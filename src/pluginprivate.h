@@ -26,6 +26,7 @@
 #ifndef PLUGINPRIVATE_H
 #define PLUGINPRIVATE_H
 
+#include "plugindata.h"
 #include "ui_utils.h"	/* GeanyAutoSeparator */
 #include "keybindings.h"	/* GeanyKeyGroup */
 

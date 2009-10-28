@@ -195,7 +195,8 @@ static GtkWidget *create_pref_page(Plugin *p, GtkWidget *dialog)
 }
 
 
-/* multiple plugin configure dialog */
+/* multiple plugin configure dialog
+ * current_plugin can be NULL */
 static void configure_plugins(Plugin *current_plugin)
 {
 	GtkWidget *dialog, *vbox, *nb;
@@ -228,14 +229,18 @@ static void configure_plugins(Plugin *current_plugin)
 				cur_page = n;
 		}
 	}
-	if (cur_page >= 0)
+	if (gtk_notebook_get_n_pages(GTK_NOTEBOOK(nb)))
 	{
 		gtk_widget_show_all(vbox);
-		gtk_notebook_set_current_page(GTK_NOTEBOOK(nb), cur_page);
+		if (cur_page >= 0)
+			gtk_notebook_set_current_page(GTK_NOTEBOOK(nb), cur_page);
 
 		/* run the dialog */
 		while (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_APPLY);
 	}
+	else
+		utils_beep();
+
 	gtk_widget_destroy(dialog);
 }
 
@@ -244,9 +249,17 @@ static void configure_plugins(Plugin *current_plugin)
  * The plugin must implement one of the plugin_configure() or plugin_configure_single() symbols.
  * @param plugin Must be @ref geany_plugin.
  * @since 0.19. */
+/* if NULL, show all plugins */
 void plugin_show_configure(GeanyPlugin *plugin)
 {
-	Plugin *p = plugin->priv;
+	Plugin *p;
+
+	if (!plugin)
+	{
+		configure_plugins(NULL);
+		return;
+	}
+	p = plugin->priv;
 
 	if (p->configure)
 		configure_plugins(p);

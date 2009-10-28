@@ -8,6 +8,12 @@
  * src/sciwrappers.c, src/sciwrappers.h, src/editor.c:
    Add general function sci_get_string() that works with any string
    buffer messages that follow the Windows message convention.
+ * src/pluginprivate.h, src/interface.c, src/keybindings.c,
+   src/keybindings.h, src/callbacks.c, src/callbacks.h,
+   src/pluginutils.c, src/pluginutils.h, geany.glade:
+   Add 'Edit->Plugin Preferences' menu item and keybinding.
+   Don't include plugindata.h in pluginutils.h because it redefines the
+   GEANY() macro for plugin use.
 
 
 2009-10-27  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

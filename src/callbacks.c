@@ -65,6 +65,7 @@
 #include "plugins.h"
 #include "log.h"
 #include "toolbar.h"
+#include "pluginutils.h"
 
 
 #ifdef HAVE_VTE
@@ -272,9 +273,18 @@ void
 on_edit1_activate                      (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
+	GtkWidget *item;
 	GeanyDocument *doc = document_get_current();
+
 	ui_update_menu_copy_items(doc);
 	ui_update_insert_include_item(doc, 1);
+
+	item = ui_lookup_widget(main_widgets.window, "plugin_preferences1");
+#ifndef HAVE_PLUGINS
+	gtk_widget_hide(item);
+#else
+	gtk_widget_set_sensitive(item, active_plugin_list != NULL);
+#endif
 }
 
 
@@ -2363,5 +2373,15 @@ on_smart_line_indent1_activate         (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
 	keybindings_send_command(GEANY_KEY_GROUP_FORMAT, GEANY_KEYS_FORMAT_AUTOINDENT);
+}
+
+
+void
+on_plugin_preferences1_activate        (GtkMenuItem     *menuitem,
+                                        gpointer         user_data)
+{
+#ifdef HAVE_PLUGINS
+	plugin_show_configure(NULL);
+#endif
 }
 

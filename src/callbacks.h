@@ -660,3 +660,7 @@ on_transpose_current_line1_activate    (GtkMenuItem     *menuitem,
 void
 on_smart_line_indent1_activate         (GtkMenuItem     *menuitem,
                                         gpointer         user_data);
+
+void
+on_plugin_preferences1_activate        (GtkMenuItem     *menuitem,
+                                        gpointer         user_data);

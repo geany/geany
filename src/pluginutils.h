@@ -28,22 +28,25 @@
 
 #ifdef HAVE_PLUGINS
 
-#include "plugindata.h"		/* GeanyPlugin */
 #include "keybindings.h"	/* GeanyKeyGroupCallback */
 
 
-void plugin_add_toolbar_item(GeanyPlugin *plugin, GtkToolItem *item);
+/* avoid including plugindata.h otherwise this redefines the GEANY() macro */
+struct GeanyPlugin;
 
-void plugin_module_make_resident(GeanyPlugin *plugin);
 
-void plugin_signal_connect(GeanyPlugin *plugin,
+void plugin_add_toolbar_item(struct GeanyPlugin *plugin, GtkToolItem *item);
+
+void plugin_module_make_resident(struct GeanyPlugin *plugin);
+
+void plugin_signal_connect(struct GeanyPlugin *plugin,
 		GObject *object, gchar *signal_name, gboolean after,
 		GCallback callback, gpointer user_data);
 
-struct GeanyKeyGroup *plugin_set_key_group(GeanyPlugin *plugin,
+struct GeanyKeyGroup *plugin_set_key_group(struct GeanyPlugin *plugin,
 		const gchar *section_name, gsize count, GeanyKeyGroupCallback callback);
 
-void plugin_show_configure(GeanyPlugin *plugin);
+void plugin_show_configure(struct GeanyPlugin *plugin);
 
 #endif /* HAVE_PLUGINS */
 #endif /* PLUGINUTILS_H */

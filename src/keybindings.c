@@ -377,6 +377,8 @@ static void init_default_kb(void)
 	keybindings_set_item(group, GEANY_KEYS_SETTINGS_PREFERENCES, cb_func_menu_preferences,
 		GDK_p, GDK_CONTROL_MASK | GDK_MOD1_MASK, "menu_preferences", _("Preferences"),
 		LW(preferences1));
+	keybindings_set_item(group, GEANY_KEYS_SETTINGS_PLUGINPREFERENCES, cb_func_menu_preferences,
+		0, 0, "menu_pluginpreferences", _("P_lugin Preferences"), LW(plugin_preferences1));
 
 	group = ADD_KB_GROUP(SEARCH, _("Search"), cb_func_search_action);
 
@@ -1315,9 +1317,17 @@ static gboolean cb_func_project_action(guint key_id)
 }
 
 
-static void cb_func_menu_preferences(G_GNUC_UNUSED guint key_id)
+static void cb_func_menu_preferences(guint key_id)
 {
-	on_preferences1_activate(NULL, NULL);
+	switch (key_id)
+	{
+		case GEANY_KEYS_SETTINGS_PREFERENCES:
+			on_preferences1_activate(NULL, NULL);
+			break;
+		case GEANY_KEYS_SETTINGS_PLUGINPREFERENCES:
+			on_plugin_preferences1_activate(NULL, NULL);
+			break;
+	}
 }
 
 
