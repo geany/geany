@@ -3047,6 +3047,8 @@ Settings keybindings
 Action                          Default shortcut          Description
 =============================== ========================= ==================================================
 Preferences                     Ctrl-Alt-P                Opens preferences dialog.
+
+Plugin Preferences                                        Opens plugin preferences dialog.
 =============================== ========================= ==================================================
 
 

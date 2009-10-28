@@ -14,6 +14,8 @@
    Add 'Edit->Plugin Preferences' menu item and keybinding.
    Don't include plugindata.h in pluginutils.h because it redefines the
    GEANY() macro for plugin use.
+ * doc/geany.txt, doc/geany.html:
+   Update for Plugin Preferences keybinding.
 
 
 2009-10-27  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
