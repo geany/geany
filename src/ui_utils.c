@@ -648,6 +648,7 @@ static void init_document_widgets(void)
 	add_doc_widget("menu_select_all1");
 	add_doc_widget("insert_date1");
 	add_doc_widget("menu_format1");
+	add_doc_widget("commands2");
 	add_doc_widget("menu_open_selected_file1");
 	add_doc_widget("page_setup1");
 	add_doc_widget("find1");
