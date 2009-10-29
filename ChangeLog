@@ -10,6 +10,9 @@
    strings.
    Add mnemonics for 3 Edit->Format menu items.
    Add keybindings_get_label().
+ * src/interface.c, geany.glade:
+   Use GtkVBoxes for Encoding prefs combo boxes to reduce width of prefs
+   dialog.
 
 
 2009-10-28  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
