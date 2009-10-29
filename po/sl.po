@@ -7,9 +7,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: geany 0.19\n"
-"Report-Msgid-Bugs-To: geany-i18n@uvena.de\n"
-"POT-Creation-Date: 2009-09-01 10:23+0200\n"
-"PO-Revision-Date: 2009-08-29 00:22+0100\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2009-10-29 18:59+0100\n"
+"PO-Revision-Date: 2009-10-28 18:35+0100\n"
 "Last-Translator: Jože Klepec <joze.klepec@siol.net>\n"
 "Language-Team: Slovenian <>\n"
 "MIME-Version: 1.0\n"
@@ -26,7 +26,7 @@ msgstr ""
 msgid "A fast and lightweight IDE using GTK2"
 msgstr "Hitro in lahkotno vdelano razvojno okolje z uporabo GTK2"
 
-#: ../geany.desktop.in.h:2 ../src/interface.c:262 ../src/interface.c:1476
+#: ../geany.desktop.in.h:2 ../src/interface.c:280 ../src/interface.c:1618
 msgid "Geany"
 msgstr "Geany"
 
@@ -34,54 +34,54 @@ msgstr "Geany"
 msgid "Integrated Development Environment"
 msgstr "Vdelano razvojno okolje"
 
-#: ../src/about.c:139
+#: ../src/about.c:140
 msgid "About Geany"
 msgstr "O Geany"
 
-#: ../src/about.c:189
+#: ../src/about.c:190
 msgid "A fast and lightweight IDE"
 msgstr "Hitro in lahkotno razvojno okolje"
 
-#: ../src/about.c:210
+#: ../src/about.c:211
 #, c-format
 msgid "(built on or after %s)"
 msgstr "(zgrajeno dne %s ali kasneje)"
 
 # gtk_container_add(GTK_CONTAINER(info_box), cop_label);
 #. gtk_container_add(GTK_CONTAINER(info_box), cop_label);
-#: ../src/about.c:241
+#: ../src/about.c:242
 msgid "Info"
 msgstr "Info"
 
-#: ../src/about.c:257
+#: ../src/about.c:258
 msgid "Developers"
 msgstr "Razvijalci"
 
-#: ../src/about.c:266
+#: ../src/about.c:267
 msgid "maintainer"
 msgstr "vzdrževalec"
 
-#: ../src/about.c:274
+#: ../src/about.c:275
 msgid "developer"
 msgstr "razvijalec"
 
-#: ../src/about.c:282
+#: ../src/about.c:283
 msgid "translation maintainer"
 msgstr "vzdrževalec prevoda"
 
-#: ../src/about.c:291
+#: ../src/about.c:292
 msgid "Translators"
 msgstr "Prevajalci"
 
-#: ../src/about.c:311
+#: ../src/about.c:312
 msgid "Previous Translators"
 msgstr "Prejšnji prevajalci"
 
-#: ../src/about.c:332
+#: ../src/about.c:333
 msgid "Contributors"
 msgstr "Sodelavci"
 
-#: ../src/about.c:342
+#: ../src/about.c:343
 #, c-format
 msgid ""
 "Some of the many contributors (for a more detailed list, see the file %s):"
@@ -89,15 +89,15 @@ msgstr ""
 "Nekateri od mnogih sodelavcev (za bolj natančen seznam, poglejte datoteko %"
 "s):"
 
-#: ../src/about.c:368
+#: ../src/about.c:369
 msgid "Credits"
 msgstr "Zahvale"
 
-#: ../src/about.c:382
+#: ../src/about.c:383
 msgid "License"
 msgstr "Licenca"
 
-#: ../src/about.c:391
+#: ../src/about.c:392
 msgid ""
 "License text could not be found, please visit http://www.gnu.org/licenses/"
 "gpl-2.0.txt to view it online."
@@ -105,38 +105,44 @@ msgstr ""
 "Besedilo licence ni najdeno, za ogled obiščite spletno mesto: http://www.gnu."
 "org/licenses/gpl-2.0.txt "
 
+# fall back to %d
 #. fall back to %d
-#: ../src/build.c:536
+#: ../src/build.c:626
 #, c-format
 msgid "failed to substitute %%p, no project active"
-msgstr ""
+msgstr "spodletela zamenjava %%p, ni aktivnega projekta"
 
-#: ../src/build.c:596
+#: ../src/build.c:664
+#, fuzzy
+msgid "Process failed, no working directory"
+msgstr "Spodletela menjava delovne mape v \"%s\""
+
+#: ../src/build.c:690
 #, c-format
 msgid "%s (in directory: %s)"
 msgstr "%s (v mapi: %s)"
 
-#: ../src/build.c:616 ../src/build.c:839 ../src/search.c:1411
+#: ../src/build.c:710 ../src/build.c:934 ../src/search.c:1412
 #, c-format
 msgid "Process failed (%s)"
 msgstr "Proces spodletel (%s)"
 
-#: ../src/build.c:685
+#: ../src/build.c:780
 #, c-format
 msgid "Failed to change the working directory to \"%s\""
 msgstr "Spodletela menjava delovne mape v \"%s\""
 
-#: ../src/build.c:714
+#: ../src/build.c:809
 #, c-format
 msgid "Failed to execute \"%s\" (start-script could not be created)"
 msgstr "Spodletelo izvajanje \"%s\" (ni mogoče ustvariti zagonske skripte)."
 
-#: ../src/build.c:768
+#: ../src/build.c:863
 msgid ""
 "Could not execute the file in the VTE because it probably contains a command."
 msgstr "Izvajanje v VTE ni možno, ker verjetno vsebuje ukaz."
 
-#: ../src/build.c:806
+#: ../src/build.c:901
 #, c-format
 msgid ""
 "Could not find terminal \"%s\" (check path for Terminal tool setting in "
@@ -145,234 +151,225 @@ msgstr ""
 "Ne najdem terminala \"%s\" (preverite pot za nastavitve orodja Terminal v "
 "Možnostih)"
 
-#: ../src/build.c:976
+#: ../src/build.c:1071
 msgid "Compilation failed."
 msgstr "Prevajanje spodletelo."
 
-#: ../src/build.c:990
+#: ../src/build.c:1085
 msgid "Compilation finished successfully."
 msgstr "Prevajanje uspešno zaključeno."
 
-#: ../src/build.c:1144
-#, fuzzy
+#: ../src/build.c:1241
 msgid "Custom Text"
-msgstr "Zgradi tarčo po meri"
+msgstr "Besedilo po meri"
 
-#: ../src/build.c:1145
-#, fuzzy
+#: ../src/build.c:1242
 msgid "Enter custom text here, all entered text is appended to the command."
 msgstr ""
 "Tu vnesite možnosti po meri, vse vneseno besedilo bo preneseno ukazu make."
 
 # skok na naslednjo napako
-#: ../src/build.c:1219
+#: ../src/build.c:1320
 msgid "_Next Error"
 msgstr "_Naslednja napaka"
 
 # skok na prejšnjo napako
-#: ../src/build.c:1221
+#: ../src/build.c:1322
 msgid "_Previous Error"
 msgstr "_Predhodna napaka"
 
-#: ../src/build.c:1231
-#, fuzzy
+#: ../src/build.c:1332
 msgid "_Set Build Commands"
-msgstr "Nastavi ukaze po meri"
+msgstr "_Nastavi ukaze za gradnjo"
 
-#: ../src/build.c:1489 ../src/toolbar.c:344
+#: ../src/build.c:1610 ../src/toolbar.c:344
 msgid "Build the current file"
 msgstr "Zgradi trenutno datoteko"
 
-#: ../src/build.c:1504
+#: ../src/build.c:1624
 msgid "Build the current file with Make and the default target"
 msgstr "Zgradi trenutno datoteko z Make in privzeto tarčo."
 
-#: ../src/build.c:1506
+#: ../src/build.c:1626
 msgid "Build the current file with Make and the specified target"
 msgstr "Zgradi trenutno datoteko z Make in določeno tarčo."
 
-#: ../src/build.c:1508
+#: ../src/build.c:1628
 msgid "Compile the current file with Make"
 msgstr "Prevede trenutno datoteko z Make"
 
-#: ../src/build.c:1535
+#: ../src/build.c:1655
 #, c-format
 msgid "Process could not be stopped (%s)."
 msgstr "Procesa ni bilo mogoče zaustaviti (%s)."
 
-#: ../src/build.c:1554 ../src/build.c:1568
+#: ../src/build.c:1672 ../src/build.c:1684
 msgid "No more build errors."
 msgstr "Ni več napak gradnje."
 
-#: ../src/build.c:1630
+#: ../src/build.c:1756
 msgid "Item"
-msgstr ""
+msgstr "Izbira"
 
-#: ../src/build.c:1631 ../src/symbols.c:636
+#: ../src/build.c:1757 ../src/symbols.c:639
 msgid "Label"
 msgstr "Oznaka"
 
-#: ../src/build.c:1632 ../src/symbols.c:631
+#: ../src/build.c:1758 ../src/symbols.c:634
 msgid "Command"
 msgstr "Ukaz"
 
-#: ../src/build.c:1633
-#, fuzzy
+#: ../src/build.c:1759
 msgid "Working directory"
-msgstr "%s (v mapi: %s)"
+msgstr "Delovni imenik"
 
-#: ../src/build.c:1634
-#, fuzzy
+#: ../src/build.c:1760
 msgid "Clear"
-msgstr "Prevajalnik"
+msgstr "Počisti"
 
 # in-dialog heading for the "Set Includes and Arguments" dialog
-#: ../src/build.c:1726
-#, c-format
-msgid "%s commands"
+#: ../src/build.c:1862 ../src/build.c:1864
+#, fuzzy, c-format
+msgid "%s Commands"
 msgstr "%s ukazi"
 
-#: ../src/build.c:1728
-#, fuzzy
+#: ../src/build.c:1864
 msgid "No Filetype"
-msgstr "Nastavi _tip datoteke"
+msgstr "Brez tipa datoteke"
 
-#: ../src/build.c:1736 ../src/build.c:1769
+#: ../src/build.c:1872 ../src/build.c:1907
 #, fuzzy
-msgid "Error Regular Expression"
-msgstr "_Grepovi regularni izrazi"
+msgid "Error Regular Expression:"
+msgstr "Napaka regularnega izraza"
 
-#: ../src/build.c:1763
-msgid "Non Filetype Commands"
+#: ../src/build.c:1900
+#, fuzzy
+msgid "Non-Filetype Commands"
+msgstr "Ukazi nedatotečne vrste"
+
+#: ../src/build.c:1930
+msgid "Note: Item 2 opens a dialog and appends the response to the command."
 msgstr ""
 
-#: ../src/build.c:1796
-#, fuzzy
+#: ../src/build.c:1939
 msgid "Execute Commands"
-msgstr "Nastavi ukaze po meri"
+msgstr "Izvedi ukaze"
 
-#: ../src/build.c:1811
+#: ../src/build.c:1950
 #, c-format
 msgid ""
-"Notes:\n"
-"   %d, %e, %f, %p are substituted in Commands and Working dir, see manual "
-"for details\n"
-"   Non-filetype menu Item 2 opens a dialog and appends the reponse to the "
-"command"
+"%d, %e, %f, %p are substituted in command and directory fields, see manual "
+"for details."
 msgstr ""
 
-#: ../src/build.c:1956
-#, fuzzy
+#: ../src/build.c:2102
 msgid "Set Build Commands"
-msgstr "Nastavi ukaze po meri"
+msgstr "Nastavi ukaze za gradnjo"
 
-#: ../src/build.c:2191 ../src/build.c:2358
-#, fuzzy
+#: ../src/build.c:2368 ../src/build.c:2553
 msgid "_Execute"
-msgstr "Poženi:"
+msgstr "_Izvedi:"
 
-#: ../src/build.c:2355
-#, fuzzy
+#: ../src/build.c:2550
 msgid "_Make"
-msgstr "Make:"
+msgstr "_Zgradi:"
 
 # zgradi izvorno kodo z make custom
 #. build the code with make custom
-#: ../src/build.c:2356 ../src/build.c:2409
+#: ../src/build.c:2551 ../src/build.c:2604
 msgid "Make Custom _Target"
 msgstr "Zgradi _tarčo po meri"
 
 # zgradi izvorno kodo z make object
 #. build the code with make object
-#: ../src/build.c:2357 ../src/build.c:2417
+#: ../src/build.c:2552 ../src/build.c:2612
 msgid "Make _Object"
 msgstr "Zgradi _objekt"
 
 # zgradi izvorno kodo
 #. build the code
-#: ../src/build.c:2389 ../src/interface.c:976
+#: ../src/build.c:2584 ../src/interface.c:1069
 msgid "_Build"
 msgstr "_Zgradi"
 
 # zgradi izvorno kodo z make all
 #. build the code with make all
-#: ../src/build.c:2401
+#: ../src/build.c:2596
 msgid "_Make All"
 msgstr "Zgradi _vse"
 
 #. arguments
-#: ../src/build.c:2429
-#, fuzzy
+#: ../src/build.c:2624
 msgid "_Set Build Menu Commands"
-msgstr "Nastavi ukaze po meri"
+msgstr "Nastavi ukaze za izbirnik gradnje"
 
-#: ../src/callbacks.c:152
+#: ../src/callbacks.c:153
 msgid "Do you really want to quit?"
 msgstr "Zares želite končati z delom?"
 
 # ponovno naloži datoteko
-#: ../src/callbacks.c:469 ../src/document.c:2871 ../src/interface.c:340
-#: ../src/treeviews.c:578
+#: ../src/callbacks.c:481 ../src/document.c:2923 ../src/interface.c:351
+#: ../src/sidebar.c:580
 msgid "_Reload"
 msgstr "_Ponovno odpri"
 
-#: ../src/callbacks.c:470
+#: ../src/callbacks.c:482
 msgid "Any unsaved changes will be lost."
 msgstr "Vse neshranjene spremembe bodo izgubljene."
 
-#: ../src/callbacks.c:471
+#: ../src/callbacks.c:483
 #, c-format
 msgid "Are you sure you want to reload '%s'?"
 msgstr "Zagotovo želite ponovno odpreti '%s'?"
 
-#: ../src/callbacks.c:1249 ../src/keybindings.c:397
+#: ../src/callbacks.c:1270 ../src/keybindings.c:420
 msgid "Go to Line"
 msgstr "Pojdi na vrstico"
 
-#: ../src/callbacks.c:1249
+#: ../src/callbacks.c:1270
 msgid "Enter the line you want to go to:"
 msgstr "Vnesite želeno številko vrstice:"
 
-#: ../src/callbacks.c:1344 ../src/callbacks.c:1369
+#: ../src/callbacks.c:1367 ../src/callbacks.c:1392
 msgid ""
 "Please set the filetype for the current file before using this function."
 msgstr ""
 "Prosim, nastavite tip datoteke za trenutno datoteko preden uporabite to "
 "funkcijo."
 
-#: ../src/callbacks.c:1481 ../src/ui_utils.c:542
+#: ../src/callbacks.c:1504 ../src/ui_utils.c:544
 msgid "dd.mm.yyyy"
 msgstr "dd.mm.yyyy"
 
-#: ../src/callbacks.c:1483 ../src/ui_utils.c:543
+#: ../src/callbacks.c:1506 ../src/ui_utils.c:545
 msgid "mm.dd.yyyy"
 msgstr "mm.dd.yyyy"
 
-#: ../src/callbacks.c:1485 ../src/ui_utils.c:544
+#: ../src/callbacks.c:1508 ../src/ui_utils.c:546
 msgid "yyyy/mm/dd"
 msgstr "yyyy/mm/dd"
 
-#: ../src/callbacks.c:1487 ../src/ui_utils.c:553
+#: ../src/callbacks.c:1510 ../src/ui_utils.c:555
 msgid "dd.mm.yyyy hh:mm:ss"
 msgstr "dd.mm.yyyy hh:mm:ss"
 
-#: ../src/callbacks.c:1489 ../src/ui_utils.c:554
+#: ../src/callbacks.c:1512 ../src/ui_utils.c:556
 msgid "mm.dd.yyyy hh:mm:ss"
 msgstr "mm.dd.yyyy hh:mm:ss"
 
-#: ../src/callbacks.c:1491 ../src/ui_utils.c:555
+#: ../src/callbacks.c:1514 ../src/ui_utils.c:557
 msgid "yyyy/mm/dd hh:mm:ss"
 msgstr "yyyy/mm/dd hh:mm:ss"
 
-#: ../src/callbacks.c:1493 ../src/ui_utils.c:564
+#: ../src/callbacks.c:1516 ../src/ui_utils.c:566
 msgid "_Use Custom Date Format"
 msgstr "_Uporabi obliko datuma po meri"
 
-#: ../src/callbacks.c:1497
+#: ../src/callbacks.c:1520
 msgid "Custom Date Format"
 msgstr "Oblika datuma po meri"
 
-#: ../src/callbacks.c:1498
+#: ../src/callbacks.c:1521
 msgid ""
 "Enter here a custom date and time format. You can use any conversion "
 "specifiers which can be used with the ANSI C strftime function."
@@ -380,21 +377,21 @@ msgstr ""
 "Tu vnesite obliko datuma in časa po meri. Uporabite lahko vse oblike, ki jih "
 "sprejme ANSI C strftime funkcija."
 
-#: ../src/callbacks.c:1516
+#: ../src/callbacks.c:1539
 msgid "Date format string could not be converted (possibly too long)."
 msgstr "Datumski oblični niz ni bil pretvorjen (verjetno predolg)."
 
-#: ../src/callbacks.c:1738 ../src/callbacks.c:1748
+#: ../src/callbacks.c:1753 ../src/callbacks.c:1763
 msgid "No more message items."
 msgstr "Ni več sporočilnih postavk."
 
 # initialize the dialog
 #. initialize the dialog
-#: ../src/dialogs.c:140 ../src/prefs.c:1634
+#: ../src/dialogs.c:140 ../src/prefs.c:1660
 msgid "Open File"
 msgstr "Odpri datoteko"
 
-#: ../src/dialogs.c:144 ../src/interface.c:691
+#: ../src/dialogs.c:144 ../src/interface.c:784
 msgid "_View"
 msgstr "_Pogled"
 
@@ -410,7 +407,7 @@ msgstr ""
 msgid "Detect by file extension"
 msgstr "Zaznaj po podaljšku datoteke"
 
-#: ../src/dialogs.c:196 ../src/interface.c:3578 ../src/interface.c:5118
+#: ../src/dialogs.c:196 ../src/interface.c:3648 ../src/interface.c:5166
 msgid "Detect from file"
 msgstr "Zaznaj po vsebini"
 
@@ -460,13 +457,12 @@ msgstr ""
 "izbranim tipom datoteke."
 
 #: ../src/dialogs.c:389
-#, fuzzy
 msgid "Overwrite?"
-msgstr "_Prezri"
+msgstr "Prepišem?"
 
 #: ../src/dialogs.c:390
 msgid "Filename already exists!"
-msgstr ""
+msgstr "Datoteka s tem imenom že obstaja!"
 
 #: ../src/dialogs.c:424
 msgid "Save File"
@@ -496,7 +492,7 @@ msgstr ""
 msgid "Error"
 msgstr "Napaka"
 
-#: ../src/dialogs.c:569 ../src/dialogs.c:1367 ../src/win32.c:568
+#: ../src/dialogs.c:569 ../src/dialogs.c:1382 ../src/win32.c:568
 #: ../src/win32.c:627
 msgid "Question"
 msgstr "Vprašanje"
@@ -536,112 +532,112 @@ msgstr ""
 
 #: ../src/dialogs.c:1023 ../src/dialogs.c:1024 ../src/dialogs.c:1025
 #: ../src/dialogs.c:1031 ../src/dialogs.c:1032 ../src/dialogs.c:1033
-#: ../src/symbols.c:1707 ../src/symbols.c:1728 ../src/symbols.c:1780
-#: ../src/ui_utils.c:216
+#: ../src/symbols.c:1691 ../src/symbols.c:1712 ../src/symbols.c:1764
+#: ../src/ui_utils.c:218
 msgid "unknown"
 msgstr "neznano"
 
-#: ../src/dialogs.c:1038 ../src/symbols.c:780
+#: ../src/dialogs.c:1038 ../src/symbols.c:782
 msgid "Properties"
 msgstr "Lastnosti"
 
-#: ../src/dialogs.c:1069
+#: ../src/dialogs.c:1067
 msgid "<b>Type:</b>"
 msgstr "<b>Tip:</b>"
 
-#: ../src/dialogs.c:1083
+#: ../src/dialogs.c:1081
 msgid "<b>Size:</b>"
 msgstr "<b>Velikost:</b>"
 
-#: ../src/dialogs.c:1099
+#: ../src/dialogs.c:1097
 msgid "<b>Location:</b>"
-msgstr "<b>Location:</b>"
+msgstr "<b>Pot:</b>"
 
-#: ../src/dialogs.c:1113
+#: ../src/dialogs.c:1111
 msgid "<b>Read-only:</b>"
 msgstr "<b>Samo-za-branje:</b>"
 
-#: ../src/dialogs.c:1120
+#: ../src/dialogs.c:1118
 msgid "(only inside Geany)"
 msgstr "(samo znotraj Geany)"
 
-#: ../src/dialogs.c:1129
+#: ../src/dialogs.c:1127
 msgid "<b>Encoding:</b>"
 msgstr "<b>Kodiranje:</b>"
 
 #. BOM = byte order mark
-#: ../src/dialogs.c:1139 ../src/ui_utils.c:219
+#: ../src/dialogs.c:1137 ../src/ui_utils.c:221
 msgid "(with BOM)"
 msgstr "(z BOM)"
 
-#: ../src/dialogs.c:1139
+#: ../src/dialogs.c:1137
 msgid "(without BOM)"
 msgstr "(brez BOM)"
 
 # prilagojeno, spremenjeno
-#: ../src/dialogs.c:1150
+#: ../src/dialogs.c:1148
 msgid "<b>Modified:</b>"
 msgstr "<b>Prilagojeno:</b>"
 
 # spremenjeno, prenarejeno
-#: ../src/dialogs.c:1164
+#: ../src/dialogs.c:1162
 msgid "<b>Changed:</b>"
 msgstr "<b>Spremenjeno:</b>"
 
-#: ../src/dialogs.c:1178
+#: ../src/dialogs.c:1176
 msgid "<b>Accessed:</b>"
 msgstr "<b>Dostopano:</b>"
 
-#: ../src/dialogs.c:1200
+#: ../src/dialogs.c:1198
 msgid "<b>Permissions:</b>"
 msgstr "<b>Dovoljenja:</b>"
 
 #. Header
-#: ../src/dialogs.c:1208
+#: ../src/dialogs.c:1206
 msgid "Read:"
 msgstr "Branje:"
 
-#: ../src/dialogs.c:1215
+#: ../src/dialogs.c:1213
 msgid "Write:"
 msgstr "Pisanje:"
 
-#: ../src/dialogs.c:1222
+#: ../src/dialogs.c:1220
 msgid "Execute:"
 msgstr "Poženi:"
 
 # Lastnik
 #. Owner
-#: ../src/dialogs.c:1230
+#: ../src/dialogs.c:1228
 msgid "Owner:"
 msgstr "Lastnik:"
 
 #. Group
-#: ../src/dialogs.c:1266
+#: ../src/dialogs.c:1264
 msgid "Group:"
 msgstr "Skupina:"
 
 # Drugi, npr. guest, anonymus,  ostali uporabniki
 #. Other
-#: ../src/dialogs.c:1302
+#: ../src/dialogs.c:1300
 msgid "Other:"
 msgstr "Drugi:"
 
-#: ../src/document.c:622
+#: ../src/document.c:643
 #, c-format
 msgid "File %s closed."
 msgstr "Datoteka %s zaprta."
 
-#: ../src/document.c:745
+#: ../src/document.c:768
 #, c-format
 msgid "New file \"%s\" opened."
 msgstr "Odprta nova datoteka \"%s\"."
 
-#: ../src/document.c:918 ../src/document.c:1421
+#: ../src/document.c:941 ../src/document.c:1456
 #, c-format
 msgid "Could not open file %s (%s)"
 msgstr "Ni mogoče odpreti datoteke %s (%s)"
 
-#: ../src/document.c:948
+#: ../src/document.c:971
 #, c-format
 msgid ""
 "The file \"%s\" could not be opened properly and has been truncated. This "
@@ -658,12 +654,12 @@ msgstr ""
 # Datoteka \"test.txt" ni veljavna UTF-8 datoteka.
 #. For translators: the second wildcard is an encoding name, e.g.
 #. * The file \"test.txt\" is not valid UTF-8.
-#: ../src/document.c:974
+#: ../src/document.c:997
 #, c-format
 msgid "The file \"%s\" is not valid %s."
 msgstr "Datoteka \"%s\" ni veljavna %s datoteka."
 
-#: ../src/document.c:984
+#: ../src/document.c:1007
 #, c-format
 msgid ""
 "The file \"%s\" does not look like a text file or the file encoding is not "
@@ -671,15 +667,15 @@ msgid ""
 msgstr ""
 "Datoteka \"%s\" ni besedilna datoteka ali kodiranje besedila ni podprto."
 
-#: ../src/document.c:1122
+#: ../src/document.c:1155
 msgid "Spaces"
 msgstr "Presledki"
 
-#: ../src/document.c:1125
+#: ../src/document.c:1158
 msgid "Tabs"
 msgstr "Razmaki"
 
-#: ../src/document.c:1128
+#: ../src/document.c:1161
 msgid "Tabs and Spaces"
 msgstr "Razmaki in presledki"
 
@@ -687,16 +683,16 @@ msgstr "Razmaki in presledki"
 # * and Spaces), the second one is the filename
 #. For translators: first wildcard is the indentation mode (Spaces, Tabs, Tabs
 #. * and Spaces), the second one is the filename
-#: ../src/document.c:1133
+#: ../src/document.c:1166
 #, c-format
 msgid "Setting %s indentation mode for %s."
 msgstr "Nastavitev %s načina zamikanja za %s."
 
-#: ../src/document.c:1186
+#: ../src/document.c:1219
 msgid "Invalid filename"
 msgstr "Napačno ime datoteke"
 
-#: ../src/document.c:1309
+#: ../src/document.c:1334
 #, c-format
 msgid "File %s reloaded."
 msgstr "Datoteka %s ponovno odprta."
@@ -704,20 +700,20 @@ msgstr "Datoteka %s ponovno odprta."
 #. For translators: this is the status window message for opening a file. %d is the number
 #. * of the newly opened file, %s indicates whether the file is opened read-only
 #. * (it is replaced with the string ", read-only").
-#: ../src/document.c:1314
+#: ../src/document.c:1339
 #, c-format
 msgid "File %s opened(%d%s)."
 msgstr "Datoteka %s je odprta (%d%s)."
 
-#: ../src/document.c:1316
+#: ../src/document.c:1341
 msgid ", read-only"
 msgstr ", za branje"
 
-#: ../src/document.c:1516
+#: ../src/document.c:1551
 msgid "Error renaming file."
 msgstr "Napaka med preimenovanjem datoteke."
 
-#: ../src/document.c:1591
+#: ../src/document.c:1626
 #, c-format
 msgid ""
 "An error occurred while converting the file from UTF-8 in \"%s\". The file "
@@ -726,7 +722,7 @@ msgstr ""
 "Napaka se je pojavila med pretvorbo datoteke iz UTF-8 \"%s\". Datoteka "
 "ostaja neshranjena."
 
-#: ../src/document.c:1613
+#: ../src/document.c:1648
 #, c-format
 msgid ""
 "Error message: %s\n"
@@ -735,42 +731,42 @@ msgstr ""
 "Sporočilo o napaki: %s\n"
 "Napaka se je pojavila na mestu \"%s\" (vrstica: %d, stolpec %d)."
 
-#: ../src/document.c:1618
+#: ../src/document.c:1653
 #, c-format
 msgid "Error message: %s."
 msgstr "Sporočilo o napaki: %s."
 
-#: ../src/document.c:1719 ../src/document.c:1779
+#: ../src/document.c:1756 ../src/document.c:1819
 msgid "Error saving file."
 msgstr "Napaka med shranjevanjem datoteke."
 
-#: ../src/document.c:1778
+#: ../src/document.c:1818
 #, c-format
 msgid "Error saving file (%s)."
 msgstr "Napaka med shranjevanjem datoteke (%s)."
 
-#: ../src/document.c:1803
+#: ../src/document.c:1843
 #, c-format
 msgid "File %s saved."
 msgstr "Datoteka %s shranjena."
 
 # Search regexp I assume for now.
-#: ../src/document.c:1871 ../src/document.c:1928 ../src/document.c:1936
+#: ../src/document.c:1911 ../src/document.c:1968 ../src/document.c:1976
 #, c-format
 msgid "\"%s\" was not found."
 msgstr "\"%s\" ni bila najden."
 
-#: ../src/document.c:1936
+#: ../src/document.c:1976
 msgid "Wrap search and find again?"
 msgstr "Zaključim iskanje v preostanku?"
 
-#: ../src/document.c:2015 ../src/search.c:1084 ../src/search.c:1688
-#: ../src/search.c:1689
+#: ../src/document.c:2055 ../src/search.c:1085 ../src/search.c:1659
+#: ../src/search.c:1660
 #, c-format
 msgid "No matches found for \"%s\"."
 msgstr "Ni ujemanj za \"%s\"."
 
-#: ../src/document.c:2026 ../src/document.c:2035
+#: ../src/document.c:2066 ../src/document.c:2075
 #, c-format
 msgid "%s: replaced %d occurrence of \"%s\" with \"%s\"."
 msgid_plural "%s: replaced %d occurrences of \"%s\" with \"%s\"."
@@ -779,11 +775,11 @@ msgstr[1] "%s: zamenjani %d pojavljanji niza \"%s\" z nizom \"%s\"."
 msgstr[2] "%s: zamenjanih %d pojavljanj niza \"%s\" z nizom \"%s\"."
 msgstr[3] "%s: zamenjanih %d pojavljanj niza \"%s\" z nizom \"%s\"."
 
-#: ../src/document.c:2872
+#: ../src/document.c:2924
 msgid "Do you want to reload it?"
 msgstr "Ali želite ponovno odpreti datoteko?"
 
-#: ../src/document.c:2873
+#: ../src/document.c:2925
 #, c-format
 msgid ""
 "The file '%s' on the disk is more recent than\n"
@@ -792,20 +788,20 @@ msgstr ""
 "Datoteka '%s' na disku je bolj sveža kot\n"
 "trenutni pomnilnik."
 
-#: ../src/document.c:2894
+#: ../src/document.c:2946
 msgid "Try to resave the file?"
 msgstr "Želite ponovno shraniti?"
 
-#: ../src/document.c:2895
+#: ../src/document.c:2947
 #, c-format
 msgid "File \"%s\" was not found on disk!"
 msgstr "Datoteka \"%s\" ni bila najdena na disku!"
 
-#: ../src/editor.c:4288
+#: ../src/editor.c:4357
 msgid "Enter Tab Width"
 msgstr "Vnesite širino tabulatorja"
 
-#: ../src/editor.c:4289
+#: ../src/editor.c:4358
 msgid "Enter the amount of spaces which should be replaced by a tab character."
 msgstr "Vnesite število presledkov, ki naj bodo zamenjani s tabulatorjem.  "
 
@@ -836,7 +832,7 @@ msgstr "Baltsko"
 
 #: ../src/encodings.c:89 ../src/encodings.c:90 ../src/encodings.c:91
 msgid "Central European"
-msgstr "Centralnoevropsko"
+msgstr "Srednjeevropsko"
 
 # ISO-IR-111 ni na voljo pod Windows
 #. ISO-IR-111 not available on Windows
@@ -921,27 +917,27 @@ msgstr "Korejsko"
 msgid "Without encoding"
 msgstr "Brez kodiranja"
 
-#: ../src/encodings.c:374
+#: ../src/encodings.c:375
 msgid "_West European"
 msgstr "_Zahodnoevropsko"
 
-#: ../src/encodings.c:380
+#: ../src/encodings.c:381
 msgid "_East European"
 msgstr "_Vzhodnoevropsko"
 
-#: ../src/encodings.c:386
+#: ../src/encodings.c:387
 msgid "East _Asian"
 msgstr "Vzhodno _azijsko"
 
-#: ../src/encodings.c:392
+#: ../src/encodings.c:393
 msgid "_SE & SW Asian"
 msgstr "_JV & JZ azijsko"
 
-#: ../src/encodings.c:398
+#: ../src/encodings.c:399
 msgid "_Middle Eastern"
 msgstr "_Bližnjevzhodno"
 
-#: ../src/encodings.c:404
+#: ../src/encodings.c:405
 msgid "_Unicode"
 msgstr "_Unicode"
 
@@ -952,544 +948,598 @@ msgid "%s source file"
 msgstr "%s izvorna datoteka"
 
 #: ../src/filetypes.c:102
-#, fuzzy, c-format
+#, c-format
 msgid "%s file"
 msgstr "%s izvorna datoteka"
 
-#: ../src/filetypes.c:118 ../src/filetypes.c:119 ../src/interface.c:3497
-#: ../src/interface.c:5037
+#: ../src/filetypes.c:118 ../src/filetypes.c:119 ../src/interface.c:3567
+#: ../src/interface.c:5109
 msgid "None"
 msgstr "Brez"
 
-#: ../src/filetypes.c:387
+#: ../src/filetypes.c:409
 msgid "Shell script file"
 msgstr "Lupinski skript"
 
-#: ../src/filetypes.c:399
+#: ../src/filetypes.c:421
 msgid "Makefile"
 msgstr "Datoteka gradnje"
 
-#: ../src/filetypes.c:411
+#: ../src/filetypes.c:433
 msgid "XML document"
 msgstr "dokument XML"
 
-#: ../src/filetypes.c:446
+#: ../src/filetypes.c:468
 msgid "Cascading StyleSheet"
 msgstr "Padajoča slogovna predloga (CSS)"
 
-#: ../src/filetypes.c:457
+#: ../src/filetypes.c:479
 msgid "SQL Dump file"
 msgstr "SQL "
 
-#: ../src/filetypes.c:501
+#: ../src/filetypes.c:523
 msgid "Config file"
 msgstr "Nastavitvena datoteka"
 
-#: ../src/filetypes.c:513
+#: ../src/filetypes.c:535
 msgid "Gettext translation file"
 msgstr "Gettext datoteka s prevodi"
 
-#: ../src/filetypes.c:546
+#: ../src/filetypes.c:568
 #, c-format
 msgid "%s script file"
 msgstr "%s skriptna datoteka"
 
-#: ../src/filetypes.c:797
+#: ../src/filetypes.c:814
 msgid "_Programming Languages"
 msgstr "_Programski jeziki"
 
-#: ../src/filetypes.c:798
+#: ../src/filetypes.c:815
 msgid "_Scripting Languages"
 msgstr "_Skriptni jeziki"
 
-#: ../src/filetypes.c:799
+#: ../src/filetypes.c:816
 msgid "_Markup Languages"
 msgstr "_Označevalni jeziki"
 
-#: ../src/filetypes.c:800
+#: ../src/filetypes.c:817
 msgid "M_iscellaneous Languages"
 msgstr "_Drugi jeziki"
 
-#: ../src/filetypes.c:1349 ../src/win32.c:107
+#: ../src/filetypes.c:1386 ../src/win32.c:107
 msgid "All Source"
 msgstr "Vsa izvorna koda"
 
-#: ../src/filetypes.c:1374 ../src/project.c:291
+#: ../src/filetypes.c:1411 ../src/project.c:292
 msgid "All files"
 msgstr "Vse datoteke"
 
-#: ../src/filetypes.c:1432
+#: ../src/filetypes.c:1470
 #, c-format
 msgid "Bad regex for filetype %s: %s"
-msgstr "Slab regex za datotečno vrsto %s: %s"
+msgstr "Slab regex izraz za datotečno vrsto %s: %s"
 
 #: ../src/geany.h:53
 msgid "untitled"
 msgstr "neimenovano"
 
-#: ../src/interface.c:276
+#: ../src/interface.c:294
 msgid "_File"
 msgstr "_Datoteka"
 
-#: ../src/interface.c:287
+#: ../src/interface.c:305
 msgid "New (with _Template)"
 msgstr "Novo (iz _vzorca)"
 
-#: ../src/interface.c:298 ../src/interface.c:359 ../src/interface.c:537
-#: ../src/interface.c:591 ../src/interface.c:605 ../src/interface.c:851
-#: ../src/interface.c:861 ../src/interface.c:2018 ../src/interface.c:2072
-#: ../src/interface.c:2086
-msgid "invisible"
-msgstr "nevidno"
-
-#: ../src/interface.c:300
-msgid "dummy tooltip, don't translate this."
-msgstr "dummy tooltip, don't translate this."
-
-#: ../src/interface.c:311 ../src/interface.c:1940
+#: ../src/interface.c:322 ../src/interface.c:2086
 msgid "Open Selected F_ile"
 msgstr "Odpri _izbrano datoteko"
 
-#: ../src/interface.c:315
+#: ../src/interface.c:326
 msgid "Recent _Files"
 msgstr "_Nedavne datoteke"
 
-#: ../src/interface.c:332
+#: ../src/interface.c:343
 msgid "Save A_ll"
 msgstr "Shrani _vse"
 
-#: ../src/interface.c:348
+#: ../src/interface.c:359
 msgid "R_eload As"
 msgstr "Pono_vno odpri kot"
 
-#: ../src/interface.c:376
+#: ../src/interface.c:370 ../src/interface.c:556 ../src/interface.c:676
+#: ../src/interface.c:690 ../src/interface.c:944 ../src/interface.c:954
+#: ../src/interface.c:2154 ../src/interface.c:2168
+msgid "invisible"
+msgstr "nevidno"
+
+#: ../src/interface.c:387
 msgid "Page Set_up"
 msgstr "Nastavitev _strani"
 
-#: ../src/interface.c:393 ../src/notebook.c:240
+#: ../src/interface.c:404 ../src/notebook.c:213
 msgid "Close Ot_her Documents"
 msgstr "Zapri _ostale dokumente"
 
 # zapre vse dokumente
-#: ../src/interface.c:401 ../src/notebook.c:245
+#: ../src/interface.c:412 ../src/notebook.c:218
 msgid "C_lose All"
 msgstr "Zapri _vse"
 
-#: ../src/interface.c:418
+#: ../src/interface.c:429
 msgid "_Edit"
 msgstr "_Uredi"
 
-#: ../src/interface.c:468 ../src/interface.c:1949
+#: ../src/interface.c:479 ../src/interface.c:2095
 msgid "_Format"
 msgstr "_Oblika"
 
-#: ../src/interface.c:475 ../src/interface.c:1956
+#: ../src/interface.c:486 ../src/keybindings.c:364
+#, fuzzy
+msgid "_Reflow Lines/Block"
+msgstr "Ponovno poravnaj vrstice/blok"
+
+#: ../src/interface.c:490
 msgid "T_oggle Case of Selection"
 msgstr "Pre_obrni izbor"
 
-#: ../src/interface.c:484 ../src/interface.c:1965
+#: ../src/interface.c:494 ../src/keybindings.c:270
+#, fuzzy
+msgid "_Transpose Current Line"
+msgstr "Prestavi tekočo vrstico"
+
+#: ../src/interface.c:503
 msgid "_Comment Line(s)"
 msgstr "_Komentiraj vrstico ali več vrstic"
 
-#: ../src/interface.c:488 ../src/interface.c:1969
+#: ../src/interface.c:507
 msgid "U_ncomment Line(s)"
 msgstr "_Odkomentiraj vrstico ali več vrstic"
 
-#: ../src/interface.c:492 ../src/interface.c:1973
+#: ../src/interface.c:511
 msgid "_Toggle Line Commentation"
 msgstr "_Preklopi komentiranje vrstic"
 
-#: ../src/interface.c:496 ../src/interface.c:1977
-msgid "Du_plicate Line or Selection"
-msgstr "Po_dvoji vrstico ali izbor"
-
-#: ../src/interface.c:505 ../src/interface.c:1986
+#: ../src/interface.c:520
 msgid "_Increase Indent"
 msgstr "_Povečaj zamik"
 
-#: ../src/interface.c:513 ../src/interface.c:1994
+#: ../src/interface.c:528
 msgid "_Decrease Indent"
 msgstr "_Zmanjšaj zamik"
 
-#: ../src/interface.c:526 ../src/interface.c:2007
+#: ../src/interface.c:536 ../src/keybindings.c:354
+#, fuzzy
+msgid "_Smart Line Indent"
+msgstr "Pametno zamikanje vrstic"
+
+#: ../src/interface.c:545
 msgid "_Send Selection to Terminal"
 msgstr "_Pošlji izbor terminalu"
 
-#: ../src/interface.c:530 ../src/interface.c:2011
+#: ../src/interface.c:549
 msgid "_Send Selection to"
 msgstr "_Pošlji izbor v"
 
-#: ../src/interface.c:545 ../src/interface.c:2026
+#: ../src/interface.c:559 ../src/interface.c:2099
+#, fuzzy
+msgid "_Commands"
+msgstr "Ukaz"
+
+#: ../src/interface.c:566 ../src/keybindings.c:311
+msgid "Cut current line(s)"
+msgstr "Izreži tekočo vrstico ali več vrstic"
+
+#: ../src/interface.c:574 ../src/keybindings.c:308
+msgid "Copy current line(s)"
+msgstr "Kopiraj tekočo vrstico ali več vrstic"
+
+#: ../src/interface.c:582 ../src/keybindings.c:263
+msgid "Delete current line(s)"
+msgstr "Izbriši trenutno vrstico ali več vrstic"
+
+#: ../src/interface.c:586 ../src/keybindings.c:260
+msgid "Duplicate line or selection"
+msgstr "Podvoji vrstico ali izbor"
+
+#: ../src/interface.c:595 ../src/keybindings.c:321
+msgid "Select current line(s)"
+msgstr "Izberi tekočo vrstico ali več vrstic"
+
+#: ../src/interface.c:599 ../src/keybindings.c:324
+msgid "Select current paragraph"
+msgstr "Izberi tekoči odstavek"
+
+#: ../src/interface.c:608 ../src/keybindings.c:373
+msgid "Insert alternative white space"
+msgstr "Vstavi alternativni presledek"
+
+#: ../src/interface.c:617 ../src/keybindings.c:429
+msgid "Go to next marker"
+msgstr "Pojdi na naslednjo oznako"
+
+#: ../src/interface.c:621 ../src/keybindings.c:432
+msgid "Go to previous marker"
+msgstr "Pojdi na predhodno oznako"
+
+#: ../src/interface.c:630 ../src/interface.c:2108
 msgid "I_nsert Comments"
 msgstr "Vstavi _komentar"
 
-#: ../src/interface.c:556 ../src/interface.c:2037
+#: ../src/interface.c:641 ../src/interface.c:2119
 msgid "Insert _ChangeLog Entry"
 msgstr "Vstavi vnos d_nevnika sprememb"
 
-#: ../src/interface.c:560 ../src/interface.c:2041
+#: ../src/interface.c:645 ../src/interface.c:2123
 msgid "Insert File _Header"
 msgstr "Vstavi _zaglavje datoteke"
 
-#: ../src/interface.c:564 ../src/interface.c:2045
+#: ../src/interface.c:649 ../src/interface.c:2127
 msgid "Insert _Function Description"
 msgstr "Vstavi opis  _funkcije"
 
-#: ../src/interface.c:568 ../src/interface.c:2049
+#: ../src/interface.c:653 ../src/interface.c:2131
 msgid "Insert _Multiline Comment"
 msgstr "Vstavi ve_čvrstični komentar"
 
-#: ../src/interface.c:572 ../src/interface.c:2053
+#: ../src/interface.c:657 ../src/interface.c:2135
 msgid "Insert _GPL Notice"
 msgstr "Vstavi _GPL obvestilo"
 
-#: ../src/interface.c:576 ../src/interface.c:2057
+#: ../src/interface.c:661 ../src/interface.c:2139
 msgid "Insert _BSD License Notice"
 msgstr "Vstavi _BSD obvestilo"
 
-#: ../src/interface.c:580 ../src/interface.c:2061
+#: ../src/interface.c:665 ../src/interface.c:2143
 msgid "Insert Dat_e"
 msgstr "Vstavi _datum"
 
-#: ../src/interface.c:594 ../src/interface.c:2075
+#: ../src/interface.c:679 ../src/interface.c:2157
 msgid "_Insert \"include <...>\""
 msgstr "_Vstavi \"include <...>\""
 
-#: ../src/interface.c:613
+#: ../src/interface.c:698
 msgid "Preference_s"
 msgstr "_Možnosti"
 
-#: ../src/interface.c:621
+#: ../src/interface.c:706 ../src/keybindings.c:382
+#, fuzzy
+msgid "P_lugin Preferences"
+msgstr "Možnosti"
+
+#: ../src/interface.c:714
 msgid "_Search"
 msgstr "_Išči"
 
-#: ../src/interface.c:632
+#: ../src/interface.c:725
 msgid "Find _Next"
 msgstr "Išči _naslednje"
 
-#: ../src/interface.c:636
+#: ../src/interface.c:729
 msgid "Find _Previous"
 msgstr "Išči _predhodno"
 
-#: ../src/interface.c:640
+#: ../src/interface.c:733
 msgid "Find in F_iles"
 msgstr "Išči v _datoteki"
 
-#: ../src/interface.c:644 ../src/search.c:524
+#: ../src/interface.c:737 ../src/search.c:524
 msgid "_Replace"
 msgstr "_Zamenjaj"
 
-#: ../src/interface.c:657
+#: ../src/interface.c:750
 msgid "Find _Selected"
 msgstr "Išči v _izboru"
 
-#: ../src/interface.c:661
+#: ../src/interface.c:754
 msgid "Find Pre_vious Selected"
 msgstr "Išči v p_rejšnjem izboru"
 
-#: ../src/interface.c:670
+#: ../src/interface.c:763
 msgid "Next _Message"
 msgstr "Naslednje _sporočilo"
 
-#: ../src/interface.c:674
+#: ../src/interface.c:767
 msgid "Pr_evious Message"
 msgstr "Pr_ejšnje sporočilo"
 
-#: ../src/interface.c:683 ../src/interface.c:2127
+#: ../src/interface.c:776 ../src/interface.c:2209
 msgid "_Go to Line"
 msgstr "Pojdi na vrs_tico"
 
-#: ../src/interface.c:698
+#: ../src/interface.c:791
 msgid "Change _Font"
 msgstr "Spremeni _nabor znakov"
 
-#: ../src/interface.c:711
+#: ../src/interface.c:804
 msgid "To_ggle All Additional Widgets"
 msgstr "Preklo_pi vse dodatne gradnike"
 
-#: ../src/interface.c:715
+#: ../src/interface.c:808
 msgid "Full_screen"
 msgstr "_Celozaslonsko"
 
-#: ../src/interface.c:719
+#: ../src/interface.c:812
 msgid "Show Message _Window"
 msgstr "Pokaži _sporočilno okno"
 
-#: ../src/interface.c:724
+#: ../src/interface.c:817
 msgid "Show _Toolbar"
 msgstr "Pokaži _orodno vrstico"
 
-#: ../src/interface.c:729
+#: ../src/interface.c:822
 msgid "Show Side_bar"
 msgstr "Pokaži s_transko vrstico"
 
-#: ../src/interface.c:734 ../src/interface.c:3913 ../src/keybindings.c:250
+#: ../src/interface.c:827 ../src/interface.c:3983 ../src/keybindings.c:253
 msgid "Editor"
 msgstr "Urejevalnik"
 
-#: ../src/interface.c:741
+#: ../src/interface.c:834
 msgid "Show _Markers Margin"
 msgstr "Pokaži _rob oznak"
 
-#: ../src/interface.c:746
+#: ../src/interface.c:839
 msgid "Show _Line Numbers"
 msgstr "Pokaži številke _vrstic"
 
-#: ../src/interface.c:751
+#: ../src/interface.c:844
 msgid "Show _White Space"
 msgstr "Pokaži _prazne znake"
 
-#: ../src/interface.c:755
+#: ../src/interface.c:848
 msgid "Show Line _Endings"
 msgstr "Prikaži _konce vrstic"
 
-#: ../src/interface.c:759
+#: ../src/interface.c:852
 msgid "Show _Indentation Guides"
 msgstr "Pokaži vodila _zamikanja"
 
-#: ../src/interface.c:780
+#: ../src/interface.c:873
 msgid "_Document"
 msgstr "_Dokument"
 
-#: ../src/interface.c:787
+#: ../src/interface.c:880
 msgid "_Line Wrapping"
 msgstr "_Zavijanje vrstic"
 
-#: ../src/interface.c:792
+#: ../src/interface.c:885
 msgid "Line _Breaking"
 msgstr "_Lomljenje vrstic"
 
-#: ../src/interface.c:796
+#: ../src/interface.c:889
 msgid "_Auto-indentation"
 msgstr "S_amozamikanje"
 
-#: ../src/interface.c:801
+#: ../src/interface.c:894
 msgid "In_dent Type"
 msgstr "Vrsta _zamika"
 
-#: ../src/interface.c:808 ../src/interface.c:3536 ../src/interface.c:5076
+#: ../src/interface.c:901 ../src/interface.c:3606 ../src/interface.c:5148
 msgid "_Tabs"
 msgstr "_Razmaki"
 
-#: ../src/interface.c:814 ../src/interface.c:3527 ../src/interface.c:5067
+#: ../src/interface.c:907 ../src/interface.c:3597 ../src/interface.c:5139
 msgid "_Spaces"
 msgstr "_Presledki"
 
-#: ../src/interface.c:820 ../src/interface.c:3545 ../src/interface.c:5085
+#: ../src/interface.c:913 ../src/interface.c:3615 ../src/interface.c:5157
 msgid "T_abs and Spaces"
 msgstr "R_azmaki in presledki"
 
-#: ../src/interface.c:831
+#: ../src/interface.c:924
 msgid "Read _Only"
 msgstr "Le za _branje"
 
-#: ../src/interface.c:835
+#: ../src/interface.c:928
 msgid "_Write Unicode BOM"
 msgstr "_Zapiši Unicode BOM"
 
-#: ../src/interface.c:844
+#: ../src/interface.c:937
 msgid "Set File_type"
 msgstr "Nastavi _tip datoteke"
 
-#: ../src/interface.c:854
+#: ../src/interface.c:947
 msgid "Set _Encoding"
 msgstr "Nastavi _kodiranje"
 
-#: ../src/interface.c:864
+#: ../src/interface.c:957
 msgid "Set Line E_ndings"
 msgstr "Nastavi ko_nce vrstic"
 
-#: ../src/interface.c:871
+#: ../src/interface.c:964
 msgid "Convert and Set to _CR/LF (Win)"
 msgstr "Pretvori in nastavi na _CR/LF (Win)"
 
-#: ../src/interface.c:877
+#: ../src/interface.c:970
 msgid "Convert and Set to _LF (Unix)"
 msgstr "Pretvori in nastavi na _LF (Unix)"
 
-#: ../src/interface.c:883
+#: ../src/interface.c:976
 msgid "Convert and Set to CR (_Mac)"
 msgstr "Pretvori in nastavi na CR(_Mac)"
 
-#: ../src/interface.c:894
+#: ../src/interface.c:987
 msgid "_Strip Trailing Spaces"
 msgstr "_Odreži presledke na repu"
 
-#: ../src/interface.c:898
+#: ../src/interface.c:991
 msgid "_Replace Tabs by Spaces"
 msgstr "Zamenjaj _razmake s presledki"
 
-#: ../src/interface.c:902
+#: ../src/interface.c:995
 msgid "Replace Spaces b_y Tabs"
 msgstr "Zamenjaj _presledke z razmaki"
 
-#: ../src/interface.c:911
+#: ../src/interface.c:1004
 msgid "_Fold All"
 msgstr "_Zvij vse"
 
-#: ../src/interface.c:915
+#: ../src/interface.c:1008
 msgid "_Unfold All"
 msgstr "_Odvij vse"
 
-#: ../src/interface.c:924
+#: ../src/interface.c:1017
 msgid "Remove _Markers"
 msgstr "Odstrani _oznake"
 
-#: ../src/interface.c:928
+#: ../src/interface.c:1021
 msgid "Remove Error _Indicators"
 msgstr "Odstrani oznake _napak"
 
-#: ../src/interface.c:932
+#: ../src/interface.c:1025
 msgid "_Project"
 msgstr "_Projekt"
 
-#: ../src/interface.c:939
+#: ../src/interface.c:1032
 msgid "_New"
 msgstr "_Nov"
 
-#: ../src/interface.c:947
+#: ../src/interface.c:1040
 msgid "_Open"
 msgstr "_Odpri"
 
-#: ../src/interface.c:955
+#: ../src/interface.c:1048
 msgid "_Recent Projects"
 msgstr "Ne_davni projekti"
 
-#: ../src/interface.c:959
+#: ../src/interface.c:1052
 msgid "_Close"
 msgstr "_Zapri"
 
-#: ../src/interface.c:980
+#: ../src/interface.c:1073
 msgid "_Tools"
 msgstr "_Orodja"
 
-#: ../src/interface.c:987
-msgid "_Color Chooser"
-msgstr "_Barvni izbiralnik"
-
-#: ../src/interface.c:995
-msgid "_Word Count"
-msgstr "_Preštevalnik besed"
-
-#: ../src/interface.c:999
-msgid "Load Ta_gs"
-msgstr "Naloži _značke"
-
-#: ../src/interface.c:1003
+#: ../src/interface.c:1080
 msgid "_Reload Configuration"
 msgstr "_Osveži nastavitve"
 
-#: ../src/interface.c:1011 ../src/interface.c:1018
+#: ../src/interface.c:1088
+msgid "C_onfiguration Files"
+msgstr "_Nastavitvene datoteke"
+
+#: ../src/interface.c:1101
+msgid "_Color Chooser"
+msgstr "_Barvni izbiralnik"
+
+#: ../src/interface.c:1109
+msgid "_Word Count"
+msgstr "_Preštevalnik besed"
+
+#: ../src/interface.c:1113
+msgid "Load Ta_gs"
+msgstr "Naloži _značke"
+
+#: ../src/interface.c:1117 ../src/interface.c:1124
 msgid "_Help"
 msgstr "_Pomoč"
 
-#: ../src/interface.c:1026
+#: ../src/interface.c:1132
 msgid "_Website"
 msgstr "_Splet"
 
-#: ../src/interface.c:1030
+#: ../src/interface.c:1136
 msgid "_Keyboard Shortcuts"
 msgstr "Bližnjice _tipkovnice"
 
-#: ../src/interface.c:1034
+#: ../src/interface.c:1140
 msgid "_Debug Messages"
 msgstr "_Razhroščevalna sporočila"
 
-#: ../src/interface.c:1073 ../src/treeviews.c:119
+#: ../src/interface.c:1179 ../src/sidebar.c:121
 msgid "Symbols"
 msgstr "Simboli"
 
-#: ../src/interface.c:1087
+#: ../src/interface.c:1193
 msgid "Documents"
 msgstr "Dokumenti"
 
-#: ../src/interface.c:1123
+#: ../src/interface.c:1229
 msgid "Status"
 msgstr "Stanje"
 
-#: ../src/interface.c:1137
+#: ../src/interface.c:1243
 msgid "Compiler"
 msgstr "Prevajalnik"
 
-#: ../src/interface.c:1152
+#: ../src/interface.c:1258
 msgid "Messages"
 msgstr "Sporočila"
 
-#: ../src/interface.c:1165
+#: ../src/interface.c:1271
 msgid "Scribble"
 msgstr "Beležka"
 
-#: ../src/interface.c:1727 ../src/interface.c:3282
+#: ../src/interface.c:1889 ../src/interface.c:3352
 msgid "Images _and Text"
 msgstr "Besedilo _in podobe"
 
-#: ../src/interface.c:1732 ../src/interface.c:3314
+#: ../src/interface.c:1894 ../src/interface.c:3384
 msgid "_Images Only"
 msgstr "Samo _podobe"
 
-#: ../src/interface.c:1737 ../src/interface.c:3306
+#: ../src/interface.c:1899 ../src/interface.c:3376
 msgid "_Text Only"
 msgstr "Samo _besedilo"
 
-#: ../src/interface.c:1748 ../src/interface.c:3298
+#: ../src/interface.c:1910 ../src/interface.c:3368
 msgid "_Large Icons"
 msgstr "_Velike ikone"
 
-#: ../src/interface.c:1753 ../src/interface.c:3290
+#: ../src/interface.c:1915 ../src/interface.c:3360
 msgid "_Small Icons"
 msgstr "_Male ikone"
 
-#: ../src/interface.c:1758 ../src/interface.c:3322
+#: ../src/interface.c:1920 ../src/interface.c:3392
 msgid "_Very Small Icons"
 msgstr "_Drobne ikone"
 
-#: ../src/interface.c:1769
-#, fuzzy
+#: ../src/interface.c:1931
 msgid "_Customize Toolbar"
-msgstr "_Skrij orodno vrstico"
+msgstr "Pri_lagodi orodno vrstico"
 
-#: ../src/interface.c:1777
-#, fuzzy
+#: ../src/interface.c:1939
 msgid "_Hide Toolbar"
 msgstr "_Skrij orodno vrstico"
 
-#: ../src/interface.c:2094
+#: ../src/interface.c:2176
 msgid "Find _Usage"
 msgstr "Najdi _uporabo"
 
-#: ../src/interface.c:2102
+#: ../src/interface.c:2184
 msgid "Find _Document Usage"
 msgstr "Najdi uporabo _dokumenta"
 
-#: ../src/interface.c:2110
+#: ../src/interface.c:2192
 msgid "Go to _Tag Definition"
 msgstr "Pojdi na _opredelitev značke"
 
-#: ../src/interface.c:2114
+#: ../src/interface.c:2196
 msgid "Go to T_ag Declaration"
 msgstr "Pojdi na _navedbo značke"
 
-#: ../src/interface.c:2118
+#: ../src/interface.c:2200
 msgid "Conte_xt Action"
 msgstr "Dejanje _konteksta"
 
-#: ../src/interface.c:2663 ../src/keybindings.c:358
+#: ../src/interface.c:2712 ../src/keybindings.c:379
 msgid "Preferences"
 msgstr "Možnosti"
 
-#: ../src/interface.c:2699
+#: ../src/interface.c:2748
 msgid "Load files from the last session"
 msgstr "Naloži datoteke prejšnje seje"
 
-#: ../src/interface.c:2702
+#: ../src/interface.c:2751
 msgid "Opens at startup the files from the last session"
 msgstr "Ob zagonu odpre datoteke iz zadnje seje"
 
-#: ../src/interface.c:2704
+#: ../src/interface.c:2753
 msgid "Load virtual terminal support"
 msgstr "Naloži podporo za navidezni terminal"
 
-#: ../src/interface.c:2706
+#: ../src/interface.c:2755
 msgid ""
 "Whether the virtual terminal emulation (VTE) should be loaded at startup, "
 "disable it if you do not need it"
@@ -1497,40 +1547,40 @@ msgstr ""
 "Ali naj bo ob zagonu naložena podpora za posnemovalnik navideznega terminal "
 "(VTE) . Onemogočite, če je ne potrebujete."
 
-#: ../src/interface.c:2708
+#: ../src/interface.c:2757
 msgid "Enable plugin support"
 msgstr "Omogoči podporo vstavkom"
 
-#: ../src/interface.c:2712
+#: ../src/interface.c:2761
 msgid "<b>Startup</b>"
 msgstr "<b>Zagon</b>"
 
-#: ../src/interface.c:2731
+#: ../src/interface.c:2780
 msgid "Save window position and geometry"
 msgstr "Shrani položaj in razmerja okna"
 
-#: ../src/interface.c:2734
+#: ../src/interface.c:2783
 msgid "Saves the window position and geometry and restores it at the start"
 msgstr ""
 "Shrani položaj okna in njegova razmerja ter jih obnovi ob naslednjem zagonu"
 
-#: ../src/interface.c:2736
+#: ../src/interface.c:2785
 msgid "Confirm exit"
 msgstr "Potrdi izhod"
 
-#: ../src/interface.c:2739
+#: ../src/interface.c:2788
 msgid "Shows a confirmation dialog on exit"
 msgstr "Prikaže potrditveno okno ob izhodu"
 
-#: ../src/interface.c:2741
+#: ../src/interface.c:2790
 msgid "<b>Shutdown</b>"
 msgstr "<b>Zaustavitev</b>"
 
-#: ../src/interface.c:2762
+#: ../src/interface.c:2811
 msgid "Startup path:"
 msgstr "Zagonska pot:"
 
-#: ../src/interface.c:2774
+#: ../src/interface.c:2823
 msgid ""
 "Path to start in when opening or saving files. Must be an absolute path. "
 "Leave blank to use the current working directory."
@@ -1538,19 +1588,19 @@ msgstr ""
 "Zagonska pot kjer odpirate in shranjujete datoteke. Mora biti absolutna pot. "
 "Pustite prazno, da uporabite trenutno delovno mapo."
 
-#: ../src/interface.c:2787
+#: ../src/interface.c:2836
 msgid "Project files:"
 msgstr "Projektne datoteke:"
 
-#: ../src/interface.c:2799
+#: ../src/interface.c:2848
 msgid "Path to start in when opening project files"
 msgstr "Začetna pot ob odprtju projektnih datotek"
 
-#: ../src/interface.c:2812
+#: ../src/interface.c:2861
 msgid "Extra plugin path:"
 msgstr "Pot do dodatnih vstavkov:"
 
-#: ../src/interface.c:2824
+#: ../src/interface.c:2873
 msgid ""
 "Geany looks by default in the global installation path and in the "
 "configuration directory. The path entered here will be searched additionally "
@@ -1560,30 +1610,30 @@ msgstr ""
 "splošno namestitveno pot in nastavitveno mapo. Pustite prazno, da "
 "onemogočite."
 
-#: ../src/interface.c:2837
+#: ../src/interface.c:2886
 msgid "<b>Paths</b>"
 msgstr "<b>Poti</b>"
 
-#: ../src/interface.c:2842
+#: ../src/interface.c:2891
 msgid "Startup"
 msgstr "Zagon"
 
-#: ../src/interface.c:2864
+#: ../src/interface.c:2913
 msgid "Beep on errors or when compilation has finished"
 msgstr "Zapiskaj ob napaki ali ob zaključenem prevajanju"
 
-#: ../src/interface.c:2867
+#: ../src/interface.c:2916
 msgid ""
 "Whether to beep if an error occurred or when the compilation process has "
 "finished"
 msgstr ""
 "Ali naj se sproži pisk ob napaki oziroma ob zaključku prevajalnega postopka"
 
-#: ../src/interface.c:2869
+#: ../src/interface.c:2918
 msgid "Switch to status message list at new message"
 msgstr "Preklopi v seznam sporočil stanja po novem sporočilu"
 
-#: ../src/interface.c:2872
+#: ../src/interface.c:2921
 msgid ""
 "Switch to the status message tab (in the notebook window at the bottom) if a "
 "new status message arrives"
@@ -1591,11 +1641,11 @@ msgstr ""
 "Ob novem sporočilu stanja preklopi v seznam sporočil stanja (v oknu zvezka "
 "na dnu)"
 
-#: ../src/interface.c:2874
+#: ../src/interface.c:2923
 msgid "Suppress status messages in the status bar"
 msgstr "Zatri sporočila stanja v vrstici stanja"
 
-#: ../src/interface.c:2877
+#: ../src/interface.c:2926
 msgid ""
 "Removes all messages from the status bar. The messages are still displayed "
 "in the status messages window."
@@ -1604,13 +1654,12 @@ msgstr ""
 "v oknu sporočil stanja."
 
 # Kot naslednji/As next
-#: ../src/interface.c:2879
-#, fuzzy
+#: ../src/interface.c:2928
 msgid "Auto-focus widgets (focus follows mouse)"
 msgstr "Samodejno fokusiraj gradnike (fokus sledi miški)"
 
 # puščen delno nepreveden, bo dodelan - fokus ni najboljši prevod; will be done later, left partially undone - goto line fields?
-#: ../src/interface.c:2882
+#: ../src/interface.c:2931
 msgid ""
 "Gives the focus automatically to widgets below the mouse cursor. Works for "
 "the main editor widget, the scribble, the toolbar search and goto line "
@@ -1619,27 +1668,27 @@ msgstr ""
 "Samodejno dodeli  fokus  gradnikom pod miškinim kazalcem. Deluje za gradnike "
 "glavnega urejevalnika, beležko, iskanje iz  orodne vrstice in VTE."
 
-#: ../src/interface.c:2884 ../src/interface.c:3210 ../src/interface.c:4122
+#: ../src/interface.c:2933 ../src/interface.c:3280 ../src/interface.c:4188
 msgid "<b>Miscellaneous</b>"
 msgstr "<b>Raznotero</b>"
 
-#: ../src/interface.c:2904
+#: ../src/interface.c:2953
 msgid "Always wrap search and hide the Find dialog"
-msgstr "Vedno dokončaj iskanje in skrije pogovorno okno Najdi"
+msgstr "Vedno obrne iskanje in skrije pogovorno okno Najdi"
 
-#: ../src/interface.c:2907
+#: ../src/interface.c:2956
 msgid ""
 "Always wrap search around the document and hide the Find dialog after "
 "clicking Find Next/Previous"
 msgstr ""
-"Vedno dokonča iskanje izraza dokumenta v preostanku besedila in skrije "
-"pogovorno okno Najdi po kliku na Najdi Naprej/Nazaj"
+"Vedno obrne iskanje izraza v preostanku dokumenta in skrije pogovorno okno "
+"Najdi po kliku na Najdi Naprej/Nazaj"
 
-#: ../src/interface.c:2909
+#: ../src/interface.c:2958
 msgid "Use the current word under the cursor for Find dialogs"
 msgstr "Uporabi trenutno besedo pod kazalko za pogovorna okna Najdi"
 
-#: ../src/interface.c:2912
+#: ../src/interface.c:2961
 msgid ""
 "Use current word under the cursor when opening the Find, Find in Files or "
 "Replace dialog and there is no selection"
@@ -1647,19 +1696,19 @@ msgstr ""
 "Uporabi trenutno besedo pod kazalko ob odpiranju pogovornih oken Najdi, "
 "Najdi v datotekah ali Zamenjaj, ko ne obstaja izbira"
 
-#: ../src/interface.c:2914
+#: ../src/interface.c:2963
 msgid "Use the current file's directory for Find in Files"
 msgstr "Uporabi mapo trenutne datoteke za Najdi v datotekah"
 
-#: ../src/interface.c:2918
+#: ../src/interface.c:2967
 msgid "<b>Search</b>"
 msgstr "<b>Išči</b>"
 
-#: ../src/interface.c:2937
+#: ../src/interface.c:2986
 msgid "Use project-based session files"
 msgstr "Uporabi projektno osnovane sejne datoteke"
 
-#: ../src/interface.c:2940
+#: ../src/interface.c:2989
 msgid ""
 "Whether to store a project's session files and open them when re-opening the "
 "project"
@@ -1667,11 +1716,11 @@ msgstr ""
 "Ali naj se sejne datoteke projekta shranijo in odprejo ob ponovnem odpiranju "
 "projekta"
 
-#: ../src/interface.c:2942
+#: ../src/interface.c:2991
 msgid "Store project file inside the project base directory"
 msgstr "Shrani projektno datoteko v osnovnem imenu projekta"
 
-#: ../src/interface.c:2945
+#: ../src/interface.c:2994
 msgid ""
 "When enabled, a project file is stored by default inside the project base "
 "directory when creating new projects instead of one directory above the base "
@@ -1683,75 +1732,90 @@ msgstr ""
 "njim. Še vedno pa lahko spremenite pot projektne datoteke v pogovornem oknu "
 "Nov projekt."
 
-#: ../src/interface.c:2947
+#: ../src/interface.c:2996
 msgid "<b>Projects</b>"
 msgstr "<b>Projekti</b>"
 
-#: ../src/interface.c:2952
+#: ../src/interface.c:3001
 msgid "Miscellaneous"
 msgstr "Raznotero"
 
-#: ../src/interface.c:2956
+#: ../src/interface.c:3005
 msgid "General"
 msgstr "Splošno"
 
-#: ../src/interface.c:2979
+#: ../src/interface.c:3028
 msgid "Show symbol list"
 msgstr "Pokaži seznam simbolov"
 
-#: ../src/interface.c:2982
+#: ../src/interface.c:3031
 msgid "Toggle the symbol list on and off"
 msgstr "Vklopi/izklopi seznam simbolov"
 
-#: ../src/interface.c:2984
+#: ../src/interface.c:3033
 msgid "Show documents list"
 msgstr "Pokaži seznam dokumentov"
 
-#: ../src/interface.c:2987
+#: ../src/interface.c:3036
 msgid "Toggle the documents list on and off"
 msgstr "Vklopi/izklopi seznam dokumentov"
 
-#: ../src/interface.c:2989
+#: ../src/interface.c:3042
+#, fuzzy
+msgid "Position:"
+msgstr "Opis:"
+
+#: ../src/interface.c:3046 ../src/interface.c:3161 ../src/interface.c:3215
+#: ../src/interface.c:3233 ../src/interface.c:3251
+msgid "Left"
+msgstr "Levo"
+
+#: ../src/interface.c:3053 ../src/interface.c:3169 ../src/interface.c:3216
+#: ../src/interface.c:3234 ../src/interface.c:3252
+msgid "Right"
+msgstr "Desno"
+
+#: ../src/interface.c:3059
 msgid "<b>Sidebar</b>"
 msgstr "<b>Stranska vrstica</b>"
 
-#: ../src/interface.c:3010
+#: ../src/interface.c:3080
 msgid "Symbol list:"
 msgstr "Seznam simbolov:"
 
-#: ../src/interface.c:3017 ../src/interface.c:3132
+#: ../src/interface.c:3087 ../src/interface.c:3202
 msgid "Message window:"
 msgstr "Sporočilno okno:"
 
-#: ../src/interface.c:3024 ../src/interface.c:3168
+#: ../src/interface.c:3094 ../src/interface.c:3238
 msgid "Editor:"
 msgstr "Urejevalnik:"
 
-#: ../src/interface.c:3036
+#: ../src/interface.c:3106
 msgid "Sets the font for the message window"
 msgstr "Nastavi nabor znakov za sporočilno okno"
 
-#: ../src/interface.c:3044
+#: ../src/interface.c:3114
 msgid "Sets the font for the symbol list"
 msgstr "Nastavi nabor znakov za seznam simbolov"
 
-#: ../src/interface.c:3052
+#: ../src/interface.c:3122
 msgid "Sets the editor font"
 msgstr "Nastavi nabor znakov za urejevalnik"
 
-#: ../src/interface.c:3054
+#: ../src/interface.c:3124
 msgid "<b>Fonts</b>"
 msgstr "<b>Nabori znakov</b>"
 
-#: ../src/interface.c:3073
+#: ../src/interface.c:3143
 msgid "Show editor tabs"
 msgstr "Pokaži razmake urejevalnika"
 
-#: ../src/interface.c:3077
+#: ../src/interface.c:3147
 msgid "Show close buttons"
 msgstr "Pokaži gumbe za zapiranje"
 
-#: ../src/interface.c:3080
+#: ../src/interface.c:3150
 msgid ""
 "Shows a small cross button in the file tabs to easily close files when "
 "clicking on it (requires restart of Geany)"
@@ -1759,126 +1823,115 @@ msgstr ""
 "Pokaže majhen križast gumb na zavihku za lažje zapiranje datotek ob kliku "
 "nanj (zahteva ponovni zagon Geany)"
 
-#: ../src/interface.c:3086
+#: ../src/interface.c:3156
 msgid "Placement of new file tabs:"
 msgstr "Položaj novih datotečnih zavihkov:"
 
-#: ../src/interface.c:3091 ../src/interface.c:3145 ../src/interface.c:3163
-#: ../src/interface.c:3181
-msgid "Left"
-msgstr "Levo"
-
-#: ../src/interface.c:3094
+#: ../src/interface.c:3164
 msgid "File tabs will be placed on the left of the notebook"
 msgstr "Datotečni zavihki bodo na levi strani zvezka"
 
-#: ../src/interface.c:3099 ../src/interface.c:3146 ../src/interface.c:3164
-#: ../src/interface.c:3182
-msgid "Right"
-msgstr "Desno"
-
-#: ../src/interface.c:3102
+#: ../src/interface.c:3172
 msgid "File tabs will be placed on the right of the notebook"
 msgstr "Datotečni zavihki bodo na desni strani zvezka"
 
-#: ../src/interface.c:3106
+#: ../src/interface.c:3176
 msgid "Double-clicking hides all additional widgets"
 msgstr "Dvoklik skrije vse dodatne gradnike"
 
-#: ../src/interface.c:3109
+#: ../src/interface.c:3179
 msgid "Calls the View->Toggle All Additional Widgets command"
 msgstr "Pokliče ukaz Pogled->Preklopi vse dodatne gradnike"
 
-#: ../src/interface.c:3111
+#: ../src/interface.c:3181
 msgid "<b>Editor tabs</b>"
 msgstr "<b>Razmaki urejevalnika</b>"
 
-#: ../src/interface.c:3147 ../src/interface.c:3165 ../src/interface.c:3183
+#: ../src/interface.c:3217 ../src/interface.c:3235 ../src/interface.c:3253
 msgid "Top"
 msgstr "Vrh"
 
-#: ../src/interface.c:3148 ../src/interface.c:3166 ../src/interface.c:3184
+#: ../src/interface.c:3218 ../src/interface.c:3236 ../src/interface.c:3254
 msgid "Bottom"
 msgstr "Dno"
 
-#: ../src/interface.c:3150
+#: ../src/interface.c:3220
 msgid "Sidebar:"
 msgstr "Stranska vrstica:"
 
-#: ../src/interface.c:3186
+#: ../src/interface.c:3256
 msgid "<b>Tab positions</b>"
 msgstr "<b>Pozicije razmakov:</b>"
 
-#: ../src/interface.c:3205
+#: ../src/interface.c:3275
 msgid "Show status bar"
 msgstr "Pokaži vrstico stanja"
 
-#: ../src/interface.c:3208
+#: ../src/interface.c:3278
 msgid "Whether to show the status bar at the bottom of the main window"
 msgstr "Ali naj se prikaže statusna vrstica na dnu glavnega okna"
 
-#: ../src/interface.c:3215
+#: ../src/interface.c:3285
 msgid "Interface"
 msgstr "Vmesnik"
 
-#: ../src/interface.c:3238
+#: ../src/interface.c:3308
 msgid "Show T_oolbar"
 msgstr "P_okaži orodno vrstico"
 
-#: ../src/interface.c:3242
+#: ../src/interface.c:3312
 msgid "_Append Toolbar to the Menu"
 msgstr "Dod_aj orodno vrstico v meni"
 
 # Ni: Add --> Temveč: Pack
-#: ../src/interface.c:3245
+#: ../src/interface.c:3315
 msgid "Pack the toolbar to the main menu to save vertical space"
 msgstr ""
 "Dodaj orodno vrstico v glavni meni zaradi prihranka navpičnega prostora"
 
-#: ../src/interface.c:3247
+#: ../src/interface.c:3317
 msgid "<b>Toolbar</b>"
 msgstr "<b>Orodna vrstica</b>"
 
-#: ../src/interface.c:3268
+#: ../src/interface.c:3338
 msgid "Icon style:"
 msgstr "Slog ikon:"
 
-#: ../src/interface.c:3275
+#: ../src/interface.c:3345
 msgid "Icon size:"
 msgstr "Velikost ikon:"
 
-#: ../src/interface.c:3330
+#: ../src/interface.c:3400
 msgid "<b>Appearance</b>"
 msgstr "<b>Izgled</b>"
 
-#: ../src/interface.c:3355 ../src/toolbar.c:881
-#, fuzzy
+#: ../src/interface.c:3425 ../src/toolbar.c:883
 msgid "Customize Toolbar"
-msgstr "Pokaži _orodno vrstico"
+msgstr "Prilagodi orodno vrstico"
 
-#: ../src/interface.c:3359
+#: ../src/interface.c:3429
 msgid "Toolbar"
 msgstr "Orodna vrstica"
 
-#: ../src/interface.c:3386
+#: ../src/interface.c:3456
 msgid "Line wrapping"
 msgstr "Zavijanje vrstic"
 
-#: ../src/interface.c:3389
+#: ../src/interface.c:3459
 msgid ""
 "Wrap the line at the window border and continue it on the next line. Note: "
 "line wrapping has a high performance cost for large documents so should be "
 "disabled on slow machines."
 msgstr ""
 "Zavije vrstico na robu okna in jo nadaljuje v naslednji. Opomba: zavijanje "
-"vrstic ima močan vpliv na zmogljivost pri velikih dokumentih in bi moral "
+"vrstic ima močan vpliv na zmogljivost pri velikih dokumentih in bi moralo "
 "biti onemogočen na počasnejših računalnikih. "
 
-#: ../src/interface.c:3391
+#: ../src/interface.c:3461
 msgid "Enable \"smart\" home key"
 msgstr "Omogoči \"pametno\" tipko domov"
 
-#: ../src/interface.c:3394
+#: ../src/interface.c:3464
 msgid ""
 "When \"smart\" home is enabled, the HOME key will move the caret to the "
 "first non-blank character of the line, unless it is already there, it moves "
@@ -1886,17 +1939,17 @@ msgid ""
 "key always moves the caret to the start of the current line, regardless of "
 "its current position."
 msgstr ""
-"Kadar je \"pametni\" domov omogočen, bo tipka HOME pomaknila kazalec na prvi "
-"ne-prazni znak vrstice razen v primeru da se že tam nahaja.  V tem primeru "
-"bo kazalec pomaknjen na sam začetek vrstice.  Če je ta možnost onemogočena, "
-"bo tipka HOME vedno pomaknila kazalec na strogi začetek vrstice ne glede na "
-"tekoči stolpec."
+"Kadar je \"pametni\" domov omogočen, bo tipka \" Home pomaknila kazalec na "
+"prvi ne-prazni znak vrstice razen v primeru da se že tam nahaja.  V tem "
+"primeru bo kazalec pomaknjen na sam začetek vrstice.  Če je ta možnost "
+"onemogočena, bo tipka Home vedno pomaknila kazalec na strogi začetek vrstice "
+"ne glede na tekoči stolpec."
 
-#: ../src/interface.c:3396
+#: ../src/interface.c:3466
 msgid "Disable Drag and Drop"
 msgstr "Onemogoči povleci in spusti"
 
-#: ../src/interface.c:3399
+#: ../src/interface.c:3469
 msgid ""
 "Disable drag and drop completely in the editor window so you can't drag and "
 "drop any selections within or outside of the editor window"
@@ -1904,19 +1957,19 @@ msgstr ""
 "Popolnoma onemogoči povleci in spusti  v oknu urejevalnika tako, da ne "
 "morete povleci in spustiti nobenih izbir znotraj ali zunaj okna urejevalnika"
 
-#: ../src/interface.c:3401
+#: ../src/interface.c:3471
 msgid "Enable folding"
 msgstr "Omogoči zvijanje"
 
-#: ../src/interface.c:3404
+#: ../src/interface.c:3474
 msgid "Whether to enable folding the code"
 msgstr "Ali naj bo zvijanje kode omogočeno"
 
-#: ../src/interface.c:3406
+#: ../src/interface.c:3476
 msgid "Fold/unfold all children of a fold point"
 msgstr "Zvij/odvij vse naslednike točke zvijanja"
 
-#: ../src/interface.c:3409
+#: ../src/interface.c:3479
 msgid ""
 "Fold or unfold all children of a fold point. By pressing the Shift key while "
 "clicking on a fold symbol the contrary behavior is used."
@@ -1924,12 +1977,12 @@ msgstr ""
 "Zvije ali odvije vse naslednike točke zvijanja. S pritiskom na tipko Shift "
 "med klikom na simbol zvijanja se uporabi nasproten učinek."
 
-#: ../src/interface.c:3411
+#: ../src/interface.c:3481
 msgid "Use indicators to show compile errors"
 msgstr "Uporabi pokazatelje, da prikažeš napake prevajanja"
 
 # squiggly=twisty!-->wavy
-#: ../src/interface.c:3414
+#: ../src/interface.c:3484
 msgid ""
 "Whether to use indicators (a squiggly underline) to highlight the lines "
 "where the compiler found a warning or an error"
@@ -1937,23 +1990,23 @@ msgstr ""
 "Ali naj bodo v uporabi pokazatelji (valovito podčrtavanje), ki poudarijo "
 "vrstice kjer je prevajalnik našel opozorilo ali napako"
 
-#: ../src/interface.c:3416
+#: ../src/interface.c:3486
 msgid "Newline strips trailing spaces"
 msgstr "Nova vrstica poreže presledke na repu"
 
-#: ../src/interface.c:3419
+#: ../src/interface.c:3489
 msgid "Enable newline to strip the trailing spaces on the previous line"
 msgstr "Omogoči novi vrstici rezanje presledkov na repu prejšnje vrstice"
 
-#: ../src/interface.c:3425
+#: ../src/interface.c:3495
 msgid "Line breaking column:"
 msgstr "Prelomni stolpec vrstice:"
 
-#: ../src/interface.c:3439
+#: ../src/interface.c:3509
 msgid "Comment toggle marker:"
 msgstr "Oznaka komentarja:"
 
-#: ../src/interface.c:3446
+#: ../src/interface.c:3516
 msgid ""
 "A string which is added when toggling a line comment in a source file, it is "
 "used to mark the comment as toggled."
@@ -1961,94 +2014,94 @@ msgstr ""
 "Niz, ki je dodan takrat, ko preklapljamo komentar vrstice v izvorni kodi. "
 "Uporablja se za oznako komentarja kot preklopljenega."
 
-#: ../src/interface.c:3448
+#: ../src/interface.c:3518
 msgid "<b>Features</b>"
-msgstr "<b>Posebnosti!!</b>"
+msgstr "<b>Možnosti</b>"
 
-#: ../src/interface.c:3453
+#: ../src/interface.c:3523
 msgid "Features"
-msgstr "Posebnosti!!"
+msgstr "Možnosti"
 
-#: ../src/interface.c:3485 ../src/interface.c:5025
+#: ../src/interface.c:3555 ../src/interface.c:5097
 msgid "Auto-indent mode:"
 msgstr "Samozamikalni način:"
 
-#: ../src/interface.c:3498 ../src/interface.c:5038
+#: ../src/interface.c:3568 ../src/interface.c:5110
 msgid "Basic"
 msgstr "Osnovno"
 
-#: ../src/interface.c:3499 ../src/interface.c:5039
+#: ../src/interface.c:3569 ../src/interface.c:5111
 msgid "Current chars"
 msgstr "Tekoči znaki"
 
-#: ../src/interface.c:3500 ../src/interface.c:5040
+#: ../src/interface.c:3570 ../src/interface.c:5112
 msgid "Match braces"
 msgstr "Ujemanje oklepajev"
 
-#: ../src/interface.c:3502 ../src/interface.c:3853 ../src/interface.c:5042
+#: ../src/interface.c:3572 ../src/interface.c:3923 ../src/interface.c:5114
 msgid "Type:"
 msgstr "Način:"
 
-#: ../src/interface.c:3509 ../src/interface.c:5049
+#: ../src/interface.c:3579 ../src/interface.c:5121
 msgid "Width:"
 msgstr "Širina:"
 
-#: ../src/interface.c:3522 ../src/interface.c:5062
+#: ../src/interface.c:3592 ../src/interface.c:5134
 msgid "The width in chars of a single indent"
 msgstr "Širina enega zamika v znakih"
 
-#: ../src/interface.c:3532 ../src/interface.c:5072
+#: ../src/interface.c:3602 ../src/interface.c:5144
 msgid "Use spaces when inserting indentation"
 msgstr "Uporabi presledke ob vrivanju zamikanja"
 
-#: ../src/interface.c:3541 ../src/interface.c:5081
+#: ../src/interface.c:3611 ../src/interface.c:5153
 msgid "Use one tab per indent"
 msgstr "Uporabi en razmak na zamik"
 
-#: ../src/interface.c:3550 ../src/interface.c:5090
+#: ../src/interface.c:3620 ../src/interface.c:5162
 msgid ""
 "Use spaces if the total indent is less than the tab width, otherwise use both"
 msgstr ""
 "Uporabi presledke, če je skupni zamik manjši kot širina razmaka, sicer "
 "uporabi oboje"
 
-#: ../src/interface.c:3565 ../src/interface.c:5105
+#: ../src/interface.c:3635 ../src/interface.c:5184
 msgid "Hard tab width:"
 msgstr "Širina trajnega razmaka:"
 
-#: ../src/interface.c:3573 ../src/interface.c:5113
+#: ../src/interface.c:3643 ../src/interface.c:5192
 msgid "The width of a tab when Tabs & Spaces is set for a document"
 msgstr "Širina razmaka, ko uporabljamo Razmake & presledke v dokumentu"
 
-#: ../src/interface.c:3583 ../src/interface.c:5123
+#: ../src/interface.c:3653 ../src/interface.c:5171
 msgid ""
 "Whether to detect the indentation type from file contents when a file is "
 "opened"
 msgstr "Ali naj se zazna način zamikanja iz vsebine datoteke ob njenem odprtju"
 
-#: ../src/interface.c:3585
+#: ../src/interface.c:3655
 msgid "Tab key indents"
 msgstr "Tipka razmaka zamakne"
 
-#: ../src/interface.c:3588
+#: ../src/interface.c:3658
 msgid ""
 "Pressing tab/shift-tab indents/unindents instead of inserting a tab character"
 msgstr ""
 "Pritisk na razmak/shift-razmak zamakne/umakne namesto vrivanja znaka razmaka"
 
-#: ../src/interface.c:3590
+#: ../src/interface.c:3660
 msgid "<b>Indentation</b>"
 msgstr "<b>Zamikanje</b>"
 
-#: ../src/interface.c:3595 ../src/interface.c:5125
+#: ../src/interface.c:3665 ../src/interface.c:5197
 msgid "Indentation"
 msgstr "Zamikanje"
 
-#: ../src/interface.c:3618
+#: ../src/interface.c:3688
 msgid "Snippet completion"
 msgstr "Dokončanje koščkov"
 
-#: ../src/interface.c:3621
+#: ../src/interface.c:3691
 msgid ""
 "Type a defined short character sequence and complete it to a more complex "
 "string using a single keypress"
@@ -2056,20 +2109,19 @@ msgstr ""
 "Natipkajte določeno kratko zaporedje znakov in ga dokončajte v bolj "
 "zapletenega  z uporabo ene tipke"
 
-#: ../src/interface.c:3623
-#, fuzzy
+#: ../src/interface.c:3693
 msgid "XML tag autocompletion"
 msgstr "Samodokončanje XML značk"
 
-#: ../src/interface.c:3626
+#: ../src/interface.c:3696
 msgid "Automatic completion and closing of XML tags (includes HTML tags)"
 msgstr "Samodokončanje in zapiranje XML značk (vključuje HTML značke)"
 
-#: ../src/interface.c:3628
+#: ../src/interface.c:3698
 msgid "Automatic continuation of multi-line comments"
 msgstr "Samodejno nadaljevanje večvrstičnih komentarjev"
 
-#: ../src/interface.c:3631
+#: ../src/interface.c:3701
 msgid ""
 "Continue automatically multi-line comments in languages like C, C++ and Java "
 "when a new line is entered inside such a comment"
@@ -2077,11 +2129,11 @@ msgstr ""
 "Samodejno nadaljuj večvrstične komentarje v jezikih kot so C, C++ in Java, "
 "ko je vrinjena nova vrstica znotraj komentarja "
 
-#: ../src/interface.c:3633
+#: ../src/interface.c:3703
 msgid "Autocomplete symbols"
-msgstr ""
+msgstr "Samodokončaj simbole"
 
-#: ../src/interface.c:3636
+#: ../src/interface.c:3706
 msgid ""
 "Automatic completion of known symbols in open files (function names, global "
 "variables, ...)"
@@ -2089,148 +2141,140 @@ msgstr ""
 "Samodokončanje znanih simbolov v odprtih datotekah (imena funkcij, splošne "
 "spremenljivke, ...)"
 
-#: ../src/interface.c:3638
+#: ../src/interface.c:3708
 msgid "Autocomplete all words in document"
-msgstr ""
+msgstr "Samodokončaj vse besede v dokumentu"
 
-#: ../src/interface.c:3642
+#: ../src/interface.c:3712
 msgid "Drop rest of word on completion"
-msgstr ""
+msgstr "Izpusti ostanek besede ob dokončanju"
 
-#: ../src/interface.c:3652
+#: ../src/interface.c:3722
 msgid "Max. symbol name suggestions:"
 msgstr "Največ predloženih imen simbolov:"
 
-#: ../src/interface.c:3659
+#: ../src/interface.c:3729
 msgid "Completion list height:"
 msgstr "Višina seznama dokončanja"
 
-#: ../src/interface.c:3666
-#, fuzzy
+#: ../src/interface.c:3736
 msgid "Characters to type for autocompletion:"
 msgstr "Potrebni znaki za dopolnjevanje:"
 
-#: ../src/interface.c:3679
-#, fuzzy
+#: ../src/interface.c:3749
 msgid ""
 "The amount of characters which are necessary to show the symbol "
 "autocompletion list"
 msgstr ""
 "Količina potrebnih znakov, ki je potrebna za prikaz seznama samodopolnjevanja"
 
-#: ../src/interface.c:3688
-#, fuzzy
+#: ../src/interface.c:3758
 msgid "Display height in rows for the autocompletion list"
 msgstr "Višina prikaza v vrsticah za seznam samodopolnjevanja"
 
-#: ../src/interface.c:3697
-#, fuzzy
+#: ../src/interface.c:3767
 msgid "Maximum number of entries to display in the autocompletion list"
 msgstr "Največje število prikazanih vnosov v seznamu samodopolnjevanja"
 
-#: ../src/interface.c:3700
+#: ../src/interface.c:3770
 msgid "<b>Completions</b>"
 msgstr "<b>Dopolnjevanja</b>"
 
-#: ../src/interface.c:3720
+#: ../src/interface.c:3790
 msgid "Parenthesis ( )"
 msgstr "Oklepaji ()"
 
-#: ../src/interface.c:3725
+#: ../src/interface.c:3795
 msgid "Auto-close parenthesis when typing an opening one"
 msgstr "Samodejno zapri oklepaje med tipkanjem med odpiranjem"
 
-#: ../src/interface.c:3727
+#: ../src/interface.c:3797
 msgid "Single quotes ' '"
 msgstr "Enojni narekovaji ' '"
 
-#: ../src/interface.c:3732
+#: ../src/interface.c:3802
 msgid "Auto-close simple quote when typing an opening one"
 msgstr "Samodejno zapri enojne narekovaje med odpiranjem"
 
-#: ../src/interface.c:3734
+#: ../src/interface.c:3804
 msgid "Curly brackets { }"
 msgstr "Zaviti oklepaji { }"
 
-#: ../src/interface.c:3739
+#: ../src/interface.c:3809
 msgid "Auto-close curly bracket when typing an opening one"
 msgstr "Samodejno zapri zaviti oklepaje med tipkanjem"
 
-#: ../src/interface.c:3741
+#: ../src/interface.c:3811
 msgid "Square brackets [ ]"
 msgstr "Oglati oklepaji [ ]"
 
-#: ../src/interface.c:3746
+#: ../src/interface.c:3816
 msgid "Auto-close square-bracket when typing an opening one"
 msgstr "Samodejno zapri oglate oklepaje med tipkanjem"
 
-#: ../src/interface.c:3748
+#: ../src/interface.c:3818
 msgid "Double quotes \" \""
 msgstr "Dvojni narekovaji \" \""
 
-#: ../src/interface.c:3753
+#: ../src/interface.c:3823
 msgid "Auto-close double quote when typing an opening one"
 msgstr "Samodejno zapri dvojni narekovaje med tipkanjem"
 
-#: ../src/interface.c:3755
+#: ../src/interface.c:3825
 msgid "<b>Auto-close quotes and brackets</b>"
 msgstr "<b>Samodejno zapri narekovaje in oklepaje</b>"
 
-#: ../src/interface.c:3760
+#: ../src/interface.c:3830
 msgid "Completions"
 msgstr "Dopolnjevanja"
 
-#: ../src/interface.c:3783
+#: ../src/interface.c:3853
 msgid "Invert syntax highlighting colors"
 msgstr "Obrni barve poudarjanja skladnje"
 
-#: ../src/interface.c:3786
-msgid ""
-"Use white text on a black background and invert all colors, this option "
-"requires a restart of Geany"
+#: ../src/interface.c:3856
+msgid "Invert all colors, by default using white text on a black background"
 msgstr ""
-"Uporabi beli tekst na črnem ozadju in obrne vse barve. Ta izbira zahteva "
-"ponovni zagon Geany"
 
-#: ../src/interface.c:3788
+#: ../src/interface.c:3858
 msgid "Show indentation guides"
 msgstr "Pokaži vodila zamikanja"
 
 # right indent=pravilna ali desna?
-#: ../src/interface.c:3791
+#: ../src/interface.c:3861
 msgid "Shows small dotted lines to help you to use the right indentation"
 msgstr ""
 "Prikaže majhne pikčaste črte, ki so vam v pomoč pri uporabi desne poravnave"
 
-#: ../src/interface.c:3793
+#: ../src/interface.c:3863
 msgid "Show white space"
 msgstr "Pokaži prazni prostor"
 
-#: ../src/interface.c:3796
+#: ../src/interface.c:3866
 msgid "Marks spaces with dots and tabs with arrows"
 msgstr "Prikaže presledke kot pikice in razmake kot puščice"
 
-#: ../src/interface.c:3798
+#: ../src/interface.c:3868
 msgid "Show line endings"
 msgstr "Pokaži konec vrstice"
 
-#: ../src/interface.c:3801
+#: ../src/interface.c:3871
 msgid "Shows the line ending character"
 msgstr "Prikaže znak za konec vrstice"
 
-#: ../src/interface.c:3803
+#: ../src/interface.c:3873
 msgid "Show line numbers"
 msgstr "Pokaži številke vrstic"
 
-#: ../src/interface.c:3806
+#: ../src/interface.c:3876
 msgid "Shows or hides the Line Number margin"
 msgstr "Prikaže ali skrije rob s številkami vrstic"
 
-#: ../src/interface.c:3808
+#: ../src/interface.c:3878
 msgid "Show markers margin"
 msgstr "Pokaži rob oznak"
 
-#: ../src/interface.c:3811
+#: ../src/interface.c:3881
 msgid ""
 "Shows or hides the small margin right of the line numbers, which is used to "
 "mark lines"
@@ -2238,36 +2282,36 @@ msgstr ""
 "Prikaže ali skrije mali rob desno od številk strani, ki se uporablja za "
 "označevanje vrstic"
 
-#: ../src/interface.c:3813
+#: ../src/interface.c:3883
 msgid "Stop scrolling at last line"
 msgstr "Ustavi pomikanje na zadnji  vrstici"
 
-#: ../src/interface.c:3816
+#: ../src/interface.c:3886
 msgid "Whether to stop scrolling one page past the last line of a document"
 msgstr "Ali naj se ustavi pomikanje za zadnjo vrstico dokumenta"
 
-#: ../src/interface.c:3818
+#: ../src/interface.c:3888
 msgid "<b>Display</b>"
 msgstr "<b>Prikaz</b>"
 
-#: ../src/interface.c:3839
+#: ../src/interface.c:3909
 msgid "Long line marker:"
 msgstr "Oznaka dolge vrste:"
 
-#: ../src/interface.c:3846
+#: ../src/interface.c:3916
 msgid "Long line marker color:"
 msgstr "Barva oznake dolge vrste:"
 
-#: ../src/interface.c:3865
+#: ../src/interface.c:3935
 msgid "Sets the color of the long line marker"
 msgstr "Nastavi barvo oznake dolge vrste"
 
-#: ../src/interface.c:3866 ../src/toolbar.c:70 ../src/tools.c:746
+#: ../src/interface.c:3936 ../src/toolbar.c:70 ../src/tools.c:717
 #: ../src/vte.c:769 ../src/vte.c:776
 msgid "Color Chooser"
 msgstr "Barvni izbiralnik"
 
-#: ../src/interface.c:3874
+#: ../src/interface.c:3944
 msgid ""
 "The long line marker is a thin vertical line in the editor, it helps to mark "
 "long lines, or as a hint to break the line. Set this value to a value "
@@ -2277,11 +2321,11 @@ msgstr ""
 "dolge črte ali kot namig pri prelomu vrstice. Nastavite to vrednost na večjo "
 "od 0 da določite stolpec kjer se naj pojavi."
 
-#: ../src/interface.c:3884
+#: ../src/interface.c:3954
 msgid "Line"
 msgstr "Črta"
 
-#: ../src/interface.c:3887
+#: ../src/interface.c:3957
 msgid ""
 "Prints a vertical line in the editor window at the given cursor position "
 "(see below)"
@@ -2289,11 +2333,11 @@ msgstr ""
 "Izpiše navpično črto v oknu urejevalnika na dani poziciji kurzorja (glej "
 "spodaj)"
 
-#: ../src/interface.c:3891
+#: ../src/interface.c:3961
 msgid "Background"
 msgstr "Ozadje"
 
-#: ../src/interface.c:3894
+#: ../src/interface.c:3964
 msgid ""
 "The background color of characters after the given cursor position (see "
 "below) changed to the color set below, (this is recommended if you use "
@@ -2303,111 +2347,115 @@ msgstr ""
 "spremenil v barvo nastavljeno spodaj. To je priporočeno, če uporabljate "
 "proporcionalni nabor znakov. "
 
-#: ../src/interface.c:3898
+#: ../src/interface.c:3968
 msgid "Disabled"
 msgstr "Onemogočeno"
 
-#: ../src/interface.c:3904
+#: ../src/interface.c:3974
 msgid "<b>Long line marker</b>"
 msgstr "<b>Oznaka dolge vrste</b>"
 
-#: ../src/interface.c:3909
+#: ../src/interface.c:3979
 msgid "Display"
 msgstr "Prikaz"
 
 # "Open"!="Create"; "Ustvari"=="Create"; "Start"=="Začni"; "Začni"==nonsense_translation;
-#: ../src/interface.c:3940
+#: ../src/interface.c:4010
 msgid "Open new documents from the command-line"
 msgstr "Ustvari nove dokumente iz ukazne vrstice"
 
 # "Open"!="Create"; "Ustvari"=="Create"; "Start"=="Začni"; "Začni"==nonsense_translation;
-#: ../src/interface.c:3943
+#: ../src/interface.c:4013
 msgid "Start a new file for each command-line filename that doesn't exist"
 msgstr "Odpre novo datoteko za vsako datoteko iz ukazne vrstice, ki ne obstaja"
 
-#: ../src/interface.c:3957
+#: ../src/interface.c:4027
 msgid "Default end of line characters:"
 msgstr "Privzeti znaki konca vrstice:"
 
-#: ../src/interface.c:3964
+#: ../src/interface.c:4034
 msgid "<b>New files</b>"
 msgstr "<b>Nove datoteke</b>"
 
-#: ../src/interface.c:3990
-msgid "Sets the default encoding for newly created files"
-msgstr "Nastavi kodiranje za novonastale datoteke"
-
-#: ../src/interface.c:3996
+#: ../src/interface.c:4057
 msgid "Default encoding (new files):"
 msgstr "Privzeto kodiranje (nove datoteke):"
 
-#: ../src/interface.c:4003
-msgid "Default encoding (existing files):"
-msgstr "Privzeto kodiranje (obstoječe datoteke):"
+#: ../src/interface.c:4065
+msgid "Sets the default encoding for newly created files"
+msgstr "Nastavi kodiranje za novonastale datoteke"
 
-#: ../src/interface.c:4015
-msgid "Sets the default encoding for opening existing files"
-msgstr "Nastavi privzeto kodiranje ob odpiranju obstoječih datotek"
-
-#: ../src/interface.c:4021
-msgid "Use fixed encoding when opening files"
+#: ../src/interface.c:4071
+#, fuzzy
+msgid "Use fixed encoding when opening non-Unicode files"
 msgstr "Uporabi fiksno kodiranje ob odpiranju datotek"
 
-#: ../src/interface.c:4026
+#: ../src/interface.c:4074
+#, fuzzy
 msgid ""
 "This option disables the automatic detection of the file encoding when "
-"opening files and opens the file with the specified encoding (usually not "
-"needed)"
+"opening non-Unicode files and opens the file with the specified encoding "
+"(usually not needed)"
 msgstr ""
 "Ta možnost onemogoči samodejno zaznavanje kodiranja datotek ob odpiranju in "
 "odpre datoteko z določenim kodiranjem (običajno nepotrebno)."
 
-#: ../src/interface.c:4028
+#: ../src/interface.c:4080
+#, fuzzy
+msgid "Default encoding (existing non-Unicode files):"
+msgstr "Privzeto kodiranje (obstoječe datoteke):"
+
+#: ../src/interface.c:4088
+#, fuzzy
+msgid "Sets the default encoding for opening existing non-Unicode files"
+msgstr "Nastavi privzeto kodiranje ob odpiranju obstoječih datotek"
+
+#: ../src/interface.c:4094
 msgid "<b>Encodings</b>"
 msgstr "<b>Kodiranja</b>"
 
-#: ../src/interface.c:4047
+#: ../src/interface.c:4113
 msgid "Ensure new line at file end"
 msgstr "Zagotovi novo vrstico na koncu"
 
-#: ../src/interface.c:4050
+#: ../src/interface.c:4116
 msgid "Ensures that at the end of the file is a new line"
 msgstr "Zagotovi novo vrstico na koncu datoteke"
 
-#: ../src/interface.c:4052
+#: ../src/interface.c:4118
 msgid "Strip trailing spaces and tabs"
 msgstr "Poreži razmike in presledke na koncu"
 
-#: ../src/interface.c:4055
+#: ../src/interface.c:4121
 msgid "Removes trailing spaces and tabs and the end of lines"
 msgstr "Poreže razmike in presledke na koncu vrstic"
 
-#: ../src/interface.c:4057 ../src/keybindings.c:481
+#: ../src/interface.c:4123 ../src/keybindings.c:506
 msgid "Replace tabs by space"
 msgstr "Zamenja razmike s presledki"
 
-#: ../src/interface.c:4060
+#: ../src/interface.c:4126
 msgid "Replaces all tabs in document by spaces"
 msgstr "Zamenja vse razmike v dokumentu s presledki"
 
-#: ../src/interface.c:4062
+#: ../src/interface.c:4128
 msgid "<b>Saving files</b>"
 msgstr "<b>Shranjevanje datotek</b>"
 
-#: ../src/interface.c:4087
+#: ../src/interface.c:4153
 msgid "Recent files list length:"
 msgstr "Dolžina seznam nedavnih:"
 
-#: ../src/interface.c:4101
+#: ../src/interface.c:4167
 msgid "Specifies the number of files which are stored in the Recent files list"
 msgstr "Določa število datotek, spravljenih na seznamu nedavnih datotek"
 
 # fsck 3rd rock from the Sun?
-#: ../src/interface.c:4105
+#: ../src/interface.c:4171
 msgid "Disk check timeout:"
 msgstr "Potek časa za preverjanje diska:"
 
-#: ../src/interface.c:4118
+#: ../src/interface.c:4184
 msgid ""
 "How often to check for changes to document files on disk, in seconds. Zero "
 "disables checking."
@@ -2415,19 +2463,19 @@ msgstr ""
 "Preverjanje za spremembe na dokumentih na disku v sekundah. Ničla onemogoči "
 "preverjanja."
 
-#: ../src/interface.c:4127 ../src/symbols.c:590 ../plugins/filebrowser.c:1013
+#: ../src/interface.c:4193 ../src/symbols.c:593 ../plugins/filebrowser.c:1031
 msgid "Files"
 msgstr "Datoteke"
 
-#: ../src/interface.c:4160
+#: ../src/interface.c:4226
 msgid "Terminal:"
 msgstr "Terminal:"
 
-#: ../src/interface.c:4167
+#: ../src/interface.c:4233
 msgid "Browser:"
 msgstr "Brskalnik:"
 
-#: ../src/interface.c:4179
+#: ../src/interface.c:4245
 msgid ""
 "A terminal emulator like xterm, gnome-terminal or konsole (should accept the "
 "-e argument)"
@@ -2435,23 +2483,23 @@ msgstr ""
 "Posnemovalnik terminala kot xterm, gnome-terminal ali konsole (sprejeti mora "
 "možnost -e)"
 
-#: ../src/interface.c:4186
+#: ../src/interface.c:4252
 msgid "Path (and possibly additional arguments) to your favorite browser"
 msgstr "Pot (in morebitne dodatne možnosti) do vašega brskalnika "
 
-#: ../src/interface.c:4208
+#: ../src/interface.c:4274
 msgid "Grep:"
 msgstr "Grep:"
 
-#: ../src/interface.c:4231
+#: ../src/interface.c:4297
 msgid "<b>Tool paths</b>"
 msgstr "<b>Poti do orodij</b>"
 
-#: ../src/interface.c:4252
+#: ../src/interface.c:4318
 msgid "Context action:"
 msgstr "Kontekstno dejanje:"
 
-#: ../src/interface.c:4263
+#: ../src/interface.c:4329
 #, c-format
 msgid ""
 "Context action command. The currently selected word can be used with %s. It "
@@ -2462,150 +2510,147 @@ msgstr ""
 "pripomočkom %s. Lahko se pojavi kjerkoli v danem ukazu in bo zamenjan pred "
 "izvedbo."
 
-#: ../src/interface.c:4276
+#: ../src/interface.c:4342
 msgid "<b>Commands</b>"
 msgstr "<b>Ukazi</b>"
 
-#: ../src/interface.c:4281 ../src/keybindings.c:515
+#: ../src/interface.c:4347 ../src/keybindings.c:540
 msgid "Tools"
 msgstr "Orodja"
 
-#: ../src/interface.c:4315
+#: ../src/interface.c:4381
 msgid "email address of the developer"
 msgstr "e-poštni naslov razvijalca"
 
-#: ../src/interface.c:4322
+#: ../src/interface.c:4388
 msgid "Initials of the developer name"
 msgstr "Začetnice razvijalca"
 
-#: ../src/interface.c:4324
+#: ../src/interface.c:4390
 msgid "Initial version:"
 msgstr "Začetna različica:"
 
-#: ../src/interface.c:4336
+#: ../src/interface.c:4402
 msgid "Version number, which a new file initially has"
 msgstr "Različica, ki jo nosi nova datoteka ob nastanku"
 
-#: ../src/interface.c:4343
+#: ../src/interface.c:4409
 msgid "Company name"
 msgstr "Ime družbe"
 
-#: ../src/interface.c:4345
+#: ../src/interface.c:4411
 msgid "Developer:"
 msgstr "Razvijalec:"
 
-#: ../src/interface.c:4352
+#: ../src/interface.c:4418
 msgid "Company:"
 msgstr "Družba:"
 
-#: ../src/interface.c:4359
+#: ../src/interface.c:4425
 msgid "Mail address:"
-msgstr "E-naslov:"
+msgstr "Elektronska pošta:"
 
-#: ../src/interface.c:4366
+#: ../src/interface.c:4432
 msgid "Initials:"
 msgstr "Začetnice:"
 
-#: ../src/interface.c:4378
+#: ../src/interface.c:4444
 msgid "The name of the developer"
 msgstr "Ime razvijalca:"
 
-#: ../src/interface.c:4380
+#: ../src/interface.c:4446
 msgid "Year:"
 msgstr "Leto:"
 
-#: ../src/interface.c:4387
+#: ../src/interface.c:4453
 msgid "Date:"
 msgstr "Datum:"
 
-#: ../src/interface.c:4394
+#: ../src/interface.c:4460
 msgid "Date & Time:"
 msgstr "Datum in čas:"
 
-#: ../src/interface.c:4406
-#, fuzzy
+#: ../src/interface.c:4472
 msgid ""
 "Specify a format for the the {datetime} wildcard. You can use any conversion "
 "specifiers which can be used with the ANSI C strftime function."
 msgstr ""
-"Določite obliko za {datetime} wildcard. Uporabite lahko katerikoli "
+"Določite obliko za  zamenjavo{datetime}. Uporabite lahko katerikoli "
 "pretvorbeni določitelj, ki je uporaben v ANSI C strftime funkciji."
 
-#: ../src/interface.c:4413
-#, fuzzy
+#: ../src/interface.c:4479
 msgid ""
 "Specify a format for the the {year} wildcard. You can use any conversion "
 "specifiers which can be used with the ANSI C strftime function."
 msgstr ""
-"Določite obliko za {year} wildcard. Uporabite lahko katerikoli pretvorbeni "
+"Določite obliko za zamenjavo {year}. Uporabite lahko katerikoli pretvorbeni "
 "določitelj, ki je uporaben v ANSI C strftime funkciji."
 
-#: ../src/interface.c:4420
-#, fuzzy
+#: ../src/interface.c:4486
 msgid ""
 "Specify a format for the the {date} wildcard. You can use any conversion "
 "specifiers which can be used with the ANSI C strftime function."
 msgstr ""
-"Določite obliko za {date} wildcard. Uporabite lahko katerikoli pretvorbeni "
+"Določite obliko za zamenjavo {date}. Uporabite lahko katerikoli pretvorbeni "
 "določitelj, ki je uporaben v ANSI C strftime funkciji."
 
-#: ../src/interface.c:4422
+#: ../src/interface.c:4488
 msgid "<b>Template data</b>"
 msgstr "<b>Podatki predlog</b>"
 
-#: ../src/interface.c:4427
+#: ../src/interface.c:4493
 msgid "Templates"
 msgstr "Predloge"
 
-#: ../src/interface.c:4465
+#: ../src/interface.c:4531
 msgid "C_hange"
 msgstr "_Spremeni"
 
-#: ../src/interface.c:4469
+#: ../src/interface.c:4535
 msgid "<b>Keyboard shortcuts</b>"
 msgstr "<b>Bližnjice tipkovnice</b>"
 
-#: ../src/interface.c:4474
+#: ../src/interface.c:4540
 msgid "Keybindings"
 msgstr "Bližnjice tipkovnice"
 
-#: ../src/interface.c:4497
+#: ../src/interface.c:4563
 msgid "Command:"
 msgstr "Ukaz:"
 
-#: ../src/interface.c:4504
+#: ../src/interface.c:4570
 #, c-format
 msgid "Path to the command for printing files (use %f for the filename)"
 msgstr "Pot do ukaza za tiskanje datotek (uporabite %f za ime datoteke)"
 
-#: ../src/interface.c:4514
+#: ../src/interface.c:4580
 msgid "Use an external command for printing"
 msgstr "Uporabi zunanji ukaz za tiskanje"
 
-#: ../src/interface.c:4534 ../src/printing.c:380
+#: ../src/interface.c:4600 ../src/printing.c:381
 msgid "Print line numbers"
 msgstr "Natisni številke vrstic"
 
-#: ../src/interface.c:4537 ../src/printing.c:382
+#: ../src/interface.c:4603 ../src/printing.c:383
 msgid "Add line numbers to the printed page"
 msgstr "Doda številke vrstic na natisnjeno stran"
 
-#: ../src/interface.c:4539 ../src/printing.c:385
+#: ../src/interface.c:4605 ../src/printing.c:386
 msgid "Print page numbers"
 msgstr "Natisni številko strani"
 
-#: ../src/interface.c:4542 ../src/printing.c:387
+#: ../src/interface.c:4608 ../src/printing.c:388
 msgid ""
 "Add page numbers at the bottom of each page. It takes 2 lines of the page."
 msgstr ""
 "Doda številke vrstic na dno natisnjene strani kar vzame dve (2) vrstici na "
 "stran."
 
-#: ../src/interface.c:4544 ../src/printing.c:390
+#: ../src/interface.c:4610 ../src/printing.c:391
 msgid "Print page header"
 msgstr "Natisni glavo strani"
 
-#: ../src/interface.c:4547 ../src/printing.c:392
+#: ../src/interface.c:4613 ../src/printing.c:393
 msgid ""
 "Add a little header to every page containing the page number, the filename "
 "and the current date (see below). It takes 3 lines of the page."
@@ -2613,20 +2658,20 @@ msgstr ""
 "Doda majhno glavo na vsako stran s številko strani, imenom datoteke in "
 "trenutnim datumom (glej spodaj). Porabi tri (3) vrstice na stran."
 
-#: ../src/interface.c:4564 ../src/printing.c:408
+#: ../src/interface.c:4630 ../src/printing.c:409
 msgid "Use the basename of the printed file"
 msgstr "Uporabi skrajšano ime natisnjene datoteke"
 
-#: ../src/interface.c:4567
+#: ../src/interface.c:4633
 msgid "Print only the basename (without the path) of the printed file"
 msgstr "Natisne le skrajšano ime natisnjene datoteke (brez poti)"
 
-#: ../src/interface.c:4573 ../src/printing.c:416
+#: ../src/interface.c:4639 ../src/printing.c:417
 msgid "Date format:"
 msgstr "Oblika datuma:"
 
 # conversion specifier?=pretvorbeno določilo
-#: ../src/interface.c:4580 ../src/printing.c:422
+#: ../src/interface.c:4646 ../src/printing.c:423
 msgid ""
 "Specify a format for the date and time stamp which is added to the page "
 "header on each page. You can use any conversion specifiers which can be used "
@@ -2636,548 +2681,527 @@ msgstr ""
 "natisnjene strani. Uporabite lahko katerakoli pretvorbena določila, ki se "
 "uporabljajo s funkcijo ANSI C strftime."
 
-#: ../src/interface.c:4583
+#: ../src/interface.c:4649
 msgid "Use native GTK printing"
 msgstr "Uporabi vgrajeno GTK tiskanje"
 
-#: ../src/interface.c:4589
+#: ../src/interface.c:4655
 msgid "Printing"
 msgstr "Tiskanje"
 
-#: ../src/interface.c:5008
+#: ../src/interface.c:5080
 msgid "Project Properties"
 msgstr "Lastnosti projekta"
 
-#: ../src/keybindings.c:219 ../src/plugins.c:1076
+#: ../src/keybindings.c:222 ../src/plugins.c:1108
 msgid "File"
 msgstr "Datoteka"
 
-#: ../src/keybindings.c:222
+#: ../src/keybindings.c:225
 msgid "New"
 msgstr "Novo"
 
-#: ../src/keybindings.c:224
+#: ../src/keybindings.c:227
 msgid "Open"
 msgstr "Odpri"
 
-#: ../src/keybindings.c:227
+#: ../src/keybindings.c:230
 msgid "Open selected file"
 msgstr "Odpri izbrano datoteko"
 
-#: ../src/keybindings.c:229
+#: ../src/keybindings.c:232
 msgid "Save"
 msgstr "Shrani"
 
-#: ../src/keybindings.c:231
+#: ../src/keybindings.c:234
 msgid "Save as"
 msgstr "Shrani kot"
 
-#: ../src/keybindings.c:233
+#: ../src/keybindings.c:236
 msgid "Save all"
 msgstr "Shrani vse"
 
-#: ../src/keybindings.c:236
+#: ../src/keybindings.c:239
 msgid "Print"
 msgstr "Natisni"
 
-#: ../src/keybindings.c:238
+#: ../src/keybindings.c:241
 msgid "Close"
 msgstr "Zapri"
 
-#: ../src/keybindings.c:240
+#: ../src/keybindings.c:243
 msgid "Close all"
 msgstr "Zapri vse"
 
-#: ../src/keybindings.c:243
+#: ../src/keybindings.c:246
 msgid "Reload file"
 msgstr "Ponovno odpre datoteko"
 
-#: ../src/keybindings.c:245 ../src/project.c:518
+#: ../src/keybindings.c:248 ../src/project.c:522
 msgid "Project"
 msgstr "Projekt"
 
-#: ../src/keybindings.c:248
+#: ../src/keybindings.c:251
 msgid "Project properties"
 msgstr "Lastnosti projekta"
 
-#: ../src/keybindings.c:253
+#: ../src/keybindings.c:256
 msgid "Undo"
 msgstr "Razveljavi"
 
-#: ../src/keybindings.c:255
+#: ../src/keybindings.c:258
 msgid "Redo"
 msgstr "Ponovi"
 
-#: ../src/keybindings.c:257
-msgid "Duplicate line or selection"
-msgstr "Podvoji vrstico ali izbor"
-
-#: ../src/keybindings.c:260
-msgid "Delete current line(s)"
-msgstr "Izbriši trenutno vrstico ali več vrstic"
-
-#: ../src/keybindings.c:263
-#, fuzzy
-msgid "Delete to line end"
-msgstr "Izbriši trenutno vrstico ali več vrstic"
-
-#: ../src/keybindings.c:265
-msgid "Transpose current line"
-msgstr "Prestavi tekočo vrstico"
-
 #: ../src/keybindings.c:267
+msgid "Delete to line end"
+msgstr "Izbriši do konca trenutne vrstice"
+
+#: ../src/keybindings.c:273
 msgid "Scroll to current line"
 msgstr "Pomakni do trenutne vrstice"
 
-#: ../src/keybindings.c:269
+#: ../src/keybindings.c:275
 msgid "Scroll up the view by one line"
 msgstr "Pomakni navzgor za eno vrstico"
 
-#: ../src/keybindings.c:271
+#: ../src/keybindings.c:277
 msgid "Scroll down the view by one line"
 msgstr "Pomakni dol za eno vrstico"
 
-#: ../src/keybindings.c:274
+#: ../src/keybindings.c:279
 msgid "Complete snippet"
 msgstr "Zaključi košček"
 
-#: ../src/keybindings.c:276
+#: ../src/keybindings.c:281
 msgid "Move cursor in snippet"
 msgstr "Premakni kazalko v košček"
 
-#: ../src/keybindings.c:278
+#: ../src/keybindings.c:283
 msgid "Suppress snippet completion"
 msgstr "Zatri dokončanje koščkov"
 
-#: ../src/keybindings.c:280
+#: ../src/keybindings.c:285
 msgid "Context Action"
 msgstr "Kontekstno dejanje"
 
-#: ../src/keybindings.c:282
+#: ../src/keybindings.c:287
 msgid "Complete word"
 msgstr "Dokončaj besedo"
 
-#: ../src/keybindings.c:284
+#: ../src/keybindings.c:289
 msgid "Show calltip"
 msgstr "Prikaži pozivni namig"
 
-#: ../src/keybindings.c:286
+#: ../src/keybindings.c:291
 msgid "Show macro list"
 msgstr "Prikaži seznam makrojev"
 
-#: ../src/keybindings.c:288
+#: ../src/keybindings.c:293
+#, fuzzy
+msgid "Word part completion"
+msgstr "Dokončanje koščkov"
+
+#: ../src/keybindings.c:295
+#, fuzzy
+msgid "Move line(s) up"
+msgstr "Komentiraj vrstico ali več vrstic"
+
+#: ../src/keybindings.c:297
+#, fuzzy
+msgid "Move line(s) down"
+msgstr "Komentiraj vrstico ali več vrstic"
+
+#: ../src/keybindings.c:299
 msgid "Clipboard"
 msgstr "Odložišče"
 
-#: ../src/keybindings.c:291
+#: ../src/keybindings.c:302
 msgid "Cut"
 msgstr "Izreži"
 
-#: ../src/keybindings.c:293
+#: ../src/keybindings.c:304
 msgid "Copy"
 msgstr "Kopiraj"
 
-#: ../src/keybindings.c:295
+#: ../src/keybindings.c:306
 msgid "Paste"
 msgstr "Prilepi"
 
-#: ../src/keybindings.c:297
-msgid "Copy current line(s)"
-msgstr "Kopiraj tekočo vrstico ali več vrstic"
-
-#: ../src/keybindings.c:299
-msgid "Cut current line(s)"
-msgstr "Izreži tekočo vrstico ali več vrstic"
-
-#: ../src/keybindings.c:301
+#: ../src/keybindings.c:314
 msgid "Select"
 msgstr "Izberi"
 
-#: ../src/keybindings.c:304
+#: ../src/keybindings.c:317
 msgid "Select All"
 msgstr "Izberi vse"
 
-#: ../src/keybindings.c:306
+#: ../src/keybindings.c:319
 msgid "Select current word"
 msgstr "Izberi tekočo besedo"
 
-#: ../src/keybindings.c:308
-msgid "Select current line(s)"
-msgstr "Izberi tekočo vrstico ali več vrstic"
+#: ../src/keybindings.c:327
+#, fuzzy
+msgid "Select to previous word part"
+msgstr "Pojdi na predhodni del besede"
 
-#: ../src/keybindings.c:310
-msgid "Select current paragraph"
-msgstr "Izberi tekoči odstavek"
+#: ../src/keybindings.c:329
+#, fuzzy
+msgid "Select to next word part"
+msgstr "Pojdi na naslednji del besede"
 
-#: ../src/keybindings.c:312
+#: ../src/keybindings.c:331
 msgid "Format"
 msgstr "Oblika"
 
-#: ../src/keybindings.c:316
+#: ../src/keybindings.c:335
 msgid "Toggle Case of Selection"
 msgstr "Preklopi velikost izbora"
 
-#: ../src/keybindings.c:318
+#: ../src/keybindings.c:337
 msgid "Toggle line commentation"
 msgstr "Preklopi komentiranje vrstic"
 
-#: ../src/keybindings.c:321
+#: ../src/keybindings.c:340
 msgid "Comment line(s)"
 msgstr "Komentiraj vrstico ali več vrstic"
 
-#: ../src/keybindings.c:323
+#: ../src/keybindings.c:342
 msgid "Uncomment line(s)"
 msgstr "Odkomentiraj vrstico ali več vrstic"
 
-#: ../src/keybindings.c:325
+#: ../src/keybindings.c:344
 msgid "Increase indent"
 msgstr "Povečaj zamik"
 
-#: ../src/keybindings.c:328
+#: ../src/keybindings.c:347
 msgid "Decrease indent"
 msgstr "Zmanjšaj zamik"
 
-#: ../src/keybindings.c:331
+#: ../src/keybindings.c:350
 msgid "Increase indent by one space"
 msgstr "Povečaj zamik za presledek"
 
-#: ../src/keybindings.c:333
+#: ../src/keybindings.c:352
 msgid "Decrease indent by one space"
 msgstr "Zmanjšaj zamik za presledek"
 
-#: ../src/keybindings.c:335
-msgid "Smart line indent"
-msgstr "Pametno zamikanje vrstic"
-
-#: ../src/keybindings.c:337
+#: ../src/keybindings.c:356
 msgid "Send to Custom Command 1"
 msgstr "Nastavi na ukaz po meri 1"
 
-#: ../src/keybindings.c:339
+#: ../src/keybindings.c:358
 msgid "Send to Custom Command 2"
 msgstr "Nastavi na ukaz po meri 2"
 
-#: ../src/keybindings.c:341
+#: ../src/keybindings.c:360
 msgid "Send to Custom Command 3"
 msgstr "Nastavi na ukaz po meri 3"
 
-#: ../src/keybindings.c:343
+#: ../src/keybindings.c:362
 msgid "Send Selection to Terminal"
 msgstr "Pošlji izbor terminalu"
 
-#: ../src/keybindings.c:345
-msgid "Reflow lines/block"
-msgstr ""
-
-#: ../src/keybindings.c:347
+#: ../src/keybindings.c:367
 msgid "Insert"
 msgstr "Vstavi"
 
-#: ../src/keybindings.c:350
+#: ../src/keybindings.c:370
 msgid "Insert date"
 msgstr "Vstavi datum"
 
-#: ../src/keybindings.c:353
-msgid "Insert alternative white space"
-msgstr "Vstavi alternativni presledek"
-
-#: ../src/keybindings.c:355
+#: ../src/keybindings.c:376
 msgid "Settings"
 msgstr "Nastavitve"
 
-#: ../src/keybindings.c:361 ../src/toolbar.c:350
+#: ../src/keybindings.c:384 ../src/toolbar.c:350
 msgid "Search"
 msgstr "Išči"
 
-#: ../src/keybindings.c:364 ../src/search.c:379
+#: ../src/keybindings.c:387 ../src/search.c:379
 msgid "Find"
 msgstr "Najdi"
 
-#: ../src/keybindings.c:366
+#: ../src/keybindings.c:389
 msgid "Find Next"
 msgstr "Najdi naslednje"
 
-#: ../src/keybindings.c:368
+#: ../src/keybindings.c:391
 msgid "Find Previous"
 msgstr "Najdi predhodno"
 
-#: ../src/keybindings.c:371
+#: ../src/keybindings.c:394
 msgid "Find Next Selection"
 msgstr "Najdi naslednjo izbiro"
 
-#: ../src/keybindings.c:373
+#: ../src/keybindings.c:396
 msgid "Find Previous Selection"
 msgstr "Najdi predhodno izbiro"
 
-#: ../src/keybindings.c:375 ../src/search.c:514
+#: ../src/keybindings.c:398 ../src/search.c:514
 msgid "Replace"
 msgstr "Zamenjaj"
 
-#: ../src/keybindings.c:377 ../src/search.c:686
+#: ../src/keybindings.c:400 ../src/search.c:686
 msgid "Find in Files"
 msgstr "Najdi v datotekah"
 
-#: ../src/keybindings.c:380
+#: ../src/keybindings.c:403
 msgid "Next Message"
 msgstr "Naslednje sporočilo"
 
-#: ../src/keybindings.c:382
+#: ../src/keybindings.c:405
 msgid "Previous Message"
 msgstr "Predhodno sporočilo"
 
-#: ../src/keybindings.c:384
+#: ../src/keybindings.c:407
 msgid "Find Usage"
 msgstr "Najdi uporabo"
 
-#: ../src/keybindings.c:386
+#: ../src/keybindings.c:409
 msgid "Find Document Usage"
 msgstr "Najdi uporabo dokumenta"
 
 # zgradi izvorno kodo z make all
-#: ../src/keybindings.c:388
-#, fuzzy
+#: ../src/keybindings.c:411
 msgid "Mark All"
-msgstr "Zgradi _vse"
+msgstr "Označi vse"
 
-#: ../src/keybindings.c:390
+#: ../src/keybindings.c:413
 msgid "Go to"
 msgstr "Pojdi"
 
-#: ../src/keybindings.c:393 ../src/toolbar.c:66
+#: ../src/keybindings.c:416 ../src/toolbar.c:66
 msgid "Navigate back a location"
 msgstr "Krmari nazaj  "
 
-#: ../src/keybindings.c:395 ../src/toolbar.c:67
+#: ../src/keybindings.c:418 ../src/toolbar.c:67
 msgid "Navigate forward a location"
 msgstr "Krmari naprej"
 
-#: ../src/keybindings.c:400
+#: ../src/keybindings.c:423
 msgid "Go to matching brace"
 msgstr "Pojdi na ujemajoči oklepaj"
 
-#: ../src/keybindings.c:403
+#: ../src/keybindings.c:426
 msgid "Toggle marker"
 msgstr "Preklopi oznako"
 
-#: ../src/keybindings.c:406
-msgid "Go to next marker"
-msgstr "Pojdi na naslednjo oznako"
-
-#: ../src/keybindings.c:409
-msgid "Go to previous marker"
-msgstr "Pojdi na predhodno oznako"
-
-#: ../src/keybindings.c:411
+#: ../src/keybindings.c:434
 msgid "Go to Tag Definition"
 msgstr "Pojdi na opredelitev značke"
 
-#: ../src/keybindings.c:413
+#: ../src/keybindings.c:436
 msgid "Go to Tag Declaration"
 msgstr "Pojdi na navedbo značke"
 
-#: ../src/keybindings.c:415
+#: ../src/keybindings.c:438
 msgid "Go to Start of Line"
 msgstr "Pojdi na začetek vrstice "
 
-#: ../src/keybindings.c:417
+#: ../src/keybindings.c:440
 msgid "Go to End of Line"
 msgstr "Pojdi na konec vrstice"
 
-#: ../src/keybindings.c:419
-#, fuzzy
+#: ../src/keybindings.c:442
 msgid "Go to End of Display Line"
-msgstr "Pojdi na konec vrstice"
+msgstr "Pojdi na konec prikazne vrstice"
 
-#: ../src/keybindings.c:421
+#: ../src/keybindings.c:444
 msgid "Go to Previous Word Part"
 msgstr "Pojdi na predhodni del besede"
 
-#: ../src/keybindings.c:423
+#: ../src/keybindings.c:446
 msgid "Go to Next Word Part"
 msgstr "Pojdi na naslednji del besede"
 
-#: ../src/keybindings.c:425
+#: ../src/keybindings.c:448
 msgid "View"
 msgstr "Pogled"
 
-#: ../src/keybindings.c:428
+#: ../src/keybindings.c:451
 msgid "Toggle All Additional Widgets"
 msgstr "Preklopi vse dodatne gradnike"
 
-#: ../src/keybindings.c:431
+#: ../src/keybindings.c:454
 msgid "Fullscreen"
 msgstr "Celozaslonsko"
 
-#: ../src/keybindings.c:433
+#: ../src/keybindings.c:456
 msgid "Toggle Messages Window"
 msgstr "Preklopi sporočilno okno"
 
-#: ../src/keybindings.c:436
+#: ../src/keybindings.c:459
 msgid "Toggle Sidebar"
 msgstr "Preklopi stransko vrstico"
 
-#: ../src/keybindings.c:438
+#: ../src/keybindings.c:461
 msgid "Zoom In"
 msgstr "Približaj"
 
-#: ../src/keybindings.c:440
+#: ../src/keybindings.c:463
 msgid "Zoom Out"
 msgstr "Oddalji"
 
-#: ../src/keybindings.c:442
+#: ../src/keybindings.c:465
 msgid "Focus"
 msgstr "Žarišče"
 
-#: ../src/keybindings.c:445
+#: ../src/keybindings.c:468
 msgid "Switch to Editor"
 msgstr "Preklopi v urejevalnik"
 
-#: ../src/keybindings.c:447
+#: ../src/keybindings.c:470
 msgid "Switch to Scribble"
 msgstr "Preklopi v beležko"
 
-#: ../src/keybindings.c:449
+#: ../src/keybindings.c:472
 msgid "Switch to VTE"
 msgstr "Preklopi v VTE"
 
-#: ../src/keybindings.c:451
+#: ../src/keybindings.c:474
 msgid "Switch to Search Bar"
 msgstr "Preklopi v iskalno vrstico"
 
-#: ../src/keybindings.c:453
+#: ../src/keybindings.c:476
 msgid "Switch to Sidebar"
 msgstr "Preklopi v stransko vrstico"
 
-#: ../src/keybindings.c:455
+#: ../src/keybindings.c:478
 msgid "Switch to Compiler"
 msgstr "Preklopi v prevajalnik"
 
-#: ../src/keybindings.c:457
+#: ../src/keybindings.c:480
+#, fuzzy
+msgid "Switch to Messages"
+msgstr "Preklopi v stransko vrstico"
+
+#: ../src/keybindings.c:482
 msgid "Notebook tab"
 msgstr "Zavihek zvezka"
 
-#: ../src/keybindings.c:460
+#: ../src/keybindings.c:485
 msgid "Switch to left document"
 msgstr "Preklopi v levi dokument"
 
-#: ../src/keybindings.c:462
+#: ../src/keybindings.c:487
 msgid "Switch to right document"
 msgstr "Preklopi v desni dokument"
 
-#: ../src/keybindings.c:464
+#: ../src/keybindings.c:489
 msgid "Switch to last used document"
 msgstr "Preklopi v zadnji uporabljeni dokument"
 
-#: ../src/keybindings.c:466
+#: ../src/keybindings.c:491
 msgid "Move document left"
 msgstr "Premakni dokument levo"
 
-#: ../src/keybindings.c:468
+#: ../src/keybindings.c:493
 msgid "Move document right"
 msgstr "Premakni dokument desno"
 
-#: ../src/keybindings.c:470
+#: ../src/keybindings.c:495
 msgid "Move document first"
 msgstr "Premakni dokument na prvo mesto"
 
-#: ../src/keybindings.c:472
+#: ../src/keybindings.c:497
 msgid "Move document last"
 msgstr "Premakni dokument na zadnje mesto"
 
-#: ../src/keybindings.c:474
+#: ../src/keybindings.c:499
 msgid "Document"
 msgstr "Dokument"
 
-#: ../src/keybindings.c:477
+#: ../src/keybindings.c:502
 msgid "Toggle Line wrapping"
 msgstr "Preklopi zavijanje vrstic"
 
-#: ../src/keybindings.c:479
+#: ../src/keybindings.c:504
 msgid "Toggle Line breaking"
 msgstr "Preklopi lomljenje vrstic"
 
-#: ../src/keybindings.c:483
+#: ../src/keybindings.c:508
 msgid "Replace spaces by tabs"
 msgstr "Zamenjaj presledke z razmaki"
 
-#: ../src/keybindings.c:485
+#: ../src/keybindings.c:510
 msgid "Toggle current fold"
 msgstr "Preklopi trenutno zvijanje"
 
-#: ../src/keybindings.c:487
+#: ../src/keybindings.c:512
 msgid "Fold all"
 msgstr "Zvij vse"
 
-#: ../src/keybindings.c:489
+#: ../src/keybindings.c:514
 msgid "Unfold all"
 msgstr "Odvij vse"
 
-#: ../src/keybindings.c:491
+#: ../src/keybindings.c:516
 msgid "Reload symbol list"
 msgstr "Osveži seznam simbolov"
 
-#: ../src/keybindings.c:493 ../src/keybindings.c:498 ../src/project.c:479
-#: ../src/ui_utils.c:1787
+#: ../src/keybindings.c:518 ../src/keybindings.c:523 ../src/project.c:483
+#: ../src/ui_utils.c:1795
 msgid "Build"
 msgstr "Zgradi"
 
-#: ../src/keybindings.c:496 ../src/toolbar.c:68
+#: ../src/keybindings.c:521 ../src/toolbar.c:68
 msgid "Compile"
 msgstr "Prevedi"
 
-#: ../src/keybindings.c:500
+#: ../src/keybindings.c:525
 msgid "Make all"
 msgstr "Zgradi vse"
 
-#: ../src/keybindings.c:503
+#: ../src/keybindings.c:528
 msgid "Make custom target"
 msgstr "Zgradi tarčo po meri"
 
-#: ../src/keybindings.c:505
+#: ../src/keybindings.c:530
 msgid "Make object"
 msgstr "Zgradi objekt"
 
-#: ../src/keybindings.c:507
+#: ../src/keybindings.c:532
 msgid "Next error"
 msgstr "Naslednja napaka"
 
-#: ../src/keybindings.c:509
+#: ../src/keybindings.c:534
 msgid "Previous error"
 msgstr "Predhodna napaka"
 
-#: ../src/keybindings.c:511
+#: ../src/keybindings.c:536
 msgid "Run"
 msgstr "Zaženi"
 
-#: ../src/keybindings.c:513
+#: ../src/keybindings.c:538
 msgid "Build options"
 msgstr "Možnosti gradnje"
 
-#: ../src/keybindings.c:518
+#: ../src/keybindings.c:543
 msgid "Show Color Chooser"
 msgstr "Prikaži barvni izbiralnik"
 
-#: ../src/keybindings.c:520 ../src/keybindings.c:523
+#: ../src/keybindings.c:545 ../src/keybindings.c:548
 msgid "Help"
 msgstr "Pomoč"
 
-#: ../src/keybindings.c:812
+#: ../src/keybindings.c:837
 msgid "Keyboard Shortcuts"
 msgstr "Bližnjice tipkovnice"
 
-#: ../src/keybindings.c:825
+#: ../src/keybindings.c:850
 msgid "The following keyboard shortcuts are configurable:"
 msgstr "Naslednje bližnjice tipkovnice so nastavljive:"
 
-#: ../src/keybindings.c:1625
+#: ../src/keybindings.c:1694
 msgid "Switch to Document"
 msgstr "Preklopi v dokument"
 
-#: ../src/keyfile.c:818
+#: ../src/keyfile.c:821
 msgid "Type here what you want, use it as a notice/scratch board"
 msgstr "Tu natipkajte karkoli želite, uporabite to kot vašo beležko."
 
-#: ../src/keyfile.c:1022
+#: ../src/keyfile.c:1025
 msgid "Failed to load one or more session files."
 msgstr "Spodletelo nalaganje ene ali večih datotek seje."
 
@@ -3185,7 +3209,7 @@ msgstr "Spodletelo nalaganje ene ali večih datotek seje."
 msgid "Debug Messages"
 msgstr "Razhroščevalna sporočila"
 
-#: ../src/main.c:123
+#: ../src/main.c:122
 msgid ""
 "Set initial column number for the first opened file (useful in conjunction "
 "with --line)"
@@ -3193,73 +3217,72 @@ msgstr ""
 "Nastavi začetni stolpec za prvo odprto datoteko (uporabno v povezavi z --"
 "line)"
 
-#: ../src/main.c:124
+#: ../src/main.c:123
 msgid "Use an alternate configuration directory"
 msgstr "Uporabi alternativno nastavitveno mapo"
 
-#: ../src/main.c:125 ../src/main.c:144
-msgid "Be verbose"
-msgstr "Dolgovezi"
-
-#: ../src/main.c:126
+#: ../src/main.c:124
 msgid "Print internal filetype names"
 msgstr "Natisni notranja imena tipov datotek"
 
-#: ../src/main.c:127
+#: ../src/main.c:125
 msgid "Generate global tags file (see documentation)"
 msgstr "Ustvari splošno datoteko (glej dokumentacijo)"
 
-#: ../src/main.c:128
+#: ../src/main.c:126
 msgid "Don't preprocess C/C++ files when generating tags"
 msgstr "Brez predobdelave C/C++ datotek ob ustvarjanju značk"
 
 # instance==izvod
-#: ../src/main.c:130
+#: ../src/main.c:128
 msgid "Don't open files in a running instance, force opening a new instance"
 msgstr "Ne odpri datotek v zagnanem izvodu, prisili odpiranje novega izvoda"
 
-#: ../src/main.c:132
+#: ../src/main.c:130
 msgid "Set initial line number for the first opened file"
 msgstr "Nastavi začetno številko vrstice za prvo odprto datoteko"
 
-#: ../src/main.c:133
+#: ../src/main.c:131
 msgid "Don't show message window at startup"
 msgstr "Ne prikaži sporočilnega okna ob zagonu"
 
-#: ../src/main.c:134
+#: ../src/main.c:132
 msgid "Don't load auto completion data (see documentation)"
-msgstr "Ne naloži podatkov za samodejno dopolnjevanje (glej dokumentacijo)"
+msgstr "Ne nalagaj podatkov za samodejno dopolnjevanje (glej dokumentacijo)"
+
+#: ../src/main.c:134
+msgid "Don't load plugins"
+msgstr "Ne nalagaj vstavkov"
 
 #: ../src/main.c:136
-msgid "Don't load plugins"
-msgstr "Ne naloži vstavkov"
-
-#: ../src/main.c:138
 msgid "Print Geany's installation prefix"
 msgstr "Izpiši Geanyjevo namestitveno predpono"
 
-#: ../src/main.c:139
-#, fuzzy
+#: ../src/main.c:137
 msgid "Don't load the previous session's files"
-msgstr "ne naloži datotek prejšnje seje"
+msgstr "Ne nalagaj datotek prejšnje seje"
 
-#: ../src/main.c:141
+#: ../src/main.c:139
 msgid "Don't load terminal support"
-msgstr "Ne naloži podpore terminalu"
+msgstr "Ne nalagaj podpore terminalu"
 
-#: ../src/main.c:142
+#: ../src/main.c:140
 msgid "Filename of libvte.so"
 msgstr "Ime datoteke libvte.so"
 
-#: ../src/main.c:145
+#: ../src/main.c:142
+msgid "Be verbose"
+msgstr "Dolgovezi"
+
+#: ../src/main.c:143
 msgid "Show version and exit"
 msgstr "Prikaži različico in zaključi"
 
-#: ../src/main.c:468
+#: ../src/main.c:474
 msgid "[FILES...]"
 msgstr "[DATOTEKE...]"
 
-#: ../src/main.c:485
+#: ../src/main.c:491
 #, c-format
 msgid "(built on %s with GTK %d.%d.%d, GLib %d.%d.%d)"
 msgstr "(zgrajeno na %s z GTK %d.%d.%d, Glib %d.%d.%d)"
@@ -3301,7 +3324,7 @@ msgstr ""
 "Lahko boste imeli težave z uporabo Geany brez nastavitvene mape.\n"
 "Vseeno poženem Geany?"
 
-#: ../src/main.c:770 ../src/socket.c:164
+#: ../src/main.c:770 ../src/socket.c:164 ../src/templates.c:339
 #, c-format
 msgid "Could not find file '%s'."
 msgstr "Datoteke ni bilo mogoče najti '%s'."
@@ -3316,7 +3339,7 @@ msgstr "To je Geany %s."
 msgid "Configuration directory could not be created (%s)."
 msgstr "Nastavitvene mape ni bilo mogoče ustvariti (%s)."
 
-#: ../src/main.c:1213
+#: ../src/main.c:1201
 msgid "Configuration files reloaded."
 msgstr "Osvežene nastavitvene datoteke."
 
@@ -3332,7 +3355,7 @@ msgstr "Kopiraj _vse"
 msgid "_Hide Message Window"
 msgstr "_Skrij sporočilno okno"
 
-#: ../src/plugins.c:410
+#: ../src/plugins.c:424
 #, c-format
 msgid ""
 "The plugin \"%s\" is not binary compatible with this release of Geany - "
@@ -3341,11 +3364,11 @@ msgstr ""
 "Vstavek \"%s\" ni binarno združljiv s to različico Geany - prosimo, ponovno "
 "prevedite vstavek. "
 
-#: ../src/plugins.c:846
+#: ../src/plugins.c:866
 msgid "_Plugin Manager"
 msgstr "_Upravitelj vstavkov"
 
-#: ../src/plugins.c:994
+#: ../src/plugins.c:1024
 #, c-format
 msgid ""
 "Plugin: %s %s\n"
@@ -3356,68 +3379,72 @@ msgstr ""
 "Opis: %s\n"
 "Avtor(ji): %s"
 
-#: ../src/plugins.c:1064
+#: ../src/plugins.c:1096
 msgid "Active"
 msgstr "Aktiven"
 
-#: ../src/plugins.c:1070
+#: ../src/plugins.c:1102
 msgid "Plugin"
 msgstr "Vstavek"
 
-#: ../src/plugins.c:1094
+#: ../src/plugins.c:1126
 msgid "No plugins available."
 msgstr "Ni vstavkov na voljo."
 
-#: ../src/plugins.c:1207
+#: ../src/plugins.c:1206
 msgid "Plugins"
 msgstr "Vstavki"
 
-#: ../src/plugins.c:1227
-msgid ""
-"Below is a list of available plugins. Select the plugins which should be "
-"loaded when Geany is started."
+#: ../src/plugins.c:1226
+msgid "Choose which plugins should be loaded at startup:"
 msgstr ""
-"Iz spodnjega seznama izberite tiste vstavke, ki se naj naložijo ob zagonu "
-"Geany. "
 
-#: ../src/plugins.c:1240
+#: ../src/plugins.c:1238
 msgid "<b>Plugin details:</b>"
 msgstr "<b>Podrobnosti o vstavku:</b>"
 
-#: ../src/prefs.c:160
+#: ../src/pluginutils.c:207
+msgid "Configure Plugins"
+msgstr ""
+
+#: ../src/prefs.c:161
 msgid "Grab Key"
 msgstr "Zagrabi tipko"
 
-#: ../src/prefs.c:166
+#: ../src/prefs.c:167
 #, c-format
 msgid "Press the combination of the keys you want to use for \"%s\"."
 msgstr "Pritisnite kombinacijo tipk, ki jo želite uporabiti za \"%s\"."
 
-#: ../src/prefs.c:209 ../src/symbols.c:1849
+#: ../src/prefs.c:210 ../src/symbols.c:1833
 msgid "_Expand All"
 msgstr "_Razširi vse"
 
-#: ../src/prefs.c:214 ../src/symbols.c:1854
+#: ../src/prefs.c:215 ../src/symbols.c:1838
 msgid "_Collapse All"
 msgstr "_Zloži vse"
 
-#: ../src/prefs.c:273
+#: ../src/prefs.c:274
 msgid "Action"
 msgstr "Dejanje"
 
-#: ../src/prefs.c:278
+#: ../src/prefs.c:279
 msgid "Shortcut"
 msgstr "Bližnjica"
 
-#: ../src/prefs.c:1393
+#: ../src/prefs.c:1407
 msgid "_Override"
 msgstr "_Prezri"
 
-#: ../src/prefs.c:1394
+#: ../src/prefs.c:1407
+msgid "_Allow"
+msgstr ""
+
+#: ../src/prefs.c:1408
 msgid "Override that keybinding?"
 msgstr "Naj bodo povezave tipk prezrte? "
 
-#: ../src/prefs.c:1395
+#: ../src/prefs.c:1409
 #, c-format
 msgid "The combination '%s' is already used for \"%s\"."
 msgstr "Kombinacije '%s' se že uporablja za \"%s\". "
@@ -3426,7 +3453,7 @@ msgstr "Kombinacije '%s' se že uporablja za \"%s\". "
 # page Tools
 #. add manually GeanyWrapLabels because they can't be added with Glade
 #. page Tools
-#: ../src/prefs.c:1508
+#: ../src/prefs.c:1527
 msgid "Enter tool paths below. Tools you do not need can be left blank."
 msgstr ""
 "Spodaj vnesite pot do orodij. Nepotrebnih orodij ne vnašate in pustite "
@@ -3434,14 +3461,14 @@ msgstr ""
 
 # stran Vzorci
 #. page Templates
-#: ../src/prefs.c:1513
+#: ../src/prefs.c:1532
 msgid ""
 "Set the information to be used in templates. See the documentation for "
 "details."
 msgstr ""
 "Nastavite uporabo podatkov v vzorcih. Glejte dokumentacijo za podrobnosti."
 
-#: ../src/prefs.c:1517
+#: ../src/prefs.c:1536
 msgid ""
 "<i>Notice: For all changes you make here to take effect, you need to restart "
 "Geany or force the reload of the settings using Tools->Reload Configuration."
@@ -3452,7 +3479,7 @@ msgstr ""
 "i>"
 
 #. page Keybindings
-#: ../src/prefs.c:1523
+#: ../src/prefs.c:1542
 msgid ""
 "Here you can change keyboard shortcuts for various actions. Select one and "
 "press the Change button to enter a new shortcut, or double click on an "
@@ -3464,7 +3491,7 @@ msgstr ""
 
 # stran Tiskanje
 #. page Printing
-#: ../src/prefs.c:1528
+#: ../src/prefs.c:1547
 msgid ""
 "<i>Notice: Native GTK printing is only available if Geany was built against "
 "GTK 2.10 (or above) <b>and</b> Geany is running with GTK 2.10 (or above).</i>"
@@ -3473,7 +3500,7 @@ msgstr ""
 "2.10 ali višjim <b>in</b> Geany tudi teče v okolju z GTK 2.10 ali višjim.</i>"
 
 #. page Editor->Indentation
-#: ../src/prefs.c:1534
+#: ../src/prefs.c:1553
 msgid ""
 "<i>Warning: these settings are overridden by the current project. See "
 "<b>Project->Properties</b>.</i>"
@@ -3484,50 +3511,52 @@ msgstr ""
 #: ../src/printing.c:188
 msgid "The editor font is not a monospaced font!"
 msgstr ""
+"Nabor znakov urejevalnika ni nabor znakov z enojnimi razmaki (vrste "
+"monospace)! "
 
 #: ../src/printing.c:189
 msgid "Text will be wrongly spaced."
-msgstr ""
+msgstr "Besedilo bo razmaknjeno napačno."
 
-#: ../src/printing.c:305
+#: ../src/printing.c:306
 #, c-format
 msgid "<b>Page %d of %d</b>"
 msgstr "<b>Stran %d od %d</b>"
 
-#: ../src/printing.c:375
+#: ../src/printing.c:376
 msgid "Document Setup"
 msgstr "Nastavitev dokumenta"
 
-#: ../src/printing.c:410
+#: ../src/printing.c:411
 msgid "Print only the basename(without the path) of the printed file"
 msgstr "Natisni le osnovno ime natisnjene datoteke, brez poti"
 
-#: ../src/printing.c:526
+#: ../src/printing.c:527
 #, c-format
 msgid "Page %d of %d"
 msgstr "Stran %d od %d"
 
-#: ../src/printing.c:776
+#: ../src/printing.c:781
 #, c-format
 msgid "Printing of file %s was cancelled."
 msgstr "Tiskanje datoteke %s je bilo preklicano."
 
-#: ../src/printing.c:778 ../src/printing.c:897
+#: ../src/printing.c:783 ../src/printing.c:905
 #, c-format
 msgid "File %s printed."
 msgstr "Datoteka %s natisnjena."
 
-#: ../src/printing.c:827
+#: ../src/printing.c:835
 #, c-format
 msgid "Printing of %s failed (%s)."
 msgstr "Tiskanje %s spodletelo (%s)."
 
-#: ../src/printing.c:867
+#: ../src/printing.c:875
 msgid "Please set a print command in the preferences dialog first."
 msgstr ""
 "Prosimo, najprej nastavite ukaz za tiskanje v pogovornem oknu Možnosti."
 
-#: ../src/printing.c:875
+#: ../src/printing.c:883
 #, c-format
 msgid ""
 "The file \"%s\" will be printed with the following command:\n"
@@ -3538,7 +3567,7 @@ msgstr ""
 "\n"
 "%s"
 
-#: ../src/printing.c:891
+#: ../src/printing.c:899
 #, c-format
 msgid "Printing of \"%s\" failed (return code: %s)."
 msgstr "Tiskanje \"%s\" spodletelo (povratna koda: %s)."
@@ -3551,27 +3580,27 @@ msgstr "Tiskanje \"%s\" spodletelo (povratna koda: %s)."
 msgid "projects"
 msgstr "projekti"
 
-#: ../src/project.c:117
+#: ../src/project.c:118
 msgid "New Project"
 msgstr "Nov projekt"
 
-#: ../src/project.c:125
+#: ../src/project.c:126
 msgid "C_reate"
 msgstr "Ustva_ri"
 
-#: ../src/project.c:139 ../src/project.c:416
+#: ../src/project.c:140 ../src/project.c:419
 msgid "Name:"
 msgstr "Ime:"
 
-#: ../src/project.c:148 ../src/project.c:429
+#: ../src/project.c:149 ../src/project.c:432
 msgid "Filename:"
 msgstr "Ime datoteke:"
 
-#: ../src/project.c:164 ../src/project.c:459
+#: ../src/project.c:165 ../src/project.c:462
 msgid "Base path:"
 msgstr "Osnovna pot:"
 
-#: ../src/project.c:170 ../src/project.c:468
+#: ../src/project.c:171 ../src/project.c:471
 msgid ""
 "Base directory of all files that make up the project. This can be a new "
 "path, or an existing directory tree. You can use paths relative to the "
@@ -3581,109 +3610,111 @@ msgstr ""
 "že obstoječe drevo imenikov. Poti lahko uporabljate relativno glede na "
 "datotečno ime projekta."
 
-#: ../src/project.c:173 ../src/project.c:471
+#: ../src/project.c:174 ../src/project.c:474
 msgid "Choose Project Base Path"
 msgstr "Izberite osnovno pot projekta"
 
 # V izvirniku - could not be loaded, ne: opened!
-#: ../src/project.c:238 ../src/project.c:269 ../src/project.c:932
+#: ../src/project.c:239 ../src/project.c:270 ../src/project.c:937
 #, c-format
 msgid "Project file \"%s\" could not be loaded."
 msgstr "Projektne datoteke \"%s\" ni bilo mogoče odpreti."
 
-#: ../src/project.c:263 ../src/project.c:275
+#: ../src/project.c:264 ../src/project.c:276
 msgid "Open Project"
 msgstr "Odpri projekt"
 
-#: ../src/project.c:295
+#: ../src/project.c:296
 msgid "Project files"
 msgstr "Projektne datoteke"
 
-#: ../src/project.c:340
+#: ../src/project.c:343
 #, c-format
 msgid "Project \"%s\" closed."
 msgstr "Projekt \"%s\" zaprt."
 
-#: ../src/project.c:442
+#: ../src/project.c:445
 msgid "Description:"
 msgstr "Opis:"
 
-#: ../src/project.c:483
-msgid "Set the non-filetype working directories on build tab to use base path:"
-msgstr ""
-
-#: ../src/project.c:486
+#: ../src/project.c:487
 #, fuzzy
-msgid "Set"
-msgstr "Razd1"
+msgid "Set the Build non-filetype working directories to use base path:"
+msgstr "Nastavi nedatotečne delovne mape na uporabo osnovne mape:"
 
-#: ../src/project.c:488
+#: ../src/project.c:490
+msgid "Set"
+msgstr "Nastavi"
+
+#: ../src/project.c:492
 msgid ""
 "Set the working directories (on the Build tab) for the non-filetype build "
 "commands to use the base path"
 msgstr ""
+"Nastavi delovne mape na osnovno pot (na zavihku Zgradi) med uporabo "
+"nedatotečno osnovanih ukazov gradnje."
 
-#: ../src/project.c:500
+#: ../src/project.c:504
 msgid "File patterns:"
 msgstr "Datotečni vzorci:"
 
-#: ../src/project.c:597
+#: ../src/project.c:601
 msgid "Do you want to close it before proceeding?"
 msgstr "Ali želite zapreti datoteko pred nadaljevanjem?"
 
-#: ../src/project.c:598
+#: ../src/project.c:602
 #, c-format
 msgid "The '%s' project is already open."
 msgstr "Projekt '%s' je že odprt."
 
-#: ../src/project.c:642
+#: ../src/project.c:646
 msgid "The specified project name is too short."
 msgstr "Določeno ime projekta je prekratko."
 
-#: ../src/project.c:648
+#: ../src/project.c:652
 #, c-format
 msgid "The specified project name is too long (max. %d characters)."
 msgstr "Določeno ime projekta je predolgo (največ %d znakov)."
 
-#: ../src/project.c:656
+#: ../src/project.c:660
 msgid "You have specified an invalid project filename."
 msgstr "Določili ste napačno ime projektne datoteke."
 
-#: ../src/project.c:679
+#: ../src/project.c:683
 msgid "Create the project's base path directory?"
 msgstr "Ustvarim osnovni imenik projekta?"
 
-#: ../src/project.c:680
+#: ../src/project.c:684
 #, c-format
 msgid "The path \"%s\" does not exist."
 msgstr "Pot \"%s\" ne obstaja."
 
-#: ../src/project.c:689
+#: ../src/project.c:693
 #, c-format
 msgid "Project base directory could not be created (%s)."
 msgstr "Osnovnega imenika projekta ni bilo možno ustvariti (%s)."
 
-#: ../src/project.c:701
+#: ../src/project.c:705
 #, c-format
 msgid "Project file could not be written (%s)."
 msgstr "Projektne datoteke datoteke ni bilo možno zapisati (%s)."
 
-#: ../src/project.c:774
+#: ../src/project.c:780
 #, c-format
 msgid "Project \"%s\" created."
 msgstr "Projekt \"%s\" ustvarjen."
 
-#: ../src/project.c:776
+#: ../src/project.c:782
 #, c-format
 msgid "Project \"%s\" saved."
 msgstr "Projekt \"%s\" shranjen."
 
 #. initialise the dialog
-#: ../src/project.c:842 ../src/project.c:853
+#: ../src/project.c:847 ../src/project.c:858
 msgid "Choose Project Filename"
 msgstr "Izberite Projekt Ime datoteke"
 
-#: ../src/project.c:922
+#: ../src/project.c:927
 #, c-format
 msgid "Project \"%s\" opened."
 msgstr "Projekt \"%s\" odprt."
@@ -3839,7 +3870,7 @@ msgstr "_Dodatne možnosti:"
 msgid "Other options to pass to Grep"
 msgstr "Razne druge možno za Grep"
 
-#: ../src/search.c:1087 ../src/search.c:1694 ../src/search.c:1697
+#: ../src/search.c:1088 ../src/search.c:1665 ../src/search.c:1668
 #, c-format
 msgid "Found %d match for \"%s\"."
 msgid_plural "Found %d matches for \"%s\"."
@@ -3848,7 +3879,7 @@ msgstr[1] "Najdena %d zadetka za \"%s\"."
 msgstr[2] "Najdeni %d zadetki za \"%s\"."
 msgstr[3] "Najdenih %d zadetkov za \"%s\". "
 
-#: ../src/search.c:1203
+#: ../src/search.c:1204
 #, c-format
 msgid "Replaced text in %u file."
 msgid_plural "Replaced text in %u files."
@@ -3857,38 +3888,39 @@ msgstr[1] "Zamenjano besedilo v %u datotekah."
 msgstr[2] "Zamenjano besedilo v %u datotekah."
 msgstr[3] "Zamenjano besedilo v %u datotekah."
 
-#: ../src/search.c:1304
+#: ../src/search.c:1305
 msgid "Invalid directory for find in files."
 msgstr "Napačna mapa za iskanje v datotekah."
 
-#: ../src/search.c:1324
+#: ../src/search.c:1325
 msgid "No text to find."
 msgstr "Ni besedila za iskanje."
 
-#: ../src/search.c:1351
+#: ../src/search.c:1352
 #, c-format
 msgid "Cannot execute grep tool '%s'; check the path setting in Preferences."
 msgstr "Ni mogoče izvesti orodja grep '%s'; preverite pot v Možnosti>Orodja."
 
-#: ../src/search.c:1419
+#: ../src/search.c:1420
 msgid "Searching..."
 msgstr "Iščem..."
 
-#: ../src/search.c:1431
+#: ../src/search.c:1432
 #, c-format
 msgid "%s %s -- %s (in directory: %s)"
 msgstr "%s %s -- %s (v mapi: %s)"
 
-#: ../src/search.c:1459
+#: ../src/search.c:1460
 #, c-format
 msgid "Could not open directory (%s)"
 msgstr "Ni mogoče odpreti mape (%s)"
 
-#: ../src/search.c:1565
-msgid "Search failed (see Help->Debug Messages for details)."
-msgstr "Iskanje spodletelo"
+#: ../src/search.c:1538
+#, fuzzy
+msgid "Search failed."
+msgstr "_Išči:"
 
-#: ../src/search.c:1586
+#: ../src/search.c:1558
 #, c-format
 msgid "Search completed with %d match."
 msgid_plural "Search completed with %d matches."
@@ -3897,31 +3929,31 @@ msgstr[1] "Iskanju je uspelo najti %d zadetka."
 msgstr[2] "Iskanju je uspelo najti %d zadetke."
 msgstr[3] "Iskanju je uspelo najti %d zadetkov."
 
-#: ../src/search.c:1594
+#: ../src/search.c:1566
 msgid "No matches found."
 msgstr "Iskanje ni bilo uspešno."
 
-#: ../src/symbols.c:596 ../src/symbols.c:637 ../src/symbols.c:700
+#: ../src/symbols.c:599 ../src/symbols.c:640 ../src/symbols.c:702
 msgid "Chapter"
 msgstr "Poglavje"
 
-#: ../src/symbols.c:597 ../src/symbols.c:633 ../src/symbols.c:701
+#: ../src/symbols.c:600 ../src/symbols.c:636 ../src/symbols.c:703
 msgid "Section"
 msgstr "Razdelek"
 
-#: ../src/symbols.c:598
+#: ../src/symbols.c:601
 msgid "Sect1"
 msgstr "Razd1"
 
-#: ../src/symbols.c:599
+#: ../src/symbols.c:602
 msgid "Sect2"
 msgstr "Razd2"
 
-#: ../src/symbols.c:600
+#: ../src/symbols.c:603
 msgid "Sect3"
 msgstr "Razd2"
 
-#: ../src/symbols.c:601
+#: ../src/symbols.c:604
 msgid "Appendix"
 msgstr "Dodatek"
 
@@ -3929,37 +3961,37 @@ msgstr "Dodatek"
 # &(tv_iters.tag_variable), _("Variables"),
 #. &(tv_iters.tag_macro), _("Macros"),
 #. &(tv_iters.tag_variable), _("Variables"),
-#: ../src/symbols.c:602 ../src/symbols.c:638 ../src/symbols.c:769
-#: ../src/symbols.c:783 ../src/symbols.c:795 ../src/symbols.c:807
-#: ../src/symbols.c:822 ../src/symbols.c:867
+#: ../src/symbols.c:605 ../src/symbols.c:641 ../src/symbols.c:660
+#: ../src/symbols.c:771 ../src/symbols.c:785 ../src/symbols.c:797
+#: ../src/symbols.c:809 ../src/symbols.c:824 ../src/symbols.c:869
 msgid "Other"
 msgstr "Drugo"
 
-#: ../src/symbols.c:609 ../src/symbols.c:815 ../src/symbols.c:847
+#: ../src/symbols.c:612 ../src/symbols.c:817 ../src/symbols.c:849
 msgid "Module"
 msgstr "Modul"
 
-#: ../src/symbols.c:610 ../src/symbols.c:793 ../src/symbols.c:805
-#: ../src/symbols.c:820 ../src/symbols.c:832
+#: ../src/symbols.c:613 ../src/symbols.c:795 ../src/symbols.c:807
+#: ../src/symbols.c:822 ../src/symbols.c:834
 msgid "Types"
 msgstr "Tipi"
 
-#: ../src/symbols.c:611
+#: ../src/symbols.c:614
 msgid "Type constructors"
-msgstr ""
+msgstr "Konstruktorji tipov"
 
-#: ../src/symbols.c:612 ../src/symbols.c:624 ../src/symbols.c:645
-#: ../src/symbols.c:654 ../src/symbols.c:669 ../src/symbols.c:681
-#: ../src/symbols.c:734 ../src/symbols.c:748 ../src/symbols.c:779
-#: ../src/symbols.c:802 ../src/symbols.c:817 ../src/symbols.c:854
+#: ../src/symbols.c:615 ../src/symbols.c:627 ../src/symbols.c:648
+#: ../src/symbols.c:657 ../src/symbols.c:669 ../src/symbols.c:681
+#: ../src/symbols.c:736 ../src/symbols.c:750 ../src/symbols.c:781
+#: ../src/symbols.c:804 ../src/symbols.c:819 ../src/symbols.c:856
 msgid "Functions"
 msgstr "Funkcije"
 
-#: ../src/symbols.c:617 ../src/symbols.c:623
+#: ../src/symbols.c:620 ../src/symbols.c:626
 msgid "Sections"
 msgstr "Razdelki"
 
-#: ../src/symbols.c:618
+#: ../src/symbols.c:621
 msgid "Keys"
 msgstr "Ključi"
 
@@ -3969,58 +4001,51 @@ msgstr "Ključi"
 #. &(tv_iters.tag_class), _("Constants"),
 #. &(tv_iters.tag_member), _("Members"),
 #. &(tv_iters.tag_macro), _("Macros"),
-#: ../src/symbols.c:625 ../src/symbols.c:671 ../src/symbols.c:735
-#: ../src/symbols.c:752 ../src/symbols.c:781 ../src/symbols.c:794
-#: ../src/symbols.c:803 ../src/symbols.c:819 ../src/symbols.c:866
+#: ../src/symbols.c:628 ../src/symbols.c:671 ../src/symbols.c:737
+#: ../src/symbols.c:754 ../src/symbols.c:783 ../src/symbols.c:796
+#: ../src/symbols.c:805 ../src/symbols.c:821 ../src/symbols.c:868
 msgid "Variables"
 msgstr "Spremenljivke"
 
-#: ../src/symbols.c:632
+#: ../src/symbols.c:635
 msgid "Environment"
 msgstr "Okolje"
 
-#: ../src/symbols.c:634 ../src/symbols.c:702
+#: ../src/symbols.c:637 ../src/symbols.c:704
 msgid "Subsection"
 msgstr "Podrazdelek"
 
-#: ../src/symbols.c:635 ../src/symbols.c:703
+#: ../src/symbols.c:638 ../src/symbols.c:705
 msgid "Subsubsection"
 msgstr "Podpodrazdelek"
 
-#: ../src/symbols.c:646
+#: ../src/symbols.c:649
 msgid "Structures"
 msgstr "Zapisi"
 
-#: ../src/symbols.c:653 ../src/symbols.c:762 ../src/symbols.c:776
+#: ../src/symbols.c:656 ../src/symbols.c:764 ../src/symbols.c:778
 msgid "Package"
-msgstr ""
+msgstr "Paket"
 
-#: ../src/symbols.c:655
-msgid "My"
-msgstr "Moj"
+#: ../src/symbols.c:658 ../src/symbols.c:808 ../src/symbols.c:831
+msgid "Labels"
+msgstr "Oznake"
 
-#: ../src/symbols.c:656
-msgid "Local"
-msgstr "Lokalen"
+#: ../src/symbols.c:659 ../src/symbols.c:670 ../src/symbols.c:784
+#: ../src/symbols.c:806
+msgid "Constants"
+msgstr "Konstante"
 
-#: ../src/symbols.c:657
-msgid "Our"
-msgstr "Naš"
-
-#: ../src/symbols.c:667 ../src/symbols.c:763 ../src/symbols.c:777
-#: ../src/symbols.c:790 ../src/symbols.c:816
+#: ../src/symbols.c:667 ../src/symbols.c:765 ../src/symbols.c:779
+#: ../src/symbols.c:792 ../src/symbols.c:818
 msgid "Interfaces"
 msgstr "Vmesniki"
 
-#: ../src/symbols.c:668 ../src/symbols.c:692 ../src/symbols.c:711
-#: ../src/symbols.c:723 ../src/symbols.c:732 ../src/symbols.c:764
-#: ../src/symbols.c:778 ../src/symbols.c:791 ../src/symbols.c:853
+#: ../src/symbols.c:668 ../src/symbols.c:692 ../src/symbols.c:713
+#: ../src/symbols.c:725 ../src/symbols.c:734 ../src/symbols.c:766
+#: ../src/symbols.c:780 ../src/symbols.c:793 ../src/symbols.c:855
 msgid "Classes"
 msgstr "Razredi"
-
-#: ../src/symbols.c:670 ../src/symbols.c:782 ../src/symbols.c:804
-msgid "Constants"
-msgstr "Konstante"
 
 #: ../src/symbols.c:682
 msgid "Anchors"
@@ -4046,82 +4071,76 @@ msgstr "ID izbirniki"
 msgid "Type Selectors"
 msgstr "Izbirniki tipov"
 
-#: ../src/symbols.c:710
+#: ../src/symbols.c:712
 msgid "Modules"
 msgstr "Moduli"
 
-#: ../src/symbols.c:712
+#: ../src/symbols.c:714
 msgid "Singletons"
-msgstr ""
+msgstr "Enoelementni nizi "
 
-#: ../src/symbols.c:713 ../src/symbols.c:724 ../src/symbols.c:733
-#: ../src/symbols.c:765 ../src/symbols.c:792
+#: ../src/symbols.c:715 ../src/symbols.c:726 ../src/symbols.c:735
+#: ../src/symbols.c:767 ../src/symbols.c:794
 msgid "Methods"
 msgstr "Metode"
 
-#: ../src/symbols.c:722 ../src/symbols.c:850
+#: ../src/symbols.c:724 ../src/symbols.c:852
 msgid "Namespaces"
-msgstr ""
+msgstr "Imenski obsegi"
 
-#: ../src/symbols.c:725
-#, fuzzy
+#: ../src/symbols.c:727
 msgid "Procedures"
-msgstr "Lastnosti"
+msgstr "Postopki"
 
-#: ../src/symbols.c:736
-#, fuzzy
+#: ../src/symbols.c:738
 msgid "Imports"
-msgstr "Izvozi"
+msgstr "Uvaža"
 
-#: ../src/symbols.c:766 ../src/symbols.c:855
+#: ../src/symbols.c:768 ../src/symbols.c:857
 msgid "Members"
 msgstr "Člani"
 
-#: ../src/symbols.c:806 ../src/symbols.c:829
-msgid "Labels"
-msgstr "Oznake"
-
-#: ../src/symbols.c:818
+#: ../src/symbols.c:820
 msgid "Subroutines"
 msgstr "Podprogrami"
 
-#: ../src/symbols.c:821
+#: ../src/symbols.c:823
 msgid "Blocks"
 msgstr "Bloki"
 
-#: ../src/symbols.c:830 ../src/symbols.c:839 ../src/symbols.c:863
+#: ../src/symbols.c:832 ../src/symbols.c:841 ../src/symbols.c:865
 msgid "Macros"
 msgstr "Makroji"
 
-#: ../src/symbols.c:831
+#: ../src/symbols.c:833
 msgid "Defines"
-msgstr ""
+msgstr "Določila"
 
-#: ../src/symbols.c:838
+#: ../src/symbols.c:840
 msgid "Targets"
 msgstr "Tarče"
 
-#: ../src/symbols.c:856
+#: ../src/symbols.c:858
 msgid "Structs"
 msgstr "Zapisi"
 
-#: ../src/symbols.c:857
+#: ../src/symbols.c:859
 msgid "Typedefs / Enums"
-msgstr ""
+msgstr "Definicije tipov / Naštevanja"
 
-#: ../src/symbols.c:1337
+#: ../src/symbols.c:1335
 #, c-format
 msgid "Unknown filetype extension for \"%s\".\n"
 msgstr "Neznana datotečna vrsta za \"%s\".\n"
 
-#: ../src/symbols.c:1358
+#: ../src/symbols.c:1356
 #, c-format
 msgid "Failed to create tags file, perhaps because no tags were found.\n"
 msgstr ""
 "Spodletelo ustvarjanje datoteke oznak, verjetno ker ni bilo najdenih nobenih "
 "oznak.\n"
 
-#: ../src/symbols.c:1365
+#: ../src/symbols.c:1363
 #, c-format
 msgid ""
 "Usage: %s -g <Tag File> <File list>\n"
@@ -4130,7 +4149,7 @@ msgstr ""
 "Uporaba: %s -g <Datoteka oznak> <Seznam datotekt>\n"
 "\n"
 
-#: ../src/symbols.c:1366
+#: ../src/symbols.c:1364
 #, c-format
 msgid ""
 "Example:\n"
@@ -4141,42 +4160,46 @@ msgstr ""
 "CFLAGS=`pkg-config gtk+-2.0 --cflags` %s -g gtk2.c.tags /usr/include/gtk-2.0/"
 "gtk/gtk.h\n"
 
-#: ../src/symbols.c:1380
+#: ../src/symbols.c:1378
 msgid "Load Tags"
 msgstr "Naloži značke"
 
-#: ../src/symbols.c:1387
+#: ../src/symbols.c:1385
 msgid "Geany tag files (*.tags)"
 msgstr "Geany datoteke značk (*.tags) "
 
 #. For translators: the first wildcard is the filetype, the second the filename
-#: ../src/symbols.c:1407
+#: ../src/symbols.c:1405
 #, c-format
 msgid "Loaded %s tags file '%s'."
 msgstr "Naložene %s  značke iz datoteke z značkami '%s'."
 
-#: ../src/symbols.c:1409
+#: ../src/symbols.c:1407
 #, c-format
 msgid "Could not load tags file '%s'."
 msgstr "Ni možno naložiti datoteke z značkami '%s'."
 
-#: ../src/symbols.c:1556
+#: ../src/symbols.c:1540
 #, c-format
 msgid "Forward declaration \"%s\" not found."
 msgstr "Navedba \"forward\"  \"%s\" ni najdena."
 
-#: ../src/symbols.c:1558
+#: ../src/symbols.c:1542
 #, c-format
 msgid "Definition of \"%s\" not found."
 msgstr "Opredelitev  \"%s\" ni najdena."
 
-#: ../src/symbols.c:1864
+#: ../src/symbols.c:1848
 msgid "Sort by _Name"
 msgstr "Uredi po _imenu"
 
-#: ../src/symbols.c:1871
+#: ../src/symbols.c:1855
 msgid "Sort by _Appearance"
 msgstr "Uredi po _videzu"
+
+#: ../src/templates.c:264
+msgid "Old"
+msgstr ""
 
 #. custom actions defined in toolbar_init(): "New", "Open", "SearchEntry", "GotoEntry", "Build"
 #: ../src/toolbar.c:55
@@ -4235,24 +4258,24 @@ msgstr "Poženi ali preglej trenutno datoteko"
 msgid ""
 "Open a color chooser dialog, to interactively pick colors from a palette"
 msgstr ""
-"Odpre pogovorno okno barvnega izbiralnika kjer interaktivno izbirate barve s "
-"palete"
+"Odpre pogovorno okno barvnega izbiralnika kjer neposredno izberete barve s "
+"palete."
 
 #: ../src/toolbar.c:71
 msgid "Zoom in the text"
-msgstr "Poveča besedilo"
+msgstr "Poveča besedilo."
 
 #: ../src/toolbar.c:72
 msgid "Zoom out the text"
-msgstr "Zmanjša besedilo"
+msgstr "Zmanjša besedilo."
 
 #: ../src/toolbar.c:73
 msgid "Decrease indentation"
-msgstr "Zmanjša zamik"
+msgstr "Zmanjša zamik."
 
 #: ../src/toolbar.c:74
 msgid "Increase indentation"
-msgstr "Poveča zamik"
+msgstr "Poveča zamik."
 
 #: ../src/toolbar.c:75 ../src/toolbar.c:350
 msgid "Find the entered text in the current file"
@@ -4275,9 +4298,8 @@ msgid "Print document"
 msgstr "Natisni dokument"
 
 #: ../src/toolbar.c:80
-#, fuzzy
 msgid "Replace text in the current document"
-msgstr "Označi vsa ujemanja v trenutnem dokumentu"
+msgstr "Zamenjaj besedilo v trenutnem dokumentu"
 
 #. Create our custom actions
 #: ../src/toolbar.c:334
@@ -4292,28 +4314,29 @@ msgstr "Odpri obstoječo datoteko"
 msgid "Goto"
 msgstr "Pojdi"
 
-#: ../src/toolbar.c:533
-msgid "Separator"
-msgstr ""
-
 #: ../src/toolbar.c:534
-msgid "--- Separator ---"
-msgstr ""
+msgid "Separator"
+msgstr "Ločilo"
 
-#: ../src/toolbar.c:897
+#: ../src/toolbar.c:535
+msgid "--- Separator ---"
+msgstr "--- Ločilo ---"
+
+#: ../src/toolbar.c:899
 msgid ""
 "Select items to be displayed on the toolbar. Items can be reordered by drag "
 "and drop."
 msgstr ""
+"Izberite izbire, ki naj bodo prikazane na orodni vrstici. S potegom in "
+"spuščanjem jih lahko preuredite."
 
-#: ../src/toolbar.c:913
+#: ../src/toolbar.c:915
 msgid "Available Items"
-msgstr ""
+msgstr "Dostopne izbire"
 
-#: ../src/toolbar.c:934
-#, fuzzy
+#: ../src/toolbar.c:936
 msgid "Displayed Items"
-msgstr "Prikaz"
+msgstr "Prikazane izbire"
 
 #: ../src/tools.c:153
 #, c-format
@@ -4338,7 +4361,7 @@ msgstr "Posredovanje podatkov in izvajanje ukaza po meri: %s"
 msgid "Custom command failed: %s"
 msgstr "Ukaz po meri je spodletel: %s"
 
-#: ../src/tools.c:304 ../src/tools.c:538
+#: ../src/tools.c:304 ../src/tools.c:511
 msgid "Set Custom Commands"
 msgstr "Nastavi ukaze po meri"
 
@@ -4350,162 +4373,157 @@ msgstr ""
 "Izbrani izbor lahko pošljete kateremukoli od teh ukazov in izhod ukaza "
 "zamenja trenutni izbor."
 
-#: ../src/tools.c:506 ../src/tools.c:510
+#: ../src/tools.c:486
 msgid "No custom commands defined."
 msgstr "Ni nastavljenih ukazov po meri."
 
-#: ../src/tools.c:615
+#: ../src/tools.c:586
 msgid "Word Count"
 msgstr "Štetje besed"
 
-#: ../src/tools.c:625
+#: ../src/tools.c:596
 msgid "selection"
 msgstr "izbor"
 
-#: ../src/tools.c:631
+#: ../src/tools.c:602
 msgid "whole document"
 msgstr "celoten dokument"
 
-#: ../src/tools.c:640
+#: ../src/tools.c:611
 msgid "Range:"
 msgstr "Obseg:"
 
-#: ../src/tools.c:652
+#: ../src/tools.c:623
 msgid "Lines:"
 msgstr "Vrstice:"
 
-#: ../src/tools.c:666
+#: ../src/tools.c:637
 msgid "Words:"
 msgstr "Besede:"
 
-#: ../src/tools.c:680
+#: ../src/tools.c:651
 msgid "Characters:"
 msgstr "Znaki:"
 
-#: ../src/treeviews.c:177
+#: ../src/sidebar.c:177
 msgid "No tags found"
 msgstr "Ni najdenih značk"
 
-#: ../src/treeviews.c:508
+#: ../src/sidebar.c:510
 msgid "Show S_ymbol List"
 msgstr "Pokaži seznam sim_bolov"
 
-#: ../src/treeviews.c:516
+#: ../src/sidebar.c:518
 msgid "Show _Document List"
 msgstr "Pokaži seznam _dokumentov"
 
-#: ../src/treeviews.c:524 ../plugins/filebrowser.c:580
+#: ../src/sidebar.c:526 ../plugins/filebrowser.c:601
 msgid "H_ide Sidebar"
 msgstr "Skr_ij stransko vrstico"
 
-#: ../src/treeviews.c:591
-#, fuzzy
+#: ../src/sidebar.c:593
 msgid "Show _Paths"
-msgstr "Pokaži vrstico stanja"
+msgstr "Pokaži _poti"
 
 # Status bar statistics: col = column, sel = selection.
 #. Status bar statistics: col = column, sel = selection.
-#: ../src/ui_utils.c:188
+#: ../src/ui_utils.c:190
 #, c-format
 msgid "line: %d\t col: %d\t sel: %d\t "
-msgstr "vrstica: %d\t stolp: %d\t izbor: %d\t"
+msgstr "vrst: %d\t stol: %d\t izbor: %d\t"
 
 #. RO = read-only
-#: ../src/ui_utils.c:194
+#: ../src/ui_utils.c:196
 msgid "RO "
 msgstr "RO "
 
 #. OVR = overwrite/overtype, INS = insert
-#: ../src/ui_utils.c:196
+#: ../src/ui_utils.c:198
 msgid "OVR"
 msgstr "PRE"
 
-#: ../src/ui_utils.c:196
+#: ../src/ui_utils.c:198
 msgid "INS"
 msgstr "VST"
 
-#: ../src/ui_utils.c:202
+#: ../src/ui_utils.c:204
 msgid "TAB"
 msgstr "Raz"
 
-#: ../src/ui_utils.c:205
+#: ../src/ui_utils.c:207
 msgid "SP"
 msgstr "Pre"
 
-#: ../src/ui_utils.c:208
+#: ../src/ui_utils.c:210
 msgid "T/S"
 msgstr "R/P"
 
-#: ../src/ui_utils.c:212
+#: ../src/ui_utils.c:214
 #, c-format
 msgid "mode: %s"
 msgstr "način: %s"
 
-#: ../src/ui_utils.c:215
+#: ../src/ui_utils.c:217
 #, c-format
 msgid "encoding: %s %s"
 msgstr "kodiranje: %s %s"
 
-#: ../src/ui_utils.c:221
+#: ../src/ui_utils.c:223
 #, c-format
 msgid "filetype: %s"
 msgstr "tip datoteke: %s"
 
-#: ../src/ui_utils.c:225
+#: ../src/ui_utils.c:227
 msgid "MOD"
 msgstr "MOD"
 
-#: ../src/ui_utils.c:230
+#: ../src/ui_utils.c:232
 #, c-format
 msgid "scope: %s"
 msgstr "doseg: %s"
 
-#: ../src/ui_utils.c:315
+#: ../src/ui_utils.c:317
 #, c-format
 msgid "Font updated (%s)."
 msgstr "Nabor znakov osvežen (%s)."
 
-#: ../src/ui_utils.c:511
+#: ../src/ui_utils.c:513
 msgid "C Standard Library"
 msgstr "C standardna knjižnica"
 
-#: ../src/ui_utils.c:512
+#: ../src/ui_utils.c:514
 msgid "ISO C99"
 msgstr "ISO C99"
 
-#: ../src/ui_utils.c:513
+#: ../src/ui_utils.c:515
 msgid "C++ (C Standard Library)"
 msgstr "C++ (C standardna knjižnica)"
 
-#: ../src/ui_utils.c:514
+#: ../src/ui_utils.c:516
 msgid "C++ Standard Library"
 msgstr "C++ standardna knjižnica"
 
-#: ../src/ui_utils.c:515
+#: ../src/ui_utils.c:517
 msgid "C++ STL"
 msgstr "C++ STL"
 
-#: ../src/ui_utils.c:579
+#: ../src/ui_utils.c:581
 msgid "_Set Custom Date Format"
 msgstr "_Nastavi prilagojeno obliko datuma"
 
-#: ../src/ui_utils.c:1644
+#: ../src/ui_utils.c:1654
 msgid "Select Folder"
 msgstr "Izberite mapo"
 
-#: ../src/ui_utils.c:1644
+#: ../src/ui_utils.c:1654
 msgid "Select File"
 msgstr "Izberite datoteko"
 
-#: ../src/ui_utils.c:1767
-msgid "C_onfiguration Files"
-msgstr "_Nastavitvene datoteke"
-
-#: ../src/ui_utils.c:1785
+#: ../src/ui_utils.c:1793
 msgid "Save All"
 msgstr "Shrani vse"
 
-#: ../src/ui_utils.c:1786
+#: ../src/ui_utils.c:1794
 msgid "Close All"
 msgstr "Zapri vse"
 
@@ -4574,11 +4592,11 @@ msgstr "Barva ozadja:"
 
 #: ../src/vte.c:768
 msgid "Sets the foreground color of the text in the terminal widget"
-msgstr "Nastavi barvo ospredja besedilu v terminalskem gradniku"
+msgstr "Nastavi barvo ospredja besedilu v terminalskem gradniku."
 
 #: ../src/vte.c:775
 msgid "Sets the background color of the text in the terminal widget"
-msgstr "Nastavi barvo ozadja besedilu v terminalskem gradniku"
+msgstr "Nastavi barvo ozadja besedilu v terminalskem gradniku."
 
 #: ../src/vte.c:778
 msgid "Scrollback lines:"
@@ -4589,7 +4607,7 @@ msgid ""
 "Specifies the history in lines, which you can scroll back in the terminal "
 "widget"
 msgstr ""
-"Določa zgodovino v vrsticah, ki jo lahko zavrtite nazaj v gradniku terminala"
+"Določa zgodovino v vrsticah, ki jo lahko zavrtite nazaj v gradniku terminala."
 
 #: ../src/vte.c:794
 msgid "Shell:"
@@ -4600,7 +4618,7 @@ msgid ""
 "Sets the path to the shell which should be started inside the terminal "
 "emulation"
 msgstr ""
-"Nastavi pot do lupine, ki naj bo zagnana znotraj posnemovalnika termnala"
+"Nastavi pot do lupine, ki naj bo zagnana znotraj posnemovalnika terminala."
 
 #: ../src/vte.c:819
 msgid "Scroll on keystroke"
@@ -4608,7 +4626,7 @@ msgstr "Pomakni ob pritisku na tipko"
 
 #: ../src/vte.c:820
 msgid "Whether to scroll to the bottom if a key was pressed"
-msgstr "Ali naj se pomakne izpis do dna, ko je pritisnjena tipka"
+msgstr "Ali naj se izpis pomakne do dna okna/zaslona, ko je pritisnjena tipka."
 
 #: ../src/vte.c:823
 msgid "Scroll on output"
@@ -4616,7 +4634,7 @@ msgstr "Pomakni na izhodu"
 
 #: ../src/vte.c:824
 msgid "Whether to scroll to the bottom when output is generated"
-msgstr "Ali naj se izpis pomakne navzdol, ko se ustvari izhod"
+msgstr "Ali naj se izpis pomakne navzdol, ko se ustvari izhod."
 
 #: ../src/vte.c:827
 msgid "Cursor blinks"
@@ -4634,7 +4652,7 @@ msgstr "Zanemari  bližnjice Geany-ja"
 msgid ""
 "Allows the VTE to receive keyboard shortcuts (apart from focus commands)"
 msgstr ""
-"Dovoli VTE da sprejema bližnjice s tipkovnice (ločeno od usmerjenih ukazov)"
+"Dovoli VTE da sprejema bližnjice s tipkovnice (ločeno od usmerjenih ukazov)."
 
 #: ../src/vte.c:836
 msgid "Disable menu shortcut key (F10 by default)"
@@ -4650,13 +4668,13 @@ msgstr ""
 "F10). Onemogočenje je lahko uporabno, če na primer, uporabljate Midnight "
 "Comander znotraj VTE."
 
-#: ../src/vte.c:840 ../plugins/filebrowser.c:1122
+#: ../src/vte.c:840 ../plugins/filebrowser.c:1144
 msgid "Follow the path of the current file"
 msgstr "Sledi poti trenutne datoteke"
 
 #: ../src/vte.c:841
 msgid "Whether to execute \"cd $path\" when you switch between opened files"
-msgstr "Ali naj se izvede \"cd $path\" ko preklopite med odprtimi datotekami"
+msgstr "Ali naj se izvede \"cd $path\", ko preklopite med odprtimi datotekami."
 
 #. create check_skip_script checkbox before the check_skip_script checkbox to be able to
 #. * use the object for the toggled handler of check_skip_script checkbox
@@ -4670,7 +4688,7 @@ msgid ""
 "status of the executed program"
 msgstr ""
 "Ne uporabi preproste zagonske skripte katera je običajno uporabljena za "
-"prikaz izhodnega statusa izvajanega programa"
+"prikaz izhodnega statusa izvajanega programa."
 
 #: ../src/vte.c:850
 msgid "Execute programs in VTE"
@@ -4682,7 +4700,7 @@ msgid ""
 "note, programs executed in VTE cannot be stopped"
 msgstr ""
 "Izvede programe v VTE namesto odprtja okna posnemovalnika terminala. Velja "
-"opozoriti, da programov v VTE ni mogoče ustaviti"
+"opozoriti, da programov v VTE ni mogoče ustaviti."
 
 #: ../src/win32.c:135
 msgid "Geany project files"
@@ -4746,15 +4764,15 @@ msgstr "Možnosti"
 
 #: ../plugins/classbuilder.c:423
 msgid "Create constructor"
-msgstr "Ustvari konstruktor"
+msgstr "Ustvari ustvarjalec"
 
 #: ../plugins/classbuilder.c:427
 msgid "Create destructor"
-msgstr "Ustvari destruktor"
+msgstr "Ustvari uničevalec"
 
 #: ../plugins/classbuilder.c:437
 msgid "GTK+ constructor type"
-msgstr "GTK+ tip konstruktorja"
+msgstr "GTK+ tip ustvarjalec"
 
 #: ../plugins/classbuilder.c:744
 msgid "Create Cla_ss"
@@ -4814,15 +4832,15 @@ msgstr "Ločila"
 msgid "Miscellaneous characters"
 msgstr "Razni drugi znaki"
 
-#: ../plugins/htmlchars.c:447
+#: ../plugins/htmlchars.c:449
 msgid "Special Characters"
 msgstr "Posebni znaki"
 
-#: ../plugins/htmlchars.c:449
+#: ../plugins/htmlchars.c:451
 msgid "_Insert"
 msgstr "_Vstavi"
 
-#: ../plugins/htmlchars.c:458
+#: ../plugins/htmlchars.c:460
 msgid ""
 "Choose a special character from the list below and double click on it or use "
 "the button to insert it at the current cursor position."
@@ -4830,41 +4848,41 @@ msgstr ""
 "Izberite poseben znak iz spodnjega seznama in kliknite nanj ali uporabite "
 "gumb, da ga vstavite na trenutno mesto kazalca."
 
-#: ../plugins/htmlchars.c:472
+#: ../plugins/htmlchars.c:474
 msgid "Character"
 msgstr "Znak"
 
-#: ../plugins/htmlchars.c:478
+#: ../plugins/htmlchars.c:480
 msgid "HTML (name)"
 msgstr "HTML (ime)"
 
-#: ../plugins/htmlchars.c:678
+#: ../plugins/htmlchars.c:681
 msgid "_Insert Special HTML Characters"
 msgstr "_Vstavi posebne HTML znake"
 
 # Doda menijski vnos za funkcije html zamenjav
 #. Add menuitem for html replacement functions
-#: ../plugins/htmlchars.c:690
+#: ../plugins/htmlchars.c:693
 msgid "HTML Replacement"
 msgstr "HTML zamenjave"
 
-#: ../plugins/htmlchars.c:697
+#: ../plugins/htmlchars.c:700
 msgid "_HTMLToggle"
 msgstr "_HTMLpreklop"
 
-#: ../plugins/htmlchars.c:706
+#: ../plugins/htmlchars.c:709
 msgid "Bulk replacement of special chars"
 msgstr "Masovna zamenjava posebnih znakov"
 
-#: ../plugins/htmlchars.c:721
+#: ../plugins/htmlchars.c:724
 msgid "Insert Special HTML Characters"
 msgstr "Vstavi posebne HTML znake"
 
-#: ../plugins/htmlchars.c:724
+#: ../plugins/htmlchars.c:727
 msgid "Replace special characters"
 msgstr "Zamenjaj posebne znake"
 
-#: ../plugins/htmlchars.c:727
+#: ../plugins/htmlchars.c:730
 msgid "Toggle plugin status"
 msgstr "Preklopi stanje vstavka"
 
@@ -4929,69 +4947,69 @@ msgstr "Brskalnik datotek"
 msgid "Adds a file browser tab to the sidebar."
 msgstr "Doda zavihek brskalnika datotek na stransko vrstico."
 
-#: ../plugins/filebrowser.c:323
+#: ../plugins/filebrowser.c:329
 msgid "Too many items selected!"
 msgstr "Izbranih preveč postavk!"
 
-#: ../plugins/filebrowser.c:399
+#: ../plugins/filebrowser.c:405
 #, c-format
 msgid "Could not execute configured external command '%s' (%s)."
 msgstr "Izvajanje nastavljenega zunanjega ukaza '%s' ni bilo mogoče (%s)."
 
-#: ../plugins/filebrowser.c:555
+#: ../plugins/filebrowser.c:567
 msgid "Open _externally"
 msgstr "Odpri _zunanje"
 
-#: ../plugins/filebrowser.c:561
+#: ../plugins/filebrowser.c:573
 msgid "_Find in Files"
 msgstr "_Najdi v datotekah"
 
-#: ../plugins/filebrowser.c:571
+#: ../plugins/filebrowser.c:583
 msgid "Show _Hidden Files"
 msgstr "Pokaži _skrite datoteke"
 
-#: ../plugins/filebrowser.c:763
+#: ../plugins/filebrowser.c:781
 msgid "Up"
 msgstr "Gor"
 
-#: ../plugins/filebrowser.c:768
+#: ../plugins/filebrowser.c:786
 msgid "Refresh"
 msgstr "Osveži"
 
-#: ../plugins/filebrowser.c:773
+#: ../plugins/filebrowser.c:791
 msgid "Home"
 msgstr "Domov"
 
-#: ../plugins/filebrowser.c:778
+#: ../plugins/filebrowser.c:796
 msgid "Set path from document"
 msgstr "Nastavi pot iz dokumenta"
 
-#: ../plugins/filebrowser.c:786
+#: ../plugins/filebrowser.c:804
 msgid "Clear the filter"
 msgstr "Počisti filter"
 
-#: ../plugins/filebrowser.c:800
+#: ../plugins/filebrowser.c:818
 msgid "Filter:"
 msgstr "Filter:"
 
-#: ../plugins/filebrowser.c:1019
+#: ../plugins/filebrowser.c:1037
 msgid "Focus File List"
 msgstr "Osredotoči se na datotečni seznam"
 
-#: ../plugins/filebrowser.c:1021
+#: ../plugins/filebrowser.c:1039
 msgid "Focus Path Entry"
 msgstr "Osredotoči se na vnos poti"
 
-#: ../plugins/filebrowser.c:1067 ../plugins/saveactions.c:470
+#: ../plugins/filebrowser.c:1085 ../plugins/saveactions.c:470
 msgid "Plugin configuration directory could not be created."
 msgstr "Mape nastavitev vstavkov ni bilo možno ustvariti."
 
 # ????
-#: ../plugins/filebrowser.c:1092
+#: ../plugins/filebrowser.c:1112
 msgid "External open command:"
 msgstr "Zunanji ukaz za odpiranje:"
 
-#: ../plugins/filebrowser.c:1101
+#: ../plugins/filebrowser.c:1121
 #, c-format
 msgid ""
 "The command to execute when using \"Open with\". You can use %f and %d "
@@ -5005,15 +5023,15 @@ msgstr ""
 "%f bo zamenjan s polno potjo do datoteke in njenim imenom\n"
 "%d pa s potjo do izbrane datoteke brez njenega imena."
 
-#: ../plugins/filebrowser.c:1107
+#: ../plugins/filebrowser.c:1129
 msgid "Show hidden files"
 msgstr "Pokaži skrite datoteke"
 
-#: ../plugins/filebrowser.c:1113
+#: ../plugins/filebrowser.c:1135
 msgid "Hide object files"
 msgstr "Skrij objektne datoteke"
 
-#: ../plugins/filebrowser.c:1117
+#: ../plugins/filebrowser.c:1139
 msgid ""
 "Don't show generated object files in the file browser, this includes *.o, *."
 "obj. *.so, *.dll, *.a, *.lib"
@@ -5021,12 +5039,11 @@ msgstr ""
 "Ne prikaže objektnih datotek v brskalniku datotek  (*.o, *.obj, *.so, *.dll, "
 "*.a, *.lib)"
 
-#: ../plugins/filebrowser.c:1128
-#, fuzzy
+#: ../plugins/filebrowser.c:1150
 msgid "Use the project's base directory"
-msgstr "Nastavi osnovni imenik projekta"
+msgstr "Uporabi osnovni imenik projekta"
 
-#: ../plugins/filebrowser.c:1132
+#: ../plugins/filebrowser.c:1154
 msgid ""
 "Change the directory to the base directory of the currently opened project"
 msgstr "Spremeni mapo v osnovni imenik trenutno odprtega projekta"
@@ -5128,7 +5145,7 @@ msgstr ""
 
 #: ../plugins/saveactions.c:692
 msgid "Directory _levels to include in the backup destination:"
-msgstr "Koliko nivojev kopije vk_ljučiti v cilj varnostne kopije"
+msgstr "Koliko nivojev kopije želite vk_ljučiti v cilj varnostne kopije:"
 
 #: ../plugins/splitwindow.c:36
 msgid "Split Window"
@@ -5138,148 +5155,78 @@ msgstr "Razdeli okno"
 msgid "Splits the editor view into two windows."
 msgstr "Razdeli pogled urejevalnika v dve ločeni okni"
 
-#: ../plugins/splitwindow.c:276
-#, fuzzy
+#: ../plugins/splitwindow.c:244
 msgid "Show the current document"
-msgstr "Označi vsa ujemanja v trenutnem dokumentu"
+msgstr "Pokaži trenutni dokument"
 
-#: ../plugins/splitwindow.c:289 ../plugins/splitwindow.c:417
+#: ../plugins/splitwindow.c:261 ../plugins/splitwindow.c:389
+#: ../plugins/splitwindow.c:404
 msgid "_Unsplit"
 msgstr "_Združi"
 
-#: ../plugins/splitwindow.c:399
+#: ../plugins/splitwindow.c:371
 msgid "_Split Window"
 msgstr "_Razdeli okno"
 
-#: ../plugins/splitwindow.c:407
+#: ../plugins/splitwindow.c:379
 msgid "_Horizontally"
 msgstr "_Vodoravno"
 
-#: ../plugins/splitwindow.c:412
+#: ../plugins/splitwindow.c:384
 msgid "_Vertically"
 msgstr "_Navpično"
 
-#: ../plugins/splitwindow.c:428
+#: ../plugins/splitwindow.c:400
 msgid "Split Horizontally"
 msgstr "Razdeli vodoravno"
 
-#: ../plugins/splitwindow.c:430
+#: ../plugins/splitwindow.c:402
 msgid "Split Vertically"
 msgstr "Razdeli navpično"
 
-#: ../plugins/splitwindow.c:432
-msgid "Unsplit"
-msgstr "Združi"
+#~ msgid ""
+#~ "Notes:\n"
+#~ "   %d, %e, %f, %p are substituted in Commands and Working dir, see manual "
+#~ "for details\n"
+#~ "   Non-filetype menu Item 2 opens a dialog and appends the reponse to the "
+#~ "command"
+#~ msgstr ""
+#~ "Opombe:\n"
+#~ "   %d, %e, %f, %p so  zamenjane v Ukazih in Delovnih imenikih; za "
+#~ "podrobnosti glej priročnik.\n"
+#~ "    Nedatotečni izbirnik št. 2 odpre pogovorno okno in doda odziv na ukaz."
 
-# prevede izvorno kodo
-#~ msgid "_Compile"
-#~ msgstr "_Prevedi"
+#~ msgid "dummy tooltip, don't translate this."
+#~ msgstr "dummy tooltip, don't translate this."
 
-#~ msgid "_Set Includes and Arguments"
-#~ msgstr "_Nastavi zaglavja in spremenljivke"
-
-# DVI
-#~ msgid "LaTeX -> _DVI"
-#~ msgstr "LaTeX -> _DVI"
-
-# PDF
-#~ msgid "LaTeX -> _PDF"
-#~ msgstr "LaTeX -> _PDF"
-
-#~ msgid "_View DVI File"
-#~ msgstr "Prikaži _DVI"
-
-#~ msgid "V_iew PDF File"
-#~ msgstr "Prikaži _PDF"
-
-#~ msgid "_Set Arguments"
-#~ msgstr "_Nastavi ukazne spremenljivke"
-
-#~ msgid "Set Arguments"
-#~ msgstr "Nastavi ukazne spremenljivke"
-
-#~ msgid "Set programs and options for compiling and viewing (La)TeX files."
-#~ msgstr "Nastavi programe in možnosti za izdelavo in pregled (La)TeX datotek"
-
-#~ msgid "DVI creation:"
-#~ msgstr "Izdelava DVI:"
-
-#~ msgid "PDF creation:"
-#~ msgstr "Izdelava PDF:"
-
-#~ msgid "DVI preview:"
-#~ msgstr "DVI predogled:"
-
-#~ msgid "PDF preview:"
-#~ msgstr "PDF predogled:"
+#~ msgid "Du_plicate Line or Selection"
+#~ msgstr "Po_dvoji vrstico ali izbor"
 
 #~ msgid ""
-#~ "%f will be replaced by the current filename, e.g. test_file.c\n"
-#~ "%e will be replaced by the filename without extension, e.g. test_file"
+#~ "Use white text on a black background and invert all colors, this option "
+#~ "requires a restart of Geany"
 #~ msgstr ""
-#~ "%f bo zamenjana s trenutno datoteko, npr. test_dat.c\n"
-#~ "%e bo zamenjano z datoteko brez podaljška, npr. test_dat "
-
-#~ msgid "Set Includes and Arguments"
-#~ msgstr "Nastavi zaglavja in ukazne spremenljivke"
-
-#~ msgid "Set the commands for building and running programs."
-#~ msgstr "Nastavi ukaze za gradnjo in zagon programov."
-
-#~ msgid "Compile:"
-#~ msgstr "Prevedi:"
-
-#~ msgid "Build:"
-#~ msgstr "Zgradi:"
-
-#~ msgid "Failed to execute the view program"
-#~ msgstr "Spodletelo izvajanje oglednega programa"
-
-#~ msgid "Diff file"
-#~ msgstr "Diff datoteka"
-
-#~ msgid "reStructuredText file"
-#~ msgstr "reStructuredText datoteka"
-
-#~ msgid "Select _All"
-#~ msgstr "Izberi _Vse"
-
-#~ msgid "Automatic symbol completion"
-#~ msgstr "Samodokončanje simbolov"
-
-#~ msgid "Path and options for the make tool"
-#~ msgstr "Pot in možnosti do orodja make "
-
-#~ msgid "Run (alternative command)"
-#~ msgstr "Zaženi (alternativni ukaz)"
+#~ "Uporabi beli tekst na črnem ozadju in obrne vse barve. Ta izbira zahteva "
+#~ "ponovni zagon Geany"
 
 #~ msgid ""
-#~ "<i>Notice: To customize the toolbar elements, edit the file 'ui_toolbar."
-#~ "xml'. Please see the documentation for details.</i>"
+#~ "Below is a list of available plugins. Select the plugins which should be "
+#~ "loaded when Geany is started."
 #~ msgstr ""
-#~ "<i>Opomba: Za prilagajanje elementov orodne vrstice, uredite datoteko "
-#~ "'ui_toolbar.xml'. Prosimo, da si za podrobnosti ogledate dokumentacijo.</"
-#~ "i>"
+#~ "Iz spodnjega seznama izberite tiste vstavke, ki se naj naložijo ob zagonu "
+#~ "Geany. "
 
-#~ msgid "Make in base path"
-#~ msgstr "Zgradi v osnovni poti"
+#~ msgid "Search failed (see Help->Debug Messages for details)."
+#~ msgstr "Iskanje spodletelo"
 
-#~ msgid "Run command:"
-#~ msgstr "Zaženi ukaz:"
+#~ msgid "My"
+#~ msgstr "Moj"
 
-#~ msgid ""
-#~ "Command-line to run in the project base directory. Options can be "
-#~ "appended to the command. Leave blank to use the default run command."
-#~ msgstr ""
-#~ "Ukazna vrstica za zagon v osnovnem imeniku projekta. Ukazu lahko dodate "
-#~ "tudi možnosti, pustite prazno za privzeti zagonski ukaz."
+#~ msgid "Local"
+#~ msgstr "Lokalen"
 
-#~ msgid "Choose Project Run Command"
-#~ msgstr "Izberite Projekt Zaženi ukaz"
+#~ msgid "Our"
+#~ msgstr "Naš"
 
-#~ msgid ""
-#~ "For all changes you make in this file to take effect, you need to restart "
-#~ "Geany."
-#~ msgstr ""
-#~ "Da bodo vse spremembe v tej datoteki učinkovale boste morali ponovno "
-#~ "zagnati Geany."
+#~ msgid "Unsplit"
+#~ msgstr "Združi"
