@@ -1,3 +1,10 @@
+2009-10-29  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/pluginutils.c:
+   Don't expand Plugin Preferences page spacing vertically to fill the
+   height of the dialog.
+
+
 2009-10-28  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/ui_utils.c:
