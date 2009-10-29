@@ -401,7 +401,7 @@ void plugin_init(GeanyData *data)
 	keybindings_set_item(key_group, KB_SPLIT_VERTICAL, kb_activate,
 		0, 0, "split_vertical", _("Split Vertically"), menu_items.vertical);
 	keybindings_set_item(key_group, KB_SPLIT_UNSPLIT, kb_activate,
-		0, 0, "split_unsplit", _("Unsplit"), menu_items.unsplit);
+		0, 0, "split_unsplit", _("_Unsplit"), menu_items.unsplit);
 }
 
 

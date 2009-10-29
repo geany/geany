@@ -3,6 +3,13 @@
  * src/pluginutils.c:
    Don't expand Plugin Preferences page spacing vertically to fill the
    height of the dialog.
+ * src/interface.c, src/keybindings.c, src/keybindings.h, src/prefs.c,
+   geany.glade, plugins/splitwindow.c:
+   Allow GeanyKeyBinding label field to contain underscores, which won't
+   be displayed by Geany. This saves adding near-duplicate translation
+   strings.
+   Add mnemonics for 3 Edit->Format menu items.
+   Add keybindings_get_label().
 
 
 2009-10-28  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

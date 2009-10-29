@@ -41,7 +41,9 @@ typedef struct GeanyKeyBinding
 	guint key;				/**< Key value in lower-case, such as @c GDK_a or 0 */
 	GdkModifierType mods;	/**< Modifier keys, such as @c GDK_CONTROL_MASK or 0 */
 	gchar *name;			/**< Key name for the configuration file, such as @c "menu_new" */
-	gchar *label;			/**< Label used in the preferences dialog keybindings tab */
+	/** Label used in the preferences dialog keybindings tab.
+	 * May contain underscores - these won't be displayed. */
+	gchar *label;
 	/** Function called when the key combination is pressed, or @c NULL to use the group callback
 	 * (preferred). @see plugin_set_key_group(). */
 	GeanyKeyCallback callback;
@@ -350,6 +352,8 @@ GeanyKeyBinding *keybindings_set_item(GeanyKeyGroup *group, gsize key_id,
 		gchar *name, gchar *label, GtkWidget *menu_item);
 
 GeanyKeyBinding *keybindings_get_item(GeanyKeyGroup *group, gsize key_id);
+
+gchar *keybindings_get_label(GeanyKeyBinding *kb);
 
 void keybindings_update_combo(GeanyKeyBinding *kb, guint key, GdkModifierType mods);
 

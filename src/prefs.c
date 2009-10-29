@@ -297,7 +297,7 @@ static void kb_init(void)
 {
 	GtkTreeIter parent, iter;
 	gsize g, i;
-	gchar *key_string;
+	gchar *key_string, *label;
 	GeanyKeyGroup *group;
 	GeanyKeyBinding *kb;
 
@@ -316,11 +316,13 @@ static void kb_init(void)
 		{
 			kb = &group->keys[i];
 
+			label = keybindings_get_label(kb);
 			key_string = gtk_accelerator_name(kb->key, kb->mods);
 			gtk_tree_store_append(store, &iter, &parent);
-			gtk_tree_store_set(store, &iter, KB_TREE_ACTION, kb->label,
+			gtk_tree_store_set(store, &iter, KB_TREE_ACTION, label,
 				KB_TREE_SHORTCUT, key_string, KB_TREE_INDEX, i, -1);
 			g_free(key_string);
+			g_free(label);
 		}
 	}
 	gtk_tree_view_expand_all(GTK_TREE_VIEW(tree));
@@ -1400,11 +1402,14 @@ static gboolean kb_find_duplicate(GeanyKeyBinding *search_kb,
 			if (kb->key == key && kb->mods == mods
 				&& ! (kb->key == search_kb->key && kb->mods == search_kb->mods))
 			{
+				gchar *label = keybindings_get_label(kb);
 				gint ret = dialogs_show_prompt(main_widgets.window,
 					_("_Override"), GTK_STOCK_CANCEL, _("_Allow"),
 					_("Override that keybinding?"),
 					_("The combination '%s' is already used for \"%s\"."),
-					action, kb->label);
+					action, label);
+
+				g_free(label);
 
 				if (ret == GTK_RESPONSE_YES)
 				{

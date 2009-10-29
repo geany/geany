@@ -428,7 +428,7 @@
 			      <child>
 				<widget class="GtkMenuItem" id="reflow_lines/block1">
 				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">Reflow Lines/Block</property>
+				  <property name="label" translatable="yes">_Reflow Lines/Block</property>
 				  <property name="use_underline">True</property>
 				  <signal name="activate" handler="on_reflow_lines/block1_activate" last_modification_time="Wed, 28 Oct 2009 11:13:48 GMT"/>
 				</widget>
@@ -446,7 +446,7 @@
 			      <child>
 				<widget class="GtkMenuItem" id="transpose_current_line1">
 				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">Transpose Current Line</property>
+				  <property name="label" translatable="yes">_Transpose Current Line</property>
 				  <property name="use_underline">True</property>
 				  <signal name="activate" handler="on_transpose_current_line1_activate" last_modification_time="Wed, 28 Oct 2009 11:13:48 GMT"/>
 				</widget>
@@ -536,7 +536,7 @@
 			      <child>
 				<widget class="GtkMenuItem" id="smart_line_indent1">
 				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">Smart Line Indent</property>
+				  <property name="label" translatable="yes">_Smart Line Indent</property>
 				  <property name="use_underline">True</property>
 				  <signal name="activate" handler="on_smart_line_indent1_activate" last_modification_time="Wed, 28 Oct 2009 11:13:48 GMT"/>
 				</widget>

@@ -483,7 +483,7 @@ create_window1 (void)
   menu_format1_menu = gtk_menu_new ();
   gtk_menu_item_set_submenu (GTK_MENU_ITEM (menu_format1), menu_format1_menu);
 
-  reflow_lines_block1 = gtk_menu_item_new_with_mnemonic (_("Reflow Lines/Block"));
+  reflow_lines_block1 = gtk_menu_item_new_with_mnemonic (_("_Reflow Lines/Block"));
   gtk_widget_show (reflow_lines_block1);
   gtk_container_add (GTK_CONTAINER (menu_format1_menu), reflow_lines_block1);
 
@@ -491,7 +491,7 @@ create_window1 (void)
   gtk_widget_show (menu_toggle_case2);
   gtk_container_add (GTK_CONTAINER (menu_format1_menu), menu_toggle_case2);
 
-  transpose_current_line1 = gtk_menu_item_new_with_mnemonic (_("Transpose Current Line"));
+  transpose_current_line1 = gtk_menu_item_new_with_mnemonic (_("_Transpose Current Line"));
   gtk_widget_show (transpose_current_line1);
   gtk_container_add (GTK_CONTAINER (menu_format1_menu), transpose_current_line1);
 
@@ -533,7 +533,7 @@ create_window1 (void)
   gtk_widget_show (image3148);
   gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (menu_decrease_indent1), image3148);
 
-  smart_line_indent1 = gtk_menu_item_new_with_mnemonic (_("Smart Line Indent"));
+  smart_line_indent1 = gtk_menu_item_new_with_mnemonic (_("_Smart Line Indent"));
   gtk_widget_show (smart_line_indent1);
   gtk_container_add (GTK_CONTAINER (menu_format1_menu), smart_line_indent1);
 

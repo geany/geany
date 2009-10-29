@@ -134,7 +134,8 @@ GeanyKeyBinding *keybindings_get_item(GeanyKeyGroup *group, gsize key_id)
  * @param key (Lower case) default key, e.g. @c GDK_j, but usually 0 for unset.
  * @param mod Default modifier, e.g. @c GDK_CONTROL_MASK, but usually 0 for unset.
  * @param kf_name Key name for the configuration file, such as @c "menu_new".
- * @param label Label used in the preferences dialog keybindings tab.
+ * @param label Label used in the preferences dialog keybindings tab. May contain
+ * underscores - these won't be displayed.
  * @param menu_item Optional widget to set an accelerator for, or @c NULL.
  * @return The keybinding - normally this is ignored. */
 GeanyKeyBinding *keybindings_set_item(GeanyKeyGroup *group, gsize key_id,
@@ -266,7 +267,7 @@ static void init_default_kb(void)
 		_("Delete to line end"), NULL);
 	/* transpose may fit better in format group */
 	keybindings_set_item(group, GEANY_KEYS_EDITOR_TRANSPOSELINE, NULL,
-		GDK_t, GDK_CONTROL_MASK, "edit_transposeline", _("Transpose Current Line"),
+		GDK_t, GDK_CONTROL_MASK, "edit_transposeline", _("_Transpose Current Line"),
 		LW(transpose_current_line1));
 	keybindings_set_item(group, GEANY_KEYS_EDITOR_SCROLLTOLINE, NULL,
 		GDK_l, GDK_SHIFT_MASK | GDK_CONTROL_MASK, "edit_scrolltoline", _("Scroll to current line"), NULL);
@@ -350,7 +351,7 @@ static void init_default_kb(void)
 	keybindings_set_item(group, GEANY_KEYS_FORMAT_DECREASEINDENTBYSPACE, NULL,
 		0, 0, "edit_decreaseindentbyspace", _("Decrease indent by one space"), NULL);
 	keybindings_set_item(group, GEANY_KEYS_FORMAT_AUTOINDENT, NULL,
-		0, 0, "edit_autoindent", _("Smart Line Indent"), LW(smart_line_indent1));
+		0, 0, "edit_autoindent", _("_Smart Line Indent"), LW(smart_line_indent1));
 	keybindings_set_item(group, GEANY_KEYS_FORMAT_SENDTOCMD1, NULL,
 		GDK_1, GDK_CONTROL_MASK, "edit_sendtocmd1", _("Send to Custom Command 1"), NULL);
 	keybindings_set_item(group, GEANY_KEYS_FORMAT_SENDTOCMD2, NULL,
@@ -360,7 +361,7 @@ static void init_default_kb(void)
 	keybindings_set_item(group, GEANY_KEYS_FORMAT_SENDTOVTE, NULL,
 		0, 0, "edit_sendtovte", _("Send Selection to Terminal"), LW(send_selection_to_vte1));
 	keybindings_set_item(group, GEANY_KEYS_FORMAT_REFLOWPARAGRAPH, NULL,
-		GDK_j, GDK_CONTROL_MASK, "format_reflowparagraph", _("Reflow Lines/Block"),
+		GDK_j, GDK_CONTROL_MASK, "format_reflowparagraph", _("_Reflow Lines/Block"),
 		LW(reflow_lines_block1));
 
 	group = ADD_KB_GROUP(INSERT, _("Insert"), cb_func_insert_action);
@@ -776,10 +777,15 @@ void keybindings_free(void)
 }
 
 
+gchar *keybindings_get_label(GeanyKeyBinding *kb)
+{
+	return utils_str_remove_chars(g_strdup(kb->label), "_");
+}
+
+
 static void fill_shortcut_labels_treeview(GtkWidget *tree)
 {
 	gsize g, i;
-	gchar *shortcut;
 	GeanyKeyBinding *kb;
 	GeanyKeyGroup *group;
 	GtkListStore *store;
@@ -802,13 +808,17 @@ static void fill_shortcut_labels_treeview(GtkWidget *tree)
 
 		for (i = 0; i < group->count; i++)
 		{
+			gchar *shortcut, *label;
+
 			kb = &group->keys[i];
+			label = keybindings_get_label(kb);
 			shortcut = gtk_accelerator_get_label(kb->key, kb->mods);
 
 			gtk_list_store_append(store, &iter);
-			gtk_list_store_set(store, &iter, 0, kb->label, 1, shortcut, 2, PANGO_WEIGHT_NORMAL, -1);
+			gtk_list_store_set(store, &iter, 0, label, 1, shortcut, 2, PANGO_WEIGHT_NORMAL, -1);
 
 			g_free(shortcut);
+			g_free(label);
 		}
 	}
 
