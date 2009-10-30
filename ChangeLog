@@ -1,3 +1,9 @@
+2009-10-30  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/stash.c, src/stash.h:
+   Use typedef instead of pointer for widget_id function arguments.
+
+
 2009-10-29  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/pluginutils.c:

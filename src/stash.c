@@ -72,7 +72,7 @@ struct GeanyPrefEntry
 	const gchar *key_name;
 	gpointer default_value;
 	GType widget_type;			/* e.g. GTK_TYPE_TOGGLE_BUTTON */
-	gpointer widget_id;			/* can be GtkWidget or gchararray */
+	GeanyWidgetID widget_id;	/* (GtkWidget*) or (gchar*) */
 	gpointer fields;			/* extra fields */
 };
 
@@ -86,7 +86,7 @@ struct GeanyPrefGroup
 
 typedef struct EnumWidget
 {
-	gpointer widget_id;
+	GeanyWidgetID widget_id;
 	gint enum_id;
 }
 EnumWidget;
@@ -441,7 +441,7 @@ lookup_widget(GtkWidget *widget, const gchar *widget_name)
 
 
 static GtkWidget *
-get_widget(GtkWidget *owner, gpointer widget_id)
+get_widget(GtkWidget *owner, GeanyWidgetID widget_id)
 {
 	GtkWidget *widget = widget_id;
 
@@ -588,7 +588,7 @@ void stash_group_update(GeanyPrefGroup *group, GtkWidget *owner)
 static GeanyPrefEntry *
 add_widget_pref(GeanyPrefGroup *group, GType setting_type, gpointer setting,
 		const gchar *key_name, gpointer default_value,
-		GType widget_type, gpointer widget_id)
+		GType widget_type, GeanyWidgetID widget_id)
 {
 	GeanyPrefEntry *entry =
 		add_pref(group, setting_type, setting, key_name, default_value);
@@ -602,7 +602,7 @@ add_widget_pref(GeanyPrefGroup *group, GType setting_type, gpointer setting,
 /* Used for GtkCheckButton or GtkToggleButton widgets.
  * @see stash_group_add_radio_buttons(). */
 void stash_group_add_toggle_button(GeanyPrefGroup *group, gboolean *setting,
-		const gchar *key_name, gboolean default_value, gpointer widget_id)
+		const gchar *key_name, gboolean default_value, GeanyWidgetID widget_id)
 {
 	add_widget_pref(group, G_TYPE_BOOLEAN, setting, key_name, GINT_TO_POINTER(default_value),
 		GTK_TYPE_TOGGLE_BUTTON, widget_id);
@@ -618,7 +618,7 @@ void stash_group_add_toggle_button(GeanyPrefGroup *group, gboolean *setting,
  * @endcode */
 void stash_group_add_radio_buttons(GeanyPrefGroup *group, gint *setting,
 		const gchar *key_name, gint default_value,
-		gpointer widget_id, gint enum_id, ...)
+		GeanyWidgetID widget_id, gint enum_id, ...)
 {
 	GeanyPrefEntry *entry =
 		add_widget_pref(group, G_TYPE_INT, setting, key_name, GINT_TO_POINTER(default_value),
@@ -663,7 +663,7 @@ void stash_group_add_radio_buttons(GeanyPrefGroup *group, gint *setting,
 
 
 void stash_group_add_spin_button_integer(GeanyPrefGroup *group, gint *setting,
-		const gchar *key_name, gint default_value, gpointer widget_id)
+		const gchar *key_name, gint default_value, GeanyWidgetID widget_id)
 {
 	add_widget_pref(group, G_TYPE_INT, setting, key_name, GINT_TO_POINTER(default_value),
 		GTK_TYPE_SPIN_BUTTON, widget_id);
@@ -672,7 +672,7 @@ void stash_group_add_spin_button_integer(GeanyPrefGroup *group, gint *setting,
 
 /* @see stash_group_add_combo_box_entry(). */
 void stash_group_add_combo_box(GeanyPrefGroup *group, gint *setting,
-		const gchar *key_name, gint default_value, gpointer widget_id)
+		const gchar *key_name, gint default_value, GeanyWidgetID widget_id)
 {
 	add_widget_pref(group, G_TYPE_INT, setting, key_name, GINT_TO_POINTER(default_value),
 		GTK_TYPE_COMBO_BOX, widget_id);
@@ -682,7 +682,7 @@ void stash_group_add_combo_box(GeanyPrefGroup *group, gint *setting,
 /* We could maybe also have something like stash_group_add_combo_box_entry_with_menu()
  * for the history list - or should that be stored as a separate setting? */
 void stash_group_add_combo_box_entry(GeanyPrefGroup *group, gchar **setting,
-		const gchar *key_name, const gchar *default_value, gpointer widget_id)
+		const gchar *key_name, const gchar *default_value, GeanyWidgetID widget_id)
 {
 	add_widget_pref(group, G_TYPE_STRING, setting, key_name, (gpointer)default_value,
 		GTK_TYPE_COMBO_BOX_ENTRY, widget_id);
@@ -690,7 +690,7 @@ void stash_group_add_combo_box_entry(GeanyPrefGroup *group, gchar **setting,
 
 
 void stash_group_add_entry(GeanyPrefGroup *group, gchar **setting,
-		const gchar *key_name, const gchar *default_value, gpointer widget_id)
+		const gchar *key_name, const gchar *default_value, GeanyWidgetID widget_id)
 {
 	add_widget_pref(group, G_TYPE_STRING, setting, key_name, (gpointer)default_value,
 		GTK_TYPE_ENTRY, widget_id);
@@ -716,7 +716,7 @@ static GType object_get_property_type(GObject *object, const gchar *property_nam
  * @warning Currently only string GValue properties will be freed before setting; patch for
  * other types - see handle_widget_property(). */
 void stash_group_add_widget_property(GeanyPrefGroup *group, gpointer setting,
-		const gchar *key_name, gpointer default_value, gpointer widget_id,
+		const gchar *key_name, gpointer default_value, GeanyWidgetID widget_id,
 		const gchar *property_name, GType type)
 {
 	if (!type)

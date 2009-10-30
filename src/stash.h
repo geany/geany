@@ -29,6 +29,10 @@ typedef struct GeanyPrefEntry GeanyPrefEntry;
 
 typedef struct GeanyPrefGroup GeanyPrefGroup;
 
+/* Can be (GtkWidget*) or (gchar*) depending on whether owner argument is used for
+ * stash_group_display/stash_group_update. */
+typedef gpointer GeanyWidgetID;
+
 
 GeanyPrefGroup *stash_group_new(const gchar *name);
 
@@ -58,26 +62,26 @@ void stash_group_free(GeanyPrefGroup *group);
 /* *** GTK-related functions *** */
 
 void stash_group_add_toggle_button(GeanyPrefGroup *group, gboolean *setting,
-		const gchar *key_name, gboolean default_value, gpointer widget_id);
+		const gchar *key_name, gboolean default_value, GeanyWidgetID widget_id);
 
 void stash_group_add_radio_buttons(GeanyPrefGroup *group, gint *setting,
 		const gchar *key_name, gint default_value,
-		gpointer widget_id, gint enum_id, ...) G_GNUC_NULL_TERMINATED;
+		GeanyWidgetID widget_id, gint enum_id, ...) G_GNUC_NULL_TERMINATED;
 
 void stash_group_add_spin_button_integer(GeanyPrefGroup *group, gint *setting,
-		const gchar *key_name, gint default_value, gpointer widget_id);
+		const gchar *key_name, gint default_value, GeanyWidgetID widget_id);
 
 void stash_group_add_combo_box(GeanyPrefGroup *group, gint *setting,
-		const gchar *key_name, gint default_value, gpointer widget_id);
+		const gchar *key_name, gint default_value, GeanyWidgetID widget_id);
 
 void stash_group_add_combo_box_entry(GeanyPrefGroup *group, gchar **setting,
-		const gchar *key_name, const gchar *default_value, gpointer widget_id);
+		const gchar *key_name, const gchar *default_value, GeanyWidgetID widget_id);
 
 void stash_group_add_entry(GeanyPrefGroup *group, gchar **setting,
-		const gchar *key_name, const gchar *default_value, gpointer widget_id);
+		const gchar *key_name, const gchar *default_value, GeanyWidgetID widget_id);
 
 void stash_group_add_widget_property(GeanyPrefGroup *group, gpointer setting,
-		const gchar *key_name, gpointer default_value, gpointer widget_id,
+		const gchar *key_name, gpointer default_value, GeanyWidgetID widget_id,
 		const gchar *property_name, GType type);
 
 void stash_group_display(GeanyPrefGroup *group, GtkWidget *owner);
