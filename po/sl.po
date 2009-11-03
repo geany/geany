@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: geany 0.19\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-10-29 18:59+0100\n"
-"PO-Revision-Date: 2009-10-28 18:35+0100\n"
+"PO-Revision-Date: 2009-10-30 21:48+0100\n"
 "Last-Translator: Jože Klepec <joze.klepec@siol.net>\n"
 "Language-Team: Slovenian <>\n"
 "MIME-Version: 1.0\n"
@@ -113,9 +113,8 @@ msgid "failed to substitute %%p, no project active"
 msgstr "spodletela zamenjava %%p, ni aktivnega projekta"
 
 #: ../src/build.c:664
-#, fuzzy
 msgid "Process failed, no working directory"
-msgstr "Spodletela menjava delovne mape v \"%s\""
+msgstr "Spodletela proces, ni delovne mape."
 
 #: ../src/build.c:690
 #, c-format
@@ -229,7 +228,7 @@ msgstr "Počisti"
 
 # in-dialog heading for the "Set Includes and Arguments" dialog
 #: ../src/build.c:1862 ../src/build.c:1864
-#, fuzzy, c-format
+#, c-format
 msgid "%s Commands"
 msgstr "%s ukazi"
 
@@ -238,18 +237,16 @@ msgid "No Filetype"
 msgstr "Brez tipa datoteke"
 
 #: ../src/build.c:1872 ../src/build.c:1907
-#, fuzzy
 msgid "Error Regular Expression:"
-msgstr "Napaka regularnega izraza"
+msgstr "Napaka regularnega izraza:"
 
 #: ../src/build.c:1900
-#, fuzzy
 msgid "Non-Filetype Commands"
 msgstr "Ukazi nedatotečne vrste"
 
 #: ../src/build.c:1930
 msgid "Note: Item 2 opens a dialog and appends the response to the command."
-msgstr ""
+msgstr "Opomba: Izbira 2 odpre pogovorno okno in doda odziv na ukaz."
 
 #: ../src/build.c:1939
 msgid "Execute Commands"
@@ -261,6 +258,8 @@ msgid ""
 "%d, %e, %f, %p are substituted in command and directory fields, see manual "
 "for details."
 msgstr ""
+"%d, %e, %f, %p so zamenjani v ukazu in poljih imenika. Glej priročnik za "
+"podrobnosti uporabe. (?directory, environment, file, path ?)"
 
 #: ../src/build.c:2102
 msgid "Set Build Commands"
@@ -1075,7 +1074,6 @@ msgid "_Format"
 msgstr "_Oblika"
 
 #: ../src/interface.c:486 ../src/keybindings.c:364
-#, fuzzy
 msgid "_Reflow Lines/Block"
 msgstr "Ponovno poravnaj vrstice/blok"
 
@@ -1084,9 +1082,8 @@ msgid "T_oggle Case of Selection"
 msgstr "Pre_obrni izbor"
 
 #: ../src/interface.c:494 ../src/keybindings.c:270
-#, fuzzy
 msgid "_Transpose Current Line"
-msgstr "Prestavi tekočo vrstico"
+msgstr "Pres_tavi tekočo vrstico"
 
 #: ../src/interface.c:503
 msgid "_Comment Line(s)"
@@ -1109,9 +1106,8 @@ msgid "_Decrease Indent"
 msgstr "_Zmanjšaj zamik"
 
 #: ../src/interface.c:536 ../src/keybindings.c:354
-#, fuzzy
 msgid "_Smart Line Indent"
-msgstr "Pametno zamikanje vrstic"
+msgstr "_Pametno zamikanje vrstic"
 
 #: ../src/interface.c:545
 msgid "_Send Selection to Terminal"
@@ -1122,9 +1118,8 @@ msgid "_Send Selection to"
 msgstr "_Pošlji izbor v"
 
 #: ../src/interface.c:559 ../src/interface.c:2099
-#, fuzzy
 msgid "_Commands"
-msgstr "Ukaz"
+msgstr "_Ukazi"
 
 #: ../src/interface.c:566 ../src/keybindings.c:311
 msgid "Cut current line(s)"
@@ -1203,9 +1198,8 @@ msgid "Preference_s"
 msgstr "_Možnosti"
 
 #: ../src/interface.c:706 ../src/keybindings.c:382
-#, fuzzy
 msgid "P_lugin Preferences"
-msgstr "Možnosti"
+msgstr "Možnosti _vstavkov"
 
 #: ../src/interface.c:714
 msgid "_Search"
@@ -1761,9 +1755,8 @@ msgid "Toggle the documents list on and off"
 msgstr "Vklopi/izklopi seznam dokumentov"
 
 #: ../src/interface.c:3042
-#, fuzzy
 msgid "Position:"
-msgstr "Opis:"
+msgstr "Položaj:"
 
 #: ../src/interface.c:3046 ../src/interface.c:3161 ../src/interface.c:3215
 #: ../src/interface.c:3233 ../src/interface.c:3251
@@ -1886,8 +1879,7 @@ msgstr "Dod_aj orodno vrstico v meni"
 # Ni: Add --> Temveč: Pack
 #: ../src/interface.c:3315
 msgid "Pack the toolbar to the main menu to save vertical space"
-msgstr ""
-"Dodaj orodno vrstico v glavni meni zaradi prihranka navpičnega prostora"
+msgstr "Stisni orodno vrstico v glavni izbirnik in prihrani navpični prostor"
 
 #: ../src/interface.c:3317
 msgid "<b>Toolbar</b>"
@@ -2234,7 +2226,7 @@ msgstr "Obrni barve poudarjanja skladnje"
 
 #: ../src/interface.c:3856
 msgid "Invert all colors, by default using white text on a black background"
-msgstr ""
+msgstr "Obrne vse barve in privzame belo besedilo na črnem ozadju"
 
 #: ../src/interface.c:3858
 msgid "Show indentation guides"
@@ -2386,29 +2378,26 @@ msgid "Sets the default encoding for newly created files"
 msgstr "Nastavi kodiranje za novonastale datoteke"
 
 #: ../src/interface.c:4071
-#, fuzzy
 msgid "Use fixed encoding when opening non-Unicode files"
-msgstr "Uporabi fiksno kodiranje ob odpiranju datotek"
+msgstr "Uporabi določeno kodiranje ob odpiranju ne-Unicode datotek"
 
 #: ../src/interface.c:4074
-#, fuzzy
 msgid ""
 "This option disables the automatic detection of the file encoding when "
 "opening non-Unicode files and opens the file with the specified encoding "
 "(usually not needed)"
 msgstr ""
-"Ta možnost onemogoči samodejno zaznavanje kodiranja datotek ob odpiranju in "
-"odpre datoteko z določenim kodiranjem (običajno nepotrebno)."
+"Ta možnost onemogoči samodejno zaznavanje kodiranja datotek ob odpiranju ne-"
+"Unicode datotek in odpre datoteko z določenim kodiranjem (običajno "
+"nepotrebno)."
 
 #: ../src/interface.c:4080
-#, fuzzy
 msgid "Default encoding (existing non-Unicode files):"
-msgstr "Privzeto kodiranje (obstoječe datoteke):"
+msgstr "Privzeto kodiranje (obstoječe ne-Unicode datoteke):"
 
 #: ../src/interface.c:4088
-#, fuzzy
 msgid "Sets the default encoding for opening existing non-Unicode files"
-msgstr "Nastavi privzeto kodiranje ob odpiranju obstoječih datotek"
+msgstr "Nastavi privzeto kodiranje ob odpiranju obstoječih ne-Unicode datotek"
 
 #: ../src/interface.c:4094
 msgid "<b>Encodings</b>"
@@ -2798,19 +2787,16 @@ msgid "Show macro list"
 msgstr "Prikaži seznam makrojev"
 
 #: ../src/keybindings.c:293
-#, fuzzy
 msgid "Word part completion"
-msgstr "Dokončanje koščkov"
+msgstr "Dokončanje koščkov besed"
 
 #: ../src/keybindings.c:295
-#, fuzzy
 msgid "Move line(s) up"
-msgstr "Komentiraj vrstico ali več vrstic"
+msgstr "Premakni vrstico ali več navzgor"
 
 #: ../src/keybindings.c:297
-#, fuzzy
 msgid "Move line(s) down"
-msgstr "Komentiraj vrstico ali več vrstic"
+msgstr "Premakni vrstico ali več navzdol"
 
 #: ../src/keybindings.c:299
 msgid "Clipboard"
@@ -2841,14 +2827,12 @@ msgid "Select current word"
 msgstr "Izberi tekočo besedo"
 
 #: ../src/keybindings.c:327
-#, fuzzy
 msgid "Select to previous word part"
-msgstr "Pojdi na predhodni del besede"
+msgstr "Izbere predhodni del besede"
 
 #: ../src/keybindings.c:329
-#, fuzzy
 msgid "Select to next word part"
-msgstr "Pojdi na naslednji del besede"
+msgstr "Izbere naslednji del besede"
 
 #: ../src/keybindings.c:331
 msgid "Format"
@@ -3072,9 +3056,8 @@ msgid "Switch to Compiler"
 msgstr "Preklopi v prevajalnik"
 
 #: ../src/keybindings.c:480
-#, fuzzy
 msgid "Switch to Messages"
-msgstr "Preklopi v stransko vrstico"
+msgstr "Preklopi na Sporočila"
 
 #: ../src/keybindings.c:482
 msgid "Notebook tab"
@@ -3397,7 +3380,7 @@ msgstr "Vstavki"
 
 #: ../src/plugins.c:1226
 msgid "Choose which plugins should be loaded at startup:"
-msgstr ""
+msgstr "Izberite, kateri vstavki se naj naložijo ob zagonu:"
 
 #: ../src/plugins.c:1238
 msgid "<b>Plugin details:</b>"
@@ -3405,7 +3388,7 @@ msgstr "<b>Podrobnosti o vstavku:</b>"
 
 #: ../src/pluginutils.c:207
 msgid "Configure Plugins"
-msgstr ""
+msgstr "Nastavi vstavki"
 
 #: ../src/prefs.c:161
 msgid "Grab Key"
@@ -3438,7 +3421,7 @@ msgstr "_Prezri"
 
 #: ../src/prefs.c:1407
 msgid "_Allow"
-msgstr ""
+msgstr "_Dovoli"
 
 #: ../src/prefs.c:1408
 msgid "Override that keybinding?"
@@ -3638,9 +3621,8 @@ msgid "Description:"
 msgstr "Opis:"
 
 #: ../src/project.c:487
-#, fuzzy
 msgid "Set the Build non-filetype working directories to use base path:"
-msgstr "Nastavi nedatotečne delovne mape na uporabo osnovne mape:"
+msgstr "Nastavi nedatotečne delovne mape gradnje na uporabo osnovne mape:"
 
 #: ../src/project.c:490
 msgid "Set"
@@ -3916,9 +3898,8 @@ msgid "Could not open directory (%s)"
 msgstr "Ni mogoče odpreti mape (%s)"
 
 #: ../src/search.c:1538
-#, fuzzy
 msgid "Search failed."
-msgstr "_Išči:"
+msgstr "Iskanje spodletelo."
 
 #: ../src/search.c:1558
 #, c-format
@@ -4199,7 +4180,7 @@ msgstr "Uredi po _videzu"
 
 #: ../src/templates.c:264
 msgid "Old"
-msgstr ""
+msgstr "Staro"
 
 #. custom actions defined in toolbar_init(): "New", "Open", "SearchEntry", "GotoEntry", "Build"
 #: ../src/toolbar.c:55
