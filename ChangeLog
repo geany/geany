@@ -14,6 +14,10 @@
  * src/highlighting.c:
    Only reload filetype files when changing color scheme, not all
    configuration files.
+ * src/filetypes.c, src/document.c, src/document.h, doc/Doxyfile.in:
+   Deprecate documents_foreach() as it looks more like a function; use
+   foreach_document() instead.
+   Generate dox even for GEANY_DISABLE_DEPRECATED declarations.
 
 
 2009-10-30  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

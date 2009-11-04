@@ -90,7 +90,7 @@ GeanyFilePrefs file_prefs;
  * file by then.
  *
  * You also need to check @c GeanyDocument::is_valid when iterating over this array,
- * although usually you would just use the documents_foreach() macro.
+ * although usually you would just use the foreach_document() macro.
  *
  * Never assume that the order of document pointers is the same as the order of notebook tabs.
  * Notebook tabs can be reordered. Use @c document_get_from_page(). */

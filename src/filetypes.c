@@ -774,7 +774,7 @@ static void on_document_save(G_GNUC_UNUSED GObject *object, GeanyDocument *doc)
 		 * The user can do this manually with 'Tools->Reload Configuration' */
 		filetypes_load_config(GEANY_FILETYPES_NONE, TRUE);
 
-		documents_foreach(i)
+		foreach_document(i)
 			document_reload_config(documents[i]);
 	}
 }
@@ -1618,7 +1618,7 @@ void filetypes_reload(void)
 		filetypes_load_config(i, TRUE);
 	}
 	/* update document styling */
-	documents_foreach(i)
+	foreach_document(i)
 		document_reload_config(documents[i]);
 }
 

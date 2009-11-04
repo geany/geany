@@ -114,10 +114,18 @@ extern GPtrArray *documents_array;
  * @see document_index(). */
 #define documents ((GeanyDocument **)GEANY(documents_array)->pdata)
 
+/** @deprecated Use @ref foreach_document() instead.
+ * Iterates all valid documents.
+ * Use like a @c for statement.
+ * @param i @c guint index for document_index(). */
+#ifndef GEANY_DISABLE_DEPRECATED
+#define documents_foreach(i) foreach_document(i)
+#endif
+
 /** Iterates all valid documents.
  * Use like a @c for statement.
  * @param i @c guint index for document_index(). */
-#define documents_foreach(i) \
+#define foreach_document(i) \
 	for (i = 0; i < GEANY(documents_array)->len; i++)\
 		if (!documents[i]->is_valid)\
 			{}\
