@@ -40,12 +40,18 @@
 #include "symbols.h"
 #include "ui_utils.h"
 #include "utils.h"
+#include "main.h"
+#include "support.h"
 
+
+#define GEANY_COLORSCHEMES_SUBDIR "colorschemes"
 
 /* Whitespace has to be set after setting wordchars. */
 #define GEANY_WHITESPACE_CHARS " \t" "!\"#$%&'()*+,-./:;<=>?@[\\]^`{|}~"
 
+
 static gchar *whitespace_chars;
+
 
 static void styleset_markup(ScintillaObject *sci, gboolean set_keywords);
 
@@ -512,14 +518,31 @@ static void get_named_styles(GKeyFile *config)
 }
 
 
-static void styleset_common_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
+static GKeyFile *utils_key_file_new(const gchar *filename)
 {
-	/* named styles */
+	GKeyFile *config = g_key_file_new();
+
+	g_key_file_load_from_file(config, filename, G_KEY_FILE_KEEP_COMMENTS, NULL);
+	return config;
+}
+
+
+static void read_named_styles(GKeyFile *config, GKeyFile *config_home)
+{
+	const gchar *scheme = editor_prefs.color_scheme;
+
 	if (named_style_hash)
 		g_hash_table_destroy(named_style_hash);	/* reloading */
 
 	named_style_hash = g_hash_table_new_full(g_str_hash, g_str_equal, g_free, g_free);
 
+	if (NZV(scheme))
+	{
+		config = utils_key_file_new(
+			utils_build_path(app->datadir, GEANY_COLORSCHEMES_SUBDIR, scheme, NULL));
+		config_home = utils_key_file_new(
+			utils_build_path(app->configdir, GEANY_COLORSCHEMES_SUBDIR, scheme, NULL));
+	}
 	/* first set default to the "default" named style */
 	add_named_style(config, "default");
 	add_named_style(config_home, "default");
@@ -528,6 +551,18 @@ static void styleset_common_init(gint ft_id, GKeyFile *config, GKeyFile *config_
 	get_named_styles(config);
 	/* home overrides any system named style */
 	get_named_styles(config_home);
+
+	if (NZV(scheme))
+	{
+		g_key_file_free(config);
+		g_key_file_free(config_home);
+	}
+}
+
+
+static void styleset_common_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
+{
+	read_named_styles(config, config_home);
 
 	get_keyfile_style(config, config_home, "default", &common_style_set.styling[GCS_DEFAULT]);
 	get_keyfile_style(config, config_home, "selection", &common_style_set.styling[GCS_SELECTION]);
@@ -3322,3 +3357,145 @@ const GeanyLexerStyle *highlighting_get_style(gint ft_id, gint style_id)
 	 * with array indices) */
 	return get_style(ft_id, style_id);
 }
+
+
+static void
+on_color_scheme_clicked(GtkMenuItem *menuitem, gpointer user_data)
+{
+	gchar *fname;
+	gchar *path;
+
+	/* check if default item */
+	if (user_data)
+	{
+		setptr(editor_prefs.color_scheme, NULL);
+		/* TODO: should be changed to only reload color schemes */
+		main_reload_configuration();
+		return;
+	}
+	fname = ui_menu_item_get_text(menuitem);
+	setptr(fname, utils_get_locale_from_utf8(fname));
+
+	/* fname is just the basename from the menu item, so prepend the custom files path */
+	path = g_build_path(G_DIR_SEPARATOR_S, app->configdir, GEANY_COLORSCHEMES_SUBDIR, fname, NULL);
+	if (!g_file_test(path, G_FILE_TEST_EXISTS))
+	{
+		/* try the system path */
+		g_free(path);
+		path = g_build_path(G_DIR_SEPARATOR_S, app->datadir, GEANY_COLORSCHEMES_SUBDIR, fname, NULL);
+	}
+	if (g_file_test(path, G_FILE_TEST_EXISTS))
+	{
+		setptr(editor_prefs.color_scheme, fname);
+		fname = NULL;
+		/* TODO: should be changed to only reload color schemes */
+		main_reload_configuration();
+	}
+	else
+	{
+		setptr(fname, utils_get_utf8_from_locale(fname));
+		ui_set_statusbar(TRUE, _("Could not find file '%s'."), fname);
+	}
+	g_free(path);
+	g_free(fname);
+}
+
+
+static void add_color_scheme_item(const gchar *fname, GtkWidget *menu)
+{
+	GtkWidget *tmp_button;
+	gchar *label;
+
+	g_return_if_fail(fname);
+	g_return_if_fail(menu);
+
+	label = utils_get_utf8_from_locale(fname);
+
+	tmp_button = gtk_menu_item_new_with_label(label);
+	gtk_widget_show(tmp_button);
+	gtk_container_add(GTK_CONTAINER(menu), tmp_button);
+	g_signal_connect(tmp_button, "activate", G_CALLBACK(on_color_scheme_clicked), NULL);
+
+	g_free(label);
+}
+
+
+/* TODO: move */
+static void utils_slist_remove_next(GSList *node)
+{
+	GSList *old = node->next;
+
+	g_return_if_fail(old);
+
+	node->next = old->next;
+	g_slist_free_1(old);
+}
+
+
+/* note: color scheme code adapted from custom file template code */
+static gboolean add_color_scheme_items(GtkWidget *menu)
+{
+	gchar *path = g_build_path(G_DIR_SEPARATOR_S, app->configdir, GEANY_COLORSCHEMES_SUBDIR, NULL);
+	GSList *list = utils_get_file_list_full(path, FALSE, FALSE, NULL);
+	GSList *syslist, *node;
+
+	if (!list)
+	{
+		utils_mkdir(path, FALSE);
+	}
+	setptr(path, g_build_path(G_DIR_SEPARATOR_S, app->datadir, GEANY_COLORSCHEMES_SUBDIR, NULL));
+	syslist = utils_get_file_list_full(path, FALSE, FALSE, NULL);
+	/* merge lists */
+	list = g_slist_concat(list, syslist);
+
+	list = g_slist_sort(list, (GCompareFunc) utils_str_casecmp);
+	/* remove duplicates (next to each other after sorting) */
+	foreach_slist(node, list)
+	{
+		if (node->next && utils_str_equal(node->next->data, node->data))
+		{
+			g_free(node->next->data);
+			utils_slist_remove_next(node);
+		}
+	}
+	foreach_slist(node, list)
+	{
+		gchar *fname = node->data;
+
+		if (g_str_has_suffix(fname, ".conf"))
+			add_color_scheme_item(fname, menu);
+		g_free(fname);
+	}
+	g_slist_free(list);
+	g_free(path);
+	return list != NULL;
+}
+
+
+static void create_color_scheme_menu(void)
+{
+	GtkWidget *item, *menu, *root;
+
+	menu = ui_lookup_widget(main_widgets.window, "menu_view_editor1_menu");
+	item = ui_image_menu_item_new(GTK_STOCK_SELECT_COLOR, _("_Color Schemes"));
+	gtk_menu_shell_prepend(GTK_MENU_SHELL(menu), item);
+	root = item;
+
+	menu = gtk_menu_new();
+	gtk_menu_item_set_submenu(GTK_MENU_ITEM(item), menu);
+
+	item = gtk_menu_item_new_with_mnemonic(_("_Default"));
+	gtk_container_add(GTK_CONTAINER(menu), item);
+	g_signal_connect(item, "activate", G_CALLBACK(on_color_scheme_clicked), GINT_TO_POINTER(TRUE));
+
+	/* for now we don't show the color scheme menu unless there are files */
+	if (add_color_scheme_items(menu))
+		gtk_widget_show_all(root);
+}
+
+
+void highlighting_init(void)
+{
+	create_color_scheme_menu();
+}
+

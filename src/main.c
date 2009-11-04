@@ -943,6 +943,7 @@ gint main(gint argc, gchar **argv)
 	sidebar_init();
 	load_settings();	/* load keyfile */
 
+	highlighting_init();
 	msgwin_init();
 	build_init();
 	ui_create_insert_menu_items();
@@ -1107,6 +1108,7 @@ void main_quit()
 	g_free(interface_prefs.msgwin_font);
 	g_free(editor_prefs.long_line_color);
 	g_free(editor_prefs.comment_toggle_mark);
+	g_free(editor_prefs.color_scheme);
 	g_free(tool_prefs.context_action_cmd);
 	g_free(template_prefs.developer);
 	g_free(template_prefs.company);

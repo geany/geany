@@ -130,6 +130,7 @@ typedef struct GeanyEditorPrefs
 	guint		autoclose_chars;
 	gboolean	autocomplete_doc_words;
 	gboolean	completion_drops_rest_of_word;
+	gchar		*color_scheme;
 }
 GeanyEditorPrefs;
 

@@ -161,6 +161,8 @@ static void init_pref_groups(void)
 	stash_group_add_spin_button_integer(group, (gint*)&editor_prefs.autocompletion_max_entries,
 		"autocompletion_max_entries", GEANY_MAX_AUTOCOMPLETE_WORDS,
 		"spin_autocompletion_max_entries");
+	stash_group_add_string(group, &editor_prefs.color_scheme,
+		"color_scheme", NULL);
 
 	/* files */
 	stash_group_add_spin_button_integer(group, (gint*)&file_prefs.mru_length,

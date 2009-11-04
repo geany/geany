@@ -41,6 +41,8 @@ typedef struct GeanyLexerStyle
 GeanyLexerStyle;
 
 
+void highlighting_init(void);
+
 void highlighting_init_styles(gint filetype_idx, GKeyFile *config, GKeyFile *configh);
 
 void highlighting_set_styles(ScintillaObject *sci, GeanyFiletype *ft);
