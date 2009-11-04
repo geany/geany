@@ -11,6 +11,9 @@
  * src/highlighting.c:
    Fix issue with default color not being reset if overridden with a
    system default color.
+ * src/highlighting.c:
+   Only reload filetype files when changing color scheme, not all
+   configuration files.
 
 
 2009-10-30  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

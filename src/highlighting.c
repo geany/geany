@@ -3370,8 +3370,7 @@ on_color_scheme_clicked(GtkMenuItem *menuitem, gpointer user_data)
 	if (user_data)
 	{
 		setptr(editor_prefs.color_scheme, NULL);
-		/* TODO: should be changed to only reload color schemes */
-		main_reload_configuration();
+		filetypes_reload();
 		return;
 	}
 	fname = ui_menu_item_get_text(menuitem);
@@ -3389,8 +3388,7 @@ on_color_scheme_clicked(GtkMenuItem *menuitem, gpointer user_data)
 	{
 		setptr(editor_prefs.color_scheme, fname);
 		fname = NULL;
-		/* TODO: should be changed to only reload color schemes */
-		main_reload_configuration();
+		filetypes_reload();
 	}
 	else
 	{
