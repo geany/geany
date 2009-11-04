@@ -8,6 +8,9 @@
    section is read.
  * src/templates.c, src/utils.c, src/highlighting.c, src/utils.h:
    Add utils_get_config_files().
+ * src/highlighting.c:
+   Fix issue with default color not being reset if overridden with a
+   system default color.
 
 
 2009-10-30  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

@@ -545,6 +545,7 @@ static void load_named_styles(GKeyFile *config, GKeyFile *config_home)
 	}
 	/* first set default to the "default" named style */
 	add_named_style(config, "default");
+	read_named_style("default", &gsd_default);	/* in case user overrides but not with both colors */
 	add_named_style(config_home, "default");
 	read_named_style("default", &gsd_default);
 
