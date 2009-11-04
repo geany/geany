@@ -196,6 +196,10 @@ gint utils_mkdir(const gchar *path, gboolean create_parent_dirs);
 
 GSList *utils_get_file_list(const gchar *path, guint *length, GError **error);
 
+GSList *utils_get_file_list_full(const gchar *path, gboolean full_path, gboolean sort, GError **error);
+
+GSList *utils_get_config_files(const gchar *subdir);
+
 gboolean utils_str_has_upper(const gchar *str);
 
 gint utils_is_file_writeable(const gchar *locale_filename);
@@ -222,7 +226,5 @@ gboolean utils_is_remote_path(const gchar *path);
 gchar *utils_str_middle_truncate(const gchar *string, guint truncate_length);
 
 gchar *utils_str_remove_chars(gchar *string, const gchar *chars);
-
-GSList *utils_get_file_list_full(const gchar *path, gboolean full_path, gboolean sort, GError **error);
 
 #endif

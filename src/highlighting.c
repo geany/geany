@@ -527,7 +527,7 @@ static GKeyFile *utils_key_file_new(const gchar *filename)
 }
 
 
-static void read_named_styles(GKeyFile *config, GKeyFile *config_home)
+static void load_named_styles(GKeyFile *config, GKeyFile *config_home)
 {
 	const gchar *scheme = editor_prefs.color_scheme;
 
@@ -562,7 +562,7 @@ static void read_named_styles(GKeyFile *config, GKeyFile *config_home)
 
 static void styleset_common_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
 {
-	read_named_styles(config, config_home);
+	load_named_styles(config, config_home);
 
 	get_keyfile_style(config, config_home, "default", &common_style_set.styling[GCS_DEFAULT]);
 	get_keyfile_style(config, config_home, "selection", &common_style_set.styling[GCS_SELECTION]);
@@ -3420,44 +3420,11 @@ static void add_color_scheme_item(const gchar *fname, GtkWidget *menu)
 }
 
 
-/* TODO: move */
-static void utils_slist_remove_next(GSList *node)
-{
-	GSList *old = node->next;
-
-	g_return_if_fail(old);
-
-	node->next = old->next;
-	g_slist_free_1(old);
-}
-
-
-/* note: color scheme code adapted from custom file template code */
 static gboolean add_color_scheme_items(GtkWidget *menu)
 {
-	gchar *path = g_build_path(G_DIR_SEPARATOR_S, app->configdir, GEANY_COLORSCHEMES_SUBDIR, NULL);
-	GSList *list = utils_get_file_list_full(path, FALSE, FALSE, NULL);
-	GSList *syslist, *node;
+	GSList *list = utils_get_config_files(GEANY_COLORSCHEMES_SUBDIR);
+	GSList *node;
 
-	if (!list)
-	{
-		utils_mkdir(path, FALSE);
-	}
-	setptr(path, g_build_path(G_DIR_SEPARATOR_S, app->datadir, GEANY_COLORSCHEMES_SUBDIR, NULL));
-	syslist = utils_get_file_list_full(path, FALSE, FALSE, NULL);
-	/* merge lists */
-	list = g_slist_concat(list, syslist);
-
-	list = g_slist_sort(list, (GCompareFunc) utils_str_casecmp);
-	/* remove duplicates (next to each other after sorting) */
-	foreach_slist(node, list)
-	{
-		if (node->next && utils_str_equal(node->next->data, node->data))
-		{
-			g_free(node->next->data);
-			utils_slist_remove_next(node);
-		}
-	}
 	foreach_slist(node, list)
 	{
 		gchar *fname = node->data;
@@ -3467,7 +3434,6 @@ static gboolean add_color_scheme_items(GtkWidget *menu)
 		g_free(fname);
 	}
 	g_slist_free(list);
-	g_free(path);
 	return list != NULL;
 }
 

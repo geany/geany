@@ -6,6 +6,8 @@
    scheme files exist in a colorschemes config directory. Color scheme
    files must end in ".conf" and currently only the [named_styles]
    section is read.
+ * src/templates.c, src/utils.c, src/highlighting.c, src/utils.h:
+   Add utils_get_config_files().
 
 
 2009-10-30  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

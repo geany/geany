@@ -364,44 +364,11 @@ static void add_file_item(const gchar *fname, GtkWidget *menu)
 }
 
 
-static void utils_slist_remove_next(GSList *node)
-{
-	GSList *old = node->next;
-
-	g_return_if_fail(old);
-
-	node->next = old->next;
-	g_slist_free_1(old);
-}
-
-
 static gboolean add_custom_template_items(void)
 {
-	gchar *path = g_build_path(G_DIR_SEPARATOR_S, app->configdir, GEANY_TEMPLATES_SUBDIR,
-		"files", NULL);
-	GSList *list = utils_get_file_list_full(path, FALSE, FALSE, NULL);
-	GSList *syslist, *node;
+	GSList *list = utils_get_config_files(GEANY_TEMPLATES_SUBDIR G_DIR_SEPARATOR_S "files");
+	GSList *node;
 
-	if (!list)
-	{
-		utils_mkdir(path, FALSE);
-	}
-	setptr(path, g_build_path(G_DIR_SEPARATOR_S, app->datadir, GEANY_TEMPLATES_SUBDIR,
-		"files", NULL));
-	syslist = utils_get_file_list_full(path, FALSE, FALSE, NULL);
-	/* merge lists */
-	list = g_slist_concat(list, syslist);
-
-	list = g_slist_sort(list, (GCompareFunc) utils_str_casecmp);
-	/* remove duplicates (next to each other after sorting) */
-	foreach_slist(node, list)
-	{
-		if (node->next && utils_str_equal(node->next->data, node->data))
-		{
-			g_free(node->next->data);
-			utils_slist_remove_next(node);
-		}
-	}
 	foreach_slist(node, list)
 	{
 		gchar *fname = node->data;
@@ -410,7 +377,6 @@ static gboolean add_custom_template_items(void)
 		g_free(fname);
 	}
 	g_slist_free(list);
-	g_free(path);
 	return list != NULL;
 }
 

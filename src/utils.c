@@ -1822,3 +1822,45 @@ gchar *utils_str_remove_chars(gchar *string, const gchar *chars)
 }
 
 
+static void utils_slist_remove_next(GSList *node)
+{
+	GSList *old = node->next;
+
+	g_return_if_fail(old);
+
+	node->next = old->next;
+	g_slist_free_1(old);
+}
+
+
+/* Gets list of sorted filenames with no path and no duplicates from user and system config */
+GSList *utils_get_config_files(const gchar *subdir)
+{
+	gchar *path = g_build_path(G_DIR_SEPARATOR_S, app->configdir, subdir, NULL);
+	GSList *list = utils_get_file_list_full(path, FALSE, FALSE, NULL);
+	GSList *syslist, *node;
+
+	if (!list)
+	{
+		utils_mkdir(path, FALSE);
+	}
+	setptr(path, g_build_path(G_DIR_SEPARATOR_S, app->datadir, subdir, NULL));
+	syslist = utils_get_file_list_full(path, FALSE, FALSE, NULL);
+	/* merge lists */
+	list = g_slist_concat(list, syslist);
+
+	list = g_slist_sort(list, (GCompareFunc) utils_str_casecmp);
+	/* remove duplicates (next to each other after sorting) */
+	foreach_slist(node, list)
+	{
+		if (node->next && utils_str_equal(node->next->data, node->data))
+		{
+			g_free(node->next->data);
+			utils_slist_remove_next(node);
+		}
+	}
+	g_free(path);
+	return list;
+}
+
+
