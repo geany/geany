@@ -7,6 +7,8 @@
    Show number of files saved on status bar when using Save All.
  * src/highlighting.c:
    Use default color scheme if pref color scheme file doesn't exist.
+ * src/keybindings.c:
+   Fix moving correct lines after selecting whole line(s).
 
 
 2009-11-04  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

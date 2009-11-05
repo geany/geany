@@ -1994,7 +1994,7 @@ static void move_lines(GeanyEditor *editor, gboolean down)
 	gint pos, line, len;
 
 	sci_start_undo_action(sci);
-	editor_select_lines(editor, TRUE);
+	editor_select_lines(editor, FALSE);
 	len = sci_get_selected_text_length(sci);
 
 	pos = sci_get_selection_start(sci);
@@ -2012,7 +2012,7 @@ static void move_lines(GeanyEditor *editor, gboolean down)
 	g_free(text);
 
 	sci_set_current_position(sci, pos, TRUE);
-	sci_set_selection_end(sci, pos + len - 2);
+	sci_set_selection_end(sci, pos + len - 1);
 
 	sci_end_undo_action(sci);
 }
