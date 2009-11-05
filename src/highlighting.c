@@ -530,6 +530,7 @@ static GKeyFile *utils_key_file_new(const gchar *filename)
 static void load_named_styles(GKeyFile *config, GKeyFile *config_home)
 {
 	const gchar *scheme = editor_prefs.color_scheme;
+	gboolean free_kf = FALSE;
 
 	if (named_style_hash)
 		g_hash_table_destroy(named_style_hash);	/* reloading */
@@ -538,10 +539,20 @@ static void load_named_styles(GKeyFile *config, GKeyFile *config_home)
 
 	if (NZV(scheme))
 	{
-		config = utils_key_file_new(
-			utils_build_path(app->datadir, GEANY_COLORSCHEMES_SUBDIR, scheme, NULL));
-		config_home = utils_key_file_new(
-			utils_build_path(app->configdir, GEANY_COLORSCHEMES_SUBDIR, scheme, NULL));
+		gchar *path, *path_home;
+
+		path = g_build_path(G_DIR_SEPARATOR_S, app->datadir, GEANY_COLORSCHEMES_SUBDIR, scheme, NULL);
+		path_home = g_build_path(G_DIR_SEPARATOR_S, app->configdir, GEANY_COLORSCHEMES_SUBDIR, scheme, NULL);
+
+		if (g_file_test(path, G_FILE_TEST_EXISTS) || g_file_test(path_home, G_FILE_TEST_EXISTS))
+		{
+			config = utils_key_file_new(path);
+			config_home = utils_key_file_new(path_home);
+			free_kf = TRUE;
+		}
+		/* if color scheme is missing, use default */
+		g_free(path);
+		g_free(path_home);
 	}
 	/* first set default to the "default" named style */
 	add_named_style(config, "default");
@@ -553,7 +564,7 @@ static void load_named_styles(GKeyFile *config, GKeyFile *config_home)
 	/* home overrides any system named style */
 	get_named_styles(config_home);
 
-	if (NZV(scheme))
+	if (free_kf)
 	{
 		g_key_file_free(config);
 		g_key_file_free(config_home);
