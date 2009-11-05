@@ -119,7 +119,8 @@ GeanyPlugin;
 	}
 
 
-/** @see PLUGIN_KEY_GROUP() macro. */
+/** @deprecated - use plugin_set_key_group() instead.
+ * @see PLUGIN_KEY_GROUP() macro. */
 typedef struct GeanyKeyGroupInfo
 {
 	const gchar *name;		/**< Group name used in the configuration file, such as @c "html_chars" */
@@ -127,7 +128,8 @@ typedef struct GeanyKeyGroupInfo
 }
 GeanyKeyGroupInfo;
 
-/** Declare and initialise a keybinding group.
+/** @deprecated - use plugin_set_key_group() instead.
+ * Declare and initialise a keybinding group.
  * @code GeanyKeyGroup *plugin_key_group; @endcode
  * You must then set the @c plugin_key_group::keys[] entries for the group in plugin_init(),
  * normally using keybindings_set_item().
@@ -135,8 +137,7 @@ GeanyKeyGroupInfo;
  * is called, to the name of the plugin.
  * @param group_name A unique group name (without quotes) to be used in the
  * configuration file, such as @c html_chars.
- * @param key_count	The number of keybindings the group will hold.
- * @see plugin_set_key_group() to set the group size dynamically. */
+ * @param key_count	The number of keybindings the group will hold. */
 #define PLUGIN_KEY_GROUP(group_name, key_count) \
 	/* We have to declare this as a single element array.
 	 * Declaring as a pointer to a struct doesn't work with g_module_symbol(). */ \

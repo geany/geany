@@ -75,10 +75,10 @@ the existing elements stay in place - this will keep the ABI stable.
 
 .. warning::
 
-    Some structs like GeanyKeyGroupInfo and GeanyCallback cannot be
-    appended to without breaking the ABI because they are used to declare
-    structs by plugins, not just for accessing struct members through
-    a pointer.
+    Some structs like GeanyCallback cannot be appended to without
+    breaking the ABI because they are used to declare structs by
+    plugins, not just for accessing struct members through a pointer.
+    Normally structs should never be allocated by plugins.
 
 Keeping the plugin ABI stable
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
