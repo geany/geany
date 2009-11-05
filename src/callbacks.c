@@ -204,6 +204,7 @@ on_save_all1_activate                  (GtkMenuItem     *menuitem,
 {
 	gint i, max = gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook));
 	GeanyDocument *doc, *cur_doc = document_get_current();
+	gint count = 0;
 
 	for (i = 0; i < max; i++)
 	{
@@ -215,11 +216,20 @@ on_save_all1_activate                  (GtkMenuItem     *menuitem,
 			/* display unnamed document */
 			gtk_notebook_set_current_page(GTK_NOTEBOOK(main_widgets.notebook),
 				document_get_notebook_page(doc));
-			dialogs_show_save_as();
+			if (dialogs_show_save_as())
+				count++;
 		}
 		else
-			document_save_file(doc, FALSE);
+		{
+			if (document_save_file(doc, FALSE))
+				count++;
+		}
 	}
+	if (!count)
+		return;
+
+	ui_set_statusbar(FALSE, ngettext("%d file saved.", "%d files saved.", count), count);
+	/* saving may have changed window title, sidebar for another doc, so update */
 	sidebar_update_tag_list(cur_doc, TRUE);
 	ui_set_window_title(cur_doc);
 }
