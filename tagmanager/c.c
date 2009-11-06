@@ -394,7 +394,8 @@ static const keywordDesc KeywordTable [] = {
 	{ "event",          KEYWORD_EVENT,          { 0, 0, 1, 0, 1, 0, 0 } },
 	{ "explicit",       KEYWORD_EXPLICIT,       { 0, 1, 1, 0, 0, 0, 1 } },
 	{ "extends",        KEYWORD_EXTENDS,        { 0, 0, 0, 1, 1, 0, 0 } },
-	{ "extern",         KEYWORD_EXTERN,         { 1, 1, 1, 0, 1, 1, 1 } },
+	{ "extern",         KEYWORD_EXTERN,         { 1, 1, 1, 0, 1, 1, 0 } },
+	{ "extern",         KEYWORD_NAMESPACE,      { 0, 0, 0, 0, 0, 0, 1 } },	/* hack to ignore extern */
 	{ "final",          KEYWORD_FINAL,          { 0, 0, 0, 1, 0, 0, 1 } },
 	{ "finally",        KEYWORD_FINALLY,        { 0, 0, 0, 0, 0, 1, 1 } },
 	{ "float",          KEYWORD_FLOAT,          { 1, 1, 1, 1, 0, 1, 1 } },
@@ -470,6 +471,7 @@ static const keywordDesc KeywordTable [] = {
 	{ "unsigned",       KEYWORD_UNSIGNED,       { 1, 1, 1, 0, 0, 0, 1 } },
 	{ "ushort",         KEYWORD_USHORT,         { 0, 0, 1, 0, 0, 1, 1 } },
 	{ "using",          KEYWORD_USING,          { 0, 1, 1, 0, 0, 1, 0 } },
+	{ "version",        KEYWORD_NAMESPACE,      { 0, 0, 0, 0, 0, 0, 1 } },	/* hack to ignore version */
 	{ "virtual",        KEYWORD_VIRTUAL,        { 0, 1, 1, 0, 1, 1, 0 } },
 	{ "void",           KEYWORD_VOID,           { 1, 1, 1, 1, 1, 1, 1 } },
 	{ "volatile",       KEYWORD_VOLATILE,       { 1, 1, 1, 1, 0, 0, 1 } },

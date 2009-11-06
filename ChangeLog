@@ -6,6 +6,8 @@
    (Ignore some more D keywords).
  * tagmanager/c.c:
    Fix creating D interface tags properly.
+ * tagmanager/c.c:
+   Parse contents of D extern{} and version{} blocks.
 
 
 2009-11-05  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
