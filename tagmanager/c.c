@@ -58,9 +58,9 @@ typedef enum eException
 typedef enum eKeywordId
 {
 	KEYWORD_NONE = -1,
-	KEYWORD_ATTRIBUTE, KEYWORD_ABSTRACT,
+	KEYWORD_ATTRIBUTE, KEYWORD_ABSTRACT, KEYWORD_ALIAS,
 	KEYWORD_BOOLEAN, KEYWORD_BYTE, KEYWORD_BAD_STATE, KEYWORD_BAD_TRANS,
-	KEYWORD_BIND, KEYWORD_BIND_VAR, KEYWORD_BIT,
+	KEYWORD_BIND, KEYWORD_BIND_VAR, KEYWORD_BIT, KEYWORD_BODY,
 	KEYWORD_CASE, KEYWORD_CATCH, KEYWORD_CHAR, KEYWORD_CLASS, KEYWORD_CONST,
 	KEYWORD_CONSTRAINT, KEYWORD_COVERAGE_BLOCK, KEYWORD_COVERAGE_DEF,
 	KEYWORD_DEFAULT, KEYWORD_DELEGATE, KEYWORD_DELETE, KEYWORD_DO,
@@ -69,7 +69,7 @@ typedef enum eKeywordId
 	KEYWORD_EXTENDS, KEYWORD_EVENT,
 	KEYWORD_FINAL, KEYWORD_FINALLY, KEYWORD_FLOAT, KEYWORD_FOR, KEYWORD_FRIEND, KEYWORD_FUNCTION,
 	KEYWORD_GET, KEYWORD_GOTO,
-	KEYWORD_IF, KEYWORD_IMPLEMENTS, KEYWORD_IMPORT, KEYWORD_INLINE, KEYWORD_INT,
+	KEYWORD_IF, KEYWORD_IMPLEMENTS, KEYWORD_IMPORT, KEYWORD_IN, KEYWORD_INLINE, KEYWORD_INT,
 	KEYWORD_INOUT, KEYWORD_INPUT, KEYWORD_INTEGER, KEYWORD_INTERFACE,
 	KEYWORD_INTERNAL,
 	KEYWORD_LOCAL, KEYWORD_LONG,
@@ -365,13 +365,15 @@ static const keywordDesc KeywordTable [] = {
 	/* keyword          keyword ID                |  |  |  |  |  |  |    */
 	{ "__attribute__",  KEYWORD_ATTRIBUTE,      { 1, 1, 1, 0, 0, 0, 1 } },
 	{ "abstract",       KEYWORD_ABSTRACT,       { 0, 0, 1, 1, 0, 1, 1 } },
+	{ "alias",          KEYWORD_TYPEDEF,        { 0, 0, 0, 0, 0, 0, 1 } }, /* handle like typedef */
 	{ "bad_state",      KEYWORD_BAD_STATE,      { 0, 0, 0, 0, 1, 0, 0 } },
 	{ "bad_trans",      KEYWORD_BAD_TRANS,      { 0, 0, 0, 0, 1, 0, 0 } },
 	{ "bind",           KEYWORD_BIND,           { 0, 0, 0, 0, 1, 0, 0 } },
 	{ "bind_var",       KEYWORD_BIND_VAR,       { 0, 0, 0, 0, 1, 0, 0 } },
 	{ "bit",            KEYWORD_BIT,            { 0, 0, 0, 0, 1, 0, 0 } },
+	{ "body",           KEYWORD_BODY,           { 0, 0, 0, 0, 0, 0, 1 } },
 	{ "boolean",        KEYWORD_BOOLEAN,        { 0, 0, 0, 1, 0, 0, 0 } },
-	{ "byte",           KEYWORD_BYTE,           { 0, 0, 0, 1, 0, 0, 0 } },
+	{ "byte",           KEYWORD_BYTE,           { 0, 0, 0, 1, 0, 0, 1 } },
 	{ "case",           KEYWORD_CASE,           { 1, 1, 1, 1, 0, 1, 1 } },
 	{ "catch",          KEYWORD_CATCH,          { 0, 1, 1, 0, 0, 1, 1 } },
 	{ "char",           KEYWORD_CHAR,           { 1, 1, 1, 1, 0, 1, 1 } },
@@ -392,18 +394,19 @@ static const keywordDesc KeywordTable [] = {
 	{ "explicit",       KEYWORD_EXPLICIT,       { 0, 1, 1, 0, 0, 0, 1 } },
 	{ "extends",        KEYWORD_EXTENDS,        { 0, 0, 0, 1, 1, 0, 0 } },
 	{ "extern",         KEYWORD_EXTERN,         { 1, 1, 1, 0, 1, 1, 1 } },
-	{ "final",          KEYWORD_FINAL,          { 0, 0, 0, 1, 0, 0, 0 } },
-	{ "finally",        KEYWORD_FINALLY,        { 0, 0, 0, 0, 0, 1, 0 } },
+	{ "final",          KEYWORD_FINAL,          { 0, 0, 0, 1, 0, 0, 1 } },
+	{ "finally",        KEYWORD_FINALLY,        { 0, 0, 0, 0, 0, 1, 1 } },
 	{ "float",          KEYWORD_FLOAT,          { 1, 1, 1, 1, 0, 1, 1 } },
 	{ "for",            KEYWORD_FOR,            { 1, 1, 1, 1, 0, 1, 1 } },
 	{ "friend",         KEYWORD_FRIEND,         { 0, 1, 0, 0, 0, 0, 0 } },
-	{ "function",       KEYWORD_FUNCTION,       { 0, 0, 0, 0, 1, 0, 0 } },
+	{ "function",       KEYWORD_FUNCTION,       { 0, 0, 0, 0, 1, 0, 1 } },
 	{ "get",            KEYWORD_GET,            { 0, 0, 0, 0, 0, 1, 0 } },
 	{ "goto",           KEYWORD_GOTO,           { 1, 1, 1, 1, 0, 1, 1 } },
 	{ "if",             KEYWORD_IF,             { 1, 1, 1, 1, 0, 1, 1 } },
 	{ "implements",     KEYWORD_IMPLEMENTS,     { 0, 0, 0, 1, 0, 0, 0 } },
 	{ "import",         KEYWORD_IMPORT,         { 0, 0, 0, 1, 0, 0, 1 } },
 	{ "inline",         KEYWORD_INLINE,         { 0, 1, 0, 0, 0, 1, 0 } },
+	{ "in",             KEYWORD_IN,             { 0, 0, 0, 0, 0, 0, 1 } },
 	{ "inout",          KEYWORD_INOUT,          { 0, 0, 0, 0, 1, 0, 1 } },
 	{ "input",          KEYWORD_INPUT,          { 0, 0, 0, 0, 1, 0, 0 } },
 	{ "int",            KEYWORD_INT,            { 1, 1, 1, 1, 0, 1, 1 } },
@@ -423,7 +426,7 @@ static const keywordDesc KeywordTable [] = {
 	{ "new",            KEYWORD_NEW,            { 0, 1, 1, 1, 0, 1, 1 } },
 	{ "newcov",         KEYWORD_NEWCOV,         { 0, 0, 0, 0, 1, 0, 0 } },
 	{ "operator",       KEYWORD_OPERATOR,       { 0, 1, 1, 0, 0, 0, 0 } },
-	{ "out",            KEYWORD_OUT,            { 0, 0, 0, 0, 0, 1, 0 } },
+	{ "out",            KEYWORD_OUT,            { 0, 0, 0, 0, 0, 1, 1 } },
 	{ "output",         KEYWORD_OUTPUT,         { 0, 0, 0, 0, 1, 0, 0 } },
 	{ "overload",       KEYWORD_OVERLOAD,       { 0, 1, 0, 0, 0, 0, 0 } },
 	{ "override",       KEYWORD_OVERRIDE,       { 0, 0, 1, 0, 0, 1, 1 } },
@@ -434,7 +437,7 @@ static const keywordDesc KeywordTable [] = {
 	{ "program",        KEYWORD_PROGRAM,        { 0, 0, 0, 0, 1, 0, 0 } },
 	{ "protected",      KEYWORD_PROTECTED,      { 0, 1, 1, 1, 1, 1, 1 } },
 	{ "public",         KEYWORD_PUBLIC,         { 0, 1, 1, 1, 1, 1, 1 } },
-	{ "ref",            KEYWORD_REF,            { 0, 0, 0, 0, 0, 1, 0 } },
+	{ "ref",            KEYWORD_REF,            { 0, 0, 0, 0, 0, 1, 1 } },
 	{ "register",       KEYWORD_REGISTER,       { 1, 1, 0, 0, 0, 0, 0 } },
 	{ "return",         KEYWORD_RETURN,         { 1, 1, 1, 1, 0, 1, 1 } },
 	{ "set",            KEYWORD_SET,            { 0, 0, 0, 0, 0, 1, 0 } },
@@ -2112,6 +2115,18 @@ static boolean skipPostArgumentStuff (statementInfo *const st,
 				if (isident1 (c))
 				{
 					readIdentifier (token, c);
+					if (isLanguage(Lang_d))
+					{	/* parse D contracts */
+						switch (token->keyword)
+						{
+							case KEYWORD_IN:
+							case KEYWORD_OUT:
+							case KEYWORD_BODY:
+								token->keyword = KEYWORD_CONST;
+							default:
+								break;
+						}
+					}
 					switch (token->keyword)
 					{
 					case KEYWORD_ATTRIBUTE:	skipParens ();	break;
