@@ -300,7 +300,7 @@ typedef enum
 {
 	JK_UNDEFINED = -1,
 	JK_CLASS, JK_FIELD, JK_INTERFACE, JK_METHOD,
-	JK_PACKAGE, JK_ACCESS, JK_CLASS_PREFIX
+	JK_PACKAGE
 } javaKind;
 
 static kindOption JavaKinds [] = {
