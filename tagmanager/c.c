@@ -273,7 +273,7 @@ typedef enum
 {
 	CK_UNDEFINED = -1,
 	CK_CLASS, CK_DEFINE, CK_ENUMERATOR, CK_FUNCTION,
-	CK_ENUMERATION, CK_MEMBER, CK_NAMESPACE, CK_PROTOTYPE,
+	CK_ENUMERATION, CK_INTERFACE, CK_MEMBER, CK_NAMESPACE, CK_PROTOTYPE,
 	CK_STRUCT, CK_TYPEDEF, CK_UNION, CK_VARIABLE,
 	CK_EXTERN_VARIABLE
 } cKind;
@@ -284,6 +284,7 @@ static kindOption CKinds [] = {
 	{ TRUE,  'e', "enumerator", "enumerators (values inside an enumeration)"},
 	{ TRUE,  'f', "function",   "function definitions"},
 	{ TRUE,  'g', "enum",       "enumeration names"},
+	{ TRUE,  'i', "interface",  "interfaces"}, /* for D */
 	{ TRUE,  'm', "member",     "class, struct, and union members"},
 	{ TRUE,  'n', "namespace",  "namespaces"},
 	{ FALSE, 'p', "prototype",  "function prototypes"},
@@ -965,6 +966,7 @@ static cKind cTagKind (const tagType type)
 		case TAG_ENUM:       result = CK_ENUMERATION;     break;
 		case TAG_ENUMERATOR: result = CK_ENUMERATOR;      break;
 		case TAG_FUNCTION:   result = CK_FUNCTION;        break;
+		case TAG_INTERFACE:  result = CK_INTERFACE;       break;
 		case TAG_MEMBER:     result = CK_MEMBER;          break;
 		case TAG_NAMESPACE:  result = CK_NAMESPACE;       break;
 		case TAG_PROTOTYPE:  result = CK_PROTOTYPE;       break;

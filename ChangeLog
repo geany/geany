@@ -4,6 +4,8 @@
    Parse D functions with contracts (fixes #1885480).
    Parse D alias statement like typedef.
    (Ignore some more D keywords).
+ * tagmanager/c.c:
+   Fix creating D interface tags properly.
 
 
 2009-11-05  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
