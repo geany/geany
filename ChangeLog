@@ -1,3 +1,9 @@
+2009-11-07  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * tagmanager/c.c:
+   Fix parsing some Java code (e.g. filetypes.java) after r4407.
+
+
 2009-11-06  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * tagmanager/c.c:

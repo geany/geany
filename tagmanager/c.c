@@ -1496,6 +1496,7 @@ static void qualifyVariableTag (const statementInfo *const st,
 			else if (st->scope == SCOPE_GLOBAL  ||  st->scope == SCOPE_STATIC)
 				makeTag (nameToken, st, TRUE, TAG_MEMBER);
 		}
+		else if (isLanguage (Lang_java) || isLanguage (Lang_csharp) || isLanguage (Lang_vala));
 		else
 		{
 			if (st->scope == SCOPE_EXTERN  ||  ! st->haveQualifyingName)
