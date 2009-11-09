@@ -3,6 +3,8 @@
  * src/vte.c:
    Remove useless comment about applying settings only when libvte.so
    could be loaded which is only displayed *if* libvte.so is loaded.
+ * src/editor.c:
+   Allow autocompletion for HTML entities even within a word.
 
 
 2009-11-07  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
