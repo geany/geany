@@ -726,12 +726,6 @@ void vte_append_preferences_tab(void)
 		label = gtk_label_new(_("Terminal"));
 		vte_prefs_tab_num = gtk_notebook_append_page(GTK_NOTEBOOK(notebook), frame, label);
 
-		label = geany_wrap_label_new(_("These settings for the virtual terminal emulator widget (VTE) only apply if the VTE library could be loaded."));
-		gtk_box_pack_start(GTK_BOX(vbox), label, FALSE, FALSE, 6);
-		gtk_label_set_justify(GTK_LABEL(label), GTK_JUSTIFY_FILL);
-		gtk_label_set_line_wrap(GTK_LABEL(label), TRUE);
-		gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
-
 		table = gtk_table_new(6, 2, FALSE);
 		gtk_box_pack_start(GTK_BOX(vbox), table, FALSE, FALSE, 0);
 		gtk_table_set_row_spacings(GTK_TABLE(table), 3);
