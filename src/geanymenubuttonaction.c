@@ -44,7 +44,6 @@ struct _GeanyMenubuttonActionPrivate
 enum
 {
 	BUTTON_CLICKED,
-
 	LAST_SIGNAL
 };
 static guint signals[LAST_SIGNAL];
@@ -126,19 +125,55 @@ GtkWidget *geany_menu_button_action_get_menu(GeanyMenubuttonAction *action)
 }
 
 
-void geany_menu_button_action_set_menu(GeanyMenubuttonAction *action, GtkWidget *menu)
+static void menu_items_changed_cb(GtkContainer *container, GtkWidget *widget, GeanyMenubuttonAction *action)
 {
 	GeanyMenubuttonActionPrivate *priv;
+	gboolean enable;
 	GSList *l;
 
 	g_return_if_fail(action != NULL);
 
 	priv = GEANY_MENU_BUTTON_ACTION_GET_PRIVATE(action);
+	if (priv->menu != NULL)
+		enable = (g_list_length(gtk_container_get_children(GTK_CONTAINER(priv->menu))) > 0);
+	else
+		enable = FALSE;
+
+	if (enable)
+	{
+		foreach_slist(l, gtk_action_get_proxies(GTK_ACTION(action)))
+		{
+			if (gtk_menu_tool_button_get_menu(GTK_MENU_TOOL_BUTTON(l->data)) == NULL)
+				gtk_menu_tool_button_set_menu(GTK_MENU_TOOL_BUTTON(l->data), priv->menu);
+		}
+	}
+	else
+	{
+		foreach_slist(l, gtk_action_get_proxies(GTK_ACTION(action)))
+		{
+			gtk_menu_tool_button_set_menu(GTK_MENU_TOOL_BUTTON(l->data), NULL);
+		}
+	}
+}
+
+
+void geany_menu_button_action_set_menu(GeanyMenubuttonAction *action, GtkWidget *menu)
+{
+	GeanyMenubuttonActionPrivate *priv;
+
+	g_return_if_fail(action != NULL);
+
+	priv = GEANY_MENU_BUTTON_ACTION_GET_PRIVATE(action);
+
+	if (priv->menu != NULL)
+		g_signal_handlers_disconnect_by_func(priv->menu, menu_items_changed_cb, action);
+	if (menu != NULL)
+	{
+		g_signal_connect(menu, "add", G_CALLBACK(menu_items_changed_cb), action);
+		g_signal_connect(menu, "remove", G_CALLBACK(menu_items_changed_cb), action);
+	}
 
 	priv->menu = menu;
 
-	foreach_slist(l, gtk_action_get_proxies(GTK_ACTION(action)))
-	{
-		gtk_menu_tool_button_set_menu(GTK_MENU_TOOL_BUTTON(l->data), priv->menu);
-	}
+	menu_items_changed_cb(GTK_CONTAINER(menu), NULL, action);
 }
