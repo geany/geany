@@ -657,7 +657,7 @@ static void add_top_level_items(GeanyDocument *doc)
 				&(tv_iters.tag_function), _("Functions"), "classviewer-method",
 				&(tv_iters.tag_macro), _("Labels"), NULL,
 				&(tv_iters.tag_type), _("Constants"), NULL,
-				&(tv_iters.tag_other), _("Other"), NULL,
+				&(tv_iters.tag_other), _("Other"), "classviewer-other",
 				NULL);
 			break;
 		}
@@ -1061,6 +1061,21 @@ static GtkTreeIter *get_tag_type_iter(TMTagType tag_type, filetype_id ft_id)
 }
 
 
+static GdkPixbuf *get_child_icon(GtkTreeStore *tree_store, GtkTreeIter *parent)
+{
+	GdkPixbuf *icon = NULL;
+
+	if (parent == &tv_iters.tag_other)
+	{
+		return get_tag_icon("classviewer-var");
+	}
+	/* copy parent icon */
+	gtk_tree_model_get(GTK_TREE_MODEL(tree_store), parent,
+		SYMBOLS_COLUMN_ICON, &icon, -1);
+	return icon;
+}
+
+
 static void add_tree_tag(GeanyDocument *doc, const TMTag *tag, GHashTable *parent_hash)
 {
 	filetype_id ft_id = FILETYPE_ID(doc->file_type);
@@ -1074,14 +1089,11 @@ static void add_tree_tag(GeanyDocument *doc, const TMTag *tag, GHashTable *paren
 		const gchar *name;
 		const gchar *parent_name = get_parent_name(tag, ft_id);
 		GtkTreeIter iter;
-		GtkTreeIter *icon_iter = NULL, *child = NULL;
-		GdkPixbuf *icon = NULL;
+		GtkTreeIter *child = NULL;
+ 		GdkPixbuf *icon = NULL;
 
-		child = &iter;
-		icon_iter = (parent != &tv_iters.tag_other) ? parent : &tv_iters.tag_variable;
-
-		gtk_tree_model_get(GTK_TREE_MODEL(tree_store), icon_iter,
-			SYMBOLS_COLUMN_ICON, &icon, -1);
+ 		child = &iter;
+		icon = get_child_icon(tree_store, parent);
 
 		if (parent_name)
 		{

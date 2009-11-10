@@ -2,6 +2,9 @@
 
  * tagmanager/perl.c:
    Fix Geany segfault with constant tags (#2895168).
+ * src/symbols.c:
+   Fix invalid tree iter access when using tv_iters.tag_other but not
+   using tv_iters.tag_variable.
 
 
 2009-11-09  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
