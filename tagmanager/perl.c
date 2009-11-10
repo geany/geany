@@ -41,7 +41,7 @@ typedef enum {
 
 static kindOption PerlKinds [] = {
 	{ TRUE,  'e', "enum",       "constants" },
-	{ TRUE,  'e', "enumerator", "formats" },
+	{ TRUE,  'o', "other",      "formats" },
 	{ TRUE,  'm', "macro",      "labels" },
 	{ TRUE,  'p', "package",    "packages" },
 	{ TRUE,  'f', "function",   "subroutines" },

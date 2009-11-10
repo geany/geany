@@ -118,6 +118,9 @@ static int get_tag_type(const char *tag_name)
 		else if (cmp < 0)
 			break;
 	}
+	/* other is not checked above as it is last, not sorted alphabetically */
+	if (strcmp(tag_name, "other") == 0)
+		return tm_tag_other_t;
 #ifdef TM_DEBUG
 	fprintf(stderr, "Unknown tag type %s\n", tag_name);
 #endif

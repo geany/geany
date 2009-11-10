@@ -373,7 +373,6 @@ http://sf.net/projects/ctags - see the tracker.
 
 In foo.c:
 Edit FooKinds 3rd column to match a s_tag_type_names string in tm_tag.c.
-Warning: "other" type doesn't seem to work.
 
 In filetypes.c, init_builtin_filetypes():
 Set filetypes[GEANY_FILETYPES_FOO].lang = foo's parser number.
