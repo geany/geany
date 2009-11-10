@@ -423,7 +423,7 @@ static const keywordDesc KeywordTable [] = {
 	{ "m_trans",        KEYWORD_M_TRANS,        { 0, 0, 0, 0, 1, 0, 0 } },
 	{ "mutable",        KEYWORD_MUTABLE,        { 0, 1, 0, 0, 0, 0, 0 } },
 	{ "module",         KEYWORD_MODULE,         { 0, 0, 0, 0, 0, 0, 1 } },
-	{ "namespace",      KEYWORD_NAMESPACE,      { 0, 1, 1, 0, 0, 1, 1 } },
+	{ "namespace",      KEYWORD_NAMESPACE,      { 0, 1, 1, 0, 0, 1, 0 } },
 	{ "native",         KEYWORD_NATIVE,         { 0, 0, 0, 1, 0, 0, 0 } },
 	{ "new",            KEYWORD_NEW,            { 0, 1, 1, 1, 0, 1, 1 } },
 	{ "newcov",         KEYWORD_NEWCOV,         { 0, 0, 0, 0, 1, 0, 0 } },
