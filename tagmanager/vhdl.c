@@ -79,7 +79,6 @@ static kindOption VhdlKinds [] = {
 };
 
 static keywordAssoc VhdlKeywordTable [] = {
-    { "variable",     K_VARIABLE },
     { "constant",     K_CONSTANT },
     { "variable",     K_VARIABLE },
     { "type",         K_TYPE },
