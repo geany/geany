@@ -1,3 +1,9 @@
+2009-11-10  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * tagmanager/perl.c:
+   Fix Geany segfault with constant tags (#2895168).
+
+
 2009-11-09  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/vte.c:
