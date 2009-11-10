@@ -5,6 +5,8 @@
  * src/symbols.c:
    Fix invalid tree iter access when using tv_iters.tag_other but not
    using tv_iters.tag_variable.
+ * HACKING, tagmanager/perl.c:
+   Fix parsing Perl format statements ("other" type doesn't seem to work).
 
 
 2009-11-09  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
