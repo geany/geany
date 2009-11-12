@@ -2,6 +2,9 @@
 
  * tagmanager/ctags.c, tagmanager/general.h:
    Make TagManager Assert statements cause g_warning on failure.
+ * src/keybindings.c:
+   Fix reflow paragraph command when cursor < anchor using
+   sci_fix_selection().
 
 
 2009-11-10  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

@@ -2225,6 +2225,17 @@ static void split_lines(GeanyEditor *editor, gint column)
 }
 
 
+/* if cursor < anchor, swap them */
+static void sci_fix_selection(ScintillaObject *sci)
+{
+	gint start, end;
+
+	start = sci_get_selection_start(sci);
+	end = sci_get_selection_end(sci);
+	sci_set_selection(sci, start, end);
+}
+
+
 static void reflow_paragraph(GeanyEditor *editor)
 {
 	ScintillaObject *sci = editor->sci;
@@ -2264,6 +2275,7 @@ static void reflow_paragraph(GeanyEditor *editor)
 			sci_set_selection_end(sci, pos);
 		}
 	}
+	sci_fix_selection(sci);
 	split_lines(editor, column);
 	if (!sel)
 		sci_set_anchor(sci, -1);
