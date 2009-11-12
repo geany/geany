@@ -373,13 +373,15 @@ http://sf.net/projects/ctags - see the tracker.
 
 In foo.c:
 Edit FooKinds 3rd column to match a s_tag_type_names string in tm_tag.c.
+(You may want to make the symbols.c change before doing this).
 
 In filetypes.c, init_builtin_filetypes():
 Set filetypes[GEANY_FILETYPES_FOO].lang = foo's parser number.
 
 In symbols.c:
-If your parser doesn't use C-like tag type names, update
-add_top_level_items() for foo, calling tag_list_add_groups().
+Unless your parser uses C-like tag type kinds, update
+add_top_level_items() for foo, calling tag_list_add_groups(). See
+get_tag_type_iter() for which tv_iters fields to use.
 
 
 GDB
