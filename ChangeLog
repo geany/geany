@@ -1,3 +1,10 @@
+2009-11-16  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * tagmanager/c.c:
+   Separate DKinds from CKinds.
+   Don't generate macro tags for D, Java.
+
+
 2009-11-12  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * tagmanager/ctags.c, tagmanager/general.h:

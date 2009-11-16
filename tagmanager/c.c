@@ -273,7 +273,7 @@ typedef enum
 {
 	CK_UNDEFINED = -1,
 	CK_CLASS, CK_DEFINE, CK_ENUMERATOR, CK_FUNCTION,
-	CK_ENUMERATION, CK_INTERFACE, CK_MEMBER, CK_NAMESPACE, CK_PROTOTYPE,
+	CK_ENUMERATION, CK_MEMBER, CK_NAMESPACE, CK_PROTOTYPE,
 	CK_STRUCT, CK_TYPEDEF, CK_UNION, CK_VARIABLE,
 	CK_EXTERN_VARIABLE
 } cKind;
@@ -284,7 +284,32 @@ static kindOption CKinds [] = {
 	{ TRUE,  'e', "enumerator", "enumerators (values inside an enumeration)"},
 	{ TRUE,  'f', "function",   "function definitions"},
 	{ TRUE,  'g', "enum",       "enumeration names"},
-	{ TRUE,  'i', "interface",  "interfaces"}, /* for D */
+	{ TRUE,  'm', "member",     "class, struct, and union members"},
+	{ TRUE,  'n', "namespace",  "namespaces"},
+	{ FALSE, 'p', "prototype",  "function prototypes"},
+	{ TRUE,  's', "struct",     "structure names"},
+	{ TRUE,  't', "typedef",    "typedefs"},
+	{ TRUE,  'u', "union",      "union names"},
+	{ TRUE,  'v', "variable",   "variable definitions"},
+	{ FALSE, 'x', "externvar",  "external variable declarations"},
+};
+
+/* Used to index into the DKinds table. */
+typedef enum
+{
+	DK_UNDEFINED = -1,
+	DK_CLASS, DK_ENUMERATOR, DK_FUNCTION,
+	DK_ENUMERATION, DK_INTERFACE, DK_MEMBER, DK_NAMESPACE, DK_PROTOTYPE,
+	DK_STRUCT, DK_TYPEDEF, DK_UNION, DK_VARIABLE,
+	DK_EXTERN_VARIABLE
+} dKind;
+
+static kindOption DKinds [] = {
+	{ TRUE,  'c', "class",      "classes"},
+	{ TRUE,  'e', "enumerator", "enumerators (values inside an enumeration)"},
+	{ TRUE,  'f', "function",   "function definitions"},
+	{ TRUE,  'g', "enum",       "enumeration names"},
+	{ TRUE,  'i', "interface",  "interfaces"},
 	{ TRUE,  'm', "member",     "class, struct, and union members"},
 	{ TRUE,  'n', "namespace",  "namespaces"},
 	{ FALSE, 'p', "prototype",  "function prototypes"},
@@ -553,7 +578,15 @@ void printStatement(const statementInfo *const statement)
 
 extern boolean includingDefineTags (void)
 {
-	return CKinds [CK_DEFINE].enabled;
+	if (isLanguage(Lang_c) ||
+		isLanguage(Lang_cpp) ||
+		isLanguage(Lang_csharp) ||
+		isLanguage(Lang_ferite) ||
+		isLanguage(Lang_glsl) ||
+		isLanguage(Lang_vala))
+		return CKinds [CK_DEFINE].enabled;
+
+	return FALSE;
 }
 
 /*
@@ -968,7 +1001,6 @@ static cKind cTagKind (const tagType type)
 		case TAG_ENUM:       result = CK_ENUMERATION;     break;
 		case TAG_ENUMERATOR: result = CK_ENUMERATOR;      break;
 		case TAG_FUNCTION:   result = CK_FUNCTION;        break;
-		case TAG_INTERFACE:  result = CK_INTERFACE;       break;
 		case TAG_MEMBER:     result = CK_MEMBER;          break;
 		case TAG_NAMESPACE:  result = CK_NAMESPACE;       break;
 		case TAG_PROTOTYPE:  result = CK_PROTOTYPE;       break;
@@ -1002,6 +1034,30 @@ static csharpKind csharpTagKind (const tagType type)
 		case TAG_TYPEDEF:    result = CSK_TYPEDEF;         break;
 
 		default: Assert ("Bad C# tag type" == NULL); break;
+	}
+	return result;
+}
+
+static dKind dTagKind (const tagType type)
+{
+	dKind result = DK_UNDEFINED;
+	switch (type)
+	{
+		case TAG_CLASS:      result = DK_CLASS;           break;
+		case TAG_ENUM:       result = DK_ENUMERATION;     break;
+		case TAG_ENUMERATOR: result = DK_ENUMERATOR;      break;
+		case TAG_FUNCTION:   result = DK_FUNCTION;        break;
+		case TAG_INTERFACE:  result = DK_INTERFACE;       break;
+		case TAG_MEMBER:     result = DK_MEMBER;          break;
+		case TAG_NAMESPACE:  result = DK_NAMESPACE;       break;
+		case TAG_PROTOTYPE:  result = DK_PROTOTYPE;       break;
+		case TAG_STRUCT:     result = DK_STRUCT;          break;
+		case TAG_TYPEDEF:    result = DK_TYPEDEF;         break;
+		case TAG_UNION:      result = DK_UNION;           break;
+		case TAG_VARIABLE:   result = DK_VARIABLE;        break;
+		case TAG_EXTERN_VAR: result = DK_EXTERN_VARIABLE; break;
+
+		default: Assert ("Bad D tag type" == NULL); break;
 	}
 	return result;
 }
@@ -1051,6 +1107,8 @@ static const char *tagName (const tagType type)
 		result = JavaKinds [javaTagKind (type)].name;
 	else if (isLanguage (Lang_csharp))
 		result = CsharpKinds [csharpTagKind (type)].name;
+	else if (isLanguage (Lang_d))
+		result = DKinds [dTagKind (type)].name;
 	else if (isLanguage (Lang_vala))
 		result = ValaKinds [valaTagKind (type)].name;
 	else
@@ -1063,6 +1121,8 @@ static int tagLetter (const tagType type)
 	int result;
 	if (isLanguage (Lang_csharp))
 		result = CsharpKinds [csharpTagKind (type)].letter;
+	else if (isLanguage (Lang_d))
+		result = DKinds [dTagKind (type)].letter;
 	else if (isLanguage (Lang_java))
 		result = JavaKinds [javaTagKind (type)].letter;
 	else if (isLanguage (Lang_vala))
@@ -3072,8 +3132,8 @@ extern parserDefinition* DParser (void)
 {
 	static const char *const extensions [] = { "d", "di", NULL };
 	parserDefinition* def = parserNew ("D");
-	def->kinds      = CKinds;
-	def->kindCount  = KIND_COUNT (CKinds);
+	def->kinds      = DKinds;
+	def->kindCount  = KIND_COUNT (DKinds);
 	def->extensions = extensions;
 	def->parser2    = findCTags;
 	def->initialize = initializeDParser;
