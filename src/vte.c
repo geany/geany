@@ -920,7 +920,7 @@ void vte_append_preferences_tab(void)
 															GINT_TO_POINTER(1));
 		g_signal_connect(color_back, "color-set", G_CALLBACK(on_color_button_choose_cb),
 															GINT_TO_POINTER(2));
-		ui_setup_open_button_callback(button_shell, _("Open File"),
+		ui_setup_open_button_callback(button_shell, NULL,
 			GTK_FILE_CHOOSER_ACTION_OPEN, GTK_ENTRY(entry_shell));
 	}
 }

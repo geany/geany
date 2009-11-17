@@ -12,6 +12,9 @@
    Make use of ui_setup_open_button_callback().
  * src/printing.c:
    Improve printing status texts (patch by Dominic Hopf, thanks).
+ * src/prefs.c, src/vte.c:
+   Use the default dialog title set by ui_setup_open_button_callback()
+   to be more consistent and to save one string.
 
 
 2009-11-16  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

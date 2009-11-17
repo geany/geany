@@ -1575,27 +1575,27 @@ void prefs_show_dialog(void)
 				"color-set", G_CALLBACK(on_color_button_choose_cb), NULL);
 		/* file chooser buttons in the tools tab */
 		ui_setup_open_button_callback(ui_lookup_widget(ui_widgets.prefs_dialog, "button_term"),
-			_("Open File"),
+			NULL,
 			GTK_FILE_CHOOSER_ACTION_OPEN,
 			GTK_ENTRY(ui_lookup_widget(ui_widgets.prefs_dialog, "entry_com_term")));
 		ui_setup_open_button_callback(ui_lookup_widget(ui_widgets.prefs_dialog, "button_browser"),
-			_("Open File"),
+			NULL,
 			GTK_FILE_CHOOSER_ACTION_OPEN,
 			GTK_ENTRY(ui_lookup_widget(ui_widgets.prefs_dialog, "entry_browser")));
 		ui_setup_open_button_callback(ui_lookup_widget(ui_widgets.prefs_dialog, "button_grep"),
-			_("Open File"),
+			NULL,
 			GTK_FILE_CHOOSER_ACTION_OPEN,
 			GTK_ENTRY(ui_lookup_widget(ui_widgets.prefs_dialog, "entry_grep")));
 
 		/* tools commands */
 		ui_setup_open_button_callback(ui_lookup_widget(ui_widgets.prefs_dialog, "button_contextaction"),
-			_("Open File"),
+			NULL,
 			GTK_FILE_CHOOSER_ACTION_OPEN,
 			GTK_ENTRY(ui_lookup_widget(ui_widgets.prefs_dialog, "entry_contextaction")));
 
 		/* printing */
 		ui_setup_open_button_callback(ui_lookup_widget(ui_widgets.prefs_dialog, "button_print_external_cmd"),
-			_("Open File"),
+			NULL,
 			GTK_FILE_CHOOSER_ACTION_OPEN,
 			GTK_ENTRY(ui_lookup_widget(ui_widgets.prefs_dialog, "entry_print_external_cmd")));
 
