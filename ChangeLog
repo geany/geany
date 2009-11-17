@@ -5,6 +5,11 @@
  * src/ui_utils.c:
    Implement GTK_FILE_CHOOSER_ACTION_OPEN mode in
    ui_setup_open_button_callback().
+ * src/prefs.c, src/prefs.c, src/vte.c:
+   Refactor color and font button callback functions in the
+   preferences dialog. Move the VTE related callback functions
+   into vte.c.
+   Make use of ui_setup_open_button_callback().
 
 
 2009-11-16  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

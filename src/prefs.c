@@ -1149,39 +1149,16 @@ on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_data)
 }
 
 
-void on_prefs_color_choosed(GtkColorButton *widget, gpointer user_data)
+static void on_color_button_choose_cb(GtkColorButton *widget, gpointer user_data)
 {
 	GdkColor color;
 
-	switch (GPOINTER_TO_INT(user_data))
-	{
-		case 1:
-		{
-			gtk_color_button_get_color(widget, &color);
-			setptr(editor_prefs.long_line_color, utils_get_hex_from_color(&color));
-			break;
-		}
-#ifdef HAVE_VTE
-		case 2:
-		{
-			g_free(vc->colour_fore);
-			vc->colour_fore = g_new0(GdkColor, 1);
-			gtk_color_button_get_color(widget, vc->colour_fore);
-			break;
-		}
-		case 3:
-		{
-			g_free(vc->colour_back);
-			vc->colour_back = g_new0(GdkColor, 1);
-			gtk_color_button_get_color(widget, vc->colour_back);
-			break;
-		}
-#endif
-	}
+	gtk_color_button_get_color(widget, &color);
+	setptr(editor_prefs.long_line_color, utils_get_hex_from_color(&color));
 }
 
 
-void on_prefs_font_choosed(GtkFontButton *widget, gpointer user_data)
+static void on_prefs_font_choosed(GtkFontButton *widget, gpointer user_data)
 {
 	const gchar *fontbtn = gtk_font_button_get_font_name(widget);
 	guint i;
@@ -1225,17 +1202,6 @@ void on_prefs_font_choosed(GtkFontButton *widget, gpointer user_data)
 			ui_set_editor_font(fontbtn);
 			break;
 		}
-#ifdef HAVE_VTE
-		case 4:
-		{
-			/* VTE settings */
-			if (strcmp(fontbtn, vc->font) == 0)
-				break;
-			setptr(vc->font, g_strdup(gtk_font_button_get_font_name(widget)));
-			vte_apply_user_settings();
-			break;
-		}
-#endif
 	}
 }
 
@@ -1606,24 +1572,33 @@ void prefs_show_dialog(void)
 		g_signal_connect(ui_lookup_widget(ui_widgets.prefs_dialog, "editor_font"),
 				"font-set", G_CALLBACK(on_prefs_font_choosed), GINT_TO_POINTER(3));
 		g_signal_connect(ui_lookup_widget(ui_widgets.prefs_dialog, "long_line_color"),
-				"color-set", G_CALLBACK(on_prefs_color_choosed), GINT_TO_POINTER(1));
-		/* file chooser buttons in the tools tab
-		g_signal_connect(ui_lookup_widget(ui_widgets.prefs_dialog, "button_make"),
-				"clicked", G_CALLBACK(on_prefs_tools_button_clicked), ui_lookup_widget(ui_widgets.prefs_dialog, "entry_com_make")); */
-		g_signal_connect(ui_lookup_widget(ui_widgets.prefs_dialog, "button_term"),
-				"clicked", G_CALLBACK(on_prefs_tools_button_clicked), ui_lookup_widget(ui_widgets.prefs_dialog, "entry_com_term"));
-		g_signal_connect(ui_lookup_widget(ui_widgets.prefs_dialog, "button_browser"),
-				"clicked", G_CALLBACK(on_prefs_tools_button_clicked), ui_lookup_widget(ui_widgets.prefs_dialog, "entry_browser"));
-		g_signal_connect(ui_lookup_widget(ui_widgets.prefs_dialog, "button_grep"),
-				"clicked", G_CALLBACK(on_prefs_tools_button_clicked), ui_lookup_widget(ui_widgets.prefs_dialog, "entry_grep"));
+				"color-set", G_CALLBACK(on_color_button_choose_cb), NULL);
+		/* file chooser buttons in the tools tab */
+		ui_setup_open_button_callback(ui_lookup_widget(ui_widgets.prefs_dialog, "button_term"),
+			_("Open File"),
+			GTK_FILE_CHOOSER_ACTION_OPEN,
+			GTK_ENTRY(ui_lookup_widget(ui_widgets.prefs_dialog, "entry_com_term")));
+		ui_setup_open_button_callback(ui_lookup_widget(ui_widgets.prefs_dialog, "button_browser"),
+			_("Open File"),
+			GTK_FILE_CHOOSER_ACTION_OPEN,
+			GTK_ENTRY(ui_lookup_widget(ui_widgets.prefs_dialog, "entry_browser")));
+		ui_setup_open_button_callback(ui_lookup_widget(ui_widgets.prefs_dialog, "button_grep"),
+			_("Open File"),
+			GTK_FILE_CHOOSER_ACTION_OPEN,
+			GTK_ENTRY(ui_lookup_widget(ui_widgets.prefs_dialog, "entry_grep")));
 
 		/* tools commands */
-		g_signal_connect(ui_lookup_widget(ui_widgets.prefs_dialog, "button_contextaction"),
-			"clicked", G_CALLBACK(on_prefs_tools_button_clicked), ui_lookup_widget(ui_widgets.prefs_dialog, "entry_contextaction"));
+		ui_setup_open_button_callback(ui_lookup_widget(ui_widgets.prefs_dialog, "button_contextaction"),
+			_("Open File"),
+			GTK_FILE_CHOOSER_ACTION_OPEN,
+			GTK_ENTRY(ui_lookup_widget(ui_widgets.prefs_dialog, "entry_contextaction")));
 
 		/* printing */
-		g_signal_connect(ui_lookup_widget(ui_widgets.prefs_dialog, "button_print_external_cmd"),
-			"clicked", G_CALLBACK(on_prefs_tools_button_clicked), ui_lookup_widget(ui_widgets.prefs_dialog, "entry_print_external_cmd"));
+		ui_setup_open_button_callback(ui_lookup_widget(ui_widgets.prefs_dialog, "button_print_external_cmd"),
+			_("Open File"),
+			GTK_FILE_CHOOSER_ACTION_OPEN,
+			GTK_ENTRY(ui_lookup_widget(ui_widgets.prefs_dialog, "entry_print_external_cmd")));
+
 		g_signal_connect(ui_lookup_widget(ui_widgets.prefs_dialog, "radio_print_gtk"),
 			"toggled", G_CALLBACK(on_prefs_print_radio_button_toggled), NULL);
 		g_signal_connect(ui_lookup_widget(ui_widgets.prefs_dialog, "check_print_pageheader"),
@@ -1644,59 +1619,4 @@ void prefs_show_dialog(void)
 	prefs_init_dialog();
 	gtk_window_present(GTK_WINDOW(ui_widgets.prefs_dialog));
 }
-
-
-void
-on_prefs_tools_button_clicked           (GtkButton       *button,
-                                        gpointer         item)
-{
-#ifdef G_OS_WIN32
-	win32_show_pref_file_dialog(item);
-#else
-	GtkWidget *dialog;
-	gchar *filename, *tmp, **field;
-
-	/* initialize the dialog */
-	dialog = gtk_file_chooser_dialog_new(_("Open File"), GTK_WINDOW(ui_widgets.prefs_dialog),
-					GTK_FILE_CHOOSER_ACTION_OPEN,
-					GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-					GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT, NULL);
-	/* cut the options from the command line */
-	field = g_strsplit(gtk_entry_get_text(GTK_ENTRY(item)), " ", 2);
-	if (field[0])
-	{
-		filename = g_find_program_in_path(field[0]);
-		if (filename)
-		{
-			gtk_file_chooser_select_filename(GTK_FILE_CHOOSER(dialog), filename);
-			g_free(filename);
-		}
-	}
-
-	/* run it */
-	if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_ACCEPT)
-	{
-		gchar *utf8_filename;
-
-		tmp = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
-		utf8_filename = utils_get_utf8_from_locale(tmp);
-
-		if (g_strv_length(field) > 1)
-			filename = g_strconcat(utf8_filename, " ", field[1], NULL);
-		else
-		{
-			filename = utf8_filename;
-			utf8_filename = NULL;
-		}
-		gtk_entry_set_text(GTK_ENTRY(item), filename);
-		g_free(filename);
-		g_free(tmp);
-		g_free(utf8_filename);
-	}
-
-	g_strfreev(field);
-	gtk_widget_destroy(dialog);
-#endif
-}
-
 

@@ -705,6 +705,40 @@ static void check_run_in_vte_toggled(GtkToggleButton *togglebutton, GtkWidget *u
 }
 
 
+static void font_button_clicked_cb(GtkFontButton *widget, gpointer user_data)
+{
+	const gchar *fontbtn = gtk_font_button_get_font_name(widget);
+
+	if (! utils_str_equal(fontbtn, vc->font))
+	{
+		setptr(vc->font, g_strdup(gtk_font_button_get_font_name(widget)));
+		vte_apply_user_settings();
+	}
+}
+
+
+static void on_color_button_choose_cb(GtkColorButton *widget, gpointer user_data)
+{
+	switch (GPOINTER_TO_INT(user_data))
+	{
+		case 1:
+		{
+			g_free(vc->colour_fore);
+			vc->colour_fore = g_new0(GdkColor, 1);
+			gtk_color_button_get_color(widget, vc->colour_fore);
+			break;
+		}
+		case 2:
+		{
+			g_free(vc->colour_back);
+			vc->colour_back = g_new0(GdkColor, 1);
+			gtk_color_button_get_color(widget, vc->colour_back);
+			break;
+		}
+	}
+}
+
+
 void vte_append_preferences_tab(void)
 {
 	if (vte_info.have_vte)
@@ -881,14 +915,13 @@ void vte_append_preferences_tab(void)
 
 		gtk_widget_show_all(frame);
 
-		g_signal_connect(font_term, "font-set", G_CALLBACK(on_prefs_font_choosed),
-															GINT_TO_POINTER(4));
-		g_signal_connect(color_fore, "color-set", G_CALLBACK(on_prefs_color_choosed),
+		g_signal_connect(font_term, "font-set", G_CALLBACK(font_button_clicked_cb), NULL);
+		g_signal_connect(color_fore, "color-set", G_CALLBACK(on_color_button_choose_cb),
+															GINT_TO_POINTER(1));
+		g_signal_connect(color_back, "color-set", G_CALLBACK(on_color_button_choose_cb),
 															GINT_TO_POINTER(2));
-		g_signal_connect(color_back, "color-set", G_CALLBACK(on_prefs_color_choosed),
-															GINT_TO_POINTER(3));
-		g_signal_connect(button_shell, "clicked",
-				G_CALLBACK(on_prefs_tools_button_clicked), entry_shell);
+		ui_setup_open_button_callback(button_shell, _("Open File"),
+			GTK_FILE_CHOOSER_ACTION_OPEN, GTK_ENTRY(entry_shell));
 	}
 }
 

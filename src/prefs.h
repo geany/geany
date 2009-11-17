@@ -62,10 +62,4 @@ extern GeanyToolPrefs tool_prefs;
 
 void prefs_show_dialog(void);
 
-void on_prefs_font_choosed(GtkFontButton *widget, gpointer user_data);
-
-void on_prefs_color_choosed(GtkColorButton *widget, gpointer user_data);
-
-void on_prefs_tools_button_clicked(GtkButton *button, gpointer user_data);
-
 #endif
