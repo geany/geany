@@ -1055,10 +1055,10 @@ needs.
 Inserting Unicode characters
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-With GTK 2.10 and above, you can insert Unicode code points by hitting Ctrl-Shift-u, then still holding
-Ctrl-Shift, type some hex digits representing the code point for the
-character you want, then let go of Ctrl-Shift and hit a key such as
-the right arrow.
+With GTK 2.10 and above, you can insert Unicode code points by hitting
+Ctrl-Shift-u, then still holding Ctrl-Shift, type some hex digits representing
+the code point for the character you want, then let go of Ctrl-Shift and
+hit Enter or Return.
 
 For this to work in Geany, you'll need to first unbind Ctrl-Shift-u
 in the `keybinding preferences`_, then restart Geany.
