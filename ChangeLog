@@ -2,6 +2,9 @@
 
  * doc/geany.txt, doc/geany.html:
    Fix slightly wrong description of how to insert Unicode characters.
+ * src/ui_utils.c:
+   Implement GTK_FILE_CHOOSER_ACTION_OPEN mode in
+   ui_setup_open_button_callback().
 
 
 2009-11-16  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

@@ -1620,6 +1620,11 @@ static gchar *run_file_chooser(const gchar *title, GtkFileChooserAction action,
 		if (g_path_is_absolute(locale_path) && g_file_test(locale_path, G_FILE_TEST_IS_DIR))
 			gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog), locale_path);
 	}
+	else if (action == GTK_FILE_CHOOSER_ACTION_OPEN)
+	{
+		if (g_path_is_absolute(locale_path))
+			gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(dialog), locale_path);
+	}
 	g_free(locale_path);
 
 	if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_OK)
@@ -1647,18 +1652,34 @@ static void ui_path_box_open_clicked(GtkButton *button, gpointer user_data)
 	gchar *utf8_path;
 
 	/* TODO: extend for other actions */
-	g_return_if_fail(action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
+	g_return_if_fail(action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER ||
+					 action == GTK_FILE_CHOOSER_ACTION_OPEN);
 
 	if (title == NULL)
 		title = (action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER) ?
 			_("Select Folder") : _("Select File");
 
+	if (action == GTK_FILE_CHOOSER_ACTION_OPEN)
+	{
 #ifdef G_OS_WIN32
-	utf8_path = win32_show_project_folder_dialog(ui_widgets.prefs_dialog, title,
+		utf8_path = win32_show_project_folder_dialog(ui_widgets.prefs_dialog, title,
 						gtk_entry_get_text(GTK_ENTRY(entry)));
 #else
-	utf8_path = run_file_chooser(title, action, gtk_entry_get_text(GTK_ENTRY(entry)));
+		utf8_path = run_file_chooser(title, action, gtk_entry_get_text(GTK_ENTRY(entry)));
 #endif
+	}
+	else if (action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER)
+	{
+		gchar *path = g_path_get_dirname(gtk_entry_get_text(GTK_ENTRY(entry)));
+#ifdef G_OS_WIN32
+		/* TODO this doesn't work on Windows yet, we need a more generic win32_show_file_dialog() */
+		/*utf8_path = win32_show_file_dialog(TRUE, ui_widgets.prefs_dialog, path);*/
+		utf8_path = NULL;
+#else
+		utf8_path = run_file_chooser(title, action, path);
+#endif
+		g_free(path);
+	}
 
 	if (utf8_path != NULL)
 	{
