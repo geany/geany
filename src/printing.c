@@ -778,9 +778,9 @@ static void status_changed(GtkPrintOperation *op, gpointer data)
 {
 	gchar *filename = (data != NULL) ? data : GEANY_STRING_UNTITLED;
 	if (gtk_print_operation_get_status(op) == GTK_PRINT_STATUS_FINISHED_ABORTED)
-		msgwin_status_add(_("Printing of file %s was cancelled."), filename);
+		msgwin_status_add(_("Did not send document %s to the printing subsystem."), filename);
 	else if (gtk_print_operation_get_status(op) == GTK_PRINT_STATUS_FINISHED)
-		msgwin_status_add(_("File %s printed."), filename);
+		msgwin_status_add(_("Document %s was sent to the printing subsystem."), filename);
 }
 
 

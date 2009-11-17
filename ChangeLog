@@ -10,6 +10,8 @@
    preferences dialog. Move the VTE related callback functions
    into vte.c.
    Make use of ui_setup_open_button_callback().
+ * src/printing.c:
+   Improve printing status texts (patch by Dominic Hopf, thanks).
 
 
 2009-11-16  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
