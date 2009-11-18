@@ -62,6 +62,8 @@ typedef struct
 	GeanyLexerStyle	*styling;		/* array of styles, NULL if not used or uninitialised */
 	gchar			**keywords;
 	gchar			*wordchars;	/* NULL used for style sets with no styles */
+	gchar			**property_keys;
+	gchar			**property_values;
 } StyleSet;
 
 /* each filetype has a styleset except GEANY_FILETYPES_NONE, which uses common_style_set */
@@ -117,6 +119,7 @@ static GeanyLexerStyle gsd_default = {0x000000, 0xffffff, FALSE, FALSE};
  * Do not use SSM in files unrelated to scintilla. */
 #define SSM(s, m, w, l) scintilla_send_message(s, m, w, l)
 
+/* filetypes should use the filetypes.foo [lexer_properties] group instead of hardcoding */
 static void sci_set_property(ScintillaObject *sci, const gchar *name, const gchar *value)
 {
 	SSM(sci, SCI_SETPROPERTY, (uptr_t) name, (sptr_t) value);
@@ -150,6 +153,10 @@ static void free_styleset(gint file_type_id)
 	style_ptr->keywords = NULL;
 	g_free(style_ptr->wordchars);
 	style_ptr->wordchars = NULL;
+	g_strfreev(style_ptr->property_keys);
+	style_ptr->property_keys = NULL;
+	g_strfreev(style_ptr->property_values);
+	style_ptr->property_values = NULL;
 }
 
 
@@ -1112,8 +1119,6 @@ static void styleset_pascal(ScintillaObject *sci)
 	set_sci_style(sci, SCE_PAS_CHARACTER, GEANY_FILETYPES_PASCAL, 12);
 	set_sci_style(sci, SCE_PAS_OPERATOR, GEANY_FILETYPES_PASCAL, 13);
 	set_sci_style(sci, SCE_PAS_ASM, GEANY_FILETYPES_PASCAL, 14);
-
-	sci_set_property(sci, "lexer.pascal.smart.highlighting", "1");
 }
 
 
@@ -1227,8 +1232,6 @@ static void styleset_php(ScintillaObject *sci)
 	const filetype_id ft_id = GEANY_FILETYPES_PHP;
 
 	apply_filetype_properties(sci, SCLEX_HTML, ft_id);
-
-	sci_set_property(sci, "phpscript.mode", "1");
 
 	/* use the same colouring as for XML */
 	styleset_markup(sci, TRUE);
@@ -1577,8 +1580,6 @@ static void styleset_perl(ScintillaObject *sci)
 
 	apply_filetype_properties(sci, SCLEX_PERL, ft_id);
 
-	sci_set_property(sci, "styling.within.preprocessor", "1");
-
 	sci_set_keywords(sci, 0, style_sets[GEANY_FILETYPES_PERL].keywords[0]);
 
 	set_sci_style(sci, STYLE_DEFAULT, GEANY_FILETYPES_PERL, 0);
@@ -1673,9 +1674,6 @@ static void styleset_python(ScintillaObject *sci)
 	set_sci_style(sci, SCE_P_STRINGEOL, GEANY_FILETYPES_PYTHON, 13);
 	set_sci_style(sci, SCE_P_WORD2, GEANY_FILETYPES_PYTHON, 14);
 	set_sci_style(sci, SCE_P_DECORATOR, GEANY_FILETYPES_PYTHON, 15);
-
-	sci_set_property(sci, "fold.comment.python", "1");
-	sci_set_property(sci, "fold.quotes.python", "1");
 }
 
 
@@ -2022,9 +2020,6 @@ static void styleset_docbook(ScintillaObject *sci)
 	set_sci_style(sci, SCE_H_SGML_BLOCK_DEFAULT, GEANY_FILETYPES_DOCBOOK, 26);
 	set_sci_style(sci, SCE_H_SGML_1ST_PARAM_COMMENT, GEANY_FILETYPES_DOCBOOK, 27);
 	set_sci_style(sci, SCE_H_SGML_ERROR, GEANY_FILETYPES_DOCBOOK, 28);
-
-	sci_set_property(sci, "fold.html", "1");
-	sci_set_property(sci, "fold.html.preprocessor", "1");
 }
 
 
@@ -2179,9 +2174,6 @@ static void styleset_nsis(ScintillaObject *sci)
 	set_sci_style(sci, SCE_NSIS_PAGEEX, GEANY_FILETYPES_NSIS, 16);
 	set_sci_style(sci, SCE_NSIS_FUNCTIONDEF, GEANY_FILETYPES_NSIS, 17);
 	set_sci_style(sci, SCE_NSIS_COMMENTBOX, GEANY_FILETYPES_NSIS, 18);
-
-	sci_set_property(sci, "nsis.uservars", "1");
-	sci_set_property(sci, "nsis.ignorecase", "1");
 }
 
 
@@ -2248,8 +2240,6 @@ static void styleset_conf(ScintillaObject *sci)
 	set_sci_style(sci, SCE_PROPS_KEY, GEANY_FILETYPES_CONF, 3);
 	set_sci_style(sci, SCE_PROPS_ASSIGNMENT, GEANY_FILETYPES_CONF, 4);
 	set_sci_style(sci, SCE_PROPS_DEFVAL, GEANY_FILETYPES_CONF, 5);
-
-	sci_set_property(sci, "lexer.props.allow.initial.spaces", "0");
 }
 
 
@@ -3205,6 +3195,42 @@ static void styleset_ada(ScintillaObject *sci)
 }
 
 
+static void get_key_values(GKeyFile *config, const gchar *group, gchar **keys, gchar **values)
+{
+	while (*keys)
+	{
+		gchar *str = g_key_file_get_string(config, group, *keys, NULL);
+
+		if (str)
+			setptr(*values, str);
+
+		keys++;
+		values++;
+	}
+}
+
+
+static void read_properties(GeanyFiletype *ft, GKeyFile *config, GKeyFile *configh)
+{
+	gchar group[] = "lexer_properties";
+	gchar **keys = g_key_file_get_keys(config, group, NULL, NULL);
+
+	if (!keys)
+		keys = g_key_file_get_keys(configh, group, NULL, NULL);
+
+	if (keys)
+	{
+		gchar **values = g_new0(gchar*, g_strv_length(keys));
+
+		style_sets[ft->id].property_keys = keys;
+		style_sets[ft->id].property_values = values;
+
+		get_key_values(config, group, keys, values);
+		get_key_values(configh, group, keys, values);
+	}
+}
+
+
 /* lang_name is the name used for the styleset_foo_init function, e.g. foo. */
 #define init_styleset_case(ft_id, init_styleset_func) \
 	case (ft_id): \
@@ -3214,6 +3240,8 @@ static void styleset_ada(ScintillaObject *sci)
 /* Called by filetypes_load_config(). */
 void highlighting_init_styles(gint filetype_idx, GKeyFile *config, GKeyFile *configh)
 {
+	GeanyFiletype *ft = filetypes[filetype_idx];
+
 	if (!style_sets)
 		style_sets = g_new0(StyleSet, filetypes_array->len);
 
@@ -3271,6 +3299,8 @@ void highlighting_init_styles(gint filetype_idx, GKeyFile *config, GKeyFile *con
 		init_styleset_case(GEANY_FILETYPES_XML,		styleset_markup_init);
 		init_styleset_case(GEANY_FILETYPES_YAML,	styleset_yaml_init);
 	}
+	read_properties(ft, config, configh);
+
 	/* should be done in filetypes.c really: */
 	if (filetype_idx != GEANY_FILETYPES_NONE)
 		get_keyfile_wordchars(config, configh, &style_sets[filetype_idx].wordchars);
@@ -3292,11 +3322,8 @@ void highlighting_set_styles(ScintillaObject *sci, GeanyFiletype *ft)
 
 	/* now settings are loaded, check lexer_filetype */
 	if (ft->lexer_filetype)
-	{
 		highlighting_set_styles(sci, ft->lexer_filetype);
-		return;
-	}
-
+	else
 	switch (ft->id)
 	{
 		styleset_case(GEANY_FILETYPES_ADA,		styleset_ada);
@@ -3345,6 +3372,19 @@ void highlighting_set_styles(ScintillaObject *sci, GeanyFiletype *ft)
 		case GEANY_FILETYPES_NONE:
 		default:
 			styleset_default(sci, ft->id);
+	}
+	/* [lexer_properties] settings */
+	if (style_sets[ft->id].property_keys)
+	{
+		gchar **prop = style_sets[ft->id].property_keys;
+		gchar **val = style_sets[ft->id].property_values;
+
+		while (*prop)
+		{
+			sci_set_property(sci, *prop, *val);
+			prop++;
+			val++;
+		}
 	}
 }
 

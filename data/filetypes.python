@@ -24,6 +24,9 @@ primary=and as assert break class continue def del elif else except exec finally
 # additional keywords, will be highlighted with style "word2"
 identifiers=
 
+[lexer_properties]
+fold.comment.python=1
+fold.quotes.python=1
 
 [settings]
 # default extension used when saving files

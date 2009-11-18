@@ -2,6 +2,8 @@
 [styling]
 # styling for PHP/HTML is done in filetypes.xml
 
+[lexer_properties]
+phpscript.mode=1
 
 [settings]
 # default extension used when saving files

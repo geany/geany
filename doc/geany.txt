@@ -3460,6 +3460,12 @@ an existing list.
     The keywords list must be in one line without line ending characters.
 
 
+[lexer_properties] Section
+``````````````````````````
+Here any special properties for the Scintilla lexer can be set in the
+format ``key.name.field=some.value``.
+
+
 [settings] Section
 ``````````````````
 

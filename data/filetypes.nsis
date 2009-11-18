@@ -29,6 +29,9 @@ variables=$$ $` $' $" $0 $0, $1 $2 $3 $4 $5 $6 $7 $8 $9 $admintools $appdata $cd
 lables=all alt alwaysoff archive auto both bottom bzip2 center colored components control current custom directory dlg_id ext false file_attribute_archive file_attribute_hidden file_attribute_normal file_attribute_offline file_attribute_readonly file_attribute_system file_attribute_temporary filesonly force hidden hide hkcc hkcr hkcu hkdd hkey_classes_root hkey_current_config hkey_current_user hkey_dyn_data hkey_local_machine hkey_performance_data hkey_users hklm hkpd hku idabort idcancel idignore idno idok idretry idyes ifdiff ifnewer instfiles italic  lastused leave left license listonly lzma manual mb_abortretryignore mb_defbutton1 mb_defbutton2 mb_defbutton3 mb_defbutton4 mb_iconexclamation mb_iconinformation mb_iconquestion mb_iconstop mb_ok mb_okcancel mb_retrycancel mb_right mb_setforeground mb_topmost mb_yesno mb_yesnocancel nevershow none nonfatal normal of off offline on open print readonly rebootok right shctx shift show silent silentlog smooth strike sw_hide  sw_showmaximized sw_showmaximized  sw_showminimized sw_showminimized  sw_showminnoactive  sw_showna  sw_shownoactivate  sw_shownormal sw_shownormal  system temporary textonly top trim true try underline  uninstconfirm zlib
 userdefined=
 
+[lexer_properties]
+nsis.uservars=1
+nsis.ignorecase=1
 
 [settings]
 # default extension used when saving files
