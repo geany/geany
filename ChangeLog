@@ -6,6 +6,10 @@
    data/filetypes.python, data/filetypes.conf:
    Use filetypes.foo [lexer_properties] group instead of hardcoding
    lexer properties (more flexible e.g. for custom filetypes).
+ * src/highlighting.c, data/filetypes.xml, data/filetypes.html:
+   Replace filetypes.xml html_asp_default_language key with
+   filetypes.html asp.default.language property in [lexer_properties]
+   group.
 
 
 2009-11-17  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

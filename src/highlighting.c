@@ -1258,7 +1258,7 @@ static void styleset_html(ScintillaObject *sci)
 
 static void styleset_markup_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
 {
-	new_styleset(GEANY_FILETYPES_XML, 57);
+	new_styleset(GEANY_FILETYPES_XML, 56);
 	get_keyfile_style(config, config_home, "html_default", &style_sets[GEANY_FILETYPES_XML].styling[0]);
 	get_keyfile_style(config, config_home, "html_tag", &style_sets[GEANY_FILETYPES_XML].styling[1]);
 	get_keyfile_style(config, config_home, "html_tagunknown", &style_sets[GEANY_FILETYPES_XML].styling[2]);
@@ -1318,8 +1318,6 @@ static void styleset_markup_init(gint ft_id, GKeyFile *config, GKeyFile *config_
 	get_keyfile_style(config, config_home, "jscript_symbols", &style_sets[GEANY_FILETYPES_XML].styling[53]);
 	get_keyfile_style(config, config_home, "jscript_stringeol", &style_sets[GEANY_FILETYPES_XML].styling[54]);
 	get_keyfile_style(config, config_home, "jscript_regex", &style_sets[GEANY_FILETYPES_XML].styling[55]);
-
-	get_keyfile_int(config, config_home, "styling", "html_asp_default_language", 1, 0, &style_sets[GEANY_FILETYPES_XML].styling[56]);
 
 	style_sets[GEANY_FILETYPES_XML].keywords = g_new(gchar*, 7);
 	get_keyfile_keywords(config, config_home, "html", GEANY_FILETYPES_XML, 0);
@@ -1484,18 +1482,9 @@ static void styleset_markup(ScintillaObject *sci, gboolean set_keywords)
 	set_sci_style(sci, SCE_HPHP_HSTRING_VARIABLE, GEANY_FILETYPES_XML, 41);
 	set_sci_style(sci, SCE_HPHP_COMPLEX_VARIABLE, GEANY_FILETYPES_XML, 42);
 
+	/* note: normally this would be in the filetype file instead */
 	sci_set_property(sci, "fold.html", "1");
 	sci_set_property(sci, "fold.html.preprocessor", "0");
-
-	{
-		gint asp_default_language;
-		gchar *str;
-
-		asp_default_language = style_sets[GEANY_FILETYPES_XML].styling[56].foreground;
-		str = g_strdup_printf("%d", asp_default_language);
-		sci_set_property(sci, "asp.default.language", &str[0]);
-		g_free(str);
-	}
 }
 
 
