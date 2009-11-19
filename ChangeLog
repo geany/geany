@@ -1,3 +1,9 @@
+2009-11-19  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/geanymenubuttonaction.c:
+   Try to fix Gtk warning when using Tools->Reload Configuration.
+
+
 2009-11-18  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/highlighting.c, doc/geany.txt, doc/geany.html,
