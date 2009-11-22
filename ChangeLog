@@ -4,6 +4,9 @@
    src/geanymenubuttonaction.h:
    Use separate tooltips for toolbar menu buttons and their attached
    drop-down arrows.
+ * tagmanager/latex.c:
+   Improve parsing of sections and chapters by ignoring shortnames
+   like \section[shortname]{label} (closes #2890477).
 
 
 2009-11-19  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
