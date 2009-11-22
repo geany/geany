@@ -39,6 +39,14 @@ typedef struct _GeanyMenubuttonActionPrivate		GeanyMenubuttonActionPrivate;
 struct _GeanyMenubuttonActionPrivate
 {
 	GtkWidget	*menu;
+
+	gchar *tooltip_arrow;
+};
+
+enum
+{
+	PROP_0,
+	PROP_TOOLTIP_ARROW
 };
 
 enum
@@ -57,6 +65,7 @@ static void geany_menu_button_action_finalize(GObject *object)
 	GeanyMenubuttonActionPrivate *priv = GEANY_MENU_BUTTON_ACTION_GET_PRIVATE(object);
 
 	g_object_unref(priv->menu);
+	g_free(priv->tooltip_arrow);
 
 	(* G_OBJECT_CLASS(geany_menu_button_action_parent_class)->finalize)(object);
 }
@@ -68,17 +77,74 @@ static void delegate_button_activated(GtkAction *action)
 }
 
 
+static void set_arrow_tooltip(GtkMenuToolButton *button, const gchar *tooltip)
+{
+#if GTK_CHECK_VERSION(2, 12, 0)
+	gtk_menu_tool_button_set_arrow_tooltip_text(button, tooltip);
+#else
+	static GtkTooltips *tooltips = NULL;
+
+	if (G_UNLIKELY(tooltips == NULL))
+		tooltips = gtk_tooltips_new();
+
+	gtk_menu_tool_button_set_arrow_tooltip(button, tooltips, tooltip, NULL);
+#endif
+}
+
+
+static void geany_menu_button_action_set_property(GObject *object, guint prop_id,
+												  const GValue *value, GParamSpec *pspec)
+{
+	switch (prop_id)
+	{
+	case PROP_TOOLTIP_ARROW:
+	{
+		GeanyMenubuttonActionPrivate *priv = GEANY_MENU_BUTTON_ACTION_GET_PRIVATE(object);
+		g_free(priv->tooltip_arrow);
+		priv->tooltip_arrow = g_value_dup_string(value);
+		break;
+	}
+	default:
+		G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
+		break;
+	}
+}
+
+
+static GtkWidget *geany_menu_button_action_create_tool_item(GtkAction *action)
+{
+	GtkWidget *toolitem;
+	GeanyMenubuttonActionPrivate *priv = GEANY_MENU_BUTTON_ACTION_GET_PRIVATE(action);
+
+	toolitem = g_object_new(GTK_TYPE_MENU_TOOL_BUTTON, NULL);
+	set_arrow_tooltip(GTK_MENU_TOOL_BUTTON(toolitem), priv->tooltip_arrow);
+
+	return toolitem;
+}
+
+
 static void geany_menu_button_action_class_init(GeanyMenubuttonActionClass *klass)
 {
 	GtkActionClass *action_class = GTK_ACTION_CLASS(klass);
 	GObjectClass *g_object_class = G_OBJECT_CLASS(klass);
 
 	g_object_class->finalize = geany_menu_button_action_finalize;
+	g_object_class->set_property = geany_menu_button_action_set_property;
 
 	action_class->activate = delegate_button_activated;
+	action_class->create_tool_item = geany_menu_button_action_create_tool_item;
 	action_class->toolbar_item_type = GTK_TYPE_MENU_TOOL_BUTTON;
 
 	g_type_class_add_private(klass, sizeof(GeanyMenubuttonActionPrivate));
+
+	g_object_class_install_property(g_object_class,
+									PROP_TOOLTIP_ARROW,
+									g_param_spec_string(
+									"tooltip-arrow",
+									"Arrow tooltip",
+									"A special tooltip for the arrow button",
+									"",
+									G_PARAM_WRITABLE));
 
 	signals[BUTTON_CLICKED] = g_signal_new("button-clicked",
 										G_TYPE_FROM_CLASS(klass),
@@ -93,19 +159,23 @@ static void geany_menu_button_action_class_init(GeanyMenubuttonActionClass *klas
 
 static void geany_menu_button_action_init(GeanyMenubuttonAction *action)
 {
-	/* nothing to do */
+	GeanyMenubuttonActionPrivate *priv = GEANY_MENU_BUTTON_ACTION_GET_PRIVATE(action);
+	priv->tooltip_arrow = NULL;
+	priv->menu = NULL;
 }
 
 
 GtkAction *geany_menu_button_action_new(const gchar *name,
 										const gchar *label,
 									    const gchar *tooltip,
+									    const gchar *tooltip_arrow,
 										const gchar *stock_id)
 {
 	GtkAction *action = g_object_new(GEANY_MENU_BUTTON_ACTION_TYPE,
 		"name", name,
 		"label", label,
 		"tooltip", tooltip,
+		"tooltip-arrow", tooltip_arrow,
 		"stock-id", stock_id,
 		NULL);
 

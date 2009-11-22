@@ -331,17 +331,27 @@ GtkWidget *toolbar_init(void)
 	gtk_action_group_add_actions(group, ui_entries, ui_entries_n, NULL);
 
 	/* Create our custom actions */
-	action_new = geany_menu_button_action_new("New", NULL, _("Create a new file"), GTK_STOCK_NEW);
+	action_new = geany_menu_button_action_new(
+		"New", NULL,
+		_("Create a new file"),
+		_("Create a new file from a template"),
+		GTK_STOCK_NEW);
 	g_signal_connect(action_new, "button-clicked", G_CALLBACK(on_toolbutton_new_clicked), NULL);
 	gtk_action_group_add_action(group, action_new);
 
 	action_open = geany_menu_button_action_new(
-		"Open", NULL, _("Open an existing file"), GTK_STOCK_OPEN);
+		"Open", NULL,
+		_("Open an existing file"),
+		_("Open a recent file"),
+		GTK_STOCK_OPEN);
 	g_signal_connect(action_open, "button-clicked", G_CALLBACK(on_toolbutton_open_clicked), NULL);
 	gtk_action_group_add_action(group, action_open);
 
 	action_build = geany_menu_button_action_new(
-		"Build", NULL, _("Build the current file"), GEANY_STOCK_BUILD);
+		"Build", NULL,
+		_("Build the current file"),
+		_("Choose more build actions"),
+		GEANY_STOCK_BUILD);
 	g_signal_connect(action_build, "button-clicked",
 		G_CALLBACK(build_toolbutton_build_clicked), NULL);
 	gtk_action_group_add_action(group, action_build);

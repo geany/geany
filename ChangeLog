@@ -1,3 +1,11 @@
+2009-11-22  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/toolbar.c, src/geanymenubuttonaction.c, 
+   src/geanymenubuttonaction.h:
+   Use separate tooltips for toolbar menu buttons and their attached
+   drop-down arrows.
+
+
 2009-11-19  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/geanymenubuttonaction.c:

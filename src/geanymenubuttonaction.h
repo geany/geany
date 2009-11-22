@@ -52,6 +52,7 @@ GType		geany_menu_button_action_get_type	(void);
 GtkAction*	geany_menu_button_action_new		(const gchar	*name,
 												 const gchar	*label,
 												 const gchar	*tooltip,
+												 const gchar	*tooltip_arrow,
 												 const gchar	*stock_id);
 GtkWidget*	geany_menu_button_action_get_menu	(GeanyMenubuttonAction *action);
 
