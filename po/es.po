@@ -8,9 +8,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: geany 0.18\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-11-15 22:05+0100\n"
-"PO-Revision-Date: 2009-11-10 12:55+0100\n"
-"Last-Translator: \n"
+"POT-Creation-Date: 2009-11-23 15:29+0100\n"
+"PO-Revision-Date: 2009-11-23 15:06+0100\n"
+"Last-Translator: Antonio Jiménez González <tonificante@hotmail.com>\n"
 "Language-Team: Spanish <geany-i18n@uvena.de>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -97,7 +97,7 @@ msgid ""
 "gpl-2.0.txt to view it online."
 msgstr ""
 "El texto de la licencia no pudo ser encontrado, por favor visite http://www."
-"gnu.org/licenses/gpl-2.0.txt para verlo en linea"
+"gnu.org/licenses/gpl-2.0.txt para verlo en línea"
 
 #. fall back to %d
 #: ../src/build.c:626
@@ -106,9 +106,8 @@ msgid "failed to substitute %%p, no project active"
 msgstr ""
 
 #: ../src/build.c:664
-#, fuzzy
 msgid "Process failed, no working directory"
-msgstr "Fallo al cambiar el directorio de trabajo a \"%s\""
+msgstr "El proceso falló, no hay directorio de trabajo"
 
 #: ../src/build.c:690
 #, c-format
@@ -168,18 +167,17 @@ msgstr ""
 
 #: ../src/build.c:1320
 msgid "_Next Error"
-msgstr "Siguie_nte Error"
+msgstr "Error Siguie_nte"
 
 #: ../src/build.c:1322
 msgid "_Previous Error"
-msgstr "Error _anterior"
+msgstr "Error _Anterior"
 
 #: ../src/build.c:1332
-#, fuzzy
 msgid "_Set Build Commands"
-msgstr "Configurar Comandos Personalizados"
+msgstr "Configurar Comando_s para Construir"
 
-#: ../src/build.c:1610 ../src/toolbar.c:344
+#: ../src/build.c:1610 ../src/toolbar.c:352
 msgid "Build the current file"
 msgstr "Compilar el archivo actual"
 
@@ -271,9 +269,8 @@ msgid "Set Build Commands"
 msgstr "Configurar Comandos Personalizados"
 
 #: ../src/build.c:2368 ../src/build.c:2553
-#, fuzzy
 msgid "_Execute"
-msgstr "Ejecución:"
+msgstr "Ejecutar"
 
 #: ../src/build.c:2550
 #, fuzzy
@@ -397,8 +394,7 @@ msgstr ""
 msgid "No more message items."
 msgstr "No hay más items de mensajes."
 
-#. initialize the dialog
-#: ../src/dialogs.c:140 ../src/prefs.c:1660
+#: ../src/dialogs.c:140
 msgid "Open File"
 msgstr "Abrir archivo"
 
@@ -732,7 +728,7 @@ msgid ""
 "The error occurred at \"%s\" (line: %d, column: %d)."
 msgstr ""
 "Mensaje de error: %s\n"
-"El error ocurrió en \"%s\" (linea: %d, columna: %d)."
+"El error ocurrió en \"%s\" (línea: %d, columna: %d)."
 
 #: ../src/document.c:1653
 #, c-format
@@ -1023,18 +1019,18 @@ msgstr "Expresión regular incorrecta para el tipo de archivo %s: %s"
 msgid "untitled"
 msgstr "sin título"
 
-#: ../src/highlighting.c:3407 ../src/main.c:766 ../src/socket.c:164
+#: ../src/highlighting.c:3436 ../src/main.c:766 ../src/socket.c:164
 #: ../src/templates.c:339
 #, c-format
 msgid "Could not find file '%s'."
 msgstr "No se pudo encontrar el archivo '%s'."
 
-#: ../src/highlighting.c:3456
+#: ../src/highlighting.c:3485
 #, fuzzy
 msgid "_Color Schemes"
 msgstr "Selector de _Color"
 
-#: ../src/highlighting.c:3463
+#: ../src/highlighting.c:3492
 msgid "_Default"
 msgstr ""
 
@@ -1123,9 +1119,8 @@ msgid "_Decrease Indent"
 msgstr "_Decrementar sangría"
 
 #: ../src/interface.c:536 ../src/keybindings.c:354
-#, fuzzy
 msgid "_Smart Line Indent"
-msgstr "Sangrado de linea inteligente"
+msgstr "Indentado de líneas inteligente"
 
 #: ../src/interface.c:545
 msgid "_Send Selection to Terminal"
@@ -1136,21 +1131,20 @@ msgid "_Send Selection to"
 msgstr "Mandar _Selección a"
 
 #: ../src/interface.c:559 ../src/interface.c:2099
-#, fuzzy
 msgid "_Commands"
-msgstr "Comando"
+msgstr "_Comandos"
 
 #: ../src/interface.c:566 ../src/keybindings.c:311
 msgid "Cut current line(s)"
-msgstr "Cortar la(s) linea(s) actual(es)"
+msgstr "Cortar la(s) línea(s) actual(es)"
 
 #: ../src/interface.c:574 ../src/keybindings.c:308
 msgid "Copy current line(s)"
-msgstr "Copiar la(s) linea(s) actual(es)"
+msgstr "Copiar la(s) línea(s) actual(es)"
 
 #: ../src/interface.c:582 ../src/keybindings.c:263
 msgid "Delete current line(s)"
-msgstr "Borrar la(s) linea(s) actual(es)"
+msgstr "Borrar la(s) línea(s) actual(es)"
 
 #: ../src/interface.c:586 ../src/keybindings.c:260
 msgid "Duplicate line or selection"
@@ -1158,11 +1152,11 @@ msgstr "Duplicar línea o selección"
 
 #: ../src/interface.c:595 ../src/keybindings.c:321
 msgid "Select current line(s)"
-msgstr "Seleccionar linea(s) actual(es)"
+msgstr "Seleccionar línea(s) actual(es)"
 
 #: ../src/interface.c:599 ../src/keybindings.c:324
 msgid "Select current paragraph"
-msgstr "Seleccionar parrafo actual"
+msgstr "Seleccionar párrafo actual"
 
 #: ../src/interface.c:608 ../src/keybindings.c:373
 msgid "Insert alternative white space"
@@ -1243,15 +1237,15 @@ msgstr "_Reemplazar"
 
 #: ../src/interface.c:750
 msgid "Find _Selected"
-msgstr "Buscar _Selección"
+msgstr "Buscar _Seleccionado"
 
 #: ../src/interface.c:754
 msgid "Find Pre_vious Selected"
-msgstr "Buscar Selección Pre_vio"
+msgstr "Buscar Seleccionado Anterior"
 
 #: ../src/interface.c:763
 msgid "Next _Message"
-msgstr "Próximo _Mensaje"
+msgstr "_Mensaje Siguiente"
 
 #: ../src/interface.c:767
 msgid "Pr_evious Message"
@@ -1510,9 +1504,8 @@ msgid "_Very Small Icons"
 msgstr "Iconos muy _pequeños"
 
 #: ../src/interface.c:1931
-#, fuzzy
 msgid "_Customize Toolbar"
-msgstr "_Ocultar barra de herramientas"
+msgstr "Personalizar Barra de Herramientas"
 
 #: ../src/interface.c:1939
 #, fuzzy
@@ -1667,13 +1660,13 @@ msgid ""
 "Removes all messages from the status bar. The messages are still displayed "
 "in the status messages window."
 msgstr ""
-"Remueve todos los mensajes de la barra de estado. Los mensajes son mostrados "
+"Elimina todos los mensajes de la barra de estado. Los mensajes son mostrados "
 "de todas formas en la ventana de mensajes de estado."
 
 #: ../src/interface.c:2928
-#, fuzzy
 msgid "Auto-focus widgets (focus follows mouse)"
-msgstr "Enfocar automáticamente (el foco sigue al ratón)"
+msgstr ""
+"Dar foco automáticamente a los elementos de la interfaz (al pasar el ratón)"
 
 #: ../src/interface.c:2931
 msgid ""
@@ -1926,7 +1919,7 @@ msgstr "Tamaño de icono:"
 msgid "<b>Appearance</b>"
 msgstr "<b>Apariencia</b>"
 
-#: ../src/interface.c:3425 ../src/toolbar.c:883
+#: ../src/interface.c:3425 ../src/toolbar.c:893
 #, fuzzy
 msgid "Customize Toolbar"
 msgstr "Mostrar Barra de _Herramientas"
@@ -1962,10 +1955,10 @@ msgid ""
 "its current position."
 msgstr ""
 "Cuando la tecla de inicio \"inteligente\" está activa, la tecla INICIO "
-"moverá el cursor al primer carácter no blanco de la linea, a menos que ya se "
-"encuentre allí, en cuyo caso lo mueve al principio absoluto de la linea. "
+"moverá el cursor al primer carácter no blanco de la línea, a menos que ya se "
+"encuentre allí, en cuyo caso lo mueve al principio absoluto de la línea. "
 "Cuando esta funcionalidad está desactivada, la tecla INICIO siempre mueve el "
-"cursor al principio de la linea actual, independientemente de su posición "
+"cursor al principio de la línea actual, independientemente de su posición "
 "actual."
 
 #: ../src/interface.c:3466
@@ -2016,13 +2009,13 @@ msgstr ""
 
 #: ../src/interface.c:3486
 msgid "Newline strips trailing spaces"
-msgstr "Al crear nueva linea, borrar espacios extra"
+msgstr "Al crear una nueva línea, borrar espacios extra"
 
 #: ../src/interface.c:3489
 msgid "Enable newline to strip the trailing spaces on the previous line"
 msgstr ""
-"Habilitar que las nuevas lineas borren los espacios extra al final de la "
-"linea anterior"
+"Habilitar que las nuevas líneas borren los espacios extra al final de la "
+"línea anterior"
 
 #: ../src/interface.c:3495
 msgid "Line breaking column:"
@@ -2140,9 +2133,8 @@ msgid ""
 msgstr "Doble click esconde todos los paneles adicionales"
 
 #: ../src/interface.c:3693
-#, fuzzy
 msgid "XML tag autocompletion"
-msgstr "Completado automático de etiquetas XML"
+msgstr "Autocompletado de etiquetas XML"
 
 #: ../src/interface.c:3696
 msgid "Automatic completion and closing of XML tags (includes HTML tags)"
@@ -2160,7 +2152,7 @@ msgid ""
 "when a new line is entered inside such a comment"
 msgstr ""
 "Continuar automáticamente comentarios de varias líneas en lenguajes como C, C"
-"++ y Java cuando se introduce una nueva linea dentro del comentario"
+"++ y Java cuando se introduce una nueva línea dentro del comentario"
 
 #: ../src/interface.c:3703
 msgid "Autocomplete symbols"
@@ -2192,9 +2184,8 @@ msgid "Completion list height:"
 msgstr "Altura de la lista de completado:"
 
 #: ../src/interface.c:3736
-#, fuzzy
 msgid "Characters to type for autocompletion:"
-msgstr "Caracteres a escribir para el completado:"
+msgstr "Caracteres a escribir para el autocompletado:"
 
 #: ../src/interface.c:3749
 #, fuzzy
@@ -2292,7 +2283,7 @@ msgstr ""
 
 #: ../src/interface.c:3863
 msgid "Show white space"
-msgstr "Mostrar espacios en blanco"
+msgstr "Mostrar Espacios en Blanco"
 
 #: ../src/interface.c:3866
 msgid "Marks spaces with dots and tabs with arrows"
@@ -2300,7 +2291,7 @@ msgstr "Marca los espacios con puntos y las tabulaciones con flechas"
 
 #: ../src/interface.c:3868
 msgid "Show line endings"
-msgstr "Mostrar terminaciones de línea"
+msgstr "Mostrar Terminaciones de Línea"
 
 #: ../src/interface.c:3871
 msgid "Shows the line ending character"
@@ -2353,7 +2344,7 @@ msgid "Sets the color of the long line marker"
 msgstr "Selecciona el color del marcador de líneas largas"
 
 #: ../src/interface.c:3936 ../src/toolbar.c:70 ../src/tools.c:717
-#: ../src/vte.c:763 ../src/vte.c:770
+#: ../src/vte.c:797 ../src/vte.c:804
 msgid "Color Chooser"
 msgstr "Selector de color"
 
@@ -2432,30 +2423,28 @@ msgid "Sets the default encoding for newly created files"
 msgstr "Selecciona la codificación por omisión para nuevos archivos creados"
 
 #: ../src/interface.c:4071
-#, fuzzy
 msgid "Use fixed encoding when opening non-Unicode files"
-msgstr "Usar una codificación fija al abrir archivos"
+msgstr "Usar una codificación fija al abrir archivos que no sean Unicode"
 
 #: ../src/interface.c:4074
-#, fuzzy
 msgid ""
 "This option disables the automatic detection of the file encoding when "
 "opening non-Unicode files and opens the file with the specified encoding "
 "(usually not needed)"
 msgstr ""
-"Esta opción deshabilita la detección automática de codificación de los "
-"archivos cuando se está abriendo un archivo y abre el archivo con la "
-"codificación especificada (esto normalmente no es necesario)"
+"Esta opción desactiva la detección automática de codificación de los "
+"archivos cuando se está abriendo un archivo que no sea Unicode, y abre el "
+"archivo con la codificación especificada (normalmente no es necesario)"
 
 #: ../src/interface.c:4080
-#, fuzzy
 msgid "Default encoding (existing non-Unicode files):"
-msgstr "Codificación por omisión (para archivos existentes):"
+msgstr "Codificación por omisión (para archivos que no sean Unicode):"
 
 #: ../src/interface.c:4088
-#, fuzzy
 msgid "Sets the default encoding for opening existing non-Unicode files"
-msgstr "Selecciona la codificación por omisión para abrir archivos existentes"
+msgstr ""
+"Establece la codificación por omisión para abrir archivos existentes que no "
+"sean Unicode"
 
 #: ../src/interface.c:4094
 msgid "<b>Encodings</b>"
@@ -2682,7 +2671,7 @@ msgstr "Imprimir números de línea"
 
 #: ../src/interface.c:4603 ../src/printing.c:383
 msgid "Add line numbers to the printed page"
-msgstr "Añadir números de linea a la página impresa"
+msgstr "Añadir números de línea a la página impresa"
 
 #: ../src/interface.c:4605 ../src/printing.c:386
 msgid "Print page numbers"
@@ -2692,7 +2681,7 @@ msgstr "Imprimir números de página"
 msgid ""
 "Add page numbers at the bottom of each page. It takes 2 lines of the page."
 msgstr ""
-"Agregar números de página al final de cada página. Ocupa 2 lineas de la "
+"Agregar números de página al final de cada página. Ocupa 2 líneas de la "
 "página."
 
 #: ../src/interface.c:4610 ../src/printing.c:391
@@ -2705,7 +2694,7 @@ msgid ""
 "and the current date (see below). It takes 3 lines of the page."
 msgstr ""
 "Agrega un pequeño encabezado a cada página conteniendo el número de página, "
-"el nombre del archivo y la fecha actual (ver abajo). Ocupa 3 lineas de la "
+"el nombre del archivo y la fecha actual (ver abajo). Ocupa 3 líneas de la "
 "página."
 
 #: ../src/interface.c:4630 ../src/printing.c:409
@@ -2809,15 +2798,15 @@ msgstr "Borrar la(s) linea(s) actual(es)"
 
 #: ../src/keybindings.c:273
 msgid "Scroll to current line"
-msgstr "Desplazar a la linea actual"
+msgstr "Desplazar a la línea actual"
 
 #: ../src/keybindings.c:275
 msgid "Scroll up the view by one line"
-msgstr "Desplazar la vista hacia arriba una linea"
+msgstr "Desplazar la vista hacia arriba una línea"
 
 #: ../src/keybindings.c:277
 msgid "Scroll down the view by one line"
-msgstr "Desplazar la vista hacia abajo una linea"
+msgstr "Desplazar la vista hacia abajo una línea"
 
 #: ../src/keybindings.c:279
 msgid "Complete snippet"
@@ -2964,7 +2953,7 @@ msgstr "Insertar fecha"
 msgid "Settings"
 msgstr "Opciones"
 
-#: ../src/keybindings.c:384 ../src/toolbar.c:350
+#: ../src/keybindings.c:384 ../src/toolbar.c:360
 msgid "Search"
 msgstr "Buscar"
 
@@ -3192,7 +3181,7 @@ msgid "Reload symbol list"
 msgstr "Recargar lista de símbolos"
 
 #: ../src/keybindings.c:518 ../src/keybindings.c:523 ../src/project.c:483
-#: ../src/ui_utils.c:1795
+#: ../src/ui_utils.c:1816
 msgid "Build"
 msgstr "Construir"
 
@@ -3250,7 +3239,7 @@ msgstr "Cambiar a Documento"
 
 #: ../src/keyfile.c:823
 msgid "Type here what you want, use it as a notice/scratch board"
-msgstr "Escriba aquí lo que desee, úselo como nota o borrador"
+msgstr "Escriba aquí lo que desee, úselo como panel de notas o borrador"
 
 #: ../src/keyfile.c:1027
 msgid "Failed to load one or more session files."
@@ -3304,7 +3293,7 @@ msgstr "No cargar los datos de completado automático (ver la documentación)"
 
 #: ../src/main.c:134
 msgid "Don't load plugins"
-msgstr "No cargar agregados"
+msgstr "No cargar complementos"
 
 #: ../src/main.c:136
 msgid "Print Geany's installation prefix"
@@ -3415,8 +3404,8 @@ msgid ""
 "The plugin \"%s\" is not binary compatible with this release of Geany - "
 "please recompile it."
 msgstr ""
-"El complemento \"%s\" no es compatible binariamente con esta distribución de "
-"Geany - por favor recompilarlo."
+"El complemento \"%s\" no es compatible a nivel binario con esta distribución "
+"de Geany - por favor, vuelva a compilarlo."
 
 #: ../src/plugins.c:866
 msgid "_Plugin Manager"
@@ -3451,11 +3440,11 @@ msgstr "Complementos"
 
 #: ../src/plugins.c:1226
 msgid "Choose which plugins should be loaded at startup:"
-msgstr ""
+msgstr "Elija los complementos que se activarán en el inicio de Geany:"
 
 #: ../src/plugins.c:1238
 msgid "<b>Plugin details:</b>"
-msgstr "<b>Detalles del complemente:</b>"
+msgstr "<b>Detalles del complemento:</b>"
 
 #: ../src/pluginutils.c:207
 msgid "Configure Plugins"
@@ -3486,33 +3475,33 @@ msgstr "Acción"
 msgid "Shortcut"
 msgstr "Atajo"
 
-#: ../src/prefs.c:1407
+#: ../src/prefs.c:1373
 msgid "_Override"
 msgstr "S_obrescribir"
 
-#: ../src/prefs.c:1407
+#: ../src/prefs.c:1373
 msgid "_Allow"
 msgstr ""
 
-#: ../src/prefs.c:1408
+#: ../src/prefs.c:1374
 msgid "Override that keybinding?"
 msgstr "Sobrescribir ese atajo?"
 
-#: ../src/prefs.c:1409
+#: ../src/prefs.c:1375
 #, c-format
 msgid "The combination '%s' is already used for \"%s\"."
 msgstr "La combinación '%s' está usada por \"%s\"."
 
 #. add manually GeanyWrapLabels because they can't be added with Glade
 #. page Tools
-#: ../src/prefs.c:1527
+#: ../src/prefs.c:1493
 msgid "Enter tool paths below. Tools you do not need can be left blank."
 msgstr ""
 "Ingrese debajo las rutas a las herramientas. Las herramientas que no "
 "necesite pueden quedar en blanco."
 
 #. page Templates
-#: ../src/prefs.c:1532
+#: ../src/prefs.c:1498
 msgid ""
 "Set the information to be used in templates. See the documentation for "
 "details."
@@ -3520,7 +3509,7 @@ msgstr ""
 "Especificar la información que quiera usar en las plantillas. Para más "
 "detalles ver la documentación."
 
-#: ../src/prefs.c:1536
+#: ../src/prefs.c:1502
 msgid ""
 "<i>Notice: For all changes you make here to take effect, you need to restart "
 "Geany or force the reload of the settings using Tools->Reload Configuration."
@@ -3531,7 +3520,7 @@ msgstr ""
 ">Recargar Configuración.</i>"
 
 #. page Keybindings
-#: ../src/prefs.c:1542
+#: ../src/prefs.c:1508
 msgid ""
 "Here you can change keyboard shortcuts for various actions. Select one and "
 "press the Change button to enter a new shortcut, or double click on an "
@@ -3543,7 +3532,7 @@ msgstr ""
 "el atajo."
 
 #. page Printing
-#: ../src/prefs.c:1547
+#: ../src/prefs.c:1513
 msgid ""
 "<i>Notice: Native GTK printing is only available if Geany was built against "
 "GTK 2.10 (or above) <b>and</b> Geany is running with GTK 2.10 (or above).</i>"
@@ -3553,7 +3542,7 @@ msgstr ""
 "2.10 (o superior).</i>"
 
 #. page Editor->Indentation
-#: ../src/prefs.c:1553
+#: ../src/prefs.c:1519
 msgid ""
 "<i>Warning: these settings are overridden by the current project. See "
 "<b>Project->Properties</b>.</i>"
@@ -3589,13 +3578,13 @@ msgstr "Página %d de %d"
 
 #: ../src/printing.c:781
 #, c-format
-msgid "Printing of file %s was cancelled."
-msgstr "La impresión de %s fue cancelada."
+msgid "Did not send document %s to the printing subsystem."
+msgstr ""
 
-#: ../src/printing.c:783 ../src/printing.c:905
+#: ../src/printing.c:783
 #, c-format
-msgid "File %s printed."
-msgstr "Archivo %s impreso."
+msgid "Document %s was sent to the printing subsystem."
+msgstr ""
 
 #: ../src/printing.c:835
 #, c-format
@@ -3623,6 +3612,11 @@ msgstr ""
 #, c-format
 msgid "Printing of \"%s\" failed (return code: %s)."
 msgstr "La impresión de \"%s\" ha fallado (código de retorno: %s)."
+
+#: ../src/printing.c:905
+#, c-format
+msgid "File %s printed."
+msgstr "Archivo %s impreso."
 
 #. "projects" is part of the default project base path so be careful when translating
 #. * please avoid special characters and spaces, look at the source for details or ask Frank
@@ -4315,11 +4309,11 @@ msgstr "Decrementar sangría"
 msgid "Increase indentation"
 msgstr "Incrementar sangría"
 
-#: ../src/toolbar.c:75 ../src/toolbar.c:350
+#: ../src/toolbar.c:75 ../src/toolbar.c:360
 msgid "Find the entered text in the current file"
 msgstr "Buscar el texto ingresado en el archivo actual"
 
-#: ../src/toolbar.c:76 ../src/toolbar.c:358
+#: ../src/toolbar.c:76 ../src/toolbar.c:368
 msgid "Jump to the entered line number"
 msgstr "Saltar al número de línea introducido"
 
@@ -4340,28 +4334,42 @@ msgstr "Imprimir documento"
 msgid "Replace text in the current document"
 msgstr "Marcar todas las coincidencias en el documento actual"
 
-#. Create our custom actions
-#: ../src/toolbar.c:334
+#: ../src/toolbar.c:336
 msgid "Create a new file"
 msgstr "Crear un archivo nuevo"
 
-#: ../src/toolbar.c:339
+#: ../src/toolbar.c:337
+#, fuzzy
+msgid "Create a new file from a template"
+msgstr "Crear un archivo nuevo"
+
+#: ../src/toolbar.c:344
 msgid "Open an existing file"
 msgstr "Abrir un archivo existente"
 
-#: ../src/toolbar.c:358
+#: ../src/toolbar.c:345
+#, fuzzy
+msgid "Open a recent file"
+msgstr "Abrir archivos seleccionados"
+
+#: ../src/toolbar.c:353
+#, fuzzy
+msgid "Choose more build actions"
+msgstr "No hay más errores de construción."
+
+#: ../src/toolbar.c:368
 msgid "Goto"
 msgstr "Ir a"
 
-#: ../src/toolbar.c:534
+#: ../src/toolbar.c:544
 msgid "Separator"
 msgstr "Separador"
 
-#: ../src/toolbar.c:535
+#: ../src/toolbar.c:545
 msgid "--- Separator ---"
 msgstr "--- Separador ---"
 
-#: ../src/toolbar.c:899
+#: ../src/toolbar.c:909
 msgid ""
 "Select items to be displayed on the toolbar. Items can be reordered by drag "
 "and drop."
@@ -4369,11 +4377,11 @@ msgstr ""
 "Selecciona los items que serán mostrados. Éstos pueden ser reorganizados "
 "arrastrando y soltandolos"
 
-#: ../src/toolbar.c:915
+#: ../src/toolbar.c:925
 msgid "Available Items"
 msgstr "Items disponibles"
 
-#: ../src/toolbar.c:936
+#: ../src/toolbar.c:946
 #, fuzzy
 msgid "Displayed Items"
 msgstr "Mostrar"
@@ -4470,7 +4478,7 @@ msgstr "Mostrar la ruta _completa"
 #: ../src/ui_utils.c:190
 #, c-format
 msgid "line: %d\t col: %d\t sel: %d\t "
-msgstr "linea: %d\t col: %d\t sel: %d\t "
+msgstr "línea: %d\t col: %d\t sel: %d\t "
 
 #. RO = read-only
 #: ../src/ui_utils.c:196
@@ -4551,19 +4559,19 @@ msgstr "C++ STL"
 msgid "_Set Custom Date Format"
 msgstr "_Configurar Formato de Fecha Personalizado"
 
-#: ../src/ui_utils.c:1654
+#: ../src/ui_utils.c:1660
 msgid "Select Folder"
 msgstr "Seleccionar Carpeta"
 
-#: ../src/ui_utils.c:1654
+#: ../src/ui_utils.c:1660
 msgid "Select File"
 msgstr "Seleccionar Archivo"
 
-#: ../src/ui_utils.c:1793
+#: ../src/ui_utils.c:1814
 msgid "Save All"
 msgstr "Guardar _Todo"
 
-#: ../src/ui_utils.c:1794
+#: ../src/ui_utils.c:1815
 msgid "Close All"
 msgstr "C_errar Todo"
 
@@ -4579,7 +4587,7 @@ msgstr "Mac (CR)"
 msgid "Unix (LF)"
 msgstr "Unix (LF)"
 
-#: ../src/vte.c:301 ../src/vte.c:726
+#: ../src/vte.c:301 ../src/vte.c:760
 msgid "Terminal"
 msgstr "Terminal"
 
@@ -4603,39 +4611,39 @@ msgstr ""
 "No se pudo cambiar el directorio en la terminal virtual (VTE) probablemente "
 "porque contiene un comando."
 
-#: ../src/vte.c:721
+#: ../src/vte.c:755
 msgid "Terminal plugin"
 msgstr "Plugin de Terminal"
 
-#: ../src/vte.c:734
+#: ../src/vte.c:768
 msgid "Terminal font:"
 msgstr "Fuente de la terminal:"
 
-#: ../src/vte.c:744
+#: ../src/vte.c:778
 msgid "Sets the font for the terminal widget"
 msgstr "Selecciona la fuente para la ventana de terminal"
 
-#: ../src/vte.c:746
+#: ../src/vte.c:780
 msgid "Foreground color:"
 msgstr "Color de primer plano:"
 
-#: ../src/vte.c:752
+#: ../src/vte.c:786
 msgid "Background color:"
 msgstr "Color de fondo:"
 
-#: ../src/vte.c:762
+#: ../src/vte.c:796
 msgid "Sets the foreground color of the text in the terminal widget"
 msgstr "Selecciona el color de frente del texto en la terminal."
 
-#: ../src/vte.c:769
+#: ../src/vte.c:803
 msgid "Sets the background color of the text in the terminal widget"
 msgstr "Selecciona el color de fondo del texto en la terminal."
 
-#: ../src/vte.c:772
+#: ../src/vte.c:806
 msgid "Scrollback lines:"
 msgstr "Líneas del historial:"
 
-#: ../src/vte.c:784
+#: ../src/vte.c:818
 msgid ""
 "Specifies the history in lines, which you can scroll back in the terminal "
 "widget"
@@ -4643,11 +4651,11 @@ msgstr ""
 "Especifica el número de líneas de historial que pueden volver a usarse en la "
 "terminal."
 
-#: ../src/vte.c:788
+#: ../src/vte.c:822
 msgid "Shell:"
 msgstr "Shell:"
 
-#: ../src/vte.c:796
+#: ../src/vte.c:830
 msgid ""
 "Sets the path to the shell which should be started inside the terminal "
 "emulation"
@@ -4655,50 +4663,50 @@ msgstr ""
 "Configura la ruta para la línea de comandos que se iniciará dentro del "
 "emulador de teminal"
 
-#: ../src/vte.c:813
+#: ../src/vte.c:847
 msgid "Scroll on keystroke"
 msgstr "Descender al presionar una tecla"
 
-#: ../src/vte.c:814
+#: ../src/vte.c:848
 msgid "Whether to scroll to the bottom if a key was pressed"
 msgstr ""
 "Define si se realiza scroll hacia abajo hasta el final cuando se pulse una "
 "tecla"
 
-#: ../src/vte.c:817
+#: ../src/vte.c:851
 msgid "Scroll on output"
 msgstr "Descender al haber salida"
 
-#: ../src/vte.c:818
+#: ../src/vte.c:852
 msgid "Whether to scroll to the bottom when output is generated"
 msgstr ""
 "Define si se realiza scroll hacia abajo hasta el final de manera automática "
 "cuando se genere nueva salida"
 
-#: ../src/vte.c:821
+#: ../src/vte.c:855
 msgid "Cursor blinks"
 msgstr "Hacer que el cursor parpadee"
 
-#: ../src/vte.c:822
+#: ../src/vte.c:856
 msgid "Whether to blink the cursor"
 msgstr "Define si el cursor parpadea"
 
-#: ../src/vte.c:825
+#: ../src/vte.c:859
 msgid "Override Geany keybindings"
 msgstr "Sobreescribir atajos de Geany"
 
-#: ../src/vte.c:827
+#: ../src/vte.c:861
 msgid ""
 "Allows the VTE to receive keyboard shortcuts (apart from focus commands)"
 msgstr ""
 "Permite que la terminal virtual (VTE) reciba atajos de teclado (exceptuando "
 "los comandos de foco)."
 
-#: ../src/vte.c:830
+#: ../src/vte.c:864
 msgid "Disable menu shortcut key (F10 by default)"
 msgstr "Desactivar el atajo de teclado del menu (por omisión F10)"
 
-#: ../src/vte.c:831
+#: ../src/vte.c:865
 msgid ""
 "This option disables the keybinding to popup the menu bar (default is F10). "
 "Disabling it can be useful if you use, for example, Midnight Commander "
@@ -4708,22 +4716,22 @@ msgstr ""
 "menu (por omisión F10). Desactivarlo puede ser útil si se usa, por ejemplo, "
 "Midnight Commander dentro de la VTE."
 
-#: ../src/vte.c:834 ../plugins/filebrowser.c:1144
+#: ../src/vte.c:868 ../plugins/filebrowser.c:1144
 msgid "Follow the path of the current file"
 msgstr "Seguir la ruta del archivo actual"
 
-#: ../src/vte.c:835
+#: ../src/vte.c:869
 msgid "Whether to execute \"cd $path\" when you switch between opened files"
 msgstr ""
 "Indica si se ejecutará \"cd $path\" cuando se cambie de archivo abierto."
 
 #. create check_skip_script checkbox before the check_skip_script checkbox to be able to
 #. * use the object for the toggled handler of check_skip_script checkbox
-#: ../src/vte.c:840
+#: ../src/vte.c:874
 msgid "Don't use run script"
 msgstr "No usar script de ejecución"
 
-#: ../src/vte.c:841
+#: ../src/vte.c:875
 msgid ""
 "Don't use the simple run script which is usually used to display the exit "
 "status of the executed program"
@@ -4731,11 +4739,11 @@ msgstr ""
 "No usar el script de ejecución simple que normalmente se usa para mostrar el "
 "estado de salida del programa ejecutado."
 
-#: ../src/vte.c:844
+#: ../src/vte.c:878
 msgid "Execute programs in VTE"
 msgstr "Ejecutar programas en la VTE"
 
-#: ../src/vte.c:845
+#: ../src/vte.c:879
 msgid ""
 "Run programs in VTE instead of opening a terminal emulation window. Please "
 "note, programs executed in VTE cannot be stopped"
@@ -5225,6 +5233,9 @@ msgstr "Dividir Horizontalmente"
 #: ../plugins/splitwindow.c:402
 msgid "Split Vertically"
 msgstr "Dividir Verticalmente"
+
+#~ msgid "Printing of file %s was cancelled."
+#~ msgstr "La impresión de %s fue cancelada."
 
 #~ msgid "_Compile"
 #~ msgstr "_Compilar"
