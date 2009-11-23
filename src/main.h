@@ -28,6 +28,7 @@
 typedef struct
 {
 	gboolean	new_instance;
+	gchar	   *socket_filename;
 	gboolean	load_session;
 	gint		goto_line;
 	gint		goto_column;

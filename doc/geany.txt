@@ -355,6 +355,12 @@ Short option  Long option              Function
                                        then terminal-support is automatically disabled. Only
                                        available if Geany was compiled with support for VTE.
 
+*none*        --socket-file            Use this socket filename for communication with a 
+                                       running Geany instance. This can be used with the following
+                                       command to execute Geany on the current workspace::
+                                       
+                                         geany --socket-file=/tmp/geany-sock-$(xprop -root _NET_CURRENT_DESKTOP | awk '{print $3}')
+
 *none*        --vte-lib                Specify explicitly the path including filename or only
                                        the filename to the VTE library, e.g.
                                        ``/usr/lib/libvte.so`` or ``libvte.so``. This option is

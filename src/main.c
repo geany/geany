@@ -126,6 +126,7 @@ static GOptionEntry entries[] =
 	{ "no-preprocessing", 'P', 0, G_OPTION_ARG_NONE, &no_preprocessing, N_("Don't preprocess C/C++ files when generating tags"), NULL },
 #ifdef HAVE_SOCKET
 	{ "new-instance", 'i', 0, G_OPTION_ARG_NONE, &cl_options.new_instance, N_("Don't open files in a running instance, force opening a new instance"), NULL },
+	{ "socket-file", 0, 0, G_OPTION_ARG_FILENAME, &cl_options.socket_filename, N_("Use this socket filename for communication with a running Geany instance"), NULL },
 #endif
 	{ "line", 'l', 0, G_OPTION_ARG_INT, &cl_options.goto_line, N_("Set initial line number for the first opened file"), NULL },
 	{ "no-msgwin", 'm', 0, G_OPTION_ARG_NONE, &no_msgwin, N_("Don't show message window at startup"), NULL },
@@ -451,7 +452,7 @@ static void parse_command_line_options(gint *argc, gchar ***argv)
 	GError *error = NULL;
 	GOptionContext *context;
 	gint i;
-	CommandLineOptions def_clo = {FALSE, TRUE, -1, -1, FALSE};
+	CommandLineOptions def_clo = {FALSE, NULL, TRUE, -1, -1, FALSE};
 
 	/* first initialise cl_options fields with default values */
 	cl_options = def_clo;
@@ -535,7 +536,12 @@ static void parse_command_line_options(gint *argc, gchar ***argv)
 
 #ifdef HAVE_SOCKET
 	socket_info.ignore_socket = cl_options.new_instance;
+	if (cl_options.socket_filename)
+	{
+		socket_info.file_name = cl_options.socket_filename;
+	}
 #endif
+
 #ifdef HAVE_VTE
 	vte_info.lib_vte = lib_vte;
 #endif
