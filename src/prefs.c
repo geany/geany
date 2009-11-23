@@ -1456,6 +1456,77 @@ static void on_prefs_print_page_header_toggled(GtkToggleButton *togglebutton, gp
 }
 
 
+static void open_preferences_help(void)
+{
+	gchar *uri;
+	const gchar *label, *suffix;
+	GtkNotebook *notebook = GTK_NOTEBOOK(
+		ui_lookup_widget(ui_widgets.prefs_dialog, "notebook2"));
+	gint page_nr = gtk_notebook_get_current_page(notebook);
+	GtkWidget *page = gtk_notebook_get_nth_page(notebook, page_nr);
+
+	label = gtk_notebook_get_tab_label_text(notebook, page);
+
+	/* TODO Find a better way to map the current notebook page to the
+	 * corresponding chapter in the documentation, comparing translatable
+	 * strings is easy to break. Maybe attach an identifying string to the
+	 * tab label object. */
+	if (utils_str_equal(label, _("General")))
+		suffix = "#general-startup-preferences";
+	else if (utils_str_equal(label, _("Interface")))
+		suffix = "#interface-preferences";
+	else if (utils_str_equal(label, _("Toolbar")))
+		suffix = "#toolbar-preferences";
+	else if (utils_str_equal(label, _("Editor")))
+		suffix = "#editor-features-preferences";
+	else if (utils_str_equal(label, _("Files")))
+		suffix = "#files-preferences";
+	else if (utils_str_equal(label, _("Tools")))
+		suffix = "#tools-preferences";
+	else if (utils_str_equal(label, _("Templates")))
+		suffix = "#template-preferences";
+	else if (utils_str_equal(label, _("Keybindings")))
+		suffix = "#keybinding-preferences";
+	else if (utils_str_equal(label, _("Printing")))
+		suffix = "#printing-preferences";
+	else if (utils_str_equal(label, _("Terminal")))
+		suffix = "#terminal-vte-preferences";
+
+	uri = utils_get_help_url(suffix);
+	utils_open_browser(uri);
+	g_free(uri);
+}
+
+
+static gboolean prefs_dialog_key_press_response_cb(GtkWidget *dialog, GdkEventKey *event,
+												   gpointer data)
+{
+	gint group, keybinding;
+
+	if (keybindings_check_event(event, &group, &keybinding) != NULL)
+	{
+		if (group == GEANY_KEY_GROUP_HELP && keybinding == GEANY_KEYS_HELP_HELP)
+		{
+			open_preferences_help();
+			return TRUE;
+		}
+	}
+	return FALSE;
+}
+
+
+static gboolean prefs_dialog_button_press_event_cb(GtkWidget *dialog, GdkEventButton *event,
+												   gpointer data)
+{
+	if (event->button == 1)
+	{
+		open_preferences_help();
+		return TRUE;
+	}
+	return FALSE;
+}
+
+
 void prefs_show_dialog(void)
 {
 	if (ui_widgets.prefs_dialog == NULL)
@@ -1614,6 +1685,11 @@ void prefs_show_dialog(void)
 				"toggled", G_CALLBACK(on_use_folding_toggled), NULL);
 		g_signal_connect(ui_lookup_widget(ui_widgets.prefs_dialog, "check_open_encoding"),
 				"toggled", G_CALLBACK(on_open_encoding_toggled), NULL);
+
+		g_signal_connect(ui_lookup_widget(ui_widgets.prefs_dialog, "button_help"),
+				"button-press-event", G_CALLBACK(prefs_dialog_button_press_event_cb), NULL);
+		g_signal_connect(ui_widgets.prefs_dialog,
+				"key-press-event", G_CALLBACK(prefs_dialog_key_press_response_cb), NULL);
 	}
 
 	prefs_init_dialog();

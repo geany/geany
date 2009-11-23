@@ -2704,6 +2704,7 @@ create_prefs_dialog (void)
   GtkWidget *button3;
   GtkWidget *button4;
   GtkWidget *button5;
+  GtkWidget *button_help;
   GtkTooltips *tooltips;
 
   tooltips = gtk_tooltips_new ();
@@ -4675,6 +4676,11 @@ create_prefs_dialog (void)
   gtk_dialog_add_action_widget (GTK_DIALOG (prefs_dialog), button5, GTK_RESPONSE_OK);
   GTK_WIDGET_SET_FLAGS (button5, GTK_CAN_DEFAULT);
 
+  button_help = gtk_button_new_from_stock ("gtk-help");
+  gtk_widget_show (button_help);
+  gtk_dialog_add_action_widget (GTK_DIALOG (prefs_dialog), button_help, GTK_RESPONSE_HELP);
+  GTK_WIDGET_SET_FLAGS (button_help, GTK_CAN_DEFAULT);
+
   g_signal_connect ((gpointer) button_customize_toolbar, "clicked",
                     G_CALLBACK (on_button_customize_toolbar_clicked),
                     NULL);
@@ -5039,6 +5045,7 @@ create_prefs_dialog (void)
   GLADE_HOOKUP_OBJECT (prefs_dialog, button3, "button3");
   GLADE_HOOKUP_OBJECT (prefs_dialog, button4, "button4");
   GLADE_HOOKUP_OBJECT (prefs_dialog, button5, "button5");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, button_help, "button_help");
   GLADE_HOOKUP_OBJECT_NO_REF (prefs_dialog, tooltips, "tooltips");
 
   gtk_widget_grab_default (button5);

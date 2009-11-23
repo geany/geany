@@ -13,6 +13,11 @@
    Geany's keybindings.
  * src/callbacks.c, src/utils.c, src/utils.h:
    Add and use utils_get_help_url().
+ * geany.glade, src/interface.c, src/prefs.c:
+   Add a Help button to the preferences dialog.
+   Handle Help keybinding events for the preferences dialog especially
+   and open the manual with the corresponding anchor link to the current
+   preferences page (same goes for the new Help button).
 
 
 2009-11-22  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
