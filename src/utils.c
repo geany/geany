@@ -1864,3 +1864,33 @@ GSList *utils_get_config_files(const gchar *subdir)
 }
 
 
+/* Suffix can be NULL or a string which should be appended to the Help URL like
+ * an anchor link, e.g. "#some_anchor". */
+gchar *utils_get_help_url(const gchar *suffix)
+{
+	gint skip;
+	gchar *uri;
+
+#ifdef G_OS_WIN32
+	skip = 8;
+	uri = g_strconcat("file:///", app->docdir, "/Manual.html", NULL);
+	g_strdelimit(uri, "\\", '/'); /* replace '\\' by '/' */
+#else
+	skip = 7;
+	uri = g_strconcat("file://", app->docdir, "index.html", NULL);
+#endif
+
+	if (! g_file_test(uri + skip, G_FILE_TEST_IS_REGULAR))
+	{	/* fall back to online documentation if it is not found on the hard disk */
+		g_free(uri);
+		uri = g_strconcat(GEANY_HOMEPAGE, "manual/", VERSION, "/index.html", NULL);
+	}
+	
+	if (suffix != NULL)
+	{
+		setptr(uri, g_strconcat(uri, suffix, NULL));
+	}
+
+	return uri;
+}
+

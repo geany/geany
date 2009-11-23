@@ -200,6 +200,8 @@ GSList *utils_get_file_list_full(const gchar *path, gboolean full_path, gboolean
 
 GSList *utils_get_config_files(const gchar *subdir);
 
+gchar *utils_get_help_url(const gchar *suffix);
+
 gboolean utils_str_has_upper(const gchar *str);
 
 gint utils_is_file_writeable(const gchar *locale_filename);

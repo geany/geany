@@ -3,19 +3,21 @@
  * tagmanager/php.c:
    Remove duplicate regular expression for parsing classes.
    Fix and improve parsing of constants (patch by Harold Aling, thanks).
- * doc/geany.1.in, doc/geany.html, doc/geany.txt, src/main.c, 
+ * doc/geany.1.in, doc/geany.html, doc/geany.txt, src/main.c,
    src/main.h, THANKS, src/about.c:
    Add new command line option "--socket-file" to be able to specify
-   separate socket filenames for instances 
+   separate socket filenames for instances
    (closes #2896027, patch by Jörn Reder, thanks).
  * src/keybindings.c, src/keybindings.h:
    Add keybindings_check_event() to manually check GdkKeyEvents against
    Geany's keybindings.
+ * src/callbacks.c, src/utils.c, src/utils.h:
+   Add and use utils_get_help_url().
 
 
 2009-11-22  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
- * src/toolbar.c, src/geanymenubuttonaction.c, 
+ * src/toolbar.c, src/geanymenubuttonaction.c,
    src/geanymenubuttonaction.h:
    Use separate tooltips for toolbar menu buttons and their attached
    drop-down arrows.
