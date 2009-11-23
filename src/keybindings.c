@@ -1138,6 +1138,52 @@ static guint key_kp_translate(guint key_in)
 }
 
 
+/* Stripped down version of the main keypress event handler which can be used
+ * to process foreign events. Instead of executing the keybinding, a pointer to the
+ * keybinding structure is returned.
+ * Additionally, the group_id and binding_id are filled with the appropriate indexes
+ * if non-NULL. */
+const GeanyKeyBinding *keybindings_check_event(GdkEventKey *ev, gint *group_id, gint *binding_id)
+{
+	guint state, keyval;
+	gsize g, i;
+	GeanyKeyGroup *group;
+	GeanyKeyBinding *kb;
+
+	if (ev->keyval == 0)
+		return FALSE;
+
+	keyval = ev->keyval;
+	state = ev->state & gtk_accelerator_get_default_mod_mask();
+	/* hack to get around that CTRL+Shift+r results in GDK_R not GDK_r */
+	if ((ev->state & GDK_SHIFT_MASK) || (ev->state & GDK_LOCK_MASK))
+		if (keyval >= GDK_A && keyval <= GDK_Z)
+			keyval += GDK_a - GDK_A;
+
+	if (keyval >= GDK_KP_Space && keyval < GDK_KP_Equal)
+		keyval = key_kp_translate(keyval);
+
+	for (g = 0; g < keybinding_groups->len; g++)
+	{
+		group = g_ptr_array_index(keybinding_groups, g);
+
+		for (i = 0; i < group->count; i++)
+		{
+			kb = &group->keys[i];
+			if (keyval == kb->key && state == kb->mods)
+			{
+				if (group_id != NULL)
+					*group_id = g;
+				if (binding_id != NULL)
+					*binding_id = i;
+				return kb;
+			}
+		}
+	}
+	return NULL;
+}
+
+
 /* central keypress event handler, almost all keypress events go to this function */
 static gboolean on_key_press_event(GtkWidget *widget, GdkEventKey *ev, gpointer user_data)
 {
@@ -1155,7 +1201,7 @@ static gboolean on_key_press_event(GtkWidget *widget, GdkEventKey *ev, gpointer 
 		document_check_disk_status(doc, FALSE);
 
 	keyval = ev->keyval;
-    state = ev->state & gtk_accelerator_get_default_mod_mask();
+	state = ev->state & gtk_accelerator_get_default_mod_mask();
 	/* hack to get around that CTRL+Shift+r results in GDK_R not GDK_r */
 	if ((ev->state & GDK_SHIFT_MASK) || (ev->state & GDK_LOCK_MASK))
 		if (keyval >= GDK_A && keyval <= GDK_Z)

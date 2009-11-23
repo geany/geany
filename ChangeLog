@@ -8,6 +8,9 @@
    Add new command line option "--socket-file" to be able to specify
    separate socket filenames for instances 
    (closes #2896027, patch by Jörn Reder, thanks).
+ * src/keybindings.c, src/keybindings.h:
+   Add keybindings_check_event() to manually check GdkKeyEvents against
+   Geany's keybindings.
 
 
 2009-11-22  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
