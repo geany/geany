@@ -1,3 +1,10 @@
+2009-11-23  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * tagmanager/php.c:
+   Remove duplicate regular expression for parsing classes.
+   Fix and improve parsing of constants (patch by Harold Aling, thanks).
+
+
 2009-11-22  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/toolbar.c, src/geanymenubuttonaction.c, 
