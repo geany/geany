@@ -3114,17 +3114,36 @@ static void get_key_values(GKeyFile *config, const gchar *group, gchar **keys, g
 }
 
 
+#define foreach_strv(strptr, strv) \
+	for (strptr = strv; *strptr; strptr++)
+
 static void read_properties(GeanyFiletype *ft, GKeyFile *config, GKeyFile *configh)
 {
 	gchar group[] = "lexer_properties";
 	gchar **keys = g_key_file_get_keys(config, group, NULL, NULL);
+	gchar **keysh = g_key_file_get_keys(configh, group, NULL, NULL);
 
+	/* move/merge keysh into keys */
 	if (!keys)
-		keys = g_key_file_get_keys(configh, group, NULL, NULL);
+		keys = keysh;
+	else if (keysh)
+	{
+		gchar **strv = g_new0(gchar*, g_strv_length(keys) + g_strv_length(keysh) + 1);
+		gchar **read, **write = strv;
+
+		/* may have same key in each, but home will override so it's OK */
+		foreach_strv(read, keys)
+			*write++ = *read;
+		foreach_strv(read, keysh)
+			*write++ = *read;
+		g_free(keys);
+		g_free(keysh);
+		keys = strv;
+	}
 
 	if (keys)
 	{
-		gchar **values = g_new0(gchar*, g_strv_length(keys));
+		gchar **values = g_new0(gchar*, g_strv_length(keys) + 1);
 
 		style_sets[ft->id].property_keys = keys;
 		style_sets[ft->id].property_values = values;
