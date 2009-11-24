@@ -1,3 +1,10 @@
+2009-11-24  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/highlighting.c:
+   Make stylesets take a ft_id argument so they can be reused fully with
+   custom filetypes, so custom styles and keywords can be set.
+
+
 2009-11-23  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * tagmanager/php.c:
