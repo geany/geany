@@ -63,13 +63,13 @@ static vString* Keyword=NULL;
 static vString* TagName=NULL;
 
 static kindOption VhdlKinds [] = {
- { TRUE, 'c', "constant",     "constants" },
- { TRUE, 't', "type",         "types" },
+ { TRUE, 'c', "other",        "constants" },
+ { TRUE, 't', "typedef",      "types" },
  { TRUE, 'v', "variable",     "variables" },
  { TRUE, 'a', "atribute",     "atributes" },
- { TRUE, 's', "signal",       "signals" },
+ { TRUE, 's', "struct",       "signals" },
  { TRUE, 'f', "function",     "functions" },
- { TRUE, 'p', "procedure",    "procedure" },
+ { TRUE, 'p', "prototype",    "procedure" },
  { TRUE, 'k', "component",    "components" },
  { TRUE, 'l', "package",      "packages" },
  { TRUE, 'm', "process",      "process" },

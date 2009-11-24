@@ -752,10 +752,11 @@ static void add_top_level_items(GeanyDocument *doc)
 				/*&(tv_iters.tag_member), _("Members"),*/
 				/*&(tv_iters.tag_macro), _("Macros"),*/
 				&(tv_iters.tag_variable), _("Variables"), "classviewer-var",
+				&(tv_iters.tag_struct), _("Signals"), NULL,
+				&(tv_iters.tag_namespace), _("Package"), "classviewer-namespace",
+				&(tv_iters.tag_type), _("Types"), NULL,
+				&(tv_iters.tag_other), _("Other"), "classviewer-other",
 				NULL);
-				/*&(tv_iters.tag_namespace), _("Namespaces"),*/
-				/*&(tv_iters.tag_struct), _("Signals"),*/
-				/*&(tv_iters.tag_other), _("Other"), NULL);*/
 			break;
 		}
 		case GEANY_FILETYPES_JAVA:
