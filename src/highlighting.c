@@ -3164,6 +3164,7 @@ static void read_properties(GeanyFiletype *ft, GKeyFile *config, GKeyFile *confi
 void highlighting_init_styles(gint filetype_idx, GKeyFile *config, GKeyFile *configh)
 {
 	GeanyFiletype *ft = filetypes[filetype_idx];
+	gint lexer_id = ft->lexer_filetype ? ft->lexer_filetype->id : ft->id;
 
 	if (!style_sets)
 		style_sets = g_new0(StyleSet, filetypes_array->len);
@@ -3175,7 +3176,7 @@ void highlighting_init_styles(gint filetype_idx, GKeyFile *config, GKeyFile *con
 	if (filetype_idx != GEANY_FILETYPES_NONE)
 		filetypes_load_config(GEANY_FILETYPES_NONE, FALSE);
 
-	switch (filetype_idx)
+	switch (lexer_id)
 	{
 		init_styleset_case(GEANY_FILETYPES_NONE,	styleset_common_init);
 		init_styleset_case(GEANY_FILETYPES_ADA,		styleset_ada_init);
@@ -3233,7 +3234,7 @@ void highlighting_init_styles(gint filetype_idx, GKeyFile *config, GKeyFile *con
 /* lang_name is the name used for the styleset_foo function, e.g. foo. */
 #define styleset_case(ft_id, styleset_func) \
 	case (ft_id): \
-		styleset_func(sci, ft_id); \
+		styleset_func(sci, ft->id); \
 		break
 
 /** Setup highlighting and other visual settings.

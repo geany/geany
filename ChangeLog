@@ -8,6 +8,8 @@
    have properties set.
  * src/symbols.c, tagmanager/vhdl.c:
    Parse VHDL signals.
+ * src/highlighting.c:
+   Fix lexer settings for custom filetypes.
 
 
 2009-11-23  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
