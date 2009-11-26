@@ -1,3 +1,10 @@
+2009-11-26  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/about.c, src/symbols.c, THANKS, tagmanager/vhdl.c:
+   Fix VHDL symbol list to display all tags (patch from Kelvin Gardiner,
+   thanks).
+
+
 2009-11-24  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/highlighting.c:

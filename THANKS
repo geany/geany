@@ -72,6 +72,7 @@ Lex Trotman <elextr<at>gmail<dot>com> - Build commands configuration improvement
 Ross McKay <rosko<at>zeta<dot>org<dot>au> - ASP preferred language option
 Alexey Antipov <1a_antipov(at)mail(dot)ru> - Apply file open encoding only to non-Unicode files
 Jörn Reder <joern(at)zyn(dot)de> - --socket-file command line option patch
+Kelvin Gardiner <kelvin.mbmn.net> - VHDL symbol list patch
 
 Translators:
 ------------

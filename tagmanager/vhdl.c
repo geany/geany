@@ -43,7 +43,8 @@ typedef enum {
     K_PROCESS,
     K_ENTITY,
     K_ARCHITECTURE,
-    K_PORT
+    K_PORT,
+    K_ALIAS
 } vhdlKind;
 
 typedef struct {
@@ -63,20 +64,21 @@ static vString* Keyword=NULL;
 static vString* TagName=NULL;
 
 static kindOption VhdlKinds [] = {
- { TRUE, 'c', "other",        "constants" },
+ { TRUE, 'c', "variable",     "constants" },
  { TRUE, 't', "typedef",      "types" },
  { TRUE, 'v', "variable",     "variables" },
  { TRUE, 'a', "atribute",     "atributes" },
- { TRUE, 's', "struct",       "signals" },
+ { TRUE, 's', "variable",     "signals" },
  { TRUE, 'f', "function",     "functions" },
- { TRUE, 'p', "prototype",    "procedure" },
- { TRUE, 'k', "component",    "components" },
- { TRUE, 'l', "package",      "packages" },
- { TRUE, 'm', "process",      "process" },
- { TRUE, 'n', "entity",       "entity" },
- { TRUE, 'o', "architecture", "architecture" },
- { TRUE, 'u', "port",         "ports" }
-};
+ { TRUE, 'p', "function",     "procedure" },
+ { TRUE, 'k', "member",       "components" },
+ { TRUE, 'l', "namespace",    "packages" },
+ { TRUE, 'm', "member",       "process" },
+ { TRUE, 'n', "class",        "entity" },
+ { TRUE, 'o', "struct",       "architecture" },
+ { TRUE, 'u', "port",         "ports" },
+ { TRUE, 'v', "typedef",      "alias" }
+ };
 
 static keywordAssoc VhdlKeywordTable [] = {
     { "constant",     K_CONSTANT },
@@ -93,7 +95,8 @@ static keywordAssoc VhdlKeywordTable [] = {
     { "architecture", K_ARCHITECTURE },
     { "inout",        K_PORT },
     { "in",           K_PORT },
-    { "out",          K_PORT }
+    { "out",          K_PORT },
+    { "alias",        K_ALIAS }
 };
 
 

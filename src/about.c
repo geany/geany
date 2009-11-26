@@ -87,7 +87,7 @@ static const gchar *contributors =
 "Dirk Weber, Elias Pschernig, Eric Forgeot, Eugene Arshinov, Felipe Pena, François Cami, "
 "Giuseppe Torelli, Guillaume de Rorthais, Guillaume Hoffmann, Herbert Voss, Jason Oster, "
 "Jean-François Wauthy, Jeff Pohlmeyer, Jesse Mayes, John Gabriele, Jon Strait, Josef Whiter, "
-"Jörn Reder, Kevin Ellwood, Kristoffer A. Tjernås, Lex Trotman, Marko Peric, Matti Mårds, "
+"Jörn Reder, Kelvin Gardiner, Kevin Ellwood, Kristoffer A. Tjernås, Lex Trotman, Marko Peric, Matti Mårds, "
 "Moritz Barsnick, Peter Strand, Philipp Gildein, Pierre Joye, Rob van der Linde, Robert McGinley, "
 "Roland Baudin, Ross McKay, S Jagannathan, Saleem Abdulrasool, "
 "Sebastian Kraft, Shiv, Slava Semushin, Stefan Oltmanns, Tamim, Thomas Martitz, Tomás Vírseda, "
