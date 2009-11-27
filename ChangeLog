@@ -1,3 +1,10 @@
+2009-11-26  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * src/about.c, THANKS:
+   Add Peter Scholtens and Ayke van Laethem to list of translators. Move
+   Kurt de Bree into section of previous translators.
+
+
 2009-11-26  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/about.c, src/symbols.c, THANKS, tagmanager/vhdl.c:
