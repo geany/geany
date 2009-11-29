@@ -386,6 +386,23 @@ static void setup_paths(void)
 
 
 /**
+ *  Check whether the main window has been realized.
+ *  This is an easy indicator whether Geany is right now starting up (main window is not
+ *  yet realized) or whether it has finished the startup process (main window is realized).
+ *  This is because the main window is realized (i.e. actually drawn on the screen) at the
+ *  end of the startup process.
+ *
+ *  @return @c TRUE if the Geany main window has been realized or @c FALSE otherwise.
+ *
+ *  @since 0.19
+ **/
+gboolean main_is_realized(void)
+{
+	return main_status.main_window_realized;
+}
+
+
+/**
  *  Initialises the gettext translation system.
  *  This is a convenience function to set up gettext for internationalisation support
  *  in external plugins. You should call this function early in @ref plugin_init().

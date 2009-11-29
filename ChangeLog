@@ -1,3 +1,10 @@
+2009-11-29  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/main.c, src/main.h, src/plugins.c, src/plugindata.h,
+   plugins/geanyfunctions.h:
+   Add main_is_realized() to the plugin API.
+
+
 2009-11-26  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * src/about.c, THANKS:

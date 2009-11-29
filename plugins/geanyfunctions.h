@@ -312,5 +312,7 @@
 	geany_functions->p_main->reload_configuration
 #define main_locale_init \
 	geany_functions->p_main->locale_init
+#define main_is_realized \
+	geany_functions->p_main->is_realized
 
 #endif

@@ -290,7 +290,8 @@ static NavQueueFuncs navqueue_funcs = {
 
 static MainFuncs main_funcs = {
 	&main_reload_configuration,
-	&main_locale_init
+	&main_locale_init,
+	&main_is_realized
 };
 
 static GeanyFunctions geany_functions = {
