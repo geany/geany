@@ -830,6 +830,26 @@ static void load_settings(void)
 }
 
 
+void main_load_project_from_command_line(const gchar *locale_filename, gboolean use_session)
+{
+	gchar *pfile = NULL;
+
+	if (utils_is_uri(locale_filename))
+		pfile = utils_get_path_from_uri(locale_filename);
+	else
+		pfile = g_strdup(locale_filename);
+
+	if (pfile != NULL)
+	{
+		if (use_session)
+			project_load_file_with_session(pfile);
+		else
+			project_load_file(pfile);
+	}
+	g_free(pfile);
+}
+
+
 static void load_startup_files(gint argc, gchar **argv)
 {
 	gboolean load_project_from_cl = FALSE;
@@ -845,15 +865,7 @@ static void load_startup_files(gint argc, gchar **argv)
 		{
 			if (load_project_from_cl)
 			{
-				gchar *pfile = argv[1];
-				if (utils_is_uri(argv[1]))
-					pfile = utils_get_path_from_uri(argv[1]);
-				if (pfile != NULL)
-				{
-					project_load_file(pfile);
-					if (pfile != argv[1])
-						g_free(pfile);
-				}
+				main_load_project_from_command_line(argv[1], FALSE);
 			}
 			else if (cl_options.load_session && !cl_options.new_instance)
 				load_session_project_file();

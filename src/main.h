@@ -66,4 +66,6 @@ void main_locale_init(const gchar *locale_dir, const gchar *gettext_package);
 
 gboolean main_is_realized(void);
 
+void main_load_project_from_command_line(const gchar *locale_filename, gboolean use_session);
+
 #endif

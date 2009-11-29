@@ -504,7 +504,12 @@ static void handle_input_filename(const gchar *buf)
 
 	locale_filename = utils_get_locale_from_utf8(utf8_filename);
 	if (locale_filename)
-		main_handle_filename(locale_filename);
+	{
+		if (g_str_has_suffix(locale_filename, ".geany"))
+			main_load_project_from_command_line(locale_filename, TRUE);
+		else
+			main_handle_filename(locale_filename);
+	}
 	g_free(utf8_filename);
 	g_free(locale_filename);
 }
