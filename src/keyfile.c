@@ -435,6 +435,9 @@ static void save_dialog_prefs(GKeyFile *config)
 
 		if (!g_key_file_has_key(config, "VTE", "emulation", NULL))	/* hidden */
 			g_key_file_set_string(config, "VTE", "emulation", vc->emulation);
+		if (!g_key_file_has_key(config, "VTE", "send_selection_unsafe", NULL))	/* hidden */
+			g_key_file_set_boolean(config, "VTE", "send_selection_unsafe",
+				vc->send_selection_unsafe);
 		g_key_file_set_string(config, "VTE", "font", vc->font);
 		g_key_file_set_boolean(config, "VTE", "scroll_on_key", vc->scroll_on_key);
 		g_key_file_set_boolean(config, "VTE", "scroll_on_out", vc->scroll_on_out);
@@ -731,6 +734,8 @@ static void load_dialog_prefs(GKeyFile *config)
 			vte_info.dir = g_strdup("/");
 
 		vc->emulation = utils_get_setting_string(config, "VTE", "emulation", "xterm");
+		vc->send_selection_unsafe = utils_get_setting_boolean(config, "VTE",
+			"send_selection_unsafe", FALSE);
 		vc->shell = utils_get_setting_string(config, "VTE", "shell", shell);
 		vc->font = utils_get_setting_string(config, "VTE", "font", "Monospace 10");
 		vc->scroll_on_key = utils_get_setting_boolean(config, "VTE", "scroll_on_key", TRUE);

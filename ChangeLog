@@ -7,6 +7,11 @@
    Update partly outdated and wrong doc comment.
  * src/main.c, src/main.h, src/socket.c:
    Allow opening Geany projects remotely.
+ * doc/geany.txt, doc/geany.html, src/bte.c, src/vte.h, src/keyfile.c:
+   Add a hidden pref to allow executing text which was sent to the
+   terminal directly, i.e. do not strip trailing newline characters.
+   Also fix the stripping of trailing newline characters if there was
+   more than one.
 
 
 2009-11-26  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>

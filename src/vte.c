@@ -948,9 +948,23 @@ void vte_send_selection_to_vte(void)
 
 	len = strlen(text);
 
-	/* Make sure there is no newline character at the end to prevent unwanted execution */
-	if (text[len-1] == '\n' || text[len-1] == '\r')
-		text[len-1] = '\0';
+	if (vc->send_selection_unsafe)
+	{	/* Explicitly append a trailing newline character to get the command executed,
+		   this is disabled by default as it could cause all sorts of damage. */
+		if (text[len-1] != '\n' && text[len-1] != '\r')
+		{
+			setptr(text, g_strconcat(text, "\n", NULL));
+			len++;
+		}
+	}
+	else
+	{	/* Make sure there is no newline character at the end to prevent unwanted execution */
+		while (text[len-1] == '\n' || text[len-1] == '\r')
+		{
+			text[len-1] = '\0';
+			len--;
+		}
+	}
 
 	vf->vte_terminal_feed_child(VTE_TERMINAL(vc->vte), text, len);
 
