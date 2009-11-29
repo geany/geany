@@ -3,6 +3,8 @@
  * src/main.c, src/main.h, src/plugins.c, src/plugindata.h,
    plugins/geanyfunctions.h:
    Add main_is_realized() to the plugin API.
+ * tagmanager/include/tm_tagmanager.h:
+   Update partly outdated and wrong doc comment.
 
 
 2009-11-26  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
