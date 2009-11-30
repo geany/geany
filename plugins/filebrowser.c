@@ -728,6 +728,15 @@ static void on_filter_activate(GtkEntry *entry, gpointer user_data)
 }
 
 
+static void on_filter_clear(GtkEntry *entry, gint icon_pos,
+							GdkEvent *event, gpointer data)
+{
+	setptr(filter, g_strdup("*"));
+
+	refresh();
+}
+
+
 static void prepare_file_view(void)
 {
 	GtkCellRenderer *text_renderer, *icon_renderer;
@@ -797,14 +806,16 @@ static GtkWidget *make_toolbar(void)
 	g_signal_connect(wid, "clicked", G_CALLBACK(on_current_path), NULL);
 	gtk_container_add(GTK_CONTAINER(toolbar), wid);
 
-	wid = (GtkWidget *) gtk_separator_tool_item_new();
-	gtk_container_add(GTK_CONTAINER(toolbar), wid);
+	if (gtk_check_version(2, 15, 2) != NULL)
+	{
+		wid = (GtkWidget *) gtk_separator_tool_item_new();
+		gtk_container_add(GTK_CONTAINER(toolbar), wid);
 
-	wid = (GtkWidget *) gtk_tool_button_new_from_stock(GTK_STOCK_CLEAR);
-	ui_widget_set_tooltip_text(wid, _("Clear the filter"));
-	g_signal_connect(wid, "clicked", G_CALLBACK(on_clear_filter), NULL);
-	gtk_container_add(GTK_CONTAINER(toolbar), wid);
-
+		wid = (GtkWidget *) gtk_tool_button_new_from_stock(GTK_STOCK_CLEAR);
+		ui_widget_set_tooltip_text(wid, _("Clear the filter"));
+		g_signal_connect(wid, "clicked", G_CALLBACK(on_clear_filter), NULL);
+		gtk_container_add(GTK_CONTAINER(toolbar), wid);
+	}
 	return toolbar;
 }
 
@@ -818,6 +829,14 @@ static GtkWidget *make_filterbar(void)
 	label = gtk_label_new(_("Filter:"));
 
 	filter_entry = gtk_entry_new();
+
+	if (gtk_check_version(2, 15, 2) == NULL)
+	{
+		ui_entry_add_clear_icon(GTK_ENTRY(filter_entry));
+		g_signal_connect(filter_entry, "icon-release", G_CALLBACK(on_filter_clear), NULL);
+	}
+	ui_widget_set_tooltip_text(filter_entry,
+		_("Filter your files with usual wildcards"));
 	g_signal_connect(filter_entry, "activate", G_CALLBACK(on_filter_activate), NULL);
 
 	gtk_box_pack_start(GTK_BOX(filterbar), label, FALSE, FALSE, 0);

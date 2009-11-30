@@ -1,3 +1,10 @@
+2009-11-30  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * plugins/filebrowser.c:
+   Add an in-entry clear icon to the filebrowser plugin's filter
+   entry (patch by Dominic Hopf, thanks).
+
+
 2009-11-29  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/main.c, src/main.h, src/plugins.c, src/plugindata.h,
