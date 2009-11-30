@@ -9,6 +9,8 @@
  * plugins/filebrowser.c:
    Add an in-entry clear icon to the filebrowser plugin's filter
    entry (patch by Dominic Hopf, thanks).
+ * src/prefs.c, src/ui_uitls.c:
+   Fix two compiler warnings about possibly uninitialised variables.
 
 
 2009-11-29  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

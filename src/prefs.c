@@ -1459,7 +1459,7 @@ static void on_prefs_print_page_header_toggled(GtkToggleButton *togglebutton, gp
 static void open_preferences_help(void)
 {
 	gchar *uri;
-	const gchar *label, *suffix;
+	const gchar *label, *suffix = NULL;
 	GtkNotebook *notebook = GTK_NOTEBOOK(
 		ui_lookup_widget(ui_widgets.prefs_dialog, "notebook2"));
 	gint page_nr = gtk_notebook_get_current_page(notebook);

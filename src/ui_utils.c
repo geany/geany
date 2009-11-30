@@ -1649,7 +1649,7 @@ static void ui_path_box_open_clicked(GtkButton *button, gpointer user_data)
 	GtkEntry *entry =
 		(GtkEntry *) g_object_get_data(G_OBJECT(path_box), "entry");
 	const gchar *title = g_object_get_data(G_OBJECT(path_box), "title");
-	gchar *utf8_path;
+	gchar *utf8_path = NULL;
 
 	/* TODO: extend for other actions */
 	g_return_if_fail(action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER ||
