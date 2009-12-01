@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Geany 0.19\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-11-26 22:10+0100\n"
+"POT-Creation-Date: 2009-12-01 21:46+0100\n"
 "PO-Revision-Date: 2009-11-23 22:24+0100\n"
 "Last-Translator: Ayke van Laethem <aykevanlaethem@gmail.com>\n"
 "Language-Team: Dutch <geany-i18n@uvena.de>\n"
@@ -31,53 +31,53 @@ msgstr "Geany"
 msgid "Integrated Development Environment"
 msgstr "Geintegreerde Ontwikkel Omgeving"
 
-#: ../src/about.c:143
+#: ../src/about.c:144
 msgid "About Geany"
 msgstr "Over Geany"
 
-#: ../src/about.c:193
+#: ../src/about.c:194
 msgid "A fast and lightweight IDE"
 msgstr "Een snel en lichtgewicht IDE"
 
-#: ../src/about.c:214
+#: ../src/about.c:215
 #, c-format
 msgid "(built on or after %s)"
 msgstr "(gebouwd op of na %s)"
 
 #. gtk_container_add(GTK_CONTAINER(info_box), cop_label);
-#: ../src/about.c:245
+#: ../src/about.c:246
 msgid "Info"
 msgstr "Info"
 
-#: ../src/about.c:261
+#: ../src/about.c:262
 msgid "Developers"
 msgstr "Ontwikkelaars"
 
-#: ../src/about.c:270
+#: ../src/about.c:271
 msgid "maintainer"
 msgstr "beheerder"
 
-#: ../src/about.c:278
+#: ../src/about.c:279
 msgid "developer"
 msgstr "ontwikkelaar"
 
-#: ../src/about.c:286
+#: ../src/about.c:287
 msgid "translation maintainer"
 msgstr "vertalingscoördinator"
 
-#: ../src/about.c:295
+#: ../src/about.c:296
 msgid "Translators"
 msgstr "Vertalers"
 
-#: ../src/about.c:315
+#: ../src/about.c:316
 msgid "Previous Translators"
 msgstr "Vorige vertalers"
 
-#: ../src/about.c:336
+#: ../src/about.c:337
 msgid "Contributors"
 msgstr "Ontwikkelaars"
 
-#: ../src/about.c:346
+#: ../src/about.c:347
 #, c-format
 msgid ""
 "Some of the many contributors (for a more detailed list, see the file %s):"
@@ -85,15 +85,15 @@ msgstr ""
 "Enkele van de vele ontwikkelaars (voor een gedetailleerde lijst, raadpleeg "
 "bestand %s):"
 
-#: ../src/about.c:372
+#: ../src/about.c:373
 msgid "Credits"
 msgstr "Credits"
 
-#: ../src/about.c:386
+#: ../src/about.c:387
 msgid "License"
 msgstr "Licentie"
 
-#: ../src/about.c:395
+#: ../src/about.c:396
 msgid ""
 "License text could not be found, please visit http://www.gnu.org/licenses/"
 "gpl-2.0.txt to view it online."
@@ -176,7 +176,7 @@ msgstr "Zoek Vor_ige Fout"
 
 #: ../src/build.c:1332
 msgid "_Set Build Commands"
-msgstr "Bouwcommando's instellen"
+msgstr "_Bouwcommando's instellen"
 
 #: ../src/build.c:1610 ../src/toolbar.c:352
 msgid "Build the current file"
@@ -1019,7 +1019,7 @@ msgstr "Verkeerde reguliere expressie voor bestandstype %s; %s"
 msgid "untitled"
 msgstr "naamloos"
 
-#: ../src/highlighting.c:3369 ../src/main.c:772 ../src/socket.c:164
+#: ../src/highlighting.c:3369 ../src/main.c:789 ../src/socket.c:164
 #: ../src/templates.c:339
 #, c-format
 msgid "Could not find file '%s'."
@@ -1027,7 +1027,7 @@ msgstr "Kan bestand %s niet vinden."
 
 #: ../src/highlighting.c:3418
 msgid "_Color Schemes"
-msgstr "Kleurkiezer"
+msgstr "_Kleurkiezer"
 
 #: ../src/highlighting.c:3425
 msgid "_Default"
@@ -1056,7 +1056,7 @@ msgstr "A_lles Opslaan"
 # Alle letters zijn al in gebruik als hotkey.
 #: ../src/interface.c:359
 msgid "R_eload As"
-msgstr "Herladen als"
+msgstr "He_rladen als"
 
 #: ../src/interface.c:370 ../src/interface.c:556 ../src/interface.c:676
 #: ../src/interface.c:690 ../src/interface.c:944 ../src/interface.c:954
@@ -1090,11 +1090,11 @@ msgstr ""
 
 #: ../src/interface.c:490
 msgid "T_oggle Case of Selection"
-msgstr "Maak selectie onder- of bovenkast"
+msgstr "_Maak selectie onder- of bovenkast"
 
 #: ../src/interface.c:494 ../src/keybindings.c:270
 msgid "_Transpose Current Line"
-msgstr "Verwissel huidige regel"
+msgstr "_Verwissel huidige regel"
 
 #: ../src/interface.c:503
 msgid "_Comment Line(s)"
@@ -1118,7 +1118,7 @@ msgstr "In_springing verkleinen"
 
 #: ../src/interface.c:536 ../src/keybindings.c:354
 msgid "_Smart Line Indent"
-msgstr ""
+msgstr "Sli_mme regel inspringing"
 
 #: ../src/interface.c:545
 msgid "_Send Selection to Terminal"
@@ -1211,7 +1211,7 @@ msgstr "Voo_rkeuren"
 
 #: ../src/interface.c:706 ../src/keybindings.c:382
 msgid "P_lugin Preferences"
-msgstr "Plugin voorkeuren"
+msgstr "Plu_gin voorkeuren"
 
 #: ../src/interface.c:714
 msgid "_Search"
@@ -1368,7 +1368,7 @@ msgstr "Converteren en instellen op CR (_Mac)"
 
 #: ../src/interface.c:987
 msgid "_Strip Trailing Spaces"
-msgstr "Lege spaties aan regeleinden verwijderen"
+msgstr "_Lege spaties aan regeleinden verwijderen"
 
 #: ../src/interface.c:991
 msgid "_Replace Tabs by Spaces"
@@ -1436,7 +1436,7 @@ msgstr "_Woorden tellen"
 
 #: ../src/interface.c:1113
 msgid "Load Ta_gs"
-msgstr "Labels laden"
+msgstr "_Labels laden"
 
 #: ../src/interface.c:1117 ../src/interface.c:1124
 msgid "_Help"
@@ -1492,7 +1492,7 @@ msgstr "Enkel _tekst"
 
 #: ../src/interface.c:1910 ../src/interface.c:3369
 msgid "_Large Icons"
-msgstr "Grote pictogrammen"
+msgstr "_Grote pictogrammen"
 
 #: ../src/interface.c:1915 ../src/interface.c:3361
 msgid "_Small Icons"
@@ -1500,11 +1500,11 @@ msgstr "_Kleine pictogrammen"
 
 #: ../src/interface.c:1920 ../src/interface.c:3393
 msgid "_Very Small Icons"
-msgstr "Miniscule pictogrammen"
+msgstr "_Miniscule pictogrammen"
 
 #: ../src/interface.c:1931
 msgid "_Customize Toolbar"
-msgstr "Werkbalk aanpassen"
+msgstr "Werkbalk _aanpassen"
 
 #: ../src/interface.c:1939
 msgid "_Hide Toolbar"
@@ -1892,11 +1892,11 @@ msgstr "Interface"
 
 #: ../src/interface.c:3309
 msgid "Show T_oolbar"
-msgstr "Werkbalk weergeven"
+msgstr "_Werkbalk weergeven"
 
 #: ../src/interface.c:3313
 msgid "_Append Toolbar to the Menu"
-msgstr "Voeg de toolbar toe aan het menu"
+msgstr "_Voeg de toolbar toe aan het menu"
 
 #: ../src/interface.c:3316
 msgid "Pack the toolbar to the main menu to save vertical space"
@@ -2487,7 +2487,7 @@ msgstr ""
 "worden, uitgedrukt in seconden. Nul zet de controle uit."
 
 #: ../src/interface.c:4194 ../src/prefs.c:1482 ../src/symbols.c:593
-#: ../plugins/filebrowser.c:1031
+#: ../plugins/filebrowser.c:1050
 msgid "Files"
 msgstr "Bestanden"
 
@@ -2720,7 +2720,6 @@ msgid "Use native GTK printing"
 msgstr "Gebruik standaard GTK printing"
 
 #: ../src/interface.c:4656 ../src/prefs.c:1490
-#, fuzzy
 msgid "Printing"
 msgstr "Afdrukken"
 
@@ -2728,7 +2727,7 @@ msgstr "Afdrukken"
 msgid "Project Properties"
 msgstr "Eigenschappen"
 
-#: ../src/keybindings.c:222 ../src/plugins.c:1108
+#: ../src/keybindings.c:222 ../src/plugins.c:1109
 msgid "File"
 msgstr "Bestand"
 
@@ -3234,11 +3233,11 @@ msgstr "Volgende sneltoetsen zijn gedefinieert:"
 msgid "Switch to Document"
 msgstr "Schakel naar document"
 
-#: ../src/keyfile.c:823
+#: ../src/keyfile.c:828
 msgid "Type here what you want, use it as a notice/scratch board"
 msgstr "Type hier wat u wilt, gebruik het als notitie/krabbelbord"
 
-#: ../src/keyfile.c:1027
+#: ../src/keyfile.c:1032
 msgid "Failed to load one or more session files."
 msgstr "Kon bestanden van vorige sessies niet laden."
 
@@ -3326,24 +3325,24 @@ msgstr "Uitvoerig toelichten"
 msgid "Show version and exit"
 msgstr "Toon versie en sluit af"
 
-#: ../src/main.c:471
+#: ../src/main.c:488
 msgid "[FILES...]"
 msgstr "[BESTANDEN...]"
 
-#: ../src/main.c:488
+#: ../src/main.c:505
 #, c-format
 msgid "(built on %s with GTK %d.%d.%d, GLib %d.%d.%d)"
 msgstr "(gebouwd op %s met GTK %d.%d.%d, GLib %d.%d.%d)"
 
-#: ../src/main.c:584
+#: ../src/main.c:601
 msgid "Move it now?"
 msgstr "Nu verplaatsen?"
 
-#: ../src/main.c:586
+#: ../src/main.c:603
 msgid "Geany needs to move your old configuration directory before starting."
 msgstr "Geany moet je oude configuratiemap verplaatsen voor het starten."
 
-#: ../src/main.c:595
+#: ../src/main.c:612
 #, c-format
 msgid ""
 "Your configuration directory has been successfully moved from \"%s\" to \"%s"
@@ -3352,7 +3351,7 @@ msgstr "Je configuratiemap is succesvol verplaatst van \"%s\" naar \"%s\"."
 
 #. for translators: the third %s in brackets is the error message which
 #. * describes why moving the dir didn't work
-#: ../src/main.c:605
+#: ../src/main.c:622
 #, c-format
 msgid ""
 "Your old configuration directory \"%s\" could not be moved to \"%s\" (%s). "
@@ -3361,7 +3360,7 @@ msgstr ""
 "Je oude configuratiemap \"%s\" kon niet worden verplaatst naar \"%s\" (%s). "
 "Verplaats de map alstublieft naar de nieuwe plaats."
 
-#: ../src/main.c:686
+#: ../src/main.c:703
 #, c-format
 msgid ""
 "Configuration directory could not be created (%s).\n"
@@ -3373,17 +3372,17 @@ msgstr ""
 "configuratiemap.\n"
 "Geany sowieso starten?"
 
-#: ../src/main.c:983
+#: ../src/main.c:1012
 #, c-format
 msgid "This is Geany %s."
 msgstr "Dit is Geany %s."
 
-#: ../src/main.c:985
+#: ../src/main.c:1014
 #, c-format
 msgid "Configuration directory could not be created (%s)."
 msgstr "Configuratiemap kon niet worden aangemaakt (%s)."
 
-#: ../src/main.c:1205
+#: ../src/main.c:1234
 #, fuzzy
 msgid "Configuration files reloaded."
 msgstr "%s configuratiebestand, bewerk het inien nodig"
@@ -3400,7 +3399,7 @@ msgstr "_Alles kopiëren"
 msgid "_Hide Message Window"
 msgstr "Ver_berg berichtenvenster"
 
-#: ../src/plugins.c:424
+#: ../src/plugins.c:425
 #, c-format
 msgid ""
 "The plugin \"%s\" is not binary compatible with this release of Geany - "
@@ -3409,11 +3408,11 @@ msgstr ""
 "Plugin \"%s\" is binair niet compatibel met deze release van Geany - "
 "hercompileren vereist."
 
-#: ../src/plugins.c:866
+#: ../src/plugins.c:867
 msgid "_Plugin Manager"
 msgstr "_Plugin beheer"
 
-#: ../src/plugins.c:1024
+#: ../src/plugins.c:1025
 #, c-format
 msgid ""
 "Plugin: %s %s\n"
@@ -3424,27 +3423,27 @@ msgstr ""
 "Beschrijving: %s\n"
 "Auteur(s): %s"
 
-#: ../src/plugins.c:1096
+#: ../src/plugins.c:1097
 msgid "Active"
 msgstr "Actief"
 
-#: ../src/plugins.c:1102
+#: ../src/plugins.c:1103
 msgid "Plugin"
 msgstr "Plugin"
 
-#: ../src/plugins.c:1126
+#: ../src/plugins.c:1127
 msgid "No plugins available."
 msgstr "Geen plugins beschikbaar"
 
-#: ../src/plugins.c:1206
+#: ../src/plugins.c:1207
 msgid "Plugins"
 msgstr "Plugins"
 
-#: ../src/plugins.c:1226
+#: ../src/plugins.c:1227
 msgid "Choose which plugins should be loaded at startup:"
 msgstr "Kies welke plugins bij het starten geladen moeten worden:"
 
-#: ../src/plugins.c:1238
+#: ../src/plugins.c:1239
 msgid "<b>Plugin details:</b>"
 msgstr "<b>Plugin details:</b>"
 
@@ -3820,7 +3819,7 @@ msgstr "_Volgende"
 
 #: ../src/search.c:396 ../src/search.c:535 ../src/search.c:711
 msgid "_Search for:"
-msgstr "_Zoek naar:"
+msgstr "Zoek _naar:"
 
 #. Now add the multiple match options
 #: ../src/search.c:424
@@ -3876,7 +3875,7 @@ msgstr ""
 
 #: ../src/search.c:696
 msgid "_Directory:"
-msgstr "Map:"
+msgstr "_Map:"
 
 #: ../src/search.c:727
 msgid "E_ncoding:"
@@ -3900,14 +3899,13 @@ msgstr "_Uitgebreide reguliere expressies"
 
 #: ../src/search.c:776
 msgid "_Recurse in subfolders"
-msgstr "Daal af in submappen"
+msgstr "_Daal af in submappen"
 
 #: ../src/search.c:792
 msgid "_Invert search results"
-msgstr "Zoekresultaten omkeren"
+msgstr "Zoekresultaten _omkeren"
 
 #: ../src/search.c:797
-#, fuzzy
 msgid "Invert the sense of matching, to select non-matching lines"
 msgstr ""
 "Keert de zoekresultaten om, om niet-overeenkomstige regels te selecteren"
@@ -4728,7 +4726,7 @@ msgstr ""
 "te brengen (standaard: F10). Dit kan nuttig zijn als u bijv Midnight "
 "Commander gebruikt binnenin de VTE."
 
-#: ../src/vte.c:868 ../plugins/filebrowser.c:1144
+#: ../src/vte.c:868 ../plugins/filebrowser.c:1163
 msgid "Follow the path of the current file"
 msgstr "Pad van het huidige bestand volgen"
 
@@ -5029,47 +5027,51 @@ msgstr "_Zoek in bestanden"
 msgid "Show _Hidden Files"
 msgstr "Ver_borgen bestanden weergeven"
 
-#: ../plugins/filebrowser.c:781
+#: ../plugins/filebrowser.c:790
 msgid "Up"
 msgstr "Omhoog"
 
-#: ../plugins/filebrowser.c:786
+#: ../plugins/filebrowser.c:795
 msgid "Refresh"
 msgstr "Vernieuwen"
 
-#: ../plugins/filebrowser.c:791
+#: ../plugins/filebrowser.c:800
 msgid "Home"
 msgstr "Thuis"
 
-#: ../plugins/filebrowser.c:796
+#: ../plugins/filebrowser.c:805
 msgid "Set path from document"
 msgstr "Haal pad van document"
 
-#: ../plugins/filebrowser.c:804
+#: ../plugins/filebrowser.c:815
 msgid "Clear the filter"
 msgstr "Filter leegmaken"
 
-#: ../plugins/filebrowser.c:818
+#: ../plugins/filebrowser.c:829
 msgid "Filter:"
 msgstr "Filter"
 
-#: ../plugins/filebrowser.c:1037
+#: ../plugins/filebrowser.c:839
+msgid "Filter your files with usual wildcards"
+msgstr "Zeef de bestanden met de gebruikelijke jokertekens"
+
+#: ../plugins/filebrowser.c:1056
 msgid "Focus File List"
 msgstr "Focus bestandenlijst"
 
-#: ../plugins/filebrowser.c:1039
+#: ../plugins/filebrowser.c:1058
 msgid "Focus Path Entry"
 msgstr "Focus pad invoerveld"
 
-#: ../plugins/filebrowser.c:1085 ../plugins/saveactions.c:470
+#: ../plugins/filebrowser.c:1104 ../plugins/saveactions.c:470
 msgid "Plugin configuration directory could not be created."
 msgstr "Plugin configuratiemap kon niet worden aangemaakt."
 
-#: ../plugins/filebrowser.c:1112
+#: ../plugins/filebrowser.c:1131
 msgid "External open command:"
 msgstr "Extern open commando:"
 
-#: ../plugins/filebrowser.c:1121
+#: ../plugins/filebrowser.c:1140
 #, c-format
 msgid ""
 "The command to execute when using \"Open with\". You can use %f and %d "
@@ -5084,16 +5086,16 @@ msgstr ""
 "%d wordt vervangen door het pad van het geselecteerde bestand zonder de "
 "bestandsnaam"
 
-#: ../plugins/filebrowser.c:1129
+#: ../plugins/filebrowser.c:1148
 msgid "Show hidden files"
 msgstr "Verborgen bestanden weergeven"
 
 #
-#: ../plugins/filebrowser.c:1135
+#: ../plugins/filebrowser.c:1154
 msgid "Hide object files"
 msgstr "Verberg object bestanden"
 
-#: ../plugins/filebrowser.c:1139
+#: ../plugins/filebrowser.c:1158
 msgid ""
 "Don't show generated object files in the file browser, this includes *.o, *."
 "obj. *.so, *.dll, *.a, *.lib"
@@ -5101,12 +5103,12 @@ msgstr ""
 "Verberg gegenereerde object bestanden in de bestandbrowser, inclusief *.o, *."
 "obj. *.so, *.dll, *.a, *.lib"
 
-#: ../plugins/filebrowser.c:1150
+#: ../plugins/filebrowser.c:1169
 msgid "Use the project's base directory"
 msgstr "Gebruik de project basisdirectory"
 
 #
-#: ../plugins/filebrowser.c:1154
+#: ../plugins/filebrowser.c:1173
 msgid ""
 "Change the directory to the base directory of the currently opened project"
 msgstr "Verander de directory naar de basis van het huidige geopende project"
@@ -5222,7 +5224,7 @@ msgstr "Toon huidige document."
 #: ../plugins/splitwindow.c:261 ../plugins/splitwindow.c:389
 #: ../plugins/splitwindow.c:404
 msgid "_Unsplit"
-msgstr "Maak splitsing ongedaan"
+msgstr "_Maak splitsing ongedaan"
 
 #: ../plugins/splitwindow.c:371
 msgid "_Split Window"
