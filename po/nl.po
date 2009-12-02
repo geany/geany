@@ -577,7 +577,7 @@ msgstr "(met BOM)"
 
 #: ../src/dialogs.c:1137
 msgid "(without BOM)"
-msgstr "(zonder BOM"
+msgstr "(zonder BOM)"
 
 #: ../src/dialogs.c:1148
 msgid "<b>Modified:</b>"
@@ -1211,7 +1211,7 @@ msgstr "Voo_rkeuren"
 
 #: ../src/interface.c:706 ../src/keybindings.c:382
 msgid "P_lugin Preferences"
-msgstr "Plu_gin voorkeuren"
+msgstr "P_lugin voorkeuren"
 
 #: ../src/interface.c:714
 msgid "_Search"
@@ -3082,7 +3082,7 @@ msgstr "Focus"
 
 #: ../src/keybindings.c:468
 msgid "Switch to Editor"
-msgstr "Sckakel naar Editor"
+msgstr "Schakel naar Editor"
 
 #: ../src/keybindings.c:470
 msgid "Switch to Scribble"
@@ -3862,11 +3862,11 @@ msgstr "Verv_angen met:"
 #. Now add the multiple replace options
 #: ../src/search.c:588
 msgid "Re_place All"
-msgstr "Alles vervan_gen"
+msgstr "A_lles vervangen"
 
 #: ../src/search.c:605
 msgid "In Se_lection"
-msgstr "In se_lectie"
+msgstr "In sele_ctie"
 
 #: ../src/search.c:607
 msgid "Replace all matches found in the currently selected text"
