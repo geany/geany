@@ -3,6 +3,8 @@
  * doc/geany.txt, doc/geany.html:
    Warn about not using BOM for configuration files (confuses GKeyFile
    parser, at least on my system).
+ * src/filetypes.c:
+   Add/improve debug messages for custom filetypes.
 
 
 2009-11-30  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>

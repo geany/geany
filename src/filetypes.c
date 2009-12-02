@@ -695,13 +695,13 @@ static void add_custom_filetype(const gchar *filename)
 	if (g_hash_table_lookup(filetypes_hash, fn))
 		return;
 
-	geany_debug("Adding filetype %s.", fn);
 	ft = filetype_new();
 	ft->name = g_strdup(fn);
 	filetype_make_title(ft, TITLE_FILE);
 	ft->pattern = g_new0(gchar*, 1);
 	ft->priv->custom = TRUE;
 	filetype_add(ft);
+	geany_debug("Added filetype %s (%d).", ft->name, ft->id);
 }
 
 
@@ -1241,6 +1241,8 @@ static void load_settings(gint ft_id, GKeyFile *config, GKeyFile *configh)
 	if (result)
 	{
 		ft->lang = tm_source_file_get_named_lang(result);
+		if (ft->lang < 0)
+			geany_debug("Cannot find tag parser '%s' for custom filetype '%s'.", result, ft->name);
 		g_free(result);
 	}
 
@@ -1250,6 +1252,8 @@ static void load_settings(gint ft_id, GKeyFile *config, GKeyFile *configh)
 	if (result)
 	{
 		ft->lexer_filetype = filetypes_lookup_by_name(result);
+		if (!ft->lexer_filetype)
+			geany_debug("Cannot find lexer filetype '%s' for custom filetype '%s'.", result, ft->name);
 		g_free(result);
 	}
 
