@@ -1,3 +1,10 @@
+2009-12-02  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * doc/geany.txt, doc/geany.html:
+   Warn about not using BOM for configuration files (confuses GKeyFile
+   parser, at least on my system).
+
+
 2009-11-30  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * data/latex.tags:
@@ -9,7 +16,7 @@
  * plugins/filebrowser.c:
    Add an in-entry clear icon to the filebrowser plugin's filter
    entry (patch by Dominic Hopf, thanks).
- * src/prefs.c, src/ui_uitls.c:
+ * src/prefs.c, src/ui_utils.c:
    Fix two compiler warnings about possibly uninitialised variables.
 
 
@@ -22,7 +29,7 @@
    Update partly outdated and wrong doc comment.
  * src/main.c, src/main.h, src/socket.c:
    Allow opening Geany projects remotely.
- * doc/geany.txt, doc/geany.html, src/bte.c, src/vte.h, src/keyfile.c:
+ * doc/geany.txt, doc/geany.html, src/vte.c, src/vte.h, src/keyfile.c:
    Add a hidden pref to allow executing text which was sent to the
    terminal directly, i.e. do not strip trailing newline characters.
    Also fix the stripping of trailing newline characters if there was

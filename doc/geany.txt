@@ -3301,6 +3301,8 @@ Help                            F1 (C)                       Opens the manual.
 
 Configuration files
 ===================
+.. warning::
+    You must use UTF-8 encoding *without BOM* for configuration files.
 
 
 Tools menu items
