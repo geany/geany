@@ -6,6 +6,10 @@
  * src/highlighting.c, data/filetypes.cpp, data/filetypes.cs,
    data/filetypes.c:
    Remove now unnecessary "styling_within_preprocessor" C style key.
+ * src/highlighting.c, data/filetypes.cpp, data/filetypes.vala,
+   data/filetypes.glsl, data/filetypes.cs:
+   Use lexer_filetype=C configuration file key instead of duplicate
+   styleset functions for C++, C#, GLSL, Vala.
 
 
 2009-12-02  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

@@ -947,106 +947,6 @@ static void styleset_c(ScintillaObject *sci, gint ft_id)
 }
 
 
-static void styleset_cpp_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
-{
-	styleset_c_like_init(config, config_home, ft_id);
-
-	style_sets[ft_id].keywords = g_new(gchar*, 4);
-	get_keyfile_keywords(config, config_home, "primary", ft_id, 0);
-	get_keyfile_keywords(config, config_home, "secondary", ft_id, 1);
-	get_keyfile_keywords(config, config_home, "docComment", ft_id, 2);
-	style_sets[ft_id].keywords[3] = NULL;
-}
-
-
-static void styleset_cpp(ScintillaObject *sci, gint ft_id)
-{
-	styleset_c_like(sci, ft_id);
-
-	sci_set_keywords(sci, 0, style_sets[ft_id].keywords[0]);
-	/* for SCI_SETKEYWORDS = 1, see below*/
-	sci_set_keywords(sci, 2, style_sets[ft_id].keywords[2]);
-
-	/* assign global types, merge them with user defined keywords and set them */
-	assign_global_and_user_keywords(sci, style_sets[ft_id].keywords[1],
-		filetypes[ft_id]->lang);
-}
-
-
-static void styleset_glsl_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
-{
-	styleset_c_like_init(config, config_home, ft_id);
-
-	style_sets[ft_id].keywords = g_new(gchar*, 4);
-	get_keyfile_keywords(config, config_home, "primary", ft_id, 0);
-	get_keyfile_keywords(config, config_home, "secondary", ft_id, 1);
-	get_keyfile_keywords(config, config_home, "docComment", ft_id, 2);
-	style_sets[ft_id].keywords[3] = NULL;
-}
-
-
-static void styleset_glsl(ScintillaObject *sci, gint ft_id)
-{
-	styleset_c_like(sci, ft_id);
-
-	sci_set_keywords(sci, 0, style_sets[ft_id].keywords[0]);
-	/* for SCI_SETKEYWORDS = 1, see below*/
-	sci_set_keywords(sci, 2, style_sets[ft_id].keywords[2]);
-
-	/* assign global types, merge them with user defined keywords and set them */
-	assign_global_and_user_keywords(sci, style_sets[ft_id].keywords[1],
-		filetypes[ft_id]->lang);
-}
-
-
-static void styleset_cs_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
-{
-	styleset_c_like_init(config, config_home, ft_id);
-
-	style_sets[ft_id].keywords = g_new(gchar*, 4);
-	get_keyfile_keywords(config, config_home, "primary", ft_id, 0);
-	get_keyfile_keywords(config, config_home, "secondary", ft_id, 1);
-	get_keyfile_keywords(config, config_home, "docComment", ft_id, 2);
-	style_sets[ft_id].keywords[3] = NULL;
-}
-
-
-static void styleset_cs(ScintillaObject *sci, gint ft_id)
-{
-	styleset_c_like(sci, ft_id);
-
-	sci_set_keywords(sci, 0, style_sets[ft_id].keywords[0]);
-	sci_set_keywords(sci, 2, style_sets[ft_id].keywords[2]);
-
-	/* assign global types, merge them with user defined keywords and set them */
-	assign_global_and_user_keywords(sci, style_sets[ft_id].keywords[1], filetypes[ft_id]->lang);
-}
-
-
-static void styleset_vala_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
-{
-	styleset_c_like_init(config, config_home, ft_id);
-
-	style_sets[ft_id].keywords = g_new(gchar*, 4);
-	get_keyfile_keywords(config, config_home, "primary", ft_id, 0);
-	get_keyfile_keywords(config, config_home, "secondary", ft_id, 1);
-	get_keyfile_keywords(config, config_home, "docComment", ft_id, 2);
-	style_sets[ft_id].keywords[3] = NULL;
-}
-
-
-static void styleset_vala(ScintillaObject *sci, gint ft_id)
-{
-	styleset_c_like(sci, ft_id);
-
-	sci_set_keywords(sci, 0, style_sets[ft_id].keywords[0]);
-	sci_set_keywords(sci, 2, style_sets[ft_id].keywords[2]);
-
-	/* assign global types, merge them with user defined keywords and set them */
-	assign_global_and_user_keywords(sci, style_sets[ft_id].keywords[1], filetypes[ft_id]->lang);
-}
-
-
 static void styleset_pascal_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
 {
 	new_styleset(ft_id, 15);
@@ -3173,8 +3073,6 @@ void highlighting_init_styles(gint filetype_idx, GKeyFile *config, GKeyFile *con
 		init_styleset_case(GEANY_FILETYPES_CAML,	styleset_caml_init);
 		init_styleset_case(GEANY_FILETYPES_CMAKE,	styleset_cmake_init);
 		init_styleset_case(GEANY_FILETYPES_CONF,	styleset_conf_init);
-		init_styleset_case(GEANY_FILETYPES_CPP,		styleset_cpp_init);
-		init_styleset_case(GEANY_FILETYPES_CS,		styleset_cs_init);
 		init_styleset_case(GEANY_FILETYPES_CSS,		styleset_css_init);
 		init_styleset_case(GEANY_FILETYPES_D,		styleset_d_init);
 		init_styleset_case(GEANY_FILETYPES_DIFF,	styleset_diff_init);
@@ -3182,7 +3080,6 @@ void highlighting_init_styles(gint filetype_idx, GKeyFile *config, GKeyFile *con
 		init_styleset_case(GEANY_FILETYPES_FERITE,	styleset_ferite_init);
 		init_styleset_case(GEANY_FILETYPES_F77,		styleset_f77_init);
 		init_styleset_case(GEANY_FILETYPES_FORTRAN,	styleset_fortran_init);
-		init_styleset_case(GEANY_FILETYPES_GLSL,	styleset_glsl_init);
 		init_styleset_case(GEANY_FILETYPES_HASKELL,	styleset_haskell_init);
 		init_styleset_case(GEANY_FILETYPES_HAXE,	styleset_haxe_init);
 		init_styleset_case(GEANY_FILETYPES_AS,		styleset_actionscript_init);
@@ -3205,7 +3102,6 @@ void highlighting_init_styles(gint filetype_idx, GKeyFile *config, GKeyFile *con
 		init_styleset_case(GEANY_FILETYPES_SH,		styleset_sh_init);
 		init_styleset_case(GEANY_FILETYPES_SQL,		styleset_sql_init);
 		init_styleset_case(GEANY_FILETYPES_TCL,		styleset_tcl_init);
-		init_styleset_case(GEANY_FILETYPES_VALA,	styleset_vala_init);
 		init_styleset_case(GEANY_FILETYPES_VHDL,	styleset_vhdl_init);
 		init_styleset_case(GEANY_FILETYPES_XML,		styleset_markup_init);
 		init_styleset_case(GEANY_FILETYPES_YAML,	styleset_yaml_init);
@@ -3242,8 +3138,6 @@ void highlighting_set_styles(ScintillaObject *sci, GeanyFiletype *ft)
 		styleset_case(GEANY_FILETYPES_CAML,		styleset_caml);
 		styleset_case(GEANY_FILETYPES_CMAKE,	styleset_cmake);
 		styleset_case(GEANY_FILETYPES_CONF,		styleset_conf);
-		styleset_case(GEANY_FILETYPES_CPP,		styleset_cpp);
-		styleset_case(GEANY_FILETYPES_CS,		styleset_cs);
 		styleset_case(GEANY_FILETYPES_CSS,		styleset_css);
 		styleset_case(GEANY_FILETYPES_D,		styleset_d);
 		styleset_case(GEANY_FILETYPES_DIFF,		styleset_diff);
@@ -3251,7 +3145,6 @@ void highlighting_set_styles(ScintillaObject *sci, GeanyFiletype *ft)
 		styleset_case(GEANY_FILETYPES_FERITE,	styleset_ferite);
 		styleset_case(GEANY_FILETYPES_F77,		styleset_f77);
 		styleset_case(GEANY_FILETYPES_FORTRAN,	styleset_fortran);
-		styleset_case(GEANY_FILETYPES_GLSL,		styleset_glsl);
 		styleset_case(GEANY_FILETYPES_HASKELL,	styleset_haskell);
 		styleset_case(GEANY_FILETYPES_HAXE,		styleset_haxe);
 		styleset_case(GEANY_FILETYPES_AS,		styleset_actionscript);
@@ -3274,7 +3167,6 @@ void highlighting_set_styles(ScintillaObject *sci, GeanyFiletype *ft)
 		styleset_case(GEANY_FILETYPES_SH,		styleset_sh);
 		styleset_case(GEANY_FILETYPES_SQL,		styleset_sql);
 		styleset_case(GEANY_FILETYPES_TCL,		styleset_tcl);
-		styleset_case(GEANY_FILETYPES_VALA,		styleset_vala);
 		styleset_case(GEANY_FILETYPES_VHDL,		styleset_vhdl);
 		styleset_case(GEANY_FILETYPES_XML,		styleset_xml);
 		styleset_case(GEANY_FILETYPES_YAML,		styleset_yaml);

@@ -39,6 +39,8 @@ preprocessor.middle.$(file.patterns.cpp)=else elif
 preprocessor.end.$(file.patterns.cpp)=endif
 
 [settings]
+lexer_filetype=C
+
 # default extension used when saving files
 #extension=cpp
 
