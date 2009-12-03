@@ -23,9 +23,6 @@ commentlinedoc=commentdoc,bold
 commentdockeyword=commentdoc,bold,italic
 commentdockeyworderror=commentdoc
 globalclass=type
-# whether arguments of preprocessor commands should be styled (only first argument is used)
-# 1 to enable, 0 to disable
-styling_within_preprocessor=1;0;false;false
 
 [keywords]
 # all items must be in one line

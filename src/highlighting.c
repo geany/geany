@@ -884,10 +884,8 @@ styleset_c_like_init(GKeyFile *config, GKeyFile *config_home, gint filetype_idx)
 		"globalclass"
 	};
 
-	new_styleset(filetype_idx, 21);
+	new_styleset(filetype_idx, G_N_ELEMENTS(entries));
 	load_style_entries(config, config_home, filetype_idx, entries, G_N_ELEMENTS(entries));
-	get_keyfile_int(config, config_home, "styling", "styling_within_preprocessor",
-		1, 0, &style_sets[filetype_idx].styling[20]);
 }
 
 

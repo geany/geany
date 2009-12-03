@@ -3,6 +3,9 @@
  * src/highlighting.c, data/filetypes.cpp, data/filetypes.vala,
    data/filetypes.glsl, data/filetypes.cs, data/filetypes.c:
    Move C-like filetype properties into configuration files.
+ * src/highlighting.c, data/filetypes.cpp, data/filetypes.cs,
+   data/filetypes.c:
+   Remove now unnecessary "styling_within_preprocessor" C style key.
 
 
 2009-12-02  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
