@@ -1,3 +1,10 @@
+2009-12-03  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/highlighting.c, data/filetypes.cpp, data/filetypes.vala,
+   data/filetypes.glsl, data/filetypes.cs, data/filetypes.c:
+   Move C-like filetype properties into configuration files.
+
+
 2009-12-02  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * doc/geany.txt, doc/geany.html:

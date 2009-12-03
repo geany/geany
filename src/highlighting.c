@@ -891,9 +891,7 @@ styleset_c_like_init(GKeyFile *config, GKeyFile *config_home, gint filetype_idx)
 }
 
 
-/* preprocess_ifdef: C#, Vala have a reduced preprocessor-like syntax without #ifdef */
-static void styleset_c_like(ScintillaObject *sci, gint ft_id,
-		gboolean preprocessor, gboolean preprocess_ifdef)
+static void styleset_c_like(ScintillaObject *sci, gint ft_id)
 {
 	gint styles[] = {
 		SCE_C_DEFAULT,
@@ -922,16 +920,6 @@ static void styleset_c_like(ScintillaObject *sci, gint ft_id,
 	apply_filetype_properties(sci, SCLEX_CPP, ft_id);
 
 	apply_style_entries(sci, ft_id, styles, G_N_ELEMENTS(styles));
-	if (preprocessor)
-	{
-		if (style_sets[ft_id].styling[20].foreground == 1)
-			sci_set_property(sci, "styling.within.preprocessor", "1");
-		sci_set_property(sci, "preprocessor.symbol.$(file.patterns.cpp)", "#");
-		sci_set_property(sci, "preprocessor.start.$(file.patterns.cpp)",
-			preprocess_ifdef ? "if ifdef ifndef" : "if");
-		sci_set_property(sci, "preprocessor.middle.$(file.patterns.cpp)", "else elif");
-		sci_set_property(sci, "preprocessor.end.$(file.patterns.cpp)", "endif");
-	}
 }
 
 
@@ -949,9 +937,10 @@ static void styleset_c_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
 
 static void styleset_c(ScintillaObject *sci, gint ft_id)
 {
-	styleset_c_like(sci, ft_id, TRUE, TRUE);
+	styleset_c_like(sci, ft_id);
 
 	sci_set_keywords(sci, 0, style_sets[ft_id].keywords[0]);
+	/* for SCI_SETKEYWORDS = 1, see below*/
 	sci_set_keywords(sci, 2, style_sets[ft_id].keywords[2]);
 
 	/* assign global types, merge them with user defined keywords and set them */
@@ -974,7 +963,7 @@ static void styleset_cpp_init(gint ft_id, GKeyFile *config, GKeyFile *config_hom
 
 static void styleset_cpp(ScintillaObject *sci, gint ft_id)
 {
-	styleset_c_like(sci, ft_id, TRUE, TRUE);
+	styleset_c_like(sci, ft_id);
 
 	sci_set_keywords(sci, 0, style_sets[ft_id].keywords[0]);
 	/* for SCI_SETKEYWORDS = 1, see below*/
@@ -1000,7 +989,7 @@ static void styleset_glsl_init(gint ft_id, GKeyFile *config, GKeyFile *config_ho
 
 static void styleset_glsl(ScintillaObject *sci, gint ft_id)
 {
-	styleset_c_like(sci, ft_id, TRUE, TRUE);
+	styleset_c_like(sci, ft_id);
 
 	sci_set_keywords(sci, 0, style_sets[ft_id].keywords[0]);
 	/* for SCI_SETKEYWORDS = 1, see below*/
@@ -1026,7 +1015,7 @@ static void styleset_cs_init(gint ft_id, GKeyFile *config, GKeyFile *config_home
 
 static void styleset_cs(ScintillaObject *sci, gint ft_id)
 {
-	styleset_c_like(sci, ft_id, TRUE, FALSE);
+	styleset_c_like(sci, ft_id);
 
 	sci_set_keywords(sci, 0, style_sets[ft_id].keywords[0]);
 	sci_set_keywords(sci, 2, style_sets[ft_id].keywords[2]);
@@ -1050,7 +1039,7 @@ static void styleset_vala_init(gint ft_id, GKeyFile *config, GKeyFile *config_ho
 
 static void styleset_vala(ScintillaObject *sci, gint ft_id)
 {
-	styleset_c_like(sci, ft_id, TRUE, FALSE);
+	styleset_c_like(sci, ft_id);
 
 	sci_set_keywords(sci, 0, style_sets[ft_id].keywords[0]);
 	sci_set_keywords(sci, 2, style_sets[ft_id].keywords[2]);
@@ -1481,7 +1470,7 @@ static void styleset_java_init(gint ft_id, GKeyFile *config, GKeyFile *config_ho
 
 static void styleset_java(ScintillaObject *sci, gint ft_id)
 {
-	styleset_c_like(sci, ft_id, FALSE, FALSE);
+	styleset_c_like(sci, ft_id);
 
 	sci_set_keywords(sci, 0, style_sets[ft_id].keywords[0]);
 	sci_set_keywords(sci, 1, style_sets[ft_id].keywords[1]);
@@ -2740,7 +2729,7 @@ static void styleset_ferite_init(gint ft_id, GKeyFile *config, GKeyFile *config_
 
 static void styleset_ferite(ScintillaObject *sci, gint ft_id)
 {
-	styleset_c_like(sci, ft_id, FALSE, FALSE);
+	styleset_c_like(sci, ft_id);
 
 	sci_set_keywords(sci, 0, style_sets[ft_id].keywords[0]);
 	sci_set_keywords(sci, 1, style_sets[ft_id].keywords[1]);
@@ -2864,7 +2853,7 @@ static void styleset_js_init(gint ft_id, GKeyFile *config, GKeyFile *config_home
 
 static void styleset_js(ScintillaObject *sci, gint ft_id)
 {
-	styleset_c_like(sci, ft_id, FALSE, FALSE);
+	styleset_c_like(sci, ft_id);
 
 	sci_set_keywords(sci, 0, style_sets[ft_id].keywords[0]);
 }
@@ -3024,7 +3013,7 @@ static void styleset_actionscript_init(gint ft_id, GKeyFile *config, GKeyFile *c
 
 static void styleset_actionscript(ScintillaObject *sci, gint ft_id)
 {
-	styleset_c_like(sci, ft_id, FALSE, FALSE);
+	styleset_c_like(sci, ft_id);
 
 	sci_set_keywords(sci, 0, style_sets[ft_id].keywords[0]);
 	sci_set_keywords(sci, 1, style_sets[ft_id].keywords[2]);
@@ -3046,7 +3035,7 @@ static void styleset_haxe_init(gint ft_id, GKeyFile *config, GKeyFile *config_ho
 
 static void styleset_haxe(ScintillaObject *sci, gint ft_id)
 {
-	styleset_c_like(sci, ft_id, FALSE, FALSE);
+	styleset_c_like(sci, ft_id);
 
 	sci_set_keywords(sci, 0, style_sets[ft_id].keywords[0]);
 	sci_set_keywords(sci, 1, style_sets[ft_id].keywords[1]);
