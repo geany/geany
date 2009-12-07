@@ -64,6 +64,7 @@ libtagmanager_a_SOURCES =\
 	sh.c\
 	txt2tags.c\
 	vhdl.c\
+	verilog.c\
 	actionscript.c\
 	nsis.c\
 	ctags.c\

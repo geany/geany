@@ -32,6 +32,7 @@ LexRuby.cxx \
 LexSQL.cxx \
 LexTCL.cxx \
 LexVHDL.cxx \
+LexVerilog.cxx \
 LexYAML.cxx
 
 SRCS= \

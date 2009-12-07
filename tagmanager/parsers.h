@@ -53,7 +53,8 @@
     NsisParser, \
     MarkdownParser, \
     Txt2tagsParser, \
-    AbcParser
+    AbcParser, \
+    VerilogParser
 /*
 langType of each parser
  0	CParser
@@ -95,6 +96,7 @@ langType of each parser
 36  MarkdownParser
 37  Txt2tagsParser
 38  AbcParser
+39  Verilog
 */
 #endif	/* _PARSERS_H */
 

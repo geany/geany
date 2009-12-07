@@ -504,6 +504,17 @@ static void init_builtin_filetypes(void)
 	ft->comment_open = g_strdup("--");
 	ft->comment_close = NULL;
 	ft->group = GEANY_FILETYPE_GROUP_COMPILED;
+	
+#define VERILOG
+	ft = filetypes[GEANY_FILETYPES_VERILOG];
+	ft->lang = 39;
+	ft->name = g_strdup("Verilog");
+	filetype_make_title(ft, TITLE_SOURCE_FILE);
+	ft->extension = g_strdup("v");
+	ft->pattern = utils_strv_new("*.v", "*.verilog", NULL);
+	ft->comment_open = g_strdup("/*");
+	ft->comment_close = g_strdup("*/");
+	ft->group = GEANY_FILETYPE_GROUP_COMPILED;
 
 #define DIFF
 	ft = filetypes[GEANY_FILETYPES_DIFF];

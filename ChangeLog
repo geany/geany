@@ -9,6 +9,13 @@
  * src/highlighting.c:
    Only show debug message once if recursive lexer_filetype is set.
    Tidy highlighting_init_styles code for filetype None handling.
+ * scintilla/makefile.win32, scintilla/KeyWords.cxx,
+   scintilla/LexVerilog.cxx, scintilla/Makefile.am, src/highlighting.c,
+   src/filetypes.c, src/filetypes.h, src/symbols.c, THANKS,
+   tagmanager/parsers.h, tagmanager/makefile.win32,
+   tagmanager/verilog.c, tagmanager/Makefile.am,
+   data/filetypes.verilog, data/filetype_extensions.conf, wscript:
+   Apply patch from Kelvin Gardiner to add Verilog filetype (thanks).
 
 
 2009-12-03  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

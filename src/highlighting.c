@@ -2698,6 +2698,59 @@ static void styleset_vhdl(ScintillaObject *sci, gint ft_id)
 }
 
 
+static void styleset_verilog_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
+{
+	new_styleset(ft_id, 14);
+
+	get_keyfile_style(config, config_home, "default", &style_sets[ft_id].styling[0]);
+	get_keyfile_style(config, config_home, "comment", &style_sets[ft_id].styling[1]);
+	get_keyfile_style(config, config_home, "comment_line", &style_sets[ft_id].styling[2]);
+	get_keyfile_style(config, config_home, "comment_line_bang", &style_sets[ft_id].styling[3]);
+	get_keyfile_style(config, config_home, "number", &style_sets[ft_id].styling[4]);
+	get_keyfile_style(config, config_home, "word", &style_sets[ft_id].styling[5]);
+	get_keyfile_style(config, config_home, "string", &style_sets[ft_id].styling[6]);
+	get_keyfile_style(config, config_home, "word2", &style_sets[ft_id].styling[7]);
+	get_keyfile_style(config, config_home, "word3", &style_sets[ft_id].styling[8]);
+	get_keyfile_style(config, config_home, "preprocessor", &style_sets[ft_id].styling[9]);
+	get_keyfile_style(config, config_home, "operator", &style_sets[ft_id].styling[10]);
+	get_keyfile_style(config, config_home, "identifier", &style_sets[ft_id].styling[11]);
+	get_keyfile_style(config, config_home, "stringeol", &style_sets[ft_id].styling[12]);
+	get_keyfile_style(config, config_home, "userword", &style_sets[ft_id].styling[13]);
+
+	style_sets[ft_id].keywords = g_new(gchar*, 4);
+	get_keyfile_keywords(config, config_home, "word", ft_id, 0);
+	get_keyfile_keywords(config, config_home, "word2", ft_id, 1);
+	get_keyfile_keywords(config, config_home, "word3", ft_id, 2);
+	style_sets[ft_id].keywords[3] = NULL;
+}
+
+
+static void styleset_verilog(ScintillaObject *sci, gint ft_id)
+{
+	apply_filetype_properties(sci, SCLEX_VERILOG, ft_id);
+
+	sci_set_keywords(sci, 0, style_sets[ft_id].keywords[0]);
+	sci_set_keywords(sci, 1, style_sets[ft_id].keywords[1]);
+	sci_set_keywords(sci, 2, style_sets[ft_id].keywords[2]);
+
+	set_sci_style(sci, STYLE_DEFAULT, ft_id, 0);
+	set_sci_style(sci, SCE_V_DEFAULT, ft_id, 0);
+	set_sci_style(sci, SCE_V_COMMENT, ft_id, 1);
+	set_sci_style(sci, SCE_V_COMMENTLINE, ft_id, 2);
+	set_sci_style(sci, SCE_V_COMMENTLINEBANG, ft_id, 3);
+	set_sci_style(sci, SCE_V_NUMBER, ft_id, 4);
+	set_sci_style(sci, SCE_V_WORD, ft_id,5);
+	set_sci_style(sci, SCE_V_STRING, ft_id, 6);
+	set_sci_style(sci, SCE_V_WORD2, ft_id, 7);
+	set_sci_style(sci, SCE_V_WORD3, ft_id, 8);
+	set_sci_style(sci, SCE_V_PREPROCESSOR, ft_id, 9);
+	set_sci_style(sci, SCE_V_OPERATOR, ft_id, 10);
+	set_sci_style(sci, SCE_V_IDENTIFIER, ft_id, 11);
+	set_sci_style(sci, SCE_V_STRINGEOL, ft_id, 12);
+	set_sci_style(sci, SCE_V_USER, ft_id, 13);
+}
+
+
 static void styleset_yaml_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
 {
 	new_styleset(ft_id, 10);
@@ -3113,6 +3166,7 @@ void highlighting_init_styles(gint filetype_idx, GKeyFile *config, GKeyFile *con
 		init_styleset_case(GEANY_FILETYPES_SQL,		styleset_sql_init);
 		init_styleset_case(GEANY_FILETYPES_TCL,		styleset_tcl_init);
 		init_styleset_case(GEANY_FILETYPES_VHDL,	styleset_vhdl_init);
+		init_styleset_case(GEANY_FILETYPES_VERILOG,	styleset_verilog_init);
 		init_styleset_case(GEANY_FILETYPES_XML,		styleset_markup_init);
 		init_styleset_case(GEANY_FILETYPES_YAML,	styleset_yaml_init);
 		default:
@@ -3181,6 +3235,7 @@ void highlighting_set_styles(ScintillaObject *sci, GeanyFiletype *ft)
 		styleset_case(GEANY_FILETYPES_SQL,		styleset_sql);
 		styleset_case(GEANY_FILETYPES_TCL,		styleset_tcl);
 		styleset_case(GEANY_FILETYPES_VHDL,		styleset_vhdl);
+		styleset_case(GEANY_FILETYPES_VERILOG,	styleset_verilog);
 		styleset_case(GEANY_FILETYPES_XML,		styleset_xml);
 		styleset_case(GEANY_FILETYPES_YAML,		styleset_yaml);
 		case GEANY_FILETYPES_NONE:

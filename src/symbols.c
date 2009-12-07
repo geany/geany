@@ -758,6 +758,17 @@ static void add_top_level_items(GeanyDocument *doc)
 				NULL);
 			break;
 		}
+		case GEANY_FILETYPES_VERILOG:
+		{
+			tag_list_add_groups(tag_store,
+				&(tv_iters.tag_type), _("Events"), "classviewer-macro",
+				&(tv_iters.tag_class), _("Modules"), "classviewer-class",
+				&(tv_iters.tag_function), _("Functions / Tasks"), "classviewer-method",
+				&(tv_iters.tag_variable), _("Variables"), "classviewer-var",
+				&(tv_iters.tag_other), _("Other"), "classviewer-other",
+				NULL);
+			break;
+		}
 		case GEANY_FILETYPES_JAVA:
 		{
 			tag_list_add_groups(tag_store,

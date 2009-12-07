@@ -83,6 +83,7 @@ typedef enum
 	GEANY_FILETYPES_MARKDOWN,
 	GEANY_FILETYPES_TXT2TAGS,
 	GEANY_FILETYPES_ABC,
+	GEANY_FILETYPES_VERILOG,
 	/* ^ append items here */
 	GEANY_MAX_BUILT_IN_FILETYPES	/* Don't use this, use filetypes_array->len instead */
 }

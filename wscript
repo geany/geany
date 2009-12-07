@@ -76,7 +76,7 @@ tagmanager_sources = [
 	'tagmanager/tm_file_entry.c',
 	'tagmanager/tm_project.c', 'tagmanager/tm_source_file.c', 'tagmanager/tm_symbol.c',
 	'tagmanager/tm_tag.c', 'tagmanager/tm_tagmanager.c', 'tagmanager/tm_work_object.c',
-	'tagmanager/tm_workspace.c', 'tagmanager/vhdl.c', 'tagmanager/vstring.c' ]
+	'tagmanager/tm_workspace.c', 'tagmanager/vhdl.c', 'tagmanager/verilog.c', 'tagmanager/vstring.c' ]
 
 scintilla_sources = [
 	'scintilla/AutoComplete.cxx', 'scintilla/CallTip.cxx', 'scintilla/CellBuffer.cxx',
@@ -93,7 +93,7 @@ scintilla_sources = [
 	'scintilla/LexPascal.cxx', 'scintilla/LexPerl.cxx', 'scintilla/LexPython.cxx',
 	'scintilla/LexR.cxx',
 	'scintilla/LexRuby.cxx', 'scintilla/LexSQL.cxx', 'scintilla/LexTCL.cxx',
-	'scintilla/LexVHDL.cxx', 'scintilla/LexYAML.cxx',
+	'scintilla/LexVHDL.cxx', 'scintilla/LexVerilog.cxx', 'scintilla/LexYAML.cxx',
 	'scintilla/LineMarker.cxx', 'scintilla/PerLine.cxx',
 	'scintilla/PlatGTK.cxx',
 	'scintilla/PositionCache.cxx', 'scintilla/PropSet.cxx', 'scintilla/RESearch.cxx',
