@@ -3552,6 +3552,8 @@ tag_parser
 
 lexer_filetype
     A filetype name to setup syntax highlighting from another filetype.
+    This must not be recursive, i.e. it should be a filetype name that
+    doesn't use the lexer_filetype key itself.
 
 
 [build_settings] Section

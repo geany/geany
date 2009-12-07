@@ -2,6 +2,8 @@
 
  * src/highlighting.c:
    Highlight D & Java types from a global tags file.
+ * src/highlighting.c, doc/geany.txt, doc/geany.html:
+   Add debug message warning if recursive lexer_filetype is set.
 
 
 2009-12-03  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

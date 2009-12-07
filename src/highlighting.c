@@ -3186,6 +3186,9 @@ void highlighting_set_styles(ScintillaObject *sci, GeanyFiletype *ft)
 		styleset_case(GEANY_FILETYPES_YAML,		styleset_yaml);
 		case GEANY_FILETYPES_NONE:
 		default:
+			if (ft->lexer_filetype)
+				geany_debug("Filetype %s has a recursive lexer_filetype %s set!",
+					ft->name, ft->lexer_filetype->name);
 			styleset_default(sci, ft->id);
 	}
 	/* [lexer_properties] settings */
