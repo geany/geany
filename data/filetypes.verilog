@@ -1,20 +1,20 @@
 # For complete documentation of this file, please see Geany's main documentation
 [styling]
 # foreground;background;bold;italic
-default=0xd3d7cf;0x2e3436;false;false
-comment=0x888a85;0x2e3436;false;false
-comment_line=0x888a85;0x2e3436;false;false
-comment_line_bang=0x888a85;0x2e3436;false;false;
-number=0xedd400;0x2e3436;false;false
-word=0xffffff;0x2e3436;true;false
-string=0xedd400;0x2e3436;false;false
-word2=0xad7fa8;0x2e3436;false;false
-word3=0x8ae234;0x2e3436;true;false
-preprocessor=0xad7fa8;0x2e3436;false;false
-operator=0xd3d7cf;0x2e3436;false;false
-identifier=0x729fcf;0x2e3436;false;false
-stringeol=0xffffff;0x2e3436;false;false
-userword=0xffffff;0x2e3436;true;false
+default=default
+comment=comment
+comment_line=comment
+comment_line_bang=comment
+number=number
+word=word
+word2=word2
+word3=0x5ea01f;;true
+string=string
+preprocessor=preprocessor
+operator=operator
+identifier=default
+stringeol=stringeol
+userword=type
 
 [keywords]
 # all items must be in one line

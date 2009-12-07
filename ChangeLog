@@ -18,6 +18,8 @@
    Apply patch from Kelvin Gardiner to add Verilog filetype (thanks).
  * src/highlighting.c:
    Fix segfault on startup (oops).
+ * data/filetypes.verilog:
+   Fix using common style colours for Verilog.
 
 
 2009-12-03  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
