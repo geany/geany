@@ -3046,6 +3046,15 @@ static void read_properties(GeanyFiletype *ft, GKeyFile *config, GKeyFile *confi
 }
 
 
+static gint get_lexer_filetype(GeanyFiletype *ft)
+{
+	/* TODO: some way of checking that lexer_filetype is supported here and not recursive (without
+	 * loading the config file) */
+	ft = NVL(ft->lexer_filetype, ft);
+	return ft->id;
+}
+
+
 /* lang_name is the name used for the styleset_foo_init function, e.g. foo. */
 #define init_styleset_case(ft_id, init_styleset_func) \
 	case (ft_id): \
@@ -3056,7 +3065,7 @@ static void read_properties(GeanyFiletype *ft, GKeyFile *config, GKeyFile *confi
 void highlighting_init_styles(gint filetype_idx, GKeyFile *config, GKeyFile *configh)
 {
 	GeanyFiletype *ft = filetypes[filetype_idx];
-	gint lexer_id = ft->lexer_filetype ? ft->lexer_filetype->id : ft->id;
+	gint lexer_id = get_lexer_filetype(ft);
 
 	if (!style_sets)
 		style_sets = g_new0(StyleSet, filetypes_array->len);
@@ -3130,7 +3139,7 @@ void highlighting_init_styles(gint filetype_idx, GKeyFile *config, GKeyFile *con
  * @param ft Filetype settings to use. */
 void highlighting_set_styles(ScintillaObject *sci, GeanyFiletype *ft)
 {
-	gint lexer_id = ft->lexer_filetype ? ft->lexer_filetype->id : ft->id;
+	gint lexer_id = get_lexer_filetype(ft);
 
 	filetypes_load_config(ft->id, FALSE);	/* load filetypes.ext */
 
