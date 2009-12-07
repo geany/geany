@@ -6,6 +6,9 @@
    Add debug message warning if recursive lexer_filetype is set.
  * src/highlighting.c, src/sciwrappers.c, src/sciwrappers.h:
    Remove duplicate sci_set_keywords(), make argument const.
+ * src/highlighting.c:
+   Only show debug message once if recursive lexer_filetype is set.
+   Tidy highlighting_init_styles code for filetype None handling.
 
 
 2009-12-03  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

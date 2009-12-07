@@ -3043,8 +3043,6 @@ static void read_properties(GeanyFiletype *ft, GKeyFile *config, GKeyFile *confi
 
 static gint get_lexer_filetype(GeanyFiletype *ft)
 {
-	/* TODO: some way of checking that lexer_filetype is supported here and not recursive (without
-	 * loading the config file) */
 	ft = NVL(ft->lexer_filetype, ft);
 	return ft->id;
 }
@@ -3062,19 +3060,22 @@ void highlighting_init_styles(gint filetype_idx, GKeyFile *config, GKeyFile *con
 	GeanyFiletype *ft = filetypes[filetype_idx];
 	gint lexer_id = get_lexer_filetype(ft);
 
+	/* None filetype handled specially */
+	if (filetype_idx == GEANY_FILETYPES_NONE)
+	{
+		styleset_common_init(GEANY_FILETYPES_NONE, config, configh);
+		return;
+	}
 	if (!style_sets)
 		style_sets = g_new0(StyleSet, filetypes_array->len);
 
 	/* Clear old information if necessary - e.g. when reloading config */
 	free_styleset(filetype_idx);
-
 	/* All stylesets depend on filetypes.common */
-	if (filetype_idx != GEANY_FILETYPES_NONE)
-		filetypes_load_config(GEANY_FILETYPES_NONE, FALSE);
+	filetypes_load_config(GEANY_FILETYPES_NONE, FALSE);
 
 	switch (lexer_id)
 	{
-		init_styleset_case(GEANY_FILETYPES_NONE,	styleset_common_init);
 		init_styleset_case(GEANY_FILETYPES_ADA,		styleset_ada_init);
 		init_styleset_case(GEANY_FILETYPES_ASM,		styleset_asm_init);
 		init_styleset_case(GEANY_FILETYPES_BASIC,	styleset_basic_init);
@@ -3114,12 +3115,15 @@ void highlighting_init_styles(gint filetype_idx, GKeyFile *config, GKeyFile *con
 		init_styleset_case(GEANY_FILETYPES_VHDL,	styleset_vhdl_init);
 		init_styleset_case(GEANY_FILETYPES_XML,		styleset_markup_init);
 		init_styleset_case(GEANY_FILETYPES_YAML,	styleset_yaml_init);
+		default:
+			if (ft->lexer_filetype)
+				geany_debug("Filetype %s has a recursive lexer_filetype %s set!",
+					ft->name, ft->lexer_filetype->name);
 	}
 	read_properties(ft, config, configh);
 
 	/* should be done in filetypes.c really: */
-	if (filetype_idx != GEANY_FILETYPES_NONE)
-		get_keyfile_wordchars(config, configh, &style_sets[filetype_idx].wordchars);
+	get_keyfile_wordchars(config, configh, &style_sets[filetype_idx].wordchars);
 }
 
 
@@ -3181,9 +3185,6 @@ void highlighting_set_styles(ScintillaObject *sci, GeanyFiletype *ft)
 		styleset_case(GEANY_FILETYPES_YAML,		styleset_yaml);
 		case GEANY_FILETYPES_NONE:
 		default:
-			if (ft->lexer_filetype)
-				geany_debug("Filetype %s has a recursive lexer_filetype %s set!",
-					ft->name, ft->lexer_filetype->name);
 			styleset_default(sci, ft->id);
 	}
 	/* [lexer_properties] settings */
