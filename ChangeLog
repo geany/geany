@@ -1,3 +1,9 @@
+2009-12-07  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/highlighting.c:
+   Highlight D & Java types from a global tags file.
+
+
 2009-12-03  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/highlighting.c, data/filetypes.cpp, data/filetypes.vala,

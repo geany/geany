@@ -790,13 +790,14 @@ static void styleset_common(ScintillaObject *sci, filetype_id ft_id)
 }
 
 
-/* Assign global typedefs and user secondary keywords */
-static void assign_global_and_user_keywords(ScintillaObject *sci,
-											const gchar *user_words, gint lang)
+/* Merge & assign global typedefs and user secondary keywords.
+ * keyword_idx is used for both style_sets[].keywords and scintilla keyword style number */
+static void merge_type_keywords(ScintillaObject *sci, gint ft_id, gint keyword_idx)
 {
+	const gchar *user_words = style_sets[ft_id].keywords[keyword_idx];
 	GString *s;
 
-	s = get_global_typenames(lang);
+	s = get_global_typenames(filetypes[ft_id]->lang);
 	if (G_UNLIKELY(s == NULL))
 		s = g_string_sized_new(200);
 	else
@@ -804,7 +805,7 @@ static void assign_global_and_user_keywords(ScintillaObject *sci,
 
 	g_string_append(s, user_words);
 
-	sci_set_keywords(sci, 1, s->str);
+	sci_set_keywords(sci, keyword_idx, s->str);
 	g_string_free(s, TRUE);
 }
 
@@ -938,12 +939,12 @@ static void styleset_c(ScintillaObject *sci, gint ft_id)
 	styleset_c_like(sci, ft_id);
 
 	sci_set_keywords(sci, 0, style_sets[ft_id].keywords[0]);
-	/* for SCI_SETKEYWORDS = 1, see below*/
+	/* SCI_SETKEYWORDS = 1 - secondary + global tags file types, see below */
 	sci_set_keywords(sci, 2, style_sets[ft_id].keywords[2]);
+	/* SCI_SETKEYWORDS = 3 is for current session types - see editor_lexer_get_type_keyword_idx() */
 
 	/* assign global types, merge them with user defined keywords and set them */
-	assign_global_and_user_keywords(sci, style_sets[ft_id].keywords[1],
-		filetypes[ft_id]->lang);
+	merge_type_keywords(sci, ft_id, 1);
 }
 
 
@@ -1371,12 +1372,13 @@ static void styleset_java(ScintillaObject *sci, gint ft_id)
 	styleset_c_like(sci, ft_id);
 
 	sci_set_keywords(sci, 0, style_sets[ft_id].keywords[0]);
-	sci_set_keywords(sci, 1, style_sets[ft_id].keywords[1]);
+	/* SCI_SETKEYWORDS = 1 - secondary + global tags file types, see below */
 	sci_set_keywords(sci, 2, style_sets[ft_id].keywords[2]);
+	/* SCI_SETKEYWORDS = 3 is for current session types - see editor_lexer_get_type_keyword_idx() */
 	sci_set_keywords(sci, 4, style_sets[ft_id].keywords[3]);
 
 	/* assign global types, merge them with user defined keywords and set them */
-	assign_global_and_user_keywords(sci, style_sets[ft_id].keywords[1], filetypes[ft_id]->lang);
+	merge_type_keywords(sci, ft_id, 1);
 }
 
 
@@ -2583,9 +2585,13 @@ static void styleset_d(ScintillaObject *sci, gint ft_id)
 	apply_filetype_properties(sci, SCLEX_D, ft_id);
 
 	sci_set_keywords(sci, 0, style_sets[ft_id].keywords[0]);
-	sci_set_keywords(sci, 1, style_sets[ft_id].keywords[1]);
+	/* SCI_SETKEYWORDS = 1 - secondary + global tags file types, see below */
 	sci_set_keywords(sci, 2, style_sets[ft_id].keywords[2]);
-	sci_set_keywords(sci, 3, style_sets[ft_id].keywords[3]);
+	/* SCI_SETKEYWORDS = 3 is for current session types - see editor_lexer_get_type_keyword_idx() */
+	sci_set_keywords(sci, 4, style_sets[ft_id].keywords[3]);
+
+	/* assign global types, merge them with user defined keywords and set them */
+	merge_type_keywords(sci, ft_id, 1);
 
 	set_sci_style(sci, STYLE_DEFAULT, ft_id, 0);
 	set_sci_style(sci, SCE_D_DEFAULT, ft_id, 0);
@@ -2598,7 +2604,10 @@ static void styleset_d(ScintillaObject *sci, gint ft_id)
 	set_sci_style(sci, SCE_D_WORD2, ft_id, 7);
 	set_sci_style(sci, SCE_D_WORD3, ft_id, 8);
 	set_sci_style(sci, SCE_D_TYPEDEF, ft_id, 9);
-	set_sci_style(sci, SCE_D_STRING, ft_id, 10);	/* also for other strings below */
+	set_sci_style(sci, SCE_D_WORD5, ft_id, 9);
+	set_sci_style(sci, SCE_D_STRING, ft_id, 10);
+	set_sci_style(sci, SCE_D_STRINGB, ft_id, 10);
+	set_sci_style(sci, SCE_D_STRINGR, ft_id, 10);
 	set_sci_style(sci, SCE_D_STRINGEOL, ft_id, 11);
 	set_sci_style(sci, SCE_D_CHARACTER, ft_id, 12);
 	set_sci_style(sci, SCE_D_OPERATOR, ft_id, 13);
@@ -2606,10 +2615,6 @@ static void styleset_d(ScintillaObject *sci, gint ft_id)
 	set_sci_style(sci, SCE_D_COMMENTLINEDOC, ft_id, 15);
 	set_sci_style(sci, SCE_D_COMMENTDOCKEYWORD, ft_id, 16);
 	set_sci_style(sci, SCE_D_COMMENTDOCKEYWORDERROR, ft_id, 17);
-
-	/* copy existing styles */
-	set_sci_style(sci, SCE_D_STRINGB, ft_id, 10);	/* `string` */
-	set_sci_style(sci, SCE_D_STRINGR, ft_id, 10);	/* r"string" */
 }
 
 
