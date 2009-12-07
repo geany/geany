@@ -67,7 +67,7 @@ typedef struct
 	gchar			**property_values;
 } StyleSet;
 
-/* each filetype has a styleset except GEANY_FILETYPES_NONE, which uses common_style_set */
+/* each filetype has a styleset but GEANY_FILETYPES_NONE uses common_style_set for styling */
 static StyleSet *style_sets = NULL;
 
 
@@ -3113,17 +3113,20 @@ void highlighting_init_styles(gint filetype_idx, GKeyFile *config, GKeyFile *con
 	GeanyFiletype *ft = filetypes[filetype_idx];
 	gint lexer_id = get_lexer_filetype(ft);
 
+	if (!style_sets)
+		style_sets = g_new0(StyleSet, filetypes_array->len);
+
+	/* Clear old information if necessary - e.g. when reloading config */
+	free_styleset(filetype_idx);
+
+	read_properties(ft, config, configh);
+
 	/* None filetype handled specially */
 	if (filetype_idx == GEANY_FILETYPES_NONE)
 	{
 		styleset_common_init(GEANY_FILETYPES_NONE, config, configh);
 		return;
 	}
-	if (!style_sets)
-		style_sets = g_new0(StyleSet, filetypes_array->len);
-
-	/* Clear old information if necessary - e.g. when reloading config */
-	free_styleset(filetype_idx);
 	/* All stylesets depend on filetypes.common */
 	filetypes_load_config(GEANY_FILETYPES_NONE, FALSE);
 
@@ -3174,7 +3177,6 @@ void highlighting_init_styles(gint filetype_idx, GKeyFile *config, GKeyFile *con
 				geany_debug("Filetype %s has a recursive lexer_filetype %s set!",
 					ft->name, ft->lexer_filetype->name);
 	}
-	read_properties(ft, config, configh);
 
 	/* should be done in filetypes.c really: */
 	get_keyfile_wordchars(config, configh, &style_sets[filetype_idx].wordchars);
