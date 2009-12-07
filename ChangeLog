@@ -4,6 +4,8 @@
    Highlight D & Java types from a global tags file.
  * src/highlighting.c, doc/geany.txt, doc/geany.html:
    Add debug message warning if recursive lexer_filetype is set.
+ * src/highlighting.c, src/sciwrappers.c, src/sciwrappers.h:
+   Remove duplicate sci_set_keywords(), make argument const.
 
 
 2009-12-03  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

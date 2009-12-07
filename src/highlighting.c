@@ -42,6 +42,7 @@
 #include "utils.h"
 #include "main.h"
 #include "support.h"
+#include "sciwrappers.h"
 
 
 #define GEANY_COLORSCHEMES_SUBDIR "colorschemes"
@@ -123,12 +124,6 @@ static GeanyLexerStyle gsd_default = {0x000000, 0xffffff, FALSE, FALSE};
 static void sci_set_property(ScintillaObject *sci, const gchar *name, const gchar *value)
 {
 	SSM(sci, SCI_SETPROPERTY, (uptr_t) name, (sptr_t) value);
-}
-
-
-static void sci_set_keywords(ScintillaObject *sci, gint idx, const gchar *words)
-{
-	SSM(sci, SCI_SETKEYWORDS, idx, (sptr_t) words);
 }
 
 
