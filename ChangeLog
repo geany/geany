@@ -1,3 +1,9 @@
+2009-12-08  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/filetypes.c, src/filetypes.h:
+   Make group for custom filetypes.
+
+
 2009-12-07  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/highlighting.c:
