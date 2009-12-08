@@ -2,7 +2,7 @@
 
  * src/filetypes.c, src/filetypes.h:
    Make group for custom filetypes.
- * data/filetypes.Genie.conf:
+ * data/filetypes.Genie.conf, data/filetype_extensions.conf:
    Add custom filetype Genie.
 
 
