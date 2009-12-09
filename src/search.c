@@ -1104,6 +1104,34 @@ on_replace_entry_activate(GtkEntry *entry, gpointer user_data)
 }
 
 
+static void replace_in_session(GeanyDocument *doc,
+		gint search_flags_re, gboolean search_replace_escape_re,
+		const gchar *find, const gchar *replace)
+{
+	guint n, page_count, count = 0;
+
+	/* replace in all documents following notebook tab order */
+	page_count = gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook));
+	for (n = 0; n < page_count; n++)
+	{
+		GeanyDocument *tmp_doc = document_get_from_page(n);
+
+		if (document_replace_all(tmp_doc, find, replace, search_flags_re,
+			search_replace_escape_re)) count++;
+	}
+	if (count == 0)
+		utils_beep();
+
+	ui_set_statusbar(FALSE,
+		ngettext("Replaced text in %u file.",
+				 "Replaced text in %u files.", count), count);
+	/* show which docs had replacements: */
+	gtk_notebook_set_current_page(GTK_NOTEBOOK(msgwindow.notebook), MSG_STATUS);
+
+	ui_save_buttons_toggle(doc->changed);	/* update save all */
+}
+
+
 static void
 on_replace_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 {
@@ -1163,11 +1191,10 @@ on_replace_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 			break;
 		}
 		case GEANY_RESPONSE_REPLACE:
-		{
 			document_replace_text(doc, find, replace, search_flags_re,
 				search_backwards_re);
 			break;
-		}
+
 		case GEANY_RESPONSE_FIND:
 		{
 			gint result = document_find_text(doc, find, search_flags_re,
@@ -1176,44 +1203,18 @@ on_replace_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 			break;
 		}
 		case GEANY_RESPONSE_REPLACE_IN_FILE:
-		{
 			if (! document_replace_all(doc, find, replace, search_flags_re,
 				search_replace_escape_re))
-			{
 				utils_beep();
-			}
 			break;
-		}
+
 		case GEANY_RESPONSE_REPLACE_IN_SESSION:
-		{
-			guint n, page_count, count = 0;
-
-			/* replace in all documents following notebook tab order */
-			page_count = gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook));
-			for (n = 0; n < page_count; n++)
-			{
-				GeanyDocument *tmp_doc = document_get_from_page(n);
-
-				if (document_replace_all(tmp_doc, find, replace, search_flags_re,
-					search_replace_escape_re)) count++;
-			}
-			if (count == 0)
-				utils_beep();
-
-			ui_set_statusbar(FALSE,
-				ngettext("Replaced text in %u file.",
-						 "Replaced text in %u files.", count), count);
-			/* show which docs had replacements: */
-			gtk_notebook_set_current_page(GTK_NOTEBOOK(msgwindow.notebook), MSG_STATUS);
-
-			ui_save_buttons_toggle(doc->changed);	/* update save all */
+			replace_in_session(doc, search_flags_re, search_replace_escape_re, find, replace);
 			break;
-		}
+
 		case GEANY_RESPONSE_REPLACE_IN_SEL:
-		{
 			document_replace_sel(doc, find, replace, search_flags_re, search_replace_escape_re);
 			break;
-		}
 	}
 	switch (response)
 	{
