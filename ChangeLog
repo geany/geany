@@ -3,6 +3,11 @@
  * geany.glade, src/interface.c:
    Move 'Send Selection to Terminal' menu item from Format to Commands
    submenu.
+ * src/msgwindow.c:
+   When going to a build error, try the current document's path if
+   the parsed filename doesn't exist. (This can happen when we receive
+   build messages in the wrong order - after the 'Leaving directory'
+   messages).
 
 
 2009-12-08  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

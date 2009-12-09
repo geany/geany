@@ -610,9 +610,34 @@ gboolean msgwin_goto_compiler_file_line()
 			find_prev_build_dir(path, model, &dir);
 			gtk_tree_path_free(path);
 			msgwin_parse_compiler_error_line(string, dir, &filename, &line);
+			g_free(dir);
 
-			if (dir != NULL)
-				g_free(dir);
+			/* If the path doesn't exist, try the current document.
+			 * This happens when we receive build messages in the wrong order - after the
+			 * 'Leaving directory' messages */
+			if (!g_file_test(filename, G_FILE_TEST_EXISTS))
+			{
+				gchar *cur_dir = utils_get_current_file_dir_utf8();
+				gchar *name;
+
+				if (cur_dir)
+				{
+					/* we let the user know we couldn't find the parsed filename from the message window */
+					setptr(cur_dir, utils_get_locale_from_utf8(cur_dir));
+					name = g_path_get_basename(filename);
+					setptr(name, g_build_path(G_DIR_SEPARATOR_S, cur_dir, name, NULL));
+					g_free(cur_dir);
+
+					if (g_file_test(name, G_FILE_TEST_EXISTS))
+					{
+						ui_set_statusbar(FALSE, _("Could not find file '%s' - trying the current document path."),
+							filename);
+						filename = name;
+					}
+					else
+						g_free(name);
+				}
+			}
 
 			if (filename != NULL && line > -1)
 			{
