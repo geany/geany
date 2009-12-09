@@ -207,10 +207,14 @@ Example::
     gint function_long_name(gchar arg1, <too many args to fit on this line>,
             gchar argN)
     {
+        /* variable declarations go before code in each scope */
         gint foo, bar;  /* variables can go on the same line */
         gchar *ptr;     /* pointer symbol must go next to variable name, not type */
         gchar *another; /* pointers should normally go on separate lines */
 
+        /* Some long comment block
+         * taking several different
+         * lines to explain */
         if (foo)
         {
             gint dir = -1;    /* -1 to search backwards */
