@@ -8,6 +8,8 @@
    the parsed filename doesn't exist. (This can happen when we receive
    build messages in the wrong order - after the 'Leaving directory'
    messages).
+ * src/msgwindow.c:
+   Refactor msgwin_goto_compiler_file_line().
 
 
 2009-12-08  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
