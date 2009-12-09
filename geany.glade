@@ -584,7 +584,7 @@
 			      <child>
 				<widget class="GtkImageMenuItem" id="cut_current_line(s)1">
 				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">Cut current line(s)</property>
+				  <property name="label" translatable="yes">_Cut Current Line(s)</property>
 				  <property name="use_underline">True</property>
 				  <signal name="activate" handler="on_cut_current_line(s)1_activate" last_modification_time="Mon, 26 Oct 2009 17:34:30 GMT"/>
 
@@ -605,7 +605,7 @@
 			      <child>
 				<widget class="GtkImageMenuItem" id="copy_current_line(s)1">
 				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">Copy current line(s)</property>
+				  <property name="label" translatable="yes">_Copy Current Line(s)</property>
 				  <property name="use_underline">True</property>
 				  <signal name="activate" handler="on_copy_current_line(s)1_activate" last_modification_time="Mon, 26 Oct 2009 17:34:30 GMT"/>
 
@@ -626,7 +626,7 @@
 			      <child>
 				<widget class="GtkMenuItem" id="delete_current_line(s)1">
 				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">Delete current line(s)</property>
+				  <property name="label" translatable="yes">_Delete Current Line(s)</property>
 				  <property name="use_underline">True</property>
 				  <signal name="activate" handler="on_delete_current_line(s)1_activate" last_modification_time="Mon, 26 Oct 2009 17:34:30 GMT"/>
 				</widget>
@@ -635,7 +635,7 @@
 			      <child>
 				<widget class="GtkMenuItem" id="duplicate_line_or_selection1">
 				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">Duplicate line or selection</property>
+				  <property name="label" translatable="yes">_Duplicate Line or Selection</property>
 				  <property name="use_underline">True</property>
 				  <signal name="activate" handler="on_duplicate_line_or_selection1_activate" last_modification_time="Mon, 26 Oct 2009 17:34:30 GMT"/>
 				</widget>
@@ -650,7 +650,7 @@
 			      <child>
 				<widget class="GtkMenuItem" id="select_current_line(s)1">
 				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">Select current line(s)</property>
+				  <property name="label" translatable="yes">_Select Current Line(s)</property>
 				  <property name="use_underline">True</property>
 				  <signal name="activate" handler="on_select_current_line(s)1_activate" last_modification_time="Mon, 26 Oct 2009 17:34:30 GMT"/>
 				</widget>
@@ -659,7 +659,7 @@
 			      <child>
 				<widget class="GtkMenuItem" id="select_current_paragraph1">
 				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">Select current paragraph</property>
+				  <property name="label" translatable="yes">_Select Current Paragraph</property>
 				  <property name="use_underline">True</property>
 				  <signal name="activate" handler="on_select_current_paragraph1_activate" last_modification_time="Mon, 26 Oct 2009 17:34:30 GMT"/>
 				</widget>
@@ -674,7 +674,7 @@
 			      <child>
 				<widget class="GtkMenuItem" id="insert_alternative_white_space1">
 				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">Insert alternative white space</property>
+				  <property name="label" translatable="yes">_Insert Alternative White Space</property>
 				  <property name="use_underline">True</property>
 				  <signal name="activate" handler="on_insert_alternative_white_space1_activate" last_modification_time="Mon, 26 Oct 2009 17:34:30 GMT"/>
 				</widget>
@@ -689,7 +689,7 @@
 			      <child>
 				<widget class="GtkMenuItem" id="go_to_next_marker1">
 				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">Go to next marker</property>
+				  <property name="label" translatable="yes">_Go to Next Marker</property>
 				  <property name="use_underline">True</property>
 				  <signal name="activate" handler="on_go_to_next_marker1_activate" last_modification_time="Mon, 26 Oct 2009 17:34:30 GMT"/>
 				</widget>
@@ -698,7 +698,7 @@
 			      <child>
 				<widget class="GtkMenuItem" id="go_to_previous_marker1">
 				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">Go to previous marker</property>
+				  <property name="label" translatable="yes">_Go to Previous Marker</property>
 				  <property name="use_underline">True</property>
 				  <signal name="activate" handler="on_go_to_previous_marker1_activate" last_modification_time="Mon, 26 Oct 2009 17:34:30 GMT"/>
 				</widget>

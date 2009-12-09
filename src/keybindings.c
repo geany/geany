@@ -257,10 +257,10 @@ static void init_default_kb(void)
 	keybindings_set_item(group, GEANY_KEYS_EDITOR_REDO, NULL,
 		GDK_y, GDK_CONTROL_MASK, "menu_redo", _("Redo"), LW(menu_redo2));
 	keybindings_set_item(group, GEANY_KEYS_EDITOR_DUPLICATELINE, NULL,
-		GDK_d, GDK_CONTROL_MASK, "edit_duplicateline", _("Duplicate line or selection"),
+		GDK_d, GDK_CONTROL_MASK, "edit_duplicateline", _("_Duplicate Line or Selection"),
 		LW(duplicate_line_or_selection1));
 	keybindings_set_item(group, GEANY_KEYS_EDITOR_DELETELINE, NULL,
-		GDK_k, GDK_CONTROL_MASK, "edit_deleteline", _("Delete current line(s)"),
+		GDK_k, GDK_CONTROL_MASK, "edit_deleteline", _("_Delete Current Line(s)"),
 		LW(delete_current_line_s_1));
 	keybindings_set_item(group, GEANY_KEYS_EDITOR_DELETELINETOEND, NULL,
 		GDK_Delete, GDK_SHIFT_MASK | GDK_CONTROL_MASK, "edit_deletelinetoend",
@@ -305,10 +305,10 @@ static void init_default_kb(void)
 	keybindings_set_item(group, GEANY_KEYS_CLIPBOARD_PASTE, NULL,
 		GDK_v, GDK_CONTROL_MASK, "menu_paste", _("Paste"), NULL);
 	keybindings_set_item(group, GEANY_KEYS_CLIPBOARD_COPYLINE, NULL,
-		GDK_c, GDK_CONTROL_MASK | GDK_SHIFT_MASK, "edit_copyline", _("Copy current line(s)"),
+		GDK_c, GDK_CONTROL_MASK | GDK_SHIFT_MASK, "edit_copyline", _("_Copy Current Line(s)"),
 		LW(cut_current_line_s_1));
 	keybindings_set_item(group, GEANY_KEYS_CLIPBOARD_CUTLINE, NULL,
-		GDK_x, GDK_CONTROL_MASK | GDK_SHIFT_MASK, "edit_cutline", _("Cut current line(s)"),
+		GDK_x, GDK_CONTROL_MASK | GDK_SHIFT_MASK, "edit_cutline", _("_Cut Current Line(s)"),
 		LW(copy_current_line_s_1));
 
 	group = ADD_KB_GROUP(SELECT, _("Select"), cb_func_select_action);
@@ -318,10 +318,10 @@ static void init_default_kb(void)
 	keybindings_set_item(group, GEANY_KEYS_SELECT_WORD, NULL,
 		GDK_w, GDK_SHIFT_MASK | GDK_MOD1_MASK, "edit_selectword", _("Select current word"), NULL);
 	keybindings_set_item(group, GEANY_KEYS_SELECT_LINE, NULL,
-		GDK_l, GDK_SHIFT_MASK | GDK_MOD1_MASK, "edit_selectline", _("Select current line(s)"),
+		GDK_l, GDK_SHIFT_MASK | GDK_MOD1_MASK, "edit_selectline", _("_Select Current Line(s)"),
 		LW(select_current_line_s_1));
 	keybindings_set_item(group, GEANY_KEYS_SELECT_PARAGRAPH, NULL,
-		GDK_p, GDK_SHIFT_MASK | GDK_MOD1_MASK, "edit_selectparagraph", _("Select current paragraph"),
+		GDK_p, GDK_SHIFT_MASK | GDK_MOD1_MASK, "edit_selectparagraph", _("_Select Current Paragraph"),
 		LW(select_current_paragraph1));
 	keybindings_set_item(group, GEANY_KEYS_SELECT_WORDPARTLEFT, NULL,
 		0, 0, "edit_selectwordpartleft", _("Select to previous word part"), NULL);
@@ -358,8 +358,9 @@ static void init_default_kb(void)
 		GDK_2, GDK_CONTROL_MASK, "edit_sendtocmd2", _("Send to Custom Command 2"), NULL);
 	keybindings_set_item(group, GEANY_KEYS_FORMAT_SENDTOCMD3, NULL,
 		GDK_3, GDK_CONTROL_MASK, "edit_sendtocmd3", _("Send to Custom Command 3"), NULL);
+	/* may fit better in editor group */
 	keybindings_set_item(group, GEANY_KEYS_FORMAT_SENDTOVTE, NULL,
-		0, 0, "edit_sendtovte", _("Send Selection to Terminal"), LW(send_selection_to_vte1));
+		0, 0, "edit_sendtovte", _("_Send Selection to Terminal"), LW(send_selection_to_vte1));
 	keybindings_set_item(group, GEANY_KEYS_FORMAT_REFLOWPARAGRAPH, NULL,
 		GDK_j, GDK_CONTROL_MASK, "format_reflowparagraph", _("_Reflow Lines/Block"),
 		LW(reflow_lines_block1));
@@ -370,7 +371,7 @@ static void init_default_kb(void)
 		GDK_d, GDK_SHIFT_MASK | GDK_MOD1_MASK, "menu_insert_date", _("Insert date"),
 		LW(insert_date_custom1));
 	keybindings_set_item(group, GEANY_KEYS_INSERT_ALTWHITESPACE, NULL,
-		0, 0, "edit_insertwhitespace", _("Insert alternative white space"),
+		0, 0, "edit_insertwhitespace", _("_Insert Alternative White Space"),
 		LW(insert_alternative_white_space1));
 
 	group = ADD_KB_GROUP(SETTINGS, _("Settings"), NULL);
@@ -426,10 +427,10 @@ static void init_default_kb(void)
 		_("Toggle marker"), NULL);
 	keybindings_set_item(group, GEANY_KEYS_GOTO_NEXTMARKER, NULL,
 		GDK_period, GDK_CONTROL_MASK, "edit_gotonextmarker",
-		_("Go to next marker"), LW(go_to_next_marker1));
+		_("_Go to Next Marker"), LW(go_to_next_marker1));
 	keybindings_set_item(group, GEANY_KEYS_GOTO_PREVIOUSMARKER, NULL,
 		GDK_comma, GDK_CONTROL_MASK, "edit_gotopreviousmarker",
-		_("Go to previous marker"), LW(go_to_previous_marker1));
+		_("_Go to Previous Marker"), LW(go_to_previous_marker1));
 	keybindings_set_item(group, GEANY_KEYS_GOTO_TAGDEFINITION, NULL,
 		0, 0, "popup_gototagdefinition", _("Go to Tag Definition"), NULL);
 	keybindings_set_item(group, GEANY_KEYS_GOTO_TAGDECLARATION, NULL,

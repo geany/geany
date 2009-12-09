@@ -560,7 +560,7 @@ create_window1 (void)
   commands2_menu = gtk_menu_new ();
   gtk_menu_item_set_submenu (GTK_MENU_ITEM (commands2), commands2_menu);
 
-  cut_current_line_s_1 = gtk_image_menu_item_new_with_mnemonic (_("Cut current line(s)"));
+  cut_current_line_s_1 = gtk_image_menu_item_new_with_mnemonic (_("_Cut Current Line(s)"));
   gtk_widget_show (cut_current_line_s_1);
   gtk_container_add (GTK_CONTAINER (commands2_menu), cut_current_line_s_1);
 
@@ -568,7 +568,7 @@ create_window1 (void)
   gtk_widget_show (image3173);
   gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (cut_current_line_s_1), image3173);
 
-  copy_current_line_s_1 = gtk_image_menu_item_new_with_mnemonic (_("Copy current line(s)"));
+  copy_current_line_s_1 = gtk_image_menu_item_new_with_mnemonic (_("_Copy Current Line(s)"));
   gtk_widget_show (copy_current_line_s_1);
   gtk_container_add (GTK_CONTAINER (commands2_menu), copy_current_line_s_1);
 
@@ -576,11 +576,11 @@ create_window1 (void)
   gtk_widget_show (image3174);
   gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (copy_current_line_s_1), image3174);
 
-  delete_current_line_s_1 = gtk_menu_item_new_with_mnemonic (_("Delete current line(s)"));
+  delete_current_line_s_1 = gtk_menu_item_new_with_mnemonic (_("_Delete Current Line(s)"));
   gtk_widget_show (delete_current_line_s_1);
   gtk_container_add (GTK_CONTAINER (commands2_menu), delete_current_line_s_1);
 
-  duplicate_line_or_selection1 = gtk_menu_item_new_with_mnemonic (_("Duplicate line or selection"));
+  duplicate_line_or_selection1 = gtk_menu_item_new_with_mnemonic (_("_Duplicate Line or Selection"));
   gtk_widget_show (duplicate_line_or_selection1);
   gtk_container_add (GTK_CONTAINER (commands2_menu), duplicate_line_or_selection1);
 
@@ -589,11 +589,11 @@ create_window1 (void)
   gtk_container_add (GTK_CONTAINER (commands2_menu), separator49);
   gtk_widget_set_sensitive (separator49, FALSE);
 
-  select_current_line_s_1 = gtk_menu_item_new_with_mnemonic (_("Select current line(s)"));
+  select_current_line_s_1 = gtk_menu_item_new_with_mnemonic (_("_Select Current Line(s)"));
   gtk_widget_show (select_current_line_s_1);
   gtk_container_add (GTK_CONTAINER (commands2_menu), select_current_line_s_1);
 
-  select_current_paragraph1 = gtk_menu_item_new_with_mnemonic (_("Select current paragraph"));
+  select_current_paragraph1 = gtk_menu_item_new_with_mnemonic (_("_Select Current Paragraph"));
   gtk_widget_show (select_current_paragraph1);
   gtk_container_add (GTK_CONTAINER (commands2_menu), select_current_paragraph1);
 
@@ -602,7 +602,7 @@ create_window1 (void)
   gtk_container_add (GTK_CONTAINER (commands2_menu), separator50);
   gtk_widget_set_sensitive (separator50, FALSE);
 
-  insert_alternative_white_space1 = gtk_menu_item_new_with_mnemonic (_("Insert alternative white space"));
+  insert_alternative_white_space1 = gtk_menu_item_new_with_mnemonic (_("_Insert Alternative White Space"));
   gtk_widget_show (insert_alternative_white_space1);
   gtk_container_add (GTK_CONTAINER (commands2_menu), insert_alternative_white_space1);
 
@@ -611,11 +611,11 @@ create_window1 (void)
   gtk_container_add (GTK_CONTAINER (commands2_menu), separator51);
   gtk_widget_set_sensitive (separator51, FALSE);
 
-  go_to_next_marker1 = gtk_menu_item_new_with_mnemonic (_("Go to next marker"));
+  go_to_next_marker1 = gtk_menu_item_new_with_mnemonic (_("_Go to Next Marker"));
   gtk_widget_show (go_to_next_marker1);
   gtk_container_add (GTK_CONTAINER (commands2_menu), go_to_next_marker1);
 
-  go_to_previous_marker1 = gtk_menu_item_new_with_mnemonic (_("Go to previous marker"));
+  go_to_previous_marker1 = gtk_menu_item_new_with_mnemonic (_("_Go to Previous Marker"));
   gtk_widget_show (go_to_previous_marker1);
   gtk_container_add (GTK_CONTAINER (commands2_menu), go_to_previous_marker1);
 

@@ -10,6 +10,9 @@
    messages).
  * src/msgwindow.c:
    Refactor msgwin_goto_compiler_file_line().
+ * src/interface.c, src/keybindings.c, geany.glade:
+   Capitalize, add mnemonics, sync with kb.c the Edit->Commands menu item
+   labels.
 
 
 2009-12-08  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
