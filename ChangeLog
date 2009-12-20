@@ -12,6 +12,9 @@
  * src/document.c:
    When closing a document after it was deleted from the filesystem,
    don't ask whether it should be saved first.
+   Mark the document only as changed if it is not closed afterwards.
+   Prevent possible segfaults if the document was closed when it is
+   missing from the filesystem.
  * src/keybindings.c, src/keyfile.c, src/main.c, src/msgwindow.c,
    src/msgwindow.h, src/prefs.c:
    Add MessageWindow::scribble and use it instead of searching the

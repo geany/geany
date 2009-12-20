@@ -2948,11 +2948,6 @@ static gboolean monitor_resave_missing_file(GeanyDocument *doc)
 	gboolean want_reload = FALSE;
 	gint ret;
 
-	/* file is missing - set unsaved state */
-	document_set_text_changed(doc, TRUE);
-	/* don't prompt more than once */
-	setptr(doc->real_path, NULL);
-
 	ret = dialogs_show_prompt(NULL,
 		GTK_STOCK_CLOSE, GTK_RESPONSE_CLOSE,
 		GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
@@ -2966,8 +2961,14 @@ static gboolean monitor_resave_missing_file(GeanyDocument *doc)
 	}
 	else if (ret == GTK_RESPONSE_CLOSE)
 	{
-		doc->changed = FALSE;
 		document_close(doc);
+	}
+	if (ret != GTK_RESPONSE_CLOSE)
+	{
+		/* file is missing - set unsaved state */
+		document_set_text_changed(doc, TRUE);
+		/* don't prompt more than once */
+		setptr(doc->real_path, NULL);
 	}
 
 	return want_reload;
@@ -3027,11 +3028,13 @@ gboolean document_check_disk_status(GeanyDocument *doc, gboolean force)
 	}
 	g_free(locale_filename);
 
-	old_status = doc->priv->file_disk_status;
-	doc->priv->file_disk_status = FILE_OK;
-	if (old_status != doc->priv->file_disk_status)
-		ui_update_tab_status(doc);
-
+	if (DOC_VALID(doc))
+	{	/* doc can get invalid when a document was closed by monitor_resave_missing_file() */
+		old_status = doc->priv->file_disk_status;
+		doc->priv->file_disk_status = FILE_OK;
+		if (old_status != doc->priv->file_disk_status)
+			ui_update_tab_status(doc);
+	}
 	return ret;
 }
 
