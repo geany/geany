@@ -22,6 +22,9 @@
  * src/keyfile.c, src/msgwindow.c, src/msgwindow.h, src/ui_utils.h:
    Add preferences for hiding single tabs from the messages window
    (no GUI preferences yet, still to be implemented).
+ * src/callbacks.c, src/prefs.c, src/toolbar.c, src/toolbar.h:
+   Set the correct parent window for the toolbar editor
+   dialog (closes #2913334).
 
 
 2009-12-20  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>

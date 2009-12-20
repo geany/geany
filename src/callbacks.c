@@ -2261,7 +2261,7 @@ void
 on_customize_toolbar1_activate         (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	toolbar_configure();
+	toolbar_configure(GTK_WINDOW(main_widgets.window));
 }
 
 
@@ -2269,7 +2269,7 @@ void
 on_button_customize_toolbar_clicked    (GtkButton       *button,
                                         gpointer         user_data)
 {
-	toolbar_configure();
+	toolbar_configure(GTK_WINDOW(ui_widgets.prefs_dialog));
 }
 
 
