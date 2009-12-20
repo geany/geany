@@ -2043,6 +2043,28 @@ static void editor_auto_latex(GeanyEditor *editor, gint pos)
 				}
 			}
 
+			/* Search whether the environment is closed within the next
+			 * lines. We assume, no \end is needed in such cases */
+			/* TODO using sci_find_text() should be way faster than getting
+			 *      the line buffer and performing string comparisons */
+			for (i = 1; i < 5; i++)
+			{
+				gchar *tmp;
+				gchar *end_construct;
+				tmp = sci_get_line(sci, line + i);
+				/* Again get to the first non-blank char */
+				start = 0;
+				while (isspace(buf[start]))
+					start++;
+				end_construct = g_strdup_printf("\\end%s{%s}", full_cmd, env);
+				if (strstr(tmp, end_construct) != NULL)
+				{
+					utils_free_pointers(3, tmp, buf, end_construct, NULL);
+					return;
+				}
+				g_free(tmp);
+			}
+
 			/* get the indentation */
 			if (editor->auto_indent)
 				read_indent(editor, pos);

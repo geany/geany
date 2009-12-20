@@ -1,3 +1,10 @@
+2009-12-20  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * src/editor.c:
+   Extend auto_latex() function to check whether an environment has been
+   closed within the next lines to avoid auto adding double \end{}.
+
+
 2009-12-09  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * geany.glade, src/interface.c:
