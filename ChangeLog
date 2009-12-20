@@ -5,6 +5,14 @@
    closed within the next lines to avoid auto adding double \end{}.
 
 
+2009-12-19  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/callbacks.c, src/dialogs.c, src/document.c, src/document.h:
+   Add document_need_save_as().
+   Show the Save As also for documents created from filetype templates
+   instead of saving them directly with the untitled filename.
+
+
 2009-12-09  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * geany.glade, src/interface.c:

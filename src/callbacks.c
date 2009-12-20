@@ -182,7 +182,7 @@ on_save1_activate                      (GtkMenuItem     *menuitem,
 
 	if (doc != NULL && cur_page >= 0)
 	{
-		if (doc->file_name == NULL)
+		if (document_need_save_as(doc))
 			dialogs_show_save_as();
 		else
 			document_save_file(doc, FALSE);
@@ -211,7 +211,7 @@ on_save_all1_activate                  (GtkMenuItem     *menuitem,
 		doc = document_get_from_page(i);
 		if (! doc->changed)
 			continue;
-		if (doc->file_name == NULL)
+		if (document_need_save_as(doc))
 		{
 			/* display unnamed document */
 			gtk_notebook_set_current_page(GTK_NOTEBOOK(main_widgets.notebook),

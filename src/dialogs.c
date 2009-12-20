@@ -700,7 +700,7 @@ gboolean dialogs_show_unsaved_file(GeanyDocument *doc)
 	{
 		case GTK_RESPONSE_YES:
 		{
-			if (doc->file_name == NULL)
+			if (document_need_save_as(doc))
 			{
 				ret = dialogs_show_save_as();
 			}

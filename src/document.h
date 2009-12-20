@@ -250,4 +250,6 @@ const GdkColor *document_get_status_color(GeanyDocument *doc);
 
 gchar *document_get_basename_for_display(GeanyDocument *doc, gint length);
 
+gboolean document_need_save_as(GeanyDocument *doc);
+
 #endif
