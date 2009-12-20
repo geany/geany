@@ -1003,11 +1003,6 @@ static gboolean check_menu_key(GeanyDocument *doc, guint keyval, guint state, gu
 	if ((keyval == GDK_Menu && state == 0) || (keyval == GDK_F10 && state == GDK_SHIFT_MASK))
 	{
 		GtkWidget *focusw = gtk_window_get_focus(GTK_WINDOW(main_widgets.window));
-		static GtkWidget *scribble = NULL;
-
-		if (scribble == NULL)
-			scribble = ui_lookup_widget(main_widgets.window, "textview_scribble");
-
 		if (doc != NULL)
 		{
 			if (focusw == doc->priv->tag_tree)
@@ -1033,7 +1028,7 @@ static gboolean check_menu_key(GeanyDocument *doc, guint keyval, guint state, gu
 		 || focusw == msgwindow.tree_status
 		 || focusw == msgwindow.tree_compiler
 		 || focusw == msgwindow.tree_msg
-		 || focusw == scribble
+		 || focusw == msgwindow.scribble
 #ifdef HAVE_VTE
 		 || (vte_info.have_vte && focusw == vc->vte)
 #endif
@@ -2399,14 +2394,11 @@ static gboolean cb_func_select_action(guint key_id)
 	GeanyDocument *doc;
 	ScintillaObject *sci;
 	GtkWidget *focusw = gtk_window_get_focus(GTK_WINDOW(main_widgets.window));
-	static GtkWidget *scribble_widget = NULL;
 
 	/* special case for Select All in the scribble widget */
-	if (scribble_widget == NULL) /* lookup the scribble widget only once */
-		scribble_widget = ui_lookup_widget(main_widgets.window, "textview_scribble");
-	if (key_id == GEANY_KEYS_SELECT_ALL && focusw == scribble_widget)
+	if (key_id == GEANY_KEYS_SELECT_ALL && focusw == msgwindow.scribble)
 	{
-		g_signal_emit_by_name(scribble_widget, "select-all", TRUE);
+		g_signal_emit_by_name(msgwindow.scribble, "select-all", TRUE);
 		return TRUE;
 	}
 

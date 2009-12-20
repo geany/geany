@@ -12,6 +12,10 @@
  * src/document.c:
    When closing a document after it was deleted from the filesystem,
    don't ask whether it should be saved first.
+ * src/keybindings.c, src/keyfile.c, src/main.c, src/msgwindow.c,
+   src/msgwindow.h, src/prefs.c:
+   Add MessageWindow::scribble and use it instead of searching the
+   widget pointer everytime.
 
 
 2009-12-20  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>

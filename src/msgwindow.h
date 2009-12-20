@@ -64,6 +64,7 @@ typedef struct
 	GtkWidget		*tree_compiler;
 	GtkWidget		*tree_status;
 	GtkWidget		*tree_msg;
+	GtkWidget		*scribble;
 	GtkWidget		*popup_status_menu;
 	GtkWidget		*popup_msg_menu;
 	GtkWidget		*popup_compiler_menu;

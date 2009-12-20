@@ -476,7 +476,7 @@ static void save_ui_prefs(GKeyFile *config)
 		GtkTextIter start, end, iter;
 		GtkTextMark *mark;
 
-		buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(ui_lookup_widget(main_widgets.window, "textview_scribble")));
+		buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(msgwindow.scribble));
 		gtk_text_buffer_get_bounds(buffer, &start, &end);
 		scribble_text = gtk_text_buffer_get_text(buffer, &start, &end, FALSE);
 		g_key_file_set_string(config, PACKAGE, "scribble_text", scribble_text);
@@ -1051,8 +1051,7 @@ void configuration_apply_settings(void)
 	{	/* update the scribble widget, because now it's realized */
 		GtkTextIter iter;
 		GtkTextBuffer *buffer =
-			gtk_text_view_get_buffer(GTK_TEXT_VIEW(ui_lookup_widget(main_widgets.window,
-				"textview_scribble")));
+			gtk_text_view_get_buffer(GTK_TEXT_VIEW(msgwindow.scribble));
 
 		gtk_text_buffer_set_text(buffer, scribble_text, -1);
 		gtk_text_buffer_get_iter_at_offset(buffer, &iter, scribble_pos);

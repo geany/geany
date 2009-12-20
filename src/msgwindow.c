@@ -75,12 +75,13 @@ static gboolean on_msgwin_button_press_event(GtkWidget *widget, GdkEventButton *
 static void on_scribble_populate(GtkTextView *textview, GtkMenu *arg1, gpointer user_data);
 
 
-void msgwin_init()
+void msgwin_init(void)
 {
 	msgwindow.notebook = ui_lookup_widget(main_widgets.window, "notebook_info");
 	msgwindow.tree_status = ui_lookup_widget(main_widgets.window, "treeview3");
 	msgwindow.tree_msg = ui_lookup_widget(main_widgets.window, "treeview4");
 	msgwindow.tree_compiler = ui_lookup_widget(main_widgets.window, "treeview5");
+	msgwindow.scribble = ui_lookup_widget(main_widgets.window, "textview_scribble");
 	msgwindow.find_in_files_dir = NULL;
 
 	prepare_status_tree_view();
@@ -90,15 +91,12 @@ void msgwin_init()
 	msgwindow.popup_msg_menu = create_message_popup_menu(MSG_MESSAGE);
 	msgwindow.popup_compiler_menu = create_message_popup_menu(MSG_COMPILER);
 
-	ui_widget_modify_font_from_string(
-		ui_lookup_widget(main_widgets.window, "textview_scribble"), interface_prefs.msgwin_font);
-
-	g_signal_connect(ui_lookup_widget(main_widgets.window, "textview_scribble"),
-		"populate-popup", G_CALLBACK(on_scribble_populate), NULL);
+	ui_widget_modify_font_from_string(msgwindow.scribble, interface_prefs.msgwin_font);
+	g_signal_connect(msgwindow.scribble, "populate-popup", G_CALLBACK(on_scribble_populate), NULL);
 }
 
 
-void msgwin_finalize()
+void msgwin_finalize(void)
 {
 	g_free(msgwindow.find_in_files_dir);
 }
@@ -629,7 +627,7 @@ static gboolean goto_compiler_file_line(const gchar *filename, gint line)
 }
 
 
-gboolean msgwin_goto_compiler_file_line()
+gboolean msgwin_goto_compiler_file_line(void)
 {
 	GtkTreeIter iter;
 	GtkTreeModel *model;
@@ -942,7 +940,7 @@ void msgwin_parse_compiler_error_line(const gchar *string, const gchar *dir,
 }
 
 
-gboolean msgwin_goto_messages_file_line()
+gboolean msgwin_goto_messages_file_line(void)
 {
 	GtkTreeIter iter;
 	GtkTreeModel *model;
@@ -1075,7 +1073,7 @@ void msgwin_switch_tab(gint tabnum, gboolean show)
 
 	switch (tabnum)
 	{
-		case MSG_SCRATCH: widget = ui_lookup_widget(main_widgets.window, "textview_scribble"); break;
+		case MSG_SCRATCH: widget = msgwindow.scribble; break;
 		case MSG_COMPILER: widget = msgwindow.tree_compiler; break;
 		case MSG_STATUS: widget = msgwindow.tree_status; break;
 		case MSG_MESSAGE: widget = msgwindow.tree_msg; break;
