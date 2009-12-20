@@ -1370,7 +1370,9 @@ static gboolean kb_find_duplicate(GeanyKeyBinding *search_kb,
 			{
 				gchar *label = keybindings_get_label(kb);
 				gint ret = dialogs_show_prompt(main_widgets.window,
-					_("_Override"), GTK_STOCK_CANCEL, _("_Allow"),
+					_("_Allow"), GTK_RESPONSE_APPLY,
+					GTK_STOCK_CANCEL, GTK_RESPONSE_NO,
+					_("_Override"), GTK_RESPONSE_YES,
 					_("Override that keybinding?"),
 					_("The combination '%s' is already used for \"%s\"."),
 					action, label);

@@ -2946,19 +2946,29 @@ static gboolean monitor_reload_file(GeanyDocument *doc)
 static gboolean monitor_resave_missing_file(GeanyDocument *doc)
 {
 	gboolean want_reload = FALSE;
+	gint ret;
 
 	/* file is missing - set unsaved state */
 	document_set_text_changed(doc, TRUE);
 	/* don't prompt more than once */
 	setptr(doc->real_path, NULL);
 
-	if (dialogs_show_question_full(NULL, GTK_STOCK_SAVE, GTK_STOCK_CANCEL,
+	ret = dialogs_show_prompt(NULL,
+		GTK_STOCK_CLOSE, GTK_RESPONSE_CLOSE,
+		GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+		GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT,
 		_("Try to resave the file?"),
-		_("File \"%s\" was not found on disk!"), doc->file_name))
+		_("File \"%s\" was not found on disk!"), doc->file_name);
+	if (ret == GTK_RESPONSE_ACCEPT)
 	{
 		dialogs_show_save_as();
 		want_reload = TRUE;
 	}
+	else if (ret == GTK_RESPONSE_CLOSE)
+	{
+		document_close(doc);
+	}
+
 	return want_reload;
 }
 

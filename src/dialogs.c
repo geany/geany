@@ -1344,30 +1344,38 @@ void dialogs_show_file_properties(GeanyDocument *doc)
 
 /* extra_text can be NULL; otherwise it is displayed below main_text.
  * if parent is NULL, main_widgets.window will be used
- * yes_btn, no_btn, apply_btn can be NULL.
- * returns GTK_RESPONSE_YES, GTK_RESPONSE_NO, GTK_RESPONSE_APPLY */
+ * btn_1, btn_2, btn_3 can be NULL.
+ * returns response_1, response_2 or response_3 */
 static gint show_prompt(GtkWidget *parent,
-		const gchar *yes_btn, const gchar *no_btn, const gchar *apply_btn,
+		const gchar *btn_1, GtkResponseType response_1,
+		const gchar *btn_2, GtkResponseType response_2,
+		const gchar *btn_3, GtkResponseType response_3,
 		const gchar *question_text, const gchar *extra_text)
 {
 	gboolean ret = FALSE;
 	GtkWidget *dialog;
 	GtkWidget *btn;
 
-	if (!yes_btn)
-		yes_btn = GTK_STOCK_YES;
-	if (!no_btn)
-		no_btn = GTK_STOCK_NO;
+	if (btn_2 == NULL)
+	{
+		btn_2 = GTK_STOCK_NO;
+		response_2 = GTK_RESPONSE_NO;
+	}
+	if (btn_3 == NULL)
+	{
+		btn_3 = GTK_STOCK_YES;
+		response_3 = GTK_RESPONSE_YES;
+	}
 
 #ifdef G_OS_WIN32
 	/* our native dialog code doesn't support custom buttons */
-	if (yes_btn == GTK_STOCK_YES && no_btn == GTK_STOCK_NO && !apply_btn)
+	if (btn_3 == GTK_STOCK_YES && btn_2 == GTK_STOCK_NO && btn_1 == NULL)
 	{
 		gchar *string = (extra_text == NULL) ? g_strdup(question_text) :
 			g_strconcat(question_text, "\n\n", extra_text, NULL);
 
 		ret = win32_message_dialog(parent, GTK_MESSAGE_QUESTION, string);
-		ret = ret ? GTK_RESPONSE_YES : GTK_RESPONSE_NO;
+		ret = ret ? response_3 : response_2;
 		g_free(string);
 		return ret;
 	}
@@ -1392,21 +1400,21 @@ static gint show_prompt(GtkWidget *parent,
 		gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
 			"%s", extra_text);
 
-	if (apply_btn)
-		gtk_dialog_add_button(GTK_DIALOG(dialog), apply_btn, GTK_RESPONSE_APPLY);
+	if (btn_1 != NULL)
+		gtk_dialog_add_button(GTK_DIALOG(dialog), btn_1, response_1);
 
 	/* For a cancel button, use cancel response so user can press escape to cancel */
-	btn = gtk_dialog_add_button(GTK_DIALOG(dialog), no_btn,
-		utils_str_equal(no_btn, GTK_STOCK_CANCEL) ? GTK_RESPONSE_CANCEL : GTK_RESPONSE_NO);
+	btn = gtk_dialog_add_button(GTK_DIALOG(dialog), btn_2,
+		utils_str_equal(btn_2, GTK_STOCK_CANCEL) ? GTK_RESPONSE_CANCEL : response_2);
 	/* we don't want a default, but we need to override the apply button as default */
 	gtk_widget_grab_default(btn);
-	gtk_dialog_add_button(GTK_DIALOG(dialog), yes_btn, GTK_RESPONSE_YES);
+	gtk_dialog_add_button(GTK_DIALOG(dialog), btn_3, response_3);
 
 	ret = gtk_dialog_run(GTK_DIALOG(dialog));
 	gtk_widget_destroy(dialog);
 
 	if (ret == GTK_RESPONSE_CANCEL)
-		ret = GTK_RESPONSE_NO;
+		ret = response_2;
 	return ret;
 }
 
@@ -1430,7 +1438,11 @@ gboolean dialogs_show_question(const gchar *text, ...)
 	va_start(args, text);
 	g_vsnprintf(string, 511, text, args);
 	va_end(args);
-	return show_prompt(parent, GTK_STOCK_YES, GTK_STOCK_NO, NULL, string, NULL) == GTK_RESPONSE_YES;
+	return show_prompt(parent,
+		NULL, GTK_RESPONSE_NONE,
+		GTK_STOCK_NO, GTK_RESPONSE_NO,
+		GTK_STOCK_YES, GTK_RESPONSE_YES,
+		string, NULL) == GTK_RESPONSE_YES;
 }
 
 
@@ -1446,16 +1458,22 @@ gboolean dialogs_show_question_full(GtkWidget *parent, const gchar *yes_btn, con
 	va_start(args, main_text);
 	g_vsnprintf(string, 511, main_text, args);
 	va_end(args);
-	return show_prompt(parent, yes_btn, no_btn, NULL, string, extra_text) == GTK_RESPONSE_YES;
+	return show_prompt(parent,
+		NULL, GTK_RESPONSE_NONE,
+		no_btn, GTK_RESPONSE_NO,
+		yes_btn, GTK_RESPONSE_YES,
+		string, extra_text) == GTK_RESPONSE_YES;
 }
 
 
 /* extra_text can be NULL; otherwise it is displayed below main_text.
  * if parent is NULL, main_widgets.window will be used
- * yes_btn, no_btn, apply_btn can be NULL.
- * returns GTK_RESPONSE_YES, GTK_RESPONSE_NO, GTK_RESPONSE_APPLY */
+ * btn_1, btn_2, btn_3 can be NULL.
+ * returns response_1, response_2 or response_3 */
 gint dialogs_show_prompt(GtkWidget *parent,
-		const gchar *yes_btn, const gchar *no_btn, const gchar *apply_btn,
+		const gchar *btn_1, GtkResponseType response_1,
+		const gchar *btn_2, GtkResponseType response_2,
+		const gchar *btn_3, GtkResponseType response_3,
 		const gchar *extra_text, const gchar *main_text, ...)
 {
 	gchar string[512];
@@ -1464,7 +1482,8 @@ gint dialogs_show_prompt(GtkWidget *parent,
 	va_start(args, main_text);
 	g_vsnprintf(string, 511, main_text, args);
 	va_end(args);
-	return show_prompt(parent, yes_btn, no_btn, apply_btn, string, extra_text);
+	return show_prompt(parent, btn_1, response_1, btn_2, response_2, btn_3, response_3,
+				string, extra_text);
 }
 
 

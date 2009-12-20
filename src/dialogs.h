@@ -59,8 +59,10 @@ gboolean dialogs_show_question_full(GtkWidget *parent, const gchar *yes_btn, con
 	const gchar *extra_text, const gchar *main_text, ...) G_GNUC_PRINTF (5, 6);
 
 gint dialogs_show_prompt(GtkWidget *parent,
-		const gchar *yes_btn, const gchar *no_btn, const gchar *apply_btn,
-		const gchar *extra_text, const gchar *main_text, ...) G_GNUC_PRINTF (6, 7);
+		const gchar *btn_1, GtkResponseType response_1,
+		const gchar *btn_2, GtkResponseType response_2,
+		const gchar *btn_3, GtkResponseType response_3,
+		const gchar *extra_text, const gchar *main_text, ...) G_GNUC_PRINTF (9, 10);
 
 void dialogs_show_msgbox(GtkMessageType type, const gchar *text, ...) G_GNUC_PRINTF (2, 3);
 
