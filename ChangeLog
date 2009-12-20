@@ -29,6 +29,11 @@
    Rename win32_show_project_folder_dialog() to
    win32_show_folder_dialog() as it is not related and not used by any
    project management related code.
+ * src/ui_utils.c, src/win32.c, src/win32.h, src/dialogs.c:
+   Rename win32_show_file_dialog() to win32_show_document_open_dialog()
+   as it is specialised for opening documents.
+   Implement win32_show_file_dialog() as a generic file open dialog and
+   use it with ui_path_box_new().
 
 
 2009-12-20  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>

@@ -222,7 +222,7 @@ void dialogs_show_open_file()
 	setptr(initdir, utils_get_locale_from_utf8(initdir));
 
 #if GEANY_USE_WIN32_DIALOG
-	win32_show_file_dialog(TRUE, initdir);
+	win32_show_document_open_dialog(TRUE, initdir);
 #else /* X11, not win32: use GTK_FILE_CHOOSER */
 
 	/* We use the same file selection widget each time, so first of all we create it

@@ -27,7 +27,9 @@
 
 void win32_show_pref_file_dialog(GtkEntry *item);
 
-gboolean win32_show_file_dialog(gboolean file_open, const gchar *initial_dir);
+gchar *win32_show_file_dialog(GtkWindow *parent, const gchar *title, const gchar *initial_dir);
+
+gboolean win32_show_document_open_dialog(gboolean file_open, const gchar *initial_dir);
 
 void win32_show_font_dialog(void);
 
@@ -43,8 +45,7 @@ gchar *win32_show_project_open_dialog(GtkWidget *parent, const gchar *title,
 								      const gchar *initial_dir, gboolean allow_new_file,
 								      gboolean project_file_filter);
 
-gchar *win32_show_project_folder_dialog(GtkWidget *parent, const gchar *title,
-										const gchar *initial_dir);
+gchar *win32_show_folder_dialog(GtkWidget *parent, const gchar *title, const gchar *initial_dir);
 
 gint win32_check_write_permission(const gchar *dir);
 

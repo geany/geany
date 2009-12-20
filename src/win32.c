@@ -313,7 +313,7 @@ gchar *win32_show_project_open_dialog(GtkWidget *parent, const gchar *title,
 
 /* initial_dir can be NULL to use the current working directory.
  * Returns: TRUE if the dialog was not cancelled. */
-gboolean win32_show_file_dialog(gboolean file_open, const gchar *initial_dir)
+gboolean win32_show_document_open_dialog(gboolean file_open, const gchar *initial_dir)
 {
 	OPENFILENAMEW of;
 	gint retval;
@@ -409,6 +409,59 @@ gboolean win32_show_file_dialog(gboolean file_open, const gchar *initial_dir)
 		document_save_file_as(doc, tmp);
 	}
 	return (retval != 0);
+}
+
+
+/* initial_dir can be NULL to use the current working directory.
+ * Returns: the selected filename */
+gchar *win32_show_file_dialog(GtkWindow *parent, const gchar *title, const gchar *initial_file)
+{
+	OPENFILENAMEW of;
+	gint retval;
+	gchar tmp[MAX_PATH];
+	wchar_t w_file[MAX_PATH];
+	wchar_t w_title[512];
+	guint x;
+
+	w_file[0] = '\0';
+
+	if (initial_file != NULL)
+		MultiByteToWideChar(CP_UTF8, 0, initial_file, -1, w_file, sizeof(w_file));
+
+	MultiByteToWideChar(CP_UTF8, 0, title, -1, w_title, sizeof(w_title));
+
+	/* initialise file dialog info struct */
+	memset(&of, 0, sizeof of);
+#ifdef OPENFILENAME_SIZE_VERSION_400
+	of.lStructSize = OPENFILENAME_SIZE_VERSION_400;
+#else
+	of.lStructSize = sizeof of;
+#endif
+	of.hwndOwner = GDK_WINDOW_HWND(GTK_WIDGET(parent)->window);
+
+	of.lpstrFile = w_file;
+	of.nMaxFile = 2048;
+	of.lpstrFileTitle = NULL;
+	of.lpstrTitle = w_title;
+	of.lpstrDefExt = L"";
+	of.Flags = OFN_FILEMUSTEXIST | OFN_EXPLORER;
+	retval = GetOpenFileNameW(&of);
+
+	if (! retval)
+	{
+		if (CommDlgExtendedError())
+		{
+			gchar *error = g_strdup_printf(
+				"File dialog box error (%x)", (gint) CommDlgExtendedError());
+			win32_message_dialog(NULL, GTK_MESSAGE_ERROR, error);
+			g_free(error);
+		}
+		return NULL;
+	}
+
+	WideCharToMultiByte(CP_UTF8, 0, w_file, -1, tmp, sizeof(tmp), NULL, NULL);
+
+	return g_strdup(tmp);
 }
 
 
