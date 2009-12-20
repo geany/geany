@@ -9,6 +9,9 @@
  * src/editor.c:
    Fix LaTeX environment auto completion with CR/LF line endings.
    Add some sanity checks.
+ * src/document.c:
+   When closing a document after it was deleted from the filesystem,
+   don't ask whether it should be saved first.
 
 
 2009-12-20  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>

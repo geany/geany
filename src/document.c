@@ -2966,6 +2966,7 @@ static gboolean monitor_resave_missing_file(GeanyDocument *doc)
 	}
 	else if (ret == GTK_RESPONSE_CLOSE)
 	{
+		doc->changed = FALSE;
 		document_close(doc);
 	}
 
