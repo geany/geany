@@ -6,6 +6,9 @@
    Add a close button to the dialog when asking to Re-Save a
    deleted file
    (closes #2916954, based on a patch by Dominik Stadler, thanks).
+ * src/editor.c:
+   Fix LaTeX environment auto completion with CR/LF line endings.
+   Add some sanity checks.
 
 
 2009-12-20  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
