@@ -1662,7 +1662,7 @@ static void ui_path_box_open_clicked(GtkButton *button, gpointer user_data)
 	if (action == GTK_FILE_CHOOSER_ACTION_OPEN)
 	{
 #ifdef G_OS_WIN32
-		utf8_path = win32_show_project_folder_dialog(ui_widgets.prefs_dialog, title,
+		utf8_path = win32_show_folder_dialog(ui_widgets.prefs_dialog, title,
 						gtk_entry_get_text(GTK_ENTRY(entry)));
 #else
 		utf8_path = run_file_chooser(title, action, gtk_entry_get_text(GTK_ENTRY(entry)));

@@ -208,8 +208,7 @@ INT CALLBACK BrowseCallbackProc(HWND hwnd, UINT uMsg, LPARAM lp, LPARAM pData)
 /* Shows a folder selection dialog.
  * initial_dir is expected in UTF-8
  * The selected folder name is returned. */
-gchar *win32_show_project_folder_dialog(GtkWidget *parent, const gchar *title,
-										const gchar *initial_dir)
+gchar *win32_show_folder_dialog(GtkWidget *parent, const gchar *title, const gchar *initial_dir)
 {
 	BROWSEINFOW bi;
 	LPCITEMIDLIST pidl;
