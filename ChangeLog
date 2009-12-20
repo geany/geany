@@ -29,6 +29,9 @@
  * src/editor.c:
    Extend auto_latex() function to check whether an environment has been
    closed within the next lines to avoid auto adding double \end{}.
+ * data/latex.tags:
+   Remove LaTeX tags from SVN. Can be found at
+   http://download.geany.org/contrib/tags/ if needed.
 
 
 2009-12-19  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
