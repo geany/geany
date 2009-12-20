@@ -96,6 +96,8 @@ void msgwin_compiler_add_string(gint msg_color, const gchar *msg);
 
 void msgwin_status_add(const gchar *format, ...) G_GNUC_PRINTF (1, 2);
 
+void msgwin_show_hide_tabs(void);
+
 
 void msgwin_menu_add_common_items(GtkMenu *menu);
 

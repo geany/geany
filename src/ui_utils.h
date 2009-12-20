@@ -53,6 +53,10 @@ typedef struct GeanyInterfacePrefs
 	gboolean		notebook_double_click_hides_widgets;
 	gboolean		highlighting_invert_all;
 	gint			sidebar_pos;
+	gboolean		msgwin_status_visible;
+	gboolean		msgwin_compiler_visible;
+	gboolean		msgwin_messages_visible;
+	gboolean		msgwin_scribble_visible;
 }
 GeanyInterfacePrefs;
 

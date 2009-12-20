@@ -351,6 +351,10 @@ static void save_dialog_prefs(GKeyFile *config)
 	g_key_file_set_boolean(config, PACKAGE, "tab_order_ltr", file_prefs.tab_order_ltr);
 	g_key_file_set_integer(config, PACKAGE, "tab_pos_editor", interface_prefs.tab_pos_editor);
 	g_key_file_set_integer(config, PACKAGE, "tab_pos_msgwin", interface_prefs.tab_pos_msgwin);
+	g_key_file_set_boolean(config, PACKAGE, "msgwin_status_visible", interface_prefs.msgwin_status_visible);
+	g_key_file_set_boolean(config, PACKAGE, "msgwin_compiler_visible", interface_prefs.msgwin_compiler_visible);
+	g_key_file_set_boolean(config, PACKAGE, "msgwin_messages_visible", interface_prefs.msgwin_messages_visible);
+	g_key_file_set_boolean(config, PACKAGE, "msgwin_scribble_visible", interface_prefs.msgwin_scribble_visible);
 
 	/* display */
 	g_key_file_set_boolean(config, PACKAGE, "show_indent_guide", editor_prefs.show_indent_guide);
@@ -644,6 +648,10 @@ static void load_dialog_prefs(GKeyFile *config)
 	interface_prefs.editor_font = utils_get_setting_string(config, PACKAGE, "editor_font", GEANY_DEFAULT_FONT_EDITOR);
 	interface_prefs.tagbar_font = utils_get_setting_string(config, PACKAGE, "tagbar_font", GEANY_DEFAULT_FONT_SYMBOL_LIST);
 	interface_prefs.msgwin_font = utils_get_setting_string(config, PACKAGE, "msgwin_font", GEANY_DEFAULT_FONT_MSG_WINDOW);
+	interface_prefs.msgwin_status_visible = utils_get_setting_boolean(config, PACKAGE, "msgwin_status_visible", TRUE);
+	interface_prefs.msgwin_compiler_visible = utils_get_setting_boolean(config, PACKAGE, "msgwin_compiler_visible", TRUE);
+	interface_prefs.msgwin_messages_visible = utils_get_setting_boolean(config, PACKAGE, "msgwin_messages_visible", TRUE);
+	interface_prefs.msgwin_scribble_visible = utils_get_setting_boolean(config, PACKAGE, "msgwin_scribble_visible", TRUE);
 
 	/* display, editor */
 	editor_prefs.long_line_type = utils_get_setting_integer(config, PACKAGE, "long_line_type", 0);
@@ -1074,6 +1082,8 @@ void configuration_apply_settings(void)
 		ui_prefs.fullscreen = TRUE;
 		ui_set_fullscreen();
 	}
+
+	msgwin_show_hide_tabs();
 }
 
 
