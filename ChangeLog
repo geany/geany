@@ -1,3 +1,9 @@
+2009-12-26  Frank Lanitz  <frank@frank.uvena.de>
+
+ * doc/plugins.dox:
+   Fix a minor typo inside plugin API reference.
+
+
 2009-12-20  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/dialog.c, src/dialogs.h, src/document.c, src/prefs.c:

@@ -152,7 +152,7 @@ PluginCallback plugin_callbacks[] =
  *  Sent after the filetype of a document has been changed.
  *  The previous filetype object is passed but it can be NULL (e.g. at startup).
  *  The new filetype can be read with: @code
- *     GeanyFiletype *ft = doc->filetype;
+ *     GeanyFiletype *ft = doc->file_type;
  *  @endcode
  *
  *  @param obj a GeanyObject instance, should be ignored.
