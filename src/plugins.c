@@ -970,6 +970,25 @@ void plugins_finalize(void)
 }
 
 
+/* Check whether there are any plugins loaded which provide a configure symbol */
+gboolean plugins_have_preferences(void)
+{
+	GList *item;
+
+	if (active_plugin_list == NULL)
+		return FALSE;
+
+	foreach_list(item, active_plugin_list)
+	{
+		Plugin *plugin = item->data;
+		if (plugin->configure != NULL || plugin->configure_single != NULL)
+			return TRUE;
+	}
+
+	return FALSE;
+}
+
+
 /* Plugin Manager */
 
 enum

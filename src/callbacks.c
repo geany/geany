@@ -293,7 +293,7 @@ on_edit1_activate                      (GtkMenuItem     *menuitem,
 #ifndef HAVE_PLUGINS
 	gtk_widget_hide(item);
 #else
-	gtk_widget_set_sensitive(item, active_plugin_list != NULL);
+	gtk_widget_set_sensitive(item, plugins_have_preferences());
 #endif
 }
 

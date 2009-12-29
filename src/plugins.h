@@ -37,6 +37,8 @@ void plugins_finalize(void);
 
 void plugins_load_active(void);
 
+gboolean plugins_have_preferences(void);
+
 #endif
 
 #endif

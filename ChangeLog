@@ -4,6 +4,9 @@
    plugins/geanyfunctions.h:
    Add editor_get_eol_char_name(), editor_get_eol_char_len() and
    editor_get_eol_char() to the plugin API.
+ * src/callbacks.c, src/plugins.c, src/plugins.h:
+   Fix sensitivity of the Edit->Plugin Preferences menu item
+   if plugins are loaded which do not provide a configuration dialog.
 
 
 2009-12-26  Frank Lanitz  <frank@frank.uvena.de>
