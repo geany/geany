@@ -11,6 +11,8 @@
    Rewrite and extend the Python tags parsing script to use
    Python's inspect module to read symbols from Python modules
    including scope information.
+ * data/filetypes.restructuredtext:
+   Add the default comment character sequence for reStructuredText.
 
 
 2009-12-26  Frank Lanitz  <frank@frank.uvena.de>
