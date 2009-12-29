@@ -20,6 +20,9 @@
    src/highlighting.c:
    Add new style to change foreground and background colours for
    calltips (patch by Dimitar Zhekov, thanks, closes #2919229).
+ * src/search.c:
+   Remember the window position of the Find, Replace and Find in Files
+   dialogs (closes #2877988).
 
 
 2009-12-26  Frank Lanitz  <frank@frank.uvena.de>

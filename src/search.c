@@ -99,8 +99,9 @@ static struct
 	GtkWidget	*dialog;
 	GtkWidget	*entry;
 	gboolean	all_expanded;
+	gint		position[2]; /* x, y */
 }
-find_dlg = {NULL, NULL, FALSE};
+find_dlg = {NULL, NULL, FALSE, {0, 0}};
 
 static struct
 {
@@ -108,8 +109,9 @@ static struct
 	GtkWidget	*find_entry;
 	GtkWidget	*replace_entry;
 	gboolean	all_expanded;
+	gint		position[2]; /* x, y */
 }
-replace_dlg = {NULL, NULL, NULL, FALSE};
+replace_dlg = {NULL, NULL, NULL, FALSE, {0, 0}};
 
 static struct
 {
@@ -117,8 +119,9 @@ static struct
 	GtkWidget	*dir_combo;
 	GtkWidget	*search_combo;
 	GtkWidget	*encoding_combo;
+	gint		position[2]; /* x, y */
 }
-fif_dlg = {NULL, NULL, NULL, NULL};
+fif_dlg = {NULL, NULL, NULL, NULL, {0, 0}};
 
 
 static gboolean search_read_io(GIOChannel *source, GIOCondition condition, gpointer data);
@@ -165,6 +168,13 @@ static void init_prefs(void)
 		"pref_search_current_file_dir", TRUE, "check_fif_current_dir");
 	stash_group_add_boolean(group, &find_dlg.all_expanded, "find_all_expanded", FALSE);
 	stash_group_add_boolean(group, &replace_dlg.all_expanded, "replace_all_expanded", FALSE);
+	/* dialog positions */
+	stash_group_add_integer(group, &find_dlg.position[0], "position_find_x", -1);
+	stash_group_add_integer(group, &find_dlg.position[1], "position_find_y", -1);
+	stash_group_add_integer(group, &replace_dlg.position[0], "position_replace_x", -1);
+	stash_group_add_integer(group, &replace_dlg.position[1], "position_replace_y", -1);
+	stash_group_add_integer(group, &fif_dlg.position[0], "position_fif_x", -1);
+	stash_group_add_integer(group, &fif_dlg.position[1], "position_fif_y", -1);
 
 	group = stash_group_new("search");
 	fif_prefs = group;
@@ -464,6 +474,13 @@ static void create_find_dialog(void)
 }
 
 
+static void set_dialog_position(GtkWidget *dialog, gint *position)
+{
+	if (position[0] >= 0)
+		gtk_window_move(GTK_WINDOW(dialog), position[0], position[1]);
+}
+
+
 void search_show_find_dialog(void)
 {
 	GeanyDocument *doc = document_get_current();
@@ -479,6 +496,7 @@ void search_show_find_dialog(void)
 		if (sel)
 			gtk_entry_set_text(GTK_ENTRY(find_dlg.entry), sel);
 
+		set_dialog_position(find_dlg.dialog, find_dlg.position);
 		gtk_widget_show_all(find_dlg.dialog);
 	}
 	else
@@ -487,12 +505,14 @@ void search_show_find_dialog(void)
 		if (! GTK_WIDGET_VISIBLE(find_dlg.dialog) && sel)
 			gtk_entry_set_text(GTK_ENTRY(find_dlg.entry), sel);
 		gtk_widget_grab_focus(find_dlg.entry);
+		set_dialog_position(find_dlg.dialog, find_dlg.position);
 		gtk_widget_show(find_dlg.dialog);
 		if (sel != NULL) /* when we have a selection, reset the entry widget's background colour */
 			ui_set_search_entry_background(find_dlg.entry, TRUE);
 		/* bring the dialog back in the foreground in case it is already open but the focus is away */
 		gtk_window_present(GTK_WINDOW(find_dlg.dialog));
 	}
+
 	g_free(sel);
 }
 
@@ -644,6 +664,7 @@ void search_show_replace_dialog(void)
 		if (sel)
 			gtk_entry_set_text(GTK_ENTRY(replace_dlg.find_entry), sel);
 
+		set_dialog_position(replace_dlg.dialog, replace_dlg.position);
 		gtk_widget_show_all(replace_dlg.dialog);
 	}
 	else
@@ -654,6 +675,7 @@ void search_show_replace_dialog(void)
 		if (sel != NULL) /* when we have a selection, reset the entry widget's background colour */
 			ui_set_search_entry_background(replace_dlg.find_entry, TRUE);
 		gtk_widget_grab_focus(replace_dlg.find_entry);
+		set_dialog_position(replace_dlg.dialog, replace_dlg.position);
 		gtk_widget_show(replace_dlg.dialog);
 		/* bring the dialog back in the foreground in case it is already open but the focus is away */
 		gtk_window_present(GTK_WINDOW(replace_dlg.dialog));
@@ -912,6 +934,9 @@ void search_show_find_in_files_dialog(const gchar *dir)
 	else
 		gtk_widget_grab_focus(fif_dlg.search_combo);
 
+	/* set dialog window position */
+	set_dialog_position(fif_dlg.dialog, fif_dlg.position);
+
 	gtk_widget_show(fif_dlg.dialog);
 	/* bring the dialog back in the foreground in case it is already open but the focus is away */
 	gtk_window_present(GTK_WINDOW(fif_dlg.dialog));
@@ -1025,6 +1050,9 @@ static gint get_search_flags(GtkWidget *dialog)
 static void
 on_find_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 {
+	gtk_window_get_position(GTK_WINDOW(find_dlg.dialog),
+		&find_dlg.position[0], &find_dlg.position[1]);
+
 	if (response == GTK_RESPONSE_CANCEL || response == GTK_RESPONSE_DELETE_EVENT)
 		gtk_widget_hide(find_dlg.dialog);
 	else
@@ -1140,6 +1168,9 @@ on_replace_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 	gboolean search_backwards_re, search_replace_escape_re;
 	gboolean close_window;
 	gchar *find, *replace;
+
+	gtk_window_get_position(GTK_WINDOW(replace_dlg.dialog),
+		&replace_dlg.position[0], &replace_dlg.position[1]);
 
 	if (response == GTK_RESPONSE_CANCEL || response == GTK_RESPONSE_DELETE_EVENT)
 	{
@@ -1289,6 +1320,8 @@ static void
 on_find_in_files_dialog_response(GtkDialog *dialog, gint response,
 		G_GNUC_UNUSED gpointer user_data)
 {
+	gtk_window_get_position(GTK_WINDOW(fif_dlg.dialog), &fif_dlg.position[0], &fif_dlg.position[1]);
+
 	stash_group_update(fif_prefs, fif_dlg.dialog);
 
 	if (response == GTK_RESPONSE_ACCEPT)
