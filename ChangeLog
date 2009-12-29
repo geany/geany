@@ -13,6 +13,9 @@
    including scope information.
  * data/filetypes.restructuredtext:
    Add the default comment character sequence for reStructuredText.
+ * src/callbacks.c:
+   Show the Find/Goto dialogs if the corresponding toolbar buttons are
+   clicked but their text fields are not part of the toolbar (#2920807).
 
 
 2009-12-26  Frank Lanitz  <frank@frank.uvena.de>
