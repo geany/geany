@@ -4254,6 +4254,16 @@ void editor_insert_color(GeanyEditor *editor, const gchar *colour)
 }
 
 
+/**
+ *  Retrieves the localized name (for displaying) of the used end of line characters
+ *  (LF, CR/LF, CR) in the given editor.
+ *  If @a editor is @c NULL, the default end of line characters are used.
+ *
+ *  @param editor The editor to operate on, or @c NULL to query the default value.
+ *  @return The name of the end of line characters.
+ *
+ *  @since 0.19
+ */
 const gchar *editor_get_eol_char_name(GeanyEditor *editor)
 {
 	gint mode = file_prefs.default_eol_character;
@@ -4265,7 +4275,16 @@ const gchar *editor_get_eol_char_name(GeanyEditor *editor)
 }
 
 
-/* returns the end-of-line character(s) length of the specified editor */
+/**
+ *  Retrieves the length of the used end of line characters (LF, CR/LF, CR) in the given editor.
+ *  If @a editor is @c NULL, the default end of line characters are used.
+ *  The returned value is 1 for CR and LF and 2 for CR/LF.
+ *
+ *  @param editor The editor to operate on, or @c NULL to query the default value.
+ *  @return The length of the end of line characters.
+ *
+ *  @since 0.19
+ */
 gint editor_get_eol_char_len(GeanyEditor *editor)
 {
 	gint mode = file_prefs.default_eol_character;
@@ -4281,7 +4300,16 @@ gint editor_get_eol_char_len(GeanyEditor *editor)
 }
 
 
-/* returns the end-of-line character(s) of the specified editor */
+/**
+ *  Retrieves the used end of line characters (LF, CR/LF, CR) in the given editor.
+ *  If @a editor is @c NULL, the default end of line characters are used.
+ *  The returned value is either "\n", "\r\n" or "\r".
+ *
+ *  @param editor The editor to operate on, or @c NULL to query the default value.
+ *  @return The end of line characters.
+ *
+ *  @since 0.19
+ */
 const gchar *editor_get_eol_char(GeanyEditor *editor)
 {
 	gint mode = file_prefs.default_eol_character;

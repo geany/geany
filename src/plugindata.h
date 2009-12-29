@@ -50,7 +50,7 @@
 enum {
 	/** The Application Programming Interface (API) version, incremented
 	 * whenever any plugin data types are modified or appended to. */
-	GEANY_API_VERSION = 165,
+	GEANY_API_VERSION = 166,
 
 	/** The Application Binary Interface (ABI) version, incremented whenever
 	 * existing fields in the plugin data types have to be changed or reordered. */
@@ -559,8 +559,9 @@ typedef struct EditorFuncs
 	void	(*set_indent_type)(struct GeanyEditor *editor, GeanyIndentType type);
 	gchar*	(*get_word_at_pos) (struct GeanyEditor *editor, gint pos, const gchar *wordchars);
 
-	/* Remember to convert any GeanyDocument or ScintillaObject pointers in any
-	 * appended functions to GeanyEditor pointers. */
+	const gchar*	(*get_eol_char_name) (struct GeanyEditor *editor);
+	gint			(*get_eol_char_len) (struct GeanyEditor *editor);
+	const gchar*	(*get_eol_char) (struct GeanyEditor *editor);
 }
 EditorFuncs;
 

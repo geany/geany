@@ -117,7 +117,10 @@ static EditorFuncs editor_funcs = {
 	&editor_indicator_set_on_line,
 	&editor_indicator_clear,
 	&editor_set_indent_type,
-	&editor_get_word_at_pos
+	&editor_get_word_at_pos,
+	&editor_get_eol_char_name,
+	&editor_get_eol_char_len,
+	&editor_get_eol_char
 };
 
 static ScintillaFuncs scintilla_funcs = {

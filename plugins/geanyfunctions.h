@@ -80,6 +80,12 @@
 	geany_functions->p_editor->set_indent_type
 #define editor_get_word_at_pos \
 	geany_functions->p_editor->get_word_at_pos
+#define editor_get_eol_char_name \
+	geany_functions->p_editor->get_eol_char_name
+#define editor_get_eol_char_len \
+	geany_functions->p_editor->get_eol_char_len
+#define editor_get_eol_char \
+	geany_functions->p_editor->get_eol_char
 #define scintilla_send_message \
 	geany_functions->p_scintilla->send_message
 #define scintilla_new \
