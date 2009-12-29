@@ -7,6 +7,10 @@
  * src/callbacks.c, src/plugins.c, src/plugins.h:
    Fix sensitivity of the Edit->Plugin Preferences menu item
    if plugins are loaded which do not provide a configuration dialog.
+ * scripts/create_py_tags.py:
+   Rewrite and extend the Python tags parsing script to use
+   Python's inspect module to read symbols from Python modules
+   including scope information.
 
 
 2009-12-26  Frank Lanitz  <frank@frank.uvena.de>

@@ -12,48 +12,115 @@
 # them into data/python.tags (internal tagmanager format).
 # If called without command line arguments, a preset of common Python libs is used.
 
-import sys, re, os, datetime
+import datetime
+import imp
+import inspect
+import os
+import re
+import string
+import sys
+import types
 
 
 # (from tagmanager/tm_tag.c:32)
 TA_NAME = '%c' % 200,
 TA_TYPE = '%c' % 204
 TA_ARGLIST = '%c' % 205
+TA_SCOPE = '%c' % 206
 
 # TMTagType (tagmanager/tm_tag.h:47)
 TYPE_CLASS = '%d' % 1
 TYPE_FUNCTION = '%d' % 128
 
 tag_filename = 'data/python.tags'
-matcher = re.compile('^[ \t]*(def|class)[ \t]+([a-zA-Z0-9_]+)[ \t]*(\(.*\))[:]')
+tag_regexp = '^[ \t]*(def|class)[ \t]+([a-zA-Z0-9_]+)[ \t]*(\(.*\))[:]'
 
 
 class Parser:
 
 	#----------------------------------------------------------------------
 	def __init__(self):
-		self.tags = []
+		self.tags = {}
+		self.re_matcher = re.compile(tag_regexp)
 
 	#----------------------------------------------------------------------
-	def add_tag(self, tag):
+	def _get_superclass(self, c):
+		"""
+		Python class base-finder
+		(found on http://mail.python.org/pipermail/python-list/2002-November/173949.html)
+
+		@param c (object)
+		@return superclass (object)
+		"""
+		try:
+			#~ TODO print inspect.getmro(c)
+			if type(c) == types.ClassType:
+				return c.__bases__[0].__name__
+			else:
+				return c.__mro__[1].__name__
+		except Exception, e:
+			return ''
+
+	#----------------------------------------------------------------------
+	def _formatargspec(self, args, varargs=None, varkw=None, defaults=None,
+					  formatarg=str,
+					  formatvarargs=lambda name: '*' + name,
+					  formatvarkw=lambda name: '**' + name,
+					  formatvalue=lambda value: '=' + repr(value),
+					  join=inspect.joinseq):
+		"""Format an argument spec from the 4 values returned by getargspec.
+
+		The first four arguments are (args, varargs, varkw, defaults).  The
+		other four arguments are the corresponding optional formatting functions
+		that are called to turn names and values into strings.  The ninth
+		argument is an optional function to format the sequence of arguments."""
+		specs = []
+		if defaults:
+			firstdefault = len(args) - len(defaults)
+		for i in range(len(args)):
+			spec = inspect.strseq(args[i], formatarg, join)
+			if defaults and i >= firstdefault:
+				d = defaults[i - firstdefault]
+				# this is the difference from the original formatargspec() function
+				# to use nicer names then the default repr() output
+				if hasattr(d, '__name__'):
+					d = d.__name__
+				spec = spec + formatvalue(d)
+			specs.append(spec)
+		if varargs is not None:
+			specs.append(formatvarargs(varargs))
+		if varkw is not None:
+			specs.append(formatvarkw(varkw))
+		return '(' + string.join(specs, ', ') + ')'
+
+	#----------------------------------------------------------------------
+	def _add_tag(self, obj, tag_type, parent=''):
 		"""
 		Verify the found tag name and if it is valid, add it to the list
 
-		@param tag (str)
+		@param obj (instance)
+		@param tag_type (str)
+		@param parent (str)
 		"""
-		end_pos = tag.find(TA_TYPE)
-		tagname = tag[0:(end_pos+1)]
+		args = ''
+		scope = ''
+		try:
+			args = apply(self._formatargspec, inspect.getargspec(obj))
+		except TypeError, KeyError:
+			pass
+		if parent:
+			if tag_type == TYPE_CLASS:
+				args = '(%s)' % parent
+			else:
+				scope = '%s%s' % (TA_SCOPE, parent)
+		tagname = obj.__name__
 		# check for duplicates
-		if len(tagname) < 5:
+		if len(tagname) < 4:
 			# skip short tags
 			return
-		for test in self.tags:
-			if test.startswith(tagname):
-				# check whether we find a tag line which starts with the same name,
-				# include the separating TA_TYPE character to ensure we don't match
-				# writelines() and write()
-				return
-		self.tags.append(tag)
+		tag = '%s%s%s%s%s%s\n' % (tagname, TA_TYPE, tag_type, TA_ARGLIST, args, scope)
+		if not tagname in self.tags:
+			self.tags[tagname] = tag
 
 	#----------------------------------------------------------------------
 	def process_file(self, filename):
@@ -63,46 +130,66 @@ class Parser:
 		@param filename (str)
 		"""
 		try:
-			fp = open(filename, 'r')
-		except:
-			sys.stderr.write('Cannot open %s\n' % filename)
-			return
-		for line in fp:
-			m = matcher.match(line)
-			if m:
-				tag_type_str, name, args = m.groups()
-				if not name or name[0] == '_':
+			module = imp.load_source('tags_file_module', filename)
+		except Exception, e:
+			module = None
+
+		if module:
+			symbols = inspect.getmembers(module, callable)
+			for obj_name, obj in symbols:
+				try:
+					name = obj.__name__
+				except AttributeError:
+					name = obj_name
+				if not name or name.startswith('_'):
 					# skip non-public tags
 					continue;
-				if tag_type_str == 'class':
-					tag_type = TYPE_CLASS
-				else:
-					tag_type = TYPE_FUNCTION
-				args = args.strip()
-				# tagnameTA_TYPEtypeTA_ARGLISTarglist\n
-				s = name + TA_TYPE + tag_type + TA_ARGLIST + args + '\n'
-				self.add_tag(s)
-				#~ # maybe for later use, with a more sophisticated algo to retrieve the API
-				#~ scope = ''
-				#~ return_value = ''
-				#~ # tagnameTA_TYPEtypeTA_ARGLISTarglistTA_SCOPEscopeTA_VARTYPEreturn_value\n
-				#~ s = name + TA_TYPE + type + TA_ARGLIST + args + TA_SCOPE + scope + TA_VARTYPE + return_value + '\n'
+				if inspect.isfunction(obj):
+					self._add_tag(obj, TYPE_FUNCTION)
+				elif inspect.isclass(obj):
+					self._add_tag(obj, TYPE_CLASS, self._get_superclass(obj))
+					methods = inspect.getmembers(obj, inspect.ismethod)
+					for m_name, m_obj in methods:
+						# skip non-public tags
+						if m_name.startswith('_') or not inspect.ismethod(m_obj):
+							continue
+						self._add_tag(m_obj, TYPE_FUNCTION, name)
+		else:
+			# plain regular expression based parsing
+			fp = open(filename)
+			for line in fp:
+				m = self.re_matcher.match(line)
+				if m:
+					tag_type_str, tagname, args = m.groups()
+					if not tagname or tagname.startswith('_'):
+						# skip non-public tags
+						continue;
+					if tag_type_str == 'class':
+						tag_type = TYPE_CLASS
+					else:
+						tag_type = TYPE_FUNCTION
+					args = args.strip()
+					tag = '%s%s%s%s%s\n' % (tagname, TA_TYPE, tag_type, TA_ARGLIST, args)
+					if not tagname in self.tags:
+						self.tags[tagname] = tag
+			fp.close()
 
 	#----------------------------------------------------------------------
-	def tags_to_file(self, filename):
+	def write_to_file(self, filename):
 		"""
 		Sort the found tags and write them into the file specified by filename
 
 		@param filename (str)
 		"""
+		result = self.tags.values()
 		# sort the tags
-		self.tags.sort()
+		result.sort()
 		# write them
 		fp = open(filename, 'wb')
 		fp.write(
 			'# format=tagmanager - Automatically generated file - do not edit (created on %s)\n' % \
 			datetime.datetime.now().ctime())
-		for s in self.tags:
+		for s in result:
 			if not s == '\n': # skip empty lines
 				fp.write(s)
 		fp.close()
@@ -151,7 +238,7 @@ def main():
 	for filename in args:
 		parser.process_file(filename)
 
-	parser.tags_to_file(tag_filename)
+	parser.write_to_file(tag_filename)
 
 
 if __name__ == '__main__':
