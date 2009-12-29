@@ -91,6 +91,7 @@ enum	/* Geany common styling */
 	GCS_MARKER_MARK,
 	GCS_MARKER_TRANSLUCENCY,
 	GCS_LINE_HEIGHT,
+	GCS_CALLTIPS,
 	GCS_MAX
 };
 
@@ -591,6 +592,7 @@ static void styleset_common_init(gint ft_id, GKeyFile *config, GKeyFile *config_
 	get_keyfile_style(config, config_home, "marker_line", &common_style_set.styling[GCS_MARKER_LINE]);
 	get_keyfile_style(config, config_home, "marker_search", &common_style_set.styling[GCS_MARKER_SEARCH]);
 	get_keyfile_style(config, config_home, "marker_mark", &common_style_set.styling[GCS_MARKER_MARK]);
+	get_keyfile_style(config, config_home, "calltips", &common_style_set.styling[GCS_CALLTIPS]);
 
 	get_keyfile_ints(config, config_home, "styling", "folding_style",
 		1, 1, &common_style_set.fold_marker, &common_style_set.fold_lines);
@@ -782,6 +784,11 @@ static void styleset_common(ScintillaObject *sci, filetype_id ft_id)
 		invert(common_style_set.styling[GCS_WHITE_SPACE].foreground));
 	SSM(sci, SCI_SETWHITESPACEBACK, common_style_set.styling[GCS_WHITE_SPACE].italic,
 		invert(common_style_set.styling[GCS_WHITE_SPACE].background));
+
+	if (common_style_set.styling[GCS_CALLTIPS].bold)
+		SSM(sci, SCI_CALLTIPSETFORE, invert(common_style_set.styling[GCS_CALLTIPS].foreground), 1);
+	if (common_style_set.styling[GCS_CALLTIPS].italic)
+		SSM(sci, SCI_CALLTIPSETBACK, invert(common_style_set.styling[GCS_CALLTIPS].background), 1);
 }
 
 

@@ -3842,6 +3842,13 @@ line_height
 
     *Example:* ``line_height=0;0;false;false``
 
+calltips
+    The style for coloring the calltips. The first two arguments
+    define the foreground and background colors, the third and fourth
+    arguments set whether to use the defined colors.
+
+    *Example:* ``calltips=0xc0c0c0;0xffffff;false;false``
+
 
 [settings] Section
 ``````````````````
