@@ -2399,8 +2399,12 @@ create_prefs_dialog (void)
   GtkWidget *frame7;
   GtkWidget *alignment9;
   GtkWidget *vbox11;
+  GtkWidget *frame39;
+  GtkWidget *alignment46;
+  GtkWidget *vbox46;
   GtkWidget *check_list_symbol;
   GtkWidget *check_list_openfiles;
+  GtkWidget *check_sidebar_visible;
   GtkWidget *hbox17;
   GtkWidget *label237;
   GtkWidget *radio_sidebar_left;
@@ -3033,19 +3037,37 @@ create_prefs_dialog (void)
   gtk_widget_show (vbox11);
   gtk_container_add (GTK_CONTAINER (alignment9), vbox11);
 
+  frame39 = gtk_frame_new (NULL);
+  gtk_widget_show (frame39);
+  gtk_box_pack_start (GTK_BOX (vbox11), frame39, FALSE, FALSE, 0);
+  gtk_frame_set_shadow_type (GTK_FRAME (frame39), GTK_SHADOW_NONE);
+
+  alignment46 = gtk_alignment_new (0.5, 0.5, 1, 1);
+  gtk_widget_show (alignment46);
+  gtk_container_add (GTK_CONTAINER (frame39), alignment46);
+  gtk_alignment_set_padding (GTK_ALIGNMENT (alignment46), 0, 0, 12, 0);
+
+  vbox46 = gtk_vbox_new (FALSE, 0);
+  gtk_widget_show (vbox46);
+  gtk_container_add (GTK_CONTAINER (alignment46), vbox46);
+
   check_list_symbol = gtk_check_button_new_with_mnemonic (_("Show symbol list"));
   gtk_widget_show (check_list_symbol);
-  gtk_box_pack_start (GTK_BOX (vbox11), check_list_symbol, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox46), check_list_symbol, FALSE, FALSE, 0);
   gtk_tooltips_set_tip (tooltips, check_list_symbol, _("Toggle the symbol list on and off"), NULL);
 
   check_list_openfiles = gtk_check_button_new_with_mnemonic (_("Show documents list"));
   gtk_widget_show (check_list_openfiles);
-  gtk_box_pack_start (GTK_BOX (vbox11), check_list_openfiles, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox46), check_list_openfiles, FALSE, FALSE, 0);
   gtk_tooltips_set_tip (tooltips, check_list_openfiles, _("Toggle the documents list on and off"), NULL);
+
+  check_sidebar_visible = gtk_check_button_new_with_mnemonic (_("Show sidebar"));
+  gtk_widget_show (check_sidebar_visible);
+  gtk_frame_set_label_widget (GTK_FRAME (frame39), check_sidebar_visible);
 
   hbox17 = gtk_hbox_new (FALSE, 12);
   gtk_widget_show (hbox17);
-  gtk_box_pack_start (GTK_BOX (vbox11), hbox17, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox11), hbox17, FALSE, FALSE, 0);
 
   label237 = gtk_label_new (_("Position:"));
   gtk_widget_show (label237);
@@ -4756,8 +4778,12 @@ create_prefs_dialog (void)
   GLADE_HOOKUP_OBJECT (prefs_dialog, frame7, "frame7");
   GLADE_HOOKUP_OBJECT (prefs_dialog, alignment9, "alignment9");
   GLADE_HOOKUP_OBJECT (prefs_dialog, vbox11, "vbox11");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, frame39, "frame39");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, alignment46, "alignment46");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, vbox46, "vbox46");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_list_symbol, "check_list_symbol");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_list_openfiles, "check_list_openfiles");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, check_sidebar_visible, "check_sidebar_visible");
   GLADE_HOOKUP_OBJECT (prefs_dialog, hbox17, "hbox17");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label237, "label237");
   GLADE_HOOKUP_OBJECT (prefs_dialog, radio_sidebar_left, "radio_sidebar_left");

@@ -1687,6 +1687,9 @@ Interface preferences
 Sidebar
 ```````
 
+Show sidebar
+    Whether to show the sidebar at all.
+
 Show symbol list
     Show the list of functions, variables, and other information in the
     current document you are editing.

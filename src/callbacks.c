@@ -1646,14 +1646,14 @@ on_menu_select_all1_activate           (GtkMenuItem     *menuitem,
 
 void
 on_menu_show_sidebar1_toggled          (GtkCheckMenuItem *checkmenuitem,
-                                        gpointer         user_data)
+                                        gpointer          user_data)
 {
 	if (ignore_callback)
 		return;
 
 	ui_prefs.sidebar_visible = ! ui_prefs.sidebar_visible;
 
-	if ((! interface_prefs.sidebar_openfiles_visible && ! interface_prefs.sidebar_symbol_visible))
+	if (! interface_prefs.sidebar_openfiles_visible && ! interface_prefs.sidebar_symbol_visible)
 	{
 		interface_prefs.sidebar_openfiles_visible = TRUE;
 		interface_prefs.sidebar_symbol_visible = TRUE;
