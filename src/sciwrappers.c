@@ -799,6 +799,19 @@ gint sci_search_prev(ScintillaObject *sci, gint flags, const gchar *text)
 }
 
 
+/** Find a text in the document.
+ * The @a ttf argument should be a pointer to a Sci_TextToFind structure which contains
+ * the text to find and the range in which the text should be searched.
+ * 
+ * Please refer to the Scintilla documentation for a more detailed description.
+ * 
+ * @param sci Scintilla widget.
+ * @param flags Bitmask of Scintilla search flags (@c SCFIND_*, see Scintilla documentation).
+ * @param ttf Pointer to a TextToFind structure which contains the text to find and the range.
+ * @return The position of the start of the found text if it succeeds, otherwise @c -1. 
+ *         The @c chrgText.cpMin and @c chrgText.cpMax members of @c TextToFind are filled in 
+ *         with the start and end positions of the found text.
+ */
 gint sci_find_text(ScintillaObject *sci, gint flags, struct Sci_TextToFind *ttf)
 {
 	return SSM(sci, SCI_FINDTEXT, flags, (long) ttf);

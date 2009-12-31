@@ -2,6 +2,9 @@
 
  * autogen.sh, configure.in, configure.ac:
    Rename configure.in to configure.ac.
+ * plugins/geanyfunctions.h, src/plugins.c, src/plugindata.h,
+   src/sciwrappers.c:
+   Add sci_find_text() to the plugin API.
 
 
 2009-12-29  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

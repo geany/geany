@@ -186,6 +186,8 @@
 	geany_functions->p_sci->is_marker_set_at_line
 #define sci_goto_line \
 	geany_functions->p_sci->goto_line
+#define sci_find_text \
+	geany_functions->p_sci->find_text
 #define templates_get_template_fileheader \
 	geany_functions->p_templates->get_template_fileheader
 #define utils_str_equal \
