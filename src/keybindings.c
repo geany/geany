@@ -244,6 +244,8 @@ static void init_default_kb(void)
 		LW(menu_close_all1));
 	keybindings_set_item(group, GEANY_KEYS_FILE_RELOAD, NULL,
 		GDK_r, GDK_CONTROL_MASK, "menu_reloadfile", _("Reload file"), LW(menu_reload1));
+	keybindings_set_item(group, GEANY_KEYS_FILE_OPENLASTTAB, NULL,
+		0, 0, "file_openlasttab", _("Re-open last closed tab"), NULL);
 
 	group = ADD_KB_GROUP(PROJECT, _("Project"), cb_func_project_action);
 
@@ -1330,6 +1332,14 @@ static gboolean cb_func_file_action(guint key_id)
 		case GEANY_KEYS_FILE_OPENSELECTED:
 			on_menu_open_selected_file1_activate(NULL, NULL);
 			break;
+		case GEANY_KEYS_FILE_OPENLASTTAB:
+		{
+			gchar *utf8_filename = g_queue_peek_head(ui_prefs.recent_queue);
+			gchar *locale_filename = utils_get_locale_from_utf8(utf8_filename);
+			document_open_file(locale_filename, FALSE, NULL, NULL);
+			g_free(locale_filename);
+			break;
+		}
 		case GEANY_KEYS_FILE_SAVE:
 			on_save1_activate(NULL, NULL);
 			break;

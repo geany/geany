@@ -2852,6 +2852,10 @@ New                             Ctrl-N  (C)               Creates a new file.
 
 Open                            Ctrl-O  (C)               Opens a file.
 
+Open selected file              Ctrl-Shift-O              Opens the selected filename.
+
+Re-open last closed tab                                   Re-opens the last closed document tab.
+
 Save                            Ctrl-S  (C)               Saves the current file.
 
 Save As                                                   Saves the current file under a new name.
