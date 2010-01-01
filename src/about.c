@@ -1,8 +1,8 @@
 /*
  *      about.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2005-2009 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2006-2009 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2005-2010 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2006-2010 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -41,7 +41,7 @@ static GtkWidget *gb_window = NULL;
 #define INFO "<span size=\"larger\" weight=\"bold\">%s</span>"
 #define CODENAME "<span weight=\"bold\">\"" GEANY_CODENAME "\"</span>"
 #define BUILDDATE "<span size=\"smaller\">%s</span>"
-#define COPYRIGHT "Copyright (c)  2005-2009\nEnrico Tröger\nNick Treleaven\nFrank Lanitz\nAll rights reserved."
+#define COPYRIGHT "Copyright (c)  2005-2010\nEnrico Tröger\nNick Treleaven\nFrank Lanitz\nAll rights reserved."
 
 const gchar *translators[][2] = {
 	{ "be_BY", "Yura Semashko &lt;yurand2@gmail.com&gt;" },

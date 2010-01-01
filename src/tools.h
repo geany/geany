@@ -1,8 +1,8 @@
 /*
  *      tools.h - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2006-2009 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2006-2009 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2006-2010 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2006-2010 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -28,7 +28,6 @@
 void tools_create_insert_custom_command_menu_items(void);
 
 void tools_execute_custom_command(GeanyDocument *doc, const gchar *command);
-
 
 void tools_word_count(void);
 

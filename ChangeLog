@@ -1,3 +1,9 @@
+2010-01-01  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * *.*:
+   Update copyright information.
+
+
 2009-12-31  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * autogen.sh, configure.in, configure.ac:
@@ -5,11 +11,11 @@
  * plugins/geanyfunctions.h, src/plugins.c, src/plugindata.h,
    src/sciwrappers.c:
    Add sci_find_text() to the plugin API.
- * doc/geany.html, doc/geany.txt, geany.glade, src/callbacks.c, 
+ * doc/geany.html, doc/geany.txt, geany.glade, src/callbacks.c,
    src/interface.c, src/prefs.c:
    Add a checkbox in the preferences dialog to explicitly toggle
    the visibility of the sidebar (closes #2923340).
-   
+
 
 2009-12-29  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 

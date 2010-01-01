@@ -1,8 +1,9 @@
 /*
  *      sciwrappers.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2005-2009 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2006-2009 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2005-2010 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2006-2010 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
  *      the Free Software Foundation; either version 2 of the License, or
@@ -802,14 +803,14 @@ gint sci_search_prev(ScintillaObject *sci, gint flags, const gchar *text)
 /** Find a text in the document.
  * The @a ttf argument should be a pointer to a Sci_TextToFind structure which contains
  * the text to find and the range in which the text should be searched.
- * 
+ *
  * Please refer to the Scintilla documentation for a more detailed description.
- * 
+ *
  * @param sci Scintilla widget.
  * @param flags Bitmask of Scintilla search flags (@c SCFIND_*, see Scintilla documentation).
  * @param ttf Pointer to a TextToFind structure which contains the text to find and the range.
- * @return The position of the start of the found text if it succeeds, otherwise @c -1. 
- *         The @c chrgText.cpMin and @c chrgText.cpMax members of @c TextToFind are filled in 
+ * @return The position of the start of the found text if it succeeds, otherwise @c -1.
+ *         The @c chrgText.cpMin and @c chrgText.cpMax members of @c TextToFind are filled in
  *         with the start and end positions of the found text.
  */
 gint sci_find_text(ScintillaObject *sci, gint flags, struct Sci_TextToFind *ttf)
