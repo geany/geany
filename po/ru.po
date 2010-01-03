@@ -1471,7 +1471,7 @@ msgid ""
 "disable it if you do not need it"
 msgstr ""
 "Включить эмуляцию виртуального терминала, при запуске программы будет "
-"загружена  VTE-библиотека .Отключите, если вам это не требуется."
+"загружена VTE-библиотека. Отключите, если вам это не требуется."
 
 #: ../src/interface.c:2693
 msgid "Enable plugin support"
@@ -1695,7 +1695,7 @@ msgstr "Список тегов:"
 
 #: ../src/interface.c:3002 ../src/interface.c:3117
 msgid "Message window:"
-msgstr "Окно сообщенийи:"
+msgstr "Окно сообщений:"
 
 #: ../src/interface.c:3009 ../src/interface.c:3153
 msgid "Editor:"
