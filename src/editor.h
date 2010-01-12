@@ -277,4 +277,8 @@ void editor_apply_update_prefs(GeanyEditor *editor);
 
 gchar *editor_get_calltip_text(GeanyEditor *editor, const TMTag *tag);
 
+void editor_insert_text_block(GeanyEditor *editor, const gchar *text,
+	 						  gint insert_pos, gint cursor_index,
+	 						  gint newline_indent_size, gboolean replace_newlines);
+
 #endif

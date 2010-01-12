@@ -1,3 +1,10 @@
+2010-01-11  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * plugins/geanyfunctions.h, src/editor.c, src/editor.h,
+   src/plugindata.h, src/plugins.c:
+   Add editor_insert_text_block() to plugin API.
+
+
 2010-01-01  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * *.*:

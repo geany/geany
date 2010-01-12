@@ -86,6 +86,8 @@
 	geany_functions->p_editor->get_eol_char_len
 #define editor_get_eol_char \
 	geany_functions->p_editor->get_eol_char
+#define editor_insert_text_block \
+	geany_functions->p_editor->insert_text_block
 #define scintilla_send_message \
 	geany_functions->p_scintilla->send_message
 #define scintilla_new \

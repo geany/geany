@@ -50,7 +50,7 @@
 enum {
 	/** The Application Programming Interface (API) version, incremented
 	 * whenever any plugin data types are modified or appended to. */
-	GEANY_API_VERSION = 168,
+	GEANY_API_VERSION = 169,
 
 	/** The Application Binary Interface (ABI) version, incremented whenever
 	 * existing fields in the plugin data types have to be changed or reordered. */
@@ -563,6 +563,10 @@ typedef struct EditorFuncs
 	const gchar*	(*get_eol_char_name) (struct GeanyEditor *editor);
 	gint			(*get_eol_char_len) (struct GeanyEditor *editor);
 	const gchar*	(*get_eol_char) (struct GeanyEditor *editor);
+
+	void	(*insert_text_block) (struct GeanyEditor *editor, const gchar *text,
+			 gint insert_pos, gint cursor_index, gint newline_indent_size,
+			 gboolean replace_newlines);
 }
 EditorFuncs;
 

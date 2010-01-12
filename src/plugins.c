@@ -120,7 +120,8 @@ static EditorFuncs editor_funcs = {
 	&editor_get_word_at_pos,
 	&editor_get_eol_char_name,
 	&editor_get_eol_char_len,
-	&editor_get_eol_char
+	&editor_get_eol_char,
+	&editor_insert_text_block
 };
 
 static ScintillaFuncs scintilla_funcs = {

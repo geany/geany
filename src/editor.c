@@ -2170,9 +2170,11 @@ static void fix_line_indents(GeanyEditor *editor, gint line_start, gint line_end
 	sci_set_current_position(sci, pos, FALSE);
 }
 
-
-/* Insert text, replacing \t tab chars with the correct indent width, and \n newline
+/* TODO: Fix \\t inside comment*/
+/** Insert text, replacing \\t tab chars with the correct indent width, and \\n newline
  * chars with the correct line ending string.
+ * @param editor The editor to operate on.
+ * @param insert_pos Position, where to start with inserting text block.
  * @param text Intended as e.g. "if (1)\n\tdo_something();"
  * @param cursor_index If >= 0, the index into @a text to place the cursor.
  * @param newline_indent_size Indentation size (in spaces) to insert for each newline; use
@@ -2180,11 +2182,11 @@ static void fix_line_indents(GeanyEditor *editor, gint line_start, gint line_end
  * @param replace_newlines Whether to replace newlines in text or not. If
  * newlines have been replaced before, this should be false, to avoid multiple
  * replacements of newlines, which is error prone on Windows.
- * @warning Make sure all \t tab chars in @a text are intended as indent widths,
+ * @warning Make sure all \\t tab chars in @a text are intended as indent widths,
  * NOT any hard tabs (you get those when copying document text with the Tabs
  * & Spaces indent mode set).
- * @note This doesn't scroll the cursor in view afterwards. */
-static void editor_insert_text_block(GeanyEditor *editor, const gchar *text, gint insert_pos,
+ * @note This doesn't scroll the cursor in view afterwards. **/
+void editor_insert_text_block(GeanyEditor *editor, const gchar *text, gint insert_pos,
 		gint cursor_index, gint newline_indent_size, gboolean replace_newlines)
 {
 	ScintillaObject *sci = editor->sci;
@@ -2195,6 +2197,7 @@ static void editor_insert_text_block(GeanyEditor *editor, const gchar *text, gin
 	const gchar cur_marker[] = "__GEANY_CURSOR_MARKER__";
 
 	g_return_if_fail(text);
+	g_return_if_fail(editor != NULL);
 
 	buf = g_string_new(text);
 
