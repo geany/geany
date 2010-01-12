@@ -74,8 +74,9 @@ gchar *templates_get_template_function(gint filetype_idx, const gchar *func_name
 
 gchar *templates_get_template_licence(gint filetype_idx, gint licence_type);
 
-void templates_replace_all(GString *source, const gchar *year, const gchar *date,
-						   const gchar *datetime);
+void templates_replace_default_dates(GString *text);
+
+void templates_replace_valist(GString *text, const gchar *first_wildcard, ...) G_GNUC_NULL_TERMINATED;
 
 void templates_free_templates(void);
 

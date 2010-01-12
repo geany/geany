@@ -167,7 +167,11 @@ static gchar *replace_all(gchar *text, const gchar *year, const gchar *date, con
 	str = g_string_new(text);
 
 	g_free(text);
-	templates_replace_all(str, year, date, datetime);
+	templates_replace_valist(str,
+		"{year}", year,
+		"{date}", date,
+		"{datetime}", datetime,
+		NULL);
 
 	return g_string_free(str, FALSE);
 }
@@ -288,18 +292,17 @@ static gchar *get_template_from_file(const gchar *locale_fname, const gchar *doc
 	if (content != NULL)
 	{
 		gchar *file_header;
-		gchar *year = utils_get_date_time(template_prefs.year_format, NULL);
-		gchar *date = utils_get_date_time(template_prefs.date_format, NULL);
-		gchar *datetime = utils_get_date_time(template_prefs.datetime_format, NULL);
 
 		template = g_string_new(content);
 
 		file_header = templates_get_template_fileheader(FILETYPE_ID(ft), doc_filename);
-		templates_replace_all(template, year, date, datetime);
-		utils_string_replace_all(template, "{filename}", doc_filename);
-		utils_string_replace_all(template, "{fileheader}", file_header);
+		templates_replace_valist(template,
+			"{filename}", doc_filename,
+			"{fileheader}", file_header,
+			NULL);
+		templates_replace_default_dates(template);
 
-		utils_free_pointers(5, year, date, datetime, file_header, content, NULL);
+		utils_free_pointers(2, file_header, content, NULL);
 		return g_string_free(template, FALSE);
 	}
 	return NULL;
@@ -660,12 +663,8 @@ void templates_free_templates(void)
 }
 
 
-void templates_replace_all(GString *text, const gchar *year, const gchar *date,
-						   const gchar *datetime)
+static void replace_static_values(GString *text)
 {
-	utils_string_replace_all(text, "{year}", year);
-	utils_string_replace_all(text, "{date}", date);
-	utils_string_replace_all(text, "{datetime}", datetime);
 	utils_string_replace_all(text, "{version}", template_prefs.version);
 	utils_string_replace_all(text, "{initial}", template_prefs.initials);
 	utils_string_replace_all(text, "{developer}", template_prefs.developer);
@@ -675,3 +674,52 @@ void templates_replace_all(GString *text, const gchar *year, const gchar *date,
 	utils_string_replace_all(text, "{geanyversion}", "Geany " VERSION);
 }
 
+
+/* Replaces all static template wildcards (version, mail, company, name, ...)
+ * plus those wildcard, value pairs which are passed, e.g.
+ *
+ * templates_replace_valist(text, "{some_wildcard}", "some value",
+ *      "{another_wildcard}", "another value", NULL);
+ *
+ * The argument list must be terminated with NULL. */
+void templates_replace_valist(GString *text, const gchar *first_wildcard, ...)
+{
+	va_list args;
+	const gchar *key, *value;
+
+	g_return_if_fail(text != NULL);
+
+	va_start(args, first_wildcard);
+
+	key = first_wildcard;
+	value = va_arg(args, gchar*);
+
+	while (key != NULL)
+	{
+		utils_string_replace_all(text, key, value);
+
+		key = va_arg(args, gchar*);
+		if (text == NULL)
+			break;
+		value = va_arg(args, gchar*);
+	}
+	va_end(args);
+
+	replace_static_values(text);
+}
+
+
+void templates_replace_default_dates(GString *text)
+{
+	gchar *year = utils_get_date_time(template_prefs.year_format, NULL);
+	gchar *date = utils_get_date_time(template_prefs.date_format, NULL);
+	gchar *datetime = utils_get_date_time(template_prefs.datetime_format, NULL);
+
+	templates_replace_valist(text,
+		"{year}", year,
+		"{date}", date,
+		"{datetime}", datetime,
+		NULL);
+
+	utils_free_pointers(3, year, date, datetime, NULL);
+}

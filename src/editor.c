@@ -2135,15 +2135,12 @@ void snippets_replace_specials(gpointer key, gpointer value, gpointer user_data)
 
 static void snippets_replace_wildcards(GeanyEditor *editor, GString *text)
 {
-	gchar *year = utils_get_date_time(template_prefs.year_format, NULL);
-	gchar *date = utils_get_date_time(template_prefs.date_format, NULL);
-	gchar *datetime = utils_get_date_time(template_prefs.datetime_format, NULL);
 	gchar *basename = g_path_get_basename(DOC_FILENAME(editor->document));
 
-	templates_replace_all(text, year, date, datetime);
-	utils_string_replace_all(text, "{filename}", basename);
+	templates_replace_default_dates(text);
+	templates_replace_valist(text, "{filename}", basename, NULL);
 
-	utils_free_pointers(4, year, date, datetime, basename, NULL);
+	g_free(basename);
 }
 
 
