@@ -1069,7 +1069,7 @@ msgstr "_Format"
 
 #: ../src/interface.c:475 ../src/interface.c:1956
 msgid "T_oggle Case of Selection"
-msgstr "M_odifier la casse de la séléction"
+msgstr "M_odifier la casse de la sélection"
 
 #: ../src/interface.c:484 ../src/interface.c:1965
 msgid "_Comment Line(s)"
