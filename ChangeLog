@@ -1,3 +1,10 @@
+2010-01-16  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * src/editor.c:
+   Remove editor_auto_latex() from Geany core and move it to geanyLaTeX
+   plugin.
+
+
 2010-01-12  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/editor.c, src/templates.c, src/templates.h:

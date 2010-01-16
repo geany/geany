@@ -101,7 +101,6 @@ static void auto_close_chars(ScintillaObject *sci, gint pos, gchar c);
 static void auto_table(GeanyEditor *editor, gint pos);
 static void close_block(GeanyEditor *editor, gint pos);
 static void editor_highlight_braces(GeanyEditor *editor, gint cur_pos);
-static void editor_auto_latex(GeanyEditor *editor, gint pos);
 static void read_current_word(GeanyEditor *editor, gint pos, gchar *word, size_t wordlen,
 		const gchar *wc, gboolean stem);
 
@@ -1037,11 +1036,6 @@ static void on_new_line_added(GeanyEditor *editor)
 	if (editor_prefs.auto_continue_multiline)
 	{	/* " * " auto completion in multiline C/C++/D/Java comments */
 		auto_multiline(editor, line);
-	}
-
-	if (editor_prefs.complete_snippets)
-	{
-		editor_auto_latex(editor, pos);
 	}
 
 	if (editor_prefs.newline_strip)
@@ -1980,110 +1974,6 @@ gboolean editor_start_auto_complete(GeanyEditor *editor, gint pos, gboolean forc
 	return ret;
 }
 
-
-static void editor_auto_latex(GeanyEditor *editor, gint pos)
-{
-	ScintillaObject *sci;
-
-	g_return_if_fail(editor != NULL);
-
-	if (editor->document->file_type->id != GEANY_FILETYPES_LATEX)
-		return;
-
-	sci = editor->sci;
-
-	if (sci_get_char_at(sci, pos - 1 - editor_get_eol_char_len(editor)) == '}')
-	{
-		gchar *eol, *buf, *construct;
-		gchar env[50];
-		gint line = sci_get_line_from_position(sci, pos - 2);
-		gint line_len = sci_get_line_length(sci, line);
-		gint i, start;
-
-		/* get the line */
-		buf = sci_get_line(sci, line);
-
-		/* get to the first non-blank char (some kind of ltrim()) */
-		start = 0;
-		while (isspace(buf[start]) && buf[start] != '\0')
-			start++;
-
-		/* check for begin */
-		if (strncmp(buf + start, "\\begin", 6) == 0)
-		{
-			gchar full_cmd[15];
-			guint j = 0;
-
-			/* take also "\begingroup" (or whatever there can be) and
-			 * append "\endgroup" and so on. */
-			i = start + 6;
-			while (i < line_len && buf[i] != '{' && j < (sizeof(full_cmd) - 1))
-			{	/* copy all between "\begin" and "{" to full_cmd */
-				full_cmd[j] = buf[i];
-				i++;
-				j++;
-			}
-			full_cmd[j] = '\0';
-
-			/* go through the line and get the environment */
-			for (i = start + j; i < line_len; i++)
-			{
-				if (buf[i] == '{')
-				{
-					j = 0;
-					i++;
-					while (buf[i] != '}' && j < (sizeof(env) - 1))
-					{	/* this could be done in a shorter way, but so it remains readable ;-) */
-						env[j] = buf[i];
-						j++;
-						i++;
-					}
-					env[j] = '\0';
-					break;
-				}
-			}
-
-			/* Search whether the environment is closed within the next
-			 * lines. We assume, no \end is needed in such cases */
-			/* TODO using sci_find_text() should be way faster than getting
-			 *      the line buffer and performing string comparisons */
-			for (i = 1; i < 5; i++)
-			{
-				gchar *tmp;
-				gchar *end_construct;
-				tmp = sci_get_line(sci, line + i);
-				/* Again get to the first non-blank char */
-				start = 0;
-				while (isspace(buf[start]) && buf[start] != '\0')
-					start++;
-				end_construct = g_strdup_printf("\\end%s{%s}", full_cmd, env);
-				if (strstr(tmp, end_construct) != NULL)
-				{
-					utils_free_pointers(3, tmp, buf, end_construct, NULL);
-					return;
-				}
-				g_free(tmp);
-			}
-
-			/* get the indentation */
-			if (editor->auto_indent)
-				read_indent(editor, pos);
-			eol = g_strconcat(editor_get_eol_char(editor), indent, NULL);
-
-			construct = g_strdup_printf("%s\\end%s{%s}", eol, full_cmd, env);
-
-			sci_insert_text(sci, pos, construct);
-			sci_goto_pos(sci, pos, TRUE);
-			g_free(construct);
-			g_free(eol);
-		}
-		/* later there could be some else ifs for other keywords */
-
-		g_free(buf);
-	}
-}
-
-
 static gchar *snippets_find_completion_by_name(const gchar *type, const gchar *name)
 {
 	gchar *result = NULL;
@@ -2171,8 +2061,8 @@ static void fix_line_indents(GeanyEditor *editor, gint line_start, gint line_end
 /** Insert text, replacing \\t tab chars with the correct indent width, and \\n newline
  * chars with the correct line ending string.
  * @param editor The editor to operate on.
- * @param insert_pos Position, where to start with inserting text block.
  * @param text Intended as e.g. "if (1)\n\tdo_something();"
+ * @param insert_pos Position, where to start with inserting text block.
  * @param cursor_index If >= 0, the index into @a text to place the cursor.
  * @param newline_indent_size Indentation size (in spaces) to insert for each newline; use
  * -1 to read the indent size from the line with @a insert_pos on it.
