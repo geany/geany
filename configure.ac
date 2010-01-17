@@ -240,7 +240,16 @@ GETTEXT_PACKAGE=geany
 AC_SUBST(GETTEXT_PACKAGE)
 AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE,"$GETTEXT_PACKAGE", [Gettext package.])
 
-ALL_LINGUAS="`sed -e '/^#/d' $srcdir/po/LINGUAS`" # take all languages found in file po/LINGUAS
+if test -n "${LINGUAS}"
+then
+	ALL_LINGUAS="${LINGUAS}"
+	echo "special"
+else
+	if test -z "$conf_dir" ; then
+		conf_dir="."
+	fi
+	ALL_LINGUAS=`cd "$conf_dir/po" 2>/dev/null && ls *.po 2>/dev/null | $AWK 'BEGIN { FS="."; ORS=" " } { print $1 }'`
+fi
 
 AM_GLIB_GNU_GETTEXT
 # workaround for intltool bug (http://bugzilla.gnome.org/show_bug.cgi?id=490845)

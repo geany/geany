@@ -20,8 +20,8 @@ text editor (like Geany ;-)) or you can also use a graphical
 interface. I can suggest PoEdit (http://www.poedit.net/), but
 there are several other GUIs.
 
-Make sure you add your language to the file po/LINGUAS.
-Just open the file with a text editor and add your code.
+You don't need to modify the file po/LINGUAS, it is regenerated
+automatically on the next build.
 
 When you have finished editing the file, check the file with:
 

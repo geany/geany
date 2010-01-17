@@ -8,6 +8,11 @@
    src/plugindata.h:
    Add new signal: "geany-startup-complete" which is sent once all
    initialization and startup tasks has been done.
+ * README.I18N, configure.ac, wscript, po/LINGUAS:
+   Remove po/LINGUAS from the repository.
+   Generate it automatically if needed by reading available
+   message catalogs from the po directory.
+   Also respect the LINGUAS environment variable properly.
 
 
 2010-01-16  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
