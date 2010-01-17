@@ -1024,7 +1024,6 @@ editor_get_indent_prefs(GeanyEditor *editor)
 static void on_new_line_added(GeanyEditor *editor)
 {
 	ScintillaObject *sci = editor->sci;
-	gint pos = sci_get_current_position(sci);
 	gint line = sci_get_current_line(sci);
 
 	/* simple indentation */
