@@ -243,7 +243,6 @@ AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE,"$GETTEXT_PACKAGE", [Gettext package.])
 if test -n "${LINGUAS}"
 then
 	ALL_LINGUAS="${LINGUAS}"
-	echo "special"
 else
 	if test -z "$conf_dir" ; then
 		conf_dir="."
