@@ -392,6 +392,9 @@ static void setup_paths(void)
  *  This is because the main window is realized (i.e. actually drawn on the screen) at the
  *  end of the startup process.
  *
+ *  @note Maybe you want to use the @ref geany-startup-complete signal to get notified about
+ *        the completed startup process.
+ *
  *  @return @c TRUE if the Geany main window has been realized or @c FALSE otherwise.
  *
  *  @since 0.19
@@ -888,6 +891,13 @@ static void load_startup_files(gint argc, gchar **argv)
 }
 
 
+static gboolean send_startup_complete(gpointer data)
+{
+	g_signal_emit_by_name(geany_object, "geany-startup-complete");
+	return FALSE;
+}
+
+
 gint main(gint argc, gchar **argv)
 {
 	GeanyDocument *doc;
@@ -1078,6 +1088,10 @@ gint main(gint argc, gchar **argv)
 		g_free(dir);
 	}
 #endif
+
+	/* when we are really done with setting everything up and the main event loop is running,
+	 * tell other components, mainly plugins, that startup is complete */
+	g_idle_add_full(G_PRIORITY_LOW, send_startup_complete, NULL, NULL);
 
 	gtk_main();
 	return 0;

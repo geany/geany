@@ -286,6 +286,16 @@ static void create_signals(GObjectClass *g_object_class)
 		G_TYPE_BOOLEAN, 2,
 		G_TYPE_POINTER, G_TYPE_POINTER);
 
+	/* General signals */
+	geany_object_signals[GCB_GEANY_STARTUP_COMPLETE] = g_signal_new (
+		"geany-startup-complete",
+		G_OBJECT_CLASS_TYPE  (g_object_class),
+		G_SIGNAL_RUN_FIRST,
+		G_STRUCT_OFFSET (GeanyObjectClass, geany_startup_complete),
+		NULL, NULL,
+		g_cclosure_marshal_VOID__VOID,
+		G_TYPE_NONE, 0);
+
 	/* Core-only signals */
 	geany_object_signals[GCB_SAVE_SETTINGS] = g_signal_new (
 		"save-settings",

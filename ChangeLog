@@ -4,6 +4,10 @@
    Add a little test program which can load and test Geany plugins to
    verify it is loadable at runtime and all necessary symbols are
    defined.
+ * doc/plugins.dox, src/geanyobject.c, src/geanyobject.h, src/main.c,
+   src/plugindata.h:
+   Add new signal: "geany-startup-complete" which is sent once all
+   initialization and startup tasks has been done.
 
 
 2010-01-16  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>

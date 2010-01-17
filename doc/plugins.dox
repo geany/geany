@@ -225,6 +225,19 @@ PluginCallback plugin_callbacks[] =
  *  @param user_data user data.
  *  @endsignaldef
  *
+ *  @signaldef geany-startup-complete
+ *  @signalproto
+ *  void user_function(GObject *obj, gpointer user_data);
+ *  @endsignalproto
+ *  @signaldesc
+ *  Sent once Geany has finished all initialization and startup tasks and the GUI has been
+ *  realized. This signal is the very last step in the startup process and is sent once
+ *  the GTK main event loop has been entered.
+ *
+ *  @param obj a GeanyObject instance, should be ignored.
+ *  @param user_data user data.
+ *  @endsignaldef
+ *
  *  @signaldef update-editor-menu
  *  @signalproto
  *  void user_function(GObject *obj, const gchar *word, gint pos, GeanyDocument *doc,
