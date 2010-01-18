@@ -481,6 +481,20 @@ void plugin_cleanup(void)
 }
  *  @endcode
  *
+ * @section building Building
+ * @code gcc -c plugin.c -fPIC `pkg-config --cflags geany` @endcode
+ *
+ * to make plugin.o, then:
+ *
+ * @code gcc plugin.o -o plugin.so -shared `pkg-config --libs geany`@endcode
+ *
+ * to make the plugin library plugin.so (or plugin.dll on Windows).
+ *
+ * Then just put the library into one of the paths Geany looks for plugins in, e.g. $prefix/lib/geany.
+ * See @ref paths "Installation paths" for details.
+ *
+ * @section realfunc Real functionality
+ *
  *  If you think this plugin seems not to implement any functionality right now and only wastes
  *  some memory, you are right. But it should compile and load/unload in Geany nicely.
  *  Now you have the very basic layout of a new plugin. Great, isn't it?
