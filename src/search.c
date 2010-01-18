@@ -1136,23 +1136,33 @@ static void replace_in_session(GeanyDocument *doc,
 		gint search_flags_re, gboolean search_replace_escape_re,
 		const gchar *find, const gchar *replace)
 {
-	guint n, page_count, count = 0;
+	guint n, page_count, rep_count = 0, file_count = 0;
 
 	/* replace in all documents following notebook tab order */
 	page_count = gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook));
 	for (n = 0; n < page_count; n++)
 	{
 		GeanyDocument *tmp_doc = document_get_from_page(n);
+		gint reps = 0;
 
-		if (document_replace_all(tmp_doc, find, replace, search_flags_re,
-			search_replace_escape_re)) count++;
+		reps = document_replace_all(tmp_doc, find, replace, search_flags_re,
+			search_replace_escape_re);
+		rep_count += reps;
+		if (reps)
+			file_count++;
 	}
-	if (count == 0)
+	if (file_count == 0)
+	{
 		utils_beep();
+		ui_set_statusbar(FALSE, _("No matches found for \"%s\"."), find);
+		return;
+	}
+	/* if only one file was changed, don't override that document's status message
+	 * so we don't have to translate 4 messages for ngettext */
+	if (file_count > 1)
+		ui_set_statusbar(FALSE, _("Replaced %u matches in %u documents."),
+			rep_count, file_count);
 
-	ui_set_statusbar(FALSE,
-		ngettext("Replaced text in %u file.",
-				 "Replaced text in %u files.", count), count);
 	/* show which docs had replacements: */
 	gtk_notebook_set_current_page(GTK_NOTEBOOK(msgwindow.notebook), MSG_STATUS);
 

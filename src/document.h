@@ -218,7 +218,7 @@ gint document_find_text(GeanyDocument *doc, const gchar *text, gint flags, gbool
 gint document_replace_text(GeanyDocument *doc, const gchar *find_text, const gchar *replace_text,
 		gint flags, gboolean search_backwards);
 
-gboolean document_replace_all(GeanyDocument *doc, const gchar *find_text, const gchar *replace_text,
+gint document_replace_all(GeanyDocument *doc, const gchar *find_text, const gchar *replace_text,
 		gint flags, gboolean escaped_chars);
 
 void document_replace_sel(GeanyDocument *doc, const gchar *find_text, const gchar *replace_text, gint flags,

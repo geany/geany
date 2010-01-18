@@ -2278,8 +2278,8 @@ void document_replace_sel(GeanyDocument *doc, const gchar *find_text, const gcha
 }
 
 
-/* returns TRUE if at least one replacement was made. */
-gboolean document_replace_all(GeanyDocument *doc, const gchar *find_text, const gchar *replace_text,
+/* returns number of replacements made. */
+gint document_replace_all(GeanyDocument *doc, const gchar *find_text, const gchar *replace_text,
 		gint flags, gboolean escaped_chars)
 {
 	gint len, count;
@@ -2293,7 +2293,7 @@ gboolean document_replace_all(GeanyDocument *doc, const gchar *find_text, const 
 			doc, find_text, replace_text, flags, 0, len, TRUE, NULL);
 
 	show_replace_summary(doc, count, find_text, replace_text, escaped_chars);
-	return (count > 0);
+	return count;
 }
 
 
