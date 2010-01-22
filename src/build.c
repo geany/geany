@@ -427,7 +427,7 @@ static GeanyBuildCommand *get_build_group(GeanyBuildSource src, GeanyBuildGroup 
 			}
 			break;
 		case GEANY_GBG_EXEC:
-			if ((doc = document_get_current()) == NULL)
+			if ((doc = document_get_current()) != NULL)
 				ft = doc->file_type;
 			switch (src)
 			{
