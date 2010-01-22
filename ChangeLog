@@ -2,6 +2,9 @@
 
  * src/build.c:
    Prevent possible segfault in get_build_group().
+ * src/callbacks.c:
+   Fix GLib warning & beep if trying to insert multiline comment for a
+   filetype that doesn't support it.
 
 
 2010-01-18  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
