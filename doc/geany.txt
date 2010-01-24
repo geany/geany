@@ -1045,6 +1045,7 @@ listed in `Template wildcards`_. All wildcards which are listed as
 
     [Default]
     myname=My name is {developer}
+    mysystem=My system: {command:uname -a}
 
 this will replace ``myname`` with "My name is " and the value of the template
 preference ``developer``.
@@ -4212,6 +4213,11 @@ functionname   The function name of the function at the      function descriptio
 fileheader     The file header template. This wildcard       file header, snippets, custom filetype
                will only be replaced in filetype             templates
                templates.
+
+command:path   Executes the specified command and replace    filetype templates, file header,
+               the wildcard with the command's standard      function description, ChangeLog entry,
+               output. See `Special {command:} wilcard`_     bsd, gpl, snippets
+               for details.
 ============== ============================================= =======================================
 
 
@@ -4219,6 +4225,30 @@ fileheader     The file header template. This wildcard       file header, snippe
        in the preferences dialog, see `Template preferences`_. You can
        use any conversion specifiers which can be used with the ANSI C strftime function.
        For details please see http://man.cx/strftime.
+
+
+Special {command:} wilcard
+**************************
+
+The {command:} wilcard is a special one because it can execute
+a specified command and put the command's output (stdout) into
+the template.
+
+Example::
+
+    {command:uname -a}
+
+will result in::
+
+    Linux localhost 2.6.9-023stab046.2-smp #1 SMP Mon Dec 10 15:04:55 MSK 2007 x86_64 GNU/Linux
+
+Using this wildcard you can insert nearly any arbitrary text into the
+template.
+
+.. note::
+    If the specified command could not be found or not executed, the wildcard is substituted
+    by an empty string. In such cases, you can find the occurred error message on Geany's
+    standard error and in the Help->Debug Messages dialog.
 
 
 Customizing the toolbar

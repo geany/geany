@@ -66,17 +66,18 @@ gchar *templates_get_template_fileheader(gint filetype_idx, const gchar *fname);
 
 gchar *templates_get_template_new_file(GeanyFiletype *ft);
 
-gchar *templates_get_template_changelog(void);
+gchar *templates_get_template_changelog(GeanyDocument *doc);
 
-gchar *templates_get_template_generic(gint template);
+gchar *templates_get_template_function(GeanyDocument *doc, const gchar *func_name);
 
-gchar *templates_get_template_function(gint filetype_idx, const gchar *func_name);
-
-gchar *templates_get_template_licence(gint filetype_idx, gint licence_type);
+gchar *templates_get_template_licence(GeanyDocument *doc, gint licence_type);
 
 void templates_replace_default_dates(GString *text);
 
 void templates_replace_valist(GString *text, const gchar *first_wildcard, ...) G_GNUC_NULL_TERMINATED;
+
+void templates_replace_command(GString *text, const gchar *file_name,
+							   const gchar *file_type, const gchar *func_name);
 
 void templates_free_templates(void);
 

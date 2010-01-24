@@ -2,6 +2,12 @@
 
  * src/utils.c, src/utils.h, src/vte.c:
    Add utils_copy_environment() and make use of it.
+ * data/snippets.conf, doc/geany.html, doc/geany.txt, src/callbacks.c,
+   src/editor.c, src/templates.c, src/templates.h:
+   Add new special template wildcard "{command:...}" to use the
+   output of a command in templates.
+   Adjust template functions to mostly work with GeanyDocuments.
+   Minor cleanups in the template code.
 
 
 2010-01-22  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

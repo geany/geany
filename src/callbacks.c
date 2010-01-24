@@ -1372,7 +1372,7 @@ on_comments_function_activate          (GtkMenuItem     *menuitem,
 	line = symbols_get_current_function(doc, &cur_tag);
 	pos = sci_get_position_from_line(doc->editor->sci, line - 1);
 
-	text = templates_get_template_function(doc->file_type->id, cur_tag);
+	text = templates_get_template_function(doc, cur_tag);
 
 	sci_insert_text(doc->editor->sci, pos, text);
 	g_free(text);
@@ -1410,7 +1410,7 @@ on_comments_gpl_activate               (GtkMenuItem     *menuitem,
 
 	g_return_if_fail(doc != NULL);
 
-	text = templates_get_template_licence(FILETYPE_ID(doc->file_type), GEANY_TEMPLATE_GPL);
+	text = templates_get_template_licence(doc, GEANY_TEMPLATE_GPL);
 
 	verify_click_pos(doc); /* make sure that the click_pos is valid */
 
@@ -1429,7 +1429,7 @@ on_comments_bsd_activate               (GtkMenuItem     *menuitem,
 
 	g_return_if_fail(doc != NULL);
 
-	text = templates_get_template_licence(FILETYPE_ID(doc->file_type), GEANY_TEMPLATE_BSD);
+	text = templates_get_template_licence(doc, GEANY_TEMPLATE_BSD);
 
 	verify_click_pos(doc); /* make sure that the click_pos is valid */
 
@@ -1448,7 +1448,7 @@ on_comments_changelog_activate         (GtkMenuItem     *menuitem,
 
 	g_return_if_fail(doc != NULL);
 
-	text = templates_get_template_changelog();
+	text = templates_get_template_changelog(doc);
 	sci_insert_text(doc->editor->sci, 0, text);
 	/* sets the cursor to the right position to type the changelog text,
 	 * the template has 21 chars + length of name and email */

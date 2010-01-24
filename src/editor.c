@@ -2024,10 +2024,12 @@ void snippets_replace_specials(gpointer key, gpointer value, gpointer user_data)
 
 static void snippets_replace_wildcards(GeanyEditor *editor, GString *text)
 {
-	gchar *basename = g_path_get_basename(DOC_FILENAME(editor->document));
+	const gchar *file_name = DOC_FILENAME(editor->document);
+	gchar *basename = g_path_get_basename(file_name);
 
 	templates_replace_default_dates(text);
 	templates_replace_valist(text, "{filename}", basename, NULL);
+	templates_replace_command(text, file_name, editor->document->file_type->name, NULL);
 
 	g_free(basename);
 }

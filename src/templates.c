@@ -126,6 +126,9 @@ static gchar *templates[GEANY_MAX_TEMPLATES];
 static gchar *ft_templates[GEANY_MAX_BUILT_IN_FILETYPES] = {NULL};
 
 
+static void replace_static_values(GString *text);
+
+
 /* some simple macros to reduce code size and make the code readable */
 #define TEMPLATES_GET_FILENAME(shortname) \
 	g_strconcat(app->configdir, \
@@ -301,6 +304,7 @@ static gchar *get_template_from_file(const gchar *locale_fname, const gchar *doc
 			"{fileheader}", file_header,
 			NULL);
 		templates_replace_default_dates(template);
+		templates_replace_command(template, doc_filename, ft->name, NULL);
 
 		utils_free_pointers(2, file_header, content, NULL);
 		return g_string_free(template, FALSE);
@@ -453,6 +457,7 @@ void templates_init(void)
  * e.g. indent = 8 prints " *     here comes the text of the line"
  * indent is meant to be the whole amount of characters before the real line content follows, i.e.
  * 6 characters are filled with whitespace when the comment characters include " *" */
+/* TODO make this function operating on a GString */
 static gchar *make_comment_block(const gchar *comment_text, gint filetype_idx, guint indent)
 {
 	gchar *frame_start;		/* to add before comment_text */
@@ -526,21 +531,33 @@ static gchar *make_comment_block(const gchar *comment_text, gint filetype_idx, g
 }
 
 
-gchar *templates_get_template_licence(gint filetype_idx, gint licence_type)
+gchar *templates_get_template_licence(GeanyDocument *doc, gint licence_type)
 {
-	if (licence_type != GEANY_TEMPLATE_GPL && licence_type != GEANY_TEMPLATE_BSD)
-		return NULL;
+	GString *template;
+	gchar *result = NULL;
 
-	return make_comment_block(templates[licence_type], filetype_idx, 8);
+	g_return_val_if_fail(doc != NULL, NULL);
+	g_return_val_if_fail(licence_type == GEANY_TEMPLATE_GPL || licence_type == GEANY_TEMPLATE_BSD, NULL);
+
+	template = g_string_new(templates[licence_type]);
+	replace_static_values(template);
+	templates_replace_default_dates(template);
+	templates_replace_command(template, DOC_FILENAME(doc), doc->file_type->name, NULL);
+
+	result = make_comment_block(template->str, FILETYPE_ID(doc->file_type), 8);
+
+	g_string_free(template, TRUE);
+
+	return result;
 }
 
 
+/* TODO change the signature to take a GeanyDocument although this would break plugin API/ABI */
 gchar *templates_get_template_fileheader(gint filetype_idx, const gchar *fname)
 {
-	gchar *template = g_strdup(templates[GEANY_TEMPLATE_FILEHEADER]);
+	GString *template = g_string_new(templates[GEANY_TEMPLATE_FILEHEADER]);
 	gchar *shortname;
 	gchar *result;
-	gchar *date = utils_get_date_time(template_prefs.datetime_format, NULL);
 	filetype_id ft_id = filetype_idx;
 	GeanyFiletype *ft = filetypes[ft_id];
 
@@ -556,83 +573,77 @@ gchar *templates_get_template_fileheader(gint filetype_idx, const gchar *fname)
 	else
 		shortname = g_path_get_basename(fname);
 
-	utils_str_replace_all(&template, "{filename}", shortname);
-	utils_str_replace_all(&template, "{gpl}", templates[GEANY_TEMPLATE_GPL]);
-	utils_str_replace_all(&template, "{bsd}", templates[GEANY_TEMPLATE_BSD]);
-	utils_str_replace_all(&template, "{datetime}", date);
+	templates_replace_valist(template,
+		"{filename}", shortname,
+		"{gpl}", templates[GEANY_TEMPLATE_GPL],
+		"{bsd}", templates[GEANY_TEMPLATE_BSD],
+		NULL);
+	templates_replace_default_dates(template);
+	templates_replace_command(template, fname, ft->name, NULL);
 
-	result = make_comment_block(template, ft_id, 8);
+	result = make_comment_block(template->str, ft_id, 8);
 
-	g_free(template);
+	g_string_free(template, TRUE);
 	g_free(shortname);
-	g_free(date);
 	return result;
-}
-
-
-static gchar *get_file_template(GeanyFiletype *ft)
-{
-	filetype_id ft_id = FILETYPE_ID(ft);
-
-	g_return_val_if_fail(ft_id < GEANY_MAX_BUILT_IN_FILETYPES, NULL);
-
-	return g_strdup(ft_templates[ft_id]);
 }
 
 
 gchar *templates_get_template_new_file(GeanyFiletype *ft)
 {
-	gchar *ft_template = NULL;
+	GString *ft_template;
 	gchar *file_header = NULL;
 
+	g_return_val_if_fail(ft != NULL, NULL);
 	g_return_val_if_fail(ft->id < GEANY_MAX_BUILT_IN_FILETYPES, NULL);
 
+	ft_template = g_string_new(ft_templates[ft->id]);
 	if (FILETYPE_ID(ft) == GEANY_FILETYPES_NONE)
-		return get_file_template(ft);
+	{
+		replace_static_values(ft_template);
+	}
+	else
+	{	/* file template only used for new files */
+		file_header = templates_get_template_fileheader(ft->id, NULL);
+		templates_replace_valist(ft_template, "{fileheader}", file_header, NULL);
+	}
+	templates_replace_default_dates(ft_template);
+	templates_replace_command(ft_template, NULL, ft->name, NULL);
 
-	file_header = templates_get_template_fileheader(ft->id, NULL);	/* file template only used for new files */
-	ft_template = get_file_template(ft);
-	utils_str_replace_all(&ft_template, "{fileheader}", file_header);
 	g_free(file_header);
-	return ft_template;
+	return g_string_free(ft_template, FALSE);
 }
 
 
-gchar *templates_get_template_generic(gint template)
+gchar *templates_get_template_function(GeanyDocument *doc, const gchar *func_name)
 {
-	return g_strdup(templates[template]);
-}
-
-
-gchar *templates_get_template_function(gint filetype_idx, const gchar *func_name)
-{
-	gchar *template = g_strdup(templates[GEANY_TEMPLATE_FUNCTION]);
-	gchar *date = utils_get_date_time(template_prefs.date_format, NULL);
-	gchar *datetime = utils_get_date_time(template_prefs.datetime_format, NULL);
 	gchar *result;
+	GString *text;
 
-	utils_str_replace_all(&template, "{date}", date);
-	utils_str_replace_all(&template, "{datetime}", datetime);
-	utils_str_replace_all(&template, "{functionname}", (func_name) ? func_name : "");
+	func_name = (func_name != NULL) ? func_name : "";
+	text = g_string_new(templates[GEANY_TEMPLATE_FUNCTION]);
 
-	result = make_comment_block(template, filetype_idx, 3);
+	templates_replace_valist(text, "{functionname}", func_name, NULL);
+	templates_replace_default_dates(text);
+	templates_replace_command(text, DOC_FILENAME(doc), doc->file_type->name, func_name);
 
-	g_free(template);
-	g_free(date);
-	g_free(datetime);
+	result = make_comment_block(text->str, doc->file_type->id, 3);
+
+	g_string_free(text, TRUE);
 	return result;
 }
 
 
-gchar *templates_get_template_changelog(void)
+gchar *templates_get_template_changelog(GeanyDocument *doc)
 {
-	gchar *date = utils_get_date_time(template_prefs.datetime_format, NULL);
-	gchar *result = g_strdup(templates[GEANY_TEMPLATE_CHANGELOG]);
+	GString *result = g_string_new(templates[GEANY_TEMPLATE_CHANGELOG]);
+	gchar *file_type_name = (doc != NULL) ? doc->file_type->name : "";
 
-	utils_str_replace_all(&result, "{date}", date);
+	replace_static_values(result);
+	templates_replace_default_dates(result);
+	templates_replace_command(result, DOC_FILENAME(doc), file_type_name, NULL);
 
-	g_free(date);
-	return result;
+	return g_string_free(result, FALSE);
 }
 
 
@@ -699,7 +710,7 @@ void templates_replace_valist(GString *text, const gchar *first_wildcard, ...)
 		utils_string_replace_all(text, key, value);
 
 		key = va_arg(args, gchar*);
-		if (text == NULL)
+		if (key == NULL || text == NULL)
 			break;
 		value = va_arg(args, gchar*);
 	}
@@ -715,6 +726,8 @@ void templates_replace_default_dates(GString *text)
 	gchar *date = utils_get_date_time(template_prefs.date_format, NULL);
 	gchar *datetime = utils_get_date_time(template_prefs.datetime_format, NULL);
 
+	g_return_if_fail(text != NULL);
+
 	templates_replace_valist(text,
 		"{year}", year,
 		"{date}", date,
@@ -722,4 +735,72 @@ void templates_replace_default_dates(GString *text)
 		NULL);
 
 	utils_free_pointers(3, year, date, datetime, NULL);
+}
+
+
+static gchar *run_command(const gchar *command, const gchar *file_name,
+						  const gchar *file_type, const gchar *func_name)
+{
+	gchar *result = NULL;
+	gchar **argv;
+
+	if (g_shell_parse_argv(command, NULL, &argv, NULL))
+	{
+		GError *error = NULL;
+		gchar **env;
+
+		file_name = (file_name != NULL) ? file_name : "";
+		file_type = (file_type != NULL) ? file_type : "";
+		func_name = (func_name != NULL) ? func_name : "";
+
+		env = utils_copy_environment(NULL,
+			"GEANY_FILENAME", file_name,
+			"GEANY_FILETYPE", file_type,
+			"GEANY_FUNCNAME", func_name,
+			NULL);
+		if (! g_spawn_sync(NULL, argv, env, G_SPAWN_SEARCH_PATH,
+				NULL, NULL, &result, NULL, NULL, &error))
+		{
+			g_warning("templates_replace_command: %s", error->message);
+			g_error_free(error);
+			return NULL;
+		}
+		g_strfreev(argv);
+		g_strfreev(env);
+	}
+	return result;
+}
+
+
+void templates_replace_command(GString *text, const gchar *file_name,
+							   const gchar *file_type, const gchar *func_name)
+{
+	gchar *match = NULL;
+	gchar *wildcard = NULL;
+	gchar *cmd;
+	gchar *result;
+
+	g_return_if_fail(text != NULL);
+
+	while ((match = strstr(text->str, "{command:")) != NULL)
+	{
+		cmd = match;
+		while (*match != '}' && *match != '\0')
+			match++;
+
+		wildcard = g_strndup(cmd, match - cmd + 1);
+		cmd = g_strndup(wildcard + 9, strlen(wildcard) - 10);
+
+		result = run_command(cmd, file_name, file_type, func_name);
+		if (result != NULL)
+		{
+			utils_string_replace_first(text, wildcard, result);
+			g_free(result);
+		}
+		else
+			utils_string_replace_first(text, wildcard, "");
+
+		g_free(wildcard);
+		g_free(cmd);
+	}
 }
