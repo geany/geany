@@ -8,6 +8,10 @@
    output of a command in templates.
    Adjust template functions to mostly work with GeanyDocuments.
    Minor cleanups in the template code.
+ * src/gb.c:
+   Replace the old icons with smiley icons from the Rodent icon theme.
+   Fix showing the same icon for two or more slots.
+   Minor cleanups.
 
 
 2010-01-22  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
