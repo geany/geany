@@ -281,4 +281,6 @@ void editor_insert_text_block(GeanyEditor *editor, const gchar *text,
 	 						  gint insert_pos, gint cursor_index,
 	 						  gint newline_indent_size, gboolean replace_newlines);
 
+void editor_toggle_fold(GeanyEditor *editor, gint line, gint modifiers);
+
 #endif
