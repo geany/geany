@@ -1,3 +1,9 @@
+2010-01-24  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/utils.c, src/utils.h, src/vte.c:
+   Add utils_copy_environment() and make use of it.
+
+
 2010-01-22  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/build.c:

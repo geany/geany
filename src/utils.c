@@ -1894,3 +1894,86 @@ gchar *utils_get_help_url(const gchar *suffix)
 	return uri;
 }
 
+
+static gboolean str_in_array(const gchar **haystack, const gchar *needle)
+{
+	const gchar **p;
+
+	for (p = haystack; *p != NULL; ++p)
+	{
+		if (utils_str_equal(*p, needle))
+			return TRUE;
+	}
+	return FALSE;
+}
+
+
+/* Copies the current environment into a new array.
+ * exclude_vars is a NULL-terminated array of variable names which should be not copied.
+ * All further arguments are key, value pairs of variables which should be added to
+ * the environment.
+ *
+ * The argument list must be terminated with NULL. */
+gchar **utils_copy_environment(const gchar **exclude_vars, const gchar *first_varname, ...)
+{
+	gchar **result;
+	gchar **p;
+	gchar **env;
+	va_list args;
+	const gchar *key, *value;
+	guint n, o;
+
+	/* get all the environ variables */
+	env = g_listenv();
+
+	/* count the additional variables */
+	va_start(args, first_varname);
+	for (o = 1; va_arg(args, gchar*) != NULL; o++);
+	va_end(args);
+	/* the passed arguments should be even (key, value pairs) */
+	g_return_val_if_fail(o % 2 == 0, NULL);
+
+	o /= 2;
+
+	/* create an array large enough to hold the new environment */
+	n = g_strv_length(env);
+	/* 'n + o + 1' could leak a little bit when exclude_vars is set */
+	result = g_new(gchar *, n + o + 1);
+
+	/* copy the environment */
+	for (n = 0, p = env; *p != NULL; ++p)
+	{
+		/* copy the variable */
+		value = g_getenv(*p);
+		if (G_LIKELY(value != NULL))
+		{
+			/* skip excluded variables */
+			if (exclude_vars != NULL && str_in_array(exclude_vars, *p))
+				continue;
+
+			result[n++] = g_strconcat(*p, "=", value, NULL);
+		}
+	}
+	g_strfreev(env);
+
+	/* now add additional variables */
+	va_start(args, first_varname);
+	key = first_varname;
+	value = va_arg(args, gchar*);
+	while (key != NULL)
+	{
+		result[n++] = g_strconcat(key, "=", value, NULL);
+
+		key = va_arg(args, gchar*);
+		if (key == NULL)
+			break;
+		value = va_arg(args, gchar*);
+	}
+	va_end(args);
+
+	result[n] = NULL;
+
+	return result;
+}
+
+

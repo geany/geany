@@ -56,7 +56,6 @@
 VteInfo vte_info;
 VteConfig *vc;
 
-extern gchar **environ;
 static pid_t pid = 0;
 static gboolean clean = TRUE;
 static GModule *module = NULL;
@@ -155,43 +154,11 @@ static const GtkTargetEntry dnd_targets[] =
 };
 
 
-/* taken from anjuta, thanks */
 static gchar **vte_get_child_environment(void)
 {
-	/* code from gnome-terminal, sort of. */
-	gchar **p;
-	gint i;
-	gchar **retval;
-#define EXTRA_ENV_VARS 5
+	const gchar *exclude_vars[] = {"COLUMNS", "LINES", "TERM", NULL};
 
-	/* count env vars that are set */
-	for (p = environ; *p; p++);
-
-	i = p - environ;
-	retval = g_new0(gchar *, i + 1 + EXTRA_ENV_VARS);
-
-	for (i = 0, p = environ; *p; p++)
-	{
-		/* Strip all these out, we'll replace some of them */
-		if ((strncmp(*p, "COLUMNS=", 8) == 0) ||
-		    (strncmp(*p, "LINES=", 6) == 0)   ||
-		    (strncmp(*p, "TERM=", 5) == 0))
-		{
-			/* nothing: do not copy */
-		}
-		else
-		{
-			retval[i] = g_strdup(*p);
-			++i;
-		}
-	}
-
-	retval[i] = g_strdup("TERM=xterm");
-	++i;
-
-	retval[i] = NULL;
-
-	return retval;
+	return utils_copy_environment(exclude_vars, "TERM", "xterm", NULL);
 }
 
 
