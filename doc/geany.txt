@@ -4245,6 +4245,17 @@ will result in::
 Using this wildcard you can insert nearly any arbitrary text into the
 template.
 
+In the environment of the executed command the variables
+``GEANY_FILENAME``, ``GEANY_FILETYPE`` and ``GEANY_FUNCNAME`` are set.
+The value of these variables is filled in only if Geany knows about it.
+For example, ``GEANY_FUNCNAME`` is only filled within the function
+description template. However, these variables are ``always`` set,
+just maybe with an empty value.
+You can easily access them e.g. within an executed shell script using::
+
+    $GEANY_FILENAME
+
+
 .. note::
     If the specified command could not be found or not executed, the wildcard is substituted
     by an empty string. In such cases, you can find the occurred error message on Geany's
