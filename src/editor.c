@@ -1795,6 +1795,7 @@ static GString *get_doc_words(ScintillaObject *sci, gchar *root, gsize rootlen)
 	flags = SCFIND_WORDSTART | SCFIND_MATCHCASE;
 
 	words = g_string_sized_new(256);
+	/* put space before first entry to make searching with strstr easy */
 	g_string_append_c(words, ' ');
 
 	/* search the whole document for the word root and collect results */
@@ -1872,7 +1873,7 @@ static gboolean autocomplete_doc_word(GeanyEditor *editor, gchar *root, gsize ro
 	}
 	list = g_slist_sort(list, (GCompareFunc)utils_str_casecmp);
 
-	str = g_string_sized_new(256);
+	str = g_string_sized_new(words->len);
 	foreach_slist(node, list)
 	{
 		g_string_append(str, node->data);
