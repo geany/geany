@@ -640,24 +640,22 @@ void keybindings_load_keyfile(void)
 }
 
 
-static void add_menu_accel(GeanyKeyGroup *group, guint kb_id,
-	GtkAccelGroup *accel_group, GtkWidget *menuitem)
+static void add_menu_accel(GeanyKeyGroup *group, guint kb_id, GtkWidget *menuitem)
 {
 	GeanyKeyBinding *kb = &group->keys[kb_id];
 
 	if (kb->key != 0)
-		gtk_widget_add_accelerator(menuitem, "activate", accel_group,
+		gtk_widget_add_accelerator(menuitem, "activate", kb_accel_group,
 			kb->key, kb->mods, GTK_ACCEL_VISIBLE);
 }
 
 
 #define GEANY_ADD_POPUP_ACCEL(kb_id, wid) \
-	add_menu_accel(group, kb_id, accel_group, ui_lookup_widget(main_widgets.editor_menu, G_STRINGIFY(wid)))
+	add_menu_accel(group, kb_id, ui_lookup_widget(main_widgets.editor_menu, G_STRINGIFY(wid)))
 
 /* set the menu item accelerator shortcuts (just for visibility, they are handled anyway) */
 static void add_popup_menu_accels(void)
 {
-	GtkAccelGroup *accel_group = gtk_accel_group_new();
 	GeanyKeyGroup *group;
 
 	group = g_ptr_array_index(keybinding_groups, GEANY_KEY_GROUP_EDITOR);
@@ -694,8 +692,6 @@ static void add_popup_menu_accels(void)
 	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_FORMAT_SENDTOVTE, send_selection_to_vte2);
 
 	/* the build menu items are set if the build menus are created */
-
-	gtk_window_add_accel_group(GTK_WINDOW(main_widgets.window), accel_group);
 }
 
 
