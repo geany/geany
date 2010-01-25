@@ -72,7 +72,7 @@ the existing elements stay in place - this will keep the ABI stable.
 
 .. warning::
 
-	Some structs like GeanyKeyGroup and GeanyCallback cannot be
+	Some structs like GeanyKeyGroupInfo and GeanyCallback cannot be
 	appended to without breaking the ABI because they are used to declare
 	structs by plugins, not just for accessing struct members through
 	a pointer.
@@ -82,13 +82,22 @@ even the API can change. An ABI change just means that all plugins will
 not load and they must be rebuilt. An API change means that some plugins
 might not build correctly.
 
-When reordering or changing existing elements of structs that are
+If you're reordering or changing existing elements of structs that are
 used as part of the plugin API, you should increment GEANY_ABI_VERSION
 in plugindata.h. This is usually not needed if you're just appending
 fields to structs. The GEANY_API_VERSION value should be incremented
 for any changes to the plugin API, including appending elements.
 
 If you're in any doubt when making changes to plugin API code, just ask us.
+
+Plugin API/ABI design
+---------------------
+You should not make plugins rely on the size of a struct. This means:
+
+* Don't let plugins allocate any structs (stack or heap).
+* Don't let plugins index any arrays of structs.
+* Don't add any array fields to structs in case we want to change the
+  array size later.
 
 Glade
 -----
