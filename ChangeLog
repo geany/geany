@@ -2,6 +2,9 @@
 
  * src/geany.h:
    Define G_GNUC_WARN_UNUSED_RESULT if GLib < 2.10.
+ * doc/plugins.dox:
+   Mention Files link at top for header files; demoplugin.c.
+   Minor edits; remove 'far from being complete'.
 
 
 2009-08-26  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
