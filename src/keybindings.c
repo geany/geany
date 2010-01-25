@@ -1077,6 +1077,37 @@ static gboolean check_vte(GdkModifierType state, guint keyval)
 #endif
 
 
+/* Map the keypad keys to their equivalent functions (taken from ScintillaGTK.cxx) */
+static guint key_kp_translate(guint key_in)
+{
+	switch (key_in)
+	{
+		case GDK_KP_Down:
+			return GDK_Down;
+		case GDK_KP_Up:
+			return GDK_Up;
+		case GDK_KP_Left:
+			return GDK_Left;
+		case GDK_KP_Right:
+			return GDK_Right;
+		case GDK_KP_Home:
+			return GDK_Home;
+		case GDK_KP_End:
+			return GDK_End;
+		case GDK_KP_Page_Up:
+			return GDK_Page_Up;
+		case GDK_KP_Page_Down:
+			return GDK_Page_Down;
+		case GDK_KP_Delete:
+			return GDK_Delete;
+		case GDK_KP_Insert:
+			return GDK_Insert;
+		default:
+			return key_in;
+	}
+}
+
+
 /* central keypress event handler, almost all keypress events go to this function */
 static gboolean on_key_press_event(GtkWidget *widget, GdkEventKey *ev, gpointer user_data)
 {
@@ -1100,6 +1131,9 @@ static gboolean on_key_press_event(GtkWidget *widget, GdkEventKey *ev, gpointer 
 	if ((ev->state & GDK_SHIFT_MASK) || (ev->state & GDK_LOCK_MASK))
 		if (keyval >= GDK_A && keyval <= GDK_Z)
 			keyval += GDK_a - GDK_A;
+
+	if (keyval >= GDK_KP_Space && keyval < GDK_KP_Equal)
+		keyval = key_kp_translate(keyval);
 
 	/*geany_debug("%d (%d) %d (%d)", keyval, ev->keyval, state, ev->state);*/
 

@@ -1,3 +1,9 @@
+2009-08-18  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/keybindings.c:
+   Fix non-working Home and End keys on numpads.
+
+
 2009-08-17  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * doc/geany.txt:
