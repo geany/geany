@@ -1270,8 +1270,7 @@ static void kb_cell_edited_cb(GtkCellRendererText *cellrenderertext, gchar *path
 
 		/* set the values here, because of the above check, setting it in
 		 * gtk_accelerator_parse would return a wrong key combination if it is duplicate */
-		kb->key = lkey;
-		kb->mods = lmods;
+		keybindings_update_combo(kb, lkey, lmods);
 
 		gtk_tree_store_set(store, &iter, KB_TREE_SHORTCUT, new_text, -1);
 
@@ -1316,8 +1315,7 @@ static void kb_dialog_response_cb(GtkWidget *dialog, gint response, G_GNUC_UNUSE
 
 		/* set the values here, because of the above check, setting it in
 		 * gtk_accelerator_parse would return a wrong key combination if it is duplicate */
-		kb->key = lkey;
-		kb->mods = lmods;
+		keybindings_update_combo(kb, lkey, lmods);
 
 		gtk_tree_store_set(store, &g_iter,
 			KB_TREE_SHORTCUT, gtk_label_get_text(GTK_LABEL(dialog_label)), -1);
@@ -1400,8 +1398,7 @@ static gboolean kb_find_duplicate(GeanyKeyBinding *search_kb,
 					_("The combination '%s' is already used for \"%s\"."),
 					action, kb->label))
 				{
-					kb->key = 0;
-					kb->mods = 0;
+					keybindings_update_combo(kb, 0, 0);
 					kb_clear_tree_shortcut(g, i);
 					continue;
 				}

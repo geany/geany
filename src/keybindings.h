@@ -323,6 +323,8 @@ void keybindings_set_item(GeanyKeyGroup *group, gsize key_id,
 		GeanyKeyCallback callback, guint key, GdkModifierType mod,
 		gchar *name, gchar *label, GtkWidget *menu_item);
 
+void keybindings_update_combo(GeanyKeyBinding *kb, guint key, GdkModifierType mods);
+
 void keybindings_send_command(guint group_id, guint key_id);
 
 GeanyKeyBinding *keybindings_lookup_item(guint group_id, guint key_id);
