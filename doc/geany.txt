@@ -44,10 +44,10 @@ Some basic features of Geany:
 
 * Syntax highlighting
 * Code folding
-* Symbol name autocompletion
+* Autocompletion of symbols/words
 * Construct completion/snippets
 * Auto-closing of XML and HTML tags
-* Call tips
+* Calltips
 * Many supported filetypes including C, Java, PHP, HTML, Python, Perl,
   Pascal, and others
 * Symbol lists
@@ -865,6 +865,24 @@ word on completion* preference is set (in `Editor Completions tab in
 preferences dialog`_) then any characters after the cursor that match
 a symbol or word are deleted.
 
+Scope autocompletion
+````````````````````
+E.g.::
+
+    struct
+    {
+        int i;
+        char c;
+    } foo;
+
+When you type ``foo.`` it will show an autocompletion list with 'i' and
+'c' symbols.
+
+It only works for languages that set parent scope names for e.g. struct
+members. Currently this means C-like languages. The C tag parser only
+parses global scopes, so this won't work for structs or objects declared
+in local scope.
+
 
 User-definable snippets
 ^^^^^^^^^^^^^^^^^^^^^^^
@@ -1587,10 +1605,6 @@ Show documents list
     Show all the documents you have open currently. This can be used to
     change between documents (see `Switching between documents`_) and
     to perform some common operations such as saving, closing and reloading.
-
-Show full path name in documents list
-    Show the full directory path of the files you are editing in the
-    *Documents* list.
 
 Fonts
 `````
@@ -2710,7 +2724,8 @@ Send Selection to Terminal                                Sends the current sele
                                                           line (if there is no selection) to the
                                                           embedded Terminal (VTE).
 
-Reflow lines/paragraph                                    Reformat selected lines or current paragraph,
+Reflow lines/block                                        Reformat selected lines or current
+                                                          (indented) text block,
                                                           breaking lines at the long line marker.
 
 
@@ -2745,6 +2760,11 @@ Find Document Usage                                       Finds all occurrences 
                                                           the keyboard cursor) or selection in the current
                                                           document and displays them in the messages
                                                           window.
+
+Mark All                                                  Highlight all matches of the current
+                                                          word/selection in the current document
+                                                          with a colored box. If there's nothing to
+                                                          find, highlighted matches will be cleared.
 
 **Go to**
 
@@ -2914,6 +2934,27 @@ Help                            F1                        Opens the manual.
 
 Configuration files
 ===================
+
+
+Tools menu items
+----------------
+There's a *Configuration files* submenu in the *Tools* menu that
+contains items for some of the available user configuration files.
+Clicking on one opens it in the editor for you to update. Geany will
+reload the file after you have saved it.
+
+.. note::
+    Other configuration files are not shown here and you will need to open
+    them manually and usually restart Geany to see any changes.
+
+There's also a *Reload Configuration* item which can be used if you
+updated a configuration file outside of the current instance. This
+item is also necessary to update syntax highlighting colors.
+
+.. note::
+    Syntax highlighting colors aren't updated after saving
+    filetypes.common as this can take a short while depending on which
+    documents are open.
 
 
 Global configuration file
