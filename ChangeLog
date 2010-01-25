@@ -1,3 +1,9 @@
+2009-08-27  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/geany.h:
+   Define G_GNUC_WARN_UNUSED_RESULT if GLib < 2.10.
+
+
 2009-08-26  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * doc/plugins.dox:
