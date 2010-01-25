@@ -1466,10 +1466,17 @@ on_insert_date_activate                (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
 	GeanyDocument *doc = document_get_current();
-	gchar *format;
+	gchar *format = NULL;
 	gchar *time_str;
 
 	g_return_if_fail(doc != NULL);
+
+	/* set default value */
+	if (utils_str_equal("", ui_prefs.custom_date_format))
+	{
+		g_free(ui_prefs.custom_date_format);
+		ui_prefs.custom_date_format = g_strdup("%d.%m.%Y");
+	}
 
 	if (utils_str_equal(_("dd.mm.yyyy"), (gchar*) user_data))
 		format = "%d.%m.%Y";
@@ -1487,13 +1494,6 @@ on_insert_date_activate                (GtkMenuItem     *menuitem,
 		format = ui_prefs.custom_date_format;
 	else
 	{
-		/* set default value */
-		if (utils_str_equal("", ui_prefs.custom_date_format))
-		{
-			g_free(ui_prefs.custom_date_format);
-			ui_prefs.custom_date_format = g_strdup("%d.%m.%Y");
-		}
-
 		dialogs_show_input(_("Custom Date Format"),
 			_("Enter here a custom date and time format. You can use any conversion specifiers which can be used with the ANSI C strftime function."),
 			ui_prefs.custom_date_format, FALSE, &on_custom_date_input_response);
