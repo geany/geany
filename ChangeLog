@@ -1,3 +1,9 @@
+2009-08-20  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * plugins/splitwindow.c:
+   Set the cursor color for the split window.
+
+
 2009-08-18  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/callbacks.c:
