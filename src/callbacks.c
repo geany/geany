@@ -1866,7 +1866,7 @@ on_menu_open_selected_file1_activate   (GtkMenuItem     *menuitem,
 
 	if (sel != NULL)
 	{
-		gchar *locale_filename, *filename;
+		gchar *locale_filename, *filename = NULL;
 
 		if (g_path_is_absolute(sel))
 			filename = g_strdup(sel);
@@ -1874,7 +1874,10 @@ on_menu_open_selected_file1_activate   (GtkMenuItem     *menuitem,
 		{	/* relative filename, add the path of the current file */
 			gchar *path;
 
-			path = g_path_get_dirname(doc->file_name);
+			path = utils_get_current_file_dir_utf8();
+			if (!path)
+				path = g_get_current_dir();
+
 			filename = g_build_path(G_DIR_SEPARATOR_S, path, sel, NULL);
 
 			if (! g_file_test(filename, G_FILE_TEST_EXISTS) &&
