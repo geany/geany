@@ -5,6 +5,9 @@
    whitespace before the 'function' keyword to ignore some false
    positives like function tags inside comments
    (patch by Harold Aling, thanks).
+ * tagmanager/python.c:
+   Don't parse comments after import statements and other tags
+   (closes #2838938, patch by Huandari Lopez, thanks).
 
 
 2009-08-20  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
