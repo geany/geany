@@ -26,7 +26,7 @@ r"""
 Creates macros for each plugin API function pointer, e.g.:
 
 #define plugin_add_toolbar_item \
-	geany_functions->p_plugin->add_toolbar_item
+	geany_functions->p_plugin->plugin_add_toolbar_item
 """
 
 
@@ -63,7 +63,7 @@ r'''/* This file is generated automatically by genapi.py - do not edit. */
  *
  * E.g.:@code
  * #define plugin_add_toolbar_item \
- * 	geany_functions->p_plugin->add_toolbar_item @endcode
+ * 	geany_functions->p_plugin->plugin_add_toolbar_item @endcode
  *
  * You need to declare the @ref geany_functions symbol yourself.
  *
@@ -87,7 +87,8 @@ if __name__ == "__main__":
 
 	for fname in fnames:
 		ptr, name = get_api_tuple(fname)
-		print >>f, '#define %s \\\n\tgeany_functions->%s->%s' % (fname, ptr, name)
+		# note: name no longer needed
+		print >>f, '#define %s \\\n\tgeany_functions->%s->%s' % (fname, ptr, fname)
 
 	print >>f, '\n#endif'
 	f.close

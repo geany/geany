@@ -95,7 +95,7 @@ WARN_LOGFILE           =
 # configuration options related to the input files
 #---------------------------------------------------------------------------
 INPUT                  = ../src/ ./ \
-                         ../plugins/pluginmacros.h ../plugins/geanyplugin.h ../plugins/geanyfunctions.h \
+                         ../plugins/geanyplugin.h ../plugins/geanyfunctions.h \
                          ../tagmanager/tm_source_file.c ../tagmanager/include/tm_source_file.h \
                          ../tagmanager/tm_work_object.c ../tagmanager/include/tm_work_object.h \
                          ../tagmanager/tm_workspace.c ../tagmanager/include/tm_workspace.h

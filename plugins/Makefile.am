@@ -8,7 +8,6 @@ plugindir = $(libdir)/geany
 
 plugins_includedir = $(includedir)/geany
 plugins_include_HEADERS = \
-	pluginmacros.h \
 	geanyplugin.h \
 	geanyfunctions.h
 

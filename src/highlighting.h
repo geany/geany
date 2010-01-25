@@ -30,7 +30,7 @@
 
 
 /** Fields representing the different attributes of a Scintilla lexer style.
- * @see Scintilla messages @c SCI_STYLEGETFORE, etc, for use with ScintillaFuncs::send_message(). */
+ * @see Scintilla messages @c SCI_STYLEGETFORE, etc, for use with scintilla_send_message(). */
 typedef struct GeanyLexerStyle
 {
 	gint	foreground;	/**< Foreground text colour, in @c 0xBBGGRR format. */

@@ -50,7 +50,7 @@
 enum {
 	/** The Application Programming Interface (API) version, incremented
 	 * whenever any plugin data types are modified or appended to. */
-	GEANY_API_VERSION = 170,
+	GEANY_API_VERSION = 171,
 
 	/** The Application Binary Interface (ABI) version, incremented whenever
 	 * existing fields in the plugin data types have to be changed or reordered. */
@@ -249,29 +249,29 @@ GeanyFunctions;
 /* See document.h */
 typedef struct DocumentFuncs
 {
-	struct GeanyDocument*	(*new_file) (const gchar *utf8_filename, struct GeanyFiletype *ft,
+	struct GeanyDocument*	(*document_new_file) (const gchar *utf8_filename, struct GeanyFiletype *ft,
 			const gchar *text);
-	struct GeanyDocument*	(*get_current) (void);
-	struct GeanyDocument*	(*get_from_page) (guint page_num);
-	struct GeanyDocument*	(*find_by_filename) (const gchar *utf8_filename);
-	struct GeanyDocument*	(*find_by_real_path) (const gchar *realname);
-	gboolean				(*save_file) (struct GeanyDocument *doc, gboolean force);
-	struct GeanyDocument*	(*open_file) (const gchar *locale_filename, gboolean readonly,
+	struct GeanyDocument*	(*document_get_current) (void);
+	struct GeanyDocument*	(*document_get_from_page) (guint page_num);
+	struct GeanyDocument*	(*document_find_by_filename) (const gchar *utf8_filename);
+	struct GeanyDocument*	(*document_find_by_real_path) (const gchar *realname);
+	gboolean				(*document_save_file) (struct GeanyDocument *doc, gboolean force);
+	struct GeanyDocument*	(*document_open_file) (const gchar *locale_filename, gboolean readonly,
 			struct GeanyFiletype *ft, const gchar *forced_enc);
-	void		(*open_files) (const GSList *filenames, gboolean readonly,
+	void		(*document_open_files) (const GSList *filenames, gboolean readonly,
 			struct GeanyFiletype *ft, const gchar *forced_enc);
-	gboolean	(*remove_page) (guint page_num);
-	gboolean	(*reload_file) (struct GeanyDocument *doc, const gchar *forced_enc);
-	void		(*set_encoding) (struct GeanyDocument *doc, const gchar *new_encoding);
-	void		(*set_text_changed) (struct GeanyDocument *doc, gboolean changed);
-	void		(*set_filetype) (struct GeanyDocument *doc, struct GeanyFiletype *type);
-	gboolean	(*close) (struct GeanyDocument *doc);
-	struct GeanyDocument*	(*index)(gint idx);
-	gboolean	(*save_file_as) (struct GeanyDocument *doc, const gchar *utf8_fname);
-	void		(*rename_file) (struct GeanyDocument *doc, const gchar *new_filename);
-	const GdkColor*	(*get_status_color) (struct GeanyDocument *doc);
-	gchar*		(*get_basename_for_display) (struct GeanyDocument *doc, gint length);
-	gint		(*get_notebook_page) (struct GeanyDocument *doc);
+	gboolean	(*document_remove_page) (guint page_num);
+	gboolean	(*document_reload_file) (struct GeanyDocument *doc, const gchar *forced_enc);
+	void		(*document_set_encoding) (struct GeanyDocument *doc, const gchar *new_encoding);
+	void		(*document_set_text_changed) (struct GeanyDocument *doc, gboolean changed);
+	void		(*document_set_filetype) (struct GeanyDocument *doc, struct GeanyFiletype *type);
+	gboolean	(*document_close) (struct GeanyDocument *doc);
+	struct GeanyDocument*	(*document_index)(gint idx);
+	gboolean	(*document_save_file_as) (struct GeanyDocument *doc, const gchar *utf8_fname);
+	void		(*document_rename_file) (struct GeanyDocument *doc, const gchar *new_filename);
+	const GdkColor*	(*document_get_status_color) (struct GeanyDocument *doc);
+	gchar*		(*document_get_basename_for_display) (struct GeanyDocument *doc, gint length);
+	gint		(*document_get_notebook_page) (struct GeanyDocument *doc);
 }
 DocumentFuncs;
 
@@ -282,10 +282,10 @@ struct _ScintillaObject;
 typedef struct ScintillaFuncs
 {
 	/** Send Scintilla a message. */
-	long int	(*send_message) (struct _ScintillaObject* sci, unsigned int iMessage,
+	long int	(*scintilla_send_message) (struct _ScintillaObject* sci, unsigned int iMessage,
 			long unsigned int wParam, long int lParam);
 	/** Create a new ScintillaObject widget. */
-	GtkWidget*	(*new)(void);
+	GtkWidget*	(*scintilla_new)(void);
 }
 ScintillaFuncs;
 
@@ -294,60 +294,60 @@ ScintillaFuncs;
  * See sciwrappers.h for the list of functions. */
 typedef struct SciFuncs
 {
-	/** @deprecated Use @ref ScintillaFuncs::send_message() instead. */
+	/** @deprecated Use @c scintilla_send_message() instead. */
 	long int (*send_message) (struct _ScintillaObject *sci, unsigned int iMessage,
 			long unsigned int wParam, long int lParam);
 	void	(*send_command) (struct _ScintillaObject *sci, gint cmd);
 
-	void	(*start_undo_action) (struct _ScintillaObject *sci);
-	void	(*end_undo_action) (struct _ScintillaObject *sci);
-	void	(*set_text) (struct _ScintillaObject *sci, const gchar *text);
-	void	(*insert_text) (struct _ScintillaObject *sci, gint pos, const gchar *text);
-	void	(*get_text) (struct _ScintillaObject *sci, gint len, gchar *text);
-	gint	(*get_length) (struct _ScintillaObject *sci);
-	gint	(*get_current_position) (struct _ScintillaObject *sci);
-	void	(*set_current_position) (struct _ScintillaObject *sci, gint position,
+	void	(*sci_start_undo_action) (struct _ScintillaObject *sci);
+	void	(*sci_end_undo_action) (struct _ScintillaObject *sci);
+	void	(*sci_set_text) (struct _ScintillaObject *sci, const gchar *text);
+	void	(*sci_insert_text) (struct _ScintillaObject *sci, gint pos, const gchar *text);
+	void	(*sci_get_text) (struct _ScintillaObject *sci, gint len, gchar *text);
+	gint	(*sci_get_length) (struct _ScintillaObject *sci);
+	gint	(*sci_get_current_position) (struct _ScintillaObject *sci);
+	void	(*sci_set_current_position) (struct _ScintillaObject *sci, gint position,
 			 gboolean scroll_to_caret);
-	gint	(*get_col_from_position) (struct _ScintillaObject *sci, gint position);
-	gint	(*get_line_from_position) (struct _ScintillaObject *sci, gint position);
-	gint	(*get_position_from_line) (struct _ScintillaObject *sci, gint line);
-	void	(*replace_sel) (struct _ScintillaObject *sci, const gchar *text);
-	void	(*get_selected_text) (struct _ScintillaObject *sci, gchar *text);
-	gint	(*get_selected_text_length) (struct _ScintillaObject *sci);
-	gint	(*get_selection_start) (struct _ScintillaObject *sci);
-	gint	(*get_selection_end) (struct _ScintillaObject *sci);
-	gint	(*get_selection_mode) (struct _ScintillaObject *sci);
-	void	(*set_selection_mode) (struct _ScintillaObject *sci, gint mode);
-	void	(*set_selection_start) (struct _ScintillaObject *sci, gint position);
-	void	(*set_selection_end) (struct _ScintillaObject *sci, gint position);
-	void	(*get_text_range) (struct _ScintillaObject *sci, gint start, gint end, gchar *text);
-	gchar*	(*get_line) (struct _ScintillaObject *sci, gint line_num);
-	gint	(*get_line_length) (struct _ScintillaObject *sci, gint line);
-	gint	(*get_line_count) (struct _ScintillaObject *sci);
-	gboolean (*get_line_is_visible) (struct _ScintillaObject *sci, gint line);
-	void	(*ensure_line_is_visible) (struct _ScintillaObject *sci, gint line);
-	void	(*scroll_caret) (struct _ScintillaObject *sci);
-	gint	(*find_matching_brace) (struct _ScintillaObject *sci, gint pos);
-	gint	(*get_style_at) (struct _ScintillaObject *sci, gint position);
-	gchar	(*get_char_at) (struct _ScintillaObject *sci, gint pos);
-	gint	(*get_current_line) (struct _ScintillaObject *sci);
-	gboolean (*has_selection) (struct _ScintillaObject *sci);
-	gint	(*get_tab_width) (struct _ScintillaObject *sci);
-	void	(*indicator_clear) (struct _ScintillaObject *sci, gint start, gint end);
-	void	(*indicator_set) (struct _ScintillaObject *sci, gint indic);
-	gchar*	(*get_contents) (struct _ScintillaObject *sci, gint len);
-	gchar*	(*get_contents_range) (struct _ScintillaObject *sci, gint start, gint end);
-	gchar*	(*get_selection_contents) (struct _ScintillaObject *sci);
-	void	(*set_font) (struct _ScintillaObject *sci, gint style, const gchar *font, gint size);
-	gint	(*get_line_end_position) (struct _ScintillaObject *sci, gint line);
-	void	(*set_target_start) (struct _ScintillaObject *sci, gint start);
-	void	(*set_target_end) (struct _ScintillaObject *sci, gint end);
-	gint	(*replace_target) (struct _ScintillaObject *sci, const gchar *text, gboolean regex);
-	void	(*set_marker_at_line) (struct _ScintillaObject *sci, gint line_number, gint marker);
-	void	(*delete_marker_at_line) (struct _ScintillaObject *sci, gint line_number, gint marker);
-	gboolean (*is_marker_set_at_line) (struct _ScintillaObject *sci, gint line, gint marker);
-	void 	(*goto_line) (struct _ScintillaObject *sci, gint line, gboolean unfold);
-	gint	(*find_text) (struct _ScintillaObject *sci, gint flags, struct Sci_TextToFind *ttf);
+	gint	(*sci_get_col_from_position) (struct _ScintillaObject *sci, gint position);
+	gint	(*sci_get_line_from_position) (struct _ScintillaObject *sci, gint position);
+	gint	(*sci_get_position_from_line) (struct _ScintillaObject *sci, gint line);
+	void	(*sci_replace_sel) (struct _ScintillaObject *sci, const gchar *text);
+	void	(*sci_get_selected_text) (struct _ScintillaObject *sci, gchar *text);
+	gint	(*sci_get_selected_text_length) (struct _ScintillaObject *sci);
+	gint	(*sci_get_selection_start) (struct _ScintillaObject *sci);
+	gint	(*sci_get_selection_end) (struct _ScintillaObject *sci);
+	gint	(*sci_get_selection_mode) (struct _ScintillaObject *sci);
+	void	(*sci_set_selection_mode) (struct _ScintillaObject *sci, gint mode);
+	void	(*sci_set_selection_start) (struct _ScintillaObject *sci, gint position);
+	void	(*sci_set_selection_end) (struct _ScintillaObject *sci, gint position);
+	void	(*sci_get_text_range) (struct _ScintillaObject *sci, gint start, gint end, gchar *text);
+	gchar*	(*sci_get_line) (struct _ScintillaObject *sci, gint line_num);
+	gint	(*sci_get_line_length) (struct _ScintillaObject *sci, gint line);
+	gint	(*sci_get_line_count) (struct _ScintillaObject *sci);
+	gboolean (*sci_get_line_is_visible) (struct _ScintillaObject *sci, gint line);
+	void	(*sci_ensure_line_is_visible) (struct _ScintillaObject *sci, gint line);
+	void	(*sci_scroll_caret) (struct _ScintillaObject *sci);
+	gint	(*sci_find_matching_brace) (struct _ScintillaObject *sci, gint pos);
+	gint	(*sci_get_style_at) (struct _ScintillaObject *sci, gint position);
+	gchar	(*sci_get_char_at) (struct _ScintillaObject *sci, gint pos);
+	gint	(*sci_get_current_line) (struct _ScintillaObject *sci);
+	gboolean (*sci_has_selection) (struct _ScintillaObject *sci);
+	gint	(*sci_get_tab_width) (struct _ScintillaObject *sci);
+	void	(*sci_indicator_clear) (struct _ScintillaObject *sci, gint start, gint end);
+	void	(*sci_indicator_set) (struct _ScintillaObject *sci, gint indic);
+	gchar*	(*sci_get_contents) (struct _ScintillaObject *sci, gint len);
+	gchar*	(*sci_get_contents_range) (struct _ScintillaObject *sci, gint start, gint end);
+	gchar*	(*sci_get_selection_contents) (struct _ScintillaObject *sci);
+	void	(*sci_set_font) (struct _ScintillaObject *sci, gint style, const gchar *font, gint size);
+	gint	(*sci_get_line_end_position) (struct _ScintillaObject *sci, gint line);
+	void	(*sci_set_target_start) (struct _ScintillaObject *sci, gint start);
+	void	(*sci_set_target_end) (struct _ScintillaObject *sci, gint end);
+	gint	(*sci_replace_target) (struct _ScintillaObject *sci, const gchar *text, gboolean regex);
+	void	(*sci_set_marker_at_line) (struct _ScintillaObject *sci, gint line_number, gint marker);
+	void	(*sci_delete_marker_at_line) (struct _ScintillaObject *sci, gint line_number, gint marker);
+	gboolean (*sci_is_marker_set_at_line) (struct _ScintillaObject *sci, gint line, gint marker);
+	void 	(*sci_goto_line) (struct _ScintillaObject *sci, gint line, gboolean unfold);
+	gint	(*sci_find_text) (struct _ScintillaObject *sci, gint flags, struct Sci_TextToFind *ttf);
 }
 SciFuncs;
 
@@ -355,7 +355,7 @@ SciFuncs;
 /* See templates.h */
 typedef struct TemplateFuncs
 {
-	gchar*		(*get_template_fileheader) (gint filetype_idx, const gchar *fname);
+	gchar*		(*templates_get_template_fileheader) (gint filetype_idx, const gchar *fname);
 }
 TemplateFuncs;
 
@@ -363,35 +363,35 @@ TemplateFuncs;
 /* See utils.h */
 typedef struct UtilsFuncs
 {
-	gboolean	(*str_equal) (const gchar *a, const gchar *b);
-	guint		(*string_replace_all) (GString *haystack, const gchar *needle,
+	gboolean	(*utils_str_equal) (const gchar *a, const gchar *b);
+	guint		(*utils_string_replace_all) (GString *haystack, const gchar *needle,
 				 const gchar *replacement);
-	GSList*		(*get_file_list) (const gchar *path, guint *length, GError **error);
-	gint		(*write_file) (const gchar *filename, const gchar *text);
-	gchar*		(*get_locale_from_utf8) (const gchar *utf8_text);
-	gchar*		(*get_utf8_from_locale) (const gchar *locale_text);
-	gchar*		(*remove_ext_from_filename) (const gchar *filename);
-	gint		(*mkdir) (const gchar *path, gboolean create_parent_dirs);
-	gboolean	(*get_setting_boolean) (GKeyFile *config, const gchar *section, const gchar *key,
+	GSList*		(*utils_get_file_list) (const gchar *path, guint *length, GError **error);
+	gint		(*utils_write_file) (const gchar *filename, const gchar *text);
+	gchar*		(*utils_get_locale_from_utf8) (const gchar *utf8_text);
+	gchar*		(*utils_get_utf8_from_locale) (const gchar *locale_text);
+	gchar*		(*utils_remove_ext_from_filename) (const gchar *filename);
+	gint		(*utils_mkdir) (const gchar *path, gboolean create_parent_dirs);
+	gboolean	(*utils_get_setting_boolean) (GKeyFile *config, const gchar *section, const gchar *key,
 				 const gboolean default_value);
-	gint		(*get_setting_integer) (GKeyFile *config, const gchar *section, const gchar *key,
+	gint		(*utils_get_setting_integer) (GKeyFile *config, const gchar *section, const gchar *key,
 				 const gint default_value);
-	gchar*		(*get_setting_string) (GKeyFile *config, const gchar *section, const gchar *key,
+	gchar*		(*utils_get_setting_string) (GKeyFile *config, const gchar *section, const gchar *key,
 				 const gchar *default_value);
-	gboolean	(*spawn_sync) (const gchar *dir, gchar **argv, gchar **env, GSpawnFlags flags,
+	gboolean	(*utils_spawn_sync) (const gchar *dir, gchar **argv, gchar **env, GSpawnFlags flags,
 				 GSpawnChildSetupFunc child_setup, gpointer user_data, gchar **std_out,
 				 gchar **std_err, gint *exit_status, GError **error);
-	gboolean	(*spawn_async) (const gchar *dir, gchar **argv, gchar **env, GSpawnFlags flags,
+	gboolean	(*utils_spawn_async) (const gchar *dir, gchar **argv, gchar **env, GSpawnFlags flags,
 				 GSpawnChildSetupFunc child_setup, gpointer user_data, GPid *child_pid,
 				 GError **error);
-	gint		(*str_casecmp) (const gchar *s1, const gchar *s2);
-	gchar*		(*get_date_time) (const gchar *format, time_t *time_to_use);
-	void		(*open_browser) (const gchar *uri);
-	guint		(*string_replace_first) (GString *haystack, const gchar *needle,
+	gint		(*utils_str_casecmp) (const gchar *s1, const gchar *s2);
+	gchar*		(*utils_get_date_time) (const gchar *format, time_t *time_to_use);
+	void		(*utils_open_browser) (const gchar *uri);
+	guint		(*utils_string_replace_first) (GString *haystack, const gchar *needle,
 				 const gchar *replace);
-	gchar*		(*str_middle_truncate) (const gchar *string, guint truncate_length);
-	gchar*		(*str_remove_chars) (gchar *string, const gchar *chars);
-	GSList*		(*get_file_list_full)(const gchar *path, gboolean full_path, gboolean sort,
+	gchar*		(*utils_str_middle_truncate) (const gchar *string, guint truncate_length);
+	gchar*		(*utils_str_remove_chars) (gchar *string, const gchar *chars);
+	GSList*		(*utils_get_file_list_full)(const gchar *path, gboolean full_path, gboolean sort,
 				GError **error);
 }
 UtilsFuncs;
@@ -400,9 +400,9 @@ UtilsFuncs;
 /* See main.h */
 typedef struct MainFuncs
 {
-	void		(*reload_configuration) (void);
-	void		(*locale_init) (const gchar *locale_dir, const gchar *package);
-	gboolean	(*is_realized) (void);
+	void		(*main_reload_configuration) (void);
+	void		(*main_locale_init) (const gchar *locale_dir, const gchar *package);
+	gboolean	(*main_is_realized) (void);
 }
 MainFuncs;
 
@@ -410,22 +410,22 @@ MainFuncs;
 /* See ui_utils.h */
 typedef struct UIUtilsFuncs
 {
-	GtkWidget*	(*dialog_vbox_new) (GtkDialog *dialog);
-	GtkWidget*	(*frame_new_with_alignment) (const gchar *label_text, GtkWidget **alignment);
-	void		(*set_statusbar) (gboolean log, const gchar *format, ...) G_GNUC_PRINTF (2, 3);
-	void		(*table_add_row) (GtkTable *table, gint row, ...) G_GNUC_NULL_TERMINATED;
-	GtkWidget*	(*path_box_new) (const gchar *title, GtkFileChooserAction action, GtkEntry *entry);
-	GtkWidget*	(*button_new_with_image) (const gchar *stock_id, const gchar *text);
-	void		(*add_document_sensitive) (GtkWidget *widget);
-	void		(*widget_set_tooltip_text) (GtkWidget *widget, const gchar *text);
-	GtkWidget*	(*image_menu_item_new) (const gchar *stock_id, const gchar *label);
-	GtkWidget*	(*lookup_widget) (GtkWidget *widget, const gchar *widget_name);
-	void		(*progress_bar_start) (const gchar *text);
-	void		(*progress_bar_stop) (void);
-	void		(*entry_add_clear_icon) (GtkEntry *entry);
-	void		(*menu_add_document_items) (GtkMenu *menu, struct GeanyDocument *active,
+	GtkWidget*	(*ui_dialog_vbox_new) (GtkDialog *dialog);
+	GtkWidget*	(*ui_frame_new_with_alignment) (const gchar *label_text, GtkWidget **alignment);
+	void		(*ui_set_statusbar) (gboolean log, const gchar *format, ...) G_GNUC_PRINTF (2, 3);
+	void		(*ui_table_add_row) (GtkTable *table, gint row, ...) G_GNUC_NULL_TERMINATED;
+	GtkWidget*	(*ui_path_box_new) (const gchar *title, GtkFileChooserAction action, GtkEntry *entry);
+	GtkWidget*	(*ui_button_new_with_image) (const gchar *stock_id, const gchar *text);
+	void		(*ui_add_document_sensitive) (GtkWidget *widget);
+	void		(*ui_widget_set_tooltip_text) (GtkWidget *widget, const gchar *text);
+	GtkWidget*	(*ui_image_menu_item_new) (const gchar *stock_id, const gchar *label);
+	GtkWidget*	(*ui_lookup_widget) (GtkWidget *widget, const gchar *widget_name);
+	void		(*ui_progress_bar_start) (const gchar *text);
+	void		(*ui_progress_bar_stop) (void);
+	void		(*ui_entry_add_clear_icon) (GtkEntry *entry);
+	void		(*ui_menu_add_document_items) (GtkMenu *menu, struct GeanyDocument *active,
 				GCallback callback);
-	void		(*widget_modify_font_from_string) (GtkWidget *widget, const gchar *str);
+	void		(*ui_widget_modify_font_from_string) (GtkWidget *widget, const gchar *str);
 }
 UIUtilsFuncs;
 
@@ -433,12 +433,11 @@ UIUtilsFuncs;
 /* See dialogs.h */
 typedef struct DialogFuncs
 {
-	gboolean	(*show_question) (const gchar *text, ...) G_GNUC_PRINTF (1, 2);
-	void		(*show_msgbox) (GtkMessageType type, const gchar *text, ...) G_GNUC_PRINTF (2, 3);
-	gboolean	(*show_save_as) (void);
-	gboolean	(*show_input_numeric) (const gchar *title, const gchar *label_text,
+	gboolean	(*dialogs_show_question) (const gchar *text, ...) G_GNUC_PRINTF (1, 2);
+	void		(*dialogs_show_msgbox) (GtkMessageType type, const gchar *text, ...) G_GNUC_PRINTF (2, 3);
+	gboolean	(*dialogs_show_save_as) (void);
+	gboolean	(*dialogs_show_input_numeric) (const gchar *title, const gchar *label_text,
 				 gdouble *value, gdouble min, gdouble max, gdouble step);
-
 }
 DialogFuncs;
 
@@ -446,7 +445,7 @@ DialogFuncs;
 /* @deprecated Use ui_lookup_widget() instead. */
 typedef struct SupportFuncs
 {
-	GtkWidget*	(*lookup_widget) (GtkWidget *widget, const gchar *widget_name);
+	GtkWidget*	(*support_lookup_widget) (GtkWidget *widget, const gchar *widget_name);
 }
 SupportFuncs;
 
@@ -455,12 +454,12 @@ SupportFuncs;
 typedef struct MsgWinFuncs
 {
 	/* status_add() does not set the status bar - use ui->set_statusbar() instead. */
-	void		(*status_add) (const gchar *format, ...) G_GNUC_PRINTF (1, 2);
-	void		(*compiler_add) (gint msg_color, const gchar *format, ...) G_GNUC_PRINTF (2, 3);
-	void		(*msg_add) (gint msg_color, gint line, struct GeanyDocument *doc,
+	void		(*msgwin_status_add) (const gchar *format, ...) G_GNUC_PRINTF (1, 2);
+	void		(*msgwin_compiler_add) (gint msg_color, const gchar *format, ...) G_GNUC_PRINTF (2, 3);
+	void		(*msgwin_msg_add) (gint msg_color, gint line, struct GeanyDocument *doc,
 				 const gchar *format, ...) G_GNUC_PRINTF (4, 5);
-	void		(*clear_tab) (gint tabnum);
-	void		(*switch_tab) (gint tabnum, gboolean show);
+	void		(*msgwin_clear_tab) (gint tabnum);
+	void		(*msgwin_switch_tab) (gint tabnum, gboolean show);
 }
 MsgWinFuncs;
 
@@ -468,10 +467,10 @@ MsgWinFuncs;
 /* See encodings.h */
 typedef struct EncodingFuncs
 {
-	gchar*			(*convert_to_utf8) (const gchar *buffer, gsize size, gchar **used_encoding);
-	gchar* 			(*convert_to_utf8_from_charset) (const gchar *buffer, gsize size,
+	gchar*			(*encodings_convert_to_utf8) (const gchar *buffer, gsize size, gchar **used_encoding);
+	gchar* 			(*encodings_convert_to_utf8_from_charset) (const gchar *buffer, gsize size,
 													 const gchar *charset, gboolean fast);
-	const gchar*	(*get_charset_from_index) (gint idx);
+	const gchar*	(*encodings_get_charset_from_index) (gint idx);
 }
 EncodingFuncs;
 
@@ -483,11 +482,11 @@ typedef void (*_GeanyKeyCallback) (guint key_id);
 /* See keybindings.h */
 typedef struct KeybindingFuncs
 {
-	void		(*send_command) (guint group_id, guint key_id);
-	struct GeanyKeyBinding* (*set_item) (struct GeanyKeyGroup *group, gsize key_id,
+	void		(*keybindings_send_command) (guint group_id, guint key_id);
+	struct GeanyKeyBinding* (*keybindings_set_item) (struct GeanyKeyGroup *group, gsize key_id,
 					_GeanyKeyCallback callback, guint key, GdkModifierType mod,
 					gchar *name, gchar *label, GtkWidget *menu_item);
-	struct GeanyKeyBinding* (*get_item)(struct GeanyKeyGroup *group, gsize key_id);
+	struct GeanyKeyBinding* (*keybindings_get_item)(struct GeanyKeyGroup *group, gsize key_id);
 
 }
 KeybindingFuncs;
@@ -496,8 +495,8 @@ KeybindingFuncs;
 /* See highlighting.h */
 typedef struct HighlightingFuncs
 {
-	const struct GeanyLexerStyle* (*get_style) (gint ft_id, gint style_id);
-	void		(*set_styles) (struct _ScintillaObject *sci, struct GeanyFiletype *ft);
+	const struct GeanyLexerStyle* (*highlighting_get_style) (gint ft_id, gint style_id);
+	void		(*highlighting_set_styles) (struct _ScintillaObject *sci, struct GeanyFiletype *ft);
 }
 HighlightingFuncs;
 
@@ -505,9 +504,9 @@ HighlightingFuncs;
 /* See filetypes.h */
 typedef struct FiletypeFuncs
 {
-	GeanyFiletype*	(*detect_from_file) (const gchar *utf8_filename);
-	GeanyFiletype*	(*lookup_by_name) (const gchar *name);
-	GeanyFiletype*	(*index)(gint idx);
+	GeanyFiletype*	(*filetypes_detect_from_file) (const gchar *utf8_filename);
+	GeanyFiletype*	(*filetypes_lookup_by_name) (const gchar *name);
+	GeanyFiletype*	(*filetypes_index)(gint idx);
 	/* Remember to convert any filetype_id arguments to GeanyFiletype pointers in any
 	 * appended functions */
 }
@@ -517,7 +516,7 @@ FiletypeFuncs;
 /* See search.h */
 typedef struct SearchFuncs
 {
-	void		(*show_find_in_files_dialog) (const gchar *dir);
+	void		(*search_show_find_in_files_dialog) (const gchar *dir);
 }
 SearchFuncs;
 
@@ -525,13 +524,13 @@ SearchFuncs;
 /* See tagmanager/include */
 typedef struct TagManagerFuncs
 {
-	gchar*			(*get_real_path) (const gchar *file_name);
-	TMWorkObject*	(*source_file_new) (const char *file_name, gboolean update, const char *name);
-	gboolean		(*workspace_add_object) (TMWorkObject *work_object);
-	gboolean		(*source_file_update) (TMWorkObject *source_file, gboolean force,
+	gchar*			(*tm_get_real_path) (const gchar *file_name);
+	TMWorkObject*	(*tm_source_file_new) (const char *file_name, gboolean update, const char *name);
+	gboolean		(*tm_workspace_add_object) (TMWorkObject *work_object);
+	gboolean		(*tm_source_file_update) (TMWorkObject *source_file, gboolean force,
 					 gboolean recurse, gboolean update_parent);
-	void			(*work_object_free) (gpointer work_object);
-	gboolean		(*workspace_remove_object) (TMWorkObject *w, gboolean do_free, gboolean update);
+	void			(*tm_work_object_free) (gpointer work_object);
+	gboolean		(*tm_workspace_remove_object) (TMWorkObject *w, gboolean do_free, gboolean update);
 }
 TagManagerFuncs;
 
@@ -539,7 +538,7 @@ TagManagerFuncs;
 /* See navqueue.h */
 typedef struct NavQueueFuncs
 {
-	gboolean		(*goto_line) (struct GeanyDocument *old_doc, struct GeanyDocument *new_doc,
+	gboolean		(*navqueue_goto_line) (struct GeanyDocument *old_doc, struct GeanyDocument *new_doc,
 					 gint line);
 }
 NavQueueFuncs;
@@ -550,21 +549,21 @@ struct GeanyEditor;
 /* See editor.h */
 typedef struct EditorFuncs
 {
-	const struct GeanyIndentPrefs* (*get_indent_prefs)(struct GeanyEditor *editor);
-	struct _ScintillaObject* (*create_widget)(struct GeanyEditor *editor);
+	const struct GeanyIndentPrefs* (*editor_get_indent_prefs)(struct GeanyEditor *editor);
+	struct _ScintillaObject* (*editor_create_widget)(struct GeanyEditor *editor);
 
-	void	(*indicator_set_on_range) (struct GeanyEditor *editor, gint indic, gint start, gint end);
-	void	(*indicator_set_on_line) (struct GeanyEditor *editor, gint indic, gint line);
-	void	(*indicator_clear) (struct GeanyEditor *editor, gint indic);
+	void	(*editor_indicator_set_on_range) (struct GeanyEditor *editor, gint indic, gint start, gint end);
+	void	(*editor_indicator_set_on_line) (struct GeanyEditor *editor, gint indic, gint line);
+	void	(*editor_indicator_clear) (struct GeanyEditor *editor, gint indic);
 
-	void	(*set_indent_type)(struct GeanyEditor *editor, GeanyIndentType type);
-	gchar*	(*get_word_at_pos) (struct GeanyEditor *editor, gint pos, const gchar *wordchars);
+	void	(*editor_set_indent_type)(struct GeanyEditor *editor, GeanyIndentType type);
+	gchar*	(*editor_get_word_at_pos) (struct GeanyEditor *editor, gint pos, const gchar *wordchars);
 
-	const gchar*	(*get_eol_char_name) (struct GeanyEditor *editor);
-	gint			(*get_eol_char_len) (struct GeanyEditor *editor);
-	const gchar*	(*get_eol_char) (struct GeanyEditor *editor);
+	const gchar*	(*editor_get_eol_char_name) (struct GeanyEditor *editor);
+	gint			(*editor_get_eol_char_len) (struct GeanyEditor *editor);
+	const gchar*	(*editor_get_eol_char) (struct GeanyEditor *editor);
 
-	void	(*insert_text_block) (struct GeanyEditor *editor, const gchar *text,
+	void	(*editor_insert_text_block) (struct GeanyEditor *editor, const gchar *text,
 			 gint insert_pos, gint cursor_index, gint newline_indent_size,
 			 gboolean replace_newlines);
 }
@@ -577,14 +576,14 @@ typedef gboolean (*_GeanyKeyGroupCallback) (guint key_id);
 /* See pluginutils.c */
 typedef struct PluginFuncs
 {
-	void	(*add_toolbar_item)(GeanyPlugin *plugin, GtkToolItem *item);
-	void	(*module_make_resident) (GeanyPlugin *plugin);
-	void	(*signal_connect) (GeanyPlugin *plugin,
+	void	(*plugin_add_toolbar_item)(GeanyPlugin *plugin, GtkToolItem *item);
+	void	(*plugin_module_make_resident) (GeanyPlugin *plugin);
+	void	(*plugin_signal_connect) (GeanyPlugin *plugin,
 		GObject *object, gchar *signal_name, gboolean after,
 		GCallback callback, gpointer user_data);
-	struct GeanyKeyGroup* (*set_key_group)(GeanyPlugin *plugin,
+	struct GeanyKeyGroup* (*plugin_set_key_group)(GeanyPlugin *plugin,
 		const gchar *section_name, gsize count, _GeanyKeyGroupCallback callback);
-	void	(*show_configure)(GeanyPlugin *plugin);
+	void	(*plugin_show_configure)(GeanyPlugin *plugin);
 }
 PluginFuncs;
 

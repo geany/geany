@@ -1,3 +1,14 @@
+2010-01-25  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/highlighting.c, src/highlighting.h, src/sciwrappers.c,
+   src/plugindata.h, doc/Doxyfile.in, doc/pluginsymbols.c,
+   plugins/geanyfunctions.h, plugins/Makefile.am,
+   plugins/pluginmacros.h, plugins/genapi.py, ChangeLog, wscript:
+   Use full function name for GeanyFunctions function pointers. This
+   avoids naming conflicts e.g. with C++'s 'new' keyword.
+   Remove deprecated header pluginmacros.h - use geanyfunctions.h instead.
+
+
 2010-01-24  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/utils.c, src/utils.h, src/vte.c:
@@ -12,7 +23,7 @@
    Replace the old icons with smiley icons from the Rodent icon theme.
    Fix showing the same icon for two or more slots.
    Minor cleanups.
- * src/editor.c, src/editor.j, src/keybindings.c:
+ * src/editor.c, src/editor.h, src/keybindings.c:
    Rename fold_symbol_click() to editor_toggle_fold().
    Use editor_toggle_fold() when the 'Toggle current fold' keybinding
    was used to respect the 'Fold/unfold all children' preference

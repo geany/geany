@@ -26,7 +26,7 @@
  * You should also check the http://scintilla.org documentation, as it is more detailed.
  * @note These functions were originally from the cssed project
  * (http://cssed.sf.net, thanks).
- * @see ScintillaFuncs::send_message().
+ * @see scintilla_send_message().
  */
 
 #include <string.h>

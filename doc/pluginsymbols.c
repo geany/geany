@@ -58,7 +58,7 @@ const GeanyData *geany_data;
  * Example: @code #include "geanyfunctions.h"
  * ...
  * document_new_file(NULL, NULL, NULL); @endcode
- * This is equivalent of @c geany_functions->p_document->new_file(NULL, NULL, NULL); */
+ * This is equivalent of @c geany_functions->p_document->document_new_file(NULL, NULL, NULL); */
 const GeanyFunctions *geany_functions;
 
 /** @deprecated Use @ref ui_add_document_sensitive() instead.

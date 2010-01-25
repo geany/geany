@@ -3274,7 +3274,7 @@ void highlighting_set_styles(ScintillaObject *sci, GeanyFiletype *ft)
  * @param ft_id Filetype ID, e.g. @c GEANY_FILETYPES_DIFF.
  * @param style_id A Scintilla lexer style, e.g. @c SCE_DIFF_ADDED. See scintilla/include/SciLexer.h.
  * @return A pointer to the style struct.
- * @see Scintilla messages @c SCI_STYLEGETFORE, etc, for use with ScintillaFuncs::send_message(). */
+ * @see Scintilla messages @c SCI_STYLEGETFORE, etc, for use with scintilla_send_message(). */
 const GeanyLexerStyle *highlighting_get_style(gint ft_id, gint style_id)
 {
 	if (ft_id < 0 || ft_id >= (gint)filetypes_array->len)
