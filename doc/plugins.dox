@@ -29,26 +29,29 @@
 
 /**
  *
- *  @mainpage Geany Plugin API Documentation
+ * @mainpage Geany Plugin API Documentation
  *
- *  @author Enrico Tröger, Nick Treleaven, Frank Lanitz
- *  @date $Date$
+ * @author Enrico Tröger, Nick Treleaven, Frank Lanitz
+ * @date $Date$
  *
- *  @section Intro
- *  This is the Geany API documentation. It is far from being complete and should be
- *  considered as a work in progress.
- *  We will try to document as many functions and structs as possible.
+ * @section Intro
+ * This is the Geany API documentation. It is far from being complete and should be
+ * considered as a work in progress.
+ * We will try to document as many functions and structs as possible.
  *
- *  To get started, see the @link howto Plugin Howto @endlink.
+ * To get started, see the @link howto Plugin Howto @endlink.
  *
- *  Other pages:
- *  - @link pluginsymbols.c Plugin Symbols @endlink
- *  - @link plugindata.h Main Datatypes and Macros @endlink
- *  - @link signals Plugin Signals @endlink
- *  - @link pluginutils.c Plugin Utility Functions @endlink
- *  - @link guidelines Plugin Writing Guidelines @endlink
+ * Other pages:
+ * - @link pluginsymbols.c Plugin Symbols @endlink
+ * - @link plugindata.h Main Datatypes and Macros @endlink
+ * - @link signals Plugin Signals @endlink
+ * - @link pluginutils.c Plugin Utility Functions @endlink
+ * - @link guidelines Plugin Writing Guidelines @endlink
  *
- *  @note Some of these pages are also listed in Related Pages.
+ * @note Some of these pages are also listed in Related Pages, plus the list of deprecated symbols.
+ * @warning Do not use anything not documented here, it may change.
+ * @note You should see the HACKING file for information about developing the plugin API and
+ * other useful things.
  */
 
 /**
