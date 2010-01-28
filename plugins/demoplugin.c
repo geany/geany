@@ -50,7 +50,7 @@ GeanyFunctions	*geany_functions;
 PLUGIN_VERSION_CHECK(147)
 
 /* All plugins must set name, description, version and author. */
-PLUGIN_SET_INFO(_("Demo"), _("Example plugin."), VERSION, _("The Geany developer team"))
+PLUGIN_SET_INFO(_("Demo"), _("Example plugin."), "0.1" , _("The Geany developer team"))
 
 
 static GtkWidget *main_menu_item = NULL;
