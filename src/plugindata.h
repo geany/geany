@@ -50,7 +50,7 @@
 enum {
 	/** The Application Programming Interface (API) version, incremented
 	 * whenever any plugin data types are modified or appended to. */
-	GEANY_API_VERSION = 171,
+	GEANY_API_VERSION = 172,
 
 	/** The Application Binary Interface (ABI) version, incremented whenever
 	 * existing fields in the plugin data types have to be changed or reordered. */
@@ -295,9 +295,9 @@ ScintillaFuncs;
 typedef struct SciFuncs
 {
 	/** @deprecated Use @c scintilla_send_message() instead. */
-	long int (*send_message) (struct _ScintillaObject *sci, unsigned int iMessage,
+	long int (*sci_send_message) (struct _ScintillaObject *sci, unsigned int iMessage,
 			long unsigned int wParam, long int lParam);
-	void	(*send_command) (struct _ScintillaObject *sci, gint cmd);
+	void	(*sci_send_command) (struct _ScintillaObject *sci, gint cmd);
 
 	void	(*sci_start_undo_action) (struct _ScintillaObject *sci);
 	void	(*sci_end_undo_action) (struct _ScintillaObject *sci);

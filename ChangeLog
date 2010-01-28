@@ -1,3 +1,9 @@
+2010-01-28  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/plugindata.h:
+   Fix renaming sci_send_message(), sci_send_command() function pointers.
+
+
 2010-01-25  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/highlighting.c, src/highlighting.h, src/sciwrappers.c,
