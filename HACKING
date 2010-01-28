@@ -201,17 +201,7 @@ check to see if those features have been written in other projects first.
 * Add GEANY_FILETYPES_FOO to filetypes.h.
 * Initialize GEANY_FILETYPES_FOO in init_builtin_filetypes() of
   filetypes.c.
-* Rebuild Geany.
-* From your geany/ directory, run::
-
-	src/geany --generate-data-files
-
-(The src/ prefix may be different, depending on where the binary is
-generated.)
-This will update data/filetype_extensions.conf. Note that
-you need GEANY_DEBUG to be defined when building Geany for the
---generate-data-files argument to work - this is always defined in the
-SVN version. Alternatively, edit the file by hand.
+* Update data/filetype_extensions.conf.
 
 filetypes.* configuration file
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

@@ -108,7 +108,6 @@ static gchar *alternate_config = NULL;
 static gboolean no_vte = FALSE;
 static gchar *lib_vte = NULL;
 #endif
-static gboolean generate_datafiles = FALSE;
 static gboolean generate_tags = FALSE;
 static gboolean no_preprocessing = FALSE;
 static gboolean ft_names = FALSE;
@@ -127,7 +126,6 @@ static GOptionEntry entries[] =
 	{ "ft-names", 0, 0, G_OPTION_ARG_NONE, &ft_names, N_("Print internal filetype names"), NULL },
 	{ "generate-tags", 'g', 0, G_OPTION_ARG_NONE, &generate_tags, N_("Generate global tags file (see documentation)"), NULL },
 	{ "no-preprocessing", 'P', 0, G_OPTION_ARG_NONE, &no_preprocessing, N_("Don't preprocess C/C++ files when generating tags"), NULL },
-	{ "generate-data-files", 0, G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_NONE, &generate_datafiles, NULL, NULL },
 #ifdef HAVE_SOCKET
 	{ "new-instance", 'i', 0, G_OPTION_ARG_NONE, &cl_options.new_instance, N_("Don't open files in a running instance, force opening a new instance"), NULL },
 #endif
@@ -523,14 +521,6 @@ static void parse_command_line_options(gint *argc, gchar ***argv)
 		app->configdir = g_build_filename(g_get_user_config_dir(), "geany", NULL);
 	}
 
-#ifdef GEANY_DEBUG
-	if (generate_datafiles)
-	{
-		filetypes_init_types();
-		configuration_generate_data_files();	/* currently only filetype_extensions.conf */
-		exit(0);
-	}
-#endif
 	if (generate_tags)
 	{
 		gboolean ret;
