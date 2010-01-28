@@ -1376,10 +1376,12 @@ GSList *utils_get_file_list(const gchar *path, guint *length, GError **error)
 		if (filename == NULL)
 			break;
 
-		list = g_slist_insert_sorted(list, g_strdup(filename), (GCompareFunc) utils_str_casecmp);
+		list = g_slist_append(list, g_strdup(filename));
 		len++;
 	}
 	g_dir_close(dir);
+	/* sorting last is quicker than on insertion */
+	list = g_slist_sort(list, (GCompareFunc) utils_str_casecmp);
 
 	if (length)
 		*length = len;
