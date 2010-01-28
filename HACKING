@@ -247,6 +247,7 @@ Adding a source file foo.[hc] in src/ or plugins/
 -------------------------------------------------
 * Add foo.c, foo.h to SRCS in path/Makefile.am.
 * Add foo.o to OBJS in path/makefile.win32.
+* Add path/foo.c to geany_sources in wscript.
 * Add path/foo.c to po/POTFILES.in (for string translation).
 
 Adding a filetype
@@ -283,6 +284,7 @@ LexFoo.cxx. Try the Scintilla project first. When adding a lexer, update:
 
 * scintilla/Makefile.am
 * scintilla/makefile.win32
+* wscript
 * scintilla/KeyWords.cxx - add a LINK_LEXER command *manually*
 
 For syntax highlighting, you will need to edit highlighting.c and add
@@ -343,6 +345,7 @@ http://sf.net/projects/ctags - see the tracker.
 
 * Add foo.c to SRCS in Makefile.am.
 * Add foo.o to OBJS in makefile.win32.
+* Add path/foo.c to geany_sources in wscript.
 * Add Foo to parsers.h & fill in comment with parser number for foo.
 
 In foo.c:
