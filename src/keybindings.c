@@ -2087,8 +2087,12 @@ static void reflow_paragraph(GeanyEditor *editor)
 		/* deselect last line break */
 		pos = sci_get_selection_end(sci);
 		line = sci_get_line_from_position(sci, pos);
-		pos = sci_get_line_end_position(sci, line - 1);
-		sci_set_selection_end(sci, pos);
+		if (line < sci_get_line_count(sci) - 1)
+		{
+			/* not last line */
+			pos = sci_get_line_end_position(sci, line - 1);
+			sci_set_selection_end(sci, pos);
+		}
 	}
 	split_lines(editor);
 	if (!sel)
