@@ -66,8 +66,8 @@ Avoid adding code to geany.h if it will fit better elsewhere.
 See the top of each ``src/*.c`` file for a brief description of what
 it's for.
 
-Keeping the plugin ABI stable
------------------------------
+Plugin API code
+---------------
 Please be aware that anything with a doc-comment (a comment with an
 extra asterix: ``/**``) is something in the plugin API. Things like
 enums and structs can usually still be appended to, ensuring that all
@@ -80,13 +80,15 @@ the existing elements stay in place - this will keep the ABI stable.
 	structs by plugins, not just for accessing struct members through
 	a pointer.
 
+Keeping the plugin ABI stable
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Before the 1.0 release series, the ABI can change when necessary, and
 even the API can change. An ABI change just means that all plugins will
 not load and they must be rebuilt. An API change means that some plugins
 might not build correctly.
 
 If you're reordering or changing existing elements of structs that are
-used as part of the plugin API, you should increment GEANY_ABI_VERSION
+used as part of the plugin API, you must increment GEANY_ABI_VERSION
 in plugindata.h. This is usually not needed if you're just appending
 fields to structs. The GEANY_API_VERSION value should be incremented
 for any changes to the plugin API, including appending elements.
@@ -101,6 +103,14 @@ You should not make plugins rely on the size of a struct. This means:
 * Don't let plugins index any arrays of structs.
 * Don't add any array fields to structs in case we want to change the
   array size later.
+
+Doc-comments
+^^^^^^^^^^^^
+* The @file tag can go in the source .c file, but use the .h header name so
+  it appears normally in the generated documentation. See ui_utils.c for an
+  example.
+* Function doc-comments should always go in the source file, not the
+  header, so they can be updated if/when the implementation changes.
 
 Glade
 -----

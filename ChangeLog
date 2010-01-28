@@ -1,3 +1,9 @@
+2009-10-26  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * HACKING:
+   Add 'Doc-comments' plugin API subsection.
+
+
 2009-09-27  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * configure.in:
