@@ -1,3 +1,10 @@
+2009-09-27  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * configure.in:
+   Use AC_PATH_PROG instead of which for portability (patch by Erik
+   Southworth, thanks).
+
+
 2009-09-22  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * doc/geany.txt, doc/geany.html:
