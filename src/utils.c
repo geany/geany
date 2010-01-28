@@ -1726,8 +1726,8 @@ void utils_tidy_path(gchar *filename)
 	utils_string_replace_all(str, G_DIR_SEPARATOR_S "." G_DIR_SEPARATOR_S, G_DIR_SEPARATOR_S);
 	utils_string_replace_all(str, G_DIR_SEPARATOR_S G_DIR_SEPARATOR_S, G_DIR_SEPARATOR_S);
 
-	/* replace "/.." */
-	needle = G_DIR_SEPARATOR_S "..";
+	/* replace "/../" */
+	needle = G_DIR_SEPARATOR_S ".." G_DIR_SEPARATOR_S;
 	while (1)
 	{
 		c = strstr(str->str, needle);
@@ -1739,9 +1739,11 @@ void utils_tidy_path(gchar *filename)
 			if (pos <= 3)
 				break;	/* bad path */
 
-			g_string_erase(str, pos, strlen(needle));	/* erase "/.." */
+			/* replace "/../" */
+			g_string_erase(str, pos, strlen(needle));
+			g_string_insert_c(str, pos, G_DIR_SEPARATOR);
 
-			tmp = g_strndup(str->str, pos);	/* path up to "/.." */
+			tmp = g_strndup(str->str, pos);	/* path up to "/../" */
 			c = g_strrstr(tmp, G_DIR_SEPARATOR_S);
 			g_return_if_fail(c);
 

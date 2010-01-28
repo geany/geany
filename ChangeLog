@@ -1,3 +1,9 @@
+2009-09-14  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/utils.c:
+   Fix opening filenames beginning with two dots (closes #2858487).
+
+
 2009-09-13  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/keybindings.c:
