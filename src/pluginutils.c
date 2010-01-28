@@ -27,6 +27,8 @@
  * These functions all take the @ref geany_plugin symbol as their first argument. */
 
 #include "geany.h"
+#ifdef HAVE_PLUGINS
+
 #include "pluginutils.h"
 #include "pluginprivate.h"
 
@@ -125,3 +127,4 @@ void plugin_signal_connect(GeanyPlugin *plugin,
 }
 
 
+#endif

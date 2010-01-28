@@ -26,7 +26,9 @@
 #ifndef PLUGINUTILS_H
 #define PLUGINUTILS_H
 
-#include "plugindata.h"
+#ifdef HAVE_PLUGINS
+
+#include "plugindata.h"		/* GeanyPlugin */
 
 void plugin_add_toolbar_item(GeanyPlugin *plugin, GtkToolItem *item);
 
@@ -36,4 +38,5 @@ void plugin_signal_connect(GeanyPlugin *plugin,
 		GObject *object, gchar *signal_name, gboolean after,
 		GCallback callback, gpointer user_data);
 
+#endif /* HAVE_PLUGINS */
 #endif /* PLUGINUTILS_H */

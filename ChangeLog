@@ -3,6 +3,8 @@
  * configure.in:
    Use AC_PATH_PROG instead of which for portability (patch by Erik
    Southworth, thanks).
+ * src/pluginutils.c, src/pluginutils.h:
+   Don't build pluginutils.o if HAVE_PLUGINS is not defined.
 
 
 2009-09-22  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
