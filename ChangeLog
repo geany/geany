@@ -1,3 +1,9 @@
+2010-01-28  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * geany.spec.in:
+   Update RPM Spec file (patch by Dominic Hopf, thanks).
+
+
 2010-01-28  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/plugindata.h:

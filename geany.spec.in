@@ -14,7 +14,7 @@ Vendor:        The Geany developer team <info@geany.org>
 Packager:      Dominic Hopf <dmaphy@googlemail.com>
 Source:        http://download.geany.org/%{name}-%{version}.tar.bz2
 
-# The following tags files were retrieved 16th Aug 2009
+# The following tags files were retrieved 2nd Jan 2010
 # You will have to download these and put them into your rpmbuild/SOURCES directory,
 # otherwise comment these lines out
 Source1:   http://download.geany.org/contrib/tags/sqlite3.c.tags
@@ -25,6 +25,9 @@ Source5:   http://download.geany.org/contrib/tags/dbus-glib-0.76.c.tags
 Source6:   http://download.geany.org/contrib/tags/standard.css.tags
 Source7:   http://download.geany.org/contrib/tags/geany-api-0.18.c.tags
 Source8:   http://download.geany.org/contrib/tags/std.vala.tags
+Source9:   http://download.geany.org/contrib/tags/drupal.php.tags
+Source10:  http://download.geany.org/contrib/tags/std.latex.tags
+Source11:  http://download.geany.org/contrib/tags/libxml-2.0.c.tags
 
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 Requires:      glib2, gtk2, pango
@@ -59,6 +62,10 @@ Geany plug-ins. You do not need to install this package to use Geany.
 
 %prep
 %setup -q
+# remove waf since this isn't needed for the build, we're building the package
+# with autotools
+rm -f waf
+rm -f wscript
 
 %build
 %configure
@@ -78,7 +85,7 @@ Geany plug-ins. You do not need to install this package to use Geany.
 # comment the following two lines out if you didn't download the tags files mentioned
 # above
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/%{name}/tags/
-install -p %{SOURCE1} %{SOURCE2} %{SOURCE3} %{SOURCE4} %{SOURCE5} %{SOURCE6} %{SOURCE7} %{SOURCE8} $RPM_BUILD_ROOT%{_datadir}/%{name}/tags/
+install -p %{SOURCE1} %{SOURCE2} %{SOURCE3} %{SOURCE4} %{SOURCE5} %{SOURCE6} %{SOURCE7} %{SOURCE8} %{SOURCE9} %{SOURCE10} %{SOURCE11} $RPM_BUILD_ROOT%{_datadir}/%{name}/tags/
 
 %clean
 %__rm -Rf $RPM_BUILD_ROOT
@@ -96,6 +103,7 @@ install -p %{SOURCE1} %{SOURCE2} %{SOURCE3} %{SOURCE4} %{SOURCE5} %{SOURCE6} %{S
 %{_datadir}/icons/hicolor/16x16/apps/*.png
 %{_datadir}/icons/hicolor/48x48/apps/*.png
 %{_datadir}/icons/hicolor/scalable/apps/*.svg
+
 
 %files devel
 %defattr(-, root, root, -)
