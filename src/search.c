@@ -1480,12 +1480,11 @@ static gchar **search_get_argv(const gchar **argv_prefix, const gchar *dir)
 }
 
 
-static gboolean search_read_io(GIOChannel *source, GIOCondition condition, gpointer data)
+static gboolean read_fif_io(GIOChannel *source, GIOCondition condition, gchar *enc, gint msg_color)
 {
 	if (condition & (G_IO_IN | G_IO_PRI))
 	{
 		gchar *msg, *utf8_msg;
-		gchar *enc = data;
 
 		while (g_io_channel_read_line(source, &msg, NULL, NULL, NULL) && msg)
 		{
@@ -1505,7 +1504,7 @@ static gboolean search_read_io(GIOChannel *source, GIOCondition condition, gpoin
 			else
 				utf8_msg = msg;
 
-			msgwin_msg_add_string(COLOR_BLACK, -1, NULL, utf8_msg);
+			msgwin_msg_add_string(msg_color, -1, NULL, utf8_msg);
 
 			if (utf8_msg != msg)
 				g_free(utf8_msg);
@@ -1519,42 +1518,15 @@ static gboolean search_read_io(GIOChannel *source, GIOCondition condition, gpoin
 }
 
 
+static gboolean search_read_io(GIOChannel *source, GIOCondition condition, gpointer data)
+{
+	return read_fif_io(source, condition, data, COLOR_BLACK);
+}
+
+
 static gboolean search_read_io_stderr(GIOChannel *source, GIOCondition condition, gpointer data)
 {
-	if (condition & (G_IO_IN | G_IO_PRI))
-	{
-		gchar *msg, *utf8_msg;
-		gchar *enc = data;
-
-		while (g_io_channel_read_line(source, &msg, NULL, NULL, NULL) && msg)
-		{
-			utf8_msg = NULL;
-
-			g_strstrip(msg);
-			/* enc is NULL when encoding is set to UTF-8, so we can skip any conversion */
-			if (enc != NULL)
-			{
-				if (! g_utf8_validate(msg, -1, NULL))
-				{
-					utf8_msg = g_convert(msg, -1, "UTF-8", enc, NULL, NULL, NULL);
-				}
-				if (utf8_msg == NULL)
-					utf8_msg = msg;
-			}
-			else
-				utf8_msg = msg;
-
-			g_warning("Find in Files: %s", utf8_msg);
-
-			if (utf8_msg != msg)
-				g_free(utf8_msg);
-			g_free(msg);
-		}
-	}
-	if (condition & (G_IO_ERR | G_IO_HUP | G_IO_NVAL))
-		return FALSE;
-
-	return TRUE;
+	return read_fif_io(source, condition, data, COLOR_DARK_RED);
 }
 
 
@@ -1563,7 +1535,6 @@ static void search_close_pid(GPid child_pid, gint status, gpointer user_data)
 	/* TODO: port this also to Windows API */
 #ifdef G_OS_UNIX
 	const gchar *msg = _("Search failed (see Help->Debug Messages for details).");
-	gint color = COLOR_DARK_RED;
 	gint exit_status = 1;
 
 	if (WIFEXITED(status))
@@ -1592,9 +1563,8 @@ static void search_close_pid(GPid child_pid, gint status, gpointer user_data)
 		}
 		case 1:
 			msg = _("No matches found.");
-			color = COLOR_BLUE;
 		default:
-			msgwin_msg_add_string(color, -1, NULL, msg);
+			msgwin_msg_add_string(COLOR_BLUE, -1, NULL, msg);
 			ui_set_statusbar(FALSE, "%s", msg);
 			break;
 	}
