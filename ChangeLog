@@ -1,3 +1,9 @@
+2010-01-18  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * doc/plugins.dox:
+   Add gcc commands to build a plugin to the HowTo.
+
+
 2009-11-12  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * tagmanager/ctags.c, tagmanager/general.h:

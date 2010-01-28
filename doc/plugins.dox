@@ -441,6 +441,21 @@ void plugin_cleanup(void)
  *  some memory, you are right. But it should compile and load/unload in Geany nicely.
  *  Now you have the very basic layout of a new plugin. Great, isn't it?
  *
+ *  @section building Building
+ *
+ *  First make plugin.o:
+ *
+ *  @code gcc -c plugin.c -fPIC `pkg-config --cflags geany` @endcode
+ *
+ *  Then make the plugin library plugin.so (or plugin.dll on Windows):
+ *
+ *  @code gcc plugin.o -o plugin.so -shared `pkg-config --libs geany` @endcode
+ *
+ *  If all went OK, put the library into one of the paths Geany looks for plugins,
+ *  e.g. $prefix/lib/geany. See @ref paths "Installation paths" for details.
+ *
+ *  @section realfunc Adding functionality
+ *
  *  Let's go on and implement some real functionality.
  *
  *  As mentioned before, plugin_init() will be called when the plugin is loaded in Geany.
@@ -514,7 +529,8 @@ void plugin_cleanup(void)
  *  memory once your plugin is unloaded, so you don't leave any memory leaks.
  *  Once this is done, your first plugin is ready. Congratulations!
  *
- *  The complete listing (without comments):
+ *  @section listing Complete listing (without comments)
+ *
  *  @code
 #include "geanyplugin.h"
 
