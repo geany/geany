@@ -1057,20 +1057,27 @@ static void pm_plugin_toggled(GtkCellRendererToggle *cell, gchar *pth, gpointer 
 
 	/* reload plugin module and initialize it if item is checked */
 	p = plugin_new(file_name, state, TRUE);
-	if (state)
-		keybindings_load_keyfile();		/* load shortcuts */
+	if (!p)
+	{
+		/* plugin file may no longer be on disk, or is now incompatible */
+		gtk_list_store_remove(pm_widgets.store, &iter);
+	}
+	else
+	{
+		if (state)
+			keybindings_load_keyfile();		/* load shortcuts */
 
-	/* update model */
-	gtk_list_store_set(pm_widgets.store, &iter,
-		PLUGIN_COLUMN_CHECK, state,
-		PLUGIN_COLUMN_PLUGIN, p, -1);
+		/* update model */
+		gtk_list_store_set(pm_widgets.store, &iter,
+			PLUGIN_COLUMN_CHECK, state,
+			PLUGIN_COLUMN_PLUGIN, p, -1);
 
+		/* set again the sensitiveness of the configure and help buttons */
+		is_active = is_active_plugin(p);
+		gtk_widget_set_sensitive(pm_widgets.configure_button, p->configure != NULL && is_active);
+		gtk_widget_set_sensitive(pm_widgets.help_button, p->help != NULL && is_active);
+	}
 	g_free(file_name);
-
-	/* set again the sensitiveness of the configure and help buttons */
-	is_active = is_active_plugin(p);
-	gtk_widget_set_sensitive(pm_widgets.configure_button, p->configure != NULL && is_active);
-	gtk_widget_set_sensitive(pm_widgets.help_button, p->help != NULL && is_active);
 }
 
 
