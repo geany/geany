@@ -4,6 +4,12 @@
    Add gcc commands to build a plugin to the HowTo.
 
 
+2009-11-30  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * data/latex.tags:
+   Add a couple of further latex-beamer commands to list of LaTeX tags.
+
+
 2009-11-26  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * src/about.c, THANKS:
