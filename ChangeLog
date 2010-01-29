@@ -16,6 +16,13 @@
    Add 'Doc-comments' plugin API subsection.
 
 
+2009-10-19  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * THANKS, src/about.c:
+   Add Xhacker Liu for his work at zh_CN translation to long list of
+   translators.
+
+
 2009-10-12  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * THANKS, src/about.c, po/LINGUAS, po/gl.po:
