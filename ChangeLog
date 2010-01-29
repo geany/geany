@@ -4,6 +4,13 @@
    Add gcc commands to build a plugin to the HowTo.
 
 
+2009-11-26  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * src/about.c, THANKS:
+   Add Peter Scholtens and Ayke van Laethem to list of translators. Move
+   Kurt de Bree into section of previous translators.
+
+
 2009-11-12  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * tagmanager/ctags.c, tagmanager/general.h:
