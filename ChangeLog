@@ -16,6 +16,12 @@
    Add 'Doc-comments' plugin API subsection.
 
 
+2009-10-12  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * THANKS, src/about.c, po/LINGUAS, po/gl.po:
+   Added Galician translation. Thanks to José Manuel Castroagudín Silva.
+
+
 2009-09-27  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * configure.in:
