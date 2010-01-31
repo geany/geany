@@ -1898,6 +1898,15 @@ gboolean editor_start_auto_complete(GeanyEditor *editor, gint pos, gboolean forc
 	{
 		if (autocomplete_check_for_html(ft->id, style))
 		{
+			/* Allow something like "&quot;some text&quot;". The above startword calculation
+			 * only works on words but for HTML entity completion we also want to have completion
+			 * based on '&' within words. */
+			gchar *tmp = strchr(root, '&');
+			if (tmp != NULL)
+			{
+				root = tmp;
+				rootlen = strlen(tmp);
+			}
 			ret = autocomplete_html(sci, root, rootlen);
 		}
 		else
