@@ -64,6 +64,12 @@
    Don't build pluginutils.o if HAVE_PLUGINS is not defined.
 
 
+2009-09-24  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/filetypes.xml:
+   Update VBScript keywords (patch by Ross McKay, thanks).
+
+
 2009-09-22  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * doc/geany.txt, doc/geany.html:
