@@ -6,6 +6,8 @@
    Fix 'make distcheck' by removing data/latex.tags from EXTRA_DIST.
  * scripts/create_py_tags.py:
    Make the script a bit more robust with newer Python versions.
+ * src/templates.c:
+   Use utils_spawn_sync() instead of g_spawn_sync().
 
 
 2010-01-31  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>

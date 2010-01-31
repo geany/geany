@@ -758,7 +758,7 @@ static gchar *run_command(const gchar *command, const gchar *file_name,
 			"GEANY_FILETYPE", file_type,
 			"GEANY_FUNCNAME", func_name,
 			NULL);
-		if (! g_spawn_sync(NULL, argv, env, G_SPAWN_SEARCH_PATH,
+		if (! utils_spawn_sync(NULL, argv, env, G_SPAWN_SEARCH_PATH,
 				NULL, NULL, &result, NULL, NULL, &error))
 		{
 			g_warning("templates_replace_command: %s", error->message);
