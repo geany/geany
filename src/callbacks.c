@@ -592,6 +592,8 @@ on_toolbutton_search_clicked           (GtkAction       *action,
 		if (search_data.search_bar)
 			ui_set_search_entry_background(entry, result);
 	}
+	else
+		on_find1_activate(NULL, NULL);
 }
 
 
@@ -1285,6 +1287,8 @@ on_toolbutton_goto_clicked             (GtkAction       *action,
 
 		on_toolbutton_goto_entry_activate(NULL, text, NULL);
 	}
+	else
+		on_go_to_line_activate(NULL, NULL);
 }
 
 

@@ -10,6 +10,13 @@
    Add gcc commands to build a plugin to the HowTo.
 
 
+2009-12-29  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/callbacks.c:
+   Show the Find/Goto dialogs if the corresponding toolbar buttons are
+   clicked but their text fields are not part of the toolbar (#2920807).
+
+
 2009-12-20  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/editor.c:
