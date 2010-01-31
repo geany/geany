@@ -870,7 +870,7 @@ static void tb_editor_available_items_deleted_cb(GtkTreeModel *model, GtkTreePat
 }
 
 
-static TBEditorWidget *tb_editor_create_dialog(void)
+static TBEditorWidget *tb_editor_create_dialog(GtkWindow *parent)
 {
 	GtkWidget *dialog, *vbox, *hbox, *vbox_buttons, *button_add, *button_remove;
 	GtkWidget *swin_available, *swin_used, *tree_available, *tree_used, *label;
@@ -878,8 +878,11 @@ static TBEditorWidget *tb_editor_create_dialog(void)
 	GtkTreeViewColumn *column;
 	TBEditorWidget *tbw = g_new(TBEditorWidget, 1);
 
+	if (parent == NULL)
+		parent = GTK_WINDOW(main_widgets.window);
+
 	dialog = gtk_dialog_new_with_buttons(_("Customize Toolbar"),
-				GTK_WINDOW(main_widgets.window),
+				parent,
 				GTK_DIALOG_DESTROY_WITH_PARENT,
 				GTK_STOCK_CLOSE, GTK_RESPONSE_CLOSE, NULL);
 	vbox = ui_dialog_vbox_new(GTK_DIALOG(dialog));
@@ -999,7 +1002,7 @@ static TBEditorWidget *tb_editor_create_dialog(void)
 }
 
 
-void toolbar_configure(void)
+void toolbar_configure(GtkWindow *parent)
 {
 	gchar *markup;
 	const gchar *name;
@@ -1018,7 +1021,7 @@ void toolbar_configure(void)
 	all_items = gtk_action_group_list_actions(group);
 
 	/* create the GUI */
-	tbw = tb_editor_create_dialog();
+	tbw = tb_editor_create_dialog(parent);
 
 	/* fill the stores */
 	gtk_list_store_insert_with_values(tbw->store_available, NULL, -1,

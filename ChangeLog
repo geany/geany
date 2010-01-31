@@ -15,6 +15,9 @@
  * src/editor.c:
    Fix LaTeX environment auto completion with CR/LF line endings.
    Add some sanity checks.
+ * src/callbacks.c, src/prefs.c, src/toolbar.c, src/toolbar.h:
+   Set the correct parent window for the toolbar editor
+   dialog (closes #2913334).
 
 
 2009-12-20  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>

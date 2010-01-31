@@ -57,6 +57,6 @@ GtkWidget *toolbar_init(void);
 
 void toolbar_finalize(void);
 
-void toolbar_configure(void);
+void toolbar_configure(GtkWindow *parent);
 
 #endif
