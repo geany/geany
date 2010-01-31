@@ -141,14 +141,17 @@ class Parser:
 					name = obj.__name__
 				except AttributeError:
 					name = obj_name
-				if not name or name.startswith('_'):
+				if not name or not isinstance(name, basestring) or name.startswith('_'):
 					# skip non-public tags
 					continue;
 				if inspect.isfunction(obj):
 					self._add_tag(obj, TYPE_FUNCTION)
 				elif inspect.isclass(obj):
 					self._add_tag(obj, TYPE_CLASS, self._get_superclass(obj))
-					methods = inspect.getmembers(obj, inspect.ismethod)
+					try:
+						methods = inspect.getmembers(obj, inspect.ismethod)
+					except AttributeError:
+						methods = []
 					for m_name, m_obj in methods:
 						# skip non-public tags
 						if m_name.startswith('_') or not inspect.ismethod(m_obj):
