@@ -1944,7 +1944,7 @@ static void editor_auto_latex(GeanyEditor *editor, gint pos)
 
 	sci = editor->sci;
 
-	if (sci_get_char_at(sci, pos - 2) == '}')
+	if (sci_get_char_at(sci, pos - 1 - editor_get_eol_char_len(editor)) == '}')
 	{
 		gchar *eol, *buf, *construct;
 		gchar env[50];
@@ -1957,8 +1957,8 @@ static void editor_auto_latex(GeanyEditor *editor, gint pos)
 
 		/* get to the first non-blank char (some kind of ltrim()) */
 		start = 0;
-		/*while (isspace(buf[i++])) start++;*/
-		while (isspace(buf[start])) start++;
+		while (isspace(buf[start]) && buf[start] != '\0')
+			start++;
 
 		/* check for begin */
 		if (strncmp(buf + start, "\\begin", 6) == 0)
@@ -2006,7 +2006,7 @@ static void editor_auto_latex(GeanyEditor *editor, gint pos)
 				tmp = sci_get_line(sci, line + i);
 				/* Again get to the first non-blank char */
 				start = 0;
-				while (isspace(buf[start]))
+				while (isspace(buf[start]) && buf[start] != '\0')
 					start++;
 				end_construct = g_strdup_printf("\\end%s{%s}", full_cmd, env);
 				if (strstr(tmp, end_construct) != NULL)

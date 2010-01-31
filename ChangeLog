@@ -10,6 +10,13 @@
    Add gcc commands to build a plugin to the HowTo.
 
 
+2009-12-20  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/editor.c:
+   Fix LaTeX environment auto completion with CR/LF line endings.
+   Add some sanity checks.
+
+
 2009-12-20  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * src/editor.c:
