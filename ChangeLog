@@ -23,6 +23,12 @@
    Add a couple of further latex-beamer commands to list of LaTeX tags.
 
 
+2009-11-29  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * tagmanager/include/tm_tagmanager.h:
+   Update partly outdated and wrong doc comment.
+
+
 2009-11-26  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * src/about.c, THANKS:
