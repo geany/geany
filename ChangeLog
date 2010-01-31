@@ -78,6 +78,13 @@
    browser delay on displaying a big directory, e.g. /usr/bin.
 
 
+2009-09-17  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/printing.c:
+   Fix wrong alignment of printed pages when page headers are
+   disabled (closes #2856822).
+
+
 2009-09-15  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/search.c:
