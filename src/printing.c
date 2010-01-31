@@ -270,7 +270,7 @@ static gint get_page_count(GtkPrintContext *context, DocInfo *dinfo)
 }
 
 
-static void add_page_header(PangoLayout *layout, cairo_t *cr, DocInfo *dinfo, gint width, gint page_nr)
+static void add_page_header(DocInfo *dinfo, cairo_t *cr, gint width, gint page_nr)
 {
 	gint ph_height = dinfo->line_height * 3;
 	gchar *data;
@@ -279,6 +279,7 @@ static void add_page_header(PangoLayout *layout, cairo_t *cr, DocInfo *dinfo, gi
 		dinfo->doc->file_name : GEANY_STRING_UNTITLED;
 	gchar *file_name = (printing_prefs.page_header_basename) ?
 		g_path_get_basename(tmp_file_name) : g_strdup(tmp_file_name);
+	PangoLayout *layout = dinfo->layout;
 
 	/* draw the frame */
 	cairo_set_line_width(cr, 0.3);
@@ -526,6 +527,7 @@ static void draw_page(GtkPrintOperation *operation, GtkPrintContext *context,
 		gchar *text = g_strdup_printf(_("Page %d of %d"), page_nr, dinfo->n_pages);
 		gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(main_widgets.progressbar), fraction);
 		gtk_progress_bar_set_text(GTK_PROGRESS_BAR(main_widgets.progressbar), text);
+		g_free(text);
 	}
 
 #ifdef GEANY_PRINT_DEBUG
@@ -552,7 +554,7 @@ static void draw_page(GtkPrintOperation *operation, GtkPrintContext *context,
 	pango_layout_set_justify(dinfo->layout, FALSE);
 
 	if (printing_prefs.print_page_header)
-		add_page_header(dinfo->layout, cr, dinfo, width, page_nr);
+		add_page_header(dinfo, cr, width, page_nr);
 
 	count = 0;	/* the actual line counter for the current page, might be different from
 				 * dinfo->cur_line due to possible line breaks */
