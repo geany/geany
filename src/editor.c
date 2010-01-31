@@ -270,27 +270,32 @@ static gboolean is_style_php(gint style)
 }
 
 
-static void fold_symbol_click(ScintillaObject *sci, SCNotification *nt)
+void editor_toggle_fold(GeanyEditor *editor, gint line, gint modifiers)
 {
-	gint line = sci_get_line_from_position(sci, nt->position);
+	ScintillaObject *sci;
 
-	SSM(sci, SCI_TOGGLEFOLD, line, 0);
+	g_return_if_fail(editor != NULL);
+
+	sci = editor->sci;
+
+	sci_toggle_fold(sci, line);
+
 	/* extra toggling of child fold points
 	 * use when editor_prefs.unfold_all_children is set and Shift is NOT pressed or when
 	 * editor_prefs.unfold_all_children is NOT set but Shift is pressed */
-	if ((editor_prefs.unfold_all_children && ! (nt->modifiers & SCMOD_SHIFT)) ||
-		(! editor_prefs.unfold_all_children && (nt->modifiers & SCMOD_SHIFT)))
+	if ((editor_prefs.unfold_all_children && ! (modifiers & SCMOD_SHIFT)) ||
+		(! editor_prefs.unfold_all_children && (modifiers & SCMOD_SHIFT)))
 	{
 		gint last_line = SSM(sci, SCI_GETLASTCHILD, line, -1);
 		gint i;
 
-		if (SSM(sci, SCI_GETLINEVISIBLE, line + 1, 0))
+		if (sci_get_line_is_visible(sci, line + 1))
 		{	/* unfold all children of the current fold point */
 			for (i = line; i < last_line; i++)
 			{
-				if (! SSM(sci, SCI_GETLINEVISIBLE, i, 0))
+				if (! sci_get_line_is_visible(sci, i))
 				{
-					SSM(sci, SCI_TOGGLEFOLD, SSM(sci, SCI_GETFOLDPARENT, i, 0), 0);
+					sci_toggle_fold(sci, sci_get_fold_parent(sci, i));
 				}
 			}
 		}
@@ -301,8 +306,8 @@ static void fold_symbol_click(ScintillaObject *sci, SCNotification *nt)
 				gint level = sci_get_fold_level(sci, i);
 				if (level & SC_FOLDLEVELHEADERFLAG)
 				{
-					if (SSM(sci, SCI_GETFOLDEXPANDED, i, 0))
-						SSM(sci, SCI_TOGGLEFOLD, i, 0);
+					if (sci_get_fold_expanded(sci, i))
+						sci_toggle_fold(sci, i);
 				}
 			}
 		}
@@ -310,21 +315,21 @@ static void fold_symbol_click(ScintillaObject *sci, SCNotification *nt)
 }
 
 
-static void on_margin_click(ScintillaObject *sci, SCNotification *nt)
+static void on_margin_click(GeanyEditor *editor, SCNotification *nt)
 {
 	/* left click to marker margin marks the line */
 	if (nt->margin == 1)
 	{
-		gint line = sci_get_line_from_position(sci, nt->position);
-		gboolean set = sci_is_marker_set_at_line(sci, line, 1);
+		gint line = sci_get_line_from_position(editor->sci, nt->position);
 
 		/*sci_marker_delete_all(editor->sci, 1);*/
-		sci_set_marker_at_line(sci, line, ! set, 1);	/* toggle the marker */
+		sci_toggle_marker_at_line(editor->sci, line, 1);	/* toggle the marker */
 	}
 	/* left click on the folding margin to toggle folding state of current line */
 	else if (nt->margin == 2 && editor_prefs.folding)
 	{
-		fold_symbol_click(sci, nt);
+		gint line = sci_get_line_from_position(editor->sci, nt->position);
+		editor_toggle_fold(editor, line, nt->modifiers);
 	}
 }
 
@@ -830,7 +835,7 @@ static gboolean on_editor_notify(G_GNUC_UNUSED GObject *object, GeanyEditor *edi
 			break;
 		}
 		case SCN_MARGINCLICK:
-			on_margin_click(sci, nt);
+			on_margin_click(editor, nt);
 			break;
 
 		case SCN_UPDATEUI:

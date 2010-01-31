@@ -279,6 +279,14 @@ gboolean sci_is_marker_set_at_line(ScintillaObject* sci, gint line, gint marker)
 }
 
 
+void sci_toggle_marker_at_line(ScintillaObject* sci, gint line, gint marker)
+{
+	gboolean set = sci_is_marker_set_at_line(sci, line, marker);
+
+	sci_set_marker_at_line(sci, line, set, marker);
+}
+
+
 /* Returns the line number of the next marker that matches marker_mask, or -1.
  * marker_mask is a bitor of 1 << marker_index. (See MarkerHandleSet::MarkValue()).
  * Note: If there is a marker on the line, it returns the same line. */

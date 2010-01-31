@@ -53,6 +53,7 @@ void 				sci_zoom_in					(ScintillaObject* sci);
 void 				sci_zoom_out				(ScintillaObject* sci);
 void 				sci_zoom_off				(ScintillaObject* sci);
 void				sci_set_marker_at_line		(ScintillaObject* sci, gint line_number, gboolean set, gint marker );
+void				sci_toggle_marker_at_line	(ScintillaObject* sci, gint line, gint marker);
 gboolean 			sci_is_marker_set_at_line	(ScintillaObject* sci, gint line, gint marker);
 gint				sci_marker_next				(ScintillaObject* sci, gint line, gint marker_mask, gboolean wrap);
 gint				sci_marker_previous			(ScintillaObject* sci, gint line, gint marker_mask, gboolean wrap);

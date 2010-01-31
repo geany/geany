@@ -10,6 +10,12 @@
    Replace the old icons with smiley icons from the Rodent icon theme.
    Fix showing the same icon for two or more slots.
    Minor cleanups.
+ * src/editor.c, src/editor.h, src/keybindings.c, src/sciwrappers.c,
+   src/sciwrappers.h:
+   Rename fold_symbol_click() to editor_toggle_fold().
+   Use editor_toggle_fold() when the 'Toggle current fold' keybinding
+   was used to respect the 'Fold/unfold all children' preference
+   (closes #2935053).
 
 
 2010-01-18  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
