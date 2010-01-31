@@ -36,6 +36,13 @@
    Make TagManager Assert statements cause g_warning on failure.
 
 
+2009-11-09  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/vte.c:
+   Remove useless comment about applying settings only when libvte.so
+   could be loaded which is only displayed *if* libvte.so is loaded.
+
+
 2009-10-26  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * HACKING:
