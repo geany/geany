@@ -80,8 +80,15 @@ static void createTag(int flags, TeXKind kind, const char * l)
  	l++;
     if (flags & (TEX_BRACES | TEX_LABEL))
     {
- 	if ((*(l++)) != '{')
+	if (*l == '[')
+	{
+	    while (*l != ']')
+		l++;
+	    l++; /* skip the closing square bracket */
+	}
+	if (*l != '{')
  	    goto no_tag;
+	l++;
      }
      if (flags & TEX_BSLASH)
      {
