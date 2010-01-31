@@ -30,6 +30,12 @@
    Kurt de Bree into section of previous translators.
 
 
+2009-11-17  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * doc/geany.txt:
+   Fix slightly wrong description of how to insert Unicode characters.
+
+
 2009-11-12  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * tagmanager/ctags.c, tagmanager/general.h:
