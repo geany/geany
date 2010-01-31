@@ -103,7 +103,7 @@ static void prepare_taglist(GtkWidget *tree, GtkTreeStore *store)
 {
 	GtkCellRenderer *text_renderer, *icon_renderer;
 	GtkTreeViewColumn *column;
-	GtkTreeSelection *select;
+	GtkTreeSelection *selection;
 
 	text_renderer = gtk_cell_renderer_text_new();
 	icon_renderer = gtk_cell_renderer_pixbuf_new();
@@ -145,8 +145,8 @@ static void prepare_taglist(GtkWidget *tree, GtkTreeStore *store)
 	}
 
 	/* selection handling */
-	select = gtk_tree_view_get_selection(GTK_TREE_VIEW(tree));
-	gtk_tree_selection_set_mode(select, GTK_SELECTION_SINGLE);
+	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(tree));
+	gtk_tree_selection_set_mode(selection, GTK_SELECTION_SINGLE);
 	/* callback for changed selection not necessary, will be handled by button-press-event */
 }
 
@@ -232,7 +232,7 @@ static void prepare_openfiles(void)
 	GtkCellRenderer *icon_renderer;
 	GtkCellRenderer *text_renderer;
 	GtkTreeViewColumn *column;
-	GtkTreeSelection *select;
+	GtkTreeSelection *selection;
 	GtkTreeSortable *sortable;
 
 	tv.tree_openfiles = ui_lookup_widget(main_widgets.window, "treeview6");
@@ -278,9 +278,9 @@ static void prepare_openfiles(void)
 		G_CALLBACK(on_documents_button_release_event), NULL);
 
 	/* selection handling */
-	select = gtk_tree_view_get_selection(GTK_TREE_VIEW(tv.tree_openfiles));
-	gtk_tree_selection_set_mode(select, GTK_SELECTION_SINGLE);
-	g_signal_connect(select, "changed", G_CALLBACK(on_openfiles_tree_selection_changed), NULL);
+	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(tv.tree_openfiles));
+	gtk_tree_selection_set_mode(selection, GTK_SELECTION_SINGLE);
+	g_signal_connect(selection, "changed", G_CALLBACK(on_openfiles_tree_selection_changed), NULL);
 }
 
 
@@ -783,10 +783,10 @@ static gboolean on_treeviews_key_press_event(GtkWidget *widget, GdkEventKey *eve
 		event->keyval == GDK_KP_Enter ||
 		event->keyval == GDK_space)
 	{
-		GtkTreeSelection *select = gtk_tree_view_get_selection(GTK_TREE_VIEW(widget));
+		GtkTreeSelection *selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(widget));
 		/* delay the query of selection state because this callback is executed before GTK
 		 * changes the selection (g_signal_connect_after would be better but it doesn't work) */
-		g_idle_add((GSourceFunc) on_taglist_tree_selection_changed, select);
+		g_idle_add((GSourceFunc) on_taglist_tree_selection_changed, selection);
 	}
 	return FALSE;
 }
