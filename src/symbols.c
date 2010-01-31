@@ -759,7 +759,7 @@ static void add_top_level_items(GeanyDocument *doc)
 		case GEANY_FILETYPES_JAVA:
 		{
 			tag_list_add_groups(tag_store,
-				&(tv_iters.tag_namespace), _("Package"), NULL,
+				&(tv_iters.tag_namespace), _("Package"), "classviewer-namespace",
 				&(tv_iters.tag_struct), _("Interfaces"), "classviewer-struct",
 				&(tv_iters.tag_class), _("Classes"), "classviewer-class",
 				&(tv_iters.tag_function), _("Methods"), "classviewer-method",

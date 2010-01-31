@@ -55,6 +55,12 @@
    Added Galician translation. Thanks to José Manuel Castroagudín Silva.
 
 
+2009-09-30  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/symbols.c:
+   Add missing icon for Java packages in the Symbol List.
+
+
 2009-09-27  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * configure.in:
