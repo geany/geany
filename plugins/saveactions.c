@@ -250,7 +250,7 @@ static void instantsave_document_new_cb(GObject *obj, GeanyDocument *doc, gpoint
 		if (fd != -1)
 			close(fd); /* close the returned file descriptor as we only need the filename */
 
-		if (ft == NULL)
+		if (ft == NULL || ft->id == GEANY_FILETYPES_NONE)
 			/* ft is NULL when a new file without template was opened, so use the
 			 * configured default file type */
 			ft = filetypes_lookup_by_name(instantsave_default_ft);
