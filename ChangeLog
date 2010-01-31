@@ -43,6 +43,10 @@
    could be loaded which is only displayed *if* libvte.so is loaded.
  * src/editor.c:
    Allow autocompletion for HTML entities even within a word.
+ * src/geanymenubuttonaction.c:
+   Only set the menu of the button if a non-empty GtkMenu is passed to
+   geany_menu_button_action_set_menu() so the menu arrow keeps
+   insensitive.
 
 
 2009-10-26  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
