@@ -52,7 +52,7 @@ static GtkWidget *main_menu_item = NULL;
 	<title>{export_filename}</title>\n\
 	<meta http-equiv=\"content-type\" content=\"text/html;charset=utf-8\" />\n\
 	<meta name=\"generator\" content=\"Geany " VERSION "\" />\n\
-	<meta name=\"date\" content=\"{export_date}\">\n\
+	<meta name=\"date\" content=\"{export_date}\" />\n\
 	<style type=\"text/css\">\n\
 {export_styles}\n\
 	</style>\n\
