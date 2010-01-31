@@ -36,6 +36,12 @@
    Add gcc commands to build a plugin to the HowTo.
 
 
+2010-01-01  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * *.*:
+   Update copyright information.
+
+
 2009-12-29  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * data/filetypes.restructuredtext:
