@@ -1,4 +1,11 @@
+2010-01-31  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * plugins/export.c:
+   Close meta tag for export date properly.
+
+
 2010-01-18  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
  * doc/plugins.dox:
    Add gcc commands to build a plugin to the HowTo.
 
