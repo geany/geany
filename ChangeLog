@@ -71,6 +71,13 @@
    Minor edits.
 
 
+2009-09-21  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/callbacks.c, src/document.c:
+   When reloading files, use the previously set encoding instead of
+   detecting it again (closes #2862041).
+
+
 2009-09-21  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/utils.c:

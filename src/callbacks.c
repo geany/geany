@@ -464,6 +464,8 @@ on_reload_as_activate                  (GtkMenuItem     *menuitem,
 			return;
 		charset = encodings[i].charset;
 	}
+	else
+		charset = doc->encoding;
 
 	base_name = g_path_get_basename(doc->file_name);
 	if (dialogs_show_question_full(NULL, _("_Reload"), GTK_STOCK_CANCEL,
