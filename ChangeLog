@@ -78,6 +78,13 @@
    browser delay on displaying a big directory, e.g. /usr/bin.
 
 
+2009-09-20  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * tagmanager/php.c:
+   Merge recent changes from the CTags project to further improve
+   PHP symbol parsing.
+
+
 2009-09-17  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/printing.c:
