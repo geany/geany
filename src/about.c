@@ -33,7 +33,6 @@
 #include "geanywraplabel.h"
 #include "main.h"
 
-static GtkWidget *gb_window = NULL;
 #include "gb.c"
 
 
