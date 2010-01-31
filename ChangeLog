@@ -53,6 +53,8 @@
    opening of files like "test:0".
  * src/treeviews.c:
    Rename "select" variables into "selection" to avoid shadowed names.
+ * plugins/filebrowser.c:
+   Rename "select" variables into "selection" to avoid shadowed names.
 
 
 2009-10-19  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
