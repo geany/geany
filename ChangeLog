@@ -118,6 +118,13 @@
    longer exists or is incompatible.
 
 
+2009-08-29  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/utils.c:
+   Fix removing leading double slashes in filenames which are used for
+   network resources on Windows (closes #2844085).
+
+
 2009-08-27  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/geany.h:

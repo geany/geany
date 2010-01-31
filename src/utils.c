@@ -1721,12 +1721,19 @@ void utils_tidy_path(gchar *filename)
 	const gchar *c, *needle;
 	gchar *tmp;
 	gssize pos;
+	gboolean preserve_double_backslash = FALSE;
 
 	g_return_if_fail(g_path_is_absolute(filename));
+
+	if (str->len >= 2 && strncmp(str->str, "\\\\", 2) == 0)
+		preserve_double_backslash = TRUE;
 
 	/* replace "/./" and "//" */
 	utils_string_replace_all(str, G_DIR_SEPARATOR_S "." G_DIR_SEPARATOR_S, G_DIR_SEPARATOR_S);
 	utils_string_replace_all(str, G_DIR_SEPARATOR_S G_DIR_SEPARATOR_S, G_DIR_SEPARATOR_S);
+
+	if (preserve_double_backslash)
+		g_string_prepend(str, "\\");
 
 	/* replace "/../" */
 	needle = G_DIR_SEPARATOR_S ".." G_DIR_SEPARATOR_S;
