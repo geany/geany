@@ -1,3 +1,9 @@
+2010-01-31  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * icons/Makefile.am:
+   Include geany.ico in the distribution tarball.
+
+
 2010-01-31  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * plugins/export.c:
