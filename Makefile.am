@@ -6,17 +6,16 @@ AUTOMAKE_OPTIONS =	1.7
 
 WIN32_BUILD_FILES = \
 	geany_private.rc \
-    win32-config.h \
+	win32-config.h \
 	makefile.win32 \
-    scintilla/makefile.win32 \
-    tagmanager/makefile.win32 \
-    src/makefile.win32
+	scintilla/makefile.win32 \
+	tagmanager/makefile.win32 \
+	src/makefile.win32
 
 SYS_DATA_FILES = \
 	data/c99.tags \
 	data/php.tags \
 	data/python.tags \
-	data/latex.tags \
 	data/pascal.tags \
 	data/html_entities.tags \
 	$(srcdir)/data/filetypes.* \
@@ -61,7 +60,6 @@ install-data-local:
 	$(INSTALL_DATA) $(srcdir)/data/php.tags $(DESTDIR)$(pkgdatadir); \
 	$(INSTALL_DATA) $(srcdir)/data/python.tags $(DESTDIR)$(pkgdatadir); \
 	$(INSTALL_DATA) $(srcdir)/data/pascal.tags $(DESTDIR)$(pkgdatadir); \
-	$(INSTALL_DATA) $(srcdir)/data/latex.tags $(DESTDIR)$(pkgdatadir); \
 	$(INSTALL_DATA) $(srcdir)/data/html_entities.tags $(DESTDIR)$(pkgdatadir); \
 	$(INSTALL_DATA) $(srcdir)/COPYING $(DESTDIR)$(pkgdatadir)/GPL-2; \
 	for file in $(srcdir)/data/*; do \
