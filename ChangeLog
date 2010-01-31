@@ -30,11 +30,19 @@
    Kurt de Bree into section of previous translators.
 
 
+2009-11-23  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * tagmanager/php.c:
+   Remove duplicate regular expression for parsing classes.
+   Fix and improve parsing of constants (patch by Harold Aling, thanks).
+
+
 2009-11-22  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * tagmanager/latex.c:
    Improve parsing of sections and chapters by ignoring shortnames
    like \section[shortname]{label} (closes #2890477).
+
 
 2009-11-17  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
