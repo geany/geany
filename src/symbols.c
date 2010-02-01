@@ -1358,6 +1358,9 @@ int symbols_generate_global_tags(int argc, char **argv, gboolean want_preprocess
 			g_printerr(_("Unknown filetype extension for \"%s\".\n"), tags_file);
 			return 1;
 		}
+		/* load config in case of custom filetypes */
+		filetypes_load_config(ft->id, FALSE);
+
 		/* load ignore list for C/C++ parser */
 		if (ft->id == GEANY_FILETYPES_C || ft->id == GEANY_FILETYPES_CPP)
 			load_c_ignore_tags();
