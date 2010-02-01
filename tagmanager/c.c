@@ -58,9 +58,9 @@ typedef enum eException
 typedef enum eKeywordId
 {
 	KEYWORD_NONE = -1,
-	KEYWORD_ATTRIBUTE, KEYWORD_ABSTRACT,
+	KEYWORD_ATTRIBUTE, KEYWORD_ABSTRACT, KEYWORD_ALIAS,
 	KEYWORD_BOOLEAN, KEYWORD_BYTE, KEYWORD_BAD_STATE, KEYWORD_BAD_TRANS,
-	KEYWORD_BIND, KEYWORD_BIND_VAR, KEYWORD_BIT,
+	KEYWORD_BIND, KEYWORD_BIND_VAR, KEYWORD_BIT, KEYWORD_BODY,
 	KEYWORD_CASE, KEYWORD_CATCH, KEYWORD_CHAR, KEYWORD_CLASS, KEYWORD_CONST,
 	KEYWORD_CONSTRAINT, KEYWORD_COVERAGE_BLOCK, KEYWORD_COVERAGE_DEF,
 	KEYWORD_DEFAULT, KEYWORD_DELEGATE, KEYWORD_DELETE, KEYWORD_DO,
@@ -69,7 +69,7 @@ typedef enum eKeywordId
 	KEYWORD_EXTENDS, KEYWORD_EVENT,
 	KEYWORD_FINAL, KEYWORD_FINALLY, KEYWORD_FLOAT, KEYWORD_FOR, KEYWORD_FRIEND, KEYWORD_FUNCTION,
 	KEYWORD_GET, KEYWORD_GOTO,
-	KEYWORD_IF, KEYWORD_IMPLEMENTS, KEYWORD_IMPORT, KEYWORD_INLINE, KEYWORD_INT,
+	KEYWORD_IF, KEYWORD_IMPLEMENTS, KEYWORD_IMPORT, KEYWORD_IN, KEYWORD_INLINE, KEYWORD_INT,
 	KEYWORD_INOUT, KEYWORD_INPUT, KEYWORD_INTEGER, KEYWORD_INTERFACE,
 	KEYWORD_INTERNAL,
 	KEYWORD_LOCAL, KEYWORD_LONG,
@@ -294,12 +294,38 @@ static kindOption CKinds [] = {
 	{ FALSE, 'x', "externvar",  "external variable declarations"},
 };
 
+/* Used to index into the DKinds table. */
+typedef enum
+{
+	DK_UNDEFINED = -1,
+	DK_CLASS, DK_ENUMERATOR, DK_FUNCTION,
+	DK_ENUMERATION, DK_INTERFACE, DK_MEMBER, DK_NAMESPACE, DK_PROTOTYPE,
+	DK_STRUCT, DK_TYPEDEF, DK_UNION, DK_VARIABLE,
+	DK_EXTERN_VARIABLE
+} dKind;
+
+static kindOption DKinds [] = {
+	{ TRUE,  'c', "class",      "classes"},
+	{ TRUE,  'e', "enumerator", "enumerators (values inside an enumeration)"},
+	{ TRUE,  'f', "function",   "function definitions"},
+	{ TRUE,  'g', "enum",       "enumeration names"},
+	{ TRUE,  'i', "interface",  "interfaces"},
+	{ TRUE,  'm', "member",     "class, struct, and union members"},
+	{ TRUE,  'n', "namespace",  "namespaces"},
+	{ FALSE, 'p', "prototype",  "function prototypes"},
+	{ TRUE,  's', "struct",     "structure names"},
+	{ TRUE,  't', "typedef",    "typedefs"},
+	{ TRUE,  'u', "union",      "union names"},
+	{ TRUE,  'v', "variable",   "variable definitions"},
+	{ FALSE, 'x', "externvar",  "external variable declarations"},
+};
+
 /* Used to index into the JavaKinds table. */
 typedef enum
 {
 	JK_UNDEFINED = -1,
 	JK_CLASS, JK_FIELD, JK_INTERFACE, JK_METHOD,
-	JK_PACKAGE, JK_ACCESS, JK_CLASS_PREFIX
+	JK_PACKAGE
 } javaKind;
 
 static kindOption JavaKinds [] = {
@@ -365,13 +391,15 @@ static const keywordDesc KeywordTable [] = {
 	/* keyword          keyword ID                |  |  |  |  |  |  |    */
 	{ "__attribute__",  KEYWORD_ATTRIBUTE,      { 1, 1, 1, 0, 0, 0, 1 } },
 	{ "abstract",       KEYWORD_ABSTRACT,       { 0, 0, 1, 1, 0, 1, 1 } },
+	{ "alias",          KEYWORD_TYPEDEF,        { 0, 0, 0, 0, 0, 0, 1 } }, /* handle like typedef */
 	{ "bad_state",      KEYWORD_BAD_STATE,      { 0, 0, 0, 0, 1, 0, 0 } },
 	{ "bad_trans",      KEYWORD_BAD_TRANS,      { 0, 0, 0, 0, 1, 0, 0 } },
 	{ "bind",           KEYWORD_BIND,           { 0, 0, 0, 0, 1, 0, 0 } },
 	{ "bind_var",       KEYWORD_BIND_VAR,       { 0, 0, 0, 0, 1, 0, 0 } },
 	{ "bit",            KEYWORD_BIT,            { 0, 0, 0, 0, 1, 0, 0 } },
+	{ "body",           KEYWORD_BODY,           { 0, 0, 0, 0, 0, 0, 1 } },
 	{ "boolean",        KEYWORD_BOOLEAN,        { 0, 0, 0, 1, 0, 0, 0 } },
-	{ "byte",           KEYWORD_BYTE,           { 0, 0, 0, 1, 0, 0, 0 } },
+	{ "byte",           KEYWORD_BYTE,           { 0, 0, 0, 1, 0, 0, 1 } },
 	{ "case",           KEYWORD_CASE,           { 1, 1, 1, 1, 0, 1, 1 } },
 	{ "catch",          KEYWORD_CATCH,          { 0, 1, 1, 0, 0, 1, 1 } },
 	{ "char",           KEYWORD_CHAR,           { 1, 1, 1, 1, 0, 1, 1 } },
@@ -391,19 +419,21 @@ static const keywordDesc KeywordTable [] = {
 	{ "event",          KEYWORD_EVENT,          { 0, 0, 1, 0, 1, 0, 0 } },
 	{ "explicit",       KEYWORD_EXPLICIT,       { 0, 1, 1, 0, 0, 0, 1 } },
 	{ "extends",        KEYWORD_EXTENDS,        { 0, 0, 0, 1, 1, 0, 0 } },
-	{ "extern",         KEYWORD_EXTERN,         { 1, 1, 1, 0, 1, 1, 1 } },
-	{ "final",          KEYWORD_FINAL,          { 0, 0, 0, 1, 0, 0, 0 } },
-	{ "finally",        KEYWORD_FINALLY,        { 0, 0, 0, 0, 0, 1, 0 } },
+	{ "extern",         KEYWORD_EXTERN,         { 1, 1, 1, 0, 1, 1, 0 } },
+	{ "extern",         KEYWORD_NAMESPACE,      { 0, 0, 0, 0, 0, 0, 1 } },	/* hack to ignore extern */
+	{ "final",          KEYWORD_FINAL,          { 0, 0, 0, 1, 0, 0, 1 } },
+	{ "finally",        KEYWORD_FINALLY,        { 0, 0, 0, 0, 0, 1, 1 } },
 	{ "float",          KEYWORD_FLOAT,          { 1, 1, 1, 1, 0, 1, 1 } },
 	{ "for",            KEYWORD_FOR,            { 1, 1, 1, 1, 0, 1, 1 } },
 	{ "friend",         KEYWORD_FRIEND,         { 0, 1, 0, 0, 0, 0, 0 } },
-	{ "function",       KEYWORD_FUNCTION,       { 0, 0, 0, 0, 1, 0, 0 } },
+	{ "function",       KEYWORD_FUNCTION,       { 0, 0, 0, 0, 1, 0, 1 } },
 	{ "get",            KEYWORD_GET,            { 0, 0, 0, 0, 0, 1, 0 } },
 	{ "goto",           KEYWORD_GOTO,           { 1, 1, 1, 1, 0, 1, 1 } },
 	{ "if",             KEYWORD_IF,             { 1, 1, 1, 1, 0, 1, 1 } },
 	{ "implements",     KEYWORD_IMPLEMENTS,     { 0, 0, 0, 1, 0, 0, 0 } },
 	{ "import",         KEYWORD_IMPORT,         { 0, 0, 0, 1, 0, 0, 1 } },
 	{ "inline",         KEYWORD_INLINE,         { 0, 1, 0, 0, 0, 1, 0 } },
+	{ "in",             KEYWORD_IN,             { 0, 0, 0, 0, 0, 0, 1 } },
 	{ "inout",          KEYWORD_INOUT,          { 0, 0, 0, 0, 1, 0, 1 } },
 	{ "input",          KEYWORD_INPUT,          { 0, 0, 0, 0, 1, 0, 0 } },
 	{ "int",            KEYWORD_INT,            { 1, 1, 1, 1, 0, 1, 1 } },
@@ -418,12 +448,12 @@ static const keywordDesc KeywordTable [] = {
 	{ "m_trans",        KEYWORD_M_TRANS,        { 0, 0, 0, 0, 1, 0, 0 } },
 	{ "mutable",        KEYWORD_MUTABLE,        { 0, 1, 0, 0, 0, 0, 0 } },
 	{ "module",         KEYWORD_MODULE,         { 0, 0, 0, 0, 0, 0, 1 } },
-	{ "namespace",      KEYWORD_NAMESPACE,      { 0, 1, 1, 0, 0, 1, 1 } },
+	{ "namespace",      KEYWORD_NAMESPACE,      { 0, 1, 1, 0, 0, 1, 0 } },
 	{ "native",         KEYWORD_NATIVE,         { 0, 0, 0, 1, 0, 0, 0 } },
 	{ "new",            KEYWORD_NEW,            { 0, 1, 1, 1, 0, 1, 1 } },
 	{ "newcov",         KEYWORD_NEWCOV,         { 0, 0, 0, 0, 1, 0, 0 } },
 	{ "operator",       KEYWORD_OPERATOR,       { 0, 1, 1, 0, 0, 0, 0 } },
-	{ "out",            KEYWORD_OUT,            { 0, 0, 0, 0, 0, 1, 0 } },
+	{ "out",            KEYWORD_OUT,            { 0, 0, 0, 0, 0, 1, 1 } },
 	{ "output",         KEYWORD_OUTPUT,         { 0, 0, 0, 0, 1, 0, 0 } },
 	{ "overload",       KEYWORD_OVERLOAD,       { 0, 1, 0, 0, 0, 0, 0 } },
 	{ "override",       KEYWORD_OVERRIDE,       { 0, 0, 1, 0, 0, 1, 1 } },
@@ -434,7 +464,7 @@ static const keywordDesc KeywordTable [] = {
 	{ "program",        KEYWORD_PROGRAM,        { 0, 0, 0, 0, 1, 0, 0 } },
 	{ "protected",      KEYWORD_PROTECTED,      { 0, 1, 1, 1, 1, 1, 1 } },
 	{ "public",         KEYWORD_PUBLIC,         { 0, 1, 1, 1, 1, 1, 1 } },
-	{ "ref",            KEYWORD_REF,            { 0, 0, 0, 0, 0, 1, 0 } },
+	{ "ref",            KEYWORD_REF,            { 0, 0, 0, 0, 0, 1, 1 } },
 	{ "register",       KEYWORD_REGISTER,       { 1, 1, 0, 0, 0, 0, 0 } },
 	{ "return",         KEYWORD_RETURN,         { 1, 1, 1, 1, 0, 1, 1 } },
 	{ "set",            KEYWORD_SET,            { 0, 0, 0, 0, 0, 1, 0 } },
@@ -466,6 +496,7 @@ static const keywordDesc KeywordTable [] = {
 	{ "unsigned",       KEYWORD_UNSIGNED,       { 1, 1, 1, 0, 0, 0, 1 } },
 	{ "ushort",         KEYWORD_USHORT,         { 0, 0, 1, 0, 0, 1, 1 } },
 	{ "using",          KEYWORD_USING,          { 0, 1, 1, 0, 0, 1, 0 } },
+	{ "version",        KEYWORD_NAMESPACE,      { 0, 0, 0, 0, 0, 0, 1 } },	/* hack to ignore version */
 	{ "virtual",        KEYWORD_VIRTUAL,        { 0, 1, 1, 0, 1, 1, 0 } },
 	{ "void",           KEYWORD_VOID,           { 1, 1, 1, 1, 1, 1, 1 } },
 	{ "volatile",       KEYWORD_VOLATILE,       { 1, 1, 1, 1, 0, 0, 1 } },
@@ -547,7 +578,15 @@ void printStatement(const statementInfo *const statement)
 
 extern boolean includingDefineTags (void)
 {
-	return CKinds [CK_DEFINE].enabled;
+	if (isLanguage(Lang_c) ||
+		isLanguage(Lang_cpp) ||
+		isLanguage(Lang_csharp) ||
+		isLanguage(Lang_ferite) ||
+		isLanguage(Lang_glsl) ||
+		isLanguage(Lang_vala))
+		return CKinds [CK_DEFINE].enabled;
+
+	return FALSE;
 }
 
 /*
@@ -999,6 +1038,30 @@ static csharpKind csharpTagKind (const tagType type)
 	return result;
 }
 
+static dKind dTagKind (const tagType type)
+{
+	dKind result = DK_UNDEFINED;
+	switch (type)
+	{
+		case TAG_CLASS:      result = DK_CLASS;           break;
+		case TAG_ENUM:       result = DK_ENUMERATION;     break;
+		case TAG_ENUMERATOR: result = DK_ENUMERATOR;      break;
+		case TAG_FUNCTION:   result = DK_FUNCTION;        break;
+		case TAG_INTERFACE:  result = DK_INTERFACE;       break;
+		case TAG_MEMBER:     result = DK_MEMBER;          break;
+		case TAG_NAMESPACE:  result = DK_NAMESPACE;       break;
+		case TAG_PROTOTYPE:  result = DK_PROTOTYPE;       break;
+		case TAG_STRUCT:     result = DK_STRUCT;          break;
+		case TAG_TYPEDEF:    result = DK_TYPEDEF;         break;
+		case TAG_UNION:      result = DK_UNION;           break;
+		case TAG_VARIABLE:   result = DK_VARIABLE;        break;
+		case TAG_EXTERN_VAR: result = DK_EXTERN_VARIABLE; break;
+
+		default: Assert ("Bad D tag type" == NULL); break;
+	}
+	return result;
+}
+
 static valaKind valaTagKind (const tagType type)
 {
 	valaKind result = VK_UNDEFINED;
@@ -1044,6 +1107,8 @@ static const char *tagName (const tagType type)
 		result = JavaKinds [javaTagKind (type)].name;
 	else if (isLanguage (Lang_csharp))
 		result = CsharpKinds [csharpTagKind (type)].name;
+	else if (isLanguage (Lang_d))
+		result = DKinds [dTagKind (type)].name;
 	else if (isLanguage (Lang_vala))
 		result = ValaKinds [valaTagKind (type)].name;
 	else
@@ -1056,6 +1121,8 @@ static int tagLetter (const tagType type)
 	int result;
 	if (isLanguage (Lang_csharp))
 		result = CsharpKinds [csharpTagKind (type)].letter;
+	else if (isLanguage (Lang_d))
+		result = DKinds [dTagKind (type)].letter;
 	else if (isLanguage (Lang_java))
 		result = JavaKinds [javaTagKind (type)].letter;
 	else if (isLanguage (Lang_vala))
@@ -1489,6 +1556,7 @@ static void qualifyVariableTag (const statementInfo *const st,
 			else if (st->scope == SCOPE_GLOBAL  ||  st->scope == SCOPE_STATIC)
 				makeTag (nameToken, st, TRUE, TAG_MEMBER);
 		}
+		else if (isLanguage (Lang_java) || isLanguage (Lang_csharp) || isLanguage (Lang_vala));
 		else
 		{
 			if (st->scope == SCOPE_EXTERN  ||  ! st->haveQualifyingName)
@@ -2112,6 +2180,18 @@ static boolean skipPostArgumentStuff (statementInfo *const st,
 				if (isident1 (c))
 				{
 					readIdentifier (token, c);
+					if (isLanguage(Lang_d))
+					{	/* parse D contracts */
+						switch (token->keyword)
+						{
+							case KEYWORD_IN:
+							case KEYWORD_OUT:
+							case KEYWORD_BODY:
+								token->keyword = KEYWORD_CONST;
+							default:
+								break;
+						}
+					}
 					switch (token->keyword)
 					{
 					case KEYWORD_ATTRIBUTE:	skipParens ();	break;
@@ -3052,8 +3132,8 @@ extern parserDefinition* DParser (void)
 {
 	static const char *const extensions [] = { "d", "di", NULL };
 	parserDefinition* def = parserNew ("D");
-	def->kinds      = CKinds;
-	def->kindCount  = KIND_COUNT (CKinds);
+	def->kinds      = DKinds;
+	def->kindCount  = KIND_COUNT (DKinds);
 	def->extensions = extensions;
 	def->parser2    = findCTags;
 	def->initialize = initializeDParser;

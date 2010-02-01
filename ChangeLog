@@ -1,5 +1,18 @@
 2010-02-01  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
+ * tagmanager/c.c:
+   Backport revisions 4406-4426:
+   Separate DKinds from CKinds.
+   Don't generate macro tags for D, Java.
+   Quick hack to parse contents of D extern{} and version{} blocks.
+   Fix creating D interface tags properly.
+   Parse D functions with contracts (fixes #1885480).
+   Parse D alias statement like typedef.
+   (Ignore some more D keywords).
+
+
+2010-02-01  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
  * src/plugins.c:
    Fix GLib warning when toggling 'no plugins available' item.
 
