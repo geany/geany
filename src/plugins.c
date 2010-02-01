@@ -1042,7 +1042,11 @@ static void pm_plugin_toggled(GtkCellRendererToggle *cell, gchar *pth, gpointer 
 
 	gtk_tree_model_get(GTK_TREE_MODEL(pm_widgets.store), &iter,
 		PLUGIN_COLUMN_CHECK, &old_state, PLUGIN_COLUMN_PLUGIN, &p, -1);
-	g_return_if_fail(p != NULL);
+
+	/* no plugins item */
+	if (p == NULL)
+		return;
+
 	state = ! old_state; /* toggle the state */
 
 	/* save the filename of the plugin */
