@@ -1,5 +1,7 @@
 2010-02-01  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
+ * src/plugins.c:
+   Fix GLib warning when toggling 'no plugins available' item.
  * tagmanager/c.c:
    Backport revisions 4406-4426:
    Separate DKinds from CKinds.
@@ -9,12 +11,11 @@
    Parse D functions with contracts (fixes #1885480).
    Parse D alias statement like typedef.
    (Ignore some more D keywords).
-
-
-2010-02-01  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
-
- * src/plugins.c:
-   Fix GLib warning when toggling 'no plugins available' item.
+ * src/highlighting.c, doc/geany.txt, doc/geany.html,
+   data/filetypes.common:
+   Partial backport:
+   Remove filetypes.common invert_all option - use 'Invert syntax
+   highlighting colors' pref instead (closes #2854525).
 
 
 2010-01-31  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

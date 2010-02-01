@@ -71,9 +71,6 @@ folding_style=1;1;false;false
 # 2 to draw the line below folded text
 folding_horiz_line=2;0;false;false
 
-# only first argument is interpreted, sets whether all defined colours should be inverted
-invert_all=0;0;false;false
-
 # only first and second argument is interpreted
 # first argument: drawing of visual flags to indicate a line is wrapped. This is a bitmask of the
 # values: 0 - No visual flags, 1 - Visual flag at end of subline of a wrapped line, 2 - Visual flag
