@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: geany 0.18\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-08-16 18:09+0200\n"
+"POT-Creation-Date: 2010-02-03 22:39+0100\n"
 "PO-Revision-Date: 2009-05-31 13:56+0100\n"
 "Last-Translator: Laurent HOELTGEN <laurent.hoeltgen@googlemail.com>\n"
 "Language-Team: Letzebuergesch\n"
@@ -30,53 +30,53 @@ msgstr "Geany"
 msgid "Integrated Development Environment"
 msgstr "Integréiert Entwécklungsumgebung"
 
-#: ../src/about.c:139
+#: ../src/about.c:140
 msgid "About Geany"
 msgstr "Iwwert Geany"
 
-#: ../src/about.c:189
+#: ../src/about.c:190
 msgid "A fast and lightweight IDE"
 msgstr "En klenge an schnelle IDE"
 
-#: ../src/about.c:210
+#: ../src/about.c:211
 #, c-format
 msgid "(built on or after %s)"
 msgstr "(compiléiert den %s oder méi spéit)"
 
 #. gtk_container_add(GTK_CONTAINER(info_box), cop_label);
-#: ../src/about.c:241
+#: ../src/about.c:242
 msgid "Info"
 msgstr "Info"
 
-#: ../src/about.c:257
+#: ../src/about.c:258
 msgid "Developers"
 msgstr "Entwéckler"
 
-#: ../src/about.c:266
+#: ../src/about.c:267
 msgid "maintainer"
 msgstr "Haaptentwéckler"
 
-#: ../src/about.c:274
+#: ../src/about.c:275
 msgid "developer"
 msgstr "Entwéckler"
 
-#: ../src/about.c:282
+#: ../src/about.c:283
 msgid "translation maintainer"
 msgstr "Iwwersetzungskoordinator"
 
-#: ../src/about.c:291
+#: ../src/about.c:292
 msgid "Translators"
 msgstr "Iwwersetzer"
 
-#: ../src/about.c:311
+#: ../src/about.c:312
 msgid "Previous Translators"
 msgstr "Vireg Iwwersetzer"
 
-#: ../src/about.c:332
+#: ../src/about.c:333
 msgid "Contributors"
 msgstr "Kollaborateuren"
 
-#: ../src/about.c:342
+#: ../src/about.c:343
 #, c-format
 msgid ""
 "Some of the many contributors (for a more detailed list, see the file %s):"
@@ -84,15 +84,15 @@ msgstr ""
 "E puer Kollaborateuren (fir eng méi detailléiert Lescht, kuckt an den "
 "Fichier %s):"
 
-#: ../src/about.c:368
+#: ../src/about.c:369
 msgid "Credits"
 msgstr "Credits"
 
-#: ../src/about.c:382
+#: ../src/about.c:383
 msgid "License"
 msgstr "Lizenz"
 
-#: ../src/about.c:391
+#: ../src/about.c:392
 msgid ""
 "License text could not be found, please visit http://www.gnu.org/licenses/"
 "gpl-2.0.txt to view it online."
@@ -100,7 +100,7 @@ msgstr ""
 "Den Lizenztext konnt net fonnt ginn, gitt w.e.g. op http://www.gnu.org/"
 "licenses/gpl-2.0.txt fir den Text online ze liesen."
 
-#: ../src/build.c:221 ../src/build.c:745
+#: ../src/build.c:222 ../src/build.c:746
 #, c-format
 msgid ""
 "Could not find terminal \"%s\" (check path for Terminal tool setting in "
@@ -109,133 +109,133 @@ msgstr ""
 "Konnt den Terminal \"%s\" net fannen (kontrolléiert den Pad fir bei den "
 "Terminal an den Astellungen)"
 
-#: ../src/build.c:236 ../src/build.c:650
+#: ../src/build.c:237 ../src/build.c:651
 #, c-format
 msgid "Failed to execute \"%s\" (start-script could not be created)"
 msgstr "Konnt \"%s\" net ausféieren (Start Skript konnt net erstallt ginn)"
 
-#: ../src/build.c:272 ../src/build.c:528 ../src/build.c:778
+#: ../src/build.c:273 ../src/build.c:529 ../src/build.c:779
 #: ../src/search.c:1411
 #, c-format
 msgid "Process failed (%s)"
 msgstr "Prozess feelgeschloen (%s)"
 
-#: ../src/build.c:508
+#: ../src/build.c:509
 #, c-format
 msgid "%s (in directory: %s)"
 msgstr "%s (am Ordner: %s)"
 
-#: ../src/build.c:613
+#: ../src/build.c:614
 #, c-format
 msgid "Failed to change the working directory to \"%s\""
 msgstr "Konnt d'Aarbechtsverzeechnis net an \"%s\" änneren"
 
-#: ../src/build.c:707
+#: ../src/build.c:708
 msgid ""
 "Could not execute the file in the VTE because it probably contains a command."
 msgstr ""
 "Konnt den Fichier net am VTE ausféieren, well en wahrscheinlech eng Commande "
 "enthält"
 
-#: ../src/build.c:914
+#: ../src/build.c:915
 msgid "Compilation failed."
 msgstr "Compiléieren feelgeschloen."
 
-#: ../src/build.c:928
+#: ../src/build.c:929
 msgid "Compilation finished successfully."
 msgstr "Compiléieren mat Erfolleg ofgeschloss."
 
 #. compile the code
-#: ../src/build.c:1039
+#: ../src/build.c:1040
 msgid "_Compile"
 msgstr "_Compiléiren"
 
 #. build the code
-#: ../src/build.c:1047 ../src/build.c:2120 ../src/interface.c:976
+#: ../src/build.c:1048 ../src/build.c:2121 ../src/interface.c:976
 msgid "_Build"
 msgstr "_Erstellen"
 
 #. build the code with make all
-#: ../src/build.c:1059 ../src/build.c:1165 ../src/build.c:2131
+#: ../src/build.c:1060 ../src/build.c:1166 ../src/build.c:2132
 msgid "_Make All"
 msgstr "_Make all"
 
 #. build the code with make custom
-#: ../src/build.c:1068 ../src/build.c:1174 ../src/build.c:2139
+#: ../src/build.c:1069 ../src/build.c:1175 ../src/build.c:2140
 msgid "Make Custom _Target"
 msgstr "Make Custom _Target"
 
 #. build the code with make object
-#: ../src/build.c:1077 ../src/build.c:2147
+#: ../src/build.c:1078 ../src/build.c:2148
 msgid "Make _Object"
 msgstr "Make _Object"
 
 #. next error
-#: ../src/build.c:1090 ../src/build.c:1187
+#: ../src/build.c:1091 ../src/build.c:1188
 msgid "_Next Error"
 msgstr "_Nächsten Feeler"
 
-#: ../src/build.c:1097 ../src/build.c:1194
+#: ../src/build.c:1098 ../src/build.c:1195
 msgid "_Previous Error"
 msgstr "_Viregen Feeler"
 
 #. arguments
-#: ../src/build.c:1122 ../src/build.c:2159
+#: ../src/build.c:1123 ../src/build.c:2160
 msgid "_Set Includes and Arguments"
 msgstr "_Include Parameter an Argumenter uginn"
 
 #. DVI
-#: ../src/build.c:1143
+#: ../src/build.c:1144
 msgid "LaTeX -> _DVI"
 msgstr "LaTeX -> _DVI"
 
 #. PDF
-#: ../src/build.c:1152
+#: ../src/build.c:1153
 msgid "LaTeX -> _PDF"
 msgstr "LaTeX -> _PDF"
 
 #. DVI view
-#: ../src/build.c:1206
+#: ../src/build.c:1207
 msgid "_View DVI File"
 msgstr "_DVI Fichier kucken"
 
 #. PDF view
-#: ../src/build.c:1216
+#: ../src/build.c:1217
 msgid "V_iew PDF File"
 msgstr "_PDF Fichier kucken"
 
 #. arguments
-#: ../src/build.c:1231
+#: ../src/build.c:1232
 msgid "_Set Arguments"
 msgstr "Parameter vum Programm _uginn"
 
-#: ../src/build.c:1306
+#: ../src/build.c:1307
 msgid "Set Arguments"
 msgstr "Parameter vum Programm uginn"
 
-#: ../src/build.c:1313
+#: ../src/build.c:1314
 msgid "Set programs and options for compiling and viewing (La)TeX files."
 msgstr ""
 "D'Programmer an d'Optiounen fir (La)TeX Fichieren ze compiléieren an ze "
 "kucken uginn"
 
-#: ../src/build.c:1324
+#: ../src/build.c:1325
 msgid "DVI creation:"
 msgstr "DVI erstellen"
 
-#: ../src/build.c:1344
+#: ../src/build.c:1345
 msgid "PDF creation:"
 msgstr "PDF erstellen"
 
-#: ../src/build.c:1364
+#: ../src/build.c:1365
 msgid "DVI preview:"
 msgstr "DVI Virschau"
 
-#: ../src/build.c:1384
+#: ../src/build.c:1385
 msgid "PDF preview:"
 msgstr "PDF Virschau"
 
-#: ../src/build.c:1401 ../src/build.c:1583
+#: ../src/build.c:1402 ../src/build.c:1584
 #, c-format
 msgid ""
 "%f will be replaced by the current filename, e.g. test_file.c\n"
@@ -244,69 +244,69 @@ msgstr ""
 "%f gëtt duerch den aktuellen Numm vum Fichier ersat, z.B. fichier.c\n"
 "%e gëtt duerch den aktuellen Numm ouni Endung vum Fichier ersat, z.B. fichier"
 
-#: ../src/build.c:1486
+#: ../src/build.c:1487
 msgid "Set Includes and Arguments"
 msgstr "Include Parameter an Argumenter uginn"
 
-#: ../src/build.c:1493
+#: ../src/build.c:1494
 msgid "Set the commands for building and running programs."
 msgstr "D'Commanden fir Programmer ze erstellen an auszeféieren uginn"
 
 #. in-dialog heading for the "Set Includes and Arguments" dialog
-#: ../src/build.c:1501
+#: ../src/build.c:1502
 #, c-format
 msgid "%s commands"
 msgstr "Commanden fir %s"
 
-#: ../src/build.c:1516
+#: ../src/build.c:1517
 msgid "Compile:"
 msgstr "Compiléieren:"
 
-#: ../src/build.c:1538
+#: ../src/build.c:1539
 msgid "Build:"
 msgstr "Erstellen:"
 
-#: ../src/build.c:1560 ../src/dialogs.c:1223
+#: ../src/build.c:1561 ../src/dialogs.c:1223
 msgid "Execute:"
 msgstr "Ausféieren"
 
-#: ../src/build.c:1892 ../src/toolbar.c:344
+#: ../src/build.c:1893 ../src/toolbar.c:344
 msgid "Build the current file"
 msgstr "Aktuellen Fichier erstellen"
 
-#: ../src/build.c:1917
+#: ../src/build.c:1918
 msgid "Make Custom Target"
 msgstr "Make mat eegenem Ziel"
 
-#: ../src/build.c:1918
+#: ../src/build.c:1919
 msgid ""
 "Enter custom options here, all entered text is passed to the make command."
 msgstr ""
 "Gidd d'benotzerdefinéiert Optiounen hei an. Den ganzen Text gëtt sou un Make "
 "weiderginn."
 
-#: ../src/build.c:1967
+#: ../src/build.c:1968
 msgid "Build the current file with Make and the default target"
 msgstr "Den aktuellen Fichier mat Make an mam standard Ziel erstellen"
 
-#: ../src/build.c:1970
+#: ../src/build.c:1971
 msgid "Build the current file with Make and the specified target"
 msgstr "Den aktuellen Fichier mat Make erstellen an en Ziel uginn"
 
-#: ../src/build.c:1973
+#: ../src/build.c:1974
 msgid "Compile the current file with Make"
 msgstr "Den aktuellen Fichier mat Make compiléieren"
 
-#: ../src/build.c:2035
+#: ../src/build.c:2036
 msgid "Failed to execute the view program"
 msgstr "Konnt den Programm fir ze betruechten net ausféieren"
 
-#: ../src/build.c:2073
+#: ../src/build.c:2074
 #, c-format
 msgid "Process could not be stopped (%s)."
 msgstr "Prozess konnt net gestoppt ginn (%s)."
 
-#: ../src/build.c:2092 ../src/build.c:2106
+#: ../src/build.c:2093 ../src/build.c:2107
 msgid "No more build errors."
 msgstr "Keng weider Feelermeldungen"
 
@@ -314,68 +314,68 @@ msgstr "Keng weider Feelermeldungen"
 msgid "Do you really want to quit?"
 msgstr "Well dier wierklech ophalen?"
 
-#: ../src/callbacks.c:469 ../src/document.c:2867 ../src/interface.c:340
+#: ../src/callbacks.c:471 ../src/document.c:2867 ../src/interface.c:340
 #: ../src/treeviews.c:578
 msgid "_Reload"
 msgstr "_Nei lueden"
 
-#: ../src/callbacks.c:470
+#: ../src/callbacks.c:472
 msgid "Any unsaved changes will be lost."
 msgstr "All net gespäichert Ännerungen ginn verluer."
 
-#: ../src/callbacks.c:471
+#: ../src/callbacks.c:473
 #, c-format
 msgid "Are you sure you want to reload '%s'?"
 msgstr "Well dier wierklech '%s' nei lueden?"
 
-#: ../src/callbacks.c:1249 ../src/keybindings.c:376
+#: ../src/callbacks.c:1253 ../src/keybindings.c:374
 msgid "Go to Line"
 msgstr "Bei d'Zeil goen"
 
-#: ../src/callbacks.c:1249
+#: ../src/callbacks.c:1253
 msgid "Enter the line you want to go to:"
 msgstr "Gitt d'Zeil an bei déi dier wëllt goen:"
 
-#: ../src/callbacks.c:1344 ../src/callbacks.c:1369
+#: ../src/callbacks.c:1350 ../src/callbacks.c:1375
 msgid ""
 "Please set the filetype for the current file before using this function."
 msgstr ""
 "Stellt w.e.g. den Fichierstyp fir den aktuellen Fichier an éier dier dës "
 "Fonctioun benotzt."
 
-#: ../src/callbacks.c:1474 ../src/ui_utils.c:542
+#: ../src/callbacks.c:1487 ../src/ui_utils.c:542
 msgid "dd.mm.yyyy"
 msgstr "dd.mm.yyyy"
 
-#: ../src/callbacks.c:1476 ../src/ui_utils.c:543
+#: ../src/callbacks.c:1489 ../src/ui_utils.c:543
 msgid "mm.dd.yyyy"
 msgstr "mm.dd.yyyy"
 
-#: ../src/callbacks.c:1478 ../src/ui_utils.c:544
+#: ../src/callbacks.c:1491 ../src/ui_utils.c:544
 msgid "yyyy/mm/dd"
 msgstr "yyyy/mm/dd"
 
-#: ../src/callbacks.c:1480 ../src/ui_utils.c:553
+#: ../src/callbacks.c:1493 ../src/ui_utils.c:553
 msgid "dd.mm.yyyy hh:mm:ss"
 msgstr "dd.mm.yyyy hh:mm:ss"
 
-#: ../src/callbacks.c:1482 ../src/ui_utils.c:554
+#: ../src/callbacks.c:1495 ../src/ui_utils.c:554
 msgid "mm.dd.yyyy hh:mm:ss"
 msgstr "mm.dd.yyyy hh:mm:ss"
 
-#: ../src/callbacks.c:1484 ../src/ui_utils.c:555
+#: ../src/callbacks.c:1497 ../src/ui_utils.c:555
 msgid "yyyy/mm/dd hh:mm:ss"
 msgstr "yyyy/mm/dd hh:mm:ss"
 
-#: ../src/callbacks.c:1486 ../src/ui_utils.c:564
+#: ../src/callbacks.c:1499 ../src/ui_utils.c:564
 msgid "_Use Custom Date Format"
 msgstr "Benotzerdefinéierten Format fir den Dat_um benotzen"
 
-#: ../src/callbacks.c:1497
+#: ../src/callbacks.c:1503
 msgid "Custom Date Format"
 msgstr "Benotzerdefinéierten Format fir den Datum"
 
-#: ../src/callbacks.c:1498
+#: ../src/callbacks.c:1504
 msgid ""
 "Enter here a custom date and time format. You can use any conversion "
 "specifiers which can be used with the ANSI C strftime function."
@@ -384,16 +384,16 @@ msgstr ""
 "d'Spécificateuren benotzt ginn, déi och an der ANSI C Fonctioun strftime "
 "virkommen."
 
-#: ../src/callbacks.c:1516
+#: ../src/callbacks.c:1522
 msgid "Date format string could not be converted (possibly too long)."
 msgstr "Den Datumsformat konnt net changéiert ginn (wahrscheinlech ze laang)."
 
-#: ../src/callbacks.c:1738 ../src/callbacks.c:1748
+#: ../src/callbacks.c:1744 ../src/callbacks.c:1754
 msgid "No more message items."
 msgstr "Keng weider Meldungen."
 
 #. initialize the dialog
-#: ../src/dialogs.c:140 ../src/prefs.c:1640
+#: ../src/dialogs.c:140 ../src/prefs.c:1641
 msgid "Open File"
 msgstr "Fichier opmaachen"
 
@@ -754,8 +754,8 @@ msgstr "\"%s\" konnt net fonnt ginn."
 msgid "Wrap search and find again?"
 msgstr "D'Sich um Ufank resp. Enn vum Dokument weiderféieren?"
 
-#: ../src/document.c:2011 ../src/search.c:1084 ../src/search.c:1688
-#: ../src/search.c:1689
+#: ../src/document.c:2011 ../src/search.c:1084 ../src/search.c:1658
+#: ../src/search.c:1659
 #, c-format
 msgid "No matches found for \"%s\"."
 msgstr "Keng Iwwerteneestëmmung fond fir \"%s\"."
@@ -789,11 +789,11 @@ msgstr "Probéieren den Fichier nach eng kéier ze späicheren?"
 msgid "File \"%s\" was not found on disk!"
 msgstr "Den Fichier \"%s\" konnt net fonnt gin!"
 
-#: ../src/editor.c:4288
+#: ../src/editor.c:4324
 msgid "Enter Tab Width"
 msgstr "Breet vun engem Tab aginn"
 
-#: ../src/editor.c:4289
+#: ../src/editor.c:4325
 msgid "Enter the amount of spaces which should be replaced by a tab character."
 msgstr "D'Unzuel un Espacen aginn déi en Tab sollen ersetzen"
 
@@ -1208,7 +1208,7 @@ msgstr "_Geschirleescht uweisen"
 msgid "Show Side_bar"
 msgstr "Säitenleescht u_weisen"
 
-#: ../src/interface.c:734 ../src/interface.c:3917 ../src/keybindings.c:229
+#: ../src/interface.c:734 ../src/interface.c:3917 ../src/keybindings.c:227
 msgid "Editor"
 msgstr "Editor"
 
@@ -1458,7 +1458,7 @@ msgstr "Bei d'Declaratioun vum T_ag goen"
 msgid "Conte_xt Action"
 msgstr "Konte_xt Aktioun"
 
-#: ../src/interface.c:2667 ../src/keybindings.c:337
+#: ../src/interface.c:2667 ../src/keybindings.c:335
 msgid "Preferences"
 msgstr "Astellungen"
 
@@ -1838,7 +1838,7 @@ msgstr "Symbolgréisst:"
 msgid "<b>Appearance</b>"
 msgstr "<b>Apparence</b>"
 
-#: ../src/interface.c:3359 ../src/toolbar.c:881
+#: ../src/interface.c:3359 ../src/toolbar.c:884
 #, fuzzy
 msgid "Customize Toolbar"
 msgstr "_Geschirleescht uweisen"
@@ -2264,7 +2264,7 @@ msgid "Sets the color of the long line marker"
 msgstr "Stellt d'Faarf vun der Ëmbrochhëllef fir laang Zeilen an"
 
 #: ../src/interface.c:3870 ../src/toolbar.c:70 ../src/tools.c:746
-#: ../src/vte.c:769 ../src/vte.c:776
+#: ../src/vte.c:763 ../src/vte.c:770
 msgid "Color Chooser"
 msgstr "Faarf auswielen"
 
@@ -2385,7 +2385,7 @@ msgstr "Läscht Ofstänn an Tabulatoren um Zeilenenn"
 msgid "Removes trailing spaces and tabs and the end of lines"
 msgstr "Läscht Ofstänn an Tabulatoren um Enn vun enger Zeil"
 
-#: ../src/interface.c:4061 ../src/keybindings.c:460
+#: ../src/interface.c:4061 ../src/keybindings.c:458
 msgid "Replace tabs by space"
 msgstr "Tabs duerch Espacen ersetzen"
 
@@ -2478,7 +2478,7 @@ msgstr ""
 msgid "<b>Commands</b>"
 msgstr "<b>Commanden</b>"
 
-#: ../src/interface.c:4309 ../src/keybindings.c:496
+#: ../src/interface.c:4309 ../src/keybindings.c:494
 msgid "Tools"
 msgstr "Geschir"
 
@@ -2596,30 +2596,30 @@ msgstr ""
 msgid "Use an external command for printing"
 msgstr "Eng extern Commande fir ze drécken benotzen"
 
-#: ../src/interface.c:4562 ../src/printing.c:380
+#: ../src/interface.c:4562 ../src/printing.c:381
 msgid "Print line numbers"
 msgstr "Zeilennummer drécken"
 
-#: ../src/interface.c:4565 ../src/printing.c:382
+#: ../src/interface.c:4565 ../src/printing.c:383
 msgid "Add line numbers to the printed page"
 msgstr "Mat Zeilennummeren drécken "
 
-#: ../src/interface.c:4567 ../src/printing.c:385
+#: ../src/interface.c:4567 ../src/printing.c:386
 msgid "Print page numbers"
 msgstr "Säitenzuel drécken"
 
-#: ../src/interface.c:4570 ../src/printing.c:387
+#: ../src/interface.c:4570 ../src/printing.c:388
 msgid ""
 "Add page numbers at the bottom of each page. It takes 2 lines of the page."
 msgstr ""
 "Säitenzuel um Enn vun all Säit uginn. Duerfir ginn 2 Zeilen vun der Säit "
 "gebraucht."
 
-#: ../src/interface.c:4572 ../src/printing.c:390
+#: ../src/interface.c:4572 ../src/printing.c:391
 msgid "Print page header"
 msgstr "Kappzeil drécken"
 
-#: ../src/interface.c:4575 ../src/printing.c:392
+#: ../src/interface.c:4575 ../src/printing.c:393
 msgid ""
 "Add a little header to every page containing the page number, the filename "
 "and the current date (see below). It takes 3 lines of the page."
@@ -2628,7 +2628,7 @@ msgstr ""
 "Fichier an dem aktuellen Datum (c.f. Ënnen). Duerfir ginn 3 Zeilen vun der "
 "Säit gebraucht"
 
-#: ../src/interface.c:4592 ../src/printing.c:408
+#: ../src/interface.c:4592 ../src/printing.c:409
 msgid "Use the basename of the printed file"
 msgstr "Den Basisnumm vum gedréckten Fichier benotzen."
 
@@ -2636,11 +2636,11 @@ msgstr "Den Basisnumm vum gedréckten Fichier benotzen."
 msgid "Print only the basename (without the path) of the printed file"
 msgstr "Nemmen den Basisnumm (ouni den Pad) vum gedréckten Fichier drécken"
 
-#: ../src/interface.c:4601 ../src/printing.c:416
+#: ../src/interface.c:4601 ../src/printing.c:417
 msgid "Date format:"
 msgstr "Format vum Datum:"
 
-#: ../src/interface.c:4608 ../src/printing.c:422
+#: ../src/interface.c:4608 ../src/printing.c:423
 msgid ""
 "Specify a format for the date and time stamp which is added to the page "
 "header on each page. You can use any conversion specifiers which can be used "
@@ -2662,531 +2662,531 @@ msgstr "Drécken"
 msgid "Project Properties"
 msgstr "Eegenschaften vum Projet"
 
-#: ../src/keybindings.c:198 ../src/plugins.c:1099
+#: ../src/keybindings.c:196 ../src/plugins.c:1110
 msgid "File"
 msgstr "Fichier"
 
-#: ../src/keybindings.c:201
+#: ../src/keybindings.c:199
 msgid "New"
 msgstr "Nei"
 
-#: ../src/keybindings.c:203
+#: ../src/keybindings.c:201
 msgid "Open"
 msgstr "Opmaachen"
 
-#: ../src/keybindings.c:206
+#: ../src/keybindings.c:204
 msgid "Open selected file"
 msgstr "Ausgewielten Fichier opmaachen"
 
-#: ../src/keybindings.c:208
+#: ../src/keybindings.c:206
 msgid "Save"
 msgstr "Späicheren"
 
-#: ../src/keybindings.c:210
+#: ../src/keybindings.c:208
 msgid "Save as"
 msgstr "Späicheren als"
 
-#: ../src/keybindings.c:212
+#: ../src/keybindings.c:210
 msgid "Save all"
 msgstr "Alles späicheren"
 
-#: ../src/keybindings.c:215
+#: ../src/keybindings.c:213
 msgid "Print"
 msgstr "Drécken"
 
-#: ../src/keybindings.c:217
+#: ../src/keybindings.c:215
 msgid "Close"
 msgstr "Zoumaachen"
 
-#: ../src/keybindings.c:219
+#: ../src/keybindings.c:217
 msgid "Close all"
 msgstr "Alles zoumaachen"
 
-#: ../src/keybindings.c:222
+#: ../src/keybindings.c:220
 msgid "Reload file"
 msgstr "Fichier nei lueden"
 
-#: ../src/keybindings.c:224 ../src/project.c:495
+#: ../src/keybindings.c:222 ../src/project.c:495
 msgid "Project"
 msgstr "Projet"
 
-#: ../src/keybindings.c:227
+#: ../src/keybindings.c:225
 msgid "Project properties"
 msgstr "Eegenschaften vum Projet"
 
-#: ../src/keybindings.c:232
+#: ../src/keybindings.c:230
 msgid "Undo"
 msgstr "Réckgängeg"
 
-#: ../src/keybindings.c:234
+#: ../src/keybindings.c:232
 msgid "Redo"
 msgstr "Widderhuelen"
 
-#: ../src/keybindings.c:236
+#: ../src/keybindings.c:234
 #, fuzzy
 msgid "Duplicate line or selection"
 msgstr "Zeil oder Auswiel duplizéieren"
 
-#: ../src/keybindings.c:239
+#: ../src/keybindings.c:237
 msgid "Delete current line(s)"
 msgstr "Aktuell Zeil(en) löschen"
 
-#: ../src/keybindings.c:242
+#: ../src/keybindings.c:240
 #, fuzzy
 msgid "Delete to line end"
 msgstr "Aktuell Zeil(en) löschen"
 
-#: ../src/keybindings.c:244
+#: ../src/keybindings.c:242
 msgid "Transpose current line"
 msgstr "Aktuell Zeil tauschen"
 
-#: ../src/keybindings.c:246
+#: ../src/keybindings.c:244
 msgid "Scroll to current line"
 msgstr "Bei dei aktuell Zeil scrollen"
 
-#: ../src/keybindings.c:248
+#: ../src/keybindings.c:246
 msgid "Scroll up the view by one line"
 msgstr "Eng Zeil no uewen scrollen"
 
-#: ../src/keybindings.c:250
+#: ../src/keybindings.c:248
 msgid "Scroll down the view by one line"
 msgstr "Eng Zeil no ennen scrollen"
 
-#: ../src/keybindings.c:253
+#: ../src/keybindings.c:251
 msgid "Complete snippet"
 msgstr "Code vervollstännegen"
 
-#: ../src/keybindings.c:255
+#: ../src/keybindings.c:253
 msgid "Move cursor in snippet"
 msgstr "Mauszeiger am Codestéck beweegen"
 
-#: ../src/keybindings.c:257
+#: ../src/keybindings.c:255
 msgid "Suppress snippet completion"
 msgstr "Keng Vervollstännegung vun Code"
 
-#: ../src/keybindings.c:259
+#: ../src/keybindings.c:257
 msgid "Context Action"
 msgstr "Kontext Aktioun"
 
-#: ../src/keybindings.c:261
+#: ../src/keybindings.c:259
 msgid "Complete word"
 msgstr "Wuert vervollstännegen"
 
-#: ../src/keybindings.c:263
+#: ../src/keybindings.c:261
 msgid "Show calltip"
 msgstr "Calltip uweisen"
 
-#: ../src/keybindings.c:265
+#: ../src/keybindings.c:263
 msgid "Show macro list"
 msgstr "Lescht mat den Makroen uweisen"
 
-#: ../src/keybindings.c:267
+#: ../src/keybindings.c:265
 msgid "Clipboard"
 msgstr "Zwëschenspäicher"
 
-#: ../src/keybindings.c:270
+#: ../src/keybindings.c:268
 msgid "Cut"
 msgstr "Ausschneiden"
 
-#: ../src/keybindings.c:272
+#: ../src/keybindings.c:270
 msgid "Copy"
 msgstr "Kopéieren"
 
-#: ../src/keybindings.c:274
+#: ../src/keybindings.c:272
 msgid "Paste"
 msgstr "Afügen"
 
-#: ../src/keybindings.c:276
+#: ../src/keybindings.c:274
 msgid "Copy current line(s)"
 msgstr "Aktuell Zeil(en) kopéieren"
 
-#: ../src/keybindings.c:278
+#: ../src/keybindings.c:276
 msgid "Cut current line(s)"
 msgstr "Aktuell Zeil(en) ausschneiden"
 
-#: ../src/keybindings.c:280
+#: ../src/keybindings.c:278
 msgid "Select"
 msgstr "Auswielen"
 
-#: ../src/keybindings.c:283
+#: ../src/keybindings.c:281
 msgid "Select All"
 msgstr "Alles Auswielen"
 
-#: ../src/keybindings.c:285
+#: ../src/keybindings.c:283
 msgid "Select current word"
 msgstr "Aktuellt Wuert auswielen"
 
-#: ../src/keybindings.c:287
+#: ../src/keybindings.c:285
 msgid "Select current line(s)"
 msgstr "Aktuell Zeil(en) auswielen"
 
-#: ../src/keybindings.c:289
+#: ../src/keybindings.c:287
 msgid "Select current paragraph"
 msgstr "Aktuellen Abschnitt auswielen"
 
-#: ../src/keybindings.c:291
+#: ../src/keybindings.c:289
 msgid "Format"
 msgstr "Format"
 
-#: ../src/keybindings.c:295
+#: ../src/keybindings.c:293
 msgid "Toggle Case of Selection"
 msgstr "Grouss an Klengschreiwen an der Auswiel vertauschen"
 
-#: ../src/keybindings.c:297
+#: ../src/keybindings.c:295
 msgid "Toggle line commentation"
 msgstr "Kommentéierung ëmdréinen"
 
-#: ../src/keybindings.c:300
+#: ../src/keybindings.c:298
 msgid "Comment line(s)"
 msgstr "Zeil(en) kommentéiren"
 
-#: ../src/keybindings.c:302
+#: ../src/keybindings.c:300
 msgid "Uncomment line(s)"
 msgstr "Zeil(en) auskommentéiren"
 
-#: ../src/keybindings.c:304
+#: ../src/keybindings.c:302
 msgid "Increase indent"
 msgstr "Méi arécken"
 
-#: ../src/keybindings.c:307
+#: ../src/keybindings.c:305
 msgid "Decrease indent"
 msgstr "Manner arécken"
 
-#: ../src/keybindings.c:310
+#: ../src/keybindings.c:308
 msgid "Increase indent by one space"
 msgstr "Aréckung ëm een Ofstand vergréisseren"
 
-#: ../src/keybindings.c:312
+#: ../src/keybindings.c:310
 msgid "Decrease indent by one space"
 msgstr "Aréckung ëm een Ofstand verklengeren"
 
-#: ../src/keybindings.c:314
+#: ../src/keybindings.c:312
 msgid "Smart line indent"
 msgstr "Intelligent Arécken"
 
-#: ../src/keybindings.c:316
+#: ../src/keybindings.c:314
 msgid "Send to Custom Command 1"
 msgstr "Un d'Benotzerdefinéiert Commande 1 schécken"
 
-#: ../src/keybindings.c:318
+#: ../src/keybindings.c:316
 msgid "Send to Custom Command 2"
 msgstr "Un d'Benotzerdefinéiert Commande 2 schécken"
 
-#: ../src/keybindings.c:320
+#: ../src/keybindings.c:318
 msgid "Send to Custom Command 3"
 msgstr "Un d'Benotzerdefinéiert Commande 3 schécken"
 
-#: ../src/keybindings.c:322
+#: ../src/keybindings.c:320
 msgid "Send Selection to Terminal"
 msgstr "Auswiel un den Terminal schecken"
 
-#: ../src/keybindings.c:324
+#: ../src/keybindings.c:322
 msgid "Reflow lines/block"
 msgstr ""
 
-#: ../src/keybindings.c:326
+#: ../src/keybindings.c:324
 msgid "Insert"
 msgstr "Afügen"
 
-#: ../src/keybindings.c:329
+#: ../src/keybindings.c:327
 msgid "Insert date"
 msgstr "Datum afügen"
 
-#: ../src/keybindings.c:332
+#: ../src/keybindings.c:330
 msgid "Insert alternative white space"
 msgstr "Alternativ Ofstänn afügen"
 
-#: ../src/keybindings.c:334
+#: ../src/keybindings.c:332
 msgid "Settings"
 msgstr "Astellungen"
 
-#: ../src/keybindings.c:340 ../src/toolbar.c:350
+#: ../src/keybindings.c:338 ../src/toolbar.c:350
 msgid "Search"
 msgstr "Sichen"
 
-#: ../src/keybindings.c:343 ../src/search.c:379
+#: ../src/keybindings.c:341 ../src/search.c:379
 msgid "Find"
 msgstr "Fannen"
 
-#: ../src/keybindings.c:345
+#: ../src/keybindings.c:343
 msgid "Find Next"
 msgstr "Nächsten fannen"
 
-#: ../src/keybindings.c:347
+#: ../src/keybindings.c:345
 msgid "Find Previous"
 msgstr "Viregen fannen"
 
-#: ../src/keybindings.c:350
+#: ../src/keybindings.c:348
 msgid "Find Next Selection"
 msgstr "Déi nächst Auswiel fannen"
 
-#: ../src/keybindings.c:352
+#: ../src/keybindings.c:350
 msgid "Find Previous Selection"
 msgstr "Vireg Auswiel fannen"
 
-#: ../src/keybindings.c:354 ../src/search.c:514
+#: ../src/keybindings.c:352 ../src/search.c:514
 msgid "Replace"
 msgstr "Ersetzen"
 
-#: ../src/keybindings.c:356 ../src/search.c:686
+#: ../src/keybindings.c:354 ../src/search.c:686
 msgid "Find in Files"
 msgstr "An den Fichieren fannen"
 
-#: ../src/keybindings.c:359
+#: ../src/keybindings.c:357
 msgid "Next Message"
 msgstr "Nächsten Message"
 
-#: ../src/keybindings.c:361
+#: ../src/keybindings.c:359
 msgid "Previous Message"
 msgstr "Viregen Message"
 
-#: ../src/keybindings.c:363
+#: ../src/keybindings.c:361
 msgid "Find Usage"
 msgstr "An allen Dokumenter nosichen"
 
-#: ../src/keybindings.c:365
+#: ../src/keybindings.c:363
 msgid "Find Document Usage"
 msgstr "Am Dokument nosichen"
 
-#: ../src/keybindings.c:367
+#: ../src/keybindings.c:365
 #, fuzzy
 msgid "Mark All"
 msgstr "_Make all"
 
-#: ../src/keybindings.c:369
+#: ../src/keybindings.c:367
 msgid "Go to"
 msgstr "Goen"
 
-#: ../src/keybindings.c:372 ../src/toolbar.c:66
+#: ../src/keybindings.c:370 ../src/toolbar.c:66
 msgid "Navigate back a location"
 msgstr "Eng Positioun no vir goen"
 
-#: ../src/keybindings.c:374 ../src/toolbar.c:67
+#: ../src/keybindings.c:372 ../src/toolbar.c:67
 msgid "Navigate forward a location"
 msgstr "Eng Positioun no hannen goen"
 
-#: ../src/keybindings.c:379
+#: ../src/keybindings.c:377
 msgid "Go to matching brace"
 msgstr "Bei déi passend Klamer goen"
 
-#: ../src/keybindings.c:382
+#: ../src/keybindings.c:380
 msgid "Toggle marker"
 msgstr "Markéierung setzen"
 
-#: ../src/keybindings.c:385
+#: ../src/keybindings.c:383
 msgid "Go to next marker"
 msgstr "Bei déi nächst Markéierung goen"
 
-#: ../src/keybindings.c:388
+#: ../src/keybindings.c:386
 msgid "Go to previous marker"
 msgstr "Bei d'Markéierung vun virdrun goen"
 
-#: ../src/keybindings.c:390
+#: ../src/keybindings.c:388
 msgid "Go to Tag Definition"
 msgstr "Bei d'Definitioun vum Tag goen"
 
-#: ../src/keybindings.c:392
+#: ../src/keybindings.c:390
 msgid "Go to Tag Declaration"
 msgstr "Bei d'Declaratioun vum Tag goen"
 
-#: ../src/keybindings.c:394
+#: ../src/keybindings.c:392
 msgid "Go to Start of Line"
 msgstr "Un den Ufank vun der Zeil goen"
 
-#: ../src/keybindings.c:396
+#: ../src/keybindings.c:394
 msgid "Go to End of Line"
 msgstr "Un den Enn vun der Zeil goen"
 
-#: ../src/keybindings.c:398
+#: ../src/keybindings.c:396
 #, fuzzy
 msgid "Go to End of Display Line"
 msgstr "Un den Enn vun der Zeil goen"
 
-#: ../src/keybindings.c:400
+#: ../src/keybindings.c:398
 msgid "Go to Previous Word Part"
 msgstr "Bei dat Deelwuert vun virdrun goen"
 
-#: ../src/keybindings.c:402
+#: ../src/keybindings.c:400
 msgid "Go to Next Word Part"
 msgstr "Bei dat nächst Deelwuert goen"
 
-#: ../src/keybindings.c:404
+#: ../src/keybindings.c:402
 msgid "View"
 msgstr "Usicht"
 
-#: ../src/keybindings.c:407
+#: ../src/keybindings.c:405
 msgid "Toggle All Additional Widgets"
 msgstr "Zousätzlech Infofënstern an/ausblennen"
 
-#: ../src/keybindings.c:410
+#: ../src/keybindings.c:408
 msgid "Fullscreen"
 msgstr "Vollbildschierm"
 
-#: ../src/keybindings.c:412
+#: ../src/keybindings.c:410
 msgid "Toggle Messages Window"
 msgstr "Noriichtenfënster verstoppen"
 
-#: ../src/keybindings.c:415
+#: ../src/keybindings.c:413
 msgid "Toggle Sidebar"
 msgstr "Saitenleescht un an ausschalten"
 
-#: ../src/keybindings.c:417
+#: ../src/keybindings.c:415
 msgid "Zoom In"
 msgstr "Eran zoomen"
 
-#: ../src/keybindings.c:419
+#: ../src/keybindings.c:417
 msgid "Zoom Out"
 msgstr "Eraus zoomen"
 
-#: ../src/keybindings.c:421
+#: ../src/keybindings.c:419
 msgid "Focus"
 msgstr "Fokusséiren"
 
-#: ../src/keybindings.c:424
+#: ../src/keybindings.c:422
 msgid "Switch to Editor"
 msgstr "Zum Editor wiesselen"
 
-#: ../src/keybindings.c:426
+#: ../src/keybindings.c:424
 msgid "Switch to Scribble"
 msgstr "An den Notizblock wiesselen"
 
-#: ../src/keybindings.c:428
+#: ../src/keybindings.c:426
 msgid "Switch to VTE"
 msgstr "An den VTE wiesselen"
 
-#: ../src/keybindings.c:430
+#: ../src/keybindings.c:428
 msgid "Switch to Search Bar"
 msgstr "An d'Sichfënster wiesselen"
 
-#: ../src/keybindings.c:432
+#: ../src/keybindings.c:430
 msgid "Switch to Sidebar"
 msgstr "An d'Saitenleescht wiesselen"
 
-#: ../src/keybindings.c:434
+#: ../src/keybindings.c:432
 msgid "Switch to Compiler"
 msgstr "Zum Compiler wiesselen"
 
-#: ../src/keybindings.c:436
+#: ../src/keybindings.c:434
 msgid "Notebook tab"
 msgstr "Tab"
 
-#: ../src/keybindings.c:439
+#: ../src/keybindings.c:437
 msgid "Switch to left document"
 msgstr "Zum lenken Dokument wiesselen"
 
-#: ../src/keybindings.c:441
+#: ../src/keybindings.c:439
 msgid "Switch to right document"
 msgstr "Zum rietsen Dokument wiesselen"
 
-#: ../src/keybindings.c:443
+#: ../src/keybindings.c:441
 msgid "Switch to last used document"
 msgstr "Zum läscht benotzten Dokument wiesselen"
 
-#: ../src/keybindings.c:445
+#: ../src/keybindings.c:443
 msgid "Move document left"
 msgstr "Dokument no lenks beweegen"
 
-#: ../src/keybindings.c:447
+#: ../src/keybindings.c:445
 msgid "Move document right"
 msgstr "Dokument no riets beweegen"
 
-#: ../src/keybindings.c:449
+#: ../src/keybindings.c:447
 msgid "Move document first"
 msgstr "Dokument un den Ufank beweegen"
 
-#: ../src/keybindings.c:451
+#: ../src/keybindings.c:449
 msgid "Move document last"
 msgstr "Dokument un den Schluss beweegen"
 
-#: ../src/keybindings.c:453
+#: ../src/keybindings.c:451
 msgid "Document"
 msgstr "Dokument"
 
-#: ../src/keybindings.c:456
+#: ../src/keybindings.c:454
 msgid "Toggle Line wrapping"
 msgstr "Visuellen Zeilenembroch emschalten"
 
-#: ../src/keybindings.c:458
+#: ../src/keybindings.c:456
 msgid "Toggle Line breaking"
 msgstr "Automateschen Zeilenembroch emschalten"
 
-#: ../src/keybindings.c:462
+#: ../src/keybindings.c:460
 msgid "Replace spaces by tabs"
 msgstr "Ofstänn duerch Tabulatoren ersetzen"
 
-#: ../src/keybindings.c:464
+#: ../src/keybindings.c:462
 msgid "Toggle current fold"
 msgstr "Aktuell Fal emdréinen"
 
-#: ../src/keybindings.c:466
+#: ../src/keybindings.c:464
 msgid "Fold all"
 msgstr "Zesummeklappen"
 
-#: ../src/keybindings.c:468
+#: ../src/keybindings.c:466
 msgid "Unfold all"
 msgstr "Erausklappen"
 
-#: ../src/keybindings.c:470
+#: ../src/keybindings.c:468
 msgid "Reload symbol list"
 msgstr "Lescht mat den Symboler nei lueden"
 
-#: ../src/keybindings.c:472 ../src/keybindings.c:477 ../src/ui_utils.c:1787
+#: ../src/keybindings.c:470 ../src/keybindings.c:475 ../src/ui_utils.c:1787
 msgid "Build"
 msgstr "Erstellen"
 
-#: ../src/keybindings.c:475 ../src/toolbar.c:68
+#: ../src/keybindings.c:473 ../src/toolbar.c:68
 msgid "Compile"
 msgstr "Compiléieren"
 
-#: ../src/keybindings.c:479
+#: ../src/keybindings.c:477
 msgid "Make all"
 msgstr "Make all"
 
-#: ../src/keybindings.c:482
+#: ../src/keybindings.c:480
 msgid "Make custom target"
 msgstr "Make mat eegenem Ziel"
 
-#: ../src/keybindings.c:484
+#: ../src/keybindings.c:482
 msgid "Make object"
 msgstr "Make object"
 
-#: ../src/keybindings.c:486
+#: ../src/keybindings.c:484
 msgid "Next error"
 msgstr "Nächsten Feeler"
 
-#: ../src/keybindings.c:488
+#: ../src/keybindings.c:486
 msgid "Previous error"
 msgstr "Viregen Feeler"
 
-#: ../src/keybindings.c:490
+#: ../src/keybindings.c:488
 msgid "Run"
 msgstr "Ausféiren"
 
-#: ../src/keybindings.c:492
+#: ../src/keybindings.c:490
 msgid "Run (alternative command)"
 msgstr "Ausféieren (alternativ Commande):"
 
-#: ../src/keybindings.c:494
+#: ../src/keybindings.c:492
 msgid "Build options"
 msgstr "Optiounen fir d'Erstellung"
 
-#: ../src/keybindings.c:499
+#: ../src/keybindings.c:497
 msgid "Show Color Chooser"
 msgstr "Faarwe Auswieler uweisen"
 
-#: ../src/keybindings.c:501 ../src/keybindings.c:504
+#: ../src/keybindings.c:499 ../src/keybindings.c:502
 msgid "Help"
 msgstr "Hëllef"
 
-#: ../src/keybindings.c:799
+#: ../src/keybindings.c:791
 msgid "Keyboard Shortcuts"
 msgstr "Tastatur Kierzel"
 
-#: ../src/keybindings.c:812
+#: ../src/keybindings.c:804
 msgid "The following keyboard shortcuts are configurable:"
 msgstr "Déi folgend Kierzel kënnen agestallt ginn:"
 
-#: ../src/keybindings.c:1583
+#: ../src/keybindings.c:1609
 msgid "Switch to Document"
 msgstr "Zum Dokument wiesselen"
 
@@ -3202,7 +3202,7 @@ msgstr "Konnt verschidden Sëtzungsfichieren net lueden."
 msgid "Debug Messages"
 msgstr "Debug Messagen"
 
-#: ../src/main.c:124
+#: ../src/main.c:123
 msgid ""
 "Set initial column number for the first opened file (useful in conjunction "
 "with --line)"
@@ -3210,87 +3210,87 @@ msgstr ""
 "Setzt Kolonnennummer am fir d'éischt opgematen Fichier. Sënnvoll nëmmen an "
 "Kombinatioun mat der Optioun -l oder --line"
 
-#: ../src/main.c:125
+#: ../src/main.c:124
 msgid "Use an alternate configuration directory"
 msgstr "En Alternativen Configuratiounsordner benotzen."
 
-#: ../src/main.c:126 ../src/main.c:146
+#: ../src/main.c:125 ../src/main.c:144
 msgid "Be verbose"
 msgstr "Ausféierlech Angaben"
 
-#: ../src/main.c:127
+#: ../src/main.c:126
 msgid "Print internal filetype names"
 msgstr "Weist déi ënnerstëtzen Fichierstypen un"
 
-#: ../src/main.c:128
+#: ../src/main.c:127
 msgid "Generate global tags file (see documentation)"
 msgstr "Globalen Tag Fichier erstellen (Dokumentatioun beuechten)"
 
-#: ../src/main.c:129
+#: ../src/main.c:128
 msgid "Don't preprocess C/C++ files when generating tags"
 msgstr "C/C++ Präprozessor iwwersprangen, wann en Tag Fichier erstallt gëtt"
 
-#: ../src/main.c:132
+#: ../src/main.c:130
 msgid "Don't open files in a running instance, force opening a new instance"
 msgstr ""
 "Fichieren net an enger schonns lafenden Instanz, mä an enger neien Instanz "
 "opmaachen"
 
-#: ../src/main.c:134
+#: ../src/main.c:132
 msgid "Set initial line number for the first opened file"
 msgstr "Setzt d'Zeilennummer am fir d'éischt opgematen Fichier"
 
-#: ../src/main.c:135
+#: ../src/main.c:133
 msgid "Don't show message window at startup"
 msgstr "D'Noriichtenfënster beim Start net uweisen"
 
-#: ../src/main.c:136
+#: ../src/main.c:134
 msgid "Don't load auto completion data (see documentation)"
 msgstr ""
 "Automatesch Vervollstännegungsdonnéeen net lueden (Dokumentatioun beuechten)"
 
-#: ../src/main.c:138
+#: ../src/main.c:136
 msgid "Don't load plugins"
 msgstr "Keng PlugIns lueden"
 
-#: ../src/main.c:140
+#: ../src/main.c:138
 msgid "Print Geany's installation prefix"
 msgstr "Den Installatiounsordner vun Geany ausginn"
 
-#: ../src/main.c:141
+#: ../src/main.c:139
 msgid "Don't load the previous session's files"
 msgstr "Fichieren aus der Sëtzung vun virdrun net lueden"
 
-#: ../src/main.c:143
+#: ../src/main.c:141
 msgid "Don't load terminal support"
 msgstr "Keng Ënnerstëtzung fir den Terminal lueden"
 
-#: ../src/main.c:144
+#: ../src/main.c:142
 msgid "Filename of libvte.so"
 msgstr "Den Numm vum Fichier libvte.so"
 
-#: ../src/main.c:147
+#: ../src/main.c:145
 msgid "Show version and exit"
 msgstr "Versioun uweisen an nees erausgoen"
 
-#: ../src/main.c:470
+#: ../src/main.c:472
 msgid "[FILES...]"
 msgstr "[FICHIEREN...]"
 
-#: ../src/main.c:487
+#: ../src/main.c:489
 #, c-format
 msgid "(built on %s with GTK %d.%d.%d, GLib %d.%d.%d)"
 msgstr "(compiléiert den %s mat GTK %d.%d.%d, GLib %d.%d.%d)"
 
-#: ../src/main.c:592
+#: ../src/main.c:586
 msgid "Move it now?"
 msgstr "Elo Beweegen?"
 
-#: ../src/main.c:594
+#: ../src/main.c:588
 msgid "Geany needs to move your old configuration directory before starting."
 msgstr "Geany muss ären aalen Configuratiounsordner virum Start beweegen."
 
-#: ../src/main.c:603
+#: ../src/main.c:597
 #, c-format
 msgid ""
 "Your configuration directory has been successfully moved from \"%s\" to \"%s"
@@ -3299,7 +3299,7 @@ msgstr "Ären Configuratiounsordner as vun \"%s\" no \"%s\" beweegt ginn."
 
 #. for translators: the third %s in brackets is the error message which
 #. * describes why moving the dir didn't work
-#: ../src/main.c:613
+#: ../src/main.c:607
 #, c-format
 msgid ""
 "Your old configuration directory \"%s\" could not be moved to \"%s\" (%s). "
@@ -3308,7 +3308,7 @@ msgstr ""
 "Ären aalen Configuratiounsordner \"%s\" konnt nët no \"%s\" beweegt ginn (%"
 "s). Beweegt den Ordner w.e.g. manuell."
 
-#: ../src/main.c:694
+#: ../src/main.c:688
 #, c-format
 msgid ""
 "Configuration directory could not be created (%s).\n"
@@ -3320,22 +3320,22 @@ msgstr ""
 "gëtt.\n"
 "Geany trotzdem starten?"
 
-#: ../src/main.c:780 ../src/socket.c:164
+#: ../src/main.c:774 ../src/socket.c:164
 #, c-format
 msgid "Could not find file '%s'."
 msgstr "Konnt den Fichier '%s' net fannen."
 
-#: ../src/main.c:990
+#: ../src/main.c:984
 #, c-format
 msgid "This is Geany %s."
 msgstr "Dëst as Geany '%s'."
 
-#: ../src/main.c:992
+#: ../src/main.c:986
 #, c-format
 msgid "Configuration directory could not be created (%s)."
 msgstr "Den Cofiguratiounsordner konnt net erstallt ginn (%s)."
 
-#: ../src/main.c:1224
+#: ../src/main.c:1218
 msgid "Configuration files reloaded."
 msgstr "Fichier mat den Configuratiounen nei gelueden."
 
@@ -3375,23 +3375,23 @@ msgstr ""
 "Beschreiwung: %s\n"
 "Auteur(en): %s"
 
-#: ../src/plugins.c:1087
+#: ../src/plugins.c:1098
 msgid "Active"
 msgstr "Aktiv"
 
-#: ../src/plugins.c:1093
+#: ../src/plugins.c:1104
 msgid "Plugin"
 msgstr "Plugin"
 
-#: ../src/plugins.c:1117
+#: ../src/plugins.c:1128
 msgid "No plugins available."
 msgstr "Keng PlugIns verfügbar"
 
-#: ../src/plugins.c:1230
+#: ../src/plugins.c:1241
 msgid "Plugins"
 msgstr "Plugins"
 
-#: ../src/plugins.c:1250
+#: ../src/plugins.c:1261
 msgid ""
 "Below is a list of available plugins. Select the plugins which should be "
 "loaded when Geany is started."
@@ -3399,7 +3399,7 @@ msgstr ""
 "Hei ass eng Lescht mat verfügbaren PlugIns. Wielt déi PlugIns eraus déi beim "
 "start vun Geany gelueden sollen ginn."
 
-#: ../src/plugins.c:1263
+#: ../src/plugins.c:1274
 msgid "<b>Plugin details:</b>"
 msgstr "<b>Detailer vum PlugIn</b>"
 
@@ -3428,29 +3428,29 @@ msgstr "Aktioun"
 msgid "Shortcut"
 msgstr "Ofkierzung"
 
-#: ../src/prefs.c:1398
+#: ../src/prefs.c:1396
 msgid "_Override"
 msgstr "I_wwerschreiwen"
 
-#: ../src/prefs.c:1399
+#: ../src/prefs.c:1397
 msgid "Override that keybinding?"
 msgstr "Den Kierzel iwwerschreiwen?"
 
-#: ../src/prefs.c:1400
+#: ../src/prefs.c:1398
 #, c-format
 msgid "The combination '%s' is already used for \"%s\"."
 msgstr "Den Kierzel '%s' gëtt schonns fir \"%s\" benotzt."
 
 #. add manually GeanyWrapLabels because they can't be added with Glade
 #. page Tools
-#: ../src/prefs.c:1514
+#: ../src/prefs.c:1515
 msgid "Enter tool paths below. Tools you do not need can be left blank."
 msgstr ""
 "Den Pad bei d'Geschir ënnen aginn. Den Pad fir Geschir dat dier net braucht "
 "kann eidel gelooss ginn."
 
 #. page Templates
-#: ../src/prefs.c:1519
+#: ../src/prefs.c:1520
 msgid ""
 "Set the information to be used in templates. See the documentation for "
 "details."
@@ -3458,7 +3458,7 @@ msgstr ""
 "D'Informatiounen astellen déi an den Virlagen soll benotzt ginn. Kuckt an "
 "d'Dokumentatioun fir méi Detailer."
 
-#: ../src/prefs.c:1523
+#: ../src/prefs.c:1524
 msgid ""
 "<i>Notice: For all changes you make here to take effect, you need to restart "
 "Geany or force the reload of the settings using Tools->Reload Configuration."
@@ -3469,7 +3469,7 @@ msgstr ""
 "opruffen</i>"
 
 #. page Keybindings
-#: ../src/prefs.c:1529
+#: ../src/prefs.c:1530
 msgid ""
 "Here you can change keyboard shortcuts for various actions. Select one and "
 "press the Change button to enter a new shortcut, or double click on an "
@@ -3480,7 +3480,7 @@ msgstr ""
 "zweemol op eng Aktioun fir den Kierzel direkt ze änneren."
 
 #. page Printing
-#: ../src/prefs.c:1534
+#: ../src/prefs.c:1535
 msgid ""
 "<i>Notice: Native GTK printing is only available if Geany was built against "
 "GTK 2.10 (or above) <b>and</b> Geany is running with GTK 2.10 (or above).</i>"
@@ -3490,7 +3490,7 @@ msgstr ""
 "heich) ausgefouert gëtt.</i>"
 
 #. page Editor->Indentation
-#: ../src/prefs.c:1540
+#: ../src/prefs.c:1541
 msgid ""
 "<i>Warning: these settings are overridden by the current project. See "
 "<b>Project->Properties</b>.</i>"
@@ -3506,45 +3506,45 @@ msgstr ""
 msgid "Text will be wrongly spaced."
 msgstr ""
 
-#: ../src/printing.c:305
+#: ../src/printing.c:306
 #, c-format
 msgid "<b>Page %d of %d</b>"
 msgstr "<b>Sait %d vun %d</b>"
 
-#: ../src/printing.c:375
+#: ../src/printing.c:376
 msgid "Document Setup"
 msgstr "Dokument ariichten"
 
-#: ../src/printing.c:410
+#: ../src/printing.c:411
 msgid "Print only the basename(without the path) of the printed file"
 msgstr "Nemmen den Basisnumm (ouni den Pad) vum gedréckten Fichier drécken"
 
-#: ../src/printing.c:526
+#: ../src/printing.c:527
 #, c-format
 msgid "Page %d of %d"
 msgstr "Säit %d vun %d"
 
-#: ../src/printing.c:776
+#: ../src/printing.c:781
 #, c-format
 msgid "Printing of file %s was cancelled."
 msgstr "Drécken vum Fichier %s gouf ofgebrach."
 
-#: ../src/printing.c:778 ../src/printing.c:897
+#: ../src/printing.c:783 ../src/printing.c:905
 #, c-format
 msgid "File %s printed."
 msgstr "Den Fichier %s gouf gedréckt"
 
-#: ../src/printing.c:827
+#: ../src/printing.c:835
 #, c-format
 msgid "Printing of %s failed (%s)."
 msgstr "Den Fichier %s konnt net gedréckt gin (%s)"
 
-#: ../src/printing.c:867
+#: ../src/printing.c:875
 msgid "Please set a print command in the preferences dialog first."
 msgstr ""
 "W.e.g. fir d'eischt eng Commande fir ze drécken an den Astellungen aginn."
 
-#: ../src/printing.c:875
+#: ../src/printing.c:883
 #, c-format
 msgid ""
 "The file \"%s\" will be printed with the following command:\n"
@@ -3555,7 +3555,7 @@ msgstr ""
 "\n"
 "%s"
 
-#: ../src/printing.c:891
+#: ../src/printing.c:899
 #, c-format
 msgid "Printing of \"%s\" failed (return code: %s)."
 msgstr "Den Fichier %s konnt net gedréckt gin (Code: %s)"
@@ -3858,7 +3858,7 @@ msgstr "E_xtra Optiounen:"
 msgid "Other options to pass to Grep"
 msgstr "Aner Optioune fir un grep weiderzeginn"
 
-#: ../src/search.c:1087 ../src/search.c:1694 ../src/search.c:1697
+#: ../src/search.c:1087 ../src/search.c:1664 ../src/search.c:1667
 #, c-format
 msgid "Found %d match for \"%s\"."
 msgid_plural "Found %d matches for \"%s\"."
@@ -3901,18 +3901,18 @@ msgstr "%s %s -- %s (am Ordner: %s)"
 msgid "Could not open directory (%s)"
 msgstr "Konnt den Ordner net opmaachen (%s)"
 
-#: ../src/search.c:1565
+#: ../src/search.c:1537
 msgid "Search failed (see Help->Debug Messages for details)."
 msgstr "Sich feelgeschloen (kuckt ënnert Hëllef->Debug Messagen fir Detailer)."
 
-#: ../src/search.c:1586
+#: ../src/search.c:1557
 #, c-format
 msgid "Search completed with %d match."
 msgid_plural "Search completed with %d matches."
 msgstr[0] "%d Iwwerteneestëmmung bei der Sich fonnt."
 msgstr[1] "%d Iwwerteneestëmmungen bei der Sich fonnt."
 
-#: ../src/search.c:1594
+#: ../src/search.c:1565
 msgid "No matches found."
 msgstr "Keng Iwwerteneestëmmungen fonnt."
 
@@ -4317,17 +4317,17 @@ msgstr ""
 msgid "--- Separator ---"
 msgstr ""
 
-#: ../src/toolbar.c:897
+#: ../src/toolbar.c:900
 msgid ""
 "Select items to be displayed on the toolbar. Items can be reordered by drag "
 "and drop."
 msgstr ""
 
-#: ../src/toolbar.c:913
+#: ../src/toolbar.c:916
 msgid "Available Items"
 msgstr ""
 
-#: ../src/toolbar.c:934
+#: ../src/toolbar.c:937
 #, fuzzy
 msgid "Displayed Items"
 msgstr "Uweisen"
@@ -4567,53 +4567,45 @@ msgstr ""
 msgid "Terminal plugin"
 msgstr "Terminal plugin"
 
-#: ../src/vte.c:729
-msgid ""
-"These settings for the virtual terminal emulator widget (VTE) only apply if "
-"the VTE library could be loaded."
-msgstr ""
-"D'Astellungen fir den virtuellen Terminal emulator (VTE) sinn nëmmen dann "
-"gülteg wann d'VTE Bibliothéik konnt gelueden ginn."
-
-#: ../src/vte.c:740
+#: ../src/vte.c:734
 msgid "Terminal font:"
 msgstr "Schrëft fir den Terminal:"
 
-#: ../src/vte.c:750
+#: ../src/vte.c:744
 msgid "Sets the font for the terminal widget"
 msgstr "D'Schrëft fir den Terminal astellen"
 
-#: ../src/vte.c:752
+#: ../src/vte.c:746
 msgid "Foreground color:"
 msgstr "Virdergrondfaarf:"
 
-#: ../src/vte.c:758
+#: ../src/vte.c:752
 msgid "Background color:"
 msgstr "Hannergrondfaarf:"
 
-#: ../src/vte.c:768
+#: ../src/vte.c:762
 msgid "Sets the foreground color of the text in the terminal widget"
 msgstr "Virdergrondfaarf vum Text am Terminal astellen"
 
-#: ../src/vte.c:775
+#: ../src/vte.c:769
 msgid "Sets the background color of the text in the terminal widget"
 msgstr "Hannergrondfaarf vum Text am Terminal astellen"
 
-#: ../src/vte.c:778
+#: ../src/vte.c:772
 msgid "Scrollback lines:"
 msgstr "Zeilen zeréckscrollen"
 
-#: ../src/vte.c:790
+#: ../src/vte.c:784
 msgid ""
 "Specifies the history in lines, which you can scroll back in the terminal "
 "widget"
 msgstr "Gëtt d'Unzuel un Zeilen un dei een am Terminal kann zeréckscrollen"
 
-#: ../src/vte.c:794
+#: ../src/vte.c:788
 msgid "Shell:"
 msgstr "Shell:"
 
-#: ../src/vte.c:802
+#: ../src/vte.c:796
 msgid ""
 "Sets the path to the shell which should be started inside the terminal "
 "emulation"
@@ -4621,45 +4613,45 @@ msgstr ""
 "Den Pad vun der Shell astellen déi innerhalb der Terminal emulatioun gestart "
 "soll ginn"
 
-#: ../src/vte.c:819
+#: ../src/vte.c:813
 msgid "Scroll on keystroke"
 msgstr "Bei Tastendrock scrollen"
 
-#: ../src/vte.c:820
+#: ../src/vte.c:814
 msgid "Whether to scroll to the bottom if a key was pressed"
 msgstr "Ob bei engem Tastendrock bis zum Schluss gescrollt soll ginn"
 
-#: ../src/vte.c:823
+#: ../src/vte.c:817
 msgid "Scroll on output"
 msgstr "Bei enger Ausgab scrollen"
 
-#: ../src/vte.c:824
+#: ../src/vte.c:818
 msgid "Whether to scroll to the bottom when output is generated"
 msgstr "Leet fest ob d'Fënster bei enger Ausgab gescrollt soll gin."
 
-#: ../src/vte.c:827
+#: ../src/vte.c:821
 msgid "Cursor blinks"
 msgstr "Curseur blénkt"
 
-#: ../src/vte.c:828
+#: ../src/vte.c:822
 msgid "Whether to blink the cursor"
 msgstr "Ob den Curseur blénken soll"
 
-#: ../src/vte.c:831
+#: ../src/vte.c:825
 msgid "Override Geany keybindings"
 msgstr "Tastenkierzel vun Geany iwwerschreiwen"
 
-#: ../src/vte.c:833
+#: ../src/vte.c:827
 msgid ""
 "Allows the VTE to receive keyboard shortcuts (apart from focus commands)"
 msgstr ""
 "Erlaabt dem VTE Tastenkierzel ze emfänken (ofgesinn vun den Fokus Commanden)"
 
-#: ../src/vte.c:836
+#: ../src/vte.c:830
 msgid "Disable menu shortcut key (F10 by default)"
 msgstr "Menüskierzel deaktivéiren (standardméisseg F10)"
 
-#: ../src/vte.c:837
+#: ../src/vte.c:831
 msgid ""
 "This option disables the keybinding to popup the menu bar (default is F10). "
 "Disabling it can be useful if you use, for example, Midnight Commander "
@@ -4669,11 +4661,11 @@ msgstr ""
 "(standardméisseg F10). Deaktivéierung kann nëtzlech sinn, wann dier z.B. den "
 "Midnight Commander an der VTE benotzt."
 
-#: ../src/vte.c:840 ../plugins/filebrowser.c:1122
+#: ../src/vte.c:834 ../plugins/filebrowser.c:1122
 msgid "Follow the path of the current file"
 msgstr "Dem Pad vum aktuellen Fichier nogoen"
 
-#: ../src/vte.c:841
+#: ../src/vte.c:835
 msgid "Whether to execute \"cd $path\" when you switch between opened files"
 msgstr ""
 "Ob \"cd $path\" soll ausgefouert soll ginn wann tëschent oppenen Fichieren "
@@ -4681,11 +4673,11 @@ msgstr ""
 
 #. create check_skip_script checkbox before the check_skip_script checkbox to be able to
 #. * use the object for the toggled handler of check_skip_script checkbox
-#: ../src/vte.c:846
+#: ../src/vte.c:840
 msgid "Don't use run script"
 msgstr "Run-Skript net benotzen"
 
-#: ../src/vte.c:847
+#: ../src/vte.c:841
 msgid ""
 "Don't use the simple run script which is usually used to display the exit "
 "status of the executed program"
@@ -4693,11 +4685,11 @@ msgstr ""
 "Den Run-Skript, den normalerweis benotzt gëtt fir den Status vun "
 "ausgefouerten Programmer zeréckzeginn, net benotzen"
 
-#: ../src/vte.c:850
+#: ../src/vte.c:844
 msgid "Execute programs in VTE"
 msgstr "Programmer am VTE ausféieren"
 
-#: ../src/vte.c:851
+#: ../src/vte.c:845
 msgid ""
 "Run programs in VTE instead of opening a terminal emulation window. Please "
 "note, programs executed in VTE cannot be stopped"
@@ -5159,38 +5151,45 @@ msgstr "Fënster opdeelen"
 msgid "Splits the editor view into two windows."
 msgstr "Spléckt d'Editorsfënster an zwou Fënsteren op."
 
-#: ../plugins/splitwindow.c:277
+#: ../plugins/splitwindow.c:278
 #, fuzzy
 msgid "Show the current document"
 msgstr "All d'Iwwerteneestëmmungen am aktuellen Dokument markéieren"
 
-#: ../plugins/splitwindow.c:290 ../plugins/splitwindow.c:417
+#: ../plugins/splitwindow.c:291 ../plugins/splitwindow.c:418
 msgid "_Unsplit"
 msgstr "Opspléck_ung réckgängeg maachen"
 
-#: ../plugins/splitwindow.c:399
+#: ../plugins/splitwindow.c:400
 msgid "_Split Window"
 msgstr "Fën_ster opdeelen"
 
-#: ../plugins/splitwindow.c:407
+#: ../plugins/splitwindow.c:408
 msgid "_Horizontally"
 msgstr "_Horizontal"
 
-#: ../plugins/splitwindow.c:412
+#: ../plugins/splitwindow.c:413
 msgid "_Vertically"
 msgstr "_Vertikal"
 
-#: ../plugins/splitwindow.c:427
+#: ../plugins/splitwindow.c:428
 msgid "Split Horizontally"
 msgstr "Horizontal opdeelen"
 
-#: ../plugins/splitwindow.c:429
+#: ../plugins/splitwindow.c:430
 msgid "Split Vertically"
 msgstr "Vertikal opdeelen"
 
-#: ../plugins/splitwindow.c:431
+#: ../plugins/splitwindow.c:432
 msgid "Unsplit"
 msgstr "Opspléckung réckgängeg maachen"
+
+#~ msgid ""
+#~ "These settings for the virtual terminal emulator widget (VTE) only apply "
+#~ "if the VTE library could be loaded."
+#~ msgstr ""
+#~ "D'Astellungen fir den virtuellen Terminal emulator (VTE) sinn nëmmen dann "
+#~ "gülteg wann d'VTE Bibliothéik konnt gelueden ginn."
 
 #~ msgid "Diff file"
 #~ msgstr "Diff Fichier"
