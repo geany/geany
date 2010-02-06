@@ -3,6 +3,9 @@
  * src/document.c:
    Allow saving remote files using g_file_set_contents() as well
    (patch by Алексей Антипов, thanks).
+ * data/filetypes.python:
+   Adjust style for secondary keywords to be less aggressive.
+   Add Python 2.5 builtins keywords.
 
 
 2010-02-01  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
