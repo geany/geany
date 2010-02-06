@@ -1624,6 +1624,7 @@ GeanyFiletype *filetypes_index(gint idx)
 void filetypes_reload(void)
 {
 	guint i;
+	GeanyDocument *current_doc;
 
 	/* save possibly changed commands before re-reading them */
 	filetypes_save_commands();
@@ -1635,8 +1636,14 @@ void filetypes_reload(void)
 		filetypes_load_config(i, TRUE);
 	}
 	/* update document styling */
+	current_doc = document_get_current();
 	foreach_document(i)
-		document_reload_config(documents[i]);
+	{
+		if (current_doc != documents[i])
+			document_reload_config(documents[i]);
+	}
+	/* process the current document at last */
+	document_reload_config(current_doc);
 }
 
 
