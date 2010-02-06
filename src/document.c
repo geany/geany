@@ -1691,10 +1691,7 @@ static gchar *write_data_to_disk(GeanyDocument *doc, const gchar *locale_filenam
 	g_return_val_if_fail(doc != NULL, g_strdup(g_strerror(EINVAL)));
 	g_return_val_if_fail(data != NULL, g_strdup(g_strerror(EINVAL)));
 
-	/* we never use g_file_set_contents() for remote files as Geany only writes such files
-	 * 'into' the Fuse mountpoint, the file itself is then written by GVfs on the target
-	 * remote filesystem. */
-	if (! file_prefs.use_safe_file_saving || doc->priv->is_remote)
+	if (! file_prefs.use_safe_file_saving)
 	{
 		fp = g_fopen(locale_filename, "wb");
 		if (G_UNLIKELY(fp == NULL))

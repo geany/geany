@@ -1,3 +1,10 @@
+2010-02-06  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/document.c:
+   Allow saving remote files using g_file_set_contents() as well
+   (patch by Алексей Антипов, thanks).
+
+
 2010-02-01  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/symbols.c:
