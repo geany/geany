@@ -6,6 +6,9 @@
  * data/filetypes.python:
    Adjust style for secondary keywords to be less aggressive.
    Add Python 2.5 builtins keywords.
+ * src/geanymenubuttonaction.c, src/templates.c:
+   Unref the new files toolbar menu when setting a new menu to fix
+   possible crashes when reloading configuration.
 
 
 2010-02-01  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

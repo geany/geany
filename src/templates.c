@@ -668,8 +668,8 @@ void templates_free_templates(void)
 	}
 	g_list_free(children);
 
-	/* Shouldn't unrefing destroy children anyway? */
-	g_object_unref(new_with_template_menu);
+	geany_menu_button_action_set_menu(
+		GEANY_MENU_BUTTON_ACTION(toolbar_get_action_by_name("New")), NULL);
 	new_with_template_menu = NULL;
 }
 
