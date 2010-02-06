@@ -1188,6 +1188,7 @@ void *rpl_malloc(size_t n)
 void main_reload_configuration(void)
 {
 	guint i;
+	GeanyDocument *current_doc;
 
 	/* reload templates */
 	templates_free_templates();
@@ -1209,8 +1210,15 @@ void main_reload_configuration(void)
 		/* filetypes_load_config() will skip not loaded filetypes */
 		filetypes_load_config(i, TRUE);
 	}
+	/* update document styling */
+	current_doc = document_get_current();
 	documents_foreach(i)
-		document_reload_config(documents[i]);
+	{
+		if (current_doc != documents[i])
+			document_reload_config(documents[i]);
+	}
+	/* process the current document at last */
+	document_reload_config(current_doc);
 
 	/* C tag names to ignore */
 	symbols_reload_config_files();

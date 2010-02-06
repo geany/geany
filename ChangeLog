@@ -3,6 +3,9 @@
  * src/geanymenubuttonaction.c, src/templates.c:
    Unref the new files toolbar menu when setting a new menu to fix
    possible crashes when reloading configuration.
+ * src/main.c:
+   When reloading configuration, process the current document at last
+   so the symbol list will be updated correctly.
 
 
 2010-02-01  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
