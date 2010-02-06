@@ -1,3 +1,10 @@
+2010-02-06  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/geanymenubuttonaction.c, src/templates.c:
+   Unref the new files toolbar menu when setting a new menu to fix
+   possible crashes when reloading configuration.
+
+
 2010-02-01  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/plugins.c:

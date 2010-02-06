@@ -165,8 +165,11 @@ void geany_menu_button_action_set_menu(GeanyMenubuttonAction *action, GtkWidget 
 
 	priv = GEANY_MENU_BUTTON_ACTION_GET_PRIVATE(action);
 
-	if (priv->menu != NULL)
+	if (priv->menu != NULL && GTK_IS_WIDGET(priv->menu))
+	{
 		g_signal_handlers_disconnect_by_func(priv->menu, menu_items_changed_cb, action);
+		g_object_unref(priv->menu);
+	}
 	if (menu != NULL)
 	{
 		g_signal_connect(menu, "add", G_CALLBACK(menu_items_changed_cb), action);
