@@ -797,10 +797,6 @@ void templates_free_templates(void)
 	{
 		gtk_widget_destroy(GTK_WIDGET(item->data));
 	}
-
-	geany_menu_button_action_set_menu(
-		GEANY_MENU_BUTTON_ACTION(toolbar_get_action_by_name("New")), NULL);
-	new_with_template_menu = NULL;
 }
 
 
