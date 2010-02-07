@@ -5,6 +5,9 @@
    Unref the new files toolbar menu when freeing templates as it
    was done before but unref it *after* the menu has been removed
    from the GeanyMenuButtonAction.
+ * src/encodings.c:
+   Fix possible endless loop when trying to detect the encoding of
+   non-text files (patch by Alexey Antipov, thanks).
 
 
 2010-02-06  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

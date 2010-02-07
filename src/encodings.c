@@ -550,13 +550,17 @@ gchar *encodings_convert_to_utf8(const gchar *buffer, gsize size, gchar **used_e
 	/* First check for preferred charset, if specified */
 	preferred_charset = file_prefs.default_open_encoding;
 
-	if (preferred_charset == encodings[GEANY_ENCODING_NONE].idx || preferred_charset < 0 || preferred_charset >= GEANY_ENCODINGS_MAX)
+	if (preferred_charset == encodings[GEANY_ENCODING_NONE].idx ||
+		preferred_charset < 0 ||
+		preferred_charset >= GEANY_ENCODINGS_MAX)
+	{
 		preferred_charset = -1;
+	}
 
 	/* -1 means "Preferred charset" */
 	for (i = -1; i < GEANY_ENCODINGS_MAX; i++)
 	{
-		if (G_UNLIKELY(i == encodings[GEANY_ENCODING_NONE].idx) || G_UNLIKELY(i == -2))
+		if (G_UNLIKELY(i == encodings[GEANY_ENCODING_NONE].idx))
 			continue;
 
 		if (i == -1)
@@ -565,7 +569,6 @@ gchar *encodings_convert_to_utf8(const gchar *buffer, gsize size, gchar **used_e
 			{
 				charset = encodings[preferred_charset].charset;
 				geany_debug("Preferred charset: %s", charset);
-				i = -2;
 			}
 			else
 				continue;
@@ -574,13 +577,11 @@ gchar *encodings_convert_to_utf8(const gchar *buffer, gsize size, gchar **used_e
 		{
 			check_regex = FALSE;
 			charset = regex_charset;
-			i = -2;
 		}
 		else if (check_locale)
 		{
 			check_locale = FALSE;
 			charset = locale_charset;
-			i = -2;
 		}
 		else
 			charset = encodings[i].charset;
