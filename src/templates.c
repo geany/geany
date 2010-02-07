@@ -670,6 +670,7 @@ void templates_free_templates(void)
 
 	geany_menu_button_action_set_menu(
 		GEANY_MENU_BUTTON_ACTION(toolbar_get_action_by_name("New")), NULL);
+	g_object_unref(new_with_template_menu);
 	new_with_template_menu = NULL;
 }
 
