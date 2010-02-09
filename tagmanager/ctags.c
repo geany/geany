@@ -1395,7 +1395,11 @@ extern int ctags_main (int __unused__ argc, char **argv)
 /* wrap g_warning so we don't include glib.h for all parsers, to keep compat with CTags */
 void utils_warn(const char *msg)
 {
+#ifdef GEANY_DEBUG
+	/* There are still some asserts firing e.g. for vhdl, pascal
+	 * so for now warning is disabled by default */
     g_warning("%s", msg);
+#endif
 }
 
 /* vi:set tabstop=8 shiftwidth=4: */
