@@ -26,17 +26,24 @@ Geany 0.18.1 (TBA)
     * Speed up sorting in utils_get_file_list(). This reduces the file
       browser delay on displaying a big directory, e.g. /usr/bin.
     * Fix a bug with not w3c compatible HTML code on export plugin
+    * Fix non-working Home and End keys on numpads.
+    * Fix loading of files on network resources on Windows.
+    * Fix wrong alignment of printed pages when page headers are disabled
+      (closes #2856822).
 
     Improvements:
     * Extend auto_latex() function to check whether an environment has
       been closed within the next lines to avoid auto adding double
       \end{}.
+    * Replace some icons which could cause licensing problems by icons
+      from the Rodent icon theme.
 
     Filetype fixes:
     * Parse contents of D extern{} and version{} blocks.
     * Fix creating D interface tags properly.
     * Parse D functions with contracts (fixes #1885480).
     * Parse D alias statement like typedef.
+    * Improve parsing of LaTeX, PHP and Python files.
 
     Documentation:
     * Add 'Scope autocompletion' section.
