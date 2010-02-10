@@ -1,11 +1,11 @@
 Geany 0.18.1 (TBA)
-    
+
     Build fixes:
     * Define G_GNUC_WARN_UNUSED_RESULT to fix build on GLib 2.8.
     * Use AC_PATH_PROG instead of 'which' for portability (patch by Erik
       Southworth, thanks).
-      
-    Incompatibilities:  
+
+    Incompatibilities:
     * Remove filetypes.common invert_all option - use 'Invert syntax
       highlighting colors' pref instead (fixes #2854525).
 
@@ -25,6 +25,12 @@ Geany 0.18.1 (TBA)
       debug window so that invalid regex messages can be seen easily.
     * Speed up sorting in utils_get_file_list(). This reduces the file
       browser delay on displaying a big directory, e.g. /usr/bin.
+    * Fix a bug with not w3c compatible HTML code on export plugin
+
+    Improvements:
+    * Extend auto_latex() function to check whether an environment has
+      been closed within the next lines to avoid auto adding double
+      \end{}.
 
     Filetype fixes:
     * Parse contents of D extern{} and version{} blocks.
@@ -47,6 +53,9 @@ Geany 0.18.1 (TBA)
     * Update Style section to be clearer about code alignment and show
       some example code.
     * Add 'Doc-comments' plugin API subsection.
+
+    Internationalisation:
+    * Added translations: gl
 
 
 Geany 0.18 (August 16, 2009)
