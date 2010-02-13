@@ -2274,6 +2274,13 @@ static void split_lines(GeanyEditor *editor, gint column)
 	/* Fix indentation. */
 	for (i = start; i <= start + linescount; i++)
 		sci_set_line_indentation(editor->sci, i, indent);
+
+	/* Remove trailing spaces. */
+	if (editor_prefs.newline_strip || file_prefs.strip_trailing_spaces)
+	{
+		for (i = start; i <= start + linescount; i++)
+			editor_strip_line_trailing_spaces(editor, i);
+	}
 }
 
 

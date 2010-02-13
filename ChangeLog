@@ -3,6 +3,8 @@
  * src/keybindings.c:
    Add special cases for handling the Select All keybinding (Ctrl-A) in
    the toolbar search and goto line text entries (closes #2948040).
+   Strip trailing spaces after reflowing a paragraph, patch by
+   Dominik Wagenfuehr, thanks (closes #2945497).
 
 
 2010-02-07  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
