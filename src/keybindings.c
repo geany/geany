@@ -2404,11 +2404,24 @@ static gboolean cb_func_select_action(guint key_id)
 	GeanyDocument *doc;
 	ScintillaObject *sci;
 	GtkWidget *focusw = gtk_window_get_focus(GTK_WINDOW(main_widgets.window));
+	GtkWidget *toolbar_search_entry = toolbar_get_widget_child_by_name("SearchEntry");
+	GtkWidget *toolbar_goto_entry = toolbar_get_widget_child_by_name("GotoEntry");
 
 	/* special case for Select All in the scribble widget */
 	if (key_id == GEANY_KEYS_SELECT_ALL && focusw == msgwindow.scribble)
 	{
 		g_signal_emit_by_name(msgwindow.scribble, "select-all", TRUE);
+		return TRUE;
+	}
+	/* special case for Select All in the toolbar search widget */
+	else if (key_id == GEANY_KEYS_SELECT_ALL && focusw == toolbar_search_entry)
+	{
+		gtk_editable_select_region(GTK_EDITABLE(toolbar_search_entry), 0, -1);
+		return TRUE;
+	}
+	else if (key_id == GEANY_KEYS_SELECT_ALL && focusw == toolbar_goto_entry)
+	{
+		gtk_editable_select_region(GTK_EDITABLE(toolbar_goto_entry), 0, -1);
 		return TRUE;
 	}
 
