@@ -1,7 +1,14 @@
+2010-02-13  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/keybindings.c:
+   Add special cases for handling the Select All keybinding (Ctrl-A) in
+   the toolbar search and goto line text entries (closes #2948040).
+
+
 2010-02-09  Nick Treleaven  <nmt@localhost.localdomain>
 
  * tagmanager/ctags.c:
-   Disable Assert warning for now as some (unnecessary?) asserts are 
+   Disable Assert warning for now as some (unnecessary?) asserts are
    still firing e.g. for VHDL, Pascal.
 
 

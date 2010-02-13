@@ -2168,6 +2168,8 @@ static void cb_func_select_action(guint key_id)
 	GeanyDocument *doc;
 	GtkWidget *focusw = gtk_window_get_focus(GTK_WINDOW(main_widgets.window));
 	static GtkWidget *scribble_widget = NULL;
+	GtkWidget *toolbar_search_entry = toolbar_get_widget_child_by_name("SearchEntry");
+	GtkWidget *toolbar_goto_entry = toolbar_get_widget_child_by_name("GotoEntry");
 
 	/* special case for Select All in the scribble widget */
 	if (scribble_widget == NULL) /* lookup the scribble widget only once */
@@ -2175,6 +2177,17 @@ static void cb_func_select_action(guint key_id)
 	if (key_id == GEANY_KEYS_SELECT_ALL && focusw == scribble_widget)
 	{
 		g_signal_emit_by_name(scribble_widget, "select-all", TRUE);
+		return;
+	}
+	/* special case for Select All in the toolbar search widget */
+	else if (key_id == GEANY_KEYS_SELECT_ALL && focusw == toolbar_search_entry)
+	{
+		gtk_editable_select_region(GTK_EDITABLE(toolbar_search_entry), 0, -1);
+		return;
+	}
+	else if (key_id == GEANY_KEYS_SELECT_ALL && focusw == toolbar_goto_entry)
+	{
+		gtk_editable_select_region(GTK_EDITABLE(toolbar_goto_entry), 0, -1);
 		return;
 	}
 
