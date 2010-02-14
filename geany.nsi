@@ -33,8 +33,8 @@ RequestExecutionLevel user ; set execution level for Windows Vista
 ; helper defines  ;
 ;;;;;;;;;;;;;;;;;;;
 !define PRODUCT_NAME "Geany"
-!define PRODUCT_VERSION "0.18"
-!define PRODUCT_VERSION_ID "0.18.0.0"
+!define PRODUCT_VERSION "0.18.1"
+!define PRODUCT_VERSION_ID "0.18.1.0"
 !define PRODUCT_PUBLISHER "The Geany developer team"
 !define PRODUCT_WEB_SITE "http://www.geany.org/"
 !define PRODUCT_DIR_REGKEY "Software\Geany"
@@ -54,7 +54,7 @@ VIAddVersionKey "ProductVersion" "${PRODUCT_VERSION}"
 VIAddVersionKey "LegalCopyright" "Copyright 2005-2010 by the Geany developer team"
 VIAddVersionKey "FileDescription" "${PRODUCT_NAME} Installer"
 
-BrandingText "$(^NAME) installer (NSIS 2.45)"
+BrandingText "$(^NAME) installer (NSIS 2.46)"
 InstallDir "$PROGRAMFILES\Geany"
 Name "${PRODUCT_NAME} ${PRODUCT_VERSION}"
 SetCompressor /SOLID lzma

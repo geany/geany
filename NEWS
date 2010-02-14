@@ -1,4 +1,4 @@
-Geany 0.18.1 (TBA)
+Geany 0.18.1 (February 14, 2010)
 
     Build fixes:
     * Define G_GNUC_WARN_UNUSED_RESULT to fix build on GLib 2.8.

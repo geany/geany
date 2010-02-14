@@ -35,7 +35,7 @@ Missing features: --enable-binreloc, make targets: dist, pdf (in doc/)
 Known issues: Dependency handling is buggy, e.g. if src/document.h is
 			  changed, depending source files are not rebuilt (maybe Waf bug).
 
-The code of this file itself loosely follows PEP 8 with some exceptions 
+The code of this file itself loosely follows PEP 8 with some exceptions
 (line width 100 characters and some other minor things).
 
 Requires WAF 1.5.7 and Python 2.4 (or later).
@@ -54,7 +54,7 @@ from distutils import version
 
 
 APPNAME = 'geany'
-VERSION = '0.18'
+VERSION = '0.18.1'
 
 srcdir = '.'
 blddir = '_build_'
@@ -273,7 +273,7 @@ def configure(conf):
 
 	conf.env.append_value('CCFLAGS', '-DHAVE_CONFIG_H')
 	# Scintilla flags
-	conf.env.append_value('CXXFLAGS', 
+	conf.env.append_value('CXXFLAGS',
 		'-DNDEBUG -DGTK -DGTK2 -DSCI_LEXER -DG_THREADS_IMPL_NONE'.split())
 
 
@@ -287,10 +287,10 @@ def set_options(opt):
 		opt.add_option('--disable-plugins', action='store_true', default=False,
 			help='compile without plugin support [default: No]', dest='no_plugins')
 		opt.add_option('--disable-socket', action='store_true', default=False,
-			help='compile without support to detect a running instance [[default: No]', 
+			help='compile without support to detect a running instance [[default: No]',
 			dest='no_socket')
 		opt.add_option('--disable-vte', action='store_true', default=target_is_win32(os.environ),
-			help='compile without support for an embedded virtual terminal [[default: No]', 
+			help='compile without support for an embedded virtual terminal [[default: No]',
 			dest='no_vte')
 		opt.add_option('--enable-gnu-regex', action='store_true', default=False,
 			help='compile with included GNU regex library [default: No]', dest='gnu_regex')
