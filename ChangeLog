@@ -3,6 +3,7 @@
  * NEWS, configure.in, doc/geany.1.in, doc/geany.html, doc/geany.txt,
    geany.nsi, geany_private.rc, win32-config.h, wscript:
    Version bump.
+ * New release: Geany 0.18.1 "Balfour".
 
 
 2010-02-13  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
