@@ -1068,10 +1068,10 @@ the code point for the character you want, then let go of Ctrl-Shift and
 hit Enter or Return.
 
 For this to work in Geany, you'll need to first unbind Ctrl-Shift-u
-in the `keybinding preferences`_, then restart Geany.
-Note that it works slightly differently from other GTK applications,
-in that you'll need to continue to hold down the Ctrl and Shift keys
-while typing the code point hex digits.
+in the `keybinding preferences`_, then select *Tools->Reload Configuration* 
+or restart Geany. Note that it works slightly differently from other GTK 
+applications, in that you'll need to continue to hold down the Ctrl and Shift
+keys while typing the code point hex digits.
 
 For GTK < 2.10, it is also possible, but typing the first Ctrl-Shift-u
 is not necessary. One problem is that you may find the alphabetic
@@ -2137,7 +2137,9 @@ This data is used as meta data for various template text to insert into
 a document, such as the file header. You only need to set fields that
 you want to use in your template files.
 
-.. note:: For changes made here to take effect a restart of geany is required.
+.. note:: 
+    For changes made here to take effect, either selecting
+    *Tools->Reload Configuration* or restarting Geany is required.
 
 .. image:: ./images/pref_dialog_templ.png
 
@@ -3321,17 +3323,20 @@ Clicking on one opens it in the editor for you to update. Geany will
 reload the file after you have saved it.
 
 .. note::
-    Other configuration files are not shown here and you will need to open
-    them manually and usually restart Geany to see any changes.
+    Other configuration files not shown here will need to be opened
+    manually, and will not be automatically reloaded when saved.
+    (see *Reload Configuration* below).
 
 There's also a *Reload Configuration* item which can be used if you
-updated a configuration file outside of the current instance. This
-item is also necessary to update syntax highlighting colors.
+updated one of the other configuration files, or modified or added 
+template files.
+
+*Reload Configuration* is also necessary to update syntax highlighting colors.
 
 .. note::
-    Syntax highlighting colors aren't updated after saving
-    filetypes.common as this can take a short while depending on which
-    documents are open.
+    Syntax highlighting colors aren't updated in open documents after 
+    saving filetypes.common as this can possibly take a significant 
+    amount of time.
 
 
 Global configuration file
@@ -3914,7 +3919,8 @@ Hidden preferences
 
 There are some rarely used preferences that are not shown in the Preferences
 dialog. These can be set by editing the preferences file, then
-restarting Geany. Search for the key name, then edit the value. Example:
+selecting *Tools->Reload Configuration* or restarting Geany. Search for the 
+key name, then edit the value. Example:
 
     ``brace_match_ltgt=true``
 
@@ -4084,10 +4090,9 @@ Meta data can be used with all templates, but by default user set
 meta data is only used for the ChangeLog and File header templates.
 
 In the configuration dialog you can find a tab "Templates" (see
-`Template preferences`_). You can define the
-default values which will be inserted in the templates. You should
-restart Geany after making changes, because they are only read
-at startup.
+`Template preferences`_). You can define the default values 
+which will be inserted in the templates. You should select 
+*Tools->Reload Configuration* or restart Geany after making changes.
 
 
 File templates
@@ -4099,7 +4104,8 @@ menu.
 
 By default, file templates are installed for some filetypes. Custom
 file templates can be added by creating the appropriate template file
-and restarting Geany. You can also edit the default file templates.
+and then selecting *Tools->Reload Configuration* or restarting Geany. You can 
+also edit the default file templates.
 
 The file's contents are just the text to place in the document, with
 optional template wildcards like ``{fileheader}``. The fileheader
@@ -4120,8 +4126,8 @@ any. For example, creating a file ``module.c`` would add a menu item
 which created a new document with the filetype set to 'C'.
 
 The template file is read from disk when the corresponding menu item is
-clicked, so you don't need to restart Geany after editing a custom file
-template, only after adding a new one.
+clicked, so you don't need to select *Tools->Reload Configuration* or restart 
+Geany after editing a custom file template.
 
 Filetype templates
 ``````````````````
