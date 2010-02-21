@@ -5,10 +5,13 @@
 
 
 2010-02-20 Dominic Hopf <dmaphy(at)googlemail(dot)com>
+
  * doc/geany.txt:
-   add more detailed hints about reloading configuration (thanks to Tony Rick)
+   add more detailed hints about reloading configuration
+   (thanks to Tony Rick).
  * data/filetypes.javascript:
-   correct the keyword list for JavaScript (thanks to Jonas)
+   correct the keyword list for JavaScript (thanks to Jonas).
+
 
 2010-02-14  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
