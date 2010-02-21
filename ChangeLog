@@ -15,6 +15,9 @@
    Add keybindings to switch to the sidebar's Document and Symbol list
    as well as to the Message Window's current tab
    (patch by Eugene Arshinov, thanks).
+ * data/filetypes.r:
+   Update primary keywords for the R language
+   (patch by Jon Senior, thanks).
 
 
 2010-02-20 Dominic Hopf <dmaphy(at)googlemail(dot)com>
