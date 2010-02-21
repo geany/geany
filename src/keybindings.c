@@ -481,6 +481,12 @@ static void init_default_kb(void)
 		0, 0, "switch_compiler", _("Switch to Compiler"), NULL);
 	keybindings_set_item(group, GEANY_KEYS_FOCUS_MESSAGES, NULL,
 		0, 0, "switch_messages", _("Switch to Messages"), NULL);
+	keybindings_set_item(group, GEANY_KEYS_FOCUS_MESSAGE_WINDOW, NULL,
+		0, 0, "switch_message_window", _("Switch to Message Window"), NULL);
+	keybindings_set_item(group, GEANY_KEYS_FOCUS_SIDEBAR_DOCUMENT_LIST, NULL,
+		0, 0, "switch_sidebar_doc_list", _("Switch to Sidebar Document List"), NULL);
+	keybindings_set_item(group, GEANY_KEYS_FOCUS_SIDEBAR_SYMBOL_LIST, NULL,
+		0, 0, "switch_sidebar_symbol_list", _("Switch to Sidebar Symbol List"), NULL);
 
 	group = ADD_KB_GROUP(NOTEBOOK, _("Notebook tab"), NULL);
 
@@ -1611,6 +1617,18 @@ static void focus_sidebar(void)
 }
 
 
+static void focus_msgwindow(void)
+{
+	if (ui_prefs.msgwindow_visible)
+	{
+		gint page_num = gtk_notebook_get_current_page(GTK_NOTEBOOK(msgwindow.notebook));
+		GtkWidget *page = gtk_notebook_get_nth_page(GTK_NOTEBOOK(msgwindow.notebook), page_num);
+
+		gtk_widget_grab_focus(gtk_bin_get_child(GTK_BIN(page)));
+	}
+}
+
+
 static gboolean cb_func_switch_action(guint key_id)
 {
 	switch (key_id)
@@ -1644,6 +1662,15 @@ static gboolean cb_func_switch_action(guint key_id)
 			break;
 		case GEANY_KEYS_FOCUS_MESSAGES:
 			msgwin_switch_tab(MSG_MESSAGE, TRUE);
+			break;
+		case GEANY_KEYS_FOCUS_MESSAGE_WINDOW:
+			focus_msgwindow();
+			break;
+		case GEANY_KEYS_FOCUS_SIDEBAR_DOCUMENT_LIST:
+			sidebar_focus_openfiles_tab();
+			break;
+		case GEANY_KEYS_FOCUS_SIDEBAR_SYMBOL_LIST:
+			sidebar_focus_symbols_tab();
 			break;
 	}
 	return TRUE;

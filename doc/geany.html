@@ -6,7 +6,7 @@
 <meta name="generator" content="Docutils 0.6: http://docutils.sourceforge.net/" />
 <title>Geany</title>
 <meta name="authors" content="Enrico Tröger  Nick Treleaven  Frank Lanitz" />
-<meta name="date" content="2010-01-24" />
+<meta name="date" content="2010-02-20" />
 <style type="text/css">
 
 /*
@@ -139,7 +139,7 @@ Stylesheet for Geany's documentation based on a version of John Gabriele.
 <br />Nick Treleaven
 <br />Frank Lanitz</td></tr>
 <tr><th class="docinfo-name">Date:</th>
-<td>2010-01-24</td></tr>
+<td>2010-02-20</td></tr>
 <tr><th class="docinfo-name">Version:</th>
 <td>0.19</td></tr>
 </tbody>
@@ -1458,10 +1458,10 @@ Ctrl-Shift-u, then still holding Ctrl-Shift, type some hex digits representing
 the code point for the character you want, then let go of Ctrl-Shift and
 hit Enter or Return.</p>
 <p>For this to work in Geany, you'll need to first unbind Ctrl-Shift-u
-in the <a class="reference internal" href="#keybinding-preferences">keybinding preferences</a>, then restart Geany.
-Note that it works slightly differently from other GTK applications,
-in that you'll need to continue to hold down the Ctrl and Shift keys
-while typing the code point hex digits.</p>
+in the <a class="reference internal" href="#keybinding-preferences">keybinding preferences</a>, then select <em>Tools-&gt;Reload Configuration</em>
+or restart Geany. Note that it works slightly differently from other GTK
+applications, in that you'll need to continue to hold down the Ctrl and Shift
+keys while typing the code point hex digits.</p>
 <p>For GTK &lt; 2.10, it is also possible, but typing the first Ctrl-Shift-u
 is not necessary. One problem is that you may find the alphabetic
 keys conflict with other Geany keybindings.</p>
@@ -2426,7 +2426,8 @@ a document, such as the file header. You only need to set fields that
 you want to use in your template files.</p>
 <div class="note">
 <p class="first admonition-title">Note</p>
-<p class="last">For changes made here to take effect a restart of geany is required.</p>
+<p class="last">For changes made here to take effect, either selecting
+<em>Tools-&gt;Reload Configuration</em> or restarting Geany is required.</p>
 </div>
 <img alt="./images/pref_dialog_templ.png" src="./images/pref_dialog_templ.png" />
 <div class="section" id="template-data">
@@ -3724,8 +3725,8 @@ and the statusbar.</td>
 <h4><a class="toc-backref" href="#id164">Focus keybindings</a></h4>
 <table border="1" class="docutils">
 <colgroup>
-<col width="29%" />
-<col width="24%" />
+<col width="30%" />
+<col width="23%" />
 <col width="47%" />
 </colgroup>
 <thead valign="bottom">
@@ -3763,6 +3764,20 @@ visible).</td>
 <tr><td>Switch to Messages</td>
 <td>&nbsp;</td>
 <td>Focus the Messages message window tab.</td>
+</tr>
+<tr><td>Switch to Message Window</td>
+<td>&nbsp;</td>
+<td>Focus the Message Window's current tab.</td>
+</tr>
+<tr><td>Switch to Sidebar Document List</td>
+<td>&nbsp;</td>
+<td>Focus the Document list tab in the Sidebar
+(if visible)</td>
+</tr>
+<tr><td>Switch to Sidebar Symbol List</td>
+<td>&nbsp;</td>
+<td>Focus the Symbol list tab in the Sidebar
+(if visible)</td>
 </tr>
 </tbody>
 </table>
@@ -3991,17 +4006,19 @@ Clicking on one opens it in the editor for you to update. Geany will
 reload the file after you have saved it.</p>
 <div class="note">
 <p class="first admonition-title">Note</p>
-<p class="last">Other configuration files are not shown here and you will need to open
-them manually and usually restart Geany to see any changes.</p>
+<p class="last">Other configuration files not shown here will need to be opened
+manually, and will not be automatically reloaded when saved.
+(see <em>Reload Configuration</em> below).</p>
 </div>
 <p>There's also a <em>Reload Configuration</em> item which can be used if you
-updated a configuration file outside of the current instance. This
-item is also necessary to update syntax highlighting colors.</p>
+updated one of the other configuration files, or modified or added
+template files.</p>
+<p><em>Reload Configuration</em> is also necessary to update syntax highlighting colors.</p>
 <div class="note">
 <p class="first admonition-title">Note</p>
-<p class="last">Syntax highlighting colors aren't updated after saving
-filetypes.common as this can take a short while depending on which
-documents are open.</p>
+<p class="last">Syntax highlighting colors aren't updated in open documents after
+saving filetypes.common as this can possibly take a significant
+amount of time.</p>
 </div>
 </div>
 <div class="section" id="global-configuration-file">
@@ -4517,7 +4534,8 @@ as they are overwritten by Geany.</p>
 <h3><a class="toc-backref" href="#id190">Hidden preferences</a></h3>
 <p>There are some rarely used preferences that are not shown in the Preferences
 dialog. These can be set by editing the preferences file, then
-restarting Geany. Search for the key name, then edit the value. Example:</p>
+selecting <em>Tools-&gt;Reload Configuration</em> or restarting Geany. Search for the
+key name, then edit the value. Example:</p>
 <blockquote>
 <tt class="docutils literal">brace_match_ltgt=true</tt></blockquote>
 <p>The table below show the key names of hidden preferences in the
@@ -4732,10 +4750,9 @@ instead.</p>
 <p>Meta data can be used with all templates, but by default user set
 meta data is only used for the ChangeLog and File header templates.</p>
 <p>In the configuration dialog you can find a tab &quot;Templates&quot; (see
-<a class="reference internal" href="#template-preferences">Template preferences</a>). You can define the
-default values which will be inserted in the templates. You should
-restart Geany after making changes, because they are only read
-at startup.</p>
+<a class="reference internal" href="#template-preferences">Template preferences</a>). You can define the default values
+which will be inserted in the templates. You should select
+<em>Tools-&gt;Reload Configuration</em> or restart Geany after making changes.</p>
 </div>
 <div class="section" id="file-templates">
 <h3><a class="toc-backref" href="#id196">File templates</a></h3>
@@ -4744,7 +4761,8 @@ use them, choose the <em>New (with Template)</em> menu item from the <em>File</e
 menu.</p>
 <p>By default, file templates are installed for some filetypes. Custom
 file templates can be added by creating the appropriate template file
-and restarting Geany. You can also edit the default file templates.</p>
+and then selecting <em>Tools-&gt;Reload Configuration</em> or restarting Geany. You can
+also edit the default file templates.</p>
 <p>The file's contents are just the text to place in the document, with
 optional template wildcards like <tt class="docutils literal">{fileheader}</tt>. The fileheader
 wildcard can be placed anywhere, but it's usually put on the first
@@ -4761,8 +4779,8 @@ Geany is started).</li>
 any. For example, creating a file <tt class="docutils literal">module.c</tt> would add a menu item
 which created a new document with the filetype set to 'C'.</p>
 <p>The template file is read from disk when the corresponding menu item is
-clicked, so you don't need to restart Geany after editing a custom file
-template, only after adding a new one.</p>
+clicked, so you don't need to select <em>Tools-&gt;Reload Configuration</em> or restart
+Geany after editing a custom file template.</p>
 </div>
 <div class="section" id="filetype-templates">
 <h4><a class="toc-backref" href="#id198">Filetype templates</a></h4>
@@ -5902,7 +5920,7 @@ USE OR PERFORMANCE OF THIS SOFTWARE.</p>
 <div class="footer">
 <hr class="footer" />
 <a class="reference external" href="geany.txt">View document source</a>.
-Generated on: 2010-01-24 16:15 UTC.
+Generated on: 2010-02-21 18:00 UTC.
 Generated by <a class="reference external" href="http://docutils.sourceforge.net/">Docutils</a> from <a class="reference external" href="http://docutils.sourceforge.net/rst.html">reStructuredText</a> source.
 
 </div>

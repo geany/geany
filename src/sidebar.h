@@ -64,4 +64,8 @@ void sidebar_remove_document(GeanyDocument *doc);
 
 void sidebar_add_common_menu_items(GtkMenu *menu);
 
+void sidebar_focus_openfiles_tab(void);
+
+void sidebar_focus_symbols_tab(void);
+
 #endif

@@ -1068,8 +1068,8 @@ the code point for the character you want, then let go of Ctrl-Shift and
 hit Enter or Return.
 
 For this to work in Geany, you'll need to first unbind Ctrl-Shift-u
-in the `keybinding preferences`_, then select *Tools->Reload Configuration* 
-or restart Geany. Note that it works slightly differently from other GTK 
+in the `keybinding preferences`_, then select *Tools->Reload Configuration*
+or restart Geany. Note that it works slightly differently from other GTK
 applications, in that you'll need to continue to hold down the Ctrl and Shift
 keys while typing the code point hex digits.
 
@@ -2137,7 +2137,7 @@ This data is used as meta data for various template text to insert into
 a document, such as the file header. You only need to set fields that
 you want to use in your template files.
 
-.. note:: 
+.. note::
     For changes made here to take effect, either selecting
     *Tools->Reload Configuration* or restarting Geany is required.
 
@@ -3187,24 +3187,32 @@ Zoom Out                        Ctrl--  (C)               Zooms out the text
 
 Focus keybindings
 `````````````````
-=============================== ========================= ==================================================
-Action                          Default shortcut          Description
-=============================== ========================= ==================================================
-Switch to Editor                F2                        Switches to editor widget.
+================================ ========================= ==================================================
+Action                           Default shortcut          Description
+================================ ========================= ==================================================
+Switch to Editor                 F2                        Switches to editor widget.
 
-Switch to Scribble              F6                        Switches to scribble widget.
+Switch to Scribble               F6                        Switches to scribble widget.
 
-Switch to VTE                   F4                        Switches to VTE widget.
+Switch to VTE                    F4                        Switches to VTE widget.
 
-Switch to Search Bar            F7                        Switches to the search bar in the toolbar (if
-                                                          visible).
+Switch to Search Bar             F7                        Switches to the search bar in the toolbar (if
+                                                           visible).
 
-Switch to Sidebar                                         Focus the Sidebar.
+Switch to Sidebar                                          Focus the Sidebar.
 
-Switch to Compiler                                        Focus the Compiler message window tab.
+Switch to Compiler                                         Focus the Compiler message window tab.
 
-Switch to Messages                                        Focus the Messages message window tab.
-=============================== ========================= ==================================================
+Switch to Messages                                         Focus the Messages message window tab.
+
+Switch to Message Window                                   Focus the Message Window's current tab.
+
+Switch to Sidebar Document List                            Focus the Document list tab in the Sidebar
+                                                           (if visible)
+
+Switch to Sidebar Symbol List                              Focus the Symbol list tab in the Sidebar
+                                                           (if visible)
+================================ ========================= ==================================================
 
 
 Notebook tab keybindings
@@ -3328,14 +3336,14 @@ reload the file after you have saved it.
     (see *Reload Configuration* below).
 
 There's also a *Reload Configuration* item which can be used if you
-updated one of the other configuration files, or modified or added 
+updated one of the other configuration files, or modified or added
 template files.
 
 *Reload Configuration* is also necessary to update syntax highlighting colors.
 
 .. note::
-    Syntax highlighting colors aren't updated in open documents after 
-    saving filetypes.common as this can possibly take a significant 
+    Syntax highlighting colors aren't updated in open documents after
+    saving filetypes.common as this can possibly take a significant
     amount of time.
 
 
@@ -3919,7 +3927,7 @@ Hidden preferences
 
 There are some rarely used preferences that are not shown in the Preferences
 dialog. These can be set by editing the preferences file, then
-selecting *Tools->Reload Configuration* or restarting Geany. Search for the 
+selecting *Tools->Reload Configuration* or restarting Geany. Search for the
 key name, then edit the value. Example:
 
     ``brace_match_ltgt=true``
@@ -4090,8 +4098,8 @@ Meta data can be used with all templates, but by default user set
 meta data is only used for the ChangeLog and File header templates.
 
 In the configuration dialog you can find a tab "Templates" (see
-`Template preferences`_). You can define the default values 
-which will be inserted in the templates. You should select 
+`Template preferences`_). You can define the default values
+which will be inserted in the templates. You should select
 *Tools->Reload Configuration* or restart Geany after making changes.
 
 
@@ -4104,7 +4112,7 @@ menu.
 
 By default, file templates are installed for some filetypes. Custom
 file templates can be added by creating the appropriate template file
-and then selecting *Tools->Reload Configuration* or restarting Geany. You can 
+and then selecting *Tools->Reload Configuration* or restarting Geany. You can
 also edit the default file templates.
 
 The file's contents are just the text to place in the document, with
@@ -4126,7 +4134,7 @@ any. For example, creating a file ``module.c`` would add a menu item
 which created a new document with the filetype set to 'C'.
 
 The template file is read from disk when the corresponding menu item is
-clicked, so you don't need to select *Tools->Reload Configuration* or restart 
+clicked, so you don't need to select *Tools->Reload Configuration* or restart
 Geany after editing a custom file template.
 
 Filetype templates

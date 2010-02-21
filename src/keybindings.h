@@ -268,6 +268,7 @@ enum
 };
 
 /** Focus group keybinding command IDs */
+/* TODO when the plugin get increased the next time, re-arrange these keybindings */
 enum
 {
 	GEANY_KEYS_FOCUS_EDITOR,
@@ -277,6 +278,9 @@ enum
 	GEANY_KEYS_FOCUS_SIDEBAR,
 	GEANY_KEYS_FOCUS_COMPILER,
 	GEANY_KEYS_FOCUS_MESSAGES,
+	GEANY_KEYS_FOCUS_MESSAGE_WINDOW,
+	GEANY_KEYS_FOCUS_SIDEBAR_DOCUMENT_LIST,
+	GEANY_KEYS_FOCUS_SIDEBAR_SYMBOL_LIST,
 	GEANY_KEYS_FOCUS_COUNT
 };
 
