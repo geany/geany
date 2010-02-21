@@ -1,3 +1,8 @@
+2010-02-21 Dominic Hopf <dmaphy(at)googlemail(dot)com>
+
+ * doc/geany.txt: fix the instruction how to insert unicode characters
+   (thanks Tony Rick)
+   
 2010-02-21  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * scripts/create_py_tags.py:
