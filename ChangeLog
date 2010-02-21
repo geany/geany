@@ -1,3 +1,9 @@
+2010-02-21  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * scripts/create_py_tags.py:
+   Minor fixes.
+
+
 2010-02-20 Dominic Hopf <dmaphy(at)googlemail(dot)com>
  * doc/geany.txt:
    add more detailed hints about reloading configuration (thanks to Tony Rick)

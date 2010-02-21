@@ -15,9 +15,7 @@
 import datetime
 import imp
 import inspect
-import os
 import re
-import string
 import sys
 import types
 
@@ -44,21 +42,21 @@ class Parser:
 		self.re_matcher = re.compile(tag_regexp)
 
 	#----------------------------------------------------------------------
-	def _get_superclass(self, c):
+	def _get_superclass(self, _object):
 		"""
 		Python class base-finder
 		(found on http://mail.python.org/pipermail/python-list/2002-November/173949.html)
 
-		@param c (object)
+		@param _object (object)
 		@return superclass (object)
 		"""
 		try:
 			#~ TODO print inspect.getmro(c)
-			if type(c) == types.ClassType:
-				return c.__bases__[0].__name__
+			if type(_object) == types.ClassType:
+				return _object.__bases__[0].__name__
 			else:
-				return c.__mro__[1].__name__
-		except Exception, e:
+				return _object.__mro__[1].__name__
+		except IndexError:
 			return ''
 
 	#----------------------------------------------------------------------
@@ -91,7 +89,7 @@ class Parser:
 			specs.append(formatvarargs(varargs))
 		if varkw is not None:
 			specs.append(formatvarkw(varkw))
-		return '(' + string.join(specs, ', ') + ')'
+		return ', '.join(specs)
 
 	#----------------------------------------------------------------------
 	def _add_tag(self, obj, tag_type, parent=''):
@@ -106,7 +104,7 @@ class Parser:
 		scope = ''
 		try:
 			args = apply(self._formatargspec, inspect.getargspec(obj))
-		except TypeError, KeyError:
+		except (TypeError, KeyError):
 			pass
 		if parent:
 			if tag_type == TYPE_CLASS:
@@ -131,7 +129,11 @@ class Parser:
 		"""
 		try:
 			module = imp.load_source('tags_file_module', filename)
-		except Exception, e:
+		except IOError, e:
+			# file not found
+			print '%s: %s' % (filename, e)
+			return
+		except Exception:
 			module = None
 
 		if module:
@@ -143,7 +145,7 @@ class Parser:
 					name = obj_name
 				if not name or not isinstance(name, basestring) or name.startswith('_'):
 					# skip non-public tags
-					continue;
+					continue
 				if inspect.isfunction(obj):
 					self._add_tag(obj, TYPE_FUNCTION)
 				elif inspect.isclass(obj):
@@ -159,14 +161,14 @@ class Parser:
 						self._add_tag(m_obj, TYPE_FUNCTION, name)
 		else:
 			# plain regular expression based parsing
-			fp = open(filename)
-			for line in fp:
+			filep = open(filename)
+			for line in filep:
 				m = self.re_matcher.match(line)
 				if m:
 					tag_type_str, tagname, args = m.groups()
 					if not tagname or tagname.startswith('_'):
 						# skip non-public tags
-						continue;
+						continue
 					if tag_type_str == 'class':
 						tag_type = TYPE_CLASS
 					else:
@@ -175,7 +177,7 @@ class Parser:
 					tag = '%s%s%s%s%s\n' % (tagname, TA_TYPE, tag_type, TA_ARGLIST, args)
 					if not tagname in self.tags:
 						self.tags[tagname] = tag
-			fp.close()
+			filep.close()
 
 	#----------------------------------------------------------------------
 	def write_to_file(self, filename):
@@ -188,14 +190,14 @@ class Parser:
 		# sort the tags
 		result.sort()
 		# write them
-		fp = open(filename, 'wb')
-		fp.write(
+		target_file = open(filename, 'wb')
+		target_file.write(
 			'# format=tagmanager - Automatically generated file - do not edit (created on %s)\n' % \
 			datetime.datetime.now().ctime())
-		for s in result:
-			if not s == '\n': # skip empty lines
-				fp.write(s)
-		fp.close()
+		for symbol in result:
+			if not symbol == '\n': # skip empty lines
+				target_file.write(symbol)
+		target_file.close()
 
 
 
