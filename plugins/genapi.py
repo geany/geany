@@ -26,30 +26,30 @@ r"""
 Creates macros for each plugin API function pointer, e.g.:
 
 #define plugin_add_toolbar_item \
-	geany_functions->p_plugin->plugin_add_toolbar_item
+    geany_functions->p_plugin->plugin_add_toolbar_item
 """
 
 
 import re, sys
 
 def get_function_names():
-	names = []
-	filep = open('../src/plugins.c')
-	while 1:
-		line = filep.readline()
-		if line == "":
-			break
-		match = re.match("^\t&([a-z][a-z0-9_]+)", line)
-		if match:
-			symbol = match.group(1)
-			if not symbol.endswith('_funcs'):
-				names.append(symbol)
-	filep.close()
-	return names
+    names = []
+    filep = open('../src/plugins.c')
+    while 1:
+        line = filep.readline()
+        if line == "":
+            break
+        match = re.match("^\t&([a-z][a-z0-9_]+)", line)
+        if match:
+            symbol = match.group(1)
+            if not symbol.endswith('_funcs'):
+                names.append(symbol)
+    filep.close()
+    return names
 
 def get_api_tuple(source):
-	match = re.match("^([a-z]+)_([a-z][a-z0-9_]+)$", source)
-	return 'p_' + match.group(1), match.group(2)
+    match = re.match("^([a-z]+)_([a-z][a-z0-9_]+)$", source)
+    return 'p_' + match.group(1), match.group(2)
 
 
 header = \
@@ -60,7 +60,7 @@ r'''/* This file is generated automatically by genapi.py - do not edit. */
  *
  * E.g.:@code
  * #define plugin_add_toolbar_item \
- * 	geany_functions->p_plugin->plugin_add_toolbar_item @endcode
+ *  geany_functions->p_plugin->plugin_add_toolbar_item @endcode
  *
  * You need to declare the @ref geany_functions symbol yourself.
  *
@@ -73,22 +73,22 @@ r'''/* This file is generated automatically by genapi.py - do not edit. */
 '''
 
 if __name__ == "__main__":
-	outfile = 'geanyfunctions.h'
+    outfile = 'geanyfunctions.h'
 
-	fnames = get_function_names()
-	if not fnames:
-		sys.exit("No function names read!")
+    fnames = get_function_names()
+    if not fnames:
+        sys.exit("No function names read!")
 
-	f = open(outfile, 'w')
-	print >> f, header % (outfile)
+    f = open(outfile, 'w')
+    print >> f, header % (outfile)
 
-	for fname in fnames:
-		ptr, name = get_api_tuple(fname)
-		# note: name no longer needed
-		print >> f, '#define %s \\\n\tgeany_functions->%s->%s' % (fname, ptr, fname)
+    for fname in fnames:
+        ptr, name = get_api_tuple(fname)
+        # note: name no longer needed
+        print >> f, '#define %s \\\n\tgeany_functions->%s->%s' % (fname, ptr, fname)
 
-	print >> f, '\n#endif'
-	f.close()
+    print >> f, '\n#endif'
+    f.close()
 
-	if not '-q' in sys.argv:
-		print 'Generated ' + outfile
+    if not '-q' in sys.argv:
+        print 'Generated ' + outfile
