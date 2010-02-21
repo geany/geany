@@ -34,25 +34,22 @@ import re, sys
 
 def get_function_names():
 	names = []
-	try:
-		f = open('../src/plugins.c')
-		while 1:
-			l = f.readline()
-			if l == "":
-				break;
-			m = re.match("^\t&([a-z][a-z0-9_]+)", l)
-			if m:
-				s = m.group(1)
-				if not s.endswith('_funcs'):
-					names.append(s)
-		f.close
-	except:
-		pass
+	filep = open('../src/plugins.c')
+	while 1:
+		line = filep.readline()
+		if line == "":
+			break
+		match = re.match("^\t&([a-z][a-z0-9_]+)", line)
+		if match:
+			symbol = match.group(1)
+			if not symbol.endswith('_funcs'):
+				names.append(symbol)
+	filep.close()
 	return names
 
-def get_api_tuple(str):
-	m = re.match("^([a-z]+)_([a-z][a-z0-9_]+)$", str)
-	return 'p_' + m.group(1), m.group(2)
+def get_api_tuple(source):
+	match = re.match("^([a-z]+)_([a-z][a-z0-9_]+)$", source)
+	return 'p_' + match.group(1), match.group(2)
 
 
 header = \
@@ -83,15 +80,15 @@ if __name__ == "__main__":
 		sys.exit("No function names read!")
 
 	f = open(outfile, 'w')
-	print >>f, header % (outfile)
+	print >> f, header % (outfile)
 
 	for fname in fnames:
 		ptr, name = get_api_tuple(fname)
 		# note: name no longer needed
-		print >>f, '#define %s \\\n\tgeany_functions->%s->%s' % (fname, ptr, fname)
+		print >> f, '#define %s \\\n\tgeany_functions->%s->%s' % (fname, ptr, fname)
 
-	print >>f, '\n#endif'
-	f.close
+	print >> f, '\n#endif'
+	f.close()
 
 	if not '-q' in sys.argv:
 		print 'Generated ' + outfile
