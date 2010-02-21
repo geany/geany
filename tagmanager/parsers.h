@@ -54,7 +54,8 @@
     MarkdownParser, \
     Txt2tagsParser, \
     AbcParser, \
-    VerilogParser
+    VerilogParser, \
+    RParser
 /*
 langType of each parser
  0	CParser
@@ -97,6 +98,7 @@ langType of each parser
 37  Txt2tagsParser
 38  AbcParser
 39  Verilog
+40	RParser
 */
 #endif	/* _PARSERS_H */
 

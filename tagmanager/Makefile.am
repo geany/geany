@@ -67,6 +67,7 @@ libtagmanager_a_SOURCES =\
 	verilog.c\
 	actionscript.c\
 	nsis.c\
+	r.c \
 	ctags.c\
 	entry.c\
 	get.c\

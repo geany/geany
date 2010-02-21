@@ -70,7 +70,7 @@ tagmanager_sources = [
 	'tagmanager/keyword.c', 'tagmanager/latex.c', 'tagmanager/lregex.c', 'tagmanager/lua.c',
 	'tagmanager/make.c', 'tagmanager/markdown.c', 'tagmanager/matlab.c', 'tagmanager/nsis.c',
 	'tagmanager/nestlevel.c', 'tagmanager/options.c',
-	'tagmanager/parse.c', 'tagmanager/pascal.c',
+	'tagmanager/parse.c', 'tagmanager/pascal.c', 'tagmanager/r.c',
 	'tagmanager/perl.c', 'tagmanager/php.c', 'tagmanager/python.c', 'tagmanager/read.c',
 	'tagmanager/rest.c', 'tagmanager/ruby.c', 'tagmanager/sh.c', 'tagmanager/sort.c',
 	'tagmanager/sql.c', 'tagmanager/strlist.c', 'tagmanager/txt2tags.c', 'tagmanager/tcl.c',

@@ -574,7 +574,7 @@ static void init_builtin_filetypes(void)
 
 #define R
 	ft = filetypes[GEANY_FILETYPES_R];
-	ft->lang = 34;
+	ft->lang = 40;
 	ft->name = g_strdup("R");
 	ft->title = g_strdup_printf(_("%s script file"), "R");
 	ft->extension = g_strdup("R");

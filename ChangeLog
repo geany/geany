@@ -6,6 +6,10 @@
  * plugins/genapi.py:
    Minor fixes.
    Replace tabs by spaces.
+ * tagmanager/r.c, plugins/geanyfunctions.h, src/about.c,
+   src/filetypes.c, src/symbols.c, tagmanager/Makefile.am,
+   tagmanager/makefile.win32, tagmanager/parsers.h, wscript, THANKS:
+   Add R tagmanager symbol parser (patch by Jon Senior, thanks).
 
 
 2010-02-20 Dominic Hopf <dmaphy(at)googlemail(dot)com>
