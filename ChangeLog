@@ -2,6 +2,7 @@
 
  * scripts/create_py_tags.py:
    Minor fixes.
+   Replace tabs by spaces.
 
 
 2010-02-20 Dominic Hopf <dmaphy(at)googlemail(dot)com>
