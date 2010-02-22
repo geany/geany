@@ -1,8 +1,15 @@
+2010-02-22  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * data/filetypes.r:
+   Update keywords for the R language (patch by Jon Senior, thanks).
+
+
 2010-02-21  Dominic Hopf  <dmaphy(at)googlemail(dot)com>
 
- * doc/geany.txt: fix the instruction how to insert unicode characters
-   (thanks Tony Rick)
-   
+ * doc/geany.txt:
+   Fix the instruction how to insert unicode characters
+   (thanks Tony Rick).
+
 
 2010-02-21  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
@@ -29,10 +36,10 @@
 2010-02-20  Dominic Hopf  <dmaphy(at)googlemail(dot)com>
 
  * doc/geany.txt:
-   add more detailed hints about reloading configuration
+   Add more detailed hints about reloading configuration
    (thanks to Tony Rick).
  * data/filetypes.javascript:
-   correct the keyword list for JavaScript (thanks to Jonas).
+   Correct the keyword list for JavaScript (thanks to Jonas).
 
 
 2010-02-14  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
