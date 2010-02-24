@@ -1,3 +1,10 @@
+2010-02-24  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/keybindings.c, doc/geany.txt, doc/geany.html:
+   Make Switch to Editor keybinding reshow the document statistics
+   line, so user doesn't have to move the cursor.
+
+
 2010-02-22  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * data/filetypes.r:
