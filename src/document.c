@@ -1924,6 +1924,72 @@ gboolean document_search_bar_find(GeanyDocument *doc, const gchar *text, gint fl
 }
 
 
+/* TODO: fix building when HAVE_REGCOMP is not defined? */
+# ifdef HAVE_REGEX_H
+#  include <regex.h>
+# else
+#  include "gnuregex.h"
+# endif
+
+static gboolean compile_regex(regex_t *regex, const gchar *str, gint sflags)
+{
+	gint err;
+	gint rflags = REG_EXTENDED | REG_NEWLINE;
+
+	if (~sflags & SCFIND_MATCHCASE)
+		rflags |= REG_ICASE;
+
+	err = regcomp(regex, str, rflags);
+	if (err != 0)
+	{
+		gchar buf[256];
+
+		regerror(err, regex, buf, sizeof buf);
+		ui_set_statusbar(FALSE, _("Bad regex: %s"), buf);
+		return FALSE;
+	}
+	return TRUE;
+}
+
+
+static gint find_regex(ScintillaObject *sci, guint pos, regex_t *regex, regmatch_t *match)
+{
+	const gchar *text;
+
+	g_return_val_if_fail(pos <= (guint)sci_get_length(sci), FALSE);
+
+	text = (void*)scintilla_send_message(sci, SCI_GETCHARACTERPOINTER, 0, 0);
+	text += pos;
+	if (regexec(regex, text, 1, match, 0) == 0)
+		return match->rm_so + pos;
+
+	return -1;
+}
+
+
+static gint geany_search_next(ScintillaObject *sci, const gchar *str, gint flags)
+{
+	regmatch_t match;
+	regex_t regex;
+	gint ret = -1;
+	gint pos;
+
+	if (~flags & SCFIND_REGEXP)
+		return sci_search_next(sci, flags, str);
+
+	if (!compile_regex(&regex, str, flags))
+		return -1;
+
+	pos = sci_get_current_position(sci);
+	ret = find_regex(sci, pos, &regex, &match);
+	if (ret >= 0)
+		sci_set_selection(sci, ret, match.rm_eo + pos);
+
+	regfree(&regex);
+	return ret;
+}
+
+
 /* General search function, used from the find dialog.
  * Returns -1 on failure or the start position of the matching text.
  * Will skip past any selection, ignoring it. */
@@ -1954,7 +2020,7 @@ gint document_find_text(GeanyDocument *doc, const gchar *text, gint flags, gbool
 	if (search_backwards)
 		search_pos = sci_search_prev(doc->editor->sci, flags, text);
 	else
-		search_pos = sci_search_next(doc->editor->sci, flags, text);
+		search_pos = geany_search_next(doc->editor->sci, text, flags);
 
 	if (search_pos != -1)
 	{

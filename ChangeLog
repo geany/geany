@@ -3,6 +3,9 @@
  * src/keybindings.c, doc/geany.txt, doc/geany.html:
    Make Switch to Editor keybinding reshow the document statistics
    line, so user doesn't have to move the cursor.
+ * src/document.c:
+   Make Find dialog Next button use GNU/system regex instead of
+   Scintilla engine.
 
 
 2010-02-22  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
