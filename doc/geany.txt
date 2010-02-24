@@ -1069,7 +1069,7 @@ holding Ctrl-Shift). If you release Ctrl-Shift before hitting Enter or Return
 (or any other character), the code insertion is completed, but the typed
 character is also entered.  In the case of Enter/Return, it is a newline, as
 you might expect.
- 
+
 
 In some earlier versions of Geany, you might need to first unbind Ctrl-Shift-u
 in the `keybinding preferences`_, then select *Tools->Reload Configuration*
@@ -1644,6 +1644,11 @@ Switch status message list at new message
 Suppress status messages in the status bar
     Remove all messages from the status bar. The messages are still displayed
     in the status messages window.
+
+    .. tip::
+        Another option is to use the *Switch to Editor* keybinding - it
+        reshows the document statistics on the status bar. See `Focus
+        keybindings`_.
 
 Auto-focus widgets (focus follows mouse)
     Give the focus automatically to widgets below the mouse cursor.
@@ -3182,7 +3187,7 @@ Toggle Sidebar                                            Shows or hides the sid
 
 Toggle all additional widgets                             Hide and show all additional widgets like the
                                                           notebook tabs, the toolbar, the messages window
-                                                          and the statusbar.
+                                                          and the status bar.
 
 Zoom In                         Ctrl-+  (C)               Zooms in the text
 
@@ -3195,6 +3200,8 @@ Focus keybindings
 Action                           Default shortcut          Description
 ================================ ========================= ==================================================
 Switch to Editor                 F2                        Switches to editor widget.
+                                                           Also reshows the document statistics line
+                                                           (after a short timeout).
 
 Switch to Scribble               F6                        Switches to scribble widget.
 

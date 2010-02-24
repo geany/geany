@@ -1637,7 +1637,13 @@ static gboolean cb_func_switch_action(guint key_id)
 		{
 			GeanyDocument *doc = document_get_current();
 			if (doc != NULL)
-				gtk_widget_grab_focus(GTK_WIDGET(doc->editor->sci));
+			{
+				GtkWidget *sci = GTK_WIDGET(doc->editor->sci);
+				if (GTK_WIDGET_HAS_FOCUS(sci))
+					ui_update_statusbar(doc, -1);
+				else
+					gtk_widget_grab_focus(sci);
+			}
 			break;
 		}
 		case GEANY_KEYS_FOCUS_SCRIBBLE:
