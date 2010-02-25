@@ -2063,6 +2063,59 @@ gint document_find_text(GeanyDocument *doc, const gchar *text, gint flags, gbool
 }
 
 
+static gint geany_replace_target(ScintillaObject *sci, const gchar *replace_text,
+	gboolean regex)
+{
+	GString *str;
+	gint ret = 0;
+	gint i = 0;
+
+	if (!regex)
+		return sci_replace_target(sci, replace_text, FALSE);
+
+	str = g_string_new(replace_text);
+	while (str->str[i])
+	{
+		gchar *ptr = &str->str[i];
+		gchar *grp;
+		gchar c;
+
+		if (ptr[0] != '\\')
+		{
+			i++;
+			continue;
+		}
+		if (ptr[1] == '\\')
+		{
+			/* backslash escape, leave for later */
+			i += 2;
+			continue;
+		}
+		c = ptr[1];
+		if (!isdigit(c))
+		{
+			/* unnecessary escape */
+			i += 2;
+			continue;
+		}
+		/* digit escape */
+		g_string_erase(str, i, 2);
+		grp = "{group}";
+		g_string_insert(str, i, grp);
+		i += strlen(grp);
+	}
+	/* now fix backslash, tabs, etc */
+	if (!utils_str_replace_escape(str->str))
+	{
+		/* replace_text should already be checked as valid */
+		g_assert_not_reached();
+	}
+	ret = sci_replace_target(sci, str->str, FALSE);
+	g_string_free(str, TRUE);
+	return ret;
+}
+
+
 /* Replaces the selection if it matches, otherwise just finds the next match.
  * Returns: start of replaced text, or -1 if no replacement was made */
 gint document_replace_text(GeanyDocument *doc, const gchar *find_text, const gchar *replace_text,
@@ -2104,7 +2157,7 @@ gint document_replace_text(GeanyDocument *doc, const gchar *find_text, const gch
 		gint replace_len;
 		/* search next/prev will select matching text, which we use to set the replace target */
 		sci_target_from_selection(doc->editor->sci);
-		replace_len = sci_replace_target(doc->editor->sci, replace_text, flags & SCFIND_REGEXP);
+		replace_len = geany_replace_target(doc->editor->sci, replace_text, flags & SCFIND_REGEXP);
 		/* select the replacement - find text will skip past the selected text */
 		sci_set_selection_start(doc->editor->sci, search_pos);
 		sci_set_selection_end(doc->editor->sci, search_pos + replace_len);

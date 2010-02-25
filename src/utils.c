@@ -1094,6 +1094,7 @@ gboolean utils_str_replace_escape(gchar *string)
 					break;
 #endif
 				case 'u':
+				{
 					i += 2;
 					if (i >= strlen(string))
 					{
@@ -1159,8 +1160,10 @@ gboolean utils_str_replace_escape(gchar *string)
 						return FALSE;
 					}
 					break;
+				}
 				default:
-					return FALSE;
+					/* unnecessary escapes are allowed */
+					string[j] = string[i];
 			}
 		}
 		else

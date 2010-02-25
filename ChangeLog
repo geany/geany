@@ -1,3 +1,13 @@
+2010-02-25  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/utils.c, src/document.c:
+   Implement single POSIX regex replacement - escape replacements are
+   done with utils_str_replace_escape().
+   Warning: regex backreference replacement is still to do.
+   Make utils_str_replace_escape() accept unnecessary escapes (e.g.
+   '\e' goes to 'e').
+
+
 2010-02-24  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/keybindings.c, doc/geany.txt, doc/geany.html:
