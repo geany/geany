@@ -1,3 +1,10 @@
+2010-02-26  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/document.c:
+   Implement regex backreference replacement for \0 (whole match) and
+   groups \1 to \9.
+
+
 2010-02-25  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/utils.c, src/document.c:

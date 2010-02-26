@@ -1952,7 +1952,19 @@ static gboolean compile_regex(regex_t *regex, const gchar *str, gint sflags)
 }
 
 
-static gint find_regex(ScintillaObject *sci, guint pos, regex_t *regex, regmatch_t *match)
+/* groups that don't exist are handled OK as len = end - start = (-1) - (-1) = 0 */
+static gchar *get_regex_match_string(const gchar *text, regmatch_t *pmatch, gint match_idx)
+{
+	return g_strndup(&text[pmatch[match_idx].rm_so],
+		pmatch[match_idx].rm_eo - pmatch[match_idx].rm_so);
+}
+
+
+static regmatch_t regex_matches[10];
+/* All matching text from regex_matches[0].rm_so to regex_matches[0].rm_eo */
+static gchar *regex_match_text = NULL;
+
+static gint find_regex(ScintillaObject *sci, guint pos, regex_t *regex)
 {
 	const gchar *text;
 
@@ -1960,16 +1972,18 @@ static gint find_regex(ScintillaObject *sci, guint pos, regex_t *regex, regmatch
 
 	text = (void*)scintilla_send_message(sci, SCI_GETCHARACTERPOINTER, 0, 0);
 	text += pos;
-	if (regexec(regex, text, 1, match, 0) == 0)
-		return match->rm_so + pos;
-
+	if (regexec(regex, text, G_N_ELEMENTS(regex_matches), regex_matches, 0) == 0)
+	{
+		setptr(regex_match_text, get_regex_match_string(text, regex_matches, 0));
+		return regex_matches[0].rm_so + pos;
+	}
+	setptr(regex_match_text, NULL);
 	return -1;
 }
 
 
 static gint geany_search_next(ScintillaObject *sci, const gchar *str, gint flags)
 {
-	regmatch_t match;
 	regex_t regex;
 	gint ret = -1;
 	gint pos;
@@ -1981,9 +1995,9 @@ static gint geany_search_next(ScintillaObject *sci, const gchar *str, gint flags
 		return -1;
 
 	pos = sci_get_current_position(sci);
-	ret = find_regex(sci, pos, &regex, &match);
+	ret = find_regex(sci, pos, &regex);
 	if (ret >= 0)
-		sci_set_selection(sci, ret, match.rm_eo + pos);
+		sci_set_selection(sci, ret, regex_matches[0].rm_eo + pos);
 
 	regfree(&regex);
 	return ret;
@@ -2100,9 +2114,12 @@ static gint geany_replace_target(ScintillaObject *sci, const gchar *replace_text
 		}
 		/* digit escape */
 		g_string_erase(str, i, 2);
-		grp = "{group}";
+		/* fix match offsets by subtracting index of whole match start from the string */
+		grp = get_regex_match_string(regex_match_text - regex_matches[0].rm_so,
+			regex_matches, c - '0');
 		g_string_insert(str, i, grp);
 		i += strlen(grp);
+		g_free(grp);
 	}
 	/* now fix backslash, tabs, etc */
 	if (!utils_str_replace_escape(str->str))
