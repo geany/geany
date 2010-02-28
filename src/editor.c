@@ -3182,8 +3182,12 @@ static void auto_multiline(GeanyEditor *editor, gint cur_line)
 	/* Use the start of the line enter was pressed on, to avoid any doc keyword styles */
 	indent_pos = sci_get_line_indent_position(sci, cur_line - 1);
 	style = sci_get_style_at(sci, indent_pos);
+	if (!in_block_comment(lexer, style))
+		return;
 
-	if (in_block_comment(lexer, style))
+	/* Check whether the comment block continues on this line */
+	indent_pos = sci_get_line_indent_position(sci, cur_line);
+	if (sci_get_style_at(sci, indent_pos) == style)
 	{
 		gchar *previous_line = sci_get_line(sci, cur_line - 1);
 		/* the type of comment, '*' (C/C++/Java), '+' and the others (D) */
@@ -4949,5 +4953,3 @@ void editor_indent(GeanyEditor *editor, gboolean increase)
 		sci_set_current_line(sci, lstart);
 	}
 }
-
-
