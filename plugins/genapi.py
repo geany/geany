@@ -60,7 +60,7 @@ r'''/* This file is generated automatically by genapi.py - do not edit. */
  *
  * E.g.:@code
  * #define plugin_add_toolbar_item \
- *  geany_functions->p_plugin->plugin_add_toolbar_item @endcode
+ * 	geany_functions->p_plugin->plugin_add_toolbar_item @endcode
  *
  * You need to declare the @ref geany_functions symbol yourself.
  *
