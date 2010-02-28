@@ -1,8 +1,8 @@
-2010-02-26  Dominic Hopf  <dmaphy(at)googlemail(dot)com>
+2010-02-28  Dominic Hopf  <dmaphy(at)googlemail(dot)com>
 
  * src/log.c:
-   fix keyboard accelerators in debug messages window
-   (Thanks Can Koy!)
+   Fix keyboard accelerators in debug messages window
+   (Thanks Can Koy).
 
 
 2010-02-28  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
