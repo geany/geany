@@ -10,6 +10,12 @@
  * scintilla/LexR.cxx:
    Backport R lexer from Scintilla CVS to fix case sensitive keywords
    (Scintilla bug #2956543).
+ * src/sidebar.c, src/about.c, THANKS:
+   Make Space on the symbol and document list not focus the editor
+   widget while Enter does (closes #2919444, patch by Can Koy, thanks).
+ * src/document.c, src/document.h:
+   Fix document_try_focus() to make it work with the sidebar document
+   list as well.
 
 
 2010-02-28  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>

@@ -74,6 +74,7 @@ Alexey Antipov <1a_antipov(at)mail(dot)ru> - Apply file open encoding only to no
 Jörn Reder <joern(at)zyn(dot)de> - --socket-file command line option patch
 Kelvin Gardiner <kelvin(at)mbmn(dot)net> - VHDL symbol list patch, Verilog filetype
 Jon Senior <jon(at)restlesslemon(dot)co(dot)uk> - R tagmanager parser patch
+Can Koy <cankoy(at)ymail(dot)com> - Multiple changes/improvements
 
 Translators:
 ------------

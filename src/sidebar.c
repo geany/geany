@@ -46,6 +46,7 @@
 
 #include <gdk/gdkkeysyms.h>
 
+
 SidebarTreeviews tv = {NULL, NULL, NULL};
 /* while typeahead searching, editor should not get focus */
 static gboolean may_steal_focus = FALSE;
@@ -58,6 +59,12 @@ static struct
 	GtkWidget *show_paths;
 }
 doc_items = {NULL, NULL, NULL, NULL};
+
+static struct
+{
+	GtkTreeSelection *selection;
+	guint keyval;
+} selection_change = {NULL, 0};
 
 enum
 {
@@ -88,9 +95,9 @@ static gboolean documents_show_paths;
 static GtkWidget *tag_window;	/* scrolled window that holds the symbol list GtkTreeView */
 
 /* callback prototypes */
-static gboolean on_openfiles_tree_selection_changed(GtkTreeSelection *selection);
+static gboolean on_openfiles_tree_selection_changed(gpointer data);
 static void on_openfiles_document_action(GtkMenuItem *menuitem, gpointer user_data);
-static gboolean on_taglist_tree_selection_changed(GtkTreeSelection *selection);
+static gboolean on_taglist_tree_selection_changed(gpointer data);
 static gboolean sidebar_button_press_cb(GtkWidget *widget, GdkEventButton *event,
 		gpointer user_data);
 static gboolean sidebar_key_press_cb(GtkWidget *widget, GdkEventKey *event,
@@ -667,7 +674,6 @@ static void document_action(GeanyDocument *doc, gint action)
 			break;
 		}
 	}
-
 }
 
 
@@ -712,14 +718,14 @@ static void change_focus_to_editor(GeanyDocument *doc)
 }
 
 
-static gboolean on_openfiles_tree_selection_changed(GtkTreeSelection *selection)
+static gboolean on_openfiles_tree_selection_changed(gpointer data)
 {
 	GtkTreeIter iter;
 	GtkTreeModel *model;
 	GeanyDocument *doc = NULL;
 
 	/* use switch_notebook_page to ignore changing the notebook page because it is already done */
-	if (gtk_tree_selection_get_selected(selection, &model, &iter) && ! ignore_callback)
+	if (gtk_tree_selection_get_selected(selection_change.selection, &model, &iter) && ! ignore_callback)
 	{
 		gtk_tree_model_get(model, &iter, DOCUMENTS_DOCUMENT, &doc, -1);
 		if (! doc)
@@ -729,19 +735,20 @@ static gboolean on_openfiles_tree_selection_changed(GtkTreeSelection *selection)
 		gtk_notebook_set_current_page(GTK_NOTEBOOK(main_widgets.notebook),
 			gtk_notebook_page_num(GTK_NOTEBOOK(main_widgets.notebook),
 			(GtkWidget*) doc->editor->sci));
-		change_focus_to_editor(doc);
+		if (selection_change.keyval != GDK_space)
+			change_focus_to_editor(doc);
 	}
 	return FALSE;
 }
 
 
-static gboolean on_taglist_tree_selection_changed(GtkTreeSelection *selection)
+static gboolean on_taglist_tree_selection_changed(gpointer data)
 {
 	GtkTreeIter iter;
 	GtkTreeModel *model;
 	gint line = 0;
 
-	if (gtk_tree_selection_get_selected(selection, &model, &iter))
+	if (gtk_tree_selection_get_selected(selection_change.selection, &model, &iter))
 	{
 		const TMTag *tag;
 
@@ -757,11 +764,19 @@ static gboolean on_taglist_tree_selection_changed(GtkTreeSelection *selection)
 			if (doc != NULL)
 			{
 				navqueue_goto_line(doc, doc, line);
-				change_focus_to_editor(doc);
+				if (selection_change.keyval != GDK_space)
+					change_focus_to_editor(doc);
 			}
 		}
 	}
 	return FALSE;
+}
+
+
+static void update_selection_change(GtkTreeSelection *selection, guint keyval)
+{
+	selection_change.selection = selection;
+	selection_change.keyval = keyval;
 }
 
 
@@ -778,10 +793,12 @@ static gboolean sidebar_key_press_cb(GtkWidget *widget, GdkEventKey *event,
 		may_steal_focus = TRUE;
 		/* delay the query of selection state because this callback is executed before GTK
 		 * changes the selection (g_signal_connect_after would be better but it doesn't work) */
+		update_selection_change(selection, event->keyval);
+
 		if (widget ==  tv.tree_openfiles) /* tag and doc list have separate handlers */
-			g_idle_add((GSourceFunc) on_openfiles_tree_selection_changed, selection);
+			g_idle_add(on_openfiles_tree_selection_changed, NULL);
 		else
-			g_idle_add((GSourceFunc) on_taglist_tree_selection_changed, selection);
+			g_idle_add(on_taglist_tree_selection_changed, NULL);
 	}
 	return FALSE;
 }
@@ -820,10 +837,12 @@ static gboolean sidebar_button_press_cb(GtkWidget *widget, GdkEventButton *event
 	{	/* allow reclicking of taglist treeview item */
 		/* delay the query of selection state because this callback is executed before GTK
 		 * changes the selection (g_signal_connect_after would be better but it doesn't work) */
+		update_selection_change(selection, 0);
+
 		if (widget == tv.tree_openfiles)
-			g_idle_add((GSourceFunc) on_openfiles_tree_selection_changed, selection);
+			g_idle_add(on_openfiles_tree_selection_changed, NULL);
 		else
-			g_idle_add((GSourceFunc) on_taglist_tree_selection_changed, selection);
+			g_idle_add(on_taglist_tree_selection_changed, NULL);
 	}
 	else if (event->button == 3)
 	{
