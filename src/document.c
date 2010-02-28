@@ -516,7 +516,7 @@ static void monitor_file_setup(GeanyDocument *doc)
 }
 
 
-void document_try_focus(GeanyDocument *doc)
+void document_try_focus(GeanyDocument *doc, GtkWidget *source_widget)
 {
 	/* doc might not be valid e.g. if user closed a tab whilst Geany is opening files */
 	if (DOC_VALID(doc))
@@ -524,7 +524,10 @@ void document_try_focus(GeanyDocument *doc)
 		GtkWidget *sci = GTK_WIDGET(doc->editor->sci);
 		GtkWidget *focusw = gtk_window_get_focus(GTK_WINDOW(main_widgets.window));
 
-		if (focusw == doc->priv->tag_tree)
+		if (source_widget == NULL)
+			source_widget = doc->priv->tag_tree;
+
+		if (focusw == source_widget)
 			gtk_widget_grab_focus(sci);
 	}
 }
@@ -532,7 +535,7 @@ void document_try_focus(GeanyDocument *doc)
 
 static gboolean on_idle_focus(gpointer doc)
 {
-	document_try_focus(doc);
+	document_try_focus(doc, NULL);
 	return FALSE;
 }
 
@@ -752,7 +755,7 @@ GeanyDocument *document_new_file(const gchar *utf8_filename, GeanyFiletype *ft,
 	sci_set_line_numbers(doc->editor->sci, editor_prefs.show_linenumber_margin, 0);
 	/* bring it in front, jump to the start and grab the focus */
 	editor_goto_pos(doc->editor, 0, FALSE);
-	document_try_focus(doc);
+	document_try_focus(doc, NULL);
 
 #if USE_GIO_FILEMON
 	monitor_file_setup(doc);

@@ -710,10 +710,10 @@ static void on_openfiles_document_action(GtkMenuItem *menuitem, gpointer user_da
 }
 
 
-static void change_focus_to_editor(GeanyDocument *doc)
+static void change_focus_to_editor(GeanyDocument *doc, GtkWidget *source_widget)
 {
 	if (may_steal_focus)
-		document_try_focus(doc);
+		document_try_focus(doc, source_widget);
 	may_steal_focus = FALSE;
 }
 
@@ -736,7 +736,7 @@ static gboolean on_openfiles_tree_selection_changed(gpointer data)
 			gtk_notebook_page_num(GTK_NOTEBOOK(main_widgets.notebook),
 			(GtkWidget*) doc->editor->sci));
 		if (selection_change.keyval != GDK_space)
-			change_focus_to_editor(doc);
+			change_focus_to_editor(doc, tv.tree_openfiles);
 	}
 	return FALSE;
 }
@@ -765,7 +765,7 @@ static gboolean on_taglist_tree_selection_changed(gpointer data)
 			{
 				navqueue_goto_line(doc, doc, line);
 				if (selection_change.keyval != GDK_space)
-					change_focus_to_editor(doc);
+					change_focus_to_editor(doc, NULL);
 			}
 		}
 	}
