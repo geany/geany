@@ -16,6 +16,9 @@
  * src/document.c, src/document.h:
    Fix document_try_focus() to make it work with the sidebar document
    list as well.
+ * src/msgwindow.c, src/msgwindow.h, src/ui_utils.c, src/ui_utils.h:
+   Make Space on the compiler and messages widgets not focus the editor
+   widget while Enter does (patch by Can Koy, thanks).
 
 
 2010-02-28  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>

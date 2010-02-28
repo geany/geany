@@ -111,18 +111,29 @@ void msgwin_finalize(void)
 }
 
 
+static gboolean is_keyval_enter_or_return(guint keyval)
+{
+	return (keyval == GDK_Return || keyval == GDK_ISO_Enter || keyval == GDK_KP_Enter);
+}
+
+
 static gboolean on_msgwin_key_press_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 {
-	if (event->keyval == GDK_Return ||
-		event->keyval == GDK_ISO_Enter ||
-		event->keyval == GDK_KP_Enter ||
-		event->keyval == GDK_space)
+	if (is_keyval_enter_or_return(event->keyval) || event->keyval == GDK_space)
 	{
-		GdkEventButton button_event;
-
-		button_event.button = 1;
-		button_event.time = event->time;
-		on_msgwin_button_press_event(NULL, &button_event, data);
+		switch (GPOINTER_TO_INT(data))
+		{
+			case MSG_COMPILER:
+			{	/* single click in the compiler treeview */
+				msgwin_goto_compiler_file_line(event->keyval);
+				break;
+			}
+			case MSG_MESSAGE:
+			{	/* single click in the message treeview (results of 'Find usage') */
+				msgwin_goto_messages_file_line(event->keyval);
+				break;
+			}
+		}
 	}
 	return FALSE;
 }
@@ -582,7 +593,7 @@ find_prev_build_dir(GtkTreePath *cur, GtkTreeModel *model, gchar **prefix)
 }
 
 
-static gboolean goto_compiler_file_line(const gchar *filename, gint line)
+static gboolean goto_compiler_file_line(const gchar *filename, gint line, guint keyval)
 {
 	if (!filename || line <= -1)
 		return FALSE;
@@ -626,17 +637,23 @@ static gboolean goto_compiler_file_line(const gchar *filename, gint line)
 
 		if (doc != NULL)
 		{
+			gboolean ret;
+
 			if (! doc->changed)	/* if modified, line may be wrong */
 				editor_indicator_set_on_line(doc->editor, GEANY_INDICATOR_ERROR, line - 1);
 
-			return navqueue_goto_line(old_doc, doc, line);
+			ret = navqueue_goto_line(old_doc, doc, line);
+			if (ret && is_keyval_enter_or_return(keyval))
+				gtk_widget_grab_focus(GTK_WIDGET(doc->editor->sci));
+
+			return ret;
 		}
 	}
 	return FALSE;
 }
 
 
-gboolean msgwin_goto_compiler_file_line(void)
+gboolean msgwin_goto_compiler_file_line(guint keyval)
 {
 	GtkTreeIter iter;
 	GtkTreeModel *model;
@@ -672,7 +689,7 @@ gboolean msgwin_goto_compiler_file_line(void)
 			g_free(string);
 			g_free(dir);
 
-			ret = goto_compiler_file_line(filename, line);
+			ret = goto_compiler_file_line(filename, line, keyval);
 			g_free(filename);
 			return ret;
 		}
@@ -949,7 +966,7 @@ void msgwin_parse_compiler_error_line(const gchar *string, const gchar *dir,
 }
 
 
-gboolean msgwin_goto_messages_file_line(void)
+gboolean msgwin_goto_messages_file_line(guint keyval)
 {
 	GtkTreeIter iter;
 	GtkTreeModel *model;
@@ -969,6 +986,8 @@ gboolean msgwin_goto_messages_file_line(void)
 		if (line >= 0 && DOC_VALID(doc))
 		{
 			ret = navqueue_goto_line(old_doc, doc, line);
+			if (ret && is_keyval_enter_or_return(keyval))
+				gtk_widget_grab_focus(GTK_WIDGET(doc->editor->sci));
 		}
 		else if (line < 0 && string != NULL)
 		{
@@ -979,7 +998,11 @@ gboolean msgwin_goto_messages_file_line(void)
 				/* use document_open_file to find an already open file, or open it in place */
 				doc = document_open_file(filename, FALSE, NULL, NULL);
 				if (doc != NULL)
+				{
 					ret = navqueue_goto_line(old_doc, doc, line);
+					if (ret && is_keyval_enter_or_return(keyval))
+						gtk_widget_grab_focus(GTK_WIDGET(doc->editor->sci));
+				}
 			}
 			g_free(filename);
 		}
@@ -1027,12 +1050,12 @@ static gboolean on_msgwin_button_press_event(GtkWidget *widget, GdkEventButton *
 		{
 			case MSG_COMPILER:
 			{	/* single click in the compiler treeview */
-				msgwin_goto_compiler_file_line();
+				msgwin_goto_compiler_file_line(0);
 				break;
 			}
 			case MSG_MESSAGE:
 			{	/* single click in the message treeview (results of 'Find usage') */
-				msgwin_goto_messages_file_line();
+				msgwin_goto_messages_file_line(0);
 				break;
 			}
 		}

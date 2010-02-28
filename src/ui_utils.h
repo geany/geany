@@ -283,7 +283,7 @@ void ui_add_recent_project_file(const gchar *utf8_filename);
 void ui_update_tab_status(GeanyDocument *doc);
 
 
-typedef gboolean TVMatchCallback(void);
+typedef gboolean TVMatchCallback(guint);
 
 gboolean ui_tree_view_find_next(GtkTreeView *treeview, TVMatchCallback cb);
 
