@@ -187,8 +187,8 @@ void ui_update_statusbar(GeanyDocument *doc, gint pos)
 			col = 0;
 
 		/* Status bar statistics: col = column, sel = selection. */
-		g_string_printf(stats_str, _("line: %d\t col: %d\t sel: %d\t "),
-			(line + 1), col,
+		g_string_printf(stats_str, _("line: %d / %d\t col: %d\t sel: %d\t "),
+			(line + 1), sci_get_line_count(doc->editor->sci), col,
 			sci_get_selected_text_length(doc->editor->sci) - 1);
 
 		g_string_append(stats_str,

@@ -1,3 +1,10 @@
+2010-02-28  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * src/ui_utils.c:
+   Show number of lines of current document inside statusbar. Thanks to
+   Can Koy for providing the patch.
+
+
 2010-02-24  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/keybindings.c, doc/geany.txt, doc/geany.html:
