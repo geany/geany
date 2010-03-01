@@ -1,3 +1,9 @@
+2010-03-01  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/search.c:
+   Make regex search imply replacing escaped chars.
+
+
 2010-02-26  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/document.c:
