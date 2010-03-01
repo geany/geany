@@ -1216,9 +1216,8 @@ on_replace_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 	}
 	if (search_flags_re & SCFIND_REGEXP)
 	{
-		/* we don't want to interpret escapes for replace string yet, so check a copy */
 		if (! utils_str_replace_escape(find, TRUE) ||
-			! utils_str_replace_escape(utils_strdupa(replace), TRUE))
+			! utils_str_replace_escape(replace, TRUE))
 			goto fail;
 	}
 	else if (search_replace_escape_re)

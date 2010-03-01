@@ -1045,7 +1045,8 @@ gchar **utils_read_file_in_array(const gchar *filename)
 
 
 /* Contributed by Stefan Oltmanns, thanks.
- * Replaces \\, \r, \n, \t and \uXXX by their real counterparts */
+ * Replaces \\, \r, \n, \t and \uXXX by their real counterparts.
+ * keep_backslash is used for regex strings to leave '\\' and '\?' in place */
 gboolean utils_str_replace_escape(gchar *string, gboolean keep_backslash)
 {
 	gsize i, j, len;
@@ -1165,6 +1166,8 @@ gboolean utils_str_replace_escape(gchar *string, gboolean keep_backslash)
 				}
 				default:
 					/* unnecessary escapes are allowed */
+					if (keep_backslash)
+						string[j++] = '\\';
 					string[j] = string[i];
 			}
 		}

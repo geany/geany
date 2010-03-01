@@ -2099,17 +2099,12 @@ static gint geany_replace_target(ScintillaObject *sci, const gchar *replace_text
 			i++;
 			continue;
 		}
-		if (ptr[1] == '\\')
-		{
-			/* backslash escape, leave for later */
-			i += 2;
-			continue;
-		}
 		c = ptr[1];
-		if (!isdigit(c))
+		/* backslash or unnecessary escape */
+		if (c == '\\' || !isdigit(c))
 		{
-			/* unnecessary escape */
-			i += 2;
+			g_string_erase(str, i, 1);
+			i++;
 			continue;
 		}
 		/* digit escape */
@@ -2120,12 +2115,6 @@ static gint geany_replace_target(ScintillaObject *sci, const gchar *replace_text
 		g_string_insert(str, i, grp);
 		i += strlen(grp);
 		g_free(grp);
-	}
-	/* now fix backslash, tabs, etc */
-	if (!utils_str_replace_escape(str->str, FALSE))
-	{
-		/* replace_text should already be checked as valid */
-		g_assert_not_reached();
 	}
 	ret = sci_replace_target(sci, str->str, FALSE);
 	g_string_free(str, TRUE);

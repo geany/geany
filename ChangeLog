@@ -4,6 +4,8 @@
    Make regex search imply replacing escaped chars.
  * src/utils.c, src/utils.h, src/search.c, src/document.c:
    Fix regex search for '\\'.
+ * src/utils.c, src/search.c, src/document.c:
+   Fix not replacing escapes within a backreference match.
 
 
 2010-02-26  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
