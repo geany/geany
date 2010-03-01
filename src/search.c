@@ -1077,13 +1077,17 @@ on_find_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 		search_data.text = g_strdup(gtk_entry_get_text(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(user_data)))));
 		search_data.flags = get_search_flags(find_dlg.dialog);
 
-		if (strlen(search_data.text) == 0 ||
-			((search_replace_escape || search_data.flags & SCFIND_REGEXP) &&
-				! utils_str_replace_escape(search_data.text)))
+		if (strlen(search_data.text) == 0)
 		{
+			fail:
 			utils_beep();
 			gtk_widget_grab_focus(find_dlg.entry);
 			return;
+		}
+		if (search_replace_escape || search_data.flags & SCFIND_REGEXP)
+		{
+			if (! utils_str_replace_escape(search_data.text, search_data.flags & SCFIND_REGEXP))
+				goto fail;
 		}
 		ui_combo_box_add_to_history(GTK_COMBO_BOX(user_data), search_data.text);
 
@@ -1205,23 +1209,29 @@ on_replace_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 	if ((response != GEANY_RESPONSE_FIND) && (search_flags_re & SCFIND_MATCHCASE)
 		&& (strcmp(find, replace) == 0))
 	{
+		fail:
 		utils_beep();
 		gtk_widget_grab_focus(replace_dlg.find_entry);
 		return;
+	}
+	if (search_flags_re & SCFIND_REGEXP)
+	{
+		/* we don't want to interpret escapes for replace string yet, so check a copy */
+		if (! utils_str_replace_escape(find, TRUE) ||
+			! utils_str_replace_escape(utils_strdupa(replace), TRUE))
+			goto fail;
+	}
+	else if (search_replace_escape_re)
+	{
+		if (! utils_str_replace_escape(find, FALSE) ||
+			! utils_str_replace_escape(replace, FALSE))
+			goto fail;
 	}
 
 	ui_combo_box_add_to_history(GTK_COMBO_BOX(
 		gtk_widget_get_parent(replace_dlg.find_entry)), find);
 	ui_combo_box_add_to_history(GTK_COMBO_BOX(
 		gtk_widget_get_parent(replace_dlg.replace_entry)), replace);
-
-	if ((search_replace_escape_re || search_flags_re & SCFIND_REGEXP) &&
-		(! utils_str_replace_escape(find) || ! utils_str_replace_escape(replace)))
-	{
-		utils_beep();
-		gtk_widget_grab_focus(replace_dlg.find_entry);
-		return;
-	}
 
 	switch (response)
 	{

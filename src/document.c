@@ -2122,7 +2122,7 @@ static gint geany_replace_target(ScintillaObject *sci, const gchar *replace_text
 		g_free(grp);
 	}
 	/* now fix backslash, tabs, etc */
-	if (!utils_str_replace_escape(str->str))
+	if (!utils_str_replace_escape(str->str, FALSE))
 	{
 		/* replace_text should already be checked as valid */
 		g_assert_not_reached();

@@ -1046,7 +1046,7 @@ gchar **utils_read_file_in_array(const gchar *filename)
 
 /* Contributed by Stefan Oltmanns, thanks.
  * Replaces \\, \r, \n, \t and \uXXX by their real counterparts */
-gboolean utils_str_replace_escape(gchar *string)
+gboolean utils_str_replace_escape(gchar *string, gboolean keep_backslash)
 {
 	gsize i, j, len;
 	guint unicodechar;
@@ -1066,6 +1066,8 @@ gboolean utils_str_replace_escape(gchar *string)
 			switch (string[i])
 			{
 				case '\\':
+					if (keep_backslash)
+						string[j++] = '\\';
 					string[j] = '\\';
 					break;
 				case 'n':

@@ -2,6 +2,8 @@
 
  * src/search.c:
    Make regex search imply replacing escaped chars.
+ * src/utils.c, src/utils.h, src/search.c, src/document.c:
+   Fix regex search for '\\'.
 
 
 2010-02-26  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
