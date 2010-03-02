@@ -1,3 +1,10 @@
+2010-03-02  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/search.c, src/search.h, src/document.c:
+   Move new regex code to search.c: search_find_next(),
+   search_replace_target().
+
+
 2010-03-01  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/search.c:

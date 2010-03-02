@@ -41,7 +41,6 @@
 # include <sys/types.h>
 #endif
 
-#include <ctype.h>
 #include <stdlib.h>
 
 /* gstdio.h also includes sys/stat.h */
@@ -1924,86 +1923,6 @@ gboolean document_search_bar_find(GeanyDocument *doc, const gchar *text, gint fl
 }
 
 
-/* TODO: fix building when HAVE_REGCOMP is not defined? */
-# ifdef HAVE_REGEX_H
-#  include <regex.h>
-# else
-#  include "gnuregex.h"
-# endif
-
-static gboolean compile_regex(regex_t *regex, const gchar *str, gint sflags)
-{
-	gint err;
-	gint rflags = REG_EXTENDED | REG_NEWLINE;
-
-	if (~sflags & SCFIND_MATCHCASE)
-		rflags |= REG_ICASE;
-
-	err = regcomp(regex, str, rflags);
-	if (err != 0)
-	{
-		gchar buf[256];
-
-		regerror(err, regex, buf, sizeof buf);
-		ui_set_statusbar(FALSE, _("Bad regex: %s"), buf);
-		return FALSE;
-	}
-	return TRUE;
-}
-
-
-/* groups that don't exist are handled OK as len = end - start = (-1) - (-1) = 0 */
-static gchar *get_regex_match_string(const gchar *text, regmatch_t *pmatch, gint match_idx)
-{
-	return g_strndup(&text[pmatch[match_idx].rm_so],
-		pmatch[match_idx].rm_eo - pmatch[match_idx].rm_so);
-}
-
-
-static regmatch_t regex_matches[10];
-/* All matching text from regex_matches[0].rm_so to regex_matches[0].rm_eo */
-static gchar *regex_match_text = NULL;
-
-static gint find_regex(ScintillaObject *sci, guint pos, regex_t *regex)
-{
-	const gchar *text;
-
-	g_return_val_if_fail(pos <= (guint)sci_get_length(sci), FALSE);
-
-	text = (void*)scintilla_send_message(sci, SCI_GETCHARACTERPOINTER, 0, 0);
-	text += pos;
-	if (regexec(regex, text, G_N_ELEMENTS(regex_matches), regex_matches, 0) == 0)
-	{
-		setptr(regex_match_text, get_regex_match_string(text, regex_matches, 0));
-		return regex_matches[0].rm_so + pos;
-	}
-	setptr(regex_match_text, NULL);
-	return -1;
-}
-
-
-static gint geany_search_next(ScintillaObject *sci, const gchar *str, gint flags)
-{
-	regex_t regex;
-	gint ret = -1;
-	gint pos;
-
-	if (~flags & SCFIND_REGEXP)
-		return sci_search_next(sci, flags, str);
-
-	if (!compile_regex(&regex, str, flags))
-		return -1;
-
-	pos = sci_get_current_position(sci);
-	ret = find_regex(sci, pos, &regex);
-	if (ret >= 0)
-		sci_set_selection(sci, ret, regex_matches[0].rm_eo + pos);
-
-	regfree(&regex);
-	return ret;
-}
-
-
 /* General search function, used from the find dialog.
  * Returns -1 on failure or the start position of the matching text.
  * Will skip past any selection, ignoring it. */
@@ -2034,7 +1953,7 @@ gint document_find_text(GeanyDocument *doc, const gchar *text, gint flags, gbool
 	if (search_backwards)
 		search_pos = sci_search_prev(doc->editor->sci, flags, text);
 	else
-		search_pos = geany_search_next(doc->editor->sci, text, flags);
+		search_pos = search_find_next(doc->editor->sci, text, flags);
 
 	if (search_pos != -1)
 	{
@@ -2074,51 +1993,6 @@ gint document_find_text(GeanyDocument *doc, const gchar *text, gint flags, gbool
 		}
 	}
 	return search_pos;
-}
-
-
-static gint geany_replace_target(ScintillaObject *sci, const gchar *replace_text,
-	gboolean regex)
-{
-	GString *str;
-	gint ret = 0;
-	gint i = 0;
-
-	if (!regex)
-		return sci_replace_target(sci, replace_text, FALSE);
-
-	str = g_string_new(replace_text);
-	while (str->str[i])
-	{
-		gchar *ptr = &str->str[i];
-		gchar *grp;
-		gchar c;
-
-		if (ptr[0] != '\\')
-		{
-			i++;
-			continue;
-		}
-		c = ptr[1];
-		/* backslash or unnecessary escape */
-		if (c == '\\' || !isdigit(c))
-		{
-			g_string_erase(str, i, 1);
-			i++;
-			continue;
-		}
-		/* digit escape */
-		g_string_erase(str, i, 2);
-		/* fix match offsets by subtracting index of whole match start from the string */
-		grp = get_regex_match_string(regex_match_text - regex_matches[0].rm_so,
-			regex_matches, c - '0');
-		g_string_insert(str, i, grp);
-		i += strlen(grp);
-		g_free(grp);
-	}
-	ret = sci_replace_target(sci, str->str, FALSE);
-	g_string_free(str, TRUE);
-	return ret;
 }
 
 
@@ -2163,7 +2037,7 @@ gint document_replace_text(GeanyDocument *doc, const gchar *find_text, const gch
 		gint replace_len;
 		/* search next/prev will select matching text, which we use to set the replace target */
 		sci_target_from_selection(doc->editor->sci);
-		replace_len = geany_replace_target(doc->editor->sci, replace_text, flags & SCFIND_REGEXP);
+		replace_len = search_replace_target(doc->editor->sci, replace_text, flags & SCFIND_REGEXP);
 		/* select the replacement - find text will skip past the selected text */
 		sci_set_selection_start(doc->editor->sci, search_pos);
 		sci_set_selection_end(doc->editor->sci, search_pos + replace_len);
