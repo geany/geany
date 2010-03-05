@@ -1,0 +1,5416 @@
+# Asturian translation file for geany
+# Copyright (C) 2006
+# This file is distributed under the same license as the geany package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: geany 0.16\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2010-03-05 15:43+0100\n"
+"PO-Revision-Date: 2010-03-05 10:15+0000\n"
+"Last-Translator: Marcos <Unknown>\n"
+"Language-Team: Asturian <alministradores@softastur.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Launchpad-Export-Date: 2010-03-05 10:36+0000\n"
+"X-Generator: Launchpad (build Unknown)\n"
+
+#: ../geany.desktop.in.h:1
+msgid "A fast and lightweight IDE using GTK2"
+msgstr "Un IDE rápidu y llixeru basáu en GTK2"
+
+#: ../geany.desktop.in.h:2 ../src/interface.c:281 ../src/interface.c:1624
+msgid "Geany"
+msgstr "Geany"
+
+#: ../geany.desktop.in.h:3
+msgid "Integrated Development Environment"
+msgstr "Entornu Integráu de Desarrollu"
+
+#: ../src/about.c:144
+msgid "About Geany"
+msgstr "Tocante a Geany"
+
+#: ../src/about.c:194
+msgid "A fast and lightweight IDE"
+msgstr "Un IDE rápidu y llixeru"
+
+#: ../src/about.c:215
+#, c-format
+msgid "(built on or after %s)"
+msgstr "(construyíu en, o dempués del %s)"
+
+#. gtk_container_add(GTK_CONTAINER(info_box), cop_label);
+#: ../src/about.c:246
+msgid "Info"
+msgstr "Información"
+
+#: ../src/about.c:262
+msgid "Developers"
+msgstr "Desarrolladores"
+
+#: ../src/about.c:271
+msgid "maintainer"
+msgstr "caltenedor"
+
+#: ../src/about.c:279
+msgid "developer"
+msgstr "desendolcador"
+
+#: ../src/about.c:287
+msgid "translation maintainer"
+msgstr "caltenedor de torna"
+
+#: ../src/about.c:296
+msgid "Translators"
+msgstr "Tornadores"
+
+#: ../src/about.c:316
+msgid "Previous Translators"
+msgstr "Tornadores Anteriores"
+
+#: ../src/about.c:337
+msgid "Contributors"
+msgstr "Collaboradores"
+
+#: ../src/about.c:347
+#, c-format
+msgid ""
+"Some of the many contributors (for a more detailed list, see the file %s):"
+msgstr ""
+"Dalgunos de los munchos collaboradores (pa una llista detallada, mira'l "
+"ficheru %s):"
+
+#: ../src/about.c:373
+msgid "Credits"
+msgstr "Créitos"
+
+#: ../src/about.c:387
+msgid "License"
+msgstr "Llicencia"
+
+#: ../src/about.c:396
+msgid ""
+"License text could not be found, please visit http://www.gnu.org/licenses/"
+"gpl-2.0.txt to view it online."
+msgstr ""
+"El testu de la llicencia non pudo ser atopáu, por favor visita http://www."
+"gnu.org/licenses/gpl-2.0.txt pa velo en llínia"
+
+#. fall back to %d
+#: ../src/build.c:627
+#, c-format
+msgid "failed to substitute %%p, no project active"
+msgstr ""
+
+#: ../src/build.c:665
+#, fuzzy
+msgid "Process failed, no working directory"
+msgstr "Falló al camudar el direutoriu de trabayu a \"%s\""
+
+#: ../src/build.c:691
+#, c-format
+msgid "%s (in directory: %s)"
+msgstr "%s (en direutoriu: %s)"
+
+#: ../src/build.c:711 ../src/build.c:935 ../src/search.c:1456
+#, c-format
+msgid "Process failed (%s)"
+msgstr "Falló'l procesu (%s)"
+
+#: ../src/build.c:781
+#, c-format
+msgid "Failed to change the working directory to \"%s\""
+msgstr "Falló al camudar el direutoriu de trabayu a \"%s\""
+
+#: ../src/build.c:810
+#, c-format
+msgid "Failed to execute \"%s\" (start-script could not be created)"
+msgstr "Falló al executar \"%s\" (el guión d'entamu non pudo ser criáu)"
+
+#: ../src/build.c:864
+msgid ""
+"Could not execute the file in the VTE because it probably contains a command."
+msgstr ""
+"Non se pudó executar el ficheru na terminal virtual (VTE) probablemente "
+"porque caltien un comandu."
+
+#: ../src/build.c:902
+#, c-format
+msgid ""
+"Could not find terminal \"%s\" (check path for Terminal tool setting in "
+"Preferences)"
+msgstr ""
+"Non s'atopó la terminal \"%s\" (verifica les rutes pa la ferramienta de "
+"terminal nes Preferencies)"
+
+#: ../src/build.c:1072
+msgid "Compilation failed."
+msgstr "La compilación falló."
+
+#: ../src/build.c:1086
+msgid "Compilation finished successfully."
+msgstr "La compilación finó con éxitu."
+
+#: ../src/build.c:1242
+#, fuzzy
+msgid "Custom Text"
+msgstr "Make Oxetivu Personalizáu"
+
+#: ../src/build.c:1243
+#, fuzzy
+msgid "Enter custom text here, all entered text is appended to the command."
+msgstr ""
+"Ingresar opciones personalizaes equí, tol testu ingresáu ye pasáu a la "
+"ferramienta make"
+
+#: ../src/build.c:1321
+msgid "_Next Error"
+msgstr "Siguie_nte Fallu"
+
+#: ../src/build.c:1323
+msgid "_Previous Error"
+msgstr "Fallu _Previu"
+
+#: ../src/build.c:1333
+#, fuzzy
+msgid "_Set Build Commands"
+msgstr "Configurar Comandos Personalizaos"
+
+#: ../src/build.c:1611 ../src/toolbar.c:352
+msgid "Build the current file"
+msgstr "Construyir el ficheru actual"
+
+#: ../src/build.c:1625
+msgid "Build the current file with Make and the default target"
+msgstr "Fae'l ficheru actual con Make y l'oxetivu por defeutu"
+
+#: ../src/build.c:1627
+msgid "Build the current file with Make and the specified target"
+msgstr "Fae'l ficheru actual con Make y l'oxetivu especificáu"
+
+#: ../src/build.c:1629
+msgid "Compile the current file with Make"
+msgstr "Compilar el ficheru actual con Make"
+
+#: ../src/build.c:1656
+#, c-format
+msgid "Process could not be stopped (%s)."
+msgstr "El procesu nun pudo ser deteníu (%s)."
+
+#: ../src/build.c:1673 ../src/build.c:1685
+msgid "No more build errors."
+msgstr "Nun hai más fallos de construción."
+
+#: ../src/build.c:1757
+msgid "Item"
+msgstr ""
+
+#: ../src/build.c:1758 ../src/symbols.c:639
+msgid "Label"
+msgstr "Etiqueta"
+
+#: ../src/build.c:1759 ../src/symbols.c:634
+msgid "Command"
+msgstr "Comandu"
+
+#: ../src/build.c:1760
+#, fuzzy
+msgid "Working directory"
+msgstr "%s (en direutoriu: %s)"
+
+#: ../src/build.c:1761
+#, fuzzy
+msgid "Clear"
+msgstr "Compilador"
+
+#: ../src/build.c:1863 ../src/build.c:1865
+#, fuzzy, c-format
+msgid "%s Commands"
+msgstr "comandos de %s"
+
+#: ../src/build.c:1865
+#, fuzzy
+msgid "No Filetype"
+msgstr "Escoyer _Triba de Ficheru"
+
+#: ../src/build.c:1873 ../src/build.c:1908
+#, fuzzy
+msgid "Error Regular Expression:"
+msgstr "Espresiones regulares _Grep"
+
+#: ../src/build.c:1901
+msgid "Non-Filetype Commands"
+msgstr ""
+
+#: ../src/build.c:1931
+msgid "Note: Item 2 opens a dialog and appends the response to the command."
+msgstr ""
+
+#: ../src/build.c:1940
+#, fuzzy
+msgid "Execute Commands"
+msgstr "Configurar Comandos Personalizaos"
+
+#: ../src/build.c:1951
+#, c-format
+msgid ""
+"%d, %e, %f, %p are substituted in command and directory fields, see manual "
+"for details."
+msgstr ""
+
+#: ../src/build.c:2103
+#, fuzzy
+msgid "Set Build Commands"
+msgstr "Configurar Comandos Personalizaos"
+
+#: ../src/build.c:2369 ../src/build.c:2554
+#, fuzzy
+msgid "_Execute"
+msgstr "Execución:"
+
+#: ../src/build.c:2551
+#, fuzzy
+msgid "_Make"
+msgstr "Make:"
+
+#. build the code with make custom
+#: ../src/build.c:2552 ../src/build.c:2605
+msgid "Make Custom _Target"
+msgstr "Make Oxe_tivu Personalizáu"
+
+#. build the code with make object
+#: ../src/build.c:2553 ../src/build.c:2613
+msgid "Make _Object"
+msgstr "Make _Object"
+
+#. build the code
+#: ../src/build.c:2585 ../src/interface.c:1075
+msgid "_Build"
+msgstr "_Construyir"
+
+#. build the code with make all
+#: ../src/build.c:2597
+msgid "_Make All"
+msgstr "_Make All"
+
+#. arguments
+#: ../src/build.c:2625
+#, fuzzy
+msgid "_Set Build Menu Commands"
+msgstr "Configurar Comandos Personalizaos"
+
+#: ../src/callbacks.c:153
+msgid "Do you really want to quit?"
+msgstr "¿De xuro que quies colar?"
+
+#: ../src/callbacks.c:231
+#, fuzzy, c-format
+msgid "%d file saved."
+msgid_plural "%d files saved."
+msgstr[0] "Ficheru %s guardáu."
+msgstr[1] "Ficheru %s guardáu."
+
+#: ../src/callbacks.c:491 ../src/document.c:2933 ../src/interface.c:352
+#: ../src/sidebar.c:587
+msgid "_Reload"
+msgstr "_Recargar"
+
+#: ../src/callbacks.c:492
+msgid "Any unsaved changes will be lost."
+msgstr "Cualisquier cambio non grabáu será perdíu."
+
+#: ../src/callbacks.c:493
+#, c-format
+msgid "Are you sure you want to reload '%s'?"
+msgstr "¿De xuro que quies recargar '%s'?"
+
+#: ../src/callbacks.c:1282 ../src/keybindings.c:423
+msgid "Go to Line"
+msgstr "Dir a la Llínia"
+
+#: ../src/callbacks.c:1282
+msgid "Enter the line you want to go to:"
+msgstr "Introduz la llínia a la que quies dir:"
+
+#: ../src/callbacks.c:1366 ../src/callbacks.c:1391
+msgid ""
+"Please set the filetype for the current file before using this function."
+msgstr ""
+"Por favor seleiciona la triba de ficheru pal ficheru actual enantes d'usar "
+"esta función."
+
+#: ../src/callbacks.c:1506 ../src/ui_utils.c:544
+msgid "dd.mm.yyyy"
+msgstr "dd.mm.yyyy"
+
+#: ../src/callbacks.c:1508 ../src/ui_utils.c:545
+msgid "mm.dd.yyyy"
+msgstr "mm.dd.yyyy"
+
+#: ../src/callbacks.c:1510 ../src/ui_utils.c:546
+msgid "yyyy/mm/dd"
+msgstr "yyyy/mm/dd"
+
+#: ../src/callbacks.c:1512 ../src/ui_utils.c:555
+msgid "dd.mm.yyyy hh:mm:ss"
+msgstr "dd.mm.yyyy hh:mm:ss"
+
+#: ../src/callbacks.c:1514 ../src/ui_utils.c:556
+msgid "mm.dd.yyyy hh:mm:ss"
+msgstr "mm.dd.yyyy hh:mm:ss"
+
+#: ../src/callbacks.c:1516 ../src/ui_utils.c:557
+msgid "yyyy/mm/dd hh:mm:ss"
+msgstr "yyyy/mm/dd hh:mm:ss"
+
+#: ../src/callbacks.c:1518 ../src/ui_utils.c:566
+msgid "_Use Custom Date Format"
+msgstr "_Usar Formatu de Fecha Personalizáu"
+
+#: ../src/callbacks.c:1522
+msgid "Custom Date Format"
+msgstr "Formatu de Fecha Personalizáu"
+
+#: ../src/callbacks.c:1523
+msgid ""
+"Enter here a custom date and time format. You can use any conversion "
+"specifiers which can be used with the ANSI C strftime function."
+msgstr ""
+"Introduz equí un formatu de fecha y hora personalizáu. Puedes usar "
+"cualisquier especificador de conversión que pueda ser usáu cola función "
+"strftime d'ANSI C."
+
+#: ../src/callbacks.c:1541
+msgid "Date format string could not be converted (possibly too long)."
+msgstr ""
+"El formatu de fecha nun pudo ser convertíu (probablemente seya mui llargu)."
+
+#: ../src/callbacks.c:1755 ../src/callbacks.c:1765
+msgid "No more message items."
+msgstr "Nun hai más items de mensaxes."
+
+#: ../src/dialogs.c:140
+msgid "Open File"
+msgstr "Abrir ficheru"
+
+#: ../src/dialogs.c:144 ../src/interface.c:790
+msgid "_View"
+msgstr "_Ver"
+
+#: ../src/dialogs.c:147
+msgid ""
+"Opens the file in read-only mode. If you choose more than one file to open, "
+"all files will be opened read-only."
+msgstr ""
+"Abre'l ficheru en mou sólo lllectura. Si escueyes más d'un ficheru toos "
+"serán abiertos como sólo lllectura."
+
+#: ../src/dialogs.c:169
+msgid "Detect by file extension"
+msgstr "Deteuctar por estensión de ficheru"
+
+#: ../src/dialogs.c:196 ../src/interface.c:3678 ../src/interface.c:5206
+msgid "Detect from file"
+msgstr "Deteutar dende ficheru"
+
+#: ../src/dialogs.c:258
+msgid "_More Options"
+msgstr "_Más Opciones"
+
+#. line 1 with checkbox and encoding combo
+#: ../src/dialogs.c:265
+msgid "Show _hidden files"
+msgstr "Amosar ficheros _ocultos"
+
+#: ../src/dialogs.c:276
+msgid "Set encoding:"
+msgstr "Escoyer _codificación:"
+
+#: ../src/dialogs.c:286
+msgid ""
+"Explicitly defines an encoding for the file, if it would not be detected. "
+"This is useful when you know that the encoding of a file cannot be detected "
+"correctly by Geany.\n"
+"Note if you choose multiple files, they will all be opened with the chosen "
+"encoding."
+msgstr ""
+"Define esplicitamente una codificación pal ficheru, non usaráse la deteición "
+"automática. Esto ye útil cuando se sabe que la codificación d'un ficheru nun "
+"puede ser deteutada correutamente por Geany.\n"
+"Ten en cuenta que si se seleicionen multiples ficheros toos serán abiertos "
+"cola codificación seleicionada."
+
+#. line 2 with filetype combo
+#: ../src/dialogs.c:293
+msgid "Set filetype:"
+msgstr "Seleicionar triba de ficheru:"
+
+#: ../src/dialogs.c:303
+msgid ""
+"Explicitly defines a filetype for the file, if it would not be detected by "
+"filename extension.\n"
+"Note if you choose multiple files, they will all be opened with the chosen "
+"filetype."
+msgstr ""
+"Define esplicitamente la triba de ficheru, non se usará la deteición por "
+"estensión.\n"
+"Ten en cuenta que si se seleicionen multiples ficheros toos serán abiertos "
+"como la triba seleicionada"
+
+#: ../src/dialogs.c:389
+msgid "Overwrite?"
+msgstr "¿Sobrescribir?"
+
+#: ../src/dialogs.c:390
+msgid "Filename already exists!"
+msgstr "¡El nome de ficheru yá esiste!"
+
+#: ../src/dialogs.c:424
+msgid "Save File"
+msgstr "Grabar Ficheru"
+
+#: ../src/dialogs.c:432
+msgid "R_ename"
+msgstr "R_enomar"
+
+#: ../src/dialogs.c:434
+msgid "Save the file and rename it"
+msgstr "Guardar el ficheru y renomalu"
+
+#: ../src/dialogs.c:442
+msgid "_Open file in a new tab"
+msgstr "_Abrir el ficheru nuna nueva llingüeta"
+
+#: ../src/dialogs.c:444
+msgid ""
+"Keep the current unsaved document open and open the newly saved file in a "
+"new tab"
+msgstr ""
+"Caltien el documentu actual non salváu y abre un ficheru guardáu nuevu nuna "
+"llingüeta nueva"
+
+#: ../src/dialogs.c:566 ../src/win32.c:614
+msgid "Error"
+msgstr "Fallu"
+
+#: ../src/dialogs.c:569 ../src/dialogs.c:1390 ../src/win32.c:620
+#: ../src/win32.c:679
+msgid "Question"
+msgstr "Entruga"
+
+#: ../src/dialogs.c:572 ../src/win32.c:626
+msgid "Warning"
+msgstr "Alvertencia"
+
+#: ../src/dialogs.c:575 ../src/win32.c:632
+msgid "Information"
+msgstr "Información"
+
+#: ../src/dialogs.c:655
+msgid "_Don't save"
+msgstr "_Non grabar"
+
+#: ../src/dialogs.c:686
+#, c-format
+msgid "The file '%s' is not saved."
+msgstr "El ficheru '%s' non foi guardáu."
+
+#: ../src/dialogs.c:688
+msgid "Do you want to save it before closing?"
+msgstr "¿Quies guardalu enantes de zarrar?"
+
+#: ../src/dialogs.c:763
+msgid "Choose font"
+msgstr "Escoyer fonte"
+
+#: ../src/dialogs.c:1004
+msgid ""
+"An error occurred or file information could not be retrieved (e.g. from a "
+"new file)."
+msgstr ""
+"Ocurrió un fallu o non se pudo obtener información d'un ficheru (ex. d'un "
+"ficheru nuevu)."
+
+#: ../src/dialogs.c:1023 ../src/dialogs.c:1024 ../src/dialogs.c:1025
+#: ../src/dialogs.c:1031 ../src/dialogs.c:1032 ../src/dialogs.c:1033
+#: ../src/symbols.c:1725 ../src/symbols.c:1746 ../src/symbols.c:1798
+#: ../src/ui_utils.c:218
+msgid "unknown"
+msgstr "desconocíu"
+
+#: ../src/dialogs.c:1038 ../src/symbols.c:801
+msgid "Properties"
+msgstr "Propiedaes"
+
+#: ../src/dialogs.c:1067
+msgid "<b>Type:</b>"
+msgstr "<b>Triba:</b>"
+
+#: ../src/dialogs.c:1081
+msgid "<b>Size:</b>"
+msgstr "<b>Tamañu:</b>"
+
+#: ../src/dialogs.c:1097
+msgid "<b>Location:</b>"
+msgstr "<b>Ubicación:</b>"
+
+#: ../src/dialogs.c:1111
+msgid "<b>Read-only:</b>"
+msgstr "<b>Sólo Llectura:</b>"
+
+#: ../src/dialogs.c:1118
+msgid "(only inside Geany)"
+msgstr "(sólo dientro de Geany)"
+
+#: ../src/dialogs.c:1127
+msgid "<b>Encoding:</b>"
+msgstr "<b>Codificación</b>"
+
+#. BOM = byte order mark
+#: ../src/dialogs.c:1137 ../src/ui_utils.c:221
+msgid "(with BOM)"
+msgstr "(con BOM)"
+
+#: ../src/dialogs.c:1137
+msgid "(without BOM)"
+msgstr "(ensin BOM)"
+
+#: ../src/dialogs.c:1148
+msgid "<b>Modified:</b>"
+msgstr "<b>Modificáu:</b>"
+
+#: ../src/dialogs.c:1162
+msgid "<b>Changed:</b>"
+msgstr "<b>Camudáu:</b>"
+
+#: ../src/dialogs.c:1176
+msgid "<b>Accessed:</b>"
+msgstr "<b>Accedíu:</b>"
+
+#: ../src/dialogs.c:1198
+msgid "<b>Permissions:</b>"
+msgstr "<b>Permisos</b>"
+
+#. Header
+#: ../src/dialogs.c:1206
+msgid "Read:"
+msgstr "Llectura:"
+
+#: ../src/dialogs.c:1213
+msgid "Write:"
+msgstr "Escritura:"
+
+#: ../src/dialogs.c:1220
+msgid "Execute:"
+msgstr "Execución:"
+
+#. Owner
+#: ../src/dialogs.c:1228
+msgid "Owner:"
+msgstr "Dueñu:"
+
+#. Group
+#: ../src/dialogs.c:1264
+msgid "Group:"
+msgstr "Grupu:"
+
+#. Other
+#: ../src/dialogs.c:1300
+msgid "Other:"
+msgstr "Otros:"
+
+#: ../src/document.c:646
+#, c-format
+msgid "File %s closed."
+msgstr "El ficheru %s foi zarráu."
+
+#: ../src/document.c:771
+#, c-format
+msgid "New file \"%s\" opened."
+msgstr "Nuevu ficheru \"%s\" abiertu."
+
+#: ../src/document.c:944 ../src/document.c:1459
+#, c-format
+msgid "Could not open file %s (%s)"
+msgstr "Non se pudo abrir el ficheru %s (%s)"
+
+#: ../src/document.c:974
+#, c-format
+msgid ""
+"The file \"%s\" could not be opened properly and has been truncated. This "
+"can occur if the file contains a NULL byte. Be aware that saving it can "
+"cause data loss.\n"
+"The file was set to read-only."
+msgstr ""
+"El ficheru \"%s\" non pudó ser abiertu adecuadamente y probablemente foi "
+"recortáu. Esto puede ocurrir si'l ficheru caltien un byte NULL. Tate "
+"consciente de que grabalu puede provocar perdida de datos.\n"
+"El ficheru foi abiertu como sólo llectura."
+
+#. For translators: the second wildcard is an encoding name, e.g.
+#. * The file \"test.txt\" is not valid UTF-8.
+#: ../src/document.c:1000
+#, c-format
+msgid "The file \"%s\" is not valid %s."
+msgstr "El ficheru \"%s\" non ye %s válidu."
+
+#: ../src/document.c:1010
+#, c-format
+msgid ""
+"The file \"%s\" does not look like a text file or the file encoding is not "
+"supported."
+msgstr ""
+"El ficheru \"%s\" non parez ser de testu o la codificación non ye sofitada."
+
+#: ../src/document.c:1158
+msgid "Spaces"
+msgstr "Espacios"
+
+#: ../src/document.c:1161
+msgid "Tabs"
+msgstr "Tabulaciones"
+
+#: ../src/document.c:1164
+msgid "Tabs and Spaces"
+msgstr "Tabulación y espacios"
+
+#. For translators: first wildcard is the indentation mode (Spaces, Tabs, Tabs
+#. * and Spaces), the second one is the filename
+#: ../src/document.c:1169
+#, c-format
+msgid "Setting %s indentation mode for %s."
+msgstr "Configura'l mou d'indentación de %s pa %s."
+
+#: ../src/document.c:1222
+msgid "Invalid filename"
+msgstr "Nome de ficheru invalidu"
+
+#: ../src/document.c:1337
+#, c-format
+msgid "File %s reloaded."
+msgstr "Ficheru %s recargáu."
+
+#. For translators: this is the status window message for opening a file. %d is the number
+#. * of the newly opened file, %s indicates whether the file is opened read-only
+#. * (it is replaced with the string ", read-only").
+#: ../src/document.c:1342
+#, c-format
+msgid "File %s opened(%d%s)."
+msgstr "Ficheru %s abiertu(%d%s)"
+
+#: ../src/document.c:1344
+msgid ", read-only"
+msgstr ", sólo llectura"
+
+#: ../src/document.c:1554
+msgid "Error renaming file."
+msgstr "Fallu renomando'l ficheru."
+
+#: ../src/document.c:1639
+#, c-format
+msgid ""
+"An error occurred while converting the file from UTF-8 in \"%s\". The file "
+"remains unsaved."
+msgstr ""
+"Ocurrió un fallu mientres se convertía'l ficheru dende UTF-8 en \"%s\". El "
+"ficheru non foi guardáu.n"
+
+#: ../src/document.c:1661
+#, c-format
+msgid ""
+"Error message: %s\n"
+"The error occurred at \"%s\" (line: %d, column: %d)."
+msgstr ""
+"Mensax de fallu: %s\n"
+"El fallu ocurrió en \"%s\" (llinia: %d, columna: %d)."
+
+#: ../src/document.c:1666
+#, c-format
+msgid "Error message: %s."
+msgstr "Mensax de fallu: %s."
+
+#: ../src/document.c:1766 ../src/document.c:1829
+msgid "Error saving file."
+msgstr "Fallu guardando ficheru."
+
+#: ../src/document.c:1828
+#, c-format
+msgid "Error saving file (%s)."
+msgstr "Fallu guardando ficheru (%s)."
+
+#: ../src/document.c:1853
+#, c-format
+msgid "File %s saved."
+msgstr "Ficheru %s guardáu."
+
+#: ../src/document.c:1921 ../src/document.c:1978 ../src/document.c:1986
+#, c-format
+msgid "\"%s\" was not found."
+msgstr "non s'atopó \"%s\"."
+
+#: ../src/document.c:1986
+msgid "Wrap search and find again?"
+msgstr "¿Volver al entamu y guetar de nueves?"
+
+#: ../src/document.c:2065 ../src/search.c:1113 ../src/search.c:1157
+#: ../src/search.c:1703 ../src/search.c:1704
+#, c-format
+msgid "No matches found for \"%s\"."
+msgstr "Non s'atoparon coincidencies pa \"%s\"."
+
+#: ../src/document.c:2076 ../src/document.c:2085
+#, c-format
+msgid "%s: replaced %d occurrence of \"%s\" with \"%s\"."
+msgid_plural "%s: replaced %d occurrences of \"%s\" with \"%s\"."
+msgstr[0] "%s: reemplazada %d ocurrencia de \"%s\" con \"%s\"."
+msgstr[1] "%s: reemplazado %d ocurrencies de \"%s\" con \"%s\"."
+
+#: ../src/document.c:2934
+msgid "Do you want to reload it?"
+msgstr "¿Quies recargalu?"
+
+#: ../src/document.c:2935
+#, c-format
+msgid ""
+"The file '%s' on the disk is more recent than\n"
+"the current buffer."
+msgstr ""
+"El ficheru '%s' del discu ye más reciente\n"
+"que la vista actual."
+
+#: ../src/document.c:2955
+msgid "Try to resave the file?"
+msgstr "¿Intentar volver a guardar el ficheru?"
+
+#: ../src/document.c:2956
+#, c-format
+msgid "File \"%s\" was not found on disk!"
+msgstr "Ficheru \"%s\" non foi atopáu nel discu!"
+
+#: ../src/editor.c:4318
+msgid "Enter Tab Width"
+msgstr "Introduz l'anchu de la llingüeta"
+
+#: ../src/editor.c:4319
+msgid "Enter the amount of spaces which should be replaced by a tab character."
+msgstr ""
+"Introduz la cantidá d'espacios que deben ser reemplazaos por un carauter de "
+"tabulación."
+
+#: ../src/encodings.c:76
+msgid "Celtic"
+msgstr "Celta"
+
+#: ../src/encodings.c:77 ../src/encodings.c:78
+msgid "Greek"
+msgstr "Griegu"
+
+#: ../src/encodings.c:79
+msgid "Nordic"
+msgstr "Nórdicu"
+
+#: ../src/encodings.c:80
+msgid "South European"
+msgstr "Europeu del sur"
+
+#: ../src/encodings.c:81 ../src/encodings.c:82 ../src/encodings.c:83
+#: ../src/encodings.c:84
+msgid "Western"
+msgstr "Occidental"
+
+#: ../src/encodings.c:86 ../src/encodings.c:87 ../src/encodings.c:88
+msgid "Baltic"
+msgstr "Bálticu"
+
+#: ../src/encodings.c:89 ../src/encodings.c:90 ../src/encodings.c:91
+msgid "Central European"
+msgstr "Europeu central"
+
+#. ISO-IR-111 not available on Windows
+#: ../src/encodings.c:92 ../src/encodings.c:93 ../src/encodings.c:95
+#: ../src/encodings.c:96 ../src/encodings.c:97
+msgid "Cyrillic"
+msgstr "Cirílicu"
+
+#: ../src/encodings.c:98
+msgid "Cyrillic/Russian"
+msgstr "Cirílicu/Rusu"
+
+#: ../src/encodings.c:99
+msgid "Cyrillic/Ukrainian"
+msgstr "Cirílicu/Ucranianu"
+
+#: ../src/encodings.c:100
+msgid "Romanian"
+msgstr "Rumanu"
+
+#: ../src/encodings.c:102 ../src/encodings.c:103 ../src/encodings.c:104
+msgid "Arabic"
+msgstr "Árabe"
+
+#. not available at all, ?
+#: ../src/encodings.c:105 ../src/encodings.c:107 ../src/encodings.c:108
+msgid "Hebrew"
+msgstr "Hebreu"
+
+#: ../src/encodings.c:109
+msgid "Hebrew Visual"
+msgstr "Hebreu Visual"
+
+#: ../src/encodings.c:111
+msgid "Armenian"
+msgstr "Armeniu"
+
+#: ../src/encodings.c:112
+msgid "Georgian"
+msgstr "Xeorxianu"
+
+#: ../src/encodings.c:113
+msgid "Thai"
+msgstr "Tailandés"
+
+#: ../src/encodings.c:114 ../src/encodings.c:115 ../src/encodings.c:116
+msgid "Turkish"
+msgstr "Turcu"
+
+#: ../src/encodings.c:117 ../src/encodings.c:118 ../src/encodings.c:119
+msgid "Vietnamese"
+msgstr "Vietnamita"
+
+#: ../src/encodings.c:121 ../src/encodings.c:122 ../src/encodings.c:123
+#: ../src/encodings.c:124 ../src/encodings.c:125 ../src/encodings.c:126
+#: ../src/encodings.c:127 ../src/encodings.c:128
+msgid "Unicode"
+msgstr "Unicode"
+
+#. maybe not available on Linux
+#: ../src/encodings.c:130 ../src/encodings.c:131 ../src/encodings.c:132
+#: ../src/encodings.c:134
+msgid "Chinese Simplified"
+msgstr "Chinu simplificáu"
+
+#: ../src/encodings.c:135 ../src/encodings.c:136 ../src/encodings.c:137
+msgid "Chinese Traditional"
+msgstr "Chinu tradicional"
+
+#: ../src/encodings.c:138 ../src/encodings.c:139 ../src/encodings.c:140
+#: ../src/encodings.c:141
+msgid "Japanese"
+msgstr "Xaponés"
+
+#: ../src/encodings.c:142 ../src/encodings.c:143 ../src/encodings.c:144
+#: ../src/encodings.c:145
+msgid "Korean"
+msgstr "Coreanu"
+
+#: ../src/encodings.c:147
+msgid "Without encoding"
+msgstr "Ensin _codificación"
+
+#: ../src/encodings.c:375
+msgid "_West European"
+msgstr "Europeu del _Oeste"
+
+#: ../src/encodings.c:381
+msgid "_East European"
+msgstr "Europeu del _Este"
+
+#: ../src/encodings.c:387
+msgid "East _Asian"
+msgstr "Este _Asiáticu"
+
+#: ../src/encodings.c:393
+msgid "_SE & SW Asian"
+msgstr "_SE & SO Asiáticu"
+
+#: ../src/encodings.c:399
+msgid "_Middle Eastern"
+msgstr "_Cercanu Oriente"
+
+#: ../src/encodings.c:405
+msgid "_Unicode"
+msgstr "_Unicode"
+
+#: ../src/filetypes.c:101 ../src/filetypes.c:209 ../src/filetypes.c:231
+#: ../src/filetypes.c:242 ../src/filetypes.c:264
+#, c-format
+msgid "%s source file"
+msgstr "Ficheru fonte %s"
+
+#: ../src/filetypes.c:102
+#, c-format
+msgid "%s file"
+msgstr "Ficheru %s"
+
+#: ../src/filetypes.c:118 ../src/filetypes.c:119 ../src/interface.c:3597
+#: ../src/interface.c:5149
+msgid "None"
+msgstr "Nengún"
+
+#: ../src/filetypes.c:409
+msgid "Shell script file"
+msgstr "Ficheru de guiones shell"
+
+#: ../src/filetypes.c:421
+msgid "Makefile"
+msgstr "Makefile"
+
+#: ../src/filetypes.c:433
+msgid "XML document"
+msgstr "Documentu XML"
+
+#: ../src/filetypes.c:468
+msgid "Cascading StyleSheet"
+msgstr "Fueyes d'estilu en cascada (CSS)"
+
+#: ../src/filetypes.c:479
+msgid "SQL Dump file"
+msgstr "Ficheru de volcáu SQL"
+
+#: ../src/filetypes.c:534
+msgid "Config file"
+msgstr "Ficheru de configuración"
+
+#: ../src/filetypes.c:546
+msgid "Gettext translation file"
+msgstr "Ficheru de torna Gettext"
+
+#: ../src/filetypes.c:579
+#, c-format
+msgid "%s script file"
+msgstr "Ficheru guión %s"
+
+#: ../src/filetypes.c:826
+msgid "_Programming Languages"
+msgstr "Llingüaxes de _Programación"
+
+#: ../src/filetypes.c:827
+msgid "_Scripting Languages"
+msgstr "Llingüaxes de _Scripts"
+
+#: ../src/filetypes.c:828
+msgid "_Markup Languages"
+msgstr "Llingüaxes d'_Etiquetes"
+
+#: ../src/filetypes.c:829
+msgid "M_iscellaneous Languages"
+msgstr "Llingüaxes M_isceláneos"
+
+#: ../src/filetypes.c:830
+#, fuzzy
+msgid "_Custom Filetypes"
+msgstr "Escoyer _Triba de Ficheru"
+
+#: ../src/filetypes.c:1403 ../src/win32.c:107
+msgid "All Source"
+msgstr "Too codigu fonte"
+
+#: ../src/filetypes.c:1428 ../src/project.c:292
+msgid "All files"
+msgstr "Tolos ficheros"
+
+#: ../src/filetypes.c:1487
+#, c-format
+msgid "Bad regex for filetype %s: %s"
+msgstr "Espresión regular incorreuta pa la triba de ficheru %s: %s"
+
+#: ../src/geany.h:53
+msgid "untitled"
+msgstr "ensin títulu"
+
+#: ../src/highlighting.c:3325 ../src/main.c:792 ../src/socket.c:164
+#: ../src/templates.c:346
+#, c-format
+msgid "Could not find file '%s'."
+msgstr "Non se pudo atopar el ficheru '%s'."
+
+#: ../src/highlighting.c:3374
+#, fuzzy
+msgid "_Color Schemes"
+msgstr "Seleutor de _Collor"
+
+#: ../src/highlighting.c:3381
+msgid "_Default"
+msgstr ""
+
+#: ../src/interface.c:295
+msgid "_File"
+msgstr "_Ficheru"
+
+#: ../src/interface.c:306
+msgid "New (with _Template)"
+msgstr "Nuevu (dende _Plantilla)"
+
+#: ../src/interface.c:323 ../src/interface.c:2093
+msgid "Open Selected F_ile"
+msgstr "Abrir Ficheru Seleic_ionáu"
+
+#: ../src/interface.c:327
+msgid "Recent _Files"
+msgstr "_Ficheros Recientes"
+
+#: ../src/interface.c:344
+msgid "Save A_ll"
+msgstr "Guardar _Too"
+
+#: ../src/interface.c:360
+msgid "R_eload As"
+msgstr "R_ecargar Como"
+
+#: ../src/interface.c:371 ../src/interface.c:553 ../src/interface.c:682
+#: ../src/interface.c:696 ../src/interface.c:950 ../src/interface.c:960
+#: ../src/interface.c:2161 ../src/interface.c:2175
+msgid "invisible"
+msgstr "invisible"
+
+#: ../src/interface.c:388
+msgid "Page Set_up"
+msgstr "_Configuración de Páxina"
+
+#: ../src/interface.c:405 ../src/notebook.c:213
+msgid "Close Ot_her Documents"
+msgstr "Zarrar otr_os documentos"
+
+#: ../src/interface.c:413 ../src/notebook.c:218
+msgid "C_lose All"
+msgstr "Za_rrar Too"
+
+#: ../src/interface.c:430
+msgid "_Edit"
+msgstr "_Editar"
+
+#: ../src/interface.c:480 ../src/interface.c:2102
+msgid "_Format"
+msgstr "_Formatu"
+
+#: ../src/interface.c:487 ../src/keybindings.c:367
+#, fuzzy
+msgid "_Reflow Lines/Block"
+msgstr "Celar llinies/bloque"
+
+#: ../src/interface.c:491
+msgid "T_oggle Case of Selection"
+msgstr "C_onvertir mayúscules/minúscules de la Seleición"
+
+#: ../src/interface.c:495 ../src/keybindings.c:272
+#, fuzzy
+msgid "_Transpose Current Line"
+msgstr "Tresponer la llinia actual"
+
+#: ../src/interface.c:504
+msgid "_Comment Line(s)"
+msgstr "_Comentar Llínia(es)"
+
+#: ../src/interface.c:508
+msgid "U_ncomment Line(s)"
+msgstr "_Descomentar Llínia(es)"
+
+#: ../src/interface.c:512
+msgid "_Toggle Line Commentation"
+msgstr "Comen_tar/Descomentar"
+
+#: ../src/interface.c:521
+msgid "_Increase Indent"
+msgstr "_Incrementar sangría"
+
+#: ../src/interface.c:529
+msgid "_Decrease Indent"
+msgstr "_Decrementar sangría"
+
+#: ../src/interface.c:537 ../src/keybindings.c:356
+#, fuzzy
+msgid "_Smart Line Indent"
+msgstr "Sangráu de llínia intelixente"
+
+#: ../src/interface.c:546
+msgid "_Send Selection to"
+msgstr "Mandar _Seleición a"
+
+#: ../src/interface.c:556 ../src/interface.c:2106
+#, fuzzy
+msgid "_Commands"
+msgstr "Comandu"
+
+#: ../src/interface.c:563 ../src/keybindings.c:313
+#, fuzzy
+msgid "_Cut Current Line(s)"
+msgstr "Cortar la(es) llínia(es) actual(es)"
+
+#: ../src/interface.c:571 ../src/keybindings.c:310
+#, fuzzy
+msgid "_Copy Current Line(s)"
+msgstr "Copiar la(es) llínia(es) actual(es)"
+
+#: ../src/interface.c:579 ../src/keybindings.c:265
+#, fuzzy
+msgid "_Delete Current Line(s)"
+msgstr "Esborrar la(es) llínia(es) actual(es)"
+
+#: ../src/interface.c:583 ../src/keybindings.c:262
+#, fuzzy
+msgid "_Duplicate Line or Selection"
+msgstr "Du_plicar Llínia o Seleición"
+
+#: ../src/interface.c:592 ../src/keybindings.c:323
+#, fuzzy
+msgid "_Select Current Line(s)"
+msgstr "Seleicionar llínia(es) actual(es)"
+
+#: ../src/interface.c:596 ../src/keybindings.c:326
+#, fuzzy
+msgid "_Select Current Paragraph"
+msgstr "Seleicionar parrafu actual"
+
+#: ../src/interface.c:605 ../src/keybindings.c:376
+#, fuzzy
+msgid "_Insert Alternative White Space"
+msgstr "Inxertar espaciu alternativu"
+
+#: ../src/interface.c:614 ../src/keybindings.c:432
+#, fuzzy
+msgid "_Go to Next Marker"
+msgstr "Dir a la siguiente marca"
+
+#: ../src/interface.c:618 ../src/keybindings.c:435
+#, fuzzy
+msgid "_Go to Previous Marker"
+msgstr "Dir a la marca anterior"
+
+#: ../src/interface.c:627 ../src/keybindings.c:365
+msgid "_Send Selection to Terminal"
+msgstr "_Unviar la Seleición a la Terminal"
+
+#: ../src/interface.c:636 ../src/interface.c:2115
+msgid "I_nsert Comments"
+msgstr "I_nxertar Comentarios"
+
+#: ../src/interface.c:647 ../src/interface.c:2126
+msgid "Insert _ChangeLog Entry"
+msgstr "Inxertar Entrada de _ChangeLog"
+
+#: ../src/interface.c:651 ../src/interface.c:2130
+msgid "Insert File _Header"
+msgstr "Inxertar _Encabezáu de Ficheru"
+
+#: ../src/interface.c:655 ../src/interface.c:2134
+msgid "Insert _Function Description"
+msgstr "Inxertar Descripción de _Función"
+
+#: ../src/interface.c:659 ../src/interface.c:2138
+msgid "Insert _Multiline Comment"
+msgstr "Inxertar Comentariu _Multillinia"
+
+#: ../src/interface.c:663 ../src/interface.c:2142
+msgid "Insert _GPL Notice"
+msgstr "Inxertar avisu de llicencia _GPL"
+
+#: ../src/interface.c:667 ../src/interface.c:2146
+msgid "Insert _BSD License Notice"
+msgstr "Inxertar avisu de llicencia _BSD"
+
+#: ../src/interface.c:671 ../src/interface.c:2150
+msgid "Insert Dat_e"
+msgstr "Inxertar F_echa"
+
+#: ../src/interface.c:685 ../src/interface.c:2164
+msgid "_Insert \"include <...>\""
+msgstr "_Inxertar \"include <...>\""
+
+#: ../src/interface.c:704
+msgid "Preference_s"
+msgstr "Preferencie_s"
+
+#: ../src/interface.c:712 ../src/keybindings.c:385
+#, fuzzy
+msgid "P_lugin Preferences"
+msgstr "Preferencies"
+
+#: ../src/interface.c:720
+msgid "_Search"
+msgstr "_Guetar"
+
+#: ../src/interface.c:731
+msgid "Find _Next"
+msgstr "Guetar _Sigiuente"
+
+#: ../src/interface.c:735
+msgid "Find _Previous"
+msgstr "Guetar _Anterior"
+
+#: ../src/interface.c:739
+msgid "Find in F_iles"
+msgstr "Guetar n'Arch_ivos"
+
+#: ../src/interface.c:743 ../src/search.c:544
+msgid "_Replace"
+msgstr "_Reemplazar"
+
+#: ../src/interface.c:756
+msgid "Find _Selected"
+msgstr "Guetar _Seleición"
+
+#: ../src/interface.c:760
+msgid "Find Pre_vious Selected"
+msgstr "Guetar Seleición Pre_via"
+
+#: ../src/interface.c:769
+msgid "Next _Message"
+msgstr "Prósimo _Mensax"
+
+#: ../src/interface.c:773
+msgid "Pr_evious Message"
+msgstr "Mensax Ant_erior"
+
+#: ../src/interface.c:782 ../src/interface.c:2216
+msgid "_Go to Line"
+msgstr "D_ir a la Llínia"
+
+#: ../src/interface.c:797
+msgid "Change _Font"
+msgstr "Camudar _Fonte"
+
+#: ../src/interface.c:810
+msgid "To_ggle All Additional Widgets"
+msgstr "Am_osar/Anubrir tolos paneles adicionales"
+
+#: ../src/interface.c:814
+msgid "Full_screen"
+msgstr "Pantalla _completa"
+
+#: ../src/interface.c:818
+msgid "Show Message _Window"
+msgstr "Amosar _Ventanu de Mensaxes"
+
+#: ../src/interface.c:823
+msgid "Show _Toolbar"
+msgstr "Amosar Barra de _Ferramientes"
+
+#: ../src/interface.c:828
+msgid "Show Side_bar"
+msgstr "Amosar _Barra llateral"
+
+#: ../src/interface.c:833 ../src/interface.c:4013 ../src/keybindings.c:255
+#: ../src/prefs.c:1495
+msgid "Editor"
+msgstr "Editor"
+
+#: ../src/interface.c:840
+msgid "Show _Markers Margin"
+msgstr "Amosar les _Marques de Marxenes"
+
+#: ../src/interface.c:845
+msgid "Show _Line Numbers"
+msgstr "Amosar Númberos de _Llínia"
+
+#: ../src/interface.c:850
+msgid "Show _White Space"
+msgstr "Amosar Espacios en Blancu"
+
+#: ../src/interface.c:854
+msgid "Show Line _Endings"
+msgstr "Amosar Final de Llín_ia"
+
+#: ../src/interface.c:858
+msgid "Show _Indentation Guides"
+msgstr "Amosar Guíes d'_Identación"
+
+#: ../src/interface.c:879
+msgid "_Document"
+msgstr "_Documentu"
+
+#: ../src/interface.c:886
+msgid "_Line Wrapping"
+msgstr "_Cortáu de Llínies"
+
+#: ../src/interface.c:891
+msgid "Line _Breaking"
+msgstr "_Dixebráu de llínia"
+
+#: ../src/interface.c:895
+msgid "_Auto-indentation"
+msgstr "Formateu de Códigu _Automáticu"
+
+#: ../src/interface.c:900
+msgid "In_dent Type"
+msgstr "Triba _de formateu"
+
+#: ../src/interface.c:907 ../src/interface.c:3636 ../src/interface.c:5188
+msgid "_Tabs"
+msgstr "_Tabulaciones"
+
+#: ../src/interface.c:913 ../src/interface.c:3627 ../src/interface.c:5179
+msgid "_Spaces"
+msgstr "E_spacios"
+
+#: ../src/interface.c:919 ../src/interface.c:3645 ../src/interface.c:5197
+msgid "T_abs and Spaces"
+msgstr "S_angríes y Espacios"
+
+#: ../src/interface.c:930
+msgid "Read _Only"
+msgstr "S_ólo Llectura"
+
+#: ../src/interface.c:934
+msgid "_Write Unicode BOM"
+msgstr "_Escribir el BOM Unicode"
+
+#: ../src/interface.c:943
+msgid "Set File_type"
+msgstr "Escoyer _Triba de Ficheru"
+
+#: ../src/interface.c:953
+msgid "Set _Encoding"
+msgstr "Escoyer _Codificación"
+
+#: ../src/interface.c:963
+msgid "Set Line E_ndings"
+msgstr "Escoyer Termi_naciones de Llínia"
+
+#: ../src/interface.c:970
+msgid "Convert and Set to _CR/LF (Win)"
+msgstr "Convertir a, y Escoyer _CR/LF (Win)"
+
+#: ../src/interface.c:976
+msgid "Convert and Set to _LF (Unix)"
+msgstr "Convertir a, y Escoyer _LF (Unix)"
+
+#: ../src/interface.c:982
+msgid "Convert and Set to CR (_Mac)"
+msgstr "Convertir a, y Escoyer CR (_Mac)"
+
+#: ../src/interface.c:993
+msgid "_Strip Trailing Spaces"
+msgstr "_Esborrar espacios al final"
+
+#: ../src/interface.c:997
+msgid "_Replace Tabs by Spaces"
+msgstr "_Reemplazar Tabulaciones por Espacios"
+
+#: ../src/interface.c:1001
+msgid "Replace Spaces b_y Tabs"
+msgstr "Reemplazar Espacios por San_gríes"
+
+#: ../src/interface.c:1010
+msgid "_Fold All"
+msgstr "_Replegar Too"
+
+#: ../src/interface.c:1014
+msgid "_Unfold All"
+msgstr "_Estenderexar Too"
+
+#: ../src/interface.c:1023
+msgid "Remove _Markers"
+msgstr "Esborrar _Marques"
+
+#: ../src/interface.c:1027
+msgid "Remove Error _Indicators"
+msgstr "Esborrar los _Indicadores de Fallos"
+
+#: ../src/interface.c:1031
+msgid "_Project"
+msgstr "_Proyeutu"
+
+#: ../src/interface.c:1038
+msgid "_New"
+msgstr "_Nuevu"
+
+#: ../src/interface.c:1046
+msgid "_Open"
+msgstr "_Abrir"
+
+#: ../src/interface.c:1054
+msgid "_Recent Projects"
+msgstr "Proyeutos _Recientes"
+
+#: ../src/interface.c:1058
+msgid "_Close"
+msgstr "_Zarrar"
+
+#: ../src/interface.c:1079
+msgid "_Tools"
+msgstr "_Ferramientes"
+
+#: ../src/interface.c:1086
+msgid "_Reload Configuration"
+msgstr "_Recargar Configuración"
+
+#: ../src/interface.c:1094
+msgid "C_onfiguration Files"
+msgstr "Ficheros de C_onfiguración"
+
+#: ../src/interface.c:1107
+msgid "_Color Chooser"
+msgstr "Seleutor de _Collor"
+
+#: ../src/interface.c:1115
+msgid "_Word Count"
+msgstr "C_untar Pallabres"
+
+#: ../src/interface.c:1119
+msgid "Load Ta_gs"
+msgstr "Cargar Ta_gs"
+
+#: ../src/interface.c:1123 ../src/interface.c:1130
+msgid "_Help"
+msgstr "A_ida"
+
+#: ../src/interface.c:1138
+msgid "_Website"
+msgstr "Sitiu _Web"
+
+#: ../src/interface.c:1142
+msgid "_Keyboard Shortcuts"
+msgstr "_Ataxos de Tecláu"
+
+#: ../src/interface.c:1146
+msgid "_Debug Messages"
+msgstr "Mensaxes de _Depuración"
+
+#: ../src/interface.c:1185 ../src/sidebar.c:128
+msgid "Symbols"
+msgstr "Símbolos"
+
+#: ../src/interface.c:1199
+msgid "Documents"
+msgstr "Documentos"
+
+#: ../src/interface.c:1235
+msgid "Status"
+msgstr "Estáu"
+
+#: ../src/interface.c:1249
+msgid "Compiler"
+msgstr "Compilador"
+
+#: ../src/interface.c:1264
+msgid "Messages"
+msgstr "Mensaxes"
+
+#: ../src/interface.c:1277
+msgid "Scribble"
+msgstr "Borrador"
+
+#: ../src/interface.c:1896 ../src/interface.c:3382
+msgid "Images _and Text"
+msgstr "Imáxenes _y testu"
+
+#: ../src/interface.c:1901 ../src/interface.c:3414
+msgid "_Images Only"
+msgstr "Sólo _imáxenes"
+
+#: ../src/interface.c:1906 ../src/interface.c:3406
+msgid "_Text Only"
+msgstr "Sólo _testu"
+
+#: ../src/interface.c:1917 ../src/interface.c:3398
+msgid "_Large Icons"
+msgstr "Iconos _grandes"
+
+#: ../src/interface.c:1922 ../src/interface.c:3390
+msgid "_Small Icons"
+msgstr "Iconos _pequeños"
+
+#: ../src/interface.c:1927 ../src/interface.c:3422
+msgid "_Very Small Icons"
+msgstr "_Iconos mui pequeños"
+
+#: ../src/interface.c:1938
+msgid "_Customize Toolbar"
+msgstr "_Personalizar la Barra de Ferramientes"
+
+#: ../src/interface.c:1946
+msgid "_Hide Toolbar"
+msgstr "_Anubrir la Barra de Ferramientes"
+
+#: ../src/interface.c:2183
+msgid "Find _Usage"
+msgstr "Atopar _Usu"
+
+#: ../src/interface.c:2191
+msgid "Find _Document Usage"
+msgstr "Atopar Usu del _Documentu"
+
+#: ../src/interface.c:2199
+msgid "Go to _Tag Definition"
+msgstr "Dir a la Definición del _Tag"
+
+#: ../src/interface.c:2203
+msgid "Go to T_ag Declaration"
+msgstr "Dir a la Declaración del T_ag"
+
+#: ../src/interface.c:2207
+msgid "Conte_xt Action"
+msgstr "Aición Conte_stual"
+
+#: ../src/interface.c:2724 ../src/keybindings.c:382
+msgid "Preferences"
+msgstr "Preferencies"
+
+#: ../src/interface.c:2760
+msgid "Load files from the last session"
+msgstr "Cargar ficheros de la cabera sesión"
+
+#: ../src/interface.c:2763
+msgid "Opens at startup the files from the last session"
+msgstr "Abre nel entamu los ficheros de la cabera sesion"
+
+#: ../src/interface.c:2765
+msgid "Load virtual terminal support"
+msgstr "Cargar emulación de terminal virtual"
+
+#: ../src/interface.c:2767
+msgid ""
+"Whether the virtual terminal emulation (VTE) should be loaded at startup, "
+"disable it if you do not need it"
+msgstr ""
+"Cuando la emulación de la terminal virtual (VTE) debiera cargase al entamu, "
+"desactivalu si nun lo necesites"
+
+#: ../src/interface.c:2769
+msgid "Enable plugin support"
+msgstr "Activar sofitu de complementos"
+
+#: ../src/interface.c:2773
+msgid "<b>Startup</b>"
+msgstr "<b>Entamu</b>"
+
+#: ../src/interface.c:2792
+msgid "Save window position and geometry"
+msgstr "Guardar la posición de la ventana y la so xeometría"
+
+#: ../src/interface.c:2795
+msgid "Saves the window position and geometry and restores it at the start"
+msgstr ""
+"Guardar la posición de la ventana y la so xeometría y restableceles al entamu"
+
+#: ../src/interface.c:2797
+msgid "Confirm exit"
+msgstr "Confirmar salida"
+
+#: ../src/interface.c:2800
+msgid "Shows a confirmation dialog on exit"
+msgstr "Pidir confirmación al salir"
+
+#: ../src/interface.c:2802
+msgid "<b>Shutdown</b>"
+msgstr "<b>Zarráu</b>"
+
+#: ../src/interface.c:2823
+msgid "Startup path:"
+msgstr "Camín d'aniciu:"
+
+#: ../src/interface.c:2835
+msgid ""
+"Path to start in when opening or saving files. Must be an absolute path. "
+"Leave blank to use the current working directory."
+msgstr ""
+"Camín a aniciar cuando s'abren o guarden ficheros. Debe ser un camín "
+"absolutu. Dexar en blancu pa usar el direutoriu de trabayu actual."
+
+#: ../src/interface.c:2848
+msgid "Project files:"
+msgstr "Ficheros del proyeutu:"
+
+#: ../src/interface.c:2860
+msgid "Path to start in when opening project files"
+msgstr "Camín a aniciar cuando s'abran ficheros de proyeutos"
+
+#: ../src/interface.c:2873
+msgid "Extra plugin path:"
+msgstr "Camín adicional pa plugins:"
+
+#: ../src/interface.c:2885
+msgid ""
+"Geany looks by default in the global installation path and in the "
+"configuration directory. The path entered here will be searched additionally "
+"for plugins. Leave blank to disable."
+msgstr ""
+"De mou predetermináu, Geany restola nel camín global d'instalación y nel "
+"direutoriu de configuración. Nel camín qu'introduzas equí van guetase "
+"adicionalmente plugins. Déxalu en blancu pa desactivalu."
+
+#: ../src/interface.c:2898
+msgid "<b>Paths</b>"
+msgstr "<b>Caminos</b>"
+
+#: ../src/interface.c:2903
+msgid "Startup"
+msgstr "Anicíu"
+
+#: ../src/interface.c:2925
+msgid "Beep on errors or when compilation has finished"
+msgstr "Alerta sonora pa fallos o la finalización de la compilación"
+
+#: ../src/interface.c:2928
+msgid ""
+"Whether to beep if an error occurred or when the compilation process has "
+"finished"
+msgstr "cuando pitar si pasó un fallu o cuando'l procesu de compilación finé"
+
+#: ../src/interface.c:2930
+msgid "Switch to status message list at new message"
+msgstr "Camudar a la llista de mensaxes d'estáu cuando heba un nuevu mensaxe"
+
+#: ../src/interface.c:2933
+msgid ""
+"Switch to the status message tab (in the notebook window at the bottom) if a "
+"new status message arrives"
+msgstr ""
+"Camudar a la llingüeta de mensaxes d'estáu (no cimero de la ventana de "
+"llingüetes) si ye un mensaxe d'estáu nuevu"
+
+#: ../src/interface.c:2935
+msgid "Suppress status messages in the status bar"
+msgstr "Desaniciar mensaxes de estáu na barra d'estáu"
+
+#: ../src/interface.c:2938
+msgid ""
+"Removes all messages from the status bar. The messages are still displayed "
+"in the status messages window."
+msgstr ""
+"Desaniciar tolos mensaxes de la barra d'estáu. Los mensaxes son amosaos de "
+"toes formes nel ventanu de mensaxes d'estáu."
+
+#: ../src/interface.c:2940
+msgid "Auto-focus widgets (focus follows mouse)"
+msgstr "Enfocar automáticamente los widgets (el focu sigue al mur)"
+
+#: ../src/interface.c:2943
+msgid ""
+"Gives the focus automatically to widgets below the mouse cursor. Works for "
+"the main editor widget, the scribble, the toolbar search and goto line "
+"fields and the VTE."
+msgstr ""
+"Dar focu automáticamente a los paneles embaxo del cursor del mur. Furrula "
+"pal panel d'edición principal, el borrador, la barra de guetes, el campu dir "
+"a y la VTE."
+
+#: ../src/interface.c:2945 ../src/interface.c:3310 ../src/interface.c:4218
+msgid "<b>Miscellaneous</b>"
+msgstr "<b>Miscelaneos</b>"
+
+#: ../src/interface.c:2965
+msgid "Always wrap search and hide the Find dialog"
+msgstr "Siempre dar la vuelta cola gueta y anubrir el dialogu de Guetar"
+
+#: ../src/interface.c:2968
+msgid ""
+"Always wrap search around the document and hide the Find dialog after "
+"clicking Find Next/Previous"
+msgstr ""
+"Axustar siempre la gueta alrodiu del documentu y anubrir el diálogu d'Atopar "
+"dempués de calcar Atopar Siguiente/Previu"
+
+#: ../src/interface.c:2970
+msgid "Use the current word under the cursor for Find dialogs"
+msgstr ""
+"Usar la pallabra actualmente embaxu del cursor pa los diálogos de Guetar"
+
+#: ../src/interface.c:2973
+msgid ""
+"Use current word under the cursor when opening the Find, Find in Files or "
+"Replace dialog and there is no selection"
+msgstr ""
+"Usar pallabra actual embaxu'l cursor cuando abriendo Atopar, Atopar en "
+"Ficheros o Reemplazar diálogu y nun hai seleición"
+
+#: ../src/interface.c:2975
+msgid "Use the current file's directory for Find in Files"
+msgstr "Usar el direutoriu del ficheru actual pa Guetar en Ficheros"
+
+#: ../src/interface.c:2979
+msgid "<b>Search</b>"
+msgstr "<b>Guetar</b>"
+
+#: ../src/interface.c:2998
+msgid "Use project-based session files"
+msgstr "Usar ficheros de sesión por proyeutos"
+
+#: ../src/interface.c:3001
+msgid ""
+"Whether to store a project's session files and open them when re-opening the "
+"project"
+msgstr ""
+"Cuando almacenar los ficheros d'una sesión de proyeutu y abrilos al reabrir "
+"el proyeutu"
+
+#: ../src/interface.c:3003
+msgid "Store project file inside the project base directory"
+msgstr ""
+"Guardar el ficheru de proyeutu dientro del direutoriu base del proyeutu"
+
+#: ../src/interface.c:3006
+msgid ""
+"When enabled, a project file is stored by default inside the project base "
+"directory when creating new projects instead of one directory above the base "
+"directory. You can still change the path of the project file in the New "
+"Project dialog."
+msgstr ""
+"Cuando ta activáu, y en creando nuevos proyeutos, atróxase de mou "
+"predetermináu un ficheru de proyeutu dientro'l direutoriu base del proyeutu "
+"en cuenta de facelo nun direutoriu perriba del base. Entá podrás camudar el "
+"camín del ficheru de proyeutu nel diálogu Nuevu Proyeutu."
+
+#: ../src/interface.c:3008
+msgid "<b>Projects</b>"
+msgstr "<b>Proyeutos</b>"
+
+#: ../src/interface.c:3013
+msgid "Miscellaneous"
+msgstr "Varios"
+
+#. TODO Find a better way to map the current notebook page to the
+#. * corresponding chapter in the documentation, comparing translatable
+#. * strings is easy to break. Maybe attach an identifying string to the
+#. * tab label object.
+#: ../src/interface.c:3017 ../src/prefs.c:1489
+msgid "General"
+msgstr "Xeneral"
+
+#: ../src/interface.c:3054
+msgid "Show symbol list"
+msgstr "Amosar la llista de símbolos"
+
+#: ../src/interface.c:3057
+msgid "Toggle the symbol list on and off"
+msgstr "Amosar/anubrir la llista de símbolos"
+
+#: ../src/interface.c:3059
+msgid "Show documents list"
+msgstr "Amosar la llista de documentos"
+
+#: ../src/interface.c:3062
+msgid "Toggle the documents list on and off"
+msgstr "Amosar/anubrir la llista de documentos"
+
+#: ../src/interface.c:3064
+#, fuzzy
+msgid "Show sidebar"
+msgstr "Amosar _Barra llateral"
+
+#: ../src/interface.c:3072
+#, fuzzy
+msgid "Position:"
+msgstr "Descripción:"
+
+#: ../src/interface.c:3076 ../src/interface.c:3191 ../src/interface.c:3245
+#: ../src/interface.c:3263 ../src/interface.c:3281
+msgid "Left"
+msgstr "Manzorga"
+
+#: ../src/interface.c:3083 ../src/interface.c:3199 ../src/interface.c:3246
+#: ../src/interface.c:3264 ../src/interface.c:3282
+msgid "Right"
+msgstr "Mandrecha"
+
+#: ../src/interface.c:3089
+msgid "<b>Sidebar</b>"
+msgstr "<b>Barra llateral</b>"
+
+#: ../src/interface.c:3110
+msgid "Symbol list:"
+msgstr "Llista de símbolos:"
+
+#: ../src/interface.c:3117 ../src/interface.c:3232
+msgid "Message window:"
+msgstr "Ventanu de mensaxes:"
+
+#: ../src/interface.c:3124 ../src/interface.c:3268
+msgid "Editor:"
+msgstr "Editor:"
+
+#: ../src/interface.c:3136
+msgid "Sets the font for the message window"
+msgstr "Seleiciona la fonte pal ventanu de mensaxes"
+
+#: ../src/interface.c:3144
+msgid "Sets the font for the symbol list"
+msgstr "Seleiciona la fonte pa la llista de símbolos"
+
+#: ../src/interface.c:3152
+msgid "Sets the editor font"
+msgstr "Seleiciona la fonte del editor"
+
+#: ../src/interface.c:3154
+msgid "<b>Fonts</b>"
+msgstr "<b>Fontes</b>"
+
+#: ../src/interface.c:3173
+msgid "Show editor tabs"
+msgstr "Amosar llingüetes del editor"
+
+#: ../src/interface.c:3177
+msgid "Show close buttons"
+msgstr "Amosar botónes pa zarrar"
+
+#: ../src/interface.c:3180
+msgid ""
+"Shows a small cross button in the file tabs to easily close files when "
+"clicking on it (requires restart of Geany)"
+msgstr ""
+"Amosa una pequeña cruz nes llingüetes de ficheru pa poder zarrales "
+"fácilmente (requier reaniciar Geany)"
+
+#: ../src/interface.c:3186
+msgid "Placement of new file tabs:"
+msgstr "Ubicación de les llingüetes de ficheros nuevos:"
+
+#: ../src/interface.c:3194
+msgid "File tabs will be placed on the left of the notebook"
+msgstr ""
+"Les llingüetes de ficheros serán ubicaes a la manzorga de la llista de "
+"pestañes"
+
+#: ../src/interface.c:3202
+msgid "File tabs will be placed on the right of the notebook"
+msgstr ""
+"Les llingüetes de ficheros serán ubicaes a la mandrecha de la llista de "
+"llingüetes"
+
+#: ../src/interface.c:3206
+msgid "Double-clicking hides all additional widgets"
+msgstr "Calcar dos vegaes anubre tolos widgets adicionales"
+
+#: ../src/interface.c:3209
+msgid "Calls the View->Toggle All Additional Widgets command"
+msgstr "Llamar a la Vista->Camuda'l comandu de Tolos los Widgets Adicionales"
+
+#: ../src/interface.c:3211
+msgid "<b>Editor tabs</b>"
+msgstr "<b>Llingüetes d'edición</b>"
+
+#: ../src/interface.c:3247 ../src/interface.c:3265 ../src/interface.c:3283
+msgid "Top"
+msgstr "Enrriba"
+
+#: ../src/interface.c:3248 ../src/interface.c:3266 ../src/interface.c:3284
+msgid "Bottom"
+msgstr "Embaxu"
+
+#: ../src/interface.c:3250
+msgid "Sidebar:"
+msgstr "Barra llateral:"
+
+#: ../src/interface.c:3286
+msgid "<b>Tab positions</b>"
+msgstr "<b>Posición de llingüetes:</b>"
+
+#: ../src/interface.c:3305
+msgid "Show status bar"
+msgstr "Amosar barra d'estáu"
+
+#: ../src/interface.c:3308
+msgid "Whether to show the status bar at the bottom of the main window"
+msgstr "Cuando amosar la barra d'estáu no cimero de la ventana principal"
+
+#: ../src/interface.c:3315 ../src/prefs.c:1491
+msgid "Interface"
+msgstr "Interface"
+
+#: ../src/interface.c:3338
+msgid "Show T_oolbar"
+msgstr "Amosar la _Barra de Ferramientes"
+
+#: ../src/interface.c:3342
+msgid "_Append Toolbar to the Menu"
+msgstr "A_mestar la Barra de Ferramientes al Menú"
+
+#: ../src/interface.c:3345
+msgid "Pack the toolbar to the main menu to save vertical space"
+msgstr ""
+"Empaquetar la barra de ferramientes nel menú p'aforrar espaciu vertical"
+
+#: ../src/interface.c:3347
+msgid "<b>Toolbar</b>"
+msgstr "<b>Barra de Ferramientes</b>"
+
+#: ../src/interface.c:3368
+msgid "Icon style:"
+msgstr "Estilu d'iconu:"
+
+#: ../src/interface.c:3375
+msgid "Icon size:"
+msgstr "Tamañu d'iconu:"
+
+#: ../src/interface.c:3430
+msgid "<b>Appearance</b>"
+msgstr "<b>Apariencia</b>"
+
+#: ../src/interface.c:3455 ../src/toolbar.c:896
+msgid "Customize Toolbar"
+msgstr "Personalizar la Barra de Ferramientes"
+
+#: ../src/interface.c:3459 ../src/prefs.c:1493
+msgid "Toolbar"
+msgstr "Barra de Ferramientes"
+
+#: ../src/interface.c:3486
+msgid "Line wrapping"
+msgstr "Cortáu de llínias"
+
+#: ../src/interface.c:3489
+msgid ""
+"Wrap the line at the window border and continue it on the next line. Note: "
+"line wrapping has a high performance cost for large documents so should be "
+"disabled on slow machines."
+msgstr ""
+"Cortar la llínia nel borde de la ventana y continuala na llínia siguiente. "
+"Nota: esta opción tien un gran costu en velocidá pa documentos grandes asina "
+"que debería ser desactivada en maquines llentes."
+
+#: ../src/interface.c:3491
+msgid "Enable \"smart\" home key"
+msgstr "Activar la tecla anicio \"intelixente\""
+
+#: ../src/interface.c:3494
+msgid ""
+"When \"smart\" home is enabled, the HOME key will move the caret to the "
+"first non-blank character of the line, unless it is already there, it moves "
+"to the very beginning of the line. When this feature is disabled, the HOME "
+"key always moves the caret to the start of the current line, regardless of "
+"its current position."
+msgstr ""
+"Cuando la tecla d'anicio \"intelixente\" te activa, la tecla ANICIU moverá'l "
+"cursor al primer caráuter non blancu de la llinia, a menos que ya té elli, "
+"en cuyo casu muevelu al principiu absolutu de la llinia. Cuando esta "
+"funcionalidá ta desactivada, la tecla ANICIU siempre mueve'l cursor al "
+"principiu de la llinia actual, independientemente de la so posición actual."
+
+#: ../src/interface.c:3496
+msgid "Disable Drag and Drop"
+msgstr "Desactivar Arrastrar y Soltar (Drag and Drop)"
+
+#: ../src/interface.c:3499
+msgid ""
+"Disable drag and drop completely in the editor window so you can't drag and "
+"drop any selections within or outside of the editor window"
+msgstr ""
+"Desactiva completamente arrastrar y soltar na ventana del editor, asina que "
+"nun puedes soltar y arrastrar nenguna seleición dientro o fuera de la "
+"ventana del editor"
+
+#: ../src/interface.c:3501
+msgid "Enable folding"
+msgstr "Activar plegáu"
+
+#: ../src/interface.c:3504
+msgid "Whether to enable folding the code"
+msgstr "Si activar el plegáu de códigu"
+
+#: ../src/interface.c:3506
+msgid "Fold/unfold all children of a fold point"
+msgstr "Replegar/Desplegar tolos fíos d'un puntu de plegáu"
+
+#: ../src/interface.c:3509
+msgid ""
+"Fold or unfold all children of a fold point. By pressing the Shift key while "
+"clicking on a fold symbol the contrary behavior is used."
+msgstr ""
+"Plegar o desplegar tolos fíos d'un puntu de pliegu. N'apertando la tecla "
+"Mayúscules demientres se calca nun símbolu de pliegu, algamaráse'l "
+"comportamientu contrariu."
+
+#: ../src/interface.c:3511
+msgid "Use indicators to show compile errors"
+msgstr "Usar indicadores p'amosar los fallos de compilación"
+
+#: ../src/interface.c:3514
+msgid ""
+"Whether to use indicators (a squiggly underline) to highlight the lines "
+"where the compiler found a warning or an error"
+msgstr ""
+"Cuando usar indicadores (una llínia ondulada) pa marcar les llínies cuando'l "
+"compilador atopa un avisu o un fallu"
+
+#: ../src/interface.c:3516
+msgid "Newline strips trailing spaces"
+msgstr "Una nueva llinia esborra espacios estra al final"
+
+#: ../src/interface.c:3519
+msgid "Enable newline to strip the trailing spaces on the previous line"
+msgstr ""
+"Activa nueva llínia curtiando los espacios sobrantes na llínia siguiente"
+
+#: ../src/interface.c:3525
+msgid "Line breaking column:"
+msgstr "Columna de división de llínia:"
+
+#: ../src/interface.c:3539
+msgid "Comment toggle marker:"
+msgstr "Activar/Desactivar marcador de comentarios:"
+
+#: ../src/interface.c:3546
+msgid ""
+"A string which is added when toggling a line comment in a source file, it is "
+"used to mark the comment as toggled."
+msgstr ""
+"Una cadena la cual ye amestada cuando s'alterna una llínia de comentariu nel "
+"ficheru fonte, ello ye usáu pa marcar los comentarios como camudaos."
+
+#: ../src/interface.c:3548
+msgid "<b>Features</b>"
+msgstr "<b>Característiques</b>"
+
+#: ../src/interface.c:3553
+msgid "Features"
+msgstr "Característiques"
+
+#: ../src/interface.c:3585 ../src/interface.c:5137
+msgid "Auto-indent mode:"
+msgstr "Mou de formatéu de códigu:"
+
+#: ../src/interface.c:3598 ../src/interface.c:5150
+msgid "Basic"
+msgstr "Básicu"
+
+#: ../src/interface.c:3599 ../src/interface.c:5151
+msgid "Current chars"
+msgstr "Caráuter actual"
+
+#: ../src/interface.c:3600 ../src/interface.c:5152
+msgid "Match braces"
+msgstr "Concasando coles llaves correspondientes"
+
+#: ../src/interface.c:3602 ../src/interface.c:3953 ../src/interface.c:5154
+msgid "Type:"
+msgstr "Triba:"
+
+#: ../src/interface.c:3609 ../src/interface.c:5161
+msgid "Width:"
+msgstr "Anchu:"
+
+#: ../src/interface.c:3622 ../src/interface.c:5174
+msgid "The width in chars of a single indent"
+msgstr "L'anchu en carauteres d'una indentación simple"
+
+#: ../src/interface.c:3632 ../src/interface.c:5184
+msgid "Use spaces when inserting indentation"
+msgstr "Usar espacios cuando s'inxerte la identación"
+
+#: ../src/interface.c:3641 ../src/interface.c:5193
+msgid "Use one tab per indent"
+msgstr "Usar una tabulación por identación"
+
+#: ../src/interface.c:3650 ../src/interface.c:5202
+msgid ""
+"Use spaces if the total indent is less than the tab width, otherwise use both"
+msgstr ""
+"Usar espacios si la identación ye menor que l'anchu d'una sangría, sinon "
+"usar dambos"
+
+#: ../src/interface.c:3665 ../src/interface.c:5224
+msgid "Hard tab width:"
+msgstr "Anchu del tabulador puru:"
+
+#: ../src/interface.c:3673 ../src/interface.c:5232
+msgid "The width of a tab when Tabs & Spaces is set for a document"
+msgstr ""
+"L'anchu d'un tabulador cuando Tabulación y Espacios ye afitáu pa un documentu"
+
+#: ../src/interface.c:3683 ../src/interface.c:5211
+msgid ""
+"Whether to detect the indentation type from file contents when a file is "
+"opened"
+msgstr ""
+"Cuando deteutar la triba d'indentación dende'l conteníu d'un ficheru cuando "
+"ye abiertu"
+
+#: ../src/interface.c:3685
+msgid "Tab key indents"
+msgstr "Indentación de la tecla Tabulación"
+
+#: ../src/interface.c:3688
+msgid ""
+"Pressing tab/shift-tab indents/unindents instead of inserting a tab character"
+msgstr ""
+"Calcar tab/shift-tab indenta/desidenta en llugar d'insertar un carauter de "
+"tabulación"
+
+#: ../src/interface.c:3690
+msgid "<b>Indentation</b>"
+msgstr "<b>Sangría</b>"
+
+#: ../src/interface.c:3695 ../src/interface.c:5237
+msgid "Indentation"
+msgstr "Indentáu"
+
+#: ../src/interface.c:3718
+msgid "Snippet completion"
+msgstr "Completáu de construcciones"
+
+#: ../src/interface.c:3721
+msgid ""
+"Type a defined short character sequence and complete it to a more complex "
+"string using a single keypress"
+msgstr ""
+"Escribir la secuencia d'un carauter curtíu definíu y completalu a una cadena "
+"más complexa usando pulsación de telcles simple"
+
+#: ../src/interface.c:3723
+msgid "XML tag autocompletion"
+msgstr "Completar etiquetes XML automáticamente"
+
+#: ../src/interface.c:3726
+msgid "Automatic completion and closing of XML tags (includes HTML tags)"
+msgstr ""
+"Completáu y zarráu automáticu d'etiquetes XML abiertes (incluí etiquetes "
+"HTML)"
+
+#: ../src/interface.c:3728
+msgid "Automatic continuation of multi-line comments"
+msgstr "Continuación automática de comentarios multi-llínia"
+
+#: ../src/interface.c:3731
+msgid ""
+"Continue automatically multi-line comments in languages like C, C++ and Java "
+"when a new line is entered inside such a comment"
+msgstr ""
+"Siguir automáticamente los comentarios multillínia en llingüaxes como C, C++ "
+"y Java cuando una nueva llínia seya inxertada en dicho comentariu"
+
+#: ../src/interface.c:3733
+msgid "Autocomplete symbols"
+msgstr "Completar símbolos automáticamente"
+
+#: ../src/interface.c:3736
+msgid ""
+"Automatic completion of known symbols in open files (function names, global "
+"variables, ...)"
+msgstr ""
+"Completáu automáticu de símbolos conocíos en ficheros abiertos (nomes de "
+"funciones, variables globales, ...)"
+
+#: ../src/interface.c:3738
+msgid "Autocomplete all words in document"
+msgstr "Completar toles pallabres del documentu automáticamente"
+
+#: ../src/interface.c:3742
+msgid "Drop rest of word on completion"
+msgstr "Omitir el restu de la pallabra tres completar"
+
+#: ../src/interface.c:3752
+msgid "Max. symbol name suggestions:"
+msgstr "Númberu de suxerencies másimu pa un símbolu:"
+
+#: ../src/interface.c:3759
+msgid "Completion list height:"
+msgstr "Largu de la llista de completáu:"
+
+#: ../src/interface.c:3766
+msgid "Characters to type for autocompletion:"
+msgstr "Carauteres a tecliar pa completar automáticamente:"
+
+#: ../src/interface.c:3779
+msgid ""
+"The amount of characters which are necessary to show the symbol "
+"autocompletion list"
+msgstr ""
+"La cantidá de carauteres necesarios p'amosar la llista de símbolos pa "
+"completar automáticamente"
+
+#: ../src/interface.c:3788
+msgid "Display height in rows for the autocompletion list"
+msgstr "Altor, en files, del visor pa la llista de completáu automáticu"
+
+#: ../src/interface.c:3797
+msgid "Maximum number of entries to display in the autocompletion list"
+msgstr "Númberu máximu d'entraes p'amosar na llista de completáu automáticu"
+
+#: ../src/interface.c:3800
+msgid "<b>Completions</b>"
+msgstr "<b>Completaos</b>"
+
+#: ../src/interface.c:3820
+msgid "Parenthesis ( )"
+msgstr "Paréntesis ( )"
+
+#: ../src/interface.c:3825
+msgid "Auto-close parenthesis when typing an opening one"
+msgstr "Zarrar automáticamente los paréntesis cuando s'abra un"
+
+#: ../src/interface.c:3827
+msgid "Single quotes ' '"
+msgstr "Comilles simples ' '"
+
+#: ../src/interface.c:3832
+msgid "Auto-close simple quote when typing an opening one"
+msgstr "Zarrar automáticamente los apóstrofes cuando s'abra un"
+
+#: ../src/interface.c:3834
+msgid "Curly brackets { }"
+msgstr "Llaves { }"
+
+#: ../src/interface.c:3839
+msgid "Auto-close curly bracket when typing an opening one"
+msgstr "Zarrar automáticamente les llaves cuando s'abra una"
+
+#: ../src/interface.c:3841
+msgid "Square brackets [ ]"
+msgstr "Corchetes [ ]"
+
+#: ../src/interface.c:3846
+msgid "Auto-close square-bracket when typing an opening one"
+msgstr "Zarrar automáticamente los corchetes en tecliando ún d'apertura"
+
+#: ../src/interface.c:3848
+msgid "Double quotes \" \""
+msgstr "Comilles \" \""
+
+#: ../src/interface.c:3853
+msgid "Auto-close double quote when typing an opening one"
+msgstr "Zarrar automáticamente les comilles cuando s'abra una"
+
+#: ../src/interface.c:3855
+msgid "<b>Auto-close quotes and brackets</b>"
+msgstr "<b>Zarrar automáticamente los corchetes y comilles</b>"
+
+#: ../src/interface.c:3860
+msgid "Completions"
+msgstr "Completaos"
+
+#: ../src/interface.c:3883
+msgid "Invert syntax highlighting colors"
+msgstr "Invierte los collores de resaltáu de sintasis"
+
+#: ../src/interface.c:3886
+msgid "Invert all colors, by default using white text on a black background"
+msgstr ""
+
+#: ../src/interface.c:3888
+msgid "Show indentation guides"
+msgstr "Amosar guíes de formatéu automáticu de códigu"
+
+#: ../src/interface.c:3891
+msgid "Shows small dotted lines to help you to use the right indentation"
+msgstr ""
+"Amosar pequeñes llínies de puntos p'aidar nel usu de la indentación correuta"
+
+#: ../src/interface.c:3893
+msgid "Show white space"
+msgstr "Amosar espacios en blancu"
+
+#: ../src/interface.c:3896
+msgid "Marks spaces with dots and tabs with arrows"
+msgstr "Marcar espacios con puntos y tabuladores con fleches"
+
+#: ../src/interface.c:3898
+msgid "Show line endings"
+msgstr "Amosar terminaciones de llínia"
+
+#: ../src/interface.c:3901
+msgid "Shows the line ending character"
+msgstr "Amuesa'l caráuter de fin de llinia"
+
+#: ../src/interface.c:3903
+msgid "Show line numbers"
+msgstr "Amosar númberu de llínia"
+
+#: ../src/interface.c:3906
+msgid "Shows or hides the Line Number margin"
+msgstr "Amosar o anubrir la Numberación de Llínia nel marxe"
+
+#: ../src/interface.c:3908
+msgid "Show markers margin"
+msgstr "Amosar marcadores nel marxe"
+
+#: ../src/interface.c:3911
+msgid ""
+"Shows or hides the small margin right of the line numbers, which is used to "
+"mark lines"
+msgstr ""
+"Amosar o anubrir nel pequeñu marxe de la mandrecha los númberos de llínia, "
+"los cuales son usaos pa marcar llínies"
+
+#: ../src/interface.c:3913
+msgid "Stop scrolling at last line"
+msgstr "Parar desplazamientu na cabera llínia"
+
+#: ../src/interface.c:3916
+msgid "Whether to stop scrolling one page past the last line of a document"
+msgstr ""
+"Cuando detener el desplazamiento d'una páxina pasada de la cabera llínia "
+"d'un documentu"
+
+#: ../src/interface.c:3918
+msgid "<b>Display</b>"
+msgstr "<b>Amosar</b>"
+
+#: ../src/interface.c:3939
+msgid "Long line marker:"
+msgstr "Marcador de llínies llargues:"
+
+#: ../src/interface.c:3946
+msgid "Long line marker color:"
+msgstr "Collor del marcador de llínies llargues:"
+
+#: ../src/interface.c:3965
+msgid "Sets the color of the long line marker"
+msgstr "Seleiciona'l collor del marcador de llínies llargues"
+
+#: ../src/interface.c:3966 ../src/toolbar.c:70 ../src/tools.c:717
+#: ../src/vte.c:764 ../src/vte.c:771
+msgid "Color Chooser"
+msgstr "Selector de collor"
+
+#: ../src/interface.c:3974
+msgid ""
+"The long line marker is a thin vertical line in the editor, it helps to mark "
+"long lines, or as a hint to break the line. Set this value to a value "
+"greater than 0 to specify the column where it should appear."
+msgstr ""
+"El marcador de llínia llarga ye una fina llínia vertical nel editor, qu'aida "
+"a marcar llínies llarges, o un avisu a dixebrar la llínia. Afitar esti valor "
+"a un valor más grande que 0 especifica la columna onde debiere aparecer."
+
+#: ../src/interface.c:3984
+msgid "Line"
+msgstr "Llínia"
+
+#: ../src/interface.c:3987
+msgid ""
+"Prints a vertical line in the editor window at the given cursor position "
+"(see below)"
+msgstr ""
+"Amosar una llínia vertical nel editor na posición indicada (ver más abaxo)"
+
+#: ../src/interface.c:3991
+msgid "Background"
+msgstr "Fondu"
+
+#: ../src/interface.c:3994
+msgid ""
+"The background color of characters after the given cursor position (see "
+"below) changed to the color set below, (this is recommended if you use "
+"proportional fonts)"
+msgstr ""
+"Camudó'l collor de carauteres del fondu dempués de la posición dada (ver "
+"embaxu) al collor afitáu enrriba, (esto ye recomendáu si uses fontes "
+"proporcionales)"
+
+#: ../src/interface.c:3998
+msgid "Disabled"
+msgstr "Desactiváu"
+
+#: ../src/interface.c:4004
+msgid "<b>Long line marker</b>"
+msgstr "<b>Marcador de llínies llargues</b>"
+
+#: ../src/interface.c:4009
+msgid "Display"
+msgstr "Amosar"
+
+#: ../src/interface.c:4040
+msgid "Open new documents from the command-line"
+msgstr "Abre nuevos documentos dende la llínia de comandos"
+
+#: ../src/interface.c:4043
+msgid "Start a new file for each command-line filename that doesn't exist"
+msgstr ""
+"Anicia un nuevu ficheru pa cada nome de ficheru na llínia de comandu que nun "
+"existe"
+
+#: ../src/interface.c:4057
+msgid "Default end of line characters:"
+msgstr "Carauteres de final de llínia predeterminaos:"
+
+#: ../src/interface.c:4064
+msgid "<b>New files</b>"
+msgstr "<b>Ficheros nuevos</b>"
+
+#: ../src/interface.c:4087
+msgid "Default encoding (new files):"
+msgstr "Codificación por omisión (pa ficheros nuevos):"
+
+#: ../src/interface.c:4095
+msgid "Sets the default encoding for newly created files"
+msgstr "Afita la codificación por defeutu na criación de nuevos ficheros"
+
+#: ../src/interface.c:4101
+#, fuzzy
+msgid "Use fixed encoding when opening non-Unicode files"
+msgstr "Usar una codificación fixa al abrir ficheros"
+
+#: ../src/interface.c:4104
+#, fuzzy
+msgid ""
+"This option disables the automatic detection of the file encoding when "
+"opening non-Unicode files and opens the file with the specified encoding "
+"(usually not needed)"
+msgstr ""
+"Esta opción desactiva la deteción automática de la codificación de ficheros "
+"cuando son abiertos y abre'l ficheru cola codificación especificada "
+"(usualmente non necesaria)"
+
+#: ../src/interface.c:4110
+#, fuzzy
+msgid "Default encoding (existing non-Unicode files):"
+msgstr "Codificación por omisión (pa ficheros existentes):"
+
+#: ../src/interface.c:4118
+#, fuzzy
+msgid "Sets the default encoding for opening existing non-Unicode files"
+msgstr "Afita la codificaci´no por defeutu al abrir ficheros existentes"
+
+#: ../src/interface.c:4124
+msgid "<b>Encodings</b>"
+msgstr "<b>Codificaciones</b>"
+
+#: ../src/interface.c:4143
+msgid "Ensure new line at file end"
+msgstr "Asegurar terminación de llínia al final del ficheru"
+
+#: ../src/interface.c:4146
+msgid "Ensures that at the end of the file is a new line"
+msgstr "Asegura que haya una terminación de llíniaal final del ficheru"
+
+#: ../src/interface.c:4148
+msgid "Strip trailing spaces and tabs"
+msgstr "Eliminar espacios y tabuladores al final de llínia"
+
+#: ../src/interface.c:4151
+msgid "Removes trailing spaces and tabs and the end of lines"
+msgstr "Esborra los espacios y tabulaciones al final de les llínies"
+
+#: ../src/interface.c:4153 ../src/keybindings.c:515
+msgid "Replace tabs by space"
+msgstr "Reemplazar tabulaciones por espacios"
+
+#: ../src/interface.c:4156
+msgid "Replaces all tabs in document by spaces"
+msgstr "Reemplaza tolos tabuladores nel documentu por espacios"
+
+#: ../src/interface.c:4158
+msgid "<b>Saving files</b>"
+msgstr "<b>Grabando ficheros</b>"
+
+#: ../src/interface.c:4183
+msgid "Recent files list length:"
+msgstr "Llonxitú de la llista de ficheros recientes:"
+
+#: ../src/interface.c:4197
+msgid "Specifies the number of files which are stored in the Recent files list"
+msgstr ""
+"Indica'l númberu de ficheros que serán almacenaos na llista de Ficheros "
+"Recientes"
+
+#: ../src/interface.c:4201
+msgid "Disk check timeout:"
+msgstr "Venció'l tiempu de comprobación de discu:"
+
+#: ../src/interface.c:4214
+msgid ""
+"How often to check for changes to document files on disk, in seconds. Zero "
+"disables checking."
+msgstr ""
+"Cuando seguío verificar cambios a los ficheros de documentos nel discu, en "
+"segundos. Cero desactiva la verificación."
+
+#: ../src/interface.c:4223 ../src/prefs.c:1497 ../src/symbols.c:593
+#: ../plugins/filebrowser.c:1050
+msgid "Files"
+msgstr "_Ficheros"
+
+#: ../src/interface.c:4256
+msgid "Terminal:"
+msgstr "Terminal:"
+
+#: ../src/interface.c:4263
+msgid "Browser:"
+msgstr "Restolador:"
+
+#: ../src/interface.c:4275
+msgid ""
+"A terminal emulator like xterm, gnome-terminal or konsole (should accept the "
+"-e argument)"
+msgstr ""
+"Un emulador de terminal como xterm, gnome-terminal o konsole (tien "
+"qu'aceptar l'argumentu -e)"
+
+#: ../src/interface.c:4282
+msgid "Path (and possibly additional arguments) to your favorite browser"
+msgstr ""
+"Camín (y posiblemente argumentos adicionales) al to restolador preferíu"
+
+#: ../src/interface.c:4304
+msgid "Grep:"
+msgstr "Grep:"
+
+#: ../src/interface.c:4327
+msgid "<b>Tool paths</b>"
+msgstr "<b>Caminos a les ferramientes</b>"
+
+#: ../src/interface.c:4348
+msgid "Context action:"
+msgstr "Aición contestual:"
+
+#: ../src/interface.c:4359
+#, c-format
+msgid ""
+"Context action command. The currently selected word can be used with %s. It "
+"can appear anywhere in the given command and will be replaced before "
+"execution."
+msgstr ""
+"Comandu d'aición contestual. La pallabra actualmente seleicionada puede ser "
+"usada con %s. Puedes tar en cualisquier llugar del comandu dau y será "
+"remplazada enantes de la execución."
+
+#: ../src/interface.c:4372
+msgid "<b>Commands</b>"
+msgstr "<b>Comandos</b>"
+
+#: ../src/interface.c:4377 ../src/keybindings.c:549 ../src/prefs.c:1499
+msgid "Tools"
+msgstr "Ferramientes"
+
+#: ../src/interface.c:4411
+msgid "email address of the developer"
+msgstr "direición de correu electrónicu del desarrollador"
+
+#: ../src/interface.c:4418
+msgid "Initials of the developer name"
+msgstr "Iniciales del nome del desarrollador"
+
+#: ../src/interface.c:4420
+msgid "Initial version:"
+msgstr "Version inicial:"
+
+#: ../src/interface.c:4432
+msgid "Version number, which a new file initially has"
+msgstr "Númberu de version que tien un ficheru nuevu"
+
+#: ../src/interface.c:4439
+msgid "Company name"
+msgstr "Nome de la compañia"
+
+#: ../src/interface.c:4441
+msgid "Developer:"
+msgstr "Desarrollador:"
+
+#: ../src/interface.c:4448
+msgid "Company:"
+msgstr "Compañia:"
+
+#: ../src/interface.c:4455
+msgid "Mail address:"
+msgstr "Direición de correu electrónicu:"
+
+#: ../src/interface.c:4462
+msgid "Initials:"
+msgstr "Iniciales:"
+
+#: ../src/interface.c:4474
+msgid "The name of the developer"
+msgstr "El nome del desarrollador"
+
+#: ../src/interface.c:4476
+msgid "Year:"
+msgstr "Añu:"
+
+#: ../src/interface.c:4483
+msgid "Date:"
+msgstr "Fecha:"
+
+#: ../src/interface.c:4490
+msgid "Date & Time:"
+msgstr "Fecha y hora:"
+
+#: ../src/interface.c:4502
+msgid ""
+"Specify a format for the the {datetime} wildcard. You can use any conversion "
+"specifiers which can be used with the ANSI C strftime function."
+msgstr ""
+"Indica'l formatu del comodín {datetime}. Puedes usar cualisquier conversión "
+"especificada la cual puede ser usada cola función strftime d'ANSI C."
+
+#: ../src/interface.c:4509
+msgid ""
+"Specify a format for the the {year} wildcard. You can use any conversion "
+"specifiers which can be used with the ANSI C strftime function."
+msgstr ""
+"Indica'l formatu de comodín {year}. Podemos usar cualisquier conversión "
+"especificada la cual puede ser usada cola función strftime n'ANSI C."
+
+#: ../src/interface.c:4516
+msgid ""
+"Specify a format for the the {date} wildcard. You can use any conversion "
+"specifiers which can be used with the ANSI C strftime function."
+msgstr ""
+"Especificar un formatu pal comodín {fecha}. Tu puedes usar cualisquier "
+"conversión especifica la cual puede usase cola función strftime n'ANSI C."
+
+#: ../src/interface.c:4518
+msgid "<b>Template data</b>"
+msgstr "<b>Datos de plantilles</b>"
+
+#: ../src/interface.c:4523 ../src/prefs.c:1501
+msgid "Templates"
+msgstr "Plantilles"
+
+#: ../src/interface.c:4561
+msgid "C_hange"
+msgstr "_Camudar"
+
+#: ../src/interface.c:4565
+msgid "<b>Keyboard shortcuts</b>"
+msgstr "<b>Ataxos de tecláu</b>"
+
+#: ../src/interface.c:4570 ../src/prefs.c:1503
+msgid "Keybindings"
+msgstr "Ataxos"
+
+#: ../src/interface.c:4593
+msgid "Command:"
+msgstr "Comandu:"
+
+#: ../src/interface.c:4600
+#, c-format
+msgid "Path to the command for printing files (use %f for the filename)"
+msgstr "Camín pal comandu d'imprentar ficheros (usar %f pal nome del ficheru)"
+
+#: ../src/interface.c:4610
+msgid "Use an external command for printing"
+msgstr "Usar un comandu esterno pa la impresión"
+
+#: ../src/interface.c:4630 ../src/printing.c:381
+msgid "Print line numbers"
+msgstr "Imprentar númberos de llínia"
+
+#: ../src/interface.c:4633 ../src/printing.c:383
+msgid "Add line numbers to the printed page"
+msgstr "Añader númberos de llínia a la páxina imprentadas"
+
+#: ../src/interface.c:4635 ../src/printing.c:386
+msgid "Print page numbers"
+msgstr "Imprentar númberos de páxina"
+
+#: ../src/interface.c:4638 ../src/printing.c:388
+msgid ""
+"Add page numbers at the bottom of each page. It takes 2 lines of the page."
+msgstr ""
+"Amestar númberos de páxina nel pie de cada páxina. Garra 2 llinies de la "
+"páxina."
+
+#: ../src/interface.c:4640 ../src/printing.c:391
+msgid "Print page header"
+msgstr "Imprentar encabezáu de páxina"
+
+#: ../src/interface.c:4643 ../src/printing.c:393
+msgid ""
+"Add a little header to every page containing the page number, the filename "
+"and the current date (see below). It takes 3 lines of the page."
+msgstr ""
+"Amestar una pequeña cabecera a cada páxina, conteniendo'l númberu de páxina, "
+"el nome del ficheru y la data actual (ver abaxo). Garra 3 llinies de la "
+"páxina."
+
+#: ../src/interface.c:4660 ../src/printing.c:409
+msgid "Use the basename of the printed file"
+msgstr "Usa'l nome del ficheru imprentáu"
+
+#: ../src/interface.c:4663
+msgid "Print only the basename (without the path) of the printed file"
+msgstr "Imprentar namái'l nome (ensin el camín) del ficheru imprentáu"
+
+#: ../src/interface.c:4669 ../src/printing.c:417
+msgid "Date format:"
+msgstr "Formatu de Fecha:"
+
+#: ../src/interface.c:4676 ../src/printing.c:423
+msgid ""
+"Specify a format for the date and time stamp which is added to the page "
+"header on each page. You can use any conversion specifiers which can be used "
+"with the ANSI C strftime function."
+msgstr ""
+"Introduz equí un formatu de fecha y hora que será agregáu al encabezáu de "
+"cada páxina. Puedes usar cualisquier especificador de conversión que pueda "
+"ser usáu cola función strftime d'ANSI C."
+
+#: ../src/interface.c:4679
+msgid "Use native GTK printing"
+msgstr "Usar la impresión nativa de GTK"
+
+#: ../src/interface.c:4685 ../src/prefs.c:1505
+msgid "Printing"
+msgstr "Imprentando"
+
+#: ../src/interface.c:5120
+msgid "Project Properties"
+msgstr "Propiedaes del Proyeutu"
+
+#: ../src/keybindings.c:222 ../src/plugins.c:1137
+msgid "File"
+msgstr "Ficheru"
+
+#: ../src/keybindings.c:225
+msgid "New"
+msgstr "Nuevu"
+
+#: ../src/keybindings.c:227
+msgid "Open"
+msgstr "Abrir"
+
+#: ../src/keybindings.c:230
+msgid "Open selected file"
+msgstr "Abrir ficheros seleicionados"
+
+#: ../src/keybindings.c:232
+msgid "Save"
+msgstr "Guardar"
+
+#: ../src/keybindings.c:234
+msgid "Save as"
+msgstr "Guardar como"
+
+#: ../src/keybindings.c:236
+msgid "Save all"
+msgstr "Guardar too"
+
+#: ../src/keybindings.c:239
+msgid "Print"
+msgstr "Imprentar"
+
+#: ../src/keybindings.c:241
+msgid "Close"
+msgstr "Zarrar"
+
+#: ../src/keybindings.c:243
+msgid "Close all"
+msgstr "Zarrar too"
+
+#: ../src/keybindings.c:246
+msgid "Reload file"
+msgstr "Recargar ficheru"
+
+#: ../src/keybindings.c:248
+msgid "Re-open last closed tab"
+msgstr ""
+
+#: ../src/keybindings.c:250 ../src/project.c:522
+msgid "Project"
+msgstr "Proyeutu"
+
+#: ../src/keybindings.c:253
+msgid "Project properties"
+msgstr "Propiedaes del proyeutu"
+
+#: ../src/keybindings.c:258
+msgid "Undo"
+msgstr "Desfacer"
+
+#: ../src/keybindings.c:260
+msgid "Redo"
+msgstr "Refacer"
+
+#: ../src/keybindings.c:269
+msgid "Delete to line end"
+msgstr "Esborrar fasta la fin de llinia"
+
+#: ../src/keybindings.c:275
+msgid "Scroll to current line"
+msgstr "Desplazar a la llínia actual"
+
+#: ../src/keybindings.c:277
+msgid "Scroll up the view by one line"
+msgstr "Desplazar la vista p'arriba una llínia"
+
+#: ../src/keybindings.c:279
+msgid "Scroll down the view by one line"
+msgstr "Desplazar la vista p'abaxo una llínia"
+
+#: ../src/keybindings.c:281
+msgid "Complete snippet"
+msgstr "Completar construcción"
+
+#: ../src/keybindings.c:283
+msgid "Move cursor in snippet"
+msgstr "Desplazar el cursor na contrucción"
+
+#: ../src/keybindings.c:285
+msgid "Suppress snippet completion"
+msgstr "Evitar completáu de contrucciones"
+
+#: ../src/keybindings.c:287
+msgid "Context Action"
+msgstr "Aición contestual"
+
+#: ../src/keybindings.c:289
+msgid "Complete word"
+msgstr "Completar pallabra"
+
+#: ../src/keybindings.c:291
+msgid "Show calltip"
+msgstr "Amosar pistes de prototipos"
+
+#: ../src/keybindings.c:293
+msgid "Show macro list"
+msgstr "Amosar la llista de macros"
+
+#: ../src/keybindings.c:295
+#, fuzzy
+msgid "Word part completion"
+msgstr "Completáu de construcciones"
+
+#: ../src/keybindings.c:297
+#, fuzzy
+msgid "Move line(s) up"
+msgstr "Comentar llínia(es)"
+
+#: ../src/keybindings.c:299
+#, fuzzy
+msgid "Move line(s) down"
+msgstr "Comentar llínia(es)"
+
+#: ../src/keybindings.c:301
+msgid "Clipboard"
+msgstr "Portapapeles"
+
+#: ../src/keybindings.c:304
+msgid "Cut"
+msgstr "Cortar"
+
+#: ../src/keybindings.c:306
+msgid "Copy"
+msgstr "Copiar"
+
+#: ../src/keybindings.c:308
+msgid "Paste"
+msgstr "Apegar"
+
+#: ../src/keybindings.c:316
+msgid "Select"
+msgstr "Seleicionar"
+
+#: ../src/keybindings.c:319
+msgid "Select All"
+msgstr "Seleicionar Too"
+
+#: ../src/keybindings.c:321
+msgid "Select current word"
+msgstr "Seleicionar pallabra actual"
+
+#: ../src/keybindings.c:329
+#, fuzzy
+msgid "Select to previous word part"
+msgstr "Dir a la Parte de Pallabra Anterior"
+
+#: ../src/keybindings.c:331
+#, fuzzy
+msgid "Select to next word part"
+msgstr "Dir a la Siguietne Parte de la Pallabra"
+
+#: ../src/keybindings.c:333
+msgid "Format"
+msgstr "Formatu"
+
+#: ../src/keybindings.c:337
+msgid "Toggle Case of Selection"
+msgstr "Camudar ente Mayúscules y minúscules"
+
+#: ../src/keybindings.c:339
+msgid "Toggle line commentation"
+msgstr "Comentar/Descomentar"
+
+#: ../src/keybindings.c:342
+msgid "Comment line(s)"
+msgstr "Comentar llínia(es)"
+
+#: ../src/keybindings.c:344
+msgid "Uncomment line(s)"
+msgstr "Descomentar llínia(es)"
+
+#: ../src/keybindings.c:346
+msgid "Increase indent"
+msgstr "Incrementar sangría"
+
+#: ../src/keybindings.c:349
+msgid "Decrease indent"
+msgstr "Decrementar sangría"
+
+#: ../src/keybindings.c:352
+msgid "Increase indent by one space"
+msgstr "Incrementar sangría nun espaciu"
+
+#: ../src/keybindings.c:354
+msgid "Decrease indent by one space"
+msgstr "Decrementar sangría nun espaciu"
+
+#: ../src/keybindings.c:358
+msgid "Send to Custom Command 1"
+msgstr "Unviar al Comandu Personalizáu 1"
+
+#: ../src/keybindings.c:360
+msgid "Send to Custom Command 2"
+msgstr "Unviar al Comandu Personalizáu 2"
+
+#: ../src/keybindings.c:362
+msgid "Send to Custom Command 3"
+msgstr "Unviar al Comandu Personalizáu 3"
+
+#: ../src/keybindings.c:370
+msgid "Insert"
+msgstr "Inxertar"
+
+#: ../src/keybindings.c:373
+msgid "Insert date"
+msgstr "Inxertar fecha"
+
+#: ../src/keybindings.c:379
+msgid "Settings"
+msgstr "Opciones"
+
+#: ../src/keybindings.c:387 ../src/toolbar.c:360
+msgid "Search"
+msgstr "Guetar"
+
+#: ../src/keybindings.c:390 ../src/search.c:389
+msgid "Find"
+msgstr "Atopar"
+
+#: ../src/keybindings.c:392
+msgid "Find Next"
+msgstr "Guetar Siguente"
+
+#: ../src/keybindings.c:394
+msgid "Find Previous"
+msgstr "Guetar Anterior"
+
+#: ../src/keybindings.c:397
+msgid "Find Next Selection"
+msgstr "Guetar Siguiente Seleición"
+
+#: ../src/keybindings.c:399
+msgid "Find Previous Selection"
+msgstr "Guetar Anterior Seleición"
+
+#: ../src/keybindings.c:401 ../src/search.c:534
+msgid "Replace"
+msgstr "Reemplazar"
+
+#: ../src/keybindings.c:403 ../src/search.c:708
+msgid "Find in Files"
+msgstr "Guetar en Ficheros"
+
+#: ../src/keybindings.c:406
+msgid "Next Message"
+msgstr "Mensax Siguiente"
+
+#: ../src/keybindings.c:408
+msgid "Previous Message"
+msgstr "Mensax anterior"
+
+#: ../src/keybindings.c:410
+msgid "Find Usage"
+msgstr "Atopar usu"
+
+#: ../src/keybindings.c:412
+msgid "Find Document Usage"
+msgstr "Atopar Utilización de Documentu"
+
+#: ../src/keybindings.c:414
+msgid "Mark All"
+msgstr "Marcar Too"
+
+#: ../src/keybindings.c:416
+msgid "Go to"
+msgstr "Dir a"
+
+#: ../src/keybindings.c:419 ../src/toolbar.c:66
+msgid "Navigate back a location"
+msgstr "Restolar una ubicación p'atrás"
+
+#: ../src/keybindings.c:421 ../src/toolbar.c:67
+msgid "Navigate forward a location"
+msgstr "Restolar una ubicación p'alantre"
+
+#: ../src/keybindings.c:426
+msgid "Go to matching brace"
+msgstr "Dir a la llave correspondiente"
+
+#: ../src/keybindings.c:429
+msgid "Toggle marker"
+msgstr "Activar/Desactivar marca"
+
+#: ../src/keybindings.c:437
+msgid "Go to Tag Definition"
+msgstr "Dir a la Definición del Tag"
+
+#: ../src/keybindings.c:439
+msgid "Go to Tag Declaration"
+msgstr "Dir a la Declaración del Tag"
+
+#: ../src/keybindings.c:441
+msgid "Go to Start of Line"
+msgstr "Dir al entamu de llínia"
+
+#: ../src/keybindings.c:443
+msgid "Go to End of Line"
+msgstr "Dir a lo cabero de llínia"
+
+#: ../src/keybindings.c:445
+msgid "Go to End of Display Line"
+msgstr "Dir a la Fin de la Llinia Amosada"
+
+#: ../src/keybindings.c:447
+msgid "Go to Previous Word Part"
+msgstr "Dir a la Parte de Pallabra Anterior"
+
+#: ../src/keybindings.c:449
+msgid "Go to Next Word Part"
+msgstr "Dir a la Siguietne Parte de la Pallabra"
+
+#: ../src/keybindings.c:451
+msgid "View"
+msgstr "Ver"
+
+#: ../src/keybindings.c:454
+msgid "Toggle All Additional Widgets"
+msgstr "Amosar/Anubrir tolos paneles adicionales"
+
+#: ../src/keybindings.c:457
+msgid "Fullscreen"
+msgstr "Pantalla completa"
+
+#: ../src/keybindings.c:459
+msgid "Toggle Messages Window"
+msgstr "Amosar ventanu de mensaxes"
+
+#: ../src/keybindings.c:462
+msgid "Toggle Sidebar"
+msgstr "Amosar/Anubrir barra llateral"
+
+#: ../src/keybindings.c:464
+msgid "Zoom In"
+msgstr "Acercar el testu"
+
+#: ../src/keybindings.c:466
+msgid "Zoom Out"
+msgstr "Alloñar el testu"
+
+#: ../src/keybindings.c:468
+msgid "Focus"
+msgstr "Focu"
+
+#: ../src/keybindings.c:471
+msgid "Switch to Editor"
+msgstr "Dir al Editor"
+
+#: ../src/keybindings.c:473
+msgid "Switch to Scribble"
+msgstr "Dir al Borrador"
+
+#: ../src/keybindings.c:475
+msgid "Switch to VTE"
+msgstr "Dir a la VTE"
+
+#: ../src/keybindings.c:477
+msgid "Switch to Search Bar"
+msgstr "Dir a la Barra de Gueta"
+
+#: ../src/keybindings.c:479
+msgid "Switch to Sidebar"
+msgstr "Dir a la Barra Llateral"
+
+#: ../src/keybindings.c:481
+msgid "Switch to Compiler"
+msgstr "Camudar a Compilador"
+
+#: ../src/keybindings.c:483
+#, fuzzy
+msgid "Switch to Messages"
+msgstr "Dir a la Barra Llateral"
+
+#: ../src/keybindings.c:485
+#, fuzzy
+msgid "Switch to Message Window"
+msgstr "Amosar _Ventanu de Mensaxes"
+
+#: ../src/keybindings.c:487
+#, fuzzy
+msgid "Switch to Sidebar Document List"
+msgstr "Camudar a Documentu"
+
+#: ../src/keybindings.c:489
+#, fuzzy
+msgid "Switch to Sidebar Symbol List"
+msgstr "Dir a la Barra Llateral"
+
+#: ../src/keybindings.c:491
+msgid "Notebook tab"
+msgstr "Llingüeta d'anotador"
+
+#: ../src/keybindings.c:494
+msgid "Switch to left document"
+msgstr "Dir al documentu de manzorga"
+
+#: ../src/keybindings.c:496
+msgid "Switch to right document"
+msgstr "Dir al documentu de mandrecha."
+
+#: ../src/keybindings.c:498
+msgid "Switch to last used document"
+msgstr "Dir al caberu documentu usáu"
+
+#: ../src/keybindings.c:500
+msgid "Move document left"
+msgstr "Mover el documentu a manzorga"
+
+#: ../src/keybindings.c:502
+msgid "Move document right"
+msgstr "Mover el documentu a mandrecha"
+
+#: ../src/keybindings.c:504
+msgid "Move document first"
+msgstr "Mover el documentu al entamu"
+
+#: ../src/keybindings.c:506
+msgid "Move document last"
+msgstr "Mover el documentu a lo cabero"
+
+#: ../src/keybindings.c:508
+msgid "Document"
+msgstr "Documentu"
+
+#: ../src/keybindings.c:511
+msgid "Toggle Line wrapping"
+msgstr "Activar/Desactivar axuste de testu"
+
+#: ../src/keybindings.c:513
+msgid "Toggle Line breaking"
+msgstr "Activar/Desactivar ddixebráu de llínies"
+
+#: ../src/keybindings.c:517
+msgid "Replace spaces by tabs"
+msgstr "Reemplazar espacios con tabulaciones"
+
+#: ../src/keybindings.c:519
+msgid "Toggle current fold"
+msgstr "Entenderexar/replegar el puntu actual"
+
+#: ../src/keybindings.c:521
+msgid "Fold all"
+msgstr "Replegar too"
+
+#: ../src/keybindings.c:523
+msgid "Unfold all"
+msgstr "Estenderexar too"
+
+#: ../src/keybindings.c:525
+msgid "Reload symbol list"
+msgstr "Recargar llista de símbolos"
+
+#: ../src/keybindings.c:527 ../src/keybindings.c:532 ../src/project.c:483
+#: ../src/ui_utils.c:1815
+msgid "Build"
+msgstr "Construyir"
+
+#: ../src/keybindings.c:530 ../src/toolbar.c:68
+msgid "Compile"
+msgstr "Compilar"
+
+#: ../src/keybindings.c:534
+msgid "Make all"
+msgstr "Make all"
+
+#: ../src/keybindings.c:537
+msgid "Make custom target"
+msgstr "Construí con make (oxetivu personalizáu)"
+
+#: ../src/keybindings.c:539
+msgid "Make object"
+msgstr "Make object"
+
+#: ../src/keybindings.c:541
+msgid "Next error"
+msgstr "Siguiente fallu"
+
+#: ../src/keybindings.c:543
+msgid "Previous error"
+msgstr "Fallu anterior"
+
+#: ../src/keybindings.c:545
+msgid "Run"
+msgstr "Executar"
+
+#: ../src/keybindings.c:547
+msgid "Build options"
+msgstr "Opciones de construcción"
+
+#: ../src/keybindings.c:552
+msgid "Show Color Chooser"
+msgstr "Amosar Seleutor de Collores"
+
+#: ../src/keybindings.c:554 ../src/keybindings.c:557
+msgid "Help"
+msgstr "Aida"
+
+#: ../src/keybindings.c:846
+msgid "Keyboard Shortcuts"
+msgstr "Ataxos de Tecláu"
+
+#: ../src/keybindings.c:859
+msgid "The following keyboard shortcuts are configurable:"
+msgstr "Los siguientes ataxos de tecláu son configurables:"
+
+#: ../src/keybindings.c:1779
+msgid "Switch to Document"
+msgstr "Camudar a Documentu"
+
+#: ../src/keyfile.c:836
+msgid "Type here what you want, use it as a notice/scratch board"
+msgstr "Escribe equí lo que quies, úsalo como nota o borrador"
+
+#: ../src/keyfile.c:1040
+msgid "Failed to load one or more session files."
+msgstr "Fallu al cargar un o más ficheros de la sesión."
+
+#: ../src/log.c:181
+msgid "Debug Messages"
+msgstr "Mensaxes de Depuración"
+
+#: ../src/log.c:183
+#, fuzzy
+msgid "Cl_ear"
+msgstr "_Guetar"
+
+#: ../src/main.c:122
+msgid ""
+"Set initial column number for the first opened file (useful in conjunction "
+"with --line)"
+msgstr ""
+"Seleiciona'l númberu inicial de columna pal primer ficheru abiertu (útil en "
+"conxuntu con --line)"
+
+#: ../src/main.c:123
+msgid "Use an alternate configuration directory"
+msgstr "Usar un direutoriu de configuración alternativu"
+
+#: ../src/main.c:124
+msgid "Print internal filetype names"
+msgstr "Imprentar nomes internos de tribes de ficheros"
+
+#: ../src/main.c:125
+msgid "Generate global tags file (see documentation)"
+msgstr "Xenerar ficheru global de tags (ver la documentación)"
+
+#: ../src/main.c:126
+msgid "Don't preprocess C/C++ files when generating tags"
+msgstr "Ensin ficheros prepocesaos C/C++ al xenerar etiquetes"
+
+#: ../src/main.c:128
+msgid "Don't open files in a running instance, force opening a new instance"
+msgstr ""
+"Non abrir ficheros n'instancies corriendo, forzar l'apertura d'una nueva "
+"instancia"
+
+#: ../src/main.c:129
+msgid ""
+"Use this socket filename for communication with a running Geany instance"
+msgstr ""
+
+#: ../src/main.c:131
+msgid "Set initial line number for the first opened file"
+msgstr "Seleiciona'l númberu inicial pal primer ficheru abiertu"
+
+#: ../src/main.c:132
+msgid "Don't show message window at startup"
+msgstr "Non amosar ventanu de mensaxes al entamu"
+
+#: ../src/main.c:133
+msgid "Don't load auto completion data (see documentation)"
+msgstr "Non cargar los datos de completáu automáticu (ver la documentación)"
+
+#: ../src/main.c:135
+msgid "Don't load plugins"
+msgstr "Non cargar módulos complementarios"
+
+#: ../src/main.c:137
+msgid "Print Geany's installation prefix"
+msgstr "Imprentar el prefixu d'instalación de Geany"
+
+#: ../src/main.c:138
+msgid "Don't load the previous session's files"
+msgstr "Nun cargar los ficheros de la cabera sesión"
+
+#: ../src/main.c:140
+msgid "Don't load terminal support"
+msgstr "Non cargar el sofitu de terminal"
+
+#: ../src/main.c:141
+msgid "Filename of libvte.so"
+msgstr "Nome de ficheru de libvte.so"
+
+#: ../src/main.c:143
+msgid "Be verbose"
+msgstr "Más esplicativu"
+
+#: ../src/main.c:144
+msgid "Show version and exit"
+msgstr "Amosar versión y colar"
+
+#: ../src/main.c:491
+msgid "[FILES...]"
+msgstr "[FICHEROS...]"
+
+#: ../src/main.c:508
+#, c-format
+msgid "(built on %s with GTK %d.%d.%d, GLib %d.%d.%d)"
+msgstr "(compiláu en %s con GTK %d.%d.%d, GLib %d.%d.%d)"
+
+#: ../src/main.c:604
+msgid "Move it now?"
+msgstr "¿Movelo agora?"
+
+#: ../src/main.c:606
+msgid "Geany needs to move your old configuration directory before starting."
+msgstr ""
+"Geany necesita mover el to direutoriu vieyu de configuración anantes "
+"d'entamar."
+
+#: ../src/main.c:615
+#, c-format
+msgid ""
+"Your configuration directory has been successfully moved from \"%s\" to \"%s"
+"\"."
+msgstr ""
+"El to direutoriu de configuración foi movíu dafechu dende \"%s\" a \"%s\"."
+
+#. for translators: the third %s in brackets is the error message which
+#. * describes why moving the dir didn't work
+#: ../src/main.c:625
+#, c-format
+msgid ""
+"Your old configuration directory \"%s\" could not be moved to \"%s\" (%s). "
+"Please move manually the directory to the new location."
+msgstr ""
+"El direutoriu vieyu de configuración \"%s\" nun pudó movese a \"%s\" (%s). "
+"Por favor, mueve a man el direutoriu a la nueva llocalización."
+
+#: ../src/main.c:706
+#, c-format
+msgid ""
+"Configuration directory could not be created (%s).\n"
+"There could be some problems using Geany without a configuration directory.\n"
+"Start Geany anyway?"
+msgstr ""
+"El direutoriu de configuración non puede ser criáu (%s).\n"
+"Puede haber problemes usando Geany ensin un direutoriu de configuración.\n"
+"¿Entamar Geany de toes formes?"
+
+#: ../src/main.c:1021
+#, c-format
+msgid "This is Geany %s."
+msgstr "Esti ye Geany %s."
+
+#: ../src/main.c:1023
+#, c-format
+msgid "Configuration directory could not be created (%s)."
+msgstr "El direutoriu de configuración non pudo ser criáu (%s)."
+
+#: ../src/main.c:1247
+msgid "Configuration files reloaded."
+msgstr "Ficheros de configuración recargaos."
+
+#: ../src/msgwindow.c:153
+msgid "Status messages"
+msgstr "Mensaxes d'estáu"
+
+#: ../src/msgwindow.c:533
+msgid "Copy _All"
+msgstr "Copi_ar Too"
+
+#: ../src/msgwindow.c:563
+msgid "_Hide Message Window"
+msgstr "_Anubrir Ventanu de Mensaxes"
+
+#: ../src/msgwindow.c:619
+#, c-format
+msgid "Could not find file '%s' - trying the current document path."
+msgstr ""
+
+#: ../src/plugins.c:430
+#, c-format
+msgid ""
+"The plugin \"%s\" is not binary compatible with this release of Geany - "
+"please recompile it."
+msgstr ""
+"El complementu \"%s\" non ye compatible binariamente con esta distribución "
+"de Geany - por favor recompilalu."
+
+#: ../src/plugins.c:872
+msgid "_Plugin Manager"
+msgstr "_Alministrador de Complementos"
+
+#: ../src/plugins.c:1049
+#, c-format
+msgid ""
+"Plugin: %s %s\n"
+"Description: %s\n"
+"Author(s): %s"
+msgstr ""
+"Complementu: %s %s\n"
+"Descripción: %s\n"
+"Autor(es): %s"
+
+#: ../src/plugins.c:1125
+msgid "Active"
+msgstr "Activu"
+
+#: ../src/plugins.c:1131
+msgid "Plugin"
+msgstr "Complementu"
+
+#: ../src/plugins.c:1155
+msgid "No plugins available."
+msgstr "Non hai complementos disponibles."
+
+#: ../src/plugins.c:1235
+msgid "Plugins"
+msgstr "Complementos"
+
+#: ../src/plugins.c:1255
+msgid "Choose which plugins should be loaded at startup:"
+msgstr ""
+
+#: ../src/plugins.c:1267
+msgid "<b>Plugin details:</b>"
+msgstr "<b>Detalles del complementu:</b>"
+
+#: ../src/pluginutils.c:207
+msgid "Configure Plugins"
+msgstr ""
+
+#: ../src/prefs.c:162
+msgid "Grab Key"
+msgstr "Capturar Tecla"
+
+#: ../src/prefs.c:168
+#, c-format
+msgid "Press the combination of the keys you want to use for \"%s\"."
+msgstr "Calca la combinación de tecles que quies usar pa \"%s\"."
+
+#: ../src/prefs.c:211 ../src/symbols.c:1867
+msgid "_Expand All"
+msgstr "_Estenderexar Too"
+
+#: ../src/prefs.c:216 ../src/symbols.c:1872
+msgid "_Collapse All"
+msgstr "_Replegar Too"
+
+#: ../src/prefs.c:275
+msgid "Action"
+msgstr "Aición"
+
+#: ../src/prefs.c:280
+msgid "Shortcut"
+msgstr "Ataxu"
+
+#: ../src/prefs.c:1377
+msgid "_Allow"
+msgstr ""
+
+#: ../src/prefs.c:1379
+msgid "_Override"
+msgstr "S_obroescribir"
+
+#: ../src/prefs.c:1380
+msgid "Override that keybinding?"
+msgstr "Sobroescribir esi ataxu?"
+
+#: ../src/prefs.c:1381
+#, c-format
+msgid "The combination '%s' is already used for \"%s\"."
+msgstr "La combinación '%s' ta usada por \"%s\"."
+
+#: ../src/prefs.c:1507 ../src/vte.c:268 ../src/vte.c:727
+msgid "Terminal"
+msgstr "Terminal"
+
+#. add manually GeanyWrapLabels because they can't be added with Glade
+#. page Tools
+#: ../src/prefs.c:1583
+msgid "Enter tool paths below. Tools you do not need can be left blank."
+msgstr ""
+"Introduz embaxu les rutes a les ferramientes. Les ferramientes que non "
+"necesites pueden quedar en blancu."
+
+#. page Templates
+#: ../src/prefs.c:1588
+msgid ""
+"Set the information to be used in templates. See the documentation for "
+"details."
+msgstr ""
+"Especificar la información que quies usar nes plantilles. Pa más detalles "
+"ver la documentación."
+
+#: ../src/prefs.c:1592
+msgid ""
+"<i>Notice: For all changes you make here to take effect, you need to restart "
+"Geany or force the reload of the settings using Tools->Reload Configuration."
+"</i>"
+msgstr ""
+"<i>Avisu: Pa que tolos cambios fechos equí faigan efeutu, necesites "
+"reaniciar Geany o forzar la recarga de les opciones usando Ferramientes-"
+">Recargar Configuración.</i>"
+
+#. page Keybindings
+#: ../src/prefs.c:1598
+msgid ""
+"Here you can change keyboard shortcuts for various actions. Select one and "
+"press the Change button to enter a new shortcut, or double click on an "
+"action to edit the string representation of the shortcut directly."
+msgstr ""
+"Equí puedes camudar los ataxos de tecláu pa varies aiciones. Seleiciona una "
+"y calca'l botón de Camudar pa introducir un nuevu ataxu, o calca dos vegaes "
+"nuna aición pa editar direutamente'l testu que representa l'ataxu."
+
+#. page Printing
+#: ../src/prefs.c:1603
+msgid ""
+"<i>Notice: Native GTK printing is only available if Geany was built against "
+"GTK 2.10 (or above) <b>and</b> Geany is running with GTK 2.10 (or above).</i>"
+msgstr ""
+"<i>Noticia: La impresión nativa de GTK sólo ta disponible si Geany foi "
+"compiláu escontra GTK 2.10 (o mayor) <b>and</b> Geany ta corriendo con GTK "
+"2.10 (o mayor).</i>"
+
+#. page Editor->Indentation
+#: ../src/prefs.c:1609
+msgid ""
+"<i>Warning: these settings are overridden by the current project. See "
+"<b>Project->Properties</b>.</i>"
+msgstr ""
+"<i>Alvertencia: les preferencies serán sobroescrites pal proyeutu actual. "
+"Mira <b>Proyeutu->Propiedaes</b>.</i>"
+
+#: ../src/printing.c:188
+msgid "The editor font is not a monospaced font!"
+msgstr "¡La fonte del editor nun ye monoespaciada!"
+
+#: ../src/printing.c:189
+msgid "Text will be wrongly spaced."
+msgstr "El testu quedará mal espaciáu."
+
+#: ../src/printing.c:306
+#, c-format
+msgid "<b>Page %d of %d</b>"
+msgstr "<b>Páxina %d de %d</b>"
+
+#: ../src/printing.c:376
+msgid "Document Setup"
+msgstr "Configuración del Documentu"
+
+#: ../src/printing.c:411
+msgid "Print only the basename(without the path) of the printed file"
+msgstr "Imprentar sólo el nome base (ensín el camín) del ficheru imprentáu"
+
+#: ../src/printing.c:527
+#, c-format
+msgid "Page %d of %d"
+msgstr "Páxina %d de %d"
+
+#: ../src/printing.c:781
+#, c-format
+msgid "Did not send document %s to the printing subsystem."
+msgstr ""
+
+#: ../src/printing.c:783
+#, c-format
+msgid "Document %s was sent to the printing subsystem."
+msgstr ""
+
+#: ../src/printing.c:835
+#, c-format
+msgid "Printing of %s failed (%s)."
+msgstr "La impresión de %s falló (%s)."
+
+#: ../src/printing.c:875
+msgid "Please set a print command in the preferences dialog first."
+msgstr ""
+"Por favor, a lo primero configura un comandu d'imprentación nel diálogu de "
+"preferencies."
+
+#: ../src/printing.c:883
+#, c-format
+msgid ""
+"The file \"%s\" will be printed with the following command:\n"
+"\n"
+"%s"
+msgstr ""
+"El ficheru \"%s\" será imprentáu col siguiente comandu:\n"
+"\n"
+"%s"
+
+#: ../src/printing.c:899
+#, c-format
+msgid "Printing of \"%s\" failed (return code: %s)."
+msgstr "La impresión de \"%s\" falló (códigu de retornu: %s)."
+
+#: ../src/printing.c:905
+#, c-format
+msgid "File %s printed."
+msgstr "Ficheru %s imprentáu."
+
+#. "projects" is part of the default project base path so be careful when translating
+#. * please avoid special characters and spaces, look at the source for details or ask Frank
+#: ../src/project.c:98
+msgid "projects"
+msgstr "proyeutos"
+
+#: ../src/project.c:118
+msgid "New Project"
+msgstr "Nuevu Proyeutu"
+
+#: ../src/project.c:126
+msgid "C_reate"
+msgstr "C_riar"
+
+#: ../src/project.c:140 ../src/project.c:419
+msgid "Name:"
+msgstr "Nome:"
+
+#: ../src/project.c:149 ../src/project.c:432
+msgid "Filename:"
+msgstr "Nome de Ficheru:"
+
+#: ../src/project.c:165 ../src/project.c:462
+msgid "Base path:"
+msgstr "Camín base:"
+
+#: ../src/project.c:171 ../src/project.c:471
+msgid ""
+"Base directory of all files that make up the project. This can be a new "
+"path, or an existing directory tree. You can use paths relative to the "
+"project filename."
+msgstr ""
+"Direutoriu base de tolos ficheros que componen esti proyeutu. Esti puede ser "
+"un camín nuevu o un árbol de direutorios ya existente. Puedes usar caminos "
+"rellativos al ficheru de proyeutu."
+
+#: ../src/project.c:174 ../src/project.c:474
+msgid "Choose Project Base Path"
+msgstr "Escueye'l Camín Base del Proyeutu"
+
+#: ../src/project.c:239 ../src/project.c:270 ../src/project.c:937
+#, c-format
+msgid "Project file \"%s\" could not be loaded."
+msgstr "El ficheru de proyeutu \"%s\" non pudo ser cargáu."
+
+#: ../src/project.c:264 ../src/project.c:276
+msgid "Open Project"
+msgstr "Abrir Proyeutu"
+
+#: ../src/project.c:296
+msgid "Project files"
+msgstr "Ficheros del proyeutu"
+
+#: ../src/project.c:343
+#, c-format
+msgid "Project \"%s\" closed."
+msgstr "Proyeutu \"%s\" zarráu."
+
+#: ../src/project.c:445
+msgid "Description:"
+msgstr "Descripción:"
+
+#: ../src/project.c:487
+msgid "Set the Build non-filetype working directories to use base path:"
+msgstr ""
+
+#: ../src/project.c:490
+#, fuzzy
+msgid "Set"
+msgstr "Sec1"
+
+#: ../src/project.c:492
+msgid ""
+"Set the working directories (on the Build tab) for the non-filetype build "
+"commands to use the base path"
+msgstr ""
+
+#: ../src/project.c:504
+msgid "File patterns:"
+msgstr "Patrones de ficheros:"
+
+#: ../src/project.c:601
+msgid "Do you want to close it before proceeding?"
+msgstr "¿Quies zarralu enantes de proceder?"
+
+#: ../src/project.c:602
+#, c-format
+msgid "The '%s' project is already open."
+msgstr "El proyeutu '%s' ya ta abiertu."
+
+#: ../src/project.c:646
+msgid "The specified project name is too short."
+msgstr "El nome del proyeutu especificáu ye mui curtiu."
+
+#: ../src/project.c:652
+#, c-format
+msgid "The specified project name is too long (max. %d characters)."
+msgstr "El nome del proyeutu especificáu ye mui llargu (máx. %d caráuteres)."
+
+#: ../src/project.c:660
+msgid "You have specified an invalid project filename."
+msgstr "Especificáu un nome de ficheru de proyeutu inválidu."
+
+#: ../src/project.c:683
+msgid "Create the project's base path directory?"
+msgstr "¿Criar el direutoriu del camín base del proyeutu?"
+
+#: ../src/project.c:684
+#, c-format
+msgid "The path \"%s\" does not exist."
+msgstr "El camín \"%s\" non esiste."
+
+#: ../src/project.c:693
+#, c-format
+msgid "Project base directory could not be created (%s)."
+msgstr "Non se pudo criar el direutoriu principal pal proyeutu (%s)."
+
+#: ../src/project.c:705
+#, c-format
+msgid "Project file could not be written (%s)."
+msgstr "El ficheru de proyeutu non pudo ser escritu (%s)."
+
+#: ../src/project.c:780
+#, c-format
+msgid "Project \"%s\" created."
+msgstr "Proyeutu \"%s\" criáu."
+
+#: ../src/project.c:782
+#, c-format
+msgid "Project \"%s\" saved."
+msgstr "Proyeutu \"%s\" guardáu."
+
+#. initialise the dialog
+#: ../src/project.c:847 ../src/project.c:858
+msgid "Choose Project Filename"
+msgstr "Escueye'l Nome del ficheru del Proyeutu"
+
+#: ../src/project.c:927
+#, c-format
+msgid "Project \"%s\" opened."
+msgstr "Proyeutu \"%s\" abiertu."
+
+#: ../src/search.c:226
+msgid "_Use regular expressions"
+msgstr "_Usar espresiones regulares"
+
+#: ../src/search.c:230
+msgid ""
+"Use POSIX-like regular expressions. For detailed information about using "
+"regular expressions, please read the documentation."
+msgstr ""
+"Usar espresiones regulares estilo-POSIX. Por información detallada so l'usu "
+"d'espresiones regulares, por favor llee la documentación"
+
+#: ../src/search.c:237
+msgid "Search _backwards"
+msgstr "Guetar p'_atras"
+
+#: ../src/search.c:251
+msgid "Use _escape sequences"
+msgstr "Usar secuencies d'_escape"
+
+#: ../src/search.c:256
+msgid ""
+"Replace \\\\, \\t, \\n, \\r and \\uXXXX (Unicode chararacters) with the "
+"corresponding control characters"
+msgstr ""
+"Reemplaza \\\\, \\t, \\n, \\r i \\uXXXX (caráuteres Unicode) polos "
+"carauteres de control correspondientes"
+
+#: ../src/search.c:265 ../src/search.c:803
+msgid "C_ase sensitive"
+msgstr "_Respetar Mayúscules y minúscules"
+
+#: ../src/search.c:270 ../src/search.c:809
+msgid "Match only a _whole word"
+msgstr "Sólo _pallabres enteres"
+
+#: ../src/search.c:275
+msgid "Match from s_tart of word"
+msgstr "Sólo dende l'entamu de les _pallabres"
+
+#: ../src/search.c:396
+msgid "_Previous"
+msgstr "_Anterior"
+
+#: ../src/search.c:402
+msgid "_Next"
+msgstr "Siguie_nte"
+
+#: ../src/search.c:406 ../src/search.c:555 ../src/search.c:733
+msgid "_Search for:"
+msgstr "_Guetar por:"
+
+#. Now add the multiple match options
+#: ../src/search.c:434
+msgid "_Find All"
+msgstr "Guetar _Toos"
+
+#: ../src/search.c:441
+msgid "_Mark"
+msgstr "_Marcar"
+
+#: ../src/search.c:443
+msgid "Mark all matches in the current document"
+msgstr "Marca toles coincidencies nel documentu"
+
+#: ../src/search.c:448 ../src/search.c:615
+msgid "In Sessi_on"
+msgstr "Na _Sesión"
+
+#: ../src/search.c:453 ../src/search.c:620
+msgid "_In Document"
+msgstr "Nel _Documentu"
+
+#. close window checkbox
+#: ../src/search.c:459 ../src/search.c:633
+msgid "Close _dialog"
+msgstr "Zarrar _diálogu"
+
+#: ../src/search.c:464 ../src/search.c:638
+msgid "Disable this option to keep the dialog open"
+msgstr "Desactiva esta opción pa caltener el diálogu d'abrir"
+
+#: ../src/search.c:549
+msgid "Replace & Fi_nd"
+msgstr "Reemplazar y G_uetar"
+
+#: ../src/search.c:558
+msgid "Replace wit_h:"
+msgstr "Reem_plazar con:"
+
+#. Now add the multiple replace options
+#: ../src/search.c:608
+msgid "Re_place All"
+msgstr "Reemplazar _Toes"
+
+#: ../src/search.c:625
+msgid "In Se_lection"
+msgstr "Na Se_leición"
+
+#: ../src/search.c:627
+msgid "Replace all matches found in the currently selected text"
+msgstr "Reemplaza toles ocurrencies atopaes nel testu actualmente seleicionáu"
+
+#: ../src/search.c:718
+msgid "_Directory:"
+msgstr "_Direutoriu:"
+
+#: ../src/search.c:749
+msgid "E_ncoding:"
+msgstr "_Codificación:"
+
+#: ../src/search.c:774
+msgid "Fixed s_trings"
+msgstr "Cadenes _fixes"
+
+#: ../src/search.c:783
+msgid "_Grep regular expressions"
+msgstr "Espresiones regulares _Grep"
+
+#: ../src/search.c:786 ../src/search.c:794
+msgid "See grep's manual page for more information"
+msgstr "Ver la páxina de manual grep pa más información"
+
+#: ../src/search.c:791
+msgid "_Extended regular expressions"
+msgstr "Espresiones regulares _Estendíes"
+
+#: ../src/search.c:798
+msgid "_Recurse in subfolders"
+msgstr "Operar _Recursivamente nos subdireutorios"
+
+#: ../src/search.c:814
+msgid "_Invert search results"
+msgstr "_Invertir los resultaos de la gueta"
+
+#: ../src/search.c:819
+msgid "Invert the sense of matching, to select non-matching lines"
+msgstr "Invertir el sen de la rellación pa seleicionar llinies non venceyaes"
+
+#: ../src/search.c:836
+msgid "E_xtra options:"
+msgstr "Opciónes e_xtra:"
+
+#: ../src/search.c:844
+msgid "Other options to pass to Grep"
+msgstr "Otres opciones a pasar a Grep"
+
+#: ../src/search.c:1116 ../src/search.c:1709 ../src/search.c:1712
+#, c-format
+msgid "Found %d match for \"%s\"."
+msgid_plural "Found %d matches for \"%s\"."
+msgstr[0] "Atopóse %d coincidencia pa \"%s\"."
+msgstr[1] "Atopáronse %d coincidencies pa \"%s\"."
+
+#: ../src/search.c:1163
+#, fuzzy, c-format
+msgid "Replaced %u matches in %u documents."
+msgstr "Sustituyir el testu nel documentu actual"
+
+#: ../src/search.c:1349
+msgid "Invalid directory for find in files."
+msgstr "Direutoriu non válidu pa guetar ficheros."
+
+#: ../src/search.c:1369
+msgid "No text to find."
+msgstr "Non hai testu pa guetar."
+
+#: ../src/search.c:1396
+#, c-format
+msgid "Cannot execute grep tool '%s'; check the path setting in Preferences."
+msgstr ""
+"Non se pudo atopar la ferramienta grep '%s'; verifica'l camín nes "
+"Preferencies."
+
+#: ../src/search.c:1464
+msgid "Searching..."
+msgstr "Guetando..."
+
+#: ../src/search.c:1476
+#, c-format
+msgid "%s %s -- %s (in directory: %s)"
+msgstr "%s %s -- %s (en direutoriu: %s)"
+
+#: ../src/search.c:1504
+#, c-format
+msgid "Could not open directory (%s)"
+msgstr "Non pudó abrise'l direutoriu (%s)"
+
+#: ../src/search.c:1582
+#, fuzzy
+msgid "Search failed."
+msgstr "_Guetar por:"
+
+#: ../src/search.c:1602
+#, c-format
+msgid "Search completed with %d match."
+msgid_plural "Search completed with %d matches."
+msgstr[0] "Finó la gueta con %d coincidencia."
+msgstr[1] "Finó la gueta con %d coincidencies."
+
+#: ../src/search.c:1610
+msgid "No matches found."
+msgstr "Non s'atoparon coincidencies."
+
+#: ../src/symbols.c:599 ../src/symbols.c:640 ../src/symbols.c:710
+msgid "Chapter"
+msgstr "Capítulu"
+
+#: ../src/symbols.c:600 ../src/symbols.c:636 ../src/symbols.c:711
+msgid "Section"
+msgstr "Seición"
+
+#: ../src/symbols.c:601
+msgid "Sect1"
+msgstr "Sec1"
+
+#: ../src/symbols.c:602
+msgid "Sect2"
+msgstr "Sec2"
+
+#: ../src/symbols.c:603
+msgid "Sect3"
+msgstr "Sec3"
+
+#: ../src/symbols.c:604
+msgid "Appendix"
+msgstr "Apéndice"
+
+#. &(tv_iters.tag_macro), _("Macros"),
+#. &(tv_iters.tag_variable), _("Variables"),
+#: ../src/symbols.c:605 ../src/symbols.c:641 ../src/symbols.c:657
+#: ../src/symbols.c:668 ../src/symbols.c:765 ../src/symbols.c:776
+#: ../src/symbols.c:790 ../src/symbols.c:804 ../src/symbols.c:816
+#: ../src/symbols.c:828 ../src/symbols.c:843 ../src/symbols.c:888
+msgid "Other"
+msgstr "Otru"
+
+#: ../src/symbols.c:612 ../src/symbols.c:836 ../src/symbols.c:868
+msgid "Module"
+msgstr "Módulu"
+
+#: ../src/symbols.c:613 ../src/symbols.c:761 ../src/symbols.c:814
+#: ../src/symbols.c:826 ../src/symbols.c:841 ../src/symbols.c:853
+msgid "Types"
+msgstr "Tribes"
+
+#: ../src/symbols.c:614
+msgid "Type constructors"
+msgstr "Constructores de tribes"
+
+#: ../src/symbols.c:615 ../src/symbols.c:627 ../src/symbols.c:648
+#: ../src/symbols.c:656 ../src/symbols.c:665 ../src/symbols.c:677
+#: ../src/symbols.c:689 ../src/symbols.c:744 ../src/symbols.c:800
+#: ../src/symbols.c:823 ../src/symbols.c:838 ../src/symbols.c:875
+msgid "Functions"
+msgstr "Funciones"
+
+#: ../src/symbols.c:620 ../src/symbols.c:626
+msgid "Sections"
+msgstr "Seiciónes"
+
+#: ../src/symbols.c:621
+msgid "Keys"
+msgstr "Tecles"
+
+#: ../src/symbols.c:628 ../src/symbols.c:679 ../src/symbols.c:745
+#: ../src/symbols.c:775 ../src/symbols.c:802 ../src/symbols.c:815
+#: ../src/symbols.c:824 ../src/symbols.c:840 ../src/symbols.c:887
+msgid "Variables"
+msgstr "Variables"
+
+#: ../src/symbols.c:635
+msgid "Environment"
+msgstr "Entornu"
+
+#: ../src/symbols.c:637 ../src/symbols.c:712
+msgid "Subsection"
+msgstr "Subseición"
+
+#: ../src/symbols.c:638 ../src/symbols.c:713
+msgid "Subsubsection"
+msgstr "Subsubseición"
+
+#: ../src/symbols.c:649
+msgid "Structures"
+msgstr "Estructures"
+
+#: ../src/symbols.c:664 ../src/symbols.c:758 ../src/symbols.c:783
+#: ../src/symbols.c:797
+msgid "Package"
+msgstr "Paquete"
+
+#: ../src/symbols.c:666 ../src/symbols.c:827 ../src/symbols.c:850
+msgid "Labels"
+msgstr "Etiquetes"
+
+#: ../src/symbols.c:667 ../src/symbols.c:678 ../src/symbols.c:803
+#: ../src/symbols.c:825
+msgid "Constants"
+msgstr "Constantes"
+
+#: ../src/symbols.c:675 ../src/symbols.c:784 ../src/symbols.c:798
+#: ../src/symbols.c:811 ../src/symbols.c:837
+msgid "Interfaces"
+msgstr "Interfaces"
+
+#: ../src/symbols.c:676 ../src/symbols.c:700 ../src/symbols.c:721
+#: ../src/symbols.c:733 ../src/symbols.c:742 ../src/symbols.c:785
+#: ../src/symbols.c:799 ../src/symbols.c:812 ../src/symbols.c:874
+msgid "Classes"
+msgstr "Clases"
+
+#: ../src/symbols.c:690
+msgid "Anchors"
+msgstr "Anchos"
+
+#: ../src/symbols.c:691
+msgid "H1 Headings"
+msgstr "Cabeceres (H1)"
+
+#: ../src/symbols.c:692
+msgid "H2 Headings"
+msgstr "Cabeceres (H2)"
+
+#: ../src/symbols.c:693
+msgid "H3 Headings"
+msgstr "Cabeceres (H3)"
+
+#: ../src/symbols.c:701
+msgid "ID Selectors"
+msgstr "Selectores d'ID"
+
+#: ../src/symbols.c:702
+msgid "Type Selectors"
+msgstr "Selectores de Tribes"
+
+#: ../src/symbols.c:720 ../src/symbols.c:773
+msgid "Modules"
+msgstr "Módulos"
+
+#: ../src/symbols.c:722
+msgid "Singletons"
+msgstr "Singletons"
+
+#: ../src/symbols.c:723 ../src/symbols.c:734 ../src/symbols.c:743
+#: ../src/symbols.c:786 ../src/symbols.c:813
+msgid "Methods"
+msgstr "Métodos"
+
+#: ../src/symbols.c:732 ../src/symbols.c:871
+msgid "Namespaces"
+msgstr "Namespaces"
+
+#: ../src/symbols.c:735
+msgid "Procedures"
+msgstr "Procedimientos"
+
+#: ../src/symbols.c:746
+msgid "Imports"
+msgstr "Importaciones"
+
+#: ../src/symbols.c:759
+#, fuzzy
+msgid "Entities"
+msgstr "ensin títulu"
+
+#: ../src/symbols.c:760
+#, fuzzy
+msgid "Architectures"
+msgstr "Estructures"
+
+#: ../src/symbols.c:762
+#, fuzzy
+msgid "Functions / Procedures"
+msgstr "Procedimientos"
+
+#: ../src/symbols.c:763
+#, fuzzy
+msgid "Variables / Signals"
+msgstr "Variables"
+
+#: ../src/symbols.c:764
+msgid "Processes / Components"
+msgstr ""
+
+#: ../src/symbols.c:772
+msgid "Events"
+msgstr ""
+
+#: ../src/symbols.c:774
+#, fuzzy
+msgid "Functions / Tasks"
+msgstr "Funciones"
+
+#: ../src/symbols.c:787 ../src/symbols.c:876
+msgid "Members"
+msgstr "Miembros"
+
+#: ../src/symbols.c:839
+msgid "Subroutines"
+msgstr "Subrutines"
+
+#: ../src/symbols.c:842
+msgid "Blocks"
+msgstr "Bloques"
+
+#: ../src/symbols.c:851 ../src/symbols.c:860 ../src/symbols.c:884
+msgid "Macros"
+msgstr "Macros"
+
+#: ../src/symbols.c:852
+msgid "Defines"
+msgstr "Defines"
+
+#: ../src/symbols.c:859
+msgid "Targets"
+msgstr "Oxetivos"
+
+#: ../src/symbols.c:877
+msgid "Structs"
+msgstr "Estructures"
+
+#: ../src/symbols.c:878
+msgid "Typedefs / Enums"
+msgstr "Definición de Tribes / Enumberación"
+
+#: ../src/symbols.c:1366
+#, c-format
+msgid "Unknown filetype extension for \"%s\".\n"
+msgstr "Estención de ficheru desconocida pa \"%s\".\n"
+
+#: ../src/symbols.c:1390
+#, c-format
+msgid "Failed to create tags file, perhaps because no tags were found.\n"
+msgstr ""
+"Fállo al criar el ficheru de tags, tal vez porque nun s'atopó nengún tag.\n"
+
+#: ../src/symbols.c:1397
+#, c-format
+msgid ""
+"Usage: %s -g <Tag File> <File list>\n"
+"\n"
+msgstr ""
+"Usu: %s -g <Ficheru de Tags> <Llista de ficheros>\n"
+"\n"
+
+#: ../src/symbols.c:1398
+#, c-format
+msgid ""
+"Example:\n"
+"CFLAGS=`pkg-config gtk+-2.0 --cflags` %s -g gtk2.c.tags /usr/include/gtk-2.0/"
+"gtk/gtk.h\n"
+msgstr ""
+"Exemplu:\n"
+"CFLAGS=`pkg-config gtk+-2.0 --cflags` %s -g gtk2.c.tags /usr/include/gtk-2.0/"
+"gtk/gtk.h\n"
+
+#: ../src/symbols.c:1412
+msgid "Load Tags"
+msgstr "Cargar Tags"
+
+#: ../src/symbols.c:1419
+msgid "Geany tag files (*.tags)"
+msgstr "Ficheros de tags de Geany (*.tags)"
+
+#. For translators: the first wildcard is the filetype, the second the filename
+#: ../src/symbols.c:1439
+#, c-format
+msgid "Loaded %s tags file '%s'."
+msgstr "Cargáu %s ficheru de tags '%s'."
+
+#: ../src/symbols.c:1441
+#, c-format
+msgid "Could not load tags file '%s'."
+msgstr "Non pudo cargase'l ficheru de tags '%s'."
+
+#: ../src/symbols.c:1574
+#, c-format
+msgid "Forward declaration \"%s\" not found."
+msgstr "Declaración de \"%s\" non atopada."
+
+#: ../src/symbols.c:1576
+#, c-format
+msgid "Definition of \"%s\" not found."
+msgstr "Definición de \"%s\" non atopada."
+
+#: ../src/symbols.c:1882
+msgid "Sort by _Name"
+msgstr "Ordenar por _Nome"
+
+#: ../src/symbols.c:1889
+msgid "Sort by _Appearance"
+msgstr "Ordenar por _Aparición"
+
+#: ../src/templates.c:271
+msgid "Old"
+msgstr ""
+
+#. custom actions defined in toolbar_init(): "New", "Open", "SearchEntry", "GotoEntry", "Build"
+#: ../src/toolbar.c:55
+msgid "Save the current file"
+msgstr "Grabar el ficheru actual"
+
+#: ../src/toolbar.c:56
+msgid "Save all open files"
+msgstr "Grabar tolos ficheros abiertos"
+
+#: ../src/toolbar.c:57
+msgid "Reload the current file from disk"
+msgstr "Recarga'l ficheru actual dende'l discu"
+
+#: ../src/toolbar.c:58
+msgid "Close the current file"
+msgstr "Zarrar el ficheru actual"
+
+#: ../src/toolbar.c:59
+msgid "Close all open files"
+msgstr "Zarrar tolos ficheros abiertos"
+
+#: ../src/toolbar.c:60
+msgid "Cut the current selection"
+msgstr "Cortar la seleición actual"
+
+#: ../src/toolbar.c:61
+msgid "Copy the current selection"
+msgstr "Copiar el testu de la seleición actual"
+
+#: ../src/toolbar.c:62
+msgid "Paste the contents of the clipboard"
+msgstr "Apegar el conteníu del portapapeles"
+
+#: ../src/toolbar.c:63
+msgid "Delete the current selection"
+msgstr "Esborrar la seleición actual"
+
+#: ../src/toolbar.c:64
+msgid "Undo the last modification"
+msgstr "Desfacer la cabera modificación"
+
+#: ../src/toolbar.c:65
+msgid "Redo the last modification"
+msgstr "Refacer la cabera modificación"
+
+#: ../src/toolbar.c:68
+msgid "Compile the current file"
+msgstr "Compilar el ficheru actual"
+
+#: ../src/toolbar.c:69
+msgid "Run or view the current file"
+msgstr "Executar o ver el ficheru actual"
+
+#: ../src/toolbar.c:70
+msgid ""
+"Open a color chooser dialog, to interactively pick colors from a palette"
+msgstr ""
+"Abrir un diálogu d'escoyer collor, pa seleicionalu interautivamente dende "
+"una paleta"
+
+#: ../src/toolbar.c:71
+msgid "Zoom in the text"
+msgstr "Aumentar el testu"
+
+#: ../src/toolbar.c:72
+msgid "Zoom out the text"
+msgstr "Alloñar el testu"
+
+#: ../src/toolbar.c:73
+msgid "Decrease indentation"
+msgstr "Decrementar sangría"
+
+#: ../src/toolbar.c:74
+msgid "Increase indentation"
+msgstr "Incrementar sangría"
+
+#: ../src/toolbar.c:75 ../src/toolbar.c:360
+msgid "Find the entered text in the current file"
+msgstr "Guetar el testu ingresáu nel ficheru actual"
+
+#: ../src/toolbar.c:76 ../src/toolbar.c:368
+msgid "Jump to the entered line number"
+msgstr "Saltar al númberu de llínia introducíu"
+
+#: ../src/toolbar.c:77
+msgid "Show the preferences dialog"
+msgstr "Amosar el diálogu de preferencies"
+
+#: ../src/toolbar.c:78
+msgid "Quit Geany"
+msgstr "Colar de Geany"
+
+#: ../src/toolbar.c:79
+msgid "Print document"
+msgstr "Imprentar documentu"
+
+#: ../src/toolbar.c:80
+msgid "Replace text in the current document"
+msgstr "Sustituyir el testu nel documentu actual"
+
+#: ../src/toolbar.c:336
+msgid "Create a new file"
+msgstr "Criar un ficheru nuevu"
+
+#: ../src/toolbar.c:337
+#, fuzzy
+msgid "Create a new file from a template"
+msgstr "Criar un ficheru nuevu"
+
+#: ../src/toolbar.c:344
+msgid "Open an existing file"
+msgstr "Abrir un ficheru existente"
+
+#: ../src/toolbar.c:345
+#, fuzzy
+msgid "Open a recent file"
+msgstr "Abrir ficheros seleicionados"
+
+#: ../src/toolbar.c:353
+#, fuzzy
+msgid "Choose more build actions"
+msgstr "Nun hai más fallos de construción."
+
+#: ../src/toolbar.c:368
+msgid "Goto"
+msgstr "Dir a"
+
+#: ../src/toolbar.c:544
+msgid "Separator"
+msgstr "Separador"
+
+#: ../src/toolbar.c:545
+msgid "--- Separator ---"
+msgstr "--- Separador ---"
+
+#: ../src/toolbar.c:912
+msgid ""
+"Select items to be displayed on the toolbar. Items can be reordered by drag "
+"and drop."
+msgstr ""
+"Esbillar elementos p'amosalos na barra de ferramientes. Los elementos pueden "
+"reordenase n'arrastrándolos y desafitándolos."
+
+#: ../src/toolbar.c:928
+msgid "Available Items"
+msgstr "Elementos Disponibles"
+
+#: ../src/toolbar.c:949
+msgid "Displayed Items"
+msgstr "Elementos Amosaos"
+
+#: ../src/tools.c:153
+#, c-format
+msgid ""
+"The executed custom command returned an error. Your selection was not "
+"changed. Error message: %s"
+msgstr ""
+"El comandu personalizáu executáu retornó fallu. La to seleición non fué "
+"camudada. Mensaxe de fallu: %s"
+
+#: ../src/tools.c:219
+msgid "The executed custom command exited with an unsuccessful exit code."
+msgstr "El comandu personalizáu executáu salió con un códigu de fallu."
+
+#: ../src/tools.c:246
+#, c-format
+msgid "Passing data and executing custom command: %s"
+msgstr "Pasando datos y executando comandu personalizáu: %s"
+
+#: ../src/tools.c:290
+#, c-format
+msgid "Custom command failed: %s"
+msgstr "Falló'l comandu personalizáu: %s"
+
+#: ../src/tools.c:304 ../src/tools.c:511
+msgid "Set Custom Commands"
+msgstr "Configurar Comandos Personalizaos"
+
+#: ../src/tools.c:311
+msgid ""
+"You can send the current selection to any of these commands and the output "
+"of the command replaces the current selection."
+msgstr ""
+"Puedes unviar la seleición actual a cualisquiera d'estos comandos y la "
+"salida del comandu remplaza la seleición actual."
+
+#: ../src/tools.c:486
+msgid "No custom commands defined."
+msgstr "Non hai comandos personalizaos definíos."
+
+#: ../src/tools.c:586
+msgid "Word Count"
+msgstr "Cuntar Pallabres"
+
+#: ../src/tools.c:596
+msgid "selection"
+msgstr "seleición"
+
+#: ../src/tools.c:602
+msgid "whole document"
+msgstr "tol documentu"
+
+#: ../src/tools.c:611
+msgid "Range:"
+msgstr "Rangu:"
+
+#: ../src/tools.c:623
+msgid "Lines:"
+msgstr "Llínies:"
+
+#: ../src/tools.c:637
+msgid "Words:"
+msgstr "Pallabres:"
+
+#: ../src/tools.c:651
+msgid "Characters:"
+msgstr "Caráuteres:"
+
+#: ../src/sidebar.c:184
+msgid "No tags found"
+msgstr "Non s'atoparon tags"
+
+#: ../src/sidebar.c:517
+msgid "Show S_ymbol List"
+msgstr "Amosar la llista de _símbolos"
+
+#: ../src/sidebar.c:525
+msgid "Show _Document List"
+msgstr "Amosar la llista de _Documentos"
+
+#: ../src/sidebar.c:533 ../plugins/filebrowser.c:601
+msgid "H_ide Sidebar"
+msgstr "_Anubrir barra llateral"
+
+#: ../src/sidebar.c:600
+msgid "Show _Paths"
+msgstr "Amosar _Caminos"
+
+#. Status bar statistics: col = column, sel = selection.
+#: ../src/ui_utils.c:190
+#, fuzzy, c-format
+msgid "line: %d / %d\t col: %d\t sel: %d\t "
+msgstr "llínia: %d\t col: %d\t sel: %d\t "
+
+#. RO = read-only
+#: ../src/ui_utils.c:196
+msgid "RO "
+msgstr "SL "
+
+#. OVR = overwrite/overtype, INS = insert
+#: ../src/ui_utils.c:198
+msgid "OVR"
+msgstr "SOB"
+
+#: ../src/ui_utils.c:198
+msgid "INS"
+msgstr "INS"
+
+#: ../src/ui_utils.c:204
+msgid "TAB"
+msgstr "TAB"
+
+#: ../src/ui_utils.c:207
+msgid "SP"
+msgstr "SP"
+
+#: ../src/ui_utils.c:210
+msgid "T/S"
+msgstr "T/S"
+
+#: ../src/ui_utils.c:214
+#, c-format
+msgid "mode: %s"
+msgstr "mou: %s"
+
+#: ../src/ui_utils.c:217
+#, c-format
+msgid "encoding: %s %s"
+msgstr "codificación: %s %s"
+
+#: ../src/ui_utils.c:223
+#, c-format
+msgid "filetype: %s"
+msgstr "Triba de ficheru: %s"
+
+#: ../src/ui_utils.c:227
+msgid "MOD"
+msgstr "MOD"
+
+#: ../src/ui_utils.c:232
+#, c-format
+msgid "scope: %s"
+msgstr "alcance: %s"
+
+#: ../src/ui_utils.c:317
+#, c-format
+msgid "Font updated (%s)."
+msgstr "Fonte actualizada (%s)."
+
+#: ../src/ui_utils.c:513
+msgid "C Standard Library"
+msgstr "Biblioteca Standard de C"
+
+#: ../src/ui_utils.c:514
+msgid "ISO C99"
+msgstr "ISO C99"
+
+#: ../src/ui_utils.c:515
+msgid "C++ (C Standard Library)"
+msgstr "C++ (Biblioteca Standard de C)"
+
+#: ../src/ui_utils.c:516
+msgid "C++ Standard Library"
+msgstr "Biblioteca Standard de C++"
+
+#: ../src/ui_utils.c:517
+msgid "C++ STL"
+msgstr "C++ STL"
+
+#: ../src/ui_utils.c:581
+msgid "_Set Custom Date Format"
+msgstr "_Configurar Formatu de Fecha Personalizáu"
+
+#: ../src/ui_utils.c:1660
+msgid "Select Folder"
+msgstr "Seleicionar Carpeta"
+
+#: ../src/ui_utils.c:1660
+msgid "Select File"
+msgstr "Seleicionar Ficheru"
+
+#: ../src/ui_utils.c:1813
+msgid "Save All"
+msgstr "Guardar Too"
+
+#: ../src/ui_utils.c:1814
+msgid "Close All"
+msgstr "Zarrar Too"
+
+#: ../src/utils.c:324
+msgid "Win (CRLF)"
+msgstr "Win (CRLF)"
+
+#: ../src/utils.c:325
+msgid "Mac (CR)"
+msgstr "Mac (CR)"
+
+#: ../src/utils.c:326
+msgid "Unix (LF)"
+msgstr "Unix (LF)"
+
+#: ../src/vte.c:515
+msgid "_Set Path From Document"
+msgstr "_Configurar Camín del Documentu"
+
+#: ../src/vte.c:520
+msgid "_Restart Terminal"
+msgstr "_Reanicia Terminal"
+
+#: ../src/vte.c:543
+msgid "_Input Methods"
+msgstr "Métodos d'_Entrada"
+
+#: ../src/vte.c:637
+msgid ""
+"Could not change the directory in the VTE because it probably contains a "
+"command."
+msgstr ""
+"Non se pudo camudar el direutoriu na terminal virtual (VTE) probablemente "
+"porque caltien un comandu."
+
+#: ../src/vte.c:722
+msgid "Terminal plugin"
+msgstr "Plugin de Terminal"
+
+#: ../src/vte.c:735
+msgid "Terminal font:"
+msgstr "Fonte de la terminal:"
+
+#: ../src/vte.c:745
+msgid "Sets the font for the terminal widget"
+msgstr "Especifica la fonte del terminal"
+
+#: ../src/vte.c:747
+msgid "Foreground color:"
+msgstr "Collor de primer planu:"
+
+#: ../src/vte.c:753
+msgid "Background color:"
+msgstr "Collor de fondu:"
+
+#: ../src/vte.c:763
+msgid "Sets the foreground color of the text in the terminal widget"
+msgstr "Especifica'l collor del testu de la terminal"
+
+#: ../src/vte.c:770
+msgid "Sets the background color of the text in the terminal widget"
+msgstr "Especifica'l collor del testu de la terminal"
+
+#: ../src/vte.c:773
+msgid "Scrollback lines:"
+msgstr "Llínies d'hestoricu:"
+
+#: ../src/vte.c:785
+msgid ""
+"Specifies the history in lines, which you can scroll back in the terminal "
+"widget"
+msgstr "Indica'l nome de llínies d'hestoria que pueden revisase na terminal"
+
+#: ../src/vte.c:789
+msgid "Shell:"
+msgstr "Shell:"
+
+#: ../src/vte.c:797
+msgid ""
+"Sets the path to the shell which should be started inside the terminal "
+"emulation"
+msgstr ""
+"Indica'l camín del shell el cual debiere ser aniciáu dientro de la emulación "
+"de la terminal"
+
+#: ../src/vte.c:814
+msgid "Scroll on keystroke"
+msgstr "Descender al calcar una tecla"
+
+#: ../src/vte.c:815
+msgid "Whether to scroll to the bottom if a key was pressed"
+msgstr "Cuando desplazar a la parte d'embaxo si una tecla ye calcada"
+
+#: ../src/vte.c:818
+msgid "Scroll on output"
+msgstr "Descender cuando heba salida"
+
+#: ../src/vte.c:819
+msgid "Whether to scroll to the bottom when output is generated"
+msgstr "Desplazar a la parte d'embaxu cuando la salida seya xenerada"
+
+#: ../src/vte.c:822
+msgid "Cursor blinks"
+msgstr "Parpadéu del cursor"
+
+#: ../src/vte.c:823
+msgid "Whether to blink the cursor"
+msgstr "Activar el parpadéu del cursor"
+
+#: ../src/vte.c:826
+msgid "Override Geany keybindings"
+msgstr "Sobroescribir ataxos de Geany"
+
+#: ../src/vte.c:828
+msgid ""
+"Allows the VTE to receive keyboard shortcuts (apart from focus commands)"
+msgstr ""
+"Permitir recibir abreviaciones de tecláu VTE (aparte del focu del comandu)"
+
+#: ../src/vte.c:831
+msgid "Disable menu shortcut key (F10 by default)"
+msgstr "Desactivar l'ataxu de tecláu del menu (por omisión F10)"
+
+#: ../src/vte.c:832
+msgid ""
+"This option disables the keybinding to popup the menu bar (default is F10). "
+"Disabling it can be useful if you use, for example, Midnight Commander "
+"within the VTE."
+msgstr ""
+"Esta opción desactiva l'ataxu de tecláu usáu pa estenderexar la barra de "
+"menu (por omisión F10). Desactivalu puede ser útil si se usa, por exemplu, "
+"Midnight Commander dientro de la VTE."
+
+#: ../src/vte.c:835 ../plugins/filebrowser.c:1163
+msgid "Follow the path of the current file"
+msgstr "Siguir el camín del ficheru actual"
+
+#: ../src/vte.c:836
+msgid "Whether to execute \"cd $path\" when you switch between opened files"
+msgstr "Executa \"cd $path\" pa camudar ente ficheros abiertos"
+
+#. create check_skip_script checkbox before the check_skip_script checkbox to be able to
+#. * use the object for the toggled handler of check_skip_script checkbox
+#: ../src/vte.c:841
+msgid "Don't use run script"
+msgstr "Non usar script d'execución"
+
+#: ../src/vte.c:842
+msgid ""
+"Don't use the simple run script which is usually used to display the exit "
+"status of the executed program"
+msgstr ""
+"Non usar el script d'execución, que s'usa normalmente p'amosar el valor "
+"d'estáu retornáu pol programa executáu"
+
+#: ../src/vte.c:845
+msgid "Execute programs in VTE"
+msgstr "Executar programes na VTE"
+
+#: ../src/vte.c:846
+msgid ""
+"Run programs in VTE instead of opening a terminal emulation window. Please "
+"note, programs executed in VTE cannot be stopped"
+msgstr ""
+"Executa programes en VTE llugar d'abrir un ventanu d'emulación de terminal. "
+"Por favor, ten en cuenta que programes executaos en VTE nun pueden posase."
+
+#: ../src/win32.c:135
+msgid "Geany project files"
+msgstr "Ficheros de proyeutu Geany"
+
+#: ../src/win32.c:141
+msgid "Executables"
+msgstr "Executables"
+
+#: ../plugins/classbuilder.c:37
+msgid "Class Builder"
+msgstr "Constructor de clases"
+
+#: ../plugins/classbuilder.c:37
+msgid "Creates source files for new class types."
+msgstr "Cria ficheros fonte pa nueves clases."
+
+#: ../plugins/classbuilder.c:322
+msgid "Create Class"
+msgstr "Criar Clas"
+
+#: ../plugins/classbuilder.c:332
+msgid "Class"
+msgstr "Clas"
+
+#: ../plugins/classbuilder.c:341
+msgid "Class name:"
+msgstr "Nome de clas:"
+
+#: ../plugins/classbuilder.c:352
+msgid "Header file:"
+msgstr "Ficheru d'encabezáu:"
+
+#: ../plugins/classbuilder.c:361
+msgid "Source file:"
+msgstr "Ficheru fonte:"
+
+#: ../plugins/classbuilder.c:367
+msgid "Inheritance"
+msgstr "Herencia"
+
+#: ../plugins/classbuilder.c:376
+msgid "Base class:"
+msgstr "Clas base:"
+
+#: ../plugins/classbuilder.c:389
+msgid "Base header:"
+msgstr "Encabezáu base:"
+
+#: ../plugins/classbuilder.c:397
+msgid "Global"
+msgstr "Global"
+
+#: ../plugins/classbuilder.c:406
+msgid "Base GType:"
+msgstr "Gtype base:"
+
+#: ../plugins/classbuilder.c:414
+msgid "Options"
+msgstr "Opciones"
+
+#: ../plugins/classbuilder.c:423
+msgid "Create constructor"
+msgstr "Criar constructor"
+
+#: ../plugins/classbuilder.c:427
+msgid "Create destructor"
+msgstr "Criar destructor"
+
+#: ../plugins/classbuilder.c:437
+msgid "GTK+ constructor type"
+msgstr "Constructor de triba GTK+"
+
+#: ../plugins/classbuilder.c:744
+msgid "Create Cla_ss"
+msgstr "Criar Cla_s"
+
+#: ../plugins/classbuilder.c:750
+msgid "_C++ Class"
+msgstr "Clas _C++"
+
+#: ../plugins/classbuilder.c:753
+msgid "_GTK+ Class"
+msgstr "Clas _GTK+"
+
+#: ../plugins/htmlchars.c:38
+msgid "HTML Characters"
+msgstr "Caráuteres HTML"
+
+#: ../plugins/htmlchars.c:38
+msgid "Inserts HTML character entities like '&amp;'."
+msgstr "Inxertar entidaes HTML pa caráuteres como '&amp;'."
+
+#: ../plugins/htmlchars.c:39 ../plugins/export.c:38
+#: ../plugins/filebrowser.c:41 ../plugins/saveactions.c:40
+#: ../plugins/splitwindow.c:37
+msgid "The Geany developer team"
+msgstr "L'equipu de desarrollu de Geany"
+
+#: ../plugins/htmlchars.c:72
+msgid "HTML characters"
+msgstr "Caráuteres HTML"
+
+#: ../plugins/htmlchars.c:78
+msgid "ISO 8859-1 characters"
+msgstr "Caráuteres ISO 8859-1"
+
+#: ../plugins/htmlchars.c:176
+msgid "Greek characters"
+msgstr "Caráuteres griegos"
+
+#: ../plugins/htmlchars.c:231
+msgid "Mathematical characters"
+msgstr "Caráuteres matemáticos"
+
+#: ../plugins/htmlchars.c:272
+msgid "Technical characters"
+msgstr "Caráuteres técnicos"
+
+#: ../plugins/htmlchars.c:280
+msgid "Arrow characters"
+msgstr "Caráuteres de fleches"
+
+#: ../plugins/htmlchars.c:293
+msgid "Punctuation characters"
+msgstr "Caráuteres de puntuación"
+
+#: ../plugins/htmlchars.c:309
+msgid "Miscellaneous characters"
+msgstr "Caráuteres misceláneos"
+
+#: ../plugins/htmlchars.c:449
+msgid "Special Characters"
+msgstr "Caráuteres especiales"
+
+#: ../plugins/htmlchars.c:451
+msgid "_Insert"
+msgstr "_Inxertar"
+
+#: ../plugins/htmlchars.c:460
+msgid ""
+"Choose a special character from the list below and double click on it or use "
+"the button to insert it at the current cursor position."
+msgstr ""
+"Escueye un caráuter especial de la llista d'embaxu y calca dos vegaes nel o "
+"usa'l botón pa inxertalu na posición actual del cursor."
+
+#: ../plugins/htmlchars.c:474
+msgid "Character"
+msgstr "Caráuter"
+
+#: ../plugins/htmlchars.c:480
+msgid "HTML (name)"
+msgstr "HTML (nome)"
+
+#: ../plugins/htmlchars.c:681
+msgid "_Insert Special HTML Characters"
+msgstr "_Inxertar Caráuteres Especiales de HTML"
+
+#. Add menuitem for html replacement functions
+#: ../plugins/htmlchars.c:693
+msgid "HTML Replacement"
+msgstr "Sustitución de HTML"
+
+#: ../plugins/htmlchars.c:700
+msgid "_HTMLToggle"
+msgstr "_Activador de HTML"
+
+#: ../plugins/htmlchars.c:709
+msgid "Bulk replacement of special chars"
+msgstr "Sustitución masiva de carauteres especiales"
+
+#: ../plugins/htmlchars.c:724
+msgid "Insert Special HTML Characters"
+msgstr "Inxertar Caráuteres Especiales HTML"
+
+#: ../plugins/htmlchars.c:727
+msgid "Replace special characters"
+msgstr "Sustituyir carauteres especiales"
+
+#: ../plugins/htmlchars.c:730
+msgid "Toggle plugin status"
+msgstr "Activar/Desactivar l'estáu del plugin"
+
+#: ../plugins/export.c:37
+msgid "Export"
+msgstr "Esportar"
+
+#: ../plugins/export.c:37
+msgid "Exports the current file into different formats."
+msgstr "Esporta'l ficheru actual en diferentes formatos."
+
+#: ../plugins/export.c:166
+msgid "Export File"
+msgstr "Esportar ficheru"
+
+#: ../plugins/export.c:183
+msgid "_Use current zoom level"
+msgstr "_Usar el nivel actual d'acercamientu/alloñamientu"
+
+#: ../plugins/export.c:185
+msgid ""
+"Renders the font size of the document together with the current zoom level"
+msgstr ""
+"Asoleya'l tamañu de la fonte del documentu cabo'l nivel actual d'averamientu"
+
+#: ../plugins/export.c:267
+#, c-format
+msgid "Document successfully exported as '%s'."
+msgstr "Documentu esportáu exitosamente como '%s'."
+
+#: ../plugins/export.c:269
+#, c-format
+msgid "File '%s' could not be written (%s)."
+msgstr "El ficheru '%s' non pudo ser escritu (%s)."
+
+#: ../plugins/export.c:316
+#, c-format
+msgid "The file '%s' already exists. Do you want to overwrite it?"
+msgstr "El ficheru '%s' ya existe. ¿Quies sobroescribilu?"
+
+#: ../plugins/export.c:703
+msgid "_Export"
+msgstr "_Esportar"
+
+#. HTML
+#: ../plugins/export.c:710
+msgid "As _HTML"
+msgstr "Como _HTML"
+
+#. LaTeX
+#: ../plugins/export.c:716
+msgid "As _LaTeX"
+msgstr "Como _LaTeX"
+
+#: ../plugins/filebrowser.c:40
+msgid "File Browser"
+msgstr "Restolador de Ficheros:"
+
+#: ../plugins/filebrowser.c:40
+msgid "Adds a file browser tab to the sidebar."
+msgstr "Amesta una llingüeta de restolación de ficheros al panel llateral."
+
+#: ../plugins/filebrowser.c:329
+msgid "Too many items selected!"
+msgstr "¡Demasiaos elementos seleicionaos!"
+
+#: ../plugins/filebrowser.c:405
+#, c-format
+msgid "Could not execute configured external command '%s' (%s)."
+msgstr "Non se pudo executar el comandu esternu configuráu '%s' (%s)."
+
+#: ../plugins/filebrowser.c:567
+msgid "Open _externally"
+msgstr "Abrir _esternamente"
+
+#: ../plugins/filebrowser.c:573
+msgid "_Find in Files"
+msgstr "_Guetar en Ficheros"
+
+#: ../plugins/filebrowser.c:583
+msgid "Show _Hidden Files"
+msgstr "Amosar Ficheros Anubrí_os"
+
+#: ../plugins/filebrowser.c:790
+msgid "Up"
+msgstr "P'arriba"
+
+#: ../plugins/filebrowser.c:795
+msgid "Refresh"
+msgstr "Refrescar"
+
+#: ../plugins/filebrowser.c:800
+msgid "Home"
+msgstr "Aniciu"
+
+#: ../plugins/filebrowser.c:805
+msgid "Set path from document"
+msgstr "Afitar camín dende'l documentu"
+
+#: ../plugins/filebrowser.c:815
+msgid "Clear the filter"
+msgstr "Llimpiar el filtru"
+
+#: ../plugins/filebrowser.c:829
+msgid "Filter:"
+msgstr "Filtrar:"
+
+#: ../plugins/filebrowser.c:839
+msgid "Filter your files with usual wildcards"
+msgstr ""
+
+#: ../plugins/filebrowser.c:1056
+msgid "Focus File List"
+msgstr "Enfocar la Llista de Ficheros"
+
+#: ../plugins/filebrowser.c:1058
+msgid "Focus Path Entry"
+msgstr "Enfocar Entrada de Camín"
+
+#: ../plugins/filebrowser.c:1104 ../plugins/saveactions.c:470
+msgid "Plugin configuration directory could not be created."
+msgstr "El direutoriu de configuración del complementu nonpudo ser criáu."
+
+#: ../plugins/filebrowser.c:1131
+msgid "External open command:"
+msgstr "Comandu esternu d'apertura:"
+
+#: ../plugins/filebrowser.c:1140
+#, c-format
+msgid ""
+"The command to execute when using \"Open with\". You can use %f and %d "
+"wildcards.\n"
+"%f will be replaced with the filename including full path\n"
+"%d will be replaced with the path name of the selected file without the "
+"filename"
+msgstr ""
+"El comandu a executar cuando usase \"Abrir con\". Pueden usase %f y %d como "
+"remplazos.\n"
+"%f será remplazáu col nome del ficheru col so camín completu\n"
+"%d será remplazáu col camín del ficheru seleicionáu ensin el so nome"
+
+#: ../plugins/filebrowser.c:1148
+msgid "Show hidden files"
+msgstr "Amosar ficheros anubrí_os"
+
+#: ../plugins/filebrowser.c:1154
+msgid "Hide object files"
+msgstr "Anubrir ficheros oxetu"
+
+#: ../plugins/filebrowser.c:1158
+msgid ""
+"Don't show generated object files in the file browser, this includes *.o, *."
+"obj. *.so, *.dll, *.a, *.lib"
+msgstr ""
+"Non amosar oxetos xeneraos nel restolador de ficheros, esto incluí *.o, *."
+"obj. *.so, *.dll, *.a, *.lib"
+
+#: ../plugins/filebrowser.c:1169
+msgid "Use the project's base directory"
+msgstr "Facer usu del direutoriu base del proyeutu"
+
+#: ../plugins/filebrowser.c:1173
+msgid ""
+"Change the directory to the base directory of the currently opened project"
+msgstr "Camudar el direutoriu al direutoriu base del proyeutu abiertu actual"
+
+#: ../plugins/saveactions.c:39
+msgid "Save Actions"
+msgstr "Guardar Aiciones"
+
+#: ../plugins/saveactions.c:39
+msgid "This plugin provides different actions related to saving of files."
+msgstr ""
+"La estensión proporciona diferentes aiciones rellacionaes con guardar "
+"documentos."
+
+#: ../plugins/saveactions.c:169
+#, c-format
+msgid "Backup Copy: Directory could not be created (%s)."
+msgstr "Copia de Respaldu: Non pudó criase la carpeta (%s)."
+
+#. it's unlikely that this happens
+#: ../plugins/saveactions.c:201
+#, c-format
+msgid "Backup Copy: File could not be read (%s)."
+msgstr "Copia de Respaldu: Non pudó lleese'l ficheru (%s)."
+
+#: ../plugins/saveactions.c:219
+#, c-format
+msgid "Backup Copy: File could not be saved (%s)."
+msgstr "Copia de Respaldu: Non pudo guardase'l ficheru (%s)."
+
+#: ../plugins/saveactions.c:311
+#, c-format
+msgid "Autosave: Saved %d file automatically."
+msgid_plural "Autosave: Saved %d files automatically."
+msgstr[0] "Autoguardar: Guardó'l ficheru %d automáticamente."
+msgstr[1] "Autoguardar: Guardó los ficheros %d automáticamente."
+
+#. initialize the dialog
+#: ../plugins/saveactions.c:380
+msgid "Select Directory"
+msgstr "Seleicionar direutoriu"
+
+#: ../plugins/saveactions.c:463
+msgid "Backup directory does not exist or is not writable."
+msgstr "El direutoriu de respaldu non esiste o non ye escribible."
+
+#: ../plugins/saveactions.c:543
+msgid "Auto Save"
+msgstr "AutoGuardar"
+
+#: ../plugins/saveactions.c:545 ../plugins/saveactions.c:607
+#: ../plugins/saveactions.c:648
+msgid "_Enable"
+msgstr "_Activar"
+
+#: ../plugins/saveactions.c:553
+msgid "Auto save _interval:"
+msgstr "Autoguardar _intervalu:"
+
+#: ../plugins/saveactions.c:561
+msgid "seconds"
+msgstr "segundos"
+
+#: ../plugins/saveactions.c:570
+msgid "_Print status message if files have been automatically saved"
+msgstr "Im_prentar mensax d'estáu si los ficheros son guardaos atuomáticamente"
+
+#: ../plugins/saveactions.c:578
+msgid "Save only current open _file"
+msgstr "Guardar sólo'l ficheru actual"
+
+#: ../plugins/saveactions.c:585
+msgid "Sa_ve all open files"
+msgstr "Guardar tolos fiche_ros abiertos"
+
+#: ../plugins/saveactions.c:605
+msgid "Instant Save"
+msgstr "Guardáu Automáticu"
+
+#: ../plugins/saveactions.c:615
+msgid "_Filetype to use for newly opened files:"
+msgstr "Tribes de _ficheru por defeutu pa ficheros abiertos:"
+
+#: ../plugins/saveactions.c:646
+msgid "Backup Copy"
+msgstr "Copia de Seguridá"
+
+#: ../plugins/saveactions.c:656
+msgid "_Directory to save backup files in:"
+msgstr "_Direutoriu onde guardar ficheros de seguridá:"
+
+#: ../plugins/saveactions.c:679
+msgid "Date/_Time format for backup files (\"man strftime\" for details):"
+msgstr ""
+"Forma_tu de fecha/hora pa los ficheros de seguridá (detalles en \"man "
+"strftime\"):"
+
+#: ../plugins/saveactions.c:692
+msgid "Directory _levels to include in the backup destination:"
+msgstr ""
+"Nive_les de direutoriu que incluiránse nel destín de la copia de seguridá:"
+
+#: ../plugins/splitwindow.c:36
+msgid "Split Window"
+msgstr "Dixebrar Ventana"
+
+#: ../plugins/splitwindow.c:36
+msgid "Splits the editor view into two windows."
+msgstr "Dixebra la vista del editor en dos ventanes."
+
+#: ../plugins/splitwindow.c:244
+msgid "Show the current document"
+msgstr "Amosar el documentu actual"
+
+#: ../plugins/splitwindow.c:261 ../plugins/splitwindow.c:389
+#: ../plugins/splitwindow.c:404
+msgid "_Unsplit"
+msgstr "N_un cortar"
+
+#: ../plugins/splitwindow.c:371
+msgid "_Split Window"
+msgstr "_Dixebrar la ventana"
+
+#: ../plugins/splitwindow.c:379
+msgid "_Horizontally"
+msgstr "_Horizontalmente"
+
+#: ../plugins/splitwindow.c:384
+msgid "_Vertically"
+msgstr "_Verticalmente"
+
+#: ../plugins/splitwindow.c:400
+msgid "Split Horizontally"
+msgstr "Xebrar Horizontalmente"
+
+#: ../plugins/splitwindow.c:402
+msgid "Split Vertically"
+msgstr "Xebrar Verticalmente"
+
+#~ msgid "_Compile"
+#~ msgstr "_Compilar"
+
+#~ msgid "_Set Includes and Arguments"
+#~ msgstr "_Seleiciona Inclusiones y Argumentos"
+
+#~ msgid "LaTeX -> _DVI"
+#~ msgstr "LaTeX -> _DVI"
+
+#~ msgid "LaTeX -> _PDF"
+#~ msgstr "LaTeX -> _PDF"
+
+#~ msgid "_View DVI File"
+#~ msgstr "_Ver Ficheru DVI"
+
+#~ msgid "V_iew PDF File"
+#~ msgstr "V_er Ficheru PDF"
+
+#~ msgid "_Set Arguments"
+#~ msgstr "_Seleicionar argumentos"
+
+#~ msgid "Set Arguments"
+#~ msgstr "Seleicionar argumentos"
+
+#~ msgid "Set programs and options for compiling and viewing (La)TeX files."
+#~ msgstr ""
+#~ "Seleiciona los programes y opciones pa la compilación y visualización de "
+#~ "ficheros (La)TeX."
+
+#~ msgid "DVI creation:"
+#~ msgstr "Criación de DVI:"
+
+#~ msgid "PDF creation:"
+#~ msgstr "Criación de PDF:"
+
+#~ msgid "DVI preview:"
+#~ msgstr "Previsualización de DVI"
+
+#~ msgid "PDF preview:"
+#~ msgstr "Previsualización de PDF"
+
+#~ msgid ""
+#~ "%f will be replaced by the current filename, e.g. test_file.c\n"
+#~ "%e will be replaced by the filename without extension, e.g. test_file"
+#~ msgstr ""
+#~ "%f será reemplazáu pol nome del ficheru actual, ej. preba.c\n"
+#~ "%e será reemplazáu pol nome del ficheru actual ensin estencion, ej. preba"
+
+#~ msgid "Set Includes and Arguments"
+#~ msgstr "Seleiciona Inclusiones y Argumentos"
+
+#~ msgid "Set the commands for building and running programs."
+#~ msgstr "Configura los comandos pa construyir y executar programes."
+
+#~ msgid "Compile:"
+#~ msgstr "Compilar:"
+
+#~ msgid "Build:"
+#~ msgstr "Construyir:"
+
+#~ msgid "Failed to execute the view program"
+#~ msgstr "Falló al executar el programa visualizador"
+
+#~ msgid "dummy tooltip, don't translate this."
+#~ msgstr "dummy tooltip, don't translate this."
+
+#~ msgid ""
+#~ "Use white text on a black background and invert all colors, this option "
+#~ "requires a restart of Geany"
+#~ msgstr ""
+#~ "Usar testu en blancu sobro fondo prietu ya invertir tolos collores, esta "
+#~ "opción requier reaniciar Geany"
+
+#~ msgid "Path and options for the make tool"
+#~ msgstr "Camín y opciones pa la ferramienta make"
+
+#~ msgid "Duplicate line or selection"
+#~ msgstr "Duplicar llínia o seleición"
+
+#~ msgid "Send Selection to Terminal"
+#~ msgstr "Unviar Seleición a la Terminal"
+
+#~ msgid "Run (alternative command)"
+#~ msgstr "Executar (comandu alternativu)"
+
+#~ msgid ""
+#~ "Below is a list of available plugins. Select the plugins which should be "
+#~ "loaded when Geany is started."
+#~ msgstr ""
+#~ "Embaxu atopase una llista de complementos disponibles. Seleiciona los "
+#~ "complementos que deben ser cargaos cuando s'anicie Geayn."
+
+#~ msgid "Printing of file %s was cancelled."
+#~ msgstr "La imprentación de %s foi encaboxada."
+
+#~ msgid "Make in base path"
+#~ msgstr "Make nel direutoriu base"
+
+#~ msgid "Run command:"
+#~ msgstr "Comandu d'execución:"
+
+#~ msgid ""
+#~ "Command-line to run in the project base directory. Options can be "
+#~ "appended to the command. Leave blank to use the default run command."
+#~ msgstr ""
+#~ "Llínia de comandos a correr nel camín base del proyeutu. Opciones pueden "
+#~ "ser amestaes al comandu. Dexar en blancu pa usar el comandu por defeutu."
+
+#~ msgid "Choose Project Run Command"
+#~ msgstr "Escueye'l Comandu d'Execución del Proyeutu"
+
+#~ msgid "Replaced text in %u file."
+#~ msgid_plural "Replaced text in %u files."
+#~ msgstr[0] "Reemplazar testu en %u ficheru."
+#~ msgstr[1] "Reemplazar testu en %u ficheros."
+
+#~ msgid "Search failed (see Help->Debug Messages for details)."
+#~ msgstr "Falló la gueta (Ver Aida->Mensaxes de Depuración pa detalles)."
+
+#~ msgid "My"
+#~ msgstr "El mio"
+
+#~ msgid "Local"
+#~ msgstr "Llocal"
+
+#~ msgid "Our"
+#~ msgstr "El nuestro"
+
+#~ msgid ""
+#~ "These settings for the virtual terminal emulator widget (VTE) only apply "
+#~ "if the VTE library could be loaded."
+#~ msgstr ""
+#~ "Estes opciones pa la emulación de terminal virtual (VTE) sólo apliquen si "
+#~ "la biblioteca de VTE pudo ser cargada."
+
+#~ msgid "Unsplit"
+#~ msgstr "Arrexuntar"

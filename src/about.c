@@ -43,6 +43,7 @@
 #define COPYRIGHT "Copyright (c)  2005-2010\nEnrico Tröger\nNick Treleaven\nFrank Lanitz\nAll rights reserved."
 
 const gchar *translators[][2] = {
+	{ "ast", "Marcos Costales &lt;marcoscostales@gmail.com&gt;"},
 	{ "be_BY", "Yura Semashko &lt;yurand2@gmail.com&gt;" },
 	{ "bg", "Dilyan Rusev &lt;dilyanrusev@gmail.com&gt;" },
 	{ "ca_ES", "Toni Garcia-Navarro &lt;topi@elpiset.net&gt;" },

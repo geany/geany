@@ -1,3 +1,9 @@
+2010-03-05  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * src/about.c, THANKS, po/ast.po:
+   Added Asturian translation. Thanks to Marcos Costales for providing.
+
+
 2010-02-28  Dominic Hopf  <dmaphy(at)googlemail(dot)com>
 
  * src/log.c:
