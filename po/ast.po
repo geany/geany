@@ -6,9 +6,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: geany 0.16\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-03-05 15:43+0100\n"
-"PO-Revision-Date: 2010-03-05 10:15+0000\n"
-"Last-Translator: Marcos <Unknown>\n"
+"POT-Creation-Date: 2010-03-05 18:51+0100\n"
+"PO-Revision-Date: 2010-03-05 17:14+0100\n"
+"Last-Translator: maacub <maacub@gmail.com>\n"
 "Language-Team: Asturian <alministradores@softastur.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -103,12 +103,11 @@ msgstr ""
 #: ../src/build.c:627
 #, c-format
 msgid "failed to substitute %%p, no project active"
-msgstr ""
+msgstr "fallo sustituir %%p, ensin proyeutu activu"
 
 #: ../src/build.c:665
-#, fuzzy
 msgid "Process failed, no working directory"
-msgstr "Falló al camudar el direutoriu de trabayu a \"%s\""
+msgstr "Falló procesu, nun hai directoriu de trabayu"
 
 #: ../src/build.c:691
 #, c-format
@@ -155,16 +154,14 @@ msgid "Compilation finished successfully."
 msgstr "La compilación finó con éxitu."
 
 #: ../src/build.c:1242
-#, fuzzy
 msgid "Custom Text"
-msgstr "Make Oxetivu Personalizáu"
+msgstr "Testu Personalizáu"
 
 #: ../src/build.c:1243
-#, fuzzy
 msgid "Enter custom text here, all entered text is appended to the command."
 msgstr ""
-"Ingresar opciones personalizaes equí, tol testu ingresáu ye pasáu a la "
-"ferramienta make"
+"Introducir testu personalizáu equí, too testu introducíu amestaráse al "
+"comandu."
 
 #: ../src/build.c:1321
 msgid "_Next Error"
@@ -175,9 +172,8 @@ msgid "_Previous Error"
 msgstr "Fallu _Previu"
 
 #: ../src/build.c:1333
-#, fuzzy
 msgid "_Set Build Commands"
-msgstr "Configurar Comandos Personalizaos"
+msgstr "_Configurar comandos de compilación"
 
 #: ../src/build.c:1611 ../src/toolbar.c:352
 msgid "Build the current file"
@@ -206,7 +202,7 @@ msgstr "Nun hai más fallos de construción."
 
 #: ../src/build.c:1757
 msgid "Item"
-msgstr ""
+msgstr "Elementu"
 
 #: ../src/build.c:1758 ../src/symbols.c:639
 msgid "Label"
@@ -217,42 +213,37 @@ msgid "Command"
 msgstr "Comandu"
 
 #: ../src/build.c:1760
-#, fuzzy
 msgid "Working directory"
-msgstr "%s (en direutoriu: %s)"
+msgstr "Directoriu de trabayu"
 
 #: ../src/build.c:1761
-#, fuzzy
 msgid "Clear"
-msgstr "Compilador"
+msgstr "Llimpio"
 
 #: ../src/build.c:1863 ../src/build.c:1865
-#, fuzzy, c-format
+#, c-format
 msgid "%s Commands"
-msgstr "comandos de %s"
+msgstr "%s Comandos"
 
 #: ../src/build.c:1865
-#, fuzzy
 msgid "No Filetype"
-msgstr "Escoyer _Triba de Ficheru"
+msgstr "Ensin triba de ficheru"
 
 #: ../src/build.c:1873 ../src/build.c:1908
-#, fuzzy
 msgid "Error Regular Expression:"
-msgstr "Espresiones regulares _Grep"
+msgstr "Fallu n'espresión regular"
 
 #: ../src/build.c:1901
 msgid "Non-Filetype Commands"
-msgstr ""
+msgstr "Comandos de non triba de ficheru"
 
 #: ../src/build.c:1931
 msgid "Note: Item 2 opens a dialog and appends the response to the command."
-msgstr ""
+msgstr "Nota: Elementu 2 abre un diálogu y amesta la rempuesta al comandu."
 
 #: ../src/build.c:1940
-#, fuzzy
 msgid "Execute Commands"
-msgstr "Configurar Comandos Personalizaos"
+msgstr "Comandos d'execución"
 
 #: ../src/build.c:1951
 #, c-format
@@ -260,21 +251,20 @@ msgid ""
 "%d, %e, %f, %p are substituted in command and directory fields, see manual "
 "for details."
 msgstr ""
+"%d, %e, %f, %p son sustituyíes nel comandu y campos de direutoriu, mira'l "
+"manual pa más detalles."
 
 #: ../src/build.c:2103
-#, fuzzy
 msgid "Set Build Commands"
-msgstr "Configurar Comandos Personalizaos"
+msgstr "Configurar comandos de compilación"
 
 #: ../src/build.c:2369 ../src/build.c:2554
-#, fuzzy
 msgid "_Execute"
-msgstr "Execución:"
+msgstr "_Executar:"
 
 #: ../src/build.c:2551
-#, fuzzy
 msgid "_Make"
-msgstr "Make:"
+msgstr "_Make:"
 
 #. build the code with make custom
 #: ../src/build.c:2552 ../src/build.c:2605
@@ -298,20 +288,19 @@ msgstr "_Make All"
 
 #. arguments
 #: ../src/build.c:2625
-#, fuzzy
 msgid "_Set Build Menu Commands"
-msgstr "Configurar Comandos Personalizaos"
+msgstr "_Configurar Comandos del menú de compilación"
 
 #: ../src/callbacks.c:153
 msgid "Do you really want to quit?"
 msgstr "¿De xuro que quies colar?"
 
 #: ../src/callbacks.c:231
-#, fuzzy, c-format
+#, c-format
 msgid "%d file saved."
 msgid_plural "%d files saved."
-msgstr[0] "Ficheru %s guardáu."
-msgstr[1] "Ficheru %s guardáu."
+msgstr[0] "Ficheru %d guardáu."
+msgstr[1] "Ficheros %d guardaos."
 
 #: ../src/callbacks.c:491 ../src/document.c:2933 ../src/interface.c:352
 #: ../src/sidebar.c:587
@@ -1000,9 +989,8 @@ msgid "M_iscellaneous Languages"
 msgstr "Llingüaxes M_isceláneos"
 
 #: ../src/filetypes.c:830
-#, fuzzy
 msgid "_Custom Filetypes"
-msgstr "Escoyer _Triba de Ficheru"
+msgstr "Triba de Fi_cheru Personalizada"
 
 #: ../src/filetypes.c:1403 ../src/win32.c:107
 msgid "All Source"
@@ -1028,13 +1016,12 @@ msgid "Could not find file '%s'."
 msgstr "Non se pudo atopar el ficheru '%s'."
 
 #: ../src/highlighting.c:3374
-#, fuzzy
 msgid "_Color Schemes"
-msgstr "Seleutor de _Collor"
+msgstr "Temes de _colores"
 
 #: ../src/highlighting.c:3381
 msgid "_Default"
-msgstr ""
+msgstr "_Defeutu"
 
 #: ../src/interface.c:295
 msgid "_File"
@@ -1087,18 +1074,16 @@ msgid "_Format"
 msgstr "_Formatu"
 
 #: ../src/interface.c:487 ../src/keybindings.c:367
-#, fuzzy
 msgid "_Reflow Lines/Block"
-msgstr "Celar llinies/bloque"
+msgstr "_Celar llinies/bloque"
 
 #: ../src/interface.c:491
 msgid "T_oggle Case of Selection"
 msgstr "C_onvertir mayúscules/minúscules de la Seleición"
 
 #: ../src/interface.c:495 ../src/keybindings.c:272
-#, fuzzy
 msgid "_Transpose Current Line"
-msgstr "Tresponer la llinia actual"
+msgstr "_Tresponer la llinia actual"
 
 #: ../src/interface.c:504
 msgid "_Comment Line(s)"
@@ -1121,63 +1106,52 @@ msgid "_Decrease Indent"
 msgstr "_Decrementar sangría"
 
 #: ../src/interface.c:537 ../src/keybindings.c:356
-#, fuzzy
 msgid "_Smart Line Indent"
-msgstr "Sangráu de llínia intelixente"
+msgstr "_Sangráu de llínia intelixente"
 
 #: ../src/interface.c:546
 msgid "_Send Selection to"
 msgstr "Mandar _Seleición a"
 
 #: ../src/interface.c:556 ../src/interface.c:2106
-#, fuzzy
 msgid "_Commands"
-msgstr "Comandu"
+msgstr "_Comandos"
 
 #: ../src/interface.c:563 ../src/keybindings.c:313
-#, fuzzy
 msgid "_Cut Current Line(s)"
-msgstr "Cortar la(es) llínia(es) actual(es)"
+msgstr "_Cortar la(es) llínia(es) actual(es)"
 
 #: ../src/interface.c:571 ../src/keybindings.c:310
-#, fuzzy
 msgid "_Copy Current Line(s)"
-msgstr "Copiar la(es) llínia(es) actual(es)"
+msgstr "_Copiar la(es) llínia(es) actual(es)"
 
 #: ../src/interface.c:579 ../src/keybindings.c:265
-#, fuzzy
 msgid "_Delete Current Line(s)"
-msgstr "Esborrar la(es) llínia(es) actual(es)"
+msgstr "_Esborrar la(es) llínia(es) actual(es)"
 
 #: ../src/interface.c:583 ../src/keybindings.c:262
-#, fuzzy
 msgid "_Duplicate Line or Selection"
-msgstr "Du_plicar Llínia o Seleición"
+msgstr "_Du_plicar Llínia o Seleición"
 
 #: ../src/interface.c:592 ../src/keybindings.c:323
-#, fuzzy
 msgid "_Select Current Line(s)"
-msgstr "Seleicionar llínia(es) actual(es)"
+msgstr "_Seleicionar llínia(es) actual(es)"
 
 #: ../src/interface.c:596 ../src/keybindings.c:326
-#, fuzzy
 msgid "_Select Current Paragraph"
-msgstr "Seleicionar parrafu actual"
+msgstr "_Seleicionar parrafu actual"
 
 #: ../src/interface.c:605 ../src/keybindings.c:376
-#, fuzzy
 msgid "_Insert Alternative White Space"
-msgstr "Inxertar espaciu alternativu"
+msgstr "_Inxertar espaciu alternativu"
 
 #: ../src/interface.c:614 ../src/keybindings.c:432
-#, fuzzy
 msgid "_Go to Next Marker"
-msgstr "Dir a la siguiente marca"
+msgstr "_Dir a la siguiente marca"
 
 #: ../src/interface.c:618 ../src/keybindings.c:435
-#, fuzzy
 msgid "_Go to Previous Marker"
-msgstr "Dir a la marca anterior"
+msgstr "_Dir a la marca anterior"
 
 #: ../src/interface.c:627 ../src/keybindings.c:365
 msgid "_Send Selection to Terminal"
@@ -1224,9 +1198,8 @@ msgid "Preference_s"
 msgstr "Preferencie_s"
 
 #: ../src/interface.c:712 ../src/keybindings.c:385
-#, fuzzy
 msgid "P_lugin Preferences"
-msgstr "Preferencies"
+msgstr "_Preferencies de plugins"
 
 #: ../src/interface.c:720
 msgid "_Search"
@@ -1787,14 +1760,12 @@ msgid "Toggle the documents list on and off"
 msgstr "Amosar/anubrir la llista de documentos"
 
 #: ../src/interface.c:3064
-#, fuzzy
 msgid "Show sidebar"
 msgstr "Amosar _Barra llateral"
 
 #: ../src/interface.c:3072
-#, fuzzy
 msgid "Position:"
-msgstr "Descripción:"
+msgstr "Posición:"
 
 #: ../src/interface.c:3076 ../src/interface.c:3191 ../src/interface.c:3245
 #: ../src/interface.c:3263 ../src/interface.c:3281
@@ -2278,6 +2249,7 @@ msgstr "Invierte los collores de resaltáu de sintasis"
 #: ../src/interface.c:3886
 msgid "Invert all colors, by default using white text on a black background"
 msgstr ""
+"Invertir tolos colores, por defeutu usa testu blancu sobre fondu prietu"
 
 #: ../src/interface.c:3888
 msgid "Show indentation guides"
@@ -2429,30 +2401,27 @@ msgid "Sets the default encoding for newly created files"
 msgstr "Afita la codificación por defeutu na criación de nuevos ficheros"
 
 #: ../src/interface.c:4101
-#, fuzzy
 msgid "Use fixed encoding when opening non-Unicode files"
-msgstr "Usar una codificación fixa al abrir ficheros"
+msgstr "Usar una codificación fixa al abrir ficheros non Unicode"
 
 #: ../src/interface.c:4104
-#, fuzzy
 msgid ""
 "This option disables the automatic detection of the file encoding when "
 "opening non-Unicode files and opens the file with the specified encoding "
 "(usually not needed)"
 msgstr ""
 "Esta opción desactiva la deteción automática de la codificación de ficheros "
-"cuando son abiertos y abre'l ficheru cola codificación especificada "
-"(usualmente non necesaria)"
+"cuando son abiertos ficheros non Unicode y abre'l ficheru cola codificación "
+"especificada (usualmente non necesaria)"
 
 #: ../src/interface.c:4110
-#, fuzzy
 msgid "Default encoding (existing non-Unicode files):"
-msgstr "Codificación por omisión (pa ficheros existentes):"
+msgstr "Codificación por omisión (pa ficheros non Unicode):"
 
 #: ../src/interface.c:4118
-#, fuzzy
 msgid "Sets the default encoding for opening existing non-Unicode files"
-msgstr "Afita la codificaci´no por defeutu al abrir ficheros existentes"
+msgstr ""
+"Afita la codificación por defeutu al abrir ficheros existentes non Unicode"
 
 #: ../src/interface.c:4124
 msgid "<b>Encodings</b>"
@@ -2786,7 +2755,7 @@ msgstr "Recargar ficheru"
 
 #: ../src/keybindings.c:248
 msgid "Re-open last closed tab"
-msgstr ""
+msgstr "Reabrir cabera llingüeta zarrada"
 
 #: ../src/keybindings.c:250 ../src/project.c:522
 msgid "Project"
@@ -2849,19 +2818,16 @@ msgid "Show macro list"
 msgstr "Amosar la llista de macros"
 
 #: ../src/keybindings.c:295
-#, fuzzy
 msgid "Word part completion"
-msgstr "Completáu de construcciones"
+msgstr "Completáu de pallabres"
 
 #: ../src/keybindings.c:297
-#, fuzzy
 msgid "Move line(s) up"
-msgstr "Comentar llínia(es)"
+msgstr "Mover llínia(es) p'arriba"
 
 #: ../src/keybindings.c:299
-#, fuzzy
 msgid "Move line(s) down"
-msgstr "Comentar llínia(es)"
+msgstr "Mover llínia(es) p'abaxo"
 
 #: ../src/keybindings.c:301
 msgid "Clipboard"
@@ -2892,14 +2858,12 @@ msgid "Select current word"
 msgstr "Seleicionar pallabra actual"
 
 #: ../src/keybindings.c:329
-#, fuzzy
 msgid "Select to previous word part"
-msgstr "Dir a la Parte de Pallabra Anterior"
+msgstr "Seleicionar Parte de Pallabra Anterior"
 
 #: ../src/keybindings.c:331
-#, fuzzy
 msgid "Select to next word part"
-msgstr "Dir a la Siguietne Parte de la Pallabra"
+msgstr "Seleicionar Parte de la Pallabra siguiente"
 
 #: ../src/keybindings.c:333
 msgid "Format"
@@ -3118,24 +3082,20 @@ msgid "Switch to Compiler"
 msgstr "Camudar a Compilador"
 
 #: ../src/keybindings.c:483
-#, fuzzy
 msgid "Switch to Messages"
-msgstr "Dir a la Barra Llateral"
+msgstr "Camudar a Mensaxes"
 
 #: ../src/keybindings.c:485
-#, fuzzy
 msgid "Switch to Message Window"
-msgstr "Amosar _Ventanu de Mensaxes"
+msgstr "Camudar _Ventanu de Mensaxes"
 
 #: ../src/keybindings.c:487
-#, fuzzy
 msgid "Switch to Sidebar Document List"
-msgstr "Camudar a Documentu"
+msgstr "Camudar a barra llateral de llista de Documentos"
 
 #: ../src/keybindings.c:489
-#, fuzzy
 msgid "Switch to Sidebar Symbol List"
-msgstr "Dir a la Barra Llateral"
+msgstr "Camudar a la Barra Llateral de llista de símbolos"
 
 #: ../src/keybindings.c:491
 msgid "Notebook tab"
@@ -3271,9 +3231,8 @@ msgid "Debug Messages"
 msgstr "Mensaxes de Depuración"
 
 #: ../src/log.c:183
-#, fuzzy
 msgid "Cl_ear"
-msgstr "_Guetar"
+msgstr "_Llimpiar"
 
 #: ../src/main.c:122
 msgid ""
@@ -3308,7 +3267,7 @@ msgstr ""
 #: ../src/main.c:129
 msgid ""
 "Use this socket filename for communication with a running Geany instance"
-msgstr ""
+msgstr "Usar esti nome de ficheru pa comunicaciones cola instancia de Geany"
 
 #: ../src/main.c:131
 msgid "Set initial line number for the first opened file"
@@ -3429,6 +3388,8 @@ msgstr "_Anubrir Ventanu de Mensaxes"
 #, c-format
 msgid "Could not find file '%s' - trying the current document path."
 msgstr ""
+"Nun pudo alcontrase'l ficheru '%s' - intentando dende'l camín del documentu "
+"actual."
 
 #: ../src/plugins.c:430
 #, c-format
@@ -3472,7 +3433,7 @@ msgstr "Complementos"
 
 #: ../src/plugins.c:1255
 msgid "Choose which plugins should be loaded at startup:"
-msgstr ""
+msgstr "Escoyer qué plugins podríen cargase nel aniciu:"
 
 #: ../src/plugins.c:1267
 msgid "<b>Plugin details:</b>"
@@ -3480,7 +3441,7 @@ msgstr "<b>Detalles del complementu:</b>"
 
 #: ../src/pluginutils.c:207
 msgid "Configure Plugins"
-msgstr ""
+msgstr "Configurar Plugins"
 
 #: ../src/prefs.c:162
 msgid "Grab Key"
@@ -3509,7 +3470,7 @@ msgstr "Ataxu"
 
 #: ../src/prefs.c:1377
 msgid "_Allow"
-msgstr ""
+msgstr "_Permitir"
 
 #: ../src/prefs.c:1379
 msgid "_Override"
@@ -3614,12 +3575,12 @@ msgstr "Páxina %d de %d"
 #: ../src/printing.c:781
 #, c-format
 msgid "Did not send document %s to the printing subsystem."
-msgstr ""
+msgstr "Documentu %s nun mandáu al subsistema d'imprentación."
 
 #: ../src/printing.c:783
 #, c-format
 msgid "Document %s was sent to the printing subsystem."
-msgstr ""
+msgstr "Documentu %s mandáu al subsistema d'imprentación."
 
 #: ../src/printing.c:835
 #, c-format
@@ -3718,17 +3679,20 @@ msgstr "Descripción:"
 #: ../src/project.c:487
 msgid "Set the Build non-filetype working directories to use base path:"
 msgstr ""
+"Afitar la compilación de ficheros non triba de ficheros trabayando en "
+"direutorios qu'usen el camín base:"
 
 #: ../src/project.c:490
-#, fuzzy
 msgid "Set"
-msgstr "Sec1"
+msgstr "Afitar"
 
 #: ../src/project.c:492
 msgid ""
 "Set the working directories (on the Build tab) for the non-filetype build "
 "commands to use the base path"
 msgstr ""
+"Afitar los direutorios de trabayu (na llingüeta Compilación) pa los comandos "
+"de compilación de ficheros ensin triba pa usar el camín base"
 
 #: ../src/project.c:504
 msgid "File patterns:"
@@ -3950,9 +3914,9 @@ msgstr[0] "Atopóse %d coincidencia pa \"%s\"."
 msgstr[1] "Atopáronse %d coincidencies pa \"%s\"."
 
 #: ../src/search.c:1163
-#, fuzzy, c-format
+#, c-format
 msgid "Replaced %u matches in %u documents."
-msgstr "Sustituyir el testu nel documentu actual"
+msgstr "Sustituyir %u coincidencies en %u documentos."
 
 #: ../src/search.c:1349
 msgid "Invalid directory for find in files."
@@ -3984,9 +3948,8 @@ msgid "Could not open directory (%s)"
 msgstr "Non pudó abrise'l direutoriu (%s)"
 
 #: ../src/search.c:1582
-#, fuzzy
 msgid "Search failed."
-msgstr "_Guetar por:"
+msgstr "Fallo la gueta."
 
 #: ../src/search.c:1602
 #, c-format
@@ -4157,37 +4120,32 @@ msgid "Imports"
 msgstr "Importaciones"
 
 #: ../src/symbols.c:759
-#, fuzzy
 msgid "Entities"
-msgstr "ensin títulu"
+msgstr "Entidaes"
 
 #: ../src/symbols.c:760
-#, fuzzy
 msgid "Architectures"
 msgstr "Estructures"
 
 #: ../src/symbols.c:762
-#, fuzzy
 msgid "Functions / Procedures"
-msgstr "Procedimientos"
+msgstr "Funciones / Procedimientos"
 
 #: ../src/symbols.c:763
-#, fuzzy
 msgid "Variables / Signals"
-msgstr "Variables"
+msgstr "Variables / Signos"
 
 #: ../src/symbols.c:764
 msgid "Processes / Components"
-msgstr ""
+msgstr "Procesos / Componentes"
 
 #: ../src/symbols.c:772
 msgid "Events"
-msgstr ""
+msgstr "Eventos"
 
 #: ../src/symbols.c:774
-#, fuzzy
 msgid "Functions / Tasks"
-msgstr "Funciones"
+msgstr "Funciones /Tarees"
 
 #: ../src/symbols.c:787 ../src/symbols.c:876
 msgid "Members"
@@ -4291,7 +4249,7 @@ msgstr "Ordenar por _Aparición"
 
 #: ../src/templates.c:271
 msgid "Old"
-msgstr ""
+msgstr "Antigüu"
 
 #. custom actions defined in toolbar_init(): "New", "Open", "SearchEntry", "GotoEntry", "Build"
 #: ../src/toolbar.c:55
@@ -4398,23 +4356,20 @@ msgid "Create a new file"
 msgstr "Criar un ficheru nuevu"
 
 #: ../src/toolbar.c:337
-#, fuzzy
 msgid "Create a new file from a template"
-msgstr "Criar un ficheru nuevu"
+msgstr "Criar un ficheru nuevu dende plantilla"
 
 #: ../src/toolbar.c:344
 msgid "Open an existing file"
 msgstr "Abrir un ficheru existente"
 
 #: ../src/toolbar.c:345
-#, fuzzy
 msgid "Open a recent file"
-msgstr "Abrir ficheros seleicionados"
+msgstr "Abrir ficheru reciente"
 
 #: ../src/toolbar.c:353
-#, fuzzy
 msgid "Choose more build actions"
-msgstr "Nun hai más fallos de construción."
+msgstr "Escoyer más aiciones de compilación"
 
 #: ../src/toolbar.c:368
 msgid "Goto"
@@ -4533,9 +4488,9 @@ msgstr "Amosar _Caminos"
 
 #. Status bar statistics: col = column, sel = selection.
 #: ../src/ui_utils.c:190
-#, fuzzy, c-format
+#, c-format
 msgid "line: %d / %d\t col: %d\t sel: %d\t "
-msgstr "llínia: %d\t col: %d\t sel: %d\t "
+msgstr "llinia: %d / %d\t col: %d\t sel: %d\t "
 
 #. RO = read-only
 #: ../src/ui_utils.c:196
@@ -5085,7 +5040,7 @@ msgstr "Filtrar:"
 
 #: ../plugins/filebrowser.c:839
 msgid "Filter your files with usual wildcards"
-msgstr ""
+msgstr "Peñera los tos ficheros con comodines"
 
 #: ../plugins/filebrowser.c:1056
 msgid "Focus File List"
