@@ -14,6 +14,9 @@
    move the question from the secondary to the main text to be
    more compatible with the Gnome HIG.
    Fix broken 'Save' action in 'Resave missing file' dialog.
+ * tagmanager/php.c:
+   Improve PHP parser to parse also the argument lists of PHP
+   functions (patch by Can Koy, thanks).
 
 
 2010-03-05  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>

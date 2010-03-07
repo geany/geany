@@ -19,7 +19,7 @@
 #include "general.h"  /* must always come first */
 
 #include <string.h>
-
+#include "main.h"
 #include "parse.h"
 #include "read.h"
 #include "vstring.h"
@@ -67,6 +67,7 @@ static kindOption PhpKinds [] = {
 #define ALPHA "[:alpha:]"
 #define ALNUM "[:alnum:]"
 
+static void function_cb(const char *line, const regexMatch *matches, unsigned int count);
 
 static void installPHPRegex (const langType language)
 {
@@ -78,8 +79,9 @@ static void installPHPRegex (const langType language)
 		"\\1", "m,macro,macros", NULL);
 	addTagRegex(language, "^[ \t]*const[ \t]*([" ALPHA "_][" ALNUM "_]*)[ \t]*[=;]",
 		"\\1", "m,macro,macros", NULL);
-	addTagRegex(language, "^[ \t]*((public|protected|private|static)[ \t]+)*function[ \t]+&?[ \t]*([" ALPHA "_][" ALNUM "_]*)",
-		"\\3", "f,function,functions", NULL);
+	addCallbackRegex(language,
+	"^[ \t]*([public|protected|private|static]*[ \t]*)*function[ \t]+&?[ \t]*([" ALPHA "_][" ALNUM "_]*)[[:space:]]*(\\([^)]*\\))",
+			NULL, function_cb);
 	addTagRegex(language, "^[ \t]*(\\$|::\\$|\\$this->)([" ALPHA "_][" ALNUM "_]*)[ \t]*=",
 		"\\2", "v,variable,variables", NULL);
 	addTagRegex(language, "^[ \t]*((var|public|protected|private|static)[ \t]+)+\\$([" ALPHA "_][" ALNUM "_]*)[ \t]*[=;]",
@@ -92,6 +94,38 @@ static void installPHPRegex (const langType language)
 		"\\2.\\3", "j,jsfunction,javascript functions", NULL);
 	addTagRegex (language, "(^|[ \t])([A-Za-z0-9_.]+)\\.([A-Za-z0-9_]+)[ \t]*=[ \t]*function[ \t]*\\(",
 		"\\3", "j,jsfunction,javascript functions", NULL);
+}
+
+
+static void function_cb(const char *line, const regexMatch *matches, unsigned int count)
+{
+	char *name, *arglist;
+	static char *kindName = "function";
+	tagEntryInfo e;
+	const regexMatch *match_funcname = NULL;
+	const regexMatch *match_arglist = NULL;
+
+	if (count > 2 && count < 6)
+	{
+		match_funcname = &matches[count - 2];
+		match_arglist = &matches[count -1];
+	}
+
+	if (match_funcname != NULL)
+	{
+		name = xMalloc(match_funcname->length + 1, char);
+		strncpy(name, line + match_funcname->start, match_funcname->length);
+		*(name+match_funcname->length) = '\x0';
+		arglist = xMalloc(match_arglist->length + 1, char);
+		strncpy(arglist, line + match_arglist->start, match_arglist->length);
+		*(arglist+match_arglist->length) = '\x0';
+
+		initTagEntry (&e, name);
+		e.kind = 'f';
+		e.kindName = kindName;
+		e.extensionFields.arglist = arglist;
+		makeTagEntry (&e);
+	}
 }
 
 /* Create parser definition structure */
