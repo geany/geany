@@ -4651,6 +4651,12 @@ static ScintillaObject *create_new_sci(GeanyEditor *editor)
 	SSM(sci, SCI_REGISTERIMAGE, 1, (sptr_t)classviewer_var);
 	SSM(sci, SCI_REGISTERIMAGE, 2, (sptr_t)classviewer_method);
 
+	/* necessary for column mode editing, implemented in Scintilla since 2.0 */
+	SSM(sci, SCI_SETADDITIONALSELECTIONTYPING, 1, 0);
+
+	/* virtual space */
+	SSM(sci, SCI_SETVIRTUALSPACEOPTIONS, editor_prefs.show_virtual_space, 0);
+
 	/* only connect signals if this is for the document notebook, not split window */
 	if (editor->sci == NULL)
 	{
@@ -4862,6 +4868,9 @@ void editor_apply_update_prefs(GeanyEditor *editor)
 	sci_set_line_numbers(sci, editor_prefs.show_linenumber_margin, 0);
 
 	sci_set_folding_margin_visible(sci, editor_prefs.folding);
+
+	/* virtual space */
+	SSM(sci, SCI_SETVIRTUALSPACEOPTIONS, editor_prefs.show_virtual_space, 0);
 
 	/* (dis)allow scrolling past end of document */
 	sci_set_scroll_stop_at_last_line(sci, editor_prefs.scroll_stop_at_last_line);

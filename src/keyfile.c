@@ -154,6 +154,12 @@ static void init_pref_groups(void)
 		"radio_indent_tabs", GEANY_INDENT_TYPE_TABS,
 		"radio_indent_both", GEANY_INDENT_TYPE_BOTH,
 		NULL);
+	stash_group_add_radio_buttons(group, (gint*)(void*)&editor_prefs.show_virtual_space,
+		"virtualspace", GEANY_VIRTUAL_SPACE_SELECTION,
+		"radio_virtualspace_disabled", GEANY_VIRTUAL_SPACE_DISABLED,
+		"radio_virtualspace_selection", GEANY_VIRTUAL_SPACE_SELECTION,
+		"radio_virtualspace_always", GEANY_VIRTUAL_SPACE_ALWAYS,
+		NULL);
 	stash_group_add_toggle_button(group, &editor_prefs.autocomplete_doc_words,
 		"autocomplete_doc_words", FALSE, "check_autocomplete_doc_words");
 	stash_group_add_toggle_button(group, &editor_prefs.completion_drops_rest_of_word,

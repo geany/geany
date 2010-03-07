@@ -51,6 +51,14 @@ typedef enum
 }
 GeanyAutoIndent;
 
+typedef enum
+{
+	GEANY_VIRTUAL_SPACE_DISABLED = 0,
+	GEANY_VIRTUAL_SPACE_SELECTION = 1,
+	GEANY_VIRTUAL_SPACE_ALWAYS = 3
+}
+GeanyVirtualSpace;
+
 
 /* Auto-close brackets/quotes */
 enum {
@@ -106,7 +114,7 @@ typedef struct GeanyEditorPrefs
 	gboolean	show_markers_margin;		/* view menu */
 	gboolean	show_linenumber_margin;		/* view menu */
 	gboolean	show_scrollbars;			/* hidden pref */
-	gboolean	scroll_stop_at_last_line;	/* hidden pref */
+	gboolean	scroll_stop_at_last_line;
 	gboolean	line_wrapping;
 	gboolean	use_indicators;
 	gboolean	folding;
@@ -131,6 +139,7 @@ typedef struct GeanyEditorPrefs
 	gboolean	autocomplete_doc_words;
 	gboolean	completion_drops_rest_of_word;
 	gchar		*color_scheme;
+	gint 		show_virtual_space;
 }
 GeanyEditorPrefs;
 

@@ -2581,6 +2581,14 @@ create_prefs_dialog (void)
   GtkWidget *radio_long_line_background;
   GtkWidget *radio_long_line_disabled;
   GtkWidget *label155;
+  GtkWidget *frame40;
+  GtkWidget *alignment47;
+  GtkWidget *vbox48;
+  GtkWidget *radio_virtualspace_disabled;
+  GSList *radio_virtualspace_disabled_group = NULL;
+  GtkWidget *radio_virtualspace_selection;
+  GtkWidget *radio_virtualspace_always;
+  GtkWidget *label238;
   GtkWidget *label213;
   GtkWidget *label95;
   GtkWidget *vbox18;
@@ -3922,7 +3930,7 @@ create_prefs_dialog (void)
 
   frame8 = gtk_frame_new (NULL);
   gtk_widget_show (frame8);
-  gtk_box_pack_start (GTK_BOX (vbox24), frame8, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox24), frame8, FALSE, TRUE, 0);
   gtk_frame_set_shadow_type (GTK_FRAME (frame8), GTK_SHADOW_NONE);
 
   alignment11 = gtk_alignment_new (0.5, 0.5, 1, 1);
@@ -4005,6 +4013,46 @@ create_prefs_dialog (void)
   gtk_widget_show (label155);
   gtk_frame_set_label_widget (GTK_FRAME (frame8), label155);
   gtk_label_set_use_markup (GTK_LABEL (label155), TRUE);
+
+  frame40 = gtk_frame_new (NULL);
+  gtk_widget_show (frame40);
+  gtk_box_pack_start (GTK_BOX (vbox24), frame40, FALSE, TRUE, 0);
+  gtk_frame_set_shadow_type (GTK_FRAME (frame40), GTK_SHADOW_NONE);
+
+  alignment47 = gtk_alignment_new (0.5, 0.5, 1, 1);
+  gtk_widget_show (alignment47);
+  gtk_container_add (GTK_CONTAINER (frame40), alignment47);
+  gtk_alignment_set_padding (GTK_ALIGNMENT (alignment47), 0, 0, 12, 0);
+
+  vbox48 = gtk_vbox_new (FALSE, 0);
+  gtk_widget_show (vbox48);
+  gtk_container_add (GTK_CONTAINER (alignment47), vbox48);
+
+  radio_virtualspace_disabled = gtk_radio_button_new_with_mnemonic (NULL, _("Disabled"));
+  gtk_widget_show (radio_virtualspace_disabled);
+  gtk_box_pack_start (GTK_BOX (vbox48), radio_virtualspace_disabled, FALSE, FALSE, 0);
+  gtk_tooltips_set_tip (tooltips, radio_virtualspace_disabled, _("Do not show virtual spaces"), NULL);
+  gtk_radio_button_set_group (GTK_RADIO_BUTTON (radio_virtualspace_disabled), radio_virtualspace_disabled_group);
+  radio_virtualspace_disabled_group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio_virtualspace_disabled));
+
+  radio_virtualspace_selection = gtk_radio_button_new_with_mnemonic (NULL, _("Only for rectangular selections"));
+  gtk_widget_show (radio_virtualspace_selection);
+  gtk_box_pack_start (GTK_BOX (vbox48), radio_virtualspace_selection, FALSE, FALSE, 0);
+  gtk_tooltips_set_tip (tooltips, radio_virtualspace_selection, _("Only show virtual spaces beyond the end of lines when drawing a rectangular selection"), NULL);
+  gtk_radio_button_set_group (GTK_RADIO_BUTTON (radio_virtualspace_selection), radio_virtualspace_disabled_group);
+  radio_virtualspace_disabled_group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio_virtualspace_selection));
+
+  radio_virtualspace_always = gtk_radio_button_new_with_mnemonic (NULL, _("Always"));
+  gtk_widget_show (radio_virtualspace_always);
+  gtk_box_pack_start (GTK_BOX (vbox48), radio_virtualspace_always, FALSE, FALSE, 0);
+  gtk_tooltips_set_tip (tooltips, radio_virtualspace_always, _("Always show virtual spaces beyond the end of lines"), NULL);
+  gtk_radio_button_set_group (GTK_RADIO_BUTTON (radio_virtualspace_always), radio_virtualspace_disabled_group);
+  radio_virtualspace_disabled_group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio_virtualspace_always));
+
+  label238 = gtk_label_new (_("<b>Virtual spaces</b>"));
+  gtk_widget_show (label238);
+  gtk_frame_set_label_widget (GTK_FRAME (frame40), label238);
+  gtk_label_set_use_markup (GTK_LABEL (label238), TRUE);
 
   label213 = gtk_label_new (_("Display"));
   gtk_widget_show (label213);
@@ -4947,6 +4995,13 @@ create_prefs_dialog (void)
   GLADE_HOOKUP_OBJECT (prefs_dialog, radio_long_line_background, "radio_long_line_background");
   GLADE_HOOKUP_OBJECT (prefs_dialog, radio_long_line_disabled, "radio_long_line_disabled");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label155, "label155");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, frame40, "frame40");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, alignment47, "alignment47");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, vbox48, "vbox48");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, radio_virtualspace_disabled, "radio_virtualspace_disabled");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, radio_virtualspace_selection, "radio_virtualspace_selection");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, radio_virtualspace_always, "radio_virtualspace_always");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, label238, "label238");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label213, "label213");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label95, "label95");
   GLADE_HOOKUP_OBJECT (prefs_dialog, vbox18, "vbox18");

@@ -2044,6 +2044,24 @@ Long line marker color
     Set the color of the long line marker.
 
 
+Virtual spaces
+``````````````
+
+Virtual space is space beyond the end of each line.
+The cursor may be moved into virtual space but no real space will be
+added to the document until there is some text typed or some other
+text insertion command is used.
+
+Disabled
+    Do not show virtual spaces
+
+Only for rectangular selections
+    Only show virtual spaces beyond the end of lines when drawing a rectangular selection
+
+Always
+    Always show virtual spaces beyond the end of lines
+
+
 Files preferences
 ^^^^^^^^^^^^^^^^^
 
