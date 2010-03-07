@@ -2946,6 +2946,7 @@ static gboolean monitor_reload_file(GeanyDocument *doc)
 static gboolean monitor_resave_missing_file(GeanyDocument *doc)
 {
 	gboolean want_reload = FALSE;
+	gboolean file_saved = FALSE;
 	gint ret;
 
 	ret = dialogs_show_prompt(NULL,
@@ -2957,14 +2958,14 @@ static gboolean monitor_resave_missing_file(GeanyDocument *doc)
 		doc->file_name);
 	if (ret == GTK_RESPONSE_ACCEPT)
 	{
-		dialogs_show_save_as();
+		file_saved = dialogs_show_save_as();
 		want_reload = TRUE;
 	}
 	else if (ret == GTK_RESPONSE_CLOSE)
 	{
 		document_close(doc);
 	}
-	if (ret != GTK_RESPONSE_CLOSE)
+	if (ret != GTK_RESPONSE_CLOSE && ! file_saved)
 	{
 		/* file is missing - set unsaved state */
 		document_set_text_changed(doc, TRUE);

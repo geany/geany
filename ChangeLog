@@ -10,9 +10,10 @@
  * src/dialogs.c:
    Fix crashes when using Save As with no open files (closes #2964406).
  * src/document.c:
-   Fix duplicate mnemonics on 'resave missing file' dialog, also
+   Fix duplicate mnemonics on 'Resave missing file' dialog, also
    move the question from the secondary to the main text to be
    more compatible with the Gnome HIG.
+   Fix broken 'Save' action in 'Resave missing file' dialog.
 
 
 2010-03-05  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
