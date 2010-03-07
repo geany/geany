@@ -23,6 +23,10 @@
  * src/dialog.c:
    Fix setting the icon for some dialogs if the parent itself is also
    a dialog.
+ * src/ui_utils.c:
+   When editing non-existent config files using the Tools->Configuration
+   Files menu, explicitly set the real_path to avoid presenting the Save
+   As dialog when saving the file (patch by Tony Rick, thanks).
 
 
 2010-03-05  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>

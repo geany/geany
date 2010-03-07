@@ -1737,18 +1737,24 @@ static void on_config_file_clicked(GtkWidget *widget, gpointer user_data)
 		document_open_file(file_name, FALSE, ft, NULL);
 	else
 	{
-		gchar *utf8 = utils_get_utf8_from_locale(file_name);
+		gchar *utf8_filename = utils_get_utf8_from_locale(file_name);
 		gchar *base_name = g_path_get_basename(file_name);
 		gchar *global_file = g_build_filename(app->datadir, base_name, NULL);
 		gchar *global_content = NULL;
+		GeanyDocument *doc;
 
 		/* if the requested file doesn't exist in the user's config dir, try loading the file
 		 * from the global data directory and use its contents for the newly created file */
 		if (g_file_test(global_file, G_FILE_TEST_EXISTS))
 			g_file_get_contents(global_file, &global_content, NULL, NULL);
 
-		document_new_file(utf8, ft, global_content);
-		utils_free_pointers(4, utf8, base_name, global_file, global_content, NULL);
+		doc = document_new_file(utf8_filename, ft, global_content);
+
+		/* Enforce config file override policy by populating doc->real_path, which in turn
+		 * allows document to be saved directly to file_name location. */
+		doc->real_path = g_strdup(utf8_filename);
+
+		utils_free_pointers(4, utf8_filename, base_name, global_file, global_content, NULL);
 	}
 }
 
