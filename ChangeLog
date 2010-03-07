@@ -20,6 +20,9 @@
  * src/prefs.c:
    Correctly set the parent widget for the keybinding overwrite
    confirmation dialog.
+ * src/dialog.c:
+   Fix setting the icon for some dialogs if the parent itself is also
+   a dialog.
 
 
 2010-03-05  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
