@@ -5,6 +5,8 @@
  * geany.glade, doc/geany.txt, doc/geany.html, src/editor.c,
    src/editor.h, src/interface.c, src/keyfile.c, src/plugindata.h:
    Add preference for virtual spaces.
+ * src/log.c:
+   Fix wrong default response for the Debug Messages dialog.
 
 
 2010-03-05  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>

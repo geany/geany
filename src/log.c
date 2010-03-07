@@ -187,7 +187,7 @@ void log_show_debug_messages_dialog(void)
 	gtk_widget_set_name(dialog, "GeanyDialog");
 
 	gtk_window_set_default_size(GTK_WINDOW(dialog), 550, 300);
-	gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_CANCEL);
+	gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_CLOSE);
 
 	textview = gtk_text_view_new();
 	dialog_textbuffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(textview));
