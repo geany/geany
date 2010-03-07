@@ -10,6 +10,8 @@
 #include <stdio.h>
 #include <ctype.h>
 
+#include <vector>
+
 #include "Platform.h"
 
 #include "Scintilla.h"
@@ -28,6 +30,7 @@
 #include "CharClassify.h"
 #include "Decoration.h"
 #include "Document.h"
+#include "Selection.h"
 #include "PositionCache.h"
 
 #ifdef SCI_NAMESPACE
@@ -46,11 +49,11 @@ LineLayout::LineLayout(int maxLineLength_) :
 	inCache(false),
 	maxLineLength(-1),
 	numCharsInLine(0),
+	numCharsBeforeEOL(0),
 	validity(llInvalid),
 	xHighlightGuide(0),
 	highlightColumn(0),
-	selStart(0),
-	selEnd(0),
+	psel(NULL),
 	containsCaret(false),
 	edgeColumn(0),
 	chars(0),
@@ -115,12 +118,7 @@ int LineLayout::LineLastVisible(int line) const {
 	if (line < 0) {
 		return 0;
 	} else if ((line >= lines-1) || !lineStarts) {
-		int startLine = LineStart(line);
-		int endLine = numCharsInLine;
-		while ((endLine > startLine) && IsEOLChar(chars[endLine-1])) {
-			endLine--;
-		}
-		return endLine;
+		return numCharsBeforeEOL;
 	} else {
 		return lineStarts[line+1];
 	}
@@ -135,8 +133,6 @@ void LineLayout::SetLineStart(int line, int start) {
 	if ((line >= lenLineStarts) && (line != 0)) {
 		int newMaxLines = line + 20;
 		int *newLineStarts = new int[newMaxLines];
-		if (!newLineStarts)
-			return;
 		for (int i = 0; i < newMaxLines; i++) {
 			if (i < lenLineStarts)
 				newLineStarts[i] = lineStarts[i];
@@ -199,6 +195,10 @@ int LineLayout::FindBefore(int x, int lower, int upper) const {
 		}
 	} while (lower < upper);
 	return lower;
+}
+
+int LineLayout::EndLineStyle() const {
+	return styles[numCharsBeforeEOL > 0 ? numCharsBeforeEOL-1 : 0];
 }
 
 LineLayoutCache::LineLayoutCache() :
@@ -386,7 +386,7 @@ static int NextBadU(const char *s, int p, int len, int &trailBytes) {
 	return -1;
 }
 
-BreakFinder::BreakFinder(LineLayout *ll_, int lineStart_, int lineEnd_, int posLineStart_, bool utf8_, int xStart) :
+BreakFinder::BreakFinder(LineLayout *ll_, int lineStart_, int lineEnd_, int posLineStart_, bool utf8_, int xStart, bool breakForSelection) :
 	ll(ll_),
 	lineStart(lineStart_),
 	lineEnd(lineEnd_),
@@ -412,9 +412,19 @@ BreakFinder::BreakFinder(LineLayout *ll_, int lineStart_, int lineEnd_, int posL
 		nextBreak--;
 	}
 
-	if (ll->selStart != ll->selEnd) {
-		Insert(ll->selStart - posLineStart - 1);
-		Insert(ll->selEnd - posLineStart - 1);
+	if (breakForSelection) {
+		SelectionPosition posStart(posLineStart);
+		SelectionPosition posEnd(posLineStart + lineEnd);
+		SelectionSegment segmentLine(posStart, posEnd);
+		for (size_t r=0; r<ll->psel->Count(); r++) {
+			SelectionSegment portion = ll->psel->Range(r).Intersect(segmentLine);
+			if (!(portion.start == portion.end)) {
+				if (portion.start.IsValid())
+					Insert(portion.start.Position() - posLineStart - 1);
+				if (portion.end.IsValid())
+					Insert(portion.end.Position() - posLineStart - 1);
+			}
+		}
 	}
 
 	Insert(ll->edgeColumn - 1);

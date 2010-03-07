@@ -54,6 +54,7 @@ PropSet.cxx \
 RESearch.cxx \
 RunStyles.cxx \
 ScintillaBase.cxx \
+Selection.cxx \
 StyleContext.cxx \
 Style.cxx \
 UniConversion.cxx \
@@ -82,10 +83,12 @@ LineMarker.h \
 Partitioning.h \
 PerLine.h \
 PositionCache.h \
+PropSetSimple.h \
 RESearch.h \
 RunStyles.h \
 ScintillaBase.h \
 scintilla-marshal.h \
+Selection.h \
 SplitVector.h \
 StyleContext.h \
 Style.h \

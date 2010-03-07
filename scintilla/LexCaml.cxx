@@ -27,6 +27,7 @@
 #include "Platform.h"
 
 #include "PropSet.h"
+#include "PropSetSimple.h"
 #include "Accessor.h"
 #include "StyleContext.h"
 #include "KeyWords.h"
@@ -143,7 +144,7 @@ static void InternalLexOrFold(int foldOrLex, unsigned int startPos, int length,
 	int initStyle, char *words[], WindowID window, char *props)
 {
 	// create and initialize a WindowAccessor (including contained PropSet)
-	PropSet ps;
+	PropSetSimple ps;
 	ps.SetMultiple(props);
 	WindowAccessor wa(window, ps);
 	// create and initialize WordList(s)

@@ -10,6 +10,9 @@
 #include <ctype.h>
 #include <time.h>
 
+#include <string>
+#include <vector>
+
 #include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
 
@@ -24,6 +27,7 @@
 #ifdef SCI_LEXER
 #include "SciLexer.h"
 #include "PropSet.h"
+#include "PropSetSimple.h"
 #include "Accessor.h"
 #include "KeyWords.h"
 #endif
@@ -44,9 +48,9 @@
 #include "Decoration.h"
 #include "CharClassify.h"
 #include "Document.h"
+#include "Selection.h"
 #include "PositionCache.h"
 #include "Editor.h"
-#include "SString.h"
 #include "ScintillaBase.h"
 #include "UniConversion.h"
 
@@ -116,6 +120,7 @@ class ScintillaGTK : public ScintillaBase {
 	bool capturedMouse;
 	bool dragWasDropped;
 	int lastKey;
+	int rectangularSelectionModifier;
 
 	GtkWidgetClass *parentClass;
 
@@ -151,8 +156,8 @@ class ScintillaGTK : public ScintillaBase {
 	GdkRegion *rgnUpdate;
 
 	// Private so ScintillaGTK objects can not be copied
-	ScintillaGTK(const ScintillaGTK &) : ScintillaBase() {}
-	ScintillaGTK &operator=(const ScintillaGTK &) { return * this; }
+	ScintillaGTK(const ScintillaGTK &);
+	ScintillaGTK &operator=(const ScintillaGTK &);
 
 public:
 	ScintillaGTK(_ScintillaObject *sci_);
@@ -346,7 +351,7 @@ ScintillaGTK::ScintillaGTK(_ScintillaObject *sci_) :
 		adjustmentv(0), adjustmenth(0),
 		scrollBarWidth(30), scrollBarHeight(30),
 		capturedMouse(false), dragWasDropped(false),
-		lastKey(0), parentClass(0),
+		lastKey(0), rectangularSelectionModifier(SCMOD_CTRL), parentClass(0),
 #ifdef INTERNATIONAL_INPUT
 #if GTK_MAJOR_VERSION < 2
 		ic(NULL),
@@ -360,6 +365,12 @@ ScintillaGTK::ScintillaGTK(_ScintillaObject *sci_) :
 		rgnUpdate(0) {
 	sci = sci_;
 	wMain = GTK_WIDGET(sci);
+
+#if PLAT_GTK_WIN32
+	rectangularSelectionModifier = SCMOD_ALT;
+#else
+	rectangularSelectionModifier = SCMOD_CTRL;
+#endif
 
 #if PLAT_GTK_WIN32
  	// There does not seem to be a real standard for indicating that the clipboard
@@ -990,7 +1001,12 @@ int ScintillaGTK::EncodedFromUTF8(char *utf8, char *encoded) {
 }
 
 bool ScintillaGTK::ValidCodePage(int codePage) const {
-	return codePage == 0 || codePage == SC_CP_UTF8 || codePage == SC_CP_DBCS;
+	return codePage == 0 
+	|| codePage == SC_CP_UTF8 
+	|| codePage == 932
+	|| codePage == 936
+	|| codePage == 950
+	|| codePage == SC_CP_DBCS;
 }
 
 sptr_t ScintillaGTK::WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lParam) {
@@ -1019,6 +1035,13 @@ sptr_t ScintillaGTK::WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lParam
 			return EncodedFromUTF8(reinterpret_cast<char*>(wParam),
 			        reinterpret_cast<char*>(lParam));
 
+		case SCI_SETRECTANGULARSELECTIONMODIFIER:
+			rectangularSelectionModifier = wParam;
+			break;
+		
+		case SCI_GETRECTANGULARSELECTIONMODIFIER:
+			return rectangularSelectionModifier;
+		
 		default:
 			return ScintillaBase::WndProc(iMessage, wParam, lParam);
 		}
@@ -1345,7 +1368,7 @@ void ScintillaGTK::CopyToClipboard(const SelectionText &selectedText) {
 }
 
 void ScintillaGTK::Copy() {
-	if (currentPos != anchor) {
+	if (!sel.Empty()) {
 #ifndef USE_GTK_CLIPBOARD
 		CopySelectionRange(&copyText);
 		gtk_selection_owner_set(GTK_WIDGET(PWidget(wMain)),
@@ -1357,7 +1380,7 @@ void ScintillaGTK::Copy() {
 		StoreOnClipboard(clipText);
 #endif
 #if PLAT_GTK_WIN32
-		if (selType == selRectangle) {
+		if (sel.IsRectangular()) {
 			::OpenClipboard(NULL);
 			::SetClipboardData(cfColumnSelect, 0);
 			::CloseClipboard();
@@ -1433,7 +1456,7 @@ bool ScintillaGTK::OwnPrimarySelection() {
 void ScintillaGTK::ClaimSelection() {
 	// X Windows has a 'primary selection' as well as the clipboard.
 	// Whenever the user selects some text, we become the primary selection
-	if (currentPos != anchor && GTK_WIDGET_REALIZED(GTK_WIDGET(PWidget(wMain)))) {
+	if (!sel.Empty() && GTK_WIDGET_REALIZED(GTK_WIDGET(PWidget(wMain)))) {
 		primarySelection = true;
 		gtk_selection_owner_set(GTK_WIDGET(PWidget(wMain)),
 		                        GDK_SELECTION_PRIMARY, GDK_CURRENT_TIME);
@@ -1513,19 +1536,22 @@ void ScintillaGTK::ReceivedSelection(GtkSelectionData *selection_data) {
 				SelectionText selText;
 				GetGtkSelectionText(selection_data, selText);
 
-				pdoc->BeginUndoAction();
+				UndoGroup ug(pdoc);
 				if (selection_data->selection != GDK_SELECTION_PRIMARY) {
 					ClearSelection();
 				}
-				int selStart = SelectionStart();
+				SelectionPosition selStart = sel.IsRectangular() ?
+					sel.Rectangular().Start() :
+					sel.Range(sel.Main()).Start();
 
 				if (selText.rectangular) {
 					PasteRectangular(selStart, selText.s, selText.len);
 				} else {
-					pdoc->InsertString(currentPos, selText.s, selText.len);
-					SetEmptySelection(currentPos + selText.len);
+					selStart = SelectionPosition(InsertSpace(selStart.Position(), selStart.VirtualSpace()));
+					if (pdoc->InsertString(selStart.Position(),selText.s, selText.len)) {
+						SetEmptySelection(selStart.Position() + selText.len);
+					}
 				}
-				pdoc->EndUndoAction();
 				EnsureCaretVisible();
 			}
 		}
@@ -1595,18 +1621,19 @@ void ScintillaGTK::GetSelection(GtkSelectionData *selection_data, guint info, Se
 	// All other tested aplications behave benignly by ignoring the \0.
 	// The #if is here because on Windows cfColumnSelect clip entry is used
 	// instead as standard indicator of rectangularness (so no need to kludge)
-	int len = strlen(text->s);
+	const char *textData = text->s ? text->s : "";
+	int len = strlen(textData);
 #if PLAT_GTK_WIN32 == 0
 	if (text->rectangular)
 		len++;
 #endif
 
 	if (info == TARGET_UTF8_STRING) {
-		gtk_selection_data_set_text(selection_data, text->s, len);
+		gtk_selection_data_set_text(selection_data, textData, len);
 	} else {
 		gtk_selection_data_set(selection_data,
 			static_cast<GdkAtom>(GDK_SELECTION_TYPE_STRING),
-			8, reinterpret_cast<unsigned char *>(text->s), len);
+			8, reinterpret_cast<const unsigned char *>(textData), len);
 	}
 	delete converted;
 
@@ -1780,6 +1807,21 @@ static void SetAdjustmentValue(GtkObject *object, int value) {
 	gtk_adjustment_set_value(adjustment, value);
 }
 
+static int modifierTranslated(int sciModifier) {
+	switch (sciModifier) {
+		case SCMOD_SHIFT:
+			return GDK_SHIFT_MASK;
+		case SCMOD_CTRL:
+			return GDK_CONTROL_MASK;
+		case SCMOD_ALT:
+			return GDK_MOD1_MASK;
+		case SCMOD_SUPER:
+			return GDK_MOD4_MASK;
+		default: 
+			return 0;
+	}
+}
+
 gint ScintillaGTK::PressThis(GdkEventButton *event) {
 	try {
 		//Platform::DebugPrintf("Press %x time=%d state = %x button = %x\n",this,event->time, event->state, event->button);
@@ -1803,22 +1845,16 @@ gint ScintillaGTK::PressThis(GdkEventButton *event) {
 
 		gtk_widget_grab_focus(PWidget(wMain));
 		if (event->button == 1) {
-			// On X, instead of sending literal modifiers use control instead of alt
+			// On X, instead of sending literal modifiers use the user specified
+			// modifier, defaulting to control instead of alt.
 			// This is because most X window managers grab alt + click for moving
-#if !PLAT_GTK_WIN32
 			ButtonDown(pt, event->time,
 			        (event->state & GDK_SHIFT_MASK) != 0,
 			        (event->state & GDK_CONTROL_MASK) != 0,
-			        (event->state & GDK_CONTROL_MASK) != 0);
-#else
-			ButtonDown(pt, event->time,
-			        (event->state & GDK_SHIFT_MASK) != 0,
-			        (event->state & GDK_CONTROL_MASK) != 0,
-			        (event->state & GDK_MOD1_MASK) != 0);
-#endif
+			        (event->state & modifierTranslated(rectangularSelectionModifier)) != 0);
 		} else if (event->button == 2) {
 			// Grab the primary selection if it exists
-			Position pos = PositionFromLocation(pt);
+			SelectionPosition pos = SPositionFromLocation(pt);
 			if (OwnPrimarySelection() && primary.s == NULL)
 				CopySelectionRange(&primary);
 
@@ -2222,7 +2258,7 @@ void ScintillaGTK::PreeditChangedThis() {
 			gint x, y;
 			gdk_window_get_origin((PWidget(wText))->window, &x, &y);
 
-			Point pt = LocationFromPosition(currentPos);
+			Point pt = PointMainCaret();
 			if (pt.x < 0)
 				pt.x = 0;
 			if (pt.y < 0)
@@ -2309,7 +2345,7 @@ void ScintillaGTK::Draw(GtkWidget *widget, GdkRectangle *area) {
 		}
 
 #ifdef INTERNATIONAL_INPUT
-		Point pt = sciThis->LocationFromPosition(sciThis->currentPos);
+		Point pt = sciThis->PointMainCaret();
 		pt.y += sciThis->vs.lineHeight - 2;
 		if (pt.x < 0) pt.x = 0;
 		if (pt.y < 0) pt.y = 0;
@@ -2493,10 +2529,10 @@ gboolean ScintillaGTK::DragMotionThis(GdkDragContext *context,
                                  gint x, gint y, guint dragtime) {
 	try {
 		Point npt(x, y);
-		SetDragPosition(PositionFromLocation(npt));
+		SetDragPosition(SPositionFromLocation(npt, false, false, UserVirtualSpace()));
 		GdkDragAction preferredAction = context->suggested_action;
-		int pos = PositionFromLocation(npt);
-		if ((inDragDrop == ddDragging) && (0 == PositionInSelection(pos))) {
+		SelectionPosition pos = SPositionFromLocation(npt);
+		if ((inDragDrop == ddDragging) && (PositionInSelection(pos.Position()))) {
 			// Avoid dragging selection onto itself as that produces a move
 			// with no real effect but which creates undo actions.
 			preferredAction = static_cast<GdkDragAction>(0);
@@ -2520,7 +2556,7 @@ gboolean ScintillaGTK::DragMotion(GtkWidget *widget, GdkDragContext *context,
 void ScintillaGTK::DragLeave(GtkWidget *widget, GdkDragContext * /*context*/, guint) {
 	ScintillaGTK *sciThis = ScintillaFromWidget(widget);
 	try {
-		sciThis->SetDragPosition(invalidPosition);
+		sciThis->SetDragPosition(SelectionPosition(invalidPosition));
 		//Platform::DebugPrintf("DragLeave %x\n", sciThis);
 	} catch (...) {
 		sciThis->errorStatus = SC_STATUS_FAILURE;
@@ -2533,7 +2569,7 @@ void ScintillaGTK::DragEnd(GtkWidget *widget, GdkDragContext * /*context*/) {
 		// If drag did not result in drop here or elsewhere
 		if (!sciThis->dragWasDropped)
 			sciThis->SetEmptySelection(sciThis->posDrag);
-		sciThis->SetDragPosition(invalidPosition);
+		sciThis->SetDragPosition(SelectionPosition(invalidPosition));
 		//Platform::DebugPrintf("DragEnd %x %d\n", sciThis, sciThis->dragWasDropped);
 		sciThis->inDragDrop = ddNone;
 	} catch (...) {
@@ -2546,7 +2582,7 @@ gboolean ScintillaGTK::Drop(GtkWidget *widget, GdkDragContext * /*context*/,
 	ScintillaGTK *sciThis = ScintillaFromWidget(widget);
 	try {
 		//Platform::DebugPrintf("Drop %x\n", sciThis);
-		sciThis->SetDragPosition(invalidPosition);
+		sciThis->SetDragPosition(SelectionPosition(invalidPosition));
 	} catch (...) {
 		sciThis->errorStatus = SC_STATUS_FAILURE;
 	}
@@ -2558,7 +2594,7 @@ void ScintillaGTK::DragDataReceived(GtkWidget *widget, GdkDragContext * /*contex
 	ScintillaGTK *sciThis = ScintillaFromWidget(widget);
 	try {
 		sciThis->ReceivedDrop(selection_data);
-		sciThis->SetDragPosition(invalidPosition);
+		sciThis->SetDragPosition(SelectionPosition(invalidPosition));
 	} catch (...) {
 		sciThis->errorStatus = SC_STATUS_FAILURE;
 	}
@@ -2569,22 +2605,22 @@ void ScintillaGTK::DragDataGet(GtkWidget *widget, GdkDragContext *context,
 	ScintillaGTK *sciThis = ScintillaFromWidget(widget);
 	try {
 		sciThis->dragWasDropped = true;
-		if (sciThis->currentPos != sciThis->anchor) {
+		if (!sciThis->sel.Empty()) {
 			sciThis->GetSelection(selection_data, info, &sciThis->drag);
 		}
 		if (context->action == GDK_ACTION_MOVE) {
-			int selStart = sciThis->SelectionStart();
-			int selEnd = sciThis->SelectionEnd();
-			if (sciThis->posDrop > selStart) {
-				if (sciThis->posDrop > selEnd)
-					sciThis->posDrop = sciThis->posDrop - (selEnd - selStart);
-				else
-					sciThis->posDrop = selStart;
-				sciThis->posDrop = sciThis->pdoc->ClampPositionIntoDocument(sciThis->posDrop);
+			for (size_t r=0; r<sciThis->sel.Count(); r++) {
+				if (sciThis->posDrop >= sciThis->sel.Range(r).Start()) {
+					if (sciThis->posDrop > sciThis->sel.Range(r).End()) {
+						sciThis->posDrop.Add(-sciThis->sel.Range(r).Length());
+					} else {
+						sciThis->posDrop.Add(-SelectionRange(sciThis->posDrop, sciThis->sel.Range(r).Start()).Length());
+					}
+				}
 			}
 			sciThis->ClearSelection();
 		}
-		sciThis->SetDragPosition(invalidPosition);
+		sciThis->SetDragPosition(SelectionPosition(invalidPosition));
 	} catch (...) {
 		sciThis->errorStatus = SC_STATUS_FAILURE;
 	}

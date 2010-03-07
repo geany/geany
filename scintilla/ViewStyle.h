@@ -58,10 +58,13 @@ public:
 	unsigned int spaceWidth;
 	bool selforeset;
 	ColourPair selforeground;
+	ColourPair selAdditionalForeground;
 	bool selbackset;
 	ColourPair selbackground;
+	ColourPair selAdditionalBackground;
 	ColourPair selbackground2;
 	int selAlpha;
+	int selAdditionalAlpha;
 	bool selEOLFilled;
 	bool whitespaceForegroundSet;
 	ColourPair whitespaceForeground;
@@ -89,10 +92,12 @@ public:
 	int fixedColumnWidth;
 	int zoomLevel;
 	WhiteSpaceVisibility viewWhitespace;
+	int whitespaceSize;
 	IndentView viewIndentationGuides;
 	bool viewEOL;
 	bool showMarkedLines;
 	ColourPair caretcolour;
+	ColourPair additionalCaretColour;
 	bool showCaretLineBackground;
 	ColourPair caretLineBackground;
 	int caretLineAlpha;
@@ -101,7 +106,7 @@ public:
 	int caretStyle;
 	int caretWidth;
 	bool someStylesProtected;
-	bool extraFontFlag;
+	int extraFontFlag;
 	int extraAscent;
 	int extraDescent;
 	int marginStyleOffset;

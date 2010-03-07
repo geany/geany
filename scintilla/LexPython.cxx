@@ -158,6 +158,10 @@ static void ColourisePyDoc(unsigned int startPos, int length, int initStyle,
 	if (styler.GetPropertyInt("lexer.python.strings.b", 1))
 		allowedLiterals = static_cast<literalsAllowed>(allowedLiterals | litB);
 
+	// property lexer.python.strings.over.newline
+	//      Set to 1 to allow strings to span newline characters.
+	bool stringsOverNewline = styler.GetPropertyInt("lexer.python.strings.over.newline") != 0;
+
 	initStyle = initStyle & 31;
 	if (initStyle == SCE_P_STRINGEOL) {
 		initStyle = SCE_P_DEFAULT;
@@ -204,7 +208,7 @@ static void ColourisePyDoc(unsigned int startPos, int length, int initStyle,
 			}
 			lineCurrent++;
 			if ((sc.state == SCE_P_STRING) || (sc.state == SCE_P_CHARACTER)) {
-				if (inContinuedString) {
+				if (inContinuedString || stringsOverNewline) {
 					inContinuedString = false;
 				} else {
 					sc.ChangeState(SCE_P_STRINGEOL);
@@ -416,6 +420,8 @@ static void FoldPyDoc(unsigned int startPos, int length, int /*initStyle - unuse
 	//	This option enables folding multi-line quoted strings when using the Python lexer.
 	const bool foldQuotes = styler.GetPropertyInt("fold.quotes.python") != 0;
 
+	const bool foldCompact = styler.GetPropertyInt("fold.compact") != 0;
+
 	// Backtrack to previous non-blank line so we can determine indent level
 	// for any white space lines (needed esp. within triple quoted strings)
 	// and so we can fix any preceding fold level (which is why we go back
@@ -514,12 +520,21 @@ static void FoldPyDoc(unsigned int startPos, int length, int /*initStyle - unuse
 		while (--skipLine > lineCurrent) {
 			int skipLineIndent = styler.IndentAmount(skipLine, &spaceFlags, NULL);
 
-			if ((skipLineIndent & SC_FOLDLEVELNUMBERMASK) > levelAfterComments)
-				skipLevel = levelBeforeComments;
+			if (foldCompact) {
+				if ((skipLineIndent & SC_FOLDLEVELNUMBERMASK) > levelAfterComments)
+					skipLevel = levelBeforeComments;
 
-			int whiteFlag = skipLineIndent & SC_FOLDLEVELWHITEFLAG;
+				int whiteFlag = skipLineIndent & SC_FOLDLEVELWHITEFLAG;
 
-			styler.SetLevel(skipLine, skipLevel | whiteFlag);
+				styler.SetLevel(skipLine, skipLevel | whiteFlag);
+			} else {
+				if ((skipLineIndent & SC_FOLDLEVELNUMBERMASK) > levelAfterComments &&
+					!(skipLineIndent & SC_FOLDLEVELWHITEFLAG) &&
+					!IsCommentLine(skipLine, styler))
+					skipLevel = levelBeforeComments;
+
+				styler.SetLevel(skipLine, skipLevel);
+			}
 		}
 
 		// Set fold header on non-quote/non-comment line

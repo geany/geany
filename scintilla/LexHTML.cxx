@@ -69,6 +69,22 @@ static void GetTextSegment(Accessor &styler, unsigned int start, unsigned int en
 	s[i] = '\0';
 }
 
+static const char *GetNextWord(Accessor &styler, unsigned int start, char *s, size_t sLen) {
+
+	size_t i = 0;
+	for (; i < sLen-1; i++) {
+		char ch = static_cast<char>(styler.SafeGetCharAt(start + i));
+		if ((i == 0) && !IsAWordStart(ch))
+			break;
+		if ((i > 0) && !IsAWordChar(ch)) 
+			break;
+		s[i] = ch;
+	}
+	s[i] = '\0';
+	
+	return s;
+}
+
 static script_type segIsScriptingIndicator(Accessor &styler, unsigned int start, unsigned int end, script_type prevValue) {
 	char s[100];
 	GetTextSegment(styler, start, end, s, sizeof(s));
@@ -474,6 +490,23 @@ static bool isOKBeforeRE(int ch) {
 	return (ch == '(') || (ch == '=') || (ch == ',');
 }
 
+static bool isMakoBlockEnd(const int ch, const int chNext, const char *blockType) {
+	if (strlen(blockType) == 0) {
+		return ((ch == '%') && (chNext == '>'));
+	} else if ((0 == strcmp(blockType, "inherit")) ||
+			   (0 == strcmp(blockType, "namespace")) || 
+			   (0 == strcmp(blockType, "include")) ||
+			   (0 == strcmp(blockType, "page"))) {
+		return ((ch == '/') && (chNext == '>'));
+	} else if (0 == strcmp(blockType, "%")) {
+		return isLineEnd(ch);
+	} else if (0 == strcmp(blockType, "{")) {
+		return ch == '}';
+	} else {
+		return (ch == '>');
+	}
+}
+
 static bool isPHPStringState(int state) {
 	return
 	    (state == SCE_HPHP_HSTRING) ||
@@ -542,10 +575,14 @@ static void ColouriseHyperTextDoc(unsigned int startPos, int length, int initSty
 	styler.StartAt(startPos, static_cast<char>(STYLE_MAX));
 	char prevWord[200];
 	prevWord[0] = '\0';
+	char nextWord[200];
+	nextWord[0] = '\0';
 	char phpStringDelimiter[200]; // PHP is not limited in length, we are
 	phpStringDelimiter[0] = '\0';
 	int StateToPrint = initStyle;
 	int state = stateForPrintState(StateToPrint);
+	char makoBlockType[200];
+	makoBlockType[0] = '\0';
 
 	// If inside a tag, it may be a script tag, so reread from the start to ensure any language tags are seen
 	if (InTagState(state)) {
@@ -627,6 +664,10 @@ static void ColouriseHyperTextDoc(unsigned int startPos, int length, int initSty
 	//	Set to 0 to disable scripts in XML.  
 	const bool allowScripts = styler.GetPropertyInt("lexer.xml.allow.scripts", 1) != 0;
 
+	// property lexer.html.mako 
+	//	Set to 1 to enable the mako template language.  
+	const bool isMako = styler.GetPropertyInt("lexer.html.mako", 0) != 0;
+
 	const CharacterSet setHTMLWord(CharacterSet::setAlphaNum, ".-_:!#", 0x80, true);
 	const CharacterSet setTagContinue(CharacterSet::setAlphaNum, ".-_:!#[", 0x80, true);
 	const CharacterSet setAttributeContinue(CharacterSet::setAlphaNum, ".-_:!#/", 0x80, true);
@@ -634,6 +675,7 @@ static void ColouriseHyperTextDoc(unsigned int startPos, int length, int initSty
 	int levelPrev = styler.LevelAt(lineCurrent) & SC_FOLDLEVELNUMBERMASK;
 	int levelCurrent = levelPrev;
 	int visibleChars = 0;
+	int lineStartVisibleChars = 0;
 
 	int chPrev = ' ';
 	int ch = ' ';
@@ -674,6 +716,8 @@ static void ColouriseHyperTextDoc(unsigned int startPos, int length, int initSty
 
 		if ((!IsASpace(ch) || !foldCompact) && fold)
 			visibleChars++;
+		if (!IsASpace(ch))
+			lineStartVisibleChars++;
 
 		// decide what is the current state to print (depending of the script tag)
 		StateToPrint = statePrintForState(state, inScriptType);
@@ -742,6 +786,7 @@ static void ColouriseHyperTextDoc(unsigned int startPos, int length, int initSty
 				levelPrev = levelCurrent;
 			}
 			lineCurrent++;
+			lineStartVisibleChars = 0;
 			styler.SetLineState(lineCurrent,
 			                    ((inScriptType & 0x03) << 0) |
 			                    ((tagOpened & 0x01) << 2) |
@@ -751,6 +796,11 @@ static void ColouriseHyperTextDoc(unsigned int startPos, int length, int initSty
 			                    ((beforePreProc & 0xFF) << 12));
 		}
 
+		// Allow falling through to mako handling code if newline is going to end a block
+		if (((ch == '\r' && chNext != '\n') || (ch == '\n')) &&
+			(!isMako || (0 != strcmp(makoBlockType, "%")))) {
+		}
+		
 		// generic end of script processing
 		else if ((inScriptType == eNonHtmlScript) && (ch == '<') && (chNext == '/')) {
 			// Check if it's the end of the script tag (or any other HTML tag)
@@ -835,8 +885,54 @@ static void ColouriseHyperTextDoc(unsigned int startPos, int length, int initSty
 			continue;
 		}
 
+		// handle the start Mako template Python code
+		else if (isMako && scriptLanguage == eScriptNone && ((ch == '<' && chNext == '%') || 
+															 (lineStartVisibleChars == 1 && ch == '%') ||
+															 (ch == '$' && chNext == '{') ||
+															 (ch == '<' && chNext == '/' && chNext2 == '%'))) {
+			if (ch == '%')
+				strcpy(makoBlockType, "%");
+			else if (ch == '$') 
+				strcpy(makoBlockType, "{");
+			else if (chNext == '/')
+				GetNextWord(styler, i+3, makoBlockType, sizeof(makoBlockType));
+			else
+				GetNextWord(styler, i+2, makoBlockType, sizeof(makoBlockType));
+			styler.ColourTo(i - 1, StateToPrint);
+			beforePreProc = state;
+			if (inScriptType == eNonHtmlScript)
+				inScriptType = eNonHtmlScriptPreProc;
+			else
+				inScriptType = eNonHtmlPreProc;
+
+			if (chNext == '/') {
+				i += 2;
+				visibleChars += 2;
+			} else if (ch != '%') {
+				i++;
+				visibleChars++;
+			}
+			state = SCE_HP_START;
+			scriptLanguage = eScriptPython;
+			styler.ColourTo(i, SCE_H_ASP);
+			if (foldHTMLPreprocessor && ch == '<')
+				levelCurrent++;
+				
+			if (ch != '%' && ch != '$') {
+				i += strlen(makoBlockType);
+				visibleChars += strlen(makoBlockType);
+				if (keywords4.InList(makoBlockType))
+					styler.ColourTo(i, SCE_HP_WORD);
+				else
+					styler.ColourTo(i, SCE_H_TAGUNKNOWN);
+			}
+
+			ch = static_cast<unsigned char>(styler.SafeGetCharAt(i));
+			continue;
+		}
+
 		// handle the start of ASP pre-processor = Non-HTML
-		else if (!isCommentASPState(state) && (ch == '<') && (chNext == '%') && !isPHPStringState(state)) {
+		else if (!isMako && !isCommentASPState(state) && (ch == '<') && (chNext == '%') && !isPHPStringState(state)) {
 			styler.ColourTo(i - 1, StateToPrint);
 			beforePreProc = state;
 			if (inScriptType == eNonHtmlScript)
@@ -901,12 +997,43 @@ static void ColouriseHyperTextDoc(unsigned int startPos, int length, int initSty
 			continue;
 		}
 
+		// handle the end of Mako Python code
+		else if (isMako && 
+			     ((inScriptType == eNonHtmlPreProc) || (inScriptType == eNonHtmlScriptPreProc)) && 
+				 (scriptLanguage != eScriptNone) && stateAllowsTermination(state) &&
+				 isMakoBlockEnd(ch, chNext, makoBlockType)) {
+			if (state == SCE_H_ASPAT) {
+				aspScript = segIsScriptingIndicator(styler,
+				                                    styler.GetStartSegment(), i - 1, aspScript);
+			}
+			if (state == SCE_HP_WORD) {
+				classifyWordHTPy(styler.GetStartSegment(), i - 1, keywords4, styler, prevWord, inScriptType);
+			} else {
+				styler.ColourTo(i - 1, StateToPrint);
+			}
+			if (0 != strcmp(makoBlockType, "%") && (0 != strcmp(makoBlockType, "{")) && ch != '>') {
+				i++;
+				visibleChars++;
+		    }
+			if (0 != strcmp(makoBlockType, "%")) {
+				styler.ColourTo(i, SCE_H_ASP);
+			}
+			state = beforePreProc;
+			if (inScriptType == eNonHtmlScriptPreProc)
+				inScriptType = eNonHtmlScript;
+			else
+				inScriptType = eHtml;
+			if (foldHTMLPreprocessor && ch != '\n' && ch != '\r') {
+				levelCurrent--;
+			}
+			scriptLanguage = eScriptNone;
+			continue;
+		}
+
 		// handle the end of a pre-processor = Non-HTML
-		else if ((
-		             ((inScriptType == eNonHtmlPreProc)
-		              || (inScriptType == eNonHtmlScriptPreProc)) && (
-		                 ((scriptLanguage != eScriptNone) && stateAllowsTermination(state) && ((ch == '%') || (ch == '?')))
-		             ) && (chNext == '>')) ||
+		else if ((!isMako && ((inScriptType == eNonHtmlPreProc) || (inScriptType == eNonHtmlScriptPreProc)) &&
+				  (((scriptLanguage != eScriptNone) && stateAllowsTermination(state))) &&
+				  (((ch == '%') || (ch == '?')) && (chNext == '>'))) ||
 		         ((scriptLanguage == eScriptSGML) && (ch == '>') && (state != SCE_H_SGML_COMMENT))) {
 			if (state == SCE_H_ASPAT) {
 				aspScript = segIsScriptingIndicator(styler,

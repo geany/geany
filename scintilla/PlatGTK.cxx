@@ -352,6 +352,7 @@ static void GenerateFontSpecStrings(const char *fontName, int characterSet,
 		char tmp[300];
 		char *d1 = NULL, *d2 = NULL, *d3 = NULL;
 		strncpy(tmp, fontName, sizeof(tmp) - 1);
+		tmp[sizeof(tmp) - 1] = '\0';
 		d1 = strchr(tmp, '-');
 		// we know the first dash exists
 		d2 = strchr(d1 + 1, '-');
@@ -666,7 +667,7 @@ Font::Font() : fid(0) {}
 Font::~Font() {}
 
 void Font::Create(const char *faceName, int characterSet, int size,
-	bool bold, bool italic, bool) {
+	bool bold, bool italic, int) {
 	Release();
 	fid = FontCached::FindOrCreate(faceName, characterSet, size, bold, italic);
 }
@@ -1287,7 +1288,11 @@ void SurfaceImpl::DrawTextBase(PRectangle rc, Font &font_, int ybase, const char
 				pango_layout_set_text(layout, utfForm, len);
 			}
 			pango_layout_set_font_description(layout, PFont(font_)->pfd);
+#ifdef PANGO_VERSION
+			PangoLayoutLine *pll = pango_layout_get_line_readonly(layout,0);
+#else
 			PangoLayoutLine *pll = pango_layout_get_line(layout,0);
+#endif
 			gdk_draw_layout_line(drawable, gc, xText, ybase, pll);
 			if (useGFree) {
 				g_free(utfForm);
@@ -1371,6 +1376,44 @@ void SurfaceImpl::DrawTextTransparent(PRectangle rc, Font &font_, int ybase, con
 	}
 }
 
+#ifdef USE_PANGO
+
+class ClusterIterator {
+	PangoLayoutIter *iter;
+	PangoRectangle pos;
+	int lenPositions;
+public:
+	bool finished;
+	int positionStart;
+	int position;
+	int distance;
+	int curIndex;
+	ClusterIterator(PangoLayout *layout, int len) : lenPositions(len), finished(false), 
+		positionStart(0), position(0), distance(0) {
+		iter = pango_layout_get_iter(layout);
+		pango_layout_iter_get_cluster_extents(iter, NULL, &pos);
+	}
+	~ClusterIterator() {
+		pango_layout_iter_free(iter);
+	}
+
+	void Next() { 
+		positionStart = position;
+		if (pango_layout_iter_next_cluster(iter)) {
+			pango_layout_iter_get_cluster_extents(iter, NULL, &pos);
+			position = PANGO_PIXELS(pos.x);
+			curIndex = pango_layout_iter_get_index(iter);
+		} else {
+			finished = true;
+			position = PANGO_PIXELS(pos.x + pos.width);
+			curIndex = lenPositions;
+		}
+		distance = position - positionStart;
+	}
+};
+
+#endif
+
 void SurfaceImpl::MeasureWidths(Font &font_, const char *s, int len, int *positions) {
 	if (font_.GetID()) {
 		int totalWidth = 0;
@@ -1384,32 +1427,24 @@ void SurfaceImpl::MeasureWidths(Font &font_, const char *s, int len, int *positi
 					return;
 				}
 			}
-			PangoRectangle pos;
 			pango_layout_set_font_description(layout, PFont(font_)->pfd);
 			if (et == UTF8) {
 				// Simple and direct as UTF-8 is native Pango encoding
-				pango_layout_set_text(layout, s, len);
-				PangoLayoutIter *iter = pango_layout_get_iter(layout);
-				pango_layout_iter_get_cluster_extents(iter, NULL, &pos);
 				int i = 0;
-				while (pango_layout_iter_next_cluster(iter)) {
-					pango_layout_iter_get_cluster_extents(iter, NULL, &pos);
-					int position = PANGO_PIXELS(pos.x);
-					int curIndex = pango_layout_iter_get_index(iter);
-					int places = curIndex - i;
-					int distance = position - positions[i-1];
-					while (i < curIndex) {
+				pango_layout_set_text(layout, s, len);
+				ClusterIterator iti(layout, lenPositions);
+				while (!iti.finished) {
+					iti.Next();
+					int places = iti.curIndex - i;
+					while (i < iti.curIndex) {
 						// Evenly distribute space among bytes of this cluster.
 						// Would be better to find number of characters and then
 						// divide evenly between characters with each byte of a character
 						// being at the same position.
-						positions[i] = position - (curIndex - 1 - i) * distance / places;
+						positions[i] = iti.position - (iti.curIndex - 1 - i) * iti.distance / places;
 						i++;
 					}
 				}
-				while (i < lenPositions)
-					positions[i++] = PANGO_PIXELS(pos.x + pos.width);
-				pango_layout_iter_free(iter);
 				PLATFORM_ASSERT(i == lenPositions);
 			} else {
 				int positionsCalculated = 0;
@@ -1423,26 +1458,23 @@ void SurfaceImpl::MeasureWidths(Font &font_, const char *s, int len, int *positi
 						Converter convMeasure("UCS-2", CharacterSetID(characterSet), false);
 						pango_layout_set_text(layout, utfForm, strlen(utfForm));
 						int i = 0;
-						int utfIndex = 0;
-						PangoLayoutIter *iter = pango_layout_get_iter(layout);
-						pango_layout_iter_get_cluster_extents(iter, NULL, &pos);
-						while (pango_layout_iter_next_cluster(iter)) {
-							pango_layout_iter_get_cluster_extents (iter, NULL, &pos);
-							int position = PANGO_PIXELS(pos.x);
-							int utfIndexNext = pango_layout_iter_get_index(iter);
-							while (utfIndex < utfIndexNext) {
+						int clusterStart = 0;
+						ClusterIterator iti(layout, strlen(utfForm));
+						while (!iti.finished) {
+							iti.Next();
+							int clusterEnd = iti.curIndex;
+							int places = g_utf8_strlen(utfForm + clusterStart, clusterEnd - clusterStart);
+							int place = 1;
+							while (clusterStart < clusterEnd) {
 								size_t lenChar = MultiByteLenFromIconv(convMeasure, s+i, len-i);
-								//size_t lenChar = mblen(s+i, MB_CUR_MAX);
 								while (lenChar--) {
-									positions[i++] = position;
+									positions[i++] = iti.position - (places - place) * iti.distance / places;
 									positionsCalculated++;
 								}
-								utfIndex += UTF8CharLength(utfForm+utfIndex);
+								clusterStart += UTF8CharLength(utfForm+clusterStart);
+								place++;
 							}
 						}
-						while (i < lenPositions)
-							positions[i++] = PANGO_PIXELS(pos.x + pos.width);
-						pango_layout_iter_free(iter);
 						delete []utfForm;
 						PLATFORM_ASSERT(i == lenPositions);
 					}
@@ -1456,29 +1488,21 @@ void SurfaceImpl::MeasureWidths(Font &font_, const char *s, int len, int *positi
 						utfForm = UTF8FromLatin1(s, len);
 					}
 					pango_layout_set_text(layout, utfForm, len);
-					PangoLayoutIter *iter = pango_layout_get_iter(layout);
-					pango_layout_iter_get_cluster_extents(iter, NULL, &pos);
 					int i = 0;
-					int positionStart = 0;
 					int clusterStart = 0;
 					// Each Latin1 input character may take 1 or 2 bytes in UTF-8
 					// and groups of up to 3 may be represented as ligatures.
-					while (pango_layout_iter_next_cluster(iter)) {
-						pango_layout_iter_get_cluster_extents(iter, NULL, &pos);
-						int position = PANGO_PIXELS(pos.x);
-						int distance = position - positionStart;
-						int clusterEnd = pango_layout_iter_get_index(iter);
+					ClusterIterator iti(layout, strlen(utfForm));
+					while (!iti.finished) {
+						iti.Next();
+						int clusterEnd = iti.curIndex;
 						int ligatureLength = g_utf8_strlen(utfForm + clusterStart, clusterEnd - clusterStart);
 						PLATFORM_ASSERT(ligatureLength > 0 && ligatureLength <= 3);
 						for (int charInLig=0; charInLig<ligatureLength; charInLig++) {
-							positions[i++] = position - (ligatureLength - 1 - charInLig) * distance / ligatureLength;
+							positions[i++] = iti.position - (ligatureLength - 1 - charInLig) * iti.distance / ligatureLength;
 						}
-						positionStart = position;
 						clusterStart = clusterEnd;
 					}
-					while (i < lenPositions)
-						positions[i++] = PANGO_PIXELS(pos.x + pos.width);
-					pango_layout_iter_free(iter);
 					if (useGFree) {
 						g_free(utfForm);
 					} else {
@@ -1575,7 +1599,11 @@ int SurfaceImpl::WidthText(Font &font_, const char *s, int len) {
 				}
 				pango_layout_set_text(layout, utfForm, len);
 			}
-			PangoLayoutLine *pangoLine = pango_layout_get_line(layout, 0);
+#ifdef PANGO_VERSION
+			PangoLayoutLine *pangoLine = pango_layout_get_line_readonly(layout,0);
+#else
+			PangoLayoutLine *pangoLine = pango_layout_get_line(layout,0);
+#endif
 			pango_layout_line_get_extents(pangoLine, NULL, &pos);
 			if (useGFree) {
 				g_free(utfForm);
@@ -1967,9 +1995,7 @@ class ListBoxX : public ListBox {
 #if GTK_MAJOR_VERSION >= 2
         GtkCellRenderer* pixbuf_renderer;
 #endif
-	int lineHeight;
 	XPMSet xset;
-	bool unicodeMode;
 	int desiredVisibleRows;
 	unsigned int maxItemCharacters;
 	unsigned int aveCharWidth;
@@ -1977,8 +2003,9 @@ public:
 	CallBackAction doubleClickAction;
 	void *doubleClickActionData;
 
-	ListBoxX() : list(0), pixhash(NULL), desiredVisibleRows(5), maxItemCharacters(0),
-		doubleClickAction(NULL), doubleClickActionData(NULL) {
+	ListBoxX() : list(0), pixhash(NULL),
+		desiredVisibleRows(5), maxItemCharacters(0),
+		aveCharWidth(1), doubleClickAction(NULL), doubleClickActionData(NULL) {
 #if GTK_MAJOR_VERSION < 2
 			current = 0;
 #endif
@@ -2718,16 +2745,35 @@ long Platform::SendScintillaPointer(
 	                              reinterpret_cast<sptr_t>(lParam));
 }
 
-bool Platform::IsDBCSLeadByte(int /* codePage */, char /* ch */) {
+bool Platform::IsDBCSLeadByte(int codePage, char ch) {
+	// Byte ranges found in Wikipedia articles with relevant search strings in each case
+	unsigned char uch = static_cast<unsigned char>(ch);
+	switch (codePage) {
+		case 932:
+			// Shift_jis
+			return ((uch >= 0x81) && (uch <= 0x9F)) ||
+				((uch >= 0xE0) && (uch <= 0xEF));
+		case 936:
+			// GBK
+			return (uch >= 0x81) && (uch <= 0xFE);
+		case 950:
+			// Big5
+			return (uch >= 0x81) && (uch <= 0xFE);
+		// Korean EUC-KR may be code page 949.
+	}
 	return false;
 }
 
-int Platform::DBCSCharLength(int, const char *s) {
-	int bytes = mblen(s, MB_CUR_MAX);
-	if (bytes >= 1)
-		return bytes;
-	else
-		return 1;
+int Platform::DBCSCharLength(int codePage, const char *s) {
+	if (codePage == 932 || codePage == 936 || codePage == 950) {
+		return IsDBCSLeadByte(codePage, s[0]) ? 2 : 1;
+	} else {
+		int bytes = mblen(s, MB_CUR_MAX);
+		if (bytes >= 1)
+			return bytes;
+		else
+			return 1;
+	}
 }
 
 int Platform::DBCSCharMaxLength() {

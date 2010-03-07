@@ -99,7 +99,7 @@ scintilla_sources = [
 	'scintilla/PlatGTK.cxx',
 	'scintilla/PositionCache.cxx', 'scintilla/PropSet.cxx', 'scintilla/RESearch.cxx',
 	'scintilla/RunStyles.cxx', 'scintilla/ScintillaBase.cxx', 'scintilla/ScintillaGTK.cxx',
-	'scintilla/scintilla-marshal.c', 'scintilla/StyleContext.cxx', 'scintilla/Style.cxx',
+	'scintilla/scintilla-marshal.c', 'scintilla/Selection.cxx', 'scintilla/StyleContext.cxx', 'scintilla/Style.cxx',
 	'scintilla/UniConversion.cxx', 'scintilla/ViewStyle.cxx', 'scintilla/WindowAccessor.cxx',
 	'scintilla/XPM.cxx' ]
 
