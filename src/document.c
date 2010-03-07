@@ -2949,11 +2949,12 @@ static gboolean monitor_resave_missing_file(GeanyDocument *doc)
 	gint ret;
 
 	ret = dialogs_show_prompt(NULL,
-		GTK_STOCK_CLOSE, GTK_RESPONSE_CLOSE,
+		_("Close _without saving"), GTK_RESPONSE_CLOSE,
 		GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 		GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT,
-		_("Try to resave the file?"),
-		_("File \"%s\" was not found on disk!"), doc->file_name);
+		NULL,
+		_("File \"%s\" was not found on disk! Try to resave the file?"),
+		doc->file_name);
 	if (ret == GTK_RESPONSE_ACCEPT)
 	{
 		dialogs_show_save_as();

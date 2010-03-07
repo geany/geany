@@ -9,6 +9,10 @@
    Fix wrong default response for the Debug Messages dialog.
  * src/dialogs.c:
    Fix crashes when using Save As with no open files (closes #2964406).
+ * src/document.c:
+   Fix duplicate mnemonics on 'resave missing file' dialog, also
+   move the question from the secondary to the main text to be
+   more compatible with the Gnome HIG.
 
 
 2010-03-05  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
