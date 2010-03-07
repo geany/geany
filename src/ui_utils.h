@@ -304,4 +304,6 @@ void ui_progress_bar_stop(void);
 
 void ui_swap_sidebar_pos(void);
 
+gboolean ui_is_keyval_enter_or_return(guint keyval);
+
 #endif

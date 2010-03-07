@@ -209,7 +209,7 @@ static UtilsFuncs utils_funcs = {
 	&utils_string_replace_first,
 	&utils_str_middle_truncate,
 	&utils_str_remove_chars,
-	&utils_get_file_list_full
+	&utils_get_file_list_full,
 };
 
 static UIUtilsFuncs uiutils_funcs = {
@@ -227,7 +227,8 @@ static UIUtilsFuncs uiutils_funcs = {
 	&ui_progress_bar_stop,
 	&ui_entry_add_clear_icon,
 	&ui_menu_add_document_items,
-	&ui_widget_modify_font_from_string
+	&ui_widget_modify_font_from_string,
+	&ui_is_keyval_enter_or_return
 };
 
 static DialogFuncs dialog_funcs = {

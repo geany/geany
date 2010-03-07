@@ -35,7 +35,7 @@ GeanyData		*geany_data;
 GeanyFunctions	*geany_functions;
 
 
-PLUGIN_VERSION_CHECK(163)
+PLUGIN_VERSION_CHECK(175)
 
 PLUGIN_SET_INFO(_("File Browser"), _("Adds a file browser tab to the sidebar."), VERSION,
 	_("The Geany developer team"))
@@ -649,9 +649,7 @@ static gboolean on_button_press(GtkWidget *widget, GdkEventButton *event, gpoint
 
 static gboolean on_key_press(GtkWidget *widget, GdkEventKey *event, gpointer data)
 {
-	if (event->keyval == GDK_Return
-		|| event->keyval == GDK_ISO_Enter
-		|| event->keyval == GDK_KP_Enter)
+	if (ui_is_keyval_enter_or_return(event->keyval))
 	{
 		on_open_clicked(NULL, NULL);
 		return TRUE;

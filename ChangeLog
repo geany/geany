@@ -35,6 +35,11 @@
  * plugins/filebrowser.c:
    After opening files, focus the editor widget
    (based on a patch by Can Koy, thanks).
+ * plugins/filebrowser.c, plugins/geanyfunctions.h, src/msgwindow.c,
+   src/plugindata.h, src/plugins.c, src/sidebar.c, src/ui_utils.c,
+   src/ui_utils.h, src/vte.c:
+   Add and use convenience function ui_is_keyval_enter_or_return() and
+   add it to the plugin API.
 
 
 2010-03-05  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>

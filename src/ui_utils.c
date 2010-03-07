@@ -28,6 +28,7 @@
 #include "geany.h"
 
 #include <string.h>
+#include <gdk/gdkkeysyms.h>
 
 #include "ui_utils.h"
 #include "prefs.h"
@@ -2245,3 +2246,14 @@ void ui_menu_add_document_items(GtkMenu *menu, GeanyDocument *active, GCallback 
 }
 
 
+/** Check whether the passed @a keyval is the Enter or Return key.
+ * There are three different Enter/Return key values
+ * (@c GDK_Return, @c GDK_ISO_Enter, @c GDK_KP_Enter).
+ * This is just a convenience function.
+ * @param keyval A keyval.
+ * @return @c TRUE if @a keyval is the one of the Enter/Return key values, otherwise @c FALSE.
+ * @since 0.19 */
+gboolean ui_is_keyval_enter_or_return(guint keyval)
+{
+	return (keyval == GDK_Return || keyval == GDK_ISO_Enter|| keyval == GDK_KP_Enter);
+}

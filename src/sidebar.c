@@ -784,10 +784,7 @@ static gboolean sidebar_key_press_cb(GtkWidget *widget, GdkEventKey *event,
 											 gpointer user_data)
 {
 	may_steal_focus = FALSE;
-	if (event->keyval == GDK_Return ||
-		event->keyval == GDK_ISO_Enter ||
-		event->keyval == GDK_KP_Enter ||
-		event->keyval == GDK_space)
+	if (ui_is_keyval_enter_or_return(event->keyval) || event->keyval == GDK_space)
 	{
 		GtkTreeSelection *selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(widget));
 		may_steal_focus = TRUE;

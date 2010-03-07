@@ -296,10 +296,8 @@ void vte_close(void)
 
 static gboolean vte_keyrelease_cb(GtkWidget *widget, GdkEventKey *event, gpointer data)
 {
-	if (event->keyval == GDK_Return ||
-			 event->keyval == GDK_ISO_Enter ||
-			 event->keyval == GDK_KP_Enter ||
-			 ((event->keyval == GDK_c) && (event->state & GDK_CONTROL_MASK)))
+	if (ui_is_keyval_enter_or_return(event->keyval) ||
+		((event->keyval == GDK_c) && (event->state & GDK_CONTROL_MASK)))
 	{
 		/* assume any text on the prompt has been executed when pressing Enter/Return */
 		clean = TRUE;

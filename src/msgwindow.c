@@ -111,15 +111,9 @@ void msgwin_finalize(void)
 }
 
 
-static gboolean is_keyval_enter_or_return(guint keyval)
-{
-	return (keyval == GDK_Return || keyval == GDK_ISO_Enter || keyval == GDK_KP_Enter);
-}
-
-
 static gboolean on_msgwin_key_press_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 {
-	if (is_keyval_enter_or_return(event->keyval) || event->keyval == GDK_space)
+	if (ui_is_keyval_enter_or_return(event->keyval) || event->keyval == GDK_space)
 	{
 		switch (GPOINTER_TO_INT(data))
 		{
@@ -643,7 +637,7 @@ static gboolean goto_compiler_file_line(const gchar *filename, gint line, guint 
 				editor_indicator_set_on_line(doc->editor, GEANY_INDICATOR_ERROR, line - 1);
 
 			ret = navqueue_goto_line(old_doc, doc, line);
-			if (ret && is_keyval_enter_or_return(keyval))
+			if (ret && ui_is_keyval_enter_or_return(keyval))
 				gtk_widget_grab_focus(GTK_WIDGET(doc->editor->sci));
 
 			return ret;
@@ -986,7 +980,7 @@ gboolean msgwin_goto_messages_file_line(guint keyval)
 		if (line >= 0 && DOC_VALID(doc))
 		{
 			ret = navqueue_goto_line(old_doc, doc, line);
-			if (ret && is_keyval_enter_or_return(keyval))
+			if (ret && ui_is_keyval_enter_or_return(keyval))
 				gtk_widget_grab_focus(GTK_WIDGET(doc->editor->sci));
 		}
 		else if (line < 0 && string != NULL)
@@ -1000,7 +994,7 @@ gboolean msgwin_goto_messages_file_line(guint keyval)
 				if (doc != NULL)
 				{
 					ret = navqueue_goto_line(old_doc, doc, line);
-					if (ret && is_keyval_enter_or_return(keyval))
+					if (ret && ui_is_keyval_enter_or_return(keyval))
 						gtk_widget_grab_focus(GTK_WIDGET(doc->editor->sci));
 				}
 			}
