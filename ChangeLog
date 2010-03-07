@@ -27,6 +27,9 @@
    When editing non-existent config files using the Tools->Configuration
    Files menu, explicitly set the real_path to avoid presenting the Save
    As dialog when saving the file (patch by Tony Rick, thanks).
+ * src/callbacks.c:
+   Focus the editor widget after hiding the sidebar when it had the
+   input focus (patch by Can Koy, thanks).
 
 
 2010-03-05  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>

@@ -1662,6 +1662,13 @@ on_menu_show_sidebar1_toggled          (GtkCheckMenuItem *checkmenuitem,
 		interface_prefs.sidebar_symbol_visible = TRUE;
 	}
 
+#if GTK_CHECK_VERSION(2, 14, 0)
+	/* if window has input focus, set it back to the editor before toggling off */
+	if (ui_prefs.sidebar_visible == FALSE &&
+		gtk_container_get_focus_child(GTK_CONTAINER(main_widgets.sidebar_notebook)) != NULL)
+		keybindings_send_command(GEANY_KEY_GROUP_FOCUS, GEANY_KEYS_FOCUS_EDITOR);
+#endif
+
 	ui_sidebar_show_hide();
 }
 
