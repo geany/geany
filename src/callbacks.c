@@ -984,10 +984,11 @@ void
 on_show_messages_window1_toggled       (GtkCheckMenuItem *checkmenuitem,
                                         gpointer          user_data)
 {
-	if (ignore_callback) return;
+	if (ignore_callback)
+		return;
 
 	ui_prefs.msgwindow_visible = (ui_prefs.msgwindow_visible) ? FALSE : TRUE;
-	ui_widget_show_hide(ui_lookup_widget(main_widgets.window, "scrolledwindow1"), ui_prefs.msgwindow_visible);
+	msgwin_show_hide(ui_prefs.msgwindow_visible);
 }
 
 
@@ -1664,9 +1665,11 @@ on_menu_show_sidebar1_toggled          (GtkCheckMenuItem *checkmenuitem,
 
 #if GTK_CHECK_VERSION(2, 14, 0)
 	/* if window has input focus, set it back to the editor before toggling off */
-	if (ui_prefs.sidebar_visible == FALSE &&
+	if (! ui_prefs.sidebar_visible &&
 		gtk_container_get_focus_child(GTK_CONTAINER(main_widgets.sidebar_notebook)) != NULL)
+	{
 		keybindings_send_command(GEANY_KEY_GROUP_FOCUS, GEANY_KEYS_FOCUS_EDITOR);
+	}
 #endif
 
 	ui_sidebar_show_hide();
