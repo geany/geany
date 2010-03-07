@@ -448,6 +448,7 @@ static void open_selected_files(GList *list)
 {
 	GSList *files = NULL;
 	GList *item;
+	GeanyDocument *doc;
 
 	for (item = list; item != NULL; item = g_list_next(item))
 	{
@@ -457,6 +458,10 @@ static void open_selected_files(GList *list)
 		files = g_slist_append(files, fname);
 	}
 	document_open_files(files, FALSE, NULL, NULL);
+	doc = document_get_current();
+	if (doc != NULL)
+		keybindings_send_command(GEANY_KEY_GROUP_FOCUS, GEANY_KEYS_FOCUS_EDITOR);
+
 	g_slist_foreach(files, (GFunc) g_free, NULL);	/* free filenames */
 	g_slist_free(files);
 }

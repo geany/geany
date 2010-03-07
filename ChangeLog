@@ -32,6 +32,9 @@
    input focus (patch by Can Koy, thanks).
    Properly show/hide the mesages window when using the View menu item
    (closes #2961282).
+ * plugins/filebrowser.c:
+   After opening files, focus the editor widget
+   (based on a patch by Can Koy, thanks).
 
 
 2010-03-05  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
