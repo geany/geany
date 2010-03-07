@@ -17,6 +17,9 @@
  * tagmanager/php.c:
    Improve PHP parser to parse also the argument lists of PHP
    functions (patch by Can Koy, thanks).
+ * src/prefs.c:
+   Correctly set the parent widget for the keybinding overwrite
+   confirmation dialog.
 
 
 2010-03-05  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>

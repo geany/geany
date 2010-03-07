@@ -81,7 +81,7 @@ static gboolean edited = FALSE;
 static void kb_cell_edited_cb(GtkCellRendererText *cellrenderertext, gchar *path, gchar *new_text, gpointer user_data);
 static gboolean kb_keytype_dialog_response_cb(GtkWidget *dialog, GdkEventKey *event, gpointer user_data);
 static void kb_dialog_response_cb(GtkWidget *dialog, gint response, gpointer user_data);
-static gboolean kb_find_duplicate(GeanyKeyBinding *search_kb,
+static gboolean kb_find_duplicate(GtkWidget *parent, GeanyKeyBinding *search_kb,
 		guint key, GdkModifierType mods, const gchar *action);
 static void on_toolbar_show_toggled(GtkToggleButton *togglebutton, gpointer user_data);
 static void on_show_notebook_tabs_toggled(GtkToggleButton *togglebutton, gpointer user_data);
@@ -1243,7 +1243,7 @@ static void kb_cell_edited_cb(GtkCellRendererText *cellrenderertext, gchar *path
 
 		kb = kb_lookup_kb_from_iter(GTK_TREE_MODEL(store), &iter);
 
-		if (kb_find_duplicate(kb, lkey, lmods, new_text))
+		if (kb_find_duplicate(ui_widgets.prefs_dialog, kb, lkey, lmods, new_text))
 			return;
 
 		/* set the values here, because of the above check, setting it in
@@ -1288,7 +1288,7 @@ static void kb_dialog_response_cb(GtkWidget *dialog, gint response, G_GNUC_UNUSE
 
 		gtk_accelerator_parse(gtk_label_get_text(GTK_LABEL(dialog_label)), &lkey, &lmods);
 
-		if (kb_find_duplicate(kb, lkey, lmods, gtk_label_get_text(GTK_LABEL(dialog_label))))
+		if (kb_find_duplicate(dialog, kb, lkey, lmods, gtk_label_get_text(GTK_LABEL(dialog_label))))
 			return;
 
 		/* set the values here, because of the above check, setting it in
@@ -1349,7 +1349,7 @@ static void kb_clear_tree_shortcut(gsize group_id, gsize keybinding_id)
 
 /* test if the entered key combination is already used
  * returns true if cancelling duplicate */
-static gboolean kb_find_duplicate(GeanyKeyBinding *search_kb,
+static gboolean kb_find_duplicate(GtkWidget *parent, GeanyKeyBinding *search_kb,
 		guint key, GdkModifierType mods, const gchar *action)
 {
 	gsize g, i;
@@ -1373,7 +1373,7 @@ static gboolean kb_find_duplicate(GeanyKeyBinding *search_kb,
 				&& ! (kb->key == search_kb->key && kb->mods == search_kb->mods))
 			{
 				gchar *label = keybindings_get_label(kb);
-				gint ret = dialogs_show_prompt(main_widgets.window,
+				gint ret = dialogs_show_prompt(parent,
 					_("_Allow"), GTK_RESPONSE_APPLY,
 					GTK_STOCK_CANCEL, GTK_RESPONSE_NO,
 					_("_Override"), GTK_RESPONSE_YES,
