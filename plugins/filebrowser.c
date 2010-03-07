@@ -444,7 +444,7 @@ static void on_external_open(GtkMenuItem *menuitem, gpointer user_data)
 
 
 /* We use document_open_files() as it's more efficient. */
-static void open_selected_files(GList *list)
+static void open_selected_files(GList *list, gboolean do_not_focus)
 {
 	GSList *files = NULL;
 	GList *item;
@@ -459,7 +459,7 @@ static void open_selected_files(GList *list)
 	}
 	document_open_files(files, FALSE, NULL, NULL);
 	doc = document_get_current();
-	if (doc != NULL)
+	if (doc != NULL && ! do_not_focus)
 		keybindings_send_command(GEANY_KEY_GROUP_FOCUS, GEANY_KEYS_FOCUS_EDITOR);
 
 	g_slist_foreach(files, (GFunc) g_free, NULL);	/* free filenames */
@@ -498,7 +498,7 @@ static void on_open_clicked(GtkMenuItem *menuitem, gpointer user_data)
 		}
 	}
 	else
-		open_selected_files(list);
+		open_selected_files(list, GPOINTER_TO_INT(user_data));
 
 	g_list_foreach(list, (GFunc) gtk_tree_path_free, NULL);
 	g_list_free(list);
@@ -651,10 +651,15 @@ static gboolean on_key_press(GtkWidget *widget, GdkEventKey *event, gpointer dat
 {
 	if (event->keyval == GDK_Return
 		|| event->keyval == GDK_ISO_Enter
-		|| event->keyval == GDK_KP_Enter
-		|| event->keyval == GDK_space)
+		|| event->keyval == GDK_KP_Enter)
 	{
 		on_open_clicked(NULL, NULL);
+		return TRUE;
+	}
+
+	if (event->keyval == GDK_space)
+	{
+		on_open_clicked(NULL, GINT_TO_POINTER(TRUE));
 		return TRUE;
 	}
 
