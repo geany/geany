@@ -481,6 +481,8 @@ static gboolean gtk_show_save_as(void)
 	GeanyDocument *doc = document_get_current();
 	gint resp;
 
+	g_return_val_if_fail(doc != NULL, FALSE);
+
 	if (G_UNLIKELY(ui_widgets.save_filesel == NULL))
 		create_save_file_dialog();
 
