@@ -521,7 +521,10 @@ def build(bld):
 def write_linguas_file(self):
 	linguas = ''
 	if 'LINGUAS' in Build.bld.env:
-		linguas = Build.bld.env['LINGUAS']
+		files = Build.bld.env['LINGUAS']
+		for po_filename in files.split(' '):
+			if os.path.exists ('po/%s.po' % po_filename):
+				linguas += '%s ' % po_filename
 	else:
 		files = os.listdir('%s/po' % self.path.abspath())
 		files.sort()
