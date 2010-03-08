@@ -1876,3 +1876,64 @@ void search_find_usage(const gchar *search_text, gint flags, gboolean in_session
 }
 
 
+/* ttf is updated to include the last match positions.
+ * Note: Normally you would call sci_start/end_undo_action() around this call. */
+guint search_replace_range(ScintillaObject *sci, struct Sci_TextToFind *ttf,
+		gint flags, const gchar *replace_text)
+{
+	gint count = 0;
+	const gchar *find_text = ttf->lpstrText;
+	gint start = ttf->chrg.cpMin;
+	gint end = ttf->chrg.cpMax;
+
+	g_return_val_if_fail(sci != NULL && find_text != NULL && replace_text != NULL, 0);
+	if (! *find_text)
+		return 0;
+
+	while (TRUE)
+	{
+		gint search_pos;
+		gint find_len = 0, replace_len = 0;
+
+		search_pos = sci_find_text(sci, flags, ttf);
+		find_len = ttf->chrgText.cpMax - ttf->chrgText.cpMin;
+		if (search_pos == -1)
+			break;	/* no more matches */
+		if (find_len == 0 && ! NZV(replace_text))
+			break;	/* nothing to do */
+
+		if (search_pos + find_len > end)
+			break;	/* found text is partly out of range */
+		else
+		{
+			gint movepastEOL = 0;
+
+			sci_set_target_start(sci, search_pos);
+			sci_set_target_end(sci, search_pos + find_len);
+
+			if (find_len <= 0)
+			{
+				gchar chNext = sci_get_char_at(sci, sci_get_target_end(sci));
+
+				if (chNext == '\r' || chNext == '\n')
+					movepastEOL = 1;
+			}
+			replace_len = sci_replace_target(sci, replace_text,
+				flags & SCFIND_REGEXP);
+			count++;
+			if (search_pos == end)
+				break;	/* Prevent hang when replacing regex $ */
+
+			/* make the next search start after the replaced text */
+			start = search_pos + replace_len + movepastEOL;
+			if (find_len == 0)
+				start = sci_get_position_after(sci, start);	/* prevent '[ ]*' regex rematching part of replaced text */
+			ttf->chrg.cpMin = start;
+			end += replace_len - find_len;	/* update end of range now text has changed */
+			ttf->chrg.cpMax = end;
+		}
+	}
+	return count;
+}
+
+
