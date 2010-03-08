@@ -2,6 +2,8 @@
 
  * src/search.c:
    Implement POSIX-regex Find All.
+ * src/document.c:
+   Refactor document_replace_range() with search_replace_range().
 
 
 2010-03-02  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

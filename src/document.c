@@ -2086,42 +2086,27 @@ static void show_replace_summary(GeanyDocument *doc, gint count, const gchar *fi
 }
 
 
-/* Replace all text matches in a certain range within document.
- * If not NULL, *new_range_end is set to the new range endpoint after replacing,
- * or -1 if no text was found.
- * scroll_to_match is whether to scroll the last replacement in view (which also
- * clears the selection).
- * Returns: the number of replacements made. */
-static guint
-document_replace_range(GeanyDocument *doc, const gchar *find_text, const gchar *replace_text,
-	gint flags, gint start, gint end, gboolean scroll_to_match, gint *new_range_end)
+/* ttf is updated to include the last match positions.
+ * Note: Normally you would call sci_start/end_undo_action() around this call. */
+static guint search_replace_range(ScintillaObject *sci, struct Sci_TextToFind *ttf,
+		gint flags, const gchar *replace_text)
 {
 	gint count = 0;
-	struct Sci_TextToFind ttf;
-	ScintillaObject *sci;
+	const gchar *find_text = ttf->lpstrText;
+	gint start = ttf->chrg.cpMin;
+	gint end = ttf->chrg.cpMax;
 
-	if (new_range_end != NULL)
-		*new_range_end = -1;
-
-	g_return_val_if_fail(doc != NULL && find_text != NULL && replace_text != NULL, 0);
-
-	if (! *find_text || doc->readonly)
+	g_return_val_if_fail(sci != NULL && find_text != NULL && replace_text != NULL, 0);
+	if (! *find_text)
 		return 0;
-
-	sci = doc->editor->sci;
-
-	sci_start_undo_action(sci);
-	ttf.chrg.cpMin = start;
-	ttf.chrg.cpMax = end;
-	ttf.lpstrText = (gchar*)find_text;
 
 	while (TRUE)
 	{
 		gint search_pos;
 		gint find_len = 0, replace_len = 0;
 
-		search_pos = sci_find_text(sci, flags, &ttf);
-		find_len = ttf.chrgText.cpMax - ttf.chrgText.cpMin;
+		search_pos = sci_find_text(sci, flags, ttf);
+		find_len = ttf->chrgText.cpMax - ttf->chrgText.cpMin;
 		if (search_pos == -1)
 			break;	/* no more matches */
 		if (find_len == 0 && ! NZV(replace_text))
@@ -2153,11 +2138,45 @@ document_replace_range(GeanyDocument *doc, const gchar *find_text, const gchar *
 			start = search_pos + replace_len + movepastEOL;
 			if (find_len == 0)
 				start = sci_get_position_after(sci, start);	/* prevent '[ ]*' regex rematching part of replaced text */
-			ttf.chrg.cpMin = start;
+			ttf->chrg.cpMin = start;
 			end += replace_len - find_len;	/* update end of range now text has changed */
-			ttf.chrg.cpMax = end;
+			ttf->chrg.cpMax = end;
 		}
 	}
+	return count;
+}
+
+
+/* Replace all text matches in a certain range within document.
+ * If not NULL, *new_range_end is set to the new range endpoint after replacing,
+ * or -1 if no text was found.
+ * scroll_to_match is whether to scroll the last replacement in view (which also
+ * clears the selection).
+ * Returns: the number of replacements made. */
+static guint
+document_replace_range(GeanyDocument *doc, const gchar *find_text, const gchar *replace_text,
+	gint flags, gint start, gint end, gboolean scroll_to_match, gint *new_range_end)
+{
+	gint count = 0;
+	struct Sci_TextToFind ttf;
+	ScintillaObject *sci;
+
+	if (new_range_end != NULL)
+		*new_range_end = -1;
+
+	g_return_val_if_fail(doc != NULL && find_text != NULL && replace_text != NULL, 0);
+
+	if (! *find_text || doc->readonly)
+		return 0;
+
+	sci = doc->editor->sci;
+
+	ttf.chrg.cpMin = start;
+	ttf.chrg.cpMax = end;
+	ttf.lpstrText = (gchar*)find_text;
+
+	sci_start_undo_action(sci);
+	count = search_replace_range(sci, &ttf, flags, replace_text);
 	sci_end_undo_action(sci);
 
 	if (count > 0)
