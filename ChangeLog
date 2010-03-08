@@ -9,6 +9,8 @@
  * src/search.c:
    Implement POSIX-regex Replace All (could be more efficient but
    seems OK for now).
+ * doc/geany.txt, doc/geany.html:
+   Update for POSIX-regexes.
 
 
 2010-03-02  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
