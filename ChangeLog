@@ -6,6 +6,9 @@
    Refactor document_replace_range() with search_replace_range().
  * src/search.c, src/search.h, src/document.c:
    Move search_replace_range() to search.c.
+ * src/search.c:
+   Implement POSIX-regex Replace All (could be more efficient but
+   seems OK for now).
 
 
 2010-03-02  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

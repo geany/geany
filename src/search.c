@@ -1878,6 +1878,8 @@ void search_find_usage(const gchar *search_text, gint flags, gboolean in_session
 
 /* ttf is updated to include the last match positions.
  * Note: Normally you would call sci_start/end_undo_action() around this call. */
+/* Warning: Scintilla recommends caching replacements to do all at once to avoid
+ * performance issues with SCI_GETCHARACTERPOINTER. */
 guint search_replace_range(ScintillaObject *sci, struct Sci_TextToFind *ttf,
 		gint flags, const gchar *replace_text)
 {
@@ -1895,7 +1897,7 @@ guint search_replace_range(ScintillaObject *sci, struct Sci_TextToFind *ttf,
 		gint search_pos;
 		gint find_len = 0, replace_len = 0;
 
-		search_pos = sci_find_text(sci, flags, ttf);
+		search_pos = geany_find_text(sci, flags, ttf);
 		find_len = ttf->chrgText.cpMax - ttf->chrgText.cpMin;
 		if (search_pos == -1)
 			break;	/* no more matches */
@@ -1918,7 +1920,7 @@ guint search_replace_range(ScintillaObject *sci, struct Sci_TextToFind *ttf,
 				if (chNext == '\r' || chNext == '\n')
 					movepastEOL = 1;
 			}
-			replace_len = sci_replace_target(sci, replace_text,
+			replace_len = search_replace_target(sci, replace_text,
 				flags & SCFIND_REGEXP);
 			count++;
 			if (search_pos == end)
