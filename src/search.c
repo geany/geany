@@ -1758,7 +1758,7 @@ gint search_replace_target(ScintillaObject *sci, const gchar *replace_text,
 }
 
 
-static gint geany_find_text(ScintillaObject *sci, gint flags, struct Sci_TextToFind *ttf)
+static gint search_find_text(ScintillaObject *sci, gint flags, struct Sci_TextToFind *ttf)
 {
 	regex_t regex;
 	gint pos;
@@ -1800,7 +1800,7 @@ static gint find_document_usage(GeanyDocument *doc, const gchar *search_text, gi
 	{
 		gint pos, line, start, find_len;
 
-		pos = geany_find_text(doc->editor->sci, flags, &ttf);
+		pos = search_find_text(doc->editor->sci, flags, &ttf);
 		if (pos == -1)
 			break;	/* no more matches */
 		find_len = ttf.chrgText.cpMax - ttf.chrgText.cpMin;
@@ -1897,7 +1897,7 @@ guint search_replace_range(ScintillaObject *sci, struct Sci_TextToFind *ttf,
 		gint search_pos;
 		gint find_len = 0, replace_len = 0;
 
-		search_pos = geany_find_text(sci, flags, ttf);
+		search_pos = search_find_text(sci, flags, ttf);
 		find_len = ttf->chrgText.cpMax - ttf->chrgText.cpMin;
 		if (search_pos == -1)
 			break;	/* no more matches */
