@@ -1758,6 +1758,30 @@ gint search_replace_target(ScintillaObject *sci, const gchar *replace_text,
 }
 
 
+static gint geany_find_text(ScintillaObject *sci, gint flags, struct Sci_TextToFind *ttf)
+{
+	regex_t regex;
+	gint pos;
+	gint ret;
+
+	if (~flags & SCFIND_REGEXP)
+		return sci_find_text(sci, flags, ttf);
+
+	if (!compile_regex(&regex, ttf->lpstrText, flags))
+		return -1;
+
+	pos = ttf->chrg.cpMin;
+	ret = find_regex(sci, pos, &regex);
+	if (ret >= 0)
+	{
+		ttf->chrgText.cpMin = regex_matches[0].rm_so + pos;
+		ttf->chrgText.cpMax = regex_matches[0].rm_eo + pos;
+	}
+	regfree(&regex);
+	return ret;
+}
+
+
 static gint find_document_usage(GeanyDocument *doc, const gchar *search_text, gint flags)
 {
 	gchar *buffer, *short_file_name;
@@ -1776,7 +1800,7 @@ static gint find_document_usage(GeanyDocument *doc, const gchar *search_text, gi
 	{
 		gint pos, line, start, find_len;
 
-		pos = sci_find_text(doc->editor->sci, flags, &ttf);
+		pos = geany_find_text(doc->editor->sci, flags, &ttf);
 		if (pos == -1)
 			break;	/* no more matches */
 		find_len = ttf.chrgText.cpMax - ttf.chrgText.cpMin;
@@ -1789,7 +1813,7 @@ static gint find_document_usage(GeanyDocument *doc, const gchar *search_text, gi
 		{
 			buffer = sci_get_line(doc->editor->sci, line);
 			msgwin_msg_add(COLOR_BLACK, line + 1, doc,
-				"%s:%d : %s", short_file_name, line + 1, g_strstrip(buffer));
+				"%s:%d: %s", short_file_name, line + 1, g_strstrip(buffer));
 			g_free(buffer);
 			prev_line = line;
 		}

@@ -1,3 +1,9 @@
+2010-03-08  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/search.c:
+   Implement POSIX-regex Find All.
+
+
 2010-03-02  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/search.c, src/search.h, src/document.c:
