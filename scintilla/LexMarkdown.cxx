@@ -18,8 +18,7 @@
  *  there is a following blank line issue that can't be ignored, 
  *  explained in the next paragraph. Embedded HTML and code 
  *  blocks would be better supported with language specific 
- *  highlighting; something Scintilla isn't really architected 
- *  to support yet.
+ *  highlighting.
  * 
  *  The highlighting aims to accurately reflect correct syntax,
  *  but a few restrictions are relaxed. Delimited code blocks are
@@ -30,8 +29,8 @@
  * 
  *  Written by Jon Strait - jstrait@moonloop.net
  *
- *   This source code is released for free distribution under the
- *   terms of the GNU General Public License.
+ *  The License.txt file describes the conditions under which this
+ *  software may be distributed.
  *
  *****************************************************************/
 
@@ -59,8 +58,8 @@ static inline bool IsNewline(const int ch) {
 }
 
 // True if can follow ch down to the end with possibly trailing whitespace
-static bool FollowToLineEnd(const int ch, const int state, const int endPos, StyleContext &sc) {
-    int i = 0;
+static bool FollowToLineEnd(const int ch, const int state, const unsigned int endPos, StyleContext &sc) {
+    unsigned int i = 0;
     while (sc.GetRelative(++i) == ch)
         ;
     // Skip over whitespace
@@ -78,13 +77,12 @@ static bool FollowToLineEnd(const int ch, const int state, const int endPos, Sty
 // Set the state on text section from current to length characters, 
 // then set the rest until the newline to default, except for any characters matching token
 static void SetStateAndZoom(const int state, const int length, const int token, StyleContext &sc) {
-    int i = 0;
     sc.SetState(state);
     sc.Forward(length);
     sc.SetState(SCE_MARKDOWN_DEFAULT);
     sc.Forward();
+    bool started = false;
     while (sc.More() && !IsNewline(sc.ch)) {
-        bool started = false;
         if (sc.ch == token && !started) {
             sc.SetState(state);
             started = true;
@@ -113,8 +111,9 @@ static bool HasPrevLineContent(StyleContext &sc) {
     return false;
 }
 
-static bool IsValidHrule(const int endPos, StyleContext &sc) {
-    int c, i = 0, count = 1;
+static bool IsValidHrule(const unsigned int endPos, StyleContext &sc) {
+    int c, count = 1;
+    unsigned int i = 0;
     while (++i) {
         c = sc.GetRelative(i);
         if (c == sc.ch) 
@@ -131,35 +130,17 @@ static bool IsValidHrule(const int endPos, StyleContext &sc) {
             }
             else {
                 sc.SetState(SCE_MARKDOWN_DEFAULT);
-                return false;
+		return false;
             }
         }
     }
-}
-
-// Only consume if already valid.  Doesn't work for delimiting multiple lines.
-static void ConsumeEnd(const int state, const int origPos, const int endPos, 
-        const char *token, StyleContext &sc) {
-    int targetPos;
-    while (sc.currentPos + 1 < endPos) {
-        sc.Forward();
-        if (sc.Match(token) && sc.chPrev != '\\' && sc.chPrev != ' ') {
-            targetPos = sc.currentPos + strlen(token);
-            sc.currentPos = origPos;
-            sc.SetState(state);
-            sc.Forward(targetPos - origPos);
-            sc.SetState(SCE_MARKDOWN_DEFAULT);
-            break;
-        }
-    }
+    return false;
 }
 
 static void ColorizeMarkdownDoc(unsigned int startPos, int length, int initStyle,
-                               WordList *keywordlists[], Accessor &styler) {
-
-    int digitCount = 0;
-    int endPos = startPos + length;
-    int precharCount;
+                               WordList **, Accessor &styler) {
+    unsigned int endPos = startPos + length;
+    int precharCount = 0;
     // Don't advance on a new loop iteration and retry at the same position.
     // Useful in the corner case of having to start at the beginning file position
     // in the default state.
@@ -330,7 +311,7 @@ static void ColorizeMarkdownDoc(unsigned int startPos, int length, int initStyle
             }
             // Ordered list
             else if (IsADigit(sc.ch)) {
-                digitCount = 0;
+                int digitCount = 0;
                 while (IsADigit(sc.GetRelative(++digitCount)))
                     ;
                 if (sc.GetRelative(digitCount) == '.' && 
@@ -354,7 +335,6 @@ static void ColorizeMarkdownDoc(unsigned int startPos, int length, int initStyle
         
         // New state anywhere in doc
         if (sc.state == SCE_MARKDOWN_DEFAULT) {
-            int origPos = sc.currentPos;
             if (sc.atLineStart && sc.ch == '#') {
                 sc.SetState(SCE_MARKDOWN_LINE_BEGIN);
                 freezeCursor = true;
@@ -430,4 +410,3 @@ static void ColorizeMarkdownDoc(unsigned int startPos, int length, int initStyle
 }
 
 LexerModule lmMarkdown(SCLEX_MARKDOWN, ColorizeMarkdownDoc, "markdown");
-
