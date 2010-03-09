@@ -45,10 +45,17 @@
 
 #include <unistd.h>
 #include <string.h>
+#include <ctype.h>
 
 #ifdef G_OS_UNIX
 # include <sys/types.h>
 # include <sys/wait.h>
+#endif
+
+#ifdef HAVE_REGEX_H
+# include <regex.h>
+#else
+# include "gnuregex.h"
 #endif
 
 
@@ -957,9 +964,12 @@ on_find_replace_checkbutton_toggled(GtkToggleButton *togglebutton, gpointer user
 		GtkWidget *check_wordstart = ui_lookup_widget(dialog, "check_wordstart");
 		GtkToggleButton *check_case = GTK_TOGGLE_BUTTON(
 			ui_lookup_widget(dialog, "check_case"));
+		GtkWidget *check_escape = ui_lookup_widget(dialog, "check_escape");
 		static gboolean case_state = FALSE; /* state before regex enabled */
 
 		/* hide options that don't apply to regex searches */
+		gtk_widget_set_sensitive(check_escape, ! regex_set);
+
 		if (dialog == find_dlg.dialog)
 			gtk_widget_set_sensitive(ui_lookup_widget(dialog, "btn_previous"), ! regex_set);
 		else
@@ -1072,17 +1082,21 @@ on_find_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 
 		g_free(search_data.text);
 		search_data.text = g_strdup(gtk_entry_get_text(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(user_data)))));
-		if (strlen(search_data.text) == 0 ||
-			(search_replace_escape && ! utils_str_replace_escape(search_data.text)))
+		search_data.flags = get_search_flags(find_dlg.dialog);
+
+		if (strlen(search_data.text) == 0)
 		{
+			fail:
 			utils_beep();
 			gtk_widget_grab_focus(find_dlg.entry);
 			return;
 		}
-
+		if (search_replace_escape || search_data.flags & SCFIND_REGEXP)
+		{
+			if (! utils_str_replace_escape(search_data.text, search_data.flags & SCFIND_REGEXP))
+				goto fail;
+		}
 		ui_combo_box_add_to_history(GTK_COMBO_BOX(user_data), search_data.text);
-
-		search_data.flags = get_search_flags(find_dlg.dialog);
 
 		switch (response)
 		{
@@ -1202,23 +1216,28 @@ on_replace_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 	if ((response != GEANY_RESPONSE_FIND) && (search_flags_re & SCFIND_MATCHCASE)
 		&& (strcmp(find, replace) == 0))
 	{
+		fail:
 		utils_beep();
 		gtk_widget_grab_focus(replace_dlg.find_entry);
 		return;
+	}
+	if (search_flags_re & SCFIND_REGEXP)
+	{
+		if (! utils_str_replace_escape(find, TRUE) ||
+			! utils_str_replace_escape(replace, TRUE))
+			goto fail;
+	}
+	else if (search_replace_escape_re)
+	{
+		if (! utils_str_replace_escape(find, FALSE) ||
+			! utils_str_replace_escape(replace, FALSE))
+			goto fail;
 	}
 
 	ui_combo_box_add_to_history(GTK_COMBO_BOX(
 		gtk_widget_get_parent(replace_dlg.find_entry)), find);
 	ui_combo_box_add_to_history(GTK_COMBO_BOX(
 		gtk_widget_get_parent(replace_dlg.replace_entry)), replace);
-
-	if (search_replace_escape_re &&
-		(! utils_str_replace_escape(find) || ! utils_str_replace_escape(replace)))
-	{
-		utils_beep();
-		gtk_widget_grab_focus(replace_dlg.find_entry);
-		return;
-	}
 
 	switch (response)
 	{
@@ -1621,6 +1640,148 @@ static void search_close_pid(GPid child_pid, gint status, gpointer user_data)
 }
 
 
+static gboolean compile_regex(regex_t *regex, const gchar *str, gint sflags)
+{
+	gint err;
+	gint rflags = REG_EXTENDED | REG_NEWLINE;
+
+	if (~sflags & SCFIND_MATCHCASE)
+		rflags |= REG_ICASE;
+
+	err = regcomp(regex, str, rflags);
+	if (err != 0)
+	{
+		gchar buf[256];
+
+		regerror(err, regex, buf, sizeof buf);
+		ui_set_statusbar(FALSE, _("Bad regex: %s"), buf);
+		return FALSE;
+	}
+	return TRUE;
+}
+
+
+/* groups that don't exist are handled OK as len = end - start = (-1) - (-1) = 0 */
+static gchar *get_regex_match_string(const gchar *text, regmatch_t *pmatch, gint match_idx)
+{
+	return g_strndup(&text[pmatch[match_idx].rm_so],
+		pmatch[match_idx].rm_eo - pmatch[match_idx].rm_so);
+}
+
+
+static regmatch_t regex_matches[10];
+/* All matching text from regex_matches[0].rm_so to regex_matches[0].rm_eo */
+static gchar *regex_match_text = NULL;
+
+static gint find_regex(ScintillaObject *sci, guint pos, regex_t *regex)
+{
+	const gchar *text;
+
+	g_return_val_if_fail(pos <= (guint)sci_get_length(sci), FALSE);
+
+	text = (void*)scintilla_send_message(sci, SCI_GETCHARACTERPOINTER, 0, 0);
+	text += pos;
+	if (regexec(regex, text, G_N_ELEMENTS(regex_matches), regex_matches, 0) == 0)
+	{
+		setptr(regex_match_text, get_regex_match_string(text, regex_matches, 0));
+		return regex_matches[0].rm_so + pos;
+	}
+	setptr(regex_match_text, NULL);
+	return -1;
+}
+
+
+gint search_find_next(ScintillaObject *sci, const gchar *str, gint flags)
+{
+	regex_t regex;
+	gint ret = -1;
+	gint pos;
+
+	if (~flags & SCFIND_REGEXP)
+		return sci_search_next(sci, flags, str);
+
+	if (!compile_regex(&regex, str, flags))
+		return -1;
+
+	pos = sci_get_current_position(sci);
+	ret = find_regex(sci, pos, &regex);
+	if (ret >= 0)
+		sci_set_selection(sci, ret, regex_matches[0].rm_eo + pos);
+
+	regfree(&regex);
+	return ret;
+}
+
+
+gint search_replace_target(ScintillaObject *sci, const gchar *replace_text,
+	gboolean regex)
+{
+	GString *str;
+	gint ret = 0;
+	gint i = 0;
+
+	if (!regex)
+		return sci_replace_target(sci, replace_text, FALSE);
+
+	str = g_string_new(replace_text);
+	while (str->str[i])
+	{
+		gchar *ptr = &str->str[i];
+		gchar *grp;
+		gchar c;
+
+		if (ptr[0] != '\\')
+		{
+			i++;
+			continue;
+		}
+		c = ptr[1];
+		/* backslash or unnecessary escape */
+		if (c == '\\' || !isdigit(c))
+		{
+			g_string_erase(str, i, 1);
+			i++;
+			continue;
+		}
+		/* digit escape */
+		g_string_erase(str, i, 2);
+		/* fix match offsets by subtracting index of whole match start from the string */
+		grp = get_regex_match_string(regex_match_text - regex_matches[0].rm_so,
+			regex_matches, c - '0');
+		g_string_insert(str, i, grp);
+		i += strlen(grp);
+		g_free(grp);
+	}
+	ret = sci_replace_target(sci, str->str, FALSE);
+	g_string_free(str, TRUE);
+	return ret;
+}
+
+
+static gint search_find_text(ScintillaObject *sci, gint flags, struct Sci_TextToFind *ttf)
+{
+	regex_t regex;
+	gint pos;
+	gint ret;
+
+	if (~flags & SCFIND_REGEXP)
+		return sci_find_text(sci, flags, ttf);
+
+	if (!compile_regex(&regex, ttf->lpstrText, flags))
+		return -1;
+
+	pos = ttf->chrg.cpMin;
+	ret = find_regex(sci, pos, &regex);
+	if (ret >= 0)
+	{
+		ttf->chrgText.cpMin = regex_matches[0].rm_so + pos;
+		ttf->chrgText.cpMax = regex_matches[0].rm_eo + pos;
+	}
+	regfree(&regex);
+	return ret;
+}
+
+
 static gint find_document_usage(GeanyDocument *doc, const gchar *search_text, gint flags)
 {
 	gchar *buffer, *short_file_name;
@@ -1639,7 +1800,7 @@ static gint find_document_usage(GeanyDocument *doc, const gchar *search_text, gi
 	{
 		gint pos, line, start, find_len;
 
-		pos = sci_find_text(doc->editor->sci, flags, &ttf);
+		pos = search_find_text(doc->editor->sci, flags, &ttf);
 		if (pos == -1)
 			break;	/* no more matches */
 		find_len = ttf.chrgText.cpMax - ttf.chrgText.cpMin;
@@ -1652,7 +1813,7 @@ static gint find_document_usage(GeanyDocument *doc, const gchar *search_text, gi
 		{
 			buffer = sci_get_line(doc->editor->sci, line);
 			msgwin_msg_add(COLOR_BLACK, line + 1, doc,
-				"%s:%d : %s", short_file_name, line + 1, g_strstrip(buffer));
+				"%s:%d: %s", short_file_name, line + 1, g_strstrip(buffer));
 			g_free(buffer);
 			prev_line = line;
 		}
@@ -1712,6 +1873,69 @@ void search_find_usage(const gchar *search_text, gint flags, gboolean in_session
 			"Found %d match for \"%s\".", "Found %d matches for \"%s\".", count),
 			count, search_text);
 	}
+}
+
+
+/* ttf is updated to include the last match positions.
+ * Note: Normally you would call sci_start/end_undo_action() around this call. */
+/* Warning: Scintilla recommends caching replacements to do all at once to avoid
+ * performance issues with SCI_GETCHARACTERPOINTER. */
+guint search_replace_range(ScintillaObject *sci, struct Sci_TextToFind *ttf,
+		gint flags, const gchar *replace_text)
+{
+	gint count = 0;
+	const gchar *find_text = ttf->lpstrText;
+	gint start = ttf->chrg.cpMin;
+	gint end = ttf->chrg.cpMax;
+
+	g_return_val_if_fail(sci != NULL && find_text != NULL && replace_text != NULL, 0);
+	if (! *find_text)
+		return 0;
+
+	while (TRUE)
+	{
+		gint search_pos;
+		gint find_len = 0, replace_len = 0;
+
+		search_pos = search_find_text(sci, flags, ttf);
+		find_len = ttf->chrgText.cpMax - ttf->chrgText.cpMin;
+		if (search_pos == -1)
+			break;	/* no more matches */
+		if (find_len == 0 && ! NZV(replace_text))
+			break;	/* nothing to do */
+
+		if (search_pos + find_len > end)
+			break;	/* found text is partly out of range */
+		else
+		{
+			gint movepastEOL = 0;
+
+			sci_set_target_start(sci, search_pos);
+			sci_set_target_end(sci, search_pos + find_len);
+
+			if (find_len <= 0)
+			{
+				gchar chNext = sci_get_char_at(sci, sci_get_target_end(sci));
+
+				if (chNext == '\r' || chNext == '\n')
+					movepastEOL = 1;
+			}
+			replace_len = search_replace_target(sci, replace_text,
+				flags & SCFIND_REGEXP);
+			count++;
+			if (search_pos == end)
+				break;	/* Prevent hang when replacing regex $ */
+
+			/* make the next search start after the replaced text */
+			start = search_pos + replace_len + movepastEOL;
+			if (find_len == 0)
+				start = sci_get_position_after(sci, start);	/* prevent '[ ]*' regex rematching part of replaced text */
+			ttf->chrg.cpMin = start;
+			end += replace_len - find_len;	/* update end of range now text has changed */
+			ttf->chrg.cpMax = end;
+		}
+	}
+	return count;
 }
 
 

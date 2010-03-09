@@ -41,7 +41,6 @@
 # include <sys/types.h>
 #endif
 
-#include <ctype.h>
 #include <stdlib.h>
 
 /* gstdio.h also includes sys/stat.h */
@@ -1957,7 +1956,7 @@ gint document_find_text(GeanyDocument *doc, const gchar *text, gint flags, gbool
 	if (search_backwards)
 		search_pos = sci_search_prev(doc->editor->sci, flags, text);
 	else
-		search_pos = sci_search_next(doc->editor->sci, flags, text);
+		search_pos = search_find_next(doc->editor->sci, text, flags);
 
 	if (search_pos != -1)
 	{
@@ -2041,7 +2040,7 @@ gint document_replace_text(GeanyDocument *doc, const gchar *find_text, const gch
 		gint replace_len;
 		/* search next/prev will select matching text, which we use to set the replace target */
 		sci_target_from_selection(doc->editor->sci);
-		replace_len = sci_replace_target(doc->editor->sci, replace_text, flags & SCFIND_REGEXP);
+		replace_len = search_replace_target(doc->editor->sci, replace_text, flags & SCFIND_REGEXP);
 		/* select the replacement - find text will skip past the selected text */
 		sci_set_selection_start(doc->editor->sci, search_pos);
 		sci_set_selection_end(doc->editor->sci, search_pos + replace_len);
@@ -2114,54 +2113,12 @@ document_replace_range(GeanyDocument *doc, const gchar *find_text, const gchar *
 
 	sci = doc->editor->sci;
 
-	sci_start_undo_action(sci);
 	ttf.chrg.cpMin = start;
 	ttf.chrg.cpMax = end;
 	ttf.lpstrText = (gchar*)find_text;
 
-	while (TRUE)
-	{
-		gint search_pos;
-		gint find_len = 0, replace_len = 0;
-
-		search_pos = sci_find_text(sci, flags, &ttf);
-		find_len = ttf.chrgText.cpMax - ttf.chrgText.cpMin;
-		if (search_pos == -1)
-			break;	/* no more matches */
-		if (find_len == 0 && ! NZV(replace_text))
-			break;	/* nothing to do */
-
-		if (search_pos + find_len > end)
-			break;	/* found text is partly out of range */
-		else
-		{
-			gint movepastEOL = 0;
-
-			sci_set_target_start(sci, search_pos);
-			sci_set_target_end(sci, search_pos + find_len);
-
-			if (find_len <= 0)
-			{
-				gchar chNext = sci_get_char_at(sci, sci_get_target_end(sci));
-
-				if (chNext == '\r' || chNext == '\n')
-					movepastEOL = 1;
-			}
-			replace_len = sci_replace_target(sci, replace_text,
-				flags & SCFIND_REGEXP);
-			count++;
-			if (search_pos == end)
-				break;	/* Prevent hang when replacing regex $ */
-
-			/* make the next search start after the replaced text */
-			start = search_pos + replace_len + movepastEOL;
-			if (find_len == 0)
-				start = sci_get_position_after(sci, start);	/* prevent '[ ]*' regex rematching part of replaced text */
-			ttf.chrg.cpMin = start;
-			end += replace_len - find_len;	/* update end of range now text has changed */
-			ttf.chrg.cpMax = end;
-		}
-	}
+	sci_start_undo_action(sci);
+	count = search_replace_range(sci, &ttf, flags, replace_text);
 	sci_end_undo_action(sci);
 
 	if (count > 0)

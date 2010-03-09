@@ -1127,10 +1127,13 @@ The Find dialog is used for finding text in one or more open documents.
 Matching options
 ````````````````
 
-The syntax for the Use regular expressions option is shown in
+The syntax for the *Use regular expressions* option is shown in
 `Regular expressions`_.
 
-The Use escape sequences option will transform any escaped characters
+.. note::
+    *Use escape sequences* is implied for regular expressions.
+
+The *Use escape sequences* option will transform any escaped characters
 into their UTF-8 equivalent. For example, \\t will be transformed into
 a tab character. Other recognized symbols are: \\\\, \\n, \\r, \\uXXXX
 (Unicode characters).
@@ -1286,19 +1289,16 @@ Regular expressions
 ^^^^^^^^^^^^^^^^^^^
 
 You can use regular expressions in the Find and Replace dialogs
-by selecting the Use regular expressions check box. The syntax is
-POSIX-like, as described in the table below.
+by selecting the *Use regular expressions* check box (see `Matching
+options`_). The syntax is POSIX compatible, as described in the table
+below.
 
 .. note::
-    (1) Searching backwards with regular expressions is not supported.
-    (2) \\r and \\n are never matched because regular expression
-        searches are made line per line (stripped of end-of-line chars).
-    (3) The POSIX '?' regular expression character for optional
-        matching is not supported.
+    Searching backwards with regular expressions is not supported.
 
 **In a regular expression, the following characters are interpreted:**
 
-======  ============================================================
+======= ============================================================
 .       Matches any character.
 
 (       This marks the start of a region for tagging a match.
@@ -1310,9 +1310,9 @@ POSIX-like, as described in the table below.
         Fred([1-9])XXX and the replace string was Sam\\1YYY, when applied
         to Fred2XXX this would generate Sam2YYY.
 
-\\<     This matches the start of a word.
+\\0     When replacing, the whole matching text.
 
-\\>     This matches the end of a word.
+\\b     This matches a word boundary.
 
 \\c     A backslash followed by d, D, s, S, w or W, becomes a
         character class (both inside and outside sets []).
@@ -1321,32 +1321,33 @@ POSIX-like, as described in the table below.
         * D: any char except decimal digits
         * s: whitespace (space, \\t \\n \\r \\f \\v)
         * S: any char except whitespace (see above)
-        * w: alphanumeric & underscore (changed by user setting)
-        * W: any char except alphanumeric & underscore (see above)
+        * w: alphanumeric & underscore
+        * W: any char except alphanumeric & underscore
 
 \\x     This allows you to use a character x that would otherwise have
         a special meaning. For example, \\[ would be interpreted as [
         and not as the start of a character set. Use \\\\ for a literal
         backslash.
 
-\\xHH   A backslash followed by x and two hexa digits, becomes the
-        character whose Ascii code is equal to these digits. If not
-        followed by two digits, it is 'x' char itself.
+\\uHHHH A backslash followed by u and one, two or four hexa digits,
+        becomes the character whose Unicode is equal to these digits.
 
 [...]   Matches one of the characters in the set. If the first
         character in the set is ^, it matches the characters NOT in
         the set, i.e. complements the set. A shorthand S-E (start
         dash end) is used to specify a set of characters S up to E,
-        inclusive. The special characters ] and - have no special
-        meaning if they appear as the first chars in the set. To
-        include both, put - first: [-]A-Z] (or just backslash them).
+        inclusive.
+
+        The special characters ] and - have no special
+        meaning if they appear first in the set. - can also be last
+        in the set. To include both, put ] first: []A-Z-].
 
         Examples::
 
-        [-]|]    matches these 3 chars
+        []|-]    matches these 3 chars
         []-|]    matches from ] to | chars
         [a-z]    any lowercase alpha
-        [^-]]    any char except - and ]
+        [^]-]    any char except - and ]
         [^A-Z]   any char except uppercase alpha
         [a-zA-Z] any alpha
 
@@ -1360,7 +1361,9 @@ $       This matches the end of a line.
 
 \+      This matches 1 or more times. For example, Sa+m matches Sam,
         Saam, Saaam and so on.
-======  ============================================================
+
+\?      This matches 0 or 1 time(s). For example, Joh?n matches John, Jon.
+======= ============================================================
 
 .. note::
     This table is adapted from Scintilla and SciTE documentation,

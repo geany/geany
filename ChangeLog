@@ -1,3 +1,21 @@
+2010-03-09  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/utils.c, src/utils.h, src/search.c, src/search.h,
+   src/document.c, doc/geany.txt, doc/geany.html:
+   Merge gnu-regex branch:
+   Use POSIX system/GNU regex engine for find & replace 'Use regular
+   expressions' option. This alters regex syntax a bit - see the docs
+   for details; we now support '?' operator and replacement backslash
+   escaping is more standard.
+   Make regex search imply replacing escaped chars.
+   Allow \0 backreference replacement for the whole match.
+   Note: Replace All may be slower; if this is a problem please let me
+   know.
+ - code:
+   Add argument to utils_str_replace_escape() for keeping
+   uninterpreted backslash escapes e.g. '\\', '\e'.
+
+
 2010-03-09  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * wscript:

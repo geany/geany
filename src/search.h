@@ -67,10 +67,22 @@ void search_show_replace_dialog(void);
 
 void search_show_find_in_files_dialog(const gchar *dir);
 
+struct _ScintillaObject;
+
+gint search_find_next(struct _ScintillaObject *sci, const gchar *str, gint flags);
+
 void search_find_usage(const gchar *search_text, gint flags, gboolean in_session);
 
 void search_find_selection(GeanyDocument *doc, gboolean search_backwards);
 
 gint search_mark_all(GeanyDocument *doc, const gchar *search_text, gint flags);
+
+gint search_replace_target(struct _ScintillaObject *sci, const gchar *replace_text,
+	gboolean regex);
+
+struct Sci_TextToFind;
+
+guint search_replace_range(struct _ScintillaObject *sci, struct Sci_TextToFind *ttf,
+		gint flags, const gchar *replace_text);
 
 #endif
