@@ -16,6 +16,9 @@
    uninterpreted backslash escapes e.g. '\\', '\e'.
  * scintilla/LexMarkdown.cxx:
    Backport minor formatting/style changes from Scintilla project.
+ * doc/geany.txt, doc/geany.html:
+   Remove warning about no visual indication for zero-column-mode
+   editing.
 
 
 2010-03-09  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
