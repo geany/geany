@@ -2339,10 +2339,10 @@ static void reflow_paragraph(GeanyEditor *editor)
 		/* use line break column if enabled */
 		column = editor_prefs.line_break_column;
 	}
-	else if (editor_prefs.long_line_type != 2)
+	else if (editor_get_long_line_type() != 2)
 	{
 		/* use long line if enabled */
-		column = editor_prefs.long_line_column;
+		column = editor_get_long_line_column();
 	}
 	else
 	{

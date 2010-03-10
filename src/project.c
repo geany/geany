@@ -88,6 +88,8 @@ static gboolean load_config(const gchar *filename);
 static gboolean write_config(gboolean emit_signal);
 static void on_name_entry_changed(GtkEditable *editable, PropertyDialogElements *e);
 static void on_entries_changed(GtkEditable *editable, PropertyDialogElements *e);
+static void on_radio_long_line_custom_toggled(GtkToggleButton *radio, GtkWidget *spin_long_line);
+static void apply_editor_prefs();
 
 
 #define SHOW_ERR(args) dialogs_show_msgbox(GTK_MESSAGE_ERROR, args)
@@ -367,6 +369,8 @@ void project_close(gboolean open_default)
 	g_free(app->project);
 	app->project = NULL;
 
+	apply_editor_prefs(); /* ensure that global settings are restored */
+
 	if (project_prefs.project_session)
 	{
 		/* close all existing tabs first */
@@ -500,6 +504,9 @@ static void create_properties_dialog(PropertyDialogElements *e)
 					(GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
 					(GtkAttachOptions) (GTK_FILL), 0, 0);
 
+	g_signal_connect(ui_lookup_widget(e->dialog, "radio_long_line_custom"), "toggled",
+		G_CALLBACK(on_radio_long_line_custom_toggled), ui_lookup_widget(e->dialog, "spin_long_line"));
+
 #if 0
 	label = gtk_label_new(_("File patterns:"));
 	/* <small>Separate multiple patterns by a new line</small> */
@@ -531,6 +538,8 @@ void project_properties(void)
 	PropertyDialogElements *e = g_new(PropertyDialogElements, 1);
 	GeanyProject *p = app->project;
 	gint response;
+	GtkWidget *widget = NULL;
+	GtkWidget *radio_long_line_custom;
 
 	g_return_if_fail(app->project != NULL);
 
@@ -542,6 +551,21 @@ void project_properties(void)
 
 	/* fill the elements with the appropriate data */
 	gtk_entry_set_text(GTK_ENTRY(e->name), p->name);
+	gtk_entry_set_text(GTK_ENTRY(e->file_name), p->file_name);
+	gtk_entry_set_text(GTK_ENTRY(e->base_path), p->base_path);
+
+	radio_long_line_custom = ui_lookup_widget(e->dialog, "radio_long_line_custom");
+	switch (p->long_line_behaviour)
+	{
+		case 0: widget = ui_lookup_widget(e->dialog, "radio_long_line_disabled"); break;
+		case 1: widget = ui_lookup_widget(e->dialog, "radio_long_line_default"); break;
+		case 2: widget = radio_long_line_custom; break;
+	}
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), TRUE);
+
+	widget = ui_lookup_widget(e->dialog, "spin_long_line");
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget), (gdouble)p->long_line_column);
+	on_radio_long_line_custom_toggled(GTK_TOGGLE_BUTTON(radio_long_line_custom), widget);
 
 	if (p->description != NULL)
 	{	/* set text */
@@ -570,8 +594,6 @@ void project_properties(void)
 	}
 #endif
 
-	gtk_entry_set_text(GTK_ENTRY(e->file_name), p->file_name);
-	gtk_entry_set_text(GTK_ENTRY(e->base_path), p->base_path);
 	gtk_widget_show_all(e->dialog);
 
 	retry:
@@ -620,6 +642,9 @@ static GeanyProject *create_project(void)
 	indentation = *editor_get_indent_prefs(NULL);
 	priv.indentation = &indentation;
 	project->priv = &priv;
+
+	project->long_line_behaviour = 1 /* use global settings */;
+	project->long_line_column = editor_prefs.long_line_global_column;
 
 	app->project = project;
 	return project;
@@ -729,6 +754,7 @@ static gboolean update_config(const PropertyDialogElements *e)
 		BuildDestination 	 menu_dst;
 		GeanyBuildCommand 	*oldvalue;
 		GeanyFiletype 		*ft = NULL;
+		GtkWidget 		*widget;
 
 		/* get and set the project description */
 		buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(e->description));
@@ -763,6 +789,23 @@ static gboolean update_config(const PropertyDialogElements *e)
 			g_ptr_array_add(p->build_filetypes_list, ft);
 		}
 		build_menu_update(doc);
+
+		widget = ui_lookup_widget(e->dialog, "radio_long_line_disabled");
+		if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)))
+			p->long_line_behaviour = 0;
+		else
+		{
+			widget = ui_lookup_widget(e->dialog, "radio_long_line_default");
+			if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)))
+				p->long_line_behaviour = 1;
+			else
+				/* "Custom" radio button must be checked */
+				p->long_line_behaviour = 2;
+		}
+
+		widget = ui_lookup_widget(e->dialog, "spin_long_line");
+		p->long_line_column = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));
+		apply_editor_prefs();
 
 #if 0
 		/* get and set the project file patterns */
@@ -916,6 +959,12 @@ static void on_entries_changed(GtkEditable *editable, PropertyDialogElements *e)
 }
 
 
+static void on_radio_long_line_custom_toggled(GtkToggleButton *radio, GtkWidget *spin_long_line)
+{
+	gtk_widget_set_sensitive(spin_long_line, gtk_toggle_button_get_active(radio));
+}
+
+
 gboolean project_load_file(const gchar *locale_file_name)
 {
 	g_return_val_if_fail(locale_file_name != NULL, FALSE);
@@ -970,6 +1019,10 @@ static gboolean load_config(const gchar *filename)
 	p->base_path = utils_get_setting_string(config, "project", "base_path", "");
 	p->file_patterns = g_key_file_get_string_list(config, "project", "file_patterns", NULL, NULL);
 
+	p->long_line_behaviour = g_key_file_get_integer(config, "long line marker", "long_line_behaviour", NULL);
+	p->long_line_column = g_key_file_get_integer(config, "long line marker", "long_line_column", NULL);
+	apply_editor_prefs();
+
 	build_load_menu(config, GEANY_BCS_PROJ, (gpointer)p);
 	if (project_prefs.project_session)
 	{
@@ -985,6 +1038,15 @@ static gboolean load_config(const gchar *filename)
 
 	update_ui();
 	return TRUE;
+}
+
+
+static void apply_editor_prefs()
+{
+	guint i;
+
+	foreach_document(i)
+		editor_apply_update_prefs(documents[i]->editor);
 }
 
 
@@ -1020,6 +1082,9 @@ static gboolean write_config(gboolean emit_signal)
 	if (p->file_patterns)
 		g_key_file_set_string_list(config, "project", "file_patterns",
 			(const gchar**) p->file_patterns, g_strv_length(p->file_patterns));
+
+	g_key_file_set_integer(config, "long line marker", "long_line_behaviour", p->long_line_behaviour);
+	g_key_file_set_integer(config, "long line marker", "long_line_column", p->long_line_column);
 
 	/* store the session files into the project too */
 	if (project_prefs.project_session)
@@ -1165,4 +1230,3 @@ void project_finalize(void)
 {
 	stash_group_free(indent_group);
 }
-

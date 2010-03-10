@@ -2579,8 +2579,7 @@ create_prefs_dialog (void)
   GtkWidget *radio_long_line_line;
   GSList *radio_long_line_line_group = NULL;
   GtkWidget *radio_long_line_background;
-  GtkWidget *radio_long_line_disabled;
-  GtkWidget *label155;
+  GtkWidget *check_long_line;
   GtkWidget *frame40;
   GtkWidget *alignment47;
   GtkWidget *vbox48;
@@ -4003,16 +4002,9 @@ create_prefs_dialog (void)
   gtk_radio_button_set_group (GTK_RADIO_BUTTON (radio_long_line_background), radio_long_line_line_group);
   radio_long_line_line_group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio_long_line_background));
 
-  radio_long_line_disabled = gtk_radio_button_new_with_mnemonic (NULL, _("Disabled"));
-  gtk_widget_show (radio_long_line_disabled);
-  gtk_box_pack_start (GTK_BOX (hbox5), radio_long_line_disabled, FALSE, FALSE, 0);
-  gtk_radio_button_set_group (GTK_RADIO_BUTTON (radio_long_line_disabled), radio_long_line_line_group);
-  radio_long_line_line_group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio_long_line_disabled));
-
-  label155 = gtk_label_new (_("<b>Long line marker</b>"));
-  gtk_widget_show (label155);
-  gtk_frame_set_label_widget (GTK_FRAME (frame8), label155);
-  gtk_label_set_use_markup (GTK_LABEL (label155), TRUE);
+  check_long_line = gtk_check_button_new_with_mnemonic (_("Long line marker"));
+  gtk_widget_show (check_long_line);
+  gtk_frame_set_label_widget (GTK_FRAME (frame8), check_long_line);
 
   frame40 = gtk_frame_new (NULL);
   gtk_widget_show (frame40);
@@ -4993,8 +4985,7 @@ create_prefs_dialog (void)
   GLADE_HOOKUP_OBJECT (prefs_dialog, hbox5, "hbox5");
   GLADE_HOOKUP_OBJECT (prefs_dialog, radio_long_line_line, "radio_long_line_line");
   GLADE_HOOKUP_OBJECT (prefs_dialog, radio_long_line_background, "radio_long_line_background");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, radio_long_line_disabled, "radio_long_line_disabled");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, label155, "label155");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, check_long_line, "check_long_line");
   GLADE_HOOKUP_OBJECT (prefs_dialog, frame40, "frame40");
   GLADE_HOOKUP_OBJECT (prefs_dialog, alignment47, "alignment47");
   GLADE_HOOKUP_OBJECT (prefs_dialog, vbox48, "vbox48");
@@ -5164,6 +5155,20 @@ create_project_dialog (void)
   GtkObject *spin_tab_width_adj;
   GtkWidget *spin_tab_width;
   GtkWidget *label227;
+  GtkWidget *vbox47;
+  GtkWidget *frame40;
+  GtkWidget *alignment48;
+  GtkWidget *table18;
+  GtkWidget *label241;
+  GtkWidget *label240;
+  GtkWidget *radio_long_line_disabled;
+  GSList *radio_long_line_disabled_group = NULL;
+  GtkWidget *radio_long_line_custom;
+  GtkWidget *radio_long_line_default;
+  GtkObject *spin_long_line_adj;
+  GtkWidget *spin_long_line;
+  GtkWidget *label239;
+  GtkWidget *label238;
   GtkWidget *dialog_action_area4;
   GtkWidget *cancelbutton1;
   GtkWidget *okbutton1;
@@ -5293,6 +5298,83 @@ create_project_dialog (void)
   gtk_widget_show (label227);
   gtk_notebook_set_tab_label (GTK_NOTEBOOK (project_notebook), gtk_notebook_get_nth_page (GTK_NOTEBOOK (project_notebook), 0), label227);
 
+  vbox47 = gtk_vbox_new (FALSE, 3);
+  gtk_widget_show (vbox47);
+  gtk_container_add (GTK_CONTAINER (project_notebook), vbox47);
+  gtk_container_set_border_width (GTK_CONTAINER (vbox47), 6);
+
+  frame40 = gtk_frame_new (NULL);
+  gtk_widget_show (frame40);
+  gtk_box_pack_start (GTK_BOX (vbox47), frame40, FALSE, TRUE, 0);
+  gtk_frame_set_shadow_type (GTK_FRAME (frame40), GTK_SHADOW_NONE);
+
+  alignment48 = gtk_alignment_new (0.5, 0.5, 1, 1);
+  gtk_widget_show (alignment48);
+  gtk_container_add (GTK_CONTAINER (frame40), alignment48);
+  gtk_alignment_set_padding (GTK_ALIGNMENT (alignment48), 0, 0, 12, 0);
+
+  table18 = gtk_table_new (4, 2, FALSE);
+  gtk_widget_show (table18);
+  gtk_container_add (GTK_CONTAINER (alignment48), table18);
+  gtk_table_set_row_spacings (GTK_TABLE (table18), 3);
+  gtk_table_set_col_spacings (GTK_TABLE (table18), 12);
+
+  label241 = gtk_label_new (_("Display:"));
+  gtk_widget_show (label241);
+  gtk_table_attach (GTK_TABLE (table18), label241, 0, 1, 0, 1,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_misc_set_alignment (GTK_MISC (label241), 0, 0.5);
+
+  label240 = gtk_label_new (_("Long line marker:"));
+  gtk_widget_show (label240);
+  gtk_table_attach (GTK_TABLE (table18), label240, 0, 1, 3, 4,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_misc_set_alignment (GTK_MISC (label240), 0, 0.5);
+
+  radio_long_line_disabled = gtk_radio_button_new_with_mnemonic (NULL, _("Disabled"));
+  gtk_widget_show (radio_long_line_disabled);
+  gtk_table_attach (GTK_TABLE (table18), radio_long_line_disabled, 1, 2, 0, 1,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_radio_button_set_group (GTK_RADIO_BUTTON (radio_long_line_disabled), radio_long_line_disabled_group);
+  radio_long_line_disabled_group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio_long_line_disabled));
+
+  radio_long_line_custom = gtk_radio_button_new_with_mnemonic (NULL, _("Custom"));
+  gtk_widget_show (radio_long_line_custom);
+  gtk_table_attach (GTK_TABLE (table18), radio_long_line_custom, 1, 2, 2, 3,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_radio_button_set_group (GTK_RADIO_BUTTON (radio_long_line_custom), radio_long_line_disabled_group);
+  radio_long_line_disabled_group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio_long_line_custom));
+
+  radio_long_line_default = gtk_radio_button_new_with_mnemonic (NULL, _("Use global settings"));
+  gtk_widget_show (radio_long_line_default);
+  gtk_table_attach (GTK_TABLE (table18), radio_long_line_default, 1, 2, 1, 2,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_radio_button_set_group (GTK_RADIO_BUTTON (radio_long_line_default), radio_long_line_disabled_group);
+  radio_long_line_disabled_group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio_long_line_default));
+
+  spin_long_line_adj = gtk_adjustment_new (72, 0, 1000, 1, 10, 0);
+  spin_long_line = gtk_spin_button_new (GTK_ADJUSTMENT (spin_long_line_adj), 1, 0);
+  gtk_widget_show (spin_long_line);
+  gtk_table_attach (GTK_TABLE (table18), spin_long_line, 1, 2, 3, 4,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (spin_long_line), TRUE);
+  gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spin_long_line), TRUE);
+
+  label239 = gtk_label_new (_("<b>Long line marker</b>"));
+  gtk_widget_show (label239);
+  gtk_frame_set_label_widget (GTK_FRAME (frame40), label239);
+  gtk_label_set_use_markup (GTK_LABEL (label239), TRUE);
+
+  label238 = gtk_label_new (_("Editor"));
+  gtk_widget_show (label238);
+  gtk_notebook_set_tab_label (GTK_NOTEBOOK (project_notebook), gtk_notebook_get_nth_page (GTK_NOTEBOOK (project_notebook), 1), label238);
+
   dialog_action_area4 = GTK_DIALOG (project_dialog)->action_area;
   gtk_widget_show (dialog_action_area4);
   gtk_button_box_set_layout (GTK_BUTTON_BOX (dialog_action_area4), GTK_BUTTONBOX_END);
@@ -5326,6 +5408,18 @@ create_project_dialog (void)
   GLADE_HOOKUP_OBJECT (project_dialog, label231, "label231");
   GLADE_HOOKUP_OBJECT (project_dialog, spin_tab_width, "spin_tab_width");
   GLADE_HOOKUP_OBJECT (project_dialog, label227, "label227");
+  GLADE_HOOKUP_OBJECT (project_dialog, vbox47, "vbox47");
+  GLADE_HOOKUP_OBJECT (project_dialog, frame40, "frame40");
+  GLADE_HOOKUP_OBJECT (project_dialog, alignment48, "alignment48");
+  GLADE_HOOKUP_OBJECT (project_dialog, table18, "table18");
+  GLADE_HOOKUP_OBJECT (project_dialog, label241, "label241");
+  GLADE_HOOKUP_OBJECT (project_dialog, label240, "label240");
+  GLADE_HOOKUP_OBJECT (project_dialog, radio_long_line_disabled, "radio_long_line_disabled");
+  GLADE_HOOKUP_OBJECT (project_dialog, radio_long_line_custom, "radio_long_line_custom");
+  GLADE_HOOKUP_OBJECT (project_dialog, radio_long_line_default, "radio_long_line_default");
+  GLADE_HOOKUP_OBJECT (project_dialog, spin_long_line, "spin_long_line");
+  GLADE_HOOKUP_OBJECT (project_dialog, label239, "label239");
+  GLADE_HOOKUP_OBJECT (project_dialog, label238, "label238");
   GLADE_HOOKUP_OBJECT_NO_REF (project_dialog, dialog_action_area4, "dialog_action_area4");
   GLADE_HOOKUP_OBJECT (project_dialog, cancelbutton1, "cancelbutton1");
   GLADE_HOOKUP_OBJECT (project_dialog, okbutton1, "okbutton1");

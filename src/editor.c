@@ -272,6 +272,35 @@ static gboolean is_style_php(gint style)
 }
 
 
+gint editor_get_long_line_type(void)
+{
+	if (app->project)
+		switch (app->project->long_line_behaviour)
+		{
+			case 0: /* marker disabled */
+				return 2;
+			case 1: /* use global settings */
+				break;
+			case 2: /* custom (enabled) */
+				return editor_prefs.long_line_global_type;
+		}
+
+	if (!editor_prefs.long_line_global_enabled)
+		return 2;
+	else
+		return editor_prefs.long_line_global_type;
+}
+
+
+gint editor_get_long_line_column(void)
+{
+	if (app->project && app->project->long_line_behaviour != 1 /* use global settings */)
+		return app->project->long_line_column;
+	else
+		return editor_prefs.long_line_global_column;
+}
+
+
 void editor_toggle_fold(GeanyEditor *editor, gint line, gint modifiers)
 {
 	ScintillaObject *sci;
@@ -4850,8 +4879,8 @@ void editor_apply_update_prefs(GeanyEditor *editor)
 
 	sci = editor->sci;
 
-	sci_set_mark_long_lines(sci, editor_prefs.long_line_type,
-		editor_prefs.long_line_column, editor_prefs.long_line_color);
+	sci_set_mark_long_lines(sci, editor_get_long_line_type(),
+		editor_get_long_line_column(), editor_prefs.long_line_color);
 
 	/* update indent width, tab width */
 	editor_set_indent_type(editor, editor->indent_type);

@@ -368,8 +368,9 @@ static void save_dialog_prefs(GKeyFile *config)
 	g_key_file_set_boolean(config, PACKAGE, "show_line_endings", editor_prefs.show_line_endings);
 	g_key_file_set_boolean(config, PACKAGE, "show_markers_margin", editor_prefs.show_markers_margin);
 	g_key_file_set_boolean(config, PACKAGE, "show_linenumber_margin", editor_prefs.show_linenumber_margin);
-	g_key_file_set_integer(config, PACKAGE, "long_line_type", editor_prefs.long_line_type);
-	g_key_file_set_integer(config, PACKAGE, "long_line_column", editor_prefs.long_line_column);
+	g_key_file_set_boolean(config, PACKAGE, "long_line_enabled", editor_prefs.long_line_global_enabled);
+	g_key_file_set_integer(config, PACKAGE, "long_line_type", editor_prefs.long_line_global_type);
+	g_key_file_set_integer(config, PACKAGE, "long_line_column", editor_prefs.long_line_global_column);
 	g_key_file_set_string(config, PACKAGE, "long_line_color", editor_prefs.long_line_color);
 
 	/* editor */
@@ -660,9 +661,15 @@ static void load_dialog_prefs(GKeyFile *config)
 	interface_prefs.msgwin_scribble_visible = utils_get_setting_boolean(config, PACKAGE, "msgwin_scribble_visible", TRUE);
 
 	/* display, editor */
-	editor_prefs.long_line_type = utils_get_setting_integer(config, PACKAGE, "long_line_type", 0);
+	editor_prefs.long_line_global_enabled = utils_get_setting_boolean(config, PACKAGE, "long_line_enabled", TRUE);
+	editor_prefs.long_line_global_type = utils_get_setting_integer(config, PACKAGE, "long_line_type", 0);
+	if (editor_prefs.long_line_global_type == 2) /* backward compatibility */
+	{
+		editor_prefs.long_line_global_type = 0;
+		editor_prefs.long_line_global_enabled = FALSE;
+	}
 	editor_prefs.long_line_color = utils_get_setting_string(config, PACKAGE, "long_line_color", "#C2EBC2");
-	editor_prefs.long_line_column = utils_get_setting_integer(config, PACKAGE, "long_line_column", 72);
+	editor_prefs.long_line_global_column = utils_get_setting_integer(config, PACKAGE, "long_line_column", 72);
 	editor_prefs.symbolcompletion_min_chars = utils_get_setting_integer(config, PACKAGE, "symbolcompletion_min_chars", GEANY_MIN_SYMBOLLIST_CHARS);
 	editor_prefs.symbolcompletion_max_height = utils_get_setting_integer(config, PACKAGE, "symbolcompletion_max_height", GEANY_MAX_SYMBOLLIST_HEIGHT);
 	editor_prefs.line_wrapping = utils_get_setting_boolean(config, PACKAGE, "line_wrapping", FALSE); /* default is off for better performance */
@@ -1112,4 +1119,3 @@ void configuration_finalize(void)
 	g_ptr_array_free(keyfile_groups, TRUE);
 	g_ptr_array_free(pref_groups, TRUE);
 }
-

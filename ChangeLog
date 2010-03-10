@@ -3,6 +3,11 @@
  * doc/geany.txt, doc/geany.html:
    Warn about some GNU extensions for regular expressions & clarify
    some points.
+ * src/interface.c, src/keybindings.c, src/project.c, src/project.h,
+   src/prefs.c, src/plugindata.h, src/keyfile.c, src/editor.c,
+   src/editor.h, geany.glade:
+   Apply patch from Eugene Arshinov to add project long line marker
+   customisation (thanks).
 
 
 2010-03-10  Lex Trotman  <elextr.at.gmail.dot.com>
