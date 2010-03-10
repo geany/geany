@@ -8,6 +8,8 @@
    src/editor.h, geany.glade:
    Apply patch from Eugene Arshinov to add project long line marker
    customisation (thanks).
+ * src/interface.c, geany.glade:
+   Edit/tidy 'Long line marker' labels.
 
 
 2010-03-10  Lex Trotman  <elextr.at.gmail.dot.com>
