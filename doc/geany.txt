@@ -1293,7 +1293,12 @@ options`_). The syntax is POSIX compatible, as described in the table
 below.
 
 .. note::
-    Searching backwards with regular expressions is not supported.
+    1. The *Use escape sequences* dialog option always applies for regular
+       expressions.
+    2. Searching backwards with regular expressions is not supported.
+    3. \\b, \\d, \\s, \\w are GNU extensions and may not be available
+       on non-GNU POSIX systems unless you built Geany with the
+       ``--enable-gnu-regex`` option (this is always used on Windows).
 
 **In a regular expression, the following characters are interpreted:**
 
@@ -1305,9 +1310,13 @@ below.
 )       This marks the end of a tagged region.
 
 \\n     Where n is 1 through 9 refers to the first through ninth tagged
-        region when replacing. For example, if the search string was
-        Fred([1-9])XXX and the replace string was Sam\\1YYY, when applied
-        to Fred2XXX this would generate Sam2YYY.
+        region when searching or replacing.
+
+        Searching for (Wiki)\\1 matches WikiWiki.
+
+        If the search string was Fred([1-9])XXX and the
+        replace string was Sam\\1YYY, when applied to Fred2XXX this
+        would generate Sam2YYY.
 
 \\0     When replacing, the whole matching text.
 
@@ -1327,9 +1336,6 @@ below.
         a special meaning. For example, \\[ would be interpreted as [
         and not as the start of a character set. Use \\\\ for a literal
         backslash.
-
-\\uHHHH A backslash followed by u and one, two or four hexa digits,
-        becomes the character whose Unicode is equal to these digits.
 
 [...]   Matches one of the characters in the set. If the first
         character in the set is ^, it matches the characters NOT in
