@@ -1,3 +1,10 @@
+2010-03-10  Lex Trotman  <elextr.at.gmail.dot.com>
+
+ * src/build.c, src/project.c
+   Fix crash due to NULL in project build preferences ( thanks to 
+   Wolfgang Ocker )
+
+
 2010-03-09  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/utils.c, src/utils.h, src/search.c, src/search.h,

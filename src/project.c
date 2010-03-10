@@ -401,7 +401,7 @@ static void create_properties_dialog(PropertyDialogElements *e)
 	GtkWidget *label;
 	GtkWidget *swin;
 	GeanyDocument *doc = document_get_current();
-	GeanyFiletype *ft;
+	GeanyFiletype *ft = NULL;
 
 	e->dialog = create_project_dialog();
 	gtk_window_set_transient_for(GTK_WINDOW(e->dialog), GTK_WINDOW(main_widgets.window));

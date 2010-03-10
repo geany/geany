@@ -1859,7 +1859,7 @@ GtkWidget *build_commands_table(GeanyDocument *doc, GeanyBuildSource dst, TableD
 	sep = gtk_hseparator_new();
 	gtk_table_attach(table, sep, 0, DC_N_COL, 1, 2, GTK_FILL, GTK_FILL | GTK_EXPAND,
 		entry_x_padding, sep_padding);
-	if (ft->id != GEANY_FILETYPES_NONE)
+	if (ft != NULL && ft->id != GEANY_FILETYPES_NONE)
 		txt = g_strdup_printf(_("%s Commands"), ft->title);
 	else
 		txt = g_strdup_printf(_("%s Commands"), _("No Filetype"));
