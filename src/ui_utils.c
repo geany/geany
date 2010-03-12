@@ -1278,7 +1278,7 @@ GtkWidget *ui_dialog_vbox_new(GtkDialog *dialog)
 }
 
 
-/** Create a @c GtkButton with custom text and a stock image, aligned like
+/** Creates a @c GtkButton with custom text and a stock image similar to
  * @c gtk_button_new_from_stock().
  * @param stock_id A @c GTK_STOCK_NAME string.
  * @param text Button label text, can include mnemonics.
@@ -1286,19 +1286,13 @@ GtkWidget *ui_dialog_vbox_new(GtkDialog *dialog)
  */
 GtkWidget *ui_button_new_with_image(const gchar *stock_id, const gchar *text)
 {
-	GtkWidget *image, *label, *align, *hbox, *button;
+	GtkWidget *image, *button;
 
-	hbox = gtk_hbox_new(FALSE, 2);
+	button = gtk_button_new_with_mnemonic(text);
+	gtk_widget_show(button);
 	image = gtk_image_new_from_stock(stock_id, GTK_ICON_SIZE_BUTTON);
-	label = gtk_label_new_with_mnemonic(text);
-	gtk_box_pack_start(GTK_BOX(hbox), image, FALSE, FALSE, 0);
-	gtk_box_pack_end(GTK_BOX(hbox), label, FALSE, FALSE, 0);
-
-	button = gtk_button_new();
-	align = gtk_alignment_new(0.5, 0.5, 0.0, 0.0);
-	gtk_container_add(GTK_CONTAINER(align), hbox);
-	gtk_container_add(GTK_CONTAINER(button), align);
-	gtk_widget_show_all(align);
+	gtk_button_set_image(GTK_BUTTON(button), image);
+	/* note: image is shown by gtk */
 	return button;
 }
 

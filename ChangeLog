@@ -1,3 +1,10 @@
+2010-03-12  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/ui_utils.c:
+   Fix ui_button_new_with_image() to call gtk_button_set_image() so
+   that gtk_button_[sg]et_label() work as expected.
+
+
 2010-03-10  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * doc/geany.txt, doc/geany.html:
