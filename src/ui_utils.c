@@ -135,7 +135,7 @@ static void set_statusbar(const gchar *text, gboolean allow_override)
 }
 
 
-/** Display text on the statusbar.
+/** Displays text on the statusbar.
  * @param log Whether the message should be recorded in the Status window.
  * @param format A @c printf -style string. */
 void ui_set_statusbar(gboolean log, const gchar *format, ...)
@@ -706,7 +706,7 @@ static void on_doc_sensitive_widget_destroy(GtkWidget *widget, G_GNUC_UNUSED gpo
 }
 
 
-/** Add a widget to the list of widgets that should be set sensitive/insensitive
+/** Adds a widget to the list of widgets that should be set sensitive/insensitive
  * when some documents are present/no documents are open.
  * It will be removed when the widget is destroyed.
  * @param widget The widget to add.
@@ -1264,8 +1264,7 @@ GtkWidget *ui_frame_new_with_alignment(const gchar *label_text, GtkWidget **alig
 }
 
 
-/** Convenience function for getting a fixed border for dialogs that doesn't
- * increase the button box border.
+/** Makes a fixed border for dialogs without increasing the button box border.
  * @param dialog The parent container for the @c GtkVBox.
  * @return The packed @c GtkVBox. */
 GtkWidget *ui_dialog_vbox_new(GtkDialog *dialog)
@@ -1297,7 +1296,7 @@ GtkWidget *ui_button_new_with_image(const gchar *stock_id, const gchar *text)
 }
 
 
-/** Create a @c GtkImageMenuItem with a stock image and a custom label.
+/** Creates a @c GtkImageMenuItem with a stock image and a custom label.
  * @param stock_id Stock image ID, e.g. @c GTK_STOCK_OPEN.
  * @param label Menu item label, can include mnemonics.
  * @return The new @c GtkImageMenuItem.
@@ -1327,7 +1326,7 @@ static void entry_clear_icon_release_cb(GtkEntry *entry, gint icon_pos,
 }
 
 
-/** Convenience function to add a small clear icon to the right end of the passed @a entry.
+/** Adds a small clear icon to the right end of the passed @a entry.
  *  A callback to clear the contents of the GtkEntry is automatically added.
  *
  *  This feature is only available with GTK 2.16 but implemented as a runtime check,
@@ -1696,7 +1695,7 @@ void ui_statusbar_showhide(gboolean state)
 }
 
 
-/** Pack all @c GtkWidgets passed after the row argument into a table, using
+/** Packs all @c GtkWidgets passed after the row argument into a table, using
  * one widget per cell. The first widget is not expanded as the table grows,
  * as this is usually a label.
  * @param table
@@ -2037,7 +2036,7 @@ void ui_widget_set_tooltip_text(GtkWidget *widget, const gchar *text)
 }
 
 
-/** This function returns a widget from a name in a component, usually created by Glade.
+/** Returns a widget from a name in a component, usually created by Glade.
  * Call it with the toplevel widget in the component (i.e. a window/dialog),
  * or alternatively any widget in the component, and the name of the widget
  * you want returned.
@@ -2199,7 +2198,7 @@ GtkWidget *ui_label_set_markup(GtkLabel *label, const gchar *format, ...)
 }
 
 
-/** Add a list of document items to @a menu.
+/** Adds a list of document items to @a menu.
  * @param menu Menu.
  * @param active Which document to highlight, or @c NULL.
  * @param callback is used for each menu item's @c "activate" signal and will be passed
@@ -2240,7 +2239,7 @@ void ui_menu_add_document_items(GtkMenu *menu, GeanyDocument *active, GCallback 
 }
 
 
-/** Check whether the passed @a keyval is the Enter or Return key.
+/** Checks whether the passed @a keyval is the Enter or Return key.
  * There are three different Enter/Return key values
  * (@c GDK_Return, @c GDK_ISO_Enter, @c GDK_KP_Enter).
  * This is just a convenience function.

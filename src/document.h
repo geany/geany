@@ -109,7 +109,7 @@ struct GeanyDocument
 extern GPtrArray *documents_array;
 
 
-/** Wrap documents_array so it can be used with C array syntax.
+/** Wraps documents_array so it can be used with C array syntax.
  * Example: documents[0]->sci = NULL;
  * @see document_index(). */
 #define documents ((GeanyDocument **)GEANY(documents_array)->pdata)
@@ -140,8 +140,8 @@ extern GPtrArray *documents_array;
 	(G_LIKELY((doc_ptr) != NULL) && G_LIKELY((doc_ptr)->is_valid))
 
 /**
- *  DOC_FILENAME returns the filename of the document passed or
- *  GEANY_STRING_UNTITLED (e.g. _("untitled")) if the document's filename was not yet set.
+ *  Returns the filename of the document passed or @c GEANY_STRING_UNTITLED
+ *  (e.g. _("untitled")) if the document's filename was not yet set.
  *  This macro never returns @c NULL.
  **/
 #define DOC_FILENAME(doc) \

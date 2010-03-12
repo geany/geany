@@ -33,7 +33,7 @@
 #include <time.h>
 
 
-/** Returns: TRUE if @a ptr points to a non-zero value. */
+/** Returns TRUE if @a ptr points to a non-zero value. */
 #define NZV(ptr) \
 	(G_LIKELY((ptr)) && G_LIKELY((ptr)[0]))
 
@@ -49,8 +49,8 @@
 		g_free(setptr_tmp);\
 	}
 
-/** Like glibc's @c strdupa(), but portable.
- * Duplicate a string on the stack using @c g_alloca().
+/** Duplicates a string on the stack using @c g_alloca().
+ * Like glibc's @c strdupa(), but portable.
  * @note You must include @c string.h yourself.
  * @warning Don't use excessively or for long strings otherwise there may be stack exhaustion -
  *          see the GLib docs for @c g_alloca(). */

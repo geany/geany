@@ -145,7 +145,7 @@ struct GeanyFiletype
 
 extern GPtrArray *filetypes_array;
 
-/** Wrap filetypes_array so it can be used with C array syntax.
+/** Wraps filetypes_array so it can be used with C array syntax.
  * Example: filetypes[GEANY_FILETYPES_C]->name = ...;
  * @see filetypes_index(). */
 #define filetypes	((GeanyFiletype **)GEANY(filetypes_array)->pdata)

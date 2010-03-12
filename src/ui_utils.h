@@ -24,7 +24,7 @@
 #ifndef GEANY_UI_UTILS_H
 #define GEANY_UI_UTILS_H 1
 
-/** Set a name to lookup @a widget from @a owner.
+/** Sets a name to lookup @a widget from @a owner.
  * @param owner Usually a @c GtkWindow.
  * @param widget Widget.
  * @param widget_name Name.

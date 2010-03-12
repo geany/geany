@@ -17,6 +17,12 @@
  * src/project.c:
    Make Long Line Marker settings for existing projects default to
    general settings instead of 0 (thanks to Eugene Arshinov).
+ * src/utils.c, src/ui_utils.h, src/utils.h, src/highlighting.c,
+   src/keybindings.c, src/sciwrappers.c, src/plugindata.h,
+   src/filetypes.c, src/filetypes.h, src/document.c, src/pluginutils.c,
+   src/document.h, src/editor.c, src/editor.h, src/ui_utils.c:
+   Use 3rd person (gets not get) for API function brief descriptions.
+   Avoid using 'convenience function' in API brief descriptions.
 
 
 2010-03-10  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

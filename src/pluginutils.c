@@ -40,7 +40,7 @@
 #include "plugins.h"
 
 
-/** Insert a toolbar item before the Quit button, or after the previous plugin toolbar item.
+/** Inserts a toolbar item before the Quit button, or after the previous plugin toolbar item.
  * A separator is added on the first call to this function, and will be shown when @a item is
  * shown; hidden when @a item is hidden.
  * @note You should still destroy @a item yourself, usually in @ref plugin_cleanup().
@@ -98,7 +98,7 @@ void plugin_module_make_resident(GeanyPlugin *plugin)
 }
 
 
-/** Connect a signal which will be disconnected on unloading the plugin, to prevent a possible segfault.
+/** Connects a signal which will be disconnected on unloading the plugin, to prevent a possible segfault.
  * @param plugin Must be @ref geany_plugin.
  * @param object Object to connect to, or @c NULL when using @link signals Geany signals @endlink.
  * @param signal_name The name of the signal. For a list of available
@@ -131,7 +131,7 @@ void plugin_signal_connect(GeanyPlugin *plugin,
 }
 
 
-/** Setup or resize a keybinding group for the plugin.
+/** Sets up or resizes a keybinding group for the plugin.
  * You should then call keybindings_set_item() for each keybinding in the group.
  * @param plugin Must be @ref geany_plugin.
  * @param section_name Name used in the configuration file, such as @c "html_chars".
@@ -246,7 +246,7 @@ static void configure_plugins(Plugin *current_plugin)
 }
 
 
-/** Show the plugin's configure dialog.
+/** Shows the plugin's configure dialog.
  * The plugin must implement one of the plugin_configure() or plugin_configure_single() symbols.
  * @param plugin Must be @ref geany_plugin.
  * @since 0.19. */

@@ -1026,7 +1026,7 @@ get_default_indent_prefs(void)
 }
 
 
-/** Get the indentation prefs for the editor.
+/** Gets the indentation prefs for the editor.
  * In future, the prefs might be different according to project or filetype.
  * @warning Always get a fresh result instead of keeping a pointer to it if the editor
  * settings may have changed, or if this function has been called for a different @a editor.
@@ -2095,7 +2095,7 @@ static void fix_line_indents(GeanyEditor *editor, gint line_start, gint line_end
 }
 
 /* TODO: Fix \\t inside comment*/
-/** Insert text, replacing \\t tab chars with the correct indent width, and \\n newline
+/** Inserts text, replacing \\t tab chars with the correct indent width, and \\n newline
  * chars with the correct line ending string.
  * @param editor The editor to operate on.
  * @param text Intended as e.g. "if (1)\n\tdo_something();"
@@ -4474,7 +4474,7 @@ void editor_set_line_wrapping(GeanyEditor *editor, gboolean wrap)
 }
 
 
-/** Set the indent type for @a editor.
+/** Sets the indent type for @a editor.
  * @param editor Editor.
  * @param type Indent type.
  *
@@ -4699,7 +4699,7 @@ static ScintillaObject *create_new_sci(GeanyEditor *editor)
 }
 
 
-/** Create a new Scintilla @c GtkWidget based on the settings for @a editor.
+/** Creates a new Scintilla @c GtkWidget based on the settings for @a editor.
  * @param editor Editor settings.
  * @return The new widget.
  *
@@ -4803,7 +4803,7 @@ void editor_init(void)
 }
 
 
-/** TODO: Should these be user-defined instead of hard-coded? */
+/* TODO: Should these be user-defined instead of hard-coded? */
 void editor_set_indentation_guides(GeanyEditor *editor)
 {
 	gint mode;

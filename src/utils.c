@@ -660,7 +660,7 @@ gint utils_strpos(const gchar *haystack, const gchar *needle)
 
 
 /**
- *  This is a convenience function to retrieve a formatted date/time string from strftime().
+ *  Retrieves a formatted date/time string from strftime().
  *  This function should be preferred to directly calling strftime() since this function
  *  works on UTF-8 encoded strings.
  *
@@ -729,7 +729,7 @@ gchar *utils_get_initials(const gchar *name)
 
 
 /**
- *  Convenience function for g_key_file_get_integer() to add a default value argument.
+ *  Wraps g_key_file_get_integer() to add a default value argument.
  *
  *  @param config A GKeyFile object.
  *  @param section The group name to look in for the key.
@@ -760,7 +760,7 @@ gint utils_get_setting_integer(GKeyFile *config, const gchar *section, const gch
 
 
 /**
- *  Convenience function for g_key_file_get_boolean() to add a default value argument.
+ *  Wraps g_key_file_get_boolean() to add a default value argument.
  *
  *  @param config A GKeyFile object.
  *  @param section The group name to look in for the key.
@@ -791,7 +791,7 @@ gboolean utils_get_setting_boolean(GKeyFile *config, const gchar *section, const
 
 
 /**
- *  Convenience function for g_key_file_get_string() to add a default value argument.
+ *  Wraps g_key_file_get_string() to add a default value argument.
  *
  *  @param config A GKeyFile object.
  *  @param section The group name to look in for the key.
@@ -1488,7 +1488,7 @@ static guint utils_string_replace_helper(GString *haystack, const gchar *needle,
  * @param needle The string which should be replaced.
  * @param replace The replacement for @a needle.
  *
- * @return amount of replacements done
+ * @return Number of replacements made.
  **/
 guint utils_string_replace_all(GString *haystack, const gchar *needle, const gchar *replace)
 {
@@ -1497,7 +1497,7 @@ guint utils_string_replace_all(GString *haystack, const gchar *needle, const gch
 
 
 /**
- * Convenience function to replace only the first occurrence of @a needle in @a haystack
+ * Replaces only the first occurrence of @a needle in @a haystack
  * with @a replace.
  * For details, see utils_string_replace_all().
  *
@@ -1505,7 +1505,7 @@ guint utils_string_replace_all(GString *haystack, const gchar *needle, const gch
  * @param needle The string which should be replaced.
  * @param replace The replacement for @a needle.
  *
- * @return amount of replacements done
+ * @return Number of replacements made.
  *
  *  @since 0.16
  */

@@ -111,7 +111,7 @@ static void cb_func_move_tab(guint key_id);
 static void add_popup_menu_accels(void);
 
 
-/** Lookup a keybinding item.
+/** Looks up a keybinding item.
  * @param group Group.
  * @param key_id Keybinding index for the group.
  * @return The keybinding.
@@ -126,7 +126,7 @@ GeanyKeyBinding *keybindings_get_item(GeanyKeyGroup *group, gsize key_id)
 
 /* This is used to set default keybindings on startup.
  * Menu accels are set in apply_kb_accel(). */
-/** Simple convenience function to fill a GeanyKeyBinding struct item.
+/** Fills a GeanyKeyBinding struct item.
  * @param group Group.
  * @param key_id Keybinding index for the group.
  * @param callback Function to call when activated, or @c NULL to use the group callback.
@@ -1295,7 +1295,7 @@ GeanyKeyBinding *keybindings_lookup_item(guint group_id, guint key_id)
 }
 
 
-/** Mimic a (built-in only) keybinding action.
+/** Mimics a (built-in only) keybinding action.
  * 	Example: @code keybindings_send_command(GEANY_KEY_GROUP_FILE, GEANY_KEYS_FILE_OPEN); @endcode
  * 	@param group_id The index for the key group that contains the @a key_id keybinding.
  * 	@param key_id The keybinding command index. */

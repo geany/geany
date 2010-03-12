@@ -59,7 +59,7 @@ enum {
 	GEANY_ABI_VERSION = 66
 };
 
-/** Check the plugin can be loaded by Geany.
+/** Checks the plugin can be loaded by Geany.
  * This performs runtime checks that try to ensure:
  * - Geany ABI data types are compatible with this plugin.
  * - Geany sources provide the required API for this plugin. */
@@ -101,7 +101,7 @@ typedef struct GeanyPlugin
 GeanyPlugin;
 
 
-/** Set the plugin name and some other basic information about a plugin.
+/** Sets the plugin name and some other basic information about a plugin.
  * This declares a function, so you can use the _() translation macro for arguments.
  *
  * Example:

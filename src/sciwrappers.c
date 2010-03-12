@@ -176,7 +176,7 @@ void sci_add_text(ScintillaObject *sci, const gchar *text)
 }
 
 
-/** Set all text.
+/** Sets all text.
  * @param sci Scintilla widget.
  * @param text Text. */
 void sci_set_text(ScintillaObject *sci, const gchar *text)
@@ -213,7 +213,7 @@ void sci_redo(ScintillaObject *sci)
 }
 
 
-/** Begin grouping a set of edits together as one Undo action.
+/** Begins grouping a set of edits together as one Undo action.
  * You must call sci_end_undo_action() after making your edits.
  * @param sci Scintilla @c GtkWidget. */
 void sci_start_undo_action(ScintillaObject *sci)
@@ -222,7 +222,7 @@ void sci_start_undo_action(ScintillaObject *sci)
 }
 
 
-/** End grouping a set of edits together as one Undo action.
+/** Ends grouping a set of edits together as one Undo action.
  * @param sci Scintilla @c GtkWidget.
  * @see sci_start_undo_action(). */
 void sci_end_undo_action(ScintillaObject *sci)
@@ -273,7 +273,7 @@ gint sci_get_zoom(ScintillaObject *sci)
 }
 
 
-/** Set a line marker.
+/** Sets a line marker.
  * @param sci Scintilla widget.
  * @param line_number Line number.
  * @param marker Marker number. */
@@ -283,7 +283,7 @@ void sci_set_marker_at_line(ScintillaObject *sci, gint line_number, gint marker)
 }
 
 
-/** Delete a line marker.
+/** Deletes a line marker.
  * @param sci Scintilla widget.
  * @param line_number Line number.
  * @param marker Marker number. */
@@ -293,7 +293,7 @@ void sci_delete_marker_at_line(ScintillaObject *sci, gint line_number, gint mark
 }
 
 
-/** Check if a line has a marker set.
+/** Checks if a line has a marker set.
  * @param sci Scintilla widget.
  * @param line Line number.
  * @param marker Marker number.
@@ -351,7 +351,7 @@ gint sci_marker_previous(ScintillaObject *sci, gint line, gint marker_mask, gboo
 }
 
 
-/** Get line number from position.
+/** Gets the line number from @a position.
  * @param sci Scintilla widget.
  * @param position Position. */
 gint sci_get_line_from_position(ScintillaObject *sci, gint position)
@@ -360,7 +360,7 @@ gint sci_get_line_from_position(ScintillaObject *sci, gint position)
 }
 
 
-/** Get column number relative to the start of the line that @a position is on.
+/** Gets the column number relative to the start of the line that @a position is on.
  * @param sci Scintilla widget.
  * @param position Position. */
 gint sci_get_col_from_position(ScintillaObject *sci, gint position)
@@ -369,7 +369,7 @@ gint sci_get_col_from_position(ScintillaObject *sci, gint position)
 }
 
 
-/** Get position for the start of @a line.
+/** Gets the position for the start of @a line.
  * @param sci Scintilla widget.
  * @param line Line.
  * @return Position. */
@@ -379,7 +379,7 @@ gint sci_get_position_from_line(ScintillaObject *sci, gint line)
 }
 
 
-/** Get cursor position.
+/** Gets the cursor position.
  * @param sci Scintilla widget.
  * @return Position. */
 gint sci_get_current_position(ScintillaObject *sci)
@@ -388,7 +388,7 @@ gint sci_get_current_position(ScintillaObject *sci)
 }
 
 
-/** Set the cursor position.
+/** Sets the cursor position.
  * @param sci Scintilla widget.
  * @param position Position.
  * @param scroll_to_caret Whether to scroll the cursor in view. */
@@ -414,7 +414,7 @@ void sci_set_current_line(ScintillaObject *sci, gint line)
 }
 
 
-/** Get total number of lines.
+/** Gets the total number of lines.
  * @param sci Scintilla widget. */
 gint sci_get_line_count(ScintillaObject *sci)
 {
@@ -422,7 +422,7 @@ gint sci_get_line_count(ScintillaObject *sci)
 }
 
 
-/** Set selection start position.
+/** Sets the selection start position.
  * @param sci Scintilla widget.
  * @param position Position. */
 void sci_set_selection_start(ScintillaObject *sci, gint position)
@@ -431,7 +431,7 @@ void sci_set_selection_start(ScintillaObject *sci, gint position)
 }
 
 
-/** Set selection end position.
+/** Sets the selection end position.
  * @param sci Scintilla widget.
  * @param position Position. */
 void sci_set_selection_end(ScintillaObject *sci, gint position)
@@ -476,7 +476,7 @@ void sci_clear(ScintillaObject *sci)
 }
 
 
-/** Get position of selection start.
+/** Gets the selection start position.
  * @param sci Scintilla widget.
  * @return Position. */
 gint sci_get_selection_start(ScintillaObject *sci)
@@ -485,7 +485,7 @@ gint sci_get_selection_start(ScintillaObject *sci)
 }
 
 
-/** Get position of selection end.
+/** Gets the selection end position.
  * @param sci Scintilla widget.
  * @return Position. */
 gint sci_get_selection_end(ScintillaObject *sci)
@@ -494,7 +494,7 @@ gint sci_get_selection_end(ScintillaObject *sci)
 }
 
 
-/** Replace selection.
+/** Replaces selection.
  * @param sci Scintilla widget.
  * @param text Text. */
 void sci_replace_sel(ScintillaObject *sci, const gchar *text)
@@ -503,7 +503,7 @@ void sci_replace_sel(ScintillaObject *sci, const gchar *text)
 }
 
 
-/** Get length of all text.
+/** Gets the length of all text.
  * @param sci Scintilla widget.
  * @return Length. */
 gint sci_get_length(ScintillaObject *sci)
@@ -518,7 +518,7 @@ gint sci_get_lexer(ScintillaObject *sci)
 }
 
 
-/** Get line length.
+/** Gets line length.
  * @param sci Scintilla widget.
  * @param line Line number.
  * @return Length. */
@@ -541,7 +541,7 @@ gchar *sci_get_string(ScintillaObject *sci, gint msg, gulong wParam)
 }
 
 
-/** Get line contents.
+/** Gets line contents.
  * @param sci Scintilla widget.
  * @param line_num Line number.
  * @return A @c NULL-terminated copy of the line text. */
@@ -551,7 +551,7 @@ gchar *sci_get_line(ScintillaObject *sci, gint line_num)
 }
 
 
-/** Get all text.
+/** Gets all text.
  * @deprecated sci_get_text is deprecated and should not be used in newly-written code.
  * Use sci_get_contents() instead.
  *
@@ -564,7 +564,7 @@ void sci_get_text(ScintillaObject *sci, gint len, gchar *text)
 }
 
 
-/** Get all text inside a given text length.
+/** Gets all text inside a given text length.
  * @param sci Scintilla widget.
  * @param len Length of the text to retrieve from the start of the document,
  *            usually sci_get_length() + 1.
@@ -580,7 +580,7 @@ gchar *sci_get_contents(ScintillaObject *sci, gint len)
 }
 
 
-/** Get selected text.
+/** Gets selected text.
  * @deprecated sci_get_selected_text is deprecated and should not be used in newly-written code.
  * Use sci_get_selection_contents() instead.
  *
@@ -593,7 +593,7 @@ void sci_get_selected_text(ScintillaObject *sci, gchar *text)
 }
 
 
-/** Get selected text.
+/** Gets selected text.
  * @param sci Scintilla widget.
  *
  * @return The selected text. Should be freed when no longer needed.
@@ -606,7 +606,7 @@ gchar *sci_get_selection_contents(ScintillaObject *sci)
 }
 
 
-/** Get selected text length.
+/** Gets selected text length.
  * @param sci Scintilla widget.
  * @return Length. */
 gint sci_get_selected_text_length(ScintillaObject *sci)
@@ -622,7 +622,7 @@ gint sci_get_position_from_xy(ScintillaObject *sci, gint x, gint y, gboolean nea
 }
 
 
-/** Check if a line is visible (folding may have hidden it).
+/** Checks if a line is visible (folding may have hidden it).
  * @param sci Scintilla widget.
  * @param line Line number.
  * @return Whether @a line will be drawn on the screen. */
@@ -632,7 +632,7 @@ gboolean sci_get_line_is_visible(ScintillaObject *sci, gint line)
 }
 
 
-/** Make the @a line visible (folding may have hidden it).
+/** Makes @a line visible (folding may have hidden it).
  * @param sci Scintilla widget.
  * @param line Line number. */
 void sci_ensure_line_is_visible(ScintillaObject *sci, gint line)
@@ -690,7 +690,7 @@ void sci_set_tab_width(ScintillaObject *sci, gint width)
 }
 
 
-/** Get display tab width (this is not indent width, see GeanyIndentPrefs).
+/** Gets display tab width (this is not indent width, see GeanyIndentPrefs).
  * @param sci Scintilla widget.
  * @return Width.
  *
@@ -702,7 +702,7 @@ gint sci_get_tab_width(ScintillaObject *sci)
 }
 
 
-/** Get character.
+/** Gets a character.
  * @param sci Scintilla widget.
  * @param pos Position.
  * @return Char. */
@@ -730,7 +730,7 @@ void sci_use_popup(ScintillaObject *sci, gboolean enable)
 }
 
 
-/** Check if there's a selection.
+/** Checks if there's a selection.
  * @param sci Scintilla widget.
  * @return Whether a selection is present.
  *
@@ -768,7 +768,7 @@ void sci_set_anchor(ScintillaObject *sci, gint pos)
 }
 
 
-/** Scroll the cursor in view.
+/** Scrolls the cursor in view.
  * @param sci Scintilla widget. */
 void sci_scroll_caret(ScintillaObject *sci)
 {
@@ -800,7 +800,7 @@ gint sci_search_prev(ScintillaObject *sci, gint flags, const gchar *text)
 }
 
 
-/** Find a text in the document.
+/** Finds text in the document.
  * The @a ttf argument should be a pointer to a Sci_TextToFind structure which contains
  * the text to find and the range in which the text should be searched.
  *
@@ -826,7 +826,7 @@ void sci_set_font(ScintillaObject *sci, gint style, const gchar *font, gint size
 }
 
 
-/** Jump to the specified line in the document.
+/** Jumps to the specified line in the document.
  * If @a unfold is set and @a line is hidden by a fold, it is unfolded
  * first to ensure it is visible.
  * @param sci Scintilla widget.
@@ -846,7 +846,7 @@ void sci_marker_delete_all(ScintillaObject *sci, gint marker)
 }
 
 
-/** Get style ID for @a position.
+/** Gets style ID at @a position.
  * @param sci Scintilla widget.
  * @param position Position.
  * @return Style ID. */
@@ -875,7 +875,7 @@ void sci_clear_cmdkey(ScintillaObject *sci, gint key)
 }
 
 
-/** Get text between @a start and @a end.
+/** Gets text between @a start and @a end.
  * @deprecated sci_get_text_range is deprecated and should not be used in newly-written code.
  * Use sci_get_contents_range() instead.
  *
@@ -893,7 +893,7 @@ void sci_get_text_range(ScintillaObject *sci, gint start, gint end, gchar *text)
 }
 
 
-/** Get text between @a start and @a end.
+/** Gets text between @a start and @a end.
  *
  * @param sci Scintilla widget.
  * @param start Start.
@@ -922,7 +922,7 @@ void sci_selection_duplicate(ScintillaObject *sci)
 }
 
 
-/** Insert text.
+/** Inserts text.
  * @param sci Scintilla widget.
  * @param pos Position, or -1 for current.
  * @param text Text. */
@@ -968,7 +968,7 @@ void sci_set_readonly(ScintillaObject *sci, gboolean readonly)
 }
 
 
-/** A simple convenience function for sending Scintilla commands without any parameters.
+/** Sends Scintilla commands without any parameters.
  * @param sci The Scintilla @c GtkWidget.
  * @param cmd @c SCI_COMMAND.
  * @see http://scintilla.org for the documentation.
@@ -981,7 +981,7 @@ void sci_send_command(ScintillaObject *sci, gint cmd)
 }
 
 
-/** Get current line number.
+/** Gets current line number.
  * @param sci Scintilla widget.
  * @return Line number. */
 gint sci_get_current_line(ScintillaObject *sci)
@@ -1070,7 +1070,7 @@ void sci_set_autoc_max_height(ScintillaObject *sci, gint val)
 }
 
 
-/** Find a matching brace at @a pos.
+/** Finds a matching brace at @a pos.
  * @param sci Scintilla widget.
  * @param pos Position.
  * @return Matching brace position.
@@ -1113,7 +1113,7 @@ gint sci_get_pos_at_line_sel_end(ScintillaObject *sci, gint line)
 }
 
 
-/** Get selection mode.
+/** Gets selection mode.
  * @param sci Scintilla widget.
  * @return Selection mode. */
 gint sci_get_selection_mode(ScintillaObject *sci)
@@ -1122,7 +1122,7 @@ gint sci_get_selection_mode(ScintillaObject *sci)
 }
 
 
-/** Set selection mode.
+/** Sets selection mode.
  * @param sci Scintilla widget.
  * @param mode Mode. */
 void sci_set_selection_mode(ScintillaObject *sci, gint mode)

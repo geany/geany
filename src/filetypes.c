@@ -1447,7 +1447,7 @@ gboolean filetype_has_tags(GeanyFiletype *ft)
 }
 
 
-/** Find a filetype pointer from its @a name field.
+/** Finds a filetype pointer from its @a name field.
  * @param name Filetype name.
  * @return The filetype found, or @c NULL.
  *

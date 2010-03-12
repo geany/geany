@@ -221,7 +221,7 @@ GeanyDocument *document_find_by_sci(ScintillaObject *sci)
 }
 
 
-/** Get the notebook page index for a document.
+/** Gets the notebook page index for a document.
  * @param doc The document.
  * @return The index.
  * @since 0.19 */

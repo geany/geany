@@ -28,7 +28,7 @@
 #include "Scintilla.h"
 #include "ScintillaWidget.h"
 
-/** Default character set to define which characters shoud be treated as part of a word. */
+/** Default character set to define which characters should be treated as part of a word. */
 #define GEANY_WORDCHARS					"_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 #define GEANY_MAX_WORD_LENGTH			192
 

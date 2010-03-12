@@ -3196,7 +3196,7 @@ void highlighting_init_styles(gint filetype_idx, GKeyFile *config, GKeyFile *con
 		styleset_func(sci, ft->id); \
 		break
 
-/** Setup highlighting and other visual settings.
+/** Sets up highlighting and other visual settings.
  * @param sci Scintilla widget.
  * @param ft Filetype settings to use. */
 void highlighting_set_styles(ScintillaObject *sci, GeanyFiletype *ft)
@@ -3267,7 +3267,7 @@ void highlighting_set_styles(ScintillaObject *sci, GeanyFiletype *ft)
 }
 
 
-/** Retrieve a style @a style_id for the filetype @a ft_id.
+/** Retrieves a style @a style_id for the filetype @a ft_id.
  * If the style was not already initialised
  * (e.g. by by opening a file of this type), it will be initialised. The returned pointer is
  * owned by Geany and must not be freed.
