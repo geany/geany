@@ -3,6 +3,14 @@
  * src/ui_utils.c:
    Fix ui_button_new_with_image() to call gtk_button_set_image() so
    that gtk_button_[sg]et_label() work as expected.
+ * src/build.c, src/dialogs.c, src/dialogs.h, src/callbacks.c:
+   Make Build Commands dialog show menu item labels as a button (to
+   help show that menu labels don't normally need to be edited &
+   display the mnemonic correctly). Clicking shows an input dialog to
+   set a new menu item label.
+   Split dialogs_show_input() into 2 functions: one simple, one for
+   a persistent dialog.
+   Fix possible double-destroy of input dialog when closed by user.
 
 
 2010-03-10  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

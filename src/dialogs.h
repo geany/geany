@@ -30,7 +30,7 @@
 #ifndef GEANY_DIALOGS_H
 #define GEANY_DIALOGS_H 1
 
-typedef void (*InputCallback)(const gchar *);
+typedef void (*GeanyInputCallback)(const gchar *text);
 
 
 void dialogs_show_open_file(void);
@@ -45,8 +45,11 @@ void dialogs_show_word_count(void);
 
 void dialogs_show_color(gchar *colour);
 
-GtkWidget *dialogs_show_input(const gchar *title, const gchar *label_text,
-	const gchar *default_text, gboolean persistent, InputCallback input_cb);
+gchar *dialogs_show_input(const gchar *title, const gchar *label_text,
+	const gchar *default_text);
+
+GtkWidget *dialogs_show_input_persistent(const gchar *title, const gchar *label_text,
+	const gchar *default_text, GeanyInputCallback input_cb);
 
 gboolean dialogs_show_input_numeric(const gchar *title, const gchar *label_text,
 									gdouble *value, gdouble min, gdouble max, gdouble step);

@@ -1480,13 +1480,6 @@ on_comments_fileheader_activate        (GtkMenuItem     *menuitem,
 }
 
 
-static void
-on_custom_date_input_response(const gchar *input)
-{
-	setptr(ui_prefs.custom_date_format, g_strdup(input));
-}
-
-
 void
 on_insert_date_activate                (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
@@ -1520,9 +1513,11 @@ on_insert_date_activate                (GtkMenuItem     *menuitem,
 		format = ui_prefs.custom_date_format;
 	else
 	{
-		dialogs_show_input(_("Custom Date Format"),
-			_("Enter here a custom date and time format. You can use any conversion specifiers which can be used with the ANSI C strftime function."),
-			ui_prefs.custom_date_format, FALSE, &on_custom_date_input_response);
+		setptr(ui_prefs.custom_date_format,
+			dialogs_show_input(_("Custom Date Format"),
+				_("Enter here a custom date and time format. "
+				"You can use any conversion specifiers which can be used with the ANSI C strftime function."),
+				ui_prefs.custom_date_format));
 		return;
 	}
 

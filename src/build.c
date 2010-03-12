@@ -1239,9 +1239,9 @@ static void on_build_menu_item(GtkWidget *w, gpointer user_data)
 
 		if (! dialog)
 		{
-			dialog = dialogs_show_input(_("Custom Text"),
+			dialog = dialogs_show_input_persistent(_("Custom Text"),
 				_("Enter custom text here, all entered text is appended to the command."),
-				build_info.custom_target, TRUE, &on_make_custom_input_response);
+				build_info.custom_target, &on_make_custom_input_response);
 		}
 		else
 		{
@@ -1716,6 +1716,15 @@ typedef struct RowWidgets
 } RowWidgets;
 
 
+static void set_build_command_entry_text(GtkWidget *wid, const gchar *text)
+{
+	if (GTK_IS_BUTTON(wid))
+		gtk_button_set_label(GTK_BUTTON(wid), text);
+	else
+		gtk_entry_set_text(GTK_ENTRY(wid), text);
+}
+
+
 static void on_clear_dialog_row(GtkWidget *unused, gpointer user_data)
 {
 	RowWidgets *r = (RowWidgets*)user_data;
@@ -1729,7 +1738,7 @@ static void on_clear_dialog_row(GtkWidget *unused, gpointer user_data)
 		r->src = src;
 		for (i = 0; i < GEANY_BC_CMDENTRIES_COUNT; i++)
 		{
-			gtk_entry_set_text(GTK_ENTRY(r->entries[i]),
+			set_build_command_entry_text(r->entries[i],
 				id_to_str(bc,i) != NULL ? id_to_str(bc,i) : "");
 		}
 	}
@@ -1738,7 +1747,7 @@ static void on_clear_dialog_row(GtkWidget *unused, gpointer user_data)
 		r->cmdsrc = NULL;
 		for (i = 0; i < GEANY_BC_CMDENTRIES_COUNT; i++)
 		{
-			gtk_entry_set_text(GTK_ENTRY(r->entries[i]), "");
+			set_build_command_entry_text(r->entries[i], "");
 		}
 	}
 	r->cleared = TRUE;
@@ -1748,6 +1757,16 @@ static void on_clear_dialog_row(GtkWidget *unused, gpointer user_data)
 static void on_clear_dialog_regex_row(GtkEntry *regex, gpointer unused)
 {
 	gtk_entry_set_text(regex,"");
+}
+
+
+static void on_label_button_clicked(GtkWidget *wid)
+{
+	const gchar *old = gtk_button_get_label(GTK_BUTTON(wid));
+	gchar *str = dialogs_show_input(_("Set menu item label"), NULL, old);
+
+	gtk_button_set_label(GTK_BUTTON(wid), str);
+	g_free(str);
 }
 
 
@@ -1793,7 +1812,15 @@ static RowWidgets *build_add_dialog_row(GeanyDocument *doc, GtkTable *table, gin
 		gint xflags = (i == GEANY_BC_COMMAND) ? GTK_FILL | GTK_EXPAND : GTK_FILL;
 
 		column += 1;
-		roww->entries[i] = gtk_entry_new();
+		if (i == GEANY_BC_LABEL)
+		{
+			GtkWidget *wid = roww->entries[i] = gtk_button_new();
+			gtk_button_set_use_underline(GTK_BUTTON(wid), TRUE);
+			ui_widget_set_tooltip_text(wid, _("Click to set menu item label"));
+			g_signal_connect(wid, "clicked", G_CALLBACK(on_label_button_clicked), NULL);
+		}
+		else
+			roww->entries[i] = gtk_entry_new();
 		gtk_table_attach(table, roww->entries[i], column, column + 1, row, row + 1, xflags,
 			GTK_FILL | GTK_EXPAND, entry_x_padding, entry_y_padding);
 	}
@@ -1813,7 +1840,7 @@ static RowWidgets *build_add_dialog_row(GeanyDocument *doc, GtkTable *table, gin
 		gchar *str = "";
 		if (bc != NULL && (str = bc->entries[i]) == NULL)
 			str = "";
-		gtk_entry_set_text(GTK_ENTRY(roww->entries[i]), str);
+		set_build_command_entry_text(roww->entries[i], str);
 	}
 	if (src > (gint)dst || (grp == GEANY_GBG_FT && (doc == NULL || doc->file_type == NULL)))
 	{
@@ -1982,6 +2009,15 @@ static int stcmp(const gchar *a, const gchar *b)
 }
 
 
+static const gchar *get_build_command_entry_text(GtkWidget *wid)
+{
+	if (GTK_IS_BUTTON(wid))
+		return gtk_button_get_label(GTK_BUTTON(wid));
+	else
+		return gtk_entry_get_text(GTK_ENTRY(wid));
+}
+
+
 static gboolean read_row(BuildDestination *dst, TableData table_data, gint drow, gint grp, gint cmd)
 {
 	gchar			*entries[GEANY_BC_CMDENTRIES_COUNT];
@@ -1993,7 +2029,7 @@ static gboolean read_row(BuildDestination *dst, TableData table_data, gint drow,
 
 	for (i = 0; i < GEANY_BC_CMDENTRIES_COUNT; i++)
 	{
-		entries[i] = g_strdup(gtk_entry_get_text(GTK_ENTRY(table_data->rows[drow]->entries[i])));
+		entries[i] = g_strdup(get_build_command_entry_text(table_data->rows[drow]->entries[i]));
 	}
 	if (table_data->rows[drow]->cleared)
 	{

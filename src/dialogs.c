@@ -822,8 +822,8 @@ on_input_dialog_response(GtkDialog *dialog,
 	if (response == GTK_RESPONSE_ACCEPT)
 	{
 		const gchar *str = gtk_entry_get_text(GTK_ENTRY(entry));
-		InputCallback input_cb =
-			(InputCallback) g_object_get_data(G_OBJECT(dialog), "input_cb");
+		GeanyInputCallback input_cb =
+			(GeanyInputCallback) g_object_get_data(G_OBJECT(dialog), "input_cb");
 
 		if (persistent)
 		{
@@ -832,23 +832,22 @@ on_input_dialog_response(GtkDialog *dialog,
 		}
 		input_cb(str);
 	}
-
-	if (persistent)
-		gtk_widget_hide(GTK_WIDGET(dialog));
-	else
-		gtk_widget_destroy(GTK_WIDGET(dialog));
+	gtk_widget_hide(GTK_WIDGET(dialog));
 }
 
 
 static void add_input_widgets(GtkWidget *dialog, GtkWidget *vbox,
 		const gchar *label_text, const gchar *default_text, gboolean persistent)
 {
-	GtkWidget *label, *entry;
+	GtkWidget *entry;
 
-	label = gtk_label_new(label_text);
-	gtk_label_set_line_wrap(GTK_LABEL(label), TRUE);
-	gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
-	gtk_container_add(GTK_CONTAINER(vbox), label);
+	if (label_text)
+	{
+		GtkWidget *label = gtk_label_new(label_text);
+		gtk_label_set_line_wrap(GTK_LABEL(label), TRUE);
+		gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
+		gtk_container_add(GTK_CONTAINER(vbox), label);
+	}
 
 	if (persistent)	/* remember previous entry text in a combo box */
 	{
@@ -884,9 +883,9 @@ static void add_input_widgets(GtkWidget *dialog, GtkWidget *vbox,
  * 	in this case the dialog returned is not destroyed on a response,
  * 	and can be reshown.
  * Returns: the dialog widget. */
-GtkWidget *
-dialogs_show_input(const gchar *title, const gchar *label_text, const gchar *default_text,
-						gboolean persistent, InputCallback input_cb)
+static GtkWidget *
+dialogs_show_input_full(const gchar *title, const gchar *label_text, const gchar *default_text,
+						gboolean persistent, GeanyInputCallback input_cb)
 {
 	GtkWidget *dialog, *vbox;
 
@@ -903,12 +902,43 @@ dialogs_show_input(const gchar *title, const gchar *label_text, const gchar *def
 	add_input_widgets(dialog, vbox, label_text, default_text, persistent);
 
 	if (persistent)
-		g_signal_connect(dialog, "delete-event", G_CALLBACK(gtk_widget_hide_on_delete), NULL);
-	else
-		g_signal_connect(dialog, "delete-event", G_CALLBACK(gtk_widget_destroy), NULL);
-
+	{
+		gtk_widget_show_all(dialog);
+		return dialog;
+	}
 	gtk_widget_show_all(dialog);
-	return dialog;
+	gtk_dialog_run(GTK_DIALOG(dialog));
+	gtk_widget_destroy(dialog);
+	return NULL;
+}
+
+
+/* Remember previous entry text in a combo box.
+ * Returns: the dialog widget. */
+GtkWidget *
+dialogs_show_input_persistent(const gchar *title, const gchar *label_text, const gchar *default_text,
+		GeanyInputCallback input_cb)
+{
+	return dialogs_show_input_full(title, label_text, default_text, TRUE, input_cb);
+}
+
+
+/* ugly hack - user_data not supported for callback */
+gchar *dialog_input = NULL;
+
+static void on_dialog_input(const gchar *str)
+{
+	dialog_input = g_strdup(str);
+}
+
+
+/* Returns: newly allocated string - a copy of either the entry text or default_text. */
+gchar *dialogs_show_input(const gchar *title, const gchar *label_text,
+	const gchar *default_text)
+{
+	dialog_input = NULL;
+	dialogs_show_input_full(title, label_text, default_text, FALSE, on_dialog_input);
+	return NVL(dialog_input, g_strdup(default_text));
 }
 
 
