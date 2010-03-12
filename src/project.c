@@ -1019,8 +1019,10 @@ static gboolean load_config(const gchar *filename)
 	p->base_path = utils_get_setting_string(config, "project", "base_path", "");
 	p->file_patterns = g_key_file_get_string_list(config, "project", "file_patterns", NULL, NULL);
 
-	p->long_line_behaviour = g_key_file_get_integer(config, "long line marker", "long_line_behaviour", NULL);
-	p->long_line_column = g_key_file_get_integer(config, "long line marker", "long_line_column", NULL);
+	p->long_line_behaviour = utils_get_setting_integer(config, "long line marker",
+		"long_line_behaviour", 1 /* follow global */);
+	p->long_line_column = utils_get_setting_integer(config, "long line marker",
+		"long_line_column", editor_prefs.long_line_global_column);
 	apply_editor_prefs();
 
 	build_load_menu(config, GEANY_BCS_PROJ, (gpointer)p);

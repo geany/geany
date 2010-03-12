@@ -14,6 +14,9 @@
  * src/dialogs.c:
    Fix not destroying 'Make Custom Target' input dialog after first
    use (oops).
+ * src/project.c:
+   Make Long Line Marker settings for existing projects default to
+   general settings instead of 0 (thanks to Eugene Arshinov).
 
 
 2010-03-10  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
