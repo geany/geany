@@ -11,6 +11,9 @@
    Split dialogs_show_input() into 2 functions: one simple, one for
    a persistent dialog.
    Fix possible double-destroy of input dialog when closed by user.
+ * src/dialogs.c:
+   Fix not destroying 'Make Custom Target' input dialog after first
+   use (oops).
 
 
 2010-03-10  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

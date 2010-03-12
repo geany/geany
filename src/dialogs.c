@@ -903,6 +903,8 @@ dialogs_show_input_full(const gchar *title, const gchar *label_text, const gchar
 
 	if (persistent)
 	{
+		/* override default handler */
+		g_signal_connect(dialog, "delete-event", G_CALLBACK(gtk_widget_hide_on_delete), NULL);
 		gtk_widget_show_all(dialog);
 		return dialog;
 	}
