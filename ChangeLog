@@ -7,6 +7,9 @@
    Change 'This is a wrapper function for...' to 'Wraps...' in brief
    descriptions.
    Change 'After all...' to 'Afterwards...'.
+ * src/interface.c, geany.glade:
+   Apply patch from Eugene Arshinov to make frame packing/alignment
+   more consistent (thanks).
 
 
 2010-03-12  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
