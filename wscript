@@ -118,13 +118,21 @@ geany_sources = [
 
 
 def configure(conf):
+	def in_git():
+		cmd = 'git ls-files >/dev/null 2>&1'
+		return (Utils.exec_command(cmd) == 0)
+
+	def in_svn():
+		return os.path.exists('.svn')
+
 	def conf_get_svn_rev():
 		# try GIT
-		if os.path.exists('.git'):
+		if in_git():
 			cmds = [ 'git svn find-rev HEAD 2>/dev/null',
 					 'git svn find-rev origin/trunk 2>/dev/null',
 					 'git svn find-rev trunk 2>/dev/null',
-					 'git svn find-rev master 2>/dev/null' ]
+					 'git svn find-rev master 2>/dev/null'
+					]
 			for c in cmds:
 				try:
 					stdout = Utils.cmd_output(c)
@@ -133,7 +141,7 @@ def configure(conf):
 				except:
 					pass
 		# try SVN
-		elif os.path.exists('.svn'):
+		elif in_svn():
 			try:
 				_env = None if is_win32 else {'LANG' : 'C'}
 				stdout = Utils.cmd_output(cmd='svn info --non-interactive', silent=True, env=_env)
@@ -273,7 +281,7 @@ def configure(conf):
 	print_message(conf, 'Use virtual terminal support', Options.options.no_vte and 'no' or 'yes')
 	if svn_rev != '-1':
 		print_message(conf, 'Compiling Subversion revision', svn_rev)
-		conf.env.append_value('CCFLAGS', '-g -DGEANY_DEBUG'.split())
+		conf.env.append_value('CCFLAGS', '-g -O0 -DGEANY_DEBUG'.split())
 
 	conf.env.append_value('CCFLAGS', '-DHAVE_CONFIG_H')
 	# for now define GEANY_PRIVATE for all files, even though it should just be for src/*.

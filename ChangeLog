@@ -4,6 +4,9 @@
    For now revert the recent patch which set real_path of newly
    open non-existent configuration files as this seems hackish and
    causes 'file not found' warnings.
+ * wscript:
+   Fix/Improve GIT repository detection
+   (patch by Thomas Martitz, thanks).
 
 
 2010-03-15  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
