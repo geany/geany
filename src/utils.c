@@ -1916,12 +1916,20 @@ static gboolean str_in_array(const gchar **haystack, const gchar *needle)
 }
 
 
-/* Copies the current environment into a new array.
- * exclude_vars is a NULL-terminated array of variable names which should be not copied.
+/**
+ * Copies the current environment into a new array.
+ * @a exclude_vars is a @c NULL-terminated array of variable names which should be not copied.
  * All further arguments are key, value pairs of variables which should be added to
  * the environment.
  *
- * The argument list must be terminated with NULL. */
+ * The argument list must be @c NULL-terminated.
+ *
+ * @param exclude_vars @c NULL-terminated array of variable names to exclude.
+ * @param first_varname Name of the first variable to copy into the new array.
+ * @param ... Key-value pairs of variable names and values, @c NULL-terminated.
+ *
+ * @return The new environment array.
+ **/
 gchar **utils_copy_environment(const gchar **exclude_vars, const gchar *first_varname, ...)
 {
 	gchar **result;

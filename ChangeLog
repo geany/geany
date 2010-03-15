@@ -7,6 +7,9 @@
  * wscript:
    Fix/Improve GIT repository detection
    (patch by Thomas Martitz, thanks).
+ * plugins/geanyfunctions.h, src/plugindata.h, src/plugins.c,
+   src/utils.c:
+   Add utils_copy_environment() to the plugin API.
 
 
 2010-03-15  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

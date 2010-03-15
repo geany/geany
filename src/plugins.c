@@ -210,6 +210,7 @@ static UtilsFuncs utils_funcs = {
 	&utils_str_middle_truncate,
 	&utils_str_remove_chars,
 	&utils_get_file_list_full,
+	&utils_copy_environment
 };
 
 static UIUtilsFuncs uiutils_funcs = {
