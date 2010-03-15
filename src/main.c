@@ -386,7 +386,7 @@ static void setup_paths(void)
 
 
 /**
- *  Check whether the main window has been realized.
+ *  Checks whether the main window has been realized.
  *  This is an easy indicator whether Geany is right now starting up (main window is not
  *  yet realized) or whether it has finished the startup process (main window is realized).
  *  This is because the main window is realized (i.e. actually drawn on the screen) at the

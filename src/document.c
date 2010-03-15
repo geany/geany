@@ -119,13 +119,14 @@ static gboolean update_tags_from_buffer(GeanyDocument *doc);
 #endif
 
 /**
- * Find and retrieve a document with the given filename from the document list.
+ * Finds a document whose @c real_path field matches the given filename.
  *
  * @param realname The filename to search, which should be identical to the
  * string returned by @c tm_get_real_path().
  *
  * @return The matching document, or @c NULL.
  * @note This is only really useful when passing a @c TMWorkObject::file_name.
+ * @see GeanyDocument::real_path.
  * @see document_find_by_filename().
  *
  * @since 0.15
@@ -165,7 +166,7 @@ static gchar *get_real_path_from_utf8(const gchar *utf8_filename)
 
 
 /**
- *  Find and retrieve a document with the given filename from the document list.
+ *  Finds a document with the given filename.
  *  This matches either an exact GeanyDocument::file_name string, or variant
  *  filenames with relative elements in the path (e.g. @c "/dir/..//name" will
  *  match @c "/name").
@@ -235,7 +236,7 @@ gint document_get_notebook_page(GeanyDocument *doc)
 
 
 /**
- *  Find and retrieve the document for the given notebook page @a page_num.
+ *  Finds the document for the given notebook page @a page_num.
  *
  *  @param page_num The notebook page number to search.
  *
@@ -256,7 +257,7 @@ GeanyDocument *document_get_from_page(guint page_num)
 
 
 /**
- *  Find and retrieve the current document.
+ *  Finds the current document.
  *
  *  @return A pointer to the current document or @c NULL if there are no opened documents.
  **/
@@ -341,7 +342,7 @@ void document_update_tab_label(GeanyDocument *doc)
 
 
 /**
- *  Update the tab labels, the status bar, the window title and some save-sensitive buttons
+ *  Updates the tab labels, the status bar, the window title and some save-sensitive buttons
  *  according to the document's save state.
  *  This is called by Geany mostly when opening or saving files.
  *
@@ -591,7 +592,7 @@ static GeanyDocument *document_create(const gchar *utf8_filename)
 
 
 /**
- *  Close the given document.
+ *  Closes the given document.
  *
  *  @param doc The document to remove.
  *
@@ -608,7 +609,7 @@ gboolean document_close(GeanyDocument *doc)
 
 
 /**
- *  Remove the given notebook tab at @a page_num and clear all related information
+ *  Removes the given notebook tab at @a page_num and clears all related information
  *  in the document list.
  *
  *  @param page_num The notebook page number to remove.
@@ -697,7 +698,7 @@ GeanyDocument *document_new_file_if_non_open(void)
 
 /**
  *  Creates a new document.
- *  After all, the "document-new" signal is emitted for plugins.
+ *  Afterwards, the @c "document-new" signal is emitted for plugins.
  *
  *  @param utf8_filename The file name in UTF-8 encoding, or @c NULL to open a file as "untitled".
  *  @param ft The filetype to set or @c NULL to detect it from @a filename if not @c NULL.
@@ -775,8 +776,8 @@ GeanyDocument *document_new_file(const gchar *utf8_filename, GeanyFiletype *ft,
 
 
 /**
- *  Open a document specified by @a locale_filename.
- *  After all, the "document-open" signal is emitted for plugins.
+ *  Opens a document specified by @a locale_filename.
+ *  Afterwards, the @c "document-open" signal is emitted for plugins.
  *
  *  @param locale_filename The filename of the document to load, in locale encoding.
  *  @param readonly Whether to open the document in read-only mode.
@@ -1733,12 +1734,12 @@ static gchar *write_data_to_disk(GeanyDocument *doc, const gchar *locale_filenam
 
 
 /**
- *  Save the document. Saving includes replacing tabs by spaces,
+ *  Saves the document. Saving includes replacing tabs by spaces,
  *  stripping trailing spaces and adding a final new line at the end of the file (all only if
- *  user enabled these features). Then the "document-before-save" signal is emitted,
+ *  user enabled these features). Then the @c "document-before-save" signal is emitted,
  *  allowing plugins to modify the document before it is saved, and data is
  *  actually written to disk. The filetype is set again or auto-detected if it wasn't set yet.
- *  After all, the "document-save" signal is emitted for plugins.
+ *  Afterwards, the @c "document-save" signal is emitted for plugins.
  *
  *  If the file is not modified, this functions does nothing unless force is set to @c TRUE.
  *

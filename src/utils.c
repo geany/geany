@@ -214,7 +214,7 @@ gboolean utils_is_opening_brace(gchar c, gboolean include_angles)
 
 
 /**
- *  Write the given @a text into a file with @a filename.
+ *  Writes the given @a text into a file with @a filename.
  *  If the file doesn't exist, it will be created.
  *  If it already exists, it will be overwritten.
  *
@@ -508,7 +508,7 @@ gboolean utils_str_equal(const gchar *a, const gchar *b)
 
 
 /**
- *  Remove the extension from @a filename and return the result in a newly allocated string.
+ *  Removes the extension from @a filename and return the result in a newly allocated string.
  *
  *  @param filename The filename to operate on.
  *
@@ -1322,8 +1322,8 @@ gchar **utils_strv_new(const gchar *first, ...)
 
 
 /**
- *  Create a directory if it doesn't already exist.
- *  Create intermediate parent directories as needed, too.
+ *  Creates a directory if it doesn't already exist.
+ *  Creates intermediate parent directories as needed, too.
  *  The permissions of the created directory are set 0700.
  *
  *  @param path The path of the directory to create, in locale encoding.
@@ -1549,7 +1549,7 @@ static gboolean check_error(GError **error)
 
 
 /**
- *  This is a wrapper function for g_spawn_sync() and internally calls this function on Unix-like
+ *  Wraps g_spawn_sync() and internally calls this function on Unix-like
  *  systems. On Win32 platforms, it uses the Windows API.
  *
  *  @param dir The child's current working directory, or @a NULL to inherit parent's.
@@ -1597,7 +1597,7 @@ gboolean utils_spawn_sync(const gchar *dir, gchar **argv, gchar **env, GSpawnFla
 
 
 /**
- *  This is a wrapper function for g_spawn_async() and internally calls this function on Unix-like
+ *  Wraps g_spawn_async() and internally calls this function on Unix-like
  *  systems. On Win32 platforms, it uses the Windows API.
  *
  *  @param dir The child's current working directory, or @a NULL to inherit parent's.
@@ -1801,7 +1801,7 @@ void utils_tidy_path(gchar *filename)
 
 
 /**
- *  Replace or remove characters from a string in place.
+ *  Removes characters from a string, in place.
  *
  *  @param string String to search.
  *  @param chars Characters to remove.

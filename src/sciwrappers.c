@@ -1012,7 +1012,7 @@ gint sci_get_first_visible_line(ScintillaObject *sci)
 
 
 /**
- *  Set the current indicator. This is necessary to define an indicator for a range of text or
+ *  Sets the current indicator. This is necessary to define an indicator for a range of text or
  *  clearing indicators for a range of text.
  *
  *  @param sci Scintilla widget.
@@ -1035,7 +1035,7 @@ void sci_indicator_fill(ScintillaObject *sci, gint pos, gint len)
 
 
 /**
- *  Clear a range of text from the currently set indicator.
+ *  Clears the currently set indicator from a range of text.
  *  Starting at @a pos, @a len characters long.
  *  In order to make this function properly, you need to set the current indicator before with
  *  @ref sci_indicator_set().

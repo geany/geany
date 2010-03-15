@@ -136,7 +136,7 @@ static void add_new_position(const gchar *utf8_filename, gint pos)
 
 
 /**
- *  Add old file position and new file position to the navqueue, then goes to the new position.
+ *  Adds old file position and new file position to the navqueue, then goes to the new position.
  *
  *  @param old_doc The document of the previous position, if set as invalid (@c NULL) then no old
  *         position is set

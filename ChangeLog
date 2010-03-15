@@ -1,3 +1,14 @@
+2010-03-15  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/utils.c, src/utils.h, src/sciwrappers.c, src/dialogs.c,
+   src/navqueue.c, src/msgwindow.c, src/filetypes.c, src/document.c,
+   src/main.c:
+   Use 3rd person for more API dox.
+   Change 'This is a wrapper function for...' to 'Wraps...' in brief
+   descriptions.
+   Change 'After all...' to 'Afterwards...'.
+
+
 2010-03-12  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/ui_utils.c:

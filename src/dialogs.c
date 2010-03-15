@@ -541,7 +541,7 @@ static gboolean gtk_show_save_as(void)
 
 
 /**
- *  Show the Save As dialog for the current notebook page.
+ *  Shows the Save As dialog for the current notebook page.
  *
  *  @return @c TRUE if the file was saved, otherwise @c FALSE.
  **/
@@ -593,7 +593,7 @@ static void show_msgbox_dialog(GtkWidget *dialog, GtkMessageType type, GtkWindow
 
 
 /**
- *  Show a message box of the type @a type with @a text.
+ *  Shows a message box of the type @a type with @a text.
  *  On Unix-like systems a GTK message dialog box is shown, on Win32 systems a native Windows
  *  message dialog box is shown.
  *
@@ -945,7 +945,7 @@ gchar *dialogs_show_input(const gchar *title, const gchar *label_text,
 
 
 /**
- *  Show an input box to enter a numerical value using a GtkSpinButton.
+ *  Shows an input box to enter a numerical value using a GtkSpinButton.
  *  If the dialog is aborted, @a value remains untouched.
  *
  *  @param title The dialog title.
@@ -1454,7 +1454,7 @@ static gint show_prompt(GtkWidget *parent,
 
 
 /**
- *  Show a question message box with @a text and Yes/No buttons.
+ *  Shows a question message box with @a text and Yes/No buttons.
  *  On Unix-like systems a GTK message dialog box is shown, on Win32 systems a native Windows
  *  message dialog box is shown.
  *

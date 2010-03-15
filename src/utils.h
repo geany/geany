@@ -38,7 +38,7 @@
 	(G_LIKELY((ptr)) && G_LIKELY((ptr)[0]))
 
 /**
- *  Free's @a ptr (if not @c NULL), then assigns @a result to it.
+ *  Frees @a ptr (if not @c NULL), then assigns @a result to it.
  *  @a result can be an expression using the 'old' value of @a ptr.
  *  It prevents a memory leak compared with: @code ptr = func(ptr); @endcode
  **/

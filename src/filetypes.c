@@ -1067,7 +1067,7 @@ GeanyFiletype *filetypes_detect_from_document(GeanyDocument *doc)
 #ifdef HAVE_PLUGINS
 /* Currently only used by external plugins (e.g. geanyprj). */
 /**
- *  Detect filetype based on a shebang line in the file, or the filename extension.
+ *  Detects filetype based on a shebang line in the file or the filename extension.
  *
  *  @param utf8_filename The filename in UTF-8 encoding.
  *
