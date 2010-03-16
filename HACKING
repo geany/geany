@@ -166,6 +166,11 @@ to set warning options (as well as anything else e.g. -g -O2).
   function_name(). This is for compatibility with various Unix-like
   compilers. You should use -ansi to help check this.
 
+.. tip::
+    Remember for gcc you need to enable optimization to get certain
+    warnings like uninitialized variables, but for debugging it's
+    better to have no optimization on.
+
 Style
 ^^^^^
 * We use a tab width of 4 and indent completely with tabs not spaces.
@@ -234,16 +239,27 @@ Example::
         ...
 
 
+Testing
+-------
+* Run with ``-v`` to print any debug messages.
+* You can use a second instance (``geany -i``).
+* To check first-run behaviour, use an alternate config directory by
+  passing ``-c some_dir`` (but make sure the directory is clean first).
+* For debugging tips, see `GDB`_.
+
 Libraries
 ---------
-We prefer to use an unmodified version of Scintilla - any changes should
-be passed on to the maintainers at http://scintilla.org.
+We try to use an unmodified version of Scintilla - any new lexers or
+other changes should be passed on to the maintainers at
+http://scintilla.org. We normally update to a new Scintilla release
+shortly after one is made.
 
 Tagmanager was originally taken from Anjuta 1.2.2, and parts of it
 (notably c.c) have been merged from later versions of Anjuta and
 CTags. The independent Tagmanager library itself ceased development
 before Geany was started. It's source code parsing is mostly taken from
-Exuberant CTags (see http://ctags.sf.net).
+Exuberant CTags (see http://ctags.sf.net). If appropriate it's good to
+pass language parser changes back to the CTags project.
 
 
 Notes
