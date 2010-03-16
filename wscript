@@ -281,7 +281,7 @@ def configure(conf):
 	print_message(conf, 'Use virtual terminal support', Options.options.no_vte and 'no' or 'yes')
 	if svn_rev != '-1':
 		print_message(conf, 'Compiling Subversion revision', svn_rev)
-		conf.env.append_value('CCFLAGS', '-g -O0 -DGEANY_DEBUG'.split())
+		conf.env.append_value('CCFLAGS', '-g -DGEANY_DEBUG'.split())
 
 	conf.env.append_value('CCFLAGS', '-DHAVE_CONFIG_H')
 	# for now define GEANY_PRIVATE for all files, even though it should just be for src/*.
