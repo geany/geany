@@ -1,8 +1,16 @@
+2010-03-17  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * tagmanager/python.c:
+   Apply patch from Colomban Wendling to parse Python lambda functions
+   (thanks) - modified to only parse toplevel or class member lambdas.
+
+
 2010-03-17  Lex Trotman  <elextr.at.gmail.dot.com>
 
- * src/build.c
+ * src/build.c:
    Fix using return value without checking return status, caused
    incorrect sensitivity settings on build dialog.
+
 
 2010-03-16  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
@@ -10,6 +18,7 @@
    Add tip about gcc optimization & warnings/debugging.
    Add Testing section.
    Update Libraries section about synchronizing with other projects.
+
 
 2010-03-15  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
