@@ -22,27 +22,38 @@
  * $Id$
  */
 
-/* Mini-library for reading/writing GKeyFile settings and synchronizing widgets with
- * C variables. */
-
-/* Terms
+/*
+ * @file stash.h
+ * Lightweight library for reading/writing @c GKeyFile settings and synchronizing widgets with
+ * C variables.
+ *
+ * Note: Stash should only depend on GLib and GTK, but currently has some minor
+ * dependencies on Geany's utils.c.
+ *
+ * @section Terms
  * 'Setting' is used only for data stored on disk or in memory.
  * 'Pref' can also include visual widget information.
  *
- * Memory Usage
+ * @section Memory Usage
  * Stash will not duplicate strings if they are normally static arrays, such as
  * keyfile group names and key names, string default values, widget_id names, property names.
  *
- * String Settings
+ * @section String Settings
  * String settings and other dynamically allocated settings must be initialized to NULL as they
  * will be freed before reassigning.
  *
- * Widget Support
+ * @section Widget Support
  * Widgets very commonly used in configuration dialogs will be supported with their own function.
  * Widgets less commonly used such as GtkExpander or widget settings that aren't commonly needed
  * to be persistent won't be directly supported, to keep the library lightweight. However, you can
  * use stash_group_add_widget_property() to also save these settings for any read/write widget
  * property.
+ *
+ * @section Example
+ * @include stash-example.c
+ */
+/* TODO: Type naming should be changed to be independent of Geany.
+ * TODO: Rename to GStash as a libstash already exists.
  */
 
 /* Implementation Note
@@ -56,7 +67,9 @@
  * Usually the prefs code isn't what user code will spend most of its time doing, so this
  * should be efficient enough. But, if desired we could add a stash_group_set_size() function
  * to reduce reallocation.
- * */
+ *
+ * TODO: Maybe using GSlice chunks with an extra 'next' pointer would be more (memory) efficient.
+ */
 
 
 #include <gtk/gtk.h>
@@ -75,6 +88,8 @@ struct GeanyPrefEntry
 	GeanyWidgetID widget_id;	/* (GtkWidget*) or (gchar*) */
 	gpointer fields;			/* extra fields */
 };
+
+typedef struct GeanyPrefEntry GeanyPrefEntry;
 
 struct GeanyPrefGroup
 {
@@ -227,18 +242,27 @@ static void keyfile_action(SettingAction action, GeanyPrefGroup *group, GKeyFile
 }
 
 
+/** Reads all key values (usually from a configuration file) into the group settings.
+ * @param group .
+ * @param keyfile . */
 void stash_group_load_from_key_file(GeanyPrefGroup *group, GKeyFile *keyfile)
 {
 	keyfile_action(SETTING_READ, group, keyfile);
 }
 
 
+/** Writes group settings into key values for a configuration file.
+ * @param group .
+ * @param keyfile . */
 void stash_group_save_to_key_file(GeanyPrefGroup *group, GKeyFile *keyfile)
 {
 	keyfile_action(SETTING_WRITE, group, keyfile);
 }
 
 
+/** Creates a new group.
+ * @param name Name used for @c GKeyFile group.
+ * @return Group. */
 GeanyPrefGroup *stash_group_new(const gchar *name)
 {
 	GeanyPrefGroup *group = g_new0(GeanyPrefGroup, 1);
@@ -250,6 +274,8 @@ GeanyPrefGroup *stash_group_new(const gchar *name)
 }
 
 
+/** Frees a group.
+ * @param group . */
 void stash_group_free(GeanyPrefGroup *group)
 {
 	GeanyPrefEntry *entry;
@@ -299,6 +325,11 @@ add_pref(GeanyPrefGroup *group, GType type, gpointer setting,
 }
 
 
+/** Adds boolean setting.
+ * @param group .
+ * @param setting Address of setting variable.
+ * @param key_name Name for key in a @c GKeyFile.
+ * @param default_value Value to use if the key doesn't exist when loading. */
 void stash_group_add_boolean(GeanyPrefGroup *group, gboolean *setting,
 		const gchar *key_name, gboolean default_value)
 {
@@ -306,6 +337,11 @@ void stash_group_add_boolean(GeanyPrefGroup *group, gboolean *setting,
 }
 
 
+/** Adds integer setting.
+ * @param group .
+ * @param setting Address of setting variable.
+ * @param key_name Name for key in a @c GKeyFile.
+ * @param default_value Value to use if the key doesn't exist when loading. */
 void stash_group_add_integer(GeanyPrefGroup *group, gint *setting,
 		const gchar *key_name, gint default_value)
 {
@@ -313,9 +349,13 @@ void stash_group_add_integer(GeanyPrefGroup *group, gint *setting,
 }
 
 
-/* The contents of @a setting will be freed before being replaced, so make sure it is
+/** Adds string setting.
+ * The contents of @a setting will be freed before being replaced, so make sure it is
  * allocated, or initialized to @c NULL.
- * @param default_value Not duplicated. */
+ * @param group .
+ * @param setting Address of setting variable.
+ * @param key_name Name for key in a @c GKeyFile.
+ * @param default_value Value to use if the key doesn't exist when loading. Not duplicated. */
 void stash_group_add_string(GeanyPrefGroup *group, gchar **setting,
 		const gchar *key_name, const gchar *default_value)
 {
@@ -323,9 +363,13 @@ void stash_group_add_string(GeanyPrefGroup *group, gchar **setting,
 }
 
 
-/* The contents of @a setting will be freed before being replaced, so make sure it is
+/** Adds string vector setting (array of strings).
+ * The contents of @a setting will be freed before being replaced, so make sure it is
  * allocated, or initialized to @c NULL.
- * @param default_value Not duplicated. */
+ * @param group .
+ * @param setting Address of setting variable.
+ * @param key_name Name for key in a @c GKeyFile.
+ * @param default_value Value to use if the key doesn't exist when loading. Not duplicated. */
 void stash_group_add_string_vector(GeanyPrefGroup *group, gchar ***setting,
 		const gchar *key_name, const gchar **default_value)
 {
@@ -572,7 +616,7 @@ static void pref_action(PrefAction action, GeanyPrefGroup *group, GtkWidget *own
 }
 
 
-/** @param owner If non-NULL, used to lookup widgets by name. */
+/* @param owner If non-NULL, used to lookup widgets by name. */
 void stash_group_display(GeanyPrefGroup *group, GtkWidget *owner)
 {
 	pref_action(PREF_DISPLAY, group, owner);

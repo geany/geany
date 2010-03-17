@@ -25,12 +25,11 @@
 #ifndef GEANY_STASH_H
 #define GEANY_STASH_H
 
-typedef struct GeanyPrefEntry GeanyPrefEntry;
-
+/** Opaque type for a group of settings. */
 typedef struct GeanyPrefGroup GeanyPrefGroup;
 
-/* Can be (GtkWidget*) or (gchar*) depending on whether owner argument is used for
- * stash_group_display/stash_group_update. */
+/* Can be @c GtkWidget* or @c gchar* depending on whether the @c owner argument is used for
+ * stash_group_display() and stash_group_update(). */
 typedef gpointer GeanyWidgetID;
 
 

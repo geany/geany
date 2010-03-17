@@ -3,6 +3,11 @@
  * tagmanager/python.c:
    Apply patch from Colomban Wendling to parse Python lambda functions
    (thanks) - modified to only parse toplevel or class member lambdas.
+ * src/stash.c, src/stash.h, doc/Doxyfile.in, doc/Makefile.am,
+   doc/stash-example.c:
+   Add doc-comments for Stash setting functions.
+   Add an example file showing usage of Stash.
+   (Not enabled yet until added to the plugin API).
 
 
 2010-03-17  Lex Trotman  <elextr.at.gmail.dot.com>
