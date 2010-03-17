@@ -1842,7 +1842,7 @@ static RowWidgets *build_add_dialog_row(GeanyDocument *doc, GtkTable *table, gin
 			str = "";
 		set_build_command_entry_text(roww->entries[i], str);
 	}
-	if (src > (gint)dst || (grp == GEANY_GBG_FT && (doc == NULL || doc->file_type == NULL)))
+	if (bc != NULL && (src > (gint)dst || (grp == GEANY_GBG_FT && (doc == NULL || doc->file_type == NULL))))
 	{
 		for (i = 0; i < GEANY_BC_CMDENTRIES_COUNT; i++)
 			gtk_widget_set_sensitive(roww->entries[i], FALSE);
