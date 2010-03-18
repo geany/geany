@@ -1,3 +1,10 @@
+2010-03-18  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * data/filetypes.common:
+   Set default for wrapped lines to show marker at end of line only
+   (more expected and doesn't change line alignment - closes #2972386).
+
+
 2010-03-17  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * tagmanager/python.c:

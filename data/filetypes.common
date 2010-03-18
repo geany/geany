@@ -73,7 +73,7 @@ folding_horiz_line=2
 # second argument: whether the visual flags to indicate a line is wrapped are drawn near the border
 # or near the text. This is a bitmask of the values: 0 - Visual flags drawn near border,
 # 1 - Visual flag at end of subline drawn near text, 2 - Visual flag at begin of subline drawn near text
-line_wrap_visuals=3;0;
+line_wrap_visuals=1;0;
 
 # first argument: sets the size of indentation of sublines for wrapped lines in terms of
 # the width of a space, only used when the second argument is 0
