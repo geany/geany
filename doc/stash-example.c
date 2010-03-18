@@ -1,4 +1,4 @@
-GeanyPrefGroup *group;
+StashGroup *group;
 gboolean china_enabled;
 gchar *potter_name = NULL; /* strings must be initialised */
 GKeyFile *keyfile;

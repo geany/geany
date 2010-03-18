@@ -893,7 +893,7 @@ static void documents_menu_update(GtkTreeSelection *selection)
 }
 
 
-GeanyPrefGroup *stash_group = NULL;
+StashGroup *stash_group = NULL;
 
 static void on_load_settings(void)
 {
@@ -913,7 +913,7 @@ static void on_save_settings(void)
 
 void sidebar_init(void)
 {
-	GeanyPrefGroup *group;
+	StashGroup *group;
 
 	group = stash_group_new(PACKAGE);
 	stash_group_add_boolean(group, &documents_show_paths, "documents_show_paths", TRUE);

@@ -33,9 +33,9 @@ void configuration_init(void);
 
 void configuration_finalize(void);
 
-struct GeanyPrefGroup;
+struct StashGroup;
 
-void configuration_add_pref_group(struct GeanyPrefGroup *group, gboolean for_prefs_dialog);
+void configuration_add_pref_group(struct StashGroup *group, gboolean for_prefs_dialog);
 
 void configuration_save(void);
 

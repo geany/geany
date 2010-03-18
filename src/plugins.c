@@ -942,7 +942,7 @@ static void on_save_settings(GKeyFile *config)
 /* called even if plugin support is disabled */
 void plugins_init(void)
 {
-	GeanyPrefGroup *group;
+	StashGroup *group;
 
 	group = stash_group_new("plugins");
 	configuration_add_pref_group(group, TRUE);

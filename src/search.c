@@ -98,7 +98,7 @@ static struct
 }
 settings = {0, NULL, FALSE, FALSE, FALSE, FALSE, FALSE};
 
-static GeanyPrefGroup *fif_prefs = NULL;
+static StashGroup *fif_prefs = NULL;
 
 
 static struct
@@ -167,7 +167,7 @@ search_find_in_files(const gchar *utf8_search_text, const gchar *dir, const gcha
 
 static void init_prefs(void)
 {
-	GeanyPrefGroup *group;
+	StashGroup *group;
 
 	group = stash_group_new("search");
 	configuration_add_pref_group(group, TRUE);

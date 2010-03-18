@@ -98,7 +98,7 @@ GPtrArray *pref_groups = NULL;
 
 /* The group will be free'd on quitting.
  * @param for_prefs_dialog is whether the group also has Prefs dialog items. */
-void configuration_add_pref_group(struct GeanyPrefGroup *group, gboolean for_prefs_dialog)
+void configuration_add_pref_group(struct StashGroup *group, gboolean for_prefs_dialog)
 {
 	g_ptr_array_add(keyfile_groups, group);
 
@@ -109,7 +109,7 @@ void configuration_add_pref_group(struct GeanyPrefGroup *group, gboolean for_pre
 
 static void init_pref_groups(void)
 {
-	GeanyPrefGroup *group;
+	StashGroup *group;
 
 	group = stash_group_new(PACKAGE);
 	configuration_add_pref_group(group, TRUE);
@@ -207,7 +207,7 @@ SettingAction;
 static void settings_action(GKeyFile *config, SettingAction action)
 {
 	guint i;
-	GeanyPrefGroup *group;
+	StashGroup *group;
 
 	foreach_ptr_array(group, i, keyfile_groups)
 	{
@@ -1111,7 +1111,7 @@ void configuration_init(void)
 void configuration_finalize(void)
 {
 	guint i;
-	GeanyPrefGroup *group;
+	StashGroup *group;
 
 	foreach_ptr_array(group, i, keyfile_groups)
 		stash_group_free(group);

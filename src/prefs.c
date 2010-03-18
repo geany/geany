@@ -109,7 +109,7 @@ PrefCallbackAction;
 /* Synchronize Stash settings with widgets (see keyfile.c - init_pref_groups()). */
 static void prefs_action(PrefCallbackAction action)
 {
-	GeanyPrefGroup *group;
+	StashGroup *group;
 	guint i;
 
 	foreach_ptr_array(group, i, pref_groups)

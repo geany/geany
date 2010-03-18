@@ -58,7 +58,7 @@ ProjectPrefs project_prefs = { NULL, FALSE, FALSE };
 static GeanyProjectPrivate priv;
 static GeanyIndentPrefs indentation;
 
-static GeanyPrefGroup *indent_group = NULL;
+static StashGroup *indent_group = NULL;
 
 static struct
 {
@@ -1204,7 +1204,7 @@ void project_apply_prefs(void)
 
 void project_init(void)
 {
-	GeanyPrefGroup *group;
+	StashGroup *group;
 
 	group = stash_group_new("indentation");
 	/* defaults are copied from editor indent prefs */

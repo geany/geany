@@ -11,6 +11,12 @@
    Move some '@file' doc-comments to the .c file.
  * src/interface.c, geany.glade:
    Add frame for 'Printing' prefs dialog page.
+ * src/sidebar.c, src/project.c, src/prefs.c, src/stash.c, src/stash.h,
+   src/keyfile.c, src/keyfile.h, src/search.c, src/plugins.c,
+   doc/stash-example.c:
+   Rename Stash data types to be independently named from Geany (so
+   Stash can be reused for other projects).
+   Rename GeanyPrefGroup to StashGroup.
 
 
 2010-03-17  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
