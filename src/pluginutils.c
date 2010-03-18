@@ -22,7 +22,7 @@
  * $Id$
  */
 
-/** @file pluginutils.c
+/** @file pluginutils.h
  * Plugin utility functions.
  * These functions all take the @ref geany_plugin symbol as their first argument. */
 

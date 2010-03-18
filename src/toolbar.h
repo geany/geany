@@ -21,12 +21,6 @@
  * $Id$
  */
 
-/**
- * @file toolbar.h
- * Toolbar (prefs).
- **/
-
-
 #ifndef GEANY_TOOLBAR_H
 #define GEANY_TOOLBAR_H
 

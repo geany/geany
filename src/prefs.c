@@ -22,6 +22,11 @@
  */
 
 /*
+ * @file prefs.h
+ * Preferences dialog.
+ */
+
+/*
  * Preferences dialog support functions.
  * New prefs should use Stash code in keyfile.c - init_pref_groups().
  */

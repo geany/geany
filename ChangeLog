@@ -3,6 +3,12 @@
  * data/filetypes.common:
    Set default for wrapped lines to show marker at end of line only
    (more expected and doesn't change line alignment - closes #2972386).
+ * src/toolbar.c, src/toolbar.h, src/prefs.c, src/prefs.h,
+   src/pluginutils.c, doc/plugins.dox:
+   Improve API docs contents page by listing all commonly-used files.
+   Fix 'Date' appearing twice on the date line.
+   Don't generate API docs for prefs.h, toolbar.h (unused).
+   Move some '@file' doc-comments to the .c file.
 
 
 2010-03-17  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

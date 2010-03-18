@@ -20,12 +20,6 @@
  *
  */
 
-/**
- * @file prefs.h
- * Preferences dialog.
- **/
-
-
 #ifndef GEANY_PREFS_H
 #define GEANY_PREFS_H 1
 

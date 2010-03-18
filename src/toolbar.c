@@ -21,10 +21,11 @@
  * $Id$
  */
 
-
-/** @file toolbar.c
- * Utility functions to create the toolbar.
+/**
+ * @file toolbar.h
+ * Toolbar (prefs).
  */
+/* Utility functions to create the toolbar */
 
 #include "geany.h"
 #include "support.h"

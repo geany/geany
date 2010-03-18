@@ -32,25 +32,38 @@
  * @mainpage Geany Plugin API Documentation
  *
  * @author Enrico Tröger, Nick Treleaven, Frank Lanitz
- * @date $Date$
+ * $Date$
  *
  * @section Intro
  * This is the Geany API documentation. It should be considered work in progress.
  * We will try to document as many functions and structs as possible.
  *
- * To get started, see the @link howto Plugin Howto @endlink.
+ * @warning Do not use any symbol not in the documentation - it may change.
  *
- * Other pages:
+ * @section pluginsupport Plugin Support
+ * - @link howto Plugin HowTo @endlink - get started
  * - @link pluginsymbols.c Plugin Symbols @endlink
  * - @link plugindata.h Main Datatypes and Macros @endlink
  * - @link signals Plugin Signals @endlink
- * - @link pluginutils.c Plugin Utility Functions @endlink
+ * - @link pluginutils.h Plugin Utility Functions @endlink
  * - @link guidelines Plugin Writing Guidelines @endlink
  * - <b>plugins/demoplugin.c</b> - in Geany's source, bigger than the howto example
- * - Header files for functions and types - see <b>Files</b> link at the top
+ *
+ * @section common Common API files
+ * - @link dialogs.h @endlink
+ * - @link document.h @endlink
+ * - @link editor.h @endlink
+ * - @link filetypes.h @endlink
+ * - @link msgwindow.h @endlink
+ * - @link project.h @endlink
+ * - @link sciwrappers.h Scintilla Wrapper Functions @endlink
+ * - @link utils.h General Utility Functions @endlink
+ * - @link ui_utils.h Widget Utility Functions @endlink
+
+ * @section More
+ * - All API functions and types - see <b>Files</b> link at the top
  * - Deprecated symbols - see <b>Related Pages</b> link at the top
  *
- * @warning Do not use any symbol not in the documentation - it may change.
  * @note See the HACKING file for information about developing the plugin API and
  * other useful notes.
  */
@@ -376,7 +389,7 @@ PluginCallback plugin_callbacks[] =
  *     the plugin binary in @c ~/.config/geany/plugins/.
  *
  *
- *  @page howto Plugin Howto
+ *  @page howto Plugin HowTo
  *
  *  @section intro Introduction
  *
