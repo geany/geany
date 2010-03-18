@@ -717,7 +717,7 @@ void vte_append_preferences_tab(void)
 
 		notebook = ui_lookup_widget(ui_widgets.prefs_dialog, "notebook2");
 
-		frame = ui_frame_new_with_alignment(_("Terminal plugin"), &alignment);
+		frame = ui_frame_new_with_alignment(_("Terminal"), &alignment);
 		gtk_container_set_border_width(GTK_CONTAINER(frame), 5);
 		vbox = gtk_vbox_new(FALSE, 12);
 		gtk_container_add(GTK_CONTAINER(alignment), vbox);
@@ -730,7 +730,7 @@ void vte_append_preferences_tab(void)
 		gtk_table_set_row_spacings(GTK_TABLE(table), 3);
 		gtk_table_set_col_spacings(GTK_TABLE(table), 10);
 
-		label = gtk_label_new(_("Terminal font:"));
+		label = gtk_label_new(_("Font:"));
 		gtk_table_attach(GTK_TABLE(table), label, 0, 1, 0, 1,
 					(GtkAttachOptions) (GTK_FILL),
 					(GtkAttachOptions) (0), 0, 0);
