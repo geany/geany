@@ -21,15 +21,8 @@
  * $Id$
  */
 
-/**
- * @file keybindings.h
- * Configurable keyboard shortcuts.
- **/
-
-
 #ifndef GEANY_KEYBINDINGS_H
 #define GEANY_KEYBINDINGS_H 1
-
 
 /** Function pointer type used for keybinding callbacks. */
 typedef void (*GeanyKeyCallback) (guint key_id);

@@ -21,9 +21,11 @@
  * $Id$
  */
 
-/*
+/**
+ * @file keybindings.h
  * Configurable keyboard shortcuts.
- */
+ * @see plugin_set_key_group().
+ **/
 
 
 #include "geany.h"
