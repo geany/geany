@@ -2695,6 +2695,8 @@ create_prefs_dialog (void)
   GtkWidget *button2;
   GtkWidget *label181;
   GtkWidget *label151;
+  GtkWidget *frame41;
+  GtkWidget *alignment49;
   GtkWidget *vbox27;
   GtkWidget *frame32;
   GtkWidget *alignment35;
@@ -2719,6 +2721,7 @@ create_prefs_dialog (void)
   GtkWidget *label203;
   GtkWidget *entry_print_dateformat;
   GtkWidget *radio_print_gtk;
+  GtkWidget *label243;
   GtkWidget *label201;
   GtkWidget *dialog_action_area3;
   GtkWidget *button3;
@@ -4624,9 +4627,20 @@ create_prefs_dialog (void)
   gtk_widget_show (label151);
   gtk_notebook_set_tab_label (GTK_NOTEBOOK (notebook2), gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook2), 7), label151);
 
+  frame41 = gtk_frame_new (NULL);
+  gtk_widget_show (frame41);
+  gtk_container_add (GTK_CONTAINER (notebook2), frame41);
+  gtk_container_set_border_width (GTK_CONTAINER (frame41), 5);
+  gtk_frame_set_shadow_type (GTK_FRAME (frame41), GTK_SHADOW_NONE);
+
+  alignment49 = gtk_alignment_new (0.5, 0.5, 1, 1);
+  gtk_widget_show (alignment49);
+  gtk_container_add (GTK_CONTAINER (frame41), alignment49);
+  gtk_alignment_set_padding (GTK_ALIGNMENT (alignment49), 0, 0, 12, 0);
+
   vbox27 = gtk_vbox_new (FALSE, 10);
   gtk_widget_show (vbox27);
-  gtk_container_add (GTK_CONTAINER (notebook2), vbox27);
+  gtk_container_add (GTK_CONTAINER (alignment49), vbox27);
   gtk_container_set_border_width (GTK_CONTAINER (vbox27), 5);
 
   frame32 = gtk_frame_new (NULL);
@@ -4734,6 +4748,11 @@ create_prefs_dialog (void)
   gtk_frame_set_label_widget (GTK_FRAME (frame31), radio_print_gtk);
   gtk_radio_button_set_group (GTK_RADIO_BUTTON (radio_print_gtk), radio_print_external_group);
   radio_print_external_group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio_print_gtk));
+
+  label243 = gtk_label_new (_("<b>Printing</b>"));
+  gtk_widget_show (label243);
+  gtk_frame_set_label_widget (GTK_FRAME (frame41), label243);
+  gtk_label_set_use_markup (GTK_LABEL (label243), TRUE);
 
   label201 = gtk_label_new (_("Printing"));
   gtk_widget_show (label201);
@@ -5111,6 +5130,8 @@ create_prefs_dialog (void)
   GLADE_HOOKUP_OBJECT (prefs_dialog, button2, "button2");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label181, "label181");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label151, "label151");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, frame41, "frame41");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, alignment49, "alignment49");
   GLADE_HOOKUP_OBJECT (prefs_dialog, vbox27, "vbox27");
   GLADE_HOOKUP_OBJECT (prefs_dialog, frame32, "frame32");
   GLADE_HOOKUP_OBJECT (prefs_dialog, alignment35, "alignment35");
@@ -5134,6 +5155,7 @@ create_prefs_dialog (void)
   GLADE_HOOKUP_OBJECT (prefs_dialog, label203, "label203");
   GLADE_HOOKUP_OBJECT (prefs_dialog, entry_print_dateformat, "entry_print_dateformat");
   GLADE_HOOKUP_OBJECT (prefs_dialog, radio_print_gtk, "radio_print_gtk");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, label243, "label243");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label201, "label201");
   GLADE_HOOKUP_OBJECT_NO_REF (prefs_dialog, dialog_action_area3, "dialog_action_area3");
   GLADE_HOOKUP_OBJECT (prefs_dialog, button3, "button3");

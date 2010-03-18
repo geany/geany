@@ -9,6 +9,8 @@
    Fix 'Date' appearing twice on the date line.
    Don't generate API docs for prefs.h, toolbar.h (unused).
    Move some '@file' doc-comments to the .c file.
+ * src/interface.c, geany.glade:
+   Add frame for 'Printing' prefs dialog page.
 
 
 2010-03-17  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
