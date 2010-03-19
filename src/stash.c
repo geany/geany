@@ -40,7 +40,7 @@
  *
  * @section String Settings
  * String settings and other dynamically allocated settings will be initialized to NULL when
- * added to a StashGroup (so they can safely be freed before reassigning).
+ * added to a StashGroup (so they can safely be reassigned).
  *
  * @section Widget Support
  * Widgets very commonly used in configuration dialogs will be supported with their own function.
@@ -51,6 +51,7 @@
  *
  * @section Example
  * @include stash-example.c
+ * @note You might want to handle the warning/error conditions differently from above.
  */
 
 /* Implementation Note
@@ -254,6 +255,61 @@ void stash_group_load_from_key_file(StashGroup *group, GKeyFile *keyfile)
 void stash_group_save_to_key_file(StashGroup *group, GKeyFile *keyfile)
 {
 	keyfile_action(SETTING_WRITE, group, keyfile);
+}
+
+
+/** Reads group settings from a configuration file using @c GKeyFile.
+ * @param group .
+ * @param filename Filename of the file to write, in locale encoding.
+ * @param flags Keyfile options - @c G_KEY_FILE_NONE is the most efficient.
+ * @return @c TRUE if a key file could be loaded.
+ * @see stash_group_load_from_key_file().
+ **/
+gboolean stash_group_load_from_file(StashGroup *group, const gchar *filename,
+		GKeyFileFlags flags)
+{
+	GKeyFile *keyfile;
+	gboolean ret;
+
+	keyfile = g_key_file_new();
+	ret = g_key_file_load_from_file(keyfile, filename, flags, NULL);
+	/* even on failure we load settings to apply defaults */
+	stash_group_load_from_key_file(group, keyfile);
+
+	g_key_file_free(keyfile);
+	return ret;
+}
+
+
+/** Writes group settings to a configuration file using @c GKeyFile.
+ * If the file doesn't exist, it will be created.
+ * If it already exists, it will be overwritten.
+ *
+ * @param group .
+ * @param filename Filename of the file to write, in locale encoding.
+ * @param flags Keyfile options - @c G_KEY_FILE_NONE is the most efficient.
+ * @return 0 if the file was successfully written, otherwise the @c errno of the
+ *         failed operation is returned.
+ * @see stash_group_save_to_key_file().
+ **/
+gint stash_group_save_to_file(StashGroup *group, const gchar *filename,
+		GKeyFileFlags flags)
+{
+	GKeyFile *keyfile;
+	gchar *data;
+	gint ret;
+
+	keyfile = g_key_file_new();
+	/* if we need to keep comments or translations, try to load first */
+	if (flags)
+		g_key_file_load_from_file(keyfile, filename, flags, NULL);
+
+	stash_group_save_to_key_file(group, keyfile);
+	data = g_key_file_to_data(keyfile, NULL, NULL);
+	ret = utils_write_file(filename, data);
+	g_free(data);
+	g_key_file_free(keyfile);
+	return ret;
 }
 
 

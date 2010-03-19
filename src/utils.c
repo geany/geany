@@ -221,7 +221,7 @@ gboolean utils_is_opening_brace(gchar c, gboolean include_angles)
  *  @param filename The filename of the file to write, in locale encoding.
  *  @param text The text to write into the file.
  *
- *  @return 0 if the directory was successfully created, otherwise the @c errno of the
+ *  @return 0 if the file was successfully written, otherwise the @c errno of the
  *          failed operation is returned.
  **/
 gint utils_write_file(const gchar *filename, const gchar *text)

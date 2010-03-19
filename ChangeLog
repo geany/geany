@@ -3,6 +3,8 @@
  * src/stash.c:
    Make adding string and string vector settings initialise the setting
    to NULL for safety.
+ * src/utils.c, src/stash.c, src/stash.h, doc/stash-example.c:
+   Add stash_group_load_from_file() and stash_group_save_to_file().
 
 
 2010-03-18  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

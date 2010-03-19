@@ -55,6 +55,12 @@ void stash_group_load_from_key_file(StashGroup *group, GKeyFile *keyfile);
 
 void stash_group_save_to_key_file(StashGroup *group, GKeyFile *keyfile);
 
+gboolean stash_group_load_from_file(StashGroup *group, const gchar *filename,
+		GKeyFileFlags flags);
+
+gint stash_group_save_to_file(StashGroup *group, const gchar *filename,
+		GKeyFileFlags flags);
+
 void stash_group_free(StashGroup *group);
 
 
