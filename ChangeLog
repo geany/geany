@@ -1,3 +1,10 @@
+2010-03-19  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/stash.c:
+   Make adding string and string vector settings initialise the setting
+   to NULL for safety.
+
+
 2010-03-18  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * data/filetypes.common:

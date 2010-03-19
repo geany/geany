@@ -39,8 +39,8 @@
  * keyfile group names and key names, string default values, widget_id names, property names.
  *
  * @section String Settings
- * String settings and other dynamically allocated settings must be initialized to NULL as they
- * will be freed before reassigning.
+ * String settings and other dynamically allocated settings will be initialized to NULL when
+ * added to a StashGroup (so they can safely be freed before reassigning).
  *
  * @section Widget Support
  * Widgets very commonly used in configuration dialogs will be supported with their own function.
@@ -316,6 +316,11 @@ add_pref(StashGroup *group, GType type, gpointer setting,
 	StashPref entry = {type, setting, key_name, default_value, G_TYPE_NONE, NULL, NULL};
 	GArray *array = group->entries;
 
+	/* init any pointer settings to NULL so they can be freed later */
+	if (type == G_TYPE_STRING ||
+		type == G_TYPE_STRV)
+			*(gpointer**)setting = NULL;
+
 	g_array_append_val(array, entry);
 
 	return &g_array_index(array, StashPref, array->len - 1);
@@ -347,12 +352,11 @@ void stash_group_add_integer(StashGroup *group, gint *setting,
 
 
 /** Adds string setting.
- * The contents of @a setting will be freed before being replaced, so make sure it is
- * allocated, or initialized to @c NULL.
+ * The contents of @a setting will be initialized to @c NULL.
  * @param group .
  * @param setting Address of setting variable.
  * @param key_name Name for key in a @c GKeyFile.
- * @param default_value Value to use if the key doesn't exist when loading. Not duplicated. */
+ * @param default_value String to copy if the key doesn't exist when loading, or @c NULL. */
 void stash_group_add_string(StashGroup *group, gchar **setting,
 		const gchar *key_name, const gchar *default_value)
 {
@@ -361,12 +365,11 @@ void stash_group_add_string(StashGroup *group, gchar **setting,
 
 
 /** Adds string vector setting (array of strings).
- * The contents of @a setting will be freed before being replaced, so make sure it is
- * allocated, or initialized to @c NULL.
+ * The contents of @a setting will be initialized to @c NULL.
  * @param group .
  * @param setting Address of setting variable.
  * @param key_name Name for key in a @c GKeyFile.
- * @param default_value Value to use if the key doesn't exist when loading. Not duplicated. */
+ * @param default_value Vector to copy if the key doesn't exist when loading. Usually @c NULL. */
 void stash_group_add_string_vector(StashGroup *group, gchar ***setting,
 		const gchar *key_name, const gchar **default_value)
 {
