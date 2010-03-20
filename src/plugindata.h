@@ -50,7 +50,7 @@
 enum {
 	/** The Application Programming Interface (API) version, incremented
 	 * whenever any plugin data types are modified or appended to. */
-	GEANY_API_VERSION = 177,
+	GEANY_API_VERSION = 178,
 
 	/** The Application Binary Interface (ABI) version, incremented whenever
 	 * existing fields in the plugin data types have to be changed or reordered. */
@@ -600,6 +600,9 @@ PluginFuncs;
 	(doc_ptr ? doc_ptr->index : -1)
 #define DOC_IDX_VALID(doc_idx) \
 	((doc_idx) >= 0 && (guint)(doc_idx) < documents_array->len && documents[doc_idx]->is_valid)
+
+#define GEANY_WINDOW_MINIMAL_WIDTH		550
+#define GEANY_WINDOW_MINIMAL_HEIGHT		GEANY_DEFAULT_DIALOG_HEIGHT
 
 #endif	/* GEANY_DISABLE_DEPRECATED */
 

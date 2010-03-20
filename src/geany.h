@@ -51,10 +51,10 @@
 #define GEANY_HOMEPAGE					"http://www.geany.org/"
 #define GEANY_USE_WIN32_DIALOG			0
 #define GEANY_STRING_UNTITLED			_("untitled")
-#define GEANY_WINDOW_MINIMAL_WIDTH		550
-#define GEANY_WINDOW_MINIMAL_HEIGHT		350
+#define GEANY_DEFAULT_DIALOG_HEIGHT		350
 #define GEANY_WINDOW_DEFAULT_WIDTH		900
 #define GEANY_WINDOW_DEFAULT_HEIGHT		600
+
 
 
 /* Common forward declarations */

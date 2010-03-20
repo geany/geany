@@ -453,7 +453,7 @@ static void tools_show_dialog_insert_special_chars(void)
 		gtk_box_set_spacing(GTK_BOX(vbox), 6);
 		gtk_widget_set_name(sc_dialog, "GeanyDialog");
 
-		height = GEANY_WINDOW_MINIMAL_HEIGHT;
+		height = GEANY_DEFAULT_DIALOG_HEIGHT;
 		gtk_window_set_default_size(GTK_WINDOW(sc_dialog), height * 8 / 10, height);
 		gtk_dialog_set_default_response(GTK_DIALOG(sc_dialog), GTK_RESPONSE_CANCEL);
 

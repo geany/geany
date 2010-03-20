@@ -265,6 +265,12 @@ static void main_init(void)
 	/* hide Page setup menu item, it isn't supported with non-GTK printing */
 	gtk_widget_hide(ui_widgets.print_page_setup);
 #endif
+
+	/* for some reason we need to set the initial size request,
+	 * otherwise the main window gets crazy dimensions */
+	gtk_widget_set_size_request(main_widgets.window, 10, 10);
+	gtk_window_set_default_size(GTK_WINDOW(main_widgets.window),
+		GEANY_WINDOW_DEFAULT_WIDTH, GEANY_WINDOW_DEFAULT_HEIGHT);
 }
 
 
@@ -968,8 +974,6 @@ gint main(gint argc, gchar **argv)
 
 	/* inits */
 	main_init();
-	gtk_widget_set_size_request(main_widgets.window, GEANY_WINDOW_MINIMAL_WIDTH, GEANY_WINDOW_MINIMAL_HEIGHT);
-	gtk_window_set_default_size(GTK_WINDOW(main_widgets.window), GEANY_WINDOW_DEFAULT_WIDTH, GEANY_WINDOW_DEFAULT_HEIGHT);
 
 	encodings_init();
 	editor_init();

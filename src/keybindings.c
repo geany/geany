@@ -843,7 +843,6 @@ static GtkWidget *create_dialog(void)
 	GtkWidget *dialog, *tree, *label, *swin, *vbox;
 	GtkCellRenderer *text_renderer;
 	GtkTreeViewColumn *column;
-	gint height;
 
 	dialog = gtk_dialog_new_with_buttons(_("Keyboard Shortcuts"), GTK_WINDOW(main_widgets.window),
 				GTK_DIALOG_DESTROY_WITH_PARENT,
@@ -853,8 +852,7 @@ static GtkWidget *create_dialog(void)
 	gtk_box_set_spacing(GTK_BOX(vbox), 6);
 	gtk_widget_set_name(dialog, "GeanyDialog");
 
-	height = GEANY_WINDOW_MINIMAL_HEIGHT;
-	gtk_window_set_default_size(GTK_WINDOW(dialog), -1, height);
+	gtk_window_set_default_size(GTK_WINDOW(dialog), -1, GEANY_DEFAULT_DIALOG_HEIGHT);
 
 	gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_CANCEL);
 
