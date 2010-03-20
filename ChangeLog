@@ -1,3 +1,9 @@
+2010-03-20  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/win32.c:
+   Make CreateChildProcess() working with Unicode strings, e.g.
+   directory names (closes 2972606).
+
 2010-03-19  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/stash.c:

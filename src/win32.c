@@ -1007,9 +1007,11 @@ gchar *win32_expand_environment_variables(const gchar *str)
 static gboolean CreateChildProcess(geany_win32_spawn *gw_spawn, TCHAR *szCmdline, const TCHAR *dir, GError **error)
 {
 	PROCESS_INFORMATION piProcInfo;
-	STARTUPINFO siStartInfo;
+	STARTUPINFOW siStartInfo;
 	BOOL bFuncRetn = FALSE;
 	gchar *expandedCmdline;
+	wchar_t w_commandline[MAX_PATH];
+	wchar_t w_dir[MAX_PATH];
 
 	/* Set up members of the PROCESS_INFORMATION structure. */
 	ZeroMemory(&piProcInfo, sizeof(PROCESS_INFORMATION));
@@ -1026,15 +1028,18 @@ static gboolean CreateChildProcess(geany_win32_spawn *gw_spawn, TCHAR *szCmdline
 	/* Expand environment variables like %blah%. */
 	expandedCmdline = win32_expand_environment_variables(szCmdline);
 
+	MultiByteToWideChar(CP_UTF8, 0, expandedCmdline, -1, w_commandline, sizeof(w_commandline));
+	MultiByteToWideChar(CP_UTF8, 0, dir, -1, w_dir, sizeof(w_dir));
+
 	/* Create the child process. */
-	bFuncRetn = CreateProcess(NULL,
-		expandedCmdline,             /* command line */
+	bFuncRetn = CreateProcessW(NULL,
+		w_commandline,             /* command line */
 		NULL,          /* process security attributes */
 		NULL,          /* primary thread security attributes */
 		TRUE,          /* handles are inherited */
 		CREATE_NO_WINDOW,             /* creation flags */
 		NULL,          /* use parent's environment */
-		dir,           /* use parent's current directory */
+		w_dir,           /* use parent's current directory */
 		&siStartInfo,  /* STARTUPINFO pointer */
 		&piProcInfo);  /* receives PROCESS_INFORMATION */
 
