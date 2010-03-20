@@ -1001,8 +1001,8 @@ int ScintillaGTK::EncodedFromUTF8(char *utf8, char *encoded) {
 }
 
 bool ScintillaGTK::ValidCodePage(int codePage) const {
-	return codePage == 0 
-	|| codePage == SC_CP_UTF8 
+	return codePage == 0
+	|| codePage == SC_CP_UTF8
 	|| codePage == 932
 	|| codePage == 936
 	|| codePage == 950
@@ -1038,10 +1038,10 @@ sptr_t ScintillaGTK::WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lParam
 		case SCI_SETRECTANGULARSELECTIONMODIFIER:
 			rectangularSelectionModifier = wParam;
 			break;
-		
+
 		case SCI_GETRECTANGULARSELECTIONMODIFIER:
 			return rectangularSelectionModifier;
-		
+
 		default:
 			return ScintillaBase::WndProc(iMessage, wParam, lParam);
 		}
@@ -1817,7 +1817,7 @@ static int modifierTranslated(int sciModifier) {
 			return GDK_MOD1_MASK;
 		case SCMOD_SUPER:
 			return GDK_MOD4_MASK;
-		default: 
+		default:
 			return 0;
 	}
 }
@@ -1854,7 +1854,7 @@ gint ScintillaGTK::PressThis(GdkEventButton *event) {
 			        (event->state & modifierTranslated(rectangularSelectionModifier)) != 0);
 		} else if (event->button == 2) {
 			// Grab the primary selection if it exists
-			SelectionPosition pos = SPositionFromLocation(pt);
+			SelectionPosition pos = SPositionFromLocation(pt, false, false, UserVirtualSpace());
 			if (OwnPrimarySelection() && primary.s == NULL)
 				CopySelectionRange(&primary);
 

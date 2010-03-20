@@ -2,11 +2,14 @@
 
  * src/win32.c:
    Make CreateChildProcess() working with Unicode strings, e.g.
-   directory names (closes 2972606).
+   directory names (closes #2972606).
  * geany.nsi:
    Remove reference to already removed latex.tags file.
    Future releases probably still depend on GTK 2.16.
-   
+ * scintilla/ScintillaGTK.cxx:
+   Backport fix from Scintilla CVS to not paste text beyond the end
+   of lines (closes #2969096).
+
 
 2010-03-19  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
