@@ -1,3 +1,9 @@
+2010-03-25  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/search.c, src/document.c:
+   Fix wrong selection range after Replace in Selection.
+
+
 2010-03-20  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/win32.c:

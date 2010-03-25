@@ -1876,7 +1876,8 @@ void search_find_usage(const gchar *search_text, gint flags, gboolean in_session
 }
 
 
-/* ttf is updated to include the last match positions.
+/* ttf is updated to include the last match position (ttf->chrg.cpMin) and
+ * the new search range end (ttf->chrg.cpMax).
  * Note: Normally you would call sci_start/end_undo_action() around this call. */
 /* Warning: Scintilla recommends caching replacements to do all at once to avoid
  * performance issues with SCI_GETCHARACTERPOINTER. */

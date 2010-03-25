@@ -2128,7 +2128,7 @@ document_replace_range(GeanyDocument *doc, const gchar *find_text, const gchar *
 			sci_goto_pos(sci, ttf.chrg.cpMin, TRUE);
 
 		if (new_range_end != NULL)
-			*new_range_end = end;
+			*new_range_end = ttf.chrg.cpMax;
 	}
 	return count;
 }
