@@ -1,3 +1,9 @@
+2010-03-25  Peter Scholtens  <peter(dot)scholtens(at)xs4all(dot)nl>
+
+ * src/keybindings.[hc]:
+   Added Control+0 for zoom reset, see suggestion from #2969886.
+
+
 2010-03-25  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/search.c, src/document.c:

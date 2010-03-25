@@ -466,6 +466,8 @@ static void init_default_kb(void)
 		GDK_plus, GDK_CONTROL_MASK, "menu_zoomin", _("Zoom In"), LW(menu_zoom_in1));
 	keybindings_set_item(group, GEANY_KEYS_VIEW_ZOOMOUT, NULL,
 		GDK_minus, GDK_CONTROL_MASK, "menu_zoomout", _("Zoom Out"), LW(menu_zoom_out1));
+	keybindings_set_item(group, GEANY_KEYS_VIEW_ZOOMRESET, NULL,
+		GDK_0, GDK_CONTROL_MASK, "normal_size", _("Zoom Reset"), LW(normal_size1));
 
 	group = ADD_KB_GROUP(FOCUS, _("Focus"), cb_func_switch_action);
 
@@ -1485,6 +1487,9 @@ static gboolean cb_func_view_action(guint key_id)
 			break;
 		case GEANY_KEYS_VIEW_ZOOMOUT:
 			on_zoom_out1_activate(NULL, NULL);
+			break;
+		case GEANY_KEYS_VIEW_ZOOMRESET:
+			on_normal_size1_activate(NULL, NULL);
 			break;
 		default:
 			break;
