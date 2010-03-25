@@ -2944,19 +2944,25 @@ void editor_do_comment_toggle(GeanyEditor *editor)
 			gint eol_len = editor_get_eol_char_len(editor);
 			if (count_uncommented > 0)
 			{
-				sci_set_selection_start(editor->sci, sel_start - co_len - eol_len);
-				sci_set_selection_end(editor->sci, sel_end - co_len - eol_len);
+				sci_set_selection_start(editor->sci, sel_start - co_len + eol_len);
+				sci_set_selection_end(editor->sci, sel_end - co_len + eol_len);
 			}
-			else
+			else if (count_commented > 0)
 			{
-				sci_set_selection_start(editor->sci, sel_start + co_len + eol_len);
-				sci_set_selection_end(editor->sci, sel_end + co_len + eol_len);
+				sci_set_selection_start(editor->sci, sel_start + co_len - eol_len);
+				sci_set_selection_end(editor->sci, sel_end + co_len - eol_len);
 			}
 		}
 	}
 	else if (count_uncommented > 0)
 	{
-		sci_set_current_position(editor->sci, sel_start - co_len, TRUE);
+		gint eol_len = single_line ? 0: editor_get_eol_char_len(editor);
+		sci_set_current_position(editor->sci, sel_start - co_len + eol_len, TRUE);
+	}
+	else if (count_commented > 0)
+	{
+		gint eol_len = single_line ? 0: editor_get_eol_char_len(editor);
+		sci_set_current_position(editor->sci, sel_start + co_len - eol_len, TRUE);
 	}
 }
 
