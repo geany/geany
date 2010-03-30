@@ -57,6 +57,7 @@
  * - @link msgwindow.h @endlink
  * - @link project.h @endlink
  * - @link sciwrappers.h Scintilla Wrapper Functions @endlink
+ * - @link stash.h Stash Pref/Setting Functions @endlink
  * - @link utils.h General Utility Functions @endlink
  * - @link ui_utils.h Widget Utility Functions @endlink
 

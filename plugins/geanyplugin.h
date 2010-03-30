@@ -34,7 +34,7 @@
 #include "geany.h"
 #include "plugindata.h"
 
-/* only include headers that define types or macros, not just functions */
+/* Note: only include headers that define types or macros, not just functions */
 #include "document.h"
 #include "editor.h"
 #include "encodings.h"
@@ -45,6 +45,7 @@
 #include "prefs.h"
 #include "project.h"
 #include "search.h"
+#include "stash.h"
 #include "support.h"
 #include "templates.h"
 #include "toolbar.h"

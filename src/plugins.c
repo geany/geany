@@ -301,6 +301,19 @@ static MainFuncs main_funcs = {
 	&main_is_realized
 };
 
+static StashFuncs stash_funcs = {
+	&stash_group_new,
+	&stash_group_add_boolean,
+	&stash_group_add_integer,
+	&stash_group_add_string,
+	&stash_group_add_string_vector,
+	&stash_group_load_from_key_file,
+	&stash_group_save_to_key_file,
+	&stash_group_free,
+	&stash_group_load_from_file,
+	&stash_group_save_to_file
+};
+
 static GeanyFunctions geany_functions = {
 	&doc_funcs,
 	&sci_funcs,
@@ -321,7 +334,8 @@ static GeanyFunctions geany_functions = {
 	&main_funcs,
 	&plugin_funcs,
 	&scintilla_funcs,
-	&msgwin_funcs
+	&msgwin_funcs,
+	&stash_funcs
 };
 
 static GeanyData geany_data;

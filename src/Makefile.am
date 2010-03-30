@@ -66,6 +66,7 @@ geany_include_HEADERS = \
 	prefs.h \
 	project.h \
 	search.h \
+	stash.h \
 	support.h \
 	templates.h \
 	toolbar.h \

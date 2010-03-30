@@ -22,7 +22,7 @@
  * $Id$
  */
 
-/*
+/**
  * @file stash.h
  * Lightweight library for reading/writing @c GKeyFile settings and synchronizing widgets with
  * C variables.
@@ -40,7 +40,7 @@
  *
  * @section String Settings
  * String settings and other dynamically allocated settings will be initialized to NULL when
- * added to a StashGroup (so they can safely be reassigned).
+ * added to a StashGroup (so they can safely be reassigned later).
  *
  * @section Widget Support
  * Widgets very commonly used in configuration dialogs will be supported with their own function.
@@ -240,16 +240,19 @@ static void keyfile_action(SettingAction action, StashGroup *group, GKeyFile *ke
 }
 
 
-/** Reads all key values (usually from a configuration file) into the group settings.
+/** Reads key values from @a keyfile into the group settings.
+ * @note You should still call this even if the keyfile couldn't be loaded from disk
+ * so that all Stash settings are initialized to defaults.
  * @param group .
- * @param keyfile . */
+ * @param keyfile Usually loaded from a configuration file first. */
 void stash_group_load_from_key_file(StashGroup *group, GKeyFile *keyfile)
 {
 	keyfile_action(SETTING_READ, group, keyfile);
 }
 
 
-/** Writes group settings into key values for a configuration file.
+/** Writes group settings into key values in @a keyfile.
+ * @a keyfile is usually written to a configuration file afterwards.
  * @param group .
  * @param keyfile . */
 void stash_group_save_to_key_file(StashGroup *group, GKeyFile *keyfile)
@@ -259,20 +262,20 @@ void stash_group_save_to_key_file(StashGroup *group, GKeyFile *keyfile)
 
 
 /** Reads group settings from a configuration file using @c GKeyFile.
+ * @note Stash settings will be initialized to defaults if the keyfile
+ * couldn't be loaded from disk.
  * @param group .
- * @param filename Filename of the file to write, in locale encoding.
- * @param flags Keyfile options - @c G_KEY_FILE_NONE is the most efficient.
+ * @param filename Filename of the file to read, in locale encoding.
  * @return @c TRUE if a key file could be loaded.
  * @see stash_group_load_from_key_file().
  **/
-gboolean stash_group_load_from_file(StashGroup *group, const gchar *filename,
-		GKeyFileFlags flags)
+gboolean stash_group_load_from_file(StashGroup *group, const gchar *filename)
 {
 	GKeyFile *keyfile;
 	gboolean ret;
 
 	keyfile = g_key_file_new();
-	ret = g_key_file_load_from_file(keyfile, filename, flags, NULL);
+	ret = g_key_file_load_from_file(keyfile, filename, 0, NULL);
 	/* even on failure we load settings to apply defaults */
 	stash_group_load_from_key_file(group, keyfile);
 
@@ -282,8 +285,6 @@ gboolean stash_group_load_from_file(StashGroup *group, const gchar *filename,
 
 
 /** Writes group settings to a configuration file using @c GKeyFile.
- * If the file doesn't exist, it will be created.
- * If it already exists, it will be overwritten.
  *
  * @param group .
  * @param filename Filename of the file to write, in locale encoding.
@@ -375,6 +376,7 @@ add_pref(StashGroup *group, GType type, gpointer setting,
 	/* init any pointer settings to NULL so they can be freed later */
 	if (type == G_TYPE_STRING ||
 		type == G_TYPE_STRV)
+		if (group->use_defaults)
 			*(gpointer**)setting = NULL;
 
 	g_array_append_val(array, entry);

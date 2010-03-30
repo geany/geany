@@ -3,6 +3,11 @@
  * THANKS, src/vte.c:
    Apply patch from Yoann Le Montagner to set VTE bold color (thanks,
    fixes #2976905).
+ * wscript, src/plugindata.h, src/stash.c, src/stash.h, src/plugins.c,
+   src/Makefile.am, doc/plugins.dox, doc/stash-example.c,
+   plugins/geanyfunctions.h, plugins/geanyplugin.h:
+   Add Stash setting functions to API.
+   Remove unnecessary argument to stash_group_load_from_file().
 
 
 2010-03-25  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

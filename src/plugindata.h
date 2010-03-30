@@ -50,7 +50,7 @@
 enum {
 	/** The Application Programming Interface (API) version, incremented
 	 * whenever any plugin data types are modified or appended to. */
-	GEANY_API_VERSION = 179,
+	GEANY_API_VERSION = 180,
 
 	/** The Application Binary Interface (ABI) version, incremented whenever
 	 * existing fields in the plugin data types have to be changed or reordered. */
@@ -238,6 +238,7 @@ typedef struct GeanyFunctions
 	struct PluginFuncs        	*p_plugin;			/**< See pluginutils.c */
 	struct ScintillaFuncs		*p_scintilla;		/**< See ScintillaFuncs */
 	struct MsgWinFuncs			*p_msgwin;			/**< See msgwindow.h */
+	struct StashFuncs			*p_stash;			/**< See stash.h */
 }
 GeanyFunctions;
 
@@ -589,6 +590,30 @@ typedef struct PluginFuncs
 	void	(*plugin_show_configure)(GeanyPlugin *plugin);
 }
 PluginFuncs;
+
+
+struct StashGroup;
+
+/* See stash.h */
+typedef struct StashFuncs
+{
+	struct StashGroup *(*stash_group_new)(const gchar *name);
+	void (*stash_group_add_boolean)(struct StashGroup *group, gboolean *setting,
+			const gchar *key_name, gboolean default_value);
+	void (*stash_group_add_integer)(struct StashGroup *group, gint *setting,
+			const gchar *key_name, gint default_value);
+	void (*stash_group_add_string)(struct StashGroup *group, gchar **setting,
+			const gchar *key_name, const gchar *default_value);
+	void (*stash_group_add_string_vector)(struct StashGroup *group, gchar ***setting,
+			const gchar *key_name, const gchar **default_value);
+	void (*stash_group_load_from_key_file)(struct StashGroup *group, GKeyFile *keyfile);
+	void (*stash_group_save_to_key_file)(struct StashGroup *group, GKeyFile *keyfile);
+	void (*stash_group_free)(struct StashGroup *group);
+	gboolean (*stash_group_load_from_file)(struct StashGroup *group, const gchar *filename);
+	gint (*stash_group_save_to_file)(struct StashGroup *group, const gchar *filename,
+			GKeyFileFlags flags);
+}
+StashFuncs;
 
 
 /* Deprecated aliases */
