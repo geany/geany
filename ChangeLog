@@ -8,6 +8,9 @@
    plugins/geanyfunctions.h, plugins/geanyplugin.h:
    Add Stash setting functions to API.
    Remove unnecessary argument to stash_group_load_from_file().
+ * src/geanyobject.c, plugins/classbuilder.c:
+   Don't generate FOO_GET_PRIVATE() macro because caching the result
+   in Foo::priv can be much more efficient.
 
 
 2010-03-25  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

@@ -129,10 +129,14 @@ G_BEGIN_DECLS\n\
 typedef struct _{class_name}			{class_name};\n\
 typedef struct _{class_name}Class		{class_name}Class;\n\
 \n\
+struct _{class_name}Private;\n\
+\n\
 struct _{class_name}\n\
 {\n\
 	{base_name} parent;\n\
 	/* add your public declarations here */\n\
+	\n\
+	struct _{class_name}Private *priv;\n\
 };\n\
 \n\
 struct _{class_name}Class\n\
@@ -153,9 +157,6 @@ static const gchar templates_gtk_class_source[] = "{fileheader}\n\
 \n\
 typedef struct _{class_name}Private			{class_name}Private;\n\
 \n\
-#define {class_name_up}_GET_PRIVATE(obj)		(G_TYPE_INSTANCE_GET_PRIVATE((obj),\\\n\
-			{class_name_up}_TYPE, {class_name}Private))\n\
-\n\
 struct _{class_name}Private\n\
 {\n\
 	/* add your private declarations here */\n\
@@ -175,6 +176,8 @@ static void {class_name_low}_class_init({class_name}Class *klass)\n\
 \n\
 static void {class_name_low}_init({class_name} *self)\n\
 {\n\
+	self->priv = G_TYPE_INSTANCE_GET_PRIVATE(self,\n\
+		{class_name_up}_TYPE, {class_name}Private);\n\
 	\n\
 }\n\
 \n\
