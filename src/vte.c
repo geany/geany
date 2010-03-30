@@ -107,6 +107,7 @@ struct VteFunctions
 	void (*vte_terminal_paste_clipboard) (VteTerminal *terminal);
 	void (*vte_terminal_set_emulation) (VteTerminal *terminal, const gchar *emulation);
 	void (*vte_terminal_set_color_foreground) (VteTerminal *terminal, const GdkColor *foreground);
+	void (*vte_terminal_set_color_bold) (VteTerminal *terminal, const GdkColor *foreground);
 	void (*vte_terminal_set_color_background) (VteTerminal *terminal, const GdkColor *background);
 	void (*vte_terminal_feed_child) (VteTerminal *terminal, const char *data, glong length);
 	void (*vte_terminal_im_append_menuitems) (VteTerminal *terminal, GtkMenuShell *menushell);
@@ -419,6 +420,7 @@ static void vte_register_symbols(GModule *mod)
 	g_module_symbol(mod, "vte_terminal_paste_clipboard", (void*)&vf->vte_terminal_paste_clipboard);
 	g_module_symbol(mod, "vte_terminal_set_emulation", (void*)&vf->vte_terminal_set_emulation);
 	g_module_symbol(mod, "vte_terminal_set_color_foreground", (void*)&vf->vte_terminal_set_color_foreground);
+	g_module_symbol(mod, "vte_terminal_set_color_bold", (void*)&vf->vte_terminal_set_color_bold);
 	g_module_symbol(mod, "vte_terminal_set_color_background", (void*)&vf->vte_terminal_set_color_background);
 	g_module_symbol(mod, "vte_terminal_feed_child", (void*)&vf->vte_terminal_feed_child);
 	g_module_symbol(mod, "vte_terminal_im_append_menuitems", (void*)&vf->vte_terminal_im_append_menuitems);
@@ -441,6 +443,7 @@ void vte_apply_user_settings(void)
 	vf->vte_terminal_set_emulation(VTE_TERMINAL(vc->vte), vc->emulation);
 	vf->vte_terminal_set_font_from_string(VTE_TERMINAL(vc->vte), vc->font);
 	vf->vte_terminal_set_color_foreground(VTE_TERMINAL(vc->vte), vc->colour_fore);
+	vf->vte_terminal_set_color_bold(VTE_TERMINAL(vc->vte), vc->colour_fore);
 	vf->vte_terminal_set_color_background(VTE_TERMINAL(vc->vte), vc->colour_back);
 	vte_set_cursor_blink_mode();
 

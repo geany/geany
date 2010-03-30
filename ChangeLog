@@ -1,3 +1,10 @@
+2010-03-30  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * THANKS, src/vte.c:
+   Apply patch from Yoann Le Montagner to set VTE bold color (thanks,
+   fixes #2976905).
+
+
 2010-03-25  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/editor.c:

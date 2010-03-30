@@ -75,6 +75,7 @@ Jörn Reder <joern(at)zyn(dot)de> - --socket-file command line option patch
 Kelvin Gardiner <kelvin(at)mbmn(dot)net> - VHDL symbol list patch, Verilog filetype
 Jon Senior <jon(at)restlesslemon(dot)co(dot)uk> - R tagmanager parser patch
 Can Koy <cankoy(at)ymail(dot)com> - Multiple changes/improvements
+Yoann Le Montagner <yoann(dot)le-montagner(at)m4x(dot)org> - set VTE bold color
 
 Translators:
 ------------
