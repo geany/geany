@@ -2,6 +2,8 @@
 
  * plugins/classbuilder.c:
    Beep if the user hasn't entered a class name on pressing OK.
+ * src/search.c:
+   Fix replacing '^' regex.
 
 
 2010-03-30  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

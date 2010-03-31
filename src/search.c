@@ -1676,12 +1676,17 @@ static gchar *regex_match_text = NULL;
 static gint find_regex(ScintillaObject *sci, guint pos, regex_t *regex)
 {
 	const gchar *text;
+	gint flags = 0;
 
 	g_return_val_if_fail(pos <= (guint)sci_get_length(sci), FALSE);
 
+	if (sci_get_col_from_position(sci, pos) != 0)
+		flags = REG_NOTBOL;
+	/* Warning: any SCI calls will invalidate 'text' after calling SCI_GETCHARACTERPOINTER */
 	text = (void*)scintilla_send_message(sci, SCI_GETCHARACTERPOINTER, 0, 0);
 	text += pos;
-	if (regexec(regex, text, G_N_ELEMENTS(regex_matches), regex_matches, 0) == 0)
+
+	if (regexec(regex, text, G_N_ELEMENTS(regex_matches), regex_matches, flags) == 0)
 	{
 		setptr(regex_match_text, get_regex_match_string(text, regex_matches, 0));
 		return regex_matches[0].rm_so + pos;
