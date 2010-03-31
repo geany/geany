@@ -1,3 +1,9 @@
+2010-03-31  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * plugins/classbuilder.c:
+   Beep if the user hasn't entered a class name on pressing OK.
+
+
 2010-03-30  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * THANKS, src/vte.c:

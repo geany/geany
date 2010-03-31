@@ -188,7 +188,7 @@ static void {class_name_low}_init({class_name} *self)\n\
 static void cc_dlg_on_set_sensitive_toggled(GtkWidget *toggle_button, GtkWidget *target_widget);
 static void cc_dlg_on_class_name_entry_changed(GtkWidget *entry, CreateClassDialog *cc_dlg);
 static void cc_dlg_on_base_name_entry_changed(GtkWidget *entry, CreateClassDialog *cc_dlg);
-static void cc_dlg_on_create_class(CreateClassDialog *cc_dlg);
+static gboolean create_class(CreateClassDialog *cc_dlg);
 
 
 /* The list must be ended with NULL as an extra check that arg_count is correct. */
@@ -446,9 +446,13 @@ void show_dialog_create_class(gint type)
 	}
 
 	gtk_widget_show_all(cc_dlg->dialog);
-	if (gtk_dialog_run(GTK_DIALOG(cc_dlg->dialog)) == GTK_RESPONSE_OK)
-		cc_dlg_on_create_class(cc_dlg);
-
+	while (gtk_dialog_run(GTK_DIALOG(cc_dlg->dialog)) == GTK_RESPONSE_OK)
+	{
+		if (create_class(cc_dlg))
+			break;
+		else
+			gdk_beep();
+	}
 	gtk_widget_destroy(cc_dlg->dialog);
 /*	g_object_unref(G_OBJECT(cc_dlg->dialog));	*/
 }
@@ -559,17 +563,17 @@ static void cc_dlg_on_base_name_entry_changed(GtkWidget *entry, CreateClassDialo
 }
 
 
-static void cc_dlg_on_create_class(CreateClassDialog *cc_dlg)
+static gboolean create_class(CreateClassDialog *cc_dlg)
 {
 	ClassInfo *class_info;
 	GeanyDocument *doc;
 	gchar *text;
 	gchar *tmp;
 
-	g_return_if_fail(cc_dlg != NULL);
+	g_return_val_if_fail(cc_dlg != NULL, FALSE);
 
 	if (utils_str_equal(gtk_entry_get_text(GTK_ENTRY(cc_dlg->class_name_entry)), ""))
-		return;
+		return FALSE;
 
 	class_info = g_new0(ClassInfo, 1);
 	class_info->type = cc_dlg->class_type;
@@ -718,6 +722,7 @@ static void cc_dlg_on_create_class(CreateClassDialog *cc_dlg)
 		class_info->constructor_decl, class_info->constructor_impl,
 		class_info->gtk_destructor_registration, class_info->destructor_decl,
 		class_info->destructor_impl, class_info->base_gtype, class_info, NULL);
+	return TRUE;
 }
 
 
