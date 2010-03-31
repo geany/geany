@@ -28,7 +28,7 @@
 /** Opaque type for a group of settings. */
 typedef struct StashGroup StashGroup;
 
-/* Can be @c GtkWidget* or @c gchar* depending on whether the @c owner argument is used for
+/** Can be @c GtkWidget* or @c gchar* depending on whether the @a owner argument is used for
  * stash_group_display() and stash_group_update(). */
 typedef gpointer StashWidgetID;
 

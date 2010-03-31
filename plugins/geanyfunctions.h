@@ -348,5 +348,23 @@
 	geany_functions->p_stash->stash_group_load_from_file
 #define stash_group_save_to_file \
 	geany_functions->p_stash->stash_group_save_to_file
+#define stash_group_add_toggle_button \
+	geany_functions->p_stash->stash_group_add_toggle_button
+#define stash_group_add_radio_buttons \
+	geany_functions->p_stash->stash_group_add_radio_buttons
+#define stash_group_add_spin_button_integer \
+	geany_functions->p_stash->stash_group_add_spin_button_integer
+#define stash_group_add_combo_box \
+	geany_functions->p_stash->stash_group_add_combo_box
+#define stash_group_add_combo_box_entry \
+	geany_functions->p_stash->stash_group_add_combo_box_entry
+#define stash_group_add_entry \
+	geany_functions->p_stash->stash_group_add_entry
+#define stash_group_add_widget_property \
+	geany_functions->p_stash->stash_group_add_widget_property
+#define stash_group_display \
+	geany_functions->p_stash->stash_group_display
+#define stash_group_update \
+	geany_functions->p_stash->stash_group_update
 
 #endif

@@ -4,6 +4,9 @@
    Beep if the user hasn't entered a class name on pressing OK.
  * src/search.c:
    Fix replacing '^' regex.
+ * src/plugindata.h, src/stash.c, src/stash.h, src/plugins.c,
+   plugins/geanyfunctions.h:
+   Add Stash widget functions to API.
 
 
 2010-03-30  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

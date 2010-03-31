@@ -44,14 +44,36 @@
  *
  * @section Widget Support
  * Widgets very commonly used in configuration dialogs will be supported with their own function.
- * Widgets less commonly used such as GtkExpander or widget settings that aren't commonly needed
+ * Widgets less commonly used such as @c GtkExpander or widget settings that aren't commonly needed
  * to be persistent won't be directly supported, to keep the library lightweight. However, you can
  * use stash_group_add_widget_property() to also save these settings for any read/write widget
- * property.
+ * property. Macros could be added for common widget properties such as @c GtkExpander:"expanded".
  *
- * @section Example
+ * @section settings-example Settings Example
  * @include stash-example.c
  * @note You might want to handle the warning/error conditions differently from above.
+ *
+ * @section prefs-example GUI Prefs Example
+ * For prefs, it's the same as the above example but you add widget prefs instead of e.g.
+ * boolean settings.
+ *
+ * This example uses lookup strings for widgets as they are more flexible than widget pointers.
+ * @code
+gboolean want_handle;
+GtkWidget *parent;
+GtkWidget *my_check_button;
+
+stash_group_add_toggle_button(group, &want_handle, "handle", TRUE, "check_handle");
+...
+gtk_container_add(GTK_CONTAINER(parent), my_check_button);
+ui_hookup_widget(parent, my_check_button, "check_handle");
+...
+stash_group_display(group, parent);
+* @endcode
+* Now let the user manipulate widgets. To synchronize the Stash settings afterwards, call:
+* @code
+stash_group_update(group, parent);
+ * @endcode
  */
 
 /* Implementation Note
@@ -674,13 +696,24 @@ static void pref_action(PrefAction action, StashGroup *group, GtkWidget *owner)
 }
 
 
-/* @param owner If non-NULL, used to lookup widgets by name. */
+/** Applies Stash settings to widgets, usually called before displaying the widgets.
+ * The @a owner argument depends on which type you use for @ref StashWidgetID.
+ * @param group .
+ * @param owner If non-NULL, used to lookup widgets by name, otherwise
+ * widget pointers are assumed.
+ * @see stash_group_update(). */
 void stash_group_display(StashGroup *group, GtkWidget *owner)
 {
 	pref_action(PREF_DISPLAY, group, owner);
 }
 
 
+/** Applies widget values to Stash settings, usually called after displaying the widgets.
+ * The @a owner argument depends on which type you use for @ref StashWidgetID.
+ * @param group .
+ * @param owner If non-NULL, used to lookup widgets by name, otherwise
+ * widget pointers are assumed.
+ * @see stash_group_display(). */
 void stash_group_update(StashGroup *group, GtkWidget *owner)
 {
 	pref_action(PREF_UPDATE, group, owner);
@@ -701,7 +734,12 @@ add_widget_pref(StashGroup *group, GType setting_type, gpointer setting,
 }
 
 
-/* Used for GtkCheckButton or GtkToggleButton widgets.
+/** Adds a @c GtkToggleButton (or @c GtkCheckButton) widget pref.
+ * @param group .
+ * @param setting Address of setting variable.
+ * @param key_name Name for key in a @c GKeyFile.
+ * @param default_value Value to use if the key doesn't exist when loading.
+ * @param widget_id @c GtkWidget pointer or string to lookup widget later.
  * @see stash_group_add_radio_buttons(). */
 void stash_group_add_toggle_button(StashGroup *group, gboolean *setting,
 		const gchar *key_name, gboolean default_value, StashWidgetID widget_id)
@@ -711,7 +749,14 @@ void stash_group_add_toggle_button(StashGroup *group, gboolean *setting,
 }
 
 
-/* @param ... pairs of widget_id, enum_id.
+/** Adds a @c GtkRadioButton widget group pref.
+ * @param group .
+ * @param setting Address of setting variable.
+ * @param key_name Name for key in a @c GKeyFile.
+ * @param default_value Value to use if the key doesn't exist when loading.
+ * @param widget_id @c GtkWidget pointer or string to lookup widget later.
+ * @param enum_id Enum value for @a widget_id.
+ * @param ... pairs of @a widget_id, @a enum_id.
  * Example (using widget lookup strings, but widget pointers can also work):
  * @code
  * enum {FOO, BAR};
@@ -764,6 +809,12 @@ void stash_group_add_radio_buttons(StashGroup *group, gint *setting,
 }
 
 
+/** Adds a @c GtkSpinButton widget pref.
+ * @param group .
+ * @param setting Address of setting variable.
+ * @param key_name Name for key in a @c GKeyFile.
+ * @param default_value Value to use if the key doesn't exist when loading.
+ * @param widget_id @c GtkWidget pointer or string to lookup widget later. */
 void stash_group_add_spin_button_integer(StashGroup *group, gint *setting,
 		const gchar *key_name, gint default_value, StashWidgetID widget_id)
 {
@@ -772,7 +823,13 @@ void stash_group_add_spin_button_integer(StashGroup *group, gint *setting,
 }
 
 
-/* @see stash_group_add_combo_box_entry(). */
+/** Adds a @c GtkComboBox widget pref.
+ * @param group .
+ * @param setting Address of setting variable.
+ * @param key_name Name for key in a @c GKeyFile.
+ * @param default_value Value to use if the key doesn't exist when loading.
+ * @param widget_id @c GtkWidget pointer or string to lookup widget later.
+ * @see stash_group_add_combo_box_entry(). */
 void stash_group_add_combo_box(StashGroup *group, gint *setting,
 		const gchar *key_name, gint default_value, StashWidgetID widget_id)
 {
@@ -781,6 +838,12 @@ void stash_group_add_combo_box(StashGroup *group, gint *setting,
 }
 
 
+/** Adds a @c GtkComboBoxEntry widget pref.
+ * @param group .
+ * @param setting Address of setting variable.
+ * @param key_name Name for key in a @c GKeyFile.
+ * @param default_value Value to use if the key doesn't exist when loading.
+ * @param widget_id @c GtkWidget pointer or string to lookup widget later. */
 /* We could maybe also have something like stash_group_add_combo_box_entry_with_menu()
  * for the history list - or should that be stored as a separate setting? */
 void stash_group_add_combo_box_entry(StashGroup *group, gchar **setting,
@@ -791,6 +854,12 @@ void stash_group_add_combo_box_entry(StashGroup *group, gchar **setting,
 }
 
 
+/** Adds a @c GtkEntry widget pref.
+ * @param group .
+ * @param setting Address of setting variable.
+ * @param key_name Name for key in a @c GKeyFile.
+ * @param default_value Value to use if the key doesn't exist when loading.
+ * @param widget_id @c GtkWidget pointer or string to lookup widget later. */
 void stash_group_add_entry(StashGroup *group, gchar **setting,
 		const gchar *key_name, const gchar *default_value, StashWidgetID widget_id)
 {
@@ -809,14 +878,20 @@ static GType object_get_property_type(GObject *object, const gchar *property_nam
 }
 
 
-/* Add a widget's read/write property to the stash group. The property will be set when calling
+/** Adds a widget's read/write property to the stash group.
+ * The property will be set when calling
  * stash_group_display(), and read when calling stash_group_update().
- * @param setting address of e.g. an integer if using an integer property.
- * @param default_value should be cast into a pointer e.g. with @c GINT_TO_POINTER().
- * @param type can be 0 if passing a GtkWidget as the @a widget_id argument to look it up from the
- * GObject data.
+ * @param group .
+ * @param setting Address of e.g. an integer if using an integer property.
+ * @param key_name Name for key in a @c GKeyFile.
+ * @param default_value Value to use if the key doesn't exist when loading.
+ * Should be cast into a pointer e.g. with @c GINT_TO_POINTER().
+ * @param widget_id @c GtkWidget pointer or string to lookup widget later.
+ * @param property_name .
+ * @param type can be @c 0 if passing a @c GtkWidget as the @a widget_id argument to look it up from the
+ * @c GObject data.
  * @warning Currently only string GValue properties will be freed before setting; patch for
- * other types - see handle_widget_property(). */
+ * other types - see @c handle_widget_property(). */
 void stash_group_add_widget_property(StashGroup *group, gpointer setting,
 		const gchar *key_name, gpointer default_value, StashWidgetID widget_id,
 		const gchar *property_name, GType type)

@@ -311,7 +311,16 @@ static StashFuncs stash_funcs = {
 	&stash_group_save_to_key_file,
 	&stash_group_free,
 	&stash_group_load_from_file,
-	&stash_group_save_to_file
+	&stash_group_save_to_file,
+	&stash_group_add_toggle_button,
+	&stash_group_add_radio_buttons,
+	&stash_group_add_spin_button_integer,
+	&stash_group_add_combo_box,
+	&stash_group_add_combo_box_entry,
+	&stash_group_add_entry,
+	&stash_group_add_widget_property,
+	&stash_group_display,
+	&stash_group_update
 };
 
 static GeanyFunctions geany_functions = {
