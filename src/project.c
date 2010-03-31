@@ -109,7 +109,6 @@ void project_new(void)
 	GtkWidget *bbox;
 	GtkWidget *label;
 	PropertyDialogElements *e;
-	gint response;
 
 	if (! project_ask_close())
 		return;
@@ -190,16 +189,14 @@ void project_new(void)
 
 	gtk_widget_show_all(e->dialog);
 
-	retry:
-	response = gtk_dialog_run(GTK_DIALOG(e->dialog));
-	if (response == GTK_RESPONSE_OK)
+	while (gtk_dialog_run(GTK_DIALOG(e->dialog)) == GTK_RESPONSE_OK)
 	{
-		if (! update_config(e))
-			goto retry;
-		else
+		if (update_config(e))
+		{
 			ui_add_recent_project_file(app->project->file_name);
+			break;
+		}
 	}
-
 	gtk_widget_destroy(e->dialog);
 	g_free(e);
 }
@@ -224,12 +221,7 @@ gboolean project_load_file_with_session(const gchar *locale_file_name)
 #ifndef G_OS_WIN32
 static void run_open_dialog(GtkDialog *dialog)
 {
-	gint response;
-
-	retry:
-	response = gtk_dialog_run(dialog);
-
-	if (response == GTK_RESPONSE_ACCEPT)
+	while (gtk_dialog_run(dialog) == GTK_RESPONSE_ACCEPT)
 	{
 		gchar *filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
 
@@ -242,9 +234,10 @@ static void run_open_dialog(GtkDialog *dialog)
 			gtk_widget_grab_focus(GTK_WIDGET(dialog));
 			g_free(utf8_filename);
 			g_free(filename);
-			goto retry;
+			continue;
 		}
 		g_free(filename);
+		break;
 	}
 }
 #endif
@@ -537,7 +530,6 @@ void project_properties(void)
 {
 	PropertyDialogElements *e = g_new(PropertyDialogElements, 1);
 	GeanyProject *p = app->project;
-	gint response;
 	GtkWidget *widget = NULL;
 	GtkWidget *radio_long_line_custom;
 
@@ -596,16 +588,14 @@ void project_properties(void)
 
 	gtk_widget_show_all(e->dialog);
 
-	retry:
-	response = gtk_dialog_run(GTK_DIALOG(e->dialog));
-	if (response == GTK_RESPONSE_OK)
+	while (gtk_dialog_run(GTK_DIALOG(e->dialog)) == GTK_RESPONSE_OK)
 	{
-		if (! update_config(e))
-			goto retry;
-
-		stash_group_update(indent_group, e->dialog);
+		if (update_config(e))
+		{
+			stash_group_update(indent_group, e->dialog);
+			break;
+		}
 	}
-
 	build_free_fields(e->build_properties);
 	gtk_widget_destroy(e->dialog);
 	g_free(e);
