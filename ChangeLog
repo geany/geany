@@ -7,6 +7,9 @@
  * src/plugindata.h, src/stash.c, src/stash.h, src/plugins.c,
    plugins/geanyfunctions.h:
    Add Stash widget functions to API.
+ * configure.ac:
+   Revert commit to use AC_PATH_PROG instead of 'which' (fixes
+   #2973764).
 
 
 2010-03-30  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

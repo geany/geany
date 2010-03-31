@@ -17,9 +17,8 @@ AC_PROG_CC
 AC_PROG_CXX
 # check for C++ compiler explicitly and fail if none is found, do this check
 # after AC_PROG_CXX has set the CXX environment variable
-AC_PATH_PROG([CXXCOMPILER], [$CXX])
-if ! test -x "${CXXCOMPILER}"
-then
+which $CXX >/dev/null 2>&1
+if test "x$?" != "x0"; then
 	AC_MSG_ERROR([No C++ compiler found. Please install a C++ compiler.])
 fi
 
@@ -51,7 +50,7 @@ AC_CHECK_FUNCS([gethostname ftruncate fgetpos mkstemp regcomp strerror strstr])
 
 # get svn revision (try GIT first, then check for SVN)
 REVISION="r0"
-AC_PATH_PROG([GIT], [git])
+GIT=`which git 2>/dev/null`
 if test -d ".git" -a "x${GIT}" != "x" -a -x "${GIT}"
 then
 	REVISION=r`git svn find-rev origin/trunk 2>/dev/null ||
@@ -60,7 +59,7 @@ then
 fi
 if test "x${REVISION}" = "xr0"
 then
-	AC_PATH_PROG([SVN], [svn])
+	SVN=`which svn 2>/dev/null`
 	if test -d ".svn" -a "x${SVN}" != "x" -a -x "${SVN}"
 	then
 		REVISION=r`$SVN info|grep 'Last Changed Rev'|cut -d' ' -f4`
