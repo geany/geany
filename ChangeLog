@@ -1,3 +1,12 @@
+2010-04-01  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/geanymenubuttonaction.c, src/geanymenubuttonaction.h,
+   src/geanyentryaction.c, src/geanyentryaction.h,
+   src/geanywraplabel.c:
+   Cache G_TYPE_INSTANCE_GET_PRIVATE() result when initializing an
+   object for efficiency.
+
+
 2010-03-31  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * plugins/classbuilder.c:

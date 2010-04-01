@@ -38,9 +38,12 @@ G_BEGIN_DECLS
 typedef struct _GeanyMenubuttonAction				GeanyMenubuttonAction;
 typedef struct _GeanyMenubuttonActionClass			GeanyMenubuttonActionClass;
 
+struct _GeanyMenubuttonActionPrivate;
+
 struct _GeanyMenubuttonAction
 {
 	GtkAction parent;
+	struct _GeanyMenubuttonActionPrivate *priv;
 };
 
 struct _GeanyMenubuttonActionClass

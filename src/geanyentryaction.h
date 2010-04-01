@@ -38,9 +38,12 @@ G_BEGIN_DECLS
 typedef struct _GeanyEntryAction				GeanyEntryAction;
 typedef struct _GeanyEntryActionClass			GeanyEntryActionClass;
 
+struct _GeanyEntryActionPrivate;
+
 struct _GeanyEntryAction
 {
 	GtkAction parent;
+	struct _GeanyEntryActionPrivate *priv;
 };
 
 struct _GeanyEntryActionClass

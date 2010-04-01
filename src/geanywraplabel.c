@@ -33,8 +33,7 @@
 
 
 
-#define GEANY_WRAP_LABEL_GET_PRIVATE(obj)		(G_TYPE_INSTANCE_GET_PRIVATE((obj),\
-	GEANY_WRAP_LABEL_TYPE, GeanyWrapLabelPrivate))
+#define GEANY_WRAP_LABEL_GET_PRIVATE(obj)	(GEANY_WRAP_LABEL(obj)->priv)
 
 
 struct _GeanyWrapLabelClass
@@ -42,15 +41,16 @@ struct _GeanyWrapLabelClass
 	GtkLabelClass parent_class;
 };
 
-struct _GeanyWrapLabel
-{
-	GtkLabel parent;
-};
-
 typedef struct
 {
 	gsize wrap_width;
 } GeanyWrapLabelPrivate;
+
+struct _GeanyWrapLabel
+{
+	GtkLabel parent;
+	GeanyWrapLabelPrivate *priv;
+};
 
 
 static void geany_wrap_label_size_request	(GtkWidget *widget, GtkRequisition *req);
@@ -73,8 +73,12 @@ static void geany_wrap_label_class_init(GeanyWrapLabelClass *klass)
 
 static void geany_wrap_label_init(GeanyWrapLabel *self)
 {
-	GeanyWrapLabelPrivate *priv = GEANY_WRAP_LABEL_GET_PRIVATE(self);
+	GeanyWrapLabelPrivate *priv;
 
+	self->priv = G_TYPE_INSTANCE_GET_PRIVATE(self,
+		GEANY_WRAP_LABEL_TYPE, GeanyWrapLabelPrivate);
+
+	priv = self->priv;
 	priv->wrap_width = 0;
 }
 

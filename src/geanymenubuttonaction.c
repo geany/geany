@@ -32,8 +32,7 @@
 
 typedef struct _GeanyMenubuttonActionPrivate		GeanyMenubuttonActionPrivate;
 
-#define GEANY_MENU_BUTTON_ACTION_GET_PRIVATE(obj)	(G_TYPE_INSTANCE_GET_PRIVATE((obj), \
-			GEANY_MENU_BUTTON_ACTION_TYPE, GeanyMenubuttonActionPrivate))
+#define GEANY_MENU_BUTTON_ACTION_GET_PRIVATE(obj)	(GEANY_MENU_BUTTON_ACTION(obj)->priv)
 
 
 struct _GeanyMenubuttonActionPrivate
@@ -159,7 +158,12 @@ static void geany_menu_button_action_class_init(GeanyMenubuttonActionClass *klas
 
 static void geany_menu_button_action_init(GeanyMenubuttonAction *action)
 {
-	GeanyMenubuttonActionPrivate *priv = GEANY_MENU_BUTTON_ACTION_GET_PRIVATE(action);
+	GeanyMenubuttonActionPrivate *priv;
+
+	action->priv = G_TYPE_INSTANCE_GET_PRIVATE(action,
+		GEANY_MENU_BUTTON_ACTION_TYPE, GeanyMenubuttonActionPrivate);
+
+	priv = action->priv;
 	priv->tooltip_arrow = NULL;
 	priv->menu = NULL;
 }

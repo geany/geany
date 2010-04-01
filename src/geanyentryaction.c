@@ -33,8 +33,7 @@
 
 typedef struct _GeanyEntryActionPrivate		GeanyEntryActionPrivate;
 
-#define GEANY_ENTRY_ACTION_GET_PRIVATE(obj)	(G_TYPE_INSTANCE_GET_PRIVATE((obj), \
-			GEANY_ENTRY_ACTION_TYPE, GeanyEntryActionPrivate))
+#define GEANY_ENTRY_ACTION_GET_PRIVATE(obj)	(GEANY_ENTRY_ACTION(obj)->priv)
 
 
 struct _GeanyEntryActionPrivate
@@ -147,8 +146,12 @@ static void geany_entry_action_class_init(GeanyEntryActionClass *klass)
 
 static void geany_entry_action_init(GeanyEntryAction *action)
 {
-	GeanyEntryActionPrivate *priv = GEANY_ENTRY_ACTION_GET_PRIVATE(action);
+	GeanyEntryActionPrivate *priv;
 
+	action->priv = G_TYPE_INSTANCE_GET_PRIVATE(action,
+		GEANY_ENTRY_ACTION_TYPE, GeanyEntryActionPrivate);
+
+	priv = action->priv;
 	priv->entry = NULL;
 	priv->numeric = FALSE;
 }
