@@ -19,8 +19,6 @@ Note: features included in brackets have lower priority.
 	o (selectable menu of arguments to use for Make, from Make Custom)
 	o (DBUS)
 	o (sci macro support - as a plugin?)
-	o (better search & replace regex support e.g. multiline - use
-	   SCI_GETCHARACTERPOINTER and GNU regex?)
 	o (parsing tags from a memory buffer instead of a file on disk)
 	o (tango-like icons for the symbol list)
 	o (per-workspace instances with socket support?)
