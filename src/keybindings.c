@@ -24,6 +24,8 @@
 /**
  * @file keybindings.h
  * Configurable keyboard shortcuts.
+ * - keybindings_send_command() mimics a built-in keybinding.
+ * - @ref GeanyKeyGroupID lists groups of built-in keybindings.
  * @see plugin_set_key_group().
  **/
 

@@ -54,6 +54,7 @@
  * - @link document.h @endlink
  * - @link editor.h @endlink
  * - @link filetypes.h @endlink
+ * - @link keybindings.h @endlink
  * - @link msgwindow.h @endlink
  * - @link project.h @endlink
  * - @link sciwrappers.h Scintilla Wrapper Functions @endlink

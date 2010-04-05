@@ -1,3 +1,9 @@
+2010-04-05  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/keybindings.c, src/keybindings.h, doc/plugins.dox:
+   Add API docs for keybinding enums.
+
+
 2010-04-01  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/geanymenubuttonaction.c, src/geanymenubuttonaction.h,
