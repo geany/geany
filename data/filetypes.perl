@@ -72,13 +72,9 @@ context_action_cmd=
 # %e will be replaced by the filename without extension
 # (use only one of it at one time)
 
-# B - The Perl Bytecode Compiler (requires Perl 5.8 or higher)
-compiler=perl -MO=Bytecode,-H,-o"%f"c "%f"
+compiler=perl -cw "%f"
 
 # alternatively use perlcc
 #compiler=perlcc -o "%e" "%f"
-
-# instead of actual compiling, just run a nice syntax check
-#compiler=perl -c "%f"
 
 run_cmd=perl "%f"
