@@ -2,6 +2,9 @@
 
  * src/keybindings.c, src/keybindings.h, doc/plugins.dox:
    Add API docs for keybinding enums.
+ * src/notebook.c, doc/geany.txt, doc/geany.html:
+   Make Ctrl-click on any notebook tab switch to the last used
+   document.
 
 
 2010-04-01  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

@@ -35,6 +35,7 @@
 #include "support.h"
 #include "callbacks.h"
 #include "utils.h"
+#include "keybindings.h"
 
 #define GEANY_DND_NOTEBOOK_TAB_TYPE	"geany_dnd_notebook_tab"
 
@@ -435,7 +436,13 @@ static gboolean notebook_tab_click(GtkWidget *widget, GdkEventButton *event, gpo
 			GTK_WIDGET(data)));
 		return TRUE; /* stop other handlers like notebook_tab_bar_click_cb() */
 	}
-
+	/* switch last used tab on ctrl-click */
+	if (event->button == 1 && event->state == GDK_CONTROL_MASK)
+	{
+		keybindings_send_command(GEANY_KEY_GROUP_NOTEBOOK,
+			GEANY_KEYS_NOTEBOOK_SWITCHTABLASTUSED);
+		return TRUE;
+	}
 	return FALSE;
 }
 
