@@ -78,3 +78,8 @@ compiler=perl -cw "%f"
 #compiler=perlcc -o "%e" "%f"
 
 run_cmd=perl "%f"
+
+# Parse syntax check error messages and warnings, examples:
+# syntax error at test.pl line 7, near "{
+# Unknown warnings category '1' at test.pl line 13
+error_regex=.+ at (.+) line ([0-9]+).*

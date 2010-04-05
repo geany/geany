@@ -4,6 +4,8 @@
    Adjust Perl Compile command to use the -c command
    line option to perform a syntax check instead of using the
    deprecated ByteCompile module.
+   Add error_regex to parse error messages and warnings when performing
+   syntax checks on Perl files.
 
 
 2010-04-05  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
