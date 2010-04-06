@@ -1,3 +1,70 @@
+Geany 0.18.1 (February 14, 2010)
+
+    Build fixes:
+    * Define G_GNUC_WARN_UNUSED_RESULT to fix build on GLib 2.8.
+    * Use AC_PATH_PROG instead of 'which' for portability (patch by Erik
+      Southworth, thanks).
+
+    Incompatibilities:
+    * Remove filetypes.common invert_all option - use 'Invert syntax
+      highlighting colors' pref instead (fixes #2854525).
+
+    Bug fixes:
+    * Fix 'Open Selected File' for unsaved new documents.
+    * Fix updating main menu accelerators after changing keybindings
+      (thanks to Lex Trotman).
+    * Fix using 'Insert date' keybinding when a custom date string has
+      not been set.
+    * Set the cursor color for the split window plugin.
+    * Remove plugin from plugin manager dialog on unloading if it no
+      longer exists or is incompatible.
+    * Fix 'Reflow block' command when at the last paragraph and there's
+      no last newline (patch by Eugene Arshinov, thanks).
+    * Fix opening filenames beginning with two dots (closes #2858487).
+    * Show Find in Files stderr output in messages window instead of
+      debug window so that invalid regex messages can be seen easily.
+    * Speed up sorting in utils_get_file_list(). This reduces the file
+      browser delay on displaying a big directory, e.g. /usr/bin.
+    * Fix a bug with not w3c compatible HTML code on export plugin
+    * Fix non-working Home and End keys on numpads.
+    * Fix loading of files on network resources on Windows.
+    * Fix wrong alignment of printed pages when page headers are disabled
+      (closes #2856822).
+
+    Improvements:
+    * Extend auto_latex() function to check whether an environment has
+      been closed within the next lines to avoid auto adding double
+      \end{}.
+    * Replace some icons which could cause licensing problems by icons
+      from the Rodent icon theme.
+
+    Filetype fixes:
+    * Parse contents of D extern{} and version{} blocks.
+    * Fix creating D interface tags properly.
+    * Parse D functions with contracts (fixes #1885480).
+    * Parse D alias statement like typedef.
+    * Improve parsing of LaTeX, PHP and Python files.
+
+    Documentation:
+    * Add 'Scope autocompletion' section.
+    * Add 'Tools menu items' section to explain configuration files
+      submenu, reload configuration item.
+    * Minor updates/fixes.
+
+    API:
+    * Add gcc commands to build a plugin to the HowTo.
+
+    HACKING file:
+    * Add section 'Plugin API/ABI design'.
+    * Add 'Compiler options & warnings' section.
+    * Update Style section to be clearer about code alignment and show
+      some example code.
+    * Add 'Doc-comments' plugin API subsection.
+
+    Internationalisation:
+    * Added translations: gl
+
+
 Geany 0.18 (August 16, 2009)
 
     General:
