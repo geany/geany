@@ -1853,10 +1853,7 @@ static GString *get_doc_words(ScintillaObject *sci, gchar *root, gsize rootlen)
 				g_free(word);
 
 				if (nmatches == editor_prefs.autocompletion_max_entries)
-				{
-					g_string_append(words, "... ");
 					break;
-				}
 			}
 		}
 		ttf.chrg.cpMin = word_end;
@@ -1909,6 +1906,9 @@ static gboolean autocomplete_doc_word(GeanyEditor *editor, gchar *root, gsize ro
 		if (node->next)
 			g_string_append_c(str, '\n');
 	}
+	if (g_slist_length(list) >= editor_prefs.autocompletion_max_entries)
+		g_string_append(str, "\n...");
+
 	g_slist_free(list);
 	g_string_free(words, TRUE);
 
