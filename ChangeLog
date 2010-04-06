@@ -1,3 +1,10 @@
+2010-04-06  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/filetypes.c:
+   Re-detect any document filetypes set to None after reloading
+   filetype extensions (closes #2979661).
+
+
 2010-04-05  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * data/filetypes.perl:

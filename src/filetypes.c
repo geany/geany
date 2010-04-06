@@ -1579,7 +1579,6 @@ void filetypes_read_extensions(void)
 		"filetype_extensions.conf", NULL);
 	gchar *userconfigfile = g_strconcat(app->configdir, G_DIR_SEPARATOR_S,
 		"filetype_extensions.conf", NULL);
-	gchar **list;
 	GKeyFile *sysconfig = g_key_file_new();
 	GKeyFile *userconfig = g_key_file_new();
 
@@ -1591,20 +1590,30 @@ void filetypes_read_extensions(void)
 	{
 		gboolean userset =
 			g_key_file_has_key(userconfig, "Extensions", filetypes[i]->name, NULL);
-		list = g_key_file_get_string_list(
+		gchar **list = g_key_file_get_string_list(
 			(userset) ? userconfig : sysconfig, "Extensions", filetypes[i]->name, &len, NULL);
+
 		if (G_LIKELY(list) && G_LIKELY(len > 0))
 		{
 			g_strfreev(filetypes[i]->pattern);
 			filetypes[i]->pattern = list;
 		}
-		else g_strfreev(list);
+		else
+			g_strfreev(list);
 	}
 
 	g_free(sysconfigfile);
 	g_free(userconfigfile);
 	g_key_file_free(sysconfig);
 	g_key_file_free(userconfig);
+
+	foreach_document(i)
+	{
+		GeanyDocument *doc = documents[i];
+		if (doc->file_type->id != GEANY_FILETYPES_NONE)
+			continue;
+		document_set_filetype(doc, filetypes_detect_from_document(doc));
+	}
 }
 
 
