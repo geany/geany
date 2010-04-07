@@ -3955,8 +3955,9 @@ Preferences File Format
 -----------------------
 
 The preferences file ``~/.config/geany/geany.conf`` holds settings for all the items configured
-in the preferences dialog.  These are not detailed as they should not be edited
-as they are overwritten by Geany.
+in the preferences dialog. This file should not be edited while Geany is running
+as the file will be overwritten when the preferences in Geany are changed or Geany
+is quitted.
 
 
 Hidden preferences
