@@ -967,7 +967,7 @@ static void process_build_output_line(const gchar *str, gint color)
 	if (! NZV(msg))
 		return;
 
-	if (editor_prefs.use_indicators && build_info.message_count < GEANY_BUILD_ERR_HIGHLIGHT_MAX)
+	if (build_info.message_count < GEANY_BUILD_ERR_HIGHLIGHT_MAX)
 	{
 		gchar *filename;
 		gint line;
@@ -983,7 +983,7 @@ static void process_build_output_line(const gchar *str, gint color)
 		{
 			GeanyDocument *doc = document_find_by_filename(filename);
 
-			if (doc)
+			if (doc && editor_prefs.use_indicators)
 			{
 				if (line > 0) /* some compilers, like pdflatex report errors on line 0 */
 					line--;   /* so only adjust the line number if it is greater than 0 */

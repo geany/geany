@@ -2,6 +2,9 @@
 
  * doc/geany.txt, doc/geany.html:
    Improve wording.
+ * src/build.c, src/msgwindow.c:
+   Fix disabled compiler message tracking if using indicators to
+   show build errors is disabled (closes #2982834).
 
 
 2010-04-07  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

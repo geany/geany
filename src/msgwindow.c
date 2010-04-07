@@ -633,7 +633,7 @@ static gboolean goto_compiler_file_line(const gchar *filename, gint line, guint 
 		{
 			gboolean ret;
 
-			if (! doc->changed)	/* if modified, line may be wrong */
+			if (! doc->changed && editor_prefs.use_indicators)	/* if modified, line may be wrong */
 				editor_indicator_set_on_line(doc->editor, GEANY_INDICATOR_ERROR, line - 1);
 
 			ret = navqueue_goto_line(old_doc, doc, line);
