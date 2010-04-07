@@ -1,3 +1,11 @@
+2010-04-07  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * scintilla/Editor.cxx:
+   Backport fix from Scintilla CVS to fix using SCI_GETSELECTIONSTART
+   and SCI_GETSELECTIONEND with rectangular selections. This fixes
+   replacing in a rectangular selection.
+
+
 2010-04-06  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/filetypes.c:

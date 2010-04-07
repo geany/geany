@@ -6861,14 +6861,14 @@ sptr_t Editor::WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lParam) {
 		break;
 
 	case SCI_GETSELECTIONSTART:
-		return Platform::Minimum(sel.MainAnchor(), sel.MainCaret());
+		return sel.LimitsForRectangularElseMain().start.Position();
 
 	case SCI_SETSELECTIONEND:
 		SetSelection(wParam, Platform::Minimum(sel.MainAnchor(), wParam));
 		break;
 
 	case SCI_GETSELECTIONEND:
-		return Platform::Maximum(sel.MainAnchor(), sel.MainCaret());
+		return sel.LimitsForRectangularElseMain().end.Position();
 
 	case SCI_SETPRINTMAGNIFICATION:
 		printMagnification = wParam;
