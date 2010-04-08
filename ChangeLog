@@ -3,6 +3,9 @@
  * src/editor.c:
    Refactor snippets_complete_constructs().
    Remove an unnecessary TODO.
+ * src/editor.c:
+   Fix indenting a snippet when there is whitespace after the
+   snippet key name.
 
 
 2010-04-07  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

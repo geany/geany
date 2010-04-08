@@ -103,6 +103,7 @@ static void close_block(GeanyEditor *editor, gint pos);
 static void editor_highlight_braces(GeanyEditor *editor, gint cur_pos);
 static void read_current_word(GeanyEditor *editor, gint pos, gchar *word, size_t wordlen,
 		const gchar *wc, gboolean stem);
+static gsize count_indent_size(GeanyEditor *editor, const gchar *base_indent);
 
 
 void editor_snippets_free(void)
@@ -2123,6 +2124,7 @@ void editor_insert_text_block(GeanyEditor *editor, const gchar *text, gint inser
 
 	g_return_if_fail(text);
 	g_return_if_fail(editor != NULL);
+	g_return_if_fail(insert_pos >= 0);
 
 	buf = g_string_new(text);
 
@@ -2132,7 +2134,15 @@ void editor_insert_text_block(GeanyEditor *editor, const gchar *text, gint inser
 	/* Add line indents (in spaces) */
 
 	if (newline_indent_size == -1)
-		newline_indent_size = sci_get_line_indentation(sci, line_start);
+	{
+		/* count indent size up to insert_pos instead of asking sci
+		 * because there may be spaces after it */
+		gchar *tmp = sci_get_line(sci, line_start);
+		gint idx = insert_pos - sci_get_position_from_line(sci, line_start);
+		tmp[idx] = '\0';
+		newline_indent_size = count_indent_size(editor, tmp);
+		g_free(tmp);
+	}
 
 	if (newline_indent_size > 0)
 	{
@@ -2366,7 +2376,6 @@ static gboolean at_eol(ScintillaObject *sci, gint pos)
 gboolean editor_complete_snippet(GeanyEditor *editor, gint pos)
 {
 	gboolean result = FALSE;
-	gint lexer, style;
 	const gchar *wc;
 	const gchar *word;
 	ScintillaObject *sci;
@@ -2381,9 +2390,6 @@ gboolean editor_complete_snippet(GeanyEditor *editor, gint pos)
 			GEANY_KEYS_EDITOR_COMPLETESNIPPET)->key == GDK_space &&
 		! editor_prefs.complete_snippets_whilst_editing && ! at_eol(sci, pos))
 		return FALSE;
-
-	lexer = sci_get_lexer(sci);
-	style = sci_get_style_at(sci, pos - 2);
 
 	wc = snippets_find_completion_by_name("Special", "wordchars");
 	word = editor_read_word_stem(editor, pos, wc);
