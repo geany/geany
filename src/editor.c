@@ -2009,7 +2009,8 @@ gboolean editor_start_auto_complete(GeanyEditor *editor, gint pos, gboolean forc
 	return ret;
 }
 
-static gchar *snippets_find_completion_by_name(const gchar *type, const gchar *name)
+
+static const gchar *snippets_find_completion_by_name(const gchar *type, const gchar *name)
 {
 	gchar *result = NULL;
 	GHashTable *tmp;
@@ -2034,7 +2035,7 @@ static gchar *snippets_find_completion_by_name(const gchar *type, const gchar *n
 	/* if result is still NULL here, no completion could be found */
 
 	/* result is owned by the hash table and will be freed when the table will destroyed */
-	return g_strdup(result);
+	return result;
 }
 
 
@@ -2366,7 +2367,7 @@ gboolean editor_complete_snippet(GeanyEditor *editor, gint pos)
 {
 	gboolean result = FALSE;
 	gint lexer, style;
-	gchar *wc;
+	const gchar *wc;
 	const gchar *word;
 	ScintillaObject *sci;
 
@@ -2397,8 +2398,6 @@ gboolean editor_complete_snippet(GeanyEditor *editor, gint pos)
 		if (result)
 			sci_cancel(sci);	/* cancel any autocompletion list, etc */
 	}
-
-	g_free(wc);
 	return result;
 }
 
