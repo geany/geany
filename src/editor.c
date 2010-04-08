@@ -2044,7 +2044,7 @@ static gchar *snippets_find_completion_by_name(const gchar *type, const gchar *n
  * ac_complete_constructs. Any hints to improve this are welcome. */
 static GString *snippets_global_pattern = NULL;
 
-void snippets_replace_specials(gpointer key, gpointer value, gpointer user_data)
+static void snippets_replace_specials(gpointer key, gpointer value, gpointer user_data)
 {
 	gchar *needle;
 
@@ -2094,7 +2094,7 @@ static void fix_line_indents(GeanyEditor *editor, gint line_start, gint line_end
 	sci_set_current_position(sci, pos, FALSE);
 }
 
-/* TODO: Fix \\t inside comment*/
+
 /** Inserts text, replacing \\t tab chars with the correct indent width, and \\n newline
  * chars with the correct line ending string.
  * @param editor The editor to operate on.
@@ -2197,42 +2197,16 @@ void editor_goto_next_snippet_cursor(GeanyEditor *editor)
 }
 
 
-static gboolean snippets_complete_constructs(GeanyEditor *editor, gint pos, const gchar *word)
+static gssize snippets_make_replacements(GeanyEditor *editor, GString *pattern,
+		gsize indent_size)
 {
-	ScintillaObject *sci = editor->sci;
-	gchar *str, *whitespace;
-	GString *pattern;
-	gint i, str_len, tmp_pos, whitespace_len, nl_count = 0;
 	gssize cur_index = -1;
-	gint ft_id = FILETYPE_ID(editor->document->file_type);
+	gchar *whitespace;
+	gint i, tmp_pos, whitespace_len, nl_count = 0;
 	GHashTable *specials;
 	GList *temp_list = NULL;
-	const GeanyIndentPrefs *iprefs;
-	gsize indent_size;
+	const GeanyIndentPrefs *iprefs = editor_get_indent_prefs(editor);
 	gint cursor_steps, old_cursor = 0;
-
-	str = g_strdup(word);
-	g_strstrip(str);
-	pattern = g_string_new(snippets_find_completion_by_name(filetypes[ft_id]->name, str));
-	if (pattern == NULL || pattern->len == 0)
-	{
-		g_free(str);
-		g_string_free(pattern, TRUE);
-		return FALSE;
-	}
-
-	iprefs = editor_get_indent_prefs(editor);
-	read_indent(editor, pos);
-	indent_size = strlen(indent);
-
-	/* remove the typed word, it will be added again by the used auto completion
-	 * (not really necessary but this makes the auto completion more flexible,
-	 *  e.g. with a completion like hi=hello, so typing "hi<TAB>" will result in "hello") */
-	str_len = strlen(str);
-	sci_set_selection_start(sci, pos - str_len);
-	sci_set_selection_end(sci, pos);
-	sci_replace_sel(sci, "");
-	pos -= str_len; /* pos has changed while deleting */
 
 	/* replace 'special' completions */
 	specials = g_hash_table_lookup(snippet_hash, "Special");
@@ -2286,7 +2260,7 @@ static gboolean snippets_complete_constructs(GeanyEditor *editor, gint pos, cons
 		/* modify cursor_steps to take indentation count and type into account */
 
 		/* We're saving the relative offset to each cursor position in a simple
-		 * linked list, including intendations between them. */
+		 * linked list, including indentations between them. */
 		if (i++ > 0)
 		{
 			cursor_steps += (nl_count * indent_size);
@@ -2303,6 +2277,7 @@ static gboolean snippets_complete_constructs(GeanyEditor *editor, gint pos, cons
 	utils_string_replace_all(pattern, "%newline%", editor_get_eol_char(editor));
 	utils_string_replace_all(pattern, "%ws%", whitespace);
 	g_free(whitespace);
+
 	/* We put the cursor positions for the most recent
 	 * parsed snippet first, followed by any remaining positions */
 	i = 0;
@@ -2322,13 +2297,48 @@ static gboolean snippets_complete_constructs(GeanyEditor *editor, gint pos, cons
 	if (cur_index < 0)
 		cur_index = pattern->len;
 
+	return cur_index;
+}
+
+
+static gboolean snippets_complete_constructs(GeanyEditor *editor, gint pos, const gchar *word)
+{
+	ScintillaObject *sci = editor->sci;
+	gchar *str;
+	GString *pattern;
+	gssize cur_index = -1;
+	gint str_len;
+	gint ft_id = FILETYPE_ID(editor->document->file_type);
+
+	str = g_strdup(word);
+	g_strstrip(str);
+	pattern = g_string_new(snippets_find_completion_by_name(filetypes[ft_id]->name, str));
+	if (pattern == NULL || pattern->len == 0)
+	{
+		g_free(str);
+		g_string_free(pattern, TRUE);
+		return FALSE;
+	}
+
+	read_indent(editor, pos);
+
+	/* remove the typed word, it will be added again by the used auto completion
+	 * (not really necessary but this makes the auto completion more flexible,
+	 *  e.g. with a completion like hi=hello, so typing "hi<TAB>" will result in "hello") */
+	str_len = strlen(str);
+	sci_set_selection_start(sci, pos - str_len);
+	sci_set_selection_end(sci, pos);
+	sci_replace_sel(sci, "");
+	pos -= str_len; /* pos has changed while deleting */
+
+	cur_index = snippets_make_replacements(editor, pattern, strlen(indent));
+
 	/* finally insert the text and set the cursor */
 	editor_insert_text_block(editor, pattern->str, pos, cur_index, -1, FALSE);
 	sci_scroll_caret(sci);
 
 	g_free(str);
 	g_string_free(pattern, TRUE);
-
  	return TRUE;
 }
 
