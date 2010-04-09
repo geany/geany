@@ -68,6 +68,9 @@ static GtkTreeView *sc_tree = NULL;
 static GtkWidget *menu_htmltoggle = NULL;
 static gboolean plugin_active = FALSE;
 
+/* Configuration file */
+static gchar *config_file = NULL;
+
 const gchar *chars[][2] ={
 	{ N_("HTML characters"), NULL },
 	{ "\"", "&quot;" },
@@ -344,10 +347,36 @@ PluginCallback plugin_callbacks[] =
 /* Functions to toggle the status of plugin */
 void set_status(gboolean new_status)
 {
-	/* No more function at the moment.*/
 	if (plugin_active != new_status)
+	{
+		GKeyFile *config = g_key_file_new();
+		gchar *data;
+		gchar *config_dir = g_path_get_dirname(config_file);
+
 		plugin_active = new_status;
-}
+
+		/* Now we save the new status into configuration file to
+		 * remember next time */
+		g_key_file_set_boolean(config, "general", "replacement_on_typing_active",
+			plugin_active);
+
+		if (!g_file_test(config_dir, G_FILE_TEST_IS_DIR)
+			&& utils_mkdir(config_dir, TRUE) != 0)
+		{
+			dialogs_show_msgbox(GTK_MESSAGE_ERROR,
+				_("Plugin configuration directory could not be created."));
+		}
+		else
+		{
+			/* write config to file */
+			data = g_key_file_to_data(config, NULL, NULL);
+			utils_write_file(config_file, data);
+			g_free(data);
+		}
+		g_free(config_dir);
+		g_key_file_free(config);
+	}
+}	
 
 
 static void toggle_status(G_GNUC_UNUSED GtkMenuItem * menuitem)
@@ -430,9 +459,13 @@ static gboolean ht_editor_notify_cb(GObject *object, GeanyEditor *editor,
 static void kbhtmltoggle_toggle(G_GNUC_UNUSED guint key_id)
 {
 	if (plugin_active == TRUE)
+	{
 		set_status(FALSE);
+	}
 	else
+	{
 		set_status(TRUE);
+	}
 }
 
 
@@ -674,11 +707,31 @@ static void kb_special_chars_replacement(G_GNUC_UNUSED guint key_id)
 }
 
 
-/* Called by Geany to initialize the plugin */
+static void init_configuration()
+{
+	GKeyFile *config = g_key_file_new();
+
+	/* loading configurations from file ...*/
+	config_file = g_strconcat(geany->app->configdir, G_DIR_SEPARATOR_S,
+	"plugins", G_DIR_SEPARATOR_S,
+	"htmchars", G_DIR_SEPARATOR_S, "general.conf", NULL);
+
+	/* ... and initialising options from config file */
+	g_key_file_load_from_file(config, config_file, G_KEY_FILE_NONE, NULL);
+
+	plugin_active = utils_get_setting_boolean(config, "general",
+		"replacement_on_typing_active", FALSE);
+}
+
+
+/* Called by Geany to initialise the plugin */
 void plugin_init(GeanyData *data)
 {
 	GtkWidget *menu_item;
 	const gchar *menu_text = _("_Insert Special HTML Characters");
+
+	/* First we catch the configuration and initialize them */
+	init_configuration();
 
 	/* Add an item to the Tools menu for html chars dialog*/
 	menu_item = gtk_menu_item_new_with_mnemonic(menu_text);
@@ -739,6 +792,9 @@ void plugin_cleanup(void)
 
 	if (sc_dialog != NULL)
 		gtk_widget_destroy(sc_dialog);
+
+	if (config_file != NULL)
+		g_free(config_file);
 }
 
 
