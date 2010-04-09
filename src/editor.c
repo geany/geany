@@ -2121,6 +2121,7 @@ void editor_insert_text_block(GeanyEditor *editor, const gchar *text, gint inser
 	gchar *whitespace;
 	GString *buf;
 	const gchar cur_marker[] = "__GEANY_CURSOR_MARKER__";
+	const gchar *eol = editor_get_eol_char(editor);
 
 	g_return_if_fail(text);
 	g_return_if_fail(editor != NULL);
@@ -2130,8 +2131,6 @@ void editor_insert_text_block(GeanyEditor *editor, const gchar *text, gint inser
 
 	if (cursor_index >= 0)
 		g_string_insert(buf, cursor_index, cur_marker);	/* remember cursor pos */
-
-	/* Add line indents (in spaces) */
 
 	if (newline_indent_size == -1)
 	{
@@ -2144,17 +2143,18 @@ void editor_insert_text_block(GeanyEditor *editor, const gchar *text, gint inser
 		g_free(tmp);
 	}
 
+	/* Add line indents (in spaces) */
 	if (newline_indent_size > 0)
 	{
 		whitespace = g_strnfill(newline_indent_size, ' ');
-		setptr(whitespace, g_strconcat("\n", whitespace, NULL));
-		utils_string_replace_all(buf, "\n", whitespace);
+		setptr(whitespace, g_strconcat(eol, whitespace, NULL));
+		utils_string_replace_all(buf, eol, whitespace);
 		g_free(whitespace);
 	}
 
 	/* transform line endings */
 	if (replace_newlines)
-		utils_string_replace_all(buf, "\n", editor_get_eol_char(editor));
+		utils_string_replace_all(buf, "\n", eol);
 
 	/* transform tabs into indent widths (in spaces) */
 	whitespace = g_strnfill(editor_get_indent_prefs(editor)->width, ' ');

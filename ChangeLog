@@ -1,3 +1,10 @@
+2010-04-09  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/editor.c:
+   Fix inserting snippets with an indent when using Mac CR line
+   endings.
+
+
 2010-04-08  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/editor.c:
