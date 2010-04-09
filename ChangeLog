@@ -3,6 +3,8 @@
  * src/editor.c:
    Fix inserting snippets with an indent when using Mac CR line
    endings.
+ * src/callbacks.c:
+   Update status bar after using Document->Set Line Endings.
 
 
 2010-04-08  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

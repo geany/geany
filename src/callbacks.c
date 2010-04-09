@@ -803,18 +803,26 @@ on_tv_notebook_switch_page_after       (GtkNotebook     *notebook,
 }
 
 
+static void convert_eol(gint mode)
+{
+	GeanyDocument *doc = document_get_current();
+
+	g_return_if_fail(doc != NULL);
+
+	sci_convert_eols(doc->editor->sci, mode);
+	sci_set_eol_mode(doc->editor->sci, mode);
+	ui_update_statusbar(doc, -1);
+}
+
+
 void
 on_crlf_activate                       (GtkCheckMenuItem *menuitem,
                                         gpointer          user_data)
 {
-	GeanyDocument *doc;
 	if (ignore_callback || ! gtk_check_menu_item_get_active(menuitem))
 		return;
-	doc = document_get_current();
-	g_return_if_fail(doc != NULL);
 
-	sci_convert_eols(doc->editor->sci, SC_EOL_CRLF);
-	sci_set_eol_mode(doc->editor->sci, SC_EOL_CRLF);
+	convert_eol(SC_EOL_CRLF);
 }
 
 
@@ -822,14 +830,10 @@ void
 on_lf_activate                         (GtkCheckMenuItem *menuitem,
                                         gpointer          user_data)
 {
-	GeanyDocument *doc;
 	if (ignore_callback || ! gtk_check_menu_item_get_active(menuitem))
 		return;
-	doc = document_get_current();
-	g_return_if_fail(doc != NULL);
 
-	sci_convert_eols(doc->editor->sci, SC_EOL_LF);
-	sci_set_eol_mode(doc->editor->sci, SC_EOL_LF);
+	convert_eol(SC_EOL_LF);
 }
 
 
@@ -837,14 +841,10 @@ void
 on_cr_activate                         (GtkCheckMenuItem *menuitem,
                                         gpointer          user_data)
 {
-	GeanyDocument *doc;
 	if (ignore_callback || ! gtk_check_menu_item_get_active(menuitem))
 		return;
-	doc = document_get_current();
-	g_return_if_fail(doc != NULL);
 
-	sci_convert_eols(doc->editor->sci, SC_EOL_CR);
-	sci_set_eol_mode(doc->editor->sci, SC_EOL_CR);
+	convert_eol(SC_EOL_CR);
 }
 
 
