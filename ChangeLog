@@ -5,6 +5,8 @@
    endings.
  * src/callbacks.c:
    Update status bar after using Document->Set Line Endings.
+ * src/editor.c:
+   Improve API docs for editor_insert_text_block().
 
 
 2010-04-08  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

@@ -2097,11 +2097,14 @@ static void fix_line_indents(GeanyEditor *editor, gint line_start, gint line_end
 }
 
 
-/** Inserts text, replacing \\t tab chars with the correct indent width, and \\n newline
- * chars with the correct line ending string.
- * @param editor The editor to operate on.
- * @param text Intended as e.g. "if (1)\n\tdo_something();"
- * @param insert_pos Position, where to start with inserting text block.
+/** Inserts text, replacing \\t tab chars (@c 0x9) with the correct indent
+ * width, and \\n newline chars (@c 0xA) with the correct line ending string
+ * for the document.
+ * This is very useful for inserting code without having to handle the indent
+ * type yourself (Tabs & Spaces mode can be tricky).
+ * @param editor Editor.
+ * @param text Intended as e.g. @c "if (foo)\n\tbar();".
+ * @param insert_pos Document position to insert text at.
  * @param cursor_index If >= 0, the index into @a text to place the cursor.
  * @param newline_indent_size Indentation size (in spaces) to insert for each newline; use
  * -1 to read the indent size from the line with @a insert_pos on it.
@@ -2109,8 +2112,7 @@ static void fix_line_indents(GeanyEditor *editor, gint line_start, gint line_end
  * newlines have been replaced before, this should be false, to avoid multiple
  * replacements of newlines, which is error prone on Windows.
  * @warning Make sure all \\t tab chars in @a text are intended as indent widths,
- * NOT any hard tabs (you get those when copying document text with the Tabs
- * & Spaces indent mode set).
+ * not hard tabs, as these might not be preserved.
  * @note This doesn't scroll the cursor in view afterwards. **/
 void editor_insert_text_block(GeanyEditor *editor, const gchar *text, gint insert_pos,
 		gint cursor_index, gint newline_indent_size, gboolean replace_newlines)
