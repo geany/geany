@@ -266,6 +266,8 @@
 	geany_functions->p_ui->ui_widget_modify_font_from_string
 #define ui_is_keyval_enter_or_return \
 	geany_functions->p_ui->ui_is_keyval_enter_or_return
+#define ui_get_gtk_settings_integer \
+	geany_functions->p_ui->ui_get_gtk_settings_integer
 #define dialogs_show_question \
 	geany_functions->p_dialogs->dialogs_show_question
 #define dialogs_show_msgbox \

@@ -229,7 +229,8 @@ static UIUtilsFuncs uiutils_funcs = {
 	&ui_entry_add_clear_icon,
 	&ui_menu_add_document_items,
 	&ui_widget_modify_font_from_string,
-	&ui_is_keyval_enter_or_return
+	&ui_is_keyval_enter_or_return,
+	&ui_get_gtk_settings_integer
 };
 
 static DialogFuncs dialog_funcs = {

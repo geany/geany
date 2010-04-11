@@ -2245,3 +2245,23 @@ gboolean ui_is_keyval_enter_or_return(guint keyval)
 {
 	return (keyval == GDK_Return || keyval == GDK_ISO_Enter|| keyval == GDK_KP_Enter);
 }
+
+
+/** Reads an integer from the GTK default settings registry
+ * (see http://library.gnome.org/devel/gtk/stable/GtkSettings.html).
+ * @param property_name The property to read.
+ * @param default_value The default value in case the value could not be read.
+ * @return The value for the property if it exists, otherwise the @a default_value.
+ * @since 0.19 */
+gint ui_get_gtk_settings_integer(const gchar *property_name, gint default_value)
+{
+	if (g_object_class_find_property(G_OBJECT_GET_CLASS(G_OBJECT(
+		gtk_settings_get_default())), property_name))
+	{
+		gint value;
+		g_object_get(G_OBJECT(gtk_settings_get_default()), property_name, &value, NULL);
+		return value;
+	}
+	else
+		return default_value;
+}

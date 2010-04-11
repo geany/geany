@@ -2453,29 +2453,35 @@ create_prefs_dialog (void)
   GtkWidget *frame28;
   GtkWidget *alignment31;
   GtkWidget *vbox42;
+  GtkWidget *hbox18;
+  GtkWidget *vbox52;
   GtkWidget *check_toolbar_show;
   GtkWidget *check_toolbar_in_menu;
-  GtkWidget *label196;
-  GtkWidget *frame13;
-  GtkWidget *alignment16;
-  GtkWidget *table9;
-  GtkWidget *label169;
-  GtkWidget *label170;
-  GtkWidget *radio_toolbar_imagetext;
-  GSList *radio_toolbar_imagetext_group = NULL;
-  GtkWidget *radio_toolbar_small;
-  GSList *radio_toolbar_small_group = NULL;
-  GtkWidget *radio_toolbar_large;
-  GtkWidget *radio_toolbar_text;
-  GtkWidget *radio_toolbar_image;
-  GtkWidget *radio_toolbar_verysmall;
-  GtkWidget *label167;
-  GtkWidget *hbox15;
+  GtkWidget *vbox53;
   GtkWidget *button_customize_toolbar;
   GtkWidget *alignment45;
   GtkWidget *hbox16;
   GtkWidget *image2877;
   GtkWidget *label236;
+  GtkWidget *frame_toolbar_style;
+  GtkWidget *alignment50;
+  GtkWidget *table19;
+  GtkWidget *radio_toolbar_style_default;
+  GSList *radio_toolbar_style_default_group = NULL;
+  GtkWidget *radio_toolbar_imagetext;
+  GtkWidget *radio_toolbar_image;
+  GtkWidget *radio_toolbar_text;
+  GtkWidget *label244;
+  GtkWidget *frame_toolbar_icon;
+  GtkWidget *alignment51;
+  GtkWidget *table20;
+  GtkWidget *radio_toolbar_icon_default;
+  GSList *radio_toolbar_icon_default_group = NULL;
+  GtkWidget *radio_toolbar_small;
+  GtkWidget *radio_toolbar_verysmall;
+  GtkWidget *radio_toolbar_large;
+  GtkWidget *label245;
+  GtkWidget *label246;
   GtkWidget *label164;
   GtkWidget *notebook4;
   GtkWidget *vbox5;
@@ -3343,114 +3349,34 @@ create_prefs_dialog (void)
   gtk_container_add (GTK_CONTAINER (frame28), alignment31);
   gtk_alignment_set_padding (GTK_ALIGNMENT (alignment31), 0, 0, 12, 0);
 
-  vbox42 = gtk_vbox_new (FALSE, 0);
+  vbox42 = gtk_vbox_new (FALSE, 5);
   gtk_widget_show (vbox42);
   gtk_container_add (GTK_CONTAINER (alignment31), vbox42);
 
+  hbox18 = gtk_hbox_new (FALSE, 0);
+  gtk_widget_show (hbox18);
+  gtk_box_pack_start (GTK_BOX (vbox42), hbox18, FALSE, FALSE, 0);
+
+  vbox52 = gtk_vbox_new (FALSE, 0);
+  gtk_widget_show (vbox52);
+  gtk_box_pack_start (GTK_BOX (hbox18), vbox52, TRUE, TRUE, 0);
+
   check_toolbar_show = gtk_check_button_new_with_mnemonic (_("Show T_oolbar"));
   gtk_widget_show (check_toolbar_show);
-  gtk_box_pack_start (GTK_BOX (vbox42), check_toolbar_show, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox52), check_toolbar_show, FALSE, FALSE, 0);
 
   check_toolbar_in_menu = gtk_check_button_new_with_mnemonic (_("_Append Toolbar to the Menu"));
   gtk_widget_show (check_toolbar_in_menu);
-  gtk_box_pack_start (GTK_BOX (vbox42), check_toolbar_in_menu, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox52), check_toolbar_in_menu, FALSE, FALSE, 0);
   gtk_tooltips_set_tip (tooltips, check_toolbar_in_menu, _("Pack the toolbar to the main menu to save vertical space"), NULL);
 
-  label196 = gtk_label_new (_("<b>Toolbar</b>"));
-  gtk_widget_show (label196);
-  gtk_frame_set_label_widget (GTK_FRAME (frame28), label196);
-  gtk_label_set_use_markup (GTK_LABEL (label196), TRUE);
-
-  frame13 = gtk_frame_new (NULL);
-  gtk_widget_show (frame13);
-  gtk_box_pack_start (GTK_BOX (vbox15), frame13, FALSE, FALSE, 0);
-  gtk_frame_set_shadow_type (GTK_FRAME (frame13), GTK_SHADOW_NONE);
-
-  alignment16 = gtk_alignment_new (0.5, 0.5, 1, 1);
-  gtk_widget_show (alignment16);
-  gtk_container_add (GTK_CONTAINER (frame13), alignment16);
-  gtk_alignment_set_padding (GTK_ALIGNMENT (alignment16), 0, 0, 12, 0);
-
-  table9 = gtk_table_new (2, 4, FALSE);
-  gtk_widget_show (table9);
-  gtk_container_add (GTK_CONTAINER (alignment16), table9);
-  gtk_table_set_row_spacings (GTK_TABLE (table9), 3);
-  gtk_table_set_col_spacings (GTK_TABLE (table9), 12);
-
-  label169 = gtk_label_new (_("Icon style:"));
-  gtk_widget_show (label169);
-  gtk_table_attach (GTK_TABLE (table9), label169, 0, 1, 0, 1,
-                    (GtkAttachOptions) (GTK_FILL),
-                    (GtkAttachOptions) (0), 0, 0);
-  gtk_misc_set_alignment (GTK_MISC (label169), 0, 0.5);
-
-  label170 = gtk_label_new (_("Icon size:"));
-  gtk_widget_show (label170);
-  gtk_table_attach (GTK_TABLE (table9), label170, 0, 1, 1, 2,
-                    (GtkAttachOptions) (GTK_FILL),
-                    (GtkAttachOptions) (0), 0, 0);
-  gtk_misc_set_alignment (GTK_MISC (label170), 0, 0.5);
-
-  radio_toolbar_imagetext = gtk_radio_button_new_with_mnemonic (NULL, _("Images _and Text"));
-  gtk_widget_show (radio_toolbar_imagetext);
-  gtk_table_attach (GTK_TABLE (table9), radio_toolbar_imagetext, 1, 2, 0, 1,
-                    (GtkAttachOptions) (GTK_FILL),
-                    (GtkAttachOptions) (0), 0, 0);
-  gtk_radio_button_set_group (GTK_RADIO_BUTTON (radio_toolbar_imagetext), radio_toolbar_imagetext_group);
-  radio_toolbar_imagetext_group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio_toolbar_imagetext));
-
-  radio_toolbar_small = gtk_radio_button_new_with_mnemonic (NULL, _("_Small Icons"));
-  gtk_widget_show (radio_toolbar_small);
-  gtk_table_attach (GTK_TABLE (table9), radio_toolbar_small, 2, 3, 1, 2,
-                    (GtkAttachOptions) (GTK_FILL),
-                    (GtkAttachOptions) (0), 0, 0);
-  gtk_radio_button_set_group (GTK_RADIO_BUTTON (radio_toolbar_small), radio_toolbar_small_group);
-  radio_toolbar_small_group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio_toolbar_small));
-
-  radio_toolbar_large = gtk_radio_button_new_with_mnemonic (NULL, _("_Large Icons"));
-  gtk_widget_show (radio_toolbar_large);
-  gtk_table_attach (GTK_TABLE (table9), radio_toolbar_large, 1, 2, 1, 2,
-                    (GtkAttachOptions) (GTK_FILL),
-                    (GtkAttachOptions) (0), 0, 0);
-  gtk_radio_button_set_group (GTK_RADIO_BUTTON (radio_toolbar_large), radio_toolbar_small_group);
-  radio_toolbar_small_group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio_toolbar_large));
-
-  radio_toolbar_text = gtk_radio_button_new_with_mnemonic (NULL, _("_Text Only"));
-  gtk_widget_show (radio_toolbar_text);
-  gtk_table_attach (GTK_TABLE (table9), radio_toolbar_text, 3, 4, 0, 1,
-                    (GtkAttachOptions) (GTK_FILL),
-                    (GtkAttachOptions) (0), 0, 0);
-  gtk_radio_button_set_group (GTK_RADIO_BUTTON (radio_toolbar_text), radio_toolbar_imagetext_group);
-  radio_toolbar_imagetext_group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio_toolbar_text));
-
-  radio_toolbar_image = gtk_radio_button_new_with_mnemonic (NULL, _("_Images Only"));
-  gtk_widget_show (radio_toolbar_image);
-  gtk_table_attach (GTK_TABLE (table9), radio_toolbar_image, 2, 3, 0, 1,
-                    (GtkAttachOptions) (GTK_FILL),
-                    (GtkAttachOptions) (0), 0, 0);
-  gtk_radio_button_set_group (GTK_RADIO_BUTTON (radio_toolbar_image), radio_toolbar_imagetext_group);
-  radio_toolbar_imagetext_group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio_toolbar_image));
-
-  radio_toolbar_verysmall = gtk_radio_button_new_with_mnemonic (NULL, _("_Very Small Icons"));
-  gtk_widget_show (radio_toolbar_verysmall);
-  gtk_table_attach (GTK_TABLE (table9), radio_toolbar_verysmall, 3, 4, 1, 2,
-                    (GtkAttachOptions) (GTK_FILL),
-                    (GtkAttachOptions) (0), 0, 0);
-  gtk_radio_button_set_group (GTK_RADIO_BUTTON (radio_toolbar_verysmall), radio_toolbar_small_group);
-  radio_toolbar_small_group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio_toolbar_verysmall));
-
-  label167 = gtk_label_new (_("<b>Appearance</b>"));
-  gtk_widget_show (label167);
-  gtk_frame_set_label_widget (GTK_FRAME (frame13), label167);
-  gtk_label_set_use_markup (GTK_LABEL (label167), TRUE);
-
-  hbox15 = gtk_hbox_new (TRUE, 0);
-  gtk_widget_show (hbox15);
-  gtk_box_pack_start (GTK_BOX (vbox15), hbox15, FALSE, FALSE, 0);
+  vbox53 = gtk_vbox_new (FALSE, 0);
+  gtk_widget_show (vbox53);
+  gtk_box_pack_start (GTK_BOX (hbox18), vbox53, FALSE, FALSE, 0);
 
   button_customize_toolbar = gtk_button_new ();
   gtk_widget_show (button_customize_toolbar);
-  gtk_box_pack_start (GTK_BOX (hbox15), button_customize_toolbar, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox53), button_customize_toolbar, FALSE, FALSE, 0);
 
   alignment45 = gtk_alignment_new (0.5, 0.5, 0, 0);
   gtk_widget_show (alignment45);
@@ -3467,6 +3393,117 @@ create_prefs_dialog (void)
   label236 = gtk_label_new_with_mnemonic (_("Customize Toolbar"));
   gtk_widget_show (label236);
   gtk_box_pack_start (GTK_BOX (hbox16), label236, FALSE, FALSE, 0);
+
+  frame_toolbar_style = gtk_frame_new (NULL);
+  gtk_widget_show (frame_toolbar_style);
+  gtk_box_pack_start (GTK_BOX (vbox42), frame_toolbar_style, TRUE, TRUE, 0);
+  gtk_frame_set_shadow_type (GTK_FRAME (frame_toolbar_style), GTK_SHADOW_NONE);
+
+  alignment50 = gtk_alignment_new (0.5, 0.5, 1, 1);
+  gtk_widget_show (alignment50);
+  gtk_container_add (GTK_CONTAINER (frame_toolbar_style), alignment50);
+  gtk_alignment_set_padding (GTK_ALIGNMENT (alignment50), 0, 0, 12, 0);
+
+  table19 = gtk_table_new (2, 2, FALSE);
+  gtk_widget_show (table19);
+  gtk_container_add (GTK_CONTAINER (alignment50), table19);
+  gtk_table_set_row_spacings (GTK_TABLE (table19), 3);
+  gtk_table_set_col_spacings (GTK_TABLE (table19), 20);
+
+  radio_toolbar_style_default = gtk_radio_button_new_with_mnemonic (NULL, _("System _Default"));
+  gtk_widget_show (radio_toolbar_style_default);
+  gtk_table_attach (GTK_TABLE (table19), radio_toolbar_style_default, 0, 1, 0, 1,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_radio_button_set_group (GTK_RADIO_BUTTON (radio_toolbar_style_default), radio_toolbar_style_default_group);
+  radio_toolbar_style_default_group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio_toolbar_style_default));
+
+  radio_toolbar_imagetext = gtk_radio_button_new_with_mnemonic (NULL, _("Images _and Text"));
+  gtk_widget_show (radio_toolbar_imagetext);
+  gtk_table_attach (GTK_TABLE (table19), radio_toolbar_imagetext, 0, 1, 1, 2,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_radio_button_set_group (GTK_RADIO_BUTTON (radio_toolbar_imagetext), radio_toolbar_style_default_group);
+  radio_toolbar_style_default_group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio_toolbar_imagetext));
+
+  radio_toolbar_image = gtk_radio_button_new_with_mnemonic (NULL, _("_Images Only"));
+  gtk_widget_show (radio_toolbar_image);
+  gtk_table_attach (GTK_TABLE (table19), radio_toolbar_image, 1, 2, 0, 1,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_radio_button_set_group (GTK_RADIO_BUTTON (radio_toolbar_image), radio_toolbar_style_default_group);
+  radio_toolbar_style_default_group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio_toolbar_image));
+
+  radio_toolbar_text = gtk_radio_button_new_with_mnemonic (NULL, _("_Text Only"));
+  gtk_widget_show (radio_toolbar_text);
+  gtk_table_attach (GTK_TABLE (table19), radio_toolbar_text, 1, 2, 1, 2,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_radio_button_set_group (GTK_RADIO_BUTTON (radio_toolbar_text), radio_toolbar_style_default_group);
+  radio_toolbar_style_default_group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio_toolbar_text));
+
+  label244 = gtk_label_new (_("<b>Icon Style</b>"));
+  gtk_widget_show (label244);
+  gtk_frame_set_label_widget (GTK_FRAME (frame_toolbar_style), label244);
+  gtk_label_set_use_markup (GTK_LABEL (label244), TRUE);
+
+  frame_toolbar_icon = gtk_frame_new (NULL);
+  gtk_widget_show (frame_toolbar_icon);
+  gtk_box_pack_start (GTK_BOX (vbox42), frame_toolbar_icon, TRUE, TRUE, 0);
+  gtk_frame_set_shadow_type (GTK_FRAME (frame_toolbar_icon), GTK_SHADOW_NONE);
+
+  alignment51 = gtk_alignment_new (0.5, 0.5, 1, 1);
+  gtk_widget_show (alignment51);
+  gtk_container_add (GTK_CONTAINER (frame_toolbar_icon), alignment51);
+  gtk_alignment_set_padding (GTK_ALIGNMENT (alignment51), 0, 0, 12, 0);
+
+  table20 = gtk_table_new (2, 2, TRUE);
+  gtk_widget_show (table20);
+  gtk_container_add (GTK_CONTAINER (alignment51), table20);
+  gtk_table_set_row_spacings (GTK_TABLE (table20), 3);
+  gtk_table_set_col_spacings (GTK_TABLE (table20), 20);
+
+  radio_toolbar_icon_default = gtk_radio_button_new_with_mnemonic (NULL, _("S_ystem Default"));
+  gtk_widget_show (radio_toolbar_icon_default);
+  gtk_table_attach (GTK_TABLE (table20), radio_toolbar_icon_default, 0, 1, 0, 1,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_radio_button_set_group (GTK_RADIO_BUTTON (radio_toolbar_icon_default), radio_toolbar_icon_default_group);
+  radio_toolbar_icon_default_group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio_toolbar_icon_default));
+
+  radio_toolbar_small = gtk_radio_button_new_with_mnemonic (NULL, _("_Small Icons"));
+  gtk_widget_show (radio_toolbar_small);
+  gtk_table_attach (GTK_TABLE (table20), radio_toolbar_small, 0, 1, 1, 2,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_radio_button_set_group (GTK_RADIO_BUTTON (radio_toolbar_small), radio_toolbar_icon_default_group);
+  radio_toolbar_icon_default_group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio_toolbar_small));
+
+  radio_toolbar_verysmall = gtk_radio_button_new_with_mnemonic (NULL, _("_Very Small Icons"));
+  gtk_widget_show (radio_toolbar_verysmall);
+  gtk_table_attach (GTK_TABLE (table20), radio_toolbar_verysmall, 1, 2, 0, 1,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_radio_button_set_group (GTK_RADIO_BUTTON (radio_toolbar_verysmall), radio_toolbar_icon_default_group);
+  radio_toolbar_icon_default_group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio_toolbar_verysmall));
+
+  radio_toolbar_large = gtk_radio_button_new_with_mnemonic (NULL, _("_Large Icons"));
+  gtk_widget_show (radio_toolbar_large);
+  gtk_table_attach (GTK_TABLE (table20), radio_toolbar_large, 1, 2, 1, 2,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_radio_button_set_group (GTK_RADIO_BUTTON (radio_toolbar_large), radio_toolbar_icon_default_group);
+  radio_toolbar_icon_default_group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio_toolbar_large));
+
+  label245 = gtk_label_new (_("<b>Icon Size</b>"));
+  gtk_widget_show (label245);
+  gtk_frame_set_label_widget (GTK_FRAME (frame_toolbar_icon), label245);
+  gtk_label_set_use_markup (GTK_LABEL (label245), TRUE);
+
+  label246 = gtk_label_new (_("<b>Toolbar</b>"));
+  gtk_widget_show (label246);
+  gtk_frame_set_label_widget (GTK_FRAME (frame28), label246);
+  gtk_label_set_use_markup (GTK_LABEL (label246), TRUE);
 
   label164 = gtk_label_new (_("Toolbar"));
   gtk_widget_show (label164);
@@ -4902,27 +4939,33 @@ create_prefs_dialog (void)
   GLADE_HOOKUP_OBJECT (prefs_dialog, frame28, "frame28");
   GLADE_HOOKUP_OBJECT (prefs_dialog, alignment31, "alignment31");
   GLADE_HOOKUP_OBJECT (prefs_dialog, vbox42, "vbox42");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, hbox18, "hbox18");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, vbox52, "vbox52");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_toolbar_show, "check_toolbar_show");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_toolbar_in_menu, "check_toolbar_in_menu");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, label196, "label196");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, frame13, "frame13");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, alignment16, "alignment16");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, table9, "table9");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, label169, "label169");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, label170, "label170");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, radio_toolbar_imagetext, "radio_toolbar_imagetext");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, radio_toolbar_small, "radio_toolbar_small");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, radio_toolbar_large, "radio_toolbar_large");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, radio_toolbar_text, "radio_toolbar_text");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, radio_toolbar_image, "radio_toolbar_image");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, radio_toolbar_verysmall, "radio_toolbar_verysmall");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, label167, "label167");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, hbox15, "hbox15");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, vbox53, "vbox53");
   GLADE_HOOKUP_OBJECT (prefs_dialog, button_customize_toolbar, "button_customize_toolbar");
   GLADE_HOOKUP_OBJECT (prefs_dialog, alignment45, "alignment45");
   GLADE_HOOKUP_OBJECT (prefs_dialog, hbox16, "hbox16");
   GLADE_HOOKUP_OBJECT (prefs_dialog, image2877, "image2877");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label236, "label236");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, frame_toolbar_style, "frame_toolbar_style");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, alignment50, "alignment50");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, table19, "table19");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, radio_toolbar_style_default, "radio_toolbar_style_default");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, radio_toolbar_imagetext, "radio_toolbar_imagetext");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, radio_toolbar_image, "radio_toolbar_image");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, radio_toolbar_text, "radio_toolbar_text");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, label244, "label244");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, frame_toolbar_icon, "frame_toolbar_icon");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, alignment51, "alignment51");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, table20, "table20");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, radio_toolbar_icon_default, "radio_toolbar_icon_default");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, radio_toolbar_small, "radio_toolbar_small");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, radio_toolbar_verysmall, "radio_toolbar_verysmall");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, radio_toolbar_large, "radio_toolbar_large");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, label245, "label245");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, label246, "label246");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label164, "label164");
   GLADE_HOOKUP_OBJECT (prefs_dialog, notebook4, "notebook4");
   GLADE_HOOKUP_OBJECT (prefs_dialog, vbox5, "vbox5");

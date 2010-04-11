@@ -30,6 +30,8 @@ typedef struct GeanyToolbarPrefs
 	gboolean		visible;
 	GtkIconSize		icon_size;
 	GtkToolbarStyle	icon_style;	/**< Icon style. */
+	gboolean		use_gtk_default_style;
+	gboolean		use_gtk_default_icon;
 	gboolean		append_to_menu;
 }
 GeanyToolbarPrefs;
@@ -48,6 +50,10 @@ gint toolbar_get_insert_position(void);
 void toolbar_update_ui(void);
 
 void toolbar_apply_settings(void);
+
+void toolbar_set_icon_style(void);
+
+void toolbar_set_icon_size(void);
 
 void toolbar_show_hide(void);
 

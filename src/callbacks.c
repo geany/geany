@@ -507,8 +507,8 @@ on_images_and_text2_activate           (GtkCheckMenuItem *menuitem,
 	if (ignore_toolbar_toggle || ! gtk_check_menu_item_get_active(menuitem))
 		return;
 
-	gtk_toolbar_set_style(GTK_TOOLBAR(main_widgets.toolbar), GTK_TOOLBAR_BOTH);
 	toolbar_prefs.icon_style = GTK_TOOLBAR_BOTH;
+	toolbar_set_icon_style();
 }
 
 
@@ -519,8 +519,8 @@ on_images_only2_activate               (GtkCheckMenuItem *menuitem,
 	if (ignore_toolbar_toggle || ! gtk_check_menu_item_get_active(menuitem))
 		return;
 
-	gtk_toolbar_set_style(GTK_TOOLBAR(main_widgets.toolbar), GTK_TOOLBAR_ICONS);
 	toolbar_prefs.icon_style = GTK_TOOLBAR_ICONS;
+	toolbar_set_icon_style();
 }
 
 
@@ -531,8 +531,8 @@ on_text_only2_activate                 (GtkCheckMenuItem *menuitem,
 	if (ignore_toolbar_toggle || ! gtk_check_menu_item_get_active(menuitem))
 		return;
 
-	gtk_toolbar_set_style(GTK_TOOLBAR(main_widgets.toolbar), GTK_TOOLBAR_TEXT);
 	toolbar_prefs.icon_style = GTK_TOOLBAR_TEXT;
+	toolbar_set_icon_style();
 }
 
 
@@ -626,7 +626,7 @@ on_toolbar_large_icons1_activate       (GtkCheckMenuItem *menuitem,
 		return;
 
 	toolbar_prefs.icon_size = GTK_ICON_SIZE_LARGE_TOOLBAR;
-	gtk_toolbar_set_icon_size(GTK_TOOLBAR(main_widgets.toolbar), toolbar_prefs.icon_size);
+	toolbar_set_icon_size();
 }
 
 
@@ -638,7 +638,7 @@ on_toolbar_small_icons1_activate       (GtkCheckMenuItem *menuitem,
 		return;
 
 	toolbar_prefs.icon_size = GTK_ICON_SIZE_SMALL_TOOLBAR;
-	gtk_toolbar_set_icon_size(GTK_TOOLBAR(main_widgets.toolbar), toolbar_prefs.icon_size);
+	toolbar_set_icon_size();
 }
 
 
@@ -650,7 +650,7 @@ on_very_small_icons1_activate          (GtkCheckMenuItem *menuitem,
 		return;
 
 	toolbar_prefs.icon_size = GTK_ICON_SIZE_MENU;
-	gtk_toolbar_set_icon_size(GTK_TOOLBAR(main_widgets.toolbar), toolbar_prefs.icon_size);
+	toolbar_set_icon_size();
 }
 
 

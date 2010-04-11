@@ -1792,6 +1792,8 @@ Append Toolbar to the Menu
     Allows to append the toolbar to the main menu bar instead of placing it below.
     This is useful to save vertical space.
 
+Customize Toolbar
+    See `Customizing the toolbar`_.
 
 Appearance
 ``````````
@@ -1799,12 +1801,11 @@ Appearance
 Icon Style
     Select the toolbar icon style to use - either icons and text, just
     icons or just text.
+    The choice System default uses whatever icon style is set by GTK.
 
 Icon size
     Select the size of the icons you see (large, small or very small).
-
-Customize Toolbar
-    See `Customizing the toolbar`_.
+    The choice System default uses whatever icon size is set by GTK.
 
 
 Editor Features preferences

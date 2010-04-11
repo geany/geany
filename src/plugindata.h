@@ -430,6 +430,7 @@ typedef struct UIUtilsFuncs
 				GCallback callback);
 	void		(*ui_widget_modify_font_from_string) (GtkWidget *widget, const gchar *str);
 	gboolean	(*ui_is_keyval_enter_or_return) (guint keyval);
+	gint		(*ui_get_gtk_settings_integer) (const gchar *property_name, gint default_value);
 }
 UIUtilsFuncs;
 

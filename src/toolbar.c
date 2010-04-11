@@ -505,40 +505,59 @@ void toolbar_show_hide(void)
 }
 
 
-void toolbar_apply_settings(void)
+/* sets the icon style of the toolbar */
+void toolbar_set_icon_style(void)
 {
-	/* sets the icon style of the toolbar */
-	switch (toolbar_prefs.icon_style)
+	gint icon_style;
+
+	icon_style = toolbar_prefs.icon_style;
+
+	if (toolbar_prefs.use_gtk_default_style)
+		icon_style = ui_get_gtk_settings_integer("gtk-toolbar-style", toolbar_prefs.icon_style);
+
+	gtk_toolbar_set_style(GTK_TOOLBAR(main_widgets.toolbar), icon_style);
+
+	switch (icon_style)
 	{
 		default:
 		case GTK_TOOLBAR_BOTH:
 		{
-			/*gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(ui_lookup_widget(main_widgets.window, "images_and_text1")), TRUE);*/
 			gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(ui_lookup_widget(ui_widgets.toolbar_menu, "images_and_text2")), TRUE);
 			break;
 		}
 		case GTK_TOOLBAR_ICONS:
 		{
-			/*gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(ui_lookup_widget(main_widgets.window, "images_only1")), TRUE);*/
 			gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(ui_lookup_widget(ui_widgets.toolbar_menu, "images_only2")), TRUE);
 			break;
 		}
 		case GTK_TOOLBAR_TEXT:
 		{
-			/*gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(ui_lookup_widget(main_widgets.window, "text_only1")), TRUE);*/
 			gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(ui_lookup_widget(ui_widgets.toolbar_menu, "text_only2")), TRUE);
 			break;
 		}
 	}
-	gtk_toolbar_set_style(GTK_TOOLBAR(main_widgets.toolbar), toolbar_prefs.icon_style);
+	g_message("%d style %d (%d)", toolbar_prefs.use_gtk_default_style, icon_style, toolbar_prefs.icon_style);
+}
 
-	/* sets the icon size of the toolbar, use user preferences (.gtkrc) if not set */
-	if (toolbar_prefs.icon_size == GTK_ICON_SIZE_SMALL_TOOLBAR ||
-		toolbar_prefs.icon_size == GTK_ICON_SIZE_LARGE_TOOLBAR ||
-		toolbar_prefs.icon_size == GTK_ICON_SIZE_MENU)
-	{
-		gtk_toolbar_set_icon_size(GTK_TOOLBAR(main_widgets.toolbar), toolbar_prefs.icon_size);
-	}
+
+/* sets the icon size of the toolbar */
+void toolbar_set_icon_size(void)
+{
+	gint icon_size;
+
+	icon_size = toolbar_prefs.icon_size;
+
+	if (toolbar_prefs.use_gtk_default_icon)
+		icon_size = ui_get_gtk_settings_integer("gtk-toolbar-icon-size", toolbar_prefs.icon_size);
+
+	gtk_toolbar_set_icon_size(GTK_TOOLBAR(main_widgets.toolbar), icon_size);
+}
+
+
+void toolbar_apply_settings(void)
+{
+	toolbar_set_icon_style();
+	toolbar_set_icon_size();
 }
 
 
