@@ -102,18 +102,6 @@ toolbar_popup_menu                     (GtkWidget *widget,
                                         gpointer user_data);
 
 void
-on_images_and_text2_activate           (GtkCheckMenuItem *menuitem,
-                                        gpointer          user_data);
-
-void
-on_images_only2_activate               (GtkCheckMenuItem *menuitem,
-                                        gpointer          user_data);
-
-void
-on_text_only2_activate                 (GtkCheckMenuItem *menuitem,
-                                        gpointer          user_data);
-
-void
 on_hide_toolbar1_activate              (GtkMenuItem     *menuitem,
                                         gpointer         user_data);
 
@@ -320,14 +308,6 @@ on_custom_date_entry_activate          (GtkEntry        *entry,
 void
 on_insert_date_activate                (GtkMenuItem     *menuitem,
                                         gpointer         user_data);
-
-void
-on_toolbar_large_icons1_activate       (GtkCheckMenuItem *menuitem,
-                                        gpointer          user_data);
-
-void
-on_toolbar_small_icons1_activate       (GtkCheckMenuItem *menuitem,
-                                        gpointer          user_data);
 
 void
 on_set_file_readonly1_toggled          (GtkCheckMenuItem *checkmenuitem,
@@ -594,10 +574,6 @@ on_menu_show_indentation_guides1_toggled
 void
 on_send_selection_to_vte1_activate     (GtkMenuItem     *menuitem,
                                         gpointer         user_data);
-
-void
-on_very_small_icons1_activate          (GtkCheckMenuItem *menuitem,
-                                        gpointer          user_data);
 
 gboolean on_window_state_event         (GtkWidget           *widget,
                                         GdkEventWindowState *event,

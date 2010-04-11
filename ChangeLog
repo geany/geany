@@ -6,6 +6,10 @@
    src/ui_utils.c, src/ui_utils.h:
    Add option 'System Default' for toolbar icon style and size to
    use the GTK default value.
+ * geany.glade, src/callbacks.c, src/callbacks.h, src/interface.c,
+   src/toolbar.c, src/toolbar.h:
+   Shorten the toolbar popup menu, only provide items for Toolbar
+   Preferences and to Hide the toolbar.
 
 
 2010-04-09  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>

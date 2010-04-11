@@ -2283,92 +2283,16 @@
 <widget class="GtkMenu" id="toolbar_popup_menu1">
 
   <child>
-    <widget class="GtkRadioMenuItem" id="images_and_text2">
-      <property name="visible">True</property>
-      <property name="label" translatable="yes">Images _and Text</property>
-      <property name="use_underline">True</property>
-      <property name="active">False</property>
-      <signal name="activate" handler="on_images_and_text2_activate" last_modification_time="Sat, 30 Apr 2005 19:42:24 GMT"/>
-    </widget>
-  </child>
-
-  <child>
-    <widget class="GtkRadioMenuItem" id="images_only2">
-      <property name="visible">True</property>
-      <property name="label" translatable="yes">_Images Only</property>
-      <property name="use_underline">True</property>
-      <property name="active">False</property>
-      <property name="group">images_and_text2</property>
-      <signal name="activate" handler="on_images_only2_activate" last_modification_time="Sat, 30 Apr 2005 19:42:29 GMT"/>
-    </widget>
-  </child>
-
-  <child>
-    <widget class="GtkRadioMenuItem" id="text_only2">
-      <property name="visible">True</property>
-      <property name="label" translatable="yes">_Text Only</property>
-      <property name="use_underline">True</property>
-      <property name="active">True</property>
-      <property name="group">images_and_text2</property>
-      <signal name="activate" handler="on_text_only2_activate" last_modification_time="Sat, 30 Apr 2005 19:42:33 GMT"/>
-    </widget>
-  </child>
-
-  <child>
-    <widget class="GtkSeparatorMenuItem" id="separator1">
-      <property name="visible">True</property>
-    </widget>
-  </child>
-
-  <child>
-    <widget class="GtkRadioMenuItem" id="large_icons1">
-      <property name="visible">True</property>
-      <property name="label" translatable="yes">_Large Icons</property>
-      <property name="use_underline">True</property>
-      <property name="active">False</property>
-      <signal name="activate" handler="on_toolbar_large_icons1_activate" last_modification_time="Sat, 22 Oct 2005 11:52:26 GMT"/>
-    </widget>
-  </child>
-
-  <child>
-    <widget class="GtkRadioMenuItem" id="small_icons1">
-      <property name="visible">True</property>
-      <property name="label" translatable="yes">_Small Icons</property>
-      <property name="use_underline">True</property>
-      <property name="active">False</property>
-      <property name="group">large_icons1</property>
-      <signal name="activate" handler="on_toolbar_small_icons1_activate" last_modification_time="Sat, 22 Oct 2005 11:52:26 GMT"/>
-    </widget>
-  </child>
-
-  <child>
-    <widget class="GtkRadioMenuItem" id="very_small_icons1">
-      <property name="visible">True</property>
-      <property name="label" translatable="yes">_Very Small Icons</property>
-      <property name="use_underline">True</property>
-      <property name="active">True</property>
-      <property name="group">large_icons1</property>
-      <signal name="activate" handler="on_very_small_icons1_activate" last_modification_time="Sun, 29 Mar 2009 18:51:50 GMT"/>
-    </widget>
-  </child>
-
-  <child>
-    <widget class="GtkSeparatorMenuItem" id="separator20">
-      <property name="visible">True</property>
-    </widget>
-  </child>
-
-  <child>
     <widget class="GtkImageMenuItem" id="customize_toolbar1">
       <property name="visible">True</property>
-      <property name="label" translatable="yes">_Customize Toolbar</property>
+      <property name="label" translatable="yes">_Toolbar Preferences</property>
       <property name="use_underline">True</property>
       <signal name="activate" handler="on_customize_toolbar1_activate" last_modification_time="Thu, 25 Jun 2009 17:08:08 GMT"/>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image2878">
+	<widget class="GtkImage" id="image3192">
 	  <property name="visible">True</property>
-	  <property name="stock">gtk-properties</property>
+	  <property name="stock">gtk-preferences</property>
 	  <property name="icon_size">1</property>
 	  <property name="xalign">0.5</property>
 	  <property name="yalign">0.5</property>
@@ -2380,6 +2304,12 @@
   </child>
 
   <child>
+    <widget class="GtkSeparatorMenuItem" id="separator53">
+      <property name="visible">True</property>
+    </widget>
+  </child>
+
+  <child>
     <widget class="GtkImageMenuItem" id="hide_toolbar1">
       <property name="visible">True</property>
       <property name="label" translatable="yes">_Hide Toolbar</property>
@@ -2387,7 +2317,7 @@
       <signal name="activate" handler="on_hide_toolbar1_activate" last_modification_time="Sat, 30 Apr 2005 20:23:03 GMT"/>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image2879">
+	<widget class="GtkImage" id="image3193">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-cancel</property>
 	  <property name="icon_size">1</property>

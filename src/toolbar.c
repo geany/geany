@@ -506,7 +506,7 @@ void toolbar_show_hide(void)
 
 
 /* sets the icon style of the toolbar */
-void toolbar_set_icon_style(void)
+static void toolbar_set_icon_style(void)
 {
 	gint icon_style;
 
@@ -516,32 +516,11 @@ void toolbar_set_icon_style(void)
 		icon_style = ui_get_gtk_settings_integer("gtk-toolbar-style", toolbar_prefs.icon_style);
 
 	gtk_toolbar_set_style(GTK_TOOLBAR(main_widgets.toolbar), icon_style);
-
-	switch (icon_style)
-	{
-		default:
-		case GTK_TOOLBAR_BOTH:
-		{
-			gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(ui_lookup_widget(ui_widgets.toolbar_menu, "images_and_text2")), TRUE);
-			break;
-		}
-		case GTK_TOOLBAR_ICONS:
-		{
-			gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(ui_lookup_widget(ui_widgets.toolbar_menu, "images_only2")), TRUE);
-			break;
-		}
-		case GTK_TOOLBAR_TEXT:
-		{
-			gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(ui_lookup_widget(ui_widgets.toolbar_menu, "text_only2")), TRUE);
-			break;
-		}
-	}
-	g_message("%d style %d (%d)", toolbar_prefs.use_gtk_default_style, icon_style, toolbar_prefs.icon_style);
 }
 
 
 /* sets the icon size of the toolbar */
-void toolbar_set_icon_size(void)
+static void toolbar_set_icon_size(void)
 {
 	gint icon_size;
 

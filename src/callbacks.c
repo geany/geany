@@ -77,9 +77,6 @@
 #endif
 
 
-/* flag to indicate the explicit change of a toggle button of the toolbar menu and so the
- * toggled callback should ignore the change since it is not triggered by the user */
-static gboolean ignore_toolbar_toggle = FALSE;
 
 /* flag to indicate that an insert callback was triggered from the file menu,
  * so we need to store the current cursor position in editor_info.click_pos. */
@@ -501,42 +498,6 @@ on_reload_as_activate                  (GtkMenuItem     *menuitem,
 
 
 void
-on_images_and_text2_activate           (GtkCheckMenuItem *menuitem,
-                                        gpointer          user_data)
-{
-	if (ignore_toolbar_toggle || ! gtk_check_menu_item_get_active(menuitem))
-		return;
-
-	toolbar_prefs.icon_style = GTK_TOOLBAR_BOTH;
-	toolbar_set_icon_style();
-}
-
-
-void
-on_images_only2_activate               (GtkCheckMenuItem *menuitem,
-                                        gpointer          user_data)
-{
-	if (ignore_toolbar_toggle || ! gtk_check_menu_item_get_active(menuitem))
-		return;
-
-	toolbar_prefs.icon_style = GTK_TOOLBAR_ICONS;
-	toolbar_set_icon_style();
-}
-
-
-void
-on_text_only2_activate                 (GtkCheckMenuItem *menuitem,
-                                        gpointer          user_data)
-{
-	if (ignore_toolbar_toggle || ! gtk_check_menu_item_get_active(menuitem))
-		return;
-
-	toolbar_prefs.icon_style = GTK_TOOLBAR_TEXT;
-	toolbar_set_icon_style();
-}
-
-
-void
 on_change_font1_activate               (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
@@ -615,42 +576,6 @@ on_toolbutton_search_clicked           (GtkAction       *action,
 	}
 	else
 		on_find1_activate(NULL, NULL);
-}
-
-
-void
-on_toolbar_large_icons1_activate       (GtkCheckMenuItem *menuitem,
-                                        gpointer          user_data)
-{
-	if (ignore_toolbar_toggle || ! gtk_check_menu_item_get_active(menuitem))
-		return;
-
-	toolbar_prefs.icon_size = GTK_ICON_SIZE_LARGE_TOOLBAR;
-	toolbar_set_icon_size();
-}
-
-
-void
-on_toolbar_small_icons1_activate       (GtkCheckMenuItem *menuitem,
-                                        gpointer          user_data)
-{
-	if (ignore_toolbar_toggle || ! gtk_check_menu_item_get_active(menuitem))
-		return;
-
-	toolbar_prefs.icon_size = GTK_ICON_SIZE_SMALL_TOOLBAR;
-	toolbar_set_icon_size();
-}
-
-
-void
-on_very_small_icons1_activate          (GtkCheckMenuItem *menuitem,
-                                        gpointer          user_data)
-{
-	if (ignore_toolbar_toggle || ! gtk_check_menu_item_get_active(menuitem))
-		return;
-
-	toolbar_prefs.icon_size = GTK_ICON_SIZE_MENU;
-	toolbar_set_icon_size();
 }
 
 
@@ -867,32 +792,7 @@ toolbar_popup_menu                     (GtkWidget *widget,
 {
 	if (event->button == 3)
 	{
-		GtkWidget *w;
-
-		ignore_toolbar_toggle = TRUE;
-
-		switch (toolbar_prefs.icon_style)
-		{
-			case 0: w = ui_lookup_widget(ui_widgets.toolbar_menu, "images_only2"); break;
-			case 1: w = ui_lookup_widget(ui_widgets.toolbar_menu, "text_only2"); break;
-			default: w = ui_lookup_widget(ui_widgets.toolbar_menu, "images_and_text2"); break;
-		}
-		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(w), TRUE);
-
-		switch (toolbar_prefs.icon_size)
-		{
-			case GTK_ICON_SIZE_LARGE_TOOLBAR:
-					w = ui_lookup_widget(ui_widgets.toolbar_menu, "large_icons1"); break;
-			case GTK_ICON_SIZE_SMALL_TOOLBAR:
-					w = ui_lookup_widget(ui_widgets.toolbar_menu, "small_icons1"); break;
-			default: w = ui_lookup_widget(ui_widgets.toolbar_menu, "very_small_icons1"); break;
-		}
-		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(w), TRUE);
-
-		ignore_toolbar_toggle = FALSE;
-
 		gtk_menu_popup(GTK_MENU(ui_widgets.toolbar_menu), NULL, NULL, NULL, NULL, event->button, event->time);
-
 		return TRUE;
 	}
 	return FALSE;
@@ -2273,7 +2173,17 @@ void
 on_customize_toolbar1_activate         (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	toolbar_configure(GTK_WINDOW(main_widgets.window));
+	GtkWidget *widget;
+	GtkNotebook *notebook;
+
+	prefs_show_dialog();
+
+	/* select the KB page */
+	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "vbox15");
+	notebook = GTK_NOTEBOOK(ui_lookup_widget(ui_widgets.prefs_dialog, "notebook2"));
+
+	if (notebook != NULL && widget != NULL)
+		gtk_notebook_set_current_page(notebook, gtk_notebook_page_num(notebook, widget));
 }
 
 

@@ -1876,99 +1876,35 @@ GtkWidget*
 create_toolbar_popup_menu1 (void)
 {
   GtkWidget *toolbar_popup_menu1;
-  GSList *images_and_text2_group = NULL;
-  GtkWidget *images_and_text2;
-  GtkWidget *images_only2;
-  GtkWidget *text_only2;
-  GtkWidget *separator1;
-  GSList *large_icons1_group = NULL;
-  GtkWidget *large_icons1;
-  GtkWidget *small_icons1;
-  GtkWidget *very_small_icons1;
-  GtkWidget *separator20;
   GtkWidget *customize_toolbar1;
-  GtkWidget *image2878;
+  GtkWidget *image3192;
+  GtkWidget *separator53;
   GtkWidget *hide_toolbar1;
-  GtkWidget *image2879;
+  GtkWidget *image3193;
 
   toolbar_popup_menu1 = gtk_menu_new ();
 
-  images_and_text2 = gtk_radio_menu_item_new_with_mnemonic (images_and_text2_group, _("Images _and Text"));
-  images_and_text2_group = gtk_radio_menu_item_get_group (GTK_RADIO_MENU_ITEM (images_and_text2));
-  gtk_widget_show (images_and_text2);
-  gtk_container_add (GTK_CONTAINER (toolbar_popup_menu1), images_and_text2);
-
-  images_only2 = gtk_radio_menu_item_new_with_mnemonic (images_and_text2_group, _("_Images Only"));
-  images_and_text2_group = gtk_radio_menu_item_get_group (GTK_RADIO_MENU_ITEM (images_only2));
-  gtk_widget_show (images_only2);
-  gtk_container_add (GTK_CONTAINER (toolbar_popup_menu1), images_only2);
-
-  text_only2 = gtk_radio_menu_item_new_with_mnemonic (images_and_text2_group, _("_Text Only"));
-  images_and_text2_group = gtk_radio_menu_item_get_group (GTK_RADIO_MENU_ITEM (text_only2));
-  gtk_widget_show (text_only2);
-  gtk_container_add (GTK_CONTAINER (toolbar_popup_menu1), text_only2);
-  gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (text_only2), TRUE);
-
-  separator1 = gtk_separator_menu_item_new ();
-  gtk_widget_show (separator1);
-  gtk_container_add (GTK_CONTAINER (toolbar_popup_menu1), separator1);
-  gtk_widget_set_sensitive (separator1, FALSE);
-
-  large_icons1 = gtk_radio_menu_item_new_with_mnemonic (large_icons1_group, _("_Large Icons"));
-  large_icons1_group = gtk_radio_menu_item_get_group (GTK_RADIO_MENU_ITEM (large_icons1));
-  gtk_widget_show (large_icons1);
-  gtk_container_add (GTK_CONTAINER (toolbar_popup_menu1), large_icons1);
-
-  small_icons1 = gtk_radio_menu_item_new_with_mnemonic (large_icons1_group, _("_Small Icons"));
-  large_icons1_group = gtk_radio_menu_item_get_group (GTK_RADIO_MENU_ITEM (small_icons1));
-  gtk_widget_show (small_icons1);
-  gtk_container_add (GTK_CONTAINER (toolbar_popup_menu1), small_icons1);
-
-  very_small_icons1 = gtk_radio_menu_item_new_with_mnemonic (large_icons1_group, _("_Very Small Icons"));
-  large_icons1_group = gtk_radio_menu_item_get_group (GTK_RADIO_MENU_ITEM (very_small_icons1));
-  gtk_widget_show (very_small_icons1);
-  gtk_container_add (GTK_CONTAINER (toolbar_popup_menu1), very_small_icons1);
-  gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (very_small_icons1), TRUE);
-
-  separator20 = gtk_separator_menu_item_new ();
-  gtk_widget_show (separator20);
-  gtk_container_add (GTK_CONTAINER (toolbar_popup_menu1), separator20);
-  gtk_widget_set_sensitive (separator20, FALSE);
-
-  customize_toolbar1 = gtk_image_menu_item_new_with_mnemonic (_("_Customize Toolbar"));
+  customize_toolbar1 = gtk_image_menu_item_new_with_mnemonic (_("_Toolbar Preferences"));
   gtk_widget_show (customize_toolbar1);
   gtk_container_add (GTK_CONTAINER (toolbar_popup_menu1), customize_toolbar1);
 
-  image2878 = gtk_image_new_from_stock ("gtk-properties", GTK_ICON_SIZE_MENU);
-  gtk_widget_show (image2878);
-  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (customize_toolbar1), image2878);
+  image3192 = gtk_image_new_from_stock ("gtk-preferences", GTK_ICON_SIZE_MENU);
+  gtk_widget_show (image3192);
+  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (customize_toolbar1), image3192);
+
+  separator53 = gtk_separator_menu_item_new ();
+  gtk_widget_show (separator53);
+  gtk_container_add (GTK_CONTAINER (toolbar_popup_menu1), separator53);
+  gtk_widget_set_sensitive (separator53, FALSE);
 
   hide_toolbar1 = gtk_image_menu_item_new_with_mnemonic (_("_Hide Toolbar"));
   gtk_widget_show (hide_toolbar1);
   gtk_container_add (GTK_CONTAINER (toolbar_popup_menu1), hide_toolbar1);
 
-  image2879 = gtk_image_new_from_stock ("gtk-cancel", GTK_ICON_SIZE_MENU);
-  gtk_widget_show (image2879);
-  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (hide_toolbar1), image2879);
+  image3193 = gtk_image_new_from_stock ("gtk-cancel", GTK_ICON_SIZE_MENU);
+  gtk_widget_show (image3193);
+  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (hide_toolbar1), image3193);
 
-  g_signal_connect ((gpointer) images_and_text2, "activate",
-                    G_CALLBACK (on_images_and_text2_activate),
-                    NULL);
-  g_signal_connect ((gpointer) images_only2, "activate",
-                    G_CALLBACK (on_images_only2_activate),
-                    NULL);
-  g_signal_connect ((gpointer) text_only2, "activate",
-                    G_CALLBACK (on_text_only2_activate),
-                    NULL);
-  g_signal_connect ((gpointer) large_icons1, "activate",
-                    G_CALLBACK (on_toolbar_large_icons1_activate),
-                    NULL);
-  g_signal_connect ((gpointer) small_icons1, "activate",
-                    G_CALLBACK (on_toolbar_small_icons1_activate),
-                    NULL);
-  g_signal_connect ((gpointer) very_small_icons1, "activate",
-                    G_CALLBACK (on_very_small_icons1_activate),
-                    NULL);
   g_signal_connect ((gpointer) customize_toolbar1, "activate",
                     G_CALLBACK (on_customize_toolbar1_activate),
                     NULL);
@@ -1978,18 +1914,11 @@ create_toolbar_popup_menu1 (void)
 
   /* Store pointers to all widgets, for use by lookup_widget(). */
   GLADE_HOOKUP_OBJECT_NO_REF (toolbar_popup_menu1, toolbar_popup_menu1, "toolbar_popup_menu1");
-  GLADE_HOOKUP_OBJECT (toolbar_popup_menu1, images_and_text2, "images_and_text2");
-  GLADE_HOOKUP_OBJECT (toolbar_popup_menu1, images_only2, "images_only2");
-  GLADE_HOOKUP_OBJECT (toolbar_popup_menu1, text_only2, "text_only2");
-  GLADE_HOOKUP_OBJECT (toolbar_popup_menu1, separator1, "separator1");
-  GLADE_HOOKUP_OBJECT (toolbar_popup_menu1, large_icons1, "large_icons1");
-  GLADE_HOOKUP_OBJECT (toolbar_popup_menu1, small_icons1, "small_icons1");
-  GLADE_HOOKUP_OBJECT (toolbar_popup_menu1, very_small_icons1, "very_small_icons1");
-  GLADE_HOOKUP_OBJECT (toolbar_popup_menu1, separator20, "separator20");
   GLADE_HOOKUP_OBJECT (toolbar_popup_menu1, customize_toolbar1, "customize_toolbar1");
-  GLADE_HOOKUP_OBJECT (toolbar_popup_menu1, image2878, "image2878");
+  GLADE_HOOKUP_OBJECT (toolbar_popup_menu1, image3192, "image3192");
+  GLADE_HOOKUP_OBJECT (toolbar_popup_menu1, separator53, "separator53");
   GLADE_HOOKUP_OBJECT (toolbar_popup_menu1, hide_toolbar1, "hide_toolbar1");
-  GLADE_HOOKUP_OBJECT (toolbar_popup_menu1, image2879, "image2879");
+  GLADE_HOOKUP_OBJECT (toolbar_popup_menu1, image3193, "image3193");
 
   return toolbar_popup_menu1;
 }

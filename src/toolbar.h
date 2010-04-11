@@ -51,10 +51,6 @@ void toolbar_update_ui(void);
 
 void toolbar_apply_settings(void);
 
-void toolbar_set_icon_style(void);
-
-void toolbar_set_icon_size(void);
-
 void toolbar_show_hide(void);
 
 void toolbar_item_ref(GtkToolItem *item);
