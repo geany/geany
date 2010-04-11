@@ -13,6 +13,10 @@
  * src/toolbar.c:
    Instantly update the toolbar icon size and style when the
    corresponding global GTK settings are changed.
+ * doc/geany.1.in, doc/geany.txt, src/main.c, src/main.h,
+   src/plugindata.h, src/socket.c:
+   Add new command line option --list-documents to return a list
+   of currently opened documents (closes #2979933).
 
 
 2010-04-09  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>

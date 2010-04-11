@@ -42,7 +42,7 @@
  * The command window is only available on Windows and takes no additional data, instead it
  * writes back a Windows handle (HWND) for the main window to set it to the foreground (focus).
  *
- * At the moment the commands window, open, line and column are available.
+ * At the moment the commands window, doclist, open, line and column are available.
  *
  * About the socket files on Unix-like systems:
  * Geany creates a socket in /tmp (or any other directory returned by g_get_tmp_dir()) and
@@ -59,7 +59,6 @@
 #ifdef HAVE_SOCKET
 
 #ifndef G_OS_WIN32
-# include <string.h>
 # include <sys/time.h>
 # include <sys/types.h>
 # include <sys/socket.h>
@@ -72,6 +71,7 @@
 # include <winsock2.h>
 # include <ws2tcpip.h>
 #endif
+#include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <fcntl.h>
@@ -97,7 +97,7 @@
 #define SOCKET_IS_VALID(s)	(G_LIKELY((s) >= 0))
 #define INVALID_SOCKET		(-1)
 #endif
-
+#define BUFFER_LENGTH 4096
 
 struct socket_info_struct socket_info;
 
@@ -191,6 +191,26 @@ static void remove_socket_link_full(void)
 #endif
 
 
+static void socket_get_document_list(gint sock)
+{
+	gchar doc_list[BUFFER_LENGTH];
+	gint doc_list_len;
+
+	if (sock < 0)
+		return;
+
+	socket_fd_write_all(sock, "doclist\n", 8);
+
+	doc_list_len = socket_fd_read(sock, doc_list, sizeof(doc_list));
+	if (doc_list_len >= BUFFER_LENGTH)
+		doc_list_len = BUFFER_LENGTH -1;
+	doc_list[doc_list_len] = '\0';
+	/* if we received ETX (end-of-text), there were no open files, so print only otherwise */
+	if (! utils_str_equal(doc_list, "\3"))
+		printf("%s", doc_list);
+}
+
+
 /* (Unix domain) socket support to replace the old FIFO code
  * (taken from Sylpheed, thanks)
  * Returns the created socket, -1 if an error occurred or -2 if another socket exists and files
@@ -266,6 +286,11 @@ gint socket_init(gint argc, gchar **argv)
 	if (argc > 1)
 	{
 		send_open_command(sock, argc, argv);
+	}
+
+	if (cl_options.list_documents)
+	{
+		socket_get_document_list(sock);
 	}
 
 	socket_fd_close(sock);
@@ -515,10 +540,26 @@ static void handle_input_filename(const gchar *buf)
 }
 
 
+static gchar *build_document_list(void)
+{
+	GString *doc_list = g_string_new(NULL);
+	guint i;
+	const gchar *filename;
+
+	foreach_document(i)
+	{
+		filename = DOC_FILENAME(documents[i]);
+		g_string_append(doc_list, filename);
+		g_string_append_c(doc_list, '\n');
+	}
+	return g_string_free(doc_list, FALSE);
+}
+
+
 gboolean socket_lock_input_cb(GIOChannel *source, GIOCondition condition, gpointer data)
 {
 	gint fd, sock;
-	gchar buf[4096];
+	gchar buf[BUFFER_LENGTH];
 	struct sockaddr_in caddr;
 	guint caddr_len = sizeof(caddr);
 	GtkWidget *window = data;
@@ -537,6 +578,17 @@ gboolean socket_lock_input_cb(GIOChannel *source, GIOCondition condition, gpoint
 				handle_input_filename(g_strstrip(buf));
 			}
 			popup = TRUE;
+		}
+		else if (strncmp(buf, "doclist", 7) == 0)
+		{
+			gchar *doc_list = build_document_list();
+			if (NZV(doc_list))
+				socket_fd_write_all(sock, doc_list, strlen(doc_list));
+			else
+				/* send ETX (end-of-text) in case we have no open files, we must send anything
+				 * otherwise the client would hang on reading */
+				socket_fd_write_all(sock, "\3", 1);
+			g_free(doc_list);
 		}
 		else if (strncmp(buf, "line", 4) == 0)
 		{
