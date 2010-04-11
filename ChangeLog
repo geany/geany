@@ -10,6 +10,9 @@
    src/toolbar.c, src/toolbar.h:
    Shorten the toolbar popup menu, only provide items for Toolbar
    Preferences and to Hide the toolbar.
+ * src/toolbar.c:
+   Instantly update the toolbar icon size and style when the
+   corresponding global GTK settings are changed.
 
 
 2010-04-09  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>

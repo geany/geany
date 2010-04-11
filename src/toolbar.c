@@ -316,6 +316,24 @@ static GtkWidget *toolbar_reload(const gchar *markup)
 }
 
 
+static void toolbar_notify_style_cb(GObject *object, GParamSpec *arg1, gpointer data)
+{
+	const gchar *arg_name = g_param_spec_get_name(arg1);
+	gint value;
+
+	if (toolbar_prefs.use_gtk_default_style && utils_str_equal(arg_name, "gtk-toolbar-style"))
+	{
+		value = ui_get_gtk_settings_integer(arg_name, toolbar_prefs.icon_style);
+		gtk_toolbar_set_style(GTK_TOOLBAR(main_widgets.toolbar), value);
+	}
+	else if (toolbar_prefs.use_gtk_default_icon && utils_str_equal(arg_name, "gtk-toolbar-size"))
+	{
+		value = ui_get_gtk_settings_integer(arg_name, toolbar_prefs.icon_size);
+		gtk_toolbar_set_icon_size(GTK_TOOLBAR(main_widgets.toolbar), value);
+	}
+}
+
+
 GtkWidget *toolbar_init(void)
 {
 	GtkWidget *toolbar;
@@ -324,6 +342,7 @@ GtkWidget *toolbar_init(void)
 	GtkAction *action_build;
 	GtkAction *action_searchentry;
 	GtkAction *action_gotoentry;
+	GtkSettings *gtk_settings;
 
 	uim = gtk_ui_manager_new();
 	group = gtk_action_group_new("GeanyToolbar");
@@ -374,6 +393,13 @@ GtkWidget *toolbar_init(void)
 	gtk_ui_manager_insert_action_group(uim, group, 0);
 
 	toolbar = toolbar_reload(NULL);
+
+	gtk_settings = gtk_widget_get_settings(GTK_WIDGET(toolbar));
+	if (gtk_settings != NULL)
+	{
+		g_signal_connect(gtk_settings, "notify::gtk-toolbar-style",
+			G_CALLBACK(toolbar_notify_style_cb), NULL);
+	}
 
 	return toolbar;
 }
