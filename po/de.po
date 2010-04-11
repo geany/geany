@@ -3318,7 +3318,7 @@ msgstr "Debug-Meldungen"
 
 #: ../src/log.c:183
 msgid "Cl_ear"
-msgstr "h_Leeren"
+msgstr "_Leeren"
 
 #: ../src/main.c:122
 msgid ""
