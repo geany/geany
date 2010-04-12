@@ -334,7 +334,8 @@ Short option  Long option              Function
 
 -l            --line                   Set initial line number for the first opened file.
 
-*none*        --list-documents         Return a list of open documents in a running Geany instance.
+*none*        --list-documents         Return a list of open documents in a running Geany
+                                       instance.
                                        This can be used to read the currently opened documents in
                                        Geany from an external script or tool. The returned list
                                        is separated by newlines (LF) and consists of the full,
