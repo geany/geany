@@ -4,6 +4,10 @@
    Remove duplicate code from Txt2Tags parser.
    Remove the title control characters ('=') when parsing titles.
    Also parse numbered titles (closes #2984703).
+ * doc/geany.html, doc/geany.txt, src/keybindings.c, src/keybindings.h,
+   src/plugindata.h:
+   Add 'Remove Markers' and 'Remove Error Indicators' keybindings.
+   Add missing documentation for 'Reset Zoom' keybinding.
 
 
 2010-04-11  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

@@ -529,6 +529,10 @@ static void init_default_kb(void)
 		0, 0, "menu_unfoldall", _("Unfold all"), LW(menu_unfold_all1));
 	keybindings_set_item(group, GEANY_KEYS_DOCUMENT_RELOADTAGLIST, NULL,
 		GDK_r, GDK_SHIFT_MASK | GDK_CONTROL_MASK, "reloadtaglist", _("Reload symbol list"), NULL);
+	keybindings_set_item(group, GEANY_KEYS_DOCUMENT_REMOVE_MARKERS, NULL,
+		0, 0, "remove_markers", _("Remove Markers"), LW(remove_markers1));
+	keybindings_set_item(group, GEANY_KEYS_DOCUMENT_REMOVE_ERROR_INDICATORS, NULL,
+		0, 0, "remove_error_indicators", _("Remove Error Indicators"), LW(menu_remove_indicators1));
 
 	group = ADD_KB_GROUP(BUILD, _("Build"), cb_func_build_action);
 
@@ -2542,6 +2546,12 @@ static gboolean cb_func_document_action(guint key_id)
 				editor_toggle_fold(doc->editor, line, 0);
 				break;
 			}
+		case GEANY_KEYS_DOCUMENT_REMOVE_MARKERS:
+			on_remove_markers1_activate(NULL, NULL);
+			break;
+		case GEANY_KEYS_DOCUMENT_REMOVE_ERROR_INDICATORS:
+			on_menu_remove_indicators1_activate(NULL, NULL);
+			break;
 	}
 	return TRUE;
 }
