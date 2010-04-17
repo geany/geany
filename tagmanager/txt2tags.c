@@ -92,7 +92,7 @@ static void findTxt2tagsTags (void)
 		{
 			makeTxt2tagsTag(name, TRUE);
 		}*/
-		if (line[0] == '=') {
+		if (line[0] == '=' || line[0] == '+') {
  			/*vStringClear(name);*/
 			vStringCatS(name, (const char *) line);
 			vStringTerminate(name);
