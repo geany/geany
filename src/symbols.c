@@ -604,7 +604,6 @@ static void add_top_level_items(GeanyDocument *doc)
 				&(tv_iters.tag_struct), _("Appendix"), NULL,
 				&(tv_iters.tag_other), _("Other"), NULL,
 				NULL);
-			/*	&(tv_iters.tag_namespace), _("Other"), NULL, NULL);	*/
 			break;
 		}
 		case GEANY_FILETYPES_HASKELL:
@@ -678,9 +677,6 @@ static void add_top_level_items(GeanyDocument *doc)
 				&(tv_iters.tag_macro), _("Constants"), "classviewer-macro",
 				&(tv_iters.tag_variable), _("Variables"), "classviewer-var",
 				NULL);
-				/*&(tv_iters.tag_struct), _("Label"),*/
-				/*&(tv_iters.tag_namespace), _("Begin"),*/
-				/*&(tv_iters.tag_other), _("Other"), NULL);*/
 			break;
 		}
 		case GEANY_FILETYPES_HTML:
@@ -722,8 +718,6 @@ static void add_top_level_items(GeanyDocument *doc)
 				&(tv_iters.tag_member), _("Singletons"), "classviewer-struct",
 				&(tv_iters.tag_function), _("Methods"), "classviewer-method",
 				NULL);
-				/*&(tv_iters.tag_namespace), _("Begin"),*/
-				/*&(tv_iters.tag_other), _("Other"), NULL);*/
 			break;
 		}
 		case GEANY_FILETYPES_TCL:
@@ -745,11 +739,6 @@ static void add_top_level_items(GeanyDocument *doc)
 				&(tv_iters.tag_variable), _("Variables"), "classviewer-var",
 				&(tv_iters.tag_namespace), _("Imports"), "classviewer-namespace",
 				NULL);
-				/*&(tv_iters.tag_macro), _("Mixin"),*/
-				/*&(tv_iters.tag_variable), _("Variables"),*/
-				/*&(tv_iters.tag_struct), _("Members"),*/
-				/*&(tv_iters.tag_namespace), _("Begin"),*/
-				/*&(tv_iters.tag_other), _("Other"), NULL);*/
 			break;
 		}
 		case GEANY_FILETYPES_VHDL:
@@ -785,8 +774,6 @@ static void add_top_level_items(GeanyDocument *doc)
 				&(tv_iters.tag_class), _("Classes"), "classviewer-class",
 				&(tv_iters.tag_function), _("Methods"), "classviewer-method",
 				&(tv_iters.tag_member), _("Members"), "classviewer-member",
-				/*&(tv_iters.tag_macro), _("Macros"),*/
-				/*&(tv_iters.tag_variable), _("Variables"),*/
 				&(tv_iters.tag_other), _("Other"), "classviewer-other",
 				NULL);
 			break;
