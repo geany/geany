@@ -100,15 +100,16 @@ static void installPHPRegex (const langType language)
 static void function_cb(const char *line, const regexMatch *matches, unsigned int count)
 {
 	char *name, *arglist;
+	char kind = 'f';
 	static char *kindName = "function";
 	tagEntryInfo e;
 	const regexMatch *match_funcname = NULL;
 	const regexMatch *match_arglist = NULL;
 
-	if (count > 2 && count < 6)
+	if (count > 2)
 	{
 		match_funcname = &matches[count - 2];
-		match_arglist = &matches[count -1];
+		match_arglist = &matches[count - 1];
 	}
 
 	if (match_funcname != NULL)
@@ -121,7 +122,7 @@ static void function_cb(const char *line, const regexMatch *matches, unsigned in
 		*(arglist+match_arglist->length) = '\x0';
 
 		initTagEntry (&e, name);
-		e.kind = 'f';
+		e.kind = kind;
 		e.kindName = kindName;
 		e.extensionFields.arglist = arglist;
 		makeTagEntry (&e);
