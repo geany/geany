@@ -57,6 +57,30 @@ static boolean isIdentifierCharacter (int c)
 	return (boolean) (isalnum (c) || c == '_');
 }
 
+static const char *get_class_name_from_parent (const char *parent)
+{
+	const char *result;
+
+	if (parent == NULL)
+		return NULL;
+
+	result = strrchr (parent, '.');
+	if (result != NULL)
+	{
+		result++;
+		parent = result;
+	}
+
+	result = strrchr (parent, '/');
+	if (result != NULL)
+		result++;
+	else
+		result = parent;
+
+	return result;
+}
+
+
 /* Given a string with the contents of a line directly after the "def" keyword,
  * extract all relevant information and create a tag.
  */
@@ -69,6 +93,13 @@ static void makeFunctionTag (vString *const function,
 	tag.kindName = "function";
 	tag.kind = 'f';
 	tag.extensionFields.arglist = arglist;
+	/* add argument list of __init__() methods to the class tag */
+	if (strcmp (vStringValue (function), "__init__") == 0 && parent != NULL)
+	{
+		const char *parent_tag_name = get_class_name_from_parent (vStringValue (parent));
+		if (parent_tag_name != NULL)
+			setTagArglistByName (parent_tag_name, arglist);
+	}
 
 	if (vStringLength (parent) > 0)
 	{
