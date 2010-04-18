@@ -12,6 +12,8 @@
    Another attempt to fix the PHP parser regexp for parsing functions.
    Fix wrong parsing of function arguments when those contain nested
    brackets (as reported by Harold Aling).
+ * src/notebook.c:
+   Fix Ctrl-Click on notebook tab if Numpad is active.
 
 
 2010-04-11  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
