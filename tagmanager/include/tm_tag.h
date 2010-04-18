@@ -287,6 +287,7 @@ gboolean tm_tags_custom_dedup(GPtrArray *tags_array, TMTagCompareFunc compare_fu
  \param sorted_tags_array Tag array sorted on name
  \param name Name of the tag to locate.
  \param partial If TRUE, matches the first part of the name instead of doing exact match.
+ \param tagCount Return location of the matched tags.
 */
 TMTag **tm_tags_find(const GPtrArray *sorted_tags_array, const char *name,
 		gboolean partial, int * tagCount);
