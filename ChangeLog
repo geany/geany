@@ -9,6 +9,8 @@
    Use tm_source_file_set_tag_arglist() to set the argument list
    field of Python class tags to the argument list of their
    __init__() methods.
+   Backport a fix from CTags SVN to prevent possible crashes by trying
+   to free NULL pointers.
 
 
 2010-04-17  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
