@@ -55,6 +55,8 @@ gboolean tm_source_file_init(TMSourceFile *source_file, const char *file_name
 		installLanguageMapDefaults();
 		if (NULL == TagEntryFunction)
 			TagEntryFunction = tm_source_file_tags;
+		if (NULL == TagEntrySetArglistFunction)
+			TagEntrySetArglistFunction = tm_source_file_set_tag_arglist;
 	}
 
 	if (name == NULL)
@@ -120,6 +122,8 @@ gboolean tm_source_file_parse(TMSourceFile *source_file)
 		installLanguageMapDefaults();
 		if (NULL == TagEntryFunction)
 			TagEntryFunction = tm_source_file_tags;
+		if (NULL == TagEntrySetArglistFunction)
+			TagEntrySetArglistFunction = tm_source_file_set_tag_arglist;
 	}
 	current_source_file = source_file;
 
@@ -178,6 +182,8 @@ gboolean tm_source_file_buffer_parse(TMSourceFile *source_file, guchar* text_buf
 		installLanguageMapDefaults();
 		if (NULL == TagEntryFunction)
 			TagEntryFunction = tm_source_file_tags;
+		if (NULL == TagEntrySetArglistFunction)
+			TagEntrySetArglistFunction = tm_source_file_set_tag_arglist;
 	}
 	current_source_file = source_file;
 	if (LANG_AUTO == source_file->lang)
@@ -223,6 +229,28 @@ gboolean tm_source_file_buffer_parse(TMSourceFile *source_file, guchar* text_buf
 		return TRUE;
 	}
 	return status;
+}
+
+void tm_source_file_set_tag_arglist(const char *tag_name, const char *arglist)
+{
+	int count;
+	TMTag **tags, *tag;
+
+	if (NULL == arglist ||
+		NULL == tag_name ||
+		NULL == current_source_file ||
+		NULL == current_source_file->work_object.tags_array)
+	{
+		return;
+	}
+
+	tags = tm_tags_find(current_source_file->work_object.tags_array, tag_name, FALSE, &count);
+	if (tags != NULL && count == 1)
+	{
+		tag = tags[0];
+		g_free(tag->atts.entry.arglist);
+		tag->atts.entry.arglist = g_strdup(arglist);
+	}
 }
 
 int tm_source_file_tags(const tagEntryInfo *tag)
@@ -319,6 +347,8 @@ const gchar *tm_source_file_get_lang_name(gint lang)
 		installLanguageMapDefaults();
 		if (NULL == TagEntryFunction)
 			TagEntryFunction = tm_source_file_tags;
+		if (NULL == TagEntrySetArglistFunction)
+			TagEntrySetArglistFunction = tm_source_file_set_tag_arglist;
 	}
 	return getLanguageName(lang);
 }
@@ -331,6 +361,8 @@ gint tm_source_file_get_named_lang(const gchar *name)
 		installLanguageMapDefaults();
 		if (NULL == TagEntryFunction)
 			TagEntryFunction = tm_source_file_tags;
+		if (NULL == TagEntrySetArglistFunction)
+			TagEntrySetArglistFunction = tm_source_file_set_tag_arglist;
 	}
 	return getNamedLanguage(name);
 }

@@ -37,6 +37,7 @@ typedef void (*simpleParser) (void);
 typedef boolean (*rescanParser) (const unsigned int passCount);
 typedef void (*parserInitialize) (langType language);
 typedef int (*tagEntryFunction) (const tagEntryInfo *const tag);
+typedef void (*tagEntrySetArglistFunction) (const char *tag_name, const char *arglist);
 
 typedef struct sKindOption {
     boolean enabled;			/* are tags for kind enabled? */
@@ -128,6 +129,7 @@ extern void checkRegex (void);
 
 /* Extra stuff for Tag Manager */
 extern tagEntryFunction TagEntryFunction;
+extern tagEntrySetArglistFunction TagEntrySetArglistFunction;
 extern void setTagEntryFunction(tagEntryFunction entry_function);
 
 #endif	/* _PARSE_H */

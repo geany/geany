@@ -1,3 +1,12 @@
+2010-04-18  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * tagmanager/entry.c, tagmanager/entry.h,
+   tagmanager/include/tm_source_file.h, tagmanager/parse.c,
+   tagmanager/parse.h, tagmanager/tm_source_file.c:
+   Add tm_source_file_set_tag_arglist() to manually set the argument
+   list of a tag.
+
+
 2010-04-17  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * tagmanager/txt2tags.c:

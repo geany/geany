@@ -150,6 +150,9 @@ const gchar *tm_source_file_get_lang_name(gint lang);
 */
 gint tm_source_file_get_named_lang(const gchar *name);
 
+/* Set the argument list of tag identified by its name */
+void tm_source_file_set_tag_arglist(const char *tag_name, const char *arglist);
+
 #ifdef __cplusplus
 }
 #endif
