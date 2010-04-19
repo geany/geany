@@ -105,6 +105,8 @@ static gboolean sidebar_key_press_cb(GtkWidget *widget, GdkEventKey *event,
 static void on_list_document_activate(GtkCheckMenuItem *item, gpointer user_data);
 static void on_list_symbol_activate(GtkCheckMenuItem *item, gpointer user_data);
 static void documents_menu_update(GtkTreeSelection *selection);
+static void sidebar_tabs_show_hide(GtkNotebook *notebook, GtkWidget *child,
+								   guint page_num, gpointer data);
 
 
 /* the prepare_* functions are document-related, but I think they fit better here than in document.c */
@@ -550,6 +552,7 @@ static void on_list_document_activate(GtkCheckMenuItem *item, gpointer user_data
 {
 	interface_prefs.sidebar_openfiles_visible = gtk_check_menu_item_get_active(item);
 	ui_sidebar_show_hide();
+	sidebar_tabs_show_hide(GTK_NOTEBOOK(main_widgets.sidebar_notebook), NULL, 0, NULL);
 }
 
 
@@ -557,6 +560,7 @@ static void on_list_symbol_activate(GtkCheckMenuItem *item, gpointer user_data)
 {
 	interface_prefs.sidebar_symbol_visible = gtk_check_menu_item_get_active(item);
 	ui_sidebar_show_hide();
+	sidebar_tabs_show_hide(GTK_NOTEBOOK(main_widgets.sidebar_notebook), NULL, 0, NULL);
 }
 
 
@@ -902,12 +906,14 @@ static void on_load_settings(void)
 	prepare_openfiles();
 	/* note: ui_prefs.sidebar_page is reapplied after plugins are loaded */
 	stash_group_display(stash_group, NULL);
+	sidebar_tabs_show_hide(GTK_NOTEBOOK(main_widgets.sidebar_notebook), NULL, 0, NULL);
 }
 
 
 static void on_save_settings(void)
 {
 	stash_group_update(stash_group, NULL);
+	sidebar_tabs_show_hide(GTK_NOTEBOOK(main_widgets.sidebar_notebook), NULL, 0, NULL);
 }
 
 
@@ -925,8 +931,18 @@ void sidebar_init(void)
 	/* delay building documents treeview until sidebar font has been read */
 	g_signal_connect(geany_object, "load-settings", on_load_settings, NULL);
 	g_signal_connect(geany_object, "save-settings", on_save_settings, NULL);
-}
 
+
+	if (gtk_check_version(2, 10, 0) == NULL)
+	{
+		g_signal_connect(main_widgets.sidebar_notebook, "page-added",
+			G_CALLBACK(sidebar_tabs_show_hide), NULL);
+
+		g_signal_connect(main_widgets.sidebar_notebook, "page-removed",
+			G_CALLBACK(sidebar_tabs_show_hide), NULL);
+	}
+	sidebar_tabs_show_hide(GTK_NOTEBOOK(main_widgets.sidebar_notebook), NULL, 0, NULL);
+}
 
 #define WIDGET(w) w && GTK_IS_WIDGET(w)
 
@@ -968,3 +984,16 @@ void sidebar_focus_symbols_tab(void)
 	}
 }
 
+
+static void sidebar_tabs_show_hide(GtkNotebook *notebook, GtkWidget *child,
+								   guint page_num, gpointer data)
+{
+	gint tabs = gtk_notebook_get_n_pages(notebook);
+
+	if (interface_prefs.sidebar_symbol_visible == FALSE)
+		tabs--;
+	if (interface_prefs.sidebar_openfiles_visible == FALSE)
+		tabs--;
+
+	gtk_notebook_set_show_tabs(notebook, (tabs > 1));
+}

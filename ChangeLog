@@ -3,6 +3,9 @@
  * tagmanager/pascal.c:
    More fixes to prevent possible crashes by trying to free NULL
    pointers.
+ * src/sidebar.c:
+   Automatically show and hide the sidebar notebook tabs according
+   to the amount of visible pages (patch by Adrian Dimitrov, thanks).
 
 
 2010-04-19  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
