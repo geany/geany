@@ -1,3 +1,10 @@
+2010-04-19  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * tagmanager/pascal.c:
+   More fixes to prevent possible crashes by trying to free NULL
+   pointers.
+
+
 2010-04-19  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * plugins/filebrowser.c:
