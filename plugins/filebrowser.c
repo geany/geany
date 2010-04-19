@@ -85,6 +85,7 @@ static struct
 	GtkWidget *open;
 	GtkWidget *open_external;
 	GtkWidget *find_in_files;
+	GtkWidget *show_hidden_files;
 } popup_items;
 
 
@@ -589,6 +590,7 @@ static GtkWidget *create_popup_menu(void)
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	g_signal_connect(item, "activate", G_CALLBACK(on_hidden_files_clicked), NULL);
+	popup_items.show_hidden_files = item;
 
 	item = gtk_separator_menu_item_new();
 	gtk_widget_show(item);
@@ -640,6 +642,8 @@ static gboolean on_button_press(GtkWidget *widget, GdkEventButton *event, gpoint
 		if (popup_menu == NULL)
 			popup_menu = create_popup_menu();
 
+		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(popup_items.show_hidden_files),
+			show_hidden_files);
 		gtk_menu_popup(GTK_MENU(popup_menu), NULL, NULL, NULL, NULL, event->button, event->time);
 		/* don't return TRUE here, unless the selection won't be changed */
 	}
@@ -1070,6 +1074,38 @@ void plugin_init(GeanyData *data)
 }
 
 
+static void save_settings(void)
+{
+	GKeyFile *config = g_key_file_new();
+	gchar *data;
+	gchar *config_dir = g_path_get_dirname(config_file);
+
+	g_key_file_load_from_file(config, config_file, G_KEY_FILE_NONE, NULL);
+
+	g_key_file_set_string(config, "filebrowser", "open_command", open_cmd);
+	g_key_file_set_boolean(config, "filebrowser", "show_hidden_files", show_hidden_files);
+	g_key_file_set_boolean(config, "filebrowser", "hide_object_files", hide_object_files);
+	g_key_file_set_boolean(config, "filebrowser", "fb_follow_path", fb_follow_path);
+	g_key_file_set_boolean(config, "filebrowser", "fb_set_project_base_path",
+		fb_set_project_base_path);
+
+	if (! g_file_test(config_dir, G_FILE_TEST_IS_DIR) && utils_mkdir(config_dir, TRUE) != 0)
+	{
+		dialogs_show_msgbox(GTK_MESSAGE_ERROR,
+			_("Plugin configuration directory could not be created."));
+	}
+	else
+	{
+		/* write config to file */
+		data = g_key_file_to_data(config, NULL, NULL);
+		utils_write_file(config_file, data);
+		g_free(data);
+	}
+	g_free(config_dir);
+	g_key_file_free(config);
+}
+
+
 static struct
 {
 	GtkWidget *open_cmd_entry;
@@ -1085,10 +1121,6 @@ on_configure_response(GtkDialog *dialog, gint response, gpointer user_data)
 {
 	if (response == GTK_RESPONSE_OK || response == GTK_RESPONSE_APPLY)
 	{
-		GKeyFile *config = g_key_file_new();
-		gchar *data;
-		gchar *config_dir = g_path_get_dirname(config_file);
-
 		g_free(open_cmd);
 		open_cmd = g_strdup(gtk_entry_get_text(GTK_ENTRY(pref_widgets.open_cmd_entry)));
 		show_hidden_files = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(pref_widgets.show_hidden_checkbox));
@@ -1097,33 +1129,8 @@ on_configure_response(GtkDialog *dialog, gint response, gpointer user_data)
 		fb_set_project_base_path = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
 			pref_widgets.set_project_base_path_checkbox));
 
-		g_key_file_load_from_file(config, config_file, G_KEY_FILE_NONE, NULL);
-
-		g_key_file_set_string(config, "filebrowser", "open_command", open_cmd);
-		g_key_file_set_boolean(config, "filebrowser", "show_hidden_files", show_hidden_files);
-		g_key_file_set_boolean(config, "filebrowser", "hide_object_files", hide_object_files);
-		g_key_file_set_boolean(config, "filebrowser", "fb_follow_path", fb_follow_path);
-		g_key_file_set_boolean(config, "filebrowser", "fb_set_project_base_path",
-			fb_set_project_base_path);
-
-		if (! g_file_test(config_dir, G_FILE_TEST_IS_DIR) && utils_mkdir(config_dir, TRUE) != 0)
-		{
-			dialogs_show_msgbox(GTK_MESSAGE_ERROR,
-				_("Plugin configuration directory could not be created."));
-		}
-		else
-		{
-			/* write config to file */
-			data = g_key_file_to_data(config, NULL, NULL);
-			utils_write_file(config_file, data);
-			g_free(data);
-		}
-
 		/* apply the changes */
 		refresh();
-
-		g_free(config_dir);
-		g_key_file_free(config);
 	}
 }
 
@@ -1191,6 +1198,8 @@ GtkWidget *plugin_configure(GtkDialog *dialog)
 
 void plugin_cleanup(void)
 {
+	save_settings();
+
 	g_free(config_file);
 	g_free(open_cmd);
 	g_free(filter);
