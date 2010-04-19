@@ -988,12 +988,15 @@ void sidebar_focus_symbols_tab(void)
 static void sidebar_tabs_show_hide(GtkNotebook *notebook, GtkWidget *child,
 								   guint page_num, gpointer data)
 {
-	gint tabs = gtk_notebook_get_n_pages(notebook);
+	if (gtk_check_version(2, 10, 0) == NULL)
+	{
+		gint tabs = gtk_notebook_get_n_pages(notebook);
 
-	if (interface_prefs.sidebar_symbol_visible == FALSE)
-		tabs--;
-	if (interface_prefs.sidebar_openfiles_visible == FALSE)
-		tabs--;
+		if (interface_prefs.sidebar_symbol_visible == FALSE)
+			tabs--;
+		if (interface_prefs.sidebar_openfiles_visible == FALSE)
+			tabs--;
 
-	gtk_notebook_set_show_tabs(notebook, (tabs > 1));
+		gtk_notebook_set_show_tabs(notebook, (tabs > 1));
+	}
 }
