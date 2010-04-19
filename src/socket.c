@@ -86,6 +86,7 @@
 #include "support.h"
 #include "ui_utils.h"
 #include "utils.h"
+#include "dialogs.h"
 #include "encodings.h"
 
 
@@ -211,6 +212,27 @@ static void socket_get_document_list(gint sock)
 }
 
 
+static void check_socket_permissions(void)
+{
+	struct stat socket_stat;
+
+	if (g_lstat(socket_info.file_name, &socket_stat) == 0)
+	{	/* If the user id of the process is not the same as the owner of the socket
+		 * file, then ignore this socket and start a new session. */
+		if (socket_stat.st_uid != getuid())
+		{
+			const gchar *msg = _(
+	/* TODO maybe this message needs a rewording */
+	"Geany tried to access the Unix Domain socket of another instance running as another user.\n"
+	"This is a fatal error and Geany will now quit.");
+			g_warning("%s", msg);
+			dialogs_show_msgbox(GTK_MESSAGE_ERROR, "%s", msg);
+			exit(1);
+		}
+	}
+}
+
+
 /* (Unix domain) socket support to replace the old FIFO code
  * (taken from Sylpheed, thanks)
  * Returns the created socket, -1 if an error occurred or -2 if another socket exists and files
@@ -265,6 +287,9 @@ gint socket_init(gint argc, gchar **argv)
 
 	g_free(display_name);
 	g_free(hostname);
+
+	/* check whether the real user id is the same as this of the socket file */
+	check_socket_permissions();
 
 	sock = socket_fd_connect_unix(socket_info.file_name);
 	if (sock < 0)
