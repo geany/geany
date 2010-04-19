@@ -3225,11 +3225,11 @@ Toggle all additional widgets                             Hide and show all addi
                                                           notebook tabs, the toolbar, the messages window
                                                           and the status bar.
 
-Zoom In                         Ctrl-+  (C)               Zooms in the text
+Zoom In                         Ctrl-+  (C)               Zooms in the text.
 
-Zoom Out                        Ctrl--  (C)               Zooms out the text
+Zoom Out                        Ctrl--  (C)               Zooms out the text.
 
-Zoom Reset                      Ctrl-0                    Reset any previously zoom on the text
+Zoom Reset                      Ctrl-0                    Reset any previous zoom on the text.
 =============================== ========================= ==================================================
 
 Focus keybindings
@@ -3257,10 +3257,10 @@ Switch to Messages                                         Focus the Messages me
 Switch to Message Window                                   Focus the Message Window's current tab.
 
 Switch to Sidebar Document List                            Focus the Document list tab in the Sidebar
-                                                           (if visible)
+                                                           (if visible).
 
 Switch to Sidebar Symbol List                              Focus the Symbol list tab in the Sidebar
-                                                           (if visible)
+                                                           (if visible).
 ================================ ========================= ==================================================
 
 
