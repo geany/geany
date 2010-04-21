@@ -704,7 +704,7 @@ static gboolean create_class(CreateClassDialog *cc_dlg)
 	{
 		text = get_template_class_source(class_info);
 		doc = document_new_file(class_info->source, NULL, NULL);
-		sci_set_text(doc->editor->sci, text);
+		editor_insert_text_block(doc->editor, text, 0, -1, 0, TRUE);
 		g_free(text);
 	}
 
@@ -712,7 +712,7 @@ static gboolean create_class(CreateClassDialog *cc_dlg)
 	{
 		text = get_template_class_header(class_info);
 		doc = document_new_file(class_info->header, NULL, NULL);
-		sci_set_text(doc->editor->sci, text);
+		editor_insert_text_block(doc->editor, text, 0, -1, 0, TRUE);
 		g_free(text);
 	}
 

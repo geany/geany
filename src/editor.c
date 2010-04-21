@@ -44,6 +44,12 @@
 #include "SciLexer.h"
 #include "geany.h"
 
+#ifdef HAVE_REGEX_H
+# include <regex.h>
+#else
+# include "gnuregex.h"
+#endif
+
 #include "support.h"
 #include "editor.h"
 #include "document.h"
@@ -2112,9 +2118,40 @@ static void fix_line_indents(GeanyEditor *editor, gint line_start, gint line_end
 }
 
 
-/** Inserts text, replacing \\t tab chars (@c 0x9) with the correct indent
- * width, and \\n newline chars (@c 0xA) with the correct line ending string
- * for the document.
+static void replace_leading_tabs(GString *str, const gchar *whitespace)
+{
+	regex_t regex;
+	gssize pos;
+	regmatch_t matches[2];
+	gchar *ptr;
+
+	if (regcomp(&regex, "^ *(\t)", 0) != 0)
+	{
+		g_return_if_fail(FALSE);
+	}
+	ptr = str->str;
+	while (ptr)
+	{
+		if (regexec(&regex, ptr,
+			G_N_ELEMENTS(matches), matches, 0) != 0)
+			break;
+
+		pos = matches[1].rm_so;
+		g_return_if_fail(pos >= 0);
+		pos += ptr - str->str;
+		g_string_erase(str, pos, 1);
+		g_string_insert(str, pos, whitespace);
+		ptr = str->str + pos + strlen(whitespace);
+	}
+	regfree(&regex);
+}
+
+
+/** Inserts text, replacing \\t tab chars (@c 0x9) and \\n newline chars (@c 0xA)
+ * accordingly for the document.
+ * - Leading tabs are replaced with the correct indentation.
+ * - Non-leading tabs are replaced with spaces (except when using 'Tabs' indent type).
+ * - Newline chars are replaced with the correct line ending string.
  * This is very useful for inserting code without having to handle the indent
  * type yourself (Tabs & Spaces mode can be tricky).
  * @param editor Editor.
@@ -2123,11 +2160,10 @@ static void fix_line_indents(GeanyEditor *editor, gint line_start, gint line_end
  * @param cursor_index If >= 0, the index into @a text to place the cursor.
  * @param newline_indent_size Indentation size (in spaces) to insert for each newline; use
  * -1 to read the indent size from the line with @a insert_pos on it.
- * @param replace_newlines Whether to replace newlines in text or not. If
- * newlines have been replaced before, this should be false, to avoid multiple
- * replacements of newlines, which is error prone on Windows.
- * @warning Make sure all \\t tab chars in @a text are intended as indent widths,
- * not hard tabs, as these might not be preserved.
+ * @param replace_newlines Whether to replace newlines. If
+ * newlines have been replaced already, this should be false, to avoid errors e.g. on Windows.
+ * @warning Make sure all \\t tab chars in @a text are intended as indent widths or alignment,
+ * not hard tabs, as those won't be preserved.
  * @note This doesn't scroll the cursor in view afterwards. **/
 void editor_insert_text_block(GeanyEditor *editor, const gchar *text, gint insert_pos,
 		gint cursor_index, gint newline_indent_size, gboolean replace_newlines)
@@ -2139,6 +2175,7 @@ void editor_insert_text_block(GeanyEditor *editor, const gchar *text, gint inser
 	GString *buf;
 	const gchar cur_marker[] = "__GEANY_CURSOR_MARKER__";
 	const gchar *eol = editor_get_eol_char(editor);
+	const GeanyIndentPrefs *iprefs = editor_get_indent_prefs(editor);
 
 	g_return_if_fail(text);
 	g_return_if_fail(editor != NULL);
@@ -2173,10 +2210,15 @@ void editor_insert_text_block(GeanyEditor *editor, const gchar *text, gint inser
 	if (replace_newlines)
 		utils_string_replace_all(buf, "\n", eol);
 
-	/* transform tabs into indent widths (in spaces) */
-	whitespace = g_strnfill(editor_get_indent_prefs(editor)->width, ' ');
-	utils_string_replace_all(buf, "\t", whitespace);
+	/* transform leading tabs into indent widths (in spaces) */
+	whitespace = g_strnfill(iprefs->width, ' ');
+	replace_leading_tabs(buf, whitespace);
+	/* remaining tabs are for alignment */
+	if (iprefs->type != GEANY_INDENT_TYPE_TABS)
+		utils_string_replace_all(buf, "\t", whitespace);
 	g_free(whitespace);
+
+	sci_start_undo_action(sci);
 
 	if (cursor_index >= 0)
 	{
@@ -2195,6 +2237,7 @@ void editor_insert_text_block(GeanyEditor *editor, const gchar *text, gint inser
 	fix_line_indents(editor, line_start, line_end);
 	snippet_cursor_insert_pos = sci_get_current_position(sci);
 
+	sci_end_undo_action(sci);
 	g_string_free(buf, TRUE);
 }
 
