@@ -127,6 +127,7 @@ static gchar *ft_templates[GEANY_MAX_BUILT_IN_FILETYPES] = {NULL};
 
 
 static void replace_static_values(GString *text);
+static gchar *get_template_fileheader(GeanyFiletype *ft);
 
 
 /* some simple macros to reduce code size and make the code readable */
@@ -284,6 +285,37 @@ static gboolean create_new_filetype_items(void)
 }
 
 
+static void templates_replace_common(GString *template, const gchar *fname,
+							GeanyFiletype *ft, const gchar *func_name)
+{
+	gchar *shortname;
+
+	if (fname == NULL)
+	{
+		if (!ft->extension)
+			shortname = g_strdup(GEANY_STRING_UNTITLED);
+		else
+			shortname = g_strconcat(GEANY_STRING_UNTITLED, ".", ft->extension, NULL);
+	}
+	else
+		shortname = g_path_get_basename(fname);
+
+	templates_replace_valist(template,
+		"{filename}", shortname,
+		NULL);
+	g_free(shortname);
+
+	templates_replace_default_dates(template);
+	templates_replace_command(template, fname, ft->name, func_name);
+	/* Bug: command results could have {ob} {cb} strings in! */
+	/* replace braces last */
+	templates_replace_valist(template,
+		"{ob}", "{",
+		"{cb}", "}",
+		NULL);
+}
+
+
 static gchar *get_template_from_file(const gchar *locale_fname, const gchar *doc_filename,
 									 GeanyFiletype *ft)
 {
@@ -298,13 +330,11 @@ static gchar *get_template_from_file(const gchar *locale_fname, const gchar *doc
 
 		template = g_string_new(content);
 
-		file_header = templates_get_template_fileheader(FILETYPE_ID(ft), doc_filename);
+		file_header = get_template_fileheader(ft);
 		templates_replace_valist(template,
-			"{filename}", doc_filename,
 			"{fileheader}", file_header,
 			NULL);
-		templates_replace_default_dates(template);
-		templates_replace_command(template, doc_filename, ft->name, NULL);
+		templates_replace_common(template, doc_filename, ft, NULL);
 
 		utils_free_pointers(2, file_header, content, NULL);
 		return g_string_free(template, FALSE);
@@ -552,40 +582,35 @@ gchar *templates_get_template_licence(GeanyDocument *doc, gint licence_type)
 }
 
 
-/* TODO change the signature to take a GeanyDocument although this would break plugin API/ABI */
-gchar *templates_get_template_fileheader(gint filetype_idx, const gchar *fname)
+static gchar *get_template_fileheader(GeanyFiletype *ft)
 {
 	GString *template = g_string_new(templates[GEANY_TEMPLATE_FILEHEADER]);
-	gchar *shortname;
 	gchar *result;
-	filetype_id ft_id = filetype_idx;
-	GeanyFiletype *ft = filetypes[ft_id];
 
-	filetypes_load_config(ft_id, FALSE);	/* load any user extension setting */
-
-	if (fname == NULL)
-	{
-		if (!ft->extension)
-			shortname = g_strdup(GEANY_STRING_UNTITLED);
-		else
-			shortname = g_strconcat(GEANY_STRING_UNTITLED, ".", ft->extension, NULL);
-	}
-	else
-		shortname = g_path_get_basename(fname);
+	filetypes_load_config(ft->id, FALSE);	/* load any user extension setting */
 
 	templates_replace_valist(template,
-		"{filename}", shortname,
 		"{gpl}", templates[GEANY_TEMPLATE_GPL],
 		"{bsd}", templates[GEANY_TEMPLATE_BSD],
 		NULL);
-	templates_replace_default_dates(template);
-	templates_replace_command(template, fname, ft->name, NULL);
 
-	result = make_comment_block(template->str, ft_id, 8);
-
+	/* we don't replace other wildcards here otherwise they would get done twice for files */
+	result = make_comment_block(template->str, ft->id, 8);
 	g_string_free(template, TRUE);
-	g_free(shortname);
 	return result;
+}
+
+
+/* TODO change the signature to take a GeanyDocument? this would break plugin API/ABI */
+gchar *templates_get_template_fileheader(gint filetype_idx, const gchar *fname)
+{
+	GeanyFiletype *ft = filetypes[filetype_idx];
+	gchar *str = get_template_fileheader(ft);
+	GString *template = g_string_new(str);
+
+	g_free(str);
+	templates_replace_common(template, fname, ft, NULL);
+	return g_string_free(template, FALSE);
 }
 
 
@@ -604,11 +629,10 @@ gchar *templates_get_template_new_file(GeanyFiletype *ft)
 	}
 	else
 	{	/* file template only used for new files */
-		file_header = templates_get_template_fileheader(ft->id, NULL);
+		file_header = get_template_fileheader(ft);
 		templates_replace_valist(ft_template, "{fileheader}", file_header, NULL);
 	}
-	templates_replace_default_dates(ft_template);
-	templates_replace_command(ft_template, NULL, ft->name, NULL);
+	templates_replace_common(ft_template, NULL, ft, NULL);
 
 	g_free(file_header);
 	return g_string_free(ft_template, FALSE);

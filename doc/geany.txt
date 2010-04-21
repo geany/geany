@@ -4230,6 +4230,10 @@ All wildcards must be enclosed by "{" and "}", e.g. {date}.
 ============== ============================================= =======================================
 Wildcard       Description                                   Available in
 ============== ============================================= =======================================
+ob             Opening Brace (used to prevent other          file templates, file header
+               wildcards being expanded).
+cb             Closing Brace.                                file templates, file header
+
 developer      The name of the developer.                    filetype templates, file header,
                                                              function description, ChangeLog entry,
                                                              bsd, gpl, snippets
@@ -4246,7 +4250,7 @@ company        The company the developer is working for.     filetype templates,
                                                              function description, ChangeLog entry,
                                                              bsd, gpl, snippets
 
-year [1]_      The current year. Default format is: YYYY     filetype templates, file header,
+year [1]_      The current year. Default format is: YYYY.    filetype templates, file header,
                                                              function description, ChangeLog entry,
                                                              bsd, gpl, snippets
 
@@ -4254,8 +4258,8 @@ version        The initial version of a new file.            filetype templates,
                                                              function description, ChangeLog entry,
                                                              bsd, gpl, snippets
 
-date [1]_      The current date. Default format: YYYY-MM-DD. filetype templates, file header,
-                                                             function description, ChangeLog entry,
+date [1]_      The current date. Default format:             filetype templates, file header,
+               YYYY-MM-DD.                                   function description, ChangeLog entry,
                                                              bsd, gpl, snippets
 
 untitled       The string "untitled" (this will be           filetype templates, file header,
@@ -4281,13 +4285,13 @@ functionname   The function name of the function at the      function descriptio
                replaced in the function description
                template.
 
-fileheader     The file header template. This wildcard       file header, snippets, custom filetype
+fileheader     The file header template. This wildcard       file header, snippets, file
                will only be replaced in filetype             templates
                templates.
 
 command:path   Executes the specified command and replace    filetype templates, file header,
                the wildcard with the command's standard      function description, ChangeLog entry,
-               output. See `Special {command:} wilcard`_     bsd, gpl, snippets
+               output. See `Special {command:} wildcard`_    bsd, gpl, snippets
                for details.
 ============== ============================================= =======================================
 
@@ -4298,10 +4302,10 @@ command:path   Executes the specified command and replace    filetype templates,
        For details please see http://man.cx/strftime.
 
 
-Special {command:} wilcard
-**************************
+Special {command:} wildcard
+***************************
 
-The {command:} wilcard is a special one because it can execute
+The {command:} wildcard is a special one because it can execute
 a specified command and put the command's output (stdout) into
 the template.
 
