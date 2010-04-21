@@ -24,6 +24,9 @@
 /** @file sciwrappers.h
  * Wrapper functions for the Scintilla editor widget @c SCI_* messages.
  * You should also check the http://scintilla.org documentation, as it is more detailed.
+ *
+ * To get Scintilla notifications, use the @c editor-notify @link signals Geany Signal @endlink.
+ *
  * @note These functions were originally from the cssed project
  * (http://cssed.sf.net, thanks).
  * @see scintilla_send_message().
