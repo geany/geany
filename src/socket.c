@@ -212,6 +212,7 @@ static void socket_get_document_list(gint sock)
 }
 
 
+#ifndef G_OS_WIN32
 static void check_socket_permissions(void)
 {
 	struct stat socket_stat;
@@ -231,6 +232,7 @@ static void check_socket_permissions(void)
 		}
 	}
 }
+#endif
 
 
 /* (Unix domain) socket support to replace the old FIFO code
