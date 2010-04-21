@@ -128,6 +128,11 @@ static gchar *ft_templates[GEANY_MAX_BUILT_IN_FILETYPES] = {NULL};
 
 static void replace_static_values(GString *text);
 static gchar *get_template_fileheader(GeanyFiletype *ft);
+static void templates_replace_default_dates(GString *text);
+static void templates_replace_valist(GString *text,
+	const gchar *first_wildcard, ...) G_GNUC_NULL_TERMINATED;
+static void templates_replace_command(GString *text, const gchar *file_name,
+	const gchar *file_type, const gchar *func_name);
 
 
 /* some simple macros to reduce code size and make the code readable */
@@ -285,8 +290,8 @@ static gboolean create_new_filetype_items(void)
 }
 
 
-static void templates_replace_common(GString *template, const gchar *fname,
-							GeanyFiletype *ft, const gchar *func_name)
+void templates_replace_common(GString *template, const gchar *fname,
+							  GeanyFiletype *ft, const gchar *func_name)
 {
 	gchar *shortname;
 
@@ -718,7 +723,7 @@ static void replace_static_values(GString *text)
  *      "{another_wildcard}", "another value", NULL);
  *
  * The argument list must be terminated with NULL. */
-void templates_replace_valist(GString *text, const gchar *first_wildcard, ...)
+static void templates_replace_valist(GString *text, const gchar *first_wildcard, ...)
 {
 	va_list args;
 	const gchar *key, *value;
@@ -745,7 +750,7 @@ void templates_replace_valist(GString *text, const gchar *first_wildcard, ...)
 }
 
 
-void templates_replace_default_dates(GString *text)
+static void templates_replace_default_dates(GString *text)
 {
 	gchar *year = utils_get_date_time(template_prefs.year_format, NULL);
 	gchar *date = utils_get_date_time(template_prefs.date_format, NULL);
@@ -797,7 +802,7 @@ static gchar *run_command(const gchar *command, const gchar *file_name,
 }
 
 
-void templates_replace_command(GString *text, const gchar *file_name,
+static void templates_replace_command(GString *text, const gchar *file_name,
 							   const gchar *file_type, const gchar *func_name)
 {
 	gchar *match = NULL;

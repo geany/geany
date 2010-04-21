@@ -3,12 +3,15 @@
  * src/templates.c, doc/geany.txt, doc/geany.html:
    Support {ob} and {cb} in fileheader and file templates; they are
    replaced last with { and }. This allows 'escaping' of wildcard
-   strings (fixes #2937008).
+   strings.
  * src/editor.c, plugins/classbuilder.c:
    Fix Class Builder plugin to use correct indentation instead of
    always tabs.
    Make editor_insert_text_block() only replace leading tabs for the
    'Tabs' indent type; also group edits for undo.
+ * src/templates.c, src/templates.h, src/editor.c, doc/geany.txt,
+   doc/geany.html:
+   Support {ob} and {cb} wildcards for snippets too (fixes #2937008).
 
 
 2010-04-19  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

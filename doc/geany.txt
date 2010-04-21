@@ -4230,9 +4230,9 @@ All wildcards must be enclosed by "{" and "}", e.g. {date}.
 ============== ============================================= =======================================
 Wildcard       Description                                   Available in
 ============== ============================================= =======================================
-ob             Opening Brace (used to prevent other          file templates, file header.
+ob             Opening Brace (used to prevent other          file templates, file header, snippets.
                wildcards being expanded).
-cb             Closing Brace.                                file templates, file header.
+cb             Closing Brace.                                file templates, file header, snippets.
 
 developer      The name of the developer.                    file templates, file header,
                                                              function description, ChangeLog entry,

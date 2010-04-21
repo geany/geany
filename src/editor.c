@@ -2081,19 +2081,6 @@ static void snippets_replace_specials(gpointer key, gpointer value, gpointer use
 }
 
 
-static void snippets_replace_wildcards(GeanyEditor *editor, GString *text)
-{
-	const gchar *file_name = DOC_FILENAME(editor->document);
-	gchar *basename = g_path_get_basename(file_name);
-
-	templates_replace_default_dates(text);
-	templates_replace_valist(text, "{filename}", basename, NULL);
-	templates_replace_command(text, file_name, editor->document->file_type->name, NULL);
-
-	g_free(basename);
-}
-
-
 /* this only works with spaces only indentation on the lines */
 static void fix_line_indents(GeanyEditor *editor, gint line_start, gint line_end)
 {
@@ -2289,7 +2276,7 @@ static gssize snippets_make_replacements(GeanyEditor *editor, GString *pattern,
 	}
 
 	/* replace any %template% wildcards */
-	snippets_replace_wildcards(editor, pattern);
+	templates_replace_common(pattern, editor->document->file_name, editor->document->file_type, NULL);
 
 	/* transform other wildcards */
 	/* convert to %newlines%, else we get endless loops */

@@ -72,12 +72,8 @@ gchar *templates_get_template_function(GeanyDocument *doc, const gchar *func_nam
 
 gchar *templates_get_template_licence(GeanyDocument *doc, gint licence_type);
 
-void templates_replace_default_dates(GString *text);
-
-void templates_replace_valist(GString *text, const gchar *first_wildcard, ...) G_GNUC_NULL_TERMINATED;
-
-void templates_replace_command(GString *text, const gchar *file_name,
-							   const gchar *file_type, const gchar *func_name);
+void templates_replace_common(GString *template, const gchar *fname,
+							  GeanyFiletype *ft, const gchar *func_name);
 
 void templates_free_templates(void);
 
