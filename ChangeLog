@@ -3,6 +3,9 @@
  * src/plugindata.h, src/pluginutils.c, src/pluginutils.h, THANKS:
    Make plugin_signal_connect() string argument const (patch by
    Colomban Wendling, thanks).
+ * src/keybindings.c, src/keybindings.h, src/plugindata.h:
+   Constify some more string pointers in the API (patch by
+   Colomban Wendling, thanks).
 
 
 2010-04-21  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

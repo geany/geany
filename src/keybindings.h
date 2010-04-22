@@ -350,7 +350,7 @@ void keybindings_free_group(GeanyKeyGroup *group);
 
 GeanyKeyBinding *keybindings_set_item(GeanyKeyGroup *group, gsize key_id,
 		GeanyKeyCallback callback, guint key, GdkModifierType mod,
-		gchar *name, gchar *label, GtkWidget *menu_item);
+		const gchar *name, const gchar *label, GtkWidget *menu_item);
 
 GeanyKeyBinding *keybindings_get_item(GeanyKeyGroup *group, gsize key_id);
 

@@ -144,7 +144,7 @@ GeanyKeyBinding *keybindings_get_item(GeanyKeyGroup *group, gsize key_id)
  * @return The keybinding - normally this is ignored. */
 GeanyKeyBinding *keybindings_set_item(GeanyKeyGroup *group, gsize key_id,
 		GeanyKeyCallback callback, guint key, GdkModifierType mod,
-		gchar *kf_name, gchar *label, GtkWidget *menu_item)
+		const gchar *kf_name, const gchar *label, GtkWidget *menu_item)
 {
 	GeanyKeyBinding *kb = keybindings_get_item(group, key_id);
 
@@ -156,8 +156,9 @@ GeanyKeyBinding *keybindings_set_item(GeanyKeyGroup *group, gsize key_id,
 	}
 	else
 	{
-		kb->name = kf_name;
-		kb->label = label;
+		/* we don't touch them unless group->plugin is set, cast is safe */
+		kb->name = (gchar *)kf_name;
+		kb->label = (gchar *)label;
 	}
 	kb->key = key;
 	kb->mods = mod;

@@ -79,13 +79,13 @@ enum {
 typedef struct PluginInfo
 {
 	/** The name of the plugin. */
-	gchar	*name;
+	const gchar	*name;
 	/** The description of the plugin. */
-	gchar	*description;
+	const gchar	*description;
 	/** The version of the plugin. */
-	gchar	*version;
+	const gchar	*version;
 	/** The author of the plugin. */
-	gchar	*author;
+	const gchar	*author;
 }
 PluginInfo;
 
@@ -153,7 +153,7 @@ typedef struct PluginCallback
 {
 	/** The name of signal, must be an existing signal. For a list of available signals,
 	 *  please see the @link signals Signal documentation @endlink. */
-	gchar		*signal_name;
+	const gchar	*signal_name;
 	/** A callback function which is called when the signal is emitted. */
 	GCallback	callback;
 	/** Set to TRUE to connect your handler with g_signal_connect_after(). */
@@ -490,7 +490,7 @@ typedef struct KeybindingFuncs
 	void		(*keybindings_send_command) (guint group_id, guint key_id);
 	struct GeanyKeyBinding* (*keybindings_set_item) (struct GeanyKeyGroup *group, gsize key_id,
 					_GeanyKeyCallback callback, guint key, GdkModifierType mod,
-					gchar *name, gchar *label, GtkWidget *menu_item);
+					const gchar *name, const gchar *label, GtkWidget *menu_item);
 	struct GeanyKeyBinding* (*keybindings_get_item)(struct GeanyKeyGroup *group, gsize key_id);
 
 }
