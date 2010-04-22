@@ -40,7 +40,7 @@ void plugin_add_toolbar_item(struct GeanyPlugin *plugin, GtkToolItem *item);
 void plugin_module_make_resident(struct GeanyPlugin *plugin);
 
 void plugin_signal_connect(struct GeanyPlugin *plugin,
-		GObject *object, gchar *signal_name, gboolean after,
+		GObject *object, const gchar *signal_name, gboolean after,
 		GCallback callback, gpointer user_data);
 
 struct GeanyKeyGroup *plugin_set_key_group(struct GeanyPlugin *plugin,

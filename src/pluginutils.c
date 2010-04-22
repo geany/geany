@@ -109,7 +109,7 @@ void plugin_module_make_resident(GeanyPlugin *plugin)
  * @param user_data The user data passed to the signal handler.
  * @see plugin_callbacks. */
 void plugin_signal_connect(GeanyPlugin *plugin,
-		GObject *object, gchar *signal_name, gboolean after,
+		GObject *object, const gchar *signal_name, gboolean after,
 		GCallback callback, gpointer user_data)
 {
 	gulong id;

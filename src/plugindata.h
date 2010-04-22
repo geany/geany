@@ -584,7 +584,7 @@ typedef struct PluginFuncs
 	void	(*plugin_add_toolbar_item)(GeanyPlugin *plugin, GtkToolItem *item);
 	void	(*plugin_module_make_resident) (GeanyPlugin *plugin);
 	void	(*plugin_signal_connect) (GeanyPlugin *plugin,
-		GObject *object, gchar *signal_name, gboolean after,
+		GObject *object, const gchar *signal_name, gboolean after,
 		GCallback callback, gpointer user_data);
 	struct GeanyKeyGroup* (*plugin_set_key_group)(GeanyPlugin *plugin,
 		const gchar *section_name, gsize count, _GeanyKeyGroupCallback callback);
