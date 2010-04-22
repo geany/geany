@@ -9,6 +9,8 @@
  * src/templates.c, src/templates.h, src/editor.c, doc/geany.txt,
    doc/geany.html:
    Support {pc} wildcard in snippets to escape percent char.
+ * src/editor.c:
+   Recalculate line margin width when zooming (fixes #2990553).
 
 
 2010-04-21  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
