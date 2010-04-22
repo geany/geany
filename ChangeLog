@@ -11,6 +11,10 @@
    Support {pc} wildcard in snippets to escape percent char.
  * src/editor.c:
    Recalculate line margin width when zooming (fixes #2990553).
+ * src/highlighting.c, doc/geany.txt, doc/geany.html,
+   data/filetypes.common:
+   Support more folding icon styles: arrows, +/- and no lines
+   (#2935059).
 
 
 2010-04-21  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

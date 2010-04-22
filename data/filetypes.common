@@ -57,8 +57,8 @@ indent_guide=0xc0c0c0;;
 white_space=0xc0c0c0;0xffffff;true;false
 
 # style of folding icons, valid values are:
-# first argument:  1 for boxes, 2 for circles
-# second argument: 1 for straight lines, 2 for curved lines
+# first argument:  1 for boxes, 2 for circles, 3 for arrows, 4 for +/-
+# second argument: 1 for straight lines, 2 for curved lines or 0 for none
 folding_style=1;1;
 
 # should an horizontal line be drawn at the line where text is folded

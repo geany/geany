@@ -3807,13 +3807,18 @@ folding_style
 
     * 1 -- for boxes
     * 2 -- for circles
+    * 3 -- for arrows
+    * 4 -- for +/-
 
     Valid values for the second argument are:
 
+    * 0 -- for no lines
     * 1 -- for straight lines
     * 2 -- for curved lines
 
-    *Example:* ``folding_style=1;1;false;false``
+    *Example:* ``folding_style=1;1;``
+
+    *Example:* ``folding_style=3;0;``
 
 folding_horiz_line
     Draw a thin horizontal line at the line where text is folded. Only
