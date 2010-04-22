@@ -2275,7 +2275,7 @@ static gssize snippets_make_replacements(GeanyEditor *editor, GString *pattern,
 		g_hash_table_foreach(specials, snippets_replace_specials, NULL);
 	}
 
-	/* replace any %template% wildcards */
+	/* replace any template {foo} wildcards */
 	templates_replace_common(pattern, editor->document->file_name, editor->document->file_type, NULL);
 
 	/* transform other wildcards */
@@ -2335,6 +2335,10 @@ static gssize snippets_make_replacements(GeanyEditor *editor, GString *pattern,
 	utils_string_replace_all(pattern, "%newline%", editor_get_eol_char(editor));
 	utils_string_replace_all(pattern, "%ws%", whitespace);
 	g_free(whitespace);
+
+	/* escape % last */
+	/* Bug: {ob}pc{cb} will be replaced by % too */
+	templates_replace_valist(pattern, "{pc}", "%", NULL);
 
 	/* We put the cursor positions for the most recent
 	 * parsed snippet first, followed by any remaining positions */

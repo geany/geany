@@ -6,6 +6,9 @@
  * src/keybindings.c, src/keybindings.h, src/plugindata.h:
    Constify some more string pointers in the API (patch by
    Colomban Wendling, thanks).
+ * src/templates.c, src/templates.h, src/editor.c, doc/geany.txt,
+   doc/geany.html:
+   Support {pc} wildcard in snippets to escape percent char.
 
 
 2010-04-21  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
