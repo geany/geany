@@ -607,12 +607,12 @@ void dialogs_show_msgbox(GtkMessageType type, const gchar *text, ...)
 #ifndef G_OS_WIN32
 	GtkWidget *dialog;
 #endif
-	gchar string[512];
+	gchar *string;
 	va_list args;
 	GtkWindow *parent = (main_status.main_window_realized) ? GTK_WINDOW(main_widgets.window) : NULL;
 
 	va_start(args, text);
-	g_vsnprintf(string, 511, text, args);
+	string = g_strdup_vprintf(text, args);
 	va_end(args);
 
 #ifdef G_OS_WIN32
@@ -622,6 +622,7 @@ void dialogs_show_msgbox(GtkMessageType type, const gchar *text, ...)
                                   type, GTK_BUTTONS_OK, "%s", string);
 	show_msgbox_dialog(dialog, type, parent);
 #endif
+	g_free(string);
 }
 
 
@@ -1465,18 +1466,21 @@ static gint show_prompt(GtkWidget *parent,
  **/
 gboolean dialogs_show_question(const gchar *text, ...)
 {
-	gchar string[512];
+	gchar *string;
 	va_list args;
 	GtkWidget *parent = (main_status.main_window_realized) ? main_widgets.window : NULL;
+	gint result;
 
 	va_start(args, text);
-	g_vsnprintf(string, 511, text, args);
+	string = g_strdup_vprintf(text, args);
 	va_end(args);
-	return show_prompt(parent,
+	result = show_prompt(parent,
 		NULL, GTK_RESPONSE_NONE,
 		GTK_STOCK_NO, GTK_RESPONSE_NO,
 		GTK_STOCK_YES, GTK_RESPONSE_YES,
-		string, NULL) == GTK_RESPONSE_YES;
+		string, NULL);
+	g_free(string);
+	return (result == GTK_RESPONSE_YES);
 }
 
 
@@ -1486,17 +1490,20 @@ gboolean dialogs_show_question(const gchar *text, ...)
 gboolean dialogs_show_question_full(GtkWidget *parent, const gchar *yes_btn, const gchar *no_btn,
 	const gchar *extra_text, const gchar *main_text, ...)
 {
-	gchar string[512];
+	gint result;
+	gchar *string;
 	va_list args;
 
 	va_start(args, main_text);
-	g_vsnprintf(string, 511, main_text, args);
+	string = g_strdup_vprintf(main_text, args);
 	va_end(args);
-	return show_prompt(parent,
+	result = show_prompt(parent,
 		NULL, GTK_RESPONSE_NONE,
 		no_btn, GTK_RESPONSE_NO,
 		yes_btn, GTK_RESPONSE_YES,
-		string, extra_text) == GTK_RESPONSE_YES;
+		string, extra_text);
+	g_free(string);
+	return (result == GTK_RESPONSE_YES);
 }
 
 
@@ -1510,14 +1517,17 @@ gint dialogs_show_prompt(GtkWidget *parent,
 		const gchar *btn_3, GtkResponseType response_3,
 		const gchar *extra_text, const gchar *main_text, ...)
 {
-	gchar string[512];
+	gchar *string;
 	va_list args;
+	gint result;
 
 	va_start(args, main_text);
-	g_vsnprintf(string, 511, main_text, args);
+	string = g_strdup_vprintf(main_text, args);
 	va_end(args);
-	return show_prompt(parent, btn_1, response_1, btn_2, response_2, btn_3, response_3,
+	result = show_prompt(parent, btn_1, response_1, btn_2, response_2, btn_3, response_3,
 				string, extra_text);
+	g_free(string);
+	return result;
 }
 
 

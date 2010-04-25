@@ -252,13 +252,14 @@ static const GdkColor *get_color(gint msg_color)
  **/
 void msgwin_compiler_add(gint msg_color, const gchar *format, ...)
 {
-	gchar string[512];
+	gchar *string;
 	va_list args;
 
 	va_start(args, format);
-	g_vsnprintf(string, 512, format, args);
+	string = g_strdup_vprintf(format, args);
 	va_end(args);
 	msgwin_compiler_add_string(msg_color, string);
+	g_free(string);
 }
 
 
@@ -314,14 +315,15 @@ void msgwin_show_hide(gboolean show)
  **/
 void msgwin_msg_add(gint msg_color, gint line, GeanyDocument *doc, const gchar *format, ...)
 {
-	gchar string[512];
+	gchar *string;
 	va_list args;
 
 	va_start(args, format);
-	g_vsnprintf(string, 512, format, args);
+	string = g_strdup_vprintf(format, args);
 	va_end(args);
 
 	msgwin_msg_add_string(msg_color, line, doc, string);
+	g_free(string);
 }
 
 
@@ -361,18 +363,19 @@ void msgwin_msg_add_string(gint msg_color, gint line, GeanyDocument *doc, const 
 void msgwin_status_add(const gchar *format, ...)
 {
 	GtkTreeIter iter;
-	gchar string[512];
+	gchar *string;
 	gchar *statusmsg, *time_str;
 	va_list args;
 
 	va_start(args, format);
-	g_vsnprintf(string, 512, format, args);
+	string = g_strdup_vprintf(format, args);
 	va_end(args);
 
 	/* add a timestamp to status messages */
 	time_str = utils_get_current_time_string();
 	statusmsg = g_strconcat(time_str, ": ", string, NULL);
 	g_free(time_str);
+	g_free(string);
 
 	/* add message to Status window */
 	gtk_list_store_append(msgwindow.store_status, &iter);

@@ -140,11 +140,11 @@ static void set_statusbar(const gchar *text, gboolean allow_override)
  * @param format A @c printf -style string. */
 void ui_set_statusbar(gboolean log, const gchar *format, ...)
 {
-	gchar string[512];
+	gchar *string;
 	va_list args;
 
 	va_start(args, format);
-	g_vsnprintf(string, 512, format, args);
+	string = g_strdup_vprintf(format, args);
 	va_end(args);
 
 	if (! prefs.suppress_status_messages)
@@ -152,6 +152,8 @@ void ui_set_statusbar(gboolean log, const gchar *format, ...)
 
 	if (log || prefs.suppress_status_messages)
 		msgwin_status_add("%s", string);
+
+	g_free(string);
 }
 
 
