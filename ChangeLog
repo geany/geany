@@ -6,6 +6,8 @@
  * src/win32.c:
    Change the limit for the command line length when executing commands
    to a maximum of 32768 characters (closes #2979697).
+ * tagmanager/ctags.c:
+   Change eFree() to simply ignore NULL pointers instead of asserting.
 
 
 2010-04-22  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

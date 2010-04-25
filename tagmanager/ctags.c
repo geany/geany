@@ -373,8 +373,8 @@ extern void *eRealloc (void *const ptr, const size_t size)
 
 extern void eFree (void *const ptr)
 {
-    Assert (ptr != NULL);
-    free (ptr);
+    if (ptr != NULL)
+	free (ptr);
 }
 
 extern void toLowerString (char* str)
