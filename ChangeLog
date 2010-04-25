@@ -12,6 +12,10 @@
  * src/main.c:
    Remove malloc() fallback since we completely rely on g_malloc()
    nowadays.
+ * plugins/export.c, plugins/filebrowser.c, plugins/htmlchars.c,
+   plugins/saveactions.c:
+   Make string arguments const where appropriate (patch by
+   Colomban Wendling, thanks).
 
 
 2010-04-22  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

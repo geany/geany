@@ -150,7 +150,8 @@ static gboolean check_filtered(const gchar *base_name)
 static void add_item(const gchar *name)
 {
 	GtkTreeIter iter;
-	gchar *fname, *utf8_name, *utf8_fullname, *sep;
+	gchar *fname, *utf8_name, *utf8_fullname;
+	const gchar *sep;
 	gboolean dir;
 
 	if (! show_hidden_files && check_hidden(name))

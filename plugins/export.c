@@ -207,7 +207,7 @@ static void create_file_save_as_dialog(const gchar *extension, ExportFunc func,
 		gchar *file_name;
 		gchar *locale_filename;
 		gchar *locale_dirname;
-		gchar *suffix = "";
+		const gchar *suffix = "";
 
 		if (g_str_has_suffix(doc->file_name, extension))
 			suffix = "_export";
@@ -220,6 +220,7 @@ static void create_file_save_as_dialog(const gchar *extension, ExportFunc func,
 		 * gtk_file_chooser_set_current_folder() additionally */
 		gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog), locale_dirname);
 		gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(dialog), file_name);
+		g_free(locale_dirname);
 		g_free(locale_filename);
 		g_free(short_name);
 		g_free(file_name);
@@ -275,7 +276,7 @@ static void write_data(const gchar *filename, const gchar *data)
 
 static gchar *get_date(gint type)
 {
-	gchar *format;
+	const gchar *format;
 
 	if (type == DATE_TYPE_HTML)
 /* needs testing */

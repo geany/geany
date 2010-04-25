@@ -278,7 +278,7 @@ PluginCallback plugin_callbacks[] =
 };
 
 
-gboolean auto_save(gpointer data)
+static gboolean auto_save(gpointer data)
 {
 	GeanyDocument *doc;
 	GeanyDocument *cur_doc = document_get_current();
@@ -316,7 +316,7 @@ gboolean auto_save(gpointer data)
 }
 
 
-void autosave_set_timeout(void)
+static void autosave_set_timeout(void)
 {
 	if (! enable_autosave)
 		return;

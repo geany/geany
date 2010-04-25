@@ -345,7 +345,7 @@ PluginCallback plugin_callbacks[] =
 
 
 /* Functions to toggle the status of plugin */
-void set_status(gboolean new_status)
+static void set_status(gboolean new_status)
 {
 	if (plugin_active != new_status)
 	{
@@ -398,7 +398,7 @@ static gboolean sc_insert(GtkTreeModel *model, GtkTreeIter *iter);
 
 /* Function takes over value of key which was pressed and returns
  * HTML/SGML entity if any */
-const gchar *get_entity(gchar *letter)
+static const gchar *get_entity(gchar *letter)
 {
 	guint i, len;
 
@@ -635,7 +635,7 @@ static void sc_on_tree_row_activated(GtkTreeView *treeview, GtkTreePath *path,
 }
 
 
-static void replace_special_character()
+static void replace_special_character(void)
 {
 	GeanyDocument *doc = NULL;
 	doc = document_get_current();
@@ -707,7 +707,7 @@ static void kb_special_chars_replacement(G_GNUC_UNUSED guint key_id)
 }
 
 
-static void init_configuration()
+static void init_configuration(void)
 {
 	GKeyFile *config = g_key_file_new();
 
