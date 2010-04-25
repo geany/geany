@@ -57,6 +57,7 @@
 #include "editor.h"
 
 #define BUFSIZE 4096
+#define CMDSIZE 32768
 
 struct _geany_win32_spawn
 {
@@ -779,9 +780,9 @@ gchar *win32_get_hostname(void)
 gboolean win32_spawn(const gchar *dir, gchar **argv, gchar **env, GSpawnFlags flags,
 					 gchar **std_out, gchar **std_err, gint *exit_status, GError **error)
 {
-	TCHAR  buffer[MAX_PATH]=TEXT("");
-	TCHAR  cmdline[MAX_PATH] = TEXT("");
-	TCHAR* lpPart[MAX_PATH]={NULL};
+	TCHAR  buffer[CMDSIZE]=TEXT("");
+	TCHAR  cmdline[CMDSIZE] = TEXT("");
+	TCHAR* lpPart[CMDSIZE]={NULL};
 	DWORD  retval = 0;
 	gint argc = 0, i;
 	gint cmdpos = 0;
@@ -808,9 +809,9 @@ gboolean win32_spawn(const gchar *dir, gchar **argv, gchar **env, GSpawnFlags fl
 
 	if (flags & G_SPAWN_SEARCH_PATH)
 	{
-		retval = SearchPath(NULL, argv[0], ".exe", MAX_PATH, buffer, lpPart);
+		retval = SearchPath(NULL, argv[0], ".exe", sizeof(buffer), buffer, lpPart);
 		if (retval > 0)
-			g_snprintf(cmdline, MAX_PATH, "\"%s\"", buffer);
+			g_snprintf(cmdline, sizeof(cmdline), "\"%s\"", buffer);
 		else
 			g_strlcpy(cmdline, argv[0], sizeof(cmdline));
 		cmdpos = 1;
@@ -818,7 +819,7 @@ gboolean win32_spawn(const gchar *dir, gchar **argv, gchar **env, GSpawnFlags fl
 
 	for (i = cmdpos; i < argc; i++)
 	{
-		g_snprintf(cmdline, MAX_PATH, "%s %s", cmdline, argv[i]);
+		g_snprintf(cmdline, sizeof(cmdline), "%s %s", cmdline, argv[i]);
 		/*MessageBox(NULL, cmdline, cmdline, MB_OK);*/
 	}
 
@@ -1010,7 +1011,7 @@ static gboolean CreateChildProcess(geany_win32_spawn *gw_spawn, TCHAR *szCmdline
 	STARTUPINFOW siStartInfo;
 	BOOL bFuncRetn = FALSE;
 	gchar *expandedCmdline;
-	wchar_t w_commandline[MAX_PATH];
+	wchar_t w_commandline[CMDSIZE];
 	wchar_t w_dir[MAX_PATH];
 
 	/* Set up members of the PROCESS_INFORMATION structure. */

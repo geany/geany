@@ -3,6 +3,9 @@
  * src/build.c, src/dialogs.c, src/msgwindow.c, src/ui_utils.c:
    Replace g_vsnprintf() by g_strdup_vprintf() to avoid truncated
    strings in case of reaching the buffer size limit (part of #2979697).
+ * src/win32.c:
+   Change the limit for the command line length when executing commands
+   to a maximum of 32768 characters (closes #2979697).
 
 
 2010-04-22  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
