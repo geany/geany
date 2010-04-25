@@ -470,7 +470,7 @@ static void monitor_file_changed_cb(G_GNUC_UNUSED GFileMonitor *monitor, G_GNUC_
 #endif
 
 
-void document_stop_file_monitoring(GeanyDocument *doc)
+static void document_stop_file_monitoring(GeanyDocument *doc)
 {
 	g_return_if_fail(doc != NULL);
 
