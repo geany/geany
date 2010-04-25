@@ -56,7 +56,7 @@ enum
 static guint signals[LAST_SIGNAL];
 
 
-G_DEFINE_TYPE(GeanyMenubuttonAction, geany_menu_button_action, GTK_TYPE_ACTION);
+G_DEFINE_TYPE(GeanyMenubuttonAction, geany_menu_button_action, GTK_TYPE_ACTION)
 
 
 static void geany_menu_button_action_finalize(GObject *object)

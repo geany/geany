@@ -738,7 +738,7 @@ static void load_dialog_prefs(GKeyFile *config)
 	if (vte_info.load_vte)
 	{
 		struct passwd *pw = getpwuid(getuid());
-		gchar *shell = (pw != NULL) ? pw->pw_shell : "/bin/sh";
+		const gchar *shell = (pw != NULL) ? pw->pw_shell : "/bin/sh";
 
 		vc = g_new0(VteConfig, 1);
 		vte_info.dir = utils_get_setting_string(config, "VTE", "last_dir", NULL);

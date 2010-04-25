@@ -211,7 +211,7 @@ static GeanyBuildCommand **cl[GEANY_GBG_COUNT][GEANY_BCS_COUNT] = {
 
 
 /* for debug only, print the commands structures in priority order */
-static void printfcmds()
+static void printfcmds(void)
 {
 	GeanyFiletype	*ft = NULL;
 	GeanyDocument	*doc;
@@ -752,7 +752,8 @@ static gchar *prepare_run_script(GeanyDocument *doc, gchar **vte_cmd_nonscript, 
 	GeanyProject 		*project = app->project;
 	GeanyBuildCommand	*cmd = NULL;
 	gchar				*executable = NULL;
-	gchar				*working_dir = NULL, *cmd_working_dir;
+	gchar				*working_dir = NULL;
+	const gchar			*cmd_working_dir;
 	gboolean 			 autoclose = FALSE;
 	gboolean 			 result = FALSE;
 	gchar				*tmp;
@@ -1272,7 +1273,7 @@ static void on_build_menu_item(GtkWidget *w, gpointer user_data)
 	}
 	else
 		build_command(doc, grp, cmd, NULL);
-};
+}
 
 
 /* group codes for menu items other than the known commands
@@ -1337,7 +1338,7 @@ static struct BuildMenuItemSpec {
 
 
 static void create_build_menu_item(GtkWidget *menu, GeanyKeyGroup *group, GtkAccelGroup *ag,
-							struct BuildMenuItemSpec *bs, gchar *lbl, gint grp, gint cmd)
+							struct BuildMenuItemSpec *bs, const gchar *lbl, gint grp, gint cmd)
 {
 	GtkWidget *item = gtk_image_menu_item_new_with_mnemonic(lbl);
 	if (bs->stock_id != NULL)
@@ -1392,14 +1393,14 @@ static void create_build_menu(BuildMenuItems *build_menu_items)
 			for (j = bs->build_cmd; j < build_groups_count[grp]; ++j)
 			{
 				GeanyBuildCommand *bc = get_build_cmd(NULL, grp, j, NULL);
-				gchar *lbl = (bc == NULL) ? "" : buildcmd_label(bc);
+				const gchar *lbl = (bc == NULL) ? "" : buildcmd_label(bc);
 				create_build_menu_item(menu, keygroup, accel_group, bs, lbl, grp, j);
 			}
 		}
 		else
 		{
 			GeanyBuildCommand *bc = get_build_cmd(NULL, bs->build_grp, bs->build_cmd, NULL);
-			gchar *lbl = (bc == NULL) ? "" : buildcmd_label(bc);
+			const gchar *lbl = (bc == NULL) ? "" : buildcmd_label(bc);
 			create_build_menu_item(menu, keygroup, accel_group, bs, lbl, bs->build_grp, bs->build_cmd);
 		}
 	}
@@ -1412,7 +1413,7 @@ static void create_build_menu(BuildMenuItems *build_menu_items)
 /* portability to various GTK versions needs checking
  * conforms to description of gtk_accel_label as child of menu item
  * NB 2.16 adds set_label but not yet set_label_mnemonic */
-static void geany_menu_item_set_label(GtkWidget *w, gchar *label)
+static void geany_menu_item_set_label(GtkWidget *w, const gchar *label)
 {
 	GtkWidget *c = gtk_bin_get_child(GTK_BIN(w));
 	gtk_label_set_text_with_mnemonic(GTK_LABEL(c), label);
@@ -1484,7 +1485,7 @@ void build_menu_update(GeanyDocument *doc)
 				for (cmd = bs->build_cmd; cmd < cmdcount; ++cmd)
 				{
 					GtkWidget *menu_item = menu_items.menu_item[grp][cmd];
-					gchar *label;
+					const gchar *label;
 					bc = get_build_cmd(doc, grp, cmd, NULL);
 					if (bc)
 						label = buildcmd_label(bc);
@@ -1771,7 +1772,7 @@ static void on_label_button_clicked(GtkWidget *wid)
 
 
 /* Column headings, array NULL-terminated */
-static gchar *colheads[] =
+static const gchar *colheads[] =
 {
 	N_("Item"),
 	N_("Label"),
@@ -1785,11 +1786,11 @@ static gchar *colheads[] =
 #define DC_CLEAR 4
 #define DC_N_COL 5
 
-static const int entry_x_padding = 3;
-static const int entry_y_padding = 0;
+static const guint entry_x_padding = 3;
+static const guint entry_y_padding = 0;
 
 
-static RowWidgets *build_add_dialog_row(GeanyDocument *doc, GtkTable *table, gint row,
+static RowWidgets *build_add_dialog_row(GeanyDocument *doc, GtkTable *table, guint row,
 				GeanyBuildSource dst, gint grp, gint cmd, gboolean dir)
 {
 	GtkWidget 	*label, *clear, *clearicon;
@@ -1797,7 +1798,7 @@ static RowWidgets *build_add_dialog_row(GeanyDocument *doc, GtkTable *table, gin
 	GeanyBuildCommand *bc;
 	gint src;
 	enum GeanyBuildCmdEntries i;
-	gint column = 0;
+	guint column = 0;
 
 	label = gtk_label_new(g_strdup_printf("%d:", cmd + 1));
 	gtk_table_attach(table, label, column, column + 1, row, row + 1, GTK_FILL,
@@ -1837,7 +1838,7 @@ static RowWidgets *build_add_dialog_row(GeanyDocument *doc, GtkTable *table, gin
 
 	for (i = 0; i < GEANY_BC_CMDENTRIES_COUNT; i++)
 	{
-		gchar *str = "";
+		const gchar *str = "";
 		if (bc != NULL && (str = bc->entries[i]) == NULL)
 			str = "";
 		set_build_command_entry_text(roww->entries[i], str);
@@ -1868,11 +1869,13 @@ GtkWidget *build_commands_table(GeanyDocument *doc, GeanyBuildSource dst, TableD
 	GtkWidget		*label, *sep, *clearicon, *clear;
 	TableFields		*fields;
 	GtkTable		*table;
-	gchar			**ch, *txt;
-	gint			 col, row, cmdindex, cmd;
+	const gchar		**ch;
+	gchar			*txt;
+	guint			 col, row, cmdindex;
+	gint 			 cmd;
 	gint			 src;
 	gboolean		 sensitivity;
-	gint sep_padding = entry_y_padding + 3;
+	guint sep_padding = entry_y_padding + 3;
 
 	table = GTK_TABLE(gtk_table_new(build_items_count + 12, 5, FALSE));
 	fields = g_new0(TableFields, 1);
@@ -2580,7 +2583,7 @@ gint build_get_group_count(GeanyBuildGroup grp)
 
 static struct
 {
-	gchar *entries[GEANY_BC_CMDENTRIES_COUNT];
+	const gchar *entries[GEANY_BC_CMDENTRIES_COUNT];
 	GeanyBuildCommand **ptr;
 	gint index;
 } default_cmds[] = {

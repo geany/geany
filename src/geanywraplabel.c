@@ -57,7 +57,7 @@ static void geany_wrap_label_size_request	(GtkWidget *widget, GtkRequisition *re
 static void geany_wrap_label_size_allocate	(GtkWidget *widget, GtkAllocation *alloc);
 static void geany_wrap_label_set_wrap_width	(GtkWidget *widget, gsize width);
 
-G_DEFINE_TYPE(GeanyWrapLabel, geany_wrap_label, GTK_TYPE_LABEL);
+G_DEFINE_TYPE(GeanyWrapLabel, geany_wrap_label, GTK_TYPE_LABEL)
 
 
 static void geany_wrap_label_class_init(GeanyWrapLabelClass *klass)

@@ -122,7 +122,7 @@ static gint socket_fd_close			(gint sock);
 
 
 
-void send_open_command(gint sock, gint argc, gchar **argv)
+static void send_open_command(gint sock, gint argc, gchar **argv)
 {
 	gint i;
 	gchar *filename;

@@ -127,7 +127,7 @@ typedef enum  GeanyBuildCmdEntries
     GEANY_BC_LABEL,				/**< The menu item label, _ marks mnemonic */
     GEANY_BC_COMMAND,			/**< The command to run. */
     GEANY_BC_WORKING_DIR,		/**< The directory to run in */
-    GEANY_BC_CMDENTRIES_COUNT,	/**< Count of entries */
+    GEANY_BC_CMDENTRIES_COUNT	/**< Count of entries */
 } GeanyBuildCmdEntries;
 
 /** The command for a menu item. */

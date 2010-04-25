@@ -99,7 +99,7 @@ static enum
 	AUTOC_CANCELLED,
 	AUTOC_SCOPE,
 	AUTOC_TAGS,
-	AUTOC_DOC_WORDS,
+	AUTOC_DOC_WORDS
 } autocompletion_mode = AUTOC_CANCELLED;
 
 static gchar indent[100];
@@ -1951,7 +1951,7 @@ gboolean editor_start_auto_complete(GeanyEditor *editor, gint pos, gboolean forc
 	gchar *linebuf, *root;
 	ScintillaObject *sci;
 	gboolean ret = FALSE;
-	gchar *wordchars;
+	const gchar *wordchars;
 	GeanyFiletype *ft;
 
 	if (! editor_prefs.auto_complete_symbols && ! force)

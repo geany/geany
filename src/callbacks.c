@@ -470,7 +470,7 @@ on_reload_as_activate                  (GtkMenuItem     *menuitem,
 	GeanyDocument *doc = document_get_current();
 	gchar *base_name;
 	gint i = GPOINTER_TO_INT(user_data);
-	gchar *charset = NULL;
+	const gchar *charset = NULL;
 
 	g_return_if_fail(doc != NULL);
 	g_return_if_fail(doc->file_name != NULL);
@@ -1365,7 +1365,7 @@ on_comments_fileheader_activate        (GtkMenuItem     *menuitem,
 {
 	GeanyDocument *doc = document_get_current();
 	gchar *text;
-	gchar *fname;
+	const gchar *fname;
 	GeanyFiletype *ft;
 
 	g_return_if_fail(doc != NULL);
@@ -1385,7 +1385,7 @@ on_insert_date_activate                (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
 	GeanyDocument *doc = document_get_current();
-	gchar *format = NULL;
+	const gchar *format = NULL;
 	gchar *time_str;
 
 	g_return_if_fail(doc != NULL);

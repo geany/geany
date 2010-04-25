@@ -52,7 +52,7 @@ enum
 static guint signals[LAST_SIGNAL];
 
 
-G_DEFINE_TYPE(GeanyEntryAction, geany_entry_action, GTK_TYPE_ACTION);
+G_DEFINE_TYPE(GeanyEntryAction, geany_entry_action, GTK_TYPE_ACTION)
 
 
 static GtkWidget *geany_entry_action_create_tool_item(GtkAction *action)

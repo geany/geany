@@ -53,7 +53,7 @@ struct _GeanyObjectPrivate
 };
 
 
-G_DEFINE_TYPE(GeanyObject, geany_object, G_TYPE_OBJECT);
+G_DEFINE_TYPE(GeanyObject, geany_object, G_TYPE_OBJECT)
 
 
 

@@ -44,7 +44,7 @@ gint points;
 gushort iconset;
 GtkWidget *image1, *image2, *image3, *image4, *label1, *label2, *label3, *okbutton1, *textview1;
 gchar info_texts[4][50];
-gchar *help_text;
+const gchar *help_text;
 gboolean is_running;
 static GdkPixbuf **icons;
 

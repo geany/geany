@@ -770,7 +770,7 @@ void ui_sidebar_show_hide(void)
 
 void ui_document_show_hide(GeanyDocument *doc)
 {
-	gchar *widget_name;
+	const gchar *widget_name;
 	GtkWidget *item;
 	const GeanyIndentPrefs *iprefs;
 

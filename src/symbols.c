@@ -128,7 +128,7 @@ void symbols_reload_config_files(void)
 }
 
 
-static gsize get_tag_count()
+static gsize get_tag_count(void)
 {
 	GPtrArray *tags = tm_get_workspace()->global_tags;
 	gsize count = tags ? tags->len : 0;
@@ -975,7 +975,7 @@ static gchar *get_symbol_tooltip(GeanyDocument *doc, const TMTag *tag)
 
 
 /* find the last word in "foo::bar::blah", e.g. "blah" */
-const gchar *get_parent_name(const TMTag *tag, filetype_id ft_id)
+static const gchar *get_parent_name(const TMTag *tag, filetype_id ft_id)
 {
 	const gchar *scope = tag->atts.entry.scope;
 	const gchar *separator = symbols_get_context_separator(ft_id);

@@ -89,7 +89,7 @@ static gboolean write_config(gboolean emit_signal);
 static void on_name_entry_changed(GtkEditable *editable, PropertyDialogElements *e);
 static void on_entries_changed(GtkEditable *editable, PropertyDialogElements *e);
 static void on_radio_long_line_custom_toggled(GtkToggleButton *radio, GtkWidget *spin_long_line);
-static void apply_editor_prefs();
+static void apply_editor_prefs(void);
 
 
 #define SHOW_ERR(args) dialogs_show_msgbox(GTK_MESSAGE_ERROR, args)
@@ -1033,7 +1033,7 @@ static gboolean load_config(const gchar *filename)
 }
 
 
-static void apply_editor_prefs()
+static void apply_editor_prefs(void)
 {
 	guint i;
 
@@ -1135,7 +1135,7 @@ void project_save_prefs(GKeyFile *config)
 
 	if (cl_options.load_session)
 	{
-		gchar *utf8_filename = (project == NULL) ? "" : project->file_name;
+		const gchar *utf8_filename = (project == NULL) ? "" : project->file_name;
 
 		g_key_file_set_string(config, "project", "session_file", utf8_filename);
 	}

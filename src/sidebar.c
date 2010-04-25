@@ -184,7 +184,7 @@ static void create_default_tag_tree(void)
 		gtk_scrolled_window_get_hadjustment(scrolled_window),
 		gtk_scrolled_window_get_vadjustment(scrolled_window));
 	label = gtk_label_new(_("No tags found"));
-	gtk_misc_set_alignment(GTK_MISC(label), 0.1, 0.01);
+	gtk_misc_set_alignment(GTK_MISC(label), 0.1f, 0.01f);
 	gtk_container_add(GTK_CONTAINER(tv.default_tag_tree), label);
 	gtk_widget_show_all(tv.default_tag_tree);
 	g_signal_connect(tv.default_tag_tree, "button-press-event",

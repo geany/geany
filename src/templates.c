@@ -495,9 +495,9 @@ void templates_init(void)
 /* TODO make this function operating on a GString */
 static gchar *make_comment_block(const gchar *comment_text, gint filetype_idx, guint indent)
 {
-	gchar *frame_start;		/* to add before comment_text */
-	gchar *frame_end;		/* to add after comment_text */
-	gchar *line_prefix;		/* to add before every line in comment_text */
+	gchar *frame_start;			/* to add before comment_text */
+	gchar *frame_end;			/* to add after comment_text */
+	const gchar *line_prefix;	/* to add before every line in comment_text */
 	gchar *result;
 	gchar *tmp;
 	gchar *prefix;
@@ -666,7 +666,7 @@ gchar *templates_get_template_function(GeanyDocument *doc, const gchar *func_nam
 gchar *templates_get_template_changelog(GeanyDocument *doc)
 {
 	GString *result = g_string_new(templates[GEANY_TEMPLATE_CHANGELOG]);
-	gchar *file_type_name = (doc != NULL) ? doc->file_type->name : "";
+	const gchar *file_type_name = (doc != NULL) ? doc->file_type->name : "";
 
 	replace_static_values(result);
 	templates_replace_default_dates(result);

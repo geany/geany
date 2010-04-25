@@ -523,7 +523,7 @@ gchar *encodings_convert_to_utf8(const gchar *buffer, gsize size, gchar **used_e
 {
 	gchar *locale_charset = NULL;
 	gchar *regex_charset = NULL;
-	gchar *charset;
+	const gchar *charset;
 	gchar *utf8_content;
 	gboolean check_regex = FALSE;
 	gboolean check_locale = FALSE;
