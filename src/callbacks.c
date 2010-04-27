@@ -687,7 +687,9 @@ on_notebook1_switch_page_after         (GtkNotebook     *notebook,
 	if (doc != NULL)
 	{
 		sidebar_select_openfiles_item(doc);
-		document_set_text_changed(doc, doc->changed);	/* also sets window title and status bar */
+		ui_save_buttons_toggle(doc->changed);
+		ui_set_window_title(doc);
+		ui_update_statusbar(doc, -1);
 		ui_update_popup_reundo_items(doc);
 		ui_document_show_hide(doc); /* update the document menu */
 		build_menu_update(doc);
