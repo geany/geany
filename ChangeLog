@@ -1,3 +1,9 @@
+2010-04-28  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * doc/geany.txt, doc/geany.html:
+   Add Folding section link to filetypes.common custom settings.
+
+
 2010-04-27  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/callbacks.c:

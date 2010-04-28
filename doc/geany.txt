@@ -714,6 +714,10 @@ marked by vertical lines within this margin. For many filetypes nested
 folding is supported, so there may be several fold points within other
 fold points.
 
+.. note::
+    You can customize the folding icon and line styles - see the
+    filetypes.common `Folding Settings`_.
+
 If you don't like it or don't need it at all, you can simply disable
 folding support completely in the preferences dialog.
 
@@ -3799,6 +3803,8 @@ white_space
 
     *Example:* ``white_space=0xc0c0c0;0xffffff;true;true``
 
+.. _Folding Settings:
+
 folding_style
     The style of folding icons. Only first and second arguments are
     used.
@@ -3816,9 +3822,9 @@ folding_style
     * 1 -- for straight lines
     * 2 -- for curved lines
 
-    *Example:* ``folding_style=1;1;``
+    *Default:* ``folding_style=1;1;``
 
-    *Example:* ``folding_style=3;0;``
+    *Arrows:* ``folding_style=3;0;``
 
 folding_horiz_line
     Draw a thin horizontal line at the line where text is folded. Only
