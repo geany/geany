@@ -1,5 +1,13 @@
 2010-04-28  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
+ * src/interface.c, src/project.c, src/keyfile.c, geany.glade,
+   doc/geany.txt, doc/geany.html:
+   Hide 'Tabs and Spaces: Hard tab width' preference - it should
+   always be 8. (Hidden setting kept in case users have modified it).
+
+
+2010-04-28  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
  * doc/geany.txt, doc/geany.html:
    Add Folding section link to filetypes.common custom settings.
 

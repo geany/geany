@@ -406,7 +406,6 @@ static void create_properties_dialog(PropertyDialogElements *e)
 	gtk_widget_set_name(e->dialog, "GeanyDialogProject");
 
 	ui_entry_add_clear_icon(GTK_ENTRY(ui_lookup_widget(e->dialog, "spin_indent_width")));
-	ui_entry_add_clear_icon(GTK_ENTRY(ui_lookup_widget(e->dialog, "spin_tab_width")));
 
 	table = gtk_table_new(6, 2, FALSE);
 	gtk_container_set_border_width(GTK_CONTAINER(table), 6);
@@ -1209,8 +1208,9 @@ void project_init(void)
 		"radio_indent_tabs", GEANY_INDENT_TYPE_TABS,
 		"radio_indent_both", GEANY_INDENT_TYPE_BOTH,
 		NULL);
-	stash_group_add_spin_button_integer(group, &indentation.hard_tab_width,
-		"indent_hard_tab_width", 8, "spin_tab_width");
+	/* This is a 'hidden' pref for backwards-compatibility */
+	stash_group_add_integer(group, &indentation.hard_tab_width,
+		"indent_hard_tab_width", 8);
 	stash_group_add_toggle_button(group, &indentation.detect_type,
 		"detect_indent", FALSE, "check_detect_indent");
 	stash_group_add_combo_box(group, (gint*)(gpointer)&indentation.auto_indent_mode,

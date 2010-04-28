@@ -1889,11 +1889,6 @@ Width
     The width of a single indent size in spaces. By default the indent
     size is equivalent to 4 spaces.
 
-Hard tab width
-    When the *Tabs and Spaces* indent type is enabled, this is the
-    display size of a tab. Otherwise this is ignored. Although
-    configurable, this should usually be set to 8.
-
 Detect from file
     Try to detect and set the indent type based on file content, when
     a file is opened.
