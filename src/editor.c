@@ -4567,9 +4567,20 @@ void editor_set_indent_type(GeanyEditor *editor, GeanyIndentType type)
 	sci_set_use_tabs(sci, use_tabs);
 
 	if (type == GEANY_INDENT_TYPE_BOTH)
+	{
 		sci_set_tab_width(sci, iprefs->hard_tab_width);
+		if (iprefs->hard_tab_width != 8)
+		{
+			static gboolean warn = TRUE;
+			if (warn)
+				ui_set_statusbar(TRUE, _("Warning: non-standard hard tab width: %d != 8!"),
+					iprefs->hard_tab_width);
+			warn = FALSE;
+		}
+	}
 	else
 		sci_set_tab_width(sci, iprefs->width);
+
 	SSM(sci, SCI_SETINDENT, iprefs->width, 0);
 
 	/* remove indent spaces on backspace, if using any spaces to indent */
