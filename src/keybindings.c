@@ -313,10 +313,10 @@ static void init_default_kb(void)
 		GDK_v, GDK_CONTROL_MASK, "menu_paste", _("Paste"), NULL);
 	keybindings_set_item(group, GEANY_KEYS_CLIPBOARD_COPYLINE, NULL,
 		GDK_c, GDK_CONTROL_MASK | GDK_SHIFT_MASK, "edit_copyline", _("_Copy Current Line(s)"),
-		LW(cut_current_line_s_1));
+		LW(copy_current_line_s_1));
 	keybindings_set_item(group, GEANY_KEYS_CLIPBOARD_CUTLINE, NULL,
 		GDK_x, GDK_CONTROL_MASK | GDK_SHIFT_MASK, "edit_cutline", _("_Cut Current Line(s)"),
-		LW(copy_current_line_s_1));
+		LW(cut_current_line_s_1));
 
 	group = ADD_KB_GROUP(SELECT, _("Select"), cb_func_select_action);
 

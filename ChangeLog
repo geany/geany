@@ -1,3 +1,10 @@
+2010-05-03  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/keybindings.c:
+   Fix setting wrong accelerator for 2 Edit->Commands items (patch by
+   Anonymous, #2995593).
+
+
 2010-04-30  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/editor.c:
