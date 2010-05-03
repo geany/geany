@@ -201,18 +201,17 @@ gchar *regex_proj = NULL;
 #endif
 static gboolean printbuildcmds = PRINTBUILDCMDS;
 
-static GeanyBuildCommand **cl[GEANY_GBG_COUNT][GEANY_BCS_COUNT] = {
-	/* 	GEANY_BCS_DEF, GEANY_BCS_FT, GEANY_BCS_HOME_FT, GEANY_BCS_PREF,
-	 *  GEANY_BCS_FT_PROJ, GEANY_BCS_PROJ */
-	{ &ft_def, NULL, NULL, NULL, NULL, NULL },
-	{ &non_ft_def, NULL, NULL, &non_ft_pref, NULL, &non_ft_proj },
-	{ &exec_def, NULL, NULL, &exec_pref, NULL, &exec_proj }
-};
-
 
 /* for debug only, print the commands structures in priority order */
 static void printfcmds(void)
 {
+	GeanyBuildCommand **cl[GEANY_GBG_COUNT][GEANY_BCS_COUNT] = {
+		/* GEANY_BCS_DEF, GEANY_BCS_FT, GEANY_BCS_HOME_FT, GEANY_BCS_PREF,
+		 * GEANY_BCS_FT_PROJ, GEANY_BCS_PROJ */
+		{ &ft_def, NULL, NULL, NULL, NULL, NULL },
+		{ &non_ft_def, NULL, NULL, &non_ft_pref, NULL, &non_ft_proj },
+		{ &exec_def, NULL, NULL, &exec_pref, NULL, &exec_proj }
+	};
 	GeanyFiletype *ft = NULL;
 	GeanyDocument *doc;
 	gint i, j, k, l, m;
