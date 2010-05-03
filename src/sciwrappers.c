@@ -1141,12 +1141,26 @@ void sci_set_scrollbar_mode(ScintillaObject *sci, gboolean visible)
 }
 
 
+/** Sets the indentation of a line.
+ * @param sci Scintilla widget.
+ * @param line Line to indent.
+ * @param indent Indentation width.
+ *
+ * @since 0.19
+ */
 void sci_set_line_indentation(ScintillaObject *sci, gint line, gint indent)
 {
 	SSM(sci, SCI_SETLINEINDENTATION, line, indent);
 }
 
 
+/** Gets the indentation width of a line.
+ * @param sci Scintilla widget.
+ * @param line Line to get the indentation from.
+ * @return Indentation width.
+ *
+ * @since 0.19
+ */
 gint sci_get_line_indentation(ScintillaObject *sci, gint line)
 {
 	return SSM(sci, SCI_GETLINEINDENTATION, line, 0);

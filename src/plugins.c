@@ -182,7 +182,9 @@ static SciFuncs sci_funcs = {
 	&sci_delete_marker_at_line,
 	&sci_is_marker_set_at_line,
 	&sci_goto_line,
-	&sci_find_text
+	&sci_find_text,
+	&sci_set_line_indentation,
+	&sci_get_line_indentation
 };
 
 static TemplateFuncs template_funcs = {

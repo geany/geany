@@ -50,7 +50,7 @@
 enum {
 	/** The Application Programming Interface (API) version, incremented
 	 * whenever any plugin data types are modified or appended to. */
-	GEANY_API_VERSION = 183,
+	GEANY_API_VERSION = 184,
 
 	/** The Application Binary Interface (ABI) version, incremented whenever
 	 * existing fields in the plugin data types have to be changed or reordered. */
@@ -349,6 +349,8 @@ typedef struct SciFuncs
 	gboolean (*sci_is_marker_set_at_line) (struct _ScintillaObject *sci, gint line, gint marker);
 	void 	(*sci_goto_line) (struct _ScintillaObject *sci, gint line, gboolean unfold);
 	gint	(*sci_find_text) (struct _ScintillaObject *sci, gint flags, struct Sci_TextToFind *ttf);
+	void	(*sci_set_line_indentation) (struct _ScintillaObject *sci, gint line, gint indent);
+	gint	(*sci_get_line_indentation) (struct _ScintillaObject *sci, gint line);
 }
 SciFuncs;
 

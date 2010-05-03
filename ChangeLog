@@ -2,7 +2,11 @@
 
  * src/keybindings.c:
    Fix setting wrong accelerator for 2 Edit->Commands items (patch by
-   Anonymous, #2995593).
+   Anonymous, thanks; #2995593).
+ * src/sciwrappers.c, src/plugindata.h, src/plugins.c,
+   plugins/geanyfunctions.h:
+   Add sci_set_line_indentation(), sci_get_line_indentation() to API
+   (patch by Colomban Wendling, thanks).
 
 
 2010-04-30  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

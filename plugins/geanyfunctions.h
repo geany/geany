@@ -190,6 +190,10 @@
 	geany_functions->p_sci->sci_goto_line
 #define sci_find_text \
 	geany_functions->p_sci->sci_find_text
+#define sci_set_line_indentation \
+	geany_functions->p_sci->sci_set_line_indentation
+#define sci_get_line_indentation \
+	geany_functions->p_sci->sci_get_line_indentation
 #define templates_get_template_fileheader \
 	geany_functions->p_templates->templates_get_template_fileheader
 #define utils_str_equal \
