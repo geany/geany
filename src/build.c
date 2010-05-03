@@ -184,22 +184,22 @@ static const gchar *config_keys[] = {
  *-----------------------------------------------------*/
 
 /* the various groups of commands not in the filetype struct */
-GeanyBuildCommand *ft_def = NULL;
+static GeanyBuildCommand *ft_def = NULL;
 GeanyBuildCommand *non_ft_proj = NULL;
-GeanyBuildCommand *non_ft_pref = NULL;
-GeanyBuildCommand *non_ft_def = NULL;
+static GeanyBuildCommand *non_ft_pref = NULL;
+static GeanyBuildCommand *non_ft_def = NULL;
 GeanyBuildCommand *exec_proj = NULL;
-GeanyBuildCommand *exec_pref = NULL;
-GeanyBuildCommand *exec_def = NULL;
+static GeanyBuildCommand *exec_pref = NULL;
+static GeanyBuildCommand *exec_def = NULL;
 /* and the regexen not in the filetype structure */
-gchar *regex_pref = NULL;
+static gchar *regex_pref = NULL;
 gchar *regex_proj = NULL;
 
 /* control if build commands are printed by get_build_cmd, for debug purposes only*/
 #ifndef PRINTBUILDCMDS
 #define PRINTBUILDCMDS FALSE
 #endif
-gboolean printbuildcmds = PRINTBUILDCMDS;
+static gboolean printbuildcmds = PRINTBUILDCMDS;
 
 static GeanyBuildCommand **cl[GEANY_GBG_COUNT][GEANY_BCS_COUNT] = {
 	/* 	GEANY_BCS_DEF, GEANY_BCS_FT, GEANY_BCS_HOME_FT, GEANY_BCS_PREF,
@@ -213,12 +213,13 @@ static GeanyBuildCommand **cl[GEANY_GBG_COUNT][GEANY_BCS_COUNT] = {
 /* for debug only, print the commands structures in priority order */
 static void printfcmds(void)
 {
-	GeanyFiletype	*ft = NULL;
-	GeanyDocument	*doc;
+	GeanyFiletype *ft = NULL;
+	GeanyDocument *doc;
 	gint i, j, k, l, m;
 	enum GeanyBuildCmdEntries n;
 	gint cc[GEANY_BCS_COUNT];
 	gchar c;
+
 	doc = document_get_current();
 	if (doc != NULL)
 		ft = doc->file_type;
@@ -285,21 +286,24 @@ static void printfcmds(void)
 
 
 /* macros to save typing and make the logic visible */
-#define return_cmd_if(src, cmds) if (cmds != NULL && cmds[cmdindex].exists && below>src)\
-									{ \
-										*fr=src; \
-										if (printbuildcmds) \
-											printf("cmd[%d,%d]=%d\n",cmdgrp,cmdindex,src); \
-										return &(cmds[cmdindex]); \
-									}
-#define return_ft_cmd_if(src, cmds) if (ft != NULL && ft->cmds != NULL \
-										&& ft->cmds[cmdindex].exists && below>src)\
-										{ \
-											*fr=src; \
-											if (printbuildcmds) \
-												printf("cmd[%d,%d]=%d\n",cmdgrp,cmdindex,src); \
-											return &(ft->cmds[cmdindex]); \
-										}
+#define return_cmd_if(src, cmds)\
+	if (cmds != NULL && cmds[cmdindex].exists && below>src)\
+	{ \
+		*fr=src; \
+		if (printbuildcmds) \
+			printf("cmd[%d,%d]=%d\n",cmdgrp,cmdindex,src); \
+		return &(cmds[cmdindex]); \
+	}
+
+#define return_ft_cmd_if(src, cmds)\
+	if (ft != NULL && ft->cmds != NULL \
+		&& ft->cmds[cmdindex].exists && below>src)\
+		{ \
+			*fr=src; \
+			if (printbuildcmds) \
+				printf("cmd[%d,%d]=%d\n",cmdgrp,cmdindex,src); \
+			return &(ft->cmds[cmdindex]); \
+		}
 
 
 /* get the next lowest command taking priority into account */
@@ -307,9 +311,8 @@ static GeanyBuildCommand *get_next_build_cmd(GeanyDocument *doc, gint cmdgrp, gi
 											 gint below, gint *from)
 {
 	/* Note: parameter below used in macros above */
-
-	GeanyFiletype		*ft = NULL;
-	gint				 sink, *fr = &sink;
+	GeanyFiletype *ft = NULL;
+	gint sink, *fr = &sink;
 
 	if (printbuildcmds)
 		printfcmds();
@@ -321,6 +324,7 @@ static GeanyBuildCommand *get_next_build_cmd(GeanyDocument *doc, gint cmdgrp, gi
 		doc = document_get_current();
 	if (doc != NULL)
 		ft = doc->file_type;
+
 	switch (cmdgrp)
 	{
 		case GEANY_GBG_FT: /* order proj ft, home ft, ft, defft */
@@ -360,14 +364,16 @@ static GeanyBuildCommand *get_build_cmd(GeanyDocument *doc, gint grp, gint cmdin
 }
 
 
-#define return_nonblank_regex(src, ptr) if (NZV(ptr)) \
-											{ *fr = (src); return &(ptr); }
+#define return_nonblank_regex(src, ptr)\
+	if (NZV(ptr)) \
+		{ *fr = (src); return &(ptr); }
 
 
 /* like get_build_cmd, but for regexen, used by filetypes */
 gchar **build_get_regex(GeanyBuildGroup grp, GeanyFiletype *ft, gint *from)
 {
 	gint sink, *fr = &sink;
+
 	if (from != NULL)
 		fr = from;
 	if (grp == GEANY_GBG_FT)
@@ -467,6 +473,7 @@ void build_remove_menu_item(GeanyBuildSource src, GeanyBuildGroup grp, gint cmd)
 {
 	GeanyBuildCommand *bc;
 	gint i;
+
 	bc = get_build_group(src, grp);
 	if (bc == NULL)
 		return;
@@ -497,6 +504,7 @@ void build_remove_menu_item(GeanyBuildSource src, GeanyBuildGroup grp, gint cmd)
 GeanyBuildCommand *build_get_menu_item(GeanyBuildSource src, GeanyBuildGroup grp, gint cmd)
 {
 	GeanyBuildCommand *bc;
+
 	if (src >= GEANY_BCS_COUNT || grp >= GEANY_GBG_COUNT || cmd >= build_groups_count[grp])
 		return NULL;
 	bc = get_build_group(src, grp);
@@ -645,18 +653,18 @@ static gchar *build_replace_placeholder(const GeanyDocument *doc, const gchar *s
  * idx document directory */
 static GPid build_spawn_cmd(GeanyDocument *doc, const gchar *cmd, const gchar *dir)
 {
-	GError  *error = NULL;
-	gchar  **argv;
-	gchar	*working_dir;
-	gchar	*utf8_working_dir;
-	gchar	*cmd_string;
-	gchar	*utf8_cmd_string;
+	GError *error = NULL;
+	gchar **argv;
+	gchar *working_dir;
+	gchar *utf8_working_dir;
+	gchar *cmd_string;
+	gchar *utf8_cmd_string;
 #ifdef G_OS_WIN32
-	gchar	*output[2];
-	gint	 status;
+	gchar *output[2];
+	gint status;
 #else
-	gint	 stdout_fd;
-	gint	 stderr_fd;
+	gint stdout_fd;
+	gint stderr_fd;
 #endif
 
 	if (!((doc != NULL && NZV(doc->file_name)) || NZV(dir)))
@@ -747,17 +755,17 @@ static GPid build_spawn_cmd(GeanyDocument *doc, const gchar *cmd, const gchar *d
  * when vc->skip_run_script is set, otherwise it will be set to NULL */
 static gchar *prepare_run_script(GeanyDocument *doc, gchar **vte_cmd_nonscript, gint cmdindex)
 {
-	gchar				*locale_filename = NULL;
-	gboolean 			 have_project;
-	GeanyProject 		*project = app->project;
-	GeanyBuildCommand	*cmd = NULL;
-	gchar				*executable = NULL;
-	gchar				*working_dir = NULL;
-	const gchar			*cmd_working_dir;
-	gboolean 			 autoclose = FALSE;
-	gboolean 			 result = FALSE;
-	gchar				*tmp;
-	gchar				*cmd_string;
+	gchar *locale_filename = NULL;
+	gboolean have_project;
+	GeanyProject *project = app->project;
+	GeanyBuildCommand *cmd = NULL;
+	gchar *executable = NULL;
+	gchar *working_dir = NULL;
+	const gchar *cmd_working_dir;
+	gboolean autoclose = FALSE;
+	gboolean result = FALSE;
+	gchar *tmp;
+	gchar *cmd_string;
 
 	if (vte_cmd_nonscript != NULL)
 		*vte_cmd_nonscript = NULL;
@@ -824,9 +832,9 @@ static gchar *prepare_run_script(GeanyDocument *doc, gchar **vte_cmd_nonscript, 
 
 static GPid build_run_cmd(GeanyDocument *doc, gint cmdindex)
 {
-	gchar	*working_dir;
-	gchar	*vte_cmd_nonscript = NULL;
-	GError	*error = NULL;
+	gchar *working_dir;
+	gchar *vte_cmd_nonscript = NULL;
+	GError *error = NULL;
 
 	if (doc == NULL || doc->file_name == NULL)
 		return (GPid) 0;
@@ -1219,6 +1227,7 @@ static void build_command(GeanyDocument *doc, GeanyBuildGroup grp, gint cmd, gch
 static void on_make_custom_input_response(const gchar *input)
 {
 	GeanyDocument *doc = document_get_current();
+
 	setptr(build_info.custom_target, g_strdup(input));
 	build_command(doc, GBO_TO_GBG(GEANY_GBO_CUSTOM), GBO_TO_CMD(GEANY_GBO_CUSTOM),
 					build_info.custom_target);
@@ -1300,40 +1309,40 @@ static struct BuildMenuItemSpec {
 	const gchar	*fix_label;
 	Callback *cb;
 } build_menu_specs[] = {
-	{ GTK_STOCK_CONVERT, GEANY_KEYS_BUILD_COMPILE, GBO_TO_GBG(GEANY_GBO_COMPILE),
-		GBO_TO_CMD(GEANY_GBO_COMPILE),       NULL, on_build_menu_item },
-	{ GEANY_STOCK_BUILD, GEANY_KEYS_BUILD_LINK,    GBO_TO_GBG(GEANY_GBO_BUILD),
-		GBO_TO_CMD(GEANY_GBO_BUILD),         NULL, on_build_menu_item },
-	{ NULL,              -1,                       MENU_FT_REST,
-		GBO_TO_CMD(GEANY_GBO_BUILD) + 1,       NULL, on_build_menu_item },
-	{ NULL,              -1,                       MENU_SEPARATOR,
-		GBF_SEP_1,                     NULL, NULL },
-	{ NULL,              GEANY_KEYS_BUILD_MAKE,    GBO_TO_GBG(GEANY_GBO_MAKE_ALL),
-		GBO_TO_CMD(GEANY_GBO_MAKE_ALL),      NULL, on_build_menu_item },
-	{ NULL, GEANY_KEYS_BUILD_MAKEOWNTARGET,        GBO_TO_GBG(GEANY_GBO_CUSTOM),
-		GBO_TO_CMD(GEANY_GBO_CUSTOM),   NULL, on_build_menu_item },
-	{ NULL, GEANY_KEYS_BUILD_MAKEOBJECT,           GBO_TO_GBG(GEANY_GBO_MAKE_OBJECT),
-		GBO_TO_CMD(GEANY_GBO_MAKE_OBJECT),   NULL, on_build_menu_item },
-	{ NULL,              -1,                       MENU_NON_FT_REST,
-		GBO_TO_CMD(GEANY_GBO_MAKE_OBJECT) + 1, NULL, on_build_menu_item },
-	{ NULL,              -1,                       MENU_SEPARATOR,
-		GBF_SEP_2,                     NULL, NULL },
-	{ NULL, GEANY_KEYS_BUILD_NEXTERROR,            MENU_NEXT_ERROR,
-		GBF_NEXT_ERROR,                N_("_Next Error"), on_build_next_error },
-	{ NULL, GEANY_KEYS_BUILD_PREVIOUSERROR,        MENU_PREV_ERROR,
-		GBF_PREV_ERROR,                N_("_Previous Error"), on_build_previous_error },
-	{ NULL,              -1,                       MENU_SEPARATOR,
-		GBF_SEP_3,                     NULL, NULL },
-	{ GTK_STOCK_EXECUTE, GEANY_KEYS_BUILD_RUN,     GBO_TO_GBG(GEANY_GBO_EXEC),
-		GBO_TO_CMD(GEANY_GBO_EXEC),          NULL, on_build_menu_item },
-	{ NULL,              -1,                       MENU_EXEC_REST,
-		GBO_TO_CMD(GEANY_GBO_EXEC) + 1,        NULL, on_build_menu_item },
-	{ NULL,              -1,                       MENU_SEPARATOR,
-		GBF_SEP_4,                     NULL, NULL },
-	{ GTK_STOCK_PREFERENCES, GEANY_KEYS_BUILD_OPTIONS, MENU_COMMANDS,
-		GBF_COMMANDS,                  N_("_Set Build Commands"), on_set_build_commands_activate },
-	{ NULL,              -1,                       MENU_DONE,
-		0,                             NULL, NULL }
+	{GTK_STOCK_CONVERT, GEANY_KEYS_BUILD_COMPILE, GBO_TO_GBG(GEANY_GBO_COMPILE),
+		GBO_TO_CMD(GEANY_GBO_COMPILE), NULL, on_build_menu_item},
+	{GEANY_STOCK_BUILD, GEANY_KEYS_BUILD_LINK, GBO_TO_GBG(GEANY_GBO_BUILD),
+		GBO_TO_CMD(GEANY_GBO_BUILD), NULL, on_build_menu_item},
+	{NULL, -1, MENU_FT_REST,
+		GBO_TO_CMD(GEANY_GBO_BUILD) + 1, NULL, on_build_menu_item},
+	{NULL, -1, MENU_SEPARATOR,
+		GBF_SEP_1, NULL, NULL},
+	{NULL, GEANY_KEYS_BUILD_MAKE, GBO_TO_GBG(GEANY_GBO_MAKE_ALL),
+		GBO_TO_CMD(GEANY_GBO_MAKE_ALL), NULL, on_build_menu_item},
+	{NULL, GEANY_KEYS_BUILD_MAKEOWNTARGET, GBO_TO_GBG(GEANY_GBO_CUSTOM),
+		GBO_TO_CMD(GEANY_GBO_CUSTOM), NULL, on_build_menu_item},
+	{NULL, GEANY_KEYS_BUILD_MAKEOBJECT, GBO_TO_GBG(GEANY_GBO_MAKE_OBJECT),
+		GBO_TO_CMD(GEANY_GBO_MAKE_OBJECT), NULL, on_build_menu_item},
+	{NULL, -1, MENU_NON_FT_REST,
+		GBO_TO_CMD(GEANY_GBO_MAKE_OBJECT) + 1, NULL, on_build_menu_item},
+	{NULL, -1, MENU_SEPARATOR,
+		GBF_SEP_2, NULL, NULL},
+	{NULL, GEANY_KEYS_BUILD_NEXTERROR, MENU_NEXT_ERROR,
+		GBF_NEXT_ERROR, N_("_Next Error"), on_build_next_error},
+	{NULL, GEANY_KEYS_BUILD_PREVIOUSERROR, MENU_PREV_ERROR,
+		GBF_PREV_ERROR, N_("_Previous Error"), on_build_previous_error},
+	{NULL, -1, MENU_SEPARATOR,
+		GBF_SEP_3, NULL, NULL},
+	{GTK_STOCK_EXECUTE, GEANY_KEYS_BUILD_RUN, GBO_TO_GBG(GEANY_GBO_EXEC),
+		GBO_TO_CMD(GEANY_GBO_EXEC), NULL, on_build_menu_item},
+	{NULL, -1, MENU_EXEC_REST,
+		GBO_TO_CMD(GEANY_GBO_EXEC) + 1, NULL, on_build_menu_item},
+	{NULL, -1, MENU_SEPARATOR,
+		GBF_SEP_4, NULL, NULL},
+	{GTK_STOCK_PREFERENCES, GEANY_KEYS_BUILD_OPTIONS, MENU_COMMANDS,
+		GBF_COMMANDS, N_("_Set Build Commands"), on_set_build_commands_activate},
+	{NULL, -1, MENU_DONE,
+		0, NULL, NULL}
 };
 
 
@@ -1341,11 +1350,11 @@ static void create_build_menu_item(GtkWidget *menu, GeanyKeyGroup *group, GtkAcc
 							struct BuildMenuItemSpec *bs, const gchar *lbl, gint grp, gint cmd)
 {
 	GtkWidget *item = gtk_image_menu_item_new_with_mnemonic(lbl);
+
 	if (bs->stock_id != NULL)
 	{
 		GtkWidget *image = gtk_image_new_from_stock(bs->stock_id, GTK_ICON_SIZE_MENU);
 		gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item), image);
-
 	}
 	gtk_widget_show(item);
 	if (bs->key_binding >= 0)
@@ -1416,6 +1425,7 @@ static void create_build_menu(BuildMenuItems *build_menu_items)
 static void geany_menu_item_set_label(GtkWidget *w, const gchar *label)
 {
 	GtkWidget *c = gtk_bin_get_child(GTK_BIN(w));
+
 	gtk_label_set_text_with_mnemonic(GTK_LABEL(c), label);
 }
 
@@ -1793,8 +1803,8 @@ static const guint entry_y_padding = 0;
 static RowWidgets *build_add_dialog_row(GeanyDocument *doc, GtkTable *table, guint row,
 				GeanyBuildSource dst, gint grp, gint cmd, gboolean dir)
 {
-	GtkWidget 	*label, *clear, *clearicon;
-	RowWidgets 	*roww;
+	GtkWidget *label, *clear, *clearicon;
+	RowWidgets *roww;
 	GeanyBuildCommand *bc;
 	gint src;
 	enum GeanyBuildCmdEntries i;
@@ -1866,15 +1876,15 @@ typedef struct TableFields
 GtkWidget *build_commands_table(GeanyDocument *doc, GeanyBuildSource dst, TableData *table_data,
 								GeanyFiletype *ft)
 {
-	GtkWidget		*label, *sep, *clearicon, *clear;
-	TableFields		*fields;
-	GtkTable		*table;
-	const gchar		**ch;
-	gchar			*txt;
-	guint			 col, row, cmdindex;
-	gint 			 cmd;
-	gint			 src;
-	gboolean		 sensitivity;
+	GtkWidget *label, *sep, *clearicon, *clear;
+	TableFields *fields;
+	GtkTable *table;
+	const gchar **ch;
+	gchar *txt;
+	guint col, row, cmdindex;
+	gint cmd;
+	gint src;
+	gboolean sensitivity;
 	guint sep_padding = entry_y_padding + 3;
 
 	table = GTK_TABLE(gtk_table_new(build_items_count + 12, 5, FALSE));
@@ -1992,6 +2002,7 @@ GtkWidget *build_commands_table(GeanyDocument *doc, GeanyBuildSource dst, TableD
 void build_free_fields(TableData table_data)
 {
 	gint cmdindex;
+
 	for (cmdindex = 0; cmdindex < build_items_count; ++cmdindex)
 		g_free(table_data->rows[cmdindex]);
 	g_free(table_data->rows);
@@ -2000,7 +2011,7 @@ void build_free_fields(TableData table_data)
 
 
 /* string compare where null pointers match null or 0 length strings */
-static int stcmp(const gchar *a, const gchar *b)
+static gint stcmp(const gchar *a, const gchar *b)
 {
 	if (a == NULL && b == NULL)
 		return 0;
@@ -2023,8 +2034,8 @@ static const gchar *get_build_command_entry_text(GtkWidget *wid)
 
 static gboolean read_row(BuildDestination *dst, TableData table_data, gint drow, gint grp, gint cmd)
 {
-	gchar			*entries[GEANY_BC_CMDENTRIES_COUNT];
-	gboolean		 changed = FALSE;
+	gchar *entries[GEANY_BC_CMDENTRIES_COUNT];
+	gboolean changed = FALSE;
 	GeanyBuildSource src;
 	enum GeanyBuildCmdEntries i;
 
@@ -2090,14 +2101,15 @@ static gboolean read_row(BuildDestination *dst, TableData table_data, gint drow,
 
 static gboolean read_regex(GtkWidget *regexentry, gchar **src, gchar **dst)
 {
-	gboolean 	changed = FALSE;
-	gchar 		*reg = g_strdup(gtk_entry_get_text(GTK_ENTRY(regexentry)));
+	gboolean changed = FALSE;
+	gchar *reg = g_strdup(gtk_entry_get_text(GTK_ENTRY(regexentry)));
+
 	if (
 			(
 				(src == NULL			/* originally there was no regex */
 				 || *src == NULL		/* or it was NULL*/
 				)
-				&& NZV(reg) > 0			/*  and something was typed */
+				&& NZV(reg) > 0			/* and something was typed */
 			)
 			||(src != NULL				/* originally there was a regex*/
 			&& strcmp(*src, reg) != 0 	/* and it has been changed */
@@ -2116,8 +2128,8 @@ static gboolean read_regex(GtkWidget *regexentry, gchar **src, gchar **dst)
 
 gboolean build_read_commands(BuildDestination *dst, TableData table_data, gint response)
 {
-	gint			 cmdindex, cmd;
-	gboolean		 changed = FALSE;
+	gint cmdindex, cmd;
+	gboolean changed = FALSE;
 
 	if (response == GTK_RESPONSE_ACCEPT)
 	{
@@ -2136,12 +2148,12 @@ gboolean build_read_commands(BuildDestination *dst, TableData table_data, gint r
 
 static void show_build_commands_dialog(void)
 {
-	GtkWidget		*dialog, *table, *vbox;
-	GeanyDocument	*doc = document_get_current();
-	GeanyFiletype	*ft = NULL;
-	gchar			*title = _("Set Build Commands");
-	gint			 response;
-	TableData		 table_data;
+	GtkWidget *dialog, *table, *vbox;
+	GeanyDocument *doc = document_get_current();
+	GeanyFiletype *ft = NULL;
+	gchar *title = _("Set Build Commands");
+	gint response;
+	TableData table_data;
 	BuildDestination prefdsts;
 
 	if (doc != NULL)
@@ -2196,6 +2208,7 @@ BuildMenuItems *build_get_menu_items(gint filetype_idx)
 void build_set_non_ft_wd_to_proj(TableData table_data)
 {
 	gint i, start, end;
+
 	start = build_groups_count[GEANY_GBG_FT];
 	end = start + build_groups_count[GEANY_GBG_NON_FT];
 	for (i = start; i < end; ++i)
@@ -2268,12 +2281,11 @@ static void build_load_menu_grp(GKeyFile *config, GeanyBuildCommand **dst, gint 
  * old format setings, not done perfectly but better than ignoring them */
 void build_load_menu(GKeyFile *config, GeanyBuildSource src, gpointer p)
 {
-	/*gint grp;*/
-	GeanyFiletype 	*ft;
-	GeanyProject  	*pj;
-	gchar 			**ftlist;
-	gchar 			*value, *basedir, *makebasedir;
-	gboolean 		 bvalue = FALSE;
+	GeanyFiletype *ft;
+	GeanyProject *pj;
+	gchar **ftlist;
+	gchar *value, *basedir, *makebasedir;
+	gboolean bvalue = FALSE;
 
 	if (g_key_file_has_group(config, build_grp_name))
 	{
@@ -2509,10 +2521,10 @@ static void foreach_project_filetype(gpointer data, gpointer user_data)
 
 void build_save_menu(GKeyFile *config, gpointer ptr, GeanyBuildSource src)
 {
-	GeanyFiletype 	*ft;
-	GeanyProject  	*pj;
-	ForEachData		 data;
-	gchar 			*regkey;
+	GeanyFiletype *ft;
+	GeanyProject *pj;
+	ForEachData data;
+	gchar *regkey;
 
 	switch (src)
 	{
@@ -2567,6 +2579,7 @@ void build_save_menu(GKeyFile *config, gpointer ptr, GeanyBuildSource src)
 void build_set_group_count(GeanyBuildGroup grp, gint count)
 {
 	gint i, sum;
+
 	if (count > build_groups_count[grp])
 		build_groups_count[grp] = count;
 	for (i = 0, sum = 0; i < GEANY_GBG_COUNT; ++i)
@@ -2667,7 +2680,6 @@ void build_init(void)
 	g_signal_connect(item, "activate", G_CALLBACK(on_set_build_commands_activate), NULL);
 	widgets.toolitem_set_args = item;
 
-
 	/* get toolbar action pointers */
 	widgets.build_action = toolbar_get_action_by_name("Build");
 	widgets.compile_action = toolbar_get_action_by_name("Compile");
@@ -2675,7 +2687,6 @@ void build_init(void)
 	widgets.toolmenu = toolmenu;
 	/* set the submenu to the toolbar item */
 	geany_menu_button_action_set_menu(GEANY_MENU_BUTTON_ACTION(widgets.build_action), toolmenu);
-
 }
 
 
