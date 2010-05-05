@@ -372,5 +372,7 @@
 	geany_functions->p_stash->stash_group_display
 #define stash_group_update \
 	geany_functions->p_stash->stash_group_update
+#define symbols_get_context_separator \
+	geany_functions->p_symbols->symbols_get_context_separator
 
 #endif

@@ -50,7 +50,7 @@
 enum {
 	/** The Application Programming Interface (API) version, incremented
 	 * whenever any plugin data types are modified or appended to. */
-	GEANY_API_VERSION = 184,
+	GEANY_API_VERSION = 185,
 
 	/** The Application Binary Interface (ABI) version, incremented whenever
 	 * existing fields in the plugin data types have to be changed or reordered. */
@@ -239,6 +239,7 @@ typedef struct GeanyFunctions
 	struct ScintillaFuncs		*p_scintilla;		/**< See ScintillaFuncs */
 	struct MsgWinFuncs			*p_msgwin;			/**< See msgwindow.h */
 	struct StashFuncs			*p_stash;			/**< See stash.h */
+	struct SymbolsFuncs			*p_symbols;			/**< See symbols.h */
 }
 GeanyFunctions;
 
@@ -635,6 +636,14 @@ typedef struct StashFuncs
 	void (*stash_group_update)(struct StashGroup *group, GtkWidget *owner);
 }
 StashFuncs;
+
+
+/* See symbols.h */
+typedef struct SymbolsFuncs
+{
+	const gchar*	(*symbols_get_context_separator)(gint ft_id);
+}
+SymbolsFuncs;
 
 
 /* Deprecated aliases */

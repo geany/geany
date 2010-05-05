@@ -21,6 +21,11 @@
  * $Id$
  */
 
+/**
+ * @file symbols.h
+ * Tag-related functions.
+ **/
+
 /*
  * Symbol Tree and TagManager-related convenience functions.
  * TagManager parses tags for each document, and also adds them to the workspace (session).
@@ -269,6 +274,13 @@ GString *symbols_find_tags_as_string(GPtrArray *tags_array, guint tag_types, gin
 }
 
 
+/** Gets the context separator used by the tag manager for a particular file
+ * type.
+ * @param ft_id File type identifier.
+ * @return The context separator string.
+ *
+ * @since 0.19
+ */
 const gchar *symbols_get_context_separator(gint ft_id)
 {
 	switch (ft_id)

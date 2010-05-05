@@ -9,6 +9,10 @@
    Add {project}, {description} template wildcards (#2954737).
  * doc/geany.txt, doc/geany.html:
    Divide template wildcards into groups.
+ * src/plugindata.h, src/plugins.c, src/symbols.c,
+   plugins/geanyfunctions.h:
+   Add symbols_get_context_separator() to plugin API (patch by Colomban
+   Wendling, thanks).
 
 
 2010-05-03  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

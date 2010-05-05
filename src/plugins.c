@@ -57,6 +57,7 @@
 #include "main.h"
 #include "toolbar.h"
 #include "stash.h"
+#include "symbols.h"
 #include "keyfile.h"
 #include "win32.h"
 #include "pluginutils.h"
@@ -326,6 +327,10 @@ static StashFuncs stash_funcs = {
 	&stash_group_update
 };
 
+static SymbolsFuncs symbols_funcs = {
+	&symbols_get_context_separator
+};
+
 static GeanyFunctions geany_functions = {
 	&doc_funcs,
 	&sci_funcs,
@@ -347,7 +352,8 @@ static GeanyFunctions geany_functions = {
 	&plugin_funcs,
 	&scintilla_funcs,
 	&msgwin_funcs,
-	&stash_funcs
+	&stash_funcs,
+	&symbols_funcs
 };
 
 static GeanyData geany_data;
