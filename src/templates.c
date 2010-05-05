@@ -39,6 +39,7 @@
 #include "ui_utils.h"
 #include "toolbar.h"
 #include "geanymenubuttonaction.h"
+#include "project.h"
 
 
 GeanyTemplatePrefs template_prefs;
@@ -307,6 +308,8 @@ void templates_replace_common(GString *template, const gchar *fname,
 
 	templates_replace_valist(template,
 		"{filename}", shortname,
+		"{project}", app->project ? app->project->name : "",
+		"{description}", app->project ? app->project->description : "",
 		NULL);
 	g_free(shortname);
 

@@ -4286,6 +4286,10 @@ filename       The filename of the current file.             file header, snippe
                Only replaced when first saving if found on   templates.
                the first 3 lines of the file.
 
+project        The current project's name, if any.           file header, snippets, file templates.
+
+description    The current project's description, if any.    file header, snippets, file templates.
+
 gpl            This wildcard inserts a short GPL notice.     file header.
 
 bsd            This wildcard inserts a BSD licence notice.   file header.

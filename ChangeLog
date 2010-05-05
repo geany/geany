@@ -5,6 +5,8 @@
    Fix replacing {filename} template wildcard for custom file
    templates with non-default file extension.
    Add search_find_text() for POSIX regex searches.
+ * src/templates.c, doc/geany.txt, doc/geany.html:
+   Add {project}, {description} template wildcards (#2954737).
 
 
 2010-05-03  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
