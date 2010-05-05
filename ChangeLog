@@ -1,3 +1,12 @@
+2010-05-05  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/search.c, src/search.h, src/document.c, doc/geany.txt,
+   doc/geany.html:
+   Fix replacing {filename} template wildcard for custom file
+   templates with non-default file extension.
+   Add search_find_text() for POSIX regex searches.
+
+
 2010-05-03  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/keybindings.c:

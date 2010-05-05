@@ -1763,7 +1763,7 @@ gint search_replace_target(ScintillaObject *sci, const gchar *replace_text,
 }
 
 
-static gint search_find_text(ScintillaObject *sci, gint flags, struct Sci_TextToFind *ttf)
+gint search_find_text(ScintillaObject *sci, gint flags, struct Sci_TextToFind *ttf)
 {
 	regex_t regex;
 	gint pos;
@@ -1777,7 +1777,8 @@ static gint search_find_text(ScintillaObject *sci, gint flags, struct Sci_TextTo
 
 	pos = ttf->chrg.cpMin;
 	ret = find_regex(sci, pos, &regex);
-	if (ret >= 0)
+
+	if (ret >= 0 && ret < ttf->chrg.cpMax)
 	{
 		ttf->chrgText.cpMin = regex_matches[0].rm_so + pos;
 		ttf->chrgText.cpMax = regex_matches[0].rm_eo + pos;

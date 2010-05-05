@@ -4282,7 +4282,9 @@ datetime [1]_  The current date and time. Default format:    file templates, fil
                DD.MM.YYYY HH:mm:ss ZZZZ.                     function description, ChangeLog entry,
                                                              bsd, gpl, snippets.
 
-filename       The filename of the current file.             file header, snippets.
+filename       The filename of the current file.             file header, snippets, file
+               Only replaced when first saving if found on   templates.
+               the first 3 lines of the file.
 
 gpl            This wildcard inserts a short GPL notice.     file header.
 
@@ -4293,7 +4295,7 @@ functionname   The function name of the function at the      function descriptio
                replaced in the function description.
                template.
 
-fileheader     The file header template. This wildcard       file header, snippets, file.
+fileheader     The file header template. This wildcard       file header, snippets, file
                will only be replaced in filetype             templates.
                templates.
 
