@@ -1129,24 +1129,25 @@ static GeanyIndentType detect_indent_type(GeanyEditor *editor)
 }
 
 
-static void set_indentation(GeanyEditor *editor)
+void document_apply_indent_settings(GeanyDocument *doc)
 {
-	const GeanyIndentPrefs *iprefs = editor_get_indent_prefs(editor);
+	const GeanyIndentPrefs *iprefs = editor_get_indent_prefs(NULL);
+	GeanyIndentType type = iprefs->type;
 
-	switch (FILETYPE_ID(editor->document->file_type))
+	switch (FILETYPE_ID(doc->file_type))
 	{
 		case GEANY_FILETYPES_MAKE:
 			/* force using tabs for indentation for Makefiles */
-			editor_set_indent_type(editor, GEANY_INDENT_TYPE_TABS);
+			editor_set_indent_type(doc->editor, GEANY_INDENT_TYPE_TABS);
 			return;
 		case GEANY_FILETYPES_F77:
 			/* force using spaces for indentation for Fortran 77 */
-			editor_set_indent_type(editor, GEANY_INDENT_TYPE_SPACES);
+			editor_set_indent_type(doc->editor, GEANY_INDENT_TYPE_SPACES);
 			return;
 	}
 	if (iprefs->detect_type)
 	{
-		GeanyIndentType type = detect_indent_type(editor);
+		type = detect_indent_type(doc->editor);
 
 		if (type != iprefs->type)
 		{
@@ -1167,10 +1168,10 @@ static void set_indentation(GeanyEditor *editor)
 			/* For translators: first wildcard is the indentation mode (Spaces, Tabs, Tabs
 			 * and Spaces), the second one is the filename */
 			ui_set_statusbar(TRUE, _("Setting %s indentation mode for %s."), name,
-				DOC_FILENAME(editor->document));
+				DOC_FILENAME(doc));
 		}
-		editor_set_indent_type(editor, type);
 	}
+	editor_set_indent_type(doc->editor, type);
 }
 
 
@@ -1321,7 +1322,7 @@ GeanyDocument *document_open_file_full(GeanyDocument *doc, const gchar *filename
 		if (reload)
 			editor_set_indent_type(doc->editor, doc->editor->indent_type); /* resetup sci */
 		else
-			set_indentation(doc->editor);
+			document_apply_indent_settings(doc);
 
 		document_set_text_changed(doc, FALSE);	/* also updates tab state */
 		ui_document_show_hide(doc);	/* update the document menu */

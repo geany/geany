@@ -252,4 +252,6 @@ gchar *document_get_basename_for_display(GeanyDocument *doc, gint length);
 
 gboolean document_need_save_as(GeanyDocument *doc);
 
+void document_apply_indent_settings(GeanyDocument *doc);
+
 #endif
