@@ -1,3 +1,10 @@
+2010-05-06  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/build.c:
+   Fix marking some strings as translatable (cannot be done in the
+   ASSIGNIF macro).
+
+
 2010-05-05  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/search.c, src/search.h, src/document.c, doc/geany.txt,

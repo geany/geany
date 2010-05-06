@@ -2356,7 +2356,7 @@ void build_load_menu(GKeyFile *config, GeanyBuildSource src, gpointer p)
 #define ASSIGNIF(type, id, string, value) \
 	if (NZV(value) && ! type[GBO_TO_CMD(id)].exists) { \
 		type[GBO_TO_CMD(id)].exists = TRUE; \
-		setptr(type[GBO_TO_CMD(id)].entries[GEANY_BC_LABEL], g_strdup(_(string))); \
+		setptr(type[GBO_TO_CMD(id)].entries[GEANY_BC_LABEL], g_strdup(string)); \
 		setptr(type[GBO_TO_CMD(id)].entries[GEANY_BC_COMMAND], (value)); \
 		setptr(type[GBO_TO_CMD(id)].entries[GEANY_BC_WORKING_DIR], NULL); \
 		type[GBO_TO_CMD(id)].old = TRUE; \
@@ -2372,21 +2372,21 @@ void build_load_menu(GKeyFile *config, GeanyBuildSource src, gpointer p)
 			{
 				if (ft->filecmds == NULL)
 					ft->filecmds = g_new0(GeanyBuildCommand, build_groups_count[GEANY_GBG_FT]);
-				ASSIGNIF(ft->filecmds, GEANY_GBO_COMPILE, "_Compile", value);
+				ASSIGNIF(ft->filecmds, GEANY_GBO_COMPILE, _("_Compile"), value);
 			}
 			value = g_key_file_get_string(config, "build_settings", "linker", NULL);
 			if (value != NULL)
 			{
 				if (ft->filecmds == NULL)
 					ft->filecmds = g_new0(GeanyBuildCommand, build_groups_count[GEANY_GBG_FT]);
-				ASSIGNIF(ft->filecmds, GEANY_GBO_BUILD, "_Build", value);
+				ASSIGNIF(ft->filecmds, GEANY_GBO_BUILD, _("_Build"), value);
 			}
 			value = g_key_file_get_string(config, "build_settings", "run_cmd", NULL);
 			if (value != NULL)
 			{
 				if (ft->execcmds == NULL)
 					ft->execcmds = g_new0(GeanyBuildCommand, build_groups_count[GEANY_GBG_EXEC]);
-				ASSIGNIF(ft->execcmds, GEANY_GBO_EXEC, "_Execute", value);
+				ASSIGNIF(ft->execcmds, GEANY_GBO_EXEC, _("_Execute"), value);
 			}
 			if (ft->error_regex_string == NULL)
 				ft->error_regex_string = g_key_file_get_string(config, "build_settings", "error_regex", NULL);
@@ -2431,11 +2431,11 @@ void build_load_menu(GKeyFile *config, GeanyBuildSource src, gpointer p)
 			{
 				if (non_ft_pref == NULL)
 					non_ft_pref = g_new0(GeanyBuildCommand, build_groups_count[GEANY_GBG_NON_FT]);
-				ASSIGNIF(non_ft_pref, GEANY_GBO_CUSTOM, "Make Custom _Target",
+				ASSIGNIF(non_ft_pref, GEANY_GBO_CUSTOM, _("Make Custom _Target"),
 						g_strdup_printf("%s ", value));
-				ASSIGNIF(non_ft_pref, GEANY_GBO_MAKE_OBJECT, "Make _Object",
+				ASSIGNIF(non_ft_pref, GEANY_GBO_MAKE_OBJECT, _("Make _Object"),
 						g_strdup_printf("%s %%e.o",value));
-				ASSIGNIF(non_ft_pref, GEANY_GBO_MAKE_ALL, "_Make", value);
+				ASSIGNIF(non_ft_pref, GEANY_GBO_MAKE_ALL, _("_Make"), value);
 			}
 			break;
 		default:
