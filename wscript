@@ -206,9 +206,9 @@ def configure(conf):
 		conf.check_tool('intltool')
 		if 'LINGUAS' in os.environ:
 			conf.env['LINGUAS'] = os.environ['LINGUAS']
-	except:
-		pass
-
+	except Configure.ConfigurationError:
+		if not is_win32:
+			raise
 
 	# GTK / GIO version check
 	conf.check_cfg(package='gtk+-2.0', atleast_version='2.8.0', uselib_store='GTK',
@@ -531,7 +531,7 @@ def write_linguas_file(self):
 	if 'LINGUAS' in Build.bld.env:
 		files = Build.bld.env['LINGUAS']
 		for po_filename in files.split(' '):
-			if os.path.exists ('po/%s.po' % po_filename):
+			if os.path.exists('po/%s.po' % po_filename):
 				linguas += '%s ' % po_filename
 	else:
 		files = os.listdir('%s/po' % self.path.abspath())
