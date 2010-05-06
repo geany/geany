@@ -2182,8 +2182,8 @@ a document, such as the file header. You only need to set fields that
 you want to use in your template files.
 
 .. note::
-    For changes made here to take effect, either selecting
-    *Tools->Reload Configuration* or restarting Geany is required.
+    For changes made here to take effect, you must either select
+    *Tools->Reload Configuration* or restart Geany.
 
 .. image:: ./images/pref_dialog_templ.png
 
@@ -4153,6 +4153,11 @@ of a function or the function name cannot be determined, the inserted
 function description won't contain the correct function name but "unknown"
 instead.
 
+.. note::
+    Geany automatically reloads template information when it notices you
+    save a file in the user's template configuration directory. You can
+    also force this by selecting *Tools->Reload Configuration*.
+
 
 Template meta data
 ^^^^^^^^^^^^^^^^^^
@@ -4197,8 +4202,7 @@ any. For example, creating a file ``module.c`` would add a menu item
 which created a new document with the filetype set to 'C'.
 
 The template file is read from disk when the corresponding menu item is
-clicked, so you don't need to select *Tools->Reload Configuration* or restart
-Geany after editing a custom file template.
+clicked.
 
 Filetype templates
 ``````````````````

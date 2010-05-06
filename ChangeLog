@@ -3,6 +3,8 @@
  * src/build.c:
    Fix marking some strings as translatable (cannot be done in the
    ASSIGNIF macro).
+ * src/templates.c:
+   Reload templates if saving a document in the templates config dir.
 
 
 2010-05-05  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

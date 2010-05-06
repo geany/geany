@@ -465,6 +465,22 @@ static void on_file_menu_hide(GtkWidget *item)
 }
 
 
+/* reload templates if any file in the templates path is saved */
+static void on_document_save(G_GNUC_UNUSED GObject *object, GeanyDocument *doc)
+{
+	const gchar *path = utils_build_path(app->configdir, GEANY_TEMPLATES_SUBDIR, NULL);
+
+	g_return_if_fail(NZV(doc->real_path));
+
+	if (strncmp(doc->real_path, path, strlen(path)) == 0)
+	{
+		/* reload templates */
+		templates_free_templates();
+		templates_init();
+	}
+}
+
+
 void templates_init(void)
 {
 	gchar *year = utils_get_date_time(template_prefs.year_format, NULL);
@@ -488,6 +504,8 @@ void templates_init(void)
 	item = gtk_menu_item_get_submenu(GTK_MENU_ITEM(item));
 	g_signal_connect(item, "show", G_CALLBACK(on_file_menu_show), NULL);
 	g_signal_connect(item, "hide", G_CALLBACK(on_file_menu_hide), NULL);
+
+	g_signal_connect(geany_object, "document-save", G_CALLBACK(on_document_save), NULL);
 }
 
 
