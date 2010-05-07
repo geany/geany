@@ -481,12 +481,13 @@ static void on_document_save(G_GNUC_UNUSED GObject *object, GeanyDocument *doc)
 }
 
 
+/* warning: also called when reloading template settings */
 void templates_init(void)
 {
 	gchar *year = utils_get_date_time(template_prefs.year_format, NULL);
 	gchar *date = utils_get_date_time(template_prefs.date_format, NULL);
 	gchar *datetime = utils_get_date_time(template_prefs.datetime_format, NULL);
-	GtkWidget *item;
+	static gboolean init_done = FALSE;
 
 	init_general_templates(year, date, datetime);
 	init_ft_templates(year, date, datetime);
@@ -499,13 +500,19 @@ void templates_init(void)
 	/* we hold our own ref for the menu as it has no parent whilst being moved */
 	g_object_ref(new_with_template_menu);
 
-	/* reparent the template menu as needed */
-	item = ui_lookup_widget(main_widgets.window, "file1");
-	item = gtk_menu_item_get_submenu(GTK_MENU_ITEM(item));
-	g_signal_connect(item, "show", G_CALLBACK(on_file_menu_show), NULL);
-	g_signal_connect(item, "hide", G_CALLBACK(on_file_menu_hide), NULL);
+	/* only connect signals to persistent objects once */
+	if (!init_done)
+	{
+		GtkWidget *item;
+		/* reparent the template menu as needed */
+		item = ui_lookup_widget(main_widgets.window, "file1");
+		item = gtk_menu_item_get_submenu(GTK_MENU_ITEM(item));
+		g_signal_connect(item, "show", G_CALLBACK(on_file_menu_show), NULL);
+		g_signal_connect(item, "hide", G_CALLBACK(on_file_menu_hide), NULL);
 
-	g_signal_connect(geany_object, "document-save", G_CALLBACK(on_document_save), NULL);
+		g_signal_connect(geany_object, "document-save", G_CALLBACK(on_document_save), NULL);
+	}
+	init_done = TRUE;
 }
 
 
