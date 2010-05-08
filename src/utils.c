@@ -292,7 +292,19 @@ gchar *utils_find_open_xml_tag(const gchar sel[], gint size, gboolean check_tag)
 	else
 		cur = &sel[size - 1];
 
-	cur--; /* Skip past the > */
+	/* Skip to the character before the closing brace */
+	while (cur > begin)
+	{
+		if (*cur == '>')
+			break;
+		--cur;
+	}
+	--cur;
+	/* skip whitespace */
+	while (cur > begin && isspace(*cur))
+		cur--;
+	if (*cur == '/')
+		return NULL; /* we found a short tag which doesn't need to be closed */
 	while (cur > begin)
 	{
 		if (*cur == '<') break;

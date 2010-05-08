@@ -3,6 +3,8 @@
  * src/highlighting.c:
    Apply foreground and background colours of the folding margin
    style properly (closes #2998347).
+ * src/utils.c:
+   Don't auto-close short XML tags (closes #2994852).
 
 
 2010-05-07  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
