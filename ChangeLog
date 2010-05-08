@@ -1,3 +1,10 @@
+2010-05-08  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/highlighting.c:
+   Apply foreground and background colours of the folding margin
+   style properly (closes #2998347).
+
+
 2010-05-07  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/templates.c:

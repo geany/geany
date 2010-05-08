@@ -750,20 +750,34 @@ static void styleset_common(ScintillaObject *sci, filetype_id ft_id)
 			break;
 	}
 
-	SSM(sci, SCI_MARKERSETFORE, SC_MARKNUM_FOLDEROPEN, 0xffffff);
-	SSM(sci, SCI_MARKERSETBACK, SC_MARKNUM_FOLDEROPEN, 0x000000);
-	SSM(sci, SCI_MARKERSETFORE, SC_MARKNUM_FOLDER, 0xffffff);
-	SSM(sci, SCI_MARKERSETBACK, SC_MARKNUM_FOLDER, 0x000000);
-	SSM(sci, SCI_MARKERSETFORE, SC_MARKNUM_FOLDERSUB, 0xffffff);
-	SSM(sci, SCI_MARKERSETBACK, SC_MARKNUM_FOLDERSUB, 0x000000);
-	SSM(sci, SCI_MARKERSETFORE, SC_MARKNUM_FOLDERTAIL, 0xffffff);
-	SSM(sci, SCI_MARKERSETBACK, SC_MARKNUM_FOLDERTAIL, 0x000000);
-	SSM(sci, SCI_MARKERSETFORE, SC_MARKNUM_FOLDEREND, 0xffffff);
-	SSM(sci, SCI_MARKERSETBACK, SC_MARKNUM_FOLDEREND, 0x000000);
-	SSM(sci, SCI_MARKERSETFORE, SC_MARKNUM_FOLDEROPENMID, 0xffffff);
-	SSM(sci, SCI_MARKERSETBACK, SC_MARKNUM_FOLDEROPENMID, 0x000000);
-	SSM(sci, SCI_MARKERSETFORE, SC_MARKNUM_FOLDERMIDTAIL, 0xffffff);
-	SSM(sci, SCI_MARKERSETBACK, SC_MARKNUM_FOLDERMIDTAIL, 0x000000);
+	SSM(sci, SCI_MARKERSETFORE, SC_MARKNUM_FOLDEROPEN,
+		invert(common_style_set.styling[GCS_MARGIN_FOLDING].background));
+	SSM(sci, SCI_MARKERSETBACK, SC_MARKNUM_FOLDEROPEN,
+		invert(common_style_set.styling[GCS_MARGIN_FOLDING].foreground));
+	SSM(sci, SCI_MARKERSETFORE, SC_MARKNUM_FOLDER,
+		invert(common_style_set.styling[GCS_MARGIN_FOLDING].background));
+	SSM(sci, SCI_MARKERSETBACK, SC_MARKNUM_FOLDER,
+		invert(common_style_set.styling[GCS_MARGIN_FOLDING].foreground));
+	SSM(sci, SCI_MARKERSETFORE, SC_MARKNUM_FOLDERSUB,
+		invert(common_style_set.styling[GCS_MARGIN_FOLDING].background));
+	SSM(sci, SCI_MARKERSETBACK, SC_MARKNUM_FOLDERSUB,
+		invert(common_style_set.styling[GCS_MARGIN_FOLDING].foreground));
+	SSM(sci, SCI_MARKERSETFORE, SC_MARKNUM_FOLDERTAIL,
+		invert(common_style_set.styling[GCS_MARGIN_FOLDING].background));
+	SSM(sci, SCI_MARKERSETBACK, SC_MARKNUM_FOLDERTAIL,
+		invert(common_style_set.styling[GCS_MARGIN_FOLDING].foreground));
+	SSM(sci, SCI_MARKERSETFORE, SC_MARKNUM_FOLDEREND,
+		invert(common_style_set.styling[GCS_MARGIN_FOLDING].background));
+	SSM(sci, SCI_MARKERSETBACK, SC_MARKNUM_FOLDEREND,
+		invert(common_style_set.styling[GCS_MARGIN_FOLDING].foreground));
+	SSM(sci, SCI_MARKERSETFORE, SC_MARKNUM_FOLDEROPENMID,
+		invert(common_style_set.styling[GCS_MARGIN_FOLDING].background));
+	SSM(sci, SCI_MARKERSETBACK, SC_MARKNUM_FOLDEROPENMID,
+		invert(common_style_set.styling[GCS_MARGIN_FOLDING].foreground));
+	SSM(sci, SCI_MARKERSETFORE, SC_MARKNUM_FOLDERMIDTAIL,
+		invert(common_style_set.styling[GCS_MARGIN_FOLDING].background));
+	SSM(sci, SCI_MARKERSETBACK, SC_MARKNUM_FOLDERMIDTAIL,
+		invert(common_style_set.styling[GCS_MARGIN_FOLDING].foreground));
 
 	sci_set_property(sci, "fold", "1");
 	sci_set_property(sci, "fold.compact", "0");
@@ -781,8 +795,9 @@ static void styleset_common(ScintillaObject *sci, filetype_id ft_id)
 
 	SSM(sci, SCI_SETSTYLEBITS, SSM(sci, SCI_GETSTYLEBITSNEEDED, 0, 0), 0);
 
+	/* TODO maybe we want to split the colour and hicolour to allow more fine-grained control */
 	SSM(sci, SCI_SETFOLDMARGINCOLOUR, 1, invert(common_style_set.styling[GCS_MARGIN_FOLDING].background));
-	/*SSM(sci, SCI_SETFOLDMARGINHICOLOUR, 1, invert(common_style_set.styling[GCS_MARGIN_FOLDING].background));*/
+	SSM(sci, SCI_SETFOLDMARGINHICOLOUR, 1, invert(common_style_set.styling[GCS_MARGIN_FOLDING].background));
 	set_sci_style(sci, STYLE_LINENUMBER, GEANY_FILETYPES_NONE, GCS_MARGIN_LINENUMBER);
 	set_sci_style(sci, STYLE_BRACELIGHT, GEANY_FILETYPES_NONE, GCS_BRACE_GOOD);
 	set_sci_style(sci, STYLE_BRACEBAD, GEANY_FILETYPES_NONE, GCS_BRACE_BAD);
