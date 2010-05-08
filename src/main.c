@@ -549,9 +549,12 @@ static void parse_command_line_options(gint *argc, gchar ***argv)
 	{
 		gboolean ret;
 
+		document_init_doclist();
 		filetypes_init_types();
 		filetypes_read_extensions();	/* needed for *.lang.tags filetype matching */
 		ret = symbols_generate_global_tags(*argc, *argv, ! no_preprocessing);
+		filetypes_free_types();
+		document_finalize();
 		exit(ret);
 	}
 

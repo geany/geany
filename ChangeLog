@@ -9,6 +9,9 @@
    Improve jumping to matching braces by consistently position the
    cursor before or after the matching brace dependent where it
    was before (patch by Dimitar Zhekov, thanks).
+ * src/main.c:
+   Fix crash when generating global tags files (patch by Colomban
+   Wendling, thanks).
 
 
 2010-05-07  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
