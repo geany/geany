@@ -5,6 +5,10 @@
    style properly (closes #2998347).
  * src/utils.c:
    Don't auto-close short XML tags (closes #2994852).
+ * THANKS, src/about.c, src/keybindings.c:
+   Improve jumping to matching braces by consistently position the
+   cursor before or after the matching brace dependent where it
+   was before (patch by Dimitar Zhekov, thanks).
 
 
 2010-05-07  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

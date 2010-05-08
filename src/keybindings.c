@@ -1905,18 +1905,19 @@ static void cb_func_move_tab(guint key_id)
 static void goto_matching_brace(GeanyDocument *doc)
 {
 	gint pos, new_pos;
+	gint after_brace;
 
 	if (doc == NULL)
 		return;
 
 	pos = sci_get_current_position(doc->editor->sci);
-	if (! utils_isbrace(sci_get_char_at(doc->editor->sci, pos), TRUE))
-		pos--; /* set pos to the brace */
+	after_brace = pos > 0 && utils_isbrace(sci_get_char_at(doc->editor->sci, pos - 1), TRUE);
+	pos -= after_brace;	/* set pos to the brace */
 
 	new_pos = sci_find_matching_brace(doc->editor->sci, pos);
 	if (new_pos != -1)
-	{	/* set the cursor at the brace */
-		sci_set_current_position(doc->editor->sci, new_pos, FALSE);
+	{	/* set the cursor at/after the brace */
+		sci_set_current_position(doc->editor->sci, new_pos + (!after_brace), FALSE);
 		editor_display_current_line(doc->editor, 0.5F);
 	}
 }
