@@ -96,6 +96,7 @@ typedef struct _CreateClassDialog
 } CreateClassDialog;
 
 
+/* TODO make these templates configurable */
 static const gchar templates_cpp_class_header[] = "{fileheader}\n\n\
 #ifndef {header_guard}\n\
 #define {header_guard}\n\
@@ -542,7 +543,6 @@ void show_dialog_create_class(gint type)
 			gdk_beep();
 	}
 	gtk_widget_destroy(cc_dlg->dialog);
-/*	g_object_unref(G_OBJECT(cc_dlg->dialog));	*/
 }
 
 
@@ -579,8 +579,10 @@ static void cc_dlg_on_class_name_entry_changed(GtkWidget *entry, CreateClassDial
 	else
 		class_source = g_strconcat(class_name_down, ".c", NULL);
 
-	gtk_entry_set_text(GTK_ENTRY(cc_dlg->header_entry), class_header);
-	gtk_entry_set_text(GTK_ENTRY(cc_dlg->source_entry), class_source);
+	if (cc_dlg->header_entry != NULL)
+		gtk_entry_set_text(GTK_ENTRY(cc_dlg->header_entry), class_header);
+	if (cc_dlg->source_entry != NULL)
+		gtk_entry_set_text(GTK_ENTRY(cc_dlg->source_entry), class_source);
 
 	g_free(class_name);
 	g_free(class_name_down);
@@ -825,7 +827,7 @@ static gboolean create_class(CreateClassDialog *cc_dlg)
 				class_info->implements_decl = g_strdup("");
 			g_free(tmp_str);
 
-			if ( gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(cc_dlg->create_constructor_box)) &&
+			if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(cc_dlg->create_constructor_box)) &&
 			    ! gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(cc_dlg->create_isabstract_box)))
 			{
 				class_info->constructor_impl = g_strdup_printf("\n"
@@ -919,8 +921,7 @@ static gboolean create_class(CreateClassDialog *cc_dlg)
 		g_free(text);
 	}
 
-	if (! utils_str_equal(class_info->header, "") &&
-	      class_info->type != GEANY_CLASS_TYPE_PHP)
+	if (! utils_str_equal(class_info->header, "") && class_info->type != GEANY_CLASS_TYPE_PHP)
 	{
 		text = get_template_class_header(class_info);
 		doc = document_new_file(class_info->header, NULL, NULL);
@@ -928,7 +929,7 @@ static gboolean create_class(CreateClassDialog *cc_dlg)
 		g_free(text);
 	}
 
-	free_pointers(17, tmp, class_info->class_name, class_info->class_name_up,
+	free_pointers(21, tmp, class_info->class_name, class_info->class_name_up,
 		class_info->base_name, class_info->class_name_low, class_info->base_include,
 		class_info->header, class_info->header_guard, class_info->source, class_info->base_decl,
 		class_info->constructor_decl, class_info->constructor_impl,
