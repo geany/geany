@@ -320,7 +320,7 @@ get_template_class_source(ClassInfo *class_info)
 			utils_string_replace_all(template, "{gtk_destructor_registration}",
 					class_info->gtk_destructor_registration);
 			break;
-    
+
 		case GEANY_CLASS_TYPE_PHP:
 			fileheader = templates_get_template_fileheader(GEANY_FILETYPES_PHP, class_info->source);
 			template = g_string_new(templates_php_class_source);
@@ -368,25 +368,25 @@ void show_dialog_create_class(gint type)
 	g_signal_connect_swapped(cc_dlg->dialog, "destroy", G_CALLBACK(g_free), (gpointer)cc_dlg);
 
 	main_box = ui_dialog_vbox_new(GTK_DIALOG(cc_dlg->dialog));
-	
+
 	if (type == GEANY_CLASS_TYPE_PHP)
 	{
 		frame = ui_frame_new_with_alignment(_("Namespace"), &align);
 		gtk_container_add(GTK_CONTAINER(main_box), frame);
-		
+
 		vbox = gtk_vbox_new(FALSE, 10);
 		gtk_container_add(GTK_CONTAINER(align), vbox);
-		
+
 		hbox = gtk_hbox_new(FALSE, 10);
 		gtk_container_add(GTK_CONTAINER(vbox), hbox);
-		
+
 		label = gtk_label_new(_("Namespace:"));
 		gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
-		
+
 		cc_dlg->class_namespace_entry = gtk_entry_new();
 		gtk_box_pack_start(GTK_BOX(hbox), cc_dlg->class_namespace_entry, TRUE, TRUE, 0);
 	}
-	
+
 	frame = ui_frame_new_with_alignment(_("Class"), &align);
 	gtk_container_add(GTK_CONTAINER(main_box), frame);
 
@@ -403,28 +403,28 @@ void show_dialog_create_class(gint type)
 	gtk_box_pack_start(GTK_BOX(hbox), cc_dlg->class_name_entry, TRUE, TRUE, 0);
 	g_signal_connect(cc_dlg->class_name_entry, "changed",
 			G_CALLBACK(cc_dlg_on_class_name_entry_changed), cc_dlg);
-	
-	if (type != GEANY_CLASS_TYPE_PHP) 
+
+	if (type != GEANY_CLASS_TYPE_PHP)
 	{
 		hbox = gtk_hbox_new(FALSE, 10);
 		gtk_container_add(GTK_CONTAINER(vbox), hbox);
-		
+
 		label = gtk_label_new(_("Header file:"));
 		gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
-		
+
 		cc_dlg->header_entry = gtk_entry_new();
 		gtk_container_add(GTK_CONTAINER(hbox), cc_dlg->header_entry);
 	}
-	
+
 	hbox = gtk_hbox_new(FALSE, 10);
 	gtk_container_add(GTK_CONTAINER(vbox), hbox);
-	
+
 	label = gtk_label_new(_("Source file:"));
 	gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
-	
+
 	cc_dlg->source_entry = gtk_entry_new();
 	gtk_container_add(GTK_CONTAINER(hbox), cc_dlg->source_entry);
-	
+
 	frame = ui_frame_new_with_alignment(_("Inheritance"), &align);
 	gtk_container_add(GTK_CONTAINER(main_box), frame);
 
@@ -446,25 +446,25 @@ void show_dialog_create_class(gint type)
 
 	hbox = gtk_hbox_new(FALSE, 10);
  	gtk_container_add(GTK_CONTAINER(vbox), hbox);
-	
+
 	if (type == GEANY_CLASS_TYPE_PHP)
 		label = gtk_label_new(_("Base source:"));
 	else
 		label = gtk_label_new(_("Base header:"));
 	gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
-	
+
 	cc_dlg->base_header_entry = gtk_entry_new();
 	if (type == GEANY_CLASS_TYPE_GTK)
 		gtk_entry_set_text(GTK_ENTRY(cc_dlg->base_header_entry), "glib-object.h");
 	gtk_container_add(GTK_CONTAINER(hbox), cc_dlg->base_header_entry);
-	
+
 	if (type != GEANY_CLASS_TYPE_PHP)
 	{
 		cc_dlg->base_header_global_box = gtk_check_button_new_with_label(_("Global"));
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(cc_dlg->base_header_global_box), TRUE);
 		gtk_box_pack_end(GTK_BOX(hbox), cc_dlg->base_header_global_box, FALSE, FALSE, 0);
 	}
-	
+
 	if (type == GEANY_CLASS_TYPE_GTK)
 	{
 		hbox = gtk_hbox_new(FALSE, 10);
@@ -477,19 +477,19 @@ void show_dialog_create_class(gint type)
 		gtk_entry_set_text(GTK_ENTRY(cc_dlg->base_gtype_entry), "G_TYPE_OBJECT");
 		gtk_container_add(GTK_CONTAINER(hbox), cc_dlg->base_gtype_entry);
 	}
-	
+
 	if (type == GEANY_CLASS_TYPE_PHP)
 	{
 		hbox = gtk_hbox_new(FALSE, 10);
 		gtk_container_add(GTK_CONTAINER(vbox), hbox);
-		
+
 		label = gtk_label_new(_("Implements:"));
 		gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
-		
+
 		cc_dlg->class_implements_entry = gtk_entry_new();
 		gtk_container_add(GTK_CONTAINER(hbox), cc_dlg->class_implements_entry);
 	}
-	
+
 	frame = ui_frame_new_with_alignment(_("Options"), &align);
 	gtk_container_add(GTK_CONTAINER(main_box), frame);
 
@@ -505,19 +505,19 @@ void show_dialog_create_class(gint type)
 
 	cc_dlg->create_destructor_box = gtk_check_button_new_with_label(_("Create destructor"));
 	gtk_container_add(GTK_CONTAINER(hbox), cc_dlg->create_destructor_box);
-	
+
 	if (type == GEANY_CLASS_TYPE_PHP)
 	{
 		hbox = gtk_hbox_new(FALSE, 10);
 		gtk_container_add(GTK_CONTAINER(vbox), hbox);
-		
+
 		cc_dlg->create_isabstract_box = gtk_check_button_new_with_label(_("Is abstract"));
 		gtk_container_add(GTK_CONTAINER(hbox), cc_dlg->create_isabstract_box);
-		
+
 		cc_dlg->create_issingleton_box = gtk_check_button_new_with_label(_("Is singleton"));
 		gtk_container_add(GTK_CONTAINER(hbox), cc_dlg->create_issingleton_box);
 	}
-	
+
 	if (type == GEANY_CLASS_TYPE_GTK)
 	{
 		hbox = gtk_hbox_new(FALSE, 10);
@@ -581,7 +581,7 @@ static void cc_dlg_on_class_name_entry_changed(GtkWidget *entry, CreateClassDial
 
 	gtk_entry_set_text(GTK_ENTRY(cc_dlg->header_entry), class_header);
 	gtk_entry_set_text(GTK_ENTRY(cc_dlg->source_entry), class_source);
-	
+
 	g_free(class_name);
 	g_free(class_name_down);
 	g_free(class_header);
@@ -618,7 +618,7 @@ static void cc_dlg_on_base_name_entry_changed(GtkWidget *entry, CreateClassDialo
 	g_return_if_fail(entry != NULL);
 	g_return_if_fail(GTK_IS_ENTRY(entry));
 	g_return_if_fail(cc_dlg != NULL);
-  
+
 	base_name_splitted = str_case_split(gtk_entry_get_text(GTK_ENTRY(entry)), '_');
 	if (! g_ascii_strncasecmp(gtk_entry_get_text(GTK_ENTRY(entry)), "gtk", 3))
 		/*tmp = g_strconcat("gtk/", gtk_entry_get_text(GTK_ENTRY(entry)), ".h", NULL);*/
@@ -630,12 +630,12 @@ static void cc_dlg_on_base_name_entry_changed(GtkWidget *entry, CreateClassDialo
 		tmp = g_strconcat(gtk_entry_get_text(GTK_ENTRY(entry)), ".php", NULL);
 	else
 		tmp = g_strconcat(gtk_entry_get_text(GTK_ENTRY(entry)), ".h", NULL);
-	
+
 	if (cc_dlg->class_type == GEANY_CLASS_TYPE_PHP)
 		base_header = g_strdup(tmp);
 	else
 		base_header = g_ascii_strdown(tmp, -1);
-	
+
 	g_free(tmp);
 
 	gtk_entry_set_text(GTK_ENTRY(cc_dlg->base_header_entry), base_header);
@@ -684,7 +684,7 @@ static gboolean create_class(CreateClassDialog *cc_dlg)
 	if (! utils_str_equal(gtk_entry_get_text(GTK_ENTRY(cc_dlg->base_name_entry)), ""))
 	{
 		class_info->base_name = g_strdup(gtk_entry_get_text(GTK_ENTRY(cc_dlg->base_name_entry)));
-		if (class_info->type != GEANY_CLASS_TYPE_PHP) 
+		if (class_info->type != GEANY_CLASS_TYPE_PHP)
 		{
 			class_info->base_include = g_strdup_printf("\n#include %c%s%c\n",
 				gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(cc_dlg->base_header_global_box)) ?
@@ -695,7 +695,7 @@ static gboolean create_class(CreateClassDialog *cc_dlg)
 		}
 		else
 		{
-			class_info->base_include = g_strdup_printf("\nrequire_once \"%s\";\n", 
+			class_info->base_include = g_strdup_printf("\nrequire_once \"%s\";\n",
 				gtk_entry_get_text(GTK_ENTRY(cc_dlg->base_header_entry)));
 				class_info->base_decl = g_strdup_printf(" extends %s", class_info->base_name);
 		}
@@ -809,23 +809,23 @@ static gboolean create_class(CreateClassDialog *cc_dlg)
 		case GEANY_CLASS_TYPE_PHP:
 		{
 			gchar *tmp;
-			
+
 			class_info->source = g_strdup(gtk_entry_get_text(GTK_ENTRY(cc_dlg->source_entry)));
-			
+
 			tmp = g_strdup(gtk_entry_get_text(GTK_ENTRY(cc_dlg->class_namespace_entry)));
 			if (! utils_str_equal(tmp, ""))
 				class_info->namespace_decl = g_strdup_printf("namespace %s;", tmp);
 			else
 				class_info->namespace_decl = g_strdup("");
-			
+
 			tmp = g_strdup(gtk_entry_get_text(GTK_ENTRY(cc_dlg->class_implements_entry)));
 			if (! utils_str_equal(tmp, ""))
 				class_info->implements_decl = g_strdup_printf(" implements %s", tmp);
 			else
 				class_info->implements_decl = g_strdup("");
 			g_free(tmp);
-			
-			if ( gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(cc_dlg->create_constructor_box)) && 
+
+			if ( gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(cc_dlg->create_constructor_box)) &&
 			    ! gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(cc_dlg->create_isabstract_box)))
 			{
 				class_info->constructor_impl = g_strdup_printf("\n"
@@ -840,7 +840,7 @@ static gboolean create_class(CreateClassDialog *cc_dlg)
 					"\t}\n",
 					class_info->class_name);
 			}
-			else if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(cc_dlg->create_constructor_box)) && 
+			else if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(cc_dlg->create_constructor_box)) &&
 			         gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(cc_dlg->create_isabstract_box)))
 			{
 				class_info->constructor_impl = g_strdup_printf("\n"
@@ -855,9 +855,9 @@ static gboolean create_class(CreateClassDialog *cc_dlg)
 					"\t}\n",
 					class_info->class_name);
 			}
-			else 
+			else
 				class_info->constructor_impl = g_strdup("");
-			
+
 			if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(cc_dlg->create_destructor_box)))
 			{
 				class_info->destructor_impl = g_strdup_printf("\n"
@@ -874,12 +874,12 @@ static gboolean create_class(CreateClassDialog *cc_dlg)
 			}
 			else
 				class_info->destructor_impl = g_strdup("");
-			
+
 			if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(cc_dlg->create_isabstract_box)))
 				class_info->abstract_decl = g_strdup("abstract ");
-			else 
+			else
 				class_info->abstract_decl = g_strdup("");
-			
+
 			if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(cc_dlg->create_issingleton_box)))
 			{
 				class_info->singleton_impl = g_strdup_printf("\n"
@@ -900,8 +900,8 @@ static gboolean create_class(CreateClassDialog *cc_dlg)
 					"\t\t}\n"
 					"\t\treturn self::$kInstance;\n"
 					"\t}\n",
-					class_info->class_name, 
-					class_info->class_name, 
+					class_info->class_name,
+					class_info->class_name,
 					class_info->class_name);
 			}
 			else
@@ -909,7 +909,7 @@ static gboolean create_class(CreateClassDialog *cc_dlg)
 			break;
 		}
 	}
-	
+
 	/* only create the files if the filename is not empty */
 	if (! utils_str_equal(class_info->source, ""))
 	{
@@ -919,7 +919,7 @@ static gboolean create_class(CreateClassDialog *cc_dlg)
 		g_free(text);
 	}
 
-	if (! utils_str_equal(class_info->header, "") && 
+	if (! utils_str_equal(class_info->header, "") &&
 	      class_info->type != GEANY_CLASS_TYPE_PHP)
 	{
 		text = get_template_class_header(class_info);
@@ -933,8 +933,8 @@ static gboolean create_class(CreateClassDialog *cc_dlg)
 		class_info->header, class_info->header_guard, class_info->source, class_info->base_decl,
 		class_info->constructor_decl, class_info->constructor_impl,
 		class_info->gtk_destructor_registration, class_info->destructor_decl,
-		class_info->destructor_impl, class_info->base_gtype, 
-		class_info->namespace_decl, class_info->implements_decl, 
+		class_info->destructor_impl, class_info->base_gtype,
+		class_info->namespace_decl, class_info->implements_decl,
 		class_info->abstract_decl, class_info->singleton_impl, class_info, NULL);
 	return TRUE;
 }
@@ -956,7 +956,7 @@ on_menu_create_gtk_class_activate      (GtkMenuItem     *menuitem,
 }
 
 
-static void 
+static void
 on_menu_create_php_class_activate	(GtkMenuItem	*menuitem,
 					 gpointer	user_data)
 {
@@ -983,7 +983,7 @@ void plugin_init(GeanyData *data)
 
 	menu_create_gtk_class = gtk_menu_item_new_with_mnemonic (_("_GTK+ Class"));
 	gtk_container_add (GTK_CONTAINER (menu_create_class1_menu), menu_create_gtk_class);
-	
+
 	menu_create_php_class = gtk_menu_item_new_with_mnemonic (_("_PHP Class"));
 	gtk_container_add (GTK_CONTAINER (menu_create_class1_menu), menu_create_php_class);
 
@@ -994,7 +994,7 @@ void plugin_init(GeanyData *data)
 		G_CALLBACK (on_menu_create_gtk_class_activate),
 		NULL);
 	g_signal_connect(menu_create_php_class, "activate",
-		G_CALLBACK (on_menu_create_php_class_activate), 
+		G_CALLBACK (on_menu_create_php_class_activate),
 		NULL);
 
 	gtk_widget_show_all(menu_create_class1);
