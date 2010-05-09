@@ -48,6 +48,9 @@ void dialogs_show_color(gchar *colour);
 gchar *dialogs_show_input(const gchar *title, const gchar *label_text,
 	const gchar *default_text);
 
+gchar *dialogs_show_input_goto_line(const gchar *title, const gchar *label_text,
+	const gchar *default_text);
+
 GtkWidget *dialogs_show_input_persistent(const gchar *title, const gchar *label_text,
 	const gchar *default_text, GeanyInputCallback input_cb);
 

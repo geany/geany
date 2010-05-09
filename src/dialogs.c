@@ -838,7 +838,8 @@ on_input_dialog_response(GtkDialog *dialog,
 
 
 static void add_input_widgets(GtkWidget *dialog, GtkWidget *vbox,
-		const gchar *label_text, const gchar *default_text, gboolean persistent)
+		const gchar *label_text, const gchar *default_text, gboolean persistent,
+		GCallback insert_text_cb)
 {
 	GtkWidget *entry;
 
@@ -873,6 +874,8 @@ static void add_input_widgets(GtkWidget *dialog, GtkWidget *vbox,
 	gtk_entry_set_max_length(GTK_ENTRY(entry), 255);
 	gtk_entry_set_width_chars(GTK_ENTRY(entry), 30);
 
+	if (insert_text_cb != NULL)
+		g_signal_connect(entry, "insert-text", insert_text_cb, NULL);
 	g_signal_connect(entry, "activate", G_CALLBACK(on_input_entry_activate), dialog);
 	g_signal_connect(dialog, "show", G_CALLBACK(on_input_dialog_show), entry);
 	g_signal_connect(dialog, "response", G_CALLBACK(on_input_dialog_response), entry);
@@ -886,7 +889,7 @@ static void add_input_widgets(GtkWidget *dialog, GtkWidget *vbox,
  * Returns: the dialog widget. */
 static GtkWidget *
 dialogs_show_input_full(const gchar *title, const gchar *label_text, const gchar *default_text,
-						gboolean persistent, GeanyInputCallback input_cb)
+						gboolean persistent, GeanyInputCallback input_cb, GCallback insert_text_cb)
 {
 	GtkWidget *dialog, *vbox;
 
@@ -900,7 +903,7 @@ dialogs_show_input_full(const gchar *title, const gchar *label_text, const gchar
 	g_object_set_data(G_OBJECT(dialog), "has_combo", GINT_TO_POINTER(persistent));
 	g_object_set_data(G_OBJECT(dialog), "input_cb", (gpointer) input_cb);
 
-	add_input_widgets(dialog, vbox, label_text, default_text, persistent);
+	add_input_widgets(dialog, vbox, label_text, default_text, persistent, insert_text_cb);
 
 	if (persistent)
 	{
@@ -922,7 +925,7 @@ GtkWidget *
 dialogs_show_input_persistent(const gchar *title, const gchar *label_text, const gchar *default_text,
 		GeanyInputCallback input_cb)
 {
-	return dialogs_show_input_full(title, label_text, default_text, TRUE, input_cb);
+	return dialogs_show_input_full(title, label_text, default_text, TRUE, input_cb, NULL);
 }
 
 
@@ -940,7 +943,20 @@ gchar *dialogs_show_input(const gchar *title, const gchar *label_text,
 	const gchar *default_text)
 {
 	dialog_input = NULL;
-	dialogs_show_input_full(title, label_text, default_text, FALSE, on_dialog_input);
+	dialogs_show_input_full(title, label_text, default_text, FALSE, on_dialog_input, NULL);
+	return NVL(dialog_input, g_strdup(default_text));
+}
+
+
+/* Returns: newly allocated string - a copy of either the entry text or default_text.
+ * Specialised variant for Goto Line dialog. */
+gchar *dialogs_show_input_goto_line(const gchar *title, const gchar *label_text,
+	const gchar *default_text)
+{
+	dialog_input = NULL;
+	dialogs_show_input_full(
+		title, label_text, default_text, FALSE, on_dialog_input,
+		G_CALLBACK(ui_editable_insert_text_callback));
 	return NVL(dialog_input, g_strdup(default_text));
 }
 
