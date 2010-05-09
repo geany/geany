@@ -93,21 +93,13 @@ static void delegate_entry_changed_cb(GtkEditable *editable, GeanyEntryAction *a
 }
 
 
-static void entry_insert_text_cb(GtkEditable *editable, gchar *new_text, gint new_text_len,
-								 gint *position, GeanyEntryAction *action)
-{
-	/* don't insert any text when it is not a digit */
-	if (! isdigit(*new_text))
-		g_signal_stop_emission_by_name(editable, "insert-text");
-}
-
-
 static void geany_entry_action_connect_proxy(GtkAction *action, GtkWidget *widget)
 {
 	GeanyEntryActionPrivate *priv = GEANY_ENTRY_ACTION_GET_PRIVATE(action);
 
 	if (priv->numeric)
-		g_signal_connect(priv->entry, "insert-text", G_CALLBACK(entry_insert_text_cb), action);
+		g_signal_connect(priv->entry, "insert-text",
+			G_CALLBACK(ui_editable_insert_text_callback), NULL);
 	g_signal_connect(priv->entry, "changed", G_CALLBACK(delegate_entry_changed_cb), action);
 	g_signal_connect(priv->entry, "activate", G_CALLBACK(delegate_entry_activate_cb), action);
 

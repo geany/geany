@@ -4589,15 +4589,22 @@ void editor_set_indent_type(GeanyEditor *editor, GeanyIndentType type)
 
 
 /* Convenience function for editor_goto_pos() to pass in a line number. */
-gboolean editor_goto_line(GeanyEditor *editor, gint line)
+gboolean editor_goto_line(GeanyEditor *editor, gint line_no, gint offset)
 {
 	gint pos;
 
 	g_return_val_if_fail(editor, FALSE);
-	if (line < 0 || line >= sci_get_line_count(editor->sci))
+	if (line_no < 0 || line_no >= sci_get_line_count(editor->sci))
 		return FALSE;
 
-	pos = sci_get_position_from_line(editor->sci, line);
+	if (offset != 0)
+	{
+		gint current_line = sci_get_current_line(editor->sci);
+		line_no *= offset;
+		line_no = current_line + line_no;
+	}
+
+	pos = sci_get_position_from_line(editor->sci, line_no);
 	return editor_goto_pos(editor, pos, TRUE);
 }
 

@@ -1176,21 +1176,45 @@ on_find_in_files1_activate             (GtkMenuItem     *menuitem,
 }
 
 
+static void get_line_and_offset_from_text(const gchar *text, gint *line_no, gint *offset)
+{
+	if (*text == '+' || *text == '-')
+	{
+		*line_no = atoi(text + 1);
+		*offset = (*text == '+') ? 1 : -1;
+	}
+	else
+	{
+		*line_no = atoi(text) - 1;
+		*offset = 0;
+	}
+}
+
+
 void
 on_go_to_line_activate                 (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	static gdouble val = 1;
+	static gchar value[16] = "";
+	gchar *result;
 
-	if (dialogs_show_input_numeric(_("Go to Line"), _("Enter the line you want to go to:"),
-			&val, 1, 100000000, 1))
+	result = dialogs_show_input_goto_line(
+		_("Go to Line"), _("Enter the line you want to go to:"), value);
+	if (result != NULL)
 	{
 		GeanyDocument *doc = document_get_current();
+		gint offset;
+		gint line_no;
 
 		g_return_if_fail(doc != NULL);
 
-		if (! editor_goto_line(doc->editor, (gint) val - 1))
+		get_line_and_offset_from_text(result, &line_no, &offset);
+		if (! editor_goto_line(doc->editor, line_no, offset))
 			utils_beep();
+		/* remember value for future calls */
+		g_snprintf(value, sizeof(value), "%s", result);
+
+		g_free(result);
 	}
 }
 
@@ -1199,10 +1223,13 @@ void
 on_toolbutton_goto_entry_activate(GtkAction *action, const gchar *text, gpointer user_data)
 {
 	GeanyDocument *doc = document_get_current();
+	gint offset;
+	gint line_no;
 
 	g_return_if_fail(doc != NULL);
 
-	if (! editor_goto_line(doc->editor, atoi(text) - 1))
+	get_line_and_offset_from_text(text, &line_no, &offset);
+	if (! editor_goto_line(doc->editor, line_no, offset))
 		utils_beep();
 	else
 		keybindings_send_command(GEANY_KEY_GROUP_FOCUS, GEANY_KEYS_FOCUS_EDITOR);

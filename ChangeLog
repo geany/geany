@@ -5,9 +5,12 @@
  * src/ui_utils.h, src/ui_utils.c:
    Add public, generic callback ui_editable_insert_text_callback()
    to restrict GtkEntry text inputs to +/- and numeric values only.
- * src/dialogsh, src/dialogs.c:
+ * src/dialogs.h, src/dialogs.c:
    Add special variant dialogs_show_input_goto_line() to use a normal
    GtkEntry together with dialogs_show_input_goto_line() for text input.
+ * src/geanyentryaction.c, src/callbacks.c, src/editor.c, src/editor.h:
+   Allow '+<number' and '-<number>' as values for Goto Line inputs
+   to jump relative to the current line (closes #2997238).
 
 
 2010-05-08  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
