@@ -707,9 +707,12 @@ static gboolean create_class(CreateClassDialog *cc_dlg)
 		class_info->base_name = g_strdup("");
 		class_info->base_include = g_strdup("");
 	}
-	class_info->header = g_strdup(gtk_entry_get_text(GTK_ENTRY(cc_dlg->header_entry)));
-	class_info->header_guard = g_ascii_strup(class_info->header, -1);
-	g_strdelimit(class_info->header_guard, ".-", '_');
+	if (cc_dlg->header_entry != NULL)
+	{
+		class_info->header = g_strdup(gtk_entry_get_text(GTK_ENTRY(cc_dlg->header_entry)));
+		class_info->header_guard = g_ascii_strup(class_info->header, -1);
+		g_strdelimit(class_info->header_guard, ".-", '_');
+	}
 	switch (class_info->type)
 	{
 		case GEANY_CLASS_TYPE_CPP:
