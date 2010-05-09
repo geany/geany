@@ -27,14 +27,14 @@
 
 #include "geanyplugin.h"
 
-GeanyData	*geany_data;
+GeanyData		*geany_data;
 GeanyFunctions	*geany_functions;
 
 
 PLUGIN_VERSION_CHECK(GEANY_API_VERSION)
 
 PLUGIN_SET_INFO(_("Class Builder"), _("Creates source files for new class types."), VERSION,
-	"Alexander Rodin")
+	"Alexander Rodin, Ondrej Donek, the Geany developer team")
 
 
 static GtkWidget *main_menu_item = NULL;
@@ -67,7 +67,7 @@ struct _ClassInfo
 	gchar *constructor_impl;
 	gchar *destructor_impl;
 	gchar *gtk_destructor_registration;
-	// These are needed only for PHP classes
+	/* These are needed only for PHP classes */
 	gchar *namespace_decl;
 	gchar *implements_decl;
 	gchar *abstract_decl;
@@ -88,7 +88,7 @@ typedef struct _CreateClassDialog
 	GtkWidget *create_constructor_box;
 	GtkWidget *create_destructor_box;
 	GtkWidget *gtk_constructor_type_entry;
-	// These are needed only for PHP classes
+	/* These are needed only for PHP classes */
 	GtkWidget *class_namespace_entry;
 	GtkWidget *class_implements_entry;
 	GtkWidget *create_isabstract_box;
@@ -808,22 +808,22 @@ static gboolean create_class(CreateClassDialog *cc_dlg)
 		}
 		case GEANY_CLASS_TYPE_PHP:
 		{
-			gchar *tmp;
+			gchar *tmp_str;
 
 			class_info->source = g_strdup(gtk_entry_get_text(GTK_ENTRY(cc_dlg->source_entry)));
 
-			tmp = g_strdup(gtk_entry_get_text(GTK_ENTRY(cc_dlg->class_namespace_entry)));
-			if (! utils_str_equal(tmp, ""))
-				class_info->namespace_decl = g_strdup_printf("namespace %s;", tmp);
+			tmp_str = g_strdup(gtk_entry_get_text(GTK_ENTRY(cc_dlg->class_namespace_entry)));
+			if (! utils_str_equal(tmp_str, ""))
+				class_info->namespace_decl = g_strdup_printf("namespace %s;", tmp_str);
 			else
 				class_info->namespace_decl = g_strdup("");
 
-			tmp = g_strdup(gtk_entry_get_text(GTK_ENTRY(cc_dlg->class_implements_entry)));
-			if (! utils_str_equal(tmp, ""))
-				class_info->implements_decl = g_strdup_printf(" implements %s", tmp);
+			tmp_str = g_strdup(gtk_entry_get_text(GTK_ENTRY(cc_dlg->class_implements_entry)));
+			if (! utils_str_equal(tmp_str, ""))
+				class_info->implements_decl = g_strdup_printf(" implements %s", tmp_str);
 			else
 				class_info->implements_decl = g_strdup("");
-			g_free(tmp);
+			g_free(tmp_str);
 
 			if ( gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(cc_dlg->create_constructor_box)) &&
 			    ! gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(cc_dlg->create_isabstract_box)))
