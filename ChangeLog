@@ -2,6 +2,9 @@
 
  * THANKS, src/about.c, plugins/classbuilder.c:
    Add support for creating PHP classes (patch by Ondrej Donek, thanks).
+ * src/ui_utils.h, src/ui_utils.c:
+   Add public, generic callback ui_editable_insert_text_callback()
+   to restrict GtkEntry text inputs to +/- and numeric values only.
 
 
 2010-05-08  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
