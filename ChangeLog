@@ -1,3 +1,9 @@
+2010-05-09  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * THANKS, src/about.c, plugins/classbuilder.c:
+   Add support for creating PHP classes (patch by Ondrej Donek, thanks).
+
+
 2010-05-08  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/highlighting.c:

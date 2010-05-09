@@ -77,6 +77,7 @@ Jon Senior <jon(at)restlesslemon(dot)co(dot)uk> - R tagmanager parser patch
 Can Koy <cankoy(at)ymail(dot)com> - Multiple changes/improvements
 Yoann Le Montagner <yoann(dot)le-montagner(at)m4x(dot)org> - set VTE bold color
 Dimitar Zhekov <hamster(at)mbox(dot)contact(dot)bg> - matching brace improvements patch
+Ondrej Donek <ondrejd(at)gmail(dot)com> - Support for creating PHP classes with the classbuilder plugin
 
 Translators:
 ------------
