@@ -65,6 +65,10 @@ enum
 	GEANY_RESPONSE_VIEW
 };
 
+
+static gboolean handle_save_as(const gchar *utf8_filename, gboolean open_new_tab,
+	gboolean rename_file);
+
 #if ! GEANY_USE_WIN32_DIALOG
 static GtkWidget *add_file_open_extra_widget(void);
 
@@ -333,7 +337,6 @@ static void on_save_as_new_tab_toggled(GtkToggleButton *togglebutton, gpointer u
 #endif
 
 
-#if ! GEANY_USE_WIN32_DIALOG
 static gboolean handle_save_as(const gchar *utf8_filename, gboolean open_new_tab, gboolean rename_file)
 {
 	GeanyDocument *doc = document_get_current();
@@ -366,6 +369,7 @@ static gboolean handle_save_as(const gchar *utf8_filename, gboolean open_new_tab
 }
 
 
+#if ! GEANY_USE_WIN32_DIALOG
 static void
 on_file_save_dialog_response           (GtkDialog *dialog,
                                         gint response,
@@ -550,7 +554,10 @@ gboolean dialogs_show_save_as()
 	gboolean result;
 
 #if GEANY_USE_WIN32_DIALOG
-	result = win32_show_file_dialog(FALSE, utils_get_default_dir_utf8());
+	GeanyDocument *doc = document_get_current();
+	gchar *utf8_name = win32_show_document_save_as_dialog(GTK_WINDOW(main_widgets.window),
+					_("Save File"), DOC_FILENAME(doc));
+	result = handle_save_as(utf8_name, FALSE, FALSE);
 #else
 	result = gtk_show_save_as();
 #endif

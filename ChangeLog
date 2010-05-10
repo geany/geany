@@ -2,6 +2,9 @@
 
  * src/dialogs.c:
    Fix Cancel on Goto Line dialog (patch by Dimitar Zhekov, thanks).
+ * src/dialogs.c, src/win32.c, src/win32.h:
+   (Re-)Implement a (still basic) native Windows Save As dialog when
+   compiled with GEANY_USE_WIN32_DIALOG.
 
 
 2010-05-09  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
