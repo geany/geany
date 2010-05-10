@@ -930,7 +930,7 @@ dialogs_show_input_persistent(const gchar *title, const gchar *label_text, const
 
 
 /* ugly hack - user_data not supported for callback */
-gchar *dialog_input = NULL;
+static gchar *dialog_input = NULL;
 
 static void on_dialog_input(const gchar *str)
 {
@@ -948,7 +948,7 @@ gchar *dialogs_show_input(const gchar *title, const gchar *label_text,
 }
 
 
-/* Returns: newly allocated string - a copy of either the entry text or default_text.
+/* Returns: newly allocated copy of the entry text or NULL on cancel.
  * Specialised variant for Goto Line dialog. */
 gchar *dialogs_show_input_goto_line(const gchar *title, const gchar *label_text,
 	const gchar *default_text)
@@ -957,7 +957,7 @@ gchar *dialogs_show_input_goto_line(const gchar *title, const gchar *label_text,
 	dialogs_show_input_full(
 		title, label_text, default_text, FALSE, on_dialog_input,
 		G_CALLBACK(ui_editable_insert_text_callback));
-	return NVL(dialog_input, g_strdup(default_text));
+	return dialog_input;
 }
 
 
