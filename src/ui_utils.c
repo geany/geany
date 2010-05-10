@@ -28,6 +28,7 @@
 #include "geany.h"
 
 #include <string.h>
+#include <ctype.h>
 #include <gdk/gdkkeysyms.h>
 
 #include "ui_utils.h"
