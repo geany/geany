@@ -1777,14 +1777,15 @@ gint search_find_text(ScintillaObject *sci, gint flags, struct Sci_TextToFind *t
 
 	pos = ttf->chrg.cpMin;
 	ret = find_regex(sci, pos, &regex);
+	regfree(&regex);
 
 	if (ret >= 0 && ret < ttf->chrg.cpMax)
 	{
 		ttf->chrgText.cpMin = regex_matches[0].rm_so + pos;
 		ttf->chrgText.cpMax = regex_matches[0].rm_eo + pos;
+		return ret;
 	}
-	regfree(&regex);
-	return ret;
+	return -1;
 }
 
 
