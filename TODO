@@ -7,14 +7,12 @@ Note: features included in brackets have lower priority.
 
 
 	Next version or later:
+	o better file template {filename} wildcard replacement +{BASENAME}
 	o documentation: list and explain filetype modes
 	o common default highlighting styles configurable for all
 	  programming languages (done for C-like filetypes using
 	  filetypes.common named styles)
-	o configurable filetype and project make commands (e.g. using
-	  bud for D) - see the build-system SVN branch
 	o (better custom filetype support)
-	o (support for adding plugin filetypes - SCI_LOADLEXERLIBRARY?)
 	o (custom template insertion - so user can add licenses, etc)
 	o (selectable menu of arguments to use for Make, from Make Custom)
 	o (DBUS)
@@ -28,8 +26,6 @@ Note: features included in brackets have lower priority.
 	o stable plugin ABI for the 1.0 series? (Split up geany_data, prefs,
 	  GeanyKeyCommand enum into groups)
 	o review documentation
-	o review any hidden prefs/compile time constants that could be in the
-	  Prefs dialog, e.g. invert_all syntax highlighting pref
 
 
 Wishlist
@@ -40,5 +36,6 @@ Note: these items might not get worked on.
 	   function_name(arguments) syntax - see python.c:parseArglist())
 	o (better tags support for popular languages? - this is a moving
 	   target...)
+	o (support for adding plugin filetypes - SCI_LOADLEXERLIBRARY?)
 	o Some kind of support for CTags tags files
 	o Python plugin interface (different concept from Lua scripting)
