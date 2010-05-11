@@ -141,11 +141,6 @@ typedef struct GeanyBuildCommand
 	gboolean	 old;						/**< Converted from old format. */
 } GeanyBuildCommand;
 
-/* project command array pointers */
-extern GeanyBuildCommand *non_ft_proj;
-extern GeanyBuildCommand *exec_proj;
-extern gchar *regex_proj; /* project non-fileregex string */
-
 typedef struct BuildMenuItems
 {
 	GtkWidget		*menu;
@@ -170,7 +165,7 @@ void build_finalize(void);
 /* menu configuration dialog functions */
 GtkWidget *build_commands_table(GeanyDocument *doc, GeanyBuildSource dst, TableData *data, GeanyFiletype *ft);
 
-gboolean build_read_commands(BuildDestination *dst, TableData data, gint response);
+void build_read_project(GeanyFiletype *ft, TableData build_properties);
 
 void build_free_fields(TableData data);
 

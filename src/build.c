@@ -185,15 +185,16 @@ static const gchar *config_keys[] = {
 
 /* the various groups of commands not in the filetype struct */
 static GeanyBuildCommand *ft_def = NULL;
-GeanyBuildCommand *non_ft_proj = NULL;
+static GeanyBuildCommand *non_ft_proj = NULL;
 static GeanyBuildCommand *non_ft_pref = NULL;
 static GeanyBuildCommand *non_ft_def = NULL;
-GeanyBuildCommand *exec_proj = NULL;
+static GeanyBuildCommand *exec_proj = NULL;
 static GeanyBuildCommand *exec_pref = NULL;
 static GeanyBuildCommand *exec_def = NULL;
 /* and the regexen not in the filetype structure */
 static gchar *regex_pref = NULL;
-gchar *regex_proj = NULL;
+/* project non-fileregex string */
+static gchar *regex_proj = NULL;
 
 /* control if build commands are printed by get_build_cmd, for debug purposes only*/
 #ifndef PRINTBUILDCMDS
@@ -2125,7 +2126,7 @@ static gboolean read_regex(GtkWidget *regexentry, gchar **src, gchar **dst)
 }
 
 
-gboolean build_read_commands(BuildDestination *dst, TableData table_data, gint response)
+static gboolean build_read_commands(BuildDestination *dst, TableData table_data, gint response)
 {
 	gint cmdindex, cmd;
 	gboolean changed = FALSE;
@@ -2142,6 +2143,28 @@ gboolean build_read_commands(BuildDestination *dst, TableData table_data, gint r
 		changed |= read_regex(table_data->nonfileregex, table_data->nonfileregexstring, dst->nonfileregexstr);
 	}
 	return changed;
+}
+
+
+void build_read_project(GeanyFiletype *ft, TableData build_properties)
+{
+	BuildDestination menu_dst;
+
+	if (ft != NULL)
+	{
+		menu_dst.dst[GEANY_GBG_FT] = &(ft->projfilecmds);
+		menu_dst.fileregexstr = &(ft->projerror_regex_string);
+	}
+	else
+	{
+		menu_dst.dst[GEANY_GBG_FT] = NULL;
+		menu_dst.fileregexstr = NULL;
+	}
+	menu_dst.dst[GEANY_GBG_NON_FT] = &non_ft_proj;
+	menu_dst.dst[GEANY_GBG_EXEC] = &exec_proj;
+	menu_dst.nonfileregexstr = &regex_proj;
+
+	build_read_commands(&menu_dst, build_properties, GTK_RESPONSE_ACCEPT);
 }
 
 
@@ -2593,6 +2616,13 @@ gint build_get_group_count(GeanyBuildGroup grp)
 }
 
 
+static void on_project_close(void)
+{
+	/* remove project regexen */
+	setptr(regex_proj, NULL);
+}
+
+
 static struct
 {
 	const gchar *entries[GEANY_BC_CMDENTRIES_COUNT];
@@ -2612,6 +2642,8 @@ void build_init(void)
 	GtkWidget *item;
 	GtkWidget *toolmenu;
 	gint cmdindex;
+
+	g_signal_connect(geany_object, "project-close", on_project_close, NULL);
 
 	ft_def = g_new0(GeanyBuildCommand, build_groups_count[GEANY_GBG_FT]);
 	non_ft_def = g_new0(GeanyBuildCommand, build_groups_count[GEANY_GBG_NON_FT]);

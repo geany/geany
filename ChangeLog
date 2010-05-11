@@ -8,6 +8,8 @@
    Only replace template filename matching start of word on saving.
  * plugins/filebrowser.c:
    Add 'Refresh' popup menu item (part of geany-plugins #2999858).
+ * src/build.c, src/build.h, src/project.c:
+   Make some ugly build.h global variables static.
 
 
 2010-05-10  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

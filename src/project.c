@@ -351,9 +351,6 @@ void project_close(gboolean open_default)
 	build_remove_menu_item(GEANY_BCS_PROJ, GEANY_GBG_NON_FT, -1);
 	build_remove_menu_item(GEANY_BCS_PROJ, GEANY_GBG_EXEC, -1);
 
-	/* remove project regexen */
-	setptr(regex_proj, NULL);
-
 	g_free(app->project->name);
 	g_free(app->project->description);
 	g_free(app->project->file_name);
@@ -737,13 +734,12 @@ static gboolean update_config(const PropertyDialogElements *e)
 
 	if (! new_project)	/* save properties specific fields */
 	{
-		GtkTextIter 		 start, end;
-		GtkTextBuffer		*buffer;
-		GeanyDocument		*doc = document_get_current();
-		BuildDestination 	 menu_dst;
-		GeanyBuildCommand 	*oldvalue;
-		GeanyFiletype 		*ft = NULL;
-		GtkWidget 		*widget;
+		GtkTextIter start, end;
+		GtkTextBuffer *buffer;
+		GeanyDocument *doc = document_get_current();
+		GeanyBuildCommand *oldvalue;
+		GeanyFiletype *ft = doc ? doc->file_type : NULL;
+		GtkWidget *widget;
 
 		/* get and set the project description */
 		buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(e->description));
@@ -752,24 +748,9 @@ static gboolean update_config(const PropertyDialogElements *e)
 		setptr(p->description, g_strdup(gtk_text_buffer_get_text(buffer, &start, &end, FALSE)));
 
 		/* read the project build menu */
-		if (doc != NULL)
-			ft = doc->file_type;
-		if (ft != NULL)
-		{
-			menu_dst.dst[GEANY_GBG_FT] = &(ft->projfilecmds);
-			oldvalue = ft->projfilecmds;
-			menu_dst.fileregexstr = &(ft->projerror_regex_string);
-		}
-		else
-		{
-			menu_dst.dst[GEANY_GBG_FT] = NULL;
-			oldvalue = NULL;
-			menu_dst.fileregexstr = NULL;
-		}
-		menu_dst.dst[GEANY_GBG_NON_FT] = &non_ft_proj;
-		menu_dst.dst[GEANY_GBG_EXEC] = &exec_proj;
-		menu_dst.nonfileregexstr = &regex_proj;
-		build_read_commands(&menu_dst, e->build_properties,  GTK_RESPONSE_ACCEPT);
+		oldvalue = ft ? ft->projfilecmds : NULL;
+		build_read_project(ft, e->build_properties);
+
 		if (ft != NULL && ft->projfilecmds != oldvalue && ft->project_list_entry < 0)
 		{
 			if (p->build_filetypes_list == NULL)
