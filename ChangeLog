@@ -10,6 +10,8 @@
    Add 'Refresh' popup menu item (part of geany-plugins #2999858).
  * src/build.c, src/build.h, src/project.c:
    Make some ugly build.h global variables static.
+ * src/build.c, src/build.h, src/project.c:
+   Add Build prefix for TableFields, TableData.
 
 
 2010-05-10  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

@@ -886,10 +886,10 @@ static GPid build_run_cmd(GeanyDocument *doc, gint cmdindex)
 	else
 #endif
 	{
-		gchar	*locale_term_cmd = NULL;
-		gchar  **term_argv = NULL;
-		guint	term_argv_len, i;
-		gchar  **argv = NULL;
+		gchar *locale_term_cmd = NULL;
+		gchar **term_argv = NULL;
+		guint term_argv_len, i;
+		gchar **argv = NULL;
 
 		/* get the terminal path */
 		locale_term_cmd = utils_get_locale_from_utf8(tool_prefs.term_cmd);
@@ -923,12 +923,12 @@ static GPid build_run_cmd(GeanyDocument *doc, gint cmdindex)
 		/* command line arguments only for cmd.exe */
 		if (strstr(argv[0], "cmd.exe") != NULL)
 		{
-			argv[term_argv_len   ]  = g_strdup("/Q /C");
+			argv[term_argv_len] = g_strdup("/Q /C");
 			argv[term_argv_len + 1] = g_strdup(RUN_SCRIPT_CMD);
 		}
 		else
 		{
-			argv[term_argv_len	] = g_strdup(RUN_SCRIPT_CMD);
+			argv[term_argv_len] = g_strdup(RUN_SCRIPT_CMD);
 			argv[term_argv_len + 1] = NULL;
 		}
 #else
@@ -1863,21 +1863,21 @@ static RowWidgets *build_add_dialog_row(GeanyDocument *doc, GtkTable *table, gui
 }
 
 
-typedef struct TableFields
+typedef struct BuildTableFields
 {
 	RowWidgets 	**rows;
 	GtkWidget	 *fileregex;
 	GtkWidget	 *nonfileregex;
 	gchar		**fileregexstring;
 	gchar		**nonfileregexstring;
-} TableFields;
+} BuildTableFields;
 
 
-GtkWidget *build_commands_table(GeanyDocument *doc, GeanyBuildSource dst, TableData *table_data,
+GtkWidget *build_commands_table(GeanyDocument *doc, GeanyBuildSource dst, BuildTableData *table_data,
 								GeanyFiletype *ft)
 {
 	GtkWidget *label, *sep, *clearicon, *clear;
-	TableFields *fields;
+	BuildTableFields *fields;
 	GtkTable *table;
 	const gchar **ch;
 	gchar *txt;
@@ -1888,7 +1888,7 @@ GtkWidget *build_commands_table(GeanyDocument *doc, GeanyBuildSource dst, TableD
 	guint sep_padding = entry_y_padding + 3;
 
 	table = GTK_TABLE(gtk_table_new(build_items_count + 12, 5, FALSE));
-	fields = g_new0(TableFields, 1);
+	fields = g_new0(BuildTableFields, 1);
 	fields->rows = g_new0(RowWidgets*, build_items_count);
 	for (ch = colheads, col = 0; *ch != NULL; ch++, col++)
 	{
@@ -1999,7 +1999,7 @@ GtkWidget *build_commands_table(GeanyDocument *doc, GeanyBuildSource dst, TableD
 }
 
 
-void build_free_fields(TableData table_data)
+void build_free_fields(BuildTableData table_data)
 {
 	gint cmdindex;
 
@@ -2032,7 +2032,7 @@ static const gchar *get_build_command_entry_text(GtkWidget *wid)
 }
 
 
-static gboolean read_row(BuildDestination *dst, TableData table_data, gint drow, gint grp, gint cmd)
+static gboolean read_row(BuildDestination *dst, BuildTableData table_data, gint drow, gint grp, gint cmd)
 {
 	gchar *entries[GEANY_BC_CMDENTRIES_COUNT];
 	gboolean changed = FALSE;
@@ -2126,7 +2126,7 @@ static gboolean read_regex(GtkWidget *regexentry, gchar **src, gchar **dst)
 }
 
 
-static gboolean build_read_commands(BuildDestination *dst, TableData table_data, gint response)
+static gboolean build_read_commands(BuildDestination *dst, BuildTableData table_data, gint response)
 {
 	gint cmdindex, cmd;
 	gboolean changed = FALSE;
@@ -2146,7 +2146,7 @@ static gboolean build_read_commands(BuildDestination *dst, TableData table_data,
 }
 
 
-void build_read_project(GeanyFiletype *ft, TableData build_properties)
+void build_read_project(GeanyFiletype *ft, BuildTableData build_properties)
 {
 	BuildDestination menu_dst;
 
@@ -2175,7 +2175,7 @@ static void show_build_commands_dialog(void)
 	GeanyFiletype *ft = NULL;
 	gchar *title = _("Set Build Commands");
 	gint response;
-	TableData table_data;
+	BuildTableData table_data;
 	BuildDestination prefdsts;
 
 	if (doc != NULL)
@@ -2227,7 +2227,7 @@ BuildMenuItems *build_get_menu_items(gint filetype_idx)
 
 
 /* set non_ft working directory entries to %p for project */
-void build_set_non_ft_wd_to_proj(TableData table_data)
+void build_set_non_ft_wd_to_proj(BuildTableData table_data)
 {
 	gint i, start, end;
 

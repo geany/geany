@@ -156,20 +156,20 @@ typedef struct BuildDestination
 } BuildDestination;
 
 /* opaque pointers returned from build functions and passed back to them */
-typedef struct TableFields *TableData;
+typedef struct BuildTableFields *BuildTableData;
 
 void build_init(void);
 
 void build_finalize(void);
 
 /* menu configuration dialog functions */
-GtkWidget *build_commands_table(GeanyDocument *doc, GeanyBuildSource dst, TableData *data, GeanyFiletype *ft);
+GtkWidget *build_commands_table(GeanyDocument *doc, GeanyBuildSource dst, BuildTableData *data, GeanyFiletype *ft);
 
-void build_read_project(GeanyFiletype *ft, TableData build_properties);
+void build_read_project(GeanyFiletype *ft, BuildTableData build_properties);
 
-void build_free_fields(TableData data);
+void build_free_fields(BuildTableData data);
 
-void build_set_non_ft_wd_to_proj(TableData table_data);
+void build_set_non_ft_wd_to_proj(BuildTableData table_data);
 
 /* build response decode assistance function */
 gboolean build_parse_make_dir(const gchar *string, gchar **prefix);

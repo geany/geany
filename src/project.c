@@ -77,7 +77,7 @@ typedef struct _PropertyDialogElements
 	GtkWidget *file_name;
 	GtkWidget *base_path;
 	GtkWidget *patterns;
-	TableData  build_properties;
+	BuildTableData  build_properties;
 } PropertyDialogElements;
 
 
@@ -383,7 +383,7 @@ void project_close(gboolean open_default)
 
 static void on_set_use_base_path_clicked(GtkWidget *unused1, gpointer user_data)
 {
-	build_set_non_ft_wd_to_proj((TableData)user_data);
+	build_set_non_ft_wd_to_proj((BuildTableData)user_data);
 }
 
 
