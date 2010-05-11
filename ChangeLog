@@ -6,6 +6,8 @@
    wildcard replacement.
  * src/search.c, src/document.c:
    Only replace template filename matching start of word on saving.
+ * plugins/filebrowser.c:
+   Add 'Refresh' popup menu item (part of geany-plugins #2999858).
 
 
 2010-05-10  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

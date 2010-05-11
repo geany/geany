@@ -577,6 +577,15 @@ static GtkWidget *create_popup_menu(void)
 	g_signal_connect(item, "activate", G_CALLBACK(on_external_open), NULL);
 	popup_items.open_external = item;
 
+	item = gtk_separator_menu_item_new();
+	gtk_widget_show(item);
+	gtk_container_add(GTK_CONTAINER(menu), item);
+
+	item = gtk_image_menu_item_new_from_stock(GTK_STOCK_REFRESH, NULL);
+	gtk_widget_show(item);
+	gtk_container_add(GTK_CONTAINER(menu), item);
+	g_signal_connect(item, "activate", G_CALLBACK(refresh), NULL);
+
 	item = ui_image_menu_item_new(GTK_STOCK_FIND, _("_Find in Files"));
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
