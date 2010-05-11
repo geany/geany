@@ -4,6 +4,8 @@
    Fix search_find_text not returning -1 when match is out of range.
    This fixes invalid memory reads and wrong template filename
    wildcard replacement.
+ * src/search.c, src/document.c:
+   Only replace template filename matching start of word on saving.
 
 
 2010-05-10  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

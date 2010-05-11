@@ -93,7 +93,7 @@ GeanyFilePrefs file_prefs;
  *
  * Never assume that the order of document pointers is the same as the order of notebook tabs.
  * Notebook tabs can be reordered. Use @c document_get_from_page(). */
-GPtrArray *documents_array;
+GPtrArray *documents_array = NULL;
 
 
 /* an undo action, also used for redo actions */
@@ -1504,7 +1504,7 @@ static void replace_header_filename(GeanyDocument *doc)
 	g_return_if_fail(doc->file_type != NULL);
 
 	if (doc->file_type->extension)
-		filebase = g_strconcat(GEANY_STRING_UNTITLED, "\\.\\w+", NULL);
+		filebase = g_strconcat("\\<", GEANY_STRING_UNTITLED, "\\.\\w+", NULL);
 	else
 		filebase = g_strdup(GEANY_STRING_UNTITLED);
 
