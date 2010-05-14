@@ -235,6 +235,28 @@ void sidebar_update_tag_list(GeanyDocument *doc, gboolean update)
 }
 
 
+/* cleverly sorts documents by their short name */
+static gint documents_sort_func(GtkTreeModel *model, GtkTreeIter *iter_a,
+								GtkTreeIter *iter_b, gpointer data)
+{
+	gchar *key_a, *key_b;
+	gchar *name_a, *name_b;
+	gint cmp;
+
+	gtk_tree_model_get(model, iter_a, DOCUMENTS_SHORTNAME, &name_a, -1);
+	key_a = g_utf8_collate_key_for_filename(name_a, -1);
+	g_free(name_a);
+	gtk_tree_model_get(model, iter_b, DOCUMENTS_SHORTNAME, &name_b, -1);
+	key_b = g_utf8_collate_key_for_filename(name_b, -1);
+	g_free(name_b);
+	cmp = strcmp(key_a, key_b);
+	g_free(key_b);
+	g_free(key_a);
+
+	return cmp;
+}
+
+
 /* does some preparing things to the open files list widget */
 static void prepare_openfiles(void)
 {
@@ -275,6 +297,7 @@ static void prepare_openfiles(void)
 
 	/* sort opened filenames in the store_openfiles treeview */
 	sortable = GTK_TREE_SORTABLE(GTK_TREE_MODEL(store_openfiles));
+	gtk_tree_sortable_set_sort_func(sortable, DOCUMENTS_SHORTNAME, documents_sort_func, NULL, NULL);
 	gtk_tree_sortable_set_sort_column_id(sortable, DOCUMENTS_SHORTNAME, GTK_SORT_ASCENDING);
 
 	ui_widget_modify_font_from_string(tv.tree_openfiles, interface_prefs.tagbar_font);
