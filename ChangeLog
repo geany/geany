@@ -14,6 +14,8 @@
  * src/sidebar.c:
    Improve sorting of document list items
    (patch by Colomban Wendling, thanks).
+ * src/main.c:
+   Remove unnecessary textdomain() call.
 
 
 2010-05-11  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
