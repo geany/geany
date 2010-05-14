@@ -52,6 +52,9 @@ typedef struct _ClassInfo	ClassInfo;
 struct _ClassInfo
 {
 	gint type;
+	gchar *namespace;
+	gchar *namespace_up;
+	gchar *namespace_low;
 	gchar *class_name;
 	gchar *class_name_up;
 	gchar *class_name_low;
@@ -126,38 +129,39 @@ static const gchar templates_gtk_class_header[] = "{fileheader}\n\n\
 #define __{header_guard}__\n\
 {base_include}\n\
 G_BEGIN_DECLS\n\
+\n\n\
+#define {namespace_up}TYPE_{class_name_up}				({namespace_low}{class_name_low}_get_type())\n\
+#define {namespace_up}{class_name_up}(obj)				(G_TYPE_CHECK_INSTANCE_CAST((obj),\\\n\
+			{namespace_up}TYPE_{class_name_up}, {namespace}{class_name}))\n\
+#define {namespace_up}{class_name_up}_CLASS(klass)		(G_TYPE_CHECK_CLASS_CAST((klass),\\\n\
+			{namespace_up}TYPE_{class_name_up}, {namespace}{class_name}Class))\n\
+#define {namespace_up}IS_{class_name_up}(obj)			(G_TYPE_CHECK_INSTANCE_TYPE((obj),\\\n\
+			{namespace_up}TYPE_{class_name_up}))\n\
+#define {namespace_up}IS_{class_name_up}_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE((klass),\\\n\
+			{namespace_up}TYPE_{class_name_up}))\n\
+#define {namespace_up}{class_name_up}_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS((obj),\\\n\
+			{namespace_up}TYPE_{class_name_up}, {namespace}{class_name}Class))\n\
 \n\
-#define {class_name_up}_TYPE				({class_name_low}_get_type())\n\
-#define {class_name_up}(obj)				(G_TYPE_CHECK_INSTANCE_CAST((obj),\\\n\
-			{class_name_up}_TYPE, {class_name}))\n\
-#define {class_name_up}_CLASS(klass)		(G_TYPE_CHECK_CLASS_CAST((klass),\\\n\
-			{class_name_up}_TYPE, {class_name}Class))\n\
-#define IS_{class_name_up}(obj)			(G_TYPE_CHECK_INSTANCE_TYPE((obj),\\\n\
-			{class_name_up}_TYPE))\n\
-#define IS_{class_name_up}_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE((klass),\\\n\
-			{class_name_up}_TYPE))\n\
+typedef struct _{namespace}{class_name}			{namespace}{class_name};\n\
+typedef struct _{namespace}{class_name}Class		{namespace}{class_name}Class;\n\
+typedef struct _{namespace}{class_name}Private		{namespace}{class_name}Private;\n\
 \n\
-typedef struct _{class_name}			{class_name};\n\
-typedef struct _{class_name}Class		{class_name}Class;\n\
-\n\
-struct _{class_name}Private;\n\
-\n\
-struct _{class_name}\n\
+struct _{namespace}{class_name}\n\
 {\n\
 	{base_name} parent;\n\
 	/* add your public declarations here */\n\
 	\n\
-	struct _{class_name}Private *priv;\n\
+	{namespace}{class_name}Private *priv;\n\
 };\n\
 \n\
-struct _{class_name}Class\n\
+struct _{namespace}{class_name}Class\n\
 {\n\
 	{base_name}Class parent_class;\n\
 };\n\
-\n\
-GType		{class_name_low}_get_type		(void);\n\
+\n\n\
+GType		{namespace_low}{class_name_low}_get_type		(void);\n\
 {constructor_decl}\
-\n\
+\n\n\
 G_END_DECLS\n\
 \n\
 #endif /* __{header_guard}__ */\n\
@@ -166,29 +170,27 @@ G_END_DECLS\n\
 static const gchar templates_gtk_class_source[] = "{fileheader}\n\
 #include \"{header}\"\n\
 \n\
-typedef struct _{class_name}Private			{class_name}Private;\n\
-\n\
-struct _{class_name}Private\n\
+struct _{namespace}{class_name}Private\n\
 {\n\
 	/* add your private declarations here */\n\
 };\n\
 \n\
 {destructor_decl}\
 \n\
-G_DEFINE_TYPE({class_name}, {class_name_low}, {base_gtype});\n\
+G_DEFINE_TYPE({namespace}{class_name}, {namespace_low}{class_name_low}, {base_gtype})\n\
 \n\n\
-static void {class_name_low}_class_init({class_name}Class *klass)\n\
+static void {namespace_low}{class_name_low}_class_init({namespace}{class_name}Class *klass)\n\
 {\n\
 	{gtk_destructor_registration}\n\
-	g_type_class_add_private((gpointer)klass, sizeof({class_name}Private));\n\
+	g_type_class_add_private((gpointer)klass, sizeof({namespace}{class_name}Private));\n\
 }\n\
 \n\
 {destructor_impl}\n\
 \n\
-static void {class_name_low}_init({class_name} *self)\n\
+static void {namespace_low}{class_name_low}_init({namespace}{class_name} *self)\n\
 {\n\
 	self->priv = G_TYPE_INSTANCE_GET_PRIVATE(self,\n\
-		{class_name_up}_TYPE, {class_name}Private);\n\
+		{namespace_up}TYPE_{class_name_up}, {namespace}{class_name}Private);\n\
 	\n\
 }\n\
 \n\
@@ -210,6 +212,7 @@ static const gchar templates_php_class_source[] = "<?php\n\
 
 static void cc_dlg_on_set_sensitive_toggled(GtkWidget *toggle_button, GtkWidget *target_widget);
 static void cc_dlg_on_class_name_entry_changed(GtkWidget *entry, CreateClassDialog *cc_dlg);
+static void cc_dlg_on_class_namespace_entry_changed(GtkWidget *entry, CreateClassDialog *cc_dlg);
 static void cc_dlg_on_base_name_entry_changed(GtkWidget *entry, CreateClassDialog *cc_dlg);
 static gboolean create_class(CreateClassDialog *cc_dlg);
 
@@ -263,6 +266,9 @@ get_template_class_header(ClassInfo *class_info)
 			utils_string_replace_all(template, "{fileheader}", fileheader);
 			utils_string_replace_all(template, "{header_guard}", class_info->header_guard);
 			utils_string_replace_all(template, "{base_include}", class_info->base_include);
+			utils_string_replace_all(template, "{namespace}", class_info->namespace);
+			utils_string_replace_all(template, "{namespace_up}", class_info->namespace_up);
+			utils_string_replace_all(template, "{namespace_low}", class_info->namespace_low);
 			utils_string_replace_all(template, "{class_name}", class_info->class_name);
 			utils_string_replace_all(template, "{class_name_up}", class_info->class_name_up);
 			utils_string_replace_all(template, "{class_name_low}", class_info->class_name_low);
@@ -308,6 +314,9 @@ get_template_class_source(ClassInfo *class_info)
 			template = g_string_new(templates_gtk_class_source);
 			utils_string_replace_all(template, "{fileheader}", fileheader);
 			utils_string_replace_all(template, "{header}", class_info->header);
+			utils_string_replace_all(template, "{namespace}", class_info->namespace);
+			utils_string_replace_all(template, "{namespace_up}", class_info->namespace_up);
+			utils_string_replace_all(template, "{namespace_low}", class_info->namespace_low);
 			utils_string_replace_all(template, "{class_name}", class_info->class_name);
 			utils_string_replace_all(template, "{class_name_up}", class_info->class_name_up);
 			utils_string_replace_all(template, "{class_name_low}", class_info->class_name_low);
@@ -370,7 +379,7 @@ void show_dialog_create_class(gint type)
 
 	main_box = ui_dialog_vbox_new(GTK_DIALOG(cc_dlg->dialog));
 
-	if (type == GEANY_CLASS_TYPE_PHP)
+	if (type == GEANY_CLASS_TYPE_PHP || type == GEANY_CLASS_TYPE_GTK)
 	{
 		frame = ui_frame_new_with_alignment(_("Namespace"), &align);
 		gtk_container_add(GTK_CONTAINER(main_box), frame);
@@ -386,6 +395,8 @@ void show_dialog_create_class(gint type)
 
 		cc_dlg->class_namespace_entry = gtk_entry_new();
 		gtk_box_pack_start(GTK_BOX(hbox), cc_dlg->class_namespace_entry, TRUE, TRUE, 0);
+		g_signal_connect(cc_dlg->class_namespace_entry, "changed",
+				G_CALLBACK(cc_dlg_on_class_namespace_entry_changed), cc_dlg);
 	}
 
 	frame = ui_frame_new_with_alignment(_("Class"), &align);
@@ -558,36 +569,68 @@ static void cc_dlg_on_set_sensitive_toggled(GtkWidget *toggle_button, GtkWidget 
 }
 
 
-static void cc_dlg_on_class_name_entry_changed(GtkWidget *entry, CreateClassDialog *cc_dlg)
+static void cc_dlg_update_file_names(CreateClassDialog *cc_dlg)
 {
 	gchar *class_name;
 	gchar *class_name_down;
-	gchar *class_header;
-	gchar *class_source;
+	gchar *class_header = NULL;
+	gchar *class_source = NULL;
 
-	g_return_if_fail(entry != NULL);
-	g_return_if_fail(GTK_IS_ENTRY(entry));
 	g_return_if_fail(cc_dlg != NULL);
 
-	class_name = g_strdup(gtk_entry_get_text(GTK_ENTRY(entry)));
+	class_name = g_strdup(gtk_entry_get_text(GTK_ENTRY(cc_dlg->class_name_entry)));
 	class_name_down = g_ascii_strdown(class_name, -1);
-	class_header = g_strconcat(class_name_down, ".h", NULL);
-	if (cc_dlg->class_type == GEANY_CLASS_TYPE_CPP)
-		class_source = g_strconcat(class_name_down, ".cpp", NULL);
-	else if (cc_dlg->class_type == GEANY_CLASS_TYPE_PHP)
-		class_source = g_strconcat(class_name, ".php", NULL);
-	else
-		class_source = g_strconcat(class_name_down, ".c", NULL);
+	switch (cc_dlg->class_type)
+	{
+		case GEANY_CLASS_TYPE_CPP:
+		{
+			class_header = g_strconcat(class_name_down, ".h", NULL);
+			class_source = g_strconcat(class_name_down, ".cpp", NULL);
+			break;
+		}
+		case GEANY_CLASS_TYPE_GTK:
+		{
+			const gchar *namespace;
+			gchar *namespace_down;
+			
+			namespace = gtk_entry_get_text(GTK_ENTRY(cc_dlg->class_namespace_entry));
+			namespace_down = g_ascii_strdown(namespace, -1);
+			class_header = g_strconcat(namespace_down, class_name_down, ".h", NULL);
+			class_source = g_strconcat(namespace_down, class_name_down, ".c", NULL);
+			g_free(namespace_down);
+			break;
+		}
+		case GEANY_CLASS_TYPE_PHP:
+		{
+			class_header = NULL;
+			class_source = g_strconcat(class_name, ".php", NULL);
+			break;
+		}
+	}
 
-	if (cc_dlg->header_entry != NULL)
+	if (cc_dlg->header_entry != NULL && class_header != NULL)
 		gtk_entry_set_text(GTK_ENTRY(cc_dlg->header_entry), class_header);
-	if (cc_dlg->source_entry != NULL)
+	if (cc_dlg->source_entry != NULL && class_source != NULL)
 		gtk_entry_set_text(GTK_ENTRY(cc_dlg->source_entry), class_source);
 
 	g_free(class_name);
 	g_free(class_name_down);
 	g_free(class_header);
 	g_free(class_source);
+}
+
+
+static void cc_dlg_on_class_name_entry_changed(GtkWidget *entry, CreateClassDialog *cc_dlg)
+{
+	cc_dlg_update_file_names(cc_dlg);
+}
+
+
+static void cc_dlg_on_class_namespace_entry_changed(GtkWidget *entry, CreateClassDialog *cc_dlg)
+{
+
+	if (cc_dlg->class_type == GEANY_CLASS_TYPE_GTK)
+		cc_dlg_update_file_names(cc_dlg);
 }
 
 
@@ -756,22 +799,40 @@ static gboolean create_class(CreateClassDialog *cc_dlg)
 		}
 		case GEANY_CLASS_TYPE_GTK:
 		{
+			class_info->namespace = g_strdup(gtk_entry_get_text(GTK_ENTRY(cc_dlg->class_namespace_entry)));
+			if (!NZV(class_info->namespace))
+			{
+				class_info->namespace_up = g_strdup("");
+				class_info->namespace_low = g_strdup("");
+			}
+			else
+			{
+				gchar *tmp_namespace;
+				gchar *tmp_namespace_split;
+
+				tmp_namespace_split = str_case_split(class_info->namespace, '_');
+				tmp_namespace = g_strconcat(tmp_namespace_split, "_", NULL);
+				class_info->namespace_up = g_ascii_strup(tmp_namespace, -1);
+				class_info->namespace_low = g_ascii_strdown(class_info->namespace_up, -1);
+				g_free(tmp_namespace);
+				g_free(tmp_namespace_split);
+			}
 			class_info->base_gtype = g_strdup(gtk_entry_get_text(
 					GTK_ENTRY(cc_dlg->base_gtype_entry)));
 			class_info->source = g_strdup(gtk_entry_get_text(GTK_ENTRY(cc_dlg->source_entry)));
 			if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(cc_dlg->create_constructor_box)))
 			{
-				class_info->constructor_decl = g_strdup_printf("%s*\t%s_new\t\t\t(void);\n",
+				class_info->constructor_decl = g_strdup_printf("%s*\t%s%s_new\t\t\t(void);\n",
 						gtk_entry_get_text(GTK_ENTRY(cc_dlg->gtk_constructor_type_entry)),
-						class_info->class_name_low);
+						class_info->namespace_low, class_info->class_name_low);
 				class_info->constructor_impl = g_strdup_printf("\n"
-						"%s *%s_new(void)\n"
+						"%s *%s%s_new(void)\n"
 						"{\n"
-						"\treturn g_object_new(%s_TYPE, NULL);\n"
+						"\treturn g_object_new(%sTYPE_%s, NULL);\n"
 						"}\n",
 						gtk_entry_get_text(GTK_ENTRY(cc_dlg->gtk_constructor_type_entry)),
-						class_info->class_name_low,
-						class_info->class_name_up);
+						class_info->namespace_low, class_info->class_name_low,
+						class_info->namespace_up, class_info->class_name_up);
 			}
 			else
 			{
@@ -783,25 +844,25 @@ static gboolean create_class(CreateClassDialog *cc_dlg)
 				class_info->gtk_destructor_registration =
 						g_strdup_printf("GObjectClass *g_object_class;\n\n"
 						"\tg_object_class = G_OBJECT_CLASS(klass);\n\n"
-						"\tg_object_class->finalize = %s_finalize;\n",
-						class_info->class_name_low);
+						"\tg_object_class->finalize = %s%s_finalize;\n",
+						class_info->namespace_low, class_info->class_name_low);
 				class_info->destructor_decl =
-						g_strdup_printf("static void %s_finalize  \t\t\t(GObject *object);\n",
-						class_info->class_name_low);
+						g_strdup_printf("static void %s%s_finalize\t\t\t(GObject *object);\n",
+						class_info->namespace_low, class_info->class_name_low);
 				class_info->destructor_impl = g_strdup_printf("\n"
-						"static void %s_finalize(GObject *object)\n"
+						"static void %s%s_finalize(GObject *object)\n"
 						"{\n"
-						"\t%s *self;\n\n"
+						"\t%s%s *self;\n\n"
 						"\tg_return_if_fail(object != NULL);\n"
-						"\tg_return_if_fail(IS_%s(object));\n\n"
-						"\tself = %s(object);\n\n"
-						"\tG_OBJECT_CLASS(%s_parent_class)->finalize(object);\n"
+						"\tg_return_if_fail(%sIS_%s(object));\n\n"
+						"\tself = %s%s(object);\n\n"
+						"\tG_OBJECT_CLASS(%s%s_parent_class)->finalize(object);\n"
 						"}\n",
-						class_info->class_name_low,
-						class_info->class_name,
-						class_info->class_name_up,
-						class_info->class_name_up,
-						class_info->class_name_low);
+						class_info->namespace_low,	class_info->class_name_low,
+						class_info->namespace,		class_info->class_name,
+						class_info->namespace_up,	class_info->class_name_up,
+						class_info->namespace_up,	class_info->class_name_up,
+						class_info->namespace_low,	class_info->class_name_low);
 			}
 			else
 			{
@@ -932,7 +993,8 @@ static gboolean create_class(CreateClassDialog *cc_dlg)
 		g_free(text);
 	}
 
-	free_pointers(21, tmp, class_info->class_name, class_info->class_name_up,
+	free_pointers(24, tmp, class_info->namespace, class_info->namespace_up,
+		class_info->namespace_low, class_info->class_name, class_info->class_name_up,
 		class_info->base_name, class_info->class_name_low, class_info->base_include,
 		class_info->header, class_info->header_guard, class_info->source, class_info->base_decl,
 		class_info->constructor_decl, class_info->constructor_impl,

@@ -3,6 +3,11 @@
  * src/classbuilder.c:
    Don't make the 'Create Class' menu item document-sensitive
    (patch by Colomban Wendling, thanks).
+   Add namespace support for GTK+ classes.
+   Add GET_CLASS() macro for GTK+ classes.
+   Add typedef of the private structure in the header file instead
+   of declaring it
+   (all the above from a patch by Colomban Wendling, thanks).
 
 
 2010-05-11  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
