@@ -1003,7 +1003,6 @@ void plugin_init(GeanyData *data)
 
 	gtk_widget_show_all(menu_create_class1);
 
-	ui_add_document_sensitive(menu_create_class1);
 	main_menu_item = menu_create_class1;
 }
 

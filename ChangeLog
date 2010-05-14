@@ -1,3 +1,10 @@
+2010-05-14  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/classbuilder.c:
+   Don't make the 'Create Class' menu item document-sensitive
+   (patch by Colomban Wendling, thanks).
+
+
 2010-05-11  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/search.c:
