@@ -339,18 +339,22 @@ gchar *win32_show_project_open_dialog(GtkWidget *parent, const gchar *title,
 
 /* initial_dir can be NULL to use the current working directory.
  * Returns: TRUE if the dialog was not cancelled. */
-gboolean win32_show_document_open_dialog(gboolean file_open, const gchar *initial_dir)
+gboolean win32_show_document_open_dialog(GtkWindow *parent, const gchar *title, const gchar *initial_dir)
 {
 	OPENFILENAMEW of;
 	gint retval;
+	guint x;
 	gchar tmp[MAX_PATH];
 	wchar_t fname[MAX_PATH];
 	wchar_t w_dir[MAX_PATH];
+	wchar_t w_title[512];
 
 	fname[0] = '\0';
 
 	if (initial_dir != NULL)
 		MultiByteToWideChar(CP_UTF8, 0, initial_dir, -1, w_dir, sizeof(w_dir));
+
+	MultiByteToWideChar(CP_UTF8, 0, title, -1, w_title, sizeof(w_title));
 
 	/* initialise file dialog info struct */
 	memset(&of, 0, sizeof of);
@@ -359,7 +363,7 @@ gboolean win32_show_document_open_dialog(gboolean file_open, const gchar *initia
 #else
 	of.lStructSize = sizeof of;
 #endif
-	of.hwndOwner = GDK_WINDOW_HWND(main_widgets.window->window);
+	of.hwndOwner = GDK_WINDOW_HWND(GTK_WIDGET(parent)->window);
 	of.lpstrFilter = get_file_filters();
 
 	of.lpstrCustomFilter = NULL;
@@ -368,18 +372,11 @@ gboolean win32_show_document_open_dialog(gboolean file_open, const gchar *initia
 	of.lpstrInitialDir = (initial_dir != NULL) ? w_dir : NULL;
 	of.nMaxFile = 2048;
 	of.lpstrFileTitle = NULL;
-	of.lpstrTitle = NULL;
+	of.lpstrTitle = w_title;
 	of.lpstrDefExt = L"";
-	if (file_open)
-	{
-		of.Flags = OFN_ALLOWMULTISELECT | OFN_FILEMUSTEXIST | OFN_EXPLORER;
-		retval = GetOpenFileNameW(&of);
-	}
-	else
-	{
-		of.Flags = OFN_OVERWRITEPROMPT | OFN_PATHMUSTEXIST;
-		retval = GetSaveFileNameW(&of);
-	}
+	of.Flags = OFN_ALLOWMULTISELECT | OFN_FILEMUSTEXIST | OFN_EXPLORER;
+
+	retval = GetOpenFileNameW(&of);
 
 	if (!retval)
 	{
@@ -392,47 +389,35 @@ gboolean win32_show_document_open_dialog(gboolean file_open, const gchar *initia
 		return FALSE;
 	}
 
-	if (file_open)
-	{
-		guint x;
-
-		x = of.nFileOffset - 1;
-		if (x != wcslen(fname))
-		{	/* open a single file */
-			WideCharToMultiByte(CP_UTF8, 0, fname, -1, tmp, sizeof(tmp), NULL, NULL);
-			document_open_file(tmp, of.Flags & OFN_READONLY, NULL, NULL);
-		}
-		else
-		{	/* open multiple files */
-			gchar file_name[MAX_PATH];
-			gchar dir_name[MAX_PATH];
-
-			WideCharToMultiByte(CP_UTF8, 0, fname, of.nFileOffset,
-				dir_name, sizeof(dir_name), NULL, NULL);
-			for (; ;)
-			{
-				if (! fname[x])
-				{
-					if (! fname[x + 1])
-						break;
-
-					WideCharToMultiByte(CP_UTF8, 0, fname + x + 1, -1,
-						tmp, sizeof(tmp), NULL, NULL);
-					g_snprintf(file_name, 511, "%s\\%s", dir_name, tmp);
-
-					/* convert the resulting filename into UTF-8 */
-					document_open_file(file_name, of.Flags & OFN_READONLY, NULL, NULL);
-				}
-				x++;
-			}
-		}
+	x = of.nFileOffset - 1;
+	if (x != wcslen(fname))
+	{	/* open a single file */
+		WideCharToMultiByte(CP_UTF8, 0, fname, -1, tmp, sizeof(tmp), NULL, NULL);
+		document_open_file(tmp, of.Flags & OFN_READONLY, NULL, NULL);
 	}
 	else
-	{
-		GeanyDocument *doc = document_get_current();
+	{	/* open multiple files */
+		gchar file_name[MAX_PATH];
+		gchar dir_name[MAX_PATH];
 
-		WideCharToMultiByte(CP_UTF8, 0, fname, -1, tmp, sizeof(tmp), NULL, NULL);
-		document_save_file_as(doc, tmp);
+		WideCharToMultiByte(CP_UTF8, 0, fname, of.nFileOffset,
+			dir_name, sizeof(dir_name), NULL, NULL);
+		for (; ;)
+		{
+			if (! fname[x])
+			{
+				if (! fname[x + 1])
+					break;
+
+				WideCharToMultiByte(CP_UTF8, 0, fname + x + 1, -1,
+					tmp, sizeof(tmp), NULL, NULL);
+				g_snprintf(file_name, 511, "%s\\%s", dir_name, tmp);
+
+				/* convert the resulting filename into UTF-8 */
+				document_open_file(file_name, of.Flags & OFN_READONLY, NULL, NULL);
+			}
+			x++;
+		}
 	}
 	return (retval != 0);
 }

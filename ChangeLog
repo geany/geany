@@ -3,6 +3,10 @@
  * src/win32.c:
    Sort file filters for the native Windows file open dialog by name.
    Don't use file filters for the native Windows Save As dialog.
+ * src/dialogs.c, src/win32.c, src/win32.h:
+   Remove old code.
+   Pass and use also parent and title arguments to
+   win32_show_document_open_dialog().
 
 
 2010-05-15  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
