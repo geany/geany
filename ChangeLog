@@ -9,6 +9,9 @@
    win32_show_document_open_dialog().
  * src/dialogs.c:
    Call handle_save_as() only when the Save As dialog was not cancelled.
+ * src/toolbar.c:
+   Improve adding/removing of the special separator between menubar and
+   toolbar when the toolbar is appended to the menubar.
 
 
 2010-05-15  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>

@@ -409,17 +409,20 @@ void toolbar_update_ui(void)
 {
 	static GtkWidget *hbox_menubar = NULL;
 	static GtkWidget *menubar = NULL;
-	static GtkWidget *menubar_toolbar_separator = NULL;
+	GtkWidget *menubar_toolbar_separator = NULL;
 	GtkWidget *parent;
+	GtkToolItem *first_item;
 
 	if (menubar == NULL)
 	{	/* cache widget pointers */
 		hbox_menubar = ui_lookup_widget(main_widgets.window, "hbox_menubar");
 		menubar = ui_lookup_widget(main_widgets.window, "menubar1");
-
-		menubar_toolbar_separator = GTK_WIDGET(gtk_separator_tool_item_new());
-		gtk_toolbar_insert(GTK_TOOLBAR(main_widgets.toolbar),
-			GTK_TOOL_ITEM(menubar_toolbar_separator), 0);
+	}
+	/* the separator between the menubar and the toolbar */
+	first_item = gtk_toolbar_get_nth_item(GTK_TOOLBAR(main_widgets.toolbar), 0);
+	if (first_item != NULL && GTK_IS_SEPARATOR_TOOL_ITEM(first_item))
+	{
+		gtk_widget_destroy(GTK_WIDGET(first_item));
 	}
 
 	parent = gtk_widget_get_parent(main_widgets.toolbar);
@@ -442,6 +445,12 @@ void toolbar_update_ui(void)
 		}
 		else
 			gtk_box_pack_start(GTK_BOX(hbox_menubar), main_widgets.toolbar, TRUE, TRUE, 0);
+
+		/* the separator between the menubar and the toolbar */
+		menubar_toolbar_separator = GTK_WIDGET(gtk_separator_tool_item_new());
+		gtk_widget_show(menubar_toolbar_separator);
+		gtk_toolbar_insert(GTK_TOOLBAR(main_widgets.toolbar),
+			GTK_TOOL_ITEM(menubar_toolbar_separator), 0);
 	}
 	else
 	{
@@ -466,8 +475,6 @@ void toolbar_update_ui(void)
 			gtk_box_reorder_child(GTK_BOX(box), main_widgets.toolbar, 1);
 		}
 	}
-	/* the separator between the menubar and the toolbar */
-	ui_widget_show_hide(menubar_toolbar_separator, toolbar_prefs.append_to_menu);
 	/* we need to adjust the packing flags for the menubar to expand it if it is alone in the
 	 * hbox and not expand it if the toolbar is appended */
 	gtk_box_set_child_packing(GTK_BOX(hbox_menubar), menubar,
