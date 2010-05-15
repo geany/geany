@@ -85,19 +85,16 @@ static wchar_t *get_file_filters(void)
 {
 	gchar *string;
 	guint i, j, len;
-	static wchar_t title[1024];
+	static wchar_t title[4096];
 	GString *str = g_string_sized_new(100);
 	GString *all_patterns = g_string_sized_new(100);
+	GSList *node;
 	gchar *tmp;
 
-	for (i = 0; i < filetypes_array->len; i++)
-	{
-		tmp = g_strjoinv(";", filetypes[i]->pattern);
-		g_string_append_printf(str, "%s\t%s\t", filetypes[i]->title, tmp);
-		g_free(tmp);
-	}
-	/* create meta file filter "All Source" */
-	for (i = 0; i < filetypes_array->len; i++)
+	/* create meta file filter "All files" */
+	g_string_append_printf(str, "%s\t*\t", _("All files"));
+	/* create meta file filter "All Source" (skip GEANY_FILETYPES_NONE) */
+	for (i = GEANY_FILETYPES_NONE + 1; i < filetypes_array->len; i++)
 	{
 		for (j = 0; filetypes[i]->pattern[j] != NULL; j++)
 		{
@@ -107,7 +104,17 @@ static wchar_t *get_file_filters(void)
 	}
 	g_string_append_printf(str, "%s\t%s\t", _("All Source"), all_patterns->str);
 	g_string_free(all_patterns, TRUE);
+	/* add 'usual' filetypes */
+	foreach_slist(node, filetypes_by_title)
+	{
+		GeanyFiletype *ft = node->data;
 
+		if (G_UNLIKELY(ft->id == GEANY_FILETYPES_NONE))
+			continue;
+		tmp = g_strjoinv(";", ft->pattern);
+		g_string_append_printf(str, "%s\t%s\t", ft->title, tmp);
+		g_free(tmp);
+	}
 	g_string_append_c(str, '\t'); /* the final \0 byte to mark the end of the string */
 	string = str->str;
 	g_string_free(str, FALSE);
@@ -116,7 +123,8 @@ static wchar_t *get_file_filters(void)
 	len = strlen(string);
 	for (i = 0; i < len; i++)
 	{
-		if (string[i] == '\t') string[i] = '\0';
+		if (string[i] == '\t')
+			string[i] = '\0';
 	}
 	MultiByteToWideChar(CP_UTF8, 0, string, len, title, sizeof(title));
 	g_free(string);

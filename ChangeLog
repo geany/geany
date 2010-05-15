@@ -1,3 +1,9 @@
+2010-05-15  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/win32.c:
+   Sort file filters for the native Windows file open dialog by name.
+
+
 2010-05-15  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * src/support.h:
