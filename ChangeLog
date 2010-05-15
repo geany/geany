@@ -7,6 +7,8 @@
    Remove old code.
    Pass and use also parent and title arguments to
    win32_show_document_open_dialog().
+ * src/dialogs.c:
+   Call handle_save_as() only when the Save As dialog was not cancelled.
 
 
 2010-05-15  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
