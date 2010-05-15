@@ -517,8 +517,9 @@ gint toolbar_get_insert_position(void)
 
 void toolbar_finalize(void)
 {
-	g_object_unref(geany_menu_button_action_get_menu(
-					GEANY_MENU_BUTTON_ACTION(toolbar_get_action_by_name("Open"))));
+	GeanyMenubuttonAction *open_action = GEANY_MENU_BUTTON_ACTION(toolbar_get_action_by_name("Open"));
+	g_object_unref(geany_menu_button_action_get_menu(open_action));
+	geany_menu_button_action_set_menu(open_action, NULL);
 
 	/* unref'ing the GtkUIManager object will destroy all its widgets unless they were ref'ed */
 	g_object_unref(uim);

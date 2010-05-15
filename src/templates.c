@@ -709,6 +709,11 @@ void templates_free_templates(void)
 	gint i;
 	GList *children, *item;
 
+	/* disconnect the menu from the action widget, so destroying the items below doesn't
+	 * trigger rebuilding of the menu on each item destroy */
+	geany_menu_button_action_set_menu(
+		GEANY_MENU_BUTTON_ACTION(toolbar_get_action_by_name("New")), NULL);
+
 	for (i = 0; i < GEANY_MAX_TEMPLATES; i++)
 	{
 		g_free(templates[i]);
@@ -725,8 +730,6 @@ void templates_free_templates(void)
 	}
 	g_list_free(children);
 
-	geany_menu_button_action_set_menu(
-		GEANY_MENU_BUTTON_ACTION(toolbar_get_action_by_name("New")), NULL);
 	g_object_unref(new_with_template_menu);
 	new_with_template_menu = NULL;
 }

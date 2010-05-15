@@ -12,6 +12,9 @@
  * src/toolbar.c:
    Improve adding/removing of the special separator between menubar and
    toolbar when the toolbar is appended to the menubar.
+ * src/toolbar.c, src/templates.c:
+   Explicitly disconnect menus from GeanyMenuButtonAction on quit to
+   not trigger updating the menus on each item removal.
 
 
 2010-05-15  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
