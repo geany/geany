@@ -38,6 +38,6 @@
 # define bindtextdomain(Domain,Charset) (Domain)
 # define ngettext(String) (String)
 # define _(String) String
-# define Q_(String) g_strip_context((String), (String))
+# define Q_(String) g_strip_context((String), (String))
 # define N_(String) String
 #endif
