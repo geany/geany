@@ -2,6 +2,7 @@
 
  * src/win32.c:
    Sort file filters for the native Windows file open dialog by name.
+   Don't use file filters for the native Windows Save As dialog.
 
 
 2010-05-15  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>

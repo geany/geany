@@ -133,6 +133,23 @@ static wchar_t *get_file_filters(void)
 }
 
 
+static wchar_t *get_file_filter_all_files(void)
+{
+	guint len;
+	static wchar_t title[4096];
+	gchar *filter;
+
+	/* create meta file filter "All files" */
+	filter = g_strdup_printf("%s\0*\0", _("All files"));
+
+	len = strlen(_("All files")) + 3;
+	MultiByteToWideChar(CP_UTF8, 0, filter, len, title, sizeof(title));
+	g_free(filter);
+
+	return title;
+}
+
+
 static wchar_t *get_filters(gboolean project_files)
 {
 	gchar *string;
@@ -447,9 +464,9 @@ gchar *win32_show_document_save_as_dialog(GtkWindow *parent, const gchar *title,
 #endif
 	of.hwndOwner = GDK_WINDOW_HWND(GTK_WIDGET(parent)->window);
 
-	of.lpstrFilter = get_file_filters();
+	of.lpstrFilter = get_file_filter_all_files();
 	of.lpstrCustomFilter = NULL;
-	of.nFilterIndex = GEANY_FILETYPES_NONE + 1;
+	of.nFilterIndex = 0;
 
 	of.lpstrFile = w_file;
 	of.nMaxFile = 2048;
