@@ -118,7 +118,8 @@ AM_CFLAGS = -DGEANY_DATADIR=\""$(datadir)"\" \
 			-DGEANY_LIBDIR=\""$(libdir)"\" \
 			-DGEANY_LOCALEDIR=\""$(localedir)"\" \
 			-DGEANY_PREFIX=\""$(prefix)"\" \
-			-DGEANY_PRIVATE
+			-DGEANY_PRIVATE \
+			-DGTK
 
 clean-local:
 

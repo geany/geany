@@ -284,6 +284,7 @@ def configure(conf):
 		conf.env.append_value('CCFLAGS', '-g -DGEANY_DEBUG'.split())
 
 	conf.env.append_value('CCFLAGS', '-DHAVE_CONFIG_H')
+	conf.env.append_value('CCFLAGS', '-DGTK') # Scintilla needs this
 	# for now define GEANY_PRIVATE for all files, even though it should just be for src/*.
 	conf.env.append_value('CCFLAGS', '-DGEANY_PRIVATE')
 	# Scintilla flags

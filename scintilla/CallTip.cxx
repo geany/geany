@@ -68,7 +68,7 @@ static bool IsArrowCharacter(char ch) {
 }
 
 // We ignore tabs unless a tab width has been set.
-bool CallTip::IsTabCharacter(char ch) {
+bool CallTip::IsTabCharacter(char ch) const {
 	return (tabSize > 0) && (ch == '\t');
 }
 
@@ -95,7 +95,7 @@ void CallTip::DrawChunk(Surface *surface, int &x, const char *s,
 	int maxEnd = 0;
 	const int numEnds = 10;
 	int ends[numEnds + 2];
-	for (int i=0;i<len;i++) {
+	for (int i=0; i<len; i++) {
 		if ((maxEnd < numEnds) &&
 		        (IsArrowCharacter(s[i]) || IsTabCharacter(s[i])) ) {
 			if (i > 0)

@@ -197,7 +197,7 @@ void UndoHistory::AppendAction(actionType at, int position, char *data, int leng
 				// Insertions must be immediately after to coalesce
 				currentAction++;
 			} else if (at == removeAction) {
-				if ((lengthData == 1) || (lengthData == 2)){
+				if ((lengthData == 1) || (lengthData == 2)) {
 					if ((position + lengthData) == actPrevious->position) {
 						; // Backspace -> OK
 					} else if (position == actPrevious->position) {
@@ -349,7 +349,7 @@ void CellBuffer::GetCharRange(char *buffer, int position, int lengthRetrieve) {
 		                      lengthRetrieve, substance.Length());
 		return;
 	}
-	
+
 	for (int i=0; i<lengthRetrieve; i++) {
 		*buffer++ = substance.ValueAt(position + i);
 	}
@@ -359,7 +359,7 @@ char CellBuffer::StyleAt(int position) {
 	return style.ValueAt(position);
 }
 
-const char *CellBuffer::BufferPointer() { 
+const char *CellBuffer::BufferPointer() {
 	return substance.BufferPointer();
 }
 
@@ -455,7 +455,7 @@ int CellBuffer::LineStart(int line) const {
 		return lv.LineStart(line);
 }
 
-bool CellBuffer::IsReadOnly() {
+bool CellBuffer::IsReadOnly() const {
 	return readOnly;
 }
 
@@ -586,7 +586,7 @@ bool CellBuffer::SetUndoCollection(bool collectUndo) {
 	return collectingUndo;
 }
 
-bool CellBuffer::IsCollectingUndo() {
+bool CellBuffer::IsCollectingUndo() const {
 	return collectingUndo;
 }
 

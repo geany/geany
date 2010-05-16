@@ -142,6 +142,7 @@ protected:	// ScintillaBase subclass needs access to much of Editor
 	bool caretSticky;
 	bool multipleSelection;
 	bool additionalSelectionTyping;
+	int multiPasteMode;
 	bool additionalCaretsBlink;
 	bool additionalCaretsVisible;
 
@@ -338,7 +339,7 @@ protected:	// ScintillaBase subclass needs access to much of Editor
         PRectangle rcLine, LineLayout *ll, int subLine);
 	void DrawLine(Surface *surface, ViewStyle &vsDraw, int line, int lineVisible, int xStart,
 		PRectangle rcLine, LineLayout *ll, int subLine);
-	void DrawBlockCaret(Surface *surface, ViewStyle &vsDraw, LineLayout *ll, int subLine, 
+	void DrawBlockCaret(Surface *surface, ViewStyle &vsDraw, LineLayout *ll, int subLine,
 		int xStart, int offset, int posCaret, PRectangle rcCaret, ColourAllocated caretColour);
 	void DrawCarets(Surface *surface, ViewStyle &vsDraw, int line, int xStart,
 		PRectangle rcLine, LineLayout *ll, int subLine);
@@ -358,6 +359,7 @@ protected:	// ScintillaBase subclass needs access to much of Editor
 	int InsertSpace(int position, unsigned int spaces);
 	void AddChar(char ch);
 	virtual void AddCharUTF(char *s, unsigned int len, bool treatAsDBCS=false);
+	void InsertPaste(SelectionPosition selStart, const char *text, int len);
 	void ClearSelection();
 	void ClearAll();
 	void ClearDocumentStyle();
@@ -403,7 +405,9 @@ protected:	// ScintillaBase subclass needs access to much of Editor
 	void NotifyMacroRecord(unsigned int iMessage, uptr_t wParam, sptr_t lParam);
 
 	void PageMove(int direction, Selection::selTypes sel=Selection::noSel, bool stuttered = false);
-	void ChangeCaseOfSelection(bool makeUpperCase);
+	enum { cmSame, cmUpper, cmLower } caseMap;
+	virtual std::string CaseMapString(const std::string &s, int caseMapping);
+	void ChangeCaseOfSelection(int caseMapping);
 	void LineTranspose();
 	void Duplicate(bool forLine);
 	virtual void CancelModes();
@@ -420,6 +424,7 @@ protected:	// ScintillaBase subclass needs access to much of Editor
 
 	void Indent(bool forwards);
 
+	virtual CaseFolder *CaseFolderForEncoding();
 	long FindText(uptr_t wParam, sptr_t lParam);
 	void SearchAnchor();
 	long SearchText(unsigned int iMessage, uptr_t wParam, sptr_t lParam);
@@ -442,6 +447,7 @@ protected:	// ScintillaBase subclass needs access to much of Editor
 	bool PointInSelMargin(Point pt);
 	void LineSelection(int lineCurrent_, int lineAnchor_);
 	void DwellEnd(bool mouseMoved);
+	void MouseLeave();
 	virtual void ButtonDown(Point pt, unsigned int curTime, bool shift, bool ctrl, bool alt);
 	void ButtonMove(Point pt);
 	void ButtonUp(Point pt, unsigned int curTime, bool ctrl);
@@ -461,18 +467,19 @@ protected:	// ScintillaBase subclass needs access to much of Editor
 
 	void SetAnnotationHeights(int start, int end);
 	void SetDocPointer(Document *document);
-	
+
 	void SetAnnotationVisible(int visible);
 
 	void Expand(int &line, bool doExpand);
 	void ToggleContraction(int line);
 	void EnsureLineVisible(int lineDoc, bool enforcePolicy);
+	int GetTag(char *tagValue, int tagNumber);
 	int ReplaceTarget(bool replacePatterns, const char *text, int length=-1);
 
 	bool PositionIsHotspot(int position);
 	bool PointIsHotspot(Point pt);
 	void SetHotSpotRange(Point *pt);
-	void GetHotSpotRange(int& hsStart, int& hsEnd);
+	void GetHotSpotRange(int &hsStart, int &hsEnd);
 
 	int CodePage() const;
 	virtual bool ValidCodePage(int /* codePage */) const { return true; }

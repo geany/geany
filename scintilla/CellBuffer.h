@@ -170,7 +170,7 @@ public:
 
 	const char *DeleteChars(int position, int deleteLength, bool &startSequence);
 
-	bool IsReadOnly();
+	bool IsReadOnly() const;
 	void SetReadOnly(bool set);
 
 	/// The save point is a marker in the undo stack where the container has stated that
@@ -183,7 +183,7 @@ public:
 	void BasicDeleteChars(int position, int deleteLength);
 
 	bool SetUndoCollection(bool collectUndo);
-	bool IsCollectingUndo();
+	bool IsCollectingUndo() const;
 	void BeginUndoAction();
 	void EndUndoAction();
 	void AddUndoAction(int token, bool mayCoalesce);

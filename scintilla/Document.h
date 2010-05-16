@@ -81,17 +81,17 @@ class Document;
  */
 class RegexSearchBase {
 public:
-	virtual ~RegexSearchBase(){}
+	virtual ~RegexSearchBase() {}
 
-	virtual long FindText(Document* doc, int minPos, int maxPos, const char *s,
+	virtual long FindText(Document *doc, int minPos, int maxPos, const char *s,
                         bool caseSensitive, bool word, bool wordStart, int flags, int *length) = 0;
 
 	///@return String with the substitutions, must remain valid until the next call or destruction
-	virtual const char *SubstituteByPosition(Document* doc, const char *text, int *length) = 0;
+	virtual const char *SubstituteByPosition(Document *doc, const char *text, int *length) = 0;
 };
 
 /// Factory function for RegexSearchBase
-extern RegexSearchBase* CreateRegexSearch(CharClassify *charClassTable);
+extern RegexSearchBase *CreateRegexSearch(CharClassify *charClassTable);
 
 struct StyledText {
 	size_t length;
@@ -99,7 +99,7 @@ struct StyledText {
 	bool multipleStyles;
 	size_t style;
 	const unsigned char *styles;
-	StyledText(	size_t length_, const char *text_, bool multipleStyles_, int style_, const unsigned char *styles_) : 
+	StyledText(size_t length_, const char *text_, bool multipleStyles_, int style_, const unsigned char *styles_) :
 		length(length_), text(text_), multipleStyles(multipleStyles_), style(style_), styles(styles_) {
 	}
 	// Return number of bytes from start to before '\n' or end of text.
@@ -113,6 +113,24 @@ struct StyledText {
 	size_t StyleAt(size_t i) const {
 		return multipleStyles ? styles[i] : style;
 	}
+};
+
+class CaseFolder {
+public:
+	virtual ~CaseFolder() {
+	};
+	virtual size_t Fold(char *folded, size_t sizeFolded, const char *mixed, size_t lenMixed) = 0;
+};
+
+class CaseFolderTable : public CaseFolder {
+protected:
+	char mapping[256];
+public:
+	CaseFolderTable();
+	virtual ~CaseFolderTable();
+	virtual size_t Fold(char *folded, size_t sizeFolded, const char *mixed, size_t lenMixed);
+	void SetTranslation(char ch, char chTranslation);
+	void StandardASCII();
 };
 
 /**
@@ -147,11 +165,11 @@ private:
 	int lenWatchers;
 
 	// ldSize is not real data - it is for dimensions and loops
-	enum lineData { ldMarkers, ldLevels, ldState, ldMargin, ldAnnotation, ldSize };	
+	enum lineData { ldMarkers, ldLevels, ldState, ldMargin, ldAnnotation, ldSize };
 	PerLine *perLineData[ldSize];
 
 	bool matchesValid;
-	RegexSearchBase* regex;
+	RegexSearchBase *regex;
 
 public:
 	int stylingBits;
@@ -254,9 +272,10 @@ public:
 	int NextWordEnd(int pos, int delta);
 	int Length() const { return cb.Length(); }
 	void Allocate(int newSize) { cb.Allocate(newSize); }
-	long FindText(int minPos, int maxPos, const char *s,
-		bool caseSensitive, bool word, bool wordStart, bool regExp, int flags, int *length);
-	long FindText(int iMessage, unsigned long wParam, long lParam);
+	size_t ExtractChar(int pos, char *bytes);
+	bool MatchesWordOptions(bool word, bool wordStart, int pos, int length);
+	long FindText(int minPos, int maxPos, const char *search, bool caseSensitive, bool word,
+		bool wordStart, bool regExp, int flags, int *length, CaseFolder *pcf);
 	const char *SubstituteByPosition(const char *text, int *length);
 	int LinesTotal() const;
 
@@ -324,7 +343,7 @@ class UndoGroup {
 	Document *pdoc;
 	bool groupNeeded;
 public:
-	UndoGroup(Document *pdoc_, bool groupNeeded_=true) : 
+	UndoGroup(Document *pdoc_, bool groupNeeded_=true) :
 		pdoc(pdoc_), groupNeeded(groupNeeded_) {
 		if (groupNeeded) {
 			pdoc->BeginUndoAction();

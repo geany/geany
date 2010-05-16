@@ -10,6 +10,17 @@
 #include <stdio.h>
 #include <ctype.h>
 
+#include <string>
+#include <vector>
+
+// With Borland C++ 5.5, including <string> includes Windows.h leading to defining
+// FindText to FindTextA which makes calls here to Document::FindText fail.
+#ifdef __BORLANDC__
+#ifdef FindText
+#undef FindText
+#endif
+#endif
+
 #include "Platform.h"
 
 #include "Scintilla.h"
@@ -22,6 +33,7 @@
 #include "Decoration.h"
 #include "Document.h"
 #include "RESearch.h"
+#include "UniConversion.h"
 
 #ifdef SCI_NAMESPACE
 using namespace Scintilla;
@@ -140,13 +152,13 @@ void Document::SetSavePoint() {
 	NotifySavePoint(true);
 }
 
-int Document::GetMark(int line) { 
-	return static_cast<LineMarkers*>(perLineData[ldMarkers])->MarkValue(line); 
+int Document::GetMark(int line) {
+	return static_cast<LineMarkers *>(perLineData[ldMarkers])->MarkValue(line);
 }
 
 int Document::AddMark(int line, int markerNum) {
 	if (line <= LinesTotal()) {
-		int prev = static_cast<LineMarkers*>(perLineData[ldMarkers])->
+		int prev = static_cast<LineMarkers *>(perLineData[ldMarkers])->
 			AddMark(line, markerNum, LinesTotal());
 		DocModification mh(SC_MOD_CHANGEMARKER, LineStart(line), 0, 0, 0, line);
 		NotifyModified(mh);
@@ -160,20 +172,20 @@ void Document::AddMarkSet(int line, int valueSet) {
 	unsigned int m = valueSet;
 	for (int i = 0; m; i++, m >>= 1)
 		if (m & 1)
-			static_cast<LineMarkers*>(perLineData[ldMarkers])->
+			static_cast<LineMarkers *>(perLineData[ldMarkers])->
 				AddMark(line, i, LinesTotal());
 	DocModification mh(SC_MOD_CHANGEMARKER, LineStart(line), 0, 0, 0, line);
 	NotifyModified(mh);
 }
 
 void Document::DeleteMark(int line, int markerNum) {
-	static_cast<LineMarkers*>(perLineData[ldMarkers])->DeleteMark(line, markerNum, false);
+	static_cast<LineMarkers *>(perLineData[ldMarkers])->DeleteMark(line, markerNum, false);
 	DocModification mh(SC_MOD_CHANGEMARKER, LineStart(line), 0, 0, 0, line);
 	NotifyModified(mh);
 }
 
 void Document::DeleteMarkFromHandle(int markerHandle) {
-	static_cast<LineMarkers*>(perLineData[ldMarkers])->DeleteMarkFromHandle(markerHandle);
+	static_cast<LineMarkers *>(perLineData[ldMarkers])->DeleteMarkFromHandle(markerHandle);
 	DocModification mh(SC_MOD_CHANGEMARKER, 0, 0, 0, 0);
 	mh.line = -1;
 	NotifyModified(mh);
@@ -181,15 +193,15 @@ void Document::DeleteMarkFromHandle(int markerHandle) {
 
 void Document::DeleteAllMarks(int markerNum) {
 	for (int line = 0; line < LinesTotal(); line++) {
-		static_cast<LineMarkers*>(perLineData[ldMarkers])->DeleteMark(line, markerNum, true);
+		static_cast<LineMarkers *>(perLineData[ldMarkers])->DeleteMark(line, markerNum, true);
 	}
 	DocModification mh(SC_MOD_CHANGEMARKER, 0, 0, 0, 0);
 	mh.line = -1;
 	NotifyModified(mh);
 }
 
-int Document::LineFromHandle(int markerHandle) { 
-	return static_cast<LineMarkers*>(perLineData[ldMarkers])->LineFromHandle(markerHandle); 
+int Document::LineFromHandle(int markerHandle) {
+	return static_cast<LineMarkers *>(perLineData[ldMarkers])->LineFromHandle(markerHandle);
 }
 
 int Document::LineStart(int line) const {
@@ -226,7 +238,7 @@ int Document::VCHomePosition(int position) const {
 	int startPosition = LineStart(line);
 	int endLine = LineEnd(line);
 	int startText = startPosition;
-	while (startText < endLine && (cb.CharAt(startText) == ' ' || cb.CharAt(startText) == '\t' ) )
+	while (startText < endLine && (cb.CharAt(startText) == ' ' || cb.CharAt(startText) == '\t'))
 		startText++;
 	if (position == startText)
 		return startPosition;
@@ -235,7 +247,7 @@ int Document::VCHomePosition(int position) const {
 }
 
 int Document::SetLevel(int line, int level) {
-	int prev = static_cast<LineLevels*>(perLineData[ldLevels])->SetLevel(line, level, LinesTotal());
+	int prev = static_cast<LineLevels *>(perLineData[ldLevels])->SetLevel(line, level, LinesTotal());
 	if (prev != level) {
 		DocModification mh(SC_MOD_CHANGEFOLD | SC_MOD_CHANGEMARKER,
 		                   LineStart(line), 0, 0, 0, line);
@@ -246,12 +258,12 @@ int Document::SetLevel(int line, int level) {
 	return prev;
 }
 
-int Document::GetLevel(int line) { 
-	return static_cast<LineLevels*>(perLineData[ldLevels])->GetLevel(line); 
+int Document::GetLevel(int line) {
+	return static_cast<LineLevels *>(perLineData[ldLevels])->GetLevel(line);
 }
 
-void Document::ClearLevels() { 
-	static_cast<LineLevels*>(perLineData[ldLevels])->ClearLevels(); 
+void Document::ClearLevels() {
+	static_cast<LineLevels *>(perLineData[ldLevels])->ClearLevels();
 }
 
 static bool IsSubordinate(int levelStart, int levelTry) {
@@ -437,7 +449,7 @@ int Document::MovePositionOutsideChar(int pos, int moveDir, bool checkLineEnd) {
 			while (posCheck < pos) {
 				char mbstr[maxBytesInDBCSCharacter+1];
 				int i;
-				for(i=0;i<Platform::DBCSCharMaxLength();i++) {
+				for (i=0; i<Platform::DBCSCharMaxLength(); i++) {
 					mbstr[i] = cb.CharAt(posCheck+i);
 				}
 				mbstr[i] = '\0';
@@ -739,7 +751,7 @@ int Document::GetLineIndentation(int line) {
 	if ((line >= 0) && (line < LinesTotal())) {
 		int lineStart = LineStart(line);
 		int length = Length();
-		for (int i = lineStart;i < length;i++) {
+		for (int i = lineStart; i < length; i++) {
 			char ch = cb.CharAt(i);
 			if (ch == ' ')
 				indent++;
@@ -782,7 +794,7 @@ int Document::GetColumn(int pos) {
 	int column = 0;
 	int line = LineFromPosition(pos);
 	if ((line >= 0) && (line < LinesTotal())) {
-		for (int i = LineStart(line);i < pos;) {
+		for (int i = LineStart(line); i < pos;) {
 			char ch = cb.CharAt(i);
 			if (ch == '\t') {
 				column = NextTab(column, tabInChars);
@@ -969,7 +981,7 @@ int Document::ExtendWordSelect(int pos, int delta, bool onlyWordCharacters) {
 		while (pos < (Length()) && (WordCharClass(cb.CharAt(pos)) == ccStart))
 			pos++;
 	}
-	return MovePositionOutsideChar(pos, delta);
+	return MovePositionOutsideChar(pos, delta, true);
 }
 
 /**
@@ -1074,79 +1086,170 @@ static inline char MakeLowerCase(char ch) {
 		return static_cast<char>(ch - 'A' + 'a');
 }
 
+static bool GoodTrailByte(int v) {
+	return (v >= 0x80) && (v < 0xc0);
+}
+
+size_t Document::ExtractChar(int pos, char *bytes) {
+	unsigned char ch = static_cast<unsigned char>(cb.CharAt(pos));
+	size_t widthChar = UTF8CharLength(ch);
+	bytes[0] = ch;
+	for (size_t i=1; i<widthChar; i++) {
+		bytes[i] = cb.CharAt(pos+i);
+		if (!GoodTrailByte(static_cast<unsigned char>(bytes[i]))) { // Bad byte
+			widthChar = 1;
+		}
+	}
+	return widthChar;
+}
+
+CaseFolderTable::CaseFolderTable() {
+	for (size_t iChar=0; iChar<sizeof(mapping); iChar++) {
+		mapping[iChar] = static_cast<char>(iChar);
+	}
+}
+
+CaseFolderTable::~CaseFolderTable() {
+}
+
+size_t CaseFolderTable::Fold(char *folded, size_t sizeFolded, const char *mixed, size_t lenMixed) {
+	if (lenMixed > sizeFolded) {
+		return 0;
+	} else {
+		for (size_t i=0; i<lenMixed; i++) {
+			folded[i] = mapping[static_cast<unsigned char>(mixed[i])];
+		}
+		return lenMixed;
+	}
+}
+
+void CaseFolderTable::SetTranslation(char ch, char chTranslation) {
+	mapping[static_cast<unsigned char>(ch)] = chTranslation;
+}
+
+void CaseFolderTable::StandardASCII() {
+	for (size_t iChar=0; iChar<sizeof(mapping); iChar++) {
+		if (iChar >= 'A' && iChar <= 'Z') {
+			mapping[iChar] = static_cast<char>(iChar - 'A' + 'a');
+		} else {
+			mapping[iChar] = static_cast<char>(iChar);
+		}
+	}
+}
+
+bool Document::MatchesWordOptions(bool word, bool wordStart, int pos, int length) {
+	return (!word && !wordStart) ||
+			(word && IsWordAt(pos, pos + length)) ||
+			(wordStart && IsWordStartAt(pos));
+}
+
 /**
  * Find text in document, supporting both forward and backward
  * searches (just pass minPos > maxPos to do a backward search)
  * Has not been tested with backwards DBCS searches yet.
  */
-long Document::FindText(int minPos, int maxPos, const char *s,
+long Document::FindText(int minPos, int maxPos, const char *search,
                         bool caseSensitive, bool word, bool wordStart, bool regExp, int flags,
-                        int *length) {
+                        int *length, CaseFolder *pcf) {
 	if (regExp) {
 		if (!regex)
 			regex = CreateRegexSearch(&charClass);
-		return regex->FindText(this, minPos, maxPos, s, caseSensitive, word, wordStart, flags, length);
+		return regex->FindText(this, minPos, maxPos, search, caseSensitive, word, wordStart, flags, length);
 	} else {
 
-		bool forward = minPos <= maxPos;
-		int increment = forward ? 1 : -1;
+		const bool forward = minPos <= maxPos;
+		const int increment = forward ? 1 : -1;
 
 		// Range endpoints should not be inside DBCS characters, but just in case, move them.
-		int startPos = MovePositionOutsideChar(minPos, increment, false);
-		int endPos = MovePositionOutsideChar(maxPos, increment, false);
+		const int startPos = MovePositionOutsideChar(minPos, increment, false);
+		const int endPos = MovePositionOutsideChar(maxPos, increment, false);
 
 		// Compute actual search ranges needed
-		int lengthFind = *length;
-		if (lengthFind == -1)
-			lengthFind = static_cast<int>(strlen(s));
-		int endSearch = endPos;
-		if (startPos <= endPos) {
-			endSearch = endPos - lengthFind + 1;
-		}
+		const int lengthFind = (*length == -1) ? static_cast<int>(strlen(search)) : *length;
+		const int endSearch = (startPos <= endPos) ? endPos - lengthFind + 1 : endPos;
+
 		//Platform::DebugPrintf("Find %d %d %s %d\n", startPos, endPos, ft->lpstrText, lengthFind);
-		char firstChar = s[0];
-		if (!caseSensitive)
-			firstChar = static_cast<char>(MakeUpperCase(firstChar));
+		const int limitPos = Platform::Maximum(startPos, endPos);
 		int pos = forward ? startPos : (startPos - 1);
-		while (forward ? (pos < endSearch) : (pos >= endSearch)) {
-			char ch = CharAt(pos);
-			if (caseSensitive) {
-				if (ch == firstChar) {
-					bool found = true;
-					if (pos + lengthFind > Platform::Maximum(startPos, endPos)) found = false;
-					for (int posMatch = 1; posMatch < lengthFind && found; posMatch++) {
-						ch = CharAt(pos + posMatch);
-						if (ch != s[posMatch])
-							found = false;
-					}
-					if (found) {
-						if ((!word && !wordStart) ||
-						        (word && IsWordAt(pos, pos + lengthFind)) ||
-						        (wordStart && IsWordStartAt(pos)))
-							return pos;
+		if (caseSensitive) {
+			while (forward ? (pos < endSearch) : (pos >= endSearch)) {
+				bool found = (pos + lengthFind) <= limitPos;
+				for (int indexSearch = 0; (indexSearch < lengthFind) && found; indexSearch++) {
+					found = CharAt(pos + indexSearch) == search[indexSearch];
+				}
+				if (found && MatchesWordOptions(word, wordStart, pos, lengthFind)) {
+					return pos;
+				}
+				pos += increment;
+				if (dbcsCodePage && (pos >= 0)) {
+					// Have to use >= 0 as otherwise next statement would change 
+					// -1 to 0 and make loop infinite.
+					// Ensure trying to match from start of character
+					pos = MovePositionOutsideChar(pos, increment, false);
+				}
+			}
+		} else if (SC_CP_UTF8 == dbcsCodePage) {
+			const size_t maxBytesCharacter = 4;
+			const size_t maxFoldingExpansion = 4;
+			std::vector<char> searchThing(lengthFind * maxBytesCharacter * maxFoldingExpansion + 1);
+			const int lenSearch = pcf->Fold(&searchThing[0], searchThing.size(), search, lengthFind);
+			while (forward ? (pos < endSearch) : (pos >= endSearch)) {
+				int widthFirstCharacter = 0;
+				int indexDocument = 0;
+				int indexSearch = 0;
+				bool characterMatches = true;
+				while (characterMatches && 
+					((pos + indexDocument) < limitPos) && 
+					(indexSearch < lenSearch)) {
+					char bytes[maxBytesCharacter + 1];
+					bytes[maxBytesCharacter] = 0;
+					const int widthChar = ExtractChar(pos + indexDocument, bytes);
+					if (!widthFirstCharacter)
+						widthFirstCharacter = widthChar;
+					char folded[maxBytesCharacter * maxFoldingExpansion + 1];
+					const int lenFlat = pcf->Fold(folded, sizeof(folded), bytes, widthChar);
+					folded[lenFlat] = 0;
+					// Does folded match the buffer
+					characterMatches = 0 == memcmp(folded, &searchThing[0] + indexSearch, lenFlat);
+					indexDocument += widthChar;
+					indexSearch += lenFlat;
+				}
+				if (characterMatches && (indexSearch == static_cast<int>(lenSearch))) {
+					if (MatchesWordOptions(word, wordStart, pos, indexDocument)) {
+						*length = indexDocument;
+						return pos;
 					}
 				}
-			} else {
-				if (MakeUpperCase(ch) == firstChar) {
-					bool found = true;
-					if (pos + lengthFind > Platform::Maximum(startPos, endPos)) found = false;
-					for (int posMatch = 1; posMatch < lengthFind && found; posMatch++) {
-						ch = CharAt(pos + posMatch);
-						if (MakeUpperCase(ch) != MakeUpperCase(s[posMatch]))
-							found = false;
-					}
-					if (found) {
-						if ((!word && !wordStart) ||
-						        (word && IsWordAt(pos, pos + lengthFind)) ||
-						        (wordStart && IsWordStartAt(pos)))
-							return pos;
+				if (forward) {
+					pos += widthFirstCharacter;
+				} else {
+					pos--;
+					if (pos > 0) {
+						// Ensure trying to match from start of character
+						pos = MovePositionOutsideChar(pos, increment, false);
 					}
 				}
 			}
-			pos += increment;
-			if (dbcsCodePage && (pos >= 0)) {
-				// Ensure trying to match from start of character
-				pos = MovePositionOutsideChar(pos, increment, false);
+		} else {
+			CaseFolderTable caseFolder;
+			std::vector<char> searchThing(lengthFind + 1);
+			pcf->Fold(&searchThing[0], searchThing.size(), search, lengthFind);
+			while (forward ? (pos < endSearch) : (pos >= endSearch)) {
+				bool found = (pos + lengthFind) <= limitPos;
+				for (int indexSearch = 0; (indexSearch < lengthFind) && found; indexSearch++) {
+					char ch = CharAt(pos + indexSearch);
+					char folded[2];
+					pcf->Fold(folded, sizeof(folded), &ch, 1);
+					found = folded[0] == searchThing[indexSearch];
+				}
+				if (found && MatchesWordOptions(word, wordStart, pos, lengthFind)) {
+					return pos;
+				}
+				pos += increment;
+				if (dbcsCodePage && (pos >= 0)) {
+					// Ensure trying to match from start of character
+					pos = MovePositionOutsideChar(pos, increment, false);
+				}
 			}
 		}
 	}
@@ -1256,7 +1359,7 @@ void Document::EnsureStyledTo(int pos) {
 }
 
 int Document::SetLineState(int line, int state) {
-	int statePrevious = static_cast<LineState*>(perLineData[ldState])->SetLineState(line, state);
+	int statePrevious = static_cast<LineState *>(perLineData[ldState])->SetLineState(line, state);
 	if (state != statePrevious) {
 		DocModification mh(SC_MOD_CHANGELINESTATE, 0, 0, 0, 0, line);
 		NotifyModified(mh);
@@ -1264,59 +1367,59 @@ int Document::SetLineState(int line, int state) {
 	return statePrevious;
 }
 
-int Document::GetLineState(int line) { 
-	return static_cast<LineState*>(perLineData[ldState])->GetLineState(line); 
+int Document::GetLineState(int line) {
+	return static_cast<LineState *>(perLineData[ldState])->GetLineState(line);
 }
 
-int Document::GetMaxLineState() { 
-	return static_cast<LineState*>(perLineData[ldState])->GetMaxLineState(); 
+int Document::GetMaxLineState() {
+	return static_cast<LineState *>(perLineData[ldState])->GetMaxLineState();
 }
 
 StyledText Document::MarginStyledText(int line) {
-	LineAnnotation *pla = static_cast<LineAnnotation*>(perLineData[ldMargin]);
-	return StyledText(pla->Length(line), pla->Text(line), 
+	LineAnnotation *pla = static_cast<LineAnnotation *>(perLineData[ldMargin]);
+	return StyledText(pla->Length(line), pla->Text(line),
 		pla->MultipleStyles(line), pla->Style(line), pla->Styles(line));
 }
 
 void Document::MarginSetText(int line, const char *text) {
-	static_cast<LineAnnotation*>(perLineData[ldMargin])->SetText(line, text); 
+	static_cast<LineAnnotation *>(perLineData[ldMargin])->SetText(line, text);
 	DocModification mh(SC_MOD_CHANGEMARGIN, LineStart(line), 0, 0, 0, line);
 	NotifyModified(mh);
 }
 
 void Document::MarginSetStyle(int line, int style) {
-	static_cast<LineAnnotation*>(perLineData[ldMargin])->SetStyle(line, style); 
+	static_cast<LineAnnotation *>(perLineData[ldMargin])->SetStyle(line, style);
 }
 
 void Document::MarginSetStyles(int line, const unsigned char *styles) {
-	static_cast<LineAnnotation*>(perLineData[ldMargin])->SetStyles(line, styles); 
+	static_cast<LineAnnotation *>(perLineData[ldMargin])->SetStyles(line, styles);
 }
 
 int Document::MarginLength(int line) const {
-	return static_cast<LineAnnotation*>(perLineData[ldMargin])->Length(line);
+	return static_cast<LineAnnotation *>(perLineData[ldMargin])->Length(line);
 }
 
 void Document::MarginClearAll() {
 	int maxEditorLine = LinesTotal();
-	for (int l=0;l<maxEditorLine;l++)
+	for (int l=0; l<maxEditorLine; l++)
 		MarginSetText(l, 0);
 	// Free remaining data
-	static_cast<LineAnnotation*>(perLineData[ldMargin])->ClearAll();
+	static_cast<LineAnnotation *>(perLineData[ldMargin])->ClearAll();
 }
 
 bool Document::AnnotationAny() const {
-	return static_cast<LineAnnotation*>(perLineData[ldAnnotation])->AnySet(); 
+	return static_cast<LineAnnotation *>(perLineData[ldAnnotation])->AnySet();
 }
 
 StyledText Document::AnnotationStyledText(int line) {
-	LineAnnotation *pla = static_cast<LineAnnotation*>(perLineData[ldAnnotation]);
-	return StyledText(pla->Length(line), pla->Text(line), 
+	LineAnnotation *pla = static_cast<LineAnnotation *>(perLineData[ldAnnotation]);
+	return StyledText(pla->Length(line), pla->Text(line),
 		pla->MultipleStyles(line), pla->Style(line), pla->Styles(line));
 }
 
 void Document::AnnotationSetText(int line, const char *text) {
 	const int linesBefore = AnnotationLines(line);
-	static_cast<LineAnnotation*>(perLineData[ldAnnotation])->SetText(line, text); 
+	static_cast<LineAnnotation *>(perLineData[ldAnnotation])->SetText(line, text);
 	const int linesAfter = AnnotationLines(line);
 	DocModification mh(SC_MOD_CHANGEANNOTATION, LineStart(line), 0, 0, 0, line);
 	mh.annotationLinesAdded = linesAfter - linesBefore;
@@ -1324,27 +1427,27 @@ void Document::AnnotationSetText(int line, const char *text) {
 }
 
 void Document::AnnotationSetStyle(int line, int style) {
-	static_cast<LineAnnotation*>(perLineData[ldAnnotation])->SetStyle(line, style); 
+	static_cast<LineAnnotation *>(perLineData[ldAnnotation])->SetStyle(line, style);
 }
 
 void Document::AnnotationSetStyles(int line, const unsigned char *styles) {
-	static_cast<LineAnnotation*>(perLineData[ldAnnotation])->SetStyles(line, styles); 
+	static_cast<LineAnnotation *>(perLineData[ldAnnotation])->SetStyles(line, styles);
 }
 
 int Document::AnnotationLength(int line) const {
-	return static_cast<LineAnnotation*>(perLineData[ldAnnotation])->Length(line);
+	return static_cast<LineAnnotation *>(perLineData[ldAnnotation])->Length(line);
 }
 
 int Document::AnnotationLines(int line) const {
-	return static_cast<LineAnnotation*>(perLineData[ldAnnotation])->Lines(line);
+	return static_cast<LineAnnotation *>(perLineData[ldAnnotation])->Lines(line);
 }
 
 void Document::AnnotationClearAll() {
 	int maxEditorLine = LinesTotal();
-	for (int l=0;l<maxEditorLine;l++)
+	for (int l=0; l<maxEditorLine; l++)
 		AnnotationSetText(l, 0);
 	// Free remaining data
-	static_cast<LineAnnotation*>(perLineData[ldAnnotation])->ClearAll();
+	static_cast<LineAnnotation *>(perLineData[ldAnnotation])->ClearAll();
 }
 
 void Document::IncrementStyleClock() {
@@ -1523,11 +1626,11 @@ bool IsLineEndChar(char c) {
 int Document::ExtendStyleRange(int pos, int delta, bool singleLine) {
 	int sStart = cb.StyleAt(pos);
 	if (delta < 0) {
-		while (pos > 0 && (cb.StyleAt(pos) == sStart) && (!singleLine || !IsLineEndChar(cb.CharAt(pos))) )
+		while (pos > 0 && (cb.StyleAt(pos) == sStart) && (!singleLine || !IsLineEndChar(cb.CharAt(pos))))
 			pos--;
 		pos++;
 	} else {
-		while (pos < (Length()) && (cb.StyleAt(pos) == sStart) && (!singleLine || !IsLineEndChar(cb.CharAt(pos))) )
+		while (pos < (Length()) && (cb.StyleAt(pos) == sStart) && (!singleLine || !IsLineEndChar(cb.CharAt(pos))))
 			pos++;
 	}
 	return pos;
@@ -1569,7 +1672,7 @@ int Document::BraceMatch(int position, int /*maxReStyle*/) {
 	int depth = 1;
 	position = position + direction;
 	while ((position >= 0) && (position < Length())) {
-		position = MovePositionOutsideChar(position, direction);
+		position = MovePositionOutsideChar(position, direction, true);
 		char chAtPos = CharAt(position);
 		char styAtPos = static_cast<char>(StyleAt(position) & stylingBitsMask);
 		if ((position > GetEndStyled()) || (styAtPos == styBrace)) {
@@ -1600,7 +1703,7 @@ public:
                         bool caseSensitive, bool word, bool wordStart, int flags,
                         int *length);
 
-	virtual const char *SubstituteByPosition(Document* doc, const char *text, int *length);
+	virtual const char *SubstituteByPosition(Document *doc, const char *text, int *length);
 
 private:
 	RESearch search;
@@ -1715,7 +1818,7 @@ long BuiltinRegex::FindText(Document *doc, int minPos, int maxPos, const char *s
 	return pos;
 }
 
-const char *BuiltinRegex::SubstituteByPosition(Document* doc, const char *text, int *length) {
+const char *BuiltinRegex::SubstituteByPosition(Document *doc, const char *text, int *length) {
 	delete []substituted;
 	substituted = 0;
 	DocumentIndexer di(doc, doc->Length());
@@ -1737,6 +1840,7 @@ const char *BuiltinRegex::SubstituteByPosition(Document* doc, const char *text, 
 				case 'r':
 				case 't':
 				case 'v':
+				case '\\':
 					i++;
 				}
 				lenResult++;
@@ -1779,6 +1883,9 @@ const char *BuiltinRegex::SubstituteByPosition(Document* doc, const char *text, 
 					break;
 				case 'v':
 					*o++ = '\v';
+					break;
+				case '\\':
+					*o++ = '\\';
 					break;
 				default:
 					*o++ = '\\';

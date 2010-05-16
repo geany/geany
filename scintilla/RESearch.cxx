@@ -248,6 +248,7 @@ const char bitarr[] = { 1, 2, 4, 8, 16, 32, 64, '\200' };
  */
 
 RESearch::RESearch(CharClassify *charClassTable) {
+	failure = 0;
 	charClass = charClassTable;
 	Init();
 }

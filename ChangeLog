@@ -11,6 +11,9 @@
  * src/geanymenubuttonaction.c:
    Explicitly check for the type when iterating the action's proxies.
    For some reason on Windows, a GtkImageMenuItem proxy is created.
+ * geany.pc.in, wscript, plugins/Makefile.am, src/Makefile.am,
+   src/plugindata.h, scintilla/*, scintilla/include/*:
+   Update Scintilla to version 2.11.
 
 
 2010-05-15  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
