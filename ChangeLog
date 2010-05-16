@@ -18,6 +18,8 @@
    src/makefile.win32:
    Add new GTK define also for Mingw cross compilation and
    makefile.win32 based Windows builds.
+ * plugins/filebrowser.c:
+   Implement reading and evaluating hidden file attribute on Windows.
 
 
 2010-05-15  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

@@ -29,6 +29,9 @@
 
 #include <gdk/gdkkeysyms.h>
 
+#ifdef G_OS_WIN32
+# include <windows.h>
+#endif
 
 GeanyPlugin		*geany_plugin;
 GeanyData		*geany_data;
@@ -99,16 +102,35 @@ PluginCallback plugin_callbacks[] =
 };
 
 
+#ifdef G_OS_WIN32
+static gboolean win32_check_hidden(const gchar *filename)
+{
+	DWORD attrs;
+	static wchar_t w_filename[MAX_PATH];
+	MultiByteToWideChar(CP_UTF8, 0, filename, -1, w_filename, sizeof(w_filename));
+	attrs = GetFileAttributesW(w_filename);
+	if (attrs != INVALID_FILE_ATTRIBUTES && attrs & FILE_ATTRIBUTE_HIDDEN)
+		return TRUE;
+	return FALSE;
+}
+#endif
+
+
 /* Returns: whether name should be hidden. */
-static gboolean check_hidden(const gchar *base_name)
+static gboolean check_hidden(const gchar *filename, const gchar *base_name)
 {
 	gsize len;
 
 	if (! NZV(base_name))
 		return FALSE;
 
+#ifdef G_OS_WIN32
+	if (win32_check_hidden(filename))
+		return TRUE;
+#else
 	if (base_name[0] == '.')
 		return TRUE;
+#endif
 
 	len = strlen(base_name);
 	if (base_name[len - 1] == '~')
@@ -154,15 +176,19 @@ static void add_item(const gchar *name)
 	const gchar *sep;
 	gboolean dir;
 
-	if (! show_hidden_files && check_hidden(name))
-		return;
-
 	sep = (utils_str_equal(current_dir, "/")) ? "" : G_DIR_SEPARATOR_S;
 	fname = g_strconcat(current_dir, sep, name, NULL);
 	dir = g_file_test(fname, G_FILE_TEST_IS_DIR);
 	utf8_fullname = utils_get_locale_from_utf8(fname);
 	utf8_name = utils_get_utf8_from_locale(name);
 	g_free(fname);
+
+	if (! show_hidden_files && check_hidden(utf8_fullname, name))
+	{
+		g_free(utf8_name);
+		g_free(utf8_fullname);
+		return;
+	}
 
 	if (dir)
 	{
