@@ -29,7 +29,7 @@ void win32_show_pref_file_dialog(GtkEntry *item);
 
 gchar *win32_show_file_dialog(GtkWindow *parent, const gchar *title, const gchar *initial_dir);
 
-gboolean win32_show_document_open_dialog(gboolean file_open, const gchar *initial_dir);
+gboolean win32_show_document_open_dialog(GtkWindow *parent, const gchar *title, const gchar *initial_dir);
 
 gchar *win32_show_document_save_as_dialog(GtkWindow *parent, const gchar *title,
 										  const gchar *initial_file);
