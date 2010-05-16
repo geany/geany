@@ -94,7 +94,8 @@ AM_CFLAGS = -DGEANY_DATADIR=\"data\" \
 			-DGEANY_LIBDIR=\"\" \
 			-DGEANY_LOCALEDIR=\"\" \
 			-DGEANY_PREFIX=\"\" \
-			-DGEANY_PRIVATE
+			-DGEANY_PRIVATE \
+			-DGTK
 
 geany_LDFLAGS =	-mwindows -mms-bitfields
 

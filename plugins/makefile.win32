@@ -36,6 +36,7 @@ CFLAGS=-O0 -g $(CBASEFLAGS)
 else
 CFLAGS=-O2 $(CBASEFLAGS)
 endif
+CFLAGS += -DGTK
 
 ifndef GTK210
 ALL_GTK_LIBS += -liconv

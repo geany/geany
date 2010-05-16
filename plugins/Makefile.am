@@ -35,6 +35,7 @@ DLL_LD_FLAGS = -module -avoid-version
 MINGW_CFLAGS = \
 			-DGEANY_DATADIR=\"data\" \
 			-DHAVE_CONFIG_H \
+			-DGTK \
 			-I$(top_srcdir) \
 			-I$(top_srcdir)/src \
 			-I$(top_srcdir)/tagmanager/include \

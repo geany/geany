@@ -5,7 +5,8 @@ DEFINES = -DHAVE_CONFIG_H \
 	-DGEANY_DATADIR=\"data\" \
 	-DGEANY_LOCALEDIR=\"\" \
 	-DGEANY_LIBDIR=\"\" \
-	-DGEANY_PREFIX=\"\"
+	-DGEANY_PREFIX=\"\" \
+	-DGTK
 
 .SUFFIXES: .c .o .h .a
 WINDRES = windres.exe
