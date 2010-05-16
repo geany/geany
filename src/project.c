@@ -41,9 +41,7 @@
 #include "msgwindow.h"
 #include "main.h"
 #include "keyfile.h"
-#ifdef G_OS_WIN32
-# include "win32.h"
-#endif
+#include "win32.h"
 #include "build.h"
 #include "interface.h"
 #include "editor.h"

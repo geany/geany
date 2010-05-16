@@ -1,3 +1,9 @@
+2010-05-16  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/prefs.c, src/project.c:
+   win32.h can be included unconditionally.
+
+
 2010-05-15  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/win32.c:

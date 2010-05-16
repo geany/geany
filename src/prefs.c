@@ -62,14 +62,12 @@
 #include "stash.h"
 #include "keyfile.h"
 #include "filetypes.h"
+#include "win32.h"
 
 #ifdef HAVE_VTE
 # include "vte.h"
 #endif
 
-#ifdef G_OS_WIN32
-# include "win32.h"
-#endif
 
 
 GeanyPrefs prefs;
