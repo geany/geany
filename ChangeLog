@@ -8,6 +8,10 @@
    Small improvements to speed up quit process with many open documents.
    Avoid calling gtk_notebook_remove_page() on exit as it takes
    a lot of time.
+ * src/geanymenubuttonaction.c:
+   Explicitly check for the type when iterating the action's proxies.
+   For some reason on Windows, a GtkImageMenuItem proxy is created.
+
 
 2010-05-15  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 

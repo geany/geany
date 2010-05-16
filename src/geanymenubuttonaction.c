@@ -213,20 +213,21 @@ static void menu_items_changed_cb(GtkContainer *container, GtkWidget *widget, Ge
 	else
 		enable = FALSE;
 
-	if (enable)
+	foreach_slist(l, gtk_action_get_proxies(GTK_ACTION(action)))
 	{
-		foreach_slist(l, gtk_action_get_proxies(GTK_ACTION(action)))
+		/* On Windows a GtkImageMenuItem proxy is created for whatever reason. So we filter
+		 * by type and act only on GtkMenuToolButton proxies. */
+		/* TODO find why the GtkImageMenuItem proxy is created */
+		if (! GTK_IS_MENU_TOOL_BUTTON(l->data))
+			continue;
+
+		if (enable)
 		{
 			if (gtk_menu_tool_button_get_menu(GTK_MENU_TOOL_BUTTON(l->data)) == NULL)
 				gtk_menu_tool_button_set_menu(GTK_MENU_TOOL_BUTTON(l->data), priv->menu);
 		}
-	}
-	else
-	{
-		foreach_slist(l, gtk_action_get_proxies(GTK_ACTION(action)))
-		{
+		else
 			gtk_menu_tool_button_set_menu(GTK_MENU_TOOL_BUTTON(l->data), NULL);
-		}
 	}
 }
 
