@@ -343,6 +343,9 @@ static void on_current_path(void)
 
 static void on_go_up(void)
 {
+	gsize len = strlen(current_dir);
+	if (current_dir[len-1] == G_DIR_SEPARATOR)
+		current_dir[len-1] = '\0';
 	/* remove the highest directory part (which becomes the basename of current_dir) */
 	setptr(current_dir, g_path_get_dirname(current_dir));
 	refresh();

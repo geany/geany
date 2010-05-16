@@ -20,6 +20,7 @@
    makefile.win32 based Windows builds.
  * plugins/filebrowser.c:
    Implement reading and evaluating hidden file attribute on Windows.
+   Fix broken "Go Up" if the current path ends with a slash.
 
 
 2010-05-15  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
