@@ -364,6 +364,7 @@ static void save_dialog_prefs(GKeyFile *config)
 	g_key_file_set_boolean(config, PACKAGE, "msgwin_compiler_visible", interface_prefs.msgwin_compiler_visible);
 	g_key_file_set_boolean(config, PACKAGE, "msgwin_messages_visible", interface_prefs.msgwin_messages_visible);
 	g_key_file_set_boolean(config, PACKAGE, "msgwin_scribble_visible", interface_prefs.msgwin_scribble_visible);
+	g_key_file_set_boolean(config, PACKAGE, "use_native_windows_dialogs", interface_prefs.use_native_windows_dialogs);
 
 	/* display */
 	g_key_file_set_boolean(config, PACKAGE, "show_indent_guide", editor_prefs.show_indent_guide);
@@ -657,6 +658,7 @@ static void load_dialog_prefs(GKeyFile *config)
 	interface_prefs.msgwin_compiler_visible = utils_get_setting_boolean(config, PACKAGE, "msgwin_compiler_visible", TRUE);
 	interface_prefs.msgwin_messages_visible = utils_get_setting_boolean(config, PACKAGE, "msgwin_messages_visible", TRUE);
 	interface_prefs.msgwin_scribble_visible = utils_get_setting_boolean(config, PACKAGE, "msgwin_scribble_visible", TRUE);
+	interface_prefs.use_native_windows_dialogs = utils_get_setting_boolean(config, PACKAGE, "use_native_windows_dialogs", FALSE);
 
 	/* display, editor */
 	editor_prefs.long_line_global_enabled = utils_get_setting_boolean(config, PACKAGE, "long_line_enabled", TRUE);

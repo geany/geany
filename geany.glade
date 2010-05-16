@@ -3472,6 +3472,26 @@
 				  <property name="fill">False</property>
 				</packing>
 			      </child>
+
+			      <child>
+				<widget class="GtkCheckButton" id="check_native_windows_dialogs">
+				  <property name="visible">True</property>
+				  <property name="tooltip" translatable="yes">Defines whether to use the native Windows File Open/Save dialogs or whether to use the GTK default dialogs</property>
+				  <property name="can_focus">True</property>
+				  <property name="label" translatable="yes">Use Windows File Open/Save dialogs</property>
+				  <property name="use_underline">True</property>
+				  <property name="relief">GTK_RELIEF_NORMAL</property>
+				  <property name="focus_on_click">True</property>
+				  <property name="active">False</property>
+				  <property name="inconsistent">False</property>
+				  <property name="draw_indicator">True</property>
+				</widget>
+				<packing>
+				  <property name="padding">0</property>
+				  <property name="expand">False</property>
+				  <property name="fill">False</property>
+				</packing>
+			      </child>
 			    </widget>
 			  </child>
 			</widget>

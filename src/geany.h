@@ -49,7 +49,6 @@
 #define GEANY_TEMPLATES_SUBDIR			"templates"
 #define GEANY_CODENAME					"Vellam"
 #define GEANY_HOMEPAGE					"http://www.geany.org/"
-#define GEANY_USE_WIN32_DIALOG			0
 #define GEANY_STRING_UNTITLED			_("untitled")
 #define GEANY_DEFAULT_DIALOG_HEIGHT		350
 #define GEANY_WINDOW_DEFAULT_WIDTH		900

@@ -2308,6 +2308,7 @@ create_prefs_dialog (void)
   GtkWidget *check_switch_pages;
   GtkWidget *check_suppress_status_msgs;
   GtkWidget *check_auto_focus;
+  GtkWidget *check_native_windows_dialogs;
   GtkWidget *label199;
   GtkWidget *frame36;
   GtkWidget *alignment39;
@@ -2886,6 +2887,11 @@ create_prefs_dialog (void)
   gtk_widget_show (check_auto_focus);
   gtk_box_pack_start (GTK_BOX (vbox21), check_auto_focus, FALSE, FALSE, 0);
   gtk_tooltips_set_tip (tooltips, check_auto_focus, _("Gives the focus automatically to widgets below the mouse cursor. Works for the main editor widget, the scribble, the toolbar search and goto line fields and the VTE."), NULL);
+
+  check_native_windows_dialogs = gtk_check_button_new_with_mnemonic (_("Use Windows File Open/Save dialogs"));
+  gtk_widget_show (check_native_windows_dialogs);
+  gtk_box_pack_start (GTK_BOX (vbox21), check_native_windows_dialogs, FALSE, FALSE, 0);
+  gtk_tooltips_set_tip (tooltips, check_native_windows_dialogs, _("Defines whether to use the native Windows File Open/Save dialogs or whether to use the GTK default dialogs"), NULL);
 
   label199 = gtk_label_new (_("<b>Miscellaneous</b>"));
   gtk_widget_show (label199);
@@ -4784,6 +4790,7 @@ create_prefs_dialog (void)
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_switch_pages, "check_switch_pages");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_suppress_status_msgs, "check_suppress_status_msgs");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_auto_focus, "check_auto_focus");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, check_native_windows_dialogs, "check_native_windows_dialogs");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label199, "label199");
   GLADE_HOOKUP_OBJECT (prefs_dialog, frame36, "frame36");
   GLADE_HOOKUP_OBJECT (prefs_dialog, alignment39, "alignment39");

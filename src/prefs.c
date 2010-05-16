@@ -375,6 +375,10 @@ static void prefs_init_dialog(void)
 	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_auto_focus");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), prefs.auto_focus);
 
+	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_native_windows_dialogs");
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),
+		interface_prefs.use_native_windows_dialogs);
+
 	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "entry_contextaction");
 	gtk_entry_set_text(GTK_ENTRY(widget), tool_prefs.context_action_cmd);
 
@@ -799,6 +803,10 @@ on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_data)
 
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_auto_focus");
 		prefs.auto_focus = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_native_windows_dialogs");
+		interface_prefs.use_native_windows_dialogs =
+			gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "entry_contextaction");
 		g_free(tool_prefs.context_action_cmd);
@@ -1673,6 +1681,9 @@ void prefs_show_dialog(void)
 		vte_append_preferences_tab();
 #endif
 
+#ifndef G_OS_WIN32
+		gtk_widget_hide(ui_lookup_widget(ui_widgets.prefs_dialog, "check_native_windows_dialogs"));
+#endif
 		ui_setup_open_button_callback(ui_lookup_widget(ui_widgets.prefs_dialog, "startup_path_button"), NULL,
 			GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER, GTK_ENTRY(ui_lookup_widget(ui_widgets.prefs_dialog, "startup_path_entry")));
 		ui_setup_open_button_callback(ui_lookup_widget(ui_widgets.prefs_dialog, "extra_plugin_path_button"), NULL,

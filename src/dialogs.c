@@ -69,7 +69,7 @@ enum
 static gboolean handle_save_as(const gchar *utf8_filename, gboolean open_new_tab,
 	gboolean rename_file);
 
-#if ! GEANY_USE_WIN32_DIALOG
+
 static GtkWidget *add_file_open_extra_widget(void);
 
 
@@ -207,7 +207,6 @@ static void create_open_file_dialog(void)
 	g_signal_connect(ui_widgets.open_filesel, "response",
 				G_CALLBACK(on_file_open_dialog_response), NULL);
 }
-#endif
 
 
 /* This shows the file selection dialog to open a file. */
@@ -225,34 +224,35 @@ void dialogs_show_open_file()
 
 	setptr(initdir, utils_get_locale_from_utf8(initdir));
 
-#if GEANY_USE_WIN32_DIALOG
-	win32_show_document_open_dialog(GTK_WINDOW(main_widgets.window), _("Open File"), initdir);
-#else /* X11, not win32: use GTK_FILE_CHOOSER */
-
-	/* We use the same file selection widget each time, so first of all we create it
-	 * if it hasn't already been created. */
-	if (ui_widgets.open_filesel == NULL)
-		create_open_file_dialog();
-
-	if (initdir != NULL)
-	{
-		if (g_path_is_absolute(initdir))
-			gtk_file_chooser_set_current_folder(
-				GTK_FILE_CHOOSER(ui_widgets.open_filesel), initdir);
-	}
-
-	if (app->project && NZV(app->project->base_path))
-		gtk_file_chooser_add_shortcut_folder(GTK_FILE_CHOOSER(ui_widgets.open_filesel),
-			app->project->base_path, NULL);
-
-	gtk_file_chooser_unselect_all(GTK_FILE_CHOOSER(ui_widgets.open_filesel));
-	gtk_window_present(GTK_WINDOW(ui_widgets.open_filesel));
+#ifdef G_OS_WIN32
+	if (interface_prefs.use_native_windows_dialogs)
+		win32_show_document_open_dialog(GTK_WINDOW(main_widgets.window), _("Open File"), initdir);
+	else
 #endif
+	{
+		/* We use the same file selection widget each time, so first of all we create it
+		 * if it hasn't already been created. */
+		if (ui_widgets.open_filesel == NULL)
+			create_open_file_dialog();
+
+		if (initdir != NULL)
+		{
+			if (g_path_is_absolute(initdir))
+				gtk_file_chooser_set_current_folder(
+					GTK_FILE_CHOOSER(ui_widgets.open_filesel), initdir);
+		}
+
+		if (app->project && NZV(app->project->base_path))
+			gtk_file_chooser_add_shortcut_folder(GTK_FILE_CHOOSER(ui_widgets.open_filesel),
+				app->project->base_path, NULL);
+
+		gtk_file_chooser_unselect_all(GTK_FILE_CHOOSER(ui_widgets.open_filesel));
+		gtk_window_present(GTK_WINDOW(ui_widgets.open_filesel));
+	}
 	g_free(initdir);
 }
 
 
-#if ! GEANY_USE_WIN32_DIALOG
 static GtkWidget *add_file_open_extra_widget()
 {
 	GtkWidget *expander, *vbox, *table, *check_hidden;
@@ -325,16 +325,13 @@ static GtkWidget *add_file_open_extra_widget()
 
 	return expander;
 }
-#endif
 
 
-#if ! GEANY_USE_WIN32_DIALOG
 static void on_save_as_new_tab_toggled(GtkToggleButton *togglebutton, gpointer user_data)
 {
 	gtk_widget_set_sensitive(GTK_WIDGET(user_data),
 		! gtk_toggle_button_get_active(togglebutton));
 }
-#endif
 
 
 static gboolean handle_save_as(const gchar *utf8_filename, gboolean open_new_tab, gboolean rename_file)
@@ -369,7 +366,6 @@ static gboolean handle_save_as(const gchar *utf8_filename, gboolean open_new_tab
 }
 
 
-#if ! GEANY_USE_WIN32_DIALOG
 static void
 on_file_save_dialog_response           (GtkDialog *dialog,
                                         gint response,
@@ -416,10 +412,8 @@ on_file_save_dialog_response           (GtkDialog *dialog,
 	if (success)
 		gtk_widget_hide(ui_widgets.save_filesel);
 }
-#endif
 
 
-#if ! GEANY_USE_WIN32_DIALOG
 static void create_save_file_dialog(void)
 {
 	GtkWidget *vbox, *check_open_new_tab, *rename_btn;
@@ -476,10 +470,8 @@ static void create_save_file_dialog(void)
 
 	gtk_window_set_transient_for(GTK_WINDOW(ui_widgets.save_filesel), GTK_WINDOW(main_widgets.window));
 }
-#endif
 
 
-#if ! GEANY_USE_WIN32_DIALOG
 static gboolean gtk_show_save_as(void)
 {
 	GeanyDocument *doc = document_get_current();
@@ -541,7 +533,6 @@ static gboolean gtk_show_save_as(void)
 
 	return (resp == GTK_RESPONSE_ACCEPT);
 }
-#endif
 
 
 /**
@@ -553,15 +544,18 @@ gboolean dialogs_show_save_as()
 {
 	gboolean result = FALSE;
 
-#if GEANY_USE_WIN32_DIALOG
-	GeanyDocument *doc = document_get_current();
-	gchar *utf8_name = win32_show_document_save_as_dialog(GTK_WINDOW(main_widgets.window),
-					_("Save File"), DOC_FILENAME(doc));
-	if (utf8_name != NULL)
-		result = handle_save_as(utf8_name, FALSE, FALSE);
-#else
-	result = gtk_show_save_as();
+#ifdef G_OS_WIN32
+	if (interface_prefs.use_native_windows_dialogs)
+	{
+		GeanyDocument *doc = document_get_current();
+		gchar *utf8_name = win32_show_document_save_as_dialog(GTK_WINDOW(main_widgets.window),
+						_("Save File"), DOC_FILENAME(doc));
+		if (utf8_name != NULL)
+			result = handle_save_as(utf8_name, FALSE, FALSE);
+	}
+	else
 #endif
+	result = gtk_show_save_as();
 	return result;
 }
 

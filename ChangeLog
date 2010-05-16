@@ -27,6 +27,10 @@
    src/main.c, src/notebook.c, src/prefs.c:
    Add preference to add new document tabs beside the current one
    (patch by Colomban Wendling, thanks).
+ * geany.glade, src/dialogs.c, src/geany.h, src/interface.c,
+   src/keyfile.c, src/prefs.c, src/ui_utils.h:
+   Add a preference for choosing between GTK and native
+   File Open/Save dialogs (only available on Windows).
 
 
 2010-05-15  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
