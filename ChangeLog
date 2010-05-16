@@ -21,6 +21,8 @@
  * plugins/filebrowser.c:
    Implement reading and evaluating hidden file attribute on Windows.
    Fix broken "Go Up" if the current path ends with a slash.
+ * THANKS, src/about.c, src/prefix.c:
+   Replace free() by g_free() (patch by Daniel Marjamaki, thanks).
 
 
 2010-05-15  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

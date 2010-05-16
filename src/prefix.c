@@ -206,18 +206,18 @@ br_extract_prefix (const char *path)
 	tmp = g_strndup ((char *) path, end - path);
 	if (!*tmp)
 	{
-		free (tmp);
+		g_free (tmp);
 		return strdup ("/");
 	}
 	end = strrchr (tmp, '/');
 	if (!end) return tmp;
 
 	result = g_strndup (tmp, end - tmp);
-	free (tmp);
+	g_free (tmp);
 
 	if (!*result)
 	{
-		free (result);
+		g_free (result);
 		result = strdup ("/");
 	}
 
