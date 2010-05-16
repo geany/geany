@@ -65,6 +65,7 @@
 #include "keybindings.h"
 #include "project.h"
 #include "projectprivate.h"
+#include "main.h"
 
 
 /* Note: use sciwrappers.h instead where possible.
@@ -4971,6 +4972,9 @@ void editor_apply_update_prefs(GeanyEditor *editor)
 	ScintillaObject *sci;
 
 	g_return_if_fail(editor != NULL);
+
+	if (main_status.quitting)
+		return;
 
 	sci = editor->sci;
 

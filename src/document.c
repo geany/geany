@@ -640,10 +640,13 @@ gboolean document_remove_page(guint page_num)
 
 	doc->is_valid = FALSE;
 
-	notebook_remove_page(page_num);
-	sidebar_remove_document(doc);
-	navqueue_remove_file(doc->file_name);
-	msgwin_status_add(_("File %s closed."), DOC_FILENAME(doc));
+	if (! main_status.quitting)
+	{
+		notebook_remove_page(page_num);
+		sidebar_remove_document(doc);
+		navqueue_remove_file(doc->file_name);
+		msgwin_status_add(_("File %s closed."), DOC_FILENAME(doc));
+	}
 	g_free(doc->encoding);
 	g_free(doc->priv->saved_encoding.encoding);
 	g_free(doc->file_name);
@@ -2830,7 +2833,7 @@ gboolean document_account_for_unsaved(void)
 	for (p = 0; p < page_count; p++)
 	{
 		doc = document_get_from_page(p);
-		if (doc->changed)
+		if (DOC_VALID(doc) && doc->changed)
 		{
 			if (! dialogs_show_unsaved_file(doc))
 				return FALSE;
@@ -2863,9 +2866,9 @@ static void force_close_all(void)
 	}
 	main_status.closing_all = TRUE;
 
-	while (gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook)) > 0)
+	foreach_document(i)
 	{
-		document_remove_page(0);
+		document_close(documents[i]);
 	}
 
 	main_status.closing_all = FALSE;

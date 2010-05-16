@@ -309,6 +309,9 @@ void project_open(void)
 /* Called when creating, opening, closing and updating projects. */
 static void update_ui(void)
 {
+	if (main_status.quitting)
+		return;
+
 	ui_set_window_title(NULL);
 	build_menu_update(NULL);
 	sidebar_openfiles_update_all();
