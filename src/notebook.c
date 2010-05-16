@@ -466,6 +466,7 @@ gint notebook_new_tab(GeanyDocument *this)
 	GtkWidget *hbox, *ebox;
 	gint tabnum;
 	GtkWidget *page;
+	gint cur_page;
 
 	g_return_val_if_fail(this != NULL, -1);
 
@@ -513,12 +514,16 @@ gint notebook_new_tab(GeanyDocument *this)
 
 	document_update_tab_label(this);
 
+	if (file_prefs.tab_order_beside)
+		cur_page = gtk_notebook_get_current_page(GTK_NOTEBOOK(main_widgets.notebook));
+	else
+		cur_page = file_prefs.tab_order_ltr ? -2 /* hack: -2 + 1 = -1, last page */ : 0;
 	if (file_prefs.tab_order_ltr)
-		tabnum = gtk_notebook_append_page_menu(GTK_NOTEBOOK(main_widgets.notebook), page,
-			ebox, NULL);
+		tabnum = gtk_notebook_insert_page_menu(GTK_NOTEBOOK(main_widgets.notebook), page,
+			ebox, NULL, cur_page + 1);
 	else
 		tabnum = gtk_notebook_insert_page_menu(GTK_NOTEBOOK(main_widgets.notebook), page,
-			ebox, NULL, 0);
+			ebox, NULL, cur_page);
 
 	tab_count_changed();
 

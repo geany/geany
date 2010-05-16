@@ -51,6 +51,7 @@ typedef struct GeanyFilePrefs
 	gboolean		strip_trailing_spaces;
 	gboolean		replace_tabs;
 	gboolean		tab_order_ltr;
+	gboolean		tab_order_beside;
 	gboolean		show_tab_cross;
 	guint			mru_length;
 	gint			default_eol_character;

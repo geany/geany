@@ -4291,10 +4291,13 @@
 			  </child>
 
 			  <child>
-			    <widget class="GtkHBox" id="hbox7">
+			    <widget class="GtkTable" id="table21">
 			      <property name="visible">True</property>
+			      <property name="n_rows">2</property>
+			      <property name="n_columns">2</property>
 			      <property name="homogeneous">False</property>
-			      <property name="spacing">12</property>
+			      <property name="row_spacing">0</property>
+			      <property name="column_spacing">0</property>
 
 			      <child>
 				<widget class="GtkLabel" id="label150">
@@ -4315,50 +4318,91 @@
 				  <property name="angle">0</property>
 				</widget>
 				<packing>
-				  <property name="padding">0</property>
-				  <property name="expand">False</property>
-				  <property name="fill">False</property>
+				  <property name="left_attach">0</property>
+				  <property name="right_attach">1</property>
+				  <property name="top_attach">0</property>
+				  <property name="bottom_attach">1</property>
+				  <property name="x_options">fill</property>
+				  <property name="y_options"></property>
 				</packing>
 			      </child>
 
 			      <child>
-				<widget class="GtkRadioButton" id="radio_tab_left">
+				<widget class="GtkHBox" id="hbox7">
 				  <property name="visible">True</property>
-				  <property name="tooltip" translatable="yes">File tabs will be placed on the left of the notebook</property>
-				  <property name="can_focus">True</property>
-				  <property name="label" translatable="yes">Left</property>
-				  <property name="use_underline">True</property>
-				  <property name="relief">GTK_RELIEF_NORMAL</property>
-				  <property name="focus_on_click">True</property>
-				  <property name="active">True</property>
-				  <property name="inconsistent">False</property>
-				  <property name="draw_indicator">True</property>
+				  <property name="homogeneous">False</property>
+				  <property name="spacing">12</property>
+
+				  <child>
+				    <widget class="GtkRadioButton" id="radio_tab_left">
+				      <property name="visible">True</property>
+				      <property name="tooltip" translatable="yes">File tabs will be placed on the left of the notebook</property>
+				      <property name="can_focus">True</property>
+				      <property name="label" translatable="yes">Left</property>
+				      <property name="use_underline">True</property>
+				      <property name="relief">GTK_RELIEF_NORMAL</property>
+				      <property name="focus_on_click">True</property>
+				      <property name="active">True</property>
+				      <property name="inconsistent">False</property>
+				      <property name="draw_indicator">True</property>
+				    </widget>
+				    <packing>
+				      <property name="padding">0</property>
+				      <property name="expand">False</property>
+				      <property name="fill">False</property>
+				    </packing>
+				  </child>
+
+				  <child>
+				    <widget class="GtkRadioButton" id="radio_tab_right">
+				      <property name="visible">True</property>
+				      <property name="tooltip" translatable="yes">File tabs will be placed on the right of the notebook</property>
+				      <property name="can_focus">True</property>
+				      <property name="label" translatable="yes">Right</property>
+				      <property name="use_underline">True</property>
+				      <property name="relief">GTK_RELIEF_NORMAL</property>
+				      <property name="focus_on_click">True</property>
+				      <property name="active">False</property>
+				      <property name="inconsistent">False</property>
+				      <property name="draw_indicator">True</property>
+				      <property name="group">radio_tab_left</property>
+				    </widget>
+				    <packing>
+				      <property name="padding">0</property>
+				      <property name="expand">False</property>
+				      <property name="fill">False</property>
+				    </packing>
+				  </child>
 				</widget>
 				<packing>
-				  <property name="padding">0</property>
-				  <property name="expand">False</property>
-				  <property name="fill">False</property>
+				  <property name="left_attach">1</property>
+				  <property name="right_attach">2</property>
+				  <property name="top_attach">0</property>
+				  <property name="bottom_attach">1</property>
+				  <property name="y_options">fill</property>
 				</packing>
 			      </child>
 
 			      <child>
-				<widget class="GtkRadioButton" id="radio_tab_right">
+				<widget class="GtkCheckButton" id="check_tab_beside">
 				  <property name="visible">True</property>
-				  <property name="tooltip" translatable="yes">File tabs will be placed on the right of the notebook</property>
+				  <property name="tooltip" translatable="yes">Whether to place file tabs next to the current tab rather than at the edges of the notebook</property>
 				  <property name="can_focus">True</property>
-				  <property name="label" translatable="yes">Right</property>
+				  <property name="label" translatable="yes">Next to current</property>
 				  <property name="use_underline">True</property>
 				  <property name="relief">GTK_RELIEF_NORMAL</property>
 				  <property name="focus_on_click">True</property>
 				  <property name="active">False</property>
 				  <property name="inconsistent">False</property>
 				  <property name="draw_indicator">True</property>
-				  <property name="group">radio_tab_left</property>
 				</widget>
 				<packing>
-				  <property name="padding">0</property>
-				  <property name="expand">False</property>
-				  <property name="fill">False</property>
+				  <property name="left_attach">1</property>
+				  <property name="right_attach">2</property>
+				  <property name="top_attach">1</property>
+				  <property name="bottom_attach">2</property>
+				  <property name="x_options">fill</property>
+				  <property name="y_options"></property>
 				</packing>
 			      </child>
 			    </widget>

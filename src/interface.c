@@ -2355,11 +2355,13 @@ create_prefs_dialog (void)
   GtkWidget *vbox26;
   GtkWidget *check_show_notebook_tabs;
   GtkWidget *check_show_tab_cross;
-  GtkWidget *hbox7;
+  GtkWidget *table21;
   GtkWidget *label150;
+  GtkWidget *hbox7;
   GtkWidget *radio_tab_left;
   GSList *radio_tab_left_group = NULL;
   GtkWidget *radio_tab_right;
+  GtkWidget *check_tab_beside;
   GtkWidget *check_double_click_hides_widgets;
   GtkWidget *label197;
   GtkWidget *frame9;
@@ -3121,14 +3123,22 @@ create_prefs_dialog (void)
   gtk_box_pack_start (GTK_BOX (vbox26), check_show_tab_cross, FALSE, FALSE, 0);
   gtk_tooltips_set_tip (tooltips, check_show_tab_cross, _("Shows a small cross button in the file tabs to easily close files when clicking on it (requires restart of Geany)"), NULL);
 
-  hbox7 = gtk_hbox_new (FALSE, 12);
-  gtk_widget_show (hbox7);
-  gtk_box_pack_start (GTK_BOX (vbox26), hbox7, FALSE, TRUE, 0);
+  table21 = gtk_table_new (2, 2, FALSE);
+  gtk_widget_show (table21);
+  gtk_box_pack_start (GTK_BOX (vbox26), table21, FALSE, TRUE, 0);
 
   label150 = gtk_label_new (_("Placement of new file tabs:"));
   gtk_widget_show (label150);
-  gtk_box_pack_start (GTK_BOX (hbox7), label150, FALSE, FALSE, 0);
+  gtk_table_attach (GTK_TABLE (table21), label150, 0, 1, 0, 1,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
   gtk_misc_set_alignment (GTK_MISC (label150), 0, 0.5);
+
+  hbox7 = gtk_hbox_new (FALSE, 12);
+  gtk_widget_show (hbox7);
+  gtk_table_attach (GTK_TABLE (table21), hbox7, 1, 2, 0, 1,
+                    (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
+                    (GtkAttachOptions) (GTK_FILL), 0, 0);
 
   radio_tab_left = gtk_radio_button_new_with_mnemonic (NULL, _("Left"));
   gtk_widget_show (radio_tab_left);
@@ -3144,6 +3154,13 @@ create_prefs_dialog (void)
   gtk_tooltips_set_tip (tooltips, radio_tab_right, _("File tabs will be placed on the right of the notebook"), NULL);
   gtk_radio_button_set_group (GTK_RADIO_BUTTON (radio_tab_right), radio_tab_left_group);
   radio_tab_left_group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio_tab_right));
+
+  check_tab_beside = gtk_check_button_new_with_mnemonic (_("Next to current"));
+  gtk_widget_show (check_tab_beside);
+  gtk_table_attach (GTK_TABLE (table21), check_tab_beside, 1, 2, 1, 2,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_tooltips_set_tip (tooltips, check_tab_beside, _("Whether to place file tabs next to the current tab rather than at the edges of the notebook"), NULL);
 
   check_double_click_hides_widgets = gtk_check_button_new_with_mnemonic (_("Double-clicking hides all additional widgets"));
   gtk_widget_show (check_double_click_hides_widgets);
@@ -4813,10 +4830,12 @@ create_prefs_dialog (void)
   GLADE_HOOKUP_OBJECT (prefs_dialog, vbox26, "vbox26");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_show_notebook_tabs, "check_show_notebook_tabs");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_show_tab_cross, "check_show_tab_cross");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, hbox7, "hbox7");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, table21, "table21");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label150, "label150");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, hbox7, "hbox7");
   GLADE_HOOKUP_OBJECT (prefs_dialog, radio_tab_left, "radio_tab_left");
   GLADE_HOOKUP_OBJECT (prefs_dialog, radio_tab_right, "radio_tab_right");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, check_tab_beside, "check_tab_beside");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_double_click_hides_widgets, "check_double_click_hides_widgets");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label197, "label197");
   GLADE_HOOKUP_OBJECT (prefs_dialog, frame9, "frame9");

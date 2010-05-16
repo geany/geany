@@ -23,6 +23,10 @@
    Fix broken "Go Up" if the current path ends with a slash.
  * THANKS, src/about.c, src/prefix.c:
    Replace free() by g_free() (patch by Daniel Marjamaki, thanks).
+ * geany.glade, src/document.h, src/interface.c, src/keyfile.c,
+   src/main.c, src/notebook.c, src/prefs.c:
+   Add preference to add new document tabs beside the current one
+   (patch by Colomban Wendling, thanks).
 
 
 2010-05-15  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

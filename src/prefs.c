@@ -482,6 +482,8 @@ static void prefs_init_dialog(void)
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "radio_tab_left");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), TRUE);
 
+	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_tab_beside");
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), file_prefs.tab_order_beside);
 
 	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "combo_new_encoding");
 	/* luckily the index of the combo box items match the index of the encodings array */
@@ -891,6 +893,9 @@ on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_data)
 		/* Files settings */
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "radio_tab_right");
 		file_prefs.tab_order_ltr = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_tab_beside");
+		file_prefs.tab_order_beside = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "combo_new_encoding");
 		file_prefs.default_new_encoding = gtk_combo_box_get_active(GTK_COMBO_BOX(widget));

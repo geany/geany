@@ -228,6 +228,7 @@ static void main_init(void)
 	ui_widgets.prefs_dialog		= NULL;
 	main_status.main_window_realized = FALSE;
 	file_prefs.tab_order_ltr		= FALSE;
+	file_prefs.tab_order_beside		= FALSE;
 	main_status.quitting			= FALSE;
 	ignore_callback	= FALSE;
 	app->tm_workspace		= tm_get_workspace();
