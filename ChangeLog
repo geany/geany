@@ -31,6 +31,8 @@
    src/keyfile.c, src/prefs.c, src/ui_utils.h:
    Add a preference for choosing between GTK and native
    File Open/Save dialogs (only available on Windows).
+ * doc/geany.html, doc/geany.txt:
+   Update documentation.
 
 
 2010-05-15  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
