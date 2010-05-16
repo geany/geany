@@ -2,6 +2,8 @@
 
  * src/prefs.c, src/project.c:
    win32.h can be included unconditionally.
+ * src/sidebar.c:
+   Fix project base_path detection if the path has a trailing slash.
 
 
 2010-05-15  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
