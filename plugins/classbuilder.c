@@ -883,6 +883,7 @@ static gboolean create_class(CreateClassDialog *cc_dlg)
 				class_info->namespace_decl = g_strdup_printf("namespace %s;", tmp_str);
 			else
 				class_info->namespace_decl = g_strdup("");
+			g_free(tmp_str);
 
 			tmp_str = g_strdup(gtk_entry_get_text(GTK_ENTRY(cc_dlg->class_implements_entry)));
 			if (! utils_str_equal(tmp_str, ""))

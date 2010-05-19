@@ -1,3 +1,9 @@
+2010-05-19  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * plugins/classbuilder.c:
+   Fix a memory leak. (patch by Daniel Marjamaki, thanks)
+
+
 2010-05-16  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/prefs.c, src/project.c:
