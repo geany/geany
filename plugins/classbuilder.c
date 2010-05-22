@@ -592,7 +592,7 @@ static void cc_dlg_update_file_names(CreateClassDialog *cc_dlg)
 		{
 			const gchar *namespace;
 			gchar *namespace_down;
-			
+
 			namespace = gtk_entry_get_text(GTK_ENTRY(cc_dlg->class_namespace_entry));
 			namespace_down = g_ascii_strdown(namespace, -1);
 			class_header = g_strconcat(namespace_down, class_name_down, ".h", NULL);
@@ -874,23 +874,21 @@ static gboolean create_class(CreateClassDialog *cc_dlg)
 		}
 		case GEANY_CLASS_TYPE_PHP:
 		{
-			gchar *tmp_str;
+			const gchar *tmp_str;
 
 			class_info->source = g_strdup(gtk_entry_get_text(GTK_ENTRY(cc_dlg->source_entry)));
 
-			tmp_str = g_strdup(gtk_entry_get_text(GTK_ENTRY(cc_dlg->class_namespace_entry)));
+			tmp_str = gtk_entry_get_text(GTK_ENTRY(cc_dlg->class_namespace_entry));
 			if (! utils_str_equal(tmp_str, ""))
 				class_info->namespace_decl = g_strdup_printf("namespace %s;", tmp_str);
 			else
 				class_info->namespace_decl = g_strdup("");
-			g_free(tmp_str);
 
-			tmp_str = g_strdup(gtk_entry_get_text(GTK_ENTRY(cc_dlg->class_implements_entry)));
+			tmp_str = gtk_entry_get_text(GTK_ENTRY(cc_dlg->class_implements_entry));
 			if (! utils_str_equal(tmp_str, ""))
 				class_info->implements_decl = g_strdup_printf(" implements %s", tmp_str);
 			else
 				class_info->implements_decl = g_strdup("");
-			g_free(tmp_str);
 
 			if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(cc_dlg->create_constructor_box)) &&
 			    ! gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(cc_dlg->create_isabstract_box)))

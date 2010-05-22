@@ -9,6 +9,8 @@
  * src/build.c:
    Fix Run toolbar item sensitivity after the last document has been
    closed.
+ * plugins/classbuilder.c:
+   Remove two unnecessary g_strdups().
 
 
 2010-05-19  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
