@@ -673,6 +673,7 @@ gboolean document_remove_page(guint page_num)
 		/*on_notebook1_switch_page(GTK_NOTEBOOK(main_widgets.notebook), NULL, 0, NULL);*/
 		ui_set_window_title(NULL);
 		ui_save_buttons_toggle(FALSE);
+		ui_update_popup_reundo_items(NULL);
 		ui_document_buttons_update();
 		build_menu_update(NULL);
 	}
