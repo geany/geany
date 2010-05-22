@@ -4035,6 +4035,9 @@ allow_always_save                 Whether files can be saved always, even if   f
                                   setting this option to true, the Save
                                   buttons and menu items are always active
                                   and files can be saved.
+compiler_tab_autoscroll           Whether to automatically scroll to the       true
+                                  last line of the output in the Compiler
+                                  tab.
 **VTE related**
 emulation                         Terminal emulation mode. Only change this    xterm
                                   if you have VTE termcap files other than

@@ -58,6 +58,7 @@ typedef struct GeanyInterfacePrefs
 	gboolean		msgwin_messages_visible;
 	gboolean		msgwin_scribble_visible;
 	gboolean		use_native_windows_dialogs; /* only used on Windows */
+	gboolean		compiler_tab_autoscroll;
 }
 GeanyInterfacePrefs;
 

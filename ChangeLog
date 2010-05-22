@@ -11,6 +11,10 @@
    closed.
  * plugins/classbuilder.c:
    Remove two unnecessary g_strdups().
+ * doc/geany.html, doc/geany.txt, src/keyfile.c, src/msgwindow.c,
+   src/plugindata.h, src/ui_utils.h:
+   Add hidden preference to disable automatic scrolling in the
+   Compiler tab (closes #3004714).
 
 
 2010-05-19  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>

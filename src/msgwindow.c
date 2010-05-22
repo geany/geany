@@ -272,7 +272,7 @@ void msgwin_compiler_add_string(gint msg_color, const gchar *msg)
 	gtk_list_store_append(msgwindow.store_compiler, &iter);
 	gtk_list_store_set(msgwindow.store_compiler, &iter, 0, color, 1, msg, -1);
 
-	if (ui_prefs.msgwindow_visible)
+	if (ui_prefs.msgwindow_visible && interface_prefs.compiler_tab_autoscroll)
 	{
 		path = gtk_tree_model_get_path(
 			gtk_tree_view_get_model(GTK_TREE_VIEW(msgwindow.tree_compiler)), &iter);
