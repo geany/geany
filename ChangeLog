@@ -2,6 +2,8 @@
 
  * src/ui_utils.c:
    Fix Undo/Redo button state after the last document has been closed.
+ * src/toolbar.c:
+   Fix crash when the toolbar is reloaded without any open documents.
 
 
 2010-05-19  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>

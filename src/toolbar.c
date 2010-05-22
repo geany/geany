@@ -288,9 +288,10 @@ static GtkWidget *toolbar_reload(const gchar *markup)
 	if (main_status.main_window_realized)
 	{
 		GeanyDocument *doc = document_get_current();
+		gboolean doc_changed = (doc != NULL) ? doc->changed : FALSE;
 
 		ui_document_buttons_update();
-		ui_save_buttons_toggle(doc->changed); /* update save all */
+		ui_save_buttons_toggle(doc_changed); /* update save all */
 		ui_update_popup_reundo_items(doc);
 
 		toolbar_apply_settings();
