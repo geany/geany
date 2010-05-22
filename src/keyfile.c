@@ -805,9 +805,9 @@ static void load_dialog_prefs(GKeyFile *config)
 	tool_prefs.context_action_cmd = utils_get_setting_string(config, PACKAGE, "context_action_cmd", "");
 
 	/* build menu */
-	build_set_group_count( GEANY_GBG_FT, utils_get_setting_integer( config, "build-menu", "number_ft_menu_items", 0 ));
-	build_set_group_count( GEANY_GBG_NON_FT, utils_get_setting_integer( config, "build-menu", "number_non_ft_menu_items", 0 ));
-	build_set_group_count( GEANY_GBG_EXEC, utils_get_setting_integer( config, "build-menu", "number_exec_menu_items", 0 ));
+	build_set_group_count(GEANY_GBG_FT, utils_get_setting_integer(config, "build-menu", "number_ft_menu_items", 0));
+	build_set_group_count(GEANY_GBG_NON_FT, utils_get_setting_integer(config, "build-menu", "number_non_ft_menu_items", 0));
+	build_set_group_count(GEANY_GBG_EXEC, utils_get_setting_integer(config, "build-menu", "number_exec_menu_items", 0));
 	build_load_menu(config, GEANY_BCS_PREF, NULL);
 
 	/* printing */
