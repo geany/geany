@@ -6,6 +6,9 @@
    sensitive widgets.
  * src/toolbar.c:
    Fix crash when the toolbar is reloaded without any open documents.
+ * src/build.c:
+   Fix Run toolbar item sensitivity after the last document has been
+   closed.
 
 
 2010-05-19  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>

@@ -1549,6 +1549,7 @@ void build_menu_update(GeanyDocument *doc)
 		}
 	}
 
+	run_sensitivity &= (doc != NULL);
 	can_build = get_build_cmd(doc, GEANY_GBG_FT, GBO_TO_CMD(GEANY_GBO_BUILD), NULL) != NULL
 					&& have_path && ! build_running;
 	if (widgets.toolitem_build != NULL)
