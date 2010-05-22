@@ -684,6 +684,8 @@ static void init_document_widgets(void)
 	add_doc_toolitem("Color");
 	add_doc_toolitem("Goto");
 	add_doc_toolitem("GotoEntry");
+	add_doc_toolitem("Replace");
+	add_doc_toolitem("Print");
 }
 
 
