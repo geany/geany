@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: geany 0.19\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-05-22 01:10+0200\n"
+"POT-Creation-Date: 2010-05-22 13:10+0200\n"
 "PO-Revision-Date: 2010-05-22 01:01+0100\n"
 "Last-Translator: Frank Lanitz <frank@frank.uvena.de>\n"
 "Language-Team: German <geany-i18n@uvena.de>\n"
@@ -1861,7 +1861,6 @@ msgid "Next to current"
 msgstr "Reiter neben aktuellem öffnen"
 
 #: ../src/interface.c:3169
-#, fuzzy
 msgid ""
 "Whether to place file tabs next to the current tab rather than at the edges "
 "of the notebook"
