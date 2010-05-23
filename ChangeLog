@@ -1,3 +1,9 @@
+2010-05-23  Lex Trotman  <elextr.at.gmail.dot.com>
+
+ * src/build.c:
+   Fix infinite loop reading build command output
+
+
 2010-05-23  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/msgwindow.c:

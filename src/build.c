@@ -1014,14 +1014,16 @@ static gboolean build_iofunc(GIOChannel *ioc, GIOCondition cond, gpointer data)
 	if (cond & (G_IO_IN | G_IO_PRI))
 	{
 		gchar *msg;
+		GIOStatus st;
 
-		while (g_io_channel_read_line(ioc, &msg, NULL, NULL, NULL) && msg)
+		while ((st = g_io_channel_read_line(ioc, &msg, NULL, NULL, NULL)) == G_IO_STATUS_NORMAL && msg)
 		{
 			gint color = (GPOINTER_TO_INT(data)) ? COLOR_DARK_RED : COLOR_BLACK;
 
 			process_build_output_line(msg, color);
  			g_free(msg);
 		}
+		if (st == G_IO_STATUS_ERROR || st == G_IO_STATUS_EOF) return FALSE;
 	}
 	if (cond & (G_IO_ERR | G_IO_HUP | G_IO_NVAL))
 		return FALSE;
