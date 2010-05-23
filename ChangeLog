@@ -9,6 +9,9 @@
  * src/msgwindow.c:
    Fix duplicate accelerators for Clear and Copy in the
    Messages Window popup menu.
+ * src/pluginutils.c:
+   Expand child widgets in the Plugin Preferences dialog
+   (patch by Colomban Wendling, thanks).
 
 
 2010-05-22  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
