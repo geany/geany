@@ -1,15 +1,15 @@
 # British English translation of geany.
-# Copyright (C) 2007 THE geany'S COPYRIGHT HOLDER
+# Copyright (C) 2007-2010 THE geany'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the geany package.
-# Jeff Bailes <thepizzaking@gmail.com>, 2007-2009.
+# Jeff Bailes <thepizzaking@gmail.com>, 2007-2010.
 #
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: geany 0.19\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-05-23 10:05+0200\n"
-"PO-Revision-Date: 2009-08-03 21:19+1000\n"
+"POT-Creation-Date: 2010-05-23 13:39+0200\n"
+"PO-Revision-Date: 2010-05-23 21:33+1000\n"
 "Last-Translator: Jeff Bailes <thepizzaking@gmail.com>\n"
 "Language-Team: British English <geany-i18n@uvena.de>\n"
 "MIME-Version: 1.0\n"
@@ -102,12 +102,11 @@ msgstr ""
 #: ../src/build.c:635
 #, c-format
 msgid "failed to substitute %%p, no project active"
-msgstr ""
+msgstr "failed to substitute %%p, no project active"
 
 #: ../src/build.c:673
-#, fuzzy
 msgid "Process failed, no working directory"
-msgstr "Failed to change the working directory to \"%s\""
+msgstr "Process failed, no working directory"
 
 #: ../src/build.c:699
 #, c-format
@@ -144,183 +143,172 @@ msgstr ""
 "Could not find terminal \"%s\" (check path for Terminal tool setting in "
 "Preferences)"
 
-#: ../src/build.c:1081
+#: ../src/build.c:1083
 msgid "Compilation failed."
 msgstr "Compilation failed."
 
-#: ../src/build.c:1095
+#: ../src/build.c:1097
 msgid "Compilation finished successfully."
 msgstr "Compilation finished successfully."
 
-#: ../src/build.c:1252
-#, fuzzy
+#: ../src/build.c:1254
 msgid "Custom Text"
-msgstr "Make Custom Target"
+msgstr "Custom Text"
 
-#: ../src/build.c:1253
-#, fuzzy
+#: ../src/build.c:1255
 msgid "Enter custom text here, all entered text is appended to the command."
-msgstr ""
-"Enter custom options here, all entered text is passed to the make command."
+msgstr "Enter custom text here, all entered text is appended to the command."
 
-#: ../src/build.c:1331
+#: ../src/build.c:1333
 msgid "_Next Error"
 msgstr "_Next Error"
 
-#: ../src/build.c:1333
+#: ../src/build.c:1335
 msgid "_Previous Error"
 msgstr "_Previous Error"
 
-#: ../src/build.c:1343
-#, fuzzy
+#: ../src/build.c:1345
 msgid "_Set Build Commands"
-msgstr "Set Custom Commands"
+msgstr "_Set Build Commands"
 
-#: ../src/build.c:1623 ../src/toolbar.c:373
+#: ../src/build.c:1625 ../src/toolbar.c:373
 msgid "Build the current file"
 msgstr "Build the current file"
 
-#: ../src/build.c:1637
+#: ../src/build.c:1639
 msgid "Build the current file with Make and the default target"
 msgstr "Build the current file with Make and the default target"
 
-#: ../src/build.c:1639
+#: ../src/build.c:1641
 msgid "Build the current file with Make and the specified target"
 msgstr "Build the current file with Make and the specified target"
 
-#: ../src/build.c:1641
+#: ../src/build.c:1643
 msgid "Compile the current file with Make"
 msgstr "Compile the current file with Make"
 
-#: ../src/build.c:1668
+#: ../src/build.c:1670
 #, c-format
 msgid "Process could not be stopped (%s)."
 msgstr "Process could not be stopped (%s)."
 
-#: ../src/build.c:1685 ../src/build.c:1697
+#: ../src/build.c:1687 ../src/build.c:1699
 msgid "No more build errors."
 msgstr "No more build errors."
 
-#: ../src/build.c:1778
+#: ../src/build.c:1780
 msgid "Set menu item label"
-msgstr ""
+msgstr "Set menu item label"
 
-#: ../src/build.c:1788
+#: ../src/build.c:1790
 msgid "Item"
-msgstr ""
+msgstr "Item"
 
-#: ../src/build.c:1789 ../src/symbols.c:650
+#: ../src/build.c:1791 ../src/symbols.c:650
 msgid "Label"
 msgstr "Label"
 
-#: ../src/build.c:1790 ../src/symbols.c:645
+#: ../src/build.c:1792 ../src/symbols.c:645
 msgid "Command"
 msgstr "Command"
 
-#: ../src/build.c:1791
-#, fuzzy
+#: ../src/build.c:1793
 msgid "Working directory"
-msgstr "Directory:"
+msgstr "Working directory"
 
-#: ../src/build.c:1792
-#, fuzzy
+#: ../src/build.c:1794
 msgid "Clear"
-msgstr "Compiler"
+msgstr "Clear"
 
-#: ../src/build.c:1831
+#: ../src/build.c:1833
 msgid "Click to set menu item label"
-msgstr ""
+msgstr "Click to set menu item label"
 
-#: ../src/build.c:1904 ../src/build.c:1906
-#, fuzzy, c-format
+#: ../src/build.c:1906 ../src/build.c:1908
+#, c-format
 msgid "%s Commands"
-msgstr "%s commands"
+msgstr "%s Commands"
 
-#: ../src/build.c:1906
-#, fuzzy
+#: ../src/build.c:1908
 msgid "No Filetype"
-msgstr "Set File_type"
+msgstr "No Filetype"
 
-#: ../src/build.c:1914 ../src/build.c:1949
-#, fuzzy
+#: ../src/build.c:1916 ../src/build.c:1951
 msgid "Error Regular Expression:"
-msgstr "_Grep regular expressions"
+msgstr "Error Regular Expression:"
 
-#: ../src/build.c:1942
+#: ../src/build.c:1944
 msgid "Non-Filetype Commands"
-msgstr ""
+msgstr "Non-Filetype Commands"
 
-#: ../src/build.c:1972
+#: ../src/build.c:1974
 msgid "Note: Item 2 opens a dialog and appends the response to the command."
-msgstr ""
+msgstr "Note: Item 2 opens a dialogue and appends the response to the command."
 
-#: ../src/build.c:1981
-#, fuzzy
+#: ../src/build.c:1983
 msgid "Execute Commands"
-msgstr "Set Custom Commands"
+msgstr "Execute Commands"
 
-#: ../src/build.c:1992
+#: ../src/build.c:1994
 #, c-format
 msgid ""
 "%d, %e, %f, %p are substituted in command and directory fields, see manual "
 "for details."
 msgstr ""
+"%d, %e, %f, %p are substituted in command and directory fields, see manual "
+"for details."
 
-#: ../src/build.c:2177
-#, fuzzy
+#: ../src/build.c:2179
 msgid "Set Build Commands"
-msgstr "Set Custom Commands"
+msgstr "Set Build Commands"
 
-#: ../src/build.c:2399
+#: ../src/build.c:2401
 msgid "_Compile"
 msgstr "_Compile"
 
 #. build the code
-#: ../src/build.c:2406 ../src/build.c:2669 ../src/interface.c:1075
+#: ../src/build.c:2408 ../src/build.c:2671 ../src/interface.c:1075
 msgid "_Build"
 msgstr "_Build"
 
-#: ../src/build.c:2413 ../src/build.c:2443 ../src/build.c:2636
-#, fuzzy
+#: ../src/build.c:2415 ../src/build.c:2445 ../src/build.c:2638
 msgid "_Execute"
-msgstr "Execute:"
+msgstr "_Execute"
 
 #. build the code with make custom
-#: ../src/build.c:2458 ../src/build.c:2634 ../src/build.c:2689
+#: ../src/build.c:2460 ../src/build.c:2636 ../src/build.c:2691
 msgid "Make Custom _Target"
 msgstr "Make Custom _Target"
 
 #. build the code with make object
-#: ../src/build.c:2460 ../src/build.c:2635 ../src/build.c:2697
+#: ../src/build.c:2462 ../src/build.c:2637 ../src/build.c:2699
 msgid "Make _Object"
 msgstr "Make _Object"
 
-#: ../src/build.c:2462 ../src/build.c:2633
-#, fuzzy
+#: ../src/build.c:2464 ../src/build.c:2635
 msgid "_Make"
-msgstr "Make:"
+msgstr "_Make"
 
 #. build the code with make all
-#: ../src/build.c:2681
+#: ../src/build.c:2683
 msgid "_Make All"
 msgstr "_Make All"
 
 #. arguments
-#: ../src/build.c:2709
-#, fuzzy
+#: ../src/build.c:2711
 msgid "_Set Build Menu Commands"
-msgstr "Set Custom Commands"
+msgstr "_Set Build Menu Commands"
 
 #: ../src/callbacks.c:150
 msgid "Do you really want to quit?"
 msgstr "Do you really want to quit?"
 
 #: ../src/callbacks.c:228
-#, fuzzy, c-format
+#, c-format
 msgid "%d file saved."
 msgid_plural "%d files saved."
-msgstr[0] "File %s saved."
-msgstr[1] "File %s saved."
+msgstr[0] "%d file saved."
+msgstr[1] "%d files saved."
 
 #: ../src/callbacks.c:488 ../src/document.c:2895 ../src/interface.c:352
 #: ../src/sidebar.c:618
@@ -790,12 +778,12 @@ msgstr ""
 
 #: ../src/document.c:2915
 msgid "Close _without saving"
-msgstr ""
+msgstr "Close _without saving"
 
 #: ../src/document.c:2919
-#, fuzzy, c-format
+#, c-format
 msgid "File \"%s\" was not found on disk! Try to resave the file?"
-msgstr "File \"%s\" was not found on disk!"
+msgstr "File \"%s\" was not found on disk! Try to resave the file?"
 
 #: ../src/editor.c:4425
 msgid "Enter Tab Width"
@@ -809,7 +797,7 @@ msgstr ""
 #: ../src/editor.c:4577
 #, c-format
 msgid "Warning: non-standard hard tab width: %d != 8!"
-msgstr ""
+msgstr "Warning: non-standard hard tab width: %d != 8!"
 
 #: ../src/encodings.c:76
 msgid "Celtic"
@@ -1011,9 +999,8 @@ msgid "M_iscellaneous Languages"
 msgstr "M_iscellaneous Languages"
 
 #: ../src/filetypes.c:830
-#, fuzzy
 msgid "_Custom Filetypes"
-msgstr "Set File_type"
+msgstr "_Custom Filetypes"
 
 #: ../src/filetypes.c:1403 ../src/win32.c:105
 msgid "All Source"
@@ -1041,13 +1028,12 @@ msgid "Could not find file '%s'."
 msgstr "Could not find file '%s'."
 
 #: ../src/highlighting.c:3398
-#, fuzzy
 msgid "_Color Schemes"
-msgstr "_Colour Chooser"
+msgstr "_Colour Schemes"
 
 #: ../src/highlighting.c:3405
 msgid "_Default"
-msgstr ""
+msgstr "_Default"
 
 #: ../src/interface.c:295
 msgid "_File"
@@ -1100,18 +1086,16 @@ msgid "_Format"
 msgstr "_Format"
 
 #: ../src/interface.c:487 ../src/keybindings.c:372
-#, fuzzy
 msgid "_Reflow Lines/Block"
-msgstr "Reflow lines/block"
+msgstr "_Reflow Lines/Block"
 
 #: ../src/interface.c:491
 msgid "T_oggle Case of Selection"
 msgstr "T_oggle Case of Selection"
 
 #: ../src/interface.c:495 ../src/keybindings.c:277
-#, fuzzy
 msgid "_Transpose Current Line"
-msgstr "Transpose current line"
+msgstr "_Transpose Current Line"
 
 #: ../src/interface.c:504
 msgid "_Comment Line(s)"
@@ -1134,63 +1118,52 @@ msgid "_Decrease Indent"
 msgstr "_Decrease Indent"
 
 #: ../src/interface.c:537 ../src/keybindings.c:361
-#, fuzzy
 msgid "_Smart Line Indent"
-msgstr "Smart line indent"
+msgstr "_Smart Line Indent"
 
 #: ../src/interface.c:546
 msgid "_Send Selection to"
 msgstr "_Send Selection to"
 
 #: ../src/interface.c:556 ../src/interface.c:2035
-#, fuzzy
 msgid "_Commands"
-msgstr "Command"
+msgstr "_Commands"
 
 #: ../src/interface.c:563 ../src/keybindings.c:318
-#, fuzzy
 msgid "_Cut Current Line(s)"
-msgstr "Cut current line(s)"
+msgstr "_Cut Current Line(s)"
 
 #: ../src/interface.c:571 ../src/keybindings.c:315
-#, fuzzy
 msgid "_Copy Current Line(s)"
-msgstr "Copy current line(s)"
+msgstr "_Copy Current Line(s)"
 
 #: ../src/interface.c:579 ../src/keybindings.c:270
-#, fuzzy
 msgid "_Delete Current Line(s)"
-msgstr "Delete current line(s)"
+msgstr "_Delete Current Line(s)"
 
 #: ../src/interface.c:583 ../src/keybindings.c:267
-#, fuzzy
 msgid "_Duplicate Line or Selection"
-msgstr "Du_plicate Line or Selection"
+msgstr "_Duplicate Line or Selection"
 
 #: ../src/interface.c:592 ../src/keybindings.c:328
-#, fuzzy
 msgid "_Select Current Line(s)"
-msgstr "Select current line(s)"
+msgstr "_Select Current Line(s)"
 
 #: ../src/interface.c:596 ../src/keybindings.c:331
-#, fuzzy
 msgid "_Select Current Paragraph"
-msgstr "Select current paragraph"
+msgstr "_Select Current Paragraph"
 
 #: ../src/interface.c:605 ../src/keybindings.c:381
-#, fuzzy
 msgid "_Insert Alternative White Space"
-msgstr "Insert alternative white space"
+msgstr "_Insert Alternative White Space"
 
 #: ../src/interface.c:614 ../src/keybindings.c:437
-#, fuzzy
 msgid "_Go to Next Marker"
-msgstr "Go to next marker"
+msgstr "_Go to Next Marker"
 
 #: ../src/interface.c:618 ../src/keybindings.c:440
-#, fuzzy
 msgid "_Go to Previous Marker"
-msgstr "Go to previous marker"
+msgstr "_Go to Previous Marker"
 
 #: ../src/interface.c:627 ../src/keybindings.c:370
 msgid "_Send Selection to Terminal"
@@ -1237,9 +1210,8 @@ msgid "Preference_s"
 msgstr "Preference_s"
 
 #: ../src/interface.c:712 ../src/keybindings.c:390
-#, fuzzy
 msgid "P_lugin Preferences"
-msgstr "Preferences"
+msgstr "P_lugin Preferences"
 
 #: ../src/interface.c:720
 msgid "_Search"
@@ -1507,9 +1479,8 @@ msgid "Scribble"
 msgstr "Scribble"
 
 #: ../src/interface.c:1887
-#, fuzzy
 msgid "_Toolbar Preferences"
-msgstr "Preferences"
+msgstr "_Toolbar Preferences"
 
 #: ../src/interface.c:1900
 msgid "_Hide Toolbar"
@@ -1681,13 +1652,15 @@ msgstr ""
 
 #: ../src/interface.c:2891
 msgid "Use Windows File Open/Save dialogs"
-msgstr ""
+msgstr "Use Windows File Open/Save dialogues"
 
 #: ../src/interface.c:2894
 msgid ""
 "Defines whether to use the native Windows File Open/Save dialogs or whether "
 "to use the GTK default dialogs"
 msgstr ""
+"Defines whether to use the native Windows File Open/Save dialogues or "
+"whether to use the GTK default dialogues"
 
 #: ../src/interface.c:2896 ../src/interface.c:3275 ../src/interface.c:4230
 msgid "<b>Miscellaneous</b>"
@@ -1786,14 +1759,12 @@ msgid "Toggle the documents list on and off"
 msgstr "Toggle the documents list on and off"
 
 #: ../src/interface.c:3014
-#, fuzzy
 msgid "Show sidebar"
-msgstr "Show Side_bar"
+msgstr "Show sidebar"
 
 #: ../src/interface.c:3022
-#, fuzzy
 msgid "Position:"
-msgstr "Description:"
+msgstr "Position:"
 
 #: ../src/interface.c:3026 ../src/interface.c:3149 ../src/interface.c:3210
 #: ../src/interface.c:3228 ../src/interface.c:3246
@@ -1866,15 +1837,16 @@ msgid "File tabs will be placed on the right of the notebook"
 msgstr "File tabs will be placed on the right of the notebook"
 
 #: ../src/interface.c:3164
-#, fuzzy
 msgid "Next to current"
-msgstr "Save the current file"
+msgstr "Next to current"
 
 #: ../src/interface.c:3169
 msgid ""
 "Whether to place file tabs next to the current tab rather than at the edges "
 "of the notebook"
 msgstr ""
+"Whether to place file tabs next to the current tab rather than at the edges "
+"of the notebook"
 
 #: ../src/interface.c:3171
 msgid "Double-clicking hides all additional widgets"
@@ -1934,7 +1906,7 @@ msgstr "Customise Toolbar"
 
 #: ../src/interface.c:3360
 msgid "System _Default"
-msgstr ""
+msgstr "System _Default"
 
 #: ../src/interface.c:3368
 msgid "Images _and Text"
@@ -1949,13 +1921,12 @@ msgid "_Text Only"
 msgstr "_Text Only"
 
 #: ../src/interface.c:3392
-#, fuzzy
 msgid "<b>Icon Style</b>"
-msgstr "<b>Fonts</b>"
+msgstr "<b>Icon Style</b>"
 
 #: ../src/interface.c:3413
 msgid "S_ystem Default"
-msgstr ""
+msgstr "S_ystem Default"
 
 #: ../src/interface.c:3421
 msgid "_Small Icons"
@@ -1970,9 +1941,8 @@ msgid "_Large Icons"
 msgstr "_Large Icons"
 
 #: ../src/interface.c:3445
-#, fuzzy
 msgid "<b>Icon Size</b>"
-msgstr "<b>Size:</b>"
+msgstr "<b>Icon Size</b>"
 
 #: ../src/interface.c:3450
 msgid "<b>Toolbar</b>"
@@ -2295,9 +2265,8 @@ msgid "Invert syntax highlighting colors"
 msgstr "Invert syntax highlighting colours"
 
 #: ../src/interface.c:3858
-#, fuzzy
 msgid "Invert all colors, by default using white text on a black background"
-msgstr "Use white text on a black background."
+msgstr "Invert all colours, by default using white text on a black background"
 
 #: ../src/interface.c:3860
 msgid "Show indentation guides"
@@ -2356,14 +2325,12 @@ msgid "<b>Display</b>"
 msgstr "<b>Display</b>"
 
 #: ../src/interface.c:3911 ../src/interface.c:5302
-#, fuzzy
 msgid "Column:"
-msgstr "Company:"
+msgstr "Column:"
 
 #: ../src/interface.c:3918
-#, fuzzy
 msgid "Color:"
-msgstr "Colour"
+msgstr "Colour:"
 
 #: ../src/interface.c:3937
 msgid "Sets the color of the long line marker"
@@ -2411,9 +2378,8 @@ msgstr ""
 "proportional fonts)"
 
 #: ../src/interface.c:3970
-#, fuzzy
 msgid "Enabled"
-msgstr "_Enable"
+msgstr "Enabled"
 
 #: ../src/interface.c:3976 ../src/interface.c:5342
 msgid "<b>Long line marker</b>"
@@ -2425,31 +2391,31 @@ msgstr "Disabled"
 
 #: ../src/interface.c:3998
 msgid "Do not show virtual spaces"
-msgstr ""
+msgstr "Do not show virtual spaces"
 
 #: ../src/interface.c:4002
 msgid "Only for rectangular selections"
-msgstr ""
+msgstr "Only for rectangular selections"
 
 #: ../src/interface.c:4005
 msgid ""
 "Only show virtual spaces beyond the end of lines when drawing a rectangular "
 "selection"
 msgstr ""
+"Only show virtual spaces beyond the end of lines when drawing a rectangular "
+"selection"
 
 #: ../src/interface.c:4009
 msgid "Always"
-msgstr ""
+msgstr "Always"
 
 #: ../src/interface.c:4012
-#, fuzzy
 msgid "Always show virtual spaces beyond the end of lines"
-msgstr "Removes trailing spaces and tabs and the end of lines"
+msgstr "Always show virtual spaces beyond the end of lines"
 
 #: ../src/interface.c:4016
-#, fuzzy
 msgid "<b>Virtual spaces</b>"
-msgstr "<b>Tool paths</b>"
+msgstr "<b>Virtual spaces</b>"
 
 #: ../src/interface.c:4021
 msgid "Display"
@@ -2480,30 +2446,26 @@ msgid "Sets the default encoding for newly created files"
 msgstr "Sets the default encoding for newly created files"
 
 #: ../src/interface.c:4113
-#, fuzzy
 msgid "Use fixed encoding when opening non-Unicode files"
-msgstr "Use fixed encoding when opening files"
+msgstr "Use fixed encoding when opening non-Unicode files"
 
 #: ../src/interface.c:4116
-#, fuzzy
 msgid ""
 "This option disables the automatic detection of the file encoding when "
 "opening non-Unicode files and opens the file with the specified encoding "
 "(usually not needed)"
 msgstr ""
 "This option disables the automatic detection of the file encoding when "
-"opening files and opens the file with the specified encoding (usually not "
-"needed)"
+"opening non-Unicode files and opens the file with the specified encoding "
+"(usually not needed)"
 
 #: ../src/interface.c:4122
-#, fuzzy
 msgid "Default encoding (existing non-Unicode files):"
-msgstr "Default encoding (existing files):"
+msgstr "Default encoding (existing non-Unicode files):"
 
 #: ../src/interface.c:4130
-#, fuzzy
 msgid "Sets the default encoding for opening existing non-Unicode files"
-msgstr "Sets the default encoding for opening existing files"
+msgstr "Sets the default encoding for opening existing non-Unicode files"
 
 #: ../src/interface.c:4136
 msgid "<b>Encodings</b>"
@@ -2780,9 +2742,8 @@ msgid "Use native GTK printing"
 msgstr "Use native GTK printing"
 
 #: ../src/interface.c:4712
-#, fuzzy
 msgid "<b>Printing</b>"
-msgstr "<b>Encoding:</b>"
+msgstr "<b>Printing</b>"
 
 #: ../src/interface.c:4717 ../src/prefs.c:1541
 msgid "Printing"
@@ -2793,18 +2754,16 @@ msgid "Project Properties"
 msgstr "Project Properties"
 
 #: ../src/interface.c:5295
-#, fuzzy
 msgid "Display:"
-msgstr "Display"
+msgstr "Display:"
 
 #: ../src/interface.c:5317
-#, fuzzy
 msgid "Custom"
-msgstr "Cut"
+msgstr "Custom"
 
 #: ../src/interface.c:5325
 msgid "Use global settings"
-msgstr ""
+msgstr "Use global settings"
 
 #: ../src/keybindings.c:227 ../src/plugins.c:1171
 msgid "File"
@@ -2852,7 +2811,7 @@ msgstr "Reload file"
 
 #: ../src/keybindings.c:253
 msgid "Re-open last closed tab"
-msgstr ""
+msgstr "Re-open last closed tab"
 
 #: ../src/keybindings.c:255 ../src/project.c:519
 msgid "Project"
@@ -2915,19 +2874,16 @@ msgid "Show macro list"
 msgstr "Show macro list"
 
 #: ../src/keybindings.c:300
-#, fuzzy
 msgid "Word part completion"
-msgstr "Snippet completion"
+msgstr "Word part completion"
 
 #: ../src/keybindings.c:302
-#, fuzzy
 msgid "Move line(s) up"
-msgstr "Comment line(s)"
+msgstr "Move line(s) up"
 
 #: ../src/keybindings.c:304
-#, fuzzy
 msgid "Move line(s) down"
-msgstr "Comment line(s)"
+msgstr "Move line(s) down"
 
 #: ../src/keybindings.c:306
 msgid "Clipboard"
@@ -2958,14 +2914,12 @@ msgid "Select current word"
 msgstr "Select current word"
 
 #: ../src/keybindings.c:334
-#, fuzzy
 msgid "Select to previous word part"
-msgstr "Go to Previous Word Part"
+msgstr "Select to previous word part"
 
 #: ../src/keybindings.c:336
-#, fuzzy
 msgid "Select to next word part"
-msgstr "Go to Next Word Part"
+msgstr "Select to next word part"
 
 #: ../src/keybindings.c:338
 msgid "Format"
@@ -3156,9 +3110,8 @@ msgid "Zoom Out"
 msgstr "Zoom Out"
 
 #: ../src/keybindings.c:473
-#, fuzzy
 msgid "Zoom Reset"
-msgstr "Zoom Out"
+msgstr "Zoom Reset"
 
 #: ../src/keybindings.c:475
 msgid "Focus"
@@ -3189,24 +3142,20 @@ msgid "Switch to Compiler"
 msgstr "Switch to Compiler"
 
 #: ../src/keybindings.c:490
-#, fuzzy
 msgid "Switch to Messages"
-msgstr "Switch to Sidebar"
+msgstr "Switch to Messages"
 
 #: ../src/keybindings.c:492
-#, fuzzy
 msgid "Switch to Message Window"
-msgstr "Show Message _Window"
+msgstr "Switch to Message Window"
 
 #: ../src/keybindings.c:494
-#, fuzzy
 msgid "Switch to Sidebar Document List"
-msgstr "Switch to Document"
+msgstr "Switch to Sidebar Document List"
 
 #: ../src/keybindings.c:496
-#, fuzzy
 msgid "Switch to Sidebar Symbol List"
-msgstr "Switch to Sidebar"
+msgstr "Switch to Sidebar Symbol List"
 
 #: ../src/keybindings.c:498
 msgid "Notebook tab"
@@ -3273,14 +3222,12 @@ msgid "Reload symbol list"
 msgstr "Reload symbol list"
 
 #: ../src/keybindings.c:534
-#, fuzzy
 msgid "Remove Markers"
-msgstr "Remove _Markers"
+msgstr "Remove Markers"
 
 #: ../src/keybindings.c:536
-#, fuzzy
 msgid "Remove Error Indicators"
-msgstr "Remove Error _Indicators"
+msgstr "Remove Error Indicators"
 
 #: ../src/keybindings.c:538 ../src/keybindings.c:543 ../src/project.c:477
 #: ../src/ui_utils.c:1815
@@ -3352,9 +3299,8 @@ msgid "Debug Messages"
 msgstr "Debug Messages"
 
 #: ../src/log.c:183
-#, fuzzy
 msgid "Cl_ear"
-msgstr "_Search"
+msgstr "Cl_ear"
 
 #: ../src/main.c:122
 msgid ""
@@ -3388,10 +3334,11 @@ msgstr "Don't open files in a running instance, force opening a new instance"
 msgid ""
 "Use this socket filename for communication with a running Geany instance"
 msgstr ""
+"Use this socket filename for communication with a running Geany instance"
 
 #: ../src/main.c:130
 msgid "Return a list of open documents in a running Geany instance"
-msgstr ""
+msgstr "Return a list of open documents in a running Geany instance"
 
 #: ../src/main.c:132
 msgid "Set initial line number for the first opened file"
@@ -3500,9 +3447,8 @@ msgid "Status messages"
 msgstr "Status messages"
 
 #: ../src/msgwindow.c:524
-#, fuzzy
 msgid "C_opy"
-msgstr "Copy"
+msgstr "C_opy"
 
 #: ../src/msgwindow.c:533
 msgid "Copy _All"
@@ -3513,9 +3459,9 @@ msgid "_Hide Message Window"
 msgstr "_Hide Message Window"
 
 #: ../src/msgwindow.c:619
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find file '%s' - trying the current document path."
-msgstr "Removes all error indicators in the current document."
+msgstr "Could not find file '%s' - trying the current document path."
 
 #: ../src/plugins.c:464
 #, c-format
@@ -3559,7 +3505,7 @@ msgstr "Plugins"
 
 #: ../src/plugins.c:1289
 msgid "Choose which plugins should be loaded at startup:"
-msgstr ""
+msgstr "Choose which plugins should be loaded at startup:"
 
 #: ../src/plugins.c:1301
 msgid "<b>Plugin details:</b>"
@@ -3567,7 +3513,7 @@ msgstr "<b>Plugin details:</b>"
 
 #: ../src/pluginutils.c:207
 msgid "Configure Plugins"
-msgstr ""
+msgstr "Configure Plugins"
 
 #: ../src/prefs.c:165
 msgid "Grab Key"
@@ -3596,7 +3542,7 @@ msgstr "Shortcut"
 
 #: ../src/prefs.c:1408
 msgid "_Allow"
-msgstr ""
+msgstr "_Allow"
 
 #: ../src/prefs.c:1410
 msgid "_Override"
@@ -3698,12 +3644,12 @@ msgstr "Page %d of %d"
 #: ../src/printing.c:781
 #, c-format
 msgid "Did not send document %s to the printing subsystem."
-msgstr ""
+msgstr "Did not send document %s to the printing subsystem."
 
 #: ../src/printing.c:783
 #, c-format
 msgid "Document %s was sent to the printing subsystem."
-msgstr ""
+msgstr "Document %s was sent to the printing subsystem."
 
 #: ../src/printing.c:835
 #, c-format
@@ -3799,18 +3745,19 @@ msgstr "Description:"
 
 #: ../src/project.c:481
 msgid "Set the Build non-filetype working directories to use base path:"
-msgstr ""
+msgstr "Set the Build non-filetype working directories to use base path:"
 
 #: ../src/project.c:484
-#, fuzzy
 msgid "Set"
-msgstr "Sect1"
+msgstr "Set"
 
 #: ../src/project.c:486
 msgid ""
 "Set the working directories (on the Build tab) for the non-filetype build "
 "commands to use the base path"
 msgstr ""
+"Set the working directories (on the Build tab) for the non-filetype build "
+"commands to use the base path"
 
 #: ../src/project.c:501
 msgid "File patterns:"
@@ -4032,9 +3979,9 @@ msgstr[0] "Found %d match for \"%s\"."
 msgstr[1] "Found %d matches for \"%s\"."
 
 #: ../src/search.c:1177
-#, fuzzy, c-format
+#, c-format
 msgid "Replaced %u matches in %u documents."
-msgstr "Replace text in the current document"
+msgstr "Replaced %u matches in %u documents."
 
 #: ../src/search.c:1368
 msgid "Invalid directory for find in files."
@@ -4079,9 +4026,9 @@ msgid "No matches found."
 msgstr "No matches found."
 
 #: ../src/search.c:1661
-#, fuzzy, c-format
+#, c-format
 msgid "Bad regex: %s"
-msgstr "Bad regex for filetype %s: %s"
+msgstr "Bad regex: %s"
 
 #. TODO maybe this message needs a rewording
 #: ../src/socket.c:227
@@ -4090,6 +4037,9 @@ msgid ""
 "another user.\n"
 "This is a fatal error and Geany will now quit."
 msgstr ""
+"Geany tried to access the Unix Domain socket of another instance running as "
+"another user.\n"
+"This is a fatal error and Geany will now quit."
 
 #: ../src/symbols.c:611 ../src/symbols.c:651 ../src/symbols.c:718
 msgid "Chapter"
@@ -4247,37 +4197,32 @@ msgid "Imports"
 msgstr "Imports"
 
 #: ../src/symbols.c:760
-#, fuzzy
 msgid "Entities"
-msgstr "untitled"
+msgstr "Entities"
 
 #: ../src/symbols.c:761
-#, fuzzy
 msgid "Architectures"
-msgstr "Structures"
+msgstr "Architectures"
 
 #: ../src/symbols.c:763
-#, fuzzy
 msgid "Functions / Procedures"
-msgstr "Procedures"
+msgstr "Functions / Procedures"
 
 #: ../src/symbols.c:764
-#, fuzzy
 msgid "Variables / Signals"
-msgstr "Variables"
+msgstr "Variables / Signals"
 
 #: ../src/symbols.c:765
 msgid "Processes / Components"
-msgstr ""
+msgstr "Processes / Components"
 
 #: ../src/symbols.c:773
 msgid "Events"
-msgstr ""
+msgstr "Events"
 
 #: ../src/symbols.c:775
-#, fuzzy
 msgid "Functions / Tasks"
-msgstr "Functions"
+msgstr "Functions / Tasks"
 
 #: ../src/symbols.c:788 ../src/symbols.c:875
 msgid "Members"
@@ -4380,7 +4325,7 @@ msgstr "Sort by _Appearance"
 
 #: ../src/templates.c:278
 msgid "Old"
-msgstr ""
+msgstr "Old"
 
 #. custom actions defined in toolbar_init(): "New", "Open", "SearchEntry", "GotoEntry", "Build"
 #: ../src/toolbar.c:56
@@ -4486,23 +4431,20 @@ msgid "Create a new file"
 msgstr "Create a new file"
 
 #: ../src/toolbar.c:358
-#, fuzzy
 msgid "Create a new file from a template"
-msgstr "Create a new file"
+msgstr "Create a new file from a template"
 
 #: ../src/toolbar.c:365
 msgid "Open an existing file"
 msgstr "Open an existing file"
 
 #: ../src/toolbar.c:366
-#, fuzzy
 msgid "Open a recent file"
-msgstr "Open selected file"
+msgstr "Open a recent file"
 
 #: ../src/toolbar.c:374
-#, fuzzy
 msgid "Choose more build actions"
-msgstr "No more build errors."
+msgstr "Choose more build actions"
 
 #: ../src/toolbar.c:389
 msgid "Goto"
@@ -4621,9 +4563,9 @@ msgstr "Show _Paths"
 
 #. Status bar statistics: col = column, sel = selection.
 #: ../src/ui_utils.c:194
-#, fuzzy, c-format
+#, c-format
 msgid "line: %d / %d\t col: %d\t sel: %d\t "
-msgstr "line: %d\t col: %d\t sel: %d\t "
+msgstr "line: %d / %d\t col: %d\t sel: %d\t "
 
 #. RO = read-only
 #: ../src/ui_utils.c:200
@@ -4754,7 +4696,7 @@ msgstr ""
 
 #: ../src/vte.c:736
 msgid "Font:"
-msgstr ""
+msgstr "Font:"
 
 #: ../src/vte.c:746
 msgid "Sets the font for the terminal widget"
@@ -4903,14 +4845,12 @@ msgid "Create Class"
 msgstr "Create Class"
 
 #: ../plugins/classbuilder.c:384
-#, fuzzy
 msgid "Namespace"
-msgstr "Namespaces"
+msgstr "Namespace"
 
 #: ../plugins/classbuilder.c:393
-#, fuzzy
 msgid "Namespace:"
-msgstr "Namespaces"
+msgstr "Namespace:"
 
 #: ../plugins/classbuilder.c:402
 msgid "Class"
@@ -4937,9 +4877,8 @@ msgid "Base class:"
 msgstr "Base class:"
 
 #: ../plugins/classbuilder.c:463
-#, fuzzy
 msgid "Base source:"
-msgstr "Haskell source file"
+msgstr "Base source:"
 
 #: ../plugins/classbuilder.c:465
 msgid "Base header:"
@@ -4955,7 +4894,7 @@ msgstr "Base GType:"
 
 #: ../plugins/classbuilder.c:498
 msgid "Implements:"
-msgstr ""
+msgstr "Implements:"
 
 #: ../plugins/classbuilder.c:505
 msgid "Options"
@@ -4971,12 +4910,11 @@ msgstr "Create destructor"
 
 #: ../plugins/classbuilder.c:526
 msgid "Is abstract"
-msgstr ""
+msgstr "Is abstract"
 
 #: ../plugins/classbuilder.c:529
-#, fuzzy
 msgid "Is singleton"
-msgstr "Singletons"
+msgstr "Is singleton"
 
 #: ../plugins/classbuilder.c:540
 msgid "GTK+ constructor type"
@@ -4995,9 +4933,8 @@ msgid "_GTK+ Class"
 msgstr "_GTK+ Class"
 
 #: ../plugins/classbuilder.c:1052
-#, fuzzy
 msgid "_PHP Class"
-msgstr "_C++ Class"
+msgstr "_PHP Class"
 
 #: ../plugins/htmlchars.c:38
 msgid "HTML Characters"
@@ -5209,7 +5146,7 @@ msgstr "Filter:"
 
 #: ../plugins/filebrowser.c:890
 msgid "Filter your files with usual wildcards"
-msgstr ""
+msgstr "Filter your files with usual wildcards"
 
 #: ../plugins/filebrowser.c:1107
 msgid "Focus File List"
