@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: geany 0.19\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-05-22 13:10+0200\n"
+"POT-Creation-Date: 2010-05-23 10:05+0200\n"
 "PO-Revision-Date: 2008-02-01 12:02+0200\n"
 "Last-Translator: Stavros Temertzidis <bullgr@gmail.com>\n"
 "Language-Team: Greek\n"
@@ -182,146 +182,146 @@ msgstr "_Προηγούμενο"
 msgid "_Set Build Commands"
 msgstr "Ρύθμιση Προσαρμοσμένων Εντολών"
 
-#: ../src/build.c:1622 ../src/toolbar.c:372
+#: ../src/build.c:1623 ../src/toolbar.c:373
 #, fuzzy
 msgid "Build the current file"
 msgstr "Μεταγλώτιση του τρέχοντος αρχείου"
 
-#: ../src/build.c:1636
+#: ../src/build.c:1637
 #, fuzzy
 msgid "Build the current file with Make and the default target"
 msgstr ""
 "Δημιουργεί το τρέχον αρχείο με το εργαλείο δημιουργίας και το προεπιλεγμένο "
 "προορισμό"
 
-#: ../src/build.c:1638
+#: ../src/build.c:1639
 #, fuzzy
 msgid "Build the current file with Make and the specified target"
 msgstr ""
 "Δημιουργεί το τρέχον αρχείο με το εργαλείο δημιουργίας και το καθορισμένο "
 "προορισμό"
 
-#: ../src/build.c:1640
+#: ../src/build.c:1641
 #, fuzzy
 msgid "Compile the current file with Make"
 msgstr "Μεταγλώτιση του τρέχοντος αρχείου"
 
-#: ../src/build.c:1667
+#: ../src/build.c:1668
 #, c-format
 msgid "Process could not be stopped (%s)."
 msgstr "Αδύνατη η διακοπή της διαδικασίας (%s)."
 
-#: ../src/build.c:1684 ../src/build.c:1696
+#: ../src/build.c:1685 ../src/build.c:1697
 #, fuzzy
 msgid "No more build errors."
 msgstr "Δεν έχει άλλα λάθη στη δημιουργία."
 
-#: ../src/build.c:1777
+#: ../src/build.c:1778
 msgid "Set menu item label"
 msgstr ""
 
-#: ../src/build.c:1787
+#: ../src/build.c:1788
 msgid "Item"
 msgstr ""
 
-#: ../src/build.c:1788 ../src/symbols.c:650
+#: ../src/build.c:1789 ../src/symbols.c:650
 msgid "Label"
 msgstr "Ετικέτα"
 
-#: ../src/build.c:1789 ../src/symbols.c:645
+#: ../src/build.c:1790 ../src/symbols.c:645
 msgid "Command"
 msgstr "Εντολή"
 
-#: ../src/build.c:1790
+#: ../src/build.c:1791
 #, fuzzy
 msgid "Working directory"
 msgstr "%s (στο φάκελο: %s)"
 
-#: ../src/build.c:1791
+#: ../src/build.c:1792
 #, fuzzy
 msgid "Clear"
 msgstr "Μεταγλωτιστής"
 
-#: ../src/build.c:1830
+#: ../src/build.c:1831
 msgid "Click to set menu item label"
 msgstr ""
 
-#: ../src/build.c:1903 ../src/build.c:1905
+#: ../src/build.c:1904 ../src/build.c:1906
 #, fuzzy, c-format
 msgid "%s Commands"
 msgstr "%s εντολές"
 
-#: ../src/build.c:1905
+#: ../src/build.c:1906
 #, fuzzy
 msgid "No Filetype"
 msgstr "Καθορισμός _Τύπου Αρχείου"
 
-#: ../src/build.c:1913 ../src/build.c:1948
+#: ../src/build.c:1914 ../src/build.c:1949
 msgid "Error Regular Expression:"
 msgstr ""
 
-#: ../src/build.c:1941
+#: ../src/build.c:1942
 msgid "Non-Filetype Commands"
 msgstr ""
 
-#: ../src/build.c:1971
+#: ../src/build.c:1972
 msgid "Note: Item 2 opens a dialog and appends the response to the command."
 msgstr ""
 
-#: ../src/build.c:1980
+#: ../src/build.c:1981
 #, fuzzy
 msgid "Execute Commands"
 msgstr "Ρύθμιση Προσαρμοσμένων Εντολών"
 
-#: ../src/build.c:1991
+#: ../src/build.c:1992
 #, c-format
 msgid ""
 "%d, %e, %f, %p are substituted in command and directory fields, see manual "
 "for details."
 msgstr ""
 
-#: ../src/build.c:2176
+#: ../src/build.c:2177
 #, fuzzy
 msgid "Set Build Commands"
 msgstr "Ρύθμιση Προσαρμοσμένων Εντολών"
 
-#: ../src/build.c:2398
+#: ../src/build.c:2399
 msgid "_Compile"
 msgstr "_Μεταγλώτιση"
 
 #. build the code
-#: ../src/build.c:2405 ../src/build.c:2668 ../src/interface.c:1075
+#: ../src/build.c:2406 ../src/build.c:2669 ../src/interface.c:1075
 #, fuzzy
 msgid "_Build"
 msgstr "_Δημιουργία"
 
-#: ../src/build.c:2412 ../src/build.c:2442 ../src/build.c:2635
+#: ../src/build.c:2413 ../src/build.c:2443 ../src/build.c:2636
 #, fuzzy
 msgid "_Execute"
 msgstr "Εκτέλεση:"
 
 #. build the code with make custom
-#: ../src/build.c:2457 ../src/build.c:2633 ../src/build.c:2688
+#: ../src/build.c:2458 ../src/build.c:2634 ../src/build.c:2689
 msgid "Make Custom _Target"
 msgstr "Δημιουργία _Προσαρμοσμένου Προορισμού"
 
 #. build the code with make object
-#: ../src/build.c:2459 ../src/build.c:2634 ../src/build.c:2696
+#: ../src/build.c:2460 ../src/build.c:2635 ../src/build.c:2697
 msgid "Make _Object"
 msgstr "Δημιουργία _Αντικειμένου"
 
-#: ../src/build.c:2461 ../src/build.c:2632
+#: ../src/build.c:2462 ../src/build.c:2633
 #, fuzzy
 msgid "_Make"
 msgstr "Δημιουργία:"
 
 #. build the code with make all
-#: ../src/build.c:2680
+#: ../src/build.c:2681
 msgid "_Make All"
 msgstr "Δημιουργία _Όλων"
 
 #. arguments
-#: ../src/build.c:2708
+#: ../src/build.c:2709
 #, fuzzy
 msgid "_Set Build Menu Commands"
 msgstr "Ρύθμιση Προσαρμοσμένων Εντολών"
@@ -337,7 +337,7 @@ msgid_plural "%d files saved."
 msgstr[0] "Το αρχείο %s αποθηκεύτηκε."
 msgstr[1] "Το αρχείο %s αποθηκεύτηκε."
 
-#: ../src/callbacks.c:488 ../src/document.c:2894 ../src/interface.c:352
+#: ../src/callbacks.c:488 ../src/document.c:2895 ../src/interface.c:352
 #: ../src/sidebar.c:618
 msgid "_Reload"
 msgstr "_Επαναφόρτωση"
@@ -656,17 +656,17 @@ msgstr "Άλλοι:"
 msgid "File %s closed."
 msgstr "Το αρχείο %s έκλεισε."
 
-#: ../src/document.c:774
+#: ../src/document.c:775
 #, c-format
 msgid "New file \"%s\" opened."
 msgstr "Ανοίχθηκε νέο αρχείο \"%s\"."
 
-#: ../src/document.c:947 ../src/document.c:1463
+#: ../src/document.c:948 ../src/document.c:1464
 #, c-format
 msgid "Could not open file %s (%s)"
 msgstr "Δεν ήταν δυνατόν το άνοιγμα αρχείου %s (%s)"
 
-#: ../src/document.c:977
+#: ../src/document.c:978
 #, c-format
 msgid ""
 "The file \"%s\" could not be opened properly and has been truncated. This "
@@ -682,12 +682,12 @@ msgstr ""
 
 #. For translators: the second wildcard is an encoding name, e.g.
 #. * The file \"test.txt\" is not valid UTF-8.
-#: ../src/document.c:1003
+#: ../src/document.c:1004
 #, c-format
 msgid "The file \"%s\" is not valid %s."
 msgstr "Το αρχείο \"%s\" δεν είναι έγκυρο %s."
 
-#: ../src/document.c:1013
+#: ../src/document.c:1014
 #, c-format
 msgid ""
 "The file \"%s\" does not look like a text file or the file encoding is not "
@@ -696,31 +696,31 @@ msgstr ""
 "Το αρχείο \"%s\" δεν φαίνεται να είναι αρχείο κειμένου ή δεν υποστηρίζεται η "
 "κωδικοποίηση του αρχείου."
 
-#: ../src/document.c:1162
+#: ../src/document.c:1163
 msgid "Spaces"
 msgstr "Κενά"
 
-#: ../src/document.c:1165
+#: ../src/document.c:1166
 msgid "Tabs"
 msgstr "Ετικέτες"
 
-#: ../src/document.c:1168
+#: ../src/document.c:1169
 #, fuzzy
 msgid "Tabs and Spaces"
 msgstr "_Αντικατάσταση των Tab σε Κενά"
 
 #. For translators: first wildcard is the indentation mode (Spaces, Tabs, Tabs
 #. * and Spaces), the second one is the filename
-#: ../src/document.c:1173
+#: ../src/document.c:1174
 #, fuzzy, c-format
 msgid "Setting %s indentation mode for %s."
 msgstr "Ρύθμιση %s μεθόδου εσοχής"
 
-#: ../src/document.c:1226
+#: ../src/document.c:1227
 msgid "Invalid filename"
 msgstr "Λάθος όνομα αρχείου"
 
-#: ../src/document.c:1341
+#: ../src/document.c:1342
 #, c-format
 msgid "File %s reloaded."
 msgstr "Το αρχείο %s επαναφορτώθηκε."
@@ -728,21 +728,21 @@ msgstr "Το αρχείο %s επαναφορτώθηκε."
 #. For translators: this is the status window message for opening a file. %d is the number
 #. * of the newly opened file, %s indicates whether the file is opened read-only
 #. * (it is replaced with the string ", read-only").
-#: ../src/document.c:1346
+#: ../src/document.c:1347
 #, c-format
 msgid "File %s opened(%d%s)."
 msgstr "Το αρχείο %s ανοίχθηκε(%d%s)."
 
-#: ../src/document.c:1348
+#: ../src/document.c:1349
 msgid ", read-only"
 msgstr ", μόνο για ανάγνωση"
 
-#: ../src/document.c:1557
+#: ../src/document.c:1558
 #, fuzzy
 msgid "Error renaming file."
 msgstr "Σφάλμα στην αποθήκευση αρχείου."
 
-#: ../src/document.c:1642
+#: ../src/document.c:1643
 #, c-format
 msgid ""
 "An error occurred while converting the file from UTF-8 in \"%s\". The file "
@@ -751,7 +751,7 @@ msgstr ""
 "Παρουσιάστηκε σφάλμα κατά την μετατροπή του αρχείου από UTF-8 σε \"%s\". Το "
 "αρχείο παραμένει μη αποθηκευμένο."
 
-#: ../src/document.c:1664
+#: ../src/document.c:1665
 #, c-format
 msgid ""
 "Error message: %s\n"
@@ -760,52 +760,52 @@ msgstr ""
 "Μήνυμα σφάλματος: %s\n"
 "Το σφάλμα παρουσιάστηκε στο \"%s\" (γραμμή: %d, στήλη: %d)."
 
-#: ../src/document.c:1669
+#: ../src/document.c:1670
 #, c-format
 msgid "Error message: %s."
 msgstr "Μήνυμα σφάλματος: %s."
 
-#: ../src/document.c:1769 ../src/document.c:1832
+#: ../src/document.c:1770 ../src/document.c:1833
 msgid "Error saving file."
 msgstr "Σφάλμα στην αποθήκευση αρχείου."
 
-#: ../src/document.c:1831
+#: ../src/document.c:1832
 #, c-format
 msgid "Error saving file (%s)."
 msgstr "Σφάλμα αποθήκευσης αρχείου (%s)."
 
-#: ../src/document.c:1856
+#: ../src/document.c:1857
 #, c-format
 msgid "File %s saved."
 msgstr "Το αρχείο %s αποθηκεύτηκε."
 
-#: ../src/document.c:1924 ../src/document.c:1981 ../src/document.c:1989
+#: ../src/document.c:1925 ../src/document.c:1982 ../src/document.c:1990
 #, c-format
 msgid "\"%s\" was not found."
 msgstr "\"%s\" δεν βρέθηκε."
 
-#: ../src/document.c:1989
+#: ../src/document.c:1990
 msgid "Wrap search and find again?"
 msgstr "Ολοκλήρωση αναζήτησης και εύρεση ξανά;"
 
-#: ../src/document.c:2068 ../src/search.c:1127 ../src/search.c:1171
+#: ../src/document.c:2069 ../src/search.c:1127 ../src/search.c:1171
 #: ../src/search.c:1875 ../src/search.c:1876
 #, c-format
 msgid "No matches found for \"%s\"."
 msgstr "Δεν βρέθηκαν αποτελέσματα για \"%s\"."
 
-#: ../src/document.c:2079 ../src/document.c:2088
+#: ../src/document.c:2080 ../src/document.c:2089
 #, fuzzy, c-format
 msgid "%s: replaced %d occurrence of \"%s\" with \"%s\"."
 msgid_plural "%s: replaced %d occurrences of \"%s\" with \"%s\"."
 msgstr[0] "%s: αντικατάσταση %d εμφανιζόμενου(ων) του \"%s\" με \"%s\"."
 msgstr[1] "%s: αντικατάσταση %d εμφανιζόμενου(ων) του \"%s\" με \"%s\"."
 
-#: ../src/document.c:2895
+#: ../src/document.c:2896
 msgid "Do you want to reload it?"
 msgstr "Θέλετε να το επαναφορτώσετε;"
 
-#: ../src/document.c:2896
+#: ../src/document.c:2897
 #, c-format
 msgid ""
 "The file '%s' on the disk is more recent than\n"
@@ -814,11 +814,11 @@ msgstr ""
 "Το αρχείο '%s' στον δίσκο είναι πιο πρόσφατο από\n"
 "του τρέχοντος buffer."
 
-#: ../src/document.c:2914
+#: ../src/document.c:2915
 msgid "Close _without saving"
 msgstr ""
 
-#: ../src/document.c:2918
+#: ../src/document.c:2919
 #, fuzzy, c-format
 msgid "File \"%s\" was not found on disk! Try to resave the file?"
 msgstr "\"%s\" δεν βρέθηκε."
@@ -2002,7 +2002,7 @@ msgstr ""
 msgid "Pack the toolbar to the main menu to save vertical space"
 msgstr ""
 
-#: ../src/interface.c:3340 ../src/toolbar.c:929
+#: ../src/interface.c:3340 ../src/toolbar.c:930
 #, fuzzy
 msgid "Customize Toolbar"
 msgstr "Εμφάνιση _Μπάρας Εργαλείων"
@@ -3183,7 +3183,7 @@ msgstr "Εισαγωγή ημερομηνίας"
 msgid "Settings"
 msgstr "Ενότητες"
 
-#: ../src/keybindings.c:392 ../src/toolbar.c:380
+#: ../src/keybindings.c:392 ../src/toolbar.c:381
 #, fuzzy
 msgid "Search"
 msgstr "_Αναζήτηση"
@@ -3458,7 +3458,7 @@ msgid "Remove Error Indicators"
 msgstr "Απομάκρυνση _Δεικτών Σφάλματος"
 
 #: ../src/keybindings.c:538 ../src/keybindings.c:543 ../src/project.c:477
-#: ../src/ui_utils.c:1813
+#: ../src/ui_utils.c:1815
 #, fuzzy
 msgid "Build"
 msgstr "Δημιουργία"
@@ -3518,13 +3518,13 @@ msgstr "Οι ακόλουθες συντομεύσεις πληκτρολογί�
 msgid "Switch to Document"
 msgstr "Μετάβαση στο αριστερό έγγραφο"
 
-#: ../src/keyfile.c:850
+#: ../src/keyfile.c:852
 msgid "Type here what you want, use it as a notice/scratch board"
 msgstr ""
 "Πληκτρολογείστε εδώ ότι θέλετε, χρησιμοποιείστε το ως ένα σημειωματάριο/"
 "πίνακα μηνυμάτων"
 
-#: ../src/keyfile.c:1054
+#: ../src/keyfile.c:1056
 msgid "Failed to load one or more session files."
 msgstr "Αποτυχία φόρτωσης ενός ή περισσότερων αρχείων συνεδρίας."
 
@@ -3680,16 +3680,21 @@ msgstr "Αποτυχία μεταγλώτισης."
 msgid "Status messages"
 msgstr "Μηνύματα κατάστασης λειτουργίας"
 
-#: ../src/msgwindow.c:530
+#: ../src/msgwindow.c:524
+#, fuzzy
+msgid "C_opy"
+msgstr "Αντιγραφή"
+
+#: ../src/msgwindow.c:533
 #, fuzzy
 msgid "Copy _All"
 msgstr "_Κλείσιμο Όλων"
 
-#: ../src/msgwindow.c:560
+#: ../src/msgwindow.c:563
 msgid "_Hide Message Window"
 msgstr "_Απόκρυψη παράθυρου μηνυμάτων"
 
-#: ../src/msgwindow.c:616
+#: ../src/msgwindow.c:619
 #, fuzzy, c-format
 msgid "Could not find file '%s' - trying the current document path."
 msgstr "Απομακρύνει όλους τους δείκτες σφάλματος στο τρέχον έγγραφο."
@@ -4664,11 +4669,11 @@ msgstr "Μείωση εσοχής"
 msgid "Increase indentation"
 msgstr "Αύξηση εσοχής"
 
-#: ../src/toolbar.c:76 ../src/toolbar.c:380
+#: ../src/toolbar.c:76 ../src/toolbar.c:381
 msgid "Find the entered text in the current file"
 msgstr " Βρείτε το εισακτέο κείμενο στο τρέχον αρχείο"
 
-#: ../src/toolbar.c:77 ../src/toolbar.c:388
+#: ../src/toolbar.c:77 ../src/toolbar.c:389
 #, fuzzy
 msgid "Jump to the entered line number"
 msgstr "Μετάβαση στον εισακτέο αριθμό γραμμής."
@@ -4691,53 +4696,53 @@ msgstr "Έγγραφο XML"
 msgid "Replace text in the current document"
 msgstr "Μαρκάρει τα ευρήματα της αναζήτησης στο τρέχον έγγραφο."
 
-#: ../src/toolbar.c:356
+#: ../src/toolbar.c:357
 msgid "Create a new file"
 msgstr "Δημιουργία νέου αρχείου"
 
-#: ../src/toolbar.c:357
+#: ../src/toolbar.c:358
 #, fuzzy
 msgid "Create a new file from a template"
 msgstr "Δημιουργία νέου αρχείου"
 
-#: ../src/toolbar.c:364
+#: ../src/toolbar.c:365
 msgid "Open an existing file"
 msgstr "Άνοιγμα υπάρχοντος αρχείου"
 
-#: ../src/toolbar.c:365
+#: ../src/toolbar.c:366
 #, fuzzy
 msgid "Open a recent file"
 msgstr "Άνοιγμα του επιλεγμένου αρχείου"
 
-#: ../src/toolbar.c:373
+#: ../src/toolbar.c:374
 #, fuzzy
 msgid "Choose more build actions"
 msgstr "Δεν έχει άλλα λάθη στη δημιουργία."
 
-#: ../src/toolbar.c:388
+#: ../src/toolbar.c:389
 #, fuzzy
 msgid "Goto"
 msgstr "Μετάβαση στη Γραμμή"
 
-#: ../src/toolbar.c:577
+#: ../src/toolbar.c:578
 msgid "Separator"
 msgstr ""
 
-#: ../src/toolbar.c:578
+#: ../src/toolbar.c:579
 msgid "--- Separator ---"
 msgstr ""
 
-#: ../src/toolbar.c:945
+#: ../src/toolbar.c:946
 msgid ""
 "Select items to be displayed on the toolbar. Items can be reordered by drag "
 "and drop."
 msgstr ""
 
-#: ../src/toolbar.c:961
+#: ../src/toolbar.c:962
 msgid "Available Items"
 msgstr ""
 
-#: ../src/toolbar.c:982
+#: ../src/toolbar.c:983
 #, fuzzy
 msgid "Displayed Items"
 msgstr "Εμφάνιση"
@@ -4914,20 +4919,20 @@ msgstr ""
 msgid "_Set Custom Date Format"
 msgstr "_Ρύθμιση Προσαρμοσμένης Διάταξης Ημερομηνίας"
 
-#: ../src/ui_utils.c:1657
+#: ../src/ui_utils.c:1659
 msgid "Select Folder"
 msgstr "Επιλογή Φακέλου"
 
-#: ../src/ui_utils.c:1657
+#: ../src/ui_utils.c:1659
 msgid "Select File"
 msgstr "Επιλογή Αρχείου"
 
-#: ../src/ui_utils.c:1811
+#: ../src/ui_utils.c:1813
 #, fuzzy
 msgid "Save All"
 msgstr "Αποθήκευση Ό_λων"
 
-#: ../src/ui_utils.c:1812
+#: ../src/ui_utils.c:1814
 #, fuzzy
 msgid "Close All"
 msgstr "_Κλείσιμο Όλων"
@@ -5214,21 +5219,21 @@ msgstr "Σίνγκλετον"
 msgid "GTK+ constructor type"
 msgstr ""
 
-#: ../plugins/classbuilder.c:1042
+#: ../plugins/classbuilder.c:1040
 msgid "Create Cla_ss"
 msgstr "Δημιουργία Κλά_σης"
 
-#: ../plugins/classbuilder.c:1048
+#: ../plugins/classbuilder.c:1046
 #, fuzzy
 msgid "_C++ Class"
 msgstr "C++ Κλάση"
 
-#: ../plugins/classbuilder.c:1051
+#: ../plugins/classbuilder.c:1049
 #, fuzzy
 msgid "_GTK+ Class"
 msgstr "GTK+ Κλάση"
 
-#: ../plugins/classbuilder.c:1054
+#: ../plugins/classbuilder.c:1052
 #, fuzzy
 msgid "_PHP Class"
 msgstr "C++ Κλάση"

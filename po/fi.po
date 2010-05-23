@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Geany 0.19\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-05-22 13:10+0200\n"
+"POT-Creation-Date: 2010-05-23 10:05+0200\n"
 "PO-Revision-Date: 2009-08-13 15:48+0200\n"
 "Last-Translator: Harri Koskinen <reg2009@fastmonkey.fi>\n"
 "Language-Team: Finnish\n"
@@ -179,137 +179,137 @@ msgstr "_Edellinen virhe"
 msgid "_Set Build Commands"
 msgstr "Mukautetut komennot"
 
-#: ../src/build.c:1622 ../src/toolbar.c:372
+#: ../src/build.c:1623 ../src/toolbar.c:373
 msgid "Build the current file"
 msgstr "Käännä nykyinen tiedosto"
 
-#: ../src/build.c:1636
+#: ../src/build.c:1637
 msgid "Build the current file with Make and the default target"
 msgstr "Koosta nykyinen tiedosto make-komennolla määrittämättä kohdetta"
 
-#: ../src/build.c:1638
+#: ../src/build.c:1639
 msgid "Build the current file with Make and the specified target"
 msgstr "Koosta nykyinen tiedosto make-komennon määritetyllä kohteella"
 
-#: ../src/build.c:1640
+#: ../src/build.c:1641
 msgid "Compile the current file with Make"
 msgstr "Käännä nykyinen tiedosto make-komennolla"
 
-#: ../src/build.c:1667
+#: ../src/build.c:1668
 #, c-format
 msgid "Process could not be stopped (%s)."
 msgstr "Prosessin (%s) pysäytys epäonnistui."
 
-#: ../src/build.c:1684 ../src/build.c:1696
+#: ../src/build.c:1685 ../src/build.c:1697
 msgid "No more build errors."
 msgstr "Kääntövirheitä ei ole enempää."
 
-#: ../src/build.c:1777
+#: ../src/build.c:1778
 msgid "Set menu item label"
 msgstr ""
 
-#: ../src/build.c:1787
+#: ../src/build.c:1788
 msgid "Item"
 msgstr ""
 
-#: ../src/build.c:1788 ../src/symbols.c:650
+#: ../src/build.c:1789 ../src/symbols.c:650
 msgid "Label"
 msgstr "Nimike"
 
-#: ../src/build.c:1789 ../src/symbols.c:645
+#: ../src/build.c:1790 ../src/symbols.c:645
 msgid "Command"
 msgstr "Komento"
 
-#: ../src/build.c:1790
+#: ../src/build.c:1791
 #, fuzzy
 msgid "Working directory"
 msgstr "%s (kansiossa %s)"
 
-#: ../src/build.c:1791
+#: ../src/build.c:1792
 #, fuzzy
 msgid "Clear"
 msgstr "Kääntäjä"
 
-#: ../src/build.c:1830
+#: ../src/build.c:1831
 msgid "Click to set menu item label"
 msgstr ""
 
-#: ../src/build.c:1903 ../src/build.c:1905
+#: ../src/build.c:1904 ../src/build.c:1906
 #, fuzzy, c-format
 msgid "%s Commands"
 msgstr "%s komennot"
 
-#: ../src/build.c:1905
+#: ../src/build.c:1906
 #, fuzzy
 msgid "No Filetype"
 msgstr "Aseta _tiedostotyyppi"
 
-#: ../src/build.c:1913 ../src/build.c:1948
+#: ../src/build.c:1914 ../src/build.c:1949
 #, fuzzy
 msgid "Error Regular Expression:"
 msgstr "_Grepin säännölliset lausekkeet"
 
-#: ../src/build.c:1941
+#: ../src/build.c:1942
 msgid "Non-Filetype Commands"
 msgstr ""
 
-#: ../src/build.c:1971
+#: ../src/build.c:1972
 msgid "Note: Item 2 opens a dialog and appends the response to the command."
 msgstr ""
 
-#: ../src/build.c:1980
+#: ../src/build.c:1981
 #, fuzzy
 msgid "Execute Commands"
 msgstr "Mukautetut komennot"
 
-#: ../src/build.c:1991
+#: ../src/build.c:1992
 #, c-format
 msgid ""
 "%d, %e, %f, %p are substituted in command and directory fields, see manual "
 "for details."
 msgstr ""
 
-#: ../src/build.c:2176
+#: ../src/build.c:2177
 #, fuzzy
 msgid "Set Build Commands"
 msgstr "Mukautetut komennot"
 
-#: ../src/build.c:2398
+#: ../src/build.c:2399
 msgid "_Compile"
 msgstr "_Käännä"
 
 #. build the code
-#: ../src/build.c:2405 ../src/build.c:2668 ../src/interface.c:1075
+#: ../src/build.c:2406 ../src/build.c:2669 ../src/interface.c:1075
 msgid "_Build"
 msgstr "K_oosta"
 
-#: ../src/build.c:2412 ../src/build.c:2442 ../src/build.c:2635
+#: ../src/build.c:2413 ../src/build.c:2443 ../src/build.c:2636
 #, fuzzy
 msgid "_Execute"
 msgstr "Suorita:"
 
 #. build the code with make custom
-#: ../src/build.c:2457 ../src/build.c:2633 ../src/build.c:2688
+#: ../src/build.c:2458 ../src/build.c:2634 ../src/build.c:2689
 msgid "Make Custom _Target"
 msgstr "Koosta _mukautettu kohde"
 
 #. build the code with make object
-#: ../src/build.c:2459 ../src/build.c:2634 ../src/build.c:2696
+#: ../src/build.c:2460 ../src/build.c:2635 ../src/build.c:2697
 msgid "Make _Object"
 msgstr "Koosta o_lio"
 
-#: ../src/build.c:2461 ../src/build.c:2632
+#: ../src/build.c:2462 ../src/build.c:2633
 #, fuzzy
 msgid "_Make"
 msgstr "Make:"
 
 #. build the code with make all
-#: ../src/build.c:2680
+#: ../src/build.c:2681
 msgid "_Make All"
 msgstr "Koosta k_aikki"
 
 #. arguments
-#: ../src/build.c:2708
+#: ../src/build.c:2709
 #, fuzzy
 msgid "_Set Build Menu Commands"
 msgstr "Mukautetut komennot"
@@ -325,7 +325,7 @@ msgid_plural "%d files saved."
 msgstr[0] "Tiedosto %s tallennettu."
 msgstr[1] "Tiedosto %s tallennettu."
 
-#: ../src/callbacks.c:488 ../src/document.c:2894 ../src/interface.c:352
+#: ../src/callbacks.c:488 ../src/document.c:2895 ../src/interface.c:352
 #: ../src/sidebar.c:618
 msgid "_Reload"
 msgstr "_Lataa uudelleen"
@@ -634,17 +634,17 @@ msgstr "Muu:"
 msgid "File %s closed."
 msgstr "Tiedosto %s suljettu."
 
-#: ../src/document.c:774
+#: ../src/document.c:775
 #, c-format
 msgid "New file \"%s\" opened."
 msgstr "Uusi tiedosto \"%s\" avattu."
 
-#: ../src/document.c:947 ../src/document.c:1463
+#: ../src/document.c:948 ../src/document.c:1464
 #, c-format
 msgid "Could not open file %s (%s)"
 msgstr "Tiedoston %s avaaminen epäonnistui (%s)"
 
-#: ../src/document.c:977
+#: ../src/document.c:978
 #, c-format
 msgid ""
 "The file \"%s\" could not be opened properly and has been truncated. This "
@@ -658,12 +658,12 @@ msgstr ""
 
 #. For translators: the second wildcard is an encoding name, e.g.
 #. * The file \"test.txt\" is not valid UTF-8.
-#: ../src/document.c:1003
+#: ../src/document.c:1004
 #, c-format
 msgid "The file \"%s\" is not valid %s."
 msgstr "Tiedoston \"%s\" merkistö ei ole %s."
 
-#: ../src/document.c:1013
+#: ../src/document.c:1014
 #, c-format
 msgid ""
 "The file \"%s\" does not look like a text file or the file encoding is not "
@@ -671,30 +671,30 @@ msgid ""
 msgstr ""
 "Tiedosto \"%s\" ei ole tekstitiedosto tai käytettyä merkistöä ei tueta."
 
-#: ../src/document.c:1162
+#: ../src/document.c:1163
 msgid "Spaces"
 msgstr "Välilyönnit"
 
-#: ../src/document.c:1165
+#: ../src/document.c:1166
 msgid "Tabs"
 msgstr "Sarkaimet"
 
-#: ../src/document.c:1168
+#: ../src/document.c:1169
 msgid "Tabs and Spaces"
 msgstr "Sarkaimet ja välilyönnit"
 
 #. For translators: first wildcard is the indentation mode (Spaces, Tabs, Tabs
 #. * and Spaces), the second one is the filename
-#: ../src/document.c:1173
+#: ../src/document.c:1174
 #, c-format
 msgid "Setting %s indentation mode for %s."
 msgstr "Asetetaan sisennystila %s tiedostolle %s."
 
-#: ../src/document.c:1226
+#: ../src/document.c:1227
 msgid "Invalid filename"
 msgstr "Tiedostonimi ei kelpaa"
 
-#: ../src/document.c:1341
+#: ../src/document.c:1342
 #, c-format
 msgid "File %s reloaded."
 msgstr "Tiedosto %s ladattu uudelleen."
@@ -702,20 +702,20 @@ msgstr "Tiedosto %s ladattu uudelleen."
 #. For translators: this is the status window message for opening a file. %d is the number
 #. * of the newly opened file, %s indicates whether the file is opened read-only
 #. * (it is replaced with the string ", read-only").
-#: ../src/document.c:1346
+#: ../src/document.c:1347
 #, c-format
 msgid "File %s opened(%d%s)."
 msgstr "Tiedosto %s avattu (%d%s)."
 
-#: ../src/document.c:1348
+#: ../src/document.c:1349
 msgid ", read-only"
 msgstr ", kirjoitussuojattu"
 
-#: ../src/document.c:1557
+#: ../src/document.c:1558
 msgid "Error renaming file."
 msgstr "Tiedostonimen muutosvirhe."
 
-#: ../src/document.c:1642
+#: ../src/document.c:1643
 #, c-format
 msgid ""
 "An error occurred while converting the file from UTF-8 in \"%s\". The file "
@@ -724,7 +724,7 @@ msgstr ""
 "Virhe muunnettaessa tiedostoa merkistöstä UTF-8 (%s). Tiedostoa ei "
 "tallennettu."
 
-#: ../src/document.c:1664
+#: ../src/document.c:1665
 #, c-format
 msgid ""
 "Error message: %s\n"
@@ -733,52 +733,52 @@ msgstr ""
 "Virheilmoitus: %s\n"
 "Tiedostossa \"%s\" (rivi %d, merkki %d)."
 
-#: ../src/document.c:1669
+#: ../src/document.c:1670
 #, c-format
 msgid "Error message: %s."
 msgstr "Virheilmoitus: %s."
 
-#: ../src/document.c:1769 ../src/document.c:1832
+#: ../src/document.c:1770 ../src/document.c:1833
 msgid "Error saving file."
 msgstr "Tiedoston tallennusvirhe."
 
-#: ../src/document.c:1831
+#: ../src/document.c:1832
 #, c-format
 msgid "Error saving file (%s)."
 msgstr "Tiedoston tallennusvirhe (%s)."
 
-#: ../src/document.c:1856
+#: ../src/document.c:1857
 #, c-format
 msgid "File %s saved."
 msgstr "Tiedosto %s tallennettu."
 
-#: ../src/document.c:1924 ../src/document.c:1981 ../src/document.c:1989
+#: ../src/document.c:1925 ../src/document.c:1982 ../src/document.c:1990
 #, c-format
 msgid "\"%s\" was not found."
 msgstr "\"%s\" ei löytynyt."
 
-#: ../src/document.c:1989
+#: ../src/document.c:1990
 msgid "Wrap search and find again?"
 msgstr "Jatketaanko etsintää tiedoston alusta?"
 
-#: ../src/document.c:2068 ../src/search.c:1127 ../src/search.c:1171
+#: ../src/document.c:2069 ../src/search.c:1127 ../src/search.c:1171
 #: ../src/search.c:1875 ../src/search.c:1876
 #, c-format
 msgid "No matches found for \"%s\"."
 msgstr "Osumia ei löytynyt: \"%s\"."
 
-#: ../src/document.c:2079 ../src/document.c:2088
+#: ../src/document.c:2080 ../src/document.c:2089
 #, c-format
 msgid "%s: replaced %d occurrence of \"%s\" with \"%s\"."
 msgid_plural "%s: replaced %d occurrences of \"%s\" with \"%s\"."
 msgstr[0] "%1$s: \"%3$s\" korvattiin merkkijonolla \"%4$s\" %2$d kerran."
 msgstr[1] "%1$s: \"%3$s\" korvattiin merkkijonolla \"%4$s\" %2$d kertaa."
 
-#: ../src/document.c:2895
+#: ../src/document.c:2896
 msgid "Do you want to reload it?"
 msgstr "Ladataanko uudelleen?"
 
-#: ../src/document.c:2896
+#: ../src/document.c:2897
 #, c-format
 msgid ""
 "The file '%s' on the disk is more recent than\n"
@@ -787,11 +787,11 @@ msgstr ""
 "Levyllä oleva tiedosto \"%s\" on uudempi kuin\n"
 "Geanyn muistissa oleva."
 
-#: ../src/document.c:2914
+#: ../src/document.c:2915
 msgid "Close _without saving"
 msgstr ""
 
-#: ../src/document.c:2918
+#: ../src/document.c:2919
 #, fuzzy, c-format
 msgid "File \"%s\" was not found on disk! Try to resave the file?"
 msgstr "Tiedostoa \"%s\" ei löytynyt!"
@@ -1926,7 +1926,7 @@ msgstr "_Työkalupalkki valikon vierellä"
 msgid "Pack the toolbar to the main menu to save vertical space"
 msgstr "Siirrä työkalupalkki päävalikon viereen säästääksesi pystytilaa"
 
-#: ../src/interface.c:3340 ../src/toolbar.c:929
+#: ../src/interface.c:3340 ../src/toolbar.c:930
 msgid "Customize Toolbar"
 msgstr "Muokkaa työkalupalkkia"
 
@@ -3020,7 +3020,7 @@ msgstr "Lisää päiväys"
 msgid "Settings"
 msgstr "Asetukset"
 
-#: ../src/keybindings.c:392 ../src/toolbar.c:380
+#: ../src/keybindings.c:392 ../src/toolbar.c:381
 msgid "Search"
 msgstr "Etsi"
 
@@ -3276,7 +3276,7 @@ msgid "Remove Error Indicators"
 msgstr "Poista virh_eilmaisimet"
 
 #: ../src/keybindings.c:538 ../src/keybindings.c:543 ../src/project.c:477
-#: ../src/ui_utils.c:1813
+#: ../src/ui_utils.c:1815
 msgid "Build"
 msgstr "Koosta"
 
@@ -3332,11 +3332,11 @@ msgstr "Voit muokata seuraavia pikanäppäimiä:"
 msgid "Switch to Document"
 msgstr "Siirry asiakirjaan"
 
-#: ../src/keyfile.c:850
+#: ../src/keyfile.c:852
 msgid "Type here what you want, use it as a notice/scratch board"
 msgstr "Tähän tilaan voit kirjoittaa vaikkapa muistiinpanoja"
 
-#: ../src/keyfile.c:1054
+#: ../src/keyfile.c:1056
 msgid "Failed to load one or more session files."
 msgstr "Yhden tai useamman istuntotiedoston lataus epäonnistui."
 
@@ -3490,15 +3490,20 @@ msgstr "Asetustiedostot ladattiin uudelleen."
 msgid "Status messages"
 msgstr "Tilaviestit"
 
-#: ../src/msgwindow.c:530
+#: ../src/msgwindow.c:524
+#, fuzzy
+msgid "C_opy"
+msgstr "Kopioi"
+
+#: ../src/msgwindow.c:533
 msgid "Copy _All"
 msgstr "_Kopioi kaikki"
 
-#: ../src/msgwindow.c:560
+#: ../src/msgwindow.c:563
 msgid "_Hide Message Window"
 msgstr "_Piilota viesti-ikkuna"
 
-#: ../src/msgwindow.c:616
+#: ../src/msgwindow.c:619
 #, c-format
 msgid "Could not find file '%s' - trying the current document path."
 msgstr ""
@@ -4442,11 +4447,11 @@ msgstr "Vähennä sisennystä"
 msgid "Increase indentation"
 msgstr "Kasvata sisennystä"
 
-#: ../src/toolbar.c:76 ../src/toolbar.c:380
+#: ../src/toolbar.c:76 ../src/toolbar.c:381
 msgid "Find the entered text in the current file"
 msgstr "Etsi kentän teksti nykyisestä tiedostosta"
 
-#: ../src/toolbar.c:77 ../src/toolbar.c:388
+#: ../src/toolbar.c:77 ../src/toolbar.c:389
 msgid "Jump to the entered line number"
 msgstr "Siirry kenttään syötetylle riville"
 
@@ -4466,42 +4471,42 @@ msgstr "Tulosta tiedosto"
 msgid "Replace text in the current document"
 msgstr "Korvaa tekstiä nykyisestä asiakirjasta"
 
-#: ../src/toolbar.c:356
+#: ../src/toolbar.c:357
 msgid "Create a new file"
 msgstr "Luo uusi tiedosto"
 
-#: ../src/toolbar.c:357
+#: ../src/toolbar.c:358
 #, fuzzy
 msgid "Create a new file from a template"
 msgstr "Luo uusi tiedosto"
 
-#: ../src/toolbar.c:364
+#: ../src/toolbar.c:365
 msgid "Open an existing file"
 msgstr "Avaa tiedosto"
 
-#: ../src/toolbar.c:365
+#: ../src/toolbar.c:366
 #, fuzzy
 msgid "Open a recent file"
 msgstr "Avaa valittu tiedosto"
 
-#: ../src/toolbar.c:373
+#: ../src/toolbar.c:374
 #, fuzzy
 msgid "Choose more build actions"
 msgstr "Kääntövirheitä ei ole enempää."
 
-#: ../src/toolbar.c:388
+#: ../src/toolbar.c:389
 msgid "Goto"
 msgstr "Siirry"
 
-#: ../src/toolbar.c:577
+#: ../src/toolbar.c:578
 msgid "Separator"
 msgstr "Erotin"
 
-#: ../src/toolbar.c:578
+#: ../src/toolbar.c:579
 msgid "--- Separator ---"
 msgstr "--- Erotin ---"
 
-#: ../src/toolbar.c:945
+#: ../src/toolbar.c:946
 msgid ""
 "Select items to be displayed on the toolbar. Items can be reordered by drag "
 "and drop."
@@ -4509,11 +4514,11 @@ msgstr ""
 "Valitse työkalupalkissa näytettävät kohteet. Niitä voi järjestellä "
 "raahaamalla ja pudottamalla."
 
-#: ../src/toolbar.c:961
+#: ../src/toolbar.c:962
 msgid "Available Items"
 msgstr "Saatavilla olevat kohteet"
 
-#: ../src/toolbar.c:982
+#: ../src/toolbar.c:983
 msgid "Displayed Items"
 msgstr "Näytetyt kohteet"
 
@@ -4689,19 +4694,19 @@ msgstr "C++ STL"
 msgid "_Set Custom Date Format"
 msgstr "_Päivämäärän muotoilu"
 
-#: ../src/ui_utils.c:1657
+#: ../src/ui_utils.c:1659
 msgid "Select Folder"
 msgstr "Valitse kansio"
 
-#: ../src/ui_utils.c:1657
+#: ../src/ui_utils.c:1659
 msgid "Select File"
 msgstr "Valitse tiedosto"
 
-#: ../src/ui_utils.c:1811
+#: ../src/ui_utils.c:1813
 msgid "Save All"
 msgstr "Tallenna _kaikki"
 
-#: ../src/ui_utils.c:1812
+#: ../src/ui_utils.c:1814
 msgid "Close All"
 msgstr "Sulje kaikki"
 
@@ -4965,19 +4970,19 @@ msgstr "Ainokaiset"
 msgid "GTK+ constructor type"
 msgstr "GTK+-muodostintyyppi"
 
-#: ../plugins/classbuilder.c:1042
+#: ../plugins/classbuilder.c:1040
 msgid "Create Cla_ss"
 msgstr "_Luo luokka"
 
-#: ../plugins/classbuilder.c:1048
+#: ../plugins/classbuilder.c:1046
 msgid "_C++ Class"
 msgstr "_C++-luokka"
 
-#: ../plugins/classbuilder.c:1051
+#: ../plugins/classbuilder.c:1049
 msgid "_GTK+ Class"
 msgstr "_GTK+-luokka"
 
-#: ../plugins/classbuilder.c:1054
+#: ../plugins/classbuilder.c:1052
 #, fuzzy
 msgid "_PHP Class"
 msgstr "_C++-luokka"

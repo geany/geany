@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: geany 0.19\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-05-22 13:10+0200\n"
+"POT-Creation-Date: 2010-05-23 10:05+0200\n"
 "PO-Revision-Date: 2010-05-21 10:15+0300\n"
 "Last-Translator: Yura Siamashka <yurand2@gmail.com>\n"
 "Language-Team: Belarusian <geany-i18n@uvena.de>\n"
@@ -173,85 +173,85 @@ msgstr "Папярэдняя памылка"
 msgid "_Set Build Commands"
 msgstr "Усталяваць каманды будоўлі"
 
-#: ../src/build.c:1622 ../src/toolbar.c:372
+#: ../src/build.c:1623 ../src/toolbar.c:373
 msgid "Build the current file"
 msgstr "Будаваць цяперашні файл"
 
-#: ../src/build.c:1636
+#: ../src/build.c:1637
 msgid "Build the current file with Make and the default target"
 msgstr "Будаваць цяперашні файл, выкарыстоўваючы make і мэту зборкі па змоўку"
 
-#: ../src/build.c:1638
+#: ../src/build.c:1639
 msgid "Build the current file with Make and the specified target"
 msgstr "Будаваць цяперашні файл, выкарыстоўваючы make і указаную мэту"
 
-#: ../src/build.c:1640
+#: ../src/build.c:1641
 msgid "Compile the current file with Make"
 msgstr "Скампіляваць цяперашні файл, выкарыстоўваючы make"
 
-#: ../src/build.c:1667
+#: ../src/build.c:1668
 #, c-format
 msgid "Process could not be stopped (%s)."
 msgstr "Працэс немагчыма спыніць (%s)."
 
-#: ../src/build.c:1684 ../src/build.c:1696
+#: ../src/build.c:1685 ../src/build.c:1697
 msgid "No more build errors."
 msgstr "Памылак будоўлі больш няма."
 
-#: ../src/build.c:1777
+#: ../src/build.c:1778
 msgid "Set menu item label"
 msgstr "Усталяваць надпіс элемента меню"
 
-#: ../src/build.c:1787
+#: ../src/build.c:1788
 msgid "Item"
 msgstr "Элемент"
 
-#: ../src/build.c:1788 ../src/symbols.c:650
+#: ../src/build.c:1789 ../src/symbols.c:650
 msgid "Label"
 msgstr "Метка"
 
-#: ../src/build.c:1789 ../src/symbols.c:645
+#: ../src/build.c:1790 ../src/symbols.c:645
 msgid "Command"
 msgstr "Каманда"
 
-#: ../src/build.c:1790
+#: ../src/build.c:1791
 msgid "Working directory"
 msgstr "Працоўная дырэкторыя"
 
-#: ../src/build.c:1791
+#: ../src/build.c:1792
 msgid "Clear"
 msgstr "Ачысціць"
 
-#: ../src/build.c:1830
+#: ../src/build.c:1831
 msgid "Click to set menu item label"
 msgstr "Пстрыкніце для ўсталявання надпісу элемента меню"
 
-#: ../src/build.c:1903 ../src/build.c:1905
+#: ../src/build.c:1904 ../src/build.c:1906
 #, c-format
 msgid "%s Commands"
 msgstr "%s Каманды"
 
-#: ../src/build.c:1905
+#: ../src/build.c:1906
 msgid "No Filetype"
 msgstr "Без тыпа файла"
 
-#: ../src/build.c:1913 ../src/build.c:1948
+#: ../src/build.c:1914 ../src/build.c:1949
 msgid "Error Regular Expression:"
 msgstr "Памылка ў сталым выразе:"
 
-#: ../src/build.c:1941
+#: ../src/build.c:1942
 msgid "Non-Filetype Commands"
 msgstr "Каманды не звязаныя з тыпам файлаў"
 
-#: ../src/build.c:1971
+#: ../src/build.c:1972
 msgid "Note: Item 2 opens a dialog and appends the response to the command."
 msgstr "Заўвага: Элемент 2 адчыняе дыялог і дадае адказ да каманды."
 
-#: ../src/build.c:1980
+#: ../src/build.c:1981
 msgid "Execute Commands"
 msgstr "Выканаць каманды"
 
-#: ../src/build.c:1991
+#: ../src/build.c:1992
 #, c-format
 msgid ""
 "%d, %e, %f, %p are substituted in command and directory fields, see manual "
@@ -260,44 +260,44 @@ msgstr ""
 "%d, %e, %f, %p замяняюцца ў камандзе і дырэкторыі, глядзі даведку для "
 "дэталяў."
 
-#: ../src/build.c:2176
+#: ../src/build.c:2177
 msgid "Set Build Commands"
 msgstr "Усталяваць каманды будоўлі"
 
-#: ../src/build.c:2398
+#: ../src/build.c:2399
 msgid "_Compile"
 msgstr "Кампіляваць"
 
 #. build the code
-#: ../src/build.c:2405 ../src/build.c:2668 ../src/interface.c:1075
+#: ../src/build.c:2406 ../src/build.c:2669 ../src/interface.c:1075
 msgid "_Build"
 msgstr "Пабудаваць"
 
-#: ../src/build.c:2412 ../src/build.c:2442 ../src/build.c:2635
+#: ../src/build.c:2413 ../src/build.c:2443 ../src/build.c:2636
 msgid "_Execute"
 msgstr "Выканаць"
 
 #. build the code with make custom
-#: ../src/build.c:2457 ../src/build.c:2633 ../src/build.c:2688
+#: ../src/build.c:2458 ../src/build.c:2634 ../src/build.c:2689
 msgid "Make Custom _Target"
 msgstr "Будаваць з make (свая мэта)"
 
 #. build the code with make object
-#: ../src/build.c:2459 ../src/build.c:2634 ../src/build.c:2696
+#: ../src/build.c:2460 ../src/build.c:2635 ../src/build.c:2697
 msgid "Make _Object"
 msgstr "Будаваць аб'ект"
 
-#: ../src/build.c:2461 ../src/build.c:2632
+#: ../src/build.c:2462 ../src/build.c:2633
 msgid "_Make"
 msgstr "Зрабіць"
 
 #. build the code with make all
-#: ../src/build.c:2680
+#: ../src/build.c:2681
 msgid "_Make All"
 msgstr "Будаваць усе"
 
 #. arguments
-#: ../src/build.c:2708
+#: ../src/build.c:2709
 msgid "_Set Build Menu Commands"
 msgstr "Усталяваць каманды меню пабудовы"
 
@@ -313,7 +313,7 @@ msgstr[0] "%d файл захаваны."
 msgstr[1] "%d файла захавана."
 msgstr[2] "%d файлаў захавана."
 
-#: ../src/callbacks.c:488 ../src/document.c:2894 ../src/interface.c:352
+#: ../src/callbacks.c:488 ../src/document.c:2895 ../src/interface.c:352
 #: ../src/sidebar.c:618
 msgid "_Reload"
 msgstr "Загрузіць зноў"
@@ -623,17 +623,17 @@ msgstr "Іншыя:"
 msgid "File %s closed."
 msgstr "Файл %s зачынены."
 
-#: ../src/document.c:774
+#: ../src/document.c:775
 #, c-format
 msgid "New file \"%s\" opened."
 msgstr "Адчынены новы файл \"%s\"."
 
-#: ../src/document.c:947 ../src/document.c:1463
+#: ../src/document.c:948 ../src/document.c:1464
 #, c-format
 msgid "Could not open file %s (%s)"
 msgstr "Немагчыма адчыніць файл %s (%s)"
 
-#: ../src/document.c:977
+#: ../src/document.c:978
 #, c-format
 msgid ""
 "The file \"%s\" could not be opened properly and has been truncated. This "
@@ -648,12 +648,12 @@ msgstr ""
 
 #. For translators: the second wildcard is an encoding name, e.g.
 #. * The file \"test.txt\" is not valid UTF-8.
-#: ../src/document.c:1003
+#: ../src/document.c:1004
 #, c-format
 msgid "The file \"%s\" is not valid %s."
 msgstr "Файл \"%s\" не з'яўляецца сапраўдным %s."
 
-#: ../src/document.c:1013
+#: ../src/document.c:1014
 #, c-format
 msgid ""
 "The file \"%s\" does not look like a text file or the file encoding is not "
@@ -661,30 +661,30 @@ msgid ""
 msgstr ""
 "Файл \"%s\" не выглядае як тэкст, альбо яго знаканабор не падтрымліваецца."
 
-#: ../src/document.c:1162
+#: ../src/document.c:1163
 msgid "Spaces"
 msgstr "Прабелы"
 
-#: ../src/document.c:1165
+#: ../src/document.c:1166
 msgid "Tabs"
 msgstr "Укладкі"
 
-#: ../src/document.c:1168
+#: ../src/document.c:1169
 msgid "Tabs and Spaces"
 msgstr "Адступы і прабелы"
 
 #. For translators: first wildcard is the indentation mode (Spaces, Tabs, Tabs
 #. * and Spaces), the second one is the filename
-#: ../src/document.c:1173
+#: ../src/document.c:1174
 #, c-format
 msgid "Setting %s indentation mode for %s."
 msgstr "Усталюецца %s рэжым фарматавання для %s."
 
-#: ../src/document.c:1226
+#: ../src/document.c:1227
 msgid "Invalid filename"
 msgstr "Благое імя файла"
 
-#: ../src/document.c:1341
+#: ../src/document.c:1342
 #, c-format
 msgid "File %s reloaded."
 msgstr "Файл %s загружаны зноў."
@@ -692,20 +692,20 @@ msgstr "Файл %s загружаны зноў."
 #. For translators: this is the status window message for opening a file. %d is the number
 #. * of the newly opened file, %s indicates whether the file is opened read-only
 #. * (it is replaced with the string ", read-only").
-#: ../src/document.c:1346
+#: ../src/document.c:1347
 #, c-format
 msgid "File %s opened(%d%s)."
 msgstr "Файл %s адчынены (%d%s)."
 
-#: ../src/document.c:1348
+#: ../src/document.c:1349
 msgid ", read-only"
 msgstr ", толькі чытаць"
 
-#: ../src/document.c:1557
+#: ../src/document.c:1558
 msgid "Error renaming file."
 msgstr "Памылка пры перамяшчэнні файла."
 
-#: ../src/document.c:1642
+#: ../src/document.c:1643
 #, c-format
 msgid ""
 "An error occurred while converting the file from UTF-8 in \"%s\". The file "
@@ -714,7 +714,7 @@ msgstr ""
 "Адбылася памылка пры пераўтварэнні фала з UTF-8 у \"%s\". Файл застанецца "
 "незахаваным."
 
-#: ../src/document.c:1664
+#: ../src/document.c:1665
 #, c-format
 msgid ""
 "Error message: %s\n"
@@ -723,41 +723,41 @@ msgstr ""
 "Паведамленне памылкі: %s\n"
 "Памылка адбылася ў \"%s\" (радок %d, слупок: %d)."
 
-#: ../src/document.c:1669
+#: ../src/document.c:1670
 #, c-format
 msgid "Error message: %s."
 msgstr "Тэкст памылкі: (%s)."
 
-#: ../src/document.c:1769 ../src/document.c:1832
+#: ../src/document.c:1770 ../src/document.c:1833
 msgid "Error saving file."
 msgstr "Памылка пры захаванні файла."
 
-#: ../src/document.c:1831
+#: ../src/document.c:1832
 #, c-format
 msgid "Error saving file (%s)."
 msgstr "Памылка пры захаванні файла (%s)."
 
-#: ../src/document.c:1856
+#: ../src/document.c:1857
 #, c-format
 msgid "File %s saved."
 msgstr "Файл %s захаваны."
 
-#: ../src/document.c:1924 ../src/document.c:1981 ../src/document.c:1989
+#: ../src/document.c:1925 ../src/document.c:1982 ../src/document.c:1990
 #, c-format
 msgid "\"%s\" was not found."
 msgstr "\"%s\" не знайдзён."
 
-#: ../src/document.c:1989
+#: ../src/document.c:1990
 msgid "Wrap search and find again?"
 msgstr "Шукаць зноў с пачатку?"
 
-#: ../src/document.c:2068 ../src/search.c:1127 ../src/search.c:1171
+#: ../src/document.c:2069 ../src/search.c:1127 ../src/search.c:1171
 #: ../src/search.c:1875 ../src/search.c:1876
 #, c-format
 msgid "No matches found for \"%s\"."
 msgstr "Супадзенні не знойдзены для \"%s\"."
 
-#: ../src/document.c:2079 ../src/document.c:2088
+#: ../src/document.c:2080 ../src/document.c:2089
 #, c-format
 msgid "%s: replaced %d occurrence of \"%s\" with \"%s\"."
 msgid_plural "%s: replaced %d occurrences of \"%s\" with \"%s\"."
@@ -765,11 +765,11 @@ msgstr[0] "%s:  зменены %d выпадак \"%s\" на \"%s\"."
 msgstr[1] "%s:  зменена %d выпадкі \"%s\" на \"%s\"."
 msgstr[2] "%s:  зменены %d выпадкаў \"%s\" на \"%s\"."
 
-#: ../src/document.c:2895
+#: ../src/document.c:2896
 msgid "Do you want to reload it?"
 msgstr "Вы жадаеце загрузіць яго зноў?"
 
-#: ../src/document.c:2896
+#: ../src/document.c:2897
 #, c-format
 msgid ""
 "The file '%s' on the disk is more recent than\n"
@@ -778,11 +778,11 @@ msgstr ""
 "Файл '%s' на дыску больш новы чым\n"
 "цяперашні буфер."
 
-#: ../src/document.c:2914
+#: ../src/document.c:2915
 msgid "Close _without saving"
 msgstr "Зачыніць без захавання"
 
-#: ../src/document.c:2918
+#: ../src/document.c:2919
 #, c-format
 msgid "File \"%s\" was not found on disk! Try to resave the file?"
 msgstr "Файл \"%s\" не знайдзён на дыску! Паспрабаваць перазахаваць файл?"
@@ -1897,7 +1897,7 @@ msgid "Pack the toolbar to the main menu to save vertical space"
 msgstr ""
 "Далучыць панэль прыладаў да меню каб захаваць больш вертыкальнага месца"
 
-#: ../src/interface.c:3340 ../src/toolbar.c:929
+#: ../src/interface.c:3340 ../src/toolbar.c:930
 msgid "Customize Toolbar"
 msgstr "Наладзіць панэль прыладаў"
 
@@ -2979,7 +2979,7 @@ msgstr "Уставіць дату"
 msgid "Settings"
 msgstr "Наладкі"
 
-#: ../src/keybindings.c:392 ../src/toolbar.c:380
+#: ../src/keybindings.c:392 ../src/toolbar.c:381
 msgid "Search"
 msgstr "Шукаць"
 
@@ -3228,7 +3228,7 @@ msgid "Remove Error Indicators"
 msgstr "Убраць індыкатары памылак"
 
 #: ../src/keybindings.c:538 ../src/keybindings.c:543 ../src/project.c:477
-#: ../src/ui_utils.c:1813
+#: ../src/ui_utils.c:1815
 msgid "Build"
 msgstr "Пабудаваць"
 
@@ -3284,11 +3284,11 @@ msgstr "Наступныя камбінацыі клавіш можна нала
 msgid "Switch to Document"
 msgstr "Пераключыцца да дакумента"
 
-#: ../src/keyfile.c:850
+#: ../src/keyfile.c:852
 msgid "Type here what you want, use it as a notice/scratch board"
 msgstr "Пішы тут што жадаеш, выкарыстоўвай для заметак."
 
-#: ../src/keyfile.c:1054
+#: ../src/keyfile.c:1056
 msgid "Failed to load one or more session files."
 msgstr "Немагчыма загрузіць адзін або больш файлаў з прошлай сесіі"
 
@@ -3442,15 +3442,19 @@ msgstr "Файлы наладкі загружаны зноў."
 msgid "Status messages"
 msgstr "Статус паведамленні"
 
-#: ../src/msgwindow.c:530
+#: ../src/msgwindow.c:524
+msgid "C_opy"
+msgstr "Капіяваць"
+
+#: ../src/msgwindow.c:533
 msgid "Copy _All"
 msgstr "Капіяваць усе"
 
-#: ../src/msgwindow.c:560
+#: ../src/msgwindow.c:563
 msgid "_Hide Message Window"
 msgstr "Схаваць акно паведамленняў"
 
-#: ../src/msgwindow.c:616
+#: ../src/msgwindow.c:619
 #, c-format
 msgid "Could not find file '%s' - trying the current document path."
 msgstr "Немагчыма знайсці файл  '%s'  па цяперашнім шляху дакумента."
@@ -4401,11 +4405,11 @@ msgstr "Зменшыць адступ"
 msgid "Increase indentation"
 msgstr "Павялічыць адступ"
 
-#: ../src/toolbar.c:76 ../src/toolbar.c:380
+#: ../src/toolbar.c:76 ../src/toolbar.c:381
 msgid "Find the entered text in the current file"
 msgstr "Знайсці уведзены тэкст у цяперашнім файле"
 
-#: ../src/toolbar.c:77 ../src/toolbar.c:388
+#: ../src/toolbar.c:77 ../src/toolbar.c:389
 msgid "Jump to the entered line number"
 msgstr "Перайсці да ўведзенага радка"
 
@@ -4425,39 +4429,39 @@ msgstr "Друкаваць дакумент"
 msgid "Replace text in the current document"
 msgstr "Замяніць тэкст у цяперашнім дакуменце"
 
-#: ../src/toolbar.c:356
+#: ../src/toolbar.c:357
 msgid "Create a new file"
 msgstr "Стварыць новы файл"
 
-#: ../src/toolbar.c:357
+#: ../src/toolbar.c:358
 msgid "Create a new file from a template"
 msgstr "Стварыць новы файл з шаблона"
 
-#: ../src/toolbar.c:364
+#: ../src/toolbar.c:365
 msgid "Open an existing file"
 msgstr "Адчыніць існуючы файл"
 
-#: ../src/toolbar.c:365
+#: ../src/toolbar.c:366
 msgid "Open a recent file"
 msgstr "Адчыніць нядаўні файл"
 
-#: ../src/toolbar.c:373
+#: ../src/toolbar.c:374
 msgid "Choose more build actions"
 msgstr "Выбраць больш дзеянняў будоўлі."
 
-#: ../src/toolbar.c:388
+#: ../src/toolbar.c:389
 msgid "Goto"
 msgstr "Перайсці"
 
-#: ../src/toolbar.c:577
+#: ../src/toolbar.c:578
 msgid "Separator"
 msgstr "Межавальнік"
 
-#: ../src/toolbar.c:578
+#: ../src/toolbar.c:579
 msgid "--- Separator ---"
 msgstr "--- Межавальнік ---"
 
-#: ../src/toolbar.c:945
+#: ../src/toolbar.c:946
 msgid ""
 "Select items to be displayed on the toolbar. Items can be reordered by drag "
 "and drop."
@@ -4465,11 +4469,11 @@ msgstr ""
 "Вылучыце прылады для панелі прыладаў. Прылады можна перапарадкаваць "
 "выкарыстоўваючы перацягванне"
 
-#: ../src/toolbar.c:961
+#: ../src/toolbar.c:962
 msgid "Available Items"
 msgstr "Даступныя элементы"
 
-#: ../src/toolbar.c:982
+#: ../src/toolbar.c:983
 msgid "Displayed Items"
 msgstr "Паказаныя рэчы"
 
@@ -4645,19 +4649,19 @@ msgstr "C++ STL"
 msgid "_Set Custom Date Format"
 msgstr "Усталяваць свой фармат даты"
 
-#: ../src/ui_utils.c:1657
+#: ../src/ui_utils.c:1659
 msgid "Select Folder"
 msgstr "Вылучыць дырэкторыю"
 
-#: ../src/ui_utils.c:1657
+#: ../src/ui_utils.c:1659
 msgid "Select File"
 msgstr "Вылучыць файл"
 
-#: ../src/ui_utils.c:1811
+#: ../src/ui_utils.c:1813
 msgid "Save All"
 msgstr "Захаваць усё"
 
-#: ../src/ui_utils.c:1812
+#: ../src/ui_utils.c:1814
 msgid "Close All"
 msgstr "Зачыніць усё"
 
@@ -4911,19 +4915,19 @@ msgstr "Ці сінглтон"
 msgid "GTK+ constructor type"
 msgstr "Канструктар GTK+"
 
-#: ../plugins/classbuilder.c:1042
+#: ../plugins/classbuilder.c:1040
 msgid "Create Cla_ss"
 msgstr "Стварыць клас"
 
-#: ../plugins/classbuilder.c:1048
+#: ../plugins/classbuilder.c:1046
 msgid "_C++ Class"
 msgstr "C++ клас"
 
-#: ../plugins/classbuilder.c:1051
+#: ../plugins/classbuilder.c:1049
 msgid "_GTK+ Class"
 msgstr "GTK+ клас"
 
-#: ../plugins/classbuilder.c:1054
+#: ../plugins/classbuilder.c:1052
 msgid "_PHP Class"
 msgstr "PHP клас"
 

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: geany 0.19\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-05-22 13:10+0200\n"
+"POT-Creation-Date: 2010-05-23 10:05+0200\n"
 "PO-Revision-Date: 2006-11-16 22:02+0800\n"
 "Last-Translator: KoViCH <kovich.ian@gmail.com>\n"
 "Language-Team: Chinese <geany-i18n@uvena.de>\n"
@@ -174,144 +174,144 @@ msgstr "找上一個(_P)"
 msgid "_Set Build Commands"
 msgstr "設定自定義日期格式"
 
-#: ../src/build.c:1622 ../src/toolbar.c:372
+#: ../src/build.c:1623 ../src/toolbar.c:373
 #, fuzzy
 msgid "Build the current file"
 msgstr "編譯目前檔案"
 
-#: ../src/build.c:1636
+#: ../src/build.c:1637
 #, fuzzy
 msgid "Build the current file with Make and the default target"
 msgstr "以建立工具和預設目標建構目前檔案"
 
-#: ../src/build.c:1638
+#: ../src/build.c:1639
 #, fuzzy
 msgid "Build the current file with Make and the specified target"
 msgstr "以建立工具和指定目標建構目前檔案"
 
-#: ../src/build.c:1640
+#: ../src/build.c:1641
 #, fuzzy
 msgid "Compile the current file with Make"
 msgstr "編譯目前檔案"
 
-#: ../src/build.c:1667
+#: ../src/build.c:1668
 #, fuzzy, c-format
 msgid "Process could not be stopped (%s)."
 msgstr "無法建立組態文件目錄(%s)."
 
-#: ../src/build.c:1684 ../src/build.c:1696
+#: ../src/build.c:1685 ../src/build.c:1697
 msgid "No more build errors."
 msgstr ""
 
-#: ../src/build.c:1777
+#: ../src/build.c:1778
 msgid "Set menu item label"
 msgstr ""
 
-#: ../src/build.c:1787
+#: ../src/build.c:1788
 msgid "Item"
 msgstr ""
 
-#: ../src/build.c:1788 ../src/symbols.c:650
+#: ../src/build.c:1789 ../src/symbols.c:650
 msgid "Label"
 msgstr "標籤"
 
-#: ../src/build.c:1789 ../src/symbols.c:645
+#: ../src/build.c:1790 ../src/symbols.c:645
 msgid "Command"
 msgstr "指令"
 
-#: ../src/build.c:1790
+#: ../src/build.c:1791
 #, fuzzy
 msgid "Working directory"
 msgstr "目錄:"
 
-#: ../src/build.c:1791
+#: ../src/build.c:1792
 #, fuzzy
 msgid "Clear"
 msgstr "編譯器"
 
-#: ../src/build.c:1830
+#: ../src/build.c:1831
 msgid "Click to set menu item label"
 msgstr ""
 
-#: ../src/build.c:1903 ../src/build.c:1905
+#: ../src/build.c:1904 ../src/build.c:1906
 #, fuzzy, c-format
 msgid "%s Commands"
 msgstr "指令"
 
-#: ../src/build.c:1905
+#: ../src/build.c:1906
 #, fuzzy
 msgid "No Filetype"
 msgstr "設定檔案類型(_t)"
 
-#: ../src/build.c:1913 ../src/build.c:1948
+#: ../src/build.c:1914 ../src/build.c:1949
 #, fuzzy
 msgid "Error Regular Expression:"
 msgstr "使用正規式(_U)"
 
-#: ../src/build.c:1941
+#: ../src/build.c:1942
 msgid "Non-Filetype Commands"
 msgstr ""
 
-#: ../src/build.c:1971
+#: ../src/build.c:1972
 msgid "Note: Item 2 opens a dialog and appends the response to the command."
 msgstr ""
 
-#: ../src/build.c:1980
+#: ../src/build.c:1981
 #, fuzzy
 msgid "Execute Commands"
 msgstr "設定自定義日期格式"
 
-#: ../src/build.c:1991
+#: ../src/build.c:1992
 #, c-format
 msgid ""
 "%d, %e, %f, %p are substituted in command and directory fields, see manual "
 "for details."
 msgstr ""
 
-#: ../src/build.c:2176
+#: ../src/build.c:2177
 #, fuzzy
 msgid "Set Build Commands"
 msgstr "設定自定義日期格式"
 
-#: ../src/build.c:2398
+#: ../src/build.c:2399
 msgid "_Compile"
 msgstr "編譯(_C)"
 
 #. build the code
-#: ../src/build.c:2405 ../src/build.c:2668 ../src/interface.c:1075
+#: ../src/build.c:2406 ../src/build.c:2669 ../src/interface.c:1075
 msgid "_Build"
 msgstr "建立(_B)"
 
-#: ../src/build.c:2412 ../src/build.c:2442 ../src/build.c:2635
+#: ../src/build.c:2413 ../src/build.c:2443 ../src/build.c:2636
 #, fuzzy
 msgid "_Execute"
 msgstr "執行:"
 
 #. build the code with make custom
-#: ../src/build.c:2457 ../src/build.c:2633 ../src/build.c:2688
+#: ../src/build.c:2458 ../src/build.c:2634 ../src/build.c:2689
 #, fuzzy
 msgid "Make Custom _Target"
 msgstr "建立自定義目標(_t)"
 
 #. build the code with make object
-#: ../src/build.c:2459 ../src/build.c:2634 ../src/build.c:2696
+#: ../src/build.c:2460 ../src/build.c:2635 ../src/build.c:2697
 #, fuzzy
 msgid "Make _Object"
 msgstr "建立物件(_o)"
 
-#: ../src/build.c:2461 ../src/build.c:2632
+#: ../src/build.c:2462 ../src/build.c:2633
 #, fuzzy
 msgid "_Make"
 msgstr "建立全部"
 
 #. build the code with make all
-#: ../src/build.c:2680
+#: ../src/build.c:2681
 #, fuzzy
 msgid "_Make All"
 msgstr "建立全部"
 
 #. arguments
-#: ../src/build.c:2708
+#: ../src/build.c:2709
 #, fuzzy
 msgid "_Set Build Menu Commands"
 msgstr "設定自定義日期格式"
@@ -327,7 +327,7 @@ msgid_plural "%d files saved."
 msgstr[0] "檔案%s已儲存."
 msgstr[1] "檔案%s已儲存."
 
-#: ../src/callbacks.c:488 ../src/document.c:2894 ../src/interface.c:352
+#: ../src/callbacks.c:488 ../src/document.c:2895 ../src/interface.c:352
 #: ../src/sidebar.c:618
 msgid "_Reload"
 msgstr "重新載入(_R)"
@@ -625,17 +625,17 @@ msgstr "其他:"
 msgid "File %s closed."
 msgstr ""
 
-#: ../src/document.c:774
+#: ../src/document.c:775
 #, c-format
 msgid "New file \"%s\" opened."
 msgstr ""
 
-#: ../src/document.c:947 ../src/document.c:1463
+#: ../src/document.c:948 ../src/document.c:1464
 #, c-format
 msgid "Could not open file %s (%s)"
 msgstr "無法開啟檔案%s(%s)"
 
-#: ../src/document.c:977
+#: ../src/document.c:978
 #, c-format
 msgid ""
 "The file \"%s\" could not be opened properly and has been truncated. This "
@@ -646,44 +646,44 @@ msgstr ""
 
 #. For translators: the second wildcard is an encoding name, e.g.
 #. * The file \"test.txt\" is not valid UTF-8.
-#: ../src/document.c:1003
+#: ../src/document.c:1004
 #, c-format
 msgid "The file \"%s\" is not valid %s."
 msgstr ""
 
-#: ../src/document.c:1013
+#: ../src/document.c:1014
 #, c-format
 msgid ""
 "The file \"%s\" does not look like a text file or the file encoding is not "
 "supported."
 msgstr ""
 
-#: ../src/document.c:1162
+#: ../src/document.c:1163
 #, fuzzy
 msgid "Spaces"
 msgstr "命名空間"
 
-#: ../src/document.c:1165
+#: ../src/document.c:1166
 msgid "Tabs"
 msgstr ""
 
-#: ../src/document.c:1168
+#: ../src/document.c:1169
 #, fuzzy
 msgid "Tabs and Spaces"
 msgstr "置換tab字元為空白(_R)"
 
 #. For translators: first wildcard is the indentation mode (Spaces, Tabs, Tabs
 #. * and Spaces), the second one is the filename
-#: ../src/document.c:1173
+#: ../src/document.c:1174
 #, fuzzy, c-format
 msgid "Setting %s indentation mode for %s."
 msgstr "自動縮排"
 
-#: ../src/document.c:1226
+#: ../src/document.c:1227
 msgid "Invalid filename"
 msgstr "無效的檔案名稱"
 
-#: ../src/document.c:1341
+#: ../src/document.c:1342
 #, c-format
 msgid "File %s reloaded."
 msgstr ""
@@ -691,91 +691,91 @@ msgstr ""
 #. For translators: this is the status window message for opening a file. %d is the number
 #. * of the newly opened file, %s indicates whether the file is opened read-only
 #. * (it is replaced with the string ", read-only").
-#: ../src/document.c:1346
+#: ../src/document.c:1347
 #, c-format
 msgid "File %s opened(%d%s)."
 msgstr ""
 
-#: ../src/document.c:1348
+#: ../src/document.c:1349
 msgid ", read-only"
 msgstr ",唯讀"
 
-#: ../src/document.c:1557
+#: ../src/document.c:1558
 #, fuzzy
 msgid "Error renaming file."
 msgstr "儲存檔案時出現錯誤."
 
-#: ../src/document.c:1642
+#: ../src/document.c:1643
 #, c-format
 msgid ""
 "An error occurred while converting the file from UTF-8 in \"%s\". The file "
 "remains unsaved."
 msgstr ""
 
-#: ../src/document.c:1664
+#: ../src/document.c:1665
 #, c-format
 msgid ""
 "Error message: %s\n"
 "The error occurred at \"%s\" (line: %d, column: %d)."
 msgstr ""
 
-#: ../src/document.c:1669
+#: ../src/document.c:1670
 #, fuzzy, c-format
 msgid "Error message: %s."
 msgstr "儲存檔案( %s)時出現錯誤."
 
-#: ../src/document.c:1769 ../src/document.c:1832
+#: ../src/document.c:1770 ../src/document.c:1833
 msgid "Error saving file."
 msgstr "儲存檔案時出現錯誤."
 
-#: ../src/document.c:1831
+#: ../src/document.c:1832
 #, c-format
 msgid "Error saving file (%s)."
 msgstr "儲存檔案( %s)時出現錯誤."
 
-#: ../src/document.c:1856
+#: ../src/document.c:1857
 #, c-format
 msgid "File %s saved."
 msgstr "檔案%s已儲存."
 
-#: ../src/document.c:1924 ../src/document.c:1981 ../src/document.c:1989
+#: ../src/document.c:1925 ../src/document.c:1982 ../src/document.c:1990
 #, c-format
 msgid "\"%s\" was not found."
 msgstr ""
 
-#: ../src/document.c:1989
+#: ../src/document.c:1990
 msgid "Wrap search and find again?"
 msgstr ""
 
-#: ../src/document.c:2068 ../src/search.c:1127 ../src/search.c:1171
+#: ../src/document.c:2069 ../src/search.c:1127 ../src/search.c:1171
 #: ../src/search.c:1875 ../src/search.c:1876
 #, fuzzy, c-format
 msgid "No matches found for \"%s\"."
 msgstr "找不到符合「%s」的內容."
 
-#: ../src/document.c:2079 ../src/document.c:2088
+#: ../src/document.c:2080 ../src/document.c:2089
 #, c-format
 msgid "%s: replaced %d occurrence of \"%s\" with \"%s\"."
 msgid_plural "%s: replaced %d occurrences of \"%s\" with \"%s\"."
 msgstr[0] ""
 msgstr[1] ""
 
-#: ../src/document.c:2895
+#: ../src/document.c:2896
 msgid "Do you want to reload it?"
 msgstr ""
 
-#: ../src/document.c:2896
+#: ../src/document.c:2897
 #, c-format
 msgid ""
 "The file '%s' on the disk is more recent than\n"
 "the current buffer."
 msgstr ""
 
-#: ../src/document.c:2914
+#: ../src/document.c:2915
 msgid "Close _without saving"
 msgstr ""
 
-#: ../src/document.c:2918
+#: ../src/document.c:2919
 #, c-format
 msgid "File \"%s\" was not found on disk! Try to resave the file?"
 msgstr ""
@@ -1972,7 +1972,7 @@ msgstr ""
 msgid "Pack the toolbar to the main menu to save vertical space"
 msgstr ""
 
-#: ../src/interface.c:3340 ../src/toolbar.c:929
+#: ../src/interface.c:3340 ../src/toolbar.c:930
 #, fuzzy
 msgid "Customize Toolbar"
 msgstr "顯示工具列(_T)"
@@ -3084,7 +3084,7 @@ msgstr "插入日期/時間"
 msgid "Settings"
 msgstr "區塊"
 
-#: ../src/keybindings.c:392 ../src/toolbar.c:380
+#: ../src/keybindings.c:392 ../src/toolbar.c:381
 #, fuzzy
 msgid "Search"
 msgstr "搜尋(_S)"
@@ -3369,7 +3369,7 @@ msgid "Remove Error Indicators"
 msgstr ""
 
 #: ../src/keybindings.c:538 ../src/keybindings.c:543 ../src/project.c:477
-#: ../src/ui_utils.c:1813
+#: ../src/ui_utils.c:1815
 msgid "Build"
 msgstr "建構"
 
@@ -3430,11 +3430,11 @@ msgstr ""
 msgid "Switch to Document"
 msgstr "切換到左邊文件"
 
-#: ../src/keyfile.c:850
+#: ../src/keyfile.c:852
 msgid "Type here what you want, use it as a notice/scratch board"
 msgstr ""
 
-#: ../src/keyfile.c:1054
+#: ../src/keyfile.c:1056
 #, fuzzy
 msgid "Failed to load one or more session files."
 msgstr "不要載入前一作業階段的檔案"
@@ -3597,17 +3597,22 @@ msgstr "編譯失敗."
 msgid "Status messages"
 msgstr ""
 
-#: ../src/msgwindow.c:530
+#: ../src/msgwindow.c:524
+#, fuzzy
+msgid "C_opy"
+msgstr "公司"
+
+#: ../src/msgwindow.c:533
 #, fuzzy
 msgid "Copy _All"
 msgstr "全部關閉(_l)"
 
-#: ../src/msgwindow.c:560
+#: ../src/msgwindow.c:563
 #, fuzzy
 msgid "_Hide Message Window"
 msgstr "訊息視窗"
 
-#: ../src/msgwindow.c:616
+#: ../src/msgwindow.c:619
 #, c-format
 msgid "Could not find file '%s' - trying the current document path."
 msgstr ""
@@ -4566,11 +4571,11 @@ msgstr "減少縮排"
 msgid "Increase indentation"
 msgstr "增加縮排"
 
-#: ../src/toolbar.c:76 ../src/toolbar.c:380
+#: ../src/toolbar.c:76 ../src/toolbar.c:381
 msgid "Find the entered text in the current file"
 msgstr "在目前檔案中尋找輸入的文字"
 
-#: ../src/toolbar.c:77 ../src/toolbar.c:388
+#: ../src/toolbar.c:77 ../src/toolbar.c:389
 #, fuzzy
 msgid "Jump to the entered line number"
 msgstr "跳至指定行號"
@@ -4593,52 +4598,52 @@ msgstr "整個文件"
 msgid "Replace text in the current document"
 msgstr "轉換目前選擇區域的大/小寫"
 
-#: ../src/toolbar.c:356
+#: ../src/toolbar.c:357
 msgid "Create a new file"
 msgstr "建立新檔案"
 
-#: ../src/toolbar.c:357
+#: ../src/toolbar.c:358
 #, fuzzy
 msgid "Create a new file from a template"
 msgstr "建立新檔案"
 
-#: ../src/toolbar.c:364
+#: ../src/toolbar.c:365
 msgid "Open an existing file"
 msgstr "開啟舊檔"
 
-#: ../src/toolbar.c:365
+#: ../src/toolbar.c:366
 #, fuzzy
 msgid "Open a recent file"
 msgstr "開啟檔案"
 
-#: ../src/toolbar.c:373
+#: ../src/toolbar.c:374
 msgid "Choose more build actions"
 msgstr ""
 
-#: ../src/toolbar.c:388
+#: ../src/toolbar.c:389
 #, fuzzy
 msgid "Goto"
 msgstr "前往行數"
 
-#: ../src/toolbar.c:577
+#: ../src/toolbar.c:578
 msgid "Separator"
 msgstr ""
 
-#: ../src/toolbar.c:578
+#: ../src/toolbar.c:579
 msgid "--- Separator ---"
 msgstr ""
 
-#: ../src/toolbar.c:945
+#: ../src/toolbar.c:946
 msgid ""
 "Select items to be displayed on the toolbar. Items can be reordered by drag "
 "and drop."
 msgstr ""
 
-#: ../src/toolbar.c:961
+#: ../src/toolbar.c:962
 msgid "Available Items"
 msgstr ""
 
-#: ../src/toolbar.c:982
+#: ../src/toolbar.c:983
 #, fuzzy
 msgid "Displayed Items"
 msgstr "<b>顯示</b>"
@@ -4820,22 +4825,22 @@ msgstr ""
 msgid "_Set Custom Date Format"
 msgstr "設定自定義日期格式"
 
-#: ../src/ui_utils.c:1657
+#: ../src/ui_utils.c:1659
 #, fuzzy
 msgid "Select Folder"
 msgstr "選擇資料夾"
 
-#: ../src/ui_utils.c:1657
+#: ../src/ui_utils.c:1659
 #, fuzzy
 msgid "Select File"
 msgstr "全部選取"
 
-#: ../src/ui_utils.c:1811
+#: ../src/ui_utils.c:1813
 #, fuzzy
 msgid "Save All"
 msgstr "全部儲存(_l)"
 
-#: ../src/ui_utils.c:1812
+#: ../src/ui_utils.c:1814
 #, fuzzy
 msgid "Close All"
 msgstr "全部關閉(_l)"
@@ -5104,21 +5109,21 @@ msgstr ""
 msgid "GTK+ constructor type"
 msgstr ""
 
-#: ../plugins/classbuilder.c:1042
+#: ../plugins/classbuilder.c:1040
 msgid "Create Cla_ss"
 msgstr ""
 
-#: ../plugins/classbuilder.c:1048
+#: ../plugins/classbuilder.c:1046
 #, fuzzy
 msgid "_C++ Class"
 msgstr "類別"
 
-#: ../plugins/classbuilder.c:1051
+#: ../plugins/classbuilder.c:1049
 #, fuzzy
 msgid "_GTK+ Class"
 msgstr "類別"
 
-#: ../plugins/classbuilder.c:1054
+#: ../plugins/classbuilder.c:1052
 #, fuzzy
 msgid "_PHP Class"
 msgstr "類別"
