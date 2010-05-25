@@ -1,8 +1,15 @@
+2010-05-25  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * plugins/Makefile.am, src/Makefile.am, tagmanager/Makefile.am,
+   wscript:
+   Pass G_LOG_DOMAIN to source files for better logging.
+
+
 2010-05-24  Frank Lanitz  <frank@frank.uvena.de>
 
  * THANKS, src/about.c:
    Update of translation credits to reflect a change on Spanish
-   translation team better. 
+   translation team better.
 
 
 2010-05-23  Lex Trotman  <elextr.at.gmail.dot.com>

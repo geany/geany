@@ -84,7 +84,14 @@ saveactions_la_SOURCES   = saveactions.c
 filebrowser_la_SOURCES   = filebrowser.c
 splitwindow_la_SOURCES   = splitwindow.c
 
-# instead of linking against all in $(GTK_LIBS), we link only against needed libs
+demoplugin_la_CFLAGS    = -DG_LOG_DOMAIN=\""Demoplugin"\"
+classbuilder_la_CFLAGS  = -DG_LOG_DOMAIN=\""Classbuilder"\"
+htmlchars_la_CFLAGS     = -DG_LOG_DOMAIN=\""HTMLChars"\"
+export_la_CFLAGS        = -DG_LOG_DOMAIN=\""Export"\"
+saveactions_la_CFLAGS   = -DG_LOG_DOMAIN=\""SaveActions"\"
+filebrowser_la_CFLAGS   = -DG_LOG_DOMAIN=\""FileBrowser"\"
+splitwindow_la_CFLAGS   = -DG_LOG_DOMAIN=\""SplitWindow"\"
+
 demoplugin_la_LIBADD    = $(GTK_LIBS)
 classbuilder_la_LIBADD  = $(GTK_LIBS)
 htmlchars_la_LIBADD     = $(GTK_LIBS)

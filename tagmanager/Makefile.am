@@ -3,9 +3,8 @@
 
 SUBDIRS = include
 INCLUDES = -I$(srcdir)/include $(GTK_CFLAGS)
-#	-DG_DISABLE_DEPRECATED -DGDK_DISABLE_DEPRECATED \
-#	-DGDK_PIXBUF_DEPRECATED \
-#	-DGTK_DISABLE_DEPRECATED -DGNOME_DISABLE_DEPRECATED
+
+AM_CFLAGS = -DG_LOG_DOMAIN=\""Tagmanager"\"
 
 # regex.c is the GNU regex implementation needed for Windows
 EXTRA_DIST = regex.c

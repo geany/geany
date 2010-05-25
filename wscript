@@ -340,6 +340,7 @@ def build(bld):
 			features				= 'cc cshlib',
 			source					= 'plugins/' + plugin_name + '.c',
 			includes				= '. plugins/ src/ scintilla/include tagmanager/include',
+			defines					= 'G_LOG_DOMAIN="%s"' % plugin_name,
 			target					= plugin_name,
 			uselib					= 'GTK',
 			install_path			= instpath
@@ -355,6 +356,7 @@ def build(bld):
 		name			= 'tagmanager',
 		target			= 'tagmanager',
 		includes		= '. tagmanager/ tagmanager/include/',
+		defines			= 'G_LOG_DOMAIN="Tagmanager"',
 		uselib			= 'GTK',
 		install_path	= None # do not install this library
 	)
@@ -382,6 +384,7 @@ def build(bld):
 		target			= 'geany',
 		source			= geany_sources,
 		includes		= '. src/ scintilla/include/ tagmanager/include/',
+		defines			= 'G_LOG_DOMAIN="Geany"',
 		uselib			= 'GTK GIO WIN32',
 		uselib_local	= 'scintilla tagmanager',
 		add_objects		= 'geany-rc' if is_win32 else None
