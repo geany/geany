@@ -1,16 +1,17 @@
 # Galician messages for the Geany IDE
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# Copyright (C) 2009-2010 by Geany's copyright holders
 # This file is distributed under the same license as the Geany package.
-# José Manuel Castroagudín Silva <chavescesures@gmail.com>, 2009
+# José Manuel Castroagudín Silva <chavescesures@gmail.com>, 2009-2010
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Geany 0.19\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-05-23 10:05+0200\n"
-"PO-Revision-Date: 2009-10-30 03:03+0100\n"
+"POT-Creation-Date: 2010-05-28 22:52+0200\n"
+"PO-Revision-Date: 2010-05-25 03:33+0100\n"
 "Last-Translator: José Manuel Castroagudín Silva <chavescesures@gmail.com>\n"
 "Language-Team: Galician <proxecto@trasno.net>\n"
+"Language: gl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -28,53 +29,53 @@ msgstr "Geany"
 msgid "Integrated Development Environment"
 msgstr "Contorno integrado de desenvolvemento"
 
-#: ../src/about.c:145
+#: ../src/about.c:146
 msgid "About Geany"
 msgstr "Acerca de Geany"
 
-#: ../src/about.c:195
+#: ../src/about.c:196
 msgid "A fast and lightweight IDE"
 msgstr "Un IDE rápido e lixeiro "
 
-#: ../src/about.c:216
+#: ../src/about.c:217
 #, c-format
 msgid "(built on or after %s)"
 msgstr "(compilado no ou despois do %s)"
 
 #. gtk_container_add(GTK_CONTAINER(info_box), cop_label);
-#: ../src/about.c:247
+#: ../src/about.c:248
 msgid "Info"
 msgstr "Información"
 
-#: ../src/about.c:263
+#: ../src/about.c:264
 msgid "Developers"
 msgstr "Desenvolvedores"
 
-#: ../src/about.c:272
+#: ../src/about.c:273
 msgid "maintainer"
 msgstr "mantedor"
 
-#: ../src/about.c:280
+#: ../src/about.c:281
 msgid "developer"
 msgstr "desenvolvedor"
 
-#: ../src/about.c:288
+#: ../src/about.c:289
 msgid "translation maintainer"
 msgstr "mantedor da tradución"
 
-#: ../src/about.c:297
+#: ../src/about.c:298
 msgid "Translators"
 msgstr "Tradutores"
 
-#: ../src/about.c:317
+#: ../src/about.c:318
 msgid "Previous Translators"
 msgstr "Tradutores anteriores"
 
-#: ../src/about.c:338
+#: ../src/about.c:339
 msgid "Contributors"
 msgstr "Contribuíntes"
 
-#: ../src/about.c:348
+#: ../src/about.c:349
 #, c-format
 msgid ""
 "Some of the many contributors (for a more detailed list, see the file %s):"
@@ -82,15 +83,15 @@ msgstr ""
 "Algúns dos moitos contribuíntes (para ver unha lista máis detallada, vexa o "
 "ficheiro %s):"
 
-#: ../src/about.c:374
+#: ../src/about.c:375
 msgid "Credits"
 msgstr "Créditos"
 
-#: ../src/about.c:388
+#: ../src/about.c:389
 msgid "License"
 msgstr "Licenza"
 
-#: ../src/about.c:397
+#: ../src/about.c:398
 msgid ""
 "License text could not be found, please visit http://www.gnu.org/licenses/"
 "gpl-2.0.txt to view it online."
@@ -143,118 +144,118 @@ msgid ""
 "Could not find terminal \"%s\" (check path for Terminal tool setting in "
 "Preferences)"
 msgstr ""
-"Non se puido atopar o terminal \"%s\" (comprobe a configuración de ruta para "
-"a ferramenta de terminal nas preferencias)"
+"Non se puido atopar o terminal \"%s\" (comprobe a configuración do camiño "
+"para a ferramenta de terminal nas preferencias)"
 
-#: ../src/build.c:1081
+#: ../src/build.c:1083
 msgid "Compilation failed."
 msgstr "Fallou a compilación."
 
-#: ../src/build.c:1095
+#: ../src/build.c:1097
 msgid "Compilation finished successfully."
 msgstr "A compilación rematou correctamente."
 
-#: ../src/build.c:1252
+#: ../src/build.c:1254
 msgid "Custom Text"
 msgstr "Texto personalizado"
 
-#: ../src/build.c:1253
+#: ../src/build.c:1255
 msgid "Enter custom text here, all entered text is appended to the command."
 msgstr ""
 "Introduza texto personalizado aquí. Todo o texto introducido engadiráselle á "
 "orde."
 
-#: ../src/build.c:1331
+#: ../src/build.c:1333
 msgid "_Next Error"
 msgstr "Segui_nte erro"
 
-#: ../src/build.c:1333
+#: ../src/build.c:1335
 msgid "_Previous Error"
 msgstr "Erro _anterior"
 
-#: ../src/build.c:1343
+#: ../src/build.c:1345
 msgid "_Set Build Commands"
 msgstr "Definir as orde_s de compilación"
 
-#: ../src/build.c:1623 ../src/toolbar.c:373
+#: ../src/build.c:1625 ../src/toolbar.c:373
 msgid "Build the current file"
 msgstr "Compilar o ficheiro actual"
 
-#: ../src/build.c:1637
+#: ../src/build.c:1639
 msgid "Build the current file with Make and the default target"
 msgstr "Construír o ficheiro actual con Make e o obxectivo predeterminado"
 
-#: ../src/build.c:1639
+#: ../src/build.c:1641
 msgid "Build the current file with Make and the specified target"
 msgstr "Construír o ficheiro actual con Make e o obxectivo especificado"
 
-#: ../src/build.c:1641
+#: ../src/build.c:1643
 msgid "Compile the current file with Make"
 msgstr "Compilar o ficheiro actual con Make"
 
-#: ../src/build.c:1668
+#: ../src/build.c:1670
 #, c-format
 msgid "Process could not be stopped (%s)."
 msgstr "O proceso non se puido deter (%s)."
 
-#: ../src/build.c:1685 ../src/build.c:1697
+#: ../src/build.c:1687 ../src/build.c:1699
 msgid "No more build errors."
 msgstr "Non hai máis erros de compilación."
 
-#: ../src/build.c:1778
+#: ../src/build.c:1780
 msgid "Set menu item label"
-msgstr ""
+msgstr "Estabelecer etiqueta de elemento de menú"
 
-#: ../src/build.c:1788
+#: ../src/build.c:1790
 msgid "Item"
 msgstr "Elemento"
 
-#: ../src/build.c:1789 ../src/symbols.c:650
+#: ../src/build.c:1791 ../src/symbols.c:650
 msgid "Label"
 msgstr "Etiqueta"
 
-#: ../src/build.c:1790 ../src/symbols.c:645
+#: ../src/build.c:1792 ../src/symbols.c:645
 msgid "Command"
 msgstr "Orde"
 
-#: ../src/build.c:1791
+#: ../src/build.c:1793
 msgid "Working directory"
 msgstr "Directorio de traballo"
 
-#: ../src/build.c:1792
+#: ../src/build.c:1794
 msgid "Clear"
 msgstr "Limpar"
 
-#: ../src/build.c:1831
+#: ../src/build.c:1833
 msgid "Click to set menu item label"
-msgstr ""
+msgstr "Prema para estabelecer etiqueta de elemento de menú"
 
-#: ../src/build.c:1904 ../src/build.c:1906
+#: ../src/build.c:1906 ../src/build.c:1908
 #, c-format
 msgid "%s Commands"
 msgstr "Ordes para ficheiros %s"
 
-#: ../src/build.c:1906
+#: ../src/build.c:1908
 msgid "No Filetype"
 msgstr "sen tipo de ficheiro"
 
-#: ../src/build.c:1914 ../src/build.c:1949
+#: ../src/build.c:1916 ../src/build.c:1951
 msgid "Error Regular Expression:"
 msgstr "Expresión regular para os erros:"
 
-#: ../src/build.c:1942
+#: ../src/build.c:1944
 msgid "Non-Filetype Commands"
 msgstr "Ordes para os ficheiros sen tipo de ficheiro"
 
-#: ../src/build.c:1972
+#: ../src/build.c:1974
 msgid "Note: Item 2 opens a dialog and appends the response to the command."
 msgstr "Nota: o elemento 2 abre un diálogo e engade a resposta á orde."
 
-#: ../src/build.c:1981
+#: ../src/build.c:1983
 msgid "Execute Commands"
 msgstr "Ordes para executar"
 
-#: ../src/build.c:1992
+#: ../src/build.c:1994
 #, c-format
 msgid ""
 "%d, %e, %f, %p are substituted in command and directory fields, see manual "
@@ -263,44 +264,44 @@ msgstr ""
 "%d, %e, %f, %p substitúense nos campos de orde e directorio. Vexa o manual "
 "para coñecer os detalles."
 
-#: ../src/build.c:2177
+#: ../src/build.c:2179
 msgid "Set Build Commands"
 msgstr "Definir as ordes de compilación"
 
-#: ../src/build.c:2399
+#: ../src/build.c:2401
 msgid "_Compile"
 msgstr "_Compilar"
 
 #. build the code
-#: ../src/build.c:2406 ../src/build.c:2669 ../src/interface.c:1075
+#: ../src/build.c:2408 ../src/build.c:2671 ../src/interface.c:1075
 msgid "_Build"
 msgstr "Constr_uír"
 
-#: ../src/build.c:2413 ../src/build.c:2443 ../src/build.c:2636
+#: ../src/build.c:2415 ../src/build.c:2445 ../src/build.c:2638
 msgid "_Execute"
 msgstr "_Executar"
 
 #. build the code with make custom
-#: ../src/build.c:2458 ../src/build.c:2634 ../src/build.c:2689
+#: ../src/build.c:2460 ../src/build.c:2636 ../src/build.c:2691
 msgid "Make Custom _Target"
 msgstr "Make cun obxec_tivo personalizado"
 
 #. build the code with make object
-#: ../src/build.c:2460 ../src/build.c:2635 ../src/build.c:2697
+#: ../src/build.c:2462 ../src/build.c:2637 ../src/build.c:2699
 msgid "Make _Object"
 msgstr "Make (_obxecto)"
 
-#: ../src/build.c:2462 ../src/build.c:2633
+#: ../src/build.c:2464 ../src/build.c:2635
 msgid "_Make"
 msgstr "_Make"
 
 #. build the code with make all
-#: ../src/build.c:2681
+#: ../src/build.c:2683
 msgid "_Make All"
 msgstr "Lanzar un _make all"
 
 #. arguments
-#: ../src/build.c:2709
+#: ../src/build.c:2711
 msgid "_Set Build Menu Commands"
 msgstr "Configurar a_s ordes do menú Construír"
 
@@ -309,11 +310,11 @@ msgid "Do you really want to quit?"
 msgstr "Está seguro de que desexa saír?"
 
 #: ../src/callbacks.c:228
-#, fuzzy, c-format
+#, c-format
 msgid "%d file saved."
 msgid_plural "%d files saved."
-msgstr[0] "Gardouse o ficheiro %s."
-msgstr[1] "Gardouse o ficheiro %s."
+msgstr[0] "%d ficheiro gardado."
+msgstr[1] "%d ficheiros gardados."
 
 #: ../src/callbacks.c:488 ../src/document.c:2895 ../src/interface.c:352
 #: ../src/sidebar.c:618
@@ -786,12 +787,14 @@ msgstr ""
 
 #: ../src/document.c:2915
 msgid "Close _without saving"
-msgstr ""
+msgstr "Pechar _sen gardar"
 
 #: ../src/document.c:2919
-#, fuzzy, c-format
+#, c-format
 msgid "File \"%s\" was not found on disk! Try to resave the file?"
-msgstr "O ficheiro \"%s\" non se atopou no disco!"
+msgstr ""
+"O ficheiro \"%s\" non se atopou no disco! Quere intentar gardar de novo o "
+"ficheiro?"
 
 #: ../src/editor.c:4425
 msgid "Enter Tab Width"
@@ -806,7 +809,7 @@ msgstr ""
 #: ../src/editor.c:4577
 #, c-format
 msgid "Warning: non-standard hard tab width: %d != 8!"
-msgstr ""
+msgstr "Atención: o largo da tabulación fixado non é estándar: %d != 8!"
 
 #: ../src/encodings.c:76
 msgid "Celtic"
@@ -1008,9 +1011,8 @@ msgid "M_iscellaneous Languages"
 msgstr "Linguaxes var_iados"
 
 #: ../src/filetypes.c:830
-#, fuzzy
 msgid "_Custom Filetypes"
-msgstr "sen tipo de ficheiro"
+msgstr "Tipos de fi_cheiro personalizados"
 
 #: ../src/filetypes.c:1403 ../src/win32.c:105
 msgid "All Source"
@@ -1038,13 +1040,12 @@ msgid "Could not find file '%s'."
 msgstr "Non foi posíbel encontrar o ficheiro '%s'."
 
 #: ../src/highlighting.c:3398
-#, fuzzy
 msgid "_Color Schemes"
-msgstr "Selector de _cor"
+msgstr "Esquemas de _cor"
 
 #: ../src/highlighting.c:3405
 msgid "_Default"
-msgstr ""
+msgstr "Pre_definido"
 
 #: ../src/interface.c:295
 msgid "_File"
@@ -1141,49 +1142,40 @@ msgid "_Commands"
 msgstr "_Ordes"
 
 #: ../src/interface.c:563 ../src/keybindings.c:318
-#, fuzzy
 msgid "_Cut Current Line(s)"
-msgstr "Cortar a(s) liña(s) actual(is)"
+msgstr "_Cortar a(s) liña(s) actual(is)"
 
 #: ../src/interface.c:571 ../src/keybindings.c:315
-#, fuzzy
 msgid "_Copy Current Line(s)"
-msgstr "Copiar a(s) liña(s) actual(is)"
+msgstr "_Copiar a(s) liña(s) actual(is)"
 
 #: ../src/interface.c:579 ../src/keybindings.c:270
-#, fuzzy
 msgid "_Delete Current Line(s)"
-msgstr "Borrar a(s) liña(s) actual(is)"
+msgstr "_Borrar a(s) liña(s) actual(is)"
 
 #: ../src/interface.c:583 ../src/keybindings.c:267
-#, fuzzy
 msgid "_Duplicate Line or Selection"
-msgstr "Du_plicar liña ou selección"
+msgstr "_Duplicar liña ou selección"
 
 #: ../src/interface.c:592 ../src/keybindings.c:328
-#, fuzzy
 msgid "_Select Current Line(s)"
-msgstr "Seleccionar a(s) liña(s) actual(is)"
+msgstr "_Seleccionar a(s) liña(s) actual(is)"
 
 #: ../src/interface.c:596 ../src/keybindings.c:331
-#, fuzzy
 msgid "_Select Current Paragraph"
-msgstr "Seleccionar o parágrafo actual"
+msgstr "_Seleccionar o parágrafo actual"
 
 #: ../src/interface.c:605 ../src/keybindings.c:381
-#, fuzzy
 msgid "_Insert Alternative White Space"
-msgstr "Inserir espazo en branco alternativo"
+msgstr "_Inserir espazo en branco alternativo"
 
 #: ../src/interface.c:614 ../src/keybindings.c:437
-#, fuzzy
 msgid "_Go to Next Marker"
-msgstr "Ir ao seguinte marcador"
+msgstr "_Ir ao seguinte marcador"
 
 #: ../src/interface.c:618 ../src/keybindings.c:440
-#, fuzzy
 msgid "_Go to Previous Marker"
-msgstr "Ir ao anterior marcador"
+msgstr "_Ir ao anterior marcador"
 
 #: ../src/interface.c:627 ../src/keybindings.c:370
 msgid "_Send Selection to Terminal"
@@ -1499,9 +1491,8 @@ msgid "Scribble"
 msgstr "Anotacións"
 
 #: ../src/interface.c:1887
-#, fuzzy
 msgid "_Toolbar Preferences"
-msgstr "Preferencias dos p_lugins"
+msgstr "Preferencias da barra de ferramen_tas"
 
 #: ../src/interface.c:1900
 msgid "_Hide Toolbar"
@@ -1581,14 +1572,14 @@ msgstr "<b>Apagar</b>"
 
 #: ../src/interface.c:2768
 msgid "Startup path:"
-msgstr "Ruta de inicio:"
+msgstr "Camiño de inicio:"
 
 #: ../src/interface.c:2780
 msgid ""
 "Path to start in when opening or saving files. Must be an absolute path. "
 "Leave blank to use the current working directory."
 msgstr ""
-"Ruta na que comezar ao abrir ou gardar ficheiros. Debe ser unha ruta "
+"Camiño no que comezar ao abrir ou gardar ficheiros. Debe ser un camiño "
 "absoluta. Déixeo en branco para usar o directorio de traballo actual."
 
 #: ../src/interface.c:2793
@@ -1597,11 +1588,11 @@ msgstr "Ficheiros de proxecto:"
 
 #: ../src/interface.c:2805
 msgid "Path to start in when opening project files"
-msgstr "Ruta na que comezar ao abrir ficheiros de proxecto"
+msgstr "Camiño no que comezar ao abrir ficheiros de proxecto"
 
 #: ../src/interface.c:2818
 msgid "Extra plugin path:"
-msgstr "Ruta adicional para plugins:"
+msgstr "Camiño adicional para plugins:"
 
 #: ../src/interface.c:2830
 msgid ""
@@ -1609,13 +1600,13 @@ msgid ""
 "configuration directory. The path entered here will be searched additionally "
 "for plugins. Leave blank to disable."
 msgstr ""
-"De xeito predeterminado Geany busca na ruta de instalación global e no "
-"directorio de configuración. Adicionalmente buscaranse plugins na ruta "
-"introducida aquí. Déixeo en branco para deshabilitar."
+"De xeito predeterminado Geany busca no camiño de instalación global e no "
+"directorio de configuración. Adicionalmente buscaranse plugins no camiño "
+"introducido aquí. Déixeo en branco para deshabilitar."
 
 #: ../src/interface.c:2843
 msgid "<b>Paths</b>"
-msgstr "<b>Rutas</b>"
+msgstr "<b>Camiños</b>"
 
 #: ../src/interface.c:2848
 msgid "Startup"
@@ -1673,13 +1664,15 @@ msgstr ""
 
 #: ../src/interface.c:2891
 msgid "Use Windows File Open/Save dialogs"
-msgstr ""
+msgstr "Usar os diálogos de abrir ou gardar ficheiros de Windows"
 
 #: ../src/interface.c:2894
 msgid ""
 "Defines whether to use the native Windows File Open/Save dialogs or whether "
 "to use the GTK default dialogs"
 msgstr ""
+"DEfine se se debe usar os diálogos de abrir ou gardar ficheiros nativos de "
+"Windows ou os diálogos predefinidos de GTK"
 
 #: ../src/interface.c:2896 ../src/interface.c:3275 ../src/interface.c:4230
 msgid "<b>Miscellaneous</b>"
@@ -1742,8 +1735,8 @@ msgid ""
 msgstr ""
 "Cando está activado, o ficheiro dun proxecto gárdase de xeito predeterminado "
 "dentro do directorio base do proxecto ao crear proxectos novos, no canto de "
-"nun directorio por riba do directorio base. Aínda así pode cambiar a ruta do "
-"ficheiro de proxecto no diálogo de novo proxecto."
+"nun directorio por riba do directorio base. Aínda así pode cambiar o camiño "
+"do ficheiro de proxecto no diálogo de novo proxecto."
 
 #: ../src/interface.c:2958
 msgid "<b>Projects</b>"
@@ -1778,9 +1771,8 @@ msgid "Toggle the documents list on and off"
 msgstr "Activar ou desactivar a lista de documentos"
 
 #: ../src/interface.c:3014
-#, fuzzy
 msgid "Show sidebar"
-msgstr "Mostrar _barra lateral"
+msgstr "Mostrar a barra lateral"
 
 #: ../src/interface.c:3022
 msgid "Position:"
@@ -1857,15 +1849,16 @@ msgid "File tabs will be placed on the right of the notebook"
 msgstr "Os separadores de ficheiros colocaranse á dereita do caderno"
 
 #: ../src/interface.c:3164
-#, fuzzy
 msgid "Next to current"
-msgstr "Gardar o ficheiro actual"
+msgstr "Pegado ao actual"
 
 #: ../src/interface.c:3169
 msgid ""
 "Whether to place file tabs next to the current tab rather than at the edges "
 "of the notebook"
 msgstr ""
+"Colocar os separadores de ficheiro pegados ao actual no canto de nos bordos "
+"do caderno"
 
 #: ../src/interface.c:3171
 msgid "Double-clicking hides all additional widgets"
@@ -1929,7 +1922,7 @@ msgstr "Personalizar a barra de ferramentas"
 
 #: ../src/interface.c:3360
 msgid "System _Default"
-msgstr ""
+msgstr "Pre_definido do sistema"
 
 #: ../src/interface.c:3368
 msgid "Images _and Text"
@@ -1944,13 +1937,12 @@ msgid "_Text Only"
 msgstr "Só _texto"
 
 #: ../src/interface.c:3392
-#, fuzzy
 msgid "<b>Icon Style</b>"
-msgstr "<b>Tipos de letra</b>"
+msgstr "<b>Estilo das iconas</b>"
 
 #: ../src/interface.c:3413
 msgid "S_ystem Default"
-msgstr ""
+msgstr "Predefinido do s_istema"
 
 #: ../src/interface.c:3421
 msgid "_Small Icons"
@@ -1965,9 +1957,8 @@ msgid "_Large Icons"
 msgstr "Iconas _grandes"
 
 #: ../src/interface.c:3445
-#, fuzzy
 msgid "<b>Icon Size</b>"
-msgstr "<b>Tamaño:</b>"
+msgstr "<b>Tamaño das iconas</b>"
 
 #: ../src/interface.c:3450
 msgid "<b>Toolbar</b>"
@@ -2363,13 +2354,12 @@ msgid "<b>Display</b>"
 msgstr "<b>Mostrar</b>"
 
 #: ../src/interface.c:3911 ../src/interface.c:5302
-#, fuzzy
 msgid "Column:"
-msgstr "Empresa:"
+msgstr "Columna:"
 
 #: ../src/interface.c:3918
 msgid "Color:"
-msgstr ""
+msgstr "Cor:"
 
 #: ../src/interface.c:3937
 msgid "Sets the color of the long line marker"
@@ -2417,9 +2407,8 @@ msgstr ""
 "proporcionais)"
 
 #: ../src/interface.c:3970
-#, fuzzy
 msgid "Enabled"
-msgstr "_Activar"
+msgstr "Activado"
 
 #: ../src/interface.c:3976 ../src/interface.c:5342
 msgid "<b>Long line marker</b>"
@@ -2431,31 +2420,31 @@ msgstr "Desactivado"
 
 #: ../src/interface.c:3998
 msgid "Do not show virtual spaces"
-msgstr ""
+msgstr "Non mostrar espazos virtuais"
 
 #: ../src/interface.c:4002
 msgid "Only for rectangular selections"
-msgstr ""
+msgstr "Só para seleccións rectangulares"
 
 #: ../src/interface.c:4005
 msgid ""
 "Only show virtual spaces beyond the end of lines when drawing a rectangular "
 "selection"
 msgstr ""
+"Mostrar espazos virtuais ao final das liñas só cando se faga unha selección "
+"rectangular"
 
 #: ../src/interface.c:4009
 msgid "Always"
-msgstr ""
+msgstr "Sempre"
 
 #: ../src/interface.c:4012
-#, fuzzy
 msgid "Always show virtual spaces beyond the end of lines"
-msgstr "Elimina espazos e tabulacións ao final dos ficheiros"
+msgstr "Mostrar sempre espazos virtuais ao final das liñas"
 
 #: ../src/interface.c:4016
-#, fuzzy
 msgid "<b>Virtual spaces</b>"
-msgstr "<b>Ruta de ferramentas</b>"
+msgstr "<b>Espazos virtuais</b>"
 
 #: ../src/interface.c:4021
 msgid "Display"
@@ -2590,7 +2579,8 @@ msgstr ""
 
 #: ../src/interface.c:4294
 msgid "Path (and possibly additional arguments) to your favorite browser"
-msgstr "Ruta (e posibelmente argumentos adicionais) ao seu navegador favorito"
+msgstr ""
+"Camiño (e posibelmente argumentos adicionais) ao seu navegador favorito"
 
 #: ../src/interface.c:4316
 msgid "Grep:"
@@ -2598,7 +2588,7 @@ msgstr "Grep:"
 
 #: ../src/interface.c:4339
 msgid "<b>Tool paths</b>"
-msgstr "<b>Ruta de ferramentas</b>"
+msgstr "<b>Camiño para ferramentas</b>"
 
 #: ../src/interface.c:4360
 msgid "Context action:"
@@ -2730,7 +2720,8 @@ msgstr "Orde:"
 #, c-format
 msgid "Path to the command for printing files (use %f for the filename)"
 msgstr ""
-"Ruta á orde para imprimir ficheiros (use %f para usar o nome do ficheiro)"
+"CAmiño á orde para imprimir ficheiros (use %f para referirse ao nome do "
+"ficheiro)"
 
 #: ../src/interface.c:4637
 msgid "Use an external command for printing"
@@ -2772,7 +2763,7 @@ msgstr "Usar o nome base do ficheiro impreso"
 
 #: ../src/interface.c:4690
 msgid "Print only the basename (without the path) of the printed file"
-msgstr "Imprimir só o nome base (sen a ruta) do ficheiro impreso"
+msgstr "Imprimir só o nome base (sen o camiño) do ficheiro impreso"
 
 #: ../src/interface.c:4696 ../src/printing.c:417
 msgid "Date format:"
@@ -2793,9 +2784,8 @@ msgid "Use native GTK printing"
 msgstr "Usar o sistema de impresión nativo de GTK"
 
 #: ../src/interface.c:4712
-#, fuzzy
 msgid "<b>Printing</b>"
-msgstr "<b>Codificación:</b>"
+msgstr "<b>Impresión:</b>"
 
 #: ../src/interface.c:4717 ../src/prefs.c:1541
 msgid "Printing"
@@ -2808,16 +2798,15 @@ msgstr "Propiedades do proxecto"
 #: ../src/interface.c:5295
 #, fuzzy
 msgid "Display:"
-msgstr "Mostrar"
+msgstr "Pantalla:"
 
 #: ../src/interface.c:5317
-#, fuzzy
 msgid "Custom"
-msgstr "Texto personalizado"
+msgstr "Personalizado"
 
 #: ../src/interface.c:5325
 msgid "Use global settings"
-msgstr ""
+msgstr "Usar as propiedades globais"
 
 #: ../src/keybindings.c:227 ../src/plugins.c:1171
 msgid "File"
@@ -2865,7 +2854,7 @@ msgstr "Recargar o ficheiro"
 
 #: ../src/keybindings.c:253
 msgid "Re-open last closed tab"
-msgstr ""
+msgstr "Abrir de novo o último separador pechado"
 
 #: ../src/keybindings.c:255 ../src/project.c:519
 msgid "Project"
@@ -3164,9 +3153,8 @@ msgid "Zoom Out"
 msgstr "Alonxar"
 
 #: ../src/keybindings.c:473
-#, fuzzy
 msgid "Zoom Reset"
-msgstr "Alonxar"
+msgstr "Reiniciar o zoom"
 
 #: ../src/keybindings.c:475
 msgid "Focus"
@@ -3201,19 +3189,16 @@ msgid "Switch to Messages"
 msgstr "Cambiar ás mensaxes"
 
 #: ../src/keybindings.c:492
-#, fuzzy
 msgid "Switch to Message Window"
-msgstr "Mostrar a _xanela de mensaxes"
+msgstr "Cambiar á xanela de mensaxes"
 
 #: ../src/keybindings.c:494
-#, fuzzy
 msgid "Switch to Sidebar Document List"
-msgstr "Cambiar ao documento"
+msgstr "Cambiar a lista de documentos na barra lateral"
 
 #: ../src/keybindings.c:496
-#, fuzzy
 msgid "Switch to Sidebar Symbol List"
-msgstr "Cambiar á barra lateral"
+msgstr "Cambiar a lista de símbolos na barra lateral"
 
 #: ../src/keybindings.c:498
 msgid "Notebook tab"
@@ -3280,14 +3265,12 @@ msgid "Reload symbol list"
 msgstr "Recargar a lista de símbolos"
 
 #: ../src/keybindings.c:534
-#, fuzzy
 msgid "Remove Markers"
-msgstr "Eliminar _marcadores"
+msgstr "Eliminar marcadores"
 
 #: ../src/keybindings.c:536
-#, fuzzy
 msgid "Remove Error Indicators"
-msgstr "Eliminar _indicadores de erro"
+msgstr "Eliminar indicadores de erro"
 
 #: ../src/keybindings.c:538 ../src/keybindings.c:543 ../src/project.c:477
 #: ../src/ui_utils.c:1815
@@ -3359,9 +3342,8 @@ msgid "Debug Messages"
 msgstr "Mensaxes de depuración"
 
 #: ../src/log.c:183
-#, fuzzy
 msgid "Cl_ear"
-msgstr "Limpar"
+msgstr "L_impar"
 
 #: ../src/main.c:122
 msgid ""
@@ -3397,10 +3379,13 @@ msgstr ""
 msgid ""
 "Use this socket filename for communication with a running Geany instance"
 msgstr ""
+"Usar este ficheiro de socket para a comunicación cunha instancia existente "
+"de Geany"
 
 #: ../src/main.c:130
 msgid "Return a list of open documents in a running Geany instance"
 msgstr ""
+"Devolve unha lista de documentos abertos nunha instancia existente de Geany"
 
 #: ../src/main.c:132
 msgid "Set initial line number for the first opened file"
@@ -3510,9 +3495,8 @@ msgid "Status messages"
 msgstr "Mensaxes de estado"
 
 #: ../src/msgwindow.c:524
-#, fuzzy
 msgid "C_opy"
-msgstr "Copiar"
+msgstr "C_opiar"
 
 #: ../src/msgwindow.c:533
 msgid "Copy _All"
@@ -3526,6 +3510,8 @@ msgstr "_Ocultar a xanela de mensaxes"
 #, c-format
 msgid "Could not find file '%s' - trying the current document path."
 msgstr ""
+"Non foi posíbel atopar o ficheiro '%s' - intentarase no camiño do documento "
+"actual"
 
 #: ../src/plugins.c:464
 #, c-format
@@ -3630,7 +3616,7 @@ msgstr "Terminal"
 #: ../src/prefs.c:1619
 msgid "Enter tool paths below. Tools you do not need can be left blank."
 msgstr ""
-"Introduza as rutas ás ferramentas embaixo. Pode deixar en branco as "
+"Introduza os camiños ás ferramentas embaixo. Pode deixar en branco as "
 "ferramentas que non necesite."
 
 #. page Templates
@@ -3702,7 +3688,7 @@ msgstr "Configuración do documento"
 
 #: ../src/printing.c:411
 msgid "Print only the basename(without the path) of the printed file"
-msgstr "Imprimir só o nome base (sen a ruta) do ficheiro impreso"
+msgstr "Imprimir só o nome base (sen o camiño) do ficheiro impreso"
 
 #: ../src/printing.c:527
 #, c-format
@@ -3712,12 +3698,12 @@ msgstr "Páxina %d de %d"
 #: ../src/printing.c:781
 #, c-format
 msgid "Did not send document %s to the printing subsystem."
-msgstr ""
+msgstr "Non se enviou o documento %s ao subsistema de impresión."
 
 #: ../src/printing.c:783
 #, c-format
 msgid "Document %s was sent to the printing subsystem."
-msgstr ""
+msgstr "Enviouse o documento %s ao subsistema de impresión."
 
 #: ../src/printing.c:835
 #, c-format
@@ -3775,7 +3761,7 @@ msgstr "Nome do ficheiro:"
 
 #: ../src/project.c:164 ../src/project.c:456
 msgid "Base path:"
-msgstr "Ruta base:"
+msgstr "Camiño base:"
 
 #: ../src/project.c:170 ../src/project.c:465
 msgid ""
@@ -3783,13 +3769,13 @@ msgid ""
 "path, or an existing directory tree. You can use paths relative to the "
 "project filename."
 msgstr ""
-"Directorio base de todos os ficheiros que constitúen o proxecto. Pode ser "
-"unha ruta nova, ou unha árbore de directorios existente. Pode usar rutas "
-"relativas ó nome de ficheiro do proxecto."
+"Directorio base de todos os ficheiros que constitúen o proxecto. Pode ser un "
+"camiño novo, ou unha árbore de directorios existente. Pode usar camiños "
+"relativos ó nome de ficheiro do proxecto."
 
 #: ../src/project.c:173 ../src/project.c:468
 msgid "Choose Project Base Path"
-msgstr "Seleccionar a ruta base do proxecto"
+msgstr "Seleccionar o camiño base do proxecto"
 
 #: ../src/project.c:231 ../src/project.c:263 ../src/project.c:957
 #, c-format
@@ -3816,6 +3802,8 @@ msgstr "Descrición:"
 #: ../src/project.c:481
 msgid "Set the Build non-filetype working directories to use base path:"
 msgstr ""
+"Configurar que os directorios de traballo para construír os ficheiros sen "
+"tipo de ficheiro definido usen o camiño base:"
 
 #: ../src/project.c:484
 msgid "Set"
@@ -3826,6 +3814,8 @@ msgid ""
 "Set the working directories (on the Build tab) for the non-filetype build "
 "commands to use the base path"
 msgstr ""
+"Configurar que os directorios de traballo (no separador de 'construír') para "
+"as ordes de construír sen tipo de ficheiro definido usen o camiño base"
 
 #: ../src/project.c:501
 msgid "File patterns:"
@@ -3862,7 +3852,7 @@ msgstr "Crear o directorio base do proxecto?"
 #: ../src/project.c:696
 #, c-format
 msgid "The path \"%s\" does not exist."
-msgstr "A ruta \"%s\" non existe."
+msgstr "O camiño \"%s\" non existe."
 
 #: ../src/project.c:705
 #, c-format
@@ -4050,9 +4040,9 @@ msgstr[0] "Encontrada %d coincidencia para \"%s\"."
 msgstr[1] "Encontradas %d coincidencias para \"%s\"."
 
 #: ../src/search.c:1177
-#, fuzzy, c-format
+#, c-format
 msgid "Replaced %u matches in %u documents."
-msgstr "Substituír texto no documento actual"
+msgstr "Substituíronse %u coincidencias en %u documentos."
 
 #: ../src/search.c:1368
 msgid "Invalid directory for find in files."
@@ -4067,7 +4057,7 @@ msgstr "Non hai texto que buscar."
 msgid "Cannot execute grep tool '%s'; check the path setting in Preferences."
 msgstr ""
 "Non foi posíbel executar a ferramenta de grep '%s'. Comprobe a configuración "
-"da ruta en Preferencias."
+"do camiño en Preferencias."
 
 #: ../src/search.c:1483
 msgid "Searching..."
@@ -4099,9 +4089,9 @@ msgid "No matches found."
 msgstr "Non se atoparon coincidencias"
 
 #: ../src/search.c:1661
-#, fuzzy, c-format
+#, c-format
 msgid "Bad regex: %s"
-msgstr "Expresión regular errónea para o tipo de ficheiro %s: %s"
+msgstr "Expresión regular errónea: %s"
 
 #. TODO maybe this message needs a rewording
 #: ../src/socket.c:227
@@ -4110,6 +4100,9 @@ msgid ""
 "another user.\n"
 "This is a fatal error and Geany will now quit."
 msgstr ""
+"Geany tratou de acceder ao socket de dominio Unix doutra instancia "
+"executándose baixo outro usuario.\n"
+"Isto é un erro fatal, e Geany pecharase agora."
 
 #: ../src/symbols.c:611 ../src/symbols.c:651 ../src/symbols.c:718
 msgid "Chapter"
@@ -4267,37 +4260,32 @@ msgid "Imports"
 msgstr "Importacións"
 
 #: ../src/symbols.c:760
-#, fuzzy
 msgid "Entities"
-msgstr "Sen título"
+msgstr "Entidades"
 
 #: ../src/symbols.c:761
-#, fuzzy
 msgid "Architectures"
-msgstr "Estruturas"
+msgstr "Arquitecturas"
 
 #: ../src/symbols.c:763
-#, fuzzy
 msgid "Functions / Procedures"
-msgstr "Procedementos"
+msgstr "Funcións / procedementos"
 
 #: ../src/symbols.c:764
-#, fuzzy
 msgid "Variables / Signals"
-msgstr "Variábeis"
+msgstr "Variábeis / sinais"
 
 #: ../src/symbols.c:765
 msgid "Processes / Components"
-msgstr ""
+msgstr "Procesos / componentes"
 
 #: ../src/symbols.c:773
 msgid "Events"
-msgstr ""
+msgstr "Eventos"
 
 #: ../src/symbols.c:775
-#, fuzzy
 msgid "Functions / Tasks"
-msgstr "Funcións"
+msgstr "Funcións / tarefas"
 
 #: ../src/symbols.c:788 ../src/symbols.c:875
 msgid "Members"
@@ -4509,23 +4497,20 @@ msgid "Create a new file"
 msgstr "Crear un ficheiro novo"
 
 #: ../src/toolbar.c:358
-#, fuzzy
 msgid "Create a new file from a template"
-msgstr "Crear un ficheiro novo"
+msgstr "Crear un ficheiro novo dende un modelo"
 
 #: ../src/toolbar.c:365
 msgid "Open an existing file"
 msgstr "Abrir un ficheiro existente"
 
 #: ../src/toolbar.c:366
-#, fuzzy
 msgid "Open a recent file"
-msgstr "Abrir o ficheiro seleccionado"
+msgstr "Abrir un ficheiro recente"
 
 #: ../src/toolbar.c:374
-#, fuzzy
 msgid "Choose more build actions"
-msgstr "Non hai máis erros de compilación."
+msgstr "Escolla outras accións de construcion"
 
 #: ../src/toolbar.c:389
 msgid "Goto"
@@ -4640,13 +4625,13 @@ msgstr "_Ocultar a barra lateral"
 
 #: ../src/sidebar.c:631
 msgid "Show _Paths"
-msgstr "Mostrar _rutas"
+msgstr "Mostrar _camiños"
 
 #. Status bar statistics: col = column, sel = selection.
 #: ../src/ui_utils.c:194
-#, fuzzy, c-format
+#, c-format
 msgid "line: %d / %d\t col: %d\t sel: %d\t "
-msgstr "liña: %d\t col: %d\t sel: %d\t "
+msgstr "liña: %d / %d\t col: %d\t sel: %d\t "
 
 # SL=so lectura
 #. RO = read-only
@@ -4760,7 +4745,7 @@ msgstr "Unix (LF)"
 
 #: ../src/vte.c:516
 msgid "_Set Path From Document"
-msgstr "_Configurar a ruta a partir do documento"
+msgstr "_Configurar o camiño a partir do documento"
 
 #: ../src/vte.c:521
 msgid "_Restart Terminal"
@@ -4780,7 +4765,7 @@ msgstr ""
 
 #: ../src/vte.c:736
 msgid "Font:"
-msgstr ""
+msgstr "Tipo de letra:"
 
 #: ../src/vte.c:746
 msgid "Sets the font for the terminal widget"
@@ -4822,7 +4807,7 @@ msgid ""
 "Sets the path to the shell which should be started inside the terminal "
 "emulation"
 msgstr ""
-"Configura a ruta ó intérprete de ordes que se debe iniciar dentro do "
+"Configura o camiño ó intérprete de ordes que se debe iniciar dentro do "
 "emulador de terminal"
 
 #: ../src/vte.c:815
@@ -4875,7 +4860,7 @@ msgstr ""
 
 #: ../src/vte.c:836 ../plugins/filebrowser.c:1217
 msgid "Follow the path of the current file"
-msgstr "Seguir a ruta do ficheiro actual"
+msgstr "Seguir o camiño do ficheiro actual"
 
 #: ../src/vte.c:837
 msgid "Whether to execute \"cd $path\" when you switch between opened files"
@@ -4928,14 +4913,12 @@ msgid "Create Class"
 msgstr "Crear unha clase"
 
 #: ../plugins/classbuilder.c:384
-#, fuzzy
 msgid "Namespace"
-msgstr "Espazos de nomes"
+msgstr "Espazo de nomes"
 
 #: ../plugins/classbuilder.c:393
-#, fuzzy
 msgid "Namespace:"
-msgstr "Espazos de nomes"
+msgstr "Espazo de nomes:"
 
 #: ../plugins/classbuilder.c:402
 msgid "Class"
@@ -4964,7 +4947,7 @@ msgstr "Clase base:"
 #: ../plugins/classbuilder.c:463
 #, fuzzy
 msgid "Base source:"
-msgstr "Ficheiro fonte de %s"
+msgstr "Fonte base:"
 
 #: ../plugins/classbuilder.c:465
 msgid "Base header:"
@@ -4979,8 +4962,9 @@ msgid "Base GType:"
 msgstr "GType base:"
 
 #: ../plugins/classbuilder.c:498
+#, fuzzy
 msgid "Implements:"
-msgstr ""
+msgstr "Implementa:"
 
 #: ../plugins/classbuilder.c:505
 msgid "Options"
@@ -4996,12 +4980,11 @@ msgstr "Crear destrutor"
 
 #: ../plugins/classbuilder.c:526
 msgid "Is abstract"
-msgstr ""
+msgstr "É abstracto"
 
 #: ../plugins/classbuilder.c:529
-#, fuzzy
 msgid "Is singleton"
-msgstr "Singletons"
+msgstr "É singleton"
 
 #: ../plugins/classbuilder.c:540
 msgid "GTK+ constructor type"
@@ -5020,9 +5003,8 @@ msgid "_GTK+ Class"
 msgstr "Clase _GTK+"
 
 #: ../plugins/classbuilder.c:1052
-#, fuzzy
 msgid "_PHP Class"
-msgstr "Clase _C++"
+msgstr "Clase _PHP"
 
 #: ../plugins/htmlchars.c:38
 msgid "HTML Characters"
@@ -5234,7 +5216,7 @@ msgstr "Filtro: "
 
 #: ../plugins/filebrowser.c:890
 msgid "Filter your files with usual wildcards"
-msgstr ""
+msgstr "Filtrar os seus ficheiros cos comodíns habituais"
 
 #: ../plugins/filebrowser.c:1107
 msgid "Focus File List"
@@ -5242,7 +5224,7 @@ msgstr "Enfocar na lista de ficheiros"
 
 #: ../plugins/filebrowser.c:1109
 msgid "Focus Path Entry"
-msgstr "Enfocar na entrada de ruta"
+msgstr "Enfocar na entrada do camiño"
 
 #: ../plugins/filebrowser.c:1185
 msgid "External open command:"
@@ -5258,8 +5240,8 @@ msgid ""
 "filename"
 msgstr ""
 "A orde a executar cando se use \"Abrir con\".Pode usar os comodíns %f e %d.\n"
-"%f substituirase polo nome do ficheiro incluíndo a ruta absoluta\n"
-"%d substituirase pola ruta ao ficheiro seleccionado sen o nome do ficheiro"
+"%f substituirase polo nome do ficheiro incluíndo o camiño absoluto\n"
+"%d substituirase polo camiño ao ficheiro seleccionado sen o nome do ficheiro"
 
 #: ../plugins/filebrowser.c:1202
 msgid "Show hidden files"
