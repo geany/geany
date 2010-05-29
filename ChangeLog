@@ -2,6 +2,10 @@
 
  * src/main.c:
    Print locale information in debug output.
+ * src/build.c:
+   Fix some labels which were marked as translatable but were not
+   handled properly by gettext().
+   Add a missing const.
 
 
 2010-05-25  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

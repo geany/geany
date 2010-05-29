@@ -1395,7 +1395,7 @@ static void create_build_menu(BuildMenuItems *build_menu_items)
 		}
 		else if (bs->fix_label != NULL)
 		{
-			create_build_menu_item(menu, keygroup, accel_group, bs, gettext(bs->fix_label),
+			create_build_menu_item(menu, keygroup, accel_group, bs, _(bs->fix_label),
 									GBG_FIXED, bs->build_cmd);
 		}
 		else if (bs->build_grp >= MENU_FT_REST && bs->build_grp <= MENU_SEPARATOR)
@@ -2176,7 +2176,7 @@ static void show_build_commands_dialog(void)
 	GtkWidget *dialog, *table, *vbox;
 	GeanyDocument *doc = document_get_current();
 	GeanyFiletype *ft = NULL;
-	gchar *title = _("Set Build Commands");
+	const gchar *title = _("Set Build Commands");
 	gint response;
 	BuildTableData table_data;
 	BuildDestination prefdsts;
