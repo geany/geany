@@ -1895,7 +1895,7 @@ GtkWidget *build_commands_table(GeanyDocument *doc, GeanyBuildSource dst, BuildT
 	fields->rows = g_new0(RowWidgets*, build_items_count);
 	for (ch = colheads, col = 0; *ch != NULL; ch++, col++)
 	{
-		label = gtk_label_new(gettext(*ch));
+		label = gtk_label_new(_(*ch));
 		gtk_table_attach(table, label, col, col + 1, 0, 1,
 			GTK_FILL, GTK_FILL | GTK_EXPAND, entry_x_padding, entry_y_padding);
 	}
