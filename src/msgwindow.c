@@ -268,9 +268,15 @@ void msgwin_compiler_add_string(gint msg_color, const gchar *msg)
 	GtkTreeIter iter;
 	GtkTreePath *path;
 	const GdkColor *color = get_color(msg_color);
+	gchar *utf8_msg;
+
+	if (! g_utf8_validate(msg, -1, NULL))
+		utf8_msg = utils_get_utf8_from_locale(msg);
+	else
+		utf8_msg = (gchar *) msg;
 
 	gtk_list_store_append(msgwindow.store_compiler, &iter);
-	gtk_list_store_set(msgwindow.store_compiler, &iter, 0, color, 1, msg, -1);
+	gtk_list_store_set(msgwindow.store_compiler, &iter, 0, color, 1, utf8_msg, -1);
 
 	if (ui_prefs.msgwindow_visible && interface_prefs.compiler_tab_autoscroll)
 	{
@@ -283,6 +289,9 @@ void msgwin_compiler_add_string(gint msg_color, const gchar *msg)
 	/* calling build_menu_update for every build message would be overkill, TODO really should call it once when all done */
 	gtk_widget_set_sensitive(build_get_menu_items(-1)->menu_item[GBG_FIXED][GBF_NEXT_ERROR], TRUE);
 	gtk_widget_set_sensitive(build_get_menu_items(-1)->menu_item[GBG_FIXED][GBF_PREV_ERROR], TRUE);
+
+	if (utf8_msg != msg)
+		g_free(utf8_msg);
 }
 
 
@@ -334,8 +343,10 @@ void msgwin_msg_add_string(gint msg_color, gint line, GeanyDocument *doc, const 
 	const GdkColor *color = get_color(msg_color);
 	gchar *tmp;
 	gsize len;
+	gchar *utf8_msg;
 
-	if (! ui_prefs.msgwindow_visible) msgwin_show_hide(TRUE);
+	if (! ui_prefs.msgwindow_visible)
+		msgwin_show_hide(TRUE);
 
 	/* work around a strange problem when adding very long lines(greater than 4000 bytes)
 	 * cut the string to a maximum of 1024 bytes and discard the rest */
@@ -346,10 +357,17 @@ void msgwin_msg_add_string(gint msg_color, gint line, GeanyDocument *doc, const 
 	else
 		tmp = g_strdup(string);
 
+	if (! g_utf8_validate(tmp, -1, NULL))
+		utf8_msg = utils_get_utf8_from_locale(tmp);
+	else
+		utf8_msg = tmp;
+
 	gtk_list_store_append(msgwindow.store_msg, &iter);
-	gtk_list_store_set(msgwindow.store_msg, &iter, 0, line, 1, doc, 2, color, 3, tmp, -1);
+	gtk_list_store_set(msgwindow.store_msg, &iter, 0, line, 1, doc, 2, color, 3, utf8_msg, -1);
 
 	g_free(tmp);
+	if (utf8_msg != tmp)
+		g_free(utf8_msg);
 }
 
 

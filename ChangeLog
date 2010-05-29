@@ -6,6 +6,9 @@
    Fix some labels which were marked as translatable but were not
    handled properly by gettext().
    Add a missing const.
+ * src/msgwindow.c:
+   Try to convert text into UTF-8 before adding it to the Compiler and
+   Messages Window (closes #3007919).
 
 
 2010-05-25  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
