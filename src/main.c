@@ -908,10 +908,21 @@ static gboolean send_startup_complete(gpointer data)
 }
 
 
+static const gchar *get_locale(void)
+{
+	const gchar *locale = "unknown";
+#ifdef HAVE_LOCALE_H
+	locale = setlocale(LC_CTYPE, NULL);
+#endif
+	return locale;
+}
+
+
 gint main(gint argc, gchar **argv)
 {
 	GeanyDocument *doc;
 	gint config_dir_result;
+	const gchar *locale;
 
 	log_handlers_init();
 
@@ -970,10 +981,12 @@ gint main(gint argc, gchar **argv)
 	}
 #endif
 
-	geany_debug("Geany %s, GTK+ %u.%u.%u, GLib %u.%u.%u",
+	locale = get_locale();
+	geany_debug("Geany %s, GTK+ %u.%u.%u, GLib %u.%u.%u (%s)",
 		main_get_version_string(),
 		gtk_major_version, gtk_minor_version, gtk_micro_version,
-		glib_major_version, glib_minor_version, glib_micro_version);
+		glib_major_version, glib_minor_version, glib_micro_version,
+		locale);
 
 	/* create the object so Geany signals can be connected in init() functions */
 	geany_object = geany_object_new();

@@ -1,3 +1,9 @@
+2010-05-29  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/main.c:
+   Print locale information in debug output.
+
+
 2010-05-25  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * plugins/Makefile.am, src/Makefile.am, tagmanager/Makefile.am,
