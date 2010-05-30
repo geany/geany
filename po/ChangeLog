@@ -1,5 +1,7 @@
 2010-05-31  Frank Lanitz  <frank@frank.uvena.de>
 
+ * pt.po: Update of Portugese translation. Thanks to André Glória for
+          providing
  * tr.po: Update of Turkish translation. Thanks to Gürkan Gür.
 
 
@@ -10,7 +12,8 @@
 
 2010-05-29  Frank Lanitz  <frank@frank.uvena.de>
 
- * zh_CN.po: Update of simplified Chinese translation. Thanks to Xhacker Liu.
+ * zh_CN.po: Update of simplified Chinese translation. Thanks to
+             Xhacker Liu.
 
 
 2010-05-28  Frank Lanitz  <frank@frank.uvena.de>
