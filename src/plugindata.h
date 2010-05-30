@@ -50,7 +50,7 @@
 enum {
 	/** The Application Programming Interface (API) version, incremented
 	 * whenever any plugin data types are modified or appended to. */
-	GEANY_API_VERSION = 187,
+	GEANY_API_VERSION = 188,
 
 	/** The Application Binary Interface (ABI) version, incremented whenever
 	 * existing fields in the plugin data types have to be changed or reordered. */
@@ -102,10 +102,11 @@ GeanyPlugin;
 
 
 /** Sets the plugin name and some other basic information about a plugin.
- * This declares a function, so you can use the _() translation macro for arguments.
+ *
+ * @note If you want some of the arguments to be translated, see @ref PLUGIN_SET_TRANSLATABLE_INFO()
  *
  * Example:
- * @code PLUGIN_SET_INFO(_("Cool Feature"), _("Adds cool feature support."), "0.1", "Joe Author") @endcode */
+ * @code PLUGIN_SET_INFO("Cool Feature", "Adds cool feature support.", "0.1", "Joe Author") @endcode */
 /* plugin_set_info() could be written manually for plugins if we want to add any
  * extra PluginInfo features (such as an icon), so we don't need to break API
  * compatibility. Alternatively just add a new macro, PLUGIN_SET_INFO_FULL(). -ntrel */
@@ -118,6 +119,24 @@ GeanyPlugin;
 		info->author = (p_author); \
 	}
 
+/** Sets the plugin name and some other basic information about a plugin.
+ * This macro is like @ref PLUGIN_SET_INFO() but allows the passed information to be translated
+ * by setting up the translation mechanism with @ref main_locale_init().
+ * You therefore don't need to call it manually in plugin_init().
+ *
+ * Example:
+ * @code PLUGIN_SET_TRANSLATABLE_INFO(LOCALEDIR, GETTEXT_PACKAGE, _("Cool Feature"), _("Adds a cool feature."), "0.1", "John Doe") @endcode
+ *
+ * @since 0.19 */
+#define PLUGIN_SET_TRANSLATABLE_INFO(localedir, package, p_name, p_description, p_version, p_author) \
+	void plugin_set_info(PluginInfo* info) \
+	{ \
+		main_locale_init(localedir, package); \
+		info->name = (p_name); \
+		info->description = (p_description); \
+		info->version = (p_version); \
+		info->author = (p_author); \
+	}
 
 /** @deprecated - use plugin_set_key_group() instead.
  * @see PLUGIN_KEY_GROUP() macro. */

@@ -5,6 +5,10 @@
  * tagmanager/c.c:
    Fix parsing of C++ classes contain attributes with bitfields
    (patch by Lex Trotman, thanks).
+ * src/plugindata.h, src/plugins.c:
+   Add PLUGIN_SET_TRANSLATABLE_INFO macro to the plugin API so
+   plugins' meta information can be translated already in the
+   plugin manager dialog (patch by Colomban Wendling, thanks).
 
 
 2010-05-29  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

@@ -547,22 +547,15 @@ plugin_init(Plugin *plugin)
 	PluginCallback *callbacks;
 	PluginInfo **p_info;
 	PluginFields **plugin_fields;
-	GeanyData **p_geany_data;
-	GeanyFunctions **p_geany_functions;
 
-	/* set these symbols before plugin_init() is called */
+	/* set these symbols before plugin_init() is called
+	 * we don't set geany_functions and geany_data since they are set directly by plugin_new() */
 	g_module_symbol(plugin->module, "geany_plugin", (void *) &p_geany_plugin);
 	if (p_geany_plugin)
 		*p_geany_plugin = &plugin->public;
 	g_module_symbol(plugin->module, "plugin_info", (void *) &p_info);
 	if (p_info)
 		*p_info = &plugin->info;
-	g_module_symbol(plugin->module, "geany_data", (void *) &p_geany_data);
-	if (p_geany_data)
-		*p_geany_data = &geany_data;
-	g_module_symbol(plugin->module, "geany_functions", (void *) &p_geany_functions);
-	if (p_geany_functions)
-		*p_geany_functions = &geany_functions;
 	g_module_symbol(plugin->module, "plugin_fields", (void *) &plugin_fields);
 	if (plugin_fields)
 		*plugin_fields = &plugin->fields;
@@ -618,6 +611,8 @@ plugin_new(const gchar *fname, gboolean init_plugin, gboolean add_to_list)
 {
 	Plugin *plugin;
 	GModule *module;
+	GeanyData **p_geany_data;
+	GeanyFunctions **p_geany_functions;
 	void (*plugin_set_info)(PluginInfo*);
 
 	g_return_val_if_fail(fname, NULL);
@@ -674,6 +669,14 @@ plugin_new(const gchar *fname, gboolean init_plugin, gboolean add_to_list)
 	}
 
 	plugin = g_new0(Plugin, 1);
+
+	/* set basic fields here to allow plugins to call Geany functions in set_info() */
+	g_module_symbol(module, "geany_data", (void *) &p_geany_data);
+	if (p_geany_data)
+		*p_geany_data = &geany_data;
+	g_module_symbol(module, "geany_functions", (void *) &p_geany_functions);
+	if (p_geany_functions)
+		*p_geany_functions = &geany_functions;
 
 	/* read plugin name, etc. */
 	plugin_set_info(&plugin->info);
