@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: Geany 0.19\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-05-23 10:05+0200\n"
-"PO-Revision-Date: 2010-02-20 13:01+0100\n"
-"Last-Translator: Ayke van Laethem <aykevanlaethem@gmail.com>\n"
+"PO-Revision-Date: 2010-05-30 17:11+0100\n"
+"Last-Translator: Peter Scholtens <peter.scholtens@xs4all.nl>\n"
 "Language-Team: Dutch <geany-i18n@uvena.de>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -204,7 +204,7 @@ msgstr "Geen bouwfouten meer."
 
 #: ../src/build.c:1778
 msgid "Set menu item label"
-msgstr ""
+msgstr "Menu item label instellen"
 
 #: ../src/build.c:1788
 msgid "Item"
@@ -228,7 +228,7 @@ msgstr "Ruim op"
 
 #: ../src/build.c:1831
 msgid "Click to set menu item label"
-msgstr ""
+msgstr "Klik om menu item label in te stellen"
 
 #: ../src/build.c:1904 ../src/build.c:1906
 #, c-format
@@ -241,7 +241,7 @@ msgstr "Geen Bestandstype"
 
 #: ../src/build.c:1914 ../src/build.c:1949
 msgid "Error Regular Expression:"
-msgstr "Reguliere Expressie Fout:"
+msgstr "Reguliere expressie voor fouten:"
 
 #: ../src/build.c:1942
 msgid "Non-Filetype Commands"
@@ -271,7 +271,6 @@ msgid "Set Build Commands"
 msgstr "Bouwcommando's instellen"
 
 #: ../src/build.c:2399
-#, fuzzy
 msgid "_Compile"
 msgstr "Compileer"
 
@@ -381,14 +380,13 @@ msgid "Custom Date Format"
 msgstr "Aangepast datumformaat"
 
 #: ../src/callbacks.c:1447
-#, fuzzy
 msgid ""
 "Enter here a custom date and time format. You can use any conversion "
 "specifiers which can be used with the ANSI C strftime function."
 msgstr ""
-"Geef hier een aangepaste datum en tijdsindeling.U kunt gebruik maken van om "
-"het even welke conversie specifieerder welke kan gebruikt worden met de ANSI "
-"C strftime functie. Lees \"man strftime\" voor meer informatie."
+"Geef hier een aangepaste datum en tijdsindeling. U kunt gebruik maken van "
+"elke conversie specifieerder die beschikbaar is voor de ANSI C strftime "
+"functie."
 
 #: ../src/callbacks.c:1466
 msgid "Date format string could not be converted (possibly too long)."
@@ -792,12 +790,12 @@ msgstr ""
 
 #: ../src/document.c:2915
 msgid "Close _without saving"
-msgstr ""
+msgstr "Sluit zonder op te slaan"
 
 #: ../src/document.c:2919
-#, fuzzy, c-format
+#, c-format
 msgid "File \"%s\" was not found on disk! Try to resave the file?"
-msgstr "Bestand \"%s\" is niet gevonden!"
+msgstr "Bestand \"%s\" is niet gevonden! Opnieuw wegschrijven?"
 
 #: ../src/editor.c:4425
 msgid "Enter Tab Width"
@@ -810,7 +808,7 @@ msgstr "Geef het aantal spaties dat een tab karakter zou moeten vervangen."
 #: ../src/editor.c:4577
 #, c-format
 msgid "Warning: non-standard hard tab width: %d != 8!"
-msgstr ""
+msgstr "Waarschuwing: niet-standaard tabbreedte %d != 8!"
 
 #: ../src/encodings.c:76
 msgid "Celtic"
@@ -1013,9 +1011,8 @@ msgid "M_iscellaneous Languages"
 msgstr "Over_ige talen"
 
 #: ../src/filetypes.c:830
-#, fuzzy
 msgid "_Custom Filetypes"
-msgstr "Geen Bestandstype"
+msgstr "aangepaste bestandstypes"
 
 #: ../src/filetypes.c:1403 ../src/win32.c:105
 msgid "All Source"
@@ -1167,7 +1164,7 @@ msgstr "Selecteer huidige regel(s)"
 
 #: ../src/interface.c:596 ../src/keybindings.c:331
 msgid "_Select Current Paragraph"
-msgstr "Selecteer huidige paragraph"
+msgstr "Selecteer huidige paragraaf"
 
 #: ../src/interface.c:605 ../src/keybindings.c:381
 msgid "_Insert Alternative White Space"
@@ -1495,9 +1492,8 @@ msgid "Scribble"
 msgstr "Notities"
 
 #: ../src/interface.c:1887
-#, fuzzy
 msgid "_Toolbar Preferences"
-msgstr "P_lugin voorkeuren"
+msgstr "Toolbar voorkeuren"
 
 #: ../src/interface.c:1900
 msgid "_Hide Toolbar"
@@ -1669,13 +1665,13 @@ msgstr ""
 
 #: ../src/interface.c:2891
 msgid "Use Windows File Open/Save dialogs"
-msgstr ""
+msgstr "Gebruik Openen/Opslaan dialoog van Windows"
 
 #: ../src/interface.c:2894
 msgid ""
 "Defines whether to use the native Windows File Open/Save dialogs or whether "
 "to use the GTK default dialogs"
-msgstr ""
+msgstr "Bepaald of de standaard Windows Openen/Opslaan of de GTK default dialoog gebruikt wordt"
 
 #: ../src/interface.c:2896 ../src/interface.c:3275 ../src/interface.c:4230
 msgid "<b>Miscellaneous</b>"
@@ -1774,7 +1770,6 @@ msgid "Toggle the documents list on and off"
 msgstr "Schakelt de bestandenlijst aan en uit"
 
 #: ../src/interface.c:3014
-#, fuzzy
 msgid "Show sidebar"
 msgstr "_Zijbalk weergeven"
 
@@ -1845,25 +1840,22 @@ msgid "Placement of new file tabs:"
 msgstr "Plaats van nieuwe tabs:"
 
 #: ../src/interface.c:3152
-#, fuzzy
 msgid "File tabs will be placed on the left of the notebook"
-msgstr "Nieuwe bestanden tabs zullen links van de tab lijst worden geplaatst"
+msgstr "Nieuwe bestandtabs zullen links van het tabbladvenster worden geplaatst"
 
 #: ../src/interface.c:3160
-#, fuzzy
 msgid "File tabs will be placed on the right of the notebook"
-msgstr "Nieuwe bestanden tabs zullen rechts van de tab lijst worden geplaatst"
+msgstr "Nieuwe bestandtabs zullen rechts van het tabbladvenster worden geplaatst"
 
 #: ../src/interface.c:3164
-#, fuzzy
 msgid "Next to current"
-msgstr "Huidig bestand opslaan"
+msgstr "Naast huidige"
 
 #: ../src/interface.c:3169
 msgid ""
 "Whether to place file tabs next to the current tab rather than at the edges "
 "of the notebook"
-msgstr ""
+msgstr "Of de bestandstabbladen naast het huidige tabblad geplaatst worden, in plaats van aan de uiteinden van het tabbladvenster."
 
 #: ../src/interface.c:3171
 msgid "Double-clicking hides all additional widgets"
@@ -1922,9 +1914,8 @@ msgid "Customize Toolbar"
 msgstr "Werkbalk aanpassen"
 
 #: ../src/interface.c:3360
-#, fuzzy
 msgid "System _Default"
-msgstr "_Standaard"
+msgstr "Systeem _standaard"
 
 #: ../src/interface.c:3368
 msgid "Images _and Text"
@@ -1939,9 +1930,8 @@ msgid "_Text Only"
 msgstr "Enkel _tekst"
 
 #: ../src/interface.c:3392
-#, fuzzy
 msgid "<b>Icon Style</b>"
-msgstr "<b>Lettertypes</b>"
+msgstr "<b>Icon style</b>"
 
 #: ../src/interface.c:3413
 #, fuzzy
@@ -1961,9 +1951,8 @@ msgid "_Large Icons"
 msgstr "_Grote pictogrammen"
 
 #: ../src/interface.c:3445
-#, fuzzy
 msgid "<b>Icon Size</b>"
-msgstr "<b>Grootte:</b>"
+msgstr "<b>Icon grootte</b>"
 
 #: ../src/interface.c:3450
 msgid "<b>Toolbar</b>"
@@ -2073,7 +2062,7 @@ msgstr "'Lange regel' marker"
 msgid ""
 "A string which is added when toggling a line comment in a source file, it is "
 "used to mark the comment as toggled."
-msgstr ""
+msgstr "Een string die wordt toegevoegd bij het activeren van eenregelig commentaar in een bronbestand. Deze wordt gebruikt om het actieve commentaar te markeren."
 
 #: ../src/interface.c:3544
 msgid "<b>Features</b>"
@@ -2355,13 +2344,12 @@ msgid "<b>Display</b>"
 msgstr "<b>Weergave</b>"
 
 #: ../src/interface.c:3911 ../src/interface.c:5302
-#, fuzzy
 msgid "Column:"
-msgstr "Bedrijf:"
+msgstr "Kolom:"
 
 #: ../src/interface.c:3918
 msgid "Color:"
-msgstr ""
+msgstr "Kleur:"
 
 #: ../src/interface.c:3937
 msgid "Sets the color of the long line marker"
@@ -2410,9 +2398,8 @@ msgstr ""
 "u proportionele lettertypen gebruikt)"
 
 #: ../src/interface.c:3970
-#, fuzzy
 msgid "Enabled"
-msgstr "Aanz_etten"
+msgstr "Aang_ezet"
 
 #: ../src/interface.c:3976 ../src/interface.c:5342
 msgid "<b>Long line marker</b>"
@@ -2424,31 +2411,29 @@ msgstr "Uitgeschakeld"
 
 #: ../src/interface.c:3998
 msgid "Do not show virtual spaces"
-msgstr ""
+msgstr "Laat lege spaties niet zien"
 
 #: ../src/interface.c:4002
 msgid "Only for rectangular selections"
-msgstr ""
+msgstr "Alleen voor rechthoekige selecties"
 
 #: ../src/interface.c:4005
 msgid ""
 "Only show virtual spaces beyond the end of lines when drawing a rectangular "
 "selection"
-msgstr ""
+msgstr "Laat lege spaties voorbij regeleinden alleen zien wanneer een rechthoekige selectie gemaakt wordt"
 
 #: ../src/interface.c:4009
 msgid "Always"
-msgstr ""
+msgstr "Altijd"
 
 #: ../src/interface.c:4012
-#, fuzzy
 msgid "Always show virtual spaces beyond the end of lines"
-msgstr "Verwijdert lege spaties aan regeleinden"
+msgstr "Laat lege spaties aan regeleinden altijd zien"
 
 #: ../src/interface.c:4016
-#, fuzzy
 msgid "<b>Virtual spaces</b>"
-msgstr "<b>Hulpprogramma plaatsen</b>"
+msgstr "<b>Lege spaties</b>"
 
 #: ../src/interface.c:4021
 msgid "Display"
@@ -2665,34 +2650,31 @@ msgid "Date & Time:"
 msgstr "Datum & Tijd;"
 
 #: ../src/interface.c:4518
-#, fuzzy
 msgid ""
 "Specify a format for the the {datetime} wildcard. You can use any conversion "
 "specifiers which can be used with the ANSI C strftime function."
 msgstr ""
 "Geef hier een aangepast formaat voor de {datetime} wildcard. U kunt gebruik "
-"maken van elke conversie specifieerder welke kan gebruikt worden met de ANSI "
-"C strftime functie. Lees \"man strftime\" voor meer informatie."
+"maken van elke conversie specifieerder die beschikbaar is voor de ANSI "
+"C strftime functie."
 
 #: ../src/interface.c:4525
-#, fuzzy
 msgid ""
 "Specify a format for the the {year} wildcard. You can use any conversion "
 "specifiers which can be used with the ANSI C strftime function."
 msgstr ""
-"Geef hier een aangepaste datum en tijdsindeling.U kunt gebruik maken van om "
-"het even welke conversie specifieerder welke kan gebruikt worden met de ANSI "
-"C strftime functie. Lees \"man strftime\" voor meer informatie."
+"Geef hier een aangepast formaat voor de {year} wildcard. U kunt gebruik maken "
+"van elke conversie specifieerder die beschikbaar is voor de ANSI C strftime "
+"functie."
 
 #: ../src/interface.c:4532
-#, fuzzy
 msgid ""
 "Specify a format for the the {date} wildcard. You can use any conversion "
 "specifiers which can be used with the ANSI C strftime function."
 msgstr ""
-"Geef hier een aangepaste datum en tijdsindeling.U kunt gebruik maken van om "
-"het even welke conversie specifieerder welke kan gebruikt worden met de ANSI "
-"C strftime functie. Lees \"man strftime\" voor meer informatie."
+"Geef hier een aangepast formaat voor de {date} wildcard. U kunt gebruik maken "
+"van elke conversie specifieerder die beschikbaar is voor de ANSI C strftime "
+"functie."
 
 #: ../src/interface.c:4534
 msgid "<b>Template data</b>"
@@ -2776,24 +2758,22 @@ msgid "Date format:"
 msgstr "Datumformaat:"
 
 #: ../src/interface.c:4703 ../src/printing.c:423
-#, fuzzy
 msgid ""
 "Specify a format for the date and time stamp which is added to the page "
 "header on each page. You can use any conversion specifiers which can be used "
 "with the ANSI C strftime function."
 msgstr ""
-"Geef hier een aangepaste datum en tijdsindeling. U kunt gebruik maken van om "
-"het even welke conversie specifieerder welke kan gebruikt worden met de ANSI "
-"C strftime functie. Lees \"man strftime\" voor meer informatie."
+"Geef hier een aangepaste datum en tijdsstempel die wordt toegevoegd aan de "
+"kop van elke pagina. U kunt gebruik maken van elke conversie specifieerder "
+"die beschikbaar is voor de ANSI C strftime functie."
 
 #: ../src/interface.c:4706
 msgid "Use native GTK printing"
 msgstr "Gebruik standaard GTK printing"
 
 #: ../src/interface.c:4712
-#, fuzzy
 msgid "<b>Printing</b>"
-msgstr "<b>Codering:</b>"
+msgstr "<b>Afdrukken</b>"
 
 #: ../src/interface.c:4717 ../src/prefs.c:1541
 msgid "Printing"
@@ -2804,18 +2784,16 @@ msgid "Project Properties"
 msgstr "Eigenschappen"
 
 #: ../src/interface.c:5295
-#, fuzzy
 msgid "Display:"
-msgstr "Weergave"
+msgstr "Weergave:"
 
 #: ../src/interface.c:5317
-#, fuzzy
 msgid "Custom"
-msgstr "Aangepaste tekst"
+msgstr "Aangepast"
 
 #: ../src/interface.c:5325
 msgid "Use global settings"
-msgstr ""
+msgstr "Gebruik algemene instellingen"
 
 #: ../src/keybindings.c:227 ../src/plugins.c:1171
 msgid "File"
@@ -2863,7 +2841,7 @@ msgstr "Bestand herladen"
 
 #: ../src/keybindings.c:253
 msgid "Re-open last closed tab"
-msgstr ""
+msgstr "Her-open laatst gesloten tabblad"
 
 #: ../src/keybindings.c:255 ../src/project.c:519
 msgid "Project"
@@ -3164,9 +3142,8 @@ msgid "Zoom Out"
 msgstr "Uitzoomen"
 
 #: ../src/keybindings.c:473
-#, fuzzy
 msgid "Zoom Reset"
-msgstr "Uitzoomen"
+msgstr "Normale afmeting"
 
 #: ../src/keybindings.c:475
 msgid "Focus"
@@ -3201,19 +3178,16 @@ msgid "Switch to Messages"
 msgstr "Schakel naar Berichten"
 
 #: ../src/keybindings.c:492
-#, fuzzy
 msgid "Switch to Message Window"
-msgstr "_Berichtenvenster weergeven"
+msgstr "Schakel naar berichtenvenster"
 
 #: ../src/keybindings.c:494
-#, fuzzy
 msgid "Switch to Sidebar Document List"
-msgstr "Schakel naar document"
+msgstr "Schakel naar documentenlijst in zijbalk"
 
 #: ../src/keybindings.c:496
-#, fuzzy
 msgid "Switch to Sidebar Symbol List"
-msgstr "Schakel naar Zijbalk"
+msgstr "Schakel naar symbollijst in zijbalk"
 
 #: ../src/keybindings.c:498
 msgid "Notebook tab"
@@ -3280,14 +3254,12 @@ msgid "Reload symbol list"
 msgstr "Symbolenlijst herladen"
 
 #: ../src/keybindings.c:534
-#, fuzzy
 msgid "Remove Markers"
 msgstr "Verwijder _markers"
 
 #: ../src/keybindings.c:536
-#, fuzzy
 msgid "Remove Error Indicators"
-msgstr "Verwijder fout_indicaties"
+msgstr "Verwijder fout_indicatoren"
 
 #: ../src/keybindings.c:538 ../src/keybindings.c:543 ../src/project.c:477
 #: ../src/ui_utils.c:1815
@@ -3359,7 +3331,6 @@ msgid "Debug Messages"
 msgstr "Debug berichten"
 
 #: ../src/log.c:183
-#, fuzzy
 msgid "Cl_ear"
 msgstr "Ruim op"
 
@@ -3397,11 +3368,11 @@ msgstr ""
 #: ../src/main.c:129
 msgid ""
 "Use this socket filename for communication with a running Geany instance"
-msgstr ""
+msgstr "Gebruik deze bestandsnaamsocket om te communiceren met een lopende Geany instantatie"
 
 #: ../src/main.c:130
 msgid "Return a list of open documents in a running Geany instance"
-msgstr ""
+msgstr "Geeft een lijst met geopende documenten van een lopende Geany instantiatie"
 
 #: ../src/main.c:132
 msgid "Set initial line number for the first opened file"
@@ -3510,7 +3481,6 @@ msgid "Status messages"
 msgstr "Statusberichten"
 
 #: ../src/msgwindow.c:524
-#, fuzzy
 msgid "C_opy"
 msgstr "Kopieer"
 
@@ -3525,7 +3495,7 @@ msgstr "Ver_berg berichtenvenster"
 #: ../src/msgwindow.c:619
 #, c-format
 msgid "Could not find file '%s' - trying the current document path."
-msgstr ""
+msgstr "Kan bestand \"%s\" niet vinden - probeer huidige document pad."
 
 #: ../src/plugins.c:464
 #, c-format
@@ -3818,9 +3788,8 @@ msgid "Set the Build non-filetype working directories to use base path:"
 msgstr ""
 
 #: ../src/project.c:484
-#, fuzzy
 msgid "Set"
-msgstr "Sect1"
+msgstr "Stel in"
 
 #: ../src/project.c:486
 msgid ""
@@ -4053,9 +4022,9 @@ msgstr[0] "%d overeenkomst gevonden met '%s'."
 msgstr[1] "%d overeenkomsten gevonden met '%s'."
 
 #: ../src/search.c:1177
-#, fuzzy, c-format
+#, c-format
 msgid "Replaced %u matches in %u documents."
-msgstr "Vervang tekst in het huidige document"
+msgstr "In totaal %u maal vervangen in %u documenten."
 
 #: ../src/search.c:1368
 msgid "Invalid directory for find in files."
@@ -4102,9 +4071,9 @@ msgid "No matches found."
 msgstr "Geen overeenkomsten gevonden."
 
 #: ../src/search.c:1661
-#, fuzzy, c-format
+#, c-format
 msgid "Bad regex: %s"
-msgstr "Verkeerde reguliere expressie voor bestandstype %s; %s"
+msgstr "Verkeerde reguliere expressie: %s"
 
 #. TODO maybe this message needs a rewording
 #: ../src/socket.c:227
@@ -4113,6 +4082,8 @@ msgid ""
 "another user.\n"
 "This is a fatal error and Geany will now quit."
 msgstr ""
+"Geany probeerde als andere gebruiker de Unix Domain socket van een andere lopende instantiatie te benaderen.\n"
+"Dit is een fatale fout en Geany zal nu stoppen."
 
 #: ../src/symbols.c:611 ../src/symbols.c:651 ../src/symbols.c:718
 msgid "Chapter"
@@ -4155,9 +4126,8 @@ msgid "Types"
 msgstr "Types"
 
 #: ../src/symbols.c:625
-#, fuzzy
 msgid "Type constructors"
-msgstr "Woord vervolledigen"
+msgstr "Type constructors"
 
 #: ../src/symbols.c:626 ../src/symbols.c:638 ../src/symbols.c:659
 #: ../src/symbols.c:667 ../src/symbols.c:676 ../src/symbols.c:688
@@ -4290,7 +4260,7 @@ msgstr "Variabelen / Signalen"
 
 #: ../src/symbols.c:765
 msgid "Processes / Components"
-msgstr ""
+msgstr "Processen / Componenten"
 
 #: ../src/symbols.c:773
 msgid "Events"
@@ -4521,9 +4491,8 @@ msgid "Open a recent file"
 msgstr "Open een recent bestand"
 
 #: ../src/toolbar.c:374
-#, fuzzy
 msgid "Choose more build actions"
-msgstr "Geen bouwfouten meer."
+msgstr "Kies meer bouw acties"
 
 #: ../src/toolbar.c:389
 msgid "Goto"
@@ -4644,9 +4613,9 @@ msgstr "_Paden weergeven"
 
 #. Status bar statistics: col = column, sel = selection.
 #: ../src/ui_utils.c:194
-#, fuzzy, c-format
+#, c-format
 msgid "line: %d / %d\t col: %d\t sel: %d\t "
-msgstr "regel: %d\t kol: %d\t sel: %d\t "
+msgstr "regel: %d / %d\t kol: %d\t sel: %d\t "
 
 # Alleen Lezen
 #. RO = read-only
@@ -4779,7 +4748,7 @@ msgstr ""
 
 #: ../src/vte.c:736
 msgid "Font:"
-msgstr ""
+msgstr "Lettertype:"
 
 #: ../src/vte.c:746
 msgid "Sets the font for the terminal widget"
@@ -4867,7 +4836,7 @@ msgid ""
 "within the VTE."
 msgstr ""
 "Deze optie schakelt de sneltoets uit om de menu taakbalk naar de voorgrond "
-"te brengen (standaard: F10). Dit kan nuttig zijn als u bijv Midnight "
+"te brengen (standaard: F10). Dit kan nuttig zijn als u bijv. Midnight "
 "Commander gebruikt binnenin de VTE."
 
 #: ../src/vte.c:836 ../plugins/filebrowser.c:1217
@@ -4928,14 +4897,12 @@ msgid "Create Class"
 msgstr "Creer Class"
 
 #: ../plugins/classbuilder.c:384
-#, fuzzy
 msgid "Namespace"
-msgstr "Naamruimtes"
+msgstr "Naamruimte"
 
 #: ../plugins/classbuilder.c:393
-#, fuzzy
 msgid "Namespace:"
-msgstr "Naamruimtes"
+msgstr "Naamruimte:"
 
 #: ../plugins/classbuilder.c:402
 msgid "Class"
@@ -4962,9 +4929,8 @@ msgid "Base class:"
 msgstr "Basis class:"
 
 #: ../plugins/classbuilder.c:463
-#, fuzzy
 msgid "Base source:"
-msgstr "%s bronbestand"
+msgstr "Bronbestand:"
 
 #: ../plugins/classbuilder.c:465
 msgid "Base header:"
@@ -4996,7 +4962,7 @@ msgstr "Maak destructor"
 
 #: ../plugins/classbuilder.c:526
 msgid "Is abstract"
-msgstr ""
+msgstr "Is abstract"
 
 #: ../plugins/classbuilder.c:529
 #, fuzzy
@@ -5020,9 +4986,8 @@ msgid "_GTK+ Class"
 msgstr "_GTK+ Class"
 
 #: ../plugins/classbuilder.c:1052
-#, fuzzy
 msgid "_PHP Class"
-msgstr "_C++ Class"
+msgstr "_PHP klasse"
 
 #: ../plugins/htmlchars.c:38
 msgid "HTML Characters"
@@ -5109,9 +5074,8 @@ msgid "HTML Replacement"
 msgstr "HTML vervanging"
 
 #: ../plugins/htmlchars.c:753
-#, fuzzy
 msgid "_HTMLToggle"
-msgstr "_HTML Tekens vervangen"
+msgstr "_HTML tekens vervangen"
 
 #: ../plugins/htmlchars.c:762
 msgid "Bulk replacement of special chars"
@@ -5146,7 +5110,6 @@ msgid "_Use current zoom level"
 msgstr "_Gebruik huidig zoom niveau"
 
 #: ../plugins/export.c:185
-#, fuzzy
 msgid ""
 "Renders the font size of the document together with the current zoom level"
 msgstr "Slaat de huidige lettergrootte samen met het huidige zoomniveau op"
