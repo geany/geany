@@ -88,7 +88,7 @@ extern void externalSortTags (const boolean toStdout)
 #endif
 	verbose ("system (\"%s\")\n", cmd);
 	ret = system (cmd);
-	free (cmd);
+	g_free (cmd);
 
     }
     if (ret != 0)
