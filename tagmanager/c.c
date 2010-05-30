@@ -2555,13 +2555,15 @@ static void processColon (statementInfo *const st)
 	else
 	{
 		cppUngetc (c);
-		if (((isLanguage (Lang_cpp) || isLanguage (Lang_csharp) || isLanguage (Lang_vala))  &&
+		if ((((isLanguage (Lang_cpp) &&
+				(st->declaration == DECL_CLASS || st->declaration == DECL_STRUCT)) ||
+		    isLanguage (Lang_csharp) || isLanguage (Lang_vala))  &&
 			inheritingDeclaration (st->declaration)) ||
 			isLanguage (Lang_d))
 		{
 			readParents (st, ':');
 		}
-		else if (parentDecl (st) == DECL_STRUCT)
+		else if (parentDecl (st) == DECL_STRUCT || parentDecl (st) == DECL_CLASS)
 		{
 			c = skipToOneOf (",;");
 			if (c == ',')
