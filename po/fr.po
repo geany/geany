@@ -222,7 +222,6 @@ msgstr "Cliquez pour définir l'étiquette de l'élément du menu"
 
 #: ../src/build.c:1904
 #: ../src/build.c:1906
-#, fuzzy, c-format
 msgid "%s Commands"
 msgstr "Commandes pour %s"
 
@@ -240,7 +239,6 @@ msgid "Non-Filetype Commands"
 msgstr "Commandes sans type de fichier"
 
 #: ../src/build.c:1972
-#, fuzzy
 msgid "Note: Item 2 opens a dialog and appends the response to the command."
 msgstr "Note : le deuxième élément ouvre une boite de dialogue et ajoute la réponse à la commande."
 
@@ -796,7 +794,6 @@ msgid "Enter the amount of spaces which should be replaced by a tab character."
 msgstr "Entrer le nombre d'espaces à remplacer par une tabulation."
 
 #: ../src/editor.c:4577
-#, fuzzy, c-format
 msgid "Warning: non-standard hard tab width: %d != 8!"
 msgstr "Avertissement : largeur de tabulation non standard : %d != 8 !"
 
@@ -1071,7 +1068,6 @@ msgid "Could not find file '%s'."
 msgstr "Impossible de trouver le fichier '%s'."
 
 #: ../src/highlighting.c:3398
-#, fuzzy
 msgid "_Color Schemes"
 msgstr "Jeux de _couleurs"
 
@@ -3078,7 +3074,6 @@ msgid "Zoom Out"
 msgstr "Zoom arrière"
 
 #: ../src/keybindings.c:473
-#, fuzzy
 msgid "Zoom Reset"
 msgstr "Zoom normal"
 
@@ -3418,7 +3413,6 @@ msgid "_Hide Message Window"
 msgstr "Cac_her la fenêtre de message"
 
 #: ../src/msgwindow.c:619
-#, fuzzy, c-format
 msgid "Could not find file '%s' - trying the current document path."
 msgstr "Impossible de trouver le fichier '%s' - essayez le chemin du document courant."
 
@@ -3498,7 +3492,6 @@ msgid "Shortcut"
 msgstr "Raccourci"
 
 #: ../src/prefs.c:1408
-#, fuzzy
 msgid "_Allow"
 msgstr "_Autoriser les deux"
 
@@ -3975,7 +3968,6 @@ msgstr "Mauvaise expression régulière : %s"
 
 #. TODO maybe this message needs a rewording
 #: ../src/socket.c:227
-#, fuzzy
 msgid ""
 "Geany tried to access the Unix Domain socket of another instance running as another user.\n"
 "This is a fatal error and Geany will now quit."
@@ -4872,12 +4864,10 @@ msgid "Create destructor"
 msgstr "Créer un destructeur"
 
 #: ../plugins/classbuilder.c:526
-#, fuzzy
 msgid "Is abstract"
 msgstr "abstraite"
 
 #: ../plugins/classbuilder.c:529
-#, fuzzy
 msgid "Is singleton"
 msgstr "singleton"
 
