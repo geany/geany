@@ -1,5 +1,5 @@
 # Japanese translations for geany package.
-# Copyright (C) 2006-2009 THE geany'S COPYRIGHT HOLDER
+# Copyright (C) 2006-2010 THE geany'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the geany package.
 # Tarot Osuji <tarot@sdf.lonestar.org>, 2008.
 # Chikahiro Masami <cmasa.z321@gmail.com>, 2008-2010.
@@ -158,7 +158,7 @@ msgstr "カスタムテキスト"
 
 #: ../src/build.c:1253
 msgid "Enter custom text here, all entered text is appended to the command."
-msgstr "ここにカスタムテキストを入力してください。すべての入力されたテキストはコマンドに追加されます。"
+msgstr "ここにカスタムテキストを入力してください。入力されたテキストはコマンドに追加されます。"
 
 #: ../src/build.c:1331
 msgid "_Next Error"
@@ -244,7 +244,7 @@ msgstr "ファイル種類なしの時のコマンド"
 
 #: ../src/build.c:1972
 msgid "Note: Item 2 opens a dialog and appends the response to the command."
-msgstr "注意: 項目 2 はダイアログを開き、コマンドの応答を追加します"
+msgstr "注意: 項目 2 はダイアログを表示し、結果をコマンドに渡します"
 
 #: ../src/build.c:1981
 msgid "Execute Commands"
