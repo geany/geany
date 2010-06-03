@@ -3,13 +3,13 @@
 # Copyright (C) 2009 THE Geany's COPYRIGHT HOLDER
 # This file is distributed under the same license as the Geany package.
 #
-# Jože Klepec <joze.klepec@siol.net>, 2009-2010
+# Jože Klepec <joze.klepec@siol.net>, 2009.
 msgid ""
 msgstr ""
 "Project-Id-Version: geany 0.19\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-06-03 10:36+0200\n"
-"PO-Revision-Date: 2010-06-03 12:28+0100\n"
+"PO-Revision-Date: 2010-06-03 15:33+0100\n"
 "Last-Translator: Jože Klepec <joze.klepec@siol.net>\n"
 "Language-Team: Slovenian <>\n"
 "MIME-Version: 1.0\n"
@@ -226,7 +226,7 @@ msgstr "Počisti"
 
 #: ../src/build.c:1833
 msgid "Click to set menu item label"
-msgstr "Kliknite za nastavitev menijske oznake izbire"
+msgstr "Kliknite za nastavitev oznako menijske izbire"
 
 # in-dialog heading for the "Set Includes and Arguments" dialog
 #: ../src/build.c:1906
@@ -267,7 +267,7 @@ msgstr "Nastavi ukaze za gradnjo"
 
 #: ../src/build.c:2401
 msgid "_Compile"
-msgstr "Prevedi"
+msgstr "_Prevedi"
 
 # zgradi izvorno kodo
 #. build the code
@@ -1918,9 +1918,8 @@ msgid "Next to current"
 msgstr "Sledi trenutnemu/trenutni"
 
 #: ../src/interface.c:3169
-#, fuzzy
 msgid "Whether to place file tabs next to the current tab rather than at the edges of the notebook"
-msgstr "Whether to place file tabs next to the current tab rather than at the edges of the notebook"
+msgstr "Postavi datotečne zavihkov rajši poleg trenutnega zavihka kot pa robno"
 
 #: ../src/interface.c:3171
 msgid "Double-clicking hides all additional widgets"
@@ -2753,9 +2752,8 @@ msgid "Project Properties"
 msgstr "Lastnosti projekta"
 
 #: ../src/interface.c:5295
-#, fuzzy
 msgid "Display:"
-msgstr "Prikaz"
+msgstr "Prikaži:"
 
 #: ../src/interface.c:5317
 msgid "Custom"
@@ -3313,7 +3311,7 @@ msgstr "Razhroščevalna sporočila"
 
 #: ../src/log.c:183
 msgid "Cl_ear"
-msgstr "Po_čisti"
+msgstr "Počis_ti"
 
 #: ../src/main.c:122
 msgid "Set initial column number for the first opened file (useful in conjunction with --line)"
@@ -3342,7 +3340,7 @@ msgstr "Ne odpri datotek v zagnanem izvodu, prisili odpiranje novega izvoda"
 
 #: ../src/main.c:129
 msgid "Use this socket filename for communication with a running Geany instance"
-msgstr "Uporabi ime datoteke  te vtičnicet za komuniciranje z zagnano instanco programa Geany"
+msgstr "Uporabi ime datoteke  te vtičnice za komuniciranje z zagnano instanco programa Geany"
 
 #: ../src/main.c:130
 msgid "Return a list of open documents in a running Geany instance"
@@ -3509,7 +3507,7 @@ msgstr "<b>Podrobnosti o vstavku:</b>"
 
 #: ../src/pluginutils.c:207
 msgid "Configure Plugins"
-msgstr "Nastavi vstavki"
+msgstr "Nastavi vstavke"
 
 #: ../src/prefs.c:165
 msgid "Grab Key"
@@ -4029,8 +4027,8 @@ msgid "Bad regex: %s"
 msgstr "Slab regularni izraz:: %s"
 
 # Probably correct wording of first sentence: Program Geany tried to access to the UNIX domain socket of another socket logged in as another user.
-# And probably proper wording of last sentence: This is a fatal error and Geany will now have to quit. 
-# As this is  SIGILL :), it caused nicely captured SIGSSERV or SIGTERM, whatever.  Nice done!
+# And probably proper wording of last sentence: This is a fatal error and Geany will now have to quit.
+# need reword - approved by Jože Klepec
 #. TODO maybe this message needs a rewording
 #: ../src/socket.c:227
 msgid ""
@@ -4919,10 +4917,10 @@ msgstr "Splošno"
 msgid "Base GType:"
 msgstr "Osnovni GType:"
 
+# lahko tudi: "Izvede:"
 #: ../plugins/classbuilder.c:498
-#, fuzzy
 msgid "Implements:"
-msgstr "Implements:"
+msgstr "Izvrši:"
 
 #: ../plugins/classbuilder.c:505
 msgid "Options"
