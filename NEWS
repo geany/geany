@@ -1,3 +1,52 @@
+Geany 0.19 (TBA)
+
+    General:
+    * Add new command line option --list-documents to return a list
+      of currently opened documents
+
+
+    Interface:
+    * Add option 'System Default' for toolbar icon style and size to use
+      the GTK default value.
+    * Allow '+<number' and '-<number>' as values for Goto Line inputs
+      to jump relative to the current line.
+    * Add preference to add new document tabs beside the current one
+      (patch by Colomban Wendling, thanks).
+
+    Editor:
+    * Add new special template wildcard "{command:...}" to use the output
+      of a shell command in templates.
+    * Update Scintilla to 2.11.
+    * Add preference and support for virtual spaces.
+
+    Filetypes:
+    * Improvements in symbol parsing of PHP and Python files.
+    * Add R tagmanager symbol parser (patch by Jon Senior).
+    * New filetype: Txt2Tags (patch by Eric Forgeot).
+    * New filetype: Abc (patch by Eric Forgeot).
+
+    Keybindings:
+    * Add keybindings to switch to the sidebar's Document and Symbol list as
+      well as to the Message Window's current tab (patch by Eugene Arshinov).
+    * Add 'Remove Markers' and 'Remove Error Indicators' keybindings.
+
+    Plugins:
+    * Classbuilder: Add support for creating PHP classes
+                    (patch by Ondrej Donek).
+
+    Windows:
+    * Support very long build commands.
+    * Add a preference for choosing between GTK and native File Open/Save
+      dialogs (only available on Windows).
+
+    API:
+    * Add new plugin signals: "document-before-save", "document-filetype-set",
+      "geany-startup-complete".
+    * Add PLUGIN_SET_TRANSLATABLE_INFO macro to the plugin API so plugins' meta
+      information can be translated already in the plugin manager dialog
+      (patch by Colomban Wendling).
+
+
 Geany 0.18.1 (February 14, 2010)
 
     Build fixes:
