@@ -986,7 +986,8 @@
 2010-01-28  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/plugindata.h:
-   Fix renaming sci_send_message(), sci_send_command() function pointers.
+   Fix renaming sci_send_message(), sci_send_command() function
+   pointers.
 
 
 2010-01-25  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
@@ -997,7 +998,8 @@
    plugins/pluginmacros.h, plugins/genapi.py, ChangeLog, wscript:
    Use full function name for GeanyFunctions function pointers. This
    avoids naming conflicts e.g. with C++'s 'new' keyword.
-   Remove deprecated header pluginmacros.h - use geanyfunctions.h instead.
+   Remove deprecated header pluginmacros.h - use geanyfunctions.h
+   instead.
 
 
 2010-01-24  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
@@ -1035,8 +1037,8 @@
  * doc/plugins.dox:
    Add gcc commands to build a plugin to the HowTo.
  * src/search.c, src/document.c, src/document.h:
-   Show 'Replaced X matches in Y documents' message when using Replace in
-   Session.
+   Show 'Replaced X matches in Y documents' message when using
+   Replace in Session.
 
 
 2010-01-17  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
@@ -1201,8 +1203,8 @@
  * src/msgwindow.c:
    Refactor msgwin_goto_compiler_file_line().
  * src/interface.c, src/keybindings.c, geany.glade:
-   Capitalize, add mnemonics, sync with kb.c the Edit->Commands menu item
-   labels.
+   Capitalize, add mnemonics, sync with kb.c the Edit->Commands menu
+   item labels.
  * src/search.c:
    Refactor/reformat on_replace_dialog_response().
 
@@ -1321,8 +1323,8 @@
    Make stylesets take a ft_id argument so they can be reused fully with
    custom filetypes, so custom styles and keywords can be set.
  * src/highlighting.c:
-   Fix setting filetype properties when both the system and the user file
-   have properties set.
+   Fix setting filetype properties when both the system and the user
+   file have properties set.
  * src/symbols.c, tagmanager/vhdl.c:
    Parse VHDL signals.
  * src/highlighting.c:
@@ -1425,7 +1427,8 @@
    Fix invalid tree iter access when using tv_iters.tag_other but not
    using tv_iters.tag_variable.
  * HACKING, tagmanager/perl.c:
-   Fix parsing Perl format statements ("other" type doesn't seem to work).
+   Fix parsing Perl format statements ("other" type doesn't seem
+   to work).
  * tagmanager/tm_tag.c, tagmanager/perl.c, HACKING:
    Fix using "other" tag type.
 
@@ -1568,10 +1571,11 @@
    Fix using tab to autocomplete in some other situations that word part
    completion doesn't apply in.
  * src/templates.c, src/interface.c, src/ui_utils.c, geany.glade:
-   Add Edit->Commands submenu which is shared with the editor popup menu.
+   Add Edit->Commands submenu which is shared with the editor popup
+   menu.
  * src/interface.c, src/keybindings.c, src/ui_utils.c, geany.glade:
-   Change editor popup Commands submenu to start as child of menubar Edit
-   menu, as this is more usual e.g. for keybindings initialization.
+   Change editor popup Commands submenu to start as child of menubar
+   Edit menu, as this is more usual e.g. for keybindings initialization.
  * src/interface.c, src/keybindings.c, src/tools.c, src/ui_utils.c,
    geany.glade:
    Share a single Format submenu for menubar Edit and popup menu.
@@ -1659,7 +1663,8 @@
    Include code for project filetype execute commands and fix bug in
    saving project filetypes list.
  * src/project.c, src/build.c, doc/geany.txt:
-   Make non-project execute configuration save to filetypes not geany.conf.
+   Make non-project execute configuration save to filetypes not
+   geany.conf.
    Fix closing of project failing to remove build commands dialog entry.
 
 
@@ -1721,7 +1726,8 @@
    reshown (this also stops the selection changing).
    Add SCI_AUTOCGETCURRENTTEXT message (will be sent upstream).
  * src/editor.c:
-   Improve CamelCase word part autocompletion for runs of capital letters.
+   Improve CamelCase word part autocompletion for runs of capital
+   letters.
  * src/editor.c:
    Don't complete snippets if there's a selection.
 
@@ -1782,8 +1788,8 @@
 
  * src/notebook.c, src/plugindata.h, src/plugins.c, src/ui_utils.c,
    src/ui_utils.h, plugins/geanyfunctions.h, plugins/splitwindow.c:
-   Make Split Window 'Show current document' button have a drop-down menu
-   to select the other documents.
+   Make Split Window 'Show current document' button have a drop-down
+   menu to select the other documents.
    Add new API function ui_menu_add_document_items().
 
 
@@ -1818,13 +1824,15 @@
 2009-10-12  Lex Trotman  <elextr(at)gmail(dot)com>
 
  * src/build.c:
-   Ensure that old style build config is not loaded if it does not exist.
+   Ensure that old style build config is not loaded if it does
+   not exist.
 
 
 2009-10-12  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * THANKS, src/about.c, po/LINGUAS, po/gl.po:
-   Added Galician translation. Thanks to José Manuel Castroagudín Silva.
+   Added Galician translation.
+   Thanks to José Manuel Castroagudín Silva.
 
 
 2009-10-11  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
@@ -1838,7 +1846,8 @@
 2009-10-04  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/highlighting.c:
-   Move new_styleset() and preprocessor setup code into styleset_c_like().
+   Move new_styleset() and preprocessor setup code into
+   styleset_c_like().
  * src/highlighting.c:
    Call apply_filetype_properties() from styleset_c_like().
 
@@ -1864,8 +1873,8 @@
  * src/highlighting.c:
    Use jscript_keyword for SCE_HB[A]_WORD markup styles.
  * src/templates.c:
-   Group 'New with template' items by filetype submenu (currently only for
-   toolbar menu).
+   Group 'New with template' items by filetype submenu (currently only
+   for toolbar menu).
    Show custom file template items before filetype template items.
  * src/templates.c, src/interface.c, src/geanymenubuttonaction.c,
    geany.glade:
@@ -1887,8 +1896,8 @@
  * src/highlighting.c, data/filetypes.vala:
    Add Vala keywords to conf file.
  * src/templates.c, doc/geany.txt, doc/geany.html:
-   Read custom file templates from $prefix/share/geany/templates/files as
-   well as user dir.
+   Read custom file templates from $prefix/share/geany/templates/files
+   as well as user dir.
  * src/templates.c, data/templates, data/templates/files,
    data/templates/files/file.rb, data/templates/files/file.html,
    data/templates/files/main.java, data/templates/files/main.c,
@@ -2174,7 +2183,7 @@
 
 2009-09-11  Lex Trotman  <elextr(at)gmail(dot)com>
 
- * src/build.c
+ * src/build.c:
    Fix erroneous free of returned string in prepare_run_script.
 
 
@@ -2256,10 +2265,10 @@
 
 2009-09-03  Lex Trotman  <elextr(at)gmail(dot)com>
 
- * src/build.c, src/filetypes.h, src/filetypes.c
+ * src/build.c, src/filetypes.h, src/filetypes.c:
    Only write filetype config files when build command or regex is
    actually changed.  Removed commented code in src/filetypes.c.
- * src/build.c
+ * src/build.c:
    Ensure uses of filename are protected against nulls when running
    a build command and give status message if not.
 
@@ -2323,12 +2332,12 @@
 
 2009-08-27  Lex Trotman  <elextr(at)gmail(dot)com>
 
- * src/build.c
+ * src/build.c:
    Fix implementation of loading old project files with base
    directories. Use project_make_base_path instead of re-
    implementing.  Now depends on project.c reading base dir
    prior to calling load_build_menu.
- * src/build.c
+ * src/build.c:
    Change usage of project base directory to conform with
    previous documented behavior when loading old project files.
  * src/build.c:
@@ -2393,13 +2402,13 @@
 2009-07-30  Lex Trotman  <elextr(at)gmail(dot)com>
 
  * src/build.h, src/build.c, src/keybindings.c, src/filetypes.c
-   src/keyfile.c, src/project.c
+   src/keyfile.c, src/project.c:
    Changed names of symbols visible in build API to GEANY_xxx.
 
 
 2009-07-29  Lex Trotman  <elextr(at)gmail(dot)com>
 
- * src/project.h, src/project.c, src/build.c
+ * src/project.h, src/project.c, src/build.c:
    Remove make_in_base_dir and run_cmd fields from project structure.
    Replaced by build functionality.  Remove incorrect use in src/build.c
    build_run_cmd function.
@@ -2407,14 +2416,15 @@
 
 2009-07-28  Lex Trotman  <elextr(at)gmail(dot)com>
 
- * src/project.h, src/project.c
+ * src/project.h, src/project.c:
    Removed unused project_get_make_dir function, this is now per
    command.
 
 
 2009-07-28  Lex Trotman  <elextr(at)gmail(dot)com>
 
- * src/build.c, src/build.h, src/project.c, src/keyfile.c, src/filetypes.c
+ * src/build.c, src/build.h, src/project.c, src/keyfile.c,
+   src/filetypes.c:
    Fix some more warnings.
    Fix commented out execute/stop toolbar code in build.c.
    Add extra plugins documentation for GBO_TO_CMD and GBO_TO_GBG macros.
@@ -2429,54 +2439,54 @@
 
 2009-07-25  Lex Trotman  <elextr(at)gmail(dot)com>
 
- * src/build.c
-   Fixed leaks and crashes due to inconsistent use of static vs dynamic strings
-   when reading old format configuration & project files.
- * src/build.c, src/project.c
+ * src/build.c:
+   Fixed leaks and crashes due to inconsistent use of static vs dynamic
+   strings when reading old format configuration & project files.
+ * src/build.c, src/project.c:
    Fixed GLib array assertion warnings when no project filetypes are
    available to be saved.
 
 2009-07-24  Lex Trotman  <elextr(at)gmail(dot)com>
 
- * src/build.c
+ * src/build.c:
    Fix build warnings.
 
 
 2009-07-22  Lex Trotman  <elextr(at)gmail(dot)com>
 
- * src/build.h, src/build.c, src/project.c
+ * src/build.h, src/build.c, src/project.c:
    Created and documented plugins interface to build menu.
    Factored out new get_cmd_group function.
-   Changed name of remove_command function to be consistent with the rest
-   of the interface & changed calls in project.c.
- * src/Makefile.am, wscript
+   Changed name of remove_command function to be consistent with the
+   rest of the interface & changed calls in project.c.
+ * src/Makefile.am, wscript:
    Added build.h to installed files lists.
 
 2009-07-20  Lex Trotman  <elextr(at)gmail(dot)com>
 
- * doc/geany.txt
+ * doc/geany.txt:
    Updated manual to match build-menu capability.
 
 
 2009-07-19  Lex Trotman  <elextr(at)gmail(dot)com>
 
- * src/build.c, src/build.h
+ * src/build.c, src/build.h:
    Added set_build_non_ft_wd_to_proj() for use by project dialog.
    Improved interpretation of run_in_base_dir from old [build-settings]
    Added spacing to build commands dialog
- * src/project.c
-   Removed run in base path option from project dialog and added button to
-   set working directories to d the same.
+ * src/project.c:
+   Removed run in base path option from project dialog and added button
+   to set working directories to d the same.
 
 
 2009-07-18  Lex Trotman  <elextr(at)gmail(dot)com>
 
- * src/build.c
+ * src/build.c:
    Re-incorporated toolbar changes in trunk accidently excluded in merge
 
 2009-07-17  Lex Trotman  <elextr(at)gmail(dot)com>
 
- * src/build.c
+ * src/build.c:
    Fixed substitute %f etc in commands
    Fixed potential leak in build_replace_placeholder
    Fixed leak in prepare_run_script (Thanks for patch Thomas)
@@ -2484,44 +2494,44 @@
 
 2009-07-17  Lex Trotman  <elextr(at)gmail(dot)com>
 
- * src/build.c, src/build.h, src/filetypes.h, src/filetypes.c
+ * src/build.c, src/build.h, src/filetypes.h, src/filetypes.c:
    Fixed crash and lots of warnings, deleted some commented out code.
- * geany.glade, src/keyfile.c, src/prefs.c, src/prefs.h, src/project.c
+ * geany.glade, src/keyfile.c, src/prefs.c, src/prefs.h, src/project.c:
    Removed make command from preferences and associated code
 
 2009-07-16  Lex Trotman  <elextr(at)gmail(dot)com>
 
- * src/build.c, src/build.h
+ * src/build.c, src/build.h:
    Incorporated patch for working directory field (thanks Thomas)
    Removed run_in_base_dir option and associated code that it replaces
    Improved handling of old config files and mapping to new ones.
 
 2009-07-15  Lex Trotman  <elextr(at)gmail(dot)com>
 
- * src/build.h, src/build.c
+ * src/build.h, src/build.c:
    Changed to itterate over entries in build commands dialog to allow
    additional fields to be added
    Implement support for multiple run commands
- * data/filetypes.latex
+ * data/filetypes.latex:
    Implement configured commands and labels for latex.
 
 
 2009-07-14  Lex Trotman  <elextr(at)gmail(dot)com>
 
- * src/build.h, src/build.c
-   added dialog support for error regular expressions from multiple sources
-   and storing and loading them
-   fixed some typos and memory leaks
- * src/filetypes.c, src/filetypes.h, project.c
+ * src/build.h, src/build.c:
+   added dialog support for error regular expressions from multiple
+   sources and storing and loading them fixed some typos and memory
+   leaks
+ * src/filetypes.c, src/filetypes.h, project.c:
    added support for using error regexes from multiple sources
 
 
 2009-07-11  Lex Trotman  <elextr(at)gmail(dot)com>
 
  * src/filetypes.h, src/filetypes.c, src/build.c, src/build.h,
-   src/project.c
+   src/project.c:
    Removal of build menu item source made redundant by the following fix
- * src/build.c
+ * src/build.c:
    Corrected priority oreder and loading of filetype dependent build
    menu items saved in the project file.  Added print routine for
    debugging command sources and priorities set compile symbol
@@ -2529,11 +2539,11 @@
 
 2009-07-10  Lex Trotman  <elextr(at)gmail(dot)com>
 
- * src/build.c
-   fixed problem loading old format filetype files, some formatting fixes
-   fixed saving new format files
+ * src/build.c:
+   fixed problem loading old format filetype files, some formatting
+   fixes fixed saving new format files
    added operation for clear button on build commands dialog
- * src/filetypes.c
+ * src/filetypes.c:
    fixed loading and saving filetype files
 
 
