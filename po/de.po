@@ -179,7 +179,7 @@ msgstr "_Vorheriger Fehler"
 
 #: ../src/build.c:1343
 msgid "_Set Build Commands"
-msgstr "Befehle zum Übersetzen"
+msgstr "_Kommandos zum Erstellen konfigurieren"
 
 #: ../src/build.c:1623 ../src/toolbar.c:373
 msgid "Build the current file"
@@ -272,7 +272,7 @@ msgstr ""
 
 #: ../src/build.c:2177
 msgid "Set Build Commands"
-msgstr "Befehle zum Übersetzen"
+msgstr "Kommandos zum Erstellen konfigurieren"
 
 #: ../src/build.c:2399
 msgid "_Compile"
