@@ -8,6 +8,9 @@
    (patch by Daniel Marjamaki, thanks).
  * doc/images/*.png:
    Update images for Geany0.19.
+ * src/sidebar.c:
+   Destroy the default symbol list treeview only once
+   (fixes gtk_widget_destroy warning on exit).
 
 
 2010-05-30  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

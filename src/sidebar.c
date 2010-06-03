@@ -978,7 +978,10 @@ void sidebar_finalize(void)
 	if (WIDGET(tv.default_tag_tree))
 	{
 		g_object_unref(tv.default_tag_tree);
-		gtk_widget_destroy(tv.default_tag_tree);
+		/* This is not exactly clean, default_tag_tree's ref_count is 2 when it is shown,
+		 * 1 oherwise. We should probably handle the ref_count more accurate. */
+		if (WIDGET(tv.default_tag_tree))
+			gtk_widget_destroy(tv.default_tag_tree);
 	}
 	if (WIDGET(tv.popup_taglist))
 		gtk_widget_destroy(tv.popup_taglist);
