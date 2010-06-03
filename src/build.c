@@ -155,7 +155,7 @@ static gchar *id_to_str(GeanyBuildCommand *bc, gint id)
 
 static gchar *buildcmd_label(GeanyBuildCommand *bc)
 {
-	return id_to_str(bc, GEANY_BC_LABEL);
+	return _(id_to_str(bc, GEANY_BC_LABEL));
 }
 
 
