@@ -6,6 +6,8 @@
  * tagmanager/tm_workspace.c:
    Fix not closed FILE pointer on early exit
    (patch by Daniel Marjamaki, thanks).
+ * doc/images/*.png:
+   Update images for Geany0.19.
 
 
 2010-05-30  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
