@@ -3,7 +3,7 @@ Geany 0.19 (TBA)
     General:
     * Add new command line option --list-documents to return a list
       of currently opened documents
-
+    * Remove deprecated --debug flag. Please use --verbose/-v instead.
 
     Interface:
     * Add option 'System Default' for toolbar icon style and size to use
@@ -18,6 +18,8 @@ Geany 0.19 (TBA)
       of a shell command in templates.
     * Update Scintilla to 2.11.
     * Add preference and support for virtual spaces.
+    * Remove editor_auto_latex() from Geany core and move it to geanyLaTeX
+      plugin.
 
     Filetypes:
     * Improvements in symbol parsing of PHP and Python files.
@@ -33,6 +35,9 @@ Geany 0.19 (TBA)
     Plugins:
     * Classbuilder: Add support for creating PHP classes
                     (patch by Ondrej Donek).
+    * HTMLchars: Make plugin remember whether replacement of special
+                 characters was activated even after restart of Geany or
+                 reloading of plugin.
 
     Windows:
     * Support very long build commands.
@@ -45,6 +50,14 @@ Geany 0.19 (TBA)
     * Add PLUGIN_SET_TRANSLATABLE_INFO macro to the plugin API so plugins' meta
       information can be translated already in the plugin manager dialog
       (patch by Colomban Wendling).
+    * Add editor_insert_text_block()
+
+
+    Internationalisation:
+    * Added translations: ast
+    * Updated translations: de, en_GB, es, fr, gl, ja, nl, pt, ru, sl, sv,
+                            tr, vi, zh_CN
+
 
 
 Geany 0.18.1 (February 14, 2010)
