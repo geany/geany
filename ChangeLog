@@ -3,6 +3,9 @@
  * src/build.c:
    Explicitly try to localise build menu item labels with
    gettext to enforce getting default labels translated.
+ * tagmanager/tm_workspace.c:
+   Fix not closed FILE pointer on early exit
+   (patch by Daniel Marjamaki, thanks).
 
 
 2010-05-30  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

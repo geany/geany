@@ -147,14 +147,17 @@ gboolean tm_workspace_load_global_tags(const char *tags_file, gint mode)
 	TMTag *tag;
 	gboolean format_pipe = FALSE;
 
-	if (NULL == (fp = g_fopen(tags_file, "r")))
-		return FALSE;
 	if (NULL == theWorkspace)
+		return FALSE;
+	if (NULL == (fp = g_fopen(tags_file, "r")))
 		return FALSE;
 	if (NULL == theWorkspace->global_tags)
 		theWorkspace->global_tags = g_ptr_array_new();
 	if ((NULL == fgets((gchar*) buf, BUFSIZ, fp)) || ('\0' == *buf))
+	{
+		fclose(fp);
 		return FALSE; /* early out on error */
+	}
 	else
 	{	/* We read the first line for the format specification. */
 		if (buf[0] == '#' && strstr((gchar*) buf, "format=pipe") != NULL)
