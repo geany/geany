@@ -1,3 +1,10 @@
+2010-06-04  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * doc/geany.txt, doc/geany.html:
+   Build section: minor rewording, formatting fixes; some sentences
+   moved.
+
+
 2010-06-03  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/build.c:
