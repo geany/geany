@@ -8,7 +8,7 @@ Geany 0.19 (TBA)
     Interface:
     * Add option 'System Default' for toolbar icon style and size to use
       the GTK default value.
-    * Allow '+<number' and '-<number>' as values for Goto Line inputs
+    * Allow '+<number>' and '-<number>' as values for Goto Line inputs
       to jump relative to the current line.
     * Add preference to add new document tabs beside the current one
       (patch by Colomban Wendling, thanks).
@@ -18,8 +18,8 @@ Geany 0.19 (TBA)
       of a shell command in templates.
     * Update Scintilla to 2.11.
     * Add preference and support for virtual spaces.
-    * Remove editor_auto_latex() from Geany core and move it to geanyLaTeX
-      plugin.
+    * Remove LaTeX autocompletion from Geany's core and move it to the
+      geanyLaTeX plugin.
 
     Filetypes:
     * Improvements in symbol parsing of PHP and Python files.
@@ -50,14 +50,12 @@ Geany 0.19 (TBA)
     * Add PLUGIN_SET_TRANSLATABLE_INFO macro to the plugin API so plugins' meta
       information can be translated already in the plugin manager dialog
       (patch by Colomban Wendling).
-    * Add editor_insert_text_block()
-
+    * Add editor_insert_text_block().
 
     Internationalisation:
     * Added translations: ast
     * Updated translations: de, en_GB, es, fr, gl, ja, nl, pt, ru, sl, sv,
                             tr, vi, zh_CN
-
 
 
 Geany 0.18.1 (February 14, 2010)
