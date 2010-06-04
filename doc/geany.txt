@@ -1673,7 +1673,7 @@ Suppress status messages in the status bar
 
 Use Windows File Open/Save dialogs
     Defines whether to use the native Windows File Open/Save dialogs or
-    whether to use the GTK default dialogs
+    whether to use the GTK default dialogs.
 
 Auto-focus widgets (focus follows mouse)
     Give the focus automatically to widgets below the mouse cursor.
@@ -1766,7 +1766,7 @@ Placement of new file tabs
 
 Next to current
     Whether to place file tabs next to the current tab
-    rather than at the edges of the notebook
+    rather than at the edges of the notebook.
 
 Double-clicking hides all additional widgets
     Whether to call the View->Toggle All Additional Widgets command
