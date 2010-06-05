@@ -1,6 +1,10 @@
 Geany 0.19 (TBA)
 
     General:
+    * Build system reworked to be much more configurable (by Lex Trotman).
+    * Use POSIX system/GNU regex engine for find & replace. This alters
+      regex syntax - we now support '?' operator and match newlines.
+    * Support adding custom filetype files.
     * Add new command line option --list-documents to return a list
       of currently opened documents
     * Remove deprecated --debug flag. Please use --verbose/-v instead.
@@ -11,51 +15,113 @@ Geany 0.19 (TBA)
     * Allow '+<number>' and '-<number>' as values for Goto Line inputs
       to jump relative to the current line.
     * Add preference to add new document tabs beside the current one
-      (patch by Colomban Wendling, thanks).
+      (patch by Colomban Wendling).
+    * Enable type-ahead find for sidebar symbols and documents tabs
+      (patch by Thomas Martitz).
+    * Make Ctrl-click on any notebook tab switch to the last used
+      document.
+    * Add Edit->Commands menu.
+    * Add 'Edit->Plugin Preferences' menu item and keybinding.
+    * Add 'View->Editor->Color Schemes' menu (only shown if color
+      scheme files exist).
+
+    Prefs:
+    * Hide 'Tabs and Spaces: Hard tab width' preference - it should
+      always be 8. (Hidden setting kept in case users have modified it).
+    * Add sidebar position interface pref.
+    * Add project long line marker customisation (patch from Eugene
+      Arshinov).
 
     Editor:
-    * Add new special template wildcard "{command:...}" to use the output
-      of a shell command in templates.
     * Update Scintilla to 2.11.
     * Add preference and support for virtual spaces.
+    * Add word part autocompletion for the current selected item when
+      pressing keybinding (default Tab) - Enter still completes normally.
     * Remove LaTeX autocompletion from Geany's core and move it to the
       geanyLaTeX plugin.
 
     Filetypes:
-    * Improvements in symbol parsing of PHP and Python files.
-    * Add R tagmanager symbol parser (patch by Jon Senior).
     * New filetype: Txt2Tags (patch by Eric Forgeot).
     * New filetype: Abc (patch by Eric Forgeot).
+    * New filetype: Verilog (patch from Kelvin Gardiner).
+    * New custom filetype: Genie.
+    * Improvements in symbol parsing of PHP and Python files.
+    * Add R tagmanager symbol parser (patch by Jon Senior).
+    * Update Perl tag parser from ctags - removes support for
+      buggy local/my/our but parses constant/format/labels.
+    * Parse more VHDL tags (patch from Kelvin Gardiner).
+    * Highlight D & Java types from a global tags file.
+    * Parse Python lambda functions (patch from Colomban Wendling).
 
     Keybindings:
     * Add keybindings to switch to the sidebar's Document and Symbol list as
       well as to the Message Window's current tab (patch by Eugene Arshinov).
     * Add 'Remove Markers' and 'Remove Error Indicators' keybindings.
+    * Make 'Reflow block/lines(s)' keybinding use line breaking column when
+      enabled (patch by Lex Trotman).
+    * Add 'Select to previous/next word part' keybindings.
+    * Add 'Switch to Messages' focus keybinding.
+    * Add 'Move line(s) up/down' keybindings.
+    * Make Switch to Editor keybinding reshow the document statistics line.
+
+    Templates:
+    * Move filetype template defaults into custom file template files.
+    * Read custom file templates from system as well as user dir.
+    * Add new special template wildcard "{command:...}" to use the output
+      of a shell command in templates.
+    * Support {ob}, {cb} and {pc} to escape wildcard strings with {, }, %
+      for snippets, fileheader and file templates.
+    * Add {project}, {description} template wildcards (#2954737).
+    * Reload templates when saving a document in the templates config dir.
+
+    Configuration files:
+    * Support more filetypes.common folding icon styles: arrows, +/- and no
+      lines (#2935059).
+    * Support Scintilla lexer properties in [lexer_properties] filetypes.*
+      group.
+    * Add filetypes.xml asp.default.language property (Ross McKay).
 
     Plugins:
     * Classbuilder: Add support for creating PHP classes
                     (patch by Ondrej Donek).
     * HTMLchars: Make plugin remember whether replacement of special
-                 characters was activated even after restart of Geany or
-                 reloading of plugin.
+                 characters was activated.
 
     Windows:
     * Support very long build commands.
     * Add a preference for choosing between GTK and native File Open/Save
       dialogs (only available on Windows).
 
+    Internationalisation:
+    * Added translations: ast.
+    * Updated translations: de, en_GB, es, fr, gl, ja, nl, pt, ru, sl, sv,
+                            tr, vi, zh_CN.
+
     API:
+    * Improve documentation contents page.
+    * Add Stash mini-library setting, pref & widget functions to API.
+    * Add plugin_configure_single() plugin symbol which is easier to
+      implement than plugin_configure().
     * Add new plugin signals: "document-before-save", "document-filetype-set",
       "geany-startup-complete".
     * Add PLUGIN_SET_TRANSLATABLE_INFO macro to the plugin API so plugins' meta
       information can be translated already in the plugin manager dialog
       (patch by Colomban Wendling).
-    * Add editor_insert_text_block().
-
-    Internationalisation:
-    * Added translations: ast
-    * Updated translations: de, en_GB, es, fr, gl, ja, nl, pt, ru, sl, sv,
-                            tr, vi, zh_CN
+    * Use full function name for GeanyFunctions function pointers. This
+      avoids naming conflicts e.g. with C++'s 'new' keyword.
+    * GeanyKeyBinding label fields can now contain underscores, which won't
+      be displayed by Geany. This saves adding near-duplicate translation
+      strings.
+    * Add GeanyKeyGroup callback support.
+    * Add more Scintilla function wrappers, foreach_dir(), foreach_str(),
+      utils_get_file_list_full(), document_get_notebook_page(),
+      editor_insert_text_block().
+    * Don't install unnecessary headers.
+    * Remove deprecated header pluginmacros.h - use geanyfunctions.h
+      instead.
+    * Deprecate documents_foreach(), use foreach_document() instead.
+    * Deprecate PLUGIN_KEY_GROUP() macro - use plugin_set_key_group()
+      instead.
 
 
 Geany 0.18.1 (February 14, 2010)
