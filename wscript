@@ -87,7 +87,7 @@ scintilla_sources = [
 	'scintilla/KeyWords.cxx',
 	'scintilla/LexAda.cxx', 'scintilla/LexAsm.cxx', 'scintilla/LexBash.cxx',
 	'scintilla/LexBasic.cxx', 'scintilla/LexCaml.cxx', 'scintilla/LexCmake.cxx', 'scintilla/LexCPP.cxx',
-	'scintilla/LexCrontab.cxx', 'scintilla/LexCSS.cxx', 'scintilla/LexD.cxx',
+	'scintilla/LexCSS.cxx', 'scintilla/LexD.cxx',
 	'scintilla/LexFortran.cxx', 'scintilla/LexHaskell.cxx', 'scintilla/LexHTML.cxx',
 	'scintilla/LexLua.cxx', 'scintilla/LexMarkdown.cxx', 'scintilla/LexMatlab.cxx',
 	'scintilla/LexNsis.cxx', 'scintilla/LexOthers.cxx',

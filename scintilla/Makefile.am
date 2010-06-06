@@ -13,7 +13,6 @@ LexBash.cxx \
 LexCPP.cxx \
 LexCaml.cxx \
 LexCmake.cxx \
-LexCrontab.cxx \
 LexCSS.cxx \
 LexD.cxx \
 LexFortran.cxx \
