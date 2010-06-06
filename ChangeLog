@@ -8,6 +8,8 @@
  * src/symbols.c:
    Fix crash when trying to sort NULL pointers as tags in the Symbols
    list (closes #3011986).
+ * NEWS, scintilla/*, scintilla/include/*, src/plugindata.h:
+   Update Scintilla to version 2.12.
 
 
 2010-06-04  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

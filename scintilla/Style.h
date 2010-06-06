@@ -54,7 +54,7 @@ public:
 	void ClearTo(const Style &source);
 	bool EquivalentFontTo(const Style *other) const;
 	void Realise(Surface &surface, int zoomLevel, Style *defaultStyle = 0, int extraFontFlag = 0);
-	bool IsProtected() const { return !(changeable && visible);};
+	bool IsProtected() const { return !(changeable && visible);}
 };
 
 #ifdef SCI_NAMESPACE

@@ -46,6 +46,26 @@ public:
 };
 
 /**
+ * When platform has a way to generate an event before painting,
+ * accumulate needed styling range in StyleNeeded to avoid unnecessary work.
+ */
+class StyleNeeded {
+public:
+	bool active;
+	Position upTo;
+
+	StyleNeeded() : active(false), upTo(0) {}
+	void Reset() {
+		active = false;
+		upTo = 0;
+	}
+	void NeedUpTo(Position pos) {
+		if (upTo < pos)
+			upTo = pos;
+	}
+};
+
+/**
  * Hold a piece of text selected for copying or dragging.
  * The text is expected to hold a terminating '\0' and this is counted in len.
  */
@@ -197,7 +217,8 @@ protected:	// ScintillaBase subclass needs access to much of Editor
 	enum { notPainting, painting, paintAbandoned } paintState;
 	PRectangle rcPaint;
 	bool paintingAllText;
-
+	StyleNeeded styleNeeded;
+	
 	int modEventMask;
 
 	SelectionText drag;
@@ -272,7 +293,7 @@ protected:	// ScintillaBase subclass needs access to much of Editor
 	bool AbandonPaint();
 	void RedrawRect(PRectangle rc);
 	void Redraw();
-	void RedrawSelMargin(int line=-1);
+	void RedrawSelMargin(int line=-1, bool allAfter=false);
 	PRectangle RectangleFromRange(int start, int end);
 	void InvalidateRange(int start, int end);
 
@@ -308,6 +329,14 @@ protected:	// ScintillaBase subclass needs access to much of Editor
 	void HorizontalScrollTo(int xPos);
 	void MoveCaretInsideView(bool ensureVisible=true);
 	int DisplayFromPosition(int pos);
+
+	struct XYScrollPosition {
+		int xOffset;
+		int topLine;
+		XYScrollPosition(int xOffset_, int topLine_) : xOffset(xOffset_), topLine(topLine_) {}
+	};
+	XYScrollPosition XYScrollToMakeVisible(const bool useMargin, const bool vert, const bool horiz);
+	void SetXYScroll(XYScrollPosition newXY);
 	void EnsureCaretVisible(bool useMargin=true, bool vert=true, bool horiz=true);
 	void ShowCaretAtCurrentPosition();
 	void DropCaret();
@@ -459,6 +488,11 @@ protected:	// ScintillaBase subclass needs access to much of Editor
 	virtual void SetMouseCapture(bool on) = 0;
 	virtual bool HaveMouseCapture() = 0;
 	void SetFocusState(bool focusState);
+
+	int PositionAfterArea(PRectangle rcArea);
+	void StyleToPositionInView(Position pos);
+	void IdleStyling();
+	virtual void QueueStyling(int upTo);
 
 	virtual bool PaintContains(PRectangle rc);
 	bool PaintContainsMargin();

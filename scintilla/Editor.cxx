@@ -623,7 +623,7 @@ void Editor::Redraw() {
 	//wMain.InvalidateAll();
 }
 
-void Editor::RedrawSelMargin(int line) {
+void Editor::RedrawSelMargin(int line, bool allAfter) {
 	if (!AbandonPaint()) {
 		if (vs.maskInLine) {
 			Redraw();
@@ -634,7 +634,8 @@ void Editor::RedrawSelMargin(int line) {
 				int position = pdoc->LineStart(line);
 				PRectangle rcLine = RectangleFromRange(position, position);
 				rcSelMargin.top = rcLine.top;
-				rcSelMargin.bottom = rcLine.bottom;
+				if (!allAfter)
+					rcSelMargin.bottom = rcLine.bottom;
 			}
 			wMain.InvalidateRectangle(rcSelMargin);
 		}
@@ -849,6 +850,9 @@ SelectionPosition Editor::MovePositionOutsideChar(SelectionPosition pos, int mov
 }
 
 int Editor::MovePositionTo(SelectionPosition newPos, Selection::selTypes selt, bool ensureVisible) {
+	bool simpleCaret = (sel.Count() == 1) && sel.Empty();
+	SelectionPosition spCaret = sel.Last();
+
 	int delta = newPos.Position() - sel.MainCaret();
 	newPos = ClampPositionIntoDocument(newPos);
 	newPos = MovePositionOutsideChar(newPos, delta);
@@ -874,7 +878,14 @@ int Editor::MovePositionTo(SelectionPosition newPos, Selection::selTypes selt, b
 	}
 	ShowCaretAtCurrentPosition();
 	if (ensureVisible) {
-		EnsureCaretVisible();
+		XYScrollPosition newXY = XYScrollToMakeVisible(true, true, true);
+		if (simpleCaret && (newXY.xOffset == xOffset)) {
+			// simple vertical scroll then invalidate
+			ScrollTo(newXY.topLine);
+			InvalidateSelection(SelectionRange(spCaret), true);
+		} else {
+			SetXYScroll(newXY);
+		}
 	}
 	return 0;
 }
@@ -925,9 +936,11 @@ void Editor::ScrollTo(int line, bool moveThumb) {
 		// Try to optimise small scrolls
 		int linesToMove = topLine - topLineNew;
 		SetTopLine(topLineNew);
-		ShowCaretAtCurrentPosition();
-		// Perform redraw rather than scroll if many lines would be redrawn anyway.
+		// Optimize by styling the view as this will invalidate any needed area
+		// which could abort the initial paint if discovered later.
+		StyleToPositionInView(PositionAfterArea(GetClientRectangle()));
 #ifndef UNDER_CE
+		// Perform redraw rather than scroll if many lines would be redrawn anyway.
 		if ((abs(linesToMove) <= 10) && (paintState == notPainting)) {
 			ScrollText(linesToMove);
 		} else {
@@ -1037,29 +1050,24 @@ slop | strict | jumps | even | Caret can go to the margin                 | When
   1  |   1    |   0   |   1  | No, kept out of UZ                         | moved by one position
   1  |   1    |   1   |   1  | No, kept out of UZ                         | moved to put caret at 3UZ of the margin
 */
-void Editor::EnsureCaretVisible(bool useMargin, bool vert, bool horiz) {
-	//Platform::DebugPrintf("EnsureCaretVisible %d %s\n", xOffset, useMargin ? " margin" : " ");
+
+Editor::XYScrollPosition Editor::XYScrollToMakeVisible(const bool useMargin, const bool vert, const bool horiz) {
 	PRectangle rcClient = GetTextRectangle();
-	//int rcClientFullWidth = rcClient.Width();
-	SelectionPosition posCaret = sel.RangeMain().caret;
-	if (posDrag.IsValid()) {
-		posCaret = posDrag;
-	}
-	Point pt = LocationFromPosition(posCaret);
-	Point ptBottomCaret = pt;
-	ptBottomCaret.y += vs.lineHeight - 1;
-	int lineCaret = DisplayFromPosition(posCaret.Position());
-	bool bSlop, bStrict, bJump, bEven;
+	const SelectionPosition posCaret = posDrag.IsValid() ? posDrag : sel.RangeMain().caret;
+	const Point pt = LocationFromPosition(posCaret);
+	const Point ptBottomCaret(pt.x, pt.y + vs.lineHeight - 1);
+	const int lineCaret = DisplayFromPosition(posCaret.Position());
+
+	XYScrollPosition newXY(xOffset, topLine);
 
 	// Vertical positioning
 	if (vert && (pt.y < rcClient.top || ptBottomCaret.y > rcClient.bottom || (caretYPolicy & CARET_STRICT) != 0)) {
-		int linesOnScreen = LinesOnScreen();
-		int halfScreen = Platform::Maximum(linesOnScreen - 1, 2) / 2;
-		int newTopLine = topLine;
-		bSlop = (caretYPolicy & CARET_SLOP) != 0;
-		bStrict = (caretYPolicy & CARET_STRICT) != 0;
-		bJump = (caretYPolicy & CARET_JUMPS) != 0;
-		bEven = (caretYPolicy & CARET_EVEN) != 0;
+		const int linesOnScreen = LinesOnScreen();
+		const int halfScreen = Platform::Maximum(linesOnScreen - 1, 2) / 2;
+		const bool bSlop = (caretYPolicy & CARET_SLOP) != 0;
+		const bool bStrict = (caretYPolicy & CARET_STRICT) != 0;
+		const bool bJump = (caretYPolicy & CARET_JUMPS) != 0;
+		const bool bEven = (caretYPolicy & CARET_EVEN) != 0;
 
 		// It should be possible to scroll the window to show the caret,
 		// but this fails to remove the caret on GTK+
@@ -1092,10 +1100,10 @@ void Editor::EnsureCaretVisible(bool useMargin, bool vert, bool horiz) {
 				}
 				if (lineCaret < topLine + yMarginT) {
 					// Caret goes too high
-					newTopLine = lineCaret - yMoveT;
+					newXY.topLine = lineCaret - yMoveT;
 				} else if (lineCaret > topLine + linesOnScreen - 1 - yMarginB) {
 					// Caret goes too low
-					newTopLine = lineCaret - linesOnScreen + 1 + yMoveB;
+					newXY.topLine = lineCaret - linesOnScreen + 1 + yMoveB;
 				}
 			} else {	// Not strict
 				yMoveT = bJump ? caretYSlop * 3 : caretYSlop;
@@ -1107,10 +1115,10 @@ void Editor::EnsureCaretVisible(bool useMargin, bool vert, bool horiz) {
 				}
 				if (lineCaret < topLine) {
 					// Caret goes too high
-					newTopLine = lineCaret - yMoveT;
+					newXY.topLine = lineCaret - yMoveT;
 				} else if (lineCaret > topLine + linesOnScreen - 1) {
 					// Caret goes too low
-					newTopLine = lineCaret - linesOnScreen + 1 + yMoveB;
+					newXY.topLine = lineCaret - linesOnScreen + 1 + yMoveB;
 				}
 			}
 		} else {	// No slop
@@ -1118,41 +1126,35 @@ void Editor::EnsureCaretVisible(bool useMargin, bool vert, bool horiz) {
 				// Minimal move
 				if (lineCaret < topLine) {
 					// Caret goes too high
-					newTopLine = lineCaret;
+					newXY.topLine = lineCaret;
 				} else if (lineCaret > topLine + linesOnScreen - 1) {
 					// Caret goes too low
 					if (bEven) {
-						newTopLine = lineCaret - linesOnScreen + 1;
+						newXY.topLine = lineCaret - linesOnScreen + 1;
 					} else {
-						newTopLine = lineCaret;
+						newXY.topLine = lineCaret;
 					}
 				}
 			} else {	// Strict or going out of display
 				if (bEven) {
 					// Always center caret
-					newTopLine = lineCaret - halfScreen;
+					newXY.topLine = lineCaret - halfScreen;
 				} else {
 					// Always put caret on top of display
-					newTopLine = lineCaret;
+					newXY.topLine = lineCaret;
 				}
 			}
 		}
-		newTopLine = Platform::Clamp(newTopLine, 0, MaxScrollPos());
-		if (newTopLine != topLine) {
-			Redraw();
-			SetTopLine(newTopLine);
-			SetVerticalScrollPos();
-		}
+		newXY.topLine = Platform::Clamp(newXY.topLine, 0, MaxScrollPos());
 	}
 
 	// Horizontal positioning
 	if (horiz && (wrapState == eWrapNone)) {
-		int halfScreen = Platform::Maximum(rcClient.Width() - 4, 4) / 2;
-		int xOffsetNew = xOffset;
-		bSlop = (caretXPolicy & CARET_SLOP) != 0;
-		bStrict = (caretXPolicy & CARET_STRICT) != 0;
-		bJump = (caretXPolicy & CARET_JUMPS) != 0;
-		bEven = (caretXPolicy & CARET_EVEN) != 0;
+		const int halfScreen = Platform::Maximum(rcClient.Width() - 4, 4) / 2;
+		const bool bSlop = (caretXPolicy & CARET_SLOP) != 0;
+		const bool bStrict = (caretXPolicy & CARET_STRICT) != 0;
+		const bool bJump = (caretXPolicy & CARET_JUMPS) != 0;
+		const bool bEven = (caretXPolicy & CARET_EVEN) != 0;
 
 		if (bSlop) {	// A margin is defined
 			int xMoveL, xMoveR;
@@ -1181,18 +1183,18 @@ void Editor::EnsureCaretVisible(bool useMargin, bool vert, bool horiz) {
 				if (pt.x < rcClient.left + xMarginL) {
 					// Caret is on the left of the display
 					if (bJump && bEven) {
-						xOffsetNew -= xMoveL;
+						newXY.xOffset -= xMoveL;
 					} else {
 						// Move just enough to allow to display the caret
-						xOffsetNew -= (rcClient.left + xMarginL) - pt.x;
+						newXY.xOffset -= (rcClient.left + xMarginL) - pt.x;
 					}
 				} else if (pt.x >= rcClient.right - xMarginR) {
 					// Caret is on the right of the display
 					if (bJump && bEven) {
-						xOffsetNew += xMoveR;
+						newXY.xOffset += xMoveR;
 					} else {
 						// Move just enough to allow to display the caret
-						xOffsetNew += pt.x - (rcClient.right - xMarginR) + 1;
+						newXY.xOffset += pt.x - (rcClient.right - xMarginR) + 1;
 					}
 				}
 			} else {	// Not strict
@@ -1205,10 +1207,10 @@ void Editor::EnsureCaretVisible(bool useMargin, bool vert, bool horiz) {
 				}
 				if (pt.x < rcClient.left) {
 					// Caret is on the left of the display
-					xOffsetNew -= xMoveL;
+					newXY.xOffset -= xMoveL;
 				} else if (pt.x >= rcClient.right) {
 					// Caret is on the right of the display
-					xOffsetNew += xMoveR;
+					newXY.xOffset += xMoveR;
 				}
 			}
 		} else {	// No slop
@@ -1217,54 +1219,69 @@ void Editor::EnsureCaretVisible(bool useMargin, bool vert, bool horiz) {
 				// Strict or going out of display
 				if (bEven) {
 					// Center caret
-					xOffsetNew += pt.x - rcClient.left - halfScreen;
+					newXY.xOffset += pt.x - rcClient.left - halfScreen;
 				} else {
 					// Put caret on right
-					xOffsetNew += pt.x - rcClient.right + 1;
+					newXY.xOffset += pt.x - rcClient.right + 1;
 				}
 			} else {
 				// Move just enough to allow to display the caret
 				if (pt.x < rcClient.left) {
 					// Caret is on the left of the display
 					if (bEven) {
-						xOffsetNew -= rcClient.left - pt.x;
+						newXY.xOffset -= rcClient.left - pt.x;
 					} else {
-						xOffsetNew += pt.x - rcClient.right + 1;
+						newXY.xOffset += pt.x - rcClient.right + 1;
 					}
 				} else if (pt.x >= rcClient.right) {
 					// Caret is on the right of the display
-					xOffsetNew += pt.x - rcClient.right + 1;
+					newXY.xOffset += pt.x - rcClient.right + 1;
 				}
 			}
 		}
 		// In case of a jump (find result) largely out of display, adjust the offset to display the caret
-		if (pt.x + xOffset < rcClient.left + xOffsetNew) {
-			xOffsetNew = pt.x + xOffset - rcClient.left;
-		} else if (pt.x + xOffset >= rcClient.right + xOffsetNew) {
-			xOffsetNew = pt.x + xOffset - rcClient.right + 1;
+		if (pt.x + xOffset < rcClient.left + newXY.xOffset) {
+			newXY.xOffset = pt.x + xOffset - rcClient.left;
+		} else if (pt.x + xOffset >= rcClient.right + newXY.xOffset) {
+			newXY.xOffset = pt.x + xOffset - rcClient.right + 1;
 			if (vs.caretStyle == CARETSTYLE_BLOCK) {
 				// Ensure we can see a good portion of the block caret
-				xOffsetNew += vs.aveCharWidth;
+				newXY.xOffset += vs.aveCharWidth;
 			}
 		}
-		if (xOffsetNew < 0) {
-			xOffsetNew = 0;
+		if (newXY.xOffset < 0) {
+			newXY.xOffset = 0;
 		}
-		if (xOffset != xOffsetNew) {
-			xOffset = xOffsetNew;
-			if (xOffsetNew > 0) {
+	}
+
+	return newXY;
+}
+
+void Editor::SetXYScroll(XYScrollPosition newXY) {
+	if ((newXY.topLine != topLine) || (newXY.xOffset != xOffset)) {
+		if (newXY.topLine != topLine) {
+			SetTopLine(newXY.topLine);
+			SetVerticalScrollPos();
+		}
+		if (newXY.xOffset != xOffset) {
+			xOffset = newXY.xOffset;
+			if (newXY.xOffset > 0) {
 				PRectangle rcText = GetTextRectangle();
 				if (horizontalScrollBarVisible &&
-				        rcText.Width() + xOffset > scrollWidth) {
+					rcText.Width() + xOffset > scrollWidth) {
 					scrollWidth = xOffset + rcText.Width();
 					SetScrollBars();
 				}
 			}
 			SetHorizontalScrollPos();
-			Redraw();
 		}
+		Redraw();
+		UpdateSystemCaret();
 	}
-	UpdateSystemCaret();
+}
+
+void Editor::EnsureCaretVisible(bool useMargin, bool vert, bool horiz) {
+	SetXYScroll(XYScrollToMakeVisible(useMargin, vert, horiz));
 }
 
 void Editor::ShowCaretAtCurrentPosition() {
@@ -1850,7 +1867,7 @@ bool BadUTF(const char *s, int len, int &trailBytes) {
 			return true;
 		if (GoodTrailByte(us[1]) && GoodTrailByte(us[2]) && GoodTrailByte(us[3])) {
 			if (*us == 0xf4) {
-				// Chcek if encoding a value beyond the last Unicode character 10FFFF
+				// Check if encoding a value beyond the last Unicode character 10FFFF
 				if (us[1] > 0x8f) {
 					return true;
 				} else if (us[1] == 0x8f) {
@@ -3229,6 +3246,8 @@ void Editor::Paint(Surface *surfaceWindow, PRectangle rcArea) {
 	//Platform::DebugPrintf("Paint:%1d (%3d,%3d) ... (%3d,%3d)\n",
 	//	paintingAllText, rcArea.left, rcArea.top, rcArea.right, rcArea.bottom);
 
+	StyleToPositionInView(PositionAfterArea(rcArea));
+
 	pixmapLine->Release();
 	RefreshStyleData();
 	RefreshPixMaps(surfaceWindow);
@@ -3241,13 +3260,6 @@ void Editor::Paint(Surface *surfaceWindow, PRectangle rcArea) {
 	pixmapLine->SetPalette(&palette, !hasFocus);
 
 	int screenLinePaintFirst = rcArea.top / vs.lineHeight;
-	// The area to be painted plus one extra line is styled.
-	// The extra line is to determine when a style change, such as starting a comment flows on to other lines.
-	int lineStyleLast = topLine + (rcArea.bottom - 1) / vs.lineHeight + 1;
-	//Platform::DebugPrintf("Paint lines = %d .. %d\n", topLine + screenLinePaintFirst, lineStyleLast);
-	int endPosPaint = pdoc->Length();
-	if (lineStyleLast < cs.LinesDisplayed())
-		endPosPaint = pdoc->LineStart(cs.DocFromDisplay(lineStyleLast) + 1);
 
 	int xStart = vs.fixedColumnWidth - xOffset;
 	int ypos = 0;
@@ -3255,8 +3267,6 @@ void Editor::Paint(Surface *surfaceWindow, PRectangle rcArea) {
 		ypos += screenLinePaintFirst * vs.lineHeight;
 	int yposScreen = screenLinePaintFirst * vs.lineHeight;
 
-	// Ensure we are styled as far as we are painting.
-	pdoc->EnsureStyledTo(endPosPaint);
 	bool paintAbandonedByStyling = paintState == paintAbandoned;
 	if (needUpdateUI) {
 		// Deselect palette by selecting a temporary palette
@@ -3288,12 +3298,14 @@ void Editor::Paint(Surface *surfaceWindow, PRectangle rcArea) {
 	}
 	PLATFORM_ASSERT(pixmapSelPattern->Initialised());
 
-	PaintSelMargin(surfaceWindow, rcArea);
+	if (paintState != paintAbandoned) {
+		PaintSelMargin(surfaceWindow, rcArea);
 
-	PRectangle rcRightMargin = rcClient;
-	rcRightMargin.left = rcRightMargin.right - vs.rightMarginWidth;
-	if (rcArea.Intersects(rcRightMargin)) {
-		surfaceWindow->FillRectangle(rcRightMargin, vs.styles[STYLE_DEFAULT].back.allocated);
+		PRectangle rcRightMargin = rcClient;
+		rcRightMargin.left = rcRightMargin.right - vs.rightMarginWidth;
+		if (rcArea.Intersects(rcRightMargin)) {
+			surfaceWindow->FillRectangle(rcRightMargin, vs.styles[STYLE_DEFAULT].back.allocated);
+		}
 	}
 
 	if (paintState == paintAbandoned) {
@@ -4346,12 +4358,14 @@ void Editor::NotifyModified(Document *, DocModification mh, void *) {
 			// TODO: could invalidate from mh.startModification to end of screen
 			//InvalidateRange(mh.position, mh.position + mh.length);
 			if (paintState == notPainting && !CanDeferToLastStep(mh)) {
+				QueueStyling(pdoc->Length());
 				Redraw();
 			}
 		} else {
 			//Platform::DebugPrintf("** %x Line Changed %d .. %d\n", this,
 			//	mh.position, mh.position + mh.length);
 			if (paintState == notPainting && mh.length && !CanEliminate(mh)) {
+				QueueStyling(mh.position + mh.length);
 				InvalidateRange(mh.position, mh.position + mh.length);
 			}
 		}
@@ -4365,7 +4379,7 @@ void Editor::NotifyModified(Document *, DocModification mh, void *) {
 		if ((paintState == notPainting) || !PaintContainsMargin()) {
 			if (mh.modificationType & SC_MOD_CHANGEFOLD) {
 				// Fold changes can affect the drawing of following lines so redraw whole margin
-				RedrawSelMargin();
+				RedrawSelMargin(mh.line-1, true);
 			} else {
 				RedrawSelMargin(mh.line);
 			}
@@ -6197,6 +6211,48 @@ void Editor::SetFocusState(bool focusState) {
 		CancelModes();
 		DropCaret();
 	}
+}
+
+int Editor::PositionAfterArea(PRectangle rcArea) {
+	// The start of the document line after the display line after the area
+	// This often means that the line after a modification is restyled which helps
+	// detect multiline comment additions and heals single line comments
+	int lineAfter = topLine + (rcArea.bottom - 1) / vs.lineHeight + 1;
+	if (lineAfter < cs.LinesDisplayed())
+		return pdoc->LineStart(cs.DocFromDisplay(lineAfter) + 1);
+	else
+		return pdoc->Length();
+}
+
+// Style to a position within the view. If this causes a change at end of last line then
+// affects later lines so style all the viewed text.
+void Editor::StyleToPositionInView(Position pos) {
+	int endWindow = PositionAfterArea(GetClientRectangle());
+	if (pos > endWindow)
+		pos = endWindow;
+	int styleAtEnd = pdoc->StyleAt(pos-1);
+	pdoc->EnsureStyledTo(pos);
+	if ((endWindow > pos) && (styleAtEnd != pdoc->StyleAt(pos-1))) {
+		// Style at end of line changed so is multi-line change like starting a comment 
+		// so require rest of window to be styled.
+		pdoc->EnsureStyledTo(endWindow);
+	}
+}
+
+void Editor::IdleStyling() {
+	// Style the line after the modification as this allows modifications that change just the
+	// line of the modification to heal instead of propagating to the rest of the window.
+	StyleToPositionInView(pdoc->LineStart(pdoc->LineFromPosition(styleNeeded.upTo) + 2));
+
+	if (needUpdateUI) {
+		NotifyUpdateUI();
+		needUpdateUI = false;
+	}
+	styleNeeded.Reset();
+}
+
+void Editor::QueueStyling(int upTo) {
+	styleNeeded.NeedUpTo(upTo);
 }
 
 bool Editor::PaintContains(PRectangle rc) {

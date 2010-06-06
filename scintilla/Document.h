@@ -32,10 +32,10 @@ public:
 
 	Range(Position pos=0) :
 		start(pos), end(pos) {
-	};
+	}
 	Range(Position start_, Position end_) :
 		start(start_), end(end_) {
-	};
+	}
 
 	bool Valid() const {
 		return (start != invalidPosition) && (end != invalidPosition);
@@ -118,7 +118,7 @@ struct StyledText {
 class CaseFolder {
 public:
 	virtual ~CaseFolder() {
-	};
+	}
 	virtual size_t Fold(char *folded, size_t sizeFolded, const char *mixed, size_t lenMixed) = 0;
 };
 
@@ -243,10 +243,10 @@ public:
 	void DelCharBack(int pos);
 
 	char CharAt(int position) { return cb.CharAt(position); }
-	void GetCharRange(char *buffer, int position, int lengthRetrieve) {
+	void GetCharRange(char *buffer, int position, int lengthRetrieve) const {
 		cb.GetCharRange(buffer, position, lengthRetrieve);
 	}
-	char StyleAt(int position) { return cb.StyleAt(position); }
+	char StyleAt(int position) const { return cb.StyleAt(position); }
 	int GetMark(int line);
 	int AddMark(int line, int markerNum);
 	void AddMarkSet(int line, int valueSet);
@@ -261,7 +261,7 @@ public:
 	int VCHomePosition(int position) const;
 
 	int SetLevel(int line, int level);
-	int GetLevel(int line);
+	int GetLevel(int line) const;
 	void ClearLevels();
 	int GetLastChild(int lineParent, int level=-1);
 	int GetFoldParent(int line);
@@ -294,7 +294,7 @@ public:
 	void DecorationFillRange(int position, int value, int fillLength);
 
 	int SetLineState(int line, int state);
-	int GetLineState(int line);
+	int GetLineState(int line) const;
 	int GetMaxLineState();
 
 	StyledText MarginStyledText(int line);

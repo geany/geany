@@ -256,7 +256,9 @@ private:
 	static void DragDataGet(GtkWidget *widget, GdkDragContext *context,
 	                        GtkSelectionData *selection_data, guint info, guint time);
 	static gint TimeOut(ScintillaGTK *sciThis);
-	static gint IdleCallback(ScintillaGTK *sciThis);
+	static gboolean IdleCallback(ScintillaGTK *sciThis);
+	static gboolean StyleIdle(ScintillaGTK *sciThis);
+	virtual void QueueStyling(int upTo);
 	static void PopUpCB(ScintillaGTK *sciThis, guint action, GtkWidget *widget);
 
 	gint ExposeTextThis(GtkWidget *widget, GdkEventExpose *ose);
@@ -701,7 +703,7 @@ void ScintillaGTK::StartDrag() {
 }
 
 static char *ConvertText(int *lenResult, char *s, size_t len, const char *charSetDest,
-	const char *charSetSource, bool transliterations) {
+	const char *charSetSource, bool transliterations, bool silent=false) {
 	// s is not const because of different versions of iconv disagreeing about const
 	*lenResult = 0;
 	char *destForm = 0;
@@ -714,7 +716,9 @@ static char *ConvertText(int *lenResult, char *s, size_t len, const char *charSe
 		size_t outLeft = len*3+1;
 		size_t conversions = conv.Convert(&pin, &inLeft, &pout, &outLeft);
 		if (conversions == ((size_t)(-1))) {
-fprintf(stderr, "iconv %s->%s failed for %s\n", charSetSource, charSetDest, static_cast<char *>(s));
+			if (!silent)
+				fprintf(stderr, "iconv %s->%s failed for %s\n", 
+					charSetSource, charSetDest, static_cast<char *>(s));
 			delete []destForm;
 			destForm = 0;
 		} else {
@@ -826,7 +830,7 @@ sptr_t ScintillaGTK::WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lParam
 
 #ifdef SCI_LEXER
 		case SCI_LOADLEXERLIBRARY:
-			LexerManager::GetInstance()->Load(reinterpret_cast<const char*>(wParam));
+			LexerManager::GetInstance()->Load(reinterpret_cast<const char*>(lParam));
 			break;
 #endif
 		case SCI_TARGETASUTF8:
@@ -873,16 +877,17 @@ void ScintillaGTK::SetTicking(bool on) {
 bool ScintillaGTK::SetIdle(bool on) {
 	if (on) {
 		// Start idler, if it's not running.
-		if (idler.state == false) {
+		if (!idler.state) {
 			idler.state = true;
-			idler.idlerID = reinterpret_cast<IdlerID>
-				(gtk_idle_add((GtkFunction)IdleCallback, this));
+			idler.idlerID = reinterpret_cast<IdlerID>(
+				g_idle_add_full(G_PRIORITY_DEFAULT_IDLE, 
+					reinterpret_cast<GSourceFunc>(IdleCallback), this, NULL));
 		}
 	} else {
 		// Stop idler, if it's running
-		if (idler.state == true) {
+		if (idler.state) {
 			idler.state = false;
-			gtk_idle_remove(GPOINTER_TO_UINT(idler.idlerID));
+			g_source_remove(GPOINTER_TO_UINT(idler.idlerID));
 		}
 	}
 	return true;
@@ -1104,7 +1109,7 @@ CaseFolder *ScintillaGTK::CaseFolderForEncoding() {
 					if (mapped) {
 						int mappedLength = strlen(mapped);
 						const char *mappedBack = ConvertText(&mappedLength, mapped,
-							mappedLength, charSetBuffer, "UTF-8", false);
+							mappedLength, charSetBuffer, "UTF-8", false, true);
 						if (mappedBack && (strlen(mappedBack) == 1) && (mappedBack[0] != sCharacter[0])) {
 							pcf->SetTranslation(sCharacter[0], mappedBack[0]);
 						}
@@ -1612,6 +1617,7 @@ gint ScintillaGTK::PressThis(GdkEventButton *event) {
 			if (OwnPrimarySelection() && primary.s == NULL)
 				CopySelectionRange(&primary);
 
+			sel.Clear();
 			SetSelection(pos, pos);
 			atomSought = atomUTF8;
 			gtk_selection_convert(GTK_WIDGET(PWidget(wMain)), GDK_SELECTION_PRIMARY,
@@ -2308,8 +2314,8 @@ int ScintillaGTK::TimeOut(ScintillaGTK *sciThis) {
 	return 1;
 }
 
-int ScintillaGTK::IdleCallback(ScintillaGTK *sciThis) {
-	// Idler will be automatically stoped, if there is nothing
+gboolean ScintillaGTK::IdleCallback(ScintillaGTK *sciThis) {
+	// Idler will be automatically stopped, if there is nothing
 	// to do while idle.
 	bool ret = sciThis->Idle();
 	if (ret == false) {
@@ -2319,6 +2325,22 @@ int ScintillaGTK::IdleCallback(ScintillaGTK *sciThis) {
 		sciThis->SetIdle(false);
 	}
 	return ret;
+}
+
+gboolean ScintillaGTK::StyleIdle(ScintillaGTK *sciThis) {
+	sciThis->IdleStyling();
+	// Idler will be automatically stopped
+	return FALSE;
+}
+
+void ScintillaGTK::QueueStyling(int upTo) {
+	Editor::QueueStyling(upTo);
+	if (!styleNeeded.active) {
+		// Only allow one style needed to be queued
+		styleNeeded.active = true;
+		g_idle_add_full(G_PRIORITY_HIGH_IDLE, 
+			reinterpret_cast<GSourceFunc>(StyleIdle), this, NULL);
+	}
 }
 
 void ScintillaGTK::PopUpCB(ScintillaGTK *sciThis, guint action, GtkWidget *) {

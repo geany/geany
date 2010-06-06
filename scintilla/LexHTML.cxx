@@ -587,8 +587,6 @@ static void ColouriseHyperTextDoc(unsigned int startPos, int length, int initSty
 	styler.StartAt(startPos, static_cast<char>(STYLE_MAX));
 	char prevWord[200];
 	prevWord[0] = '\0';
-	char nextWord[200];
-	nextWord[0] = '\0';
 	char phpStringDelimiter[200]; // PHP is not limited in length, we are
 	phpStringDelimiter[0] = '\0';
 	int StateToPrint = initStyle;
@@ -644,6 +642,7 @@ static void ColouriseHyperTextDoc(unsigned int startPos, int length, int initSty
 	if (inScriptType == eNonHtmlScript && state == SCE_H_COMMENT) {
 		scriptLanguage = eScriptComment;
 	}
+	script_type beforeLanguage = ScriptOfState(beforePreProc);
 
 	// property fold.html
 	//	Folding is turned on or off for HTML and XML files with this option.
@@ -683,7 +682,7 @@ static void ColouriseHyperTextDoc(unsigned int startPos, int length, int initSty
 	const bool isMako = styler.GetPropertyInt("lexer.html.mako", 0) != 0;
 
 	// property lexer.html.django
-	//	Set to 1 to enable the django template language.  
+	//	Set to 1 to enable the django template language.
 	const bool isDjango = styler.GetPropertyInt("lexer.html.django", 0) != 0;
 
 	const CharacterSet setHTMLWord(CharacterSet::setAlphaNum, ".-_:!#", 0x80, true);
@@ -950,7 +949,7 @@ static void ColouriseHyperTextDoc(unsigned int startPos, int length, int initSty
 		}
 
 		// handle the start Django template code
-		else if (isDjango && scriptLanguage == eScriptNone && (ch == '{' && (chNext == '%' ||  chNext == '{'))) {
+		else if (isDjango && scriptLanguage != eScriptPython && (ch == '{' && (chNext == '%' ||  chNext == '{'))) {
 			if (chNext == '%')
 				strcpy(djangoBlockType, "%");
 			else
@@ -965,6 +964,7 @@ static void ColouriseHyperTextDoc(unsigned int startPos, int length, int initSty
 			i += 1;
 			visibleChars += 1;
 			state = SCE_HP_START;
+			beforeLanguage = scriptLanguage;
 			scriptLanguage = eScriptPython;
 			styler.ColourTo(i, SCE_H_ASP);
 			if (foldHTMLPreprocessor && chNext == '%')
@@ -1074,8 +1074,8 @@ static void ColouriseHyperTextDoc(unsigned int startPos, int length, int initSty
 		}
 
 		// handle the end of Django template code
-		else if (isDjango && 
-			     ((inScriptType == eNonHtmlPreProc) || (inScriptType == eNonHtmlScriptPreProc)) && 
+		else if (isDjango &&
+			     ((inScriptType == eNonHtmlPreProc) || (inScriptType == eNonHtmlScriptPreProc)) &&
 				 (scriptLanguage != eScriptNone) && stateAllowsTermination(state) &&
 				 isDjangoBlockEnd(ch, chNext, djangoBlockType)) {
 			if (state == SCE_H_ASPAT) {
@@ -1098,7 +1098,7 @@ static void ColouriseHyperTextDoc(unsigned int startPos, int length, int initSty
 			if (foldHTMLPreprocessor) {
 				levelCurrent--;
 			}
-			scriptLanguage = eScriptNone;
+			scriptLanguage = beforeLanguage;
 			continue;
 		}
 

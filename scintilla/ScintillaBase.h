@@ -76,7 +76,7 @@ protected:
 	void AutoCompleteCharacterDeleted();
 	void AutoCompleteCompleted();
 	void AutoCompleteMoveToCurrentWord();
-	static void AutoCompleteDoubleClick(void* p);
+	static void AutoCompleteDoubleClick(void *p);
 
 	void CallTipClick();
 	void CallTipShow(Point pt, const char *defn);

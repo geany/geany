@@ -33,7 +33,7 @@ Geany 0.19 (TBA)
       Arshinov).
 
     Editor:
-    * Update Scintilla to 2.11.
+    * Update Scintilla to 2.12.
     * Add preference and support for virtual spaces.
     * Add word part autocompletion for the current selected item when
       pressing keybinding (default Tab) - Enter still completes normally.
