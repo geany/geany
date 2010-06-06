@@ -359,20 +359,15 @@ static GtkTreeIter *get_doc_parent(GeanyDocument *doc)
 		gsize len = strlen(project_base_path);
 		const gchar *rest;
 
+		if (project_base_path[len-1] == G_DIR_SEPARATOR)
+			project_base_path[len-1] = '\0';
+
 		/* check whether the dir name matches or uses the project base path */
-		if (!utils_str_equal(project_base_path, tmp_dirname))
-		{
-			const gchar *sep =
-				(project_base_path[len-1] == G_DIR_SEPARATOR) ? NULL : G_DIR_SEPARATOR_S;
-			setptr(project_base_path, g_strconcat(project_base_path, sep, NULL));
-		}
 		if (g_str_has_prefix(tmp_dirname, project_base_path))
 		{
 			rest = tmp_dirname + len;
-			dirname = g_strdup_printf("%s%s%s",
-				app->project->name,
-				(*rest != G_DIR_SEPARATOR && *rest != '\0') ? G_DIR_SEPARATOR_S : "",
-				rest);
+			if (*rest == G_DIR_SEPARATOR || *rest == '\0')
+				dirname = g_strdup_printf("%s%s", app->project->name, rest);
 		}
 		g_free(project_base_path);
 	}
