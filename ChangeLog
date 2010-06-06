@@ -5,6 +5,9 @@
  * src/sidebar.c:
    Fix reducing paths to project name in the Documents list
    (patch by Eugene Arshinov, thanks).
+ * src/symbols.c:
+   Fix crash when trying to sort NULL pointers as tags in the Symbols
+   list (closes #3011986).
 
 
 2010-06-04  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

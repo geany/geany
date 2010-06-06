@@ -1251,6 +1251,12 @@ static gint tree_sort_func(GtkTreeModel *model, GtkTreeIter *a, GtkTreeIter *b,
 		}
 		else
 		{
+			/* this is what g_strcmp0() does */
+			if (! astr)
+				return -(astr != bstr);
+			if (! bstr)
+				return astr != bstr;
+
 			cmp = strcmp(astr, bstr);
 
 			/* sort duplicate 'ScopeName::OverloadedTagName' items by line as well */
