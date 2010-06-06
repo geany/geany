@@ -1,3 +1,9 @@
+2010-06-06  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * tagmanager/tm_workspace.c:
+   Fix two memory leaks (patch by Daniel Marjamaki, thanks).
+
+
 2010-06-04  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * doc/geany.txt, doc/geany.html:
@@ -14,7 +20,7 @@
    Fix not closed FILE pointer on early exit
    (patch by Daniel Marjamaki, thanks).
  * doc/images/*.png:
-   Update images for Geany0.19.
+   Update images for Geany 0.19.
  * src/sidebar.c:
    Destroy the default symbol list treeview only once
    (fixes gtk_widget_destroy warning on exit).
@@ -161,7 +167,7 @@
 
  * src/support.h:
    Replace one non breaking space by normal space. Patch by
-   Daniel Marjamak.
+   Daniel Marjamaki.
 
 
 2010-05-14  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

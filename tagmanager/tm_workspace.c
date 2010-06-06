@@ -284,7 +284,11 @@ gboolean tm_workspace_create_global_tags(const char *config_dir, const char *pre
 #endif
 
 	if (NULL == theWorkspace || NULL == (fp = g_fopen(temp_file, "w")))
+	{
+		g_free(temp_file);
+		g_free(temp_file2);
 		return FALSE;
+	}
 
 	includes_files_hash = g_hash_table_new_full (tm_file_inode_hash,
 												 g_direct_equal,
