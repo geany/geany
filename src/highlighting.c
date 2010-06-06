@@ -1900,7 +1900,7 @@ static void styleset_default(ScintillaObject *sci, gint ft_id)
 
 static void styleset_css_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
 {
-	new_styleset(ft_id, 22);
+	new_styleset(ft_id, 23);
 	get_keyfile_style(config, config_home, "default", &style_sets[ft_id].styling[0]);
 	get_keyfile_style(config, config_home, "comment", &style_sets[ft_id].styling[1]);
 	get_keyfile_style(config, config_home, "tag", &style_sets[ft_id].styling[2]);
@@ -1923,6 +1923,7 @@ static void styleset_css_init(gint ft_id, GKeyFile *config, GKeyFile *config_hom
 	get_keyfile_style(config, config_home, "extended_identifier", &style_sets[ft_id].styling[19]);
 	get_keyfile_style(config, config_home, "extended_pseudoclass", &style_sets[ft_id].styling[20]);
 	get_keyfile_style(config, config_home, "extended_pseudoelement", &style_sets[ft_id].styling[21]);
+	get_keyfile_style(config, config_home, "media", &style_sets[ft_id].styling[22]);
 
 	style_sets[ft_id].keywords = g_new(gchar*, 9);
 	get_keyfile_keywords(config, config_home, "primary", ft_id, 0);
@@ -1971,6 +1972,7 @@ static void styleset_css(ScintillaObject *sci, gint ft_id)
 	set_sci_style(sci, SCE_CSS_EXTENDED_IDENTIFIER, ft_id, 19);
 	set_sci_style(sci, SCE_CSS_EXTENDED_PSEUDOCLASS, ft_id, 20);
 	set_sci_style(sci, SCE_CSS_EXTENDED_PSEUDOELEMENT, ft_id, 21);
+	set_sci_style(sci, SCE_CSS_MEDIA, ft_id, 22);
 }
 
 

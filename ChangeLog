@@ -13,6 +13,8 @@
  * wscript, scintilla/Makefile.am, scintilla/makefile.win32,
    scintilla/LexCrontab.cxx:
    Remove unused Crontab lexer.
+ * data/filetypes.css, src/highlighting.c:
+   Add new style "media" for filetype CSS.
 
 
 2010-06-04  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
