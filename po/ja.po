@@ -1483,11 +1483,11 @@ msgstr "ツールバーを隠す(_H)"
 
 #: ../src/interface.c:2112
 msgid "Find _Usage"
-msgstr "使い方を検索(_U)"
+msgstr "使用箇所を検索(_U)"
 
 #: ../src/interface.c:2120
 msgid "Find _Document Usage"
-msgstr "文書の説明を検索(_D)"
+msgstr "文書内で使用箇所を検索(_D)"
 
 #: ../src/interface.c:2128
 msgid "Go to _Tag Definition"
