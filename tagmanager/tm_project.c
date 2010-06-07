@@ -97,7 +97,6 @@ gboolean tm_project_init(TMProject *project, const char *dir
 		g_warning("Unable to init project file %s", path);
 		g_free(project->dir);
 		g_free(path);
-		g_free(path);
 		return FALSE;
 	}
 	if (! tm_workspace_add_object(TM_WORK_OBJECT(project)))
