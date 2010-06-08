@@ -56,11 +56,6 @@ uninstall-local:
 install-data-local:
 	@$(NORMAL_INSTALL)
 	$(mkinstalldirs) $(DESTDIR)$(pkgdatadir); \
-	$(INSTALL_DATA) $(srcdir)/data/c99.tags $(DESTDIR)$(pkgdatadir); \
-	$(INSTALL_DATA) $(srcdir)/data/php.tags $(DESTDIR)$(pkgdatadir); \
-	$(INSTALL_DATA) $(srcdir)/data/python.tags $(DESTDIR)$(pkgdatadir); \
-	$(INSTALL_DATA) $(srcdir)/data/pascal.tags $(DESTDIR)$(pkgdatadir); \
-	$(INSTALL_DATA) $(srcdir)/data/html_entities.tags $(DESTDIR)$(pkgdatadir); \
 	$(INSTALL_DATA) $(srcdir)/COPYING $(DESTDIR)$(pkgdatadir)/GPL-2; \
 	for file in $(srcdir)/data/*; do \
 	  if test -f $$file; then \

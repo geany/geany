@@ -1,7 +1,15 @@
+2010-06-08  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * Makefile.am:
+   Don't individually install data/*.tags as all data/* files will be
+   installed anyway.
+
+
 2010-06-07  Frank Lanitz  <frank@frank.uvena.de>
 
  * tagmanager/tm_project.c:
    Fix a double free. (patch by Daniel Marjamaki, thanks).
+
 
 2010-06-06  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
