@@ -102,11 +102,6 @@ name: {functionname}\n\
 @return\n\
 ";
 
-static const gchar templates_multiline[] = "\
- \n\
- \n\
-";
-
 static const gchar templates_fileheader[] = "\
 {filename}\n\
 \n\
@@ -145,24 +140,30 @@ static void templates_replace_command(GString *text, const gchar *file_name,
 	g_file_get_contents(fname, contents_ptr, NULL, NULL);
 
 
-static void create_template_file_if_necessary(const gchar *filename, const gchar *content)
+static void read_template(const gchar *name, gint id)
 {
-	if (! g_file_test(filename, G_FILE_TEST_EXISTS))
-	{
-		if (file_prefs.default_eol_character != SC_EOL_LF)
-		{
-			/* Replace the \n characters in the default template text by the proper
-			 * platform-specific line ending characters. */
-			GString *tmp = g_string_new(content);
-			const gchar *eol_str = (file_prefs.default_eol_character == SC_EOL_CR) ? "\r" : "\r\n";
+	gchar *fname = TEMPLATES_GET_FILENAME(name);
 
-			utils_string_replace_all(tmp, "\n", eol_str);
-			utils_write_file(filename, tmp->str);
-			g_string_free(tmp, TRUE);
-		}
-		else
-			utils_write_file(filename, content);
+	/* try system if user template doesn't exist */
+	if (!g_file_test(fname, G_FILE_TEST_EXISTS))
+		setptr(fname, g_strconcat(app->datadir,
+			G_DIR_SEPARATOR_S GEANY_TEMPLATES_SUBDIR G_DIR_SEPARATOR_S, name, NULL));
+
+	TEMPLATES_READ_FILE(fname, &templates[id]);
+
+	/* FIXME: we should replace the line ends on insertion with doc pref, not on loading */
+	if (file_prefs.default_eol_character != SC_EOL_LF)
+	{
+		/* Replace the \n characters in the default template text by the proper
+		 * platform-specific line ending characters. */
+		GString *tmp = g_string_new(templates[id]);
+		const gchar *eol_str = (file_prefs.default_eol_character == SC_EOL_CR) ? "\r" : "\r\n";
+
+		utils_string_replace_all(tmp, "\n", eol_str);
+		setptr(templates[id], tmp->str);
+		g_string_free(tmp, FALSE);
 	}
+	g_free(fname);
 }
 
 
@@ -189,41 +190,18 @@ static gchar *replace_all(gchar *text, const gchar *year, const gchar *date, con
 
 static void init_general_templates(const gchar *year, const gchar *date, const gchar *datetime)
 {
-	gchar *template_filename_fileheader = TEMPLATES_GET_FILENAME("fileheader");
-	gchar *template_filename_gpl = TEMPLATES_GET_FILENAME("gpl");
-	gchar *template_filename_bsd = TEMPLATES_GET_FILENAME("bsd");
-	gchar *template_filename_function = TEMPLATES_GET_FILENAME("function");
-	gchar *template_filename_changelog = TEMPLATES_GET_FILENAME("changelog");
-
-	/* create the template files in the configuration directory, if they don't exist */
-	create_template_file_if_necessary(template_filename_fileheader, templates_fileheader);
-	create_template_file_if_necessary(template_filename_gpl, templates_gpl_notice);
-	create_template_file_if_necessary(template_filename_bsd, templates_bsd_notice);
-	create_template_file_if_necessary(template_filename_function, templates_function_description);
-	create_template_file_if_necessary(template_filename_changelog, templates_changelog);
+	guint id;
 
 	/* read the contents */
-	TEMPLATES_READ_FILE(template_filename_fileheader, &templates[GEANY_TEMPLATE_FILEHEADER]);
-	templates[GEANY_TEMPLATE_FILEHEADER] = replace_all(templates[GEANY_TEMPLATE_FILEHEADER], year, date, datetime);
+	read_template("fileheader", GEANY_TEMPLATE_FILEHEADER);
+	read_template("gpl", GEANY_TEMPLATE_GPL);
+	read_template("bsd", GEANY_TEMPLATE_BSD);
+	read_template("function", GEANY_TEMPLATE_FUNCTION);
+	read_template("changelog", GEANY_TEMPLATE_CHANGELOG);
 
-	TEMPLATES_READ_FILE(template_filename_gpl, &templates[GEANY_TEMPLATE_GPL]);
-	templates[GEANY_TEMPLATE_GPL] = replace_all(templates[GEANY_TEMPLATE_GPL], year, date, datetime);
-
-	TEMPLATES_READ_FILE(template_filename_bsd, &templates[GEANY_TEMPLATE_BSD]);
-	templates[GEANY_TEMPLATE_BSD] = replace_all(templates[GEANY_TEMPLATE_BSD], year, date, datetime);
-
-	TEMPLATES_READ_FILE(template_filename_function, &templates[GEANY_TEMPLATE_FUNCTION]);
-	templates[GEANY_TEMPLATE_FUNCTION] = replace_all(templates[GEANY_TEMPLATE_FUNCTION], year, date, datetime);
-
-	TEMPLATES_READ_FILE(template_filename_changelog, &templates[GEANY_TEMPLATE_CHANGELOG]);
-	templates[GEANY_TEMPLATE_CHANGELOG] = replace_all(templates[GEANY_TEMPLATE_CHANGELOG], year, date, datetime);
-
-	/* free the whole stuff */
-	g_free(template_filename_fileheader);
-	g_free(template_filename_gpl);
-	g_free(template_filename_bsd);
-	g_free(template_filename_function);
-	g_free(template_filename_changelog);
+	/* FIXME: we should replace the dates on insertion, not on loading */
+	for (id = 0; id < GEANY_MAX_TEMPLATES; id++)
+		templates[id] = replace_all(templates[id], year, date, datetime);
 }
 
 

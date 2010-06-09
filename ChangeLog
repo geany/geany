@@ -1,3 +1,13 @@
+2010-06-09  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/templates.c, data/templates/gpl, data/templates/function,
+   data/templates/changelog, data/templates/bsd,
+   data/templates/fileheader, wscript, Makefile.am:
+   Move general templates from source code into files.
+   Load general templates from system path instead of creating them in
+   the user's config dir.
+
+
 2010-06-08  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * Makefile.am:
