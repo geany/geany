@@ -7,7 +7,8 @@ If any contributors are missing, please email the developers - see the AUTHORS f
 Testers and contributors:
 -------------------------
 These people have contributed to Geany by testing the software,
-reporting problems, sending patches and making useful suggestions.
+reporting problems, sending patches and making useful suggestions:
+
 Frank Lanitz <frank(at)frank(dot)uvena(dot)de> - heavy testing
 Christoph Berg <Christoph(dot)Berg(at)kpm-sport(dot)de> - testing and patch for filetype D
 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com> - many patches
@@ -79,10 +80,12 @@ Yoann Le Montagner <yoann(dot)le-montagner(at)m4x(dot)org> - set VTE bold color
 Dimitar Zhekov <hamster(at)mbox(dot)contact(dot)bg> - matching brace improvements patch
 Ondrej Donek <ondrejd(at)gmail(dot)com> - Support for creating PHP classes with the classbuilder plugin
 Daniel Marjamaki <danielm77(at)spray(dot)se> - Small improvements
+Jiří Techet <techet(at)gmail(dot)com> - Fix switch to last used tab ordering bug
 
 Translators:
 ------------
-These people have translated Geany to foreign languages.
+These people have translated Geany to foreign languages:
+
 Marcos Costales <marcoscostales(at)gmail(dot)com - ast
 Yura Siamashka <yurand2(at)gmail(dot)com> - be_BY
 Dilyan Rusev <dilyanrusev(at)gmail(dot)com> - bg

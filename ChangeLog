@@ -1,3 +1,10 @@
+2010-06-10  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/keybindings.c, src/about.c, THANKS:
+   Fix the wrong file being put on top of the stack when switching tabs
+   too quickly (patch from Jiří Techet, thanks).
+
+
 2010-06-09  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/templates.c, data/templates/gpl, data/templates/function,
