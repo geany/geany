@@ -3677,6 +3677,8 @@ void editor_insert_multiline_comment(GeanyEditor *editor)
 	g_return_if_fail(editor != NULL &&
 		editor->document->file_type != NULL && editor->document->file_type->comment_open != NULL);
 
+	sci_start_undo_action(editor->sci);
+
 	doc = editor->document;
 
 	if (doc->file_type->comment_close != NULL && strlen(doc->file_type->comment_close) > 0)
@@ -3703,7 +3705,6 @@ void editor_insert_multiline_comment(GeanyEditor *editor)
 	sci_insert_text(editor->sci, pos, text);
 	g_free(text);
 
-
 	/* select the inserted lines for commenting */
 	sci_set_selection_start(editor->sci, pos);
 	sci_set_selection_end(editor->sci, pos + text_len);
@@ -3722,6 +3723,8 @@ void editor_insert_multiline_comment(GeanyEditor *editor)
 	sci_set_current_position(editor->sci, pos, TRUE);
 	/* reset the selection */
 	sci_set_anchor(editor->sci, pos);
+
+	sci_end_undo_action(editor->sci);
 }
 
 

@@ -1,3 +1,9 @@
+2010-06-10  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/editor.c:
+   Group undo action for Insert Multiline Comment.
+
+
 2010-06-08  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * Makefile.am:
