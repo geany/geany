@@ -1871,7 +1871,7 @@ static void cb_func_switch_tablastused(G_GNUC_UNUSED guint key_id)
 	}
 	else
 	{
-		update_filename_label();	/* update filename label */
+		update_filename_label();
 		mru_pos += 1;
 	}
 }
