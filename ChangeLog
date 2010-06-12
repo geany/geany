@@ -6,6 +6,9 @@
    Change the RequestExecutionLevel for the Windows installer to
    'highest'.
  * New release: Geany 0.19 "Vellam".
+ * configure.ac, doc/geany.html, doc/geany.txt, geany.nsi,
+   geany_private.rc, win32-config.h, wscript, src/geany.h:
+   Post-release version bump.
 
 
 2010-06-10  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
