@@ -1,4 +1,4 @@
-Geany 0.19 (TBA)
+Geany 0.19 (June 12, 2010)
 
     General:
     * Build system reworked to be much more configurable (by Lex Trotman).
@@ -20,7 +20,7 @@ Geany 0.19 (TBA)
       (patch by Thomas Martitz).
     * Make Ctrl-click on any notebook tab switch to the last used
       document.
-    * Add Edit->Commands menu.
+    * Add 'Edit->Commands' menu.
     * Add 'Edit->Plugin Preferences' menu item and keybinding.
     * Add 'View->Editor->Color Schemes' menu (only shown if color
       scheme files exist).
