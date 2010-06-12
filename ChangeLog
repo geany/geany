@@ -1,3 +1,9 @@
+2010-06-12  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * po/POTFILES.skip:
+   Add doc/stash-example.c to fix 'make distcheck'.
+
+
 2010-06-10  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/editor.c:
