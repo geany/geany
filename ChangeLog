@@ -2,6 +2,9 @@
 
  * po/POTFILES.skip:
    Add doc/stash-example.c to fix 'make distcheck'.
+ * geany.nsi:
+   Change the RequestExecutionLevel for the Windows installer to
+   'highest'.
  * New release: Geany 0.19 "Vellam".
 
 

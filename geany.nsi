@@ -27,7 +27,7 @@
 
 ; Do a Cyclic Redundancy Check to make sure the installer was not corrupted by the download
 CRCCheck force
-RequestExecutionLevel user ; set execution level for Windows Vista
+RequestExecutionLevel highest ; set execution level for Windows Vista
 
 ;;;;;;;;;;;;;;;;;;;
 ; helper defines  ;
@@ -54,7 +54,7 @@ VIAddVersionKey "ProductVersion" "${PRODUCT_VERSION}"
 VIAddVersionKey "LegalCopyright" "Copyright 2005-2010 by the Geany developer team"
 VIAddVersionKey "FileDescription" "${PRODUCT_NAME} Installer"
 
-BrandingText "$(^NAME) installer (NSIS 2.45)"
+BrandingText "$(^NAME) installer (NSIS 2.46)"
 InstallDir "$PROGRAMFILES\Geany"
 Name "${PRODUCT_NAME} ${PRODUCT_VERSION}"
 SetCompressor /SOLID lzma
