@@ -2098,8 +2098,8 @@ static gboolean read_row(BuildDestination *dst, BuildTableData table_data, gint 
 		{
 			if (*(dst->dst[grp]) == NULL)
 				*(dst->dst[grp]) = g_new0(GeanyBuildCommand, build_groups_count[grp]);
-			for (i = 0; i < GEANY_BC_CMDENTRIES_COUNT; i++){ printf(" set %d to '%s'\n", i, entries[i]);
-				setptr((*(dst->dst[grp]))[cmd].entries[i], entries[i]); }
+			for (i = 0; i < GEANY_BC_CMDENTRIES_COUNT; i++)
+				setptr((*(dst->dst[grp]))[cmd].entries[i], entries[i]);
 			(*(dst->dst[grp]))[cmd].exists = TRUE;
 			(*(dst->dst[grp]))[cmd].changed = TRUE;
 			changed = TRUE;
