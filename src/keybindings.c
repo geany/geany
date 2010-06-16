@@ -71,7 +71,7 @@ const gsize MAX_MRU_DOCS = 20;
 static GQueue *mru_docs = NULL;
 static guint mru_pos = 0;
 
-static gboolean switch_dialog_cancelled = TRUE;
+static gboolean switch_in_progress = FALSE;
 static GtkWidget *switch_dialog = NULL;
 static GtkWidget *switch_dialog_label = NULL;
 
@@ -576,7 +576,7 @@ static void on_notebook_switch_page(void)
 
 	/* when closing current doc, old is NULL.
 	 * Don't add to the mru list when switch dialog is visible. */
-	if (old && switch_dialog_cancelled)
+	if (old && !switch_in_progress)
 	{
 		g_queue_remove(mru_docs, old);
 		g_queue_push_head(mru_docs, old);
@@ -879,7 +879,7 @@ static GtkWidget *create_dialog(void)
 	gtk_tree_view_append_column(GTK_TREE_VIEW(tree), column);
 
 	text_renderer = gtk_cell_renderer_text_new();
-    column = gtk_tree_view_column_new_with_attributes(NULL, text_renderer, "text", 1, NULL);
+	column = gtk_tree_view_column_new_with_attributes(NULL, text_renderer, "text", 1, NULL);
 	gtk_tree_view_append_column(GTK_TREE_VIEW(tree), column);
 
 	fill_shortcut_labels_treeview(tree);
@@ -1751,12 +1751,15 @@ static void cb_func_switch_tabright(G_GNUC_UNUSED guint key_id)
 static gboolean on_key_release_event(GtkWidget *widget, GdkEventKey *ev, gpointer user_data)
 {
 	/* user may have rebound keybinding to a different modifier than Ctrl, so check all */
-	if (!switch_dialog_cancelled && is_modifier_key(ev->keyval))
+	if (switch_in_progress && is_modifier_key(ev->keyval))
 	{
-		switch_dialog_cancelled = TRUE;
+		switch_in_progress = FALSE;
 
-		if (switch_dialog && GTK_WIDGET_VISIBLE(switch_dialog))
-			gtk_widget_hide(switch_dialog);
+		if (switch_dialog)
+		{
+			gtk_widget_destroy(switch_dialog);
+			switch_dialog = NULL;
+		}
 
 		mru_pos = 0;
 	}
@@ -1809,23 +1812,27 @@ static GtkWidget *create_switch_dialog(void)
 }
 
 
-static gboolean on_switch_timeout(G_GNUC_UNUSED gpointer data)
+static void update_filename_label()
 {
-	if (switch_dialog_cancelled)
+	if (!switch_dialog)
 	{
-		return FALSE;
-	}
-	if (! switch_dialog || !GTK_WIDGET_VISIBLE(switch_dialog))
-		mru_pos = 2;	/* skip past the previous document */
-	else
-		mru_pos += 1;
-
-	if (! switch_dialog)
 		switch_dialog = create_switch_dialog();
+		gtk_widget_show_all(switch_dialog);
+	}
 
 	geany_wrap_label_set_text(GTK_LABEL(switch_dialog_label),
 		DOC_FILENAME(document_get_current()));
-	gtk_widget_show_all(switch_dialog);
+}
+
+
+static gboolean on_switch_timeout(G_GNUC_UNUSED gpointer data)
+{
+	if (!switch_in_progress || switch_dialog)
+	{
+		return FALSE;
+	}
+
+	update_filename_label();
 	return FALSE;
 }
 
@@ -1848,18 +1855,24 @@ static void cb_func_switch_tablastused(G_GNUC_UNUSED guint key_id)
 
 	/* if there's a modifier key, we can switch back in MRU order each time unless
 	 * the key is released */
-	if (! switch_dialog_cancelled)
+	if (!switch_in_progress)
 	{
-		on_switch_timeout(NULL);	/* update filename label */
-	}
-	else
-	if (keybindings_lookup_item(GEANY_KEY_GROUP_NOTEBOOK,
-		GEANY_KEYS_NOTEBOOK_SWITCHTABLASTUSED)->mods)
-	{
-		switch_dialog_cancelled = FALSE;
+		switch_in_progress = TRUE;
+
+		/* because switch_in_progress was not set when we called
+		 * gtk_notebook_set_current_page() above, this function inserted last_doc
+		 * into the queue => on mru_pos = 0 there is last_doc, on mru_pos = 1
+		 * there is the currently displayed doc, so we want to continue from 2
+		 * next time this function is called */
+		mru_pos = 2;
 
 		/* delay showing dialog to give user time to let go of any modifier keys */
 		g_timeout_add(600, on_switch_timeout, NULL);
+	}
+	else
+	{
+		update_filename_label();
+		mru_pos += 1;
 	}
 }
 

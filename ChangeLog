@@ -3,6 +3,18 @@
  * src/notebook.c:
    Align notebook tab close buttons centred vertically - thanks to
    Robux.Biz (galyuk).
+ * Merge unstable branch:
+ - src/build.c:
+   Make build config entries light grey until set.
+ - src/keybindings.c, src/about.c, THANKS:
+   Fix the wrong file being put on top of the stack when switching tabs
+   too quickly (patch from Jiří Techet, thanks).
+ - src/templates.c, data/templates/gpl, data/templates/function,
+   data/templates/changelog, data/templates/bsd,
+   data/templates/fileheader, wscript, Makefile.am:
+   Move general templates from source code into files.
+   Load general templates from system path instead of creating them in
+   the user's config dir.
 
 
 2010-06-12  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

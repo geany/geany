@@ -1727,7 +1727,17 @@ typedef struct RowWidgets
 	gint grp;
 	gint cmd;
 	gboolean cleared;
+	gboolean used_dst;
 } RowWidgets;
+
+
+static void set_row_color(RowWidgets *r, GdkColor *color )
+{
+	enum GeanyBuildCmdEntries i;
+
+	for (i = 0; i < GEANY_BC_CMDENTRIES_COUNT; i++)
+		gtk_widget_modify_text(r->entries[i], GTK_STATE_NORMAL, color);
+};
 
 
 static void set_build_command_entry_text(GtkWidget *wid, const gchar *text)
@@ -1744,6 +1754,7 @@ static void on_clear_dialog_row(GtkWidget *unused, gpointer user_data)
 	RowWidgets *r = (RowWidgets*)user_data;
 	gint src;
 	enum GeanyBuildCmdEntries i;
+	GdkColor color;
 	GeanyBuildCommand *bc = get_next_build_cmd(NULL, r->grp, r->cmd, r->dst, &src);
 
 	if (bc != NULL)
@@ -1764,6 +1775,9 @@ static void on_clear_dialog_row(GtkWidget *unused, gpointer user_data)
 			set_build_command_entry_text(r->entries[i], "");
 		}
 	}
+	r->used_dst = FALSE;
+	gdk_color_parse("light grey", &color);
+	set_row_color(r, &color);
 	r->cleared = TRUE;
 }
 
@@ -1774,13 +1788,25 @@ static void on_clear_dialog_regex_row(GtkEntry *regex, gpointer unused)
 }
 
 
-static void on_label_button_clicked(GtkWidget *wid)
+static void on_label_button_clicked(GtkWidget *wid, gpointer user_data)
 {
+	RowWidgets *r = (RowWidgets*)user_data;
 	const gchar *old = gtk_button_get_label(GTK_BUTTON(wid));
 	gchar *str = dialogs_show_input(_("Set menu item label"), NULL, old);
 
 	gtk_button_set_label(GTK_BUTTON(wid), str);
 	g_free(str);
+	r->used_dst = TRUE;
+	set_row_color(r, NULL);
+}
+
+
+static void on_entry_focus(GtkWidget *wid, GdkEventFocus *unused, gpointer user_data)
+{
+	RowWidgets *r = (RowWidgets*)user_data;
+
+	r->used_dst = TRUE;
+	set_row_color(r, NULL);
 }
 
 
@@ -1812,6 +1838,7 @@ static RowWidgets *build_add_dialog_row(GeanyDocument *doc, GtkTable *table, gui
 	gint src;
 	enum GeanyBuildCmdEntries i;
 	guint column = 0;
+	GdkColor color;
 
 	label = gtk_label_new(g_strdup_printf("%d:", cmd + 1));
 	gtk_table_attach(table, label, column, column + 1, row, row + 1, GTK_FILL,
@@ -1831,10 +1858,13 @@ static RowWidgets *build_add_dialog_row(GeanyDocument *doc, GtkTable *table, gui
 			GtkWidget *wid = roww->entries[i] = gtk_button_new();
 			gtk_button_set_use_underline(GTK_BUTTON(wid), TRUE);
 			ui_widget_set_tooltip_text(wid, _("Click to set menu item label"));
-			g_signal_connect(wid, "clicked", G_CALLBACK(on_label_button_clicked), NULL);
+			g_signal_connect(wid, "clicked", G_CALLBACK(on_label_button_clicked), roww);
 		}
 		else
+		{
 			roww->entries[i] = gtk_entry_new();
+			g_signal_connect(roww->entries[i], "focus-in-event", G_CALLBACK(on_entry_focus), roww);
+		}
 		gtk_table_attach(table, roww->entries[i], column, column + 1, row, row + 1, xflags,
 			GTK_FILL | GTK_EXPAND, entry_x_padding, entry_y_padding);
 	}
@@ -1852,10 +1882,19 @@ static RowWidgets *build_add_dialog_row(GeanyDocument *doc, GtkTable *table, gui
 	for (i = 0; i < GEANY_BC_CMDENTRIES_COUNT; i++)
 	{
 		const gchar *str = "";
-		if (bc != NULL && (str = bc->entries[i]) == NULL)
-			str = "";
+
+		if (bc != NULL )
+		{
+			if ((str = bc->entries[i]) == NULL)
+				str = "";
+			else if ((gint)dst == src)
+				roww->used_dst = TRUE;
+		}
 		set_build_command_entry_text(roww->entries[i], str);
 	}
+	gdk_color_parse("light grey", &color);
+	if (bc != NULL && ((gint)dst > src))
+		set_row_color(roww, &color);
 	if (bc != NULL && (src > (gint)dst || (grp == GEANY_GBG_FT && (doc == NULL || doc->file_type == NULL))))
 	{
 		for (i = 0; i < GEANY_BC_CMDENTRIES_COUNT; i++)
@@ -2014,6 +2053,7 @@ void build_free_fields(BuildTableData table_data)
 
 
 /* string compare where null pointers match null or 0 length strings */
+#if 0
 static gint stcmp(const gchar *a, const gchar *b)
 {
 	if (a == NULL && b == NULL)
@@ -2024,6 +2064,7 @@ static gint stcmp(const gchar *a, const gchar *b)
 		return strlen(a);
 	return strcmp(a, b);
 }
+#endif
 
 
 static const gchar *get_build_command_entry_text(GtkWidget *wid)
@@ -2059,28 +2100,7 @@ static gboolean read_row(BuildDestination *dst, BuildTableData table_data, gint 
 			changed = TRUE;
 		}
 	}
-	if (
-			(
-				table_data->rows[drow]->cmdsrc == NULL		/* originally there was no content */
-				&&
-				(
-					NZV(entries[GEANY_BC_LABEL])			/* but now one field has some */
-					|| NZV(entries[GEANY_BC_COMMAND])
-					|| NZV(entries[GEANY_BC_WORKING_DIR])
-				)
-			)
-			||
-			(
-				table_data->rows[drow]->cmdsrc != NULL		/* originally there was content */
-				&&
-				(											/* and some of it was changed */
-					stcmp(entries[GEANY_BC_LABEL], table_data->rows[drow]->cmdsrc->entries[GEANY_BC_LABEL]) != 0
-					|| stcmp(entries[GEANY_BC_COMMAND], table_data->rows[drow]->cmdsrc->entries[GEANY_BC_COMMAND]) != 0
-					|| stcmp(entries[GEANY_BC_WORKING_DIR],
-							table_data->rows[drow]->cmdsrc->entries[GEANY_BC_WORKING_DIR]) != 0
-				)
-			)
-		)
+	if (table_data->rows[drow]->used_dst == TRUE)
 	{
 		if (dst->dst[grp] != NULL)
 		{
