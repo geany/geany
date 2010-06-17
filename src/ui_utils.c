@@ -1384,26 +1384,44 @@ void ui_hbutton_box_copy_layout(GtkButtonBox *master, GtkButtonBox *copy)
 }
 
 
-/* Prepends the active text to the drop down list, unless the first element in
- * the list is identical, ensuring there are <= history_len elements. */
+static gboolean tree_model_find_text(GtkTreeModel *model,
+		GtkTreeIter *iter, gint column, const gchar *text)
+{
+	gchar *combo_text;
+	gboolean found = FALSE;
+
+	if (gtk_tree_model_get_iter_first(model, iter))
+	{
+		do
+		{
+			gtk_tree_model_get(model, iter, 0, &combo_text, -1);
+			found = utils_str_equal(combo_text, text);
+			g_free(combo_text);
+
+			if (found)
+				return TRUE;
+		}
+		while (gtk_tree_model_iter_next(model, iter));
+	}
+	return FALSE;
+}
+
+
+/* Prepends the active text to the drop down list, removing a duplicate element in
+ * the list if found. Ensures there are <= history_len elements. */
 void ui_combo_box_add_to_history(GtkComboBox *combo, const gchar *text)
 {
-	const gint history_len = 30;
+	const gint history_len = 10;
 	GtkTreeModel *model;
 	GtkTreeIter iter;
-	gchar *combo_text;
-	gboolean equal = FALSE;
 	GtkTreePath *path;
 
 	model = gtk_combo_box_get_model(combo);
-	if (gtk_tree_model_get_iter_first(model, &iter))
-	{
-		gtk_tree_model_get(model, &iter, 0, &combo_text, -1);
-		equal = utils_str_equal(combo_text, text);
-		g_free(combo_text);
-	}
-	if (equal) return;	/* don't prepend duplicate */
 
+	if (tree_model_find_text(model, &iter, 0, text))
+	{
+		gtk_list_store_remove(GTK_LIST_STORE(model), &iter);
+	}
 	gtk_combo_box_prepend_text(combo, text);
 
 	/* limit history */
@@ -1422,21 +1440,9 @@ void ui_combo_box_prepend_text_once(GtkComboBox *combo, const gchar *text)
 {
 	GtkTreeModel *model;
 	GtkTreeIter iter;
-	gchar *combo_text;
-	gboolean found = FALSE;
 
 	model = gtk_combo_box_get_model(combo);
-	if (gtk_tree_model_get_iter_first(model, &iter))
-	{
-		do
-		{
-			gtk_tree_model_get(model, &iter, 0, &combo_text, -1);
-			found = utils_str_equal(combo_text, text);
-			g_free(combo_text);
-		}
-		while (!found && gtk_tree_model_iter_next(model, &iter));
-	}
-	if (found)
+	if (!tree_model_find_text(model, &iter, 0, text))
 		return;	/* don't prepend duplicate */
 
 	gtk_combo_box_prepend_text(combo, text);

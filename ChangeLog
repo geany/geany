@@ -9,6 +9,8 @@
  * src/ui_utils.c:
    Display 'new instance' on title bar (patch by Eugene Arshinov,
    thanks).
+ * src/ui_utils.c:
+   Remove any duplicate on adding to combo box histories.
 
 
 2010-06-16  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
