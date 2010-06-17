@@ -51,6 +51,7 @@
 #include "symbols.h"
 #include "toolbar.h"
 #include "geanymenubuttonaction.h"
+#include "main.h"
 
 
 GeanyInterfacePrefs	interface_prefs;
@@ -290,6 +291,10 @@ void ui_set_window_title(GeanyDocument *doc)
 		g_string_append(str, "] - ");
 	}
 	g_string_append(str, "Geany");
+	if (cl_options.new_instance)
+	{
+		g_string_append(str, _(" (new instance)"));
+	}
 	gtk_window_set_title(GTK_WINDOW(main_widgets.window), str->str);
 	g_string_free(str, TRUE);
 }

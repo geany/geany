@@ -6,6 +6,9 @@
  * src/build.c:
    Make default Build dialog entries grey, not light grey (too hard to
    read on a white background).
+ * src/ui_utils.c:
+   Display 'new instance' on title bar (patch by Eugene Arshinov,
+   thanks).
 
 
 2010-06-16  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
