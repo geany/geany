@@ -1776,7 +1776,7 @@ static void on_clear_dialog_row(GtkWidget *unused, gpointer user_data)
 		}
 	}
 	r->used_dst = FALSE;
-	gdk_color_parse("light grey", &color);
+	gdk_color_parse("grey", &color);
 	set_row_color(r, &color);
 	r->cleared = TRUE;
 }
@@ -1892,7 +1892,7 @@ static RowWidgets *build_add_dialog_row(GeanyDocument *doc, GtkTable *table, gui
 		}
 		set_build_command_entry_text(roww->entries[i], str);
 	}
-	gdk_color_parse("light grey", &color);
+	gdk_color_parse("grey", &color);
 	if (bc != NULL && ((gint)dst > src))
 		set_row_color(roww, &color);
 	if (bc != NULL && (src > (gint)dst || (grp == GEANY_GBG_FT && (doc == NULL || doc->file_type == NULL))))

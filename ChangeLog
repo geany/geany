@@ -3,6 +3,9 @@
  * src/sidebar.c:
    Replace /home/user with ~ in the documents list (patch by Jon
    Strait, thanks).
+ * src/build.c:
+   Make default Build dialog entries grey, not light grey (too hard to
+   read on a white background).
 
 
 2010-06-16  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
