@@ -1,3 +1,10 @@
+2010-06-17  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/sidebar.c:
+   Replace /home/user with ~ in the documents list (patch by Jon
+   Strait, thanks).
+
+
 2010-06-16  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/notebook.c:

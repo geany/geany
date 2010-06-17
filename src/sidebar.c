@@ -345,8 +345,10 @@ static GtkTreeIter *get_doc_parent(GeanyDocument *doc)
 	gchar *tmp_dirname;
 	gchar *project_base_path;
 	gchar *dirname = NULL;
+	const gchar *home_dir = g_get_home_dir();
 	static GtkTreeIter parent;
 	GtkTreeModel *model = GTK_TREE_MODEL(store_openfiles);
+	const gchar *rest;
 
 	if (!documents_show_paths)
 		return NULL;
@@ -357,7 +359,6 @@ static GtkTreeIter *get_doc_parent(GeanyDocument *doc)
 	if (project_base_path != NULL)
 	{
 		gsize len = strlen(project_base_path);
-		const gchar *rest;
 
 		if (project_base_path[len-1] == G_DIR_SEPARATOR)
 			project_base_path[len-1] = '\0';
@@ -367,12 +368,27 @@ static GtkTreeIter *get_doc_parent(GeanyDocument *doc)
 		{
 			rest = tmp_dirname + len;
 			if (*rest == G_DIR_SEPARATOR || *rest == '\0')
+			{
 				dirname = g_strdup_printf("%s%s", app->project->name, rest);
+			}
 		}
 		g_free(project_base_path);
 	}
 	if (dirname == NULL)
+	{
 		dirname = tmp_dirname;
+
+		/* If matches home dir, replace with tilde */
+		if (home_dir && *home_dir != 0 && g_str_has_prefix(dirname, home_dir))
+		{
+			rest = dirname + strlen(home_dir);
+			if (*rest == G_DIR_SEPARATOR || *rest == '\0')
+			{
+				dirname = g_strdup_printf("~%s", rest);
+				g_free(tmp_dirname);
+			}
+		}
+	}
 	else
 		g_free(tmp_dirname);
 
