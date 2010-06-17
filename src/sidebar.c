@@ -340,22 +340,19 @@ static gboolean find_tree_iter_dir(GtkTreeIter *iter, const gchar *dir)
 }
 
 
-static GtkTreeIter *get_doc_parent(GeanyDocument *doc)
+static gchar *get_doc_folder(GeanyDocument *doc)
 {
 	gchar *tmp_dirname;
 	gchar *project_base_path;
 	gchar *dirname = NULL;
 	const gchar *home_dir = g_get_home_dir();
-	static GtkTreeIter parent;
-	GtkTreeModel *model = GTK_TREE_MODEL(store_openfiles);
 	const gchar *rest;
 
-	if (!documents_show_paths)
-		return NULL;
-
 	tmp_dirname = g_path_get_dirname(DOC_FILENAME(doc));
+
 	/* replace the project base path with the project name */
 	project_base_path = project_get_base_path();
+
 	if (project_base_path != NULL)
 	{
 		gsize len = strlen(project_base_path);
@@ -391,6 +388,21 @@ static GtkTreeIter *get_doc_parent(GeanyDocument *doc)
 	}
 	else
 		g_free(tmp_dirname);
+
+	return dirname;
+}
+
+
+static GtkTreeIter *get_doc_parent(GeanyDocument *doc)
+{
+	gchar *dirname = NULL;
+	static GtkTreeIter parent;
+	GtkTreeModel *model = GTK_TREE_MODEL(store_openfiles);
+
+	if (!documents_show_paths)
+		return NULL;
+
+	dirname = get_doc_folder(doc);
 
 	if (gtk_tree_model_get_iter_first(model, &parent))
 	{
