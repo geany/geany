@@ -257,10 +257,6 @@ static void clear(void)
 }
 
 
-/* Reuses list to free each node, so list must be a variable */
-#define foreach_slist_free(node, list) \
-	for (node = list, list = NULL; g_slist_free_1(list), node != NULL; list = node, node = node->next)
-
 /* recreate the tree model from current_dir. */
 static void refresh(void)
 {
@@ -283,14 +279,15 @@ static void refresh(void)
 	list = utils_get_file_list(current_dir, NULL, NULL);
 	if (list != NULL)
 	{
-		/* free filenames & nodes as we go through the list */
-		foreach_slist_free(node, list)
+		/* free filenames as we go through the list */
+		foreach_slist(node, list)
 		{
 			gchar *fname = node->data;
 
 			add_item(fname);
 			g_free(fname);
 		}
+		g_slist_free(list);
 	}
 	gtk_entry_completion_set_model(entry_completion, GTK_TREE_MODEL(file_store));
 }
