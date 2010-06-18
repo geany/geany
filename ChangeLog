@@ -11,6 +11,8 @@
    Improve documentation for PLUGIN_VERSION_CHECK().
  * plugins/filebrowser.c:
    Allow Find in Files when no items are selected.
+ * src/build.c, src/geanyobject.c, src/geanyobject.h, doc/plugins.dox:
+   Add API signal "build-start" (patch by Jiří Techet, thanks).
 
 
 2010-06-17  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

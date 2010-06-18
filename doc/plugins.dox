@@ -253,6 +253,18 @@ PluginCallback plugin_callbacks[] =
  *  @param user_data user data.
  *  @endsignaldef
  *
+ *  @signaldef build-start
+ *  @signalproto
+ *  void user_function(GObject *obj, gpointer user_data);
+ *  @endsignalproto
+ *  @signaldesc
+ *  Sent before build is started. Plugins can use this signal e.g. to save the opened documents
+ *  before the build starts.
+ *
+ *  @param obj a GeanyObject instance, should be ignored.
+ *  @param user_data user data.
+ *  @endsignaldef
+ *
  *  @signaldef update-editor-menu
  *  @signalproto
  *  void user_function(GObject *obj, const gchar *word, gint pos, GeanyDocument *doc,

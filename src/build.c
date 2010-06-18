@@ -1243,6 +1243,8 @@ static void on_build_menu_item(GtkWidget *w, gpointer user_data)
 	gint grp = GPOINTER_TO_GRP(user_data);
 	gint cmd = GPOINTER_TO_CMD(user_data);
 
+	g_signal_emit_by_name(geany_object, "build-start");
+
 	if (doc && doc->changed)
 		document_save_file(doc, FALSE);
 	if (grp == GEANY_GBG_NON_FT && cmd == GBO_TO_CMD(GEANY_GBO_CUSTOM))

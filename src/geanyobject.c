@@ -286,9 +286,17 @@ static void create_signals(GObjectClass *g_object_class)
 	/* General signals */
 	geany_object_signals[GCB_GEANY_STARTUP_COMPLETE] = g_signal_new (
 		"geany-startup-complete",
-		G_OBJECT_CLASS_TYPE  (g_object_class),
+		G_OBJECT_CLASS_TYPE (g_object_class),
 		G_SIGNAL_RUN_FIRST,
 		G_STRUCT_OFFSET (GeanyObjectClass, geany_startup_complete),
+		NULL, NULL,
+		g_cclosure_marshal_VOID__VOID,
+		G_TYPE_NONE, 0);
+	geany_object_signals[GCB_BUILD_START] = g_signal_new (
+		"build-start",
+		G_OBJECT_CLASS_TYPE (g_object_class),
+		G_SIGNAL_RUN_FIRST,
+		G_STRUCT_OFFSET (GeanyObjectClass, build_start),
 		NULL, NULL,
 		g_cclosure_marshal_VOID__VOID,
 		G_TYPE_NONE, 0);

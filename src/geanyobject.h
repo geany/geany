@@ -45,6 +45,7 @@ typedef enum
 	GCB_UPDATE_EDITOR_MENU,
 	GCB_EDITOR_NOTIFY,
 	GCB_GEANY_STARTUP_COMPLETE,
+	GCB_BUILD_START,
 	GCB_SAVE_SETTINGS,
 	GCB_LOAD_SETTINGS,
 	GCB_MAX
@@ -90,6 +91,7 @@ struct _GeanyObjectClass
 	void (*update_editor_menu)(const gchar *word, gint click_pos, GeanyDocument *doc);
 	gboolean (*editor_notify)(GeanyEditor *editor, gpointer scnt);
 	void (*geany_startup_complete)(void);
+	void (*build_start)(void);
 	void (*save_settings)(GKeyFile *keyfile);
 	void (*load_settings)(GKeyFile *keyfile);
 };
