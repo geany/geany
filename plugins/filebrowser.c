@@ -33,12 +33,12 @@
 # include <windows.h>
 #endif
 
-GeanyPlugin		*geany_plugin;
-GeanyData		*geany_data;
-GeanyFunctions	*geany_functions;
+GeanyPlugin *geany_plugin;
+GeanyData *geany_data;
+GeanyFunctions *geany_functions;
 
 
-PLUGIN_VERSION_CHECK(175)
+PLUGIN_VERSION_CHECK(GEANY_API_VERSION)
 
 PLUGIN_SET_INFO(_("File Browser"), _("Adds a file browser tab to the sidebar."), VERSION,
 	_("The Geany developer team"))
@@ -64,24 +64,25 @@ enum
 };
 
 static gboolean fb_set_project_base_path = FALSE;
-static gboolean fb_follow_path 	  = FALSE;
+static gboolean fb_follow_path = FALSE;
 static gboolean show_hidden_files = FALSE;
 static gboolean hide_object_files = TRUE;
 
-static GtkWidget			*file_view_vbox;
-static GtkWidget			*file_view;
-static GtkListStore			*file_store;
-static GtkTreeIter			*last_dir_iter = NULL;
-static GtkEntryCompletion	*entry_completion = NULL;
+static GtkWidget *file_view_vbox;
+static GtkWidget *file_view;
+static GtkListStore *file_store;
+static GtkTreeIter *last_dir_iter = NULL;
+static GtkEntryCompletion *entry_completion = NULL;
 
-static GtkWidget	*filter_entry;
-static GtkWidget	*path_entry;
-static gchar		*current_dir = NULL;	/* in locale-encoding */
-static gchar		*open_cmd;				/* in locale-encoding */
-static gchar		*config_file;
-static gchar 		*filter = NULL;
+static GtkWidget *filter_entry;
+static GtkWidget *path_combo;
+static GtkWidget *path_entry;
+static gchar *current_dir = NULL; /* in locale-encoding */
+static gchar *open_cmd; /* in locale-encoding */
+static gchar *config_file;
+static gchar *filter = NULL;
 
-static gint			 page_number = 0;
+static gint page_number = 0;
 
 static struct
 {
@@ -274,6 +275,7 @@ static void refresh(void)
 
 	utf8_dir = utils_get_utf8_from_locale(current_dir);
 	gtk_entry_set_text(GTK_ENTRY(path_entry), utf8_dir);
+	ui_combo_box_add_to_history(GTK_COMBO_BOX_ENTRY(path_combo), utf8_dir, 0);
 	g_free(utf8_dir);
 
 	add_top_level_entry();	/* ".." item */
@@ -766,6 +768,14 @@ static void on_path_entry_activate(GtkEntry *entry, gpointer user_data)
 }
 
 
+static void on_path_combo_changed(GtkComboBox *combo, gpointer user_data)
+{
+	/* we get this callback on typing as well as choosing an item */
+	if (gtk_combo_box_get_active(combo) >= 0)
+		on_path_entry_activate(GTK_ENTRY(path_entry), NULL);
+}
+
+
 static void on_filter_activate(GtkEntry *entry, gpointer user_data)
 {
 	setptr(filter, g_strdup(gtk_entry_get_text(entry)));
@@ -1079,8 +1089,10 @@ void plugin_init(GeanyData *data)
 	filterbar = make_filterbar();
 	gtk_box_pack_start(GTK_BOX(file_view_vbox), filterbar, FALSE, FALSE, 0);
 
-	path_entry = gtk_entry_new();
-	gtk_box_pack_start(GTK_BOX(file_view_vbox), path_entry, FALSE, FALSE, 2);
+	path_combo = gtk_combo_box_entry_new_text();
+	gtk_box_pack_start(GTK_BOX(file_view_vbox), path_combo, FALSE, FALSE, 2);
+	g_signal_connect(path_combo, "changed", G_CALLBACK(on_path_combo_changed), NULL);
+	path_entry = GTK_BIN(path_combo)->child;
 	g_signal_connect(path_entry, "activate", G_CALLBACK(on_path_entry_activate), NULL);
 
 	file_view = gtk_tree_view_new();
