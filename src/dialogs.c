@@ -831,7 +831,7 @@ on_input_dialog_response(GtkDialog *dialog,
 		if (persistent)
 		{
 			GtkWidget *combo = (GtkWidget *) g_object_get_data(G_OBJECT(dialog), "combo");
-			ui_combo_box_add_to_history(GTK_COMBO_BOX(combo), str);
+			ui_combo_box_add_to_history(GTK_COMBO_BOX_ENTRY(combo), str, 0);
 		}
 		input_cb(str);
 	}

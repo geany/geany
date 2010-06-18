@@ -50,7 +50,7 @@
 enum {
 	/** The Application Programming Interface (API) version, incremented
 	 * whenever any plugin data types are modified or appended to. */
-	GEANY_API_VERSION = 189,
+	GEANY_API_VERSION = 190,
 
 	/** The Application Binary Interface (ABI) version, incremented whenever
 	 * existing fields in the plugin data types have to be changed or reordered. */
@@ -453,6 +453,8 @@ typedef struct UIUtilsFuncs
 	void		(*ui_widget_modify_font_from_string) (GtkWidget *widget, const gchar *str);
 	gboolean	(*ui_is_keyval_enter_or_return) (guint keyval);
 	gint		(*ui_get_gtk_settings_integer) (const gchar *property_name, gint default_value);
+	void		(*ui_combo_box_add_to_history) (GtkComboBoxEntry *combo_entry,
+				const gchar *text, gint history_len);
 }
 UIUtilsFuncs;
 

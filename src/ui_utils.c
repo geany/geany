@@ -1407,14 +1407,23 @@ static gboolean tree_model_find_text(GtkTreeModel *model,
 }
 
 
-/* Prepends the active text to the drop down list, removing a duplicate element in
- * the list if found. Ensures there are <= history_len elements. */
-void ui_combo_box_add_to_history(GtkComboBox *combo, const gchar *text)
+/** Prepends @a text to the drop down list, removing a duplicate element in
+ * the list if found. Also ensures there are <= @a history_len elements.
+ * @param combo_entry .
+ * @param text Text to add, or @c NULL for current entry text.
+ * @param history_len Max number of items, or @c 0 for default. */
+void ui_combo_box_add_to_history(GtkComboBoxEntry *combo_entry,
+		const gchar *text, gint history_len)
 {
-	const gint history_len = 10;
+	GtkComboBox *combo = GTK_COMBO_BOX(combo_entry);
 	GtkTreeModel *model;
 	GtkTreeIter iter;
 	GtkTreePath *path;
+
+	if (history_len <= 0)
+		history_len = 10;
+	if (!text)
+		text = gtk_entry_get_text(GTK_ENTRY(GTK_BIN(combo)->child));
 
 	model = gtk_combo_box_get_model(combo);
 

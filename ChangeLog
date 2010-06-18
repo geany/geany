@@ -1,3 +1,10 @@
+2010-06-18  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/ui_utils.h, src/dialogs.c, src/plugindata.h, src/search.c,
+   src/plugins.c, src/ui_utils.c, plugins/geanyfunctions.h:
+   Add ui_combo_box_add_to_history() to API.
+
+
 2010-06-17  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/sidebar.c:

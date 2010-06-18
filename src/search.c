@@ -1096,7 +1096,7 @@ on_find_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 			if (! utils_str_replace_escape(search_data.text, search_data.flags & SCFIND_REGEXP))
 				goto fail;
 		}
-		ui_combo_box_add_to_history(GTK_COMBO_BOX(user_data), search_data.text);
+		ui_combo_box_add_to_history(GTK_COMBO_BOX_ENTRY(user_data), search_data.text, 0);
 
 		switch (response)
 		{
@@ -1234,10 +1234,10 @@ on_replace_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 			goto fail;
 	}
 
-	ui_combo_box_add_to_history(GTK_COMBO_BOX(
-		gtk_widget_get_parent(replace_dlg.find_entry)), find);
-	ui_combo_box_add_to_history(GTK_COMBO_BOX(
-		gtk_widget_get_parent(replace_dlg.replace_entry)), replace);
+	ui_combo_box_add_to_history(GTK_COMBO_BOX_ENTRY(
+		gtk_widget_get_parent(replace_dlg.find_entry)), find, 0);
+	ui_combo_box_add_to_history(GTK_COMBO_BOX_ENTRY(
+		gtk_widget_get_parent(replace_dlg.replace_entry)), replace, 0);
 
 	switch (response)
 	{
@@ -1377,8 +1377,8 @@ on_find_in_files_dialog_response(GtkDialog *dialog, gint response,
 
 			if (search_find_in_files(search_text, locale_dir, opts->str, enc))
 			{
-				ui_combo_box_add_to_history(GTK_COMBO_BOX(search_combo), search_text);
-				ui_combo_box_add_to_history(GTK_COMBO_BOX(dir_combo), utf8_dir);
+				ui_combo_box_add_to_history(GTK_COMBO_BOX_ENTRY(search_combo), search_text, 0);
+				ui_combo_box_add_to_history(GTK_COMBO_BOX_ENTRY(dir_combo), utf8_dir, 0);
 				gtk_widget_hide(fif_dlg.dialog);
 			}
 			g_free(locale_dir);
