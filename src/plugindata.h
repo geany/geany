@@ -59,18 +59,20 @@ enum {
 	GEANY_ABI_VERSION = 66
 };
 
-/** Checks the plugin can be loaded by Geany.
+/** Defines a function to check the plugin is safe to load.
  * This performs runtime checks that try to ensure:
  * - Geany ABI data types are compatible with this plugin.
- * - Geany sources provide the required API for this plugin. */
+ * - Geany sources provide the required API for this plugin.
+ * @param api_required The minimum API number your plugin requires.
+ * Look at the source for the value of @c GEANY_API_VERSION to use if you
+ * want your plugin to require the current Geany version on your machine.
+ * You should update this value when using any new API features. */
 #define PLUGIN_VERSION_CHECK(api_required) \
 	gint plugin_version_check(gint abi_ver) \
 	{ \
 		if (abi_ver != GEANY_ABI_VERSION) \
 			return -1; \
-		if (GEANY_API_VERSION < (api_required)) \
-			return (api_required); \
-		else return 0; \
+		return (api_required); \
 	}
 
 
