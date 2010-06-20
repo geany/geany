@@ -79,10 +79,9 @@ typedef struct _TMWorkObjectClass
 
 /*!
  Given a file name, returns a newly allocated string containing the realpath()
- of the file. However, unlike realpath, a reasonable guess is returned even if
- the file does not exist, which may often be the case
+ of the file.
  \param file_name The original file_name
- \return A newly allocated string containing the real path to the file
+ \return A newly allocated string containing the real path to the file. NULL if none is available.
 */
 gchar *tm_get_real_path(const gchar *file_name);
 

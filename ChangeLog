@@ -1,3 +1,10 @@
+2010-06-20  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * tagmanager/tm_work_object.c:
+   Change of description of tm_get_real_path(). Patch by Dimitar Zhekov.
+   Thanks.
+
+
 2010-06-18  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/ui_utils.h, src/dialogs.c, src/plugindata.h, src/search.c,
