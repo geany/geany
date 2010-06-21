@@ -154,9 +154,6 @@ on_replace_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 static void
 on_replace_entry_activate(GtkEntry *entry, gpointer user_data);
 
-static gboolean
-on_widget_key_pressed_set_focus(GtkWidget *widget, GdkEventKey *event, gpointer user_data);
-
 static void
 on_find_in_files_dialog_response(GtkDialog *dialog, gint response, gpointer user_data);
 
@@ -530,6 +527,18 @@ static void send_replace_dialog_response(GtkButton *button, gpointer user_data)
 }
 
 
+static gboolean
+on_widget_key_pressed_set_focus(GtkWidget *widget, GdkEventKey *event, gpointer user_data)
+{
+	if (event->keyval == GDK_Tab)
+	{
+		gtk_widget_grab_focus(GTK_WIDGET(user_data));
+		return TRUE;
+	}
+	return FALSE;
+}
+
+
 static void create_replace_dialog(void)
 {
 	GtkWidget *label_find, *label_replace, *entry_find, *entry_replace,
@@ -583,6 +592,8 @@ static void create_replace_dialog(void)
 		g_object_ref(entry_replace), (GDestroyNotify)g_object_unref);
 	replace_dlg.replace_entry = GTK_BIN(entry_replace)->child;
 
+	/* catch tab key to set the focus to the replace entry instead of
+	 * setting it to the combo box drop down */
 	g_signal_connect(gtk_bin_get_child(GTK_BIN(entry_find)),
 			"key-press-event", G_CALLBACK(on_widget_key_pressed_set_focus),
 			gtk_bin_get_child(GTK_BIN(entry_replace)));
@@ -722,21 +733,6 @@ static void create_fif_dialog(void)
 	gtk_dialog_set_default_response(GTK_DIALOG(fif_dlg.dialog),
 		GTK_RESPONSE_ACCEPT);
 
-	label1 = gtk_label_new_with_mnemonic(_("_Directory:"));
-	gtk_misc_set_alignment(GTK_MISC(label1), 1, 0.5);
-
-	dir_combo = gtk_combo_box_entry_new_text();
-	entry = gtk_bin_get_child(GTK_BIN(dir_combo));
-	ui_entry_add_clear_icon(GTK_ENTRY(entry));
-	gtk_label_set_mnemonic_widget(GTK_LABEL(label1), entry);
-	gtk_entry_set_max_length(GTK_ENTRY(entry), 248);
-	gtk_entry_set_width_chars(GTK_ENTRY(entry), 50);
-	fif_dlg.dir_combo = dir_combo;
-
-	dbox = ui_path_box_new(NULL, GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
-		GTK_ENTRY(entry));
-	gtk_box_pack_start(GTK_BOX(dbox), label1, FALSE, FALSE, 0);
-
 	label = gtk_label_new_with_mnemonic(_("_Search for:"));
 	gtk_misc_set_alignment(GTK_MISC(label), 1, 0.5);
 
@@ -752,6 +748,26 @@ static void create_fif_dialog(void)
 	sbox = gtk_hbox_new(FALSE, 6);
 	gtk_box_pack_start(GTK_BOX(sbox), label, FALSE, FALSE, 0);
 	gtk_box_pack_start(GTK_BOX(sbox), combo, TRUE, TRUE, 0);
+
+	label1 = gtk_label_new_with_mnemonic(_("_Directory:"));
+	gtk_misc_set_alignment(GTK_MISC(label1), 1, 0.5);
+
+	dir_combo = gtk_combo_box_entry_new_text();
+	entry = gtk_bin_get_child(GTK_BIN(dir_combo));
+	ui_entry_add_clear_icon(GTK_ENTRY(entry));
+	gtk_label_set_mnemonic_widget(GTK_LABEL(label1), entry);
+	gtk_entry_set_max_length(GTK_ENTRY(entry), 248);
+	gtk_entry_set_width_chars(GTK_ENTRY(entry), 50);
+	fif_dlg.dir_combo = dir_combo;
+
+	dbox = ui_path_box_new(NULL, GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
+		GTK_ENTRY(entry));
+	gtk_box_pack_start(GTK_BOX(dbox), label1, FALSE, FALSE, 0);
+
+	/* catch search tab key to set the focus to the dir entry instead of
+	 * setting it to the combo box drop down */
+	g_signal_connect(combo, "key-press-event",
+			G_CALLBACK(on_widget_key_pressed_set_focus), dir_combo);
 
 	label2 = gtk_label_new_with_mnemonic(_("E_ncoding:"));
 	gtk_misc_set_alignment(GTK_MISC(label2), 1, 0.5);
@@ -835,8 +851,8 @@ static void create_fif_dialog(void)
 	gtk_container_add(GTK_CONTAINER(hbox), rbox);
 	gtk_container_add(GTK_CONTAINER(hbox), cbox);
 
-	gtk_box_pack_start(GTK_BOX(vbox), dbox, TRUE, FALSE, 0);
 	gtk_box_pack_start(GTK_BOX(vbox), sbox, TRUE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(vbox), dbox, TRUE, FALSE, 0);
 	gtk_box_pack_start(GTK_BOX(vbox), ebox, TRUE, FALSE, 0);
 	gtk_container_add(GTK_CONTAINER(vbox), hbox);
 
@@ -860,8 +876,6 @@ static void create_fif_dialog(void)
 	gtk_box_pack_start(GTK_BOX(hbox), entry_extra, TRUE, TRUE, 0);
 	gtk_container_add(GTK_CONTAINER(vbox), hbox);
 
-	g_signal_connect(dir_combo, "key-press-event",
-			G_CALLBACK(on_widget_key_pressed_set_focus), combo);
 	g_signal_connect(fif_dlg.dialog, "response",
 			G_CALLBACK(on_find_in_files_dialog_response), NULL);
 	g_signal_connect(fif_dlg.dialog, "delete-event",
@@ -1286,20 +1300,6 @@ on_replace_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 	}
 	g_free(find);
 	g_free(replace);
-}
-
-
-static gboolean
-on_widget_key_pressed_set_focus(GtkWidget *widget, GdkEventKey *event, gpointer user_data)
-{
-	/* catch tabulator key to set the focus in the replace entry instead of
-	 * setting it to the combo box */
-	if (event->keyval == GDK_Tab)
-	{
-		gtk_widget_grab_focus(GTK_WIDGET(user_data));
-		return TRUE;
-	}
-	return FALSE;
 }
 
 

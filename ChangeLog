@@ -1,3 +1,9 @@
+2010-06-21  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/search.c:
+   Put Find in Files Search field above Directory field.
+
+
 2010-06-20  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * tagmanager/tm_work_object.c:
