@@ -704,7 +704,7 @@ static void create_fif_dialog(void)
 	GtkWidget *dir_combo, *combo, *e_combo, *entry;
 	GtkWidget *label, *label1, *label2, *checkbox1, *checkbox2, *check_wholeword,
 		*check_recursive, *check_extra, *entry_extra, *check_regexp;
-	GtkWidget *dbox, *sbox, *cbox, *rbox, *hbox, *vbox, *ebox;
+	GtkWidget *dbox, *sbox, *lbox, *rbox, *hbox, *vbox, *ebox;
 	GtkSizeGroup *size_group;
 	gchar *encoding_string;
 	guint i;
@@ -782,13 +782,11 @@ static void create_fif_dialog(void)
 	gtk_size_group_add_widget(size_group, label2);
 	g_object_unref(G_OBJECT(size_group));	/* auto destroy the size group */
 
-	rbox = gtk_vbox_new(FALSE, 0);
 	check_regexp = gtk_check_button_new_with_mnemonic(_("_Use regular expressions"));
 	g_object_set_data_full(G_OBJECT(fif_dlg.dialog), "check_regexp",
 					g_object_ref(check_regexp), (GDestroyNotify) g_object_unref);
 	gtk_button_set_focus_on_click(GTK_BUTTON(check_regexp), FALSE);
 	ui_widget_set_tooltip_text(check_regexp, _("See grep's manual page for more information"));
-	gtk_container_add(GTK_CONTAINER(rbox), check_regexp);
 
 	check_recursive = gtk_check_button_new_with_mnemonic(_("_Recurse in subfolders"));
 	g_object_set_data_full(G_OBJECT(fif_dlg.dialog), "check_recursive",
@@ -813,15 +811,19 @@ static void create_fif_dialog(void)
 	ui_widget_set_tooltip_text(checkbox2,
 			_("Invert the sense of matching, to select non-matching lines"));
 
-	cbox = gtk_vbox_new(FALSE, 0);
-	gtk_container_add(GTK_CONTAINER(cbox), checkbox1);
-	gtk_container_add(GTK_CONTAINER(cbox), check_wholeword);
-	gtk_container_add(GTK_CONTAINER(cbox), checkbox2);
-	gtk_container_add(GTK_CONTAINER(cbox), check_recursive);
+	lbox = gtk_vbox_new(FALSE, 0);
+	gtk_container_add(GTK_CONTAINER(lbox), check_regexp);
+	gtk_container_add(GTK_CONTAINER(lbox), checkbox2);
+	gtk_container_add(GTK_CONTAINER(lbox), check_recursive);
+
+	rbox = gtk_vbox_new(FALSE, 0);
+	gtk_container_add(GTK_CONTAINER(rbox), checkbox1);
+	gtk_container_add(GTK_CONTAINER(rbox), check_wholeword);
+	gtk_container_add(GTK_CONTAINER(rbox), gtk_label_new(NULL));
 
 	hbox = gtk_hbox_new(FALSE, 6);
+	gtk_container_add(GTK_CONTAINER(hbox), lbox);
 	gtk_container_add(GTK_CONTAINER(hbox), rbox);
-	gtk_container_add(GTK_CONTAINER(hbox), cbox);
 
 	gtk_box_pack_start(GTK_BOX(vbox), sbox, TRUE, FALSE, 0);
 	gtk_box_pack_start(GTK_BOX(vbox), dbox, TRUE, FALSE, 0);
