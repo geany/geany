@@ -1217,10 +1217,10 @@ utility. GNU Grep is recommended.
 
 .. image:: ./images/find_in_files_dialog.png
 
-
 The Encoding combo box can be used to define the encoding of the files
 to be searched. The entered search text is converted to the chosen encoding
 and the search results are converted back to UTF-8.
+
 The Extra options field is used to pass any additional arguments to
 the grep tool.
 

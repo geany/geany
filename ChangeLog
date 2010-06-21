@@ -2,6 +2,11 @@
 
  * src/search.c:
    Put Find in Files Search field above Directory field.
+ * src/search.c, doc/geany.txt:
+   Simplify FIF 'Fixed strings, Grep regular expressions, Extended
+   regular expressions' radio buttons with a 'Use regular expressions'
+   checkbox. This uses the extended syntax (which is the same as the
+   Find/Replace regex syntax).
 
 
 2010-06-20  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>

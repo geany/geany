@@ -73,30 +73,22 @@ enum
 	GEANY_RESPONSE_REPLACE_IN_SEL
 };
 
-enum
-{
-	FIF_FGREP,
-	FIF_GREP,
-	FIF_EGREP
-};
-
 
 GeanySearchData search_data;
-
 GeanySearchPrefs search_prefs;
 
 
 static struct
 {
-	gint fif_mode;
 	gchar *fif_extra_options;
+	gboolean fif_regexp;
 	gboolean fif_case_sensitive;
 	gboolean fif_match_whole_word;
 	gboolean fif_invert_results;
 	gboolean fif_recursive;
 	gboolean fif_use_extra_options;
 }
-settings = {0, NULL, FALSE, FALSE, FALSE, FALSE, FALSE};
+settings = {NULL, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE};
 
 static StashGroup *fif_prefs = NULL;
 
@@ -183,13 +175,10 @@ static void init_prefs(void)
 	group = stash_group_new("search");
 	fif_prefs = group;
 	configuration_add_pref_group(group, FALSE);
-	stash_group_add_radio_buttons(group, &settings.fif_mode, "fif_mode", FIF_FGREP,
-		"radio_fgrep", FIF_FGREP,
-		"radio_grep", FIF_GREP,
-		"radio_egrep", FIF_EGREP,
-		NULL);
 	stash_group_add_entry(group, &settings.fif_extra_options,
 		"fif_extra_options", "", "entry_extra");
+	stash_group_add_toggle_button(group, &settings.fif_regexp,
+		"fif_regexp", FALSE, "check_regexp");
 	stash_group_add_toggle_button(group, &settings.fif_case_sensitive,
 		"fif_case_sensitive", TRUE, "check_case");
 	stash_group_add_toggle_button(group, &settings.fif_match_whole_word,
@@ -714,8 +703,8 @@ static void create_fif_dialog(void)
 {
 	GtkWidget *dir_combo, *combo, *e_combo, *entry;
 	GtkWidget *label, *label1, *label2, *checkbox1, *checkbox2, *check_wholeword,
-		*check_recursive, *check_extra, *entry_extra;
-	GtkWidget *dbox, *sbox, *cbox, *rbox, *rbtn, *hbox, *vbox, *ebox;
+		*check_recursive, *check_extra, *entry_extra, *check_regexp;
+	GtkWidget *dbox, *sbox, *cbox, *rbox, *hbox, *vbox, *ebox;
 	GtkSizeGroup *size_group;
 	gchar *encoding_string;
 	guint i;
@@ -794,29 +783,12 @@ static void create_fif_dialog(void)
 	g_object_unref(G_OBJECT(size_group));	/* auto destroy the size group */
 
 	rbox = gtk_vbox_new(FALSE, 0);
-	rbtn = gtk_radio_button_new_with_mnemonic(NULL, _("Fixed s_trings"));
-	/* Make fixed strings the default to speed up searching all files in directory. */
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(rbtn), TRUE);
-	g_object_set_data_full(G_OBJECT(fif_dlg.dialog), "radio_fgrep",
-					g_object_ref(rbtn), (GDestroyNotify)g_object_unref);
-	gtk_button_set_focus_on_click(GTK_BUTTON(rbtn), FALSE);
-	gtk_container_add(GTK_CONTAINER(rbox), rbtn);
-
-	rbtn = gtk_radio_button_new_with_mnemonic_from_widget(GTK_RADIO_BUTTON(rbtn),
-				_("_Grep regular expressions"));
-	g_object_set_data_full(G_OBJECT(fif_dlg.dialog), "radio_grep",
-					g_object_ref(rbtn), (GDestroyNotify)g_object_unref);
-	ui_widget_set_tooltip_text(rbtn, _("See grep's manual page for more information"));
-	gtk_button_set_focus_on_click(GTK_BUTTON(rbtn), FALSE);
-	gtk_container_add(GTK_CONTAINER(rbox), rbtn);
-
-	rbtn = gtk_radio_button_new_with_mnemonic_from_widget(GTK_RADIO_BUTTON(rbtn),
-				_("_Extended regular expressions"));
-	g_object_set_data_full(G_OBJECT(fif_dlg.dialog), "radio_egrep",
-					g_object_ref(rbtn), (GDestroyNotify)g_object_unref);
-	ui_widget_set_tooltip_text(rbtn, _("See grep's manual page for more information"));
-	gtk_button_set_focus_on_click(GTK_BUTTON(rbtn), FALSE);
-	gtk_container_add(GTK_CONTAINER(rbox), rbtn);
+	check_regexp = gtk_check_button_new_with_mnemonic(_("_Use regular expressions"));
+	g_object_set_data_full(G_OBJECT(fif_dlg.dialog), "check_regexp",
+					g_object_ref(check_regexp), (GDestroyNotify) g_object_unref);
+	gtk_button_set_focus_on_click(GTK_BUTTON(check_regexp), FALSE);
+	ui_widget_set_tooltip_text(check_regexp, _("See grep's manual page for more information"));
+	gtk_container_add(GTK_CONTAINER(rbox), check_regexp);
 
 	check_recursive = gtk_check_button_new_with_mnemonic(_("_Recurse in subfolders"));
 	g_object_set_data_full(G_OBJECT(fif_dlg.dialog), "check_recursive",
@@ -1326,9 +1298,9 @@ static GString *get_grep_options(void)
 	if (recursive)
 		g_string_append_c(gstr, 'r');
 
-	if (settings.fif_mode == FIF_FGREP)
+	if (!settings.fif_regexp)
 		g_string_append_c(gstr, 'F');
-	else if (settings.fif_mode == FIF_EGREP)
+	else
 		g_string_append_c(gstr, 'E');
 
 	if (extra)
