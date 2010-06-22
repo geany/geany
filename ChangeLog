@@ -1,3 +1,12 @@
+2010-06-22  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/search.c:
+   Add Files checkbox and combo to Find in Files dialog, currently
+   does nothing & is disabled.
+   Don't try to focus the next entry on pressing tab anymore as this
+   is more complicated now.
+
+
 2010-06-21  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/search.c:

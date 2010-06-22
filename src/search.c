@@ -691,7 +691,7 @@ void search_show_replace_dialog(void)
 }
 
 
-static void on_extra_options_toggled(GtkToggleButton *togglebutton, gpointer user_data)
+static void on_widget_toggled_set_sensitive(GtkToggleButton *togglebutton, gpointer user_data)
 {
 	/* disable extra option entry when checkbutton not checked */
 	gtk_widget_set_sensitive(GTK_WIDGET(user_data),
@@ -701,9 +701,9 @@ static void on_extra_options_toggled(GtkToggleButton *togglebutton, gpointer use
 
 static void create_fif_dialog(void)
 {
-	GtkWidget *dir_combo, *combo, *e_combo, *entry;
+	GtkWidget *dir_combo, *combo, *fcombo, *e_combo, *entry;
 	GtkWidget *label, *label1, *label2, *checkbox1, *checkbox2, *check_wholeword,
-		*check_recursive, *check_extra, *entry_extra, *check_regexp;
+		*check_recursive, *check_extra, *entry_extra, *check_regexp, *check;
 	GtkWidget *dbox, *sbox, *lbox, *rbox, *hbox, *vbox, *ebox;
 	GtkSizeGroup *size_group;
 	gchar *encoding_string;
@@ -723,7 +723,7 @@ static void create_fif_dialog(void)
 		GTK_RESPONSE_ACCEPT);
 
 	label = gtk_label_new_with_mnemonic(_("_Search for:"));
-	gtk_misc_set_alignment(GTK_MISC(label), 1, 0.5);
+	gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
 
 	combo = gtk_combo_box_entry_new_text();
 	entry = gtk_bin_get_child(GTK_BIN(combo));
@@ -738,8 +738,34 @@ static void create_fif_dialog(void)
 	gtk_box_pack_start(GTK_BOX(sbox), label, FALSE, FALSE, 0);
 	gtk_box_pack_start(GTK_BOX(sbox), combo, TRUE, TRUE, 0);
 
+	/* make labels same width */
+	size_group = gtk_size_group_new(GTK_SIZE_GROUP_HORIZONTAL);
+	gtk_size_group_add_widget(size_group, label);
+
+	check = gtk_check_button_new_with_mnemonic(_("Fi_les:"));
+	gtk_widget_set_sensitive(check, FALSE);	/* tmp */
+	ui_hookup_widget(fif_dlg.dialog, check, "check_files");
+	gtk_button_set_focus_on_click(GTK_BUTTON(check), FALSE);
+	gtk_size_group_add_widget(size_group, check);
+
+	fcombo = gtk_combo_box_entry_new_text();
+	gtk_widget_set_sensitive(fcombo, FALSE);
+	entry = gtk_bin_get_child(GTK_BIN(fcombo));
+	ui_entry_add_clear_icon(GTK_ENTRY(entry));
+	gtk_entry_set_activates_default(GTK_ENTRY(entry), TRUE);
+	ui_widget_set_tooltip_text(entry, _("File patterns, e.g. *.c *.h"));
+	ui_hookup_widget(fif_dlg.dialog, entry, "entry_files");
+
+	/* enable entry when check is checked */
+	g_signal_connect(check, "toggled",
+		G_CALLBACK(on_widget_toggled_set_sensitive), fcombo);
+
+	hbox = gtk_hbox_new(FALSE, 6);
+	gtk_box_pack_start(GTK_BOX(hbox), check, FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(hbox), fcombo, TRUE, TRUE, 0);
+
 	label1 = gtk_label_new_with_mnemonic(_("_Directory:"));
-	gtk_misc_set_alignment(GTK_MISC(label1), 1, 0.5);
+	gtk_misc_set_alignment(GTK_MISC(label1), 0, 0.5);
 
 	dir_combo = gtk_combo_box_entry_new_text();
 	entry = gtk_bin_get_child(GTK_BIN(dir_combo));
@@ -753,13 +779,8 @@ static void create_fif_dialog(void)
 		GTK_ENTRY(entry));
 	gtk_box_pack_start(GTK_BOX(dbox), label1, FALSE, FALSE, 0);
 
-	/* catch search tab key to set the focus to the dir entry instead of
-	 * setting it to the combo box drop down */
-	g_signal_connect(combo, "key-press-event",
-			G_CALLBACK(on_widget_key_pressed_set_focus), dir_combo);
-
 	label2 = gtk_label_new_with_mnemonic(_("E_ncoding:"));
-	gtk_misc_set_alignment(GTK_MISC(label2), 1, 0.5);
+	gtk_misc_set_alignment(GTK_MISC(label2), 0, 0.5);
 
 	e_combo = gtk_combo_box_new_text();
 	for (i = 0; i < GEANY_ENCODINGS_MAX; i++)
@@ -776,11 +797,14 @@ static void create_fif_dialog(void)
 	gtk_box_pack_start(GTK_BOX(ebox), label2, FALSE, FALSE, 0);
 	gtk_box_pack_start(GTK_BOX(ebox), e_combo, TRUE, TRUE, 0);
 
-	size_group = gtk_size_group_new(GTK_SIZE_GROUP_HORIZONTAL);
 	gtk_size_group_add_widget(size_group, label1);
-	gtk_size_group_add_widget(size_group, label);
 	gtk_size_group_add_widget(size_group, label2);
 	g_object_unref(G_OBJECT(size_group));	/* auto destroy the size group */
+
+	gtk_box_pack_start(GTK_BOX(vbox), sbox, TRUE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(vbox), hbox, TRUE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(vbox), dbox, TRUE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(vbox), ebox, TRUE, FALSE, 0);
 
 	check_regexp = gtk_check_button_new_with_mnemonic(_("_Use regular expressions"));
 	g_object_set_data_full(G_OBJECT(fif_dlg.dialog), "check_regexp",
@@ -824,10 +848,6 @@ static void create_fif_dialog(void)
 	hbox = gtk_hbox_new(FALSE, 6);
 	gtk_container_add(GTK_CONTAINER(hbox), lbox);
 	gtk_container_add(GTK_CONTAINER(hbox), rbox);
-
-	gtk_box_pack_start(GTK_BOX(vbox), sbox, TRUE, FALSE, 0);
-	gtk_box_pack_start(GTK_BOX(vbox), dbox, TRUE, FALSE, 0);
-	gtk_box_pack_start(GTK_BOX(vbox), ebox, TRUE, FALSE, 0);
 	gtk_container_add(GTK_CONTAINER(vbox), hbox);
 
 	check_extra = gtk_check_button_new_with_mnemonic(_("E_xtra options:"));
@@ -843,7 +863,7 @@ static void create_fif_dialog(void)
 
 	/* enable entry_extra when check_extra is checked */
 	g_signal_connect(check_extra, "toggled",
-		G_CALLBACK(on_extra_options_toggled), entry_extra);
+		G_CALLBACK(on_widget_toggled_set_sensitive), entry_extra);
 
 	hbox = gtk_hbox_new(FALSE, 6);
 	gtk_box_pack_start(GTK_BOX(hbox), check_extra, FALSE, FALSE, 0);
