@@ -2,6 +2,8 @@
 
  * src/search.c, doc/geany.txt, doc/geany.html:
    Implement Find in Files file pattern search.
+ * src/search.c:
+   Add file pattern to combo box history.
 
 
 2010-06-22  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

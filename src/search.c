@@ -118,11 +118,12 @@ static struct
 {
 	GtkWidget	*dialog;
 	GtkWidget	*dir_combo;
+	GtkWidget	*files_combo;
 	GtkWidget	*search_combo;
 	GtkWidget	*encoding_combo;
 	gint		position[2]; /* x, y */
 }
-fif_dlg = {NULL, NULL, NULL, NULL, {0, 0}};
+fif_dlg = {NULL, NULL, NULL, NULL, NULL, {0, 0}};
 
 
 static gboolean search_read_io(GIOChannel *source, GIOCondition condition, gpointer data);
@@ -760,6 +761,7 @@ static void create_fif_dialog(void)
 	gtk_entry_set_activates_default(GTK_ENTRY(entry), TRUE);
 	ui_widget_set_tooltip_text(entry, _("File patterns, e.g. *.c *.h"));
 	ui_hookup_widget(fif_dlg.dialog, entry, "entry_files");
+	fif_dlg.files_combo = fcombo;
 
 	/* enable entry when check is checked */
 	g_signal_connect(check, "toggled",
@@ -1390,6 +1392,7 @@ on_find_in_files_dialog_response(GtkDialog *dialog, gint response,
 			if (search_find_in_files(search_text, locale_dir, opts->str, enc))
 			{
 				ui_combo_box_add_to_history(GTK_COMBO_BOX_ENTRY(search_combo), search_text, 0);
+				ui_combo_box_add_to_history(GTK_COMBO_BOX_ENTRY(fif_dlg.files_combo), NULL, 0);
 				ui_combo_box_add_to_history(GTK_COMBO_BOX_ENTRY(dir_combo), utf8_dir, 0);
 				gtk_widget_hide(fif_dlg.dialog);
 			}
