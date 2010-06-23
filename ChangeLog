@@ -1,3 +1,9 @@
+2010-06-23  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/search.c, doc/geany.txt, doc/geany.html:
+   Implement Find in Files file pattern search.
+
+
 2010-06-22  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/search.c:

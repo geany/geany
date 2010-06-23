@@ -1213,16 +1213,25 @@ Find in files
 Find in files is a more powerful version of Find usage that searches
 all files in a certain directory using the Grep tool. The Grep tool
 must be correctly set in Preferences to the path of the system's Grep
-utility. GNU Grep is recommended.
+utility. GNU Grep is recommended (see note below).
 
 .. image:: ./images/find_in_files_dialog.png
 
-The Encoding combo box can be used to define the encoding of the files
+The *Files* field optionally searches only files matching the
+patterns listed. Patterns are basic and shell-like, separated by a
+space. To search all ``.c`` and ``.h`` files, use: ``*.c *.h``.
+
+The *Encoding* field can be used to define the encoding of the files
 to be searched. The entered search text is converted to the chosen encoding
 and the search results are converted back to UTF-8.
 
-The Extra options field is used to pass any additional arguments to
+The *Extra options* field is used to pass any additional arguments to
 the grep tool.
+
+.. note::
+    The *Files* setting uses ``--include=``, *Recurse in subfolders*
+    uses ``-r``; both are GNU Grep options and may not work with other
+    Grep implementations.
 
 
 Filtering out version control files

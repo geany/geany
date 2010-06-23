@@ -80,15 +80,17 @@ GeanySearchPrefs search_prefs;
 
 static struct
 {
-	gchar *fif_extra_options;
 	gboolean fif_regexp;
 	gboolean fif_case_sensitive;
 	gboolean fif_match_whole_word;
 	gboolean fif_invert_results;
 	gboolean fif_recursive;
 	gboolean fif_use_extra_options;
+	gchar *fif_extra_options;
+	gboolean fif_use_files;
+	gchar *fif_files;
 }
-settings = {NULL, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE};
+settings = {FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, NULL, FALSE, NULL};
 
 static StashGroup *fif_prefs = NULL;
 
@@ -175,8 +177,6 @@ static void init_prefs(void)
 	group = stash_group_new("search");
 	fif_prefs = group;
 	configuration_add_pref_group(group, FALSE);
-	stash_group_add_entry(group, &settings.fif_extra_options,
-		"fif_extra_options", "", "entry_extra");
 	stash_group_add_toggle_button(group, &settings.fif_regexp,
 		"fif_regexp", FALSE, "check_regexp");
 	stash_group_add_toggle_button(group, &settings.fif_case_sensitive,
@@ -187,8 +187,14 @@ static void init_prefs(void)
 		"fif_invert_results", FALSE, "check_invert");
 	stash_group_add_toggle_button(group, &settings.fif_recursive,
 		"fif_recursive", FALSE, "check_recursive");
+	stash_group_add_entry(group, &settings.fif_extra_options,
+		"fif_extra_options", "", "entry_extra");
 	stash_group_add_toggle_button(group, &settings.fif_use_extra_options,
 		"fif_use_extra_options", FALSE, "check_extra");
+	stash_group_add_entry(group, &settings.fif_files,
+		"fif_files", "", "entry_files");
+	stash_group_add_toggle_button(group, &settings.fif_use_files,
+		"fif_use_files", FALSE, "check_files");
 }
 
 
@@ -743,7 +749,6 @@ static void create_fif_dialog(void)
 	gtk_size_group_add_widget(size_group, label);
 
 	check = gtk_check_button_new_with_mnemonic(_("Fi_les:"));
-	gtk_widget_set_sensitive(check, FALSE);	/* tmp */
 	ui_hookup_widget(fif_dlg.dialog, check, "check_files");
 	gtk_button_set_focus_on_click(GTK_BUTTON(check), FALSE);
 	gtk_size_group_add_widget(size_group, check);
@@ -1334,6 +1339,19 @@ static GString *get_grep_options(void)
 			g_string_append_c(gstr, ' ');
 			g_string_append(gstr, settings.fif_extra_options);
 		}
+	}
+	if (settings.fif_use_files)
+	{
+		GString *tmp;
+
+		/* put --include= before each pattern */
+		g_strstrip(settings.fif_files);
+		tmp = g_string_new(settings.fif_files);
+		do {} while (utils_string_replace_all(tmp, "  ", " "));
+		g_string_prepend_c(tmp, ' ');
+		utils_string_replace_all(tmp, " ", " --include=");
+		g_string_append(gstr, tmp->str);
+		g_string_free(tmp, TRUE);
 	}
 	return gstr;
 }
