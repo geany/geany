@@ -1306,25 +1306,15 @@ on_replace_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 
 static GString *get_grep_options(void)
 {
-	gboolean invert = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
-					ui_lookup_widget(fif_dlg.dialog, "check_invert")));
-	gboolean case_sens = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
-					ui_lookup_widget(fif_dlg.dialog, "check_case")));
-	gboolean whole_word = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
-					ui_lookup_widget(fif_dlg.dialog, "check_wholeword")));
-	gboolean recursive = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
-					ui_lookup_widget(fif_dlg.dialog, "check_recursive")));
-	gboolean extra = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
-					ui_lookup_widget(fif_dlg.dialog, "check_extra")));
 	GString *gstr = g_string_new("-nHI");	/* line numbers, filenames, ignore binaries */
 
-	if (invert)
+	if (settings.fif_invert_results)
 		g_string_append_c(gstr, 'v');
-	if (! case_sens)
+	if (! settings.fif_case_sensitive)
 		g_string_append_c(gstr, 'i');
-	if (whole_word)
+	if (settings.fif_match_whole_word)
 		g_string_append_c(gstr, 'w');
-	if (recursive)
+	if (settings.fif_recursive)
 		g_string_append_c(gstr, 'r');
 
 	if (!settings.fif_regexp)
@@ -1332,7 +1322,7 @@ static GString *get_grep_options(void)
 	else
 		g_string_append_c(gstr, 'E');
 
-	if (extra)
+	if (settings.fif_use_extra_options)
 	{
 		g_strstrip(settings.fif_extra_options);
 
