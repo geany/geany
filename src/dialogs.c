@@ -316,12 +316,9 @@ static GtkWidget *add_file_open_extra_widget()
 	g_signal_connect(check_hidden, "toggled",
 				G_CALLBACK(on_file_open_check_hidden_toggled), NULL);
 
-	g_object_set_data_full(G_OBJECT(ui_widgets.open_filesel), "check_hidden",
-				g_object_ref(check_hidden), (GDestroyNotify)g_object_unref);
-	g_object_set_data_full(G_OBJECT(ui_widgets.open_filesel), "filetype_combo",
-				g_object_ref(filetype_combo), (GDestroyNotify)g_object_unref);
-	g_object_set_data_full(G_OBJECT(ui_widgets.open_filesel), "encoding_combo",
-				g_object_ref(encoding_combo), (GDestroyNotify)g_object_unref);
+	ui_hookup_widget(ui_widgets.open_filesel, check_hidden, "check_hidden");
+	ui_hookup_widget(ui_widgets.open_filesel, filetype_combo, "filetype_combo");
+	ui_hookup_widget(ui_widgets.open_filesel, encoding_combo, "encoding_combo");
 
 	return expander;
 }
@@ -460,8 +457,7 @@ static void create_save_file_dialog(void)
 	g_signal_connect(check_open_new_tab, "toggled",
 				G_CALLBACK(on_save_as_new_tab_toggled), rename_btn);
 
-	g_object_set_data_full(G_OBJECT(ui_widgets.save_filesel), "check_open_new_tab",
-				g_object_ref(check_open_new_tab), (GDestroyNotify)g_object_unref);
+	ui_hookup_widget(ui_widgets.save_filesel, check_open_new_tab, "check_open_new_tab");
 
 	g_signal_connect(ui_widgets.save_filesel, "delete-event",
 		G_CALLBACK(gtk_widget_hide_on_delete), NULL);

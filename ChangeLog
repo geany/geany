@@ -4,6 +4,10 @@
    Implement Find in Files file pattern search.
  * src/search.c:
    Add file pattern to combo box history.
+ * src/dialogs.c, src/vte.c, src/search.c, src/ui_utils.c,
+   plugins/export.c:
+   Use ui_hookup_widget() instead of g_object_set_data_full() for
+   widgets.
 
 
 2010-06-22  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

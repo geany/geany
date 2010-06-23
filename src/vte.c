@@ -854,32 +854,19 @@ void vte_append_preferences_tab(void)
 
 		gtk_box_pack_start(GTK_BOX(vbox), box, FALSE, FALSE, 0);
 
-		g_object_set_data_full(G_OBJECT(ui_widgets.prefs_dialog), "font_term",
-				g_object_ref(font_term),	(GDestroyNotify) g_object_unref);
-		g_object_set_data_full(G_OBJECT(ui_widgets.prefs_dialog), "color_fore",
-				g_object_ref(color_fore),	(GDestroyNotify) g_object_unref);
-		g_object_set_data_full(G_OBJECT(ui_widgets.prefs_dialog), "color_back",
-				g_object_ref(color_back),	(GDestroyNotify) g_object_unref);
-		g_object_set_data_full(G_OBJECT(ui_widgets.prefs_dialog), "spin_scrollback",
-				g_object_ref(spin_scrollback),	(GDestroyNotify) g_object_unref);
-		g_object_set_data_full(G_OBJECT(ui_widgets.prefs_dialog), "entry_shell",
-				g_object_ref(entry_shell),	(GDestroyNotify) g_object_unref);
-		g_object_set_data_full(G_OBJECT(ui_widgets.prefs_dialog), "check_scroll_key",
-				g_object_ref(check_scroll_key),	(GDestroyNotify) g_object_unref);
-		g_object_set_data_full(G_OBJECT(ui_widgets.prefs_dialog), "check_scroll_out",
-				g_object_ref(check_scroll_out),	(GDestroyNotify) g_object_unref);
-		g_object_set_data_full(G_OBJECT(ui_widgets.prefs_dialog), "check_cursor_blinks",
-				g_object_ref(check_cursor_blinks),	(GDestroyNotify) g_object_unref);
-		g_object_set_data_full(G_OBJECT(ui_widgets.prefs_dialog), "check_enable_bash_keys",
-				g_object_ref(check_enable_bash_keys),	(GDestroyNotify) g_object_unref);
-		g_object_set_data_full(G_OBJECT(ui_widgets.prefs_dialog), "check_ignore_menu_key",
-				g_object_ref(check_ignore_menu_key),	(GDestroyNotify) g_object_unref);
-		g_object_set_data_full(G_OBJECT(ui_widgets.prefs_dialog), "check_follow_path",
-				g_object_ref(check_follow_path),	(GDestroyNotify) g_object_unref);
-		g_object_set_data_full(G_OBJECT(ui_widgets.prefs_dialog), "check_run_in_vte",
-				g_object_ref(check_run_in_vte),	(GDestroyNotify) g_object_unref);
-		g_object_set_data_full(G_OBJECT(ui_widgets.prefs_dialog), "check_skip_script",
-				g_object_ref(check_skip_script),	(GDestroyNotify) g_object_unref);
+		ui_hookup_widget(ui_widgets.prefs_dialog, font_term, "font_term");
+		ui_hookup_widget(ui_widgets.prefs_dialog, color_fore, "color_fore");
+		ui_hookup_widget(ui_widgets.prefs_dialog, color_back, "color_back");
+		ui_hookup_widget(ui_widgets.prefs_dialog, spin_scrollback, "spin_scrollback");
+		ui_hookup_widget(ui_widgets.prefs_dialog, entry_shell, "entry_shell");
+		ui_hookup_widget(ui_widgets.prefs_dialog, check_scroll_key, "check_scroll_key");
+		ui_hookup_widget(ui_widgets.prefs_dialog, check_scroll_out, "check_scroll_out");
+		ui_hookup_widget(ui_widgets.prefs_dialog, check_cursor_blinks, "check_cursor_blinks");
+		ui_hookup_widget(ui_widgets.prefs_dialog, check_enable_bash_keys, "check_enable_bash_keys");
+		ui_hookup_widget(ui_widgets.prefs_dialog, check_ignore_menu_key, "check_ignore_menu_key");
+		ui_hookup_widget(ui_widgets.prefs_dialog, check_follow_path, "check_follow_path");
+		ui_hookup_widget(ui_widgets.prefs_dialog, check_run_in_vte, "check_run_in_vte");
+		ui_hookup_widget(ui_widgets.prefs_dialog, check_skip_script, "check_skip_script");
 
 		gtk_widget_show_all(frame);
 

@@ -577,15 +577,13 @@ void ui_create_insert_date_menu_items(void)
 	gtk_container_add(GTK_CONTAINER(menu_edit), item);
 	gtk_widget_show(item);
 	g_signal_connect(item, "activate", G_CALLBACK(on_menu_insert_date_activate), str);
-	g_object_set_data_full(G_OBJECT(main_widgets.window),
-		"insert_date_custom1", g_object_ref(item), (GDestroyNotify)g_object_unref);
+	ui_hookup_widget(main_widgets.window, item, "insert_date_custom1");
 
 	item = gtk_menu_item_new_with_mnemonic(str);
 	gtk_container_add(GTK_CONTAINER(menu_popup), item);
 	gtk_widget_show(item);
 	g_signal_connect(item, "activate", G_CALLBACK(on_insert_date_activate), str);
-	g_object_set_data_full(G_OBJECT(main_widgets.editor_menu),
-		"insert_date_custom2", g_object_ref(item), (GDestroyNotify)g_object_unref);
+	ui_hookup_widget(main_widgets.editor_menu, item, "insert_date_custom2");
 
 	insert_date_items(menu_edit, menu_popup, _("_Set Custom Date Format"));
 }
@@ -1615,8 +1613,7 @@ void ui_setup_open_button_callback(GtkWidget *open_btn, const gchar *title,
 		g_object_set_data_full(G_OBJECT(open_btn), "title", g_strdup(title),
 				(GDestroyNotify) g_free);
 	g_object_set_data(G_OBJECT(open_btn), "action", (gpointer) action);
-	g_object_set_data_full(G_OBJECT(open_btn), "entry",
-		g_object_ref(path_entry), (GDestroyNotify) g_object_unref);
+	ui_hookup_widget(open_btn, path_entry, "entry");
 	g_signal_connect(open_btn, "clicked", G_CALLBACK(ui_path_box_open_clicked), open_btn);
 }
 
