@@ -1732,6 +1732,7 @@ typedef struct RowWidgets
 	gboolean used_dst;
 } RowWidgets;
 
+static GdkColor *insensitive_color;
 
 static void set_row_color(RowWidgets *r, GdkColor *color )
 {
@@ -1756,7 +1757,6 @@ static void on_clear_dialog_row(GtkWidget *unused, gpointer user_data)
 	RowWidgets *r = (RowWidgets*)user_data;
 	gint src;
 	enum GeanyBuildCmdEntries i;
-	GdkColor color;
 	GeanyBuildCommand *bc = get_next_build_cmd(NULL, r->grp, r->cmd, r->dst, &src);
 
 	if (bc != NULL)
@@ -1778,8 +1778,7 @@ static void on_clear_dialog_row(GtkWidget *unused, gpointer user_data)
 		}
 	}
 	r->used_dst = FALSE;
-	gdk_color_parse("grey", &color);
-	set_row_color(r, &color);
+	set_row_color(r, insensitive_color);
 	r->cleared = TRUE;
 }
 
@@ -1840,9 +1839,9 @@ static RowWidgets *build_add_dialog_row(GeanyDocument *doc, GtkTable *table, gui
 	gint src;
 	enum GeanyBuildCmdEntries i;
 	guint column = 0;
-	GdkColor color;
 
 	label = gtk_label_new(g_strdup_printf("%d:", cmd + 1));
+	insensitive_color = &(gtk_widget_get_style(label)->text[GTK_STATE_INSENSITIVE]);
 	gtk_table_attach(table, label, column, column + 1, row, row + 1, GTK_FILL,
 		GTK_FILL | GTK_EXPAND, entry_x_padding, entry_y_padding);
 	roww = g_new0(RowWidgets, 1);
@@ -1894,9 +1893,8 @@ static RowWidgets *build_add_dialog_row(GeanyDocument *doc, GtkTable *table, gui
 		}
 		set_build_command_entry_text(roww->entries[i], str);
 	}
-	gdk_color_parse("grey", &color);
 	if (bc != NULL && ((gint)dst > src))
-		set_row_color(roww, &color);
+		set_row_color(roww, insensitive_color);
 	if (bc != NULL && (src > (gint)dst || (grp == GEANY_GBG_FT && (doc == NULL || doc->file_type == NULL))))
 	{
 		for (i = 0; i < GEANY_BC_CMDENTRIES_COUNT; i++)

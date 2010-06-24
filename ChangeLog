@@ -1,3 +1,10 @@
+2010-06-24  Lex Trotman  <elextr(at)gmail(dot)com>
+
+ * src/build.c
+   Make default dialog entries use GTK_STATE_INSENSITIVE color not
+   a fixed color (Suggestion by Ditmar Zhekov)
+
+
 2010-06-23  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/search.c, doc/geany.txt, doc/geany.html:
