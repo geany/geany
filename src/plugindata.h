@@ -173,7 +173,7 @@ GeanyKeyGroupInfo;
 typedef struct PluginCallback
 {
 	/** The name of signal, must be an existing signal. For a list of available signals,
-	 *  please see the @link signals Signal documentation @endlink. */
+	 *  please see the @link pluginsignals.c Signal documentation @endlink. */
 	const gchar	*signal_name;
 	/** A callback function which is called when the signal is emitted. */
 	GCallback	callback;

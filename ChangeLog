@@ -1,3 +1,14 @@
+2010-06-25  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/sciwrappers.c, src/plugindata.h, src/pluginutils.c, src/main.c,
+   doc/pluginsignals.c, doc/pluginsymbols.c, doc/Makefile.am,
+   doc/plugins.dox:
+   Move plugin signals docs to pluginsignals.c, using function
+   pointer syntax instead of @signaldef as this puts a summary of
+   the signal names at the top of the page and sorts alphabetically.
+   (Note: the syntax is similar to Vala signal syntax).
+
+
 2010-06-24  Lex Trotman  <elextr(at)gmail(dot)com>
 
  * src/build.c

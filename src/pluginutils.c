@@ -100,9 +100,9 @@ void plugin_module_make_resident(GeanyPlugin *plugin)
 
 /** Connects a signal which will be disconnected on unloading the plugin, to prevent a possible segfault.
  * @param plugin Must be @ref geany_plugin.
- * @param object Object to connect to, or @c NULL when using @link signals Geany signals @endlink.
+ * @param object Object to connect to, or @c NULL when using @link pluginsignals.c Geany signals @endlink.
  * @param signal_name The name of the signal. For a list of available
- * signals, please see the @link signals Signal documentation @endlink.
+ * signals, please see the @link pluginsignals.c Signal documentation @endlink.
  * @param after Set to @c TRUE to call your handler after the main signal handlers have been called
  * (if supported by @a signal_name).
  * @param callback The function to call when the signal is emitted.

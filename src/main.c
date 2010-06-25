@@ -400,8 +400,8 @@ static void setup_paths(void)
  *  This is because the main window is realized (i.e. actually drawn on the screen) at the
  *  end of the startup process.
  *
- *  @note Maybe you want to use the @ref geany-startup-complete signal to get notified about
- *        the completed startup process.
+ *  @note Maybe you want to use the @link pluginsignals.c @c "geany-startup-complete" signal @endlink
+ *        to get notified about the completed startup process.
  *
  *  @return @c TRUE if the Geany main window has been realized or @c FALSE otherwise.
  *

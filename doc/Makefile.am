@@ -1,9 +1,10 @@
 man_MANS=geany.1
 DOCDIR = $(DESTDIR)$(docdir)
 IMAGE_FILES = images/*.png
-EXTRA_DIST = geany.html geany.css geany.txt geany.1 plugins.dox pluginsymbols.c \
-			 stash-example.c \
-			 $(srcdir)/$(IMAGE_FILES)
+EXTRA_DIST = geany.html geany.css geany.txt geany.1 \
+	plugins.dox pluginsymbols.c pluginsignals.c \
+	stash-example.c \
+	$(srcdir)/$(IMAGE_FILES)
 
 pdf: geany.txt
 	rst2latex -stg --documentoptions="10pt,a4paper" --output-encoding=utf8 $(srcdir)/geany.txt geany.tex
