@@ -577,8 +577,7 @@ static void create_replace_dialog(void)
 	ui_hookup_widget(replace_dlg.dialog, entry_replace, "entry_replace");
 	replace_dlg.replace_entry = GTK_BIN(entry_replace)->child;
 
-	/* catch tab key to set the focus to the replace entry instead of
-	 * setting it to the combo box drop down */
+	/* tab from find to the replace entry */
 	g_signal_connect(gtk_bin_get_child(GTK_BIN(entry_find)),
 			"key-press-event", G_CALLBACK(on_widget_key_pressed_set_focus),
 			gtk_bin_get_child(GTK_BIN(entry_replace)));
@@ -742,6 +741,10 @@ static void create_fif_dialog(void)
 	gtk_button_set_focus_on_click(GTK_BUTTON(check), FALSE);
 	gtk_size_group_add_widget(size_group, check);
 
+	/* tab from search to the files checkbox */
+	g_signal_connect(entry, "key-press-event",
+		G_CALLBACK(on_widget_key_pressed_set_focus), check);
+
 	fcombo = gtk_combo_box_entry_new_text();
 	gtk_widget_set_sensitive(fcombo, FALSE);
 	entry = gtk_bin_get_child(GTK_BIN(fcombo));
@@ -769,6 +772,10 @@ static void create_fif_dialog(void)
 	gtk_entry_set_max_length(GTK_ENTRY(entry), 248);
 	gtk_entry_set_width_chars(GTK_ENTRY(entry), 50);
 	fif_dlg.dir_combo = dir_combo;
+
+	/* tab from files to the dir entry */
+	g_signal_connect(gtk_bin_get_child(GTK_BIN(fcombo)), "key-press-event",
+		G_CALLBACK(on_widget_key_pressed_set_focus), entry);
 
 	dbox = ui_path_box_new(NULL, GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
 		GTK_ENTRY(entry));

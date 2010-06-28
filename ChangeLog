@@ -1,3 +1,9 @@
+2010-06-28  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/search.c:
+   Restore tabbing past Find in Files combo box drop down menus.
+
+
 2010-06-25  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/sciwrappers.c, src/plugindata.h, src/pluginutils.c, src/main.c,
