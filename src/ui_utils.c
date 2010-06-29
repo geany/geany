@@ -159,6 +159,112 @@ void ui_set_statusbar(gboolean log, const gchar *format, ...)
 }
 
 
+static gchar *statusbar_template = NULL;
+
+/* note: some comments below are for translators */
+static void add_statusbar_statistics(GString *stats_str,
+		GeanyDocument *doc, guint line, guint col)
+{
+	const gchar *cur_tag;
+	const gchar *fmt;
+	const gchar *expos;	/* % expansion position */
+	const gchar sp[] = "      ";
+
+	fmt = statusbar_template ? statusbar_template :
+		/* Status bar statistics: col = column, sel = selection. */
+		_("line: %l / %L\t col: %c\t sel: %s\t %w      %t      %m"
+		"mode: %M      encoding: %e      filetype: %f      scope: %S");
+
+	g_string_assign(stats_str, "");
+	while ((expos = strchr(fmt, '%')) != NULL)
+	{
+		/* append leading text before % char */
+		g_string_append_len(stats_str, fmt, expos - fmt);
+
+		switch (*++expos)
+		{
+			case 'l':
+				g_string_append_printf(stats_str, "%d", line + 1);
+				break;
+			case 'L':
+				g_string_append_printf(stats_str, "%d",
+					sci_get_line_count(doc->editor->sci));
+				break;
+			case 'c':
+				g_string_append_printf(stats_str, "%d", col);
+				break;
+			case 'C':
+				g_string_append_printf(stats_str, "%d", col + 1);
+				break;
+			case 's':
+				g_string_append_printf(stats_str, "%d",
+					sci_get_selected_text_length(doc->editor->sci) - 1);
+				break;
+			case 'w':
+				/* RO = read-only */
+				g_string_append(stats_str, (doc->readonly) ? _("RO ") :
+					/* OVR = overwrite/overtype, INS = insert */
+					(sci_get_overtype(doc->editor->sci) ? _("OVR") : _("INS")));
+				break;
+			case 'r':
+				if (doc->readonly)	/* RO = read-only */
+					g_string_append(stats_str, _("RO "));
+				break;
+			case 't':
+			{
+				switch (editor_get_indent_prefs(doc->editor)->type)
+				{
+					case GEANY_INDENT_TYPE_TABS:
+						g_string_append(stats_str, _("TAB"));
+						break;
+					case GEANY_INDENT_TYPE_SPACES:	/* SP = space */
+						g_string_append(stats_str, _("SP"));
+						break;
+					case GEANY_INDENT_TYPE_BOTH:	/* T/S = tabs and spaces */
+						g_string_append(stats_str, _("T/S"));
+						break;
+				}
+				break;
+			}
+			case 'm':
+				if (doc->changed)
+				{
+					/* MOD = modified */
+					g_string_append(stats_str, _("MOD"));
+					g_string_append(stats_str, sp);
+				}
+				break;
+			case 'M':
+				g_string_append(stats_str, editor_get_eol_char_name(doc->editor));
+				break;
+			case 'e':
+				g_string_append(stats_str,
+					doc->encoding ? doc->encoding : _("unknown"));
+				if (encodings_is_unicode_charset(doc->encoding) && (doc->has_bom))
+					g_string_append(stats_str, _("(with BOM)"));	/* BOM = byte order mark */
+				break;
+			case 'f':
+				g_string_append(stats_str, doc->file_type->name);
+				break;
+			case 'S':
+				symbols_get_current_function(doc, &cur_tag);
+				g_string_append(stats_str, cur_tag);
+				break;
+			default:
+				g_string_append_len(stats_str, expos, 1);
+		}
+
+		/* skip past %c chars */
+		if (*expos)
+			fmt = expos + 1;
+		else
+			break;
+	}
+	/* add any remaining text */
+	g_string_append(stats_str, fmt);
+}
+
+
 /* updates the status bar document statistics */
 void ui_update_statusbar(GeanyDocument *doc, gint pos)
 {
@@ -171,10 +277,7 @@ void ui_update_statusbar(GeanyDocument *doc, gint pos)
 	if (doc != NULL)
 	{
 		static GString *stats_str = NULL;
-		const gchar sp[] = "      ";
 		guint line, col;
-		const gchar *cur_tag;
-		gchar *filetype_name = doc->file_type->name;
 
 		if (G_UNLIKELY(stats_str == NULL))
 			stats_str = g_string_sized_new(120);
@@ -191,59 +294,17 @@ void ui_update_statusbar(GeanyDocument *doc, gint pos)
 		else
 			col = 0;
 
-		/* Status bar statistics: col = column, sel = selection. */
-		g_string_printf(stats_str, _("line: %d / %d\t col: %d\t sel: %d\t "),
-			(line + 1), sci_get_line_count(doc->editor->sci), col,
-			sci_get_selected_text_length(doc->editor->sci) - 1);
-
-		g_string_append(stats_str,
-			/* RO = read-only */
-			(doc->readonly) ? _("RO ") :
-				/* OVR = overwrite/overtype, INS = insert */
-				(sci_get_overtype(doc->editor->sci) ? _("OVR") : _("INS")));
-		g_string_append(stats_str, sp);
-
-		switch (editor_get_indent_prefs(doc->editor)->type)
-		{
-			case GEANY_INDENT_TYPE_TABS:
-				g_string_append(stats_str, _("TAB"));
-				break;
-			case GEANY_INDENT_TYPE_SPACES:
-				g_string_append(stats_str, _("SP"));	/* SP = space */
-				break;
-			case GEANY_INDENT_TYPE_BOTH:
-				g_string_append(stats_str, _("T/S"));	/* T/S = tabs and spaces */
-				break;
-		}
-		g_string_append(stats_str, sp);
-		g_string_append_printf(stats_str, _("mode: %s"),
-			editor_get_eol_char_name(doc->editor));
-		g_string_append(stats_str, sp);
-		g_string_append_printf(stats_str, _("encoding: %s %s"),
-			(doc->encoding) ? doc->encoding : _("unknown"),
-			(encodings_is_unicode_charset(doc->encoding)) ?
-				/* BOM = byte order mark */
-				((doc->has_bom) ? _("(with BOM)") : "") : "");
-		g_string_append(stats_str, sp);
-		g_string_append_printf(stats_str, _("filetype: %s"), filetype_name);
-		g_string_append(stats_str, sp);
-		if (doc->changed)
-		{
-			g_string_append(stats_str, _("MOD"));	/* MOD = modified */
-			g_string_append(stats_str, sp);
-		}
-
-		symbols_get_current_function(doc, &cur_tag);
-		g_string_append_printf(stats_str, _("scope: %s"),
-			cur_tag);
+		add_statusbar_statistics(stats_str, doc, line, col);
 
 #ifdef GEANY_DEBUG
+	{
+		const gchar sp[] = "      ";
 		g_string_append(stats_str, sp);
 		g_string_append_printf(stats_str, "pos: %d", pos);
 		g_string_append(stats_str, sp);
 		g_string_append_printf(stats_str, "style: %d", sci_get_style_at(doc->editor->sci, pos));
+	}
 #endif
-
 		/* can be overridden by status messages */
 		set_statusbar(stats_str->str, TRUE);
 	}
@@ -1929,9 +1990,20 @@ static void on_editor_menu_hide(GtkWidget *item)
 }
 
 
+static void on_load_settings(GObject *obj, GKeyFile *config)
+{
+	g_assert(statusbar_template == NULL);
+
+	statusbar_template = utils_get_setting_string(config,
+		PACKAGE, "statusbar_template", NULL);
+}
+
+
 void ui_init(void)
 {
 	GtkWidget *item;
+
+	g_signal_connect(geany_object, "load-settings", G_CALLBACK(on_load_settings), NULL);
 
 	init_recent_files();
 

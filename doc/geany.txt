@@ -4017,9 +4017,6 @@ Key                               Description                                  D
 ================================  ===========================================  ==================
 **Editor related**
 brace_match_ltgt                  Whether to highlight <, > angle brackets.    false
-show_editor_scrollbars            Whether to display scrollbars. If set to     true
-                                  false, the horizontal and vertical
-                                  scrollbars are hidden completely.
 use_gtk_word_boundaries           Whether to look for the end of a word when   true
                                   using word-boundary related Scintilla
                                   commands (see `Scintilla keyboard
@@ -4041,9 +4038,23 @@ allow_always_save                 Whether files can be saved always, even if   f
                                   setting this option to true, the Save
                                   buttons and menu items are always active
                                   and files can be saved.
+show_editor_scrollbars            Whether to display scrollbars. If set to     true
+                                  false, the horizontal and vertical
+                                  scrollbars are hidden completely.
 compiler_tab_autoscroll           Whether to automatically scroll to the       true
                                   last line of the output in the Compiler
                                   tab.
+statusbar_template                The status bar statistics line format.       See below.
+                                  (Search in src/ui_utils.c for details).
+================================  ===========================================  ==================
+
+statusbar_template default:
+
+``line: %l / %L\t col: %c\t sel: %s\t %w      %t      %mmode: %M      encoding: %e      filetype: %f      scope: %S``
+
+================================  ===========================================  ==================
+Key                               Description                                  Default
+================================  ===========================================  ==================
 **VTE related**
 emulation                         Terminal emulation mode. Only change this    xterm
                                   if you have VTE termcap files other than
