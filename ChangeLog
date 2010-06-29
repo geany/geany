@@ -3,6 +3,10 @@
  * src/ui_utils.c, THANKS, doc/geany.txt, doc/geany.html:
    Add statusbar_template hidden pref (based on patch by Dimitar
    Zhekov, thanks).
+ * src/ui_utils.c, doc/geany.txt, doc/geany.html:
+   Add spaces after RO when using %r in statusbar_template setting.
+   Add space between encoding and BOM.
+   Note \t means tab for default text.
 
 
 2010-06-28  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

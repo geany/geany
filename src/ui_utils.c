@@ -207,8 +207,11 @@ static void add_statusbar_statistics(GString *stats_str,
 					(sci_get_overtype(doc->editor->sci) ? _("OVR") : _("INS")));
 				break;
 			case 'r':
-				if (doc->readonly)	/* RO = read-only */
-					g_string_append(stats_str, _("RO "));
+				if (doc->readonly)
+				{
+					g_string_append(stats_str, _("RO "));	/* RO = read-only */
+					g_string_append(stats_str, sp + 1);
+				}
 				break;
 			case 't':
 			{
@@ -229,8 +232,7 @@ static void add_statusbar_statistics(GString *stats_str,
 			case 'm':
 				if (doc->changed)
 				{
-					/* MOD = modified */
-					g_string_append(stats_str, _("MOD"));
+					g_string_append(stats_str, _("MOD"));	/* MOD = modified */
 					g_string_append(stats_str, sp);
 				}
 				break;
@@ -241,7 +243,10 @@ static void add_statusbar_statistics(GString *stats_str,
 				g_string_append(stats_str,
 					doc->encoding ? doc->encoding : _("unknown"));
 				if (encodings_is_unicode_charset(doc->encoding) && (doc->has_bom))
+				{
+					g_string_append_c(stats_str, ' ');
 					g_string_append(stats_str, _("(with BOM)"));	/* BOM = byte order mark */
+				}
 				break;
 			case 'f':
 				g_string_append(stats_str, doc->file_type->name);
