@@ -632,7 +632,17 @@ static void on_document_close(GObject *obj, GeanyDocument *doc)
 {
 	if (! main_status.quitting)
 	{
+		GeanyDocument *last_doc;
+
+		last_doc = g_queue_peek_head(mru_docs);
+
+		if (DOC_VALID(last_doc) && document_get_current() == doc)
+		{
+			gtk_notebook_set_current_page(GTK_NOTEBOOK(main_widgets.notebook),
+				document_get_notebook_page(last_doc));
+		}
 		g_queue_remove(mru_docs, doc);
+
 		g_idle_add(on_idle_close, NULL);
 	}
 }
