@@ -781,7 +781,7 @@ static void styleset_common(ScintillaObject *sci, filetype_id ft_id)
 
 	sci_set_property(sci, "fold", "1");
 	sci_set_property(sci, "fold.compact", "0");
-	sci_set_property(sci, "fold.comment", "0");
+	sci_set_property(sci, "fold.comment", "1");
 	sci_set_property(sci, "fold.preprocessor", "1");
 	sci_set_property(sci, "fold.at.else", "1");
 

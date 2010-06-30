@@ -1,3 +1,10 @@
+2010-06-30  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/highlighting.c:
+   Re-enable fold.comment for the C lexer - it was disabled to prevent
+   //{ explicit folding, but that also disables stream comments /* */.
+
+
 2010-06-29  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/ui_utils.c, THANKS, doc/geany.txt, doc/geany.html:
