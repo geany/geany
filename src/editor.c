@@ -3733,7 +3733,7 @@ void editor_insert_multiline_comment(GeanyEditor *editor)
  * line can be -1 to use the current position. */
 void editor_scroll_to_line(GeanyEditor *editor, gint line, gfloat percent_of_view)
 {
-	gint vis1, los, delta;
+	gint los;
 	GtkWidget *wid;
 
 	g_return_if_fail(editor != NULL);
@@ -3750,10 +3750,9 @@ void editor_scroll_to_line(GeanyEditor *editor, gint line, gfloat percent_of_vie
 	/* calling SCI_VISIBLEFROMDOCLINE for line is more accurate than calling
 	 * SCI_DOCLINEFROMVISIBLE for vis1. */
 	line = SSM(editor->sci, SCI_VISIBLEFROMDOCLINE, line, 0);
-	vis1 = SSM(editor->sci, SCI_GETFIRSTVISIBLELINE, 0, 0);
 	los = SSM(editor->sci, SCI_LINESONSCREEN, 0, 0);
-	delta = (line - vis1) - los * percent_of_view;
-	sci_scroll_lines(editor->sci, delta);
+	line = line - los * percent_of_view;
+	SSM(editor->sci, SCI_SETFIRSTVISIBLELINE, line, 0);
 	sci_scroll_caret(editor->sci); /* needed for horizontal scrolling */
 }
 

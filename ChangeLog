@@ -5,6 +5,10 @@
    //{ explicit folding, but that also disables stream comments /* */.
  * tagmanager/tm_workspace.c, tagmanager/get.c:
    Use g_free instead of free (patch by Daniel Marjamäki, thanks).
+ * src/editor.c:
+   Use SCI_SETFIRSTVISIBLELINE for editor_scroll_to_line(). Note this
+   doesn't affect the bug with document switching not scrolling cursor
+   in view after loading a session.
 
 
 2010-06-29  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
