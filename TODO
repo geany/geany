@@ -8,6 +8,7 @@ Note: features included in brackets have lower priority.
 
 	Next version or later:
 	o better file template {filename} wildcard replacement +{BASENAME}
+	o print text size/zoom option
 	o documentation: list and explain filetype modes
 	o common default highlighting styles configurable for all
 	  programming languages (done for C-like filetypes using
