@@ -289,7 +289,7 @@ static void save_recent_files(GKeyFile *config, GQueue *queue, gchar const *key)
 }
 
 
-static gchar *get_session_file_string(GeanyDocument *doc)
+static gchar *get_session_file_string(GeanyDocument *doc, gboolean relative)
 {
 	gchar *fname;
 	gchar *locale_filename;
@@ -300,6 +300,26 @@ static gchar *get_session_file_string(GeanyDocument *doc)
 		ft = filetypes[GEANY_FILETYPES_NONE];
 
 	locale_filename = utils_get_locale_from_utf8(doc->file_name);
+	if (app->project && relative)
+	{
+		gchar *project_dir, *file_dir, *tmp;
+
+		project_dir = utils_get_locale_from_utf8(app->project->file_name);
+		setptr(project_dir, g_path_get_dirname(project_dir));
+		file_dir = g_path_get_dirname(locale_filename);
+		tmp = utils_relpath(project_dir, file_dir);
+		if (tmp)
+		{
+			gchar *basename;
+
+			basename = g_path_get_basename(locale_filename);
+			setptr(locale_filename, g_build_filename(tmp, basename, NULL));
+			g_free(basename);
+		}
+		g_free(project_dir);
+		g_free(file_dir);
+		g_free(tmp);
+	}
 	escaped_filename = g_uri_escape_string(locale_filename, NULL, TRUE);
 
 	fname = g_strdup_printf("%d;%s;%d;%d;%d;%d;%d;%s;%d;%d",
@@ -319,16 +339,22 @@ static gchar *get_session_file_string(GeanyDocument *doc)
 }
 
 
-void configuration_save_session_files(GKeyFile *config)
+void configuration_save_session_files(GKeyFile *config, gboolean relative)
 {
 	gint npage;
 	gchar *tmp;
 	gchar entry[16];
+	const gchar *group;
 	guint i = 0, j = 0, max;
 	GeanyDocument *doc;
 
-	npage = gtk_notebook_get_current_page(GTK_NOTEBOOK(main_widgets.notebook));
-	g_key_file_set_integer(config, "files", "current_page", npage);
+	group = relative ? "files_relative" : "files";
+
+	if (!relative)
+	{
+		npage = gtk_notebook_get_current_page(GTK_NOTEBOOK(main_widgets.notebook));
+		g_key_file_set_integer(config, group, "current_page", npage);
+	}
 
 	/* store the filenames in the notebook tab order to reopen them the next time */
 	max = gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook));
@@ -340,8 +366,8 @@ void configuration_save_session_files(GKeyFile *config)
 			gchar *fname;
 
 			g_snprintf(entry, sizeof(entry), "FILE_NAME_%d", j);
-			fname = get_session_file_string(doc);
-			g_key_file_set_string(config, "files", entry, fname);
+			fname = get_session_file_string(doc, relative);
+			g_key_file_set_string(config, group, entry, fname);
 			g_free(fname);
 			j++;
 		}
@@ -351,14 +377,14 @@ void configuration_save_session_files(GKeyFile *config)
 	while (TRUE)
 	{
 		g_snprintf(entry, sizeof(entry), "FILE_NAME_%d", i);
-		tmp = g_key_file_get_string(config, "files", entry, NULL);
+		tmp = g_key_file_get_string(config, group, entry, NULL);
 		if (G_UNLIKELY(tmp == NULL))
 		{
 			break;
 		}
 		else
 		{
-			g_key_file_remove_key(config, "files", entry, NULL);
+			g_key_file_remove_key(config, group, entry, NULL);
 			g_free(tmp);
 			i++;
 		}
@@ -589,7 +615,7 @@ void configuration_save(void)
 	save_recent_files(config, ui_prefs.recent_projects_queue, "recent_projects");
 
 	if (cl_options.load_session)
-		configuration_save_session_files(config);
+		configuration_save_session_files(config, FALSE);
 #ifdef HAVE_VTE
 	else if (vte_info.have_vte)
 	{
@@ -636,7 +662,6 @@ void configuration_load_session_files(GKeyFile *config, gboolean read_recent_fil
 	gboolean have_session_files;
 	gchar entry[16];
 	gchar **tmp_array;
-	GError *error = NULL;
 
 	session_notebook_page = utils_get_setting_integer(config, "files", "current_page", -1);
 
@@ -656,14 +681,31 @@ void configuration_load_session_files(GKeyFile *config, gboolean read_recent_fil
 	while (have_session_files)
 	{
 		g_snprintf(entry, sizeof(entry), "FILE_NAME_%d", i);
-		tmp_array = g_key_file_get_string_list(config, "files", entry, NULL, &error);
-		if (! tmp_array || error)
+		tmp_array = g_key_file_get_string_list(config, "files", entry, NULL, NULL);
+
+		if (tmp_array)
 		{
-			g_error_free(error);
-			error = NULL;
+			gchar *locale_filename;
+
+			locale_filename = utils_get_locale_from_utf8(tmp_array[7]);
+			if (!g_file_test(locale_filename, G_FILE_TEST_EXISTS))
+			{
+				g_free(tmp_array);
+				tmp_array = g_key_file_get_string_list(config, "files_relative", entry, NULL, NULL);
+			}
+
+			if (tmp_array)
+			{
+				g_ptr_array_add(session_files, tmp_array);
+			}
+
+			g_free(locale_filename);
+		}
+		else
+		{
 			have_session_files = FALSE;
 		}
-		g_ptr_array_add(session_files, tmp_array);
+
 		i++;
 	}
 
@@ -961,7 +1003,7 @@ void configuration_save_default_session(void)
 	g_key_file_load_from_file(config, configfile, G_KEY_FILE_NONE, NULL);
 
 	if (cl_options.load_session)
-		configuration_save_session_files(config);
+		configuration_save_session_files(config, FALSE);
 
 	/* write the file */
 	data = g_key_file_to_data(config, NULL, NULL);
@@ -1038,6 +1080,16 @@ static gboolean open_session_file(gchar **tmp, guint len)
 	/* try to get the locale equivalent for the filename */
 	unescaped_filename = g_uri_unescape_string(tmp[7], NULL);
 	locale_filename = utils_get_locale_from_utf8(unescaped_filename);
+
+	if (!g_path_is_absolute(locale_filename) && app->project)
+	{
+		gchar *project_dir;
+		
+		project_dir = utils_get_locale_from_utf8(app->project->file_name);
+		setptr(project_dir, g_path_get_dirname(project_dir));
+		setptr(locale_filename, g_build_filename(project_dir, locale_filename, NULL));
+		g_free(project_dir);
+	}
 
 	if (len > 8)
 		line_breaking = atoi(tmp[8]);
