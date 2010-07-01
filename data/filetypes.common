@@ -17,6 +17,7 @@ brace_bad=0xff0000;0xFFFFFF;true;false
 # the following settings define the colours of the margins on the left side
 margin_linenumber=0x000000;0xd0d0d0;
 margin_folding=0x000000;0xdfdfdf;
+fold_symbol_highlight=0xffffff
 
 # background colour of the current line, only the second and third argument is interpreted
 # use the third argument to enable or disable the highlighting of the current line (has to be true/false)

@@ -3812,7 +3812,16 @@ white_space
 
     *Example:* ``white_space=0xc0c0c0;0xffffff;true;true``
 
+margin_linenumber
+    Line number margin foreground and background colors.
+
 .. _Folding Settings:
+
+margin_folding
+    Fold margin foreground and background colors.
+
+fold_symbol_highlight
+    Highlight color of folding symbols.
 
 folding_style
     The style of folding icons. Only first and second arguments are

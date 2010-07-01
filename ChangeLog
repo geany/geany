@@ -3,6 +3,10 @@
  * scintilla/LexCPP.cxx, src/highlighting.c:
    Add C++ lexer property fold.cpp.comment.explicit (patch sent); set
    it disabled.
+ * src/utils.h, src/highlighting.c, doc/geany.txt, doc/geany.html,
+   data/filetypes.common:
+   Add filetypes.common fold_symbol_highlight color setting.
+   Add API macro foreach_range().
 
 
 2010-06-30  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

@@ -107,6 +107,13 @@
 #define foreach_str(char_ptr, string) \
 	for (char_ptr = string; *char_ptr; char_ptr++)
 
+/** Iterates from 0 to @a size.
+ * @param i Integer.
+ * @param size Number of iterations.
+ * @since Geany 0.20. */
+#define foreach_range(i, size) \
+	for (i = 0; i < size; i++)
+
 
 void utils_open_browser(const gchar *uri);
 

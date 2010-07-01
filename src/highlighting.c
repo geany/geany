@@ -79,6 +79,7 @@ enum	/* Geany common styling */
 	GCS_BRACE_BAD,
 	GCS_MARGIN_LINENUMBER,
 	GCS_MARGIN_FOLDING,
+	GCS_FOLD_SYMBOL_HIGHLIGHT,
 	GCS_CURRENT_LINE,
 	GCS_CARET,
 	GCS_INDENT_GUIDE,
@@ -587,6 +588,7 @@ static void styleset_common_init(gint ft_id, GKeyFile *config, GKeyFile *config_
 	get_keyfile_style(config, config_home, "brace_bad", &common_style_set.styling[GCS_BRACE_BAD]);
 	get_keyfile_style(config, config_home, "margin_linenumber", &common_style_set.styling[GCS_MARGIN_LINENUMBER]);
 	get_keyfile_style(config, config_home, "margin_folding", &common_style_set.styling[GCS_MARGIN_FOLDING]);
+	get_keyfile_style(config, config_home, "fold_symbol_highlight", &common_style_set.styling[GCS_FOLD_SYMBOL_HIGHLIGHT]);
 	get_keyfile_style(config, config_home, "current_line", &common_style_set.styling[GCS_CURRENT_LINE]);
 	get_keyfile_style(config, config_home, "caret", &common_style_set.styling[GCS_CARET]);
 	get_keyfile_style(config, config_home, "indent_guide", &common_style_set.styling[GCS_INDENT_GUIDE]);
@@ -749,35 +751,26 @@ static void styleset_common(ScintillaObject *sci, filetype_id ft_id)
 			SSM(sci, SCI_MARKERDEFINE,  SC_MARKNUM_FOLDERSUB, SC_MARK_EMPTY);
 			break;
 	}
+	{
+		gint markers[] = {
+			SC_MARKNUM_FOLDEROPEN,
+			SC_MARKNUM_FOLDER,
+			SC_MARKNUM_FOLDERSUB,
+			SC_MARKNUM_FOLDERTAIL,
+			SC_MARKNUM_FOLDEREND,
+			SC_MARKNUM_FOLDEROPENMID,
+			SC_MARKNUM_FOLDERMIDTAIL
+		};
+		guint i;
 
-	SSM(sci, SCI_MARKERSETFORE, SC_MARKNUM_FOLDEROPEN,
-		invert(common_style_set.styling[GCS_MARGIN_FOLDING].background));
-	SSM(sci, SCI_MARKERSETBACK, SC_MARKNUM_FOLDEROPEN,
-		invert(common_style_set.styling[GCS_MARGIN_FOLDING].foreground));
-	SSM(sci, SCI_MARKERSETFORE, SC_MARKNUM_FOLDER,
-		invert(common_style_set.styling[GCS_MARGIN_FOLDING].background));
-	SSM(sci, SCI_MARKERSETBACK, SC_MARKNUM_FOLDER,
-		invert(common_style_set.styling[GCS_MARGIN_FOLDING].foreground));
-	SSM(sci, SCI_MARKERSETFORE, SC_MARKNUM_FOLDERSUB,
-		invert(common_style_set.styling[GCS_MARGIN_FOLDING].background));
-	SSM(sci, SCI_MARKERSETBACK, SC_MARKNUM_FOLDERSUB,
-		invert(common_style_set.styling[GCS_MARGIN_FOLDING].foreground));
-	SSM(sci, SCI_MARKERSETFORE, SC_MARKNUM_FOLDERTAIL,
-		invert(common_style_set.styling[GCS_MARGIN_FOLDING].background));
-	SSM(sci, SCI_MARKERSETBACK, SC_MARKNUM_FOLDERTAIL,
-		invert(common_style_set.styling[GCS_MARGIN_FOLDING].foreground));
-	SSM(sci, SCI_MARKERSETFORE, SC_MARKNUM_FOLDEREND,
-		invert(common_style_set.styling[GCS_MARGIN_FOLDING].background));
-	SSM(sci, SCI_MARKERSETBACK, SC_MARKNUM_FOLDEREND,
-		invert(common_style_set.styling[GCS_MARGIN_FOLDING].foreground));
-	SSM(sci, SCI_MARKERSETFORE, SC_MARKNUM_FOLDEROPENMID,
-		invert(common_style_set.styling[GCS_MARGIN_FOLDING].background));
-	SSM(sci, SCI_MARKERSETBACK, SC_MARKNUM_FOLDEROPENMID,
-		invert(common_style_set.styling[GCS_MARGIN_FOLDING].foreground));
-	SSM(sci, SCI_MARKERSETFORE, SC_MARKNUM_FOLDERMIDTAIL,
-		invert(common_style_set.styling[GCS_MARGIN_FOLDING].background));
-	SSM(sci, SCI_MARKERSETBACK, SC_MARKNUM_FOLDERMIDTAIL,
-		invert(common_style_set.styling[GCS_MARGIN_FOLDING].foreground));
+		foreach_range(i, G_N_ELEMENTS(markers))
+		{
+			SSM(sci, SCI_MARKERSETFORE, markers[i],
+				invert(common_style_set.styling[GCS_FOLD_SYMBOL_HIGHLIGHT].foreground));
+			SSM(sci, SCI_MARKERSETBACK, markers[i],
+				invert(common_style_set.styling[GCS_MARGIN_FOLDING].foreground));
+		}
+	}
 
 	/* set some common defaults */
 	sci_set_property(sci, "fold", "1");
@@ -795,7 +788,6 @@ static void styleset_common(ScintillaObject *sci, filetype_id ft_id)
 
 	SSM(sci, SCI_SETSTYLEBITS, SSM(sci, SCI_GETSTYLEBITSNEEDED, 0, 0), 0);
 
-	/* TODO maybe we want to split the colour and hicolour to allow more fine-grained control */
 	SSM(sci, SCI_SETFOLDMARGINCOLOUR, 1, invert(common_style_set.styling[GCS_MARGIN_FOLDING].background));
 	SSM(sci, SCI_SETFOLDMARGINHICOLOUR, 1, invert(common_style_set.styling[GCS_MARGIN_FOLDING].background));
 	set_sci_style(sci, STYLE_LINENUMBER, GEANY_FILETYPES_NONE, GCS_MARGIN_LINENUMBER);
@@ -847,9 +839,6 @@ apply_filetype_properties(ScintillaObject *sci, gint lexer, filetype_id ft_id)
 	styleset_common(sci, ft_id);
 }
 
-
-#define foreach_range(i, size) \
-		for (i = 0; i < size; i++)
 
 /* names: the style names for the filetype. */
 static void load_style_entries(GKeyFile *config, GKeyFile *config_home, gint filetype_idx,
