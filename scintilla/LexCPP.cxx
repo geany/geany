@@ -379,10 +379,15 @@ static void FoldCppDoc(unsigned int startPos, int length, int initStyle,
 					   WordList *[], Accessor &styler) {
 
 	// property fold.comment
-	//	This option enables folding multi-line comments and explicit fold points when using the C++ lexer.
+	//	This option enables folding multi-line comments when using the C++ lexer.
+	bool foldComment = styler.GetPropertyInt("fold.comment") != 0;
+
+	// property fold.cpp.comment.explicit
+	//	Set this property to 0 to disable folding explicit fold points when fold.comment=1.
 	//	Explicit fold points allows adding extra folding by placing a //{ comment at the start and a //}
 	//	at the end of a section that should fold.
-	bool foldComment = styler.GetPropertyInt("fold.comment") != 0;
+	bool foldCommentExplicit = foldComment &&
+		styler.GetPropertyInt("fold.cpp.comment.explicit", 1) != 0;
 
 	// property fold.preprocessor
 	//	This option enables folding preprocessor directives when using the C++ lexer.
@@ -421,7 +426,7 @@ static void FoldCppDoc(unsigned int startPos, int length, int initStyle,
 				levelNext--;
 			}
 		}
-		if (foldComment && (style == SCE_C_COMMENTLINE)) {
+		if (foldCommentExplicit && (style == SCE_C_COMMENTLINE)) {
 			if ((ch == '/') && (chNext == '/')) {
 				char chNext2 = styler.SafeGetCharAt(i + 2);
 				if (chNext2 == '{') {

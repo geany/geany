@@ -1,8 +1,16 @@
+2010-07-01  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * scintilla/LexCPP.cxx, src/highlighting.c:
+   Add C++ lexer property fold.cpp.comment.explicit (patch sent); set
+   it disabled.
+
+
 2010-06-30  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/highlighting.c:
-   Re-enable fold.comment for the C lexer - it was disabled to prevent
-   //{ explicit folding, but that also disables stream comments /* */.
+   Re-enable fold.comment for lexers - it was disabled to prevent C
+   //{ explicit folding, but that also disables stream comment folding
+   /* */.
  * tagmanager/tm_workspace.c, tagmanager/get.c:
    Use g_free instead of free (patch by Daniel Marjamäki, thanks).
  * src/editor.c:

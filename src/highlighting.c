@@ -779,12 +779,12 @@ static void styleset_common(ScintillaObject *sci, filetype_id ft_id)
 	SSM(sci, SCI_MARKERSETBACK, SC_MARKNUM_FOLDERMIDTAIL,
 		invert(common_style_set.styling[GCS_MARGIN_FOLDING].foreground));
 
+	/* set some common defaults */
 	sci_set_property(sci, "fold", "1");
 	sci_set_property(sci, "fold.compact", "0");
 	sci_set_property(sci, "fold.comment", "1");
 	sci_set_property(sci, "fold.preprocessor", "1");
 	sci_set_property(sci, "fold.at.else", "1");
-
 
 	/* bold (3rd argument) is whether to override default foreground selection */
 	if (common_style_set.styling[GCS_SELECTION].bold)
@@ -943,8 +943,10 @@ static void styleset_c_like(ScintillaObject *sci, gint ft_id)
 	};
 
 	apply_filetype_properties(sci, SCLEX_CPP, ft_id);
-
 	apply_style_entries(sci, ft_id, styles, G_N_ELEMENTS(styles));
+
+	/* Disable explicit //{ folding as it can seem like a bug */
+	sci_set_property(sci, "fold.cpp.comment.explicit", "0");
 }
 
 
