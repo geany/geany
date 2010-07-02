@@ -1010,6 +1010,7 @@ gboolean msgwin_goto_messages_file_line(guint keyval)
 		else if (line < 0 && string != NULL)
 		{
 			gchar *filename;
+
 			msgwin_parse_grep_line(string, &filename, &line);
 			if (filename != NULL && line > -1)
 			{
@@ -1042,7 +1043,7 @@ static void msgwin_parse_grep_line(const gchar *string, gchar **filename, gint *
 	*filename = NULL;
 	*line = -1;
 
-	if (string == NULL || msgwindow.find_in_files_dir == NULL)
+	if (string == NULL)
 		return;
 
 	/* conflict:3:conflicting types for `foo' */
@@ -1053,7 +1054,10 @@ static void msgwin_parse_grep_line(const gchar *string, gchar **filename, gint *
 	data.file_idx = 0;
 
 	parse_file_line(&data, filename, line);
-	make_absolute(filename, msgwindow.find_in_files_dir);
+
+	/* FIF dir should be set, but a plugin might not have set it */
+	if (msgwindow.find_in_files_dir != NULL)
+		make_absolute(filename, msgwindow.find_in_files_dir);
 }
 
 

@@ -6,6 +6,9 @@
  * src/ui_utils.c:
    Fix only adding project base path to Find in Files history if it
    isn't already there (oops).
+ * src/msgwindow.c:
+   Parse lines in the Messages window even if Find in Files hasn't
+   been used yet (patch by Jiří Techet, thanks).
 
 
 2010-07-01  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
