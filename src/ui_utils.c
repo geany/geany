@@ -1515,7 +1515,7 @@ void ui_combo_box_prepend_text_once(GtkComboBox *combo, const gchar *text)
 	GtkTreeIter iter;
 
 	model = gtk_combo_box_get_model(combo);
-	if (!tree_model_find_text(model, &iter, 0, text))
+	if (tree_model_find_text(model, &iter, 0, text))
 		return;	/* don't prepend duplicate */
 
 	gtk_combo_box_prepend_text(combo, text);

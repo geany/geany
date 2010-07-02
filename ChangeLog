@@ -3,6 +3,9 @@
  * doc/geany.txt, doc/geany.html:
    Fix wording - restarting is required for hidden prefs.
    File templates don't need manual reloading anymore.
+ * src/ui_utils.c:
+   Fix only adding project base path to Find in Files history if it
+   isn't already there (oops).
 
 
 2010-07-01  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
