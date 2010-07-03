@@ -597,17 +597,12 @@ static void init_default_kb(void)
 }
 
 
-/* before the tab changes, add the current document to the MRU list */
-static void on_notebook_switch_page(void)
+static void update_mru_docs_head(GeanyDocument *doc)
 {
-	GeanyDocument *old = document_get_current();
-
-	/* when closing current doc, old is NULL.
-	 * Don't add to the mru list when switch dialog is visible. */
-	if (old && !switch_in_progress)
+	if (doc)
 	{
-		g_queue_remove(mru_docs, old);
-		g_queue_push_head(mru_docs, old);
+		g_queue_remove(mru_docs, doc);
+		g_queue_push_head(mru_docs, doc);
 
 		if (g_queue_get_length(mru_docs) > MAX_MRU_DOCS)
 			g_queue_pop_tail(mru_docs);
@@ -615,16 +610,21 @@ static void on_notebook_switch_page(void)
 }
 
 
-/* really this should be just after a document was closed, not idle */
-static gboolean on_idle_close(gpointer data)
+/* before the tab changes, add the current document to the MRU list */
+static void on_notebook_switch_page(GtkNotebook *notebook,
+	GtkNotebookPage *page, guint page_num, gpointer user_data)
 {
-	GeanyDocument *current;
+	GeanyDocument *new;
 
-	current = document_get_current();
-	if (current && g_queue_peek_head(mru_docs) == current)
-		g_queue_pop_head(mru_docs);
+	new = document_get_from_page(page_num);
 
-	return FALSE;
+	/* insert the very first document (when adding the second document
+	 * and switching to it) */
+	if (g_queue_get_length(mru_docs) == 0 && gtk_notebook_get_n_pages(notebook) == 2)
+		update_mru_docs_head(document_get_current());
+
+	if (!switch_in_progress)
+		update_mru_docs_head(new);
 }
 
 
@@ -634,7 +634,7 @@ static void on_document_close(GObject *obj, GeanyDocument *doc)
 	{
 		GeanyDocument *last_doc;
 
-		last_doc = g_queue_peek_head(mru_docs);
+		last_doc = g_queue_peek_nth(mru_docs, 1);
 
 		if (DOC_VALID(last_doc) && document_get_current() == doc)
 		{
@@ -642,8 +642,10 @@ static void on_document_close(GObject *obj, GeanyDocument *doc)
 				document_get_notebook_page(last_doc));
 		}
 		g_queue_remove(mru_docs, doc);
-
-		g_idle_add(on_idle_close, NULL);
+		/* this prevents the pop up window from showing when there's a single
+		 * document */
+		if (gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook)) == 2)
+			g_queue_clear(mru_docs);
 	}
 }
 
@@ -1768,6 +1770,7 @@ static gboolean on_key_release_event(GtkWidget *widget, GdkEventKey *ev, gpointe
 			switch_dialog = NULL;
 		}
 
+		update_mru_docs_head(document_get_current());
 		mru_pos = 0;
 	}
 	return FALSE;
@@ -1845,7 +1848,11 @@ static gboolean on_switch_timeout(G_GNUC_UNUSED gpointer data)
 
 static void cb_func_switch_tablastused(G_GNUC_UNUSED guint key_id)
 {
-	GeanyDocument *last_doc = g_queue_peek_nth(mru_docs, mru_pos);
+	GeanyDocument *last_doc;
+	gboolean switch_start = !switch_in_progress;
+
+	mru_pos += 1;
+	last_doc = g_queue_peek_nth(mru_docs, mru_pos);
 
 	if (! DOC_VALID(last_doc))
 	{
@@ -1856,29 +1863,15 @@ static void cb_func_switch_tablastused(G_GNUC_UNUSED guint key_id)
 	if (! DOC_VALID(last_doc))
 		return;
 
+	switch_in_progress = TRUE;
 	document_show_tab(last_doc);
 
 	/* if there's a modifier key, we can switch back in MRU order each time unless
 	 * the key is released */
-	if (!switch_in_progress)
-	{
-		switch_in_progress = TRUE;
-
-		/* because switch_in_progress was not set when we called
-		 * gtk_notebook_set_current_page() above, this function inserted last_doc
-		 * into the queue => on mru_pos = 0 there is last_doc, on mru_pos = 1
-		 * there is the currently displayed doc, so we want to continue from 2
-		 * next time this function is called */
-		mru_pos = 2;
-
-		/* delay showing dialog to give user time to let go of any modifier keys */
+	if (switch_start)
 		g_timeout_add(600, on_switch_timeout, NULL);
-	}
 	else
-	{
 		update_filename_label();
-		mru_pos += 1;
-	}
 }
 
 
