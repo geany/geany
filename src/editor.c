@@ -401,7 +401,8 @@ static void on_update_ui(GeanyEditor *editor, G_GNUC_UNUSED SCNotification *nt)
 	if (editor->scroll_percent > 0.0F)
 	{
 		editor_scroll_to_line(editor, -1, editor->scroll_percent);
-		editor->scroll_percent = -1.0F;	/* disable further scrolling */
+		/* disable further scrolling */
+		editor->scroll_percent = -1.0F;
 	}
 #if 0
 	/** experimental code for inverting selections */
@@ -1909,7 +1910,6 @@ static gboolean autocomplete_doc_word(GeanyEditor *editor, gchar *root, gsize ro
 	if (!words)
 	{
 		scintilla_send_message(sci, SCI_AUTOCCANCEL, 0, 0);
-		autocompletion_mode = AUTOC_CANCELLED;
 		return FALSE;
 	}
 
