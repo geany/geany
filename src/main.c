@@ -758,7 +758,7 @@ gboolean main_handle_filename(const gchar *locale_filename)
 	if (column >= 0)
 		cl_options.goto_column = column;
 
-	if (g_file_test(filename, G_FILE_TEST_IS_REGULAR | G_FILE_TEST_IS_SYMLINK))
+	if (g_file_test(filename, G_FILE_TEST_IS_REGULAR))
 	{
 		doc = document_open_file(filename, FALSE, NULL, NULL);
 		/* add recent file manually if opening_session_files is set */

@@ -145,7 +145,7 @@ void editor_snippets_init(void)
 	userconfigfile = g_strconcat(app->configdir, G_DIR_SEPARATOR_S, "snippets.conf", NULL);
 
 	/* check for old autocomplete.conf files (backwards compatibility) */
-	if (! g_file_test(userconfigfile, G_FILE_TEST_IS_REGULAR | G_FILE_TEST_IS_SYMLINK))
+	if (! g_file_test(userconfigfile, G_FILE_TEST_IS_REGULAR))
 		setptr(userconfigfile,
 			g_strconcat(app->configdir, G_DIR_SEPARATOR_S, "autocomplete.conf", NULL));
 

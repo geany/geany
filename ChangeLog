@@ -2,6 +2,9 @@
 
  * src/sidebar.c:
    Add sidebar Documents popup menu item 'Find in Files'.
+ * src/keyfile.c, src/main.c, src/editor.c:
+   Don't unnecessarily test G_FILE_TEST_IS_SYMLINK when testing
+   G_FILE_TEST_IS_REGULAR (patch by Dimitar Zhekov, thanks).
 
 
 2010-07-02  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

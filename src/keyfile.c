@@ -935,7 +935,7 @@ gboolean configuration_load(void)
 	gchar *configfile = g_strconcat(app->configdir, G_DIR_SEPARATOR_S, "geany.conf", NULL);
 	GKeyFile *config = g_key_file_new();
 
-	if (! g_file_test(configfile, G_FILE_TEST_IS_REGULAR | G_FILE_TEST_IS_SYMLINK))
+	if (! g_file_test(configfile, G_FILE_TEST_IS_REGULAR))
 	{	/* config file does not (yet) exist, so try to load a global config file which may be */
 		/* created by distributors */
 		geany_debug("No user config file found, trying to use global configuration.");
@@ -984,7 +984,7 @@ static gboolean open_session_file(gchar **tmp, guint len)
 	if (len > 8)
 		line_breaking = atoi(tmp[8]);
 
-	if (g_file_test(locale_filename, G_FILE_TEST_IS_REGULAR | G_FILE_TEST_IS_SYMLINK))
+	if (g_file_test(locale_filename, G_FILE_TEST_IS_REGULAR))
 	{
 		GeanyFiletype *ft = filetypes_lookup_by_name(ft_name);
 		GeanyDocument *doc = document_open_file_full(
