@@ -1,3 +1,9 @@
+2010-07-05  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/sidebar.c:
+   Add sidebar Documents popup menu item 'Find in Files'.
+
+
 2010-07-02  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * doc/geany.txt, doc/geany.html:

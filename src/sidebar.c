@@ -43,6 +43,7 @@
 #include "stash.h"
 #include "keyfile.h"
 #include "sciwrappers.h"
+#include "search.h"
 
 #include <gdk/gdkkeysyms.h>
 
@@ -57,8 +58,9 @@ static struct
 	GtkWidget *save;
 	GtkWidget *reload;
 	GtkWidget *show_paths;
+	GtkWidget *find_in_files;
 }
-doc_items = {NULL, NULL, NULL, NULL};
+doc_items = {NULL, NULL, NULL, NULL, NULL};
 
 static struct
 {
@@ -340,15 +342,13 @@ static gboolean find_tree_iter_dir(GtkTreeIter *iter, const gchar *dir)
 }
 
 
-static gchar *get_doc_folder(GeanyDocument *doc)
+static gchar *get_doc_folder(const gchar *path)
 {
-	gchar *tmp_dirname;
+	gchar *tmp_dirname = g_strdup(path);
 	gchar *project_base_path;
 	gchar *dirname = NULL;
 	const gchar *home_dir = g_get_home_dir();
 	const gchar *rest;
-
-	tmp_dirname = g_path_get_dirname(DOC_FILENAME(doc));
 
 	/* replace the project base path with the project name */
 	project_base_path = project_get_base_path();
@@ -395,6 +395,7 @@ static gchar *get_doc_folder(GeanyDocument *doc)
 
 static GtkTreeIter *get_doc_parent(GeanyDocument *doc)
 {
+	gchar *path;
 	gchar *dirname = NULL;
 	static GtkTreeIter parent;
 	GtkTreeModel *model = GTK_TREE_MODEL(store_openfiles);
@@ -402,7 +403,8 @@ static GtkTreeIter *get_doc_parent(GeanyDocument *doc)
 	if (!documents_show_paths)
 		return NULL;
 
-	dirname = get_doc_folder(doc);
+	path = g_path_get_dirname(DOC_FILENAME(doc));
+	dirname = get_doc_folder(path);
 
 	if (gtk_tree_model_get_iter_first(model, &parent))
 	{
@@ -411,6 +413,7 @@ static GtkTreeIter *get_doc_parent(GeanyDocument *doc)
 			if (find_tree_iter_dir(&parent, dirname))
 			{
 				g_free(dirname);
+				g_free(path);
 				return &parent;
 			}
 		}
@@ -419,9 +422,11 @@ static GtkTreeIter *get_doc_parent(GeanyDocument *doc)
 	/* no match, add dir parent */
 	gtk_tree_store_append(store_openfiles, &parent, NULL);
 	gtk_tree_store_set(store_openfiles, &parent, DOCUMENTS_ICON, GTK_STOCK_DIRECTORY,
+		DOCUMENTS_FILENAME, path,
 		DOCUMENTS_SHORTNAME, doc->file_name ? dirname : GEANY_STRING_UNTITLED, -1);
 
 	g_free(dirname);
+	g_free(path);
 	return &parent;
 }
 
@@ -614,6 +619,31 @@ static void on_list_symbol_activate(GtkCheckMenuItem *item, gpointer user_data)
 }
 
 
+static void on_find_in_files(GtkMenuItem *menuitem, gpointer user_data)
+{
+	GtkTreeSelection *treesel;
+	GtkTreeIter iter;
+	GtkTreeModel *model;
+	GeanyDocument *doc;
+	gchar *dir;
+
+	treesel = gtk_tree_view_get_selection(GTK_TREE_VIEW(tv.tree_openfiles));
+	if (!gtk_tree_selection_get_selected(treesel, &model, &iter))
+		return;
+	gtk_tree_model_get(model, &iter, DOCUMENTS_DOCUMENT, &doc, -1);
+
+	if (!doc)
+	{
+		gtk_tree_model_get(model, &iter, DOCUMENTS_FILENAME, &dir, -1);
+	}
+	else
+		dir = g_path_get_dirname(DOC_FILENAME(doc));
+
+	search_show_find_in_files_dialog(dir);
+	g_free(dir);
+}
+
+
 static void create_openfiles_popup_menu(void)
 {
 	GtkWidget *item;
@@ -646,6 +676,16 @@ static void create_openfiles_popup_menu(void)
 	g_signal_connect(item, "activate",
 			G_CALLBACK(on_openfiles_document_action), GINT_TO_POINTER(OPENFILES_ACTION_RELOAD));
 	doc_items.reload = item;
+
+	item = gtk_separator_menu_item_new();
+	gtk_widget_show(item);
+	gtk_container_add(GTK_CONTAINER(openfiles_popup_menu), item);
+
+	item = ui_image_menu_item_new(GTK_STOCK_FIND, _("_Find in Files"));
+	gtk_widget_show(item);
+	gtk_container_add(GTK_CONTAINER(openfiles_popup_menu), item);
+	g_signal_connect(item, "activate", G_CALLBACK(on_find_in_files), NULL);
+	doc_items.find_in_files = item;
 
 	item = gtk_separator_menu_item_new();
 	gtk_widget_show(item);
@@ -940,6 +980,7 @@ static void documents_menu_update(GtkTreeSelection *selection)
 	gtk_widget_set_sensitive(doc_items.close, sel);
 	gtk_widget_set_sensitive(doc_items.save, (doc && doc->real_path) || path);
 	gtk_widget_set_sensitive(doc_items.reload, doc && doc->real_path);
+	gtk_widget_set_sensitive(doc_items.find_in_files, sel);
 	g_free(shortname);
 
 	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(doc_items.show_paths),
