@@ -1244,11 +1244,7 @@ out version control files.
 If you have GNU Grep >= 2.5.2 you can use the ``--exclude-dir``
 argument to filter out CVS and hidden directories like ``.svn``.
 
-Example: ``--exclude-dir=.?* --exclude-dir=CVS``
-
-.. note::
-    The ``.?*`` glob pattern matches all directories beginning with a
-    dot except the current directory ``'.'``.
+Example: ``--exclude-dir=.svn --exclude-dir=CVS``
 
 If you have an older Grep, you can try using the ``--exclude`` flag
 to filter out filenames.
