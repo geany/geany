@@ -3,6 +3,10 @@
  * doc/geany.txt, doc/geany.html:
    Fix Grep --exclude-dir example to not filter out the current
    directory (oops).
+ * src/search.c:
+   Make Find in Files extra options default to --exclude-dir=.?* to
+   filter out hidden directories. (Still disabled by default so
+   non-GNU/older Grep works).
 
 
 2010-07-05  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

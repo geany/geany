@@ -188,8 +188,10 @@ static void init_prefs(void)
 		"fif_invert_results", FALSE, "check_invert");
 	stash_group_add_toggle_button(group, &settings.fif_recursive,
 		"fif_recursive", FALSE, "check_recursive");
+	/* default ignores hidden directories */
 	stash_group_add_entry(group, &settings.fif_extra_options,
-		"fif_extra_options", "", "entry_extra");
+		"fif_extra_options", "--exclude-dir=.?*", "entry_extra");
+	/* defaults to off so non-GNU/older Grep works */
 	stash_group_add_toggle_button(group, &settings.fif_use_extra_options,
 		"fif_use_extra_options", FALSE, "check_extra");
 	stash_group_add_entry(group, &settings.fif_files,
@@ -1441,6 +1443,7 @@ search_find_in_files(const gchar *utf8_search_text, const gchar *dir, const gcha
 	/* finally add the arguments(files to be searched) */
 	if (strstr(argv_prefix[1], "r"))	/* recursive option set */
 	{
+		/* Use '.' so we get relative paths in the output */
 		argv_prefix[i++] = g_strdup(".");
 		argv_prefix[i++] = NULL;
 		argv = argv_prefix;
