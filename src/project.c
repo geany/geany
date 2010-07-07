@@ -70,14 +70,14 @@ static gboolean entries_modified;
 typedef struct _PropertyDialogElements
 {
 	GtkWidget *dialog;
+	GtkWidget *notebook;
 	GtkWidget *name;
 	GtkWidget *description;
 	GtkWidget *file_name;
 	GtkWidget *base_path;
 	GtkWidget *patterns;
-	BuildTableData  build_properties;
+	BuildTableData build_properties;
 } PropertyDialogElements;
-
 
 
 static gboolean update_config(const PropertyDialogElements *e);
@@ -388,6 +388,8 @@ static void on_set_use_base_path_clicked(GtkWidget *unused1, gpointer user_data)
 }
 
 
+static gint build_page_num = 0;
+
 static void create_properties_dialog(PropertyDialogElements *e)
 {
 	GtkWidget *table, *notebook, *build_table;
@@ -476,7 +478,8 @@ static void create_properties_dialog(PropertyDialogElements *e)
 	gtk_container_set_border_width(GTK_CONTAINER(build_table), 6);
 	label = gtk_label_new(_("Build"));
 	notebook = ui_lookup_widget(e->dialog, "project_notebook");
-	gtk_notebook_insert_page(GTK_NOTEBOOK(notebook), build_table, label, 2);
+	build_page_num = gtk_notebook_insert_page(GTK_NOTEBOOK(notebook), build_table, label, 2);
+	e->notebook = notebook;
 
 	label = gtk_label_new(_("Set the Build non-filetype working directories to use base path:"));
 	gtk_misc_set_alignment(GTK_MISC(label), 0, 0);
@@ -517,13 +520,12 @@ static void create_properties_dialog(PropertyDialogElements *e)
 #endif
 
 	label = gtk_label_new(_("Project"));
-	gtk_widget_show(table);	/* needed to switch current page */
 	gtk_notebook_insert_page(GTK_NOTEBOOK(notebook), table, label, 0);
-	gtk_notebook_set_current_page(GTK_NOTEBOOK(notebook), 0);
+	build_page_num++;
 }
 
 
-void project_properties(void)
+static void show_project_properties(gboolean show_build)
 {
 	PropertyDialogElements *e = g_new(PropertyDialogElements, 1);
 	GeanyProject *p = app->project;
@@ -585,6 +587,12 @@ void project_properties(void)
 
 	gtk_widget_show_all(e->dialog);
 
+	/* note: notebook page must be shown before setting current page */
+	if (show_build)
+		gtk_notebook_set_current_page(GTK_NOTEBOOK(e->notebook), build_page_num);
+	else
+		gtk_notebook_set_current_page(GTK_NOTEBOOK(e->notebook), 0);
+
 	while (gtk_dialog_run(GTK_DIALOG(e->dialog)) == GTK_RESPONSE_OK)
 	{
 		if (update_config(e))
@@ -596,6 +604,18 @@ void project_properties(void)
 	build_free_fields(e->build_properties);
 	gtk_widget_destroy(e->dialog);
 	g_free(e);
+}
+
+
+void project_properties(void)
+{
+	show_project_properties(FALSE);
+}
+
+
+void project_build_properties(void)
+{
+	show_project_properties(TRUE);
 }
 
 

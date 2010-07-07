@@ -1,3 +1,10 @@
+2010-07-07  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/build.c, src/project.c, src/project.h:
+   Show the Project Properties build tab when choosing 'Set Build
+   Commands' for now to prevent confusion with non-project commands.
+
+
 2010-07-06  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/search.c, doc/geany.txt, doc/geany.html:
