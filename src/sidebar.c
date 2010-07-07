@@ -988,7 +988,7 @@ static void documents_menu_update(GtkTreeSelection *selection)
 }
 
 
-StashGroup *stash_group = NULL;
+static StashGroup *stash_group = NULL;
 
 static void on_load_settings(void)
 {
