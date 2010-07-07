@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: geany 0.19\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-06-21 22:09+0200\n"
-"PO-Revision-Date: 2010-05-22 01:01+0100\n"
+"POT-Creation-Date: 2010-07-07 23:02+0200\n"
+"PO-Revision-Date: 2010-07-07 23:02+0100\n"
 "Last-Translator: Frank Lanitz <frank@frank.uvena.de>\n"
 "Language-Team: German <geany-i18n@uvena.de>\n"
 "Language: de\n"
@@ -107,43 +107,43 @@ msgstr ""
 "gnu.org/licenses/gpl-2.0.txt um die Lizenz online zu lesen."
 
 #. fall back to %d
-#: ../src/build.c:635
+#: ../src/build.c:638
 #, c-format
 msgid "failed to substitute %%p, no project active"
 msgstr "konnte %%p nicht ersetzen. Kein Projekt aktiv."
 
-#: ../src/build.c:673
+#: ../src/build.c:676
 msgid "Process failed, no working directory"
 msgstr "Ausführung fehlgeschlagen. Kein Arbeitsverzeichnis gefunden."
 
-#: ../src/build.c:699
+#: ../src/build.c:702
 #, c-format
 msgid "%s (in directory: %s)"
 msgstr "%s (im Verzeichnis: %s)"
 
-#: ../src/build.c:719 ../src/build.c:944 ../src/search.c:1449
+#: ../src/build.c:722 ../src/build.c:947 ../src/search.c:1470
 #, c-format
 msgid "Process failed (%s)"
 msgstr "Prozess fehlgeschlagen (%s)"
 
-#: ../src/build.c:790
+#: ../src/build.c:793
 #, c-format
 msgid "Failed to change the working directory to \"%s\""
 msgstr "Konnte nicht in das Arbeitsverzeichnis »%s« wechseln"
 
-#: ../src/build.c:819
+#: ../src/build.c:822
 #, c-format
 msgid "Failed to execute \"%s\" (start-script could not be created)"
 msgstr "Konnte »%s« nicht ausführen (Start-Script konnte nicht erzeugt werden)"
 
-#: ../src/build.c:873
+#: ../src/build.c:876
 msgid ""
 "Could not execute the file in the VTE because it probably contains a command."
 msgstr ""
 "Konnte die Datei nicht in der VTE ausführen. Eventuell steht bereits ein "
 "Befehl auf der Kommandozeile."
 
-#: ../src/build.c:911
+#: ../src/build.c:914
 #, c-format
 msgid ""
 "Could not find terminal \"%s\" (check path for Terminal tool setting in "
@@ -152,117 +152,117 @@ msgstr ""
 "Konnte das Terminalprogramm »%s« nicht finden (Pfad zum Terminalprogramm in "
 "den Einstellungen überprüfen)"
 
-#: ../src/build.c:1083
+#: ../src/build.c:1084
 msgid "Compilation failed."
 msgstr "Kompilierung fehlgeschlagen."
 
-#: ../src/build.c:1097
+#: ../src/build.c:1098
 msgid "Compilation finished successfully."
 msgstr "Kompilierung erfolgreich beendet."
 
-#: ../src/build.c:1256
+#: ../src/build.c:1257
 msgid "Custom Text"
 msgstr "Freitext"
 
-#: ../src/build.c:1257
+#: ../src/build.c:1258
 msgid "Enter custom text here, all entered text is appended to the command."
 msgstr ""
 "Hier kann freier Text eingefügt werden, welcher an das Kommando angefügt "
 "wird."
 
-#: ../src/build.c:1335
+#: ../src/build.c:1336
 msgid "_Next Error"
 msgstr "Nächster _Fehler"
 
-#: ../src/build.c:1337
+#: ../src/build.c:1338
 msgid "_Previous Error"
 msgstr "_Vorheriger Fehler"
 
-#: ../src/build.c:1347
+#: ../src/build.c:1348
 msgid "_Set Build Commands"
 msgstr "_Kommandos zum Erstellen konfigurieren"
 
-#: ../src/build.c:1627 ../src/toolbar.c:373
+#: ../src/build.c:1632 ../src/toolbar.c:373
 msgid "Build the current file"
 msgstr "Kompiliert die aktuelle Datei"
 
-#: ../src/build.c:1641
+#: ../src/build.c:1646
 msgid "Build the current file with Make and the default target"
 msgstr "Kompiliert die aktuelle Datei mit »make« und dem Standard-Target"
 
-#: ../src/build.c:1643
+#: ../src/build.c:1648
 msgid "Build the current file with Make and the specified target"
 msgstr "Kompiliert die aktuelle Datei mit »make« und dem angegebenem Target"
 
-#: ../src/build.c:1645
+#: ../src/build.c:1650
 msgid "Compile the current file with Make"
 msgstr "Kompiliert die aktuelle Datei mit make"
 
-#: ../src/build.c:1672
+#: ../src/build.c:1677
 #, c-format
 msgid "Process could not be stopped (%s)."
 msgstr "Der Prozess konnte nicht angehalten werden (%s)."
 
-#: ../src/build.c:1689 ../src/build.c:1701
+#: ../src/build.c:1694 ../src/build.c:1706
 msgid "No more build errors."
 msgstr "Keine weiteren Fehlermeldungen."
 
-#: ../src/build.c:1797
+#: ../src/build.c:1801
 msgid "Set menu item label"
 msgstr "Bezeichnung für den Menüeintrag definieren"
 
-#: ../src/build.c:1818
+#: ../src/build.c:1822
 msgid "Item"
 msgstr "Eintrag"
 
-#: ../src/build.c:1819 ../src/symbols.c:650
+#: ../src/build.c:1823 ../src/symbols.c:650
 msgid "Label"
 msgstr "Label"
 
-#: ../src/build.c:1820 ../src/symbols.c:645
+#: ../src/build.c:1824 ../src/symbols.c:645
 msgid "Command"
 msgstr "Kommando"
 
-#: ../src/build.c:1821
+#: ../src/build.c:1825
 msgid "Working directory"
 msgstr "Arbeitsverzeichnis"
 
-#: ../src/build.c:1822
+#: ../src/build.c:1826
 msgid "Clear"
 msgstr "Leeren"
 
-#: ../src/build.c:1862
+#: ../src/build.c:1866
 msgid "Click to set menu item label"
 msgstr "Klicken, um die Bezeichnung für den Menüeintrag zu definieren"
 
-#: ../src/build.c:1947 ../src/build.c:1949
+#: ../src/build.c:1950 ../src/build.c:1952
 #, c-format
 msgid "%s Commands"
 msgstr "Kommandos für %s"
 
-#: ../src/build.c:1949
+#: ../src/build.c:1952
 msgid "No Filetype"
 msgstr "Kein Dateityp"
 
-#: ../src/build.c:1957 ../src/build.c:1992
+#: ../src/build.c:1960 ../src/build.c:1995
 msgid "Error Regular Expression:"
 msgstr "Regulärer Ausdruck für Fehlermeldungen:"
 
-#: ../src/build.c:1985
+#: ../src/build.c:1988
 msgid "Non-Filetype Commands"
 msgstr "Dateitypunhängige Befehle"
 
-#: ../src/build.c:2015
+#: ../src/build.c:2018
 msgid "Note: Item 2 opens a dialog and appends the response to the command."
 msgstr ""
 "Notiz: Element 2 öffnet ein Dialog und fügt das Ergebnis am Ende des "
 "Kommandos an"
 
-#: ../src/build.c:2024
+#: ../src/build.c:2027
 msgid "Execute Commands"
 msgstr "Befehle zum Ausführen"
 
-#: ../src/build.c:2035
+#: ../src/build.c:2038
 #, c-format
 msgid ""
 "%d, %e, %f, %p are substituted in command and directory fields, see manual "
@@ -271,44 +271,44 @@ msgstr ""
 "%d, %e, %f, %p werden innerhalb der Kommando- und Verzeichnisfelder ersetzt "
 "- Details gibt es in der Dokumentation."
 
-#: ../src/build.c:2201
+#: ../src/build.c:2204
 msgid "Set Build Commands"
 msgstr "Kommandos zum Erstellen konfigurieren"
 
-#: ../src/build.c:2423
+#: ../src/build.c:2426
 msgid "_Compile"
 msgstr "_Kompilieren"
 
 #. build the code
-#: ../src/build.c:2430 ../src/build.c:2693 ../src/interface.c:1075
+#: ../src/build.c:2433 ../src/build.c:2696 ../src/interface.c:1075
 msgid "_Build"
 msgstr "_Erstellen"
 
-#: ../src/build.c:2437 ../src/build.c:2467 ../src/build.c:2660
+#: ../src/build.c:2440 ../src/build.c:2470 ../src/build.c:2663
 msgid "_Execute"
 msgstr "_Ausführen"
 
 #. build the code with make custom
-#: ../src/build.c:2482 ../src/build.c:2658 ../src/build.c:2713
+#: ../src/build.c:2485 ../src/build.c:2661 ../src/build.c:2716
 msgid "Make Custom _Target"
 msgstr "Make (eigenes _Target)"
 
 #. build the code with make object
-#: ../src/build.c:2484 ../src/build.c:2659 ../src/build.c:2721
+#: ../src/build.c:2487 ../src/build.c:2662 ../src/build.c:2724
 msgid "Make _Object"
 msgstr "Make _Objekt-Datei"
 
-#: ../src/build.c:2486 ../src/build.c:2657
+#: ../src/build.c:2489 ../src/build.c:2660
 msgid "_Make"
 msgstr "_Make"
 
 #. build the code with make all
-#: ../src/build.c:2705
+#: ../src/build.c:2708
 msgid "_Make All"
 msgstr "_Make all"
 
 #. arguments
-#: ../src/build.c:2733
+#: ../src/build.c:2736
 msgid "_Set Build Menu Commands"
 msgstr "Kommandos zum Erstellen konfigurieren"
 
@@ -324,7 +324,7 @@ msgstr[0] "%d Datei gespeichert."
 msgstr[1] "%d Dateien gespeichert."
 
 #: ../src/callbacks.c:488 ../src/document.c:2895 ../src/interface.c:352
-#: ../src/sidebar.c:641
+#: ../src/sidebar.c:671
 msgid "_Reload"
 msgstr "_Neu laden"
 
@@ -350,31 +350,31 @@ msgid ""
 "Please set the filetype for the current file before using this function."
 msgstr "Bitte legen Sie den Dateityp fest, bevor Sie diese Funktion benutzen."
 
-#: ../src/callbacks.c:1429 ../src/ui_utils.c:553
+#: ../src/callbacks.c:1429 ../src/ui_utils.c:619
 msgid "dd.mm.yyyy"
 msgstr "TT.MM.JJJJ"
 
-#: ../src/callbacks.c:1431 ../src/ui_utils.c:554
+#: ../src/callbacks.c:1431 ../src/ui_utils.c:620
 msgid "mm.dd.yyyy"
 msgstr "MM.TT.JJJJ"
 
-#: ../src/callbacks.c:1433 ../src/ui_utils.c:555
+#: ../src/callbacks.c:1433 ../src/ui_utils.c:621
 msgid "yyyy/mm/dd"
 msgstr "JJJJ/MM/TT"
 
-#: ../src/callbacks.c:1435 ../src/ui_utils.c:564
+#: ../src/callbacks.c:1435 ../src/ui_utils.c:630
 msgid "dd.mm.yyyy hh:mm:ss"
 msgstr "TT.MM.JJJJ HH:MM:SS"
 
-#: ../src/callbacks.c:1437 ../src/ui_utils.c:565
+#: ../src/callbacks.c:1437 ../src/ui_utils.c:631
 msgid "mm.dd.yyyy hh:mm:ss"
 msgstr "MM.TT.JJJJ HH:MM:SS"
 
-#: ../src/callbacks.c:1439 ../src/ui_utils.c:566
+#: ../src/callbacks.c:1439 ../src/ui_utils.c:632
 msgid "yyyy/mm/dd hh:mm:ss"
 msgstr "JJJJ/MM/TT HH:MM:SS"
 
-#: ../src/callbacks.c:1441 ../src/ui_utils.c:575
+#: ../src/callbacks.c:1441 ../src/ui_utils.c:641
 msgid "_Use Custom Date Format"
 msgstr "Benutze selbst erstelltes _Datumsformat"
 
@@ -467,31 +467,31 @@ msgstr ""
 "Beachten Sie: Wenn Sie mehrere Dateien auswählen, werden alle mit dem "
 "gewählten Dateityp geöffnet."
 
-#: ../src/dialogs.c:389
+#: ../src/dialogs.c:386
 msgid "Overwrite?"
 msgstr "Überschreiben?"
 
-#: ../src/dialogs.c:390
+#: ../src/dialogs.c:387
 msgid "Filename already exists!"
 msgstr "Der Dateiname existiert bereits!"
 
-#: ../src/dialogs.c:422 ../src/dialogs.c:552
+#: ../src/dialogs.c:419 ../src/dialogs.c:548
 msgid "Save File"
 msgstr "Datei speichern"
 
-#: ../src/dialogs.c:430
+#: ../src/dialogs.c:427
 msgid "R_ename"
 msgstr "_Umbenennen"
 
-#: ../src/dialogs.c:432
+#: ../src/dialogs.c:429
 msgid "Save the file and rename it"
 msgstr "Speichert und benennt die Datei um"
 
-#: ../src/dialogs.c:440
+#: ../src/dialogs.c:437
 msgid "_Open file in a new tab"
 msgstr "_Datei in einem neuen Reiter öffnen"
 
-#: ../src/dialogs.c:442
+#: ../src/dialogs.c:439
 msgid ""
 "Keep the current unsaved document open and open the newly saved file in a "
 "new tab"
@@ -499,41 +499,41 @@ msgstr ""
 "Lässt das ungesicherte Dokument geöffnet und öffnet das gesicherte in einem "
 "neuen Reiter."
 
-#: ../src/dialogs.c:570 ../src/win32.c:681
+#: ../src/dialogs.c:566 ../src/win32.c:681
 msgid "Error"
 msgstr "Fehler"
 
-#: ../src/dialogs.c:573 ../src/dialogs.c:1443 ../src/win32.c:687
+#: ../src/dialogs.c:569 ../src/dialogs.c:1439 ../src/win32.c:687
 #: ../src/win32.c:746
 msgid "Question"
 msgstr "Frage"
 
-#: ../src/dialogs.c:576 ../src/win32.c:693
+#: ../src/dialogs.c:572 ../src/win32.c:693
 msgid "Warning"
 msgstr "Warnung"
 
-#: ../src/dialogs.c:579 ../src/win32.c:699
+#: ../src/dialogs.c:575 ../src/win32.c:699
 msgid "Information"
 msgstr "Information"
 
-#: ../src/dialogs.c:660
+#: ../src/dialogs.c:656
 msgid "_Don't save"
 msgstr "_Nicht speichern"
 
-#: ../src/dialogs.c:691
+#: ../src/dialogs.c:687
 #, c-format
 msgid "The file '%s' is not saved."
 msgstr "»%s« wurde nicht gespeichert."
 
-#: ../src/dialogs.c:693
+#: ../src/dialogs.c:689
 msgid "Do you want to save it before closing?"
 msgstr "Möchten Sie vor dem Schließen speichern?"
 
-#: ../src/dialogs.c:768
+#: ../src/dialogs.c:764
 msgid "Choose font"
 msgstr "Schriftart auswählen"
 
-#: ../src/dialogs.c:1057
+#: ../src/dialogs.c:1053
 msgid ""
 "An error occurred or file information could not be retrieved (e.g. from a "
 "new file)."
@@ -541,91 +541,90 @@ msgstr ""
 "Es ist ein Fehler aufgetreten oder Datei-Informationen konnten nicht gelesen "
 "werden (z.B. bei einer neuen, noch nicht gespeicherten Datei)."
 
-#: ../src/dialogs.c:1076 ../src/dialogs.c:1077 ../src/dialogs.c:1078
-#: ../src/dialogs.c:1084 ../src/dialogs.c:1085 ../src/dialogs.c:1086
+#: ../src/dialogs.c:1072 ../src/dialogs.c:1073 ../src/dialogs.c:1074
+#: ../src/dialogs.c:1080 ../src/dialogs.c:1081 ../src/dialogs.c:1082
 #: ../src/symbols.c:1730 ../src/symbols.c:1751 ../src/symbols.c:1803
-#: ../src/ui_utils.c:223
+#: ../src/ui_utils.c:244
 msgid "unknown"
 msgstr "unbekannt"
 
-#: ../src/dialogs.c:1091 ../src/symbols.c:800
+#: ../src/dialogs.c:1087 ../src/symbols.c:800
 msgid "Properties"
 msgstr "Eigenschaften"
 
-#: ../src/dialogs.c:1120
+#: ../src/dialogs.c:1116
 msgid "<b>Type:</b>"
 msgstr "<b>Dateityp:</b>"
 
-#: ../src/dialogs.c:1134
+#: ../src/dialogs.c:1130
 msgid "<b>Size:</b>"
 msgstr "<b>Größe:</b>"
 
-#: ../src/dialogs.c:1150
+#: ../src/dialogs.c:1146
 msgid "<b>Location:</b>"
 msgstr "<b>Ort:</b>"
 
-#: ../src/dialogs.c:1164
+#: ../src/dialogs.c:1160
 msgid "<b>Read-only:</b>"
 msgstr "<b>Schreibgeschützt:</b>"
 
-#: ../src/dialogs.c:1171
+#: ../src/dialogs.c:1167
 msgid "(only inside Geany)"
 msgstr "(nur innerhalb von Geany)"
 
-#: ../src/dialogs.c:1180
+#: ../src/dialogs.c:1176
 msgid "<b>Encoding:</b>"
 msgstr "<b>Kodierung:</b>"
 
-#. BOM = byte order mark
-#: ../src/dialogs.c:1190 ../src/ui_utils.c:226
+#: ../src/dialogs.c:1186 ../src/ui_utils.c:248
 msgid "(with BOM)"
 msgstr "(mit BOM)"
 
-#: ../src/dialogs.c:1190
+#: ../src/dialogs.c:1186
 msgid "(without BOM)"
 msgstr "(ohne BOM)"
 
-#: ../src/dialogs.c:1201
+#: ../src/dialogs.c:1197
 msgid "<b>Modified:</b>"
 msgstr "<b>Modifiziert:</b>"
 
-#: ../src/dialogs.c:1215
+#: ../src/dialogs.c:1211
 msgid "<b>Changed:</b>"
 msgstr "<b>Geändert:</b>"
 
-#: ../src/dialogs.c:1229
+#: ../src/dialogs.c:1225
 msgid "<b>Accessed:</b>"
 msgstr "<b>Zugriff:</b>"
 
-#: ../src/dialogs.c:1251
+#: ../src/dialogs.c:1247
 msgid "<b>Permissions:</b>"
 msgstr "<b>Zugriffsrechte:</b>"
 
 #. Header
-#: ../src/dialogs.c:1259
+#: ../src/dialogs.c:1255
 msgid "Read:"
 msgstr "Lesen:"
 
-#: ../src/dialogs.c:1266
+#: ../src/dialogs.c:1262
 msgid "Write:"
 msgstr "Schreiben:"
 
-#: ../src/dialogs.c:1273
+#: ../src/dialogs.c:1269
 msgid "Execute:"
 msgstr "Ausführen:"
 
 #. Owner
-#: ../src/dialogs.c:1281
+#: ../src/dialogs.c:1277
 msgid "Owner:"
 msgstr "Eigentümer:"
 
 #. Group
-#: ../src/dialogs.c:1317
+#: ../src/dialogs.c:1313
 msgid "Group:"
 msgstr "Gruppe:"
 
 #. Other
-#: ../src/dialogs.c:1353
+#: ../src/dialogs.c:1349
 msgid "Other:"
 msgstr "Andere:"
 
@@ -763,8 +762,8 @@ msgstr "»%s« wurde nicht gefunden."
 msgid "Wrap search and find again?"
 msgstr "Suche vom Dokumentanfang bzw. -ende neu beginnen?"
 
-#: ../src/document.c:2069 ../src/search.c:1115 ../src/search.c:1159
-#: ../src/search.c:1849 ../src/search.c:1850
+#: ../src/document.c:2069 ../src/search.c:1131 ../src/search.c:1175
+#: ../src/search.c:1870 ../src/search.c:1871
 #, c-format
 msgid "No matches found for \"%s\"."
 msgstr "Keine Treffer für »%s« gefunden."
@@ -800,17 +799,17 @@ msgstr ""
 "»%s« wurde nicht auf dem Datenträger gefunden. Soll die Datei neu "
 "gespeichert werden?"
 
-#: ../src/editor.c:4428
+#: ../src/editor.c:4427
 msgid "Enter Tab Width"
 msgstr "Tabulatorbreite:"
 
-#: ../src/editor.c:4429
+#: ../src/editor.c:4428
 msgid "Enter the amount of spaces which should be replaced by a tab character."
 msgstr ""
 "Geben Sie die Anzahl der Leerzeichen an, welche durch den Tabulator ersetzt "
 "werden sollen."
 
-#: ../src/editor.c:4580
+#: ../src/editor.c:4579
 #, c-format
 msgid "Warning: non-standard hard tab width: %d != 8!"
 msgstr "Achtung: Keine gewöhnliche harte Tabulatorbreite:: %d != 8!"
@@ -1037,17 +1036,17 @@ msgstr "Schlechter RegEx für Dateityp %s: %s"
 msgid "untitled"
 msgstr "unbenannt"
 
-#: ../src/highlighting.c:3351 ../src/main.c:802 ../src/socket.c:165
+#: ../src/highlighting.c:3342 ../src/main.c:802 ../src/socket.c:165
 #: ../src/templates.c:294
 #, c-format
 msgid "Could not find file '%s'."
 msgstr "Konnte die Datei »%s« nicht finden."
 
-#: ../src/highlighting.c:3400
+#: ../src/highlighting.c:3391
 msgid "_Color Schemes"
 msgstr "_FarbsSchemata"
 
-#: ../src/highlighting.c:3407
+#: ../src/highlighting.c:3398
 msgid "_Default"
 msgstr "_Standard"
 
@@ -1245,7 +1244,7 @@ msgstr "_Vorheriges"
 msgid "Find in F_iles"
 msgstr "In _Dateien suchen"
 
-#: ../src/interface.c:743 ../src/search.c:549
+#: ../src/interface.c:743 ../src/search.c:547
 msgid "_Replace"
 msgstr "_Ersetzen"
 
@@ -1470,7 +1469,7 @@ msgstr "_Tastenkürzel"
 msgid "_Debug Messages"
 msgstr "_Debug-Meldungen"
 
-#: ../src/interface.c:1185 ../src/sidebar.c:130
+#: ../src/interface.c:1185 ../src/sidebar.c:132
 msgid "Symbols"
 msgstr "Symbole"
 
@@ -2870,7 +2869,7 @@ msgstr "Neu laden"
 msgid "Re-open last closed tab"
 msgstr "Zuletzt geschlossenes Dokument wieder öffnen"
 
-#: ../src/keybindings.c:255 ../src/project.c:519
+#: ../src/keybindings.c:255 ../src/project.c:522
 msgid "Project"
 msgstr "Projekt"
 
@@ -3042,7 +3041,7 @@ msgstr "Einstellungen"
 msgid "Search"
 msgstr "Suchen"
 
-#: ../src/keybindings.c:395 ../src/search.c:382
+#: ../src/keybindings.c:395 ../src/search.c:383
 msgid "Find"
 msgstr "Suchen"
 
@@ -3062,11 +3061,11 @@ msgstr "Auswahl vorwärts im Dokument finden"
 msgid "Find Previous Selection"
 msgstr "Auswahl rückwärts im Dokument finden"
 
-#: ../src/keybindings.c:406 ../src/search.c:539
+#: ../src/keybindings.c:406 ../src/search.c:537
 msgid "Replace"
 msgstr "Ersetzen"
 
-#: ../src/keybindings.c:408 ../src/search.c:715
+#: ../src/keybindings.c:408 ../src/search.c:709
 msgid "Find in Files"
 msgstr "In Dateien suchen"
 
@@ -3286,8 +3285,8 @@ msgstr "Markierungen entfernen"
 msgid "Remove Error Indicators"
 msgstr "Fehlermarkierungen entfernen"
 
-#: ../src/keybindings.c:538 ../src/keybindings.c:543 ../src/project.c:477
-#: ../src/ui_utils.c:1835
+#: ../src/keybindings.c:538 ../src/keybindings.c:543 ../src/project.c:479
+#: ../src/ui_utils.c:1898
 msgid "Build"
 msgstr "Erstellen"
 
@@ -3712,32 +3711,32 @@ msgstr ""
 "Nur den Basisdateinamen (ohne die Pfadangabe) der zu druckenden Datei "
 "verwenden"
 
-#: ../src/printing.c:527
+#: ../src/printing.c:530
 #, c-format
 msgid "Page %d of %d"
 msgstr "Seite %d von %d"
 
-#: ../src/printing.c:781
+#: ../src/printing.c:784
 #, c-format
 msgid "Did not send document %s to the printing subsystem."
 msgstr "Das Dokument %s wurde NICHT an das Drucksystem weiter gegeben."
 
-#: ../src/printing.c:783
+#: ../src/printing.c:786
 #, c-format
 msgid "Document %s was sent to the printing subsystem."
 msgstr "Das Dokument %s wurde zum Drucken an das Drucksystem übergeben"
 
-#: ../src/printing.c:835
+#: ../src/printing.c:838
 #, c-format
 msgid "Printing of %s failed (%s)."
 msgstr "Drucken der Datei »%s« ist fehlgeschlagen (%s)."
 
-#: ../src/printing.c:875
+#: ../src/printing.c:878
 msgid "Please set a print command in the preferences dialog first."
 msgstr ""
 "Bitte geben Sie zuerst einen Befehl zum Drucken in den Einstellungen an."
 
-#: ../src/printing.c:883
+#: ../src/printing.c:886
 #, c-format
 msgid ""
 "The file \"%s\" will be printed with the following command:\n"
@@ -3748,12 +3747,12 @@ msgstr ""
 "\n"
 "%s"
 
-#: ../src/printing.c:899
+#: ../src/printing.c:902
 #, c-format
 msgid "Printing of \"%s\" failed (return code: %s)."
 msgstr "Drucken der Datei »%s« ist fehlgeschlagen (Rückgabewert: %s)."
 
-#: ../src/printing.c:905
+#: ../src/printing.c:908
 #, c-format
 msgid "File %s printed."
 msgstr "Datei »%s« wurde gedruckt."
@@ -3772,19 +3771,19 @@ msgstr "Neues Projekt erstellen"
 msgid "C_reate"
 msgstr "_Erstellen"
 
-#: ../src/project.c:139 ../src/project.c:413
+#: ../src/project.c:139 ../src/project.c:415
 msgid "Name:"
 msgstr "Name:"
 
-#: ../src/project.c:148 ../src/project.c:426
+#: ../src/project.c:148 ../src/project.c:428
 msgid "Filename:"
 msgstr "Dateiname:"
 
-#: ../src/project.c:164 ../src/project.c:456
+#: ../src/project.c:164 ../src/project.c:458
 msgid "Base path:"
 msgstr "Basisverzeichnis:"
 
-#: ../src/project.c:170 ../src/project.c:465
+#: ../src/project.c:170 ../src/project.c:467
 msgid ""
 "Base directory of all files that make up the project. This can be a new "
 "path, or an existing directory tree. You can use paths relative to the "
@@ -3795,11 +3794,11 @@ msgstr ""
 "Verzeichnis angeben. Weiterhin kann es sowohl in relativer als auch "
 "absoluter Form eingegeben werden."
 
-#: ../src/project.c:173 ../src/project.c:468
+#: ../src/project.c:173 ../src/project.c:470
 msgid "Choose Project Base Path"
 msgstr "Auswahl des Projektbasisverzeichnisses"
 
-#: ../src/project.c:231 ../src/project.c:263 ../src/project.c:957
+#: ../src/project.c:231 ../src/project.c:263 ../src/project.c:977
 #, c-format
 msgid "Project file \"%s\" could not be loaded."
 msgstr "Die Projektdatei »%s« konnte nicht geladen werden."
@@ -3817,21 +3816,21 @@ msgstr "Projektdateien"
 msgid "Project \"%s\" closed."
 msgstr "Projekt »%s« geschlossen."
 
-#: ../src/project.c:439
+#: ../src/project.c:441
 msgid "Description:"
 msgstr "Beschreibung:"
 
-#: ../src/project.c:481
+#: ../src/project.c:484
 msgid "Set the Build non-filetype working directories to use base path:"
 msgstr ""
 "Arbeitsverzeichnis für nicht spezifizierte Dateitypen auf den Basispfad "
 "setzen:"
 
-#: ../src/project.c:484
+#: ../src/project.c:487
 msgid "Set"
 msgstr "Setzen"
 
-#: ../src/project.c:486
+#: ../src/project.c:489
 msgid ""
 "Set the working directories (on the Build tab) for the non-filetype build "
 "commands to use the base path"
@@ -3839,77 +3838,76 @@ msgstr ""
 "Setzt das Arbeitsverzeichnis für typlose Dateien (innerhalb des Übersetzens) "
 "auf den Basispfad. "
 
-#: ../src/project.c:501
+#: ../src/project.c:504
 msgid "File patterns:"
 msgstr "Dateinamenmuster:"
 
-#: ../src/project.c:610
+#: ../src/project.c:630
 msgid "Do you want to close it before proceeding?"
 msgstr "Möchten Sie das Projekt schließen bevor Sie fortfahren?"
 
-#: ../src/project.c:611
+#: ../src/project.c:631
 #, c-format
 msgid "The '%s' project is already open."
 msgstr "Das Projekt »%s« ist bereits geöffnet."
 
-#: ../src/project.c:658
+#: ../src/project.c:678
 msgid "The specified project name is too short."
 msgstr "Der eingegebene Projektname ist zu kurz."
 
-#: ../src/project.c:664
+#: ../src/project.c:684
 #, c-format
 msgid "The specified project name is too long (max. %d characters)."
 msgstr "Der eingegebene Projektname ist zu lang (max. %d Zeichen)."
 
-#: ../src/project.c:672
+#: ../src/project.c:692
 msgid "You have specified an invalid project filename."
 msgstr "Sie haben einen ungültigen Dateinamen angegeben."
 
-#: ../src/project.c:695
+#: ../src/project.c:715
 msgid "Create the project's base path directory?"
 msgstr "Soll das Projektbasisverzeichnis erstellt werden?"
 
-#: ../src/project.c:696
+#: ../src/project.c:716
 #, c-format
 msgid "The path \"%s\" does not exist."
 msgstr "Der Pfad »%s« existiert nicht."
 
-#: ../src/project.c:705
+#: ../src/project.c:725
 #, c-format
 msgid "Project base directory could not be created (%s)."
 msgstr "Projektverzeichnis konnte nicht erstellt werden (%s)."
 
-#: ../src/project.c:717
+#: ../src/project.c:737
 #, c-format
 msgid "Project file could not be written (%s)."
 msgstr "Projektdatei konnte nicht geschrieben werden (%s)."
 
-#: ../src/project.c:794
+#: ../src/project.c:814
 #, c-format
 msgid "Project \"%s\" created."
 msgstr "Projekt »%s« erstellt."
 
-#: ../src/project.c:796
+#: ../src/project.c:816
 #, c-format
 msgid "Project \"%s\" saved."
 msgstr "Projekt »%s« gespeichert."
 
 #. initialise the dialog
-#: ../src/project.c:861 ../src/project.c:872
+#: ../src/project.c:881 ../src/project.c:892
 msgid "Choose Project Filename"
 msgstr "Auswahl des Projektdateinamens"
 
-#: ../src/project.c:947
+#: ../src/project.c:967
 #, c-format
 msgid "Project \"%s\" opened."
 msgstr "Projekt »%s« geöffnet."
 
-#. auto destroy the size group
-#: ../src/search.c:219 ../src/search.c:785
+#: ../src/search.c:226 ../src/search.c:811
 msgid "_Use regular expressions"
 msgstr "Reguläre Ausdrücke _benutzen"
 
-#: ../src/search.c:223
+#: ../src/search.c:229
 msgid ""
 "Use POSIX-like regular expressions. For detailed information about using "
 "regular expressions, please read the documentation."
@@ -3917,15 +3915,15 @@ msgstr ""
 "Benutze POSIX-ähnliche reguläre Ausdrücke. Für weitere Informationen über "
 "reguläre Ausdrücke konsultieren Sie bitte die Dokumentation."
 
-#: ../src/search.c:230
+#: ../src/search.c:236
 msgid "Search _backwards"
 msgstr "_Rückwärts suchen"
 
-#: ../src/search.c:244
+#: ../src/search.c:249
 msgid "Use _escape sequences"
 msgstr "S_onderzeichen maskieren"
 
-#: ../src/search.c:249
+#: ../src/search.c:253
 msgid ""
 "Replace \\\\, \\t, \\n, \\r and \\uXXXX (Unicode chararacters) with the "
 "corresponding control characters"
@@ -3933,19 +3931,19 @@ msgstr ""
 "Ersetzt \\\\, \\t, \\n, \\r und \\uXXXX (Unicode-Zeichen) mit den "
 "entsprechenden Sonderzeichen"
 
-#: ../src/search.c:258 ../src/search.c:796
+#: ../src/search.c:262 ../src/search.c:820
 msgid "C_ase sensitive"
 msgstr "_Groß-/Kleinschreibung beachten"
 
-#: ../src/search.c:263 ../src/search.c:802
+#: ../src/search.c:266 ../src/search.c:825
 msgid "Match only a _whole word"
 msgstr "N_ur ganze Wörter finden"
 
-#: ../src/search.c:268
+#: ../src/search.c:270
 msgid "Match from s_tart of word"
 msgstr "_Wortanfänge finden"
 
-#: ../src/search.c:389
+#: ../src/search.c:390
 msgid "_Previous"
 msgstr "_Vorheriges"
 
@@ -3953,151 +3951,159 @@ msgstr "_Vorheriges"
 msgid "_Next"
 msgstr "_Nächstes"
 
-#: ../src/search.c:399 ../src/search.c:560 ../src/search.c:725
+#: ../src/search.c:399 ../src/search.c:558 ../src/search.c:719
 msgid "_Search for:"
 msgstr "Suc_he nach:"
 
 #. Now add the multiple match options
-#: ../src/search.c:427
+#: ../src/search.c:426
 msgid "_Find All"
 msgstr "_Alle finden"
 
-#: ../src/search.c:434
+#: ../src/search.c:433
 msgid "_Mark"
 msgstr "_Markieren"
 
-#: ../src/search.c:436
+#: ../src/search.c:435
 msgid "Mark all matches in the current document"
 msgstr "Markiert alle Treffer innerhalb des aktuellen Dokumentes"
 
-#: ../src/search.c:441 ../src/search.c:622
+#: ../src/search.c:440 ../src/search.c:617
 msgid "In Sessi_on"
 msgstr "In Sit_zung"
 
-#: ../src/search.c:446 ../src/search.c:627
+#: ../src/search.c:445 ../src/search.c:622
 msgid "_In Document"
 msgstr "_Im Dokument"
 
 #. close window checkbox
-#: ../src/search.c:452 ../src/search.c:640
+#: ../src/search.c:451 ../src/search.c:635
 msgid "Close _dialog"
 msgstr "_Diesen Dialog schließen"
 
-#: ../src/search.c:457 ../src/search.c:645
+#: ../src/search.c:455 ../src/search.c:639
 msgid "Disable this option to keep the dialog open"
 msgstr "Deaktivieren Sie diese Option um das Dialogfenster offen zu halten."
 
-#: ../src/search.c:554
+#: ../src/search.c:552
 msgid "Replace & Fi_nd"
 msgstr "Ersetzen und _Finden"
 
-#: ../src/search.c:563
+#: ../src/search.c:561
 msgid "Replace wit_h:"
 msgstr "Erse_tzen durch:"
 
 #. Now add the multiple replace options
-#: ../src/search.c:615
+#: ../src/search.c:610
 msgid "Re_place All"
 msgstr "_Alle ersetzen"
 
-#: ../src/search.c:632
+#: ../src/search.c:627
 msgid "In Se_lection"
 msgstr "I_n Auswahl"
 
-#: ../src/search.c:634
+#: ../src/search.c:629
 msgid "Replace all matches found in the currently selected text"
 msgstr "Ersetze alle Treffer im aktuell markierten Text"
 
-#: ../src/search.c:741
+#: ../src/search.c:739
+msgid "Fi_les:"
+msgstr "Fi_lter:"
+
+#: ../src/search.c:753
+msgid "File patterns, e.g. *.c *.h"
+msgstr "Dateinamensmuster, z.B. *.c *.h"
+
+#: ../src/search.c:765
 msgid "_Directory:"
 msgstr "_Verzeichnis:"
 
-#: ../src/search.c:761
+#: ../src/search.c:784
 msgid "E_ncoding:"
 msgstr "_Kodierung"
 
-#: ../src/search.c:789
+#: ../src/search.c:814
 msgid "See grep's manual page for more information"
 msgstr ""
 "Für mehr Informationen konsultieren Sie bitte die Dokumentation von »grep«"
 
-#: ../src/search.c:791
+#: ../src/search.c:816
 msgid "_Recurse in subfolders"
 msgstr "_In Unterverzeichnissen"
 
-#: ../src/search.c:807
+#: ../src/search.c:829
 msgid "_Invert search results"
 msgstr "Su_chmuster umkehren"
 
-#: ../src/search.c:812
+#: ../src/search.c:833
 msgid "Invert the sense of matching, to select non-matching lines"
 msgstr "Invertiert die Trefferliste"
 
-#: ../src/search.c:833
+#: ../src/search.c:850
 msgid "E_xtra options:"
 msgstr "_Zus. Optionen:"
 
-#: ../src/search.c:841
+#: ../src/search.c:857
 msgid "Other options to pass to Grep"
 msgstr "Andere Argumente, die an grep übergeben werden sollen"
 
-#: ../src/search.c:1118 ../src/search.c:1855 ../src/search.c:1858
+#: ../src/search.c:1134 ../src/search.c:1876 ../src/search.c:1879
 #, c-format
 msgid "Found %d match for \"%s\"."
 msgid_plural "Found %d matches for \"%s\"."
 msgstr[0] "%d Treffer für »%s« gefunden."
 msgstr[1] "%d Treffer für »%s« gefunden."
 
-#: ../src/search.c:1165
+#: ../src/search.c:1181
 #, c-format
 msgid "Replaced %u matches in %u documents."
 msgstr "%u Treffer in %u Dokumenten ersetzt"
 
-#: ../src/search.c:1342
+#: ../src/search.c:1361
 msgid "Invalid directory for find in files."
 msgstr "Ungültiges Verzeichnis."
 
-#: ../src/search.c:1362
+#: ../src/search.c:1382
 msgid "No text to find."
 msgstr "Kein Text zum Suchen angegeben."
 
-#: ../src/search.c:1389
+#: ../src/search.c:1409
 #, c-format
 msgid "Cannot execute grep tool '%s'; check the path setting in Preferences."
 msgstr ""
 "Konnte das grep Kommando »%s« nicht finden (Pfad zum Grep Kommando in den "
 "Einstellungen überprüfen)."
 
-#: ../src/search.c:1457
+#: ../src/search.c:1478
 msgid "Searching..."
 msgstr "Suchen..."
 
-#: ../src/search.c:1469
+#: ../src/search.c:1490
 #, c-format
 msgid "%s %s -- %s (in directory: %s)"
 msgstr "%s %s -- %s (im Verzeichnis: %s)"
 
-#: ../src/search.c:1497
+#: ../src/search.c:1518
 #, c-format
 msgid "Could not open directory (%s)"
 msgstr "Konnte Verzeichnis nicht öffnen (%s)."
 
-#: ../src/search.c:1575
+#: ../src/search.c:1596
 msgid "Search failed."
 msgstr "Suche fehlgeschlagen."
 
-#: ../src/search.c:1595
+#: ../src/search.c:1616
 #, c-format
 msgid "Search completed with %d match."
 msgid_plural "Search completed with %d matches."
 msgstr[0] "Such mit %d Treffer abgeschlossen."
 msgstr[1] "Such mit %d Treffern abgeschlossen."
 
-#: ../src/search.c:1603
+#: ../src/search.c:1624
 msgid "No matches found."
 msgstr "Keine Treffer gefunden."
 
-#: ../src/search.c:1635
+#: ../src/search.c:1656
 #, c-format
 msgid "Bad regex: %s"
 msgstr "Fehler in Ausdruck: %s"
@@ -4616,128 +4622,117 @@ msgstr "Wörter:"
 msgid "Characters:"
 msgstr "Buchstaben:"
 
-#: ../src/sidebar.c:186
+#: ../src/sidebar.c:188
 msgid "No tags found"
 msgstr "Keine Symbole gefunden"
 
-#: ../src/sidebar.c:569
+#: ../src/sidebar.c:574
 msgid "Show S_ymbol List"
 msgstr "S_ymbolliste anzeigen"
 
-#: ../src/sidebar.c:577
+#: ../src/sidebar.c:582
 msgid "Show _Document List"
 msgstr "_Dokumentenliste anzeigen"
 
-#: ../src/sidebar.c:585 ../plugins/filebrowser.c:648
+#: ../src/sidebar.c:590 ../plugins/filebrowser.c:648
 msgid "H_ide Sidebar"
 msgstr "Seitenleiste _verstecken"
 
-#: ../src/sidebar.c:654
+#: ../src/sidebar.c:684 ../plugins/filebrowser.c:619
+msgid "_Find in Files"
+msgstr "In _Dateien suchen"
+
+#: ../src/sidebar.c:694
 msgid "Show _Paths"
 msgstr "_Pfade anzeigen"
 
 #. Status bar statistics: col = column, sel = selection.
-#: ../src/ui_utils.c:195
-#, c-format
-msgid "line: %d / %d\t col: %d\t sel: %d\t "
-msgstr "Zeile: %d/%d\t Spalte: %d\t Markiert: %d\t "
+#: ../src/ui_utils.c:175
+msgid ""
+"line: %l / %L\t col: %c\t sel: %s\t %w      %t      %mmode: %M      "
+"encoding: %e      filetype: %f      scope: %S"
+msgstr ""
+"Zeile: %l / %L\t Spa: %c\t Aus: %s\t %w      %t      %mmode: %M      "
+"Kodierung: %e      Dateityp: %f      Kontext: %S"
 
 #. RO = read-only
-#: ../src/ui_utils.c:201
+#: ../src/ui_utils.c:205 ../src/ui_utils.c:212
 msgid "RO "
 msgstr "RO "
 
 #. OVR = overwrite/overtype, INS = insert
-#: ../src/ui_utils.c:203
+#: ../src/ui_utils.c:207
 msgid "OVR"
 msgstr "ÜBER"
 
-#: ../src/ui_utils.c:203
+#: ../src/ui_utils.c:207
 msgid "INS"
 msgstr "EINFG"
 
-#: ../src/ui_utils.c:209
+#: ../src/ui_utils.c:221
 msgid "TAB"
 msgstr "Tab"
 
-#: ../src/ui_utils.c:212
+#. SP = space
+#: ../src/ui_utils.c:224
 msgid "SP"
 msgstr "Leer"
 
-#: ../src/ui_utils.c:215
+#. T/S = tabs and spaces
+#: ../src/ui_utils.c:227
 msgid "T/S"
 msgstr "T/L"
 
-#: ../src/ui_utils.c:219
-#, c-format
-msgid "mode: %s"
-msgstr "Modus: %s"
-
-#: ../src/ui_utils.c:222
-#, c-format
-msgid "encoding: %s %s"
-msgstr "Zeichensatz: %s %s"
-
-#: ../src/ui_utils.c:228
-#, c-format
-msgid "filetype: %s"
-msgstr "Dateityp: %s"
-
-#: ../src/ui_utils.c:232
+#: ../src/ui_utils.c:235
 msgid "MOD"
 msgstr "MOD"
 
-#: ../src/ui_utils.c:237
-#, c-format
-msgid "scope: %s"
-msgstr "Bereich: %s"
-
-#: ../src/ui_utils.c:296
+#: ../src/ui_utils.c:362
 msgid " (new instance)"
 msgstr " (neue Instanz)"
 
-#: ../src/ui_utils.c:326
+#: ../src/ui_utils.c:392
 #, c-format
 msgid "Font updated (%s)."
 msgstr "Schriftart gewechselt (%s)."
 
-#: ../src/ui_utils.c:522
+#: ../src/ui_utils.c:588
 msgid "C Standard Library"
 msgstr "C Standard Bibliothek"
 
-#: ../src/ui_utils.c:523
+#: ../src/ui_utils.c:589
 msgid "ISO C99"
 msgstr "ISO C99"
 
-#: ../src/ui_utils.c:524
+#: ../src/ui_utils.c:590
 msgid "C++ (C Standard Library)"
 msgstr "C++ (C Standard Bibliothek)"
 
-#: ../src/ui_utils.c:525
+#: ../src/ui_utils.c:591
 msgid "C++ Standard Library"
 msgstr "C++ Standard Bibliothek"
 
-#: ../src/ui_utils.c:526
+#: ../src/ui_utils.c:592
 msgid "C++ STL"
 msgstr "C++ STL"
 
-#: ../src/ui_utils.c:590
+#: ../src/ui_utils.c:654
 msgid "_Set Custom Date Format"
 msgstr "_Benutzerdefiniertes Datumsformat einstellen"
 
-#: ../src/ui_utils.c:1679
+#: ../src/ui_utils.c:1742
 msgid "Select Folder"
 msgstr "Ordner wählen"
 
-#: ../src/ui_utils.c:1679
+#: ../src/ui_utils.c:1742
 msgid "Select File"
 msgstr "Datei wählen"
 
-#: ../src/ui_utils.c:1833
+#: ../src/ui_utils.c:1896
 msgid "Save All"
 msgstr "Alle speichern"
 
-#: ../src/ui_utils.c:1834
+#: ../src/ui_utils.c:1897
 msgid "Close All"
 msgstr "Alle schließen"
 
@@ -5143,32 +5138,32 @@ msgid ""
 "Renders the font size of the document together with the current zoom level"
 msgstr "Vergrößerungsstufe in das exportierte Dokument übernehmen"
 
-#: ../plugins/export.c:268
+#: ../plugins/export.c:267
 #, c-format
 msgid "Document successfully exported as '%s'."
 msgstr "Dokument erfolgreich als »%s« exportiert."
 
-#: ../plugins/export.c:270
+#: ../plugins/export.c:269
 #, c-format
 msgid "File '%s' could not be written (%s)."
 msgstr "Die Datei »%s« konnte nicht geschrieben werden (%s)."
 
-#: ../plugins/export.c:317
+#: ../plugins/export.c:316
 #, c-format
 msgid "The file '%s' already exists. Do you want to overwrite it?"
 msgstr "Die Datei »%s« existiert bereits. Soll sie überschrieben werden?"
 
-#: ../plugins/export.c:704
+#: ../plugins/export.c:703
 msgid "_Export"
 msgstr "_Exportieren"
 
 #. HTML
-#: ../plugins/export.c:711
+#: ../plugins/export.c:710
 msgid "As _HTML"
 msgstr "Als _HTML exportieren"
 
 #. LaTeX
-#: ../plugins/export.c:717
+#: ../plugins/export.c:716
 msgid "As _LaTeX"
 msgstr "Als _LaTeX exportieren"
 
@@ -5192,10 +5187,6 @@ msgstr "Kann angegebenen externen Befehl »%s« nicht ausführen (%s)."
 #: ../plugins/filebrowser.c:604
 msgid "Open _externally"
 msgstr "Mit _externer Anwendung öffnen"
-
-#: ../plugins/filebrowser.c:619
-msgid "_Find in Files"
-msgstr "In _Dateien suchen"
 
 #: ../plugins/filebrowser.c:629
 msgid "Show _Hidden Files"
@@ -5412,6 +5403,21 @@ msgstr "Horizontal teilen"
 #: ../plugins/splitwindow.c:402
 msgid "Split Vertically"
 msgstr "Vertikal teilen"
+
+#~ msgid "line: %d / %d\t col: %d\t sel: %d\t "
+#~ msgstr "Zeile: %d/%d\t Spalte: %d\t Markiert: %d\t "
+
+#~ msgid "mode: %s"
+#~ msgstr "Modus: %s"
+
+#~ msgid "encoding: %s %s"
+#~ msgstr "Zeichensatz: %s %s"
+
+#~ msgid "filetype: %s"
+#~ msgstr "Dateityp: %s"
+
+#~ msgid "scope: %s"
+#~ msgstr "Bereich: %s"
 
 #~ msgid "Fixed s_trings"
 #~ msgstr "_Feste Zeichenketten"
