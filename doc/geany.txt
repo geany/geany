@@ -4065,9 +4065,12 @@ statusbar_template                The status bar statistics line format.       S
                                   (Search in src/ui_utils.c for details).
 ================================  ===========================================  ==================
 
-statusbar_template default (where ``\t`` = tab):
+By default, statusbar_template is empty. This tells Geany to use its
+internal default, which is currently:
 
 ``line: %l / %L\t col: %c\t sel: %s\t %w      %t      %mmode: %M      encoding: %e      filetype: %f      scope: %S``
+
+Note that ``\t`` = tab.
 
 ================================  ===========================================  ==================
 Key                               Description                                  Default

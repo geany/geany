@@ -170,7 +170,7 @@ static void add_statusbar_statistics(GString *stats_str,
 	const gchar *expos;	/* % expansion position */
 	const gchar sp[] = "      ";
 
-	fmt = statusbar_template ? statusbar_template :
+	fmt = NZV(statusbar_template) ? statusbar_template :
 		/* Status bar statistics: col = column, sel = selection. */
 		_("line: %l / %L\t col: %c\t sel: %s\t %w      %t      %m"
 		"mode: %M      encoding: %e      filetype: %f      scope: %S");
@@ -2000,7 +2000,14 @@ static void on_load_settings(GObject *obj, GKeyFile *config)
 	g_assert(statusbar_template == NULL);
 
 	statusbar_template = utils_get_setting_string(config,
-		PACKAGE, "statusbar_template", NULL);
+		PACKAGE, "statusbar_template", "");
+}
+
+
+static void on_save_settings(GObject *obj, GKeyFile *config)
+{
+	if (!g_key_file_has_key(config, PACKAGE, "statusbar_template", NULL))
+		g_key_file_set_string(config, PACKAGE, "statusbar_template", statusbar_template);
 }
 
 
@@ -2009,6 +2016,7 @@ void ui_init(void)
 	GtkWidget *item;
 
 	g_signal_connect(geany_object, "load-settings", G_CALLBACK(on_load_settings), NULL);
+	g_signal_connect(geany_object, "save-settings", G_CALLBACK(on_save_settings), NULL);
 
 	init_recent_files();
 
