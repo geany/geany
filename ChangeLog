@@ -1,3 +1,12 @@
+2010-07-08  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/ui_utils.c, doc/geany.txt, doc/geany.html:
+   Fix writing empty hidden pref "statusbar_template" key so users can
+   find it (patch by Dimitar Zhekov, thanks).
+ * src/ui_utils.c, src/ui_utils.h, src/main.c:
+   Add ui_finalize(), free string (patch by Dimitar Zhekov, thanks).
+
+
 2010-07-07  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/build.c, src/project.c, src/project.h:

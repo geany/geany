@@ -2060,6 +2060,12 @@ void ui_init(void)
 }
 
 
+void ui_finalize(void)
+{
+	g_free(statusbar_template);
+}
+
+
 static void auto_separator_update(GeanyAutoSeparator *autosep)
 {
 	g_return_if_fail(autosep->ref_count >= 0);
