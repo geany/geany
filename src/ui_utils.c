@@ -52,6 +52,8 @@
 #include "toolbar.h"
 #include "geanymenubuttonaction.h"
 #include "main.h"
+#include "stash.h"
+#include "keyfile.h"
 
 
 GeanyInterfacePrefs	interface_prefs;
@@ -1995,28 +1997,22 @@ static void on_editor_menu_hide(GtkWidget *item)
 }
 
 
-static void on_load_settings(GObject *obj, GKeyFile *config)
+/* Currently ui_init() is called before keyfile.c stash group code is initialized,
+ * so this is called after that's done. */
+void ui_init_prefs(void)
 {
-	g_assert(statusbar_template == NULL);
+	StashGroup *group = stash_group_new(PACKAGE);
 
-	statusbar_template = utils_get_setting_string(config,
-		PACKAGE, "statusbar_template", "");
-}
+	configuration_add_pref_group(group, FALSE);
+	stash_group_set_write_once(group, TRUE);
 
-
-static void on_save_settings(GObject *obj, GKeyFile *config)
-{
-	if (!g_key_file_has_key(config, PACKAGE, "statusbar_template", NULL))
-		g_key_file_set_string(config, PACKAGE, "statusbar_template", statusbar_template);
+	stash_group_add_string(group, &statusbar_template, "statusbar_template", "");
 }
 
 
 void ui_init(void)
 {
 	GtkWidget *item;
-
-	g_signal_connect(geany_object, "load-settings", G_CALLBACK(on_load_settings), NULL);
-	g_signal_connect(geany_object, "save-settings", G_CALLBACK(on_save_settings), NULL);
 
 	init_recent_files();
 

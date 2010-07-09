@@ -219,6 +219,8 @@ GtkWidget *ui_label_set_markup(GtkLabel *label, const gchar *format, ...) G_GNUC
 
 void ui_init(void);
 
+void ui_init_prefs(void);
+
 void ui_finalize(void);
 
 void ui_init_toolbar_widgets(void);

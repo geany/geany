@@ -997,8 +997,9 @@ gint main(gint argc, gchar **argv)
 	encodings_init();
 	editor_init();
 
+	/* init stash groups before loading keyfile */
 	configuration_init();
-	/* init stash code before loading keyfile */
+	ui_init_prefs();
 	search_init();
 	project_init();
 #ifdef HAVE_PLUGINS
