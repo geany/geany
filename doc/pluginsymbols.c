@@ -83,6 +83,7 @@ KeyBindingGroup *plugin_key_group;
  * connect the @c "response" signal. If settings should be read from the dialog, the
  * reponse will be either @c GTK_RESPONSE_OK or @c GTK_RESPONSE_APPLY.
  * @return A container widget holding preference widgets.
+ * @note Using @link stash.h Stash @endlink can make implementing preferences easier.
  * @see plugin_configure_single(). */
 GtkWidget *plugin_configure(GtkDialog *dialog);
 
