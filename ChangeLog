@@ -4,6 +4,9 @@
    Fix scrolling the editor line in view after loading a session and
    switching document tabs. Note this causes repainting so needs
    improvement.
+ * doc/geany.txt, doc/geany.html:
+   Add note to restart Geany after installing/updating before editing
+   hidden prefs.
 
 
 2010-07-08  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

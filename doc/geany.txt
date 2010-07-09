@@ -4026,6 +4026,11 @@ restarting Geany. Search for the key name, then edit the value. Example:
 
     ``brace_match_ltgt=true``
 
+.. note::
+    If you just installed or updated Geany, you should restart it
+    first so Geany can write/update the config file and you can find
+    the key lines.
+
 The table below show the key names of hidden preferences in the
 configuration file.
 
