@@ -1,3 +1,9 @@
+2010-07-11  Lex Trotman  <elextr(at)gmail(dot)com>
+
+ * src/build.c:
+   Fix build menu translation problems.
+
+
 2010-07-10  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * wscript:
