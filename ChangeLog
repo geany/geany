@@ -1,3 +1,10 @@
+2010-07-12  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/keybindings.c:
+   Focus toolbar item when pressing Go to Line keybinding only when
+   it's not in the toolbar's drop down overflow menu (fixes #3027454).
+
+
 2010-07-11  Lex Trotman  <elextr(at)gmail(dot)com>
 
  * src/build.c:
