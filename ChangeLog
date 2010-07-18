@@ -1,3 +1,9 @@
+2010-07-18  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * data/filetypes.python:
+   Update list of Python builtins, based on Python 2.6.
+
+
 2010-07-13  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/filetypes.c:
