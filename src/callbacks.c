@@ -1627,10 +1627,18 @@ G_MODULE_EXPORT void on_menu_open_selected_file1_activate(GtkMenuItem *menuitem,
 				setptr(filename, g_build_path(G_DIR_SEPARATOR_S, path, sel, NULL));
 			}
 			g_free(path);
+#ifdef G_OS_UNIX
+			if (! g_file_test(filename, G_FILE_TEST_EXISTS))
+				setptr(filename, g_build_path(G_DIR_SEPARATOR_S, "/usr/local/include", sel, NULL));
+
+			if (! g_file_test(filename, G_FILE_TEST_EXISTS))
+				setptr(filename, g_build_path(G_DIR_SEPARATOR_S, "/usr/include", sel, NULL));
+#endif
 		}
 
 		locale_filename = utils_get_locale_from_utf8(filename);
-		document_open_file(locale_filename, FALSE, NULL, NULL);
+		if (g_file_test(filename, G_FILE_TEST_EXISTS))
+			document_open_file(locale_filename, FALSE, NULL, NULL);
 
 		g_free(filename);
 		g_free(locale_filename);
