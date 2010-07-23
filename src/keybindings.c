@@ -1803,7 +1803,7 @@ static GtkWidget *create_switch_dialog(void)
 
 	dialog = ui_minimal_dialog_new(GTK_WINDOW(main_widgets.window), _("Switch to Document"));
 	gtk_window_set_decorated(GTK_WINDOW(dialog), FALSE);
-	gtk_window_set_default_size(GTK_WINDOW(dialog), 150, -1);
+	gtk_window_set_default_size(GTK_WINDOW(dialog), 200, -1);
 
 	vbox = gtk_vbox_new(FALSE, 6);
 	gtk_container_set_border_width(GTK_CONTAINER(vbox), 12);
@@ -1812,7 +1812,7 @@ static GtkWidget *create_switch_dialog(void)
 	widget = gtk_image_new_from_stock(GTK_STOCK_JUMP_TO, GTK_ICON_SIZE_BUTTON);
 	gtk_container_add(GTK_CONTAINER(vbox), widget);
 
-	widget = geany_wrap_label_new(NULL);
+	widget = gtk_label_new(NULL);
 	gtk_label_set_justify(GTK_LABEL(widget), GTK_JUSTIFY_CENTER);
 	gtk_container_add(GTK_CONTAINER(vbox), widget);
 	switch_dialog_label = widget;
@@ -1824,13 +1824,40 @@ static GtkWidget *create_switch_dialog(void)
 
 static void update_filename_label(void)
 {
+	guint i;
+	gchar *msg;
+	guint queue_length;
+	GeanyDocument *doc;
+
 	if (!switch_dialog)
 	{
 		switch_dialog = create_switch_dialog();
 		gtk_widget_show_all(switch_dialog);
 	}
 
-	gtk_label_set_text(GTK_LABEL(switch_dialog_label), DOC_FILENAME(document_get_current()));
+	queue_length = g_queue_get_length(mru_docs);
+	for (i = mru_pos; (i <= mru_pos + 3) && (doc = g_queue_peek_nth(mru_docs, i % queue_length)); i++)
+	{
+		gchar *basename;
+
+		basename = g_path_get_basename(DOC_FILENAME(doc));
+		if (i == mru_pos)
+			msg = g_markup_printf_escaped ("<b>%s</b>", basename);
+		else if (i % queue_length == mru_pos)    /* && i != mru_pos */
+		{
+			/* We have wrapped around and got to the starting document again */
+			g_free(basename);
+			break;
+		}
+		else
+		{
+			setptr(basename, g_markup_printf_escaped ("\n%s", basename));
+			setptr(msg, g_strconcat(msg, basename, NULL));
+		}
+		g_free(basename);
+	}
+	gtk_label_set_markup(GTK_LABEL(switch_dialog_label), msg);
+	g_free(msg);
 }
 
 
