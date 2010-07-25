@@ -132,6 +132,9 @@ Section "!Program Files" SEC01
 	File "${RESOURCEDIR}\data\snippets.conf"
 	File "${RESOURCEDIR}\data\ui_toolbar.xml"
 
+	SetOutPath "$INSTDIR\data\templates"
+	File /r "${RESOURCEDIR}\data\templates\*"
+
 	SetOutPath "$INSTDIR\share\icons"
 	File /r "${RESOURCEDIR}\share\icons\*"
 

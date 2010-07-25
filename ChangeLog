@@ -1,3 +1,9 @@
+2010-07-25  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * geany.nsi:
+   Fix missing template files in the Windows installer.
+
+
 2010-07-18  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * data/filetypes.python:
