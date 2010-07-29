@@ -114,6 +114,7 @@ struct VteFunctions
 	void (*vte_terminal_set_cursor_blink_mode) (VteTerminal *terminal,
 												VteTerminalCursorBlinkMode mode);
 	void (*vte_terminal_set_cursor_blinks) (VteTerminal *terminal, gboolean blink);
+	void (*vte_terminal_select_all) (VteTerminal *terminal);
 };
 
 
@@ -135,6 +136,7 @@ enum
 {
 	POPUP_COPY,
 	POPUP_PASTE,
+	POPUP_SELECTALL,
 	POPUP_CHANGEPATH,
 	POPUP_RESTARTTERMINAL,
 	POPUP_PREFERENCES,
@@ -429,6 +431,7 @@ static void vte_register_symbols(GModule *mod)
 		/* vte_terminal_set_cursor_blink_mode() is only available since 0.17.1, so if we don't find
 		 * this symbol, we are probably on an older version and use the old API instead */
 		g_module_symbol(mod, "vte_terminal_set_cursor_blinks", (void*)&vf->vte_terminal_set_cursor_blinks);
+	g_module_symbol(mod, "vte_terminal_select_all", (void*)&vf->vte_terminal_select_all);
 }
 
 
@@ -464,6 +467,11 @@ static void vte_popup_menu_clicked(GtkMenuItem *menuitem, gpointer user_data)
 		case POPUP_PASTE:
 		{
 			vf->vte_terminal_paste_clipboard(VTE_TERMINAL(vc->vte));
+			break;
+		}
+		case POPUP_SELECTALL:
+		{
+			vte_select_all();
 			break;
 		}
 		case POPUP_CHANGEPATH:
@@ -508,6 +516,15 @@ static GtkWidget *vte_create_popup_menu(void)
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	g_signal_connect(item, "activate", G_CALLBACK(vte_popup_menu_clicked), GINT_TO_POINTER(POPUP_PASTE));
+
+	item = gtk_separator_menu_item_new();
+	gtk_widget_show(item);
+	gtk_container_add(GTK_CONTAINER(menu), item);
+
+	item = gtk_image_menu_item_new_from_stock(GTK_STOCK_SELECT_ALL, NULL);
+	gtk_widget_show(item);
+	gtk_container_add(GTK_CONTAINER(menu), item);
+	g_signal_connect(item, "activate", G_CALLBACK(vte_popup_menu_clicked), GINT_TO_POINTER(POPUP_SELECTALL));
 
 	item = gtk_separator_menu_item_new();
 	gtk_widget_show(item);
@@ -878,6 +895,13 @@ void vte_append_preferences_tab(void)
 		ui_setup_open_button_callback(button_shell, NULL,
 			GTK_FILE_CHOOSER_ACTION_OPEN, GTK_ENTRY(entry_shell));
 	}
+}
+
+
+void vte_select_all(void)
+{
+	if (vf->vte_terminal_select_all != NULL)
+		vf->vte_terminal_select_all(VTE_TERMINAL(vc->vte));
 }
 
 

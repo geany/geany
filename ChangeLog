@@ -1,3 +1,9 @@
+2010-07-29  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/keybindings.cm src/vte.cm src/vte.h:
+   Implement 'Select All' for the VTE widget.
+
+
 2010-07-25  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * geany.nsi:

@@ -57,6 +57,9 @@
 #include "geanywraplabel.h"
 #include "main.h"
 #include "search.h"
+#ifdef HAVE_VTE
+# include "vte.h"
+#endif
 
 
 GPtrArray *keybinding_groups;	/* array of GeanyKeyGroup pointers */
@@ -2479,6 +2482,14 @@ static gboolean cb_func_select_action(guint key_id)
 		g_signal_emit_by_name(msgwindow.scribble, "select-all", TRUE);
 		return TRUE;
 	}
+	/* special case for Select All in the VTE widget */
+#ifdef HAVE_VTE
+	else if (key_id == GEANY_KEYS_SELECT_ALL && vte_info.load_vte && focusw == vc->vte)
+	{
+		vte_select_all();
+		return TRUE;
+	}
+#endif
 	/* special case for Select All in the toolbar search widget */
 	else if (key_id == GEANY_KEYS_SELECT_ALL && focusw == toolbar_search_entry)
 	{

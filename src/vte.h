@@ -79,6 +79,8 @@ void vte_append_preferences_tab(void);
 
 void vte_send_selection_to_vte(void);
 
+void vte_select_all(void);
+
 #endif
 
 #endif
