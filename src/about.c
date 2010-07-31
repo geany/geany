@@ -40,7 +40,7 @@
 #define INFO "<span size=\"larger\" weight=\"bold\">%s</span>"
 #define CODENAME "<span weight=\"bold\">\"" GEANY_CODENAME "\"</span>"
 #define BUILDDATE "<span size=\"smaller\">%s</span>"
-#define COPYRIGHT "Copyright (c)  2005-2010\nEnrico Tröger\nNick Treleaven\nFrank Lanitz\nAll rights reserved."
+#define COPYRIGHT "Copyright (c)  2005-2010\nNick Treleaven\nEnrico Tröger\nFrank Lanitz\nAll rights reserved."
 
 const gchar *translators[][2] = {
 	{ "ast", "Marcos Costales &lt;marcoscostales@gmail.com&gt;"},
@@ -271,18 +271,18 @@ static GtkWidget *create_dialog(void)
 	gtk_misc_set_alignment(GTK_MISC(label), 0, 0);
 	row++;
 
-	g_snprintf(buffer, sizeof(buffer), "Enrico Tröger - %s", _("maintainer"));
+	g_snprintf(buffer, sizeof(buffer), "Nick Treleaven - %s", _("maintainer"));
 	ROW(buffer, row, 0, 0, 0, 1);
 	row++;
-	ROW("&lt;enrico.troeger@uvena.de&gt;", row, 0, 0, 0, 1);
+	ROW("&lt;nick.treleaven@btinternet.com&gt;", row, 0, 0, 0, 1);
 	row++;
 	ROW("", row, 0, 0, 0, 0);
 	row++;
 
-	g_snprintf(buffer, sizeof(buffer), "Nick Treleaven - %s", _("developer"));
+	g_snprintf(buffer, sizeof(buffer), "Enrico Tröger - %s", _("developer"));
 	ROW(buffer, row, 0, 0, 0, 1);
 	row++;
-	ROW("&lt;nick.treleaven@btinternet.com&gt;", row, 0, 0, 0, 1);
+	ROW("&lt;enrico.troeger@uvena.de&gt;", row, 0, 0, 0, 1);
 	row++;
 	ROW("", row, 0, 0, 0, 0);
 	row++;
