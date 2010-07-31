@@ -1,6 +1,13 @@
+2010-07-31  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/vte.c:
+   Fix build with GTK 2.8, use the stock icon name directly instead
+   of the macro. Though, the icon is still missing for GTK 2.8.
+
+
 2010-07-29  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
- * src/keybindings.cm src/vte.cm src/vte.h:
+ * src/keybindings.c, src/vte.c, src/vte.h:
    Implement 'Select All' for the VTE widget.
 
 
