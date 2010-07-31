@@ -430,27 +430,31 @@ void templates_init(void)
  * e.g. indent = 8 prints " *     here comes the text of the line"
  * indent is meant to be the whole amount of characters before the real line content follows, i.e.
  * 6 characters are filled with whitespace when the comment characters include " *" */
-/* TODO make this function operating on a GString */
-static gchar *make_comment_block(const gchar *comment_text, gint filetype_idx, guint indent)
+static void make_comment_block(GString *comment_text, gint filetype_idx, guint indent)
 {
 	gchar *frame_start;			/* to add before comment_text */
 	gchar *frame_end;			/* to add after comment_text */
 	const gchar *line_prefix;	/* to add before every line in comment_text */
-	gchar *result;
 	gchar *tmp;
 	gchar *prefix;
 	gchar **lines;
 	guint i, len;
+	gint template_eol_mode;
+	const gchar *template_eol_char;
 	GeanyFiletype *ft = filetypes_index(filetype_idx);
 
-	g_return_val_if_fail(ft != NULL, NULL);
+	g_return_if_fail(comment_text != NULL);
+	g_return_if_fail(ft != NULL);
+
+	template_eol_mode = utils_get_line_endings(comment_text->str, comment_text->len);
+	template_eol_char = utils_get_eol_char(template_eol_mode);
 
 	if (NZV(ft->comment_open))
 	{
 		if (NZV(ft->comment_close))
 		{
-			frame_start = g_strconcat(ft->comment_open, "\n", NULL);
-			frame_end = g_strconcat(ft->comment_close, "\n", NULL);
+			frame_start = g_strconcat(ft->comment_open, template_eol_char, NULL);
+			frame_end = g_strconcat(ft->comment_close, template_eol_char, NULL);
 			line_prefix = "";
 		}
 		else
@@ -462,8 +466,8 @@ static gchar *make_comment_block(const gchar *comment_text, gint filetype_idx, g
 	}
 	else
 	{	/* use C-like multi-line comments as fallback */
-		frame_start = g_strdup("/*\n");
-		frame_end = g_strdup("*/\n");
+		frame_start = g_strconcat("/*", template_eol_char, NULL);
+		frame_end = g_strconcat("*/", template_eol_char, NULL);
 		line_prefix = "";
 	}
 
@@ -482,7 +486,7 @@ static gchar *make_comment_block(const gchar *comment_text, gint filetype_idx, g
 	g_free(tmp);
 
 	/* add line_prefix to every line of comment_text */
-	lines = g_strsplit(comment_text, "\n", -1);
+	lines = g_strsplit(comment_text->str, template_eol_char, -1);
 	len = g_strv_length(lines) - 1;
 	for (i = 0; i < len; i++)
 	{
@@ -490,24 +494,28 @@ static gchar *make_comment_block(const gchar *comment_text, gint filetype_idx, g
 		lines[i] = g_strconcat(prefix, tmp, NULL);
 		g_free(tmp);
 	}
-	tmp = g_strjoinv("\n", lines);
+	tmp = g_strjoinv(template_eol_char, lines);
 
-	/* add frame_start and frame_end */
+	/* clear old contents */
+	g_string_erase(comment_text, 0, -1);
+
+	/* add frame_end */
 	if (frame_start != NULL)
-		result = g_strconcat(frame_start, tmp, frame_end, NULL);
-	else
-		result = g_strconcat(tmp, frame_end, NULL);
+		g_string_append(comment_text, frame_start);
+	/* add the new main content */
+	g_string_append(comment_text, tmp);
+	/* add frame_start  */
+	if (frame_end != NULL)
+		g_string_append(comment_text, frame_end);
 
 	utils_free_pointers(4, prefix, tmp, frame_start, frame_end, NULL);
 	g_strfreev(lines);
-	return result;
 }
 
 
 gchar *templates_get_template_licence(GeanyDocument *doc, gint licence_type)
 {
 	GString *template;
-	gchar *result = NULL;
 
 	g_return_val_if_fail(doc != NULL, NULL);
 	g_return_val_if_fail(licence_type == GEANY_TEMPLATE_GPL || licence_type == GEANY_TEMPLATE_BSD, NULL);
@@ -517,18 +525,15 @@ gchar *templates_get_template_licence(GeanyDocument *doc, gint licence_type)
 	templates_replace_default_dates(template);
 	templates_replace_command(template, DOC_FILENAME(doc), doc->file_type->name, NULL);
 
-	result = make_comment_block(template->str, FILETYPE_ID(doc->file_type), 8);
+	make_comment_block(template, FILETYPE_ID(doc->file_type), 8);
 
-	g_string_free(template, TRUE);
-
-	return result;
+	return g_string_free(template, FALSE);
 }
 
 
 static gchar *get_template_fileheader(GeanyFiletype *ft)
 {
 	GString *template = g_string_new(templates[GEANY_TEMPLATE_FILEHEADER]);
-	gchar *result;
 
 	filetypes_load_config(ft->id, FALSE);	/* load any user extension setting */
 
@@ -538,9 +543,8 @@ static gchar *get_template_fileheader(GeanyFiletype *ft)
 		NULL);
 
 	/* we don't replace other wildcards here otherwise they would get done twice for files */
-	result = make_comment_block(template->str, ft->id, 8);
-	g_string_free(template, TRUE);
-	return result;
+	make_comment_block(template, ft->id, 8);
+	return g_string_free(template, FALSE);
 }
 
 
@@ -584,7 +588,6 @@ gchar *templates_get_template_new_file(GeanyFiletype *ft)
 
 gchar *templates_get_template_function(GeanyDocument *doc, const gchar *func_name)
 {
-	gchar *result;
 	GString *text;
 
 	func_name = (func_name != NULL) ? func_name : "";
@@ -594,10 +597,9 @@ gchar *templates_get_template_function(GeanyDocument *doc, const gchar *func_nam
 	templates_replace_default_dates(text);
 	templates_replace_command(text, DOC_FILENAME(doc), doc->file_type->name, func_name);
 
-	result = make_comment_block(text->str, doc->file_type->id, 3);
+	make_comment_block(text, doc->file_type->id, 3);
 
-	g_string_free(text, TRUE);
-	return result;
+	return g_string_free(text, FALSE);
 }
 
 

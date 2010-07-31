@@ -3,6 +3,9 @@
  * src/vte.c:
    Fix build with GTK 2.8, use the stock icon name directly instead
    of the macro. Though, the icon is still missing for GTK 2.8.
+ * src/templates.c:
+   Make make_comment_block() work with a GString. This is not yet
+   perfect but a bit better than before.
 
 
 2010-07-29  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
