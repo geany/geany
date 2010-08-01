@@ -128,6 +128,9 @@ gint utils_get_line_endings(const gchar* buffer, glong size)
 	guint cr, lf, crlf, max_mode;
 	gint mode;
 
+	if (size == -1)
+		size = strlen(buffer);
+
 	cr = lf = crlf = 0;
 
 	for (i = 0; i < size ; i++)
@@ -338,6 +341,17 @@ const gchar *utils_get_eol_name(gint eol_mode)
 		case SC_EOL_CRLF: return _("Win (CRLF)"); break;
 		case SC_EOL_CR: return _("Mac (CR)"); break;
 		default: return _("Unix (LF)"); break;
+	}
+}
+
+
+const gchar *utils_get_eol_char(gint eol_mode)
+{
+	switch (eol_mode)
+	{
+		case SC_EOL_CRLF: return "\r\n"; break;
+		case SC_EOL_CR: return "\r"; break;
+		default: return "\n"; break;
 	}
 }
 

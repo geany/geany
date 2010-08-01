@@ -1,3 +1,9 @@
+2010-08-01  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/utils.c, src/utils.h:
+   Add utils_get_eol_char().
+
+
 2010-07-31  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/vte.c:
