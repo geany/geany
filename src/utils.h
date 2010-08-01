@@ -127,6 +127,8 @@ gint utils_write_file(const gchar *filename, const gchar *text);
 
 gchar *utils_find_open_xml_tag(const gchar sel[], gint size, gboolean check_tag);
 
+void utils_ensure_same_eol_characters(GString *template, gint target_eol_mode);
+
 const gchar *utils_get_eol_char(gint eol_mode);
 
 const gchar *utils_get_eol_name(gint eol_mode);

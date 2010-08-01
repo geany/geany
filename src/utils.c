@@ -356,6 +356,21 @@ const gchar *utils_get_eol_char(gint eol_mode)
 }
 
 
+void utils_ensure_same_eol_characters(GString *template, gint target_eol_mode)
+{
+	gint template_eol_mode;
+
+	template_eol_mode = utils_get_line_endings(template->str, template->len);
+
+	if (target_eol_mode != template_eol_mode)
+	{
+		const gchar *target_eol_char = utils_get_eol_char(target_eol_mode);
+		const gchar *template_eol_char = utils_get_eol_char(template_eol_mode);
+		utils_string_replace_all(template, template_eol_char, target_eol_char);
+	}
+}
+
+
 gboolean utils_atob(const gchar *str)
 {
 	if (G_UNLIKELY(str == NULL))

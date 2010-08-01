@@ -122,7 +122,8 @@ static EditorFuncs editor_funcs = {
 	&editor_get_eol_char_name,
 	&editor_get_eol_char_len,
 	&editor_get_eol_char,
-	&editor_insert_text_block
+	&editor_insert_text_block,
+	&editor_get_eol_char_mode
 };
 
 static ScintillaFuncs scintilla_funcs = {

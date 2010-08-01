@@ -258,6 +258,8 @@ void editor_indicator_set_on_range(GeanyEditor *editor, gint indic, gint start, 
 
 void editor_indicator_clear(GeanyEditor *editor, gint indic);
 
+gint editor_get_eol_char_mode(GeanyEditor *editor);
+
 const gchar *editor_get_eol_char_name(GeanyEditor *editor);
 
 gint editor_get_eol_char_len(GeanyEditor *editor);

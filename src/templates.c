@@ -35,6 +35,7 @@
 #include "support.h"
 #include "utils.h"
 #include "document.h"
+#include "editor.h"
 #include "filetypes.h"
 #include "ui_utils.h"
 #include "toolbar.h"
@@ -117,6 +118,20 @@ static gchar *replace_all(gchar *text, const gchar *year, const gchar *date, con
 		NULL);
 
 	return g_string_free(str, FALSE);
+}
+
+
+static void convert_eol_characters(GString *template, GeanyDocument *doc)
+{
+	gint doc_eol_mode;
+
+	if (doc == NULL)
+		doc = document_get_current();
+
+	g_return_if_fail(doc != NULL);
+
+	doc_eol_mode = editor_get_eol_char_mode(doc->editor);
+	utils_ensure_same_eol_characters(template, doc_eol_mode);
 }
 
 
@@ -526,6 +541,7 @@ gchar *templates_get_template_licence(GeanyDocument *doc, gint licence_type)
 	templates_replace_command(template, DOC_FILENAME(doc), doc->file_type->name, NULL);
 
 	make_comment_block(template, FILETYPE_ID(doc->file_type), 8);
+	convert_eol_characters(template, doc);
 
 	return g_string_free(template, FALSE);
 }
@@ -557,6 +573,7 @@ gchar *templates_get_template_fileheader(gint filetype_idx, const gchar *fname)
 
 	g_free(str);
 	templates_replace_common(template, fname, ft, NULL);
+	convert_eol_characters(template, NULL);
 	return g_string_free(template, FALSE);
 }
 
@@ -580,6 +597,7 @@ gchar *templates_get_template_new_file(GeanyFiletype *ft)
 		templates_replace_valist(ft_template, "{fileheader}", file_header, NULL);
 	}
 	templates_replace_common(ft_template, NULL, ft, NULL);
+	convert_eol_characters(ft_template, NULL);
 
 	g_free(file_header);
 	return g_string_free(ft_template, FALSE);
@@ -598,6 +616,7 @@ gchar *templates_get_template_function(GeanyDocument *doc, const gchar *func_nam
 	templates_replace_command(text, DOC_FILENAME(doc), doc->file_type->name, func_name);
 
 	make_comment_block(text, doc->file_type->id, 3);
+	convert_eol_characters(text, doc);
 
 	return g_string_free(text, FALSE);
 }
@@ -611,6 +630,7 @@ gchar *templates_get_template_changelog(GeanyDocument *doc)
 	replace_static_values(result);
 	templates_replace_default_dates(result);
 	templates_replace_command(result, DOC_FILENAME(doc), file_type_name, NULL);
+	convert_eol_characters(result, doc);
 
 	return g_string_free(result, FALSE);
 }

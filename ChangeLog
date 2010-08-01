@@ -2,6 +2,15 @@
 
  * src/utils.c, src/utils.h:
    Add utils_get_eol_char().
+ * plugins/geanyfunctions.h, src/document.c, src/editor.c, src/editor.h,
+   src/plugindata.h, src/plugins.c, src/templates.c, src/utils.c,
+   src/utils.h:
+   Ensure inserted templates always have proper line ending characters
+   according to the current document's preference.
+   This is also fixes problems with templates on Windows which had
+   always Unix line ending characters but now since they are read
+   from files, these have Windows line ending characters and had been
+   converted twice.
 
 
 2010-07-31  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

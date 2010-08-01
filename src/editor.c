@@ -4273,6 +4273,26 @@ void editor_insert_color(GeanyEditor *editor, const gchar *colour)
 
 
 /**
+ *  Retrieves the end of line characters mode (LF, CR/LF, CR) in the given editor.
+ *  If @a editor is @c NULL, the default end of line characters are used.
+ *
+ *  @param editor The editor to operate on, or @c NULL to query the default value.
+ *  @return The used end of line characters mode.
+ *
+ *  @since 0.20
+ */
+gint editor_get_eol_char_mode(GeanyEditor *editor)
+{
+	gint mode = file_prefs.default_eol_character;
+
+	if (editor != NULL)
+		mode = sci_get_eol_mode(editor->sci);
+
+	return mode;
+}
+
+
+/**
  *  Retrieves the localized name (for displaying) of the used end of line characters
  *  (LF, CR/LF, CR) in the given editor.
  *  If @a editor is @c NULL, the default end of line characters are used.
@@ -4335,12 +4355,7 @@ const gchar *editor_get_eol_char(GeanyEditor *editor)
 	if (editor != NULL)
 		mode = sci_get_eol_mode(editor->sci);
 
-	switch (mode)
-	{
-		case SC_EOL_CRLF: return "\r\n"; break;
-		case SC_EOL_CR: return "\r"; break;
-		default: return "\n"; break;
-	}
+	return utils_get_eol_char(mode);
 }
 
 

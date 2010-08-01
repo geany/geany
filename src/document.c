@@ -710,8 +710,7 @@ GeanyDocument *document_new_file_if_non_open(void)
  *
  *  @return The new document.
  **/
-GeanyDocument *document_new_file(const gchar *utf8_filename, GeanyFiletype *ft,
-		const gchar *text)
+GeanyDocument *document_new_file(const gchar *utf8_filename, GeanyFiletype *ft, const gchar *text)
 {
 	GeanyDocument *doc;
 
@@ -728,15 +727,17 @@ GeanyDocument *document_new_file(const gchar *utf8_filename, GeanyFiletype *ft,
 
 	sci_set_undo_collection(doc->editor->sci, FALSE); /* avoid creation of an undo action */
 	if (text)
-		sci_set_text(doc->editor->sci, text);
+	{
+		GString *template = g_string_new(text);
+		utils_ensure_same_eol_characters(template, file_prefs.default_eol_character);
+
+		sci_set_text(doc->editor->sci, template->str);
+		g_string_free(template, TRUE);
+	}
 	else
 		sci_clear_all(doc->editor->sci);
 
 	sci_set_eol_mode(doc->editor->sci, file_prefs.default_eol_character);
-	/* convert the eol chars in the template text in case they are different from
-	 * from file_prefs.default_eol */
-	if (text != NULL)
-		sci_convert_eols(doc->editor->sci, file_prefs.default_eol_character);
 
 	sci_set_undo_collection(doc->editor->sci, TRUE);
 	sci_empty_undo_buffer(doc->editor->sci);
