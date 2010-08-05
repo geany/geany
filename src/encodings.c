@@ -568,7 +568,7 @@ gchar *encodings_convert_to_utf8(const gchar *buffer, gsize size, gchar **used_e
 			if (preferred_charset != -1)
 			{
 				charset = encodings[preferred_charset].charset;
-				geany_debug("Preferred charset: %s", charset);
+				geany_debug("Using preferred charset: %s", charset);
 			}
 			else
 				continue;
