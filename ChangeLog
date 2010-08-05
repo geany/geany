@@ -1,3 +1,11 @@
+2010-08-05  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/ui_utils.c, src/ui_utils.h:
+   Make ui_label_new_bold() a function.
+   Escape the name of the current document for markup when using
+   document name for menu items (closes #3038844).
+
+
 2010-08-01  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/utils.c, src/utils.h:

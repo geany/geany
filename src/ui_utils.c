@@ -2302,6 +2302,18 @@ GtkWidget *ui_label_set_markup(GtkLabel *label, const gchar *format, ...)
 }
 
 
+GtkWidget *ui_label_new_bold(const gchar *text)
+{
+	GtkWidget *label;
+	gchar *label_text;
+
+	label_text = g_markup_escape_text(text, -1);
+	label = ui_label_set_markup(GTK_LABEL(gtk_label_new(NULL)), "<b>%s</b>", label_text);
+	g_free(label_text);
+	return label;
+}
+
+
 /** Adds a list of document items to @a menu.
  * @param menu Menu.
  * @param active Which document to highlight, or @c NULL.
@@ -2315,7 +2327,7 @@ void ui_menu_add_document_items(GtkMenu *menu, GeanyDocument *active, GCallback 
 	const GdkColor *color;
 	GeanyDocument *doc;
 	guint i, len;
-	gchar *base_name;
+	gchar *base_name, *label;
 
 	len = gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook));
 	for (i = 0; i < len; i++)
@@ -2336,7 +2348,11 @@ void ui_menu_add_document_items(GtkMenu *menu, GeanyDocument *active, GCallback 
 		gtk_widget_modify_fg(menu_item_label, GTK_STATE_ACTIVE, color);
 
 		if (doc == active)
-			ui_label_set_markup(GTK_LABEL(menu_item_label), "<b>%s</b>", base_name);
+		{
+			label = g_markup_escape_text(base_name, -1);
+			ui_label_set_markup(GTK_LABEL(menu_item_label), "<b>%s</b>", label);
+			g_free(label);
+		}
 
 		g_free(base_name);
 	}
