@@ -115,6 +115,7 @@ struct VteFunctions
 												VteTerminalCursorBlinkMode mode);
 	void (*vte_terminal_set_cursor_blinks) (VteTerminal *terminal, gboolean blink);
 	void (*vte_terminal_select_all) (VteTerminal *terminal);
+	void (*vte_terminal_set_audible_bell) (VteTerminal *terminal, gboolean is_audible);
 };
 
 
@@ -432,6 +433,7 @@ static void vte_register_symbols(GModule *mod)
 		 * this symbol, we are probably on an older version and use the old API instead */
 		g_module_symbol(mod, "vte_terminal_set_cursor_blinks", (void*)&vf->vte_terminal_set_cursor_blinks);
 	g_module_symbol(mod, "vte_terminal_select_all", (void*)&vf->vte_terminal_select_all);
+	g_module_symbol(mod, "vte_terminal_set_audible_bell", (void*)&vf->vte_terminal_set_audible_bell);
 }
 
 
@@ -448,6 +450,7 @@ void vte_apply_user_settings(void)
 	vf->vte_terminal_set_color_foreground(VTE_TERMINAL(vc->vte), vc->colour_fore);
 	vf->vte_terminal_set_color_bold(VTE_TERMINAL(vc->vte), vc->colour_fore);
 	vf->vte_terminal_set_color_background(VTE_TERMINAL(vc->vte), vc->colour_back);
+	vf->vte_terminal_set_audible_bell(VTE_TERMINAL(vc->vte), prefs.beep_on_errors);
 	vte_set_cursor_blink_mode();
 
 	override_menu_key();
