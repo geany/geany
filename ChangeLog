@@ -1,3 +1,10 @@
+2010-08-10  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * autogen.sh:
+   Applying a patch by Erik de Castro Lopo for checking against 
+   pkg-config when running autogen.sh. Thanks for the patch. 
+
+
 2010-08-10  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/keybindings.c, src/keybindings.h, src/prefs.c, src/plugindata.h:

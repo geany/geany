@@ -44,6 +44,14 @@ DIE=0
      }
 }
 
+(pkg-config --version) < /dev/null > /dev/null 2>&1 || {
+        echo
+        echo "You must have pkg-config installed to compile $package."
+        echo "Download the appropriate package for your distribution."
+               result="no"
+        DIE=1
+}
+
 (automake --version) < /dev/null > /dev/null 2>&1 || {
 	echo
 	echo "**Error**: You must have \`automake' (1.7 or later) installed."
