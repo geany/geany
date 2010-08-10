@@ -136,7 +136,8 @@ static void handler_log(const gchar *domain, GLogLevelFlags level, const gchar *
 
 	time_str = utils_get_current_time_string();
 
-	g_string_append_printf(log_buffer, "%s: %s: %s\n", time_str, get_log_prefix(level), msg);
+	g_string_append_printf(log_buffer, "%s: %s %s: %s\n", time_str, domain,
+		get_log_prefix(level), msg);
 
 	g_free(time_str);
 

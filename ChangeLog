@@ -2,7 +2,10 @@
 
  * autogen.sh:
    Applying a patch by Erik de Castro Lopo for checking against 
-   pkg-config when running autogen.sh. Thanks for the patch. 
+   pkg-config when running autogen.sh. Thanks for the patch.
+ * src/log.c:
+   Applying a patch by Colomban Wendling to print out log domains. 
+   Thanks.
 
 
 2010-08-10  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
