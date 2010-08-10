@@ -101,9 +101,9 @@ stash_group_update(group, parent);
 struct StashPref
 {
 	GType setting_type;			/* e.g. G_TYPE_INT */
-	gpointer setting;
+	gpointer setting;			/* Address of a variable */
 	const gchar *key_name;
-	gpointer default_value;
+	gpointer default_value;		/* Default value, e.g. (gpointer)1 */
 	GType widget_type;			/* e.g. GTK_TYPE_TOGGLE_BUTTON */
 	StashWidgetID widget_id;	/* (GtkWidget*) or (gchar*) */
 	gpointer fields;			/* extra fields */
@@ -233,15 +233,21 @@ static void keyfile_action(SettingAction action, StashGroup *group, GKeyFile *ke
 
 	foreach_array(StashPref, entry, group->entries)
 	{
-		/* don't overwrite write_once prefs */
-		if (group->write_once && action == SETTING_WRITE &&
-			g_key_file_has_key(keyfile, group->name, entry->key_name, NULL))
-			continue;
+		gpointer tmp = entry->setting;
+
 		/* don't override settings with default values */
 		if (!group->use_defaults && action == SETTING_READ &&
 			!g_key_file_has_key(keyfile, group->name, entry->key_name, NULL))
 			continue;
 
+		/* don't overwrite write_once prefs */
+		if (group->write_once && action == SETTING_WRITE)
+		{
+			if (g_key_file_has_key(keyfile, group->name, entry->key_name, NULL))
+				continue;
+			/* We temporarily use the default value for writing */
+			entry->setting = &entry->default_value;
+		}
 		switch (entry->setting_type)
 		{
 			case G_TYPE_BOOLEAN:
@@ -251,13 +257,15 @@ static void keyfile_action(SettingAction action, StashGroup *group, GKeyFile *ke
 			case G_TYPE_STRING:
 				handle_string_setting(group, entry, keyfile, action); break;
 			default:
-				/* G_TYPE_STRV is not a constant */
+				/* Note: G_TYPE_STRV is not a constant, can't use case label */
 				if (entry->setting_type == G_TYPE_STRV)
 					handle_strv_setting(group, entry, keyfile, action);
 				else
 					g_warning("Unhandled type for %s::%s in %s()!", group->name, entry->key_name,
 						G_STRFUNC);
 		}
+		if (group->write_once && action == SETTING_WRITE)
+			entry->setting = tmp;
 	}
 }
 

@@ -6,6 +6,9 @@
    merged into one enum; the order of keybindings is now just the
    order they are added to each group. Keybindings can be reordered
    without breaking the plugin ABI but groups must stay the same.
+ * src/stash.c:
+   Fix writing the default value when a key is missing for hidden
+   prefs, even if it was overridden when it was originally read.
 
 
 2010-08-05  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
