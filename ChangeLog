@@ -11,6 +11,9 @@
    prefs, even if it was overridden when it was originally read.
  * src/keyfile.c, src/ui_utils.c, doc/geany.txt, doc/geany.html:
    Move some interface hidden prefs to ui_utils.c.
+ * src/editor.c:
+   Revert r4840 scope completion mode as it sometimes breaks
+   autocompletion.
 
 
 2010-08-05  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

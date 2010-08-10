@@ -95,14 +95,6 @@ static struct
 	ScintillaObject *sci;
 } calltip = {NULL, FALSE, NULL, 0, 0, NULL};
 
-static enum
-{
-	AUTOC_CANCELLED,
-	AUTOC_SCOPE,
-	AUTOC_TAGS,
-	AUTOC_DOC_WORDS
-} autocompletion_mode = AUTOC_CANCELLED;
-
 static gchar indent[100];
 
 
@@ -603,10 +595,7 @@ static void autocomplete_scope(GeanyEditor *editor)
 		tags = tm_workspace_find_scope_members(obj ? obj->tags_array : NULL,
 			name, TRUE, FALSE);
 		if (tags)
-		{
-			autocompletion_mode = AUTOC_SCOPE;
 			show_tags_list(editor, tags, 0);
-		}
 	}
 }
 
@@ -958,7 +947,6 @@ static gboolean on_editor_notify(G_GNUC_UNUSED GObject *object, GeanyEditor *edi
 		case SCN_AUTOCCANCELLED:
 			/* now that autocomplete is finishing or was cancelled, reshow calltips
 			 * if they were showing */
-			autocompletion_mode = AUTOC_CANCELLED;
 			request_reshowing_calltip(nt);
 			break;
 
@@ -1807,7 +1795,6 @@ autocomplete_tags(GeanyEditor *editor, const gchar *root, gsize rootlen)
 	tags = tm_workspace_find(root, tm_tag_max_t, attrs, TRUE, doc->file_type->lang);
 	if (tags)
 	{
-		autocompletion_mode = AUTOC_TAGS;
 		show_tags_list(editor, tags, rootlen);
 		return tags->len > 0;
 	}
@@ -1946,7 +1933,6 @@ static gboolean autocomplete_doc_word(GeanyEditor *editor, gchar *root, gsize ro
 	g_slist_free(list);
 	g_string_free(words, TRUE);
 
-	autocompletion_mode = AUTOC_DOC_WORDS;
 	show_autocomplete(sci, rootlen, str->str);
 	g_string_free(str, TRUE);
 	return TRUE;
@@ -2006,7 +1992,7 @@ gboolean editor_start_auto_complete(GeanyEditor *editor, gint pos, gboolean forc
 	root = linebuf + startword;
 	rootlen = current - startword;
 
-	if (rootlen > 0 && autocompletion_mode != AUTOC_SCOPE)
+	if (rootlen > 0)
 	{
 		if (autocomplete_check_for_html(ft->id, style))
 		{
