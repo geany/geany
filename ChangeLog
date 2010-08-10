@@ -1,3 +1,13 @@
+2010-08-10  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/keybindings.c, src/keybindings.h, src/prefs.c, src/plugindata.h:
+   Use single binding_ids keybinding array instead of individual
+   arrays for core keybindings. This allows the keybinding IDs to be
+   merged into one enum; the order of keybindings is now just the
+   order they are added to each group. Keybindings can be reordered
+   without breaking the plugin ABI but groups must stay the same.
+
+
 2010-08-05  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/ui_utils.c, src/ui_utils.h:

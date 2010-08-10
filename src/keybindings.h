@@ -41,6 +41,7 @@ typedef struct GeanyKeyBinding
 	 * (preferred). @see plugin_set_key_group(). */
 	GeanyKeyCallback callback;
 	GtkWidget *menu_item;	/**< Optional widget to set an accelerator for, or @c NULL */
+	guint id;
 }
 GeanyKeyBinding;
 
@@ -60,74 +61,62 @@ struct GeanyKeyGroup
 {
 	const gchar *name;		/* Group name used in the configuration file, such as @c "html_chars" */
 	const gchar *label;		/* Group label used in the preferences dialog keybindings tab */
-	gsize count;			/* number of keybindings the group holds */
-	GeanyKeyBinding *keys;	/* array of GeanyKeyBinding structs */
-	gboolean plugin;		/* used by plugin */
 	GeanyKeyGroupCallback callback;	/* use this or individual keybinding callbacks */
+	gboolean plugin;		/* used by plugin */
+	GPtrArray *key_items;	/* pointers to GeanyKeyBinding structs */
+	gsize plugin_key_count;			/* number of keybindings the group holds */
+	GeanyKeyBinding *plugin_keys;	/* array of GeanyKeyBinding structs */
 };
 #endif
 
 
 extern GPtrArray *keybinding_groups;	/* array of GeanyKeyGroup pointers */
 
-extern const gchar keybindings_keyfile_group_name[];
 
+/* Note: we don't need to break the plugin ABI when appending keybinding or keygroup IDs,
+ * just make sure to insert immediately before the _COUNT item, so
+ * the existing enum values stay the same. */
 
-/* Note: we don't need to increment the plugin ABI when appending keybindings or keygroups,
- * just make sure to only insert keybindings/groups immediately before the _COUNT item, so
- * the existing enum values stay the same.
- * The _COUNT item should not be used by plugins, as it may well change. */
-
-/** Keybinding group IDs */
+/** Keybinding group IDs for use with keybindings_send_command(). */
+/* Groups must be added in this order. */
 enum GeanyKeyGroupID
 {
-	GEANY_KEY_GROUP_FILE,			/**< Group for @ref GeanyKeysFileID. */
-	GEANY_KEY_GROUP_PROJECT,		/**< Group for @ref GeanyKeysProjectID. */
-	GEANY_KEY_GROUP_EDITOR,			/**< Group for @ref GeanyKeysEditorID. */
-	GEANY_KEY_GROUP_CLIPBOARD,		/**< Group for @ref GeanyKeysClipboardID. */
-	GEANY_KEY_GROUP_SELECT,			/**< Group for @ref GeanyKeysSelectID. */
-	GEANY_KEY_GROUP_FORMAT,			/**< Group for @ref GeanyKeysFormatID. */
-	GEANY_KEY_GROUP_INSERT,			/**< Group for @ref GeanyKeysInsertID. */
-	GEANY_KEY_GROUP_SETTINGS,		/**< Group for @ref GeanyKeysSettingsID. */
-	GEANY_KEY_GROUP_SEARCH,			/**< Group for @ref GeanyKeysSearchID. */
-	GEANY_KEY_GROUP_GOTO,			/**< Group for @ref GeanyKeysGoToID. */
-	GEANY_KEY_GROUP_VIEW,			/**< Group for @ref GeanyKeysViewID. */
-	GEANY_KEY_GROUP_FOCUS,			/**< Group for @ref GeanyKeysFocusID. */
-	GEANY_KEY_GROUP_NOTEBOOK,		/**< Group for @ref GeanyKeysNotebookTabID. */
-	GEANY_KEY_GROUP_DOCUMENT,		/**< Group for @ref GeanyKeysDocumentID. */
-	GEANY_KEY_GROUP_BUILD,			/**< Group for @ref GeanyKeysBuildID. */
-	GEANY_KEY_GROUP_TOOLS,			/**< Group for @ref GeanyKeysToolsID. */
-	GEANY_KEY_GROUP_HELP,			/**< Group for @ref GeanyKeysHelpID. */
-	GEANY_KEY_GROUP_COUNT
+	GEANY_KEY_GROUP_FILE,			/**< Group. */
+	GEANY_KEY_GROUP_PROJECT,		/**< Group. */
+	GEANY_KEY_GROUP_EDITOR,			/**< Group. */
+	GEANY_KEY_GROUP_CLIPBOARD,		/**< Group. */
+	GEANY_KEY_GROUP_SELECT,			/**< Group. */
+	GEANY_KEY_GROUP_FORMAT,			/**< Group. */
+	GEANY_KEY_GROUP_INSERT,			/**< Group. */
+	GEANY_KEY_GROUP_SETTINGS,		/**< Group. */
+	GEANY_KEY_GROUP_SEARCH,			/**< Group. */
+	GEANY_KEY_GROUP_GOTO,			/**< Group. */
+	GEANY_KEY_GROUP_VIEW,			/**< Group. */
+	GEANY_KEY_GROUP_FOCUS,			/**< Group. */
+	GEANY_KEY_GROUP_NOTEBOOK,		/**< Group. */
+	GEANY_KEY_GROUP_DOCUMENT,		/**< Group. */
+	GEANY_KEY_GROUP_BUILD,			/**< Group. */
+	GEANY_KEY_GROUP_TOOLS,			/**< Group. */
+	GEANY_KEY_GROUP_HELP,			/**< Group. */
+	GEANY_KEY_GROUP_COUNT	/* must not be used by plugins */
 };
 
-/** File group keybinding command IDs */
-enum GeanyKeysFileID
+/** Keybinding command IDs for use with keybindings_send_command(). */
+/* These IDs are used to lookup a keybinding; keybindings can be added in any order. */
+enum GeanyKeyBindingID
 {
-	GEANY_KEYS_FILE_NEW,			/**< Keybinding. */
-	GEANY_KEYS_FILE_OPEN,			/**< Keybinding. */
-	GEANY_KEYS_FILE_OPENSELECTED,	/**< Keybinding. */
-	GEANY_KEYS_FILE_SAVE,			/**< Keybinding. */
-	GEANY_KEYS_FILE_SAVEAS,			/**< Keybinding. */
-	GEANY_KEYS_FILE_SAVEALL,		/**< Keybinding. */
-	GEANY_KEYS_FILE_PRINT,			/**< Keybinding. */
-	GEANY_KEYS_FILE_CLOSE,			/**< Keybinding. */
-	GEANY_KEYS_FILE_CLOSEALL,		/**< Keybinding. */
-	GEANY_KEYS_FILE_RELOAD,			/**< Keybinding. */
-	GEANY_KEYS_FILE_OPENLASTTAB,	/**< Keybinding. */
-	GEANY_KEYS_FILE_COUNT
-};
-
-/** Project group keybinding command IDs */
-enum GeanyKeysProjectID
-{
-	GEANY_KEYS_PROJECT_PROPERTIES,		/**< Keybinding. */
-	GEANY_KEYS_PROJECT_COUNT
-};
-
-/** Editor group keybinding command IDs */
-enum GeanyKeysEditorID
-{
+	GEANY_KEYS_FILE_NEW,						/**< Keybinding. */
+	GEANY_KEYS_FILE_OPEN,						/**< Keybinding. */
+	GEANY_KEYS_FILE_OPENSELECTED,				/**< Keybinding. */
+	GEANY_KEYS_FILE_SAVE,						/**< Keybinding. */
+	GEANY_KEYS_FILE_SAVEAS,						/**< Keybinding. */
+	GEANY_KEYS_FILE_SAVEALL,					/**< Keybinding. */
+	GEANY_KEYS_FILE_PRINT,						/**< Keybinding. */
+	GEANY_KEYS_FILE_CLOSE,						/**< Keybinding. */
+	GEANY_KEYS_FILE_CLOSEALL,					/**< Keybinding. */
+	GEANY_KEYS_FILE_RELOAD,						/**< Keybinding. */
+	GEANY_KEYS_FILE_OPENLASTTAB,				/**< Keybinding. */
+	GEANY_KEYS_PROJECT_PROPERTIES,				/**< Keybinding. */
 	GEANY_KEYS_EDITOR_UNDO,						/**< Keybinding. */
 	GEANY_KEYS_EDITOR_REDO,						/**< Keybinding. */
 	GEANY_KEYS_EDITOR_DELETELINE,				/**< Keybinding. */
@@ -147,36 +136,17 @@ enum GeanyKeysEditorID
 	GEANY_KEYS_EDITOR_WORDPARTCOMPLETION,		/**< Keybinding. */
 	GEANY_KEYS_EDITOR_MOVELINEUP,				/**< Keybinding. */
 	GEANY_KEYS_EDITOR_MOVELINEDOWN,				/**< Keybinding. */
-	GEANY_KEYS_EDITOR_COUNT
-};
-
-/** Clipboard group keybinding command IDs */
-enum GeanyKeysClipboardID
-{
-	GEANY_KEYS_CLIPBOARD_CUT,			/**< Keybinding. */
-	GEANY_KEYS_CLIPBOARD_COPY,			/**< Keybinding. */
-	GEANY_KEYS_CLIPBOARD_PASTE,			/**< Keybinding. */
-	GEANY_KEYS_CLIPBOARD_CUTLINE,		/**< Keybinding. */
-	GEANY_KEYS_CLIPBOARD_COPYLINE,		/**< Keybinding. */
-	GEANY_KEYS_CLIPBOARD_COUNT
-};
-
-/** Select group keybinding command IDs */
-enum GeanyKeysSelectID
-{
-
-	GEANY_KEYS_SELECT_ALL,				/**< Keybinding. */
-	GEANY_KEYS_SELECT_WORD,				/**< Keybinding. */
-	GEANY_KEYS_SELECT_LINE,				/**< Keybinding. */
-	GEANY_KEYS_SELECT_PARAGRAPH,		/**< Keybinding. */
-	GEANY_KEYS_SELECT_WORDPARTLEFT,		/**< Keybinding. */
-	GEANY_KEYS_SELECT_WORDPARTRIGHT,	/**< Keybinding. */
-	GEANY_KEYS_SELECT_COUNT
-};
-
-/** Format group keybinding command IDs */
-enum GeanyKeysFormatID
-{
+	GEANY_KEYS_CLIPBOARD_CUT,					/**< Keybinding. */
+	GEANY_KEYS_CLIPBOARD_COPY,					/**< Keybinding. */
+	GEANY_KEYS_CLIPBOARD_PASTE,					/**< Keybinding. */
+	GEANY_KEYS_CLIPBOARD_CUTLINE,				/**< Keybinding. */
+	GEANY_KEYS_CLIPBOARD_COPYLINE,				/**< Keybinding. */
+	GEANY_KEYS_SELECT_ALL,						/**< Keybinding. */
+	GEANY_KEYS_SELECT_WORD,						/**< Keybinding. */
+	GEANY_KEYS_SELECT_LINE,						/**< Keybinding. */
+	GEANY_KEYS_SELECT_PARAGRAPH,				/**< Keybinding. */
+	GEANY_KEYS_SELECT_WORDPARTLEFT,				/**< Keybinding. */
+	GEANY_KEYS_SELECT_WORDPARTRIGHT,			/**< Keybinding. */
 	GEANY_KEYS_FORMAT_TOGGLECASE,				/**< Keybinding. */
 	GEANY_KEYS_FORMAT_COMMENTLINETOGGLE,		/**< Keybinding. */
 	GEANY_KEYS_FORMAT_COMMENTLINE,				/**< Keybinding. */
@@ -191,96 +161,53 @@ enum GeanyKeysFormatID
 	GEANY_KEYS_FORMAT_SENDTOCMD3,				/**< Keybinding. */
 	GEANY_KEYS_FORMAT_SENDTOVTE,				/**< Keybinding. */
 	GEANY_KEYS_FORMAT_REFLOWPARAGRAPH,			/**< Keybinding. */
-	GEANY_KEYS_FORMAT_COUNT
-};
-
-/** Insert group keybinding command IDs */
-enum GeanyKeysInsertID
-{
-	GEANY_KEYS_INSERT_DATE,				/**< Keybinding. */
-	GEANY_KEYS_INSERT_ALTWHITESPACE,	/**< Keybinding. */
-	GEANY_KEYS_INSERT_COUNT
-};
-
-/** Settings group keybinding command IDs */
-enum GeanyKeysSettingsID
-{
-	GEANY_KEYS_SETTINGS_PREFERENCES,		/**< Keybinding. */
-	GEANY_KEYS_SETTINGS_PLUGINPREFERENCES,	/**< Keybinding. */
-	GEANY_KEYS_SETTINGS_COUNT
-};
-
-/** Search group keybinding command IDs */
-enum GeanyKeysSearchID
-{
-	GEANY_KEYS_SEARCH_FIND,					/**< Keybinding. */
-	GEANY_KEYS_SEARCH_FINDNEXT,				/**< Keybinding. */
-	GEANY_KEYS_SEARCH_FINDPREVIOUS,			/**< Keybinding. */
-	GEANY_KEYS_SEARCH_FINDINFILES,			/**< Keybinding. */
-	GEANY_KEYS_SEARCH_REPLACE,				/**< Keybinding. */
-	GEANY_KEYS_SEARCH_FINDNEXTSEL,			/**< Keybinding. */
-	GEANY_KEYS_SEARCH_FINDPREVSEL,			/**< Keybinding. */
-	GEANY_KEYS_SEARCH_NEXTMESSAGE,			/**< Keybinding. */
-	GEANY_KEYS_SEARCH_PREVIOUSMESSAGE,		/**< Keybinding. */
-	GEANY_KEYS_SEARCH_FINDUSAGE,			/**< Keybinding. */
-	GEANY_KEYS_SEARCH_FINDDOCUMENTUSAGE,	/**< Keybinding. */
-	GEANY_KEYS_SEARCH_MARKALL,				/**< Keybinding. */
-	GEANY_KEYS_SEARCH_COUNT
-};
-
-/** Go To group keybinding command IDs */
-enum GeanyKeysGoToID
-{
-	GEANY_KEYS_GOTO_FORWARD,			/**< Keybinding. */
-	GEANY_KEYS_GOTO_BACK,				/**< Keybinding. */
-	GEANY_KEYS_GOTO_LINE,				/**< Keybinding. */
-	GEANY_KEYS_GOTO_LINESTART,			/**< Keybinding. */
-	GEANY_KEYS_GOTO_LINEEND,			/**< Keybinding. */
-	GEANY_KEYS_GOTO_MATCHINGBRACE,		/**< Keybinding. */
-	GEANY_KEYS_GOTO_TOGGLEMARKER,		/**< Keybinding. */
-	GEANY_KEYS_GOTO_NEXTMARKER,			/**< Keybinding. */
-	GEANY_KEYS_GOTO_PREVIOUSMARKER,		/**< Keybinding. */
-	GEANY_KEYS_GOTO_PREVWORDPART,		/**< Keybinding. */
-	GEANY_KEYS_GOTO_NEXTWORDPART,		/**< Keybinding. */
-	GEANY_KEYS_GOTO_TAGDEFINITION,		/**< Keybinding. */
-	GEANY_KEYS_GOTO_TAGDECLARATION,		/**< Keybinding. */
-	GEANY_KEYS_GOTO_LINEENDVISUAL,		/**< Keybinding. */
-	GEANY_KEYS_GOTO_COUNT
-};
-
-/** View group keybinding command IDs */
-enum GeanyKeysViewID
-{
-	GEANY_KEYS_VIEW_TOGGLEALL,			/**< Keybinding. */
-	GEANY_KEYS_VIEW_FULLSCREEN,			/**< Keybinding. */
-	GEANY_KEYS_VIEW_MESSAGEWINDOW,		/**< Keybinding. */
-	GEANY_KEYS_VIEW_SIDEBAR,			/**< Keybinding. */
-	GEANY_KEYS_VIEW_ZOOMIN,				/**< Keybinding. */
-	GEANY_KEYS_VIEW_ZOOMOUT,			/**< Keybinding. */
-	GEANY_KEYS_VIEW_ZOOMRESET,			/**< Keybinding. */
-	GEANY_KEYS_VIEW_COUNT
-};
-
-/** Focus group keybinding command IDs */
-/* TODO when the plugin ABI get increased the next time, rearrange these keybindings */
-enum GeanyKeysFocusID
-{
-	GEANY_KEYS_FOCUS_EDITOR,				/**< Keybinding. */
-	GEANY_KEYS_FOCUS_SCRIBBLE,				/**< Keybinding. */
-	GEANY_KEYS_FOCUS_VTE,					/**< Keybinding. */
-	GEANY_KEYS_FOCUS_SEARCHBAR,				/**< Keybinding. */
-	GEANY_KEYS_FOCUS_SIDEBAR,				/**< Keybinding. */
-	GEANY_KEYS_FOCUS_COMPILER,				/**< Keybinding. */
-	GEANY_KEYS_FOCUS_MESSAGES,				/**< Keybinding. */
-	GEANY_KEYS_FOCUS_MESSAGE_WINDOW,		/**< Keybinding. */
-	GEANY_KEYS_FOCUS_SIDEBAR_DOCUMENT_LIST,	/**< Keybinding. */
-	GEANY_KEYS_FOCUS_SIDEBAR_SYMBOL_LIST,	/**< Keybinding. */
-	GEANY_KEYS_FOCUS_COUNT
-};
-
-/** Notebook Tab group keybinding command IDs */
-enum GeanyKeysNotebookTabID
-{
+	GEANY_KEYS_INSERT_DATE,						/**< Keybinding. */
+	GEANY_KEYS_INSERT_ALTWHITESPACE,			/**< Keybinding. */
+	GEANY_KEYS_SETTINGS_PREFERENCES,			/**< Keybinding. */
+	GEANY_KEYS_SETTINGS_PLUGINPREFERENCES,		/**< Keybinding. */
+	GEANY_KEYS_SEARCH_FIND,						/**< Keybinding. */
+	GEANY_KEYS_SEARCH_FINDNEXT,					/**< Keybinding. */
+	GEANY_KEYS_SEARCH_FINDPREVIOUS,				/**< Keybinding. */
+	GEANY_KEYS_SEARCH_FINDINFILES,				/**< Keybinding. */
+	GEANY_KEYS_SEARCH_REPLACE,					/**< Keybinding. */
+	GEANY_KEYS_SEARCH_FINDNEXTSEL,				/**< Keybinding. */
+	GEANY_KEYS_SEARCH_FINDPREVSEL,				/**< Keybinding. */
+	GEANY_KEYS_SEARCH_NEXTMESSAGE,				/**< Keybinding. */
+	GEANY_KEYS_SEARCH_PREVIOUSMESSAGE,			/**< Keybinding. */
+	GEANY_KEYS_SEARCH_FINDUSAGE,				/**< Keybinding. */
+	GEANY_KEYS_SEARCH_FINDDOCUMENTUSAGE,		/**< Keybinding. */
+	GEANY_KEYS_SEARCH_MARKALL,					/**< Keybinding. */
+	GEANY_KEYS_GOTO_FORWARD,					/**< Keybinding. */
+	GEANY_KEYS_GOTO_BACK,						/**< Keybinding. */
+	GEANY_KEYS_GOTO_LINE,						/**< Keybinding. */
+	GEANY_KEYS_GOTO_LINESTART,					/**< Keybinding. */
+	GEANY_KEYS_GOTO_LINEEND,					/**< Keybinding. */
+	GEANY_KEYS_GOTO_MATCHINGBRACE,				/**< Keybinding. */
+	GEANY_KEYS_GOTO_TOGGLEMARKER,				/**< Keybinding. */
+	GEANY_KEYS_GOTO_NEXTMARKER,					/**< Keybinding. */
+	GEANY_KEYS_GOTO_PREVIOUSMARKER,				/**< Keybinding. */
+	GEANY_KEYS_GOTO_PREVWORDPART,				/**< Keybinding. */
+	GEANY_KEYS_GOTO_NEXTWORDPART,				/**< Keybinding. */
+	GEANY_KEYS_GOTO_TAGDEFINITION,				/**< Keybinding. */
+	GEANY_KEYS_GOTO_TAGDECLARATION,				/**< Keybinding. */
+	GEANY_KEYS_GOTO_LINEENDVISUAL,				/**< Keybinding. */
+	GEANY_KEYS_VIEW_TOGGLEALL,					/**< Keybinding. */
+	GEANY_KEYS_VIEW_FULLSCREEN,					/**< Keybinding. */
+	GEANY_KEYS_VIEW_MESSAGEWINDOW,				/**< Keybinding. */
+	GEANY_KEYS_VIEW_SIDEBAR,					/**< Keybinding. */
+	GEANY_KEYS_VIEW_ZOOMIN,						/**< Keybinding. */
+	GEANY_KEYS_VIEW_ZOOMOUT,					/**< Keybinding. */
+	GEANY_KEYS_VIEW_ZOOMRESET,					/**< Keybinding. */
+	GEANY_KEYS_FOCUS_EDITOR,					/**< Keybinding. */
+	GEANY_KEYS_FOCUS_SCRIBBLE,					/**< Keybinding. */
+	GEANY_KEYS_FOCUS_VTE,						/**< Keybinding. */
+	GEANY_KEYS_FOCUS_SEARCHBAR,					/**< Keybinding. */
+	GEANY_KEYS_FOCUS_SIDEBAR,					/**< Keybinding. */
+	GEANY_KEYS_FOCUS_COMPILER,					/**< Keybinding. */
+	GEANY_KEYS_FOCUS_MESSAGES,					/**< Keybinding. */
+	GEANY_KEYS_FOCUS_MESSAGE_WINDOW,			/**< Keybinding. */
+	GEANY_KEYS_FOCUS_SIDEBAR_DOCUMENT_LIST,		/**< Keybinding. */
+	GEANY_KEYS_FOCUS_SIDEBAR_SYMBOL_LIST,		/**< Keybinding. */
 	GEANY_KEYS_NOTEBOOK_SWITCHTABLEFT,			/**< Keybinding. */
 	GEANY_KEYS_NOTEBOOK_SWITCHTABRIGHT,			/**< Keybinding. */
 	GEANY_KEYS_NOTEBOOK_SWITCHTABLASTUSED,		/**< Keybinding. */
@@ -288,52 +215,28 @@ enum GeanyKeysNotebookTabID
 	GEANY_KEYS_NOTEBOOK_MOVETABRIGHT,			/**< Keybinding. */
 	GEANY_KEYS_NOTEBOOK_MOVETABFIRST,			/**< Keybinding. */
 	GEANY_KEYS_NOTEBOOK_MOVETABLAST,			/**< Keybinding. */
-	GEANY_KEYS_NOTEBOOK_COUNT
-};
-
-/** Document group keybinding command IDs */
-enum GeanyKeysDocumentID
-{
-	GEANY_KEYS_DOCUMENT_REPLACETABS,		/**< Keybinding. */
-	GEANY_KEYS_DOCUMENT_REPLACESPACES,		/**< Keybinding. */
-	GEANY_KEYS_DOCUMENT_TOGGLEFOLD,			/**< Keybinding. */
-	GEANY_KEYS_DOCUMENT_FOLDALL,			/**< Keybinding. */
-	GEANY_KEYS_DOCUMENT_UNFOLDALL,			/**< Keybinding. */
-	GEANY_KEYS_DOCUMENT_RELOADTAGLIST,		/**< Keybinding. */
-	GEANY_KEYS_DOCUMENT_LINEWRAP,			/**< Keybinding. */
-	GEANY_KEYS_DOCUMENT_LINEBREAK,			/**< Keybinding. */
-	GEANY_KEYS_DOCUMENT_REMOVE_MARKERS,		/**< Keybinding. */
-	GEANY_KEYS_DOCUMENT_REMOVE_ERROR_INDICATORS,	/**< Keybinding. */
-	GEANY_KEYS_DOCUMENT_COUNT
-};
-
-/** Build group keybinding command IDs */
-enum GeanyKeysBuildID
-{
-	GEANY_KEYS_BUILD_COMPILE,			/**< Keybinding. */
-	GEANY_KEYS_BUILD_LINK,				/**< Keybinding. */
-	GEANY_KEYS_BUILD_MAKE,				/**< Keybinding. */
-	GEANY_KEYS_BUILD_MAKEOWNTARGET,		/**< Keybinding. */
-	GEANY_KEYS_BUILD_MAKEOBJECT,		/**< Keybinding. */
-	GEANY_KEYS_BUILD_NEXTERROR,			/**< Keybinding. */
-	GEANY_KEYS_BUILD_PREVIOUSERROR,		/**< Keybinding. */
-	GEANY_KEYS_BUILD_RUN,				/**< Keybinding. */
-	GEANY_KEYS_BUILD_OPTIONS,			/**< Keybinding. */
-	GEANY_KEYS_BUILD_COUNT
-};
-
-/** Tools group keybinding command IDs */
-enum GeanyKeysToolsID
-{
-	GEANY_KEYS_TOOLS_OPENCOLORCHOOSER,		/**< Keybinding. */
-	GEANY_KEYS_TOOLS_COUNT
-};
-
-/** Help group keybinding command IDs */
-enum GeanyKeysHelpID
-{
-	GEANY_KEYS_HELP_HELP,			/**< Keybinding. */
-	GEANY_KEYS_HELP_COUNT
+	GEANY_KEYS_DOCUMENT_REPLACETABS,			/**< Keybinding. */
+	GEANY_KEYS_DOCUMENT_REPLACESPACES,			/**< Keybinding. */
+	GEANY_KEYS_DOCUMENT_TOGGLEFOLD,				/**< Keybinding. */
+	GEANY_KEYS_DOCUMENT_FOLDALL,				/**< Keybinding. */
+	GEANY_KEYS_DOCUMENT_UNFOLDALL,				/**< Keybinding. */
+	GEANY_KEYS_DOCUMENT_RELOADTAGLIST,			/**< Keybinding. */
+	GEANY_KEYS_DOCUMENT_LINEWRAP,				/**< Keybinding. */
+	GEANY_KEYS_DOCUMENT_LINEBREAK,				/**< Keybinding. */
+	GEANY_KEYS_DOCUMENT_REMOVE_MARKERS,			/**< Keybinding. */
+	GEANY_KEYS_DOCUMENT_REMOVE_ERROR_INDICATORS, /**< Keybinding. */
+	GEANY_KEYS_BUILD_COMPILE,					/**< Keybinding. */
+	GEANY_KEYS_BUILD_LINK,						/**< Keybinding. */
+	GEANY_KEYS_BUILD_MAKE,						/**< Keybinding. */
+	GEANY_KEYS_BUILD_MAKEOWNTARGET,				/**< Keybinding. */
+	GEANY_KEYS_BUILD_MAKEOBJECT,				/**< Keybinding. */
+	GEANY_KEYS_BUILD_NEXTERROR,					/**< Keybinding. */
+	GEANY_KEYS_BUILD_PREVIOUSERROR,				/**< Keybinding. */
+	GEANY_KEYS_BUILD_RUN,						/**< Keybinding. */
+	GEANY_KEYS_BUILD_OPTIONS,					/**< Keybinding. */
+	GEANY_KEYS_TOOLS_OPENCOLORCHOOSER,			/**< Keybinding. */
+	GEANY_KEYS_HELP_HELP,						/**< Keybinding. */
+	GEANY_KEYS_COUNT	/* must not be used by plugins */
 };
 
 

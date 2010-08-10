@@ -24,7 +24,7 @@
 /**
  * @file keybindings.h
  * Configurable keyboard shortcuts.
- * - keybindings_send_command() mimics a built-in keybinding.
+ * - keybindings_send_command() mimics a built-in keybinding action.
  * - @ref GeanyKeyGroupID lists groups of built-in keybindings.
  * @see plugin_set_key_group().
  **/
@@ -65,12 +65,15 @@
 GPtrArray *keybinding_groups;	/* array of GeanyKeyGroup pointers */
 
 /* keyfile group name for non-plugin KB groups */
-const gchar keybindings_keyfile_group_name[] = "Bindings";
+static const gchar keybindings_keyfile_group_name[] = "Bindings";
+
+/* core keybindings */
+static GeanyKeyBinding binding_ids[GEANY_KEYS_COUNT];
 
 static GtkAccelGroup *kb_accel_group = NULL;
 static const gboolean swap_alt_tab_order = FALSE;
 
-const gsize MAX_MRU_DOCS = 20;
+static const gsize MAX_MRU_DOCS = 20;
 static GQueue *mru_docs = NULL;
 static guint mru_pos = 0;
 
@@ -125,9 +128,13 @@ static void add_popup_menu_accels(void);
  * @since 0.19. */
 GeanyKeyBinding *keybindings_get_item(GeanyKeyGroup *group, gsize key_id)
 {
-	g_assert(key_id < group->count);
-
-	return &group->keys[key_id];
+	if (group->plugin)
+	{
+		g_assert(key_id < group->plugin_key_count);
+		return &group->plugin_keys[key_id];
+	}
+	g_assert(key_id < GEANY_KEYS_COUNT);
+	return &binding_ids[key_id];
 }
 
 
@@ -149,7 +156,12 @@ GeanyKeyBinding *keybindings_set_item(GeanyKeyGroup *group, gsize key_id,
 		GeanyKeyCallback callback, guint key, GdkModifierType mod,
 		const gchar *kf_name, const gchar *label, GtkWidget *menu_item)
 {
-	GeanyKeyBinding *kb = keybindings_get_item(group, key_id);
+	GeanyKeyBinding *kb;
+
+	g_assert(group->name);
+	kb = keybindings_get_item(group, key_id);
+	g_assert(!kb->name);
+	g_ptr_array_add(group->key_items, kb);
 
 	if (group->plugin)
 	{
@@ -159,7 +171,7 @@ GeanyKeyBinding *keybindings_set_item(GeanyKeyGroup *group, gsize key_id,
 	}
 	else
 	{
-		/* we don't touch them unless group->plugin is set, cast is safe */
+		/* we don't touch these strings unless group->plugin is set, const cast is safe */
 		kb->name = (gchar *)kf_name;
 		kb->label = (gchar *)label;
 	}
@@ -167,21 +179,21 @@ GeanyKeyBinding *keybindings_set_item(GeanyKeyGroup *group, gsize key_id,
 	kb->mods = mod;
 	kb->callback = callback;
 	kb->menu_item = menu_item;
+	kb->id = key_id;
 	return kb;
 }
 
 
 static GeanyKeyGroup *add_kb_group(GeanyKeyGroup *group,
-		const gchar *name, const gchar *label, gsize count, GeanyKeyBinding *keys,
-		GeanyKeyGroupCallback callback)
+		const gchar *name, const gchar *label, GeanyKeyGroupCallback callback, gboolean plugin)
 {
 	g_ptr_array_add(keybinding_groups, group);
 
 	group->name = name;
 	group->label = label;
-	group->count = count;
-	group->keys = keys;
 	group->callback = callback;
+	group->plugin = plugin;
+	group->key_items = g_ptr_array_new();
 	return group;
 }
 
@@ -191,16 +203,11 @@ static GeanyKeyGroup *add_kb_group(GeanyKeyGroup *group,
 	ui_lookup_widget(main_widgets.window, G_STRINGIFY(widget_name))
 
 /* Expansion for group_id = FILE:
- * static GeanyKeyBinding FILE_keys[GEANY_KEYS_FILE_COUNT]; */
-#define DECLARE_KEYS(group_id) \
-	static GeanyKeyBinding group_id ## _keys[GEANY_KEYS_ ## group_id ## _COUNT]
-
-/* Expansion for group_id = FILE:
- * add_kb_group(&groups[GEANY_KEY_GROUP_FILE], NULL, _("File menu"),
- * 	GEANY_KEYS_FILE_COUNT, FILE_keys, callback); */
+ * add_kb_group(&groups[GEANY_KEY_GROUP_FILE],
+ * 	keybindings_keyfile_group_name, _("File menu"), callback); */
 #define ADD_KB_GROUP(group_id, label, callback) \
-	add_kb_group(&groups[GEANY_KEY_GROUP_ ## group_id], keybindings_keyfile_group_name, label, \
-		GEANY_KEYS_ ## group_id ## _COUNT, group_id ## _keys, callback)
+	add_kb_group(&groups[GEANY_KEY_GROUP_ ## group_id],\
+		keybindings_keyfile_group_name, label, callback, FALSE)
 
 /* Init all fields of keys with default values.
  * The menu_item field is always the main menu item, popup menu accelerators are
@@ -209,23 +216,6 @@ static void init_default_kb(void)
 {
 	static GeanyKeyGroup groups[GEANY_KEY_GROUP_COUNT];
 	GeanyKeyGroup *group;
-	DECLARE_KEYS(FILE);
-	DECLARE_KEYS(PROJECT);
-	DECLARE_KEYS(EDITOR);
-	DECLARE_KEYS(CLIPBOARD);
-	DECLARE_KEYS(SELECT);
-	DECLARE_KEYS(FORMAT);
-	DECLARE_KEYS(INSERT);
-	DECLARE_KEYS(SETTINGS);
-	DECLARE_KEYS(SEARCH);
-	DECLARE_KEYS(GOTO);
-	DECLARE_KEYS(VIEW);
-	DECLARE_KEYS(FOCUS);
-	DECLARE_KEYS(NOTEBOOK);
-	DECLARE_KEYS(DOCUMENT);
-	DECLARE_KEYS(BUILD);
-	DECLARE_KEYS(TOOLS);
-	DECLARE_KEYS(HELP);
 
 	group = ADD_KB_GROUP(FILE, _("File"), cb_func_file_action);
 
@@ -477,6 +467,7 @@ static void init_default_kb(void)
 
 	group = ADD_KB_GROUP(FOCUS, _("Focus"), cb_func_switch_action);
 
+	/* TODO rearrange these keybindings */
 	keybindings_set_item(group, GEANY_KEYS_FOCUS_EDITOR, NULL,
 		GDK_F2, 0, "switch_editor", _("Switch to Editor"), NULL);
 	keybindings_set_item(group, GEANY_KEYS_FOCUS_SCRIBBLE, NULL,
@@ -621,12 +612,11 @@ void keybindings_init(void)
 	g_signal_connect(geany_object, "document-close",
 		G_CALLBACK(on_document_close), NULL);
 
+	memset(binding_ids, 0, sizeof binding_ids);
 	keybinding_groups = g_ptr_array_sized_new(GEANY_KEY_GROUP_COUNT);
-
 	kb_accel_group = gtk_accel_group_new();
 
 	init_default_kb();
-
 	gtk_window_add_accel_group(GTK_WINDOW(main_widgets.window), kb_accel_group);
 
 	g_signal_connect(main_widgets.window, "key-press-event", G_CALLBACK(on_key_press_event), NULL);
@@ -643,15 +633,10 @@ static void keybindings_foreach(KBItemCallback cb, gpointer user_data)
 	GeanyKeyGroup *group;
 	GeanyKeyBinding *kb;
 
-	for (g = 0; g < keybinding_groups->len; g++)
+	foreach_ptr_array(group, g, keybinding_groups)
 	{
-		group = g_ptr_array_index(keybinding_groups, g);
-		for (i = 0; i < group->count; i++)
-		{
-			kb = &group->keys[i];
-
+		foreach_ptr_array(kb, i, group->key_items)
 			cb(group, kb, user_data);
-		}
 	}
 }
 
@@ -711,7 +696,7 @@ void keybindings_load_keyfile(void)
 
 static void add_menu_accel(GeanyKeyGroup *group, guint kb_id, GtkWidget *menuitem)
 {
-	GeanyKeyBinding *kb = &group->keys[kb_id];
+	GeanyKeyBinding *kb = keybindings_get_item(group, kb_id);
 
 	if (kb->key != 0)
 		gtk_widget_add_accelerator(menuitem, "activate", kb_accel_group,
@@ -795,6 +780,12 @@ void keybindings_write_to_file(void)
 
 void keybindings_free(void)
 {
+	GeanyKeyGroup *group;
+	gsize g;
+
+	foreach_ptr_array(group, g, keybinding_groups)
+		keybindings_free_group(group);
+
 	g_ptr_array_free(keybinding_groups, TRUE);
 	g_queue_free(mru_docs);
 }
@@ -816,24 +807,20 @@ static void fill_shortcut_labels_treeview(GtkWidget *tree)
 
 	store = gtk_list_store_new(3, G_TYPE_STRING, G_TYPE_STRING, PANGO_TYPE_WEIGHT);
 
-	for (g = 0; g < keybinding_groups->len; g++)
+	foreach_ptr_array(group, g, keybinding_groups)
 	{
-		group = g_ptr_array_index(keybinding_groups, g);
-
 		if (g > 0)
 		{
 			gtk_list_store_append(store, &iter);
 			gtk_list_store_set(store, &iter, -1);
 		}
-
 		gtk_list_store_append(store, &iter);
 		gtk_list_store_set(store, &iter, 0, group->label, 2, PANGO_WEIGHT_BOLD, -1);
 
-		for (i = 0; i < group->count; i++)
+		foreach_ptr_array(kb, i, group->key_items)
 		{
 			gchar *shortcut, *label;
 
-			kb = &group->keys[i];
 			label = keybindings_get_label(kb);
 			shortcut = gtk_accelerator_get_label(kb->key, kb->mods);
 
@@ -844,7 +831,6 @@ static void fill_shortcut_labels_treeview(GtkWidget *tree)
 			g_free(label);
 		}
 	}
-
 	gtk_tree_view_set_model(GTK_TREE_VIEW(tree), GTK_TREE_MODEL(store));
 	g_object_unref(store);
 }
@@ -1082,6 +1068,8 @@ static gboolean set_sensitive(gpointer widget)
 static gboolean check_vte(GdkModifierType state, guint keyval)
 {
 	guint i;
+	GeanyKeyBinding *kb;
+	GeanyKeyGroup *group;
 	GtkWidget *widget;
 
 	if (! vc->enable_bash_keys)
@@ -1095,10 +1083,9 @@ static gboolean check_vte(GdkModifierType state, guint keyval)
 		return FALSE;
 
 	/* make focus commands override any bash commands */
-	for (i = 0; i < GEANY_KEYS_FOCUS_COUNT; i++)
+	group = g_ptr_array_index(keybinding_groups, GEANY_KEY_GROUP_FOCUS);
+	foreach_ptr_array(kb, i, group->key_items)
 	{
-		GeanyKeyBinding *kb = keybindings_lookup_item(GEANY_KEY_GROUP_FOCUS, i);
-
 		if (state == kb->mods && keyval == kb->key)
 			return FALSE;
 	}
@@ -1179,19 +1166,16 @@ const GeanyKeyBinding *keybindings_check_event(GdkEventKey *ev, gint *group_id, 
 	if (keyval >= GDK_KP_Space && keyval < GDK_KP_Equal)
 		keyval = key_kp_translate(keyval);
 
-	for (g = 0; g < keybinding_groups->len; g++)
+	foreach_ptr_array(group, g, keybinding_groups)
 	{
-		group = g_ptr_array_index(keybinding_groups, g);
-
-		for (i = 0; i < group->count; i++)
+		foreach_ptr_array(kb, i, group->key_items)
 		{
-			kb = &group->keys[i];
 			if (keyval == kb->key && state == kb->mods)
 			{
 				if (group_id != NULL)
 					*group_id = g;
 				if (binding_id != NULL)
-					*binding_id = i;
+					*binding_id = kb->id;
 				return kb;
 			}
 		}
@@ -1236,24 +1220,21 @@ static gboolean on_key_press_event(GtkWidget *widget, GdkEventKey *ev, gpointer 
 	if (check_menu_key(doc, keyval, state, ev->time))
 		return TRUE;
 
-	for (g = 0; g < keybinding_groups->len; g++)
+	foreach_ptr_array(group, g, keybinding_groups)
 	{
-		group = g_ptr_array_index(keybinding_groups, g);
-
-		for (i = 0; i < group->count; i++)
+		foreach_ptr_array(kb, i, group->key_items)
 		{
-			kb = &group->keys[i];
 			if (keyval == kb->key && state == kb->mods)
 			{
 				/* call the corresponding callback function for this shortcut */
 				if (kb->callback)
 				{
-					kb->callback(i);
+					kb->callback(kb->id);
 					return TRUE;
 				}
 				else if (group->callback)
 				{
-					if (group->callback(i))
+					if (group->callback(kb->id))
 						return TRUE;
 					else
 						continue;	/* not handled */
@@ -1301,16 +1282,14 @@ GeanyKeyBinding *keybindings_lookup_item(guint group_id, guint key_id)
 	group = g_ptr_array_index(keybinding_groups, group_id);
 
 	g_return_val_if_fail(group, NULL);
-	g_return_val_if_fail(key_id < group->count, NULL);
-
-	return &group->keys[key_id];
+	return keybindings_get_item(group, key_id);
 }
 
 
 /** Mimics a (built-in only) keybinding action.
  * 	Example: @code keybindings_send_command(GEANY_KEY_GROUP_FILE, GEANY_KEYS_FILE_OPEN); @endcode
- * 	@param group_id The index for the key group that contains the @a key_id keybinding.
- * 	@param key_id The keybinding command index. */
+ * 	@param group_id @ref GeanyKeyGroupID keybinding group index that contains the @a key_id keybinding.
+ * 	@param key_id @ref GeanyKeyBindingID keybinding index. */
 void keybindings_send_command(guint group_id, guint key_id)
 {
 	GeanyKeyBinding *kb;
@@ -2624,7 +2603,7 @@ void keybindings_update_combo(GeanyKeyBinding *kb, guint key, GdkModifierType mo
 }
 
 
-/* used for plugins */
+/* used for plugins, can be called repeatedly. */
 GeanyKeyGroup *keybindings_set_group(GeanyKeyGroup *group, const gchar *section_name,
 		const gchar *label, gsize count, GeanyKeyGroupCallback callback)
 {
@@ -2635,33 +2614,33 @@ GeanyKeyGroup *keybindings_set_group(GeanyKeyGroup *group, const gchar *section_
 	g_return_val_if_fail(!g_str_equal(section_name, keybindings_keyfile_group_name), NULL);
 
 	if (!group)
-		group = g_new0(GeanyKeyGroup, 1);
-
-	if (!group->keys || count > group->count)
 	{
-		/* allow resizing existing array of keys */
-		group->keys = g_renew(GeanyKeyBinding, group->keys, count);
-		memset(group->keys + group->count, 0, (count - group->count) * sizeof(GeanyKeyBinding));
+		group = g_new0(GeanyKeyGroup, 1);
+		add_kb_group(group, section_name, label, callback, TRUE);
 	}
-	group->plugin = TRUE;
-	add_kb_group(group, section_name, label, count, group->keys, callback);
+	g_free(group->plugin_keys);
+	group->plugin_keys = g_new0(GeanyKeyBinding, count);
+	group->plugin_key_count = count;
+	g_ptr_array_set_size(group->key_items, 0);
 	return group;
 }
 
 
-/* used for plugins */
 void keybindings_free_group(GeanyKeyGroup *group)
 {
 	GeanyKeyBinding *kb;
 
-	g_assert(group->plugin);
+	g_ptr_array_free(group->key_items, TRUE);
 
-	foreach_c_array(kb, group->keys, group->count)
+	if (group->plugin)
 	{
-		g_free(kb->name);
-		g_free(kb->label);
+		foreach_c_array(kb, group->plugin_keys, group->plugin_key_count)
+		{
+			g_free(kb->name);
+			g_free(kb->label);
+		}
+		g_free(group->plugin_keys);
+		g_ptr_array_remove_fast(keybinding_groups, group);
+		g_free(group);
 	}
-	g_free(group->keys);
-	g_ptr_array_remove_fast(keybinding_groups, group);
-	g_free(group);
 }

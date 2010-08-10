@@ -303,23 +303,19 @@ static void kb_init(void)
 	if (store == NULL)
 		kb_init_tree();
 
-	for (g = 0; g < keybinding_groups->len; g++)
+	foreach_ptr_array(group, g, keybinding_groups)
 	{
-		group = g_ptr_array_index(keybinding_groups, g);
-
 		gtk_tree_store_append(store, &parent, NULL);
 		gtk_tree_store_set(store, &parent, KB_TREE_ACTION, group->label,
 			KB_TREE_INDEX, g, -1);
 
-		for (i = 0; i < group->count; i++)
+		foreach_ptr_array(kb, i, group->key_items)
 		{
-			kb = &group->keys[i];
-
 			label = keybindings_get_label(kb);
 			key_string = gtk_accelerator_name(kb->key, kb->mods);
 			gtk_tree_store_append(store, &iter, &parent);
 			gtk_tree_store_set(store, &iter, KB_TREE_ACTION, label,
-				KB_TREE_SHORTCUT, key_string, KB_TREE_INDEX, i, -1);
+				KB_TREE_SHORTCUT, key_string, KB_TREE_INDEX, kb->id, -1);
 			g_free(key_string);
 			g_free(label);
 		}
@@ -1311,7 +1307,6 @@ static void kb_dialog_response_cb(GtkWidget *dialog, gint response, G_GNUC_UNUSE
 		GeanyKeyBinding *kb;
 
 		kb = kb_lookup_kb_from_iter(GTK_TREE_MODEL(store), &g_iter);
-
 		gtk_accelerator_parse(gtk_label_get_text(GTK_LABEL(dialog_label)), &lkey, &lmods);
 
 		if (kb_find_duplicate(dialog, kb, lkey, lmods, gtk_label_get_text(GTK_LABEL(dialog_label))))
@@ -1375,22 +1370,19 @@ static gboolean kb_find_duplicate(GtkWidget *parent, GeanyKeyBinding *search_kb,
 		guint key, GdkModifierType mods, const gchar *action)
 {
 	gsize g, i;
+	GeanyKeyGroup *group;
+	GeanyKeyBinding *kb;
 
 	/* allow duplicate if there is no key combination */
 	if (key == 0 && mods == 0)
 		return FALSE;
 
-	for (g = 0; g < keybinding_groups->len; g++)
+	foreach_ptr_array(group, g, keybinding_groups)
 	{
-		GeanyKeyGroup *group = g_ptr_array_index(keybinding_groups, g);
-
-		for (i = 0; i < group->count; i++)
+		foreach_ptr_array(kb, i, group->key_items)
 		{
-			GeanyKeyBinding *keys = group->keys;
-			GeanyKeyBinding *kb = &keys[i];
-
 			/* search another item with the same key,
-			 * but don't search the key we're looking for keys[idx] */
+			 * but don't search the key we're looking for(!) */
 			if (kb->key == key && kb->mods == mods
 				&& ! (kb->key == search_kb->key && kb->mods == search_kb->mods))
 			{
@@ -1408,7 +1400,7 @@ static gboolean kb_find_duplicate(GtkWidget *parent, GeanyKeyBinding *search_kb,
 				if (ret == GTK_RESPONSE_YES)
 				{
 					keybindings_update_combo(kb, 0, 0);
-					kb_clear_tree_shortcut(g, i);
+					kb_clear_tree_shortcut(g, kb->id);
 					/* carry on looking for other duplicates if overriding */
 					continue;
 				}
