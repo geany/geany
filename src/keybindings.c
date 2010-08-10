@@ -467,27 +467,26 @@ static void init_default_kb(void)
 
 	group = ADD_KB_GROUP(FOCUS, _("Focus"), cb_func_switch_action);
 
-	/* TODO rearrange these keybindings */
 	keybindings_set_item(group, GEANY_KEYS_FOCUS_EDITOR, NULL,
 		GDK_F2, 0, "switch_editor", _("Switch to Editor"), NULL);
-	keybindings_set_item(group, GEANY_KEYS_FOCUS_SCRIBBLE, NULL,
-		GDK_F6, 0, "switch_scribble", _("Switch to Scribble"), NULL);
-	keybindings_set_item(group, GEANY_KEYS_FOCUS_VTE, NULL,
-		GDK_F4, 0, "switch_vte", _("Switch to VTE"), NULL);
 	keybindings_set_item(group, GEANY_KEYS_FOCUS_SEARCHBAR, NULL,
 		GDK_F7, 0, "switch_search_bar", _("Switch to Search Bar"), NULL);
-	keybindings_set_item(group, GEANY_KEYS_FOCUS_SIDEBAR, NULL,
-		0, 0, "switch_sidebar", _("Switch to Sidebar"), NULL);
+	keybindings_set_item(group, GEANY_KEYS_FOCUS_MESSAGE_WINDOW, NULL,
+		0, 0, "switch_message_window", _("Switch to Message Window"), NULL);
 	keybindings_set_item(group, GEANY_KEYS_FOCUS_COMPILER, NULL,
 		0, 0, "switch_compiler", _("Switch to Compiler"), NULL);
 	keybindings_set_item(group, GEANY_KEYS_FOCUS_MESSAGES, NULL,
 		0, 0, "switch_messages", _("Switch to Messages"), NULL);
-	keybindings_set_item(group, GEANY_KEYS_FOCUS_MESSAGE_WINDOW, NULL,
-		0, 0, "switch_message_window", _("Switch to Message Window"), NULL);
-	keybindings_set_item(group, GEANY_KEYS_FOCUS_SIDEBAR_DOCUMENT_LIST, NULL,
-		0, 0, "switch_sidebar_doc_list", _("Switch to Sidebar Document List"), NULL);
+	keybindings_set_item(group, GEANY_KEYS_FOCUS_SCRIBBLE, NULL,
+		GDK_F6, 0, "switch_scribble", _("Switch to Scribble"), NULL);
+	keybindings_set_item(group, GEANY_KEYS_FOCUS_VTE, NULL,
+		GDK_F4, 0, "switch_vte", _("Switch to VTE"), NULL);
+	keybindings_set_item(group, GEANY_KEYS_FOCUS_SIDEBAR, NULL,
+		0, 0, "switch_sidebar", _("Switch to Sidebar"), NULL);
 	keybindings_set_item(group, GEANY_KEYS_FOCUS_SIDEBAR_SYMBOL_LIST, NULL,
 		0, 0, "switch_sidebar_symbol_list", _("Switch to Sidebar Symbol List"), NULL);
+	keybindings_set_item(group, GEANY_KEYS_FOCUS_SIDEBAR_DOCUMENT_LIST, NULL,
+		0, 0, "switch_sidebar_doc_list", _("Switch to Sidebar Document List"), NULL);
 
 	group = ADD_KB_GROUP(NOTEBOOK, _("Notebook tab"), NULL);
 
@@ -1518,7 +1517,7 @@ static gboolean cb_func_build_action(guint key_id)
 		return TRUE;
 
 	menu_items = build_get_menu_items(doc->file_type->id);
-/* TODO make it a table??*/
+	/* TODO make it a table??*/
 	switch (key_id)
 	{
 		case GEANY_KEYS_BUILD_COMPILE:

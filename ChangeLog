@@ -16,6 +16,8 @@
    autocompletion.
  * src/keybindings.h, src/plugindata.h:
    Randomly sort keybinding IDs to show there should be no order.
+ * src/keybindings.c:
+   Reorder Focus keybindings.
 
 
 2010-08-05  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
