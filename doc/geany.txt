@@ -4049,6 +4049,9 @@ complete_snippets_whilst_editing  Whether to allow completion of snippets      f
                                   position on the line). Only used when the
                                   keybinding ``Complete snippet`` is set to
                                   ``Space``.
+show_editor_scrollbars            Whether to display scrollbars. If set to     true
+                                  false, the horizontal and vertical
+                                  scrollbars are hidden completely.
 **Interface related**
 show_symbol_list_expanders        Whether to show or hide the small expander   true
                                   icons on the symbol list treeview (only
@@ -4060,9 +4063,6 @@ allow_always_save                 Whether files can be saved always, even if   f
                                   setting this option to true, the Save
                                   buttons and menu items are always active
                                   and files can be saved.
-show_editor_scrollbars            Whether to display scrollbars. If set to     true
-                                  false, the horizontal and vertical
-                                  scrollbars are hidden completely.
 compiler_tab_autoscroll           Whether to automatically scroll to the       true
                                   last line of the output in the Compiler
                                   tab.

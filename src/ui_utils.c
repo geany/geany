@@ -2003,10 +2003,18 @@ void ui_init_prefs(void)
 {
 	StashGroup *group = stash_group_new(PACKAGE);
 
+	/* hidden prefs (don't overwrite them so users can edit them manually) */
 	configuration_add_pref_group(group, FALSE);
 	stash_group_set_write_once(group, TRUE);
 
-	stash_group_add_string(group, &statusbar_template, "statusbar_template", "");
+	stash_group_add_boolean(group, &interface_prefs.show_symbol_list_expanders,
+		"show_symbol_list_expanders", TRUE);
+	stash_group_add_boolean(group, &interface_prefs.compiler_tab_autoscroll,
+		"compiler_tab_autoscroll", TRUE);
+	stash_group_add_boolean(group, &ui_prefs.allow_always_save,
+		"allow_always_save", FALSE);
+	stash_group_add_string(group, &statusbar_template,
+		"statusbar_template", "");
 }
 
 

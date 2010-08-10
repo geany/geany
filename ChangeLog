@@ -9,6 +9,8 @@
  * src/stash.c:
    Fix writing the default value when a key is missing for hidden
    prefs, even if it was overridden when it was originally read.
+ * src/keyfile.c, src/ui_utils.c, doc/geany.txt, doc/geany.html:
+   Move some interface hidden prefs to ui_utils.c.
 
 
 2010-08-05  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
