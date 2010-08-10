@@ -69,12 +69,10 @@
 #endif
 
 
-
 GeanyPrefs prefs;
 GeanyToolPrefs tool_prefs;
 
 
-static gchar *dialog_key_name;
 static GtkTreeIter g_iter;
 static GtkTreeStore *store = NULL;
 static GtkTreeView *tree = NULL;
@@ -181,9 +179,6 @@ static void kb_tree_view_change_button_clicked_cb(GtkWidget *button, gpointer da
 								G_CALLBACK(kb_keytype_dialog_response_cb), NULL);
 			g_signal_connect(dialog, "response", G_CALLBACK(kb_dialog_response_cb), NULL);
 
-			/* copy name to global variable to hold it, will be freed in on_dialog_response() */
-			dialog_key_name = g_strdup(name);
-
 			gtk_widget_show_all(dialog);
 			g_free(str);
 			g_free(name);
@@ -283,7 +278,7 @@ static void kb_init_tree(void)
 	column = gtk_tree_view_column_new_with_attributes(_("Shortcut"), renderer, "text", KB_TREE_SHORTCUT, NULL);
 	gtk_tree_view_append_column(GTK_TREE_VIEW(tree), column);
 
-	/* set policy settings for the scollwedwindow around the treeview again, because glade
+	/* set policy settings for the scrolled window around the treeview again, because glade
 	 * doesn't keep the settings */
 	gtk_scrolled_window_set_policy(
 			GTK_SCROLLED_WINDOW(ui_lookup_widget(ui_widgets.prefs_dialog, "scrolledwindow8")),
@@ -1328,10 +1323,6 @@ static void kb_dialog_response_cb(GtkWidget *dialog, gint response, G_GNUC_UNUSE
 
 		gtk_tree_store_set(store, &g_iter,
 			KB_TREE_SHORTCUT, gtk_label_get_text(GTK_LABEL(dialog_label)), -1);
-
-		g_free(dialog_key_name);
-		dialog_key_name = NULL;
-
 		edited = TRUE;
 	}
 	gtk_widget_destroy(dialog);
