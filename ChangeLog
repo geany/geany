@@ -3,6 +3,9 @@
  * src/printing.c, doc/geany.txt, doc/geany.html:
    Always use white background color when printing (except for text
    with a white foreground) to save ink (should fix #2968998).
+ * src/build.c, src/build.h, doc/geany.txt, doc/geany.html:
+   Limit build error editor indicators to 50, but parse all errors in
+   the Compiler tab (fixes #3019823).
 
 
 2010-06-30  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

@@ -26,8 +26,6 @@
 #ifndef GEANY_BUILD_H
 #define GEANY_BUILD_H 1
 
-#define GEANY_BUILD_ERR_HIGHLIGHT_MAX 100
-
 /* Order is important (see GBO_TO_GBG, GBO_TO_CMD below) */
 /** Geany Known Build Commands.
  * These commands are named after their default use.

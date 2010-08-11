@@ -4725,29 +4725,23 @@ GEANY_MAX_AUTOCOMPLETE_WORDS    How many autocompletion suggestions should    30
                                 Geany provide.
 ==============================  ============================================  ==================
 
-build.h
--------
-
-==============================  ============================================  ==================
-Option                          Description                                   Default
-==============================  ============================================  ==================
-GEANY_BUILD_ERR_HIGHLIGHT_MAX   Amount of build error messages which should   100
-                                be highlighted in the Compiler message
-                                window. This affects the special coloring
-                                when Geany detects a compiler output line as
-                                an error message and then highlight the
-                                corresponding line in the source code.
-                                Usually only the first few messages are
-                                interesting because following errors are
-                                just aftereffects.
-==============================  ============================================  ==================
-
 build.c
 -------
 
 ==============================  ============================================  ==================
 Option                          Description                                   Default
 ==============================  ============================================  ==================
+GEANY_BUILD_ERR_HIGHLIGHT_MAX   Amount of build error indicators to           50
+                                be shown in the editor window.
+                                This affects the special coloring
+                                when Geany detects a compiler output line as
+                                an error message and then highlights the
+                                corresponding line in the source code.
+                                Usually only the first few messages are
+                                interesting because following errors are
+                                just after-effects.
+                                All errors in the Compiler window are parsed
+                                and unaffected by this value.
 PRINTBUILDCMDS                  Every time a build menu item priority         FALSE
                                 calculation is run, print the state of the
                                 menu item table in the form of the table

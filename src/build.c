@@ -60,6 +60,9 @@
 #include "toolbar.h"
 #include "geanymenubuttonaction.h"
 
+/* Number of editor indicators to draw - limited as this can affect performance */
+#define GEANY_BUILD_ERR_HIGHLIGHT_MAX 50
+
 
 GeanyBuildInfo build_info = {GEANY_GBG_FT, 0, 0, NULL, GEANY_FILETYPES_NONE, NULL, 0};
 
@@ -968,6 +971,8 @@ static GPid build_run_cmd(GeanyDocument *doc, gint cmdindex)
 static void process_build_output_line(const gchar *str, gint color)
 {
 	gchar *msg, *tmp;
+	gchar *filename;
+	gint line;
 
 	msg = g_strdup(str);
 
@@ -976,34 +981,30 @@ static void process_build_output_line(const gchar *str, gint color)
 	if (! NZV(msg))
 		return;
 
-	if (build_info.message_count < GEANY_BUILD_ERR_HIGHLIGHT_MAX)
+	if (build_parse_make_dir(msg, &tmp))
 	{
-		gchar *filename;
-		gint line;
-
-		build_info.message_count++;
-
-		if (build_parse_make_dir(msg, &tmp))
-		{
-			setptr(current_dir_entered, tmp);
-		}
-		msgwin_parse_compiler_error_line(msg, current_dir_entered, &filename, &line);
-		if (line != -1 && filename != NULL)
-		{
-			GeanyDocument *doc = document_find_by_filename(filename);
-
-			if (doc && editor_prefs.use_indicators)
-			{
-				if (line > 0) /* some compilers, like pdflatex report errors on line 0 */
-					line--;   /* so only adjust the line number if it is greater than 0 */
-				editor_indicator_set_on_line(doc->editor, GEANY_INDICATOR_ERROR, line);
-			}
-			color = COLOR_RED;	/* error message parsed on the line */
-		}
-		g_free(filename);
+		setptr(current_dir_entered, tmp);
 	}
-	msgwin_compiler_add_string(color, msg);
+	msgwin_parse_compiler_error_line(msg, current_dir_entered, &filename, &line);
 
+	if (line != -1 && filename != NULL)
+	{
+		GeanyDocument *doc = document_find_by_filename(filename);
+
+		/* limit number of indicators */
+		if (doc && editor_prefs.use_indicators &&
+			build_info.message_count < GEANY_BUILD_ERR_HIGHLIGHT_MAX)
+		{
+			if (line > 0) /* some compilers, like pdflatex report errors on line 0 */
+				line--;   /* so only adjust the line number if it is greater than 0 */
+			editor_indicator_set_on_line(doc->editor, GEANY_INDICATOR_ERROR, line);
+		}
+		build_info.message_count++;
+		color = COLOR_RED;	/* error message parsed on the line */
+	}
+	g_free(filename);
+
+	msgwin_compiler_add_string(color, msg);
 	g_free(msg);
 }
 
