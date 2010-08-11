@@ -3263,25 +3263,25 @@ Switch to Editor                 F2                        Switches to editor wi
                                                            Also reshows the document statistics line
                                                            (after a short timeout).
 
-Switch to Scribble               F6                        Switches to scribble widget.
-
-Switch to VTE                    F4                        Switches to VTE widget.
-
 Switch to Search Bar             F7                        Switches to the search bar in the toolbar (if
                                                            visible).
 
-Switch to Sidebar                                          Focus the Sidebar.
+Switch to Message Window                                   Focus the Message Window's current tab.
 
 Switch to Compiler                                         Focus the Compiler message window tab.
 
 Switch to Messages                                         Focus the Messages message window tab.
 
-Switch to Message Window                                   Focus the Message Window's current tab.
+Switch to Scribble               F6                        Switches to scribble widget.
 
-Switch to Sidebar Document List                            Focus the Document list tab in the Sidebar
-                                                           (if visible).
+Switch to VTE                    F4                        Switches to VTE widget.
+
+Switch to Sidebar                                          Focus the Sidebar.
 
 Switch to Sidebar Symbol List                              Focus the Symbol list tab in the Sidebar
+                                                           (if visible).
+
+Switch to Sidebar Document List                            Focus the Document list tab in the Sidebar
                                                            (if visible).
 ================================ ========================= ==================================================
 
