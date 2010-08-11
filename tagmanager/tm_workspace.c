@@ -226,7 +226,7 @@ static void write_includes_file(FILE *fp, GList *includes_files)
 		size_t size;
 
 		size = fwrite(str, str_len, 1, fp);
-		free(str);
+		g_free(str);
 		node = g_list_next (node);
 	}
 }
@@ -302,6 +302,7 @@ gboolean tm_workspace_create_global_tags(const char *config_dir, const char *pre
 	{
  		int dirty_len = strlen(includes[idx_inc]);
 		char *clean_path = g_malloc(dirty_len - 1);
+
 		strncpy(clean_path, includes[idx_inc] + 1, dirty_len - 1);
 		clean_path[dirty_len - 2] = 0;
 
@@ -331,7 +332,7 @@ gboolean tm_workspace_create_global_tags(const char *config_dir, const char *pre
 			}
 		}
 		globfree(&globbuf);
-		free(clean_path);
+		g_free(clean_path);
   	}
   	else
 #endif

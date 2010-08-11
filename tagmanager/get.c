@@ -710,7 +710,7 @@ extern char *getArglistFromBufferPos(int startPosition, const char *tokenName)
 			memcpy(result, &File.fpBuffer[getBufPos()], pos2 - pos1 + 1);
 			result[pos2-pos1+1] = '\0';
 			arglist = getArglistFromStr(result, tokenName);
-			free(result);
+			g_free(result);
 		}
 	}
 	setBufPos (bufferOriginalPosition);
@@ -737,8 +737,8 @@ extern char *getArglistFromFilePos(fpos_t startPosition, const char *tokenName)
 		{
 			result[pos2-pos1+1] = '\0';
 			arglist = getArglistFromStr(result, tokenName);
-			free(result);
 		}
+		g_free(result);
 	}
 	fsetpos(File.fp, &originalPosition);
 	return arglist;

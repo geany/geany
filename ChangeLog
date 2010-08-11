@@ -3,6 +3,8 @@
  * src/highlighting.c:
    Re-enable fold.comment for the C lexer - it was disabled to prevent
    //{ explicit folding, but that also disables stream comments /* */.
+ * tagmanager/tm_workspace.c, tagmanager/get.c:
+   Use g_free instead of free (patch by Daniel Marjamäki, thanks).
 
 
 2010-06-18  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
