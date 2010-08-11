@@ -1,3 +1,11 @@
+2010-07-09  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/editor.c:
+   Fix scrolling the editor line in view after loading a session and
+   switching document tabs. Note this causes repainting so needs
+   improvement.
+
+
 2010-07-07  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/build.c, src/project.c, src/project.h:

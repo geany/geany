@@ -394,15 +394,6 @@ static void on_update_ui(GeanyEditor *editor, G_GNUC_UNUSED SCNotification *nt)
 
 	ui_update_statusbar(editor->document, pos);
 
-	/* Visible lines are only laid out accurately once [SCN_UPDATEUI] is sent,
-	 * so we need to only call sci_scroll_to_line here, because the document
-	 * may have line wrapping and folding enabled.
-	 * http://scintilla.sourceforge.net/ScintillaDoc.html#LineWrapping */
-	if (editor->scroll_percent > 0.0F)
-	{
-		editor_scroll_to_line(editor, -1, editor->scroll_percent);
-		editor->scroll_percent = -1.0F;	/* disable further scrolling */
-	}
 #if 0
 	/** experimental code for inverting selections */
 	{
@@ -908,6 +899,23 @@ static gboolean on_editor_notify(G_GNUC_UNUSED GObject *object, GeanyEditor *edi
 
 		case SCN_UPDATEUI:
 			on_update_ui(editor, nt);
+			break;
+
+		case SCN_PAINTED:
+			/* Visible lines are only laid out accurately just before painting,
+			 * so we need to only call editor_scroll_to_line here, because the document
+			 * may have line wrapping and folding enabled.
+			 * http://scintilla.sourceforge.net/ScintillaDoc.html#LineWrapping
+			 * This is important e.g. when loading a session and switching pages
+			 * and having the cursor scroll in view. */
+			 /* FIXME: Really we want to do this just before painting, not after it
+			  * as it will cause repainting. */
+			if (editor->scroll_percent > 0.0F)
+			{
+				editor_scroll_to_line(editor, -1, editor->scroll_percent);
+				/* disable further scrolling */
+				editor->scroll_percent = -1.0F;
+			}
 			break;
 
  		case SCN_MODIFIED:
@@ -4699,13 +4707,13 @@ static gboolean on_editor_focus_in(GtkWidget *widget, GdkEventFocus *event, gpoi
 }
 
 
-/* This is just to catch any uncolourised documents being drawn that didn't receive focus
- * for some reason, maybe it's not necessary but just in case. */
 static gboolean on_editor_expose_event(GtkWidget *widget, GdkEventExpose *event,
 		gpointer user_data)
 {
 	GeanyEditor *editor = user_data;
 
+	/* This is just to catch any uncolourised documents being drawn that didn't receive focus
+	 * for some reason, maybe it's not necessary but just in case. */
 	editor_check_colourise(editor);
 	return FALSE;
 }
