@@ -1,3 +1,10 @@
+2010-07-01  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/printing.c, doc/geany.txt, doc/geany.html:
+   Always use white background color when printing (except for text
+   with a white foreground) to save ink (should fix #2968998).
+
+
 2010-06-30  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/highlighting.c:

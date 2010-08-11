@@ -491,6 +491,9 @@ static void begin_print(GtkPrintOperation *operation, GtkPrintContext *context, 
 			dinfo->styles[i][BACK] = ROTATE_RGB(scintilla_send_message(
 				dinfo->doc->editor->sci, SCI_STYLEGETBACK, i, 0));
 		}
+		/* use white background color unless foreground is white to save ink */
+		if (dinfo->styles[i][FORE] != 0xffffff)
+			dinfo->styles[i][BACK] = 0xffffff;
 		dinfo->styles[i][BOLD] =
 			scintilla_send_message(dinfo->doc->editor->sci, SCI_STYLEGETBOLD, i, 0);
 		dinfo->styles[i][ITALIC] =

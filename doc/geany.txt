@@ -2775,6 +2775,11 @@ Since Geany 0.13 there has been printing support using GTK's printing API.
 The printed page(s) will look nearly the same as on your screen in Geany.
 Additionally, there are some options to modify the printed page(s).
 
+.. note::
+    The background text color is set to white, except for text with
+    a white foreground. This allows dark color schemes to save ink
+    when printing.
+
 You can define whether to print line numbers, page numbers at the bottom of
 each page and whether to print a page header on each page. This header
 contains the filename of the printed document, the current page number and
