@@ -1649,7 +1649,7 @@ static gboolean compile_regex(regex_t *regex, const gchar *str, gint sflags)
 		rflags |= REG_ICASE;
 	if (sflags & (SCFIND_WHOLEWORD | SCFIND_WORDSTART))
 	{
-		g_warning("Unsupported regex flags found!");
+		geany_debug("%s: Unsupported regex flags found!", G_STRFUNC);
 	}
 
 	err = regcomp(regex, str, rflags);
