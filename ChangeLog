@@ -4,6 +4,8 @@
    Fix not loading plugins built against a newer API when Geany doesn't
    provide the required version given in PLUGIN_VERSION_CHECK().
    Improve documentation for PLUGIN_VERSION_CHECK().
+ * plugins/filebrowser.c:
+   Allow Find in Files when no items are selected.
 
 
 2010-06-16  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

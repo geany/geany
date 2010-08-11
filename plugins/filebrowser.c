@@ -545,7 +545,9 @@ static void on_find_in_files(GtkMenuItem *menuitem, gpointer user_data)
 	gboolean is_dir = FALSE;
 
 	treesel = gtk_tree_view_get_selection(GTK_TREE_VIEW(file_view));
-	if (! check_single_selection(treesel))
+	/* allow 0 or 1 selections */
+	if (gtk_tree_selection_count_selected_rows(treesel) > 0 &&
+		! check_single_selection(treesel))
 		return;
 
 	list = gtk_tree_selection_get_selected_rows(treesel, &model);
