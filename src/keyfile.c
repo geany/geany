@@ -938,7 +938,7 @@ gboolean configuration_load(void)
 	if (! g_file_test(configfile, G_FILE_TEST_IS_REGULAR | G_FILE_TEST_IS_SYMLINK))
 	{	/* config file does not (yet) exist, so try to load a global config file which may be */
 		/* created by distributors */
-		geany_debug("No config file found, try to use global configuration.");
+		geany_debug("No user config file found, trying to use global configuration.");
 		setptr(configfile, g_strconcat(app->datadir, G_DIR_SEPARATOR_S "geany.conf", NULL));
 	}
 
