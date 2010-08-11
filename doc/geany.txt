@@ -1229,16 +1229,20 @@ Filtering out version control files
 ```````````````````````````````````
 
 When using the *Recurse in subfolders* option with a directory that's
-under version control, you can set the *Extra options* field to use
-grep's ``--exclude`` flag to filter out filenames.
+under version control, you can set the *Extra options* field to filter
+out version control files.
+
+If you have GNU Grep >= 2.5.2 you can use the ``--exclude-dir``
+argument to filter out CVS and hidden directories like ``.svn``.
+
+Example: ``--exclude-dir=.svn --exclude-dir=CVS``
+
+If you have an older Grep, you can try using the ``--exclude`` flag
+to filter out filenames.
 
 SVN Example: ``--exclude=*.svn-base``
 
-The --exclude argument only matches the file name part, not the path. If
-you have GNU Grep >= 2.5.2 you can use the ``--exclude-dir`` argument to
-filter out CVS and hidden directories like ``.svn``.
-
-Example: ``--exclude-dir=.* --exclude-dir=CVS``
+The --exclude argument only matches the file name part, not the path.
 
 
 Replace

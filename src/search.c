@@ -1447,6 +1447,7 @@ search_find_in_files(const gchar *utf8_search_text, const gchar *dir, const gcha
 	/* finally add the arguments(files to be searched) */
 	if (strstr(argv_prefix[1], "r"))	/* recursive option set */
 	{
+		/* Use '.' so we get relative paths in the output */
 		argv_prefix[i++] = g_strdup(".");
 		argv_prefix[i++] = NULL;
 		argv = argv_prefix;

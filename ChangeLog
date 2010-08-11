@@ -1,3 +1,9 @@
+2010-07-06  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/search.c, doc/geany.txt, doc/geany.html:
+   Fix Grep --exclude-dir example.
+
+
 2010-07-02  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * doc/geany.txt, doc/geany.html:
