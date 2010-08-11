@@ -1616,7 +1616,11 @@ static void set_stop_button(gboolean stop)
 
 static void on_set_build_commands_activate(GtkWidget *w, gpointer u)
 {
-	show_build_commands_dialog();
+	/* For now, just show the project dialog */
+	if (app->project)
+		project_build_properties();
+	else
+		show_build_commands_dialog();
 }
 
 

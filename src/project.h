@@ -74,6 +74,8 @@ void project_close(gboolean open_default);
 
 void project_properties(void);
 
+void project_build_properties(void);
+
 gboolean project_ask_close(void);
 
 
