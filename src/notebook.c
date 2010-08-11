@@ -499,7 +499,7 @@ gint notebook_new_tab(GeanyDocument *this)
 		image = gtk_image_new_from_stock(GTK_STOCK_CLOSE, GTK_ICON_SIZE_MENU);
 		gtk_container_add(GTK_CONTAINER(btn), image);
 
-		align = gtk_alignment_new(1.0, 0.0, 0.0, 0.0);
+		align = gtk_alignment_new(1.0, 0.5, 0.0, 0.0);
 		gtk_container_add(GTK_CONTAINER(align), btn);
 		gtk_box_pack_start(GTK_BOX(hbox), align, TRUE, TRUE, 0);
 

@@ -1,3 +1,10 @@
+2010-06-16  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/notebook.c:
+   Align notebook tab close buttons centred vertically - thanks to
+   Robux.Biz (galyuk).
+
+
 2010-06-12  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * po/POTFILES.skip:
