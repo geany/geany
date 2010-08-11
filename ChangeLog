@@ -1,3 +1,10 @@
+2010-07-02  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * doc/geany.txt, doc/geany.html:
+   Fix wording - restarting is required for hidden prefs.
+   File templates don't need manual reloading anymore.
+
+
 2010-07-01  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/printing.c, doc/geany.txt, doc/geany.html:

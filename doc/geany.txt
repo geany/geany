@@ -4000,8 +4000,7 @@ Hidden preferences
 
 There are some rarely used preferences that are not shown in the Preferences
 dialog. These can be set by editing the preferences file, then
-selecting *Tools->Reload Configuration* or restarting Geany. Search for the
-key name, then edit the value. Example:
+restarting Geany. Search for the key name, then edit the value. Example:
 
     ``brace_match_ltgt=true``
 
@@ -4192,8 +4191,7 @@ use them, choose the *New (with Template)* menu item from the *File*
 menu.
 
 By default, file templates are installed for some filetypes. Custom
-file templates can be added by creating the appropriate template file
-and then selecting *Tools->Reload Configuration* or restarting Geany. You can
+file templates can be added by creating the appropriate template file. You can
 also edit the default file templates.
 
 The file's contents are just the text to place in the document, with
