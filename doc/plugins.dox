@@ -43,7 +43,7 @@
  * @section pluginsupport Plugin Support
  * - @link howto Plugin HowTo @endlink - get started
  * - @link pluginsymbols.c Plugin Symbols @endlink
- * - @link plugindata.h Main Datatypes and Macros @endlink
+ * - @link plugindata.h Plugin Datatypes and Macros @endlink
  * - @link signals Plugin Signals @endlink
  * - @link pluginutils.h Plugin Utility Functions @endlink
  * - @link guidelines Plugin Writing Guidelines @endlink

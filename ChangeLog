@@ -1,3 +1,11 @@
+2010-06-18  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/plugindata.h, src/plugins.c, doc/plugins.dox:
+   Fix not loading plugins built against a newer API when Geany doesn't
+   provide the required version given in PLUGIN_VERSION_CHECK().
+   Improve documentation for PLUGIN_VERSION_CHECK().
+
+
 2010-06-16  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/notebook.c:

@@ -467,7 +467,7 @@ plugin_check_version(GModule *module)
 				"release of Geany - recompile it.", g_module_name(module));
 			return FALSE;
 		}
-		if (result > 0)
+		if (result > GEANY_API_VERSION)
 		{
 			geany_debug("Plugin \"%s\" requires a newer version of Geany (API >= v%d).",
 				g_module_name(module), result);
