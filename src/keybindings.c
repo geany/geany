@@ -1990,8 +1990,8 @@ static gboolean cb_func_goto_action(guint key_id)
 			{
 				GtkWidget *wid = toolbar_get_widget_child_by_name("GotoEntry");
 
-				/* use toolbar item if shown */
-				if (wid)
+				/* use toolbar item if shown & not in the drop down overflow menu */
+				if (wid && GTK_WIDGET_MAPPED(wid))
 				{
 					gtk_widget_grab_focus(wid);
 					return TRUE;
