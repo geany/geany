@@ -1455,7 +1455,7 @@ search_find_in_files(const gchar *utf8_search_text, const gchar *dir, const gcha
 
 	if (argv == NULL)	/* no files */
 	{
-		g_strfreev(argv);
+		g_free(search_text);
 		return FALSE;
 	}
 
@@ -1494,6 +1494,7 @@ search_find_in_files(const gchar *utf8_search_text, const gchar *dir, const gcha
 		utils_free_pointers(2, str, utf8_str, NULL);
 		ret = TRUE;
 	}
+	g_free(search_text);
 	g_strfreev(argv);
 	return ret;
 }
