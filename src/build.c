@@ -158,7 +158,7 @@ static gchar *id_to_str(GeanyBuildCommand *bc, gint id)
 
 static gchar *buildcmd_label(GeanyBuildCommand *bc)
 {
-	return _(id_to_str(bc, GEANY_BC_LABEL));
+	return id_to_str(bc, GEANY_BC_LABEL);
 }
 
 
@@ -2664,7 +2664,10 @@ void build_init(void)
 		cmd->exists = TRUE;
 		for (k = 0; k < GEANY_BC_CMDENTRIES_COUNT; k++)
 		{
-			cmd->entries[k] = g_strdup(default_cmds[cmdindex].entries[k]);
+			if (k == GEANY_BC_LABEL)
+				cmd->entries[k] = g_strdup(_(default_cmds[cmdindex].entries[k]));
+			else
+				cmd->entries[k] = g_strdup(default_cmds[cmdindex].entries[k]);
 		}
 	}
 

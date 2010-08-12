@@ -1,3 +1,9 @@
+2010-07-11  Lex Trotman  <elextr(at)gmail(dot)com>
+
+ * src/build.c:
+   Fix build menu translation problems.
+
+
 2010-07-09  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/editor.c:
