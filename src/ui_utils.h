@@ -211,7 +211,7 @@ void ui_editable_insert_text_callback(GtkEditable *editable, gchar *new_text,
 
 GtkWidget *ui_label_new_bold(const gchar *text);
 
-GtkWidget *ui_label_set_markup(GtkLabel *label, const gchar *format, ...) G_GNUC_PRINTF(2, 3);
+void ui_label_set_markup(GtkLabel *label, const gchar *format, ...) G_GNUC_PRINTF(2, 3);
 
 /* End of general widget functions */
 

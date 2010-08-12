@@ -2293,8 +2293,7 @@ void ui_menu_sort_by_label(GtkMenu *menu)
 }
 
 
-/* return value is for macros */
-GtkWidget *ui_label_set_markup(GtkLabel *label, const gchar *format, ...)
+void ui_label_set_markup(GtkLabel *label, const gchar *format, ...)
 {
 	va_list a;
 	gchar *text;
@@ -2306,7 +2305,6 @@ GtkWidget *ui_label_set_markup(GtkLabel *label, const gchar *format, ...)
 	gtk_label_set_text(label, text);
 	gtk_label_set_use_markup(label, TRUE);
 	g_free(text);
-	return GTK_WIDGET(label);
 }
 
 
@@ -2316,7 +2314,8 @@ GtkWidget *ui_label_new_bold(const gchar *text)
 	gchar *label_text;
 
 	label_text = g_markup_escape_text(text, -1);
-	label = ui_label_set_markup(GTK_LABEL(gtk_label_new(NULL)), "<b>%s</b>", label_text);
+	label = gtk_label_new(NULL);
+	ui_label_set_markup(GTK_LABEL(label), "<b>%s</b>", label_text);
 	g_free(label_text);
 	return label;
 }
