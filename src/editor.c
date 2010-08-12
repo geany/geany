@@ -1904,7 +1904,6 @@ static gboolean autocomplete_doc_word(GeanyEditor *editor, gchar *root, gsize ro
 	if (!words)
 	{
 		scintilla_send_message(sci, SCI_AUTOCCANCEL, 0, 0);
-		autocompletion_mode = AUTOC_CANCELLED;
 		return FALSE;
 	}
 
