@@ -1571,6 +1571,18 @@ gboolean filetypes_parse_error_message(GeanyFiletype *ft, const gchar *message,
 }
 
 
+#ifdef G_OS_WIN32
+static void convert_filetype_extensions_to_lower_case(gchar **patterns, gsize len)
+{
+	guint i;
+	for (i = 0; i < len; i++)
+	{
+		setptr(patterns[i], g_ascii_strdown(patterns[i], -1));
+	}
+}
+#endif
+
+
 void filetypes_read_extensions(void)
 {
 	guint i;
@@ -1597,6 +1609,9 @@ void filetypes_read_extensions(void)
 		{
 			g_strfreev(filetypes[i]->pattern);
 			filetypes[i]->pattern = list;
+#ifdef G_OS_WIN32
+			convert_filetype_extensions_to_lower_case(filetypes[i]->pattern, len);
+#endif
 		}
 		else
 			g_strfreev(list);
