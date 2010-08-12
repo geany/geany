@@ -1,3 +1,9 @@
+2010-08-12  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/search.c:
+   Fix a memory leak based on input by Daniel Marjamäki. Thanks.
+
+
 2010-08-10  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/editor.c:
