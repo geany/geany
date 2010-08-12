@@ -208,8 +208,7 @@ void ui_entry_add_clear_icon(GtkEntry *entry);
 void ui_editable_insert_text_callback(GtkEditable *editable, gchar *new_text,
 									  gint new_text_len, gint *position, gpointer data);
 
-#define ui_label_new_bold(text)\
-	ui_label_set_markup(GTK_LABEL(gtk_label_new(NULL)), "<b>%s</b>", text);
+GtkWidget *ui_label_new_bold(const gchar *text);
 
 GtkWidget *ui_label_set_markup(GtkLabel *label, const gchar *format, ...) G_GNUC_PRINTF(2, 3);
 
