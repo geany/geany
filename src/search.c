@@ -1436,7 +1436,7 @@ search_find_in_files(const gchar *utf8_search_text, const gchar *dir, const gcha
 
 	i++;	/* correct for tool_prefs.grep_cmd */
 	argv_prefix[i++] = g_strdup("--");
-	argv_prefix[i++] = g_strdup(search_text);
+	argv_prefix[i++] = search_text;
 
 	/* finally add the arguments(files to be searched) */
 	if (strstr(argv_prefix[1], "r"))	/* recursive option set */
@@ -1455,7 +1455,6 @@ search_find_in_files(const gchar *utf8_search_text, const gchar *dir, const gcha
 
 	if (argv == NULL)	/* no files */
 	{
-		g_free(search_text);
 		return FALSE;
 	}
 
@@ -1494,7 +1493,6 @@ search_find_in_files(const gchar *utf8_search_text, const gchar *dir, const gcha
 		utils_free_pointers(2, str, utf8_str, NULL);
 		ret = TRUE;
 	}
-	g_free(search_text);
 	g_strfreev(argv);
 	return ret;
 }
