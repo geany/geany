@@ -1,3 +1,10 @@
+2010-08-10  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/editor.c:
+   Revert r4840 scope completion mode as it sometimes breaks
+   autocompletion.
+
+
 2010-08-05  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/ui_utils.c, src/ui_utils.h:
