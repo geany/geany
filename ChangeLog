@@ -1,7 +1,14 @@
+2010-08-13  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * configure.ac:
+   Check for git-svn repo, not just git because find-rev doesn't
+   always fail with a git-only repo.
+
+
 2010-08-12  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * src/search.c:
-   Fix a memory leak based on input by Daniel Marjamäki. Thanks. 
+   Fix a memory leak based on input by Daniel Marjamäki. Thanks.
 
 
 2010-08-11  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

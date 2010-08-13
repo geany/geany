@@ -53,9 +53,13 @@ REVISION="r0"
 GIT=`which git 2>/dev/null`
 if test -d ".git" -a "x${GIT}" != "x" -a -x "${GIT}"
 then
-	REVISION=r`git svn find-rev origin/trunk 2>/dev/null ||
+	# check for git-svn repo first - find-rev (v1.5.4.1) doesn't always fail with git-only repo
+	git svn info &>/dev/null
+	if test "x$?" == "x0"; then
+		REVISION=r`git svn find-rev origin/trunk 2>/dev/null ||
 				git svn find-rev trunk 2>/dev/null || git svn find-rev HEAD 2>/dev/null ||
 				git svn find-rev master 2>/dev/null || echo 0`
+	fi
 fi
 if test "x${REVISION}" = "xr0"
 then
