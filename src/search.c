@@ -1030,7 +1030,7 @@ static void create_fif_dialog(void)
 }
 
 
-/* dir is the directory to search in (UTF-8 encoding), maybe NULL to determine it the usual way
+/* dir is the directory to search in (UTF-8 encoding), may be NULL to determine it the usual way
  * by using the current file's path */
 void search_show_find_in_files_dialog(const gchar *dir)
 {
