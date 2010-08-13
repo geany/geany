@@ -5,8 +5,8 @@
 A ICON MOVEABLE PURE LOADONCALL DISCARDABLE "../icons/geany.ico"
 
 1 VERSIONINFO
-FILEVERSION 0,19,0,0
-PRODUCTVERSION 0,19,0,0
+FILEVERSION 0,19,1,0
+PRODUCTVERSION 0,19,1,0
 FILETYPE VFT_APP
 {
   BLOCK "StringFileInfo"
@@ -14,14 +14,14 @@ FILETYPE VFT_APP
 		 BLOCK "040704E4"
 		 {
 			 VALUE "CompanyName", ""
-			 VALUE "FileVersion", "0.19"
+			 VALUE "FileVersion", "0.19.1"
 			 VALUE "FileDescription", "Geany"
 			 VALUE "InternalName", "geany"
 			 VALUE "LegalCopyright", "Copyright 2005-2010 by the Geany developers"
 			 VALUE "LegalTrademarks", ""
 			 VALUE "OriginalFilename", "geany"
 			 VALUE "ProductName", "geany"
-			 VALUE "ProductVersion", "0.19"
+			 VALUE "ProductVersion", "0.19.1"
 		 }
 	 }
 }

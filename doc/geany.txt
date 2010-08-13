@@ -1,4 +1,4 @@
-.. |(version)| replace:: 0.19
+.. |(version)| replace:: 0.19.1
 
 =======
  Geany
@@ -2759,7 +2759,7 @@ You can also use underlines in the labels to set mnemonic characters.
 Configuration Files
 ```````````````````
 
-The configurable Build Menu capability was introduced in Geany V0.19 and
+The configurable Build Menu capability was introduced in Geany 0.19 and
 required a new section to be added to the configuration files (See
 `Preferences File Format`_).  Geany will still load older format project,
 preferences and filetype file settings and will attempt to map them into the new
@@ -3649,7 +3649,7 @@ lexer_filetype
 [build_settings] Section
 ````````````````````````
 
-As of Geany v0.19 this section is supplemented by the `[build-menu] Section`_.
+As of Geany 0.19 this section is supplemented by the `[build-menu] Section`_.
 Values that are set in the [build-menu] section will override those in this section.
 
 error_regex

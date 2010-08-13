@@ -55,7 +55,7 @@ from TaskGen import taskgen, feature
 
 
 APPNAME = 'geany'
-VERSION = '0.19'
+VERSION = '0.19.1'
 
 srcdir = '.'
 blddir = '_build_'

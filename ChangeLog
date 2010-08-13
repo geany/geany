@@ -1,3 +1,10 @@
+2010-08-13  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * win32-config.h, geany.nsi, configure.ac, doc/geany.txt,
+   doc/geany.html, wscript, geany_private.rc:
+   Version bump.
+
+
 2010-08-12  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/search.c:
