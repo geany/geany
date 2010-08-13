@@ -1,3 +1,39 @@
+Geany 0.19.1 (TBA)
+
+    Fixes:
+    * Fix broken autocompletion after using scope completion.
+    * Fix scrolling the editor line in view (e.g. after loading a session
+      and switching document tabs).
+    * Fix using filetype extension patterns with upper case letters on
+      Windows (#3028856).
+    * Re-enable comment folding.
+    * Fix not loading plugins built against a newer API when Geany doesn't
+      provide the required version given in PLUGIN_VERSION_CHECK().
+    * Focus toolbar item when pressing Go to Line keybinding only when
+      it's not in the toolbar's drop down overflow menu (#3027454).
+    * Escape the name of the current document for markup when using
+      document name for menu items (#3038844).
+    * File Browser: Allow Find in Files when no items are selected.
+    * Fix build menu translation problems.
+    * Fix a memory leak (thanks to Daniel Marjamäki).
+    * Use g_free instead of free (patch by Daniel Marjamäki, thanks).
+
+    Tweaks:
+    * Always use white background color when printing (except for text
+      with a white foreground) to save ink (#2968998).
+    * Limit build error editor indicators to 50, but parse all errors in
+      the Compiler tab (#3019823).
+    * Align notebook tab close buttons centred vertically (thanks to
+      Robux.Biz (galyuk)).
+    * Show the Project Properties build tab when choosing 'Set Build
+      Commands' when a project is open to prevent confusion with
+      non-project commands.
+
+    Manual:
+    * Fix wording - restarting is required for hidden prefs.
+    * Fix Grep --exclude-dir example.
+
+
 Geany 0.19 (June 12, 2010)
 
     General:
