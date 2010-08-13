@@ -15,6 +15,8 @@ Geany 0.19.1 (TBA)
       document name for menu items (#3038844).
     * File Browser: Allow Find in Files when no items are selected.
     * Fix build menu translation problems.
+    * Fix segfault on Tools->Reload Configuration when no documents are
+      open (#3037079).
     * Fix a memory leak (thanks to Daniel Marjamäki).
     * Use g_free instead of free (patch by Daniel Marjamäki, thanks).
 

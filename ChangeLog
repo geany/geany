@@ -3,6 +3,9 @@
  * win32-config.h, geany.nsi, configure.ac, doc/geany.txt,
    doc/geany.html, wscript, geany_private.rc:
    Version bump.
+ * src/filetypes.c, NEWS:
+   Fix segfault on Tools->Reload Configuration when no documents are
+   open (#3037079).
 
 
 2010-08-12  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
