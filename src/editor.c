@@ -1694,9 +1694,9 @@ void editor_find_current_word_sciwc(GeanyEditor *editor, gint pos, gchar *word, 
  *
  *  @param editor The editor to operate on.
  *  @param pos The position where the word should be read from.
- *             Maybe @c -1 to use the current position.
+ *             May be @c -1 to use the current position.
  *  @param wordchars The wordchars to separate words. wordchars mean all characters to count
- *                   as part of a word. Maybe @c NULL to use the default wordchars,
+ *                   as part of a word. May be @c NULL to use the default wordchars,
  *                   see @ref GEANY_WORDCHARS.
  *
  *  @return A newly-allocated string containing the word at the given @a pos or @c NULL.
