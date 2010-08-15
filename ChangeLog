@@ -2,6 +2,10 @@
 
  * wscript:
    Check for libsocket on OpenSolaris to fix build.
+ * src/encodings.c:
+   Rewrite the logic to auto detect encodings a bit to make it more
+   readable and fix a slightly wrong detection on Windows
+   (closes #3019573).
 
 
 2010-08-13  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
