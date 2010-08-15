@@ -90,6 +90,8 @@
 	geany_functions->p_editor->editor_insert_text_block
 #define editor_get_eol_char_mode \
 	geany_functions->p_editor->editor_get_eol_char_mode
+#define editor_goto_pos \
+	geany_functions->p_editor->editor_goto_pos
 #define scintilla_send_message \
 	geany_functions->p_scintilla->scintilla_send_message
 #define scintilla_new \

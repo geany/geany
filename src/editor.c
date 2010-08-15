@@ -4620,8 +4620,16 @@ gboolean editor_goto_line(GeanyEditor *editor, gint line_no, gint offset)
 }
 
 
-/* Move to position @a pos, switching to the document if necessary,
- * setting a marker if @a mark is set. */
+/** Moves to position @a pos, switching to the document if necessary,
+ *  setting a marker if @a mark is set.
+ *
+ * @param editor Editor.
+ * @param pos The position.
+ * @param mark Whether to set a mark on the position.
+ * @return @c TRUE if action has been performed, otherwise @c FALSE.
+ *
+ *  @since 0.20
+ **/
 gboolean editor_goto_pos(GeanyEditor *editor, gint pos, gboolean mark)
 {
 	gint page_num;
