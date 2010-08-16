@@ -1659,8 +1659,12 @@ void filetypes_reload(void)
 		/* filetypes_load_config() will skip not loaded filetypes */
 		filetypes_load_config(i, TRUE);
 	}
-	/* update document styling */
+
 	current_doc = document_get_current();
+	if (!current_doc)
+		return;
+
+	/* update document styling */
 	foreach_document(i)
 	{
 		if (current_doc != documents[i])
