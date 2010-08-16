@@ -7,19 +7,19 @@ msgid ""
 msgstr ""
 "Project-Id-Version: geany 0.19\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-05-23 10:05+0200\n"
+"POT-Creation-Date: 2010-08-16 21:09+0200\n"
 "PO-Revision-Date: 2010-05-21 10:15+0300\n"
 "Last-Translator: Yura Siamashka <yurand2@gmail.com>\n"
 "Language-Team: Belarusian <geany-i18n@uvena.de>\n"
+"Language: be\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: be\n"
 "X-Poedit-Language: Belarusian\n"
 "X-Poedit-Country: BELARUS\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%"
-"10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
 #: ../geany.desktop.in.h:1
 msgid "A fast and lightweight IDE using GTK2"
@@ -33,68 +33,68 @@ msgstr "Geany"
 msgid "Integrated Development Environment"
 msgstr "Інтэграванае асяроддзе распрацоўкі"
 
-#: ../src/about.c:145
+#: ../src/about.c:146
 msgid "About Geany"
 msgstr "Пра Geany"
 
-#: ../src/about.c:195
+#: ../src/about.c:196
 msgid "A fast and lightweight IDE"
 msgstr "Хуткае і легкаважнае асяроддзе распрацоўкі"
 
-#: ../src/about.c:216
+#: ../src/about.c:217
 #, c-format
 msgid "(built on or after %s)"
 msgstr "(пабудавана %s або пазней)"
 
 #. gtk_container_add(GTK_CONTAINER(info_box), cop_label);
-#: ../src/about.c:247
+#: ../src/about.c:248
 msgid "Info"
 msgstr "Інфармацыя"
 
-#: ../src/about.c:263
+#: ../src/about.c:264
 msgid "Developers"
 msgstr "Распрацоўшчыкі"
 
-#: ../src/about.c:272
+#: ../src/about.c:273
 msgid "maintainer"
 msgstr "вядучы распрацоўшчык"
 
-#: ../src/about.c:280
+#: ../src/about.c:281
 msgid "developer"
 msgstr "распрацоўшчык"
 
-#: ../src/about.c:288
+#: ../src/about.c:289
 msgid "translation maintainer"
 msgstr "падтрымка перакладу"
 
-#: ../src/about.c:297
+#: ../src/about.c:298
 msgid "Translators"
 msgstr "Перакладчыкі"
 
-#: ../src/about.c:317
+#: ../src/about.c:318
 msgid "Previous Translators"
 msgstr "Былыя перакладчыкі"
 
-#: ../src/about.c:338
+#: ../src/about.c:339
 msgid "Contributors"
 msgstr "Удзельнікі"
 
-#: ../src/about.c:348
+#: ../src/about.c:349
 #, c-format
 msgid ""
 "Some of the many contributors (for a more detailed list, see the file %s):"
 msgstr ""
 "Некаторыя з шматлікіх удзельнікаў (больш дэталёвы спіс глядзі ў файле %s):"
 
-#: ../src/about.c:374
+#: ../src/about.c:375
 msgid "Credits"
 msgstr "Аўтары"
 
-#: ../src/about.c:388
+#: ../src/about.c:389
 msgid "License"
 msgstr "Ліцэнзія"
 
-#: ../src/about.c:397
+#: ../src/about.c:398
 msgid ""
 "License text could not be found, please visit http://www.gnu.org/licenses/"
 "gpl-2.0.txt to view it online."
@@ -103,41 +103,41 @@ msgstr ""
 "licenses/gpl-2.0.txt, каб азнаёміцца з ім."
 
 #. fall back to %d
-#: ../src/build.c:635
+#: ../src/build.c:638
 #, c-format
 msgid "failed to substitute %%p, no project active"
 msgstr "Немагчыма замяніць %%p, няма актыўнага праекта"
 
-#: ../src/build.c:673
+#: ../src/build.c:676
 msgid "Process failed, no working directory"
 msgstr "Працэс скончыўся непаспяхова, няма працоўнай дырэкторыі"
 
-#: ../src/build.c:699
+#: ../src/build.c:702
 #, c-format
 msgid "%s (in directory: %s)"
 msgstr "%s (у дырэкторыі: %s)"
 
-#: ../src/build.c:719 ../src/build.c:944 ../src/search.c:1475
+#: ../src/build.c:722 ../src/build.c:947 ../src/search.c:1475
 #, c-format
 msgid "Process failed (%s)"
 msgstr "Працэс скончыўся непаспяхова (%s)"
 
-#: ../src/build.c:790
+#: ../src/build.c:793
 #, c-format
 msgid "Failed to change the working directory to \"%s\""
 msgstr "Не атрымалася змяніць працоўную дырэкторыю на \"%s\""
 
-#: ../src/build.c:819
+#: ../src/build.c:822
 #, c-format
 msgid "Failed to execute \"%s\" (start-script could not be created)"
 msgstr "Памылка запуску \"%s\" (стартавы скрыпт не можа быць створаны)"
 
-#: ../src/build.c:873
+#: ../src/build.c:876
 msgid ""
 "Could not execute the file in the VTE because it probably contains a command."
 msgstr "Немагчыма запусціць файл у VTE, бо ён, магчыма, утрымлівае каманду."
 
-#: ../src/build.c:911
+#: ../src/build.c:914
 #, c-format
 msgid ""
 "Could not find terminal \"%s\" (check path for Terminal tool setting in "
@@ -145,113 +145,113 @@ msgid ""
 msgstr ""
 "Немагчыма знайсці тэрмінал '%s' (праверце шлях да тэрмінала ў уласцівасцях)"
 
-#: ../src/build.c:1081
+#: ../src/build.c:1084
 msgid "Compilation failed."
 msgstr "Кампіляцыя скончылася непаспяхова."
 
-#: ../src/build.c:1095
+#: ../src/build.c:1098
 msgid "Compilation finished successfully."
 msgstr "Кампіляцыя скончылася паспяхова."
 
-#: ../src/build.c:1252
+#: ../src/build.c:1255
 msgid "Custom Text"
 msgstr "Свой тэкст"
 
-#: ../src/build.c:1253
+#: ../src/build.c:1256
 msgid "Enter custom text here, all entered text is appended to the command."
 msgstr "Увядзіце тут свой тэкст,  увесь уведзены тэкст далучыцца да каманды."
 
-#: ../src/build.c:1331
+#: ../src/build.c:1334
 msgid "_Next Error"
 msgstr "Наступная памылка"
 
-#: ../src/build.c:1333
+#: ../src/build.c:1336
 msgid "_Previous Error"
 msgstr "Папярэдняя памылка"
 
-#: ../src/build.c:1343
+#: ../src/build.c:1346
 msgid "_Set Build Commands"
 msgstr "Усталяваць каманды будоўлі"
 
-#: ../src/build.c:1623 ../src/toolbar.c:373
+#: ../src/build.c:1630 ../src/toolbar.c:373
 msgid "Build the current file"
 msgstr "Будаваць цяперашні файл"
 
-#: ../src/build.c:1637
+#: ../src/build.c:1644
 msgid "Build the current file with Make and the default target"
 msgstr "Будаваць цяперашні файл, выкарыстоўваючы make і мэту зборкі па змоўку"
 
-#: ../src/build.c:1639
+#: ../src/build.c:1646
 msgid "Build the current file with Make and the specified target"
 msgstr "Будаваць цяперашні файл, выкарыстоўваючы make і указаную мэту"
 
-#: ../src/build.c:1641
+#: ../src/build.c:1648
 msgid "Compile the current file with Make"
 msgstr "Скампіляваць цяперашні файл, выкарыстоўваючы make"
 
-#: ../src/build.c:1668
+#: ../src/build.c:1675
 #, c-format
 msgid "Process could not be stopped (%s)."
 msgstr "Працэс немагчыма спыніць (%s)."
 
-#: ../src/build.c:1685 ../src/build.c:1697
+#: ../src/build.c:1692 ../src/build.c:1704
 msgid "No more build errors."
 msgstr "Памылак будоўлі больш няма."
 
-#: ../src/build.c:1778
+#: ../src/build.c:1785
 msgid "Set menu item label"
 msgstr "Усталяваць надпіс элемента меню"
 
-#: ../src/build.c:1788
+#: ../src/build.c:1795
 msgid "Item"
 msgstr "Элемент"
 
-#: ../src/build.c:1789 ../src/symbols.c:650
+#: ../src/build.c:1796 ../src/symbols.c:650
 msgid "Label"
 msgstr "Метка"
 
-#: ../src/build.c:1790 ../src/symbols.c:645
+#: ../src/build.c:1797 ../src/symbols.c:645
 msgid "Command"
 msgstr "Каманда"
 
-#: ../src/build.c:1791
+#: ../src/build.c:1798
 msgid "Working directory"
 msgstr "Працоўная дырэкторыя"
 
-#: ../src/build.c:1792
+#: ../src/build.c:1799
 msgid "Clear"
 msgstr "Ачысціць"
 
-#: ../src/build.c:1831
+#: ../src/build.c:1838
 msgid "Click to set menu item label"
 msgstr "Пстрыкніце для ўсталявання надпісу элемента меню"
 
-#: ../src/build.c:1904 ../src/build.c:1906
+#: ../src/build.c:1911 ../src/build.c:1913
 #, c-format
 msgid "%s Commands"
 msgstr "%s Каманды"
 
-#: ../src/build.c:1906
+#: ../src/build.c:1913
 msgid "No Filetype"
 msgstr "Без тыпа файла"
 
-#: ../src/build.c:1914 ../src/build.c:1949
+#: ../src/build.c:1921 ../src/build.c:1956
 msgid "Error Regular Expression:"
 msgstr "Памылка ў сталым выразе:"
 
-#: ../src/build.c:1942
+#: ../src/build.c:1949
 msgid "Non-Filetype Commands"
 msgstr "Каманды не звязаныя з тыпам файлаў"
 
-#: ../src/build.c:1972
+#: ../src/build.c:1979
 msgid "Note: Item 2 opens a dialog and appends the response to the command."
 msgstr "Заўвага: Элемент 2 адчыняе дыялог і дадае адказ да каманды."
 
-#: ../src/build.c:1981
+#: ../src/build.c:1988
 msgid "Execute Commands"
 msgstr "Выканаць каманды"
 
-#: ../src/build.c:1992
+#: ../src/build.c:1999
 #, c-format
 msgid ""
 "%d, %e, %f, %p are substituted in command and directory fields, see manual "
@@ -260,44 +260,44 @@ msgstr ""
 "%d, %e, %f, %p замяняюцца ў камандзе і дырэкторыі, глядзі даведку для "
 "дэталяў."
 
-#: ../src/build.c:2177
+#: ../src/build.c:2184
 msgid "Set Build Commands"
 msgstr "Усталяваць каманды будоўлі"
 
-#: ../src/build.c:2399
+#: ../src/build.c:2406
 msgid "_Compile"
 msgstr "Кампіляваць"
 
 #. build the code
-#: ../src/build.c:2406 ../src/build.c:2669 ../src/interface.c:1075
+#: ../src/build.c:2413 ../src/build.c:2679 ../src/interface.c:1075
 msgid "_Build"
 msgstr "Пабудаваць"
 
-#: ../src/build.c:2413 ../src/build.c:2443 ../src/build.c:2636
+#: ../src/build.c:2420 ../src/build.c:2450 ../src/build.c:2643
 msgid "_Execute"
 msgstr "Выканаць"
 
 #. build the code with make custom
-#: ../src/build.c:2458 ../src/build.c:2634 ../src/build.c:2689
+#: ../src/build.c:2465 ../src/build.c:2641 ../src/build.c:2699
 msgid "Make Custom _Target"
 msgstr "Будаваць з make (свая мэта)"
 
 #. build the code with make object
-#: ../src/build.c:2460 ../src/build.c:2635 ../src/build.c:2697
+#: ../src/build.c:2467 ../src/build.c:2642 ../src/build.c:2707
 msgid "Make _Object"
 msgstr "Будаваць аб'ект"
 
-#: ../src/build.c:2462 ../src/build.c:2633
+#: ../src/build.c:2469 ../src/build.c:2640
 msgid "_Make"
 msgstr "Зрабіць"
 
 #. build the code with make all
-#: ../src/build.c:2681
+#: ../src/build.c:2691
 msgid "_Make All"
 msgstr "Будаваць усе"
 
 #. arguments
-#: ../src/build.c:2709
+#: ../src/build.c:2719
 msgid "_Set Build Menu Commands"
 msgstr "Усталяваць каманды меню пабудовы"
 
@@ -314,7 +314,7 @@ msgstr[1] "%d файла захавана."
 msgstr[2] "%d файлаў захавана."
 
 #: ../src/callbacks.c:488 ../src/document.c:2895 ../src/interface.c:352
-#: ../src/sidebar.c:618
+#: ../src/sidebar.c:613
 msgid "_Reload"
 msgstr "Загрузіць зноў"
 
@@ -532,7 +532,7 @@ msgstr ""
 
 #: ../src/dialogs.c:1076 ../src/dialogs.c:1077 ../src/dialogs.c:1078
 #: ../src/dialogs.c:1084 ../src/dialogs.c:1085 ../src/dialogs.c:1086
-#: ../src/symbols.c:1724 ../src/symbols.c:1745 ../src/symbols.c:1797
+#: ../src/symbols.c:1730 ../src/symbols.c:1751 ../src/symbols.c:1803
 #: ../src/ui_utils.c:222
 msgid "unknown"
 msgstr "невядомы"
@@ -787,16 +787,16 @@ msgstr "Зачыніць без захавання"
 msgid "File \"%s\" was not found on disk! Try to resave the file?"
 msgstr "Файл \"%s\" не знайдзён на дыску! Паспрабаваць перазахаваць файл?"
 
-#: ../src/editor.c:4425
+#: ../src/editor.c:4421
 msgid "Enter Tab Width"
 msgstr "Увядзіце шырыню ўкладкі"
 
-#: ../src/editor.c:4426
+#: ../src/editor.c:4422
 msgid "Enter the amount of spaces which should be replaced by a tab character."
 msgstr ""
 "Увядзіце колькасць прабелаў якая павінна быць зменена на літару адступ."
 
-#: ../src/editor.c:4577
+#: ../src/editor.c:4573
 #, c-format
 msgid "Warning: non-standard hard tab width: %d != 8!"
 msgstr "папярэджанне: не стандартная шырыня адступа: %d != 8!"
@@ -1023,17 +1023,17 @@ msgstr "Дрэнны сталы выраз для файлаў тыпу %s: %s"
 msgid "untitled"
 msgstr "без назвы"
 
-#: ../src/highlighting.c:3349 ../src/main.c:802 ../src/socket.c:165
+#: ../src/highlighting.c:3351 ../src/main.c:802 ../src/socket.c:165
 #: ../src/templates.c:384
 #, c-format
 msgid "Could not find file '%s'."
 msgstr "Нельга знайсці файл: '%s'."
 
-#: ../src/highlighting.c:3398
+#: ../src/highlighting.c:3400
 msgid "_Color Schemes"
 msgstr "Выбар колеру"
 
-#: ../src/highlighting.c:3405
+#: ../src/highlighting.c:3407
 msgid "_Default"
 msgstr "Прадвызначаны"
 
@@ -2519,7 +2519,7 @@ msgstr ""
 "значэнне адключае праверку."
 
 #: ../src/interface.c:4235 ../src/prefs.c:1533 ../src/symbols.c:605
-#: ../plugins/filebrowser.c:1101
+#: ../plugins/filebrowser.c:1103
 msgid "Files"
 msgstr "Файлы"
 
@@ -2763,7 +2763,7 @@ msgstr "Свой"
 msgid "Use global settings"
 msgstr "Выкарыстоўваць глабальныя наладкі"
 
-#: ../src/keybindings.c:227 ../src/plugins.c:1171
+#: ../src/keybindings.c:227 ../src/plugins.c:1174
 msgid "File"
 msgstr "Файл"
 
@@ -2811,7 +2811,7 @@ msgstr "Загрузіць зноў"
 msgid "Re-open last closed tab"
 msgstr "Адчыніць апошнюю закрытую ўкладку"
 
-#: ../src/keybindings.c:255 ../src/project.c:519
+#: ../src/keybindings.c:255 ../src/project.c:522
 msgid "Project"
 msgstr "Праект"
 
@@ -3227,7 +3227,7 @@ msgstr "Убраць пазначальнікі"
 msgid "Remove Error Indicators"
 msgstr "Убраць індыкатары памылак"
 
-#: ../src/keybindings.c:538 ../src/keybindings.c:543 ../src/project.c:477
+#: ../src/keybindings.c:538 ../src/keybindings.c:543 ../src/project.c:479
 #: ../src/ui_utils.c:1815
 msgid "Build"
 msgstr "Пабудаваць"
@@ -3424,17 +3424,17 @@ msgstr ""
 "Магчымы праблемы пры карыстанні Geany без дырэкторыю наладкі.\n"
 "Запусціць Geany усё роўна?"
 
-#: ../src/main.c:1031
+#: ../src/main.c:1044
 #, c-format
 msgid "This is Geany %s."
 msgstr "Гэта Geany %s."
 
-#: ../src/main.c:1033
+#: ../src/main.c:1046
 #, c-format
 msgid "Configuration directory could not be created (%s)."
 msgstr "Немагчыма зрабіць дырэкторыю  наладкаў (%s)."
 
-#: ../src/main.c:1244
+#: ../src/main.c:1257
 msgid "Configuration files reloaded."
 msgstr "Файлы наладкі загружаны зноў."
 
@@ -3442,19 +3442,19 @@ msgstr "Файлы наладкі загружаны зноў."
 msgid "Status messages"
 msgstr "Статус паведамленні"
 
-#: ../src/msgwindow.c:524
+#: ../src/msgwindow.c:542
 msgid "C_opy"
 msgstr "Капіяваць"
 
-#: ../src/msgwindow.c:533
+#: ../src/msgwindow.c:551
 msgid "Copy _All"
 msgstr "Капіяваць усе"
 
-#: ../src/msgwindow.c:563
+#: ../src/msgwindow.c:581
 msgid "_Hide Message Window"
 msgstr "Схаваць акно паведамленняў"
 
-#: ../src/msgwindow.c:619
+#: ../src/msgwindow.c:637
 #, c-format
 msgid "Could not find file '%s' - trying the current document path."
 msgstr "Немагчыма знайсці файл  '%s'  па цяперашнім шляху дакумента."
@@ -3468,11 +3468,11 @@ msgstr ""
 "Плагін \"%s\" бінарна не адпавядае гэтай версіі Geany - калі ласка "
 "перакампілюйце яго."
 
-#: ../src/plugins.c:906
+#: ../src/plugins.c:909
 msgid "_Plugin Manager"
 msgstr "Кіраванне ўбудовамі"
 
-#: ../src/plugins.c:1083
+#: ../src/plugins.c:1086
 #, c-format
 msgid ""
 "Plugin: %s %s\n"
@@ -3483,27 +3483,27 @@ msgstr ""
 "Апісанне: %s\n"
 "Аўтар(ы): %s"
 
-#: ../src/plugins.c:1159
+#: ../src/plugins.c:1162
 msgid "Active"
 msgstr "Актыўны"
 
-#: ../src/plugins.c:1165
+#: ../src/plugins.c:1168
 msgid "Plugin"
 msgstr "Плагін"
 
-#: ../src/plugins.c:1189
+#: ../src/plugins.c:1192
 msgid "No plugins available."
 msgstr "Няма даступных ўбудоў."
 
-#: ../src/plugins.c:1269
+#: ../src/plugins.c:1272
 msgid "Plugins"
 msgstr "Убудовы"
 
-#: ../src/plugins.c:1289
+#: ../src/plugins.c:1292
 msgid "Choose which plugins should be loaded at startup:"
 msgstr "Выберыце ўбудовы якія павінны загружацца пры старце:"
 
-#: ../src/plugins.c:1301
+#: ../src/plugins.c:1304
 msgid "<b>Plugin details:</b>"
 msgstr "<b>Падрабязнасці убудовы:</b>"
 
@@ -3521,11 +3521,11 @@ msgid "Press the combination of the keys you want to use for \"%s\"."
 msgstr ""
 "Націсніце камбінацыю клавіш, якую вы жадаеце выкарыстоўваць для \"%s\"."
 
-#: ../src/prefs.c:214 ../src/symbols.c:1866
+#: ../src/prefs.c:214 ../src/symbols.c:1872
 msgid "_Expand All"
 msgstr "Разгарнуць усё"
 
-#: ../src/prefs.c:219 ../src/symbols.c:1871
+#: ../src/prefs.c:219 ../src/symbols.c:1877
 msgid "_Collapse All"
 msgstr "Згарнуць усё"
 
@@ -3635,31 +3635,31 @@ msgstr "Наладкі дакумента"
 msgid "Print only the basename(without the path) of the printed file"
 msgstr "Друкаваць толькі базавае імя (без поўнага шляху) друкуючага файла."
 
-#: ../src/printing.c:527
+#: ../src/printing.c:530
 #, c-format
 msgid "Page %d of %d"
 msgstr "Старонка %d з %d "
 
-#: ../src/printing.c:781
+#: ../src/printing.c:784
 #, c-format
 msgid "Did not send document %s to the printing subsystem."
 msgstr "Не дасылаць дакумент %s да падсістэмы друку."
 
-#: ../src/printing.c:783
+#: ../src/printing.c:786
 #, c-format
 msgid "Document %s was sent to the printing subsystem."
 msgstr "Дакумент %s быў адпраўлены да пасістэмы друку."
 
-#: ../src/printing.c:835
+#: ../src/printing.c:838
 #, c-format
 msgid "Printing of %s failed (%s)."
 msgstr "Друкаванне %s скончылася непаспяхова (%s)."
 
-#: ../src/printing.c:875
+#: ../src/printing.c:878
 msgid "Please set a print command in the preferences dialog first."
 msgstr "Калі ласка спачатку вызначце каманду для друку ў дыялогу ўласцівасцяў."
 
-#: ../src/printing.c:883
+#: ../src/printing.c:886
 #, c-format
 msgid ""
 "The file \"%s\" will be printed with the following command:\n"
@@ -3670,12 +3670,12 @@ msgstr ""
 "\n"
 "%s"
 
-#: ../src/printing.c:899
+#: ../src/printing.c:902
 #, c-format
 msgid "Printing of \"%s\" failed (return code: %s)."
 msgstr "Друкаванне \"%s\" скончылася непаспяхова (код зваротку: %s)."
 
-#: ../src/printing.c:905
+#: ../src/printing.c:908
 #, c-format
 msgid "File %s printed."
 msgstr "Файл %s надрукаваны."
@@ -3694,19 +3694,19 @@ msgstr "Новы праект"
 msgid "C_reate"
 msgstr "Стварыць"
 
-#: ../src/project.c:139 ../src/project.c:413
+#: ../src/project.c:139 ../src/project.c:415
 msgid "Name:"
 msgstr "Імя:"
 
-#: ../src/project.c:148 ../src/project.c:426
+#: ../src/project.c:148 ../src/project.c:428
 msgid "Filename:"
 msgstr "Імя файла:"
 
-#: ../src/project.c:164 ../src/project.c:456
+#: ../src/project.c:164 ../src/project.c:458
 msgid "Base path:"
 msgstr "Базавы шлях:"
 
-#: ../src/project.c:170 ../src/project.c:465
+#: ../src/project.c:170 ../src/project.c:467
 msgid ""
 "Base directory of all files that make up the project. This can be a new "
 "path, or an existing directory tree. You can use paths relative to the "
@@ -3716,11 +3716,11 @@ msgstr ""
 "шлях, або ужо існуючая дырэкторыя. Вы можаце задаць шлях адносна ад файла "
 "праекта."
 
-#: ../src/project.c:173 ../src/project.c:468
+#: ../src/project.c:173 ../src/project.c:470
 msgid "Choose Project Base Path"
 msgstr "Выберы базавы шлях праекта"
 
-#: ../src/project.c:231 ../src/project.c:263 ../src/project.c:957
+#: ../src/project.c:231 ../src/project.c:263 ../src/project.c:977
 #, c-format
 msgid "Project file \"%s\" could not be loaded."
 msgstr "Немагчыма загрузіць файл праекта \"%s\"."
@@ -3738,21 +3738,21 @@ msgstr "Зачыніць файлы"
 msgid "Project \"%s\" closed."
 msgstr "Праект \"%s\" зачынены."
 
-#: ../src/project.c:439
+#: ../src/project.c:441
 msgid "Description:"
 msgstr "Апісанне:"
 
-#: ../src/project.c:481
+#: ../src/project.c:484
 msgid "Set the Build non-filetype working directories to use base path:"
 msgstr ""
 "Усталяваць працоўныя дырэкторыі на базавы шлях для тыпаў файлаў без каманд "
 "Будаваць:"
 
-#: ../src/project.c:484
+#: ../src/project.c:487
 msgid "Set"
 msgstr "Прызначыць"
 
-#: ../src/project.c:486
+#: ../src/project.c:489
 msgid ""
 "Set the working directories (on the Build tab) for the non-filetype build "
 "commands to use the base path"
@@ -3760,67 +3760,67 @@ msgstr ""
 "Усталяваць працоўныя дырэкторыі (на укладцы Будаваць) для тыпаў файлаў без "
 "каманд будаваць выкарыстоўваць базавы шлях"
 
-#: ../src/project.c:501
+#: ../src/project.c:504
 msgid "File patterns:"
 msgstr "Патэрны файла:"
 
-#: ../src/project.c:610
+#: ../src/project.c:630
 msgid "Do you want to close it before proceeding?"
 msgstr "Жадаеце захаваць яго перад працягам?"
 
-#: ../src/project.c:611
+#: ../src/project.c:631
 #, c-format
 msgid "The '%s' project is already open."
 msgstr "Праект '%s' ужо адчынены."
 
-#: ../src/project.c:658
+#: ../src/project.c:678
 msgid "The specified project name is too short."
 msgstr "Зададзенае імя праекта надта кароткае. "
 
-#: ../src/project.c:664
+#: ../src/project.c:684
 #, c-format
 msgid "The specified project name is too long (max. %d characters)."
 msgstr "Абранае імя праекта занадта доўгае (максімум %d літар)."
 
-#: ../src/project.c:672
+#: ../src/project.c:692
 msgid "You have specified an invalid project filename."
 msgstr "Вы абралі недапушчальнае імя файла праекта."
 
-#: ../src/project.c:695
+#: ../src/project.c:715
 msgid "Create the project's base path directory?"
 msgstr "Стварыць базавую дырэкторыю праекта?"
 
-#: ../src/project.c:696
+#: ../src/project.c:716
 #, c-format
 msgid "The path \"%s\" does not exist."
 msgstr "Шлях \"%s\" не існуе."
 
-#: ../src/project.c:705
+#: ../src/project.c:725
 #, c-format
 msgid "Project base directory could not be created (%s)."
 msgstr "Немагчыма зрабіць базавую дырэкторыю праекта (%s)."
 
-#: ../src/project.c:717
+#: ../src/project.c:737
 #, c-format
 msgid "Project file could not be written (%s)."
 msgstr "Немагчыма запісаць файл праекта (%s)."
 
-#: ../src/project.c:794
+#: ../src/project.c:814
 #, c-format
 msgid "Project \"%s\" created."
 msgstr "Праект \"%s\" створаны."
 
-#: ../src/project.c:796
+#: ../src/project.c:816
 #, c-format
 msgid "Project \"%s\" saved."
 msgstr "Праект \"%s\" захаваны."
 
 #. initialise the dialog
-#: ../src/project.c:861 ../src/project.c:872
+#: ../src/project.c:881 ../src/project.c:892
 msgid "Choose Project Filename"
 msgstr "Выберы імя файла праекта"
 
-#: ../src/project.c:947
+#: ../src/project.c:967
 #, c-format
 msgid "Project \"%s\" opened."
 msgstr "Праект \"%s\" адчынены."
@@ -4259,18 +4259,18 @@ msgstr "Структуры"
 msgid "Typedefs / Enums"
 msgstr "Typedefs / Enums"
 
-#: ../src/symbols.c:1365
+#: ../src/symbols.c:1371
 #, c-format
 msgid "Unknown filetype extension for \"%s\".\n"
 msgstr "Невядомы тып файла для пашырэння \"%s\".\n"
 
-#: ../src/symbols.c:1389
+#: ../src/symbols.c:1395
 #, c-format
 msgid "Failed to create tags file, perhaps because no tags were found.\n"
 msgstr ""
 "Немагчыма стварыць файл тэгаў, магчыма таму, што ніякіх тэгаў не знойдзена.\n"
 
-#: ../src/symbols.c:1396
+#: ../src/symbols.c:1402
 #, c-format
 msgid ""
 "Usage: %s -g <Tag File> <File list>\n"
@@ -4279,7 +4279,7 @@ msgstr ""
 "Карыстаць: %s -g <файл тэгаў> <спіс файлаў>\n"
 "\n"
 
-#: ../src/symbols.c:1397
+#: ../src/symbols.c:1403
 #, c-format
 msgid ""
 "Example:\n"
@@ -4290,40 +4290,40 @@ msgstr ""
 "CFLAGS=`pkg-config gtk+-2.0 --cflags` %s -g gtk2.c.tags /usr/include/gtk-2.0/"
 "gtk/gtk.h\n"
 
-#: ../src/symbols.c:1411
+#: ../src/symbols.c:1417
 msgid "Load Tags"
 msgstr "Загрузіць тэгі"
 
-#: ../src/symbols.c:1418
+#: ../src/symbols.c:1424
 msgid "Geany tag files (*.tags)"
 msgstr "Geany тэг файлы (*.tags)"
 
 #. For translators: the first wildcard is the filetype, the second the filename
-#: ../src/symbols.c:1438
+#: ../src/symbols.c:1444
 #, c-format
 msgid "Loaded %s tags file '%s'."
 msgstr "Загружана %s тэгаў файл: '%s'."
 
-#: ../src/symbols.c:1440
+#: ../src/symbols.c:1446
 #, c-format
 msgid "Could not load tags file '%s'."
 msgstr "Немагчыма загрузіць файл тэгаў '%s'."
 
-#: ../src/symbols.c:1573
+#: ../src/symbols.c:1579
 #, c-format
 msgid "Forward declaration \"%s\" not found."
 msgstr "Аб'яўленне \"%s\" не знойдзена"
 
-#: ../src/symbols.c:1575
+#: ../src/symbols.c:1581
 #, c-format
 msgid "Definition of \"%s\" not found."
 msgstr "Рэалізацыя \"%s\" не знойдзена."
 
-#: ../src/symbols.c:1881
+#: ../src/symbols.c:1887
 msgid "Sort by _Name"
 msgstr "Сартаваць па імені"
 
-#: ../src/symbols.c:1888
+#: ../src/symbols.c:1894
 msgid "Sort by _Appearance"
 msgstr "Сартаваць па паяўленню"
 
@@ -4548,19 +4548,19 @@ msgstr "Літары:"
 msgid "No tags found"
 msgstr "Тагі не знойдзены"
 
-#: ../src/sidebar.c:546
+#: ../src/sidebar.c:541
 msgid "Show S_ymbol List"
 msgstr "Паказваць спіс сімвалаў"
 
-#: ../src/sidebar.c:554
+#: ../src/sidebar.c:549
 msgid "Show _Document List"
 msgstr "Паказваць спіс дакументаў"
 
-#: ../src/sidebar.c:562 ../plugins/filebrowser.c:647
+#: ../src/sidebar.c:557 ../plugins/filebrowser.c:649
 msgid "H_ide Sidebar"
 msgstr "Схаваць бакавую панэль"
 
-#: ../src/sidebar.c:631
+#: ../src/sidebar.c:626
 msgid "Show _Paths"
 msgstr "Паказваць Шляхі"
 
@@ -4785,7 +4785,7 @@ msgstr ""
 "Гэтая наладка адключае цэтлік для выкліку меню (звычайна F10). Гэта можа "
 "спатрэбіцца, напрыклад, калі вы выкарыстоўваеце MC у акне тэрмінала."
 
-#: ../src/vte.c:836 ../plugins/filebrowser.c:1217
+#: ../src/vte.c:836 ../plugins/filebrowser.c:1219
 msgid "Follow the path of the current file"
 msgstr "Следаваць за цяперашнім файлам"
 
@@ -4977,7 +4977,7 @@ msgstr "Знакі прыпынку"
 msgid "Miscellaneous characters"
 msgstr "Іншыя літары"
 
-#: ../plugins/htmlchars.c:367 ../plugins/filebrowser.c:1134
+#: ../plugins/htmlchars.c:367 ../plugins/filebrowser.c:1136
 #: ../plugins/saveactions.c:470
 msgid "Plugin configuration directory could not be created."
 msgstr "Немагчыма зрабіць наладкавую дырэкторыю ўбудоў."
@@ -5102,59 +5102,59 @@ msgstr "Абрана занадта шмат аб'ектаў!"
 msgid "Could not execute configured external command '%s' (%s)."
 msgstr "Немагчыма выканаць знешнюю каманду '%s' (%s)."
 
-#: ../plugins/filebrowser.c:603
+#: ../plugins/filebrowser.c:605
 msgid "Open _externally"
 msgstr "Адчыніць у знешняй праграме"
 
-#: ../plugins/filebrowser.c:618
+#: ../plugins/filebrowser.c:620
 msgid "_Find in Files"
 msgstr "Знайсці ў файлах"
 
-#: ../plugins/filebrowser.c:628
+#: ../plugins/filebrowser.c:630
 msgid "Show _Hidden Files"
 msgstr "Паказваць схаваныя файлы"
 
-#: ../plugins/filebrowser.c:841
+#: ../plugins/filebrowser.c:843
 msgid "Up"
 msgstr "Уверх"
 
-#: ../plugins/filebrowser.c:846
+#: ../plugins/filebrowser.c:848
 msgid "Refresh"
 msgstr "Абнавіць"
 
-#: ../plugins/filebrowser.c:851
+#: ../plugins/filebrowser.c:853
 msgid "Home"
 msgstr "Home"
 
-#: ../plugins/filebrowser.c:856
+#: ../plugins/filebrowser.c:858
 msgid "Set path from document"
 msgstr "Усталяваць пуць з дакумента"
 
-#: ../plugins/filebrowser.c:866
+#: ../plugins/filebrowser.c:868
 msgid "Clear the filter"
 msgstr "Чысціць фільтр"
 
-#: ../plugins/filebrowser.c:880
+#: ../plugins/filebrowser.c:882
 msgid "Filter:"
 msgstr "Фільтр:"
 
-#: ../plugins/filebrowser.c:890
+#: ../plugins/filebrowser.c:892
 msgid "Filter your files with usual wildcards"
 msgstr "Фільтраваць файлы выкарыстоўваючы звычайныя шаблонавыя выразы"
 
-#: ../plugins/filebrowser.c:1107
+#: ../plugins/filebrowser.c:1109
 msgid "Focus File List"
 msgstr "Фокус спіс файлаў"
 
-#: ../plugins/filebrowser.c:1109
+#: ../plugins/filebrowser.c:1111
 msgid "Focus Path Entry"
 msgstr "Фокус на ўвод шляху"
 
-#: ../plugins/filebrowser.c:1185
+#: ../plugins/filebrowser.c:1187
 msgid "External open command:"
 msgstr "Знешняя каманда адкрыцця:"
 
-#: ../plugins/filebrowser.c:1194
+#: ../plugins/filebrowser.c:1196
 #, c-format
 msgid ""
 "The command to execute when using \"Open with\". You can use %f and %d "
@@ -5163,20 +5163,20 @@ msgid ""
 "%d will be replaced with the path name of the selected file without the "
 "filename"
 msgstr ""
-"Каманда запуску, пры выкарыстанні \"Адчыніць з\". Вы можаце выкарыстоўваць %"
-"f і %d падмены.\n"
+"Каманда запуску, пры выкарыстанні \"Адчыніць з\". Вы можаце выкарыстоўваць "
+"%f і %d падмены.\n"
 "%f будзе зменена на імя файла з поўным шляхам да яго\n"
 "%d будзе зменена на дырэкторыю ў якой знаходзіцца файл"
 
-#: ../plugins/filebrowser.c:1202
+#: ../plugins/filebrowser.c:1204
 msgid "Show hidden files"
 msgstr "Паказваць схаваныя файлы"
 
-#: ../plugins/filebrowser.c:1208
+#: ../plugins/filebrowser.c:1210
 msgid "Hide object files"
 msgstr "Хаваць файлы аб'ектаў"
 
-#: ../plugins/filebrowser.c:1212
+#: ../plugins/filebrowser.c:1214
 msgid ""
 "Don't show generated object files in the file browser, this includes *.o, *."
 "obj. *.so, *.dll, *.a, *.lib"
@@ -5184,11 +5184,11 @@ msgstr ""
 "Не паказваць утвораныя аб'ектныя файлы, такія як  *.o, *.obj. *.so, *.dll, *."
 "a, *.lib"
 
-#: ../plugins/filebrowser.c:1223
+#: ../plugins/filebrowser.c:1225
 msgid "Use the project's base directory"
 msgstr "Выкарыстоўваць базавую дырэкторыю праекта"
 
-#: ../plugins/filebrowser.c:1227
+#: ../plugins/filebrowser.c:1229
 msgid ""
 "Change the directory to the base directory of the currently opened project"
 msgstr "Зменіць шлях на базавую дырэкторыю адчыненага праекта"

@@ -7,10 +7,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Geany 0.19\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-05-23 10:05+0200\n"
+"POT-Creation-Date: 2010-08-16 21:09+0200\n"
 "PO-Revision-Date: 2009-04-30 23:39+0200\n"
 "Last-Translator: kilo aka Gabor Kmetyko <kg.kilo@gmail.com>\n"
 "Language-Team: Hungarian\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -28,68 +29,68 @@ msgstr "Geany"
 msgid "Integrated Development Environment"
 msgstr "Integrált Fejlesztői Felület"
 
-#: ../src/about.c:145
+#: ../src/about.c:146
 msgid "About Geany"
 msgstr "Geany verzió"
 
-#: ../src/about.c:195
+#: ../src/about.c:196
 msgid "A fast and lightweight IDE"
 msgstr "Gyors és pehelykönnyű IDE"
 
-#: ../src/about.c:216
+#: ../src/about.c:217
 #, c-format
 msgid "(built on or after %s)"
 msgstr "(készült %s-on)"
 
 #. gtk_container_add(GTK_CONTAINER(info_box), cop_label);
-#: ../src/about.c:247
+#: ../src/about.c:248
 msgid "Info"
 msgstr "Információ"
 
-#: ../src/about.c:263
+#: ../src/about.c:264
 msgid "Developers"
 msgstr "Fejlesztők"
 
-#: ../src/about.c:272
+#: ../src/about.c:273
 msgid "maintainer"
 msgstr "karbantartó"
 
-#: ../src/about.c:280
+#: ../src/about.c:281
 msgid "developer"
 msgstr "fejlesztő"
 
-#: ../src/about.c:288
+#: ../src/about.c:289
 msgid "translation maintainer"
 msgstr "fordítás karbantartója"
 
-#: ../src/about.c:297
+#: ../src/about.c:298
 msgid "Translators"
 msgstr "Fordítók"
 
-#: ../src/about.c:317
+#: ../src/about.c:318
 msgid "Previous Translators"
 msgstr "Előző fordítók"
 
-#: ../src/about.c:338
+#: ../src/about.c:339
 msgid "Contributors"
 msgstr "Hozzájárultak még"
 
-#: ../src/about.c:348
+#: ../src/about.c:349
 #, c-format
 msgid ""
 "Some of the many contributors (for a more detailed list, see the file %s):"
 msgstr ""
 "Néhányan a közreműködők közül (a teljes lista megtalálható a(z) %s fájlban):"
 
-#: ../src/about.c:374
+#: ../src/about.c:375
 msgid "Credits"
 msgstr "Közreműködők"
 
-#: ../src/about.c:388
+#: ../src/about.c:389
 msgid "License"
 msgstr "Licenc"
 
-#: ../src/about.c:397
+#: ../src/about.c:398
 msgid ""
 "License text could not be found, please visit http://www.gnu.org/licenses/"
 "gpl-2.0.txt to view it online."
@@ -98,46 +99,46 @@ msgstr ""
 "gpl-2.0.txt címen."
 
 #. fall back to %d
-#: ../src/build.c:635
+#: ../src/build.c:638
 #, c-format
 msgid "failed to substitute %%p, no project active"
 msgstr ""
 
-#: ../src/build.c:673
+#: ../src/build.c:676
 #, fuzzy
 msgid "Process failed, no working directory"
 msgstr "Nem sikerült a munkakönyvtárat átállítani erre: \"%s\""
 
-#: ../src/build.c:699
+#: ../src/build.c:702
 #, c-format
 msgid "%s (in directory: %s)"
 msgstr "%s (%s könyvtárban)"
 
-#: ../src/build.c:719 ../src/build.c:944 ../src/search.c:1475
+#: ../src/build.c:722 ../src/build.c:947 ../src/search.c:1475
 #, c-format
 msgid "Process failed (%s)"
 msgstr "Folyamat sikertelen (%s)"
 
-#: ../src/build.c:790
+#: ../src/build.c:793
 #, c-format
 msgid "Failed to change the working directory to \"%s\""
 msgstr "Nem sikerült a munkakönyvtárat átállítani erre: \"%s\""
 
-#: ../src/build.c:819
+#: ../src/build.c:822
 #, c-format
 msgid "Failed to execute \"%s\" (start-script could not be created)"
 msgstr ""
 "\"%s\" végrehajtása nem sikerült (az indító szkriptet nem lehetett "
 "létrehozni)"
 
-#: ../src/build.c:873
+#: ../src/build.c:876
 msgid ""
 "Could not execute the file in the VTE because it probably contains a command."
 msgstr ""
 "Nem sikerült a fájlt végrehajtani a VTE-n belül, mert feltehetően egy "
 "parancsot tartalmaz."
 
-#: ../src/build.c:911
+#: ../src/build.c:914
 #, c-format
 msgid ""
 "Could not find terminal \"%s\" (check path for Terminal tool setting in "
@@ -146,173 +147,173 @@ msgstr ""
 "\"'%s\"' terminál nem található (ellenőrizze az elérési útvonalat a Terminál "
 "beállításoknál a Tulajdonságok között)"
 
-#: ../src/build.c:1081
+#: ../src/build.c:1084
 msgid "Compilation failed."
 msgstr "Fordítás sikertelen."
 
-#: ../src/build.c:1095
+#: ../src/build.c:1098
 msgid "Compilation finished successfully."
 msgstr "Fordítás sikerrel lezárult."
 
-#: ../src/build.c:1252
+#: ../src/build.c:1255
 #, fuzzy
 msgid "Custom Text"
 msgstr "Egyedi cél készítése"
 
-#: ../src/build.c:1253
+#: ../src/build.c:1256
 #, fuzzy
 msgid "Enter custom text here, all entered text is appended to the command."
 msgstr ""
 "Adja meg itt az egyedi opciókat, minden bevitt szöveg átadásra kerül a make "
 "parancs számára."
 
-#: ../src/build.c:1331
+#: ../src/build.c:1334
 msgid "_Next Error"
 msgstr "Kö_vetkező hiba"
 
-#: ../src/build.c:1333
+#: ../src/build.c:1336
 msgid "_Previous Error"
 msgstr "Elő_ző hiba"
 
-#: ../src/build.c:1343
+#: ../src/build.c:1346
 #, fuzzy
 msgid "_Set Build Commands"
 msgstr "Egyedi parancsok megadása"
 
-#: ../src/build.c:1623 ../src/toolbar.c:373
+#: ../src/build.c:1630 ../src/toolbar.c:373
 msgid "Build the current file"
 msgstr "Jelenlegi fájl fordítása"
 
-#: ../src/build.c:1637
+#: ../src/build.c:1644
 msgid "Build the current file with Make and the default target"
 msgstr ""
 "Build-eli a jelenlegi fájlt a make eszközzel és az alapértelmezett "
 "célállománnyal"
 
-#: ../src/build.c:1639
+#: ../src/build.c:1646
 msgid "Build the current file with Make and the specified target"
 msgstr ""
 "Build-eli a jelenlegi fájlt a make eszközzel és a megadott célállománnyal"
 
-#: ../src/build.c:1641
+#: ../src/build.c:1648
 msgid "Compile the current file with Make"
 msgstr "Lefordítja a jelenlegi fájlt a Make eszközzel"
 
-#: ../src/build.c:1668
+#: ../src/build.c:1675
 #, c-format
 msgid "Process could not be stopped (%s)."
 msgstr "A folyamatot nem sikerült leállítani (%s)."
 
-#: ../src/build.c:1685 ../src/build.c:1697
+#: ../src/build.c:1692 ../src/build.c:1704
 msgid "No more build errors."
 msgstr "Nincs több fordítási hiba."
 
-#: ../src/build.c:1778
+#: ../src/build.c:1785
 msgid "Set menu item label"
 msgstr ""
 
-#: ../src/build.c:1788
+#: ../src/build.c:1795
 msgid "Item"
 msgstr ""
 
-#: ../src/build.c:1789 ../src/symbols.c:650
+#: ../src/build.c:1796 ../src/symbols.c:650
 msgid "Label"
 msgstr "Címke"
 
-#: ../src/build.c:1790 ../src/symbols.c:645
+#: ../src/build.c:1797 ../src/symbols.c:645
 msgid "Command"
 msgstr "Parancs"
 
-#: ../src/build.c:1791
+#: ../src/build.c:1798
 #, fuzzy
 msgid "Working directory"
 msgstr "%s (%s könyvtárban)"
 
-#: ../src/build.c:1792
+#: ../src/build.c:1799
 #, fuzzy
 msgid "Clear"
 msgstr "Fordító"
 
-#: ../src/build.c:1831
+#: ../src/build.c:1838
 msgid "Click to set menu item label"
 msgstr ""
 
-#: ../src/build.c:1904 ../src/build.c:1906
+#: ../src/build.c:1911 ../src/build.c:1913
 #, fuzzy, c-format
 msgid "%s Commands"
 msgstr "%s parancsok"
 
-#: ../src/build.c:1906
+#: ../src/build.c:1913
 #, fuzzy
 msgid "No Filetype"
 msgstr "Fájl_típus megadása"
 
-#: ../src/build.c:1914 ../src/build.c:1949
+#: ../src/build.c:1921 ../src/build.c:1956
 #, fuzzy
 msgid "Error Regular Expression:"
 msgstr "_Grep reguláris kifejezések"
 
-#: ../src/build.c:1942
+#: ../src/build.c:1949
 msgid "Non-Filetype Commands"
 msgstr ""
 
-#: ../src/build.c:1972
+#: ../src/build.c:1979
 msgid "Note: Item 2 opens a dialog and appends the response to the command."
 msgstr ""
 
-#: ../src/build.c:1981
+#: ../src/build.c:1988
 #, fuzzy
 msgid "Execute Commands"
 msgstr "Egyedi parancsok megadása"
 
-#: ../src/build.c:1992
+#: ../src/build.c:1999
 #, c-format
 msgid ""
 "%d, %e, %f, %p are substituted in command and directory fields, see manual "
 "for details."
 msgstr ""
 
-#: ../src/build.c:2177
+#: ../src/build.c:2184
 #, fuzzy
 msgid "Set Build Commands"
 msgstr "Egyedi parancsok megadása"
 
-#: ../src/build.c:2399
+#: ../src/build.c:2406
 msgid "_Compile"
 msgstr "_Fordítás"
 
 #. build the code
-#: ../src/build.c:2406 ../src/build.c:2669 ../src/interface.c:1075
+#: ../src/build.c:2413 ../src/build.c:2679 ../src/interface.c:1075
 msgid "_Build"
 msgstr "Ö_sszeállítás"
 
-#: ../src/build.c:2413 ../src/build.c:2443 ../src/build.c:2636
+#: ../src/build.c:2420 ../src/build.c:2450 ../src/build.c:2643
 #, fuzzy
 msgid "_Execute"
 msgstr "Végrehajtás:"
 
 #. build the code with make custom
-#: ../src/build.c:2458 ../src/build.c:2634 ../src/build.c:2689
+#: ../src/build.c:2465 ../src/build.c:2641 ../src/build.c:2699
 msgid "Make Custom _Target"
 msgstr "Egyedi cél készí_tése"
 
 #. build the code with make object
-#: ../src/build.c:2460 ../src/build.c:2635 ../src/build.c:2697
+#: ../src/build.c:2467 ../src/build.c:2642 ../src/build.c:2707
 msgid "Make _Object"
 msgstr "Cél _készítése"
 
-#: ../src/build.c:2462 ../src/build.c:2633
+#: ../src/build.c:2469 ../src/build.c:2640
 #, fuzzy
 msgid "_Make"
 msgstr "Make:"
 
 #. build the code with make all
-#: ../src/build.c:2681
+#: ../src/build.c:2691
 msgid "_Make All"
 msgstr "_Make mindet"
 
 #. arguments
-#: ../src/build.c:2709
+#: ../src/build.c:2719
 #, fuzzy
 msgid "_Set Build Menu Commands"
 msgstr "Egyedi parancsok megadása"
@@ -328,7 +329,7 @@ msgid_plural "%d files saved."
 msgstr[0] "%s fájl elmentve."
 
 #: ../src/callbacks.c:488 ../src/document.c:2895 ../src/interface.c:352
-#: ../src/sidebar.c:618
+#: ../src/sidebar.c:613
 msgid "_Reload"
 msgstr "Ú_jraolvasás"
 
@@ -548,7 +549,7 @@ msgstr ""
 
 #: ../src/dialogs.c:1076 ../src/dialogs.c:1077 ../src/dialogs.c:1078
 #: ../src/dialogs.c:1084 ../src/dialogs.c:1085 ../src/dialogs.c:1086
-#: ../src/symbols.c:1724 ../src/symbols.c:1745 ../src/symbols.c:1797
+#: ../src/symbols.c:1730 ../src/symbols.c:1751 ../src/symbols.c:1803
 #: ../src/ui_utils.c:222
 msgid "unknown"
 msgstr "ismeretlen"
@@ -802,15 +803,15 @@ msgstr ""
 msgid "File \"%s\" was not found on disk! Try to resave the file?"
 msgstr "A(z) \"%s\" fájl nem található a lemezen!"
 
-#: ../src/editor.c:4425
+#: ../src/editor.c:4421
 msgid "Enter Tab Width"
 msgstr "Tabulátor szélessége"
 
-#: ../src/editor.c:4426
+#: ../src/editor.c:4422
 msgid "Enter the amount of spaces which should be replaced by a tab character."
 msgstr "Adja meg, hogy hány szóköz kerüljön cserére tabulátor karakterrel."
 
-#: ../src/editor.c:4577
+#: ../src/editor.c:4573
 #, c-format
 msgid "Warning: non-standard hard tab width: %d != 8!"
 msgstr ""
@@ -1038,18 +1039,18 @@ msgstr "Rossz reguláris kifejezés a(z) %s fájltípushoz: %s"
 msgid "untitled"
 msgstr "névtelen"
 
-#: ../src/highlighting.c:3349 ../src/main.c:802 ../src/socket.c:165
+#: ../src/highlighting.c:3351 ../src/main.c:802 ../src/socket.c:165
 #: ../src/templates.c:384
 #, c-format
 msgid "Could not find file '%s'."
 msgstr "'%s' fájl nem található."
 
-#: ../src/highlighting.c:3398
+#: ../src/highlighting.c:3400
 #, fuzzy
 msgid "_Color Schemes"
 msgstr "_Színválasztó"
 
-#: ../src/highlighting.c:3405
+#: ../src/highlighting.c:3407
 msgid "_Default"
 msgstr ""
 
@@ -2574,7 +2575,7 @@ msgstr ""
 "nulla letiltja az ellenőrzést."
 
 #: ../src/interface.c:4235 ../src/prefs.c:1533 ../src/symbols.c:605
-#: ../plugins/filebrowser.c:1101
+#: ../plugins/filebrowser.c:1103
 msgid "Files"
 msgstr "Fájlok"
 
@@ -2825,7 +2826,7 @@ msgstr "Kivágás"
 msgid "Use global settings"
 msgstr ""
 
-#: ../src/keybindings.c:227 ../src/plugins.c:1171
+#: ../src/keybindings.c:227 ../src/plugins.c:1174
 msgid "File"
 msgstr "Fájl"
 
@@ -2873,7 +2874,7 @@ msgstr "Fájl újraolvasása"
 msgid "Re-open last closed tab"
 msgstr ""
 
-#: ../src/keybindings.c:255 ../src/project.c:519
+#: ../src/keybindings.c:255 ../src/project.c:522
 msgid "Project"
 msgstr "Projekt"
 
@@ -3304,7 +3305,7 @@ msgstr "_Jelzések eltávolítása"
 msgid "Remove Error Indicators"
 msgstr "H_ibajelölések eltávolítása"
 
-#: ../src/keybindings.c:538 ../src/keybindings.c:543 ../src/project.c:477
+#: ../src/keybindings.c:538 ../src/keybindings.c:543 ../src/project.c:479
 #: ../src/ui_utils.c:1815
 msgid "Build"
 msgstr "Összeállítás"
@@ -3507,17 +3508,17 @@ msgstr ""
 "használja.\n"
 "Mindenképpen elindítja a Geany-t?"
 
-#: ../src/main.c:1031
+#: ../src/main.c:1044
 #, c-format
 msgid "This is Geany %s."
 msgstr "Ez a Geany  %s."
 
-#: ../src/main.c:1033
+#: ../src/main.c:1046
 #, c-format
 msgid "Configuration directory could not be created (%s)."
 msgstr "A konfigurációs könyvtárat nem lehetett létrehozni (%s)."
 
-#: ../src/main.c:1244
+#: ../src/main.c:1257
 msgid "Configuration files reloaded."
 msgstr "Beállítások újraolvasása kész."
 
@@ -3525,20 +3526,20 @@ msgstr "Beállítások újraolvasása kész."
 msgid "Status messages"
 msgstr "Állapot üzenetek"
 
-#: ../src/msgwindow.c:524
+#: ../src/msgwindow.c:542
 #, fuzzy
 msgid "C_opy"
 msgstr "Másolás"
 
-#: ../src/msgwindow.c:533
+#: ../src/msgwindow.c:551
 msgid "Copy _All"
 msgstr "Összeset _másol"
 
-#: ../src/msgwindow.c:563
+#: ../src/msgwindow.c:581
 msgid "_Hide Message Window"
 msgstr "Üzenet ablak el_rejtése"
 
-#: ../src/msgwindow.c:619
+#: ../src/msgwindow.c:637
 #, c-format
 msgid "Could not find file '%s' - trying the current document path."
 msgstr ""
@@ -3552,11 +3553,11 @@ msgstr ""
 "A(z) \"%s\" bővítmény binárisan nem kompatibilis a Geany ezen kiadásával - "
 "fordítsa újra azt!"
 
-#: ../src/plugins.c:906
+#: ../src/plugins.c:909
 msgid "_Plugin Manager"
 msgstr "_Bővítménykezelő"
 
-#: ../src/plugins.c:1083
+#: ../src/plugins.c:1086
 #, c-format
 msgid ""
 "Plugin: %s %s\n"
@@ -3567,27 +3568,27 @@ msgstr ""
 "Leírás: %s\n"
 "Szerző(k): %s"
 
-#: ../src/plugins.c:1159
+#: ../src/plugins.c:1162
 msgid "Active"
 msgstr "Aktív"
 
-#: ../src/plugins.c:1165
+#: ../src/plugins.c:1168
 msgid "Plugin"
 msgstr "Bővítmény"
 
-#: ../src/plugins.c:1189
+#: ../src/plugins.c:1192
 msgid "No plugins available."
 msgstr "Nincs elérhető bővítmény."
 
-#: ../src/plugins.c:1269
+#: ../src/plugins.c:1272
 msgid "Plugins"
 msgstr "Bővítmények"
 
-#: ../src/plugins.c:1289
+#: ../src/plugins.c:1292
 msgid "Choose which plugins should be loaded at startup:"
 msgstr ""
 
-#: ../src/plugins.c:1301
+#: ../src/plugins.c:1304
 msgid "<b>Plugin details:</b>"
 msgstr "<b>Bővítmény részletei:</b>"
 
@@ -3606,11 +3607,11 @@ msgstr ""
 "Üsse le a billentyű-kombinációt, amit a(z) \"%s\" parancshoz használni "
 "szeretne."
 
-#: ../src/prefs.c:214 ../src/symbols.c:1866
+#: ../src/prefs.c:214 ../src/symbols.c:1872
 msgid "_Expand All"
 msgstr "Mind_et kinyitja"
 
-#: ../src/prefs.c:219 ../src/symbols.c:1871
+#: ../src/prefs.c:219 ../src/symbols.c:1877
 msgid "_Collapse All"
 msgstr "Mindet be_zárja"
 
@@ -3722,33 +3723,33 @@ msgstr "Dokumentum beállítások"
 msgid "Print only the basename(without the path) of the printed file"
 msgstr "Csak a nyomtatott fájl alap nevét (elérési út nélkül) írja ki."
 
-#: ../src/printing.c:527
+#: ../src/printing.c:530
 #, c-format
 msgid "Page %d of %d"
 msgstr "%d. oldal (összesen: %d)"
 
-#: ../src/printing.c:781
+#: ../src/printing.c:784
 #, c-format
 msgid "Did not send document %s to the printing subsystem."
 msgstr ""
 
-#: ../src/printing.c:783
+#: ../src/printing.c:786
 #, c-format
 msgid "Document %s was sent to the printing subsystem."
 msgstr ""
 
-#: ../src/printing.c:835
+#: ../src/printing.c:838
 #, c-format
 msgid "Printing of %s failed (%s)."
 msgstr "%s nyomtatása sikertelen (%s)."
 
-#: ../src/printing.c:875
+#: ../src/printing.c:878
 msgid "Please set a print command in the preferences dialog first."
 msgstr ""
 "Először állítson be egy nyomtatási parancsot a tulajdonságok "
 "párbeszédablakban!"
 
-#: ../src/printing.c:883
+#: ../src/printing.c:886
 #, c-format
 msgid ""
 "The file \"%s\" will be printed with the following command:\n"
@@ -3759,12 +3760,12 @@ msgstr ""
 "\n"
 "%s"
 
-#: ../src/printing.c:899
+#: ../src/printing.c:902
 #, c-format
 msgid "Printing of \"%s\" failed (return code: %s)."
 msgstr "\"%s\" nyomtatása sikertelen (visszatérési érték: %s)."
 
-#: ../src/printing.c:905
+#: ../src/printing.c:908
 #, c-format
 msgid "File %s printed."
 msgstr "%s fájl kinyomtatva."
@@ -3783,19 +3784,19 @@ msgstr "Új projekt"
 msgid "C_reate"
 msgstr "Lét_rehozás"
 
-#: ../src/project.c:139 ../src/project.c:413
+#: ../src/project.c:139 ../src/project.c:415
 msgid "Name:"
 msgstr "Név:"
 
-#: ../src/project.c:148 ../src/project.c:426
+#: ../src/project.c:148 ../src/project.c:428
 msgid "Filename:"
 msgstr "Fájlnév:"
 
-#: ../src/project.c:164 ../src/project.c:456
+#: ../src/project.c:164 ../src/project.c:458
 msgid "Base path:"
 msgstr "Alapkönyvtár:"
 
-#: ../src/project.c:170 ../src/project.c:465
+#: ../src/project.c:170 ../src/project.c:467
 msgid ""
 "Base directory of all files that make up the project. This can be a new "
 "path, or an existing directory tree. You can use paths relative to the "
@@ -3805,11 +3806,11 @@ msgstr ""
 "létező elérési út is. Lehet használni a projekt fájlnevéhez képest relatív "
 "elérési utakat is."
 
-#: ../src/project.c:173 ../src/project.c:468
+#: ../src/project.c:173 ../src/project.c:470
 msgid "Choose Project Base Path"
 msgstr "Adja meg a projekt alapkönyvtárát"
 
-#: ../src/project.c:231 ../src/project.c:263 ../src/project.c:957
+#: ../src/project.c:231 ../src/project.c:263 ../src/project.c:977
 #, c-format
 msgid "Project file \"%s\" could not be loaded."
 msgstr "Nem sikerült betölteni a(z) \"%s\" projekt fájlt."
@@ -3827,86 +3828,86 @@ msgstr "Projekt fájlok"
 msgid "Project \"%s\" closed."
 msgstr "\"%s\" projekt bezárva."
 
-#: ../src/project.c:439
+#: ../src/project.c:441
 msgid "Description:"
 msgstr "Leírás:"
 
-#: ../src/project.c:481
+#: ../src/project.c:484
 msgid "Set the Build non-filetype working directories to use base path:"
 msgstr ""
 
-#: ../src/project.c:484
+#: ../src/project.c:487
 #, fuzzy
 msgid "Set"
 msgstr "Sect1"
 
-#: ../src/project.c:486
+#: ../src/project.c:489
 msgid ""
 "Set the working directories (on the Build tab) for the non-filetype build "
 "commands to use the base path"
 msgstr ""
 
-#: ../src/project.c:501
+#: ../src/project.c:504
 msgid "File patterns:"
 msgstr "Fájl minták:"
 
-#: ../src/project.c:610
+#: ../src/project.c:630
 msgid "Do you want to close it before proceeding?"
 msgstr "Szeretné bezárni, mielőtt folytatja?"
 
-#: ../src/project.c:611
+#: ../src/project.c:631
 #, c-format
 msgid "The '%s' project is already open."
 msgstr "A(z) '%s' projekt már nyitva van."
 
-#: ../src/project.c:658
+#: ../src/project.c:678
 msgid "The specified project name is too short."
 msgstr "A megadott projekt név túl rövid."
 
-#: ../src/project.c:664
+#: ../src/project.c:684
 #, c-format
 msgid "The specified project name is too long (max. %d characters)."
 msgstr "A megadott projekt név túl hosszú (max. %d karakter)."
 
-#: ../src/project.c:672
+#: ../src/project.c:692
 msgid "You have specified an invalid project filename."
 msgstr "Érvénytelen projekt fájlnevet adott meg."
 
-#: ../src/project.c:695
+#: ../src/project.c:715
 msgid "Create the project's base path directory?"
 msgstr "Létre kívánja hozni a projekt alapkönyvtárát?"
 
-#: ../src/project.c:696
+#: ../src/project.c:716
 #, c-format
 msgid "The path \"%s\" does not exist."
 msgstr "A(z) \"%s\" elérési út nem létezik."
 
-#: ../src/project.c:705
+#: ../src/project.c:725
 #, c-format
 msgid "Project base directory could not be created (%s)."
 msgstr "A projekt alapkönyvtárát nem lehetett létrehozni (%s)."
 
-#: ../src/project.c:717
+#: ../src/project.c:737
 #, c-format
 msgid "Project file could not be written (%s)."
 msgstr "A projekt fájl nem írható (%s)."
 
-#: ../src/project.c:794
+#: ../src/project.c:814
 #, c-format
 msgid "Project \"%s\" created."
 msgstr "\"%s\" projekt létrehozásra került."
 
-#: ../src/project.c:796
+#: ../src/project.c:816
 #, c-format
 msgid "Project \"%s\" saved."
 msgstr "\"%s\" projekt elmentve."
 
 #. initialise the dialog
-#: ../src/project.c:861 ../src/project.c:872
+#: ../src/project.c:881 ../src/project.c:892
 msgid "Choose Project Filename"
 msgstr "Adja meg a projekt nevét"
 
-#: ../src/project.c:947
+#: ../src/project.c:967
 #, c-format
 msgid "Project \"%s\" opened."
 msgstr "\"%s\" projekt megnyitásra került."
@@ -4350,19 +4351,19 @@ msgstr "Struktúrák"
 msgid "Typedefs / Enums"
 msgstr "Típusdefiníciók / Enumerátorok"
 
-#: ../src/symbols.c:1365
+#: ../src/symbols.c:1371
 #, c-format
 msgid "Unknown filetype extension for \"%s\".\n"
 msgstr "Ismeretlen fájlkiterjesztés: \"%s\".\n"
 
-#: ../src/symbols.c:1389
+#: ../src/symbols.c:1395
 #, c-format
 msgid "Failed to create tags file, perhaps because no tags were found.\n"
 msgstr ""
 "Nem sikerült létrehozni a címkefájlt, feltehetően azért, mert nem sikerült "
 "címékéket találni.\n"
 
-#: ../src/symbols.c:1396
+#: ../src/symbols.c:1402
 #, c-format
 msgid ""
 "Usage: %s -g <Tag File> <File list>\n"
@@ -4371,7 +4372,7 @@ msgstr ""
 "Használat: %s -g <Címkefájl> <Fájl lista>\n"
 "\n"
 
-#: ../src/symbols.c:1397
+#: ../src/symbols.c:1403
 #, c-format
 msgid ""
 "Example:\n"
@@ -4382,40 +4383,40 @@ msgstr ""
 "CFLAGS=`pkg-config gtk+-2.0 --cflags` %s -g gtk2.c.tags /usr/include/gtk-2.0/"
 "gtk/gtk.h\n"
 
-#: ../src/symbols.c:1411
+#: ../src/symbols.c:1417
 msgid "Load Tags"
 msgstr "Betöltött címkék"
 
-#: ../src/symbols.c:1418
+#: ../src/symbols.c:1424
 msgid "Geany tag files (*.tags)"
 msgstr "Geany címkefájlok (*.tags)"
 
 #. For translators: the first wildcard is the filetype, the second the filename
-#: ../src/symbols.c:1438
+#: ../src/symbols.c:1444
 #, c-format
 msgid "Loaded %s tags file '%s'."
 msgstr "%s címkefájl '%s' betöltésre került."
 
-#: ../src/symbols.c:1440
+#: ../src/symbols.c:1446
 #, c-format
 msgid "Could not load tags file '%s'."
 msgstr "Nem sikerült betölteni a(z) '%s' címkefájlt."
 
-#: ../src/symbols.c:1573
+#: ../src/symbols.c:1579
 #, c-format
 msgid "Forward declaration \"%s\" not found."
 msgstr "\"%s\" előzetes deklarációja nem található."
 
-#: ../src/symbols.c:1575
+#: ../src/symbols.c:1581
 #, c-format
 msgid "Definition of \"%s\" not found."
 msgstr "\"%s\" definíciója nem található."
 
-#: ../src/symbols.c:1881
+#: ../src/symbols.c:1887
 msgid "Sort by _Name"
 msgstr "Rendezés _név alapján"
 
-#: ../src/symbols.c:1888
+#: ../src/symbols.c:1894
 msgid "Sort by _Appearance"
 msgstr "Rendezés megjelenés _alapján"
 
@@ -4645,19 +4646,19 @@ msgstr "Karakterek:"
 msgid "No tags found"
 msgstr "Nem található címke"
 
-#: ../src/sidebar.c:546
+#: ../src/sidebar.c:541
 msgid "Show S_ymbol List"
 msgstr "S_zimbólum lista megjelenítése"
 
-#: ../src/sidebar.c:554
+#: ../src/sidebar.c:549
 msgid "Show _Document List"
 msgstr "Megnyitott fájlok listájának me_gjelenítése"
 
-#: ../src/sidebar.c:562 ../plugins/filebrowser.c:647
+#: ../src/sidebar.c:557 ../plugins/filebrowser.c:649
 msgid "H_ide Sidebar"
 msgstr "Oldalsáv e_lrejtése"
 
-#: ../src/sidebar.c:631
+#: ../src/sidebar.c:626
 #, fuzzy
 msgid "Show _Paths"
 msgstr "Állapotsor megjelenítése"
@@ -4892,7 +4893,7 @@ msgstr ""
 "(alapértelmezetten az F10). Akkor lehet hasznos letiltani, ha pl. Midnight "
 "Commander-t használ a VTE-n belül."
 
-#: ../src/vte.c:836 ../plugins/filebrowser.c:1217
+#: ../src/vte.c:836 ../plugins/filebrowser.c:1219
 msgid "Follow the path of the current file"
 msgstr "Az aktuális fájl elérési útjának követése"
 
@@ -5091,7 +5092,7 @@ msgstr "Elválasztás karakterek"
 msgid "Miscellaneous characters"
 msgstr "Egyéb karakterek"
 
-#: ../plugins/htmlchars.c:367 ../plugins/filebrowser.c:1134
+#: ../plugins/htmlchars.c:367 ../plugins/filebrowser.c:1136
 #: ../plugins/saveactions.c:470
 msgid "Plugin configuration directory could not be created."
 msgstr "A bővítmény konfigurációs könyvtárat nem lehetett létrehozni."
@@ -5219,59 +5220,59 @@ msgstr "Túl sok elem került kiválasztásra!"
 msgid "Could not execute configured external command '%s' (%s)."
 msgstr "Nem sikerült végrehajtani a beállított '%s' külső parancsot (%s)."
 
-#: ../plugins/filebrowser.c:603
+#: ../plugins/filebrowser.c:605
 msgid "Open _externally"
 msgstr "Külső m_egnyitás"
 
-#: ../plugins/filebrowser.c:618
+#: ../plugins/filebrowser.c:620
 msgid "_Find in Files"
 msgstr "Keresés _fájlokban"
 
-#: ../plugins/filebrowser.c:628
+#: ../plugins/filebrowser.c:630
 msgid "Show _Hidden Files"
 msgstr "_Rejtett fájlok megjelenítése"
 
-#: ../plugins/filebrowser.c:841
+#: ../plugins/filebrowser.c:843
 msgid "Up"
 msgstr "Fel"
 
-#: ../plugins/filebrowser.c:846
+#: ../plugins/filebrowser.c:848
 msgid "Refresh"
 msgstr "Frissítés"
 
-#: ../plugins/filebrowser.c:851
+#: ../plugins/filebrowser.c:853
 msgid "Home"
 msgstr "Saját könyvtár"
 
-#: ../plugins/filebrowser.c:856
+#: ../plugins/filebrowser.c:858
 msgid "Set path from document"
 msgstr "Könyvtárváltás a dokumentum alapján"
 
-#: ../plugins/filebrowser.c:866
+#: ../plugins/filebrowser.c:868
 msgid "Clear the filter"
 msgstr "Szűrő törlése"
 
-#: ../plugins/filebrowser.c:880
+#: ../plugins/filebrowser.c:882
 msgid "Filter:"
 msgstr "Szűrő:"
 
-#: ../plugins/filebrowser.c:890
+#: ../plugins/filebrowser.c:892
 msgid "Filter your files with usual wildcards"
 msgstr ""
 
-#: ../plugins/filebrowser.c:1107
+#: ../plugins/filebrowser.c:1109
 msgid "Focus File List"
 msgstr "Fókusz mozgatása a fájl listára"
 
-#: ../plugins/filebrowser.c:1109
+#: ../plugins/filebrowser.c:1111
 msgid "Focus Path Entry"
 msgstr "Fókusz mozgatása az elérési út beviteli mezőre"
 
-#: ../plugins/filebrowser.c:1185
+#: ../plugins/filebrowser.c:1187
 msgid "External open command:"
 msgstr "Külső megnyitás parancs:"
 
-#: ../plugins/filebrowser.c:1194
+#: ../plugins/filebrowser.c:1196
 #, c-format
 msgid ""
 "The command to execute when using \"Open with\". You can use %f and %d "
@@ -5285,15 +5286,15 @@ msgstr ""
 "A %f helyére a fájlnév kerül, teljes elérési úttal.\n"
 "A %d helyére a kiválasztott fájl elérési útja kerül, a fájlnév nélkül."
 
-#: ../plugins/filebrowser.c:1202
+#: ../plugins/filebrowser.c:1204
 msgid "Show hidden files"
 msgstr "Rejtett fájlokat is megjeleníti"
 
-#: ../plugins/filebrowser.c:1208
+#: ../plugins/filebrowser.c:1210
 msgid "Hide object files"
 msgstr "Objektum fájlok elrejtése"
 
-#: ../plugins/filebrowser.c:1212
+#: ../plugins/filebrowser.c:1214
 msgid ""
 "Don't show generated object files in the file browser, this includes *.o, *."
 "obj. *.so, *.dll, *.a, *.lib"
@@ -5301,12 +5302,12 @@ msgstr ""
 "Ne mutassa a fájl kiválasztó panelen a generált objektum fájlokat (*.o, *."
 "obj, *.so, *.dll, *.a, *.lib)"
 
-#: ../plugins/filebrowser.c:1223
+#: ../plugins/filebrowser.c:1225
 #, fuzzy
 msgid "Use the project's base directory"
 msgstr "Megadja a projekt alapkönyvtárát"
 
-#: ../plugins/filebrowser.c:1227
+#: ../plugins/filebrowser.c:1229
 msgid ""
 "Change the directory to the base directory of the currently opened project"
 msgstr "Az aktuálisan megnyitott projekt alapkönyvtárára vált"

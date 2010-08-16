@@ -7,10 +7,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: geany 0.19\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-05-23 10:05+0200\n"
+"POT-Creation-Date: 2010-08-16 21:09+0200\n"
 "PO-Revision-Date: 2009-05-31 13:56+0100\n"
 "Last-Translator: Laurent HOELTGEN <laurent.hoeltgen@googlemail.com>\n"
 "Language-Team: Letzebuergesch\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -30,53 +31,53 @@ msgstr "Geany"
 msgid "Integrated Development Environment"
 msgstr "Integréiert Entwécklungsumgebung"
 
-#: ../src/about.c:145
+#: ../src/about.c:146
 msgid "About Geany"
 msgstr "Iwwert Geany"
 
-#: ../src/about.c:195
+#: ../src/about.c:196
 msgid "A fast and lightweight IDE"
 msgstr "En klenge an schnelle IDE"
 
-#: ../src/about.c:216
+#: ../src/about.c:217
 #, c-format
 msgid "(built on or after %s)"
 msgstr "(compiléiert den %s oder méi spéit)"
 
 #. gtk_container_add(GTK_CONTAINER(info_box), cop_label);
-#: ../src/about.c:247
+#: ../src/about.c:248
 msgid "Info"
 msgstr "Info"
 
-#: ../src/about.c:263
+#: ../src/about.c:264
 msgid "Developers"
 msgstr "Entwéckler"
 
-#: ../src/about.c:272
+#: ../src/about.c:273
 msgid "maintainer"
 msgstr "Haaptentwéckler"
 
-#: ../src/about.c:280
+#: ../src/about.c:281
 msgid "developer"
 msgstr "Entwéckler"
 
-#: ../src/about.c:288
+#: ../src/about.c:289
 msgid "translation maintainer"
 msgstr "Iwwersetzungskoordinator"
 
-#: ../src/about.c:297
+#: ../src/about.c:298
 msgid "Translators"
 msgstr "Iwwersetzer"
 
-#: ../src/about.c:317
+#: ../src/about.c:318
 msgid "Previous Translators"
 msgstr "Vireg Iwwersetzer"
 
-#: ../src/about.c:338
+#: ../src/about.c:339
 msgid "Contributors"
 msgstr "Kollaborateuren"
 
-#: ../src/about.c:348
+#: ../src/about.c:349
 #, c-format
 msgid ""
 "Some of the many contributors (for a more detailed list, see the file %s):"
@@ -84,15 +85,15 @@ msgstr ""
 "E puer Kollaborateuren (fir eng méi detailléiert Lescht, kuckt an den "
 "Fichier %s):"
 
-#: ../src/about.c:374
+#: ../src/about.c:375
 msgid "Credits"
 msgstr "Credits"
 
-#: ../src/about.c:388
+#: ../src/about.c:389
 msgid "License"
 msgstr "Lizenz"
 
-#: ../src/about.c:397
+#: ../src/about.c:398
 msgid ""
 "License text could not be found, please visit http://www.gnu.org/licenses/"
 "gpl-2.0.txt to view it online."
@@ -101,44 +102,44 @@ msgstr ""
 "licenses/gpl-2.0.txt fir den Text online ze liesen."
 
 #. fall back to %d
-#: ../src/build.c:635
+#: ../src/build.c:638
 #, c-format
 msgid "failed to substitute %%p, no project active"
 msgstr ""
 
-#: ../src/build.c:673
+#: ../src/build.c:676
 #, fuzzy
 msgid "Process failed, no working directory"
 msgstr "Konnt d'Aarbechtsverzeechnis net an \"%s\" änneren"
 
-#: ../src/build.c:699
+#: ../src/build.c:702
 #, c-format
 msgid "%s (in directory: %s)"
 msgstr "%s (am Ordner: %s)"
 
-#: ../src/build.c:719 ../src/build.c:944 ../src/search.c:1475
+#: ../src/build.c:722 ../src/build.c:947 ../src/search.c:1475
 #, c-format
 msgid "Process failed (%s)"
 msgstr "Prozess feelgeschloen (%s)"
 
-#: ../src/build.c:790
+#: ../src/build.c:793
 #, c-format
 msgid "Failed to change the working directory to \"%s\""
 msgstr "Konnt d'Aarbechtsverzeechnis net an \"%s\" änneren"
 
-#: ../src/build.c:819
+#: ../src/build.c:822
 #, c-format
 msgid "Failed to execute \"%s\" (start-script could not be created)"
 msgstr "Konnt \"%s\" net ausféieren (Start Skript konnt net erstallt ginn)"
 
-#: ../src/build.c:873
+#: ../src/build.c:876
 msgid ""
 "Could not execute the file in the VTE because it probably contains a command."
 msgstr ""
 "Konnt den Fichier net am VTE ausféieren, well en wahrscheinlech eng Commande "
 "enthält"
 
-#: ../src/build.c:911
+#: ../src/build.c:914
 #, c-format
 msgid ""
 "Could not find terminal \"%s\" (check path for Terminal tool setting in "
@@ -147,170 +148,170 @@ msgstr ""
 "Konnt den Terminal \"%s\" net fannen (kontrolléiert den Pad fir bei den "
 "Terminal an den Astellungen)"
 
-#: ../src/build.c:1081
+#: ../src/build.c:1084
 msgid "Compilation failed."
 msgstr "Compiléieren feelgeschloen."
 
-#: ../src/build.c:1095
+#: ../src/build.c:1098
 msgid "Compilation finished successfully."
 msgstr "Compiléieren mat Erfolleg ofgeschloss."
 
-#: ../src/build.c:1252
+#: ../src/build.c:1255
 #, fuzzy
 msgid "Custom Text"
 msgstr "Make mat eegenem Ziel"
 
-#: ../src/build.c:1253
+#: ../src/build.c:1256
 #, fuzzy
 msgid "Enter custom text here, all entered text is appended to the command."
 msgstr ""
 "Gidd d'benotzerdefinéiert Optiounen hei an. Den ganzen Text gëtt sou un Make "
 "weiderginn."
 
-#: ../src/build.c:1331
+#: ../src/build.c:1334
 msgid "_Next Error"
 msgstr "_Nächsten Feeler"
 
-#: ../src/build.c:1333
+#: ../src/build.c:1336
 msgid "_Previous Error"
 msgstr "_Viregen Feeler"
 
-#: ../src/build.c:1343
+#: ../src/build.c:1346
 #, fuzzy
 msgid "_Set Build Commands"
 msgstr "Benotzerdefinéiert Commanden setzen"
 
-#: ../src/build.c:1623 ../src/toolbar.c:373
+#: ../src/build.c:1630 ../src/toolbar.c:373
 msgid "Build the current file"
 msgstr "Aktuellen Fichier erstellen"
 
-#: ../src/build.c:1637
+#: ../src/build.c:1644
 msgid "Build the current file with Make and the default target"
 msgstr "Den aktuellen Fichier mat Make an mam standard Ziel erstellen"
 
-#: ../src/build.c:1639
+#: ../src/build.c:1646
 msgid "Build the current file with Make and the specified target"
 msgstr "Den aktuellen Fichier mat Make erstellen an en Ziel uginn"
 
-#: ../src/build.c:1641
+#: ../src/build.c:1648
 msgid "Compile the current file with Make"
 msgstr "Den aktuellen Fichier mat Make compiléieren"
 
-#: ../src/build.c:1668
+#: ../src/build.c:1675
 #, c-format
 msgid "Process could not be stopped (%s)."
 msgstr "Prozess konnt net gestoppt ginn (%s)."
 
-#: ../src/build.c:1685 ../src/build.c:1697
+#: ../src/build.c:1692 ../src/build.c:1704
 msgid "No more build errors."
 msgstr "Keng weider Feelermeldungen"
 
-#: ../src/build.c:1778
+#: ../src/build.c:1785
 msgid "Set menu item label"
 msgstr ""
 
-#: ../src/build.c:1788
+#: ../src/build.c:1795
 msgid "Item"
 msgstr ""
 
-#: ../src/build.c:1789 ../src/symbols.c:650
+#: ../src/build.c:1796 ../src/symbols.c:650
 msgid "Label"
 msgstr "Label"
 
-#: ../src/build.c:1790 ../src/symbols.c:645
+#: ../src/build.c:1797 ../src/symbols.c:645
 msgid "Command"
 msgstr "Commande"
 
-#: ../src/build.c:1791
+#: ../src/build.c:1798
 #, fuzzy
 msgid "Working directory"
 msgstr "%s (am Ordner: %s)"
 
-#: ../src/build.c:1792
+#: ../src/build.c:1799
 #, fuzzy
 msgid "Clear"
 msgstr "Compiler"
 
-#: ../src/build.c:1831
+#: ../src/build.c:1838
 msgid "Click to set menu item label"
 msgstr ""
 
-#: ../src/build.c:1904 ../src/build.c:1906
+#: ../src/build.c:1911 ../src/build.c:1913
 #, fuzzy, c-format
 msgid "%s Commands"
 msgstr "Commanden fir %s"
 
-#: ../src/build.c:1906
+#: ../src/build.c:1913
 #, fuzzy
 msgid "No Filetype"
 msgstr "Den _Typ vun Fichier definéiren"
 
-#: ../src/build.c:1914 ../src/build.c:1949
+#: ../src/build.c:1921 ../src/build.c:1956
 #, fuzzy
 msgid "Error Regular Expression:"
 msgstr "_Grep regulär Ausdréck"
 
-#: ../src/build.c:1942
+#: ../src/build.c:1949
 msgid "Non-Filetype Commands"
 msgstr ""
 
-#: ../src/build.c:1972
+#: ../src/build.c:1979
 msgid "Note: Item 2 opens a dialog and appends the response to the command."
 msgstr ""
 
-#: ../src/build.c:1981
+#: ../src/build.c:1988
 #, fuzzy
 msgid "Execute Commands"
 msgstr "Benotzerdefinéiert Commanden setzen"
 
-#: ../src/build.c:1992
+#: ../src/build.c:1999
 #, c-format
 msgid ""
 "%d, %e, %f, %p are substituted in command and directory fields, see manual "
 "for details."
 msgstr ""
 
-#: ../src/build.c:2177
+#: ../src/build.c:2184
 #, fuzzy
 msgid "Set Build Commands"
 msgstr "Benotzerdefinéiert Commanden setzen"
 
-#: ../src/build.c:2399
+#: ../src/build.c:2406
 msgid "_Compile"
 msgstr "_Compiléiren"
 
 #. build the code
-#: ../src/build.c:2406 ../src/build.c:2669 ../src/interface.c:1075
+#: ../src/build.c:2413 ../src/build.c:2679 ../src/interface.c:1075
 msgid "_Build"
 msgstr "_Erstellen"
 
-#: ../src/build.c:2413 ../src/build.c:2443 ../src/build.c:2636
+#: ../src/build.c:2420 ../src/build.c:2450 ../src/build.c:2643
 #, fuzzy
 msgid "_Execute"
 msgstr "Ausféieren"
 
 #. build the code with make custom
-#: ../src/build.c:2458 ../src/build.c:2634 ../src/build.c:2689
+#: ../src/build.c:2465 ../src/build.c:2641 ../src/build.c:2699
 msgid "Make Custom _Target"
 msgstr "Make Custom _Target"
 
 #. build the code with make object
-#: ../src/build.c:2460 ../src/build.c:2635 ../src/build.c:2697
+#: ../src/build.c:2467 ../src/build.c:2642 ../src/build.c:2707
 msgid "Make _Object"
 msgstr "Make _Object"
 
-#: ../src/build.c:2462 ../src/build.c:2633
+#: ../src/build.c:2469 ../src/build.c:2640
 #, fuzzy
 msgid "_Make"
 msgstr "Make:"
 
 #. build the code with make all
-#: ../src/build.c:2681
+#: ../src/build.c:2691
 msgid "_Make All"
 msgstr "_Make all"
 
 #. arguments
-#: ../src/build.c:2709
+#: ../src/build.c:2719
 #, fuzzy
 msgid "_Set Build Menu Commands"
 msgstr "Benotzerdefinéiert Commanden setzen"
@@ -327,7 +328,7 @@ msgstr[0] "Fichier %s gespäichert."
 msgstr[1] "Fichier %s gespäichert."
 
 #: ../src/callbacks.c:488 ../src/document.c:2895 ../src/interface.c:352
-#: ../src/sidebar.c:618
+#: ../src/sidebar.c:613
 msgid "_Reload"
 msgstr "_Nei lueden"
 
@@ -549,7 +550,7 @@ msgstr ""
 
 #: ../src/dialogs.c:1076 ../src/dialogs.c:1077 ../src/dialogs.c:1078
 #: ../src/dialogs.c:1084 ../src/dialogs.c:1085 ../src/dialogs.c:1086
-#: ../src/symbols.c:1724 ../src/symbols.c:1745 ../src/symbols.c:1797
+#: ../src/symbols.c:1730 ../src/symbols.c:1751 ../src/symbols.c:1803
 #: ../src/ui_utils.c:222
 msgid "unknown"
 msgstr "onbekannt"
@@ -804,15 +805,15 @@ msgstr ""
 msgid "File \"%s\" was not found on disk! Try to resave the file?"
 msgstr "Den Fichier \"%s\" konnt net fonnt gin!"
 
-#: ../src/editor.c:4425
+#: ../src/editor.c:4421
 msgid "Enter Tab Width"
 msgstr "Breet vun engem Tab aginn"
 
-#: ../src/editor.c:4426
+#: ../src/editor.c:4422
 msgid "Enter the amount of spaces which should be replaced by a tab character."
 msgstr "D'Unzuel un Espacen aginn déi en Tab sollen ersetzen"
 
-#: ../src/editor.c:4577
+#: ../src/editor.c:4573
 #, c-format
 msgid "Warning: non-standard hard tab width: %d != 8!"
 msgstr ""
@@ -1040,18 +1041,18 @@ msgstr "Schlechten regulären Ausdrock fir den Typ vun Fichier %s: %s"
 msgid "untitled"
 msgstr "ouni Titel"
 
-#: ../src/highlighting.c:3349 ../src/main.c:802 ../src/socket.c:165
+#: ../src/highlighting.c:3351 ../src/main.c:802 ../src/socket.c:165
 #: ../src/templates.c:384
 #, c-format
 msgid "Could not find file '%s'."
 msgstr "Konnt den Fichier '%s' net fannen."
 
-#: ../src/highlighting.c:3398
+#: ../src/highlighting.c:3400
 #, fuzzy
 msgid "_Color Schemes"
 msgstr "_Faarwe auswielen"
 
-#: ../src/highlighting.c:3405
+#: ../src/highlighting.c:3407
 msgid "_Default"
 msgstr ""
 
@@ -2592,7 +2593,7 @@ msgstr ""
 "huet. Null deaktivéiert d'Kontrolléieren."
 
 #: ../src/interface.c:4235 ../src/prefs.c:1533 ../src/symbols.c:605
-#: ../plugins/filebrowser.c:1101
+#: ../plugins/filebrowser.c:1103
 msgid "Files"
 msgstr "Fichieren"
 
@@ -2846,7 +2847,7 @@ msgstr "Ausschneiden"
 msgid "Use global settings"
 msgstr ""
 
-#: ../src/keybindings.c:227 ../src/plugins.c:1171
+#: ../src/keybindings.c:227 ../src/plugins.c:1174
 msgid "File"
 msgstr "Fichier"
 
@@ -2894,7 +2895,7 @@ msgstr "Fichier nei lueden"
 msgid "Re-open last closed tab"
 msgstr ""
 
-#: ../src/keybindings.c:255 ../src/project.c:519
+#: ../src/keybindings.c:255 ../src/project.c:522
 msgid "Project"
 msgstr "Projet"
 
@@ -3325,7 +3326,7 @@ msgstr "_Markéierung ewechmaachen"
 msgid "Remove Error Indicators"
 msgstr "Feelermarké_ierungen ewechmaachen"
 
-#: ../src/keybindings.c:538 ../src/keybindings.c:543 ../src/project.c:477
+#: ../src/keybindings.c:538 ../src/keybindings.c:543 ../src/project.c:479
 #: ../src/ui_utils.c:1815
 msgid "Build"
 msgstr "Erstellen"
@@ -3511,8 +3512,8 @@ msgid ""
 "Your old configuration directory \"%s\" could not be moved to \"%s\" (%s). "
 "Please move manually the directory to the new location."
 msgstr ""
-"Ären aalen Configuratiounsordner \"%s\" konnt nët no \"%s\" beweegt ginn (%"
-"s). Beweegt den Ordner w.e.g. manuell."
+"Ären aalen Configuratiounsordner \"%s\" konnt nët no \"%s\" beweegt ginn "
+"(%s). Beweegt den Ordner w.e.g. manuell."
 
 #: ../src/main.c:716
 #, c-format
@@ -3526,17 +3527,17 @@ msgstr ""
 "gëtt.\n"
 "Geany trotzdem starten?"
 
-#: ../src/main.c:1031
+#: ../src/main.c:1044
 #, c-format
 msgid "This is Geany %s."
 msgstr "Dëst as Geany '%s'."
 
-#: ../src/main.c:1033
+#: ../src/main.c:1046
 #, c-format
 msgid "Configuration directory could not be created (%s)."
 msgstr "Den Cofiguratiounsordner konnt net erstallt ginn (%s)."
 
-#: ../src/main.c:1244
+#: ../src/main.c:1257
 msgid "Configuration files reloaded."
 msgstr "Fichier mat den Configuratiounen nei gelueden."
 
@@ -3544,20 +3545,20 @@ msgstr "Fichier mat den Configuratiounen nei gelueden."
 msgid "Status messages"
 msgstr "Status Messagen"
 
-#: ../src/msgwindow.c:524
+#: ../src/msgwindow.c:542
 #, fuzzy
 msgid "C_opy"
 msgstr "Kopéieren"
 
-#: ../src/msgwindow.c:533
+#: ../src/msgwindow.c:551
 msgid "Copy _All"
 msgstr "_Alles kopeiren"
 
-#: ../src/msgwindow.c:563
+#: ../src/msgwindow.c:581
 msgid "_Hide Message Window"
 msgstr "Noriic_htenfënster verstoppen"
 
-#: ../src/msgwindow.c:619
+#: ../src/msgwindow.c:637
 #, c-format
 msgid "Could not find file '%s' - trying the current document path."
 msgstr ""
@@ -3571,11 +3572,11 @@ msgstr ""
 "Den PlugIn \"%s\" ass net compatibel mat dëser Versioun vun Geany - dier "
 "musst en nei compiléieren."
 
-#: ../src/plugins.c:906
+#: ../src/plugins.c:909
 msgid "_Plugin Manager"
 msgstr "_PlugIn Manager"
 
-#: ../src/plugins.c:1083
+#: ../src/plugins.c:1086
 #, c-format
 msgid ""
 "Plugin: %s %s\n"
@@ -3586,27 +3587,27 @@ msgstr ""
 "Beschreiwung: %s\n"
 "Auteur(en): %s"
 
-#: ../src/plugins.c:1159
+#: ../src/plugins.c:1162
 msgid "Active"
 msgstr "Aktiv"
 
-#: ../src/plugins.c:1165
+#: ../src/plugins.c:1168
 msgid "Plugin"
 msgstr "Plugin"
 
-#: ../src/plugins.c:1189
+#: ../src/plugins.c:1192
 msgid "No plugins available."
 msgstr "Keng PlugIns verfügbar"
 
-#: ../src/plugins.c:1269
+#: ../src/plugins.c:1272
 msgid "Plugins"
 msgstr "Plugins"
 
-#: ../src/plugins.c:1289
+#: ../src/plugins.c:1292
 msgid "Choose which plugins should be loaded at startup:"
 msgstr ""
 
-#: ../src/plugins.c:1301
+#: ../src/plugins.c:1304
 msgid "<b>Plugin details:</b>"
 msgstr "<b>Detailer vum PlugIn</b>"
 
@@ -3623,11 +3624,11 @@ msgstr "Knäppchen drécken"
 msgid "Press the combination of the keys you want to use for \"%s\"."
 msgstr "Dréckt den Kierzel den dier fir \"%s\" wëllt benotzen."
 
-#: ../src/prefs.c:214 ../src/symbols.c:1866
+#: ../src/prefs.c:214 ../src/symbols.c:1872
 msgid "_Expand All"
 msgstr "Alles _erausklappen"
 
-#: ../src/prefs.c:219 ../src/symbols.c:1871
+#: ../src/prefs.c:219 ../src/symbols.c:1877
 msgid "_Collapse All"
 msgstr "Alles eran_klappen"
 
@@ -3738,32 +3739,32 @@ msgstr "Dokument ariichten"
 msgid "Print only the basename(without the path) of the printed file"
 msgstr "Nemmen den Basisnumm (ouni den Pad) vum gedréckten Fichier drécken"
 
-#: ../src/printing.c:527
+#: ../src/printing.c:530
 #, c-format
 msgid "Page %d of %d"
 msgstr "Säit %d vun %d"
 
-#: ../src/printing.c:781
+#: ../src/printing.c:784
 #, c-format
 msgid "Did not send document %s to the printing subsystem."
 msgstr ""
 
-#: ../src/printing.c:783
+#: ../src/printing.c:786
 #, c-format
 msgid "Document %s was sent to the printing subsystem."
 msgstr ""
 
-#: ../src/printing.c:835
+#: ../src/printing.c:838
 #, c-format
 msgid "Printing of %s failed (%s)."
 msgstr "Den Fichier %s konnt net gedréckt gin (%s)"
 
-#: ../src/printing.c:875
+#: ../src/printing.c:878
 msgid "Please set a print command in the preferences dialog first."
 msgstr ""
 "W.e.g. fir d'eischt eng Commande fir ze drécken an den Astellungen aginn."
 
-#: ../src/printing.c:883
+#: ../src/printing.c:886
 #, c-format
 msgid ""
 "The file \"%s\" will be printed with the following command:\n"
@@ -3774,12 +3775,12 @@ msgstr ""
 "\n"
 "%s"
 
-#: ../src/printing.c:899
+#: ../src/printing.c:902
 #, c-format
 msgid "Printing of \"%s\" failed (return code: %s)."
 msgstr "Den Fichier %s konnt net gedréckt gin (Code: %s)"
 
-#: ../src/printing.c:905
+#: ../src/printing.c:908
 #, c-format
 msgid "File %s printed."
 msgstr "Den Fichier %s gouf gedréckt"
@@ -3798,19 +3799,19 @@ msgstr "Neie Projet"
 msgid "C_reate"
 msgstr "E_rstellen"
 
-#: ../src/project.c:139 ../src/project.c:413
+#: ../src/project.c:139 ../src/project.c:415
 msgid "Name:"
 msgstr "Numm:"
 
-#: ../src/project.c:148 ../src/project.c:426
+#: ../src/project.c:148 ../src/project.c:428
 msgid "Filename:"
 msgstr "Numm vum Fichier:"
 
-#: ../src/project.c:164 ../src/project.c:456
+#: ../src/project.c:164 ../src/project.c:458
 msgid "Base path:"
 msgstr "Basis Pad:"
 
-#: ../src/project.c:170 ../src/project.c:465
+#: ../src/project.c:170 ../src/project.c:467
 msgid ""
 "Base directory of all files that make up the project. This can be a new "
 "path, or an existing directory tree. You can use paths relative to the "
@@ -3820,11 +3821,11 @@ msgstr ""
 "wielen deen et schon gëtt oder awer en neien Ordner uginn. Den Pad kann an "
 "absoluter oder relativer Form uginn ginn."
 
-#: ../src/project.c:173 ../src/project.c:468
+#: ../src/project.c:173 ../src/project.c:470
 msgid "Choose Project Base Path"
 msgstr "Den basis Pad vum Projet wielen"
 
-#: ../src/project.c:231 ../src/project.c:263 ../src/project.c:957
+#: ../src/project.c:231 ../src/project.c:263 ../src/project.c:977
 #, c-format
 msgid "Project file \"%s\" could not be loaded."
 msgstr "Projetsfichier \"%s\" konnt net gelueden gin."
@@ -3842,86 +3843,86 @@ msgstr "Fichieren vum Projet"
 msgid "Project \"%s\" closed."
 msgstr "Projet \"%s\" gouf zougemaach"
 
-#: ../src/project.c:439
+#: ../src/project.c:441
 msgid "Description:"
 msgstr "Beschreiwung:"
 
-#: ../src/project.c:481
+#: ../src/project.c:484
 msgid "Set the Build non-filetype working directories to use base path:"
 msgstr ""
 
-#: ../src/project.c:484
+#: ../src/project.c:487
 #, fuzzy
 msgid "Set"
 msgstr "Sect1"
 
-#: ../src/project.c:486
+#: ../src/project.c:489
 msgid ""
 "Set the working directories (on the Build tab) for the non-filetype build "
 "commands to use the base path"
 msgstr ""
 
-#: ../src/project.c:501
+#: ../src/project.c:504
 msgid "File patterns:"
 msgstr "Muster vum Fichiersnumm:"
 
-#: ../src/project.c:610
+#: ../src/project.c:630
 msgid "Do you want to close it before proceeding?"
 msgstr "Wëllt dier et zoumaachen virum weiderfueren?"
 
-#: ../src/project.c:611
+#: ../src/project.c:631
 #, c-format
 msgid "The '%s' project is already open."
 msgstr "Den Projet '%s' ass schonns op"
 
-#: ../src/project.c:658
+#: ../src/project.c:678
 msgid "The specified project name is too short."
 msgstr "Den Numm fir den Projet ass ze kuerz"
 
-#: ../src/project.c:664
+#: ../src/project.c:684
 #, c-format
 msgid "The specified project name is too long (max. %d characters)."
 msgstr "Den Numm fir den Projet ass ze laang (max. %d Buschtawen)"
 
-#: ../src/project.c:672
+#: ../src/project.c:692
 msgid "You have specified an invalid project filename."
 msgstr "Dier hutt en schlechten Numm fir den Projetsfichier uginn."
 
-#: ../src/project.c:695
+#: ../src/project.c:715
 msgid "Create the project's base path directory?"
 msgstr "Soll den Projetsbasisordner erstallt ginn?"
 
-#: ../src/project.c:696
+#: ../src/project.c:716
 #, c-format
 msgid "The path \"%s\" does not exist."
 msgstr "Den Pad \"%s\" existéiert net."
 
-#: ../src/project.c:705
+#: ../src/project.c:725
 #, c-format
 msgid "Project base directory could not be created (%s)."
 msgstr "Den Projetsordner konnt net erstallt ginn (%s)."
 
-#: ../src/project.c:717
+#: ../src/project.c:737
 #, c-format
 msgid "Project file could not be written (%s)."
 msgstr "Projetsfichier konnt net geschriwwen ginn (%s)."
 
-#: ../src/project.c:794
+#: ../src/project.c:814
 #, c-format
 msgid "Project \"%s\" created."
 msgstr "Projet \"%s\" erstallt."
 
-#: ../src/project.c:796
+#: ../src/project.c:816
 #, c-format
 msgid "Project \"%s\" saved."
 msgstr "Den Projet \"%s\" gouf gespäichert."
 
 #. initialise the dialog
-#: ../src/project.c:861 ../src/project.c:872
+#: ../src/project.c:881 ../src/project.c:892
 msgid "Choose Project Filename"
 msgstr "Fichiersnumm vum Projet wielen"
 
-#: ../src/project.c:947
+#: ../src/project.c:967
 #, c-format
 msgid "Project \"%s\" opened."
 msgstr "Den Projet \"%s\" ass op."
@@ -4368,19 +4369,19 @@ msgstr "Strukturen"
 msgid "Typedefs / Enums"
 msgstr "Typdefinitiounen / Enumeratiounen"
 
-#: ../src/symbols.c:1365
+#: ../src/symbols.c:1371
 #, c-format
 msgid "Unknown filetype extension for \"%s\".\n"
 msgstr "Onbekannten Fichierstyp Endung fir \"%s\".\n"
 
-#: ../src/symbols.c:1389
+#: ../src/symbols.c:1395
 #, c-format
 msgid "Failed to create tags file, perhaps because no tags were found.\n"
 msgstr ""
 "Erstellung vum Tag Fichier feelgeschloen, wahrscheinlech well keng Tags "
 "fonnt goufen.\n"
 
-#: ../src/symbols.c:1396
+#: ../src/symbols.c:1402
 #, c-format
 msgid ""
 "Usage: %s -g <Tag File> <File list>\n"
@@ -4389,7 +4390,7 @@ msgstr ""
 "Benotzung: %s -g <Tag Lescht> <Fichiers Lescht>\n"
 "\n"
 
-#: ../src/symbols.c:1397
+#: ../src/symbols.c:1403
 #, c-format
 msgid ""
 "Example:\n"
@@ -4400,40 +4401,40 @@ msgstr ""
 "CFLAGS=`pkg-config gtk+-2.0 --cflags` %s -g gtk2.c.tags /usr/include/gtk-2.0/"
 "gtk/gtk.h\n"
 
-#: ../src/symbols.c:1411
+#: ../src/symbols.c:1417
 msgid "Load Tags"
 msgstr "Tags lueden"
 
-#: ../src/symbols.c:1418
+#: ../src/symbols.c:1424
 msgid "Geany tag files (*.tags)"
 msgstr "Geany Tag Fichieren (*.tags)"
 
 #. For translators: the first wildcard is the filetype, the second the filename
-#: ../src/symbols.c:1438
+#: ../src/symbols.c:1444
 #, c-format
 msgid "Loaded %s tags file '%s'."
 msgstr "%s Tag Fichier '%s' gelueden."
 
-#: ../src/symbols.c:1440
+#: ../src/symbols.c:1446
 #, c-format
 msgid "Could not load tags file '%s'."
 msgstr "Konnt den Tag Fichier '%s' net lueden."
 
-#: ../src/symbols.c:1573
+#: ../src/symbols.c:1579
 #, c-format
 msgid "Forward declaration \"%s\" not found."
 msgstr "Vijenzeg Deklaratioun vun \"%s\" net fonnt."
 
-#: ../src/symbols.c:1575
+#: ../src/symbols.c:1581
 #, c-format
 msgid "Definition of \"%s\" not found."
 msgstr "Definitioun vun \"%s\" konnt net fonnt ginn."
 
-#: ../src/symbols.c:1881
+#: ../src/symbols.c:1887
 msgid "Sort by _Name"
 msgstr "No _Numm sënneren"
 
-#: ../src/symbols.c:1888
+#: ../src/symbols.c:1894
 msgid "Sort by _Appearance"
 msgstr "No _Optrieden sënneren"
 
@@ -4663,19 +4664,19 @@ msgstr "Buschtawen:"
 msgid "No tags found"
 msgstr "Keng Tags fonnt."
 
-#: ../src/sidebar.c:546
+#: ../src/sidebar.c:541
 msgid "Show S_ymbol List"
 msgstr "Lescht mat den S_ymboler uweisen"
 
-#: ../src/sidebar.c:554
+#: ../src/sidebar.c:549
 msgid "Show _Document List"
 msgstr "Lescht mat den _Dokumenter uweisen"
 
-#: ../src/sidebar.c:562 ../plugins/filebrowser.c:647
+#: ../src/sidebar.c:557 ../plugins/filebrowser.c:649
 msgid "H_ide Sidebar"
 msgstr "Sa_itenleescht verstoppen"
 
-#: ../src/sidebar.c:631
+#: ../src/sidebar.c:626
 #, fuzzy
 msgid "Show _Paths"
 msgstr "Statusleescht uweisen"
@@ -4907,7 +4908,7 @@ msgstr ""
 "(standardméisseg F10). Deaktivéierung kann nëtzlech sinn, wann dier z.B. den "
 "Midnight Commander an der VTE benotzt."
 
-#: ../src/vte.c:836 ../plugins/filebrowser.c:1217
+#: ../src/vte.c:836 ../plugins/filebrowser.c:1219
 msgid "Follow the path of the current file"
 msgstr "Dem Pad vum aktuellen Fichier nogoen"
 
@@ -5107,7 +5108,7 @@ msgstr "Punktuatiounszeechen"
 msgid "Miscellaneous characters"
 msgstr "Verschidden Buschtawen"
 
-#: ../plugins/htmlchars.c:367 ../plugins/filebrowser.c:1134
+#: ../plugins/htmlchars.c:367 ../plugins/filebrowser.c:1136
 #: ../plugins/saveactions.c:470
 msgid "Plugin configuration directory could not be created."
 msgstr "Den Configuratiounsordner vum PlugIn konnt nët erstallt ginn."
@@ -5234,59 +5235,59 @@ msgstr "Zevill Elementer ausgewielt!"
 msgid "Could not execute configured external command '%s' (%s)."
 msgstr "Konnt dei agestallten extern Commande '%s' (%s) net ausféieren."
 
-#: ../plugins/filebrowser.c:603
+#: ../plugins/filebrowser.c:605
 msgid "Open _externally"
 msgstr "Mat engem _externen Programm opmaachen"
 
-#: ../plugins/filebrowser.c:618
+#: ../plugins/filebrowser.c:620
 msgid "_Find in Files"
 msgstr "An den _Fichieren fannen"
 
-#: ../plugins/filebrowser.c:628
+#: ../plugins/filebrowser.c:630
 msgid "Show _Hidden Files"
 msgstr "Verstoppten Fic_hieren uweisen"
 
-#: ../plugins/filebrowser.c:841
+#: ../plugins/filebrowser.c:843
 msgid "Up"
 msgstr "Erop"
 
-#: ../plugins/filebrowser.c:846
+#: ../plugins/filebrowser.c:848
 msgid "Refresh"
 msgstr "Nei lueden"
 
-#: ../plugins/filebrowser.c:851
+#: ../plugins/filebrowser.c:853
 msgid "Home"
 msgstr "Perséinlechen Ordner"
 
-#: ../plugins/filebrowser.c:856
+#: ../plugins/filebrowser.c:858
 msgid "Set path from document"
 msgstr "Den Pad vum Dokument aus astellen"
 
-#: ../plugins/filebrowser.c:866
+#: ../plugins/filebrowser.c:868
 msgid "Clear the filter"
 msgstr "Filter läschen"
 
-#: ../plugins/filebrowser.c:880
+#: ../plugins/filebrowser.c:882
 msgid "Filter:"
 msgstr "Filter:"
 
-#: ../plugins/filebrowser.c:890
+#: ../plugins/filebrowser.c:892
 msgid "Filter your files with usual wildcards"
 msgstr ""
 
-#: ../plugins/filebrowser.c:1107
+#: ../plugins/filebrowser.c:1109
 msgid "Focus File List"
 msgstr "Lescht mat den Fichieren fokusseiren"
 
-#: ../plugins/filebrowser.c:1109
+#: ../plugins/filebrowser.c:1111
 msgid "Focus Path Entry"
 msgstr "Pad fokusseiren"
 
-#: ../plugins/filebrowser.c:1185
+#: ../plugins/filebrowser.c:1187
 msgid "External open command:"
 msgstr "Extern Opmaachen Commande:"
 
-#: ../plugins/filebrowser.c:1194
+#: ../plugins/filebrowser.c:1196
 #, c-format
 msgid ""
 "The command to execute when using \"Open with\". You can use %f and %d "
@@ -5300,15 +5301,15 @@ msgstr ""
 "%f gëtt duerch den Fichiersnumm mam vollstännegen Pad ersat\n"
 "%d gëtt duerch den Pad vum ausgewielten Fichier ouni den Fichiersnumm ersaat"
 
-#: ../plugins/filebrowser.c:1202
+#: ../plugins/filebrowser.c:1204
 msgid "Show hidden files"
 msgstr "Verstoppten Fichieren uweisen"
 
-#: ../plugins/filebrowser.c:1208
+#: ../plugins/filebrowser.c:1210
 msgid "Hide object files"
 msgstr "Objetsfichieren verstoppen"
 
-#: ../plugins/filebrowser.c:1212
+#: ../plugins/filebrowser.c:1214
 msgid ""
 "Don't show generated object files in the file browser, this includes *.o, *."
 "obj. *.so, *.dll, *.a, *.lib"
@@ -5316,12 +5317,12 @@ msgstr ""
 "Erstallten Objetsfichieren net am Fichiersbrowser  uweisen (*.o,  *.obj. *."
 "so, *.dll, *.a, *.lib)"
 
-#: ../plugins/filebrowser.c:1223
+#: ../plugins/filebrowser.c:1225
 #, fuzzy
 msgid "Use the project's base directory"
 msgstr "Stellt den Projetsbasisordner an"
 
-#: ../plugins/filebrowser.c:1227
+#: ../plugins/filebrowser.c:1229
 msgid ""
 "Change the directory to the base directory of the currently opened project"
 msgstr ""

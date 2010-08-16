@@ -8,10 +8,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Geany 0.19\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-05-23 10:05+0200\n"
+"POT-Creation-Date: 2010-08-16 21:09+0200\n"
 "PO-Revision-Date: 2009-08-13 15:48+0200\n"
 "Last-Translator: Harri Koskinen <reg2009@fastmonkey.fi>\n"
 "Language-Team: Finnish\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -32,67 +33,67 @@ msgstr "Geany"
 msgid "Integrated Development Environment"
 msgstr "Integroitu ohjelmointiympäristö"
 
-#: ../src/about.c:145
+#: ../src/about.c:146
 msgid "About Geany"
 msgstr "Tietoja Geanystä"
 
-#: ../src/about.c:195
+#: ../src/about.c:196
 msgid "A fast and lightweight IDE"
 msgstr "Nopea ja kevyt ohjelmointiympäristö"
 
-#: ../src/about.c:216
+#: ../src/about.c:217
 #, c-format
 msgid "(built on or after %s)"
 msgstr "(käännetty %s tai sen jälkeen)"
 
 #. gtk_container_add(GTK_CONTAINER(info_box), cop_label);
-#: ../src/about.c:247
+#: ../src/about.c:248
 msgid "Info"
 msgstr "Tietoja"
 
-#: ../src/about.c:263
+#: ../src/about.c:264
 msgid "Developers"
 msgstr "Kehittäjät"
 
-#: ../src/about.c:272
+#: ../src/about.c:273
 msgid "maintainer"
 msgstr "ylläpitäjä"
 
-#: ../src/about.c:280
+#: ../src/about.c:281
 msgid "developer"
 msgstr "kehittäjä"
 
-#: ../src/about.c:288
+#: ../src/about.c:289
 msgid "translation maintainer"
 msgstr "käännösten ylläpitäjä"
 
-#: ../src/about.c:297
+#: ../src/about.c:298
 msgid "Translators"
 msgstr "Kääntäjät"
 
-#: ../src/about.c:317
+#: ../src/about.c:318
 msgid "Previous Translators"
 msgstr "Aikaisemmat kääntäjät"
 
-#: ../src/about.c:338
+#: ../src/about.c:339
 msgid "Contributors"
 msgstr "Avustavat kehittäjät"
 
-#: ../src/about.c:348
+#: ../src/about.c:349
 #, c-format
 msgid ""
 "Some of the many contributors (for a more detailed list, see the file %s):"
 msgstr "Eräitä avustavia kehittäjiä (täydellinen lista tiedostossa %s):"
 
-#: ../src/about.c:374
+#: ../src/about.c:375
 msgid "Credits"
 msgstr "Tekijät"
 
-#: ../src/about.c:388
+#: ../src/about.c:389
 msgid "License"
 msgstr "Lisenssi"
 
-#: ../src/about.c:397
+#: ../src/about.c:398
 msgid ""
 "License text could not be found, please visit http://www.gnu.org/licenses/"
 "gpl-2.0.txt to view it online."
@@ -101,46 +102,46 @@ msgstr ""
 "osoitteessa http://www.gnu.org/licenses/gpl-2.0.txt"
 
 #. fall back to %d
-#: ../src/build.c:635
+#: ../src/build.c:638
 #, c-format
 msgid "failed to substitute %%p, no project active"
 msgstr ""
 
-#: ../src/build.c:673
+#: ../src/build.c:676
 #, fuzzy
 msgid "Process failed, no working directory"
 msgstr "Työkansion vaihto kansioon \"%s\" epäonnistui."
 
-#: ../src/build.c:699
+#: ../src/build.c:702
 #, c-format
 msgid "%s (in directory: %s)"
 msgstr "%s (kansiossa %s)"
 
-#: ../src/build.c:719 ../src/build.c:944 ../src/search.c:1475
+#: ../src/build.c:722 ../src/build.c:947 ../src/search.c:1475
 #, c-format
 msgid "Process failed (%s)"
 msgstr "Prosessi epäonnistui (%s)"
 
-#: ../src/build.c:790
+#: ../src/build.c:793
 #, c-format
 msgid "Failed to change the working directory to \"%s\""
 msgstr "Työkansion vaihto kansioon \"%s\" epäonnistui."
 
-#: ../src/build.c:819
+#: ../src/build.c:822
 #, c-format
 msgid "Failed to execute \"%s\" (start-script could not be created)"
 msgstr ""
 "Komennon \"%s\" suoritus epäonnistui. Käynnistyskomentotiedostoa ei voitu "
 "luoda"
 
-#: ../src/build.c:873
+#: ../src/build.c:876
 msgid ""
 "Could not execute the file in the VTE because it probably contains a command."
 msgstr ""
 "Tiedoston suoritus VTE:ssä epäonnistui, koska se todennäköisesti sisältää "
 "komennon."
 
-#: ../src/build.c:911
+#: ../src/build.c:914
 #, c-format
 msgid ""
 "Could not find terminal \"%s\" (check path for Terminal tool setting in "
@@ -148,168 +149,168 @@ msgid ""
 msgstr ""
 "Pääteohjelmaa \"%s\" ei löytynyt. Tarkista päätteen polku geanyn asetuksista."
 
-#: ../src/build.c:1081
+#: ../src/build.c:1084
 msgid "Compilation failed."
 msgstr "Käännös epäonnistui."
 
-#: ../src/build.c:1095
+#: ../src/build.c:1098
 msgid "Compilation finished successfully."
 msgstr "Käännös onnistui."
 
-#: ../src/build.c:1252
+#: ../src/build.c:1255
 #, fuzzy
 msgid "Custom Text"
 msgstr "Koosta valinnainen kohde"
 
-#: ../src/build.c:1253
+#: ../src/build.c:1256
 #, fuzzy
 msgid "Enter custom text here, all entered text is appended to the command."
 msgstr "Tähän syöttämäsi valitsimet välitetään sellaisenaan make -komennolle."
 
-#: ../src/build.c:1331
+#: ../src/build.c:1334
 msgid "_Next Error"
 msgstr "Seu_raava virhe"
 
-#: ../src/build.c:1333
+#: ../src/build.c:1336
 msgid "_Previous Error"
 msgstr "_Edellinen virhe"
 
-#: ../src/build.c:1343
+#: ../src/build.c:1346
 #, fuzzy
 msgid "_Set Build Commands"
 msgstr "Mukautetut komennot"
 
-#: ../src/build.c:1623 ../src/toolbar.c:373
+#: ../src/build.c:1630 ../src/toolbar.c:373
 msgid "Build the current file"
 msgstr "Käännä nykyinen tiedosto"
 
-#: ../src/build.c:1637
+#: ../src/build.c:1644
 msgid "Build the current file with Make and the default target"
 msgstr "Koosta nykyinen tiedosto make-komennolla määrittämättä kohdetta"
 
-#: ../src/build.c:1639
+#: ../src/build.c:1646
 msgid "Build the current file with Make and the specified target"
 msgstr "Koosta nykyinen tiedosto make-komennon määritetyllä kohteella"
 
-#: ../src/build.c:1641
+#: ../src/build.c:1648
 msgid "Compile the current file with Make"
 msgstr "Käännä nykyinen tiedosto make-komennolla"
 
-#: ../src/build.c:1668
+#: ../src/build.c:1675
 #, c-format
 msgid "Process could not be stopped (%s)."
 msgstr "Prosessin (%s) pysäytys epäonnistui."
 
-#: ../src/build.c:1685 ../src/build.c:1697
+#: ../src/build.c:1692 ../src/build.c:1704
 msgid "No more build errors."
 msgstr "Kääntövirheitä ei ole enempää."
 
-#: ../src/build.c:1778
+#: ../src/build.c:1785
 msgid "Set menu item label"
 msgstr ""
 
-#: ../src/build.c:1788
+#: ../src/build.c:1795
 msgid "Item"
 msgstr ""
 
-#: ../src/build.c:1789 ../src/symbols.c:650
+#: ../src/build.c:1796 ../src/symbols.c:650
 msgid "Label"
 msgstr "Nimike"
 
-#: ../src/build.c:1790 ../src/symbols.c:645
+#: ../src/build.c:1797 ../src/symbols.c:645
 msgid "Command"
 msgstr "Komento"
 
-#: ../src/build.c:1791
+#: ../src/build.c:1798
 #, fuzzy
 msgid "Working directory"
 msgstr "%s (kansiossa %s)"
 
-#: ../src/build.c:1792
+#: ../src/build.c:1799
 #, fuzzy
 msgid "Clear"
 msgstr "Kääntäjä"
 
-#: ../src/build.c:1831
+#: ../src/build.c:1838
 msgid "Click to set menu item label"
 msgstr ""
 
-#: ../src/build.c:1904 ../src/build.c:1906
+#: ../src/build.c:1911 ../src/build.c:1913
 #, fuzzy, c-format
 msgid "%s Commands"
 msgstr "%s komennot"
 
-#: ../src/build.c:1906
+#: ../src/build.c:1913
 #, fuzzy
 msgid "No Filetype"
 msgstr "Aseta _tiedostotyyppi"
 
-#: ../src/build.c:1914 ../src/build.c:1949
+#: ../src/build.c:1921 ../src/build.c:1956
 #, fuzzy
 msgid "Error Regular Expression:"
 msgstr "_Grepin säännölliset lausekkeet"
 
-#: ../src/build.c:1942
+#: ../src/build.c:1949
 msgid "Non-Filetype Commands"
 msgstr ""
 
-#: ../src/build.c:1972
+#: ../src/build.c:1979
 msgid "Note: Item 2 opens a dialog and appends the response to the command."
 msgstr ""
 
-#: ../src/build.c:1981
+#: ../src/build.c:1988
 #, fuzzy
 msgid "Execute Commands"
 msgstr "Mukautetut komennot"
 
-#: ../src/build.c:1992
+#: ../src/build.c:1999
 #, c-format
 msgid ""
 "%d, %e, %f, %p are substituted in command and directory fields, see manual "
 "for details."
 msgstr ""
 
-#: ../src/build.c:2177
+#: ../src/build.c:2184
 #, fuzzy
 msgid "Set Build Commands"
 msgstr "Mukautetut komennot"
 
-#: ../src/build.c:2399
+#: ../src/build.c:2406
 msgid "_Compile"
 msgstr "_Käännä"
 
 #. build the code
-#: ../src/build.c:2406 ../src/build.c:2669 ../src/interface.c:1075
+#: ../src/build.c:2413 ../src/build.c:2679 ../src/interface.c:1075
 msgid "_Build"
 msgstr "K_oosta"
 
-#: ../src/build.c:2413 ../src/build.c:2443 ../src/build.c:2636
+#: ../src/build.c:2420 ../src/build.c:2450 ../src/build.c:2643
 #, fuzzy
 msgid "_Execute"
 msgstr "Suorita:"
 
 #. build the code with make custom
-#: ../src/build.c:2458 ../src/build.c:2634 ../src/build.c:2689
+#: ../src/build.c:2465 ../src/build.c:2641 ../src/build.c:2699
 msgid "Make Custom _Target"
 msgstr "Koosta _mukautettu kohde"
 
 #. build the code with make object
-#: ../src/build.c:2460 ../src/build.c:2635 ../src/build.c:2697
+#: ../src/build.c:2467 ../src/build.c:2642 ../src/build.c:2707
 msgid "Make _Object"
 msgstr "Koosta o_lio"
 
-#: ../src/build.c:2462 ../src/build.c:2633
+#: ../src/build.c:2469 ../src/build.c:2640
 #, fuzzy
 msgid "_Make"
 msgstr "Make:"
 
 #. build the code with make all
-#: ../src/build.c:2681
+#: ../src/build.c:2691
 msgid "_Make All"
 msgstr "Koosta k_aikki"
 
 #. arguments
-#: ../src/build.c:2709
+#: ../src/build.c:2719
 #, fuzzy
 msgid "_Set Build Menu Commands"
 msgstr "Mukautetut komennot"
@@ -326,7 +327,7 @@ msgstr[0] "Tiedosto %s tallennettu."
 msgstr[1] "Tiedosto %s tallennettu."
 
 #: ../src/callbacks.c:488 ../src/document.c:2895 ../src/interface.c:352
-#: ../src/sidebar.c:618
+#: ../src/sidebar.c:613
 msgid "_Reload"
 msgstr "_Lataa uudelleen"
 
@@ -543,7 +544,7 @@ msgstr ""
 
 #: ../src/dialogs.c:1076 ../src/dialogs.c:1077 ../src/dialogs.c:1078
 #: ../src/dialogs.c:1084 ../src/dialogs.c:1085 ../src/dialogs.c:1086
-#: ../src/symbols.c:1724 ../src/symbols.c:1745 ../src/symbols.c:1797
+#: ../src/symbols.c:1730 ../src/symbols.c:1751 ../src/symbols.c:1803
 #: ../src/ui_utils.c:222
 msgid "unknown"
 msgstr "tuntematon"
@@ -796,15 +797,15 @@ msgstr ""
 msgid "File \"%s\" was not found on disk! Try to resave the file?"
 msgstr "Tiedostoa \"%s\" ei löytynyt!"
 
-#: ../src/editor.c:4425
+#: ../src/editor.c:4421
 msgid "Enter Tab Width"
 msgstr "Sarkaimen leveys"
 
-#: ../src/editor.c:4426
+#: ../src/editor.c:4422
 msgid "Enter the amount of spaces which should be replaced by a tab character."
 msgstr "Montako peräkkäistä välilyöntiä korvataan sarkaimella."
 
-#: ../src/editor.c:4577
+#: ../src/editor.c:4573
 #, c-format
 msgid "Warning: non-standard hard tab width: %d != 8!"
 msgstr ""
@@ -1032,18 +1033,18 @@ msgstr "Lauseke ei kelpaa tiedostotyypille %s: %s"
 msgid "untitled"
 msgstr "nimetön"
 
-#: ../src/highlighting.c:3349 ../src/main.c:802 ../src/socket.c:165
+#: ../src/highlighting.c:3351 ../src/main.c:802 ../src/socket.c:165
 #: ../src/templates.c:384
 #, c-format
 msgid "Could not find file '%s'."
 msgstr "Tiedostoa \"%s\" ei löytynyt"
 
-#: ../src/highlighting.c:3398
+#: ../src/highlighting.c:3400
 #, fuzzy
 msgid "_Color Schemes"
 msgstr "_Värivalitsin"
 
-#: ../src/highlighting.c:3405
+#: ../src/highlighting.c:3407
 msgid "_Default"
 msgstr ""
 
@@ -2554,7 +2555,7 @@ msgstr ""
 "tarkkailun käytöstä."
 
 #: ../src/interface.c:4235 ../src/prefs.c:1533 ../src/symbols.c:605
-#: ../plugins/filebrowser.c:1101
+#: ../plugins/filebrowser.c:1103
 msgid "Files"
 msgstr "Tiedostot"
 
@@ -2799,7 +2800,7 @@ msgstr "Leikkaa"
 msgid "Use global settings"
 msgstr ""
 
-#: ../src/keybindings.c:227 ../src/plugins.c:1171
+#: ../src/keybindings.c:227 ../src/plugins.c:1174
 msgid "File"
 msgstr "Tiedosto"
 
@@ -2847,7 +2848,7 @@ msgstr "Lataa tiedosto uudelleen"
 msgid "Re-open last closed tab"
 msgstr ""
 
-#: ../src/keybindings.c:255 ../src/project.c:519
+#: ../src/keybindings.c:255 ../src/project.c:522
 msgid "Project"
 msgstr "Projekti"
 
@@ -3275,7 +3276,7 @@ msgstr "P_oista merkinnät"
 msgid "Remove Error Indicators"
 msgstr "Poista virh_eilmaisimet"
 
-#: ../src/keybindings.c:538 ../src/keybindings.c:543 ../src/project.c:477
+#: ../src/keybindings.c:538 ../src/keybindings.c:543 ../src/project.c:479
 #: ../src/ui_utils.c:1815
 msgid "Build"
 msgstr "Koosta"
@@ -3472,17 +3473,17 @@ msgstr ""
 "Geany ei välttämättä toimi oikein ilman asetuskansiota.\n"
 "Käynnistetäänkö Geany tästä huolimatta?"
 
-#: ../src/main.c:1031
+#: ../src/main.c:1044
 #, c-format
 msgid "This is Geany %s."
 msgstr "Tämä on Geany %s."
 
-#: ../src/main.c:1033
+#: ../src/main.c:1046
 #, c-format
 msgid "Configuration directory could not be created (%s)."
 msgstr "Asetuskansion luominen epäonnistui (%s)."
 
-#: ../src/main.c:1244
+#: ../src/main.c:1257
 msgid "Configuration files reloaded."
 msgstr "Asetustiedostot ladattiin uudelleen."
 
@@ -3490,20 +3491,20 @@ msgstr "Asetustiedostot ladattiin uudelleen."
 msgid "Status messages"
 msgstr "Tilaviestit"
 
-#: ../src/msgwindow.c:524
+#: ../src/msgwindow.c:542
 #, fuzzy
 msgid "C_opy"
 msgstr "Kopioi"
 
-#: ../src/msgwindow.c:533
+#: ../src/msgwindow.c:551
 msgid "Copy _All"
 msgstr "_Kopioi kaikki"
 
-#: ../src/msgwindow.c:563
+#: ../src/msgwindow.c:581
 msgid "_Hide Message Window"
 msgstr "_Piilota viesti-ikkuna"
 
-#: ../src/msgwindow.c:619
+#: ../src/msgwindow.c:637
 #, c-format
 msgid "Could not find file '%s' - trying the current document path."
 msgstr ""
@@ -3517,11 +3518,11 @@ msgstr ""
 "Liitännäinen \"%s\" täytyy kääntää uudelleen, jotta se toimisi tämän Geany-"
 "version kanssa"
 
-#: ../src/plugins.c:906
+#: ../src/plugins.c:909
 msgid "_Plugin Manager"
 msgstr "Liit_ännäisten hallinta"
 
-#: ../src/plugins.c:1083
+#: ../src/plugins.c:1086
 #, c-format
 msgid ""
 "Plugin: %s %s\n"
@@ -3532,27 +3533,27 @@ msgstr ""
 "Kuvaus: %s\n"
 "Tekijä(t): %s"
 
-#: ../src/plugins.c:1159
+#: ../src/plugins.c:1162
 msgid "Active"
 msgstr "Aktiivinen"
 
-#: ../src/plugins.c:1165
+#: ../src/plugins.c:1168
 msgid "Plugin"
 msgstr "Liitännäinen"
 
-#: ../src/plugins.c:1189
+#: ../src/plugins.c:1192
 msgid "No plugins available."
 msgstr "Ei liitännäisiä"
 
-#: ../src/plugins.c:1269
+#: ../src/plugins.c:1272
 msgid "Plugins"
 msgstr "Liitännäiset"
 
-#: ../src/plugins.c:1289
+#: ../src/plugins.c:1292
 msgid "Choose which plugins should be loaded at startup:"
 msgstr ""
 
-#: ../src/plugins.c:1301
+#: ../src/plugins.c:1304
 msgid "<b>Plugin details:</b>"
 msgstr "<b>Liitännäisen tiedot:</b>"
 
@@ -3569,11 +3570,11 @@ msgstr "Kaappaa näppäin"
 msgid "Press the combination of the keys you want to use for \"%s\"."
 msgstr "Paina näppäinyhdistelmää, jonka haluat liittää toimintoon \"%s\"."
 
-#: ../src/prefs.c:214 ../src/symbols.c:1866
+#: ../src/prefs.c:214 ../src/symbols.c:1872
 msgid "_Expand All"
 msgstr "_Laajenna kaikki"
 
-#: ../src/prefs.c:219 ../src/symbols.c:1871
+#: ../src/prefs.c:219 ../src/symbols.c:1877
 msgid "_Collapse All"
 msgstr "S_upista kaikki"
 
@@ -3680,31 +3681,31 @@ msgstr "Asiakirjan asetukset"
 msgid "Print only the basename(without the path) of the printed file"
 msgstr "Tulosta vain tulostettavan tiedoston nimi ilman polkua"
 
-#: ../src/printing.c:527
+#: ../src/printing.c:530
 #, c-format
 msgid "Page %d of %d"
 msgstr "Sivu %d/%d"
 
-#: ../src/printing.c:781
+#: ../src/printing.c:784
 #, c-format
 msgid "Did not send document %s to the printing subsystem."
 msgstr ""
 
-#: ../src/printing.c:783
+#: ../src/printing.c:786
 #, c-format
 msgid "Document %s was sent to the printing subsystem."
 msgstr ""
 
-#: ../src/printing.c:835
+#: ../src/printing.c:838
 #, c-format
 msgid "Printing of %s failed (%s)."
 msgstr "Tiedoston \"%s\" tulostus epäonnistui (%s)."
 
-#: ../src/printing.c:875
+#: ../src/printing.c:878
 msgid "Please set a print command in the preferences dialog first."
 msgstr "Aseta ensin tulostuskomento asetusikkunassa"
 
-#: ../src/printing.c:883
+#: ../src/printing.c:886
 #, c-format
 msgid ""
 "The file \"%s\" will be printed with the following command:\n"
@@ -3715,12 +3716,12 @@ msgstr ""
 "\n"
 "%s"
 
-#: ../src/printing.c:899
+#: ../src/printing.c:902
 #, c-format
 msgid "Printing of \"%s\" failed (return code: %s)."
 msgstr "Tiedoston \"%s\" tulostus epäonnistui (paluuarvo: %s)."
 
-#: ../src/printing.c:905
+#: ../src/printing.c:908
 #, c-format
 msgid "File %s printed."
 msgstr "Tiedosto %s tulostettu."
@@ -3739,19 +3740,19 @@ msgstr "Uusi projekti"
 msgid "C_reate"
 msgstr "_Luo"
 
-#: ../src/project.c:139 ../src/project.c:413
+#: ../src/project.c:139 ../src/project.c:415
 msgid "Name:"
 msgstr "Nimi:"
 
-#: ../src/project.c:148 ../src/project.c:426
+#: ../src/project.c:148 ../src/project.c:428
 msgid "Filename:"
 msgstr "Tiedostonimi:"
 
-#: ../src/project.c:164 ../src/project.c:456
+#: ../src/project.c:164 ../src/project.c:458
 msgid "Base path:"
 msgstr "Pääkansio:"
 
-#: ../src/project.c:170 ../src/project.c:465
+#: ../src/project.c:170 ../src/project.c:467
 msgid ""
 "Base directory of all files that make up the project. This can be a new "
 "path, or an existing directory tree. You can use paths relative to the "
@@ -3760,11 +3761,11 @@ msgstr ""
 "Polku projektin kaikkien tiedostojen pääkansioon. Kansio voi olla uusi tai "
 "olemassaoleva. Voit merkitä polun suhteessa projektitiedostoon."
 
-#: ../src/project.c:173 ../src/project.c:468
+#: ../src/project.c:173 ../src/project.c:470
 msgid "Choose Project Base Path"
 msgstr "Valitse projektin pääkansio"
 
-#: ../src/project.c:231 ../src/project.c:263 ../src/project.c:957
+#: ../src/project.c:231 ../src/project.c:263 ../src/project.c:977
 #, c-format
 msgid "Project file \"%s\" could not be loaded."
 msgstr "Projektitiedostoa \"%s\" ei voitu ladata."
@@ -3782,86 +3783,86 @@ msgstr "Projektitiedostot"
 msgid "Project \"%s\" closed."
 msgstr "Projekti \"%s\" suljettu."
 
-#: ../src/project.c:439
+#: ../src/project.c:441
 msgid "Description:"
 msgstr "Kuvaus:"
 
-#: ../src/project.c:481
+#: ../src/project.c:484
 msgid "Set the Build non-filetype working directories to use base path:"
 msgstr ""
 
-#: ../src/project.c:484
+#: ../src/project.c:487
 #, fuzzy
 msgid "Set"
 msgstr "Kpl1"
 
-#: ../src/project.c:486
+#: ../src/project.c:489
 msgid ""
 "Set the working directories (on the Build tab) for the non-filetype build "
 "commands to use the base path"
 msgstr ""
 
-#: ../src/project.c:501
+#: ../src/project.c:504
 msgid "File patterns:"
 msgstr "Tiedostokaavat:"
 
-#: ../src/project.c:610
+#: ../src/project.c:630
 msgid "Do you want to close it before proceeding?"
 msgstr "Tallennetaanko tiedosto ennen jatkamista?"
 
-#: ../src/project.c:611
+#: ../src/project.c:631
 #, c-format
 msgid "The '%s' project is already open."
 msgstr "Projekti \"%s\" on jo auki."
 
-#: ../src/project.c:658
+#: ../src/project.c:678
 msgid "The specified project name is too short."
 msgstr "Projektin nimi on liian lyhyt."
 
-#: ../src/project.c:664
+#: ../src/project.c:684
 #, c-format
 msgid "The specified project name is too long (max. %d characters)."
 msgstr "Projektin nimi on liian pitkä (enintään %d merkkiä)."
 
-#: ../src/project.c:672
+#: ../src/project.c:692
 msgid "You have specified an invalid project filename."
 msgstr "Projektitiedoston nimi ei kelpaa."
 
-#: ../src/project.c:695
+#: ../src/project.c:715
 msgid "Create the project's base path directory?"
 msgstr "Luodaanko projektin pääkansio?"
 
-#: ../src/project.c:696
+#: ../src/project.c:716
 #, c-format
 msgid "The path \"%s\" does not exist."
 msgstr "Polkua \"%s\" ei löydy."
 
-#: ../src/project.c:705
+#: ../src/project.c:725
 #, c-format
 msgid "Project base directory could not be created (%s)."
 msgstr "Projektin pääkansion luominen epäonnistui (%s)."
 
-#: ../src/project.c:717
+#: ../src/project.c:737
 #, c-format
 msgid "Project file could not be written (%s)."
 msgstr "Projektitiedoston tallennus epäonnistui (%s)."
 
-#: ../src/project.c:794
+#: ../src/project.c:814
 #, c-format
 msgid "Project \"%s\" created."
 msgstr "Projekti \"%s\" luotu."
 
-#: ../src/project.c:796
+#: ../src/project.c:816
 #, c-format
 msgid "Project \"%s\" saved."
 msgstr "Projekti \"%s\" tallennettu."
 
 #. initialise the dialog
-#: ../src/project.c:861 ../src/project.c:872
+#: ../src/project.c:881 ../src/project.c:892
 msgid "Choose Project Filename"
 msgstr "Valitse projektitiedoston nimi"
 
-#: ../src/project.c:947
+#: ../src/project.c:967
 #, c-format
 msgid "Project \"%s\" opened."
 msgstr "Projekti \"%s\" avattu."
@@ -4301,18 +4302,18 @@ msgstr "Tietueet"
 msgid "Typedefs / Enums"
 msgstr "Tyyppimäärittelyt / Luetellut tyypit"
 
-#: ../src/symbols.c:1365
+#: ../src/symbols.c:1371
 #, c-format
 msgid "Unknown filetype extension for \"%s\".\n"
 msgstr "Tuntematon tiedostopääte \"%s\".\n"
 
-#: ../src/symbols.c:1389
+#: ../src/symbols.c:1395
 #, c-format
 msgid "Failed to create tags file, perhaps because no tags were found.\n"
 msgstr ""
 "Tunnistetiedoston luominen epäonnistui; ehkä tunnisteita ei löytynyt.\n"
 
-#: ../src/symbols.c:1396
+#: ../src/symbols.c:1402
 #, c-format
 msgid ""
 "Usage: %s -g <Tag File> <File list>\n"
@@ -4321,7 +4322,7 @@ msgstr ""
 "Käyttö: %s -g <Tunnistetiedosto> <Tiedostolista>\n"
 "\n"
 
-#: ../src/symbols.c:1397
+#: ../src/symbols.c:1403
 #, c-format
 msgid ""
 "Example:\n"
@@ -4332,40 +4333,40 @@ msgstr ""
 "CFLAGS=`pkg-config gtk+-2.0 --cflags` %s -g gtk2.c.tags /usr/include/gtk-2.0/"
 "gtk/gtk.h\n"
 
-#: ../src/symbols.c:1411
+#: ../src/symbols.c:1417
 msgid "Load Tags"
 msgstr "Lataa tunnisteet"
 
-#: ../src/symbols.c:1418
+#: ../src/symbols.c:1424
 msgid "Geany tag files (*.tags)"
 msgstr "Geanyn tunnisteet (*.tags)"
 
 #. For translators: the first wildcard is the filetype, the second the filename
-#: ../src/symbols.c:1438
+#: ../src/symbols.c:1444
 #, c-format
 msgid "Loaded %s tags file '%s'."
 msgstr "Ladattu tunnisteet tyypille %s \"%s\"."
 
-#: ../src/symbols.c:1440
+#: ../src/symbols.c:1446
 #, c-format
 msgid "Could not load tags file '%s'."
 msgstr "Tunnistetiedoston \"%s\" lataaminen epäonnistui."
 
-#: ../src/symbols.c:1573
+#: ../src/symbols.c:1579
 #, c-format
 msgid "Forward declaration \"%s\" not found."
 msgstr "\"%s\" esittelyä ei löydy."
 
-#: ../src/symbols.c:1575
+#: ../src/symbols.c:1581
 #, c-format
 msgid "Definition of \"%s\" not found."
 msgstr "\"%s\" määritystä ei löydy."
 
-#: ../src/symbols.c:1881
+#: ../src/symbols.c:1887
 msgid "Sort by _Name"
 msgstr "Järjestä _nimen mukaan"
 
-#: ../src/symbols.c:1888
+#: ../src/symbols.c:1894
 msgid "Sort by _Appearance"
 msgstr "Järjestä _esiintymisen mukaan"
 
@@ -4528,8 +4529,8 @@ msgid ""
 "The executed custom command returned an error. Your selection was not "
 "changed. Error message: %s"
 msgstr ""
-"Mukautettu komento palautti virheen. Valintasi ei muuttunut. Virheilmoitus: %"
-"s"
+"Mukautettu komento palautti virheen. Valintasi ei muuttunut. Virheilmoitus: "
+"%s"
 
 #: ../src/tools.c:219
 msgid "The executed custom command exited with an unsuccessful exit code."
@@ -4593,19 +4594,19 @@ msgstr "Merkkejä:"
 msgid "No tags found"
 msgstr "Tunnisteita ei löytynyt"
 
-#: ../src/sidebar.c:546
+#: ../src/sidebar.c:541
 msgid "Show S_ymbol List"
 msgstr "Näytä _symbolilista"
 
-#: ../src/sidebar.c:554
+#: ../src/sidebar.c:549
 msgid "Show _Document List"
 msgstr "Näytä _asiakirjalista"
 
-#: ../src/sidebar.c:562 ../plugins/filebrowser.c:647
+#: ../src/sidebar.c:557 ../plugins/filebrowser.c:649
 msgid "H_ide Sidebar"
 msgstr "_Piilota sivupalkki"
 
-#: ../src/sidebar.c:631
+#: ../src/sidebar.c:626
 msgid "Show _Paths"
 msgstr "Näytä _Polut"
 
@@ -4834,7 +4835,7 @@ msgstr ""
 "Tee näin jos tarvitset kyseisiä näppäimiä päätteessä suorittamassasi "
 "sovelluksessa"
 
-#: ../src/vte.c:836 ../plugins/filebrowser.c:1217
+#: ../src/vte.c:836 ../plugins/filebrowser.c:1219
 msgid "Follow the path of the current file"
 msgstr "Osoita aina valitun tiedoston kansioon"
 
@@ -5033,7 +5034,7 @@ msgstr "Välimerkit"
 msgid "Miscellaneous characters"
 msgstr "Muut merkit"
 
-#: ../plugins/htmlchars.c:367 ../plugins/filebrowser.c:1134
+#: ../plugins/htmlchars.c:367 ../plugins/filebrowser.c:1136
 #: ../plugins/saveactions.c:470
 msgid "Plugin configuration directory could not be created."
 msgstr "Liitännäiskansion luominen epäonnistui."
@@ -5158,59 +5159,59 @@ msgstr "Liikaa valittuja kohteita!"
 msgid "Could not execute configured external command '%s' (%s)."
 msgstr "Ulkoisen komennon \"%s\" suoritus epäonnistui (%s)"
 
-#: ../plugins/filebrowser.c:603
+#: ../plugins/filebrowser.c:605
 msgid "Open _externally"
 msgstr "Avaa _ulkoisesti"
 
-#: ../plugins/filebrowser.c:618
+#: ../plugins/filebrowser.c:620
 msgid "_Find in Files"
 msgstr "_Etsi tiedostoista"
 
-#: ../plugins/filebrowser.c:628
+#: ../plugins/filebrowser.c:630
 msgid "Show _Hidden Files"
 msgstr "Näytä _piilotiedostot"
 
-#: ../plugins/filebrowser.c:841
+#: ../plugins/filebrowser.c:843
 msgid "Up"
 msgstr "Ylös"
 
-#: ../plugins/filebrowser.c:846
+#: ../plugins/filebrowser.c:848
 msgid "Refresh"
 msgstr "Virkistä"
 
-#: ../plugins/filebrowser.c:851
+#: ../plugins/filebrowser.c:853
 msgid "Home"
 msgstr "Koti"
 
-#: ../plugins/filebrowser.c:856
+#: ../plugins/filebrowser.c:858
 msgid "Set path from document"
 msgstr "Avaa asiakirjan polku"
 
-#: ../plugins/filebrowser.c:866
+#: ../plugins/filebrowser.c:868
 msgid "Clear the filter"
 msgstr "Tyhjennä suodatin"
 
-#: ../plugins/filebrowser.c:880
+#: ../plugins/filebrowser.c:882
 msgid "Filter:"
 msgstr "Suodatin:"
 
-#: ../plugins/filebrowser.c:890
+#: ../plugins/filebrowser.c:892
 msgid "Filter your files with usual wildcards"
 msgstr ""
 
-#: ../plugins/filebrowser.c:1107
+#: ../plugins/filebrowser.c:1109
 msgid "Focus File List"
 msgstr "Kohdista tiedostoluetteloon"
 
-#: ../plugins/filebrowser.c:1109
+#: ../plugins/filebrowser.c:1111
 msgid "Focus Path Entry"
 msgstr "Kohdista polkukenttään"
 
-#: ../plugins/filebrowser.c:1185
+#: ../plugins/filebrowser.c:1187
 msgid "External open command:"
 msgstr "Ulkoinen avauskomento:"
 
-#: ../plugins/filebrowser.c:1194
+#: ../plugins/filebrowser.c:1196
 #, c-format
 msgid ""
 "The command to execute when using \"Open with\". You can use %f and %d "
@@ -5224,15 +5225,15 @@ msgstr ""
 "%f korvataan tiedostonimellä ja sen täydellisellä polulla\n"
 "%d korvataan tiedoston polulla ilman tiedostonimeä"
 
-#: ../plugins/filebrowser.c:1202
+#: ../plugins/filebrowser.c:1204
 msgid "Show hidden files"
 msgstr "Näytä piilotiedostot"
 
-#: ../plugins/filebrowser.c:1208
+#: ../plugins/filebrowser.c:1210
 msgid "Hide object files"
 msgstr "Piilota objektitiedostot"
 
-#: ../plugins/filebrowser.c:1212
+#: ../plugins/filebrowser.c:1214
 msgid ""
 "Don't show generated object files in the file browser, this includes *.o, *."
 "obj. *.so, *.dll, *.a, *.lib"
@@ -5240,11 +5241,11 @@ msgstr ""
 "Älä näytä kääntäjän luomia objektitiedostoja tiedostoselaimessa. (*.o, *."
 "obj, *.so, *.dll, *.a, *.lib)"
 
-#: ../plugins/filebrowser.c:1223
+#: ../plugins/filebrowser.c:1225
 msgid "Use the project's base directory"
 msgstr "Käytä projektin pääkansiota"
 
-#: ../plugins/filebrowser.c:1227
+#: ../plugins/filebrowser.c:1229
 msgid ""
 "Change the directory to the base directory of the currently opened project"
 msgstr "Avaa avoinna olevan projektin pääkansio"

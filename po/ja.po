@@ -8,10 +8,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: geany 0.19\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-05-23 10:05+0200\n"
+"POT-Creation-Date: 2010-08-16 21:09+0200\n"
 "PO-Revision-Date: 2009-01-01 13:44+0100\n"
 "Last-Translator: Chikahiro Masami <cmasa.z321@gmail.com>\n"
 "Language-Team: Japanese <ja@li.org>\n"
+"Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -32,110 +33,110 @@ msgstr "Geany"
 msgid "Integrated Development Environment"
 msgstr "統合開発環境"
 
-#: ../src/about.c:145
+#: ../src/about.c:146
 msgid "About Geany"
 msgstr "Geany について"
 
-#: ../src/about.c:195
+#: ../src/about.c:196
 msgid "A fast and lightweight IDE"
 msgstr "高速で軽量な IDE"
 
-#: ../src/about.c:216
+#: ../src/about.c:217
 #, c-format
 msgid "(built on or after %s)"
 msgstr "(%s 以降にビルド)"
 
 #. gtk_container_add(GTK_CONTAINER(info_box), cop_label);
-#: ../src/about.c:247
+#: ../src/about.c:248
 msgid "Info"
 msgstr "情報"
 
-#: ../src/about.c:263
+#: ../src/about.c:264
 msgid "Developers"
 msgstr "開発者"
 
-#: ../src/about.c:272
+#: ../src/about.c:273
 msgid "maintainer"
 msgstr "保守担当"
 
-#: ../src/about.c:280
+#: ../src/about.c:281
 msgid "developer"
 msgstr "開発者"
 
-#: ../src/about.c:288
+#: ../src/about.c:289
 msgid "translation maintainer"
 msgstr "翻訳保守担当"
 
-#: ../src/about.c:297
+#: ../src/about.c:298
 msgid "Translators"
 msgstr "翻訳者"
 
-#: ../src/about.c:317
+#: ../src/about.c:318
 msgid "Previous Translators"
 msgstr "以前の翻訳者"
 
-#: ../src/about.c:338
+#: ../src/about.c:339
 msgid "Contributors"
 msgstr "貢献者"
 
-#: ../src/about.c:348
+#: ../src/about.c:349
 #, c-format
 msgid ""
 "Some of the many contributors (for a more detailed list, see the file %s):"
 msgstr "多くの貢献者の一部です(詳細は %s ファイルを見てください):"
 
-#: ../src/about.c:374
+#: ../src/about.c:375
 msgid "Credits"
 msgstr "クレジット"
 
-#: ../src/about.c:388
+#: ../src/about.c:389
 msgid "License"
 msgstr "ライセンス"
 
-#: ../src/about.c:397
+#: ../src/about.c:398
 msgid ""
 "License text could not be found, please visit http://www.gnu.org/licenses/"
 "gpl-2.0.txt to view it online."
 msgstr ""
-"ライセンス文書が見つかりません。オンラインで http://www.gnu.org/licenses/gpl-"
-"2.0.txt を確認してください。"
+"ライセンス文書が見つかりません。オンラインで http://www.gnu.org/licenses/"
+"gpl-2.0.txt を確認してください。"
 
 #. fall back to %d
-#: ../src/build.c:635
+#: ../src/build.c:638
 #, c-format
 msgid "failed to substitute %%p, no project active"
 msgstr "%%p を置き換えに失敗, アクティブなプロジェクトがありません"
 
-#: ../src/build.c:673
+#: ../src/build.c:676
 msgid "Process failed, no working directory"
 msgstr "プロセス失敗, 作業用ディレクトリがありません"
 
-#: ../src/build.c:699
+#: ../src/build.c:702
 #, c-format
 msgid "%s (in directory: %s)"
 msgstr "%s（ディレクトリ: %s）"
 
-#: ../src/build.c:719 ../src/build.c:944 ../src/search.c:1475
+#: ../src/build.c:722 ../src/build.c:947 ../src/search.c:1475
 #, c-format
 msgid "Process failed (%s)"
 msgstr "プロセス失敗（%s）"
 
-#: ../src/build.c:790
+#: ../src/build.c:793
 #, c-format
 msgid "Failed to change the working directory to \"%s\""
 msgstr "作業用ディレクトリを \"%s\" へ変更するのに失敗"
 
-#: ../src/build.c:819
+#: ../src/build.c:822
 #, c-format
 msgid "Failed to execute \"%s\" (start-script could not be created)"
 msgstr "\"%s\" の実行に失敗（開始スクリプトを作成できませんでした）"
 
-#: ../src/build.c:873
+#: ../src/build.c:876
 msgid ""
 "Could not execute the file in the VTE because it probably contains a command."
 msgstr "コマンドが含まれているため、仮想端末でファイルが実行できません"
 
-#: ../src/build.c:911
+#: ../src/build.c:914
 #, c-format
 msgid ""
 "Could not find terminal \"%s\" (check path for Terminal tool setting in "
@@ -144,159 +145,161 @@ msgstr ""
 "端末 \"%s\" が見つかりません（「設定」にある端末ツールのパス設定を確認してく"
 "ださい）"
 
-#: ../src/build.c:1081
+#: ../src/build.c:1084
 msgid "Compilation failed."
 msgstr "コンパイル失敗"
 
-#: ../src/build.c:1095
+#: ../src/build.c:1098
 msgid "Compilation finished successfully."
 msgstr "コンパイル完了"
 
-#: ../src/build.c:1252
+#: ../src/build.c:1255
 msgid "Custom Text"
 msgstr "カスタムテキスト"
 
-#: ../src/build.c:1253
+#: ../src/build.c:1256
 msgid "Enter custom text here, all entered text is appended to the command."
-msgstr "ここにカスタムテキストを入力してください。入力されたテキストはコマンドに追加されます。"
+msgstr ""
+"ここにカスタムテキストを入力してください。入力されたテキストはコマンドに追加"
+"されます。"
 
-#: ../src/build.c:1331
+#: ../src/build.c:1334
 msgid "_Next Error"
 msgstr "次のエラー(_N)"
 
-#: ../src/build.c:1333
+#: ../src/build.c:1336
 msgid "_Previous Error"
 msgstr "前のエラー(_P)"
 
-#: ../src/build.c:1343
+#: ../src/build.c:1346
 msgid "_Set Build Commands"
 msgstr "ビルドコマンドを設定(_S)"
 
-#: ../src/build.c:1623 ../src/toolbar.c:373
+#: ../src/build.c:1630 ../src/toolbar.c:373
 msgid "Build the current file"
 msgstr "現在のファイルをビルド"
 
-#: ../src/build.c:1637
+#: ../src/build.c:1644
 msgid "Build the current file with Make and the default target"
 msgstr "現在のファイルをメイクとデフォルトのターゲットでビルドします"
 
-#: ../src/build.c:1639
+#: ../src/build.c:1646
 msgid "Build the current file with Make and the specified target"
 msgstr "現在のファイルをメイクと指定のターゲットでビルドします"
 
-#: ../src/build.c:1641
+#: ../src/build.c:1648
 msgid "Compile the current file with Make"
 msgstr "現在のファイルをメイクを使ってコンパイル"
 
-#: ../src/build.c:1668
+#: ../src/build.c:1675
 #, c-format
 msgid "Process could not be stopped (%s)."
 msgstr "プロセスを停止できません（%s）"
 
-#: ../src/build.c:1685 ../src/build.c:1697
+#: ../src/build.c:1692 ../src/build.c:1704
 msgid "No more build errors."
 msgstr "これ以上ビルドエラーはありません"
 
-#: ../src/build.c:1778
+#: ../src/build.c:1785
 msgid "Set menu item label"
 msgstr "メニュー項目ラベルを設定"
 
-#: ../src/build.c:1788
+#: ../src/build.c:1795
 msgid "Item"
 msgstr "項目"
 
-#: ../src/build.c:1789 ../src/symbols.c:650
+#: ../src/build.c:1796 ../src/symbols.c:650
 msgid "Label"
 msgstr "ラベル"
 
-#: ../src/build.c:1790 ../src/symbols.c:645
+#: ../src/build.c:1797 ../src/symbols.c:645
 msgid "Command"
 msgstr "コマンド"
 
-#: ../src/build.c:1791
+#: ../src/build.c:1798
 msgid "Working directory"
 msgstr "作業ディレクトリ"
 
-#: ../src/build.c:1792
+#: ../src/build.c:1799
 msgid "Clear"
 msgstr "クリア"
 
-#: ../src/build.c:1831
+#: ../src/build.c:1838
 msgid "Click to set menu item label"
 msgstr "メニュー項目ラベルを設定するためにクリック"
 
-#: ../src/build.c:1904 ../src/build.c:1906
+#: ../src/build.c:1911 ../src/build.c:1913
 #, c-format
 msgid "%s Commands"
 msgstr "%s コマンド"
 
-#: ../src/build.c:1906
+#: ../src/build.c:1913
 msgid "No Filetype"
 msgstr "ファイル種類なし"
 
-#: ../src/build.c:1914 ../src/build.c:1949
+#: ../src/build.c:1921 ../src/build.c:1956
 msgid "Error Regular Expression:"
 msgstr "正規表現エラー:"
 
-#: ../src/build.c:1942
+#: ../src/build.c:1949
 msgid "Non-Filetype Commands"
 msgstr "ファイル種類なしの時のコマンド"
 
-#: ../src/build.c:1972
+#: ../src/build.c:1979
 msgid "Note: Item 2 opens a dialog and appends the response to the command."
 msgstr "注意: 項目 2 はダイアログを表示し、結果をコマンドに渡します"
 
-#: ../src/build.c:1981
+#: ../src/build.c:1988
 msgid "Execute Commands"
 msgstr "コマンドを実行"
 
-#: ../src/build.c:1992
+#: ../src/build.c:1999
 #, c-format
 msgid ""
 "%d, %e, %f, %p are substituted in command and directory fields, see manual "
 "for details."
 msgstr ""
-"%d, %e, %f, %p はコマンドやディレクトリ項目に置き換えられます, "
-"詳細はマニュアルを参照してください"
+"%d, %e, %f, %p はコマンドやディレクトリ項目に置き換えられます, 詳細はマニュア"
+"ルを参照してください"
 
-#: ../src/build.c:2177
+#: ../src/build.c:2184
 msgid "Set Build Commands"
 msgstr "ビルドコマンドを設定"
 
-#: ../src/build.c:2399
+#: ../src/build.c:2406
 msgid "_Compile"
 msgstr "コンパイル(_C)"
 
 #. build the code
-#: ../src/build.c:2406 ../src/build.c:2669 ../src/interface.c:1075
+#: ../src/build.c:2413 ../src/build.c:2679 ../src/interface.c:1075
 msgid "_Build"
 msgstr "ビルド(_B)"
 
-#: ../src/build.c:2413 ../src/build.c:2443 ../src/build.c:2636
+#: ../src/build.c:2420 ../src/build.c:2450 ../src/build.c:2643
 msgid "_Execute"
 msgstr "実行(_E)"
 
 #. build the code with make custom
-#: ../src/build.c:2458 ../src/build.c:2634 ../src/build.c:2689
+#: ../src/build.c:2465 ../src/build.c:2641 ../src/build.c:2699
 msgid "Make Custom _Target"
 msgstr "カスタム ターゲットをメイク(_T)"
 
 #. build the code with make object
-#: ../src/build.c:2460 ../src/build.c:2635 ../src/build.c:2697
+#: ../src/build.c:2467 ../src/build.c:2642 ../src/build.c:2707
 msgid "Make _Object"
 msgstr "オブジェクトをメイク(_O)"
 
-#: ../src/build.c:2462 ../src/build.c:2633
+#: ../src/build.c:2469 ../src/build.c:2640
 msgid "_Make"
 msgstr "メイク(_M)"
 
 #. build the code with make all
-#: ../src/build.c:2681
+#: ../src/build.c:2691
 msgid "_Make All"
 msgstr "すべてメイク(_M)"
 
 #. arguments
-#: ../src/build.c:2709
+#: ../src/build.c:2719
 msgid "_Set Build Menu Commands"
 msgstr "ビルドメニューコマンドを設定(_S)"
 
@@ -311,7 +314,7 @@ msgid_plural "%d files saved."
 msgstr[0] "%d 個のファイルを保存しました"
 
 #: ../src/callbacks.c:488 ../src/document.c:2895 ../src/interface.c:352
-#: ../src/sidebar.c:618
+#: ../src/sidebar.c:613
 msgid "_Reload"
 msgstr "再読み込み(_R)"
 
@@ -527,7 +530,7 @@ msgstr "エラーが発生したかファイル情報が取得できません（
 
 #: ../src/dialogs.c:1076 ../src/dialogs.c:1077 ../src/dialogs.c:1078
 #: ../src/dialogs.c:1084 ../src/dialogs.c:1085 ../src/dialogs.c:1086
-#: ../src/symbols.c:1724 ../src/symbols.c:1745 ../src/symbols.c:1797
+#: ../src/symbols.c:1730 ../src/symbols.c:1751 ../src/symbols.c:1803
 #: ../src/ui_utils.c:222
 msgid "unknown"
 msgstr "不明"
@@ -779,17 +782,18 @@ msgstr "保存しないで閉じる(_W)"
 #: ../src/document.c:2919
 #, c-format
 msgid "File \"%s\" was not found on disk! Try to resave the file?"
-msgstr "ディスク上にファイル \"%s\" にありません! ファイルを保存しなおしますか?"
+msgstr ""
+"ディスク上にファイル \"%s\" にありません! ファイルを保存しなおしますか?"
 
-#: ../src/editor.c:4425
+#: ../src/editor.c:4421
 msgid "Enter Tab Width"
 msgstr "タブの幅を指定"
 
-#: ../src/editor.c:4426
+#: ../src/editor.c:4422
 msgid "Enter the amount of spaces which should be replaced by a tab character."
 msgstr "タブ文字に置き換えられる空白の数を指定"
 
-#: ../src/editor.c:4577
+#: ../src/editor.c:4573
 #, c-format
 msgid "Warning: non-standard hard tab width: %d != 8!"
 msgstr "警告: 非標準のタブ幅: %d != 8!"
@@ -1016,17 +1020,17 @@ msgstr "ファイル種類 %s の正規表現が不正です: %s"
 msgid "untitled"
 msgstr "untitled"
 
-#: ../src/highlighting.c:3349 ../src/main.c:802 ../src/socket.c:165
+#: ../src/highlighting.c:3351 ../src/main.c:802 ../src/socket.c:165
 #: ../src/templates.c:384
 #, c-format
 msgid "Could not find file '%s'."
 msgstr "ファイル '%s' が見つかりません"
 
-#: ../src/highlighting.c:3398
+#: ../src/highlighting.c:3400
 msgid "_Color Schemes"
 msgstr "色の設定(_C)"
 
-#: ../src/highlighting.c:3405
+#: ../src/highlighting.c:3407
 msgid "_Default"
 msgstr "標準(_D)"
 
@@ -1652,8 +1656,8 @@ msgid ""
 "Defines whether to use the native Windows File Open/Save dialogs or whether "
 "to use the GTK default dialogs"
 msgstr ""
-"Windowsのファイル選択ダイアログと、GTKのファイル選択ダイアログのどちらを"
-"使うかを指定します。"
+"Windowsのファイル選択ダイアログと、GTKのファイル選択ダイアログのどちらを使う"
+"かを指定します。"
 
 #: ../src/interface.c:2896 ../src/interface.c:3275 ../src/interface.c:4230
 msgid "<b>Miscellaneous</b>"
@@ -1836,8 +1840,7 @@ msgstr "現在のタブの次"
 msgid ""
 "Whether to place file tabs next to the current tab rather than at the edges "
 "of the notebook"
-msgstr ""
-"ファイルタブを現在のタブの次に開くか最後のタブの次に開くかを指定"
+msgstr "ファイルタブを現在のタブの次に開くか最後のタブの次に開くかを指定"
 
 #: ../src/interface.c:3171
 msgid "Double-clicking hides all additional widgets"
@@ -2255,7 +2258,9 @@ msgstr "構文色分けの色を反転"
 
 #: ../src/interface.c:3858
 msgid "Invert all colors, by default using white text on a black background"
-msgstr "すべての色を反転。色をカスタマイズしていないときは、黒い背景に白いテキストを使用します"
+msgstr ""
+"すべての色を反転。色をカスタマイズしていないときは、黒い背景に白いテキストを"
+"使用します"
 
 #: ../src/interface.c:3860
 msgid "Show indentation guides"
@@ -2386,8 +2391,7 @@ msgstr "矩形の範囲指定時に表示"
 msgid ""
 "Only show virtual spaces beyond the end of lines when drawing a rectangular "
 "selection"
-msgstr ""
-"矩形の範囲指定を行うときに、行末の後ろに仮の空白を表示する"
+msgstr "矩形の範囲指定を行うときに、行末の後ろに仮の空白を表示する"
 
 #: ../src/interface.c:4009
 msgid "Always"
@@ -2440,9 +2444,9 @@ msgid ""
 "opening non-Unicode files and opens the file with the specified encoding "
 "(usually not needed)"
 msgstr ""
-"このオプションは、非Unicodeファイルを開くときのファイルのエンコーディング"
-"自動検出を無効にして、指定したエンコーディングでファイルを開きます。"
-"(この機能は通常使われません)"
+"このオプションは、非Unicodeファイルを開くときのファイルのエンコーディング自動"
+"検出を無効にして、指定したエンコーディングでファイルを開きます。(この機能は通"
+"常使われません)"
 
 #: ../src/interface.c:4122
 msgid "Default encoding (existing non-Unicode files):"
@@ -2505,7 +2509,7 @@ msgstr ""
 "します。0は確認しません。"
 
 #: ../src/interface.c:4235 ../src/prefs.c:1533 ../src/symbols.c:605
-#: ../plugins/filebrowser.c:1101
+#: ../plugins/filebrowser.c:1103
 msgid "Files"
 msgstr "ファイル"
 
@@ -2746,7 +2750,7 @@ msgstr "カスタム"
 msgid "Use global settings"
 msgstr "グローバルな設定を使用"
 
-#: ../src/keybindings.c:227 ../src/plugins.c:1171
+#: ../src/keybindings.c:227 ../src/plugins.c:1174
 msgid "File"
 msgstr "ファイル"
 
@@ -2794,7 +2798,7 @@ msgstr "再読み込み"
 msgid "Re-open last closed tab"
 msgstr "最後に閉じたタブを再び開く"
 
-#: ../src/keybindings.c:255 ../src/project.c:519
+#: ../src/keybindings.c:255 ../src/project.c:522
 msgid "Project"
 msgstr "プロジェクト"
 
@@ -3210,7 +3214,7 @@ msgstr "マーカーを消去"
 msgid "Remove Error Indicators"
 msgstr "エラーインジケータを消去"
 
-#: ../src/keybindings.c:538 ../src/keybindings.c:543 ../src/project.c:477
+#: ../src/keybindings.c:538 ../src/keybindings.c:543 ../src/project.c:479
 #: ../src/ui_utils.c:1815
 msgid "Build"
 msgstr "ビルド"
@@ -3308,7 +3312,8 @@ msgstr "タグを生成するときに、C/C++ファイルのプリプロセッ�
 
 #: ../src/main.c:128
 msgid "Don't open files in a running instance, force opening a new instance"
-msgstr "実行中のインスタンスでファイルを開けません。新しいインスタンスで開きます。"
+msgstr ""
+"実行中のインスタンスでファイルを開けません。新しいインスタンスで開きます。"
 
 #: ../src/main.c:129
 msgid ""
@@ -3406,17 +3411,17 @@ msgstr ""
 "設定ディレクトリなしでGeanyを使うと問題が起きる場合があります。\n"
 "それでも Geany を実行しますか?"
 
-#: ../src/main.c:1031
+#: ../src/main.c:1044
 #, c-format
 msgid "This is Geany %s."
 msgstr "Geany %s を起動しました"
 
-#: ../src/main.c:1033
+#: ../src/main.c:1046
 #, c-format
 msgid "Configuration directory could not be created (%s)."
 msgstr "設定ディレクトリが作成できませんでした(%s)"
 
-#: ../src/main.c:1244
+#: ../src/main.c:1257
 msgid "Configuration files reloaded."
 msgstr "設定ファイルを再読み込みしました"
 
@@ -3424,19 +3429,19 @@ msgstr "設定ファイルを再読み込みしました"
 msgid "Status messages"
 msgstr "ステータスメッセージ"
 
-#: ../src/msgwindow.c:524
+#: ../src/msgwindow.c:542
 msgid "C_opy"
 msgstr "コピー(_O)"
 
-#: ../src/msgwindow.c:533
+#: ../src/msgwindow.c:551
 msgid "Copy _All"
 msgstr "すべてコピー(_A)"
 
-#: ../src/msgwindow.c:563
+#: ../src/msgwindow.c:581
 msgid "_Hide Message Window"
 msgstr "メッセージウィンドウを隠す(_H)"
 
-#: ../src/msgwindow.c:619
+#: ../src/msgwindow.c:637
 #, c-format
 msgid "Could not find file '%s' - trying the current document path."
 msgstr "ファイル '%s' がありません - 現在の文書のパスを確認します。"
@@ -3450,11 +3455,11 @@ msgstr ""
 "プラグイン \"%s\" は この Geany のリリースとバイナリ互換性がありません - 再コ"
 "ンパイルしてください。"
 
-#: ../src/plugins.c:906
+#: ../src/plugins.c:909
 msgid "_Plugin Manager"
 msgstr "プラグインマネージャ(_P)"
 
-#: ../src/plugins.c:1083
+#: ../src/plugins.c:1086
 #, c-format
 msgid ""
 "Plugin: %s %s\n"
@@ -3465,27 +3470,27 @@ msgstr ""
 "説明: %s\n"
 "作者: %s"
 
-#: ../src/plugins.c:1159
+#: ../src/plugins.c:1162
 msgid "Active"
 msgstr "アクティブ"
 
-#: ../src/plugins.c:1165
+#: ../src/plugins.c:1168
 msgid "Plugin"
 msgstr "プラグイン"
 
-#: ../src/plugins.c:1189
+#: ../src/plugins.c:1192
 msgid "No plugins available."
 msgstr "プラグインが利用できません"
 
-#: ../src/plugins.c:1269
+#: ../src/plugins.c:1272
 msgid "Plugins"
 msgstr "プラグイン"
 
-#: ../src/plugins.c:1289
+#: ../src/plugins.c:1292
 msgid "Choose which plugins should be loaded at startup:"
 msgstr "起動時に読み込まれるプラグインを選択:"
 
-#: ../src/plugins.c:1301
+#: ../src/plugins.c:1304
 msgid "<b>Plugin details:</b>"
 msgstr "<b>プラグインの詳細:</b>"
 
@@ -3502,11 +3507,11 @@ msgstr "キーの読み取り"
 msgid "Press the combination of the keys you want to use for \"%s\"."
 msgstr "\"%s\"を使用するためのキーの組み合わせをタイプします"
 
-#: ../src/prefs.c:214 ../src/symbols.c:1866
+#: ../src/prefs.c:214 ../src/symbols.c:1872
 msgid "_Expand All"
 msgstr "すべて展開(_E)"
 
-#: ../src/prefs.c:219 ../src/symbols.c:1871
+#: ../src/prefs.c:219 ../src/symbols.c:1877
 msgid "_Collapse All"
 msgstr "すべて閉じる(_C)"
 
@@ -3543,7 +3548,8 @@ msgstr "端末"
 #. page Tools
 #: ../src/prefs.c:1619
 msgid "Enter tool paths below. Tools you do not need can be left blank."
-msgstr "ツールのパスを下に入力してください。不要なツールは空白のままで構いません。"
+msgstr ""
+"ツールのパスを下に入力してください。不要なツールは空白のままで構いません。"
 
 #. page Templates
 #: ../src/prefs.c:1624
@@ -3613,31 +3619,31 @@ msgstr "文書の設定"
 msgid "Print only the basename(without the path) of the printed file"
 msgstr "印刷ファイルのベース名（パスを除いたもの）のみを印刷します"
 
-#: ../src/printing.c:527
+#: ../src/printing.c:530
 #, c-format
 msgid "Page %d of %d"
 msgstr "<b>ページ %d / %d</b>"
 
-#: ../src/printing.c:781
+#: ../src/printing.c:784
 #, c-format
 msgid "Did not send document %s to the printing subsystem."
 msgstr "文書 %s を印刷サブシステムに送信できません"
 
-#: ../src/printing.c:783
+#: ../src/printing.c:786
 #, c-format
 msgid "Document %s was sent to the printing subsystem."
 msgstr "文書 %s は印刷サブシステムに送信されました"
 
-#: ../src/printing.c:835
+#: ../src/printing.c:838
 #, c-format
 msgid "Printing of %s failed (%s)."
 msgstr "%s の印刷に失敗しました（%s）"
 
-#: ../src/printing.c:875
+#: ../src/printing.c:878
 msgid "Please set a print command in the preferences dialog first."
 msgstr "先に設定ダイアログで印刷コマンドを設定してください"
 
-#: ../src/printing.c:883
+#: ../src/printing.c:886
 #, c-format
 msgid ""
 "The file \"%s\" will be printed with the following command:\n"
@@ -3648,12 +3654,12 @@ msgstr ""
 "\n"
 "%s"
 
-#: ../src/printing.c:899
+#: ../src/printing.c:902
 #, c-format
 msgid "Printing of \"%s\" failed (return code: %s)."
 msgstr "\"%s\" の印刷に失敗(リターンコード: %s)"
 
-#: ../src/printing.c:905
+#: ../src/printing.c:908
 #, c-format
 msgid "File %s printed."
 msgstr "ファイル %s は印刷されました。"
@@ -3672,19 +3678,19 @@ msgstr "新規プロジェクト"
 msgid "C_reate"
 msgstr "作成(_R)"
 
-#: ../src/project.c:139 ../src/project.c:413
+#: ../src/project.c:139 ../src/project.c:415
 msgid "Name:"
 msgstr "プロジェクト名:"
 
-#: ../src/project.c:148 ../src/project.c:426
+#: ../src/project.c:148 ../src/project.c:428
 msgid "Filename:"
 msgstr "ファイル名:"
 
-#: ../src/project.c:164 ../src/project.c:456
+#: ../src/project.c:164 ../src/project.c:458
 msgid "Base path:"
 msgstr "基本パス:"
 
-#: ../src/project.c:170 ../src/project.c:465
+#: ../src/project.c:170 ../src/project.c:467
 msgid ""
 "Base directory of all files that make up the project. This can be a new "
 "path, or an existing directory tree. You can use paths relative to the "
@@ -3694,11 +3700,11 @@ msgstr ""
 "と既存のディレクトリのいずれかを指定できます。プロジェクトのファイル名に間接"
 "パスが使用できます。"
 
-#: ../src/project.c:173 ../src/project.c:468
+#: ../src/project.c:173 ../src/project.c:470
 msgid "Choose Project Base Path"
 msgstr "プロジェクトの基本パスを選択"
 
-#: ../src/project.c:231 ../src/project.c:263 ../src/project.c:957
+#: ../src/project.c:231 ../src/project.c:263 ../src/project.c:977
 #, c-format
 msgid "Project file \"%s\" could not be loaded."
 msgstr "プロジェクトファイル \"%s\" は読み込めませんでした"
@@ -3716,87 +3722,87 @@ msgstr "プロジェクトファイル"
 msgid "Project \"%s\" closed."
 msgstr "プロジェクト \"%s\" を閉じました"
 
-#: ../src/project.c:439
+#: ../src/project.c:441
 msgid "Description:"
 msgstr "説明:"
 
-#: ../src/project.c:481
+#: ../src/project.c:484
 msgid "Set the Build non-filetype working directories to use base path:"
 msgstr "ファイル種類に依存しないビルドコマンド用の作業ディレクトリを設定:"
 
-#: ../src/project.c:484
+#: ../src/project.c:487
 msgid "Set"
 msgstr "設定"
 
-#: ../src/project.c:486
+#: ../src/project.c:489
 msgid ""
 "Set the working directories (on the Build tab) for the non-filetype build "
 "commands to use the base path"
 msgstr ""
-"ファイル種類に依存しないビルドコマンド用の基本パスとなる作業ディレクトリ"
-"(ビルドタブに)を設定"
+"ファイル種類に依存しないビルドコマンド用の基本パスとなる作業ディレクトリ(ビル"
+"ドタブに)を設定"
 
-#: ../src/project.c:501
+#: ../src/project.c:504
 msgid "File patterns:"
 msgstr "ファイルパターン:"
 
-#: ../src/project.c:610
+#: ../src/project.c:630
 msgid "Do you want to close it before proceeding?"
 msgstr "実行する前にプロジェクトを閉じますか?"
 
-#: ../src/project.c:611
+#: ../src/project.c:631
 #, c-format
 msgid "The '%s' project is already open."
 msgstr "'%s' プロジェクトはすでに開いています"
 
-#: ../src/project.c:658
+#: ../src/project.c:678
 msgid "The specified project name is too short."
 msgstr "指定したプロジェクト名は短すぎます"
 
-#: ../src/project.c:664
+#: ../src/project.c:684
 #, c-format
 msgid "The specified project name is too long (max. %d characters)."
 msgstr "指定したプロジェクト名は長すぎます(最大 %d 文字)"
 
-#: ../src/project.c:672
+#: ../src/project.c:692
 msgid "You have specified an invalid project filename."
 msgstr "無効なプロジェクト名を指定しました"
 
-#: ../src/project.c:695
+#: ../src/project.c:715
 msgid "Create the project's base path directory?"
 msgstr "プロジェクトの基本パスのディレクトリを作成しますか?"
 
-#: ../src/project.c:696
+#: ../src/project.c:716
 #, c-format
 msgid "The path \"%s\" does not exist."
 msgstr "パス \"%s\" は存在しません"
 
-#: ../src/project.c:705
+#: ../src/project.c:725
 #, c-format
 msgid "Project base directory could not be created (%s)."
 msgstr "プロジェクト基本ディレクトリが作成できません(%s)"
 
-#: ../src/project.c:717
+#: ../src/project.c:737
 #, c-format
 msgid "Project file could not be written (%s)."
 msgstr "プロジェクトファイルが書き込めません（%s）"
 
-#: ../src/project.c:794
+#: ../src/project.c:814
 #, c-format
 msgid "Project \"%s\" created."
 msgstr "プロジェクト \"%s\" 作成しました"
 
-#: ../src/project.c:796
+#: ../src/project.c:816
 #, c-format
 msgid "Project \"%s\" saved."
 msgstr "プロジェクト \"%s\" を保存しました"
 
 #. initialise the dialog
-#: ../src/project.c:861 ../src/project.c:872
+#: ../src/project.c:881 ../src/project.c:892
 msgid "Choose Project Filename"
 msgstr "プロジェクトのファイル名を選択"
 
-#: ../src/project.c:947
+#: ../src/project.c:967
 #, c-format
 msgid "Project \"%s\" opened."
 msgstr "プロジェクト \"%s\" を開きました"
@@ -4012,8 +4018,8 @@ msgid ""
 "another user.\n"
 "This is a fatal error and Geany will now quit."
 msgstr ""
-"Geany は他のユーザとして実行している他のインスタンスの Unix ドメインソケットに"
-"アクセスしようとしました。\n"
+"Geany は他のユーザとして実行している他のインスタンスの Unix ドメインソケット"
+"にアクセスしようとしました。\n"
 "これは致命的なエラーのため、Geanyを直ちに終了します。"
 
 #: ../src/symbols.c:611 ../src/symbols.c:651 ../src/symbols.c:718
@@ -4231,17 +4237,17 @@ msgstr "構造体"
 msgid "Typedefs / Enums"
 msgstr "Typedef/Enum"
 
-#: ../src/symbols.c:1365
+#: ../src/symbols.c:1371
 #, c-format
 msgid "Unknown filetype extension for \"%s\".\n"
 msgstr "\"%s\" は不明なファイル形式の拡張子です\n"
 
-#: ../src/symbols.c:1389
+#: ../src/symbols.c:1395
 #, c-format
 msgid "Failed to create tags file, perhaps because no tags were found.\n"
 msgstr "タグが見つからないため、タグファイルの作成に失敗しました\n"
 
-#: ../src/symbols.c:1396
+#: ../src/symbols.c:1402
 #, c-format
 msgid ""
 "Usage: %s -g <Tag File> <File list>\n"
@@ -4250,7 +4256,7 @@ msgstr ""
 "使用法: %s -g <タグファイル> <ファイルリスト>\n"
 "\n"
 
-#: ../src/symbols.c:1397
+#: ../src/symbols.c:1403
 #, c-format
 msgid ""
 "Example:\n"
@@ -4261,40 +4267,40 @@ msgstr ""
 "CFLAGS=`pkg-config gtk+-2.0 --cflags` %s -g gtk2.c.tags /usr/include/gtk-2.0/"
 "gtk/gtk.h\n"
 
-#: ../src/symbols.c:1411
+#: ../src/symbols.c:1417
 msgid "Load Tags"
 msgstr "タグを読み込む"
 
-#: ../src/symbols.c:1418
+#: ../src/symbols.c:1424
 msgid "Geany tag files (*.tags)"
 msgstr "Geany タグファイル (*.tags)"
 
 #. For translators: the first wildcard is the filetype, the second the filename
-#: ../src/symbols.c:1438
+#: ../src/symbols.c:1444
 #, c-format
 msgid "Loaded %s tags file '%s'."
 msgstr "%s タグファイル '%s' を読み込みました"
 
-#: ../src/symbols.c:1440
+#: ../src/symbols.c:1446
 #, c-format
 msgid "Could not load tags file '%s'."
 msgstr "タグファイル '%s' を読み込めませんでした"
 
-#: ../src/symbols.c:1573
+#: ../src/symbols.c:1579
 #, c-format
 msgid "Forward declaration \"%s\" not found."
 msgstr "前方宣言 \"%s\" が見つかりません"
 
-#: ../src/symbols.c:1575
+#: ../src/symbols.c:1581
 #, c-format
 msgid "Definition of \"%s\" not found."
 msgstr "\"%s\" の定義が見つかりません"
 
-#: ../src/symbols.c:1881
+#: ../src/symbols.c:1887
 msgid "Sort by _Name"
 msgstr "名前順に並び替え(_N)"
 
-#: ../src/symbols.c:1888
+#: ../src/symbols.c:1894
 msgid "Sort by _Appearance"
 msgstr "出現順に並び替え(_A)"
 
@@ -4519,19 +4525,19 @@ msgstr "文字数:"
 msgid "No tags found"
 msgstr "タグが見つかりません"
 
-#: ../src/sidebar.c:546
+#: ../src/sidebar.c:541
 msgid "Show S_ymbol List"
 msgstr "シンボルリストを表示(_Y)"
 
-#: ../src/sidebar.c:554
+#: ../src/sidebar.c:549
 msgid "Show _Document List"
 msgstr "文書リストを表示(_D)"
 
-#: ../src/sidebar.c:562 ../plugins/filebrowser.c:647
+#: ../src/sidebar.c:557 ../plugins/filebrowser.c:649
 msgid "H_ide Sidebar"
 msgstr "サイドバーを隠す(_I)"
 
-#: ../src/sidebar.c:631
+#: ../src/sidebar.c:626
 msgid "Show _Paths"
 msgstr "パスを表示(_P)"
 
@@ -4759,7 +4765,7 @@ msgstr ""
 "は F10です)。例えば、Midnight Commander をVTEで使用する場合に、このオプション"
 "は便利です。"
 
-#: ../src/vte.c:836 ../plugins/filebrowser.c:1217
+#: ../src/vte.c:836 ../plugins/filebrowser.c:1219
 msgid "Follow the path of the current file"
 msgstr "現在のファイルのパスに合わせる"
 
@@ -4951,7 +4957,7 @@ msgstr "句読記号"
 msgid "Miscellaneous characters"
 msgstr "その他の記号"
 
-#: ../plugins/htmlchars.c:367 ../plugins/filebrowser.c:1134
+#: ../plugins/htmlchars.c:367 ../plugins/filebrowser.c:1136
 #: ../plugins/saveactions.c:470
 msgid "Plugin configuration directory could not be created."
 msgstr "プラグインの設定ディレクトリを作成できませんでした"
@@ -5076,59 +5082,59 @@ msgstr "選択された項目が多すぎます!"
 msgid "Could not execute configured external command '%s' (%s)."
 msgstr "設定された外部コマンド '%s' が実行できませんでした（%s）"
 
-#: ../plugins/filebrowser.c:603
+#: ../plugins/filebrowser.c:605
 msgid "Open _externally"
 msgstr "外部から開く(_E)"
 
-#: ../plugins/filebrowser.c:618
+#: ../plugins/filebrowser.c:620
 msgid "_Find in Files"
 msgstr "複数のファイルから検索(_F)"
 
-#: ../plugins/filebrowser.c:628
+#: ../plugins/filebrowser.c:630
 msgid "Show _Hidden Files"
 msgstr "隠しファイルを表示(_H)"
 
-#: ../plugins/filebrowser.c:841
+#: ../plugins/filebrowser.c:843
 msgid "Up"
 msgstr "上へ"
 
-#: ../plugins/filebrowser.c:846
+#: ../plugins/filebrowser.c:848
 msgid "Refresh"
 msgstr "更新"
 
-#: ../plugins/filebrowser.c:851
+#: ../plugins/filebrowser.c:853
 msgid "Home"
 msgstr "ホーム"
 
-#: ../plugins/filebrowser.c:856
+#: ../plugins/filebrowser.c:858
 msgid "Set path from document"
 msgstr "パスを文書から設定"
 
-#: ../plugins/filebrowser.c:866
+#: ../plugins/filebrowser.c:868
 msgid "Clear the filter"
 msgstr "フィルタをクリア"
 
-#: ../plugins/filebrowser.c:880
+#: ../plugins/filebrowser.c:882
 msgid "Filter:"
 msgstr "フィルタ:"
 
-#: ../plugins/filebrowser.c:890
+#: ../plugins/filebrowser.c:892
 msgid "Filter your files with usual wildcards"
 msgstr "ワイルドカードでファイルを制限します"
 
-#: ../plugins/filebrowser.c:1107
+#: ../plugins/filebrowser.c:1109
 msgid "Focus File List"
 msgstr "ファイルリストをフォーカス"
 
-#: ../plugins/filebrowser.c:1109
+#: ../plugins/filebrowser.c:1111
 msgid "Focus Path Entry"
 msgstr "パス入力をフォーカス"
 
-#: ../plugins/filebrowser.c:1185
+#: ../plugins/filebrowser.c:1187
 msgid "External open command:"
 msgstr "他のプログラムで開くコマンド:"
 
-#: ../plugins/filebrowser.c:1194
+#: ../plugins/filebrowser.c:1196
 #, c-format
 msgid ""
 "The command to execute when using \"Open with\". You can use %f and %d "
@@ -5142,15 +5148,15 @@ msgstr ""
 "%f は完全パス指定のファイル名に置き換えられます。\n"
 "%d は選択したファイルがあるパス名に置き換えられます。(ファイル名なし)"
 
-#: ../plugins/filebrowser.c:1202
+#: ../plugins/filebrowser.c:1204
 msgid "Show hidden files"
 msgstr "隠しファイルを表示"
 
-#: ../plugins/filebrowser.c:1208
+#: ../plugins/filebrowser.c:1210
 msgid "Hide object files"
 msgstr "オブジェクトファイルを隠す"
 
-#: ../plugins/filebrowser.c:1212
+#: ../plugins/filebrowser.c:1214
 msgid ""
 "Don't show generated object files in the file browser, this includes *.o, *."
 "obj. *.so, *.dll, *.a, *.lib"
@@ -5158,11 +5164,11 @@ msgstr ""
 "生成されたオブジェクトファイルをファイルブラウザで非表示にします。これは *."
 "o, *.obj. *.so, *.dll, *.a, *.lib を含みます"
 
-#: ../plugins/filebrowser.c:1223
+#: ../plugins/filebrowser.c:1225
 msgid "Use the project's base directory"
 msgstr "プロジェクトの基本ディレクトリを使用"
 
-#: ../plugins/filebrowser.c:1227
+#: ../plugins/filebrowser.c:1229
 msgid ""
 "Change the directory to the base directory of the currently opened project"
 msgstr "現在開かれているプロジェクトの基本ディレクトリに作業ディレクトリを変更"

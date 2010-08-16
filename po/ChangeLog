@@ -1,3 +1,36 @@
+2010-08-11  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * zh_CN.po: Update of simplified Chinese translation. Thanks to
+             Xhacker Liu.
+
+
+2010-08-02  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * ru.po: Update of Russian translation. Thanks to Denis Koryavov for
+          for providing.
+
+
+2010-07-07  Frank Lanitz  <frank@frank.uvena.de>
+
+ * de.po: Minor update of German translation.
+
+
+2010-06-02  Peter Scholtens  <peter(dot)scholtens(at)xs4all(dot)nl>
+
+ * nl.po: Update of Dutch translation, thanks to Ayke van Laëthem.
+
+
+2010-06-18  Frank Lanitz  <frank@frank.uvena.de>
+
+ * cs.po: Update of Czech translation. Thanks to Karel Kolman for
+   providing.
+
+
+2010-06-12  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * New release: Geany 0.19 "Vellam".
+
+
 2010-06-07  Frank Lanitz  <frank@frank.uvena.de>
 
  * ja.po: Update of Japanese translation. Thanks to Chikahiro Masami.
@@ -29,7 +62,7 @@
  * fr.po: Update of French translation. Thanks Jean-Philippe Moal.
  * ja.po: Update of Japanese translation. Thanks to Chikahiro Masami.
  * pt.po: Update of Portugese translation. Thanks to André Glória for
-          providing 
+          providing
 
 
 2010-05-31  Frank Lanitz  <frank@frank.uvena.de>

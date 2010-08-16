@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Geany 0.19\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-05-24 11:42+0200\n"
+"POT-Creation-Date: 2010-08-16 21:09+0200\n"
 "PO-Revision-Date: 2010-05-24 09:26+0200\n"
 "Last-Translator: Lucas Vieites <lucasvieites@gmail.com>\n"
 "Language-Team: Geany translations <geany-i18n@uvena.de>\n"
@@ -29,53 +29,53 @@ msgstr "Geany"
 msgid "Integrated Development Environment"
 msgstr "Entorno de desarrollo integrado"
 
-#: ../src/about.c:145
+#: ../src/about.c:146
 msgid "About Geany"
 msgstr "Acerca de Geany"
 
-#: ../src/about.c:195
+#: ../src/about.c:196
 msgid "A fast and lightweight IDE"
 msgstr "Un IDE rápido y ligero"
 
-#: ../src/about.c:216
+#: ../src/about.c:217
 #, c-format
 msgid "(built on or after %s)"
 msgstr "(compilado el día %s o después)"
 
 #. gtk_container_add(GTK_CONTAINER(info_box), cop_label);
-#: ../src/about.c:247
+#: ../src/about.c:248
 msgid "Info"
 msgstr "Información"
 
-#: ../src/about.c:263
+#: ../src/about.c:264
 msgid "Developers"
 msgstr "Desarrolladores"
 
-#: ../src/about.c:272
+#: ../src/about.c:273
 msgid "maintainer"
 msgstr "mantenedor"
 
-#: ../src/about.c:280
+#: ../src/about.c:281
 msgid "developer"
 msgstr "desarrollador"
 
-#: ../src/about.c:288
+#: ../src/about.c:289
 msgid "translation maintainer"
 msgstr "mantenedor de traducción"
 
-#: ../src/about.c:297
+#: ../src/about.c:298
 msgid "Translators"
 msgstr "Traductores"
 
-#: ../src/about.c:317
+#: ../src/about.c:318
 msgid "Previous Translators"
 msgstr "Traductores anteriores"
 
-#: ../src/about.c:338
+#: ../src/about.c:339
 msgid "Contributors"
 msgstr "Colaboradores"
 
-#: ../src/about.c:348
+#: ../src/about.c:349
 #, c-format
 msgid ""
 "Some of the many contributors (for a more detailed list, see the file %s):"
@@ -83,15 +83,15 @@ msgstr ""
 "Algunos de los muchos colaboradores (vea el archivo %s para una lista más "
 "detallada):"
 
-#: ../src/about.c:374
+#: ../src/about.c:375
 msgid "Credits"
 msgstr "Créditos"
 
-#: ../src/about.c:388
+#: ../src/about.c:389
 msgid "License"
 msgstr "Licencia"
 
-#: ../src/about.c:397
+#: ../src/about.c:398
 msgid ""
 "License text could not be found, please visit http://www.gnu.org/licenses/"
 "gpl-2.0.txt to view it online."
@@ -100,43 +100,43 @@ msgstr ""
 "licenses/gpl-2.0.txt para verlo en línea."
 
 #. fall back to %d
-#: ../src/build.c:635
+#: ../src/build.c:638
 #, c-format
 msgid "failed to substitute %%p, no project active"
 msgstr "no se ha podido sustituir %%p, no hay proyecto activo"
 
-#: ../src/build.c:673
+#: ../src/build.c:676
 msgid "Process failed, no working directory"
 msgstr "El proceso ha fallado, no hay directorio de trabajo"
 
-#: ../src/build.c:699
+#: ../src/build.c:702
 #, c-format
 msgid "%s (in directory: %s)"
 msgstr "%s (en el directorio: %s)"
 
-#: ../src/build.c:719 ../src/build.c:944 ../src/search.c:1475
+#: ../src/build.c:722 ../src/build.c:947 ../src/search.c:1475
 #, c-format
 msgid "Process failed (%s)"
 msgstr "El proceso ha fallado (%s)"
 
-#: ../src/build.c:790
+#: ../src/build.c:793
 #, c-format
 msgid "Failed to change the working directory to \"%s\""
 msgstr "Error al cambiar el directorio de trabajo a «%s»"
 
-#: ../src/build.c:819
+#: ../src/build.c:822
 #, c-format
 msgid "Failed to execute \"%s\" (start-script could not be created)"
 msgstr "Error al ejecutar «%s» (no se ha podido crear el script de inicio)"
 
-#: ../src/build.c:873
+#: ../src/build.c:876
 msgid ""
 "Could not execute the file in the VTE because it probably contains a command."
 msgstr ""
 "No se ha podido ejecutar el archivo en la terminal virtual (VTE) "
 "probablemente porque contiene un comando."
 
-#: ../src/build.c:911
+#: ../src/build.c:914
 #, c-format
 msgid ""
 "Could not find terminal \"%s\" (check path for Terminal tool setting in "
@@ -145,113 +145,113 @@ msgstr ""
 "No se ha podido encontrar la terminal «%s» (verifique la ruta de la "
 "herramienta de terminal en «Preferencias»)"
 
-#: ../src/build.c:1083
+#: ../src/build.c:1084
 msgid "Compilation failed."
 msgstr "Ha fallado la compilación."
 
-#: ../src/build.c:1097
+#: ../src/build.c:1098
 msgid "Compilation finished successfully."
 msgstr "La compilación ha terminado con éxito."
 
-#: ../src/build.c:1254
+#: ../src/build.c:1255
 msgid "Custom Text"
 msgstr "Texto personalizado"
 
-#: ../src/build.c:1255
+#: ../src/build.c:1256
 msgid "Enter custom text here, all entered text is appended to the command."
 msgstr "Introduzca su texto personalizado, éste se añadirá al comando."
 
-#: ../src/build.c:1333
+#: ../src/build.c:1334
 msgid "_Next Error"
 msgstr "Siguie_nte error"
 
-#: ../src/build.c:1335
+#: ../src/build.c:1336
 msgid "_Previous Error"
 msgstr "Error _anterior"
 
-#: ../src/build.c:1345
+#: ../src/build.c:1346
 msgid "_Set Build Commands"
 msgstr "Establecer comando_s de construcción"
 
-#: ../src/build.c:1625 ../src/toolbar.c:373
+#: ../src/build.c:1630 ../src/toolbar.c:373
 msgid "Build the current file"
 msgstr "Construir el archivo actual"
 
-#: ../src/build.c:1639
+#: ../src/build.c:1644
 msgid "Build the current file with Make and the default target"
 msgstr "Construir el archivo actual con «make» y el objetivo predeterminado"
 
-#: ../src/build.c:1641
+#: ../src/build.c:1646
 msgid "Build the current file with Make and the specified target"
 msgstr "Construir el archivo actual con «make» y el objetivo indicado"
 
-#: ../src/build.c:1643
+#: ../src/build.c:1648
 msgid "Compile the current file with Make"
 msgstr "Compilar el archivo actual con «make»"
 
-#: ../src/build.c:1670
+#: ../src/build.c:1675
 #, c-format
 msgid "Process could not be stopped (%s)."
 msgstr "No se ha podido detener el proceso (%s)."
 
-#: ../src/build.c:1687 ../src/build.c:1699
+#: ../src/build.c:1692 ../src/build.c:1704
 msgid "No more build errors."
 msgstr "No hay más errores de construcción."
 
-#: ../src/build.c:1780
+#: ../src/build.c:1785
 msgid "Set menu item label"
 msgstr "Establecer etiqueta del elemento de menú"
 
-#: ../src/build.c:1790
+#: ../src/build.c:1795
 msgid "Item"
 msgstr "Elem."
 
-#: ../src/build.c:1791 ../src/symbols.c:650
+#: ../src/build.c:1796 ../src/symbols.c:650
 msgid "Label"
 msgstr "Etiqueta"
 
-#: ../src/build.c:1792 ../src/symbols.c:645
+#: ../src/build.c:1797 ../src/symbols.c:645
 msgid "Command"
 msgstr "Comando"
 
-#: ../src/build.c:1793
+#: ../src/build.c:1798
 msgid "Working directory"
 msgstr "Directorio de trabajo"
 
-#: ../src/build.c:1794
+#: ../src/build.c:1799
 msgid "Clear"
 msgstr "Limpiar"
 
-#: ../src/build.c:1833
+#: ../src/build.c:1838
 msgid "Click to set menu item label"
 msgstr "Pulse para configurar etiqueta el elemento del menú"
 
-#: ../src/build.c:1906 ../src/build.c:1908
+#: ../src/build.c:1911 ../src/build.c:1913
 #, c-format
 msgid "%s Commands"
 msgstr "Comandos de %s"
 
-#: ../src/build.c:1908
+#: ../src/build.c:1913
 msgid "No Filetype"
 msgstr "tipo desconocido"
 
-#: ../src/build.c:1916 ../src/build.c:1951
+#: ../src/build.c:1921 ../src/build.c:1956
 msgid "Error Regular Expression:"
 msgstr "Expresión regular de error:"
 
-#: ../src/build.c:1944
+#: ../src/build.c:1949
 msgid "Non-Filetype Commands"
 msgstr "Comandos generales para cualquier tipo de archivo"
 
-#: ../src/build.c:1974
+#: ../src/build.c:1979
 msgid "Note: Item 2 opens a dialog and appends the response to the command."
 msgstr "Nota: El elemento 2 abre un diálogo y añade la respuesta al comando."
 
-#: ../src/build.c:1983
+#: ../src/build.c:1988
 msgid "Execute Commands"
 msgstr "Ejecutar comandos"
 
-#: ../src/build.c:1994
+#: ../src/build.c:1999
 #, c-format
 msgid ""
 "%d, %e, %f, %p are substituted in command and directory fields, see manual "
@@ -260,44 +260,44 @@ msgstr ""
 "Los comodines %d, %e, %f y %p se sustituirán en los campos de comandos y "
 "directorios. Consulte el manual para más información."
 
-#: ../src/build.c:2179
+#: ../src/build.c:2184
 msgid "Set Build Commands"
 msgstr "Establecer los comandos de construcción"
 
-#: ../src/build.c:2401
+#: ../src/build.c:2406
 msgid "_Compile"
 msgstr "_Compilar"
 
 #. build the code
-#: ../src/build.c:2408 ../src/build.c:2671 ../src/interface.c:1075
+#: ../src/build.c:2413 ../src/build.c:2679 ../src/interface.c:1075
 msgid "_Build"
 msgstr "Con_struir"
 
-#: ../src/build.c:2415 ../src/build.c:2445 ../src/build.c:2638
+#: ../src/build.c:2420 ../src/build.c:2450 ../src/build.c:2643
 msgid "_Execute"
 msgstr "_Ejecutar"
 
 #. build the code with make custom
-#: ../src/build.c:2460 ../src/build.c:2636 ../src/build.c:2691
+#: ../src/build.c:2465 ../src/build.c:2641 ../src/build.c:2699
 msgid "Make Custom _Target"
 msgstr "Compilar obje_tivo personalizado"
 
 #. build the code with make object
-#: ../src/build.c:2462 ../src/build.c:2637 ../src/build.c:2699
+#: ../src/build.c:2467 ../src/build.c:2642 ../src/build.c:2707
 msgid "Make _Object"
 msgstr "Compilar _objeto"
 
-#: ../src/build.c:2464 ../src/build.c:2635
+#: ../src/build.c:2469 ../src/build.c:2640
 msgid "_Make"
 msgstr "_Compilar"
 
 #. build the code with make all
-#: ../src/build.c:2683
+#: ../src/build.c:2691
 msgid "_Make All"
 msgstr "_Compilar todo"
 
 #. arguments
-#: ../src/build.c:2711
+#: ../src/build.c:2719
 msgid "_Set Build Menu Commands"
 msgstr "Establecer comando_s del menú «Construir»"
 
@@ -313,7 +313,7 @@ msgstr[0] "%d archivo guardado."
 msgstr[1] "%d archivos guardados."
 
 #: ../src/callbacks.c:488 ../src/document.c:2895 ../src/interface.c:352
-#: ../src/sidebar.c:618
+#: ../src/sidebar.c:613
 msgid "_Reload"
 msgstr "_Recargar"
 
@@ -536,7 +536,7 @@ msgstr ""
 
 #: ../src/dialogs.c:1076 ../src/dialogs.c:1077 ../src/dialogs.c:1078
 #: ../src/dialogs.c:1084 ../src/dialogs.c:1085 ../src/dialogs.c:1086
-#: ../src/symbols.c:1724 ../src/symbols.c:1745 ../src/symbols.c:1797
+#: ../src/symbols.c:1730 ../src/symbols.c:1751 ../src/symbols.c:1803
 #: ../src/ui_utils.c:222
 msgid "unknown"
 msgstr "desconocido"
@@ -792,17 +792,17 @@ msgstr ""
 "No se ha encontrado el archivo «%s» en el disco. ¿Desea intentar volver a "
 "guardarlo?"
 
-#: ../src/editor.c:4425
+#: ../src/editor.c:4421
 msgid "Enter Tab Width"
 msgstr "Introduzca el ancho de tabulación:"
 
-#: ../src/editor.c:4426
+#: ../src/editor.c:4422
 msgid "Enter the amount of spaces which should be replaced by a tab character."
 msgstr ""
 "Introduzca la cantidad de espacios que deberían ser reemplazados por una "
 "tabulación."
 
-#: ../src/editor.c:4577
+#: ../src/editor.c:4573
 #, c-format
 msgid "Warning: non-standard hard tab width: %d != 8!"
 msgstr "Advertencia: ancho de tabulación dura no estándar: %d != 8"
@@ -1029,17 +1029,17 @@ msgstr "Expresión regular incorrecta para el tipo de archivo %s: %s"
 msgid "untitled"
 msgstr "sin título"
 
-#: ../src/highlighting.c:3349 ../src/main.c:802 ../src/socket.c:165
+#: ../src/highlighting.c:3351 ../src/main.c:802 ../src/socket.c:165
 #: ../src/templates.c:384
 #, c-format
 msgid "Could not find file '%s'."
 msgstr "No se ha podido encontrar el archivo «%s»."
 
-#: ../src/highlighting.c:3398
+#: ../src/highlighting.c:3400
 msgid "_Color Schemes"
 msgstr "Esquemas de _color"
 
-#: ../src/highlighting.c:3405
+#: ../src/highlighting.c:3407
 msgid "_Default"
 msgstr "Pre_determinado"
 
@@ -2560,7 +2560,7 @@ msgstr ""
 "archivos abiertos. El valor 0 desactiva la comprobación."
 
 #: ../src/interface.c:4235 ../src/prefs.c:1533 ../src/symbols.c:605
-#: ../plugins/filebrowser.c:1101
+#: ../plugins/filebrowser.c:1103
 msgid "Files"
 msgstr "Archivos"
 
@@ -2808,7 +2808,7 @@ msgstr "Personalizado"
 msgid "Use global settings"
 msgstr "Usar ajustes globales"
 
-#: ../src/keybindings.c:227 ../src/plugins.c:1171
+#: ../src/keybindings.c:227 ../src/plugins.c:1174
 msgid "File"
 msgstr "Archivo"
 
@@ -2856,7 +2856,7 @@ msgstr "Recargar archivo"
 msgid "Re-open last closed tab"
 msgstr "Volver a abrir la última pestaña cerrada"
 
-#: ../src/keybindings.c:255 ../src/project.c:519
+#: ../src/keybindings.c:255 ../src/project.c:522
 msgid "Project"
 msgstr "Proyecto"
 
@@ -3272,7 +3272,7 @@ msgstr "Borrar marcas"
 msgid "Remove Error Indicators"
 msgstr "Borrar indicadores de errores"
 
-#: ../src/keybindings.c:538 ../src/keybindings.c:543 ../src/project.c:477
+#: ../src/keybindings.c:538 ../src/keybindings.c:543 ../src/project.c:479
 #: ../src/ui_utils.c:1815
 msgid "Build"
 msgstr "Construir"
@@ -3477,17 +3477,17 @@ msgstr ""
 "Puede haber problemas usando Geany sin un directorio de configuración.\n"
 "¿Desea iniciar Geany de todas formas?"
 
-#: ../src/main.c:1031
+#: ../src/main.c:1044
 #, c-format
 msgid "This is Geany %s."
 msgstr "Esto es Geany %s."
 
-#: ../src/main.c:1033
+#: ../src/main.c:1046
 #, c-format
 msgid "Configuration directory could not be created (%s)."
 msgstr "No se ha podido crear el directorio de configuración (%s)."
 
-#: ../src/main.c:1244
+#: ../src/main.c:1257
 msgid "Configuration files reloaded."
 msgstr "Archivos de configuración recargados."
 
@@ -3495,19 +3495,19 @@ msgstr "Archivos de configuración recargados."
 msgid "Status messages"
 msgstr "Mensajes de estado"
 
-#: ../src/msgwindow.c:524
+#: ../src/msgwindow.c:542
 msgid "C_opy"
 msgstr "C_opiar"
 
-#: ../src/msgwindow.c:533
+#: ../src/msgwindow.c:551
 msgid "Copy _All"
 msgstr "Copi_ar todo"
 
-#: ../src/msgwindow.c:563
+#: ../src/msgwindow.c:581
 msgid "_Hide Message Window"
 msgstr "_Ocultar ventana de mensajes"
 
-#: ../src/msgwindow.c:619
+#: ../src/msgwindow.c:637
 #, c-format
 msgid "Could not find file '%s' - trying the current document path."
 msgstr "No se encontró el archivo «%s», probando la ruta del documento actual."
@@ -3521,11 +3521,11 @@ msgstr ""
 "El complemento «%s» no es compatible a nivel binario con esta versión de "
 "Geany , intente volver a compilarlo."
 
-#: ../src/plugins.c:906
+#: ../src/plugins.c:909
 msgid "_Plugin Manager"
 msgstr "_Administrador de complementos"
 
-#: ../src/plugins.c:1083
+#: ../src/plugins.c:1086
 #, c-format
 msgid ""
 "Plugin: %s %s\n"
@@ -3536,27 +3536,27 @@ msgstr ""
 "Descripción: %s\n"
 "Autor(es): %s"
 
-#: ../src/plugins.c:1159
+#: ../src/plugins.c:1162
 msgid "Active"
 msgstr "Activo"
 
-#: ../src/plugins.c:1165
+#: ../src/plugins.c:1168
 msgid "Plugin"
 msgstr "Complemento"
 
-#: ../src/plugins.c:1189
+#: ../src/plugins.c:1192
 msgid "No plugins available."
 msgstr "No hay complementos disponibles."
 
-#: ../src/plugins.c:1269
+#: ../src/plugins.c:1272
 msgid "Plugins"
 msgstr "Complementos"
 
-#: ../src/plugins.c:1289
+#: ../src/plugins.c:1292
 msgid "Choose which plugins should be loaded at startup:"
 msgstr "Seleccione los complementos que se activarán al inicio:"
 
-#: ../src/plugins.c:1301
+#: ../src/plugins.c:1304
 msgid "<b>Plugin details:</b>"
 msgstr "<b>Detalles del complemento:</b>"
 
@@ -3573,11 +3573,11 @@ msgstr "Capturar tecla"
 msgid "Press the combination of the keys you want to use for \"%s\"."
 msgstr "Pulse la combinación de teclas que desee usar para «%s»."
 
-#: ../src/prefs.c:214 ../src/symbols.c:1866
+#: ../src/prefs.c:214 ../src/symbols.c:1872
 msgid "_Expand All"
 msgstr "_Expandir todo"
 
-#: ../src/prefs.c:219 ../src/symbols.c:1871
+#: ../src/prefs.c:219 ../src/symbols.c:1877
 msgid "_Collapse All"
 msgstr "_Colapsar todo"
 
@@ -3689,32 +3689,32 @@ msgstr "Configuración del documento"
 msgid "Print only the basename(without the path) of the printed file"
 msgstr "Imprimir sólo el nombre (sin la ruta) del archivo impreso"
 
-#: ../src/printing.c:527
+#: ../src/printing.c:530
 #, c-format
 msgid "Page %d of %d"
 msgstr "Página %d de %d"
 
-#: ../src/printing.c:781
+#: ../src/printing.c:784
 #, c-format
 msgid "Did not send document %s to the printing subsystem."
 msgstr "No se ha enviado el documento %s al sistema de impresión."
 
-#: ../src/printing.c:783
+#: ../src/printing.c:786
 #, c-format
 msgid "Document %s was sent to the printing subsystem."
 msgstr "El documento %s ha sido enviado al sistema de impresión."
 
-#: ../src/printing.c:835
+#: ../src/printing.c:838
 #, c-format
 msgid "Printing of %s failed (%s)."
 msgstr "La impresión de %s ha fallado (%s)."
 
-#: ../src/printing.c:875
+#: ../src/printing.c:878
 msgid "Please set a print command in the preferences dialog first."
 msgstr ""
 "Configure primero un comando de impresión en el diálogo «Preferencias»."
 
-#: ../src/printing.c:883
+#: ../src/printing.c:886
 #, c-format
 msgid ""
 "The file \"%s\" will be printed with the following command:\n"
@@ -3725,12 +3725,12 @@ msgstr ""
 "\n"
 "%s"
 
-#: ../src/printing.c:899
+#: ../src/printing.c:902
 #, c-format
 msgid "Printing of \"%s\" failed (return code: %s)."
 msgstr "La impresión de «%s» ha fallado (código de retorno: %s)."
 
-#: ../src/printing.c:905
+#: ../src/printing.c:908
 #, c-format
 msgid "File %s printed."
 msgstr "Archivo %s impreso."
@@ -3749,19 +3749,19 @@ msgstr "Proyecto nuevo"
 msgid "C_reate"
 msgstr "C_rear"
 
-#: ../src/project.c:139 ../src/project.c:413
+#: ../src/project.c:139 ../src/project.c:415
 msgid "Name:"
 msgstr "Nombre:"
 
-#: ../src/project.c:148 ../src/project.c:426
+#: ../src/project.c:148 ../src/project.c:428
 msgid "Filename:"
 msgstr "Nombre de archivo:"
 
-#: ../src/project.c:164 ../src/project.c:456
+#: ../src/project.c:164 ../src/project.c:458
 msgid "Base path:"
 msgstr "Ruta base:"
 
-#: ../src/project.c:170 ../src/project.c:465
+#: ../src/project.c:170 ../src/project.c:467
 msgid ""
 "Base directory of all files that make up the project. This can be a new "
 "path, or an existing directory tree. You can use paths relative to the "
@@ -3771,11 +3771,11 @@ msgstr ""
 "ser una ruta nueva o un árbol de directorios ya existente. Pueden usarse "
 "rutas relativas al archivo de proyecto."
 
-#: ../src/project.c:173 ../src/project.c:468
+#: ../src/project.c:173 ../src/project.c:470
 msgid "Choose Project Base Path"
 msgstr "Elija la ruta base del proyecto"
 
-#: ../src/project.c:231 ../src/project.c:263 ../src/project.c:957
+#: ../src/project.c:231 ../src/project.c:263 ../src/project.c:977
 #, c-format
 msgid "Project file \"%s\" could not be loaded."
 msgstr "No se ha podido cargar el archivo de proyecto «%s»."
@@ -3793,21 +3793,21 @@ msgstr "Archivos del proyecto"
 msgid "Project \"%s\" closed."
 msgstr "Proyecto «%s» cerrado."
 
-#: ../src/project.c:439
+#: ../src/project.c:441
 msgid "Description:"
 msgstr "Descripción:"
 
-#: ../src/project.c:481
+#: ../src/project.c:484
 msgid "Set the Build non-filetype working directories to use base path:"
 msgstr ""
 "Establecer que los directorios de trabajo de los comandos generales utilicen "
 "la ruta base:"
 
-#: ../src/project.c:484
+#: ../src/project.c:487
 msgid "Set"
 msgstr "Fijar"
 
-#: ../src/project.c:486
+#: ../src/project.c:489
 msgid ""
 "Set the working directories (on the Build tab) for the non-filetype build "
 "commands to use the base path"
@@ -3816,68 +3816,68 @@ msgstr ""
 "«Construir») de los comandos de construir que se aplican a cualquier tipo de "
 "archivo (generales)"
 
-#: ../src/project.c:501
+#: ../src/project.c:504
 msgid "File patterns:"
 msgstr "Patrones de archivos:"
 
-#: ../src/project.c:610
+#: ../src/project.c:630
 msgid "Do you want to close it before proceeding?"
 msgstr "¿Desea cerrarlo antes de proceder?"
 
-#: ../src/project.c:611
+#: ../src/project.c:631
 #, c-format
 msgid "The '%s' project is already open."
 msgstr "El proyecto «%s» ya está abierto."
 
-#: ../src/project.c:658
+#: ../src/project.c:678
 msgid "The specified project name is too short."
 msgstr "El nombre de proyecto indicado es demasiado corto."
 
-#: ../src/project.c:664
+#: ../src/project.c:684
 #, c-format
 msgid "The specified project name is too long (max. %d characters)."
 msgstr ""
 "El nombre de proyecto indicado es demasiado largo (máx. %d caracteres)."
 
-#: ../src/project.c:672
+#: ../src/project.c:692
 msgid "You have specified an invalid project filename."
 msgstr "Ha indicado un nombre de archivo de proyecto inválido."
 
-#: ../src/project.c:695
+#: ../src/project.c:715
 msgid "Create the project's base path directory?"
 msgstr "¿Crear el directorio de la ruta base del proyecto?"
 
-#: ../src/project.c:696
+#: ../src/project.c:716
 #, c-format
 msgid "The path \"%s\" does not exist."
 msgstr "La ruta «%s» no existe."
 
-#: ../src/project.c:705
+#: ../src/project.c:725
 #, c-format
 msgid "Project base directory could not be created (%s)."
 msgstr "No se ha podido crear el directorio base del proyecto (%s)."
 
-#: ../src/project.c:717
+#: ../src/project.c:737
 #, c-format
 msgid "Project file could not be written (%s)."
 msgstr "No se ha podido crear el archivo de proyecto (%s)."
 
-#: ../src/project.c:794
+#: ../src/project.c:814
 #, c-format
 msgid "Project \"%s\" created."
 msgstr "Proyecto «%s» creado."
 
-#: ../src/project.c:796
+#: ../src/project.c:816
 #, c-format
 msgid "Project \"%s\" saved."
 msgstr "Proyecto «%s» guardado."
 
 #. initialise the dialog
-#: ../src/project.c:861 ../src/project.c:872
+#: ../src/project.c:881 ../src/project.c:892
 msgid "Choose Project Filename"
 msgstr "Elija el nombre del archivo del proyecto"
 
-#: ../src/project.c:947
+#: ../src/project.c:967
 #, c-format
 msgid "Project \"%s\" opened."
 msgstr "Proyecto «%s» abierto."
@@ -4318,19 +4318,19 @@ msgstr "Estructuras"
 msgid "Typedefs / Enums"
 msgstr "Typedefs/enums"
 
-#: ../src/symbols.c:1365
+#: ../src/symbols.c:1371
 #, c-format
 msgid "Unknown filetype extension for \"%s\".\n"
 msgstr "Extensión de archivo desconocida para «%s».\n"
 
-#: ../src/symbols.c:1389
+#: ../src/symbols.c:1395
 #, c-format
 msgid "Failed to create tags file, perhaps because no tags were found.\n"
 msgstr ""
 "Error al crear el archivo de etiquetas, tal vez porque no se ha encontrado "
 "ninguna etiqueta.\n"
 
-#: ../src/symbols.c:1396
+#: ../src/symbols.c:1402
 #, c-format
 msgid ""
 "Usage: %s -g <Tag File> <File list>\n"
@@ -4339,7 +4339,7 @@ msgstr ""
 "Uso: %s -g <Archivo de etiquetas> <Lista de archivos>\n"
 "\n"
 
-#: ../src/symbols.c:1397
+#: ../src/symbols.c:1403
 #, c-format
 msgid ""
 "Example:\n"
@@ -4350,40 +4350,40 @@ msgstr ""
 "CFLAGS=`pkg-config gtk+-2.0 --cflags` %s -g gtk2.c.tags /usr/include/gtk-2.0/"
 "gtk/gtk.h\n"
 
-#: ../src/symbols.c:1411
+#: ../src/symbols.c:1417
 msgid "Load Tags"
 msgstr "Cargar etiquetas"
 
-#: ../src/symbols.c:1418
+#: ../src/symbols.c:1424
 msgid "Geany tag files (*.tags)"
 msgstr "Archivos de etiquetas de Geany (*.tags)"
 
 #. For translators: the first wildcard is the filetype, the second the filename
-#: ../src/symbols.c:1438
+#: ../src/symbols.c:1444
 #, c-format
 msgid "Loaded %s tags file '%s'."
 msgstr "Cargado %s archivo de etiquetas «%s»."
 
-#: ../src/symbols.c:1440
+#: ../src/symbols.c:1446
 #, c-format
 msgid "Could not load tags file '%s'."
 msgstr "No se ha podido cargar el archivo de etiquetas «%s»."
 
-#: ../src/symbols.c:1573
+#: ../src/symbols.c:1579
 #, c-format
 msgid "Forward declaration \"%s\" not found."
 msgstr "Declaración de «%s» no encontrada"
 
-#: ../src/symbols.c:1575
+#: ../src/symbols.c:1581
 #, c-format
 msgid "Definition of \"%s\" not found."
 msgstr "Definición de «%s» no encontrada"
 
-#: ../src/symbols.c:1881
+#: ../src/symbols.c:1887
 msgid "Sort by _Name"
 msgstr "Ordenar por _nombre"
 
-#: ../src/symbols.c:1888
+#: ../src/symbols.c:1894
 msgid "Sort by _Appearance"
 msgstr "Ordenar por _aparición"
 
@@ -4609,19 +4609,19 @@ msgstr "Caracteres:"
 msgid "No tags found"
 msgstr "No se han encontrado etiquetas"
 
-#: ../src/sidebar.c:546
+#: ../src/sidebar.c:541
 msgid "Show S_ymbol List"
 msgstr "Mostrar la lista de _símbolos"
 
-#: ../src/sidebar.c:554
+#: ../src/sidebar.c:549
 msgid "Show _Document List"
 msgstr "Mostrar la lista de _documentos"
 
-#: ../src/sidebar.c:562 ../plugins/filebrowser.c:647
+#: ../src/sidebar.c:557 ../plugins/filebrowser.c:649
 msgid "H_ide Sidebar"
 msgstr "_Ocultar barra lateral"
 
-#: ../src/sidebar.c:631
+#: ../src/sidebar.c:626
 msgid "Show _Paths"
 msgstr "Mostrar _rutas"
 
@@ -4858,7 +4858,7 @@ msgstr ""
 "de menú (F10 de modo predeterminado). Desactivarlo puede ser útil si se usa, "
 "por ejemplo, «Midnight Commander» dentro de la VTE."
 
-#: ../src/vte.c:836 ../plugins/filebrowser.c:1217
+#: ../src/vte.c:836 ../plugins/filebrowser.c:1219
 msgid "Follow the path of the current file"
 msgstr "Seguir la ruta del archivo actual"
 
@@ -5052,7 +5052,7 @@ msgstr "Caracteres de puntuación"
 msgid "Miscellaneous characters"
 msgstr "Caracteres variados"
 
-#: ../plugins/htmlchars.c:367 ../plugins/filebrowser.c:1134
+#: ../plugins/htmlchars.c:367 ../plugins/filebrowser.c:1136
 #: ../plugins/saveactions.c:470
 msgid "Plugin configuration directory could not be created."
 msgstr "No se ha podido crear el directorio de configuración del complemento."
@@ -5179,59 +5179,59 @@ msgstr "Demasiados elementos seleccionados"
 msgid "Could not execute configured external command '%s' (%s)."
 msgstr "No se ha podido ejecutar el comando externo configurado «%s» (%s)."
 
-#: ../plugins/filebrowser.c:603
+#: ../plugins/filebrowser.c:605
 msgid "Open _externally"
 msgstr "Abrir _externamente"
 
-#: ../plugins/filebrowser.c:618
+#: ../plugins/filebrowser.c:620
 msgid "_Find in Files"
 msgstr "_Buscar en archivos"
 
-#: ../plugins/filebrowser.c:628
+#: ../plugins/filebrowser.c:630
 msgid "Show _Hidden Files"
 msgstr "Mostrar archivos _ocultos"
 
-#: ../plugins/filebrowser.c:841
+#: ../plugins/filebrowser.c:843
 msgid "Up"
 msgstr "Arriba"
 
-#: ../plugins/filebrowser.c:846
+#: ../plugins/filebrowser.c:848
 msgid "Refresh"
 msgstr "Refrescar"
 
-#: ../plugins/filebrowser.c:851
+#: ../plugins/filebrowser.c:853
 msgid "Home"
 msgstr "Inicio"
 
-#: ../plugins/filebrowser.c:856
+#: ../plugins/filebrowser.c:858
 msgid "Set path from document"
 msgstr "Tomar ruta del documento"
 
-#: ../plugins/filebrowser.c:866
+#: ../plugins/filebrowser.c:868
 msgid "Clear the filter"
 msgstr "Borrar el filtro"
 
-#: ../plugins/filebrowser.c:880
+#: ../plugins/filebrowser.c:882
 msgid "Filter:"
 msgstr "Filtro:"
 
-#: ../plugins/filebrowser.c:890
+#: ../plugins/filebrowser.c:892
 msgid "Filter your files with usual wildcards"
 msgstr "Filtre sus archivos mediante el uso de los comodines usuales"
 
-#: ../plugins/filebrowser.c:1107
+#: ../plugins/filebrowser.c:1109
 msgid "Focus File List"
 msgstr "Enfocar la lista de archivos"
 
-#: ../plugins/filebrowser.c:1109
+#: ../plugins/filebrowser.c:1111
 msgid "Focus Path Entry"
 msgstr "Enfocar entrada de ruta"
 
-#: ../plugins/filebrowser.c:1185
+#: ../plugins/filebrowser.c:1187
 msgid "External open command:"
 msgstr "Comando de apertura externa:"
 
-#: ../plugins/filebrowser.c:1194
+#: ../plugins/filebrowser.c:1196
 #, c-format
 msgid ""
 "The command to execute when using \"Open with\". You can use %f and %d "
@@ -5245,15 +5245,15 @@ msgstr ""
 "%f será reemplazado por el nombre del archivo con su ruta completa\n"
 "%d será reemplazado por la ruta del archivo seleccionado sin su nombre"
 
-#: ../plugins/filebrowser.c:1202
+#: ../plugins/filebrowser.c:1204
 msgid "Show hidden files"
 msgstr "Mostrar archivos ocultos"
 
-#: ../plugins/filebrowser.c:1208
+#: ../plugins/filebrowser.c:1210
 msgid "Hide object files"
 msgstr "Ocultar archivos objeto"
 
-#: ../plugins/filebrowser.c:1212
+#: ../plugins/filebrowser.c:1214
 msgid ""
 "Don't show generated object files in the file browser, this includes *.o, *."
 "obj. *.so, *.dll, *.a, *.lib"
@@ -5261,11 +5261,11 @@ msgstr ""
 "No mostrar objetos generados en el navegador de archivos, esto incluye *.o, "
 "*.obj. *.so, *.dll, *.a, *.lib"
 
-#: ../plugins/filebrowser.c:1223
+#: ../plugins/filebrowser.c:1225
 msgid "Use the project's base directory"
 msgstr "Usar el directorio base del proyecto"
 
-#: ../plugins/filebrowser.c:1227
+#: ../plugins/filebrowser.c:1229
 msgid ""
 "Change the directory to the base directory of the currently opened project"
 msgstr ""
