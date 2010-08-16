@@ -8,6 +8,8 @@
    thanks).
  * src/build.c:
    Fix saving non-project filetype error regex.
+ * src/build.c:
+   Fix memory leak in read_regex().
 
 
 2010-08-15  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

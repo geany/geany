@@ -2130,7 +2130,7 @@ static gboolean read_row(BuildDestination *dst, BuildTableData table_data, gint 
 static gboolean read_regex(GtkWidget *regexentry, gchar **src, gchar **dst)
 {
 	gboolean changed = FALSE;
-	gchar *reg = g_strdup(gtk_entry_get_text(GTK_ENTRY(regexentry)));
+	const gchar *reg = gtk_entry_get_text(GTK_ENTRY(regexentry));
 
 	if (
 			(
@@ -2146,7 +2146,7 @@ static gboolean read_regex(GtkWidget *regexentry, gchar **src, gchar **dst)
 	{
 		if (dst != NULL)
 		{
-			setptr(*dst, reg);
+			setptr(*dst, g_strdup(reg));
 			changed = TRUE;
 		}
 	}
