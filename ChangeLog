@@ -3,6 +3,9 @@
  * src/filetypes.c:
    Fix segfault on Tools->Reload Configuration when no documents are
    open (#3037079).
+ * scintilla/LexMarkdown.cxx:
+   Fix infinite loop in Markdown lexer (patch by Colomban Wendling,
+   thanks).
 
 
 2010-08-15  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
