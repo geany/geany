@@ -2569,12 +2569,12 @@ static void foreach_project_filetype(gpointer data, gpointer user_data)
 }
 
 
+/* TODO: untyped ptr is too ugly (also for build_load_menu) */
 void build_save_menu(GKeyFile *config, gpointer ptr, GeanyBuildSource src)
 {
 	GeanyFiletype *ft;
 	GeanyProject *pj;
 	ForEachData data;
-	gchar *regkey;
 
 	switch (src)
 	{
@@ -2584,12 +2584,10 @@ void build_save_menu(GKeyFile *config, gpointer ptr, GeanyBuildSource src)
 				return;
 			build_save_menu_grp(config, ft->homefilecmds, GEANY_GBG_FT, NULL);
 			build_save_menu_grp(config, ft->homeexeccmds, GEANY_GBG_EXEC, NULL);
-			regkey = g_strdup_printf("%serror_regex", ft->name);
 			if (NZV(ft->homeerror_regex_string))
-				g_key_file_set_string(config, build_grp_name, regkey, ft->projerror_regex_string);
+				g_key_file_set_string(config, build_grp_name, "error_regex", ft->homeerror_regex_string);
 			else
-				g_key_file_remove_key(config, build_grp_name, regkey, NULL);
-			g_free(regkey);
+				g_key_file_remove_key(config, build_grp_name, "error_regex", NULL);
 			break;
 		case GEANY_BCS_PREF:
 			build_save_menu_grp(config, non_ft_pref, GEANY_GBG_NON_FT, NULL);

@@ -6,6 +6,8 @@
  * scintilla/LexMarkdown.cxx:
    Fix infinite loop in Markdown lexer (patch by Colomban Wendling,
    thanks).
+ * src/build.c:
+   Fix saving non-project filetype error regex.
 
 
 2010-08-15  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
