@@ -1,3 +1,9 @@
+2010-08-15  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * wscript:
+   Check for libsocket on OpenSolaris to fix build.
+
+
 2010-08-13  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * win32-config.h, geany.nsi, configure.ac, doc/geany.txt,

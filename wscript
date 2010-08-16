@@ -196,6 +196,11 @@ def configure(conf):
 	conf.check(function_name='mkstemp', header_name='stdlib.h')
 	conf.check(function_name='strstr', header_name='string.h', mandatory=True)
 
+	# check sunOS socket support
+	if Options.platform == 'sunos':
+		conf.check(function_name='socket', lib='socket',
+			header_name='sys/socket.h', uselib_store='SUNOS_SOCKET', mandatory=True)
+
 	# check for cxx after the header and function checks have been done to ensure they are
 	# checked with cc not cxx
 	conf.check_tool('compiler_cxx misc')
@@ -385,7 +390,7 @@ def build(bld):
 		source			= geany_sources,
 		includes		= '. src/ scintilla/include/ tagmanager/include/',
 		defines			= 'G_LOG_DOMAIN="Geany"',
-		uselib			= 'GTK GIO WIN32',
+		uselib			= 'GTK GIO WIN32 SUNOS_SOCKET',
 		uselib_local	= 'scintilla tagmanager',
 		add_objects		= 'geany-rc' if is_win32 else None
 	)
