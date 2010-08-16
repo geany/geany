@@ -6,6 +6,7 @@ Geany 0.19.1 (TBA)
       and switching document tabs).
     * Fix using filetype extension patterns with upper case letters on
       Windows (#3028856).
+    * Fix a slightly wrong encoding detection on Windows (#3019573).
     * Re-enable comment folding.
     * Fix not loading plugins built against a newer API when Geany doesn't
       provide the required version given in PLUGIN_VERSION_CHECK().

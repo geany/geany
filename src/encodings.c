@@ -563,9 +563,21 @@ gchar *encodings_convert_to_utf8(const gchar *buffer, gsize size, gchar **used_e
 		if (G_UNLIKELY(i == encodings[GEANY_ENCODING_NONE].idx))
 			continue;
 
-		if (i == -1)
+		if (check_regex)
 		{
-			if (preferred_charset != -1)
+			check_regex = FALSE;
+			charset = regex_charset;
+			i = -2; /* keep i below the start value to have it again at -1 on the next loop run */
+		}
+		else if (check_locale)
+		{
+			check_locale = FALSE;
+			charset = locale_charset;
+			i = -2; /* keep i below the start value to have it again at -1 on the next loop run */
+		}
+		else if (i == -1)
+		{
+			if (preferred_charset >= 0)
 			{
 				charset = encodings[preferred_charset].charset;
 				geany_debug("Using preferred charset: %s", charset);
@@ -573,24 +585,16 @@ gchar *encodings_convert_to_utf8(const gchar *buffer, gsize size, gchar **used_e
 			else
 				continue;
 		}
-		else if (check_regex)
-		{
-			check_regex = FALSE;
-			charset = regex_charset;
-		}
-		else if (check_locale)
-		{
-			check_locale = FALSE;
-			charset = locale_charset;
-		}
-		else
+		else if (i >= 0)
 			charset = encodings[i].charset;
-
+		else /* in this case we have i == -2, continue to increase i and go ahead */
+			continue;
 
 		if (G_UNLIKELY(charset == NULL))
 			continue;
 
-		geany_debug("Trying to convert %" G_GSIZE_FORMAT " bytes of data from %s into UTF-8.", size, charset);
+		geany_debug("Trying to convert %" G_GSIZE_FORMAT " bytes of data from %s into UTF-8.",
+			size, charset);
 		utf8_content = encodings_convert_to_utf8_from_charset(buffer, size, charset, FALSE);
 
 		if (G_LIKELY(utf8_content != NULL))
