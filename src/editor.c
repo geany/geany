@@ -3427,7 +3427,7 @@ static gboolean is_string_style(gint lexer, gint style)
 			return (style == SCE_B_STRING ||
 				style == SCE_B_STRINGEOL);
 
-		case SCLEX_MATLAB:
+		case SCLEX_OCTAVE:
 			return (style == SCE_MATLAB_STRING ||
 				style == SCE_MATLAB_DOUBLEQUOTESTRING);
 
@@ -3557,7 +3557,7 @@ static gboolean is_comment_style(gint lexer, gint style)
 				style == SCE_TCL_COMMENT_BOX ||
 				style == SCE_TCL_BLOCK_COMMENT);
 
-		case SCLEX_MATLAB:
+		case SCLEX_OCTAVE:
 			return (style == SCE_MATLAB_COMMENT);
 
 		case SCLEX_LUA:
@@ -4971,7 +4971,7 @@ void editor_set_indentation_guides(GeanyEditor *editor)
 		case SCLEX_VHDL:
 		case SCLEX_FREEBASIC:
 		case SCLEX_D:
-		case SCLEX_MATLAB:
+		case SCLEX_OCTAVE:
 			mode = SC_IV_LOOKBOTH;
 			break;
 

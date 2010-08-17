@@ -1,3 +1,9 @@
+2010-08-17  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/highlighting.c, src/editor.c:
+   Use Octave lexer instead of Matlab to support Octave # comment char.
+
+
 2010-08-16  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/filetypes.c:

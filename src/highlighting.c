@@ -2550,7 +2550,8 @@ static void styleset_matlab_init(gint ft_id, GKeyFile *config, GKeyFile *config_
 
 static void styleset_matlab(ScintillaObject *sci, gint ft_id)
 {
-	apply_filetype_properties(sci, SCLEX_MATLAB, ft_id);
+	/* We use SCLEX_OCTAVE instead of SCLEX_MATLAB to also support Octave # comment char */
+	apply_filetype_properties(sci, SCLEX_OCTAVE, ft_id);
 
 	sci_set_keywords(sci, 0, style_sets[ft_id].keywords[0]);
 
