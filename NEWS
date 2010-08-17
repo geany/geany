@@ -10,6 +10,9 @@ Geany 0.19.1 (TBA)
     * Re-enable comment folding.
     * Fix not loading plugins built against a newer API when Geany doesn't
       provide the required version given in PLUGIN_VERSION_CHECK().
+    * Fix infinite loop in Markdown lexer (patch by Colomban Wendling,
+      thanks).
+    * Fix saving non-project filetype error regex.
     * Focus toolbar item when pressing Go to Line keybinding only when
       it's not in the toolbar's drop down overflow menu (#3027454).
     * Escape the name of the current document for markup when using
