@@ -7,6 +7,8 @@
  * src/build.c, src/build.h:
    Replace GeanyBuildCommand::entries array with separate fields.
    Similar to r5077 in the bs2 branch, but with less loop unrolling.
+ * src/build.c:
+   Remove buildcmd_* accessor functions.
 
 
 2010-08-17  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

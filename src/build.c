@@ -189,24 +189,6 @@ static void set_command(GeanyBuildCommand *bc, gint id, gchar *str)
 }
 
 
-static gchar *buildcmd_label(GeanyBuildCommand *bc)
-{
-	return id_to_str(bc, GEANY_BC_LABEL);
-}
-
-
-static gchar *buildcmd_cmd(GeanyBuildCommand *bc)
-{
-	return id_to_str(bc, GEANY_BC_COMMAND);
-}
-
-
-static gchar *buildcmd_working_dir(GeanyBuildCommand *bc)
-{
-	return id_to_str(bc, GEANY_BC_WORKING_DIR);
-}
-
-
 static const gchar *config_keys[] = {
 	[GEANY_BC_LABEL] = "LB",
 	[GEANY_BC_COMMAND] = "CM",
@@ -813,8 +795,8 @@ static gchar *prepare_run_script(GeanyDocument *doc, gchar **vte_cmd_nonscript, 
 	have_project = project != NULL;
 	cmd = get_build_cmd(doc, GEANY_GBG_EXEC, cmdindex, NULL);
 
-	cmd_string = build_replace_placeholder(doc, buildcmd_cmd(cmd));
-	cmd_working_dir =  buildcmd_working_dir(cmd);
+	cmd_string = build_replace_placeholder(doc, cmd->command);
+	cmd_working_dir =  cmd->working_dir;
 	if (! NZV(cmd_working_dir))
 		cmd_working_dir = "%d";
 	working_dir = build_replace_placeholder(doc, cmd_working_dir); /* in utf-8 */
@@ -1231,7 +1213,7 @@ static void build_command(GeanyDocument *doc, GeanyBuildGroup grp, gint cmd, gch
 	if (buildcmd == NULL)
 		return;
 
-	cmdstr = buildcmd_cmd(buildcmd);
+	cmdstr = buildcmd->command;
 
 	if (cmd_cat != NULL)
 	{
@@ -1243,7 +1225,7 @@ static void build_command(GeanyDocument *doc, GeanyBuildGroup grp, gint cmd, gch
 	else
 		full_command = cmdstr;
 
-	dir = build_replace_placeholder(doc, buildcmd_working_dir(buildcmd));
+	dir = build_replace_placeholder(doc, buildcmd->working_dir);
 	subs_command = build_replace_placeholder(doc, full_command);
 	build_info.grp = grp;
 	build_info.cmd = cmd;
@@ -1307,7 +1289,7 @@ static void on_build_menu_item(GtkWidget *w, gpointer user_data)
 			return;
 		}
 		bc = get_build_cmd(doc, grp, cmd, NULL);
-		if (bc != NULL && strcmp(buildcmd_cmd(bc), "builtin") == 0)
+		if (bc != NULL && strcmp(bc->command, "builtin") == 0)
 		{
 			gchar *uri;
 			if (doc == NULL)
@@ -1442,14 +1424,14 @@ static void create_build_menu(BuildMenuItems *build_menu_items)
 			for (j = bs->build_cmd; j < build_groups_count[grp]; ++j)
 			{
 				GeanyBuildCommand *bc = get_build_cmd(NULL, grp, j, NULL);
-				const gchar *lbl = (bc == NULL) ? "" : buildcmd_label(bc);
+				const gchar *lbl = (bc == NULL) ? "" : bc->label;
 				create_build_menu_item(menu, keygroup, accel_group, bs, lbl, grp, j);
 			}
 		}
 		else
 		{
 			GeanyBuildCommand *bc = get_build_cmd(NULL, bs->build_grp, bs->build_cmd, NULL);
-			const gchar *lbl = (bc == NULL) ? "" : buildcmd_label(bc);
+			const gchar *lbl = (bc == NULL) ? "" : bc->label;
 			create_build_menu_item(menu, keygroup, accel_group, bs, lbl, bs->build_grp, bs->build_cmd);
 		}
 	}
@@ -1538,7 +1520,7 @@ void build_menu_update(GeanyDocument *doc)
 					const gchar *label;
 					bc = get_build_cmd(doc, grp, cmd, NULL);
 					if (bc)
-						label = buildcmd_label(bc);
+						label = bc->label;
 					else
 						label = NULL;
 
