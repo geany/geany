@@ -120,20 +120,22 @@ typedef struct GeanyBuildInfo
 extern GeanyBuildInfo build_info;
 
 /** The entries of a command for a menu item */
-typedef enum  GeanyBuildCmdEntries
+typedef enum GeanyBuildCmdEntries
 {
-    GEANY_BC_LABEL,				/**< The menu item label, _ marks mnemonic */
-    GEANY_BC_COMMAND,			/**< The command to run. */
-    GEANY_BC_WORKING_DIR,		/**< The directory to run in */
-    GEANY_BC_CMDENTRIES_COUNT	/**< Count of entries */
+	GEANY_BC_LABEL,				/**< The menu item label, _ marks mnemonic */
+	GEANY_BC_COMMAND,			/**< The command to run. */
+	GEANY_BC_WORKING_DIR,		/**< The directory to run in */
+	GEANY_BC_CMDENTRIES_COUNT	/**< Count of entries */
 } GeanyBuildCmdEntries;
 
 /** The command for a menu item. */
 typedef struct GeanyBuildCommand
 {
- 	/** Pointers to g_string values of the command entries.
+	/** Pointers to g_string values of the command entries.
 	 * Must be freed if the pointer is changed. */
-	gchar 		*entries[GEANY_BC_CMDENTRIES_COUNT];
+	gchar 		*label;						/**< Menu item label */
+	gchar		*command;					/**< Command to run */
+	gchar		*working_dir;				/**< working directory */
 	gboolean	 exists;					/**< If the entries have valid values. */
 	gboolean	 changed;					/**< Save on exit if @c changed, remove if not @c exist. */
 	gboolean	 old;						/**< Converted from old format. */
