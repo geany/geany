@@ -1,3 +1,10 @@
+2010-08-21  Frank Lanitz  <frank@frank.uvena.de>
+
+ * src/plugindata.h:
+   Apply a patch by Jiří Techet which is preventing warnings when using
+   -Wmissing-prototypes on compiling. Thanks. 
+
+
 2010-08-20  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * scintilla/KeyWords.cxx:

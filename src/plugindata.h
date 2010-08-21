@@ -68,6 +68,7 @@ enum {
  * want your plugin to require the current Geany version on your machine.
  * You should update this value when using any new API features. */
 #define PLUGIN_VERSION_CHECK(api_required) \
+	gint plugin_version_check(gint abi_ver);\
 	gint plugin_version_check(gint abi_ver) \
 	{ \
 		if (abi_ver != GEANY_ABI_VERSION) \
@@ -113,6 +114,7 @@ GeanyPlugin;
  * extra PluginInfo features (such as an icon), so we don't need to break API
  * compatibility. Alternatively just add a new macro, PLUGIN_SET_INFO_FULL(). -ntrel */
 #define PLUGIN_SET_INFO(p_name, p_description, p_version, p_author) \
+	void plugin_set_info(PluginInfo* info);\
 	void plugin_set_info(PluginInfo* info) \
 	{ \
 		info->name = (p_name); \
