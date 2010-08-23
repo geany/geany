@@ -2528,6 +2528,70 @@ static void styleset_tcl(ScintillaObject *sci, gint ft_id)
 	set_sci_style(sci, SCE_TCL_WORD5, ft_id, 15);
 }
 
+static void styleset_txt2tags_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
+{
+	new_styleset(ft_id, 22);
+
+	get_keyfile_style(config, config_home, "default", &style_sets[ft_id].styling[0]);
+	get_keyfile_style(config, config_home, "strong", &style_sets[ft_id].styling[1]);
+	get_keyfile_style(config, config_home, "emphasis", &style_sets[ft_id].styling[2]);
+	get_keyfile_style(config, config_home, "header1", &style_sets[ft_id].styling[3]);
+	get_keyfile_style(config, config_home, "header2", &style_sets[ft_id].styling[4]);
+	get_keyfile_style(config, config_home, "header3", &style_sets[ft_id].styling[5]);
+	get_keyfile_style(config, config_home, "header4", &style_sets[ft_id].styling[6]);
+	get_keyfile_style(config, config_home, "header5", &style_sets[ft_id].styling[7]);
+	get_keyfile_style(config, config_home, "header6", &style_sets[ft_id].styling[8]);
+	get_keyfile_style(config, config_home, "ulist_item", &style_sets[ft_id].styling[9]);
+	get_keyfile_style(config, config_home, "olist_item", &style_sets[ft_id].styling[10]);
+	get_keyfile_style(config, config_home, "blockquote", &style_sets[ft_id].styling[11]);
+	get_keyfile_style(config, config_home, "strikeout", &style_sets[ft_id].styling[12]);
+	get_keyfile_style(config, config_home, "hrule", &style_sets[ft_id].styling[13]);
+	get_keyfile_style(config, config_home, "link", &style_sets[ft_id].styling[14]);
+	get_keyfile_style(config, config_home, "code", &style_sets[ft_id].styling[15]);
+	get_keyfile_style(config, config_home, "codebk", &style_sets[ft_id].styling[16]);
+	get_keyfile_style(config, config_home, "underlined", &style_sets[ft_id].styling[17]);
+	get_keyfile_style(config, config_home, "comment", &style_sets[ft_id].styling[18]);
+	get_keyfile_style(config, config_home, "option", &style_sets[ft_id].styling[19]);
+	get_keyfile_style(config, config_home, "preproc", &style_sets[ft_id].styling[20]);
+	get_keyfile_style(config, config_home, "postproc", &style_sets[ft_id].styling[21]);
+
+	style_sets[ft_id].keywords = NULL;
+}
+
+
+static void styleset_txt2tags(ScintillaObject *sci, gint ft_id)
+{
+	apply_filetype_properties(sci, SCLEX_TXT2TAGS, ft_id);
+
+	set_sci_style(sci, STYLE_DEFAULT, ft_id, 0);
+	set_sci_style(sci, SCE_TXT2TAGS_DEFAULT, ft_id, 0);
+	set_sci_style(sci, SCE_TXT2TAGS_LINE_BEGIN, ft_id, 0);
+	set_sci_style(sci, SCE_TXT2TAGS_PRECHAR, ft_id, 0);
+	set_sci_style(sci, SCE_TXT2TAGS_STRONG1, ft_id, 1);
+	set_sci_style(sci, SCE_TXT2TAGS_STRONG2, ft_id, 1);
+	set_sci_style(sci, SCE_TXT2TAGS_EM1, ft_id, 2);
+	set_sci_style(sci, SCE_TXT2TAGS_EM2, ft_id, 17);
+	set_sci_style(sci, SCE_TXT2TAGS_HEADER1, ft_id, 3);
+	set_sci_style(sci, SCE_TXT2TAGS_HEADER2, ft_id, 4);
+	set_sci_style(sci, SCE_TXT2TAGS_HEADER3, ft_id, 5);
+	set_sci_style(sci, SCE_TXT2TAGS_HEADER4, ft_id, 6);
+	set_sci_style(sci, SCE_TXT2TAGS_HEADER5, ft_id, 7);
+	set_sci_style(sci, SCE_TXT2TAGS_HEADER6, ft_id, 8);
+	set_sci_style(sci, SCE_TXT2TAGS_ULIST_ITEM, ft_id, 9);
+	set_sci_style(sci, SCE_TXT2TAGS_OLIST_ITEM, ft_id, 10);
+	set_sci_style(sci, SCE_TXT2TAGS_BLOCKQUOTE, ft_id, 11);
+	set_sci_style(sci, SCE_TXT2TAGS_STRIKEOUT, ft_id, 12);
+	set_sci_style(sci, SCE_TXT2TAGS_HRULE, ft_id, 13);
+	set_sci_style(sci, SCE_TXT2TAGS_LINK, ft_id, 14);
+	set_sci_style(sci, SCE_TXT2TAGS_CODE, ft_id, 15);
+	set_sci_style(sci, SCE_TXT2TAGS_CODE2, ft_id, 15);
+	set_sci_style(sci, SCE_TXT2TAGS_CODEBK, ft_id, 16);
+	set_sci_style(sci, SCE_TXT2TAGS_COMMENT, ft_id, 18);
+	set_sci_style(sci, SCE_TXT2TAGS_OPTION, ft_id, 19);
+	set_sci_style(sci, SCE_TXT2TAGS_PREPROC, ft_id, 20);
+	set_sci_style(sci, SCE_TXT2TAGS_POSTPROC, ft_id, 21);
+}
+
 
 static void styleset_matlab_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
 {
@@ -3193,6 +3257,7 @@ void highlighting_init_styles(gint filetype_idx, GKeyFile *config, GKeyFile *con
 		init_styleset_case(GEANY_FILETYPES_SH,		styleset_sh_init);
 		init_styleset_case(GEANY_FILETYPES_SQL,		styleset_sql_init);
 		init_styleset_case(GEANY_FILETYPES_TCL,		styleset_tcl_init);
+		init_styleset_case(GEANY_FILETYPES_TXT2TAGS, styleset_txt2tags_init);
 		init_styleset_case(GEANY_FILETYPES_VHDL,	styleset_vhdl_init);
 		init_styleset_case(GEANY_FILETYPES_VERILOG,	styleset_verilog_init);
 		init_styleset_case(GEANY_FILETYPES_XML,		styleset_markup_init);
@@ -3261,6 +3326,7 @@ void highlighting_set_styles(ScintillaObject *sci, GeanyFiletype *ft)
 		styleset_case(GEANY_FILETYPES_SH,		styleset_sh);
 		styleset_case(GEANY_FILETYPES_SQL,		styleset_sql);
 		styleset_case(GEANY_FILETYPES_TCL,		styleset_tcl);
+		styleset_case(GEANY_FILETYPES_TXT2TAGS,	styleset_txt2tags);
 		styleset_case(GEANY_FILETYPES_VHDL,		styleset_vhdl);
 		styleset_case(GEANY_FILETYPES_VERILOG,	styleset_verilog);
 		styleset_case(GEANY_FILETYPES_XML,		styleset_xml);

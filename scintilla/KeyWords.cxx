@@ -359,6 +359,7 @@ int Scintilla_LinkLexers() {
 	LINK_LEXER(lmRuby);
 	LINK_LEXER(lmSQL);
 	LINK_LEXER(lmTCL);
+	LINK_LEXER(lmTxt2tags);
 	LINK_LEXER(lmVerilog);
 	LINK_LEXER(lmVHDL);
 	LINK_LEXER(lmXML);

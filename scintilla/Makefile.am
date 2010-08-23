@@ -29,6 +29,7 @@ LexPython.cxx \
 LexR.cxx \
 LexRuby.cxx \
 LexSQL.cxx \
+LexTxt2tags.cxx \
 LexTCL.cxx \
 LexVHDL.cxx \
 LexVerilog.cxx \

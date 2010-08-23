@@ -1,9 +1,34 @@
 # For complete documentation of this file, please see Geany's main documentation
 [styling]
-# no syntax highlighting yet
+# foreground;background;bold;italic
+default=0x000000;0xffffff;false;false
+strong=0x445675;0xffffff;true;false
+emphasis=0x653A39;0xffffff;false;true
+underlined=0x386742;0xffffff;false;false
+header1=0xE20700;0xffffff;true;false
+header2=0xE20700;0xffffff;true;false
+header3=0xA81D05;0xffffff;true;false
+header4=0x871704;0xffffff;true;false
+header5=0x871704;0xffffff;true;false
+header6=0x871704;0xffffff;true;false
+ulist_item=0xE300EE;0xffffff;false;false
+olist_item=0xE300EE;0xffffff;false;false
+blockquote=0x015F52;0xffffff;false;false
+strikeout=0x644A9B;0xffffff;false;false
+hrule=0xff901e;0xffffff;false;false
+link=0x0930DE;0xffffff;false;true
+code=0x009f00;0xffffff;false;false
+codebk=0x005f00;0xffffff;false;false
+comment=0x777777;0xffffff;false;false
+option=0xC0036E;0xffffff;false;true
+preproc=0x848B00;0xffffff;false;true
+postproc=0xC05600;0xffffff;false;true
 
 [settings]
 # default extension used when saving files
 extension=txt2tags
+
+[keywords]
+primary=includeconf options toc
 
 
