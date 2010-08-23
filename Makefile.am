@@ -4,6 +4,8 @@ SUBDIRS = tagmanager scintilla src plugins icons po doc
 
 AUTOMAKE_OPTIONS =	1.7
 
+ACLOCAL_AMFLAGS = -I m4
+
 WIN32_BUILD_FILES = \
 	geany_private.rc \
 	win32-config.h \

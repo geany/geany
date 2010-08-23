@@ -3,6 +3,7 @@ dnl $Id$
 
 AC_INIT(configure.ac)
 AM_INIT_AUTOMAKE(geany, 0.20)
+AC_CONFIG_MACRO_DIR([m4])
 
 m4_ifdef([AM_SILENT_RULES],[AM_SILENT_RULES([yes])])
 
@@ -22,7 +23,6 @@ if test "x$?" != "x0"; then
 	AC_MSG_ERROR([No C++ compiler found. Please install a C++ compiler.])
 fi
 
-#AC_PROG_RANLIB
 AC_PROG_INSTALL
 AC_PROG_LN_S
 AC_PROG_INTLTOOL
