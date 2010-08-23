@@ -4,9 +4,12 @@
    scintilla/include/SciLexer.h, scintilla/include/Scintilla.iface,
    scintilla/KeyWords.cxx, scintilla/Makefile.am, src/highlighting.c,
    data/filetypes.txt2tags, wscript:
-   Add lexer for Txt2Tags (patch by Forgeot Eric, #3020632).
+   Add lexer for Txt2Tags (patch by Forgeot Eric, thanks - #3020632).
  * m4, m4/intltool.m4, configure.ac, Makefile.am:
    Use AC_CONFIG_MACRO_DIR (patch by Erik de Castro Lopo, thanks).
+ * src/callbacks.c:
+   Only prompt for reloading if the document has unsaved changes
+   (patch by Jiří Techet, thanks).
 
 
 2010-08-21  Frank Lanitz  <frank@frank.uvena.de>
