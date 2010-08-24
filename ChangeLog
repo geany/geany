@@ -3,6 +3,10 @@
  * src/project.c:
    Make the Properties dialog filename a label and put it first (patch
    by Jiří Techet, thanks).
+ * src/build.c, src/build.h, src/project.c, doc/geany.txt,
+   doc/geany.html:
+   Remove the "Set build working directories" button from the project
+   properties dialog (patch by Jiří Techet, thanks).
 
 
 2010-08-23  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

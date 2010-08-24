@@ -382,18 +382,12 @@ void project_close(gboolean open_default)
 }
 
 
-static void on_set_use_base_path_clicked(GtkWidget *unused1, gpointer user_data)
-{
-	build_set_non_ft_wd_to_proj((BuildTableData)user_data);
-}
-
-
 static gint build_page_num = 0;
+
 
 static void create_properties_dialog(PropertyDialogElements *e)
 {
 	GtkWidget *table, *notebook, *build_table;
-	GtkWidget *button;
 	GtkWidget *bbox;
 	GtkWidget *label;
 	GtkWidget *swin;
@@ -407,7 +401,7 @@ static void create_properties_dialog(PropertyDialogElements *e)
 
 	ui_entry_add_clear_icon(GTK_ENTRY(ui_lookup_widget(e->dialog, "spin_indent_width")));
 
-	table = gtk_table_new(6, 2, FALSE);
+	table = gtk_table_new(5, 2, FALSE);
 	gtk_container_set_border_width(GTK_CONTAINER(table), 6);
 	gtk_table_set_row_spacings(GTK_TABLE(table), 5);
 	gtk_table_set_col_spacings(GTK_TABLE(table), 10);
@@ -481,22 +475,6 @@ static void create_properties_dialog(PropertyDialogElements *e)
 	build_page_num = gtk_notebook_insert_page(GTK_NOTEBOOK(notebook), build_table, label, 2);
 	e->notebook = notebook;
 
-	label = gtk_label_new(_("Set the Build non-filetype working directories to use base path:"));
-	gtk_misc_set_alignment(GTK_MISC(label), 0, 0);
-
-	button = gtk_button_new_with_label(_("Set"));
-	ui_widget_set_tooltip_text(button,
-		_("Set the working directories (on the Build tab) "
-		"for the non-filetype build commands to use the base path"));
-	gtk_misc_set_alignment(GTK_MISC(label), 0, 0);
-	g_signal_connect(button, "clicked", G_CALLBACK(on_set_use_base_path_clicked), e->build_properties);
-	bbox = gtk_hbox_new(FALSE, 6);
-	gtk_box_pack_start(GTK_BOX(bbox), label, TRUE, TRUE, 0);
-	gtk_box_pack_start(GTK_BOX(bbox), button, FALSE, FALSE, 0);
-	gtk_table_attach(GTK_TABLE(table), bbox, 0, 2, 4, 5,
-					(GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
-					(GtkAttachOptions) (GTK_FILL), 0, 0);
-
 	g_signal_connect(ui_lookup_widget(e->dialog, "radio_long_line_custom"), "toggled",
 		G_CALLBACK(on_radio_long_line_custom_toggled), ui_lookup_widget(e->dialog, "spin_long_line"));
 
@@ -514,7 +492,7 @@ static void create_properties_dialog(PropertyDialogElements *e)
 	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(swin),
 				GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
 	gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(swin), GTK_WIDGET(e->patterns));
-	gtk_table_attach(GTK_TABLE(table), swin, 1, 2, 6, 7,
+	gtk_table_attach(GTK_TABLE(table), swin, 1, 2, 4, 5,
 					(GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
 					(GtkAttachOptions) (0), 0, 0);
 #endif

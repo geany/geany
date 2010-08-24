@@ -2389,17 +2389,6 @@ The specified path can be an absolute path or it is considered to be
 relative to the project's file name.
 
 
-Set Base Path Button
-````````````````````
-
-This button is a convenience to set the working directory fields
-in the non-filetype Build menu items to %p to use the project base path.
-
-.. note::
-    Pressing the 'set' button will override any working directories
-    you have configured for the project.
-
-
 Open Project
 ^^^^^^^^^^^^
 

@@ -169,8 +169,6 @@ void build_read_project(GeanyFiletype *ft, BuildTableData build_properties);
 
 void build_free_fields(BuildTableData data);
 
-void build_set_non_ft_wd_to_proj(BuildTableData table_data);
-
 /* build response decode assistance function */
 gboolean build_parse_make_dir(const gchar *string, gchar **prefix);
 

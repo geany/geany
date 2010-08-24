@@ -2265,18 +2265,6 @@ BuildMenuItems *build_get_menu_items(gint filetype_idx)
 }
 
 
-/* set non_ft working directory entries to %p for project */
-void build_set_non_ft_wd_to_proj(BuildTableData table_data)
-{
-	gint i, start, end;
-
-	start = build_groups_count[GEANY_GBG_FT];
-	end = start + build_groups_count[GEANY_GBG_NON_FT];
-	for (i = start; i < end; ++i)
-		gtk_entry_set_text(GTK_ENTRY(table_data->rows[i]->entries[GEANY_BC_WORKING_DIR]), "%p");
-}
-
-
 /*----------------------------------------------------------
  *
  * Load and store configuration
