@@ -1321,12 +1321,12 @@ static GString *get_grep_options(void)
 			g_string_append(gstr, settings.fif_extra_options);
 		}
 	}
-	if (settings.fif_use_files)
+	g_strstrip(settings.fif_files);
+	if (settings.fif_use_files && *settings.fif_files)
 	{
 		GString *tmp;
 
 		/* put --include= before each pattern */
-		g_strstrip(settings.fif_files);
 		tmp = g_string_new(settings.fif_files);
 		do {} while (utils_string_replace_all(tmp, "  ", " "));
 		g_string_prepend_c(tmp, ' ');

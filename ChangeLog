@@ -7,6 +7,9 @@
    doc/geany.html:
    Remove the "Set build working directories" button from the project
    properties dialog (patch by Jiří Techet, thanks).
+ * src/search.c:
+   Include all files if the Find in Files pattern field is enabled and
+   empty.
 
 
 2010-08-23  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
