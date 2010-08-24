@@ -598,7 +598,7 @@ static void init_builtin_filetypes(void)
 #define MATLAB
 	ft = filetypes[GEANY_FILETYPES_MATLAB];
 	ft->lang = 32;
-	ft->name = g_strdup("Matlab");
+	ft->name = g_strdup("Matlab/Octave");
 	filetype_make_title(ft, TITLE_SOURCE_FILE);
 	ft->extension = g_strdup("m");
 	ft->pattern = utils_strv_new("*.m", NULL);
@@ -1345,7 +1345,7 @@ void filetypes_load_config(gint ft_id, gboolean reload)
 
 gchar *filetypes_get_conf_extension(gint filetype_idx)
 {
-	gchar *result;
+	gchar *result, *ptr;
 	GeanyFiletype *ft = filetypes[filetype_idx];
 
 	if (ft->priv->custom)
@@ -1357,7 +1357,13 @@ gchar *filetypes_get_conf_extension(gint filetype_idx)
 		case GEANY_FILETYPES_CPP: result = g_strdup("cpp"); break;
 		case GEANY_FILETYPES_CS: result = g_strdup("cs"); break;
 		case GEANY_FILETYPES_MAKE: result = g_strdup("makefile"); break;
-		default: result = g_ascii_strdown(ft->name, -1); break;
+		default:
+			result = g_ascii_strdown(ft->name, -1);
+			/* truncate at slash (e.g. for Matlab/Octave) */
+			ptr = strstr(result, "/");
+			if (ptr)
+				*ptr = 0x0;
+			break;
 	}
 	return result;
 }

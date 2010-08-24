@@ -10,6 +10,8 @@
  * src/search.c:
    Include all files if the Find in Files pattern field is enabled and
    empty.
+ * src/filetypes.c:
+   Rename Matlab -> Matlab/Octave. Datafile name remains the same.
 
 
 2010-08-23  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
