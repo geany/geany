@@ -412,8 +412,21 @@ static void create_properties_dialog(PropertyDialogElements *e)
 	gtk_table_set_row_spacings(GTK_TABLE(table), 5);
 	gtk_table_set_col_spacings(GTK_TABLE(table), 10);
 
-	label = gtk_label_new(_("Name:"));
+	label = gtk_label_new(_("Filename:"));
 	gtk_table_attach(GTK_TABLE(table), label, 0, 1, 0, 1,
+					(GtkAttachOptions) (GTK_FILL),
+					(GtkAttachOptions) (0), 0, 0);
+	gtk_misc_set_alignment(GTK_MISC(label), 0, 0);
+
+	e->file_name = gtk_label_new("");
+	gtk_label_set_selectable(GTK_LABEL(e->file_name), TRUE);
+	gtk_table_attach(GTK_TABLE(table), e->file_name, 1, 2, 0, 1,
+					(GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
+					(GtkAttachOptions) (0), 0, 0);
+	gtk_misc_set_alignment(GTK_MISC(e->file_name), 0, 0);
+
+	label = gtk_label_new(_("Name:"));
+	gtk_table_attach(GTK_TABLE(table), label, 0, 1, 1, 2,
 					(GtkAttachOptions) (GTK_FILL),
 					(GtkAttachOptions) (0), 0, 0);
 	gtk_misc_set_alignment(GTK_MISC(label), 0, 0);
@@ -421,20 +434,7 @@ static void create_properties_dialog(PropertyDialogElements *e)
 	e->name = gtk_entry_new();
 	ui_entry_add_clear_icon(GTK_ENTRY(e->name));
 	gtk_entry_set_max_length(GTK_ENTRY(e->name), MAX_NAME_LEN);
-	gtk_table_attach(GTK_TABLE(table), e->name, 1, 2, 0, 1,
-					(GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
-					(GtkAttachOptions) (0), 0, 0);
-
-	label = gtk_label_new(_("Filename:"));
-	gtk_table_attach(GTK_TABLE(table), label, 0, 1, 1, 2,
-					(GtkAttachOptions) (GTK_FILL),
-					(GtkAttachOptions) (0), 0, 0);
-	gtk_misc_set_alignment(GTK_MISC(label), 0, 0);
-
-	e->file_name = gtk_entry_new();
-	ui_entry_add_clear_icon(GTK_ENTRY(e->file_name));
-	gtk_editable_set_editable(GTK_EDITABLE(e->file_name), FALSE);	/* read-only */
-	gtk_table_attach(GTK_TABLE(table), e->file_name, 1, 2, 1, 2,
+	gtk_table_attach(GTK_TABLE(table), e->name, 1, 2, 1, 2,
 					(GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
 					(GtkAttachOptions) (0), 0, 0);
 
@@ -542,7 +542,7 @@ static void show_project_properties(gboolean show_build)
 
 	/* fill the elements with the appropriate data */
 	gtk_entry_set_text(GTK_ENTRY(e->name), p->name);
-	gtk_entry_set_text(GTK_ENTRY(e->file_name), p->file_name);
+	gtk_label_set_text(GTK_LABEL(e->file_name), p->file_name);
 	gtk_entry_set_text(GTK_ENTRY(e->base_path), p->base_path);
 
 	radio_long_line_custom = ui_lookup_widget(e->dialog, "radio_long_line_custom");
@@ -686,7 +686,11 @@ static gboolean update_config(const PropertyDialogElements *e)
 		return FALSE;
 	}
 
-	file_name = gtk_entry_get_text(GTK_ENTRY(e->file_name));
+	if (app->project == NULL)
+		file_name = gtk_entry_get_text(GTK_ENTRY(e->file_name));
+	else
+		file_name = gtk_label_get_text(GTK_LABEL(e->file_name));
+
 	if (! NZV(file_name))
 	{
 		SHOW_ERR(_("You have specified an invalid project filename."));

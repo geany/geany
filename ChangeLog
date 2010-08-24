@@ -1,3 +1,10 @@
+2010-08-24  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/project.c:
+   Make the Properties dialog filename a label and put it first (patch
+   by Jiří Techet, thanks).
+
+
 2010-08-23  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * scintilla/LexTxt2tags.cxx, scintilla/makefile.win32,
