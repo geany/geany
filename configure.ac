@@ -43,7 +43,7 @@ AC_TYPE_SIZE_T
 AC_STRUCT_TM
 
 # Checks for library functions.
-AC_CHECK_FUNCS([gethostname ftruncate fgetpos mkstemp regcomp strerror strstr])
+AC_CHECK_FUNCS([gethostname ftruncate fgetpos mkstemp strerror strstr])
 
 # autoscan end
 
@@ -163,6 +163,9 @@ fi
 
 # Use included GNU regex library
 AC_ARG_ENABLE(gnu-regex, [AC_HELP_STRING([--enable-gnu-regex], [compile with included GNU regex library  [default=no]])], , enable_gnu_regex=no)
+
+# auto-enable included regex if necessary
+AC_CHECK_FUNCS([regcomp], [], [enable_gnu_regex="yes"])
 
 if test "x$enable_gnu_regex" = "xyes" ; then
 	AC_DEFINE(USE_INCLUDED_REGEX, 1, [Define if included GNU regex code should be used.])
@@ -314,6 +317,12 @@ echo "Build with GTK printing support    : ${enable_printing}"
 echo "Build with plugin support          : ${enable_plugins}"
 echo "Use virtual terminal support       : ${want_vte}"
 echo "Use (UNIX domain) socket support   : ${want_socket}"
+if test "x$enable_gnu_regex" = "xyes" ; then
+	echo "GNU regex library                  : built-in"
+else
+	echo "GNU regex library                  : system"
+fi
+
 if test "${REVISION}" != "-1"
 then
 	echo "Compiling Subversion revision      : ${REVISION}"

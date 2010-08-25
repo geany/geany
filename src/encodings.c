@@ -44,21 +44,20 @@
 #include "callbacks.h"
 #include "ui_utils.h"
 
+#ifdef HAVE_REGEX_H
+# include <regex.h>
+#else
+# include "gnuregex.h"
+#endif
 
-#ifdef HAVE_REGCOMP
-# ifdef HAVE_REGEX_H
-#  include <regex.h>
-# else
-#  include "gnuregex.h"
-# endif
 /* <meta http-equiv="content-type" content="text/html; charset=UTF-8" /> */
-# define PATTERN_HTMLMETA "<meta[ \t\n\r\f]http-equiv[ \t\n\r\f]*=[ \t\n\r\f]*\"content-type\"[ \t\n\r\f]+content[ \t\n\r\f]*=[ \t\n\r\f]*\"text/x?html;[ \t\n\r\f]*charset=([a-z0-9_-]+)\"[ \t\n\r\f]*/?>"
+#define PATTERN_HTMLMETA "<meta[ \t\n\r\f]http-equiv[ \t\n\r\f]*=[ \t\n\r\f]*\"content-type\"[ \t\n\r\f]+content[ \t\n\r\f]*=[ \t\n\r\f]*\"text/x?html;[ \t\n\r\f]*charset=([a-z0-9_-]+)\"[ \t\n\r\f]*/?>"
 /* " geany_encoding=utf-8 " or " coding: utf-8 " */
-# define PATTERN_CODING "coding[\t ]*[:=][\t ]*([a-z0-9-]+)[\t ]*"
+#define PATTERN_CODING "coding[\t ]*[:=][\t ]*([a-z0-9-]+)[\t ]*"
+
 /* precompiled regexps */
 static regex_t pregs[2];
 static gboolean pregs_loaded = FALSE;
-#endif
 
 
 GeanyEncoding encodings[GEANY_ENCODINGS_MAX];
@@ -257,7 +256,6 @@ void encodings_select_radio_item(const gchar *charset)
 }
 
 
-#ifdef HAVE_REGCOMP
 /* Regexp detection of file encoding declared in the file itself.
  * Idea and parts of code taken from Bluefish, thanks.
  * regex_compile() is used to compile regular expressions on program init and keep it in memory
@@ -301,7 +299,6 @@ static gchar *regex_match(regex_t *preg, const gchar *buffer, gsize size)
 	g_free(tmp_buf);
 	return encoding;
 }
-#endif
 
 
 static void encodings_radio_item_change_cb(GtkCheckMenuItem *menuitem, gpointer user_data)
@@ -327,7 +324,6 @@ static void encodings_radio_item_change_cb(GtkCheckMenuItem *menuitem, gpointer 
 
 void encodings_finalize(void)
 {
-#ifdef HAVE_REGCOMP
 	if (pregs_loaded)
 	{
 		guint i, len;
@@ -337,7 +333,6 @@ void encodings_finalize(void)
 			regfree(&pregs[i]);
 		}
 	}
-#endif
 }
 
 
@@ -354,14 +349,12 @@ void encodings_init(void)
 
 	init_encodings();
 
-#ifdef HAVE_REGCOMP
 	if (! pregs_loaded)
 	{
 		regex_compile(&pregs[0], PATTERN_HTMLMETA);
 		regex_compile(&pregs[1], PATTERN_CODING);
 		pregs_loaded = TRUE;
 	}
-#endif
 
 	/* create encodings submenu in document menu */
 	menu[0] = ui_lookup_widget(main_widgets.window, "set_encoding1_menu");
@@ -534,7 +527,6 @@ gchar *encodings_convert_to_utf8(const gchar *buffer, gsize size, gchar **used_e
 		size = strlen(buffer);
 	}
 
-#ifdef HAVE_REGCOMP
 	/* first try to read the encoding from the file content */
 	len = (gint) G_N_ELEMENTS(pregs);
 	for (i = 0; i < len && ! check_regex; i++)
@@ -542,7 +534,6 @@ gchar *encodings_convert_to_utf8(const gchar *buffer, gsize size, gchar **used_e
 		if ((regex_charset = regex_match(&pregs[i], buffer, size)) != NULL)
 			check_regex = TRUE;
 	}
-#endif
 
 	/* current locale is not UTF-8, we have to check this charset */
 	check_locale = ! g_get_charset((const gchar**) &charset);

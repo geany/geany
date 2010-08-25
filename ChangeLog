@@ -2,6 +2,11 @@
 
  * src/build.c:
    Fix broken editing of build menu labels.
+ * src/encodings.c, src/filetypes.c, configure.ac:
+   Auto-enable building with included regex if no regcomp function is
+   found.
+   Remove checks for HAVE_REGCOMP in Geany source (not TagManager) -
+   regex support is required.
 
 
 2010-08-24  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

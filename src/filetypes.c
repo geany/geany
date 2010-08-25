@@ -46,12 +46,10 @@
 
 #include <stdlib.h>
 
-#ifdef HAVE_REGCOMP
-# ifdef HAVE_REGEX_H
-#  include <regex.h>
-# else
-#  include "gnuregex.h"
-# endif
+#ifdef HAVE_REGEX_H
+# include <regex.h>
+#else
+# include "gnuregex.h"
 #endif
 
 
@@ -60,11 +58,9 @@ typedef struct GeanyFiletypePrivate
 {
 	GtkWidget	*menu_item;			/* holds a pointer to the menu item for this filetype */
 	gboolean	keyfile_loaded;
-#ifdef HAVE_REGCOMP
 	regex_t		error_regex;
 	gboolean	error_regex_compiled;
 	gchar		*last_string; /* last one compiled */
-#endif
 	gboolean	custom;
 }
 GeanyFiletypePrivate;
@@ -1152,13 +1148,11 @@ static void set_error_regex(GeanyFiletype *ft, gchar *string)
 {
 	setptr(ft->error_regex_string, string);
 
-#ifdef HAVE_REGCOMP
 	if (ft->priv->error_regex_compiled)
 		regfree(&ft->priv->error_regex);
 
 	ft->priv->error_regex_compiled = FALSE;
 	/* regex will be compiled when needed */
-#endif
 }
 
 
@@ -1472,7 +1466,6 @@ GeanyFiletype *filetypes_lookup_by_name(const gchar *name)
 }
 
 
-#ifdef HAVE_REGCOMP
 static gchar *get_regex_match_string(const gchar *message, regmatch_t *pmatch, gint match_idx)
 {
 	return g_strndup(&message[pmatch[match_idx].rm_so],
@@ -1495,7 +1488,6 @@ static void compile_regex(GeanyFiletype *ft, regex_t *regex, gchar *regstr)
 	}
 	/* regex will be freed in set_error_regex(). */
 }
-#endif
 
 
 gboolean filetypes_parse_error_message(GeanyFiletype *ft, const gchar *message,
@@ -1504,10 +1496,9 @@ gboolean filetypes_parse_error_message(GeanyFiletype *ft, const gchar *message,
 	gchar *regstr;
 	gchar **tmp;
 	GeanyDocument *doc;
-#ifdef HAVE_REGCOMP
 	regex_t *regex;
 	regmatch_t pmatch[3];
-#endif
+
 	if (ft == NULL)
 	{
 		doc = document_get_current();
@@ -1518,11 +1509,6 @@ gboolean filetypes_parse_error_message(GeanyFiletype *ft, const gchar *message,
 	if (tmp == NULL)
 		return FALSE;
 	regstr = *tmp;
-#ifndef HAVE_REGCOMP
-	if (!NZV(regstr))
-		geany_debug("No regex support - maybe you should configure with --enable-gnu-regex!");
-	return FALSE;
-#else
 	regex = &ft->priv->error_regex;
 
 	*filename = NULL;
@@ -1573,7 +1559,6 @@ gboolean filetypes_parse_error_message(GeanyFiletype *ft, const gchar *message,
 		}
 	}
 	return *filename != NULL;
-#endif
 }
 
 
