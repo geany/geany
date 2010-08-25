@@ -157,7 +157,7 @@ static void skipToMatch (const char *const pair)
 			++matchLevel;
 		else if (c == end)
 			--matchLevel;
-		else if (c == '\n')
+		else if (c == '\n' || c == EOF)
 			break;
 	}
 	if (c == EOF)
@@ -272,7 +272,7 @@ static void findMakeTags (void)
 
 extern parserDefinition* MakefileParser (void)
 {
-	static const char *const patterns [] = { "[Mm]akefile", NULL };
+	static const char *const patterns [] = { "[Mm]akefile", "GNUmakefile", NULL };
 	static const char *const extensions [] = { "mak", "mk", NULL };
 	parserDefinition* const def = parserNew ("Make");
 	def->kinds      = MakeKinds;

@@ -7,6 +7,8 @@
    found.
    Remove checks for HAVE_REGCOMP in Geany source (not TagManager) -
    regex support is required.
+ * tagmanager/make.c:
+   Backport fix for possible infinite loop from CTags.
 
 
 2010-08-24  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
