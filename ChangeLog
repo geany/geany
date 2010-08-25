@@ -1,3 +1,9 @@
+2010-08-25  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/build.c:
+   Fix broken editing of build menu labels.
+
+
 2010-08-24  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/project.c:

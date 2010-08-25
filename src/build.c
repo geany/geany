@@ -184,8 +184,9 @@ static void set_command(GeanyBuildCommand *bc, gint id, gchar *str)
 		case GEANY_BC_WORKING_DIR:
 			setptr(bc->working_dir, str);
 			break;
+		default:
+			g_assert(0);
 	}
-	g_assert(0);
 }
 
 
