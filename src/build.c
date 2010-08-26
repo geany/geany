@@ -26,8 +26,7 @@
  * Build commands and menu items.
  */
 /* TODO: tidy code:
- * De-uglify expressions with too much pointer indirection/array indexing by
- * adding intermediate variables.
+ * Use intermediate pointers for common subexpressions.
  * Replace defines with enums.
  * Other TODOs in code. */
 
