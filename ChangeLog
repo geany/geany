@@ -1,3 +1,10 @@
+2010-08-29  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * data/snippets.conf:
+   Add dummy entry for "do" snippet for Haskell to explicitly avoid the
+   default completion.
+
+
 2010-08-25  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/build.c:
