@@ -3,6 +3,8 @@
  * src/ui_utils.h, src/msgwindow.c, src/msgwindow.h, src/main.c:
    Add GeanyMainWidgets::message_window_notebook for plugins to append
    a new notebook page (#3061342).
+ * src/document.c:
+   Add Close button to the detected file changed dialog.
 
 
 2010-08-29  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

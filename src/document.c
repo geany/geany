@@ -2888,21 +2888,24 @@ gboolean document_close_all(void)
 }
 
 
-static gboolean monitor_reload_file(GeanyDocument *doc)
+static void monitor_reload_file(GeanyDocument *doc)
 {
 	gchar *base_name = g_path_get_basename(doc->file_name);
-	gboolean want_reload;
+	gint ret;
 
-	want_reload = dialogs_show_question_full(NULL, _("_Reload"), GTK_STOCK_CANCEL,
+	ret = dialogs_show_prompt(NULL,
+		GTK_STOCK_CLOSE, GTK_RESPONSE_CLOSE,
+		GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+		_("_Reload"), GTK_RESPONSE_ACCEPT,
 		_("Do you want to reload it?"),
 		_("The file '%s' on the disk is more recent than\nthe current buffer."),
 		base_name);
-
-	if (want_reload)
-		document_reload_file(doc, doc->encoding);
-
 	g_free(base_name);
-	return want_reload;
+
+	if (ret == GTK_RESPONSE_ACCEPT)
+		document_reload_file(doc, doc->encoding);
+	else if (ret == GTK_RESPONSE_CLOSE)
+		document_close(doc);
 }
 
 
@@ -2978,6 +2981,7 @@ gboolean document_check_disk_status(GeanyDocument *doc, gboolean force)
 	if (g_stat(locale_filename, &st) != 0)
 	{
 		monitor_resave_missing_file(doc);
+		/* doc may be closed now */
 		ret = TRUE;
 	}
 	else if (! use_gio_filemon && /* ignore these checks when using GIO */
@@ -2987,14 +2991,15 @@ gboolean document_check_disk_status(GeanyDocument *doc, gboolean force)
 	}
 	else if (doc->priv->mtime < st.st_mtime)
 	{
-		monitor_reload_file(doc);
 		doc->priv->mtime = st.st_mtime;
+		monitor_reload_file(doc);
+		/* doc may be closed now */
 		ret = TRUE;
 	}
 	g_free(locale_filename);
 
 	if (DOC_VALID(doc))
-	{	/* doc can get invalid when a document was closed by monitor_resave_missing_file() */
+	{	/* doc can get invalid when a document was closed */
 		old_status = doc->priv->file_disk_status;
 		doc->priv->file_disk_status = FILE_OK;
 		if (old_status != doc->priv->file_disk_status)
