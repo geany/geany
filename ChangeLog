@@ -5,6 +5,9 @@
    a new notebook page (#3061342).
  * src/document.c:
    Add Close button to the detected file changed dialog.
+ * src/interface.c, geany.glade:
+   Add separator between Find Previous and Find in Files.
+   Add up/down icons for Previous/Next Message.
 
 
 2010-08-29  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
