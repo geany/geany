@@ -252,6 +252,7 @@ static void main_init(void)
 	main_widgets.notebook = ui_lookup_widget(main_widgets.window, "notebook1");
 	main_widgets.editor_menu = create_edit_menu1();
 	main_widgets.tools_menu = ui_lookup_widget(main_widgets.window, "tools1_menu");
+	main_widgets.message_window_notebook = ui_lookup_widget(main_widgets.window, "notebook_info");
 
 	ui_widgets.toolbar_menu = create_toolbar_popup_menu1();
 	ui_init();

@@ -21,13 +21,6 @@
  * $Id$
  */
 
-/**
- *  @file msgwindow.h
- *  Message window functions (status, compiler, messages windows).
- *  Also compiler error message parsing and grep file and line parsing.
- **/
-
-
 #ifndef GEANY_MSGWINDOW_H
 #define GEANY_MSGWINDOW_H 1
 

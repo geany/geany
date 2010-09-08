@@ -21,11 +21,13 @@
  * $Id$
  */
 
-/*
+/**
+ * @file msgwindow.h
  * Message window functions (status, compiler, messages windows).
  * Also compiler error message parsing and grep file and line parsing.
- */
-
+ *
+ * @see GeanyMainWidgets::message_window_notebook to append a new notebook page.
+ **/
 
 #include "geany.h"
 

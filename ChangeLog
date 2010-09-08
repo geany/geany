@@ -1,3 +1,10 @@
+2010-09-08  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/ui_utils.h, src/msgwindow.c, src/msgwindow.h, src/main.c:
+   Add GeanyMainWidgets::message_window_notebook for plugins to append
+   a new notebook page (#3061342).
+
+
 2010-08-29  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * data/snippets.conf:

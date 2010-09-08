@@ -65,18 +65,20 @@ GeanyInterfacePrefs;
 extern GeanyInterfacePrefs interface_prefs;
 
 
-/** Important widgets in the main window. */
+/** Important widgets in the main window.
+ * Accessed by @c geany->main_widgets. */
 typedef struct GeanyMainWidgets
 {
-	GtkWidget			*window;			/**< Main window. */
-	GtkWidget			*toolbar;			/**< Main toolbar. */
-	GtkWidget			*sidebar_notebook;	/**< Sidebar notebook. */
-	GtkWidget			*notebook;			/**< Document notebook. */
-	GtkWidget			*editor_menu;		/**< Popup editor menu. */
-	GtkWidget			*tools_menu;		/**< Most plugins add menu items to the Tools menu. */
-	GtkWidget			*progressbar;		/**< Progress bar widget in the status bar to show
-	                                             progress of various actions.
-												 See ui_progress_bar_start() for details. */
+	GtkWidget	*window;			/**< Main window. */
+	GtkWidget	*toolbar;			/**< Main toolbar. */
+	GtkWidget	*sidebar_notebook;	/**< Sidebar notebook. */
+	GtkWidget	*notebook;			/**< Document notebook. */
+	GtkWidget	*editor_menu;		/**< Popup editor menu. */
+	GtkWidget	*tools_menu;		/**< Most plugins add menu items to the Tools menu. */
+	/** Progress bar widget in the status bar to show progress of various actions.
+	 * See ui_progress_bar_start() for details. */
+	GtkWidget	*progressbar;
+	GtkWidget	*message_window_notebook; /**< Message Window notebook. */
 }
 GeanyMainWidgets;
 
