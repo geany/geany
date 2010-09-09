@@ -997,8 +997,7 @@ static void process_build_output_line(const gchar *str, gint color)
 
 	if (! NZV(msg))
 	{
-		if (msg != NULL)
-			g_free(msg);
+		g_free(msg);
 		return;
 	}
 
