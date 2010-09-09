@@ -485,7 +485,7 @@ on_reload_as_activate                  (GtkMenuItem     *menuitem,
 		charset = doc->encoding;
 
 	base_name = g_path_get_basename(doc->file_name);
-	if (!doc->changed || 
+	if (!doc->changed ||
 		dialogs_show_question_full(NULL, _("_Reload"), GTK_STOCK_CANCEL,
 		_("Any unsaved changes will be lost."),
 		_("Are you sure you want to reload '%s'?"), base_name))
@@ -1016,6 +1016,8 @@ static void find_usage(gboolean in_session)
 	}
 	else
 	{
+		editor_find_current_word(doc->editor, -1,
+			editor_info.current_word, GEANY_MAX_WORD_LENGTH, NULL);
 		search_text = g_strdup(editor_info.current_word);
 		flags = SCFIND_MATCHCASE | SCFIND_WHOLEWORD;
 	}
@@ -1041,12 +1043,8 @@ on_find_usage1_activate                (GtkMenuItem     *menuitem,
 }
 
 
-void
-on_goto_tag_activate                   (GtkMenuItem     *menuitem,
-                                        gpointer         user_data)
+static void goto_tag(gboolean definition)
 {
-	gboolean definition = (menuitem ==
-		GTK_MENU_ITEM(ui_lookup_widget(main_widgets.editor_menu, "goto_tag_definition1")));
 	GeanyDocument *doc = document_get_current();
 
 	g_return_if_fail(doc != NULL);
@@ -1060,6 +1058,22 @@ on_goto_tag_activate                   (GtkMenuItem     *menuitem,
 		keybindings_send_command(GEANY_KEY_GROUP_GOTO, GEANY_KEYS_GOTO_TAGDEFINITION);
 	else
 		keybindings_send_command(GEANY_KEY_GROUP_GOTO, GEANY_KEYS_GOTO_TAGDECLARATION);
+}
+
+
+void
+on_goto_tag_definition1                (GtkMenuItem     *menuitem,
+                                        gpointer         user_data)
+{
+	goto_tag(TRUE);
+}
+
+
+void
+on_goto_tag_declaration1               (GtkMenuItem     *menuitem,
+                                        gpointer         user_data)
+{
+	goto_tag(FALSE);
 }
 
 
@@ -2331,4 +2345,5 @@ on_plugin_preferences1_activate        (GtkMenuItem     *menuitem,
 	plugin_show_configure(NULL);
 #endif
 }
+
 

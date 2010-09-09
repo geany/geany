@@ -175,10 +175,6 @@ on_show_messages_window1_toggled       (GtkCheckMenuItem *checkmenuitem,
                                         gpointer         user_data);
 
 void
-on_goto_tag_activate                   (GtkMenuItem     *menuitem,
-                                        gpointer         user_data);
-
-void
 on_construct_completion1_activate      (GtkMenuItem     *menuitem,
                                         gpointer         user_data);
 
@@ -639,4 +635,12 @@ on_smart_line_indent1_activate         (GtkMenuItem     *menuitem,
 
 void
 on_plugin_preferences1_activate        (GtkMenuItem     *menuitem,
+                                        gpointer         user_data);
+
+void
+on_goto_tag_definition1                (GtkMenuItem     *menuitem,
+                                        gpointer         user_data);
+
+void
+on_goto_tag_declaration1               (GtkMenuItem     *menuitem,
                                         gpointer         user_data);

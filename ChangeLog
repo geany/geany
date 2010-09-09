@@ -2,6 +2,11 @@
 
  * src/build.c:
    Use up/down icons for Previous/Next Error.
+ * src/interface.c, src/keybindings.c, src/callbacks.c,
+   src/callbacks.h, src/ui_utils.c, doc/geany.txt, doc/geany.html,
+   geany.glade:
+   Add Find Usage and Go to Tag items to Search menu for easier
+   discovery.
 
 
 2010-09-09  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>

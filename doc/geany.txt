@@ -1102,15 +1102,12 @@ This section describes search-related commands from the Search menu
 and the editor window's popup menu:
 
 * Find
-* Find usage \*
+* Find usage
 * Find in files
 * Replace
-* Go to tag definition \*
-* Go to tag declaration \*
+* Go to tag definition
+* Go to tag declaration
 * Go to line
-
-\* These items are available from the editor window's popup menu, or by
-using a keyboard shortcut (see `Search keybindings`_).
 
 Toolbar entries
 ^^^^^^^^^^^^^^^
@@ -1300,7 +1297,7 @@ Go to tag declaration
 ^^^^^^^^^^^^^^^^^^^^^
 
 Like Go to tag definition, but for a forward declaration such as a
-function prototype or ``extern`` declaration instead of a function
+C function prototype or ``extern`` declaration instead of a function
 body.
 
 

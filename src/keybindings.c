@@ -405,9 +405,9 @@ static void init_default_kb(void)
 	keybindings_set_item(group, GEANY_KEYS_SEARCH_PREVIOUSMESSAGE, NULL,
 		0, 0, "menu_previousmessage", _("Previous Message"), LW(previous_message1));
 	keybindings_set_item(group, GEANY_KEYS_SEARCH_FINDUSAGE, NULL,
-		0, 0, "popup_findusage", _("Find Usage"), NULL);
+		0, 0, "popup_findusage", _("Find Usage"), LW(find_usage1));
 	keybindings_set_item(group, GEANY_KEYS_SEARCH_FINDDOCUMENTUSAGE, NULL,
-		0, 0, "popup_finddocumentusage", _("Find Document Usage"), NULL);
+		0, 0, "popup_finddocumentusage", _("Find Document Usage"), LW(find_document_usage1));
 	keybindings_set_item(group, GEANY_KEYS_SEARCH_MARKALL, NULL,
 		GDK_m, GDK_CONTROL_MASK | GDK_SHIFT_MASK, "find_markall", _("Mark All"), NULL);
 
@@ -432,9 +432,9 @@ static void init_default_kb(void)
 		GDK_comma, GDK_CONTROL_MASK, "edit_gotopreviousmarker",
 		_("_Go to Previous Marker"), LW(go_to_previous_marker1));
 	keybindings_set_item(group, GEANY_KEYS_GOTO_TAGDEFINITION, NULL,
-		0, 0, "popup_gototagdefinition", _("Go to Tag Definition"), NULL);
+		0, 0, "popup_gototagdefinition", _("Go to Tag Definition"), LW(goto_tag_definition1));
 	keybindings_set_item(group, GEANY_KEYS_GOTO_TAGDECLARATION, NULL,
-		0, 0, "popup_gototagdeclaration", _("Go to Tag Declaration"), NULL);
+		0, 0, "popup_gototagdeclaration", _("Go to Tag Declaration"), LW(goto_tag_declaration1));
 	keybindings_set_item(group, GEANY_KEYS_GOTO_LINESTART, NULL,
 		GDK_Home, 0, "edit_gotolinestart", _("Go to Start of Line"), NULL);
 	keybindings_set_item(group, GEANY_KEYS_GOTO_LINEEND, NULL,
