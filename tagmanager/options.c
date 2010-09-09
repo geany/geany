@@ -131,8 +131,7 @@ extern const char *fileExtension (const char *const fileName)
     const char *extension;
     const char *pDelimiter = NULL;
 
-    if (pDelimiter == NULL)
-        pDelimiter = strrchr (fileName, '.');
+    pDelimiter = strrchr (fileName, '.');
 
     if (pDelimiter == NULL)
 	extension = "";
