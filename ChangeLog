@@ -11,6 +11,9 @@
    Fix possible NULL dereference.
  * HACKING:
    Add link to glade-2.12.2.tar.gz on geany.org.
+ * doc/geany.txt, doc/geany.html:
+   Mention the filetype wordchars setting can be overridden by the
+   whitespace_chars filetypes.common setting.
 
 
 2010-09-09  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>

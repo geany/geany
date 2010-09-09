@@ -3576,6 +3576,10 @@ wordchars
 
     *Example:* (look at system filetypes.\* files)
 
+    .. note::
+        This can be overridden by the *whitespace_chars*
+        filetypes.common setting.
+
 comment_open
     A character or string which is used to comment code. If you want to
     use multiline comments, also set comment_close, otherwise leave it
