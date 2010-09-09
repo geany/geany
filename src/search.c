@@ -1223,6 +1223,8 @@ on_replace_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 		fail:
 		utils_beep();
 		gtk_widget_grab_focus(replace_dlg.find_entry);
+		g_free(find);
+		g_free(replace);
 		return;
 	}
 	if (search_flags_re & SCFIND_REGEXP)
