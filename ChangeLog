@@ -7,6 +7,8 @@
    geany.glade:
    Add Find Usage and Go to Tag items to Search menu for easier
    discovery.
+ * tagmanager/tm_symbol.c:
+   Fix possible NULL dereference.
 
 
 2010-09-09  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>

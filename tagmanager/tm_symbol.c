@@ -103,7 +103,9 @@ int tm_symbol_tag_compare(const TMTag **t1, const TMTag **t2)
 {
 	gint s1, s2;
 
-	if ((!t1 && !t2) || (!*t1 && !*t2))
+	if (!t1 && !t2)
+		return 0;
+	if (t1 && t2 && !*t1 && !*t2)
 		return 0;
 	else if (!t1 || !*t1)
 		return -1;
