@@ -115,12 +115,12 @@ static char* nextFileArg (FILE* const fp)
 static char* nextFileLine (FILE* const fp)
 {
     char* result = NULL;
+    Assert (fp != NULL);
     if (! feof (fp))
     {
 	vString* vs = vStringNew ();
 	int c;
 
-	Assert (fp != NULL);
 	c = fgetc (fp);
 	while (c != EOF  &&  c != '\n')
 	{
