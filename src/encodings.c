@@ -488,8 +488,7 @@ gchar *encodings_convert_to_utf8_from_charset(const gchar *buffer, gsize size,
 			geany_debug("Couldn't convert from %s to UTF-8.", charset);
 
 		utf8_content = NULL;
-		if (converted_contents != NULL)
-			g_free(converted_contents);
+		g_free(converted_contents);
 	}
 	else
 	{

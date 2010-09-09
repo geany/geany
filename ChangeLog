@@ -14,6 +14,9 @@
  * doc/geany.txt, doc/geany.html:
    Mention the filetype wordchars setting can be overridden by the
    whitespace_chars filetypes.common setting.
+ * src/highlighting.c, src/encodings.c, tagmanager/tm_file_entry.c:
+   Remove NULL checks when calling g_free() (patch Erik de Castro
+   Lopo, thanks).
 
 
 2010-09-09  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>

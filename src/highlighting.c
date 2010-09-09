@@ -436,8 +436,7 @@ void highlighting_free_styles()
 	if (named_style_hash)
 		g_hash_table_destroy(named_style_hash);
 
-	if (style_sets)
-		g_free(style_sets);
+	g_free(style_sets);
 }
 
 

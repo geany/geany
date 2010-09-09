@@ -238,8 +238,7 @@ TMFileEntry *tm_file_entry_new(const char *path, TMFileEntry *parent
 			}
 			closedir(dir);
 			entry->children = g_slist_sort(entry->children, (GCompareFunc) tm_file_entry_compare);
-			if (entries)
-				g_free(entries);
+			g_free(entries);
 			break;
 	}
 	return entry;
@@ -257,8 +256,7 @@ void tm_file_entry_free(gpointer entry)
 				tm_file_entry_free(tmp->data);
 			g_slist_free(file_entry->children);
 		}
-		if (file_entry->version)
-			g_free(file_entry->version);
+		g_free(file_entry->version);
 		g_free(file_entry->path);
 		FILE_FREE(file_entry);
 	}
