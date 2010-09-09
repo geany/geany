@@ -3450,10 +3450,8 @@ static gboolean is_string_style(gint lexer, gint style)
 				style == SCE_HPA_TRIPLE ||
 				style == SCE_HPA_TRIPLEDOUBLE ||
 				style == SCE_HP_CHARACTER ||
-				style == SCE_HPHP_HSTRING ||
 				style == SCE_HPHP_HSTRING ||  /* HSTRING is a heredoc */
 				style == SCE_HPHP_HSTRING_VARIABLE ||
-				style == SCE_HPHP_SIMPLESTRING ||
 				style == SCE_HPHP_SIMPLESTRING ||
 				style == SCE_HP_STRING ||
 				style == SCE_HP_TRIPLE ||
