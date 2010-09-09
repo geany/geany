@@ -1563,13 +1563,15 @@ void document_rename_file(GeanyDocument *doc, const gchar *new_filename)
 }
 
 
-/* Return TRUE if the document hasn't been saved before, i.e. either the filename or
- * the real_path is not set. */
+/* Return TRUE if the document doesn't have a full filename set.
+ * This makes filenames without a path show the save as dialog, e.g. for file templates.
+ * Otherwise just use the set filename instead of asking the user - e.g. for command-line
+ * new files. */
 gboolean document_need_save_as(GeanyDocument *doc)
 {
 	g_return_val_if_fail(doc != NULL, FALSE);
 
-	return (doc->file_name == NULL || doc->real_path == NULL);
+	return (doc->file_name == NULL || !g_path_is_absolute(doc->file_name));
 }
 
 

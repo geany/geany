@@ -17,6 +17,10 @@
  * src/highlighting.c, src/encodings.c, tagmanager/tm_file_entry.c:
    Remove NULL checks when calling g_free() (patch Erik de Castro
    Lopo, thanks).
+ * src/document.c:
+   Show Save As when saving if the document filename doesn't have an
+   absolute path, so command-line new files can be saved without a
+   prompt, but file templates still prompt the user.
 
 
 2010-09-09  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
