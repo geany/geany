@@ -145,11 +145,11 @@ static void clearPatternSet (const langType language)
 static void makeRegexTag (
 		const vString* const name, const struct sKind* const kind)
 {
+	Assert (kind != NULL);
 	if (kind->enabled)
 	{
 		tagEntryInfo e;
 		Assert (name != NULL  &&  vStringLength (name) > 0);
-		Assert (kind != NULL);
 		initTagEntry (&e, vStringValue (name));
 		e.kind     = kind->letter;
 		e.kindName = kind->name;
