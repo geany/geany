@@ -123,6 +123,9 @@ You can build Glade 2.12 and run the binary in place, without installing
 it - this should work fine even if you have another version of Glade
 installed on the system.
 
+You can download Glade 2.12.2 here:
+http://download.geany.org/glade-2.12.2.tar.gz
+
 GTK API documentation
 ---------------------
 The official GTK 2.8 API documentation is not available online anymore,

@@ -9,6 +9,8 @@
    discovery.
  * tagmanager/tm_symbol.c:
    Fix possible NULL dereference.
+ * HACKING:
+   Add link to glade-2.12.2.tar.gz on geany.org.
 
 
 2010-09-09  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
