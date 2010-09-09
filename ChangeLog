@@ -1,6 +1,12 @@
+2010-09-09  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/build.c:
+   Use up/down icons for Previous/Next Error.
+
+
 2010-09-09  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
- * src/build.c: 
+ * src/build.c:
    Fix a memory leak. Based on input by Daniel Marjamäki. Thanks for the
    catch.
 
