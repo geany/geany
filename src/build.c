@@ -996,7 +996,11 @@ static void process_build_output_line(const gchar *str, gint color)
 	g_strchomp(msg);
 
 	if (! NZV(msg))
+	{
+		if (msg != NULL)
+			g_free(msg);
 		return;
+	}
 
 	if (build_parse_make_dir(msg, &tmp))
 	{

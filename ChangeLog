@@ -1,3 +1,10 @@
+2010-09-09  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * src/build.c: 
+   Fix a memory leak. Based on input by Daniel Marjamäki. Thanks for the
+   catch.
+
+
 2010-09-08  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/ui_utils.h, src/msgwindow.c, src/msgwindow.h, src/main.c:
