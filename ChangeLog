@@ -5,6 +5,9 @@
    Find Document Usage because Find Usage can be used instead.
    Go to Tag Declaration because Go to Tag Definition is more common.
    Go to Line because the toolbar item can be used instead.
+ * src/tools.c, src/search.c, tagmanager/python.c:
+   Fix some 'possible' NULL pointer dereferences (based on patch by
+   Erik de Castro Lopo).
 
 
 2010-09-09  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

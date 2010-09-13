@@ -1505,7 +1505,7 @@ search_find_in_files(const gchar *utf8_search_text, const gchar *dir, const gcha
  * Returns NULL if no files were found, otherwise returned vector should be fully freed. */
 static gchar **search_get_argv(const gchar **argv_prefix, const gchar *dir)
 {
-	guint prefix_len, list_len, i, j;
+	guint prefix_len, list_len, i;
 	gchar **argv;
 	GSList *list, *item;
 	GError *error = NULL;
@@ -1520,21 +1520,18 @@ static gchar **search_get_argv(const gchar **argv_prefix, const gchar *dir)
 		g_error_free(error);
 		return NULL;
 	}
-	if (list == NULL) return NULL;
+	if (list == NULL)
+		return NULL;
 
 	argv = g_new(gchar*, prefix_len + list_len + 1);
 
 	for (i = 0; i < prefix_len; i++)
 		argv[i] = g_strdup(argv_prefix[i]);
 
-	item = list;
-	for (j = 0; j < list_len; j++)
-	{
+	foreach_slist(item, list)
 		argv[i++] = item->data;
-		item = g_slist_next(item);
-	}
-	argv[i] = NULL;
 
+	argv[i] = NULL;
 	g_slist_free(list);
 	return argv;
 }

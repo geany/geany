@@ -411,9 +411,9 @@ static void checkParent(NestingLevels *nls, int indent, vString *parent)
 	{
 		n = nls->levels + i;
 		/* is there a better way to compare two vStrings? */
-		if (strcmp(vStringValue(parent), vStringValue(n->name)) == 0)
+		if (n && strcmp(vStringValue(parent), vStringValue(n->name)) == 0)
 		{
-			if (n && indent <= n->indentation)
+			if (indent <= n->indentation)
 			{
 				/* remove this level by clearing its name */
 				vStringClear(n->name);
