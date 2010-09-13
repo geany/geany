@@ -8,6 +8,8 @@
  * src/tools.c, src/search.c, tagmanager/python.c:
    Fix some 'possible' NULL pointer dereferences (based on patch by
    Erik de Castro Lopo).
+ * src/keybindings.c, src/keybindings.h, src/prefs.c:
+   Simplify keybindings_check_event().
 
 
 2010-09-09  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

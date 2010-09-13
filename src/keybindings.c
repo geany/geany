@@ -1137,17 +1137,10 @@ static guint key_kp_translate(guint key_in)
 }
 
 
-/* Stripped down version of the main keypress event handler which can be used
- * to process foreign events. Instead of executing the keybinding, a pointer to the
- * keybinding structure is returned.
- * Additionally, the group_id and binding_id are filled with the appropriate indexes
- * if non-NULL. */
-const GeanyKeyBinding *keybindings_check_event(GdkEventKey *ev, gint *group_id, gint *binding_id)
+/* Check if event keypress matches keybinding combo */
+gboolean keybindings_check_event(GdkEventKey *ev, GeanyKeyBinding *kb)
 {
 	guint state, keyval;
-	gsize g, i;
-	GeanyKeyGroup *group;
-	GeanyKeyBinding *kb;
 
 	if (ev->keyval == 0)
 		return FALSE;
@@ -1162,21 +1155,7 @@ const GeanyKeyBinding *keybindings_check_event(GdkEventKey *ev, gint *group_id, 
 	if (keyval >= GDK_KP_Space && keyval < GDK_KP_Equal)
 		keyval = key_kp_translate(keyval);
 
-	foreach_ptr_array(group, g, keybinding_groups)
-	{
-		foreach_ptr_array(kb, i, group->key_items)
-		{
-			if (keyval == kb->key && state == kb->mods)
-			{
-				if (group_id != NULL)
-					*group_id = g;
-				if (binding_id != NULL)
-					*binding_id = kb->id;
-				return kb;
-			}
-		}
-	}
-	return NULL;
+	return (keyval == kb->key && state == kb->mods);
 }
 
 

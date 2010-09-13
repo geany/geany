@@ -270,7 +270,7 @@ void keybindings_write_to_file(void);
 
 void keybindings_show_shortcuts(void);
 
-const GeanyKeyBinding *keybindings_check_event(GdkEventKey *ev, gint *group_id, gint *binding_id);
+gboolean keybindings_check_event(GdkEventKey *ev, GeanyKeyBinding *kb);
 
 #endif
 

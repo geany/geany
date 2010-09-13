@@ -1535,15 +1535,12 @@ static void open_preferences_help(void)
 static gboolean prefs_dialog_key_press_response_cb(GtkWidget *dialog, GdkEventKey *event,
 												   gpointer data)
 {
-	gint group, keybinding;
+	GeanyKeyBinding *kb = keybindings_lookup_item(GEANY_KEY_GROUP_HELP, GEANY_KEYS_HELP_HELP);
 
-	if (keybindings_check_event(event, &group, &keybinding) != NULL)
+	if (keybindings_check_event(event, kb))
 	{
-		if (group == GEANY_KEY_GROUP_HELP && keybinding == GEANY_KEYS_HELP_HELP)
-		{
-			open_preferences_help();
-			return TRUE;
-		}
+		open_preferences_help();
+		return TRUE;
 	}
 	return FALSE;
 }
