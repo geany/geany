@@ -1,3 +1,12 @@
+2010-09-13  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/interface.c, src/keybindings.c, src/ui_utils.c, geany.glade:
+   Remove 3 popup menu items to save space:
+   Find Document Usage because Find Usage can be used instead.
+   Go to Tag Declaration because Go to Tag Definition is more common.
+   Go to Line because the toolbar item can be used instead.
+
+
 2010-09-09  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/build.c:
@@ -15,7 +24,7 @@
    Mention the filetype wordchars setting can be overridden by the
    whitespace_chars filetypes.common setting.
  * src/highlighting.c, src/encodings.c, tagmanager/tm_file_entry.c:
-   Remove NULL checks when calling g_free() (patch Erik de Castro
+   Remove NULL checks when calling g_free() (patch by Erik de Castro
    Lopo, thanks).
  * src/document.c:
    Show Save As when saving if the document filename doesn't have an

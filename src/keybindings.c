@@ -727,12 +727,9 @@ static void add_popup_menu_accels(void)
 
 	group = g_ptr_array_index(keybinding_groups, GEANY_KEY_GROUP_SEARCH);
 	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_SEARCH_FINDUSAGE, find_usage1);
-	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_SEARCH_FINDDOCUMENTUSAGE, find_document_usage1);
 
 	group = g_ptr_array_index(keybinding_groups, GEANY_KEY_GROUP_GOTO);
-	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_GOTO_LINE, go_to_line);
 	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_GOTO_TAGDEFINITION, goto_tag_definition1);
-	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_GOTO_TAGDECLARATION, goto_tag_declaration1);
 
 	/* Format and Commands share the menu bar submenus */
 	/* Build menu items are set if the build menus are created */
