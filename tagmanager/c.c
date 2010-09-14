@@ -144,6 +144,7 @@ typedef enum eDeclaration
 	DECL_EVENT,
 	DECL_SIGNAL,
 	DECL_FUNCTION,
+	DECL_FUNCTION_TEMPLATE,
 	DECL_IGNORE,		/* non-taggable "declaration" */
 	DECL_INTERFACE,
 	DECL_MODULE,
@@ -1155,6 +1156,7 @@ static tagType declToTagType (const declType declaration)
 		case DECL_CLASS:	type = TAG_CLASS;		break;
 		case DECL_ENUM:		type = TAG_ENUM;		break;
 		case DECL_FUNCTION:	type = TAG_FUNCTION;	break;
+		case DECL_FUNCTION_TEMPLATE: type = TAG_FUNCTION; break;
 		case DECL_INTERFACE:type = TAG_INTERFACE;	break;
 		case DECL_NAMESPACE:type = TAG_NAMESPACE;	break;
 		case DECL_STRUCT:	type = TAG_STRUCT;		break;
@@ -2498,6 +2500,10 @@ static void analyzeParens (statementInfo *const st)
 			token->type = TOKEN_NAME;
 			processName (st);
 			st->gotParenName = TRUE;
+			if (isLanguage(Lang_d) && c == '(' && isType (prev, TOKEN_NAME)) {
+				st->declaration = DECL_FUNCTION_TEMPLATE;
+				copyToken (st->blockName, prev);
+			}
 		}
 		else if (! st->gotArgs  &&  info.isParamList)
 		{
@@ -2853,7 +2859,9 @@ static void tagCheck (statementInfo *const st)
 		{
 			if (isType (prev, TOKEN_ARGS))
 			{
-				if (st->haveQualifyingName)
+				if (st->declaration == DECL_FUNCTION_TEMPLATE)
+					qualifyFunctionTag (st, st->blockName);
+				else if (st->haveQualifyingName)
 				{
 					st->declaration = DECL_FUNCTION;
 					if (isType (prev2, TOKEN_NAME))

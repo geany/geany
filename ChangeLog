@@ -3,6 +3,8 @@
  * src/main.c:
    Ignore directories passed on the command-line (based on patch by
    Erik de Castro Lopo, thanks).
+ * tagmanager/c.c:
+   Parse D function template names.
 
 
 2010-09-13  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
