@@ -1,3 +1,10 @@
+2010-09-14  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/main.c:
+   Ignore directories passed on the command-line (based on patch by
+   Erik de Castro Lopo, thanks).
+
+
 2010-09-13  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/interface.c, src/keybindings.c, src/ui_utils.c, geany.glade:

@@ -794,6 +794,13 @@ static gboolean open_cl_files(gint argc, gchar **argv)
 	for (i = 1; i < argc; i++)
 	{
 		gchar *filename = main_get_argv_filename(argv[i]);
+
+		if (g_file_test(filename, G_FILE_TEST_IS_DIR))
+		{
+			g_free(filename);
+			continue;
+		}
+
 #ifdef G_OS_WIN32
 		/* It seems argv elements are encoded in CP1252 on a German Windows */
 		setptr(filename, g_locale_to_utf8(filename, -1, NULL, NULL, NULL));
