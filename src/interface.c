@@ -987,49 +987,49 @@ create_window1 (void)
   indent_width1_menu = gtk_menu_new ();
   gtk_menu_item_set_submenu (GTK_MENU_ITEM (indent_width1), indent_width1_menu);
 
-  indent_width_1 = gtk_radio_menu_item_new_with_mnemonic (indent_width_1_group, _("_1"));
+  indent_width_1 = gtk_radio_menu_item_new_with_mnemonic (indent_width_1_group, "_1");
   indent_width_1_group = gtk_radio_menu_item_get_group (GTK_RADIO_MENU_ITEM (indent_width_1));
   gtk_widget_show (indent_width_1);
   gtk_container_add (GTK_CONTAINER (indent_width1_menu), indent_width_1);
   gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (indent_width_1), TRUE);
 
-  indent_width_2 = gtk_radio_menu_item_new_with_mnemonic (indent_width_1_group, _("_2"));
+  indent_width_2 = gtk_radio_menu_item_new_with_mnemonic (indent_width_1_group, "_2");
   indent_width_1_group = gtk_radio_menu_item_get_group (GTK_RADIO_MENU_ITEM (indent_width_2));
   gtk_widget_show (indent_width_2);
   gtk_container_add (GTK_CONTAINER (indent_width1_menu), indent_width_2);
   gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (indent_width_2), TRUE);
 
-  indent_width_3 = gtk_radio_menu_item_new_with_mnemonic (indent_width_1_group, _("_3"));
+  indent_width_3 = gtk_radio_menu_item_new_with_mnemonic (indent_width_1_group, "_3");
   indent_width_1_group = gtk_radio_menu_item_get_group (GTK_RADIO_MENU_ITEM (indent_width_3));
   gtk_widget_show (indent_width_3);
   gtk_container_add (GTK_CONTAINER (indent_width1_menu), indent_width_3);
   gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (indent_width_3), TRUE);
 
-  indent_width_4 = gtk_radio_menu_item_new_with_mnemonic (indent_width_1_group, _("_4"));
+  indent_width_4 = gtk_radio_menu_item_new_with_mnemonic (indent_width_1_group, "_4");
   indent_width_1_group = gtk_radio_menu_item_get_group (GTK_RADIO_MENU_ITEM (indent_width_4));
   gtk_widget_show (indent_width_4);
   gtk_container_add (GTK_CONTAINER (indent_width1_menu), indent_width_4);
   gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (indent_width_4), TRUE);
 
-  indent_width_5 = gtk_radio_menu_item_new_with_mnemonic (indent_width_1_group, _("_5"));
+  indent_width_5 = gtk_radio_menu_item_new_with_mnemonic (indent_width_1_group, "_5");
   indent_width_1_group = gtk_radio_menu_item_get_group (GTK_RADIO_MENU_ITEM (indent_width_5));
   gtk_widget_show (indent_width_5);
   gtk_container_add (GTK_CONTAINER (indent_width1_menu), indent_width_5);
   gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (indent_width_5), TRUE);
 
-  indent_width_6 = gtk_radio_menu_item_new_with_mnemonic (indent_width_1_group, _("_6"));
+  indent_width_6 = gtk_radio_menu_item_new_with_mnemonic (indent_width_1_group, "_6");
   indent_width_1_group = gtk_radio_menu_item_get_group (GTK_RADIO_MENU_ITEM (indent_width_6));
   gtk_widget_show (indent_width_6);
   gtk_container_add (GTK_CONTAINER (indent_width1_menu), indent_width_6);
   gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (indent_width_6), TRUE);
 
-  indent_width_7 = gtk_radio_menu_item_new_with_mnemonic (indent_width_1_group, _("_7"));
+  indent_width_7 = gtk_radio_menu_item_new_with_mnemonic (indent_width_1_group, "_7");
   indent_width_1_group = gtk_radio_menu_item_get_group (GTK_RADIO_MENU_ITEM (indent_width_7));
   gtk_widget_show (indent_width_7);
   gtk_container_add (GTK_CONTAINER (indent_width1_menu), indent_width_7);
   gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (indent_width_7), TRUE);
 
-  indent_width_8 = gtk_radio_menu_item_new_with_mnemonic (indent_width_1_group, _("_8"));
+  indent_width_8 = gtk_radio_menu_item_new_with_mnemonic (indent_width_1_group, "_8");
   indent_width_1_group = gtk_radio_menu_item_get_group (GTK_RADIO_MENU_ITEM (indent_width_8));
   gtk_widget_show (indent_width_8);
   gtk_container_add (GTK_CONTAINER (indent_width1_menu), indent_width_8);

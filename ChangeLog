@@ -12,6 +12,9 @@
    updated by Erik de Castro Lopo - thanks).
  * src/interface.c, src/callbacks.c, src/callbacks.h, geany.glade:
    Combine indent width menu item callbacks.
+ * src/interface.c, geany.glade:
+   Don't translate indent width menu items as they are now used for
+   atoi().
 
 
 2010-09-13  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
