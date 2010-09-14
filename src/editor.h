@@ -162,6 +162,7 @@ struct GeanyEditor
 	gfloat			 scroll_percent;
 	GeanyIndentType	 indent_type;	/* Use editor_get_indent_prefs() instead. */
 	gboolean		 line_breaking;	/**< Whether to split long lines as you type. */
+	gint			 indent_width;
 };
 
 
@@ -285,6 +286,8 @@ void editor_insert_color(GeanyEditor *editor, const gchar *colour);
 const GeanyIndentPrefs *editor_get_indent_prefs(GeanyEditor *editor);
 
 void editor_set_indent_type(GeanyEditor *editor, GeanyIndentType type);
+
+void editor_set_indent(GeanyEditor *editor, GeanyIndentType type, gint width);
 
 void editor_set_line_wrapping(GeanyEditor *editor, gboolean wrap);
 

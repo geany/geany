@@ -5,6 +5,11 @@
    Erik de Castro Lopo, thanks).
  * tagmanager/c.c:
    Parse D function template names.
+ * src/interface.c, src/callbacks.c, src/callbacks.h, src/keyfile.c,
+   src/document.c, src/editor.c, src/editor.h, src/ui_utils.c,
+   geany.glade:
+   Allow per-document indent width setting (patch by Jiří Techet,
+   updated by Erik de Castro Lopo - thanks).
 
 
 2010-09-13  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

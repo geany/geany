@@ -644,3 +644,35 @@ on_goto_tag_definition1                (GtkMenuItem     *menuitem,
 void
 on_goto_tag_declaration1               (GtkMenuItem     *menuitem,
                                         gpointer         user_data);
+
+void
+on_indent_width_1_activate             (GtkMenuItem     *menuitem,
+                                        gpointer         user_data);
+
+void
+on_indent_width_2_activate             (GtkMenuItem     *menuitem,
+                                        gpointer         user_data);
+
+void
+on_indent_width_3_activate             (GtkMenuItem     *menuitem,
+                                        gpointer         user_data);
+
+void
+on_indent_width_4_activate             (GtkMenuItem     *menuitem,
+                                        gpointer         user_data);
+
+void
+on_indent_width_5_activate             (GtkMenuItem     *menuitem,
+                                        gpointer         user_data);
+
+void
+on_indent_width_6_activate             (GtkMenuItem     *menuitem,
+                                        gpointer         user_data);
+
+void
+on_indent_width_7_activate             (GtkMenuItem     *menuitem,
+                                        gpointer         user_data);
+
+void
+on_indent_width_8_activate             (GtkMenuItem     *menuitem,
+                                        gpointer         user_data);

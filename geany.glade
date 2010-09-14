@@ -1424,6 +1424,106 @@
 		      </child>
 
 		      <child>
+			<widget class="GtkMenuItem" id="indent_width1">
+			  <property name="visible">True</property>
+			  <property name="label" translatable="yes">Indent Widt_h</property>
+			  <property name="use_underline">True</property>
+
+			  <child>
+			    <widget class="GtkMenu" id="indent_width1_menu">
+
+			      <child>
+				<widget class="GtkRadioMenuItem" id="indent_width_1">
+				  <property name="visible">True</property>
+				  <property name="label" translatable="yes">_1</property>
+				  <property name="use_underline">True</property>
+				  <property name="active">True</property>
+				  <signal name="activate" handler="on_indent_width_1_activate" last_modification_time="Mon, 09 Aug 2010 21:16:01 GMT"/>
+				</widget>
+			      </child>
+
+			      <child>
+				<widget class="GtkRadioMenuItem" id="indent_width_2">
+				  <property name="visible">True</property>
+				  <property name="label" translatable="yes">_2</property>
+				  <property name="use_underline">True</property>
+				  <property name="active">True</property>
+				  <property name="group">indent_width_1</property>
+				  <signal name="activate" handler="on_indent_width_2_activate" last_modification_time="Mon, 09 Aug 2010 21:16:01 GMT"/>
+				</widget>
+			      </child>
+
+			      <child>
+				<widget class="GtkRadioMenuItem" id="indent_width_3">
+				  <property name="visible">True</property>
+				  <property name="label" translatable="yes">_3</property>
+				  <property name="use_underline">True</property>
+				  <property name="active">True</property>
+				  <property name="group">indent_width_1</property>
+				  <signal name="activate" handler="on_indent_width_3_activate" last_modification_time="Mon, 09 Aug 2010 21:16:01 GMT"/>
+				</widget>
+			      </child>
+
+			      <child>
+				<widget class="GtkRadioMenuItem" id="indent_width_4">
+				  <property name="visible">True</property>
+				  <property name="label" translatable="yes">_4</property>
+				  <property name="use_underline">True</property>
+				  <property name="active">True</property>
+				  <property name="group">indent_width_1</property>
+				  <signal name="activate" handler="on_indent_width_4_activate" last_modification_time="Mon, 09 Aug 2010 21:16:01 GMT"/>
+				</widget>
+			      </child>
+
+			      <child>
+				<widget class="GtkRadioMenuItem" id="indent_width_5">
+				  <property name="visible">True</property>
+				  <property name="label" translatable="yes">_5</property>
+				  <property name="use_underline">True</property>
+				  <property name="active">True</property>
+				  <property name="group">indent_width_1</property>
+				  <signal name="activate" handler="on_indent_width_5_activate" last_modification_time="Mon, 09 Aug 2010 21:16:01 GMT"/>
+				</widget>
+			      </child>
+
+			      <child>
+				<widget class="GtkRadioMenuItem" id="indent_width_6">
+				  <property name="visible">True</property>
+				  <property name="label" translatable="yes">_6</property>
+				  <property name="use_underline">True</property>
+				  <property name="active">True</property>
+				  <property name="group">indent_width_1</property>
+				  <signal name="activate" handler="on_indent_width_6_activate" last_modification_time="Mon, 09 Aug 2010 21:16:01 GMT"/>
+				</widget>
+			      </child>
+
+			      <child>
+				<widget class="GtkRadioMenuItem" id="indent_width_7">
+				  <property name="visible">True</property>
+				  <property name="label" translatable="yes">_7</property>
+				  <property name="use_underline">True</property>
+				  <property name="active">True</property>
+				  <property name="group">indent_width_1</property>
+				  <signal name="activate" handler="on_indent_width_7_activate" last_modification_time="Mon, 09 Aug 2010 21:16:01 GMT"/>
+				</widget>
+			      </child>
+
+			      <child>
+				<widget class="GtkRadioMenuItem" id="indent_width_8">
+				  <property name="visible">True</property>
+				  <property name="label" translatable="yes">_8</property>
+				  <property name="use_underline">True</property>
+				  <property name="active">True</property>
+				  <property name="group">indent_width_1</property>
+				  <signal name="activate" handler="on_indent_width_8_activate" last_modification_time="Mon, 09 Aug 2010 21:16:01 GMT"/>
+				</widget>
+			      </child>
+			    </widget>
+			  </child>
+			</widget>
+		      </child>
+
+		      <child>
 			<widget class="GtkSeparatorMenuItem" id="separator45">
 			  <property name="visible">True</property>
 			</widget>

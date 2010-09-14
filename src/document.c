@@ -1143,11 +1143,11 @@ void document_apply_indent_settings(GeanyDocument *doc)
 	{
 		case GEANY_FILETYPES_MAKE:
 			/* force using tabs for indentation for Makefiles */
-			editor_set_indent_type(doc->editor, GEANY_INDENT_TYPE_TABS);
+			editor_set_indent(doc->editor, GEANY_INDENT_TYPE_TABS, iprefs->width);
 			return;
 		case GEANY_FILETYPES_F77:
 			/* force using spaces for indentation for Fortran 77 */
-			editor_set_indent_type(doc->editor, GEANY_INDENT_TYPE_SPACES);
+			editor_set_indent(doc->editor, GEANY_INDENT_TYPE_SPACES, iprefs->width);
 			return;
 	}
 	if (iprefs->detect_type)
@@ -1176,7 +1176,7 @@ void document_apply_indent_settings(GeanyDocument *doc)
 				DOC_FILENAME(doc));
 		}
 	}
-	editor_set_indent_type(doc->editor, type);
+	editor_set_indent(doc->editor, type, iprefs->width);
 }
 
 
@@ -1325,7 +1325,7 @@ GeanyDocument *document_open_file_full(GeanyDocument *doc, const gchar *filename
 
 		/* set indentation settings after setting the filetype */
 		if (reload)
-			editor_set_indent_type(doc->editor, doc->editor->indent_type); /* resetup sci */
+			editor_set_indent(doc->editor, doc->editor->indent_type, doc->editor->indent_width); /* resetup sci */
 		else
 			document_apply_indent_settings(doc);
 

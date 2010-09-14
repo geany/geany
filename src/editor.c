@@ -1064,6 +1064,7 @@ editor_get_indent_prefs(GeanyEditor *editor)
 		return &iprefs;
 
 	iprefs.type = editor->indent_type;
+	iprefs.width = editor->indent_width;
 
 	/* if per-document auto-indent is enabled, but we don't have a global mode set,
 	 * just use basic auto-indenting */
@@ -4568,11 +4569,18 @@ void editor_set_line_wrapping(GeanyEditor *editor, gboolean wrap)
  */
 void editor_set_indent_type(GeanyEditor *editor, GeanyIndentType type)
 {
+	editor_set_indent(editor, type, editor->indent_width);
+}
+
+
+void editor_set_indent(GeanyEditor *editor, GeanyIndentType type, gint width)
+{
 	const GeanyIndentPrefs *iprefs = editor_get_indent_prefs(editor);
 	ScintillaObject *sci = editor->sci;
 	gboolean use_tabs = type != GEANY_INDENT_TYPE_SPACES;
 
 	editor->indent_type = type;
+	editor->indent_width = width;
 	sci_set_use_tabs(sci, use_tabs);
 
 	if (type == GEANY_INDENT_TYPE_BOTH)
@@ -4588,9 +4596,9 @@ void editor_set_indent_type(GeanyEditor *editor, GeanyIndentType type)
 		}
 	}
 	else
-		sci_set_tab_width(sci, iprefs->width);
+		sci_set_tab_width(sci, width);
 
-	SSM(sci, SCI_SETINDENT, iprefs->width, 0);
+	SSM(sci, SCI_SETINDENT, width, 0);
 
 	/* remove indent spaces on backspace, if using any spaces to indent */
 	SSM(sci, SCI_SETBACKSPACEUNINDENTS, type != GEANY_INDENT_TYPE_TABS, 0);
@@ -4827,7 +4835,7 @@ ScintillaObject *editor_create_widget(GeanyEditor *editor)
 	sci = create_new_sci(editor);
 	editor->sci = sci;
 
-	editor_set_indent_type(editor, iprefs->type);
+	editor_set_indent(editor, iprefs->type, iprefs->width);
 	editor_set_font(editor, interface_prefs.editor_font);
 	editor_apply_update_prefs(editor);
 
@@ -4998,7 +5006,7 @@ void editor_apply_update_prefs(GeanyEditor *editor)
 		editor_get_long_line_column(), editor_prefs.long_line_color);
 
 	/* update indent width, tab width */
-	editor_set_indent_type(editor, editor->indent_type);
+	editor_set_indent(editor, editor->indent_type, editor->indent_width);
 	sci_set_tab_indents(sci, editor_prefs.use_tab_to_indent);
 
 	sci_set_autoc_max_height(sci, editor_prefs.symbolcompletion_max_height);

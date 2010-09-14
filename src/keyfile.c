@@ -988,7 +988,7 @@ static gboolean open_session_file(gchar **tmp, guint len)
 
 		if (doc)
 		{
-			editor_set_indent_type(doc->editor, indent_type);
+			editor_set_indent(doc->editor, indent_type, doc->editor->indent_width);
 			editor_set_line_wrapping(doc->editor, line_wrapping);
 			doc->editor->line_breaking = line_breaking;
 			doc->editor->auto_indent = auto_indent;

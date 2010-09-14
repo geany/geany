@@ -886,6 +886,16 @@ void ui_document_show_hide(GeanyDocument *doc)
 	item = ui_lookup_widget(main_widgets.window, widget_name);
 	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(item), TRUE);
 
+	if (iprefs->width >= 1 && iprefs->width <= 8)
+	{
+		gchar *name;
+
+		name = g_strdup_printf("indent_width_%d", iprefs->width);
+		item = ui_lookup_widget(main_widgets.window, name);
+		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(item), TRUE);
+		g_free(name);
+	}
+
 	gtk_check_menu_item_set_active(
 			GTK_CHECK_MENU_ITEM(ui_lookup_widget(main_widgets.window, "set_file_readonly1")),
 			doc->readonly);

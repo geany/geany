@@ -2025,7 +2025,7 @@ static void set_indent_type(GtkCheckMenuItem *menuitem, GeanyIndentType type)
 	doc = document_get_current();
 	g_return_if_fail(doc != NULL);
 
-	editor_set_indent_type(doc->editor, type);
+	editor_set_indent(doc->editor, type, doc->editor->indent_width);
 	ui_update_statusbar(doc, -1);
 }
 
@@ -2346,4 +2346,82 @@ on_plugin_preferences1_activate        (GtkMenuItem     *menuitem,
 #endif
 }
 
+
+
+static void set_indent_width(guint width)
+{
+	GeanyDocument *doc;
+
+	if (ignore_callback)
+		return;
+
+	doc = document_get_current();
+	g_return_if_fail(doc != NULL);
+
+	editor_set_indent(doc->editor, doc->editor->indent_type, width);
+}
+
+
+void
+on_indent_width_1_activate             (GtkMenuItem     *menuitem,
+                                        gpointer         user_data)
+{
+	set_indent_width(1);
+}
+
+
+void
+on_indent_width_2_activate             (GtkMenuItem     *menuitem,
+                                        gpointer         user_data)
+{
+	set_indent_width(2);
+}
+
+
+void
+on_indent_width_3_activate             (GtkMenuItem     *menuitem,
+                                        gpointer         user_data)
+{
+	set_indent_width(3);
+}
+
+
+void
+on_indent_width_4_activate             (GtkMenuItem     *menuitem,
+                                        gpointer         user_data)
+{
+	set_indent_width(4);
+}
+
+
+void
+on_indent_width_5_activate             (GtkMenuItem     *menuitem,
+                                        gpointer         user_data)
+{
+	set_indent_width(5);
+}
+
+
+void
+on_indent_width_6_activate             (GtkMenuItem     *menuitem,
+                                        gpointer         user_data)
+{
+	set_indent_width(6);
+}
+
+
+void
+on_indent_width_7_activate             (GtkMenuItem     *menuitem,
+                                        gpointer         user_data)
+{
+	set_indent_width(7);
+}
+
+
+void
+on_indent_width_8_activate             (GtkMenuItem     *menuitem,
+                                        gpointer         user_data)
+{
+	set_indent_width(8);
+}
 
