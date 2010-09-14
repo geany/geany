@@ -10,6 +10,8 @@
    geany.glade:
    Allow per-document indent width setting (patch by Jiří Techet,
    updated by Erik de Castro Lopo - thanks).
+ * src/interface.c, src/callbacks.c, src/callbacks.h, geany.glade:
+   Combine indent width menu item callbacks.
 
 
 2010-09-13  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

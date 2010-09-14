@@ -2347,7 +2347,6 @@ on_plugin_preferences1_activate        (GtkMenuItem     *menuitem,
 }
 
 
-
 static void set_indent_width(guint width)
 {
 	GeanyDocument *doc;
@@ -2363,65 +2362,14 @@ static void set_indent_width(guint width)
 
 
 void
-on_indent_width_1_activate             (GtkMenuItem     *menuitem,
+on_indent_width_activate               (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	set_indent_width(1);
-}
+	gchar *label = ui_menu_item_get_text(menuitem);
+	gint width = atoi(label);
 
-
-void
-on_indent_width_2_activate             (GtkMenuItem     *menuitem,
-                                        gpointer         user_data)
-{
-	set_indent_width(2);
-}
-
-
-void
-on_indent_width_3_activate             (GtkMenuItem     *menuitem,
-                                        gpointer         user_data)
-{
-	set_indent_width(3);
-}
-
-
-void
-on_indent_width_4_activate             (GtkMenuItem     *menuitem,
-                                        gpointer         user_data)
-{
-	set_indent_width(4);
-}
-
-
-void
-on_indent_width_5_activate             (GtkMenuItem     *menuitem,
-                                        gpointer         user_data)
-{
-	set_indent_width(5);
-}
-
-
-void
-on_indent_width_6_activate             (GtkMenuItem     *menuitem,
-                                        gpointer         user_data)
-{
-	set_indent_width(6);
-}
-
-
-void
-on_indent_width_7_activate             (GtkMenuItem     *menuitem,
-                                        gpointer         user_data)
-{
-	set_indent_width(7);
-}
-
-
-void
-on_indent_width_8_activate             (GtkMenuItem     *menuitem,
-                                        gpointer         user_data)
-{
-	set_indent_width(8);
+	g_free(label);
+	if (width)
+		set_indent_width(width);
 }
 
