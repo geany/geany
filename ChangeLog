@@ -1,3 +1,9 @@
+2010-09-15  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/keyfile.c:
+   Save document indent width with the session.
+
+
 2010-09-14  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/main.c:

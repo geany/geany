@@ -264,7 +264,7 @@ static gchar *get_session_file_string(GeanyDocument *doc)
 	 * (g_path_skip_root() to skip C:\... on Windows) */
 	g_strdelimit((gchar*) utils_path_skip_root(locale_filename), ";", ':');
 
-	fname = g_strdup_printf("%d;%s;%d;%d;%d;%d;%d;%s;%d",
+	fname = g_strdup_printf("%d;%s;%d;%d;%d;%d;%d;%s;%d;%d",
 		sci_get_current_position(doc->editor->sci),
 		ft->name,
 		doc->readonly,
@@ -273,7 +273,8 @@ static gchar *get_session_file_string(GeanyDocument *doc)
 		doc->editor->auto_indent,
 		doc->editor->line_wrapping,
 		locale_filename,
-		doc->editor->line_breaking);
+		doc->editor->line_breaking,
+		doc->editor->indent_width);
 	g_free(locale_filename);
 	return fname;
 }
@@ -988,7 +989,11 @@ static gboolean open_session_file(gchar **tmp, guint len)
 
 		if (doc)
 		{
-			editor_set_indent(doc->editor, indent_type, doc->editor->indent_width);
+			gint indent_width = doc->editor->indent_width;
+
+			if (len > 9)
+				indent_width = atoi(tmp[9]);
+			editor_set_indent(doc->editor, indent_type, indent_width);
 			editor_set_line_wrapping(doc->editor, line_wrapping);
 			doc->editor->line_breaking = line_breaking;
 			doc->editor->auto_indent = auto_indent;
