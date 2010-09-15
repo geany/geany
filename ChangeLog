@@ -2,6 +2,10 @@
 
  * src/keyfile.c:
    Save document indent width with the session.
+ * src/ui_utils.h, src/socket.c, src/ui_utils.c, doc/geany.txt,
+   doc/geany.html, TODO:
+   Use a separate socket per workspace on X (patch by Erik de Castro
+   Lopo, thanks).
 
 
 2010-09-14  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
