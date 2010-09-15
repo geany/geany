@@ -80,7 +80,8 @@ Yoann Le Montagner <yoann(dot)le-montagner(at)m4x(dot)org> - set VTE bold color
 Dimitar Zhekov <hamster(at)mbox(dot)contact(dot)bg> - various patches
 Ondrej Donek <ondrejd(at)gmail(dot)com> - Support for creating PHP classes with the classbuilder plugin
 Daniel Marjamaki <danielm77(at)spray(dot)se> - Small improvements
-Jiří Techet <techet(at)gmail(dot)com> - Fix switch to last used tab ordering bug
+Jiří Techet <techet(at)gmail(dot)com> - Various patches
+Erik de Castro Lopo <mle+tools(at)mega-nerd(dot)com> - Various patches
 
 Translators:
 ------------
