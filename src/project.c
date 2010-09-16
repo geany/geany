@@ -191,6 +191,9 @@ void project_new(void)
 	{
 		if (update_config(e))
 		{
+			write_config(TRUE);
+			ui_set_statusbar(TRUE, _("Project \"%s\" created."), app->project->name);
+
 			ui_add_recent_project_file(app->project->file_name);
 			break;
 		}
@@ -563,6 +566,7 @@ static void show_project_properties(gboolean show_build)
 	}
 #endif
 
+	g_signal_emit_by_name(geany_object, "project-dialog-create", e->notebook);
 	gtk_widget_show_all(e->dialog);
 
 	/* note: notebook page must be shown before setting current page */
@@ -575,6 +579,9 @@ static void show_project_properties(gboolean show_build)
 	{
 		if (update_config(e))
 		{
+			g_signal_emit_by_name(geany_object, "project-dialog-confirmed", e->notebook);
+			write_config(TRUE);
+			ui_set_statusbar(TRUE, _("Project \"%s\" saved."), app->project->name);
 			stash_group_update(indent_group, e->dialog);
 			break;
 		}
@@ -791,11 +798,6 @@ static gboolean update_config(const PropertyDialogElements *e)
 		g_free(tmp);
 #endif
 	}
-	write_config(TRUE);
-	if (new_project)
-		ui_set_statusbar(TRUE, _("Project \"%s\" created."), p->name);
-	else
-		ui_set_statusbar(TRUE, _("Project \"%s\" saved."), p->name);
 
 	update_ui();
 

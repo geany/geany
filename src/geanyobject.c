@@ -262,6 +262,24 @@ static void create_signals(GObjectClass *g_object_class)
 		NULL, NULL,
 		g_cclosure_marshal_VOID__VOID,
 		G_TYPE_NONE, 0);
+	geany_object_signals[GCB_PROJECT_DIALOG_CREATE] = g_signal_new (
+		"project-dialog-create",
+		G_OBJECT_CLASS_TYPE (g_object_class),
+		G_SIGNAL_RUN_FIRST,
+		G_STRUCT_OFFSET (GeanyObjectClass, project_dialog_create),
+		NULL, NULL,
+		g_cclosure_marshal_VOID__POINTER,
+		G_TYPE_NONE, 1,
+		G_TYPE_POINTER);
+	geany_object_signals[GCB_PROJECT_DIALOG_CONFIRMED] = g_signal_new (
+		"project-dialog-confirmed",
+		G_OBJECT_CLASS_TYPE (g_object_class),
+		G_SIGNAL_RUN_FIRST,
+		G_STRUCT_OFFSET (GeanyObjectClass, project_dialog_confirmed),
+		NULL, NULL,
+		g_cclosure_marshal_VOID__POINTER,
+		G_TYPE_NONE, 1,
+		G_TYPE_POINTER);
 
 	/* Editor signals */
 	geany_object_signals[GCB_UPDATE_EDITOR_MENU] = g_signal_new (

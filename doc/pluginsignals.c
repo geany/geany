@@ -160,6 +160,26 @@ signal void (*project_save)(GObject *obj, GKeyFile *config, gpointer user_data);
  */
 signal void (*project_close)(GObject *obj, gpointer user_data);
 
+/** Sent after a project dialog is created but before it is displayed. Plugins
+ *  can append their own project settings tabs by using this signal.
+ *  @param obj a GeanyObject instance, should be ignored.
+ *  @param notebook a GtkNotebook instance that can be used by plugins to append their
+ *  settings tabs.
+ *  @param user_data user data.
+ */
+signal void (*project_dialog_create)(GObject *obj, GtkWidget *notebook, gpointer user_data);
+
+/** Sent when the settings dialog is confirmed by the user. Plugins can use
+ *  this signal to read the settings widgets previously added by using the
+ *  @c project-dialog-create signal.
+ *  @warning The dialog will still be running afterwards if the user chose 'Apply'.
+ *  @param obj a GeanyObject instance, should be ignored.
+ *  @param notebook a GtkNotebook instance that can be used by plugins to read their
+ *  settings widgets.
+ *  @param user_data user data.
+ */
+signal void (*project_dialog_confirmed)(GObject *obj, GtkWidget *notebook, gpointer user_data);
+
 /** Sent once Geany has finished all initialization and startup tasks and the GUI has been
  *  realized. This signal is the very last step in the startup process and is sent once
  *  the GTK main event loop has been entered.
