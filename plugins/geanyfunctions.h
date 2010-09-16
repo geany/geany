@@ -296,6 +296,8 @@
 	geany_functions->p_msgwin->msgwin_clear_tab
 #define msgwin_switch_tab \
 	geany_functions->p_msgwin->msgwin_switch_tab
+#define msgwin_set_messages_dir \
+	geany_functions->p_msgwin->msgwin_set_messages_dir
 #define encodings_convert_to_utf8 \
 	geany_functions->p_encodings->encodings_convert_to_utf8
 #define encodings_convert_to_utf8_from_charset \

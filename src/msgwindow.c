@@ -86,6 +86,16 @@ void msgwin_show_hide_tabs(void)
 }
 
 
+/** Sets the Messages path for opening any parsed filenames without absolute path
+ * from message lines.
+ * @param messages_dir The directory. **/
+void msgwin_set_messages_dir(const gchar *messages_dir)
+{
+	g_free(msgwindow.messages_dir);
+	msgwindow.messages_dir = g_strdup(messages_dir);
+}
+
+
 void msgwin_init(void)
 {
 	msgwindow.notebook = ui_lookup_widget(main_widgets.window, "notebook_info");
@@ -93,7 +103,7 @@ void msgwin_init(void)
 	msgwindow.tree_msg = ui_lookup_widget(main_widgets.window, "treeview4");
 	msgwindow.tree_compiler = ui_lookup_widget(main_widgets.window, "treeview5");
 	msgwindow.scribble = ui_lookup_widget(main_widgets.window, "textview_scribble");
-	msgwindow.find_in_files_dir = NULL;
+	msgwindow.messages_dir = NULL;
 
 	prepare_status_tree_view();
 	prepare_msg_tree_view();
@@ -109,7 +119,7 @@ void msgwin_init(void)
 
 void msgwin_finalize(void)
 {
-	g_free(msgwindow.find_in_files_dir);
+	g_free(msgwindow.messages_dir);
 }
 
 
@@ -1058,8 +1068,8 @@ static void msgwin_parse_grep_line(const gchar *string, gchar **filename, gint *
 	parse_file_line(&data, filename, line);
 
 	/* FIF dir should be set, but a plugin might not have set it */
-	if (msgwindow.find_in_files_dir != NULL)
-		make_absolute(filename, msgwindow.find_in_files_dir);
+	if (msgwindow.messages_dir != NULL)
+		make_absolute(filename, msgwindow.messages_dir);
 }
 
 

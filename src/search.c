@@ -1478,8 +1478,7 @@ search_find_in_files(const gchar *utf8_search_text, const gchar *dir, const gcha
 
 		ui_progress_bar_start(_("Searching..."));
 
-		g_free(msgwindow.find_in_files_dir);
-		msgwindow.find_in_files_dir = g_strdup(dir);
+		msgwin_set_messages_dir(dir);
 		/* we can pass 'enc' without strdup'ing it here because it's a global const string and
 		 * always exits longer than the lifetime of this function */
 		utils_set_up_io_channel(stdout_fd, G_IO_IN | G_IO_PRI | G_IO_ERR | G_IO_HUP | G_IO_NVAL,

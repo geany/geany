@@ -259,7 +259,8 @@ static MsgWinFuncs msgwin_funcs = {
 	&msgwin_compiler_add,
 	&msgwin_msg_add,
 	&msgwin_clear_tab,
-	&msgwin_switch_tab
+	&msgwin_switch_tab,
+	&msgwin_set_messages_dir
 };
 
 static EncodingFuncs encoding_funcs = {

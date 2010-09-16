@@ -1,11 +1,5 @@
-2010-09-15  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+2010-09-16  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
- * src/keyfile.c:
-   Save document indent width with the session.
- * src/ui_utils.h, src/socket.c, src/ui_utils.c, doc/geany.txt,
-   doc/geany.html, TODO:
-   Use a separate socket per workspace on X (patch by Erik de Castro
-   Lopo, thanks).
  * src/callbacks.c:
    Prompt for reloading if the document has an undo stack to avoid
    losing undo ability on accidental reloading (patch by Colomban
@@ -17,6 +11,19 @@
    notebook tab (patch by Jiří Techet, thanks).
  * src/ui_utils.h, src/plugindata.h, src/main.c:
    Add main_widgets.project_menu to API (patch by Jiří Techet, thanks).
+ * src/plugindata.h, src/msgwindow.c, src/msgwindow.h, src/search.c,
+   src/plugins.c, plugins/geanyfunctions.h:
+   Add msgwin_set_messages_dir() to API (patch by Jiří Techet, thanks).
+
+
+2010-09-15  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/keyfile.c:
+   Save document indent width with the session.
+ * src/ui_utils.h, src/socket.c, src/ui_utils.c, doc/geany.txt,
+   doc/geany.html, TODO:
+   Use a separate socket per workspace on X (patch by Erik de Castro
+   Lopo, thanks).
 
 
 2010-09-14  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
