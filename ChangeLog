@@ -15,6 +15,8 @@
    Add plugin signals project-dialog-create and
    project-dialog-confirmed so plugins can append a Project Properties
    notebook tab (patch by Jiří Techet, thanks).
+ * src/ui_utils.h, src/plugindata.h, src/main.c:
+   Add main_widgets.project_menu to API (patch by Jiří Techet, thanks).
 
 
 2010-09-14  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

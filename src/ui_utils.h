@@ -79,6 +79,8 @@ typedef struct GeanyMainWidgets
 	 * See ui_progress_bar_start() for details. */
 	GtkWidget	*progressbar;
 	GtkWidget	*message_window_notebook; /**< Message Window notebook. */
+	/** Plugins modifying the project can add their items to the Project menu. */
+	GtkWidget	*project_menu;
 }
 GeanyMainWidgets;
 
