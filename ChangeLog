@@ -6,6 +6,10 @@
    doc/geany.html, TODO:
    Use a separate socket per workspace on X (patch by Erik de Castro
    Lopo, thanks).
+ * src/callbacks.c:
+   Prompt for reloading if the document has an undo stack to avoid
+   losing undo ability on accidental reloading (patch by Colomban
+   Wendling, thanks).
 
 
 2010-09-14  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

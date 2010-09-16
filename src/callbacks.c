@@ -485,7 +485,8 @@ on_reload_as_activate                  (GtkMenuItem     *menuitem,
 		charset = doc->encoding;
 
 	base_name = g_path_get_basename(doc->file_name);
-	if (!doc->changed ||
+	/* don't prompt if file hasn't been edited at all */
+	if ((!doc->changed && !document_can_undo(doc) && !document_can_redo(doc)) ||
 		dialogs_show_question_full(NULL, _("_Reload"), GTK_STOCK_CANCEL,
 		_("Any unsaved changes will be lost."),
 		_("Are you sure you want to reload '%s'?"), base_name))
