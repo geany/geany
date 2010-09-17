@@ -382,7 +382,8 @@ geany_data_init(void)
 		&build_info,
 		filetypes_by_title
 	};
-	memcpy(&geany_data, &gd, sizeof(GeanyData));
+
+	geany_data = gd;
 }
 
 
