@@ -1,7 +1,8 @@
 2010-09-17  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * de.po: Minor update of German translation.
-
+ * geany.pot: Remove file from version control as its an generated file. 
+ 
 
 2010-08-25  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
