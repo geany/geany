@@ -1,3 +1,9 @@
+2010-09-20  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/ui_utils.c:
+   Refactor shared submenu code with GeanySharedMenu array.
+
+
 2010-09-16  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/callbacks.c:

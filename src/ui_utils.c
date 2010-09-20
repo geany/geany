@@ -1993,29 +1993,42 @@ static void ui_menu_move(GtkWidget *menu, GtkWidget *old, GtkWidget *new)
 }
 
 
-static void on_editor_menu_show(GtkWidget *item)
+typedef struct GeanySharedMenu
 {
-	GtkWidget *popup = ui_lookup_widget(main_widgets.editor_menu, "commands1");
-	GtkWidget *bar = ui_lookup_widget(main_widgets.window, "commands2");
+	GtkWidget *menu;
+	gchar *menubar_item;
+	gchar *popup_item;
+}
+GeanySharedMenu;
 
-	ui_menu_move(widgets.commands_menu, bar, popup);
+#define foreach_menu(item, array) \
+	for (item = array; item->menu; item++)
 
-	popup = ui_lookup_widget(main_widgets.editor_menu, "menu_format2");
-	bar = ui_lookup_widget(main_widgets.window, "menu_format1");
-	ui_menu_move(widgets.format_menu, bar, popup);
+static void on_editor_menu_show(GtkWidget *widget, GeanySharedMenu *items)
+{
+	GeanySharedMenu *item;
+
+	foreach_menu(item, items)
+	{
+		GtkWidget *popup = ui_lookup_widget(main_widgets.editor_menu, item->popup_item);
+		GtkWidget *bar = ui_lookup_widget(main_widgets.window, item->menubar_item);
+
+		ui_menu_move(item->menu, bar, popup);
+	}
 }
 
 
-static void on_editor_menu_hide(GtkWidget *item)
+static void on_editor_menu_hide(GtkWidget *widget, GeanySharedMenu *items)
 {
-	GtkWidget *popup = ui_lookup_widget(main_widgets.editor_menu, "commands1");
-	GtkWidget *bar = ui_lookup_widget(main_widgets.window, "commands2");
+	GeanySharedMenu *item;
 
-	ui_menu_move(widgets.commands_menu, popup, bar);
+	foreach_menu(item, items)
+	{
+		GtkWidget *popup = ui_lookup_widget(main_widgets.editor_menu, item->popup_item);
+		GtkWidget *bar = ui_lookup_widget(main_widgets.window, item->menubar_item);
 
-	popup = ui_lookup_widget(main_widgets.editor_menu, "menu_format2");
-	bar = ui_lookup_widget(main_widgets.window, "menu_format1");
-	ui_menu_move(widgets.format_menu, popup, bar);
+		ui_menu_move(item->menu, popup, bar);
+	}
 }
 
 
@@ -2076,10 +2089,19 @@ void ui_init(void)
 	item = ui_lookup_widget(main_widgets.window, "commands2");
 	widgets.commands_menu = gtk_menu_item_get_submenu(GTK_MENU_ITEM(item));
 
-	/* reparent edit submenus as needed */
-	item = main_widgets.editor_menu;
-	g_signal_connect(item, "show", G_CALLBACK(on_editor_menu_show), NULL);
-	g_signal_connect(item, "hide", G_CALLBACK(on_editor_menu_hide), NULL);
+	/* reparent context submenus as needed */
+	{
+		GeanySharedMenu arr[] = {
+			{widgets.commands_menu, "commands2", "commands1"},
+			{widgets.format_menu, "menu_format1", "menu_format2"},
+			{NULL, NULL, NULL}
+		};
+		static GeanySharedMenu items[G_N_ELEMENTS(arr)];
+
+		memcpy(items, arr, sizeof(arr));
+		g_signal_connect(main_widgets.editor_menu, "show", G_CALLBACK(on_editor_menu_show), items);
+		g_signal_connect(main_widgets.editor_menu, "hide", G_CALLBACK(on_editor_menu_hide), items);
+	}
 
 	ui_init_toolbar_widgets();
 	init_document_widgets();
