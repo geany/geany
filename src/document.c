@@ -608,6 +608,13 @@ gboolean document_close(GeanyDocument *doc)
 }
 
 
+static gboolean on_idle_new_doc(gpointer user_data)
+{
+	document_new_file_if_non_open();
+	return FALSE;
+}
+
+
 /**
  *  Removes the given notebook tab at @a page_num and clears all related information
  *  in the document list.
@@ -677,6 +684,7 @@ gboolean document_remove_page(guint page_num)
 		ui_document_buttons_update();
 		build_menu_update(NULL);
 	}
+	g_idle_add(on_idle_new_doc, NULL);
 	return TRUE;
 }
 
