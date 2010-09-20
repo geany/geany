@@ -83,8 +83,6 @@ static struct
 	GtkWidget	*undo_items[3];
 	GtkWidget	*save_buttons[4];
 	GtkWidget	*config_files_menu;
-	GtkWidget	*commands_menu;
-	GtkWidget	*format_menu;
 }
 widgets;
 
@@ -1995,7 +1993,7 @@ static void ui_menu_move(GtkWidget *menu, GtkWidget *old, GtkWidget *new)
 
 typedef struct GeanySharedMenu
 {
-	GtkWidget *menu;
+	gchar *menu;
 	gchar *menubar_item;
 	gchar *popup_item;
 }
@@ -2012,8 +2010,9 @@ static void on_editor_menu_show(GtkWidget *widget, GeanySharedMenu *items)
 	{
 		GtkWidget *popup = ui_lookup_widget(main_widgets.editor_menu, item->popup_item);
 		GtkWidget *bar = ui_lookup_widget(main_widgets.window, item->menubar_item);
+		GtkWidget *menu = ui_lookup_widget(main_widgets.window, item->menu);
 
-		ui_menu_move(item->menu, bar, popup);
+		ui_menu_move(menu, bar, popup);
 	}
 }
 
@@ -2026,8 +2025,9 @@ static void on_editor_menu_hide(GtkWidget *widget, GeanySharedMenu *items)
 	{
 		GtkWidget *popup = ui_lookup_widget(main_widgets.editor_menu, item->popup_item);
 		GtkWidget *bar = ui_lookup_widget(main_widgets.window, item->menubar_item);
+		GtkWidget *menu = ui_lookup_widget(main_widgets.window, item->menu);
 
-		ui_menu_move(item->menu, popup, bar);
+		ui_menu_move(menu, popup, bar);
 	}
 }
 
@@ -2055,8 +2055,6 @@ void ui_init_prefs(void)
 
 void ui_init(void)
 {
-	GtkWidget *item;
-
 	init_recent_files();
 
 	ui_widgets.statusbar = ui_lookup_widget(main_widgets.window, "statusbar");
@@ -2084,16 +2082,11 @@ void ui_init(void)
 	widgets.undo_items[0] = ui_lookup_widget(main_widgets.editor_menu, "undo1");
 	widgets.undo_items[1] = ui_lookup_widget(main_widgets.window, "menu_undo2");
 
-	item = ui_lookup_widget(main_widgets.window, "menu_format1");
-	widgets.format_menu = gtk_menu_item_get_submenu(GTK_MENU_ITEM(item));
-	item = ui_lookup_widget(main_widgets.window, "commands2");
-	widgets.commands_menu = gtk_menu_item_get_submenu(GTK_MENU_ITEM(item));
-
 	/* reparent context submenus as needed */
 	{
 		GeanySharedMenu arr[] = {
-			{widgets.commands_menu, "commands2", "commands1"},
-			{widgets.format_menu, "menu_format1", "menu_format2"},
+			{"commands2_menu", "commands2", "commands1"},
+			{"menu_format1_menu", "menu_format1", "menu_format2"},
 			{NULL, NULL, NULL}
 		};
 		static GeanySharedMenu items[G_N_ELEMENTS(arr)];
