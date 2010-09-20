@@ -2,6 +2,9 @@
 
  * src/ui_utils.c:
    Refactor shared submenu code with GeanySharedMenu array.
+ * src/interface.c, src/ui_utils.c, geany.glade:
+   Add Search submenu for Find Selected, Find Usage, Go to Tag items,
+   shared with the editor popup menu.
 
 
 2010-09-16  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
