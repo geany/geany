@@ -10,6 +10,8 @@
    was lost.
  * doc/geany.txt, doc/geany.html:
    Add docs for Find Selection keybindings.
+ * src/interface.c, src/keybindings.c, geany.glade:
+   Unify Find Selection strings.
 
 
 2010-09-20  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

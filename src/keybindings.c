@@ -332,7 +332,7 @@ static void init_default_kb(void)
 
 	keybindings_set_item(group, GEANY_KEYS_FORMAT_TOGGLECASE, NULL,
 		GDK_u, GDK_CONTROL_MASK | GDK_MOD1_MASK, "edit_togglecase",
-		_("Toggle Case of Selection"), LW(menu_toggle_case2));
+		_("T_oggle Case of Selection"), LW(menu_toggle_case2));
 	keybindings_set_item(group, GEANY_KEYS_FORMAT_COMMENTLINETOGGLE, NULL,
 		GDK_e, GDK_CONTROL_MASK, "edit_commentlinetoggle", _("Toggle line commentation"),
 		LW(menu_toggle_line_commentation1));
@@ -392,9 +392,9 @@ static void init_default_kb(void)
 		GDK_g, GDK_CONTROL_MASK | GDK_SHIFT_MASK, "menu_findprevious", _("Find Previous"),
 		LW(find_previous1));
 	keybindings_set_item(group, GEANY_KEYS_SEARCH_FINDNEXTSEL, NULL,
-		0, 0, "menu_findnextsel", _("Find Next Selection"), LW(find_nextsel1));
+		0, 0, "menu_findnextsel", _("Find Next _Selection"), LW(find_nextsel1));
 	keybindings_set_item(group, GEANY_KEYS_SEARCH_FINDPREVSEL, NULL,
-		0, 0, "menu_findprevsel", _("Find Previous Selection"), LW(find_prevsel1));
+		0, 0, "menu_findprevsel", _("Find Pre_vious Selection"), LW(find_prevsel1));
 	keybindings_set_item(group, GEANY_KEYS_SEARCH_REPLACE, NULL,
 		GDK_h, GDK_CONTROL_MASK, "menu_replace", _("Replace"), LW(replace1));
 	keybindings_set_item(group, GEANY_KEYS_SEARCH_FINDINFILES, NULL, GDK_f,
