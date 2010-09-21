@@ -2724,7 +2724,7 @@ configure with a nothing in the label but at least one character in the command.
 Substitutions in Commands and Working Directories
 `````````````````````````````````````````````````
 
-The first occurance of each of the following character sequences in each of the
+The first occurence of each of the following character sequences in each of the
 command and working directory fields is substituted by the items specified below
 before the command is run.
 
@@ -3133,6 +3133,10 @@ Find                            Ctrl-F  (C)               Opens the Find dialog.
 Find Next                       Ctrl-G                    Finds next result.
 
 Find Previous                   Ctrl-Shift-G              Finds previous result.
+
+Find Next Selection                                       Finds next occurence of selected text.
+
+Find Previous Selection                                   Finds previous occurence of selected text.
 
 Replace                         Ctrl-H  (C)               Opens the Replace dialog.
 

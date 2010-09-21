@@ -8,6 +8,8 @@
  * src/search.c:
    Make Find Selected commands repeat the last search if the selection
    was lost.
+ * doc/geany.txt, doc/geany.html:
+   Add docs for Find Selection keybindings.
 
 
 2010-09-20  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
