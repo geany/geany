@@ -341,6 +341,11 @@ void search_find_selection(GeanyDocument *doc, gboolean search_backwards)
 			editor_display_current_line(doc->editor, 0.3F);
 		g_free(s);
 	}
+	else
+	{
+		/* Repeat last search (in case selection was lost) */
+		search_find_again(search_backwards);
+	}
 }
 
 

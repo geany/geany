@@ -5,6 +5,9 @@
    Rename popup editor menu item Commands -> Edit.
  * src/callbacks.c, src/search.c, src/search.h:
    Move find_again() to search.c.
+ * src/search.c:
+   Make Find Selected commands repeat the last search if the selection
+   was lost.
 
 
 2010-09-20  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
