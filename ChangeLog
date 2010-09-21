@@ -1,3 +1,10 @@
+2010-09-21  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/interface.c, geany.glade:
+   Move Go to Marker menu items to Search menu.
+   Rename popup editor menu item Commands -> Edit.
+
+
 2010-09-20  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/ui_utils.c:

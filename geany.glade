@@ -681,30 +681,6 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSeparatorMenuItem" id="separator51">
-				  <property name="visible">True</property>
-				</widget>
-			      </child>
-
-			      <child>
-				<widget class="GtkMenuItem" id="go_to_next_marker1">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">_Go to Next Marker</property>
-				  <property name="use_underline">True</property>
-				  <signal name="activate" handler="on_go_to_next_marker1_activate" last_modification_time="Mon, 26 Oct 2009 17:34:30 GMT"/>
-				</widget>
-			      </child>
-
-			      <child>
-				<widget class="GtkMenuItem" id="go_to_previous_marker1">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">_Go to Previous Marker</property>
-				  <property name="use_underline">True</property>
-				  <signal name="activate" handler="on_go_to_previous_marker1_activate" last_modification_time="Mon, 26 Oct 2009 17:34:30 GMT"/>
-				</widget>
-			      </child>
-
-			      <child>
 				<widget class="GtkSeparatorMenuItem" id="separator52">
 				  <property name="visible">True</property>
 				</widget>
@@ -1054,6 +1030,30 @@
 			      <property name="ypad">0</property>
 			    </widget>
 			  </child>
+			</widget>
+		      </child>
+
+		      <child>
+			<widget class="GtkSeparatorMenuItem" id="separator51">
+			  <property name="visible">True</property>
+			</widget>
+		      </child>
+
+		      <child>
+			<widget class="GtkMenuItem" id="go_to_next_marker1">
+			  <property name="visible">True</property>
+			  <property name="label" translatable="yes">_Go to Next Marker</property>
+			  <property name="use_underline">True</property>
+			  <signal name="activate" handler="on_go_to_next_marker1_activate" last_modification_time="Mon, 26 Oct 2009 17:34:30 GMT"/>
+			</widget>
+		      </child>
+
+		      <child>
+			<widget class="GtkMenuItem" id="go_to_previous_marker1">
+			  <property name="visible">True</property>
+			  <property name="label" translatable="yes">_Go to Previous Marker</property>
+			  <property name="use_underline">True</property>
+			  <signal name="activate" handler="on_go_to_previous_marker1_activate" last_modification_time="Mon, 26 Oct 2009 17:34:30 GMT"/>
 			</widget>
 		      </child>
 
@@ -2623,7 +2623,7 @@
       <signal name="activate" handler="on_menu_open_selected_file1_activate" last_modification_time="Wed, 24 Jan 2007 18:48:44 GMT"/>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image3602">
+	<widget class="GtkImage" id="image3617">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-open</property>
 	  <property name="icon_size">1</property>
@@ -2643,17 +2643,17 @@
   </child>
 
   <child>
-    <widget class="GtkMenuItem" id="menu_format2">
+    <widget class="GtkMenuItem" id="commands1">
       <property name="visible">True</property>
-      <property name="label" translatable="yes">_Format</property>
+      <property name="label" translatable="yes">_Edit</property>
       <property name="use_underline">True</property>
     </widget>
   </child>
 
   <child>
-    <widget class="GtkMenuItem" id="commands1">
+    <widget class="GtkMenuItem" id="menu_format2">
       <property name="visible">True</property>
-      <property name="label" translatable="yes">_Commands</property>
+      <property name="label" translatable="yes">_Format</property>
       <property name="use_underline">True</property>
     </widget>
   </child>
@@ -2679,7 +2679,7 @@
       <property name="use_underline">True</property>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image3603">
+	<widget class="GtkImage" id="image3618">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-add</property>
 	  <property name="icon_size">1</property>
@@ -2758,7 +2758,7 @@
       <property name="use_underline">True</property>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image3604">
+	<widget class="GtkImage" id="image3619">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-add</property>
 	  <property name="icon_size">1</property>
@@ -2790,7 +2790,7 @@
       <property name="use_underline">True</property>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image3605">
+	<widget class="GtkImage" id="image3620">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-add</property>
 	  <property name="icon_size">1</property>
@@ -2829,7 +2829,7 @@
       <signal name="activate" handler="on_find_usage1_activate" last_modification_time="Fri, 27 May 2005 21:55:12 GMT"/>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image3606">
+	<widget class="GtkImage" id="image3621">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-find</property>
 	  <property name="icon_size">1</property>
@@ -2850,7 +2850,7 @@
       <signal name="activate" handler="on_goto_tag_definition1" last_modification_time="Thu, 09 Sep 2010 11:30:52 GMT"/>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image3607">
+	<widget class="GtkImage" id="image3622">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-jump-to</property>
 	  <property name="icon_size">1</property>
