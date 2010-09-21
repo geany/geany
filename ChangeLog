@@ -12,6 +12,12 @@
    Add docs for Find Selection keybindings.
  * src/interface.c, src/keybindings.c, geany.glade:
    Unify Find Selection strings.
+ * src/interface.c, src/ui_utils.c, geany.glade:
+   Group editor popup Insert commands in a submenu, with extra items
+   for the most commonly used Insert Comments commands.
+   Show Edit->Commands before Format in menubar Edit menu (to match
+   keybindings order).
+   Show Open Selected F_ile popup item below submenus.
 
 
 2010-09-20  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
