@@ -75,6 +75,8 @@ gint search_find_next(struct _ScintillaObject *sci, const gchar *str, gint flags
 
 gint search_find_text(struct _ScintillaObject *sci, gint flags, struct Sci_TextToFind *ttf);
 
+void search_find_again(gboolean change_direction);
+
 void search_find_usage(const gchar *search_text, gint flags, gboolean in_session);
 
 void search_find_selection(GeanyDocument *doc, gboolean search_backwards);

@@ -3,6 +3,8 @@
  * src/interface.c, geany.glade:
    Move Go to Marker menu items to Search menu.
    Rename popup editor menu item Commands -> Edit.
+ * src/callbacks.c, src/search.c, src/search.h:
+   Move find_again() to search.c.
 
 
 2010-09-20  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

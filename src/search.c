@@ -42,6 +42,7 @@
 #include "project.h"
 #include "keyfile.h"
 #include "stash.h"
+#include "toolbar.h"
 
 #include <unistd.h>
 #include <string.h>
@@ -1940,6 +1941,28 @@ guint search_replace_range(ScintillaObject *sci, struct Sci_TextToFind *ttf,
 		}
 	}
 	return count;
+}
+
+
+void search_find_again(gboolean change_direction)
+{
+	GeanyDocument *doc = document_get_current();
+
+	g_return_if_fail(doc != NULL);
+
+	if (search_data.text)
+	{
+		gboolean forward = ! search_data.backwards;
+		gint result = document_find_text(doc, search_data.text, search_data.flags,
+			change_direction ? forward : !forward, FALSE, NULL);
+
+		if (result > -1)
+			editor_display_current_line(doc->editor, 0.3F);
+
+		if (search_data.search_bar)
+			ui_set_search_entry_background(
+				toolbar_get_widget_child_by_name("SearchEntry"), (result > -1));
+	}
 }
 
 

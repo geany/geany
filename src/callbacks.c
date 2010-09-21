@@ -1118,33 +1118,11 @@ on_find1_activate                      (GtkMenuItem     *menuitem,
 }
 
 
-static void find_again(gboolean change_direction)
-{
-	GeanyDocument *doc = document_get_current();
-
-	g_return_if_fail(doc != NULL);
-
-	if (search_data.text)
-	{
-		gboolean forward = ! search_data.backwards;
-		gint result = document_find_text(doc, search_data.text, search_data.flags,
-			change_direction ? forward : !forward, FALSE, NULL);
-
-		if (result > -1)
-			editor_display_current_line(doc->editor, 0.3F);
-
-		if (search_data.search_bar)
-			ui_set_search_entry_background(
-				toolbar_get_widget_child_by_name("SearchEntry"), (result > -1));
-	}
-}
-
-
 void
 on_find_next1_activate                 (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	find_again(FALSE);
+	search_find_again(FALSE);
 }
 
 
@@ -1156,7 +1134,7 @@ on_find_previous1_activate             (GtkMenuItem     *menuitem,
 		/* Can't reverse search order for a regex (find next ignores search backwards) */
 		utils_beep();
 	else
-		find_again(TRUE);
+		search_find_again(TRUE);
 }
 
 
