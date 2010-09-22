@@ -25,7 +25,7 @@
 #define GEANY_UI_UTILS_H 1
 
 /** Sets a name to lookup @a widget from @a owner.
- * @param owner Usually a @c GtkWindow.
+ * @param owner Usually a window, dialog or popup menu.
  * @param widget Widget.
  * @param widget_name Name.
  * @see ui_lookup_widget().
