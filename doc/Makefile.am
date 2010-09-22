@@ -3,7 +3,7 @@ DOCDIR = $(DESTDIR)$(docdir)
 IMAGE_FILES = images/*.png
 EXTRA_DIST = geany.html geany.css geany.txt geany.1 \
 	plugins.dox pluginsymbols.c pluginsignals.c \
-	stash-example.c \
+	stash-example.c stash-gui-example.c \
 	$(srcdir)/$(IMAGE_FILES)
 
 pdf: geany.txt

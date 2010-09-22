@@ -4,7 +4,7 @@ gchar *potter_name;
 const gchar filename[] = "/path/data.conf";
 
 /* setup the group */
-group = stash_group_new("cups");
+group = stash_group_new("cup");
 stash_group_add_boolean(group, &china_enabled, "china", TRUE);
 stash_group_add_string(group, &potter_name, "potter_name", "Miss Clay");
 

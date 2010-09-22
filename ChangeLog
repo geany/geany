@@ -1,3 +1,10 @@
+2010-09-22  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/stash.c, doc/Makefile.am, doc/stash-example.c,
+   doc/stash-gui-example.c:
+   Improve Stash GUI example.
+
+
 2010-09-21  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/interface.c, geany.glade:

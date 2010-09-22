@@ -50,30 +50,21 @@
  * property. Macros could be added for common widget properties such as @c GtkExpander:"expanded".
  *
  * @section settings-example Settings Example
+ * Here we have some settings for how to make a cup - whether it should be made of china
+ * and who's going to make it. (Yes, it's a stupid example).
  * @include stash-example.c
  * @note You might want to handle the warning/error conditions differently from above.
  *
  * @section prefs-example GUI Prefs Example
- * For prefs, it's the same as the above example but you add widget prefs instead of e.g.
- * boolean settings.
+ * For prefs, it's the same as the above example but you tell Stash to add widget prefs instead of
+ * just data settings.
  *
  * This example uses lookup strings for widgets as they are more flexible than widget pointers.
- * @code
-gboolean want_handle;
-GtkWidget *parent;
-GtkWidget *my_check_button;
-
-stash_group_add_toggle_button(group, &want_handle, "handle", TRUE, "check_handle");
-...
-gtk_container_add(GTK_CONTAINER(parent), my_check_button);
-ui_hookup_widget(parent, my_check_button, "check_handle");
-...
-stash_group_display(group, parent);
-* @endcode
-* Now let the user manipulate widgets. To synchronize the Stash settings afterwards, call:
-* @code
-stash_group_update(group, parent);
- * @endcode
+ * Code to load and save the settings is omitted - see the first example instead.
+ *
+ * Here we show a dialog with a toggle button for whether the cup should have a handle.
+ * @include stash-gui-example.c
+ * @note This example should also work for other widget containers besides dialogs, e.g. popup menus.
  */
 
 /* Implementation Note
@@ -86,9 +77,9 @@ stash_group_update(group, parent);
  *
  * Usually the prefs code isn't what user code will spend most of its time doing, so this
  * should be efficient enough. But, if desired we could add a stash_group_set_size() function
- * to reduce reallocation.
+ * to reduce reallocation (or perhaps use a different container).
  *
- * TODO: Maybe using GSlice chunks with an extra 'next' pointer would be more (memory) efficient.
+ * Note: Maybe using GSlice chunks with an extra 'next' pointer would be more efficient.
  */
 
 
