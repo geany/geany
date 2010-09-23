@@ -2626,6 +2626,26 @@
 	<widget class="GtkMenu" id="insert1_menu">
 
 	  <child>
+	    <widget class="GtkImageMenuItem" id="comments">
+	      <property name="visible">True</property>
+	      <property name="label" translatable="yes">I_nsert Comments</property>
+	      <property name="use_underline">True</property>
+
+	      <child internal-child="image">
+		<widget class="GtkImage" id="image3732">
+		  <property name="visible">True</property>
+		  <property name="stock">gtk-add</property>
+		  <property name="icon_size">1</property>
+		  <property name="xalign">0.5</property>
+		  <property name="yalign">0.5</property>
+		  <property name="xpad">0</property>
+		  <property name="ypad">0</property>
+		</widget>
+	      </child>
+	    </widget>
+	  </child>
+
+	  <child>
 	    <widget class="GtkMenuItem" id="add_changelog_entry2">
 	      <property name="visible">True</property>
 	      <property name="label" translatable="yes">Insert _ChangeLog Entry</property>
@@ -2649,26 +2669,6 @@
 	      <property name="label" translatable="yes">Insert _Multiline Comment</property>
 	      <property name="use_underline">True</property>
 	      <signal name="activate" handler="on_comments_multiline_activate" last_modification_time="Sat, 01 Oct 2005 17:28:26 GMT"/>
-	    </widget>
-	  </child>
-
-	  <child>
-	    <widget class="GtkImageMenuItem" id="comments">
-	      <property name="visible">True</property>
-	      <property name="label" translatable="yes">I_nsert Comments</property>
-	      <property name="use_underline">True</property>
-
-	      <child internal-child="image">
-		<widget class="GtkImage" id="image3732">
-		  <property name="visible">True</property>
-		  <property name="stock">gtk-add</property>
-		  <property name="icon_size">1</property>
-		  <property name="xalign">0.5</property>
-		  <property name="yalign">0.5</property>
-		  <property name="xpad">0</property>
-		  <property name="ypad">0</property>
-		</widget>
-	      </child>
 	    </widget>
 	  </child>
 

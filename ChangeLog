@@ -12,6 +12,8 @@
  * src/interface.c, src/keybindings.c, geany.glade:
    Move 'Edit->Commands->Insert Alternative White Space' to editor popup
    Insert menu.
+ * src/interface.c, geany.glade:
+   Move editor popup menu Insert Comments submenu to top of Insert menu.
 
 
 2010-09-22  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

@@ -2104,11 +2104,11 @@ create_edit_menu1 (void)
   GtkWidget *menu_format2;
   GtkWidget *insert1;
   GtkWidget *insert1_menu;
+  GtkWidget *comments;
+  GtkWidget *image3732;
   GtkWidget *add_changelog_entry2;
   GtkWidget *insert_function_description1;
   GtkWidget *insert_multiline_comment1;
-  GtkWidget *comments;
-  GtkWidget *image3732;
   GtkWidget *separator57;
   GtkWidget *insert_date2;
   GtkWidget *image3733;
@@ -2193,6 +2193,14 @@ create_edit_menu1 (void)
   insert1_menu = gtk_menu_new ();
   gtk_menu_item_set_submenu (GTK_MENU_ITEM (insert1), insert1_menu);
 
+  comments = gtk_image_menu_item_new_with_mnemonic (_("I_nsert Comments"));
+  gtk_widget_show (comments);
+  gtk_container_add (GTK_CONTAINER (insert1_menu), comments);
+
+  image3732 = gtk_image_new_from_stock ("gtk-add", GTK_ICON_SIZE_MENU);
+  gtk_widget_show (image3732);
+  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (comments), image3732);
+
   add_changelog_entry2 = gtk_menu_item_new_with_mnemonic (_("Insert _ChangeLog Entry"));
   gtk_widget_show (add_changelog_entry2);
   gtk_container_add (GTK_CONTAINER (insert1_menu), add_changelog_entry2);
@@ -2204,14 +2212,6 @@ create_edit_menu1 (void)
   insert_multiline_comment1 = gtk_menu_item_new_with_mnemonic (_("Insert _Multiline Comment"));
   gtk_widget_show (insert_multiline_comment1);
   gtk_container_add (GTK_CONTAINER (insert1_menu), insert_multiline_comment1);
-
-  comments = gtk_image_menu_item_new_with_mnemonic (_("I_nsert Comments"));
-  gtk_widget_show (comments);
-  gtk_container_add (GTK_CONTAINER (insert1_menu), comments);
-
-  image3732 = gtk_image_new_from_stock ("gtk-add", GTK_ICON_SIZE_MENU);
-  gtk_widget_show (image3732);
-  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (comments), image3732);
 
   separator57 = gtk_separator_menu_item_new ();
   gtk_widget_show (separator57);
@@ -2354,11 +2354,11 @@ create_edit_menu1 (void)
   GLADE_HOOKUP_OBJECT (edit_menu1, menu_format2, "menu_format2");
   GLADE_HOOKUP_OBJECT (edit_menu1, insert1, "insert1");
   GLADE_HOOKUP_OBJECT (edit_menu1, insert1_menu, "insert1_menu");
+  GLADE_HOOKUP_OBJECT (edit_menu1, comments, "comments");
+  GLADE_HOOKUP_OBJECT (edit_menu1, image3732, "image3732");
   GLADE_HOOKUP_OBJECT (edit_menu1, add_changelog_entry2, "add_changelog_entry2");
   GLADE_HOOKUP_OBJECT (edit_menu1, insert_function_description1, "insert_function_description1");
   GLADE_HOOKUP_OBJECT (edit_menu1, insert_multiline_comment1, "insert_multiline_comment1");
-  GLADE_HOOKUP_OBJECT (edit_menu1, comments, "comments");
-  GLADE_HOOKUP_OBJECT (edit_menu1, image3732, "image3732");
   GLADE_HOOKUP_OBJECT (edit_menu1, separator57, "separator57");
   GLADE_HOOKUP_OBJECT (edit_menu1, insert_date2, "insert_date2");
   GLADE_HOOKUP_OBJECT (edit_menu1, image3733, "image3733");
