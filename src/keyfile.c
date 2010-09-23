@@ -192,6 +192,10 @@ static void init_pref_groups(void)
 	/* for backwards-compatibility */
 	stash_group_add_integer(group, &editor_prefs.indentation->hard_tab_width,
 		"indent_hard_tab_width", 8);
+	stash_group_add_integer(group, (gint*)&search_prefs.find_selection_type,
+		"find_selection_type", GEANY_FIND_SEL_CURRENT_WORD);
+
+	/* Note: Interface-related hidden prefs are in ui_init_prefs() */
 }
 
 

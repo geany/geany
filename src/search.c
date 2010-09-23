@@ -302,27 +302,26 @@ static void setup_find_next(const gchar *text)
 }
 
 
-/* Search for next match of the current "selection"
- * For X11 based systems, this will try to use the system-wide
- * x-selection first. If it doesn't find anything suitable in
- * the x-selection (or if we are on Win32) it will try to use
- * the scintilla selection or current token instead.
+/* Search for next match of the current "selection".
+ * Optionally for X11 based systems, this will try to use the system-wide
+ * x-selection first.
+ * If it doesn't find a suitable search string it will try to use
+ * the current word instead, or just repeat the last search.
  * Search flags are always zero.
  */
 void search_find_selection(GeanyDocument *doc, gboolean search_backwards)
 {
 	gchar *s = NULL;
-#ifdef G_OS_UNIX
-	GtkClipboard *clipboard = gtk_clipboard_get(GDK_SELECTION_PRIMARY);
-#endif
 
 	g_return_if_fail(doc != NULL);
 
 #ifdef G_OS_UNIX
-	s = gtk_clipboard_wait_for_text(clipboard);
-	if (s)
+	if (search_prefs.find_selection_type == GEANY_FIND_SEL_X)
 	{
-		if (strchr(s,'\n') || strchr(s, '\r'))
+		GtkClipboard *clipboard = gtk_clipboard_get(GDK_SELECTION_PRIMARY);
+
+		s = gtk_clipboard_wait_for_text(clipboard);
+		if (s && (strchr(s,'\n') || strchr(s, '\r')))
 		{
 			g_free(s);
 			s = NULL;
@@ -330,8 +329,14 @@ void search_find_selection(GeanyDocument *doc, gboolean search_backwards)
 	}
 #endif
 
-	if (!s)
+	if (!s && sci_has_selection(doc->editor->sci))
+		s = sci_get_selection_contents(doc->editor->sci);
+
+	if (!s && search_prefs.find_selection_type != GEANY_FIND_SEL_AGAIN)
+	{
+		/* get the current word */
 		s = editor_get_default_selection(doc->editor, TRUE, NULL);
+	}
 
 	if (s)
 	{
@@ -341,10 +346,14 @@ void search_find_selection(GeanyDocument *doc, gboolean search_backwards)
 			editor_display_current_line(doc->editor, 0.3F);
 		g_free(s);
 	}
-	else
+	else if (search_prefs.find_selection_type == GEANY_FIND_SEL_AGAIN)
 	{
 		/* Repeat last search (in case selection was lost) */
 		search_find_again(search_backwards);
+	}
+	else
+	{
+		utils_beep();
 	}
 }
 

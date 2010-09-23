@@ -45,12 +45,20 @@ GeanySearchData;
 extern GeanySearchData search_data;
 
 
+enum GeanyFindSelOptions
+{
+	GEANY_FIND_SEL_CURRENT_WORD,
+	GEANY_FIND_SEL_X,
+	GEANY_FIND_SEL_AGAIN
+};
+
 /** Search preferences */
 typedef struct GeanySearchPrefs
 {
 	gboolean	suppress_dialogs;
 	gboolean	use_current_word;		/**< Use current word for default search text */
 	gboolean	use_current_file_dir;	/* find in files directory to use on showing dialog */
+	enum GeanyFindSelOptions find_selection_type;
 }
 GeanySearchPrefs;
 

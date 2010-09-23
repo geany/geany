@@ -1,3 +1,14 @@
+2010-09-23  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/keyfile.c, src/search.c, src/search.h, doc/geany.txt,
+   doc/geany.html:
+   Add hidden pref 'find_selection_type' with option to repeat last
+   search when there's no selection.
+   Change default Find Selection behaviour to not let the X selection
+   override the current word (can be confusing).
+   Add docs for Find Selection commands.
+
+
 2010-09-22  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/stash.c, doc/Makefile.am, doc/stash-example.c,

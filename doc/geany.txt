@@ -1104,6 +1104,7 @@ This section describes search-related commands from the Search menu
 and the editor window's popup menu:
 
 * Find
+* Find selection
 * Find usage
 * Find in files
 * Replace
@@ -1191,6 +1192,22 @@ etc subdirectory of your Geany installation on Windows)::
 Please note the addition of ":highest" in the last line which sets the priority
 of this style to the highest available. Otherwise, the style is ignored
 for the search dialogs.
+
+
+Find selection
+^^^^^^^^^^^^^^
+The *Find Next/Previous Selection* commands perform a search for the
+current selected text. If nothing is selected, by default the current
+word is used instead. This can be customized by the
+*find_selection_type* hidden pref - see `Hidden preferences`_.
+
+=====   =============================================
+Value   *find_selection_type* behaviour
+=====   =============================================
+0       Use the current word (default).
+1       Try the X selection first, then current word.
+2       Repeat last search.
+=====   =============================================
 
 
 Find usage
@@ -4106,6 +4123,8 @@ use_safe_file_saving              Defines the mode how Geany saves files to    f
                                   break things seriously.
                                   The better approach would be to ensure your
                                   disk won't run out of free space.
+**Search related**
+find_selection_type               See `Find selection`_.                       0
 **Build Menu related**
 number_ft_menu_items              The maximum number of menu items in the      2
                                   filetype section of the Build menu.
