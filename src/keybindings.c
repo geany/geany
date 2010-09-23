@@ -371,8 +371,7 @@ static void init_default_kb(void)
 		GDK_d, GDK_SHIFT_MASK | GDK_MOD1_MASK, "menu_insert_date", _("Insert date"),
 		LW(insert_date_custom1));
 	keybindings_set_item(group, GEANY_KEYS_INSERT_ALTWHITESPACE, NULL,
-		0, 0, "edit_insertwhitespace", _("_Insert Alternative White Space"),
-		LW(insert_alternative_white_space1));
+		0, 0, "edit_insertwhitespace", _("_Insert Alternative White Space"), NULL);
 
 	group = ADD_KB_GROUP(SETTINGS, _("Settings"), NULL);
 
@@ -721,6 +720,7 @@ static void add_popup_menu_accels(void)
 
 	group = g_ptr_array_index(keybinding_groups, GEANY_KEY_GROUP_INSERT);
 	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_INSERT_DATE, insert_date_custom2);
+	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_INSERT_ALTWHITESPACE, insert_alternative_white_space1);
 
 	group = g_ptr_array_index(keybinding_groups, GEANY_KEY_GROUP_FILE);
 	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_FILE_OPENSELECTED, menu_open_selected_file2);

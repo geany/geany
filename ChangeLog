@@ -9,6 +9,9 @@
    Add docs for Find Selection commands.
  * src/document.c:
    Fix segfault on idle callback when quitting.
+ * src/interface.c, src/keybindings.c, geany.glade:
+   Move 'Edit->Commands->Insert Alternative White Space' to editor popup
+   Insert menu.
 
 
 2010-09-22  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

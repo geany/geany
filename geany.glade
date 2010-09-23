@@ -510,21 +510,6 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSeparatorMenuItem" id="separator50">
-				  <property name="visible">True</property>
-				</widget>
-			      </child>
-
-			      <child>
-				<widget class="GtkMenuItem" id="insert_alternative_white_space1">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">_Insert Alternative White Space</property>
-				  <property name="use_underline">True</property>
-				  <signal name="activate" handler="on_insert_alternative_white_space1_activate" last_modification_time="Mon, 26 Oct 2009 17:34:30 GMT"/>
-				</widget>
-			      </child>
-
-			      <child>
 				<widget class="GtkSeparatorMenuItem" id="separator52">
 				  <property name="visible">True</property>
 				</widget>
@@ -2754,6 +2739,21 @@
 		  </child>
 		</widget>
 	      </child>
+	    </widget>
+	  </child>
+
+	  <child>
+	    <widget class="GtkSeparatorMenuItem" id="separator50">
+	      <property name="visible">True</property>
+	    </widget>
+	  </child>
+
+	  <child>
+	    <widget class="GtkMenuItem" id="insert_alternative_white_space1">
+	      <property name="visible">True</property>
+	      <property name="label" translatable="yes">_Insert Alternative White Space</property>
+	      <property name="use_underline">True</property>
+	      <signal name="activate" handler="on_insert_alternative_white_space1_activate" last_modification_time="Mon, 26 Oct 2009 17:34:30 GMT"/>
 	    </widget>
 	  </child>
 	</widget>

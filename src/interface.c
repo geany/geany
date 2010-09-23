@@ -90,8 +90,6 @@ create_window1 (void)
   GtkWidget *separator49;
   GtkWidget *select_current_line_s_1;
   GtkWidget *select_current_paragraph1;
-  GtkWidget *separator50;
-  GtkWidget *insert_alternative_white_space1;
   GtkWidget *separator52;
   GtkWidget *send_selection_to_vte1;
   GtkWidget *menu_format1;
@@ -542,15 +540,6 @@ create_window1 (void)
   select_current_paragraph1 = gtk_menu_item_new_with_mnemonic (_("_Select Current Paragraph"));
   gtk_widget_show (select_current_paragraph1);
   gtk_container_add (GTK_CONTAINER (commands2_menu), select_current_paragraph1);
-
-  separator50 = gtk_separator_menu_item_new ();
-  gtk_widget_show (separator50);
-  gtk_container_add (GTK_CONTAINER (commands2_menu), separator50);
-  gtk_widget_set_sensitive (separator50, FALSE);
-
-  insert_alternative_white_space1 = gtk_menu_item_new_with_mnemonic (_("_Insert Alternative White Space"));
-  gtk_widget_show (insert_alternative_white_space1);
-  gtk_container_add (GTK_CONTAINER (commands2_menu), insert_alternative_white_space1);
 
   separator52 = gtk_separator_menu_item_new ();
   gtk_widget_show (separator52);
@@ -1495,9 +1484,6 @@ create_window1 (void)
   g_signal_connect ((gpointer) select_current_paragraph1, "activate",
                     G_CALLBACK (on_select_current_paragraph1_activate),
                     NULL);
-  g_signal_connect ((gpointer) insert_alternative_white_space1, "activate",
-                    G_CALLBACK (on_insert_alternative_white_space1_activate),
-                    NULL);
   g_signal_connect ((gpointer) send_selection_to_vte1, "activate",
                     G_CALLBACK (on_send_selection_to_vte1_activate),
                     NULL);
@@ -1843,8 +1829,6 @@ create_window1 (void)
   GLADE_HOOKUP_OBJECT (window1, separator49, "separator49");
   GLADE_HOOKUP_OBJECT (window1, select_current_line_s_1, "select_current_line_s_1");
   GLADE_HOOKUP_OBJECT (window1, select_current_paragraph1, "select_current_paragraph1");
-  GLADE_HOOKUP_OBJECT (window1, separator50, "separator50");
-  GLADE_HOOKUP_OBJECT (window1, insert_alternative_white_space1, "insert_alternative_white_space1");
   GLADE_HOOKUP_OBJECT (window1, separator52, "separator52");
   GLADE_HOOKUP_OBJECT (window1, send_selection_to_vte1, "send_selection_to_vte1");
   GLADE_HOOKUP_OBJECT (window1, menu_format1, "menu_format1");
@@ -2134,6 +2118,8 @@ create_edit_menu1 (void)
   GtkWidget *image3734;
   GtkWidget *insert_include1_menu;
   GtkWidget *invisible3;
+  GtkWidget *separator50;
+  GtkWidget *insert_alternative_white_space1;
   GtkWidget *search2;
   GtkWidget *separator7;
   GtkWidget *menu_open_selected_file2;
@@ -2260,6 +2246,15 @@ create_edit_menu1 (void)
   invisible3 = gtk_menu_item_new_with_mnemonic (_("invisible"));
   gtk_container_add (GTK_CONTAINER (insert_include1_menu), invisible3);
 
+  separator50 = gtk_separator_menu_item_new ();
+  gtk_widget_show (separator50);
+  gtk_container_add (GTK_CONTAINER (insert1_menu), separator50);
+  gtk_widget_set_sensitive (separator50, FALSE);
+
+  insert_alternative_white_space1 = gtk_menu_item_new_with_mnemonic (_("_Insert Alternative White Space"));
+  gtk_widget_show (insert_alternative_white_space1);
+  gtk_container_add (GTK_CONTAINER (insert1_menu), insert_alternative_white_space1);
+
   search2 = gtk_menu_item_new_with_mnemonic (_("_Search"));
   gtk_widget_show (search2);
   gtk_container_add (GTK_CONTAINER (edit_menu1), search2);
@@ -2327,6 +2322,9 @@ create_edit_menu1 (void)
   g_signal_connect ((gpointer) insert_multiline_comment1, "activate",
                     G_CALLBACK (on_comments_multiline_activate),
                     NULL);
+  g_signal_connect ((gpointer) insert_alternative_white_space1, "activate",
+                    G_CALLBACK (on_insert_alternative_white_space1_activate),
+                    NULL);
   g_signal_connect ((gpointer) menu_open_selected_file2, "activate",
                     G_CALLBACK (on_menu_open_selected_file1_activate),
                     NULL);
@@ -2370,6 +2368,8 @@ create_edit_menu1 (void)
   GLADE_HOOKUP_OBJECT (edit_menu1, image3734, "image3734");
   GLADE_HOOKUP_OBJECT (edit_menu1, insert_include1_menu, "insert_include1_menu");
   GLADE_HOOKUP_OBJECT (edit_menu1, invisible3, "invisible3");
+  GLADE_HOOKUP_OBJECT (edit_menu1, separator50, "separator50");
+  GLADE_HOOKUP_OBJECT (edit_menu1, insert_alternative_white_space1, "insert_alternative_white_space1");
   GLADE_HOOKUP_OBJECT (edit_menu1, search2, "search2");
   GLADE_HOOKUP_OBJECT (edit_menu1, separator7, "separator7");
   GLADE_HOOKUP_OBJECT (edit_menu1, menu_open_selected_file2, "menu_open_selected_file2");
