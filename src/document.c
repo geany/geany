@@ -610,7 +610,9 @@ gboolean document_close(GeanyDocument *doc)
 
 static gboolean on_idle_new_doc(gpointer user_data)
 {
-	document_new_file_if_non_open();
+	/* Idle may be after Geany has quit */
+	if (!main_status.quitting)
+		document_new_file_if_non_open();
 	return FALSE;
 }
 

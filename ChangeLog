@@ -7,6 +7,8 @@
    Change default Find Selection behaviour to not let the X selection
    override the current word (can be confusing).
    Add docs for Find Selection commands.
+ * src/document.c:
+   Fix segfault on idle callback when quitting.
 
 
 2010-09-22  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
