@@ -14,6 +14,10 @@
    Insert menu.
  * src/interface.c, geany.glade:
    Move editor popup menu Insert Comments submenu to top of Insert menu.
+ * src/ui_utils.h, src/document.c, src/ui_utils.c, doc/geany.txt,
+   doc/geany.html:
+   Add hidden pref new_document_after_close for whether to open a new
+   document automatically, off by default.
 
 
 2010-09-22  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

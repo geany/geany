@@ -685,8 +685,12 @@ gboolean document_remove_page(guint page_num)
 		ui_update_popup_reundo_items(NULL);
 		ui_document_buttons_update();
 		build_menu_update(NULL);
+
+		/* we use an idle callback to prevent opening a new document if other documents
+		 * are about to be opened. */
+		if (ui_prefs.new_document_after_close)
+			g_idle_add(on_idle_new_doc, NULL);
 	}
-	g_idle_add(on_idle_new_doc, NULL);
 	return TRUE;
 }
 

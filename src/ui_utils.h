@@ -97,6 +97,7 @@ typedef struct UIPrefs
 	gint		sidebar_page;
 	gboolean	msgwindow_visible;
 	gboolean	allow_always_save; /* if set, files can always be saved, even if unchanged */
+	gboolean	new_document_after_close;
 
 	/* Menu-item related data */
 	GQueue		*recent_queue;

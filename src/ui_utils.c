@@ -2050,6 +2050,8 @@ void ui_init_prefs(void)
 		"allow_always_save", FALSE);
 	stash_group_add_string(group, &statusbar_template,
 		"statusbar_template", "");
+	stash_group_add_boolean(group, &ui_prefs.new_document_after_close,
+		"new_document_after_close", FALSE);
 }
 
 
