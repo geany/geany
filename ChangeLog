@@ -18,6 +18,8 @@
    doc/geany.html:
    Add hidden pref new_document_after_close for whether to open a new
    document automatically, off by default.
+ * HACKING:
+   Add 'Bugs to watch out for' section.
 
 
 2010-09-22  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

@@ -250,6 +250,13 @@ Testing
   passing ``-c some_dir`` (but make sure the directory is clean first).
 * For debugging tips, see `GDB`_.
 
+Bugs to watch out for
+---------------------
+* Forgetting to check *doc->is_valid* when looping through
+  *documents_array* - instead use *foreach_document()*.
+* Not breaking the plugin ABI when necessary.
+* Using an idle callback that doesn't check main_status.quitting.
+
 Libraries
 ---------
 We try to use an unmodified version of Scintilla - any new lexers or
