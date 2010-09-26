@@ -55,5 +55,5 @@ context_action_cmd=
 # %f will be replaced by the complete filename
 # %e will be replaced by the filename without extension
 # (use only one of it at one time)
-compiler=python -c "import py_compile; py_compile.compile('%f')"
+compiler=python -m py_compile "%f"
 run_cmd=python "%f"

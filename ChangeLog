@@ -3,6 +3,8 @@
  * src/editor.c:
    When commenting/uncommenting with single-line comment characters,
    ignore any end of line characters before evaluating the current line.
+ * data/filetypes.python:
+   Simplify Python Compile/Syntax Check command.
 
 
 2010-09-23  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
