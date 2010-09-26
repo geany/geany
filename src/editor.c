@@ -2740,7 +2740,7 @@ static gint get_multiline_comment_style(GeanyEditor *editor, gint line_start)
  * it returns just 1 */
 gint editor_do_uncomment(GeanyEditor *editor, gint line, gboolean toggle)
 {
-	gint first_line, last_line;
+	gint first_line, last_line, eol_char_len;
 	gint x, i, line_start, line_len;
 	gint sel_start, sel_end;
 	gint count = 0;
@@ -2769,6 +2769,7 @@ gint editor_do_uncomment(GeanyEditor *editor, gint line, gboolean toggle)
 	}
 
 	ft = editor->document->file_type;
+	eol_char_len = editor_get_eol_char_len(editor);
 
 	/* detection of HTML vs PHP code, if non-PHP set filetype to XML */
 	line_start = sci_get_position_from_line(editor->sci, first_line);
@@ -2797,7 +2798,7 @@ gint editor_do_uncomment(GeanyEditor *editor, gint line, gboolean toggle)
 		line_len = sci_get_line_length(editor->sci, i);
 		x = 0;
 
-		buf_len = MIN((gint)sizeof(sel) - 1, line_len - 1);
+		buf_len = MIN((gint)sizeof(sel) - 1, line_len - eol_char_len);
 		if (buf_len <= 0)
 			continue;
 		sci_get_text_range(editor->sci, line_start, line_start + buf_len, sel);
@@ -2876,7 +2877,7 @@ gint editor_do_uncomment(GeanyEditor *editor, gint line, gboolean toggle)
 
 void editor_do_comment_toggle(GeanyEditor *editor)
 {
-	gint first_line, last_line;
+	gint first_line, last_line, eol_char_len;
 	gint x, i, line_start, line_len, first_line_start;
 	gint sel_start, sel_end;
 	gint count_commented = 0, count_uncommented = 0;
@@ -2893,6 +2894,7 @@ void editor_do_comment_toggle(GeanyEditor *editor)
 	sel_end = sci_get_selection_end(editor->sci);
 
 	ft = editor->document->file_type;
+	eol_char_len = editor_get_eol_char_len(editor);
 
 	first_line = sci_get_line_from_position(editor->sci,
 		sci_get_selection_start(editor->sci));
@@ -2928,7 +2930,7 @@ void editor_do_comment_toggle(GeanyEditor *editor)
 		line_len = sci_get_line_length(editor->sci, i);
 		x = 0;
 
-		buf_len = MIN((gint)sizeof(sel) - 1, line_len - 1);
+		buf_len = MIN((gint)sizeof(sel) - 1, line_len - eol_char_len);
 		if (buf_len < 0)
 			continue;
 		sci_get_text_range(editor->sci, line_start, line_start + buf_len, sel);
@@ -3036,7 +3038,7 @@ void editor_do_comment_toggle(GeanyEditor *editor)
 /* set toggle to TRUE if the caller is the toggle function, FALSE otherwise */
 void editor_do_comment(GeanyEditor *editor, gint line, gboolean allow_empty_lines, gboolean toggle)
 {
-	gint first_line, last_line;
+	gint first_line, last_line, eol_char_len;
 	gint x, i, line_start, line_len;
 	gint sel_start, sel_end, co_len;
 	gchar sel[256], *co, *cc;
@@ -3063,6 +3065,7 @@ void editor_do_comment(GeanyEditor *editor, gint line, gboolean allow_empty_line
 	}
 
 	ft = editor->document->file_type;
+	eol_char_len = editor_get_eol_char_len(editor);
 
 	/* detection of HTML vs PHP code, if non-PHP set filetype to XML */
 	line_start = sci_get_position_from_line(editor->sci, first_line);
@@ -3091,7 +3094,7 @@ void editor_do_comment(GeanyEditor *editor, gint line, gboolean allow_empty_line
 		line_len = sci_get_line_length(editor->sci, i);
 		x = 0;
 
-		buf_len = MIN((gint)sizeof(sel) - 1, line_len - 1);
+		buf_len = MIN((gint)sizeof(sel) - 1, line_len - eol_char_len);
 		if (buf_len < 0)
 			continue;
 		sci_get_text_range(editor->sci, line_start, line_start + buf_len, sel);

@@ -1,3 +1,10 @@
+2010-09-25  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/editor.c:
+   When commenting/uncommenting with single-line comment characters,
+   ignore any end of line characters before evaluating the current line.
+
+
 2010-09-23  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/keyfile.c, src/search.c, src/search.h, doc/geany.txt,
