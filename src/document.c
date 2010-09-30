@@ -78,6 +78,7 @@
 #include "navqueue.h"
 #include "win32.h"
 #include "search.h"
+#include "filetypesprivate.h"
 
 
 GeanyFilePrefs file_prefs;
@@ -2472,6 +2473,7 @@ static void document_load_config(GeanyDocument *doc, GeanyFiletype *type,
 		editor_set_indentation_guides(doc->editor);
 		build_menu_update(doc);
 		queue_colourise(doc);
+		doc->priv->symbol_list_sort_mode = type->priv->symbol_list_sort_mode;
 	}
 
 	document_update_tag_list(doc, TRUE);

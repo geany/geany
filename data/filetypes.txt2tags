@@ -28,6 +28,9 @@ postproc=0xC05600;0xffffff;false;true
 # default extension used when saving files
 extension=txt2tags
 
+# sort tags by appearance
+symbol_list_sort_mode=1
+
 [keywords]
 primary=includeconf options toc
 

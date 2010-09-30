@@ -129,8 +129,9 @@ struct GeanyFiletype
 	struct GeanyFiletypePrivate	*priv;	/* must be last, append fields before this item */
 #ifdef GEANY_PRIVATE
 	/* Do not use following fields in plugins */
-	GeanyBuildCommand *filecmds;	/* these need to be visible since used in build.c so not in private part */
-	GeanyBuildCommand *ftdefcmds;	/* filetype dependent defaults for non_ft commands */
+	/* TODO: move these fields into filetypesprivate.h */
+	GeanyBuildCommand *filecmds;
+	GeanyBuildCommand *ftdefcmds;
 	GeanyBuildCommand *execcmds;
 	GeanyBuildCommand *homefilecmds;
 	GeanyBuildCommand *homeexeccmds;

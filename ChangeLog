@@ -1,3 +1,16 @@
+2010-09-30  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/utils.h, src/filetypesprivate.h, src/filetypes.c,
+   src/filetypes.h, src/document.c, doc/geany.txt, doc/geany.html,
+   data/filetypes.txt2tags, data/filetypes.markdown,
+   data/filetypes.restructuredtext:
+   Add symbol_list_sort_mode per-filetype setting, set to sort by line
+   number by default for Markdown, reStructuredText and Txt2Tags.
+   Add utils_get_setting() macro for reading a key from a home or
+   system keyfile.
+   Move GeanyFiletypePrivate to filetypesprivate.h.
+
+
 2010-09-25  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/editor.c:

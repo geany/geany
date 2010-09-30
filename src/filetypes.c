@@ -34,6 +34,7 @@
 
 #include "geany.h"
 #include "filetypes.h"
+#include "filetypesprivate.h"
 #include "highlighting.h"
 #include "support.h"
 #include "templates.h"
@@ -43,27 +44,9 @@
 #include "utils.h"
 #include "sciwrappers.h"
 #include "ui_utils.h"
+#include "symbols.h"
 
 #include <stdlib.h>
-
-#ifdef HAVE_REGEX_H
-# include <regex.h>
-#else
-# include "gnuregex.h"
-#endif
-
-
-/* Private GeanyFiletype fields */
-typedef struct GeanyFiletypePrivate
-{
-	GtkWidget	*menu_item;			/* holds a pointer to the menu item for this filetype */
-	gboolean	keyfile_loaded;
-	regex_t		error_regex;
-	gboolean	error_regex_compiled;
-	gchar		*last_string; /* last one compiled */
-	gboolean	custom;
-}
-GeanyFiletypePrivate;
 
 
 GPtrArray *filetypes_array = NULL;	/* Dynamic array of filetype pointers */
@@ -1264,11 +1247,13 @@ static void load_settings(gint ft_id, GKeyFile *config, GKeyFile *configh)
 		g_free(result);
 	}
 
+	ft->priv->symbol_list_sort_mode = utils_get_setting(integer, configh, config, "settings",
+		"symbol_list_sort_mode", SYMBOLS_SORT_BY_NAME);
+
 	/* read build settings */
 	build_load_menu(config, GEANY_BCS_FT, (gpointer)ft);
 	build_load_menu(configh, GEANY_BCS_HOME_FT, (gpointer)ft);
 }
-
 
 /* simple wrapper function to print file errors in DEBUG mode */
 static void load_system_keyfile(GKeyFile *key_file, const gchar *file, GKeyFileFlags flags,

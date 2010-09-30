@@ -3667,6 +3667,16 @@ lexer_filetype
     This must not be recursive, i.e. it should be a filetype name that
     doesn't use the lexer_filetype key itself.
 
+symbol_list_sort_mode
+    What the default symbol list sort order should be.
+
+    =====   =====================================
+    Value   Meaning
+    =====   =====================================
+    0       Sort tags by name
+    1       Sort tags by appearance (line number)
+    =====   =====================================
+
 
 [build_settings] Section
 ````````````````````````

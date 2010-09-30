@@ -23,4 +23,7 @@ codebk=0x005f00;0xffffff;false;false
 # default extension used when saving files
 extension=mdml
 
+# sort tags by appearance
+symbol_list_sort_mode=1
+
 

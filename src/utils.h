@@ -57,6 +57,14 @@
 #define utils_strdupa(str) \
 	strcpy(g_alloca(strlen(str) + 1), str)
 
+/* Get a keyfile setting, using the home keyfile if the key exists,
+ * otherwise system keyfile. */
+#define utils_get_setting(type, home, sys, group, key, default_val)\
+	(g_key_file_has_key(home, group, key, NULL)) ?\
+		utils_get_setting_##type(home, group, key, default_val) :\
+		utils_get_setting_##type(sys, group, key, default_val)
+
+
 /** Iterates all the items in @a array using pointers.
  * @param item pointer to an item in @a array.
  * @param array C array to traverse.
