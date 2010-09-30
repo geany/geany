@@ -3,7 +3,7 @@
 
 
 EXTRA_DIST = images.c gb.c win32.c win32.h plugindata.h \
-	documentprivate.h projectprivate.h
+	documentprivate.h filetypesprivate.h pluginprivate.h projectprivate.h
 
 bin_PROGRAMS = geany
 
@@ -29,7 +29,6 @@ SRCS = \
 	msgwindow.c msgwindow.h \
 	navqueue.c navqueue.h \
 	notebook.c notebook.h \
-	pluginprivate.h \
 	plugins.c plugins.h \
 	pluginutils.c pluginutils.h \
 	prefix.c prefix.h \
