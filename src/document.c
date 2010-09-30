@@ -541,6 +541,8 @@ static gboolean on_idle_focus(gpointer doc)
 }
 
 
+static gboolean remove_page(guint page_num);
+
 /* Creates a new document and editor, adding a tab in the notebook.
  * @return The created document */
 static GeanyDocument *document_create(const gchar *utf8_filename)
@@ -552,9 +554,11 @@ static GeanyDocument *document_create(const gchar *utf8_filename)
 	if (cur_pages == 1)
 	{
 		GeanyDocument *cur = document_get_current();
-		/* remove the empty document and open a new one */
+		/* remove the empty document first */
 		if (cur != NULL && cur->file_name == NULL && ! cur->changed)
-			document_remove_page(0);
+			/* prevent immediately opening another new doc with
+			 * new_document_after_close pref */
+			remove_page(0);
 	}
 
 	new_idx = document_get_new_idx();
@@ -609,24 +613,8 @@ gboolean document_close(GeanyDocument *doc)
 }
 
 
-static gboolean on_idle_new_doc(gpointer user_data)
-{
-	/* Idle may be after Geany has quit */
-	if (!main_status.quitting)
-		document_new_file_if_non_open();
-	return FALSE;
-}
-
-
-/**
- *  Removes the given notebook tab at @a page_num and clears all related information
- *  in the document list.
- *
- *  @param page_num The notebook page number to remove.
- *
- *  @return @c TRUE if the document was actually removed or @c FALSE otherwise.
- **/
-gboolean document_remove_page(guint page_num)
+/* Call document_remove_page() instead, this is only needed for document_create(). */
+static gboolean remove_page(guint page_num)
 {
 	GeanyDocument *doc = document_get_from_page(page_num);
 
@@ -686,13 +674,27 @@ gboolean document_remove_page(guint page_num)
 		ui_update_popup_reundo_items(NULL);
 		ui_document_buttons_update();
 		build_menu_update(NULL);
-
-		/* we use an idle callback to prevent opening a new document if other documents
-		 * are about to be opened. */
-		if (ui_prefs.new_document_after_close)
-			g_idle_add(on_idle_new_doc, NULL);
 	}
 	return TRUE;
+}
+
+
+/**
+ *  Removes the given notebook tab at @a page_num and clears all related information
+ *  in the document list.
+ *
+ *  @param page_num The notebook page number to remove.
+ *
+ *  @return @c TRUE if the document was actually removed or @c FALSE otherwise.
+ **/
+gboolean document_remove_page(guint page_num)
+{
+	gboolean done = remove_page(page_num);
+
+	if (done && ui_prefs.new_document_after_close)
+		document_new_file_if_non_open();
+
+	return done;
 }
 
 
