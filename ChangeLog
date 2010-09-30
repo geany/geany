@@ -20,6 +20,9 @@
    data/filetypes.forth, data/filetype_extensions.conf, ChangeLog,
    wscript:
    Add Forth filetype (patch by Thomas Huth, thanks).
+ * src/tools.c:
+   Remove unnecessary 'fix' from r5224 as it breaks configuring custom
+   commands for 'Send Selection to' (oops).
 
 
 2010-09-25  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

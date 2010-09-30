@@ -452,7 +452,6 @@ static void cc_insert_custom_command_items(GtkMenu *me, gchar *label, gint idx)
 		case 0: key_idx = GEANY_KEYS_FORMAT_SENDTOCMD1; break;
 		case 1: key_idx = GEANY_KEYS_FORMAT_SENDTOCMD2; break;
 		case 2: key_idx = GEANY_KEYS_FORMAT_SENDTOCMD3; break;
-		default: return;
 	}
 
 	if (key_idx != -1)
