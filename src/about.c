@@ -95,7 +95,7 @@ static const gchar *contributors =
 "Jörn Reder, Kelvin Gardiner, Kevin Ellwood, Kristoffer A. Tjernås, Lex Trotman, Marko Peric, Matti Mårds, "
 "Moritz Barsnick, Ondrej Donek, Peter Strand, Philipp Gildein, Pierre Joye, Rob van der Linde, "
 "Robert McGinley, Roland Baudin, Ross McKay, S Jagannathan, Saleem Abdulrasool, "
-"Sebastian Kraft, Shiv, Slava Semushin, Stefan Oltmanns, Tamim, Thomas Martitz, Tomás Vírseda, "
+"Sebastian Kraft, Shiv, Slava Semushin, Stefan Oltmanns, Tamim, Thomas Huth, Thomas Martitz, Tomás Vírseda, "
 "Tyler Mulligan, Walery Studennikov, Yura Siamashka";
 
 

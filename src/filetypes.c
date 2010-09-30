@@ -628,6 +628,17 @@ static void init_builtin_filetypes(void)
 	ft->comment_open = g_strdup("--");
 	ft->comment_close = NULL;
 	ft->group = GEANY_FILETYPE_GROUP_COMPILED;
+
+#define FORTH
+	ft = filetypes[GEANY_FILETYPES_FORTH];
+	ft->lang = -2;
+	ft->name = g_strdup("Forth");
+	filetype_make_title(ft, TITLE_SOURCE_FILE);
+	ft->extension = g_strdup("fs");
+	ft->pattern = utils_strv_new("*.fs", "*.fth", NULL);
+	ft->comment_open = g_strdup("\\");
+	ft->comment_close = NULL;
+	ft->group = GEANY_FILETYPE_GROUP_SCRIPT;
 }
 
 
