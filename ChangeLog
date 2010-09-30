@@ -9,6 +9,8 @@
    Add utils_get_setting() macro for reading a key from a home or
    system keyfile.
    Move GeanyFiletypePrivate to filetypesprivate.h.
+ * src/Makefile.am, src/ui_utils.c, configure.ac, wscript:
+   Link with X11 if found to fix linking with a recent GNU ld.
 
 
 2010-09-25  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

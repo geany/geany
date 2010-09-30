@@ -2475,7 +2475,7 @@ void ui_editable_insert_text_callback(GtkEditable *editable, gchar *new_text,
  * which ripped it from Galeon. */
 gint ui_get_current_workspace(const gchar *display_name)
 {
-#ifdef GDK_WINDOWING_X11
+#if defined(GDK_WINDOWING_X11) && defined(HAVE_X11)
 	GdkScreen *screen = gdk_screen_get_default();
 	GdkWindow *root_win = gdk_screen_get_root_window(screen);
 	GdkDisplay *display = gdk_display_open(display_name);

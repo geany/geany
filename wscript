@@ -226,6 +226,7 @@ def configure(conf):
 	else:
 		gtk_version = 'Unknown'
 	conf.check_cfg(package='gio-2.0', uselib_store='GIO', args='--cflags --libs', mandatory=False)
+	conf.check_cfg(package='x11', uselib_store='X11', args='--cflags --libs', mandatory=False)
 
 	# Windows specials
 	if is_win32:
@@ -390,7 +391,7 @@ def build(bld):
 		source			= geany_sources,
 		includes		= '. src/ scintilla/include/ tagmanager/include/',
 		defines			= 'G_LOG_DOMAIN="Geany"',
-		uselib			= 'GTK GIO WIN32 SUNOS_SOCKET',
+		uselib			= 'GTK GIO X11 WIN32 SUNOS_SOCKET',
 		uselib_local	= 'scintilla tagmanager',
 		add_objects		= 'geany-rc' if is_win32 else None
 	)
