@@ -76,6 +76,7 @@
 static GHashTable *snippet_hash = NULL;
 static GQueue *snippet_offsets = NULL;
 static gint snippet_cursor_insert_pos;
+static GtkAccelGroup *snippet_accel_group = NULL;
 
 /* holds word under the mouse or keyboard cursor */
 static gchar current_word[GEANY_MAX_WORD_LENGTH];
@@ -111,12 +112,16 @@ static void editor_highlight_braces(GeanyEditor *editor, gint cur_pos);
 static void read_current_word(GeanyEditor *editor, gint pos, gchar *word, size_t wordlen,
 		const gchar *wc, gboolean stem);
 static gsize count_indent_size(GeanyEditor *editor, const gchar *base_indent);
+static const gchar *snippets_find_completion_by_name(const gchar *type, const gchar *name);
+static gssize snippets_make_replacements(GeanyEditor *editor, GString *pattern,
+		gsize indent_size);
 
 
 void editor_snippets_free(void)
 {
 	g_hash_table_destroy(snippet_hash);
 	g_queue_free(snippet_offsets);
+	gtk_window_remove_accel_group(GTK_WINDOW(main_widgets.window), snippet_accel_group);
 }
 
 
@@ -136,6 +141,8 @@ static void snippets_init(GKeyFile *sysconfig, GKeyFile *userconfig)
 	groups_sys = g_key_file_get_groups(sysconfig, &len);
 	for (i = 0; i < len; i++)
 	{
+		if (strcmp(groups_sys[i], "Keybindings") == 0)
+			continue;
 		keys_sys = g_key_file_get_keys(sysconfig, groups_sys[i], &len_keys, NULL);
 		/* create new hash table for the read section (=> filetype) */
 		tmp = g_hash_table_new_full(g_str_hash, g_str_equal, g_free, g_free);
@@ -154,6 +161,8 @@ static void snippets_init(GKeyFile *sysconfig, GKeyFile *userconfig)
 	groups_user = g_key_file_get_groups(userconfig, &len);
 	for (i = 0; i < len; i++)
 	{
+		if (strcmp(groups_user[i], "Keybindings") == 0)
+			continue;
 		keys_user = g_key_file_get_keys(userconfig, groups_user[i], &len_keys, NULL);
 
 		tmp = g_hash_table_lookup(snippet_hash, groups_user[i]);
@@ -182,6 +191,74 @@ static void snippets_init(GKeyFile *sysconfig, GKeyFile *userconfig)
 }
 
 
+static void on_snippet_keybinding_activate(gchar *key)
+{
+	GeanyDocument *doc = document_get_current();
+	const gchar *s;
+	GHashTable *specials;
+	GString *pattern;
+	gint pos, line, indent_width, cursor_pos;
+
+	if (!doc || !GTK_WIDGET_HAS_FOCUS(doc->editor->sci))
+		return;
+
+	s = snippets_find_completion_by_name(doc->file_type->name, key);
+	if (!s) /* allow user to specify keybindings for "special" snippets */
+	{
+		specials = g_hash_table_lookup(snippet_hash, "Special");
+		if (G_LIKELY(specials != NULL))
+			s = g_hash_table_lookup(specials, key);
+	}
+	if (!s)
+	{
+		utils_beep();
+		return;
+	}
+
+	pos = sci_get_current_position(doc->editor->sci);
+	line = sci_get_line_from_position(doc->editor->sci, pos);
+	indent_width = sci_get_line_indentation(doc->editor->sci, line);
+
+	pattern = g_string_new(s);
+	cursor_pos = snippets_make_replacements(doc->editor, pattern, indent_width);
+
+	editor_insert_text_block(doc->editor, pattern->str, pos, cursor_pos, indent_width, FALSE);
+	sci_scroll_caret(doc->editor->sci);
+
+	g_string_free(pattern, TRUE);
+}
+
+
+static void load_kb(GKeyFile *userconfig)
+{
+	gchar group[] = "Keybindings";
+	gsize len, j;
+	gchar **keys = g_key_file_get_keys(userconfig, group, &len, NULL);
+
+	if (!keys)
+		return;
+	for (j = 0; j < len; j++)
+	{
+		guint key;
+		GdkModifierType mods;
+		gchar *accel_string = g_key_file_get_value(userconfig, group, keys[j], NULL);
+
+		gtk_accelerator_parse(accel_string, &key, &mods);
+		g_free(accel_string);
+
+		if (key == 0 && mods == 0)
+		{
+			g_warning("Can not parse accelerator \"%s\" from user snippets.conf", accel_string);
+			continue;
+		}
+		gtk_accel_group_connect(snippet_accel_group, key, mods, 0,
+			g_cclosure_new_swap((GCallback)on_snippet_keybinding_activate,
+				g_strdup(keys[j]), (GClosureNotify)g_free));
+	}
+	g_strfreev(keys);
+}
+
+
 void editor_snippets_init(void)
 {
 	gchar *sysconfigfile, *userconfigfile;
@@ -203,6 +280,11 @@ void editor_snippets_init(void)
 	g_key_file_load_from_file(userconfig, userconfigfile, G_KEY_FILE_NONE, NULL);
 
 	snippets_init(sysconfig, userconfig);
+
+	/* setup snippet keybindings */
+	snippet_accel_group = gtk_accel_group_new();
+	gtk_window_add_accel_group(GTK_WINDOW(main_widgets.window), snippet_accel_group);
+	load_kb(userconfig);
 
 	g_free(sysconfigfile);
 	g_free(userconfigfile);
