@@ -1,3 +1,10 @@
+2010-10-01  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/tools.c, doc/geany.txt, doc/geany.html:
+   Fix passing quoted arguments when using 'Send Selection to'. This
+   means sed 's/\./(dot)/g' now works.
+
+
 2010-09-30  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/utils.h, src/filetypesprivate.h, src/filetypes.c,

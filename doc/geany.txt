@@ -851,22 +851,30 @@ Sending text through custom commands
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 You can define several custom commands in Geany and send the current
-selection to one of these commands using the "Edit->Format->Send
-Selection to" menu or keybindings.
-The output of the command will be
-used to replace the current selection. This makes it possible to use text
-formatting tools with Geany in a general way. The selected text will
-be sent to the standard input of the executed command, so the command
-should be able to read from it and it should print all results to its
-standard output which will be read by Geany. To help finding errors
-in executing the command, the output of the program's standard error
-will be printed on Geany's standard output.
+selection to one of these commands using the *Edit->Format->Send
+Selection to* menu or keybindings. The output of the command will be
+used to replace the current selection. This makes it possible to use
+text formatting tools with Geany in a general way.
 
-To add a custom command, just go to the Set Custom Commands dialog
-in the Format sub menu of the Edit and Popup menu. Then click on Add
-to get a new text entry and type the command. You can also specify
-some command line options. To delete a command, just clear the text
-entry and press OK. It will be deleted automatically.
+The selected text will be sent to the standard input of the executed
+command, so the command should be able to read from it and it should
+print all results to its standard output which will be read by
+Geany. To help finding errors in executing the command, the output
+of the program's standard error will be printed on Geany's standard
+output.
+
+To add a custom command, use the *Send Selection to->Set Custom
+Commands* menu item. Click on *Add* to get a new text entry and type
+the command. You can also specify some command line options. To
+delete a command, just clear the text entry and press OK. It will be
+deleted automatically.
+
+Normal shell quoting is supported, so you can do things like:
+
+* ``sed 's/\./(dot)/g'``
+
+The above example would normally be done with the `Replace all`_
+function, but it can be handy to have common commands already set up.
 
 
 Context actions

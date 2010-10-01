@@ -242,7 +242,12 @@ void tools_execute_custom_command(GeanyDocument *doc, const gchar *command)
 	if (! sci_has_selection(doc->editor->sci))
 		return;
 
-	argv = g_strsplit(command, " ", -1);
+	if (!g_shell_parse_argv(command, NULL, &argv, &error))
+	{
+		ui_set_statusbar(TRUE, _("Custom command failed: %s"), error->message);
+		g_error_free(error);
+		return;
+	}
 	ui_set_statusbar(TRUE, _("Passing data and executing custom command: %s"), command);
 
 	cc_error_occurred = FALSE;
