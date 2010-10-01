@@ -120,30 +120,13 @@ void editor_snippets_free(void)
 }
 
 
-void editor_snippets_init(void)
+static void snippets_init(GKeyFile *sysconfig, GKeyFile *userconfig)
 {
 	gsize i, j, len = 0, len_keys = 0;
-	gchar *sysconfigfile, *userconfigfile;
 	gchar **groups_user, **groups_sys;
 	gchar **keys_user, **keys_sys;
 	gchar *value;
-	GKeyFile *sysconfig = g_key_file_new();
-	GKeyFile *userconfig = g_key_file_new();
 	GHashTable *tmp;
-
-	snippet_offsets = g_queue_new();
-
-	sysconfigfile = g_strconcat(app->datadir, G_DIR_SEPARATOR_S, "snippets.conf", NULL);
-	userconfigfile = g_strconcat(app->configdir, G_DIR_SEPARATOR_S, "snippets.conf", NULL);
-
-	/* check for old autocomplete.conf files (backwards compatibility) */
-	if (! g_file_test(userconfigfile, G_FILE_TEST_IS_REGULAR))
-		setptr(userconfigfile,
-			g_strconcat(app->configdir, G_DIR_SEPARATOR_S, "autocomplete.conf", NULL));
-
-	/* load the actual config files */
-	g_key_file_load_from_file(sysconfig, sysconfigfile, G_KEY_FILE_NONE, NULL);
-	g_key_file_load_from_file(userconfig, userconfigfile, G_KEY_FILE_NONE, NULL);
 
 	/* keys are strings, values are GHashTables, so use g_free and g_hash_table_destroy */
 	snippet_hash =
@@ -165,6 +148,7 @@ void editor_snippets_init(void)
 		}
 		g_strfreev(keys_sys);
 	}
+	g_strfreev(groups_sys);
 
 	/* now read defined completions in user's configuration directory and add / replace them */
 	groups_user = g_key_file_get_groups(userconfig, &len);
@@ -194,11 +178,34 @@ void editor_snippets_init(void)
 		}
 		g_strfreev(keys_user);
 	}
+	g_strfreev(groups_user);
+}
+
+
+void editor_snippets_init(void)
+{
+	gchar *sysconfigfile, *userconfigfile;
+	GKeyFile *sysconfig = g_key_file_new();
+	GKeyFile *userconfig = g_key_file_new();
+
+	snippet_offsets = g_queue_new();
+
+	sysconfigfile = g_strconcat(app->datadir, G_DIR_SEPARATOR_S, "snippets.conf", NULL);
+	userconfigfile = g_strconcat(app->configdir, G_DIR_SEPARATOR_S, "snippets.conf", NULL);
+
+	/* check for old autocomplete.conf files (backwards compatibility) */
+	if (! g_file_test(userconfigfile, G_FILE_TEST_IS_REGULAR))
+		setptr(userconfigfile,
+			g_strconcat(app->configdir, G_DIR_SEPARATOR_S, "autocomplete.conf", NULL));
+
+	/* load the actual config files */
+	g_key_file_load_from_file(sysconfig, sysconfigfile, G_KEY_FILE_NONE, NULL);
+	g_key_file_load_from_file(userconfig, userconfigfile, G_KEY_FILE_NONE, NULL);
+
+	snippets_init(sysconfig, userconfig);
 
 	g_free(sysconfigfile);
 	g_free(userconfigfile);
-	g_strfreev(groups_sys);
-	g_strfreev(groups_user);
 	g_key_file_free(sysconfig);
 	g_key_file_free(userconfig);
 }
