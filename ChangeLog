@@ -2,6 +2,8 @@
 
  * src/templates.c:
    Strip the output of {command: } templates (closes #3079063).
+ * doc/geany.txt, doc/geany.html:
+   Document hidden msgwin_*_visible preferences.
 
 
 2010-10-01  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

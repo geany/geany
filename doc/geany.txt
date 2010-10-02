@@ -4101,6 +4101,14 @@ statusbar_template                The status bar statistics line format.       S
                                   (Search in src/ui_utils.c for details).
 new_document_after_close          Whether to open a new document after all     false
                                   documents have been closed.
+msgwin_status_visible             Whether to show the Status tab in the        true
+                                  Messages Window
+msgwin_compiler_visible           Whether to show the Compiler tab in the      true
+                                  Messages Window
+msgwin_messages_visible           Whether to show the Messages tab in the      true
+                                  Messages Window
+msgwin_scribble_visible           Whether to show the Scribble tab in the      true
+                                  Messages Window
 ================================  ===========================================  ==================
 
 By default, statusbar_template is empty. This tells Geany to use its
