@@ -787,6 +787,7 @@ static void templates_replace_command(GString *text, const gchar *file_name,
 		result = run_command(cmd, file_name, file_type, func_name);
 		if (result != NULL)
 		{
+			result = g_strstrip(result);
 			utils_string_replace_first(text, wildcard, result);
 			g_free(result);
 		}
