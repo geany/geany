@@ -3188,9 +3188,6 @@ static void get_key_values(GKeyFile *config, const gchar *group, gchar **keys, g
 }
 
 
-#define foreach_strv(strptr, strv) \
-	for (strptr = strv; *strptr; strptr++)
-
 static void read_properties(GeanyFiletype *ft, GKeyFile *config, GKeyFile *configh)
 {
 	gchar group[] = "lexer_properties";

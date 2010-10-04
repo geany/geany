@@ -10,6 +10,8 @@
    Add some subheadings for Snippets section.
  * doc/geany.txt, doc/geany.html:
    Add snippet keybindings docs.
+ * src/highlighting.c, src/utils.h:
+   Move foreach_strv to utils.h.
 
 
 2010-09-30  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

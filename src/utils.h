@@ -115,6 +115,9 @@
 #define foreach_str(char_ptr, string) \
 	for (char_ptr = string; *char_ptr; char_ptr++)
 
+/* Iterate NULL-terminated string vector */
+#define foreach_strv foreach_str
+
 /** Iterates from 0 to @a size.
  * @param i Integer.
  * @param size Number of iterations.
