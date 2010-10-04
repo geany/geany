@@ -1088,6 +1088,21 @@ to be recognized as a word for completion. Leave it commented to use
 default characters or define it to add or remove characters to fit your
 needs.
 
+Snippet keybindings
+```````````````````
+
+Normally you would type the snippet name and press Tab. However, you
+can define keybindings for snippets under the *Keybindings* group in
+``snippets.conf``::
+
+    [Keybindings]
+    for=<Ctrl>7
+    block_cursor=<Ctrl>8
+
+.. note::
+    Snippet keybindings may be overridden by Geany's configurable
+    keybindings.
+
 
 Inserting Unicode characters
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^

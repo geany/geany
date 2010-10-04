@@ -8,6 +8,8 @@
    on patch by Eugene Arshinov, thanks). No docs yet.
  * doc/geany.txt, doc/geany.html:
    Add some subheadings for Snippets section.
+ * doc/geany.txt, doc/geany.html:
+   Add snippet keybindings docs.
 
 
 2010-09-30  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
