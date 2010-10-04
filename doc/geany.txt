@@ -994,6 +994,8 @@ with "Enrico Tröger". The key to start autocompletion can be changed
 in the preferences dialog, by default it is TAB. The corresponding keybinding
 is called ``Complete snippet``.
 
+**Paths**
+
 The system-wide configuration file can be found in
 ``$prefix/share/geany``, where ``$prefix`` is the path where Geany is
 installed (see `Installation prefix`_). It is not recommended to edit the
@@ -1013,6 +1015,8 @@ configuration directory. Alternatively, you can create a file
 to change. All missing settings will be read from the global snippets
 file in ``$prefix/share/geany``.
 
+**Snippet groups**
+
 The file ``snippets.conf`` contains sections defining snippets that
 are available for particular filetypes and in general.
 
@@ -1029,10 +1033,10 @@ filetype.  Snippets in filetype sections will hide snippets with the
 same name in the "Default" section when used in a file of that
 filetype.
 
+**Substitution sequences for snippets**
+
 To define snippets you can use several special character sequences which
 will be replaced when using the snippet:
-
-**Substitution Sequences for snippets**
 
 ================  =========================================================
 \\n or %newline%  Insert a new line (it will be replaced by the used EOL
@@ -1061,6 +1065,8 @@ string as a snippet and use it later in Geany. It is not limited
 to existing contructs of certain programming languages(like ``if``,
 ``for``, ``switch``). Define whatever you need.
 
+**Template wildcards**
+
 Since Geany 0.15 you can also use most of the available templates wildcards
 listed in `Template wildcards`_. All wildcards which are listed as
 `available in snippets` can be used. For instance to improve the above example::
@@ -1071,6 +1077,8 @@ listed in `Template wildcards`_. All wildcards which are listed as
 
 this will replace ``myname`` with "My name is " and the value of the template
 preference ``developer``.
+
+**Word characters**
 
 You can change the way Geany recognizes the word to complete,
 that is how the start and end of a word is recognised when the
