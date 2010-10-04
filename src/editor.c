@@ -229,19 +229,19 @@ static void on_snippet_keybinding_activate(gchar *key)
 }
 
 
-static void load_kb(GKeyFile *userconfig)
+static const gchar kb_group[] = "Keybindings";
+
+static void add_kb(GKeyFile *keyfile, gchar **keys)
 {
-	gchar group[] = "Keybindings";
-	gsize len, j;
-	gchar **keys = g_key_file_get_keys(userconfig, group, &len, NULL);
+	gsize i;
 
 	if (!keys)
 		return;
-	for (j = 0; j < len; j++)
+	for (i = 0; i < g_strv_length(keys); i++)
 	{
 		guint key;
 		GdkModifierType mods;
-		gchar *accel_string = g_key_file_get_value(userconfig, group, keys[j], NULL);
+		gchar *accel_string = g_key_file_get_value(keyfile, kb_group, keys[i], NULL);
 
 		gtk_accelerator_parse(accel_string, &key, &mods);
 		g_free(accel_string);
@@ -253,8 +253,25 @@ static void load_kb(GKeyFile *userconfig)
 		}
 		gtk_accel_group_connect(snippet_accel_group, key, mods, 0,
 			g_cclosure_new_swap((GCallback)on_snippet_keybinding_activate,
-				g_strdup(keys[j]), (GClosureNotify)g_free));
+				g_strdup(keys[i]), (GClosureNotify)g_free));
 	}
+}
+
+
+static void load_kb(GKeyFile *sysconfig, GKeyFile *userconfig)
+{
+	gchar **keys = g_key_file_get_keys(userconfig, kb_group, NULL, NULL);
+	gchar **ptr;
+
+	/* remove overridden keys in sys file */
+	foreach_strv(ptr, keys)
+		g_key_file_remove_key(sysconfig, kb_group, *ptr, NULL);
+
+	add_kb(userconfig, keys);
+	g_strfreev(keys);
+
+	keys = g_key_file_get_keys(sysconfig, kb_group, NULL, NULL);
+	add_kb(sysconfig, keys);
 	g_strfreev(keys);
 }
 
@@ -284,7 +301,7 @@ void editor_snippets_init(void)
 	/* setup snippet keybindings */
 	snippet_accel_group = gtk_accel_group_new();
 	gtk_window_add_accel_group(GTK_WINDOW(main_widgets.window), snippet_accel_group);
-	load_kb(userconfig);
+	load_kb(sysconfig, userconfig);
 
 	g_free(sysconfigfile);
 	g_free(userconfigfile);

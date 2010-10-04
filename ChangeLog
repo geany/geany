@@ -12,6 +12,9 @@
    Add snippet keybindings docs.
  * src/highlighting.c, src/utils.h:
    Move foreach_strv to utils.h.
+ * src/editor.c, data/snippets.conf:
+   Read snippet keybindings from system keyfile also.
+   Add keybinding example to default snippet.conf.
 
 
 2010-09-30  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
