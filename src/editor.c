@@ -125,7 +125,7 @@ void editor_snippets_free(void)
 }
 
 
-static void snippets_init(GKeyFile *sysconfig, GKeyFile *userconfig)
+static void snippets_load(GKeyFile *sysconfig, GKeyFile *userconfig)
 {
 	gsize i, j, len = 0, len_keys = 0;
 	gchar **groups_user, **groups_sys;
@@ -279,7 +279,7 @@ void editor_snippets_init(void)
 	g_key_file_load_from_file(sysconfig, sysconfigfile, G_KEY_FILE_NONE, NULL);
 	g_key_file_load_from_file(userconfig, userconfigfile, G_KEY_FILE_NONE, NULL);
 
-	snippets_init(sysconfig, userconfig);
+	snippets_load(sysconfig, userconfig);
 
 	/* setup snippet keybindings */
 	snippet_accel_group = gtk_accel_group_new();
