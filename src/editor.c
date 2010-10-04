@@ -229,9 +229,7 @@ static void on_snippet_keybinding_activate(gchar *key)
 }
 
 
-static const gchar kb_group[] = "Keybindings";
-
-static void add_kb(GKeyFile *keyfile, gchar **keys)
+static void add_kb(GKeyFile *keyfile, const gchar *group, gchar **keys)
 {
 	gsize i;
 
@@ -241,7 +239,7 @@ static void add_kb(GKeyFile *keyfile, gchar **keys)
 	{
 		guint key;
 		GdkModifierType mods;
-		gchar *accel_string = g_key_file_get_value(keyfile, kb_group, keys[i], NULL);
+		gchar *accel_string = g_key_file_get_value(keyfile, group, keys[i], NULL);
 
 		gtk_accelerator_parse(accel_string, &key, &mods);
 		g_free(accel_string);
@@ -260,6 +258,7 @@ static void add_kb(GKeyFile *keyfile, gchar **keys)
 
 static void load_kb(GKeyFile *sysconfig, GKeyFile *userconfig)
 {
+	const gchar kb_group[] = "Keybindings";
 	gchar **keys = g_key_file_get_keys(userconfig, kb_group, NULL, NULL);
 	gchar **ptr;
 
@@ -267,11 +266,11 @@ static void load_kb(GKeyFile *sysconfig, GKeyFile *userconfig)
 	foreach_strv(ptr, keys)
 		g_key_file_remove_key(sysconfig, kb_group, *ptr, NULL);
 
-	add_kb(userconfig, keys);
+	add_kb(userconfig, kb_group, keys);
 	g_strfreev(keys);
 
 	keys = g_key_file_get_keys(sysconfig, kb_group, NULL, NULL);
-	add_kb(sysconfig, keys);
+	add_kb(sysconfig, kb_group, keys);
 	g_strfreev(keys);
 }
 
