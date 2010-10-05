@@ -2036,3 +2036,29 @@ gchar **utils_copy_environment(const gchar **exclude_vars, const gchar *first_va
 }
 
 
+/* Joins @a first and @a second into a new string vector, freeing the originals.
+ * The original contents are reused. */
+gchar **utils_strv_join(gchar **first, gchar **second)
+{
+	gchar **strv;
+	gchar **rptr, **wptr;
+
+	if (!first)
+		return second;
+	if (!second)
+		return first;
+
+	strv = g_new0(gchar*, g_strv_length(first) + g_strv_length(second) + 1);
+	wptr = strv;
+
+	foreach_strv(rptr, first)
+		*wptr++ = *rptr;
+	foreach_strv(rptr, second)
+		*wptr++ = *rptr;
+
+	g_free(first);
+	g_free(second);
+	return strv;
+}
+
+

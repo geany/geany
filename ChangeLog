@@ -1,3 +1,11 @@
+2010-10-05  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/utils.c, src/utils.h, src/highlighting.c, src/editor.c:
+   Don't cache overridden lexer properties.
+   Add foreach_strv() to plugin API.
+   Add utils_strv_join().
+
+
 2010-10-01  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/tools.c, doc/geany.txt, doc/geany.html:

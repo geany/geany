@@ -115,8 +115,12 @@
 #define foreach_str(char_ptr, string) \
 	for (char_ptr = string; *char_ptr; char_ptr++)
 
-/* Iterate NULL-terminated string vector */
-#define foreach_strv foreach_str
+/** Iterates a null-terminated string vector.
+ * @param str_ptr @c gchar** pointer to string element.
+ * @param strv Can be @c NULL.
+ * @since Geany 0.20 */
+#define foreach_strv(str_ptr, strv)\
+	if (!(strv)) {} else foreach_str(str_ptr, strv)
 
 /** Iterates from 0 to @a size.
  * @param i Integer.
@@ -213,6 +217,8 @@ gchar *utils_get_utf8_from_locale(const gchar *locale_text);
 void utils_free_pointers(gsize arg_count, ...) G_GNUC_NULL_TERMINATED;
 
 gchar **utils_strv_new(const gchar *first, ...) G_GNUC_NULL_TERMINATED;
+
+gchar **utils_strv_join(gchar **first, gchar **second) G_GNUC_WARN_UNUSED_RESULT;
 
 gint utils_mkdir(const gchar *path, gboolean create_parent_dirs);
 

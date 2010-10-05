@@ -3191,26 +3191,17 @@ static void get_key_values(GKeyFile *config, const gchar *group, gchar **keys, g
 static void read_properties(GeanyFiletype *ft, GKeyFile *config, GKeyFile *configh)
 {
 	gchar group[] = "lexer_properties";
-	gchar **keys = g_key_file_get_keys(config, group, NULL, NULL);
+	gchar **keys;
 	gchar **keysh = g_key_file_get_keys(configh, group, NULL, NULL);
+	gchar **ptr;
 
-	/* move/merge keysh into keys */
-	if (!keys)
-		keys = keysh;
-	else if (keysh)
-	{
-		gchar **strv = g_new0(gchar*, g_strv_length(keys) + g_strv_length(keysh) + 1);
-		gchar **read, **write = strv;
+	/* remove overridden keys from system keyfile */
+	foreach_strv(ptr, keysh)
+		g_key_file_remove_key(config, group, *ptr, NULL);
 
-		/* may have same key in each, but home will override so it's OK */
-		foreach_strv(read, keys)
-			*write++ = *read;
-		foreach_strv(read, keysh)
-			*write++ = *read;
-		g_free(keys);
-		g_free(keysh);
-		keys = strv;
-	}
+	/* merge sys and user keys */
+	keys = g_key_file_get_keys(config, group, NULL, NULL);
+	keys = utils_strv_join(keys, keysh);
 
 	if (keys)
 	{

@@ -262,7 +262,7 @@ static void load_kb(GKeyFile *sysconfig, GKeyFile *userconfig)
 	gchar **keys = g_key_file_get_keys(userconfig, kb_group, NULL, NULL);
 	gchar **ptr;
 
-	/* remove overridden keys in sys file */
+	/* remove overridden keys from system keyfile */
 	foreach_strv(ptr, keys)
 		g_key_file_remove_key(sysconfig, kb_group, *ptr, NULL);
 
