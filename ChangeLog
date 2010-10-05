@@ -4,6 +4,9 @@
    Don't cache overridden lexer properties.
    Add foreach_strv() to plugin API.
    Add utils_strv_join().
+ * tagmanager/basic.c:
+   Parse property, constructor, destructor as functions (patch by
+   pottersson, thanks - #2992167).
 
 
 2010-10-01  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

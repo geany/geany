@@ -55,6 +55,9 @@ static KeyWord freebasic_keywords[] = {
 	{"const", K_CONST}, /* must always be the third */
 	{"function", K_FUNCTION},
 	{"sub", K_FUNCTION},
+	{"property", K_FUNCTION},
+	{"constructor", K_FUNCTION},
+	{"destructor", K_FUNCTION},
 	{"private sub", K_FUNCTION},
 	{"public sub", K_FUNCTION},
 	{"private function", K_FUNCTION},
