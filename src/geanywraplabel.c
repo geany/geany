@@ -27,7 +27,7 @@
  */
 
 
-#include <gtk/gtk.h>
+#include "geany.h"
 #include "utils.h"
 #include "geanywraplabel.h"
 

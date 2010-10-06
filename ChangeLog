@@ -1,3 +1,9 @@
+2010-10-06  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/geanywraplabel.c:
+   Fix build with GLib 2.8.
+
+
 2010-10-06  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * po/kk.po:
