@@ -1,3 +1,10 @@
+2010-10-06  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * po/kk.po:
+   Added Kazakh translation. Thanks to Baurzhan Muftakhidinov for
+   providing.
+
+
 2010-10-05  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/utils.c, src/utils.h, src/highlighting.c, src/editor.c:
