@@ -33,6 +33,7 @@
 #endif
 
 
+/* Do not change the order, only append. */
 typedef enum
 {
 	GEANY_FILETYPES_NONE = 0,	/* first filetype is always None & must be 0 */
@@ -85,6 +86,7 @@ typedef enum
 	GEANY_FILETYPES_ABC,
 	GEANY_FILETYPES_VERILOG,
 	GEANY_FILETYPES_FORTH,
+	GEANY_FILETYPES_LISP,
 	/* ^ append items here */
 	GEANY_MAX_BUILT_IN_FILETYPES	/* Don't use this, use filetypes_array->len instead */
 }

@@ -5,6 +5,12 @@
  * src/dialogs.c, src/about.c, THANKS:
    Group Open dialog encoding options by submenus (patch by Adam Ples,
    thanks; #3047717).
+ * scintilla/LexLisp.cxx, scintilla/makefile.win32,
+   scintilla/KeyWords.cxx, scintilla/Makefile.am, src/highlighting.c,
+   src/about.c, src/filetypes.c, src/filetypes.h, THANKS,
+   data/filetype_extensions.conf, data/filetypes.lisp, wscript:
+   Add Lisp filetype (patch by Mário Silva, thanks).
+   Note: Lisp lexer was taken from Scintilla instead.
 
 
 2010-10-06  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>

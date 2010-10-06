@@ -506,6 +506,17 @@ static void init_builtin_filetypes(void)
 	ft->comment_close = NULL;
 	ft->group = GEANY_FILETYPE_GROUP_MISC;
 
+#define LISP
+	ft = filetypes[GEANY_FILETYPES_LISP];
+	ft->lang = -2;
+	ft->name = g_strdup("Lisp");
+	filetype_make_title(ft, TITLE_SOURCE_FILE);
+	ft->extension = g_strdup("lisp");
+	ft->pattern = utils_strv_new("*.lisp", NULL);
+	ft->comment_open = g_strdup(";");
+	ft->comment_close = NULL;
+	ft->group = GEANY_FILETYPE_GROUP_SCRIPT;
+
 #define CONF
 	ft = filetypes[GEANY_FILETYPES_CONF];
 	ft->lang = 10;

@@ -19,6 +19,7 @@ LexForth.cxx \
 LexFortran.cxx \
 LexHaskell.cxx \
 LexHTML.cxx \
+LexLisp.cxx \
 LexLua.cxx \
 LexMarkdown.cxx \
 LexMatlab.cxx \

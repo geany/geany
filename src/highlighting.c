@@ -1076,6 +1076,62 @@ static void styleset_diff(ScintillaObject *sci, gint ft_id)
 }
 
 
+static void styleset_lisp_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
+{
+	new_styleset(ft_id, 15);
+	get_keyfile_style(config, config_home, "default", &style_sets[ft_id].styling[0]);
+	get_keyfile_style(config, config_home, "comment", &style_sets[ft_id].styling[1]);
+	get_keyfile_style(config, config_home, "multicomment", &style_sets[ft_id].styling[2]);
+	get_keyfile_style(config, config_home, "number", &style_sets[ft_id].styling[3]);
+	get_keyfile_style(config, config_home, "keyword", &style_sets[ft_id].styling[4]);
+	get_keyfile_style(config, config_home, "special_keyword", &style_sets[ft_id].styling[5]);
+	get_keyfile_style(config, config_home, "symbol", &style_sets[ft_id].styling[6]);
+	get_keyfile_style(config, config_home, "string", &style_sets[ft_id].styling[7]);
+	get_keyfile_style(config, config_home, "stringeol", &style_sets[ft_id].styling[8]);
+	get_keyfile_style(config, config_home, "identifier", &style_sets[ft_id].styling[9]);
+	get_keyfile_style(config, config_home, "operator", &style_sets[ft_id].styling[10]);
+	get_keyfile_style(config, config_home, "special", &style_sets[ft_id].styling[11]);
+	get_keyfile_style(config, config_home, "character", &style_sets[ft_id].styling[12]);
+	get_keyfile_style(config, config_home, "macro", &style_sets[ft_id].styling[13]);
+	get_keyfile_style(config, config_home, "macrodispatch", &style_sets[ft_id].styling[14]);
+
+	style_sets[ft_id].keywords = g_new(gchar*, 3);
+	get_keyfile_keywords(config, config_home, "keywords", ft_id, 0);
+	get_keyfile_keywords(config, config_home, "special_keywords", ft_id, 1);
+	style_sets[ft_id].keywords[2] = NULL;
+}
+
+
+static void styleset_lisp(ScintillaObject *sci, gint ft_id)
+{
+	apply_filetype_properties(sci, SCLEX_LISP, ft_id);
+
+	sci_set_keywords(sci, 0, style_sets[ft_id].keywords[0]);
+	sci_set_keywords(sci, 1, style_sets[ft_id].keywords[1]);
+
+	set_sci_style(sci, STYLE_DEFAULT, ft_id, 0);
+	set_sci_style(sci, SCE_LISP_DEFAULT, ft_id, 0);
+	set_sci_style(sci, SCE_LISP_COMMENT, ft_id, 1);
+	set_sci_style(sci, SCE_LISP_MULTI_COMMENT, ft_id, 2);
+	set_sci_style(sci, SCE_LISP_NUMBER, ft_id, 3);
+	set_sci_style(sci, SCE_LISP_KEYWORD, ft_id, 4);
+/*
+	set_sci_style(sci, SCE_LISP_SPECIAL_KEYWORD, ft_id, 5);
+*/
+	set_sci_style(sci, SCE_LISP_SYMBOL, ft_id, 6);
+	set_sci_style(sci, SCE_LISP_STRING, ft_id, 7);
+	set_sci_style(sci, SCE_LISP_STRINGEOL, ft_id, 8);
+	set_sci_style(sci, SCE_LISP_IDENTIFIER, ft_id, 9);
+	set_sci_style(sci, SCE_LISP_OPERATOR, ft_id, 10);
+	set_sci_style(sci, SCE_LISP_SPECIAL, ft_id, 11);
+/*
+	set_sci_style(sci, SCE_LISP_CHARACTER, ft_id, 12);
+	set_sci_style(sci, SCE_LISP_MACRO, ft_id, 13);
+	set_sci_style(sci, SCE_LISP_MACRO_DISPATCH, ft_id, 14);
+*/
+}
+
+
 static void styleset_latex_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
 {
 	new_styleset(ft_id, 5);
@@ -3264,6 +3320,7 @@ void highlighting_init_styles(gint filetype_idx, GKeyFile *config, GKeyFile *con
 		init_styleset_case(GEANY_FILETYPES_CSS,		styleset_css_init);
 		init_styleset_case(GEANY_FILETYPES_D,		styleset_d_init);
 		init_styleset_case(GEANY_FILETYPES_DIFF,	styleset_diff_init);
+		init_styleset_case(GEANY_FILETYPES_LISP,	styleset_lisp_init);
 		init_styleset_case(GEANY_FILETYPES_DOCBOOK,	styleset_docbook_init);
 		init_styleset_case(GEANY_FILETYPES_FERITE,	styleset_ferite_init);
 		init_styleset_case(GEANY_FILETYPES_F77,		styleset_f77_init);
@@ -3334,6 +3391,7 @@ void highlighting_set_styles(ScintillaObject *sci, GeanyFiletype *ft)
 		styleset_case(GEANY_FILETYPES_CSS,		styleset_css);
 		styleset_case(GEANY_FILETYPES_D,		styleset_d);
 		styleset_case(GEANY_FILETYPES_DIFF,		styleset_diff);
+		styleset_case(GEANY_FILETYPES_LISP,		styleset_lisp);
 		styleset_case(GEANY_FILETYPES_DOCBOOK,	styleset_docbook);
 		styleset_case(GEANY_FILETYPES_FERITE,	styleset_ferite);
 		styleset_case(GEANY_FILETYPES_F77,		styleset_f77);
