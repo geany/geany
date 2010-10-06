@@ -63,8 +63,7 @@
  * scintilla/LexForth.cxx, scintilla/makefile.win32,
    scintilla/KeyWords.cxx, scintilla/Makefile.am, src/highlighting.c,
    src/about.c, src/filetypes.c, src/filetypes.h, THANKS,
-   data/filetypes.forth, data/filetype_extensions.conf, ChangeLog,
-   wscript:
+   data/filetypes.forth, data/filetype_extensions.conf, wscript:
    Add Forth filetype (patch by Thomas Huth, thanks).
  * src/tools.c:
    Remove unnecessary 'fix' from r5224 as it breaks configuring custom
@@ -1762,7 +1761,7 @@
  * src/highlighting.c, src/highlighting.h, src/sciwrappers.c,
    src/plugindata.h, doc/Doxyfile.in, doc/pluginsymbols.c,
    plugins/geanyfunctions.h, plugins/Makefile.am,
-   plugins/pluginmacros.h, plugins/genapi.py, ChangeLog, wscript:
+   plugins/pluginmacros.h, plugins/genapi.py, wscript:
    Use full function name for GeanyFunctions function pointers. This
    avoids naming conflicts e.g. with C++'s 'new' keyword.
    Remove deprecated header pluginmacros.h - use geanyfunctions.h

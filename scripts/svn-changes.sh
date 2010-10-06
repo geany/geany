@@ -25,6 +25,8 @@ status=`svn st $*`
 files=`echo "$status" |egrep '^[A-Z]'`
 # get filenames on one line
 files=`echo "$files" |egrep -o '[^A-Z].[ ]+(.+)' |xargs`
+# remove ChangeLog
+files=`echo "$files" |sed "s/ ChangeLog\b//"`
 # add commas if -s argument is not given
 if [ -z "$SPACES" ]; then
 	files=`echo "$files" |sed "s/ /, /g"`
