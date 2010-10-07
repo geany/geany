@@ -117,7 +117,7 @@ static void init_builtin_filetypes(void)
 	ft = filetypes[GEANY_FILETYPES_CPP];
 	ft->lang = 1;
 	ft->name = g_strdup("C++");
-	filetype_make_title(ft, TITLE_FILE);
+	filetype_make_title(ft, TITLE_SOURCE_FILE);
 	ft->extension = g_strdup("cpp");
 	ft->pattern = utils_strv_new("*.cpp", "*.cxx", "*.c++", "*.cc",
 		"*.h", "*.hpp", "*.hxx", "*.h++", "*.hh", "*.C", NULL);
@@ -129,7 +129,7 @@ static void init_builtin_filetypes(void)
 	ft = filetypes[GEANY_FILETYPES_CS];
 	ft->lang = 25;
 	ft->name = g_strdup("C#");
-	filetype_make_title(ft, TITLE_FILE);
+	filetype_make_title(ft, TITLE_SOURCE_FILE);
 	ft->extension = g_strdup("cs");
 	ft->pattern = utils_strv_new("*.cs", NULL);
 	ft->comment_open = g_strdup("//");
