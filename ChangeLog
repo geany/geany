@@ -15,7 +15,7 @@
 
 2010-10-06  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
- * po/kk.po:
+ * po/kk.po, THANKS, src/about.c:
    Added Kazakh translation. Thanks to Baurzhan Muftakhidinov for
    providing.
 
