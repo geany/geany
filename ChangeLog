@@ -1,3 +1,11 @@
+2010-10-07  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/ui_utils.h, src/socket.c, src/Makefile.am, src/ui_utils.c,
+   configure.ac, doc/geany.txt, doc/geany.html, wscript, TODO:
+   Revert X11 workspace socket support as it needs more work; moved
+   to workspace-sockets branch.
+
+
 2010-10-06  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/geanywraplabel.c:

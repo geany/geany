@@ -31,14 +31,6 @@
 #include <ctype.h>
 #include <gdk/gdkkeysyms.h>
 
-/* For ui_get_current_workspace() */
-#ifdef GDK_WINDOWING_X11
-#include <gdk/gdkx.h>
-#include <X11/Xlib.h>
-#include <X11/Xutil.h>
-#include <X11/Xatom.h>
-#endif
-
 #include "ui_utils.h"
 #include "prefs.h"
 #include "sciwrappers.h"
@@ -2461,48 +2453,3 @@ void ui_editable_insert_text_callback(GtkEditable *editable, gchar *new_text,
 		g_signal_stop_emission_by_name(editable, "insert-text");
 }
 
-
-/* Get the current visible workspace number for the given display name.
- *
- * If the X11 window property isn't found, 0 (the first workspace)
- * is returned.
- *
- * Has been tested and verified to work under GNOME and KDE. Assuming that
- * most other X11 desktops will work the same. For non-X11 backends it returns
- * a workspace number of 0.
- *
- * This code is a slightly modified version of code that was ripped from Gedit
- * which ripped it from Galeon. */
-gint ui_get_current_workspace(const gchar *display_name)
-{
-#if defined(GDK_WINDOWING_X11) && defined(HAVE_X11)
-	GdkScreen *screen = gdk_screen_get_default();
-	GdkWindow *root_win = gdk_screen_get_root_window(screen);
-	GdkDisplay *display = gdk_display_open(display_name);
-	Atom type;
-	gint format;
-	gulong nitems;
-	gulong bytes_after;
-	guint *current_desktop;
-	gint err, result;
-	gint ret = 0;
-
-	gdk_error_trap_push();
-	result = XGetWindowProperty(GDK_DISPLAY_XDISPLAY(display), GDK_WINDOW_XID(root_win),
-		gdk_x11_get_xatom_by_name_for_display(display, "_NET_CURRENT_DESKTOP"),
-		0, G_MAXLONG, False, XA_CARDINAL, &type, &format, &nitems,
-		&bytes_after, (gpointer) &current_desktop);
-	err = gdk_error_trap_pop();
-
-	if (err == Success && result == Success)
-	{
-		if (type == XA_CARDINAL && format == 32 && nitems > 0)
-			ret = current_desktop[0];
-		XFree(current_desktop);
-	}
-	gdk_display_close(display);
-	return ret;
-#else
-	return 0;
-#endif
-}

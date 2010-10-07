@@ -271,7 +271,6 @@ gint socket_init(gint argc, gchar **argv)
 		return -1;
 #else
 	gchar *display_name = gdk_get_display();
-	gint workspace = ui_get_current_workspace(display_name);
 	gchar *hostname = utils_get_hostname();
 	gchar *p;
 
@@ -285,8 +284,8 @@ gint socket_init(gint argc, gchar **argv)
 		*p = '_';
 
 	if (socket_info.file_name == NULL)
-		socket_info.file_name = g_strdup_printf("%s%cgeany_socket_%s_%s_ws%d",
-			app->configdir, G_DIR_SEPARATOR, hostname, display_name, workspace);
+		socket_info.file_name = g_strdup_printf("%s%cgeany_socket_%s_%s",
+			app->configdir, G_DIR_SEPARATOR, hostname, display_name);
 
 	g_free(display_name);
 	g_free(hostname);

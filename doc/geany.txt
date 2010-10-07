@@ -365,12 +365,10 @@ Short option  Long option              Function
                                        available if Geany was compiled with support for VTE.
 
 *none*        --socket-file            Use this socket filename for communication with a
-                                       running Geany instance. By default Geany uses one
-                                       socket file per workspace for X Windows, otherwise
-                                       only one.
+                                       running Geany instance. This can be used with the following
+                                       command to execute Geany on the current workspace::
 
-                                       Example:
-                                       geany --socket-file=/tmp/geany-sock-2
+                                         geany --socket-file=/tmp/geany-sock-$(xprop -root _NET_CURRENT_DESKTOP | awk '{print $3}')
 
 *none*        --vte-lib                Specify explicitly the path including filename or only
                                        the filename to the VTE library, e.g.

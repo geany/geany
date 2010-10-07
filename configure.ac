@@ -146,13 +146,6 @@ AC_SUBST(GIO_LIBS)
 if test $have_gio = 1 ; then
     AC_DEFINE(HAVE_GIO, 1, [Whether GIO is available])
 fi
-# X11
-PKG_CHECK_MODULES(X11, ["x11"], have_x11=1, have_x11=0)
-AC_SUBST(X11_CFLAGS)
-AC_SUBST(X11_LIBS)
-if test $have_x11 = 1 ; then
-    AC_DEFINE(HAVE_X11, 1, [Whether X11 is available])
-fi
 
 # --disable-deprecated switch for GTK2 purification
 AC_ARG_ENABLE(deprecated, [  --disable-deprecated    Disable deprecated GTK functions. ],

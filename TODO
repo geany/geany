@@ -21,6 +21,8 @@ Note: features included in brackets have lower priority.
 	o (sci macro support - as a plugin?)
 	o (parsing tags from a memory buffer instead of a file on disk)
 	o (tango-like icons for the symbol list)
+	o (per-workspace instances with socket support - see
+	   workspace-sockets branch)
 
 
 	1.0:

@@ -321,6 +321,4 @@ gboolean ui_is_keyval_enter_or_return(guint keyval);
 
 gint ui_get_gtk_settings_integer(const gchar *property_name, gint default_value);
 
-gint ui_get_current_workspace(const gchar *display_name);
-
 #endif
