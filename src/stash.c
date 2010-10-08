@@ -83,10 +83,10 @@
  */
 
 
-#include <gtk/gtk.h>
+#include "geany.h"		/* necessary for utils.h, otherwise use gtk/gtk.h */
+#include "utils.h"		/* only for foreach_*, utils_get_setting_*(). Stash should not depend on Geany. */
 
 #include "stash.h"
-#include "utils.h"		/* only for foreach_*, utils_get_setting_*(). Stash should not depend on Geany. */
 
 
 struct StashPref

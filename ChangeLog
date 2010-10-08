@@ -1,3 +1,9 @@
+2010-10-08  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/stash.c:
+   Fix build with GLib 2.8.
+
+
 2010-10-07  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/ui_utils.h, src/socket.c, src/Makefile.am, src/ui_utils.c,
