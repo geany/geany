@@ -1411,6 +1411,122 @@ static gint get_sci_line_code_end_position(ScintillaObject *sci, gint line)
 }
 
 
+/* returns the real indentation width, not the depth */
+static gint get_open_parenthesis_indent(ScintillaObject *sci, gint line)
+{
+	gint pos, pos_start = 0;
+	gint ret = -1, depth = 0;
+	gint lexer;
+
+	lexer = sci_get_lexer (sci);
+	pos = sci_get_line_end_position(sci, line) - 1;
+	/*if (one_line)
+		pos_start = sci_get_position_from_line(sci, line);*/
+	for (; pos >= pos_start && depth >= 0; pos--)
+	{
+		if (highlighting_is_code_style (lexer, sci_get_style_at (sci, pos)))
+		{
+			gchar ch = sci_get_char_at(sci, pos);
+
+			if (ch == ')')
+				depth++;
+			else if (ch == '(')
+				depth--;
+		}
+	}
+	if (depth < 0)
+	{
+		gint end_pos;
+		gint tab_width;
+
+		end_pos = pos + 1;
+		pos = sci_get_position_from_line(sci, sci_get_line_from_position(sci, end_pos));
+		tab_width = sci_get_tab_width(sci);
+		ret = 0;
+		for (; pos <= end_pos; pos = sci_get_position_after(sci, pos))
+			ret += (sci_get_char_at(sci, pos) == '\t') ? tab_width : 1;
+	}
+	return ret;
+}
+
+
+static gint get_last_occurrence_on_code_line(ScintillaObject *sci, gint line, gchar ch)
+{
+	gint start, end;
+	gint pos = -1;
+	gint lexer;
+
+	lexer = sci_get_lexer (sci);
+	start = sci_get_position_from_line(sci, line);
+	end = sci_get_line_end_position(sci, line);
+	for (; start < end; start = sci_get_position_after(sci, start))
+		if (highlighting_is_code_style (lexer, sci_get_style_at (sci, start)) &&
+			sci_get_char_at(sci, start) == ch)
+			pos = start;
+
+	return pos;
+}
+
+
+static gboolean code_line_has_characters(ScintillaObject *sci, gint line, const gchar *chs)
+{
+	gint start, end;
+	gint lexer;
+
+	lexer = sci_get_lexer (sci);
+	start = sci_get_position_from_line(sci, line);
+	end = sci_get_line_end_position(sci, line);
+	for (; start < end; start = sci_get_position_after(sci, start))
+		if (highlighting_is_code_style (lexer, sci_get_style_at (sci, start)) &&
+			strchr (chs, sci_get_char_at(sci, start)))
+			return TRUE;
+
+	return FALSE;
+}
+
+
+/* returns the real indentation width, not the depth */
+static gint get_matching_parenthesis_indent(ScintillaObject *sci, gint line)
+{
+	gint width = -1;
+	gint pos;
+
+	pos = get_last_occurrence_on_code_line(sci, line, ')');
+	if (pos >= 0)
+	{
+		gint match_pos = sci_find_matching_brace(sci, pos);
+
+		if (match_pos >= 0)
+		{
+			line = sci_get_line_from_position(sci, match_pos);
+			width = sci_get_line_indentation(sci, line);
+		}
+	}
+	return width;
+}
+
+
+/* returns the real indentation width, not the depth */
+static gint get_parenthesis_indent(ScintillaObject *sci, gint line,
+		const GeanyIndentPrefs *iprefs)
+{
+	gint size = -1;
+
+	/* don't play with parentheses indentation if last line have no parenthesis */
+	if (code_line_has_characters(sci, line, "()"))
+	{
+		gint parenthesis_witdh = get_open_parenthesis_indent(sci, line);
+
+		if (parenthesis_witdh < 0 &&
+			iprefs->auto_indent_mode > GEANY_AUTOINDENT_CURRENTCHARS /* FIXME? */)
+			parenthesis_witdh = get_matching_parenthesis_indent(sci, line);
+		if (parenthesis_witdh >= 0)
+			size = parenthesis_witdh;
+	}
+	return size;
+}
+
+
 static gint get_python_indent(ScintillaObject *sci, gint line)
 {
 	gint last_char = get_sci_line_code_end_position(sci, line);
@@ -1477,6 +1593,13 @@ static gint get_indent_size_after_line(GeanyEditor *editor, gint line)
 	{
 		gint additional_indent = 0;
 
+		if (TRUE) /* FIXME: */
+		{
+			gint parenthesis_witdh = get_parenthesis_indent(sci, line, iprefs);
+
+			if (parenthesis_witdh >= 0)
+				size = parenthesis_witdh;
+		}
 		if (lexer_has_braces(sci))
 			additional_indent = iprefs->width * get_brace_indent(sci, line);
 		else if (sci_get_lexer(sci) == SCLEX_PYTHON) /* Python/Cython */
