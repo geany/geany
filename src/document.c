@@ -2939,8 +2939,8 @@ static gboolean monitor_resave_missing_file(GeanyDocument *doc)
 		_("Close _without saving"), GTK_RESPONSE_CLOSE,
 		GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 		GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT,
-		NULL,
-		_("File \"%s\" was not found on disk! Try to resave the file?"),
+		_("Try to resave the file?"),
+		_("File \"%s\" was not found on disk!"),
 		doc->file_name);
 	if (ret == GTK_RESPONSE_ACCEPT)
 	{
