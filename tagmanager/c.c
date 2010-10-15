@@ -421,7 +421,7 @@ static const keywordDesc KeywordTable [] = {
 	{ "explicit",       KEYWORD_EXPLICIT,       { 0, 1, 1, 0, 0, 0, 1 } },
 	{ "extends",        KEYWORD_EXTENDS,        { 0, 0, 0, 1, 1, 0, 0 } },
 	{ "extern",         KEYWORD_EXTERN,         { 1, 1, 1, 0, 1, 1, 0 } },
-	{ "extern",         KEYWORD_NAMESPACE,      { 0, 0, 0, 0, 0, 0, 1 } },	/* hack to ignore extern */
+	{ "extern",         KEYWORD_NAMESPACE,      { 0, 0, 0, 0, 0, 0, 1 } },	/* parse block */
 	{ "final",          KEYWORD_FINAL,          { 0, 0, 0, 1, 0, 0, 1 } },
 	{ "finally",        KEYWORD_FINALLY,        { 0, 0, 0, 0, 0, 1, 1 } },
 	{ "float",          KEYWORD_FLOAT,          { 1, 1, 1, 1, 0, 1, 1 } },
@@ -494,10 +494,11 @@ static const keywordDesc KeywordTable [] = {
 	{ "uint",           KEYWORD_UINT,           { 0, 0, 1, 0, 0, 1, 1 } },
 	{ "ulong",          KEYWORD_ULONG,          { 0, 0, 1, 0, 0, 1, 1 } },
 	{ "union",          KEYWORD_UNION,          { 1, 1, 0, 0, 0, 0, 1 } },
+	{ "unittest",       KEYWORD_BODY,           { 0, 0, 0, 0, 0, 0, 1 } },	/* ignore */
 	{ "unsigned",       KEYWORD_UNSIGNED,       { 1, 1, 1, 0, 0, 0, 1 } },
 	{ "ushort",         KEYWORD_USHORT,         { 0, 0, 1, 0, 0, 1, 1 } },
 	{ "using",          KEYWORD_USING,          { 0, 1, 1, 0, 0, 1, 0 } },
-	{ "version",        KEYWORD_NAMESPACE,      { 0, 0, 0, 0, 0, 0, 1 } },	/* hack to ignore version */
+	{ "version",        KEYWORD_NAMESPACE,      { 0, 0, 0, 0, 0, 0, 1 } },	/* parse block */
 	{ "virtual",        KEYWORD_VIRTUAL,        { 0, 1, 1, 0, 1, 1, 0 } },
 	{ "void",           KEYWORD_VOID,           { 1, 1, 1, 1, 1, 1, 1 } },
 	{ "volatile",       KEYWORD_VOLATILE,       { 1, 1, 1, 1, 0, 0, 1 } },
@@ -2183,9 +2184,12 @@ static boolean skipPostArgumentStuff (statementInfo *const st,
 				{
 					readIdentifier (token, c);
 					if (isLanguage(Lang_d))
-					{	/* parse D contracts */
+					{
 						switch (token->keyword)
 						{
+							/* template constraint */
+							case KEYWORD_IF:
+							/* contracts */
 							case KEYWORD_IN:
 							case KEYWORD_OUT:
 							case KEYWORD_BODY:

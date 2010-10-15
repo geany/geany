@@ -2,6 +2,9 @@
 
  * tagmanager/get.c:
    Ignore D /+ +/ comments.
+ * tagmanager/c.c:
+   Ignore D unittest blocks.
+   Parse D template functions with constraints.
 
 
 2010-10-08  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
