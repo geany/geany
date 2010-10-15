@@ -3102,6 +3102,10 @@ Insert alternative whitespace                             Inserts a tab characte
                                                           be used for indentation and inserts space
                                                           characters of the amount of a tab width when
                                                           tabs should be used for indentation.
+
+Insert New Line Before Current                            Inserts a new line with indentation.
+
+Insert New Line After Current                             Inserts a new line with indentation.
 =============================== ========================= ==================================================
 
 

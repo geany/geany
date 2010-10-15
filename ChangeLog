@@ -5,6 +5,9 @@
  * tagmanager/c.c:
    Ignore D unittest blocks.
    Parse D template functions with constraints.
+ * src/keybindings.c, src/keybindings.h, doc/geany.txt, doc/geany.html:
+   Add 'Insert New Line Before/After Current' keybindings (based on
+   patch by Eugene Arshinov, thanks).
 
 
 2010-10-08  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

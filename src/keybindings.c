@@ -372,6 +372,10 @@ static void init_default_kb(void)
 		LW(insert_date_custom1));
 	keybindings_set_item(group, GEANY_KEYS_INSERT_ALTWHITESPACE, NULL,
 		0, 0, "edit_insertwhitespace", _("_Insert Alternative White Space"), NULL);
+	keybindings_set_item(group, GEANY_KEYS_INSERT_LINEBEFORE, NULL,
+		0, 0, "edit_insertlinebefore", _("Insert New Line Before Current"), NULL);
+	keybindings_set_item(group, GEANY_KEYS_INSERT_LINEAFTER, NULL,
+		0, 0, "edit_insertlineafter", _("Insert New Line After Current"), NULL);
 
 	group = ADD_KB_GROUP(SETTINGS, _("Settings"), NULL);
 
@@ -2537,6 +2541,27 @@ static gboolean cb_func_document_action(guint key_id)
 }
 
 
+static void insert_line_after(GeanyEditor *editor)
+{
+	ScintillaObject *sci = editor->sci;
+
+	sci_send_command(sci, SCI_LINEEND);
+	sci_send_command(sci, SCI_NEWLINE);
+}
+
+
+static void insert_line_before(GeanyEditor *editor)
+{
+	ScintillaObject *sci = editor->sci;
+	gint line = sci_get_current_line(sci);
+	gint indentpos = sci_get_line_indent_position(sci, line);
+
+	sci_set_current_position(sci, indentpos, TRUE);
+	sci_send_command(sci, SCI_NEWLINE);
+	sci_send_command(sci, SCI_LINEUP);
+}
+
+
 /* common function for insert keybindings, only valid when scintilla has focus. */
 static gboolean cb_func_insert_action(guint key_id)
 {
@@ -2555,6 +2580,12 @@ static gboolean cb_func_insert_action(guint key_id)
 		case GEANY_KEYS_INSERT_DATE:
 			gtk_menu_item_activate(GTK_MENU_ITEM(
 				ui_lookup_widget(main_widgets.window, "insert_date_custom1")));
+			break;
+		case GEANY_KEYS_INSERT_LINEAFTER:
+			insert_line_after(doc->editor);
+			break;
+		case GEANY_KEYS_INSERT_LINEBEFORE:
+			insert_line_before(doc->editor);
 			break;
 	}
 	return TRUE;

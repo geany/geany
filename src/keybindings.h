@@ -236,6 +236,8 @@ enum GeanyKeyBindingID
 	GEANY_KEYS_FILE_OPENLASTTAB,				/**< Keybinding. */
 	GEANY_KEYS_SEARCH_FINDINFILES,				/**< Keybinding. */
 	GEANY_KEYS_GOTO_NEXTWORDPART,				/**< Keybinding. */
+	GEANY_KEYS_INSERT_LINEAFTER,				/**< Keybinding. */
+	GEANY_KEYS_INSERT_LINEBEFORE,				/**< Keybinding. */
 	GEANY_KEYS_COUNT	/* must not be used by plugins */
 };
 
@@ -273,4 +275,3 @@ void keybindings_show_shortcuts(void);
 gboolean keybindings_check_event(GdkEventKey *ev, GeanyKeyBinding *kb);
 
 #endif
-
