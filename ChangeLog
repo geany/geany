@@ -1,3 +1,9 @@
+2010-10-16  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/search.c:
+   Fix off-by-one bug in 'search_mark_all'.
+
+
 2010-10-15  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * tagmanager/get.c:

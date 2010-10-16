@@ -1041,7 +1041,7 @@ gint search_mark_all(GeanyDocument *doc, const gchar *search_text, gint flags)
 		if (len)
 			editor_indicator_set_on_range(doc->editor, GEANY_INDICATOR_SEARCH, pos, pos + len);
 
-		ttf.chrg.cpMin = ttf.chrgText.cpMax + 1;
+		ttf.chrg.cpMin = ttf.chrgText.cpMax;
 		count++;
 	}
 	return count;
