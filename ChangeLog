@@ -1,3 +1,11 @@
+2010-10-18  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * data/filetypes.c, data/filetypes.d:
+   Add missing C99 keyword 'restrict' (#3046716).
+   Add missing D1 keywords 'ref' and 'macro'.
+   Add D2 keywords.
+
+
 2010-10-16  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/search.c:

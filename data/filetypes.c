@@ -26,7 +26,7 @@ globalclass=type
 
 [keywords]
 # all items must be in one line
-primary=asm auto break case char const continue default do double else enum extern float for goto if inline int long register return short signed sizeof static struct switch typedef union unsigned void volatile while FALSE NULL TRUE
+primary=asm auto break case char const continue default do double else enum extern float for goto if inline int long register restrict return short signed sizeof static struct switch typedef union unsigned void volatile while FALSE NULL TRUE
 secondary=
 # these are some doxygen keywords (incomplete)
 docComment=attention author brief bug class code date def enum example exception file fn namespace note param remarks return see since struct throw todo typedef var version warning union
