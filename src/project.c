@@ -582,7 +582,6 @@ static void show_project_properties(gboolean show_build)
 			g_signal_emit_by_name(geany_object, "project-dialog-confirmed", e->notebook);
 			write_config(TRUE);
 			ui_set_statusbar(TRUE, _("Project \"%s\" saved."), app->project->name);
-			stash_group_update(indent_group, e->dialog);
 			break;
 		}
 	}
@@ -756,6 +755,8 @@ static gboolean update_config(const PropertyDialogElements *e)
 		gtk_text_buffer_get_start_iter(buffer, &start);
 		gtk_text_buffer_get_end_iter(buffer, &end);
 		setptr(p->description, g_strdup(gtk_text_buffer_get_text(buffer, &start, &end, FALSE)));
+
+		stash_group_update(indent_group, e->dialog);
 
 		/* read the project build menu */
 		oldvalue = ft ? ft->projfilecmds : NULL;
