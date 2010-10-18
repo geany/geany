@@ -209,14 +209,14 @@ static void get_keyfile_wordchars(GKeyFile *config, GKeyFile *configh, gchar **w
 }
 
 
-static void read_named_style(const gchar *named_style, GeanyLexerStyle *style)
+static gboolean read_named_style(const gchar *named_style, GeanyLexerStyle *style)
 {
 	GeanyLexerStyle *cs;
 	gchar *comma, *name = NULL;
 	const gchar *bold = NULL;
 	const gchar *italic = NULL;
 
-	g_return_if_fail(named_style);
+	g_return_val_if_fail(named_style, FALSE);
 	name = utils_strdupa(named_style);	/* named_style must not be written to, may be a static string */
 
 	comma = strstr(name, ",");
@@ -239,8 +239,8 @@ static void read_named_style(const gchar *named_style, GeanyLexerStyle *style)
 	else
 	{
 		*style = gsd_default;
-		geany_debug("No named style '%s'! Check filetypes.common.", name);
 	}
+	return (cs != NULL);
 }
 
 
@@ -280,7 +280,12 @@ static void parse_keyfile_style(gchar **list,
 
 	str = list[0];
 	if (len == 1 && isalpha(str[0]))
-		read_named_style(str, style);
+	{
+		if (!read_named_style(str, style))
+			geany_debug(
+				"No named style '%s'! Check filetype styles or %s color scheme.",
+				str, NVL(editor_prefs.color_scheme, "filetypes.common"));
+	}
 	else
 	{
 		switch (len)

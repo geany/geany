@@ -1277,6 +1277,7 @@ static void load_settings(gint ft_id, GKeyFile *config, GKeyFile *configh)
 	build_load_menu(configh, GEANY_BCS_HOME_FT, (gpointer)ft);
 }
 
+
 /* simple wrapper function to print file errors in DEBUG mode */
 static void load_system_keyfile(GKeyFile *key_file, const gchar *file, GKeyFileFlags flags,
 		GeanyFiletype *ft)
