@@ -415,6 +415,7 @@ static const keywordDesc KeywordTable [] = {
 	{ "delete",         KEYWORD_DELETE,         { 0, 1, 0, 0, 0, 1, 1 } },
 	{ "double",         KEYWORD_DOUBLE,         { 1, 1, 1, 1, 0, 1, 1 } },
 	{ "else",           KEYWORD_ELSE,           { 1, 1, 0, 1, 0, 1, 1 } },
+	{ "ensures",        KEYWORD_ATTRIBUTE,      { 0, 0, 0, 0, 0, 1, 0 } },	/* ignore */
 	{ "enum",           KEYWORD_ENUM,           { 1, 1, 1, 1, 1, 1, 1 } },
 	{ "errordomain",    KEYWORD_ENUM,           { 0, 0, 0, 0, 0, 1, 0 } }, /* errordomain behaves like enum */
 	{ "event",          KEYWORD_EVENT,          { 0, 0, 1, 0, 1, 0, 0 } },
@@ -467,6 +468,7 @@ static const keywordDesc KeywordTable [] = {
 	{ "public",         KEYWORD_PUBLIC,         { 0, 1, 1, 1, 1, 1, 1 } },
 	{ "ref",            KEYWORD_REF,            { 0, 0, 0, 0, 0, 1, 1 } },
 	{ "register",       KEYWORD_REGISTER,       { 1, 1, 0, 0, 0, 0, 0 } },
+	{ "requires",       KEYWORD_ATTRIBUTE,      { 0, 0, 0, 0, 0, 1, 0 } },	/* ignore */
 	{ "return",         KEYWORD_RETURN,         { 1, 1, 1, 1, 0, 1, 1 } },
 	{ "set",            KEYWORD_SET,            { 0, 0, 0, 0, 0, 1, 0 } },
 	{ "shadow",         KEYWORD_SHADOW,         { 0, 0, 0, 0, 1, 0, 0 } },
@@ -1744,7 +1746,7 @@ static void readIdentifier (tokenInfo *const token, const int firstChar)
 	vStringTerminate (name);
 	cppUngetc (c);		/* unget non-identifier character */
 
-	/* Vala supports '?' at end of a type (with or without whitspace before) for nullable types */
+	/* Vala supports '?' at end of a type (with or without whitespace before) for nullable types */
 	if (isLanguage (Lang_vala))
 	{
 		c = skipToNonWhite ();
@@ -2283,6 +2285,39 @@ static void skipJavaThrows (statementInfo *const st)
 	setToken (st, TOKEN_NONE);
 }
 
+static void skipValaPostParens (statementInfo *const st)
+{
+	tokenInfo *const token = activeToken (st);
+	int c = skipToNonWhite ();
+
+	while (isident1 (c))
+	{
+		readIdentifier (token, c);
+		if (token->keyword == KEYWORD_ATTRIBUTE)
+		{
+			/* parse contracts */
+			skipParens ();
+			c = skipToNonWhite ();
+		}
+		else if (token->keyword == KEYWORD_THROWS)
+		{
+			do
+			{
+				c = skipToNonWhite ();
+				if (isident1 (c))
+				{
+					readIdentifier (token, c);
+					c = skipToNonWhite ();
+				}
+			} while (c == '.'  ||  c == ',');
+		}
+		else
+			break;
+	}
+	cppUngetc (c);
+	setToken (st, TOKEN_NONE);
+}
+
 static void analyzePostParens (statementInfo *const st, parenInfo *const info)
 {
 	const unsigned long inputLineNumber = getInputLineNumber ();
@@ -2291,8 +2326,10 @@ static void analyzePostParens (statementInfo *const st, parenInfo *const info)
 	cppUngetc (c);
 	if (isOneOf (c, "{;,="))
 		;
-	else if (isLanguage (Lang_java) || isLanguage (Lang_vala))
+	else if (isLanguage (Lang_java))
 		skipJavaThrows (st);
+	else if (isLanguage (Lang_vala))
+		skipValaPostParens(st);
 	else
 	{
 		if (! skipPostArgumentStuff (st, info))
