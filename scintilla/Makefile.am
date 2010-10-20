@@ -15,6 +15,7 @@ LexCaml.cxx \
 LexCmake.cxx \
 LexCSS.cxx \
 LexD.cxx \
+LexErlang.cxx \
 LexForth.cxx \
 LexFortran.cxx \
 LexHaskell.cxx \

@@ -5,6 +5,11 @@
    Don't hide the menu when only the default item is available.
  * data/colorschemes, data/colorschemes/alt.conf, wscript, Makefile.am:
    Add alternative color scheme based on Python colors.
+ * scintilla/LexErlang.cxx, scintilla/makefile.win32,
+   scintilla/KeyWords.cxx, scintilla/Makefile.am, src/highlighting.c,
+   src/about.c, src/filetypes.c, src/filetypes.h, THANKS,
+   data/filetype_extensions.conf, data/filetypes.erlang, wscript:
+   Add Erlang filetype (patch by Taylor Venable, thanks).
 
 
 2010-10-18  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

@@ -517,6 +517,17 @@ static void init_builtin_filetypes(void)
 	ft->comment_close = NULL;
 	ft->group = GEANY_FILETYPE_GROUP_SCRIPT;
 
+#define ERLANG
+	ft = filetypes[GEANY_FILETYPES_ERLANG];
+	ft->lang = -2;
+	ft->name = g_strdup("Erlang");
+	filetype_make_title(ft, TITLE_SOURCE_FILE);
+	ft->extension = g_strdup("erl");
+	ft->pattern = utils_strv_new("*.erl", NULL);
+	ft->comment_open = g_strdup("%");
+	ft->comment_close = NULL;
+	ft->group = GEANY_FILETYPE_GROUP_SCRIPT;
+
 #define CONF
 	ft = filetypes[GEANY_FILETYPES_CONF];
 	ft->lang = 10;

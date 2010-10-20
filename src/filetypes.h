@@ -87,6 +87,7 @@ typedef enum
 	GEANY_FILETYPES_VERILOG,
 	GEANY_FILETYPES_FORTH,
 	GEANY_FILETYPES_LISP,
+	GEANY_FILETYPES_ERLANG,
 	/* ^ append items here */
 	GEANY_MAX_BUILT_IN_FILETYPES	/* Don't use this, use filetypes_array->len instead */
 }

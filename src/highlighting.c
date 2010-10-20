@@ -1137,6 +1137,88 @@ static void styleset_lisp(ScintillaObject *sci, gint ft_id)
 }
 
 
+static void styleset_erlang_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
+{
+	new_styleset(ft_id, 26);
+	get_keyfile_style(config, config_home, "default",			&style_sets[ft_id].styling[0]);
+	get_keyfile_style(config, config_home, "comment",			&style_sets[ft_id].styling[1]);
+	get_keyfile_style(config, config_home, "variable",			&style_sets[ft_id].styling[2]);
+	get_keyfile_style(config, config_home, "number",			&style_sets[ft_id].styling[3]);
+	get_keyfile_style(config, config_home, "keyword",			&style_sets[ft_id].styling[4]);
+	get_keyfile_style(config, config_home, "string",			&style_sets[ft_id].styling[5]);
+	get_keyfile_style(config, config_home, "operator",			&style_sets[ft_id].styling[6]);
+	get_keyfile_style(config, config_home, "atom",				&style_sets[ft_id].styling[7]);
+	get_keyfile_style(config, config_home, "function_name",		&style_sets[ft_id].styling[8]);
+	get_keyfile_style(config, config_home, "character",			&style_sets[ft_id].styling[9]);
+	get_keyfile_style(config, config_home, "macro",				&style_sets[ft_id].styling[10]);
+	get_keyfile_style(config, config_home, "record",			&style_sets[ft_id].styling[11]);
+	get_keyfile_style(config, config_home, "preproc",			&style_sets[ft_id].styling[12]);
+	get_keyfile_style(config, config_home, "node_name",			&style_sets[ft_id].styling[13]);
+	get_keyfile_style(config, config_home, "comment_function",	&style_sets[ft_id].styling[14]);
+	get_keyfile_style(config, config_home, "comment_module",	&style_sets[ft_id].styling[15]);
+	get_keyfile_style(config, config_home, "comment_doc",		&style_sets[ft_id].styling[16]);
+	get_keyfile_style(config, config_home, "comment_doc_macro",	&style_sets[ft_id].styling[17]);
+	get_keyfile_style(config, config_home, "atom_quoted",		&style_sets[ft_id].styling[18]);
+	get_keyfile_style(config, config_home, "macro_quoted",		&style_sets[ft_id].styling[19]);
+	get_keyfile_style(config, config_home, "record_quoted",		&style_sets[ft_id].styling[20]);
+	get_keyfile_style(config, config_home, "node_name_quoted",	&style_sets[ft_id].styling[21]);
+	get_keyfile_style(config, config_home, "bifs",				&style_sets[ft_id].styling[22]);
+	get_keyfile_style(config, config_home, "modules",			&style_sets[ft_id].styling[23]);
+	get_keyfile_style(config, config_home, "modules_att",		&style_sets[ft_id].styling[24]);
+	get_keyfile_style(config, config_home, "unknown",			&style_sets[ft_id].styling[25]);
+
+	style_sets[ft_id].keywords = g_new(gchar*, 6);
+	get_keyfile_keywords(config, config_home, "keywords",	ft_id, 0);
+	get_keyfile_keywords(config, config_home, "bifs",		ft_id, 1);
+	get_keyfile_keywords(config, config_home, "preproc",	ft_id, 2);
+	get_keyfile_keywords(config, config_home, "module",		ft_id, 3);
+	get_keyfile_keywords(config, config_home, "doc",		ft_id, 4);
+	get_keyfile_keywords(config, config_home, "doc_macro",	ft_id, 5);
+	style_sets[ft_id].keywords[6] = NULL;
+}
+
+
+static void styleset_erlang(ScintillaObject *sci, gint ft_id)
+{
+	apply_filetype_properties(sci, SCLEX_ERLANG, ft_id);
+
+	sci_set_keywords(sci, 0, style_sets[ft_id].keywords[0]);
+	sci_set_keywords(sci, 1, style_sets[ft_id].keywords[1]);
+	sci_set_keywords(sci, 2, style_sets[ft_id].keywords[2]);
+	sci_set_keywords(sci, 3, style_sets[ft_id].keywords[3]);
+	sci_set_keywords(sci, 4, style_sets[ft_id].keywords[4]);
+	sci_set_keywords(sci, 5, style_sets[ft_id].keywords[5]);
+
+	set_sci_style(sci, STYLE_DEFAULT,					ft_id, 0);
+	set_sci_style(sci, SCE_ERLANG_DEFAULT,				ft_id, 0);
+	set_sci_style(sci, SCE_ERLANG_COMMENT,				ft_id, 1);
+	set_sci_style(sci, SCE_ERLANG_VARIABLE,				ft_id, 2);
+	set_sci_style(sci, SCE_ERLANG_NUMBER,				ft_id, 3);
+	set_sci_style(sci, SCE_ERLANG_KEYWORD,				ft_id, 4);
+	set_sci_style(sci, SCE_ERLANG_STRING,				ft_id, 5);
+	set_sci_style(sci, SCE_ERLANG_OPERATOR,				ft_id, 6);
+	set_sci_style(sci, SCE_ERLANG_ATOM,					ft_id, 7);
+	set_sci_style(sci, SCE_ERLANG_FUNCTION_NAME,		ft_id, 8);
+	set_sci_style(sci, SCE_ERLANG_CHARACTER,			ft_id, 9);
+	set_sci_style(sci, SCE_ERLANG_MACRO,				ft_id, 10);
+	set_sci_style(sci, SCE_ERLANG_RECORD,				ft_id, 11);
+	set_sci_style(sci, SCE_ERLANG_PREPROC,				ft_id, 12);
+	set_sci_style(sci, SCE_ERLANG_NODE_NAME,			ft_id, 13);
+	set_sci_style(sci, SCE_ERLANG_COMMENT_FUNCTION,		ft_id, 14);
+	set_sci_style(sci, SCE_ERLANG_COMMENT_MODULE,		ft_id, 15);
+	set_sci_style(sci, SCE_ERLANG_COMMENT_DOC,			ft_id, 16);
+	set_sci_style(sci, SCE_ERLANG_COMMENT_DOC_MACRO,	ft_id, 17);
+	set_sci_style(sci, SCE_ERLANG_ATOM_QUOTED,			ft_id, 18);
+	set_sci_style(sci, SCE_ERLANG_MACRO_QUOTED,			ft_id, 19);
+	set_sci_style(sci, SCE_ERLANG_RECORD_QUOTED,		ft_id, 20);
+	set_sci_style(sci, SCE_ERLANG_NODE_NAME_QUOTED,		ft_id, 21);
+	set_sci_style(sci, SCE_ERLANG_BIFS,					ft_id, 22);
+	set_sci_style(sci, SCE_ERLANG_MODULES,				ft_id, 23);
+	set_sci_style(sci, SCE_ERLANG_MODULES_ATT,			ft_id, 24);
+	set_sci_style(sci, SCE_ERLANG_UNKNOWN,				ft_id, 25);
+}
+
+
 static void styleset_latex_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
 {
 	new_styleset(ft_id, 5);
@@ -3326,6 +3408,7 @@ void highlighting_init_styles(gint filetype_idx, GKeyFile *config, GKeyFile *con
 		init_styleset_case(GEANY_FILETYPES_D,		styleset_d_init);
 		init_styleset_case(GEANY_FILETYPES_DIFF,	styleset_diff_init);
 		init_styleset_case(GEANY_FILETYPES_LISP,	styleset_lisp_init);
+		init_styleset_case(GEANY_FILETYPES_ERLANG,	styleset_erlang_init);
 		init_styleset_case(GEANY_FILETYPES_DOCBOOK,	styleset_docbook_init);
 		init_styleset_case(GEANY_FILETYPES_FERITE,	styleset_ferite_init);
 		init_styleset_case(GEANY_FILETYPES_F77,		styleset_f77_init);
@@ -3397,6 +3480,7 @@ void highlighting_set_styles(ScintillaObject *sci, GeanyFiletype *ft)
 		styleset_case(GEANY_FILETYPES_D,		styleset_d);
 		styleset_case(GEANY_FILETYPES_DIFF,		styleset_diff);
 		styleset_case(GEANY_FILETYPES_LISP,		styleset_lisp);
+		styleset_case(GEANY_FILETYPES_ERLANG,	styleset_erlang);
 		styleset_case(GEANY_FILETYPES_DOCBOOK,	styleset_docbook);
 		styleset_case(GEANY_FILETYPES_FERITE,	styleset_ferite);
 		styleset_case(GEANY_FILETYPES_F77,		styleset_f77);

@@ -85,6 +85,7 @@ Erik de Castro Lopo <mle+tools(at)mega-nerd(dot)com> - Various patches
 Thomas Huth <th(dot)huth(at)googlemail(dot)com> - Forth filetype
 Adam Ples <adamples(at)users(dot)sourceforge(dot)net> - Group encodings in open dialog
 Mário Silva <sharelider(at)gmail(dot)com> - Lisp filetype
+Taylor Venable <taylor(at)metasyntax(dot)net> - Erlang filetype
 
 Translators:
 ------------
