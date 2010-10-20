@@ -12,6 +12,8 @@
    Add Erlang filetype (patch by Taylor Venable, thanks).
  * src/filetypes.c, data/filetypes.*:
    Move filetype 'extension' default into data files.
+ * src/filetypes.c, data/filetypes.vala:
+   Move filetype comment_{open,close} defaults into data files.
 
 
 2010-10-18  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

@@ -48,8 +48,8 @@ extension=vala
 #wordchars=_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
 
 # if only single comment char is supported like # in this file, leave comment_close blank
-#comment_open=//
-#comment_close=
+comment_open=//
+comment_close=
 # this is an alternative way, so multiline comments are used
 #comment_open=/*
 #comment_close=*/
