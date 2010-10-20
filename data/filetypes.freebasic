@@ -32,7 +32,7 @@ user2=
 
 [settings]
 # default extension used when saving files
-#extension=bas
+extension=bas
 
 # the following characters are these which a "word" can contains, see documentation
 #wordchars=_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789

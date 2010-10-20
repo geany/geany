@@ -31,7 +31,7 @@ secondary=Object Function Array prototype
 
 [settings]
 # default extension used when saving files
-#extension=js
+extension=js
 
 # the following characters are these which a "word" can contains, see documentation
 #wordchars=_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789

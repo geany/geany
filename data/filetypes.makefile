@@ -14,7 +14,7 @@ ideol=0x008000;0xffffff;false;false
 
 [settings]
 # default extension used when saving files
-#extension=mak
+extension=mak
 
 # the following characters are these which a "word" can contains, see documentation
 #wordchars=_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789

@@ -44,7 +44,7 @@ primary=__FILE__ load define_method attr_accessor attr_writer attr_reader and de
 
 [settings]
 # default extension used when saving files
-#extension=rb
+extension=rb
 
 # the following characters are these which a "word" can contains, see documentation
 #wordchars=_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789

@@ -32,7 +32,7 @@ docComment=brief class declaration description end example extends function grou
 
 [settings]
 # default extension used when saving files
-#extension=fe
+extension=fe
 
 # the following characters are these which a "word" can contains, see documentation
 #wordchars=_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789

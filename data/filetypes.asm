@@ -27,7 +27,7 @@ directives=org list nolist page equivalent word text
 
 [settings]
 # default extension used when saving files
-#extension=asm
+extension=asm
 
 # the following characters are these which a "word" can contains, see documentation
 #wordchars=_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789

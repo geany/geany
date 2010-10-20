@@ -17,7 +17,7 @@ primary=break case catch continue else elseif end for function global if otherwi
 
 [settings]
 # default extension used when saving files
-#extension=m
+extension=m
 
 # the following characters are these which a "word" can contains, see documentation
 #wordchars=_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789

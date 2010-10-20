@@ -21,13 +21,13 @@ primary=ABORT EXIT DO LOOP UNLOOP BEGIN UNTIL WHILE REPEAT EXIT IF ELSE THEN CAS
 
 [settings]
 # default extension used when saving files
-#extension=fs
+extension=fs
 
 # the following characters are these which a "word" can contains, see documentation
 #wordchars=_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
 
 # if only single comment char is supported like # in this file, leave comment_close blank
-comment_open=( 
+comment_open=(
 comment_close= )
 
 # comment_open=\

@@ -39,7 +39,7 @@ user4=
 
 [settings]
 # default extension used when saving files
-#extension=lua
+extension=lua
 
 # the following characters are these which a "word" can contains, see documentation
 #wordchars=_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789

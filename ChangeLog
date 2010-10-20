@@ -10,6 +10,8 @@
    src/about.c, src/filetypes.c, src/filetypes.h, THANKS,
    data/filetype_extensions.conf, data/filetypes.erlang, wscript:
    Add Erlang filetype (patch by Taylor Venable, thanks).
+ * src/filetypes.c, data/filetypes.*:
+   Move filetype 'extension' default into data files.
 
 
 2010-10-18  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

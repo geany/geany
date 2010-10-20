@@ -33,7 +33,7 @@ classes=Array ArrayAccess Class Date DateTools EReg Hash IntHash IntIter Iterabl
 
 [settings]
 # default extension used when saving files
-#extension=hx
+extension=hx
 
 # the following characters are these which a "word" can contains, see documentation
 #wordchars=_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789

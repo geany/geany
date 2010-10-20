@@ -21,7 +21,7 @@ primary=abort abs abstract accept access aliased all and array at begin body cas
 
 [settings]
 # default extension used when saving files
-#extension=adb
+extension=adb
 
 # the following characters are these which a "word" can contains, see documentation
 #wordchars=_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789

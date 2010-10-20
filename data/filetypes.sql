@@ -24,7 +24,7 @@ keywords=absolute action add admin after aggregate alias all allocate alter and 
 
 [settings]
 # default extension used when saving files
-#extension=sql
+extension=sql
 
 # the following characters are these which a "word" can contains, see documentation
 #wordchars=_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789

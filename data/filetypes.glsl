@@ -45,7 +45,7 @@ preprocessor.end.$(file.patterns.cpp)=endif
 lexer_filetype=C
 
 # default extension used when saving files
-#extension=glsl
+extension=glsl
 
 # the following characters are these which a "word" can contains, see documentation
 #wordchars=_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789

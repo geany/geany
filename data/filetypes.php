@@ -7,7 +7,7 @@ phpscript.mode=1
 
 [settings]
 # default extension used when saving files
-#extension=php
+extension=php
 
 # the following characters are these which a "word" can contains, see documentation
 #wordchars=_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
