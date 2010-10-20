@@ -93,7 +93,6 @@ static void init_builtin_filetypes(void)
 
 #define NONE	/* these macros are only to ease navigation */
 	ft = filetypes[GEANY_FILETYPES_NONE];
-	ft->lang = -2;
 	ft->name = g_strdup(_("None"));
 	ft->title = g_strdup(_("None"));
 	ft->pattern = utils_strv_new("*", NULL);
@@ -199,7 +198,6 @@ static void init_builtin_filetypes(void)
 
 #define CAML
 	ft = filetypes[GEANY_FILETYPES_CAML];
-	ft->lang = -2;
 	ft->name = g_strdup("CAML");
 	ft->title = g_strdup_printf(_("%s source file"), "(O)Caml");
 	ft->pattern = utils_strv_new("*.ml", "*.mli", NULL);
@@ -323,7 +321,6 @@ static void init_builtin_filetypes(void)
 
 #define XML
 	ft = filetypes[GEANY_FILETYPES_XML];
-	ft->lang = -2;
 	ft->name = g_strdup("XML");
 	ft->title = g_strdup(_("XML document"));
 	ft->pattern = utils_strv_new(
@@ -397,7 +394,6 @@ static void init_builtin_filetypes(void)
 
 #define LISP
 	ft = filetypes[GEANY_FILETYPES_LISP];
-	ft->lang = -2;
 	ft->name = g_strdup("Lisp");
 	filetype_make_title(ft, TITLE_SOURCE_FILE);
 	ft->pattern = utils_strv_new("*.lisp", NULL);
@@ -405,7 +401,6 @@ static void init_builtin_filetypes(void)
 
 #define ERLANG
 	ft = filetypes[GEANY_FILETYPES_ERLANG];
-	ft->lang = -2;
 	ft->name = g_strdup("Erlang");
 	filetype_make_title(ft, TITLE_SOURCE_FILE);
 	ft->pattern = utils_strv_new("*.erl", NULL);
@@ -422,7 +417,6 @@ static void init_builtin_filetypes(void)
 
 #define PO
 	ft = filetypes[GEANY_FILETYPES_PO];
-	ft->lang = -2;
 	ft->name = g_strdup("Po");
 	ft->title = g_strdup(_("Gettext translation file"));
 	ft->pattern = utils_strv_new("*.po", "*.pot", NULL);
@@ -471,7 +465,6 @@ static void init_builtin_filetypes(void)
 
 #define YAML
 	ft = filetypes[GEANY_FILETYPES_YAML];
-	ft->lang = -2;
 	ft->name = g_strdup("YAML");
 	filetype_make_title(ft, TITLE_SOURCE_FILE);
 	ft->pattern = utils_strv_new("*.yaml", "*.yml", NULL);
@@ -479,7 +472,6 @@ static void init_builtin_filetypes(void)
 
 #define CMAKE
 	ft = filetypes[GEANY_FILETYPES_CMAKE];
-	ft->lang = -2;
 	ft->name = g_strdup("CMake");
 	filetype_make_title(ft, TITLE_SOURCE_FILE);
 	ft->pattern = utils_strv_new("CMakeLists.txt", "*.cmake", "*.ctest", NULL);
@@ -495,7 +487,6 @@ static void init_builtin_filetypes(void)
 
 #define ADA
 	ft = filetypes[GEANY_FILETYPES_ADA];
-	ft->lang = -2;
 	ft->name = g_strdup("Ada");
 	filetype_make_title(ft, TITLE_SOURCE_FILE);
 	ft->pattern = utils_strv_new("*.adb", "*.ads", NULL);
@@ -503,7 +494,6 @@ static void init_builtin_filetypes(void)
 
 #define FORTH
 	ft = filetypes[GEANY_FILETYPES_FORTH];
-	ft->lang = -2;
 	ft->name = g_strdup("Forth");
 	filetype_make_title(ft, TITLE_SOURCE_FILE);
 	ft->pattern = utils_strv_new("*.fs", "*.fth", NULL);
