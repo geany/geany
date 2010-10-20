@@ -3477,8 +3477,12 @@ on_color_scheme_clicked(GtkMenuItem *menuitem, gpointer user_data)
 	gchar *fname;
 	gchar *path;
 
+	/* prevent callback on setting initial value */
+	if (!GTK_WIDGET_MAPPED(menuitem))
+		return;
+
 	/* check if default item */
-	if (user_data)
+	if (!user_data)
 	{
 		setptr(editor_prefs.color_scheme, NULL);
 		filetypes_reload();
@@ -3511,36 +3515,48 @@ on_color_scheme_clicked(GtkMenuItem *menuitem, gpointer user_data)
 }
 
 
-static void add_color_scheme_item(const gchar *fname, GtkWidget *menu)
+static void add_color_scheme_item(GtkWidget *menu, const gchar *fname)
 {
-	GtkWidget *tmp_button;
-	gchar *label;
+	static GSList *group = NULL;
+	GtkWidget *item;
 
-	g_return_if_fail(fname);
-	g_return_if_fail(menu);
+	if (fname)
+	{
+		gchar *label = utils_get_utf8_from_locale(fname);
 
-	label = utils_get_utf8_from_locale(fname);
+		item = gtk_radio_menu_item_new_with_label(group, label);
+		g_free(label);
+	}
+	else
+		item = gtk_radio_menu_item_new_with_mnemonic(group, _("_Default"));
 
-	tmp_button = gtk_menu_item_new_with_label(label);
-	gtk_widget_show(tmp_button);
-	gtk_container_add(GTK_CONTAINER(menu), tmp_button);
-	g_signal_connect(tmp_button, "activate", G_CALLBACK(on_color_scheme_clicked), NULL);
+	group = gtk_radio_menu_item_get_group(GTK_RADIO_MENU_ITEM(item));
+	if (utils_str_equal(editor_prefs.color_scheme, fname))
+		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(item), TRUE);
 
-	g_free(label);
+	gtk_widget_show(item);
+	gtk_container_add(GTK_CONTAINER(menu), item);
+	g_signal_connect(item, "activate",
+		G_CALLBACK(on_color_scheme_clicked), GINT_TO_POINTER(fname != NULL));
 }
 
 
 static gboolean add_color_scheme_items(GtkWidget *menu)
 {
-	GSList *list = utils_get_config_files(GEANY_COLORSCHEMES_SUBDIR);
-	GSList *node;
+	GSList *list, *node;
+
+	g_return_val_if_fail(menu, FALSE);
+
+	add_color_scheme_item(menu, NULL);
+	list = utils_get_config_files(GEANY_COLORSCHEMES_SUBDIR);
 
 	foreach_slist(node, list)
 	{
 		gchar *fname = node->data;
 
 		if (g_str_has_suffix(fname, ".conf"))
-			add_color_scheme_item(fname, menu);
+			add_color_scheme_item(menu, fname);
+
 		g_free(fname);
 	}
 	g_slist_free(list);
@@ -3560,13 +3576,8 @@ static void create_color_scheme_menu(void)
 	menu = gtk_menu_new();
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(item), menu);
 
-	item = gtk_menu_item_new_with_mnemonic(_("_Default"));
-	gtk_container_add(GTK_CONTAINER(menu), item);
-	g_signal_connect(item, "activate", G_CALLBACK(on_color_scheme_clicked), GINT_TO_POINTER(TRUE));
-
-	/* for now we don't show the color scheme menu unless there are files */
-	if (add_color_scheme_items(menu))
-		gtk_widget_show_all(root);
+	add_color_scheme_items(menu);
+	gtk_widget_show_all(root);
 }
 
 

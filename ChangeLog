@@ -1,3 +1,10 @@
+2010-10-20  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/highlighting.c:
+   Use radio buttons for View->Editor->Color Schemes menu.
+   Don't hide the menu when only the default item is available.
+
+
 2010-10-18  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * data/filetypes.c, data/filetypes.d:
