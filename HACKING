@@ -254,8 +254,11 @@ Bugs to watch out for
 ---------------------
 * Forgetting to check *doc->is_valid* when looping through
   *documents_array* - instead use *foreach_document()*.
+* Inserting fields into structs in the plugin API instead of appending.
 * Not breaking the plugin ABI when necessary.
 * Using an idle callback that doesn't check main_status.quitting.
+* Forgetting CRLF line endings on Windows.
+* Not handling Tabs/Spaces indent mode.
 
 Libraries
 ---------
