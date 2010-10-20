@@ -4618,16 +4618,8 @@ void editor_ensure_final_newline(GeanyEditor *editor)
 	}
 	if (append_newline)
 	{
-		const gchar *eol = "\n";
-		switch (sci_get_eol_mode(editor->sci))
-		{
-			case SC_EOL_CRLF:
-				eol = "\r\n";
-				break;
-			case SC_EOL_CR:
-				eol = "\r";
-				break;
-		}
+		const gchar *eol = editor_get_eol_char(editor);
+
 		sci_insert_text(editor->sci, end_document, eol);
 	}
 }
