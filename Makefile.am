@@ -25,7 +25,8 @@ SYS_DATA_FILES = \
 	data/snippets.conf \
 	data/ui_toolbar.xml \
 	$(srcdir)/data/templates/* \
-	$(srcdir)/data/templates/files/*
+	$(srcdir)/data/templates/files/* \
+	$(srcdir)/data/colorschemes/*
 
 EXTRA_DIST = \
 	autogen.sh \
@@ -75,6 +76,12 @@ install-data-local:
 	for file in $(srcdir)/data/templates/files/*; do \
 	  if test -f $$file; then \
 	    $(INSTALL_DATA) $$file $(DESTDIR)$(pkgdatadir)/templates/files/; \
+	  fi \
+	done
+	$(mkinstalldirs) $(DESTDIR)$(pkgdatadir)/colorschemes;
+	for file in $(srcdir)/data/colorschemes/*; do \
+	  if test -f $$file; then \
+	    $(INSTALL_DATA) $$file $(DESTDIR)$(pkgdatadir)/colorschemes/; \
 	  fi \
 	done
 
