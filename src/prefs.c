@@ -80,8 +80,8 @@ static GtkWidget *dialog_label;
 static gboolean edited = FALSE;
 
 static void kb_cell_edited_cb(GtkCellRendererText *cellrenderertext, gchar *path, gchar *new_text, gpointer user_data);
-static gboolean kb_keytype_dialog_response_cb(GtkWidget *dialog, GdkEventKey *event, gpointer user_data);
-static void kb_dialog_response_cb(GtkWidget *dialog, gint response, gpointer user_data);
+static gboolean kb_grab_key_dialog_key_press_cb(GtkWidget *dialog, GdkEventKey *event, gpointer user_data);
+static void kb_grab_key_dialog_response_cb(GtkWidget *dialog, gint response, gpointer user_data);
 static gboolean kb_find_duplicate(GtkWidget *parent, GeanyKeyBinding *search_kb,
 		guint key, GdkModifierType mods, const gchar *action);
 static void on_toolbar_show_toggled(GtkToggleButton *togglebutton, gpointer user_data);
@@ -176,8 +176,8 @@ static void kb_tree_view_change_button_clicked_cb(GtkWidget *button, gpointer da
 			gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), dialog_label);
 
 			g_signal_connect(dialog, "key-press-event",
-								G_CALLBACK(kb_keytype_dialog_response_cb), NULL);
-			g_signal_connect(dialog, "response", G_CALLBACK(kb_dialog_response_cb), NULL);
+								G_CALLBACK(kb_grab_key_dialog_key_press_cb), NULL);
+			g_signal_connect(dialog, "response", G_CALLBACK(kb_grab_key_dialog_response_cb), NULL);
 
 			gtk_widget_show_all(dialog);
 			g_free(str);
@@ -1279,7 +1279,7 @@ static void kb_cell_edited_cb(GtkCellRendererText *cellrenderertext, gchar *path
 }
 
 
-static gboolean kb_keytype_dialog_response_cb(GtkWidget *dialog, GdkEventKey *event, gpointer user_data)
+static gboolean kb_grab_key_dialog_key_press_cb(GtkWidget *dialog, GdkEventKey *event, gpointer user_data)
 {
 	gchar *str;
 	gint state;
@@ -1298,7 +1298,7 @@ static gboolean kb_keytype_dialog_response_cb(GtkWidget *dialog, GdkEventKey *ev
 }
 
 
-static void kb_dialog_response_cb(GtkWidget *dialog, gint response, G_GNUC_UNUSED gpointer iter)
+static void kb_grab_key_dialog_response_cb(GtkWidget *dialog, gint response, G_GNUC_UNUSED gpointer iter)
 {
 	if (response == GTK_RESPONSE_ACCEPT)
 	{
