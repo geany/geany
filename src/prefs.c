@@ -28,7 +28,7 @@
 
 /*
  * Preferences dialog support functions.
- * New prefs should use Stash code in keyfile.c - init_pref_groups().
+ * New 'simple' prefs should use Stash code in keyfile.c - init_pref_groups().
  */
 
 #include <stdlib.h>
@@ -324,7 +324,7 @@ static void kb_init(void)
 }
 
 
-/* note: new prefs should use Stash code in keyfile.c */
+/* note: new 'simple' prefs should use Stash code in keyfile.c */
 static void prefs_init_dialog(void)
 {
 	GtkWidget *widget;
@@ -744,9 +744,9 @@ static void prefs_init_dialog(void)
 /*
  * callbacks
  */
-/* note: new prefs should use Stash code in keyfile.c */
+/* note: new 'simple' prefs should use Stash code in keyfile.c */
 static void
-on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_data)
+on_prefs_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 {
 	if (response == GTK_RESPONSE_OK || response == GTK_RESPONSE_APPLY)
 	{
@@ -1670,7 +1670,7 @@ void prefs_show_dialog(void)
 			GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER, GTK_ENTRY(ui_lookup_widget(ui_widgets.prefs_dialog, "extra_plugin_path_entry")));
 
 		g_signal_connect(ui_widgets.prefs_dialog, "response",
-			G_CALLBACK(on_prefs_button_clicked), NULL);
+			G_CALLBACK(on_prefs_dialog_response), NULL);
 		g_signal_connect(ui_widgets.prefs_dialog, "delete-event",
 			G_CALLBACK(gtk_widget_hide_on_delete), NULL);
 
