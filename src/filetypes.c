@@ -1392,16 +1392,15 @@ void filetypes_read_extensions(void)
 		gchar **list = g_key_file_get_string_list(
 			(userset) ? userconfig : sysconfig, "Extensions", filetypes[i]->name, &len, NULL);
 
-		if (G_LIKELY(list) && G_LIKELY(len > 0))
-		{
-			g_strfreev(filetypes[i]->pattern);
-			filetypes[i]->pattern = list;
+		g_strfreev(filetypes[i]->pattern);
+		/* Note: we allow 'Foo=' to remove all patterns */
+		if (!list)
+			list = g_new0(gchar*, 1);
+		filetypes[i]->pattern = list;
+
 #ifdef G_OS_WIN32
-			convert_filetype_extensions_to_lower_case(filetypes[i]->pattern, len);
+		convert_filetype_extensions_to_lower_case(filetypes[i]->pattern, len);
 #endif
-		}
-		else
-			g_strfreev(list);
 	}
 
 	g_free(sysconfigfile);
@@ -1409,6 +1408,7 @@ void filetypes_read_extensions(void)
 	g_key_file_free(sysconfig);
 	g_key_file_free(userconfig);
 
+	/* Redetect filetype of any documents with none set */
 	foreach_document(i)
 	{
 		GeanyDocument *doc = documents[i];

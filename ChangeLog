@@ -2,6 +2,8 @@
 
  * src/utils.c, src/filetypes.c:
    Remove filetype default extensions from code.
+ * src/filetypes.c:
+   Allow 'Foo=' in filetype_extensions.conf to remove all patterns.
 
 
 2010-10-20  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
