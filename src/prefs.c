@@ -1248,33 +1248,41 @@ static GeanyKeyBinding *kb_lookup_kb_from_iter(G_GNUC_UNUSED GtkTreeModel *model
 }
 
 
-static void kb_cell_edited_cb(GtkCellRendererText *cellrenderertext, gchar *path, gchar *new_text, gpointer user_data)
+static void kb_change_iter_shortcut(GtkTreeIter *iter, const gchar *new_text)
+{
+	guint lkey;
+	GdkModifierType lmods;
+	GeanyKeyBinding *kb;
+
+	gtk_accelerator_parse(new_text, &lkey, &lmods);
+
+	kb = kb_lookup_kb_from_iter(GTK_TREE_MODEL(store), iter);
+
+	if (kb_find_duplicate(ui_widgets.prefs_dialog, kb, lkey, lmods, new_text))
+		return;
+
+	/* set the values here, because of the above check, setting it in
+	 * gtk_accelerator_parse would return a wrong key combination if it is duplicate */
+	keybindings_update_combo(kb, lkey, lmods);
+
+	gtk_tree_store_set(store, iter, KB_TREE_SHORTCUT, new_text, -1);
+
+	edited = TRUE;
+}
+
+
+static void kb_cell_edited_cb(GtkCellRendererText *cellrenderertext,
+		gchar *path, gchar *new_text, gpointer user_data)
 {
 	if (path != NULL && new_text != NULL)
 	{
 		GtkTreeIter iter;
-		guint lkey;
-		GdkModifierType lmods;
-		GeanyKeyBinding *kb;
 
 		gtk_tree_model_get_iter_from_string(GTK_TREE_MODEL(store), &iter, path);
 		if (gtk_tree_model_iter_has_child(GTK_TREE_MODEL(store), &iter))
 			return;	/* ignore group items */
 
-		gtk_accelerator_parse(new_text, &lkey, &lmods);
-
-		kb = kb_lookup_kb_from_iter(GTK_TREE_MODEL(store), &iter);
-
-		if (kb_find_duplicate(ui_widgets.prefs_dialog, kb, lkey, lmods, new_text))
-			return;
-
-		/* set the values here, because of the above check, setting it in
-		 * gtk_accelerator_parse would return a wrong key combination if it is duplicate */
-		keybindings_update_combo(kb, lkey, lmods);
-
-		gtk_tree_store_set(store, &iter, KB_TREE_SHORTCUT, new_text, -1);
-
-		edited = TRUE;
+		kb_change_iter_shortcut(&iter, new_text);
 	}
 }
 
@@ -1302,23 +1310,9 @@ static void kb_grab_key_dialog_response_cb(GtkWidget *dialog, gint response, G_G
 {
 	if (response == GTK_RESPONSE_ACCEPT)
 	{
-		guint lkey;
-		GdkModifierType lmods;
-		GeanyKeyBinding *kb;
+		const gchar *new_text = gtk_label_get_text(GTK_LABEL(dialog_label));
 
-		kb = kb_lookup_kb_from_iter(GTK_TREE_MODEL(store), &g_iter);
-		gtk_accelerator_parse(gtk_label_get_text(GTK_LABEL(dialog_label)), &lkey, &lmods);
-
-		if (kb_find_duplicate(dialog, kb, lkey, lmods, gtk_label_get_text(GTK_LABEL(dialog_label))))
-			return;
-
-		/* set the values here, because of the above check, setting it in
-		 * gtk_accelerator_parse would return a wrong key combination if it is duplicate */
-		keybindings_update_combo(kb, lkey, lmods);
-
-		gtk_tree_store_set(store, &g_iter,
-			KB_TREE_SHORTCUT, gtk_label_get_text(GTK_LABEL(dialog_label)), -1);
-		edited = TRUE;
+		kb_change_iter_shortcut(&g_iter, new_text);
 	}
 	gtk_widget_destroy(dialog);
 }

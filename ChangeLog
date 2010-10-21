@@ -4,6 +4,8 @@
    Remove filetype default extensions from code.
  * src/filetypes.c:
    Allow 'Foo=' in filetype_extensions.conf to remove all patterns.
+ * src/prefs.c:
+   Refactor shared code with kb_cell_edited_cb().
 
 
 2010-10-20  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
