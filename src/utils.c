@@ -1329,6 +1329,8 @@ void utils_free_pointers(gsize arg_count, ...)
 }
 
 
+/* currently unused */
+#if 0
 /* Creates a string array deep copy of a series of non-NULL strings.
  * The first argument is nothing special.
  * The list must be ended with NULL.
@@ -1362,6 +1364,7 @@ gchar **utils_strv_new(const gchar *first, ...)
 	strv[i] = NULL;
 	return strv;
 }
+#endif
 
 
 /**

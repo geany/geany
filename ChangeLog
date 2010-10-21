@@ -1,3 +1,9 @@
+2010-10-21  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/utils.c, src/filetypes.c:
+   Remove filetype default extensions from code.
+
+
 2010-10-20  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/highlighting.c:
