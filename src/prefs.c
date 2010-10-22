@@ -83,7 +83,7 @@ static void kb_cell_edited_cb(GtkCellRendererText *cellrenderertext, gchar *path
 static gboolean kb_grab_key_dialog_key_press_cb(GtkWidget *dialog, GdkEventKey *event, gpointer user_data);
 static void kb_grab_key_dialog_response_cb(GtkWidget *dialog, gint response, gpointer user_data);
 static gboolean kb_find_duplicate(GtkWidget *parent, GeanyKeyBinding *search_kb,
-		guint key, GdkModifierType mods, const gchar *action);
+		guint key, GdkModifierType mods, const gchar *shortcut);
 static void on_toolbar_show_toggled(GtkToggleButton *togglebutton, gpointer user_data);
 static void on_show_notebook_tabs_toggled(GtkToggleButton *togglebutton, gpointer user_data);
 static void on_enable_plugins_toggled(GtkToggleButton *togglebutton, gpointer user_data);
@@ -1405,7 +1405,7 @@ static void kb_clear_tree_shortcut(gsize group_id, gsize keybinding_id)
 /* test if the entered key combination is already used
  * returns true if cancelling duplicate */
 static gboolean kb_find_duplicate(GtkWidget *parent, GeanyKeyBinding *search_kb,
-		guint key, GdkModifierType mods, const gchar *action)
+		guint key, GdkModifierType mods, const gchar *shortcut)
 {
 	gsize g, i;
 	GeanyKeyGroup *group;
@@ -1431,7 +1431,7 @@ static gboolean kb_find_duplicate(GtkWidget *parent, GeanyKeyBinding *search_kb,
 					_("_Override"), GTK_RESPONSE_YES,
 					_("Override that keybinding?"),
 					_("The combination '%s' is already used for \"%s\"."),
-					action, label);
+					shortcut, label);
 
 				g_free(label);
 
