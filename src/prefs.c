@@ -741,6 +741,50 @@ static void prefs_init_dialog(void)
 }
 
 
+/* read the treeview shortcut fields into keybindings */
+static void kb_update(void)
+{
+	GtkTreeModel *model = GTK_TREE_MODEL(store);
+	GtkTreeIter child, parent;
+	guint gid = 0;
+
+	/* get first parent */
+	if (! gtk_tree_model_iter_children(model, &parent, NULL))
+		return;
+
+	/* foreach parent */
+	while (TRUE)
+	{
+		/* get first child */
+		if (! gtk_tree_model_iter_children(model, &child, &parent))
+			return;
+
+		/* foreach child */
+		while (TRUE)
+		{
+			guint kid;
+			gchar *str;
+			guint key;
+			GdkModifierType mods;
+			GeanyKeyBinding *kb;
+
+			gtk_tree_model_get(model, &child, KB_TREE_INDEX, &kid, KB_TREE_SHORTCUT, &str, -1);
+			gtk_accelerator_parse(str, &key, &mods);
+			g_free(str);
+			kb = keybindings_lookup_item(gid, kid);
+			if (kb->key != key || kb->mods != mods)
+				keybindings_update_combo(kb, key, mods);
+
+			if (! gtk_tree_model_iter_next(model, &child))
+				break;
+		}
+		if (! gtk_tree_model_iter_next(model, &parent))
+			return;
+		gid++;
+	}
+}
+
+
 /*
  * callbacks
  */
@@ -1068,8 +1112,10 @@ on_prefs_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 
 		/* Keybindings */
 		if (edited)
+		{
+			kb_update();
 			keybindings_write_to_file();
-
+		}
 
 		/* Printing */
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "radio_print_gtk");
@@ -1263,8 +1309,6 @@ static void kb_change_iter_shortcut(GtkTreeIter *iter, const gchar *new_text)
 
 	/* set the values here, because of the above check, setting it in
 	 * gtk_accelerator_parse would return a wrong key combination if it is duplicate */
-	keybindings_update_combo(kb, lkey, lmods);
-
 	gtk_tree_store_set(store, iter, KB_TREE_SHORTCUT, new_text, -1);
 
 	edited = TRUE;
@@ -1393,7 +1437,6 @@ static gboolean kb_find_duplicate(GtkWidget *parent, GeanyKeyBinding *search_kb,
 
 				if (ret == GTK_RESPONSE_YES)
 				{
-					keybindings_update_combo(kb, 0, 0);
 					kb_clear_tree_shortcut(g, kb->id);
 					/* carry on looking for other duplicates if overriding */
 					continue;
