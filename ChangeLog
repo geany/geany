@@ -3,6 +3,8 @@
  * src/prefs.c:
    Fix not changing edited keybindings when cancelling the Preferences
    dialog.
+ * data/filetypes.xml:
+   Add HTML5 element names (thanks to Ross McKay).
 
 
 2010-10-21  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
