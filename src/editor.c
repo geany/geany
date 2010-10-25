@@ -106,7 +106,6 @@ static void auto_multiline(GeanyEditor *editor, gint pos);
 static gboolean is_code_style(gint lexer, gint style);
 static gboolean is_string_style(gint lexer, gint style);
 static void auto_close_chars(ScintillaObject *sci, gint pos, gchar c);
-static void auto_table(GeanyEditor *editor, gint pos);
 static void close_block(GeanyEditor *editor, gint pos);
 static void editor_highlight_braces(GeanyEditor *editor, gint cur_pos);
 static void read_current_word(GeanyEditor *editor, gint pos, gchar *word, size_t wordlen,
@@ -2600,11 +2599,7 @@ static void insert_closing_tag(GeanyEditor *editor, gint pos, gchar ch, const gc
 	sci_start_undo_action(sci);
 	sci_replace_sel(sci, to_insert);
 	if (ch == '>')
-	{
 		sci_set_selection(sci, pos, pos);
-		if (utils_str_equal(tag_name, "table"))
-			auto_table(editor, pos);
-	}
 	sci_end_undo_action(sci);
 	g_free(to_insert);
 }
@@ -2700,50 +2695,6 @@ static gsize count_indent_size(GeanyEditor *editor, const gchar *base_indent)
 		}
 	}
 	return count;
-}
-
-
-static void auto_table(GeanyEditor *editor, gint pos)
-{
-	ScintillaObject *sci = editor->sci;
-	gchar *table;
-	gint indent_pos;
-	const gchar *indent_str;
-
-	if (sci_get_lexer(sci) != SCLEX_HTML) return;
-
-	read_indent(editor, pos);
-	indent_pos = sci_get_line_indent_position(sci, sci_get_line_from_position(sci, pos));
-	if ((pos - 7) != indent_pos) /* 7 == strlen("<table>") */
-	{
-		gint i;
-		guint x;
-
-		x = strlen(indent);
-		/* find the start of the <table tag */
-		i = 1;
-		while (i <= pos && sci_get_char_at(sci, pos - i) != '<') i++;
-		/* add all non whitespace before the tag to the indent string */
-		while ((pos - i) != indent_pos && x < sizeof(indent) - 1)
-		{
-			indent[x++] = ' ';
-			i++;
-		}
-		indent[x] = '\0';
-	}
-
-	if (! editor->auto_indent)
-		indent_str = "";
-	else
-		indent_str = "\t";
-
-	table = g_strconcat("\n", indent_str, "<tr>\n",
-						indent_str, indent_str, "<td> </td>\n",
-						indent_str, "</tr>\n",
-						NULL);
-	editor_insert_text_block(editor, table, pos, -1,
-		count_indent_size(editor, indent), TRUE);
-	g_free(table);
 }
 
 

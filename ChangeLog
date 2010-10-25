@@ -1,3 +1,11 @@
+2010-10-25  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/editor.c, data/snippets.conf:
+   Move HTML automatic <table> tag completion into a 'table' snippet
+   so the user can decide when to use it (patch by Eugene Arshinov,
+   thanks).
+
+
 2010-10-22  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/prefs.c:
