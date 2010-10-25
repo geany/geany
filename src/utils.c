@@ -281,7 +281,7 @@ gint utils_write_file(const gchar *filename, const gchar *text)
  * Search backward through size bytes looking for a '<', then return the tag, if any.
  * @return The tag name
  */
-gchar *utils_find_open_xml_tag(const gchar sel[], gint size, gboolean check_tag)
+gchar *utils_find_open_xml_tag(const gchar sel[], gint size)
 {
 	const gchar *begin, *cur;
 
@@ -290,10 +290,7 @@ gchar *utils_find_open_xml_tag(const gchar sel[], gint size, gboolean check_tag)
 		return NULL;
 	}
 	begin = &sel[0];
-	if (check_tag)
-		cur = &sel[size - 3];
-	else
-		cur = &sel[size - 1];
+	cur = &sel[size-1];
 
 	/* Skip to the character before the closing brace */
 	while (cur > begin)
@@ -312,16 +309,18 @@ gchar *utils_find_open_xml_tag(const gchar sel[], gint size, gboolean check_tag)
 	{
 		if (*cur == '<')
 			break;
-		else if (! check_tag && *cur == '>')
-			break;
 		--cur;
 	}
 
 	if (*cur == '<')
 	{
-		GString *result = g_string_sized_new(64);
+		GString *result;
 
 		cur++;
+		if (*cur == '/')
+			return NULL; /* we found a closing tag */
+
+		result = g_string_sized_new(64);
 		while (strchr(":_-.", *cur) || isalnum(*cur))
 		{
 			g_string_append_c(result, *cur);
@@ -331,6 +330,22 @@ gchar *utils_find_open_xml_tag(const gchar sel[], gint size, gboolean check_tag)
 	}
 
 	return NULL;
+}
+
+
+/* Returns true if specified tag doesn't usually contain any content and can be left unclosed */
+gboolean utils_is_short_html_tag(const gchar *tag_name)
+{
+	return utils_str_equal(tag_name, "br")
+	 || utils_str_equal(tag_name, "hr")
+	 || utils_str_equal(tag_name, "img")
+	 || utils_str_equal(tag_name, "base")
+	 || utils_str_equal(tag_name, "basefont")	/* < or not < */
+	 || utils_str_equal(tag_name, "frame")
+	 || utils_str_equal(tag_name, "input")
+	 || utils_str_equal(tag_name, "link")
+	 || utils_str_equal(tag_name, "area")
+	 || utils_str_equal(tag_name, "meta");
 }
 
 
@@ -2063,5 +2078,3 @@ gchar **utils_strv_join(gchar **first, gchar **second)
 	g_free(second);
 	return strv;
 }
-
-

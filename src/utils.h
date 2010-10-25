@@ -140,7 +140,9 @@ gboolean utils_is_opening_brace(gchar c, gboolean include_angles);
 
 gint utils_write_file(const gchar *filename, const gchar *text);
 
-gchar *utils_find_open_xml_tag(const gchar sel[], gint size, gboolean check_tag);
+gchar *utils_find_open_xml_tag(const gchar sel[], gint size);
+
+gboolean utils_is_short_html_tag(const gchar *tag_name);
 
 void utils_ensure_same_eol_characters(GString *template, gint target_eol_mode);
 

@@ -8,6 +8,10 @@
    src/document.c, src/document.h, THANKS, geany.glade:
    Add 'Ensure consistent line endings' file saving pref (patch by
    Manuel Bua, thanks).
+ * src/utils.c, src/utils.h, src/editor.c:
+   Auto-indent after an HTML/XML line with a missing closing tag (patch
+   by Eugene Arshinov, thanks).
+   Behaviour only applies if XML tag autoclosing is off.
 
 
 2010-10-22  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

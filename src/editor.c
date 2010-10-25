@@ -1304,6 +1304,37 @@ static gint get_python_indent(ScintillaObject *sci, gint line)
 }
 
 
+static gint get_xml_indent(ScintillaObject *sci, gint line)
+{
+	gboolean need_close = FALSE;
+	gint end = sci_get_line_end_position(sci, line) - 1;
+
+	if (sci_get_char_at(sci, end) == '>' &&
+		sci_get_char_at(sci, end - 1) != '/')
+	{
+		gint style = sci_get_style_at(sci, end);
+
+		if (style == SCE_H_TAG || style == SCE_H_TAGUNKNOWN)
+		{
+			gint start = sci_get_position_from_line(sci, line);
+			gchar *line_contents = sci_get_contents_range(sci, start, end + 1);
+			gchar *opened_tag_name = utils_find_open_xml_tag(line_contents, end + 1 - start);
+
+			if (NZV(opened_tag_name))
+			{
+				need_close = TRUE;
+				if (sci_get_lexer(sci) == SCLEX_HTML && utils_is_short_html_tag(opened_tag_name))
+					need_close = FALSE;
+			}
+			g_free(line_contents);
+			g_free(opened_tag_name);
+		}
+	}
+
+	return need_close ? 1 : 0;
+}
+
+
 static gint get_indent_size_after_line(GeanyEditor *editor, gint line)
 {
 	ScintillaObject *sci = editor->sci;
@@ -1316,11 +1347,25 @@ static gint get_indent_size_after_line(GeanyEditor *editor, gint line)
 
 	if (iprefs->auto_indent_mode > GEANY_AUTOINDENT_BASIC)
 	{
+		gint additional_indent = 0;
+
 		if (lexer_has_braces(sci))
-			size += iprefs->width * get_brace_indent(sci, line);
+			additional_indent = iprefs->width * get_brace_indent(sci, line);
 		else
 		if (FILETYPE_ID(editor->document->file_type) == GEANY_FILETYPES_PYTHON)
-			size += iprefs->width * get_python_indent(sci, line);
+			additional_indent = iprefs->width * get_python_indent(sci, line);
+
+		/* HTML lexer "has braces" because of PHP and JavaScript.  If get_brace_indent() did not
+		 * recommend us to insert additional indent, we are probably not in PHP/JavaScript chunk and
+		 * should make the XML-related check */
+		if (additional_indent == 0 && !editor_prefs.auto_close_xml_tags &&
+			(FILETYPE_ID(editor->document->file_type) == GEANY_FILETYPES_HTML ||
+			FILETYPE_ID(editor->document->file_type) == GEANY_FILETYPES_XML))
+		{
+			size += iprefs->width * get_xml_indent(sci, line);
+		}
+
+		size += additional_indent;
 	}
 	return size;
 }
@@ -2615,7 +2660,7 @@ static gboolean handle_xml(GeanyEditor *editor, gint pos, gchar ch)
 {
 	ScintillaObject *sci = editor->sci;
 	gint lexer = sci_get_lexer(sci);
-	gint min, style;
+	gint min, size, style;
 	gchar *str_found, sel[512];
 	gboolean result = FALSE;
 
@@ -2647,19 +2692,12 @@ static gboolean handle_xml(GeanyEditor *editor, gint pos, gchar ch)
 		/* User typed something like "<br/>" */
 		return FALSE;
 
-	str_found = utils_find_open_xml_tag(sel, pos - min, (ch == '/'));
+	size = pos - min;
+	if (ch == '/')
+		size -= 2; /* skip </ */
+	str_found = utils_find_open_xml_tag(sel, size);
 
-	/* when found string is something like br, img or another short tag, quit */
-	if (utils_str_equal(str_found, "br")
-	 || utils_str_equal(str_found, "hr")
-	 || utils_str_equal(str_found, "img")
-	 || utils_str_equal(str_found, "base")
-	 || utils_str_equal(str_found, "basefont")	/* < or not < */
-	 || utils_str_equal(str_found, "frame")
-	 || utils_str_equal(str_found, "input")
-	 || utils_str_equal(str_found, "link")
-	 || utils_str_equal(str_found, "area")
-	 || utils_str_equal(str_found, "meta"))
+	if (lexer == SCLEX_HTML && utils_is_short_html_tag(str_found))
 	{
 		/* ignore tag */
 	}
