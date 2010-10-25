@@ -2674,6 +2674,7 @@ create_prefs_dialog (void)
   GtkWidget *alignment3;
   GtkWidget *vbox6;
   GtkWidget *check_new_line;
+  GtkWidget *check_ensure_convert_new_lines;
   GtkWidget *check_trailing_spaces;
   GtkWidget *check_replace_tabs;
   GtkWidget *label19;
@@ -4280,6 +4281,11 @@ create_prefs_dialog (void)
   gtk_box_pack_start (GTK_BOX (vbox6), check_new_line, FALSE, FALSE, 0);
   gtk_tooltips_set_tip (tooltips, check_new_line, _("Ensures that at the end of the file is a new line"), NULL);
 
+  check_ensure_convert_new_lines = gtk_check_button_new_with_mnemonic (_("Ensure consistent line endings"));
+  gtk_widget_show (check_ensure_convert_new_lines);
+  gtk_box_pack_start (GTK_BOX (vbox6), check_ensure_convert_new_lines, FALSE, FALSE, 0);
+  gtk_tooltips_set_tip (tooltips, check_ensure_convert_new_lines, _("Ensures that newline characters always get converted before saving, avoiding mixed line endings in the same file"), NULL);
+
   check_trailing_spaces = gtk_check_button_new_with_mnemonic (_("Strip trailing spaces and tabs"));
   gtk_widget_show (check_trailing_spaces);
   gtk_box_pack_start (GTK_BOX (vbox6), check_trailing_spaces, FALSE, FALSE, 0);
@@ -5143,6 +5149,7 @@ create_prefs_dialog (void)
   GLADE_HOOKUP_OBJECT (prefs_dialog, alignment3, "alignment3");
   GLADE_HOOKUP_OBJECT (prefs_dialog, vbox6, "vbox6");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_new_line, "check_new_line");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, check_ensure_convert_new_lines, "check_ensure_convert_new_lines");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_trailing_spaces, "check_trailing_spaces");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_replace_tabs, "check_replace_tabs");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label19, "label19");

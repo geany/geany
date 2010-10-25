@@ -4,6 +4,10 @@
    Move HTML automatic <table> tag completion into a 'table' snippet
    so the user can decide when to use it (patch by Eugene Arshinov,
    thanks).
+ * src/interface.c, src/prefs.c, src/about.c, src/keyfile.c,
+   src/document.c, src/document.h, THANKS, geany.glade:
+   Add 'Ensure consistent line endings' file saving pref (patch by
+   Manuel Bua, thanks).
 
 
 2010-10-22  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

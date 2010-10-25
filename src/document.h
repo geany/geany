@@ -43,6 +43,7 @@
 #endif
 
 
+/** File Prefs. */
 typedef struct GeanyFilePrefs
 {
 	gint			default_new_encoding;
@@ -58,6 +59,7 @@ typedef struct GeanyFilePrefs
 	gint			disk_check_timeout;
 	gboolean		cmdline_new_files;	/* New file if command-line filename doesn't exist */
 	gboolean		use_safe_file_saving;
+	gboolean		ensure_convert_new_lines;
 }
 GeanyFilePrefs;
 

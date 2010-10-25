@@ -1801,6 +1801,9 @@ gboolean document_save_file(GeanyDocument *doc, gboolean force)
 	/* ensure the file has a newline at the end */
 	if (file_prefs.final_new_line)
 		editor_ensure_final_newline(doc->editor);
+	/* ensure newlines are consistent */
+	if (file_prefs.ensure_convert_new_lines)
+		sci_convert_eols(doc->editor->sci, sci_get_eol_mode(doc->editor->sci));
 
 	/* notify plugins which may wish to modify the document before it's saved */
 	g_signal_emit_by_name(geany_object, "document-before-save", doc);
