@@ -1156,7 +1156,7 @@ void document_apply_indent_settings(GeanyDocument *doc)
 	const GeanyIndentPrefs *iprefs = editor_get_indent_prefs(NULL);
 	GeanyIndentType type = iprefs->type;
 
-	switch (FILETYPE_ID(doc->file_type))
+	switch (doc->file_type->id)
 	{
 		case GEANY_FILETYPES_MAKE:
 			/* force using tabs for indentation for Makefiles */
@@ -1166,6 +1166,8 @@ void document_apply_indent_settings(GeanyDocument *doc)
 			/* force using spaces for indentation for Fortran 77 */
 			editor_set_indent(doc->editor, GEANY_INDENT_TYPE_SPACES, iprefs->width);
 			return;
+		default:
+			break;
 	}
 	if (iprefs->detect_type)
 	{
@@ -1616,7 +1618,7 @@ gboolean document_save_file_as(GeanyDocument *doc, const gchar *utf8_fname)
 	setptr(doc->real_path, NULL);
 
 	/* detect filetype */
-	if (FILETYPE_ID(doc->file_type) == GEANY_FILETYPES_NONE)
+	if (doc->file_type->id == GEANY_FILETYPES_NONE)
 	{
 		GeanyFiletype *ft = filetypes_detect_from_document(doc);
 
@@ -1793,7 +1795,7 @@ gboolean document_save_file(GeanyDocument *doc, gboolean force)
 	}
 
 	/* replaces tabs by spaces but only if the current file is not a Makefile */
-	if (file_prefs.replace_tabs && FILETYPE_ID(doc->file_type) != GEANY_FILETYPES_MAKE)
+	if (file_prefs.replace_tabs && doc->file_type->id != GEANY_FILETYPES_MAKE)
 		editor_replace_tabs(doc->editor);
 	/* strip trailing spaces */
 	if (file_prefs.strip_trailing_spaces)
@@ -2404,7 +2406,7 @@ static gboolean update_type_keywords(GeanyDocument *doc, gint lang)
 	g_return_val_if_fail(doc != NULL, FALSE);
 	sci = doc->editor->sci;
 
-	switch (FILETYPE_ID(doc->file_type))
+	switch (doc->file_type->id)
 	{	/* continue working with the following languages, skip on all others */
 		case GEANY_FILETYPES_C:
 		case GEANY_FILETYPES_CPP:

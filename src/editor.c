@@ -1352,15 +1352,15 @@ static gint get_indent_size_after_line(GeanyEditor *editor, gint line)
 		if (lexer_has_braces(sci))
 			additional_indent = iprefs->width * get_brace_indent(sci, line);
 		else
-		if (FILETYPE_ID(editor->document->file_type) == GEANY_FILETYPES_PYTHON)
+		if (editor->document->file_type->id == GEANY_FILETYPES_PYTHON)
 			additional_indent = iprefs->width * get_python_indent(sci, line);
 
 		/* HTML lexer "has braces" because of PHP and JavaScript.  If get_brace_indent() did not
 		 * recommend us to insert additional indent, we are probably not in PHP/JavaScript chunk and
 		 * should make the XML-related check */
 		if (additional_indent == 0 && !editor_prefs.auto_close_xml_tags &&
-			(FILETYPE_ID(editor->document->file_type) == GEANY_FILETYPES_HTML ||
-			FILETYPE_ID(editor->document->file_type) == GEANY_FILETYPES_XML))
+			(editor->document->file_type->id == GEANY_FILETYPES_HTML ||
+			editor->document->file_type->id == GEANY_FILETYPES_XML))
 		{
 			size += iprefs->width * get_xml_indent(sci, line);
 		}
@@ -1887,7 +1887,7 @@ gchar *editor_get_calltip_text(GeanyEditor *editor, const TMTag *tag)
 	g_return_val_if_fail(editor != NULL, NULL);
 
 	str = g_string_new(NULL);
-	if (append_calltip(str, tag, FILETYPE_ID(editor->document->file_type)))
+	if (append_calltip(str, tag, editor->document->file_type->id))
 		return g_string_free(str, FALSE);
 	else
 		return g_string_free(str, TRUE);
@@ -2519,7 +2519,7 @@ static gboolean snippets_complete_constructs(GeanyEditor *editor, gint pos, cons
 	GString *pattern;
 	gssize cur_index = -1;
 	gint str_len;
-	gint ft_id = FILETYPE_ID(editor->document->file_type);
+	gint ft_id = editor->document->file_type->id;
 
 	str = g_strdup(word);
 	g_strstrip(str);

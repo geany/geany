@@ -723,7 +723,7 @@ static GPid build_spawn_cmd(GeanyDocument *doc, const gchar *cmd, const gchar *d
 	/* set the build info for the message window */
 	g_free(build_info.dir);
 	build_info.dir = g_strdup(working_dir);
-	build_info.file_type_id = (doc == NULL) ? GEANY_FILETYPES_NONE : FILETYPE_ID(doc->file_type);
+	build_info.file_type_id = (doc == NULL) ? GEANY_FILETYPES_NONE : doc->file_type->id;
 	build_info.message_count = 0;
 
 #ifdef G_OS_WIN32
@@ -863,7 +863,7 @@ static GPid build_run_cmd(GeanyDocument *doc, gint cmdindex)
 	if (working_dir == NULL)
 		return (GPid) 0;
 
-	run_info[cmdindex].file_type_id = FILETYPE_ID(doc->file_type);
+	run_info[cmdindex].file_type_id = doc->file_type->id;
 
 #ifdef HAVE_VTE
 	if (vte_info.load_vte && vc != NULL && vc->run_in_vte)

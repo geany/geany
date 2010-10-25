@@ -540,7 +540,7 @@ gchar *templates_get_template_licence(GeanyDocument *doc, gint licence_type)
 	templates_replace_default_dates(template);
 	templates_replace_command(template, DOC_FILENAME(doc), doc->file_type->name, NULL);
 
-	make_comment_block(template, FILETYPE_ID(doc->file_type), 8);
+	make_comment_block(template, doc->file_type->id, 8);
 	convert_eol_characters(template, doc);
 
 	return g_string_free(template, FALSE);

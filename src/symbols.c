@@ -949,7 +949,7 @@ static const gchar *get_symbol_name(GeanyDocument *doc, const TMTag *tag, gboole
 	if (!found_parent && scope &&
 		strpbrk(scope, GEANY_WORDCHARS) == scope)
 	{
-		const gchar *sep = symbols_get_context_separator(FILETYPE_ID(doc->file_type));
+		const gchar *sep = symbols_get_context_separator(doc->file_type->id);
 
 		g_string_append(buffer, scope);
 		g_string_append(buffer, sep);
@@ -1096,7 +1096,7 @@ static GdkPixbuf *get_child_icon(GtkTreeStore *tree_store, GtkTreeIter *parent)
 
 static void add_tree_tag(GeanyDocument *doc, const TMTag *tag, GHashTable *parent_hash)
 {
-	filetype_id ft_id = FILETYPE_ID(doc->file_type);
+	filetype_id ft_id = doc->file_type->id;
 	GtkTreeStore *tree_store = doc->priv->tag_store;
 	GtkTreeIter *parent = NULL;
 
@@ -1172,7 +1172,7 @@ static void add_tree_tags(GeanyDocument *doc, const GList *tags)
 	for (item = tags; item; item = g_list_next(item))
 	{
 		const TMTag *tag = item->data;
-		const gchar *name = get_parent_name(tag, FILETYPE_ID(doc->file_type));
+		const gchar *name = get_parent_name(tag, doc->file_type->id);
 
 		if (name)
 			g_hash_table_insert(parent_hash, (gpointer)name, NULL);
@@ -1587,7 +1587,7 @@ gboolean symbols_goto_tag(const gchar *name, gboolean definition)
 static gint get_function_fold_number(GeanyDocument *doc)
 {
 	/* for Java the functions are always one fold level above the class scope */
-	if (FILETYPE_ID(doc->file_type) == GEANY_FILETYPES_JAVA)
+	if (doc->file_type->id == GEANY_FILETYPES_JAVA)
 		return SC_FOLDLEVELBASE + 1;
 	else
 		return SC_FOLDLEVELBASE;

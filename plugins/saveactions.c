@@ -261,7 +261,7 @@ static void instantsave_document_new_cb(GObject *obj, GeanyDocument *doc, gpoint
 
 		doc->file_name = new_filename;
 
-		if (FILETYPE_ID(doc->file_type) == GEANY_FILETYPES_NONE)
+		if (doc->file_type->id == GEANY_FILETYPES_NONE)
 			document_set_filetype(doc, filetypes_lookup_by_name(instantsave_default_ft));
 
 		/* force saving the file to enable all the related actions(tab name, filetype, etc.) */

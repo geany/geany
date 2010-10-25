@@ -12,6 +12,10 @@
    Auto-indent after an HTML/XML line with a missing closing tag (patch
    by Eugene Arshinov, thanks).
    Behaviour only applies if XML tag autoclosing is off.
+ * src/templates.c, src/build.c, src/document.c, src/editor.c,
+   src/symbols.c, plugins/saveactions.c:
+   Remove unnecessary uses of FILETYPE_ID() macro with
+   GeanyDocument::file_type.
 
 
 2010-10-22  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
