@@ -16,6 +16,8 @@
    src/symbols.c, plugins/saveactions.c:
    Remove unnecessary uses of FILETYPE_ID() macro with
    GeanyDocument::file_type.
+ * data/filetypes.xml:
+   Add HTML5 attributes (thanks to Ross McKay).
 
 
 2010-10-22  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
