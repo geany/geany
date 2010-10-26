@@ -2,6 +2,8 @@
 
  * src/interface.c, doc/geany.txt, doc/geany.html, geany.glade:
    Edit XML tag autocompletion pref and tooltip to include HTML.
+ * doc/geany.txt, doc/geany.html:
+   Add docs for 'Ensure consistent line endings' pref.
 
 
 2010-10-25  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

@@ -2181,6 +2181,10 @@ can each be undone with the Undo command.
 Ensure newline at file end
     Add a newline at the end of the document if one is missing.
 
+Ensure consistent line endings
+    Ensures that newline characters always get converted before
+    saving, avoiding mixed line endings in the same file.
+
 Strip trailing spaces
     Remove the trailing spaces on each line of the document.
 
