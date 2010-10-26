@@ -3817,10 +3817,10 @@ create_prefs_dialog (void)
   gtk_box_pack_start (GTK_BOX (vbox19), check_complete_snippets, FALSE, FALSE, 0);
   gtk_tooltips_set_tip (tooltips, check_complete_snippets, _("Type a defined short character sequence and complete it to a more complex string using a single keypress"), NULL);
 
-  check_xmltag = gtk_check_button_new_with_mnemonic (_("XML tag autocompletion"));
+  check_xmltag = gtk_check_button_new_with_mnemonic (_("XML/HTML tag autocompletion"));
   gtk_widget_show (check_xmltag);
   gtk_box_pack_start (GTK_BOX (vbox19), check_xmltag, FALSE, FALSE, 0);
-  gtk_tooltips_set_tip (tooltips, check_xmltag, _("Automatic completion and closing of XML tags (includes HTML tags)"), NULL);
+  gtk_tooltips_set_tip (tooltips, check_xmltag, _("Insert matching closing tag for XML/HTML"), NULL);
 
   check_auto_multiline = gtk_check_button_new_with_mnemonic (_("Automatic continuation of multi-line comments"));
   gtk_widget_show (check_auto_multiline);

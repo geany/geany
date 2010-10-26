@@ -1996,7 +1996,7 @@ Snippet Completion
     pre-defined text snippet.
     See `User-definable snippets`_.
 
-XML tag autocompletion
+XML/HTML tag autocompletion
     When you open an XML tag automatically generate its completion tag.
 
 Automatic continuation multi-line comments

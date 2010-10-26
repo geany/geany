@@ -1,3 +1,9 @@
+2010-10-26  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/interface.c, doc/geany.txt, doc/geany.html, geany.glade:
+   Edit XML tag autocompletion pref and tooltip to include HTML.
+
+
 2010-10-25  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/editor.c, data/snippets.conf:

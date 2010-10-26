@@ -6299,9 +6299,9 @@ Match braces</property>
 			      <child>
 				<widget class="GtkCheckButton" id="check_xmltag">
 				  <property name="visible">True</property>
-				  <property name="tooltip" translatable="yes">Automatic completion and closing of XML tags (includes HTML tags)</property>
+				  <property name="tooltip" translatable="yes">Insert matching closing tag for XML/HTML</property>
 				  <property name="can_focus">True</property>
-				  <property name="label" translatable="yes">XML tag autocompletion</property>
+				  <property name="label" translatable="yes">XML/HTML tag autocompletion</property>
 				  <property name="use_underline">True</property>
 				  <property name="relief">GTK_RELIEF_NORMAL</property>
 				  <property name="focus_on_click">True</property>
