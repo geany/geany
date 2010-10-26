@@ -17,6 +17,8 @@
  * src/ui_utils.c:
    Add notebook tab document icons (based on patch by Colomban
    Wendling, thanks).
+ * src/filetypes.c:
+   Leave text/plain mime_type fields as NULL (like custom filetypes).
 
 
 2010-10-25  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

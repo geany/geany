@@ -95,7 +95,6 @@ static void init_builtin_filetypes(void)
 	ft = filetypes[GEANY_FILETYPES_NONE];
 	ft->name = g_strdup(_("None"));
 	ft->title = g_strdup(_("None"));
-	ft->mime_type = g_strdup("text/plain");
 	ft->group = GEANY_FILETYPE_GROUP_NONE;
 
 #define C
@@ -159,7 +158,6 @@ static void init_builtin_filetypes(void)
 	ft->lang = 9;
 	ft->name = g_strdup("ASM");
 	ft->title = g_strdup_printf(_("%s source file"), "Assembler");
-	ft->mime_type = g_strdup("text/plain"); /* FIXME */
 	ft->group = GEANY_FILETYPE_GROUP_COMPILED;
 
 #define BASIC
@@ -167,7 +165,6 @@ static void init_builtin_filetypes(void)
 	ft->lang = 26;
 	ft->name = g_strdup("FreeBasic");
 	filetype_make_title(ft, TITLE_SOURCE_FILE);
-	ft->mime_type = g_strdup("text/plain"); /* FIXME */
 	ft->group = GEANY_FILETYPE_GROUP_COMPILED;
 
 #define FORTRAN
@@ -191,7 +188,6 @@ static void init_builtin_filetypes(void)
 	ft->lang = 31;
 	ft->name = g_strdup("GLSL");
 	filetype_make_title(ft, TITLE_SOURCE_FILE);
-	ft->mime_type = g_strdup("text/plain"); /* FIXME */
 	ft->group = GEANY_FILETYPE_GROUP_COMPILED;
 
 #define CAML
@@ -262,7 +258,6 @@ static void init_builtin_filetypes(void)
 	ft->lang = 19;
 	ft->name = g_strdup("Ferite");
 	filetype_make_title(ft, TITLE_SOURCE_FILE);
-	ft->mime_type = g_strdup("text/plain"); /* FIXME */
 	ft->group = GEANY_FILETYPE_GROUP_SCRIPT;
 
 #define HASKELL
@@ -278,7 +273,6 @@ static void init_builtin_filetypes(void)
 	ft->lang = 36;
 	ft->name = g_strdup("Markdown");
 	filetype_make_title(ft, TITLE_SOURCE_FILE);
-	ft->mime_type = g_strdup("text/plain"); /* FIXME */
 	ft->group = GEANY_FILETYPE_GROUP_MISC;
 
 #define TXT2TAGS
@@ -294,7 +288,6 @@ static void init_builtin_filetypes(void)
 	ft->lang = 38;
 	ft->name = g_strdup("Abc");
 	filetype_make_title(ft, TITLE_SOURCE_FILE);
-	ft->mime_type = g_strdup("text/plain"); /* FIXME */
 	ft->group = GEANY_FILETYPE_GROUP_MISC;
 
 #define SH
@@ -373,7 +366,6 @@ static void init_builtin_filetypes(void)
 	ft->lang = 39;
 	ft->name = g_strdup("Verilog");
 	filetype_make_title(ft, TITLE_SOURCE_FILE);
-	ft->mime_type = g_strdup("text/plain"); /* FIXME */
 	ft->group = GEANY_FILETYPE_GROUP_COMPILED;
 
 #define DIFF
@@ -388,7 +380,6 @@ static void init_builtin_filetypes(void)
 	ft = filetypes[GEANY_FILETYPES_LISP];
 	ft->name = g_strdup("Lisp");
 	filetype_make_title(ft, TITLE_SOURCE_FILE);
-	ft->mime_type = g_strdup("text/plain"); /* FIXME */
 	ft->group = GEANY_FILETYPE_GROUP_SCRIPT;
 
 #define ERLANG
@@ -403,7 +394,6 @@ static void init_builtin_filetypes(void)
 	ft->lang = 10;
 	ft->name = g_strdup("Conf");
 	ft->title = g_strdup(_("Config file"));
-	ft->mime_type = g_strdup("text/plain"); /* FIXME */
 	ft->group = GEANY_FILETYPE_GROUP_MISC;
 
 #define PO
@@ -418,7 +408,6 @@ static void init_builtin_filetypes(void)
 	ft->lang = 27;
 	ft->name = g_strdup("Haxe");
 	filetype_make_title(ft, TITLE_SOURCE_FILE);
-	ft->mime_type = g_strdup("text/plain"); /* FIXME */
 	ft->group = GEANY_FILETYPE_GROUP_COMPILED;
 
 #define ACTIONSCRIPT
@@ -434,7 +423,6 @@ static void init_builtin_filetypes(void)
 	ft->lang = 40;
 	ft->name = g_strdup("R");
 	ft->title = g_strdup_printf(_("%s script file"), "R");
-	ft->mime_type = g_strdup("text/plain"); /* FIXME */
 	ft->group = GEANY_FILETYPE_GROUP_SCRIPT;
 
 #define REST
@@ -442,7 +430,6 @@ static void init_builtin_filetypes(void)
 	ft->lang = 28;
 	ft->name = g_strdup("reStructuredText");
 	filetype_make_title(ft, TITLE_FILE);
-	ft->mime_type = g_strdup("text/plain"); /* FIXME */
 	ft->group = GEANY_FILETYPE_GROUP_MISC;
 
 #define MATLAB
@@ -457,7 +444,6 @@ static void init_builtin_filetypes(void)
 	ft = filetypes[GEANY_FILETYPES_YAML];
 	ft->name = g_strdup("YAML");
 	filetype_make_title(ft, TITLE_SOURCE_FILE);
-	ft->mime_type = g_strdup("text/plain"); /* FIXME */
 	ft->group = GEANY_FILETYPE_GROUP_MISC;
 
 #define CMAKE
@@ -472,7 +458,6 @@ static void init_builtin_filetypes(void)
 	ft->lang = 35;
 	ft->name = g_strdup("NSIS");
 	filetype_make_title(ft, TITLE_SOURCE_FILE);
-	ft->mime_type = g_strdup("text/plain"); /* FIXME */
 	ft->group = GEANY_FILETYPE_GROUP_MISC;
 
 #define ADA
@@ -486,7 +471,6 @@ static void init_builtin_filetypes(void)
 	ft = filetypes[GEANY_FILETYPES_FORTH];
 	ft->name = g_strdup("Forth");
 	filetype_make_title(ft, TITLE_SOURCE_FILE);
-	ft->mime_type = g_strdup("text/plain"); /* FIXME */
 	ft->group = GEANY_FILETYPE_GROUP_SCRIPT;
 }
 
