@@ -95,6 +95,7 @@ static void init_builtin_filetypes(void)
 	ft = filetypes[GEANY_FILETYPES_NONE];
 	ft->name = g_strdup(_("None"));
 	ft->title = g_strdup(_("None"));
+	ft->mime_type = g_strdup("text/plain");
 	ft->group = GEANY_FILETYPE_GROUP_NONE;
 
 #define C
@@ -102,6 +103,7 @@ static void init_builtin_filetypes(void)
 	ft->lang = 0;
 	ft->name = g_strdup("C");
 	filetype_make_title(ft, TITLE_SOURCE_FILE);
+	ft->mime_type = g_strdup("text/x-csrc");
 	ft->group = GEANY_FILETYPE_GROUP_COMPILED;
 
 #define CPP
@@ -109,6 +111,7 @@ static void init_builtin_filetypes(void)
 	ft->lang = 1;
 	ft->name = g_strdup("C++");
 	filetype_make_title(ft, TITLE_SOURCE_FILE);
+	ft->mime_type = g_strdup("text/x-c++src");
 	ft->group = GEANY_FILETYPE_GROUP_COMPILED;
 
 #define CS
@@ -116,6 +119,7 @@ static void init_builtin_filetypes(void)
 	ft->lang = 25;
 	ft->name = g_strdup("C#");
 	filetype_make_title(ft, TITLE_SOURCE_FILE);
+	ft->mime_type = g_strdup("text/x-csharp");
 	ft->group = GEANY_FILETYPE_GROUP_COMPILED;
 
 #define VALA
@@ -123,6 +127,7 @@ static void init_builtin_filetypes(void)
 	ft->lang = 33;
 	ft->name = g_strdup("Vala");
 	filetype_make_title(ft, TITLE_SOURCE_FILE);
+	ft->mime_type = g_strdup("text/x-vala");
 	ft->group = GEANY_FILETYPE_GROUP_COMPILED;
 
 #define D
@@ -130,6 +135,7 @@ static void init_builtin_filetypes(void)
 	ft->lang = 17;
 	ft->name = g_strdup("D");
 	filetype_make_title(ft, TITLE_SOURCE_FILE);
+	ft->mime_type = g_strdup("text/x-dsrc");
 	ft->group = GEANY_FILETYPE_GROUP_COMPILED;
 
 #define JAVA
@@ -137,6 +143,7 @@ static void init_builtin_filetypes(void)
 	ft->lang = 2;
 	ft->name = g_strdup("Java");
 	filetype_make_title(ft, TITLE_SOURCE_FILE);
+	ft->mime_type = g_strdup("text/x-java");
 	ft->group = GEANY_FILETYPE_GROUP_COMPILED;
 
 #define PAS /* to avoid warnings when building under Windows, the symbol PASCAL is there defined */
@@ -144,6 +151,7 @@ static void init_builtin_filetypes(void)
 	ft->lang = 4;
 	ft->name = g_strdup("Pascal");
 	filetype_make_title(ft, TITLE_SOURCE_FILE);
+	ft->mime_type = g_strdup("text/x-pascal");
 	ft->group = GEANY_FILETYPE_GROUP_COMPILED;
 
 #define ASM
@@ -151,6 +159,7 @@ static void init_builtin_filetypes(void)
 	ft->lang = 9;
 	ft->name = g_strdup("ASM");
 	ft->title = g_strdup_printf(_("%s source file"), "Assembler");
+	ft->mime_type = g_strdup("text/plain"); /* FIXME */
 	ft->group = GEANY_FILETYPE_GROUP_COMPILED;
 
 #define BASIC
@@ -158,6 +167,7 @@ static void init_builtin_filetypes(void)
 	ft->lang = 26;
 	ft->name = g_strdup("FreeBasic");
 	filetype_make_title(ft, TITLE_SOURCE_FILE);
+	ft->mime_type = g_strdup("text/plain"); /* FIXME */
 	ft->group = GEANY_FILETYPE_GROUP_COMPILED;
 
 #define FORTRAN
@@ -165,6 +175,7 @@ static void init_builtin_filetypes(void)
 	ft->lang = 18;
 	ft->name = g_strdup("Fortran");
 	ft->title = g_strdup_printf(_("%s source file"), "Fortran (F90)");
+	ft->mime_type = g_strdup("text/x-fortran");
 	ft->group = GEANY_FILETYPE_GROUP_COMPILED;
 
 #define F77
@@ -172,6 +183,7 @@ static void init_builtin_filetypes(void)
 	ft->lang = 30;
 	ft->name = g_strdup("F77");
 	ft->title = g_strdup_printf(_("%s source file"), "Fortran (F77)");
+	ft->mime_type = g_strdup("text/x-fortran");
 	ft->group = GEANY_FILETYPE_GROUP_COMPILED;
 
 #define GLSL
@@ -179,12 +191,14 @@ static void init_builtin_filetypes(void)
 	ft->lang = 31;
 	ft->name = g_strdup("GLSL");
 	filetype_make_title(ft, TITLE_SOURCE_FILE);
+	ft->mime_type = g_strdup("text/plain"); /* FIXME */
 	ft->group = GEANY_FILETYPE_GROUP_COMPILED;
 
 #define CAML
 	ft = filetypes[GEANY_FILETYPES_CAML];
 	ft->name = g_strdup("CAML");
 	ft->title = g_strdup_printf(_("%s source file"), "(O)Caml");
+	ft->mime_type = g_strdup("text/x-ocaml");
 	ft->group = GEANY_FILETYPE_GROUP_COMPILED;
 
 #define PERL
@@ -192,6 +206,7 @@ static void init_builtin_filetypes(void)
 	ft->lang = 5;
 	ft->name = g_strdup("Perl");
 	filetype_make_title(ft, TITLE_SOURCE_FILE);
+	ft->mime_type = g_strdup("application/x-perl");
 	ft->group = GEANY_FILETYPE_GROUP_SCRIPT;
 
 #define PHP
@@ -199,6 +214,7 @@ static void init_builtin_filetypes(void)
 	ft->lang = 6;
 	ft->name = g_strdup("PHP");
 	filetype_make_title(ft, TITLE_SOURCE_FILE);
+	ft->mime_type = g_strdup("application/x-php");
 	ft->group = GEANY_FILETYPE_GROUP_SCRIPT;
 
 #define JAVASCRIPT
@@ -206,6 +222,7 @@ static void init_builtin_filetypes(void)
 	ft->lang = 23;
 	ft->name = g_strdup("Javascript");
 	filetype_make_title(ft, TITLE_SOURCE_FILE);
+	ft->mime_type = g_strdup("application/javascript");
 	ft->group = GEANY_FILETYPE_GROUP_SCRIPT;
 
 #define PYTHON
@@ -213,6 +230,7 @@ static void init_builtin_filetypes(void)
 	ft->lang = 7;
 	ft->name = g_strdup("Python");
 	filetype_make_title(ft, TITLE_SOURCE_FILE);
+	ft->mime_type = g_strdup("text/x-python");
 	ft->group = GEANY_FILETYPE_GROUP_SCRIPT;
 
 #define RUBY
@@ -220,6 +238,7 @@ static void init_builtin_filetypes(void)
 	ft->lang = 14;
 	ft->name = g_strdup("Ruby");
 	filetype_make_title(ft, TITLE_SOURCE_FILE);
+	ft->mime_type = g_strdup("application/x-ruby");
 	ft->group = GEANY_FILETYPE_GROUP_SCRIPT;
 
 #define TCL
@@ -227,6 +246,7 @@ static void init_builtin_filetypes(void)
 	ft->lang = 15;
 	ft->name = g_strdup("Tcl");
 	filetype_make_title(ft, TITLE_SOURCE_FILE);
+	ft->mime_type = g_strdup("text/x-tcl");
 	ft->group = GEANY_FILETYPE_GROUP_SCRIPT;
 
 #define LUA
@@ -234,6 +254,7 @@ static void init_builtin_filetypes(void)
 	ft->lang = 22;
 	ft->name = g_strdup("Lua");
 	filetype_make_title(ft, TITLE_SOURCE_FILE);
+	ft->mime_type = g_strdup("text/x-lua");
 	ft->group = GEANY_FILETYPE_GROUP_SCRIPT;
 
 #define FERITE
@@ -241,6 +262,7 @@ static void init_builtin_filetypes(void)
 	ft->lang = 19;
 	ft->name = g_strdup("Ferite");
 	filetype_make_title(ft, TITLE_SOURCE_FILE);
+	ft->mime_type = g_strdup("text/plain"); /* FIXME */
 	ft->group = GEANY_FILETYPE_GROUP_SCRIPT;
 
 #define HASKELL
@@ -248,6 +270,7 @@ static void init_builtin_filetypes(void)
 	ft->lang = 24;
 	ft->name = g_strdup("Haskell");
 	filetype_make_title(ft, TITLE_SOURCE_FILE);
+	ft->mime_type = g_strdup("text/x-haskell");
 	ft->group = GEANY_FILETYPE_GROUP_COMPILED;
 
 #define MARKDOWN
@@ -255,6 +278,7 @@ static void init_builtin_filetypes(void)
 	ft->lang = 36;
 	ft->name = g_strdup("Markdown");
 	filetype_make_title(ft, TITLE_SOURCE_FILE);
+	ft->mime_type = g_strdup("text/plain"); /* FIXME */
 	ft->group = GEANY_FILETYPE_GROUP_MISC;
 
 #define TXT2TAGS
@@ -262,6 +286,7 @@ static void init_builtin_filetypes(void)
 	ft->lang = 37;
 	ft->name = g_strdup("Txt2tags");
 	filetype_make_title(ft, TITLE_SOURCE_FILE);
+	ft->mime_type = g_strdup("text/x-txt2tags");
 	ft->group = GEANY_FILETYPE_GROUP_MISC;
 
 #define ABC
@@ -269,6 +294,7 @@ static void init_builtin_filetypes(void)
 	ft->lang = 38;
 	ft->name = g_strdup("Abc");
 	filetype_make_title(ft, TITLE_SOURCE_FILE);
+	ft->mime_type = g_strdup("text/plain"); /* FIXME */
 	ft->group = GEANY_FILETYPE_GROUP_MISC;
 
 #define SH
@@ -276,6 +302,7 @@ static void init_builtin_filetypes(void)
 	ft->lang = 16;
 	ft->name = g_strdup("Sh");
 	ft->title = g_strdup(_("Shell script file"));
+	ft->mime_type = g_strdup("application/x-shellscript");
 	ft->group = GEANY_FILETYPE_GROUP_SCRIPT;
 
 #define MAKE
@@ -283,12 +310,14 @@ static void init_builtin_filetypes(void)
 	ft->lang = 3;
 	ft->name = g_strdup("Make");
 	ft->title = g_strdup(_("Makefile"));
+	ft->mime_type = g_strdup("text/x-makefile");
 	ft->group = GEANY_FILETYPE_GROUP_SCRIPT;
 
 #define XML
 	ft = filetypes[GEANY_FILETYPES_XML];
 	ft->name = g_strdup("XML");
 	ft->title = g_strdup(_("XML document"));
+	ft->mime_type = g_strdup("application/xml");
 	ft->group = GEANY_FILETYPE_GROUP_MARKUP;
 
 #define DOCBOOK
@@ -296,6 +325,7 @@ static void init_builtin_filetypes(void)
 	ft->lang = 12;
 	ft->name = g_strdup("Docbook");
 	filetype_make_title(ft, TITLE_SOURCE_FILE);
+	ft->mime_type = g_strdup("application/docbook+xml");
 	ft->group = GEANY_FILETYPE_GROUP_MARKUP;
 
 #define HTML
@@ -303,6 +333,7 @@ static void init_builtin_filetypes(void)
 	ft->lang = 29;
 	ft->name = g_strdup("HTML");
 	filetype_make_title(ft, TITLE_SOURCE_FILE);
+	ft->mime_type = g_strdup("text/html");
 	ft->group = GEANY_FILETYPE_GROUP_MARKUP;
 
 #define CSS
@@ -310,6 +341,7 @@ static void init_builtin_filetypes(void)
 	ft->lang = 13;
 	ft->name = g_strdup("CSS");
 	ft->title = g_strdup(_("Cascading StyleSheet"));
+	ft->mime_type = g_strdup("text/css");
 	ft->group = GEANY_FILETYPE_GROUP_MARKUP;	/* not really markup but fit quite well to HTML */
 
 #define SQL
@@ -317,6 +349,7 @@ static void init_builtin_filetypes(void)
 	ft->lang = 11;
 	ft->name = g_strdup("SQL");
 	ft->title = g_strdup(_("SQL Dump file"));
+	ft->mime_type = g_strdup("text/x-sql");
 	ft->group = GEANY_FILETYPE_GROUP_MISC;
 
 #define LATEX
@@ -324,6 +357,7 @@ static void init_builtin_filetypes(void)
 	ft->lang = 8;
 	ft->name = g_strdup("LaTeX");
 	filetype_make_title(ft, TITLE_SOURCE_FILE);
+	ft->mime_type = g_strdup("text/x-tex");
 	ft->group = GEANY_FILETYPE_GROUP_MISC;
 
 #define VHDL
@@ -331,6 +365,7 @@ static void init_builtin_filetypes(void)
 	ft->lang = 21;
 	ft->name = g_strdup("VHDL");
 	filetype_make_title(ft, TITLE_SOURCE_FILE);
+	ft->mime_type = g_strdup("text/x-vhdl");
 	ft->group = GEANY_FILETYPE_GROUP_COMPILED;
 
 #define VERILOG
@@ -338,6 +373,7 @@ static void init_builtin_filetypes(void)
 	ft->lang = 39;
 	ft->name = g_strdup("Verilog");
 	filetype_make_title(ft, TITLE_SOURCE_FILE);
+	ft->mime_type = g_strdup("text/plain"); /* FIXME */
 	ft->group = GEANY_FILETYPE_GROUP_COMPILED;
 
 #define DIFF
@@ -345,18 +381,21 @@ static void init_builtin_filetypes(void)
 	ft->lang = 20;
 	ft->name = g_strdup("Diff");
 	filetype_make_title(ft, TITLE_FILE);
+	ft->mime_type = g_strdup("text/x-patch");
 	ft->group = GEANY_FILETYPE_GROUP_MISC;
 
 #define LISP
 	ft = filetypes[GEANY_FILETYPES_LISP];
 	ft->name = g_strdup("Lisp");
 	filetype_make_title(ft, TITLE_SOURCE_FILE);
+	ft->mime_type = g_strdup("text/plain"); /* FIXME */
 	ft->group = GEANY_FILETYPE_GROUP_SCRIPT;
 
 #define ERLANG
 	ft = filetypes[GEANY_FILETYPES_ERLANG];
 	ft->name = g_strdup("Erlang");
 	filetype_make_title(ft, TITLE_SOURCE_FILE);
+	ft->mime_type = g_strdup("text/x-erlang");
 	ft->group = GEANY_FILETYPE_GROUP_SCRIPT;
 
 #define CONF
@@ -364,12 +403,14 @@ static void init_builtin_filetypes(void)
 	ft->lang = 10;
 	ft->name = g_strdup("Conf");
 	ft->title = g_strdup(_("Config file"));
+	ft->mime_type = g_strdup("text/plain"); /* FIXME */
 	ft->group = GEANY_FILETYPE_GROUP_MISC;
 
 #define PO
 	ft = filetypes[GEANY_FILETYPES_PO];
 	ft->name = g_strdup("Po");
 	ft->title = g_strdup(_("Gettext translation file"));
+	ft->mime_type = g_strdup("text/x-gettext-translation");
 	ft->group = GEANY_FILETYPE_GROUP_MISC;
 
 #define HAXE
@@ -377,6 +418,7 @@ static void init_builtin_filetypes(void)
 	ft->lang = 27;
 	ft->name = g_strdup("Haxe");
 	filetype_make_title(ft, TITLE_SOURCE_FILE);
+	ft->mime_type = g_strdup("text/plain"); /* FIXME */
 	ft->group = GEANY_FILETYPE_GROUP_COMPILED;
 
 #define ACTIONSCRIPT
@@ -384,6 +426,7 @@ static void init_builtin_filetypes(void)
 	ft->lang = 34;
 	ft->name = g_strdup("ActionScript");
 	filetype_make_title(ft, TITLE_SOURCE_FILE);
+	ft->mime_type = g_strdup("application/ecmascript");
 	ft->group = GEANY_FILETYPE_GROUP_SCRIPT;
 
 #define R
@@ -391,6 +434,7 @@ static void init_builtin_filetypes(void)
 	ft->lang = 40;
 	ft->name = g_strdup("R");
 	ft->title = g_strdup_printf(_("%s script file"), "R");
+	ft->mime_type = g_strdup("text/plain"); /* FIXME */
 	ft->group = GEANY_FILETYPE_GROUP_SCRIPT;
 
 #define REST
@@ -398,6 +442,7 @@ static void init_builtin_filetypes(void)
 	ft->lang = 28;
 	ft->name = g_strdup("reStructuredText");
 	filetype_make_title(ft, TITLE_FILE);
+	ft->mime_type = g_strdup("text/plain"); /* FIXME */
 	ft->group = GEANY_FILETYPE_GROUP_MISC;
 
 #define MATLAB
@@ -405,18 +450,21 @@ static void init_builtin_filetypes(void)
 	ft->lang = 32;
 	ft->name = g_strdup("Matlab/Octave");
 	filetype_make_title(ft, TITLE_SOURCE_FILE);
+	ft->mime_type = g_strdup("text/x-matlab");
 	ft->group = GEANY_FILETYPE_GROUP_SCRIPT;
 
 #define YAML
 	ft = filetypes[GEANY_FILETYPES_YAML];
 	ft->name = g_strdup("YAML");
 	filetype_make_title(ft, TITLE_SOURCE_FILE);
+	ft->mime_type = g_strdup("text/plain"); /* FIXME */
 	ft->group = GEANY_FILETYPE_GROUP_MISC;
 
 #define CMAKE
 	ft = filetypes[GEANY_FILETYPES_CMAKE];
 	ft->name = g_strdup("CMake");
 	filetype_make_title(ft, TITLE_SOURCE_FILE);
+	ft->mime_type = g_strdup("text/x-cmake");
 	ft->group = GEANY_FILETYPE_GROUP_MISC;
 
 #define NSIS
@@ -424,18 +472,21 @@ static void init_builtin_filetypes(void)
 	ft->lang = 35;
 	ft->name = g_strdup("NSIS");
 	filetype_make_title(ft, TITLE_SOURCE_FILE);
+	ft->mime_type = g_strdup("text/plain"); /* FIXME */
 	ft->group = GEANY_FILETYPE_GROUP_MISC;
 
 #define ADA
 	ft = filetypes[GEANY_FILETYPES_ADA];
 	ft->name = g_strdup("Ada");
 	filetype_make_title(ft, TITLE_SOURCE_FILE);
+	ft->mime_type = g_strdup("text/x-adasrc");
 	ft->group = GEANY_FILETYPE_GROUP_COMPILED;
 
 #define FORTH
 	ft = filetypes[GEANY_FILETYPES_FORTH];
 	ft->name = g_strdup("Forth");
 	filetype_make_title(ft, TITLE_SOURCE_FILE);
+	ft->mime_type = g_strdup("text/plain"); /* FIXME */
 	ft->group = GEANY_FILETYPE_GROUP_SCRIPT;
 }
 
@@ -481,6 +532,9 @@ static void filetype_add(GeanyFiletype *ft)
 
 	/* list will be sorted later */
 	filetypes_by_title = g_slist_prepend(filetypes_by_title, ft);
+
+	if (ft->mime_type)
+		ft->icon = ui_get_mime_icon(ft->mime_type, GTK_ICON_SIZE_MENU);
 }
 
 
@@ -962,6 +1016,7 @@ static void filetype_free(gpointer data, G_GNUC_UNUSED gpointer user_data)
 	g_free(ft->name);
 	g_free(ft->title);
 	g_free(ft->extension);
+	g_free(ft->mime_type);
 	g_free(ft->comment_open);
 	g_free(ft->comment_close);
 	g_free(ft->context_action_cmd);
@@ -969,6 +1024,8 @@ static void filetype_free(gpointer data, G_GNUC_UNUSED gpointer user_data)
 	g_free(ft->ftdefcmds);
 	g_free(ft->execcmds);
 	set_error_regex(ft, NULL);
+	if (ft->icon)
+		g_object_unref(ft->icon);
 
 	g_strfreev(ft->pattern);
 	g_free(ft->priv);

@@ -2453,3 +2453,48 @@ void ui_editable_insert_text_callback(GtkEditable *editable, gchar *new_text,
 		g_signal_stop_emission_by_name(editable, "insert-text");
 }
 
+
+/* gets the icon that applies to a particular MIME type */
+GdkPixbuf *ui_get_mime_icon(const gchar *mime_type, GtkIconSize size)
+{
+	GdkPixbuf *icon = NULL;
+#if defined(HAVE_GIO) && GLIB_CHECK_VERSION(2, 18, 0)
+	gchar *ctype;
+	GIcon *gicon;
+	GtkIconInfo *info;
+	GtkIconTheme *theme;
+	gint real_size;
+
+	g_return_val_if_fail(gtk_icon_size_lookup(size, &real_size, NULL), NULL);
+	gtk_icon_size_lookup(size, &real_size, NULL);
+
+	theme = gtk_icon_theme_get_default();
+	ctype = g_content_type_from_mime_type(mime_type);
+	gicon = g_content_type_get_icon(ctype);
+	info = gtk_icon_theme_lookup_by_gicon(theme, gicon, real_size, 0);
+	g_object_unref(gicon);
+	g_free(ctype);
+
+	if (info)
+	{
+		icon = gtk_icon_info_load_icon(info, NULL);
+		gtk_icon_info_free(info);
+	}
+#else
+	const gchar *stock_id = GTK_STOCK_FILE;
+	GtkIconSet *icon_set;
+
+	if (strstr(mime_type, "directory"))
+		stock_id = GTK_STOCK_DIRECTORY;
+
+	icon_set = gtk_icon_factory_lookup_default(stock_id);
+	if (icon_set)
+	{
+		icon = gtk_icon_set_render_icon(icon_set, gtk_widget_get_default_style(),
+			gtk_widget_get_default_direction(),
+			GTK_STATE_NORMAL, size, NULL, NULL);
+	}
+#endif
+	return icon;
+}
+

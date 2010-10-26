@@ -129,6 +129,8 @@ struct GeanyFiletype
 	GeanyFiletypeGroupID group;
 	gchar			 *error_regex_string;
 	GeanyFiletype	 *lexer_filetype;
+	gchar			 *mime_type;
+	GdkPixbuf		 *icon;
 
 	struct GeanyFiletypePrivate	*priv;	/* must be last, append fields before this item */
 #ifdef GEANY_PRIVATE
