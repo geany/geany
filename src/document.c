@@ -2512,7 +2512,10 @@ void document_set_filetype(GeanyDocument *doc, GeanyFiletype *type)
 	document_load_config(doc, type, ft_changed);
 
 	if (ft_changed)
+	{
+		sidebar_openfiles_update(doc); /* to update the icon */
 		g_signal_emit_by_name(geany_object, "document-filetype-set", doc, old_ft);
+	}
 }
 
 

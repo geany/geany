@@ -11,6 +11,9 @@
    exponential time.
  * src/ui_utils.h, src/filetypes.c, src/filetypes.h, src/ui_utils.c:
    Add filetype mimetype field (patch by Colomban Wendling, thanks).
+ * src/sidebar.c, src/document.c:
+   Show mimetype icon in sidebar Documents list (patch by Colomban
+   Wendling, thanks).
 
 
 2010-10-25  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

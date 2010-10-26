@@ -272,7 +272,7 @@ static void prepare_openfiles(void)
 
 	/* store the icon and the short filename to show, and the index as reference,
 	 * the colour (black/red/green) and the full name for the tooltip */
-	store_openfiles = gtk_tree_store_new(5, G_TYPE_STRING, G_TYPE_STRING,
+	store_openfiles = gtk_tree_store_new(5, GDK_TYPE_PIXBUF, G_TYPE_STRING,
 		G_TYPE_POINTER, GDK_TYPE_COLOR, G_TYPE_STRING);
 	gtk_tree_view_set_model(GTK_TREE_VIEW(tv.tree_openfiles), GTK_TREE_MODEL(store_openfiles));
 
@@ -287,7 +287,7 @@ static void prepare_openfiles(void)
 	g_object_set(text_renderer, "ellipsize", PANGO_ELLIPSIZE_MIDDLE, NULL);
 	column = gtk_tree_view_column_new();
 	gtk_tree_view_column_pack_start(column, icon_renderer, FALSE);
-	gtk_tree_view_column_set_attributes(column, icon_renderer, "stock-id", DOCUMENTS_ICON, NULL);
+	gtk_tree_view_column_set_attributes(column, icon_renderer, "pixbuf", DOCUMENTS_ICON, NULL);
 	gtk_tree_view_column_pack_start(column, text_renderer, TRUE);
 	gtk_tree_view_column_set_attributes(column, text_renderer, "text", DOCUMENTS_SHORTNAME,
 		"foreground-gdk", DOCUMENTS_COLOR, NULL);
@@ -399,6 +399,7 @@ static GtkTreeIter *get_doc_parent(GeanyDocument *doc)
 	gchar *dirname = NULL;
 	static GtkTreeIter parent;
 	GtkTreeModel *model = GTK_TREE_MODEL(store_openfiles);
+	static GdkPixbuf *dir_icon = NULL;
 
 	if (!documents_show_paths)
 		return NULL;
@@ -420,8 +421,11 @@ static GtkTreeIter *get_doc_parent(GeanyDocument *doc)
 		while (gtk_tree_model_iter_next(model, &parent));
 	}
 	/* no match, add dir parent */
+	if (!dir_icon)
+		dir_icon = ui_get_mime_icon("inode/directory", GTK_ICON_SIZE_MENU);
+
 	gtk_tree_store_append(store_openfiles, &parent, NULL);
-	gtk_tree_store_set(store_openfiles, &parent, DOCUMENTS_ICON, GTK_STOCK_DIRECTORY,
+	gtk_tree_store_set(store_openfiles, &parent, DOCUMENTS_ICON, dir_icon,
 		DOCUMENTS_FILENAME, path,
 		DOCUMENTS_SHORTNAME, doc->file_name ? dirname : GEANY_STRING_UNTITLED, -1);
 
@@ -439,6 +443,7 @@ void sidebar_openfiles_add(GeanyDocument *doc)
 	GtkTreeIter *parent = get_doc_parent(doc);
 	gchar *basename;
 	const GdkColor *color = document_get_status_color(doc);
+	static GdkPixbuf *file_icon = NULL;
 
 	gtk_tree_store_append(store_openfiles, iter, parent);
 
@@ -452,8 +457,12 @@ void sidebar_openfiles_add(GeanyDocument *doc)
 		gtk_tree_view_expand_row(GTK_TREE_VIEW(tv.tree_openfiles), path, TRUE);
 		gtk_tree_path_free(path);
 	}
+	if (!file_icon)
+		file_icon = ui_get_mime_icon("text/plain", GTK_ICON_SIZE_MENU);
+
 	basename = g_path_get_basename(DOC_FILENAME(doc));
-	gtk_tree_store_set(store_openfiles, iter, DOCUMENTS_ICON, GTK_STOCK_FILE,
+	gtk_tree_store_set(store_openfiles, iter,
+		DOCUMENTS_ICON, (doc->file_type && doc->file_type->icon) ? doc->file_type->icon : file_icon,
 		DOCUMENTS_SHORTNAME, basename, DOCUMENTS_DOCUMENT, doc, DOCUMENTS_COLOR, color,
 		DOCUMENTS_FILENAME, DOC_FILENAME(doc), -1);
 	g_free(basename);
@@ -482,10 +491,13 @@ void sidebar_openfiles_update(GeanyDocument *doc)
 
 	if (utils_str_equal(fname, DOC_FILENAME(doc)))
 	{
-		/* just update color */
+		/* just update color and the icon */
 		const GdkColor *color = document_get_status_color(doc);
+		GdkPixbuf *icon = doc->file_type->icon;
 
 		gtk_tree_store_set(store_openfiles, iter, DOCUMENTS_COLOR, color, -1);
+		if (icon)
+			gtk_tree_store_set(store_openfiles, iter, DOCUMENTS_ICON, icon, -1);
 	}
 	else
 	{
