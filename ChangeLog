@@ -6,6 +6,9 @@
    Add docs for 'Ensure consistent line endings' pref.
  * src/keyfile.c:
    Change default for 'Override Geany keybindings' to on.
+ * src/filetypes.c:
+   Sort filetypes_by_title last instead of on insertion to prevent
+   exponential time.
 
 
 2010-10-25  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

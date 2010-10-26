@@ -479,7 +479,8 @@ static void filetype_add(GeanyFiletype *ft)
 	g_ptr_array_add(filetypes_array, ft);
 	g_hash_table_insert(filetypes_hash, ft->name, ft);
 
-	filetypes_by_title = g_slist_insert_sorted(filetypes_by_title, ft, cmp_filetype);
+	/* list will be sorted later */
+	filetypes_by_title = g_slist_prepend(filetypes_by_title, ft);
 }
 
 
@@ -556,6 +557,9 @@ void filetypes_init_types()
 	}
 	init_custom_filetypes(app->datadir);
 	init_custom_filetypes(utils_build_path(app->configdir, GEANY_FILEDEFS_SUBDIR, NULL));
+
+	/* sort last instead of on insertion to prevent exponential time */
+	filetypes_by_title = g_slist_sort(filetypes_by_title, cmp_filetype);
 }
 
 
