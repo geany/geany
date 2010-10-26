@@ -765,7 +765,7 @@ static void load_dialog_prefs(GKeyFile *config)
 		vc->font = utils_get_setting_string(config, "VTE", "font", "Monospace 10");
 		vc->scroll_on_key = utils_get_setting_boolean(config, "VTE", "scroll_on_key", TRUE);
 		vc->scroll_on_out = utils_get_setting_boolean(config, "VTE", "scroll_on_out", TRUE);
-		vc->enable_bash_keys = utils_get_setting_boolean(config, "VTE", "enable_bash_keys", FALSE);
+		vc->enable_bash_keys = utils_get_setting_boolean(config, "VTE", "enable_bash_keys", TRUE);
 		vc->ignore_menu_bar_accel = utils_get_setting_boolean(config, "VTE", "ignore_menu_bar_accel", FALSE);
 		vc->follow_path = utils_get_setting_boolean(config, "VTE", "follow_path", FALSE);
 		vc->run_in_vte = utils_get_setting_boolean(config, "VTE", "run_in_vte", FALSE);
