@@ -2364,7 +2364,7 @@ GtkWidget *ui_label_new_bold(const gchar *text)
  * @since 0.19 */
 void ui_menu_add_document_items(GtkMenu *menu, GeanyDocument *active, GCallback callback)
 {
-	GtkWidget *menu_item, *menu_item_label;
+	GtkWidget *menu_item, *menu_item_label, *image;
 	const GdkColor *color;
 	GeanyDocument *doc;
 	guint i, len;
@@ -2378,7 +2378,14 @@ void ui_menu_add_document_items(GtkMenu *menu, GeanyDocument *active, GCallback 
 			continue;
 
 		base_name = g_path_get_basename(DOC_FILENAME(doc));
-		menu_item = gtk_menu_item_new_with_label(base_name);
+		menu_item = gtk_image_menu_item_new_with_label(base_name);
+		if (doc->file_type->icon)
+			image = gtk_image_new_from_pixbuf(doc->file_type->icon);
+		else
+			image = gtk_image_new_from_stock(GTK_STOCK_FILE, GTK_ICON_SIZE_MENU);
+
+		gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM (menu_item), image);
+
 		gtk_widget_show(menu_item);
 		gtk_container_add(GTK_CONTAINER(menu), menu_item);
 		g_signal_connect(menu_item, "activate", callback, doc);

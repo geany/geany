@@ -14,6 +14,9 @@
  * src/sidebar.c, src/document.c:
    Show mimetype icon in sidebar Documents list (patch by Colomban
    Wendling, thanks).
+ * src/ui_utils.c:
+   Add notebook tab document icons (based on patch by Colomban
+   Wendling, thanks).
 
 
 2010-10-25  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
