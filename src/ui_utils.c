@@ -2472,9 +2472,10 @@ GdkPixbuf *ui_get_mime_icon(const gchar *mime_type, GtkIconSize size)
 	GtkIconTheme *theme;
 	gint real_size;
 
-	g_return_val_if_fail(gtk_icon_size_lookup(size, &real_size, NULL), NULL);
-	gtk_icon_size_lookup(size, &real_size, NULL);
-
+	if (!gtk_icon_size_lookup(size, &real_size, NULL))
+	{
+		g_return_val_if_reached(NULL);
+	}
 	theme = gtk_icon_theme_get_default();
 	ctype = g_content_type_from_mime_type(mime_type);
 	gicon = g_content_type_get_icon(ctype);
