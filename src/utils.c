@@ -290,7 +290,7 @@ gchar *utils_find_open_xml_tag(const gchar sel[], gint size)
 		return NULL;
 	}
 	begin = &sel[0];
-	cur = &sel[size-1];
+	cur = &sel[size - 1];
 
 	/* Skip to the character before the closing brace */
 	while (cur > begin)
@@ -308,6 +308,8 @@ gchar *utils_find_open_xml_tag(const gchar sel[], gint size)
 	while (cur > begin)
 	{
 		if (*cur == '<')
+			break;
+		else if (*cur == '>')
 			break;
 		--cur;
 	}
