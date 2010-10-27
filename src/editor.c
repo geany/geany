@@ -537,7 +537,6 @@ static void check_line_breaking(GeanyEditor *editor, gint pos, gchar c)
 		if (c == GDK_space)
 		{
 			gint diff, last_pos, last_col;
-			const gchar *eol = editor_get_eol_char(editor);
 
 			/* remember the distance between the current column and the last column on the line
 			 * (we use column position in case the previous line gets altered, such as removing
@@ -547,14 +546,9 @@ static void check_line_breaking(GeanyEditor *editor, gint pos, gchar c)
 			diff = last_col - col;
 
 			/* break the line after the space */
-			sci_insert_text(sci, pos + 1, eol);
+			sci_set_current_position(sci, pos + 1, FALSE);
+			sci_send_command(sci, SCI_NEWLINE);
 			line++;
-
-			/* set position as if user had pressed return */
-			pos = sci_get_position_from_line(sci, line);
-			sci_set_current_position(sci, pos, FALSE);
-			/* add indentation, comment multilines, etc */
-			on_new_line_added(editor);
 
 			/* correct cursor position (might not be at line end) */
 			last_pos = sci_get_line_end_position(sci, line);
