@@ -1,3 +1,10 @@
+2010-10-27  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/filetypes.c, src/ui_utils.c:
+   Fix notebook tab menu icons using theme for "text/plain" filetypes.
+   Make filetype mime_type "text/plain" instead of NULL.
+
+
 2010-10-26  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/interface.c, doc/geany.txt, doc/geany.html, geany.glade:

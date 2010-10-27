@@ -517,8 +517,10 @@ static void filetype_add(GeanyFiletype *ft)
 	/* list will be sorted later */
 	filetypes_by_title = g_slist_prepend(filetypes_by_title, ft);
 
-	if (ft->mime_type)
-		ft->icon = ui_get_mime_icon(ft->mime_type, GTK_ICON_SIZE_MENU);
+	if (!ft->mime_type)
+		ft->mime_type = g_strdup("text/plain");
+
+	ft->icon = ui_get_mime_icon(ft->mime_type, GTK_ICON_SIZE_MENU);
 }
 
 

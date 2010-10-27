@@ -2379,12 +2379,8 @@ void ui_menu_add_document_items(GtkMenu *menu, GeanyDocument *active, GCallback 
 
 		base_name = g_path_get_basename(DOC_FILENAME(doc));
 		menu_item = gtk_image_menu_item_new_with_label(base_name);
-		if (doc->file_type->icon)
-			image = gtk_image_new_from_pixbuf(doc->file_type->icon);
-		else
-			image = gtk_image_new_from_stock(GTK_STOCK_FILE, GTK_ICON_SIZE_MENU);
-
-		gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM (menu_item), image);
+		image = gtk_image_new_from_pixbuf(doc->file_type->icon);
+		gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(menu_item), image);
 
 		gtk_widget_show(menu_item);
 		gtk_container_add(GTK_CONTAINER(menu), menu_item);
