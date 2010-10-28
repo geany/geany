@@ -7,6 +7,11 @@
    Make Python use named styles for color scheme support - use
    alt.conf color scheme if you want the old colors.
    Add named style 'function'.
+ * src/plugindata.h:
+   Move plugin_set_info prototype and parenthesize arguments for
+   PLUGIN_SET_TRANSLATABLE_INFO (based on patch by Colomban Wendling,
+   thanks).
+   Fix putting pointer symbol before name, not after type.
 
 
 2010-10-27  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

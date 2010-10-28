@@ -59,6 +59,7 @@ enum {
 	GEANY_ABI_VERSION = 68
 };
 
+
 /** Defines a function to check the plugin is safe to load.
  * This performs runtime checks that try to ensure:
  * - Geany ABI data types are compatible with this plugin.
@@ -68,7 +69,6 @@ enum {
  * want your plugin to require the current Geany version on your machine.
  * You should update this value when using any new API features. */
 #define PLUGIN_VERSION_CHECK(api_required) \
-	gint plugin_version_check(gint abi_ver);\
 	gint plugin_version_check(gint abi_ver) \
 	{ \
 		if (abi_ver != GEANY_ABI_VERSION) \
@@ -114,8 +114,7 @@ GeanyPlugin;
  * extra PluginInfo features (such as an icon), so we don't need to break API
  * compatibility. Alternatively just add a new macro, PLUGIN_SET_INFO_FULL(). -ntrel */
 #define PLUGIN_SET_INFO(p_name, p_description, p_version, p_author) \
-	void plugin_set_info(PluginInfo* info);\
-	void plugin_set_info(PluginInfo* info) \
+	void plugin_set_info(PluginInfo *info) \
 	{ \
 		info->name = (p_name); \
 		info->description = (p_description); \
@@ -133,14 +132,24 @@ GeanyPlugin;
  *
  * @since 0.19 */
 #define PLUGIN_SET_TRANSLATABLE_INFO(localedir, package, p_name, p_description, p_version, p_author) \
-	void plugin_set_info(PluginInfo* info) \
+	void plugin_set_info(PluginInfo *info) \
 	{ \
-		main_locale_init(localedir, package); \
+		main_locale_init((localedir), (package)); \
 		info->name = (p_name); \
 		info->description = (p_description); \
 		info->version = (p_version); \
 		info->author = (p_author); \
 	}
+
+
+#ifndef GEANY_PRIVATE
+
+/* Prototypes for building plugins with -Wmissing-prototypes */
+gint plugin_version_check(gint abi_ver);
+void plugin_set_info(PluginInfo *info);
+
+#endif
+
 
 /** @deprecated - use plugin_set_key_group() instead.
  * @see PLUGIN_KEY_GROUP() macro. */
@@ -307,7 +316,7 @@ struct _ScintillaObject;
 typedef struct ScintillaFuncs
 {
 	/** Send Scintilla a message. */
-	long int	(*scintilla_send_message) (struct _ScintillaObject* sci, unsigned int iMessage,
+	long int	(*scintilla_send_message) (struct _ScintillaObject *sci, unsigned int iMessage,
 			long unsigned int wParam, long int lParam);
 	/** Create a new ScintillaObject widget. */
 	GtkWidget*	(*scintilla_new)(void);
