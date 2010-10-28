@@ -154,7 +154,7 @@ static void handle_boolean_setting(StashGroup *group, StashPref *se,
 static void handle_integer_setting(StashGroup *group, StashPref *se,
 		GKeyFile *config, SettingAction action)
 {
-	gboolean *setting = se->setting;
+	gint *setting = se->setting;
 
 	switch (action)
 	{
