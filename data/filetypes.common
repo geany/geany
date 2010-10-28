@@ -109,11 +109,15 @@ commentdoc=0x3f5fbf
 number=0x007f00
 # keyword
 word=0x00007f;;true;false
-# e.g. global types from a *.c.tags file
+# usually type keywords and library type names
 word2=0x991111;;true;false
 string=0xff901e
 preprocessor=0x007f7f
 operator=0x301010
 # unterminated string
 stringeol=0x000000;0xe0c0e0;false;false
+# user type names
 type=0x0000d0;;true;false
+# user function names
+function=0x000080
+

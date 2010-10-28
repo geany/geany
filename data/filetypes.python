@@ -1,22 +1,23 @@
 # For complete documentation of this file, please see Geany's main documentation
 [styling]
 # foreground;background;bold;italic
-default=0x000000;0xffffff;false;false
-commentline=0x808080;0xffffff;false;false
-number=0x400080;0xffffff;false;false
-string=0x008000;0xffffff;false;false
-character=0x008000;0xffffff;false;false
-word=0x600080;0xffffff;true;false
-triple=0x008020;0xffffff;false;false
-tripledouble=0x404000;0xffffff;false;false
-classname=0x003030;0xffffff;false;false
-defname=0x000080;0xffffff;false;false
-operator=0x300080;0xffffff;false;false
-identifier=0x000000;0xffffff;false;false
-commentblock=0x808080;0xffffff;false;false
-stringeol=0x000000;0xe0c0e0;false;false
-word2=0x9f0200;0xffffff;false;false
-decorator=0x808000;0xffffff;false;false
+default=default
+commentline=comment
+number=number
+string=string
+character=string
+word=word
+triple=string
+tripledouble=commentdoc
+classname=type,bold
+defname=function
+operator=operator
+identifier=default
+commentblock=comment
+stringeol=stringeol
+# flip bold for identifiers
+word2=word2,bold
+decorator=preprocessor
 
 [keywords]
 # all items must be in one line

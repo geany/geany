@@ -2,6 +2,11 @@
 
  * data/filetypes.xml:
    Match data-* and aria-* as HTML attributes.
+ * data/colorschemes/alt.conf, data/filetypes.common,
+   data/filetypes.python:
+   Make Python use named styles for color scheme support - use
+   alt.conf color scheme if you want the old colors.
+   Add named style 'function'.
 
 
 2010-10-27  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
