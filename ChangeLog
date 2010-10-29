@@ -1,3 +1,10 @@
+2010-10-29  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * Makefile.am:
+   Add install-data-only target to only install data/* to speed up
+   testing.
+
+
 2010-10-28  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * data/filetypes.xml:

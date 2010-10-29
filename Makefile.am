@@ -57,7 +57,10 @@ DISTCLEANFILES = \
 uninstall-local:
 	rm -rf $(DESTDIR)$(pkgdatadir);
 
-install-data-local:
+install-data-local: install-data-only
+	@$(NORMAL_INSTALL)
+
+install-data-only:
 	@$(NORMAL_INSTALL)
 	$(mkinstalldirs) $(DESTDIR)$(pkgdatadir); \
 	$(INSTALL_DATA) $(srcdir)/COPYING $(DESTDIR)$(pkgdatadir)/GPL-2; \
