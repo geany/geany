@@ -120,4 +120,5 @@ stringeol=0x000000;0xe0c0e0;false;false
 type=0x0000d0;;true;false
 # user function names
 function=0x000080
+extra=0x404080
 

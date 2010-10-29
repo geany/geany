@@ -5,6 +5,13 @@
    testing.
  * src/editor.c:
    Fix not autocompleting when breaking lines.
+ * data/filetypes.java, data/filetypes.cpp, data/filetypes.vala,
+   data/colorschemes/alt.conf, data/filetypes.haxe,
+   data/filetypes.common, data/filetypes.glsl,
+   data/filetypes.actionscript, data/filetypes.cs,
+   data/filetypes.ferite, data/filetypes.c, data/filetypes.javascript,
+   data/filetypes.Genie.conf:
+   Add named style 'extra', use for C-like filetypes.
 
 
 2010-10-28  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

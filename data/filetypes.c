@@ -10,15 +10,15 @@ word=word
 word2=word2
 string=string
 character=string
-uuid=0x404080
+uuid=extra
 preprocessor=preprocessor
 operator=operator
 identifier=default
 stringeol=stringeol
 # @"verbatim"
-verbatim=0x101030
+verbatim=extra
 # (/regex/)
-regex=0x105090
+regex=extra
 commentlinedoc=commentdoc,bold
 commentdockeyword=commentdoc,bold,italic
 commentdockeyworderror=commentdoc
