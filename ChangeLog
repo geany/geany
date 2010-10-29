@@ -3,6 +3,8 @@
  * Makefile.am:
    Add install-data-only target to only install data/* to speed up
    testing.
+ * src/editor.c:
+   Fix not autocompleting when breaking lines.
 
 
 2010-10-28  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

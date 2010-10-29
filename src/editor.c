@@ -547,6 +547,7 @@ static void check_line_breaking(GeanyEditor *editor, gint pos, gchar c)
 
 			/* break the line after the space */
 			sci_set_current_position(sci, pos + 1, FALSE);
+			sci_cancel(sci);	/* don't select from completion list */
 			sci_send_command(sci, SCI_NEWLINE);
 			line++;
 
