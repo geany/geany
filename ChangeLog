@@ -1,6 +1,13 @@
+2010-11-01  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/utils.c, src/main.c:
+   Remove trailing directory separator for app->datadir and
+   app->docdir for consistency with the other directory fields.
+
+
 2010-11-01  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
- * data/filetypes.ada: 
+ * data/filetypes.ada:
    Fix comments for Ada. Thanks to Jonas Baggett for reporting.
 
 

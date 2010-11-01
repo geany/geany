@@ -1948,7 +1948,7 @@ gchar *utils_get_help_url(const gchar *suffix)
 	g_strdelimit(uri, "\\", '/'); /* replace '\\' by '/' */
 #else
 	skip = 7;
-	uri = g_strconcat("file://", app->docdir, "index.html", NULL);
+	uri = g_strconcat("file://", app->docdir, "/index.html", NULL);
 #endif
 
 	if (! g_file_test(uri + skip, G_FILE_TEST_IS_REGULAR))

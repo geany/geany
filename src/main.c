@@ -382,8 +382,8 @@ static void setup_paths(void)
 
 	g_free(install_dir);
 #else
-	data_dir = g_strconcat(GEANY_DATADIR, "/geany/", NULL); /* e.g. /usr/share/geany */
-	doc_dir = g_strconcat(GEANY_DOCDIR, "/html/", NULL);
+	data_dir = g_strconcat(GEANY_DATADIR, "/geany", NULL); /* e.g. /usr/share/geany */
+	doc_dir = g_strconcat(GEANY_DOCDIR, "/html", NULL);
 #endif
 
 	/* convert path names to locale encoding */
@@ -587,12 +587,6 @@ static void parse_command_line_options(gint *argc, gchar ***argv)
 }
 
 
-#ifdef G_OS_WIN32
-# define DIR_SEP "\\" /* on Windows we need an additional dir separator */
-#else
-# define DIR_SEP ""
-#endif
-
 static gint create_config_dir(void)
 {
 	gint saved_errno = 0;
@@ -666,7 +660,7 @@ static gint create_config_dir(void)
 			gchar *text = g_strconcat(
 "Copy files from ", app->datadir, " to this directory to overwrite "
 "them. To use the defaults, just delete the file in this directory.\nFor more information read "
-"the documentation (in ", app->docdir, DIR_SEP "index.html or visit " GEANY_HOMEPAGE ").", NULL);
+"the documentation (in ", app->docdir, G_DIR_SEPARATOR_S "index.html or visit " GEANY_HOMEPAGE ").", NULL);
 			utils_write_file(filedefs_readme, text);
 			g_free(text);
 		}
@@ -687,7 +681,7 @@ static gint create_config_dir(void)
 		{
 			gchar *text = g_strconcat(
 "There are several template files in this directory. For these templates you can use wildcards.\n\
-For more information read the documentation (in ", app->docdir, DIR_SEP "index.html or visit " GEANY_HOMEPAGE ").",
+For more information read the documentation (in ", app->docdir, G_DIR_SEPARATOR_S "index.html or visit " GEANY_HOMEPAGE ").",
 					NULL);
 			utils_write_file(templates_readme, text);
 			g_free(text);
