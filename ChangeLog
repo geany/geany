@@ -6,6 +6,8 @@
  * src/filetypes.c:
    Detect user and system filetype configuration files as Conf
    filetype.
+ * src/editor.c:
+   Respect 'Smart' home key for Shift+Home (fixes #3100290).
 
 
 2010-11-01  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>

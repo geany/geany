@@ -5093,6 +5093,9 @@ void editor_apply_update_prefs(GeanyEditor *editor)
 	editor_set_indent(editor, editor->indent_type, editor->indent_width);
 	sci_set_tab_indents(sci, editor_prefs.use_tab_to_indent);
 
+	sci_assign_cmdkey(sci, SCK_HOME | (SCMOD_SHIFT << 16),
+		editor_prefs.smart_home_key ? SCI_VCHOMEEXTEND : SCI_HOMEEXTEND);
+
 	sci_set_autoc_max_height(sci, editor_prefs.symbolcompletion_max_height);
 	SSM(sci, SCI_AUTOCSETDROPRESTOFWORD, editor_prefs.completion_drops_rest_of_word, 0);
 
