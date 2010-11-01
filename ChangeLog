@@ -3,6 +3,9 @@
  * src/utils.c, src/main.c:
    Remove trailing directory separator for app->datadir and
    app->docdir for consistency with the other directory fields.
+ * src/filetypes.c:
+   Detect user and system filetype configuration files as Conf
+   filetype.
 
 
 2010-11-01  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>

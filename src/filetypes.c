@@ -726,12 +726,43 @@ static gboolean match_basename(gconstpointer pft, gconstpointer user_data)
 }
 
 
+static GeanyFiletype *check_builtin_filenames(const gchar *utf8_filename)
+{
+	gchar *lfn = NULL;
+	const gchar *path;
+	gboolean found = FALSE;
+
+#ifdef G_OS_WIN32
+	/* use lower case basename */
+	lfn = g_utf8_strdown(utf8_filename, -1);
+#else
+	lfn = g_strdup(utf8_filename);
+#endif
+	setptr(lfn, utils_get_locale_from_utf8(lfn));
+
+	path = utils_build_path(app->configdir, GEANY_FILEDEFS_SUBDIR, "filetypes.", NULL);
+	if (g_str_has_prefix(lfn, path))
+		found = TRUE;
+
+	path = utils_build_path(app->datadir, "filetypes.", NULL);
+	if (g_str_has_prefix(lfn, path))
+		found = TRUE;
+
+	g_free(lfn);
+	return found ? filetypes[GEANY_FILETYPES_CONF] : NULL;
+}
+
+
 /* Detect filetype only based on the filename extension.
  * utf8_filename can include the full path. */
 GeanyFiletype *filetypes_detect_from_extension(const gchar *utf8_filename)
 {
 	gchar *base_filename;
 	GeanyFiletype *ft;
+
+	ft = check_builtin_filenames(utf8_filename);
+	if (ft)
+		return ft;
 
 	/* to match against the basename of the file (because of Makefile*) */
 	base_filename = g_path_get_basename(utf8_filename);
