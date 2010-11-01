@@ -27,7 +27,7 @@ extension=adb
 #wordchars=_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
 
 # if only single comment char is supported like # in this file, leave comment_close blank
-comment_open=#
+comment_open=--
 comment_close=
 
 # set to false if a comment character/string should start at column 0 of a line, true uses any
