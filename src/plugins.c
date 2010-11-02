@@ -187,7 +187,8 @@ static SciFuncs sci_funcs = {
 	&sci_goto_line,
 	&sci_find_text,
 	&sci_set_line_indentation,
-	&sci_get_line_indentation
+	&sci_get_line_indentation,
+	&sci_get_lexer
 };
 
 static TemplateFuncs template_funcs = {
