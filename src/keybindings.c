@@ -925,7 +925,7 @@ void keybindings_show_shortcuts(void)
 static gboolean check_fixed_kb(guint keyval, guint state)
 {
 	/* check alt-0 to alt-9 for setting current notebook page */
-	if (state & GDK_MOD1_MASK && keyval >= GDK_0 && keyval <= GDK_9)
+	if (state == GDK_MOD1_MASK && keyval >= GDK_0 && keyval <= GDK_9)
 	{
 		gint page = keyval - GDK_0 - 1;
 		gint npages = gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook));

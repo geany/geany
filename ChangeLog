@@ -7,6 +7,8 @@
    a Markup document.
  * plugins/htmlchars.c:
    Rename submenu item labels to be more descriptive.
+ * src/keybindings.c:
+   Fix Alt+[0-9] switching tabs when other modifiers are also held.
 
 
 2010-11-01  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
