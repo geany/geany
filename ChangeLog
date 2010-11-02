@@ -5,6 +5,8 @@
  * plugins/htmlchars.c:
    Only automatically replace characters when the current document is
    a Markup document.
+ * plugins/htmlchars.c:
+   Rename submenu item labels to be more descriptive.
 
 
 2010-11-01  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

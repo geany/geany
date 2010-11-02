@@ -750,14 +750,14 @@ void plugin_init(GeanyData *data)
 	ui_add_document_sensitive(menu_item);
 
 	/* Add menuitem for html replacement functions*/
-	main_menu = gtk_menu_item_new_with_mnemonic(_("HTML Replacement"));
+	main_menu = gtk_menu_item_new_with_mnemonic(_("_HTML Replacement"));
 	gtk_widget_show_all(main_menu);
 	gtk_container_add(GTK_CONTAINER(geany->main_widgets->tools_menu), main_menu);
 
 	main_menu_submenu = gtk_menu_new();
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(main_menu), main_menu_submenu);
 
-	menu_htmltoggle = gtk_check_menu_item_new_with_mnemonic(_("_HTMLToggle"));
+	menu_htmltoggle = gtk_check_menu_item_new_with_mnemonic(_("_Auto-replace Special Characters"));
 	gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM(menu_htmltoggle),
 		plugin_active);
 	gtk_container_add(GTK_CONTAINER(main_menu_submenu), menu_htmltoggle);
@@ -766,7 +766,7 @@ void plugin_init(GeanyData *data)
 			 G_CALLBACK(toggle_status), NULL);
 
 	menu_bulk_replace = gtk_menu_item_new_with_mnemonic(
-						_("Bulk replacement of special chars"));
+						_("_Replace Characters in Selection"));
 	g_signal_connect((gpointer) menu_bulk_replace, "activate",
 			 G_CALLBACK(replace_special_character_activated), NULL);
 
