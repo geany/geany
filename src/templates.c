@@ -85,13 +85,14 @@ static void read_template(const gchar *name, gint id)
 	TEMPLATES_READ_FILE(fname, &templates[id]);
 
 	/* FIXME: we should replace the line ends on insertion with doc pref, not on loading */
-	if (file_prefs.default_eol_character != SC_EOL_LF)
 	{
-		/* Replace the \n characters in the default template text by the proper
-		 * platform-specific line ending characters. */
 		GString *tmp = g_string_new(templates[id]);
 		const gchar *eol_str = (file_prefs.default_eol_character == SC_EOL_CR) ? "\r" : "\r\n";
 
+		/* first convert data to LF only */
+		utils_string_replace_all(tmp, "\r\n", "\n");
+		utils_string_replace_all(tmp, "\r", "\n");
+		/* now convert to desired line endings */
 		utils_string_replace_all(tmp, "\n", eol_str);
 		setptr(templates[id], tmp->str);
 		g_string_free(tmp, FALSE);

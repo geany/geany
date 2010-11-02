@@ -18,6 +18,9 @@
    Use g_file_replace_contents() if available to save documents - this
    should help workaround bugs in GVFS.
    Needs testing.
+ * src/templates.c:
+   Fix wrongly adding newlines for templates on disk that don't have
+   LF line endings when default line endings are not LF, e.g. Windows.
 
 
 2010-11-01  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
