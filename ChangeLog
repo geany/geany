@@ -14,6 +14,10 @@
    Go to Line dialog/field (patch by Dimitar Zhekov, thanks).
  * src/main.c:
    Print "GIO" and "built-in regex" if enabled with --version.
+ * src/document.c:
+   Use g_file_replace_contents() if available to save documents - this
+   should help workaround bugs in GVFS.
+   Needs testing.
 
 
 2010-11-01  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

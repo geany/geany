@@ -1704,24 +1704,29 @@ _("An error occurred while converting the file from UTF-8 in \"%s\". The file re
 		*data = conv_file_contents;
 		*len = conv_len;
 	}
-
 	return TRUE;
 }
 
 
-static gchar *write_data_to_disk(GeanyDocument *doc, const gchar *locale_filename,
+static gchar *write_data_to_disk(const gchar *locale_filename,
 								 const gchar *data, gint len)
 {
+	GError *error = NULL;
+#ifdef HAVE_GIO
+	GFile *fp;
+
+	/* Use GIO API to save file (GVFS-safe) */
+	fp = g_file_new_for_path(locale_filename);
+	g_file_replace_contents(fp, data, len, NULL, FALSE,
+		G_FILE_CREATE_NONE, NULL, NULL, &error);
+#else
+	gint err = 0;
 	FILE *fp;
 	gint bytes_written;
-	gint err = 0;
-	GError *error = NULL;
-
-	g_return_val_if_fail(doc != NULL, g_strdup(g_strerror(EINVAL)));
-	g_return_val_if_fail(data != NULL, g_strdup(g_strerror(EINVAL)));
 
 	if (! file_prefs.use_safe_file_saving)
 	{
+		/* Use POSIX API for unsafe saving (GVFS-unsafe) */
 		fp = g_fopen(locale_filename, "wb");
 		if (G_UNLIKELY(fp == NULL))
 			return g_strdup(g_strerror(errno));
@@ -1738,14 +1743,31 @@ static gchar *write_data_to_disk(GeanyDocument *doc, const gchar *locale_filenam
 	}
 	else
 	{
+		/* Use old GLib API for safe saving (GVFS-safe, but alters ownership and permissons) */
 		g_file_set_contents(locale_filename, data, len, &error);
-		if (error != NULL)
-		{
-			gchar *msg = g_strdup(error->message);
-			g_error_free(error);
-			return msg;
-		}
 	}
+#endif
+	if (error != NULL)
+	{
+		gchar *msg = g_strdup(error->message);
+		g_error_free(error);
+		return msg;
+	}
+	return NULL;
+}
+
+
+static gchar *save_doc(GeanyDocument *doc, const gchar *locale_filename,
+								 const gchar *data, gint len)
+{
+	gchar *err;
+
+	g_return_val_if_fail(doc != NULL, g_strdup(g_strerror(EINVAL)));
+	g_return_val_if_fail(data != NULL, g_strdup(g_strerror(EINVAL)));
+
+	err = write_data_to_disk(locale_filename, data, len);
+	if (err)
+		return err;
 
 	/* now the file is on disk, set real_path */
 	if (doc->real_path == NULL)
@@ -1754,7 +1776,6 @@ static gchar *write_data_to_disk(GeanyDocument *doc, const gchar *locale_filenam
 		doc->priv->is_remote = utils_is_remote_path(locale_filename);
 		monitor_file_setup(doc);
 	}
-
 	return NULL;
 }
 
@@ -1849,7 +1870,7 @@ gboolean document_save_file(GeanyDocument *doc, gboolean force)
 	doc->priv->file_disk_status = FILE_IGNORE;
 
 	/* actually write the content of data to the file on disk */
-	errmsg = write_data_to_disk(doc, locale_filename, data, len);
+	errmsg = save_doc(doc, locale_filename, data, len);
 	g_free(data);
 
 	if (errmsg != NULL)
