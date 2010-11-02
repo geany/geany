@@ -2439,21 +2439,21 @@ gint ui_get_gtk_settings_integer(const gchar *property_name, gint default_value)
 void ui_editable_insert_text_callback(GtkEditable *editable, gchar *new_text,
 									  gint new_text_len, gint *position, gpointer data)
 {
-	gboolean stop_signal = FALSE;
-	const gchar c = *new_text;
+	gboolean first = position != NULL && *position == 0;
+	gint i;
 
-	/* allow inserting '+' and '-' as the first character */
-	if (position != NULL && *position == 0)
+	if (new_text_len == -1)
+		new_text_len = strlen(new_text);
+
+	for (i = 0; i < new_text_len; i++, new_text++)
 	{
-		if (c != '+' && c != '-' && ! isdigit(c))
-			stop_signal = TRUE;
+		if ((!first || !strchr("+-", *new_text)) && !isdigit(*new_text))
+		{
+			g_signal_stop_emission_by_name(editable, "insert-text");
+			break;
+		}
+		first = FALSE;
 	}
-	/* don't insert any text when it is not a digit */
-	else if (! isdigit(c))
-		stop_signal = TRUE;
-
-	if (stop_signal)
-		g_signal_stop_emission_by_name(editable, "insert-text");
 }
 
 
