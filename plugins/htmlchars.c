@@ -27,6 +27,7 @@
 
 #include "geanyplugin.h"
 #include <string.h>
+#include "SciLexer.h"
 
 
 GeanyData		*geany_data;
@@ -376,7 +377,7 @@ static void set_status(gboolean new_status)
 		g_free(config_dir);
 		g_key_file_free(config);
 	}
-}	
+}
 
 
 static void toggle_status(G_GNUC_UNUSED GtkMenuItem * menuitem)
@@ -422,10 +423,16 @@ static const gchar *get_entity(gchar *letter)
 static gboolean ht_editor_notify_cb(GObject *object, GeanyEditor *editor,
 									SCNotification *nt, gpointer data)
 {
+	gint lexer;
+
 	g_return_val_if_fail(editor != NULL, FALSE);
 
-	if (plugin_active != TRUE)
+	if (!plugin_active)
 		return FALSE;
+
+	lexer = sci_get_lexer(editor->sci);
+	if (lexer != SCLEX_HTML && lexer != SCLEX_XML)
+			return FALSE;
 
 	if (nt->nmhdr.code == SCN_CHARADDED)
 	{

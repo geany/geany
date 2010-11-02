@@ -2,6 +2,9 @@
 
  * src/plugindata.h, src/plugins.c, plugins/geanyfunctions.h:
    Add sci_get_lexer() to plugin API.
+ * plugins/htmlchars.c:
+   Only automatically replace characters when the current document is
+   a Markup document.
 
 
 2010-11-01  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
