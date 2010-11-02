@@ -27,10 +27,6 @@
 #include "geanyplugin.h"
 #include <string.h>
 
-#include "Scintilla.h"
-#include "ScintillaWidget.h"
-#include "SciLexer.h"
-
 
 PLUGIN_VERSION_CHECK(GEANY_API_VERSION)
 PLUGIN_SET_INFO(_("Split Window"), _("Splits the editor view into two windows."),
