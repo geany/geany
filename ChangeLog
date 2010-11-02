@@ -12,6 +12,8 @@
  * src/ui_utils.c:
    Don't allow pasting of numbers followed by other characters in the
    Go to Line dialog/field (patch by Dimitar Zhekov, thanks).
+ * src/main.c:
+   Print "GIO" and "built-in regex" if enabled with --version.
 
 
 2010-11-01  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

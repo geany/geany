@@ -513,10 +513,19 @@ static void parse_command_line_options(gint *argc, gchar ***argv)
 
 	if (show_version)
 	{
+		const gchar build_opts[] = ""
+#ifdef HAVE_GIO
+			", GIO"
+#endif
+#ifdef USE_INCLUDED_REGEX
+			", built-in regex"
+#endif
+			;
 		printf(PACKAGE " %s ", main_get_version_string());
-		printf(_("(built on %s with GTK %d.%d.%d, GLib %d.%d.%d)"),
+		printf(_("(built on %s with GTK %d.%d.%d, GLib %d.%d.%d%s)"),
 				__DATE__, GTK_MAJOR_VERSION, GTK_MINOR_VERSION, GTK_MICRO_VERSION,
-				GLIB_MAJOR_VERSION, GLIB_MINOR_VERSION, GLIB_MICRO_VERSION);
+				GLIB_MAJOR_VERSION, GLIB_MINOR_VERSION, GLIB_MICRO_VERSION,
+				build_opts);
 		printf("\n");
 
 		exit(0);
