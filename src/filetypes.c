@@ -93,7 +93,8 @@ static void init_builtin_filetypes(void)
 
 #define NONE	/* these macros are only to ease navigation */
 	ft = filetypes[GEANY_FILETYPES_NONE];
-	ft->name = g_strdup(_("None"));
+	/* ft->name must not be translated as it is used for filetype lookup */
+	ft->name = g_strdup("None");
 	ft->title = g_strdup(_("None"));
 	ft->group = GEANY_FILETYPE_GROUP_NONE;
 

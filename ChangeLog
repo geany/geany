@@ -1,3 +1,12 @@
+2010-11-04  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/filetypes.c:
+   Do not translate 'name' field for filetype None because it is used
+   for hash table lookup. This fixes missing files in the Open dialog
+   for the 'All files' filter with non-English locales (thanks to Sardem
+   FF7).
+
+
 2010-11-02  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/plugindata.h, src/plugins.c, plugins/geanyfunctions.h:
@@ -16,7 +25,8 @@
    Print "GIO" and "built-in regex" if enabled with --version.
  * src/document.c:
    Use g_file_replace_contents() if available to save documents - this
-   should help workaround bugs in GVFS.
+   should help workaround bugs in GVFS (based on patch by Alexey
+   Antipov, thanks).
    Needs testing.
  * src/templates.c:
    Fix wrongly adding newlines for templates on disk that don't have
