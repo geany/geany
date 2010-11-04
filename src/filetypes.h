@@ -118,8 +118,12 @@ struct GeanyFiletype
 	/** Represents the langType of tagmanager (see the table
 	 * in tagmanager/parsers.h), -1 represents all, -2 none. */
 	langType 		  lang;
-	gchar			 *name;				/**< Short name, e.g. "C". */
-	gchar			 *title;			/**< Shown in the file open dialog. E.g. "C source file". */
+	/** Untranslated short name, such as "C", "None".
+	 * Must not be translated as it's used for hash table lookups - use
+	 * filetypes_get_display_name() instead. */
+	gchar			 *name;
+	/** Shown in the file open dialog, such as "C source file". */
+	gchar			 *title;
 	gchar			 *extension;		/**< Default file extension for new files, or @c NULL. */
 	gchar			**pattern;			/**< Array of filename-matching wildcard strings. */
 	gchar			 *context_action_cmd;
@@ -175,6 +179,8 @@ void filetypes_reload(void);
 
 
 GeanyFiletype *filetypes_index(gint idx);
+
+const gchar *filetypes_get_display_name(GeanyFiletype *ft);
 
 GeanyFiletype *filetypes_detect_from_document(GeanyDocument *doc);
 

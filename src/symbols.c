@@ -1441,7 +1441,8 @@ void symbols_show_load_tags_dialog(void)
 
 			if (ft != NULL && symbols_load_global_tags(fname, ft))
 				/* For translators: the first wildcard is the filetype, the second the filename */
-				ui_set_statusbar(TRUE, _("Loaded %s tags file '%s'."), ft->name, utf8_fname);
+				ui_set_statusbar(TRUE, _("Loaded %s tags file '%s'."),
+					filetypes_get_display_name(ft), utf8_fname);
 			else
 				ui_set_statusbar(TRUE, _("Could not load tags file '%s'."), utf8_fname);
 

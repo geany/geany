@@ -2526,7 +2526,7 @@ void document_set_filetype(GeanyDocument *doc, GeanyFiletype *type)
 	old_ft = doc->file_type;
 	geany_debug("%s : %s (%s)",
 		(doc->file_name != NULL) ? doc->file_name : "unknown",
-		(type->name != NULL) ? type->name : "unknown",
+		type->name,
 		(doc->encoding != NULL) ? doc->encoding : "unknown");
 
 	ft_changed = (doc->file_type != type); /* filetype has changed */

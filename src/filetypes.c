@@ -93,7 +93,8 @@ static void init_builtin_filetypes(void)
 
 #define NONE	/* these macros are only to ease navigation */
 	ft = filetypes[GEANY_FILETYPES_NONE];
-	/* ft->name must not be translated as it is used for filetype lookup */
+	/* ft->name must not be translated as it is used for filetype lookup.
+	 * Use filetypes_get_display_name() instead. */
 	ft->name = g_strdup("None");
 	ft->title = g_strdup(_("None"));
 	ft->group = GEANY_FILETYPE_GROUP_NONE;
@@ -1359,7 +1360,7 @@ static void compile_regex(GeanyFiletype *ft, regex_t *regex, gchar *regstr)
 		gchar buf[256];
 		regerror(retval, regex, buf, sizeof buf);
 		ui_set_statusbar(TRUE, _("Bad regex for filetype %s: %s"),
-			ft->name, buf);
+			filetypes_get_display_name(ft), buf);
 	}
 	/* regex will be freed in set_error_regex(). */
 }
@@ -1540,4 +1541,13 @@ void filetypes_reload(void)
 	document_reload_config(current_doc);
 }
 
+
+/** Gets @c ft->name or a translation for filetype None.
+ * @param ft .
+ * @return .
+ * @since Geany 0.20 */
+const gchar *filetypes_get_display_name(GeanyFiletype *ft)
+{
+	return ft->id == GEANY_FILETYPES_NONE ? _("None") : ft->name;
+}
 

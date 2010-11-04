@@ -249,7 +249,7 @@ static void add_statusbar_statistics(GString *stats_str,
 				}
 				break;
 			case 'f':
-				g_string_append(stats_str, doc->file_type->name);
+				g_string_append(stats_str, filetypes_get_display_name(doc->file_type));
 				break;
 			case 'S':
 				symbols_get_current_function(doc, &cur_tag);

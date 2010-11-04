@@ -4,7 +4,11 @@
    Do not translate 'name' field for filetype None because it is used
    for hash table lookup. This fixes missing files in the Open dialog
    for the 'All files' filter with non-English locales (thanks to Sardem
-   FF7).
+   FF7, fixes #3094771).
+ * src/filetypes.c, src/filetypes.h, src/document.c, src/symbols.c,
+   src/ui_utils.c:
+   Add filetypes_get_display_name() to get translations for filetype
+   None.
 
 
 2010-11-02  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
