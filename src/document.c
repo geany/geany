@@ -1719,6 +1719,7 @@ static gchar *write_data_to_disk(const gchar *locale_filename,
 	fp = g_file_new_for_path(locale_filename);
 	g_file_replace_contents(fp, data, len, NULL, FALSE,
 		G_FILE_CREATE_NONE, NULL, NULL, &error);
+	g_object_unref(fp);
 #else
 	gint err = 0;
 	FILE *fp;

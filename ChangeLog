@@ -9,6 +9,9 @@
    src/ui_utils.c:
    Add filetypes_get_display_name() to get translations for filetype
    None.
+ * src/document.c:
+   Fix resource leak when saving files with GIO (patch by Colomban
+   Wendling, thanks).
 
 
 2010-11-02  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
