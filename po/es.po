@@ -8,14 +8,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Geany 0.20\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-11-02 19:51+0100\n"
-"PO-Revision-Date: 2010-11-02 17:49+0100\n"
-"Last-Translator: <lucasvieites@gmail.com>\n"
-"Language-Team:  <en@li.org>\n"
-"Language: \n"
+"POT-Creation-Date: 2010-11-05 10:29+0100\n"
+"PO-Revision-Date: 2010-11-05 10:08+0100\n"
+"Last-Translator: lucasvieites@gmail.com\n"
+"Language-Team:  <es@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: es\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: KBabel 1.11.4\n"
 
@@ -314,7 +314,7 @@ msgid_plural "%d files saved."
 msgstr[0] "%d archivo guardado."
 msgstr[1] "%d archivos guardados."
 
-#: ../src/callbacks.c:490 ../src/document.c:2948 ../src/interface.c:372
+#: ../src/callbacks.c:490 ../src/document.c:2949 ../src/interface.c:372
 #: ../src/sidebar.c:683
 msgid "_Reload"
 msgstr "_Recargar"
@@ -564,7 +564,7 @@ msgstr ""
 
 #: ../src/dialogs.c:1166 ../src/dialogs.c:1167 ../src/dialogs.c:1168
 #: ../src/dialogs.c:1174 ../src/dialogs.c:1175 ../src/dialogs.c:1176
-#: ../src/symbols.c:1730 ../src/symbols.c:1751 ../src/symbols.c:1803
+#: ../src/symbols.c:1731 ../src/symbols.c:1752 ../src/symbols.c:1804
 #: ../src/ui_utils.c:244
 msgid "unknown"
 msgstr "desconocido"
@@ -759,47 +759,47 @@ msgstr ""
 msgid "Error message: %s."
 msgstr "Mensaje de error: %s."
 
-#: ../src/document.c:1813 ../src/document.c:1879
+#: ../src/document.c:1814 ../src/document.c:1880
 msgid "Error saving file."
 msgstr "Error guardando archivo."
 
-#: ../src/document.c:1878
+#: ../src/document.c:1879
 #, c-format
 msgid "Error saving file (%s)."
 msgstr "Error al guardar archivo (%s)."
 
-#: ../src/document.c:1903
+#: ../src/document.c:1904
 #, c-format
 msgid "File %s saved."
 msgstr "Archivo %s guardado."
 
-#: ../src/document.c:1971 ../src/document.c:2028 ../src/document.c:2036
+#: ../src/document.c:1972 ../src/document.c:2029 ../src/document.c:2037
 #, c-format
 msgid "\"%s\" was not found."
 msgstr "no se ha encontrado «%s»."
 
-#: ../src/document.c:2036
+#: ../src/document.c:2037
 msgid "Wrap search and find again?"
 msgstr "¿Volver al principio y buscar de nuevo?"
 
-#: ../src/document.c:2115 ../src/search.c:1146 ../src/search.c:1190
+#: ../src/document.c:2116 ../src/search.c:1146 ../src/search.c:1190
 #: ../src/search.c:1882 ../src/search.c:1883
 #, c-format
 msgid "No matches found for \"%s\"."
 msgstr "No se encontraron coincidencias para «%s»."
 
-#: ../src/document.c:2126 ../src/document.c:2135
+#: ../src/document.c:2127 ../src/document.c:2136
 #, c-format
 msgid "%s: replaced %d occurrence of \"%s\" with \"%s\"."
 msgid_plural "%s: replaced %d occurrences of \"%s\" with \"%s\"."
 msgstr[0] "%s: se reemplazó %d ocurrencia de «%s» con «%s»."
 msgstr[1] "%s: se reemplazaron %d ocurrencias de «%s» con «%s»."
 
-#: ../src/document.c:2949
+#: ../src/document.c:2950
 msgid "Do you want to reload it?"
 msgstr "¿Quiere recargarlo?"
 
-#: ../src/document.c:2950
+#: ../src/document.c:2951
 #, c-format
 msgid ""
 "The file '%s' on the disk is more recent than\n"
@@ -808,15 +808,15 @@ msgstr ""
 "El archivo «%s» del disco es más reciente\n"
 "que la vista actual."
 
-#: ../src/document.c:2968
+#: ../src/document.c:2969
 msgid "Close _without saving"
 msgstr "Cerrar _sin guardar"
 
-#: ../src/document.c:2971
+#: ../src/document.c:2972
 msgid "Try to resave the file?"
 msgstr "¿Desea intentar volver a guardar el archivo?"
 
-#: ../src/document.c:2972
+#: ../src/document.c:2973
 #, c-format
 msgid "File \"%s\" was not found on disk!"
 msgstr "No se ha encontrado el archivo «%s» en el disco."
@@ -964,8 +964,8 @@ msgstr "Oriente _medio"
 msgid "_Unicode"
 msgstr "_Unicode"
 
-#: ../src/filetypes.c:80 ../src/filetypes.c:160 ../src/filetypes.c:174
-#: ../src/filetypes.c:182 ../src/filetypes.c:196
+#: ../src/filetypes.c:80 ../src/filetypes.c:162 ../src/filetypes.c:176
+#: ../src/filetypes.c:184 ../src/filetypes.c:198
 #, c-format
 msgid "%s source file"
 msgstr "Archivo de fuente %s"
@@ -975,75 +975,75 @@ msgstr "Archivo de fuente %s"
 msgid "%s file"
 msgstr "Archivo %s"
 
-#: ../src/filetypes.c:96 ../src/filetypes.c:97 ../src/interface.c:3718
+#: ../src/filetypes.c:99 ../src/filetypes.c:1551 ../src/interface.c:3718
 #: ../src/interface.c:5336
 msgid "None"
 msgstr "Ninguno"
 
-#: ../src/filetypes.c:297
+#: ../src/filetypes.c:299
 msgid "Shell script file"
 msgstr "Archivo de script shell"
 
-#: ../src/filetypes.c:305
+#: ../src/filetypes.c:307
 msgid "Makefile"
 msgstr "Makefile"
 
-#: ../src/filetypes.c:312
+#: ../src/filetypes.c:314
 msgid "XML document"
 msgstr "Documento XML"
 
-#: ../src/filetypes.c:336
+#: ../src/filetypes.c:338
 msgid "Cascading StyleSheet"
 msgstr "Hoja de estilo en cascada (CSS)"
 
-#: ../src/filetypes.c:344
+#: ../src/filetypes.c:346
 msgid "SQL Dump file"
 msgstr "Archivo de volcado SQL"
 
-#: ../src/filetypes.c:396
+#: ../src/filetypes.c:398
 msgid "Config file"
 msgstr "Archivo de configuración"
 
-#: ../src/filetypes.c:402
+#: ../src/filetypes.c:404
 msgid "Gettext translation file"
 msgstr "Archivo de traducción gettext"
 
-#: ../src/filetypes.c:425
+#: ../src/filetypes.c:427
 #, c-format
 msgid "%s script file"
 msgstr "Archivo de script %s"
 
-#: ../src/filetypes.c:659
+#: ../src/filetypes.c:661
 msgid "_Programming Languages"
 msgstr "Lenguajes de _programación"
 
-#: ../src/filetypes.c:660
+#: ../src/filetypes.c:662
 msgid "_Scripting Languages"
 msgstr "Lenguajes de _script"
 
-#: ../src/filetypes.c:661
+#: ../src/filetypes.c:663
 msgid "_Markup Languages"
 msgstr "Lenguajes de _etiquetas"
 
-#: ../src/filetypes.c:662
+#: ../src/filetypes.c:664
 msgid "M_iscellaneous Languages"
 msgstr "Lenguajes var_ios"
 
-#: ../src/filetypes.c:663
+#: ../src/filetypes.c:665
 msgid "_Custom Filetypes"
 msgstr "_Tipos de archivo personalizados"
 
-#: ../src/filetypes.c:1277 ../src/win32.c:105
+#: ../src/filetypes.c:1279 ../src/win32.c:105
 msgid "All Source"
 msgstr "Todo código fuente"
 
 #. create meta file filter "All files"
-#: ../src/filetypes.c:1302 ../src/project.c:288 ../src/win32.c:95
+#: ../src/filetypes.c:1304 ../src/project.c:288 ../src/win32.c:95
 #: ../src/win32.c:143 ../src/win32.c:145
 msgid "All files"
 msgstr "Todos los archivos"
 
-#: ../src/filetypes.c:1360
+#: ../src/filetypes.c:1362
 #, c-format
 msgid "Bad regex for filetype %s: %s"
 msgstr "Expresión regular incorrecta para el tipo de archivo %s: %s"
@@ -1080,7 +1080,7 @@ msgstr "Abrir archivo selecc_ionado"
 
 #: ../src/interface.c:347
 msgid "Recent _Files"
-msgstr "_Archivos recientes"
+msgstr "Arc_hivos recientes"
 
 #: ../src/interface.c:364
 msgid "Save A_ll"
@@ -1098,7 +1098,7 @@ msgstr "invisible"
 
 #: ../src/interface.c:408
 msgid "Page Set_up"
-msgstr "_Configuración de página"
+msgstr "C_onfiguración de página"
 
 #: ../src/interface.c:425 ../src/notebook.c:214
 msgid "Close Ot_her Documents"
@@ -1106,7 +1106,7 @@ msgstr "Cerrar los _demás"
 
 #: ../src/interface.c:433 ../src/notebook.c:219
 msgid "C_lose All"
-msgstr "C_errar todos"
+msgstr "Cerrar _todos"
 
 #: ../src/interface.c:450 ../src/interface.c:2181
 msgid "_Edit"
@@ -2060,8 +2060,8 @@ msgid ""
 "key always moves the caret to the start of the current line, regardless of "
 "its current position."
 msgstr ""
-"Cuando la tecla de inicio «inteligente» está activa, la tecla «Inicio» "
-"moverá el cursor al primer carácter no blanco de la línea, a menos que ya se "
+"Cuando la tecla de inicio «inteligente» está activa, la tecla «Inicio» moverá "
+"el cursor al primer carácter no blanco de la línea, a menos que ya se "
 "encuentre allí, en cuyo caso lo mueve al principio absoluto de la línea. "
 "Cuando esta funcionalidad está desactivada, la tecla «Inicio» siempre mueve "
 "el cursor al principio de la línea actual, independientemente de su posición "
@@ -3506,6 +3506,7 @@ msgid "[FILES...]"
 msgstr "[ARCHIVOS...]"
 
 #: ../src/main.c:525
+#, c-format
 msgid "(built on %s with GTK %d.%d.%d, GLib %d.%d.%d%s)"
 msgstr "(compilado el %s con GTK %d.%d.%d, GLib %d.%d.%d%s)"
 
@@ -3524,8 +3525,8 @@ msgid ""
 "Your configuration directory has been successfully moved from \"%s\" to \"%s"
 "\"."
 msgstr ""
-"Su directorio de configuración se ha movido correctamente desde «%s» hacia "
-"«%s»."
+"Su directorio de configuración se ha movido correctamente desde «%s» hacia «%"
+"s»."
 
 #. for translators: the third %s in brackets is the error message which
 #. * describes why moving the dir didn't work
@@ -3535,8 +3536,8 @@ msgid ""
 "Your old configuration directory \"%s\" could not be moved to \"%s\" (%s). "
 "Please move manually the directory to the new location."
 msgstr ""
-"Su directorio de configuración antiguo «%s» no se ha podido mover hacia "
-"«%s» (%s). Mueva manualmente su antiguo directorio a la nueva ubicación."
+"Su directorio de configuración antiguo «%s» no se ha podido mover hacia «%s» (%"
+"s). Mueva manualmente su antiguo directorio a la nueva ubicación."
 
 #: ../src/main.c:721
 #, c-format
@@ -3645,11 +3646,11 @@ msgstr "Capturar tecla"
 msgid "Press the combination of the keys you want to use for \"%s\"."
 msgstr "Pulse la combinación de teclas que desee usar para «%s»."
 
-#: ../src/prefs.c:209 ../src/symbols.c:1872
+#: ../src/prefs.c:209 ../src/symbols.c:1873
 msgid "_Expand All"
 msgstr "_Expandir todo"
 
-#: ../src/prefs.c:214 ../src/symbols.c:1877
+#: ../src/prefs.c:214 ../src/symbols.c:1878
 msgid "_Collapse All"
 msgstr "_Colapsar todo"
 
@@ -3727,7 +3728,7 @@ msgid ""
 "<i>Notice: Native GTK printing is only available if Geany was built against "
 "GTK 2.10 (or above) <b>and</b> Geany is running with GTK 2.10 (or above).</i>"
 msgstr ""
-"1<i>Noticia: La impresión nativa de GTK sólo está disponible si Geany fue "
+"<i>Aviso: La impresión nativa de GTK sólo está disponible si Geany fue "
 "compilado con GTK 2.10 (o superior) <b>y</b> Geany se está ejecutando con "
 "GTK 2.10 (o superior).</i>"
 
@@ -3783,8 +3784,7 @@ msgstr "La impresión de %s ha fallado (%s)."
 
 #: ../src/printing.c:878
 msgid "Please set a print command in the preferences dialog first."
-msgstr ""
-"Configure primero un comando de impresión en el diálogo «Preferencias»."
+msgstr "Configure primero un comando de impresión en el diálogo «Preferencias»."
 
 #: ../src/printing.c:886
 #, c-format
@@ -4413,26 +4413,26 @@ msgstr "Archivos de etiquetas de Geany (*.tags)"
 msgid "Loaded %s tags file '%s'."
 msgstr "Cargado %s archivo de etiquetas «%s»."
 
-#: ../src/symbols.c:1446
+#: ../src/symbols.c:1447
 #, c-format
 msgid "Could not load tags file '%s'."
 msgstr "No se ha podido cargar el archivo de etiquetas «%s»."
 
-#: ../src/symbols.c:1579
+#: ../src/symbols.c:1580
 #, c-format
 msgid "Forward declaration \"%s\" not found."
 msgstr "Declaración de «%s» no encontrada"
 
-#: ../src/symbols.c:1581
+#: ../src/symbols.c:1582
 #, c-format
 msgid "Definition of \"%s\" not found."
 msgstr "Definición de «%s» no encontrada"
 
-#: ../src/symbols.c:1887
+#: ../src/symbols.c:1888
 msgid "Sort by _Name"
 msgstr "Ordenar por _nombre"
 
-#: ../src/symbols.c:1894
+#: ../src/symbols.c:1895
 msgid "Sort by _Appearance"
 msgstr "Ordenar por _aparición"
 
@@ -5048,66 +5048,66 @@ msgstr "Clase _GTK+"
 msgid "_PHP Class"
 msgstr "Clase _PHP"
 
-#: ../plugins/htmlchars.c:43
+#: ../plugins/htmlchars.c:39
 msgid "HTML Characters"
 msgstr "Caracteres HTML"
 
-#: ../plugins/htmlchars.c:44
+#: ../plugins/htmlchars.c:39
 msgid "Inserts HTML character entities like '&amp;'."
 msgstr "Insertar entidades HTML para carácteras como «&amp;»."
 
-#: ../plugins/htmlchars.c:46 ../plugins/export.c:38
+#: ../plugins/htmlchars.c:40 ../plugins/export.c:38
 #: ../plugins/filebrowser.c:44 ../plugins/saveactions.c:40
 #: ../plugins/splitwindow.c:33
 msgid "The Geany developer team"
 msgstr "El equipo de desarrollo de Geany"
 
-#: ../plugins/htmlchars.c:82
+#: ../plugins/htmlchars.c:76
 msgid "HTML characters"
 msgstr "Caracteres HTML"
 
-#: ../plugins/htmlchars.c:88
+#: ../plugins/htmlchars.c:82
 msgid "ISO 8859-1 characters"
 msgstr "Caracteres ISO 8859-1"
 
-#: ../plugins/htmlchars.c:186
+#: ../plugins/htmlchars.c:180
 msgid "Greek characters"
 msgstr "Caracteres griegos"
 
-#: ../plugins/htmlchars.c:241
+#: ../plugins/htmlchars.c:235
 msgid "Mathematical characters"
 msgstr "Caracteres matemáticos"
 
-#: ../plugins/htmlchars.c:282
+#: ../plugins/htmlchars.c:276
 msgid "Technical characters"
 msgstr "Caracteres técnicos"
 
-#: ../plugins/htmlchars.c:290
+#: ../plugins/htmlchars.c:284
 msgid "Arrow characters"
 msgstr "Caracteres de flechas"
 
-#: ../plugins/htmlchars.c:303
+#: ../plugins/htmlchars.c:297
 msgid "Punctuation characters"
 msgstr "Caracteres de puntuación"
 
-#: ../plugins/htmlchars.c:319
+#: ../plugins/htmlchars.c:313
 msgid "Miscellaneous characters"
 msgstr "Caracteres variados"
 
-#: ../plugins/htmlchars.c:374 ../plugins/filebrowser.c:1145
+#: ../plugins/htmlchars.c:368 ../plugins/filebrowser.c:1145
 #: ../plugins/saveactions.c:470
 msgid "Plugin configuration directory could not be created."
 msgstr "No se ha podido crear el directorio de configuración del complemento."
 
-#: ../plugins/htmlchars.c:495
+#: ../plugins/htmlchars.c:489
 msgid "Special Characters"
 msgstr "Caracteres especiales"
 
-#: ../plugins/htmlchars.c:497
+#: ../plugins/htmlchars.c:491
 msgid "_Insert"
 msgstr "_Insertar"
 
-#: ../plugins/htmlchars.c:506
+#: ../plugins/htmlchars.c:500
 msgid ""
 "Choose a special character from the list below and double click on it or use "
 "the button to insert it at the current cursor position."
@@ -5115,40 +5115,40 @@ msgstr ""
 "Elija un carácter especial de la lista de abajo y haga doble clic en él o "
 "use el botón para insertarlo en la posición actual del cursor."
 
-#: ../plugins/htmlchars.c:520
+#: ../plugins/htmlchars.c:514
 msgid "Character"
 msgstr "Carácter"
 
-#: ../plugins/htmlchars.c:526
+#: ../plugins/htmlchars.c:520
 msgid "HTML (name)"
 msgstr "HTML (nombre)"
 
-#: ../plugins/htmlchars.c:744
+#: ../plugins/htmlchars.c:738
 msgid "_Insert Special HTML Characters"
 msgstr "_Insertar caracteres especiales de HTML"
 
 #. Add menuitem for html replacement functions
-#: ../plugins/htmlchars.c:759
+#: ../plugins/htmlchars.c:753
 msgid "_HTML Replacement"
 msgstr "Reemplazo HTML"
 
-#: ../plugins/htmlchars.c:766
+#: ../plugins/htmlchars.c:760
 msgid "_Auto-replace Special Characters"
 msgstr "_{}Reemplazar caracteres especiales"
 
-#: ../plugins/htmlchars.c:775
+#: ../plugins/htmlchars.c:769
 msgid "_Replace Characters in Selection"
 msgstr "_Duplicar línea o selección"
 
-#: ../plugins/htmlchars.c:790
+#: ../plugins/htmlchars.c:784
 msgid "Insert Special HTML Characters"
 msgstr "Insertar caracteres especiales HTML"
 
-#: ../plugins/htmlchars.c:793
+#: ../plugins/htmlchars.c:787
 msgid "Replace special characters"
 msgstr "Reemplazar caracteres especiales"
 
-#: ../plugins/htmlchars.c:796
+#: ../plugins/htmlchars.c:790
 msgid "Toggle plugin status"
 msgstr "Intercambiar el estado del complemento"
 
@@ -5401,8 +5401,8 @@ msgstr "_Directorio para guardar las copias de seguridad"
 #: ../plugins/saveactions.c:679
 msgid "Date/_Time format for backup files (\"man strftime\" for details):"
 msgstr ""
-"Formato de fecha/_hora para las copias de seguridad (consulte «man "
-"strftime», para más información):"
+"Formato de fecha/_hora para las copias de seguridad (consulte «man strftime», "
+"para más información):"
 
 #: ../plugins/saveactions.c:692
 msgid "Directory _levels to include in the backup destination:"
@@ -5444,9 +5444,3 @@ msgstr "Dividir horizontalmente"
 #: ../plugins/splitwindow.c:398
 msgid "Split Vertically"
 msgstr "Dividir verticalmente"
-
-#~ msgid "_HTMLToggle"
-#~ msgstr "Activar/desactivar _HTML"
-
-#~ msgid "Bulk replacement of special chars"
-#~ msgstr "Reemplazo masivo de caracteres especiales"
