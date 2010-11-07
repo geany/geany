@@ -95,6 +95,15 @@ GeanyStatus	 main_status;
 CommandLineOptions cl_options;	/* fields initialised in parse_command_line_options */
 
 
+static const gchar geany_lib_versions[] = "GTK %u.%u.%u, GLib %u.%u.%u"
+#ifdef HAVE_GIO
+	", GIO"
+#endif
+#ifdef USE_INCLUDED_REGEX
+	", built-in regex"
+#endif
+	;
+
 static gboolean want_plugins;
 
 /* command-line options */
@@ -513,21 +522,13 @@ static void parse_command_line_options(gint *argc, gchar ***argv)
 
 	if (show_version)
 	{
-		const gchar build_opts[] = ""
-#ifdef HAVE_GIO
-			", GIO"
-#endif
-#ifdef USE_INCLUDED_REGEX
-			", built-in regex"
-#endif
-			;
-		printf(PACKAGE " %s ", main_get_version_string());
-		printf(_("(built on %s with GTK %d.%d.%d, GLib %d.%d.%d%s)"),
-				__DATE__, GTK_MAJOR_VERSION, GTK_MINOR_VERSION, GTK_MICRO_VERSION,
-				GLIB_MAJOR_VERSION, GLIB_MINOR_VERSION, GLIB_MICRO_VERSION,
-				build_opts);
-		printf("\n");
-
+		printf(PACKAGE " %s (", main_get_version_string());
+		/* note for translators: library versions are printed after this */
+		printf(_("built on %s with "), __DATE__);
+		printf(geany_lib_versions,
+			GTK_MAJOR_VERSION, GTK_MINOR_VERSION, GTK_MICRO_VERSION,
+			GLIB_MAJOR_VERSION, GLIB_MINOR_VERSION, GLIB_MICRO_VERSION);
+		printf(")\n");
 		exit(0);
 	}
 
@@ -994,11 +995,12 @@ gint main(gint argc, gchar **argv)
 #endif
 
 	locale = get_locale();
-	geany_debug("Geany %s, GTK+ %u.%u.%u, GLib %u.%u.%u (%s)",
+	geany_debug("Geany %s, %s",
 		main_get_version_string(),
-		gtk_major_version, gtk_minor_version, gtk_micro_version,
-		glib_major_version, glib_minor_version, glib_micro_version,
 		locale);
+	geany_debug(geany_lib_versions,
+		gtk_major_version, gtk_minor_version, gtk_micro_version,
+		glib_major_version, glib_minor_version, glib_micro_version);
 	geany_debug("System data dir: %s", app->datadir);
 	geany_debug("User config dir: %s", app->configdir);
 

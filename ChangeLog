@@ -19,6 +19,9 @@
    Make use_safe_file_saving hidden pref apply even when GIO is
    available, because g_file_replace_contents() doesn't handle disk
    space exhaustion.
+ * src/main.c:
+   Show GIO/built-in regex support in startup debug message as well as
+   for --version.
 
 
 2010-11-04  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
