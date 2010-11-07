@@ -451,35 +451,44 @@ of this program, and also in the chapter <a class="reference" href="#gnu-general
 </ul>
 </li>
 <li><a class="reference" href="#plugin-documentation" id="id203" name="id203">Plugin documentation</a><ul>
-<li><a class="reference" href="#save-actions" id="id204" name="id204">Save Actions</a><ul>
-<li><a class="reference" href="#instant-save" id="id205" name="id205">Instant Save</a></li>
-<li><a class="reference" href="#backup-copy" id="id206" name="id206">Backup Copy</a></li>
+<li><a class="reference" href="#htmlchars" id="id204" name="id204">HTMLChars</a><ul>
+<li><a class="reference" href="#insert-entity-dialog" id="id205" name="id205">Insert entity dialog</a></li>
+<li><a class="reference" href="#replace-special-chars-by-its-entity" id="id206" name="id206">Replace special chars by its entity</a><ul>
+<li><a class="reference" href="#at-typing-time" id="id207" name="id207">At typing time</a></li>
+<li><a class="reference" href="#bulk-replacement" id="id208" name="id208">Bulk replacement</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a class="reference" href="#contributing-to-this-document" id="id207" name="id207">Contributing to this document</a></li>
-<li><a class="reference" href="#scintilla-keyboard-commands" id="id208" name="id208">Scintilla keyboard commands</a><ul>
-<li><a class="reference" href="#keyboard-commands" id="id209" name="id209">Keyboard commands</a></li>
+<li><a class="reference" href="#save-actions" id="id209" name="id209">Save Actions</a><ul>
+<li><a class="reference" href="#instant-save" id="id210" name="id210">Instant Save</a></li>
+<li><a class="reference" href="#backup-copy" id="id211" name="id211">Backup Copy</a></li>
 </ul>
 </li>
-<li><a class="reference" href="#tips-and-tricks" id="id210" name="id210">Tips and tricks</a><ul>
-<li><a class="reference" href="#document-notebook" id="id211" name="id211">Document notebook</a></li>
-<li><a class="reference" href="#editor" id="id212" name="id212">Editor</a></li>
-<li><a class="reference" href="#interface" id="id213" name="id213">Interface</a></li>
-<li><a class="reference" href="#gtk-related" id="id214" name="id214">GTK-related</a></li>
 </ul>
 </li>
-<li><a class="reference" href="#compile-time-options" id="id215" name="id215">Compile-time options</a><ul>
-<li><a class="reference" href="#src-geany-h" id="id216" name="id216">src/geany.h</a></li>
-<li><a class="reference" href="#project-h" id="id217" name="id217">project.h</a></li>
-<li><a class="reference" href="#editor-h" id="id218" name="id218">editor.h</a></li>
-<li><a class="reference" href="#keyfile-c" id="id219" name="id219">keyfile.c</a></li>
-<li><a class="reference" href="#build-c" id="id220" name="id220">build.c</a></li>
+<li><a class="reference" href="#contributing-to-this-document" id="id212" name="id212">Contributing to this document</a></li>
+<li><a class="reference" href="#scintilla-keyboard-commands" id="id213" name="id213">Scintilla keyboard commands</a><ul>
+<li><a class="reference" href="#keyboard-commands" id="id214" name="id214">Keyboard commands</a></li>
 </ul>
 </li>
-<li><a class="reference" href="#gnu-general-public-license" id="id221" name="id221">GNU General Public License</a></li>
-<li><a class="reference" href="#license-for-scintilla-and-scite" id="id222" name="id222">License for Scintilla and SciTE</a></li>
+<li><a class="reference" href="#tips-and-tricks" id="id215" name="id215">Tips and tricks</a><ul>
+<li><a class="reference" href="#document-notebook" id="id216" name="id216">Document notebook</a></li>
+<li><a class="reference" href="#editor" id="id217" name="id217">Editor</a></li>
+<li><a class="reference" href="#interface" id="id218" name="id218">Interface</a></li>
+<li><a class="reference" href="#gtk-related" id="id219" name="id219">GTK-related</a></li>
+</ul>
+</li>
+<li><a class="reference" href="#compile-time-options" id="id220" name="id220">Compile-time options</a><ul>
+<li><a class="reference" href="#src-geany-h" id="id221" name="id221">src/geany.h</a></li>
+<li><a class="reference" href="#project-h" id="id222" name="id222">project.h</a></li>
+<li><a class="reference" href="#editor-h" id="id223" name="id223">editor.h</a></li>
+<li><a class="reference" href="#keyfile-c" id="id224" name="id224">keyfile.c</a></li>
+<li><a class="reference" href="#build-c" id="id225" name="id225">build.c</a></li>
+</ul>
+</li>
+<li><a class="reference" href="#gnu-general-public-license" id="id226" name="id226">GNU General Public License</a></li>
+<li><a class="reference" href="#license-for-scintilla-and-scite" id="id227" name="id227">License for Scintilla and SciTE</a></li>
 </ul>
 </div>
 <div class="section">
@@ -5476,10 +5485,61 @@ use 'SearchEntry')</td>
 <div class="section">
 <h1><a class="toc-backref" href="#id203" id="plugin-documentation" name="plugin-documentation">Plugin documentation</a></h1>
 <div class="section">
-<h2><a class="toc-backref" href="#id204" id="save-actions" name="save-actions">Save Actions</a></h2>
+<h2><a class="toc-backref" href="#id204" id="htmlchars" name="htmlchars">HTMLChars</a></h2>
+<p>The HTMLChars plugin helps when working with special characters in
+XML/HTML, e.g. German Umlauts ü and ä.</p>
 <div class="section">
-<h3><a class="toc-backref" href="#id205" id="instant-save" name="instant-save">Instant Save</a></h3>
-<p>This plugin sets on every new file (File-&gt;New or File-&gt; New (with template))
+<h3><a class="toc-backref" href="#id205" id="insert-entity-dialog" name="insert-entity-dialog">Insert entity dialog</a></h3>
+<p>When the plugin is enabled, you can insert special character
+entities using <em>Tools-&gt;Insert Special HTML Characters</em>.</p>
+<p>This opens up a dialog where you can find a huge amount of special
+characters sorted by category that you might like to use inside your
+document. You can expand and collapse the categories by clicking on
+the little arrow on the left hand side. Once you have found the
+desired character click on it and choose &quot;Insert&quot;. This will insert
+the entity for the character at the current cursor position. You
+might also like to double click the chosen entity instead.</p>
+</div>
+<div class="section">
+<h3><a class="toc-backref" href="#id206" id="replace-special-chars-by-its-entity" name="replace-special-chars-by-its-entity">Replace special chars by its entity</a></h3>
+<p>To help make a XML/HTML document valid the plugin supports
+replacement of special chars known by the plugin. Both bulk
+replacement and immediate replacement during typing are supported.</p>
+<dl class="docutils">
+<dt>A few characters will not be replaced. These are</dt>
+<dd><ul class="first last simple">
+<li>&quot;</li>
+<li>&amp;</li>
+<li>&lt;</li>
+<li>&gt;</li>
+<li>(<cite>&amp;nbsp;</cite>)</li>
+</ul>
+</dd>
+</dl>
+<div class="section">
+<h4><a class="toc-backref" href="#id207" id="at-typing-time" name="at-typing-time">At typing time</a></h4>
+<p>You can activate/deactivate this feature using the <em>Tools-&gt;HTML
+Replacement-&gt;Auto-replace Special Characters</em> menu item. If it's
+activated, all special characters (beside the given exceptions from
+above) known by the plugin will be replaced by their entities.</p>
+<p>You could also set a keybinding for the plugin to toggle the status
+of this feature.</p>
+</div>
+<div class="section">
+<h4><a class="toc-backref" href="#id208" id="bulk-replacement" name="bulk-replacement">Bulk replacement</a></h4>
+<p>After inserting a huge amount of text, e.g. by using copy &amp; paste, the
+plugin allows bulk replacement of all known characters (beside the
+mentioned exceptions). You can find the function under the same
+menu at <em>Tools-&gt;HTML Replacement-&gt;Replace Characters in Selection</em>, or
+configure a keybinding for the plugin.</p>
+</div>
+</div>
+</div>
+<div class="section">
+<h2><a class="toc-backref" href="#id209" id="save-actions" name="save-actions">Save Actions</a></h2>
+<div class="section">
+<h3><a class="toc-backref" href="#id210" id="instant-save" name="instant-save">Instant Save</a></h3>
+<p>This plugin sets on every new file (<em>File-&gt;New</em> or <em>File-&gt;New (with template)</em>)
 a randomly chosen filename and set its filetype appropriate to the used template
 or when no template was used, to a configurable default filetype.
 This enables you to quickly compile, build and/or run the new file without the
@@ -5488,7 +5548,7 @@ useful when you often create new files just for testing some code or something
 similar.</p>
 </div>
 <div class="section">
-<h3><a class="toc-backref" href="#id206" id="backup-copy" name="backup-copy">Backup Copy</a></h3>
+<h3><a class="toc-backref" href="#id211" id="backup-copy" name="backup-copy">Backup Copy</a></h3>
 <p>This plugin creates a backup copy of the current file in Geany when it is
 saved. You can specify the directory where the backup copy is saved and
 you can configure the automatically added extension in the configure dialog
@@ -5499,7 +5559,7 @@ copied into the configured backup directory when the file is saved in Geany.</p>
 </div>
 </div>
 <div class="section">
-<h1><a class="toc-backref" href="#id207" id="contributing-to-this-document" name="contributing-to-this-document">Contributing to this document</a></h1>
+<h1><a class="toc-backref" href="#id212" id="contributing-to-this-document" name="contributing-to-this-document">Contributing to this document</a></h1>
 <p>This document (<tt class="docutils literal"><span class="pre">geany.txt</span></tt>) is written in <a class="reference" href="http://docutils.sourceforge.net/rst.html">reStructuredText</a>
 (or &quot;reST&quot;). The source file for it is located in Geany's <tt class="docutils literal"><span class="pre">doc</span></tt>
 subdirectory.  If you intend on making changes, you should grab the
@@ -5519,7 +5579,7 @@ to build the docs. The package is named <tt class="docutils literal"><span class
 and Fedora systems.</p>
 </div>
 <div class="section">
-<h1><a class="toc-backref" href="#id208" id="scintilla-keyboard-commands" name="scintilla-keyboard-commands">Scintilla keyboard commands</a></h1>
+<h1><a class="toc-backref" href="#id213" id="scintilla-keyboard-commands" name="scintilla-keyboard-commands">Scintilla keyboard commands</a></h1>
 <p>Copyright © 1998, 2006 Neil Hodgson &lt;neilh(at)scintilla(dot)org&gt;</p>
 <p>This appendix is distributed under the terms of the License for
 Scintilla and SciTE. A copy of this license can be found in the file
@@ -5528,7 +5588,7 @@ program and in the appendix of this document. See <a class="reference" href="#li
 Scintilla and SciTE</a>.</p>
 <p>20 June 2006</p>
 <div class="section">
-<h2><a class="toc-backref" href="#id209" id="keyboard-commands" name="keyboard-commands">Keyboard commands</a></h2>
+<h2><a class="toc-backref" href="#id214" id="keyboard-commands" name="keyboard-commands">Keyboard commands</a></h2>
 <p>Keyboard commands for Scintilla mostly follow common Windows and GTK+
 conventions. All move keys (arrows, page up/down, home and end)
 allows to extend or reduce the stream selection when holding the
@@ -5610,9 +5670,9 @@ menus. Some less common commands with no menu equivalent are:</p>
 </div>
 </div>
 <div class="section">
-<h1><a class="toc-backref" href="#id210" id="tips-and-tricks" name="tips-and-tricks">Tips and tricks</a></h1>
+<h1><a class="toc-backref" href="#id215" id="tips-and-tricks" name="tips-and-tricks">Tips and tricks</a></h1>
 <div class="section">
-<h2><a class="toc-backref" href="#id211" id="document-notebook" name="document-notebook">Document notebook</a></h2>
+<h2><a class="toc-backref" href="#id216" id="document-notebook" name="document-notebook">Document notebook</a></h2>
 <ul class="simple">
 <li>Double-click on empty space in the notebook tab bar to open a
 new document.</li>
@@ -5625,7 +5685,7 @@ shortcut). The interface pref must be enabled for this to work.</li>
 </ul>
 </div>
 <div class="section">
-<h2><a class="toc-backref" href="#id212" id="editor" name="editor">Editor</a></h2>
+<h2><a class="toc-backref" href="#id217" id="editor" name="editor">Editor</a></h2>
 <ul class="simple">
 <li>Alt-scroll wheel moves up/down a page.</li>
 <li>Ctrl-scroll wheel zooms in/out.</li>
@@ -5635,13 +5695,13 @@ shortcut). The interface pref must be enabled for this to work.</li>
 </ul>
 </div>
 <div class="section">
-<h2><a class="toc-backref" href="#id213" id="interface" name="interface">Interface</a></h2>
+<h2><a class="toc-backref" href="#id218" id="interface" name="interface">Interface</a></h2>
 <ul class="simple">
 <li>Double-click on a symbol-list group to expand or compact it.</li>
 </ul>
 </div>
 <div class="section">
-<h2><a class="toc-backref" href="#id214" id="gtk-related" name="gtk-related">GTK-related</a></h2>
+<h2><a class="toc-backref" href="#id219" id="gtk-related" name="gtk-related">GTK-related</a></h2>
 <ul class="simple">
 <li>Scrolling the mouse wheel over a notebook tab bar will switch
 notebook pages.</li>
@@ -5656,7 +5716,7 @@ position without having to drag it.</li>
 </div>
 </div>
 <div class="section">
-<h1><a class="toc-backref" href="#id215" id="compile-time-options" name="compile-time-options">Compile-time options</a></h1>
+<h1><a class="toc-backref" href="#id220" id="compile-time-options" name="compile-time-options">Compile-time options</a></h1>
 <p>There are some options which can only be changed at compile time,
 and some options which are used as the default for configurable
 options. To change these options, edit the appropriate source file
@@ -5668,7 +5728,7 @@ not be changed.</p>
 <p class="last">Most users should not need to change these options.</p>
 </div>
 <div class="section">
-<h2><a class="toc-backref" href="#id216" id="src-geany-h" name="src-geany-h">src/geany.h</a></h2>
+<h2><a class="toc-backref" href="#id221" id="src-geany-h" name="src-geany-h">src/geany.h</a></h2>
 <table border="1" class="docutils">
 <colgroup>
 <col width="33%" />
@@ -5725,7 +5785,7 @@ when building on a non-Win32 system.</em></td>
 </table>
 </div>
 <div class="section">
-<h2><a class="toc-backref" href="#id217" id="project-h" name="project-h">project.h</a></h2>
+<h2><a class="toc-backref" href="#id222" id="project-h" name="project-h">project.h</a></h2>
 <table border="1" class="docutils">
 <colgroup>
 <col width="33%" />
@@ -5750,7 +5810,7 @@ open dialog.</td>
 </table>
 </div>
 <div class="section">
-<h2><a class="toc-backref" href="#id218" id="editor-h" name="editor-h">editor.h</a></h2>
+<h2><a class="toc-backref" href="#id223" id="editor-h" name="editor-h">editor.h</a></h2>
 <table border="1" class="docutils">
 <colgroup>
 <col width="33%" />
@@ -5776,7 +5836,7 @@ underscore.</td>
 </table>
 </div>
 <div class="section">
-<h2><a class="toc-backref" href="#id219" id="keyfile-c" name="keyfile-c">keyfile.c</a></h2>
+<h2><a class="toc-backref" href="#id224" id="keyfile-c" name="keyfile-c">keyfile.c</a></h2>
 <p>These are default settings that can be overridden in the <a class="reference" href="#preferences">Preferences</a> dialog.</p>
 <table border="1" class="docutils">
 <colgroup>
@@ -5857,7 +5917,7 @@ Geany provide.</td>
 </table>
 </div>
 <div class="section">
-<h2><a class="toc-backref" href="#id220" id="build-c" name="build-c">build.c</a></h2>
+<h2><a class="toc-backref" href="#id225" id="build-c" name="build-c">build.c</a></h2>
 <table border="1" class="docutils">
 <colgroup>
 <col width="33%" />
@@ -5902,7 +5962,7 @@ overriding the compile setting.</td>
 </div>
 </div>
 <div class="section">
-<h1><a class="toc-backref" href="#id221" id="gnu-general-public-license" name="gnu-general-public-license">GNU General Public License</a></h1>
+<h1><a class="toc-backref" href="#id226" id="gnu-general-public-license" name="gnu-general-public-license">GNU General Public License</a></h1>
 <pre class="literal-block">
             GNU GENERAL PUBLIC LICENSE
                Version 2, June 1991
@@ -6247,7 +6307,7 @@ Public License instead of this License.
 </pre>
 </div>
 <div class="section">
-<h1><a class="toc-backref" href="#id222" id="license-for-scintilla-and-scite" name="license-for-scintilla-and-scite">License for Scintilla and SciTE</a></h1>
+<h1><a class="toc-backref" href="#id227" id="license-for-scintilla-and-scite" name="license-for-scintilla-and-scite">License for Scintilla and SciTE</a></h1>
 <p>Copyright 1998-2003 by Neil Hodgson &lt;neilh(at)scintilla(dot)org&gt;</p>
 <p>All Rights Reserved</p>
 <p>Permission to use, copy, modify, and distribute this software and
@@ -6267,7 +6327,7 @@ USE OR PERFORMANCE OF THIS SOFTWARE.</p>
 <div class="footer">
 <hr class="footer" />
 <a class="reference" href="geany.txt">View document source</a>.
-Generated on: 2010-10-26 15:12 UTC.
+Generated on: 2010-11-07 18:52 UTC.
 Generated by <a class="reference" href="http://docutils.sourceforge.net/">Docutils</a> from <a class="reference" href="http://docutils.sourceforge.net/rst.html">reStructuredText</a> source.
 
 </div>

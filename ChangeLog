@@ -22,6 +22,8 @@
  * src/main.c:
    Show GIO/built-in regex support in startup debug message as well as
    for --version.
+ * doc/geany.txt, doc/geany.html:
+   Add docs for the HTMLChars plugin (patch by Frank).
 
 
 2010-11-04  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

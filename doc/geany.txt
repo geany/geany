@@ -4588,12 +4588,71 @@ Quit               Quit Geany
 Plugin documentation
 ====================
 
+HTMLChars
+---------
+
+The HTMLChars plugin helps when working with special characters in
+XML/HTML, e.g. German Umlauts ü and ä.
+
+
+Insert entity dialog
+^^^^^^^^^^^^^^^^^^^^
+
+When the plugin is enabled, you can insert special character
+entities using *Tools->Insert Special HTML Characters*.
+
+This opens up a dialog where you can find a huge amount of special
+characters sorted by category that you might like to use inside your
+document. You can expand and collapse the categories by clicking on
+the little arrow on the left hand side. Once you have found the
+desired character click on it and choose "Insert". This will insert
+the entity for the character at the current cursor position. You
+might also like to double click the chosen entity instead.
+
+
+Replace special chars by its entity
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+To help make a XML/HTML document valid the plugin supports
+replacement of special chars known by the plugin. Both bulk
+replacement and immediate replacement during typing are supported.
+
+A few characters will not be replaced. These are
+	* "
+	* &
+	* <
+	* >
+	*   (`&nbsp;`)
+
+
+At typing time
+``````````````
+
+You can activate/deactivate this feature using the *Tools->HTML
+Replacement->Auto-replace Special Characters* menu item. If it's
+activated, all special characters (beside the given exceptions from
+above) known by the plugin will be replaced by their entities.
+
+You could also set a keybinding for the plugin to toggle the status
+of this feature.
+
+
+Bulk replacement
+````````````````
+
+After inserting a huge amount of text, e.g. by using copy & paste, the
+plugin allows bulk replacement of all known characters (beside the
+mentioned exceptions). You can find the function under the same
+menu at *Tools->HTML Replacement->Replace Characters in Selection*, or
+configure a keybinding for the plugin.
+
+
 Save Actions
 ------------
 
 Instant Save
 ^^^^^^^^^^^^
-This plugin sets on every new file (File->New or File-> New (with template))
+This plugin sets on every new file (*File->New* or *File->New (with template)*)
 a randomly chosen filename and set its filetype appropriate to the used template
 or when no template was used, to a configurable default filetype.
 This enables you to quickly compile, build and/or run the new file without the
