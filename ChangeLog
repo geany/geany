@@ -7,6 +7,9 @@
    Fix installation of template files.
  * src/ui_utils.c:
    Use non-GIO mime-type icon lookup if GIO lookup fails.
+ * autogen.sh:
+   Allow skipping configure during autogen by setting NOCONFIGURE=1
+   (thanks to Chow Loong Jin).
 
 
 2010-11-07  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

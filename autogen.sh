@@ -91,6 +91,10 @@ autoheader
 automake --add-missing --copy --gnu
 autoconf
 
+if [ "$NOCONFIGURE" = 1 ]; then
+    echo "Done. configure skipped."
+    exit 0;
+fi
 echo "Running $srcdir/configure $@ ..."
 $srcdir/configure "$@" && echo "Now type 'make' to compile." || exit 1
 
