@@ -1748,7 +1748,8 @@ static gchar *write_data_to_disk(const gchar *locale_filename,
 	{
 		/* Use old GLib API for safe saving (GVFS-safe, but alters ownership and permissons).
 		 * This is the only option that handles disk space exhaustion. */
-		g_file_set_contents(locale_filename, data, len, &error);
+		if (g_file_set_contents(locale_filename, data, len, &error))
+			geany_debug("Wrote %s with g_file_set_contents().", locale_filename);
 	}
 	if (error != NULL)
 	{
