@@ -999,6 +999,8 @@ gint main(gint argc, gchar **argv)
 		gtk_major_version, gtk_minor_version, gtk_micro_version,
 		glib_major_version, glib_minor_version, glib_micro_version,
 		locale);
+	geany_debug("System data dir: %s", app->datadir);
+	geany_debug("User config dir: %s", app->configdir);
 
 	/* create the object so Geany signals can be connected in init() functions */
 	geany_object = geany_object_new();
