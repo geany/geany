@@ -7,3 +7,4 @@ geany.glade
 # no need to translate these files
 plugins/demoplugin.c
 doc/stash-example.c
+doc/stash-gui-example.c
