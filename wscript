@@ -523,7 +523,7 @@ def build(bld):
 	bld.install_files('${DATADIR}/%s' % dir, 'data/*.tags')
 	bld.install_files('${DATADIR}/%s' % dir, 'data/snippets.conf')
 	bld.install_files('${DATADIR}/%s' % dir, 'data/ui_toolbar.xml')
-	bld.install_files('${DATADIR}/%s/templates' % dir, 'data/templates/*.*')
+	bld.install_files('${DATADIR}/%s/templates' % dir, 'data/templates/*')
 	bld.install_files('${DATADIR}/%s/templates/files' % dir, 'data/templates/files/*.*')
 	bld.install_files('${DATADIR}/%s/colorschemes' % dir, 'data/colorschemes/*.*')
 	bld.install_as('${DATADIR}/%s/GPL-2' % dir, 'COPYING')

@@ -3,6 +3,8 @@
  * src/document.c:
    Fix build with GTK 2.12: explicitly include gio.h if GIO
    is available and to be used regardless of the USE_GIO_FILEMON flag.
+ * wscript:
+   Fix installation of template files.
 
 
 2010-11-07  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
