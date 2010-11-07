@@ -188,7 +188,6 @@ def configure(conf):
 		if conf.env['HAVE_REGCOMP'] != 1 or conf.env['HAVE_REGEX_H'] != 1:
 			conf.define('HAVE_REGCOMP', 1, 0)
 			conf.define('USE_INCLUDED_REGEX', 1, 0)
-			Utils.pprint('YELLOW', 'Using included GNU regex library.')
 
 	conf.check(function_name='fgetpos', header_name='stdio.h')
 	conf.check(function_name='ftruncate', header_name='unistd.h')
@@ -284,6 +283,7 @@ def configure(conf):
 	print_message(conf, 'Build with GTK printing support', have_gtk_210 and 'yes' or 'no')
 	print_message(conf, 'Build with plugin support', Options.options.no_plugins and 'no' or 'yes')
 	print_message(conf, 'Use virtual terminal support', Options.options.no_vte and 'no' or 'yes')
+	print_message(conf, 'GNU regex library', conf.env['USE_INCLUDED_REGEX'] and 'built-in' or 'system')
 	if svn_rev != '-1':
 		print_message(conf, 'Compiling Subversion revision', svn_rev)
 		conf.env.append_value('CCFLAGS', '-g -DGEANY_DEBUG'.split())

@@ -5,6 +5,7 @@
    is available and to be used regardless of the USE_GIO_FILEMON flag.
  * wscript:
    Fix installation of template files.
+   Show which regex implementation is used.
  * src/ui_utils.c:
    Use non-GIO mime-type icon lookup if GIO lookup fails.
  * autogen.sh:
