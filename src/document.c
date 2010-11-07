@@ -1712,21 +1712,22 @@ static gchar *write_data_to_disk(const gchar *locale_filename,
 								 const gchar *data, gint len)
 {
 	GError *error = NULL;
-#ifdef HAVE_GIO
-	GFile *fp;
-
-	/* Use GIO API to save file (GVFS-safe) */
-	fp = g_file_new_for_path(locale_filename);
-	g_file_replace_contents(fp, data, len, NULL, FALSE,
-		G_FILE_CREATE_NONE, NULL, NULL, &error);
-	g_object_unref(fp);
-#else
-	gint err = 0;
-	FILE *fp;
-	gint bytes_written;
 
 	if (! file_prefs.use_safe_file_saving)
 	{
+#ifdef HAVE_GIO
+		GFile *fp;
+
+		/* Use GIO API to save file (GVFS-safe) */
+		fp = g_file_new_for_path(locale_filename);
+		g_file_replace_contents(fp, data, len, NULL, FALSE,
+			G_FILE_CREATE_NONE, NULL, NULL, &error);
+		g_object_unref(fp);
+#else
+		gint err = 0;
+		FILE *fp;
+		gint bytes_written;
+
 		/* Use POSIX API for unsafe saving (GVFS-unsafe) */
 		fp = g_fopen(locale_filename, "wb");
 		if (G_UNLIKELY(fp == NULL))
@@ -1741,13 +1742,14 @@ static gchar *write_data_to_disk(const gchar *locale_filename,
 
 		if (err != 0)
 			return g_strdup(g_strerror(err));
+#endif
 	}
 	else
 	{
-		/* Use old GLib API for safe saving (GVFS-safe, but alters ownership and permissons) */
+		/* Use old GLib API for safe saving (GVFS-safe, but alters ownership and permissons).
+		 * This is the only option that handles disk space exhaustion. */
 		g_file_set_contents(locale_filename, data, len, &error);
 	}
-#endif
 	if (error != NULL)
 	{
 		gchar *msg = g_strdup(error->message);
