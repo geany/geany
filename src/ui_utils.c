@@ -2472,33 +2472,39 @@ GdkPixbuf *ui_get_mime_icon(const gchar *mime_type, GtkIconSize size)
 	{
 		g_return_val_if_reached(NULL);
 	}
-	theme = gtk_icon_theme_get_default();
 	ctype = g_content_type_from_mime_type(mime_type);
-	gicon = g_content_type_get_icon(ctype);
-	info = gtk_icon_theme_lookup_by_gicon(theme, gicon, real_size, 0);
-	g_object_unref(gicon);
-	g_free(ctype);
-
-	if (info)
+	if (ctype != NULL)
 	{
-		icon = gtk_icon_info_load_icon(info, NULL);
-		gtk_icon_info_free(info);
-	}
-#else
-	const gchar *stock_id = GTK_STOCK_FILE;
-	GtkIconSet *icon_set;
+		gicon = g_content_type_get_icon(ctype);
+		theme = gtk_icon_theme_get_default();
+		info = gtk_icon_theme_lookup_by_gicon(theme, gicon, real_size, 0);
+		g_object_unref(gicon);
+		g_free(ctype);
 
-	if (strstr(mime_type, "directory"))
-		stock_id = GTK_STOCK_DIRECTORY;
-
-	icon_set = gtk_icon_factory_lookup_default(stock_id);
-	if (icon_set)
-	{
-		icon = gtk_icon_set_render_icon(icon_set, gtk_widget_get_default_style(),
-			gtk_widget_get_default_direction(),
-			GTK_STATE_NORMAL, size, NULL, NULL);
+		if (info != NULL)
+		{
+			icon = gtk_icon_info_load_icon(info, NULL);
+			gtk_icon_info_free(info);
+		}
 	}
 #endif
+	/* fallback for builds without GIO or if icon lookup failed, like it might happen on Windows */
+	if (icon == NULL)
+	{
+		const gchar *stock_id = GTK_STOCK_FILE;
+		GtkIconSet *icon_set;
+
+		if (strstr(mime_type, "directory"))
+			stock_id = GTK_STOCK_DIRECTORY;
+
+		icon_set = gtk_icon_factory_lookup_default(stock_id);
+		if (icon_set)
+		{
+			icon = gtk_icon_set_render_icon(icon_set, gtk_widget_get_default_style(),
+				gtk_widget_get_default_direction(),
+				GTK_STATE_NORMAL, size, NULL, NULL);
+		}
+	}
 	return icon;
 }
 

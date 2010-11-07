@@ -5,6 +5,8 @@
    is available and to be used regardless of the USE_GIO_FILEMON flag.
  * wscript:
    Fix installation of template files.
+ * src/ui_utils.c:
+   Use non-GIO mime-type icon lookup if GIO lookup fails.
 
 
 2010-11-07  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
