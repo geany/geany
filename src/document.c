@@ -48,10 +48,10 @@
 
 /* uncomment to use GIO based file monitoring, though it is not completely stable yet */
 /*#define USE_GIO_FILEMON 1*/
-#if USE_GIO_FILEMON
-# ifdef HAVE_GIO
-#  include <gio/gio.h>
-# else
+#ifdef HAVE_GIO
+# include <gio/gio.h>
+#else
+# if USE_GIO_FILEMON
 #  undef USE_GIO_FILEMON
 # endif
 #endif

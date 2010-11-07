@@ -1,3 +1,10 @@
+2010-11-06  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/document.c:
+   Fix build with GTK 2.12: explicitly include gio.h if GIO
+   is available and to be used regardless of the USE_GIO_FILEMON flag.
+
+
 2010-11-07  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/document.c:
