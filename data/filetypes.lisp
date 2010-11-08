@@ -7,15 +7,15 @@ multicomment=comment
 number=number
 keyword=0x0071FD;;true;false
 special_keyword=0x0071FD;;true;false
-symbol=word2
+symbol=keyword2
 string=string
 stringeol=stringeol
 identifier=default
 operator=default
-special=word
+special=keyword
 character=default
-macro=word2
-macrodispatch=word2
+macro=keyword2
+macrodispatch=keyword2
 
 [keywords]
 # all items must be in one line

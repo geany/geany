@@ -108,9 +108,9 @@ comment=0xd00000
 commentdoc=0x3f5fbf
 number=0x007f00
 # keyword
-word=0x00007f;;true;false
+keyword=0x00007f;;true;false
 # usually type keywords and library type names
-word2=0x991111;;true;false
+keyword2=0x991111;;true;false
 string=0xff901e
 preprocessor=0x007f7f
 operator=0x301010
