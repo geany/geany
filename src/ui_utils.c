@@ -68,7 +68,7 @@ static struct
 	 * also be GtkAction objects, so check each pointer before using it */
 	GPtrArray	*document_buttons;
 	GtkWidget	*menu_insert_include_items[2];
-	GtkWidget	*popup_goto_items[3];
+	GtkWidget	*popup_goto_items[4];
 	GtkWidget	*popup_copy_items[3];
 	GtkWidget	*menu_copy_items[3];
 	GtkWidget	*redo_items[3];
@@ -2060,6 +2060,7 @@ void ui_init(void)
 	widgets.popup_goto_items[0] = ui_lookup_widget(main_widgets.editor_menu, "goto_tag_definition1");
 	widgets.popup_goto_items[1] = ui_lookup_widget(main_widgets.editor_menu, "context_action1");
 	widgets.popup_goto_items[2] = ui_lookup_widget(main_widgets.editor_menu, "find_usage1");
+	widgets.popup_goto_items[3] = ui_lookup_widget(main_widgets.editor_menu, "find_document_usage1");
 
 	widgets.popup_copy_items[0] = ui_lookup_widget(main_widgets.editor_menu, "cut1");
 	widgets.popup_copy_items[1] = ui_lookup_widget(main_widgets.editor_menu, "copy1");

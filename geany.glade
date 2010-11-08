@@ -2632,7 +2632,7 @@
 	      <property name="use_underline">True</property>
 
 	      <child internal-child="image">
-		<widget class="GtkImage" id="image3732">
+		<widget class="GtkImage" id="image3743">
 		  <property name="visible">True</property>
 		  <property name="stock">gtk-add</property>
 		  <property name="icon_size">1</property>
@@ -2685,7 +2685,7 @@
 	      <property name="use_underline">True</property>
 
 	      <child internal-child="image">
-		<widget class="GtkImage" id="image3733">
+		<widget class="GtkImage" id="image3744">
 		  <property name="visible">True</property>
 		  <property name="stock">gtk-add</property>
 		  <property name="icon_size">1</property>
@@ -2717,7 +2717,7 @@
 	      <property name="use_underline">True</property>
 
 	      <child internal-child="image">
-		<widget class="GtkImage" id="image3734">
+		<widget class="GtkImage" id="image3745">
 		  <property name="visible">True</property>
 		  <property name="stock">gtk-add</property>
 		  <property name="icon_size">1</property>
@@ -2783,7 +2783,7 @@
       <signal name="activate" handler="on_menu_open_selected_file1_activate" last_modification_time="Wed, 24 Jan 2007 18:48:44 GMT"/>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image3735">
+	<widget class="GtkImage" id="image3746">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-open</property>
 	  <property name="icon_size">1</property>
@@ -2804,7 +2804,28 @@
       <signal name="activate" handler="on_find_usage1_activate" last_modification_time="Fri, 27 May 2005 21:55:12 GMT"/>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image3736">
+	<widget class="GtkImage" id="image3747">
+	  <property name="visible">True</property>
+	  <property name="stock">gtk-find</property>
+	  <property name="icon_size">1</property>
+	  <property name="xalign">0.5</property>
+	  <property name="yalign">0.5</property>
+	  <property name="xpad">0</property>
+	  <property name="ypad">0</property>
+	</widget>
+      </child>
+    </widget>
+  </child>
+
+  <child>
+    <widget class="GtkImageMenuItem" id="find_document_usage1">
+      <property name="visible">True</property>
+      <property name="label" translatable="yes">Find _Document Usage</property>
+      <property name="use_underline">True</property>
+      <signal name="activate" handler="on_find_document_usage1_activate" last_modification_time="Thu, 17 Jul 2008 13:42:25 GMT"/>
+
+      <child internal-child="image">
+	<widget class="GtkImage" id="image3748">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-find</property>
 	  <property name="icon_size">1</property>
@@ -2825,7 +2846,7 @@
       <signal name="activate" handler="on_goto_tag_definition1" last_modification_time="Thu, 09 Sep 2010 11:30:52 GMT"/>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image3737">
+	<widget class="GtkImage" id="image3749">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-jump-to</property>
 	  <property name="icon_size">1</property>
