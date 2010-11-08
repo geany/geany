@@ -14,6 +14,11 @@
    Rename word/word2 named styles to keyword/keyword2.
  * doc/geany.txt, doc/geany.html:
    Mention that indentation settings can be overridden per-project.
+ * src/interface.c, src/callbacks.c, src/callbacks.h, src/document.c,
+   doc/geany.txt, doc/geany.html, geany.glade:
+   Add 'Project->Apply Default Indentation' menu command to override
+   every document's indentation settings.
+   Improve 'Indentation' section docs.
 
 
 2010-11-06  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

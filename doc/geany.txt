@@ -759,13 +759,14 @@ before the selected text was copied to the new position.
 Indentation
 ^^^^^^^^^^^
 
-Geany allows each document to indent either with a tab character or
-multiple spaces. The default indent mode is set in the `Editor
-Indentation preferences`_ (see the link for more information). But
-this can be overridden using either the *Document->Indent Type* menu,
-or by using the *Detect from file* indentation preference. When enabled,
-this scans each file that is opened and sets the indent mode based on
-how many lines start with a tab vs. 2 or more spaces.
+Geany allows each document to indent either with a tab character,
+multiple spaces or a combination of both. The default indent
+settings are set in `Editor Indentation preferences`_ (see the link
+for more information).
+
+The default settings can be overridden per-document using the
+Document menu. They can also be overridden by projects - see
+`Project Management`_.
 
 The indent mode for the current document is shown on the status bar
 as follows:
@@ -778,8 +779,17 @@ T/S
     Indent with tabs and spaces, depending on how much indentation is
     on a line.
 
-Default indentation settings can also be overridden by projects -
-see `Project Management`_.
+Applying new indentation settings
+`````````````````````````````````
+After changing the default settings you may wish to apply the new
+settings to every document in the current session. To do this use the
+*Project->Apply Default Indentation* menu item.
+
+Detecting indent type
+`````````````````````
+The *Detect from file* indentation preference can be used to
+scan each file as it's opened and set the indent type based on
+how many lines start with a tab vs. 2 or more spaces.
 
 
 Auto-indentation
@@ -2440,6 +2450,9 @@ only used for a template wildcard - see `Template wildcards`_.
 The *Base path* field is used as the directory to run the Build menu commands.
 The specified path can be an absolute path or it is considered to be
 relative to the project's file name.
+
+The *Indentation* tab allows you to override the default
+`Indentation`_ settings.
 
 
 Open Project

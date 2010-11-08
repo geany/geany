@@ -2352,3 +2352,17 @@ on_indent_width_activate               (GtkMenuItem     *menuitem,
 		set_indent_width(width);
 }
 
+
+void
+on_reset_indentation1_activate         (GtkMenuItem     *menuitem,
+                                        gpointer         user_data)
+{
+	guint i;
+
+	foreach_document(i)
+		document_apply_indent_settings(documents[i]);
+
+	ui_update_statusbar(NULL, -1);
+	ui_document_show_hide(NULL);
+}
+

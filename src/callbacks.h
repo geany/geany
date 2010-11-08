@@ -648,3 +648,8 @@ on_goto_tag_declaration1               (GtkMenuItem     *menuitem,
 void
 on_indent_width_activate               (GtkMenuItem     *menuitem,
                                         gpointer         user_data);
+
+void
+on_reset_indentation1_activate         (GtkMenuItem     *menuitem,
+                                        gpointer         user_data);
+

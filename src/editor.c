@@ -1148,20 +1148,22 @@ get_default_indent_prefs(void)
 
 /** Gets the indentation prefs for the editor.
  * In future, the prefs might be different according to project or filetype.
- * @warning Always get a fresh result instead of keeping a pointer to it if the editor
- * settings may have changed, or if this function has been called for a different @a editor.
+ * @warning Always get a fresh result instead of keeping a pointer to it if the editor/project
+ * settings may have changed, or if this function has been called for a different editor.
  * @param editor The editor, or @c NULL to get the default indent prefs.
  * @return The indent prefs. */
 const GeanyIndentPrefs *
 editor_get_indent_prefs(GeanyEditor *editor)
 {
 	static GeanyIndentPrefs iprefs;
+	const GeanyIndentPrefs *dprefs = get_default_indent_prefs();
 
-	iprefs = *get_default_indent_prefs();
-
+	/* Return the address of the default prefs to allow returning default and editor
+	 * pref pointers without invalidating the contents of either. */
 	if (editor == NULL)
-		return &iprefs;
+		return dprefs;
 
+	iprefs = *dprefs;
 	iprefs.type = editor->indent_type;
 	iprefs.width = editor->indent_width;
 
