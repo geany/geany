@@ -2083,7 +2083,6 @@ void ui_init(void)
 			{"commands2_menu", "commands2", "commands1"},
 			{"menu_format1_menu", "menu_format1", "menu_format2"},
 			{"more1_menu", "more1", "search2"},
-			{"add_comments1_menu", "add_comments1", "comments"},
 			{NULL, NULL, NULL}
 		};
 		static GeanySharedMenu items[G_N_ELEMENTS(arr)];

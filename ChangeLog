@@ -5,6 +5,11 @@
    Zhekov, thanks).
  * src/interface.c, src/keybindings.c, src/ui_utils.c, geany.glade:
    Restore top-level editor popup item 'Find Document Usage'.
+ * src/interface.c, src/ui_utils.c, geany.glade:
+   Remove duplicates in 'Insert Comments' editor popup menu; rename
+   submenu 'More'.
+   Separate main menu insertion comments depending on number of times
+   used in a document.
 
 
 2010-11-06  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
