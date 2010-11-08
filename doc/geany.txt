@@ -760,8 +760,8 @@ Indentation
 ^^^^^^^^^^^
 
 Geany allows each document to indent either with a tab character or
-multiple spaces. The default indent mode is set in the `Editor Features
-preferences`_ (see the link for more information). But
+multiple spaces. The default indent mode is set in the `Editor
+Indentation preferences`_ (see the link for more information). But
 this can be overridden using either the *Document->Indent Type* menu,
 or by using the *Detect from file* indentation preference. When enabled,
 this scans each file that is opened and sets the indent mode based on
@@ -777,6 +777,9 @@ SP
 T/S
     Indent with tabs and spaces, depending on how much indentation is
     on a line.
+
+Default indentation settings can also be overridden by projects -
+see `Project Management`_.
 
 
 Auto-indentation
@@ -2397,6 +2400,7 @@ Project Management
 Project Management is optional in Geany. Currently it can be used for:
 
 * Storing and opening session files on a project basis.
+* Overriding default settings with project equivalents.
 * Configuring the Build menu on a project basis.
 
 A list of session files can be stored and opened with the project
@@ -2430,8 +2434,8 @@ structure contained in it.
 Project Properties
 ^^^^^^^^^^^^^^^^^^
 
-You can set an optional description for the project, but it is not
-used elsewhere by Geany.
+You can set an optional description for the project. Currently it's
+only used for a template wildcard - see `Template wildcards`_.
 
 The *Base path* field is used as the directory to run the Build menu commands.
 The specified path can be an absolute path or it is considered to be
