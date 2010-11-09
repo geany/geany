@@ -84,16 +84,12 @@ static void read_template(const gchar *name, gint id)
 
 	TEMPLATES_READ_FILE(fname, &templates[id]);
 
-	/* FIXME: we should replace the line ends on insertion with doc pref, not on loading */
 	{
 		GString *tmp = g_string_new(templates[id]);
-		const gchar *eol_str = (file_prefs.default_eol_character == SC_EOL_CR) ? "\r" : "\r\n";
 
-		/* first convert data to LF only */
-		utils_string_replace_all(tmp, "\r\n", "\n");
-		utils_string_replace_all(tmp, "\r", "\n");
-		/* now convert to desired line endings */
-		utils_string_replace_all(tmp, "\n", eol_str);
+		/* Convert to default line endings e.g. for file header use in a file template.
+		 * When inserting separately we replace line endings with the document setting. */
+		utils_ensure_same_eol_characters(tmp, file_prefs.default_eol_character);
 		setptr(templates[id], tmp->str);
 		g_string_free(tmp, FALSE);
 	}
@@ -264,6 +260,7 @@ static gchar *get_template_from_file(const gchar *locale_fname, const gchar *doc
 		gchar *file_header;
 
 		template = g_string_new(content);
+		utils_ensure_same_eol_characters(template, file_prefs.default_eol_character);
 
 		file_header = get_template_fileheader(ft);
 		templates_replace_valist(template,

@@ -4,6 +4,10 @@
    Save build commands for filetype None (patch by Lex, thanks).
    Make filetypes_get_conf_extension() return "common" for filetype
    None.
+ * src/templates.c:
+   Convert line endings for file templates.
+   Fix line endings when using file header template in a file template
+   (oops).
 
 
 2010-11-08  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
