@@ -1,3 +1,11 @@
+2010-11-09  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/templates.c, src/filetypes.c:
+   Save build commands for filetype None (patch by Lex, thanks).
+   Make filetypes_get_conf_extension() return "common" for filetype
+   None.
+
+
 2010-11-08  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/editor.c:

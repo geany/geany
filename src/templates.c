@@ -159,7 +159,8 @@ static void init_ft_templates(const gchar *year, const gchar *date, const gchar 
 
 	for (ft_id = 0; ft_id < GEANY_MAX_BUILT_IN_FILETYPES; ft_id++)
 	{
-		gchar *ext = filetypes_get_conf_extension(ft_id);
+		gchar *ext = (ft_id != GEANY_FILETYPES_NONE) ?
+			filetypes_get_conf_extension(ft_id) : g_strdup("none");
 		gchar *shortname = g_strconcat("filetype.", ext, NULL);
 		gchar *fname = TEMPLATES_GET_FILENAME(shortname);
 

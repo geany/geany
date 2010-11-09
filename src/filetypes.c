@@ -1191,8 +1191,7 @@ void filetypes_load_config(gint ft_id, gboolean reload)
 	config_home = g_key_file_new();
 	{
 		/* highlighting uses GEANY_FILETYPES_NONE for common settings */
-		gchar *ext = (ft_id != GEANY_FILETYPES_NONE) ?
-			filetypes_get_conf_extension(ft_id) : g_strdup("common");
+		gchar *ext = filetypes_get_conf_extension(ft_id);
 		gchar *f0 = g_strconcat(app->datadir, G_DIR_SEPARATOR_S "filetypes.", ext, NULL);
 		gchar *f = g_strconcat(app->configdir,
 			G_DIR_SEPARATOR_S GEANY_FILEDEFS_SUBDIR G_DIR_SEPARATOR_S "filetypes.", ext, NULL);
@@ -1227,6 +1226,7 @@ gchar *filetypes_get_conf_extension(gint filetype_idx)
 		case GEANY_FILETYPES_CPP: result = g_strdup("cpp"); break;
 		case GEANY_FILETYPES_CS: result = g_strdup("cs"); break;
 		case GEANY_FILETYPES_MAKE: result = g_strdup("makefile"); break;
+		case GEANY_FILETYPES_NONE: result = g_strdup("common"); break;
 		default:
 			result = g_ascii_strdown(ft->name, -1);
 			/* truncate at slash (e.g. for Matlab/Octave) */
@@ -1245,7 +1245,7 @@ void filetypes_save_commands(void)
 		G_DIR_SEPARATOR_S GEANY_FILEDEFS_SUBDIR G_DIR_SEPARATOR_S "filetypes.", NULL);
 	guint i;
 
-	for (i = 1; i < filetypes_array->len; i++)
+	for (i = 0; i < filetypes_array->len; i++)
 	{
 		GKeyFile *config_home;
 		gchar *fname, *ext, *data;
