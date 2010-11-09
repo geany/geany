@@ -144,7 +144,7 @@ gchar *utils_find_open_xml_tag(const gchar sel[], gint size);
 
 gboolean utils_is_short_html_tag(const gchar *tag_name);
 
-void utils_ensure_same_eol_characters(GString *template, gint target_eol_mode);
+void utils_ensure_same_eol_characters(GString *string, gint target_eol_mode);
 
 const gchar *utils_get_eol_char(gint eol_mode);
 

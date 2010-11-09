@@ -8,6 +8,9 @@
    Convert line endings for file templates.
    Fix line endings when using file header template in a file template
    (oops).
+ * src/utils.c, src/utils.h:
+   Make utils_ensure_same_eol_characters() convert all wrong line
+   endings to the desired one, not just the most common one.
 
 
 2010-11-08  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

@@ -373,18 +373,20 @@ const gchar *utils_get_eol_char(gint eol_mode)
 }
 
 
-void utils_ensure_same_eol_characters(GString *template, gint target_eol_mode)
+/* Converts line endings to @a target_eol_mode. */
+void utils_ensure_same_eol_characters(GString *string, gint target_eol_mode)
 {
-	gint template_eol_mode;
+	const gchar *eol_str = utils_get_eol_char(target_eol_mode);
 
-	template_eol_mode = utils_get_line_endings(template->str, template->len);
+	/* first convert data to LF only */
+	utils_string_replace_all(string, "\r\n", "\n");
+	utils_string_replace_all(string, "\r", "\n");
 
-	if (target_eol_mode != template_eol_mode)
-	{
-		const gchar *target_eol_char = utils_get_eol_char(target_eol_mode);
-		const gchar *template_eol_char = utils_get_eol_char(template_eol_mode);
-		utils_string_replace_all(template, template_eol_char, target_eol_char);
-	}
+	if (target_eol_mode == SC_EOL_LF)
+		return;
+
+	/* now convert to desired line endings */
+	utils_string_replace_all(string, "\n", eol_str);
 }
 
 
