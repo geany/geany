@@ -16,7 +16,7 @@ identifier=default
 commentblock=comment
 stringeol=stringeol
 # flip bold for identifiers
-word2=word2,bold
+word2=keyword2,bold
 decorator=preprocessor
 
 [keywords]
