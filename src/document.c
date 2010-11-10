@@ -1725,24 +1725,31 @@ static gchar *write_data_to_disk(const gchar *locale_filename,
 			G_FILE_CREATE_NONE, NULL, NULL, &error);
 		g_object_unref(fp);
 #else
-		gint err = 0;
 		FILE *fp;
 		gint bytes_written;
+		gboolean fail = FALSE;
 
 		/* Use POSIX API for unsafe saving (GVFS-unsafe) */
 		fp = g_fopen(locale_filename, "wb");
-		if (G_UNLIKELY(fp == NULL))
-			return g_strdup(g_strerror(errno));
+		if (fp == NULL)
+			fail = TRUE;
+		else
+		{
+			bytes_written = fwrite(data, sizeof(gchar), len, fp);
 
-		bytes_written = fwrite(data, sizeof(gchar), len, fp);
+			if (len != bytes_written)
+				fail = TRUE;
 
-		if (G_UNLIKELY(len != bytes_written))
-			err = errno;
-
-		fclose(fp);
-
-		if (err != 0)
+			if (fclose(fp) != 0)
+				fail = TRUE;
+		}
+		if (fail)
+		{
+			gint err = errno;
+			if (!err)
+				err = EIO;
 			return g_strdup(g_strerror(err));
+		}
 #endif
 	}
 	else

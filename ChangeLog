@@ -4,6 +4,9 @@
    Use LF line endings for templates internally instead of default
    pref because the default can change. This fixes missing line
    endings sometimes when changing default setting.
+ * src/document.c:
+   Fix not reporting an error message when saving a document fails.
+   Check result of fclose().
 
 
 2010-11-09  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
