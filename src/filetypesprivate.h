@@ -43,6 +43,7 @@ typedef struct GeanyFiletypePrivate
 	gchar		*last_string; /* last one compiled */
 	gboolean	custom;
 	gint		symbol_list_sort_mode;
+	gboolean	xml_indent_tags; /* XML tag autoindentation, for HTML and XML filetypes */
 }
 GeanyFiletypePrivate;
 

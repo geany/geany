@@ -7,6 +7,10 @@
  * src/document.c:
    Fix not reporting an error message when saving a document fails.
    Check result of fclose().
+ * src/filetypesprivate.h, src/filetypes.c, src/editor.c,
+   data/filetypes.xml, data/filetypes.html:
+   Add xml_indent_tags filetype setting for documents using the
+   HTML/XML lexers (patch by Eugene Arshinov, thanks).
 
 
 2010-11-09  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

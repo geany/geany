@@ -55,6 +55,7 @@
 #include "document.h"
 #include "documentprivate.h"
 #include "filetypes.h"
+#include "filetypesprivate.h"
 #include "sciwrappers.h"
 #include "ui_utils.h"
 #include "utils.h"
@@ -1356,8 +1357,9 @@ static gint get_indent_size_after_line(GeanyEditor *editor, gint line)
 		 * recommend us to insert additional indent, we are probably not in PHP/JavaScript chunk and
 		 * should make the XML-related check */
 		if (additional_indent == 0 && !editor_prefs.auto_close_xml_tags &&
-			(editor->document->file_type->id == GEANY_FILETYPES_HTML ||
-			editor->document->file_type->id == GEANY_FILETYPES_XML))
+			(sci_get_lexer(sci) == SCLEX_HTML ||
+			sci_get_lexer(sci) == SCLEX_XML) &&
+			editor->document->file_type->priv->xml_indent_tags)
 		{
 			size += iprefs->width * get_xml_indent(sci, line);
 		}

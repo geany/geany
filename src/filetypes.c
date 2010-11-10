@@ -1139,6 +1139,8 @@ static void load_settings(gint ft_id, GKeyFile *config, GKeyFile *configh)
 
 	ft->priv->symbol_list_sort_mode = utils_get_setting(integer, configh, config, "settings",
 		"symbol_list_sort_mode", SYMBOLS_SORT_BY_NAME);
+	ft->priv->xml_indent_tags = utils_get_setting(boolean, configh, config, "settings",
+		"xml_indent_tags", FALSE);
 
 	/* read build settings */
 	build_load_menu(config, GEANY_BCS_FT, (gpointer)ft);
