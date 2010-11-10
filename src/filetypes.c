@@ -1112,7 +1112,7 @@ static void load_settings(gint ft_id, GKeyFile *config, GKeyFile *configh)
 	if (result == NULL) result = g_key_file_get_string(config, "settings", "context_action_cmd", NULL);
 	if (G_LIKELY(result != NULL))
 	{
-		filetypes[ft_id]->context_action_cmd = result;
+		setptr(filetypes[ft_id]->context_action_cmd, result);
 	}
 
 	result = utils_get_setting_string(configh, "settings", "tag_parser", NULL);
