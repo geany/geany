@@ -1,3 +1,11 @@
+2010-11-10  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/templates.c, src/document.c:
+   Use LF line endings for templates internally instead of default
+   pref because the default can change. This fixes missing line
+   endings sometimes when changing default setting.
+
+
 2010-11-09  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/templates.c, src/filetypes.c:

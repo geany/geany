@@ -719,6 +719,7 @@ GeanyDocument *document_new_file_if_non_open(void)
 
 /**
  *  Creates a new document.
+ *  Line endings in @a text will be converted to the default setting.
  *  Afterwards, the @c "document-new" signal is emitted for plugins.
  *
  *  @param utf8_filename The file name in UTF-8 encoding, or @c NULL to open a file as "untitled".

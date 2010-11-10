@@ -69,8 +69,22 @@ static void templates_replace_command(GString *text, const gchar *file_name,
 	g_strconcat(app->configdir, \
 		G_DIR_SEPARATOR_S GEANY_TEMPLATES_SUBDIR G_DIR_SEPARATOR_S, shortname, NULL)
 
-#define TEMPLATES_READ_FILE(fname, contents_ptr) \
-	g_file_get_contents(fname, contents_ptr, NULL, NULL);
+
+static gchar *read_file(const gchar *locale_fname)
+{
+	gchar *contents;
+	GString *str;
+
+	if (!g_file_get_contents(locale_fname, &contents, NULL, NULL))
+		return NULL;
+
+	str = g_string_new(contents);
+	g_free(contents);
+
+	/* convert to LF endings for consistency in mixing templates */
+	utils_ensure_same_eol_characters(str, SC_EOL_LF);
+	return g_string_free(str, FALSE);
+}
 
 
 static void read_template(const gchar *name, gint id)
@@ -82,17 +96,7 @@ static void read_template(const gchar *name, gint id)
 		setptr(fname, g_strconcat(app->datadir,
 			G_DIR_SEPARATOR_S GEANY_TEMPLATES_SUBDIR G_DIR_SEPARATOR_S, name, NULL));
 
-	TEMPLATES_READ_FILE(fname, &templates[id]);
-
-	{
-		GString *tmp = g_string_new(templates[id]);
-
-		/* Convert to default line endings e.g. for file header use in a file template.
-		 * When inserting separately we replace line endings with the document setting. */
-		utils_ensure_same_eol_characters(tmp, file_prefs.default_eol_character);
-		setptr(templates[id], tmp->str);
-		g_string_free(tmp, FALSE);
-	}
+	templates[id] = read_file(fname);
 	g_free(fname);
 }
 
@@ -118,6 +122,7 @@ static gchar *replace_all(gchar *text, const gchar *year, const gchar *date, con
 }
 
 
+/* called when inserting templates into an existing document */
 static void convert_eol_characters(GString *template, GeanyDocument *doc)
 {
 	gint doc_eol_mode;
@@ -160,7 +165,7 @@ static void init_ft_templates(const gchar *year, const gchar *date, const gchar 
 		gchar *shortname = g_strconcat("filetype.", ext, NULL);
 		gchar *fname = TEMPLATES_GET_FILENAME(shortname);
 
-		TEMPLATES_READ_FILE(fname, &ft_templates[ft_id]);
+		ft_templates[ft_id] = read_file(fname);
 		ft_templates[ft_id] = replace_all(ft_templates[ft_id], year, date, datetime);
 
 		g_free(fname);
@@ -253,14 +258,13 @@ static gchar *get_template_from_file(const gchar *locale_fname, const gchar *doc
 	gchar *content;
 	GString *template = NULL;
 
-	g_file_get_contents(locale_fname, &content, NULL, NULL);
+	content = read_file(locale_fname);
 
 	if (content != NULL)
 	{
 		gchar *file_header;
 
 		template = g_string_new(content);
-		utils_ensure_same_eol_characters(template, file_prefs.default_eol_character);
 
 		file_header = get_template_fileheader(ft);
 		templates_replace_valist(template,
@@ -301,7 +305,10 @@ on_new_with_file_template(GtkMenuItem *menuitem, G_GNUC_UNUSED gpointer user_dat
 		template = get_template_from_file(path, new_filename, ft);
 	}
 	if (template)
+	{
+		/* line endings will be converted */
 		document_new_file(new_filename, ft, template);
+	}
 	else
 	{
 		setptr(fname, utils_get_utf8_from_locale(fname));
@@ -577,6 +584,7 @@ gchar *templates_get_template_fileheader(gint filetype_idx, const gchar *fname)
 }
 
 
+/* old filetype templates - use file templates instead */
 gchar *templates_get_template_new_file(GeanyFiletype *ft)
 {
 	GString *ft_template;
