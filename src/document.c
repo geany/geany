@@ -1730,11 +1730,13 @@ static gchar *write_data_to_disk(const gchar *locale_filename,
 		gboolean fail = FALSE;
 
 		/* Use POSIX API for unsafe saving (GVFS-unsafe) */
+		errno = 0;
 		fp = g_fopen(locale_filename, "wb");
 		if (fp == NULL)
 			fail = TRUE;
 		else
 		{
+			errno = 0;
 			bytes_written = fwrite(data, sizeof(gchar), len, fp);
 
 			if (len != bytes_written)

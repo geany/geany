@@ -11,6 +11,9 @@
    data/filetypes.xml, data/filetypes.html:
    Add xml_indent_tags filetype setting for documents using the
    HTML/XML lexers (patch by Eugene Arshinov, thanks).
+ * src/document.c:
+   Set errno to 0 before doing disk I/O to prevent confusing error
+   messages on save failure.
 
 
 2010-11-09  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
