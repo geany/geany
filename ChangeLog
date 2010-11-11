@@ -1,3 +1,10 @@
+2010-11-11  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/document.c:
+   Display better error messages when saving a document fails (patch by
+   Dimitar Zhekov, thanks).
+
+
 2010-11-10  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/templates.c, src/document.c:

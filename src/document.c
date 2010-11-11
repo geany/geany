@@ -1726,32 +1726,59 @@ static gchar *write_data_to_disk(const gchar *locale_filename,
 		g_object_unref(fp);
 #else
 		FILE *fp;
-		gint bytes_written;
-		gboolean fail = FALSE;
+		int save_errno;
+		gchar *display_name = g_filename_display_name(locale_filename);
 
 		/* Use POSIX API for unsafe saving (GVFS-unsafe) */
+		/* The error handling is taken from glib-2.26.0 gfileutils.c */
 		errno = 0;
 		fp = g_fopen(locale_filename, "wb");
 		if (fp == NULL)
-			fail = TRUE;
+		{
+			save_errno = errno;
+
+			g_set_error(&error,
+				G_FILE_ERROR,
+				g_file_error_from_errno(save_errno),
+				_("Failed to open file '%s' for writing: fopen() failed: %s"),
+				display_name,
+				g_strerror(save_errno));
+		}
 		else
 		{
+			gint bytes_written;
+
 			errno = 0;
 			bytes_written = fwrite(data, sizeof(gchar), len, fp);
 
 			if (len != bytes_written)
-				fail = TRUE;
+			{
+				save_errno = errno;
 
-			if (fclose(fp) != 0)
-				fail = TRUE;
+				g_set_error(&error,
+					G_FILE_ERROR,
+					g_file_error_from_errno(save_errno),
+					_("Failed to write file '%s': fwrite() failed: %s"),
+					display_name,
+					g_strerror(save_errno));
+			}
+
+			errno = 0;
+			/* preserve the fwrite() error if any */
+			if (fclose(fp) != 0 && error == NULL)
+			{
+				save_errno = errno;
+
+				g_set_error(&error,
+					G_FILE_ERROR,
+					g_file_error_from_errno(save_errno),
+					_("Failed to close file '%s': fclose() failed: %s"),
+					display_name,
+					g_strerror(save_errno));
+			}
 		}
-		if (fail)
-		{
-			gint err = errno;
-			if (!err)
-				err = EIO;
-			return g_strdup(g_strerror(err));
-		}
+
+		g_free(display_name);
 #endif
 	}
 	else
