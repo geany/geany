@@ -2729,6 +2729,8 @@ static gsize count_indent_size(GeanyEditor *editor, const gchar *base_indent)
 			case '\t':
 				count += tab_size;
 				break;
+			default:
+				return count;
 		}
 	}
 	return count;

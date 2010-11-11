@@ -3,6 +3,9 @@
  * src/document.c:
    Display better error messages when saving a document fails (patch by
    Dimitar Zhekov, thanks).
+ * src/editor.c:
+   Fix wrong snippet indentation when original cursor line has
+   non-indentation whitespace (patch by david, thanks).
 
 
 2010-11-10  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
