@@ -1,3 +1,10 @@
+2010-11-11  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * waf, wscript:
+   Update Waf to version 1.6.1.
+   Update wscript for new Waf version, make it Python 3 compatible.
+
+
 2010-11-11  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/document.c:
