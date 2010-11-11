@@ -3731,6 +3731,16 @@ symbol_list_sort_mode
     1       Sort tags by appearance (line number)
     =====   =====================================
 
+xml_indent_tags
+    If this setting is set to *true*, a new line after a line ending with an
+    unclosed XML/HTML tag will be automatically indented. This only applies
+    to filetypes for which the HTML or XML lexer is used. Such filetypes have
+    this setting in their system configuration files.
+
+    .. note::
+        This setting will not work if the *XML/HTML tag
+        autocompletion* pref is set.
+
 
 [build_settings] Section
 ````````````````````````

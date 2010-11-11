@@ -13,6 +13,10 @@
  * src/editor.c:
    Fix wrong snippet indentation when original cursor line has
    non-indentation whitespace (patch by david, thanks).
+ * doc/geany.txt, doc/geany.html, data/filetypes.php,
+   data/filetypes.docbook, data/filetypes.xml, data/filetypes.html:
+   Enable XML tag autoindentation for PHP, Docbook and add docs for
+   this setting (patch by Eugene Arshinov, thanks).
 
 
 2010-11-10  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

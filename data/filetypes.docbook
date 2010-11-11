@@ -61,3 +61,7 @@ comment_use_indent=true
 
 # context action command (please see Geany's main documentation for details)
 context_action_cmd=
+
+# if this setting is set to true, a new line after a line ending with an
+# unclosed tag will be automatically indented
+xml_indent_tags=true
