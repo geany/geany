@@ -47,7 +47,7 @@ import tempfile
 from distutils import version
 from waflib import Logs, Options, Scripting, Utils
 from waflib.Configure import ConfigurationContext
-from waflib.Errors import WafError
+from waflib.Errors import ConfigurationError, WafError
 from waflib.TaskGen import feature
 
 
@@ -122,12 +122,12 @@ def configure(conf):
     conf.load('compiler_c')
     is_win32 = _target_is_win32(conf)
 
-    conf.check_cc(header_name='fcntl.h')
-    conf.check_cc(header_name='fnmatch.h')
-    conf.check_cc(header_name='glob.h')
-    conf.check_cc(header_name='sys/time.h')
-    conf.check_cc(header_name='sys/types.h')
-    conf.check_cc(header_name='sys/stat.h')
+    conf.check_cc(header_name='fcntl.h', mandatory=False)
+    conf.check_cc(header_name='fnmatch.h', mandatory=False)
+    conf.check_cc(header_name='glob.h', mandatory=False)
+    conf.check_cc(header_name='sys/time.h', mandatory=False)
+    conf.check_cc(header_name='sys/types.h', mandatory=False)
+    conf.check_cc(header_name='sys/stat.h', mandatory=False)
     conf.define('HAVE_STDLIB_H', 1) # are there systems without stdlib.h?
     conf.define('STDC_HEADERS', 1) # an optimistic guess ;-)
 
@@ -135,19 +135,18 @@ def configure(conf):
         _add_to_env_and_define(conf, 'HAVE_REGCOMP', 1)
         _add_to_env_and_define(conf, 'USE_INCLUDED_REGEX', 1)
     else:
-        conf.check_cc(header_name='regex.h')
-        if conf.env['HAVE_REGEX_H'] == 1:
+        try:
+            conf.check_cc(header_name='regex.h')
             conf.check_cc(function_name='regcomp', header_name='regex.h')
-        # fallback to included regex lib
-        if conf.env['HAVE_REGCOMP'] != 1 or conf.env['HAVE_REGEX_H'] != 1:
-            conf.define('HAVE_REGCOMP', 1)
-            conf.define('USE_INCLUDED_REGEX', 1)
+        except ConfigurationError:
+            _add_to_env_and_define(conf, 'HAVE_REGCOMP', 1)
+            _add_to_env_and_define(conf, 'USE_INCLUDED_REGEX', 1)
 
-    conf.check_cc(function_name='fgetpos', header_name='stdio.h')
-    conf.check_cc(function_name='ftruncate', header_name='unistd.h')
-    conf.check_cc(function_name='gethostname', header_name='unistd.h')
-    conf.check_cc(function_name='mkstemp', header_name='stdlib.h')
-    conf.check_cc(function_name='strstr', header_name='string.h', mandatory=True)
+    conf.check_cc(function_name='fgetpos', header_name='stdio.h', mandatory=False)
+    conf.check_cc(function_name='ftruncate', header_name='unistd.h', mandatory=False)
+    conf.check_cc(function_name='gethostname', header_name='unistd.h', mandatory=False)
+    conf.check_cc(function_name='mkstemp', header_name='stdlib.h', mandatory=False)
+    conf.check_cc(function_name='strstr', header_name='string.h')
 
     # check sunOS socket support
     if Options.platform == 'sunos':
@@ -179,6 +178,7 @@ def configure(conf):
             # overwrite default prefix on Windows (tempfile.gettempdir() is the Waf default)
             new_prefix = os.path.join(str(conf.root), '%s-%s' % (APPNAME, VERSION))
             _add_to_env_and_define(conf, 'PREFIX', new_prefix, quote=True)
+            _add_to_env_and_define(conf, 'BINDIR', os.path.join(new_prefix, 'bin'), quote=True)
         _add_to_env_and_define(conf, 'DOCDIR', os.path.join(conf.env['PREFIX'], 'doc'), quote=True)
         _add_to_env_and_define(conf, 'LIBDIR', conf.env['PREFIX'], quote=True)
         conf.define('LOCALEDIR', os.path.join('share' 'locale'), quote=True)
@@ -187,18 +187,8 @@ def configure(conf):
         # DATADIR is defined in objidl.h, so we remove it from config.h but keep it in env
         conf.undefine('DATADIR')
         conf.env['DATADIR'] = os.path.join(conf.env['PREFIX'], 'data')
-        # TODO
-        # hack: we add the parent directory of the first include directory as this is missing in
-        # list returned from pkg-config
-        conf.env['CPPPATH_GTK'].insert(0, os.path.dirname(conf.env['CPPPATH_GTK'][0]))
-        # we don't need -fPIC when compiling on or for Windows
-        if '-fPIC' in conf.env['CFLAGS_cshlib']:
-            conf.env['CFLAGS_cshlib'].remove('-fPIC')
-        if '-fPIC' in conf.env['CXXFLAGS_cxxshlib']:
-            conf.env['CXXFLAGS_cxxshlib'].remove('-fPIC')
-        conf.env.append_value('program_LINKFLAGS', '-mwindows')
+        conf.env.append_value('LINKFLAGS_cprogram', ['-mwindows'])
         conf.env.append_value('LIB_WIN32', ['wsock32', 'uuid', 'ole32', 'iberty'])
-        conf.env['cshlib_PATTERN'] = '%s.dll'
     else:
         conf.env['cshlib_PATTERN'] = '%s.so'
         # DATADIR and LOCALEDIR are defined by the intltool tool
@@ -226,11 +216,14 @@ def configure(conf):
 
     conf.define('GETTEXT_PACKAGE', APPNAME, quote=True)
 
+    # no VTE on Windows
+    if is_win32:
+        conf.options.no_vte = True
+
     _define_from_opt(conf, 'HAVE_PLUGINS', not conf.options.no_plugins, None)
     _define_from_opt(conf, 'HAVE_SOCKET', not conf.options.no_socket, None)
     _define_from_opt(conf, 'HAVE_VTE', not conf.options.no_vte, None)
 
-    conf.env['HAVE_VTE'] = 1
     conf.write_config_header('config.h', remove=False)
 
     # some more compiler flags
@@ -336,6 +329,7 @@ def build(bld):
         geany_sources.add('src/vte.c')
     if is_win32:
         geany_sources.add('src/win32.c')
+        geany_sources.add('geany_private.rc')
 
     bld.new_task_gen(
         features        = ['c', 'cxx', 'cprogram'],
@@ -345,8 +339,7 @@ def build(bld):
         includes        = ['.', 'scintilla/include/', 'tagmanager/include/'],
         defines         = ['G_LOG_DOMAIN="Geany"', 'GEANY_PRIVATE'],
         uselib          = ['GTK', 'GIO', 'WIN32', 'SUNOS_SOCKET'],
-        use             = ['scintilla', 'tagmanager'],
-        add_objects     = 'geany-rc' if is_win32 else None)
+        use             = ['scintilla', 'tagmanager'])
 
     # geanyfunctions.h
     bld.new_task_gen(
@@ -375,7 +368,7 @@ def build(bld):
             appname         = 'geany')
 
     # geany.pc
-    bld.new_task_gen(
+    task = bld.new_task_gen(
         source          = 'geany.pc.in',
         dct             = {'VERSION' : VERSION,
                            'prefix': bld.env['PREFIX'],
@@ -385,15 +378,8 @@ def build(bld):
                            'datarootdir': '${prefix}/share',
                            'datadir': '${datarootdir}',
                            'localedir': '${datarootdir}/locale'})
-        # TODO test this on win32
-        #install_path    = None if is_win32 else '${LIBDIR}/pkgconfig')
 
-    if is_win32:
-        bld.new_task_gen(
-            features        = 'c',
-            name            = 'geany-rc',
-            source          = 'geany_private.rc')
-    else:
+    if not is_win32:
         # geany.desktop
         if bld.env['INTLTOOL']:
             bld.new_task_gen(
