@@ -1120,7 +1120,7 @@ msgstr "_Standard"
 
 #: ../src/highlighting.c:3656
 msgid "_Color Schemes"
-msgstr "_FarbsSchemata"
+msgstr "_Farbschemata"
 
 #: ../src/interface.c:321
 msgid "_File"
@@ -2501,7 +2501,7 @@ msgstr "Immer virtuelle Leerzeichen am Ende der Zeilen anzeigen"
 
 #: ../src/interface.c:4215
 msgid "<b>Virtual spaces</b>"
-msgstr "<b>Imaginäre Freiräume</b>"
+msgstr "<b>Virtuelle Leerzeichen</b>"
 
 #: ../src/interface.c:4220
 msgid "Display"
