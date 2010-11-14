@@ -1,3 +1,9 @@
+2010-11-14  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * waf:
+   Update Waf to current SVN version.
+
+
 2010-11-11  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * waf, wscript:
