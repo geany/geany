@@ -4,6 +4,8 @@
    Don't use XML tag auto-indentation when '</' is to the right of the
    cursor; allow auto-indentation when XML tag auto-closing is also
    enabled.
+ * doc/geany.txt, doc/geany.html:
+   Rename 'Format' section 'Filetype configuration'.
 
 
 2010-11-14  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

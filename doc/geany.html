@@ -6,7 +6,7 @@
 <meta name="generator" content="Docutils 0.4: http://docutils.sourceforge.net/" />
 <title>Geany</title>
 <meta name="authors" content="Enrico Tröger  Nick Treleaven  Frank Lanitz" />
-<meta name="date" content="2010-11-11" />
+<meta name="date" content="2010-11-15" />
 <style type="text/css">
 
 /*
@@ -139,7 +139,7 @@ Stylesheet for Geany's documentation based on a version of John Gabriele.
 <br />Nick Treleaven
 <br />Frank Lanitz</td></tr>
 <tr><th class="docinfo-name">Date:</th>
-<td>2010-11-11</td></tr>
+<td>2010-11-15</td></tr>
 <tr><th class="docinfo-name">Version:</th>
 <td>0.20</td></tr>
 </tbody>
@@ -402,7 +402,7 @@ of this program, and also in the chapter <a class="reference" href="#gnu-general
 <li><a class="reference" href="#custom-filetypes" id="id174" name="id174">Custom filetypes</a></li>
 <li><a class="reference" href="#system-files" id="id175" name="id175">System files</a></li>
 <li><a class="reference" href="#user-files" id="id176" name="id176">User files</a></li>
-<li><a class="reference" href="#format" id="id177" name="id177">Format</a><ul>
+<li><a class="reference" href="#filetype-configuration" id="id177" name="id177">Filetype configuration</a><ul>
 <li><a class="reference" href="#styling-section" id="id178" name="id178">[styling] Section</a><ul>
 <li><a class="reference" href="#using-a-named-style" id="id179" name="id179">Using a named style</a></li>
 </ul>
@@ -1322,7 +1322,7 @@ editor and also a keyboard shortcut (see the section called
 <a class="reference" href="#keybindings">Keybindings</a>).</p>
 <p>The command can be specified in the preferences dialog and also for
 each filetype (see &quot;context_action_cmd&quot; in the section called
-<a class="reference" href="#format">Format</a>). When the context action is invoked, the filetype
+<a class="reference" href="#filetype-configuration">Filetype configuration</a>). When the context action is invoked, the filetype
 specific command is used if available, otherwise the command
 specified in the preferences dialog is executed.</p>
 <p>The current word or selection can be referred with the wildcard &quot;%s&quot;
@@ -4210,7 +4210,7 @@ template files.</p>
 <div class="note">
 <p class="first admonition-title">Note</p>
 <p class="last">Syntax highlighting colors aren't updated in open documents after
-saving filetypes.common as this can possibly take a significant
+saving filetypes.common as this may take a significant
 amount of time.</p>
 </div>
 </div>
@@ -4252,7 +4252,7 @@ have been implemented:</p>
 <tt class="docutils literal"><span class="pre">filetype_extensions.conf</span></tt>).</p>
 </li>
 <li><dl class="first docutils">
-<dt>Filetype settings in the [settings] section (see <a class="reference" href="#format">Format</a>).</dt>
+<dt>Filetype settings in the [settings] section (see <a class="reference" href="#filetype-configuration">Filetype configuration</a>).</dt>
 <dd><ul class="first last simple">
 <li>Using existing tag parsing (<tt class="docutils literal"><span class="pre">tag_parser</span></tt> key).</li>
 <li>Using existing syntax highlighting (<tt class="docutils literal"><span class="pre">lexer_filetype</span></tt> key).</li>
@@ -4297,11 +4297,11 @@ configuration directory. Alternatively, you can create a file
 <tt class="docutils literal"><span class="pre">~/.config/geany/filedefs/filetypes.X</span></tt> and add only these settings you want
 to change. All missing settings will be read from the corresponding
 global definition file in <tt class="docutils literal"><span class="pre">$prefix/share/geany</span></tt>.</p>
-<p>As well as the sections listed below, each filetype file can contain
-a [build-menu] section as described in <a class="reference" href="#build-menu-section">[build-menu] Section</a>.</p>
 </div>
 <div class="section">
-<h3><a class="toc-backref" href="#id177" id="format" name="format">Format</a></h3>
+<h3><a class="toc-backref" href="#id177" id="filetype-configuration" name="filetype-configuration">Filetype configuration</a></h3>
+<p>As well as the sections listed below, each filetype file can contain
+a [build-menu] section as described in <a class="reference" href="#build-menu-section">[build-menu] Section</a>.</p>
 <div class="section">
 <h4><a class="toc-backref" href="#id178" id="styling-section" name="styling-section">[styling] Section</a></h4>
 <p>In this section the colors for syntax highlighting are defined. The
@@ -4514,7 +4514,10 @@ complete filename, e.g. for shell scripts.</p>
 <p>There is a special filetype definition file called
 filetypes.common. This file defines some general non-filetype-specific
 settings.</p>
-<p>See the <a class="reference" href="#format">Format</a> section for how to define styles.</p>
+<div class="note">
+<p class="first admonition-title">Note</p>
+<p class="last">See the <a class="reference" href="#filetype-configuration">Filetype configuration</a> section for how to define styles.</p>
+</div>
 <div class="section">
 <h4><a class="toc-backref" href="#id185" id="named-styles-section" name="named-styles-section">[named_styles] Section</a></h4>
 <p>Named styles declared here can be used in the [styling] section of any
@@ -6356,7 +6359,7 @@ USE OR PERFORMANCE OF THIS SOFTWARE.</p>
 <div class="footer">
 <hr class="footer" />
 <a class="reference" href="geany.txt">View document source</a>.
-Generated on: 2010-11-15 13:01 UTC.
+Generated on: 2010-11-15 15:13 UTC.
 Generated by <a class="reference" href="http://docutils.sourceforge.net/">Docutils</a> from <a class="reference" href="http://docutils.sourceforge.net/rst.html">reStructuredText</a> source.
 
 </div>

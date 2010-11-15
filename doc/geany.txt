@@ -904,7 +904,7 @@ editor and also a keyboard shortcut (see the section called
 
 The command can be specified in the preferences dialog and also for
 each filetype (see "context_action_cmd" in the section called
-`Format`_). When the context action is invoked, the filetype
+`Filetype configuration`_). When the context action is invoked, the filetype
 specific command is used if available, otherwise the command
 specified in the preferences dialog is executed.
 
@@ -3488,7 +3488,7 @@ template files.
 
 .. note::
     Syntax highlighting colors aren't updated in open documents after
-    saving filetypes.common as this can possibly take a significant
+    saving filetypes.common as this may take a significant
     amount of time.
 
 
@@ -3534,7 +3534,7 @@ have been implemented:
 
 * Recognizing and setting the filetype (after the user has manually edited
   ``filetype_extensions.conf``).
-* Filetype settings in the [settings] section (see `Format`_).
+* Filetype settings in the [settings] section (see `Filetype configuration`_).
     * Using existing tag parsing (``tag_parser`` key).
     * Using existing syntax highlighting (``lexer_filetype`` key).
 * Build commands.
@@ -3572,12 +3572,13 @@ configuration directory. Alternatively, you can create a file
 to change. All missing settings will be read from the corresponding
 global definition file in ``$prefix/share/geany``.
 
+
+
+Filetype configuration
+^^^^^^^^^^^^^^^^^^^^^^
+
 As well as the sections listed below, each filetype file can contain
 a [build-menu] section as described in `[build-menu] Section`_.
-
-Format
-^^^^^^
-
 
 [styling] Section
 `````````````````
@@ -3809,7 +3810,8 @@ There is a special filetype definition file called
 filetypes.common. This file defines some general non-filetype-specific
 settings.
 
-See the `Format`_ section for how to define styles.
+.. note::
+    See the `Filetype configuration`_ section for how to define styles.
 
 
 [named_styles] Section
