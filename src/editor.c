@@ -1306,6 +1306,13 @@ static gint get_xml_indent(ScintillaObject *sci, gint line)
 {
 	gboolean need_close = FALSE;
 	gint end = sci_get_line_end_position(sci, line) - 1;
+	gint pos;
+
+	/* don't indent if there's a closing tag to the right of the cursor */
+	pos = sci_get_current_position(sci);
+	if (sci_get_char_at(sci, pos) == '<' &&
+		sci_get_char_at(sci, pos + 1) == '/')
+		return 0;
 
 	if (sci_get_char_at(sci, end) == '>' &&
 		sci_get_char_at(sci, end - 1) != '/')
@@ -1356,7 +1363,7 @@ static gint get_indent_size_after_line(GeanyEditor *editor, gint line)
 		/* HTML lexer "has braces" because of PHP and JavaScript.  If get_brace_indent() did not
 		 * recommend us to insert additional indent, we are probably not in PHP/JavaScript chunk and
 		 * should make the XML-related check */
-		if (additional_indent == 0 && !editor_prefs.auto_close_xml_tags &&
+		if (additional_indent == 0 &&
 			(sci_get_lexer(sci) == SCLEX_HTML ||
 			sci_get_lexer(sci) == SCLEX_XML) &&
 			editor->document->file_type->priv->xml_indent_tags)

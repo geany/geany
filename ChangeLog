@@ -1,3 +1,11 @@
+2010-11-15  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/editor.c, doc/geany.txt, doc/geany.html:
+   Don't use XML tag auto-indentation when '</' is to the right of the
+   cursor; allow auto-indentation when XML tag auto-closing is also
+   enabled.
+
+
 2010-11-14  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * waf:
