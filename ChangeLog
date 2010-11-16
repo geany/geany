@@ -1,3 +1,12 @@
+2010-11-16  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/keybindings.c, src/editor.c, src/editor.h:
+   Make Reflow Lines/Block command use the current indented block, not
+   the whole paragraph, which could have mixed indentation.
+   Fix memory leak and off-by-one bug on first line when using Select
+   Paragraph command.
+
+
 2010-11-15  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/editor.c, doc/geany.txt, doc/geany.html:

@@ -2344,7 +2344,8 @@ static void reflow_paragraph(GeanyEditor *editor)
 	{
 		gint line, pos;
 
-		keybindings_send_command(GEANY_KEY_GROUP_SELECT, GEANY_KEYS_SELECT_PARAGRAPH);
+		editor_select_indent_block(editor);
+
 		/* deselect last line break */
 		pos = sci_get_selection_end(sci);
 		line = sci_get_line_from_position(sci, pos);

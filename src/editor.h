@@ -243,11 +243,15 @@ gchar *editor_get_word_at_pos(GeanyEditor *editor, gint pos, const gchar *wordch
 
 gchar *editor_get_default_selection(GeanyEditor *editor, gboolean use_current_word, const gchar *wordchars);
 
+
 void editor_select_word(GeanyEditor *editor);
 
 void editor_select_lines(GeanyEditor *editor, gboolean extra_line);
 
 void editor_select_paragraph(GeanyEditor *editor);
+
+void editor_select_indent_block(GeanyEditor *editor);
+
 
 void editor_set_font(GeanyEditor *editor, const gchar *font);
 

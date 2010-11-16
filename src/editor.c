@@ -3931,50 +3931,48 @@ void editor_select_lines(GeanyEditor *editor, gboolean extra_line)
 }
 
 
-/* find the start or end of a paragraph by searching all lines in direction (UP or DOWN)
- * starting at the given line and return the found line or return -1 if called on an empty line */
+static gboolean sci_is_blank_line(ScintillaObject *sci, gint line)
+{
+	return sci_get_line_indent_position(sci, line) ==
+		sci_get_line_end_position(sci, line);
+}
+
+
+/* Returns first line of paragraph for GTK_DIR_UP, line after paragraph
+ * ends for GTK_DIR_DOWN or -1 if called on an empty line. */
 static gint find_paragraph_stop(GeanyEditor *editor, gint line, gint direction)
 {
-	gboolean found_end = FALSE;
 	gint step;
-	gchar *line_buf, *x;
 	ScintillaObject *sci = editor->sci;
 
 	/* first check current line and return -1 if it is empty to skip creating of a selection */
-	line_buf = x = sci_get_line(sci, line);
-	while (isspace(*x))
-		x++;
-	if (*x == '\0')
-	{
-		g_free(line_buf);
+	if (sci_is_blank_line(sci, line))
 		return -1;
-	}
 
 	if (direction == GTK_DIR_UP)
 		step = -1;
 	else
 		step = 1;
 
-	while (! found_end)
+	while (TRUE)
 	{
 		line += step;
-
-		/* sci_get_line checks for sanity of the given line, sci_get_line always return a string
-		 * containing at least '\0' so no need to check for NULL */
-		line_buf = x = sci_get_line(sci, line);
-
-		/* check whether after skipping all whitespace we are at end of line and if so, assume
-		 * this line as end of paragraph */
-		while (isspace(*x))
-			x++;
-		if (*x == '\0')
+		if (line == -1)
 		{
-			found_end = TRUE;
-			if (line == -1)
-				/* called on the first line but there is no previous line so return line 0 */
-				line = 0;
+			/* start of document */
+			line = 0;
+			break;
 		}
-		g_free(line_buf);
+		if (line == sci_get_line_count(sci))
+			break;
+
+		if (sci_is_blank_line(sci, line))
+		{
+			/* return line paragraph starts on */
+			if (direction == GTK_DIR_UP)
+				line++;
+			break;
+		}
 	}
 	return line;
 }
@@ -3986,21 +3984,78 @@ void editor_select_paragraph(GeanyEditor *editor)
 
 	g_return_if_fail(editor != NULL);
 
-	line_start = SSM(editor->sci, SCI_LINEFROMPOSITION,
-						SSM(editor->sci, SCI_GETCURRENTPOS, 0, 0), 0);
+	line_start = sci_get_current_line(editor->sci);
 
 	line_found = find_paragraph_stop(editor, line_start, GTK_DIR_UP);
 	if (line_found == -1)
 		return;
 
-	/* find_paragraph_stop returns the emtpy line(previous to the real start of the paragraph),
-	 * so use the next line for selection start */
-	if (line_found > 0)
-		line_found++;
-
 	pos_start = SSM(editor->sci, SCI_POSITIONFROMLINE, line_found, 0);
 
 	line_found = find_paragraph_stop(editor, line_start, GTK_DIR_DOWN);
+	pos_end = SSM(editor->sci, SCI_POSITIONFROMLINE, line_found, 0);
+
+	sci_set_selection(editor->sci, pos_start, pos_end);
+}
+
+
+/* Returns first line of block for GTK_DIR_UP, line after block
+ * ends for GTK_DIR_DOWN or -1 if called on an empty line. */
+static gint find_block_stop(GeanyEditor *editor, gint line, gint direction)
+{
+	gint step, ind;
+	ScintillaObject *sci = editor->sci;
+
+	/* first check current line and return -1 if it is empty to skip creating of a selection */
+	if (sci_is_blank_line(sci, line))
+		return -1;
+
+	if (direction == GTK_DIR_UP)
+		step = -1;
+	else
+		step = 1;
+
+	ind = sci_get_line_indentation(sci, line);
+	while (TRUE)
+	{
+		line += step;
+		if (line == -1)
+		{
+			/* start of document */
+			line = 0;
+			break;
+		}
+		if (line == sci_get_line_count(sci))
+			break;
+
+		if (sci_get_line_indentation(sci, line) != ind ||
+			sci_is_blank_line(sci, line))
+		{
+			/* return line block starts on */
+			if (direction == GTK_DIR_UP)
+				line++;
+			break;
+		}
+	}
+	return line;
+}
+
+
+void editor_select_indent_block(GeanyEditor *editor)
+{
+	gint pos_start, pos_end, line_start, line_found;
+
+	g_return_if_fail(editor != NULL);
+
+	line_start = sci_get_current_line(editor->sci);
+
+	line_found = find_block_stop(editor, line_start, GTK_DIR_UP);
+	if (line_found == -1)
+		return;
+
+	pos_start = SSM(editor->sci, SCI_POSITIONFROMLINE, line_found, 0);
+
+	line_found = find_block_stop(editor, line_start, GTK_DIR_DOWN);
 	pos_end = SSM(editor->sci, SCI_POSITIONFROMLINE, line_found, 0);
 
 	sci_set_selection(editor->sci, pos_start, pos_end);
