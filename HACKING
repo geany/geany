@@ -378,13 +378,14 @@ typedef for more information.
 
 Other features
 ^^^^^^^^^^^^^^
+If the lexer has comment styles, you should add them in
+highlighting_is_comment_style(). You should also update
+highlighting_is_string_style() for string/character styles. For now,
+this prevents calltips and autocompletion when typing in a comment
+(but it can still be forced by the user).
+
 For brace indentation, update lexer_has_braces() in editor.c;
 indentation after ':' is done from on_new_line_added().
-
-If the lexer has comment styles, you should add them in is_comment_style()
-in editor.c. You should also update is_string_style() for string/character
-styles. For now, this prevents calltips and autocompletion when typing
-in a comment (but it can still be forced by the user).
 
 If the Scintilla lexer supports user type keyword highlighting (e.g.
 SCLEX_CPP), update editor_lexer_get_type_keyword_idx() in editor.c.
