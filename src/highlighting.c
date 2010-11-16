@@ -3670,3 +3670,300 @@ void highlighting_init(void)
 	create_color_scheme_menu();
 }
 
+
+/** Checks whether the given style is a string for the given lexer.
+ *
+ * @param lexer Scintilla lexer type (@c SCLEX_*).
+ * @param style Scintilla style (@c SCE_*).
+ *
+ * @return @c TRUE if the style is a string, @c FALSE otherwise.
+ */
+gboolean highlighting_is_string_style(gint lexer, gint style)
+{
+	/* Don't forget STRINGEOL, to prevent completion whilst typing a string with no closing char. */
+
+	switch (lexer)
+	{
+		case SCLEX_CPP:
+			return (style == SCE_C_CHARACTER ||
+				style == SCE_C_STRING ||
+				style == SCE_C_STRINGEOL);
+
+		case SCLEX_PASCAL:
+			return (style == SCE_PAS_CHARACTER ||
+				style == SCE_PAS_STRING ||
+				style == SCE_PAS_STRINGEOL);
+
+		case SCLEX_D:
+			return (style == SCE_D_STRING ||
+				style == SCE_D_STRINGEOL ||
+				style == SCE_D_CHARACTER ||
+				style == SCE_D_STRINGB ||
+				style == SCE_D_STRINGR);
+
+		case SCLEX_PYTHON:
+			return (style == SCE_P_STRING ||
+				style == SCE_P_TRIPLE ||
+				style == SCE_P_TRIPLEDOUBLE ||
+				style == SCE_P_CHARACTER ||
+				style == SCE_P_STRINGEOL);
+
+		case SCLEX_F77:
+		case SCLEX_FORTRAN:
+			return (style == SCE_F_STRING1 ||
+				style == SCE_F_STRING2 ||
+				style == SCE_F_STRINGEOL);
+
+		case SCLEX_PERL:
+			return (/*style == SCE_PL_STRING ||*/ /* may want variable autocompletion "$(foo)" */
+				style == SCE_PL_CHARACTER ||
+				style == SCE_PL_HERE_DELIM ||
+				style == SCE_PL_HERE_Q ||
+				style == SCE_PL_HERE_QQ ||
+				style == SCE_PL_HERE_QX ||
+				style == SCE_PL_POD ||
+				style == SCE_PL_STRING_Q ||
+				style == SCE_PL_STRING_QQ ||
+				style == SCE_PL_STRING_QX ||
+				style == SCE_PL_STRING_QR ||
+				style == SCE_PL_STRING_QW ||
+				style == SCE_PL_POD_VERB);
+
+		case SCLEX_R:
+			return (style == SCE_R_STRING);
+
+		case SCLEX_RUBY:
+			return (style == SCE_RB_CHARACTER ||
+				style == SCE_RB_STRING ||
+				style == SCE_RB_HERE_DELIM ||
+				style == SCE_RB_HERE_Q ||
+				style == SCE_RB_HERE_QQ ||
+				style == SCE_RB_HERE_QX ||
+				style == SCE_RB_POD);
+
+		case SCLEX_BASH:
+			return (style == SCE_SH_STRING);
+
+		case SCLEX_SQL:
+			return (style == SCE_SQL_STRING);
+
+		case SCLEX_TCL:
+			return (style == SCE_TCL_IN_QUOTE);
+
+		case SCLEX_LUA:
+			return (style == SCE_LUA_LITERALSTRING ||
+				style == SCE_LUA_CHARACTER ||
+				style == SCE_LUA_STRINGEOL ||
+				style == SCE_LUA_STRING);
+
+		case SCLEX_HASKELL:
+			return (style == SCE_HA_CHARACTER ||
+				style == SCE_HA_STRING);
+
+		case SCLEX_FREEBASIC:
+			return (style == SCE_B_STRING ||
+				style == SCE_B_STRINGEOL);
+
+		case SCLEX_OCTAVE:
+			return (style == SCE_MATLAB_STRING ||
+				style == SCE_MATLAB_DOUBLEQUOTESTRING);
+
+		case SCLEX_HTML:
+			return (
+				style == SCE_HBA_STRING ||
+				style == SCE_HBA_STRINGEOL ||
+				style == SCE_HB_STRING ||
+				style == SCE_HB_STRINGEOL ||
+				style == SCE_H_CDATA ||
+				style == SCE_H_DOUBLESTRING ||
+				style == SCE_HJA_DOUBLESTRING ||
+				style == SCE_HJA_SINGLESTRING ||
+				style == SCE_HJA_STRINGEOL ||
+				style == SCE_HJ_DOUBLESTRING ||
+				style == SCE_HJ_SINGLESTRING ||
+				style == SCE_HJ_STRINGEOL ||
+				style == SCE_HPA_CHARACTER ||
+				style == SCE_HPA_STRING ||
+				style == SCE_HPA_TRIPLE ||
+				style == SCE_HPA_TRIPLEDOUBLE ||
+				style == SCE_HP_CHARACTER ||
+				style == SCE_HPHP_HSTRING ||  /* HSTRING is a heredoc */
+				style == SCE_HPHP_HSTRING_VARIABLE ||
+				style == SCE_HPHP_SIMPLESTRING ||
+				style == SCE_HP_STRING ||
+				style == SCE_HP_TRIPLE ||
+				style == SCE_HP_TRIPLEDOUBLE ||
+				style == SCE_H_SGML_DOUBLESTRING ||
+				style == SCE_H_SGML_SIMPLESTRING ||
+				style == SCE_H_SINGLESTRING);
+
+		case SCLEX_CMAKE:
+			return (style == SCE_CMAKE_STRINGDQ ||
+				style == SCE_CMAKE_STRINGLQ ||
+				style == SCE_CMAKE_STRINGRQ ||
+				style == SCE_CMAKE_STRINGVAR);
+
+		case SCLEX_NSIS:
+			return (style == SCE_NSIS_STRINGDQ ||
+				style == SCE_NSIS_STRINGLQ ||
+				style == SCE_NSIS_STRINGRQ ||
+				style == SCE_NSIS_STRINGVAR);
+
+		case SCLEX_ADA:
+			return (style == SCE_ADA_CHARACTER ||
+				style == SCE_ADA_STRING ||
+				style == SCE_ADA_CHARACTEREOL ||
+				style == SCE_ADA_STRINGEOL);
+	}
+	return FALSE;
+}
+
+
+/** Checks whether the given style is a comment for the given lexer.
+ *
+ * @param lexer Scintilla lexer type (@c SCLEX_*).
+ * @param style Scintilla style (@c SCE_*).
+ *
+ * @return @c TRUE if the style is a comment, @c FALSE otherwise.
+ */
+gboolean highlighting_is_comment_style(gint lexer, gint style)
+{
+	switch (lexer)
+	{
+		case SCLEX_CPP:
+			return (style == SCE_C_COMMENT ||
+				style == SCE_C_COMMENTLINE ||
+				style == SCE_C_COMMENTDOC ||
+				style == SCE_C_COMMENTLINEDOC ||
+				style == SCE_C_COMMENTDOCKEYWORD ||
+				style == SCE_C_COMMENTDOCKEYWORDERROR);
+
+		case SCLEX_PASCAL:
+			return (style == SCE_PAS_COMMENT ||
+				style == SCE_PAS_COMMENT2 ||
+				style == SCE_PAS_COMMENTLINE);
+
+		case SCLEX_D:
+			return (style == SCE_D_COMMENT ||
+				style == SCE_D_COMMENTLINE ||
+				style == SCE_D_COMMENTDOC ||
+				style == SCE_D_COMMENTNESTED ||
+				style == SCE_D_COMMENTLINEDOC ||
+				style == SCE_D_COMMENTDOCKEYWORD ||
+				style == SCE_D_COMMENTDOCKEYWORDERROR);
+
+		case SCLEX_PYTHON:
+			return (style == SCE_P_COMMENTLINE ||
+				style == SCE_P_COMMENTBLOCK);
+
+		case SCLEX_F77:
+		case SCLEX_FORTRAN:
+			return (style == SCE_F_COMMENT);
+
+		case SCLEX_PERL:
+			return (style == SCE_PL_COMMENTLINE);
+
+		case SCLEX_PROPERTIES:
+			return (style == SCE_PROPS_COMMENT);
+
+		case SCLEX_PO:
+			return (style == SCE_PO_COMMENT);
+
+		case SCLEX_LATEX:
+			return (style == SCE_L_COMMENT);
+
+		case SCLEX_MAKEFILE:
+			return (style == SCE_MAKE_COMMENT);
+
+		case SCLEX_RUBY:
+			return (style == SCE_RB_COMMENTLINE);
+
+		case SCLEX_BASH:
+			return (style == SCE_SH_COMMENTLINE);
+
+		case SCLEX_R:
+			return (style == SCE_R_COMMENT);
+
+		case SCLEX_SQL:
+			return (style == SCE_SQL_COMMENT ||
+				style == SCE_SQL_COMMENTLINE ||
+				style == SCE_SQL_COMMENTDOC);
+
+		case SCLEX_TCL:
+			return (style == SCE_TCL_COMMENT ||
+				style == SCE_TCL_COMMENTLINE ||
+				style == SCE_TCL_COMMENT_BOX ||
+				style == SCE_TCL_BLOCK_COMMENT);
+
+		case SCLEX_OCTAVE:
+			return (style == SCE_MATLAB_COMMENT);
+
+		case SCLEX_LUA:
+			return (style == SCE_LUA_COMMENT ||
+				style == SCE_LUA_COMMENTLINE ||
+				style == SCE_LUA_COMMENTDOC);
+
+		case SCLEX_HASKELL:
+			return (style == SCE_HA_COMMENTLINE ||
+				style == SCE_HA_COMMENTBLOCK ||
+				style == SCE_HA_COMMENTBLOCK2 ||
+				style == SCE_HA_COMMENTBLOCK3);
+
+		case SCLEX_FREEBASIC:
+			return (style == SCE_B_COMMENT);
+
+		case SCLEX_YAML:
+			return (style == SCE_YAML_COMMENT);
+
+		case SCLEX_HTML:
+			return (
+				style == SCE_HBA_COMMENTLINE ||
+				style == SCE_HB_COMMENTLINE ||
+				style == SCE_H_COMMENT ||
+				style == SCE_HJA_COMMENT ||
+				style == SCE_HJA_COMMENTDOC ||
+				style == SCE_HJA_COMMENTLINE ||
+				style == SCE_HJ_COMMENT ||
+				style == SCE_HJ_COMMENTDOC ||
+				style == SCE_HJ_COMMENTLINE ||
+				style == SCE_HPA_COMMENTLINE ||
+				style == SCE_HP_COMMENTLINE ||
+				style == SCE_HPHP_COMMENT ||
+				style == SCE_HPHP_COMMENTLINE ||
+				style == SCE_H_SGML_COMMENT);
+
+		case SCLEX_CMAKE:
+			return (style == SCE_CMAKE_COMMENT);
+
+		case SCLEX_NSIS:
+			return (style == SCE_NSIS_COMMENT ||
+				style == SCE_NSIS_COMMENTBOX);
+
+		case SCLEX_ADA:
+			return (style == SCE_ADA_COMMENTLINE ||
+				style == SCE_NSIS_COMMENTBOX);
+	}
+	return FALSE;
+}
+
+
+/** Checks whether the given style is normal code (not string, comment, preprocessor, etc).
+ *
+ * @param lexer Scintilla lexer type (@c SCLEX_*).
+ * @param style Scintilla style (@c SCE_*).
+ *
+ * @return @c TRUE if the style is code, @c FALSE otherwise.
+ */
+gboolean highlighting_is_code_style(gint lexer, gint style)
+{
+	switch (lexer)
+	{
+		case SCLEX_CPP:
+			if (style == SCE_C_PREPROCESSOR)
+				return FALSE;
+			break;
+	}
+	return !(highlighting_is_comment_style(lexer, style) ||
+		highlighting_is_string_style(lexer, style));
+}
+

@@ -276,13 +276,14 @@ gint utils_write_file(const gchar *filename, const gchar *text)
 }
 
 
-/*
- * (stolen from anjuta and modified)
- * Search backward through size bytes looking for a '<', then return the tag, if any.
- * @return The tag name
+/** Searches backward through @a size bytes looking for a '<', then returns the tag, if any.
+ * @param sel .
+ * @param size .
+ * @return The tag name.
  */
 gchar *utils_find_open_xml_tag(const gchar sel[], gint size)
 {
+	/* stolen from anjuta and modified */
 	const gchar *begin, *cur;
 
 	if (G_UNLIKELY(size < 3))

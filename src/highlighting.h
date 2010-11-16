@@ -51,4 +51,8 @@ const GeanyLexerStyle *highlighting_get_style(gint ft_id, gint style_id);
 
 void highlighting_free_styles(void);
 
+gboolean highlighting_is_string_style(gint lexer, gint style);
+gboolean highlighting_is_comment_style(gint lexer, gint style);
+gboolean highlighting_is_code_style(gint lexer, gint style);
+
 #endif

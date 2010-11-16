@@ -311,4 +311,8 @@ void editor_insert_text_block(GeanyEditor *editor, const gchar *text,
 
 void editor_toggle_fold(GeanyEditor *editor, gint line, gint modifiers);
 
+const gchar *editor_find_snippet(GeanyEditor *editor, const gchar *snippet_name);
+
+void editor_insert_snippet(GeanyEditor *editor, gint pos, const gchar *snippet);
+
 #endif

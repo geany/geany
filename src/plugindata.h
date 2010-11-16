@@ -50,7 +50,7 @@
 enum {
 	/** The Application Programming Interface (API) version, incremented
 	 * whenever any plugin data types are modified or appended to. */
-	GEANY_API_VERSION = 197,
+	GEANY_API_VERSION = 198,
 
 	/** The Application Binary Interface (ABI) version, incremented whenever
 	 * existing fields in the plugin data types have to be changed or reordered. */
@@ -431,7 +431,7 @@ typedef struct UtilsFuncs
 	GSList*		(*utils_get_file_list_full)(const gchar *path, gboolean full_path, gboolean sort,
 				GError **error);
 	gchar**		(*utils_copy_environment)(const gchar **exclude_vars, const gchar *first_varname, ...);
-
+	gchar*		(*utils_find_open_xml_tag) (const gchar sel[], gint size);
 }
 UtilsFuncs;
 
@@ -541,6 +541,9 @@ typedef struct HighlightingFuncs
 {
 	const struct GeanyLexerStyle* (*highlighting_get_style) (gint ft_id, gint style_id);
 	void		(*highlighting_set_styles) (struct _ScintillaObject *sci, struct GeanyFiletype *ft);
+	gboolean	(*highlighting_is_string_style) (gint lexer, gint style);
+	gboolean	(*highlighting_is_comment_style) (gint lexer, gint style);
+	gboolean	(*highlighting_is_code_style) (gint lexer, gint style);
 }
 HighlightingFuncs;
 
@@ -613,6 +616,9 @@ typedef struct EditorFuncs
 
 	gint	(*editor_get_eol_char_mode) (struct GeanyEditor *editor);
 	gboolean (*editor_goto_pos) (struct GeanyEditor *editor, gint pos, gboolean mark);
+
+	const gchar* (*editor_find_snippet) (struct GeanyEditor *editor, const gchar *snippet_name);
+	void	(*editor_insert_snippet) (struct GeanyEditor *editor, gint pos, const gchar *snippet);
 }
 EditorFuncs;
 

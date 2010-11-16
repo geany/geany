@@ -124,7 +124,9 @@ static EditorFuncs editor_funcs = {
 	&editor_get_eol_char,
 	&editor_insert_text_block,
 	&editor_get_eol_char_mode,
-	&editor_goto_pos
+	&editor_goto_pos,
+	&editor_find_snippet,
+	&editor_insert_snippet
 };
 
 static ScintillaFuncs scintilla_funcs = {
@@ -216,7 +218,8 @@ static UtilsFuncs utils_funcs = {
 	&utils_str_middle_truncate,
 	&utils_str_remove_chars,
 	&utils_get_file_list_full,
-	&utils_copy_environment
+	&utils_copy_environment,
+	&utils_find_open_xml_tag
 };
 
 static UIUtilsFuncs uiutils_funcs = {
@@ -291,7 +294,10 @@ static SearchFuncs search_funcs = {
 
 static HighlightingFuncs highlighting_funcs = {
 	&highlighting_get_style,
-	&highlighting_set_styles
+	&highlighting_set_styles,
+	&highlighting_is_string_style,
+	&highlighting_is_comment_style,
+	&highlighting_is_code_style
 };
 
 static FiletypeFuncs filetype_funcs = {

@@ -92,6 +92,10 @@
 	geany_functions->p_editor->editor_get_eol_char_mode
 #define editor_goto_pos \
 	geany_functions->p_editor->editor_goto_pos
+#define editor_find_snippet \
+	geany_functions->p_editor->editor_find_snippet
+#define editor_insert_snippet \
+	geany_functions->p_editor->editor_insert_snippet
 #define scintilla_send_message \
 	geany_functions->p_scintilla->scintilla_send_message
 #define scintilla_new \
@@ -244,6 +248,8 @@
 	geany_functions->p_utils->utils_get_file_list_full
 #define utils_copy_environment \
 	geany_functions->p_utils->utils_copy_environment
+#define utils_find_open_xml_tag \
+	geany_functions->p_utils->utils_find_open_xml_tag
 #define ui_dialog_vbox_new \
 	geany_functions->p_ui->ui_dialog_vbox_new
 #define ui_frame_new_with_alignment \
@@ -330,6 +336,12 @@
 	geany_functions->p_highlighting->highlighting_get_style
 #define highlighting_set_styles \
 	geany_functions->p_highlighting->highlighting_set_styles
+#define highlighting_is_string_style \
+	geany_functions->p_highlighting->highlighting_is_string_style
+#define highlighting_is_comment_style \
+	geany_functions->p_highlighting->highlighting_is_comment_style
+#define highlighting_is_code_style \
+	geany_functions->p_highlighting->highlighting_is_code_style
 #define filetypes_detect_from_file \
 	geany_functions->p_filetypes->filetypes_detect_from_file
 #define filetypes_lookup_by_name \

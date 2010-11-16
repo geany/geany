@@ -67,6 +67,7 @@
 #include "project.h"
 #include "projectprivate.h"
 #include "main.h"
+#include "highlighting.h"
 
 
 /* Note: use sciwrappers.h instead where possible.
@@ -104,8 +105,6 @@ static void on_new_line_added(GeanyEditor *editor);
 static gboolean handle_xml(GeanyEditor *editor, gint pos, gchar ch);
 static void insert_indent_after_line(GeanyEditor *editor, gint line);
 static void auto_multiline(GeanyEditor *editor, gint pos);
-static gboolean is_code_style(gint lexer, gint style);
-static gboolean is_string_style(gint lexer, gint style);
 static void auto_close_chars(ScintillaObject *sci, gint pos, gchar c);
 static void close_block(GeanyEditor *editor, gint pos);
 static void editor_highlight_braces(GeanyEditor *editor, gint cur_pos);
@@ -196,8 +195,6 @@ static void on_snippet_keybinding_activate(gchar *key)
 	GeanyDocument *doc = document_get_current();
 	const gchar *s;
 	GHashTable *specials;
-	GString *pattern;
-	gint pos, line, indent_width, cursor_pos;
 
 	if (!doc || !GTK_WIDGET_HAS_FOCUS(doc->editor->sci))
 		return;
@@ -215,17 +212,8 @@ static void on_snippet_keybinding_activate(gchar *key)
 		return;
 	}
 
-	pos = sci_get_current_position(doc->editor->sci);
-	line = sci_get_line_from_position(doc->editor->sci, pos);
-	indent_width = sci_get_line_indentation(doc->editor->sci, line);
-
-	pattern = g_string_new(s);
-	cursor_pos = snippets_make_replacements(doc->editor, pattern, indent_width);
-
-	editor_insert_text_block(doc->editor, pattern->str, pos, cursor_pos, indent_width, FALSE);
+	editor_insert_snippet(doc->editor, sci_get_current_position(doc->editor->sci), s);
 	sci_scroll_caret(doc->editor->sci);
-
-	g_string_free(pattern, TRUE);
 }
 
 
@@ -1862,7 +1850,7 @@ gboolean editor_show_calltip(GeanyEditor *editor, gint pos)
 
 	/* the style 1 before the brace (which may be highlighted) */
 	style = sci_get_style_at(sci, pos - 1);
-	if (! is_code_style(lexer, style))
+	if (! highlighting_is_code_style(lexer, style))
 		return FALSE;
 
 	word[0] = '\0';
@@ -2127,7 +2115,7 @@ gboolean editor_start_auto_complete(GeanyEditor *editor, gint pos, gboolean forc
 	style = sci_get_style_at(sci, pos - 2);
 
 	/* don't autocomplete in comments and strings */
-	if (!force && !is_code_style(lexer, style))
+	if (!force && !highlighting_is_code_style(lexer, style))
 		return FALSE;
 
 	autocomplete_scope(editor);
@@ -2522,22 +2510,19 @@ static gboolean snippets_complete_constructs(GeanyEditor *editor, gint pos, cons
 {
 	ScintillaObject *sci = editor->sci;
 	gchar *str;
-	GString *pattern;
-	gssize cur_index = -1;
+	const gchar *completion;
 	gint str_len;
 	gint ft_id = editor->document->file_type->id;
 
 	str = g_strdup(word);
 	g_strstrip(str);
-	pattern = g_string_new(snippets_find_completion_by_name(filetypes[ft_id]->name, str));
-	if (pattern == NULL || pattern->len == 0)
+
+	completion = snippets_find_completion_by_name(filetypes[ft_id]->name, str);
+	if (completion == NULL)
 	{
 		g_free(str);
-		g_string_free(pattern, TRUE);
 		return FALSE;
 	}
-
-	read_indent(editor, pos);
 
 	/* remove the typed word, it will be added again by the used auto completion
 	 * (not really necessary but this makes the auto completion more flexible,
@@ -2548,14 +2533,10 @@ static gboolean snippets_complete_constructs(GeanyEditor *editor, gint pos, cons
 	sci_replace_sel(sci, "");
 	pos -= str_len; /* pos has changed while deleting */
 
-	cur_index = snippets_make_replacements(editor, pattern, strlen(indent));
-
-	/* finally insert the text and set the cursor */
-	editor_insert_text_block(editor, pattern->str, pos, cur_index, -1, FALSE);
+	editor_insert_snippet(editor, pos, completion);
 	sci_scroll_caret(sci);
 
 	g_free(str);
-	g_string_free(pattern, TRUE);
  	return TRUE;
 }
 
@@ -2677,7 +2658,7 @@ static gboolean handle_xml(GeanyEditor *editor, gint pos, gchar ch)
 
 	/* return if we are inside any embedded script */
 	style = sci_get_style_at(sci, pos);
-	if (style > SCE_H_XCCOMMENT && ! is_string_style(lexer, style))
+	if (style > SCE_H_XCCOMMENT && ! highlighting_is_string_style(lexer, style))
 		return FALSE;
 
 	/* if ch is /, check for </, else quit */
@@ -3440,293 +3421,6 @@ static void auto_multiline(GeanyEditor *editor, gint cur_line)
 
 		g_free(previous_line);
 	}
-}
-
-
-/* Checks whether the given style is a string for the given lexer.
- * It doesn't handle LEX_HTML, this should be done by the caller.
- * Returns true if the style is a string, FALSE otherwise.
- *
- * Don't forget STRINGEOL, to prevent completion whilst typing a string with no closing char.
- */
-static gboolean is_string_style(gint lexer, gint style)
-{
-	switch (lexer)
-	{
-		case SCLEX_CPP:
-			return (style == SCE_C_CHARACTER ||
-				style == SCE_C_STRING ||
-				style == SCE_C_STRINGEOL);
-
-		case SCLEX_PASCAL:
-			return (style == SCE_PAS_CHARACTER ||
-				style == SCE_PAS_STRING ||
-				style == SCE_PAS_STRINGEOL);
-
-		case SCLEX_D:
-			return (style == SCE_D_STRING ||
-				style == SCE_D_STRINGEOL ||
-				style == SCE_D_CHARACTER ||
-				style == SCE_D_STRINGB ||
-				style == SCE_D_STRINGR);
-
-		case SCLEX_PYTHON:
-			return (style == SCE_P_STRING ||
-				style == SCE_P_TRIPLE ||
-				style == SCE_P_TRIPLEDOUBLE ||
-				style == SCE_P_CHARACTER ||
-				style == SCE_P_STRINGEOL);
-
-		case SCLEX_F77:
-		case SCLEX_FORTRAN:
-			return (style == SCE_F_STRING1 ||
-				style == SCE_F_STRING2 ||
-				style == SCE_F_STRINGEOL);
-
-		case SCLEX_PERL:
-			return (/*style == SCE_PL_STRING ||*/ /* may want variable autocompletion "$(foo)" */
-				style == SCE_PL_CHARACTER ||
-				style == SCE_PL_HERE_DELIM ||
-				style == SCE_PL_HERE_Q ||
-				style == SCE_PL_HERE_QQ ||
-				style == SCE_PL_HERE_QX ||
-				style == SCE_PL_POD ||
-				style == SCE_PL_STRING_Q ||
-				style == SCE_PL_STRING_QQ ||
-				style == SCE_PL_STRING_QX ||
-				style == SCE_PL_STRING_QR ||
-				style == SCE_PL_STRING_QW ||
-				style == SCE_PL_POD_VERB);
-
-		case SCLEX_R:
-			return (style == SCE_R_STRING);
-
-		case SCLEX_RUBY:
-			return (style == SCE_RB_CHARACTER ||
-				style == SCE_RB_STRING ||
-				style == SCE_RB_HERE_DELIM ||
-				style == SCE_RB_HERE_Q ||
-				style == SCE_RB_HERE_QQ ||
-				style == SCE_RB_HERE_QX ||
-				style == SCE_RB_POD);
-
-		case SCLEX_BASH:
-			return (style == SCE_SH_STRING);
-
-		case SCLEX_SQL:
-			return (style == SCE_SQL_STRING);
-
-		case SCLEX_TCL:
-			return (style == SCE_TCL_IN_QUOTE);
-
-		case SCLEX_LUA:
-			return (style == SCE_LUA_LITERALSTRING ||
-				style == SCE_LUA_CHARACTER ||
-				style == SCE_LUA_STRINGEOL ||
-				style == SCE_LUA_STRING);
-
-		case SCLEX_HASKELL:
-			return (style == SCE_HA_CHARACTER ||
-				style == SCE_HA_STRING);
-
-		case SCLEX_FREEBASIC:
-			return (style == SCE_B_STRING ||
-				style == SCE_B_STRINGEOL);
-
-		case SCLEX_OCTAVE:
-			return (style == SCE_MATLAB_STRING ||
-				style == SCE_MATLAB_DOUBLEQUOTESTRING);
-
-		case SCLEX_HTML:
-			return (
-				style == SCE_HBA_STRING ||
-				style == SCE_HBA_STRINGEOL ||
-				style == SCE_HB_STRING ||
-				style == SCE_HB_STRINGEOL ||
-				style == SCE_H_CDATA ||
-				style == SCE_H_DOUBLESTRING ||
-				style == SCE_HJA_DOUBLESTRING ||
-				style == SCE_HJA_SINGLESTRING ||
-				style == SCE_HJA_STRINGEOL ||
-				style == SCE_HJ_DOUBLESTRING ||
-				style == SCE_HJ_SINGLESTRING ||
-				style == SCE_HJ_STRINGEOL ||
-				style == SCE_HPA_CHARACTER ||
-				style == SCE_HPA_STRING ||
-				style == SCE_HPA_TRIPLE ||
-				style == SCE_HPA_TRIPLEDOUBLE ||
-				style == SCE_HP_CHARACTER ||
-				style == SCE_HPHP_HSTRING ||  /* HSTRING is a heredoc */
-				style == SCE_HPHP_HSTRING_VARIABLE ||
-				style == SCE_HPHP_SIMPLESTRING ||
-				style == SCE_HP_STRING ||
-				style == SCE_HP_TRIPLE ||
-				style == SCE_HP_TRIPLEDOUBLE ||
-				style == SCE_H_SGML_DOUBLESTRING ||
-				style == SCE_H_SGML_SIMPLESTRING ||
-				style == SCE_H_SINGLESTRING);
-
-		case SCLEX_CMAKE:
-			return (style == SCE_CMAKE_STRINGDQ ||
-				style == SCE_CMAKE_STRINGLQ ||
-				style == SCE_CMAKE_STRINGRQ ||
-				style == SCE_CMAKE_STRINGVAR);
-
-		case SCLEX_NSIS:
-			return (style == SCE_NSIS_STRINGDQ ||
-				style == SCE_NSIS_STRINGLQ ||
-				style == SCE_NSIS_STRINGRQ ||
-				style == SCE_NSIS_STRINGVAR);
-
-		case SCLEX_ADA:
-			return (style == SCE_ADA_CHARACTER ||
-				style == SCE_ADA_STRING ||
-				style == SCE_ADA_CHARACTEREOL ||
-				style == SCE_ADA_STRINGEOL);
-	}
-	return FALSE;
-}
-
-
-/* Checks whether the given style is a comment for the given lexer.
- * It doesn't handle LEX_HTML, this should be done by the caller.
- * Returns true if the style is a comment, FALSE otherwise.
- */
-static gboolean is_comment_style(gint lexer, gint style)
-{
-	switch (lexer)
-	{
-		case SCLEX_CPP:
-			return (style == SCE_C_COMMENT ||
-				style == SCE_C_COMMENTLINE ||
-				style == SCE_C_COMMENTDOC ||
-				style == SCE_C_COMMENTLINEDOC ||
-				style == SCE_C_COMMENTDOCKEYWORD ||
-				style == SCE_C_COMMENTDOCKEYWORDERROR);
-
-		case SCLEX_PASCAL:
-			return (style == SCE_PAS_COMMENT ||
-				style == SCE_PAS_COMMENT2 ||
-				style == SCE_PAS_COMMENTLINE);
-
-		case SCLEX_D:
-			return (style == SCE_D_COMMENT ||
-				style == SCE_D_COMMENTLINE ||
-				style == SCE_D_COMMENTDOC ||
-				style == SCE_D_COMMENTNESTED ||
-				style == SCE_D_COMMENTLINEDOC ||
-				style == SCE_D_COMMENTDOCKEYWORD ||
-				style == SCE_D_COMMENTDOCKEYWORDERROR);
-
-		case SCLEX_PYTHON:
-			return (style == SCE_P_COMMENTLINE ||
-				style == SCE_P_COMMENTBLOCK);
-
-		case SCLEX_F77:
-		case SCLEX_FORTRAN:
-			return (style == SCE_F_COMMENT);
-
-		case SCLEX_PERL:
-			return (style == SCE_PL_COMMENTLINE);
-
-		case SCLEX_PROPERTIES:
-			return (style == SCE_PROPS_COMMENT);
-
-		case SCLEX_PO:
-			return (style == SCE_PO_COMMENT);
-
-		case SCLEX_LATEX:
-			return (style == SCE_L_COMMENT);
-
-		case SCLEX_MAKEFILE:
-			return (style == SCE_MAKE_COMMENT);
-
-		case SCLEX_RUBY:
-			return (style == SCE_RB_COMMENTLINE);
-
-		case SCLEX_BASH:
-			return (style == SCE_SH_COMMENTLINE);
-
-		case SCLEX_R:
-			return (style == SCE_R_COMMENT);
-
-		case SCLEX_SQL:
-			return (style == SCE_SQL_COMMENT ||
-				style == SCE_SQL_COMMENTLINE ||
-				style == SCE_SQL_COMMENTDOC);
-
-		case SCLEX_TCL:
-			return (style == SCE_TCL_COMMENT ||
-				style == SCE_TCL_COMMENTLINE ||
-				style == SCE_TCL_COMMENT_BOX ||
-				style == SCE_TCL_BLOCK_COMMENT);
-
-		case SCLEX_OCTAVE:
-			return (style == SCE_MATLAB_COMMENT);
-
-		case SCLEX_LUA:
-			return (style == SCE_LUA_COMMENT ||
-				style == SCE_LUA_COMMENTLINE ||
-				style == SCE_LUA_COMMENTDOC);
-
-		case SCLEX_HASKELL:
-			return (style == SCE_HA_COMMENTLINE ||
-				style == SCE_HA_COMMENTBLOCK ||
-				style == SCE_HA_COMMENTBLOCK2 ||
-				style == SCE_HA_COMMENTBLOCK3);
-
-		case SCLEX_FREEBASIC:
-			return (style == SCE_B_COMMENT);
-
-		case SCLEX_YAML:
-			return (style == SCE_YAML_COMMENT);
-
-		case SCLEX_HTML:
-			return (
-				style == SCE_HBA_COMMENTLINE ||
-				style == SCE_HB_COMMENTLINE ||
-				style == SCE_H_COMMENT ||
-				style == SCE_HJA_COMMENT ||
-				style == SCE_HJA_COMMENTDOC ||
-				style == SCE_HJA_COMMENTLINE ||
-				style == SCE_HJ_COMMENT ||
-				style == SCE_HJ_COMMENTDOC ||
-				style == SCE_HJ_COMMENTLINE ||
-				style == SCE_HPA_COMMENTLINE ||
-				style == SCE_HP_COMMENTLINE ||
-				style == SCE_HPHP_COMMENT ||
-				style == SCE_HPHP_COMMENTLINE ||
-				style == SCE_H_SGML_COMMENT);
-
-		case SCLEX_CMAKE:
-			return (style == SCE_CMAKE_COMMENT);
-
-		case SCLEX_NSIS:
-			return (style == SCE_NSIS_COMMENT ||
-				style == SCE_NSIS_COMMENTBOX);
-
-		case SCLEX_ADA:
-			return (style == SCE_ADA_COMMENTLINE ||
-				style == SCE_NSIS_COMMENTBOX);
-	}
-	return FALSE;
-}
-
-
-/* Checks whether the given style is normal code (not string, comment, preprocessor, etc).
- * It doesn't handle LEX_HTML, this should be done by the caller.
- */
-static gboolean is_code_style(gint lexer, gint style)
-{
-	switch (lexer)
-	{
-		case SCLEX_CPP:
-			if (style == SCE_C_PREPROCESSOR)
-				return FALSE;
-			break;
-	}
-	return !(is_comment_style(lexer, style) ||
-		is_string_style(lexer, style));
 }
 
 
@@ -5270,4 +4964,42 @@ void editor_indent(GeanyEditor *editor, gboolean increase)
 	{
 		sci_set_current_line(sci, lstart);
 	}
+}
+
+
+/** Gets snippet by name.
+ *
+ * If @a editor is passed, returns a snippet specific to the document filetype.
+ * If @a editor is @c NULL, returns a snippet from the default set.
+ *
+ * @param editor Editor or @c NULL.
+ * @param snippet_name Snippet name.
+ * @return snippet or @c NULL if it was not found. Must not be freed.
+ */
+const gchar *editor_find_snippet(GeanyEditor *editor, const gchar *snippet_name)
+{
+	const gchar *subhash_name = editor ? editor->document->file_type->name : "Default";
+	GHashTable *subhash = g_hash_table_lookup(snippet_hash, subhash_name);
+
+	return subhash ? g_hash_table_lookup(subhash, snippet_name) : NULL;
+}
+
+
+/** Replaces all special sequences in @a snippet and inserts it at @a pos.
+ * If you insert at the current position, consider calling @c sci_scroll_caret()
+ * after this function.
+ * @param editor .
+ * @param pos .
+ * @param snippet .
+ */
+void editor_insert_snippet(GeanyEditor *editor, gint pos, const gchar *snippet)
+{
+	gint cursor_pos;
+	GString *pattern;
+
+	pattern = g_string_new(snippet);
+	read_indent(editor, pos);
+	cursor_pos = snippets_make_replacements(editor, pattern, strlen(indent));
+	editor_insert_text_block(editor, pattern->str, pos, cursor_pos, -1, FALSE);
+	g_string_free(pattern, TRUE);
 }
