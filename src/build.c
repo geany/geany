@@ -2005,7 +2005,7 @@ GtkWidget *build_commands_table(GeanyDocument *doc, GeanyBuildSource dst, BuildT
 	gtk_table_attach(table, sep, 0, DC_N_COL, row, row + 1, GTK_FILL, GTK_FILL | GTK_EXPAND,
 		entry_x_padding, sep_padding);
 	++row;
-	label = ui_label_new_bold(_("Non-Filetype Commands"));
+	label = ui_label_new_bold(_("Independent Commands"));
 	gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
 	gtk_table_attach(table, label, 0, DC_N_COL, row, row + 1, GTK_FILL, GTK_FILL | GTK_EXPAND,
 		entry_x_padding, entry_y_padding);

@@ -2663,19 +2663,20 @@ These settings are saved automatically when Geany is shut down.
 The build menu is divided into four groups of items each with different
 behaviors:
 
-* File items - are configurable and depend on the filetype of the current
+* Filetype items - are configurable and depend on the filetype of the current
   document; they capture output in the compiler tab and parse it for
   errors.
-* Non-file items - are configurable and mostly don't depend on the filetype
-  of the current document; they also capture output in the compiler tab and
-  parse it for errors.
+* Filetype-independent items - are configurable and mostly don't depend on the
+  filetype of the current document; they also capture output in the
+  compiler tab and parse it for errors.
 * Execute items - are configurable and intended for executing your
   program or other long running programs.  The output is not parsed for errors
   and is directed to the terminal selected in preferences.
 * Fixed items - these perform built-in actions:
-    * Go to the next error.
-    * Go to the previous error.
-    * Show the build menu commands dialog.
+
+  * Go to the next error.
+  * Go to the previous error.
+  * Show the build menu commands dialog.
 
 The maximum numbers of items in each of the configurable groups can be
 configured when Geany starts using hidden settings (see `Preferences File Format`_).
@@ -2704,8 +2705,8 @@ is shown in the following table.
 |              | file                | Saves to: as above,      | Saves to: as user |                               |
 |              |                     | creating if needed.      | preferences left. |                               |
 +--------------+---------------------+--------------------------+-------------------+-------------------------------+
-| Non-Filetype | Loads From: project | Loads From:              | Loads From:       | 1:                            |
-|              | file                | geany.conf file in       | filetype.xxx in   |   Label: _Make                |
+| Filetype     | Loads From: project | Loads From:              | Loads From:       | 1:                            |
+| Independent  | file                | geany.conf file in       | filetype.xxx in   |   Label: _Make                |
 |              |                     | ~/.config/geany          | Geany install     |   Command: make               |
 |              | Saves To: project   |                          |                   |                               |
 |              | file                | Saves to: as above,      | Saves to: as user | 2:                            |
@@ -2741,12 +2742,12 @@ The following notes on the table reference cells by coordinate as (group,source)
   in the project file means that there is only one file per project not
   a whole directory.
 
-* (Non-Filetype, System Filetype) - although conceptually strange, defining
-  non-filetype commands in a filetype file, this provides the ability to
+* (Filetype-Independent, System Filetype) - although conceptually strange, defining
+  filetype-independent commands in a filetype file, this provides the ability to
   define filetype dependent default menu items.
 
-* (Execute, Project File) and (Execute, Preferences) - the project filetype based execute
-  configuration and preferences non-filetype based execute can only be set by hand editing the
+* (Execute, Project File) and (Execute, Preferences) - the project filetype-based
+  execute and preferences independent execute can only be set by hand editing the
   appropriate file, see `Preferences File Format`_ and `Project File Format`_.
 
 Build Menu Commands Dialog
@@ -2764,10 +2765,10 @@ The dialog is divided into three sections:
 
 * Filetype menu items which will be selected based on the filetype of the
   currently open document.
-* Non-filetype menu items.
+* Filetype-independent menu items.
 * Execute menu items.
 
-The filetype and non-filetype sections also each contain a field for the regular
+The filetype and independent sections also each contain a field for the regular
 expression used for parsing command output for error and warning messages.
 
 The columns in the first three sections allow setting of the label, command,
@@ -2816,7 +2817,7 @@ Build Menu Keyboard Shortcuts
 `````````````````````````````
 
 Keyboard shortcuts can be defined for the first two filetype menu items, the first three
-non-filetype menu items, the first two execute menu items and the fixed menu items.
+independent menu items, the first two execute menu items and the fixed menu items.
 In the keybindings configuration dialog (see `Keybinding preferences`_)
 these items are identified by the default labels shown in the `Build Menu`_ section above.
 
@@ -4217,7 +4218,7 @@ find_selection_type               See `Find selection`_.                       0
 number_ft_menu_items              The maximum number of menu items in the      2
                                   filetype section of the Build menu.
 number_non_ft_menu_items          The maximum number of menu items in the      3
-                                  non-filetype section of the Build menu.
+                                  independent section of the Build menu.
 number_exec_menu_items            The maximum number of menu items in the      2
                                   execute section of the Build menu.
 ================================  ===========================================  ==================
@@ -4243,7 +4244,7 @@ where:
 * GG - is the menu item group,
 
   - FT for filetype
-  - NF for non-filetype
+  - NF for independent (non-filetype)
   - EX for execute
 
 * NN - is a two decimal digit number of the item within the group,

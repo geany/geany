@@ -2895,28 +2895,21 @@ you can also change the label to match.</p>
 <p>These settings are saved automatically when Geany is shut down.</p>
 <p>The build menu is divided into four groups of items each with different
 behaviors:</p>
-<ul>
-<li><p class="first">File items - are configurable and depend on the filetype of the current
+<ul class="simple">
+<li>Filetype items - are configurable and depend on the filetype of the current
 document; they capture output in the compiler tab and parse it for
-errors.</p>
-</li>
-<li><p class="first">Non-file items - are configurable and mostly don't depend on the filetype
-of the current document; they also capture output in the compiler tab and
-parse it for errors.</p>
-</li>
-<li><p class="first">Execute items - are configurable and intended for executing your
+errors.</li>
+<li>Filetype-independent items - are configurable and mostly don't depend on the
+filetype of the current document; they also capture output in the
+compiler tab and parse it for errors.</li>
+<li>Execute items - are configurable and intended for executing your
 program or other long running programs.  The output is not parsed for errors
-and is directed to the terminal selected in preferences.</p>
-</li>
-<li><dl class="first docutils">
-<dt>Fixed items - these perform built-in actions:</dt>
-<dd><ul class="first last simple">
+and is directed to the terminal selected in preferences.</li>
+<li>Fixed items - these perform built-in actions:<ul>
 <li>Go to the next error.</li>
 <li>Go to the previous error.</li>
 <li>Show the build menu commands dialog.</li>
 </ul>
-</dd>
-</dl>
 </li>
 </ul>
 <p>The maximum numbers of items in each of the configurable groups can be
@@ -2971,7 +2964,8 @@ preferences left.</p>
 </td>
 <td>None</td>
 </tr>
-<tr><td>Non-Filetype</td>
+<tr><td>Filetype
+Independent</td>
 <td><p class="first">Loads From: project
 file</p>
 <p class="last">Saves To: project
@@ -3040,11 +3034,11 @@ filetype file so that users can configure all other filetype preferences
 as well.  Projects can only configure menu items per filetype.  Saving
 in the project file means that there is only one file per project not
 a whole directory.</li>
-<li>(Non-Filetype, System Filetype) - although conceptually strange, defining
-non-filetype commands in a filetype file, this provides the ability to
+<li>(Filetype-Independent, System Filetype) - although conceptually strange, defining
+filetype-independent commands in a filetype file, this provides the ability to
 define filetype dependent default menu items.</li>
-<li>(Execute, Project File) and (Execute, Preferences) - the project filetype based execute
-configuration and preferences non-filetype based execute can only be set by hand editing the
+<li>(Execute, Project File) and (Execute, Preferences) - the project filetype-based
+execute and preferences independent execute can only be set by hand editing the
 appropriate file, see <a class="reference" href="#preferences-file-format">Preferences File Format</a> and <a class="reference" href="#project-file-format">Project File Format</a>.</li>
 </ul>
 </div>
@@ -3060,10 +3054,10 @@ dialog.  Both use the same form shown below.</p>
 <ul class="simple">
 <li>Filetype menu items which will be selected based on the filetype of the
 currently open document.</li>
-<li>Non-filetype menu items.</li>
+<li>Filetype-independent menu items.</li>
 <li>Execute menu items.</li>
 </ul>
-<p>The filetype and non-filetype sections also each contain a field for the regular
+<p>The filetype and independent sections also each contain a field for the regular
 expression used for parsing command output for error and warning messages.</p>
 <p>The columns in the first three sections allow setting of the label, command,
 and working directory to run the command in.</p>
@@ -3105,7 +3099,7 @@ build menu.</p>
 <div class="section">
 <h4><a class="toc-backref" href="#id147" id="build-menu-keyboard-shortcuts" name="build-menu-keyboard-shortcuts">Build Menu Keyboard Shortcuts</a></h4>
 <p>Keyboard shortcuts can be defined for the first two filetype menu items, the first three
-non-filetype menu items, the first two execute menu items and the fixed menu items.
+independent menu items, the first two execute menu items and the fixed menu items.
 In the keybindings configuration dialog (see <a class="reference" href="#keybinding-preferences">Keybinding preferences</a>)
 these items are identified by the default labels shown in the <a class="reference" href="#build-menu">Build Menu</a> section above.</p>
 <p>It is currently not possible to bind keyboard shortcuts to more than these menu items.</p>
@@ -4970,7 +4964,7 @@ filetype section of the Build menu.</td>
 </tr>
 <tr><td>number_non_ft_menu_items</td>
 <td>The maximum number of menu items in the
-non-filetype section of the Build menu.</td>
+independent section of the Build menu.</td>
 <td>3</td>
 </tr>
 <tr><td>number_exec_menu_items</td>
@@ -4998,7 +4992,7 @@ is configured.  The keys for these settings have the format:</p>
 <ul class="simple">
 <li>GG - is the menu item group,<ul>
 <li>FT for filetype</li>
-<li>NF for non-filetype</li>
+<li>NF for independent (non-filetype)</li>
 <li>EX for execute</li>
 </ul>
 </li>
@@ -6359,7 +6353,7 @@ USE OR PERFORMANCE OF THIS SOFTWARE.</p>
 <div class="footer">
 <hr class="footer" />
 <a class="reference" href="geany.txt">View document source</a>.
-Generated on: 2010-11-15 15:13 UTC.
+Generated on: 2010-11-17 15:28 UTC.
 Generated by <a class="reference" href="http://docutils.sourceforge.net/">Docutils</a> from <a class="reference" href="http://docutils.sourceforge.net/rst.html">reStructuredText</a> source.
 
 </div>

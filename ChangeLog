@@ -1,3 +1,10 @@
+2010-11-17  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/build.c, doc/geany.txt, doc/geany.html:
+   Change 'Non-Filetype Commands' to 'Independent Commands' in the Set
+   Build Commands dialog.
+
+
 2010-11-16  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/keybindings.c, src/editor.c, src/editor.h:
