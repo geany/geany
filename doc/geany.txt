@@ -2642,11 +2642,12 @@ tab in the terminal field.
 Set Build Commands
 ``````````````````
 
-By default the Compile and Build commands invoke the GCC compiler and
-linker with only the basic arguments needed by all programs. Using
-*Set Build Commands* you can add any include paths and compile
-flags for the compiler, any library names and paths for the linker,
-and any arguments you want to use when running Execute.
+By default Compile, Build and Execute are fairly basic commands. You
+may wish to customise them using *Set Build Commands*.
+
+E.g. for C you can add any include paths and compile flags for the
+compiler, any library names and paths for the linker, and any
+arguments you want to use when running Execute.
 
 Build Menu Configuration
 ^^^^^^^^^^^^^^^^^^^^^^^^
