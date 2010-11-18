@@ -9,6 +9,8 @@
    Don't change default build command entry color when cancelling
    label editing.
    Make dialogs_show_input() return NULL when cancelled.
+ * tagmanager/php.c:
+   Parse PHP final functions (fixes #3111171).
 
 
 2010-11-17  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
