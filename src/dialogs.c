@@ -1032,7 +1032,13 @@ static void on_dialog_input(const gchar *str)
 }
 
 
-/* Returns: new copy of user input or NULL if cancelled. */
+/** Asks the user for text input.
+ * @param title Dialog title.
+ * @param parent The currently focused window, usually @c geany->main_widgets->window.
+ * @param label_text Input label text.
+ * @param default_text Text to display in the input.
+ * @return New copy of user input or @c NULL if cancelled.
+ * @since 0.20. */
 gchar *dialogs_show_input(const gchar *title, GtkWindow *parent, const gchar *label_text,
 	const gchar *default_text)
 {
@@ -1042,6 +1048,7 @@ gchar *dialogs_show_input(const gchar *title, GtkWindow *parent, const gchar *la
 }
 
 
+/* Note: could be changed to dialogs_show_validated_input with argument for callback. */
 /* Returns: newly allocated copy of the entry text or NULL on cancel.
  * Specialised variant for Goto Line dialog. */
 gchar *dialogs_show_input_goto_line(const gchar *title, GtkWindow *parent, const gchar *label_text,

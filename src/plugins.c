@@ -247,7 +247,8 @@ static DialogFuncs dialog_funcs = {
 	&dialogs_show_question,
 	&dialogs_show_msgbox,
 	&dialogs_show_save_as,
-	&dialogs_show_input_numeric
+	&dialogs_show_input_numeric,
+	&dialogs_show_input
 };
 
 /* Macro to prevent confusing macro being generated in geanyfunctions.h */

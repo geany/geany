@@ -294,6 +294,8 @@
 	geany_functions->p_dialogs->dialogs_show_save_as
 #define dialogs_show_input_numeric \
 	geany_functions->p_dialogs->dialogs_show_input_numeric
+#define dialogs_show_input \
+	geany_functions->p_dialogs->dialogs_show_input
 #define msgwin_status_add \
 	geany_functions->p_msgwin->msgwin_status_add
 #define msgwin_compiler_add \

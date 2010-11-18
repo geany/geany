@@ -11,6 +11,9 @@
    Make dialogs_show_input() return NULL when cancelled.
  * tagmanager/php.c:
    Parse PHP final functions (fixes #3111171).
+ * src/dialogs.c, src/plugindata.h, src/plugins.c,
+   plugins/geanyfunctions.h:
+   Add dialogs_show_input() to API.
 
 
 2010-11-17  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
