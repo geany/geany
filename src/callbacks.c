@@ -1193,7 +1193,8 @@ on_go_to_line_activate                 (GtkMenuItem     *menuitem,
 	gchar *result;
 
 	result = dialogs_show_input_goto_line(
-		_("Go to Line"), _("Enter the line you want to go to:"), value);
+		_("Go to Line"), GTK_WINDOW(main_widgets.window),
+		_("Enter the line you want to go to:"), value);
 	if (result != NULL)
 	{
 		GeanyDocument *doc = document_get_current();
@@ -1437,7 +1438,7 @@ on_insert_date_activate                (GtkMenuItem     *menuitem,
 	else
 	{
 		setptr(ui_prefs.custom_date_format,
-			dialogs_show_input(_("Custom Date Format"),
+			dialogs_show_input(_("Custom Date Format"), GTK_WINDOW(main_widgets.window),
 				_("Enter here a custom date and time format. "
 				"You can use any conversion specifiers which can be used with the ANSI C strftime function."),
 				ui_prefs.custom_date_format));

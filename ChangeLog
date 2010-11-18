@@ -1,3 +1,12 @@
+2010-11-18  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/build.c, src/dialogs.c, src/dialogs.h, src/callbacks.c:
+   Re-focus Set Build Commands/Project dialogs after editing a build
+   command label.
+   Add 'parent' argument to some dialogs_show_input*() functions because
+   the dialog parent may not always be the main window.
+
+
 2010-11-17  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/build.c, doc/geany.txt, doc/geany.html:

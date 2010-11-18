@@ -45,17 +45,17 @@ void dialogs_show_word_count(void);
 
 void dialogs_show_color(gchar *colour);
 
-gchar *dialogs_show_input(const gchar *title, const gchar *label_text,
-	const gchar *default_text);
+gchar *dialogs_show_input(const gchar *title, GtkWindow *parent,
+	const gchar *label_text, const gchar *default_text);
 
-gchar *dialogs_show_input_goto_line(const gchar *title, const gchar *label_text,
-	const gchar *default_text);
+gchar *dialogs_show_input_goto_line(const gchar *title, GtkWindow *parent,
+	const gchar *label_text, const gchar *default_text);
 
-GtkWidget *dialogs_show_input_persistent(const gchar *title, const gchar *label_text,
-	const gchar *default_text, GeanyInputCallback input_cb);
+GtkWidget *dialogs_show_input_persistent(const gchar *title, GtkWindow *parent,
+	const gchar *label_text, const gchar *default_text, GeanyInputCallback input_cb);
 
 gboolean dialogs_show_input_numeric(const gchar *title, const gchar *label_text,
-									gdouble *value, gdouble min, gdouble max, gdouble step);
+	gdouble *value, gdouble min, gdouble max, gdouble step);
 
 void dialogs_show_file_properties(GeanyDocument *doc);
 

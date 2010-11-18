@@ -1274,7 +1274,7 @@ static void on_build_menu_item(GtkWidget *w, gpointer user_data)
 
 		if (! dialog)
 		{
-			dialog = dialogs_show_input_persistent(_("Custom Text"),
+			dialog = dialogs_show_input_persistent(_("Custom Text"), GTK_WINDOW(main_widgets.window),
 				_("Enter custom text here, all entered text is appended to the command."),
 				build_info.custom_target, &on_make_custom_input_response);
 		}
@@ -1816,9 +1816,11 @@ static void on_clear_dialog_regex_row(GtkEntry *regex, gpointer unused)
 
 static void on_label_button_clicked(GtkWidget *wid, gpointer user_data)
 {
-	RowWidgets *r = (RowWidgets*)user_data;
+	RowWidgets *r = user_data;
 	const gchar *old = gtk_button_get_label(GTK_BUTTON(wid));
-	gchar *str = dialogs_show_input(_("Set menu item label"), NULL, old);
+	/* FIXME: we should pass either build dialog or project dialog instead of NULL for parent */
+	gchar *str = dialogs_show_input(_("Set menu item label"),
+		NULL, NULL, old);
 
 	gtk_button_set_label(GTK_BUTTON(wid), str);
 	g_free(str);

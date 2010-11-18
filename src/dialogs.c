@@ -980,12 +980,13 @@ static void add_input_widgets(GtkWidget *dialog, GtkWidget *vbox,
  * 	and can be reshown.
  * Returns: the dialog widget. */
 static GtkWidget *
-dialogs_show_input_full(const gchar *title, const gchar *label_text, const gchar *default_text,
+dialogs_show_input_full(const gchar *title, GtkWindow *parent,
+						const gchar *label_text, const gchar *default_text,
 						gboolean persistent, GeanyInputCallback input_cb, GCallback insert_text_cb)
 {
 	GtkWidget *dialog, *vbox;
 
-	dialog = gtk_dialog_new_with_buttons(title, GTK_WINDOW(main_widgets.window),
+	dialog = gtk_dialog_new_with_buttons(title, parent,
 		GTK_DIALOG_DESTROY_WITH_PARENT, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 		GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL);
 	vbox = ui_dialog_vbox_new(GTK_DIALOG(dialog));
@@ -1014,10 +1015,11 @@ dialogs_show_input_full(const gchar *title, const gchar *label_text, const gchar
 /* Remember previous entry text in a combo box.
  * Returns: the dialog widget. */
 GtkWidget *
-dialogs_show_input_persistent(const gchar *title, const gchar *label_text, const gchar *default_text,
+dialogs_show_input_persistent(const gchar *title, GtkWindow *parent,
+		const gchar *label_text, const gchar *default_text,
 		GeanyInputCallback input_cb)
 {
-	return dialogs_show_input_full(title, label_text, default_text, TRUE, input_cb, NULL);
+	return dialogs_show_input_full(title, parent, label_text, default_text, TRUE, input_cb, NULL);
 }
 
 
@@ -1031,23 +1033,23 @@ static void on_dialog_input(const gchar *str)
 
 
 /* Returns: newly allocated string - a copy of either the entry text or default_text. */
-gchar *dialogs_show_input(const gchar *title, const gchar *label_text,
+gchar *dialogs_show_input(const gchar *title, GtkWindow *parent, const gchar *label_text,
 	const gchar *default_text)
 {
 	dialog_input = NULL;
-	dialogs_show_input_full(title, label_text, default_text, FALSE, on_dialog_input, NULL);
+	dialogs_show_input_full(title, parent, label_text, default_text, FALSE, on_dialog_input, NULL);
 	return NVL(dialog_input, g_strdup(default_text));
 }
 
 
 /* Returns: newly allocated copy of the entry text or NULL on cancel.
  * Specialised variant for Goto Line dialog. */
-gchar *dialogs_show_input_goto_line(const gchar *title, const gchar *label_text,
+gchar *dialogs_show_input_goto_line(const gchar *title, GtkWindow *parent, const gchar *label_text,
 	const gchar *default_text)
 {
 	dialog_input = NULL;
 	dialogs_show_input_full(
-		title, label_text, default_text, FALSE, on_dialog_input,
+		title, parent, label_text, default_text, FALSE, on_dialog_input,
 		G_CALLBACK(ui_editable_insert_text_callback));
 	return dialog_input;
 }
