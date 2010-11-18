@@ -1158,7 +1158,7 @@ static void build_exit_cb(GPid child_pid, gint status, gpointer user_data)
 
 static void run_exit_cb(GPid child_pid, gint status, gpointer user_data)
 {
-	RunInfo *run_info_data = (RunInfo*)user_data;
+	RunInfo *run_info_data = user_data;
 
 	g_spawn_close_pid(child_pid);
 
@@ -1779,7 +1779,7 @@ static void set_build_command_entry_text(GtkWidget *wid, const gchar *text)
 
 static void on_clear_dialog_row(GtkWidget *unused, gpointer user_data)
 {
-	RowWidgets *r = (RowWidgets*)user_data;
+	RowWidgets *r = user_data;
 	gint src;
 	enum GeanyBuildCmdEntries i;
 	GeanyBuildCommand *bc = get_next_build_cmd(NULL, r->grp, r->cmd, r->dst, &src);
@@ -1831,7 +1831,7 @@ static void on_label_button_clicked(GtkWidget *wid, gpointer user_data)
 
 static void on_entry_focus(GtkWidget *wid, GdkEventFocus *unused, gpointer user_data)
 {
-	RowWidgets *r = (RowWidgets*)user_data;
+	RowWidgets *r = user_data;
 
 	r->used_dst = TRUE;
 	set_row_color(r, NULL);
@@ -2554,8 +2554,8 @@ typedef struct ForEachData
 
 static void foreach_project_filetype(gpointer data, gpointer user_data)
 {
-	GeanyFiletype *ft = (GeanyFiletype*) data;
-	ForEachData *d = (ForEachData*) user_data;
+	GeanyFiletype *ft = data;
+	ForEachData *d = user_data;
 	gint i = 0;
 	gchar *regkey = g_strdup_printf("%serror_regex", ft->name);
 

@@ -323,7 +323,7 @@ static void update_ui(void)
 
 static void remove_foreach_project_filetype(gpointer data, gpointer user_data)
 {
-	GeanyFiletype *ft = (GeanyFiletype*)data;
+	GeanyFiletype *ft = data;
 	if (ft != NULL)
 	{
 		setptr(ft->projfilecmds, NULL);
