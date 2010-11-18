@@ -1437,11 +1437,12 @@ on_insert_date_activate                (GtkMenuItem     *menuitem,
 		format = ui_prefs.custom_date_format;
 	else
 	{
-		setptr(ui_prefs.custom_date_format,
-			dialogs_show_input(_("Custom Date Format"), GTK_WINDOW(main_widgets.window),
+		gchar *str = dialogs_show_input(_("Custom Date Format"), GTK_WINDOW(main_widgets.window),
 				_("Enter here a custom date and time format. "
 				"You can use any conversion specifiers which can be used with the ANSI C strftime function."),
-				ui_prefs.custom_date_format));
+				ui_prefs.custom_date_format);
+		if (str)
+			setptr(ui_prefs.custom_date_format, str);
 		return;
 	}
 

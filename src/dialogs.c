@@ -1032,13 +1032,13 @@ static void on_dialog_input(const gchar *str)
 }
 
 
-/* Returns: newly allocated string - a copy of either the entry text or default_text. */
+/* Returns: new copy of user input or NULL if cancelled. */
 gchar *dialogs_show_input(const gchar *title, GtkWindow *parent, const gchar *label_text,
 	const gchar *default_text)
 {
 	dialog_input = NULL;
 	dialogs_show_input_full(title, parent, label_text, default_text, FALSE, on_dialog_input, NULL);
-	return NVL(dialog_input, g_strdup(default_text));
+	return dialog_input;
 }
 
 

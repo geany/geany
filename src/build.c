@@ -1822,6 +1822,9 @@ static void on_label_button_clicked(GtkWidget *wid, gpointer user_data)
 	gchar *str = dialogs_show_input(_("Set menu item label"),
 		NULL, NULL, old);
 
+	if (!str)
+		return;
+
 	gtk_button_set_label(GTK_BUTTON(wid), str);
 	g_free(str);
 	r->used_dst = TRUE;

@@ -5,6 +5,10 @@
    command label.
    Add 'parent' argument to some dialogs_show_input*() functions because
    the dialog parent may not always be the main window.
+ * src/build.c, src/dialogs.c, src/callbacks.c:
+   Don't change default build command entry color when cancelling
+   label editing.
+   Make dialogs_show_input() return NULL when cancelled.
 
 
 2010-11-17  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
