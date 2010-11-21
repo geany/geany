@@ -1,3 +1,9 @@
+2010-11-21  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * data/filetypes.xml:
+   Add 'instanceif' keyword for PHP (closes #3109330).
+
+
 2010-11-18  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/build.c, src/dialogs.c, src/dialogs.h, src/callbacks.c:
