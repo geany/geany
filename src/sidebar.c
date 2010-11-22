@@ -1043,6 +1043,10 @@ void sidebar_init(void)
 
 		g_signal_connect(main_widgets.sidebar_notebook, "page-removed",
 			G_CALLBACK(sidebar_tabs_show_hide), NULL);
+
+		/* tabs may have changed when sidebar is reshown */
+		g_signal_connect(main_widgets.sidebar_notebook, "show",
+			G_CALLBACK(sidebar_tabs_show_hide), NULL);
 	}
 	sidebar_tabs_show_hide(GTK_NOTEBOOK(main_widgets.sidebar_notebook), NULL, 0, NULL);
 }

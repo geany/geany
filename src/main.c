@@ -192,7 +192,6 @@ static void apply_settings(void)
 		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(ui_lookup_widget(main_widgets.window, "menu_show_sidebar1")), FALSE);
 		ignore_callback = FALSE;
 	}
-	ui_sidebar_show_hide();
 
 	toolbar_apply_settings();
 	toolbar_update_ui();
@@ -1071,6 +1070,8 @@ gint main(gint argc, gchar **argv)
 	if (want_plugins)
 		plugins_load_active();
 #endif
+
+	ui_sidebar_show_hide();
 
 	/* set the active sidebar page after plugins have been loaded */
 	gtk_notebook_set_current_page(GTK_NOTEBOOK(main_widgets.sidebar_notebook), ui_prefs.sidebar_page);

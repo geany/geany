@@ -1577,7 +1577,10 @@ on_menu_show_sidebar1_toggled          (GtkCheckMenuItem *checkmenuitem,
 
 	ui_prefs.sidebar_visible = ! ui_prefs.sidebar_visible;
 
-	if (! interface_prefs.sidebar_openfiles_visible && ! interface_prefs.sidebar_symbol_visible)
+	/* show built-in tabs if no tabs visible */
+	if (ui_prefs.sidebar_visible &&
+		! interface_prefs.sidebar_openfiles_visible && ! interface_prefs.sidebar_symbol_visible &&
+		gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.sidebar_notebook)) <= 2)
 	{
 		interface_prefs.sidebar_openfiles_visible = TRUE;
 		interface_prefs.sidebar_symbol_visible = TRUE;

@@ -2,6 +2,12 @@
 
  * doc/geany.txt, doc/geany.html:
    Explain how to grep the source for Scintilla lexer properties.
+ * src/sidebar.c, src/callbacks.c, src/main.c:
+   Fix auto-displaying of sidebar tab bar when sidebar is reshown.
+   Only auto-display symbols and documents tabs when showing the
+   sidebar if there are no plugin tabs.
+   Don't hide the sidebar on startup if only plugin tabs are visible
+   (fixes #3101867).
 
 
 2010-11-21  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
