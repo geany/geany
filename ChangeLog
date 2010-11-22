@@ -8,6 +8,9 @@
    sidebar if there are no plugin tabs.
    Don't hide the sidebar on startup if only plugin tabs are visible
    (fixes #3101867).
+ * src/plugindata.h:
+   Make GEANY_API_VERSION, GEANY_ABI_VERSION macros instead of enums
+   so you can protect code with '#if GEANY_API_VERSION >= 200'.
 
 
 2010-11-21  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

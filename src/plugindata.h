@@ -43,21 +43,16 @@
 #include "editor.h"	/* GeanyIndentType */
 
 
-/* Note: We use enum instead of 'static const gint' to allow its use in global variable
- * initializing, otherwise we get errors like:
- * error: initializer element is not constant */
-/** Versioning data */
-enum {
-	/** The Application Programming Interface (API) version, incremented
-	 * whenever any plugin data types are modified or appended to. */
-	GEANY_API_VERSION = 199,
+/** The Application Programming Interface (API) version, incremented
+ * whenever any plugin data types are modified or appended to. */
+#define GEANY_API_VERSION 200
 
-	/** The Application Binary Interface (ABI) version, incremented whenever
-	 * existing fields in the plugin data types have to be changed or reordered. */
-	/* This should usually stay the same if fields are only appended, assuming only pointers to
-	 * structs and not structs themselves are declared by plugins. */
-	GEANY_ABI_VERSION = 68
-};
+/** The Application Binary Interface (ABI) version, incremented whenever
+ * existing fields in the plugin data types have to be changed or reordered.
+ * Changing this forces all plugins to be recompiled before Geany can load them. */
+/* This should usually stay the same if fields are only appended, assuming only pointers to
+ * structs and not structs themselves are declared by plugins. */
+#define GEANY_ABI_VERSION 68
 
 
 /** Defines a function to check the plugin is safe to load.
