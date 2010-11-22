@@ -3642,6 +3642,11 @@ an existing list.
 Here any special properties for the Scintilla lexer can be set in the
 format ``key.name.field=some.value``.
 
+Properties Geany uses are listed in the system filetype files. To find
+other properties you need Geany's source code::
+
+    egrep -o 'GetProperty\w*\("([^"]+)"[^)]+\)' scintilla/Lex*.cxx
+
 
 [settings] Section
 ``````````````````
