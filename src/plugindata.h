@@ -44,7 +44,13 @@
 
 
 /** The Application Programming Interface (API) version, incremented
- * whenever any plugin data types are modified or appended to. */
+ * whenever any plugin data types are modified or appended to.
+ *
+ * You can protect code that needs a higher API than e.g. 200 with:
+ * @code #if GEANY_API_VERSION >= 200
+ * 	some_newer_function();
+ * #endif @endcode
+ */
 #define GEANY_API_VERSION 200
 
 /** The Application Binary Interface (ABI) version, incremented whenever
