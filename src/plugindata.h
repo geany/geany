@@ -50,6 +50,9 @@
  * @code #if GEANY_API_VERSION >= 200
  * 	some_newer_function();
  * #endif @endcode
+ *
+ * @warning You should not test for values below 200 as previously
+ * @c GEANY_API_VERSION was defined as an enum value, not a macro.
  */
 #define GEANY_API_VERSION 200
 
