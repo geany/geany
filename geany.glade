@@ -5673,7 +5673,7 @@ Bottom
 				  <property name="visible">True</property>
 				  <property name="tooltip" translatable="yes">When &quot;smart&quot; home is enabled, the HOME key will move the caret to the first non-blank character of the line, unless it is already there, it moves to the very beginning of the line. When this feature is disabled, the HOME key always moves the caret to the start of the current line, regardless of its current position.</property>
 				  <property name="can_focus">True</property>
-				  <property name="label" translatable="yes">Enable &quot;smart&quot; home key</property>
+				  <property name="label" translatable="yes">&quot;Smart&quot; home key</property>
 				  <property name="use_underline">True</property>
 				  <property name="relief">GTK_RELIEF_NORMAL</property>
 				  <property name="focus_on_click">True</property>
@@ -5711,9 +5711,8 @@ Bottom
 			      <child>
 				<widget class="GtkCheckButton" id="check_folding">
 				  <property name="visible">True</property>
-				  <property name="tooltip" translatable="yes">Whether to enable folding the code</property>
 				  <property name="can_focus">True</property>
-				  <property name="label" translatable="yes">Enable folding</property>
+				  <property name="label" translatable="yes">Code folding</property>
 				  <property name="use_underline">True</property>
 				  <property name="relief">GTK_RELIEF_NORMAL</property>
 				  <property name="focus_on_click">True</property>
@@ -6391,7 +6390,7 @@ Match braces</property>
 				  <property name="visible">True</property>
 				  <property name="tooltip" translatable="yes">Insert matching closing tag for XML/HTML</property>
 				  <property name="can_focus">True</property>
-				  <property name="label" translatable="yes">XML/HTML tag autocompletion</property>
+				  <property name="label" translatable="yes">XML/HTML tag auto-closing</property>
 				  <property name="use_underline">True</property>
 				  <property name="relief">GTK_RELIEF_NORMAL</property>
 				  <property name="focus_on_click">True</property>
@@ -6738,7 +6737,7 @@ Match braces</property>
 			      <child>
 				<widget class="GtkCheckButton" id="check_autoclose_squote">
 				  <property name="visible">True</property>
-				  <property name="tooltip" translatable="yes">Auto-close simple quote when typing an opening one</property>
+				  <property name="tooltip" translatable="yes">Auto-close single quote when typing an opening one</property>
 				  <property name="can_focus">True</property>
 				  <property name="label" translatable="yes">Single quotes ' '</property>
 				  <property name="use_underline">True</property>

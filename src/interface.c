@@ -3699,7 +3699,7 @@ create_prefs_dialog (void)
   gtk_box_pack_start (GTK_BOX (vbox17), check_line_wrapping, FALSE, FALSE, 0);
   gtk_tooltips_set_tip (tooltips, check_line_wrapping, _("Wrap the line at the window border and continue it on the next line. Note: line wrapping has a high performance cost for large documents so should be disabled on slow machines."), NULL);
 
-  check_smart_home = gtk_check_button_new_with_mnemonic (_("Enable \"smart\" home key"));
+  check_smart_home = gtk_check_button_new_with_mnemonic (_("\"Smart\" home key"));
   gtk_widget_show (check_smart_home);
   gtk_box_pack_start (GTK_BOX (vbox17), check_smart_home, FALSE, FALSE, 0);
   gtk_tooltips_set_tip (tooltips, check_smart_home, _("When \"smart\" home is enabled, the HOME key will move the caret to the first non-blank character of the line, unless it is already there, it moves to the very beginning of the line. When this feature is disabled, the HOME key always moves the caret to the start of the current line, regardless of its current position."), NULL);
@@ -3709,10 +3709,9 @@ create_prefs_dialog (void)
   gtk_box_pack_start (GTK_BOX (vbox17), check_disable_dnd, FALSE, FALSE, 0);
   gtk_tooltips_set_tip (tooltips, check_disable_dnd, _("Disable drag and drop completely in the editor window so you can't drag and drop any selections within or outside of the editor window"), NULL);
 
-  check_folding = gtk_check_button_new_with_mnemonic (_("Enable folding"));
+  check_folding = gtk_check_button_new_with_mnemonic (_("Code folding"));
   gtk_widget_show (check_folding);
   gtk_box_pack_start (GTK_BOX (vbox17), check_folding, FALSE, FALSE, 0);
-  gtk_tooltips_set_tip (tooltips, check_folding, _("Whether to enable folding the code"), NULL);
 
   check_unfold_children = gtk_check_button_new_with_mnemonic (_("Fold/unfold all children of a fold point"));
   gtk_widget_show (check_unfold_children);
@@ -3908,7 +3907,7 @@ create_prefs_dialog (void)
   gtk_box_pack_start (GTK_BOX (vbox19), check_complete_snippets, FALSE, FALSE, 0);
   gtk_tooltips_set_tip (tooltips, check_complete_snippets, _("Type a defined short character sequence and complete it to a more complex string using a single keypress"), NULL);
 
-  check_xmltag = gtk_check_button_new_with_mnemonic (_("XML/HTML tag autocompletion"));
+  check_xmltag = gtk_check_button_new_with_mnemonic (_("XML/HTML tag auto-closing"));
   gtk_widget_show (check_xmltag);
   gtk_box_pack_start (GTK_BOX (vbox19), check_xmltag, FALSE, FALSE, 0);
   gtk_tooltips_set_tip (tooltips, check_xmltag, _("Insert matching closing tag for XML/HTML"), NULL);
@@ -4016,7 +4015,7 @@ create_prefs_dialog (void)
   gtk_table_attach (GTK_TABLE (table16), check_autoclose_squote, 0, 1, 3, 4,
                     (GtkAttachOptions) (GTK_FILL),
                     (GtkAttachOptions) (0), 0, 0);
-  gtk_tooltips_set_tip (tooltips, check_autoclose_squote, _("Auto-close simple quote when typing an opening one"), NULL);
+  gtk_tooltips_set_tip (tooltips, check_autoclose_squote, _("Auto-close single quote when typing an opening one"), NULL);
 
   check_autoclose_cbracket = gtk_check_button_new_with_mnemonic (_("Curly brackets { }"));
   gtk_widget_show (check_autoclose_cbracket);

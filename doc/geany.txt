@@ -1921,7 +1921,7 @@ Features
 Line wrapping
     Show long lines wrapped around to new display lines.
 
-Enable "smart" home key
+"Smart" home key
     Whether to move the cursor to the first non-whitespace character
     on the line when you hit the home key on your keyboard. Pressing it
     again will go to the very start of the line.
@@ -1929,7 +1929,7 @@ Enable "smart" home key
 Disable Drag and Drop
     Do not allow the dragging and dropping of selected text in documents.
 
-Enable folding
+Code folding
     Allow groups of lines in a document to be collapsed for easier
     navigation/editing.
 
@@ -2019,8 +2019,9 @@ Snippet Completion
     pre-defined text snippet.
     See `User-definable snippets`_.
 
-XML/HTML tag autocompletion
-    When you open an XML tag automatically generate its completion tag.
+XML/HTML tag auto-closing
+    When you open an XML/HTML tag automatically generate its
+    completion tag.
 
 Automatic continuation multi-line comments
     Continue automatically multi-line comments in languages like C, C++

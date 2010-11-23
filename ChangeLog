@@ -8,6 +8,9 @@
    Definition look for a tag declaration instead, as this is more
    useful. Likewise make Go to Tag Declaration search for a tag
    definition in this case also.
+ * src/interface.c, doc/geany.txt, doc/geany.html, geany.glade:
+   Don't use 'Enable' in pref labels when unnecessary.
+   Rename XML/HTML tag autocompletion -> auto-closing.
 
 
 2010-11-22  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
