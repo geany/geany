@@ -1721,7 +1721,7 @@ static gchar *write_data_to_disk(const gchar *locale_filename,
 
 		/* Use GIO API to save file (GVFS-safe) */
 		fp = g_file_new_for_path(locale_filename);
-		g_file_replace_contents(fp, data, len, NULL, FALSE,
+		g_file_replace_contents(fp, data, len, NULL, file_prefs.gio_unsafe_save_backup,
 			G_FILE_CREATE_NONE, NULL, NULL, &error);
 		g_object_unref(fp);
 #else

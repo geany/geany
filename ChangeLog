@@ -11,6 +11,10 @@
  * src/interface.c, doc/geany.txt, doc/geany.html, geany.glade:
    Don't use 'Enable' in pref labels when unnecessary.
    Rename XML/HTML tag autocompletion -> auto-closing.
+ * src/keyfile.c, src/document.c, src/document.h, doc/geany.txt,
+   doc/geany.html:
+   Add gio_unsafe_save_backup hidden pref (patch by Lex Trotman,
+   thanks).
 
 
 2010-11-22  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

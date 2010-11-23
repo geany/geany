@@ -4225,6 +4225,8 @@ use_safe_file_saving              Defines the mode how Geany saves files to    f
                                   break things seriously.
                                   The better approach would be to ensure your
                                   disk won't run out of free space.
+gio_unsafe_save_backup            Make a backup when using GIO unsafe file     false
+                                  saving. Backup is named `filename~`.
 **Search related**
 find_selection_type               See `Find selection`_.                       0
 **Build Menu related**

@@ -189,6 +189,8 @@ static void init_pref_groups(void)
 		"complete_snippets_whilst_editing", FALSE);
 	stash_group_add_boolean(group, &file_prefs.use_safe_file_saving,
 		"use_safe_file_saving", FALSE);
+	stash_group_add_boolean(group, &file_prefs.gio_unsafe_save_backup,
+		"gio_unsafe_save_backup", FALSE);
 	/* for backwards-compatibility */
 	stash_group_add_integer(group, &editor_prefs.indentation->hard_tab_width,
 		"indent_hard_tab_width", 8);
