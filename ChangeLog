@@ -19,6 +19,9 @@
    Add editor_get_prefs() instead of editor_get_long_line_*()
    functions. This general function can be extended to support
    various project and document overrides.
+ * src/keybindings.c, src/project.c, src/prefs.c, src/keyfile.c,
+   src/editor.c, src/editor.h:
+   Remove unnecessary 'global' from long line editor pref field names.
 
 
 2010-11-22  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

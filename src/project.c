@@ -635,7 +635,7 @@ static GeanyProject *create_project(void)
 	project->priv = &priv;
 
 	project->long_line_behaviour = 1 /* use global settings */;
-	project->long_line_column = editor_prefs.long_line_global_column;
+	project->long_line_column = editor_prefs.long_line_column;
 
 	app->project = project;
 	return project;
@@ -998,7 +998,7 @@ static gboolean load_config(const gchar *filename)
 	p->long_line_behaviour = utils_get_setting_integer(config, "long line marker",
 		"long_line_behaviour", 1 /* follow global */);
 	p->long_line_column = utils_get_setting_integer(config, "long line marker",
-		"long_line_column", editor_prefs.long_line_global_column);
+		"long_line_column", editor_prefs.long_line_column);
 	apply_editor_prefs();
 
 	build_load_menu(config, GEANY_BCS_PROJ, (gpointer)p);

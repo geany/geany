@@ -2328,10 +2328,10 @@ static void reflow_paragraph(GeanyEditor *editor)
 		/* use line break column if enabled */
 		column = eprefs->line_break_column;
 	}
-	else if (eprefs->long_line_global_type != 2)
+	else if (eprefs->long_line_type != 2)
 	{
 		/* use long line if enabled */
-		column = eprefs->long_line_global_column;
+		column = eprefs->long_line_column;
 	}
 	else
 	{

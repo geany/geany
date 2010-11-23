@@ -383,13 +383,13 @@ static gint editor_get_long_line_type(void)
 			case 1: /* use global settings */
 				break;
 			case 2: /* custom (enabled) */
-				return editor_prefs.long_line_global_type;
+				return editor_prefs.long_line_type;
 		}
 
-	if (!editor_prefs.long_line_global_enabled)
+	if (!editor_prefs.long_line_enabled)
 		return 2;
 	else
-		return editor_prefs.long_line_global_type;
+		return editor_prefs.long_line_type;
 }
 
 
@@ -398,7 +398,7 @@ static gint editor_get_long_line_column(void)
 	if (app->project && app->project->long_line_behaviour != 1 /* use global settings */)
 		return app->project->long_line_column;
 	else
-		return editor_prefs.long_line_global_column;
+		return editor_prefs.long_line_column;
 }
 
 
@@ -411,8 +411,8 @@ get_default_prefs(void)
 
 	/* project overrides */
 	eprefs.indentation = (GeanyIndentPrefs*)editor_get_indent_prefs(NULL);
-	eprefs.long_line_global_type = editor_get_long_line_type();
-	eprefs.long_line_global_column = editor_get_long_line_column();
+	eprefs.long_line_type = editor_get_long_line_type();
+	eprefs.long_line_column = editor_get_long_line_column();
 	return &eprefs;
 }
 
