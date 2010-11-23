@@ -1542,7 +1542,7 @@ static void load_user_tags(filetype_id ft_id)
 }
 
 
-gboolean symbols_goto_tag(const gchar *name, gboolean definition)
+static gboolean goto_tag(const gchar *name, gboolean definition)
 {
 	const gint forward_types = tm_tag_prototype_t | tm_tag_externvar_t;
 	gint type;
@@ -1565,18 +1565,38 @@ gboolean symbols_goto_tag(const gchar *name, gboolean definition)
 		GeanyDocument *new_doc = document_find_by_real_path(
 			tmtag->atts.entry.file->work_object.file_name);
 
-		/* not found in opened document, should open */
-		if (new_doc == NULL)
+		if (new_doc)
 		{
+			/* If we are already on the tag line, swap definition/declaration */
+			if (new_doc == old_doc &&
+				tmtag->atts.entry.line == (guint)sci_get_current_line(old_doc->editor->sci) + 1)
+			{
+				if (goto_tag(name, !definition))
+					return TRUE;
+			}
+		}
+		else
+		{
+			/* not found in opened document, should open */
 			new_doc = document_open_file(tmtag->atts.entry.file->work_object.file_name, FALSE, NULL, NULL);
 		}
 
 		if (navqueue_goto_line(old_doc, new_doc, tmtag->atts.entry.line))
 			return TRUE;
 	}
+	return FALSE;
+}
+
+
+gboolean symbols_goto_tag(const gchar *name, gboolean definition)
+{
+	if (goto_tag(name, definition))
+		return TRUE;
+
 	/* if we are here, there was no match and we are beeping ;-) */
 	utils_beep();
-	if (type == forward_types)
+
+	if (!definition)
 		ui_set_statusbar(FALSE, _("Forward declaration \"%s\" not found."), name);
 	else
 		ui_set_statusbar(FALSE, _("Definition of \"%s\" not found."), name);

@@ -3,6 +3,11 @@
  * src/interface.c, src/keybindings.c, src/callbacks.c,
    src/callbacks.h, geany.glade:
    Add 'Mark All' Search menu command.
+ * src/symbols.c, doc/geany.txt, doc/geany.html:
+   If the current word's tag is on the current line, make Go to Tag
+   Definition look for a tag declaration instead, as this is more
+   useful. Likewise make Go to Tag Declaration search for a tag
+   definition in this case also.
 
 
 2010-11-22  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

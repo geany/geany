@@ -1357,6 +1357,12 @@ current word is either the word nearest the edit cursor,
 or the word underneath the popup menu click position when the popup
 menu is used.
 
+.. note::
+    If the current word's tag is on the current line, Geany will try
+    to look for a tag declaration instead, as this is more useful.
+    Likewise 'Go to tag declaration' will search for a tag definition
+    in this case also.
+
 
 Go to tag declaration
 ^^^^^^^^^^^^^^^^^^^^^
