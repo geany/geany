@@ -418,7 +418,7 @@ get_default_prefs(void)
 
 
 /* Gets the prefs for the editor.
- * Prefs can be different according to project or filetype.
+ * Prefs can be different according to project or document.
  * @warning Always get a fresh result instead of keeping a pointer to it if the editor/project
  * settings may have changed, or if this function has been called for a different editor.
  * @param editor The editor, or @c NULL to get the default prefs.
@@ -1174,7 +1174,7 @@ get_default_indent_prefs(void)
 
 
 /** Gets the indentation prefs for the editor.
- * Prefs can be different according to project or filetype.
+ * Prefs can be different according to project or document.
  * @warning Always get a fresh result instead of keeping a pointer to it if the editor/project
  * settings may have changed, or if this function has been called for a different editor.
  * @param editor The editor, or @c NULL to get the default indent prefs.
