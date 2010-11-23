@@ -1,3 +1,10 @@
+2010-11-23  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/interface.c, src/keybindings.c, src/callbacks.c,
+   src/callbacks.h, geany.glade:
+   Add 'Mark All' Search menu command.
+
+
 2010-11-22  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * doc/geany.txt, doc/geany.html:

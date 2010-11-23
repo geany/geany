@@ -412,7 +412,7 @@ static void init_default_kb(void)
 	keybindings_set_item(group, GEANY_KEYS_SEARCH_FINDDOCUMENTUSAGE, NULL,
 		0, 0, "popup_finddocumentusage", _("Find Document Usage"), LW(find_document_usage1));
 	keybindings_set_item(group, GEANY_KEYS_SEARCH_MARKALL, NULL,
-		GDK_m, GDK_CONTROL_MASK | GDK_SHIFT_MASK, "find_markall", _("Mark All"), NULL);
+		GDK_m, GDK_CONTROL_MASK | GDK_SHIFT_MASK, "find_markall", _("_Mark All"), LW(mark_all1));
 
 	group = ADD_KB_GROUP(GOTO, _("Go to"), cb_func_goto_action);
 
