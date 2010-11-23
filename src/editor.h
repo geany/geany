@@ -104,14 +104,14 @@ GeanyIndentPrefs;
  * Some of these can be overridden per document or per project. */
 typedef struct GeanyEditorPrefs
 {
-	GeanyIndentPrefs *indentation;	/*< Default indentation prefs. @see editor_get_indent_prefs(). */
+	GeanyIndentPrefs *indentation;	/* Default indentation prefs. Use editor_get_indent_prefs(). */
 	gboolean	show_white_space;
 	gboolean	show_indent_guide;
 	gboolean	show_line_endings;
-	/* 0 - line, 1 - background. This setting may be overriden when a project is opened. Use
-	 * @c editor_get_long_line_type(). */
+	/* 0 - line, 1 - background, 2 - disabled.
+	 * This setting may be overriden when a project is opened. Use @c editor_get_prefs(). */
 	gint		long_line_global_type;
-	/* This setting may be overriden when a project is opened. Use @c editor_get_long_line_column(). */
+	/* This setting may be overriden when a project is opened. Use @c editor_get_prefs(). */
 	gint		long_line_global_column;
 	gchar		*long_line_color;
 	gboolean	show_markers_margin;		/* view menu */
@@ -229,10 +229,8 @@ void editor_snippets_init(void);
 
 void editor_snippets_free(void);
 
-/* 0 - line, 1 - background, 2 - disabled */
-gint editor_get_long_line_type(void);
+const GeanyEditorPrefs *editor_get_prefs(GeanyEditor *editor);
 
-gint editor_get_long_line_column(void);
 
 /* General editing functions */
 
