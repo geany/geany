@@ -4,6 +4,8 @@
    Update Scintilla to version 2.22.
    Keep Scintilla's directory structure mostly and only
    remove unused lexers.
+ * wscript:
+   Update Waf-based build system for Scintilla.
 
 
 2010-11-22  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
