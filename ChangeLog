@@ -6,6 +6,8 @@
    remove unused lexers.
  * wscript:
    Update Waf-based build system for Scintilla.
+ * scintilla/Makefile.am, scintilla/include/Makefile.am:
+   Update autotools-based build system for Scintilla.
 
 
 2010-11-22  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
