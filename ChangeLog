@@ -2,6 +2,9 @@
 
  * data/filetype_extensions.conf:
    Add *.latex pattern.
+ * src/interface.c, geany.glade:
+   Add note to indentation prefs page about using Project->Apply
+   Default Indentation for currently open documents.
 
 
 2010-11-23  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

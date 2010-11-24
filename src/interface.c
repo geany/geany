@@ -2652,6 +2652,7 @@ create_prefs_dialog (void)
   GtkWidget *label211;
   GtkWidget *vbox40;
   GtkWidget *label_project_indent_warning;
+  GtkWidget *label247;
   GtkWidget *frame27;
   GtkWidget *alignment30;
   GtkWidget *vbox25;
@@ -3772,6 +3773,13 @@ create_prefs_dialog (void)
   label_project_indent_warning = gtk_vbox_new (FALSE, 0);
   gtk_widget_show (label_project_indent_warning);
   gtk_box_pack_start (GTK_BOX (vbox40), label_project_indent_warning, FALSE, FALSE, 0);
+
+  label247 = gtk_label_new (_("Note: To apply these settings to all currently open documents, use <i>Project->Apply Default Indentation</i>."));
+  gtk_widget_show (label247);
+  gtk_box_pack_start (GTK_BOX (vbox40), label247, FALSE, FALSE, 0);
+  gtk_label_set_use_markup (GTK_LABEL (label247), TRUE);
+  gtk_label_set_line_wrap (GTK_LABEL (label247), TRUE);
+  gtk_misc_set_alignment (GTK_MISC (label247), 0, 0.5);
 
   frame27 = gtk_frame_new (NULL);
   gtk_widget_show (frame27);
@@ -5134,6 +5142,7 @@ create_prefs_dialog (void)
   GLADE_HOOKUP_OBJECT (prefs_dialog, label211, "label211");
   GLADE_HOOKUP_OBJECT (prefs_dialog, vbox40, "vbox40");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label_project_indent_warning, "label_project_indent_warning");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, label247, "label247");
   GLADE_HOOKUP_OBJECT (prefs_dialog, frame27, "frame27");
   GLADE_HOOKUP_OBJECT (prefs_dialog, alignment30, "alignment30");
   GLADE_HOOKUP_OBJECT (prefs_dialog, vbox25, "vbox25");
