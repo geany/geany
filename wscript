@@ -405,7 +405,7 @@ def build(bld):
             src/templates.h src/toolbar.h src/ui_utils.h src/utils.h
             plugins/geanyplugin.h plugins/geanyfunctions.h''')
         bld.install_files('${PREFIX}/include/geany/scintilla', '''
-            scintilla/include/SciLexer.h scintilla/include/Scintilla.h
+            scintilla/include/ILexer.h scintilla/include/SciLexer.h scintilla/include/Scintilla.h
             scintilla/include/Scintilla.iface scintilla/include/ScintillaWidget.h ''')
         bld.install_files('${PREFIX}/include/geany/tagmanager', '''
             tagmanager/include/tm_file_entry.h tagmanager/include/tm_project.h
