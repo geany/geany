@@ -1,3 +1,9 @@
+2010-11-25  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * geany_private.rc:
+   Reformat and improve the Windows resource file.
+
+
 2010-11-24  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * data/filetype_extensions.conf:
