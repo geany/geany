@@ -1,3 +1,9 @@
+2010-11-24  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * data/filetype_extensions.conf:
+   Add *.latex pattern.
+
+
 2010-11-23  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/interface.c, src/keybindings.c, src/callbacks.c,
