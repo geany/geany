@@ -1437,14 +1437,21 @@ static gint get_open_parenthesis_indent(ScintillaObject *sci, gint line)
 	if (depth < 0)
 	{
 		gint end_pos;
-		gint tab_width;
 
 		end_pos = pos + 1;
-		pos = sci_get_position_from_line(sci, sci_get_line_from_position(sci, end_pos));
-		tab_width = sci_get_tab_width(sci);
-		ret = 0;
-		for (; pos <= end_pos; pos = sci_get_position_after(sci, pos))
-			ret += (sci_get_char_at(sci, pos) == '\t') ? tab_width : 1;
+		line = sci_get_line_from_position(sci, end_pos);
+		/* don't indent if it would use the full line size since it is unlikely
+		 * somebody wants it */
+		if (end_pos < sci_get_line_end_position (sci, line) - 1)
+		{
+			gint tab_width;
+			
+			pos = sci_get_position_from_line(sci, line);
+			tab_width = sci_get_tab_width(sci);
+			ret = 0;
+			for (; pos <= end_pos; pos = sci_get_position_after(sci, pos))
+				ret += (sci_get_char_at(sci, pos) == '\t') ? tab_width : 1;
+		}
 	}
 	return ret;
 }
