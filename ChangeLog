@@ -1,3 +1,11 @@
+2010-11-28  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * data/filetypes.cpp, data/filetypes.vala, data/filetypes.glsl,
+   data/filetypes.cs, data/filetypes.c:
+   Disable preprocessor #define tracking for the CPP lexer
+   (enabled by default in Scintilla).
+
+
 2010-11-24  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * scintilla/*:
