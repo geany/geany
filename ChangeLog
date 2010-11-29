@@ -1,3 +1,10 @@
+2010-11-29  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/notebook.c:
+   Add 'Open in New Window' command in the notebook tab menu (based on
+   patch by Matthew Brush, thanks - #3118059).
+
+
 2010-11-28  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * data/filetypes.cpp, data/filetypes.vala, data/filetypes.glsl,
