@@ -1,3 +1,12 @@
+2010-11-29  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/document.c:
+   Fix not always reporting an error message when saving a document
+   fails.
+   Check result of fclose().
+   Set errno to 0 before doing disk I/O.
+
+
 2010-08-16  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * scintilla/LexMarkdown.cxx:

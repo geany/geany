@@ -1690,9 +1690,6 @@ _("An error occurred while converting the file from UTF-8 in \"%s\". The file re
 static gchar *write_data_to_disk(GeanyDocument *doc, const gchar *locale_filename,
 								 const gchar *data, gint len)
 {
-	FILE *fp;
-	gint bytes_written;
-	gint err = 0;
 	GError *error = NULL;
 
 	g_return_val_if_fail(doc != NULL, g_strdup(g_strerror(EINVAL)));
@@ -1700,19 +1697,30 @@ static gchar *write_data_to_disk(GeanyDocument *doc, const gchar *locale_filenam
 
 	if (! file_prefs.use_safe_file_saving)
 	{
+		FILE *fp;
+		gint bytes_written;
+		gboolean fail = FALSE;
+
+		/* Use POSIX API to preserve file metadata */
+		errno = 0;
 		fp = g_fopen(locale_filename, "wb");
-		if (G_UNLIKELY(fp == NULL))
+		if (fp == NULL)
+			fail = TRUE;
+		else
+		{
+			errno = 0;
+			bytes_written = fwrite(data, sizeof(gchar), len, fp);
+
+			if (len != bytes_written)
+				fail = TRUE;
+
+			if (fclose(fp) != 0)
+				fail = TRUE;
+		}
+		if (fail)
+		{
 			return g_strdup(g_strerror(errno));
-
-		bytes_written = fwrite(data, sizeof(gchar), len, fp);
-
-		if (G_UNLIKELY(len != bytes_written))
-			err = errno;
-
-		fclose(fp);
-
-		if (err != 0)
-			return g_strdup(g_strerror(err));
+		}
 	}
 	else
 	{
