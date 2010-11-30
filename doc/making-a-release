@@ -1,0 +1,27 @@
+Update NEWS & release date.
+Add changelog entry with release date.
+
+Export branch into a new directory (i.e. not usual working copy).
+Run 'make distcheck'.
+Delete the created archive and run 'make dist' and 'make dist-bzip2'.
+
+Put the resulting tarballs on uvena.de - upload to home directory
+and after the upload is finished move them into
+/home/www/files.uvena.de/geany/.
+Rename LATEST-IS-... to the new version number in
+/home/www/files.uvena.de/geany/ and /home/www/www.geany.org/files.
+Tag release in SVN, remove the branch if used.
+Add the GPG signatures (enrico?).
+Windows builds (enrico?).
+
+Website: update Releases, Documentation links and add a News item
+Update the manual data and links in the filesystem
+(/home/www/www.geany.org/manual/) and the two links on the Manual
+Wiki page.
+
+Announce on geany, devel, i18n mailing lists (check you're subscribed).
+Put a news item on Sourceforge (add a new release on Freshmeat.net
+and update the information on gnomefiles.org - enrico?).
+
+For non-trunk releases, merge NEWS into trunk and any branch-only
+commits that need to merged.
