@@ -1,3 +1,9 @@
+2010-11-30  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/utils.c:
+   Check result of fclose() for utils_write_file().
+
+
 2010-11-28  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * win32-config.h:
