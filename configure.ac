@@ -2,7 +2,7 @@ dnl Process this file with autoconf to produce a configure script.
 dnl $Id$
 
 AC_INIT(configure.ac)
-AM_INIT_AUTOMAKE(geany, 0.19.1)
+AM_INIT_AUTOMAKE(geany, 0.19.2)
 
 m4_ifdef([AM_SILENT_RULES],[AM_SILENT_RULES([yes])])
 
