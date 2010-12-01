@@ -1,3 +1,9 @@
+2010-12-01  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/document.c:
+   Warn about file truncation if unsafe file saving fails.
+
+
 2010-11-30  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/utils.c:

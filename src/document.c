@@ -1792,6 +1792,7 @@ static gchar *write_data_to_disk(const gchar *locale_filename,
 	{
 		gchar *msg = g_strdup(error->message);
 		g_error_free(error);
+		/* geany will warn about file truncation for unsafe saving below */
 		return msg;
 	}
 	return NULL;
@@ -1917,6 +1918,12 @@ gboolean document_save_file(GeanyDocument *doc, gboolean force)
 	if (errmsg != NULL)
 	{
 		ui_set_statusbar(TRUE, _("Error saving file (%s)."), errmsg);
+
+		if (!file_prefs.use_safe_file_saving)
+		{
+			setptr(errmsg,
+				g_strdup_printf(_("%s\n\nThe file on disk may now be truncated!"), errmsg));
+		}
 		dialogs_show_msgbox_with_secondary(GTK_MESSAGE_ERROR, _("Error saving file."), errmsg);
 		doc->priv->file_disk_status = FILE_OK;
 		utils_beep();
