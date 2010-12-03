@@ -363,6 +363,7 @@ ScintillaGTK::ScintillaGTK(_ScintillaObject *sci_) :
 }
 
 ScintillaGTK::~ScintillaGTK() {
+	g_idle_remove_by_data(this);
 }
 
 void ScintillaGTK::RealizeThis(GtkWidget *widget) {
