@@ -4,6 +4,8 @@
    Backport Scintilla HG fix: Remove styling idle in destructor to
    avoid crashing when idle called after ScintillaGTK instance
    destroyed (fixes #3111058).
+   This prevents a crash when closing a modified document (usually
+   without a trailing newline) and choosing Save.
 
 
 2010-12-01  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
