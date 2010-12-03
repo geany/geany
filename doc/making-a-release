@@ -1,5 +1,15 @@
+Let mailing lists know about the coming release.
+For major releases:
+* Agree string freeze period for translations.
+* Try to synchronize release date with geany-plugins.
+
+Ensure version numbers are all updated in:
+	configure.ac geany.nsi geany_private.rc win32-config.h wscript
+	doc/geany.txt
+Regenerate doc/geany.html.
+Set GEANY_CODENAME in src/geany.h.
 Update NEWS & release date.
-Add changelog entry with release date.
+Add changelog entry for new release.
 
 Export branch into a new directory (i.e. not usual working copy).
 Run 'make distcheck'.
@@ -10,18 +20,20 @@ and after the upload is finished move them into
 /home/www/files.uvena.de/geany/.
 Rename LATEST-IS-... to the new version number in
 /home/www/files.uvena.de/geany/ and /home/www/www.geany.org/files.
-Tag release in SVN, remove the branch if used.
-Add the GPG signatures (enrico?).
+Add the GPG signatures - use 'make sign' and check the public key
+can be found on the download page.
 Windows builds (enrico?).
 
-Website: update Releases, Documentation links and add a News item
+Tag release in SVN, remove the branch if used.
+
+Website: update Releases, Documentation links and add a News item.
 Update the manual data and links in the filesystem
 (/home/www/www.geany.org/manual/) and the two links on the Manual
 Wiki page.
 
 Announce on geany, devel, i18n mailing lists (check you're subscribed).
-Put a news item on Sourceforge (add a new release on Freshmeat.net
-and update the information on gnomefiles.org - enrico?).
+Put a news item on Sourceforge, add a new release on Freshmeat.net
+and update the information on gnomefiles.org.
 
 For non-trunk releases, merge NEWS into trunk and any branch-only
 commits that need to merged.
