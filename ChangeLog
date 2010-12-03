@@ -1,3 +1,11 @@
+2010-12-03  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * scintilla/ScintillaGTK.cxx:
+   Backport Scintilla HG fix: Remove styling idle in destructor to
+   avoid crashing when idle called after ScintillaGTK instance
+   destroyed (fixes #3111058).
+
+
 2010-12-01  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/document.c:
