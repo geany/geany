@@ -1,3 +1,8 @@
+2010-12-05  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * *.po: Update of po files for string freeze Geany 0.20
+
+
 2010-11-14  Frank Lanitz  <frank@frank.uvena.de>
 
  * de.po: Minor update of German translation.
@@ -10,14 +15,14 @@
 
 2010-11-04  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
- * es.po: Update of Spanish translation. Thanks to Lucas Vieites and 
-		  Nacho Cabanes for contributing. 
+ * es.po: Update of Spanish translation. Thanks to Lucas Vieites and
+		  Nacho Cabanes for contributing.
 
 2010-11-02  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * de.po: Minor update of German translation.
  * es.po: Update of Spanish translation. Thanks to Lucas Vieites for
-          contributing. 
+          contributing.
 
 
 2010-11-01  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
@@ -49,8 +54,8 @@
 2010-09-17  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * de.po: Minor update of German translation.
- * geany.pot: Remove file from version control as its an generated file. 
- 
+ * geany.pot: Remove file from version control as its an generated file.
+
 
 2010-08-25  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
