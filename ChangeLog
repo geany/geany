@@ -1,3 +1,11 @@
+2010-12-06  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/document.c:
+   Improve error message for document_save_file() if doc->file_name is
+   NULL (reusing existing strings).
+   Add warning about this in the API docs.
+
+
 2010-12-03  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * scintilla/ScintillaGTK.cxx:

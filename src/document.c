@@ -1823,14 +1823,17 @@ static gchar *save_doc(GeanyDocument *doc, const gchar *locale_filename,
 
 
 /**
- *  Saves the document. Saving includes replacing tabs by spaces,
- *  stripping trailing spaces and adding a final new line at the end of the file (all only if
- *  user enabled these features). Then the @c "document-before-save" signal is emitted,
+ *  Saves the document. Saving may include replacing tabs by spaces,
+ *  stripping trailing spaces and adding a final new line at the end of the file, depending
+ *  on user preferences. Then the @c "document-before-save" signal is emitted,
  *  allowing plugins to modify the document before it is saved, and data is
  *  actually written to disk. The filetype is set again or auto-detected if it wasn't set yet.
  *  Afterwards, the @c "document-save" signal is emitted for plugins.
  *
  *  If the file is not modified, this functions does nothing unless force is set to @c TRUE.
+ *
+ *  @note You should ensure @c doc->file_name is not @c NULL before calling this; otherwise
+ *  call dialogs_show_save_as().
  *
  *  @param doc The document to save.
  *  @param force Whether to save the file even if it is not modified (e.g. for Save As).
@@ -1852,7 +1855,7 @@ gboolean document_save_file(GeanyDocument *doc, gboolean force)
 
 	if (G_UNLIKELY(doc->file_name == NULL))
 	{
-		ui_set_statusbar(TRUE, _("Error saving file."));
+		ui_set_statusbar(TRUE, _("Error saving file (%s)."), _("Invalid filename"));
 		utils_beep();
 		return FALSE;
 	}
