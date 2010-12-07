@@ -10,6 +10,12 @@
  * src/main.c:
    Disable 'Send Selection to Terminal' item when not available
    instead of removing it to avoid trailing separator.
+ * doc/geany.txt, doc/geany.html:
+   Add 'Configuration file paths' section and link to it instead of
+   repeating typical system data and user config directory paths.
+   List 2 Tools->Configuration Files menu items.
+   Add 'Plugin Manager' section break.
+   Edit some related sections.
 
 
 2010-12-06  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
