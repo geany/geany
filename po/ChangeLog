@@ -1,7 +1,10 @@
 2010-12-07  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
- * pt.po: Update of Portugese translation. Thanks to André Glória for
+ * pt.po: Update of Portuguese translation. Thanks to André Glória for
           providing
+ * zh_CN.po:
+          Update of simplified Chinese translation. Thanks to
+          Xhacker Liu.
 
 
 2010-12-05  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
@@ -23,7 +26,7 @@
 2010-11-04  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * es.po: Update of Spanish translation. Thanks to Lucas Vieites and
-		  Nacho Cabanes for contributing.
+          Nacho Cabanes for contributing.
 
 2010-11-02  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
