@@ -814,7 +814,7 @@ static gchar *prepare_run_script(GeanyDocument *doc, gchar **vte_cmd_nonscript, 
 	}
 
 #ifdef HAVE_VTE
-	if (vte_info.load_vte && vc != NULL && vc->run_in_vte)
+	if (vte_info.have_vte && vc->run_in_vte)
 	{
 		if (vc->skip_run_script)
 		{
@@ -866,7 +866,7 @@ static GPid build_run_cmd(GeanyDocument *doc, gint cmdindex)
 	run_info[cmdindex].file_type_id = doc->file_type->id;
 
 #ifdef HAVE_VTE
-	if (vte_info.load_vte && vc != NULL && vc->run_in_vte)
+	if (vte_info.have_vte && vc->run_in_vte)
 	{
 		gchar *vte_cmd;
 

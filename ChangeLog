@@ -4,6 +4,9 @@
    Fix segfaults when using 'Send Selection to Terminal' and the VTE
    is not loaded, and when using Ctrl-A after enabling the 'Load VTE'
    pref (patch by Dimitar Zhekov, thanks).
+ * src/build.c, src/keyfile.c:
+   Fix some more wrong uses of vte_info.load_vte instead of
+   vte_info.have_vte.
 
 
 2010-12-06  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

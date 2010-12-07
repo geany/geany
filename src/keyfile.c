@@ -450,7 +450,7 @@ static void save_dialog_prefs(GKeyFile *config)
 	/* VTE */
 #ifdef HAVE_VTE
 	g_key_file_set_boolean(config, "VTE", "load_vte", vte_info.load_vte);
-	if (vte_info.load_vte && vc != NULL)
+	if (vte_info.have_vte)
 	{
 		gchar *tmp_string;
 
