@@ -16,6 +16,8 @@
    List 2 Tools->Configuration Files menu items.
    Add 'Plugin Manager' section break.
    Edit some related sections.
+ * doc/geany.txt, doc/geany.html:
+   Update Ignore Tags section with example and menu item.
 
 
 2010-12-06  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

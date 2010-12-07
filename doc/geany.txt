@@ -1621,16 +1621,30 @@ copy of the generated tags file because it will get overwritten when
 upgrading Geany.
 
 
-Ignore tags
-^^^^^^^^^^^
+C Ignore tags
+^^^^^^^^^^^^^
 
-You can also ignore certain tags if they would lead to wrong parsing of
-the code. Simply create a file called "ignore.tags" in your Geany
-configuration directory (usually ``~/.config/geany/``). Then list all tags
-you want to ignore in this file, separated by spaces and/or newlines.
+You can ignore certain tags for C-based languages if they would lead
+to wrong parsing of the code. Use the *Tools->Configuration
+Files->ignore.tags* menu item to open the user ``ignore.tags`` file.
+See also `Configuration file paths`_.
 
-More detailed information about the usage from the Exuberant Ctags
-manual page::
+List all tag names you want to ignore in this file, separated by spaces
+and/or newlines.
+
+Example::
+
+    G_GNUC_NULL_TERMINATED
+    G_GNUC_PRINTF
+    G_GNUC_WARN_UNUSED_RESULT
+
+This will parse code like:
+
+``gchar **utils_strv_new(const gchar *first, ...)
+G_GNUC_NULL_TERMINATED;``
+
+More detailed information about ignore tags usage from the Exuberant Ctags
+manual page:
 
     Specifies a list of identifiers which are to be specially handled
     while  parsing C and C++ source files. This option is specifically
