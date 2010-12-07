@@ -7,6 +7,9 @@
  * src/build.c, src/keyfile.c:
    Fix some more wrong uses of vte_info.load_vte instead of
    vte_info.have_vte.
+ * src/main.c:
+   Disable 'Send Selection to Terminal' item when not available
+   instead of removing it to avoid trailing separator.
 
 
 2010-12-06  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

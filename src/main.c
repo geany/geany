@@ -214,10 +214,11 @@ static void apply_settings(void)
 
 #ifdef HAVE_VTE
 	if (! vte_info.have_vte)
-		gtk_widget_hide(ui_lookup_widget(main_widgets.window, "send_selection_to_vte1"));
-#else
-	gtk_widget_hide(ui_lookup_widget(main_widgets.window, "send_selection_to_vte1"));
 #endif
+	{
+		gtk_widget_set_sensitive(
+			ui_lookup_widget(main_widgets.window, "send_selection_to_vte1"), FALSE);
+	}
 
 	if (interface_prefs.sidebar_pos != GTK_POS_LEFT)
 		ui_swap_sidebar_pos();
