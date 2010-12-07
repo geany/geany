@@ -1,3 +1,11 @@
+2010-12-07  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/keybindings.c, src/callbacks.c, src/vte.h, src/main.c:
+   Fix segfaults when using 'Send Selection to Terminal' and the VTE
+   is not loaded, and when using Ctrl-A after enabling the 'Load VTE'
+   pref (patch by Dimitar Zhekov, thanks).
+
+
 2010-12-06  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/document.c:

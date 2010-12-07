@@ -30,8 +30,8 @@
 
 typedef struct
 {
-	gboolean load_vte;
-	gboolean have_vte;
+	gboolean load_vte;	/* this is the preference, NOT the current instance VTE state */
+	gboolean have_vte;	/* use this field to check if the current instance has VTE */
 	gchar	*lib_vte;
 	gchar	*dir;
 } VteInfo;

@@ -2445,7 +2445,7 @@ static gboolean cb_func_select_action(guint key_id)
 	}
 	/* special case for Select All in the VTE widget */
 #ifdef HAVE_VTE
-	else if (key_id == GEANY_KEYS_SELECT_ALL && vte_info.load_vte && focusw == vc->vte)
+	else if (key_id == GEANY_KEYS_SELECT_ALL && vte_info.have_vte && focusw == vc->vte)
 	{
 		vte_select_all();
 		return TRUE;

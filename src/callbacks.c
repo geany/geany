@@ -2168,7 +2168,7 @@ on_send_selection_to_vte1_activate     (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
 #ifdef HAVE_VTE
-	if (vte_info.load_vte)
+	if (vte_info.have_vte)
 		vte_send_selection_to_vte();
 #endif
 }
