@@ -6,7 +6,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: geany 0.19\n"
+"Project-Id-Version: geany 0.20\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-12-05 15:55+0100\n"
 "PO-Revision-Date: 2009-01-01 13:44+0100\n"
@@ -243,9 +243,8 @@ msgid "Error Regular Expression:"
 msgstr "正規表現エラー:"
 
 #: ../src/build.c:2013
-#, fuzzy
 msgid "Independent Commands"
-msgstr "ファイル種類なしの時のコマンド"
+msgstr "独自のコマンド"
 
 #: ../src/build.c:2043
 msgid "Note: Item 2 opens a dialog and appends the response to the command."
@@ -395,29 +394,24 @@ msgid "Detect from file"
 msgstr "ファイルから検出"
 
 #: ../src/dialogs.c:181
-#, fuzzy
 msgid "West European"
-msgstr "西ヨ－ロッパ(_W)"
+msgstr "西ヨ－ロッパ"
 
 #: ../src/dialogs.c:183
-#, fuzzy
 msgid "East European"
-msgstr "東ヨーロッパ(_E)"
+msgstr "東ヨーロッパ"
 
 #: ../src/dialogs.c:185
-#, fuzzy
 msgid "East Asian"
-msgstr "東アジア(_A)"
+msgstr "東アジア"
 
 #: ../src/dialogs.c:187
-#, fuzzy
 msgid "SE & SW Asian"
-msgstr "東南・西南アジア(_S)"
+msgstr "東南・西南アジア"
 
 #: ../src/dialogs.c:189
-#, fuzzy
 msgid "Middle Eastern"
-msgstr "中東(_M)"
+msgstr "中東"
 
 #: ../src/dialogs.c:191 ../src/encodings.c:120 ../src/encodings.c:121
 #: ../src/encodings.c:122 ../src/encodings.c:123 ../src/encodings.c:124
@@ -762,17 +756,17 @@ msgstr "エラーメッセージ: %s"
 #: ../src/document.c:1743
 #, c-format
 msgid "Failed to open file '%s' for writing: fopen() failed: %s"
-msgstr ""
+msgstr "ファイル '%s' 書き込みオープンに失敗: fopen() エラー: %s"
 
 #: ../src/document.c:1761
 #, c-format
 msgid "Failed to write file '%s': fwrite() failed: %s"
-msgstr ""
+msgstr "ファイル '%s' 書き込みに失敗: fwrite() エラー: %s"
 
 #: ../src/document.c:1775
 #, c-format
 msgid "Failed to close file '%s': fclose() failed: %s"
-msgstr ""
+msgstr "ファイル '%s' クローズに失敗: fclose() エラー: %s"
 
 #: ../src/document.c:1855 ../src/document.c:1927
 msgid "Error saving file."
@@ -790,6 +784,9 @@ msgid ""
 "\n"
 "The file on disk may now be truncated!"
 msgstr ""
+"%s\n"
+"\n"
+"ディスク上のファイルは破損しているかもしれません!"
 
 #: ../src/document.c:1951
 #, c-format
@@ -839,10 +836,9 @@ msgid "Try to resave the file?"
 msgstr "ファイルを保存し直しますか?"
 
 #: ../src/document.c:3020
-#, fuzzy, c-format
+#, c-format
 msgid "File \"%s\" was not found on disk!"
-msgstr ""
-"ディスク上にファイル \"%s\" にありません! ファイルを保存しなおしますか?"
+msgstr "ファイル \"%s\" はディスク上にありません!"
 
 #: ../src/editor.c:4326
 msgid "Enter Tab Width"
@@ -1295,17 +1291,15 @@ msgstr "指定行へ移動(_G)"
 
 #: ../src/interface.c:818 ../src/interface.c:2258
 msgid "_More"
-msgstr ""
+msgstr "その他(_M)"
 
 #: ../src/interface.c:825 ../src/keybindings.c:398
-#, fuzzy
 msgid "Find Next _Selection"
-msgstr "選択文字列を検索"
+msgstr "選択文字列を後方検索(_S)"
 
 #: ../src/interface.c:829 ../src/keybindings.c:400
-#, fuzzy
 msgid "Find Pre_vious Selection"
-msgstr "選択文字列を前に検索"
+msgstr "選択文字列を前方に検索(_V)"
 
 #: ../src/interface.c:838 ../src/interface.c:2340
 msgid "Find _Usage"
@@ -1316,9 +1310,8 @@ msgid "Find _Document Usage"
 msgstr "文書内で使用箇所を検索(_D)"
 
 #: ../src/interface.c:851 ../src/keybindings.c:415
-#, fuzzy
 msgid "_Mark All"
-msgstr "すべてメイク"
+msgstr "すべてメイク(_M)"
 
 #: ../src/interface.c:860 ../src/interface.c:2356
 msgid "Go to _Tag Definition"
@@ -1411,39 +1404,39 @@ msgstr "タブと空白(_A)"
 
 #: ../src/interface.c:1003
 msgid "Indent Widt_h"
-msgstr ""
+msgstr "インデント幅(_H)"
 
 #: ../src/interface.c:1010
 msgid "_1"
-msgstr ""
+msgstr "_1"
 
 #: ../src/interface.c:1016
 msgid "_2"
-msgstr ""
+msgstr "_2"
 
 #: ../src/interface.c:1022
 msgid "_3"
-msgstr ""
+msgstr "_3"
 
 #: ../src/interface.c:1028
 msgid "_4"
-msgstr ""
+msgstr "_4"
 
 #: ../src/interface.c:1034
 msgid "_5"
-msgstr ""
+msgstr "_5"
 
 #: ../src/interface.c:1040
 msgid "_6"
-msgstr ""
+msgstr "_6"
 
 #: ../src/interface.c:1046
 msgid "_7"
-msgstr ""
+msgstr "_7"
 
 #: ../src/interface.c:1052
 msgid "_8"
-msgstr ""
+msgstr "_8"
 
 #: ../src/interface.c:1063
 msgid "Read _Only"
@@ -1526,13 +1519,12 @@ msgid "_Close"
 msgstr "閉じる(_C)"
 
 #: ../src/interface.c:1213
-#, fuzzy
 msgid "_Apply Default Indentation"
-msgstr "自動インデント(_A)"
+msgstr "標準インデントを適用(_A)"
 
 #: ../src/interface.c:1216
 msgid "Apply the default indentation settings to all documents"
-msgstr ""
+msgstr "すべての文書に標準インデント設定を適用"
 
 #: ../src/interface.c:1222
 msgid "_Tools"
@@ -1607,9 +1599,8 @@ msgid "_Hide Toolbar"
 msgstr "ツールバーを隠す(_H)"
 
 #: ../src/interface.c:2239
-#, fuzzy
 msgid "I_nsert"
-msgstr "挿入"
+msgstr "挿入(_N)"
 
 #: ../src/interface.c:2319 ../src/keybindings.c:374
 msgid "_Insert Alternative White Space"
@@ -2074,9 +2065,8 @@ msgstr ""
 "返すと処理時間がかかるので、遅いコンピュータでは使わないでください。"
 
 #: ../src/interface.c:3703
-#, fuzzy
 msgid "\"Smart\" home key"
-msgstr "\"スマート\" ホームキーを有効にする"
+msgstr "\"スマート\" ホームキー"
 
 #: ../src/interface.c:3706
 msgid ""
@@ -2104,9 +2094,8 @@ msgstr ""
 "ん。"
 
 #: ../src/interface.c:3713
-#, fuzzy
 msgid "Code folding"
-msgstr "折りたたみを有効にする"
+msgstr "折りたたみ"
 
 #: ../src/interface.c:3717
 msgid "Fold/unfold all children of a fold point"
@@ -2169,6 +2158,8 @@ msgid ""
 "Note: To apply these settings to all currently open documents, use "
 "<i>Project->Apply Default Indentation</i>."
 msgstr ""
+"注: 現在開いている全てのドキュメントにこれらの設定を適用するには、"
+"<i>プロジェクト->標準インデントを適用</i> を使用します。"
 
 #: ../src/interface.c:3804 ../src/interface.c:5423
 msgid "Auto-indent mode:"
@@ -2251,13 +2242,12 @@ msgstr ""
 "で入力が完了します"
 
 #: ../src/interface.c:3918
-#, fuzzy
 msgid "XML/HTML tag auto-closing"
-msgstr "XMLタグの自動補完"
+msgstr "XML/HTML タグの自動補完"
 
 #: ../src/interface.c:3921
 msgid "Insert matching closing tag for XML/HTML"
-msgstr ""
+msgstr "XML/HTMLタグの対応を確認して挿入"
 
 #: ../src/interface.c:3923
 msgid "Automatic continuation of multi-line comments"
@@ -2327,16 +2317,15 @@ msgstr "括弧の補完 ( )"
 
 #: ../src/interface.c:4019
 msgid "Auto-close parenthesis when typing an opening one"
-msgstr "開括弧を入力すると閉括弧を補完する"
+msgstr "開括弧を入力すると閉括弧を補完します"
 
 #: ../src/interface.c:4021
 msgid "Single quotes ' '"
 msgstr "単一引用符の補完 ' '"
 
 #: ../src/interface.c:4026
-#, fuzzy
 msgid "Auto-close single quote when typing an opening one"
-msgstr "引用開始を入力すると引用終了を補完する"
+msgstr "単一引用符開始を入力すると単一引用符終了を補完します"
 
 #: ../src/interface.c:4028
 msgid "Curly brackets { }"
@@ -2344,7 +2333,7 @@ msgstr "波括弧の補完 {}"
 
 #: ../src/interface.c:4033
 msgid "Auto-close curly bracket when typing an opening one"
-msgstr "開波括弧を入力すると閉波括弧を補完する"
+msgstr "開波括弧を入力すると閉波括弧を補完します"
 
 #: ../src/interface.c:4035
 msgid "Square brackets [ ]"
@@ -2352,7 +2341,7 @@ msgstr "角括弧の補完 [ ]"
 
 #: ../src/interface.c:4040
 msgid "Auto-close square-bracket when typing an opening one"
-msgstr "開角括弧を入力すると閉角括弧を補完する"
+msgstr "開角括弧を入力すると閉角括弧を補完します"
 
 #: ../src/interface.c:4042
 msgid "Double quotes \" \""
@@ -2360,7 +2349,7 @@ msgstr "二重引用符の補完"
 
 #: ../src/interface.c:4047
 msgid "Auto-close double quote when typing an opening one"
-msgstr "二重引用開始を入力すると二重引用終了を補完する"
+msgstr "二重引用開始を入力すると二重引用終了を補完します"
 
 #: ../src/interface.c:4049
 msgid "<b>Auto-close quotes and brackets</b>"
@@ -2587,15 +2576,16 @@ msgid "Ensures that at the end of the file is a new line"
 msgstr "ファイルの終端に改行を追加します"
 
 #: ../src/interface.c:4382
-#, fuzzy
 msgid "Ensure consistent line endings"
-msgstr "ファイルの終端に改行を追加"
+msgstr "行の終端が正しいかどうか確認"
 
 #: ../src/interface.c:4385
 msgid ""
 "Ensures that newline characters always get converted before saving, avoiding "
 "mixed line endings in the same file"
 msgstr ""
+"ファイル内に別の改行文字が混在しないように、"
+"保存時に改行文字が正しいかどうか確認します。"
 
 #: ../src/interface.c:4387
 msgid "Strip trailing spaces and tabs"
@@ -3089,11 +3079,11 @@ msgstr "日付を挿入"
 
 #: ../src/keybindings.c:376
 msgid "Insert New Line Before Current"
-msgstr ""
+msgstr "現在の行の前に空行を挿入"
 
 #: ../src/keybindings.c:378
 msgid "Insert New Line After Current"
-msgstr ""
+msgstr "現在の行の後に空行を挿入"
 
 #: ../src/keybindings.c:380
 msgid "Settings"
@@ -3492,9 +3482,9 @@ msgstr "[ファイル...]"
 
 #. note for translators: library versions are printed after this
 #: ../src/main.c:526
-#, fuzzy, c-format
+#, c-format
 msgid "built on %s with "
-msgstr "(%s 以降にビルド)"
+msgstr "%s 以降に次を使用してビルド"
 
 #: ../src/main.c:619
 msgid "Move it now?"
@@ -4018,12 +4008,11 @@ msgstr "現在選択されているテキストで一致しているものをす
 
 #: ../src/search.c:754
 msgid "Fi_les:"
-msgstr ""
+msgstr "ファイル(_L):"
 
 #: ../src/search.c:768
-#, fuzzy
 msgid "File patterns, e.g. *.c *.h"
-msgstr "ファイルパターン:"
+msgstr "ファイルパターン 例 *.c *.h"
 
 #: ../src/search.c:780
 msgid "_Directory:"
@@ -4654,6 +4643,8 @@ msgid ""
 "line: %l / %L\t col: %c\t sel: %s\t %w      %t      %mmode: %M      "
 "encoding: %e      filetype: %f      scope: %S"
 msgstr ""
+"行: %l / %L\t 桁: %c\t 選択: %s\t %w      %t      %m行末: %M      "
+"文字: %e      種類: %f      スコープ: %S"
 
 #. RO = read-only
 #: ../src/ui_utils.c:205 ../src/ui_utils.c:212
@@ -4688,9 +4679,8 @@ msgid "MOD"
 msgstr "MOD"
 
 #: ../src/ui_utils.c:362
-#, fuzzy
 msgid " (new instance)"
-msgstr "継承"
+msgstr "(新規インスタンス)"
 
 #: ../src/ui_utils.c:392
 #, c-format
@@ -5087,19 +5077,16 @@ msgstr "特殊 HTML 記号を挿入(_I)"
 
 #. Add menuitem for html replacement functions
 #: ../plugins/htmlchars.c:753
-#, fuzzy
 msgid "_HTML Replacement"
-msgstr "HTML 置換"
+msgstr "HTML 置換(_H)"
 
 #: ../plugins/htmlchars.c:760
-#, fuzzy
 msgid "_Auto-replace Special Characters"
-msgstr "特殊記号を置換"
+msgstr "特殊記号を置換(_A)"
 
 #: ../plugins/htmlchars.c:769
-#, fuzzy
 msgid "_Replace Characters in Selection"
-msgstr "行/選択範囲を複製(_D)"
+msgstr "選択範囲の文字を置換(_R)"
 
 #: ../plugins/htmlchars.c:784
 msgid "Insert Special HTML Characters"
