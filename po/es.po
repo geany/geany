@@ -2,14 +2,15 @@
 # Spanish translation file for Geany 0.19
 # This file is distributed under the same license as the geany package.
 # Damián Viano <des@damianv.com.ar>, 2006, 2007.
-# Antonio Jiménez González <ajimenez@linuxmail.org>, 2009, 2010.
+# Antonio Jiménez González <ajimenez@linuxmail.org>, 2009 - 2010.
 # Lucas Vieites <lucasvieites@gmail.com>, 2010.
+
 msgid ""
 msgstr ""
 "Project-Id-Version: Geany 0.20\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-12-05 15:55+0100\n"
-"PO-Revision-Date: 2010-11-05 10:08+0100\n"
+"PO-Revision-Date: 2010-12-07 18:38+0100\n"
 "Last-Translator: lucasvieites@gmail.com\n"
 "Language-Team:  <es@li.org>\n"
 "Language: es\n"
@@ -243,9 +244,8 @@ msgid "Error Regular Expression:"
 msgstr "Expresión regular de error:"
 
 #: ../src/build.c:2013
-#, fuzzy
 msgid "Independent Commands"
-msgstr "Comandos generales para cualquier tipo de archivo"
+msgstr "Comandos independientes"
 
 #: ../src/build.c:2043
 msgid "Note: Item 2 opens a dialog and appends the response to the command."
@@ -765,16 +765,19 @@ msgstr "Mensaje de error: %s."
 #, c-format
 msgid "Failed to open file '%s' for writing: fopen() failed: %s"
 msgstr ""
+"Ha ocurrido un error al abrir el archivo «%s» para escritura: ha fallado fopen"
+"(): %s"
 
 #: ../src/document.c:1761
 #, c-format
 msgid "Failed to write file '%s': fwrite() failed: %s"
 msgstr ""
+"Ha ocurrido un error al escribir el archivo «%s»: ha fallado fwrite(): %s"
 
 #: ../src/document.c:1775
 #, c-format
 msgid "Failed to close file '%s': fclose() failed: %s"
-msgstr ""
+msgstr "Ha ocurrido un error al cerrar el archivo «%s»: ha fallado fclose(): %s"
 
 #: ../src/document.c:1855 ../src/document.c:1927
 msgid "Error saving file."
@@ -792,6 +795,9 @@ msgid ""
 "\n"
 "The file on disk may now be truncated!"
 msgstr ""
+"%s\n"
+"\n"
+"El archivo en el disco podría estar truncado."
 
 #: ../src/document.c:1951
 #, c-format
@@ -1318,9 +1324,8 @@ msgid "Find _Document Usage"
 msgstr "Encontrar _uso del documento"
 
 #: ../src/interface.c:851 ../src/keybindings.c:415
-#, fuzzy
 msgid "_Mark All"
-msgstr "Marcar todo"
+msgstr "_Marcar todo"
 
 #: ../src/interface.c:860 ../src/interface.c:2356
 msgid "Go to _Tag Definition"
@@ -1528,13 +1533,13 @@ msgid "_Close"
 msgstr "_Cerrar"
 
 #: ../src/interface.c:1213
-#, fuzzy
 msgid "_Apply Default Indentation"
-msgstr "Sangría _automática"
+msgstr "_Aplicar sangría predeterminada"
 
 #: ../src/interface.c:1216
 msgid "Apply the default indentation settings to all documents"
 msgstr ""
+"Aplicar la configuración de sangría predeterminada a todos los documentos"
 
 #: ../src/interface.c:1222
 msgid "_Tools"
@@ -2088,9 +2093,8 @@ msgstr ""
 "documentos grandes así que debería ser desactivada en maquinas lentas."
 
 #: ../src/interface.c:3703
-#, fuzzy
 msgid "\"Smart\" home key"
-msgstr "Activar la tecla inicio «inteligente»"
+msgstr "Tecla Inicio «inteligente»"
 
 #: ../src/interface.c:3706
 msgid ""
@@ -2100,8 +2104,8 @@ msgid ""
 "key always moves the caret to the start of the current line, regardless of "
 "its current position."
 msgstr ""
-"Cuando la tecla de inicio «inteligente» está activa, la tecla «Inicio» "
-"moverá el cursor al primer carácter no blanco de la línea, a menos que ya se "
+"Cuando la tecla de inicio «inteligente» está activa, la tecla «Inicio» moverá "
+"el cursor al primer carácter no blanco de la línea, a menos que ya se "
 "encuentre allí, en cuyo caso lo mueve al principio absoluto de la línea. "
 "Cuando esta funcionalidad está desactivada, la tecla «Inicio» siempre mueve "
 "el cursor al principio de la línea actual, independientemente de su posición "
@@ -2121,9 +2125,8 @@ msgstr ""
 "afuera de la ventana del editor"
 
 #: ../src/interface.c:3713
-#, fuzzy
 msgid "Code folding"
-msgstr "Activar plegado"
+msgstr "Plegado de código"
 
 #: ../src/interface.c:3717
 msgid "Fold/unfold all children of a fold point"
@@ -2190,6 +2193,8 @@ msgid ""
 "Note: To apply these settings to all currently open documents, use "
 "<i>Project->Apply Default Indentation</i>."
 msgstr ""
+"Nota: utilice <i>Proyecto/Aplicar sangría predeterminada</i> para aplicar "
+"estos ajustes a todos los documentos abiertos actualmente."
 
 #: ../src/interface.c:3804 ../src/interface.c:5423
 msgid "Auto-indent mode:"
@@ -2274,9 +2279,8 @@ msgstr ""
 "una cadena más compleja con sólo pulsar una tecla"
 
 #: ../src/interface.c:3918
-#, fuzzy
 msgid "XML/HTML tag auto-closing"
-msgstr "Autocompletado de etiquetas XML/HTML"
+msgstr "Cierre automático de etiquetas XML/HTML"
 
 #: ../src/interface.c:3921
 msgid "Insert matching closing tag for XML/HTML"
@@ -2360,7 +2364,6 @@ msgid "Single quotes ' '"
 msgstr "Comillas simples ' '"
 
 #: ../src/interface.c:4026
-#, fuzzy
 msgid "Auto-close single quote when typing an opening one"
 msgstr ""
 "Cerrar automáticamente comillas simples al escribir una comilla de apertura"
@@ -3548,9 +3551,9 @@ msgstr "[ARCHIVOS...]"
 
 #. note for translators: library versions are printed after this
 #: ../src/main.c:526
-#, fuzzy, c-format
+#, c-format
 msgid "built on %s with "
-msgstr "(compilado el día %s o después)"
+msgstr "compilado el día %s con"
 
 #: ../src/main.c:619
 msgid "Move it now?"
@@ -3567,8 +3570,8 @@ msgid ""
 "Your configuration directory has been successfully moved from \"%s\" to \"%s"
 "\"."
 msgstr ""
-"Su directorio de configuración se ha movido correctamente desde «%s» hacia "
-"«%s»."
+"Su directorio de configuración se ha movido correctamente desde «%s» hacia «%"
+"s»."
 
 #. for translators: the third %s in brackets is the error message which
 #. * describes why moving the dir didn't work
@@ -3578,8 +3581,8 @@ msgid ""
 "Your old configuration directory \"%s\" could not be moved to \"%s\" (%s). "
 "Please move manually the directory to the new location."
 msgstr ""
-"Su directorio de configuración antiguo «%s» no se ha podido mover hacia "
-"«%s» (%s). Mueva manualmente su antiguo directorio a la nueva ubicación."
+"Su directorio de configuración antiguo «%s» no se ha podido mover hacia «%s» (%"
+"s). Mueva manualmente su antiguo directorio a la nueva ubicación."
 
 #: ../src/main.c:721
 #, c-format
@@ -3826,8 +3829,7 @@ msgstr "La impresión de %s ha fallado (%s)."
 
 #: ../src/printing.c:878
 msgid "Please set a print command in the preferences dialog first."
-msgstr ""
-"Configure primero un comando de impresión en el diálogo «Preferencias»."
+msgstr "Configure primero un comando de impresión en el diálogo «Preferencias»."
 
 #: ../src/printing.c:886
 #, c-format
@@ -5444,8 +5446,8 @@ msgstr "_Directorio para guardar las copias de seguridad"
 #: ../plugins/saveactions.c:679
 msgid "Date/_Time format for backup files (\"man strftime\" for details):"
 msgstr ""
-"Formato de fecha/_hora para las copias de seguridad (consulte «man "
-"strftime», para más información):"
+"Formato de fecha/_hora para las copias de seguridad (consulte «man strftime», "
+"para más información):"
 
 #: ../plugins/saveactions.c:692
 msgid "Directory _levels to include in the backup destination:"
