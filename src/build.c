@@ -472,7 +472,7 @@ static GeanyBuildCommand *get_build_group(GeanyBuildSource src, GeanyBuildGroup 
 }
 
 
-/** Remove the specified Build menu item.
+/* * Remove the specified Build menu item.
  *
  * Makes the specified menu item configuration no longer exist. This
  * is different to setting fields to blank because the menu item
@@ -507,7 +507,7 @@ void build_remove_menu_item(GeanyBuildSource src, GeanyBuildGroup grp, gint cmd)
 }
 
 
-/** Get the @a GeanyBuildCommand structure for the specified Build menu item.
+/* * Get the @a GeanyBuildCommand structure for the specified Build menu item.
  *
  * Get the command for any menu item specified by @a src, @a grp and @a cmd even if it is
  * hidden by higher priority commands.
@@ -534,7 +534,7 @@ GeanyBuildCommand *build_get_menu_item(GeanyBuildSource src, GeanyBuildGroup grp
 }
 
 
-/** Get the @a GeanyBuildCommand structure for the menu item.
+/* * Get the @a GeanyBuildCommand structure for the menu item.
  *
  * Get the current highest priority command specified by @a grp and @a cmd.  This is the one
  * that the menu item will use if activated.
@@ -1455,7 +1455,7 @@ static void geany_menu_item_set_label(GtkWidget *w, const gchar *label)
 }
 
 
-/** Update the build menu to reflect changes in configuration or status.
+/* * Update the build menu to reflect changes in configuration or status.
  *
  * Sets the labels and number of visible items to match the highest
  * priority configured commands.  Also sets sensitivity if build commands are

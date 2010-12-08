@@ -27,34 +27,34 @@
 #define GEANY_BUILD_H 1
 
 /* Order is important (see GBO_TO_GBG, GBO_TO_CMD below) */
-/** Geany Known Build Commands.
+/* * Geany Known Build Commands.
  * These commands are named after their default use.
  * Only these commands can currently have keybindings.
  **/
 typedef enum
 {
-	GEANY_GBO_COMPILE,		/**< default compile file */
-	GEANY_GBO_BUILD,		/**< default build file */
-	GEANY_GBO_MAKE_ALL,		/**< default make */
-	GEANY_GBO_CUSTOM,		/**< default make user specified target */
-	GEANY_GBO_MAKE_OBJECT,	/**< default make object, make %e.o */
-	GEANY_GBO_EXEC,			/**< default execute ./%e */
-	GEANY_GBO_COUNT			/**< count of how many */
+	GEANY_GBO_COMPILE,		/* *< default compile file */
+	GEANY_GBO_BUILD,		/* *< default build file */
+	GEANY_GBO_MAKE_ALL,		/* *< default make */
+	GEANY_GBO_CUSTOM,		/* *< default make user specified target */
+	GEANY_GBO_MAKE_OBJECT,	/* *< default make object, make %e.o */
+	GEANY_GBO_EXEC,			/* *< default execute ./%e */
+	GEANY_GBO_COUNT			/* *< count of how many */
 } GeanyBuildType;
 
-/** Groups of Build menu items. */
+/* * Groups of Build menu items. */
 typedef enum
 {
-	GEANY_GBG_FT,		/**< filetype items */
-	GEANY_GBG_NON_FT,	/**< non filetype items.*/
-	GEANY_GBG_EXEC,		/**< execute items */
-	GEANY_GBG_COUNT		/**< count of groups. */
+	GEANY_GBG_FT,		/* *< filetype items */
+	GEANY_GBG_NON_FT,	/* *< non filetype items.*/
+	GEANY_GBG_EXEC,		/* *< execute items */
+	GEANY_GBG_COUNT		/* *< count of groups. */
 } GeanyBuildGroup;
 
 /* include the fixed widgets in an array indexed by groups */
 #define GBG_FIXED GEANY_GBG_COUNT
 
-/** Convert @c GeanyBuildType to @c GeanyBuildGroup.
+/* * Convert @c GeanyBuildType to @c GeanyBuildGroup.
  *
  * This macro converts @c GeanyBuildType enum values (the "known" commands)
  * to the group they are part of.
@@ -68,7 +68,7 @@ typedef enum
 #define GBO_TO_GBG(gbo) ((gbo)>GEANY_GBO_EXEC?GEANY_GBG_COUNT:((gbo)>=GEANY_GBO_EXEC?GEANY_GBG_EXEC: \
 						 ((gbo) >= GEANY_GBO_MAKE_ALL ? GEANY_GBG_NON_FT : GEANY_GBG_FT)))
 
-/** Convert @c GeanyBuildType to command index.
+/* * Convert @c GeanyBuildType to command index.
  *
  * This macro converts @c GeanyBuildType enum values (the "known" commands)
  * to the index within the group.
@@ -94,16 +94,16 @@ enum GeanyBuildFixedMenuItems
 	GBF_COUNT
 };
 
-/** Build menu item sources in increasing priority */
+/* * Build menu item sources in increasing priority */
 typedef enum
 {
-	GEANY_BCS_DEF,		/**< Default values. */
-	GEANY_BCS_FT,		/**< System filetype values. */
-	GEANY_BCS_HOME_FT,	/**< Filetypes in ~/.config/geany/filedefs */
-	GEANY_BCS_PREF,		/**< Preferences file ~/.config/geany/geany.conf */
-	GEANY_BCS_PROJ_FT,	/**< Project file filetype command */
-	GEANY_BCS_PROJ,		/**< Project file if open. */
-	GEANY_BCS_COUNT		/**< Count of sources. */
+	GEANY_BCS_DEF,		/* *< Default values. */
+	GEANY_BCS_FT,		/* *< System filetype values. */
+	GEANY_BCS_HOME_FT,	/* *< Filetypes in ~/.config/geany/filedefs */
+	GEANY_BCS_PREF,		/* *< Preferences file ~/.config/geany/geany.conf */
+	GEANY_BCS_PROJ_FT,	/* *< Project file filetype command */
+	GEANY_BCS_PROJ,		/* *< Project file if open. */
+	GEANY_BCS_COUNT		/* *< Count of sources. */
 } GeanyBuildSource;
 
 typedef struct GeanyBuildInfo
@@ -119,26 +119,26 @@ typedef struct GeanyBuildInfo
 
 extern GeanyBuildInfo build_info;
 
-/** The entries of a command for a menu item */
+/* * The entries of a command for a menu item */
 typedef enum GeanyBuildCmdEntries
 {
-	GEANY_BC_LABEL,				/**< The menu item label, _ marks mnemonic */
-	GEANY_BC_COMMAND,			/**< The command to run. */
-	GEANY_BC_WORKING_DIR,		/**< The directory to run in */
-	GEANY_BC_CMDENTRIES_COUNT	/**< Count of entries */
+	GEANY_BC_LABEL,				/* *< The menu item label, _ marks mnemonic */
+	GEANY_BC_COMMAND,			/* *< The command to run. */
+	GEANY_BC_WORKING_DIR,		/* *< The directory to run in */
+	GEANY_BC_CMDENTRIES_COUNT	/* *< Count of entries */
 } GeanyBuildCmdEntries;
 
-/** The command for a menu item. */
+/* * The command for a menu item. */
 typedef struct GeanyBuildCommand
 {
-	/** Pointers to g_string values of the command entries.
+	/* * Pointers to g_string values of the command entries.
 	 * Must be freed if the pointer is changed. */
-	gchar 		*label;						/**< Menu item label */
-	gchar		*command;					/**< Command to run */
-	gchar		*working_dir;				/**< working directory */
-	gboolean	 exists;					/**< If the entries have valid values. */
-	gboolean	 changed;					/**< Save on exit if @c changed, remove if not @c exist. */
-	gboolean	 old;						/**< Converted from old format. */
+	gchar 		*label;						/* *< Menu item label */
+	gchar		*command;					/* *< Command to run */
+	gchar		*working_dir;				/* *< working directory */
+	gboolean	 exists;					/* *< If the entries have valid values. */
+	gboolean	 changed;					/* *< Save on exit if @c changed, remove if not @c exist. */
+	gboolean	 old;						/* *< Converted from old format. */
 } GeanyBuildCommand;
 
 typedef struct BuildMenuItems

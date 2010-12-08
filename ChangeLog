@@ -1,3 +1,10 @@
+2010-12-08  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/build.c, src/build.h:
+   Replace doc-comments with '/* *' comments to show there's no build
+   API for plugins.
+
+
 2010-12-07  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/keybindings.c, src/callbacks.c, src/vte.h, src/main.c:
