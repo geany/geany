@@ -776,8 +776,6 @@ static GPid build_spawn_cmd(GeanyDocument *doc, const gchar *cmd, const gchar *d
 static gchar *prepare_run_script(GeanyDocument *doc, gchar **vte_cmd_nonscript, gint cmdindex)
 {
 	gchar *locale_filename = NULL;
-	gboolean have_project;
-	GeanyProject *project = app->project;
 	GeanyBuildCommand *cmd = NULL;
 	gchar *executable = NULL;
 	gchar *working_dir = NULL;
@@ -792,7 +790,6 @@ static gchar *prepare_run_script(GeanyDocument *doc, gchar **vte_cmd_nonscript, 
 
 	locale_filename = utils_get_locale_from_utf8(doc->file_name);
 
-	have_project = project != NULL;
 	cmd = get_build_cmd(doc, GEANY_GBG_EXEC, cmdindex, NULL);
 
 	cmd_string = build_replace_placeholder(doc, cmd->command);
