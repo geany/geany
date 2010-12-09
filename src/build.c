@@ -2043,7 +2043,9 @@ GtkWidget *build_commands_table(GeanyDocument *doc, GeanyBuildSource dst, BuildT
 	gtk_widget_set_sensitive(fields->nonfileregex, sensitivity);
 	gtk_widget_set_sensitive(clear, sensitivity);
 	++row;
-	label = gtk_label_new(_("Note: Item 2 opens a dialog and appends the response to the command."));
+	label = gtk_label_new(NULL);
+	ui_label_set_markup(GTK_LABEL(label), "<i>%s</i>",
+		_("Note: Item 2 opens a dialog and appends the response to the command."));
 	gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
 	gtk_table_attach(table, label, 0, DC_N_COL, row, row + 1, GTK_FILL, GTK_FILL | GTK_EXPAND,
 		entry_x_padding, entry_y_padding);
@@ -2062,7 +2064,8 @@ GtkWidget *build_commands_table(GeanyDocument *doc, GeanyBuildSource dst, BuildT
 	gtk_table_attach(table, sep, 0, DC_N_COL, row, row + 1, GTK_FILL, GTK_FILL | GTK_EXPAND,
 		entry_x_padding, sep_padding);
 	++row;
-	label = gtk_label_new(
+	label = gtk_label_new(NULL);
+	ui_label_set_markup(GTK_LABEL(label), "<i>%s</i>",
 		_("%d, %e, %f, %p are substituted in command and directory fields, see manual for details."));
 	gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
 	gtk_table_attach(table, label, 0, DC_N_COL, row, row + 1, GTK_FILL, GTK_FILL | GTK_EXPAND,

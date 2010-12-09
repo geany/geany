@@ -3,6 +3,8 @@
  * src/build.c:
    Reduce Set Build Commands dialog column 1 width by using '#' label.
    Fix memory leak.
+ * src/build.c:
+   Use italic for note labels in the Build Commands dialog.
 
 
 2010-12-08  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
