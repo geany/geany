@@ -1,3 +1,10 @@
+2010-12-09  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/build.c:
+   Reduce Set Build Commands dialog column 1 width by using '#' label.
+   Fix memory leak.
+
+
 2010-12-08  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/build.c, src/build.h:

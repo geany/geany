@@ -1844,7 +1844,7 @@ static void on_entry_focus(GtkWidget *wid, GdkEventFocus *unused, gpointer user_
 /* Column headings, array NULL-terminated */
 static const gchar *colheads[] =
 {
-	N_("Item"),
+	"#",
 	N_("Label"),
 	N_("Command"),
 	N_("Working directory"),
@@ -1869,8 +1869,11 @@ static RowWidgets *build_add_dialog_row(GeanyDocument *doc, GtkTable *table, gui
 	gint src;
 	enum GeanyBuildCmdEntries i;
 	guint column = 0;
+	gchar *text;
 
-	label = gtk_label_new(g_strdup_printf("%d:", cmd + 1));
+	text = g_strdup_printf("%d.", cmd + 1);
+	label = gtk_label_new(text);
+	g_free(text);
 	insensitive_color = &(gtk_widget_get_style(label)->text[GTK_STATE_INSENSITIVE]);
 	gtk_table_attach(table, label, column, column + 1, row, row + 1, GTK_FILL,
 		GTK_FILL | GTK_EXPAND, entry_x_padding, entry_y_padding);
