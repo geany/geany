@@ -6,10 +6,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: geany 0.19\n"
+"Project-Id-Version: geany 0.20\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-12-05 15:55+0100\n"
-"PO-Revision-Date: 2010-05-23 21:33+1000\n"
+"PO-Revision-Date: 2010-12-13 18:12+1100\n"
 "Last-Translator: Jeff Bailes <thepizzaking@gmail.com>\n"
 "Language-Team: British English <geany-i18n@uvena.de>\n"
 "Language: \n"
@@ -240,9 +240,8 @@ msgid "Error Regular Expression:"
 msgstr "Error Regular Expression:"
 
 #: ../src/build.c:2013
-#, fuzzy
 msgid "Independent Commands"
-msgstr "Non-Filetype Commands"
+msgstr "Independent Commands"
 
 #: ../src/build.c:2043
 msgid "Note: Item 2 opens a dialog and appends the response to the command."
@@ -394,29 +393,24 @@ msgid "Detect from file"
 msgstr "Detect from file"
 
 #: ../src/dialogs.c:181
-#, fuzzy
 msgid "West European"
-msgstr "_West European"
+msgstr "West European"
 
 #: ../src/dialogs.c:183
-#, fuzzy
 msgid "East European"
-msgstr "_East European"
+msgstr "East European"
 
 #: ../src/dialogs.c:185
-#, fuzzy
 msgid "East Asian"
-msgstr "East _Asian"
+msgstr "East Asian"
 
 #: ../src/dialogs.c:187
-#, fuzzy
 msgid "SE & SW Asian"
-msgstr "_SE & SW Asian"
+msgstr "SE & SW Asian"
 
 #: ../src/dialogs.c:189
-#, fuzzy
 msgid "Middle Eastern"
-msgstr "_Middle Eastern"
+msgstr "Middle Eastern"
 
 #: ../src/dialogs.c:191 ../src/encodings.c:120 ../src/encodings.c:121
 #: ../src/encodings.c:122 ../src/encodings.c:123 ../src/encodings.c:124
@@ -763,17 +757,17 @@ msgstr "Error message: %s."
 #: ../src/document.c:1743
 #, c-format
 msgid "Failed to open file '%s' for writing: fopen() failed: %s"
-msgstr ""
+msgstr "Failed to open file '%s' for writing: fopen() failed: %s"
 
 #: ../src/document.c:1761
 #, c-format
 msgid "Failed to write file '%s': fwrite() failed: %s"
-msgstr ""
+msgstr "Failed to write file '%s': fwrite() failed: %s"
 
 #: ../src/document.c:1775
 #, c-format
 msgid "Failed to close file '%s': fclose() failed: %s"
-msgstr ""
+msgstr "Failed to close file '%s': fclose() failed: %s"
 
 #: ../src/document.c:1855 ../src/document.c:1927
 msgid "Error saving file."
@@ -791,6 +785,9 @@ msgid ""
 "\n"
 "The file on disk may now be truncated!"
 msgstr ""
+"%s\n"
+"\n"
+"The file on disk may now be truncated!"
 
 #: ../src/document.c:1951
 #, c-format
@@ -841,9 +838,9 @@ msgid "Try to resave the file?"
 msgstr "Try to resave the file?"
 
 #: ../src/document.c:3020
-#, fuzzy, c-format
+#, c-format
 msgid "File \"%s\" was not found on disk!"
-msgstr "File \"%s\" was not found on disk! Try to resave the file?"
+msgstr "File \"%s\" was not found on disk!"
 
 #: ../src/editor.c:4326
 msgid "Enter Tab Width"
@@ -1297,17 +1294,15 @@ msgstr "_Go to Line"
 
 #: ../src/interface.c:818 ../src/interface.c:2258
 msgid "_More"
-msgstr ""
+msgstr "_More"
 
 #: ../src/interface.c:825 ../src/keybindings.c:398
-#, fuzzy
 msgid "Find Next _Selection"
-msgstr "Find Next Selection"
+msgstr "Find Next _Selection"
 
 #: ../src/interface.c:829 ../src/keybindings.c:400
-#, fuzzy
 msgid "Find Pre_vious Selection"
-msgstr "Find Previous Selection"
+msgstr "Find Pre_vious Selection"
 
 #: ../src/interface.c:838 ../src/interface.c:2340
 msgid "Find _Usage"
@@ -1318,9 +1313,8 @@ msgid "Find _Document Usage"
 msgstr "Find _Document Usage"
 
 #: ../src/interface.c:851 ../src/keybindings.c:415
-#, fuzzy
 msgid "_Mark All"
-msgstr "Mark All"
+msgstr "_Mark All"
 
 #: ../src/interface.c:860 ../src/interface.c:2356
 msgid "Go to _Tag Definition"
@@ -1413,39 +1407,39 @@ msgstr "T_abs and Spaces"
 
 #: ../src/interface.c:1003
 msgid "Indent Widt_h"
-msgstr ""
+msgstr "Indent Widt_h"
 
 #: ../src/interface.c:1010
 msgid "_1"
-msgstr ""
+msgstr "_1"
 
 #: ../src/interface.c:1016
 msgid "_2"
-msgstr ""
+msgstr "_2"
 
 #: ../src/interface.c:1022
 msgid "_3"
-msgstr ""
+msgstr "_3"
 
 #: ../src/interface.c:1028
 msgid "_4"
-msgstr ""
+msgstr "_4"
 
 #: ../src/interface.c:1034
 msgid "_5"
-msgstr ""
+msgstr "_5"
 
 #: ../src/interface.c:1040
 msgid "_6"
-msgstr ""
+msgstr "_6"
 
 #: ../src/interface.c:1046
 msgid "_7"
-msgstr ""
+msgstr "_7"
 
 #: ../src/interface.c:1052
 msgid "_8"
-msgstr ""
+msgstr "_8"
 
 #: ../src/interface.c:1063
 msgid "Read _Only"
@@ -1528,13 +1522,12 @@ msgid "_Close"
 msgstr "_Close"
 
 #: ../src/interface.c:1213
-#, fuzzy
 msgid "_Apply Default Indentation"
-msgstr "_Auto-indentation"
+msgstr "_Apply Default Indentation"
 
 #: ../src/interface.c:1216
 msgid "Apply the default indentation settings to all documents"
-msgstr ""
+msgstr "Apply the default indentation settings to all documents"
 
 #: ../src/interface.c:1222
 msgid "_Tools"
@@ -1609,9 +1602,8 @@ msgid "_Hide Toolbar"
 msgstr "_Hide Toolbar"
 
 #: ../src/interface.c:2239
-#, fuzzy
 msgid "I_nsert"
-msgstr "Insert"
+msgstr "I_nsert"
 
 #: ../src/interface.c:2319 ../src/keybindings.c:374
 msgid "_Insert Alternative White Space"
@@ -2082,9 +2074,8 @@ msgstr ""
 "disabled on slow machines."
 
 #: ../src/interface.c:3703
-#, fuzzy
 msgid "\"Smart\" home key"
-msgstr "Enable \"smart\" home key"
+msgstr "\"Smart\" home key"
 
 #: ../src/interface.c:3706
 msgid ""
@@ -2113,9 +2104,8 @@ msgstr ""
 "drop any selections within or outside of the editor window"
 
 #: ../src/interface.c:3713
-#, fuzzy
 msgid "Code folding"
-msgstr "Enable folding"
+msgstr "Code folding"
 
 #: ../src/interface.c:3717
 msgid "Fold/unfold all children of a fold point"
@@ -2178,6 +2168,8 @@ msgid ""
 "Note: To apply these settings to all currently open documents, use "
 "<i>Project->Apply Default Indentation</i>."
 msgstr ""
+"Note: To apply these settings to all currently open documents, use "
+"<i>Project->Apply Default Indentation</i>."
 
 #: ../src/interface.c:3804 ../src/interface.c:5423
 msgid "Auto-indent mode:"
@@ -2260,13 +2252,12 @@ msgstr ""
 "string using a single keypress"
 
 #: ../src/interface.c:3918
-#, fuzzy
 msgid "XML/HTML tag auto-closing"
-msgstr "XML tag autocompletion"
+msgstr "XML/HTML tag auto-closing"
 
 #: ../src/interface.c:3921
 msgid "Insert matching closing tag for XML/HTML"
-msgstr ""
+msgstr "Insert matching closing tag for XML/HTML"
 
 #: ../src/interface.c:3923
 msgid "Automatic continuation of multi-line comments"
@@ -2345,9 +2336,8 @@ msgid "Single quotes ' '"
 msgstr "Single quotes ' '"
 
 #: ../src/interface.c:4026
-#, fuzzy
 msgid "Auto-close single quote when typing an opening one"
-msgstr "Auto-close simple quote when typing an opening one"
+msgstr "Auto-close single quote when typing an opening one"
 
 #: ../src/interface.c:4028
 msgid "Curly brackets { }"
@@ -2601,15 +2591,16 @@ msgid "Ensures that at the end of the file is a new line"
 msgstr "Ensures that at the end of the file is a new line"
 
 #: ../src/interface.c:4382
-#, fuzzy
 msgid "Ensure consistent line endings"
-msgstr "Ensure new line at file end"
+msgstr "Ensure consistent line endings"
 
 #: ../src/interface.c:4385
 msgid ""
 "Ensures that newline characters always get converted before saving, avoiding "
 "mixed line endings in the same file"
 msgstr ""
+"Ensures that newline characters always get converted before saving, avoiding "
+"mixed line endings in the same file"
 
 #: ../src/interface.c:4387
 msgid "Strip trailing spaces and tabs"
@@ -3107,11 +3098,11 @@ msgstr "Insert date"
 
 #: ../src/keybindings.c:376
 msgid "Insert New Line Before Current"
-msgstr ""
+msgstr "Insert New Line Before Current"
 
 #: ../src/keybindings.c:378
 msgid "Insert New Line After Current"
-msgstr ""
+msgstr "Insert New Line After Current"
 
 #: ../src/keybindings.c:380
 msgid "Settings"
@@ -3510,9 +3501,9 @@ msgstr "[FILES...]"
 
 #. note for translators: library versions are printed after this
 #: ../src/main.c:526
-#, fuzzy, c-format
+#, c-format
 msgid "built on %s with "
-msgstr "(built on or after %s)"
+msgstr "built on %s with "
 
 #: ../src/main.c:619
 msgid "Move it now?"
@@ -4038,12 +4029,11 @@ msgstr "Replace all matches found in the currently selected text"
 
 #: ../src/search.c:754
 msgid "Fi_les:"
-msgstr ""
+msgstr "Fi_les:"
 
 #: ../src/search.c:768
-#, fuzzy
 msgid "File patterns, e.g. *.c *.h"
-msgstr "File patterns:"
+msgstr "File patterns, e.g. *.c *.h"
 
 #: ../src/search.c:780
 msgid "_Directory:"
@@ -4673,13 +4663,12 @@ msgstr "Show _Paths"
 
 #. Status bar statistics: col = column, sel = selection.
 #: ../src/ui_utils.c:175
-#, fuzzy
 msgid ""
 "line: %l / %L\t col: %c\t sel: %s\t %w      %t      %mmode: %M      "
 "encoding: %e      filetype: %f      scope: %S"
 msgstr ""
-"line: %d\t col: %d\t sel: %d\t %s      %s      mode: %s      encoding: %s "
-"%s      filetype: %s      scope: %s"
+"line: %l / %L\t col: %c\t sel: %s\t %w      %t      %mmode: %M      "
+"encoding: %e      filetype: %f      scope: %S"
 
 #. RO = read-only
 #: ../src/ui_utils.c:205 ../src/ui_utils.c:212
@@ -4714,9 +4703,8 @@ msgid "MOD"
 msgstr "MOD"
 
 #: ../src/ui_utils.c:362
-#, fuzzy
 msgid " (new instance)"
-msgstr "Inheritance"
+msgstr " (new instance)"
 
 #: ../src/ui_utils.c:392
 #, c-format
@@ -5118,19 +5106,16 @@ msgstr "_Insert Special HTML Characters"
 
 #. Add menuitem for html replacement functions
 #: ../plugins/htmlchars.c:753
-#, fuzzy
 msgid "_HTML Replacement"
-msgstr "HTML Replacement"
+msgstr "_HTML Replacement"
 
 #: ../plugins/htmlchars.c:760
-#, fuzzy
 msgid "_Auto-replace Special Characters"
-msgstr "Replace special characters"
+msgstr "_Auto-replace Special Characters"
 
 #: ../plugins/htmlchars.c:769
-#, fuzzy
 msgid "_Replace Characters in Selection"
-msgstr "_Duplicate Line or Selection"
+msgstr "_Replace Characters in Selection"
 
 #: ../plugins/htmlchars.c:784
 msgid "Insert Special HTML Characters"
