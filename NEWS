@@ -1,3 +1,9 @@
+Geany 0.19.2 (December 01, 2010)
+    Fixes:
+    * Fix bug where Geany did not always report an error message when
+      saving a document fails.
+
+
 Geany 0.19.1 (August 18, 2010)
 
     Fixes:
