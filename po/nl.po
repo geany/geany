@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: Geany 0.19\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-12-05 15:55+0100\n"
-"PO-Revision-Date: 2010-11-05 16:30+0100\n"
+"PO-Revision-Date: 2010-12-18 12:07+0100\n"
 "Last-Translator: Peter Scholtens <peter.scholtens@xs4all.nl>\n"
 "Language-Team: Dutch <geany-i18n@uvena.de>\n"
 "Language: nl\n"
@@ -246,9 +246,8 @@ msgid "Error Regular Expression:"
 msgstr "Reguliere expressie voor fouten:"
 
 #: ../src/build.c:2013
-#, fuzzy
 msgid "Independent Commands"
-msgstr "Geen-bestandstype commando's"
+msgstr "Onafhankelijke commando's"
 
 #: ../src/build.c:2043
 msgid "Note: Item 2 opens a dialog and appends the response to the command."
@@ -770,17 +769,17 @@ msgstr "Foutmelding: %s."
 #: ../src/document.c:1743
 #, c-format
 msgid "Failed to open file '%s' for writing: fopen() failed: %s"
-msgstr ""
+msgstr "Kan bestand '%s' niet openen: fopen() faalt: %s"
 
 #: ../src/document.c:1761
 #, c-format
 msgid "Failed to write file '%s': fwrite() failed: %s"
-msgstr ""
+msgstr "Kan niet schrijven naar bestand '%s': fwrite() faalt: %s"
 
 #: ../src/document.c:1775
 #, c-format
 msgid "Failed to close file '%s': fclose() failed: %s"
-msgstr ""
+msgstr "Kan bestand '%s' niet sluiten: fclose() faalt: %s"
 
 #: ../src/document.c:1855 ../src/document.c:1927
 msgid "Error saving file."
@@ -797,7 +796,7 @@ msgid ""
 "%s\n"
 "\n"
 "The file on disk may now be truncated!"
-msgstr ""
+msgstr "Het bestand is wellicht (verkeerd) afgebroken!"
 
 #: ../src/document.c:1951
 #, c-format
@@ -1325,7 +1324,6 @@ msgid "Find _Document Usage"
 msgstr "Zoek woord in document"
 
 #: ../src/interface.c:851 ../src/keybindings.c:415
-#, fuzzy
 msgid "_Mark All"
 msgstr "Alles markeren"
 
@@ -1424,35 +1422,35 @@ msgstr "Inspring breedte"
 
 #: ../src/interface.c:1010
 msgid "_1"
-msgstr ""
+msgstr "_1"
 
 #: ../src/interface.c:1016
 msgid "_2"
-msgstr ""
+msgstr "_2"
 
 #: ../src/interface.c:1022
 msgid "_3"
-msgstr ""
+msgstr "_3"
 
 #: ../src/interface.c:1028
 msgid "_4"
-msgstr ""
+msgstr "_4"
 
 #: ../src/interface.c:1034
 msgid "_5"
-msgstr ""
+msgstr "_5"
 
 #: ../src/interface.c:1040
 msgid "_6"
-msgstr ""
+msgstr "_6"
 
 #: ../src/interface.c:1046
 msgid "_7"
-msgstr ""
+msgstr "_7"
 
 #: ../src/interface.c:1052
 msgid "_8"
-msgstr ""
+msgstr "_8"
 
 #: ../src/interface.c:1063
 msgid "Read _Only"
@@ -1535,13 +1533,12 @@ msgid "_Close"
 msgstr "_Sluiten"
 
 #: ../src/interface.c:1213
-#, fuzzy
 msgid "_Apply Default Indentation"
-msgstr "_Automatisch inspringen"
+msgstr "Standaard inspringinstellingen"
 
 #: ../src/interface.c:1216
 msgid "Apply the default indentation settings to all documents"
-msgstr ""
+msgstr "Pas de standaard inspringinstellingen toe voor alle documenten"
 
 #: ../src/interface.c:1222
 msgid "_Tools"
@@ -2090,9 +2087,8 @@ msgstr ""
 "documenten, dus zou moeten worden uitgeschakeld op trage systemen."
 
 #: ../src/interface.c:3703
-#, fuzzy
 msgid "\"Smart\" home key"
-msgstr "Pas \"slimme\" home toets toe."
+msgstr "\"Slimme\" HOME toets"
 
 #: ../src/interface.c:3706
 msgid ""
@@ -2121,9 +2117,8 @@ msgstr ""
 "van of naar het venster kunt verslepen"
 
 #: ../src/interface.c:3713
-#, fuzzy
 msgid "Code folding"
-msgstr "Invouwen activeren"
+msgstr "Invouwen code"
 
 #: ../src/interface.c:3717
 msgid "Fold/unfold all children of a fold point"
@@ -2189,7 +2184,8 @@ msgstr "Functies"
 msgid ""
 "Note: To apply these settings to all currently open documents, use "
 "<i>Project->Apply Default Indentation</i>."
-msgstr ""
+msgstr "Opmerking: Om deze instellingen bij alle huidige geopende documenten toe te passen,"
+"gebruik <i>Project->Standaard inspringinstellingen</i>."
 
 #: ../src/interface.c:3804 ../src/interface.c:5423
 msgid "Auto-indent mode:"
@@ -2274,7 +2270,6 @@ msgstr ""
 "druk op een knop"
 
 #: ../src/interface.c:3918
-#, fuzzy
 msgid "XML/HTML tag auto-closing"
 msgstr "automatische XML/HTML-tag voltooiing"
 
@@ -2357,9 +2352,8 @@ msgid "Single quotes ' '"
 msgstr "Enkele aanhalingstekens"
 
 #: ../src/interface.c:4026
-#, fuzzy
 msgid "Auto-close single quote when typing an opening one"
-msgstr "Sluit bij een nieuw aanhalingsteken deze automatisch af"
+msgstr "Sluit bij een nieuwe enkele aanhalingsteken deze automatisch af"
 
 #: ../src/interface.c:4028
 msgid "Curly brackets { }"
@@ -3548,9 +3542,8 @@ msgstr "[BESTANDEN...]"
 
 #. note for translators: library versions are printed after this
 #: ../src/main.c:526
-#, fuzzy, c-format
 msgid "built on %s with "
-msgstr "(gebouwd op of na %s)"
+msgstr "gebouwd op %s mbv."
 
 #: ../src/main.c:619
 msgid "Move it now?"
@@ -5171,23 +5164,20 @@ msgstr "Voeg spec_iale HTML karakters toe"
 
 #. Add menuitem for html replacement functions
 #: ../plugins/htmlchars.c:753
-#, fuzzy
 msgid "_HTML Replacement"
-msgstr "HTML vervanging"
+msgstr "HTML vervangingsfuncties"
 
 #: ../plugins/htmlchars.c:760
-#, fuzzy
 msgid "_Auto-replace Special Characters"
-msgstr "Vervang speciale karakters"
+msgstr "Automatisch vervangen speciale karakters"
 
 #: ../plugins/htmlchars.c:769
-#, fuzzy
 msgid "_Replace Characters in Selection"
-msgstr "Kloon regel of selectie"
+msgstr "Vervang karakters in selectie"
 
 #: ../plugins/htmlchars.c:784
 msgid "Insert Special HTML Characters"
-msgstr "Voeg Speciale HTML Karakters in."
+msgstr "Voeg Speciale HTML karakters in"
 
 #: ../plugins/htmlchars.c:787
 msgid "Replace special characters"
