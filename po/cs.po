@@ -7,10 +7,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: geany 0.19\n"
+"Project-Id-Version: geany 0.20\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-12-05 15:55+0100\n"
-"PO-Revision-Date: 2010-06-17 15:05+0100\n"
+"PO-Revision-Date: 2010-12-05 15:55+0100\n"
 "Last-Translator: Karel Kolman <kolmis@gmail.com>\n"
 "Language-Team: Czech <geany-i18n@uvena.de>\n"
 "Language: cs\n"
@@ -55,7 +55,7 @@ msgstr "Rychlé a lehké IDE"
 #: ../src/about.c:223
 #, c-format
 msgid "(built on or after %s)"
-msgstr "(sestaveno na nebo po %s)"
+msgstr "(sestaveno %s nebo později)"
 
 #. gtk_container_add(GTK_CONTAINER(info_box), cop_label);
 #: ../src/about.c:254
@@ -252,9 +252,8 @@ msgid "Error Regular Expression:"
 msgstr "Regulární výraz indikující chybu:"
 
 #: ../src/build.c:2013
-#, fuzzy
 msgid "Independent Commands"
-msgstr "Příkazy nevázané na typ souboru"
+msgstr "Nezávislé příkazy"
 
 #: ../src/build.c:2043
 msgid "Note: Item 2 opens a dialog and appends the response to the command."
@@ -319,12 +318,11 @@ msgid "Do you really want to quit?"
 msgstr "Opravdu chcete ukončit program?"
 
 #: ../src/callbacks.c:228
-#, fuzzy, c-format
 msgid "%d file saved."
 msgid_plural "%d files saved."
-msgstr[0] "%s soubor uložen."
-msgstr[1] "%s soubory uloženy."
-msgstr[2] "%s souborů uloženo."
+msgstr[0] "%d soubor uložen."
+msgstr[1] "%d soubory uloženy."
+msgstr[2] "%d souborů uloženo."
 
 #: ../src/callbacks.c:490 ../src/document.c:2996 ../src/interface.c:380
 #: ../src/sidebar.c:683
@@ -406,29 +404,24 @@ msgid "Detect from file"
 msgstr "Zjistit podle souboru"
 
 #: ../src/dialogs.c:181
-#, fuzzy
 msgid "West European"
-msgstr "_Západoevropské"
+msgstr "Západoevropské"
 
 #: ../src/dialogs.c:183
-#, fuzzy
 msgid "East European"
-msgstr "_Východoevropské"
+msgstr "Východoevropské"
 
 #: ../src/dialogs.c:185
-#, fuzzy
 msgid "East Asian"
-msgstr "Východo_asijské"
+msgstr "Východoasijské"
 
 #: ../src/dialogs.c:187
-#, fuzzy
 msgid "SE & SW Asian"
-msgstr "_JV a JZ Asie"
+msgstr "JV a JZ Asie"
 
 #: ../src/dialogs.c:189
-#, fuzzy
 msgid "Middle Eastern"
-msgstr "_Střední Východ"
+msgstr "Střední Východ"
 
 #: ../src/dialogs.c:191 ../src/encodings.c:120 ../src/encodings.c:121
 #: ../src/encodings.c:122 ../src/encodings.c:123 ../src/encodings.c:124
@@ -773,17 +766,17 @@ msgstr "Chybová zpráva: %s."
 #: ../src/document.c:1743
 #, c-format
 msgid "Failed to open file '%s' for writing: fopen() failed: %s"
-msgstr ""
+msgstr "Chyba při otevírání souboru '%s' pro zápis: fopen() selhal: %s"
 
 #: ../src/document.c:1761
 #, c-format
 msgid "Failed to write file '%s': fwrite() failed: %s"
-msgstr ""
+msgstr "Chyba při zápisu souboru '%s': fwrite() selhal: %s"
 
 #: ../src/document.c:1775
 #, c-format
 msgid "Failed to close file '%s': fclose() failed: %s"
-msgstr ""
+msgstr "Chyba při zavírání souboru '%s': fclose() selhal: %s"
 
 #: ../src/document.c:1855 ../src/document.c:1927
 msgid "Error saving file."
@@ -801,6 +794,9 @@ msgid ""
 "\n"
 "The file on disk may now be truncated!"
 msgstr ""
+"%s\n"
+"\n"
+"Je možné, že je soubor nyní zkrácený!"
 
 #: ../src/document.c:1951
 #, c-format
@@ -852,9 +848,8 @@ msgid "Try to resave the file?"
 msgstr "Pokusit se soubor znovu uložit ?"
 
 #: ../src/document.c:3020
-#, fuzzy, c-format
 msgid "File \"%s\" was not found on disk!"
-msgstr "Soubor \"%s\" nebyl nalezen na disku! Zkusit znovu uložit?"
+msgstr "Soubor \"%s\" nebyl nalezen na disku!"
 
 #: ../src/editor.c:4326
 msgid "Enter Tab Width"
@@ -1309,17 +1304,15 @@ msgstr "Jít na _řádek..."
 
 #: ../src/interface.c:818 ../src/interface.c:2258
 msgid "_More"
-msgstr ""
+msgstr "_Více"
 
 #: ../src/interface.c:825 ../src/keybindings.c:398
-#, fuzzy
 msgid "Find Next _Selection"
-msgstr "Najít další výběr"
+msgstr "Najít da_lší výskyt označeného textu"
 
 #: ../src/interface.c:829 ../src/keybindings.c:400
-#, fuzzy
 msgid "Find Pre_vious Selection"
-msgstr "Najít předchozí výběr"
+msgstr "Najít _předchozí výskyt označeného textu"
 
 # Další možnost překladu "usage" je "používání".
 #: ../src/interface.c:838 ../src/interface.c:2340
@@ -1332,9 +1325,8 @@ msgid "Find _Document Usage"
 msgstr "Najít použití v _dokumentu"
 
 #: ../src/interface.c:851 ../src/keybindings.c:415
-#, fuzzy
 msgid "_Mark All"
-msgstr "Označit všechny výskyty"
+msgstr "_Označit všechny výskyty"
 
 #: ../src/interface.c:860 ../src/interface.c:2356
 msgid "Go to _Tag Definition"
@@ -1428,39 +1420,39 @@ msgstr "T_abelátory a mezery"
 
 #: ../src/interface.c:1003
 msgid "Indent Widt_h"
-msgstr ""
+msgstr "Šířka odsa_zení"
 
 #: ../src/interface.c:1010
 msgid "_1"
-msgstr ""
+msgstr "_1"
 
 #: ../src/interface.c:1016
 msgid "_2"
-msgstr ""
+msgstr "_2"
 
 #: ../src/interface.c:1022
 msgid "_3"
-msgstr ""
+msgstr "_3"
 
 #: ../src/interface.c:1028
 msgid "_4"
-msgstr ""
+msgstr "_4"
 
 #: ../src/interface.c:1034
 msgid "_5"
-msgstr ""
+msgstr "_5"
 
 #: ../src/interface.c:1040
 msgid "_6"
-msgstr ""
+msgstr "_6"
 
 #: ../src/interface.c:1046
 msgid "_7"
-msgstr ""
+msgstr "_7"
 
 #: ../src/interface.c:1052
 msgid "_8"
-msgstr ""
+msgstr "_8"
 
 #: ../src/interface.c:1063
 msgid "Read _Only"
@@ -1543,13 +1535,12 @@ msgid "_Close"
 msgstr "_Zavřít"
 
 #: ../src/interface.c:1213
-#, fuzzy
 msgid "_Apply Default Indentation"
-msgstr "_Automatické odsazování"
+msgstr "_Aplikuj automatické odsazení"
 
 #: ../src/interface.c:1216
 msgid "Apply the default indentation settings to all documents"
-msgstr ""
+msgstr "Aplikovat automatické odsazení na všechny dokumenty"
 
 #: ../src/interface.c:1222
 msgid "_Tools"
@@ -1625,9 +1616,8 @@ msgid "_Hide Toolbar"
 msgstr "_Skrýt panel nástrojů"
 
 #: ../src/interface.c:2239
-#, fuzzy
 msgid "I_nsert"
-msgstr "Vložit"
+msgstr "V_ložit"
 
 #: ../src/interface.c:2319 ../src/keybindings.c:374
 msgid "_Insert Alternative White Space"
@@ -2098,9 +2088,8 @@ msgstr ""
 "slabším hardwaru."
 
 #: ../src/interface.c:3703
-#, fuzzy
 msgid "\"Smart\" home key"
-msgstr "Zapnout \"chytrou\" klávesu home"
+msgstr "\"Chytrá\" klávesa home"
 
 #: ../src/interface.c:3706
 msgid ""
@@ -2110,7 +2099,7 @@ msgid ""
 "key always moves the caret to the start of the current line, regardless of "
 "its current position."
 msgstr ""
-"Je-li povolena \"chytrá\" klávesa, pak stisk klávesy HOME posune kurzor na "
+"Je-li povolena \"chytrá\" klávesa home, pak stisk klávesy HOME posune kurzor na "
 "první neprázdný znak na řádku, nachází-li se kurzor právě tam, je posunut na "
 "začátek rádku. Je-li tato volba vypnuta, stisknutí klávesy HOME posune "
 "kurzor vždy na začátek aktuálního řádku, nehledě na polohu kurzoru."
@@ -2128,9 +2117,8 @@ msgstr ""
 "označený text myší."
 
 #: ../src/interface.c:3713
-#, fuzzy
 msgid "Code folding"
-msgstr "Povolit skládání bloků kódu"
+msgstr "Skládání bloků kódu"
 
 #: ../src/interface.c:3717
 msgid "Fold/unfold all children of a fold point"
@@ -2194,6 +2182,8 @@ msgid ""
 "Note: To apply these settings to all currently open documents, use "
 "<i>Project->Apply Default Indentation</i>."
 msgstr ""
+"Poznámka: Pro aplikaci těchto nastavení na všechny aktuálně otevřené soubory použijte "
+"<i>Projekt->Aplikuj automatické odsazení</i>."
 
 #: ../src/interface.c:3804 ../src/interface.c:5423
 msgid "Auto-indent mode:"
@@ -2276,13 +2266,12 @@ msgstr ""
 "komplexnější řetězec pomocí jediného stisknutí tlačítka"
 
 #: ../src/interface.c:3918
-#, fuzzy
 msgid "XML/HTML tag auto-closing"
-msgstr "Autokompletace XML značek"
+msgstr "Autokompletace XML/HTML značek"
 
 #: ../src/interface.c:3921
 msgid "Insert matching closing tag for XML/HTML"
-msgstr ""
+msgstr "Vložit uzavírající XML/HTML značku"
 
 #: ../src/interface.c:3923
 msgid "Automatic continuation of multi-line comments"
@@ -2359,7 +2348,6 @@ msgid "Single quotes ' '"
 msgstr "Jednoduché uvozovky ' '"
 
 #: ../src/interface.c:4026
-#, fuzzy
 msgid "Auto-close single quote when typing an opening one"
 msgstr "Automaticky zavírat jednoduchou uvozovku po napsání levé"
 
@@ -2617,15 +2605,16 @@ msgid "Ensures that at the end of the file is a new line"
 msgstr "Zajistí, že soubor bude končit znakem nového řádku"
 
 #: ../src/interface.c:4382
-#, fuzzy
 msgid "Ensure consistent line endings"
-msgstr "Vkládat nový řádek na konec souboru"
+msgstr "Vynutit konzistentní konce řádků"
 
 #: ../src/interface.c:4385
 msgid ""
 "Ensures that newline characters always get converted before saving, avoiding "
 "mixed line endings in the same file"
 msgstr ""
+"Zajistí konverzi znaků konce řádku před uložením souboru, předchází výskytu "
+"nekonzistentních znaků konce řádku v souboru"
 
 #: ../src/interface.c:4387
 msgid "Strip trailing spaces and tabs"
@@ -3125,11 +3114,11 @@ msgstr "Vložit datum"
 
 #: ../src/keybindings.c:376
 msgid "Insert New Line Before Current"
-msgstr ""
+msgstr "Vložit nový řádek před aktuální"
 
 #: ../src/keybindings.c:378
 msgid "Insert New Line After Current"
-msgstr ""
+msgstr "Vložit nový řádek za aktuální"
 
 # Původní nepřesný překlad je "Sekce".
 #: ../src/keybindings.c:380
@@ -3479,10 +3468,11 @@ msgstr "Pro otevření souborů vytvořit novou instanci programu"
 msgid ""
 "Use this socket filename for communication with a running Geany instance"
 msgstr ""
+"Používat tento socket soubor pro komunikace s běžící instancí Geany"
 
 #: ../src/main.c:139
 msgid "Return a list of open documents in a running Geany instance"
-msgstr ""
+msgstr "Vrátit seznam souborů otevřených v běžící instanci Geany"
 
 #: ../src/main.c:141
 msgid "Set initial line number for the first opened file"
@@ -3530,9 +3520,8 @@ msgstr "[SOUBORY...]"
 
 #. note for translators: library versions are printed after this
 #: ../src/main.c:526
-#, fuzzy, c-format
 msgid "built on %s with "
-msgstr "(sestaveno na nebo po %s)"
+msgstr "sestaveno %s s "
 
 #: ../src/main.c:619
 msgid "Move it now?"
@@ -3898,7 +3887,7 @@ msgstr "Popis:"
 
 #: ../src/project.c:485
 msgid "File patterns:"
-msgstr "Vzor souborů:"
+msgstr "Masky souborů:"
 
 #: ../src/project.c:584
 #, c-format
@@ -4061,12 +4050,11 @@ msgstr "Nahradí všechny výskyty v aktuálně označeném textu"
 
 #: ../src/search.c:754
 msgid "Fi_les:"
-msgstr ""
+msgstr "Sou_bory"
 
 #: ../src/search.c:768
-#, fuzzy
 msgid "File patterns, e.g. *.c *.h"
-msgstr "Vzor souborů:"
+msgstr "Masky souborů, např. *.c *.h"
 
 #: ../src/search.c:780
 msgid "_Directory:"
@@ -4169,6 +4157,8 @@ msgid ""
 "another user.\n"
 "This is a fatal error and Geany will now quit."
 msgstr ""
+"Aplikace Geany se pokusila přistoupit na unix socket jiné běžící instance jiného uživatele.\n"
+"Jde o závažnou chybu a aplikace bude nyní ukončena."
 
 #: ../src/symbols.c:611 ../src/symbols.c:651 ../src/symbols.c:718
 msgid "Chapter"
@@ -4462,7 +4452,7 @@ msgstr "Setřídit podle _pořadí v souboru"
 
 #: ../src/templates.c:206
 msgid "Old"
-msgstr ""
+msgstr "Staré"
 
 #. custom actions defined in toolbar_init(): "New", "Open", "SearchEntry", "GotoEntry", "Build"
 #: ../src/toolbar.c:56
@@ -4704,13 +4694,12 @@ msgstr "Zobrazovat _cesty"
 
 #. Status bar statistics: col = column, sel = selection.
 #: ../src/ui_utils.c:175
-#, fuzzy
 msgid ""
 "line: %l / %L\t col: %c\t sel: %s\t %w      %t      %mmode: %M      "
 "encoding: %e      filetype: %f      scope: %S"
 msgstr ""
-"řádek: %d\t sloupec: %d\t výběr: %d\t %s      %s      mód: %s      kódování: "
-"%s %s      typ souboru: %s      rámec: %s"
+"řádek: %l / %L\t sloupec: %c\t výběr: %s\t %w      %t      %mmód: %M      "
+"kódování: %e      typ souboru: %f      rámec: %S"
 
 #. RO = read-only
 #: ../src/ui_utils.c:205 ../src/ui_utils.c:212
@@ -4746,9 +4735,8 @@ msgid "MOD"
 msgstr "ZMĚ"
 
 #: ../src/ui_utils.c:362
-#, fuzzy
 msgid " (new instance)"
-msgstr "Dědičnost"
+msgstr " (nová instance)"
 
 #: ../src/ui_utils.c:392
 #, c-format
@@ -5148,19 +5136,16 @@ msgstr "Vložit _speciální HTML znak"
 
 #. Add menuitem for html replacement functions
 #: ../plugins/htmlchars.c:753
-#, fuzzy
 msgid "_HTML Replacement"
-msgstr "HTML nahrazení"
+msgstr "_HTML nahrazení"
 
 #: ../plugins/htmlchars.c:760
-#, fuzzy
 msgid "_Auto-replace Special Characters"
-msgstr "Nahradit speciální znaky"
+msgstr "_Automaticky nahrazovat speciální znaky"
 
 #: ../plugins/htmlchars.c:769
-#, fuzzy
 msgid "_Replace Characters in Selection"
-msgstr "_Duplikovat řádek nebo výběr"
+msgstr "_Nahradit znaky ve výběru"
 
 #: ../plugins/htmlchars.c:784
 msgid "Insert Special HTML Characters"
