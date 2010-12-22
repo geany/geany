@@ -6,6 +6,8 @@
  * src/editor.c:
    Scroll to the current line when moving the cursor to the next
    cursor position in a snippet (#3139490).
+ * doc/geany.txt, doc/geany.html:
+   Add short 'View menu' section and 'Color schemes menu' section.
 
 
 2010-12-09  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

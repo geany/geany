@@ -297,6 +297,9 @@ The workspace has the following parts:
 
 * A status bar
 
+Most of these can be configured in the `Interface preferences`_, the
+`View menu`_, or the popup menu for the relevant area.
+
 Additional tabs may be added to the sidebar and message window by plugins.
 
 The position of the tabs can be selected in the interface preferences.
@@ -1461,6 +1464,27 @@ $       This matches the end of a line.
     distributed under the `License for Scintilla and SciTE`_.
 
 
+
+View menu
+---------
+The View menu allows various elements of the main window to be shown
+or hidden, and also provides various display-related editor options.
+
+Color schemes menu
+^^^^^^^^^^^^^^^^^^
+The Color schemes menu is available under the *View->Editor* submenu.
+It lists various color schemes for editor highlighting styles,
+including the default scheme first. Other items are available based
+on what color scheme files Geany found at startup.
+
+Color scheme files are read from the `Configuration file paths`_ under
+the ``colorschemes`` subdirectory. They should have the extension
+``.conf`` and currently only contain a `[named_styles] section`_. The
+default color scheme is read from ``filetypes.common``.
+
+.. note::
+    Some filetypes do not yet support named styles so will ignore
+    any chosen color scheme.
 
 Tags
 ----
@@ -3890,6 +3914,8 @@ different files.
     entry in the above example, but they must be declared after the
     original style.
 
+This section can be overridden with color scheme files - see the `Color
+schemes menu`_.
 
 [styling] Section
 `````````````````
