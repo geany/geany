@@ -2427,7 +2427,7 @@ void editor_goto_next_snippet_cursor(GeanyEditor *editor)
 		else
 			snippet_cursor_insert_pos += offset;
 
-		sci_set_current_position(sci, snippet_cursor_insert_pos, FALSE);
+		sci_set_current_position(sci, snippet_cursor_insert_pos, TRUE);
 	}
 	else
 	{

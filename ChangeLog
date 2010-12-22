@@ -3,6 +3,9 @@
  * src/interface.c, geany.glade:
    Split Preferences dialog Interface tab into subnotebook to reduce
    height of dialog (fixes #3141277). Reuses existing strings.
+ * src/editor.c:
+   Scroll to the current line when moving the cursor to the next
+   cursor position in a snippet (#3139490).
 
 
 2010-12-09  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
