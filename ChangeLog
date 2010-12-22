@@ -1,3 +1,10 @@
+2010-12-22  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/interface.c, geany.glade:
+   Split Preferences dialog Interface tab into subnotebook to reduce
+   height of dialog (fixes #3141277). Reuses existing strings.
+
+
 2010-12-09  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/build.c:

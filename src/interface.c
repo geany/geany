@@ -2539,6 +2539,7 @@ create_prefs_dialog (void)
   GtkWidget *label207;
   GtkWidget *label234;
   GtkWidget *label94;
+  GtkWidget *notebook6;
   GtkWidget *vbox14;
   GtkWidget *frame7;
   GtkWidget *alignment9;
@@ -2565,6 +2566,13 @@ create_prefs_dialog (void)
   GtkWidget *tagbar_font;
   GtkWidget *editor_font;
   GtkWidget *label99;
+  GtkWidget *frame23;
+  GtkWidget *alignment26;
+  GtkWidget *vbox22;
+  GtkWidget *check_statusbar_visible;
+  GtkWidget *label187;
+  GtkWidget *label248;
+  GtkWidget *vbox54;
   GtkWidget *frame29;
   GtkWidget *alignment32;
   GtkWidget *vbox26;
@@ -2589,11 +2597,7 @@ create_prefs_dialog (void)
   GtkWidget *label159;
   GtkWidget *combo_tab_editor;
   GtkWidget *label158;
-  GtkWidget *frame23;
-  GtkWidget *alignment26;
-  GtkWidget *vbox22;
-  GtkWidget *check_statusbar_visible;
-  GtkWidget *label187;
+  GtkWidget *label249;
   GtkWidget *label157;
   GtkWidget *vbox15;
   GtkWidget *frame28;
@@ -3184,9 +3188,13 @@ create_prefs_dialog (void)
   gtk_widget_show (label94);
   gtk_notebook_set_tab_label (GTK_NOTEBOOK (notebook2), gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook2), 0), label94);
 
+  notebook6 = gtk_notebook_new ();
+  gtk_widget_show (notebook6);
+  gtk_container_add (GTK_CONTAINER (notebook2), notebook6);
+
   vbox14 = gtk_vbox_new (FALSE, 10);
   gtk_widget_show (vbox14);
-  gtk_container_add (GTK_CONTAINER (notebook2), vbox14);
+  gtk_container_add (GTK_CONTAINER (notebook6), vbox14);
   gtk_container_set_border_width (GTK_CONTAINER (vbox14), 5);
 
   frame7 = gtk_frame_new (NULL);
@@ -3322,9 +3330,42 @@ create_prefs_dialog (void)
   gtk_frame_set_label_widget (GTK_FRAME (frame4), label99);
   gtk_label_set_use_markup (GTK_LABEL (label99), TRUE);
 
+  frame23 = gtk_frame_new (NULL);
+  gtk_widget_show (frame23);
+  gtk_box_pack_start (GTK_BOX (vbox14), frame23, FALSE, TRUE, 0);
+  gtk_frame_set_shadow_type (GTK_FRAME (frame23), GTK_SHADOW_NONE);
+
+  alignment26 = gtk_alignment_new (0.5, 0.5, 1, 1);
+  gtk_widget_show (alignment26);
+  gtk_container_add (GTK_CONTAINER (frame23), alignment26);
+  gtk_alignment_set_padding (GTK_ALIGNMENT (alignment26), 0, 0, 12, 0);
+
+  vbox22 = gtk_vbox_new (FALSE, 0);
+  gtk_widget_show (vbox22);
+  gtk_container_add (GTK_CONTAINER (alignment26), vbox22);
+
+  check_statusbar_visible = gtk_check_button_new_with_mnemonic (_("Show status bar"));
+  gtk_widget_show (check_statusbar_visible);
+  gtk_box_pack_start (GTK_BOX (vbox22), check_statusbar_visible, FALSE, FALSE, 0);
+  gtk_tooltips_set_tip (tooltips, check_statusbar_visible, _("Whether to show the status bar at the bottom of the main window"), NULL);
+
+  label187 = gtk_label_new (_("<b>Miscellaneous</b>"));
+  gtk_widget_show (label187);
+  gtk_frame_set_label_widget (GTK_FRAME (frame23), label187);
+  gtk_label_set_use_markup (GTK_LABEL (label187), TRUE);
+
+  label248 = gtk_label_new (_("Interface"));
+  gtk_widget_show (label248);
+  gtk_notebook_set_tab_label (GTK_NOTEBOOK (notebook6), gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook6), 0), label248);
+
+  vbox54 = gtk_vbox_new (FALSE, 10);
+  gtk_widget_show (vbox54);
+  gtk_container_add (GTK_CONTAINER (notebook6), vbox54);
+  gtk_container_set_border_width (GTK_CONTAINER (vbox54), 5);
+
   frame29 = gtk_frame_new (NULL);
   gtk_widget_show (frame29);
-  gtk_box_pack_start (GTK_BOX (vbox14), frame29, FALSE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox54), frame29, FALSE, TRUE, 0);
   gtk_frame_set_shadow_type (GTK_FRAME (frame29), GTK_SHADOW_NONE);
 
   alignment32 = gtk_alignment_new (0.5, 0.5, 1, 1);
@@ -3396,7 +3437,7 @@ create_prefs_dialog (void)
 
   frame9 = gtk_frame_new (NULL);
   gtk_widget_show (frame9);
-  gtk_box_pack_start (GTK_BOX (vbox14), frame9, FALSE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox54), frame9, FALSE, TRUE, 0);
   gtk_frame_set_shadow_type (GTK_FRAME (frame9), GTK_SHADOW_NONE);
 
   alignment12 = gtk_alignment_new (0.5, 0.5, 1, 1);
@@ -3469,29 +3510,9 @@ create_prefs_dialog (void)
   gtk_frame_set_label_widget (GTK_FRAME (frame9), label158);
   gtk_label_set_use_markup (GTK_LABEL (label158), TRUE);
 
-  frame23 = gtk_frame_new (NULL);
-  gtk_widget_show (frame23);
-  gtk_box_pack_start (GTK_BOX (vbox14), frame23, FALSE, TRUE, 0);
-  gtk_frame_set_shadow_type (GTK_FRAME (frame23), GTK_SHADOW_NONE);
-
-  alignment26 = gtk_alignment_new (0.5, 0.5, 1, 1);
-  gtk_widget_show (alignment26);
-  gtk_container_add (GTK_CONTAINER (frame23), alignment26);
-  gtk_alignment_set_padding (GTK_ALIGNMENT (alignment26), 0, 0, 12, 0);
-
-  vbox22 = gtk_vbox_new (FALSE, 0);
-  gtk_widget_show (vbox22);
-  gtk_container_add (GTK_CONTAINER (alignment26), vbox22);
-
-  check_statusbar_visible = gtk_check_button_new_with_mnemonic (_("Show status bar"));
-  gtk_widget_show (check_statusbar_visible);
-  gtk_box_pack_start (GTK_BOX (vbox22), check_statusbar_visible, FALSE, FALSE, 0);
-  gtk_tooltips_set_tip (tooltips, check_statusbar_visible, _("Whether to show the status bar at the bottom of the main window"), NULL);
-
-  label187 = gtk_label_new (_("<b>Miscellaneous</b>"));
-  gtk_widget_show (label187);
-  gtk_frame_set_label_widget (GTK_FRAME (frame23), label187);
-  gtk_label_set_use_markup (GTK_LABEL (label187), TRUE);
+  label249 = gtk_label_new_with_mnemonic (_("_More"));
+  gtk_widget_show (label249);
+  gtk_notebook_set_tab_label (GTK_NOTEBOOK (notebook6), gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook6), 1), label249);
 
   label157 = gtk_label_new (_("Interface"));
   gtk_widget_show (label157);
@@ -5034,6 +5055,7 @@ create_prefs_dialog (void)
   GLADE_HOOKUP_OBJECT (prefs_dialog, label207, "label207");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label234, "label234");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label94, "label94");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, notebook6, "notebook6");
   GLADE_HOOKUP_OBJECT (prefs_dialog, vbox14, "vbox14");
   GLADE_HOOKUP_OBJECT (prefs_dialog, frame7, "frame7");
   GLADE_HOOKUP_OBJECT (prefs_dialog, alignment9, "alignment9");
@@ -5059,6 +5081,13 @@ create_prefs_dialog (void)
   GLADE_HOOKUP_OBJECT (prefs_dialog, tagbar_font, "tagbar_font");
   GLADE_HOOKUP_OBJECT (prefs_dialog, editor_font, "editor_font");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label99, "label99");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, frame23, "frame23");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, alignment26, "alignment26");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, vbox22, "vbox22");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, check_statusbar_visible, "check_statusbar_visible");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, label187, "label187");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, label248, "label248");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, vbox54, "vbox54");
   GLADE_HOOKUP_OBJECT (prefs_dialog, frame29, "frame29");
   GLADE_HOOKUP_OBJECT (prefs_dialog, alignment32, "alignment32");
   GLADE_HOOKUP_OBJECT (prefs_dialog, vbox26, "vbox26");
@@ -5082,11 +5111,7 @@ create_prefs_dialog (void)
   GLADE_HOOKUP_OBJECT (prefs_dialog, label159, "label159");
   GLADE_HOOKUP_OBJECT (prefs_dialog, combo_tab_editor, "combo_tab_editor");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label158, "label158");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, frame23, "frame23");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, alignment26, "alignment26");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, vbox22, "vbox22");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, check_statusbar_visible, "check_statusbar_visible");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, label187, "label187");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, label249, "label249");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label157, "label157");
   GLADE_HOOKUP_OBJECT (prefs_dialog, vbox15, "vbox15");
   GLADE_HOOKUP_OBJECT (prefs_dialog, frame28, "frame28");
