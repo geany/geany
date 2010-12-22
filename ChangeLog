@@ -8,6 +8,8 @@
    cursor position in a snippet (#3139490).
  * doc/geany.txt, doc/geany.html:
    Add short 'View menu' section and 'Color schemes menu' section.
+ * src/plugindata.h, src/plugins.c, plugins/geanyfunctions.h:
+   Add filetypes_get_display_name() to API.
 
 
 2010-12-09  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

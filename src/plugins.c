@@ -304,7 +304,8 @@ static HighlightingFuncs highlighting_funcs = {
 static FiletypeFuncs filetype_funcs = {
 	&filetypes_detect_from_file,
 	&filetypes_lookup_by_name,
-	&filetypes_index
+	&filetypes_index,
+	&filetypes_get_display_name
 };
 
 static NavQueueFuncs navqueue_funcs = {
