@@ -1,3 +1,9 @@
+2010-12-22  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/utils.c:
+   Fix detecting non-lowercase self-closing tags e.g. <BR> (#2226117).
+
+
 2010-12-03  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * scintilla/gtk/ScintillaGTK.cxx:

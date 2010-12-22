@@ -336,19 +336,29 @@ gchar *utils_find_open_xml_tag(const gchar sel[], gint size)
 }
 
 
-/* Returns true if specified tag doesn't usually contain any content and can be left unclosed */
+/* Returns true if tag_name is a self-closing tag */
 gboolean utils_is_short_html_tag(const gchar *tag_name)
 {
-	return utils_str_equal(tag_name, "br")
-	 || utils_str_equal(tag_name, "hr")
-	 || utils_str_equal(tag_name, "img")
-	 || utils_str_equal(tag_name, "base")
-	 || utils_str_equal(tag_name, "basefont")	/* < or not < */
-	 || utils_str_equal(tag_name, "frame")
-	 || utils_str_equal(tag_name, "input")
-	 || utils_str_equal(tag_name, "link")
-	 || utils_str_equal(tag_name, "area")
-	 || utils_str_equal(tag_name, "meta");
+	const gchar names[][20] = {
+		"area",
+		"base",
+		"basefont",	/* < or not < */
+		"br",
+		"frame",
+		"hr",
+		"img",
+		"input",
+		"link",
+		"meta"
+	};
+
+	if (tag_name)
+	{
+		if (bsearch(tag_name, names, G_N_ELEMENTS(names), 20,
+			(GCompareFunc)g_ascii_strcasecmp))
+				return TRUE;
+	}
+	return FALSE;
 }
 
 
