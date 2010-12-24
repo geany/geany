@@ -371,7 +371,8 @@ static void init_default_kb(void)
 		GDK_d, GDK_SHIFT_MASK | GDK_MOD1_MASK, "menu_insert_date", _("Insert date"),
 		LW(insert_date_custom1));
 	keybindings_set_item(group, GEANY_KEYS_INSERT_ALTWHITESPACE, NULL,
-		0, 0, "edit_insertwhitespace", _("_Insert Alternative White Space"), NULL);
+		0, 0, "edit_insertwhitespace", _("_Insert Alternative White Space"),
+		LW(insert_alternative_white_space1));
 	keybindings_set_item(group, GEANY_KEYS_INSERT_LINEBEFORE, NULL,
 		0, 0, "edit_insertlinebefore", _("Insert New Line Before Current"), NULL);
 	keybindings_set_item(group, GEANY_KEYS_INSERT_LINEAFTER, NULL,

@@ -1,3 +1,10 @@
+2010-12-24  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/interface.c, src/keybindings.c, geany.glade:
+   Add Edit->Insert Alternative White Space menu item (was previously
+   removed from Edit->Commands submenu).
+
+
 2010-12-22  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/interface.c, geany.glade:

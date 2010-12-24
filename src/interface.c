@@ -130,6 +130,7 @@ create_window1 (void)
   GtkWidget *image4023;
   GtkWidget *insert_include2_menu;
   GtkWidget *invisible4;
+  GtkWidget *insert_alternative_white_space1;
   GtkWidget *separator9;
   GtkWidget *preferences1;
   GtkWidget *image4024;
@@ -706,6 +707,10 @@ create_window1 (void)
 
   invisible4 = gtk_menu_item_new_with_mnemonic (_("invisible"));
   gtk_container_add (GTK_CONTAINER (insert_include2_menu), invisible4);
+
+  insert_alternative_white_space1 = gtk_menu_item_new_with_mnemonic (_("_Insert Alternative White Space"));
+  gtk_widget_show (insert_alternative_white_space1);
+  gtk_container_add (GTK_CONTAINER (edit1_menu), insert_alternative_white_space1);
 
   separator9 = gtk_separator_menu_item_new ();
   gtk_widget_show (separator9);
@@ -1564,6 +1569,9 @@ create_window1 (void)
   g_signal_connect ((gpointer) insert_bsd_license_notice2, "activate",
                     G_CALLBACK (on_menu_comments_bsd_activate),
                     NULL);
+  g_signal_connect ((gpointer) insert_alternative_white_space1, "activate",
+                    G_CALLBACK (on_insert_alternative_white_space1_activate),
+                    NULL);
   g_signal_connect ((gpointer) preferences1, "activate",
                     G_CALLBACK (on_preferences1_activate),
                     NULL);
@@ -1907,6 +1915,7 @@ create_window1 (void)
   GLADE_HOOKUP_OBJECT (window1, image4023, "image4023");
   GLADE_HOOKUP_OBJECT (window1, insert_include2_menu, "insert_include2_menu");
   GLADE_HOOKUP_OBJECT (window1, invisible4, "invisible4");
+  GLADE_HOOKUP_OBJECT (window1, insert_alternative_white_space1, "insert_alternative_white_space1");
   GLADE_HOOKUP_OBJECT (window1, separator9, "separator9");
   GLADE_HOOKUP_OBJECT (window1, preferences1, "preferences1");
   GLADE_HOOKUP_OBJECT (window1, image4024, "image4024");
@@ -2147,6 +2156,7 @@ create_edit_menu1 (void)
   GtkWidget *commands1;
   GtkWidget *menu_format2;
   GtkWidget *insert1;
+  GtkWidget *image4055;
   GtkWidget *insert1_menu;
   GtkWidget *add_changelog_entry2;
   GtkWidget *insert_function_description1;
@@ -2236,9 +2246,13 @@ create_edit_menu1 (void)
   gtk_widget_show (menu_format2);
   gtk_container_add (GTK_CONTAINER (edit_menu1), menu_format2);
 
-  insert1 = gtk_menu_item_new_with_mnemonic (_("I_nsert"));
+  insert1 = gtk_image_menu_item_new_with_mnemonic (_("I_nsert"));
   gtk_widget_show (insert1);
   gtk_container_add (GTK_CONTAINER (edit_menu1), insert1);
+
+  image4055 = gtk_image_new_from_stock ("gtk-add", GTK_ICON_SIZE_MENU);
+  gtk_widget_show (image4055);
+  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (insert1), image4055);
 
   insert1_menu = gtk_menu_new ();
   gtk_menu_item_set_submenu (GTK_MENU_ITEM (insert1), insert1_menu);
@@ -2438,6 +2452,7 @@ create_edit_menu1 (void)
   GLADE_HOOKUP_OBJECT (edit_menu1, commands1, "commands1");
   GLADE_HOOKUP_OBJECT (edit_menu1, menu_format2, "menu_format2");
   GLADE_HOOKUP_OBJECT (edit_menu1, insert1, "insert1");
+  GLADE_HOOKUP_OBJECT (edit_menu1, image4055, "image4055");
   GLADE_HOOKUP_OBJECT (edit_menu1, insert1_menu, "insert1_menu");
   GLADE_HOOKUP_OBJECT (edit_menu1, add_changelog_entry2, "add_changelog_entry2");
   GLADE_HOOKUP_OBJECT (edit_menu1, insert_function_description1, "insert_function_description1");
