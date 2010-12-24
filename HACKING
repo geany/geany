@@ -265,7 +265,7 @@ Libraries
 We try to use an unmodified version of Scintilla - any new lexers or
 other changes should be passed on to the maintainers at
 http://scintilla.org. We normally update to a new Scintilla release
-shortly after one is made.
+shortly after one is made. See also scintilla/README.
 
 Tagmanager was originally taken from Anjuta 1.2.2, and parts of it
 (notably c.c) have been merged from later versions of Anjuta and
