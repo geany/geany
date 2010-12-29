@@ -1,16 +1,15 @@
 Geany 0.20 (t.b.d.s)
 
     Fixes:
-    * Fixes wrong comments for Ada
-    * Fix a memory leak on build system
+    * Fix wrong comments for Ada.
 
     Manual:
-    * Added documentation for HTMLChars
+    * Add documentation for HTMLChars.
 
     Internationalisation:
-    * Added translations: kk
+    * Add translations: kk.
     * Update translations: cs, de, de, en_GB, es, fi, fr, hu, ja, nl, pt,
-                           sl, sv, tr, zh_CN
+                           sl, sv, tr, zh_CN.
 
 
 Geany 0.19.2 (December 01, 2010)
