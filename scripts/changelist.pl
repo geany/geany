@@ -25,15 +25,26 @@ use strict;
 use warnings;
 
 my $argc = $#ARGV + 1;
+my ($matchstr, $infile);
 
-($argc == 2) or die <<END;
+if ($argc == 1)
+{
+	($infile) = @ARGV;
+	$matchstr = '.';
+}
+elsif ($argc == 2)
+{
+	($matchstr, $infile) = @ARGV;
+}
+else {
+	die <<END;
 Usage:
+$0 changelogfile >outfile
 $0 matchstring changelogfile >outfile
 
-  matchstring is not case sensitive.
+  matchstring is a case-insensitive regular expression, e.g. 'joe|fred'.
 END
-
-my ($matchstr, $infile) = @ARGV;
+}
 
 open(INPUT, $infile)
 	or die "Couldn't open $infile for reading: $!\n";
