@@ -1,3 +1,10 @@
+2010-12-30  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * doc/geany.txt, doc/geany.html:
+   Move and update 'Custom filetypes' section.
+   Add 'Creating a custom filetype from an existing filetype' section.
+
+
 2010-12-24  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/interface.c, src/keybindings.c, geany.glade:

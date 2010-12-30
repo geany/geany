@@ -3593,24 +3593,6 @@ word delimiter characters as well as compiler and linker settings.
 
 See also `Configuration file paths`_.
 
-Custom filetypes
-^^^^^^^^^^^^^^^^
-At startup Geany looks for ``filetypes.*.conf`` files in the system and
-user filetype paths, adding any filetypes found with the name matching
-the '``*``' wildcard.
-
-Custom filetypes are not as powerful as built-in filetypes, but the following
-have been implemented:
-
-* Recognizing and setting the filetype (after the user has manually edited
-  ``filetype_extensions.conf``).
-* Filetype settings in the [settings] section (see `Filetype configuration`_).
-    * Using existing tag parsing (``tag_parser`` key).
-    * Using existing syntax highlighting (``lexer_filetype`` key).
-* Build commands.
-* Loading global tags files (namespace will be shared with tag_parser
-  type).
-
 System files
 ^^^^^^^^^^^^
 The system-wide filetype configuration files can be found in the
@@ -3634,6 +3616,44 @@ available after an update of Geany.
 Alternatively, you can create the file yourself and add only the
 settings you want to change. All missing settings will be read from
 the corresponding system configuration file.
+
+Custom filetypes
+^^^^^^^^^^^^^^^^
+At startup Geany looks for ``filetypes.*.conf`` files in the system and
+user filetype paths, adding any filetypes found with the name matching
+the '``*``' wildcard - e.g. ``filetypes.Bar.conf``.
+
+Custom filetypes are not as powerful as built-in filetypes, but
+support for the following has been implemented:
+
+* Recognizing and setting the filetype (after the user has manually edited
+  ``filetype_extensions.conf``).
+* Reading filetype settings in the ``[settings]`` section, including:
+    * Using an existing syntax highlighting lexer (`lexer_filetype`_ key).
+    * Using an existing tag parser (``tag_parser`` key).
+* Build commands (``[build-menu]`` section).
+* Loading global tags files (sharing the ``tag_parser`` namespace).
+
+See `Filetype configuration`_ for details on each setting.
+
+Creating a custom filetype from an existing filetype
+````````````````````````````````````````````````````
+Because most filetype settings will relate to the syntax
+highlighting (e.g. styling, keywords, ``lexer_properties``
+sections), it is best to copy an existing filetype file that uses
+the lexer you wish to use as the basis of a custom filetype, using
+the correct filename extension format shown above, e.g.::
+
+    cp filetypes.foo filetypes.Bar.conf
+
+Then add the ``lexer_filetype=Foo`` setting (if not already present)
+and add/adjust other settings.
+
+.. warning::
+    The ``[styling]`` and ``[keywords]`` sections have key names
+    specific to each filetype/lexer. You must follow the same
+    names - in particular, some lexers only support one keyword
+    list, or none.
 
 
 Filetype configuration
@@ -3786,12 +3806,21 @@ context_action_cmd
     *Example:* ``context_action_cmd=devhelp -s "%s"``
 
 tag_parser
-    The TagManager language name, e.g. "C".
+    The TagManager language name, e.g. "C". Usually the same as the
+    filetype name.
+
+.. _lexer_filetype:
 
 lexer_filetype
     A filetype name to setup syntax highlighting from another filetype.
     This must not be recursive, i.e. it should be a filetype name that
-    doesn't use the lexer_filetype key itself.
+    doesn't use the *lexer_filetype* key itself, e.g.::
+
+        lexer_filetype=C
+        #lexer_filetype=C++
+
+    The second line is wrong, because ``filetypes.cpp`` itself uses
+    ``lexer_filetype=C``, which would be recursive.
 
 symbol_list_sort_mode
     What the default symbol list sort order should be.
