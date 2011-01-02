@@ -1,14 +1,13 @@
 # Portuguese translation for geany
+# Copyright (c) 2009 Rosetta Contributors and Canonical Ltd 2009
 # This file is distributed under the same license as the geany package.
-#
-# André Glória, 2010
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Geany 0.20\n"
+"Project-Id-Version: Geany 0.19\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-12-05 15:55+0100\n"
-"PO-Revision-Date: 2010-12-06 23:22+0100\n"
+"PO-Revision-Date: 2011-01-02 12:05+0100\n"
 "Last-Translator: André Glória <gloria_dot_andre_at_gmail_dot_com>\n"
 "Language-Team: \n"
 "Language: pt\n"
@@ -4652,7 +4651,7 @@ msgstr "Mostrar Direc_tórios"
 #. Status bar statistics: col = column, sel = selection.
 #: ../src/ui_utils.c:175
 msgid "line: %l / %L\t col: %c\t sel: %s\t %w      %t      %mmode: %M      encoding: %e      filetype: %f      scope: %S"
-msgstr "linha: %l / %L\t col: %c\t sel: %s\t %w      %t      %modo: %M      codificação: %e      tipo de ficheiro: %f      contexto: %S"
+msgstr "linha: %l / %L\t col: %c\t sel: %s\t %w      %t      %mmodo: %M      codificação: %e      tipo de ficheiro: %f      contexto: %S"
 
 #. RO = read-only
 #: ../src/ui_utils.c:205
