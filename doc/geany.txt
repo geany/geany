@@ -4715,11 +4715,11 @@ Quit               Quit Geany
 Plugin documentation
 ====================
 
-HTMLChars
----------
+HTML Characters
+---------------
 
-The HTMLChars plugin helps when working with special characters in
-XML/HTML, e.g. German Umlauts ü and ä.
+The HTML Characters plugin helps when working with special
+characters in XML/HTML, e.g. German Umlauts ü and ä.
 
 
 Insert entity dialog
