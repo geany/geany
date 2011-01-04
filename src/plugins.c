@@ -825,6 +825,7 @@ load_plugins_from_path(const gchar *path)
 {
 	GSList *list, *item;
 	gchar *fname, *tmp;
+	gint count = 0;
 
 	list = utils_get_file_list(path, NULL, NULL);
 
@@ -835,12 +836,16 @@ load_plugins_from_path(const gchar *path)
 			continue;
 
 		fname = g_strconcat(path, G_DIR_SEPARATOR_S, item->data, NULL);
-		plugin_new(fname, FALSE, TRUE);
+		if (plugin_new(fname, FALSE, TRUE))
+			count++;
 		g_free(fname);
 	}
 
 	g_slist_foreach(list, (GFunc) g_free, NULL);
 	g_slist_free(list);
+
+	if (count)
+		geany_debug("Found %d plugin(s) in '%s'.", count, path);
 }
 
 

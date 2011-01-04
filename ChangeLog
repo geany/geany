@@ -1,3 +1,10 @@
+2011-01-04  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/plugins.c:
+   Add debug message with the number of compatible plugins in each
+   plugin search path when showing the Plugin Manager dialog.
+
+
 2010-12-30  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * doc/geany.txt, doc/geany.html:
