@@ -21,7 +21,8 @@ Geany 0.20 (t.b.d.s)
     * Waf: Check for libsocket on OpenSolaris to fix build.
 
     Interface:
-    * Color build command fields light grey unless overridden.
+    * Color build command fields light grey unless overridden (Lex
+      Trotman).
     * Replace /home/user with ~ in the documents list (patch by Jon
       Strait, thanks).
     * Display 'new instance' on title bar for 2nd instances (patch by
@@ -29,32 +30,26 @@ Geany 0.20 (t.b.d.s)
     * Don't add duplicates to combo box histories.
     * Reorganise Find in Files dialog and add Files pattern to filter
       search results.
-    * Add sidebar Documents popup menu item 'Find in Files'.
     * Implement 'Select All' for the VTE widget.
-    * Add Find Usage and Go to Tag items to Search menu for easier
-      discovery.
     * Reorganise editor popup menu for shorter size - some items were moved
       to submenus.
     * Move Go to Marker menu items to Search menu.
     * Group Open dialog encoding options by submenus (patch by Adam Ples,
       thanks; #3047717).
-    * Show mimetype icon in sidebar Documents list and notebook (patch by
-      Colomban Wendling, thanks).
-    * Split Preferences dialog Interface tab into subnotebook to reduce
-      height of dialog (#3141277).
+    * Show mimetype icon in sidebar Documents list and notebook popup menu
+      (patch by Colomban Wendling, thanks).
 
     Documents:
-    * Warn about file truncation if unsafe file saving fails.
     * Ensure inserted templates always have proper line ending characters
       according to the current document's preference.
-    * Don't prompt for reloading if the document has not been edited
-      (patch by Jiří Techet, thanks).
-    * Add Close button to the detected file changed dialog.
     * Add per-document indent width setting (patch by Jiří Techet, thanks).
     * Add 'Project->Apply Default Indentation' menu command to override
       every document's indentation settings.
     * Display better error messages when saving a document fails (patch by
       Dimitar Zhekov, thanks).
+    * Don't prompt for reloading if the document has not been edited
+      (patch by Jiří Techet, thanks).
+    * Add Close button to the detected file changed dialog.
 
     Editor:
     * Fix wrong snippet indentation when original cursor line has
@@ -65,9 +60,9 @@ Geany 0.20 (t.b.d.s)
       (View->Editor->Color Schemes).
     * Replace HTML automatic <table> tag completion with a 'table' snippet
       (patch by Eugene Arshinov, thanks).
-    * Auto-indent after an HTML/XML line with a missing closing tag (patch
+    * Auto-indent after an HTML/XML line without a closing tag (patch
       by Eugene Arshinov, thanks).
-    * Respect 'Smart' home key for Shift[+Alt]+Home (fixes #3100290,
+    * Respect 'Smart' home key pref for Shift[+Alt]+Home (fixes #3100290,
       patch by Dimitar Zhekov, thanks).
     * Scroll to the current line when moving the cursor to the next
       cursor position in a snippet (#3139490).
@@ -79,24 +74,25 @@ Geany 0.20 (t.b.d.s)
     Configuration:
     * Load insertion templates from system path, don't create them in
       the user's config dir.
-    * File templates don't need manual reloading anymore.
+    * File templates are now reloaded on saving.
 
     Prefs:
     * Add 'Ensure consistent line endings' file saving pref (patch by
       Manuel Bua, thanks).
-    * Add statusbar_template hidden pref (patch by Dimitar Zhekov, thanks).
-    * Add new_document_after_close hidden pref to open a new document
+    * Add 'statusbar_template' hidden pref (patch by Dimitar Zhekov,
+      thanks).
+    * Add 'new_document_after_close' hidden pref to open a new document
       automatically after closing all documents.
     * Add hidden pref 'find_selection_type' with option to use the X
       selection or to repeat the last search when there's no selection,
       both off by default.
-    * Add gio_unsafe_save_backup hidden pref (patch by Lex Trotman,
+    * Add 'gio_unsafe_save_backup' hidden pref (patch by Lex Trotman,
       thanks).
-    * Add filetypes.common fold_symbol_highlight color setting.
-    * Add symbol_list_sort_mode per-filetype setting.
+    * Add filetypes.common 'fold_symbol_highlight' color setting.
+    * Add 'symbol_list_sort_mode' per-filetype setting.
 
     Keybindings:
-    * Fix Alt+[0-9] switching tabs when other modifiers are also held.
+    * Fix Alt+[0-9] switching tabs even when other modifiers are also held.
     * Add snippet keybinding support (patch by Eugene Arshinov, thanks).
     * Add 'Insert New Line Before/After Current' keybindings (patch by
       Eugene Arshinov, thanks).
@@ -108,16 +104,14 @@ Geany 0.20 (t.b.d.s)
     * Ada: Fix wrong comments.
     * C++: Disable user fold points with new lexer property
       fold.cpp.comment.explicit.
-    * Python: Update list of builtins, based on Python 2.6.
-    * Python: Simplify Compile/Syntax Check command.
-    * Python: use named styles for color scheme support - use
-      alt.conf color scheme if you want the old colors.
+    * Python: Update list of builtins for Python 2.6, simplify
+      Compile/Syntax Check command. Use named styles for color scheme
+      support (use alt.conf color scheme if you want the old colors).
     * Matlab: Support Octave # comment char.
-    * Txt2Tags: add lexer (patch by Forgeot Eric, thanks - #3020632).
+    * Txt2Tags: add highlighting (patch by Forgeot Eric, thanks - #3020632).
     * Make: fix possible infinite loop in tag parser.
     * D: Parse template functions, ignore /+ +/ comments, ignore
       unittest blocks, add keywords 'ref', 'macro' and D2 keywords.
-    * C: Add keyword 'restrict' (#3046716).
     * Vala: Parse functions with contracts (#3080232).
     * Markdown, reStructuredText and Txt2Tags: Sort tags by line number by
       default.
@@ -125,7 +119,6 @@ Geany 0.20 (t.b.d.s)
       pottersson, thanks; #2992167).
     * HTML: Add HTML5 element names and attributes (thanks to Ross McKay).
     * PHP: Parse final functions (fixes #3111171).
-    * PHP: Add 'instanceof' keyword (#3109330).
     * Markup: Add xml_indent_tags filetype setting for documents using the
       HTML/XML lexers (patch by Eugene Arshinov, thanks).
 
@@ -140,40 +133,33 @@ Geany 0.20 (t.b.d.s)
                            sl, sv, tr, zh_CN.
 
     Manual:
-    * Update 'Custom filetypes' section.
-    * Add HTMLChars plugin section.
-    * Add 'Configuration file paths' section.
-    * Update Ignore Tags section with example and menu item.
-    * Add 'Color schemes menu' section.
+    * Update 'Custom filetypes', 'Ignore Tags' sections.
+    * Add 'HTML Characters', 'Configuration file paths', 'Color schemes
+      menu' sections.
     * Explain how to grep the Scintilla source for lexer properties.
-    * Add documentation for HTMLChars.
 
     HACKING:
     * Add 'Bugs to watch out for' section.
 
     API:
-    * Add ui_combo_box_add_to_history() to API.
+    * Improve Stash GUI example.
     * Fix not loading plugins built against a newer API when Geany doesn't
       provide the required version given in PLUGIN_VERSION_CHECK().
-    * Add API signal "build-start" (patch by Jiří Techet, thanks).
-    * Add API macro foreach_range().
-    * Add editor_goto_pos() to the plugin API.
-    * Add GeanyMainWidgets::message_window_notebook for plugins to append
-      a new notebook page (#3061342).
-    * Add plugin signals project-dialog-create and
-      project-dialog-confirmed so plugins can append a Project Properties
+    * Make GEANY_API_VERSION, GEANY_ABI_VERSION macros instead of enums
+      so you can protect code with '#if GEANY_API_VERSION >= 200'.
+    * Add signals "build-start", "project-dialog-create" and
+      "project-dialog-confirmed" - to append a Project Properties
       notebook tab (patch by Jiří Techet, thanks).
-    * Add main_widgets.project_menu to API (patch by Jiří Techet, thanks).
-    * Add msgwin_set_messages_dir() to API (patch by Jiří Techet, thanks).
-    * Improve Stash GUI example.
+    * Add macro foreach_range().
+    * Add GeanyMainWidgets::message_window_notebook (#3061342).
+    * Add main_widgets.project_menu (patch by Jiří Techet, thanks).
+    * Add msgwin_set_messages_dir() (patch by Jiří Techet, thanks).
     * Add highlighting_is_{string,comment,code}_style(),
       editor_find_snippet(), editor_insert_snippet(),
       utils_find_open_xml_tag() (patch by Eugene Arshinov, thanks).
-    * Add dialogs_show_input() to API.
-    * Make GEANY_API_VERSION, GEANY_ABI_VERSION macros instead of enums
-      so you can protect code with '#if GEANY_API_VERSION >= 200'.
+    * Add ui_combo_box_add_to_history(), editor_goto_pos(),
+      dialogs_show_input(), Add sci_get_lexer().
     * Add filetypes_get_display_name() because None is no longer translated.
-    * Add sci_get_lexer() to plugin API.
 
 
 Geany 0.19.2 (December 01, 2010)

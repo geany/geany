@@ -258,7 +258,7 @@ Bugs to watch out for
 * Not breaking the plugin ABI when necessary.
 * Using an idle callback that doesn't check main_status.quitting.
 * Forgetting CRLF line endings on Windows.
-* Not handling Tabs/Spaces indent mode.
+* Not handling Tabs & Spaces indent mode.
 
 Libraries
 ---------
