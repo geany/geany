@@ -1,13 +1,13 @@
 Geany 0.20 (t.b.d.s)
 
     Bugs:
-    * Improve compatibility with GVFS using GIO to save documents (patch
-      by Alexey Antipov, thanks).
+    * Improve compatibility with GVFS using GIO to save documents (Alexey
+      Antipov).
     * Fix crash when closing a modified document (usually without a
       trailing newline) and choosing Save (fixes #3111058).
     * Fix crash when using 'Send Selection to Terminal' and the VTE
       is not loaded, and when using Ctrl-A after enabling the 'Load VTE'
-      pref (Dimitar Zhekov, thanks).
+      pref (Dimitar Zhekov).
     * Fix a slightly wrong encoding detection on Windows (#3019573).
     * Fix issue with single-line commenting/uncommenting blocks when using
       Windows line endings.
@@ -17,16 +17,16 @@ Geany 0.20 (t.b.d.s)
       Preferences dialog.
     * Fix auto-displaying of sidebar, tab bar, symbols and documents tabs
       when only plugin tabs are visible (fixes #3101867).
-    * Save build commands for filetype None (Lex Trotman, thanks).
+    * Save build commands for filetype None (Lex Trotman).
     * Waf: Check for libsocket on OpenSolaris to fix build.
 
     Interface:
     * Color build command fields light grey unless overridden (Lex
       Trotman).
     * Replace /home/user with ~ in the documents list (Jon
-      Strait, thanks).
-    * Display 'new instance' on title bar for 2nd instances (patch by
-      Eugene Arshinov, thanks).
+      Strait).
+    * Display 'new instance' on title bar for 2nd instances (Eugene
+      Arshinov).
     * Don't add duplicates to combo box histories.
     * Reorganise Find in Files dialog and add Files pattern to filter
       search results.
@@ -34,36 +34,35 @@ Geany 0.20 (t.b.d.s)
     * Reorganise editor popup menu for shorter size - some items were moved
       to submenus.
     * Move Go to Marker menu items to Search menu.
-    * Group Open dialog encoding options by submenus (Adam Ples,
-      thanks; #3047717).
+    * Group Open dialog encoding options by submenus (Adam Ples; #3047717).
     * Show mimetype icon in sidebar Documents list and notebook popup menu
-      (Colomban Wendling, thanks).
+      (Colomban Wendling).
 
     Documents:
     * Ensure inserted templates always have proper line ending characters
       according to the current document's preference.
-    * Add per-document indent width setting (Jiří Techet, thanks).
+    * Add per-document indent width setting (Jiří Techet).
     * Add 'Project->Apply Default Indentation' menu command to override
       every document's indentation settings.
-    * Display better error messages when saving a document fails (patch by
-      Dimitar Zhekov, thanks).
+    * Display better error messages when saving a document fails (Dimitar
+      Zhekov).
     * Don't prompt for reloading if the document has not been edited
-      (Jiří Techet, thanks).
+      (Jiří Techet).
     * Add Close button to the detected file changed dialog.
 
     Editor:
     * Fix wrong snippet indentation when original cursor line has
-      non-indentation whitespace (david, thanks).
+      non-indentation whitespace (david).
     * Fix passing quoted arguments when using 'Send Selection to'. This
       means e.g. sed 's/\./(dot)/g' now works.
     * Add alternative color scheme based on Python colors
       (View->Editor->Color Schemes).
     * Replace HTML automatic <table> tag completion with a 'table' snippet
-      (Eugene Arshinov, thanks).
-    * Auto-indent after an HTML/XML line without a closing tag (patch
-      by Eugene Arshinov, thanks).
+      (Eugene Arshinov).
+    * Auto-indent after an HTML/XML line without a closing tag (Eugene
+      Arshinov).
     * Respect 'Smart' home key pref for Shift[+Alt]+Home (fixes #3100290,
-      Dimitar Zhekov, thanks).
+      Dimitar Zhekov).
     * Scroll to the current line when moving the cursor to the next
       cursor position in a snippet (#3139490).
     * If the current word's tag is on the current line, make Go to Tag
@@ -77,30 +76,27 @@ Geany 0.20 (t.b.d.s)
     * File templates are now reloaded on saving.
 
     Prefs:
-    * Add 'Ensure consistent line endings' file saving pref (patch by
-      Manuel Bua, thanks).
-    * Add 'statusbar_template' hidden pref (Dimitar Zhekov,
-      thanks).
+    * Add 'Ensure consistent line endings' file saving pref (Manuel Bua).
+    * Add 'statusbar_template' hidden pref (Dimitar Zhekov).
     * Add 'new_document_after_close' hidden pref to open a new document
       automatically after closing all documents.
     * Add hidden pref 'find_selection_type' with option to use the X
       selection or to repeat the last search when there's no selection,
       both off by default.
-    * Add 'gio_unsafe_save_backup' hidden pref (Lex Trotman,
-      thanks).
+    * Add 'gio_unsafe_save_backup' hidden pref (Lex Trotman).
     * Add filetypes.common 'fold_symbol_highlight' color setting.
     * Add 'symbol_list_sort_mode' per-filetype setting.
 
     Keybindings:
     * Fix Alt+[0-9] switching tabs even when other modifiers are also held.
-    * Add snippet keybinding support (Eugene Arshinov, thanks).
-    * Add 'Insert New Line Before/After Current' keybindings (patch by
-      Eugene Arshinov, thanks).
+    * Add snippet keybinding support (Eugene Arshinov).
+    * Add 'Insert New Line Before/After Current' keybindings (Eugene
+      Arshinov).
 
     Filetypes:
-    * Add Forth filetype (Thomas Huth, thanks).
-    * Add Lisp filetype (Mário Silva, thanks).
-    * Add Erlang filetype (Taylor Venable, thanks).
+    * Add Forth filetype (Thomas Huth).
+    * Add Lisp filetype (Mário Silva).
+    * Add Erlang filetype (Taylor Venable).
     * Ada: Fix wrong comments.
     * C++: Disable user fold points with new lexer property
       fold.cpp.comment.explicit.
@@ -108,19 +104,19 @@ Geany 0.20 (t.b.d.s)
       Compile/Syntax Check command. Use named styles for color scheme
       support (use alt.conf color scheme if you want the old colors).
     * Matlab: Support Octave # comment char.
-    * Txt2Tags: add highlighting (Forgeot Eric, thanks - #3020632).
+    * Txt2Tags: add highlighting (Forgeot Eric - #3020632).
     * Make: fix possible infinite loop in tag parser.
     * D: Parse template functions, ignore /+ +/ comments, ignore
       unittest blocks, add keywords 'ref', 'macro' and D2 keywords.
     * Vala: Parse functions with contracts (#3080232).
     * Markdown, reStructuredText and Txt2Tags: Sort tags by line number by
       default.
-    * Basic: Parse property, constructor, destructor as functions (patch by
-      pottersson, thanks; #2992167).
-    * HTML: Add HTML5 element names and attributes (thanks to Ross McKay).
+    * Basic: Parse property, constructor, destructor as functions
+      (pottersson; #2992167).
+    * HTML: Add HTML5 element names and attributes (Ross McKay).
     * PHP: Parse final functions (fixes #3111171).
     * Markup: Add xml_indent_tags filetype setting for documents using the
-      HTML/XML lexers (Eugene Arshinov, thanks).
+      HTML/XML lexers (Eugene Arshinov).
 
     Plugins:
     * File Browser: Add history to path entry.
@@ -149,14 +145,14 @@ Geany 0.20 (t.b.d.s)
       so you can protect code with '#if GEANY_API_VERSION >= 200'.
     * Add signals "build-start", "project-dialog-create" and
       "project-dialog-confirmed" - to append a Project Properties
-      notebook tab (Jiří Techet, thanks).
+      notebook tab (Jiří Techet).
     * Add macro foreach_range().
     * Add GeanyMainWidgets::message_window_notebook (#3061342).
-    * Add main_widgets.project_menu (Jiří Techet, thanks).
-    * Add msgwin_set_messages_dir() (Jiří Techet, thanks).
+    * Add main_widgets.project_menu (Jiří Techet).
+    * Add msgwin_set_messages_dir() (Jiří Techet).
     * Add highlighting_is_{string,comment,code}_style(),
       editor_find_snippet(), editor_insert_snippet(),
-      utils_find_open_xml_tag() (Eugene Arshinov, thanks).
+      utils_find_open_xml_tag() (Eugene Arshinov).
     * Add ui_combo_box_add_to_history(), editor_goto_pos(),
       dialogs_show_input(), Add sci_get_lexer().
     * Add filetypes_get_display_name() as "None" is no longer translated.
