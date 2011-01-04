@@ -9,14 +9,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Geany 0.19\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-12-05 15:55+0100\n"
+"POT-Creation-Date: 2010-12-10 16:05+0100\n"
 "PO-Revision-Date: 2009-05-04 21:37+0100\n"
 "Last-Translator: Max <firebeam@usenet.eu.org>\n"
 "Language-Team:  <geany-i18n@uvena.de>\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: \n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-Country: ITALY\n"
 "X-Poedit-SourceCharset: iso-8859-15\n"
@@ -119,29 +119,29 @@ msgstr "Impossibile cambiare la cartella di lavoro in \"%s\""
 msgid "%s (in directory: %s)"
 msgstr "%s (nella cartella: %s)"
 
-#: ../src/build.c:739 ../src/build.c:964 ../src/search.c:1486
+#: ../src/build.c:739 ../src/build.c:961 ../src/search.c:1486
 #, c-format
 msgid "Process failed (%s)"
 msgstr "Processo fallito (%s)"
 
-#: ../src/build.c:810
+#: ../src/build.c:807
 #, c-format
 msgid "Failed to change the working directory to \"%s\""
 msgstr "Impossibile cambiare la cartella di lavoro in \"%s\""
 
-#: ../src/build.c:839
+#: ../src/build.c:836
 #, c-format
 msgid "Failed to execute \"%s\" (start-script could not be created)"
 msgstr "Esecuzione di \"%s\" fallita (impossibile creare script di avvio)"
 
-#: ../src/build.c:893
+#: ../src/build.c:890
 msgid ""
 "Could not execute the file in the VTE because it probably contains a command."
 msgstr ""
 "Impossibile eseguire il file nel terminale virtuale, probabilmente contiene "
 "un comando."
 
-#: ../src/build.c:931
+#: ../src/build.c:928
 #, c-format
 msgid ""
 "Could not find terminal \"%s\" (check path for Terminal tool setting in "
@@ -150,87 +150,83 @@ msgstr ""
 "Impossibile trovare il terminale \"%s\" (verificare il percorso per il "
 "terminale nelle preferenze)"
 
-#: ../src/build.c:1104
+#: ../src/build.c:1101
 msgid "Compilation failed."
 msgstr "Compilazione fallita."
 
-#: ../src/build.c:1118
+#: ../src/build.c:1115
 msgid "Compilation finished successfully."
 msgstr "Compilazione terminata correttamente."
 
-#: ../src/build.c:1277
+#: ../src/build.c:1274
 #, fuzzy
 msgid "Custom Text"
 msgstr "Compila su destinazione scelta"
 
-#: ../src/build.c:1278
+#: ../src/build.c:1275
 #, fuzzy
 msgid "Enter custom text here, all entered text is appended to the command."
 msgstr ""
 "Inserire opzioni personalizzate qui; tutto il testo inserito è passato al "
 "comando «make»."
 
-#: ../src/build.c:1356
+#: ../src/build.c:1353
 msgid "_Next Error"
 msgstr "Errore _successivo"
 
-#: ../src/build.c:1358
+#: ../src/build.c:1355
 msgid "_Previous Error"
 msgstr "Errori _precedenti"
 
-#: ../src/build.c:1368
+#: ../src/build.c:1365
 #, fuzzy
 msgid "_Set Build Commands"
 msgstr "Imposta i comandi personalizzati"
 
-#: ../src/build.c:1652 ../src/toolbar.c:373
+#: ../src/build.c:1649 ../src/toolbar.c:373
 msgid "Build the current file"
 msgstr "Compila il file corrente"
 
-#: ../src/build.c:1666
+#: ../src/build.c:1663
 msgid "Build the current file with Make and the default target"
 msgstr "Compila il file corrente con Make verso destinazione predefinita"
 
-#: ../src/build.c:1668
+#: ../src/build.c:1665
 msgid "Build the current file with Make and the specified target"
 msgstr "Compila il file corrente con Make la destinazione specificata"
 
-#: ../src/build.c:1670
+#: ../src/build.c:1667
 msgid "Compile the current file with Make"
 msgstr "Compila il file corrente con Make"
 
-#: ../src/build.c:1697
+#: ../src/build.c:1694
 #, c-format
 msgid "Process could not be stopped (%s)."
 msgstr "Impossibile interrompere il processo (%s)."
 
-#: ../src/build.c:1714 ../src/build.c:1726
+#: ../src/build.c:1711 ../src/build.c:1723
 msgid "No more build errors."
 msgstr "Non ci sono altri errori di compilazione."
 
 #. FIXME: we should pass either build dialog or project dialog instead of NULL for parent
-#: ../src/build.c:1822
+#: ../src/build.c:1819
 msgid "Set menu item label"
 msgstr ""
 
-#: ../src/build.c:1847
-msgid "Item"
-msgstr ""
-
-#: ../src/build.c:1848 ../src/symbols.c:650
+#: ../src/build.c:1845 ../src/symbols.c:650
 msgid "Label"
 msgstr "Etichetta"
 
-#: ../src/build.c:1849 ../src/symbols.c:645
+#: ../src/build.c:1846 ../src/symbols.c:645
 msgid "Command"
 msgstr "Comando"
 
-#: ../src/build.c:1850
+#: ../src/build.c:1847
 #, fuzzy
 msgid "Working directory"
 msgstr "%s (nella cartella: %s)"
 
-#: ../src/build.c:1851
+#: ../src/build.c:1848
 #, fuzzy
 msgid "Clear"
 msgstr "Compilatore"
@@ -259,65 +255,65 @@ msgstr "Espressioni regolari di _grep"
 msgid "Independent Commands"
 msgstr "Inserisci commenti"
 
-#: ../src/build.c:2043
+#: ../src/build.c:2045
 msgid "Note: Item 2 opens a dialog and appends the response to the command."
 msgstr ""
 
-#: ../src/build.c:2052
+#: ../src/build.c:2054
 #, fuzzy
 msgid "Execute Commands"
 msgstr "Imposta i comandi personalizzati"
 
-#: ../src/build.c:2063
+#: ../src/build.c:2066
 #, c-format
 msgid ""
 "%d, %e, %f, %p are substituted in command and directory fields, see manual "
 "for details."
 msgstr ""
 
-#: ../src/build.c:2223
+#: ../src/build.c:2226
 #, fuzzy
 msgid "Set Build Commands"
 msgstr "Imposta i comandi personalizzati"
 
-#: ../src/build.c:2434
+#: ../src/build.c:2437
 msgid "_Compile"
 msgstr "_Compila"
 
 # http://lists.linux.it/pipermail/tp/2001-July/000665.html
 #. build the code
-#: ../src/build.c:2441 ../src/build.c:2703 ../src/interface.c:1218
+#: ../src/build.c:2444 ../src/build.c:2706 ../src/interface.c:1218
 msgid "_Build"
 msgstr "_Genera"
 
 # Sbagliato tradurlo con esegui poiché si riferisce ai permessi di accesso al file.
-#: ../src/build.c:2448 ../src/build.c:2478 ../src/build.c:2671
+#: ../src/build.c:2451 ../src/build.c:2481 ../src/build.c:2674
 #, fuzzy
 msgid "_Execute"
 msgstr "Esecuzione:"
 
 #. build the code with make custom
-#: ../src/build.c:2493 ../src/build.c:2669 ../src/build.c:2723
+#: ../src/build.c:2496 ../src/build.c:2672 ../src/build.c:2726
 msgid "Make Custom _Target"
 msgstr "Compila su _destinazione scelta"
 
 #. build the code with make object
-#: ../src/build.c:2495 ../src/build.c:2670 ../src/build.c:2731
+#: ../src/build.c:2498 ../src/build.c:2673 ../src/build.c:2734
 msgid "Make _Object"
 msgstr "Compila _oggetto"
 
-#: ../src/build.c:2497 ../src/build.c:2668
+#: ../src/build.c:2500 ../src/build.c:2671
 #, fuzzy
 msgid "_Make"
 msgstr "Make:"
 
 #. build the code with make all
-#: ../src/build.c:2715
+#: ../src/build.c:2718
 msgid "_Make All"
 msgstr "Co_mpila tutto"
 
 #. arguments
-#: ../src/build.c:2743
+#: ../src/build.c:2746
 #, fuzzy
 msgid "_Set Build Menu Commands"
 msgstr "Imposta i comandi personalizzati"
@@ -333,7 +329,7 @@ msgid_plural "%d files saved."
 msgstr[0] "File %s salvato."
 msgstr[1] "File %s salvato."
 
-#: ../src/callbacks.c:490 ../src/document.c:2996 ../src/interface.c:380
+#: ../src/callbacks.c:490 ../src/document.c:2999 ../src/interface.c:380
 #: ../src/sidebar.c:683
 msgid "_Reload"
 msgstr "_Ripristina"
@@ -756,7 +752,7 @@ msgstr "Tabulazioni e spazi"
 msgid "Setting %s indentation mode for %s."
 msgstr "Impostati %s come modalità rientro automatico per %s."
 
-#: ../src/document.c:1248
+#: ../src/document.c:1248 ../src/document.c:1858
 msgid "Invalid filename"
 msgstr "Nome del file non valido"
 
@@ -819,16 +815,12 @@ msgstr ""
 msgid "Failed to close file '%s': fclose() failed: %s"
 msgstr ""
 
-#: ../src/document.c:1855 ../src/document.c:1927
-msgid "Error saving file."
-msgstr "Errore nel salvataggio del file."
-
-#: ../src/document.c:1920
+#: ../src/document.c:1858 ../src/document.c:1923
 #, c-format
 msgid "Error saving file (%s)."
 msgstr "Errore nel salvataggio del file (%s)."
 
-#: ../src/document.c:1925
+#: ../src/document.c:1928
 #, c-format
 msgid ""
 "%s\n"
@@ -836,38 +828,42 @@ msgid ""
 "The file on disk may now be truncated!"
 msgstr ""
 
-#: ../src/document.c:1951
+#: ../src/document.c:1930
+msgid "Error saving file."
+msgstr "Errore nel salvataggio del file."
+
+#: ../src/document.c:1954
 #, c-format
 msgid "File %s saved."
 msgstr "File %s salvato."
 
-#: ../src/document.c:2019 ../src/document.c:2076 ../src/document.c:2084
+#: ../src/document.c:2022 ../src/document.c:2079 ../src/document.c:2087
 #, c-format
 msgid "\"%s\" was not found."
 msgstr "\"%s\" non trovato."
 
-#: ../src/document.c:2084
+#: ../src/document.c:2087
 msgid "Wrap search and find again?"
 msgstr "Ricominciare la ricerca dall'inizio?"
 
-#: ../src/document.c:2163 ../src/search.c:1146 ../src/search.c:1190
+#: ../src/document.c:2166 ../src/search.c:1146 ../src/search.c:1190
 #: ../src/search.c:1882 ../src/search.c:1883
 #, c-format
 msgid "No matches found for \"%s\"."
 msgstr "Nessuna corrispondenza trovata per \"%s\"."
 
-#: ../src/document.c:2174 ../src/document.c:2183
+#: ../src/document.c:2177 ../src/document.c:2186
 #, c-format
 msgid "%s: replaced %d occurrence of \"%s\" with \"%s\"."
 msgid_plural "%s: replaced %d occurrences of \"%s\" with \"%s\"."
 msgstr[0] "%s: sostituita %d occorrenza di \"%s\" con \"%s\"."
 msgstr[1] "%s: sostituite %d occorrenze di \"%s\" con \"%s\"."
 
-#: ../src/document.c:2997
+#: ../src/document.c:3000
 msgid "Do you want to reload it?"
 msgstr "Ricaricare il file?"
 
-#: ../src/document.c:2998
+#: ../src/document.c:3001
 #, c-format
 msgid ""
 "The file '%s' on the disk is more recent than\n"
@@ -876,15 +872,15 @@ msgstr ""
 "Il file '%s' presente sul disco è più recente della\n"
 "copia che si sta editando."
 
-#: ../src/document.c:3016
+#: ../src/document.c:3019
 msgid "Close _without saving"
 msgstr ""
 
-#: ../src/document.c:3019
+#: ../src/document.c:3022
 msgid "Try to resave the file?"
 msgstr "Provare di nuovo a salvare il file?"
 
-#: ../src/document.c:3020
+#: ../src/document.c:3023
 #, fuzzy, c-format
 msgid "File \"%s\" was not found on disk!"
 msgstr "File \"%s\" non trovato."
@@ -1124,7 +1120,7 @@ msgstr "Espressione regolare non valida per il tipo di file %s: %s"
 msgid "untitled"
 msgstr "senza nome"
 
-#: ../src/highlighting.c:3595 ../src/main.c:814 ../src/socket.c:165
+#: ../src/highlighting.c:3595 ../src/main.c:815 ../src/socket.c:165
 #: ../src/templates.c:315
 #, c-format
 msgid "Could not find file '%s'."
@@ -2164,8 +2160,8 @@ msgid ""
 "disabled on slow machines."
 msgstr ""
 "Manda a capo la riga al bordo della finestra e la continua alla riga "
-"successiva. Nota: l'«a capo» automatico per documenti di grandi dimensioni "
-"ha un alto impatto sulle prestazioni, perciò dovrebbe essere disabilitata su "
+"successiva. Nota: l'«a capo» automatico per documenti di grandi dimensioni ha "
+"un alto impatto sulle prestazioni, perciò dovrebbe essere disabilitata su "
 "macchine lente."
 
 #: ../src/interface.c:3703
@@ -3652,37 +3648,37 @@ msgstr "Messaggi verbosi"
 msgid "Show version and exit"
 msgstr "Mostra le informazioni sulla versione ed esce"
 
-#: ../src/main.c:508
+#: ../src/main.c:509
 msgid "[FILES...]"
 msgstr "[FILE...]"
 
 #. note for translators: library versions are printed after this
-#: ../src/main.c:526
+#: ../src/main.c:527
 #, fuzzy, c-format
 msgid "built on %s with "
 msgstr "(generato il %s)"
 
-#: ../src/main.c:619
+#: ../src/main.c:620
 msgid "Move it now?"
 msgstr "Spostare ora?"
 
-#: ../src/main.c:621
+#: ../src/main.c:622
 msgid "Geany needs to move your old configuration directory before starting."
 msgstr ""
 "Geany deve spostare la vecchia directory di configurazione prima dell'avvio."
 
-#: ../src/main.c:630
+#: ../src/main.c:631
 #, c-format
 msgid ""
 "Your configuration directory has been successfully moved from \"%s\" to \"%s"
 "\"."
 msgstr ""
-"La directory di configurazione è stata spostata correttamente da \"%s\" a "
-"\"%s\"."
+"La directory di configurazione è stata spostata correttamente da \"%s\" a \"%"
+"s\"."
 
 #. for translators: the third %s in brackets is the error message which
 #. * describes why moving the dir didn't work
-#: ../src/main.c:640
+#: ../src/main.c:641
 #, c-format
 msgid ""
 "Your old configuration directory \"%s\" could not be moved to \"%s\" (%s). "
@@ -3691,7 +3687,7 @@ msgstr ""
 "Impossibile spostare la vecchia directory di configurazione \"%s\" in \"%s"
 "\" (%s). Spostare manualmente la directory nella nuova posizione."
 
-#: ../src/main.c:721
+#: ../src/main.c:722
 #, c-format
 msgid ""
 "Configuration directory could not be created (%s).\n"
@@ -3703,17 +3699,17 @@ msgstr ""
 "configurazione.\n"
 "Avviare ugualmente Geany?"
 
-#: ../src/main.c:1060
+#: ../src/main.c:1061
 #, c-format
 msgid "This is Geany %s."
 msgstr "Geany %s."
 
-#: ../src/main.c:1062
+#: ../src/main.c:1063
 #, c-format
 msgid "Configuration directory could not be created (%s)."
 msgstr "Impossibile creare la cartella di configurazione (%s)."
 
-#: ../src/main.c:1276
+#: ../src/main.c:1277
 msgid "Configuration files reloaded."
 msgstr "File di configurazione ricaricato."
 
@@ -4370,7 +4366,7 @@ msgstr "Sezioni"
 
 #: ../src/symbols.c:632
 msgid "Keys"
-msgstr "Tasti"
+msgstr "Chiavi"
 
 #: ../src/symbols.c:639 ../src/symbols.c:690 ../src/symbols.c:751
 #: ../src/symbols.c:776 ../src/symbols.c:801 ../src/symbols.c:814
@@ -6367,8 +6363,8 @@ msgstr "Dividi verticalmente"
 
 #~ msgid "Automatic completion of often used constructs like if and for"
 #~ msgstr ""
-#~ "Completamento automatico di costrutti utilizzati frequentemente, come "
-#~ "«if» e «for»"
+#~ "Completamento automatico di costrutti utilizzati frequentemente, come «if» "
+#~ "e «for»"
 
 #, fuzzy
 #~ msgid "Symbol autocompletion"
