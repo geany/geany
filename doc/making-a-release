@@ -7,11 +7,11 @@ Ensure version numbers are all updated in:
 	configure.ac geany.nsi geany_private.rc win32-config.h wscript
 	doc/geany.txt
 Regenerate doc/geany.html.
-Set GEANY_CODENAME in src/geany.h.
+Check GEANY_CODENAME is set in src/geany.h.
 Update NEWS & release date.
 Add changelog entry for new release.
 
-Export branch into a new directory (i.e. not usual working copy).
+Export the code into a new directory (i.e. not usual working copy).
 Run 'make distcheck'.
 Delete the created archive and run 'make dist' and 'make dist-bzip2'.
 
@@ -37,3 +37,5 @@ and update the information on gnomefiles.org.
 
 For non-trunk releases, merge NEWS into trunk and any branch-only
 commits that need to merged.
+
+For trunk releases, bump version strings and merge unstable branch.
