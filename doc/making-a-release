@@ -27,9 +27,9 @@ Windows builds (enrico?).
 Tag release in SVN, remove the branch if used.
 
 Website: update Releases, Documentation links and add a News item.
-Update the manual data and links in the filesystem
-(/home/www/www.geany.org/manual/) and the two links on the Manual
-Wiki page.
+Update the manual data and links in the filesystem in
+/home/www/www.geany.org/manual. Remember to update current/hacking.html
+too.
 
 Announce on geany, devel, i18n mailing lists (check you're subscribed).
 Put a news item on Sourceforge, add a new release on Freshmeat.net

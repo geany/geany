@@ -1,6 +1,6 @@
 Geany 0.20 (January 5, 2011)
 
-    Bugs:
+    Fixes:
     * Improve compatibility with GVFS using GIO to save documents (Alexey
       Antipov).
     * Fix crash when closing a modified document (usually without a
