@@ -77,29 +77,7 @@ tagmanager_sources = set([
     'tagmanager/tm_tag.c', 'tagmanager/tm_tagmanager.c', 'tagmanager/tm_work_object.c',
     'tagmanager/tm_workspace.c', 'tagmanager/vhdl.c', 'tagmanager/verilog.c', 'tagmanager/vstring.c'])
 
-scintilla_sources = set([
-    'scintilla/AutoComplete.cxx', 'scintilla/CallTip.cxx', 'scintilla/CellBuffer.cxx',
-    'scintilla/CharClassify.cxx', 'scintilla/ContractionState.cxx', 'scintilla/Decoration.cxx',
-    'scintilla/DocumentAccessor.cxx', 'scintilla/Document.cxx', 'scintilla/Editor.cxx',
-    'scintilla/ExternalLexer.cxx',  'scintilla/Indicator.cxx',  'scintilla/KeyMap.cxx',
-    'scintilla/KeyWords.cxx',
-    'scintilla/LexAda.cxx', 'scintilla/LexAsm.cxx', 'scintilla/LexBash.cxx',
-    'scintilla/LexBasic.cxx', 'scintilla/LexCaml.cxx', 'scintilla/LexCmake.cxx', 'scintilla/LexCPP.cxx',
-    'scintilla/LexCSS.cxx', 'scintilla/LexD.cxx', 'scintilla/LexErlang.cxx', 'scintilla/LexForth.cxx',
-    'scintilla/LexFortran.cxx', 'scintilla/LexHaskell.cxx', 'scintilla/LexHTML.cxx', 'scintilla/LexLisp.cxx',
-    'scintilla/LexLua.cxx', 'scintilla/LexMarkdown.cxx', 'scintilla/LexMatlab.cxx',
-    'scintilla/LexNsis.cxx', 'scintilla/LexOthers.cxx',
-    'scintilla/LexPascal.cxx', 'scintilla/LexPerl.cxx', 'scintilla/LexPython.cxx',
-    'scintilla/LexR.cxx', 'scintilla/LexRuby.cxx', 'scintilla/LexSQL.cxx',
-    'scintilla/LexTCL.cxx', 'scintilla/LexTxt2tags.cxx',
-    'scintilla/LexVHDL.cxx', 'scintilla/LexVerilog.cxx', 'scintilla/LexYAML.cxx',
-    'scintilla/LineMarker.cxx', 'scintilla/PerLine.cxx',
-    'scintilla/PlatGTK.cxx',
-    'scintilla/PositionCache.cxx', 'scintilla/PropSet.cxx', 'scintilla/RESearch.cxx',
-    'scintilla/RunStyles.cxx', 'scintilla/ScintillaBase.cxx', 'scintilla/ScintillaGTK.cxx',
-    'scintilla/scintilla-marshal.c', 'scintilla/Selection.cxx', 'scintilla/StyleContext.cxx', 'scintilla/Style.cxx',
-    'scintilla/UniConversion.cxx', 'scintilla/ViewStyle.cxx', 'scintilla/WindowAccessor.cxx',
-    'scintilla/XPM.cxx'])
+scintilla_sources = set(['scintilla/gtk/scintilla-marshal.c'])
 
 geany_sources = set([
     'src/about.c', 'src/build.c', 'src/callbacks.c', 'src/dialogs.c', 'src/document.c',
@@ -233,7 +211,7 @@ def configure(conf):
     # Scintilla flags
     conf.env.append_value('CFLAGS', ['-DGTK'])
     conf.env.append_value('CXXFLAGS',
-        ['-DNDEBUG', '-DGTK', '-DGTK2', '-DSCI_LEXER', '-DG_THREADS_IMPL_NONE'])
+        ['-DNDEBUG', '-DGTK', '-DSCI_LEXER', '-DG_THREADS_IMPL_NONE'])
 
     # summary
     Logs.pprint('BLUE', 'Summary:')
@@ -314,12 +292,14 @@ def build(bld):
 
 
     # Scintilla
+    files = bld.srcnode.ant_glob('scintilla/**/*.cxx', src=True, dir=False)
+    scintilla_sources.update(files)
     bld.new_task_gen(
         features        = ['c', 'cxx', 'cxxstlib'],
         name            = 'scintilla',
         target          = 'scintilla',
         source          = scintilla_sources,
-        includes        = ['.', 'scintilla/include/'],
+        includes        = ['.', 'scintilla/include', 'scintilla/src', 'scintilla/lexlib'],
         uselib          = 'GTK',
         install_path    = None) # do not install this library
 

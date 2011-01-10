@@ -3,6 +3,23 @@
  * src/toolbar.c, src/ui_utils.c, src/about.c, THANKS:
    Add Save As toolbar button option (patch by Matthew Brush, thanks;
    #3153490).
+ * scintilla/*, src/utils.c, src/notebook.c,
+   data/filetypes.cpp, data/filetypes.vala, data/filetypes.glsl,
+   data/filetypes.cs, data/filetypes.c, wscript:
+   Merge unstable branch:
+ - src/utils.c:
+   Fix detecting non-lowercase self-closing tags e.g. <BR> (#2226117).
+ - src/notebook.c:
+   Add 'Open in New Window' command in the notebook tab menu (based on
+   patch by Matthew Brush, thanks - #3118059).
+ - data/filetypes.cpp, data/filetypes.vala, data/filetypes.glsl,
+   data/filetypes.cs, data/filetypes.c:
+   Disable preprocessor #define tracking for the CPP lexer
+   (enabled by default in Scintilla).
+ - scintilla/*, wscript:
+   Update Scintilla to version 2.22.
+   Use Scintilla's directory structure mostly and only remove
+   unused lexers.
 
 
 2011-01-05  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
