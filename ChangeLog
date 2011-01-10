@@ -1,6 +1,6 @@
 2011-01-10  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
- * src/toolbar.c, src/ui_utils.c:
+ * src/toolbar.c, src/ui_utils.c, src/about.c, THANKS:
    Add Save As toolbar button option (patch by Matthew Brush, thanks;
    #3153490).
 

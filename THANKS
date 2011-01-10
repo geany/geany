@@ -87,6 +87,7 @@ Adam Ples <adamples(at)users(dot)sourceforge(dot)net> - Group encodings in open 
 Mário Silva <sharelider(at)gmail(dot)com> - Lisp filetype
 Taylor Venable <taylor(at)metasyntax(dot)net> - Erlang filetype
 Manuel Bua <manuel(dot)bua(at)gmail(dot)com> - Ensure consistent line endings pref.
+Matthew Brush <codebrainz(at)users(dot)sourceforge(dot)net> - Save As toolbar button.
 
 Translators:
 ------------
