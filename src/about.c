@@ -95,7 +95,7 @@ static const gchar *contributors =
 "Jean-François Wauthy, Jeff Pohlmeyer, Jesse Mayes, Jiří Techet, "
 "John Gabriele, Jon Senior, Jon Strait, Josef Whiter, "
 "Jörn Reder, Kelvin Gardiner, Kevin Ellwood, Kristoffer A. Tjernås, Lex Trotman, "
-"Manuel Bua, Mário Silva, Marko Peric, Matti Mårds, "
+"Manuel Bua, Mário Silva, Marko Peric, Matthew Brush, Matti Mårds, "
 "Moritz Barsnick, Ondrej Donek, Peter Strand, Philipp Gildein, Pierre Joye, Rob van der Linde, "
 "Robert McGinley, Roland Baudin, Ross McKay, S Jagannathan, Saleem Abdulrasool, "
 "Sebastian Kraft, Shiv, Slava Semushin, Stefan Oltmanns, Tamim, Taylor Venable, "

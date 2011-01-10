@@ -189,6 +189,8 @@ static void init_pref_groups(void)
 		"complete_snippets_whilst_editing", FALSE);
 	stash_group_add_boolean(group, &file_prefs.use_safe_file_saving,
 		"use_safe_file_saving", FALSE);
+	stash_group_add_boolean(group, &file_prefs.gio_unsafe_save_backup,
+		"gio_unsafe_save_backup", FALSE);
 	/* for backwards-compatibility */
 	stash_group_add_integer(group, &editor_prefs.indentation->hard_tab_width,
 		"indent_hard_tab_width", 8);
@@ -373,9 +375,9 @@ static void save_dialog_prefs(GKeyFile *config)
 	g_key_file_set_boolean(config, PACKAGE, "show_line_endings", editor_prefs.show_line_endings);
 	g_key_file_set_boolean(config, PACKAGE, "show_markers_margin", editor_prefs.show_markers_margin);
 	g_key_file_set_boolean(config, PACKAGE, "show_linenumber_margin", editor_prefs.show_linenumber_margin);
-	g_key_file_set_boolean(config, PACKAGE, "long_line_enabled", editor_prefs.long_line_global_enabled);
-	g_key_file_set_integer(config, PACKAGE, "long_line_type", editor_prefs.long_line_global_type);
-	g_key_file_set_integer(config, PACKAGE, "long_line_column", editor_prefs.long_line_global_column);
+	g_key_file_set_boolean(config, PACKAGE, "long_line_enabled", editor_prefs.long_line_enabled);
+	g_key_file_set_integer(config, PACKAGE, "long_line_type", editor_prefs.long_line_type);
+	g_key_file_set_integer(config, PACKAGE, "long_line_column", editor_prefs.long_line_column);
 	g_key_file_set_string(config, PACKAGE, "long_line_color", editor_prefs.long_line_color);
 
 	/* editor */
@@ -448,7 +450,7 @@ static void save_dialog_prefs(GKeyFile *config)
 	/* VTE */
 #ifdef HAVE_VTE
 	g_key_file_set_boolean(config, "VTE", "load_vte", vte_info.load_vte);
-	if (vte_info.load_vte && vc != NULL)
+	if (vte_info.have_vte)
 	{
 		gchar *tmp_string;
 
@@ -663,15 +665,15 @@ static void load_dialog_prefs(GKeyFile *config)
 	interface_prefs.use_native_windows_dialogs = utils_get_setting_boolean(config, PACKAGE, "use_native_windows_dialogs", FALSE);
 
 	/* display, editor */
-	editor_prefs.long_line_global_enabled = utils_get_setting_boolean(config, PACKAGE, "long_line_enabled", TRUE);
-	editor_prefs.long_line_global_type = utils_get_setting_integer(config, PACKAGE, "long_line_type", 0);
-	if (editor_prefs.long_line_global_type == 2) /* backward compatibility */
+	editor_prefs.long_line_enabled = utils_get_setting_boolean(config, PACKAGE, "long_line_enabled", TRUE);
+	editor_prefs.long_line_type = utils_get_setting_integer(config, PACKAGE, "long_line_type", 0);
+	if (editor_prefs.long_line_type == 2) /* backward compatibility */
 	{
-		editor_prefs.long_line_global_type = 0;
-		editor_prefs.long_line_global_enabled = FALSE;
+		editor_prefs.long_line_type = 0;
+		editor_prefs.long_line_enabled = FALSE;
 	}
 	editor_prefs.long_line_color = utils_get_setting_string(config, PACKAGE, "long_line_color", "#C2EBC2");
-	editor_prefs.long_line_global_column = utils_get_setting_integer(config, PACKAGE, "long_line_column", 72);
+	editor_prefs.long_line_column = utils_get_setting_integer(config, PACKAGE, "long_line_column", 72);
 	editor_prefs.symbolcompletion_min_chars = utils_get_setting_integer(config, PACKAGE, "symbolcompletion_min_chars", GEANY_MIN_SYMBOLLIST_CHARS);
 	editor_prefs.symbolcompletion_max_height = utils_get_setting_integer(config, PACKAGE, "symbolcompletion_max_height", GEANY_MAX_SYMBOLLIST_HEIGHT);
 	editor_prefs.line_wrapping = utils_get_setting_boolean(config, PACKAGE, "line_wrapping", FALSE); /* default is off for better performance */

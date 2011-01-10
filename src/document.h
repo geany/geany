@@ -60,6 +60,7 @@ typedef struct GeanyFilePrefs
 	gboolean		cmdline_new_files;	/* New file if command-line filename doesn't exist */
 	gboolean		use_safe_file_saving;
 	gboolean		ensure_convert_new_lines;
+	gboolean		gio_unsafe_save_backup;
 }
 GeanyFilePrefs;
 

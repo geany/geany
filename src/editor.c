@@ -373,7 +373,7 @@ static gboolean is_style_php(gint style)
 }
 
 
-gint editor_get_long_line_type(void)
+static gint editor_get_long_line_type(void)
 {
 	if (app->project)
 		switch (app->project->long_line_behaviour)
@@ -383,22 +383,60 @@ gint editor_get_long_line_type(void)
 			case 1: /* use global settings */
 				break;
 			case 2: /* custom (enabled) */
-				return editor_prefs.long_line_global_type;
+				return editor_prefs.long_line_type;
 		}
 
-	if (!editor_prefs.long_line_global_enabled)
+	if (!editor_prefs.long_line_enabled)
 		return 2;
 	else
-		return editor_prefs.long_line_global_type;
+		return editor_prefs.long_line_type;
 }
 
 
-gint editor_get_long_line_column(void)
+static gint editor_get_long_line_column(void)
 {
 	if (app->project && app->project->long_line_behaviour != 1 /* use global settings */)
 		return app->project->long_line_column;
 	else
-		return editor_prefs.long_line_global_column;
+		return editor_prefs.long_line_column;
+}
+
+
+static const GeanyEditorPrefs *
+get_default_prefs(void)
+{
+	static GeanyEditorPrefs eprefs;
+
+	eprefs = editor_prefs;
+
+	/* project overrides */
+	eprefs.indentation = (GeanyIndentPrefs*)editor_get_indent_prefs(NULL);
+	eprefs.long_line_type = editor_get_long_line_type();
+	eprefs.long_line_column = editor_get_long_line_column();
+	return &eprefs;
+}
+
+
+/* Gets the prefs for the editor.
+ * Prefs can be different according to project or document.
+ * @warning Always get a fresh result instead of keeping a pointer to it if the editor/project
+ * settings may have changed, or if this function has been called for a different editor.
+ * @param editor The editor, or @c NULL to get the default prefs.
+ * @return The prefs. */
+const GeanyEditorPrefs *editor_get_prefs(GeanyEditor *editor)
+{
+	static GeanyEditorPrefs eprefs;
+	const GeanyEditorPrefs *dprefs = get_default_prefs();
+
+	/* Return the address of the default prefs to allow returning default and editor
+	 * pref pointers without invalidating the contents of either. */
+	if (editor == NULL)
+		return dprefs;
+
+	eprefs = *dprefs;
+	eprefs.indentation = (GeanyIndentPrefs*)editor_get_indent_prefs(editor);
+	/* add other editor & document overrides as needed */
+	return &eprefs;
 }
 
 
@@ -1136,7 +1174,7 @@ get_default_indent_prefs(void)
 
 
 /** Gets the indentation prefs for the editor.
- * In future, the prefs might be different according to project or filetype.
+ * Prefs can be different according to project or document.
  * @warning Always get a fresh result instead of keeping a pointer to it if the editor/project
  * settings may have changed, or if this function has been called for a different editor.
  * @param editor The editor, or @c NULL to get the default indent prefs.
@@ -2389,7 +2427,7 @@ void editor_goto_next_snippet_cursor(GeanyEditor *editor)
 		else
 			snippet_cursor_insert_pos += offset;
 
-		sci_set_current_position(sci, snippet_cursor_insert_pos, FALSE);
+		sci_set_current_position(sci, snippet_cursor_insert_pos, TRUE);
 	}
 	else
 	{

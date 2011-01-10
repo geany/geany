@@ -1,3 +1,85 @@
+2011-01-04  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * it.po: Small update of Italian translation. Fixes #3147995
+
+
+2011-01-02  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * pt.po: Update of Portuguese translation. Thanks to André Glória for
+          providing
+
+
+2010-12-27  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * de.po: Update of German translation. Review provided by Dominic Hopf.
+
+
+2010-12-19  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * cs.po: Update of Czech translation. Thanks to Karel Kolman for
+   providing.
+
+
+2010-12-18  Peter Scholtens  <peter(dot)scholtens(at)xs4all(dot)nl>
+
+ * nl.po: Update of Dutch translation, updated latest changes.
+
+
+2010-12-18  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * be.po: Update of Belarusian translation. Thanks to Yura Siamashka
+          for providing
+
+
+2010-12-17  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * fr.po: Update of French translation. Thanks to Jean-Philippe Moal for
+          providing.
+
+
+2010-12-15  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * hu.po: Update of Hungarian translation. Thanks to Gabor Kmetyko.
+
+
+2010-12-13  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * en_GB.po: Update British English translation. Thanks to Jeff Bailes.
+ * tr.po: Update of Turkish translation. Thanks to Gürkan Gür.
+
+
+2010-12-10  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * sl.po: Update of Slovenian translation. Thanks to Jože Klepec.
+
+
+2010-12-09  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * fi.po: Update of Finnish translation. Thanks to Harri Koskinen.
+
+
+2010-12-08  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * es.po: Update of Spanish translation. Thanks to Lucas Vieites.
+ * sv.po: Update of Swedish translation. Thanks to Tony Mattsson.
+
+
+2010-12-07  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * ja.po: Update of Japanese translation. Thanks to Chikahiro Masami.
+ * pt.po: Update of Portuguese translation. Thanks to André Glória for
+          providing
+ * zh_CN.po:
+          Update of simplified Chinese translation. Thanks to
+          Xhacker Liu.
+
+
+2010-12-05  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * *.po: Update of po files for string freeze Geany 0.20
+ * de.po: Update of German translation.
+
+
 2010-11-14  Frank Lanitz  <frank@frank.uvena.de>
 
  * de.po: Minor update of German translation.
@@ -10,14 +92,15 @@
 
 2010-11-04  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
- * es.po: Update of Spanish translation. Thanks to Lucas Vieites and 
-		  Nacho Cabanes for contributing. 
+ * es.po: Update of Spanish translation. Thanks to Lucas Vieites and
+          Nacho Cabanes for contributing.
+
 
 2010-11-02  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * de.po: Minor update of German translation.
  * es.po: Update of Spanish translation. Thanks to Lucas Vieites for
-          contributing. 
+          contributing.
 
 
 2010-11-01  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
@@ -49,8 +132,8 @@
 2010-09-17  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * de.po: Minor update of German translation.
- * geany.pot: Remove file from version control as its an generated file. 
- 
+ * geany.pot: Remove file from version control as its an generated file.
+
 
 2010-08-25  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 

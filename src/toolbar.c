@@ -54,6 +54,7 @@ static GSList *plugin_items = NULL;
 const GtkActionEntry ui_entries[] = {
 	/* custom actions defined in toolbar_init(): "New", "Open", "SearchEntry", "GotoEntry", "Build" */
 	{ "Save", GTK_STOCK_SAVE, NULL, NULL, N_("Save the current file"), G_CALLBACK(on_toolbutton_save_clicked) },
+	{ "SaveAs", GTK_STOCK_SAVE_AS, NULL, NULL, N_("Save as"), G_CALLBACK(on_save_as1_activate) },
 	{ "SaveAll", GEANY_STOCK_SAVE_ALL, NULL, NULL, N_("Save all open files"), G_CALLBACK(on_save_all1_activate) },
 	{ "Reload", GTK_STOCK_REVERT_TO_SAVED, NULL, NULL, N_("Reload the current file from disk"), G_CALLBACK(on_toolbutton_reload_clicked) },
 	{ "Close", GTK_STOCK_CLOSE, NULL, NULL, N_("Close the current file"), G_CALLBACK(on_toolbutton_close_clicked) },

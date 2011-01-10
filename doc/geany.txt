@@ -234,17 +234,19 @@ help from your distribution.
 
 Installation prefix
 -------------------
-If you want to edit any of Geany's system configuration files after
-installation you will need to know the installation prefix.  Usually this
-is not necessary as you can just use per user configuration files and
-you will not need root permissions.
+If you want to find Geany's system files after installation you may
+want to know the installation prefix.
 
-Use the ``--print-prefix`` option to Geany to check - see `Command line
-options`_. The first path is the prefix.
+Pass the ``--print-prefix`` option to Geany to check this - see
+`Command line options`_. The first path is the prefix.
 
-This is commonly ``/usr`` if you installed from a binary package, or
-``/usr/local`` if you build from source.
+On Unix-like systems this is commonly ``/usr`` if you installed from
+a binary package, or ``/usr/local`` if you build from source.
 
+.. note::
+    Editing system files is not necessary as you can use the
+    per-user configuration files instead, which don't need root
+    permissions. See `Configuration files`_.
 
 
 Usage
@@ -294,6 +296,9 @@ The workspace has the following parts:
   * Terminal - An optional terminal window.
 
 * A status bar
+
+Most of these can be configured in the `Interface preferences`_, the
+`View menu`_, or the popup menu for the relevant area.
 
 Additional tabs may be added to the sidebar and message window by plugins.
 
@@ -352,7 +357,7 @@ Short option  Long option              Function
 -p            --no-plugins             Do not load plugins or plugin support.
 
 *none*        --print-prefix           Print installation prefix, the data directory, the lib
-                                       directory and the locale directory (in this order) to
+                                       directory and the locale directory (in that order) to
                                        stdout, one line each. This is mainly intended for plugin
                                        authors to detect installation paths.
 
@@ -1007,28 +1012,18 @@ Maybe you need to often type your name, so define a snippet like this::
 Every time you write ``myname`` <TAB> in Geany, it will replace "myname"
 with "Enrico Tröger". The key to start autocompletion can be changed
 in the preferences dialog, by default it is TAB. The corresponding keybinding
-is called ``Complete snippet``.
+is called `Complete snippet`.
 
 **Paths**
 
-The system-wide configuration file can be found in
-``$prefix/share/geany``, where ``$prefix`` is the path where Geany is
-installed (see `Installation prefix`_). It is not recommended to edit the
-system-wide file, because it will be overridden when Geany is updated.
+You can override the default snippets using the user
+``snippets.conf`` file. Use the *Tools->Configuration
+Files->snippets.conf* menu item. See also `Configuration file paths`_.
 
-To change the settings, copy the file from ``$prefix/share/geany``
-in your configuration directory (usually ``~/.config/geany/``).
-
-For example::
-
-    % cp /usr/local/share/geany/snippets.conf /home/username/.config/geany/
-
-Then you can edit the file and the changes will remain available
-after an update of Geany because the file resides in your
-configuration directory. Alternatively, you can create a file
-``~/.config/geany/snippets.conf`` and add only these settings you want
-to change. All missing settings will be read from the global snippets
-file in ``$prefix/share/geany``.
+This adds the default settings to the user file if the file doesn't
+exist. Alternatively the file can be created manually, adding only
+the settings you want to change. All missing settings will be read
+from the system snippets file.
 
 **Snippet groups**
 
@@ -1065,7 +1060,7 @@ will be replaced when using the snippet:
 
 %cursor%          Place the cursor at this position after completion has
                   been done. You can define multiple %cursor% wildcards
-                  and use the keybinding ``Move cursor in snippet`` to jump
+                  and use the keybinding `Move cursor in snippet` to jump
                   to the next defined cursor position in the completed
                   snippet.
 
@@ -1357,6 +1352,12 @@ current word is either the word nearest the edit cursor,
 or the word underneath the popup menu click position when the popup
 menu is used.
 
+.. note::
+    If the current word's tag is on the current line, Geany will try
+    to look for a tag declaration instead, as this is more useful.
+    Likewise 'Go to tag declaration' will search for a tag definition
+    in this case also.
+
 
 Go to tag declaration
 ^^^^^^^^^^^^^^^^^^^^^
@@ -1464,6 +1465,27 @@ $       This matches the end of a line.
 
 
 
+View menu
+---------
+The View menu allows various elements of the main window to be shown
+or hidden, and also provides various display-related editor options.
+
+Color schemes menu
+^^^^^^^^^^^^^^^^^^
+The Color schemes menu is available under the *View->Editor* submenu.
+It lists various color schemes for editor highlighting styles,
+including the default scheme first. Other items are available based
+on what color scheme files Geany found at startup.
+
+Color scheme files are read from the `Configuration file paths`_ under
+the ``colorschemes`` subdirectory. They should have the extension
+``.conf`` and currently only contain a `[named_styles] section`_. The
+default color scheme is read from ``filetypes.common``.
+
+.. note::
+    Some filetypes do not yet support named styles so will ignore
+    any chosen color scheme.
+
 Tags
 ----
 
@@ -1503,11 +1525,8 @@ the library.
 You can load a custom global tags file in two ways:
 
 * Using the *Load Tags* command in the Tools menu.
-* By creating a directory ``~/.config/geany/tags``, and moving or symlinking
-  the tags files there before starting Geany.
-* By creating a directory ``$prefix/share/geany/tags``, and moving
-  or symlinking the tags files there before starting Geany.
-  ``$prefix`` is the installation prefix (see `Installation prefix`_).
+* By moving or symlinking tags files to the ``tags`` subdirectory of
+  one of the `configuration file paths`_ before starting Geany.
 
 You can either download these files or generate your own. They have
 the format::
@@ -1626,16 +1645,30 @@ copy of the generated tags file because it will get overwritten when
 upgrading Geany.
 
 
-Ignore tags
-^^^^^^^^^^^
+C Ignore tags
+^^^^^^^^^^^^^
 
-You can also ignore certain tags if they would lead to wrong parsing of
-the code. Simply create a file called "ignore.tags" in your Geany
-configuration directory (usually ``~/.config/geany/``). Then list all tags
-you want to ignore in this file, separated by spaces and/or newlines.
+You can ignore certain tags for C-based languages if they would lead
+to wrong parsing of the code. Use the *Tools->Configuration
+Files->ignore.tags* menu item to open the user ``ignore.tags`` file.
+See also `Configuration file paths`_.
 
-More detailed information about the usage from the Exuberant Ctags
-manual page::
+List all tag names you want to ignore in this file, separated by spaces
+and/or newlines.
+
+Example::
+
+    G_GNUC_NULL_TERMINATED
+    G_GNUC_PRINTF
+    G_GNUC_WARN_UNUSED_RESULT
+
+This will parse code like:
+
+``gchar **utils_strv_new(const gchar *first, ...)
+G_GNUC_NULL_TERMINATED;``
+
+More detailed information about ignore tags usage from the Exuberant Ctags
+manual page:
 
     Specifies a list of identifiers which are to be specially handled
     while  parsing C and C++ source files. This option is specifically
@@ -1915,7 +1948,7 @@ Features
 Line wrapping
     Show long lines wrapped around to new display lines.
 
-Enable "smart" home key
+"Smart" home key
     Whether to move the cursor to the first non-whitespace character
     on the line when you hit the home key on your keyboard. Pressing it
     again will go to the very start of the line.
@@ -1923,7 +1956,7 @@ Enable "smart" home key
 Disable Drag and Drop
     Do not allow the dragging and dropping of selected text in documents.
 
-Enable folding
+Code folding
     Allow groups of lines in a document to be collapsed for easier
     navigation/editing.
 
@@ -2013,8 +2046,9 @@ Snippet Completion
     pre-defined text snippet.
     See `User-definable snippets`_.
 
-XML/HTML tag autocompletion
-    When you open an XML tag automatically generate its completion tag.
+XML/HTML tag auto-closing
+    When you open an XML/HTML tag automatically generate its
+    completion tag.
 
 Automatic continuation multi-line comments
     Continue automatically multi-line comments in languages like C, C++
@@ -2826,8 +2860,8 @@ It is currently not possible to bind keyboard shortcuts to more than these menu 
 
 You can also use underlines in the labels to set mnemonic characters.
 
-Configuration Files
-```````````````````
+Old settings
+````````````
 
 The configurable Build Menu capability was introduced in Geany 0.19 and
 required a new section to be added to the configuration files (See
@@ -2910,21 +2944,25 @@ general preference is set. There is also a command-line option,
 ``-p``, which prevents plugins being loaded. Plugins are scanned in
 the following directories:
 
-*   ``$prefix/lib/geany`` (see `Installation prefix`_)
-*   ``~/.config/geany/plugins``
+* ``$prefix/lib/geany`` (see `Installation prefix`_)
+* The ``plugins`` subfolder of the user configuration directory - see
+  `Configuration file paths`_.
+* The `Extra plugin path` preference (usually blank) - see `Paths`_.
 
 Most plugins add menu items to the *Tools* menu when they are loaded.
 
-Since Geany 0.13, there is a Plugin Manager to let you choose which plugins
+See also `Plugin documentation`_ for information about single plugins
+which are included in Geany.
+
+Plugin Manager
+^^^^^^^^^^^^^^
+The Plugin Manager dialog lets you choose which plugins
 should be loaded at startup. You can also load and unload plugins on the
 fly using this dialog. Once you click the checkbox for a specific plugin
 in the dialog, it is loaded or unloaded according to its previous state.
 By default, no plugins are loaded at startup until you select some.
-You can also configure some plugin specific options when the plugin
-provides some.
-
-See also `Plugin documentation`_ for information about single plugins
-which are included in Geany.
+You can also configure some plugin specific options if the plugin
+provides any.
 
 
 Keybindings
@@ -3470,6 +3508,37 @@ Configuration files
     You must use UTF-8 encoding *without BOM* for configuration files.
 
 
+Configuration file paths
+------------------------
+Geany has default configuration files installed for the system and
+also per-user configuration files.
+
+The system files should not normally be edited because they will be
+overwritten when upgrading Geany.
+
+The user configuration directory can be overridden with the ``-c``
+switch, but this is not normally done. See `Command line options`_.
+
+.. note::
+    Any missing subdirectories in the user configuration directory
+    will be created when Geany starts.
+
+You can check the paths Geany is using with *Help->Debug Messages*.
+Near the top there should be 2 lines with something like::
+
+    Geany-INFO: System data dir: /usr/share/geany
+    Geany-INFO: User config dir: /home/username/.config/geany
+
+
+Paths on Unix-like systems
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+The system path is ``$prefix/share/geany``, where ``$prefix`` is the
+path where Geany is installed (see `Installation prefix`_).
+
+The user configuration directory is normally
+``/home/username/.config/geany/``.
+
+
 Tools menu items
 ----------------
 There's a *Configuration files* submenu in the *Tools* menu that
@@ -3497,17 +3566,14 @@ template files.
 Global configuration file
 -------------------------
 
-There is a global configuration file for Geany which will be used for
-any settings not defined in the users local configuration file.
-Settings present in the local configuration file override those in the global
-file.
+System administrators can add a global configuration file for Geany
+which will be used when starting Geany and a user configuration file
+does not exist.
 
-The global configuration file is read from
-``$prefix/share/geany/geany.conf`` (where ``$prefix`` is the path where
-Geany is installed, see `Installation prefix`_) when starting Geany and
-an user configuration file does not exist. It can contain any settings
-which are found in the usual configuration file created by Geany but
-does not have to contain all settings.
+The global configuration file is read from ``geany.conf`` in the
+system configuration path - see `Configuration file paths`_. It can
+contain any settings which are found in the usual configuration file
+created by Geany, but does not have to contain all settings.
 
 .. note::
     This feature is mainly intended for package maintainers or system
@@ -3525,30 +3591,13 @@ stored in the filetype definition files. Those settings are colors
 for syntax highlighting, general settings like comment characters or
 word delimiter characters as well as compiler and linker settings.
 
-Custom filetypes
-^^^^^^^^^^^^^^^^
-At startup Geany looks for ``filetypes.*.conf`` files in the system and
-user filetype paths, adding any filetypes found with the name matching
-the '``*``' wildcard.
-
-Custom filetypes are not as powerful as built-in filetypes, but the following
-have been implemented:
-
-* Recognizing and setting the filetype (after the user has manually edited
-  ``filetype_extensions.conf``).
-* Filetype settings in the [settings] section (see `Filetype configuration`_).
-    * Using existing tag parsing (``tag_parser`` key).
-    * Using existing syntax highlighting (``lexer_filetype`` key).
-* Build commands.
-* Loading global tags files (namespace will be shared with tag_parser
-  type).
+See also `Configuration file paths`_.
 
 System files
 ^^^^^^^^^^^^
-The system-wide configuration files can be found in
-``$prefix/share/geany`` and are called ``filetypes.$ext``,
-where ``$prefix`` is the path where Geany is installed (see
-`Installation prefix`_) and $ext is the name of the filetype. For every
+The system-wide filetype configuration files can be found in the
+system configuration path and are called ``filetypes.$ext``,
+where $ext is the name of the filetype. For every
 filetype there is a corresponding definition file. There is one
 exception: ``filetypes.common`` -- this file is for general settings,
 which are not specific to a certain filetype.
@@ -3559,21 +3608,52 @@ which are not specific to a certain filetype.
 
 User files
 ^^^^^^^^^^
-To change the settings, copy a file from ``$prefix/share/geany`` to
-the subdirectory filedefs in your configuration directory (usually
-``~/.config/geany/``).
+To change the settings, copy a file from the system configuration
+path to the subdirectory ``filedefs`` in your user configuration
+directory. Then you can edit the file and the changes will still be
+available after an update of Geany.
 
-For example::
+Alternatively, you can create the file yourself and add only the
+settings you want to change. All missing settings will be read from
+the corresponding system configuration file.
 
-    % cp /usr/local/share/geany/filetypes.c /home/username/.config/geany/filedefs/
+Custom filetypes
+^^^^^^^^^^^^^^^^
+At startup Geany looks for ``filetypes.*.conf`` files in the system and
+user filetype paths, adding any filetypes found with the name matching
+the '``*``' wildcard - e.g. ``filetypes.Bar.conf``.
 
-Then you can edit the file and the changes are also
-available after an update of Geany because they reside in your
-configuration directory. Alternatively, you can create a file
-``~/.config/geany/filedefs/filetypes.X`` and add only these settings you want
-to change. All missing settings will be read from the corresponding
-global definition file in ``$prefix/share/geany``.
+Custom filetypes are not as powerful as built-in filetypes, but
+support for the following has been implemented:
 
+* Recognizing and setting the filetype (after the user has manually edited
+  ``filetype_extensions.conf``).
+* Reading filetype settings in the ``[settings]`` section, including:
+    * Using an existing syntax highlighting lexer (`lexer_filetype`_ key).
+    * Using an existing tag parser (``tag_parser`` key).
+* Build commands (``[build-menu]`` section).
+* Loading global tags files (sharing the ``tag_parser`` namespace).
+
+See `Filetype configuration`_ for details on each setting.
+
+Creating a custom filetype from an existing filetype
+````````````````````````````````````````````````````
+Because most filetype settings will relate to the syntax
+highlighting (e.g. styling, keywords, ``lexer_properties``
+sections), it is best to copy an existing filetype file that uses
+the lexer you wish to use as the basis of a custom filetype, using
+the correct filename extension format shown above, e.g.::
+
+    cp filetypes.foo filetypes.Bar.conf
+
+Then add the ``lexer_filetype=Foo`` setting (if not already present)
+and add/adjust other settings.
+
+.. warning::
+    The ``[styling]`` and ``[keywords]`` sections have key names
+    specific to each filetype/lexer. You must follow the same
+    names - in particular, some lexers only support one keyword
+    list, or none.
 
 
 Filetype configuration
@@ -3726,12 +3806,21 @@ context_action_cmd
     *Example:* ``context_action_cmd=devhelp -s "%s"``
 
 tag_parser
-    The TagManager language name, e.g. "C".
+    The TagManager language name, e.g. "C". Usually the same as the
+    filetype name.
+
+.. _lexer_filetype:
 
 lexer_filetype
     A filetype name to setup syntax highlighting from another filetype.
     This must not be recursive, i.e. it should be a filetype name that
-    doesn't use the lexer_filetype key itself.
+    doesn't use the *lexer_filetype* key itself, e.g.::
+
+        lexer_filetype=C
+        #lexer_filetype=C++
+
+    The second line is wrong, because ``filetypes.cpp`` itself uses
+    ``lexer_filetype=C``, which would be recursive.
 
 symbol_list_sort_mode
     What the default symbol list sort order should be.
@@ -3817,6 +3906,13 @@ There is a special filetype definition file called
 filetypes.common. This file defines some general non-filetype-specific
 settings.
 
+You can open the user filetypes.common with the
+*Tools->Configuration Files->filetypes.common* menu item. This adds
+the default settings to the user file if the file doesn't exist.
+Alternatively the file can be created manually, adding only the
+settings you want to change. All missing settings will be read from
+the system file.
+
 .. note::
     See the `Filetype configuration`_ section for how to define styles.
 
@@ -3847,6 +3943,8 @@ different files.
     entry in the above example, but they must be declared after the
     original style.
 
+This section can be overridden with color scheme files - see the `Color
+schemes menu`_.
 
 [styling] Section
 `````````````````
@@ -4082,26 +4180,19 @@ Filetype extensions
 To change the default filetype extension used when saving a new file,
 see `Filetype definition files`_.
 
-You can override the list of file extensions that Geany uses for each
-filetype using the ``filetype_extensions.conf`` file.
+You can override the list of file extensions that Geany uses to detect
+filetypes using the user ``filetype_extensions.conf`` file. Use the
+*Tools->Configuration Files->filetype_extensions.conf* menu item. See
+also `Configuration file paths`_.
 
-To override the system-wide configuration file, copy it from
-``$prefix/share/geany`` to your configuration directory, usually
-``~/.config/geany/``. ``$prefix`` is the path where Geany is installed
-(see `Installation prefix`_).
+You should only list lines for filetype extensions that you want to
+override in the user configuration file and remove or comment out
+others. The patterns are listed after the ``=`` sign, using a
+semi-colon separated list of patterns which should be matched for
+that filetype.
 
-For example::
-
-    % cp /usr/local/share/geany/filetype_extensions.conf /home/username/.config/geany/
-
-Then edit it and remove all the lines for filetype extensions that
-you do not want to override. The remaining lines can be edited after
-the ``=`` sign, using a semi-colon separated list of patterns which
-should be matched for that filetype.
-
-For example, to set the filetype extensions for Make, the
-``/home/username/.config/geany/filetype_extensions.conf`` file should
-look like::
+For example, to override the filetype extensions for Make, the file
+should look like::
 
     [Extensions]
     Make=Makefile*;*.mk;Buildfile;
@@ -4109,10 +4200,10 @@ look like::
 Preferences File Format
 -----------------------
 
-The preferences file ``~/.config/geany/geany.conf`` holds settings for all the items configured
+The user preferences file ``geany.conf`` holds settings for all the items configured
 in the preferences dialog. This file should not be edited while Geany is running
 as the file will be overwritten when the preferences in Geany are changed or Geany
-is quitted.
+is quit.
 
 
 Hidden preferences
@@ -4145,7 +4236,7 @@ complete_snippets_whilst_editing  Whether to allow completion of snippets      f
                                   when editing an existing line (i.e. there
                                   is some text after the current cursor
                                   position on the line). Only used when the
-                                  keybinding ``Complete snippet`` is set to
+                                  keybinding `Complete snippet` is set to
                                   ``Space``.
 show_editor_scrollbars            Whether to display scrollbars. If set to     true
                                   false, the horizontal and vertical
@@ -4218,6 +4309,8 @@ use_safe_file_saving              Defines the mode how Geany saves files to    f
                                   break things seriously.
                                   The better approach would be to ensure your
                                   disk won't run out of free space.
+gio_unsafe_save_backup            Make a backup when using GIO unsafe file     false
+                                  saving. Backup is named `filename~`.
 **Search related**
 find_selection_type               See `Find selection`_.                       0
 **Build Menu related**
@@ -4353,11 +4446,8 @@ line of the file, followed by a blank line.
 Custom file templates
 `````````````````````
 
-These are read from the following directories:
-
-* ``$prefix/share/geany/templates/files`` (see `Installation prefix`_)
-* ``~/.config/geany/templates/files`` (created the first time
-  Geany is started).
+These are read from ``templates/files`` under the `Configuration file
+paths`_.
 
 The filetype to use is detected from the template file's extension, if
 any. For example, creating a file ``module.c`` would add a menu item
@@ -4548,19 +4638,18 @@ You can easily access them e.g. within an executed shell script using::
 Customizing the toolbar
 -----------------------
 
-You can add, remove and reorder the elements in the toolbar by using the toolbar editor
-by manually editing the file ``ui_toolbar.xml``.
+You can add, remove and reorder the elements in the toolbar by using
+the toolbar editor, or by manually editing the configuration file
+``ui_toolbar.xml``.
 
 The toolbar editor can be opened from the preferences editor on the Toolbar tab or
 by right-clicking on the toolbar itself and choosing it from the menu.
 
-Manually editing of the toolbar layout
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Manually editing the toolbar layout
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-To override the system-wide configuration file, copy it from
-``$prefix/share/geany`` to your configuration directory, usually
-``~/.config/geany/``. ``$prefix`` is the path where Geany is installed
-(see `Installation prefix`_).
+To override the system-wide configuration file, copy it to your user
+configuration directory (see `Configuration file paths`_).
 
 For example::
 
@@ -4626,11 +4715,11 @@ Quit               Quit Geany
 Plugin documentation
 ====================
 
-HTMLChars
----------
+HTML Characters
+---------------
 
-The HTMLChars plugin helps when working with special characters in
-XML/HTML, e.g. German Umlauts ü and ä.
+The HTML Characters plugin helps when working with special
+characters in XML/HTML, e.g. German Umlauts ü and ä.
 
 
 Insert entity dialog

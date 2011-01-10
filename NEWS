@@ -1,3 +1,169 @@
+Geany 0.20 (January 5, 2011)
+
+    Fixes:
+    * Improve compatibility with GVFS using GIO to save documents (Alexey
+      Antipov).
+    * Fix crash when closing a modified document (usually without a
+      trailing newline) and choosing Save (fixes #3111058).
+    * Fix crash when using 'Send Selection to Terminal' and the VTE
+      is not loaded, and when using Ctrl-A after enabling the 'Load VTE'
+      pref (Dimitar Zhekov).
+    * Fix a slightly wrong encoding detection on Windows (#3019573).
+    * Fix issue with single-line commenting/uncommenting blocks when using
+      Windows line endings.
+    * Fix saving project indent prefs straight after using project
+      properties.
+    * Fix wrongly changing edited keybindings when cancelling the
+      Preferences dialog.
+    * Fix auto-displaying of sidebar, tab bar, symbols and documents tabs
+      when only plugin tabs are visible (fixes #3101867).
+    * Save build commands for filetype None (Lex Trotman).
+    * Waf: Check for libsocket on OpenSolaris to fix build.
+
+    Interface:
+    * Color build command fields light grey unless overridden (Lex
+      Trotman).
+    * Replace /home/user with ~ in the documents list (Jon
+      Strait).
+    * Display 'new instance' on title bar for 2nd instances (Eugene
+      Arshinov).
+    * Don't add duplicates to combo box histories.
+    * Reorganise Find in Files dialog and add Files pattern to filter
+      search results.
+    * Implement 'Select All' for the VTE widget.
+    * Reorganise editor popup menu for shorter size - some items were moved
+      to submenus.
+    * Move Go to Marker menu items to Search menu.
+    * Group Open dialog encoding options by submenus (Adam Ples; #3047717).
+    * Show mimetype icon in sidebar Documents list and notebook popup menu
+      (Colomban Wendling).
+
+    Documents:
+    * Ensure inserted templates always have proper line ending characters
+      according to the current document's preference.
+    * Add per-document indent width setting (Jiří Techet).
+    * Add 'Project->Apply Default Indentation' menu command to override
+      every document's indentation settings.
+    * Display better error messages when saving a document fails (Dimitar
+      Zhekov).
+    * Don't prompt for reloading if the document has not been edited
+      (Jiří Techet).
+    * Add Close button to the detected file changed dialog.
+
+    Editor:
+    * Fix wrong snippet indentation when original cursor line has
+      non-indentation whitespace (david).
+    * Fix passing quoted arguments when using 'Send Selection to'. This
+      means e.g. sed 's/\./(dot)/g' now works.
+    * Add alternative color scheme based on Python colors
+      (View->Editor->Color Schemes).
+    * Replace HTML automatic <table> tag completion with a 'table' snippet
+      (Eugene Arshinov).
+    * Auto-indent after an HTML/XML line without a closing tag (Eugene
+      Arshinov).
+    * Respect 'Smart' home key pref for Shift[+Alt]+Home (fixes #3100290,
+      Dimitar Zhekov).
+    * Scroll to the current line when moving the cursor to the next
+      cursor position in a snippet (#3139490).
+    * If the current word's tag is on the current line, make Go to Tag
+      Definition look for a tag declaration instead and vice versa.
+    * Make Reflow Lines/Block command use the current indented block, not
+      the whole paragraph (which could have mixed indentation).
+
+    Configuration:
+    * Load insertion templates from system path, don't create them in
+      the user's config dir.
+    * File templates are now reloaded on saving.
+
+    Prefs:
+    * Add 'Ensure consistent line endings' file saving pref (Manuel Bua).
+    * Add 'statusbar_template' hidden pref (Dimitar Zhekov).
+    * Add 'new_document_after_close' hidden pref to open a new document
+      automatically after closing all documents.
+    * Add hidden pref 'find_selection_type' with option to use the X
+      selection or to repeat the last search when there's no selection,
+      both off by default.
+    * Add 'gio_unsafe_save_backup' hidden pref (Lex Trotman).
+    * Add filetypes.common 'fold_symbol_highlight' color setting.
+    * Add 'symbol_list_sort_mode' per-filetype setting.
+
+    Keybindings:
+    * Fix Alt+[0-9] switching tabs even when other modifiers are also held.
+    * Add snippet keybinding support (Eugene Arshinov).
+    * Add 'Insert New Line Before/After Current' keybindings (Eugene
+      Arshinov).
+
+    Filetypes:
+    * Add Forth filetype (Thomas Huth).
+    * Add Lisp filetype (Mário Silva).
+    * Add Erlang filetype (Taylor Venable).
+    * Ada: Fix wrong comments.
+    * C++: Disable user fold points with new lexer property
+      fold.cpp.comment.explicit.
+    * Python: Update list of builtins for Python 2.6, simplify
+      Compile/Syntax Check command. Use named styles for color scheme
+      support (use alt.conf color scheme if you want the old colors).
+    * Matlab: Support Octave # comment char.
+    * Txt2Tags: add highlighting (Forgeot Eric - #3020632).
+    * Make: fix possible infinite loop in tag parser.
+    * D: Parse template functions, ignore /+ +/ comments, ignore
+      unittest blocks, add keywords 'ref', 'macro' and D2 keywords.
+    * Vala: Parse functions with contracts (#3080232).
+    * Markdown, reStructuredText and Txt2Tags: Sort tags by line number by
+      default.
+    * Basic: Parse property, constructor, destructor as functions
+      (pottersson; #2992167).
+    * HTML: Add HTML5 element names and attributes (Ross McKay).
+    * PHP: Parse final functions (fixes #3111171).
+    * Markup: Add xml_indent_tags filetype setting for documents using the
+      HTML/XML lexers (Eugene Arshinov).
+
+    Plugins:
+    * File Browser: Add history to path entry.
+    * HTML Characters: Only automatically replace characters when the
+      current document is a Markup document.
+
+    Internationalisation:
+    * Add translations: kk.
+    * Update translations: cs, de, en_GB, es, fi, fr, hu, ja, nl, pt,
+                           sl, sv, tr, zh_CN.
+
+    Manual:
+    * Update 'Custom filetypes', 'Ignore Tags' sections.
+    * Add 'HTML Characters', 'Configuration file paths', 'Color schemes
+      menu' sections.
+    * Explain how to grep the Scintilla source for lexer properties.
+
+    HACKING:
+    * Add 'Bugs to watch out for' section.
+
+    API:
+    * Improve Stash GUI example.
+    * Fix not loading plugins built against a newer API when Geany doesn't
+      provide the required version given in PLUGIN_VERSION_CHECK().
+    * Make GEANY_API_VERSION, GEANY_ABI_VERSION macros instead of enums
+      so you can protect code with '#if GEANY_API_VERSION >= 200'.
+    * Add signals "build-start", "project-dialog-create" and
+      "project-dialog-confirmed" - to append a Project Properties
+      notebook tab (Jiří Techet).
+    * Add macro foreach_range().
+    * Add GeanyMainWidgets::message_window_notebook (#3061342).
+    * Add main_widgets.project_menu (Jiří Techet).
+    * Add msgwin_set_messages_dir() (Jiří Techet).
+    * Add highlighting_is_{string,comment,code}_style(),
+      editor_find_snippet(), editor_insert_snippet(),
+      utils_find_open_xml_tag() (Eugene Arshinov).
+    * Add ui_combo_box_add_to_history(), editor_goto_pos(),
+      dialogs_show_input(), Add sci_get_lexer().
+    * Add filetypes_get_display_name() as "None" is no longer translated.
+
+
+Geany 0.19.2 (December 01, 2010)
+    Fixes:
+    * Fix bug where Geany did not always report an error message when
+      saving a document fails.
+
+
 Geany 0.19.1 (August 18, 2010)
 
     Fixes:
@@ -1296,4 +1462,3 @@ Geany 0.2 (October 26, 2005)
 Geany 0.1 (October 19, 2005)
 
         * first official release
-

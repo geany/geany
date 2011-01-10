@@ -2168,7 +2168,7 @@ on_send_selection_to_vte1_activate     (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
 #ifdef HAVE_VTE
-	if (vte_info.load_vte)
+	if (vte_info.have_vte)
 		vte_send_selection_to_vte();
 #endif
 }
@@ -2369,5 +2369,13 @@ on_reset_indentation1_activate         (GtkMenuItem     *menuitem,
 
 	ui_update_statusbar(NULL, -1);
 	ui_document_show_hide(NULL);
+}
+
+
+void
+on_mark_all1_activate                  (GtkMenuItem     *menuitem,
+                                        gpointer         user_data)
+{
+	keybindings_send_command(GEANY_KEY_GROUP_SEARCH, GEANY_KEYS_SEARCH_MARKALL);
 }
 

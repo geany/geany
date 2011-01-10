@@ -217,15 +217,19 @@ gboolean utils_is_opening_brace(gchar c, gboolean include_angles)
 
 
 /**
- *  Writes the given @a text into a file with @a filename.
- *  If the file doesn't exist, it will be created.
- *  If it already exists, it will be overwritten.
+ * Writes @a text into a file named @a filename.
+ * If the file doesn't exist, it will be created.
+ * If it already exists, it will be overwritten.
  *
- *  @param filename The filename of the file to write, in locale encoding.
- *  @param text The text to write into the file.
+ * @warning You should use @c g_file_set_contents() instead if you don't need
+ * file permissions and other metadata to be preserved, as that always handles
+ * disk exhaustion safely.
  *
- *  @return 0 if the file was successfully written, otherwise the @c errno of the
- *          failed operation is returned.
+ * @param filename The filename of the file to write, in locale encoding.
+ * @param text The text to write into the file.
+ *
+ * @return 0 if the file was successfully written, otherwise the @c errno of the
+ *         failed operation is returned.
  **/
 gint utils_write_file(const gchar *filename, const gchar *text)
 {
@@ -246,30 +250,35 @@ gint utils_write_file(const gchar *filename, const gchar *text)
 	{
 		FILE *fp;
 		gint bytes_written, len;
+		gboolean fail = FALSE;
 
 		if (filename == NULL)
 			return ENOENT;
 
 		len = strlen(text);
+		errno = 0;
 		fp = g_fopen(filename, "w");
-		if (fp != NULL)
+		if (fp == NULL)
+			fail = TRUE;
+		else
 		{
-			bytes_written = fwrite(text, sizeof (gchar), len, fp);
-			fclose(fp);
+			bytes_written = fwrite(text, sizeof(gchar), len, fp);
 
 			if (len != bytes_written)
 			{
+				fail = TRUE;
 				geany_debug(
 					"utils_write_file(): written only %d bytes, had to write %d bytes to %s",
 					bytes_written, len, filename);
-				return EIO;
 			}
+			if (fclose(fp) != 0)
+				fail = TRUE;
 		}
-		else
+		if (fail)
 		{
 			geany_debug("utils_write_file(): could not write to file %s (%s)",
 				filename, g_strerror(errno));
-			return errno;
+			return NVL(errno, EIO);
 		}
 	}
 	return 0;

@@ -472,7 +472,7 @@ static GeanyBuildCommand *get_build_group(GeanyBuildSource src, GeanyBuildGroup 
 }
 
 
-/** Remove the specified Build menu item.
+/* * Remove the specified Build menu item.
  *
  * Makes the specified menu item configuration no longer exist. This
  * is different to setting fields to blank because the menu item
@@ -507,7 +507,7 @@ void build_remove_menu_item(GeanyBuildSource src, GeanyBuildGroup grp, gint cmd)
 }
 
 
-/** Get the @a GeanyBuildCommand structure for the specified Build menu item.
+/* * Get the @a GeanyBuildCommand structure for the specified Build menu item.
  *
  * Get the command for any menu item specified by @a src, @a grp and @a cmd even if it is
  * hidden by higher priority commands.
@@ -534,7 +534,7 @@ GeanyBuildCommand *build_get_menu_item(GeanyBuildSource src, GeanyBuildGroup grp
 }
 
 
-/** Get the @a GeanyBuildCommand structure for the menu item.
+/* * Get the @a GeanyBuildCommand structure for the menu item.
  *
  * Get the current highest priority command specified by @a grp and @a cmd.  This is the one
  * that the menu item will use if activated.
@@ -776,8 +776,6 @@ static GPid build_spawn_cmd(GeanyDocument *doc, const gchar *cmd, const gchar *d
 static gchar *prepare_run_script(GeanyDocument *doc, gchar **vte_cmd_nonscript, gint cmdindex)
 {
 	gchar *locale_filename = NULL;
-	gboolean have_project;
-	GeanyProject *project = app->project;
 	GeanyBuildCommand *cmd = NULL;
 	gchar *executable = NULL;
 	gchar *working_dir = NULL;
@@ -792,7 +790,6 @@ static gchar *prepare_run_script(GeanyDocument *doc, gchar **vte_cmd_nonscript, 
 
 	locale_filename = utils_get_locale_from_utf8(doc->file_name);
 
-	have_project = project != NULL;
 	cmd = get_build_cmd(doc, GEANY_GBG_EXEC, cmdindex, NULL);
 
 	cmd_string = build_replace_placeholder(doc, cmd->command);
@@ -814,7 +811,7 @@ static gchar *prepare_run_script(GeanyDocument *doc, gchar **vte_cmd_nonscript, 
 	}
 
 #ifdef HAVE_VTE
-	if (vte_info.load_vte && vc != NULL && vc->run_in_vte)
+	if (vte_info.have_vte && vc->run_in_vte)
 	{
 		if (vc->skip_run_script)
 		{
@@ -866,7 +863,7 @@ static GPid build_run_cmd(GeanyDocument *doc, gint cmdindex)
 	run_info[cmdindex].file_type_id = doc->file_type->id;
 
 #ifdef HAVE_VTE
-	if (vte_info.load_vte && vc != NULL && vc->run_in_vte)
+	if (vte_info.have_vte && vc->run_in_vte)
 	{
 		gchar *vte_cmd;
 
@@ -1455,7 +1452,7 @@ static void geany_menu_item_set_label(GtkWidget *w, const gchar *label)
 }
 
 
-/** Update the build menu to reflect changes in configuration or status.
+/* * Update the build menu to reflect changes in configuration or status.
  *
  * Sets the labels and number of visible items to match the highest
  * priority configured commands.  Also sets sensitivity if build commands are
@@ -1844,7 +1841,7 @@ static void on_entry_focus(GtkWidget *wid, GdkEventFocus *unused, gpointer user_
 /* Column headings, array NULL-terminated */
 static const gchar *colheads[] =
 {
-	N_("Item"),
+	"#",
 	N_("Label"),
 	N_("Command"),
 	N_("Working directory"),
@@ -1869,8 +1866,11 @@ static RowWidgets *build_add_dialog_row(GeanyDocument *doc, GtkTable *table, gui
 	gint src;
 	enum GeanyBuildCmdEntries i;
 	guint column = 0;
+	gchar *text;
 
-	label = gtk_label_new(g_strdup_printf("%d:", cmd + 1));
+	text = g_strdup_printf("%d.", cmd + 1);
+	label = gtk_label_new(text);
+	g_free(text);
 	insensitive_color = &(gtk_widget_get_style(label)->text[GTK_STATE_INSENSITIVE]);
 	gtk_table_attach(table, label, column, column + 1, row, row + 1, GTK_FILL,
 		GTK_FILL | GTK_EXPAND, entry_x_padding, entry_y_padding);
@@ -2040,7 +2040,9 @@ GtkWidget *build_commands_table(GeanyDocument *doc, GeanyBuildSource dst, BuildT
 	gtk_widget_set_sensitive(fields->nonfileregex, sensitivity);
 	gtk_widget_set_sensitive(clear, sensitivity);
 	++row;
-	label = gtk_label_new(_("Note: Item 2 opens a dialog and appends the response to the command."));
+	label = gtk_label_new(NULL);
+	ui_label_set_markup(GTK_LABEL(label), "<i>%s</i>",
+		_("Note: Item 2 opens a dialog and appends the response to the command."));
 	gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
 	gtk_table_attach(table, label, 0, DC_N_COL, row, row + 1, GTK_FILL, GTK_FILL | GTK_EXPAND,
 		entry_x_padding, entry_y_padding);
@@ -2059,7 +2061,8 @@ GtkWidget *build_commands_table(GeanyDocument *doc, GeanyBuildSource dst, BuildT
 	gtk_table_attach(table, sep, 0, DC_N_COL, row, row + 1, GTK_FILL, GTK_FILL | GTK_EXPAND,
 		entry_x_padding, sep_padding);
 	++row;
-	label = gtk_label_new(
+	label = gtk_label_new(NULL);
+	ui_label_set_markup(GTK_LABEL(label), "<i>%s</i>",
 		_("%d, %e, %f, %p are substituted in command and directory fields, see manual for details."));
 	gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
 	gtk_table_attach(table, label, 0, DC_N_COL, row, row + 1, GTK_FILL, GTK_FILL | GTK_EXPAND,

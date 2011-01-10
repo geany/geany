@@ -213,11 +213,12 @@ static void apply_settings(void)
 	gtk_notebook_set_show_tabs(GTK_NOTEBOOK(main_widgets.notebook), interface_prefs.show_notebook_tabs);
 
 #ifdef HAVE_VTE
-	if (! vte_info.load_vte)
-		gtk_widget_hide(ui_lookup_widget(main_widgets.window, "send_selection_to_vte1"));
-#else
-	gtk_widget_hide(ui_lookup_widget(main_widgets.window, "send_selection_to_vte1"));
+	if (! vte_info.have_vte)
 #endif
+	{
+		gtk_widget_set_sensitive(
+			ui_lookup_widget(main_widgets.window, "send_selection_to_vte1"), FALSE);
+	}
 
 	if (interface_prefs.sidebar_pos != GTK_POS_LEFT)
 		ui_swap_sidebar_pos();

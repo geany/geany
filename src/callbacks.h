@@ -653,3 +653,7 @@ void
 on_reset_indentation1_activate         (GtkMenuItem     *menuitem,
                                         gpointer         user_data);
 
+
+void
+on_mark_all1_activate                  (GtkMenuItem     *menuitem,
+                                        gpointer         user_data);

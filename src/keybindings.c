@@ -371,7 +371,8 @@ static void init_default_kb(void)
 		GDK_d, GDK_SHIFT_MASK | GDK_MOD1_MASK, "menu_insert_date", _("Insert date"),
 		LW(insert_date_custom1));
 	keybindings_set_item(group, GEANY_KEYS_INSERT_ALTWHITESPACE, NULL,
-		0, 0, "edit_insertwhitespace", _("_Insert Alternative White Space"), NULL);
+		0, 0, "edit_insertwhitespace", _("_Insert Alternative White Space"),
+		LW(insert_alternative_white_space1));
 	keybindings_set_item(group, GEANY_KEYS_INSERT_LINEBEFORE, NULL,
 		0, 0, "edit_insertlinebefore", _("Insert New Line Before Current"), NULL);
 	keybindings_set_item(group, GEANY_KEYS_INSERT_LINEAFTER, NULL,
@@ -412,7 +413,7 @@ static void init_default_kb(void)
 	keybindings_set_item(group, GEANY_KEYS_SEARCH_FINDDOCUMENTUSAGE, NULL,
 		0, 0, "popup_finddocumentusage", _("Find Document Usage"), LW(find_document_usage1));
 	keybindings_set_item(group, GEANY_KEYS_SEARCH_MARKALL, NULL,
-		GDK_m, GDK_CONTROL_MASK | GDK_SHIFT_MASK, "find_markall", _("Mark All"), NULL);
+		GDK_m, GDK_CONTROL_MASK | GDK_SHIFT_MASK, "find_markall", _("_Mark All"), LW(mark_all1));
 
 	group = ADD_KB_GROUP(GOTO, _("Go to"), cb_func_goto_action);
 
@@ -2321,16 +2322,17 @@ static void reflow_paragraph(GeanyEditor *editor)
 	ScintillaObject *sci = editor->sci;
 	gboolean sel;
 	gint column = -1;
+	const GeanyEditorPrefs *eprefs = editor_get_prefs(editor);
 
 	if (editor->line_breaking)
 	{
 		/* use line break column if enabled */
-		column = editor_prefs.line_break_column;
+		column = eprefs->line_break_column;
 	}
-	else if (editor_get_long_line_type() != 2)
+	else if (eprefs->long_line_type != 2)
 	{
 		/* use long line if enabled */
-		column = editor_get_long_line_column();
+		column = eprefs->long_line_column;
 	}
 	else
 	{
@@ -2444,7 +2446,7 @@ static gboolean cb_func_select_action(guint key_id)
 	}
 	/* special case for Select All in the VTE widget */
 #ifdef HAVE_VTE
-	else if (key_id == GEANY_KEYS_SELECT_ALL && vte_info.load_vte && focusw == vc->vte)
+	else if (key_id == GEANY_KEYS_SELECT_ALL && vte_info.have_vte && focusw == vc->vte)
 	{
 		vte_select_all();
 		return TRUE;
