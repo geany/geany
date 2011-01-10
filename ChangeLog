@@ -1,3 +1,10 @@
+2011-01-10  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/toolbar.c, src/ui_utils.c:
+   Add Save As toolbar button option (patch by Matthew Brush, thanks;
+   #3153490).
+
+
 2011-01-05  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * New release: Geany 0.20 "Disra".

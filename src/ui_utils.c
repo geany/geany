@@ -750,6 +750,7 @@ static void init_document_widgets(void)
 	add_doc_toolitem("Paste");
 	add_doc_toolitem("Delete");
 	add_doc_toolitem("Save");
+	add_doc_toolitem("SaveAs");
 	add_doc_toolitem("SaveAll");
 	add_doc_toolitem("Compile");
 	add_doc_toolitem("Run");
