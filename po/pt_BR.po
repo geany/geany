@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Geany 0.20\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-01-10 23:48+0100\n"
+"POT-Creation-Date: 2011-01-11 20:15+0100\n"
 "PO-Revision-Date: 2011-01-10 20:14-0300\n"
 "Last-Translator: Rafael Peregrino da Silva <rperegrino@linuxmagazine.com."
 "br>\n"
@@ -32,53 +32,53 @@ msgstr "Geany"
 msgid "Integrated Development Environment"
 msgstr "Ambiente de Desenvolvimento Integrado"
 
-#: ../src/about.c:152
+#: ../src/about.c:154
 msgid "About Geany"
 msgstr "Sobre o Geany"
 
-#: ../src/about.c:202
+#: ../src/about.c:204
 msgid "A fast and lightweight IDE"
 msgstr "Um IDE rápido e leve"
 
-#: ../src/about.c:223
+#: ../src/about.c:225
 #, c-format
 msgid "(built on or after %s)"
 msgstr "(construído em %s ou após)"
 
 #. gtk_container_add(GTK_CONTAINER(info_box), cop_label);
-#: ../src/about.c:254
+#: ../src/about.c:256
 msgid "Info"
 msgstr "Informações"
 
-#: ../src/about.c:270
+#: ../src/about.c:272
 msgid "Developers"
 msgstr "Desenvolvedores"
 
-#: ../src/about.c:279
+#: ../src/about.c:281
 msgid "maintainer"
 msgstr "Mantenedor"
 
-#: ../src/about.c:287
+#: ../src/about.c:289
 msgid "developer"
 msgstr "desenvolvedor"
 
-#: ../src/about.c:295
+#: ../src/about.c:297
 msgid "translation maintainer"
 msgstr "mantenedor de traduções"
 
-#: ../src/about.c:304
+#: ../src/about.c:306
 msgid "Translators"
 msgstr "Tradutores"
 
-#: ../src/about.c:324
+#: ../src/about.c:326
 msgid "Previous Translators"
 msgstr "Tradutores anteriores"
 
-#: ../src/about.c:345
+#: ../src/about.c:347
 msgid "Contributors"
 msgstr "Colaboradores"
 
-#: ../src/about.c:355
+#: ../src/about.c:357
 #, c-format
 msgid ""
 "Some of the many contributors (for a more detailed list, see the file %s):"
@@ -86,15 +86,15 @@ msgstr ""
 "Alguns dos muitos colaboradores (para uma lista detalhada, veja o arquivo "
 "%s):"
 
-#: ../src/about.c:381
+#: ../src/about.c:383
 msgid "Credits"
 msgstr "Créditos"
 
-#: ../src/about.c:395
+#: ../src/about.c:397
 msgid "License"
 msgstr "Licença"
 
-#: ../src/about.c:404
+#: ../src/about.c:406
 msgid ""
 "License text could not be found, please visit http://www.gnu.org/licenses/"
 "gpl-2.0.txt to view it online."
@@ -243,9 +243,8 @@ msgid "Error Regular Expression:"
 msgstr "Expressão Regular de Erro:"
 
 #: ../src/build.c:2013
-#, fuzzy
 msgid "Independent Commands"
-msgstr "Comandos Não Tipo de Arquivo"
+msgstr "Comandos Independentes"
 
 #: ../src/build.c:2045
 msgid "Note: Item 2 opens a dialog and appends the response to the command."
@@ -400,27 +399,22 @@ msgid "Detect from file"
 msgstr "Detectar a partir do arquivo"
 
 #: ../src/dialogs.c:181
-#, fuzzy
 msgid "West European"
 msgstr "Europeu _Ocidental"
 
 #: ../src/dialogs.c:183
-#, fuzzy
 msgid "East European"
 msgstr "Europeu O_riental"
 
 #: ../src/dialogs.c:185
-#, fuzzy
 msgid "East Asian"
 msgstr "Asiático Or_iental"
 
 #: ../src/dialogs.c:187
-#, fuzzy
 msgid "SE & SW Asian"
-msgstr "Asiático _SE e SO"
+msgstr "Sudeste e Sodoeste Asiático"
 
 #: ../src/dialogs.c:189
-#, fuzzy
 msgid "Middle Eastern"
 msgstr "Oriente _Médio"
 
@@ -850,11 +844,9 @@ msgid "Try to resave the file?"
 msgstr "Tentar salvar novamente o arquivo?"
 
 #: ../src/document.c:3023
-#, fuzzy, c-format
+#, c-format
 msgid "File \"%s\" was not found on disk!"
-msgstr ""
-"O arquivo \"%s\" não foi encontrado no disco! Tentar novamente salvar o "
-"arquivo?"
+msgstr "O arquivo \"%s\" não foi encontrado no disco!"
 
 #: ../src/editor.c:4326
 msgid "Enter Tab Width"
@@ -1316,12 +1308,10 @@ msgid "_More"
 msgstr "_Mais"
 
 #: ../src/interface.c:830 ../src/keybindings.c:399
-#, fuzzy
 msgid "Find Next _Selection"
-msgstr "Localizar Próxima Seleção"
+msgstr "Localizar Próxima _Seleção"
 
 #: ../src/interface.c:834 ../src/keybindings.c:401
-#, fuzzy
 msgid "Find Pre_vious Selection"
 msgstr "Localizar Seleção Anterior"
 
@@ -1334,7 +1324,6 @@ msgid "Find _Document Usage"
 msgstr "Localizar Uso do _Documento"
 
 #: ../src/interface.c:856 ../src/keybindings.c:416
-#, fuzzy
 msgid "_Mark All"
 msgstr "Marcar Tudo"
 
@@ -1544,7 +1533,6 @@ msgid "_Close"
 msgstr "_Fechar"
 
 #: ../src/interface.c:1218
-#, fuzzy
 msgid "_Apply Default Indentation"
 msgstr "_Aplicar recuo padrão"
 
@@ -1625,7 +1613,6 @@ msgid "_Hide Toolbar"
 msgstr "_Ocultar Barra de Ferramentas"
 
 #: ../src/interface.c:2249
-#, fuzzy
 msgid "I_nsert"
 msgstr "Inserir"
 
@@ -2096,7 +2083,6 @@ msgstr ""
 "grandes, e deveria ser desabilitada em máquinas lentas."
 
 #: ../src/interface.c:3739
-#, fuzzy
 msgid "\"Smart\" home key"
 msgstr "Habilitar tecla home \"inteligente\""
 
@@ -2128,9 +2114,8 @@ msgstr ""
 "editor"
 
 #: ../src/interface.c:3749
-#, fuzzy
 msgid "Code folding"
-msgstr "Habilitar dobra"
+msgstr "Habilitar agrupamento de código"
 
 #: ../src/interface.c:3753
 msgid "Fold/unfold all children of a fold point"
@@ -2280,9 +2265,8 @@ msgstr ""
 "sequência mais complexa pressionando-se uma única tecla"
 
 #: ../src/interface.c:3954
-#, fuzzy
 msgid "XML/HTML tag auto-closing"
-msgstr "Auto-completamento de tags XML"
+msgstr "Fechamento automático de tags XML/HTML"
 
 #: ../src/interface.c:3957
 msgid "Insert matching closing tag for XML/HTML"
@@ -2365,9 +2349,8 @@ msgid "Single quotes ' '"
 msgstr "Aspas simples ' '"
 
 #: ../src/interface.c:4062
-#, fuzzy
 msgid "Auto-close single quote when typing an opening one"
-msgstr "Fechar aspas simples automaticamente quando um for aberto"
+msgstr "Fechar aspas simples automaticamente quando uma for aberta"
 
 #: ../src/interface.c:4064
 msgid "Curly brackets { }"
@@ -2624,9 +2607,8 @@ msgid "Ensures that at the end of the file is a new line"
 msgstr "Garante que o final do arquivo é uma nova linha"
 
 #: ../src/interface.c:4418
-#, fuzzy
 msgid "Ensure consistent line endings"
-msgstr "Garantir nova linha no final do arquivo"
+msgstr "Garantir consistência de marcação de fim de linha"
 
 #: ../src/interface.c:4421
 msgid ""
@@ -3546,9 +3528,9 @@ msgstr "[ARQUIVOS...]"
 
 #. note for translators: library versions are printed after this
 #: ../src/main.c:527
-#, fuzzy, c-format
+#, c-format
 msgid "built on %s with "
-msgstr "(construído em %s ou após)"
+msgstr "(construído em %s com )"
 
 #: ../src/main.c:620
 msgid "Move it now?"
@@ -4085,9 +4067,8 @@ msgid "Fi_les:"
 msgstr "Ar_quivos"
 
 #: ../src/search.c:768
-#, fuzzy
 msgid "File patterns, e.g. *.c *.h"
-msgstr "Padrões de arquivo:"
+msgstr "Padrões de arquivo, p.ex. *.c, *.h"
 
 #: ../src/search.c:780
 msgid "_Directory:"
@@ -4765,9 +4746,8 @@ msgid "MOD"
 msgstr "MOD"
 
 #: ../src/ui_utils.c:362
-#, fuzzy
 msgid " (new instance)"
-msgstr "Herança"
+msgstr "(nova instância)"
 
 #: ../src/ui_utils.c:392
 #, c-format
@@ -5171,19 +5151,16 @@ msgstr "_Inserir Caracteres Especiais de HTML"
 
 #. Add menuitem for html replacement functions
 #: ../plugins/htmlchars.c:753
-#, fuzzy
 msgid "_HTML Replacement"
 msgstr "Substituição HTML"
 
 #: ../plugins/htmlchars.c:760
-#, fuzzy
 msgid "_Auto-replace Special Characters"
-msgstr "Substituir caracteres especiais"
+msgstr "Substituir Caracteres Especiais _Automaticamente"
 
 #: ../plugins/htmlchars.c:769
-#, fuzzy
 msgid "_Replace Characters in Selection"
-msgstr "_Duplicar Linha ou Seleção"
+msgstr "_Substitiuir Caracteres na Seleção"
 
 #: ../plugins/htmlchars.c:784
 msgid "Insert Special HTML Characters"
