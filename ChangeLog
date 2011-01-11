@@ -1,3 +1,10 @@
+2011-01-11  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * THANKS, src/about.c:
+   Added Rafael Peregrino da Silva to list of contributors for Brazilian
+   Portuguese (pt_BR) translation.
+
+
 2011-01-10  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/toolbar.c, src/ui_utils.c, src/about.c, THANKS:

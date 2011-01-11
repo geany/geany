@@ -63,7 +63,9 @@ const gchar *translators[][2] = {
 	{ "lb", "Laurent Hoeltgen &lt;hoeltgman@gmail.com&gt;" },
 	{ "nl", "Peter Scholtens &lt;peter.scholtens@xs4all.nl&gt;\nAyke van Laethem &lt;aykevanlaethem@gmail.com&gt;" },
 	{ "pl_PL", "Jarosław Foksa &lt;jfoksa@gmail.com&gt;" },
-	{ "pt_BR", "Alexandra Moreire &lt;alexandream@gmail.com&gt;\nAdrovane Marques Kade &lt;adrovane@gmail.com&gt;" },
+	{ "pt_BR", "Alexandra Moreire &lt;alexandream@gmail.com&gt;\n"
+			   "Adrovane Marques Kade &lt;adrovane@gmail.com&gt;\n"
+			   "Rafael Peregrino da Silva &lt;rperegrino@linuxnewmedia.com.br&gt;"},
 	{ "ro", "Alex Eftimie &lt;alex@rosedu.org&gt;" },
 	{ "ru_RU", "brahmann_ &lt;brahmann@pisem.net&gt;,\nNikita E. Shalaev &lt;nshalaev@eu.spb.ru&gt;" },
 	{ "sl", "Jože Klepec &lt;joze.klepec@siol.net&gt;"},
@@ -460,4 +462,3 @@ static void homepage_clicked(GtkButton *button, gpointer data)
 {
 	utils_open_browser(data);
 }
-
