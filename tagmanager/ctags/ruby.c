@@ -26,7 +26,7 @@
 *   DATA DECLARATIONS
 */
 typedef enum {
-	K_UNDEFINED = -1, K_CLASS, K_METHOD, K_MODULE, K_SINGLETON
+	K_UNDEFINED = -1, K_CLASS, K_METHOD, K_MODULE, K_SINGLETON, K_DESCRIBE, K_CONTEXT
 } rubyKind;
 
 /*
@@ -36,7 +36,9 @@ static kindOption RubyKinds [] = {
 	{ TRUE, 'c', "class",  "classes" },
 	{ TRUE, 'f', "method", "methods" },
 	{ TRUE, 'm', "namespace", "modules" },
-	{ TRUE, 'F', "member", "singleton methods" }
+	{ TRUE, 'F', "member", "singleton methods" },
+	{ TRUE, 'd', "describe", "describes" },
+	{ TRUE, 'C', "context", "contexts" }
 };
 
 static stringList* nesting = 0;
@@ -178,7 +180,19 @@ static rubyKind parseIdentifier (
 	 * point or equals sign. These are all part of the name.
 	 * A method name may also contain a period if it's a singleton method.
 	 */
-	const char* also_ok = (kind == K_METHOD) ? "_.?!=" : "_";
+	const char* also_ok;
+	if (kind == K_METHOD)
+	{
+		also_ok = "_.?!=";
+	}
+	else if (kind == K_DESCRIBE || kind == K_CONTEXT)
+	{
+		also_ok = " ,\".#_?!='/-";
+	}
+	else
+	{
+		also_ok = "_";
+	}
 
 	skipWhitespace (cp);
 
@@ -348,6 +362,14 @@ static void findRubyTags (void)
 		else if (canMatch (&cp, "def"))
 		{
 			readAndEmitTag (&cp, K_METHOD);
+		}
+		else if (canMatch (&cp, "describe"))
+		{
+			readAndEmitTag (&cp, K_DESCRIBE);
+		}
+		else if (canMatch (&cp, "context"))
+		{
+			readAndEmitTag (&cp, K_CONTEXT);
 		}
 
 		while (*cp != '\0')
