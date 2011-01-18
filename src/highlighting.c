@@ -3073,9 +3073,10 @@ static void styleset_js_init(gint ft_id, GKeyFile *config, GKeyFile *config_home
 {
 	styleset_c_like_init(config, config_home, ft_id);
 
-	style_sets[ft_id].keywords = g_new(gchar*, 2);
+	style_sets[ft_id].keywords = g_new(gchar*, 3);
 	get_keyfile_keywords(config, config_home, "primary", ft_id, 0);
-	style_sets[ft_id].keywords[1] = NULL;
+	get_keyfile_keywords(config, config_home, "secondary", ft_id, 1);
+	style_sets[ft_id].keywords[2] = NULL;
 }
 
 
@@ -3084,6 +3085,7 @@ static void styleset_js(ScintillaObject *sci, gint ft_id)
 	styleset_c_like(sci, ft_id);
 
 	sci_set_keywords(sci, 0, style_sets[ft_id].keywords[0]);
+	sci_set_keywords(sci, 1, style_sets[ft_id].keywords[1]);
 }
 
 

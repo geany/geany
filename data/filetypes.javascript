@@ -26,8 +26,8 @@ globalclass=type
 
 [keywords]
 # all items must be in one line
-primary=break case catch const continue delete else eval false finally for function if in try instanceof isFinite isNaN NaN new null return switch this throw true typeof undefined var while with default let
-secondary=Object Function Array prototype
+primary=break case catch const continue default delete do each else false finally for function get if in Infinity instanceof let NaN new null return set switch this throw true try typeof undefined var void while with yield
+secondary=Array Boolean Date Function Math Number Object String RegExp EvalError Error RangeError ReferenceError SyntaxError TypeError URIError prototype decodeURI decodeURIComponent encodeURI encodeURIComponent eval isFinite isNaN parseFloat parseInt
 
 [settings]
 # default extension used when saving files
