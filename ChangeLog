@@ -1,10 +1,15 @@
+2011-01-19  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * *.*:
+   Update copyright information.
+
+
 2011-01-18  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/highlighting.c, data/filetypes.javascript:
    Add and use secondary keywords for filetype JavaScript,
    update and sanitize JavaScript keyword lists
    (patch by Jason Oster, thank you).
-
 
 
 2011-01-11  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
