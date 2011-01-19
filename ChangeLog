@@ -2,6 +2,9 @@
 
  * *.*:
    Update copyright information.
+ * configure.ac, doc/geany.html, doc/geany.txt, geany.nsi,
+   geany_private.rc, win32-config.h, wscript, src/geany.h:
+   Post-release version bump.
 
 
 2011-01-18  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

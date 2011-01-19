@@ -33,8 +33,8 @@ RequestExecutionLevel highest ; set execution level for Windows Vista
 ; helper defines  ;
 ;;;;;;;;;;;;;;;;;;;
 !define PRODUCT_NAME "Geany"
-!define PRODUCT_VERSION "0.20"
-!define PRODUCT_VERSION_ID "0.20.0.0"
+!define PRODUCT_VERSION "0.21"
+!define PRODUCT_VERSION_ID "0.21.0.0"
 !define PRODUCT_PUBLISHER "The Geany developer team"
 !define PRODUCT_WEB_SITE "http://www.geany.org/"
 !define PRODUCT_DIR_REGKEY "Software\Geany"

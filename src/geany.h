@@ -47,7 +47,7 @@
  * listed in the documentation should not be changed */
 #define GEANY_FILEDEFS_SUBDIR			"filedefs"
 #define GEANY_TEMPLATES_SUBDIR			"templates"
-#define GEANY_CODENAME					"Disra"
+#define GEANY_CODENAME					"Gromia"
 #define GEANY_HOMEPAGE					"http://www.geany.org/"
 #define GEANY_STRING_UNTITLED			_("untitled")
 #define GEANY_DEFAULT_DIALOG_HEIGHT		350
