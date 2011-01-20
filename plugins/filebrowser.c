@@ -139,7 +139,7 @@ static gboolean check_hidden(const gchar *filename, const gchar *base_name)
 
 	if (hide_object_files)
 	{
-		const gchar *exts[] = {".o", ".obj", ".so", ".dll", ".a", ".lib"};
+		const gchar *exts[] = {".o", ".obj", ".so", ".dll", ".a", ".lib", ".pyc"};
 		guint i, exts_len;
 
 		exts_len = G_N_ELEMENTS(exts);

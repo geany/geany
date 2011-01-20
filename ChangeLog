@@ -1,3 +1,10 @@
+2011-01-20  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * plugins/filebrowser.c:
+   Add '.pyc' to the list of hidden object files
+   (patch by Filip Gruszczyński, thanks).
+
+
 2011-01-19  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * *.*:
