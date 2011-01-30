@@ -1,3 +1,10 @@
+2011-01-30  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/editor.c:
+   Ensure the editor widget has the focus when the editor menu is
+   called.
+
+
 2011-01-20  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * plugins/filebrowser.c:
