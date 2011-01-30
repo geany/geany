@@ -10,6 +10,7 @@ lexers/LexAda.cxx \
 lexers/LexAsm.cxx \
 lexers/LexBash.cxx \
 lexers/LexBasic.cxx \
+lexers/LexCOBOL.cxx \
 lexers/LexCPP.cxx \
 lexers/LexCSS.cxx \
 lexers/LexCaml.cxx \

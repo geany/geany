@@ -626,6 +626,16 @@ static void add_top_level_items(GeanyDocument *doc)
 				&tv_iters.tag_function, _("Functions"), "classviewer-method",
 				NULL);
 			break;
+		case GEANY_FILETYPES_COBOL:
+			tag_list_add_groups(tag_store,
+				&tv_iters.tag_class, _("Program"), "classviewer-class",
+				&tv_iters.tag_function, _("File"), "classviewer-method",
+				&tv_iters.tag_namespace, _("Sections"), "classviewer-namespace",
+				&tv_iters.tag_macro, _("Paragraph"), "classviewer-other",
+				&tv_iters.tag_struct, _("Group"), "classviewer-struct",
+				&tv_iters.tag_variable, _("Data"), "classviewer-var",
+				NULL);
+			break;
 		case GEANY_FILETYPES_CONF:
 			tag_list_add_groups(tag_store,
 				&tv_iters.tag_namespace, _("Sections"), "classviewer-other",

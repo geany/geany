@@ -62,6 +62,7 @@ LEXOBJS=\
 LexAda.o \
 LexAsm.o \
 LexBash.o \
+LexCOBOL.o \
 LexCSS.o \
 LexCPP.o \
 LexHTML.o \

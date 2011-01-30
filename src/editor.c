@@ -3364,6 +3364,7 @@ static gboolean in_block_comment(gint lexer, gint style)
 {
 	switch (lexer)
 	{
+		case SCLEX_COBOL:
 		case SCLEX_CPP:
 			return (style == SCE_C_COMMENT ||
 				style == SCE_C_COMMENTDOC);
@@ -4842,6 +4843,7 @@ void editor_set_indentation_guides(GeanyEditor *editor)
 		case SCLEX_MAKEFILE:
 		case SCLEX_ASM:
 		case SCLEX_SQL:
+		case SCLEX_COBOL:
 		case SCLEX_PROPERTIES:
 		case SCLEX_FORTRAN: /* Is this the best option for Fortran? */
 		case SCLEX_CAML:

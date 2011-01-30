@@ -347,6 +347,13 @@ static void init_builtin_filetypes(void)
 	ft->mime_type = g_strdup("text/x-sql");
 	ft->group = GEANY_FILETYPE_GROUP_MISC;
 
+#define COBOL
+	ft = filetypes[GEANY_FILETYPES_COBOL];
+	ft->lang = 41;
+	ft->name = g_strdup("COBOL");
+	filetype_make_title(ft, TITLE_FILE);
+	ft->group = GEANY_FILETYPE_GROUP_MISC;
+
 #define LATEX
 	ft = filetypes[GEANY_FILETYPES_LATEX];
 	ft->lang = 8;

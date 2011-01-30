@@ -55,7 +55,8 @@
     Txt2tagsParser, \
     AbcParser, \
     VerilogParser, \
-    RParser
+    RParser, \
+    CobolParser
 /*
 langType of each parser
  0	CParser
@@ -99,6 +100,7 @@ langType of each parser
 38  AbcParser
 39  Verilog
 40	RParser
+41	CobolParser
 */
 #endif	/* _PARSERS_H */
 

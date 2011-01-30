@@ -909,7 +909,7 @@ styleset_c_like_init(GKeyFile *config, GKeyFile *config_home, gint filetype_idx)
 }
 
 
-static void styleset_c_like(ScintillaObject *sci, gint ft_id)
+static void styleset_c_like(ScintillaObject *sci, gint ft_id, gint lexer)
 {
 	gint styles[] = {
 		SCE_C_DEFAULT,
@@ -935,7 +935,7 @@ static void styleset_c_like(ScintillaObject *sci, gint ft_id)
 		SCE_C_GLOBALCLASS
 	};
 
-	apply_filetype_properties(sci, SCLEX_CPP, ft_id);
+	apply_filetype_properties(sci, lexer, ft_id);
 	apply_style_entries(sci, ft_id, styles, G_N_ELEMENTS(styles));
 
 	/* Disable explicit //{ folding as it can seem like a bug */
@@ -957,7 +957,7 @@ static void styleset_c_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
 
 static void styleset_c(ScintillaObject *sci, gint ft_id)
 {
-	styleset_c_like(sci, ft_id);
+	styleset_c_like(sci, ft_id, SCLEX_CPP);
 
 	sci_set_keywords(sci, 0, style_sets[ft_id].keywords[0]);
 	/* SCI_SETKEYWORDS = 1 - secondary + global tags file types, see below */
@@ -1528,7 +1528,7 @@ static void styleset_java_init(gint ft_id, GKeyFile *config, GKeyFile *config_ho
 
 static void styleset_java(ScintillaObject *sci, gint ft_id)
 {
-	styleset_c_like(sci, ft_id);
+	styleset_c_like(sci, ft_id, SCLEX_CPP);
 
 	sci_set_keywords(sci, 0, style_sets[ft_id].keywords[0]);
 	/* SCI_SETKEYWORDS = 1 - secondary + global tags file types, see below */
@@ -1737,6 +1737,28 @@ static void styleset_cmake(ScintillaObject *sci, gint ft_id)
 	set_sci_style(sci, SCE_CMAKE_MACRODEF, ft_id, 12);
 	set_sci_style(sci, SCE_CMAKE_STRINGVAR, ft_id, 13);
 	set_sci_style(sci, SCE_CMAKE_NUMBER, ft_id, 14);
+}
+
+
+static void styleset_cobol_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
+{
+	styleset_c_like_init(config, config_home, ft_id);
+
+	style_sets[ft_id].keywords = g_new(gchar*, 4);
+	get_keyfile_keywords(config, config_home, "primary", ft_id, 0);
+	get_keyfile_keywords(config, config_home, "secondary", ft_id, 1);
+	get_keyfile_keywords(config, config_home, "extended_keywords", ft_id, 2);
+	style_sets[ft_id].keywords[3] = NULL;
+}
+
+
+static void styleset_cobol(ScintillaObject *sci, gint ft_id)
+{
+	styleset_c_like(sci, ft_id, SCLEX_COBOL);
+
+	sci_set_keywords(sci, 0, style_sets[ft_id].keywords[0]);
+	sci_set_keywords(sci, 1, style_sets[ft_id].keywords[1]);
+	sci_set_keywords(sci, 2, style_sets[ft_id].keywords[2]);
 }
 
 
@@ -2904,7 +2926,7 @@ static void styleset_ferite_init(gint ft_id, GKeyFile *config, GKeyFile *config_
 
 static void styleset_ferite(ScintillaObject *sci, gint ft_id)
 {
-	styleset_c_like(sci, ft_id);
+	styleset_c_like(sci, ft_id, SCLEX_CPP);
 
 	sci_set_keywords(sci, 0, style_sets[ft_id].keywords[0]);
 	sci_set_keywords(sci, 1, style_sets[ft_id].keywords[1]);
@@ -3082,7 +3104,7 @@ static void styleset_js_init(gint ft_id, GKeyFile *config, GKeyFile *config_home
 
 static void styleset_js(ScintillaObject *sci, gint ft_id)
 {
-	styleset_c_like(sci, ft_id);
+	styleset_c_like(sci, ft_id, SCLEX_CPP);
 
 	sci_set_keywords(sci, 0, style_sets[ft_id].keywords[0]);
 	sci_set_keywords(sci, 1, style_sets[ft_id].keywords[1]);
@@ -3243,7 +3265,7 @@ static void styleset_actionscript_init(gint ft_id, GKeyFile *config, GKeyFile *c
 
 static void styleset_actionscript(ScintillaObject *sci, gint ft_id)
 {
-	styleset_c_like(sci, ft_id);
+	styleset_c_like(sci, ft_id, SCLEX_CPP);
 
 	sci_set_keywords(sci, 0, style_sets[ft_id].keywords[0]);
 	sci_set_keywords(sci, 1, style_sets[ft_id].keywords[2]);
@@ -3265,7 +3287,7 @@ static void styleset_haxe_init(gint ft_id, GKeyFile *config, GKeyFile *config_ho
 
 static void styleset_haxe(ScintillaObject *sci, gint ft_id)
 {
-	styleset_c_like(sci, ft_id);
+	styleset_c_like(sci, ft_id, SCLEX_CPP);
 
 	sci_set_keywords(sci, 0, style_sets[ft_id].keywords[0]);
 	sci_set_keywords(sci, 1, style_sets[ft_id].keywords[1]);
@@ -3405,6 +3427,7 @@ void highlighting_init_styles(gint filetype_idx, GKeyFile *config, GKeyFile *con
 		init_styleset_case(GEANY_FILETYPES_C,		styleset_c_init);
 		init_styleset_case(GEANY_FILETYPES_CAML,	styleset_caml_init);
 		init_styleset_case(GEANY_FILETYPES_CMAKE,	styleset_cmake_init);
+		init_styleset_case(GEANY_FILETYPES_COBOL,	styleset_cobol_init);
 		init_styleset_case(GEANY_FILETYPES_CONF,	styleset_conf_init);
 		init_styleset_case(GEANY_FILETYPES_CSS,		styleset_css_init);
 		init_styleset_case(GEANY_FILETYPES_D,		styleset_d_init);
@@ -3477,6 +3500,7 @@ void highlighting_set_styles(ScintillaObject *sci, GeanyFiletype *ft)
 		styleset_case(GEANY_FILETYPES_C,		styleset_c);
 		styleset_case(GEANY_FILETYPES_CAML,		styleset_caml);
 		styleset_case(GEANY_FILETYPES_CMAKE,	styleset_cmake);
+		styleset_case(GEANY_FILETYPES_COBOL,		styleset_cobol);
 		styleset_case(GEANY_FILETYPES_CONF,		styleset_conf);
 		styleset_case(GEANY_FILETYPES_CSS,		styleset_css);
 		styleset_case(GEANY_FILETYPES_D,		styleset_d);
@@ -3832,6 +3856,7 @@ gboolean highlighting_is_comment_style(gint lexer, gint style)
 {
 	switch (lexer)
 	{
+		case SCLEX_COBOL:
 		case SCLEX_CPP:
 			return (style == SCE_C_COMMENT ||
 				style == SCE_C_COMMENTLINE ||

@@ -3,6 +3,13 @@
  * src/editor.c:
    Ensure the editor widget has the focus when the editor menu is
    called.
+ * scintilla/lexers/LexCOBOL.cxx, scintilla/src/Catalogue.cxx,
+   scintilla/Makefile.am, scintilla/makefile.win32, src/highlighting.c,
+   src/plugindata.h, src/filetypes.c, src/filetypes.h, src/editor.c,
+   src/symbols.c, tagmanager/parsers.h, tagmanager/makefile.win32,
+   tagmanager/cobol.c, tagmanager/Makefile.am, data/filetypes.cobol,
+   data/filetype_extensions.conf, wscript:
+   Add filetype Cobol (based on a patch by Seth Keiper).
 
 
 2011-01-20  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

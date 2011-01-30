@@ -36,6 +36,7 @@ libtagmanager_a_SOURCES =\
 	abc.c\
 	basic.c\
 	c.c\
+	cobol.c\
 	conf.c\
 	css.c\
 	diff.c\

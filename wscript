@@ -61,7 +61,7 @@ out = '_build_'
 
 tagmanager_sources = set([
     'tagmanager/args.c', 'tagmanager/abc.c', 'tagmanager/actionscript.c', 'tagmanager/asm.c',
-    'tagmanager/basic.c', 'tagmanager/c.c',
+    'tagmanager/basic.c', 'tagmanager/c.c', 'tagmanager/cobol.c',
     'tagmanager/conf.c', 'tagmanager/css.c', 'tagmanager/ctags.c', 'tagmanager/diff.c',
     'tagmanager/docbook.c', 'tagmanager/entry.c', 'tagmanager/fortran.c', 'tagmanager/get.c',
     'tagmanager/haskell.c', 'tagmanager/haxe.c', 'tagmanager/html.c', 'tagmanager/js.c',
