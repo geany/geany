@@ -347,7 +347,8 @@ void project_close(gboolean open_default)
 	ui_set_statusbar(TRUE, _("Project \"%s\" closed."), app->project->name);
 
 	/* use write_config() to save project session files */
-	write_config(FALSE);
+	if (!write_config(FALSE))
+		g_warning("Project file \"%s\" could not be written", app->project->file_name);
 
 	/* remove project filetypes build entries */
 	if (app->project->build_filetypes_list != NULL)
