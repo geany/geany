@@ -29,6 +29,7 @@
 
 #include <string.h>
 #include <unistd.h>
+#include <errno.h>
 
 #include "project.h"
 #include "projectprivate.h"
@@ -80,7 +81,7 @@ typedef struct _PropertyDialogElements
 } PropertyDialogElements;
 
 
-static gboolean update_config(const PropertyDialogElements *e);
+static gboolean update_config(const PropertyDialogElements *e, gboolean new_project);
 static void on_file_save_button_clicked(GtkButton *button, PropertyDialogElements *e);
 static gboolean load_config(const gchar *filename);
 static gboolean write_config(gboolean emit_signal);
@@ -189,13 +190,17 @@ void project_new(void)
 
 	while (gtk_dialog_run(GTK_DIALOG(e->dialog)) == GTK_RESPONSE_OK)
 	{
-		if (update_config(e))
+		if (update_config(e, TRUE))
 		{
-			write_config(TRUE);
-			ui_set_statusbar(TRUE, _("Project \"%s\" created."), app->project->name);
+			if (!write_config(TRUE))
+				SHOW_ERR(_("Project file could not be written"));
+			else
+			{
+				ui_set_statusbar(TRUE, _("Project \"%s\" created."), app->project->name);
 
-			ui_add_recent_project_file(app->project->file_name);
-			break;
+				ui_add_recent_project_file(app->project->file_name);
+				break;
+			}
 		}
 	}
 	gtk_widget_destroy(e->dialog);
@@ -577,12 +582,16 @@ static void show_project_properties(gboolean show_build)
 
 	while (gtk_dialog_run(GTK_DIALOG(e->dialog)) == GTK_RESPONSE_OK)
 	{
-		if (update_config(e))
+		if (update_config(e, FALSE))
 		{
 			g_signal_emit_by_name(geany_object, "project-dialog-confirmed", e->notebook);
-			write_config(TRUE);
-			ui_set_statusbar(TRUE, _("Project \"%s\" saved."), app->project->name);
-			break;
+			if (!write_config(TRUE))
+				SHOW_ERR(_("Project file could not be written"));
+			else
+			{
+				ui_set_statusbar(TRUE, _("Project \"%s\" saved."), app->project->name);
+				break;
+			}
 		}
 	}
 	build_free_fields(e->build_properties);
@@ -644,13 +653,12 @@ static GeanyProject *create_project(void)
 
 /* Verifies data for New & Properties dialogs.
  * Returns: FALSE if the user needs to change any data. */
-static gboolean update_config(const PropertyDialogElements *e)
+static gboolean update_config(const PropertyDialogElements *e, gboolean new_project)
 {
 	const gchar *name, *file_name, *base_path;
 	gchar *locale_filename;
 	gint name_len;
 	gint err_code = 0;
-	gboolean new_project = FALSE;
 	GeanyProject *p;
 
 	g_return_val_if_fail(e != NULL, TRUE);
@@ -670,7 +678,7 @@ static gboolean update_config(const PropertyDialogElements *e)
 		return FALSE;
 	}
 
-	if (app->project == NULL)
+	if (new_project)
 		file_name = gtk_entry_get_text(GTK_ENTRY(e->file_name));
 	else
 		file_name = gtk_label_get_text(GTK_LABEL(e->file_name));
@@ -720,7 +728,8 @@ static gboolean update_config(const PropertyDialogElements *e)
 		g_free(locale_path);
 	}
 	/* finally test whether the given project file can be written */
-	if ((err_code = utils_is_file_writeable(locale_filename)) != 0)
+	if ((err_code = utils_is_file_writeable(locale_filename)) != 0 ||
+		(err_code = g_file_test(locale_filename, G_FILE_TEST_IS_DIR) ? EISDIR : 0) != 0)
 	{
 		SHOW_ERR1(_("Project file could not be written (%s)."), g_strerror(err_code));
 		gtk_widget_grab_focus(e->file_name);

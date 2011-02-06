@@ -5,6 +5,9 @@
  * doc/geany.txt, doc/geany.html:
    Replace '+' by '-' in the Scintilla Keybindings section
    to be consistent with the other mentioned keybindings.
+ * src/project.c:
+   Improve error checking when trying to write project files
+   (patch by Colomban Wendling, thanks).
 
 
 2011-01-30  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
