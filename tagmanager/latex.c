@@ -83,9 +83,13 @@ static void createTag(int flags, TeXKind kind, const char * l)
 	if (*l == '[')
 	{
 	    while (*l != ']')
+	    {
+		if (*l == '\0')
+		    goto no_tag;
 		l++;
+	    }
 	    l++; /* skip the closing square bracket */
-	}   
+	}
 	if (*l != '{')
  	    goto no_tag;
 	l++;
@@ -240,4 +244,3 @@ extern parserDefinition* LaTeXParser (void)
 	def->parser     = findTeXTags;
 	return def;
 }
-

@@ -1,3 +1,10 @@
+2011-02-06  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * tagmanager/latex.c:
+   Add a workaround for #3066566 to prevent Geany from crashing during
+   loading of a LaTeX-file containing linebreaks inside headings.
+
+
 2011-02-06  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * tagmanager/php.c:
