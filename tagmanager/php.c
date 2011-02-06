@@ -127,6 +127,9 @@ static void function_cb(const char *line, const regexMatch *matches, unsigned in
 		e.kindName = kindName;
 		e.extensionFields.arglist = arglist;
 		makeTagEntry (&e);
+
+		eFree(name);
+		eFree(arglist);
 	}
 }
 

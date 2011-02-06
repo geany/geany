@@ -1,3 +1,9 @@
+2011-02-06  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * tagmanager/php.c:
+   Fix memory leaks (reported by an anonymous IRC user).
+
+
 2011-01-30  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/editor.c:
