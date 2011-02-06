@@ -9,6 +9,8 @@
    Improve error checking when trying to write project files
    (patch by Colomban Wendling, thanks).
    Add a warning if writing the project file fails on close.
+ * src/utils.c, src/utils.h, src/project.c, src/main.c, src/socket.c:
+   Rename utils_is_file_writeable() into utils_is_file_writable().
 
 
 2011-01-30  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

@@ -410,7 +410,7 @@ static gint socket_fd_open_unix(const gchar *path)
 	real_path = g_strdup_printf("%s%cgeany_socket.%08x",
 		g_get_tmp_dir(), G_DIR_SEPARATOR, g_random_int());
 
-	if (utils_is_file_writeable(real_path) != 0)
+	if (utils_is_file_writable(real_path) != 0)
 	{	/* if real_path is not writable for us, fall back to ~/.config/geany/geany_socket_*_* */
 		/* instead of creating a symlink and print a warning */
 		g_warning("Socket %s could not be written, using %s as fallback.", real_path, path);

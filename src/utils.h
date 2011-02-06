@@ -234,7 +234,7 @@ gchar *utils_get_help_url(const gchar *suffix);
 
 gboolean utils_str_has_upper(const gchar *str);
 
-gint utils_is_file_writeable(const gchar *locale_filename);
+gint utils_is_file_writable(const gchar *locale_filename);
 
 
 gboolean utils_spawn_sync(const gchar *dir, gchar **argv, gchar **env, GSpawnFlags flags,

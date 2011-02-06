@@ -653,7 +653,7 @@ gchar *utils_get_hostname(void)
 
 /* Checks whether the given file can be written. locale_filename is expected in locale encoding.
  * Returns 0 if it can be written, otherwise it returns errno */
-gint utils_is_file_writeable(const gchar *locale_filename)
+gint utils_is_file_writable(const gchar *locale_filename)
 {
 	gchar *file;
 	gint ret;

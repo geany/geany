@@ -652,7 +652,7 @@ static gint create_config_dir(void)
 
 	if (saved_errno == 0 && ! g_file_test(conf_file, G_FILE_TEST_EXISTS))
 	{	/* check whether geany.conf can be written */
-		saved_errno = utils_is_file_writeable(app->configdir);
+		saved_errno = utils_is_file_writable(app->configdir);
 	}
 
 	/* make subdir for filetype definitions */

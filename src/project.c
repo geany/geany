@@ -729,7 +729,7 @@ static gboolean update_config(const PropertyDialogElements *e, gboolean new_proj
 		g_free(locale_path);
 	}
 	/* finally test whether the given project file can be written */
-	if ((err_code = utils_is_file_writeable(locale_filename)) != 0 ||
+	if ((err_code = utils_is_file_writable(locale_filename)) != 0 ||
 		(err_code = g_file_test(locale_filename, G_FILE_TEST_IS_DIR) ? EISDIR : 0) != 0)
 	{
 		SHOW_ERR1(_("Project file could not be written (%s)."), g_strerror(err_code));
