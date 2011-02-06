@@ -2,6 +2,9 @@
 
  * tagmanager/php.c:
    Fix memory leaks (reported by an anonymous IRC user).
+ * doc/geany.txt, doc/geany.html:
+   Replace '+' by '-' in the Scintilla Keybindings section
+   to be consistent with the other mentioned keybindings.
 
 
 2011-01-30  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

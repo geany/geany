@@ -4859,25 +4859,25 @@ menus. Some less common commands with no menu equivalent are:
 =============================================   ======================
 Action                                          Shortcut key
 =============================================   ======================
-Magnify text size.                              Ctrl+Keypad+
-Reduce text size.                               Ctrl+Keypad-
-Restore text size to normal.                    Ctrl+Keypad/
+Magnify text size.                              Ctrl-Keypad+
+Reduce text size.                               Ctrl-Keypad-
+Restore text size to normal.                    Ctrl-Keypad/
 Indent block.                                   Tab
-Dedent block.                                   Shift+Tab
-Delete to start of word.                        Ctrl+BackSpace
-Delete to end of word.                          Ctrl+Delete
-Delete to start of line.                        Ctrl+Shift+BackSpace
-Go to start of document.                        Ctrl+Home
-Extend selection to start of document.          Ctrl+Shift+Home
-Go to start of display line.                    Alt+Home
-Extend selection to start of display line.      Alt+Shift+Home
-Go to end of document.                          Ctrl+End
-Extend selection to end of document.            Ctrl+Shift+End
-Extend selection to end of display line.        Alt+Shift+End
-Previous paragraph. Shift extends selection.    Ctrl+Up
-Next paragraph. Shift extends selection.        Ctrl+Down
-Previous word. Shift extends selection.         Ctrl+Left
-Next word. Shift extends selection.             Ctrl+Right
+Dedent block.                                   Shift-Tab
+Delete to start of word.                        Ctrl-BackSpace
+Delete to end of word.                          Ctrl-Delete
+Delete to start of line.                        Ctrl-Shift-BackSpace
+Go to start of document.                        Ctrl-Home
+Extend selection to start of document.          Ctrl-Shift-Home
+Go to start of display line.                    Alt-Home
+Extend selection to start of display line.      Alt-Shift-Home
+Go to end of document.                          Ctrl-End
+Extend selection to end of document.            Ctrl-Shift-End
+Extend selection to end of display line.        Alt-Shift-End
+Previous paragraph. Shift extends selection.    Ctrl-Up
+Next paragraph. Shift extends selection.        Ctrl-Down
+Previous word. Shift extends selection.         Ctrl-Left
+Next word. Shift extends selection.             Ctrl-Right
 =============================================   ======================
 
 
