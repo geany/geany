@@ -1,3 +1,9 @@
+2011-02-07  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * data/filetype_extensions.conf:
+   Fix detecting Matlab and Txt2Tags extensions by default.
+
+
 2011-02-06  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * tagmanager/latex.c:
