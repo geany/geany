@@ -1,7 +1,8 @@
 2011-02-07  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * data/filetype_extensions.conf:
-   Fix detecting Matlab and Txt2Tags extensions by default.
+   Fix detecting Matlab and Txt2Tags extensions by default (#3167315,
+   #3154637).
 
 
 2011-02-06  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
