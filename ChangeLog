@@ -1,3 +1,10 @@
+2011-02-21  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * plugins/filebrowser.c:
+   Add support for multiple file filters, separated by semicolon
+   (based on a patch by Grigory Javadyan, thanks).
+
+
 2011-02-07  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * data/filetype_extensions.conf:

@@ -80,7 +80,7 @@ static GtkWidget *path_entry;
 static gchar *current_dir = NULL; /* in locale-encoding */
 static gchar *open_cmd; /* in locale-encoding */
 static gchar *config_file;
-static gchar *filter = NULL;
+static gchar **filter = NULL;
 
 static gint page_number = 0;
 
@@ -158,14 +158,21 @@ static gboolean check_hidden(const gchar *filename, const gchar *base_name)
 /* Returns: whether filename should be removed. */
 static gboolean check_filtered(const gchar *base_name)
 {
+	gchar **filter_item;
+	guint len;
+	
 	if (filter == NULL)
 		return FALSE;
-
-	if (! utils_str_equal(base_name, "*") && ! g_pattern_match_simple(filter, base_name))
+	
+	len = g_strv_length(filter);
+	foreach_c_array(filter_item, filter, len)
 	{
-		return TRUE;
+		if (utils_str_equal(base_name, "*") || g_pattern_match_simple(*filter_item, base_name))
+		{
+			return FALSE;
+		}
 	}
-	return FALSE;
+	return TRUE;
 }
 
 
@@ -728,9 +735,19 @@ static gboolean on_key_press(GtkWidget *widget, GdkEventKey *event, gpointer dat
 }
 
 
+static void clear_filter(void)
+{
+	if (filter != NULL)
+	{
+		g_strfreev(filter);
+		filter = NULL;
+	}
+}
+
+
 static void on_clear_filter(GtkEntry *entry, gpointer user_data)
 {
-	setptr(filter, NULL);
+	clear_filter();
 
 	gtk_entry_set_text(GTK_ENTRY(filter_entry), "");
 
@@ -777,13 +794,11 @@ static void on_path_combo_changed(GtkComboBox *combo, gpointer user_data)
 
 static void on_filter_activate(GtkEntry *entry, gpointer user_data)
 {
-	setptr(filter, g_strdup(gtk_entry_get_text(entry)));
-
-	if (! NZV(filter))
+	filter = g_strsplit(gtk_entry_get_text(entry), ";", -1);
+	if (filter == NULL || g_strv_length(filter) == 0)
 	{
-		setptr(filter, g_strdup("*"));
+		clear_filter();
 	}
-
 	refresh();
 }
 
@@ -791,8 +806,7 @@ static void on_filter_activate(GtkEntry *entry, gpointer user_data)
 static void on_filter_clear(GtkEntry *entry, gint icon_pos,
 							GdkEvent *event, gpointer data)
 {
-	setptr(filter, g_strdup("*"));
-
+	clear_filter();
 	refresh();
 }
 
@@ -896,7 +910,7 @@ static GtkWidget *make_filterbar(void)
 		g_signal_connect(filter_entry, "icon-release", G_CALLBACK(on_filter_clear), NULL);
 	}
 	ui_widget_set_tooltip_text(filter_entry,
-		_("Filter your files with usual wildcards"));
+		_("Filter your files with usual wildcards, separate multiple filters with \";\""));
 	g_signal_connect(filter_entry, "activate", G_CALLBACK(on_filter_activate), NULL);
 
 	gtk_box_pack_start(GTK_BOX(filterbar), label, FALSE, FALSE, 0);
@@ -1080,7 +1094,7 @@ void plugin_init(GeanyData *data)
 	GtkWidget *scrollwin, *toolbar, *filterbar;
 
 	filter = NULL;
-
+	
 	file_view_vbox = gtk_vbox_new(FALSE, 0);
 	toolbar = make_toolbar();
 	gtk_box_pack_start(GTK_BOX(file_view_vbox), toolbar, FALSE, FALSE, 0);
@@ -1252,7 +1266,7 @@ void plugin_cleanup(void)
 
 	g_free(config_file);
 	g_free(open_cmd);
-	g_free(filter);
+	clear_filter();
 	gtk_widget_destroy(file_view_vbox);
 	g_object_unref(G_OBJECT(entry_completion));
 }
