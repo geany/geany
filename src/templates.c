@@ -508,12 +508,15 @@ static void make_comment_block(GString *comment_text, gint filetype_idx, guint i
 
 	/* add line_prefix to every line of comment_text */
 	lines = g_strsplit(comment_text->str, template_eol_char, -1);
-	len = g_strv_length(lines) - 1;
-	for (i = 0; i < len; i++)
+	len = g_strv_length(lines);
+	if (len > 0)	/* prevent unsigned wraparound if comment_text is empty */
 	{
-		tmp = lines[i];
-		lines[i] = g_strconcat(prefix, tmp, NULL);
-		g_free(tmp);
+		for (i = 0; i < len - 1; i++)
+		{
+			tmp = lines[i];
+			lines[i] = g_strconcat(prefix, tmp, NULL);
+			g_free(tmp);
+		}
 	}
 	tmp = g_strjoinv(template_eol_char, lines);
 
