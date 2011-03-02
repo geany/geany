@@ -3,6 +3,8 @@
  * plugins/saveactions.c:
    Fix wrong warning on empty backup directory setting if
    'Backup Copy' is not enabled at all.
+ * AUTHORS, src/about.c, README.Packagers, README:
+   Welcome Colomban Wendling, a new Geany developer.
 
 
 2011-02-22  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
