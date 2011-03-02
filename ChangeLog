@@ -1,3 +1,10 @@
+2011-03-02  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * plugins/saveactions.c:
+   Fix wrong warning on empty backup directory setting if
+   'Backup Copy' is not enabled at all.
+
+
 2011-02-22  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/templates.c:
