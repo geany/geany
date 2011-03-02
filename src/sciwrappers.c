@@ -450,6 +450,9 @@ void sci_set_selection(ScintillaObject *sci, gint anchorPos, gint currentPos)
 }
 
 
+/** Gets the position at the end of a line
+ * @param sci Scintilla widget
+ * @param line Line */
 gint sci_get_line_end_position(ScintillaObject *sci, gint line)
 {
 	return SSM(sci, SCI_GETLINEENDPOSITION, line, 0);
@@ -823,6 +826,10 @@ gint sci_find_text(ScintillaObject *sci, gint flags, struct Sci_TextToFind *ttf)
 }
 
 
+/** Sets the font for a particular style
+ * @param style The style
+ * @param font The font name
+ * @param size The font size */
 void sci_set_font(ScintillaObject *sci, gint style, const gchar *font, gint size)
 {
 	SSM(sci, SCI_STYLESETFONT, style, (sptr_t) font);
