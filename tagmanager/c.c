@@ -661,7 +661,7 @@ static void deleteToken (tokenInfo *const token)
 
 static const char *accessString (const accessType laccess)
 {
-	static const char *const names [] ={
+	static const char *const names [] = {
 		"?", "private", "protected", "public", "default"
 	};
 	Assert (sizeof (names) / sizeof (names [0]) == ACCESS_COUNT);
@@ -671,7 +671,7 @@ static const char *accessString (const accessType laccess)
 
 static const char *implementationString (const impType imp)
 {
-	static const char *const names [] ={
+	static const char *const names [] = {
 		"?", "abstract", "virtual", "pure virtual"
 	};
 	Assert (sizeof (names) / sizeof (names [0]) == IMP_COUNT);
@@ -710,14 +710,14 @@ static const char *scopeString (const tagScope scope)
 
 static const char *declString (const declType declaration)
 {
-		static const char *const names [] = {
-			"?", "base", "class", "enum", "event", "signal", "function",
-			"function template", "ignore", "interface", "module", "namespace",
-			"no mangle", "package", "struct", "union",
-		};
-		Assert (sizeof (names) / sizeof (names [0]) == DECL_COUNT);
-		Assert ((int) declaration < DECL_COUNT);
-		return names[(int) declaration];
+	static const char *const names [] = {
+		"?", "base", "class", "enum", "event", "signal", "function",
+		"function template", "ignore", "interface", "module", "namespace",
+		"no mangle", "package", "struct", "union",
+	};
+	Assert (sizeof (names) / sizeof (names [0]) == DECL_COUNT);
+	Assert ((int) declaration < DECL_COUNT);
+	return names[(int) declaration];
 }
 
 static const char *keywordString (const keywordId keyword)
@@ -954,8 +954,7 @@ static void reinitStatement (statementInfo *const st, const boolean partial)
 	initToken (st->blockName);
 	vStringClear (st->parentClasses);
 
-	/*  Init member info.
-	 */
+	/* Init member info. */
 	if (! partial)
 		st->member.access = st->member.accessDefault;
 
@@ -982,7 +981,7 @@ static void initStatement (statementInfo *const st, statementInfo *const parent)
 	st->parent = parent;
 	initMemberInfo (st);
 	reinitStatement (st, FALSE);
-	if(parent)
+	if (parent)
 	{
 		const tokenInfo *const src = activeToken (parent);
 		tokenInfo *const dst = activeToken (st);
@@ -1183,11 +1182,11 @@ static const char* accessField (const statementInfo *const st)
 static void addOtherFields (tagEntryInfo* const tag, const tagType type,
 							const statementInfo *const st, vString *const scope)
 {
-    /*  For selected tag types, append an extension flag designating the
-     *  parent object in which the tag is defined.
-     */
-    switch (type)
-    {
+	/*  For selected tag types, append an extension flag designating the
+	 *  parent object in which the tag is defined.
+	 */
+	switch (type)
+	{
 		default: break;
 
 		case TAG_CLASS:
@@ -1216,7 +1215,6 @@ static void addOtherFields (tagEntryInfo* const tag, const tagType type,
 			if ((type == TAG_CLASS  ||  type == TAG_INTERFACE  ||
 				 type == TAG_STRUCT) && vStringLength (st->parentClasses) > 0)
 			{
-
 				tag->extensionFields.inheritance =
 						vStringValue (st->parentClasses);
 			}
@@ -1548,7 +1546,8 @@ static void qualifyVariableTag (const statementInfo *const st,
 			else if (st->scope == SCOPE_GLOBAL  ||  st->scope == SCOPE_STATIC)
 				makeTag (nameToken, st, TRUE, TAG_MEMBER);
 		}
-		else if (isLanguage (Lang_java) || isLanguage (Lang_csharp) || isLanguage (Lang_vala));
+		else if (isLanguage (Lang_java) || isLanguage (Lang_csharp) || isLanguage (Lang_vala))
+			;
 		else
 		{
 			if (st->scope == SCOPE_EXTERN  ||  ! st->haveQualifyingName)
@@ -2469,10 +2468,8 @@ static int parseParens (statementInfo *const st, parenInfo *const info)
 		skipToMatch ("()");
 		--depth;
 	}
-		if (st->argEndPosition == 0)
-		{
-			st->argEndPosition = mio_tell(File.mio);
-		}
+	if (st->argEndPosition == 0)
+		st->argEndPosition = mio_tell (File.mio);
 
 	if (! info->isNameCandidate)
 		initToken (token);
@@ -2520,7 +2517,8 @@ static void analyzeParens (statementInfo *const st)
 			token->type = TOKEN_NAME;
 			processName (st);
 			st->gotParenName = TRUE;
-			if (isLanguage(Lang_d) && c == '(' && isType (prev, TOKEN_NAME)) {
+			if (isLanguage(Lang_d) && c == '(' && isType (prev, TOKEN_NAME))
+			{
 				st->declaration = DECL_FUNCTION_TEMPLATE;
 				copyToken (st->blockName, prev);
 			}
@@ -2855,12 +2853,12 @@ static void nest (statementInfo *const st, const unsigned int nestLevel)
 
 static void tagCheck (statementInfo *const st)
 {
-    const tokenInfo *const token = activeToken (st);
-    const tokenInfo *const prev  = prevToken (st, 1);
-    const tokenInfo *const prev2 = prevToken (st, 2);
+	const tokenInfo *const token = activeToken (st);
+	const tokenInfo *const prev  = prevToken (st, 1);
+	const tokenInfo *const prev2 = prevToken (st, 2);
 
-    switch (token->type)
-    {
+	switch (token->type)
+	{
 		case TOKEN_NAME:
 		{
 			if (insideEnumBody (st))
