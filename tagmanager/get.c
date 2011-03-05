@@ -314,14 +314,8 @@ static void makeDefineTag (const char *const name, boolean parameterized)
 		e.kind         = 'd';
 		if (parameterized)
 		{
-			if (useFile()) {
-				e.extensionFields.arglist = getArglistFromFilePos(getInputFilePosition()
-		  			, e.name);
-			}
-			else {
-				e.extensionFields.arglist = getArglistFromBufferPos(getInputBufferPosition()
-		  			, e.name);
-			}
+			e.extensionFields.arglist = getArglistFromFilePos(getInputFilePosition()
+					, e.name);
 		}
 		makeTagEntry (&e);
 		if (parameterized)
@@ -715,63 +709,30 @@ process:
 	return c;
 }
 
-extern char *getArglistFromBufferPos(int startPosition, const char *tokenName)
+extern char *getArglistFromFilePos(MIOPos startPosition, const char *tokenName)
 {
-	int bufferOriginalPosition;
+	MIOPos originalPosition;
 	char *result = NULL;
 	char *arglist = NULL;
 	long pos1, pos2;
 
-	/* FIXME startPosition as well as getBufPos() are mostly wrong here */
-	pos2 = getBufPos();
+	pos2 = mio_tell(File.mio);
 
-	if (!useFile()) {
-		bufferOriginalPosition = getBufPos ();
-		setBufPos(startPosition);
-		pos1 = File.fpBufferPosition;
-	}
-	else
-		return NULL;
+	mio_getpos(File.mio, &originalPosition);
+	mio_setpos(File.mio, &startPosition);
+	pos1 = mio_tell(File.mio);
 
 	if (pos2 > pos1)
 	{
 		result = (char *) g_malloc(sizeof(char ) * (pos2 - pos1 + 2));
-		if (result != NULL)
-		{
-			memcpy(result, &File.fpBuffer[getBufPos()], pos2 - pos1 + 1);
-			result[pos2-pos1+1] = '\0';
-			arglist = getArglistFromStr(result, tokenName);
-			g_free(result);
-		}
-	}
-	setBufPos (bufferOriginalPosition);
-	return arglist;
-}
-
-extern char *getArglistFromFilePos(fpos_t startPosition, const char *tokenName)
-{
-	fpos_t originalPosition;
-	char *result = NULL;
-	char *arglist = NULL;
-	long pos1, pos2;
-
-	pos2 = ftell(File.fp);
-
-	fgetpos(File.fp, &originalPosition);
-	fsetpos(File.fp, &startPosition);
-	pos1 = ftell(File.fp);
-
-	if (pos2 > pos1)
-	{
-		result = (char *) g_malloc(sizeof(char ) * (pos2 - pos1 + 2));
-		if (result != NULL && fread(result, sizeof(char), pos2 - pos1 + 1, File.fp) > 0)
+		if (result != NULL && mio_read(File.mio, result, sizeof(char), pos2 - pos1 + 1) > 0)
 		{
 			result[pos2-pos1+1] = '\0';
 			arglist = getArglistFromStr(result, tokenName);
 		}
 		g_free(result);
 	}
-	fsetpos(File.fp, &originalPosition);
+	mio_setpos(File.mio, &originalPosition);
 	return arglist;
 }
 

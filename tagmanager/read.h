@@ -23,6 +23,7 @@
 
 #include <stdio.h>
 #include <ctype.h>
+#include <mio/mio.h>
 
 #include "parse.h"
 #include "vstring.h"
@@ -33,7 +34,6 @@
 #define getInputLineNumber()	File.lineNumber
 #define getInputFileName()	vStringValue (File.source.name)
 #define getInputFilePosition()	File.filePosition
-#define getInputBufferPosition()	File.fpBufferPosition
 #define getSourceFileName()	vStringValue (File.source.name)
 #define getSourceFileTagPath()	File.source.tagPath
 #define getSourceLanguage()	File.source.language
@@ -73,13 +73,9 @@ typedef struct sInputFile {
     vString	*path;		/* path of input file (if any) */
     vString	*line;		/* last line read from file */
     const unsigned char* currentLine;	/* current line being worked on */
-    FILE	*fp;		/* stream used for reading the file */
-    unsigned char* fpBuffer;	/* buffer which contains the text to be parsed.
-				   This is optional to the use of a file-descriptor */
-    int fpBufferSize;		/* size of the fpBuffer */
-    int fpBufferPosition;	/* pointer to the current position in buffer */
+    MIO		*mio;		/* stream used for reading the file */
     unsigned long lineNumber;	/* line number in the input file */
-    fpos_t	filePosition;	/* file position of current line */
+    MIOPos	filePosition;	/* file position of current line */
     int		ungetch;	/* a single character that was ungotten */
     boolean	eof;		/* have we reached the end of file? */
     boolean	newLine;	/* will the next character begin a new line? */
@@ -106,11 +102,6 @@ extern CONST_FILE inputFile File;
 /*
 *   FUNCTION PROTOTYPES
 */
-#ifdef NEED_PROTO_FGETPOS
-extern int fgetpos  (FILE *stream, fpos_t *pos);
-extern int fsetpos  (FILE *stream, const fpos_t *pos);
-#endif
-
 extern void freeSourceFileResources (void);
 extern boolean fileOpen (const char *const fileName, const langType language);
 extern boolean fileEOF (void);
@@ -118,15 +109,11 @@ extern void fileClose (void);
 extern int fileGetc (void);
 extern void fileUngetc (int c);
 extern const unsigned char *fileReadLine (void);
-extern char *readLine (vString *const vLine, FILE *const fp);
-extern char *readSourceLine (vString *const vLine, fpos_t location, long *const pSeekValue);
-
+extern char *readLine (vString *const vLine, MIO *const mio);
+extern char *readSourceLine (vString *const vLine, MIOPos location, long *const pSeekValue);
 extern boolean bufferOpen (unsigned char *buffer, int buffer_size,
 			   const char *const fileName, const langType language );
-extern void bufferClose (void);
-extern void setBufPos (int new_position);
-extern int getBufPos (void);
-extern boolean useFile (void);
+#define bufferClose fileClose
 
 #endif	/* _READ_H */
 

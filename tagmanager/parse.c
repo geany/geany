@@ -15,6 +15,7 @@
 #include "general.h"	/* must always come first */
 
 #include <string.h>
+#include <mio/mio.h>
 
 
 #include "entry.h"
@@ -613,16 +614,16 @@ static boolean createTagsWithFallback (const char *const fileName,
 				       const langType language)
 {
     const unsigned long numTags	= TagFile.numTags.added;
-    fpos_t tagFilePosition;
+    MIOPos tagFilePosition;
     unsigned int passCount = 0;
     boolean tagFileResized = FALSE;
 
-    fgetpos (TagFile.fp, &tagFilePosition);
+    mio_getpos (TagFile.mio, &tagFilePosition);
     while (createTagsForFile (fileName, language, ++passCount))
     {
 	/*  Restore prior state of tag file.
 	 */
-	fsetpos (TagFile.fp, &tagFilePosition);
+	mio_setpos (TagFile.mio, &tagFilePosition);
 	TagFile.numTags.added = numTags;
 	tagFileResized = TRUE;
     }

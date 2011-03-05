@@ -293,6 +293,7 @@ icons/48x48/Makefile
 icons/scalable/Makefile
 tagmanager/Makefile
 tagmanager/include/Makefile
+tagmanager/mio/Makefile
 scintilla/Makefile
 scintilla/include/Makefile
 src/Makefile

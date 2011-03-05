@@ -20,6 +20,7 @@
 
 #include <string.h>
 #include <glib.h>
+#include <mio/mio.h>
 
 #ifdef HAVE_REGCOMP
 # include <ctype.h>
@@ -410,15 +411,15 @@ static void processLanguageRegex (const langType language,
 	else
 	{
 		const char* regexfile = parameter + 1;
-		FILE* const fp = fopen (regexfile, "r");
-		if (fp == NULL)
+		MIO* const mio = mio_new_file (regexfile, "r");
+		if (mio == NULL)
 			printf ("regex: %s\n", regexfile);
 		else
 		{
 			vString* const regex = vStringNew ();
-			while (readLine (regex, fp))
+			while (readLine (regex, mio))
 				addLanguageRegex (language, vStringValue (regex));
-			fclose (fp);
+			mio_free (mio);
 			vStringDelete (regex);
 		}
 	}

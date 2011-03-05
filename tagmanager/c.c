@@ -16,6 +16,7 @@
 
 #include <string.h>
 #include <setjmp.h>
+#include <mio/mio.h>
 
 #include "entry.h"
 #include "get.h"
@@ -180,8 +181,7 @@ typedef struct sTokenInfo
 	keywordId		keyword;
 	vString*		name;			/* the name of the token */
 	unsigned long	lineNumber;		/* line number of tag */
-	fpos_t			filePosition;	/* file position of line containing name */
-	int				bufferPosition;	/* buffer position of line containing name */
+	MIOPos			filePosition;	/* file position of line containing name */
 } tokenInfo;
 
 typedef enum eImplementation
@@ -602,10 +602,7 @@ static void initToken (tokenInfo* const token)
 	token->type			= TOKEN_NONE;
 	token->keyword		= KEYWORD_NONE;
 	token->lineNumber	= getSourceLineNumber();
-	if (useFile())
-		token->filePosition   = getInputFilePosition();
-	else
-		token->bufferPosition = getInputBufferPosition();
+	token->filePosition	= getInputFilePosition();
 	vStringClear(token->name);
 }
 
@@ -1236,16 +1233,8 @@ static void addOtherFields (tagEntryInfo* const tag, const tagType type,
             if ((TRUE == st->gotArgs) && (TRUE == Option.extensionFields.argList) &&
 				((TAG_FUNCTION == type) || (TAG_METHOD == type) || (TAG_PROTOTYPE == type)))
 			{
-				if (useFile())
-				{
-					tag->extensionFields.arglist = getArglistFromFilePos(
+				tag->extensionFields.arglist = getArglistFromFilePos(
 						tag->filePosition, tag->name);
-				}
-				else
-				{
-					tag->extensionFields.arglist = getArglistFromBufferPos(
-						tag->bufferPosition, tag->name);
-				}
 			}
 			break;
 		}
@@ -1424,10 +1413,7 @@ static void makeTag (const tokenInfo *const token,
 		initTagEntry (&e, vStringValue (token->name));
 
 		e.lineNumber	= token->lineNumber;
-		if (useFile())
-			e.filePosition	= token->filePosition;
-		else
-			e.bufferPosition = token->bufferPosition;
+		e.filePosition	= token->filePosition;
 		e.isFileScope = isFileScope;
 		e.kindName	= tagName (type);
 		e.kind		= tagLetter (type);
@@ -1894,10 +1880,7 @@ static void copyToken (tokenInfo *const dest, const tokenInfo *const src)
 {
 	dest->type         = src->type;
 	dest->keyword      = src->keyword;
-	if (useFile())
-		dest->filePosition = src->filePosition;
-	else
-		dest->bufferPosition = src->bufferPosition;
+	dest->filePosition = src->filePosition;
 	dest->lineNumber   = src->lineNumber;
 	vStringCopy (dest->name, src->name);
 }
@@ -2487,12 +2470,7 @@ static int parseParens (statementInfo *const st, parenInfo *const info)
 	}
 		if (st->argEndPosition == 0)
 		{
-			if (useFile())
-				st->argEndPosition = ftell(File.fp);
-			else
-				/* FIXME File.fpBufferPosition is wrong here, this breaks function signatures and
-				 * so Geany's calltips */
-				st->argEndPosition = File.fpBufferPosition;
+			st->argEndPosition = mio_tell(File.mio);
 		}
 
 	if (! info->isNameCandidate)

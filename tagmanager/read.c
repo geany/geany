@@ -28,12 +28,19 @@
 *   DATA DEFINITIONS
 */
 inputFile File;			/* globally read through macros */
-static fpos_t StartOfLine;	/* holds deferred position of start of line */
-static int bufferStartOfLine;   /* the same as StartOfLine but for buffer */
+static MIOPos StartOfLine;	/* holds deferred position of start of line */
 
 
-static int readNextChar (void);
-static int pushBackChar (int c);
+
+/* Read a character choosing automatically between file or buffer, depending
+ * on which mode we are.
+ */
+#define readNextChar() (mio_getc (File.mio))
+
+/* Replaces ungetc() for file. In case of buffer we'll perform the same action:
+ * fpBufferPosition-- and write of the param char into the buf.
+ */
+#define pushBackChar(c) (mio_ungetc (File.mio, c))
 
 /*
 *   FUNCTION DEFINITIONS
@@ -253,22 +260,22 @@ extern boolean fileOpen (const char *const fileName, const langType language)
 
     /*	If another file was already open, then close it.
      */
-    if (File.fp != NULL)
+    if (File.mio != NULL)
     {
-	fclose (File.fp);		/* close any open source file */
-	File.fp = NULL;
+	mio_free (File.mio);		/* close any open source file */
+	File.mio = NULL;
     }
 
-    File.fp = g_fopen (fileName, openMode);
-    if (File.fp == NULL)
+    File.mio = mio_new_file_full (fileName, openMode, g_fopen, fclose);
+    if (File.mio == NULL)
 	error (WARNING | PERROR, "cannot open \"%s\"", fileName);
     else
     {
 	opened = TRUE;
 
 	setInputFileName (fileName);
-	fgetpos (File.fp, &StartOfLine);
-	fgetpos (File.fp, &File.filePosition);
+	mio_getpos (File.mio, &StartOfLine);
+	mio_getpos (File.mio, &File.filePosition);
 	File.currentLine  = NULL;
 	File.language     = language;
 	File.lineNumber   = 0L;
@@ -297,19 +304,13 @@ extern boolean bufferOpen (unsigned char *buffer, int buffer_size,
 {
     boolean opened = FALSE;
 	
-    /*	Check whether a file of a buffer were already open, then close them.
+    /* Check whether a file of a buffer were already open, then close them.
      */
-    if (File.fp != NULL) {
-	fclose (File.fp);		/* close any open source file */
-	File.fp = NULL;
+    if (File.mio != NULL) {
+	mio_free (File.mio);		/* close any open source file */
+	File.mio = NULL;
     }
 
-    if (File.fpBuffer != NULL) {
-	error(PERROR, "An unallocated buffer was found. Please check you called \
-	correctly bufferClose ()\n");
-	File.fpBuffer = NULL;
-    }
-    
     /* check if we got a good buffer */
     if (buffer == NULL || buffer_size == 0) {
 	opened = FALSE;
@@ -318,11 +319,10 @@ extern boolean bufferOpen (unsigned char *buffer, int buffer_size,
 	
     opened = TRUE;
 	    
-    File.fpBuffer = buffer;		
+    File.mio = mio_new_memory (buffer, buffer_size, NULL, NULL);
     setInputFileName (fileName);
-    bufferStartOfLine = 0;
-    File.fpBufferPosition = 0;
-    File.fpBufferSize = buffer_size;
+    mio_getpos (File.mio, &StartOfLine);
+    mio_getpos (File.mio, &File.filePosition);
     File.currentLine  = NULL;
     File.language     = language;
     File.lineNumber   = 0L;
@@ -339,12 +339,12 @@ extern boolean bufferOpen (unsigned char *buffer, int buffer_size,
 	    getLanguageName (language),
 	    File.source.isHeader ? "include " : "");
 
-    return opened;	
+    return opened;
 }
 
 extern void fileClose (void)
 {
-    if (File.fp != NULL)
+    if (File.mio != NULL)
     {
 	/*  The line count of the file is 1 too big, since it is one-based
 	 *  and is incremented upon each newline.
@@ -353,16 +353,8 @@ extern void fileClose (void)
 	    addTotals (0, File.lineNumber - 1L,
 		      getFileSize (vStringValue (File.name)));
 
-	fclose (File.fp);
-	File.fp = NULL;
-    }
-}
-
-/* user should take care of freeing the buffer */
-extern void bufferClose (void)
-{
-    if (File.fpBuffer != NULL) {
-	File.fpBuffer = NULL;
+	mio_free (File.mio);
+	File.mio = NULL;
     }
 }
 
@@ -403,11 +395,7 @@ readnext:
 		goto readnext;
 	    else
 	    {
-		/* FIXME: find out a better way to do this check */
-		if (File.fp != NULL)
-		    fsetpos (File.fp, &StartOfLine);
-		else
-		    File.fpBufferPosition = bufferStartOfLine;
+		mio_setpos (File.mio, &StartOfLine);
 
 		c = readNextChar ();
 	    }
@@ -419,10 +407,7 @@ readnext:
     else if (c == NEWLINE)
     {
 	File.newLine = TRUE;
-	if (File.fp != NULL)		/* we have a file */
-	    fgetpos (File.fp, &StartOfLine);
-	else						/* it's a buffer */
-	    bufferStartOfLine = File.fpBufferPosition;
+	mio_getpos (File.mio, &StartOfLine);
     }
     else if (c == CRETURN)
     {
@@ -437,10 +422,7 @@ readnext:
 
 	c = NEWLINE;				/* convert CR into newline */
 	File.newLine = TRUE;
-	if (File.fp != NULL)
-	    fgetpos (File.fp, &StartOfLine);
-	else
-	    bufferStartOfLine = File.fpBufferPosition;
+	mio_getpos (File.mio, &StartOfLine);
     }
     DebugStatement ( debugPutc (DEBUG_RAW, c); )
     return c;
@@ -535,75 +517,17 @@ extern const unsigned char *fileReadLine (void)
     return result;
 }
 
-/* Read a character choosing automatically between file or buffer, depending
- * on which mode we are.
- */
-static int readNextChar(void) 
-{
-    if (File.fp != NULL) {
-	return getc(File.fp);
-    }
-    else {
-	int c;
-	if (File.fpBufferPosition >= File.fpBufferSize)
-	    return EOF;
-
-	c = File.fpBuffer[File.fpBufferPosition];
-	File.fpBufferPosition++;
-	
-	return c;
-    }
-}
-
-/* Replaces ungetc() for file. In case of buffer we'll perform the same action:
- * fpBufferPosition-- and write of the param char into the buf.
- */
-static int pushBackChar (int c) 
-{
-    if (File.fp != NULL) {
-	return ungetc (c, File.fp);
-    }
-    else {
-	File.fpBufferPosition--;
-	if (File.fpBufferPosition < 0)
-	    return EOF;
-	File.fpBuffer[File.fpBufferPosition] = c;
-	return File.fpBuffer[File.fpBufferPosition];
-    }
-}
-
-
-/* replacement for fsetpos, applied to a buffer */
-extern void setBufPos (int new_position) 
-{
-    File.fpBufferPosition = new_position;
-}
-
-/* replacement for fgetpos, applied to a buffer */
-extern int getBufPos (void) 
-{
-    return File.fpBufferPosition;
-}
-
-extern boolean useFile (void)
-{
-    if (File.fp != NULL)
-	return TRUE;
-    else
-	return FALSE;
-}
 
 /*
  *   Source file line reading with automatic buffer sizing
- *   Does not perform file/buffer checks. Only file is supported.
  */
-extern char *readLine (vString *const vLine, FILE *const fp)
+extern char *readLine (vString *const vLine, MIO *const mio)
 {
     char *result = NULL;
 
     vStringClear (vLine);
-    if (fp == NULL)		/* to free memory allocated to buffer */
-	error (FATAL, "NULL file pointer");
+    if (mio == NULL)		/* to free memory allocated to buffer */
+	error (FATAL, "NULL MIO pointer");
     else
     {
 	boolean reReadLine;
@@ -616,15 +540,15 @@ extern char *readLine (vString *const vLine, FILE *const fp)
 	do
 	{
 	    char *const pLastChar = vStringValue (vLine) + vStringSize (vLine) -2;
-	    fpos_t startOfLine;
+	    MIOPos startOfLine;
 
-	    fgetpos (fp, &startOfLine);
+	    mio_getpos (mio, &startOfLine);
 	    reReadLine = FALSE;
 	    *pLastChar = '\0';
-	    result = fgets (vStringValue (vLine), (int) vStringSize (vLine), fp);
+	    result = mio_gets (mio, vStringValue (vLine), (int) vStringSize (vLine));
 	    if (result == NULL)
 	    {
-		if (! feof (fp))
+		if (! mio_eof (mio))
 		    error (FATAL | PERROR, "Failure on attempt to read file");
 	    }
 	    else if (*pLastChar != '\0'  &&
@@ -633,7 +557,7 @@ extern char *readLine (vString *const vLine, FILE *const fp)
 		/*  buffer overflow */
 		reReadLine = vStringAutoResize (vLine);
 		if (reReadLine)
-		    fsetpos (fp, &startOfLine);
+		    mio_setpos (mio, &startOfLine);
 		else
 		    error (FATAL | PERROR, "input line too big; out of memory");
 	    }
@@ -660,20 +584,20 @@ extern char *readLine (vString *const vLine, FILE *const fp)
 /*  Places into the line buffer the contents of the line referenced by
  *  "location".
  */
-extern char *readSourceLine (vString *const vLine, fpos_t location,
+extern char *readSourceLine (vString *const vLine, MIOPos location,
 			     long *const pSeekValue)
 {
-    fpos_t orignalPosition;
+    MIOPos orignalPosition;
     char *result;
 
-    fgetpos (File.fp, &orignalPosition);
-    fsetpos (File.fp, &location);
+    mio_getpos (File.mio, &orignalPosition);
+    mio_setpos (File.mio, &location);
     if (pSeekValue != NULL)
-	*pSeekValue = ftell (File.fp);
-    result = readLine (vLine, File.fp);
+	*pSeekValue = mio_tell (File.mio);
+    result = readLine (vLine, File.mio);
     if (result == NULL)
 	error (FATAL, "Unexpected end of file: %s", vStringValue (File.name));
-    fsetpos (File.fp, &orignalPosition);
+    mio_setpos (File.mio, &orignalPosition);
 
     return result;
 }

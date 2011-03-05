@@ -15,7 +15,7 @@
 */
 #include "general.h"	/* must always come first */
 
-#include <stdio.h>
+#include <mio/mio.h>
 
 #include "vstring.h"
 
@@ -33,12 +33,12 @@
 typedef struct eTagFile {
     char *name;
     char *directory;
-    FILE *fp;
+    MIO *mio;
     struct sNumTags { unsigned long added, prev; } numTags;
     struct sMax { size_t line, tag, file; } max;
     struct sEtags {
 	char *name;
-	FILE *fp;
+	MIO *mio;
 	size_t byteCount;
     } etags;
     vString *vLine;
@@ -55,7 +55,7 @@ typedef struct sTagFields {
 typedef struct sTagEntryInfo {
     boolean	lineNumberEntry;/* pattern or line number entry */
     unsigned long lineNumber;	/* line number of tag */
-    fpos_t	filePosition;	/* file position of line containing tag */
+    MIOPos	filePosition;	/* file position of line containing tag */
     int bufferPosition;		/* buffer position of line containing tag */
     const char*	language;	/* language of source file */
     boolean	isFileScope;	/* is tag visibile only within source file? */
@@ -88,7 +88,7 @@ extern tagFile TagFile;
 */
 extern void freeTagFileResources (void);
 extern const char *tagFileName (void);
-extern void copyBytes (FILE* const fromFp, FILE* const toFp, const long size);
+extern void copyBytes (MIO* const fromMio, MIO* const toMio, const long size);
 extern void copyFile (const char *const from, const char *const to, const long size);
 extern void openTagFile (void);
 extern void closeTagFile (const boolean resize);

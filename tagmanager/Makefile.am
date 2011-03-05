@@ -1,8 +1,8 @@
 ## Process this file with automake to produce Makefile.in
 # $Id$
 
-SUBDIRS = include
-INCLUDES = -I$(srcdir)/include $(GTK_CFLAGS)
+SUBDIRS = mio include
+INCLUDES = -I$(srcdir)/include $(GTK_CFLAGS) -I$(srcdir)/mio -I$(srcdir)
 
 AM_CFLAGS = -DG_LOG_DOMAIN=\""Tagmanager"\"
 

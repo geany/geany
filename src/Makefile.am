@@ -74,7 +74,7 @@ geany_include_HEADERS = \
 
 
 INCLUDES = -I$(top_srcdir) -I$(srcdir)/../scintilla/include -I$(srcdir)/../tagmanager/include \
-			@GTK_CFLAGS@ @GIO_CFLAGS@
+			-I$(topsrcdir)/tagmanager/mio @GTK_CFLAGS@ @GIO_CFLAGS@
 
 # tell automake we have a C++ file so it uses the C++ linker we need for Scintilla
 nodist_EXTRA_geany_SOURCES = dummy.cxx
@@ -85,8 +85,8 @@ if MINGW
 
 geany_SOURCES = $(SRCS) win32.c win32.h
 
-geany_LDADD = ../scintilla/libscintilla.a ../tagmanager/libtagmanager.a @GTK_LIBS@ @GIO_LIBS@ \
-				$(INTLLIBS) -lole32 -luuid -liberty -lwsock32 geany_private.res
+geany_LDADD = ../scintilla/libscintilla.a ../tagmanager/libtagmanager.a ../tagmanager/mio/libmio.a \
+				@GTK_LIBS@ @GIO_LIBS@ $(INTLLIBS) -lole32 -luuid -liberty -lwsock32 geany_private.res
 
 AM_CFLAGS = -DGEANY_DATADIR=\"data\" \
 			-DGEANY_DOCDIR=\"\" \
@@ -112,7 +112,8 @@ else
 
 geany_SOURCES = $(SRCS) vte.c vte.h
 
-geany_LDADD = ../scintilla/libscintilla.a ../tagmanager/libtagmanager.a @GTK_LIBS@ @GIO_LIBS@ $(INTLLIBS)
+geany_LDADD = ../scintilla/libscintilla.a ../tagmanager/libtagmanager.a ../tagmanager/mio/libmio.a \
+				@GTK_LIBS@ @GIO_LIBS@ $(INTLLIBS)
 
 AM_CFLAGS = -DGEANY_DATADIR=\""$(datadir)"\" \
 			-DGEANY_DOCDIR=\""$(docdir)"\" \

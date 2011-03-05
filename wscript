@@ -59,6 +59,8 @@ top = '.'
 out = '_build_'
 
 
+mio_sources = set(['tagmanager/mio/mio.c'])
+
 tagmanager_sources = set([
     'tagmanager/args.c', 'tagmanager/abc.c', 'tagmanager/actionscript.c', 'tagmanager/asm.c',
     'tagmanager/basic.c', 'tagmanager/c.c', 'tagmanager/cobol.c',
@@ -285,8 +287,20 @@ def build(bld):
         source          = tagmanager_sources,
         name            = 'tagmanager',
         target          = 'tagmanager',
-        includes        = ['.', 'tagmanager/include/'],
+        includes        = ['.', 'tagmanager/include/', 'tagmanager/mio/'],
         defines         = 'G_LOG_DOMAIN="Tagmanager"',
+        uselib          = 'GTK',
+        install_path    = None) # do not install this library
+
+
+    # MIO
+    bld.new_task_gen(
+        features        = ['c', 'cstlib'],
+        source          = mio_sources,
+        name            = 'mio',
+        target          = 'mio',
+        includes        = ['.', 'tagmanager/mio/'],
+        defines         = 'G_LOG_DOMAIN="MIO"',
         uselib          = 'GTK',
         install_path    = None) # do not install this library
 
@@ -319,7 +333,7 @@ def build(bld):
         includes        = ['.', 'scintilla/include/', 'tagmanager/include/'],
         defines         = ['G_LOG_DOMAIN="Geany"', 'GEANY_PRIVATE'],
         uselib          = ['GTK', 'GIO', 'WIN32', 'SUNOS_SOCKET'],
-        use             = ['scintilla', 'tagmanager'])
+        use             = ['scintilla', 'tagmanager', 'mio'])
 
     # geanyfunctions.h
     bld.new_task_gen(

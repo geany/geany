@@ -19,6 +19,7 @@
 #include <limits.h>
 #include <ctype.h>	/* to define tolower () */
 #include <setjmp.h>
+#include <mio/mio.h>
 
 #include "entry.h"
 #include "keyword.h"
@@ -183,8 +184,7 @@ typedef struct sTokenInfo {
 	vString* string;
 	struct sTokenInfo *secondary;
 	unsigned long lineNumber;
-	fpos_t filePosition;
-	int bufferPosition;	/* buffer position of line containing name */
+	MIOPos filePosition;
 } tokenInfo;
 
 /*
@@ -423,10 +423,7 @@ static tokenInfo *newToken (void)
 	token->string       = vStringNew ();
 	token->secondary    = NULL;
 	token->lineNumber   = getSourceLineNumber ();
-	if (useFile())
-	    token->filePosition = getInputFilePosition ();
-	else
-	    token->bufferPosition = getInputBufferPosition ();
+	token->filePosition = getInputFilePosition ();
 
 	return token;
 }
@@ -480,10 +477,7 @@ static void makeFortranTag (tokenInfo *const token, tagType tag)
 			e.lineNumberEntry = (boolean) (Option.locate != EX_PATTERN);
 
 		e.lineNumber	= token->lineNumber;
-		if (useFile())
-		    e.filePosition   = token->filePosition;
-		else
-		    e.bufferPosition = token->bufferPosition;
+		e.filePosition	= token->filePosition;
 		e.isFileScope	= isFileScope (token->tag);
 		e.kindName		= FortranKinds [token->tag].name;
 		e.kind			= FortranKinds [token->tag].letter;
@@ -959,10 +953,7 @@ getNextChar:
 	c = getChar ();
 
 	token->lineNumber	= getSourceLineNumber ();
-	if (useFile())
-	    token->filePosition = getInputFilePosition ();
-	else
-	    token->bufferPosition = getInputBufferPosition ();
+	token->filePosition = getInputFilePosition ();
 
 	switch (c)
 	{

@@ -137,8 +137,7 @@ typedef struct sTokenInfo {
     vString *	string;
     vString *	scope;
     unsigned long lineNumber;
-    fpos_t filePosition;
-    int	bufferPosition;	/* buffer position of line containing name */
+    MIOPos filePosition;
 } tokenInfo;
 
 /*
@@ -392,10 +391,7 @@ static void makeConstTag (tokenInfo *const token, const sqlKind kind)
 	initTagEntry (&e, name);
 
 	e.lineNumber   = token->lineNumber;
-	if (useFile())
-	    e.filePosition	= token->filePosition;
-	else
-	    e.bufferPosition 	= token->bufferPosition;
+	e.filePosition = token->filePosition;
 	e.kindName     = SqlKinds [kind].name;
 	e.kind         = SqlKinds [kind].letter;
 
@@ -495,10 +491,7 @@ getNextChar:
 	    token->type = TOKEN_STRING;
 	    parseString (token->string, c);
             token->lineNumber = getSourceLineNumber ();
-	    if (useFile())
-		token->filePosition	= getInputFilePosition ();
-	    else
-		token->bufferPosition = getInputBufferPosition ();
+	    token->filePosition	= getInputFilePosition ();
 	    break;
 
 	case '-':
@@ -564,10 +557,7 @@ getNextChar:
 	    {
 		parseIdentifier (token->string, c);
 		token->lineNumber = getSourceLineNumber ();
-		if (useFile())
-		    token->filePosition	= getInputFilePosition ();
-		else
-		    token->bufferPosition = getInputBufferPosition ();
+		token->filePosition = getInputFilePosition ();
 		token->keyword = analyzeToken (token->string);
 		if (isKeyword (token, KEYWORD_rem))
 		{

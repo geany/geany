@@ -21,6 +21,7 @@
 #include "general.h"	/* must always come first */
 #include <ctype.h>	/* to define isalpha () */
 #include <setjmp.h>
+#include <mio/mio.h>
 #ifdef DEBUG
 #include <stdio.h>
 #endif
@@ -107,10 +108,9 @@ typedef struct sTokenInfo {
 	vString *		string;
 	vString *		scope;
 	unsigned long 	lineNumber;
-	fpos_t 			filePosition;
+	MIOPos			filePosition;
 	int				nestLevel;
 	boolean			ignoreTag;
-    int	bufferPosition;	/* buffer position of line containing name */
 } tokenInfo;
 
 /*
@@ -198,10 +198,7 @@ static tokenInfo *newToken (void)
 	token->nestLevel	= 0;
 	token->ignoreTag	= FALSE;
 	token->lineNumber   = getSourceLineNumber ();
-    if (useFile())
-		token->filePosition = getInputFilePosition ();
-    else
-		token->bufferPosition = getInputBufferPosition ();
+	token->filePosition = getInputFilePosition ();
 
 	return token;
 }
@@ -357,11 +354,8 @@ getNextChar:
 	{
 		c = fileGetc ();
 		token->lineNumber   = getSourceLineNumber ();
-		if (useFile())
-			token->filePosition = getInputFilePosition ();
-		else
-			token->bufferPosition = getInputBufferPosition ();
-		}
+		token->filePosition = getInputFilePosition ();
+	}
 	while (c == '\t'  ||  c == ' ' ||  c == '\n');
 
 	switch (c)
@@ -384,10 +378,7 @@ getNextChar:
 				  token->type = TOKEN_STRING;
 				  parseString (token->string, c);
 				  token->lineNumber = getSourceLineNumber ();
-				  if (useFile())
-					token->filePosition = getInputFilePosition ();
-				  else
-					token->bufferPosition = getInputBufferPosition ();
+				  token->filePosition = getInputFilePosition ();
 				  break;
 
 		case '\\':
@@ -396,10 +387,7 @@ getNextChar:
 					  fileUngetc (c);
 				  token->type = TOKEN_CHARACTER;
 				  token->lineNumber = getSourceLineNumber ();
-				  if (useFile())
-					token->filePosition = getInputFilePosition ();
-				  else
-					token->bufferPosition = getInputBufferPosition ();
+				  token->filePosition = getInputFilePosition ();
 				  break;
 
 		case '/':
@@ -442,10 +430,7 @@ getNextChar:
 				  {
 					  parseIdentifier (token->string, c);
 					  token->lineNumber = getSourceLineNumber ();
-					  if (useFile())
-						token->filePosition = getInputFilePosition ();
-					  else
-						token->bufferPosition = getInputBufferPosition ();
+					  token->filePosition = getInputFilePosition ();
 					  token->keyword = analyzeToken (token->string);
 					  if (isKeyword (token, KEYWORD_NONE))
 						  token->type = TOKEN_IDENTIFIER;
@@ -460,10 +445,7 @@ static void copyToken (tokenInfo *const dest, tokenInfo *const src)
 {
 	dest->nestLevel = src->nestLevel;
 	dest->lineNumber = src->lineNumber;
-    if (useFile())
-		dest->filePosition = src->filePosition;
-    else
-		dest->bufferPosition = src->bufferPosition;
+	dest->filePosition = src->filePosition;
 	dest->type = src->type;
 	dest->keyword = src->keyword;
 	vStringCopy(dest->string, src->string);

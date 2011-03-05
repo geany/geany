@@ -45,8 +45,7 @@ extern void cppEndStatement (void);
 extern void cppUngetc (const int c);
 extern int cppGetc (void);
 extern int skipOverCComment (void);
-extern char *getArglistFromFilePos(fpos_t startPosition, const char *tokenName);
-extern char *getArglistFromBufferPos(int startPosition, const char *tokenName);
+extern char *getArglistFromFilePos(MIOPos startPosition, const char *tokenName);
 extern char *getArglistFromStr(char *buf, const char *name);
 
 #endif  /* _GET_H */

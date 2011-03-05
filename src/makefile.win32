@@ -32,6 +32,7 @@ GTK_INCLUDES= \
 
 INCLUDEDIRS=  -I.. \
               -I../scintilla/include \
+              -I../tagmanager/mio \
               -I../tagmanager/include \
               $(GTK_INCLUDES)
 
@@ -92,8 +93,8 @@ binclean:
 
 $(TARGET): $(OBJS) $(RES) ../scintilla/scintilla.a ../tagmanager/tagmanager.a
 	$(CXX) $(OBJS) $(RES) -o $(TARGET) \
-	../scintilla/scintilla.a ../tagmanager/tagmanager.a $(ALL_GTK_LIBS) \
-	 $(WIN_LIBS)
+	../scintilla/scintilla.a ../tagmanager/mio∕mio.a ../tagmanager/tagmanager.a \
+	$(ALL_GTK_LIBS) $(WIN_LIBS)
 
 deps.mak:
 	$(CC) -MM  $(CFLAGS) *.c >deps.mak

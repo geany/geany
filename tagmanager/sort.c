@@ -105,11 +105,11 @@ extern void externalSortTags (const boolean toStdout)
  *  so have lots of memory if you have large tag files.
  */
 
-static void failedSort (FILE *const fp, const char* msg)
+static void failedSort (MIO *const mio, const char* msg)
 {
     const char* const cannotSort = "cannot sort tag file";
-    if (fp != NULL)
-	fclose (fp);
+    if (mio != NULL)
+	mio_free (mio);
     if (msg == NULL)
 	error (FATAL | PERROR, "%s", cannotSort);
     else
@@ -127,18 +127,18 @@ static int compareTags (const void *const one, const void *const two)
 static void writeSortedTags (char **const table, const size_t numTags,
 			     const boolean toStdout)
 {
-    FILE *fp;
+    MIO *mio;
     size_t i;
 
     /*	Write the sorted lines back into the tag file.
      */
     if (toStdout)
-	fp = stdout;
+	mio = mio_new_fp (stdout, NULL);
     else
     {
-	fp = g_fopen (tagFileName (), "w");
-	if (fp == NULL)
-	    failedSort (fp, NULL);
+	mio = mio_new_file_full (tagFileName (), "w", g_fopen, fclose);
+	if (mio == NULL)
+	    failedSort (mio, NULL);
     }
     for (i = 0 ; i < numTags ; ++i)
     {
@@ -146,19 +146,18 @@ static void writeSortedTags (char **const table, const size_t numTags,
 	 *  pattern) if this is not an xref file.
 	 */
 	if (i == 0  ||  Option.xref  ||  strcmp (table [i], table [i-1]) != 0)
-	    if (fputs (table [i], fp) == EOF)
-		failedSort (fp, NULL);
+	    if (mio_puts (mio, table [i]) == EOF)
+		failedSort (mio, NULL);
     }
     if (toStdout)
-	fflush (fp);
-    else
-	fclose (fp);
+	fflush (mio_file_get_fp (mio));
+    mio_free (mio);
 }
 
 extern void internalSortTags (const boolean toStdout)
 {
     vString *vLine = vStringNew ();
-    FILE *fp = NULL;
+    MIO *mio = NULL;
     const char *line;
     size_t i;
 
@@ -170,20 +169,20 @@ extern void internalSortTags (const boolean toStdout)
     DebugStatement ( size_t mallocSize = tableSize; )	/* cumulative total */
 
     if (table == NULL)
-	failedSort (fp, "out of memory");
+	failedSort (mio, "out of memory");
 
     /*	Open the tag file and place its lines into allocated buffers.
      */
-    fp = g_fopen (tagFileName (), "r");
-    if (fp == NULL)
-	failedSort (fp, NULL);
-    for (i = 0  ;  i < numTags  &&  ! feof (fp)  ;  )
+    mio = mio_new_file_full (tagFileName (), "r", g_fopen, fclose);
+    if (mio == NULL)
+	failedSort (mio, NULL);
+    for (i = 0  ;  i < numTags  &&  ! mio_eof (mio)  ;  )
     {
-	line = readLine (vLine, fp);
+	line = readLine (vLine, mio);
 	if (line == NULL)
 	{
-	    if (! feof (fp))
-		failedSort (fp, NULL);
+	    if (! mio_eof (mio))
+		failedSort (mio, NULL);
 	    break;
 	}
 	else if (*line == '\0'  ||  strcmp (line, "\n") == 0)
@@ -194,14 +193,14 @@ extern void internalSortTags (const boolean toStdout)
 
 	    table [i] = (char *) g_malloc (stringSize);
 	    if (table [i] == NULL)
-		failedSort (fp, "out of memory");
+		failedSort (mio, "out of memory");
 	    DebugStatement ( mallocSize += stringSize; )
 	    strcpy (table [i], line);
 	    ++i;
 	}
     }
     numTags = i;
-    fclose (fp);
+    mio_free (mio);
     vStringDelete (vLine);
 
     /*	Sort the lines.

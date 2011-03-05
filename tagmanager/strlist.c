@@ -92,20 +92,21 @@ extern stringList* stringListNewFromArgv (const char* const* const argv)
 extern stringList* stringListNewFromFile (const char* const fileName)
 {
 	stringList* result = NULL;
-	FILE* const fp = g_fopen (fileName, "r");
-	if (fp != NULL)
+	MIO* const mio = mio_new_file_full (fileName, "r", g_fopen, fclose);
+	if (mio != NULL)
 	{
 		result = stringListNew ();
-		while (! feof (fp))
+		while (! mio_eof (mio))
 		{
 			vString* const str = vStringNew ();
-			readLine (str, fp);
+			readLine (str, mio);
 			vStringStripTrailing (str);
 			if (vStringLength (str) > 0)
 				stringListAdd (result, str);
 			else
 				vStringDelete (str);
 		}
+		mio_free (mio);
 	}
 	return result;
 }
