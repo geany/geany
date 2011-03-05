@@ -2359,7 +2359,7 @@ gint document_replace_all(GeanyDocument *doc, const gchar *find_text, const gcha
 static gboolean update_tags_from_buffer(GeanyDocument *doc)
 {
 	gboolean result;
-#if 1
+#if 0
 		/* old code */
 		result = tm_source_file_update(doc->tm_file, TRUE, FALSE, TRUE);
 #else
