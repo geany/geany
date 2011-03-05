@@ -2891,6 +2891,7 @@ static void tagCheck (statementInfo *const st)
 			else if (isContextualStatement (st))
 			{
 				tokenInfo *name_token = (tokenInfo *)prev;
+				boolean free_name_token = FALSE;
 
 				if (isType (name_token, TOKEN_NAME))
 				{
@@ -2927,6 +2928,7 @@ static void tagCheck (statementInfo *const st)
 						char buffer[64];
 
 						name_token = newToken ();
+						free_name_token = TRUE;
 						copyToken (name_token, contextual_token);
 
 						sprintf(buffer, "anon_%s_%d", name_token->name->buffer, contextual_fake_count++);
@@ -2945,6 +2947,8 @@ static void tagCheck (statementInfo *const st)
 					}
 				}
 				qualifyBlockTag (st, name_token);
+				if (free_name_token)
+					deleteToken (name_token);
 			}
 			break;
 		}
