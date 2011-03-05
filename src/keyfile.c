@@ -83,6 +83,7 @@
 #define GEANY_DEFAULT_FONT_EDITOR		"Monospace 10"
 #define GEANY_TOGGLE_MARK				"~ "
 #define GEANY_MAX_AUTOCOMPLETE_WORDS	30
+#define GEANY_MAX_SYMBOLS_UPDATE_FREQ	250
 
 
 static gchar *scribble_text = NULL;
@@ -165,6 +166,8 @@ static void init_pref_groups(void)
 	stash_group_add_spin_button_integer(group, (gint*)&editor_prefs.autocompletion_max_entries,
 		"autocompletion_max_entries", GEANY_MAX_AUTOCOMPLETE_WORDS,
 		"spin_autocompletion_max_entries");
+	stash_group_add_spin_button_integer(group, (gint*)&editor_prefs.autocompletion_update_freq,
+		"autocompletion_update_freq", GEANY_MAX_SYMBOLS_UPDATE_FREQ, "spin_symbol_update_freq");
 	stash_group_add_string(group, &editor_prefs.color_scheme,
 		"color_scheme", NULL);
 

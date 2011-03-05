@@ -146,6 +146,7 @@ typedef struct GeanyEditorPrefs
 	gint 		show_virtual_space;
 	/* This setting may be overridden when a project is opened. Use @c editor_get_prefs(). */
 	gboolean	long_line_enabled;
+	gint		autocompletion_update_freq;
 }
 GeanyEditorPrefs;
 

@@ -2710,6 +2710,9 @@ create_prefs_dialog (void)
   GtkWidget *spin_symbollistheight;
   GtkObject *spin_autocompletion_max_entries_adj;
   GtkWidget *spin_autocompletion_max_entries;
+  GtkWidget *label250;
+  GtkObject *spin_symbol_update_freq_adj;
+  GtkWidget *spin_symbol_update_freq;
   GtkWidget *label177;
   GtkWidget *frame38;
   GtkWidget *alignment42;
@@ -3974,7 +3977,7 @@ create_prefs_dialog (void)
   gtk_widget_show (check_completion_drops_rest_of_word);
   gtk_box_pack_start (GTK_BOX (vbox19), check_completion_drops_rest_of_word, FALSE, FALSE, 0);
 
-  table14 = gtk_table_new (3, 2, FALSE);
+  table14 = gtk_table_new (4, 2, FALSE);
   gtk_widget_show (table14);
   gtk_box_pack_start (GTK_BOX (vbox19), table14, FALSE, FALSE, 0);
   gtk_table_set_row_spacings (GTK_TABLE (table14), 3);
@@ -4027,6 +4030,22 @@ create_prefs_dialog (void)
                     (GtkAttachOptions) (0), 0, 0);
   gtk_tooltips_set_tip (tooltips, spin_autocompletion_max_entries, _("Maximum number of entries to display in the autocompletion list"), NULL);
   gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (spin_autocompletion_max_entries), TRUE);
+
+  label250 = gtk_label_new (_("Symbol list update frequency:"));
+  gtk_widget_show (label250);
+  gtk_table_attach (GTK_TABLE (table14), label250, 0, 1, 3, 4,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_misc_set_alignment (GTK_MISC (label250), 0, 0.5);
+
+  spin_symbol_update_freq_adj = gtk_adjustment_new (250, 0, 10000, 10, 100, 0);
+  spin_symbol_update_freq = gtk_spin_button_new (GTK_ADJUSTMENT (spin_symbol_update_freq_adj), 1, 0);
+  gtk_widget_show (spin_symbol_update_freq);
+  gtk_table_attach (GTK_TABLE (table14), spin_symbol_update_freq, 1, 2, 3, 4,
+                    (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_tooltips_set_tip (tooltips, spin_symbol_update_freq, _("Minimal delay (in milliseconds) between two automatic updates of the symbol list. Note that a too short delay may have performance impact, espcially with large files. A delay of 0 disables real-time updates."), NULL);
+  gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (spin_symbol_update_freq), TRUE);
 
   label177 = gtk_label_new (_("<b>Completions</b>"));
   gtk_widget_show (label177);
@@ -5216,6 +5235,8 @@ create_prefs_dialog (void)
   GLADE_HOOKUP_OBJECT (prefs_dialog, spin_symbol_complete_chars, "spin_symbol_complete_chars");
   GLADE_HOOKUP_OBJECT (prefs_dialog, spin_symbollistheight, "spin_symbollistheight");
   GLADE_HOOKUP_OBJECT (prefs_dialog, spin_autocompletion_max_entries, "spin_autocompletion_max_entries");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, label250, "label250");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, spin_symbol_update_freq, "spin_symbol_update_freq");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label177, "label177");
   GLADE_HOOKUP_OBJECT (prefs_dialog, frame38, "frame38");
   GLADE_HOOKUP_OBJECT (prefs_dialog, alignment42, "alignment42");
