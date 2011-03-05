@@ -547,6 +547,71 @@ static GdkPixbuf *get_tag_icon(const gchar *icon_name)
 }
 
 
+/* finds the next iter at any level
+ * @param iter in/out, the current iter, will be changed to the next one
+ * @return TRUE if there @p iter was set, or FALSE if there is no next iter */
+static gboolean next_iter(GtkTreeModel *model, GtkTreeIter *iter)
+{
+	GtkTreeIter guess;
+	GtkTreeIter copy = *iter;
+
+	/* go down if the item has children */
+	if (gtk_tree_model_iter_children(model, &guess, iter))
+		*iter = guess;
+	/* or to the next item at the same level */
+	else if (gtk_tree_model_iter_next(model, &copy))
+		*iter = copy;
+	/* or to the next item at a parent level */
+	else if (gtk_tree_model_iter_parent(model, &guess, iter))
+	{
+		copy = guess;
+		while(TRUE)
+		{
+			if (gtk_tree_model_iter_next(model, &copy))
+			{
+				*iter = copy;
+				return TRUE;
+			}
+			else if (gtk_tree_model_iter_parent(model, &copy, &guess))
+				guess = copy;
+			else
+				return FALSE;
+		}
+	}
+	else
+		return FALSE;
+
+	return TRUE;
+}
+
+
+static gboolean find_toplevel_iter(GtkTreeStore *store, GtkTreeIter *iter, const gchar *title)
+{
+	GtkTreeModel *model = GTK_TREE_MODEL(store);
+
+	if (!gtk_tree_model_get_iter_first(model, iter))
+		return FALSE;
+	do
+	{
+		gchar *candidate;
+
+		gtk_tree_model_get(model, iter, SYMBOLS_COLUMN_NAME, &candidate, -1);
+		/* FIXME: what if 2 different items have the same name?
+		 * this should never happen, but might be caused by a typo in a translation */
+		if (utils_str_equal(candidate, title))
+		{
+			g_free(candidate);
+			return TRUE;
+		}
+		else
+			g_free(candidate);
+	}
+	while (gtk_tree_model_iter_next(model, iter));
+
+	return FALSE;
+}
+
+
 /* Adds symbol list groups in (iter*, title) pairs.
  * The list must be ended with NULL. */
 static void G_GNUC_NULL_TERMINATED
@@ -572,14 +637,15 @@ tag_list_add_groups(GtkTreeStore *tree_store, ...)
     	g_assert(title != NULL);
 		g_ptr_array_add(top_level_iter_names, title);
 
-		gtk_tree_store_append(tree_store, iter, NULL);
+		if (!find_toplevel_iter(tree_store, iter, title))
+			gtk_tree_store_append(tree_store, iter, NULL);
 
 		if (G_IS_OBJECT(icon))
 		{
 			gtk_tree_store_set(tree_store, iter, SYMBOLS_COLUMN_ICON, icon, -1);
 			g_object_unref(icon);
 		}
-		gtk_tree_store_set(tree_store, iter, SYMBOLS_COLUMN_NAME, title, -1);
+		gtk_tree_store_set(tree_store, iter, SYMBOLS_COLUMN_NAME, title, SYMBOLS_COLUMN_VALID, TRUE, -1);
 	}
 	va_end(args);
 }
@@ -1095,6 +1161,29 @@ static GdkPixbuf *get_child_icon(GtkTreeStore *tree_store, GtkTreeIter *parent)
 }
 
 
+static gboolean find_iter(GtkTreeStore *store, GtkTreeIter *iter, const TMTag *tag)
+{
+	GtkTreeModel *model = GTK_TREE_MODEL(store);
+	gboolean found = FALSE;
+
+	if (!gtk_tree_model_get_iter_first(model, iter))
+		return FALSE;
+	do
+	{
+		TMTag *candidate;
+
+		gtk_tree_model_get(model, iter, SYMBOLS_COLUMN_TAG, &candidate, -1);
+		found = (candidate && candidate->type == tag->type &&
+				 utils_str_equal(candidate->name, tag->name) &&
+				 utils_str_equal(candidate->atts.entry.scope, tag->atts.entry.scope));
+		tm_tag_unref(candidate);
+	}
+	while (!found && next_iter(model, iter));
+
+	return found;
+}
+
+
 static void add_tree_tag(GeanyDocument *doc, const TMTag *tag, GHashTable *parent_hash)
 {
 	filetype_id ft_id = doc->file_type->id;
@@ -1137,13 +1226,30 @@ static void add_tree_tag(GeanyDocument *doc, const TMTag *tag, GHashTable *paren
 			child = new_iter;
 		}
 
-		gtk_tree_store_append(tree_store, child, parent);
+		if (!find_iter(tree_store, child, tag))
+		{
+			gboolean expand = FALSE;
+
+			/* only expand to the iter if the parent was empty, otherwise we let the
+			 * folding as it was before (already expanded, or closed by the user) */
+			expand = !gtk_tree_model_iter_has_child(GTK_TREE_MODEL(tree_store), parent);
+			gtk_tree_store_append(tree_store, child, parent);
+			if (expand)
+			{
+				GtkTreePath *path;
+
+				path = gtk_tree_model_get_path(GTK_TREE_MODEL(tree_store), child);
+				gtk_tree_view_expand_to_path(GTK_TREE_VIEW(doc->priv->tag_tree), path);
+				gtk_tree_path_free(path);
+			}
+		}
 
 		name = get_symbol_name(doc, tag, (parent_name != NULL));
 		gtk_tree_store_set(tree_store, child,
 			SYMBOLS_COLUMN_ICON, icon,
 			SYMBOLS_COLUMN_NAME, name,
 			SYMBOLS_COLUMN_TAG, tag,
+			SYMBOLS_COLUMN_VALID, TRUE,
 			-1);
 
 		if (gtk_check_version(2, 12, 0) == NULL)
@@ -1288,6 +1394,53 @@ static void sort_tree(GtkTreeStore *store, gboolean sort_by_name)
 }
 
 
+static void invalidate_rows(GtkTreeStore *store)
+{
+	GtkTreeIter iter;
+	GtkTreeModel *model = GTK_TREE_MODEL(store);
+
+	if (!gtk_tree_model_get_iter_first(model, &iter))
+		return;
+	do
+	{
+		gtk_tree_store_set(store, &iter, SYMBOLS_COLUMN_VALID, FALSE, -1);
+	}
+	while (next_iter(model, &iter));
+}
+
+
+static void remove_invalid_rows(GtkTreeStore *store)
+{
+	GtkTreeIter iter;
+	GtkTreeModel *model = GTK_TREE_MODEL(store);
+	gboolean cont;
+
+	cont = gtk_tree_model_get_iter_first(model, &iter);
+	while (cont)
+	{
+		gboolean valid;
+
+		gtk_tree_model_get(model, &iter, SYMBOLS_COLUMN_VALID, &valid, -1);
+		if (!valid)
+		{
+			GtkTreeIter parent;
+			gboolean have_parent;
+
+			have_parent = gtk_tree_model_iter_parent(model, &parent, &iter);
+			cont = gtk_tree_store_remove(store, &iter);
+			/* if there is no next at this level but there is a parent iter, continue from it */
+			if (!cont && have_parent)
+			{
+				iter = parent;
+				cont = next_iter(model, &iter);
+			}
+		}
+		else
+			cont = next_iter(model, &iter);
+	}
+}
+
+
 gboolean symbols_recreate_tag_list(GeanyDocument *doc, gint sort_mode)
 {
 	GList *tags;
@@ -1298,12 +1451,14 @@ gboolean symbols_recreate_tag_list(GeanyDocument *doc, gint sort_mode)
 	if (tags == NULL)
 		return FALSE;
 
-	/* Make sure the model stays with us after the tree view unrefs it */
-	g_object_ref(GTK_TREE_MODEL(doc->priv->tag_store));
-	/* Detach model from view */
-	gtk_tree_view_set_model(GTK_TREE_VIEW(doc->priv->tag_tree), NULL);
-	/* Clear all contents */
-	gtk_tree_store_clear(doc->priv->tag_store);
+	/* FIXME: Not sure why we detached the model here? */
+
+	/* disable sorting during update because the code doesn't support correctly
+	 * models that are currently being built */
+	gtk_tree_sortable_set_sort_column_id(GTK_TREE_SORTABLE(doc->priv->tag_store), GTK_TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID, 0);
+
+	/* invalidate all content */
+	invalidate_rows(doc->priv->tag_store);
 
 	/* add grandparent type iters */
 	add_top_level_items(doc);
@@ -1311,6 +1466,7 @@ gboolean symbols_recreate_tag_list(GeanyDocument *doc, gint sort_mode)
 	add_tree_tags(doc, tags);
 	g_list_free(tags);
 
+	remove_invalid_rows(doc->priv->tag_store);
 	hide_empty_rows(doc->priv->tag_store);
 
 	if (sort_mode == SYMBOLS_SORT_USE_PREVIOUS)
@@ -1318,12 +1474,6 @@ gboolean symbols_recreate_tag_list(GeanyDocument *doc, gint sort_mode)
 
 	sort_tree(doc->priv->tag_store, sort_mode == SYMBOLS_SORT_BY_NAME);
 	doc->priv->symbol_list_sort_mode = sort_mode;
-
-	/* Re-attach model to view */
-	gtk_tree_view_set_model(GTK_TREE_VIEW(doc->priv->tag_tree),
-		GTK_TREE_MODEL(doc->priv->tag_store));
-	g_object_unref(GTK_TREE_MODEL(doc->priv->tag_store));
-	gtk_tree_view_expand_all(GTK_TREE_VIEW(doc->priv->tag_tree));
 
 	return TRUE;
 }
