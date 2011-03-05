@@ -9,6 +9,7 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include <glib-object.h>
 
 #include "general.h"
 #include "entry.h"
@@ -104,6 +105,17 @@ static int s_tag_types[] = {
 	tm_tag_variable_t,
 	tm_tag_other_t
 };
+
+GType tm_tag_get_type(void)
+{
+	static GType gtype = 0;
+	if (G_UNLIKELY (gtype == 0))
+	{
+		gtype = g_boxed_type_register_static("TMTag", (GBoxedCopyFunc)tm_tag_ref,
+											 (GBoxedFreeFunc)tm_tag_unref);
+	}
+	return gtype;
+}
 
 static int get_tag_type(const char *tag_name)
 {

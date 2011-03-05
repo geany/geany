@@ -1224,7 +1224,8 @@ static gint tree_sort_func(GtkTreeModel *model, GtkTreeIter *a, GtkTreeIter *b,
 		gpointer user_data)
 {
 	gboolean sort_by_name = GPOINTER_TO_INT(user_data);
-	const TMTag *tag_a, *tag_b;
+	TMTag *tag_a, *tag_b;
+	gint cmp;
 
 	gtk_tree_model_get(model, a, SYMBOLS_COLUMN_TAG, &tag_a, -1);
 	gtk_tree_model_get(model, b, SYMBOLS_COLUMN_TAG, &tag_b, -1);
@@ -1234,13 +1235,12 @@ static gint tree_sort_func(GtkTreeModel *model, GtkTreeIter *a, GtkTreeIter *b,
 	if (tag_a && !tag_has_missing_parent(tag_a, GTK_TREE_STORE(model), a) &&
 		tag_b && !tag_has_missing_parent(tag_b, GTK_TREE_STORE(model), b))
 	{
-		return sort_by_name ? compare_symbol(tag_a, tag_b) :
+		cmp = sort_by_name ? compare_symbol(tag_a, tag_b) :
 			compare_symbol_lines(tag_a, tag_b);
 	}
 	else
 	{
 		gchar *astr, *bstr;
-		gint cmp;
 
 		gtk_tree_model_get(model, a, SYMBOLS_COLUMN_NAME, &astr, -1);
 		gtk_tree_model_get(model, b, SYMBOLS_COLUMN_NAME, &bstr, -1);
@@ -1254,23 +1254,28 @@ static gint tree_sort_func(GtkTreeModel *model, GtkTreeIter *a, GtkTreeIter *b,
 		{
 			/* this is what g_strcmp0() does */
 			if (! astr)
-				return -(astr != bstr);
+				cmp = -(astr != bstr);
 			if (! bstr)
-				return astr != bstr;
+				cmp = astr != bstr;
+			else
+			{
+				cmp = strcmp(astr, bstr);
 
-			cmp = strcmp(astr, bstr);
-
-			/* sort duplicate 'ScopeName::OverloadedTagName' items by line as well */
-			if (tag_a && tag_b)
-				if (!sort_by_name ||
-					(utils_str_equal(tag_a->name, tag_b->name) &&
-						utils_str_equal(tag_a->atts.entry.scope, tag_b->atts.entry.scope)))
-					cmp = compare_symbol_lines(tag_a, tag_b);
+				/* sort duplicate 'ScopeName::OverloadedTagName' items by line as well */
+				if (tag_a && tag_b)
+					if (!sort_by_name ||
+						(utils_str_equal(tag_a->name, tag_b->name) &&
+							utils_str_equal(tag_a->atts.entry.scope, tag_b->atts.entry.scope)))
+						cmp = compare_symbol_lines(tag_a, tag_b);
+			}
 		}
 		g_free(astr);
 		g_free(bstr);
-		return cmp;
 	}
+	tm_tag_unref(tag_a);
+	tm_tag_unref(tag_b);
+
+	return cmp;
 }
 
 

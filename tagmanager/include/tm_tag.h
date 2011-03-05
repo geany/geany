@@ -30,6 +30,7 @@
 */
 
 #include "tm_source_file.h"
+#include <glib-object.h>
 
 #ifdef __cplusplus
 extern "C"
@@ -158,6 +159,12 @@ typedef struct _TMTag
  first tag is equal to, greater than or less than the second tag.
 */
 typedef int (*TMTagCompareFunc) (const void *ptr1, const void *ptr2);
+
+/*! The GType for a TMTag */
+#define TM_TYPE_TAG (tm_tag_get_type())
+
+/*! Gets the GType for a TMTag */
+GType tm_tag_get_type(void) G_GNUC_CONST;
 
 /*!
  Initializes a TMTag structure with information from a tagEntryInfo struct

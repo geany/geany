@@ -216,7 +216,7 @@ void sidebar_update_tag_list(GeanyDocument *doc, gboolean update)
 		if (doc->priv->tag_tree == NULL)
 		{
 			doc->priv->tag_store = gtk_tree_store_new(
-				SYMBOLS_N_COLUMNS, GDK_TYPE_PIXBUF, G_TYPE_STRING, G_TYPE_POINTER, G_TYPE_STRING);
+				SYMBOLS_N_COLUMNS, GDK_TYPE_PIXBUF, G_TYPE_STRING, TM_TYPE_TAG, G_TYPE_STRING);
 			doc->priv->tag_tree = gtk_tree_view_new();
 			prepare_taglist(doc->priv->tag_tree, doc->priv->tag_store);
 			gtk_widget_show(doc->priv->tag_tree);
@@ -874,6 +874,7 @@ static gboolean on_taglist_tree_selection_changed(gpointer data)
 					change_focus_to_editor(doc, NULL);
 			}
 		}
+		tm_tag_unref(tag);
 	}
 	return FALSE;
 }
