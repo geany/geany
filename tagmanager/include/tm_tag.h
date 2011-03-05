@@ -147,6 +147,7 @@ typedef struct _TMTag
 			gboolean inactive; /*!< Whether this file is to be parsed */
 		} file;
 	} atts;
+	gint refcount; /*!< the reference count of the tag */
 } TMTag;
 
 /*!
@@ -306,13 +307,27 @@ void tm_tags_array_free(GPtrArray *tags_array, gboolean free_all);
  \sa tm_tag_free()
 */
 void tm_tag_destroy(TMTag *tag);
-#endif
 
 /*!
  Destroys all data in the tag and frees the tag structure as well.
  \param tag Pointer to a TMTag structure
 */
 void tm_tag_free(gpointer tag);
+#endif
+
+/*!
+ Drops a reference from a TMTag. If the reference count reaches 0, this function
+ destroys all data in the tag and frees the tag structure as well.
+ \param tag Pointer to a TMTag structure
+*/
+void tm_tag_unref(TMTag *tag);
+
+/*!
+ Adds a reference to a TMTag.
+ \param tag Pointer to a TMTag structure
+ \return the passed-in TMTag
+*/
+TMTag *tm_tag_ref(TMTag *tag);
 
 /*!
  Returns the type of tag as a string

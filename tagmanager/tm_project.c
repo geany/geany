@@ -396,7 +396,7 @@ gboolean tm_project_open(TMProject *project, gboolean force)
 #endif
 				if (!force)
 				{
-					tm_tag_free(tag);
+					tm_tag_unref(tag);
 					fclose(fp);
 					return FALSE;
 				}
@@ -412,7 +412,7 @@ gboolean tm_project_open(TMProject *project, gboolean force)
 					project->file_list = g_ptr_array_new();
 				g_ptr_array_add(project->file_list, source_file);
 			}
-			tm_tag_free(tag);
+			tm_tag_unref(tag);
 		}
 		else
 		{
@@ -421,7 +421,7 @@ gboolean tm_project_open(TMProject *project, gboolean force)
 #ifdef TM_DEBUG
 				g_warning("Dangling tag %s", tag->name);
 #endif
-				tm_tag_free(tag);
+				tm_tag_unref(tag);
 				if (!force)
 				{
 					fclose(fp);

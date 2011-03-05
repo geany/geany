@@ -324,7 +324,7 @@ gboolean tm_source_file_write(TMWorkObject *source_file, FILE *fp, guint attrs)
 		if (NULL != (tag = tm_tag_new(TM_SOURCE_FILE(source_file), NULL)))
 		{
 			tm_tag_write(tag, fp, tm_tag_attr_max_t);
-			tm_tag_free(tag);
+			tm_tag_unref(tag);
 			if (NULL != source_file->tags_array)
 			{
 				for (i=0; i < source_file->tags_array->len; ++i)

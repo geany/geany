@@ -129,6 +129,7 @@ static int get_tag_type(const char *tag_name)
 
 gboolean tm_tag_init(TMTag *tag, TMSourceFile *file, const tagEntryInfo *tag_entry)
 {
+	tag->refcount = 1;
 	if (NULL == tag_entry)
 	{
 		/* This is a file tag */
@@ -224,6 +225,7 @@ gboolean tm_tag_init_from_file(TMTag *tag, TMSourceFile *file, FILE *fp)
 	gboolean status;
 	guchar changed_char = TA_NAME;
 
+	tag->refcount = 1;
 	if ((NULL == fgets((gchar*)buf, BUFSIZ, fp)) || ('\0' == *buf))
 		return FALSE;
 	for (start = end = buf, status = TRUE; (TRUE == status); start = end, ++ end)
@@ -327,6 +329,7 @@ gboolean tm_tag_init_from_file_alt(TMTag *tag, TMSourceFile *file, FILE *fp)
 	gboolean status;
 	/*guchar changed_char = TA_NAME;*/
 
+	tag->refcount = 1;
 	if ((NULL == fgets((gchar*)buf, BUFSIZ, fp)) || ('\0' == *buf))
 		return FALSE;
 	{
@@ -436,13 +439,28 @@ static void tm_tag_destroy(TMTag *tag)
 	}
 }
 
+#if 0
 void tm_tag_free(gpointer tag)
 {
-	if (NULL != tag)
+	tm_tag_unref(tag);
+}
+#endif
+
+void tm_tag_unref(TMTag *tag)
+{
+	/* be NULL-proof because tm_tag_free() was NULL-proof and we indent to be a
+	 * drop-in replacment of it */
+	if (NULL != tag && g_atomic_int_dec_and_test(&tag->refcount))
 	{
-		tm_tag_destroy((TMTag *) tag);
+		tm_tag_destroy(tag);
 		TAG_FREE(tag);
 	}
+}
+
+TMTag *tm_tag_ref(TMTag *tag)
+{
+	g_atomic_int_inc(&tag->refcount);
+	return tag;
 }
 
 int tm_tag_compare(const void *ptr1, const void *ptr2)
@@ -603,7 +621,7 @@ void tm_tags_array_free(GPtrArray *tags_array, gboolean free_all)
 	{
 		guint i;
 		for (i = 0; i < tags_array->len; ++i)
-			tm_tag_free(tags_array->pdata[i]);
+			tm_tag_unref(tags_array->pdata[i]);
 		if (free_all)
 			g_ptr_array_free(tags_array, TRUE);
 		else

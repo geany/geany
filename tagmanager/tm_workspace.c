@@ -82,7 +82,7 @@ void tm_workspace_free(gpointer workspace)
 		if (theWorkspace->global_tags)
 		{
 			for (i=0; i < theWorkspace->global_tags->len; ++i)
-				tm_tag_free(theWorkspace->global_tags->pdata[i]);
+				tm_tag_unref(theWorkspace->global_tags->pdata[i]);
 			g_ptr_array_free(theWorkspace->global_tags, TRUE);
 		}
 		tm_work_object_destroy(TM_WORK_OBJECT(theWorkspace));
