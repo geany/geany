@@ -900,30 +900,21 @@ static void add_top_level_items(GeanyDocument *doc)
 }
 
 
-/* the following code surely can be improved, at the moment it collects some iters
- * for removal and after that the actual removal is done. I didn't find a way to find and remove
- * an empty row in one loop (next iter fails then) */
+/* removes toplevel items that have no children */
 static void hide_empty_rows(GtkTreeStore *store)
 {
-	GtkTreeIter iter, *iters[MAX_SYMBOL_TYPES] = { NULL };
-	guint i = 0;
+	GtkTreeIter iter;
+	gboolean cont = TRUE;
 
 	if (! gtk_tree_model_get_iter_first(GTK_TREE_MODEL(store), &iter))
 		return; /* stop when first iter is invalid, i.e. no elements */
 
-	do /* first collect the iters we need to delete empty rows */
+	while (cont)
 	{
 		if (! gtk_tree_model_iter_has_child(GTK_TREE_MODEL(store), &iter))
-			iters[i++] = gtk_tree_iter_copy(&iter);
-	} while (gtk_tree_model_iter_next(GTK_TREE_MODEL(store), &iter));
-
-	/* now actually delete the collected iters */
-	for (i = 0; i < MAX_SYMBOL_TYPES; i++)
-	{
-		if (G_UNLIKELY(iters[i] == NULL))
-			break;
-		gtk_tree_store_remove(store, iters[i]);
-		gtk_tree_iter_free(iters[i]);
+			cont = gtk_tree_store_remove(store, &iter);
+		else
+			cont = gtk_tree_model_iter_next(GTK_TREE_MODEL(store), &iter);
 	}
 }
 
