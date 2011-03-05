@@ -1161,30 +1161,89 @@ static GdkPixbuf *get_child_icon(GtkTreeStore *tree_store, GtkTreeIter *parent)
 }
 
 
-static gboolean find_iter(GtkTreeStore *store, GtkTreeIter *iter, const TMTag *tag)
+static gboolean tag_equal(gconstpointer v1, gconstpointer v2)
 {
-	GtkTreeModel *model = GTK_TREE_MODEL(store);
-	gboolean found = FALSE;
+	const TMTag *t1 = v1;
+	const TMTag *t2 = v2;
 
-	if (!gtk_tree_model_get_iter_first(model, iter))
-		return FALSE;
-	do
-	{
-		TMTag *candidate;
-
-		gtk_tree_model_get(model, iter, SYMBOLS_COLUMN_TAG, &candidate, -1);
-		found = (candidate && candidate->type == tag->type &&
-				 utils_str_equal(candidate->name, tag->name) &&
-				 utils_str_equal(candidate->atts.entry.scope, tag->atts.entry.scope));
-		tm_tag_unref(candidate);
-	}
-	while (!found && next_iter(model, iter));
-
-	return found;
+	return (t1->type == t2->type && strcmp(t1->name, t2->name) == 0 &&
+			utils_str_equal(t1->atts.entry.scope, t2->atts.entry.scope));
 }
 
 
-static void add_tree_tag(GeanyDocument *doc, const TMTag *tag, GHashTable *parent_hash)
+/* inspired from g_str_hash() */
+static guint tag_hash(gconstpointer v)
+{
+	const TMTag *tag = v;
+	const signed char *p;
+	guint32 h = 5381;
+
+	h = (h << 5) + h + tag->type;
+	for (p = tag->name; *p != '\0'; p++)
+		h = (h << 5) + h + *p;
+	if (tag->atts.entry.scope)
+	{
+		for (p = tag->atts.entry.scope; *p != '\0'; p++)
+			h = (h << 5) + h + *p;
+	}
+
+	return h;
+}
+
+
+static GHashTable *build_iter_table(GtkTreeStore *store)
+{
+	GtkTreeModel *model = GTK_TREE_MODEL(store);
+	GHashTable *table;
+	GtkTreeIter iter;
+
+	table = g_hash_table_new_full(tag_hash, tag_equal,
+			(GDestroyNotify)tm_tag_unref, (GDestroyNotify)gtk_tree_path_free);
+
+	if (!gtk_tree_model_get_iter_first(model, &iter))
+		return table;
+	do
+	{
+		TMTag *tag;
+
+		gtk_tree_model_get(model, &iter, SYMBOLS_COLUMN_TAG, &tag, -1);
+		if (tag)
+			g_hash_table_insert(table, tag, gtk_tree_model_get_path(model, &iter));
+	}
+	while (next_iter(model, &iter));
+
+	return table;
+}
+
+
+static gboolean find_iter(GtkTreeStore *store, GHashTable *iter_hash, const TMTag *tag,
+		GtkTreeIter *iter)
+{
+	GtkTreePath *path;
+
+	path = g_hash_table_lookup(iter_hash, tag);
+	if (path)
+	{
+		GtkTreeIter tmp;
+		gboolean valid;
+
+		if (!gtk_tree_model_get_iter(GTK_TREE_MODEL(store), &tmp, path))
+			return FALSE;
+		gtk_tree_model_get(GTK_TREE_MODEL(store), &tmp, SYMBOLS_COLUMN_VALID, &valid, -1);
+		/* if the row is valid it has already been updated, so it's simply a duplicate */
+		if (!valid)
+		{
+			*iter = tmp;
+			return TRUE;
+		}
+	}
+
+	return FALSE;
+}
+
+
+static void add_tree_tag(GeanyDocument *doc, const TMTag *tag, GHashTable *parent_hash,
+		GHashTable *iter_hash)
 {
 	filetype_id ft_id = doc->file_type->id;
 	GtkTreeStore *tree_store = doc->priv->tag_store;
@@ -1226,7 +1285,7 @@ static void add_tree_tag(GeanyDocument *doc, const TMTag *tag, GHashTable *paren
 			child = new_iter;
 		}
 
-		if (!find_iter(tree_store, child, tag))
+		if (!find_iter(tree_store, iter_hash, tag, child))
 		{
 			gboolean expand = FALSE;
 
@@ -1271,9 +1330,11 @@ static void add_tree_tags(GeanyDocument *doc, const GList *tags)
 {
 	const GList *item;
 	GHashTable *parent_hash;
+	GHashTable *iter_hash;
 
 	/* Create a hash table "parent_tag_name":(GtkTreeIter*) */
 	parent_hash = g_hash_table_new_full(g_str_hash, g_str_equal, NULL, g_free);
+	iter_hash = build_iter_table(doc->priv->tag_store);
 
 	/* find and store all parent names in the hash table */
 	for (item = tags; item; item = g_list_next(item))
@@ -1288,8 +1349,9 @@ static void add_tree_tags(GeanyDocument *doc, const GList *tags)
 	{
 		const TMTag *tag = item->data;
 
-		add_tree_tag(doc, tag, parent_hash);
+		add_tree_tag(doc, tag, parent_hash, iter_hash);
 	}
+	g_hash_table_destroy(iter_hash);
 	g_hash_table_destroy(parent_hash);
 }
 
