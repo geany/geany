@@ -1,3 +1,40 @@
+2011-03-05  Colomban Wendling  <colomban(at)geany(dot)org>
+
+ * configure.ac, wscript, makefile.win32, src/Makefile.am,
+   src/makefile.win32, tagmanager/Makefile.am, tagmanager/c.c,
+   tagmanager/entry.c, tagmanager/entry.h, tagmanager/fortran.c,
+   tagmanager/get.c, tagmanager/get.h, tagmanager/js.c, tagmanager/lregex.c,
+   tagmanager/makefile.win32, tagmanager/parse.c, tagmanager/read.c,
+   tagmanager/read.h, tagmanager/sort.c, tagmanager/sql.c,
+   tagmanager/strlist.c, tagmanager/mio/*:
+   Move most of TagManager's I/O to MIO.
+ * src/document.c:
+   Enable in-memory tag parsing.
+ * geany.glade, src/editor.c, src/editor.h, src/interface.c, src/keyfile.c:
+   Add possibility to update symbol list in IDLE time, enabled by default
+   using a minimal delay of 250ms.
+ * src/symbols.c:
+   Improve implementation of hide_empty_rows() to do all in one shot.
+ * tagmanager/include/tm_tag.h, tagmanager/tm_project.c,
+   tagmanager/tm_source_file.c, tagmanager/tm_tag.c,
+   tagmanager/tm_workspace.c:
+   Make TMTag reference-counted.
+ * src/sidebar.c, src/symbols.c, tagmanager/include/tm_tag.h,
+   tagmanager/tm_tag.c:
+   Provide a GType for TMTag and use it in the tag store to make sure
+   the tags it holds are always valid.
+ * src/sidebar.c:
+   Don't remove and add the symbols tree view if we re-add the same one.
+ * src/sidebar.c, src/sidebar.h, src/symbols.c:
+   Update the symbol list rather than clearing and re-building it.
+   There is room for improvement in the implementation side, but it
+   is harder to do, probably a future improvement.
+ * tagmanager/c.c:
+   Fix suffix of anonymous symbols (structs, enums, ...).
+ * tagmanager/c.c:
+   Plug a memory leak.
+
+
 2011-03-02  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * plugins/saveactions.c:
