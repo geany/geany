@@ -3022,6 +3022,8 @@ static boolean findCTags (const unsigned int passCount)
 	exception_t exception;
 	boolean retry;
 
+	contextual_fake_count = 0;
+
 	Assert (passCount < 3);
 	cppInit ((boolean) (passCount > 1), isLanguage (Lang_csharp));
 
@@ -3060,56 +3062,48 @@ static void buildKeywordHash (const langType language, unsigned int idx)
 
 static void initializeCParser (const langType language)
 {
-	contextual_fake_count = 0;
 	Lang_c = language;
 	buildKeywordHash (language, 0);
 }
 
 static void initializeCppParser (const langType language)
 {
-	contextual_fake_count = 0;
 	Lang_cpp = language;
 	buildKeywordHash (language, 1);
 }
 
 static void initializeJavaParser (const langType language)
 {
-	contextual_fake_count = 0;
 	Lang_java = language;
 	buildKeywordHash (language, 3);
 }
 
 static void initializeDParser (const langType language)
 {
-	contextual_fake_count = 0;
 	Lang_d = language;
 	buildKeywordHash (language, 6);
 }
 
 static void initializeGLSLParser (const langType language)
 {
-	contextual_fake_count = 0;
 	Lang_glsl = language;
 	buildKeywordHash (language, 0); /* C keywords */
 }
 
 static void initializeFeriteParser (const langType language)
 {
-	contextual_fake_count = 0;
 	Lang_ferite = language;
 	buildKeywordHash (language, 1);	/* C++ keywords */
 }
 
 static void initializeCsharpParser (const langType language)
 {
-	contextual_fake_count = 0;
 	Lang_csharp = language;
 	buildKeywordHash (language, 2);
 }
 
 static void initializeValaParser (const langType language)
 {
-	contextual_fake_count = 0;
 	Lang_vala = language;
 	buildKeywordHash (language, 5);
 }
