@@ -198,8 +198,18 @@ static void create_default_tag_tree(void)
 /* update = rescan the tags for doc->filename */
 void sidebar_update_tag_list(GeanyDocument *doc, gboolean update)
 {
-	if (gtk_bin_get_child(GTK_BIN(tag_window)))
-		gtk_container_remove(GTK_CONTAINER(tag_window), gtk_bin_get_child(GTK_BIN(tag_window)));
+	GtkWidget *child = gtk_bin_get_child(GTK_BIN(tag_window));
+
+	/* changes the tree view to the given one, trying not to do useless changes */
+	#define CHANGE_TREE(new_child) \
+		G_STMT_START { \
+			if (child != new_child) \
+			{ \
+				if (child) \
+					gtk_container_remove(GTK_CONTAINER(tag_window), child); \
+				gtk_container_add(GTK_CONTAINER(tag_window), new_child); \
+			} \
+		} G_STMT_END
 
 	if (tv.default_tag_tree == NULL)
 		create_default_tag_tree();
@@ -207,7 +217,7 @@ void sidebar_update_tag_list(GeanyDocument *doc, gboolean update)
 	/* show default empty tag tree if there are no tags */
 	if (doc == NULL || doc->file_type == NULL || ! filetype_has_tags(doc->file_type))
 	{
-		gtk_container_add(GTK_CONTAINER(tag_window), tv.default_tag_tree);
+		CHANGE_TREE(tv.default_tag_tree);
 		return;
 	}
 
@@ -228,12 +238,14 @@ void sidebar_update_tag_list(GeanyDocument *doc, gboolean update)
 
 	if (doc->has_tags)
 	{
-		gtk_container_add(GTK_CONTAINER(tag_window), doc->priv->tag_tree);
+		CHANGE_TREE(doc->priv->tag_tree);
 	}
 	else
 	{
-		gtk_container_add(GTK_CONTAINER(tag_window), tv.default_tag_tree);
+		CHANGE_TREE(tv.default_tag_tree);
 	}
+
+	#undef CHANGE_TREE
 }
 
 
