@@ -868,7 +868,7 @@ static gboolean on_taglist_tree_selection_changed(gpointer data)
 
 	if (gtk_tree_selection_get_selected(selection_change.selection, &model, &iter))
 	{
-		const TMTag *tag;
+		TMTag *tag;
 
 		gtk_tree_model_get(model, &iter, SYMBOLS_COLUMN_TAG, &tag, -1);
 		if (! tag)
