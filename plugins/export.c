@@ -156,10 +156,10 @@ static void create_file_save_as_dialog(const gchar *extension, ExportFunc func,
 	GeanyDocument *doc;
 	ExportInfo *exi;
 
-	if (extension == NULL)
-		return;
+	g_return_if_fail(extension != NULL);
 
 	doc = document_get_current();
+	g_return_if_fail(doc != NULL);
 
 	exi = g_new(ExportInfo, 1);
 	exi->doc = doc;
@@ -366,6 +366,7 @@ static void write_latex_file(GeanyDocument *doc, const gchar *filename,
 	gboolean use_zoom, gboolean insert_line_numbers)
 {
 	GeanyEditor *editor = doc->editor;
+	ScintillaObject *sci = doc->editor->sci;
 	gint i, doc_len, style = -1, old_style = 0, column = 0;
 	gint k, line_number, line_number_width, line_number_max_width = 0, pad;
 	gchar c, c_next, *tmp, *date;
@@ -375,15 +376,15 @@ static void write_latex_file(GeanyDocument *doc, const gchar *filename,
 	GString *body;
 	GString *cmds;
 	GString *latex;
-	gint style_max = pow(2, scintilla_send_message(doc->editor->sci, SCI_GETSTYLEBITS, 0, 0));
+	gint style_max = pow(2, scintilla_send_message(sci, SCI_GETSTYLEBITS, 0, 0));
 
 	/* first read all styles from Scintilla */
 	for (i = 0; i < style_max; i++)
 	{
-		styles[i][FORE] = scintilla_send_message(doc->editor->sci, SCI_STYLEGETFORE, i, 0);
-		styles[i][BACK] = scintilla_send_message(doc->editor->sci, SCI_STYLEGETBACK, i, 0);
-		styles[i][BOLD] = scintilla_send_message(doc->editor->sci, SCI_STYLEGETBOLD, i, 0);
-		styles[i][ITALIC] = scintilla_send_message(doc->editor->sci, SCI_STYLEGETITALIC, i, 0);
+		styles[i][FORE] = scintilla_send_message(sci, SCI_STYLEGETFORE, i, 0);
+		styles[i][BACK] = scintilla_send_message(sci, SCI_STYLEGETBACK, i, 0);
+		styles[i][BOLD] = scintilla_send_message(sci, SCI_STYLEGETBOLD, i, 0);
+		styles[i][ITALIC] = scintilla_send_message(sci, SCI_STYLEGETITALIC, i, 0);
 		styles[i][USED] = 0;
 	}
 
@@ -392,17 +393,17 @@ static void write_latex_file(GeanyDocument *doc, const gchar *filename,
 
 	/* read the document and write the LaTeX code */
 	body = g_string_new("");
-	doc_len = sci_get_length(doc->editor->sci);
+	doc_len = sci_get_length(sci);
 	for (i = 0; i < doc_len; i++)
 	{
-		style = sci_get_style_at(doc->editor->sci, i);
-		c = sci_get_char_at(doc->editor->sci, i);
-		c_next = sci_get_char_at(doc->editor->sci, i + 1);
+		style = sci_get_style_at(sci, i);
+		c = sci_get_char_at(sci, i);
+		c_next = sci_get_char_at(sci, i + 1);
 
 		/* line numbers */
 		if (insert_line_numbers && column == 0)
 		{
-			line_number = sci_get_line_from_position(doc->editor->sci, i) + 1;
+			line_number = sci_get_line_from_position(sci, i) + 1;
 			line_number_width = get_line_numbers_arity(line_number);
 			/* padding */
 			pad = line_number_max_width - line_number_width;
@@ -593,6 +594,7 @@ static void write_html_file(GeanyDocument *doc, const gchar *filename,
 	gboolean use_zoom, gboolean insert_line_numbers)
 {
 	GeanyEditor *editor = doc->editor;
+	ScintillaObject *sci = doc->editor->sci;
 	gint i, doc_len, style = -1, old_style = 0, column = 0;
 	gint k, line_number, line_number_width, line_number_max_width = 0, pad;
 	gchar c, c_next, *date;
@@ -605,15 +607,15 @@ static void write_html_file(GeanyDocument *doc, const gchar *filename,
 	GString *body;
 	GString *css;
 	GString *html;
-	gint style_max = pow(2, scintilla_send_message(doc->editor->sci, SCI_GETSTYLEBITS, 0, 0));
+	gint style_max = pow(2, scintilla_send_message(sci, SCI_GETSTYLEBITS, 0, 0));
 
 	/* first read all styles from Scintilla */
 	for (i = 0; i < style_max; i++)
 	{
-		styles[i][FORE] = ROTATE_RGB(scintilla_send_message(doc->editor->sci, SCI_STYLEGETFORE, i, 0));
-		styles[i][BACK] = ROTATE_RGB(scintilla_send_message(doc->editor->sci, SCI_STYLEGETBACK, i, 0));
-		styles[i][BOLD] = scintilla_send_message(doc->editor->sci, SCI_STYLEGETBOLD, i, 0);
-		styles[i][ITALIC] = scintilla_send_message(doc->editor->sci, SCI_STYLEGETITALIC, i, 0);
+		styles[i][FORE] = ROTATE_RGB(scintilla_send_message(sci, SCI_STYLEGETFORE, i, 0));
+		styles[i][BACK] = ROTATE_RGB(scintilla_send_message(sci, SCI_STYLEGETBACK, i, 0));
+		styles[i][BOLD] = scintilla_send_message(sci, SCI_STYLEGETBOLD, i, 0);
+		styles[i][ITALIC] = scintilla_send_message(sci, SCI_STYLEGETITALIC, i, 0);
 		styles[i][USED] = 0;
 	}
 
@@ -622,27 +624,27 @@ static void write_html_file(GeanyDocument *doc, const gchar *filename,
 	font_name = pango_font_description_get_family(font_desc);
 	/*font_size = pango_font_description_get_size(font_desc) / PANGO_SCALE;*/
 	/* take the zoom level also into account */
-	font_size = scintilla_send_message(doc->editor->sci, SCI_STYLEGETSIZE, 0, 0);
+	font_size = scintilla_send_message(sci, SCI_STYLEGETSIZE, 0, 0);
 	if (use_zoom)
-		font_size += scintilla_send_message(doc->editor->sci, SCI_GETZOOM, 0, 0);
+		font_size += scintilla_send_message(sci, SCI_GETZOOM, 0, 0);
 
 	if (insert_line_numbers)
 		line_number_max_width = get_line_number_width(doc);
 
 	/* read the document and write the HTML body */
 	body = g_string_new("");
-	doc_len = sci_get_length(doc->editor->sci);
+	doc_len = sci_get_length(sci);
 	for (i = 0; i < doc_len; i++)
 	{
-		style = sci_get_style_at(doc->editor->sci, i);
-		c = sci_get_char_at(doc->editor->sci, i);
+		style = sci_get_style_at(sci, i);
+		c = sci_get_char_at(sci, i);
 		/* sci_get_char_at() takes care of index boundaries and return 0 if i is too high */
-		c_next = sci_get_char_at(doc->editor->sci, i + 1);
+		c_next = sci_get_char_at(sci, i + 1);
 
 		/* line numbers */
 		if (insert_line_numbers && column == 0)
 		{
-			line_number = sci_get_line_from_position(doc->editor->sci, i) + 1;
+			line_number = sci_get_line_from_position(sci, i) + 1;
 			line_number_width = get_line_numbers_arity(line_number);
 			/* padding */
 			pad = line_number_max_width - line_number_width;
