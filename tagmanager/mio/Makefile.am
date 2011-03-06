@@ -9,5 +9,5 @@ libmio_a_SOURCES = mio.c
 
 EXTRA_DIST = \
 	mio.h \
-	mio-file.c
+	mio-file.c \
 	mio-memory.c
