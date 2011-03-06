@@ -8,6 +8,8 @@
    Cleanup.
    Respect saved state of 'Case sensitive' option when using
    the 'Regular expressions' option as well.
+ * plugins/export.c:
+   Add option to insert line numbers (closes #3197150).
 
 
 2011-03-05  Colomban Wendling  <colomban(at)geany(dot)org>

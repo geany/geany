@@ -100,7 +100,8 @@ enum
 	DATE_TYPE_HTML
 };
 
-typedef void (*ExportFunc) (GeanyDocument *doc, const gchar *filename, gboolean use_zoom);
+typedef void (*ExportFunc) (GeanyDocument *doc, const gchar *filename,
+	gboolean use_zoom, gboolean insert_line_numbers);
 typedef struct
 {
 	GeanyDocument *doc;
@@ -109,8 +110,10 @@ typedef struct
 } ExportInfo;
 
 static void on_file_save_dialog_response(GtkDialog *dialog, gint response, gpointer user_data);
-static void write_html_file(GeanyDocument *doc, const gchar *filename, gboolean use_zoom);
-static void write_latex_file(GeanyDocument *doc, const gchar *filename, gboolean use_zoom);
+static void write_html_file(GeanyDocument *doc, const gchar *filename,
+	gboolean use_zoom, gboolean insert_line_numbers);
+static void write_latex_file(GeanyDocument *doc, const gchar *filename,
+	gboolean use_zoom, gboolean insert_line_numbers);
 
 
 /* converts a RGB colour into a LaTeX compatible representation, taken from SciTE */
@@ -149,7 +152,7 @@ static gchar *get_tex_style(gint style)
 static void create_file_save_as_dialog(const gchar *extension, ExportFunc func,
 									   gboolean show_zoom_level_checkbox)
 {
-	GtkWidget *dialog;
+	GtkWidget *dialog, *vbox;
 	GeanyDocument *doc;
 	ExportInfo *exi;
 
@@ -175,20 +178,31 @@ static void create_file_save_as_dialog(const gchar *extension, ExportFunc func,
 		GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT, NULL);
 	gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_ACCEPT);
 
+	/* file chooser extra widget */
+	vbox = gtk_vbox_new(FALSE, 0);
+	gtk_file_chooser_set_extra_widget(GTK_FILE_CHOOSER(dialog), vbox);
+	{
+		GtkWidget *check_line_numbers;
+
+		check_line_numbers = gtk_check_button_new_with_mnemonic(_("_Insert line numbers"));
+		ui_widget_set_tooltip_text(check_line_numbers,
+			_("Insert line numbers before each line in the exported document"));
+		gtk_box_pack_start(GTK_BOX(vbox), check_line_numbers, FALSE, FALSE, 0);
+		gtk_widget_show_all(vbox);
+
+		ui_hookup_widget(dialog, check_line_numbers, "check_line_numbers");
+	}
 	if (show_zoom_level_checkbox)
 	{
-		GtkWidget *vbox, *check_zoom_level;
+		GtkWidget *check_zoom_level;
 
-		vbox = gtk_vbox_new(FALSE, 0);
 		check_zoom_level = gtk_check_button_new_with_mnemonic(_("_Use current zoom level"));
 		ui_widget_set_tooltip_text(check_zoom_level,
 			_("Renders the font size of the document together with the current zoom level"));
 		gtk_box_pack_start(GTK_BOX(vbox), check_zoom_level, FALSE, FALSE, 0);
 		gtk_widget_show_all(vbox);
-		gtk_file_chooser_set_extra_widget(GTK_FILE_CHOOSER(dialog), vbox);
 
 		ui_hookup_widget(dialog, check_zoom_level, "check_zoom_level");
-
 		exi->have_zoom_level_checkbox = TRUE;
 	}
 
@@ -299,6 +313,7 @@ static void on_file_save_dialog_response(GtkDialog *dialog, gint response, gpoin
 	{
 		gchar *new_filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
 		gchar *utf8_filename;
+		gboolean insert_line_numbers;
 		gboolean use_zoom_level = FALSE;
 
 		if (exi->have_zoom_level_checkbox)
@@ -306,6 +321,8 @@ static void on_file_save_dialog_response(GtkDialog *dialog, gint response, gpoin
 			use_zoom_level = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
 				ui_lookup_widget(GTK_WIDGET(dialog), "check_zoom_level")));
 		}
+		insert_line_numbers = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
+				ui_lookup_widget(GTK_WIDGET(dialog), "check_line_numbers")));
 
 		utf8_filename = utils_get_utf8_from_locale(new_filename);
 
@@ -318,7 +335,7 @@ static void on_file_save_dialog_response(GtkDialog *dialog, gint response, gpoin
 				return;
 		}
 
-		exi->export_func(exi->doc, new_filename, use_zoom_level);
+		exi->export_func(exi->doc, new_filename, use_zoom_level, insert_line_numbers);
 
 		g_free(utf8_filename);
 		g_free(new_filename);
@@ -328,10 +345,29 @@ static void on_file_save_dialog_response(GtkDialog *dialog, gint response, gpoin
 }
 
 
-static void write_latex_file(GeanyDocument *doc, const gchar *filename, gboolean use_zoom)
+/* returns the "width" (count of needed characters) for the given number */
+static gint get_line_numbers_arity(gint line_number)
+{
+	gint a = 0;
+	while ((line_number /= 10) != 0)
+		a++;
+	return a;
+}
+
+
+static gint get_line_number_width(GeanyDocument *doc)
+{
+	gint line_count = sci_get_line_count(doc->editor->sci);
+	return get_line_numbers_arity(line_count);
+}
+
+
+static void write_latex_file(GeanyDocument *doc, const gchar *filename,
+	gboolean use_zoom, gboolean insert_line_numbers)
 {
 	GeanyEditor *editor = doc->editor;
 	gint i, doc_len, style = -1, old_style = 0, column = 0;
+	gint k, line_number, line_number_width, line_number_max_width = 0, pad;
 	gchar c, c_next, *tmp, *date;
 	/* 0 - fore, 1 - back, 2 - bold, 3 - italic, 4 - font size, 5 - used(0/1) */
 	gint styles[STYLE_MAX + 1][MAX_TYPES];
@@ -351,6 +387,9 @@ static void write_latex_file(GeanyDocument *doc, const gchar *filename, gboolean
 		styles[i][USED] = 0;
 	}
 
+	if (insert_line_numbers)
+		line_number_max_width = get_line_number_width(doc);
+
 	/* read the document and write the LaTeX code */
 	body = g_string_new("");
 	doc_len = sci_get_length(doc->editor->sci);
@@ -359,6 +398,20 @@ static void write_latex_file(GeanyDocument *doc, const gchar *filename, gboolean
 		style = sci_get_style_at(doc->editor->sci, i);
 		c = sci_get_char_at(doc->editor->sci, i);
 		c_next = sci_get_char_at(doc->editor->sci, i + 1);
+
+		/* line numbers */
+		if (insert_line_numbers && column == 0)
+		{
+			line_number = sci_get_line_from_position(doc->editor->sci, i) + 1;
+			line_number_width = get_line_numbers_arity(line_number);
+			/* padding */
+			pad = line_number_max_width - line_number_width;
+			for (k = 0; k < pad; k++)
+			{
+				g_string_append(body, " ");
+			}
+			g_string_append_printf(body, "%d ", line_number);
+		}
 
 		if (style != old_style || ! block_open)
 		{
@@ -536,10 +589,12 @@ static void write_latex_file(GeanyDocument *doc, const gchar *filename, gboolean
 }
 
 
-static void write_html_file(GeanyDocument *doc, const gchar *filename, gboolean use_zoom)
+static void write_html_file(GeanyDocument *doc, const gchar *filename,
+	gboolean use_zoom, gboolean insert_line_numbers)
 {
 	GeanyEditor *editor = doc->editor;
 	gint i, doc_len, style = -1, old_style = 0, column = 0;
+	gint k, line_number, line_number_width, line_number_max_width = 0, pad;
 	gchar c, c_next, *date;
 	/* 0 - fore, 1 - back, 2 - bold, 3 - italic, 4 - font size, 5 - used(0/1) */
 	gint styles[STYLE_MAX + 1][MAX_TYPES];
@@ -571,6 +626,9 @@ static void write_html_file(GeanyDocument *doc, const gchar *filename, gboolean 
 	if (use_zoom)
 		font_size += scintilla_send_message(doc->editor->sci, SCI_GETZOOM, 0, 0);
 
+	if (insert_line_numbers)
+		line_number_max_width = get_line_number_width(doc);
+
 	/* read the document and write the HTML body */
 	body = g_string_new("");
 	doc_len = sci_get_length(doc->editor->sci);
@@ -580,6 +638,20 @@ static void write_html_file(GeanyDocument *doc, const gchar *filename, gboolean 
 		c = sci_get_char_at(doc->editor->sci, i);
 		/* sci_get_char_at() takes care of index boundaries and return 0 if i is too high */
 		c_next = sci_get_char_at(doc->editor->sci, i + 1);
+
+		/* line numbers */
+		if (insert_line_numbers && column == 0)
+		{
+			line_number = sci_get_line_from_position(doc->editor->sci, i) + 1;
+			line_number_width = get_line_numbers_arity(line_number);
+			/* padding */
+			pad = line_number_max_width - line_number_width;
+			for (k = 0; k < pad; k++)
+			{
+				g_string_append(body, "&nbsp;");
+			}
+			g_string_append_printf(body, "%d&nbsp;", line_number);
+		}
 
 		if ((style != old_style || ! span_open) && ! isspace(c))
 		{
