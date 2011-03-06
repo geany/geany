@@ -5,6 +5,9 @@
  * src/search.c:
    Remember Find and Replace options across restarts
    (patch by Dimitar Zhekov, thanks).
+   Cleanup.
+   Respect saved state of 'Case sensitive' option when using
+   the 'Regular expressions' option as well.
 
 
 2011-03-05  Colomban Wendling  <colomban(at)geany(dot)org>

@@ -191,7 +191,7 @@ static void init_prefs(void)
 	stash_group_add_integer(group, &fif_dlg.position[0], "position_fif_x", -1);
 	stash_group_add_integer(group, &fif_dlg.position[1], "position_fif_y", -1);
 
-	memset(&settings, '\0', sizeof settings);
+	memset(&settings, '\0', sizeof(settings));
 
 	group = stash_group_new("search");
 	fif_prefs = group;
@@ -1049,9 +1049,12 @@ on_find_replace_checkbutton_toggled(GtkToggleButton *togglebutton, gpointer user
 
 		if (regex_set)	/* regex enabled */
 		{
-			/* Enable case sensitive but remember original case toggle state */
-			case_state[replace] = gtk_toggle_button_get_active(check_case);
-			gtk_toggle_button_set_active(check_case, TRUE);
+			if (GTK_WIDGET_VISIBLE(dialog))
+			{
+				/* Enable case sensitive but remember original case toggle state */
+				case_state[replace] = gtk_toggle_button_get_active(check_case);
+				gtk_toggle_button_set_active(check_case, TRUE);
+			}
 		}
 		else	/* regex disabled */
 		{
@@ -1245,7 +1248,6 @@ on_replace_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 	GeanyDocument *doc = document_get_current();
 	gint search_flags_re;
 	gboolean search_backwards_re, search_replace_escape_re;
-	gboolean close_window;
 	gchar *find, *replace;
 
 	gtk_window_get_position(GTK_WINDOW(replace_dlg.dialog),
