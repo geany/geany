@@ -90,10 +90,25 @@ static struct
 	gchar *fif_extra_options;
 	gboolean fif_use_files;
 	gchar *fif_files;
+	gboolean find_regexp;
+	gboolean find_escape_sequences;
+	gboolean find_case_sensitive;
+	gboolean find_match_whole_word;
+	gboolean find_match_word_start;
+	gboolean find_close_dialog;
+	gboolean replace_regexp;
+	gboolean replace_escape_sequences;
+	gboolean replace_case_sensitive;
+	gboolean replace_match_whole_word;
+	gboolean replace_match_word_start;
+	gboolean replace_search_backwards;
+	gboolean replace_close_dialog;
 }
-settings = {FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, NULL, FALSE, NULL};
+settings;
 
 static StashGroup *fif_prefs = NULL;
+static StashGroup *find_prefs = NULL;
+static StashGroup *replace_prefs = NULL;
 
 
 static struct
@@ -176,6 +191,8 @@ static void init_prefs(void)
 	stash_group_add_integer(group, &fif_dlg.position[0], "position_fif_x", -1);
 	stash_group_add_integer(group, &fif_dlg.position[1], "position_fif_y", -1);
 
+	memset(&settings, '\0', sizeof settings);
+
 	group = stash_group_new("search");
 	fif_prefs = group;
 	configuration_add_pref_group(group, FALSE);
@@ -197,6 +214,41 @@ static void init_prefs(void)
 		"fif_files", "", "entry_files");
 	stash_group_add_toggle_button(group, &settings.fif_use_files,
 		"fif_use_files", FALSE, "check_files");
+
+	group = stash_group_new("search");
+	find_prefs = group;
+	configuration_add_pref_group(group, FALSE);
+	/* if case is moved after regexp, the first regexp uncheck will clear it */
+	stash_group_add_toggle_button(group, &settings.find_case_sensitive,
+		"find_case_sensitive", FALSE, "check_case");
+	stash_group_add_toggle_button(group, &settings.find_regexp,
+		"find_regexp", FALSE, "check_regexp");
+	stash_group_add_toggle_button(group, &settings.find_escape_sequences,
+		"find_escape_sequences", FALSE, "check_escape");
+	stash_group_add_toggle_button(group, &settings.find_match_whole_word,
+		"find_match_whole_word", FALSE, "check_word");
+	stash_group_add_toggle_button(group, &settings.find_match_word_start,
+		"find_match_word_start", FALSE, "check_wordstart");
+	stash_group_add_toggle_button(group, &settings.find_close_dialog,
+		"find_close_dialog", TRUE, "check_close");
+
+	group = stash_group_new("search");
+	replace_prefs = group;
+	configuration_add_pref_group(group, FALSE);
+	stash_group_add_toggle_button(group, &settings.replace_case_sensitive,
+		"replace_case_sensitive", FALSE, "check_case");
+	stash_group_add_toggle_button(group, &settings.replace_regexp,
+		"replace_regexp", FALSE, "check_regexp");
+	stash_group_add_toggle_button(group, &settings.replace_escape_sequences,
+		"replace_escape_sequences", FALSE, "check_escape");
+	stash_group_add_toggle_button(group, &settings.replace_match_whole_word,
+		"replace_match_whole_word", FALSE, "check_word");
+	stash_group_add_toggle_button(group, &settings.replace_match_word_start,
+		"replace_match_word_start", FALSE, "check_wordstart");
+	stash_group_add_toggle_button(group, &settings.replace_search_backwards,
+		"replace_search_backwards", FALSE, "check_back");
+	stash_group_add_toggle_button(group, &settings.replace_close_dialog,
+		"replace_close_dialog", TRUE, "check_close");
 }
 
 
@@ -468,7 +520,6 @@ static void create_find_dialog(void)
 	gtk_button_set_focus_on_click(GTK_BUTTON(check_close), FALSE);
 	ui_widget_set_tooltip_text(check_close,
 			_("Disable this option to keep the dialog open"));
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_close), TRUE);
 	gtk_container_add(GTK_CONTAINER(bbox), check_close);
 	gtk_button_box_set_child_secondary(GTK_BUTTON_BOX(bbox), check_close, TRUE);
 
@@ -499,6 +550,7 @@ void search_show_find_dialog(void)
 	if (find_dlg.dialog == NULL)
 	{
 		create_find_dialog();
+		stash_group_display(find_prefs, find_dlg.dialog);
 		if (sel)
 			gtk_entry_set_text(GTK_ENTRY(find_dlg.entry), sel);
 
@@ -652,7 +704,6 @@ static void create_replace_dialog(void)
 	gtk_button_set_focus_on_click(GTK_BUTTON(check_close), FALSE);
 	ui_widget_set_tooltip_text(check_close,
 			_("Disable this option to keep the dialog open"));
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_close), TRUE);
 	gtk_container_add(GTK_CONTAINER(bbox), check_close);
 	gtk_button_box_set_child_secondary(GTK_BUTTON_BOX(bbox), check_close, TRUE);
 
@@ -677,6 +728,7 @@ void search_show_replace_dialog(void)
 	if (replace_dlg.dialog == NULL)
 	{
 		create_replace_dialog();
+		stash_group_display(replace_prefs, replace_dlg.dialog);
 		if (sel)
 			gtk_entry_set_text(GTK_ENTRY(replace_dlg.find_entry), sel);
 
@@ -696,6 +748,7 @@ void search_show_replace_dialog(void)
 		/* bring the dialog back in the foreground in case it is already open but the focus is away */
 		gtk_window_present(GTK_WINDOW(replace_dlg.dialog));
 	}
+
 	g_free(sel);
 }
 
@@ -984,30 +1037,27 @@ on_find_replace_checkbutton_toggled(GtkToggleButton *togglebutton, gpointer user
 		GtkToggleButton *check_case = GTK_TOGGLE_BUTTON(
 			ui_lookup_widget(dialog, "check_case"));
 		GtkWidget *check_escape = ui_lookup_widget(dialog, "check_escape");
-		static gboolean case_state = FALSE; /* state before regex enabled */
+		gboolean replace = (dialog != find_dlg.dialog);
+		const char *back_button[2] = { "btn_previous" , "check_back" };
+		static gboolean case_state[2] = { FALSE, FALSE }; /* state before regex enabled */
 
 		/* hide options that don't apply to regex searches */
 		gtk_widget_set_sensitive(check_escape, ! regex_set);
-
-		if (dialog == find_dlg.dialog)
-			gtk_widget_set_sensitive(ui_lookup_widget(dialog, "btn_previous"), ! regex_set);
-		else
-			gtk_widget_set_sensitive(ui_lookup_widget(dialog, "check_back"), ! regex_set);
-
+		gtk_widget_set_sensitive(ui_lookup_widget(dialog, back_button[replace]), ! regex_set);
 		gtk_widget_set_sensitive(check_word, ! regex_set);
 		gtk_widget_set_sensitive(check_wordstart, ! regex_set);
 
 		if (regex_set)	/* regex enabled */
 		{
 			/* Enable case sensitive but remember original case toggle state */
-			case_state = gtk_toggle_button_get_active(check_case);
+			case_state[replace] = gtk_toggle_button_get_active(check_case);
 			gtk_toggle_button_set_active(check_case, TRUE);
 		}
 		else	/* regex disabled */
 		{
 			/* If case sensitive is still enabled, revert to what it was before we enabled it */
 			if (gtk_toggle_button_get_active(check_case) == TRUE)
-				gtk_toggle_button_set_active(check_case, case_state);
+				gtk_toggle_button_set_active(check_case, case_state[replace]);
 		}
 	}
 }
@@ -1056,24 +1106,11 @@ on_find_entry_activate(GtkEntry *entry, gpointer user_data)
 }
 
 
-static gint get_search_flags(GtkWidget *dialog)
-{
-	gboolean fl1, fl2, fl3, fl4;
-
-	fl1 = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
-				ui_lookup_widget(dialog, "check_case")));
-	fl2 = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
-				ui_lookup_widget(dialog, "check_word")));
-	fl3 = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
-				ui_lookup_widget(dialog, "check_regexp")));
-	fl4 = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
-				ui_lookup_widget(dialog, "check_wordstart")));
-
-	return (fl1 ? SCFIND_MATCHCASE : 0) |
-		(fl2 ? SCFIND_WHOLEWORD : 0) |
-		(fl3 ? SCFIND_REGEXP | SCFIND_POSIX : 0) |
-		(fl4 ? SCFIND_WORDSTART : 0);
-}
+#define int_search_flags(match_case, whole_word, regexp, word_start) \
+	((match_case ? SCFIND_MATCHCASE : 0) | \
+	(whole_word ? SCFIND_WHOLEWORD : 0) | \
+	(regexp ? SCFIND_REGEXP | SCFIND_POSIX : 0) | \
+	(word_start ? SCFIND_WORDSTART : 0))
 
 
 static void
@@ -1082,26 +1119,25 @@ on_find_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 	gtk_window_get_position(GTK_WINDOW(find_dlg.dialog),
 		&find_dlg.position[0], &find_dlg.position[1]);
 
+	stash_group_update(find_prefs, find_dlg.dialog);
+
 	if (response == GTK_RESPONSE_CANCEL || response == GTK_RESPONSE_DELETE_EVENT)
 		gtk_widget_hide(find_dlg.dialog);
 	else
 	{
 		GeanyDocument *doc = document_get_current();
-		gboolean search_replace_escape;
-		gboolean check_close = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
-						ui_lookup_widget(GTK_WIDGET(find_dlg.dialog), "check_close")));
+		gboolean check_close = settings.find_close_dialog;
 
 		if (doc == NULL)
 			return;
 
-		search_replace_escape = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
-						ui_lookup_widget(GTK_WIDGET(find_dlg.dialog), "check_escape")));
 		search_data.backwards = FALSE;
 		search_data.search_bar = FALSE;
 
 		g_free(search_data.text);
 		search_data.text = g_strdup(gtk_entry_get_text(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(user_data)))));
-		search_data.flags = get_search_flags(find_dlg.dialog);
+		search_data.flags = int_search_flags(settings.find_case_sensitive,
+			settings.find_match_whole_word, settings.find_regexp, settings.find_match_word_start);
 
 		if (strlen(search_data.text) == 0)
 		{
@@ -1110,7 +1146,7 @@ on_find_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 			gtk_widget_grab_focus(find_dlg.entry);
 			return;
 		}
-		if (search_replace_escape || search_data.flags & SCFIND_REGEXP)
+		if (settings.find_escape_sequences || search_data.flags & SCFIND_REGEXP)
 		{
 			if (! utils_str_replace_escape(search_data.text, search_data.flags & SCFIND_REGEXP))
 				goto fail;
@@ -1215,22 +1251,22 @@ on_replace_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 	gtk_window_get_position(GTK_WINDOW(replace_dlg.dialog),
 		&replace_dlg.position[0], &replace_dlg.position[1]);
 
+	stash_group_update(replace_prefs, replace_dlg.dialog);
+
 	if (response == GTK_RESPONSE_CANCEL || response == GTK_RESPONSE_DELETE_EVENT)
 	{
 		gtk_widget_hide(replace_dlg.dialog);
 		return;
 	}
 
-	close_window = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
-				ui_lookup_widget(GTK_WIDGET(replace_dlg.dialog), "check_close")));
-	search_backwards_re = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
-				ui_lookup_widget(GTK_WIDGET(replace_dlg.dialog), "check_back")));
-	search_replace_escape_re = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
-				ui_lookup_widget(GTK_WIDGET(replace_dlg.dialog), "check_escape")));
+	search_backwards_re = settings.replace_search_backwards;
+	search_replace_escape_re = settings.replace_escape_sequences;
 	find = g_strdup(gtk_entry_get_text(GTK_ENTRY(replace_dlg.find_entry)));
 	replace = g_strdup(gtk_entry_get_text(GTK_ENTRY(replace_dlg.replace_entry)));
 
-	search_flags_re = get_search_flags(replace_dlg.dialog);
+	search_flags_re = int_search_flags(settings.replace_case_sensitive,
+		settings.replace_match_whole_word, settings.replace_regexp,
+		settings.replace_match_word_start);
 
 	if ((response != GEANY_RESPONSE_FIND) && (search_flags_re & SCFIND_MATCHCASE)
 		&& (strcmp(find, replace) == 0))
@@ -1302,7 +1338,7 @@ on_replace_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 		case GEANY_RESPONSE_REPLACE_IN_SEL:
 		case GEANY_RESPONSE_REPLACE_IN_FILE:
 		case GEANY_RESPONSE_REPLACE_IN_SESSION:
-			if (close_window)
+			if (settings.replace_close_dialog)
 				gtk_widget_hide(replace_dlg.dialog);
 	}
 	g_free(find);

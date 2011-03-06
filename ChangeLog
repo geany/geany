@@ -2,6 +2,9 @@
 
  * src/interface.c, geany.glade:
    Fix typo.
+ * src/search.c:
+   Remember Find and Replace options across restarts
+   (patch by Dimitar Zhekov, thanks).
 
 
 2011-03-05  Colomban Wendling  <colomban(at)geany(dot)org>
