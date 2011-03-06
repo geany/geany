@@ -216,7 +216,6 @@ static void create_file_save_as_dialog(const gchar *extension, ExportFunc func,
 	if (doc->file_name != NULL)
 	{
 		gchar *base_name = g_path_get_basename(doc->file_name);
-		gchar *short_name = utils_remove_ext_from_filename(base_name);
 		gchar *file_name;
 		gchar *locale_filename;
 		gchar *locale_dirname;
@@ -225,7 +224,7 @@ static void create_file_save_as_dialog(const gchar *extension, ExportFunc func,
 		if (g_str_has_suffix(doc->file_name, extension))
 			suffix = "_export";
 
-		file_name = g_strconcat(short_name, suffix, extension, NULL);
+		file_name = g_strconcat(base_name, suffix, extension, NULL);
 		locale_filename = utils_get_locale_from_utf8(doc->file_name);
 		locale_dirname = g_path_get_dirname(locale_filename);
 		/* set the current name to base_name.html which probably doesn't exist yet so
@@ -235,7 +234,6 @@ static void create_file_save_as_dialog(const gchar *extension, ExportFunc func,
 		gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(dialog), file_name);
 		g_free(locale_dirname);
 		g_free(locale_filename);
-		g_free(short_name);
 		g_free(file_name);
 		g_free(base_name);
 	}
