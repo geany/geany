@@ -6794,7 +6794,7 @@ Match braces</property>
 				  <child>
 				    <widget class="GtkSpinButton" id="spin_symbol_update_freq">
 				      <property name="visible">True</property>
-				      <property name="tooltip" translatable="yes">Minimal delay (in milliseconds) between two automatic updates of the symbol list. Note that a too short delay may have performance impact, espcially with large files. A delay of 0 disables real-time updates.</property>
+				      <property name="tooltip" translatable="yes">Minimal delay (in milliseconds) between two automatic updates of the symbol list. Note that a too short delay may have performance impact, especially with large files. A delay of 0 disables real-time updates.</property>
 				      <property name="can_focus">True</property>
 				      <property name="climb_rate">1</property>
 				      <property name="digits">0</property>

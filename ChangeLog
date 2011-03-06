@@ -1,3 +1,9 @@
+2011-03-06  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/interface.c, geany.glade:
+   Fix typo.
+
+
 2011-03-05  Colomban Wendling  <colomban(at)geany(dot)org>
 
  * configure.ac, wscript, makefile.win32, src/Makefile.am,

@@ -4044,7 +4044,7 @@ create_prefs_dialog (void)
   gtk_table_attach (GTK_TABLE (table14), spin_symbol_update_freq, 1, 2, 3, 4,
                     (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
                     (GtkAttachOptions) (0), 0, 0);
-  gtk_tooltips_set_tip (tooltips, spin_symbol_update_freq, _("Minimal delay (in milliseconds) between two automatic updates of the symbol list. Note that a too short delay may have performance impact, espcially with large files. A delay of 0 disables real-time updates."), NULL);
+  gtk_tooltips_set_tip (tooltips, spin_symbol_update_freq, _("Minimal delay (in milliseconds) between two automatic updates of the symbol list. Note that a too short delay may have performance impact, especially with large files. A delay of 0 disables real-time updates."), NULL);
   gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (spin_symbol_update_freq), TRUE);
 
   label177 = gtk_label_new (_("<b>Completions</b>"));
