@@ -91,9 +91,9 @@ exec:
 binclean:
 	$(RM) $(TARGET)
 
-$(TARGET): $(OBJS) $(RES) ../scintilla/scintilla.a ../tagmanager/tagmanager.a
+$(TARGET): $(OBJS) $(RES) ../scintilla/scintilla.a ../tagmanager/mio/mio.a ../tagmanager/tagmanager.a
 	$(CXX) $(OBJS) $(RES) -o $(TARGET) \
-	../scintilla/scintilla.a ../tagmanager/mio∕mio.a ../tagmanager/tagmanager.a \
+	../scintilla/scintilla.a ../tagmanager/tagmanager.a ../tagmanager/mio/mio.a \
 	$(ALL_GTK_LIBS) $(WIN_LIBS)
 
 deps.mak:
