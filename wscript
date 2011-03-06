@@ -287,7 +287,7 @@ def build(bld):
         source          = tagmanager_sources,
         name            = 'tagmanager',
         target          = 'tagmanager',
-        includes        = ['.', 'tagmanager/include/', 'tagmanager/mio/'],
+        includes        = ['.', 'tagmanager', 'tagmanager/include'],
         defines         = 'G_LOG_DOMAIN="Tagmanager"',
         uselib          = 'GTK',
         install_path    = None) # do not install this library
