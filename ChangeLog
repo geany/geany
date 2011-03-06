@@ -20,6 +20,7 @@
    Add option to insert line numbers (closes #3197150).
    Cleanup.
    Use the full filename and add the extension of the export format.
+   Fix off-by-one bug which hidden the last empty line of a document.
 
 
 2011-03-05  Colomban Wendling  <colomban(at)geany(dot)org>
