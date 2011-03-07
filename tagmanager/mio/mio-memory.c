@@ -247,28 +247,26 @@ mem_vprintf (MIO         *mio,
              va_list      ap)
 {
   gint    rv = -1;
-  gint    n;
-  gchar   tmp;
+  gsize   n;
   gsize   old_pos;
   gsize   old_size;
   va_list ap_copy;
   
   old_pos = mio->impl.mem.pos;
   old_size = mio->impl.mem.size;
-  va_copy (ap_copy, ap);
+  G_VA_COPY (ap_copy, ap);
   /* compute the size we will need into the buffer */
-  n = vsnprintf (&tmp, 1, format, ap_copy);
+  n = g_printf_string_upper_bound (format, ap_copy);
   va_end (ap_copy);
-  if (n >= 0 && mem_try_ensure_space (mio, ((guint)n) + 1)) {
+  if (mem_try_ensure_space (mio, n)) {
     guchar c;
     
     /* backup character at n+1 that will be overwritten by a \0 ... */
-    c = mio->impl.mem.buf[mio->impl.mem.pos + (guint)n];
-    rv = vsnprintf ((gchar *)&mio->impl.mem.buf[mio->impl.mem.pos],
-                    (guint)n + 1, format, ap);
+    c = mio->impl.mem.buf[mio->impl.mem.pos + (n - 1)];
+    rv = vsprintf ((gchar *)&mio->impl.mem.buf[mio->impl.mem.pos], format, ap);
     /* ...and restore it */
-    mio->impl.mem.buf[mio->impl.mem.pos + (guint)n] = c;
-    if (G_LIKELY (rv >= 0 && rv == n)) {
+    mio->impl.mem.buf[mio->impl.mem.pos + (n - 1)] = c;
+    if (G_LIKELY (rv >= 0 && (gsize)rv == (n - 1))) {
       /* re-compute the actual size since we might have allocated one byte
        * more than needed */
       mio->impl.mem.size = MAX (old_size, old_pos + (guint)rv);

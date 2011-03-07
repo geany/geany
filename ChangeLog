@@ -1,3 +1,9 @@
+2011-03-07  Colomban Wendling  <colomban(at)geany(dot)org>
+
+ * tagmanager/mio/mio-memory.c:
+   Import upstream MIO changes not to require a C99 compiler.
+
+
 2011-03-06  Colomban Wendling  <colomban(at)geany(dot)org>
 
  * src/symbols.c:
