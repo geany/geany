@@ -70,7 +70,7 @@ typedef struct GeanyApp
 	 * This is a full path read by @ref tm_get_real_path().
 	 * @note Plugin configuration files should be saved as:
 	 * @code g_build_path(G_DIR_SEPARATOR_S, geany->app->configdir, "plugins", "pluginname",
-	 * 	"file.conf"); @endcode */
+	 * 	"file.conf", NULL); @endcode */
 	gchar				*configdir;
 	gchar				*datadir;
 	gchar				*docdir;
