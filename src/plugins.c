@@ -608,7 +608,7 @@ plugin_init(Plugin *plugin)
 		add_callbacks(plugin, callbacks);
 
 	/* remember which plugins are active */
-	active_plugin_list = g_list_append(active_plugin_list, plugin);
+	active_plugin_list = g_list_prepend(active_plugin_list, plugin);
 
 	geany_debug("Loaded:   %s (%s)", plugin->filename,
 		NVL(plugin->info.name, "<Unknown>"));
@@ -639,7 +639,7 @@ plugin_new(const gchar *fname, gboolean init_plugin, gboolean add_to_list)
 	{
 		geany_debug("Plugin \"%s\" already loaded.", fname);
 		if (add_to_list)
-			plugin_list = g_list_append(plugin_list, plugin);
+			plugin_list = g_list_prepend(plugin_list, plugin);
 		return plugin;
 	}
 
@@ -727,7 +727,7 @@ plugin_new(const gchar *fname, gboolean init_plugin, gboolean add_to_list)
 		plugin_init(plugin);
 
 	if (add_to_list)
-		plugin_list = g_list_append(plugin_list, plugin);
+		plugin_list = g_list_prepend(plugin_list, plugin);
 
 	return plugin;
 }
@@ -814,7 +814,7 @@ load_active_plugins(void)
 		if (NZV(fname) && g_file_test(fname, G_FILE_TEST_EXISTS))
 		{
 			if (plugin_new(fname, TRUE, FALSE) == NULL)
-				failed_plugins_list = g_list_append(failed_plugins_list, g_strdup(fname));
+				failed_plugins_list = g_list_prepend(failed_plugins_list, g_strdup(fname));
 		}
 	}
 }

@@ -1469,13 +1469,15 @@ GSList *utils_get_file_list_full(const gchar *path, gboolean full_path, gboolean
 
 	foreach_dir(filename, dir)
 	{
-		list = g_slist_append(list, full_path ?
+		list = g_slist_prepend(list, full_path ?
 			g_build_path(G_DIR_SEPARATOR_S, path, filename, NULL) : g_strdup(filename));
 	}
 	g_dir_close(dir);
 	/* sorting last is quicker than on insertion */
 	if (sort)
 		list = g_slist_sort(list, (GCompareFunc) utils_str_casecmp);
+	else
+		list = g_slist_reverse(list);
 	return list;
 }
 

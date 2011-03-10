@@ -492,8 +492,9 @@ static void open_selected_files(GList *list, gboolean do_not_focus)
 		GtkTreePath *treepath = item->data;
 		gchar *fname = get_tree_path_filename(treepath);
 
-		files = g_slist_append(files, fname);
+		files = g_slist_prepend(files, fname);
 	}
+	files = g_slist_reverse(files);
 	document_open_files(files, FALSE, NULL, NULL);
 	doc = document_get_current();
 	if (doc != NULL && ! do_not_focus)

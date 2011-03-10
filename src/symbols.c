@@ -494,7 +494,7 @@ static GList *get_tag_list(GeanyDocument *doc, guint tag_types)
 
 		if (tag->type & tag_types)
 		{
-			tag_names = g_list_append(tag_names, tag);
+			tag_names = g_list_prepend(tag_names, tag);
 		}
 	}
 	tag_names = g_list_sort(tag_names, compare_symbol_lines);

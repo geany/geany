@@ -3,6 +3,10 @@
  * src/toolbar.c:
    Correctly expand the menubar if the toolbar is appended to it but
    not visible (closes #3204955).
+ * plugins/filebrowser.c, src/editor.c, src/plugins.c, src/symbols.c,
+   src/tools.c, src/utils.c:
+   Prefer prepend elements to lists rather than append them, for better
+   performances.
 
 
 2011-03-08  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

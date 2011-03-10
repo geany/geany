@@ -366,11 +366,12 @@ static void cc_show_dialog_custom_commands(void)
 			/* if the content of the entry is non-empty, add it to the result array */
 			if (text[0] != '\0')
 			{
-				result_list = g_slist_append(result_list, g_strdup(text));
+				result_list = g_slist_prepend(result_list, g_strdup(text));
 				len++;
 			}
 			g_list_free(list);
 		}
+		result_list = g_slist_reverse(result_list);
 		/* create a new null-terminated array but only if there any commands defined */
 		if (len > 0)
 		{

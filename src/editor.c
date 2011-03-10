@@ -2538,7 +2538,7 @@ static gssize snippets_make_replacements(GeanyEditor *editor, GString *pattern,
 		if (i++ > 0)
 		{
 			cursor_steps += (nl_count * indent_size);
-			temp_list = g_list_append(temp_list, GINT_TO_POINTER(cursor_steps - old_cursor));
+			temp_list = g_list_prepend(temp_list, GINT_TO_POINTER(cursor_steps - old_cursor));
 		}
 		else
 		{
@@ -2563,6 +2563,7 @@ static gssize snippets_make_replacements(GeanyEditor *editor, GString *pattern,
 	{
 		GList *node;
 
+		temp_list = g_list_reverse(temp_list);
 		foreach_list(node, temp_list)
 			g_queue_push_nth(snippet_offsets, node->data, i++);
 
