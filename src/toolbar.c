@@ -480,7 +480,8 @@ void toolbar_update_ui(void)
 	/* we need to adjust the packing flags for the menubar to expand it if it is alone in the
 	 * hbox and not expand it if the toolbar is appended */
 	gtk_box_set_child_packing(GTK_BOX(hbox_menubar), menubar,
-		! toolbar_prefs.append_to_menu, ! toolbar_prefs.append_to_menu, 0, GTK_PACK_START);
+		! (toolbar_prefs.visible && toolbar_prefs.append_to_menu),
+		! (toolbar_prefs.visible && toolbar_prefs.append_to_menu), 0, GTK_PACK_START);
 }
 
 
