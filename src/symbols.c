@@ -1186,7 +1186,7 @@ static gboolean tag_equal(gconstpointer v1, gconstpointer v2)
 static guint tag_hash(gconstpointer v)
 {
 	const TMTag *tag = v;
-	const signed char *p;
+	const gchar *p;
 	guint32 h = 5381;
 
 	h = (h << 5) + h + tag->type;
