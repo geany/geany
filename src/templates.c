@@ -549,7 +549,7 @@ gchar *templates_get_template_licence(GeanyDocument *doc, gint licence_type)
 	templates_replace_default_dates(template);
 	templates_replace_command(template, DOC_FILENAME(doc), doc->file_type->name, NULL);
 
-	make_comment_block(template, doc->file_type->id, 8);
+	make_comment_block(template, doc->file_type->id, GEANY_TEMPLATES_INDENT);
 	convert_eol_characters(template, doc);
 
 	return g_string_free(template, FALSE);
@@ -568,7 +568,7 @@ static gchar *get_template_fileheader(GeanyFiletype *ft)
 		NULL);
 
 	/* we don't replace other wildcards here otherwise they would get done twice for files */
-	make_comment_block(template, ft->id, 8);
+	make_comment_block(template, ft->id, GEANY_TEMPLATES_INDENT);
 	return g_string_free(template, FALSE);
 }
 
@@ -625,7 +625,7 @@ gchar *templates_get_template_function(GeanyDocument *doc, const gchar *func_nam
 	templates_replace_default_dates(text);
 	templates_replace_command(text, DOC_FILENAME(doc), doc->file_type->name, func_name);
 
-	make_comment_block(text, doc->file_type->id, 3);
+	make_comment_block(text, doc->file_type->id, GEANY_TEMPLATES_INDENT);
 	convert_eol_characters(text, doc);
 
 	return g_string_free(text, FALSE);
