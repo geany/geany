@@ -554,6 +554,15 @@ static void read_key_group(Plugin *plugin)
 }
 
 
+static gint cmp_plugin_names(gconstpointer a, gconstpointer b)
+{
+	const Plugin *pa = a;
+	const Plugin *pb = b;
+
+	return strcmp(pa->info.name, pb->info.name);
+}
+
+
 static void
 plugin_init(Plugin *plugin)
 {
@@ -607,8 +616,10 @@ plugin_init(Plugin *plugin)
 	if (callbacks)
 		add_callbacks(plugin, callbacks);
 
-	/* remember which plugins are active */
-	active_plugin_list = g_list_prepend(active_plugin_list, plugin);
+	/* remember which plugins are active.
+	 * keep list sorted so tools menu items and plugin preference tabs are
+	 * sorted by plugin name */
+	active_plugin_list = g_list_insert_sorted(active_plugin_list, plugin, cmp_plugin_names);
 
 	geany_debug("Loaded:   %s (%s)", plugin->filename,
 		NVL(plugin->info.name, "<Unknown>"));
@@ -938,15 +949,6 @@ void plugins_load_active(void)
 }
 
 
-static gint cmp_plugin_names(gconstpointer a, gconstpointer b)
-{
-	const Plugin *pa = a;
-	const Plugin *pb = b;
-
-	return strcmp(pa->info.name, pb->info.name);
-}
-
-
 static void update_active_plugins_pref(void)
 {
 	gint i = 0;
@@ -960,10 +962,6 @@ static void update_active_plugins_pref(void)
 		active_plugins_pref = NULL;
 		return;
 	}
-
-	/* sort the list so next time tools menu items are sorted by plugin name
-	 * (not ideal to do here, but better than nothing) */
-	active_plugin_list = g_list_sort(active_plugin_list, cmp_plugin_names);
 
 	active_plugins_pref = g_new0(gchar*, count + 1);
 

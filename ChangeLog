@@ -3,6 +3,8 @@
  * src/templates.c, src/templates.h:
    Use the same indentation for all templates (part of FR#3193527; from
    a patch by Matthew Brush, thanks).
+ * src/plugins.c:
+   Always keep the list of loaded plugin sorted by name.
 
 
 2011-03-12  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
