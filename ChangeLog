@@ -17,6 +17,9 @@
  * src/interface.c, geany.glade:
    Fix wrong label capitalization for Toolbar Preferences dialog tab 
    and 2 other labels.
+ * data/filetypes.Scala.conf, data/filetype_extensions.conf:
+   Add Scala custom filetype, based on file by werg (thanks).
+   (This uses the newly added [styling=C] syntax).
 
 
 2011-03-15  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
