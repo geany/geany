@@ -924,7 +924,7 @@ void configuration_save_default_session(void)
  */
 void configuration_reload_default_session(void)
 {
-	gchar *configfile = g_strconcat(app->configdir, G_DIR_SEPARATOR_S, "geany.conf", NULL);
+	const gchar *configfile = utils_build_path(app->configdir, "geany.conf", NULL);
 	GKeyFile *config = g_key_file_new();
 
 	g_key_file_load_from_file(config, configfile, G_KEY_FILE_NONE, NULL);
@@ -932,22 +932,20 @@ void configuration_reload_default_session(void)
 	configuration_load_session_files(config, FALSE);
 
 	g_key_file_free(config);
-	g_free(configfile);
 }
 
 
 gboolean configuration_load(void)
 {
-	gchar *configfile = g_strconcat(app->configdir, G_DIR_SEPARATOR_S, "geany.conf", NULL);
+	const gchar *configfile = utils_build_path(app->configdir, "geany.conf", NULL);
 	GKeyFile *config = g_key_file_new();
 
 	if (! g_file_test(configfile, G_FILE_TEST_IS_REGULAR))
 	{	/* config file does not (yet) exist, so try to load a global config file which may be */
 		/* created by distributors */
 		geany_debug("No user config file found, trying to use global configuration.");
-		setptr(configfile, g_strconcat(app->datadir, G_DIR_SEPARATOR_S "geany.conf", NULL));
+		configfile = utils_build_path(app->datadir, "geany.conf", NULL);
 	}
-
 	g_key_file_load_from_file(config, configfile, G_KEY_FILE_NONE, NULL);
 
 	load_dialog_prefs(config);
@@ -959,7 +957,6 @@ gboolean configuration_load(void)
 	g_signal_emit_by_name(geany_object, "load-settings", config);
 
 	g_key_file_free(config);
-	g_free(configfile);
 	return TRUE;
 }
 
