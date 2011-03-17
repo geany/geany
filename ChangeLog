@@ -20,6 +20,9 @@
  * data/filetypes.Scala.conf, data/filetype_extensions.conf:
    Add Scala custom filetype, based on file by werg (thanks).
    (This uses the newly added [styling=C] syntax).
+ * src/filetypes.c:
+   Make special case for filetypes.matlab instead of truncating all 
+   filetype config filenames at slash.
 
 
 2011-03-15  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
