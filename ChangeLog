@@ -10,6 +10,10 @@
  * plugins/classbuilder.c:
    Fix GLib warning when creating classes and no documents are open 
    (patch by Matthew Brush, thanks).
+ * plugins/classbuilder.c:
+   Undo patch change to cc_option_label_new() to append a ':' colon to 
+   label text because this unnecessarily causes string translations to 
+   be updated.
 
 
 2011-03-15  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>

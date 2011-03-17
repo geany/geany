@@ -355,22 +355,18 @@ get_template_class_source(ClassInfo *class_info)
 		return NULL;
 }
 
-/* Creates a new option label, indented on the left, with a semi-colon
- * added on the end */
+/* Creates a new option label, indented on the left */
 GtkWidget *cc_option_label_new(const gchar *text)
 {
-	gchar *label_text;
 	GtkWidget *align;
 	GtkWidget *label;
 
 	align = gtk_alignment_new(0.0, 0.5, 1.0, 1.0);
 	gtk_alignment_set_padding(GTK_ALIGNMENT(align), 0, 0, 12, 0);
 
-	label_text = g_strdup_printf("%s:", text);
-	label = gtk_label_new(label_text);
+	label = gtk_label_new(text);
 	gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
 	gtk_container_add(GTK_CONTAINER(align), label);
-	g_free(label_text);
 
 	return align;
 }
@@ -480,7 +476,7 @@ void show_dialog_create_class(gint type)
 	if (type == GEANY_CLASS_TYPE_PHP || type == GEANY_CLASS_TYPE_GTK)
 	{
 		cc_table_attach_section_label(table, _("Namespace"), row++, FALSE);
-		cc_dlg->class_namespace_entry = cc_table_attach_option_entry(table, _("Name"), row++);
+		cc_dlg->class_namespace_entry = cc_table_attach_option_entry(table, _("Name:"), row++);
 		g_signal_connect(cc_dlg->class_namespace_entry, "changed",
 				G_CALLBACK(cc_dlg_on_class_namespace_entry_changed), cc_dlg);
 	}
@@ -490,18 +486,18 @@ void show_dialog_create_class(gint type)
 	else
 		cc_table_attach_section_label(table, _("Class"), row++, FALSE);
 
-	cc_dlg->class_name_entry = cc_table_attach_option_entry(table, _("Name"), row++);
+	cc_dlg->class_name_entry = cc_table_attach_option_entry(table, _("Name:"), row++);
 	g_signal_connect(cc_dlg->class_name_entry, "changed",
 			G_CALLBACK(cc_dlg_on_class_name_entry_changed), cc_dlg);
 
 	if (type != GEANY_CLASS_TYPE_PHP)
-		cc_dlg->header_entry = cc_table_attach_option_entry(table, _("Header file"), row++);
+		cc_dlg->header_entry = cc_table_attach_option_entry(table, _("Header file:"), row++);
 
-	cc_dlg->source_entry = cc_table_attach_option_entry(table, _("Source file"), row++);
+	cc_dlg->source_entry = cc_table_attach_option_entry(table, _("Source file:"), row++);
 
 	cc_table_attach_section_label(table, _("Inheritance"), row++, TRUE);
 
-	cc_dlg->base_name_entry = cc_table_attach_option_entry(table, _("Base class"), row++);
+	cc_dlg->base_name_entry = cc_table_attach_option_entry(table, _("Base class:"), row++);
 
 	if (type == GEANY_CLASS_TYPE_GTK)
 		gtk_entry_set_text(GTK_ENTRY(cc_dlg->base_name_entry), "GObject");
@@ -509,12 +505,12 @@ void show_dialog_create_class(gint type)
 			G_CALLBACK(cc_dlg_on_base_name_entry_changed), (gpointer)cc_dlg);
 
 	if (type == GEANY_CLASS_TYPE_PHP)
-		cc_dlg->base_header_entry = cc_table_attach_option_entry(table, _("Base source"), row++);
+		cc_dlg->base_header_entry = cc_table_attach_option_entry(table, _("Base source:"), row++);
 	else
 	{
 		hdr_hbox = gtk_hbox_new(FALSE, 6);
 
-		label = cc_table_attach_option_label(table, _("Base header"), row);
+		label = cc_table_attach_option_label(table, _("Base header:"), row);
 
 		cc_dlg->base_header_entry = gtk_entry_new();
 		g_object_set_data(G_OBJECT(cc_dlg->base_header_entry), "label", label);
@@ -541,12 +537,12 @@ void show_dialog_create_class(gint type)
 
 	if (type == GEANY_CLASS_TYPE_GTK)
 	{
-		cc_dlg->base_gtype_entry = cc_table_attach_option_entry(table, _("Base GType"), row++);
+		cc_dlg->base_gtype_entry = cc_table_attach_option_entry(table, _("Base GType:"), row++);
 		gtk_entry_set_text(GTK_ENTRY(cc_dlg->base_gtype_entry), "G_TYPE_OBJECT");
 	}
 
 	if (type == GEANY_CLASS_TYPE_PHP)
-		cc_dlg->class_implements_entry = cc_table_attach_option_entry(table, _("Implements"), row++);
+		cc_dlg->class_implements_entry = cc_table_attach_option_entry(table, _("Implements:"), row++);
 
 	cc_table_attach_section_label(table, _("Options"), row++, TRUE);
 
@@ -590,7 +586,7 @@ void show_dialog_create_class(gint type)
 	if (type == GEANY_CLASS_TYPE_GTK)
 	{
 		cc_dlg->gtk_constructor_type_entry = cc_table_attach_option_entry(table,
-			_("Constructor Type"), row++);
+			_("Constructor type:"), row++);
 		gtk_entry_set_text(GTK_ENTRY(cc_dlg->gtk_constructor_type_entry), "GObject");
 		g_signal_connect(cc_dlg->create_constructor_box, "toggled",
 						 G_CALLBACK(cc_dlg_on_set_sensitive_toggled),
