@@ -355,16 +355,92 @@ get_template_class_source(ClassInfo *class_info)
 		return NULL;
 }
 
+/* Creates a new option label, indented on the left, with a semi-colon
+ * added on the end */
+GtkWidget *cc_option_label_new(const gchar *text)
+{
+	gchar *label_text;
+	GtkWidget *align;
+	GtkWidget *label;
+
+	align = gtk_alignment_new(0.0, 0.5, 1.0, 1.0);
+	gtk_alignment_set_padding(GTK_ALIGNMENT(align), 0, 0, 12, 0);
+
+	label_text = g_strdup_printf("%s:", text);
+	label = gtk_label_new(label_text);
+	gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
+	gtk_container_add(GTK_CONTAINER(align), label);
+	g_free(label_text);
+
+	return align;
+}
+
+/* Attaches a new section label at the specified table row, optionally
+ * padded at the top, and returns the new label. */
+GtkWidget *cc_table_attach_section_label(GtkWidget *table,
+										  const gchar *text,
+										  gint row,
+										  gboolean top_padding)
+{
+	gchar *markup;
+	GtkWidget *label, *align;
+
+	label = gtk_label_new(NULL);
+	markup = g_markup_printf_escaped("<b>%s</b>", text);
+	gtk_label_set_markup(GTK_LABEL(label), markup);
+	g_free(markup);
+	gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
+
+	align = gtk_alignment_new(0.0, 0.5, 1.0, 1.0);
+	if (top_padding)
+		gtk_alignment_set_padding(GTK_ALIGNMENT(align), 6, 0, 0, 0);
+	gtk_container_add(GTK_CONTAINER(align), label);
+
+	gtk_table_attach(GTK_TABLE(table), align,
+					 0, 2, row, row+1,
+					 GTK_EXPAND | GTK_FILL, GTK_FILL, 0, 0);
+
+	return label;
+}
+
+/* Attach a new option label at the specified table row and returns
+ * the label */
+GtkWidget *cc_table_attach_option_label(GtkWidget *table,
+										 const gchar *text,
+										 gint row)
+{
+	GtkWidget *opt_label = cc_option_label_new(text);
+	gtk_table_attach(GTK_TABLE(table), opt_label,
+					 0, 1, row, row+1,
+					 GTK_FILL|GTK_SHRINK, GTK_FILL|GTK_SHRINK, 0, 0);
+	return opt_label;
+}
+
+/* Attach an option label and entry to the table at the specified row.
+ * The label associated with the widget is set as data on the entry
+ * with the "label" key, if access to it is needed later.  The entry
+ * widget is returned. */
+GtkWidget *cc_table_attach_option_entry(GtkWidget *table,
+										 const gchar *text,
+										 gint row)
+{
+	GtkWidget *label;
+	GtkWidget *entry;
+	label = cc_table_attach_option_label(table, text, row);
+	entry = gtk_entry_new();
+	g_object_set_data(G_OBJECT(entry), "label", label);
+	gtk_table_attach(GTK_TABLE(table), entry,
+					 1, 2, row, row+1,
+					 GTK_EXPAND|GTK_FILL, GTK_FILL, 0, 0);
+	return entry;
+}
 
 void show_dialog_create_class(gint type)
 {
 	CreateClassDialog *cc_dlg;
-	GtkWidget *main_box;
-	GtkWidget *frame;
-	GtkWidget *align;
-	GtkWidget *vbox;
-	GtkWidget *hbox;
-	GtkWidget *label;
+	GtkWidget *main_box, *table, *label, *hdr_hbox;
+	GtkWidget *opt_table, *align;
+	gint row;
 
 	cc_dlg = g_new0(CreateClassDialog, 1);
 	cc_dlg->class_type = type;
@@ -375,175 +451,155 @@ void show_dialog_create_class(gint type)
 			GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 			GTK_STOCK_OK, GTK_RESPONSE_OK,
 			NULL);
+	gtk_dialog_set_has_separator(GTK_DIALOG(cc_dlg->dialog), TRUE);
+
+	switch (type)
+	{
+		case GEANY_CLASS_TYPE_CPP:
+			gtk_window_set_title(GTK_WINDOW(cc_dlg->dialog), _("Create C++ Class"));
+			break;
+		case GEANY_CLASS_TYPE_GTK:
+			gtk_window_set_title(GTK_WINDOW(cc_dlg->dialog), _("Create GTK+ Class"));
+			break;
+		case GEANY_CLASS_TYPE_PHP:
+			gtk_window_set_title(GTK_WINDOW(cc_dlg->dialog), _("Create PHP Class"));
+			break;
+	}
+
 	g_signal_connect_swapped(cc_dlg->dialog, "destroy", G_CALLBACK(g_free), (gpointer)cc_dlg);
 
+	table = gtk_table_new(13, 2, FALSE);
+	gtk_table_set_col_spacings(GTK_TABLE(table), 6);
+	gtk_table_set_row_spacings(GTK_TABLE(table), 6);
+
 	main_box = ui_dialog_vbox_new(GTK_DIALOG(cc_dlg->dialog));
+	gtk_box_pack_start(GTK_BOX(main_box), table, TRUE, TRUE, 0);
+
+	row = 0;
 
 	if (type == GEANY_CLASS_TYPE_PHP || type == GEANY_CLASS_TYPE_GTK)
 	{
-		frame = ui_frame_new_with_alignment(_("Namespace"), &align);
-		gtk_container_add(GTK_CONTAINER(main_box), frame);
-
-		vbox = gtk_vbox_new(FALSE, 10);
-		gtk_container_add(GTK_CONTAINER(align), vbox);
-
-		hbox = gtk_hbox_new(FALSE, 10);
-		gtk_container_add(GTK_CONTAINER(vbox), hbox);
-
-		label = gtk_label_new(_("Namespace:"));
-		gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
-
-		cc_dlg->class_namespace_entry = gtk_entry_new();
-		gtk_box_pack_start(GTK_BOX(hbox), cc_dlg->class_namespace_entry, TRUE, TRUE, 0);
+		cc_table_attach_section_label(table, _("Namespace"), row++, FALSE);
+		cc_dlg->class_namespace_entry = cc_table_attach_option_entry(table, _("Name"), row++);
 		g_signal_connect(cc_dlg->class_namespace_entry, "changed",
 				G_CALLBACK(cc_dlg_on_class_namespace_entry_changed), cc_dlg);
 	}
 
-	frame = ui_frame_new_with_alignment(_("Class"), &align);
-	gtk_container_add(GTK_CONTAINER(main_box), frame);
+	if (type == GEANY_CLASS_TYPE_PHP || type == GEANY_CLASS_TYPE_GTK)
+		cc_table_attach_section_label(table, _("Class"), row++, TRUE);
+	else
+		cc_table_attach_section_label(table, _("Class"), row++, FALSE);
 
-	vbox = gtk_vbox_new(FALSE, 10);
-	gtk_container_add(GTK_CONTAINER(align), vbox);
-
-	hbox = gtk_hbox_new(FALSE, 10);
-	gtk_container_add(GTK_CONTAINER(vbox), hbox);
-
-	label = gtk_label_new(_("Class name:"));
-	gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
-
-	cc_dlg->class_name_entry = gtk_entry_new();
-	gtk_box_pack_start(GTK_BOX(hbox), cc_dlg->class_name_entry, TRUE, TRUE, 0);
+	cc_dlg->class_name_entry = cc_table_attach_option_entry(table, _("Name"), row++);
 	g_signal_connect(cc_dlg->class_name_entry, "changed",
 			G_CALLBACK(cc_dlg_on_class_name_entry_changed), cc_dlg);
 
 	if (type != GEANY_CLASS_TYPE_PHP)
-	{
-		hbox = gtk_hbox_new(FALSE, 10);
-		gtk_container_add(GTK_CONTAINER(vbox), hbox);
+		cc_dlg->header_entry = cc_table_attach_option_entry(table, _("Header file"), row++);
 
-		label = gtk_label_new(_("Header file:"));
-		gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
+	cc_dlg->source_entry = cc_table_attach_option_entry(table, _("Source file"), row++);
 
-		cc_dlg->header_entry = gtk_entry_new();
-		gtk_container_add(GTK_CONTAINER(hbox), cc_dlg->header_entry);
-	}
+	cc_table_attach_section_label(table, _("Inheritance"), row++, TRUE);
 
-	hbox = gtk_hbox_new(FALSE, 10);
-	gtk_container_add(GTK_CONTAINER(vbox), hbox);
+	cc_dlg->base_name_entry = cc_table_attach_option_entry(table, _("Base class"), row++);
 
-	label = gtk_label_new(_("Source file:"));
-	gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
-
-	cc_dlg->source_entry = gtk_entry_new();
-	gtk_container_add(GTK_CONTAINER(hbox), cc_dlg->source_entry);
-
-	frame = ui_frame_new_with_alignment(_("Inheritance"), &align);
-	gtk_container_add(GTK_CONTAINER(main_box), frame);
-
-	vbox = gtk_vbox_new(FALSE, 10);
-	gtk_container_add(GTK_CONTAINER(align), vbox);
-
-	hbox = gtk_hbox_new(FALSE, 10);
-	gtk_container_add(GTK_CONTAINER(vbox), hbox);
-
-	label = gtk_label_new(_("Base class:"));
-	gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
-
-	cc_dlg->base_name_entry = gtk_entry_new();
 	if (type == GEANY_CLASS_TYPE_GTK)
 		gtk_entry_set_text(GTK_ENTRY(cc_dlg->base_name_entry), "GObject");
-	gtk_container_add(GTK_CONTAINER(hbox), cc_dlg->base_name_entry);
 	g_signal_connect(cc_dlg->base_name_entry, "changed",
 			G_CALLBACK(cc_dlg_on_base_name_entry_changed), (gpointer)cc_dlg);
 
-	hbox = gtk_hbox_new(FALSE, 10);
- 	gtk_container_add(GTK_CONTAINER(vbox), hbox);
-
 	if (type == GEANY_CLASS_TYPE_PHP)
-		label = gtk_label_new(_("Base source:"));
+		cc_dlg->base_header_entry = cc_table_attach_option_entry(table, _("Base source"), row++);
 	else
-		label = gtk_label_new(_("Base header:"));
-	gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
-
-	cc_dlg->base_header_entry = gtk_entry_new();
-	if (type == GEANY_CLASS_TYPE_GTK)
-		gtk_entry_set_text(GTK_ENTRY(cc_dlg->base_header_entry), "glib-object.h");
-	gtk_container_add(GTK_CONTAINER(hbox), cc_dlg->base_header_entry);
-
-	if (type != GEANY_CLASS_TYPE_PHP)
 	{
+		hdr_hbox = gtk_hbox_new(FALSE, 6);
+
+		label = cc_table_attach_option_label(table, _("Base header"), row);
+
+		cc_dlg->base_header_entry = gtk_entry_new();
+		g_object_set_data(G_OBJECT(cc_dlg->base_header_entry), "label", label);
+		gtk_box_pack_start(GTK_BOX(hdr_hbox),
+						   cc_dlg->base_header_entry,
+						   TRUE, TRUE, 0);
+
 		cc_dlg->base_header_global_box = gtk_check_button_new_with_label(_("Global"));
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(cc_dlg->base_header_global_box), TRUE);
-		gtk_box_pack_end(GTK_BOX(hbox), cc_dlg->base_header_global_box, FALSE, FALSE, 0);
+		gtk_box_pack_start(GTK_BOX(hdr_hbox),
+						   cc_dlg->base_header_global_box,
+						   FALSE, TRUE, 0);
+
+		gtk_table_attach(GTK_TABLE(table), hdr_hbox,
+						 1, 2, row, row+1,
+						 GTK_FILL | GTK_EXPAND,
+						 GTK_FILL | GTK_EXPAND,
+						 0, 0);
+		row++;
 	}
 
 	if (type == GEANY_CLASS_TYPE_GTK)
+		gtk_entry_set_text(GTK_ENTRY(cc_dlg->base_header_entry), "glib-object.h");
+
+	if (type == GEANY_CLASS_TYPE_GTK)
 	{
-		hbox = gtk_hbox_new(FALSE, 10);
-		gtk_container_add(GTK_CONTAINER(vbox), hbox);
-
-		label = gtk_label_new(_("Base GType:"));
-		gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
-
-		cc_dlg->base_gtype_entry = gtk_entry_new();
+		cc_dlg->base_gtype_entry = cc_table_attach_option_entry(table, _("Base GType"), row++);
 		gtk_entry_set_text(GTK_ENTRY(cc_dlg->base_gtype_entry), "G_TYPE_OBJECT");
-		gtk_container_add(GTK_CONTAINER(hbox), cc_dlg->base_gtype_entry);
 	}
 
 	if (type == GEANY_CLASS_TYPE_PHP)
-	{
-		hbox = gtk_hbox_new(FALSE, 10);
-		gtk_container_add(GTK_CONTAINER(vbox), hbox);
+		cc_dlg->class_implements_entry = cc_table_attach_option_entry(table, _("Implements"), row++);
 
-		label = gtk_label_new(_("Implements:"));
-		gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
+	cc_table_attach_section_label(table, _("Options"), row++, TRUE);
 
-		cc_dlg->class_implements_entry = gtk_entry_new();
-		gtk_container_add(GTK_CONTAINER(hbox), cc_dlg->class_implements_entry);
-	}
+	align = gtk_alignment_new(0.0, 0.5, 1.0, 1.0);
+	gtk_alignment_set_padding(GTK_ALIGNMENT(align), 0, 0, 12, 0);
 
-	frame = ui_frame_new_with_alignment(_("Options"), &align);
-	gtk_container_add(GTK_CONTAINER(main_box), frame);
+	opt_table = gtk_table_new(1, 2, FALSE);
+	gtk_table_set_row_spacings(GTK_TABLE(opt_table), 6);
+	gtk_table_set_col_spacings(GTK_TABLE(opt_table), 6);
+	gtk_container_add(GTK_CONTAINER(align), opt_table);
 
-	vbox = gtk_vbox_new(FALSE, 10);
-	gtk_container_add(GTK_CONTAINER(align), vbox);
-
-	hbox = gtk_hbox_new(FALSE, 10);
-	gtk_container_add(GTK_CONTAINER(vbox), hbox);
+	gtk_table_attach(GTK_TABLE(table), align,
+					 0, 2, row, row+1,
+					 GTK_FILL|GTK_EXPAND,
+					 GTK_FILL|GTK_EXPAND,
+					 0, 0);
+	row++;
 
 	cc_dlg->create_constructor_box = gtk_check_button_new_with_label(_("Create constructor"));
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(cc_dlg->create_constructor_box), TRUE);
-	gtk_container_add(GTK_CONTAINER(hbox), cc_dlg->create_constructor_box);
+	gtk_table_attach(GTK_TABLE(opt_table), cc_dlg->create_constructor_box,
+					 0, 1, 0, 1, GTK_FILL|GTK_SHRINK, GTK_FILL|GTK_SHRINK, 0, 0);
 
 	cc_dlg->create_destructor_box = gtk_check_button_new_with_label(_("Create destructor"));
-	gtk_container_add(GTK_CONTAINER(hbox), cc_dlg->create_destructor_box);
+	gtk_table_attach(GTK_TABLE(opt_table), cc_dlg->create_destructor_box,
+					 1, 2, 0, 1, GTK_FILL|GTK_SHRINK, GTK_FILL|GTK_SHRINK, 0, 0);
 
 	if (type == GEANY_CLASS_TYPE_PHP)
 	{
-		hbox = gtk_hbox_new(FALSE, 10);
-		gtk_container_add(GTK_CONTAINER(vbox), hbox);
-
+		gtk_table_resize(GTK_TABLE(opt_table), 2, 2);
 		cc_dlg->create_isabstract_box = gtk_check_button_new_with_label(_("Is abstract"));
-		gtk_container_add(GTK_CONTAINER(hbox), cc_dlg->create_isabstract_box);
-
+		gtk_table_attach(GTK_TABLE(opt_table), cc_dlg->create_isabstract_box,
+						 0, 1, 1, 2, GTK_FILL|GTK_SHRINK, GTK_FILL|GTK_SHRINK, 0, 0);
 		cc_dlg->create_issingleton_box = gtk_check_button_new_with_label(_("Is singleton"));
-		gtk_container_add(GTK_CONTAINER(hbox), cc_dlg->create_issingleton_box);
+		gtk_table_attach(GTK_TABLE(opt_table), cc_dlg->create_issingleton_box,
+						 1, 2, 1, 2, GTK_FILL|GTK_SHRINK, GTK_FILL|GTK_SHRINK, 0, 0);
 	}
+
+	gtk_widget_show_all(align);
 
 	if (type == GEANY_CLASS_TYPE_GTK)
 	{
-		hbox = gtk_hbox_new(FALSE, 10);
-		gtk_container_add(GTK_CONTAINER(vbox), hbox);
-		g_signal_connect(cc_dlg->create_constructor_box, "toggled",
-				G_CALLBACK(cc_dlg_on_set_sensitive_toggled), (gpointer)hbox);
-
-		label = gtk_label_new(_("GTK+ constructor type"));
-		gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
-
-		cc_dlg->gtk_constructor_type_entry = gtk_entry_new();
+		cc_dlg->gtk_constructor_type_entry = cc_table_attach_option_entry(table,
+			_("Constructor Type"), row++);
 		gtk_entry_set_text(GTK_ENTRY(cc_dlg->gtk_constructor_type_entry), "GObject");
-		gtk_container_add(GTK_CONTAINER(hbox), cc_dlg->gtk_constructor_type_entry);
+		g_signal_connect(cc_dlg->create_constructor_box, "toggled",
+						 G_CALLBACK(cc_dlg_on_set_sensitive_toggled),
+						 cc_dlg->gtk_constructor_type_entry);
 	}
+	else if (type == GEANY_CLASS_TYPE_PHP)
+		gtk_table_resize(GTK_TABLE(table), row, 2);
+	else if (type == GEANY_CLASS_TYPE_CPP)
+		gtk_table_resize(GTK_TABLE(table), row, 2);
 
 	gtk_widget_show_all(cc_dlg->dialog);
 	while (gtk_dialog_run(GTK_DIALOG(cc_dlg->dialog)) == GTK_RESPONSE_OK)
@@ -559,12 +615,18 @@ void show_dialog_create_class(gint type)
 
 static void cc_dlg_on_set_sensitive_toggled(GtkWidget *toggle_button, GtkWidget *target_widget)
 {
+	GtkWidget *label;
+
 	g_return_if_fail(toggle_button != NULL);
 	g_return_if_fail(GTK_IS_TOGGLE_BUTTON(toggle_button));
 	g_return_if_fail(target_widget != NULL);
 	g_return_if_fail(GTK_IS_WIDGET(target_widget));
 
+	label = g_object_get_data(G_OBJECT(target_widget), "label");
+
 	gtk_widget_set_sensitive(target_widget,
+			gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(toggle_button)));
+	gtk_widget_set_sensitive(label,
 			gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(toggle_button)));
 }
 

@@ -4,6 +4,9 @@
    Support copying filetype definition file group keys from a system
    keyfile with e.g. [styling=C].
    Add function utils_make_filename() for building filenames easily.
+ * THANKS, plugins/classbuilder.c:
+   Improve Class Builder plugin dialog UI using a table (patch by
+   Matthew Brush, thanks).
 
 
 2011-03-15  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
