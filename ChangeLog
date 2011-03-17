@@ -23,6 +23,9 @@
  * src/filetypes.c:
    Make special case for filetypes.matlab instead of truncating all 
    filetype config filenames at slash.
+ * src/filetypes.c:
+   Fix generating tag files and --ft-names option by ensuring GTK is 
+   initialized before calling ui_get_mime_icon().
 
 
 2011-03-15  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>

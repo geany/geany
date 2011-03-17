@@ -528,8 +528,6 @@ static void filetype_add(GeanyFiletype *ft)
 
 	if (!ft->mime_type)
 		ft->mime_type = g_strdup("text/plain");
-
-	ft->icon = ui_get_mime_icon(ft->mime_type, GTK_ICON_SIZE_MENU);
 }
 
 
@@ -581,7 +579,8 @@ static void init_custom_filetypes(const gchar *path)
 }
 
 
-/* Create the filetypes array and fill it with the known filetypes. */
+/* Create the filetypes array and fill it with the known filetypes.
+ * Warning: GTK isn't necessarily initialized yet. */
 void filetypes_init_types()
 {
 	filetype_id ft_id;
@@ -686,8 +685,15 @@ static void create_set_filetype_menu(void)
 
 void filetypes_init()
 {
-	filetypes_init_types();
+	GSList *node;
 
+	filetypes_init_types();
+	/* this has to be here as GTK isn't initialized in filetypes_init_types(). */
+	foreach_slist(node, filetypes_by_title)
+	{
+		GeanyFiletype *ft = node->data;
+		ft->icon = ui_get_mime_icon(ft->mime_type, GTK_ICON_SIZE_MENU);
+	}
 	create_set_filetype_menu();
 	setup_config_file_menus();
 }
