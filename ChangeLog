@@ -1,3 +1,11 @@
+2011-03-17  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/utils.c, src/utils.h, src/filetypes.c:
+   Support copying filetype definition file group keys from a system
+   keyfile with e.g. [styling=C].
+   Add function utils_make_filename() for building filenames easily.
+
+
 2011-03-15  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * THANKS, src/about.c:

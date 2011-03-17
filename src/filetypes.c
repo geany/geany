@@ -1155,6 +1155,72 @@ static void load_settings(gint ft_id, GKeyFile *config, GKeyFile *configh)
 }
 
 
+static void add_keys(GKeyFile *dest, const gchar *group, GKeyFile *src)
+{
+	gchar **keys = g_key_file_get_keys(src, group, NULL, NULL);
+	gchar **ptr;
+
+	foreach_strv(ptr, keys)
+	{
+		gchar *key = *ptr;
+		gchar *value = g_key_file_get_value(src, group, key, NULL);
+
+		g_key_file_set_value(dest, group, key, value);
+		g_free(value);
+	}
+	g_strfreev(keys);
+}
+
+
+static void add_group_keys(GKeyFile *kf, const gchar *group, GeanyFiletype *ft)
+{
+	GKeyFile *src = g_key_file_new();
+	gchar *ext = filetypes_get_conf_extension(ft->id);
+	const gchar *f;
+
+	f = utils_make_filename(app->datadir, "filetypes.", ext, NULL);
+	if (!g_file_test(f, G_FILE_TEST_EXISTS))
+		f = utils_make_filename(app->configdir,
+			GEANY_FILEDEFS_SUBDIR G_DIR_SEPARATOR_S, "filetypes.", ext, NULL);
+	g_free(ext);
+
+	if (!g_key_file_load_from_file(src, f, G_KEY_FILE_NONE, NULL))
+	{
+		geany_debug("Could not read config file %s for [%s=%s]!", f, group, ft->name);
+		return;
+	}
+	add_keys(kf, group, src);
+}
+
+
+static void copy_ft_groups(GKeyFile *kf)
+{
+	gchar **groups = g_key_file_get_groups(kf, NULL);
+	gchar **ptr;
+
+	foreach_strv(ptr, groups)
+	{
+		gchar *group = *ptr;
+		gchar *name = strstr(*ptr, "=");
+		GeanyFiletype *ft;
+
+		if (!name)
+			continue;
+
+		/* terminate group at '=' */
+		*name = 0;
+		name++;
+		if (!name[0])
+			continue;
+
+		ft = filetypes_lookup_by_name(name);
+		if (ft)
+			add_group_keys(kf, group, ft);
+	}
+	g_strfreev(groups);
+}
+
+
 /* simple wrapper function to print file errors in DEBUG mode */
 static void load_system_keyfile(GKeyFile *key_file, const gchar *file, GKeyFileFlags flags,
 		GeanyFiletype *ft)
@@ -1201,17 +1267,18 @@ void filetypes_load_config(gint ft_id, gboolean reload)
 	{
 		/* highlighting uses GEANY_FILETYPES_NONE for common settings */
 		gchar *ext = filetypes_get_conf_extension(ft_id);
-		gchar *f0 = g_strconcat(app->datadir, G_DIR_SEPARATOR_S "filetypes.", ext, NULL);
-		gchar *f = g_strconcat(app->configdir,
-			G_DIR_SEPARATOR_S GEANY_FILEDEFS_SUBDIR G_DIR_SEPARATOR_S "filetypes.", ext, NULL);
+		const gchar *f;
 
-		load_system_keyfile(config, f0, G_KEY_FILE_KEEP_COMMENTS, ft);
+		f = utils_make_filename(app->datadir, "filetypes.", ext, NULL);
+		load_system_keyfile(config, f, G_KEY_FILE_KEEP_COMMENTS, ft);
+		f = utils_make_filename(app->configdir,
+			GEANY_FILEDEFS_SUBDIR G_DIR_SEPARATOR_S, "filetypes.", ext, NULL);
 		g_key_file_load_from_file(config_home, f, G_KEY_FILE_KEEP_COMMENTS, NULL);
-
 		g_free(ext);
-		g_free(f);
-		g_free(f0);
 	}
+	/* Copy keys for any groups with [group=C] from system keyfile */
+	copy_ft_groups(config);
+	copy_ft_groups(config_home);
 
 	load_settings(ft_id, config, config_home);
 	highlighting_init_styles(ft_id, config, config_home);

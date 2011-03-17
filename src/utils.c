@@ -1722,6 +1722,25 @@ gboolean utils_spawn_async(const gchar *dir, gchar **argv, gchar **env, GSpawnFl
 }
 
 
+static gboolean utils_string_vappend(GString *buffer, const gchar *sep, va_list args)
+{
+	const gchar *str = va_arg(args, const gchar *);
+
+	if (!str)
+		return FALSE;
+	do
+	{
+		g_string_append(buffer, str);
+		str = va_arg(args, const gchar *);
+		if (str && sep)
+			g_string_append(buffer, sep);
+	}
+	while (str);
+
+	return TRUE;
+}
+
+
 /* Similar to g_build_path() but (re)using a fixed buffer, so never free it.
  * This assumes a small enough resulting string length to be kept without freeing,
  * but this should be the case for filenames.
@@ -1730,7 +1749,6 @@ gboolean utils_spawn_async(const gchar *dir, gchar **argv, gchar **env, GSpawnFl
 const gchar *utils_build_path(const gchar *first, ...)
 {
 	static GString *buffer = NULL;
-	const gchar *str;
 	va_list args;
 
 	if (! buffer)
@@ -1738,18 +1756,37 @@ const gchar *utils_build_path(const gchar *first, ...)
 	else
 		g_string_assign(buffer, first);
 
+	g_string_append_c(buffer, G_DIR_SEPARATOR);
+
 	va_start(args, first);
-	while (1)
-	{
-		str = va_arg(args, const gchar *);
-		if (!str)
-			break;
-
-		g_string_append_c(buffer, G_DIR_SEPARATOR);
-		g_string_append(buffer, str);
-	}
+	utils_string_vappend(buffer, G_DIR_SEPARATOR_S, args);
 	va_end(args);
+	return buffer->str;
+}
 
+
+/* Concatenates a path with other strings.
+ * @param path A path, which will have a separator added before the other strings.
+ * @param ... Strings to concatenate (no directory separators will be
+ * 	inserted between them).
+ * @warning This returns temporary string contents only valid until the next call
+ * to this function.
+ * E.g. filename = utils_make_filename(app->datadir, "filetypes.", ext, NULL); */
+const gchar *utils_make_filename(const gchar *path, ...)
+{
+	static GString *buffer = NULL;
+	va_list args;
+
+	if (! buffer)
+		buffer = g_string_new(path);
+	else
+		g_string_assign(buffer, path);
+
+	g_string_append_c(buffer, G_DIR_SEPARATOR);
+
+	va_start(args, path);
+	utils_string_vappend(buffer, NULL, args);
+	va_end(args);
 	return buffer->str;
 }
 
