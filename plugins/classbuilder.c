@@ -1040,16 +1040,16 @@ static gboolean create_class(CreateClassDialog *cc_dlg)
 	/* only create the files if the filename is not empty */
 	if (! utils_str_equal(class_info->source, ""))
 	{
-		text = get_template_class_source(class_info);
 		doc = document_new_file(class_info->source, NULL, NULL);
+		text = get_template_class_source(class_info);
 		editor_insert_text_block(doc->editor, text, 0, -1, 0, TRUE);
 		g_free(text);
 	}
 
 	if (! utils_str_equal(class_info->header, "") && class_info->type != GEANY_CLASS_TYPE_PHP)
 	{
-		text = get_template_class_header(class_info);
 		doc = document_new_file(class_info->header, NULL, NULL);
+		text = get_template_class_header(class_info);
 		editor_insert_text_block(doc->editor, text, 0, -1, 0, TRUE);
 		g_free(text);
 	}

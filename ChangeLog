@@ -7,6 +7,9 @@
  * THANKS, plugins/classbuilder.c:
    Improve Class Builder plugin dialog UI using a table (patch by
    Matthew Brush, thanks).
+ * plugins/classbuilder.c:
+   Fix GLib warning when creating classes and no documents are open 
+   (patch by Matthew Brush, thanks).
 
 
 2011-03-15  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
