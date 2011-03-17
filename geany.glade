@@ -5188,7 +5188,7 @@ Bottom
 				    <widget class="GtkCheckButton" id="check_toolbar_show">
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
-				      <property name="label" translatable="yes">Show T_oolbar</property>
+				      <property name="label" translatable="yes">Show t_oolbar</property>
 				      <property name="use_underline">True</property>
 				      <property name="relief">GTK_RELIEF_NORMAL</property>
 				      <property name="focus_on_click">True</property>
@@ -5208,7 +5208,7 @@ Bottom
 				      <property name="visible">True</property>
 				      <property name="tooltip" translatable="yes">Pack the toolbar to the main menu to save vertical space</property>
 				      <property name="can_focus">True</property>
-				      <property name="label" translatable="yes">_Append Toolbar to the Menu</property>
+				      <property name="label" translatable="yes">_Append toolbar to the menu</property>
 				      <property name="use_underline">True</property>
 				      <property name="relief">GTK_RELIEF_NORMAL</property>
 				      <property name="focus_on_click">True</property>
@@ -5365,7 +5365,7 @@ Bottom
 					<widget class="GtkRadioButton" id="radio_toolbar_style_default">
 					  <property name="visible">True</property>
 					  <property name="can_focus">True</property>
-					  <property name="label" translatable="yes">System _Default</property>
+					  <property name="label" translatable="yes">System _default</property>
 					  <property name="use_underline">True</property>
 					  <property name="relief">GTK_RELIEF_NORMAL</property>
 					  <property name="focus_on_click">True</property>
@@ -5387,7 +5387,7 @@ Bottom
 					<widget class="GtkRadioButton" id="radio_toolbar_imagetext">
 					  <property name="visible">True</property>
 					  <property name="can_focus">True</property>
-					  <property name="label" translatable="yes">Images _and Text</property>
+					  <property name="label" translatable="yes">Images _and text</property>
 					  <property name="use_underline">True</property>
 					  <property name="relief">GTK_RELIEF_NORMAL</property>
 					  <property name="focus_on_click">True</property>
@@ -5410,7 +5410,7 @@ Bottom
 					<widget class="GtkRadioButton" id="radio_toolbar_image">
 					  <property name="visible">True</property>
 					  <property name="can_focus">True</property>
-					  <property name="label" translatable="yes">_Images Only</property>
+					  <property name="label" translatable="yes">_Images only</property>
 					  <property name="use_underline">True</property>
 					  <property name="relief">GTK_RELIEF_NORMAL</property>
 					  <property name="focus_on_click">True</property>
@@ -5433,7 +5433,7 @@ Bottom
 					<widget class="GtkRadioButton" id="radio_toolbar_text">
 					  <property name="visible">True</property>
 					  <property name="can_focus">True</property>
-					  <property name="label" translatable="yes">_Text Only</property>
+					  <property name="label" translatable="yes">_Text only</property>
 					  <property name="use_underline">True</property>
 					  <property name="relief">GTK_RELIEF_NORMAL</property>
 					  <property name="focus_on_click">True</property>
@@ -5459,7 +5459,7 @@ Bottom
 			      <child>
 				<widget class="GtkLabel" id="label244">
 				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">&lt;b&gt;Icon Style&lt;/b&gt;</property>
+				  <property name="label" translatable="yes">&lt;b&gt;Icon style&lt;/b&gt;</property>
 				  <property name="use_underline">False</property>
 				  <property name="use_markup">True</property>
 				  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -5518,7 +5518,7 @@ Bottom
 					<widget class="GtkRadioButton" id="radio_toolbar_icon_default">
 					  <property name="visible">True</property>
 					  <property name="can_focus">True</property>
-					  <property name="label" translatable="yes">S_ystem Default</property>
+					  <property name="label" translatable="yes">S_ystem default</property>
 					  <property name="use_underline">True</property>
 					  <property name="relief">GTK_RELIEF_NORMAL</property>
 					  <property name="focus_on_click">True</property>
@@ -5540,7 +5540,7 @@ Bottom
 					<widget class="GtkRadioButton" id="radio_toolbar_small">
 					  <property name="visible">True</property>
 					  <property name="can_focus">True</property>
-					  <property name="label" translatable="yes">_Small Icons</property>
+					  <property name="label" translatable="yes">_Small icons</property>
 					  <property name="use_underline">True</property>
 					  <property name="relief">GTK_RELIEF_NORMAL</property>
 					  <property name="focus_on_click">True</property>
@@ -5563,7 +5563,7 @@ Bottom
 					<widget class="GtkRadioButton" id="radio_toolbar_verysmall">
 					  <property name="visible">True</property>
 					  <property name="can_focus">True</property>
-					  <property name="label" translatable="yes">_Very Small Icons</property>
+					  <property name="label" translatable="yes">_Very small icons</property>
 					  <property name="use_underline">True</property>
 					  <property name="relief">GTK_RELIEF_NORMAL</property>
 					  <property name="focus_on_click">True</property>
@@ -5586,7 +5586,7 @@ Bottom
 					<widget class="GtkRadioButton" id="radio_toolbar_large">
 					  <property name="visible">True</property>
 					  <property name="can_focus">True</property>
-					  <property name="label" translatable="yes">_Large Icons</property>
+					  <property name="label" translatable="yes">_Large icons</property>
 					  <property name="use_underline">True</property>
 					  <property name="relief">GTK_RELIEF_NORMAL</property>
 					  <property name="focus_on_click">True</property>
@@ -5612,7 +5612,7 @@ Bottom
 			      <child>
 				<widget class="GtkLabel" id="label245">
 				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">&lt;b&gt;Icon Size&lt;/b&gt;</property>
+				  <property name="label" translatable="yes">&lt;b&gt;Icon size&lt;/b&gt;</property>
 				  <property name="use_underline">False</property>
 				  <property name="use_markup">True</property>
 				  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -6322,7 +6322,7 @@ Match braces</property>
 				      <property name="visible">True</property>
 				      <property name="tooltip" translatable="yes">Use spaces if the total indent is less than the tab width, otherwise use both</property>
 				      <property name="can_focus">True</property>
-				      <property name="label" translatable="yes">T_abs and Spaces</property>
+				      <property name="label" translatable="yes">T_abs and spaces</property>
 				      <property name="use_underline">True</property>
 				      <property name="relief">GTK_RELIEF_NORMAL</property>
 				      <property name="focus_on_click">True</property>
@@ -9287,7 +9287,7 @@ Match braces</property>
 			      <child>
 				<widget class="GtkLabel" id="label218">
 				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">Date &amp; Time:</property>
+				  <property name="label" translatable="yes">Date &amp; time:</property>
 				  <property name="use_underline">False</property>
 				  <property name="use_markup">False</property>
 				  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -10312,7 +10312,7 @@ Match braces</property>
 		  <property name="visible">True</property>
 		  <property name="tooltip" translatable="yes">Use spaces if the total indent is less than the tab width, otherwise use both</property>
 		  <property name="can_focus">True</property>
-		  <property name="label" translatable="yes">T_abs and Spaces</property>
+		  <property name="label" translatable="yes">T_abs and spaces</property>
 		  <property name="use_underline">True</property>
 		  <property name="relief">GTK_RELIEF_NORMAL</property>
 		  <property name="focus_on_click">True</property>

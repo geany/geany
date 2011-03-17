@@ -3563,11 +3563,11 @@ create_prefs_dialog (void)
   gtk_widget_show (vbox52);
   gtk_box_pack_start (GTK_BOX (hbox18), vbox52, TRUE, TRUE, 0);
 
-  check_toolbar_show = gtk_check_button_new_with_mnemonic (_("Show T_oolbar"));
+  check_toolbar_show = gtk_check_button_new_with_mnemonic (_("Show t_oolbar"));
   gtk_widget_show (check_toolbar_show);
   gtk_box_pack_start (GTK_BOX (vbox52), check_toolbar_show, FALSE, FALSE, 0);
 
-  check_toolbar_in_menu = gtk_check_button_new_with_mnemonic (_("_Append Toolbar to the Menu"));
+  check_toolbar_in_menu = gtk_check_button_new_with_mnemonic (_("_Append toolbar to the menu"));
   gtk_widget_show (check_toolbar_in_menu);
   gtk_box_pack_start (GTK_BOX (vbox52), check_toolbar_in_menu, FALSE, FALSE, 0);
   gtk_tooltips_set_tip (tooltips, check_toolbar_in_menu, _("Pack the toolbar to the main menu to save vertical space"), NULL);
@@ -3612,7 +3612,7 @@ create_prefs_dialog (void)
   gtk_table_set_row_spacings (GTK_TABLE (table19), 3);
   gtk_table_set_col_spacings (GTK_TABLE (table19), 20);
 
-  radio_toolbar_style_default = gtk_radio_button_new_with_mnemonic (NULL, _("System _Default"));
+  radio_toolbar_style_default = gtk_radio_button_new_with_mnemonic (NULL, _("System _default"));
   gtk_widget_show (radio_toolbar_style_default);
   gtk_table_attach (GTK_TABLE (table19), radio_toolbar_style_default, 0, 1, 0, 1,
                     (GtkAttachOptions) (GTK_FILL),
@@ -3620,7 +3620,7 @@ create_prefs_dialog (void)
   gtk_radio_button_set_group (GTK_RADIO_BUTTON (radio_toolbar_style_default), radio_toolbar_style_default_group);
   radio_toolbar_style_default_group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio_toolbar_style_default));
 
-  radio_toolbar_imagetext = gtk_radio_button_new_with_mnemonic (NULL, _("Images _and Text"));
+  radio_toolbar_imagetext = gtk_radio_button_new_with_mnemonic (NULL, _("Images _and text"));
   gtk_widget_show (radio_toolbar_imagetext);
   gtk_table_attach (GTK_TABLE (table19), radio_toolbar_imagetext, 0, 1, 1, 2,
                     (GtkAttachOptions) (GTK_FILL),
@@ -3628,7 +3628,7 @@ create_prefs_dialog (void)
   gtk_radio_button_set_group (GTK_RADIO_BUTTON (radio_toolbar_imagetext), radio_toolbar_style_default_group);
   radio_toolbar_style_default_group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio_toolbar_imagetext));
 
-  radio_toolbar_image = gtk_radio_button_new_with_mnemonic (NULL, _("_Images Only"));
+  radio_toolbar_image = gtk_radio_button_new_with_mnemonic (NULL, _("_Images only"));
   gtk_widget_show (radio_toolbar_image);
   gtk_table_attach (GTK_TABLE (table19), radio_toolbar_image, 1, 2, 0, 1,
                     (GtkAttachOptions) (GTK_FILL),
@@ -3636,7 +3636,7 @@ create_prefs_dialog (void)
   gtk_radio_button_set_group (GTK_RADIO_BUTTON (radio_toolbar_image), radio_toolbar_style_default_group);
   radio_toolbar_style_default_group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio_toolbar_image));
 
-  radio_toolbar_text = gtk_radio_button_new_with_mnemonic (NULL, _("_Text Only"));
+  radio_toolbar_text = gtk_radio_button_new_with_mnemonic (NULL, _("_Text only"));
   gtk_widget_show (radio_toolbar_text);
   gtk_table_attach (GTK_TABLE (table19), radio_toolbar_text, 1, 2, 1, 2,
                     (GtkAttachOptions) (GTK_FILL),
@@ -3644,7 +3644,7 @@ create_prefs_dialog (void)
   gtk_radio_button_set_group (GTK_RADIO_BUTTON (radio_toolbar_text), radio_toolbar_style_default_group);
   radio_toolbar_style_default_group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio_toolbar_text));
 
-  label244 = gtk_label_new (_("<b>Icon Style</b>"));
+  label244 = gtk_label_new (_("<b>Icon style</b>"));
   gtk_widget_show (label244);
   gtk_frame_set_label_widget (GTK_FRAME (frame_toolbar_style), label244);
   gtk_label_set_use_markup (GTK_LABEL (label244), TRUE);
@@ -3665,7 +3665,7 @@ create_prefs_dialog (void)
   gtk_table_set_row_spacings (GTK_TABLE (table20), 3);
   gtk_table_set_col_spacings (GTK_TABLE (table20), 20);
 
-  radio_toolbar_icon_default = gtk_radio_button_new_with_mnemonic (NULL, _("S_ystem Default"));
+  radio_toolbar_icon_default = gtk_radio_button_new_with_mnemonic (NULL, _("S_ystem default"));
   gtk_widget_show (radio_toolbar_icon_default);
   gtk_table_attach (GTK_TABLE (table20), radio_toolbar_icon_default, 0, 1, 0, 1,
                     (GtkAttachOptions) (GTK_FILL),
@@ -3673,7 +3673,7 @@ create_prefs_dialog (void)
   gtk_radio_button_set_group (GTK_RADIO_BUTTON (radio_toolbar_icon_default), radio_toolbar_icon_default_group);
   radio_toolbar_icon_default_group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio_toolbar_icon_default));
 
-  radio_toolbar_small = gtk_radio_button_new_with_mnemonic (NULL, _("_Small Icons"));
+  radio_toolbar_small = gtk_radio_button_new_with_mnemonic (NULL, _("_Small icons"));
   gtk_widget_show (radio_toolbar_small);
   gtk_table_attach (GTK_TABLE (table20), radio_toolbar_small, 0, 1, 1, 2,
                     (GtkAttachOptions) (GTK_FILL),
@@ -3681,7 +3681,7 @@ create_prefs_dialog (void)
   gtk_radio_button_set_group (GTK_RADIO_BUTTON (radio_toolbar_small), radio_toolbar_icon_default_group);
   radio_toolbar_icon_default_group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio_toolbar_small));
 
-  radio_toolbar_verysmall = gtk_radio_button_new_with_mnemonic (NULL, _("_Very Small Icons"));
+  radio_toolbar_verysmall = gtk_radio_button_new_with_mnemonic (NULL, _("_Very small icons"));
   gtk_widget_show (radio_toolbar_verysmall);
   gtk_table_attach (GTK_TABLE (table20), radio_toolbar_verysmall, 1, 2, 0, 1,
                     (GtkAttachOptions) (GTK_FILL),
@@ -3689,7 +3689,7 @@ create_prefs_dialog (void)
   gtk_radio_button_set_group (GTK_RADIO_BUTTON (radio_toolbar_verysmall), radio_toolbar_icon_default_group);
   radio_toolbar_icon_default_group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio_toolbar_verysmall));
 
-  radio_toolbar_large = gtk_radio_button_new_with_mnemonic (NULL, _("_Large Icons"));
+  radio_toolbar_large = gtk_radio_button_new_with_mnemonic (NULL, _("_Large icons"));
   gtk_widget_show (radio_toolbar_large);
   gtk_table_attach (GTK_TABLE (table20), radio_toolbar_large, 1, 2, 1, 2,
                     (GtkAttachOptions) (GTK_FILL),
@@ -3697,7 +3697,7 @@ create_prefs_dialog (void)
   gtk_radio_button_set_group (GTK_RADIO_BUTTON (radio_toolbar_large), radio_toolbar_icon_default_group);
   radio_toolbar_icon_default_group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio_toolbar_large));
 
-  label245 = gtk_label_new (_("<b>Icon Size</b>"));
+  label245 = gtk_label_new (_("<b>Icon size</b>"));
   gtk_widget_show (label245);
   gtk_frame_set_label_widget (GTK_FRAME (frame_toolbar_icon), label245);
   gtk_label_set_use_markup (GTK_LABEL (label245), TRUE);
@@ -3900,7 +3900,7 @@ create_prefs_dialog (void)
   gtk_radio_button_set_group (GTK_RADIO_BUTTON (radio_indent_tabs), radio_indent_spaces_group);
   radio_indent_spaces_group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio_indent_tabs));
 
-  radio_indent_both = gtk_radio_button_new_with_mnemonic (NULL, _("T_abs and Spaces"));
+  radio_indent_both = gtk_radio_button_new_with_mnemonic (NULL, _("T_abs and spaces"));
   gtk_widget_show (radio_indent_both);
   gtk_table_attach (GTK_TABLE (table13), radio_indent_both, 1, 2, 3, 4,
                     (GtkAttachOptions) (GTK_FILL),
@@ -4785,7 +4785,7 @@ create_prefs_dialog (void)
                     (GtkAttachOptions) (0), 0, 0);
   gtk_misc_set_alignment (GTK_MISC (label217), 0, 0.5);
 
-  label218 = gtk_label_new (_("Date & Time:"));
+  label218 = gtk_label_new (_("Date & time:"));
   gtk_widget_show (label218);
   gtk_table_attach (GTK_TABLE (table6), label218, 0, 1, 7, 8,
                     (GtkAttachOptions) (GTK_FILL),
@@ -5541,7 +5541,7 @@ create_project_dialog (void)
   gtk_radio_button_set_group (GTK_RADIO_BUTTON (radio_indent_tabs), radio_indent_spaces_group);
   radio_indent_spaces_group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio_indent_tabs));
 
-  radio_indent_both = gtk_radio_button_new_with_mnemonic (NULL, _("T_abs and Spaces"));
+  radio_indent_both = gtk_radio_button_new_with_mnemonic (NULL, _("T_abs and spaces"));
   gtk_widget_show (radio_indent_both);
   gtk_table_attach (GTK_TABLE (table17), radio_indent_both, 1, 2, 3, 4,
                     (GtkAttachOptions) (GTK_FILL),

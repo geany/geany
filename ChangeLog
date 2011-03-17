@@ -14,6 +14,9 @@
    Undo patch change to cc_option_label_new() to append a ':' colon to 
    label text because this unnecessarily causes string translations to 
    be updated.
+ * src/interface.c, geany.glade:
+   Fix wrong label capitalization for Toolbar Preferences dialog tab 
+   and 2 other labels.
 
 
 2011-03-15  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
