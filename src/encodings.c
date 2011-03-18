@@ -676,3 +676,216 @@ gboolean encodings_is_unicode_charset(const gchar *string)
 }
 
 
+typedef struct
+{
+	gchar		*data;	/* null-terminated data */
+	gsize		 size;	/* actual data size */
+	gsize		 len;	/* string length of data */
+	gchar		*enc;
+	gboolean	 bom;
+	gboolean	 partial;
+} BufferData;
+
+
+/* convert data with the specified encoding */
+static gboolean
+handle_forced_encoding(BufferData *buffer, const gchar *forced_enc)
+{
+	GeanyEncodingIndex enc_idx;
+
+	if (utils_str_equal(forced_enc, "UTF-8"))
+	{
+		if (! g_utf8_validate(buffer->data, buffer->len, NULL))
+		{
+			return FALSE;
+		}
+	}
+	else
+	{
+		gchar *converted_text = encodings_convert_to_utf8_from_charset(
+										buffer->data, buffer->size, forced_enc, FALSE);
+		if (converted_text == NULL)
+		{
+			return FALSE;
+		}
+		else
+		{
+			setptr(buffer->data, converted_text);
+			buffer->len = strlen(converted_text);
+		}
+	}
+	enc_idx = encodings_scan_unicode_bom(buffer->data, buffer->size, NULL);
+	buffer->bom = (enc_idx == GEANY_ENCODING_UTF_8);
+	buffer->enc = g_strdup(forced_enc);
+	return TRUE;
+}
+
+
+/* detect encoding and convert to UTF-8 if necessary */
+static gboolean
+handle_encoding(BufferData *buffer, GeanyEncodingIndex enc_idx)
+{
+	g_return_val_if_fail(buffer->enc == NULL, FALSE);
+	g_return_val_if_fail(buffer->bom == FALSE, FALSE);
+
+	if (buffer->size == 0)
+	{
+		/* we have no data so assume UTF-8, buffer->len can be 0 even we have an empty
+		 * e.g. UTF32 file with a BOM(so size is 4, len is 0) */
+		buffer->enc = g_strdup("UTF-8");
+	}
+	else
+	{
+		/* first check for a BOM */
+		if (enc_idx != GEANY_ENCODING_NONE)
+		{
+			buffer->enc = g_strdup(encodings[enc_idx].charset);
+			buffer->bom = TRUE;
+
+			if (enc_idx != GEANY_ENCODING_UTF_8) /* the BOM indicated something else than UTF-8 */
+			{
+				gchar *converted_text = encodings_convert_to_utf8_from_charset(
+										buffer->data, buffer->size, buffer->enc, FALSE);
+				if (converted_text != NULL)
+				{
+					setptr(buffer->data, converted_text);
+					buffer->len = strlen(converted_text);
+				}
+				else
+				{
+					/* there was a problem converting data from BOM encoding type */
+					setptr(buffer->enc, NULL);
+					buffer->bom = FALSE;
+				}
+			}
+		}
+
+		if (buffer->enc == NULL)	/* either there was no BOM or the BOM encoding failed */
+		{
+			/* try UTF-8 first */
+			if ((buffer->size == buffer->len) &&
+				g_utf8_validate(buffer->data, buffer->len, NULL))
+			{
+				buffer->enc = g_strdup("UTF-8");
+			}
+			else
+			{
+				/* detect the encoding */
+				gchar *converted_text = encodings_convert_to_utf8(buffer->data,
+					buffer->size, &buffer->enc);
+
+				if (converted_text == NULL)
+				{
+					return FALSE;
+				}
+				setptr(buffer->data, converted_text);
+				buffer->len = strlen(converted_text);
+			}
+		}
+	}
+	return TRUE;
+}
+
+
+static void
+handle_bom(BufferData *buffer)
+{
+	guint bom_len;
+
+	encodings_scan_unicode_bom(buffer->data, buffer->size, &bom_len);
+	g_return_if_fail(bom_len != 0);
+
+	/* use filedata->len here because the contents are already converted into UTF-8 */
+	buffer->len -= bom_len;
+	/* overwrite the BOM with the remainder of the file contents, plus the NULL terminator. */
+	g_memmove(buffer->data, buffer->data + bom_len, buffer->len + 1);
+	buffer->data = g_realloc(buffer->data, buffer->len + 1);
+}
+
+
+/* loads textfile data, verifies and converts to forced_enc or UTF-8. Also handles BOM. */
+static gboolean handle_buffer(BufferData *buffer, const gchar *forced_enc)
+{
+	GeanyEncodingIndex tmp_enc_idx;
+
+	/* temporarily retrieve the encoding idx based on the BOM to suppress the following warning
+	 * if we have a BOM */
+	tmp_enc_idx = encodings_scan_unicode_bom(buffer->data, buffer->size, NULL);
+
+	/* check whether the size of the loaded data is equal to the size of the file in the
+	 * filesystem file size may be 0 to allow opening files in /proc/ which have typically a
+	 * file size of 0 bytes */
+	if (buffer->len != buffer->size && buffer->size != 0 && (
+		tmp_enc_idx == GEANY_ENCODING_UTF_8 || /* tmp_enc_idx can be UTF-7/8/16/32, UCS and None */
+		tmp_enc_idx == GEANY_ENCODING_UTF_7))  /* filter UTF-7/8 where no NULL bytes are allowed */
+	{
+		buffer->partial = TRUE;
+	}
+
+	/* Determine character encoding and convert to UTF-8 */
+	if (forced_enc != NULL)
+	{
+		/* the encoding should be ignored(requested by user), so open the file "as it is" */
+		if (utils_str_equal(forced_enc, encodings[GEANY_ENCODING_NONE].charset))
+		{
+			buffer->bom = FALSE;
+			buffer->enc = g_strdup(encodings[GEANY_ENCODING_NONE].charset);
+		}
+		else if (! handle_forced_encoding(buffer, forced_enc))
+		{
+			return FALSE;
+		}
+	}
+	else if (! handle_encoding(buffer, tmp_enc_idx))
+	{
+		return FALSE;
+	}
+
+	if (buffer->bom)
+		handle_bom(buffer);
+	return TRUE;
+}
+
+
+/*
+ * Tries to convert @a buffer into UTF-8 encoding. Unlike encodings_convert_to_utf8()
+ * and encodings_convert_to_utf8_from_charset() it handles the possible BOM in the data.
+ *
+ * @param buf a pointer to modifiable null-terminated buffer to convert.
+ *   It may or may not be modified, and should be freed whatever happens.
+ * @param size a pointer to the size of the buffer (expected to be e.g. the on-disk
+ *   file size). It will be updated to the new size.
+ * @param forced_enc forced encoding to use, or @c NULL
+ * @param used_encoding return location for the actually used encoding, or @c NULL
+ * @param has_bom return location to store whether the data had a BOM, or @c NULL
+ * @param partial return location to store whether the conversion may be partial, or @c NULL
+ *
+ * @return @C TRUE if the conversion succeeded, @c FALSE otherwise.
+ */
+gboolean encodings_convert_to_utf8_auto(gchar **buf, gsize *size, const gchar *forced_enc,
+		gchar **used_encoding, gboolean *has_bom, gboolean *partial)
+{
+	BufferData buffer;
+
+	buffer.data = *buf;
+	buffer.size = *size;
+	/* use strlen to check for null chars */
+	buffer.len = strlen(buffer.data);
+	buffer.enc = NULL;
+	buffer.bom = FALSE;
+	buffer.partial = FALSE;
+
+	if (! handle_buffer(&buffer, forced_enc))
+		return FALSE;
+
+	*size = buffer.len;
+	if (used_encoding)
+		*used_encoding = buffer.enc;
+	if (has_bom)
+		*has_bom = buffer.bom;
+	if (partial)
+		*partial = buffer.partial;
+
+	*buf = buffer.data;
+	return TRUE;
+}

@@ -1,3 +1,10 @@
+2011-03-18  Colomban Wendling  <colomban(at)geany(dot)org>
+
+ * src/document.c, src/encodings.c, src/encodings.h:
+   Move document encoding conversion with BOM support to encodings.[ch] as
+   encodings_convert_to_utf8_auto().
+
+
 2011-03-18  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * data/templates/files/main.vala:

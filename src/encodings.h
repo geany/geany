@@ -90,6 +90,8 @@ gchar *encodings_convert_to_utf8_from_charset(const gchar *buffer, gsize size,
 
 gboolean encodings_is_unicode_charset(const gchar *string);
 
+gboolean encodings_convert_to_utf8_auto(gchar **buf, gsize *size, const gchar *forced_enc,
+		gchar **used_encoding, gboolean *has_bom, gboolean *partial);
 
 /*
  * The original versions of the following tables are taken from profterm
