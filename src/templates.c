@@ -35,6 +35,7 @@
 #include "support.h"
 #include "utils.h"
 #include "document.h"
+#include "encodings.h"
 #include "editor.h"
 #include "filetypes.h"
 #include "ui_utils.h"
@@ -73,10 +74,21 @@ static void templates_replace_command(GString *text, const gchar *file_name,
 static gchar *read_file(const gchar *locale_fname)
 {
 	gchar *contents;
+	gsize length;
 	GString *str;
 
-	if (!g_file_get_contents(locale_fname, &contents, NULL, NULL))
+	if (! g_file_get_contents(locale_fname, &contents, &length, NULL))
 		return NULL;
+
+	if (! encodings_convert_to_utf8_auto(&contents, &length, NULL, NULL, NULL, NULL))
+	{
+		gchar *utf8_fname = utils_get_utf8_from_locale(locale_fname);
+
+		ui_set_statusbar(TRUE, _("Failed to convert template file \"%s\" to UTF-8"), utf8_fname);
+		g_free(utf8_fname);
+		g_free(contents);
+		return FALSE;
+	}
 
 	str = g_string_new(contents);
 	g_free(contents);

@@ -3,6 +3,9 @@
  * src/document.c, src/encodings.c, src/encodings.h:
    Move document encoding conversion with BOM support to encodings.[ch] as
    encodings_convert_to_utf8_auto().
+ * src/templates.c:
+   Properly convert template files to UTF-8 on loading, fixing encoding
+   issues if templates files are not encoded in UTF-8.
 
 
 2011-03-18  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
