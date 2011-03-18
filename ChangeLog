@@ -1,3 +1,9 @@
+2011-03-18  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * data/templates/files/main.vala:
+   Add file template for Vala (patch by Mark Trompell, thanks).
+
+
 2011-03-17  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/utils.c, src/utils.h, src/filetypes.c:
@@ -8,23 +14,23 @@
    Improve Class Builder plugin dialog UI using a table (patch by
    Matthew Brush, thanks).
  * plugins/classbuilder.c:
-   Fix GLib warning when creating classes and no documents are open 
+   Fix GLib warning when creating classes and no documents are open
    (patch by Matthew Brush, thanks).
  * plugins/classbuilder.c:
-   Undo patch change to cc_option_label_new() to append a ':' colon to 
-   label text because this unnecessarily causes string translations to 
+   Undo patch change to cc_option_label_new() to append a ':' colon to
+   label text because this unnecessarily causes string translations to
    be updated.
  * src/interface.c, geany.glade:
-   Fix wrong label capitalization for Toolbar Preferences dialog tab 
+   Fix wrong label capitalization for Toolbar Preferences dialog tab
    and 2 other labels.
  * data/filetypes.Scala.conf, data/filetype_extensions.conf:
    Add Scala custom filetype, based on file by werg (thanks).
    (This uses the newly added [styling=C] syntax).
  * src/filetypes.c:
-   Make special case for filetypes.matlab instead of truncating all 
+   Make special case for filetypes.matlab instead of truncating all
    filetype config filenames at slash.
  * src/filetypes.c:
-   Fix generating tag files and --ft-names option by ensuring GTK is 
+   Fix generating tag files and --ft-names option by ensuring GTK is
    initialized before calling ui_get_mime_icon().
 
 
