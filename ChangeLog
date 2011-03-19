@@ -1,3 +1,10 @@
+2011-03-19  Colomban Wendling  <colomban(at)geany(dot)org>
+
+ * src/callbacks.c:
+   Create a new undo action when inserting templates, making sure the user
+   can undo the template insertion without also undoing a previous action.
+
+
 2011-03-18  Colomban Wendling  <colomban(at)geany(dot)org>
 
  * src/document.c, src/encodings.c, src/encodings.h:
