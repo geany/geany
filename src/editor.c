@@ -2936,10 +2936,16 @@ gint editor_do_uncomment(GeanyEditor *editor, gint line, gboolean toggle)
 			ft = filetypes[GEANY_FILETYPES_XML];
 	}
 
-	co = ft->comment_open;
-	cc = ft->comment_close;
-	if (co == NULL)
-		return 0;
+	co = ft->comment_single;
+	if (NZV(co))
+		cc = NULL;
+	else
+	{
+		co = ft->comment_open;
+		cc = ft->comment_close;
+		if (co == NULL)
+			return;
+	}
 
 	co_len = strlen(co);
 	if (co_len == 0)
@@ -3068,10 +3074,16 @@ void editor_do_comment_toggle(GeanyEditor *editor)
 			ft = filetypes[GEANY_FILETYPES_XML];
 	}
 
-	co = ft->comment_open;
-	cc = ft->comment_close;
-	if (co == NULL)
-		return;
+	co = ft->comment_single;
+	if (NZV(co))
+		cc = NULL;
+	else
+	{
+		co = ft->comment_open;
+		cc = ft->comment_close;
+		if (co == NULL)
+			return;
+	}
 
 	co_len = strlen(co);
 	if (co_len == 0)
@@ -3096,7 +3108,7 @@ void editor_do_comment_toggle(GeanyEditor *editor)
 		while (isspace(sel[x])) x++;
 
 		/* use single line comment */
-		if (cc == NULL || strlen(cc) == 0)
+		if (cc == NULL || cc[0] == '\0')
 		{
 			gboolean do_continue = FALSE;
 			single_line = TRUE;
@@ -3232,10 +3244,16 @@ void editor_do_comment(GeanyEditor *editor, gint line, gboolean allow_empty_line
 			ft = filetypes[GEANY_FILETYPES_XML];
 	}
 
-	co = ft->comment_open;
-	cc = ft->comment_close;
-	if (co == NULL)
-		return;
+	co = ft->comment_single;
+	if (NZV(co))
+		cc = NULL;
+	else
+	{
+		co = ft->comment_open;
+		cc = ft->comment_close;
+		if (co == NULL)
+			return;
+	}
 
 	co_len = strlen(co);
 	if (co_len == 0)
@@ -3540,14 +3558,15 @@ void editor_insert_multiline_comment(GeanyEditor *editor)
 	gboolean have_multiline_comment = FALSE;
 	GeanyDocument *doc;
 
-	g_return_if_fail(editor != NULL &&
-		editor->document->file_type != NULL && editor->document->file_type->comment_open != NULL);
+	g_return_if_fail(editor != NULL && editor->document->file_type != NULL &&
+		(editor->document->file_type->comment_open != NULL ||
+		 editor->document->file_type->comment_single != NULL));
 
 	sci_start_undo_action(editor->sci);
 
 	doc = editor->document;
 
-	if (doc->file_type->comment_close != NULL && strlen(doc->file_type->comment_close) > 0)
+	if (NZV(doc->file_type->comment_close))
 		have_multiline_comment = TRUE;
 
 	/* insert three lines one line above of the current position */

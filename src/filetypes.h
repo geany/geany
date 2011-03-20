@@ -136,6 +136,7 @@ struct GeanyFiletype
 	GeanyFiletype	 *lexer_filetype;
 	gchar			 *mime_type;
 	GdkPixbuf		 *icon;
+	gchar			 *comment_single; /* single-line comment */
 
 	struct GeanyFiletypePrivate	*priv;	/* must be last, append fields before this item */
 #ifdef GEANY_PRIVATE

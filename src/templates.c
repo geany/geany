@@ -475,6 +475,8 @@ static void make_comment_block(GString *comment_text, gint filetype_idx, guint i
 	gint template_eol_mode;
 	const gchar *template_eol_char;
 	GeanyFiletype *ft = filetypes_index(filetype_idx);
+	const gchar *co;
+	const gchar *cc;
 
 	g_return_if_fail(comment_text != NULL);
 	g_return_if_fail(ft != NULL);
@@ -482,19 +484,25 @@ static void make_comment_block(GString *comment_text, gint filetype_idx, guint i
 	template_eol_mode = utils_get_line_endings(comment_text->str, comment_text->len);
 	template_eol_char = utils_get_eol_char(template_eol_mode);
 
-	if (NZV(ft->comment_open))
+	co = ft->comment_open;
+	cc = NULL;
+	if (NZV(co))
+		cc = ft->comment_close;
+	else
+		co = ft->comment_single;
+	if (NZV(co))
 	{
-		if (NZV(ft->comment_close))
+		if (NZV(cc))
 		{
-			frame_start = g_strconcat(ft->comment_open, template_eol_char, NULL);
-			frame_end = g_strconcat(ft->comment_close, template_eol_char, NULL);
+			frame_start = g_strconcat(co, template_eol_char, NULL);
+			frame_end = g_strconcat(cc, template_eol_char, NULL);
 			line_prefix = "";
 		}
 		else
 		{
 			frame_start = NULL;
 			frame_end = NULL;
-			line_prefix = ft->comment_open;
+			line_prefix = co;
 		}
 	}
 	else

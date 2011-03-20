@@ -19,8 +19,9 @@ extension=diff
 #wordchars=_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
 
 # only the text before the first --- is a comment
-comment_open=
-comment_close=
+#comment_single=
+#comment_open=
+#comment_close=
 
 # context action command (please see Geany's main documentation for details)
 context_action_cmd=

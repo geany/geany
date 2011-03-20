@@ -3749,10 +3749,23 @@ wordchars
         This can be overridden by the *whitespace_chars*
         filetypes.common setting.
 
+comment_single
+    A character or string which is used to comment code. If you want to use
+    multiline comments only, don't set this but rather comment_open and
+    comment_close.
+
+    Single-line comments are used in priority over multiline comments to
+    comment a line, e.g. with the `Comment/Uncomment line` command.
+
+    *Example:* ``comment_single=//``
+
 comment_open
-    A character or string which is used to comment code. If you want to
-    use multiline comments, also set comment_close, otherwise leave it
-    empty.
+    A character or string which is used to comment code. You need to also
+    set comment_close to really use multiline comments. If you want to use
+    single-line comments, prefer setting comment_single.
+
+    Multiline comments are used in priority over single-line comments to
+    comment a block, e.g. template comments.
 
     *Example:* ``comment_open=/*``
 

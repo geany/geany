@@ -40,9 +40,11 @@ extension=nsi
 # the following characters are these which a "word" can contains, see documentation
 #wordchars=_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
 
-# if only single comment char is supported like # in this file, leave comment_close blank
-comment_open=;
-comment_close=
+# single comments, like # in this file
+comment_single=;
+# multiline comments
+#comment_open=
+#comment_close=
 
 # set to false if a comment character/string should start at column 0 of a line, true uses any
 # indentation of the line, e.g. setting to true causes the following on pressing CTRL+d

@@ -1321,7 +1321,7 @@ on_comments_multiline_activate         (GtkMenuItem     *menuitem,
 
 	verify_click_pos(doc); /* make sure that the click_pos is valid */
 
-	if (doc->file_type->comment_open)
+	if (doc->file_type->comment_open || doc->file_type->comment_single)
 		editor_insert_multiline_comment(doc->editor);
 	else
 		utils_beep();

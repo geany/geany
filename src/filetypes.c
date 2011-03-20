@@ -1051,6 +1051,7 @@ static void filetype_free(gpointer data, G_GNUC_UNUSED gpointer user_data)
 	g_free(ft->mime_type);
 	g_free(ft->comment_open);
 	g_free(ft->comment_close);
+	g_free(ft->comment_single);
 	g_free(ft->context_action_cmd);
 	g_free(ft->filecmds);
 	g_free(ft->ftdefcmds);
@@ -1095,7 +1096,7 @@ static void load_settings(gint ft_id, GKeyFile *config, GKeyFile *configh)
 	/* read comment notes */
 	result = g_key_file_get_string(configh, "settings", "comment_open", NULL);
 	if (result == NULL) result = g_key_file_get_string(config, "settings", "comment_open", NULL);
-	if (G_LIKELY(result != NULL))
+	if (result != NULL)
 	{
 		g_free(filetypes[ft_id]->comment_open);
 		filetypes[ft_id]->comment_open = result;
@@ -1103,10 +1104,23 @@ static void load_settings(gint ft_id, GKeyFile *config, GKeyFile *configh)
 
 	result = g_key_file_get_string(configh, "settings", "comment_close", NULL);
 	if (result == NULL) result = g_key_file_get_string(config, "settings", "comment_close", NULL);
-	if (G_LIKELY(result != NULL))
+	if (result != NULL)
 	{
 		g_free(filetypes[ft_id]->comment_close);
 		filetypes[ft_id]->comment_close = result;
+	}
+
+	result = g_key_file_get_string(configh, "settings", "comment_single", NULL);
+	if (result == NULL) result = g_key_file_get_string(config, "settings", "comment_single", NULL);
+	if (result != NULL)
+	{
+		setptr(filetypes[ft_id]->comment_single, result);
+	}
+	/* import correctly filetypes that use old-style single comments */
+	else if (! NZV(filetypes[ft_id]->comment_close))
+	{
+		setptr(filetypes[ft_id]->comment_single, filetypes[ft_id]->comment_open);
+		setptr(filetypes[ft_id]->comment_open, NULL);
 	}
 
 	tmp = g_key_file_get_boolean(configh, "settings", "comment_use_indent", &error);
