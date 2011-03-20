@@ -8,6 +8,10 @@
  * src/editor.c, src/search.c, tagmanager/diff.c:
    Don't use strlen(..) > 0 or == 0, simply check the first character
    against 0.
+ * src/document.c:
+   Update forced indent settings when setting the filetype. This makes
+   documents created or set to a filetype with forced indent setting
+   (Makefile, F77) to have the correct setting right away.
 
 
 2011-03-19  Colomban Wendling  <colomban(at)geany(dot)org>

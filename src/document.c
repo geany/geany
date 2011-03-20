@@ -1001,24 +1001,33 @@ static GeanyIndentType detect_indent_type(GeanyEditor *editor)
 }
 
 
-void document_apply_indent_settings(GeanyDocument *doc)
+static gboolean apply_forced_indent_settings(GeanyDocument *doc)
 {
 	const GeanyIndentPrefs *iprefs = editor_get_indent_prefs(NULL);
-	GeanyIndentType type = iprefs->type;
 
 	switch (doc->file_type->id)
 	{
 		case GEANY_FILETYPES_MAKE:
 			/* force using tabs for indentation for Makefiles */
 			editor_set_indent(doc->editor, GEANY_INDENT_TYPE_TABS, iprefs->width);
-			return;
+			return TRUE;
 		case GEANY_FILETYPES_F77:
 			/* force using spaces for indentation for Fortran 77 */
 			editor_set_indent(doc->editor, GEANY_INDENT_TYPE_SPACES, iprefs->width);
-			return;
-		default:
-			break;
+			return TRUE;
 	}
+
+	return FALSE;
+}
+
+
+void document_apply_indent_settings(GeanyDocument *doc)
+{
+	const GeanyIndentPrefs *iprefs = editor_get_indent_prefs(NULL);
+	GeanyIndentType type = iprefs->type;
+
+	if (apply_forced_indent_settings(doc))
+		return;
 	if (iprefs->detect_type)
 	{
 		type = detect_indent_type(doc->editor);
@@ -2434,6 +2443,8 @@ void document_set_filetype(GeanyDocument *doc, GeanyFiletype *type)
 
 	if (ft_changed)
 	{
+		if (apply_forced_indent_settings(doc)) /* update forced indents, like Makefiles and F77 */
+			ui_document_show_hide(doc);
 		sidebar_openfiles_update(doc); /* to update the icon */
 		g_signal_emit_by_name(geany_object, "document-filetype-set", doc, old_ft);
 	}
