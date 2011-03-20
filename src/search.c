@@ -1142,7 +1142,7 @@ on_find_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 		search_data.flags = int_search_flags(settings.find_case_sensitive,
 			settings.find_match_whole_word, settings.find_regexp, settings.find_match_word_start);
 
-		if (strlen(search_data.text) == 0)
+		if (search_data.text[0] == '\0')
 		{
 			fail:
 			utils_beep();

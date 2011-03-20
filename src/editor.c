@@ -2944,7 +2944,7 @@ gint editor_do_uncomment(GeanyEditor *editor, gint line, gboolean toggle)
 		co = ft->comment_open;
 		cc = ft->comment_close;
 		if (co == NULL)
-			return;
+			return 0;
 	}
 
 	co_len = strlen(co);
@@ -2973,7 +2973,7 @@ gint editor_do_uncomment(GeanyEditor *editor, gint line, gboolean toggle)
 		if (x < line_len && sel[x] != '\0')
 		{
 			/* use single line comment */
-			if (cc == NULL || strlen(cc) == 0)
+			if (cc == NULL || cc[0] == '\0')
 			{
 				single_line = TRUE;
 
@@ -3281,7 +3281,7 @@ void editor_do_comment(GeanyEditor *editor, gint line, gboolean allow_empty_line
 		if (allow_empty_lines || (x < line_len && sel[x] != '\0'))
 		{
 			/* use single line comment */
-			if (cc == NULL || strlen(cc) == 0)
+			if (cc == NULL || cc[0] == '\0')
 			{
 				gint start = line_start;
 				single_line = TRUE;
@@ -3471,8 +3471,8 @@ static void auto_multiline(GeanyEditor *editor, gint cur_line)
 	{
 		gchar *previous_line = sci_get_line(sci, cur_line - 1);
 		/* the type of comment, '*' (C/C++/Java), '+' and the others (D) */
-		gchar *continuation = "*";
-		gchar *whitespace = ""; /* to hold whitespace if needed */
+		const gchar *continuation = "*";
+		const gchar *whitespace = ""; /* to hold whitespace if needed */
 		gchar *result;
 		gint len = strlen(previous_line);
 		gint i;

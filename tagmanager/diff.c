@@ -60,7 +60,7 @@ static void findDiffTags (void)
 					tmp = (const unsigned char*) strrchr((const char*) cp, '\\');
 					if (tmp == NULL)
 					{	/* last fallback, probably the filename doesn't contain a path, so take it */
-						if (strlen((const char*) cp) > 0)
+						if (cp[0] != 0)
 						{
 							tmp = cp;
 							skipSlash = FALSE;
