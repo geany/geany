@@ -1120,7 +1120,7 @@ static void load_settings(gint ft_id, GKeyFile *config, GKeyFile *configh)
 	else if (! NZV(filetypes[ft_id]->comment_close))
 	{
 		setptr(filetypes[ft_id]->comment_single, filetypes[ft_id]->comment_open);
-		setptr(filetypes[ft_id]->comment_open, NULL);
+		filetypes[ft_id]->comment_open = NULL;
 	}
 
 	tmp = g_key_file_get_boolean(configh, "settings", "comment_use_indent", &error);
