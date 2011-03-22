@@ -2,6 +2,10 @@
 
  * src/main.c:
    Make --ft-names list filetypes alphabetically.
+ * plugins/filebrowser.c:
+   Allow multiple file filters to be separated by a space for
+   consistency with Find in Files file patterns. ';' is still
+   allowed also.
 
 
 2011-03-20  Colomban Wendling  <colomban(at)geany(dot)org>

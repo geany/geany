@@ -160,10 +160,10 @@ static gboolean check_filtered(const gchar *base_name)
 {
 	gchar **filter_item;
 	guint len;
-	
+
 	if (filter == NULL)
 		return FALSE;
-	
+
 	len = g_strv_length(filter);
 	foreach_c_array(filter_item, filter, len)
 	{
@@ -795,7 +795,9 @@ static void on_path_combo_changed(GtkComboBox *combo, gpointer user_data)
 
 static void on_filter_activate(GtkEntry *entry, gpointer user_data)
 {
-	filter = g_strsplit(gtk_entry_get_text(entry), ";", -1);
+	/* We use spaces for consistency with Find in Files file patterns
+	 * ';' also supported like original patch. */
+	filter = g_strsplit_set(gtk_entry_get_text(entry), "; ", -1);
 	if (filter == NULL || g_strv_length(filter) == 0)
 	{
 		clear_filter();
@@ -911,7 +913,7 @@ static GtkWidget *make_filterbar(void)
 		g_signal_connect(filter_entry, "icon-release", G_CALLBACK(on_filter_clear), NULL);
 	}
 	ui_widget_set_tooltip_text(filter_entry,
-		_("Filter your files with usual wildcards, separate multiple filters with \";\""));
+		_("Filter your files with the usual wildcards. Separate multiple patterns with a space."));
 	g_signal_connect(filter_entry, "activate", G_CALLBACK(on_filter_activate), NULL);
 
 	gtk_box_pack_start(GTK_BOX(filterbar), label, FALSE, FALSE, 0);
@@ -1095,7 +1097,7 @@ void plugin_init(GeanyData *data)
 	GtkWidget *scrollwin, *toolbar, *filterbar;
 
 	filter = NULL;
-	
+
 	file_view_vbox = gtk_vbox_new(FALSE, 0);
 	toolbar = make_toolbar();
 	gtk_box_pack_start(GTK_BOX(file_view_vbox), toolbar, FALSE, FALSE, 0);
