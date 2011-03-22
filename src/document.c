@@ -1015,9 +1015,9 @@ static gboolean apply_forced_indent_settings(GeanyDocument *doc)
 			/* force using spaces for indentation for Fortran 77 */
 			editor_set_indent(doc->editor, GEANY_INDENT_TYPE_SPACES, iprefs->width);
 			return TRUE;
+		default:
+			return FALSE;
 	}
-
-	return FALSE;
 }
 
 
