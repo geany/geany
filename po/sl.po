@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: geany 0.20\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-12-05 15:55+0100\n"
-"PO-Revision-Date: 2010-12-09 21:30+0100\n"
+"PO-Revision-Date: 2011-03-22 23:57+0100\n"
 "Last-Translator: Jože Klepec <joze.klepec@siol.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -868,7 +868,7 @@ msgstr ""
 
 #: ../src/document.c:3016
 msgid "Close _without saving"
-msgstr "Zapri _brez sharnjevanja"
+msgstr "Zapri _brez shranjevanja"
 
 #: ../src/document.c:3019
 msgid "Try to resave the file?"
