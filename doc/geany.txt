@@ -1505,10 +1505,12 @@ tags files, as described below.
 Workspace tags
 ^^^^^^^^^^^^^^
 
-Tags for each document are parsed whenever a file is loaded or
-saved. These are shown in the Symbol list in the Sidebar. These tags
-are also used for autocompletion of symbols and calltips for all documents
-open in the current session that have the same filetype.
+Tags for each document are parsed whenever a file is loaded or saved, and
+possibly when modified (see *Symbol list update frequency* preference in the
+`Editor Completions preferences`_). These are shown in the Symbol list in
+the Sidebar. These tags are also used for autocompletion of symbols and
+calltips for all documents open in the current session that have the same
+filetype.
 
 The *Go to Tag* commands can be used with all workspace tags. See
 `Go to tag definition`_.
@@ -2089,6 +2091,20 @@ Completion list height
 
 Max. symbol name suggestions
     The maximum number of items in the autocompletion list.
+
+Symbol list update frequency
+    The minimum delay (in milliseconds) between two symbol list updates.
+
+    This option determines how frequently the tag list is updated for the
+    current document. The smaller is the delay the more up-to-date is the
+    symbol list (and then the completions); but rebuilding the symbol list
+    has a cost in performance, especially with large files.
+
+    The default value is 250, which means the symbol list will be updated at
+    most 4 times per second, even if the document changes continuously.
+
+    A value of 0 disables automatic updates, so the symbol list will only be
+    updated upon document saving.
 
 
 Auto-close quotes and brackets
