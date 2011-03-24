@@ -74,6 +74,7 @@ static GtkListStore *file_store;
 static GtkTreeIter *last_dir_iter = NULL;
 static GtkEntryCompletion *entry_completion = NULL;
 
+static GtkWidget *filter_combo;
 static GtkWidget *filter_entry;
 static GtkWidget *path_combo;
 static GtkWidget *path_entry;
@@ -785,11 +786,11 @@ static void on_path_entry_activate(GtkEntry *entry, gpointer user_data)
 }
 
 
-static void on_path_combo_changed(GtkComboBox *combo, gpointer user_data)
+static void ui_combo_box_changed(GtkComboBox *combo, gpointer user_data)
 {
 	/* we get this callback on typing as well as choosing an item */
 	if (gtk_combo_box_get_active(combo) >= 0)
-		on_path_entry_activate(GTK_ENTRY(path_entry), NULL);
+		gtk_widget_activate(GTK_BIN(combo)->child);
 }
 
 
@@ -802,6 +803,7 @@ static void on_filter_activate(GtkEntry *entry, gpointer user_data)
 	{
 		clear_filter();
 	}
+	ui_combo_box_add_to_history(GTK_COMBO_BOX_ENTRY(filter_combo), NULL, 0);
 	refresh();
 }
 
@@ -905,7 +907,8 @@ static GtkWidget *make_filterbar(void)
 
 	label = gtk_label_new(_("Filter:"));
 
-	filter_entry = gtk_entry_new();
+	filter_combo = gtk_combo_box_entry_new_text();
+	filter_entry = GTK_BIN(filter_combo)->child;
 
 	if (gtk_check_version(2, 15, 2) == NULL)
 	{
@@ -915,9 +918,10 @@ static GtkWidget *make_filterbar(void)
 	ui_widget_set_tooltip_text(filter_entry,
 		_("Filter your files with the usual wildcards. Separate multiple patterns with a space."));
 	g_signal_connect(filter_entry, "activate", G_CALLBACK(on_filter_activate), NULL);
+	g_signal_connect(filter_combo, "changed", G_CALLBACK(ui_combo_box_changed), NULL);
 
 	gtk_box_pack_start(GTK_BOX(filterbar), label, FALSE, FALSE, 0);
-	gtk_box_pack_start(GTK_BOX(filterbar), filter_entry, TRUE, TRUE, 0);
+	gtk_box_pack_start(GTK_BOX(filterbar), filter_combo, TRUE, TRUE, 0);
 
 	return filterbar;
 }
@@ -1107,7 +1111,7 @@ void plugin_init(GeanyData *data)
 
 	path_combo = gtk_combo_box_entry_new_text();
 	gtk_box_pack_start(GTK_BOX(file_view_vbox), path_combo, FALSE, FALSE, 2);
-	g_signal_connect(path_combo, "changed", G_CALLBACK(on_path_combo_changed), NULL);
+	g_signal_connect(path_combo, "changed", G_CALLBACK(ui_combo_box_changed), NULL);
 	path_entry = GTK_BIN(path_combo)->child;
 	g_signal_connect(path_entry, "activate", G_CALLBACK(on_path_entry_activate), NULL);
 

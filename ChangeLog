@@ -1,3 +1,9 @@
+2011-03-24  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * plugins/filebrowser.c:
+   Add history to filter entry.
+
+
 2011-03-24  Colomban Wendling  <colomban(at)geany(dot)org>
 
  * doc/geany.txt, doc/geany.html:
