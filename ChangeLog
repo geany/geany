@@ -8,6 +8,11 @@
 
  * doc/geany.txt, doc/geany.html:
    Update the documentation to talk about real-time tag parsing.
+ * doc/geany.txt, doc/geany.html, src/callbacks.c, src/callbacks.h,
+   src/document.c, src/document.h, src/geanyentryaction.c,
+   src/search.c, src/toolbar.c, src/ui_utils.c, src/ui_utils.h:
+   Make Shift-Enter in search dialog and toolbar search entries search
+   backwards.
 
 
 2011-03-22  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

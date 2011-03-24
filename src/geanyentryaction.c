@@ -47,6 +47,7 @@ struct _GeanyEntryActionPrivate
 enum
 {
 	ENTRY_ACTIVATE,
+	ENTRY_ACTIVATE_BACKWARD,
 	ENTRY_CHANGED,
 
 	LAST_SIGNAL
@@ -67,6 +68,7 @@ static GtkWidget *geany_entry_action_create_tool_item(GtkAction *action)
 		gtk_entry_set_width_chars(GTK_ENTRY(priv->entry), 9);
 
 	ui_entry_add_clear_icon(GTK_ENTRY(priv->entry));
+	ui_entry_add_activate_backward_signal(GTK_ENTRY(priv->entry));
 
 	gtk_widget_show(priv->entry);
 
@@ -83,6 +85,15 @@ static void delegate_entry_activate_cb(GtkEntry *entry, GeanyEntryAction *action
 	const gchar *text = gtk_entry_get_text(GTK_ENTRY(priv->entry));
 
 	g_signal_emit(action, signals[ENTRY_ACTIVATE], 0, text);
+}
+
+
+static void delegate_entry_activate_backward_cb(GtkEntry *entry, GeanyEntryAction *action)
+{
+	GeanyEntryActionPrivate *priv = GEANY_ENTRY_ACTION_GET_PRIVATE(action);
+	const gchar *text = gtk_entry_get_text(GTK_ENTRY(priv->entry));
+
+	g_signal_emit(action, signals[ENTRY_ACTIVATE_BACKWARD], 0, text);
 }
 
 
@@ -104,8 +115,10 @@ static void geany_entry_action_connect_proxy(GtkAction *action, GtkWidget *widge
 			G_CALLBACK(ui_editable_insert_text_callback), NULL);
 	g_signal_connect(priv->entry, "changed", G_CALLBACK(delegate_entry_changed_cb), action);
 	g_signal_connect(priv->entry, "activate", G_CALLBACK(delegate_entry_activate_cb), action);
+	g_signal_connect(priv->entry, "activate-backward",
+		G_CALLBACK(delegate_entry_activate_backward_cb), action);
 
-    GTK_ACTION_CLASS(geany_entry_action_parent_class)->connect_proxy(action, widget);
+	GTK_ACTION_CLASS(geany_entry_action_parent_class)->connect_proxy(action, widget);
 }
 
 
@@ -121,17 +134,25 @@ static void geany_entry_action_class_init(GeanyEntryActionClass *klass)
 
 	signals[ENTRY_CHANGED] = g_signal_new("entry-changed",
 									G_TYPE_FROM_CLASS(klass),
-									(GSignalFlags) 0,
+									G_SIGNAL_RUN_LAST,
 									0,
-									0,
+									NULL,
 									NULL,
 									g_cclosure_marshal_VOID__STRING,
 									G_TYPE_NONE, 1, G_TYPE_STRING);
 	signals[ENTRY_ACTIVATE] = g_signal_new("entry-activate",
 									G_TYPE_FROM_CLASS(klass),
-									(GSignalFlags) 0,
+									G_SIGNAL_RUN_LAST,
 									0,
+									NULL,
+									NULL,
+									g_cclosure_marshal_VOID__STRING,
+									G_TYPE_NONE, 1, G_TYPE_STRING);
+	signals[ENTRY_ACTIVATE_BACKWARD] = g_signal_new("entry-activate-backward",
+									G_TYPE_FROM_CLASS(klass),
+									G_SIGNAL_RUN_LAST,
 									0,
+									NULL,
 									NULL,
 									g_cclosure_marshal_VOID__STRING,
 									G_TYPE_NONE, 1, G_TYPE_STRING);

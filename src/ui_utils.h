@@ -211,6 +211,8 @@ void ui_widget_set_sensitive(GtkWidget *widget, gboolean set);
 
 void ui_entry_add_clear_icon(GtkEntry *entry);
 
+void ui_entry_add_activate_backward_signal(GtkEntry *entry);
+
 void ui_editable_insert_text_callback(GtkEditable *editable, gchar *new_text,
 									  gint new_text_len, gint *position, gpointer data);
 

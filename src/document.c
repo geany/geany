@@ -1826,7 +1826,8 @@ gboolean document_save_file(GeanyDocument *doc, gboolean force)
 /* special search function, used from the find entry in the toolbar
  * return TRUE if text was found otherwise FALSE
  * return also TRUE if text is empty  */
-gboolean document_search_bar_find(GeanyDocument *doc, const gchar *text, gint flags, gboolean inc)
+gboolean document_search_bar_find(GeanyDocument *doc, const gchar *text, gint flags, gboolean inc,
+		gboolean backwards)
 {
 	gint start_pos, search_pos;
 	struct Sci_TextToFind ttf;
@@ -1836,20 +1837,28 @@ gboolean document_search_bar_find(GeanyDocument *doc, const gchar *text, gint fl
 	if (! *text)
 		return TRUE;
 
-	start_pos = (inc) ? sci_get_selection_start(doc->editor->sci) :
+	start_pos = (inc || backwards) ? sci_get_selection_start(doc->editor->sci) :
 		sci_get_selection_end(doc->editor->sci);	/* equal if no selection */
 
-	/* search cursor to end */
+	/* search cursor to end or start */
 	ttf.chrg.cpMin = start_pos;
-	ttf.chrg.cpMax = sci_get_length(doc->editor->sci);
+	ttf.chrg.cpMax = backwards ? 0 : sci_get_length(doc->editor->sci);
 	ttf.lpstrText = (gchar *)text;
 	search_pos = sci_find_text(doc->editor->sci, flags, &ttf);
 
-	/* if no match, search start to cursor */
+	/* if no match, search start (or end) to cursor */
 	if (search_pos == -1)
 	{
-		ttf.chrg.cpMin = 0;
-		ttf.chrg.cpMax = start_pos + strlen(text);
+		if (backwards)
+		{
+			ttf.chrg.cpMin = sci_get_length(doc->editor->sci);
+			ttf.chrg.cpMax = start_pos;
+		}
+		else
+		{
+			ttf.chrg.cpMin = 0;
+			ttf.chrg.cpMax = start_pos + strlen(text);
+		}
 		search_pos = sci_find_text(doc->editor->sci, flags, &ttf);
 	}
 

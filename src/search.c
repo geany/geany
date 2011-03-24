@@ -160,6 +160,9 @@ static void
 on_find_entry_activate(GtkEntry *entry, gpointer user_data);
 
 static void
+on_find_entry_activate_backward(GtkEntry *entry, gpointer user_data);
+
+static void
 on_replace_dialog_response(GtkDialog *dialog, gint response, gpointer user_data);
 
 static void
@@ -476,6 +479,9 @@ static void create_find_dialog(void)
 
 	g_signal_connect(gtk_bin_get_child(GTK_BIN(entry)), "activate",
 			G_CALLBACK(on_find_entry_activate), NULL);
+	ui_entry_add_activate_backward_signal(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(entry))));
+	g_signal_connect(gtk_bin_get_child(GTK_BIN(entry)), "activate-backward",
+			G_CALLBACK(on_find_entry_activate_backward), NULL);
 	g_signal_connect(find_dlg.dialog, "response",
 			G_CALLBACK(on_find_dialog_response), entry);
 	g_signal_connect(find_dlg.dialog, "delete-event",
@@ -1106,6 +1112,18 @@ on_find_entry_activate(GtkEntry *entry, gpointer user_data)
 {
 	on_find_dialog_response(NULL, GEANY_RESPONSE_FIND,
 				ui_lookup_widget(GTK_WIDGET(entry), "entry"));
+}
+
+
+static void
+on_find_entry_activate_backward(GtkEntry *entry, gpointer user_data)
+{
+	/* can't search backwards with a regexp */
+	if (search_data.flags & SCFIND_REGEXP)
+		utils_beep();
+	else
+		on_find_dialog_response(NULL, GEANY_RESPONSE_FIND_PREVIOUS,
+					ui_lookup_widget(GTK_WIDGET(entry), "entry"));
 }
 
 

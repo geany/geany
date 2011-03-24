@@ -214,7 +214,8 @@ void document_open_file_list(const gchar *data, gssize length);
 void document_open_files(const GSList *filenames, gboolean readonly, GeanyFiletype *ft,
 		const gchar *forced_enc);
 
-gboolean document_search_bar_find(GeanyDocument *doc, const gchar *text, gint flags, gboolean inc);
+gboolean document_search_bar_find(GeanyDocument *doc, const gchar *text, gint flags, gboolean inc,
+		gboolean backwards);
 
 gint document_find_text(GeanyDocument *doc, const gchar *text, gint flags, gboolean search_backwards,
 		gboolean scroll, GtkWidget *parent);

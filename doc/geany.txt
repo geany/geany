@@ -1167,7 +1167,8 @@ Search bar
 ``````````
 The quickest way to find some text is to use the search bar entry in
 the toolbar. This performs a case-insensitive search in the current
-document whilst you type. Pressing Enter will search again.
+document whilst you type. Pressing Enter will search again, and pressing
+Shift-Enter will search backwards.
 
 Find
 ^^^^

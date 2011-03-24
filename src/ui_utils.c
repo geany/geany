@@ -1436,6 +1436,35 @@ void ui_entry_add_clear_icon(GtkEntry *entry)
 }
 
 
+/* Adds a :activate-backwards signal emitted by default when <Shift>Return is pressed */
+void ui_entry_add_activate_backward_signal(GtkEntry *entry)
+{
+	static gboolean installed = FALSE;
+
+	g_return_if_fail(GTK_IS_ENTRY(entry));
+
+	if (G_UNLIKELY(! installed))
+	{
+		GtkBindingSet *binding_set;
+
+		installed = TRUE;
+
+		/* try to handle the unexpected case where GTK would already have installed the signal */
+		if (g_signal_lookup("activate-backward", G_TYPE_FROM_INSTANCE(entry)))
+		{
+			g_warning("Signal GtkEntry:activate-backward is unexpectedly already installed");
+			return;
+		}
+
+		g_signal_new("activate-backward", G_TYPE_FROM_INSTANCE(entry),
+			G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION, 0, NULL, NULL,
+			g_cclosure_marshal_VOID__VOID, G_TYPE_NONE, 0);
+		binding_set = gtk_binding_set_by_class(GTK_ENTRY_GET_CLASS(entry));
+		gtk_binding_entry_add_signal(binding_set, GDK_Return, GDK_SHIFT_MASK, "activate-backward", 0);
+	}
+}
+
+
 static void add_to_size_group(GtkWidget *widget, gpointer size_group)
 {
 	g_return_if_fail(GTK_IS_SIZE_GROUP(size_group));

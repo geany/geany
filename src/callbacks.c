@@ -535,12 +535,24 @@ on_toolbutton_save_clicked             (GtkAction       *action,
 
 
 /* store text, clear search flags so we can use Search->Find Next/Previous */
-static void setup_find_next(const gchar *text)
+static void setup_find(const gchar *text, gboolean backwards)
 {
 	setptr(search_data.text, g_strdup(text));
 	search_data.flags = 0;
-	search_data.backwards = FALSE;
+	search_data.backwards = backwards;
 	search_data.search_bar = TRUE;
+}
+
+
+static void do_toolbar_search(const gchar *text, gboolean incremental, gboolean backwards)
+{
+	GeanyDocument *doc = document_get_current();
+	gboolean result;
+
+	setup_find(text, backwards);
+	result = document_search_bar_find(doc, search_data.text, 0, incremental, backwards);
+	if (search_data.search_bar)
+		ui_set_search_entry_background(toolbar_get_widget_child_by_name("SearchEntry"), result);
 }
 
 
@@ -548,13 +560,15 @@ static void setup_find_next(const gchar *text)
 void
 on_toolbar_search_entry_changed(GtkAction *action, const gchar *text, gpointer user_data)
 {
-	GeanyDocument *doc = document_get_current();
-	gboolean result;
+	do_toolbar_search(text, TRUE, FALSE);
+}
 
-	setup_find_next(text);
-	result = document_search_bar_find(doc, search_data.text, 0, GPOINTER_TO_INT(user_data));
-	if (search_data.search_bar)
-		ui_set_search_entry_background(toolbar_get_widget_child_by_name("SearchEntry"), result);
+
+/* search text */
+void
+on_toolbar_search_entry_activate(GtkAction *action, const gchar *text, gpointer user_data)
+{
+	do_toolbar_search(text, FALSE, GPOINTER_TO_INT(user_data));
 }
 
 
@@ -571,8 +585,8 @@ on_toolbutton_search_clicked           (GtkAction       *action,
 	{
 		const gchar *text = gtk_entry_get_text(GTK_ENTRY(entry));
 
-		setup_find_next(text);
-		result = document_search_bar_find(doc, search_data.text, 0, FALSE);
+		setup_find(text, FALSE);
+		result = document_search_bar_find(doc, search_data.text, 0, FALSE, FALSE);
 		if (search_data.search_bar)
 			ui_set_search_entry_background(entry, result);
 	}

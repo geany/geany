@@ -143,6 +143,11 @@ on_toolbar_search_entry_changed        (GtkAction *action,
                                         gpointer user_data);
 
 void
+on_toolbar_search_entry_activate       (GtkAction *action,
+                                        const gchar *text,
+                                        gpointer user_data);
+
+void
 on_toggle_case1_activate               (GtkMenuItem     *menuitem,
                                         gpointer         user_data);
 
