@@ -2,6 +2,9 @@
 
  * plugins/filebrowser.c:
    Add history to filter entry.
+ * src/keybindings.c, src/vte.c:
+   Add fixed shortcuts for VTE copy (Ctrl-Shift-C) and paste
+   (Ctrl-Shift-V).
 
 
 2011-03-24  Colomban Wendling  <colomban(at)geany(dot)org>

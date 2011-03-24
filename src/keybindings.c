@@ -1083,6 +1083,9 @@ static gboolean check_vte(GdkModifierType state, guint keyval)
 		return FALSE;
 	if (state == 0 && (keyval < GDK_F1 || keyval > GDK_F35))	/* e.g. backspace */
 		return FALSE;
+	/* let VTE copy/paste override any user keybinding */
+	if (state == (GDK_CONTROL_MASK | GDK_SHIFT_MASK) && (keyval == GDK_c || keyval == GDK_v))
+		return TRUE;
 
 	/* make focus commands override any bash commands */
 	group = g_ptr_array_index(keybinding_groups, GEANY_KEY_GROUP_FOCUS);

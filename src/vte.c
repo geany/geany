@@ -60,7 +60,6 @@ static pid_t pid = 0;
 static gboolean clean = TRUE;
 static GModule *module = NULL;
 static struct VteFunctions *vf;
-static gboolean popup_menu_created = FALSE;
 static gchar *gtk_menu_key_accel = NULL;
 static gint vte_prefs_tab_num = -1;
 
@@ -232,6 +231,15 @@ void vte_init(void)
 }
 
 
+static void on_vte_realize(void)
+{
+	/* the vte widget has to be realised before color changes take effect */
+	vte_apply_user_settings();
+
+	vf->vte_terminal_im_append_menuitems(VTE_TERMINAL(vc->vte), GTK_MENU_SHELL(vc->im_submenu));
+}
+
+
 static void create_vte(void)
 {
 	GtkWidget *vte, *scrollbar, *hbox, *frame;
@@ -239,6 +247,9 @@ static void create_vte(void)
 	vc->vte = vte = vf->vte_terminal_new();
 	scrollbar = gtk_vscrollbar_new(GTK_ADJUSTMENT(VTE_TERMINAL(vte)->adjustment));
 	GTK_WIDGET_UNSET_FLAGS(scrollbar, GTK_CAN_FOCUS);
+
+	/* create menu now so copy/paste shortcuts work */
+	vc->menu = vte_create_popup_menu();
 
 	frame = gtk_frame_new(NULL);
 
@@ -271,8 +282,7 @@ static void create_vte(void)
 	gtk_widget_show_all(frame);
 	gtk_notebook_insert_page(GTK_NOTEBOOK(msgwindow.notebook), frame, gtk_label_new(_("Terminal")), MSG_VTE);
 
-	/* the vte widget has to be realised before color changes take effect */
-	g_signal_connect_after(vte, "realize", G_CALLBACK(vte_apply_user_settings), NULL);
+	g_signal_connect_after(vte, "realize", G_CALLBACK(on_vte_realize), NULL);
 }
 
 
@@ -282,8 +292,7 @@ void vte_close(void)
 	/* free the vte widget before unloading vte module
 	 * this prevents a segfault on X close window if the message window is hidden */
 	gtk_widget_destroy(vc->vte);
-	if (popup_menu_created)
-		gtk_widget_destroy(vc->menu);
+	gtk_widget_destroy(vc->menu);
 	g_free(vc->emulation);
 	g_free(vc->shell);
 	g_free(vc->font);
@@ -378,17 +387,9 @@ static gboolean vte_button_pressed(GtkWidget *widget, GdkEventButton *event, gpo
 {
 	if (event->button == 3)
 	{
-		if (G_UNLIKELY(! popup_menu_created))
-		{
-			vc->menu = vte_create_popup_menu();
-			vf->vte_terminal_im_append_menuitems(VTE_TERMINAL(vc->vte), GTK_MENU_SHELL(vc->im_submenu));
-			popup_menu_created = TRUE;
-		}
-
 		gtk_widget_grab_focus(vc->vte);
 		gtk_menu_popup(GTK_MENU(vc->menu), NULL, NULL, NULL, NULL, event->button, event->time);
 	}
-
 	return FALSE;
 }
 
@@ -507,15 +508,23 @@ static void vte_popup_menu_clicked(GtkMenuItem *menuitem, gpointer user_data)
 static GtkWidget *vte_create_popup_menu(void)
 {
 	GtkWidget *menu, *item;
+	GtkAccelGroup *accel_group;
 
 	menu = gtk_menu_new();
 
+	accel_group = gtk_accel_group_new();
+	gtk_window_add_accel_group(GTK_WINDOW(main_widgets.window), accel_group);
+
 	item = gtk_image_menu_item_new_from_stock("gtk-copy", NULL);
+	gtk_widget_add_accelerator(item, "activate", accel_group,
+		GDK_c, GDK_CONTROL_MASK | GDK_SHIFT_MASK, GTK_ACCEL_VISIBLE);
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	g_signal_connect(item, "activate", G_CALLBACK(vte_popup_menu_clicked), GINT_TO_POINTER(POPUP_COPY));
 
 	item = gtk_image_menu_item_new_from_stock("gtk-paste", NULL);
+	gtk_widget_add_accelerator(item, "activate", accel_group,
+		GDK_v, GDK_CONTROL_MASK | GDK_SHIFT_MASK, GTK_ACCEL_VISIBLE);
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	g_signal_connect(item, "activate", G_CALLBACK(vte_popup_menu_clicked), GINT_TO_POINTER(POPUP_PASTE));
@@ -566,7 +575,7 @@ static GtkWidget *vte_create_popup_menu(void)
 	gtk_container_add(GTK_CONTAINER(menu), item);
 
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(item), vc->im_submenu);
-
+	/* submenu populated after vte realized */
 	return menu;
 }
 
