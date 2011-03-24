@@ -2015,9 +2015,9 @@ static void ui_menu_move(GtkWidget *menu, GtkWidget *old, GtkWidget *new)
 
 typedef struct GeanySharedMenu
 {
-	gchar *menu;
-	gchar *menubar_item;
-	gchar *popup_item;
+	const gchar *menu;
+	const gchar *menubar_item;
+	const gchar *popup_item;
 }
 GeanySharedMenu;
 
