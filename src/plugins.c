@@ -705,7 +705,7 @@ plugin_new(const gchar *fname, gboolean init_plugin, gboolean add_to_list)
 
 	/* read plugin name, etc. */
 	plugin_set_info(&plugin->info);
-	if (!NZV(plugin->info.name))
+	if (G_UNLIKELY(! NZV(plugin->info.name)))
 	{
 		geany_debug("No plugin name set in plugin_set_info() for \"%s\" - ignoring plugin!",
 			fname);

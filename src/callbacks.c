@@ -692,7 +692,7 @@ on_notebook1_switch_page_after         (GtkNotebook     *notebook,
 {
 	GeanyDocument *doc;
 
-	if (G_UNLIKELY(main_status.opening_session_files) || G_UNLIKELY(main_status.closing_all))
+	if (G_UNLIKELY(main_status.opening_session_files || main_status.closing_all))
 		return;
 
 	if (page_num == (guint) -1 && page != NULL)
@@ -1931,7 +1931,7 @@ on_context_action1_activate            (GtkMenuItem     *menuitem,
 	}
 
 	/* substitute the wildcard %s and run the command if it is non empty */
-	if (NZV(command))
+	if (G_LIKELY(NZV(command)))
 	{
 		utils_str_replace_all(&command, "%s", word);
 

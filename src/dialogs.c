@@ -470,7 +470,7 @@ on_file_save_dialog_response           (GtkDialog *dialog,
 	{
 		case GEANY_RESPONSE_RENAME:
 			/* rename doesn't check for empty filename or overwriting */
-			if (! NZV(new_filename))
+			if (G_UNLIKELY(! NZV(new_filename)))
 			{
 				utils_beep();
 				break;

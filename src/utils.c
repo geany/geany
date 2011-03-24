@@ -423,7 +423,7 @@ gboolean utils_atob(const gchar *str)
 /* NULL-safe version of g_path_is_absolute(). */
 gboolean utils_is_absolute_path(const gchar *path)
 {
-	if (! NZV(path))
+	if (G_UNLIKELY(! NZV(path)))
 		return FALSE;
 
 	return g_path_is_absolute(path);
@@ -832,7 +832,7 @@ gint utils_get_setting_integer(GKeyFile *config, const gchar *section, const gch
 		return default_value;
 
 	tmp = g_key_file_get_integer(config, section, key, &error);
-	if (G_UNLIKELY(error))
+	if (error)
 	{
 		g_error_free(error);
 		return default_value;
@@ -863,7 +863,7 @@ gboolean utils_get_setting_boolean(GKeyFile *config, const gchar *section, const
 		return default_value;
 
 	tmp = g_key_file_get_boolean(config, section, key, &error);
-	if (G_UNLIKELY(error))
+	if (error)
 	{
 		g_error_free(error);
 		return default_value;
@@ -893,7 +893,7 @@ gchar *utils_get_setting_string(GKeyFile *config, const gchar *section, const gc
 		return g_strdup(default_value);
 
 	tmp = g_key_file_get_string(config, section, key, NULL);
-	if (G_UNLIKELY(!tmp))
+	if (!tmp)
 	{
 		return g_strdup(default_value);
 	}
@@ -1941,7 +1941,7 @@ gchar *utils_str_remove_chars(gchar *string, const gchar *chars)
 	gchar *w = string;
 
 	g_return_val_if_fail(string, NULL);
-	if (!NZV(chars))
+	if (G_UNLIKELY(! NZV(chars)))
 		return string;
 
 	foreach_str(r, string)

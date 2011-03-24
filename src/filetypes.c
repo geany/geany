@@ -1088,7 +1088,7 @@ static void load_settings(gint ft_id, GKeyFile *config, GKeyFile *configh)
 	/* default extension */
 	result = g_key_file_get_string(configh, "settings", "extension", NULL);
 	if (result == NULL) result = g_key_file_get_string(config, "settings", "extension", NULL);
-	if (G_LIKELY(result != NULL))
+	if (result != NULL)
 	{
 		setptr(filetypes[ft_id]->extension, result);
 	}
@@ -1137,7 +1137,7 @@ static void load_settings(gint ft_id, GKeyFile *config, GKeyFile *configh)
 	/* read context action */
 	result = g_key_file_get_string(configh, "settings", "context_action_cmd", NULL);
 	if (result == NULL) result = g_key_file_get_string(config, "settings", "context_action_cmd", NULL);
-	if (G_LIKELY(result != NULL))
+	if (result != NULL)
 	{
 		setptr(filetypes[ft_id]->context_action_cmd, result);
 	}
@@ -1274,11 +1274,11 @@ void filetypes_load_config(gint ft_id, gboolean reload)
 	pft = ft->priv;
 
 	/* when reloading, proceed only if the settings were already loaded */
-	if (reload && G_UNLIKELY(! pft->keyfile_loaded))
+	if (G_UNLIKELY(reload && ! pft->keyfile_loaded))
 		return;
 
 	/* when not reloading, load the settings only once */
-	if (! reload && G_LIKELY(pft->keyfile_loaded))
+	if (G_LIKELY(! reload && pft->keyfile_loaded))
 		return;
 	pft->keyfile_loaded = TRUE;
 
@@ -1484,7 +1484,7 @@ gboolean filetypes_parse_error_message(GeanyFiletype *ft, const gchar *message,
 	*filename = NULL;
 	*line = -1;
 
-	if (!NZV(regstr))
+	if (G_UNLIKELY(! NZV(regstr)))
 		return FALSE;
 
 	if (!ft->priv->error_regex_compiled || regstr != ft->priv->last_string)

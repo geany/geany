@@ -1085,7 +1085,7 @@ gint search_mark_all(GeanyDocument *doc, const gchar *search_text, gint flags)
 	/* clear previous search indicators */
 	editor_indicator_clear(doc->editor, GEANY_INDICATOR_SEARCH);
 
-	if (!NZV(search_text))
+	if (G_UNLIKELY(! NZV(search_text)))
 		return 0;
 
 	ttf.chrg.cpMin = 0;
@@ -1160,7 +1160,7 @@ on_find_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 		search_data.flags = int_search_flags(settings.find_case_sensitive,
 			settings.find_match_whole_word, settings.find_regexp, settings.find_match_word_start);
 
-		if (search_data.text[0] == '\0')
+		if (! NZV(search_data.text))
 		{
 			fail:
 			utils_beep();
@@ -1430,7 +1430,7 @@ on_find_in_files_dialog_response(GtkDialog *dialog, gint response,
 		GeanyEncodingIndex enc_idx = gtk_combo_box_get_active(
 			GTK_COMBO_BOX(fif_dlg.encoding_combo));
 
-		if (!NZV(utf8_dir))
+		if (G_UNLIKELY(! NZV(utf8_dir)))
 			ui_set_statusbar(FALSE, _("Invalid directory for find in files."));
 		else if (NZV(search_text))
 		{
@@ -1908,7 +1908,7 @@ void search_find_usage(const gchar *search_text, gint flags, gboolean in_session
 	doc = document_get_current();
 	g_return_if_fail(doc != NULL);
 
-	if (!NZV(search_text))
+	if (G_UNLIKELY(! NZV(search_text)))
 	{
 		utils_beep();
 		return;

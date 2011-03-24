@@ -143,7 +143,7 @@ GeanyDocument* document_find_by_real_path(const gchar *realname)
 	{
 		GeanyDocument *doc = documents[i];
 
-		if (! doc->is_valid || G_UNLIKELY(! doc->real_path))
+		if (! doc->is_valid || ! doc->real_path)
 			continue;
 
 		if (filenamecmp(realname, doc->real_path) == 0)
@@ -191,7 +191,7 @@ GeanyDocument *document_find_by_filename(const gchar *utf8_filename)
 	{
 		doc = documents[i];
 
-		if (! doc->is_valid || G_UNLIKELY(doc->file_name == NULL))
+		if (! doc->is_valid || doc->file_name == NULL)
 			continue;
 
 		if (filenamecmp(utf8_filename, doc->file_name) == 0)
@@ -2953,8 +2953,8 @@ gboolean document_check_disk_status(GeanyDocument *doc, gboolean force)
 		/* doc may be closed now */
 		ret = TRUE;
 	}
-	else if (! use_gio_filemon && /* ignore these checks when using GIO */
-			 (G_UNLIKELY(doc->priv->mtime > cur_time) || G_UNLIKELY(st.st_mtime > cur_time)))
+	else if (G_UNLIKELY(! use_gio_filemon && /* ignore these checks when using GIO */
+			 (doc->priv->mtime > cur_time || st.st_mtime > cur_time)))
 	{
 		g_warning("%s: Something is wrong with the time stamps.", G_STRFUNC);
 	}

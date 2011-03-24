@@ -35,7 +35,7 @@
 
 /** Returns TRUE if @a ptr points to a non-zero value. */
 #define NZV(ptr) \
-	(G_LIKELY((ptr)) && G_LIKELY((ptr)[0]))
+	((ptr) && (ptr)[0])
 
 /**
  *  Frees @a ptr (if not @c NULL), then assigns @a result to it.

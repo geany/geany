@@ -282,7 +282,7 @@ static gchar *regex_match(regex_t *preg, const gchar *buffer, gsize size)
 	gchar *encoding = NULL;
 	regmatch_t pmatch[10];
 
-	if (G_UNLIKELY(! pregs_loaded) || G_UNLIKELY(buffer == NULL))
+	if (G_UNLIKELY(! pregs_loaded || buffer == NULL))
 		return NULL;
 
 	if (size > 512)

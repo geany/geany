@@ -91,7 +91,7 @@ static gboolean backupcopy_set_backup_dir(const gchar *utf8_dir)
 {
 	gchar *tmp;
 
-	if (! NZV(utf8_dir))
+	if (G_UNLIKELY(! NZV(utf8_dir)))
 		return FALSE;
 
 	tmp = utils_get_locale_from_utf8(utf8_dir);

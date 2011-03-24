@@ -817,7 +817,7 @@ static void expand(ScintillaObject *sci, gint *line, gboolean doExpand,
 	(*line)++;
 	while (*line <= lineMaxSubord)
 	{
-		if (G_UNLIKELY(force))
+		if (force)
 		{
 			if (visLevels > 0)
 				SSM(sci, SCI_SHOWLINES, *line, *line);
@@ -833,7 +833,7 @@ static void expand(ScintillaObject *sci, gint *line, gboolean doExpand,
 			levelLine = SSM(sci, SCI_GETFOLDLEVEL, *line, 0);
 		if (levelLine & SC_FOLDLEVELHEADERFLAG)
 		{
-			if (G_UNLIKELY(force))
+			if (force)
 			{
 				if (visLevels > 1)
 					SSM(sci, SCI_SETFOLDEXPANDED, *line, 1);
@@ -1970,7 +1970,7 @@ autocomplete_html(ScintillaObject *sci, const gchar *root, gsize rootlen)
 	GString *words;
 	const gchar **entities = symbols_get_html_entities();
 
-	if (*root != '&' || G_UNLIKELY(entities == NULL))
+	if (*root != '&' || entities == NULL)
 		return FALSE;
 
 	words = g_string_sized_new(500);
@@ -2973,7 +2973,7 @@ gint editor_do_uncomment(GeanyEditor *editor, gint line, gboolean toggle)
 		if (x < line_len && sel[x] != '\0')
 		{
 			/* use single line comment */
-			if (cc == NULL || cc[0] == '\0')
+			if (! NZV(cc))
 			{
 				single_line = TRUE;
 
@@ -3108,7 +3108,7 @@ void editor_do_comment_toggle(GeanyEditor *editor)
 		while (isspace(sel[x])) x++;
 
 		/* use single line comment */
-		if (cc == NULL || cc[0] == '\0')
+		if (! NZV(cc))
 		{
 			gboolean do_continue = FALSE;
 			single_line = TRUE;
@@ -3505,7 +3505,7 @@ static void auto_multiline(GeanyEditor *editor, gint cur_line)
 			whitespace = " ";
 		}
 
-		if (G_UNLIKELY(style == SCE_D_COMMENTNESTED))
+		if (style == SCE_D_COMMENTNESTED)
 			continuation = "+"; /* for nested comments in D */
 
 		result = g_strconcat(whitespace, continuation, " ", NULL);

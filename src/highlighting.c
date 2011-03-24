@@ -249,7 +249,7 @@ static void parse_color(const gchar *str, gint *clr)
 	gint c;
 
 	/* ignore empty strings */
-	if (!NZV(str))
+	if (G_UNLIKELY(! NZV(str)))
 		return;
 
 	c = utils_strtod(str, NULL, FALSE);

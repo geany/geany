@@ -311,7 +311,7 @@ static void add_page_header(DocInfo *dinfo, cairo_t *cr, gint width, gint page_n
 	g_free(data);
 
 	datetime = utils_get_date_time(printing_prefs.page_header_datefmt, &(dinfo->print_time));
-	if (NZV(datetime))
+	if (G_LIKELY(NZV(datetime)))
 	{
 		data = g_strdup_printf("<b>%s</b>", datetime);
 		pango_layout_set_markup(layout, data, -1);

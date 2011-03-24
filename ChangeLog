@@ -19,6 +19,12 @@
    src/search.c, src/toolbar.c, src/ui_utils.c, src/ui_utils.h:
    Make Shift-Enter in search dialog and toolbar search entries search
    backwards.
+ * plugins/filebrowser.c, plugins/saveactions.c, src/callbacks.c,
+   src/dialogs.c, src/document.c, src/document.h, src/editor.c,
+   src/encodings.c, src/filetypes.c, src/highlighting.c, src/log.c,
+   src/main.c, src/plugins.c, src/printing.c, src/project.c, src/search.c,
+   src/socket.c, src/toolbar.c, src/utils.c, src/utils.h:
+   Improve usage of G_LIKELY() and G_UNLIKELY() macros.
 
 
 2011-03-22  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

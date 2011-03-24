@@ -123,7 +123,7 @@ static gboolean check_hidden(const gchar *filename, const gchar *base_name)
 {
 	gsize len;
 
-	if (! NZV(base_name))
+	if (G_UNLIKELY(! NZV(base_name)))
 		return FALSE;
 
 #ifdef G_OS_WIN32

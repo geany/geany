@@ -93,9 +93,9 @@
 
 #ifdef G_OS_WIN32
 #define REMOTE_CMD_PORT		49876
-#define SOCKET_IS_VALID(s)	(G_LIKELY((s) != INVALID_SOCKET))
+#define SOCKET_IS_VALID(s)	((s) != INVALID_SOCKET)
 #else
-#define SOCKET_IS_VALID(s)	(G_LIKELY((s) >= 0))
+#define SOCKET_IS_VALID(s)	((s) >= 0)
 #define INVALID_SOCKET		(-1)
 #endif
 #define BUFFER_LENGTH 4096
@@ -468,7 +468,7 @@ static gint socket_fd_open_inet(gushort port)
 	gchar val;
 
 	sock = socket(AF_INET, SOCK_STREAM, 0);
-	if (! SOCKET_IS_VALID(sock))
+	if (G_UNLIKELY(! SOCKET_IS_VALID(sock)))
 	{
 		geany_debug("fd_open_inet(): socket() failed: %d\n", WSAGetLastError());
 		return -1;
@@ -511,7 +511,7 @@ static gint socket_fd_connect_inet(gushort port)
 	struct sockaddr_in addr;
 
 	sock = socket(AF_INET, SOCK_STREAM, 0);
-	if (! SOCKET_IS_VALID(sock))
+	if (G_UNLIKELY(! SOCKET_IS_VALID(sock)))
 	{
 		geany_debug("fd_connect_inet(): socket() failed: %d\n", WSAGetLastError());
 		return -1;
