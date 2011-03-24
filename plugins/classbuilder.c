@@ -201,7 +201,7 @@ static const gchar templates_php_class_source[] = "<?php\n\
 {fileheader}\n\
 {namespace_decl}\n\
 {base_include}\n\
-{abstract_decl}class {class_name}{base_decl}{implements_decl}\n\{\n\
+{abstract_decl}class {class_name}{base_decl}{implements_decl}\n{\n\
 {singleton_impl}\
 {constructor_impl}\
 {destructor_impl}\n\
@@ -356,7 +356,7 @@ get_template_class_source(ClassInfo *class_info)
 }
 
 /* Creates a new option label, indented on the left */
-GtkWidget *cc_option_label_new(const gchar *text)
+static GtkWidget *cc_option_label_new(const gchar *text)
 {
 	GtkWidget *align;
 	GtkWidget *label;
@@ -373,10 +373,8 @@ GtkWidget *cc_option_label_new(const gchar *text)
 
 /* Attaches a new section label at the specified table row, optionally
  * padded at the top, and returns the new label. */
-GtkWidget *cc_table_attach_section_label(GtkWidget *table,
-										  const gchar *text,
-										  gint row,
-										  gboolean top_padding)
+static GtkWidget *cc_table_attach_section_label(GtkWidget *table, const gchar *text,
+		gint row, gboolean top_padding)
 {
 	gchar *markup;
 	GtkWidget *label, *align;
@@ -401,9 +399,7 @@ GtkWidget *cc_table_attach_section_label(GtkWidget *table,
 
 /* Attach a new option label at the specified table row and returns
  * the label */
-GtkWidget *cc_table_attach_option_label(GtkWidget *table,
-										 const gchar *text,
-										 gint row)
+static GtkWidget *cc_table_attach_option_label(GtkWidget *table, const gchar *text, gint row)
 {
 	GtkWidget *opt_label = cc_option_label_new(text);
 	gtk_table_attach(GTK_TABLE(table), opt_label,
@@ -416,9 +412,7 @@ GtkWidget *cc_table_attach_option_label(GtkWidget *table,
  * The label associated with the widget is set as data on the entry
  * with the "label" key, if access to it is needed later.  The entry
  * widget is returned. */
-GtkWidget *cc_table_attach_option_entry(GtkWidget *table,
-										 const gchar *text,
-										 gint row)
+static GtkWidget *cc_table_attach_option_entry(GtkWidget *table, const gchar *text, gint row)
 {
 	GtkWidget *label;
 	GtkWidget *entry;
@@ -431,7 +425,7 @@ GtkWidget *cc_table_attach_option_entry(GtkWidget *table,
 	return entry;
 }
 
-void show_dialog_create_class(gint type)
+static void show_dialog_create_class(gint type)
 {
 	CreateClassDialog *cc_dlg;
 	GtkWidget *main_box, *table, *label, *hdr_hbox;

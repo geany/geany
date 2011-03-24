@@ -174,14 +174,14 @@ static const gchar *ui_get_stock_label(const gchar *stock_id)
 static GtkWidget *ui_tool_button_new(const gchar *stock_id, const gchar *label, const gchar *tooltip)
 {
 	GtkToolItem *item;
-	gchar *dup = NULL;
+	gchar *dupl = NULL;
 
 	if (stock_id && !label)
 	{
 		label = ui_get_stock_label(stock_id);
 	}
-	dup = utils_str_remove_chars(g_strdup(label), "_");
-	label = dup;
+	dupl = utils_str_remove_chars(g_strdup(label), "_");
+	label = dupl;
 
 	item = gtk_tool_button_new(NULL, label);
 	if (stock_id)
@@ -192,7 +192,7 @@ static GtkWidget *ui_tool_button_new(const gchar *stock_id, const gchar *label, 
 	if (tooltip)
 		ui_widget_set_tooltip_text(GTK_WIDGET(item), tooltip);
 
-	g_free(dup);
+	g_free(dupl);
 	return GTK_WIDGET(item);
 }
 
