@@ -26,10 +26,9 @@ globalclass=type
 
 [keywords]
 # all items must be in one line
-primary=else if switch case default break continue return for foreach in do while is try catch finally throw namespace interface class struct enum signal errordomain construct callback get set base const static var weak virtual abstract override inline extern public protected private delegate out ref lock using true false null generic new delete base this value typeof sizeof throws requires ensures void bool char uchar int uint short ushort long ulong size_t ssize_t int8 uint8 int16 uint16 int32 uint32 int64 uint64 float double unichar string constpointer time_t
-#secondary=
-# these are some doxygen keywords (incomplete)
-docComment=attention author brief bug class code date def enum example exception file fn namespace note param remarks return see since struct throw todo typedef var version warning union
+primary=abstract as async base bool break callback case catch char class const constpointer construct continue default delegate delete do double dynamic else ensures enum errordomain extern false finally float for foreach generic get global if in inline int int16 int32 int64 int8 interface internal is lock long namespace new null out override owned private protected public ref requires return set sealed short signal size_t sizeof ssize_t static string struct switch this throw throws time_t true try typeof uchar uint uint16 uint32 uint64 uint8 ulong unichar unowned ushort using value var virtual void weak while yield
+# these are some doxygen and valadoc keywords (incomplete)
+docComment=attention author brief bug class code date def deprecated enum example exception file fn inheritDoc link namespace note param remarks return see since struct throw throws todo typedef union var version warning
 
 [lexer_properties]
 styling.within.preprocessor=1
