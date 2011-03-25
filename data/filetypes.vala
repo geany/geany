@@ -27,6 +27,7 @@ globalclass=type
 [keywords]
 # all items must be in one line
 primary=abstract as async base bool break callback case catch char class const constpointer construct continue default delegate delete do double dynamic else ensures enum errordomain extern false finally float for foreach generic get global if in inline int int16 int32 int64 int8 interface internal is lock long namespace new null out override owned private protected public ref requires return set sealed short signal size_t sizeof ssize_t static string struct switch this throw throws time_t true try typeof uchar uint uint16 uint32 uint64 uint8 ulong unichar unowned ushort using value var virtual void weak while yield
+#secondary=
 # these are some doxygen and valadoc keywords (incomplete)
 docComment=attention author brief bug class code date def deprecated enum example exception file fn inheritDoc link namespace note param remarks return see since struct throw throws todo typedef union var version warning
 
