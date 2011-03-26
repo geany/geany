@@ -2,6 +2,8 @@
 
  * data/filetypes.vala:
    Update Vala keywords (based on a patch from Matthew Brush, thanks).
+ * data/document.c:
+   Small code cleanups.
 
 
 2011-03-24  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

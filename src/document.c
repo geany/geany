@@ -980,13 +980,9 @@ static GeanyIndentType detect_indent_type(GeanyEditor *editor)
 		c = sci_get_char_at(sci, pos);
 		if (c == '\t')
 			tabs++;
-		else
-		if (c == ' ')
-		{
-			/* check for at least 2 spaces */
-			if (sci_get_char_at(sci, pos + 1) == ' ')
-				spaces++;
-		}
+		/* check for at least 2 spaces */
+		else if (c == ' ' && sci_get_char_at(sci, pos + 1) == ' ')
+			spaces++;
 	}
 	if (spaces == 0 && tabs == 0)
 		return iprefs->type;
@@ -1056,25 +1052,6 @@ void document_apply_indent_settings(GeanyDocument *doc)
 	}
 	editor_set_indent(doc->editor, type, iprefs->width);
 }
-
-
-#if 0
-static gboolean auto_update_tag_list(gpointer data)
-{
-	GeanyDocument *doc = data;
-
-	if (! doc || ! doc->is_valid || doc->tm_file == NULL)
-		return FALSE;
-
-	if (gtk_window_get_focus(GTK_WINDOW(main_widgets.window)) != GTK_WIDGET(doc->editor->sci))
-		return TRUE;
-
-	if (update_tags_from_buffer(doc))
-		sidebar_update_tag_list(doc, TRUE);
-
-	return TRUE;
-}
-#endif
 
 
 /* To open a new file, set doc to NULL; filename should be locale encoded.
@@ -1232,10 +1209,6 @@ GeanyDocument *document_open_file_full(GeanyDocument *doc, const gchar *filename
 	g_free(utf8_filename);
 	g_free(locale_filename);
 
-	/* TODO This could be used to automatically update the symbol list,
-	 * based on a configurable interval */
-	/*g_timeout_add(10000, auto_update_tag_list, doc);*/
-
 	/* set the cursor position according to pos, cl_options.goto_line and cl_options.goto_column */
 	pos = set_cursor_position(doc->editor, pos);
 	/* now bring the file in front */
@@ -1261,18 +1234,10 @@ void document_open_file_list(const gchar *data, gssize length)
 	if (length < 0)
 		length = strlen(data);
 
-	switch (utils_get_line_endings(data, length))
-	{
-		case SC_EOL_CR: list = g_strsplit(data, "\r", 0); break;
-		case SC_EOL_CRLF: list = g_strsplit(data, "\r\n", 0); break;
-		case SC_EOL_LF: list = g_strsplit(data, "\n", 0); break;
-		default: list = g_strsplit(data, "\n", 0);
-	}
+	list = g_strsplit(data, utils_get_eol_char(utils_get_line_endings(data, length)), 0);
 
-	for (i = 0; ; i++)
+	for (i = 0; list[i] != NULL; i++)
 	{
-		if (list[i] == NULL)
-			break;
 		filename = g_filename_from_uri(list[i], NULL, NULL);
 		if (G_UNLIKELY(filename == NULL))
 			continue;
