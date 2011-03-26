@@ -96,6 +96,7 @@ typedef struct GeanyIndentPrefs
 	gint			hard_tab_width;
 	GeanyAutoIndent	auto_indent_mode;
 	gboolean		detect_type;
+	gboolean		detect_width;
 }
 GeanyIndentPrefs;
 

@@ -1209,7 +1209,9 @@ void project_init(void)
 	stash_group_add_integer(group, &indentation.hard_tab_width,
 		"indent_hard_tab_width", 8);
 	stash_group_add_toggle_button(group, &indentation.detect_type,
-		"detect_indent", FALSE, "check_detect_indent");
+		"detect_indent", FALSE, "check_detect_indent_type");
+	stash_group_add_toggle_button(group, &indentation.detect_width,
+		"detect_indent_width", FALSE, "check_detect_indent_width");
 	stash_group_add_combo_box(group, (gint*)(gpointer)&indentation.auto_indent_mode,
 		"indent_mode", GEANY_AUTOINDENT_CURRENTCHARS, "combo_auto_indent_mode");
 }

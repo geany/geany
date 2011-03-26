@@ -6,6 +6,11 @@
    Also change the hack used for the selection to be updated in the input
    handlers to call the GtkTreeView's handler manually rather than doing
    the actual job in IDLE callbacks for the TreeView's handler to have run.
+ * doc/geany.html, doc/geany.txt, geany.glade, src/document.c,
+   src/editor.h, src/interface.c, src/interface.h, src/keyfile.c,
+   src/project.c:
+   Add possibility to detect the indentation width from the file content
+   (not supported if indentation type is tabs only).
 
 
 2011-03-25  Colomban Wendling  <colomban(at)geany(dot)org>

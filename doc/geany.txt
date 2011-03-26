@@ -1993,6 +1993,14 @@ Indentation group
 
 See `Indentation`_ for more information.
 
+Width
+    The width of a single indent size in spaces. By default the indent
+    size is equivalent to 4 spaces.
+
+Detect width from file
+    Try to detect and set the indent width based on file content, when
+    a file is opened.
+
 Type
     When Geany inserts indentation, whether to use:
 
@@ -2003,11 +2011,7 @@ Type
     The *Tabs and Spaces* indent type is also known as *Soft tab
     support* in some other editors.
 
-Width
-    The width of a single indent size in spaces. By default the indent
-    size is equivalent to 4 spaces.
-
-Detect from file
+Detect type from file
     Try to detect and set the indent type based on file content, when
     a file is opened.
 

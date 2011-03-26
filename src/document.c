@@ -997,22 +997,72 @@ static GeanyIndentType detect_indent_type(GeanyEditor *editor)
 }
 
 
-static gboolean apply_forced_indent_settings(GeanyDocument *doc)
+/* Detect the indent width based on counting the leading indent characters for each line. */
+static gint detect_indent_width(GeanyEditor *editor, GeanyIndentType type)
 {
-	const GeanyIndentPrefs *iprefs = editor_get_indent_prefs(NULL);
+	const GeanyIndentPrefs *iprefs = editor_get_indent_prefs(editor);
+	ScintillaObject *sci = editor->sci;
+	guint line, line_count;
+	gint widths[7] = { 0 }; /* width can be from 2 to 8 */
+	gint count, width, i;
 
+	/* can't easily detect the supposed width of a tab, guess the default is OK */
+	if (type == GEANY_INDENT_TYPE_TABS)
+		return iprefs->width;
+
+	/* force 8 at detection time for tab & spaces -- anyway we don't use tabs at this point */
+	sci_set_tab_width(sci, 8);
+
+	line_count = sci_get_line_count(sci);
+	for (line = 0; line < line_count; line++)
+	{
+		width = sci_get_line_indentation(sci, line);
+		/* most code will have indent total <= 24, otherwise it's more likely to be
+		 * alignment than indentation */
+		if (width > 24)
+			continue;
+		/* < 2 is no indentation */
+		if (width < 2)
+			continue;
+
+		for (i = G_N_ELEMENTS(widths) - 1; i >= 0; i--)
+		{
+			if ((width % (i + 2)) == 0)
+			{
+				widths[i]++;
+				break;
+			}
+		}
+	}
+	count = 0;
+	width = iprefs->width;
+	for (i = 0; i < G_N_ELEMENTS(widths); i++)
+	{
+		/* give small lengths higher weight not for nested blocks to confuse detection */
+		if (widths[i] > count * 4)
+		{
+			width = i + 2;
+			count = widths[i];
+		}
+	}
+
+	return width;
+}
+
+
+/* returns the forced indent type or -1 if none is forced */
+static gint get_forced_indent_type(GeanyDocument *doc)
+{
 	switch (doc->file_type->id)
 	{
 		case GEANY_FILETYPES_MAKE:
 			/* force using tabs for indentation for Makefiles */
-			editor_set_indent(doc->editor, GEANY_INDENT_TYPE_TABS, iprefs->width);
-			return TRUE;
+			return GEANY_INDENT_TYPE_TABS;
 		case GEANY_FILETYPES_F77:
 			/* force using spaces for indentation for Fortran 77 */
-			editor_set_indent(doc->editor, GEANY_INDENT_TYPE_SPACES, iprefs->width);
-			return TRUE;
+			return GEANY_INDENT_TYPE_SPACES;
 		default:
-			return FALSE;
+			return -1;
 	}
 }
 
@@ -1020,11 +1070,13 @@ static gboolean apply_forced_indent_settings(GeanyDocument *doc)
 void document_apply_indent_settings(GeanyDocument *doc)
 {
 	const GeanyIndentPrefs *iprefs = editor_get_indent_prefs(NULL);
-	GeanyIndentType type = iprefs->type;
+	gint type;
+	gint width = iprefs->width;
 
-	if (apply_forced_indent_settings(doc))
-		return;
-	if (iprefs->detect_type)
+	type = get_forced_indent_type(doc);
+	if (type < 0 && ! iprefs->detect_type)
+		type = iprefs->type;
+	else if (type < 0)
 	{
 		type = detect_indent_type(doc->editor);
 
@@ -1050,7 +1102,17 @@ void document_apply_indent_settings(GeanyDocument *doc)
 				DOC_FILENAME(doc));
 		}
 	}
-	editor_set_indent(doc->editor, type, iprefs->width);
+	if (iprefs->detect_width)
+	{
+		width = detect_indent_width(doc->editor, type);
+
+		if (width != iprefs->width)
+		{
+			ui_set_statusbar(TRUE, _("Setting indentation width to %d for %s."), width,
+				DOC_FILENAME(doc));
+		}
+	}
+	editor_set_indent(doc->editor, type, width);
 }
 
 
@@ -2417,8 +2479,13 @@ void document_set_filetype(GeanyDocument *doc, GeanyFiletype *type)
 
 	if (ft_changed)
 	{
-		if (apply_forced_indent_settings(doc)) /* update forced indents, like Makefiles and F77 */
+		gint forced_indent_type = get_forced_indent_type(doc);
+
+		if (forced_indent_type >= 0)
+		{	/* update forced indents, like Makefiles and F77 */
+			editor_set_indent_type(doc->editor, forced_indent_type);
 			ui_document_show_hide(doc);
+		}
 		sidebar_openfiles_update(doc); /* to update the icon */
 		g_signal_emit_by_name(geany_object, "document-filetype-set", doc, old_ft);
 	}

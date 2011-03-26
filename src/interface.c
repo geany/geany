@@ -2676,17 +2676,18 @@ create_prefs_dialog (void)
   GtkWidget *alignment30;
   GtkWidget *vbox25;
   GtkWidget *table13;
-  GtkWidget *label183;
-  GtkWidget *combo_auto_indent_mode;
-  GtkWidget *label200;
   GtkWidget *label222;
   GtkObject *spin_indent_width_adj;
   GtkWidget *spin_indent_width;
-  GtkWidget *radio_indent_spaces;
-  GSList *radio_indent_spaces_group = NULL;
-  GtkWidget *radio_indent_tabs;
+  GtkWidget *label183;
+  GtkWidget *combo_auto_indent_mode;
+  GtkWidget *check_detect_indent_type;
   GtkWidget *radio_indent_both;
-  GtkWidget *check_detect_indent;
+  GSList *radio_indent_both_group = NULL;
+  GtkWidget *radio_indent_spaces;
+  GtkWidget *radio_indent_tabs;
+  GtkWidget *check_detect_indent_width;
+  GtkWidget *label200;
   GtkWidget *check_tab_key_indents;
   GtkWidget *label195;
   GtkWidget *label232;
@@ -3834,35 +3835,11 @@ create_prefs_dialog (void)
   gtk_widget_show (vbox25);
   gtk_container_add (GTK_CONTAINER (alignment30), vbox25);
 
-  table13 = gtk_table_new (6, 2, FALSE);
+  table13 = gtk_table_new (7, 2, FALSE);
   gtk_widget_show (table13);
   gtk_box_pack_start (GTK_BOX (vbox25), table13, FALSE, TRUE, 0);
   gtk_table_set_row_spacings (GTK_TABLE (table13), 3);
   gtk_table_set_col_spacings (GTK_TABLE (table13), 24);
-
-  label183 = gtk_label_new (_("Auto-indent mode:"));
-  gtk_widget_show (label183);
-  gtk_table_attach (GTK_TABLE (table13), label183, 0, 1, 5, 6,
-                    (GtkAttachOptions) (GTK_FILL),
-                    (GtkAttachOptions) (0), 0, 0);
-  gtk_misc_set_alignment (GTK_MISC (label183), 0, 0.5);
-
-  combo_auto_indent_mode = gtk_combo_box_new_text ();
-  gtk_widget_show (combo_auto_indent_mode);
-  gtk_table_attach (GTK_TABLE (table13), combo_auto_indent_mode, 1, 2, 5, 6,
-                    (GtkAttachOptions) (GTK_FILL),
-                    (GtkAttachOptions) (GTK_FILL), 0, 0);
-  gtk_combo_box_append_text (GTK_COMBO_BOX (combo_auto_indent_mode), _("None"));
-  gtk_combo_box_append_text (GTK_COMBO_BOX (combo_auto_indent_mode), _("Basic"));
-  gtk_combo_box_append_text (GTK_COMBO_BOX (combo_auto_indent_mode), _("Current chars"));
-  gtk_combo_box_append_text (GTK_COMBO_BOX (combo_auto_indent_mode), _("Match braces"));
-
-  label200 = gtk_label_new (_("Type:"));
-  gtk_widget_show (label200);
-  gtk_table_attach (GTK_TABLE (table13), label200, 0, 1, 1, 2,
-                    (GtkAttachOptions) (GTK_FILL),
-                    (GtkAttachOptions) (0), 0, 0);
-  gtk_misc_set_alignment (GTK_MISC (label200), 0, 0.5);
 
   label222 = gtk_label_new (_("Width:"));
   gtk_widget_show (label222);
@@ -3882,39 +3859,70 @@ create_prefs_dialog (void)
   gtk_spin_button_set_update_policy (GTK_SPIN_BUTTON (spin_indent_width), GTK_UPDATE_IF_VALID);
   gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spin_indent_width), TRUE);
 
-  radio_indent_spaces = gtk_radio_button_new_with_mnemonic (NULL, _("_Spaces"));
-  gtk_widget_show (radio_indent_spaces);
-  gtk_table_attach (GTK_TABLE (table13), radio_indent_spaces, 1, 2, 2, 3,
+  label183 = gtk_label_new (_("Auto-indent mode:"));
+  gtk_widget_show (label183);
+  gtk_table_attach (GTK_TABLE (table13), label183, 0, 1, 6, 7,
                     (GtkAttachOptions) (GTK_FILL),
                     (GtkAttachOptions) (0), 0, 0);
-  gtk_tooltips_set_tip (tooltips, radio_indent_spaces, _("Use spaces when inserting indentation"), NULL);
-  gtk_radio_button_set_group (GTK_RADIO_BUTTON (radio_indent_spaces), radio_indent_spaces_group);
-  radio_indent_spaces_group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio_indent_spaces));
+  gtk_misc_set_alignment (GTK_MISC (label183), 0, 0.5);
 
-  radio_indent_tabs = gtk_radio_button_new_with_mnemonic (NULL, _("_Tabs"));
-  gtk_widget_show (radio_indent_tabs);
-  gtk_table_attach (GTK_TABLE (table13), radio_indent_tabs, 1, 2, 1, 2,
+  combo_auto_indent_mode = gtk_combo_box_new_text ();
+  gtk_widget_show (combo_auto_indent_mode);
+  gtk_table_attach (GTK_TABLE (table13), combo_auto_indent_mode, 1, 2, 6, 7,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (GTK_FILL), 0, 0);
+  gtk_combo_box_append_text (GTK_COMBO_BOX (combo_auto_indent_mode), _("None"));
+  gtk_combo_box_append_text (GTK_COMBO_BOX (combo_auto_indent_mode), _("Basic"));
+  gtk_combo_box_append_text (GTK_COMBO_BOX (combo_auto_indent_mode), _("Current chars"));
+  gtk_combo_box_append_text (GTK_COMBO_BOX (combo_auto_indent_mode), _("Match braces"));
+
+  check_detect_indent_type = gtk_check_button_new_with_mnemonic (_("Detect type from file"));
+  gtk_widget_show (check_detect_indent_type);
+  gtk_table_attach (GTK_TABLE (table13), check_detect_indent_type, 1, 2, 5, 6,
                     (GtkAttachOptions) (GTK_FILL),
                     (GtkAttachOptions) (0), 0, 0);
-  gtk_tooltips_set_tip (tooltips, radio_indent_tabs, _("Use one tab per indent"), NULL);
-  gtk_radio_button_set_group (GTK_RADIO_BUTTON (radio_indent_tabs), radio_indent_spaces_group);
-  radio_indent_spaces_group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio_indent_tabs));
+  gtk_tooltips_set_tip (tooltips, check_detect_indent_type, _("Whether to detect the indentation type from file contents when a file is opened"), NULL);
 
   radio_indent_both = gtk_radio_button_new_with_mnemonic (NULL, _("T_abs and spaces"));
   gtk_widget_show (radio_indent_both);
-  gtk_table_attach (GTK_TABLE (table13), radio_indent_both, 1, 2, 3, 4,
+  gtk_table_attach (GTK_TABLE (table13), radio_indent_both, 1, 2, 4, 5,
                     (GtkAttachOptions) (GTK_FILL),
                     (GtkAttachOptions) (0), 0, 0);
   gtk_tooltips_set_tip (tooltips, radio_indent_both, _("Use spaces if the total indent is less than the tab width, otherwise use both"), NULL);
-  gtk_radio_button_set_group (GTK_RADIO_BUTTON (radio_indent_both), radio_indent_spaces_group);
-  radio_indent_spaces_group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio_indent_both));
+  gtk_radio_button_set_group (GTK_RADIO_BUTTON (radio_indent_both), radio_indent_both_group);
+  radio_indent_both_group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio_indent_both));
 
-  check_detect_indent = gtk_check_button_new_with_mnemonic (_("Detect from file"));
-  gtk_widget_show (check_detect_indent);
-  gtk_table_attach (GTK_TABLE (table13), check_detect_indent, 1, 2, 4, 5,
+  radio_indent_spaces = gtk_radio_button_new_with_mnemonic (NULL, _("_Spaces"));
+  gtk_widget_show (radio_indent_spaces);
+  gtk_table_attach (GTK_TABLE (table13), radio_indent_spaces, 1, 2, 3, 4,
                     (GtkAttachOptions) (GTK_FILL),
                     (GtkAttachOptions) (0), 0, 0);
-  gtk_tooltips_set_tip (tooltips, check_detect_indent, _("Whether to detect the indentation type from file contents when a file is opened"), NULL);
+  gtk_tooltips_set_tip (tooltips, radio_indent_spaces, _("Use spaces when inserting indentation"), NULL);
+  gtk_radio_button_set_group (GTK_RADIO_BUTTON (radio_indent_spaces), radio_indent_both_group);
+  radio_indent_both_group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio_indent_spaces));
+
+  radio_indent_tabs = gtk_radio_button_new_with_mnemonic (NULL, _("_Tabs"));
+  gtk_widget_show (radio_indent_tabs);
+  gtk_table_attach (GTK_TABLE (table13), radio_indent_tabs, 1, 2, 2, 3,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_tooltips_set_tip (tooltips, radio_indent_tabs, _("Use one tab per indent"), NULL);
+  gtk_radio_button_set_group (GTK_RADIO_BUTTON (radio_indent_tabs), radio_indent_both_group);
+  radio_indent_both_group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio_indent_tabs));
+
+  check_detect_indent_width = gtk_check_button_new_with_mnemonic (_("Detect width from file"));
+  gtk_widget_show (check_detect_indent_width);
+  gtk_table_attach (GTK_TABLE (table13), check_detect_indent_width, 1, 2, 1, 2,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_tooltips_set_tip (tooltips, check_detect_indent_width, _("Whether to detect the indentation width from file contents when a file is opened"), NULL);
+
+  label200 = gtk_label_new (_("Type:"));
+  gtk_widget_show (label200);
+  gtk_table_attach (GTK_TABLE (table13), label200, 0, 1, 2, 3,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_misc_set_alignment (GTK_MISC (label200), 0, 0.5);
 
   check_tab_key_indents = gtk_check_button_new_with_mnemonic (_("Tab key indents"));
   gtk_widget_show (check_tab_key_indents);
@@ -5206,15 +5214,16 @@ create_prefs_dialog (void)
   GLADE_HOOKUP_OBJECT (prefs_dialog, alignment30, "alignment30");
   GLADE_HOOKUP_OBJECT (prefs_dialog, vbox25, "vbox25");
   GLADE_HOOKUP_OBJECT (prefs_dialog, table13, "table13");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, label183, "label183");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, combo_auto_indent_mode, "combo_auto_indent_mode");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, label200, "label200");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label222, "label222");
   GLADE_HOOKUP_OBJECT (prefs_dialog, spin_indent_width, "spin_indent_width");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, label183, "label183");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, combo_auto_indent_mode, "combo_auto_indent_mode");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, check_detect_indent_type, "check_detect_indent_type");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, radio_indent_both, "radio_indent_both");
   GLADE_HOOKUP_OBJECT (prefs_dialog, radio_indent_spaces, "radio_indent_spaces");
   GLADE_HOOKUP_OBJECT (prefs_dialog, radio_indent_tabs, "radio_indent_tabs");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, radio_indent_both, "radio_indent_both");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, check_detect_indent, "check_detect_indent");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, check_detect_indent_width, "check_detect_indent_width");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, label200, "label200");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_tab_key_indents, "check_tab_key_indents");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label195, "label195");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label232, "label232");
@@ -5430,17 +5439,18 @@ create_project_dialog (void)
   GtkWidget *dialog_vbox4;
   GtkWidget *project_notebook;
   GtkWidget *table17;
-  GtkWidget *label228;
-  GtkWidget *combo_auto_indent_mode;
-  GtkWidget *label229;
   GtkWidget *label230;
   GtkObject *spin_indent_width_adj;
   GtkWidget *spin_indent_width;
-  GtkWidget *radio_indent_spaces;
-  GSList *radio_indent_spaces_group = NULL;
-  GtkWidget *radio_indent_tabs;
+  GtkWidget *label228;
+  GtkWidget *combo_auto_indent_mode;
+  GtkWidget *check_detect_indent_type;
   GtkWidget *radio_indent_both;
-  GtkWidget *check_detect_indent;
+  GSList *radio_indent_both_group = NULL;
+  GtkWidget *radio_indent_spaces;
+  GtkWidget *radio_indent_tabs;
+  GtkWidget *label229;
+  GtkWidget *check_detect_indent_width;
   GtkWidget *label227;
   GtkWidget *vbox47;
   GtkWidget *frame40;
@@ -5474,36 +5484,12 @@ create_project_dialog (void)
   gtk_widget_show (project_notebook);
   gtk_box_pack_start (GTK_BOX (dialog_vbox4), project_notebook, TRUE, TRUE, 0);
 
-  table17 = gtk_table_new (6, 2, FALSE);
+  table17 = gtk_table_new (7, 2, FALSE);
   gtk_widget_show (table17);
   gtk_container_add (GTK_CONTAINER (project_notebook), table17);
   gtk_container_set_border_width (GTK_CONTAINER (table17), 6);
   gtk_table_set_row_spacings (GTK_TABLE (table17), 3);
   gtk_table_set_col_spacings (GTK_TABLE (table17), 24);
-
-  label228 = gtk_label_new (_("Auto-indent mode:"));
-  gtk_widget_show (label228);
-  gtk_table_attach (GTK_TABLE (table17), label228, 0, 1, 5, 6,
-                    (GtkAttachOptions) (GTK_FILL),
-                    (GtkAttachOptions) (0), 0, 0);
-  gtk_misc_set_alignment (GTK_MISC (label228), 0, 0.5);
-
-  combo_auto_indent_mode = gtk_combo_box_new_text ();
-  gtk_widget_show (combo_auto_indent_mode);
-  gtk_table_attach (GTK_TABLE (table17), combo_auto_indent_mode, 1, 2, 5, 6,
-                    (GtkAttachOptions) (GTK_FILL),
-                    (GtkAttachOptions) (GTK_FILL), 0, 0);
-  gtk_combo_box_append_text (GTK_COMBO_BOX (combo_auto_indent_mode), _("None"));
-  gtk_combo_box_append_text (GTK_COMBO_BOX (combo_auto_indent_mode), _("Basic"));
-  gtk_combo_box_append_text (GTK_COMBO_BOX (combo_auto_indent_mode), _("Current chars"));
-  gtk_combo_box_append_text (GTK_COMBO_BOX (combo_auto_indent_mode), _("Match braces"));
-
-  label229 = gtk_label_new (_("Type:"));
-  gtk_widget_show (label229);
-  gtk_table_attach (GTK_TABLE (table17), label229, 0, 1, 1, 2,
-                    (GtkAttachOptions) (GTK_FILL),
-                    (GtkAttachOptions) (0), 0, 0);
-  gtk_misc_set_alignment (GTK_MISC (label229), 0, 0.5);
 
   label230 = gtk_label_new (_("Width:"));
   gtk_widget_show (label230);
@@ -5523,39 +5509,70 @@ create_project_dialog (void)
   gtk_spin_button_set_update_policy (GTK_SPIN_BUTTON (spin_indent_width), GTK_UPDATE_IF_VALID);
   gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spin_indent_width), TRUE);
 
-  radio_indent_spaces = gtk_radio_button_new_with_mnemonic (NULL, _("_Spaces"));
-  gtk_widget_show (radio_indent_spaces);
-  gtk_table_attach (GTK_TABLE (table17), radio_indent_spaces, 1, 2, 2, 3,
+  label228 = gtk_label_new (_("Auto-indent mode:"));
+  gtk_widget_show (label228);
+  gtk_table_attach (GTK_TABLE (table17), label228, 0, 1, 6, 7,
                     (GtkAttachOptions) (GTK_FILL),
                     (GtkAttachOptions) (0), 0, 0);
-  gtk_tooltips_set_tip (tooltips, radio_indent_spaces, _("Use spaces when inserting indentation"), NULL);
-  gtk_radio_button_set_group (GTK_RADIO_BUTTON (radio_indent_spaces), radio_indent_spaces_group);
-  radio_indent_spaces_group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio_indent_spaces));
+  gtk_misc_set_alignment (GTK_MISC (label228), 0, 0.5);
 
-  radio_indent_tabs = gtk_radio_button_new_with_mnemonic (NULL, _("_Tabs"));
-  gtk_widget_show (radio_indent_tabs);
-  gtk_table_attach (GTK_TABLE (table17), radio_indent_tabs, 1, 2, 1, 2,
+  combo_auto_indent_mode = gtk_combo_box_new_text ();
+  gtk_widget_show (combo_auto_indent_mode);
+  gtk_table_attach (GTK_TABLE (table17), combo_auto_indent_mode, 1, 2, 6, 7,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (GTK_FILL), 0, 0);
+  gtk_combo_box_append_text (GTK_COMBO_BOX (combo_auto_indent_mode), _("None"));
+  gtk_combo_box_append_text (GTK_COMBO_BOX (combo_auto_indent_mode), _("Basic"));
+  gtk_combo_box_append_text (GTK_COMBO_BOX (combo_auto_indent_mode), _("Current chars"));
+  gtk_combo_box_append_text (GTK_COMBO_BOX (combo_auto_indent_mode), _("Match braces"));
+
+  check_detect_indent_type = gtk_check_button_new_with_mnemonic (_("Detect type from file"));
+  gtk_widget_show (check_detect_indent_type);
+  gtk_table_attach (GTK_TABLE (table17), check_detect_indent_type, 1, 2, 5, 6,
                     (GtkAttachOptions) (GTK_FILL),
                     (GtkAttachOptions) (0), 0, 0);
-  gtk_tooltips_set_tip (tooltips, radio_indent_tabs, _("Use one tab per indent"), NULL);
-  gtk_radio_button_set_group (GTK_RADIO_BUTTON (radio_indent_tabs), radio_indent_spaces_group);
-  radio_indent_spaces_group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio_indent_tabs));
+  gtk_tooltips_set_tip (tooltips, check_detect_indent_type, _("Whether to detect the indentation type from file contents when a file is opened"), NULL);
 
   radio_indent_both = gtk_radio_button_new_with_mnemonic (NULL, _("T_abs and spaces"));
   gtk_widget_show (radio_indent_both);
-  gtk_table_attach (GTK_TABLE (table17), radio_indent_both, 1, 2, 3, 4,
+  gtk_table_attach (GTK_TABLE (table17), radio_indent_both, 1, 2, 4, 5,
                     (GtkAttachOptions) (GTK_FILL),
                     (GtkAttachOptions) (0), 0, 0);
   gtk_tooltips_set_tip (tooltips, radio_indent_both, _("Use spaces if the total indent is less than the tab width, otherwise use both"), NULL);
-  gtk_radio_button_set_group (GTK_RADIO_BUTTON (radio_indent_both), radio_indent_spaces_group);
-  radio_indent_spaces_group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio_indent_both));
+  gtk_radio_button_set_group (GTK_RADIO_BUTTON (radio_indent_both), radio_indent_both_group);
+  radio_indent_both_group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio_indent_both));
 
-  check_detect_indent = gtk_check_button_new_with_mnemonic (_("Detect from file"));
-  gtk_widget_show (check_detect_indent);
-  gtk_table_attach (GTK_TABLE (table17), check_detect_indent, 1, 2, 4, 5,
+  radio_indent_spaces = gtk_radio_button_new_with_mnemonic (NULL, _("_Spaces"));
+  gtk_widget_show (radio_indent_spaces);
+  gtk_table_attach (GTK_TABLE (table17), radio_indent_spaces, 1, 2, 3, 4,
                     (GtkAttachOptions) (GTK_FILL),
                     (GtkAttachOptions) (0), 0, 0);
-  gtk_tooltips_set_tip (tooltips, check_detect_indent, _("Whether to detect the indentation type from file contents when a file is opened"), NULL);
+  gtk_tooltips_set_tip (tooltips, radio_indent_spaces, _("Use spaces when inserting indentation"), NULL);
+  gtk_radio_button_set_group (GTK_RADIO_BUTTON (radio_indent_spaces), radio_indent_both_group);
+  radio_indent_both_group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio_indent_spaces));
+
+  radio_indent_tabs = gtk_radio_button_new_with_mnemonic (NULL, _("_Tabs"));
+  gtk_widget_show (radio_indent_tabs);
+  gtk_table_attach (GTK_TABLE (table17), radio_indent_tabs, 1, 2, 2, 3,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_tooltips_set_tip (tooltips, radio_indent_tabs, _("Use one tab per indent"), NULL);
+  gtk_radio_button_set_group (GTK_RADIO_BUTTON (radio_indent_tabs), radio_indent_both_group);
+  radio_indent_both_group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio_indent_tabs));
+
+  label229 = gtk_label_new (_("Type:"));
+  gtk_widget_show (label229);
+  gtk_table_attach (GTK_TABLE (table17), label229, 0, 1, 2, 3,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_misc_set_alignment (GTK_MISC (label229), 0, 0.5);
+
+  check_detect_indent_width = gtk_check_button_new_with_mnemonic (_("Detect width from file"));
+  gtk_widget_show (check_detect_indent_width);
+  gtk_table_attach (GTK_TABLE (table17), check_detect_indent_width, 1, 2, 1, 2,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_tooltips_set_tip (tooltips, check_detect_indent_width, _("Whether to detect the indentation width from file contents when a file is opened"), NULL);
 
   label227 = gtk_label_new (_("Indentation"));
   gtk_widget_show (label227);
@@ -5657,15 +5674,16 @@ create_project_dialog (void)
   GLADE_HOOKUP_OBJECT_NO_REF (project_dialog, dialog_vbox4, "dialog_vbox4");
   GLADE_HOOKUP_OBJECT (project_dialog, project_notebook, "project_notebook");
   GLADE_HOOKUP_OBJECT (project_dialog, table17, "table17");
-  GLADE_HOOKUP_OBJECT (project_dialog, label228, "label228");
-  GLADE_HOOKUP_OBJECT (project_dialog, combo_auto_indent_mode, "combo_auto_indent_mode");
-  GLADE_HOOKUP_OBJECT (project_dialog, label229, "label229");
   GLADE_HOOKUP_OBJECT (project_dialog, label230, "label230");
   GLADE_HOOKUP_OBJECT (project_dialog, spin_indent_width, "spin_indent_width");
+  GLADE_HOOKUP_OBJECT (project_dialog, label228, "label228");
+  GLADE_HOOKUP_OBJECT (project_dialog, combo_auto_indent_mode, "combo_auto_indent_mode");
+  GLADE_HOOKUP_OBJECT (project_dialog, check_detect_indent_type, "check_detect_indent_type");
+  GLADE_HOOKUP_OBJECT (project_dialog, radio_indent_both, "radio_indent_both");
   GLADE_HOOKUP_OBJECT (project_dialog, radio_indent_spaces, "radio_indent_spaces");
   GLADE_HOOKUP_OBJECT (project_dialog, radio_indent_tabs, "radio_indent_tabs");
-  GLADE_HOOKUP_OBJECT (project_dialog, radio_indent_both, "radio_indent_both");
-  GLADE_HOOKUP_OBJECT (project_dialog, check_detect_indent, "check_detect_indent");
+  GLADE_HOOKUP_OBJECT (project_dialog, label229, "label229");
+  GLADE_HOOKUP_OBJECT (project_dialog, check_detect_indent_width, "check_detect_indent_width");
   GLADE_HOOKUP_OBJECT (project_dialog, label227, "label227");
   GLADE_HOOKUP_OBJECT (project_dialog, vbox47, "vbox47");
   GLADE_HOOKUP_OBJECT (project_dialog, frame40, "frame40");
@@ -5685,5 +5703,23 @@ create_project_dialog (void)
   GLADE_HOOKUP_OBJECT_NO_REF (project_dialog, tooltips, "tooltips");
 
   return project_dialog;
+}
+
+GtkWidget*
+create_checkbutton3 (void)
+{
+  GtkWidget *checkbutton3;
+  GtkTooltips *tooltips;
+
+  tooltips = gtk_tooltips_new ();
+
+  checkbutton3 = gtk_check_button_new_with_mnemonic (_("Detect from file"));
+  gtk_tooltips_set_tip (tooltips, checkbutton3, _("Whether to detect the indentation type from file contents when a file is opened"), NULL);
+
+  /* Store pointers to all widgets, for use by lookup_widget(). */
+  GLADE_HOOKUP_OBJECT_NO_REF (checkbutton3, checkbutton3, "checkbutton3");
+  GLADE_HOOKUP_OBJECT_NO_REF (checkbutton3, tooltips, "tooltips");
+
+  return checkbutton3;
 }
 
