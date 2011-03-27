@@ -307,14 +307,14 @@ static void split_view(gboolean horizontal)
 
 	set_state(horizontal ? STATE_SPLIT_HORIZONTAL : STATE_SPLIT_VERTICAL);
 
-	/* temporarily put document notebook in main vbox (scintilla widgets must stay
-	 * in a visible parent window, otherwise there are X selection and scrollbar issues) */
-	gtk_widget_reparent(notebook,
-		ui_lookup_widget(geany->main_widgets->window, "vbox1"));
+	gtk_widget_ref(notebook);
+	gtk_container_remove(GTK_CONTAINER(parent), notebook);
 
 	pane = horizontal ? gtk_hpaned_new() : gtk_vpaned_new();
 	gtk_container_add(GTK_CONTAINER(parent), pane);
-	gtk_widget_reparent(notebook, pane);
+
+	gtk_container_add(GTK_CONTAINER(pane), notebook);
+	gtk_widget_unref(notebook);
 
 	box = gtk_vbox_new(FALSE, 0);
 	toolbar = create_toolbar();
@@ -358,10 +358,8 @@ static void on_unsplit(GtkMenuItem *menuitem, gpointer user_data)
 
 	g_return_if_fail(edit_window.editor);
 
-	/* temporarily put document notebook in main vbox (scintilla widgets must stay
-	 * in a visible parent window, otherwise there are X selection and scrollbar issues) */
-	gtk_widget_reparent(notebook,
-		ui_lookup_widget(geany->main_widgets->window, "vbox1"));
+	gtk_widget_ref(notebook);
+	gtk_container_remove(GTK_CONTAINER(pane), notebook);
 
 	if (edit_window.sci != NULL && edit_window.handler_id > 0)
 	{
@@ -372,7 +370,9 @@ static void on_unsplit(GtkMenuItem *menuitem, gpointer user_data)
 	gtk_widget_destroy(pane);
 	edit_window.editor = NULL;
 	edit_window.sci = NULL;
-	gtk_widget_reparent(notebook, parent);
+
+	gtk_container_add(GTK_CONTAINER(parent), notebook);
+	gtk_widget_unref(notebook);
 }
 
 
