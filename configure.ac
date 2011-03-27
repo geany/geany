@@ -146,6 +146,11 @@ AC_SUBST(GIO_LIBS)
 if test $have_gio = 1 ; then
     AC_DEFINE(HAVE_GIO, 1, [Whether GIO is available])
 fi
+# GTHREAD checks
+gthread_modules="gthread-2.0"
+PKG_CHECK_MODULES(GTHREAD, [$gthread_modules])
+AC_SUBST(GTHREAD_CFLAGS)
+AC_SUBST(GTHREAD_LIBS)
 
 # --disable-deprecated switch for GTK2 purification
 AC_ARG_ENABLE(deprecated, [  --disable-deprecated    Disable deprecated GTK functions. ],

@@ -39,7 +39,7 @@ INCLUDEDIRS=  -I.. \
 ALL_GTK_LIBS= \
 	-L"$(PREFIX)/lib" \
 	-lgtk-win32-2.0 -lgdk-win32-2.0 -latk-1.0 -lgdk_pixbuf-2.0 -lpangowin32-1.0 -lgdi32 \
-	-lpango-1.0 -lgobject-2.0 -lgmodule-2.0 -lgthread-2.0 -lglib-2.0 -lintl
+	-lpango-1.0 -lgobject-2.0 -lgmodule-2.0 -lgthread-2.0 -lglib-2.0 -lgthread-2.0 -lintl
 	# these things are for GTK >= 2.8
 	# (should be same as with MSYS: pkg-config --libs gtk+-2.0 gthread-2.0)
 	#"$(PREFIX)/lib/libcairo.dll.a" \

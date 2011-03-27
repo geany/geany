@@ -150,6 +150,7 @@ def configure(conf):
             have_gtk_210 = True
     else:
         gtk_version = 'Unknown'
+    conf.check_cfg(package='gthread-2.0', uselib_store='GTHREAD', args='--cflags --libs')
     conf.check_cfg(package='gio-2.0', uselib_store='GIO', args='--cflags --libs', mandatory=False)
 
     # Windows specials
@@ -332,7 +333,7 @@ def build(bld):
         source          = geany_sources,
         includes        = ['.', 'scintilla/include/', 'tagmanager/include/'],
         defines         = ['G_LOG_DOMAIN="Geany"', 'GEANY_PRIVATE'],
-        uselib          = ['GTK', 'GIO', 'WIN32', 'SUNOS_SOCKET'],
+        uselib          = ['GTK', 'GIO', 'GTHREAD', 'WIN32', 'SUNOS_SOCKET'],
         use             = ['scintilla', 'tagmanager', 'mio'])
 
     # geanyfunctions.h

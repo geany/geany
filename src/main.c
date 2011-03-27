@@ -480,7 +480,7 @@ static void print_filetypes(void)
 	foreach_slist(node, filetypes_by_title)
 	{
 		GeanyFiletype *ft = node->data;
-		
+
 		printf("%s\n", ft->name);
 	}
 	filetypes_free_types();
@@ -958,6 +958,11 @@ gint main(gint argc, gchar **argv)
 	main_locale_init(GEANY_LOCALEDIR, GETTEXT_PACKAGE);
 #endif
 	parse_command_line_options(&argc, &argv);
+
+    /* Initialize GLib's thread system in case any plugins want to use it or their
+     * dependencies (e.g. WebKit, Soup, ...) */
+	if (!g_thread_supported())
+		g_thread_init(NULL);
 
 	signal(SIGTERM, signal_cb);
 #ifdef G_OS_UNIX
