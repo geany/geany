@@ -4,6 +4,8 @@
    wscript:
    Initialize GLib's Gthread system early at startup in case any
    plugins need it.
+ * plugins/Makefile.am, plugins/makefile.win32, wscript:
+   Enable SplitWindow build on Windows again.
 
 
 2011-03-27  Colomban Wendling  <colomban(at)geany(dot)org>
