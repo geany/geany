@@ -531,6 +531,8 @@ static void init_default_kb(void)
 		0, 0, "remove_markers", _("Remove Markers"), LW(remove_markers1));
 	keybindings_set_item(group, GEANY_KEYS_DOCUMENT_REMOVE_ERROR_INDICATORS, NULL,
 		0, 0, "remove_error_indicators", _("Remove Error Indicators"), LW(menu_remove_indicators1));
+	keybindings_set_item(group, GEANY_KEYS_DOCUMENT_REMOVE_MARKERS_INDICATORS, NULL,
+		0, 0, "remove_markers_and_indicators", _("Remove Markers and Error Indicators"), NULL);
 
 	group = ADD_KB_GROUP(BUILD, _("Build"), cb_func_build_action);
 
@@ -2541,6 +2543,10 @@ static gboolean cb_func_document_action(guint key_id)
 			on_remove_markers1_activate(NULL, NULL);
 			break;
 		case GEANY_KEYS_DOCUMENT_REMOVE_ERROR_INDICATORS:
+			on_menu_remove_indicators1_activate(NULL, NULL);
+			break;
+		case GEANY_KEYS_DOCUMENT_REMOVE_MARKERS_INDICATORS:
+			on_remove_markers1_activate(NULL, NULL);
 			on_menu_remove_indicators1_activate(NULL, NULL);
 			break;
 	}

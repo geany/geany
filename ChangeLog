@@ -4,6 +4,9 @@
    wscript:
    Initialize GLib's Gthread system early at startup in case any
    plugins need it.
+ * src/keybindings.c, src/keybindings.h, src/plugindata.h,
+   doc/geany.txt, doc/geany.html:
+   Add new keybinding 'Remove Markers and Error Indicators'.
 
 
 2011-03-26  Colomban Wendling  <colomban(at)geany(dot)org>

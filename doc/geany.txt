@@ -3444,9 +3444,9 @@ Move document last                                        Moves the current docu
 
 Document keybindings
 ````````````````````
-=============================== ========================= ==================================================
-Action                          Default shortcut          Description
-=============================== ========================= ==================================================
+==================================== ==================== ==================================================
+Action                               Default shortcut     Description
+==================================== ==================== ==================================================
 Replace tabs by space                                     Replaces all tabs with the right amount of spaces.
 
 Replace spaces by tabs                                    Replaces all spaces with tab characters.
@@ -3457,7 +3457,7 @@ Fold all                                                  Folds all contractible
 
 Unfold all                                                Unfolds all contracted code blocks.
 
-Reload symbol list              Ctrl-Shift-R              Reloads the tag/symbol list.
+Reload symbol list                   Ctrl-Shift-R         Reloads the tag/symbol list.
 
 Toggle Line wrapping                                      Enables or disables wrapping of long lines.
 
@@ -3470,7 +3470,10 @@ Remove Markers                                            Remove any markers on 
 
 Remove Error Indicators                                   Remove any error indicators in the
                                                           current document.
-=============================== ========================= ==================================================
+
+Remove Markers and Error Indicators                       Combines ``Remove Markers`` and
+                                                          ``Remove Error Indicators``.
+==================================== ==================== ==================================================
 
 
 Build keybindings
