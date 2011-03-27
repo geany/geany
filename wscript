@@ -352,7 +352,7 @@ def build(bld):
         build_plugin('filebrowser')
         build_plugin('htmlchars')
         build_plugin('saveactions')
-        build_plugin('splitwindow')
+        build_plugin('splitwindow', not is_win32)
 
     # Translations
     if bld.env['INTLTOOL']:

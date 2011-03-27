@@ -50,8 +50,9 @@ all-local: \
 	htmlchars.dll \
 	export.dll \
 	saveactions.dll \
-	splitwindow.dll \
 	filebrowser.dll
+# Split Window is broken on Windows
+#	splitwindow.dll
 
 .c.dll:
 	$(CC) $(MINGW_CFLAGS) -o $@.o -c $<

@@ -56,9 +56,10 @@ plugins: \
 		classbuilder.dll \
 		export.dll \
 		saveactions.dll \
-		splitwindow.dll \
 		filebrowser.dll
 
+# Split Window is broken on Windows
+#		splitwindow.dll
 
 clean:
 	-$(RM) deps.mak *.o *.dll
