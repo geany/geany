@@ -16,6 +16,8 @@
    Brush, thanks! - closes #3097780).
    Fix confusing terminology in Split Window plugin menu labels (patch
    by Matthew Brush - closes #2796316).
+   Don't unsplit when closing the displayed document but rather pick the
+   new current one if any.
 
 
 2011-03-25  Colomban Wendling  <colomban(at)geany(dot)org>

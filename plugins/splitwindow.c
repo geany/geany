@@ -438,11 +438,31 @@ void plugin_init(GeanyData *data)
 }
 
 
+static gboolean do_select_current(gpointer data)
+{
+	GeanyDocument *doc;
+
+	/* guard out for the unlikely case we get called after another unsplitting */
+	if (plugin_state == STATE_UNSPLIT)
+		return FALSE;
+
+	doc = document_get_current();
+	if (DOC_VALID(doc))
+		set_editor(&edit_window, doc->editor);
+	else
+		on_unsplit(NULL, NULL);
+
+	return FALSE;
+}
+
+
 static void on_document_close(GObject *obj, GeanyDocument *doc, gpointer user_data)
 {
-    /* remove the split window because the document won't exist anymore */
 	if (doc->editor == edit_window.editor)
-		on_unsplit(NULL, NULL);
+	{
+		/* select current or unsplit in IDLE time, so the tab has changed */
+		g_idle_add(do_select_current, NULL);
+	}
 }
 
 
