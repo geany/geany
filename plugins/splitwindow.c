@@ -73,10 +73,11 @@ typedef struct EditWindow
 	ScintillaObject	*sci;		/* new editor widget */
 	GtkWidget		*vbox;
 	GtkWidget		*name_label;
+	gint 			handler_id;
 }
 EditWindow;
 
-static EditWindow edit_window = {NULL, NULL, NULL, NULL};
+static EditWindow edit_window = {NULL, NULL, NULL, NULL, 0 };
 
 
 static void on_unsplit(GtkMenuItem *menuitem, gpointer user_data);
@@ -103,6 +104,25 @@ static void set_line_numbers(ScintillaObject * sci, gboolean set)
 }
 
 
+static void on_sci_notify (ScintillaObject *sci, gint param, SCNotification *notif, gpointer data)
+{
+	gint line;
+
+	switch (notif->nmhdr.code)
+	{
+		case SCN_MARGINCLICK:
+			if (notif->margin == 2)
+			{
+				line = sci_get_line_from_position(sci, notif->position);
+				scintilla_send_message(sci, SCI_TOGGLEFOLD, line, 0);
+			}
+			break;
+
+		default: break;
+	}
+}
+
+
 static void sync_to_current(ScintillaObject *sci, ScintillaObject *current)
 {
 	gpointer sdoc;
@@ -119,13 +139,18 @@ static void sync_to_current(ScintillaObject *sci, ScintillaObject *current)
 	/* override some defaults */
 	set_line_numbers(sci, geany->editor_prefs->show_linenumber_margin);
 	scintilla_send_message(sci, SCI_SETMARGINWIDTHN, 1, 0 ); /* hide marker margin (no commands) */
-	scintilla_send_message(sci, SCI_SETMARGINWIDTHN, 2, 0 ); /* hide fold margin (no toggle callback) */
 }
 
 
 static void set_editor(EditWindow *editwin, GeanyEditor *editor)
 {
 	editwin->editor = editor;
+
+	if (editwin->handler_id > 0 && editwin->sci != NULL)
+	{
+		g_signal_handler_disconnect(editwin->sci, editwin->handler_id);
+		editwin->handler_id = 0;
+	}
 
 	/* first destroy any widget, otherwise its signals will have an
 	 * invalid document as user_data */
@@ -137,6 +162,12 @@ static void set_editor(EditWindow *editwin, GeanyEditor *editor)
 	gtk_container_add(GTK_CONTAINER(editwin->vbox), GTK_WIDGET(editwin->sci));
 
 	sync_to_current(editwin->sci, editor->sci);
+
+	if (geany->editor_prefs->folding)
+		editwin->handler_id = g_signal_connect(editwin->sci, "sci-notify",
+				G_CALLBACK(on_sci_notify), NULL);
+	else
+		scintilla_send_message(editwin->sci, SCI_SETMARGINWIDTHN, 2, 0);
 
 	gtk_label_set_text(GTK_LABEL(editwin->name_label), DOC_FILENAME(editor->document));
 }
@@ -331,6 +362,12 @@ static void on_unsplit(GtkMenuItem *menuitem, gpointer user_data)
 	 * in a visible parent window, otherwise there are X selection and scrollbar issues) */
 	gtk_widget_reparent(notebook,
 		ui_lookup_widget(geany->main_widgets->window, "vbox1"));
+
+	if (edit_window.sci != NULL && edit_window.handler_id > 0)
+	{
+		g_signal_handler_disconnect(edit_window.sci, edit_window.handler_id);
+		edit_window.handler_id = 0;
+	}
 
 	gtk_widget_destroy(pane);
 	edit_window.editor = NULL;
