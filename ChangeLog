@@ -6,13 +6,6 @@
    plugins need it.
 
 
-2011-03-27  Colomban Wendling  <colomban(at)geany(dot)org>
-
- * plugins/splitwindow.c:
-   Remove widget reparenting in Split Window plugin. This fixes plugin
-   issues on Windows (patch by Matthew Brush, thanks - closes #2725342).
-
-
 2011-03-26  Colomban Wendling  <colomban(at)geany(dot)org>
 
  * src/sidebar.c:
