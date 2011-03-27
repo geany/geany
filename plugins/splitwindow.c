@@ -409,12 +409,12 @@ void plugin_init(GeanyData *data)
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menu_items.main), menu);
 
 	menu_items.horizontal = item =
-		gtk_menu_item_new_with_mnemonic(_("_Horizontally"));
+		gtk_menu_item_new_with_mnemonic(_("_Side by Side"));
 	g_signal_connect(item, "activate", G_CALLBACK(on_split_horizontally), NULL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
 
 	menu_items.vertical = item =
-		gtk_menu_item_new_with_mnemonic(_("_Vertically"));
+		gtk_menu_item_new_with_mnemonic(_("_Top and Bottom"));
 	g_signal_connect(item, "activate", G_CALLBACK(on_split_vertically), NULL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
 

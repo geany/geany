@@ -14,6 +14,8 @@
  * plugins/splitwindow.c:
    Enable code folding in splitview window (based on a patch by Matthew
    Brush, thanks! - closes #3097780).
+   Fix confusing terminology in Split Window plugin menu labels (patch
+   by Matthew Brush - closes #2796316).
 
 
 2011-03-25  Colomban Wendling  <colomban(at)geany(dot)org>
