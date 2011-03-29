@@ -2754,14 +2754,14 @@ is shown in the following table.
 | Group        | Project File        | Preferences              | System Filetype   |  Defaults                     |
 +==============+=====================+==========================+===================+===============================+
 | Filetype     | Loads From: project | Loads From:              | Loads From:       | None                          |
-|              | file                | filetype.xxx file in     | filetype.xxx in   |                               |
+|              | file                | filetypes.xxx file in    | filetypes.xxx in  |                               |
 |              |                     | ~/.config/geany/filedefs | Geany install     |                               |
 |              | Saves To: project   |                          |                   |                               |
 |              | file                | Saves to: as above,      | Saves to: as user |                               |
 |              |                     | creating if needed.      | preferences left. |                               |
 +--------------+---------------------+--------------------------+-------------------+-------------------------------+
 | Filetype     | Loads From: project | Loads From:              | Loads From:       | 1:                            |
-| Independent  | file                | geany.conf file in       | filetype.xxx in   |   Label: _Make                |
+| Independent  | file                | geany.conf file in       | filetypes.xxx in  |   Label: _Make                |
 |              |                     | ~/.config/geany          | Geany install     |   Command: make               |
 |              | Saves To: project   |                          |                   |                               |
 |              | file                | Saves to: as above,      | Saves to: as user | 2:                            |
@@ -2773,20 +2773,20 @@ is shown in the following table.
 |              |                     |                          |                   |    Command: make %e.o         |
 +--------------+---------------------+--------------------------+-------------------+-------------------------------+
 | Execute      | Loads From: project | Loads From:              | Loads From:       | Label: _Execute               |
-|              | file or else        | geany.conf file in       | filetype.xxx in   | Command: ./%e                 |
+|              | file or else        | geany.conf file in       | filetypes.xxx in  | Command: ./%e                 |
 |              | filetype defined in | ~/.config/geany or else  | Geany install     |                               |
-|              | project file        | filetype.xxx file in     |                   |                               |
+|              | project file        | filetypes.xxx file in    |                   |                               |
 |              |                     | ~/.config/geany/filedefs | Saves To: as user |                               |
 |              | Saves To:           |                          | preferences left. |                               |
 |              | project file        | Saves To:                |                   |                               |
-|              |                     | filetype.xxx file in     |                   |                               |
+|              |                     | filetypes.xxx file in    |                   |                               |
 |              |                     | ~/.config/geany/filedefs |                   |                               |
 +--------------+---------------------+--------------------------+-------------------+-------------------------------+
 
 The following notes on the table reference cells by coordinate as (group,source):
 
-* General - for filetype.xxx substitute the filetype name of the
-  current document for xxx.
+* General - for filetypes.xxx substitute the appropriate extension for
+  the filetype of the current document for xxx - see `filenames`.
 
 * System Filetypes - Labels loaded from these sources are locale sensitive
   and can contain translations.
