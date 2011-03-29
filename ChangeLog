@@ -8,6 +8,8 @@
    removed when unloading the plugin, preventing possible crashes.
  * plugins/splitwindow.c:
    Use new plugin_idle_add(), preventing an unlikely crash.
+ * doc/pluginsymbols.c, src/sciwrappers.c:
+   Fix a few Doxygen warnings.
 
 
 2011-03-29  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
