@@ -54,7 +54,7 @@
  * @warning You should not test for values below 200 as previously
  * @c GEANY_API_VERSION was defined as an enum value, not a macro.
  */
-#define GEANY_API_VERSION 203
+#define GEANY_API_VERSION 204
 
 /** The Application Binary Interface (ABI) version, incremented whenever
  * existing fields in the plugin data types have to be changed or reordered.
@@ -561,6 +561,7 @@ typedef struct FiletypeFuncs
 	GeanyFiletype*	(*filetypes_lookup_by_name) (const gchar *name);
 	GeanyFiletype*	(*filetypes_index)(gint idx);
 	const gchar*	(*filetypes_get_display_name)(GeanyFiletype *ft);
+	const GSList*	(*filetypes_get_sorted_by_name)(void);
 	/* Remember to convert any filetype_id arguments to GeanyFiletype pointers in any
 	 * appended functions */
 }

@@ -6,6 +6,10 @@
  * doc/geany.txt, doc/geany.html:
    Add #filenames subsection for filetype definition files explaining
    the filename extensions and special cases.
+ * src/plugindata.h, src/filetypes.c, src/filetypes.h, src/plugins.c,
+   src/main.c, plugins/geanyfunctions.h:
+   Add filetypes_get_sorted_by_name() to API.
+   Fix --ft-names sorting to print in name order, not title order.
 
 
 2011-03-28  Colomban Wendling  <colomban(at)geany(dot)org>

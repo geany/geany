@@ -182,6 +182,8 @@ void filetypes_reload(void);
 
 GeanyFiletype *filetypes_index(gint idx);
 
+const GSList *filetypes_get_sorted_by_name(void);
+
 const gchar *filetypes_get_display_name(GeanyFiletype *ft);
 
 GeanyFiletype *filetypes_detect_from_document(GeanyDocument *doc);

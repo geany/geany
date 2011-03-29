@@ -56,7 +56,8 @@ static GHashTable *filetypes_hash = NULL;	/* Hash of filetype pointers based on 
 /** List of filetype pointers sorted by name, but with @c filetypes_index(GEANY_FILETYPES_NONE)
  * first, as this is usually treated specially.
  * The list does not change (after filetypes have been initialized), so you can use
- * @code g_slist_nth_data(filetypes_by_title, n) @endcode and expect the same result at different times. */
+ * @code g_slist_nth_data(filetypes_by_title, n) @endcode and expect the same result at different times.
+ * @see filetypes_get_sorted_by_name(). */
 GSList *filetypes_by_title = NULL;
 
 
@@ -499,8 +500,9 @@ static GeanyFiletype *filetype_new(void)
 }
 
 
-static gint cmp_filetype(gconstpointer pft1, gconstpointer pft2)
+static gint cmp_filetype(gconstpointer pft1, gconstpointer pft2, gpointer data)
 {
+	gboolean by_name = GPOINTER_TO_INT(data);
 	const GeanyFiletype *ft1 = pft1, *ft2 = pft2;
 
 	if (G_UNLIKELY(ft1->id == GEANY_FILETYPES_NONE))
@@ -508,7 +510,28 @@ static gint cmp_filetype(gconstpointer pft1, gconstpointer pft2)
 	if (G_UNLIKELY(ft2->id == GEANY_FILETYPES_NONE))
 		return 1;
 
-	return utils_str_casecmp(ft1->title, ft2->title);
+	return by_name ?
+		utils_str_casecmp(ft1->name, ft2->name) :
+		utils_str_casecmp(ft1->title, ft2->title);
+}
+
+
+/** Gets a list of filetype pointers sorted by name.
+ * The list does not change on subsequent calls.
+ * @return The list - do not free.
+ * @see filetypes_by_title. */
+const GSList *filetypes_get_sorted_by_name(void)
+{
+	static GSList *list = NULL;
+
+	g_return_val_if_fail(filetypes_by_title, NULL);
+
+	if (!list)
+	{
+		list = g_slist_copy(filetypes_by_title);
+		list = g_slist_sort_with_data(list, cmp_filetype, GINT_TO_POINTER(TRUE));
+	}
+	return list;
 }
 
 
@@ -607,7 +630,8 @@ void filetypes_init_types()
 	init_custom_filetypes(utils_build_path(app->configdir, GEANY_FILEDEFS_SUBDIR, NULL));
 
 	/* sort last instead of on insertion to prevent exponential time */
-	filetypes_by_title = g_slist_sort(filetypes_by_title, cmp_filetype);
+	filetypes_by_title = g_slist_sort_with_data(filetypes_by_title,
+		cmp_filetype, GINT_TO_POINTER(FALSE));
 }
 
 

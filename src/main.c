@@ -472,12 +472,13 @@ void main_locale_init(const gchar *locale_dir, const gchar *package)
 
 static void print_filetypes(void)
 {
-	GSList *node;
+	const GSList *list, *node;
 
 	filetypes_init_types();
 	printf("Geany's filetype names:\n");
 
-	foreach_slist(node, filetypes_by_title)
+	list = filetypes_get_sorted_by_name();
+	foreach_slist(node, list)
 	{
 		GeanyFiletype *ft = node->data;
 
