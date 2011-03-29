@@ -3616,6 +3616,34 @@ word delimiter characters as well as compiler and linker settings.
 
 See also `Configuration file paths`_.
 
+Filenames
+^^^^^^^^^
+Each filetype has a corresponding filetype definition file. The format
+for built-in filetype `Foo` is::
+
+    filetypes.foo
+
+The extension is normally just the filetype name in lower case.
+
+However there are some exceptions:
+
+=============== =========
+Filetype        Extension
+=============== =========
+C++             cpp
+C#              cs
+Make            makefile
+Matlab/Octave   matlab
+=============== =========
+
+There is also the `special file filetypes.common`_.
+
+For `custom filetypes`_, the filename for `Foo` is different::
+
+    filetypes.Foo.conf
+
+See the link for details.
+
 System files
 ^^^^^^^^^^^^
 The system-wide filetype configuration files can be found in the
