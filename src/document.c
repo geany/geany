@@ -1036,7 +1036,7 @@ static gint detect_indent_width(GeanyEditor *editor, GeanyIndentType type)
 	}
 	count = 0;
 	width = iprefs->width;
-	for (i = 0; i < G_N_ELEMENTS(widths); i++)
+	for (i = 0; i < (gint)G_N_ELEMENTS(widths); i++)
 	{
 		/* give small lengths higher weight not for nested blocks to confuse detection */
 		if (widths[i] > count * 4)
@@ -1080,7 +1080,7 @@ void document_apply_indent_settings(GeanyDocument *doc)
 	{
 		type = detect_indent_type(doc->editor);
 
-		if (type != iprefs->type)
+		if (type != (gint)iprefs->type)
 		{
 			const gchar *name = NULL;
 
