@@ -3727,6 +3727,24 @@ italic emphasis.
 To define named styles, see the filetypes.common `[named_styles]
 Section`_.
 
+Reading styles from another filetype
+************************************
+You can automatically copy all of the styles from another filetype
+definition file by using the following syntax for the ``[styling]``
+group::
+
+	[styling=Foo]
+
+Where Foo is a filetype name. The corresponding ``[styling]``
+section from ``filetypes.foo`` will be read.
+
+This is useful when the same lexer is being used for multiple
+filetypes (e.g. C/C++/C#/Java/etc).  For example, to make the C++
+styling the same as the C styling, you would put the following in
+``filetypes.cpp``::
+
+	[styling=C]
+
 
 [keywords] Section
 ``````````````````

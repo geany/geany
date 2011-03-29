@@ -1,3 +1,10 @@
+2011-03-29  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * doc/geany.txt, doc/geany.html:
+   Add #reading-styles-from-another-filetype subsection, based on
+   patch by Matthew Brush (thanks).
+
+
 2011-03-28  Colomban Wendling  <colomban(at)geany(dot)org>
 
  * src/document.c, src/document.h, src/editor.c, src/keybindings.c:
