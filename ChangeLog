@@ -1,3 +1,13 @@
+2011-03-30  Colomban Wendling  <colomban(at)geany(dot)org>
+
+ * src/plugindata.h, src/pluginprivate.h, src/plugins.c,
+   src/pluginutils.c, src/pluginutils.h plugins/geanyfunctions.h:
+   Add plugin_idle_add(), plugin_timeout_add() and
+   plugin_timeout_add_seconds() to the plugin API. These are
+   convenience wrappers to ensure the added timeouts are properly
+   removed when unloading the plugin, preventing possible crashes.
+
+
 2011-03-29  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * doc/geany.txt, doc/geany.html:

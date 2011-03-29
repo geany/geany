@@ -26,6 +26,12 @@
 	geany_functions->p_plugin->plugin_set_key_group
 #define plugin_show_configure \
 	geany_functions->p_plugin->plugin_show_configure
+#define plugin_timeout_add \
+	geany_functions->p_plugin->plugin_timeout_add
+#define plugin_timeout_add_seconds \
+	geany_functions->p_plugin->plugin_timeout_add_seconds
+#define plugin_idle_add \
+	geany_functions->p_plugin->plugin_idle_add
 #define document_new_file \
 	geany_functions->p_document->document_new_file
 #define document_get_current \

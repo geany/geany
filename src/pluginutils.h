@@ -43,6 +43,14 @@ void plugin_signal_connect(struct GeanyPlugin *plugin,
 		GObject *object, const gchar *signal_name, gboolean after,
 		GCallback callback, gpointer user_data);
 
+guint plugin_timeout_add(struct GeanyPlugin *plugin, guint interval, GSourceFunc function,
+		gpointer data);
+
+guint plugin_timeout_add_seconds(struct GeanyPlugin *plugin, guint interval, GSourceFunc function,
+		gpointer data);
+
+guint plugin_idle_add(struct GeanyPlugin *plugin, GSourceFunc function, gpointer data);
+
 struct GeanyKeyGroup *plugin_set_key_group(struct GeanyPlugin *plugin,
 		const gchar *section_name, gsize count, GeanyKeyGroupCallback callback);
 

@@ -57,6 +57,7 @@ typedef struct GeanyPluginPrivate
 	GeanyKeyGroup	*key_group;
 	GeanyAutoSeparator	toolbar_separator;
 	GArray			*signal_ids;			/* SignalConnection's to disconnect when unloading */
+	GList			*sources;				/* GSources to destroy when unloading */
 }
 GeanyPluginPrivate;
 

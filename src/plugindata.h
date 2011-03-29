@@ -54,7 +54,7 @@
  * @warning You should not test for values below 200 as previously
  * @c GEANY_API_VERSION was defined as an enum value, not a macro.
  */
-#define GEANY_API_VERSION 204
+#define GEANY_API_VERSION 205
 
 /** The Application Binary Interface (ABI) version, incremented whenever
  * existing fields in the plugin data types have to be changed or reordered.
@@ -645,6 +645,11 @@ typedef struct PluginFuncs
 	struct GeanyKeyGroup* (*plugin_set_key_group)(GeanyPlugin *plugin,
 		const gchar *section_name, gsize count, _GeanyKeyGroupCallback callback);
 	void	(*plugin_show_configure)(GeanyPlugin *plugin);
+	guint	(*plugin_timeout_add) (GeanyPlugin *plugin, guint interval, GSourceFunc function,
+		gpointer data);
+	guint	(*plugin_timeout_add_seconds) (GeanyPlugin *plugin, guint interval,
+		GSourceFunc function, gpointer data);
+	guint	(*plugin_idle_add) (GeanyPlugin *plugin, GSourceFunc function, gpointer data);
 }
 PluginFuncs;
 

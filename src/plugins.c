@@ -85,7 +85,10 @@ static PluginFuncs plugin_funcs = {
 	&plugin_module_make_resident,
 	&plugin_signal_connect,
 	&plugin_set_key_group,
-	&plugin_show_configure
+	&plugin_show_configure,
+	&plugin_timeout_add,
+	&plugin_timeout_add_seconds,
+	&plugin_idle_add
 };
 
 static DocumentFuncs doc_funcs = {
@@ -760,6 +763,22 @@ static void remove_callbacks(Plugin *plugin)
 }
 
 
+static void remove_sources(Plugin *plugin)
+{
+	GList *item;
+
+	item = plugin->sources;
+	while (item != NULL)
+	{
+		GList *next = item->next; /* cache the next pointer because current item will be freed */
+
+		g_source_destroy(item->data);
+		item = next;
+	}
+	/* don't free the list here, it is allocated inside each source's data */
+}
+
+
 static gboolean is_active_plugin(Plugin *plugin)
 {
 	return (g_list_find(active_plugin_list, plugin) != NULL);
@@ -776,6 +795,7 @@ plugin_cleanup(Plugin *plugin)
 		plugin->cleanup();
 
 	remove_callbacks(plugin);
+	remove_sources(plugin);
 
 	if (plugin->key_group)
 		keybindings_free_group(plugin->key_group);

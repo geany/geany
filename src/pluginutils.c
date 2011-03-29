@@ -131,6 +131,143 @@ void plugin_signal_connect(GeanyPlugin *plugin,
 }
 
 
+typedef struct PluginSourceData
+{
+	Plugin		*plugin;
+	GList		list_link;	/* element of plugin->sources cointaining this GSource */
+	GSourceFunc	function;
+	gpointer	user_data;
+} PluginSourceData;
+
+
+/* use GSlice if available */
+#if GLIB_CHECK_VERSION(2,10,0)
+#	define PSD_ALLOC()		(g_slice_alloc(sizeof(PluginSourceData)))
+#	define PSD_FREE(psd)	(g_slice_free1(sizeof(PluginSourceData), (psd)))
+#else
+#	define PSD_ALLOC()		(g_malloc(sizeof(PluginSourceData)))
+#	define PSD_FREE(psd)	(g_free(psd))
+#endif
+
+
+/* prepend psd->list_link to psd->plugin->sources */
+static void psd_register(PluginSourceData *psd, GSource *source)
+{
+	psd->list_link.data = source;
+	psd->list_link.prev = NULL;
+	psd->list_link.next = psd->plugin->sources;
+	if (psd->list_link.next)
+		psd->list_link.next->prev = &psd->list_link;
+	psd->plugin->sources = &psd->list_link;
+}
+
+
+/* removes psd->list_link from psd->plugin->sources */
+static void psd_unregister(PluginSourceData *psd)
+{
+	if (psd->list_link.next)
+		psd->list_link.next->prev = psd->list_link.prev;
+	if (psd->list_link.prev)
+		psd->list_link.prev->next = psd->list_link.next;
+	else /* we were the first of the list, update the plugin->sources pointer */
+		psd->plugin->sources = psd->list_link.next;
+}
+
+
+static void on_plugin_source_destroy(gpointer data)
+{
+	PluginSourceData *psd = data;
+
+	psd_unregister(psd);
+	PSD_FREE(psd);
+}
+
+
+static gboolean on_plugin_source_callback(gpointer data)
+{
+	PluginSourceData *psd = data;
+
+	return psd->function(psd->user_data);
+}
+
+
+/* adds the given source to the default GMainContext and to the list of sources to remove at plugin
+ * unloading time */
+static guint plugin_source_add(GeanyPlugin *plugin, GSource *source, GSourceFunc func, gpointer data)
+{
+	guint id;
+	PluginSourceData *psd = PSD_ALLOC();
+
+	psd->plugin = plugin->priv;
+	psd->function = func;
+	psd->user_data = data;
+
+	g_source_set_callback(source, on_plugin_source_callback, psd, on_plugin_source_destroy);
+	psd_register(psd, source);
+	id = g_source_attach(source, NULL);
+	g_source_unref(source);
+
+	return id;
+}
+
+
+/** Adds a GLib main loop timeout callback that will be removed when unloading the plugin,
+ *  preventing it to run after the plugin has been unloaded (which may lead to a segfault).
+ *
+ * @param plugin Must be @ref geany_plugin.
+ * @param interval The time between calls to the function, in milliseconds.
+ * @param function The function to call after the given timeout.
+ * @param data The user data passed to the function.
+ * @return the ID of the event source (you generally won't need it, or better use g_timeout_add()
+ *   directly if you want to manage this event source manually).
+ *
+ * @see g_timeout_add()
+ * @since 0.21, plugin API 205.
+ */
+guint plugin_timeout_add(GeanyPlugin *plugin, guint interval, GSourceFunc function, gpointer data)
+{
+	return plugin_source_add(plugin, g_timeout_source_new(interval), function, data);
+}
+
+
+/** Adds a GLib main loop timeout callback that will be removed when unloading the plugin,
+ *  preventing it to run after the plugin has been unloaded (which may lead to a segfault).
+ *
+ * @param plugin Must be @ref geany_plugin.
+ * @param interval The time between calls to the function, in seconds.
+ * @param function The function to call after the given timeout.
+ * @param data The user data passed to the function.
+ * @return the ID of the event source (you generally won't need it, or better use
+ *   g_timeout_add_seconds() directly if you want to manage this event source manually).
+ *
+ * @see g_timeout_add_seconds()
+ * @since 0.21, plugin API 205.
+ */
+guint plugin_timeout_add_seconds(GeanyPlugin *plugin, guint interval, GSourceFunc function,
+		gpointer data)
+{
+	return plugin_source_add(plugin, g_timeout_source_new_seconds(interval), function, data);
+}
+
+
+/** Adds a GLib main loop IDLE callback that will be removed when unloading the plugin, preventing
+ *  it to run after the plugin has been unloaded (which may lead to a segfault).
+ *
+ * @param plugin Must be @ref geany_plugin.
+ * @param function The function to call in IDLE time.
+ * @param data The user data passed to the function.
+ * @return the ID of the event source (you generally won't need it, or better use g_idle_add()
+ *   directly if you want to manage this event source manually).
+ *
+ * @see g_idle_add()
+ * @since 0.21, plugin API 205.
+ */
+guint plugin_idle_add(GeanyPlugin *plugin, GSourceFunc function, gpointer data)
+{
+	return plugin_source_add(plugin, g_idle_source_new(), function, data);
+}
+
+
 /** Sets up or resizes a keybinding group for the plugin.
  * You should then call keybindings_set_item() for each keybinding in the group.
  * @param plugin Must be @ref geany_plugin.
