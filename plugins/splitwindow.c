@@ -461,7 +461,7 @@ static void on_document_close(GObject *obj, GeanyDocument *doc, gpointer user_da
 	if (doc->editor == edit_window.editor)
 	{
 		/* select current or unsplit in IDLE time, so the tab has changed */
-		g_idle_add(do_select_current, NULL);
+		plugin_idle_add(geany_plugin, do_select_current, NULL);
 	}
 }
 

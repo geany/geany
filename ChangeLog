@@ -6,6 +6,8 @@
    plugin_timeout_add_seconds() to the plugin API. These are
    convenience wrappers to ensure the added timeouts are properly
    removed when unloading the plugin, preventing possible crashes.
+ * plugins/splitwindow.c:
+   Use new plugin_idle_add(), preventing an unlikely crash.
 
 
 2011-03-29  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
