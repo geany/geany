@@ -826,10 +826,11 @@ gint sci_find_text(ScintillaObject *sci, gint flags, struct Sci_TextToFind *ttf)
 }
 
 
-/** Sets the font for a particular style
- * @param style The style
- * @param font The font name
- * @param size The font size */
+/** Sets the font for a particular style.
+ * @param sci Scintilla widget.
+ * @param style The style.
+ * @param font The font name.
+ * @param size The font size. */
 void sci_set_font(ScintillaObject *sci, gint style, const gchar *font, gint size)
 {
 	SSM(sci, SCI_STYLESETFONT, style, (sptr_t) font);
