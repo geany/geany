@@ -4478,7 +4478,7 @@ void editor_set_font(GeanyEditor *editor, const gchar *font)
 	font_name = g_strdup_printf("!%s", pango_font_description_get_family(pfd));
 	pango_font_description_free(pfd);
 
-	for (style = 0; style <= 127; style++)
+	for (style = 0; style <= STYLE_MAX; style++)
 		sci_set_font(editor->sci, style, font_name, size);
 
 	/* line number and braces */
