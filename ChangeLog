@@ -23,6 +23,8 @@
    Use new plugin_idle_add(), preventing an unlikely crash.
  * doc/pluginsymbols.c, src/sciwrappers.c:
    Fix a few Doxygen warnings.
+ * plugins/saveactions.c:
+   Properly use 0 as the invalid timeout source ID.
 
 
 2011-03-29  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

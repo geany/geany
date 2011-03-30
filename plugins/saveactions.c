@@ -74,7 +74,7 @@ static gboolean enable_backupcopy;
 static gint autosave_interval;
 static gboolean autosave_print_msg;
 static gboolean autosave_save_all;
-static guint autosave_src_id = G_MAXUINT;
+static guint autosave_src_id = 0;
 
 static gchar *instantsave_default_ft;
 
@@ -321,7 +321,7 @@ static void autosave_set_timeout(void)
 	if (! enable_autosave)
 		return;
 
-	if (autosave_src_id != G_MAXUINT)
+	if (autosave_src_id != 0)
 		g_source_remove(autosave_src_id);
 	autosave_src_id = g_timeout_add(autosave_interval * 1000, (GSourceFunc) auto_save, NULL);
 }
@@ -347,7 +347,7 @@ void plugin_init(GeanyData *data)
 	instantsave_default_ft = utils_get_setting_string(config, "instantsave", "default_ft",
 		filetypes[GEANY_FILETYPES_NONE]->name);
 
-	autosave_src_id = G_MAXUINT; /* mark as invalid */
+	autosave_src_id = 0; /* mark as invalid */
 	autosave_interval = utils_get_setting_integer(config, "autosave", "interval", 300);
 	autosave_print_msg = utils_get_setting_boolean(config, "autosave", "print_messages", FALSE);
 	autosave_save_all = utils_get_setting_boolean(config, "autosave", "save_all", FALSE);
@@ -719,7 +719,7 @@ GtkWidget *plugin_configure(GtkDialog *dialog)
 
 void plugin_cleanup(void)
 {
-	if (autosave_src_id != G_MAXUINT)
+	if (autosave_src_id != 0)
 		g_source_remove(autosave_src_id);
 
 	g_free(instantsave_default_ft);
