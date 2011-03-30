@@ -7,6 +7,8 @@
  * plugins/splitwindow.c:
    Update styles when the filetype changes (based on patch by
    Matthew Brush, thanks).
+ * plugins/saveactions.c:
+   Fix Instant Save preferences combo box filetype order.
 
 
 2011-03-30  Colomban Wendling  <colomban(at)geany(dot)org>

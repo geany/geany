@@ -598,7 +598,7 @@ GtkWidget *plugin_configure(GtkDialog *dialog)
 	{
 		GtkWidget *combo;
 		guint i;
-		GSList *node;
+		const GSList *node;
 
 		notebook_vbox = gtk_vbox_new(FALSE, 2);
 		inner_vbox = gtk_vbox_new(FALSE, 5);
@@ -621,7 +621,7 @@ GtkWidget *plugin_configure(GtkDialog *dialog)
 
 		pref_widgets.instantsave_ft_combo = combo = gtk_combo_box_new_text();
 		i = 0;
-		foreach_slist(node, geany->filetypes_by_title)
+		foreach_slist(node, filetypes_get_sorted_by_name())
 		{
 			GeanyFiletype *ft = node->data;
 
