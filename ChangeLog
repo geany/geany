@@ -4,6 +4,9 @@
    Use STYLE_MAX instead of 127 for editor_set_font(). This fixes a
    crash in the Split Window plugin when changing filetype (patch by
    Matthew Brush, thanks; fixes #3255968).
+ * plugins/splitwindow.c:
+   Update styles when the filetype changes (based on patch by
+   Matthew Brush, thanks).
 
 
 2011-03-30  Colomban Wendling  <colomban(at)geany(dot)org>

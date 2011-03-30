@@ -474,11 +474,21 @@ static void on_document_save(GObject *obj, GeanyDocument *doc, gpointer user_dat
 }
 
 
+static void on_document_filetype_set(GObject *obj, GeanyDocument *doc,
+	GeanyFiletype *filetype_old, gpointer user_data)
+{
+	/* update styles */
+	if (edit_window.editor == doc->editor)
+		sync_to_current(edit_window.sci, doc->editor->sci);
+}
+
+
 PluginCallback plugin_callbacks[] =
 {
-    { "document-close", (GCallback) &on_document_close, FALSE, NULL },
-    { "document-save", (GCallback) &on_document_save, FALSE, NULL },
-    { NULL, NULL, FALSE, NULL }
+	{ "document-close", (GCallback) &on_document_close, FALSE, NULL },
+	{ "document-save", (GCallback) &on_document_save, FALSE, NULL },
+	{ "document-filetype-set", (GCallback) &on_document_filetype_set, FALSE, NULL },
+	{ NULL, NULL, FALSE, NULL }
 };
 
 
