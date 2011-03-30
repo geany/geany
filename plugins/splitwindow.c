@@ -447,7 +447,7 @@ static gboolean do_select_current(gpointer data)
 		return FALSE;
 
 	doc = document_get_current();
-	if (DOC_VALID(doc))
+	if (doc)
 		set_editor(&edit_window, doc->editor);
 	else
 		on_unsplit(NULL, NULL);
