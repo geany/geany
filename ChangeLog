@@ -9,6 +9,8 @@
    Matthew Brush, thanks).
  * plugins/saveactions.c:
    Fix Instant Save preferences combo box filetype order.
+ * plugins/filebrowser.c:
+   Remove confusing macro CHECK_READ_SETTING().
 
 
 2011-03-30  Colomban Wendling  <colomban(at)geany(dot)org>

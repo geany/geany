@@ -990,39 +990,19 @@ static void completion_create(void)
 }
 
 
-#define CHECK_READ_SETTING(var, error, tmp) \
-	if ((error) != NULL) \
-	{ \
-		g_error_free((error)); \
-		(error) = NULL; \
-	} \
-	else \
-		(var) = (tmp);
-
 static void load_settings(void)
 {
 	GKeyFile *config = g_key_file_new();
-	GError *error = NULL;
-	gboolean tmp;
 
 	config_file = g_strconcat(geany->app->configdir, G_DIR_SEPARATOR_S, "plugins", G_DIR_SEPARATOR_S,
 		"filebrowser", G_DIR_SEPARATOR_S, "filebrowser.conf", NULL);
 	g_key_file_load_from_file(config, config_file, G_KEY_FILE_NONE, NULL);
-	open_cmd = g_key_file_get_string(config, "filebrowser", "open_command", &error);
-	if (error != NULL)
-	{
-		open_cmd = g_strdup("nautilus \"%d\"");
-		g_error_free(error);
-		error = NULL;
-	}
-	tmp = g_key_file_get_boolean(config, "filebrowser", "show_hidden_files", &error);
-	CHECK_READ_SETTING(show_hidden_files, error, tmp);
-	tmp = g_key_file_get_boolean(config, "filebrowser", "hide_object_files", &error);
-	CHECK_READ_SETTING(hide_object_files, error, tmp);
-	tmp = g_key_file_get_boolean(config, "filebrowser", "fb_follow_path", &error);
-	CHECK_READ_SETTING(fb_follow_path, error, tmp);
-	tmp = g_key_file_get_boolean(config, "filebrowser", "fb_set_project_base_path", &error);
-	CHECK_READ_SETTING(fb_set_project_base_path, error, tmp);
+
+	open_cmd = utils_get_setting_string(config, "filebrowser", "open_command", "nautilus \"%d\"");
+	show_hidden_files = g_key_file_get_boolean(config, "filebrowser", "show_hidden_files", NULL);
+	hide_object_files = g_key_file_get_boolean(config, "filebrowser", "hide_object_files", NULL);
+	fb_follow_path = g_key_file_get_boolean(config, "filebrowser", "fb_follow_path", NULL);
+	fb_set_project_base_path = g_key_file_get_boolean(config, "filebrowser", "fb_set_project_base_path", NULL);
 
 	g_key_file_free(config);
 }
