@@ -562,42 +562,38 @@ gchar *encodings_convert_to_utf8_from_charset(const gchar *buffer, gsize size,
 }
 
 
-/**
- *  Tries to convert @a buffer into UTF-8 encoding and store the detected original encoding in
- *  @a used_encoding.
- *
- *  @param buffer the input string to convert.
- *  @param size the length of the string, or -1 if the string is nul-terminated.
- *  @param used_encoding return location of the detected encoding of the input string, or @c NULL.
- *
- *  @return If the conversion was successful, a newly allocated nul-terminated string,
- *    which must be freed with @c g_free(). Otherwise @c NULL.
- **/
-gchar *encodings_convert_to_utf8(const gchar *buffer, gsize size, gchar **used_encoding)
+static gchar *encodings_check_regexes(const gchar *buffer, gsize size)
 {
-	gchar *locale_charset = NULL;
-	gchar *regex_charset = NULL;
+	guint i;
+
+	for (i = 0; i < G_N_ELEMENTS(pregs); i++)
+	{
+		gchar *charset;
+
+		if ((charset = regex_match(&pregs[i], buffer, size)) != NULL)
+			return charset;
+	}
+	return NULL;
+}
+
+
+static gchar *encodings_convert_to_utf8_with_suggestion(const gchar *buffer, gsize size,
+		const gchar *suggested_charset, gchar **used_encoding)
+{
+	const gchar *locale_charset = NULL;
 	const gchar *charset;
 	gchar *utf8_content;
-	gboolean check_regex = FALSE;
+	gboolean check_suggestion = suggested_charset != NULL;
 	gboolean check_locale = FALSE;
-	gint i, len, preferred_charset;
+	gint i, preferred_charset;
 
 	if ((gint)size == -1)
 	{
 		size = strlen(buffer);
 	}
 
-	/* first try to read the encoding from the file content */
-	len = (gint) G_N_ELEMENTS(pregs);
-	for (i = 0; i < len && ! check_regex; i++)
-	{
-		if ((regex_charset = regex_match(&pregs[i], buffer, size)) != NULL)
-			check_regex = TRUE;
-	}
-
 	/* current locale is not UTF-8, we have to check this charset */
-	check_locale = ! g_get_charset((const gchar**) &charset);
+	check_locale = ! g_get_charset(&locale_charset);
 
 	/* First check for preferred charset, if specified */
 	preferred_charset = file_prefs.default_open_encoding;
@@ -615,12 +611,12 @@ gchar *encodings_convert_to_utf8(const gchar *buffer, gsize size, gchar **used_e
 		if (G_UNLIKELY(i == encodings[GEANY_ENCODING_NONE].idx))
 			continue;
 
-		if (check_regex)
+		if (check_suggestion)
 		{
-			check_regex = FALSE;
-			charset = encodings_normalize_charset(regex_charset);
-			if (! charset) /* we found a regex encoding that we can't normalize, try it as is */
-				charset = regex_charset;
+			check_suggestion = FALSE;
+			charset = encodings_normalize_charset(suggested_charset);
+			if (charset == NULL) /* we failed at normalizing suggested encoding, try it as is */
+				charset = suggested_charset;
 			i = -2; /* keep i below the start value to have it again at -1 on the next loop run */
 		}
 		else if (check_locale)
@@ -662,13 +658,36 @@ gchar *encodings_convert_to_utf8(const gchar *buffer, gsize size, gchar **used_e
 				}
 				*used_encoding = g_strdup(charset);
 			}
-			g_free(regex_charset);
 			return utf8_content;
 		}
 	}
-	g_free(regex_charset);
 
 	return NULL;
+}
+
+
+/**
+ *  Tries to convert @a buffer into UTF-8 encoding and store the detected original encoding in
+ *  @a used_encoding.
+ *
+ *  @param buffer the input string to convert.
+ *  @param size the length of the string, or -1 if the string is nul-terminated.
+ *  @param used_encoding return location of the detected encoding of the input string, or @c NULL.
+ *
+ *  @return If the conversion was successful, a newly allocated nul-terminated string,
+ *    which must be freed with @c g_free(). Otherwise @c NULL.
+ **/
+gchar *encodings_convert_to_utf8(const gchar *buffer, gsize size, gchar **used_encoding)
+{
+	gchar *regex_charset;
+	gchar *utf8;
+
+	/* first try to read the encoding from the file content */
+	regex_charset = encodings_check_regexes(buffer, size);
+	utf8 = encodings_convert_to_utf8_with_suggestion(buffer, size, regex_charset, used_encoding);
+	g_free(regex_charset);
+
+	return utf8;
 }
 
 
@@ -826,25 +845,30 @@ handle_encoding(BufferData *buffer, GeanyEncodingIndex enc_idx)
 
 		if (buffer->enc == NULL)	/* either there was no BOM or the BOM encoding failed */
 		{
+			/* first try to read the encoding from the file content */
+			gchar *regex_charset = encodings_check_regexes(buffer->data, buffer->size);
+
 			/* try UTF-8 first */
-			if ((buffer->size == buffer->len) &&
-				g_utf8_validate(buffer->data, buffer->len, NULL))
+			if (encodings_get_idx_from_charset(regex_charset) == GEANY_ENCODING_UTF_8 &&
+				(buffer->size == buffer->len) && g_utf8_validate(buffer->data, buffer->len, NULL))
 			{
 				buffer->enc = g_strdup("UTF-8");
 			}
 			else
 			{
 				/* detect the encoding */
-				gchar *converted_text = encodings_convert_to_utf8(buffer->data,
-					buffer->size, &buffer->enc);
+				gchar *converted_text = encodings_convert_to_utf8_with_suggestion(buffer->data,
+					buffer->size, regex_charset, &buffer->enc);
 
 				if (converted_text == NULL)
 				{
+					g_free(regex_charset);
 					return FALSE;
 				}
 				setptr(buffer->data, converted_text);
 				buffer->len = strlen(converted_text);
 			}
+			g_free(regex_charset);
 		}
 	}
 	return TRUE;

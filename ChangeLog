@@ -9,6 +9,13 @@
    This also makes encodings_get_idx_from_charset() and
    encodings_get_from_charset() more permissive regarding the passed-in
    encoding name.
+ * src/encodings.c:
+   Always try to honor the charset found in the document, even if the
+   document can be loaded as UTF-8.
+   This make files encoded with e.g. ISO-8859-1 that have the proper
+   information in them but only use the UTF-8 compatible part of
+   ISO-8859-1 to be properly loaded as ISO-8859-1, rather than UTF-8.
+   Also fix check for locale encoding.
 
 
 2011-03-31  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
