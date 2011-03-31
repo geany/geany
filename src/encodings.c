@@ -147,6 +147,56 @@ static void init_encodings(void)
 }
 
 
+/* compares two encoding names in a permissive fashion.
+ * e.g. "utf8" matches "UTF-8", "iso8859_1" matches "ISO-8859-1", etc. */
+static gboolean encodings_charset_equals(const gchar *a, const gchar *b)
+{
+	gboolean was_alpha = FALSE; /* whether last character of previous word was a letter */
+	gboolean need_sep = FALSE; /* whether we're expecting an implicit separator */
+
+	while (*a && *b)
+	{
+		gboolean is_alpha;
+
+		if (g_ascii_toupper(*a) == g_ascii_toupper(*b) &&
+			((is_alpha = g_ascii_isalpha(*a)) || g_ascii_isdigit(*a)))
+		{
+			/* either there was a real separator, or we need a implicit one (a chage from alpha to
+			 * numeric or so) */
+			if (! need_sep || (was_alpha != is_alpha))
+			{
+				a++;
+				b++;
+				was_alpha = is_alpha;
+				need_sep = FALSE;
+			}
+			else
+				return FALSE;
+		}
+		else
+		{
+			guint n_sep = 0;
+
+			if (! g_ascii_isalnum(*a))
+			{
+				a++;
+				n_sep++;
+			}
+			if (! g_ascii_isalnum(*b))
+			{
+				b++;
+				n_sep++;
+			}
+			if (n_sep < 1)
+				return FALSE;
+			else if (n_sep < 2)
+				need_sep = TRUE;
+		}
+	}
+	return *a == *b;
+}
+
+
 GeanyEncodingIndex encodings_get_idx_from_charset(const gchar *charset)
 {
 	gint i;
@@ -157,7 +207,7 @@ GeanyEncodingIndex encodings_get_idx_from_charset(const gchar *charset)
 	i = 0;
 	while (i < GEANY_ENCODINGS_MAX)
 	{
-		if (strcmp(charset, encodings[i].charset) == 0)
+		if (encodings_charset_equals(charset, encodings[i].charset))
 			return i;
 
 		++i;
@@ -176,11 +226,23 @@ const GeanyEncoding *encodings_get_from_charset(const gchar *charset)
 	i = 0;
 	while (i < GEANY_ENCODINGS_MAX)
 	{
-		if (strcmp(charset, encodings[i].charset) == 0)
+		if (encodings_charset_equals(charset, encodings[i].charset))
 			return &encodings[i];
 
 		++i;
 	}
+
+	return NULL;
+}
+
+
+static const gchar *encodings_normalize_charset(const gchar *charset)
+{
+	const GeanyEncoding *encoding;
+
+	encoding = encodings_get_from_charset(charset);
+	if (encoding != NULL)
+		return encoding->charset;
 
 	return NULL;
 }
@@ -556,7 +618,9 @@ gchar *encodings_convert_to_utf8(const gchar *buffer, gsize size, gchar **used_e
 		if (check_regex)
 		{
 			check_regex = FALSE;
-			charset = regex_charset;
+			charset = encodings_normalize_charset(regex_charset);
+			if (! charset) /* we found a regex encoding that we can't normalize, try it as is */
+				charset = regex_charset;
 			i = -2; /* keep i below the start value to have it again at -1 on the next loop run */
 		}
 		else if (check_locale)

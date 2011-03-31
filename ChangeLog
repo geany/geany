@@ -3,6 +3,12 @@
  * src/encodings.c:
    Update regex used to find encodings for it to allow the encoding to
    be quoted, adding support for XML (closes #3183506).
+ * src/encodings.c:
+   Implement charset name normalization in order to better deal with
+   badly-written encoding names (i.e. names found by regex search).
+   This also makes encodings_get_idx_from_charset() and
+   encodings_get_from_charset() more permissive regarding the passed-in
+   encoding name.
 
 
 2011-03-31  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
