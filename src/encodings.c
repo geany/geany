@@ -72,78 +72,78 @@ GeanyEncoding encodings[GEANY_ENCODINGS_MAX];
 
 static void init_encodings(void)
 {
-	fill(0, WESTEUROPEAN, GEANY_ENCODING_ISO_8859_14, "ISO-8859-14", _("Celtic"));
-	fill(1, WESTEUROPEAN, GEANY_ENCODING_ISO_8859_7, "ISO-8859-7", _("Greek"));
-	fill(2, WESTEUROPEAN, GEANY_ENCODING_WINDOWS_1253, "WINDOWS-1253", _("Greek"));
-	fill(3, WESTEUROPEAN, GEANY_ENCODING_ISO_8859_10, "ISO-8859-10", _("Nordic"));
-	fill(4, WESTEUROPEAN, GEANY_ENCODING_ISO_8859_3, "ISO-8859-3", _("South European"));
-	fill(5, WESTEUROPEAN, GEANY_ENCODING_IBM_850, "IBM850", _("Western"));
-	fill(6, WESTEUROPEAN, GEANY_ENCODING_ISO_8859_1, "ISO-8859-1", _("Western"));
-	fill(7, WESTEUROPEAN, GEANY_ENCODING_ISO_8859_15, "ISO-8859-15", _("Western"));
-	fill(8, WESTEUROPEAN, GEANY_ENCODING_WINDOWS_1252, "WINDOWS-1252", _("Western"));
+	fill(0,		WESTEUROPEAN,	GEANY_ENCODING_ISO_8859_14,		"ISO-8859-14",		_("Celtic"));
+	fill(1,		WESTEUROPEAN,	GEANY_ENCODING_ISO_8859_7,		"ISO-8859-7",		_("Greek"));
+	fill(2,		WESTEUROPEAN,	GEANY_ENCODING_WINDOWS_1253,	"WINDOWS-1253",		_("Greek"));
+	fill(3,		WESTEUROPEAN,	GEANY_ENCODING_ISO_8859_10,		"ISO-8859-10",		_("Nordic"));
+	fill(4,		WESTEUROPEAN,	GEANY_ENCODING_ISO_8859_3,		"ISO-8859-3",		_("South European"));
+	fill(5,		WESTEUROPEAN,	GEANY_ENCODING_IBM_850,			"IBM850",			_("Western"));
+	fill(6,		WESTEUROPEAN,	GEANY_ENCODING_ISO_8859_1,		"ISO-8859-1",		_("Western"));
+	fill(7,		WESTEUROPEAN,	GEANY_ENCODING_ISO_8859_15,		"ISO-8859-15",		_("Western"));
+	fill(8,		WESTEUROPEAN,	GEANY_ENCODING_WINDOWS_1252,	"WINDOWS-1252",		_("Western"));
 
-	fill(0, EASTEUROPEAN, GEANY_ENCODING_ISO_8859_4, "ISO-8859-4", _("Baltic"));
-	fill(1, EASTEUROPEAN, GEANY_ENCODING_ISO_8859_13, "ISO-8859-13", _("Baltic"));
-	fill(2, EASTEUROPEAN, GEANY_ENCODING_WINDOWS_1257, "WINDOWS-1257", _("Baltic"));
-	fill(3, EASTEUROPEAN, GEANY_ENCODING_IBM_852, "IBM852", _("Central European"));
-	fill(4, EASTEUROPEAN, GEANY_ENCODING_ISO_8859_2, "ISO-8859-2", _("Central European"));
-	fill(5, EASTEUROPEAN, GEANY_ENCODING_WINDOWS_1250, "WINDOWS-1250", _("Central European"));
-	fill(6, EASTEUROPEAN, GEANY_ENCODING_IBM_855, "IBM855", _("Cyrillic"));
-	fill(7, EASTEUROPEAN, GEANY_ENCODING_ISO_8859_5, "ISO-8859-5", _("Cyrillic"));
+	fill(0,		EASTEUROPEAN,	GEANY_ENCODING_ISO_8859_4,		"ISO-8859-4",		_("Baltic"));
+	fill(1,		EASTEUROPEAN,	GEANY_ENCODING_ISO_8859_13,		"ISO-8859-13",		_("Baltic"));
+	fill(2,		EASTEUROPEAN,	GEANY_ENCODING_WINDOWS_1257,	"WINDOWS-1257",		_("Baltic"));
+	fill(3,		EASTEUROPEAN,	GEANY_ENCODING_IBM_852,			"IBM852",			_("Central European"));
+	fill(4,		EASTEUROPEAN,	GEANY_ENCODING_ISO_8859_2,		"ISO-8859-2",		_("Central European"));
+	fill(5,		EASTEUROPEAN,	GEANY_ENCODING_WINDOWS_1250,	"WINDOWS-1250",		_("Central European"));
+	fill(6,		EASTEUROPEAN,	GEANY_ENCODING_IBM_855,			"IBM855",			_("Cyrillic"));
+	fill(7,		EASTEUROPEAN,	GEANY_ENCODING_ISO_8859_5,		"ISO-8859-5",		_("Cyrillic"));
 	/* ISO-IR-111 not available on Windows */
-	fill(8, EASTEUROPEAN, GEANY_ENCODING_ISO_IR_111, "ISO-IR-111", _("Cyrillic"));
-	fill(9, EASTEUROPEAN, GEANY_ENCODING_KOI8_R, "KOI8-R", _("Cyrillic"));
-	fill(10, EASTEUROPEAN, GEANY_ENCODING_WINDOWS_1251, "WINDOWS-1251", _("Cyrillic"));
-	fill(11, EASTEUROPEAN, GEANY_ENCODING_CP_866, "CP866", _("Cyrillic/Russian"));
-	fill(12, EASTEUROPEAN, GEANY_ENCODING_KOI8_U, "KOI8-U", _("Cyrillic/Ukrainian"));
-	fill(13, EASTEUROPEAN, GEANY_ENCODING_ISO_8859_16, "ISO-8859-16", _("Romanian"));
+	fill(8,		EASTEUROPEAN,	GEANY_ENCODING_ISO_IR_111,		"ISO-IR-111",		_("Cyrillic"));
+	fill(9,		EASTEUROPEAN,	GEANY_ENCODING_KOI8_R,			"KOI8-R",			_("Cyrillic"));
+	fill(10,	EASTEUROPEAN,	GEANY_ENCODING_WINDOWS_1251,	"WINDOWS-1251",		_("Cyrillic"));
+	fill(11,	EASTEUROPEAN,	GEANY_ENCODING_CP_866,			"CP866",			_("Cyrillic/Russian"));
+	fill(12,	EASTEUROPEAN,	GEANY_ENCODING_KOI8_U,			"KOI8-U",			_("Cyrillic/Ukrainian"));
+	fill(13,	EASTEUROPEAN,	GEANY_ENCODING_ISO_8859_16,		"ISO-8859-16",		_("Romanian"));
 
-	fill(0, MIDDLEEASTERN, GEANY_ENCODING_IBM_864, "IBM864", _("Arabic"));
-	fill(1, MIDDLEEASTERN, GEANY_ENCODING_ISO_8859_6, "ISO-8859-6", _("Arabic"));
-	fill(2, MIDDLEEASTERN, GEANY_ENCODING_WINDOWS_1256, "WINDOWS-1256", _("Arabic"));
-	fill(3, MIDDLEEASTERN, GEANY_ENCODING_IBM_862, "IBM862", _("Hebrew"));
+	fill(0,		MIDDLEEASTERN,	GEANY_ENCODING_IBM_864,			"IBM864",			_("Arabic"));
+	fill(1,		MIDDLEEASTERN,	GEANY_ENCODING_ISO_8859_6,		"ISO-8859-6",		_("Arabic"));
+	fill(2,		MIDDLEEASTERN,	GEANY_ENCODING_WINDOWS_1256,	"WINDOWS-1256",		_("Arabic"));
+	fill(3,		MIDDLEEASTERN,	GEANY_ENCODING_IBM_862,			"IBM862",			_("Hebrew"));
 	/* not available at all, ? */
-	fill(4, MIDDLEEASTERN, GEANY_ENCODING_ISO_8859_8_I, "ISO-8859-8-I", _("Hebrew"));
-	fill(5, MIDDLEEASTERN, GEANY_ENCODING_WINDOWS_1255, "WINDOWS-1255", _("Hebrew"));
-	fill(6, MIDDLEEASTERN, GEANY_ENCODING_ISO_8859_8, "ISO-8859-8", _("Hebrew Visual"));
+	fill(4,		MIDDLEEASTERN,	GEANY_ENCODING_ISO_8859_8_I,	"ISO-8859-8-I",		_("Hebrew"));
+	fill(5,		MIDDLEEASTERN,	GEANY_ENCODING_WINDOWS_1255,	"WINDOWS-1255",		_("Hebrew"));
+	fill(6,		MIDDLEEASTERN,	GEANY_ENCODING_ISO_8859_8,		"ISO-8859-8",		_("Hebrew Visual"));
 
-	fill(0, ASIAN, GEANY_ENCODING_ARMSCII_8, "ARMSCII-8", _("Armenian"));
-	fill(1, ASIAN, GEANY_ENCODING_GEOSTD8, "GEORGIAN-ACADEMY", _("Georgian"));
-	fill(2, ASIAN, GEANY_ENCODING_TIS_620, "TIS-620", _("Thai"));
-	fill(3, ASIAN, GEANY_ENCODING_IBM_857, "IBM857", _("Turkish"));
-	fill(4, ASIAN, GEANY_ENCODING_WINDOWS_1254, "WINDOWS-1254", _("Turkish"));
-	fill(5, ASIAN, GEANY_ENCODING_ISO_8859_9, "ISO-8859-9", _("Turkish"));
-	fill(6, ASIAN, GEANY_ENCODING_TCVN, "TCVN", _("Vietnamese"));
-	fill(7, ASIAN, GEANY_ENCODING_VISCII, "VISCII", _("Vietnamese"));
-	fill(8, ASIAN, GEANY_ENCODING_WINDOWS_1258, "WINDOWS-1258", _("Vietnamese"));
+	fill(0,		ASIAN,			GEANY_ENCODING_ARMSCII_8,		"ARMSCII-8",		_("Armenian"));
+	fill(1,		ASIAN,			GEANY_ENCODING_GEOSTD8,			"GEORGIAN-ACADEMY",	_("Georgian"));
+	fill(2,		ASIAN,			GEANY_ENCODING_TIS_620,			"TIS-620",			_("Thai"));
+	fill(3,		ASIAN,			GEANY_ENCODING_IBM_857,			"IBM857",			_("Turkish"));
+	fill(4,		ASIAN,			GEANY_ENCODING_WINDOWS_1254,	"WINDOWS-1254",		_("Turkish"));
+	fill(5,		ASIAN,			GEANY_ENCODING_ISO_8859_9,		"ISO-8859-9",		_("Turkish"));
+	fill(6,		ASIAN,			GEANY_ENCODING_TCVN,			"TCVN",				_("Vietnamese"));
+	fill(7,		ASIAN,			GEANY_ENCODING_VISCII,			"VISCII",			_("Vietnamese"));
+	fill(8,		ASIAN,			GEANY_ENCODING_WINDOWS_1258,	"WINDOWS-1258",		_("Vietnamese"));
 
-	fill(0, UNICODE, GEANY_ENCODING_UTF_7, "UTF-7", _("Unicode"));
-	fill(1, UNICODE, GEANY_ENCODING_UTF_8, "UTF-8", _("Unicode"));
-	fill(2, UNICODE, GEANY_ENCODING_UTF_16LE, "UTF-16LE", _("Unicode"));
-	fill(3, UNICODE, GEANY_ENCODING_UTF_16BE, "UTF-16BE", _("Unicode"));
-	fill(4, UNICODE, GEANY_ENCODING_UCS_2LE, "UCS-2LE", _("Unicode"));
-	fill(5, UNICODE, GEANY_ENCODING_UCS_2BE, "UCS-2BE", _("Unicode"));
-	fill(6, UNICODE, GEANY_ENCODING_UTF_32LE, "UTF-32LE", _("Unicode"));
-	fill(7, UNICODE, GEANY_ENCODING_UTF_32BE, "UTF-32BE", _("Unicode"));
+	fill(0,		UNICODE,		GEANY_ENCODING_UTF_7,			"UTF-7",			_("Unicode"));
+	fill(1,		UNICODE,		GEANY_ENCODING_UTF_8,			"UTF-8",			_("Unicode"));
+	fill(2,		UNICODE,		GEANY_ENCODING_UTF_16LE,		"UTF-16LE",			_("Unicode"));
+	fill(3,		UNICODE,		GEANY_ENCODING_UTF_16BE,		"UTF-16BE",			_("Unicode"));
+	fill(4,		UNICODE,		GEANY_ENCODING_UCS_2LE,			"UCS-2LE",			_("Unicode"));
+	fill(5,		UNICODE,		GEANY_ENCODING_UCS_2BE,			"UCS-2BE",			_("Unicode"));
+	fill(6,		UNICODE,		GEANY_ENCODING_UTF_32LE,		"UTF-32LE",			_("Unicode"));
+	fill(7,		UNICODE,		GEANY_ENCODING_UTF_32BE,		"UTF-32BE",			_("Unicode"));
 
-	fill(0, EASTASIAN, GEANY_ENCODING_GB18030, "GB18030", _("Chinese Simplified"));
-	fill(1, EASTASIAN, GEANY_ENCODING_GB2312, "GB2312", _("Chinese Simplified"));
-	fill(2, EASTASIAN, GEANY_ENCODING_GBK, "GBK", _("Chinese Simplified"));
+	fill(0,		EASTASIAN,		GEANY_ENCODING_GB18030,			"GB18030",			_("Chinese Simplified"));
+	fill(1,		EASTASIAN,		GEANY_ENCODING_GB2312,			"GB2312",			_("Chinese Simplified"));
+	fill(2,		EASTASIAN,		GEANY_ENCODING_GBK,				"GBK",				_("Chinese Simplified"));
 	/* maybe not available on Linux */
-	fill(3, EASTASIAN, GEANY_ENCODING_HZ, "HZ", _("Chinese Simplified"));
-	fill(4, EASTASIAN, GEANY_ENCODING_BIG5, "BIG5", _("Chinese Traditional"));
-	fill(5, EASTASIAN, GEANY_ENCODING_BIG5_HKSCS, "BIG5-HKSCS", _("Chinese Traditional"));
-	fill(6, EASTASIAN, GEANY_ENCODING_EUC_TW, "EUC-TW", _("Chinese Traditional"));
-	fill(7, EASTASIAN, GEANY_ENCODING_EUC_JP, "EUC-JP", _("Japanese"));
-	fill(8, EASTASIAN, GEANY_ENCODING_ISO_2022_JP, "ISO-2022-JP", _("Japanese"));
-	fill(9, EASTASIAN, GEANY_ENCODING_SHIFT_JIS, "SHIFT_JIS", _("Japanese"));
-	fill(10, EASTASIAN, GEANY_ENCODING_CP_932, "CP932", _("Japanese"));
-	fill(11, EASTASIAN, GEANY_ENCODING_EUC_KR, "EUC-KR", _("Korean"));
-	fill(12, EASTASIAN, GEANY_ENCODING_ISO_2022_KR, "ISO-2022-KR", _("Korean"));
-	fill(13, EASTASIAN, GEANY_ENCODING_JOHAB, "JOHAB", _("Korean"));
-	fill(14, EASTASIAN, GEANY_ENCODING_UHC, "UHC", _("Korean"));
+	fill(3,		EASTASIAN,		GEANY_ENCODING_HZ,				"HZ",				_("Chinese Simplified"));
+	fill(4,		EASTASIAN,		GEANY_ENCODING_BIG5,			"BIG5",				_("Chinese Traditional"));
+	fill(5,		EASTASIAN,		GEANY_ENCODING_BIG5_HKSCS,		"BIG5-HKSCS",		_("Chinese Traditional"));
+	fill(6,		EASTASIAN,		GEANY_ENCODING_EUC_TW,			"EUC-TW",			_("Chinese Traditional"));
+	fill(7,		EASTASIAN,		GEANY_ENCODING_EUC_JP,			"EUC-JP",			_("Japanese"));
+	fill(8,		EASTASIAN,		GEANY_ENCODING_ISO_2022_JP,		"ISO-2022-JP",		_("Japanese"));
+	fill(9,		EASTASIAN,		GEANY_ENCODING_SHIFT_JIS,		"SHIFT_JIS",		_("Japanese"));
+	fill(10,	EASTASIAN,		GEANY_ENCODING_CP_932,			"CP932",			_("Japanese"));
+	fill(11,	EASTASIAN,		GEANY_ENCODING_EUC_KR,			"EUC-KR",			_("Korean"));
+	fill(12,	EASTASIAN,		GEANY_ENCODING_ISO_2022_KR,		"ISO-2022-KR",		_("Korean"));
+	fill(13,	EASTASIAN,		GEANY_ENCODING_JOHAB,			"JOHAB",			_("Korean"));
+	fill(14,	EASTASIAN,		GEANY_ENCODING_UHC,				"UHC",				_("Korean"));
 
-	fill(0, NONE, GEANY_ENCODING_NONE, "None", _("Without encoding"));
+	fill(0,		NONE,			GEANY_ENCODING_NONE,			"None",				_("Without encoding"));
 }
 
 
