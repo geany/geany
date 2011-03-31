@@ -6,6 +6,9 @@
  * plugins/filebrowser.c:
    Fix applying default setting for hide_object_files (oops).
    Fix warning when enabling plugin from the Plugin Manager.
+ * plugins/filebrowser.c:
+   Fix optimization for filter check when pattern is '*'.
+   Use foreach_strv() instead of foreach_c_array().
 
 
 2011-03-30  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

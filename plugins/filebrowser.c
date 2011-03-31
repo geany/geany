@@ -163,15 +163,13 @@ static gboolean check_hidden(const gchar *filename, const gchar *base_name)
 static gboolean check_filtered(const gchar *base_name)
 {
 	gchar **filter_item;
-	guint len;
 
 	if (filter == NULL)
 		return FALSE;
 
-	len = g_strv_length(filter);
-	foreach_c_array(filter_item, filter, len)
+	foreach_strv(filter_item, filter)
 	{
-		if (utils_str_equal(base_name, "*") || g_pattern_match_simple(*filter_item, base_name))
+		if (utils_str_equal(*filter_item, "*") || g_pattern_match_simple(*filter_item, base_name))
 		{
 			return FALSE;
 		}
