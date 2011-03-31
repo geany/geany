@@ -82,6 +82,7 @@ static gchar *current_dir = NULL; /* in locale-encoding */
 static gchar *open_cmd; /* in locale-encoding */
 static gchar *config_file;
 static gchar **filter = NULL;
+static gchar *hidden_file_extensions = NULL;
 
 static gint page_number = 0;
 
@@ -121,6 +122,7 @@ static gboolean win32_check_hidden(const gchar *filename)
 /* Returns: whether name should be hidden. */
 static gboolean check_hidden(const gchar *filename, const gchar *base_name)
 {
+	gboolean ret = FALSE;
 	gsize len;
 
 	if (G_UNLIKELY(! NZV(base_name)))
@@ -140,19 +142,20 @@ static gboolean check_hidden(const gchar *filename, const gchar *base_name)
 
 	if (hide_object_files)
 	{
-		const gchar *exts[] = {".o", ".obj", ".so", ".dll", ".a", ".lib", ".pyc"};
-		guint i, exts_len;
+		gchar **ptr;
+		gchar **exts = g_strsplit(hidden_file_extensions, " ", -1);
 
-		exts_len = G_N_ELEMENTS(exts);
-		for (i = 0; i < exts_len; i++)
+		foreach_strv(ptr, exts)
 		{
-			const gchar *ext = exts[i];
-
-			if (g_str_has_suffix(base_name, ext))
-				return TRUE;
+			if (g_str_has_suffix(base_name, *ptr))
+			{
+				ret = TRUE;
+				break;
+			}
 		}
+		g_strfreev(exts);
 	}
-	return FALSE;
+	return ret;
 }
 
 
@@ -1001,6 +1004,8 @@ static void load_settings(void)
 	open_cmd = utils_get_setting_string(config, "filebrowser", "open_command", "nautilus \"%d\"");
 	show_hidden_files = g_key_file_get_boolean(config, "filebrowser", "show_hidden_files", NULL);
 	hide_object_files = g_key_file_get_boolean(config, "filebrowser", "hide_object_files", NULL);
+	hidden_file_extensions = utils_get_setting_string(config, "filebrowser", "hidden_file_extensions",
+		".o .obj .so .dll .a .lib .pyc");
 	fb_follow_path = g_key_file_get_boolean(config, "filebrowser", "fb_follow_path", NULL);
 	fb_set_project_base_path = g_key_file_get_boolean(config, "filebrowser", "fb_set_project_base_path", NULL);
 
@@ -1136,6 +1141,7 @@ static void save_settings(void)
 	g_key_file_set_string(config, "filebrowser", "open_command", open_cmd);
 	g_key_file_set_boolean(config, "filebrowser", "show_hidden_files", show_hidden_files);
 	g_key_file_set_boolean(config, "filebrowser", "hide_object_files", hide_object_files);
+	g_key_file_set_string(config, "filebrowser", "hidden_file_extensions", hidden_file_extensions);
 	g_key_file_set_boolean(config, "filebrowser", "fb_follow_path", fb_follow_path);
 	g_key_file_set_boolean(config, "filebrowser", "fb_set_project_base_path",
 		fb_set_project_base_path);
@@ -1162,6 +1168,7 @@ static struct
 	GtkWidget *open_cmd_entry;
 	GtkWidget *show_hidden_checkbox;
 	GtkWidget *hide_objects_checkbox;
+	GtkWidget *hidden_files_entry;
 	GtkWidget *follow_path_checkbox;
 	GtkWidget *set_project_base_path_checkbox;
 }
@@ -1176,6 +1183,8 @@ on_configure_response(GtkDialog *dialog, gint response, gpointer user_data)
 		open_cmd = g_strdup(gtk_entry_get_text(GTK_ENTRY(pref_widgets.open_cmd_entry)));
 		show_hidden_files = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(pref_widgets.show_hidden_checkbox));
 		hide_object_files = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(pref_widgets.hide_objects_checkbox));
+		g_free(hidden_file_extensions);
+		hidden_file_extensions = g_strdup(gtk_entry_get_text(GTK_ENTRY(pref_widgets.hidden_files_entry)));
 		fb_follow_path = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(pref_widgets.follow_path_checkbox));
 		fb_set_project_base_path = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
 			pref_widgets.set_project_base_path_checkbox));
@@ -1186,10 +1195,21 @@ on_configure_response(GtkDialog *dialog, gint response, gpointer user_data)
 }
 
 
+static void on_toggle_hidden(void)
+{
+	gboolean enabled = !gtk_toggle_button_get_active(
+		GTK_TOGGLE_BUTTON(pref_widgets.show_hidden_checkbox));
+
+	gtk_widget_set_sensitive(pref_widgets.hide_objects_checkbox, enabled);
+	enabled &= gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(pref_widgets.hide_objects_checkbox));
+	gtk_widget_set_sensitive(pref_widgets.hidden_files_entry, enabled);
+}
+
+
 GtkWidget *plugin_configure(GtkDialog *dialog)
 {
 	GtkWidget *label, *entry, *checkbox_of, *checkbox_hf, *checkbox_fp, *checkbox_pb, *vbox;
-	GtkWidget *box;
+	GtkWidget *box, *align;
 
 	vbox = gtk_vbox_new(FALSE, 6);
 	box = gtk_vbox_new(FALSE, 3);
@@ -1199,7 +1219,6 @@ GtkWidget *plugin_configure(GtkDialog *dialog)
 	gtk_box_pack_start(GTK_BOX(box), label, FALSE, FALSE, 0);
 
 	entry = gtk_entry_new();
-	gtk_widget_show(entry);
 	if (open_cmd != NULL)
 		gtk_entry_set_text(GTK_ENTRY(entry), open_cmd);
 	ui_widget_set_tooltip_text(entry,
@@ -1209,22 +1228,34 @@ GtkWidget *plugin_configure(GtkDialog *dialog)
 	gtk_box_pack_start(GTK_BOX(box), entry, FALSE, FALSE, 0);
 	pref_widgets.open_cmd_entry = entry;
 
-	gtk_box_pack_start(GTK_BOX(vbox), box, FALSE, FALSE, 6);
+	gtk_box_pack_start(GTK_BOX(vbox), box, FALSE, FALSE, 3);
 
 	checkbox_hf = gtk_check_button_new_with_label(_("Show hidden files"));
 	gtk_button_set_focus_on_click(GTK_BUTTON(checkbox_hf), FALSE);
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(checkbox_hf), show_hidden_files);
 	gtk_box_pack_start(GTK_BOX(vbox), checkbox_hf, FALSE, FALSE, 0);
 	pref_widgets.show_hidden_checkbox = checkbox_hf;
+	g_signal_connect(checkbox_hf, "toggled", on_toggle_hidden, NULL);
 
-	checkbox_of = gtk_check_button_new_with_label(_("Hide object files"));
+	box = gtk_vbox_new(FALSE, 3);
+	checkbox_of = gtk_check_button_new_with_label(_("Hide file extensions:"));
 	gtk_button_set_focus_on_click(GTK_BUTTON(checkbox_of), FALSE);
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(checkbox_of), hide_object_files);
-	ui_widget_set_tooltip_text(checkbox_of,
-		_("Don't show generated object files in the file browser, this includes "
-		  "*.o, *.obj. *.so, *.dll, *.a, *.lib"));
-	gtk_box_pack_start(GTK_BOX(vbox), checkbox_of, FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(box), checkbox_of, FALSE, FALSE, 0);
 	pref_widgets.hide_objects_checkbox = checkbox_of;
+	g_signal_connect(checkbox_of, "toggled", on_toggle_hidden, NULL);
+
+	entry = gtk_entry_new();
+	if (hidden_file_extensions != NULL)
+		gtk_entry_set_text(GTK_ENTRY(entry), hidden_file_extensions);
+	gtk_box_pack_start(GTK_BOX(box), entry, FALSE, FALSE, 0);
+	pref_widgets.hidden_files_entry = entry;
+
+	align = gtk_alignment_new(1, 0.5, 1, 1);
+	gtk_alignment_set_padding(GTK_ALIGNMENT(align), 0, 0, 12, 0);
+	gtk_container_add(GTK_CONTAINER(align), box);
+	gtk_box_pack_start(GTK_BOX(vbox), align, FALSE, FALSE, 0);
+	on_toggle_hidden();
 
 	checkbox_fp = gtk_check_button_new_with_label(_("Follow the path of the current file"));
 	gtk_button_set_focus_on_click(GTK_BUTTON(checkbox_fp), FALSE);
@@ -1253,6 +1284,7 @@ void plugin_cleanup(void)
 
 	g_free(config_file);
 	g_free(open_cmd);
+	g_free(hidden_file_extensions);
 	clear_filter();
 	gtk_widget_destroy(file_view_vbox);
 	g_object_unref(G_OBJECT(entry_completion));
