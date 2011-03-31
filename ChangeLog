@@ -9,6 +9,9 @@
  * plugins/filebrowser.c:
    Fix optimization for filter check when pattern is '*'.
    Use foreach_strv() instead of foreach_c_array().
+ * plugins/filebrowser.c:
+   Don't hide directories matching hidden file extensions e.g. foo.o.
+   Refactor with check_object().
 
 
 2011-03-30  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

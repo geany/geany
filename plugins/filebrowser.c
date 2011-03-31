@@ -122,11 +122,7 @@ static gboolean win32_check_hidden(const gchar *filename)
 /* Returns: whether name should be hidden. */
 static gboolean check_hidden(const gchar *filename, const gchar *base_name)
 {
-	gboolean ret = FALSE;
 	gsize len;
-
-	if (G_UNLIKELY(! NZV(base_name)))
-		return FALSE;
 
 #ifdef G_OS_WIN32
 	if (win32_check_hidden(filename))
@@ -137,24 +133,25 @@ static gboolean check_hidden(const gchar *filename, const gchar *base_name)
 #endif
 
 	len = strlen(base_name);
-	if (base_name[len - 1] == '~')
-		return TRUE;
+	return base_name[len - 1] == '~';
+}
 
-	if (hide_object_files)
+
+static gboolean check_object(const gchar *base_name)
+{
+	gboolean ret = FALSE;
+	gchar **ptr;
+	gchar **exts = g_strsplit(hidden_file_extensions, " ", -1);
+
+	foreach_strv(ptr, exts)
 	{
-		gchar **ptr;
-		gchar **exts = g_strsplit(hidden_file_extensions, " ", -1);
-
-		foreach_strv(ptr, exts)
+		if (g_str_has_suffix(base_name, *ptr))
 		{
-			if (g_str_has_suffix(base_name, *ptr))
-			{
-				ret = TRUE;
-				break;
-			}
+			ret = TRUE;
+			break;
 		}
-		g_strfreev(exts);
 	}
+	g_strfreev(exts);
 	return ret;
 }
 
@@ -186,6 +183,10 @@ static void add_item(const gchar *name)
 	const gchar *sep;
 	gboolean dir;
 
+	if (G_UNLIKELY(! NZV(name)))
+		return;
+
+	/* root directory doesn't need separator */
 	sep = (utils_str_equal(current_dir, "/")) ? "" : G_DIR_SEPARATOR_S;
 	fname = g_strconcat(current_dir, sep, name, NULL);
 	dir = g_file_test(fname, G_FILE_TEST_IS_DIR);
@@ -193,12 +194,8 @@ static void add_item(const gchar *name)
 	utf8_name = utils_get_utf8_from_locale(name);
 	g_free(fname);
 
-	if (! show_hidden_files && check_hidden(utf8_fullname, name))
-	{
-		g_free(utf8_name);
-		g_free(utf8_fullname);
-		return;
-	}
+	if (! show_hidden_files && check_hidden(utf8_fullname, utf8_name))
+		goto done;
 
 	if (dir)
 	{
@@ -213,12 +210,11 @@ static void add_item(const gchar *name)
 	}
 	else
 	{
+		if (! show_hidden_files && hide_object_files && check_object(utf8_name))
+			goto done;
 		if (check_filtered(utf8_name))
-		{
-			g_free(utf8_name);
-			g_free(utf8_fullname);
-			return;
-		}
+			goto done;
+
 		gtk_list_store_append(file_store, &iter);
 	}
 	gtk_list_store_set(file_store, &iter,
@@ -226,6 +222,7 @@ static void add_item(const gchar *name)
 		FILEVIEW_COLUMN_NAME, utf8_name,
 		FILEVIEW_COLUMN_FILENAME, utf8_fullname,
 		-1);
+done:
 	g_free(utf8_name);
 	g_free(utf8_fullname);
 }
