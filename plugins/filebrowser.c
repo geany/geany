@@ -853,6 +853,7 @@ static void prepare_file_view(void)
 	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(file_view));
 	gtk_tree_selection_set_mode(selection, GTK_SELECTION_MULTIPLE);
 
+	/* Show the current path when the FB is first needed */
 	g_signal_connect(file_view, "realize", G_CALLBACK(on_current_path), NULL);
 	g_signal_connect(selection, "changed", G_CALLBACK(on_tree_selection_changed), NULL);
 	g_signal_connect(file_view, "button-press-event", G_CALLBACK(on_button_press), NULL);
@@ -1002,8 +1003,9 @@ static void load_settings(void)
 	g_key_file_load_from_file(config, config_file, G_KEY_FILE_NONE, NULL);
 
 	open_cmd = utils_get_setting_string(config, "filebrowser", "open_command", "nautilus \"%d\"");
+	/* g_key_file_get_boolean defaults to FALSE */
 	show_hidden_files = g_key_file_get_boolean(config, "filebrowser", "show_hidden_files", NULL);
-	hide_object_files = g_key_file_get_boolean(config, "filebrowser", "hide_object_files", NULL);
+	hide_object_files = utils_get_setting_boolean(config, "filebrowser", "hide_object_files", TRUE);
 	hidden_file_extensions = utils_get_setting_string(config, "filebrowser", "hidden_file_extensions",
 		".o .obj .so .dll .a .lib .pyc");
 	fb_follow_path = g_key_file_get_boolean(config, "filebrowser", "fb_follow_path", NULL);
@@ -1113,11 +1115,12 @@ void plugin_init(GeanyData *data)
 	gtk_container_add(GTK_CONTAINER(scrollwin), file_view);
 	gtk_container_add(GTK_CONTAINER(file_view_vbox), scrollwin);
 
+	/* load settings before file_view "realize" callback */
+	load_settings();
+
 	gtk_widget_show_all(file_view_vbox);
 	page_number = gtk_notebook_append_page(GTK_NOTEBOOK(geany->main_widgets->sidebar_notebook),
 		file_view_vbox, gtk_label_new(_("Files")));
-
-	load_settings();
 
 	/* setup keybindings */
 	keybindings_set_item(plugin_key_group, KB_FOCUS_FILE_LIST, kb_activate,

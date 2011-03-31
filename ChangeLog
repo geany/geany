@@ -3,6 +3,9 @@
  * plugins/filebrowser.c:
    Make 'Hide object files' preference configurable with file
    extensions.
+ * plugins/filebrowser.c:
+   Fix applying default setting for hide_object_files (oops).
+   Fix warning when enabling plugin from the Plugin Manager.
 
 
 2011-03-30  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
@@ -17,7 +20,7 @@
  * plugins/saveactions.c:
    Fix Instant Save preferences combo box filetype order.
  * plugins/filebrowser.c:
-   Remove confusing macro CHECK_READ_SETTING().
+   Remove macro CHECK_READ_SETTING().
 
 
 2011-03-30  Colomban Wendling  <colomban(at)geany(dot)org>
