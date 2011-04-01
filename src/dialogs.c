@@ -1126,6 +1126,7 @@ void dialogs_show_file_properties(GeanyDocument *doc)
 	GtkWidget *dialog, *label, *table, *hbox, *image, *perm_table, *check, *vbox;
 	gchar *file_size, *title, *base_name, *time_changed, *time_modified, *time_accessed, *enctext;
 	gchar *short_name;
+	GdkPixbuf *pixbuf;
 #ifdef HAVE_SYS_TYPES_H
 	struct stat st;
 	off_t filesize;
@@ -1205,7 +1206,9 @@ void dialogs_show_file_properties(GeanyDocument *doc)
 	label = ui_label_new_bold(base_name);
 	gtk_label_set_selectable(GTK_LABEL(label), TRUE);
 	gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
-	image = gtk_image_new_from_stock("gtk-file", GTK_ICON_SIZE_BUTTON);
+	pixbuf = ui_get_mime_icon(doc->file_type->mime_type, GTK_ICON_SIZE_BUTTON);
+	image = gtk_image_new_from_pixbuf(pixbuf);
+	g_object_unref(pixbuf);
 	gtk_misc_set_alignment(GTK_MISC(image), 1.0, 0.5);
 	hbox = gtk_hbox_new(FALSE, 6);
 	gtk_label_set_use_markup(GTK_LABEL(label), TRUE);

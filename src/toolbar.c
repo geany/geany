@@ -313,7 +313,6 @@ static GtkWidget *toolbar_reload(const gchar *markup)
 	if (entry != NULL)
 		g_signal_connect(entry, "motion-notify-event", G_CALLBACK(on_motion_event), NULL);
 
-
 	return main_widgets.toolbar;
 }
 
