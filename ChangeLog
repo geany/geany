@@ -4,6 +4,8 @@
    Rename Preferences dialog Interface subtab More -> Notebook tabs.
  * src/toolbar.c, src/dialogs.c:
    Use mimetype icon in File Properties dialog.
+ * doc/geany.txt, doc/geany.html:
+   Fix title capitalization.
 
 
 2011-04-01  Colomban Wendling  <colomban(at)geany(dot)org>

@@ -161,7 +161,7 @@ Then as root::
 
     % ./waf install
 
-Waf Cache
+Waf cache
 `````````
 
 The Waf build system has a nice and interesting feature which can help  to avoid
@@ -184,7 +184,7 @@ Remember to replace ``username`` with your actual username.
 More information about the Waf cache feature are available at
 http://code.google.com/p/waf/wiki/CacheObjectFiles.
 
-Cleaning the Cache
+Cleaning the cache
 ******************
 You should be careful about the size of the cache directory as it may
 grow rapidly over time.
@@ -771,7 +771,7 @@ for more information).
 
 The default settings can be overridden per-document using the
 Document menu. They can also be overridden by projects - see
-`Project Management`_.
+`Project management`_.
 
 The indent mode for the current document is shown on the status bar
 as follows:
@@ -1647,7 +1647,7 @@ copy of the generated tags file because it will get overwritten when
 upgrading Geany.
 
 
-C Ignore tags
+C ignore.tags
 ^^^^^^^^^^^^^
 
 You can ignore certain tags for C-based languages if they would lead
@@ -2462,10 +2462,10 @@ Don't use run script
     like a Python console (e.g. ipython). Use this with care.
 
 
-Project Management
+Project management
 ------------------
 
-Project Management is optional in Geany. Currently it can be used for:
+Project management is optional in Geany. Currently it can be used for:
 
 * Storing and opening session files on a project basis.
 * Overriding default settings with project equivalents.
@@ -2486,7 +2486,7 @@ file that was in use at the end of the last session will be reopened.
 The project menu items are detailed below.
 
 
-New Project
+New project
 ^^^^^^^^^^^
 
 To create a new project, fill in the *Name* field. By default this
@@ -2499,7 +2499,7 @@ can safely be set to any existing path -- it will not touch the file
 structure contained in it.
 
 
-Project Properties
+Project properties
 ^^^^^^^^^^^^^^^^^^
 
 You can set an optional description for the project. Currently it's
@@ -2513,7 +2513,7 @@ The *Indentation* tab allows you to override the default
 `Indentation`_ settings.
 
 
-Open Project
+Open project
 ^^^^^^^^^^^^
 
 The Open command displays a standard file chooser, starting in
@@ -2524,7 +2524,7 @@ When project session support is enabled, Geany will close the currently
 open files and open the session files associated with the project.
 
 
-Close Project
+Close project
 ^^^^^^^^^^^^^
 
 Project file settings are saved when the project is closed.
@@ -2533,7 +2533,7 @@ When project session support is enabled, Geany will close the project
 session files and open any previously closed default session files.
 
 
-Build Menu
+Build menu
 ----------
 After editing code with Geany, the next step is to compile, link, build,
 interpret, run etc.  As Geany supports many languages each with a different
@@ -2574,7 +2574,7 @@ If you do not like this feature, you can disable it - see `Editor Features
 preferences`_.
 
 
-Default Build Menu Items
+Default build menu items
 ^^^^^^^^^^^^^^^^^^^^^^^^
 Depending on the current file's filetype, the default Build menu will contain
 the following items:
@@ -2642,12 +2642,12 @@ Make object will run "make current_file.o" in the same directory as
 the current file, using the filename for 'current_file'. It is useful
 for building just the current file without building the whole project.
 
-Next Error
+Next error
 ``````````
 
 The next error item will move to the next detected error in the file.
 
-Previous Error
+Previous error
 ``````````````
 The previous error item will move to the previous detected error in the file.
 
@@ -2693,7 +2693,7 @@ stopped. Just add this option in the preferences dialog on the Tools
 tab in the terminal field.
 
 
-Set Build Commands
+Set build commands
 ``````````````````
 
 By default Compile, Build and Execute are fairly basic commands. You
@@ -2703,7 +2703,7 @@ E.g. for C you can add any include paths and compile flags for the
 compiler, any library names and paths for the linker, and any
 arguments you want to use when running Execute.
 
-Build Menu Configuration
+Build menu configuration
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
 The build menu has considerable flexibility and configurability, allowing
@@ -2734,7 +2734,7 @@ behaviors:
   * Show the build menu commands dialog.
 
 The maximum numbers of items in each of the configurable groups can be
-configured when Geany starts using hidden settings (see `Preferences File Format`_).
+configured when Geany starts using hidden settings (see `Preferences file format`_).
 Even though the maximum number of items may have been increased, only
 those menu items that have values configured are shown in the menu.
 
@@ -2803,10 +2803,10 @@ The following notes on the table reference cells by coordinate as (group,source)
 
 * (Execute, Project File) and (Execute, Preferences) - the project independent
   execute and preferences independent execute commands can only be set by hand
-  editing the appropriate file, see `Preferences File Format`_ and `Project File
-  Format`_.
+  editing the appropriate file, see `Preferences file format`_ and `Project file
+  format`_.
 
-Build Menu Commands Dialog
+Build menu commands dialog
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Most of the configuration of the build menu is done through the Build Menu
@@ -2848,7 +2848,7 @@ When you do this the command from the next lower priority source will be shown.
 To hide lower priority menu items without having anything show in the menu
 configure with a nothing in the label but at least one character in the command.
 
-Substitutions in Commands and Working Directories
+Substitutions in commands and working directories
 `````````````````````````````````````````````````
 
 The first occurence of each of the following character sequences in each of the
@@ -2868,7 +2868,7 @@ before the command is run.
    and even checked into and out of version control without having to re-configure the
    build menu.
 
-Build Menu Keyboard Shortcuts
+Build menu keyboard shortcuts
 `````````````````````````````
 
 Keyboard shortcuts can be defined for the first two filetype menu items, the first three
@@ -2885,7 +2885,7 @@ Old settings
 
 The configurable Build Menu capability was introduced in Geany 0.19 and
 required a new section to be added to the configuration files (See
-`Preferences File Format`_).  Geany will still load older format project,
+`Preferences file format`_).  Geany will still load older format project,
 preferences and filetype file settings and will attempt to map them into the new
 configuration format.  There is not a simple clean mapping between the formats.
 The mapping used produces the most sensible results for the majority of cases.
@@ -2974,7 +2974,7 @@ Most plugins add menu items to the *Tools* menu when they are loaded.
 See also `Plugin documentation`_ for information about single plugins
 which are included in Geany.
 
-Plugin Manager
+Plugin manager
 ^^^^^^^^^^^^^^
 The Plugin Manager dialog lets you choose which plugins
 should be loaded at startup. You can also load and unload plugins on the
@@ -3711,9 +3711,9 @@ Filetype configuration
 ^^^^^^^^^^^^^^^^^^^^^^
 
 As well as the sections listed below, each filetype file can contain
-a [build-menu] section as described in `[build-menu] Section`_.
+a [build-menu] section as described in `[build-menu] section`_.
 
-[styling] Section
+[styling] section
 `````````````````
 
 In this section the colors for syntax highlighting are defined. The
@@ -3774,7 +3774,7 @@ styling the same as the C styling, you would put the following in
 	[styling=C]
 
 
-[keywords] Section
+[keywords] section
 ``````````````````
 
 This section contains keys for different keyword lists specific to
@@ -3786,7 +3786,7 @@ an existing list.
     The keywords list must be in one line without line ending characters.
 
 
-[lexer_properties] Section
+[lexer_properties] section
 ``````````````````````````
 Here any special properties for the Scintilla lexer can be set in the
 format ``key.name.field=some.value``.
@@ -3797,7 +3797,7 @@ other properties you need Geany's source code::
     egrep -o 'GetProperty\w*\("([^"]+)"[^)]+\)' scintilla/Lex*.cxx
 
 
-[settings] Section
+[settings] section
 ``````````````````
 
 extension
@@ -3923,10 +3923,10 @@ xml_indent_tags
     this setting in their system configuration files.
 
 
-[build_settings] Section
+[build_settings] section
 ````````````````````````
 
-As of Geany 0.19 this section is supplemented by the `[build-menu] Section`_.
+As of Geany 0.19 this section is supplemented by the `[build-menu] section`_.
 Values that are set in the [build-menu] section will override those in this section.
 
 error_regex
@@ -3999,7 +3999,7 @@ the system file.
     See the `Filetype configuration`_ section for how to define styles.
 
 
-[named_styles] Section
+[named_styles] section
 ``````````````````````
 Named styles declared here can be used in the [styling] section of any
 filetypes.* file.
@@ -4028,7 +4028,7 @@ different files.
 This section can be overridden with color scheme files - see the `Color
 schemes menu`_.
 
-[styling] Section
+[styling] section
 `````````````````
 default
     This is the default style. It is used for styling files without a
@@ -4243,7 +4243,7 @@ calltips
     *Example:* ``calltips=0xc0c0c0;0xffffff;false;false``
 
 
-[settings] Section
+[settings] section
 ``````````````````
 whitespace_chars
     Characters to treat as whitespace. These characters are ignored
@@ -4279,7 +4279,7 @@ should look like::
     [Extensions]
     Make=Makefile*;*.mk;Buildfile;
 
-Preferences File Format
+Preferences file format
 -----------------------
 
 The user preferences file ``geany.conf`` holds settings for all the items configured
@@ -4404,7 +4404,7 @@ number_exec_menu_items            The maximum number of menu items in the      2
                                   execute section of the Build menu.
 ================================  ===========================================  ==================
 
-[build-menu] Section
+[build-menu] section
 ^^^^^^^^^^^^^^^^^^^^
 
 The [build-menu] section contains the configuration of the build menu.
@@ -4437,18 +4437,18 @@ where:
   - WD for working directory
 
 
-Project File Format
+Project file format
 -------------------
 
 The project file contains project related settings and possibly a
 record of the current session files.
 
 
-[build-menu] Additions
+[build-menu] additions
 ^^^^^^^^^^^^^^^^^^^^^^
 
 The project file also can have extra fields in the [build-menu] section
-in addition to those listed in `[build-menu] Section`_ above.
+in addition to those listed in `[build-menu] section`_ above.
 
 When filetype menu items are configured for the project they are stored
 in the project file.
@@ -4457,7 +4457,7 @@ The ``filetypes`` entry is a list of the filetypes which exist in the
 project file.
 
 For each filetype the entries for that filetype have the format defined in
-`[build-menu] Section`_ but the key is prefixed by the name of the filetype
+`[build-menu] section`_ but the key is prefixed by the name of the filetype
 as it appears in the ``filetypes`` entry, eg the entry for the label of
 filetype menu item 0 for the C filetype would be
 
