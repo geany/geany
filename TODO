@@ -15,12 +15,12 @@ Note: features included in brackets have lower priority.
 	  programming languages (done for C-like filetypes using
 	  filetypes.common named styles)
 	o update included regex library (and other CTags improvements)
+	o filetype-independent run command & keybinding
 	o (better custom filetype support)
 	o (custom template insertion - so user can add licenses, etc)
 	o (selectable menu of arguments to use for Make, from Make Custom)
 	o (DBUS)
 	o (sci macro support - as a plugin?)
-	o (parsing tags from a memory buffer instead of a file on disk)
 	o (tango-like icons for the symbol list)
 	o (per-workspace instances with socket support - see
 	   workspace-sockets branch)
@@ -36,10 +36,10 @@ Wishlist
 --------
 Note: these items might not get worked on.
 
-	o (calltip support for non-C-like languages that use
+	o (calltip support for more non-C-like languages that use
 	   function_name(arguments) syntax - see python.c:parseArglist())
 	o (better tags support for popular languages? - this is a moving
 	   target...)
-	o (support for adding plugin filetypes - SCI_LOADLEXERLIBRARY?)
+	o (support for adding syntax highlighting dynamically?)
 	o Some kind of support for CTags tags files
 	o Python plugin interface (different concept from Lua scripting)
