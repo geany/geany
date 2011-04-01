@@ -240,7 +240,7 @@ void tools_execute_custom_command(GeanyDocument *doc, const gchar *command)
 	g_return_if_fail(doc != NULL && command != NULL);
 
 	if (! sci_has_selection(doc->editor->sci))
-		return;
+		editor_select_lines(doc->editor, FALSE);
 
 	if (!g_shell_parse_argv(command, NULL, &argv, &error))
 	{
@@ -398,33 +398,6 @@ static void cc_show_dialog_custom_commands(void)
 }
 
 
-/* enable or disable all custom command menu items when the sub menu is opened */
-static void cc_on_custom_command_menu_activate(GtkMenuItem *menuitem, gpointer user_data)
-{
-	GeanyDocument *doc = document_get_current();
-	gint i, len;
-	gboolean enable;
-	GList *children, *node;
-
-	g_return_if_fail(doc != NULL);
-
-	enable = sci_has_selection(doc->editor->sci) && (ui_prefs.custom_commands != NULL);
-
-	children = gtk_container_get_children(GTK_CONTAINER(user_data));
-	len = g_list_length(children);
-	i = 0;
-	foreach_list(node, children)
-	{
-		if (i == (len - 2))
-			break; /* stop before the last two elements (the seperator and the set entry) */
-
-		gtk_widget_set_sensitive(GTK_WIDGET(node->data), enable);
-		i++;
-	}
-	g_list_free(children);
-}
-
-
 static void cc_on_custom_command_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
 	GeanyDocument *doc = document_get_current();
@@ -479,7 +452,6 @@ void tools_create_insert_custom_command_menu_items(void)
 	GtkMenu *menu_edit = GTK_MENU(ui_lookup_widget(main_widgets.window, "send_selection_to2_menu"));
 	GtkWidget *item;
 	GList *me_children, *node;
-	static gboolean signal_set = FALSE;
 
 	/* first clean the menus to be able to rebuild them */
 	me_children = gtk_container_get_children(GTK_CONTAINER(menu_edit));
@@ -515,13 +487,6 @@ void tools_create_insert_custom_command_menu_items(void)
 	gtk_widget_show(item);
 
 	cc_insert_custom_command_items(menu_edit, _("Set Custom Commands"), -1);
-
-	if (! signal_set)
-	{
-		g_signal_connect(ui_lookup_widget(main_widgets.window, "send_selection_to2"),
-					"activate", G_CALLBACK(cc_on_custom_command_menu_activate), menu_edit);
-		signal_set = TRUE;
-	}
 }
 
 

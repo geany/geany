@@ -880,6 +880,8 @@ Geany. To help finding errors in executing the command, the output
 of the program's standard error will be printed on Geany's standard
 output.
 
+If there is no selection, the whole current line is used instead.
+
 To add a custom command, use the *Send Selection to->Set Custom
 Commands* menu item. Click on *Add* to get a new text entry and type
 the command. You can also specify some command line options. To

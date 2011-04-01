@@ -36,6 +36,9 @@
    information in them but only use the UTF-8 compatible part of
    ISO-8859-1 to be properly loaded as ISO-8859-1, rather than UTF-8.
    Also fix check for locale encoding.
+ * src/tools.c, doc/geany.txt, doc/geany.html:
+   Make `Send selection to` send the current line if there is no
+   selection.
 
 
 2011-03-31  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
