@@ -8,6 +8,10 @@
    Fix title capitalization.
  * src/interface.c, doc/geany.txt, doc/geany.html, geany.glade:
    Move Preferences dialog Toolbar tab under Interface tab.
+ * src/build.c:
+   Tweak some build dialog labels:
+   Clear -> Reset.
+   Fix capitalization.
 
 
 2011-04-01  Colomban Wendling  <colomban(at)geany(dot)org>

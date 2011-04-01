@@ -1845,8 +1845,10 @@ static const gchar *colheads[] =
 	N_("Label"),
 	N_("Command"),
 	N_("Working directory"),
-	N_("Clear"),
-	NULL };
+	N_("Reset"),
+	NULL
+};
+
 /* column names */
 #define DC_ITEM 0
 #define DC_ENTRIES 1
@@ -1972,9 +1974,10 @@ GtkWidget *build_commands_table(GeanyDocument *doc, GeanyBuildSource dst, BuildT
 	gtk_table_attach(table, sep, 0, DC_N_COL, 1, 2, GTK_FILL, GTK_FILL | GTK_EXPAND,
 		entry_x_padding, sep_padding);
 	if (ft != NULL && ft->id != GEANY_FILETYPES_NONE)
-		txt = g_strdup_printf(_("%s Commands"), ft->title);
+		txt = g_strdup_printf(_("%s commands"), ft->name);
 	else
-		txt = g_strdup_printf(_("%s Commands"), _("No Filetype"));
+		txt = g_strdup_printf(_("%s commands"), _("No filetype"));
+
 	label = ui_label_new_bold(txt);
 	g_free(txt);
 	gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
@@ -1982,7 +1985,7 @@ GtkWidget *build_commands_table(GeanyDocument *doc, GeanyBuildSource dst, BuildT
 		entry_x_padding, entry_y_padding);
 	for (row = 3, cmdindex = 0, cmd = 0; cmd < build_groups_count[GEANY_GBG_FT]; ++row, ++cmdindex, ++cmd)
 		fields->rows[cmdindex] = build_add_dialog_row(doc, table, row, dst, GEANY_GBG_FT, cmd, FALSE);
-	label = gtk_label_new(_("Error Regular Expression:"));
+	label = gtk_label_new(_("Error regular expression:"));
 	gtk_table_attach(table, label, 0, DC_ENTRIES + 1, row, row + 1, GTK_FILL, GTK_FILL | GTK_EXPAND,
 		entry_x_padding, entry_y_padding);
 	fields->fileregex = gtk_entry_new();
@@ -2010,14 +2013,14 @@ GtkWidget *build_commands_table(GeanyDocument *doc, GeanyBuildSource dst, BuildT
 	gtk_table_attach(table, sep, 0, DC_N_COL, row, row + 1, GTK_FILL, GTK_FILL | GTK_EXPAND,
 		entry_x_padding, sep_padding);
 	++row;
-	label = ui_label_new_bold(_("Independent Commands"));
+	label = ui_label_new_bold(_("Independent commands"));
 	gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
 	gtk_table_attach(table, label, 0, DC_N_COL, row, row + 1, GTK_FILL, GTK_FILL | GTK_EXPAND,
 		entry_x_padding, entry_y_padding);
 	for (++row, cmd = 0; cmd < build_groups_count[GEANY_GBG_NON_FT]; ++row, ++cmdindex, ++cmd)
 		fields->rows[cmdindex] = build_add_dialog_row(
 			doc, table, row, dst, GEANY_GBG_NON_FT, cmd, TRUE);
-	label = gtk_label_new(_("Error Regular Expression:"));
+	label = gtk_label_new(_("Error regular expression:"));
 	gtk_table_attach(table, label, 0, DC_ENTRIES + 1, row, row + 1, GTK_FILL,
 		GTK_FILL | GTK_EXPAND, entry_x_padding, entry_y_padding);
 	fields->nonfileregex = gtk_entry_new();
@@ -2051,7 +2054,7 @@ GtkWidget *build_commands_table(GeanyDocument *doc, GeanyBuildSource dst, BuildT
 	gtk_table_attach(table, sep, 0, DC_N_COL, row, row + 1, GTK_FILL, GTK_FILL | GTK_EXPAND,
 		entry_x_padding, sep_padding);
 	++row;
-	label = ui_label_new_bold(_("Execute Commands"));
+	label = ui_label_new_bold(_("Execute commands"));
 	gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
 	gtk_table_attach(table, label, 0, DC_N_COL, row, row + 1, GTK_FILL, GTK_FILL | GTK_EXPAND,
 		entry_x_padding, entry_y_padding);
@@ -2743,7 +2746,7 @@ void build_init(void)
 	gtk_container_add(GTK_CONTAINER(toolmenu), item);
 
 	/* arguments */
-	item = ui_image_menu_item_new(GTK_STOCK_PREFERENCES, _("_Set Build Menu Commands"));
+	item = ui_image_menu_item_new(GTK_STOCK_PREFERENCES, _("_Set Build Commands"));
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(toolmenu), item);
 	g_signal_connect(item, "activate", G_CALLBACK(on_set_build_commands_activate), NULL);
