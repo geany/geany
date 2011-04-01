@@ -22,7 +22,7 @@
  */
 
 /*
- * Templates to insert into the current document, or filetype templates to create a new
+ * Templates to insert into the current document, or file templates to create a new
  * document from.
  */
 
@@ -50,10 +50,6 @@ static GtkWidget *new_with_template_menu = NULL;	/* submenu used for both file m
 
 /* TODO: implement custom insertion templates instead? */
 static gchar *templates[GEANY_MAX_TEMPLATES];
-
-/* We should probably remove filetype templates support soon - users can use custom
- * file templates instead. */
-static gchar *ft_templates[GEANY_MAX_BUILT_IN_FILETYPES] = {NULL};
 
 
 static void replace_static_values(GString *text);
@@ -113,7 +109,7 @@ static void read_template(const gchar *name, gint id)
 }
 
 
-/* FIXME the callers should use GStrings instead of char arrays */
+/* TODO the callers should use GStrings instead of char arrays */
 static gchar *replace_all(gchar *text, const gchar *year, const gchar *date, const gchar *datetime)
 {
 	GString *str;
@@ -163,71 +159,6 @@ static void init_general_templates(const gchar *year, const gchar *date, const g
 	/* FIXME: we should replace the dates on insertion, not on loading */
 	for (id = 0; id < GEANY_MAX_TEMPLATES; id++)
 		templates[id] = replace_all(templates[id], year, date, datetime);
-}
-
-
-static void init_ft_templates(const gchar *year, const gchar *date, const gchar *datetime)
-{
-	filetype_id ft_id;
-
-	for (ft_id = 0; ft_id < GEANY_MAX_BUILT_IN_FILETYPES; ft_id++)
-	{
-		gchar *ext = (ft_id != GEANY_FILETYPES_NONE) ?
-			filetypes_get_conf_extension(ft_id) : g_strdup("none");
-		gchar *shortname = g_strconcat("filetype.", ext, NULL);
-		gchar *fname = TEMPLATES_GET_FILENAME(shortname);
-
-		ft_templates[ft_id] = read_file(fname);
-		ft_templates[ft_id] = replace_all(ft_templates[ft_id], year, date, datetime);
-
-		g_free(fname);
-		g_free(shortname);
-		g_free(ext);
-	}
-}
-
-
-static void
-on_new_with_filetype_template(GtkMenuItem *menuitem, gpointer user_data)
-{
-	GeanyFiletype *ft = user_data;
-	gchar *template = templates_get_template_new_file(ft);
-
-	document_new_file(NULL, ft, template);
-	g_free(template);
-}
-
-
-/* TODO: remove filetype template support after 0.19 */
-static gboolean create_new_filetype_items(void)
-{
-	GSList *node;
-	gboolean ret = FALSE;
-	GtkWidget *menu = NULL;
-
-	foreach_slist(node, filetypes_by_title)
-	{
-		GeanyFiletype *ft = node->data;
-		GtkWidget *item;
-
-		if (ft->id >= GEANY_MAX_BUILT_IN_FILETYPES || ft_templates[ft->id] == NULL)
-			continue;
-
-		if (!menu)
-		{
-			item = gtk_menu_item_new_with_label(_("Old"));
-			menu = gtk_menu_new();
-			gtk_menu_item_set_submenu(GTK_MENU_ITEM(item), menu);
-			gtk_widget_show_all(item);
-			gtk_container_add(GTK_CONTAINER(new_with_template_menu), item);
-		}
-		item = gtk_menu_item_new_with_label(ft->title);
-		gtk_widget_show(item);
-		gtk_container_add(GTK_CONTAINER(menu), item);
-		g_signal_connect(item, "activate", G_CALLBACK(on_new_with_filetype_template), ft);
-		ret = TRUE;
-	}
-	return ret;
 }
 
 
@@ -371,19 +302,9 @@ static gboolean add_custom_template_items(void)
 
 static void create_file_template_menu(void)
 {
-	GtkWidget *sep = NULL;
-
 	new_with_template_menu = gtk_menu_new();
+	add_custom_template_items();
 
-	if (add_custom_template_items())
-	{
-		sep = gtk_separator_menu_item_new();
-		gtk_container_add(GTK_CONTAINER(new_with_template_menu), sep);
-	}
-	if (create_new_filetype_items() && sep)
-	{
-		gtk_widget_show(sep);
-	}
 	/* unless the file menu is showing, menu should be in the toolbar widget */
 	geany_menu_button_action_set_menu(GEANY_MENU_BUTTON_ACTION(
 		toolbar_get_action_by_name("New")), new_with_template_menu);
@@ -433,7 +354,6 @@ void templates_init(void)
 	static gboolean init_done = FALSE;
 
 	init_general_templates(year, date, datetime);
-	init_ft_templates(year, date, datetime);
 
 	g_free(date);
 	g_free(datetime);
@@ -607,33 +527,6 @@ gchar *templates_get_template_fileheader(gint filetype_idx, const gchar *fname)
 }
 
 
-/* old filetype templates - use file templates instead */
-gchar *templates_get_template_new_file(GeanyFiletype *ft)
-{
-	GString *ft_template;
-	gchar *file_header = NULL;
-
-	g_return_val_if_fail(ft != NULL, NULL);
-	g_return_val_if_fail(ft->id < GEANY_MAX_BUILT_IN_FILETYPES, NULL);
-
-	ft_template = g_string_new(ft_templates[ft->id]);
-	if (FILETYPE_ID(ft) == GEANY_FILETYPES_NONE)
-	{
-		replace_static_values(ft_template);
-	}
-	else
-	{	/* file template only used for new files */
-		file_header = get_template_fileheader(ft);
-		templates_replace_valist(ft_template, "{fileheader}", file_header, NULL);
-	}
-	templates_replace_common(ft_template, NULL, ft, NULL);
-	convert_eol_characters(ft_template, NULL);
-
-	g_free(file_header);
-	return g_string_free(ft_template, FALSE);
-}
-
-
 gchar *templates_get_template_function(GeanyDocument *doc, const gchar *func_name)
 {
 	GString *text;
@@ -679,10 +572,6 @@ void templates_free_templates(void)
 	for (i = 0; i < GEANY_MAX_TEMPLATES; i++)
 	{
 		g_free(templates[i]);
-	}
-	for (i = 0; i < GEANY_MAX_BUILT_IN_FILETYPES; i++)
-	{
-		g_free(ft_templates[i]);
 	}
 	/* destroy "New with template" sub menu items (in case we want to reload the templates) */
 	children = gtk_container_get_children(GTK_CONTAINER(new_with_template_menu));

@@ -12,6 +12,10 @@
    Tweak some build dialog labels:
    Clear -> Reset.
    Fix capitalization.
+   Use filetype name instead of title.
+ * src/templates.c, src/templates.h, doc/geany.txt, doc/geany.html:
+   Remove old filetype templates support - users can use custom file
+   templates instead.
 
 
 2011-04-01  Colomban Wendling  <colomban(at)geany(dot)org>

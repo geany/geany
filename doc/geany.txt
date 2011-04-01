@@ -4525,11 +4525,11 @@ optional template wildcards like ``{fileheader}``. The fileheader
 wildcard can be placed anywhere, but it's usually put on the first
 line of the file, followed by a blank line.
 
-Custom file templates
+Adding file templates
 `````````````````````
 
-These are read from ``templates/files`` under the `Configuration file
-paths`_.
+File templates are read from ``templates/files`` under the
+`Configuration file paths`_.
 
 The filetype to use is detected from the template file's extension, if
 any. For example, creating a file ``module.c`` would add a menu item
@@ -4537,22 +4537,6 @@ which created a new document with the filetype set to 'C'.
 
 The template file is read from disk when the corresponding menu item is
 clicked.
-
-Filetype templates
-``````````````````
-
-.. note::
-    It's recommended to use custom file templates instead.
-
-Filetype template files are read from the ``~/.config/geany/templates``
-directory, and are named "filetype." followed by the filetype
-name, e.g. "filetype.python", "filetype.sh", etc. If you are
-unsure about the filetype name extensions, they are the same as
-the filetype configuration file extensions, commonly installed in
-``/usr/share/geany``, with the prefix "filetypes.".
-
-There is also a template file ``filetype.none`` which is used when
-the New command is used without a filetype. This is empty by default.
 
 
 Customizing templates
@@ -4677,8 +4661,7 @@ gpl            This wildcard inserts a short GPL notice.     file header.
 bsd            This wildcard inserts a BSD licence notice.   file header.
 
 fileheader     The file header template. This wildcard       snippets, file templates.
-               will only be replaced in filetype
-               templates.
+               will only be replaced in file templates.
 ============== ============================================= =======================================
 
 

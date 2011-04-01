@@ -66,8 +66,6 @@ void templates_init(void);
 
 gchar *templates_get_template_fileheader(gint filetype_idx, const gchar *fname);
 
-gchar *templates_get_template_new_file(GeanyFiletype *ft);
-
 gchar *templates_get_template_changelog(GeanyDocument *doc);
 
 gchar *templates_get_template_function(GeanyDocument *doc, const gchar *func_name);
