@@ -2613,7 +2613,6 @@ create_prefs_dialog (void)
   GtkWidget *combo_tab_editor;
   GtkWidget *label158;
   GtkWidget *label249;
-  GtkWidget *label157;
   GtkWidget *vbox15;
   GtkWidget *frame28;
   GtkWidget *alignment31;
@@ -2648,6 +2647,7 @@ create_prefs_dialog (void)
   GtkWidget *label245;
   GtkWidget *label246;
   GtkWidget *label164;
+  GtkWidget *label157;
   GtkWidget *notebook4;
   GtkWidget *vbox5;
   GtkWidget *frame14;
@@ -3533,13 +3533,9 @@ create_prefs_dialog (void)
   gtk_widget_show (label249);
   gtk_notebook_set_tab_label (GTK_NOTEBOOK (notebook6), gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook6), 1), label249);
 
-  label157 = gtk_label_new (_("Interface"));
-  gtk_widget_show (label157);
-  gtk_notebook_set_tab_label (GTK_NOTEBOOK (notebook2), gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook2), 1), label157);
-
   vbox15 = gtk_vbox_new (FALSE, 10);
   gtk_widget_show (vbox15);
-  gtk_container_add (GTK_CONTAINER (notebook2), vbox15);
+  gtk_container_add (GTK_CONTAINER (notebook6), vbox15);
   gtk_container_set_border_width (GTK_CONTAINER (vbox15), 5);
 
   frame28 = gtk_frame_new (NULL);
@@ -3710,7 +3706,11 @@ create_prefs_dialog (void)
 
   label164 = gtk_label_new (_("Toolbar"));
   gtk_widget_show (label164);
-  gtk_notebook_set_tab_label (GTK_NOTEBOOK (notebook2), gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook2), 2), label164);
+  gtk_notebook_set_tab_label (GTK_NOTEBOOK (notebook6), gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook6), 2), label164);
+
+  label157 = gtk_label_new (_("Interface"));
+  gtk_widget_show (label157);
+  gtk_notebook_set_tab_label (GTK_NOTEBOOK (notebook2), gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook2), 1), label157);
 
   notebook4 = gtk_notebook_new ();
   gtk_widget_show (notebook4);
@@ -4309,7 +4309,7 @@ create_prefs_dialog (void)
 
   label95 = gtk_label_new (_("Editor"));
   gtk_widget_show (label95);
-  gtk_notebook_set_tab_label (GTK_NOTEBOOK (notebook2), gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook2), 3), label95);
+  gtk_notebook_set_tab_label (GTK_NOTEBOOK (notebook2), gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook2), 2), label95);
 
   vbox18 = gtk_vbox_new (FALSE, 10);
   gtk_widget_show (vbox18);
@@ -4524,7 +4524,7 @@ create_prefs_dialog (void)
 
   label174 = gtk_label_new (_("Files"));
   gtk_widget_show (label174);
-  gtk_notebook_set_tab_label (GTK_NOTEBOOK (notebook2), gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook2), 4), label174);
+  gtk_notebook_set_tab_label (GTK_NOTEBOOK (notebook2), gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook2), 3), label174);
 
   vbox23 = gtk_vbox_new (FALSE, 10);
   gtk_widget_show (vbox23);
@@ -4678,7 +4678,7 @@ create_prefs_dialog (void)
 
   label96 = gtk_label_new (_("Tools"));
   gtk_widget_show (label96);
-  gtk_notebook_set_tab_label (GTK_NOTEBOOK (notebook2), gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook2), 5), label96);
+  gtk_notebook_set_tab_label (GTK_NOTEBOOK (notebook2), gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook2), 4), label96);
 
   vbox49 = gtk_vbox_new (FALSE, 10);
   gtk_widget_show (vbox49);
@@ -4828,7 +4828,7 @@ create_prefs_dialog (void)
 
   label119 = gtk_label_new (_("Templates"));
   gtk_widget_show (label119);
-  gtk_notebook_set_tab_label (GTK_NOTEBOOK (notebook2), gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook2), 6), label119);
+  gtk_notebook_set_tab_label (GTK_NOTEBOOK (notebook2), gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook2), 5), label119);
 
   frame22 = gtk_frame_new (NULL);
   gtk_widget_show (frame22);
@@ -4875,7 +4875,7 @@ create_prefs_dialog (void)
 
   label151 = gtk_label_new (_("Keybindings"));
   gtk_widget_show (label151);
-  gtk_notebook_set_tab_label (GTK_NOTEBOOK (notebook2), gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook2), 7), label151);
+  gtk_notebook_set_tab_label (GTK_NOTEBOOK (notebook2), gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook2), 6), label151);
 
   frame41 = gtk_frame_new (NULL);
   gtk_widget_show (frame41);
@@ -5006,7 +5006,7 @@ create_prefs_dialog (void)
 
   label201 = gtk_label_new (_("Printing"));
   gtk_widget_show (label201);
-  gtk_notebook_set_tab_label (GTK_NOTEBOOK (notebook2), gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook2), 8), label201);
+  gtk_notebook_set_tab_label (GTK_NOTEBOOK (notebook2), gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook2), 7), label201);
 
   dialog_action_area3 = GTK_DIALOG (prefs_dialog)->action_area;
   gtk_widget_show (dialog_action_area3);
@@ -5154,7 +5154,6 @@ create_prefs_dialog (void)
   GLADE_HOOKUP_OBJECT (prefs_dialog, combo_tab_editor, "combo_tab_editor");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label158, "label158");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label249, "label249");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, label157, "label157");
   GLADE_HOOKUP_OBJECT (prefs_dialog, vbox15, "vbox15");
   GLADE_HOOKUP_OBJECT (prefs_dialog, frame28, "frame28");
   GLADE_HOOKUP_OBJECT (prefs_dialog, alignment31, "alignment31");
@@ -5187,6 +5186,7 @@ create_prefs_dialog (void)
   GLADE_HOOKUP_OBJECT (prefs_dialog, label245, "label245");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label246, "label246");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label164, "label164");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, label157, "label157");
   GLADE_HOOKUP_OBJECT (prefs_dialog, notebook4, "notebook4");
   GLADE_HOOKUP_OBJECT (prefs_dialog, vbox5, "vbox5");
   GLADE_HOOKUP_OBJECT (prefs_dialog, frame14, "frame14");

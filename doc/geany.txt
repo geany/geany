@@ -552,11 +552,8 @@ Switching between documents
 The documents list and the editor tabs are two different ways
 to switch between documents using the mouse. When you hit the key
 combination to move between tabs, the order is determined by the tab
-order. Its is not alphabetical as shown in the documents list
+order. It is not alphabetical as shown in the documents list
 (regardless of whether or not editor tabs are visible).
-
-The tabs can be positioned at the top, bottom, left, or right of the
-main editing window, by a selection in the interface preferences.
 
 See the `Notebook tab keybindings`_ section for useful
 shortcuts including for Most-Recently-Used document switching.
@@ -1859,6 +1856,17 @@ Symbol list
 Message window
     Change the font used for the message window area.
 
+Miscellaneous
+`````````````
+
+Show status bar
+    Show the status bar at the bottom of the main window. It gives information about
+    the file you are editing like the line and column you are on, whether any
+    modifications were done, the file encoding, the filetype and other information.
+
+Interface Notebook tab preferences
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 Editor tabs
 ```````````
 
@@ -1897,17 +1905,9 @@ Message window
     Set the positioning of the message window's notebook tabs to the
     right, left, top, or bottom of the message window.
 
-Miscellaneous
-`````````````
 
-Show status bar
-    Show the status bar at the bottom of the main window. It gives information about
-    the file you are editing like the line and column you are on, whether any
-    modifications were done, the file encoding, the filetype and other information.
-
-
-Toolbar preferences
-^^^^^^^^^^^^^^^^^^^
+Interface Toolbar preferences
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Affects the main toolbar underneath the menu bar.
 

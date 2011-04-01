@@ -6,6 +6,8 @@
    Use mimetype icon in File Properties dialog.
  * doc/geany.txt, doc/geany.html:
    Fix title capitalization.
+ * src/interface.c, doc/geany.txt, doc/geany.html, geany.glade:
+   Move Preferences dialog Toolbar tab under Interface tab.
 
 
 2011-04-01  Colomban Wendling  <colomban(at)geany(dot)org>
