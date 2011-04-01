@@ -3529,7 +3529,7 @@ create_prefs_dialog (void)
   gtk_frame_set_label_widget (GTK_FRAME (frame9), label158);
   gtk_label_set_use_markup (GTK_LABEL (label158), TRUE);
 
-  label249 = gtk_label_new_with_mnemonic (_("_More"));
+  label249 = gtk_label_new_with_mnemonic (_("Notebook tabs"));
   gtk_widget_show (label249);
   gtk_notebook_set_tab_label (GTK_NOTEBOOK (notebook6), gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook6), 1), label249);
 
@@ -5703,23 +5703,5 @@ create_project_dialog (void)
   GLADE_HOOKUP_OBJECT_NO_REF (project_dialog, tooltips, "tooltips");
 
   return project_dialog;
-}
-
-GtkWidget*
-create_checkbutton3 (void)
-{
-  GtkWidget *checkbutton3;
-  GtkTooltips *tooltips;
-
-  tooltips = gtk_tooltips_new ();
-
-  checkbutton3 = gtk_check_button_new_with_mnemonic (_("Detect from file"));
-  gtk_tooltips_set_tip (tooltips, checkbutton3, _("Whether to detect the indentation type from file contents when a file is opened"), NULL);
-
-  /* Store pointers to all widgets, for use by lookup_widget(). */
-  GLADE_HOOKUP_OBJECT_NO_REF (checkbutton3, checkbutton3, "checkbutton3");
-  GLADE_HOOKUP_OBJECT_NO_REF (checkbutton3, tooltips, "tooltips");
-
-  return checkbutton3;
 }
 

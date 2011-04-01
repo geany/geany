@@ -7,4 +7,3 @@ GtkWidget* create_toolbar_popup_menu1 (void);
 GtkWidget* create_edit_menu1 (void);
 GtkWidget* create_prefs_dialog (void);
 GtkWidget* create_project_dialog (void);
-GtkWidget* create_checkbutton3 (void);

@@ -5091,7 +5091,7 @@ Bottom
 	      <child>
 		<widget class="GtkLabel" id="label249">
 		  <property name="visible">True</property>
-		  <property name="label" translatable="yes">_More</property>
+		  <property name="label" translatable="yes">Notebook tabs</property>
 		  <property name="use_underline">True</property>
 		  <property name="use_markup">False</property>
 		  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -10681,19 +10681,6 @@ Match braces</property>
       </child>
     </widget>
   </child>
-</widget>
-
-<widget class="GtkCheckButton" id="checkbutton3">
-  <property name="visible">True</property>
-  <property name="tooltip" translatable="yes">Whether to detect the indentation type from file contents when a file is opened</property>
-  <property name="can_focus">True</property>
-  <property name="label" translatable="yes">Detect from file</property>
-  <property name="use_underline">True</property>
-  <property name="relief">GTK_RELIEF_NORMAL</property>
-  <property name="focus_on_click">True</property>
-  <property name="active">False</property>
-  <property name="inconsistent">False</property>
-  <property name="draw_indicator">True</property>
 </widget>
 
 </glade-interface>
