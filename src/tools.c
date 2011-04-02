@@ -53,43 +53,129 @@
 #include "dialogs.h"
 
 
+enum
+{
+	CC_COLUMN_ID,
+	CC_COLUMN_STATUS,
+	CC_COLUMN_TOOLTIP,
+	CC_COLUMN_CMD,
+	CC_COLUMN_EDITABLE,
+	CC_COLUMN_ELLIPSIZE,
+	CC_COLUMN_COUNT
+};
+
 /* custom commands code*/
 struct cc_dialog
 {
 	gint count;
-	GtkWidget *box;
+	GtkWidget *view;
+	GtkTreeViewColumn *edit_column;
+	GtkListStore *store;
+	GtkTreeSelection *selection;
+	GtkWidget *button_add;
+	GtkWidget *button_remove;
+	GtkWidget *button_up;
+	GtkWidget *button_down;
 };
 
 static gboolean cc_error_occurred = FALSE;
 static gboolean cc_reading_finished = FALSE;
 static GString *cc_buffer;
 
-static void cc_add_command(struct cc_dialog *cc, gint idx)
+
+/* update STATUS and TOOLTIP columns according to cmd */
+static void cc_dialog_update_row_status(GtkListStore *store, GtkTreeIter *iter, const gchar *cmd)
 {
-	GtkWidget *label, *entry, *hbox;
-	gchar str[6];
+	GError *err = NULL;
+	const gchar *stock_id;
+	gchar *tooltip = NULL;
 
-	hbox = gtk_hbox_new(FALSE, 5);
-	g_snprintf(str, 5, "%d:", cc->count);
-	label = gtk_label_new(str);
+	if (! NZV(cmd) || g_shell_parse_argv(cmd, NULL, NULL, &err))
+		stock_id = GTK_STOCK_YES;
+	else
+	{
+		stock_id = GTK_STOCK_NO;
+		tooltip = g_strdup_printf(_("Command cannot be parsed: %s"), err->message);
+		g_error_free(err);
+	}
 
-	entry = gtk_entry_new();
-	if (idx >= 0)
-		gtk_entry_set_text(GTK_ENTRY(entry), ui_prefs.custom_commands[idx]);
-	ui_entry_add_clear_icon(GTK_ENTRY(entry));
-	gtk_entry_set_max_length(GTK_ENTRY(entry), 255);
-	gtk_entry_set_width_chars(GTK_ENTRY(entry), 30);
-	gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
-	gtk_box_pack_start(GTK_BOX(hbox), entry, TRUE, TRUE, 0);
-	gtk_widget_show_all(hbox);
-	gtk_container_add(GTK_CONTAINER(cc->box), hbox);
-	cc->count++;
+	gtk_list_store_set(store, iter, CC_COLUMN_STATUS, stock_id, CC_COLUMN_TOOLTIP, tooltip, -1);
+	g_free(tooltip);
 }
 
 
-static void cc_on_custom_commands_dlg_add_clicked(GtkToolButton *toolbutton, struct cc_dialog *cc)
+/* adds a new row for custom command @p idx, or an new empty one if < 0 */
+static void cc_dialog_add_command(struct cc_dialog *cc, gint idx, gboolean start_editing)
 {
-	cc_add_command(cc, -1);
+	GtkTreeIter iter;
+	const gchar *cmd;
+
+	cmd = (idx >= 0) ? ui_prefs.custom_commands[idx] : NULL;
+
+	gtk_list_store_append(cc->store, &iter);
+	gtk_list_store_set(cc->store, &iter, CC_COLUMN_ID, cc->count, CC_COLUMN_CMD, cmd,
+			CC_COLUMN_EDITABLE, TRUE, CC_COLUMN_ELLIPSIZE, PANGO_ELLIPSIZE_END, -1);
+	cc_dialog_update_row_status(cc->store, &iter, cmd);
+	cc->count++;
+
+	if (start_editing)
+	{
+		GtkTreePath *path;
+
+		gtk_widget_grab_focus(cc->view);
+		path = gtk_tree_model_get_path(GTK_TREE_MODEL(cc->store), &iter);
+		gtk_tree_view_set_cursor(GTK_TREE_VIEW(cc->view), path, cc->edit_column, TRUE);
+		gtk_tree_path_free(path);
+	}
+}
+
+
+static void cc_on_dialog_add_clicked(GtkButton *button, struct cc_dialog *cc)
+{
+	cc_dialog_add_command(cc, -1, TRUE);
+}
+
+
+static void cc_on_dialog_remove_clicked(GtkButton *button, struct cc_dialog *cc)
+{
+	GtkTreeIter iter;
+
+	if (gtk_tree_selection_get_selected(cc->selection, NULL, &iter))
+		gtk_list_store_remove(cc->store, &iter);
+}
+
+
+static void cc_on_dialog_move_up_clicked(GtkButton *button, struct cc_dialog *cc)
+{
+	GtkTreeIter iter;
+
+	if (gtk_tree_selection_get_selected(cc->selection, NULL, &iter))
+	{
+		GtkTreePath *path;
+		GtkTreeIter prev;
+
+		path = gtk_tree_model_get_path(GTK_TREE_MODEL(cc->store), &iter);
+		if (gtk_tree_path_prev(path) &&
+			gtk_tree_model_get_iter(GTK_TREE_MODEL(cc->store), &prev, path))
+		{
+			gtk_list_store_move_before(cc->store, &iter, &prev);
+		}
+		gtk_tree_path_free(path);
+	}
+}
+
+
+static void cc_on_dialog_move_down_clicked(GtkButton *button, struct cc_dialog *cc)
+{
+	GtkTreeIter iter;
+
+	if (gtk_tree_selection_get_selected(cc->selection, NULL, &iter))
+	{
+		GtkTreeIter next = iter;
+
+		if (gtk_tree_model_iter_next(GTK_TREE_MODEL(cc->store), &next))
+			gtk_list_store_move_after(cc->store, &iter, &next);
+	}
 }
 
 
@@ -300,15 +386,104 @@ void tools_execute_custom_command(GeanyDocument *doc, const gchar *command)
 }
 
 
+static void cc_dialog_on_command_edited(GtkCellRendererText *renderer, gchar *path, gchar *text,
+		struct cc_dialog *cc)
+{
+	GtkTreeIter iter;
+
+	gtk_tree_model_get_iter_from_string(GTK_TREE_MODEL(cc->store), &iter, path);
+	gtk_list_store_set(cc->store, &iter, CC_COLUMN_CMD, text, -1);
+	cc_dialog_update_row_status(cc->store, &iter, text);
+}
+
+
+/* re-compute IDs to reflect the current store state */
+static void cc_dialog_update_ids(struct cc_dialog *cc)
+{
+	GtkTreeIter iter;
+
+	cc->count = 1;
+	if (! gtk_tree_model_get_iter_first(GTK_TREE_MODEL(cc->store), &iter))
+		return;
+
+	do
+	{
+		gtk_list_store_set(cc->store, &iter, CC_COLUMN_ID, cc->count, -1);
+		cc->count++;
+	}
+	while (gtk_tree_model_iter_next(GTK_TREE_MODEL(cc->store), &iter));
+}
+
+
+/* update sensitiveness of the buttons according to the selection */
+static void cc_dialog_update_sensitive(struct cc_dialog *cc)
+{
+	GtkTreeIter iter;
+	gboolean has_selection = FALSE;
+	gboolean first_selected = FALSE;
+	gboolean last_selected = FALSE;
+
+	if ((has_selection = gtk_tree_selection_get_selected(cc->selection, NULL, &iter)))
+	{
+		GtkTreePath *path;
+		GtkTreePath *copy;
+
+		path = gtk_tree_model_get_path(GTK_TREE_MODEL(cc->store), &iter);
+		copy = gtk_tree_path_copy(path);
+		first_selected = ! gtk_tree_path_prev(copy);
+		gtk_tree_path_free(copy);
+		gtk_tree_path_next(path);
+		last_selected = ! gtk_tree_model_get_iter(GTK_TREE_MODEL(cc->store), &iter, path);
+		gtk_tree_path_free(path);
+	}
+
+	gtk_widget_set_sensitive(cc->button_remove, has_selection);
+	gtk_widget_set_sensitive(cc->button_up, has_selection && ! first_selected);
+	gtk_widget_set_sensitive(cc->button_down, has_selection && ! last_selected);
+}
+
+
+static void cc_dialog_on_tree_selection_changed(GtkTreeSelection *selection, struct cc_dialog *cc)
+{
+	cc_dialog_update_sensitive(cc);
+}
+
+
+static void cc_dialog_on_row_inserted(GtkTreeModel *model, GtkTreePath  *path, GtkTreeIter *iter,
+		struct cc_dialog *cc)
+{
+	cc_dialog_update_ids(cc);
+	cc_dialog_update_sensitive(cc);
+}
+
+
+static void cc_dialog_on_row_deleted(GtkTreeModel *model, GtkTreePath  *path, struct cc_dialog *cc)
+{
+	cc_dialog_update_ids(cc);
+	cc_dialog_update_sensitive(cc);
+}
+
+
+static void cc_dialog_on_rows_reordered(GtkTreeModel *model, GtkTreePath  *path, GtkTreeIter *iter,
+		gpointer new_order, struct cc_dialog *cc)
+{
+	cc_dialog_update_ids(cc);
+	cc_dialog_update_sensitive(cc);
+}
+
+
 static void cc_show_dialog_custom_commands(void)
 {
-	GtkWidget *dialog, *label, *vbox, *button;
+	GtkWidget *dialog, *label, *vbox, *scroll, *buttonbox;
+	GtkCellRenderer *renderer;
+	GtkTreeViewColumn *column;
 	guint i;
 	struct cc_dialog cc;
 
 	dialog = gtk_dialog_new_with_buttons(_("Set Custom Commands"), GTK_WINDOW(main_widgets.window),
 						GTK_DIALOG_DESTROY_WITH_PARENT, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 						GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL);
+	gtk_window_set_default_size(GTK_WINDOW(dialog), 300, 300); /* give a reasonable minimal default size */
 	vbox = ui_dialog_vbox_new(GTK_DIALOG(dialog));
 	gtk_box_set_spacing(GTK_BOX(vbox), 6);
 	gtk_widget_set_name(dialog, "GeanyDialog");
@@ -316,74 +491,127 @@ static void cc_show_dialog_custom_commands(void)
 	label = gtk_label_new(_("You can send the current selection to any of these commands and the output of the command replaces the current selection."));
 	gtk_label_set_line_wrap(GTK_LABEL(label), TRUE);
 	gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
-	gtk_container_add(GTK_CONTAINER(vbox), label);
+	gtk_box_pack_start(GTK_BOX(vbox), label, FALSE, FALSE, 0);
 
 	cc.count = 1;
-	cc.box = gtk_vbox_new(FALSE, 0);
-	gtk_container_add(GTK_CONTAINER(vbox), cc.box);
+	cc.store = gtk_list_store_new(CC_COLUMN_COUNT, G_TYPE_UINT, G_TYPE_STRING, G_TYPE_STRING,
+			G_TYPE_STRING, G_TYPE_BOOLEAN, PANGO_TYPE_ELLIPSIZE_MODE);
+	cc.view = gtk_tree_view_new_with_model(GTK_TREE_MODEL(cc.store));
+	gtk_tree_view_set_tooltip_column(GTK_TREE_VIEW(cc.view), CC_COLUMN_TOOLTIP);
+	gtk_tree_view_set_reorderable(GTK_TREE_VIEW(cc.view), TRUE);
+	cc.selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(cc.view));
+	/* ID column */
+	renderer = gtk_cell_renderer_text_new();
+	column = gtk_tree_view_column_new_with_attributes(_("ID"), renderer, "text", CC_COLUMN_ID, NULL);
+	gtk_tree_view_append_column(GTK_TREE_VIEW(cc.view), column);
+	/* command column, holding status and command display */
+	column = gtk_tree_view_column_new();
+	gtk_tree_view_column_set_title(column, _("Command"));
+	renderer = gtk_cell_renderer_pixbuf_new();
+	gtk_tree_view_column_pack_start(column, renderer, FALSE);
+	gtk_tree_view_column_set_attributes(column, renderer, "stock-id", CC_COLUMN_STATUS, NULL);
+	renderer = gtk_cell_renderer_text_new();
+	g_signal_connect(renderer, "edited", G_CALLBACK(cc_dialog_on_command_edited), &cc);
+	gtk_tree_view_column_pack_start(column, renderer, TRUE);
+	gtk_tree_view_column_set_attributes(column, renderer, "text", CC_COLUMN_CMD,
+			"editable", CC_COLUMN_EDITABLE, "ellipsize", CC_COLUMN_ELLIPSIZE, NULL);
+	cc.edit_column = column;
+	gtk_tree_view_append_column(GTK_TREE_VIEW(cc.view), column);
 
-	if (ui_prefs.custom_commands == NULL || g_strv_length(ui_prefs.custom_commands) == 0)
+	scroll = gtk_scrolled_window_new(NULL, NULL);
+	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scroll), GTK_POLICY_AUTOMATIC,
+			GTK_POLICY_AUTOMATIC);
+	gtk_scrolled_window_set_shadow_type(GTK_SCROLLED_WINDOW(scroll), GTK_SHADOW_IN);
+	gtk_container_add(GTK_CONTAINER(scroll), cc.view);
+	gtk_box_pack_start(GTK_BOX(vbox), scroll, TRUE, TRUE, 0);
+
+	if (ui_prefs.custom_commands != NULL)
 	{
-		cc_add_command(&cc, -1);
-	}
-	else
-	{
+		GtkTreeIter iter;
 		guint len = g_strv_length(ui_prefs.custom_commands);
+
 		for (i = 0; i < len; i++)
 		{
-			if (ui_prefs.custom_commands[i][0] == '\0')
+			if (! NZV(ui_prefs.custom_commands[i]))
 				continue; /* skip empty fields */
 
-			cc_add_command(&cc, i);
+			cc_dialog_add_command(&cc, i, FALSE);
+		}
+
+		/* focus the first row if any */
+		if (gtk_tree_model_get_iter_first(GTK_TREE_MODEL(cc.store), &iter))
+		{
+			GtkTreePath *path = gtk_tree_model_get_path(GTK_TREE_MODEL(cc.store), &iter);
+
+			gtk_tree_view_set_cursor(GTK_TREE_VIEW(cc.view), path, cc.edit_column, FALSE);
+			gtk_tree_path_free(path);
 		}
 	}
 
-	button = gtk_button_new_from_stock("gtk-add");
-	g_signal_connect(button, "clicked", G_CALLBACK(cc_on_custom_commands_dlg_add_clicked), &cc);
-	gtk_box_pack_start(GTK_BOX(vbox), button, FALSE, FALSE, 0);
+	buttonbox = gtk_hbutton_box_new();
+	gtk_box_set_spacing(GTK_BOX(buttonbox), 6);
+	gtk_box_pack_start(GTK_BOX(vbox), buttonbox, FALSE, FALSE, 0);
+	cc.button_add = gtk_button_new_from_stock(GTK_STOCK_ADD);
+	g_signal_connect(cc.button_add, "clicked", G_CALLBACK(cc_on_dialog_add_clicked), &cc);
+	gtk_container_add(GTK_CONTAINER(buttonbox), cc.button_add);
+	cc.button_remove = gtk_button_new_from_stock(GTK_STOCK_REMOVE);
+	g_signal_connect(cc.button_remove, "clicked", G_CALLBACK(cc_on_dialog_remove_clicked), &cc);
+	gtk_container_add(GTK_CONTAINER(buttonbox), cc.button_remove);
+	cc.button_up = gtk_button_new_from_stock(GTK_STOCK_GO_UP);
+	g_signal_connect(cc.button_up, "clicked", G_CALLBACK(cc_on_dialog_move_up_clicked), &cc);
+	gtk_container_add(GTK_CONTAINER(buttonbox), cc.button_up);
+	cc.button_down = gtk_button_new_from_stock(GTK_STOCK_GO_DOWN);
+	g_signal_connect(cc.button_down, "clicked", G_CALLBACK(cc_on_dialog_move_down_clicked), &cc);
+	gtk_container_add(GTK_CONTAINER(buttonbox), cc.button_down);
+
+	cc_dialog_update_sensitive(&cc);
+
+	/* only connect the selection signal when all other cc_dialog fields are set */
+	g_signal_connect(cc.selection, "changed", G_CALLBACK(cc_dialog_on_tree_selection_changed), &cc);
+	g_signal_connect(cc.store, "row-inserted", G_CALLBACK(cc_dialog_on_row_inserted), &cc);
+	g_signal_connect(cc.store, "row-deleted", G_CALLBACK(cc_dialog_on_row_deleted), &cc);
+	g_signal_connect(cc.store, "rows-reordered", G_CALLBACK(cc_dialog_on_rows_reordered), &cc);
 
 	gtk_widget_show_all(vbox);
 
 	if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_ACCEPT)
 	{
-		/* get all hboxes which contain a label and an entry element */
-		GList *children = gtk_container_get_children(GTK_CONTAINER(cc.box));
-		GList *node, *list;
 		GSList *result_list = NULL;
-		gint j = 0;
 		gint len = 0;
 		gchar **result = NULL;
-		const gchar *text;
+		GtkTreeIter iter;
 
-		foreach_list(node, children)
+		if (gtk_tree_model_get_iter_first(GTK_TREE_MODEL(cc.store), &iter))
 		{
-			/* get the contents of each hbox */
-			list = gtk_container_get_children(GTK_CONTAINER(node->data));
-
-			/* first element of the list is the label, so skip it and get the entry element */
-			text = gtk_entry_get_text(GTK_ENTRY(list->next->data));
-
-			/* if the content of the entry is non-empty, add it to the result array */
-			if (text[0] != '\0')
+			do
 			{
-				result_list = g_slist_prepend(result_list, g_strdup(text));
-				len++;
+				gchar *cmd;
+
+				gtk_tree_model_get(GTK_TREE_MODEL(cc.store), &iter, CC_COLUMN_CMD, &cmd, -1);
+				if (NZV(cmd))
+				{
+					result_list = g_slist_prepend(result_list, cmd);
+					len++;
+				}
+				else
+					g_free(cmd);
 			}
-			g_list_free(list);
+			while (gtk_tree_model_iter_next(GTK_TREE_MODEL(cc.store), &iter));
 		}
 		result_list = g_slist_reverse(result_list);
-		/* create a new null-terminated array but only if there any commands defined */
+		/* create a new null-terminated array but only if there is any commands defined */
 		if (len > 0)
 		{
-			result = g_new(gchar*, len + 1);
-			while (result_list != NULL)
-			{
-				result[j] = (gchar*) result_list->data;
+			gint j = 0;
+			GSList *node;
 
-				result_list = result_list->next;
+			result = g_new(gchar*, len + 1);
+			foreach_list(node, result_list)
+			{
+				result[j] = (gchar*) node->data;
 				j++;
 			}
-			result[len] = NULL; /* null-terminate the array */
+			result[j] = NULL; /* null-terminate the array */
 		}
 		/* set the new array */
 		g_strfreev(ui_prefs.custom_commands);
@@ -392,7 +620,6 @@ static void cc_show_dialog_custom_commands(void)
 		tools_create_insert_custom_command_menu_items();
 
 		g_slist_free(result_list);
-		g_list_free(children);
 	}
 	gtk_widget_destroy(dialog);
 }

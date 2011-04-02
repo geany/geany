@@ -1,3 +1,9 @@
+2011-04-01  Colomban Wendling  <colomban(at)geany(dot)org>
+
+ * src/tools.c, doc/geany.txt, doc/geany.html:
+   Improve the `Set Custom Commands` dialog.
+
+
 2011-04-01  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/interface.c, src/interface.h, geany.glade:

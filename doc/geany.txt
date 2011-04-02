@@ -883,10 +883,9 @@ output.
 If there is no selection, the whole current line is used instead.
 
 To add a custom command, use the *Send Selection to->Set Custom
-Commands* menu item. Click on *Add* to get a new text entry and type
-the command. You can also specify some command line options. To
-delete a command, just clear the text entry and press OK. It will be
-deleted automatically.
+Commands* menu item. Click on *Add* to get a new item and type the
+command. You can also specify some command line options. Empty
+commands are not saved.
 
 Normal shell quoting is supported, so you can do things like:
 
