@@ -59,8 +59,6 @@ enum
 	CC_COLUMN_STATUS,
 	CC_COLUMN_TOOLTIP,
 	CC_COLUMN_CMD,
-	CC_COLUMN_EDITABLE,
-	CC_COLUMN_ELLIPSIZE,
 	CC_COLUMN_COUNT
 };
 
@@ -113,8 +111,7 @@ static void cc_dialog_add_command(struct cc_dialog *cc, gint idx, gboolean start
 	cmd = (idx >= 0) ? ui_prefs.custom_commands[idx] : NULL;
 
 	gtk_list_store_append(cc->store, &iter);
-	gtk_list_store_set(cc->store, &iter, CC_COLUMN_ID, cc->count, CC_COLUMN_CMD, cmd,
-			CC_COLUMN_EDITABLE, TRUE, CC_COLUMN_ELLIPSIZE, PANGO_ELLIPSIZE_END, -1);
+	gtk_list_store_set(cc->store, &iter, CC_COLUMN_ID, cc->count, CC_COLUMN_CMD, cmd, -1);
 	cc_dialog_update_row_status(cc->store, &iter, cmd);
 	cc->count++;
 
@@ -495,7 +492,7 @@ static void cc_show_dialog_custom_commands(void)
 
 	cc.count = 1;
 	cc.store = gtk_list_store_new(CC_COLUMN_COUNT, G_TYPE_UINT, G_TYPE_STRING, G_TYPE_STRING,
-			G_TYPE_STRING, G_TYPE_BOOLEAN, PANGO_TYPE_ELLIPSIZE_MODE);
+			G_TYPE_STRING);
 	cc.view = gtk_tree_view_new_with_model(GTK_TREE_MODEL(cc.store));
 	gtk_tree_view_set_tooltip_column(GTK_TREE_VIEW(cc.view), CC_COLUMN_TOOLTIP);
 	gtk_tree_view_set_reorderable(GTK_TREE_VIEW(cc.view), TRUE);
@@ -511,10 +508,10 @@ static void cc_show_dialog_custom_commands(void)
 	gtk_tree_view_column_pack_start(column, renderer, FALSE);
 	gtk_tree_view_column_set_attributes(column, renderer, "stock-id", CC_COLUMN_STATUS, NULL);
 	renderer = gtk_cell_renderer_text_new();
+	g_object_set(renderer, "editable", TRUE, "ellipsize", PANGO_ELLIPSIZE_END, NULL);
 	g_signal_connect(renderer, "edited", G_CALLBACK(cc_dialog_on_command_edited), &cc);
 	gtk_tree_view_column_pack_start(column, renderer, TRUE);
-	gtk_tree_view_column_set_attributes(column, renderer, "text", CC_COLUMN_CMD,
-			"editable", CC_COLUMN_EDITABLE, "ellipsize", CC_COLUMN_ELLIPSIZE, NULL);
+	gtk_tree_view_column_set_attributes(column, renderer, "text", CC_COLUMN_CMD, NULL);
 	cc.edit_column = column;
 	gtk_tree_view_append_column(GTK_TREE_VIEW(cc.view), column);
 
