@@ -113,13 +113,14 @@ static void cc_dialog_update_row_status(GtkListStore *store, GtkTreeIter *iter, 
 		if (argc > 0 && cc_exists_command(argv[0]))
 			stock_id = GTK_STOCK_YES;
 		else
-			err = g_error_new( G_FILE_ERROR, G_FILE_ERROR_NOENT, _("Command not found"));
+			err = g_error_new(G_FILE_ERROR, G_FILE_ERROR_NOENT, _("Command not found"));
+		g_strfreev(argv);
 	}
 
 	if (err != NULL)
 	{
 		stock_id = GTK_STOCK_NO;
-		tooltip = g_strdup_printf(_("Command cannot be found/parsed: %s"), err->message);
+		tooltip = g_strdup_printf(_("Invalid command: %s"), err->message);
 		g_error_free(err);
 	}
 
