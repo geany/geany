@@ -61,6 +61,7 @@ lexlib/LexerSimple.h \
 lexlib/OptionSet.h \
 lexlib/PropSetSimple.cxx \
 lexlib/PropSetSimple.h \
+lexlib/SparseState.h \
 lexlib/StyleContext.cxx \
 lexlib/StyleContext.h \
 lexlib/WordList.cxx \

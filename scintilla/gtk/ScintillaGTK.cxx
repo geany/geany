@@ -75,6 +75,10 @@
 #define IS_WIDGET_VISIBLE(w) (GTK_WIDGET_VISIBLE(w))
 #endif
 
+#if GTK_CHECK_VERSION(2,22,0)
+#define USE_CAIRO 1
+#endif
+
 #ifdef _MSC_VER
 // Constant conditional expressions are because of GTK+ headers
 #pragma warning(disable: 4127)
@@ -531,7 +535,6 @@ void ScintillaGTK::MainForAll(GtkContainer *container, gboolean include_internal
 
 gint ScintillaGTK::FocusInThis(GtkWidget *widget) {
 	try {
-		GTK_WIDGET_SET_FLAGS(widget, GTK_HAS_FOCUS);
 		SetFocusState(true);
 		if (im_context != NULL) {
 			gchar *str = NULL;
@@ -562,7 +565,6 @@ gint ScintillaGTK::FocusIn(GtkWidget *widget, GdkEventFocus * /*event*/) {
 
 gint ScintillaGTK::FocusOutThis(GtkWidget *widget) {
 	try {
-		GTK_WIDGET_UNSET_FLAGS(widget, GTK_HAS_FOCUS);
 		SetFocusState(false);
 
 		if (PWidget(wPreedit) != NULL)
@@ -1422,7 +1424,7 @@ void ScintillaGTK::ReceivedSelection(GtkSelectionData *selection_data) {
 
 				UndoGroup ug(pdoc);
 				if (selection_data->selection != GDK_SELECTION_PRIMARY) {
-					ClearSelection();
+					ClearSelection(multiPasteMode == SC_MULTIPASTE_EACH);
 				}
 				SelectionPosition selStart = sel.IsRectangular() ?
 					sel.Rectangular().Start() :
@@ -1983,6 +1985,7 @@ gboolean ScintillaGTK::ExposePreeditThis(GtkWidget *widget, GdkEventExpose *ose)
 		PangoLayout *layout = gtk_widget_create_pango_layout(PWidget(wText), str);
 		pango_layout_set_attributes(layout, attrs);
 
+#ifndef USE_CAIRO
 		GdkGC *gc = gdk_gc_new(widget->window);
 		GdkColor color[2] = {   {0, 0x0000, 0x0000, 0x0000},
 			{0, 0xffff, 0xffff, 0xffff}
@@ -1997,8 +2000,8 @@ gboolean ScintillaGTK::ExposePreeditThis(GtkWidget *widget, GdkEventExpose *ose)
 		gdk_gc_set_foreground(gc, color);
 		gdk_gc_set_background(gc, color + 1);
 		gdk_draw_layout(widget->window, gc, 0, 0, layout);
-
 		g_object_unref(gc);
+#endif
 		g_free(str);
 		pango_attr_list_unref(attrs);
 		g_object_unref(layout);

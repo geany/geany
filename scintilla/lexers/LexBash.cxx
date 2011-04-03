@@ -16,7 +16,6 @@
 #include "Scintilla.h"
 #include "SciLexer.h"
 
-#include "PropSetSimple.h"
 #include "WordList.h"
 #include "LexAccessor.h"
 #include "Accessor.h"
@@ -639,6 +638,14 @@ static void FoldBashDoc(unsigned int startPos, int length, int, WordList *[],
 			} else if (ch == '}') {
 				levelCurrent--;
 			}
+		}
+		// Here Document folding
+		if (style == SCE_SH_HERE_DELIM) {
+			if (ch == '<' && chNext == '<') {
+				levelCurrent++;
+			}
+		} else if (style == SCE_SH_HERE_Q && styler.StyleAt(i+1) == SCE_PL_DEFAULT) {
+			levelCurrent--;
 		}
 		if (atEOL) {
 			int lev = levelPrev;

@@ -20,6 +20,7 @@ public:
 	int width;
 	int mask;
 	bool sensitive;
+	int cursor;
 	MarginStyle();
 };
 

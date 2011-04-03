@@ -14,14 +14,6 @@
 #include <string>
 #include <vector>
 
-// With Borland C++ 5.5, including <string> includes Windows.h leading to defining
-// FindText to FindTextA which makes calls here to Document::FindText fail.
-#ifdef __BORLANDC__
-#ifdef FindText
-#undef FindText
-#endif
-#endif
-
 #include "Platform.h"
 
 #include "ILexer.h"
@@ -95,7 +87,7 @@ void LexInterface::Colourise(int start, int end) {
 
 Document::Document() {
 	refCount = 0;
-#ifdef unix
+#ifdef __unix__
 	eolMode = SC_EOL_LF;
 #else
 	eolMode = SC_EOL_CRLF;
@@ -552,7 +544,7 @@ int Document::NextPosition(int pos, int moveDir) const {
 				// See http://msdn.microsoft.com/en-us/library/cc194792%28v=MSDN.10%29.aspx
 				// http://msdn.microsoft.com/en-us/library/cc194790.aspx
 				if ((pos - 1) <= posStartLine) {
-					return posStartLine - 1;
+					return pos - 1;
 				} else if (IsDBCSLeadByte(cb.CharAt(pos - 1))) {
 					// Must actually be trail byte
 					return pos - 2;
@@ -1317,7 +1309,11 @@ long Document::FindText(int minPos, int maxPos, const char *search,
 
 		//Platform::DebugPrintf("Find %d %d %s %d\n", startPos, endPos, ft->lpstrText, lengthFind);
 		const int limitPos = Platform::Maximum(startPos, endPos);
-		int pos = forward ? startPos : (startPos - 1);
+		int pos = startPos;
+		if (!forward) {
+			// Back all of a character
+			pos = NextPosition(pos, increment);
+		}
 		if (caseSensitive) {
 			while (forward ? (pos < endSearch) : (pos >= endSearch)) {
 				bool found = (pos + lengthFind) <= limitPos;
@@ -1526,8 +1522,8 @@ void Document::EnsureStyledTo(int pos) {
 		IncrementStyleClock();
 		if (pli && !pli->UseContainerLexing()) {
 			int lineEndStyled = LineFromPosition(GetEndStyled());
-			int endStyled = LineStart(lineEndStyled);
-			pli->Colourise(endStyled, pos);
+			int endStyledTo = LineStart(lineEndStyled);
+			pli->Colourise(endStyledTo, pos);
 		} else {
 			// Ask the watchers to style, and stop as soon as one responds.
 			for (int i = 0; pos > GetEndStyled() && i < lenWatchers; i++) {

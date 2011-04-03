@@ -357,6 +357,7 @@ public:
 	const WatcherWithUserData *GetWatchers() const { return watchers; }
 	int GetLenWatchers() const { return lenWatchers; }
 
+	CharClassify::cc WordCharClass(unsigned char ch);
 	bool IsWordPartSeparator(char ch);
 	int WordPartLeft(int pos);
 	int WordPartRight(int pos);
@@ -368,7 +369,6 @@ public:
 	int BraceMatch(int position, int maxReStyle);
 
 private:
-	CharClassify::cc WordCharClass(unsigned char ch);
 	bool IsWordStartAt(int pos);
 	bool IsWordEndAt(int pos);
 	bool IsWordAt(int start, int end);
