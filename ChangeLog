@@ -2,6 +2,8 @@
 
  * src/main.c, src/prefs.c, src/tools.c:
    Fix loading and updating menu accelerators for custom commands.
+ * src/prefs.c:
+   Don't allow editing keybinding column of group rows.
 
 
 2011-04-02  Colomban Wendling  <colomban(at)geany(dot)org>
