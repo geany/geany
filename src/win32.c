@@ -431,7 +431,6 @@ gchar *win32_show_document_save_as_dialog(GtkWindow *parent, const gchar *title,
 	gchar tmp[MAX_PATH];
 	wchar_t w_file[MAX_PATH];
 	wchar_t w_title[512];
-	guint x;
 
 	w_file[0] = '\0';
 
@@ -488,7 +487,6 @@ gchar *win32_show_file_dialog(GtkWindow *parent, const gchar *title, const gchar
 	gchar tmp[MAX_PATH];
 	wchar_t w_file[MAX_PATH];
 	wchar_t w_title[512];
-	guint x;
 
 	w_file[0] = '\0';
 
