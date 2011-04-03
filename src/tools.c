@@ -65,7 +65,7 @@ enum
 /* custom commands code*/
 struct cc_dialog
 {
-	gint count;
+	guint count;
 	GtkWidget *view;
 	GtkTreeViewColumn *edit_column;
 	GtkListStore *store;
@@ -133,13 +133,14 @@ static void cc_dialog_add_command(struct cc_dialog *cc, gint idx, gboolean start
 {
 	GtkTreeIter iter;
 	const gchar *cmd;
+	guint id = cc->count;
 
 	cmd = (idx >= 0) ? ui_prefs.custom_commands[idx] : NULL;
 
-	gtk_list_store_append(cc->store, &iter);
-	gtk_list_store_set(cc->store, &iter, CC_COLUMN_ID, cc->count, CC_COLUMN_CMD, cmd, -1);
-	cc_dialog_update_row_status(cc->store, &iter, cmd);
 	cc->count++;
+	gtk_list_store_append(cc->store, &iter);
+	gtk_list_store_set(cc->store, &iter, CC_COLUMN_ID, id, CC_COLUMN_CMD, cmd, -1);
+	cc_dialog_update_row_status(cc->store, &iter, cmd);
 
 	if (start_editing)
 	{
