@@ -4,6 +4,9 @@
    Update Scintilla to version 2.25.
  * version.txt, Makefile.am:
    Add Scintilla's version.txt file.
+ * scintilla/makefile.win32, tagmanager/makefile.win32, makefile.win32:
+   Replace escape character '\' by slash '/' in paths in the
+   Windows Makefiles (patch by Matthew Brush, thanks).
 
 
 2011-04-03  Colomban Wendling  <colomban(at)geany(dot)org>

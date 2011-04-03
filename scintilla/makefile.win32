@@ -138,7 +138,7 @@ $(COMPLIB): $(MARSHALLER) $(LEXOBJS) $(SRCOBJS)
 	$(RANLIB) $@
 
 deps.mak:
-	$(CC) -MM  $(CXXFLAGS) gtk\*.cxx lexers\*.cxx lexlib\*.cxx src\*.cxx >deps.mak
+	$(CC) -MM  $(CXXFLAGS) gtk/*.cxx lexers/*.cxx lexlib/*.cxx src/*.cxx >deps.mak
 
 # Generate header dependencies with "make deps.mak"
 include deps.mak

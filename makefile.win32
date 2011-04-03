@@ -22,7 +22,7 @@ MAKE = make
 # Note: && is needed after cd because each line is executed in a different
 # shell. (cd .. is just for clarity).
 all: check-tools config.h
-	cd tagmanager\mio && $(MAKE) -f makefile.win32 && cd ..\..
+	cd tagmanager/mio && $(MAKE) -f makefile.win32 && cd ../..
 	cd tagmanager && $(MAKE) -f makefile.win32 && cd ..
 	cd scintilla && $(MAKE) -f makefile.win32 && cd ..
 	cd plugins && $(MAKE) -f makefile.win32 && cd ..
@@ -38,14 +38,14 @@ config.h: win32-config.h
 	$(CP) $< $@
 
 deps:
-	-$(RM) tagmanager\mio\deps.mak tagmanager\deps.mak scintilla\deps.mak plugins\deps.mak src\deps.mak
+	-$(RM) tagmanager/mio/deps.mak tagmanager/deps.mak scintilla/deps.mak plugins/deps.mak src/deps.mak
 
 # used by src/makefile.win32 to avoid del ../file which is an error
 clean-local:
 	-$(RM) geany_private.res geany.exe
 
 clean: deps
-	cd tagmanager\mio && $(MAKE) -f makefile.win32 clean && cd ..\..
+	cd tagmanager/mio && $(MAKE) -f makefile.win32 clean && cd ../..
 	cd tagmanager && $(MAKE) -f makefile.win32 clean && cd ..
 	cd scintilla && $(MAKE) -f makefile.win32 clean && cd ..
 	cd plugins && $(MAKE) -f makefile.win32 clean && cd ..
