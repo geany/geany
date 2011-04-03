@@ -7,6 +7,9 @@
  * scintilla/makefile.win32, tagmanager/makefile.win32, makefile.win32:
    Replace escape character '\' by slash '/' in paths in the
    Windows Makefiles (patch by Matthew Brush, thanks).
+ * src/tools.c:
+   Reflect the existence of the entered command in `Set Custom Commands`
+   dialog as well using the yes/no icon.
 
 
 2011-04-03  Colomban Wendling  <colomban(at)geany(dot)org>

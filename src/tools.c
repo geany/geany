@@ -81,19 +81,45 @@ static gboolean cc_reading_finished = FALSE;
 static GString *cc_buffer;
 
 
+static gboolean cc_exists_command(const gchar *command)
+{
+	gchar *path = g_find_program_in_path(command);
+
+	if (path != NULL)
+	{
+		g_free(path);
+		return TRUE;
+	}
+
+	return FALSE;
+}
+
+
 /* update STATUS and TOOLTIP columns according to cmd */
 static void cc_dialog_update_row_status(GtkListStore *store, GtkTreeIter *iter, const gchar *cmd)
 {
 	GError *err = NULL;
 	const gchar *stock_id;
 	gchar *tooltip = NULL;
+	gint argc;
+	gchar **argv;
 
-	if (! NZV(cmd) || g_shell_parse_argv(cmd, NULL, NULL, &err))
+	if (! NZV(cmd))
+	{
 		stock_id = GTK_STOCK_YES;
-	else
+	}
+	else if (g_shell_parse_argv(cmd, &argc, &argv, &err))
+	{
+		if (argc > 0 && cc_exists_command(argv[0]))
+			stock_id = GTK_STOCK_YES;
+		else
+			err = g_error_new( G_FILE_ERROR, G_FILE_ERROR_NOENT, _("Command not found"));
+	}
+
+	if (err != NULL)
 	{
 		stock_id = GTK_STOCK_NO;
-		tooltip = g_strdup_printf(_("Command cannot be parsed: %s"), err->message);
+		tooltip = g_strdup_printf(_("Command cannot be found/parsed: %s"), err->message);
 		g_error_free(err);
 	}
 
