@@ -1,3 +1,9 @@
+2011-04-04  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/interface.c, geany.glade:
+   Make Project->Properties the last menu item so it's faster to use.
+
+
 2011-04-03  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * scintilla/*:
