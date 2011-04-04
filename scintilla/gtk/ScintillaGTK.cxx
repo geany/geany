@@ -420,6 +420,14 @@ void ScintillaGTK::RealizeThis(GtkWidget *widget) {
 	gtk_widget_realize(widtxt);
 	gtk_widget_realize(PWidget(scrollbarv));
 	gtk_widget_realize(PWidget(scrollbarh));
+
+	gtk_selection_add_targets(widget, GDK_SELECTION_PRIMARY,
+	                          clipboardCopyTargets, nClipboardCopyTargets);
+
+#ifndef USE_GTK_CLIPBOARD
+	gtk_selection_add_targets(widget, atomClipboard,
+	                          clipboardPasteTargets, nClipboardPasteTargets);
+#endif
 }
 
 void ScintillaGTK::Realize(GtkWidget *widget) {
@@ -429,6 +437,14 @@ void ScintillaGTK::Realize(GtkWidget *widget) {
 
 void ScintillaGTK::UnRealizeThis(GtkWidget *widget) {
 	try {
+
+		gtk_selection_clear_targets(widget, GDK_SELECTION_PRIMARY);
+
+#ifndef USE_GTK_CLIPBOARD
+		gtk_selection_clear_targets(widget, atomClipboard);
+#endif
+
+
 		if (IS_WIDGET_MAPPED(widget)) {
 			gtk_widget_unmap(widget);
 		}
@@ -669,14 +685,6 @@ void ScintillaGTK::Initialise() {
 	gtk_widget_show(PWidget(scrollbarh));
 
 	gtk_widget_grab_focus(PWidget(wMain));
-
-	gtk_selection_add_targets(GTK_WIDGET(PWidget(wMain)), GDK_SELECTION_PRIMARY,
-	                          clipboardCopyTargets, nClipboardCopyTargets);
-
-#ifndef USE_GTK_CLIPBOARD
-	gtk_selection_add_targets(GTK_WIDGET(PWidget(wMain)), atomClipboard,
-	                          clipboardPasteTargets, nClipboardPasteTargets);
-#endif
 
 	gtk_drag_dest_set(GTK_WIDGET(PWidget(wMain)),
 	                  GTK_DEST_DEFAULT_ALL, clipboardPasteTargets, nClipboardPasteTargets,
