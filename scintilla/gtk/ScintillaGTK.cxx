@@ -421,6 +421,18 @@ void ScintillaGTK::RealizeThis(GtkWidget *widget) {
 	gtk_widget_realize(PWidget(scrollbarv));
 	gtk_widget_realize(PWidget(scrollbarh));
 
+	cursor = gdk_cursor_new(GDK_XTERM);
+	gdk_window_set_cursor(PWidget(wText)->window, cursor);
+	gdk_cursor_unref(cursor);
+
+	cursor = gdk_cursor_new(GDK_LEFT_PTR);
+	gdk_window_set_cursor(PWidget(scrollbarv)->window, cursor);
+	gdk_cursor_unref(cursor);
+
+	cursor = gdk_cursor_new(GDK_LEFT_PTR);
+	gdk_window_set_cursor(PWidget(scrollbarh)->window, cursor);
+	gdk_cursor_unref(cursor);
+
 	gtk_selection_add_targets(widget, GDK_SELECTION_PRIMARY,
 	                          clipboardCopyTargets, nClipboardCopyTargets);
 

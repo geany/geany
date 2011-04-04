@@ -2,8 +2,10 @@
 
  * scintilla/gtk/ScintillaGTK.cxx:
    Fix X PRIMARY selection issue when Scintilla widget is
-   unrealized/re-realized
-   (Backport from Scintilla HG, original patch by Matthew Brush).
+   unrealized/re-realized (Backport from Scintilla HG,
+   original patch by Matthew Brush).
+   Reset cursors when Scintilla widget is realized (Backport from
+   Scintilla HG, original patch by Matthew Brush).
 
 
 2011-04-04  Colomban Wendling  <colomban(at)geany(dot)org>
