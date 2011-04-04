@@ -894,16 +894,11 @@ void SurfaceImpl::Init(WindowID wid) {
 		context = cairo_create(psurf);
 	}
 	createdGC = true;
-	pcontext = pango_cairo_create_context(context);
-	PLATFORM_ASSERT(pcontext);
-	layout = pango_cairo_create_layout(context);
-	PLATFORM_ASSERT(layout);
-#else
+#endif
 	pcontext = gtk_widget_create_pango_context(PWidget(wid));
 	PLATFORM_ASSERT(pcontext);
 	layout = pango_layout_new(pcontext);
 	PLATFORM_ASSERT(layout);
-#endif
 	inited = true;
 }
 
@@ -916,17 +911,10 @@ void SurfaceImpl::Init(SurfaceID sid, WindowID wid) {
 	context = gdk_cairo_create(drawable_);
 #else
 	gc = gdk_gc_new(drawable_);
-#endif
-#ifdef USE_CAIRO
-	pcontext = pango_cairo_create_context(context);
-	PLATFORM_ASSERT(pcontext);
-	layout = pango_cairo_create_layout(context);
-	PLATFORM_ASSERT(layout);
-#else
-	pcontext = gtk_widget_create_pango_context(PWidget(wid));
-	layout = pango_layout_new(pcontext);
 	drawable = drawable_;
 #endif
+	pcontext = gtk_widget_create_pango_context(PWidget(wid));
+	layout = pango_layout_new(pcontext);
 #ifdef USE_CAIRO
 	cairo_set_line_width(context, 1);
 #else
@@ -948,20 +936,16 @@ void SurfaceImpl::InitPixMap(int width, int height, Surface *surface_, WindowID 
 	PLATFORM_ASSERT(surfImpl->drawable);
 	gc = gdk_gc_new(surfImpl->drawable);
 #endif
-#ifdef USE_CAIRO
-	pcontext = pango_cairo_create_context(context);
+	pcontext = gtk_widget_create_pango_context(PWidget(wid));
 	PLATFORM_ASSERT(pcontext);
-	layout = pango_cairo_create_layout(context);
+	layout = pango_layout_new(pcontext);
 	PLATFORM_ASSERT(layout);
+#ifdef USE_CAIRO
 	if (height > 0 && width > 0)
 		psurf = gdk_window_create_similar_surface(
 			gtk_widget_get_window(PWidget(wid)),
 			CAIRO_CONTENT_COLOR_ALPHA, width, height);
 #else
-	pcontext = gtk_widget_create_pango_context(PWidget(wid));
-	PLATFORM_ASSERT(pcontext);
-	layout = pango_layout_new(pcontext);
-	PLATFORM_ASSERT(layout);
 	if (height > 0 && width > 0)
 		ppixmap = gdk_pixmap_new(surfImpl->drawable, width, height, -1);
 	drawable = ppixmap;
