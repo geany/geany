@@ -2,6 +2,9 @@
 
  * src/templates.c:
    Remove TEMPLATES_GET_FILENAME() macro.
+ * src/search.c:
+   Don't auto-enable case-sensitive option when enabling regex in
+   Find/Replace dialogs.
 
 
 2011-04-04  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

@@ -285,7 +285,7 @@ static GtkWidget *add_find_checkboxes(GtkDialog *dialog)
 	ui_widget_set_tooltip_text(check_regexp, _("Use POSIX-like regular expressions. "
 		"For detailed information about using regular expressions, please read the documentation."));
 	g_signal_connect(check_regexp, "toggled",
-		G_CALLBACK(on_find_replace_checkbutton_toggled), GTK_WIDGET(dialog));
+		G_CALLBACK(on_find_replace_checkbutton_toggled), dialog);
 
 	if (dialog != GTK_DIALOG(find_dlg.dialog))
 	{
@@ -1040,34 +1040,15 @@ on_find_replace_checkbutton_toggled(GtkToggleButton *togglebutton, gpointer user
 		gboolean regex_set = gtk_toggle_button_get_active(chk_regexp);
 		GtkWidget *check_word = ui_lookup_widget(dialog, "check_word");
 		GtkWidget *check_wordstart = ui_lookup_widget(dialog, "check_wordstart");
-		GtkToggleButton *check_case = GTK_TOGGLE_BUTTON(
-			ui_lookup_widget(dialog, "check_case"));
 		GtkWidget *check_escape = ui_lookup_widget(dialog, "check_escape");
 		gboolean replace = (dialog != find_dlg.dialog);
 		const char *back_button[2] = { "btn_previous" , "check_back" };
-		static gboolean case_state[2] = { FALSE, FALSE }; /* state before regex enabled */
 
 		/* hide options that don't apply to regex searches */
 		gtk_widget_set_sensitive(check_escape, ! regex_set);
 		gtk_widget_set_sensitive(ui_lookup_widget(dialog, back_button[replace]), ! regex_set);
 		gtk_widget_set_sensitive(check_word, ! regex_set);
 		gtk_widget_set_sensitive(check_wordstart, ! regex_set);
-
-		if (regex_set)	/* regex enabled */
-		{
-			if (GTK_WIDGET_VISIBLE(dialog))
-			{
-				/* Enable case sensitive but remember original case toggle state */
-				case_state[replace] = gtk_toggle_button_get_active(check_case);
-				gtk_toggle_button_set_active(check_case, TRUE);
-			}
-		}
-		else	/* regex disabled */
-		{
-			/* If case sensitive is still enabled, revert to what it was before we enabled it */
-			if (gtk_toggle_button_get_active(check_case) == TRUE)
-				gtk_toggle_button_set_active(check_case, case_state[replace]);
-		}
 	}
 }
 
