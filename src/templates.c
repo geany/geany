@@ -61,12 +61,6 @@ static void templates_replace_command(GString *text, const gchar *file_name,
 	const gchar *file_type, const gchar *func_name);
 
 
-/* some simple macros to reduce code size and make the code readable */
-#define TEMPLATES_GET_FILENAME(shortname) \
-	g_strconcat(app->configdir, \
-		G_DIR_SEPARATOR_S GEANY_TEMPLATES_SUBDIR G_DIR_SEPARATOR_S, shortname, NULL)
-
-
 static gchar *read_file(const gchar *locale_fname)
 {
 	gchar *contents;
@@ -97,12 +91,13 @@ static gchar *read_file(const gchar *locale_fname)
 
 static void read_template(const gchar *name, gint id)
 {
-	gchar *fname = TEMPLATES_GET_FILENAME(name);
+	gchar *fname = g_build_path(G_DIR_SEPARATOR_S, app->configdir,
+		GEANY_TEMPLATES_SUBDIR, name, NULL);
 
 	/* try system if user template doesn't exist */
 	if (!g_file_test(fname, G_FILE_TEST_EXISTS))
-		setptr(fname, g_strconcat(app->datadir,
-			G_DIR_SEPARATOR_S GEANY_TEMPLATES_SUBDIR G_DIR_SEPARATOR_S, name, NULL));
+		setptr(fname, g_build_path(G_DIR_SEPARATOR_S, app->datadir,
+			GEANY_TEMPLATES_SUBDIR, name, NULL));
 
 	templates[id] = read_file(fname);
 	g_free(fname);
