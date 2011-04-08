@@ -3,6 +3,8 @@
  * scintilla/lexers/LexCPP.cxx:
    Make hightlighting of triple-quoted verbatim an option (Backport
    from Scintilla HG 3602:5536ed81a85b).
+ * src/highlighting.c:
+   Add highlight for triple-quoted verbatims.
 
 
 2011-04-05  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

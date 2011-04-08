@@ -897,6 +897,7 @@ styleset_c_like_init(GKeyFile *config, GKeyFile *config_home, gint filetype_idx)
 		"identifier",
 		"stringeol",
 		"verbatim",
+		"verbatim", /* triple verbatims use the same style */
 		"regex",
 		"commentlinedoc",
 		"commentdockeyword",
@@ -927,6 +928,7 @@ static void styleset_c_like(ScintillaObject *sci, gint ft_id, gint lexer)
 		SCE_C_IDENTIFIER,
 		SCE_C_STRINGEOL,
 		SCE_C_VERBATIM,
+		SCE_C_TRIPLEVERBATIM,
 		SCE_C_REGEX,
 		SCE_C_COMMENTLINEDOC,
 		SCE_C_COMMENTDOCKEYWORD,
