@@ -208,6 +208,7 @@ struct OptionsCPP {
 	bool identifiersAllowDollars;
 	bool trackPreprocessor;
 	bool updatePreprocessor;
+	bool triplequotedStrings;
 	bool fold;
 	bool foldSyntaxBased;
 	bool foldComment;
@@ -224,6 +225,7 @@ struct OptionsCPP {
 		identifiersAllowDollars = true;
 		trackPreprocessor = true;
 		updatePreprocessor = true;
+		triplequotedStrings = false;
 		fold = false;
 		foldSyntaxBased = true;
 		foldComment = false;
@@ -262,6 +264,9 @@ struct OptionSetCPP : public OptionSet<OptionsCPP> {
 
 		DefineProperty("lexer.cpp.update.preprocessor", &OptionsCPP::updatePreprocessor,
 			"Set to 1 to update preprocessor definitions when #define found.");
+
+		DefineProperty("lexer.cpp.triplequoted.strings", &OptionsCPP::triplequotedStrings,
+			"Set to 1 to enable highlighting of triple-quoted strings.");
 
 		DefineProperty("fold", &OptionsCPP::fold);
 
@@ -758,7 +763,7 @@ void SCI_METHOD LexerCPP::Lex(unsigned int startPos, int length, int initStyle, 
 			if (sc.Match('@', '\"')) {
 				sc.SetState(SCE_C_VERBATIM|activitySet);
 				sc.Forward();
-			} else if (sc.Match("\"\"\"")) {
+			} else if (options.triplequotedStrings && sc.Match("\"\"\"")) {
 				sc.SetState(SCE_C_TRIPLEVERBATIM|activitySet);
 				sc.Forward(2);
 			} else if (IsADigit(sc.ch) || (sc.ch == '.' && IsADigit(sc.chNext))) {
