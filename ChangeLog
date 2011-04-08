@@ -10,6 +10,8 @@
    Highlight triple-quoted verbatims in Vala, Genie and Scala filtypes.
  * data/filetypes.Genie.conf:
    Copy C styling rather than redefining the styles.
+ * src/editor.c:
+   Don't set font twice for line numbers and braces.
 
 
 2011-04-05  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

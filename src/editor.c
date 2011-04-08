@@ -4481,10 +4481,6 @@ void editor_set_font(GeanyEditor *editor, const gchar *font)
 	for (style = 0; style <= STYLE_MAX; style++)
 		sci_set_font(editor->sci, style, font_name, size);
 
-	/* line number and braces */
-	sci_set_font(editor->sci, STYLE_LINENUMBER, font_name, size);
-	sci_set_font(editor->sci, STYLE_BRACELIGHT, font_name, size);
-	sci_set_font(editor->sci, STYLE_BRACEBAD, font_name, size);
 	g_free(font_name);
 
 	/* zoom to 100% to prevent confusion */
