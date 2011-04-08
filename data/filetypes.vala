@@ -38,6 +38,7 @@ preprocessor.symbol.$(file.patterns.cpp)=#
 preprocessor.start.$(file.patterns.cpp)=if
 preprocessor.middle.$(file.patterns.cpp)=else elif
 preprocessor.end.$(file.patterns.cpp)=endif
+lexer.cpp.triplequoted.strings=1
 
 [settings]
 lexer_filetype=C

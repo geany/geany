@@ -5,6 +5,9 @@
    from Scintilla HG 3602:5536ed81a85b).
  * src/highlighting.c:
    Add highlight for triple-quoted verbatims.
+ * data/filetypes.c, data/filetypes.vala, data/filetypes.Genie.conf,
+   data/filetypes.Scala.conf:
+   Highlight triple-quoted verbatims in Vala, Genie and Scala filtypes.
 
 
 2011-04-05  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

@@ -15,7 +15,7 @@ preprocessor=preprocessor
 operator=operator
 identifier=default
 stringeol=stringeol
-# @"verbatim"
+# @"verbatim" and """multi-line verbatim"""
 verbatim=extra
 # (/regex/)
 regex=extra
