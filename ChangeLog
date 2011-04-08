@@ -8,6 +8,8 @@
  * data/filetypes.c, data/filetypes.vala, data/filetypes.Genie.conf,
    data/filetypes.Scala.conf:
    Highlight triple-quoted verbatims in Vala, Genie and Scala filtypes.
+ * data/filetypes.Genie.conf:
+   Copy C styling rather than redefining the styles.
 
 
 2011-04-05  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
