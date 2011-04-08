@@ -221,11 +221,10 @@ static void init_prefs(void)
 	group = stash_group_new("search");
 	find_prefs = group;
 	configuration_add_pref_group(group, FALSE);
-	/* if case is moved after regexp, the first regexp uncheck will clear it */
-	stash_group_add_toggle_button(group, &settings.find_case_sensitive,
-		"find_case_sensitive", FALSE, "check_case");
 	stash_group_add_toggle_button(group, &settings.find_regexp,
 		"find_regexp", FALSE, "check_regexp");
+	stash_group_add_toggle_button(group, &settings.find_case_sensitive,
+		"find_case_sensitive", FALSE, "check_case");
 	stash_group_add_toggle_button(group, &settings.find_escape_sequences,
 		"find_escape_sequences", FALSE, "check_escape");
 	stash_group_add_toggle_button(group, &settings.find_match_whole_word,
@@ -238,10 +237,10 @@ static void init_prefs(void)
 	group = stash_group_new("search");
 	replace_prefs = group;
 	configuration_add_pref_group(group, FALSE);
-	stash_group_add_toggle_button(group, &settings.replace_case_sensitive,
-		"replace_case_sensitive", FALSE, "check_case");
 	stash_group_add_toggle_button(group, &settings.replace_regexp,
 		"replace_regexp", FALSE, "check_regexp");
+	stash_group_add_toggle_button(group, &settings.replace_case_sensitive,
+		"replace_case_sensitive", FALSE, "check_case");
 	stash_group_add_toggle_button(group, &settings.replace_escape_sequences,
 		"replace_escape_sequences", FALSE, "check_escape");
 	stash_group_add_toggle_button(group, &settings.replace_match_whole_word,
