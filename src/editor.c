@@ -515,6 +515,11 @@ static void on_update_ui(GeanyEditor *editor, G_GNUC_UNUSED SCNotification *nt)
 	ScintillaObject *sci = editor->sci;
 	gint pos = sci_get_current_position(sci);
 
+	/* since Scintilla 2.24, SCN_UPDATEUI is also sent on scrolling though we don't need to handle
+	 * this and so ignore every SCN_UPDATEUI events except for content and selection changes */
+	if (! (nt->updated & SC_UPDATE_CONTENT) && ! (nt->updated & SC_UPDATE_SELECTION))
+		return;
+
 	/* undo / redo menu update */
 	ui_update_popup_reundo_items(editor->document);
 
