@@ -1253,18 +1253,21 @@ GeanyDocument *document_open_file_full(GeanyDocument *doc, const gchar *filename
 		if (! main_status.opening_session_files)
 			ui_add_recent_file(utf8_filename);
 
-		if (! reload)
-			g_signal_emit_by_name(geany_object, "document-open", doc);
-
 		if (reload)
+		{
+			g_signal_emit_by_name(geany_object, "document-reload", doc);
 			ui_set_statusbar(TRUE, _("File %s reloaded."), display_filename);
+		}
 		else
+		{
+			g_signal_emit_by_name(geany_object, "document-open", doc);
 			/* For translators: this is the status window message for opening a file. %d is the number
 			 * of the newly opened file, %s indicates whether the file is opened read-only
 			 * (it is replaced with the string ", read-only"). */
 			msgwin_status_add(_("File %s opened(%d%s)."),
 				display_filename, gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook)),
 				(readonly) ? _(", read-only") : "");
+		}
 	}
 
 	g_free(display_filename);

@@ -189,6 +189,15 @@ static void create_signals(GObjectClass *g_object_class)
 		g_cclosure_marshal_VOID__POINTER,
 		G_TYPE_NONE, 1,
 		G_TYPE_POINTER);
+	geany_object_signals[GCB_DOCUMENT_RELOAD] = g_signal_new (
+		"document-reload",
+		G_OBJECT_CLASS_TYPE (g_object_class),
+		G_SIGNAL_RUN_FIRST,
+		G_STRUCT_OFFSET (GeanyObjectClass, document_reload),
+		NULL, NULL,
+		g_cclosure_marshal_VOID__POINTER,
+		G_TYPE_NONE, 1,
+		G_TYPE_POINTER);
 	geany_object_signals[GCB_DOCUMENT_BEFORE_SAVE] = g_signal_new (
 		"document-before-save",
 		G_OBJECT_CLASS_TYPE (g_object_class),

@@ -82,6 +82,18 @@ signal void (*document_new)(GObject *obj, GeanyDocument *doc, gpointer user_data
  */
 signal void (*document_open)(GObject *obj, GeanyDocument *doc, gpointer user_data);
 
+/** Sent when an existing document is reloaded.
+ *
+ *  You need to include "document.h" for the declaration of GeanyDocument.
+ *
+ *  @param obj a GeanyObject instance, should be ignored.
+ *  @param doc the re-opened document.
+ *  @param user_data user data.
+ *
+ *  @since 0.21
+ */
+signal void (*document_reload)(GObject *obj, GeanyDocument *doc, gpointer user_data);
+
 /** Sent before a document is saved.
  *
  *  You need to include "document.h" for the declaration of GeanyDocument.

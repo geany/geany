@@ -34,6 +34,7 @@ typedef enum
 {
 	GCB_DOCUMENT_NEW,
 	GCB_DOCUMENT_OPEN,
+	GCB_DOCUMENT_RELOAD,
 	GCB_DOCUMENT_BEFORE_SAVE,
 	GCB_DOCUMENT_SAVE,
 	GCB_DOCUMENT_FILETYPE_SET,
@@ -82,6 +83,7 @@ struct _GeanyObjectClass
 
 	void (*document_new)(GeanyDocument *doc);
 	void (*document_open)(GeanyDocument *doc);
+	void (*document_reload)(GeanyDocument *doc);
 	void (*document_before_save)(GeanyDocument *doc);
 	void (*document_save)(GeanyDocument *doc);
 	void (*document_filetype_set)(GeanyDocument *doc, GeanyFiletype *filetype_old);
