@@ -72,6 +72,8 @@
 	geany_functions->p_document->document_get_basename_for_display
 #define document_get_notebook_page \
 	geany_functions->p_document->document_get_notebook_page
+#define document_sort_by_display_name \
+	geany_functions->p_document->document_sort_by_display_name
 #define editor_get_indent_prefs \
 	geany_functions->p_editor->editor_get_indent_prefs
 #define editor_create_widget \
@@ -292,6 +294,8 @@
 	geany_functions->p_ui->ui_get_gtk_settings_integer
 #define ui_combo_box_add_to_history \
 	geany_functions->p_ui->ui_combo_box_add_to_history
+#define ui_menu_add_document_items_sorted \
+	geany_functions->p_ui->ui_menu_add_document_items_sorted
 #define dialogs_show_question \
 	geany_functions->p_dialogs->dialogs_show_question
 #define dialogs_show_msgbox \

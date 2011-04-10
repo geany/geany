@@ -7,6 +7,10 @@
    Add and use signal "document-reload" to the plugin API.
  * src/symbols.c, tagmanager/sql.c:
    Fix mapping of SQL tags for Geany's symbol list (closes #3216474).
+ * src/ui_utils.h, src/plugindata.h, src/document.c, src/plugins.c,
+   src/document.h, src/ui_utils.c, plugins/geanyfunctions.h:
+   Add ui_menu_add_document_items_sorted() and
+   document_sort_by_display_name() to the plugin API.
 
 
 2011-04-08  Colomban Wendling  <colomban(at)geany(dot)org>

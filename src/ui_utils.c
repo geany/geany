@@ -2394,16 +2394,49 @@ GtkWidget *ui_label_new_bold(const gchar *text)
  * @since 0.19 */
 void ui_menu_add_document_items(GtkMenu *menu, GeanyDocument *active, GCallback callback)
 {
+	ui_menu_add_document_items_sorted(menu, active, callback, NULL);
+}
+
+
+/** Adds a list of document items to @a menu.
+ *
+ * @a sort_func might be NULL to not sort the documents in the menu. In this case,
+ * the order of the document tabs is used.
+ *
+ * See document_sort_by_display_name() for an example sort function.
+ *
+ * @param menu Menu.
+ * @param active Which document to highlight, or @c NULL.
+ * @param callback is used for each menu item's @c "activate" signal and will be passed
+ * the corresponding document pointer as @c user_data.
+ * @param sort_func is used to sort the list. Might be @c NULL to not sort the list.
+ * @warning You should check @c doc->is_valid in the callback.
+ * @since 0.21 */
+void ui_menu_add_document_items_sorted(GtkMenu *menu, GeanyDocument *active,
+	GCallback callback, GCompareFunc sort_func)
+{
 	GtkWidget *menu_item, *menu_item_label, *image;
 	const GdkColor *color;
 	GeanyDocument *doc;
 	guint i, len;
 	gchar *base_name, *label;
+	GPtrArray *sorted_documents;
 
 	len = gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook));
-	for (i = 0; i < len; i++)
+
+	sorted_documents = g_ptr_array_sized_new(len);
+	/* copy the documents_array into the new one */
+	foreach_document(i)
 	{
-		doc = document_get_from_page(i);
+		g_ptr_array_add(sorted_documents, documents[i]);
+	}
+	/* and now sort it */
+	if (sort_func != NULL)
+		g_ptr_array_sort(sorted_documents, sort_func);
+
+	for (i = 0; i < GEANY(sorted_documents)->len; i++)
+	{
+		doc = g_ptr_array_index(sorted_documents, i);
 		if (! DOC_VALID(doc))
 			continue;
 
@@ -2430,6 +2463,7 @@ void ui_menu_add_document_items(GtkMenu *menu, GeanyDocument *active, GCallback 
 
 		g_free(base_name);
 	}
+	g_ptr_array_free(sorted_documents, TRUE);
 }
 
 

@@ -54,7 +54,7 @@
  * @warning You should not test for values below 200 as previously
  * @c GEANY_API_VERSION was defined as an enum value, not a macro.
  */
-#define GEANY_API_VERSION 206
+#define GEANY_API_VERSION 207
 
 /** The Application Binary Interface (ABI) version, incremented whenever
  * existing fields in the plugin data types have to be changed or reordered.
@@ -310,6 +310,7 @@ typedef struct DocumentFuncs
 	const GdkColor*	(*document_get_status_color) (struct GeanyDocument *doc);
 	gchar*		(*document_get_basename_for_display) (struct GeanyDocument *doc, gint length);
 	gint		(*document_get_notebook_page) (struct GeanyDocument *doc);
+	gint		(*document_sort_by_display_name) (gconstpointer a, gconstpointer b);
 }
 DocumentFuncs;
 
@@ -473,6 +474,8 @@ typedef struct UIUtilsFuncs
 	gint		(*ui_get_gtk_settings_integer) (const gchar *property_name, gint default_value);
 	void		(*ui_combo_box_add_to_history) (GtkComboBoxEntry *combo_entry,
 				const gchar *text, gint history_len);
+	void		(*ui_menu_add_document_items_sorted) (GtkMenu *menu, struct GeanyDocument *active,
+				GCallback callback, GCompareFunc sort_func);
 }
 UIUtilsFuncs;
 

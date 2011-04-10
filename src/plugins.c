@@ -111,7 +111,8 @@ static DocumentFuncs doc_funcs = {
 	&document_rename_file,
 	&document_get_status_color,
 	&document_get_basename_for_display,
-	&document_get_notebook_page
+	&document_get_notebook_page,
+	&document_sort_by_display_name
 };
 
 static EditorFuncs editor_funcs = {
@@ -243,7 +244,8 @@ static UIUtilsFuncs uiutils_funcs = {
 	&ui_widget_modify_font_from_string,
 	&ui_is_keyval_enter_or_return,
 	&ui_get_gtk_settings_integer,
-	&ui_combo_box_add_to_history
+	&ui_combo_box_add_to_history,
+	&ui_menu_add_document_items_sorted
 };
 
 static DialogFuncs dialog_funcs = {
