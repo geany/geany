@@ -5,6 +5,8 @@
  * src/geanyobject.c, src/plugindata.h, src/geanyobject.h,
    src/document.c, doc/pluginsignals.c:
    Add and use signal "document-reload" to the plugin API.
+ * src/symbols.c, tagmanager/sql.c:
+   Fix mapping of SQL tags for Geany's symbol list (closes #3216474).
 
 
 2011-04-08  Colomban Wendling  <colomban(at)geany(dot)org>

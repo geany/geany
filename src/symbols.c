@@ -946,6 +946,19 @@ static void add_top_level_items(GeanyDocument *doc)
 				&tv_iters.tag_macro, _("Macros"), "classviewer-macro",
 				NULL);
 			break;
+		case GEANY_FILETYPES_SQL:
+		{
+			tag_list_add_groups(tag_store,
+				&(tv_iters.tag_function), _("Functions"), "classviewer-method",
+				&(tv_iters.tag_namespace), _("Procedures"), "classviewer-namespace",
+				&(tv_iters.tag_struct), _("Indexes"), "classviewer-struct",
+				&(tv_iters.tag_class), _("Tables"), "classviewer-class",
+				&(tv_iters.tag_macro), _("Triggers"), "classviewer-macro",
+				&(tv_iters.tag_member), _("Views"), "classviewer-var",
+				&(tv_iters.tag_other), _("Other"), "classviewer-other",
+				NULL);
+			break;
+		}
 		case GEANY_FILETYPES_D:
 		default:
 		{
