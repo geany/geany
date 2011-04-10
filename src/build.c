@@ -1989,7 +1989,7 @@ GtkWidget *build_commands_table(GeanyDocument *doc, GeanyBuildSource dst, BuildT
 	if (ft != NULL && ft->id != GEANY_FILETYPES_NONE)
 		txt = g_strdup_printf(_("%s commands"), ft->name);
 	else
-		txt = g_strdup_printf(_("%s commands"), _("No filetype"));
+		txt = g_strdup_printf(_("%s commands"), _("Unknown filetype"));
 
 	label = ui_label_new_bold(txt);
 	g_free(txt);
