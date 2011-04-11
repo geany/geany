@@ -1,3 +1,10 @@
+2011-04-11  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * plugins/filebrowser.c:
+   Update path when saving a new document for the first time if the
+   follow path option is enabled.
+
+
 2011-04-10  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/editor.c:

@@ -97,6 +97,7 @@ static struct
 
 static void project_change_cb(GObject *obj, GKeyFile *config, gpointer data);
 
+/* note: other callbacks connected in plugin_init */
 PluginCallback plugin_callbacks[] =
 {
 	{ "project-open", (GCallback) &project_change_cb, TRUE, NULL },
@@ -1042,10 +1043,14 @@ static void project_change_cb(G_GNUC_UNUSED GObject *obj, G_GNUC_UNUSED GKeyFile
 }
 
 
+static gpointer last_activate_path = NULL;
+
 static void document_activate_cb(G_GNUC_UNUSED GObject *obj, GeanyDocument *doc,
 								 G_GNUC_UNUSED gpointer data)
 {
 	gchar *new_dir;
+
+	last_activate_path = doc->real_path;
 
 	if (! fb_follow_path || doc->file_name == NULL || ! g_path_is_absolute(doc->file_name))
 		return;
@@ -1060,6 +1065,13 @@ static void document_activate_cb(G_GNUC_UNUSED GObject *obj, GeanyDocument *doc,
 	}
 	else
 		g_free(new_dir);
+}
+
+
+static void document_save_cb(GObject *obj, GeanyDocument *doc, gpointer user_data)
+{
+	if (!last_activate_path)
+		document_activate_cb(obj, doc, user_data);
 }
 
 
@@ -1125,6 +1137,8 @@ void plugin_init(GeanyData *data)
 
 	plugin_signal_connect(geany_plugin, NULL, "document-activate", TRUE,
 		(GCallback) &document_activate_cb, NULL);
+	plugin_signal_connect(geany_plugin, NULL, "document-save", TRUE,
+		(GCallback) &document_save_cb, NULL);
 }
 
 
