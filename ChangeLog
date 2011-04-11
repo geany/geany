@@ -3,6 +3,11 @@
  * plugins/filebrowser.c:
    Update path when saving a new document for the first time if the
    follow path option is enabled.
+ * src/about.c, src/keyfile.c, THANKS:
+   Store VTE path with the session (based on patch by Nicolas
+   Sierro, thanks).
+   There's still a bug with loading a project at startup; closing the
+   project doesn't restore old VTE path.
 
 
 2011-04-10  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

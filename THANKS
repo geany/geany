@@ -88,6 +88,7 @@ Mário Silva <sharelider(at)gmail(dot)com> - Lisp filetype
 Taylor Venable <taylor(at)metasyntax(dot)net> - Erlang filetype
 Manuel Bua <manuel(dot)bua(at)gmail(dot)com> - Ensure consistent line endings pref.
 Matthew Brush <codebrainz(at)users(dot)sourceforge(dot)net> - Various patches.
+Nicolas Sierro <nicolas@sierro.net> - store VTE path with session patch
 
 Translators:
 ------------

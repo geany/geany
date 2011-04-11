@@ -335,6 +335,14 @@ void configuration_save_session_files(GKeyFile *config)
 			i++;
 		}
 	}
+
+#ifdef HAVE_VTE
+	if (vte_info.have_vte)
+	{
+		vte_get_working_directory();	/* refresh vte_info.dir */
+		g_key_file_set_string(config, "VTE", "last_dir", vte_info.dir);
+	}
+#endif
 }
 
 
@@ -482,8 +490,6 @@ static void save_dialog_prefs(GKeyFile *config)
 		tmp_string = utils_get_hex_from_color(vc->colour_back);
 		g_key_file_set_string(config, "VTE", "colour_back", tmp_string);
 		g_free(tmp_string);
-		vte_get_working_directory();	/* refresh vte_info.dir */
-		g_key_file_set_string(config, "VTE", "last_dir", vte_info.dir);
 	}
 #endif
 }
@@ -559,6 +565,13 @@ void configuration_save(void)
 
 	if (cl_options.load_session)
 		configuration_save_session_files(config);
+#ifdef HAVE_VTE
+	else if (vte_info.have_vte)
+	{
+		vte_get_working_directory();	/* refresh vte_info.dir */
+		g_key_file_set_string(config, "VTE", "last_dir", vte_info.dir);
+	}
+#endif
 
 	/* write the file */
 	data = g_key_file_to_data(config, NULL, NULL);
@@ -628,6 +641,16 @@ void configuration_load_session_files(GKeyFile *config, gboolean read_recent_fil
 		g_ptr_array_add(session_files, tmp_array);
 		i++;
 	}
+
+#ifdef HAVE_VTE
+	/* BUG: after loading project at startup, closing project doesn't restore old VTE path */
+	if (vte_info.have_vte)
+	{
+		gchar *tmp_string = utils_get_setting_string(config, "VTE", "last_dir", NULL);
+		vte_cwd(tmp_string,TRUE);
+		g_free(tmp_string);
+	}
+#endif
 }
 
 
