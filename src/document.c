@@ -109,7 +109,7 @@ typedef struct
 
 static void document_undo_clear(GeanyDocument *doc);
 static void document_redo_add(GeanyDocument *doc, guint type, gpointer data);
-static gboolean update_tags_from_buffer(GeanyDocument *doc, gboolean update_parent);
+static gboolean update_tags_from_buffer(GeanyDocument *doc);
 
 
 /* ignore the case of filenames and paths under WIN32, causes errors if not */
@@ -771,7 +771,7 @@ GeanyDocument *document_new_file(const gchar *utf8_filename, GeanyFiletype *ft, 
 
 	ui_set_window_title(doc);
 	build_menu_update(doc);
-	document_update_tag_list(doc, FALSE, TRUE);
+	document_update_tag_list(doc, FALSE);
 	document_set_text_changed(doc, FALSE);
 	ui_document_show_hide(doc); /* update the document menu */
 
@@ -2253,7 +2253,7 @@ gint document_replace_all(GeanyDocument *doc, const gchar *find_text, const gcha
 }
 
 
-static gboolean update_tags_from_buffer(GeanyDocument *doc, gboolean update_parent)
+static gboolean update_tags_from_buffer(GeanyDocument *doc)
 {
 	gboolean result;
 #if 0
@@ -2266,14 +2266,14 @@ static gboolean update_tags_from_buffer(GeanyDocument *doc, gboolean update_pare
 		/* we copy the whole text into memory instead using a direct char pointer from
 		 * Scintilla because tm_source_file_buffer_update() does modify the string slightly */
 		sci_get_text(doc->editor->sci, len, text);
-		result = tm_source_file_buffer_update(doc->tm_file, (guchar*) text, len, update_parent);
+		result = tm_source_file_buffer_update(doc->tm_file, (guchar*) text, len, TRUE);
 		g_free(text);
 #endif
 	return result;
 }
 
 
-void document_update_tag_list(GeanyDocument *doc, gboolean update, gboolean update_parent)
+void document_update_tag_list(GeanyDocument *doc, gboolean update)
 {
 	/* We must call sidebar_update_tag_list() before returning,
 	 * to ensure that the symbol list is always updated properly (e.g.
@@ -2309,14 +2309,14 @@ void document_update_tag_list(GeanyDocument *doc, gboolean update, gboolean upda
 			else
 			{
 				if (update)
-					update_tags_from_buffer(doc, update_parent);
+					update_tags_from_buffer(doc);
 				success = TRUE;
 			}
 		}
 	}
 	else
 	{
-		success = update_tags_from_buffer(doc, update_parent);
+		success = update_tags_from_buffer(doc);
 		if (G_UNLIKELY(! success))
 			geany_debug("tag list updating failed");
 	}
@@ -2452,7 +2452,7 @@ static void document_load_config(GeanyDocument *doc, GeanyFiletype *type,
 		doc->priv->symbol_list_sort_mode = type->priv->symbol_list_sort_mode;
 	}
 
-	document_update_tag_list(doc, TRUE, TRUE);
+	document_update_tag_list(doc, TRUE);
 
 	/* Update session typename keywords. */
 	update_type_keywords(doc, type->lang);

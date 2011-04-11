@@ -2524,7 +2524,7 @@ static gboolean cb_func_document_action(guint key_id)
 			ui_document_show_hide(doc);
 			break;
 		case GEANY_KEYS_DOCUMENT_RELOADTAGLIST:
-			document_update_tag_list(doc, TRUE, TRUE);
+			document_update_tag_list(doc, TRUE);
 			break;
 		case GEANY_KEYS_DOCUMENT_FOLDALL:
 			editor_fold_all(doc->editor);

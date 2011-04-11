@@ -1004,7 +1004,7 @@ static gboolean on_document_update_tags_idle(gpointer data)
 	GeanyDocument *doc = data;
 
 	if (!main_status.quitting && DOC_VALID(doc))
-		document_update_tag_list(doc, TRUE, FALSE);
+		document_update_tag_list(doc, TRUE);
 
 	document_tags_update_pending = FALSE;
 	return FALSE;
