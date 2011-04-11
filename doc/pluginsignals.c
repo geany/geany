@@ -64,8 +64,6 @@ PluginCallback plugin_callbacks[] =
 
 /** Sent when a new document is created.
  *
- *  You need to include "document.h" for the declaration of GeanyDocument.
- *
  *  @param obj a GeanyObject instance, should be ignored.
  *  @param doc the new document.
  *  @param user_data user data.
@@ -74,8 +72,6 @@ signal void (*document_new)(GObject *obj, GeanyDocument *doc, gpointer user_data
 
 /** Sent when a new document is opened.
  *
- *  You need to include "document.h" for the declaration of GeanyDocument.
- *
  *  @param obj a GeanyObject instance, should be ignored.
  *  @param doc the opened document.
  *  @param user_data user data.
@@ -83,8 +79,6 @@ signal void (*document_new)(GObject *obj, GeanyDocument *doc, gpointer user_data
 signal void (*document_open)(GObject *obj, GeanyDocument *doc, gpointer user_data);
 
 /** Sent when an existing document is reloaded.
- *
- *  You need to include "document.h" for the declaration of GeanyDocument.
  *
  *  @param obj a GeanyObject instance, should be ignored.
  *  @param doc the re-opened document.
@@ -96,8 +90,6 @@ signal void (*document_reload)(GObject *obj, GeanyDocument *doc, gpointer user_d
 
 /** Sent before a document is saved.
  *
- *  You need to include "document.h" for the declaration of GeanyDocument.
- *
  *  @param obj a GeanyObject instance, should be ignored.
  *  @param doc the document to be saved.
  *  @param user_data user data.
@@ -105,8 +97,6 @@ signal void (*document_reload)(GObject *obj, GeanyDocument *doc, gpointer user_d
 signal void (*document_before_save)(GObject *obj, GeanyDocument *doc, gpointer user_data);
 
 /** Sent when a new document is saved.
- *
- *  You need to include "document.h" for the declaration of GeanyDocument.
  *
  *  @param obj a GeanyObject instance, should be ignored.
  *  @param doc the saved document.
@@ -130,8 +120,6 @@ signal void (*document_filetype_set)(GObject *obj, GeanyDocument *doc, GeanyFile
 
 /** Sent when switching notebook pages.
  *
- *  You need to include "document.h" for the declaration of GeanyDocument.
- *
  *  @param obj a GeanyObject instance, should be ignored.
  *  @param doc the current document.
  *  @param user_data user data.
@@ -139,8 +127,6 @@ signal void (*document_filetype_set)(GObject *obj, GeanyDocument *doc, GeanyFile
 signal void (*document_activate)(GObject *obj, GeanyDocument *doc, gpointer user_data);
 
 /** Sent before closing a document.
- *
- *  You need to include "document.h" for the declaration of GeanyDocument.
  *
  *  @param obj a GeanyObject instance, should be ignored.
  *  @param doc the document about to be closed.
@@ -215,8 +201,6 @@ signal void (*build_start)(GObject *obj, gpointer user_data);
  *  @note You can add menu items from @c plugin_init() using @c geany->main_widgets->editor_menu,
  *  remembering to destroy them in @c plugin_cleanup().
  *
- *  You need to include "document.h" for the declaration of GeanyDocument.
- *
  *  @param obj a GeanyObject instance, should be ignored.
  *  @param word the current word (in UTF-8 encoding) below the cursor position
 		   where the popup menu will be opened.
@@ -249,9 +233,6 @@ signal void (*update_editor_menu)(GObject *obj, const gchar *word, gint pos, Gea
  *  @warning This signal has much power and should be used carefully. You should especially
  *           care about the return value; make sure to return TRUE only if it is necessary
  *           and in the correct situations.
- *
- *  You need to include "editor.h" for the declaration of GeanyEditor and "Scintilla.h" for
- *  SCNotification.
  *
  *  @param obj a GeanyObject instance, should be ignored.
  *  @param editor The current GeanyEditor.
