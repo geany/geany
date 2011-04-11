@@ -1221,7 +1221,7 @@ static void add_keys(GKeyFile *dest, const gchar *group, GKeyFile *src)
 static gchar *filetypes_get_filename(GeanyFiletype *ft, gboolean user)
 {
 	gchar *ext = filetypes_get_conf_extension(ft->id);
-	const gchar *f;
+	gchar *f;
 
 	if (user)
 		f = utils_make_filename(app->configdir,
@@ -1230,7 +1230,7 @@ static gchar *filetypes_get_filename(GeanyFiletype *ft, gboolean user)
 		f = utils_make_filename(app->datadir, "filetypes.", ext, NULL);
 
 	g_free(ext);
-	return g_strdup(f);
+	return f;
 }
 
 

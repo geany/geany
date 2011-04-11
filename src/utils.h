@@ -249,7 +249,7 @@ gint utils_str_casecmp(const gchar *s1, const gchar *s2);
 
 const gchar *utils_build_path(const gchar *first, ...) G_GNUC_NULL_TERMINATED;
 
-const gchar *utils_make_filename(const gchar *path, ...) G_GNUC_NULL_TERMINATED;
+gchar *utils_make_filename(const gchar *path, ...) G_GNUC_NULL_TERMINATED;
 
 gchar *utils_get_path_from_uri(const gchar *uri);
 
