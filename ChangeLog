@@ -8,6 +8,9 @@
    Sierro, thanks).
    There's still a bug with loading a project at startup; closing the
    project doesn't restore old VTE path.
+ * src/filetypes.c, src/filetypes.h:
+   Refactor with filetypes_get_filename().
+   Make filetypes_get_conf_extension() static.
 
 
 2011-04-10  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

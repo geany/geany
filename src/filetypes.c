@@ -63,6 +63,8 @@ GSList *filetypes_by_title = NULL;
 
 static void create_radio_menu_item(GtkWidget *menu, GeanyFiletype *ftype);
 
+static gchar *filetypes_get_conf_extension(gint filetype_idx);
+
 
 enum TitleType
 {
@@ -1216,23 +1218,39 @@ static void add_keys(GKeyFile *dest, const gchar *group, GKeyFile *src)
 }
 
 
-static void add_group_keys(GKeyFile *kf, const gchar *group, GeanyFiletype *ft)
+static gchar *filetypes_get_filename(GeanyFiletype *ft, gboolean user)
 {
-	GKeyFile *src = g_key_file_new();
 	gchar *ext = filetypes_get_conf_extension(ft->id);
 	const gchar *f;
 
-	f = utils_make_filename(app->datadir, "filetypes.", ext, NULL);
-	if (!g_file_test(f, G_FILE_TEST_EXISTS))
+	if (user)
 		f = utils_make_filename(app->configdir,
 			GEANY_FILEDEFS_SUBDIR G_DIR_SEPARATOR_S, "filetypes.", ext, NULL);
+	else
+		f = utils_make_filename(app->datadir, "filetypes.", ext, NULL);
+
 	g_free(ext);
+	return g_strdup(f);
+}
+
+
+static void add_group_keys(GKeyFile *kf, const gchar *group, GeanyFiletype *ft)
+{
+	GKeyFile *src = g_key_file_new();
+	gchar *f;
+
+	f = filetypes_get_filename(ft, FALSE);
+	if (!g_file_test(f, G_FILE_TEST_EXISTS))
+		f = filetypes_get_filename(ft, TRUE);
 
 	if (!g_key_file_load_from_file(src, f, G_KEY_FILE_NONE, NULL))
 	{
 		geany_debug("Could not read config file %s for [%s=%s]!", f, group, ft->name);
+		g_free(f);
 		return;
 	}
+	g_free(f);
+
 	add_keys(kf, group, src);
 }
 
@@ -1310,15 +1328,14 @@ void filetypes_load_config(gint ft_id, gboolean reload)
 	config_home = g_key_file_new();
 	{
 		/* highlighting uses GEANY_FILETYPES_NONE for common settings */
-		gchar *ext = filetypes_get_conf_extension(ft_id);
-		const gchar *f;
+		gchar *f;
 
-		f = utils_make_filename(app->datadir, "filetypes.", ext, NULL);
+		f = filetypes_get_filename(ft, FALSE);
 		load_system_keyfile(config, f, G_KEY_FILE_KEEP_COMMENTS, ft);
-		f = utils_make_filename(app->configdir,
-			GEANY_FILEDEFS_SUBDIR G_DIR_SEPARATOR_S, "filetypes.", ext, NULL);
+
+		setptr(f, filetypes_get_filename(ft, TRUE));
 		g_key_file_load_from_file(config_home, f, G_KEY_FILE_KEEP_COMMENTS, NULL);
-		g_free(ext);
+		g_free(f);
 	}
 	/* Copy keys for any groups with [group=C] from system keyfile */
 	copy_ft_groups(config);
@@ -1332,7 +1349,7 @@ void filetypes_load_config(gint ft_id, gboolean reload)
 }
 
 
-gchar *filetypes_get_conf_extension(gint filetype_idx)
+static gchar *filetypes_get_conf_extension(gint filetype_idx)
 {
 	gchar *result;
 	GeanyFiletype *ft = filetypes[filetype_idx];
@@ -1359,23 +1376,20 @@ gchar *filetypes_get_conf_extension(gint filetype_idx)
 
 void filetypes_save_commands(void)
 {
-	gchar *conf_prefix = g_strconcat(app->configdir,
-		G_DIR_SEPARATOR_S GEANY_FILEDEFS_SUBDIR G_DIR_SEPARATOR_S "filetypes.", NULL);
 	guint i;
 
 	for (i = 0; i < filetypes_array->len; i++)
 	{
 		GKeyFile *config_home;
-		gchar *fname, *ext, *data;
+		gchar *fname, *data;
+		GeanyFiletype *ft = filetypes[i];
 
-		if (filetypes[i]->home_save_needed)
+		if (ft->home_save_needed)
 		{
-			ext = filetypes_get_conf_extension(i);
-			fname = g_strconcat(conf_prefix, ext, NULL);
-			g_free(ext);
+			fname = filetypes_get_filename(ft, TRUE);
 			config_home = g_key_file_new();
 			g_key_file_load_from_file(config_home, fname, G_KEY_FILE_KEEP_COMMENTS, NULL);
-			build_save_menu(config_home, (gpointer)(filetypes[i]), GEANY_BCS_HOME_FT);
+			build_save_menu(config_home, ft, GEANY_BCS_HOME_FT);
 			data = g_key_file_to_data(config_home, NULL, NULL);
 			utils_write_file(fname, data);
 			g_free(data);
@@ -1383,7 +1397,6 @@ void filetypes_save_commands(void)
 			g_free(fname);
 		}
 	}
-	g_free(conf_prefix);
 }
 
 
