@@ -2428,17 +2428,16 @@ void ui_menu_add_document_items_sorted(GtkMenu *menu, GeanyDocument *active,
 	/* copy the documents_array into the new one */
 	foreach_document(i)
 	{
-		g_ptr_array_add(sorted_documents, documents[i]);
+		if (documents[i]->is_valid)
+			g_ptr_array_add(sorted_documents, documents[i]);
 	}
 	/* and now sort it */
 	if (sort_func != NULL)
 		g_ptr_array_sort(sorted_documents, sort_func);
 
-	for (i = 0; i < GEANY(sorted_documents)->len; i++)
+	for (i = 0; i < sorted_documents->len; i++)
 	{
 		doc = g_ptr_array_index(sorted_documents, i);
-		if (! DOC_VALID(doc))
-			continue;
 
 		base_name = g_path_get_basename(DOC_FILENAME(doc));
 		menu_item = gtk_image_menu_item_new_with_label(base_name);
