@@ -3025,8 +3025,8 @@ gboolean document_check_disk_status(GeanyDocument *doc, gboolean force)
  */
 gint document_sort_by_display_name(gconstpointer a, gconstpointer b)
 {
-	GeanyDocument *doc_a = (GeanyDocument*) ((GPtrArray*) a)->pdata;
-	GeanyDocument *doc_b = (GeanyDocument*) ((GPtrArray*) b)->pdata;
+	GeanyDocument *doc_a = *((GeanyDocument**) a);
+	GeanyDocument *doc_b = *((GeanyDocument**) b);
 	gchar *base_name_a, *base_name_b;
 	gint result;
 
