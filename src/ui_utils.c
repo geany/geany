@@ -2400,7 +2400,7 @@ void ui_menu_add_document_items(GtkMenu *menu, GeanyDocument *active, GCallback 
 
 /** Adds a list of document items to @a menu.
  *
- * @a sort_func might be NULL to not sort the documents in the menu. In this case,
+ * @a compare_func might be NULL to not sort the documents in the menu. In this case,
  * the order of the document tabs is used.
  *
  * See document_sort_by_display_name() for an example sort function.
@@ -2409,11 +2409,11 @@ void ui_menu_add_document_items(GtkMenu *menu, GeanyDocument *active, GCallback 
  * @param active Which document to highlight, or @c NULL.
  * @param callback is used for each menu item's @c "activate" signal and will be passed
  * the corresponding document pointer as @c user_data.
- * @param sort_func is used to sort the list. Might be @c NULL to not sort the list.
+ * @param compare_func is used to sort the list. Might be @c NULL to not sort the list.
  * @warning You should check @c doc->is_valid in the callback.
  * @since 0.21 */
 void ui_menu_add_document_items_sorted(GtkMenu *menu, GeanyDocument *active,
-	GCallback callback, GCompareFunc sort_func)
+	GCallback callback, GCompareFunc compare_func)
 {
 	GtkWidget *menu_item, *menu_item_label, *image;
 	const GdkColor *color;
@@ -2432,8 +2432,8 @@ void ui_menu_add_document_items_sorted(GtkMenu *menu, GeanyDocument *active,
 			g_ptr_array_add(sorted_documents, documents[i]);
 	}
 	/* and now sort it */
-	if (sort_func != NULL)
-		g_ptr_array_sort(sorted_documents, sort_func);
+	if (compare_func != NULL)
+		g_ptr_array_sort(sorted_documents, compare_func);
 
 	for (i = 0; i < sorted_documents->len; i++)
 	{

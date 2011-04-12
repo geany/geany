@@ -310,7 +310,7 @@ typedef struct DocumentFuncs
 	const GdkColor*	(*document_get_status_color) (struct GeanyDocument *doc);
 	gchar*		(*document_get_basename_for_display) (struct GeanyDocument *doc, gint length);
 	gint		(*document_get_notebook_page) (struct GeanyDocument *doc);
-	gint		(*document_compare_by_display_name) (const struct GeanyDocument **a, const struct GeanyDocument **b);
+	gint		(*document_compare_by_display_name) (gconstpointer a, gconstpointer b);
 }
 DocumentFuncs;
 
@@ -475,7 +475,7 @@ typedef struct UIUtilsFuncs
 	void		(*ui_combo_box_add_to_history) (GtkComboBoxEntry *combo_entry,
 				const gchar *text, gint history_len);
 	void		(*ui_menu_add_document_items_sorted) (GtkMenu *menu, struct GeanyDocument *active,
-				GCallback callback, GCompareFunc sort_func);
+				GCallback callback, GCompareFunc compare_func);
 }
 UIUtilsFuncs;
 
