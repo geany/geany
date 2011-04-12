@@ -2,6 +2,10 @@
 
  * src/document.c:
    Fix wrong casting of array pointers, thanks Nick.
+ * src/plugindata.h, src/callbacks.c, src/document.c, src/plugins.c,
+   src/document.h:
+   Rename document_sort_by_display_name() into
+   document_compare_by_display_name(), thanks again Nick.
 
 
 2011-04-08  Colomban Wendling  <colomban(at)geany(dot)org>

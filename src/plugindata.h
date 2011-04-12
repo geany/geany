@@ -54,7 +54,7 @@
  * @warning You should not test for values below 200 as previously
  * @c GEANY_API_VERSION was defined as an enum value, not a macro.
  */
-#define GEANY_API_VERSION 207
+#define GEANY_API_VERSION 208
 
 /** The Application Binary Interface (ABI) version, incremented whenever
  * existing fields in the plugin data types have to be changed or reordered.
@@ -310,7 +310,7 @@ typedef struct DocumentFuncs
 	const GdkColor*	(*document_get_status_color) (struct GeanyDocument *doc);
 	gchar*		(*document_get_basename_for_display) (struct GeanyDocument *doc, gint length);
 	gint		(*document_get_notebook_page) (struct GeanyDocument *doc);
-	gint		(*document_sort_by_display_name) (gconstpointer a, gconstpointer b);
+	gint		(*document_compare_by_display_name) (const struct GeanyDocument **a, const struct GeanyDocument **b);
 }
 DocumentFuncs;
 

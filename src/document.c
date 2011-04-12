@@ -3023,7 +3023,7 @@ gboolean document_check_disk_status(GeanyDocument *doc, gboolean force)
  *
  *  @since 0.21
  */
-gint document_sort_by_display_name(gconstpointer a, gconstpointer b)
+gint document_compare_by_display_name(gconstpointer a, gconstpointer b)
 {
 	GeanyDocument *doc_a = *((GeanyDocument**) a);
 	GeanyDocument *doc_b = *((GeanyDocument**) b);
