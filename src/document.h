@@ -259,6 +259,6 @@ gboolean document_need_save_as(GeanyDocument *doc);
 
 void document_apply_indent_settings(GeanyDocument *doc);
 
-gint document_compare_by_display_name(const GeanyDocument **a, const GeanyDocument **b);
+gint document_compare_by_display_name(gconstpointer a, gconstpointer b);
 
 #endif
