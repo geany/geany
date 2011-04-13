@@ -3013,15 +3013,16 @@ gboolean document_check_disk_status(GeanyDocument *doc, gboolean force)
 }
 
 
-/** GCompareFunc-like sort function to sort documents, e.g. in a GPtrArray by
- *  their display names.
- *  Display names means the base name of the document's file.
+/** Compares documents by their display names.
+ * This matches @c GCompareFunc for use with e.g. @c g_ptr_array_sort().
+ * @note 'Display name' means the base name of the document's filename.
  *
- * @param a @c document a.
- * @param b @c document b.
- * @return negative value if a < b; zero if a = b; positive value if a > b.
+ * @param a @c GeanyDocument**.
+ * @param b @c GeanyDocument**.
+ * @warning The arguments take the address of each document pointer.
+ * @return Negative value if a < b; zero if a = b; positive value if a > b.
  *
- *  @since 0.21
+ * @since 0.21
  */
 gint document_compare_by_display_name(gconstpointer a, gconstpointer b)
 {
