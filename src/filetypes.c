@@ -609,6 +609,7 @@ static void init_custom_filetypes(const gchar *path)
 void filetypes_init_types()
 {
 	filetype_id ft_id;
+	gchar *f;
 
 	g_return_if_fail(filetypes_array == NULL);
 	g_return_if_fail(filetypes_hash == NULL);
@@ -629,7 +630,9 @@ void filetypes_init_types()
 		filetype_add(filetypes[ft_id]);
 	}
 	init_custom_filetypes(app->datadir);
-	init_custom_filetypes(utils_build_path(app->configdir, GEANY_FILEDEFS_SUBDIR, NULL));
+	f = utils_build_path(app->configdir, GEANY_FILEDEFS_SUBDIR, NULL);
+	init_custom_filetypes(f);
+	g_free(f);
 
 	/* sort last instead of on insertion to prevent exponential time */
 	filetypes_by_title = g_slist_sort_with_data(filetypes_by_title,
@@ -639,13 +642,17 @@ void filetypes_init_types()
 
 static void on_document_save(G_GNUC_UNUSED GObject *object, GeanyDocument *doc)
 {
+	gchar *f;
+
 	g_return_if_fail(NZV(doc->real_path));
 
-	if (utils_str_equal(doc->real_path,
-		utils_build_path(app->configdir, "filetype_extensions.conf", NULL)))
+	f = utils_build_path(app->configdir, "filetype_extensions.conf", NULL);
+	if (utils_str_equal(doc->real_path, f))
 		filetypes_read_extensions();
-	else if (utils_str_equal(doc->real_path,
-		utils_build_path(app->configdir, GEANY_FILEDEFS_SUBDIR, "filetypes.common", NULL)))
+
+	g_free(f);
+	f = utils_build_path(app->configdir, GEANY_FILEDEFS_SUBDIR, "filetypes.common", NULL);
+	if (utils_str_equal(doc->real_path, f))
 	{
 		guint i;
 
@@ -656,15 +663,19 @@ static void on_document_save(G_GNUC_UNUSED GObject *object, GeanyDocument *doc)
 		foreach_document(i)
 			document_reload_config(documents[i]);
 	}
+	g_free(f);
 }
 
 
 static void setup_config_file_menus(void)
 {
-	ui_add_config_file_menu_item(
-		utils_build_path(app->configdir, "filetype_extensions.conf", NULL), NULL, NULL);
-	ui_add_config_file_menu_item(
-		utils_build_path(app->configdir, GEANY_FILEDEFS_SUBDIR, "filetypes.common", NULL), NULL, NULL);
+	gchar *f;
+
+	f = utils_build_path(app->configdir, "filetype_extensions.conf", NULL);
+	ui_add_config_file_menu_item(f, NULL, NULL);
+	setptr(f, utils_build_path(app->configdir, GEANY_FILEDEFS_SUBDIR, "filetypes.common", NULL));
+	ui_add_config_file_menu_item(f, NULL, NULL);
+	g_free(f);
 
 	g_signal_connect(geany_object, "document-save", G_CALLBACK(on_document_save), NULL);
 }
@@ -770,7 +781,7 @@ static gboolean match_basename(gconstpointer pft, gconstpointer user_data)
 static GeanyFiletype *check_builtin_filenames(const gchar *utf8_filename)
 {
 	gchar *lfn = NULL;
-	const gchar *path;
+	gchar *path;
 	gboolean found = FALSE;
 
 #ifdef G_OS_WIN32
@@ -785,10 +796,11 @@ static GeanyFiletype *check_builtin_filenames(const gchar *utf8_filename)
 	if (g_str_has_prefix(lfn, path))
 		found = TRUE;
 
-	path = utils_build_path(app->datadir, "filetypes.", NULL);
+	setptr(path, utils_build_path(app->datadir, "filetypes.", NULL));
 	if (g_str_has_prefix(lfn, path))
 		found = TRUE;
 
+	g_free(path);
 	g_free(lfn);
 	return found ? filetypes[GEANY_FILETYPES_CONF] : NULL;
 }

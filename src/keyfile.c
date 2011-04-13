@@ -962,16 +962,17 @@ void configuration_reload_default_session(void)
 
 gboolean configuration_load(void)
 {
-	const gchar *configfile = utils_build_path(app->configdir, "geany.conf", NULL);
+	gchar *configfile = utils_build_path(app->configdir, "geany.conf", NULL);
 	GKeyFile *config = g_key_file_new();
 
 	if (! g_file_test(configfile, G_FILE_TEST_IS_REGULAR))
 	{	/* config file does not (yet) exist, so try to load a global config file which may be */
 		/* created by distributors */
 		geany_debug("No user config file found, trying to use global configuration.");
-		configfile = utils_build_path(app->datadir, "geany.conf", NULL);
+		setptr(configfile, utils_build_path(app->datadir, "geany.conf", NULL));
 	}
 	g_key_file_load_from_file(config, configfile, G_KEY_FILE_NONE, NULL);
+	g_free(configfile);
 
 	load_dialog_prefs(config);
 	load_ui_prefs(config);

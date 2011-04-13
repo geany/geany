@@ -177,7 +177,7 @@ static GtkWidget *toolbar_reload(const gchar *markup)
 	GSList *l;
 	GtkWidget *entry;
 	GError *error = NULL;
-	const gchar *filename;
+	gchar *filename;
 	static guint merge_id = 0;
 	GtkWidget *toolbar_new_file_menu = NULL;
 	GtkWidget *toolbar_recent_files_menu = NULL;
@@ -226,9 +226,10 @@ static GtkWidget *toolbar_reload(const gchar *markup)
 			g_error_free(error);
 			error = NULL;
 
-			filename = utils_build_path(app->datadir, "ui_toolbar.xml", NULL);
+			setptr(filename, utils_build_path(app->datadir, "ui_toolbar.xml", NULL));
 			merge_id = gtk_ui_manager_add_ui_from_file(uim, filename, &error);
 		}
+		g_free(filename);
 	}
 	if (error != NULL)
 	{
@@ -890,7 +891,7 @@ editor in Geany.\n\n\
 A list of available actions can be found in the documentation included with Geany or\n\
 at http://www.geany.org/manual/current/index.html#customizing-the-toolbar.\n-->\n\
 \t<toolbar name='GeanyToolbar'>\n";
-	const gchar *filename = utils_build_path(app->configdir, "ui_toolbar.xml", NULL);
+	gchar *filename;
 	GString *str = g_string_new(template);
 
 	gtk_tree_model_foreach(GTK_TREE_MODEL(tbw->store_used), tb_editor_foreach_used, str);
@@ -899,7 +900,9 @@ at http://www.geany.org/manual/current/index.html#customizing-the-toolbar.\n-->\
 
 	toolbar_reload(str->str);
 
+	filename = utils_build_path(app->configdir, "ui_toolbar.xml", NULL);
 	utils_write_file(filename, str->str);
+	g_free(filename);
 
 	g_string_free(str, TRUE);
 }

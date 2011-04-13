@@ -4814,15 +4814,17 @@ void editor_destroy(GeanyEditor *editor)
 
 static void on_document_save(GObject *obj, GeanyDocument *doc)
 {
+	gchar *f = utils_build_path(app->configdir, "snippets.conf", NULL);
+
 	g_return_if_fail(NZV(doc->real_path));
 
-	if (utils_str_equal(doc->real_path,
-		utils_build_path(app->configdir, "snippets.conf", NULL)))
+	if (utils_str_equal(doc->real_path, f))
 	{
 		/* reload snippets */
 		editor_snippets_free();
 		editor_snippets_init();
 	}
+	g_free(f);
 }
 
 
@@ -4849,6 +4851,7 @@ gboolean editor_complete_word_part(GeanyEditor *editor)
 void editor_init(void)
 {
 	static GeanyIndentPrefs indent_prefs;
+	gchar *f;
 
 	memset(&editor_prefs, 0, sizeof(GeanyEditorPrefs));
 	memset(&indent_prefs, 0, sizeof(GeanyIndentPrefs));
@@ -4858,8 +4861,9 @@ void editor_init(void)
 	 * handler (on_editor_notify) is called */
 	g_signal_connect_after(geany_object, "editor-notify", G_CALLBACK(on_editor_notify), NULL);
 
-	ui_add_config_file_menu_item(utils_build_path(app->configdir, "snippets.conf", NULL),
-		NULL, NULL);
+	f = utils_build_path(app->configdir, "snippets.conf", NULL);
+	ui_add_config_file_menu_item(f, NULL, NULL);
+	g_free(f);
 	g_signal_connect(geany_object, "document-save", G_CALLBACK(on_document_save), NULL);
 }
 

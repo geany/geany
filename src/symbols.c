@@ -1729,7 +1729,7 @@ static GHashTable *init_user_tags(void)
 {
 	GSList *file_list = NULL, *list = NULL;
 	GHashTable *lang_hash;
-	const gchar *dir;
+	gchar *dir;
 
 	dir = utils_build_path(app->configdir, "tags", NULL);
 	/* create the user tags dir for next time if it doesn't exist */
@@ -1739,8 +1739,10 @@ static GHashTable *init_user_tags(void)
 	}
 	file_list = utils_get_file_list_full(dir, TRUE, TRUE, NULL);
 
-	dir = utils_build_path(app->datadir, "tags", NULL);
-	list =  utils_get_file_list_full(dir, TRUE, TRUE, NULL);
+	setptr(dir, utils_build_path(app->datadir, "tags", NULL));
+	list = utils_get_file_list_full(dir, TRUE, TRUE, NULL);
+	g_free(dir);
+
 	file_list = g_slist_concat(file_list, list);
 
 	lang_hash = get_tagfile_hash(file_list);
@@ -2168,20 +2170,27 @@ static void create_taglist_popup_menu(void)
 
 static void on_document_save(G_GNUC_UNUSED GObject *object, GeanyDocument *doc)
 {
+	gchar *f = utils_build_path(app->configdir, "ignore.tags", NULL);
+
 	g_return_if_fail(NZV(doc->real_path));
 
-	if (utils_str_equal(doc->real_path,
-		utils_build_path(app->configdir, "ignore.tags", NULL)))
+	if (utils_str_equal(doc->real_path, f))
 		load_c_ignore_tags();
+
+	g_free(f);
 }
 
 
 void symbols_init(void)
 {
+	gchar *f;
+
 	create_taglist_popup_menu();
 
-	ui_add_config_file_menu_item(utils_build_path(app->configdir, "ignore.tags", NULL),
-		NULL, NULL);
+	f = utils_build_path(app->configdir, "ignore.tags", NULL);
+	ui_add_config_file_menu_item(f, NULL, NULL);
+	g_free(f);
+
 	g_signal_connect(geany_object, "document-save", G_CALLBACK(on_document_save), NULL);
 }
 

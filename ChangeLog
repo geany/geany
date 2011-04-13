@@ -5,6 +5,9 @@
    about parameter addresses.
  * src/document.h:
    Use brackets for DOC_FILENAME() macro 'doc' argument.
+ * src/templates.c, src/utils.c, src/toolbar.c, src/utils.h,
+   src/keyfile.c, src/filetypes.c, src/editor.c, src/symbols.c:
+   Make utils_build_path() return a copy for safety.
 
 
 2011-04-12  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

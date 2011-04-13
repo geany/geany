@@ -247,7 +247,7 @@ gboolean utils_spawn_async(const gchar *dir, gchar **argv, gchar **env, GSpawnFl
 
 gint utils_str_casecmp(const gchar *s1, const gchar *s2);
 
-const gchar *utils_build_path(const gchar *first, ...) G_GNUC_NULL_TERMINATED;
+gchar *utils_build_path(const gchar *first, ...) G_GNUC_NULL_TERMINATED;
 
 gchar *utils_make_filename(const gchar *path, ...) G_GNUC_NULL_TERMINATED;
 

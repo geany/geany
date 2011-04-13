@@ -1741,12 +1741,8 @@ static gboolean utils_string_vappend(GString *buffer, const gchar *sep, va_list 
 }
 
 
-/* Similar to g_build_path() but (re)using a fixed buffer, so never free it.
- * This assumes a small enough resulting string length to be kept without freeing,
- * but this should be the case for filenames.
- * @warning As the buffer is reused, you can't call this recursively, e.g. for a
- * function argument and within the function called. */
-const gchar *utils_build_path(const gchar *first, ...)
+/* Like g_build_path() but without first argument. */
+gchar *utils_build_path(const gchar *first, ...)
 {
 	static GString *buffer = NULL;
 	va_list args;
@@ -1761,7 +1757,7 @@ const gchar *utils_build_path(const gchar *first, ...)
 	va_start(args, first);
 	utils_string_vappend(buffer, G_DIR_SEPARATOR_S, args);
 	va_end(args);
-	return buffer->str;
+	return g_strdup(buffer->str);
 }
 
 
