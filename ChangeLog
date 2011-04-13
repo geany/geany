@@ -3,6 +3,8 @@
  * src/document.c:
    Update dox for document_compare_by_display_name() with warning
    about parameter addresses.
+ * src/document.h:
+   Use brackets for DOC_FILENAME() macro 'doc' argument.
 
 
 2011-04-12  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

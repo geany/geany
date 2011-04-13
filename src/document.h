@@ -149,7 +149,7 @@ extern GPtrArray *documents_array;
  *  This macro never returns @c NULL.
  **/
 #define DOC_FILENAME(doc) \
-	(G_LIKELY(doc->file_name != NULL) ? (doc->file_name) : GEANY_STRING_UNTITLED)
+	(G_LIKELY((doc)->file_name != NULL) ? ((doc)->file_name) : GEANY_STRING_UNTITLED)
 
 
 
