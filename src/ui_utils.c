@@ -2428,8 +2428,7 @@ void ui_menu_add_document_items_sorted(GtkMenu *menu, GeanyDocument *active,
 	/* copy the documents_array into the new one */
 	foreach_document(i)
 	{
-		if (documents[i]->is_valid)
-			g_ptr_array_add(sorted_documents, documents[i]);
+		g_ptr_array_add(sorted_documents, documents[i]);
 	}
 	/* and now sort it */
 	if (compare_func != NULL)
