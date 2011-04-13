@@ -1,3 +1,9 @@
+2011-04-13  Colomban Wendling  <colomban(at)geany(dot)org>
+
+ * src/editor.c:
+   Avoid triggering autocompletion on PHP open tags (closes #3199442).
+
+
 2011-04-13  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/document.c:

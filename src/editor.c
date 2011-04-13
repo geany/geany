@@ -2229,6 +2229,11 @@ gboolean editor_start_auto_complete(GeanyEditor *editor, gint pos, gboolean forc
 			}
 			ret = autocomplete_html(sci, root, rootlen);
 		}
+		else if (ft->id == GEANY_FILETYPES_PHP && style == SCE_HPHP_DEFAULT &&
+				 startword >= 2 && rootlen == 3 && strcmp(&root[-2], "<?php") == 0)
+		{
+			/* nothing, don't complete PHP open tags */
+		}
 		else
 		{
 			/* force is set when called by keyboard shortcut, otherwise start at the
