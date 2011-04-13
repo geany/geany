@@ -22,7 +22,7 @@
    document_compare_by_display_name(), thanks again Nick.
 
 
-2011-04-08  Colomban Wendling  <colomban(at)geany(dot)org>
+2011-04-11  Colomban Wendling  <colomban(at)geany(dot)org>
 
  * src/document.c, src/document.h, src/editor.c, src/keybindings.c:
    Revert r5642 "Don't update parent WorkObjects when updating one in
