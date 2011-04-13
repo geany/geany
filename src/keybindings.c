@@ -1076,12 +1076,12 @@ static gboolean check_vte(GdkModifierType state, guint keyval)
 	GeanyKeyGroup *group;
 	GtkWidget *widget;
 
+	if (gtk_window_get_focus(GTK_WINDOW(main_widgets.window)) != vc->vte)
+		return FALSE;
 	/* let VTE copy/paste override any user keybinding */
 	if (state == (GDK_CONTROL_MASK | GDK_SHIFT_MASK) && (keyval == GDK_c || keyval == GDK_v))
 		return TRUE;
 	if (! vc->enable_bash_keys)
-		return FALSE;
-	if (gtk_window_get_focus(GTK_WINDOW(main_widgets.window)) != vc->vte)
 		return FALSE;
 	/* prevent menubar flickering: */
 	if (state == GDK_SHIFT_MASK && (keyval >= GDK_a && keyval <= GDK_z))
