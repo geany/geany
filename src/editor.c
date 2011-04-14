@@ -80,6 +80,8 @@ static GQueue *snippet_offsets = NULL;
 static gint snippet_cursor_insert_pos;
 static GtkAccelGroup *snippet_accel_group = NULL;
 
+static const gchar geany_cursor_marker[] = "__GEANY_CURSOR_MARKER__";
+
 /* holds word under the mouse or keyboard cursor */
 static gchar current_word[GEANY_MAX_WORD_LENGTH];
 
@@ -2386,7 +2388,6 @@ void editor_insert_text_block(GeanyEditor *editor, const gchar *text, gint inser
 	gint line_end;
 	gchar *whitespace;
 	GString *buf;
-	const gchar cur_marker[] = "__GEANY_CURSOR_MARKER__";
 	const gchar *eol = editor_get_eol_char(editor);
 	const GeanyIndentPrefs *iprefs = editor_get_indent_prefs(editor);
 
@@ -2397,7 +2398,7 @@ void editor_insert_text_block(GeanyEditor *editor, const gchar *text, gint inser
 	buf = g_string_new(text);
 
 	if (cursor_index >= 0)
-		g_string_insert(buf, cursor_index, cur_marker);	/* remember cursor pos */
+		g_string_insert(buf, cursor_index, geany_cursor_marker);	/* remember cursor pos */
 
 	if (newline_indent_size == -1)
 	{
@@ -2435,9 +2436,9 @@ void editor_insert_text_block(GeanyEditor *editor, const gchar *text, gint inser
 
 	if (cursor_index >= 0)
 	{
-		gint idx = utils_strpos(buf->str, cur_marker);
+		gint idx = utils_strpos(buf->str, geany_cursor_marker);
 
-		g_string_erase(buf, idx, strlen(cur_marker));
+		g_string_erase(buf, idx, strlen(geany_cursor_marker));
 
 		sci_insert_text(sci, insert_pos, buf->str);
 		sci_set_current_position(sci, insert_pos + idx, FALSE);
@@ -2481,16 +2482,13 @@ void editor_goto_next_snippet_cursor(GeanyEditor *editor)
 }
 
 
-static gssize snippets_make_replacements(GeanyEditor *editor, GString *pattern,
-		gsize indent_size)
+static gssize replace_cursor_markers(GeanyEditor *editor, GString *pattern, gsize indent_size);
+
+static gssize snippets_make_replacements(GeanyEditor *editor, GString *pattern, gsize indent_size)
 {
-	gssize cur_index = -1;
 	gchar *whitespace;
-	gint i, tmp_pos, whitespace_len, nl_count = 0;
 	GHashTable *specials;
-	GList *temp_list = NULL;
 	const GeanyIndentPrefs *iprefs = editor_get_indent_prefs(editor);
-	gint cursor_steps, old_cursor = 0;
 
 	/* replace 'special' completions */
 	specials = g_hash_table_lookup(snippet_hash, "Special");
@@ -2501,72 +2499,87 @@ static gssize snippets_make_replacements(GeanyEditor *editor, GString *pattern,
 		g_hash_table_foreach(specials, snippets_replace_specials, NULL);
 	}
 
-	/* replace any template {foo} wildcards */
-	templates_replace_common(pattern, editor->document->file_name, editor->document->file_type, NULL);
+	/* now transform other wildcards */
 
-	/* transform other wildcards */
-	/* convert to %newlines%, else we get endless loops */
-	utils_string_replace_all(pattern, "\n", "%newline%");
+	utils_string_replace_all(pattern, "%newline%", "\n");
 
-	/* if spaces are used, replaces all tabs with %ws%, which is later replaced
-	 * by real whitespace characters
-	 * otherwise replace all %ws% by \t, which will be replaced later by tab
-	 * characters,
-	 * this makes seperating between tab and spaces intentation pretty easy */
+	/* if spaces are used, replace tabs with spaces
+	 * otherwise replace all %ws% by \t */
 	if (iprefs->type == GEANY_INDENT_TYPE_SPACES)
 		utils_string_replace_all(pattern, "\t", "%ws%");
 	else
 		utils_string_replace_all(pattern, "%ws%", "\t");
 
 	whitespace = g_strnfill(iprefs->width, ' '); /* use spaces for indentation, will be fixed up */
-	whitespace_len = strlen(whitespace);
+	utils_string_replace_all(pattern, "%ws%", whitespace);
+	g_free(whitespace);
+
+	/* replace %cursor% by a very unlikely string marker */
+	utils_string_replace_all(pattern, "%cursor%", geany_cursor_marker);
+
+	/* unescape '%' after all %wildcards% */
+	templates_replace_valist(pattern, "{pc}", "%", NULL);
+
+	/* replace any template {foo} wildcards */
+	templates_replace_common(pattern, editor->document->file_name, editor->document->file_type, NULL);
+
+	return replace_cursor_markers(editor, pattern, indent_size);
+}
+
+
+static gssize replace_cursor_markers(GeanyEditor *editor, GString *pattern, gsize indent_size)
+{
+	gssize cur_index = -1;
+	gint i, pos, idx, nl_count = 0;
+	GList *temp_list = NULL;
+	gint cursor_steps, old_cursor = 0;
+
 	i = 0;
-	while ((cursor_steps = utils_strpos(pattern->str, "%cursor%")) >= 0)
+	idx = 0;
+	while ((cursor_steps = utils_strpos(pattern->str, geany_cursor_marker)) >= 0)
 	{
-		/* replace every %newline% (up to next %cursor%) with EOL,
-		 * and update cursor_steps after */
-		while ((tmp_pos = utils_strpos(pattern->str, "%newline%")) < cursor_steps && tmp_pos != -1)
+		/* replace every newline (up to next cursor) with EOL,
+		 * count newlines and update cursor_steps after */
+		while ((pos = utils_strpos(pattern->str + idx, "\n")) != -1)
 		{
+			idx += pos;
+			if (idx >= cursor_steps)
+				break;
+
 			nl_count++;
-			utils_string_replace_first(pattern, "%newline%", editor_get_eol_char(editor));
-			cursor_steps = utils_strpos(pattern->str, "%cursor%");
-		}
-		/* replace every %ws% (up to next %cursor%) with whitespaces,
-		 * and update cursor_steps after */
-		while ((tmp_pos = utils_strpos(pattern->str, "%ws%")) < cursor_steps && tmp_pos != -1)
-		{
-			utils_string_replace_first(pattern, "%ws%", whitespace);
-			cursor_steps = utils_strpos(pattern->str, "%cursor%");
-		}
-		/* finally replace the next %cursor% */
-		utils_string_replace_first(pattern, "%cursor%", "");
+			g_string_erase(pattern, idx, 1);
+			g_string_insert(pattern, idx, editor_get_eol_char(editor));
+			idx += editor_get_eol_char_len(editor);
 
-		/* modify cursor_steps to take indentation count and type into account */
+			cursor_steps = utils_strpos(pattern->str, geany_cursor_marker);
+		}
+		utils_string_replace_first(pattern, geany_cursor_marker, "");
+		idx = cursor_steps;
 
-		/* We're saving the relative offset to each cursor position in a simple
-		 * linked list, including indentations between them. */
 		if (i++ > 0)
 		{
+			/* save the relative offset to each cursor position */
 			cursor_steps += (nl_count * indent_size);
 			temp_list = g_list_prepend(temp_list, GINT_TO_POINTER(cursor_steps - old_cursor));
 		}
 		else
 		{
+			/* first cursor already includes newline positions */
 			nl_count = 0;
 			cur_index = cursor_steps;
 		}
 		old_cursor = cursor_steps;
 	}
-	/* replace remaining %ws% and %newline% which may occur after the last %cursor% */
-	utils_string_replace_all(pattern, "%newline%", editor_get_eol_char(editor));
-	utils_string_replace_all(pattern, "%ws%", whitespace);
-	g_free(whitespace);
+	/* replace remaining \n which may occur after the last cursor */
+	while ((pos = utils_strpos(pattern->str + idx, "\n")) != -1)
+	{
+		idx += pos;
+		g_string_erase(pattern, idx, 1);
+		g_string_insert(pattern, idx, editor_get_eol_char(editor));
+		idx += editor_get_eol_char_len(editor);
+	}
 
-	/* escape % last */
-	/* Bug: {ob}pc{cb} will be replaced by % too */
-	templates_replace_valist(pattern, "{pc}", "%", NULL);
-
-	/* We put the cursor positions for the most recent
+	/* put the cursor positions for the most recent
 	 * parsed snippet first, followed by any remaining positions */
 	i = 0;
 	if (temp_list)
@@ -2583,6 +2596,7 @@ static gssize snippets_make_replacements(GeanyEditor *editor, GString *pattern,
 
 		g_list_free(temp_list);
 	}
+	/* if there's no first cursor, skip whole snippet */
 	if (cur_index < 0)
 		cur_index = pattern->len;
 
