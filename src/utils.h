@@ -168,6 +168,9 @@ gchar utils_brace_opposite(gchar ch);
 
 gchar *utils_get_hostname(void);
 
+gint utils_string_replace(GString *haystack, gint start, gint end,
+		const gchar *needle, const gchar *replace);
+
 guint utils_string_replace_all(GString *haystack, const gchar *needle, const gchar *replace);
 
 guint utils_string_replace_first(GString *haystack, const gchar *needle, const gchar *replace);

@@ -1,3 +1,10 @@
+2011-04-15  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/utils.c, src/utils.h, src/editor.c:
+   Add function utils_string_replace() to replace in a fixed range.
+   Remove utils_string_replace_helper() and update cursor marker code.
+
+
 2011-04-14  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/editor.c:

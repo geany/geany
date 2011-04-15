@@ -2436,9 +2436,7 @@ void editor_insert_text_block(GeanyEditor *editor, const gchar *text, gint inser
 
 	if (cursor_index >= 0)
 	{
-		gint idx = utils_strpos(buf->str, geany_cursor_marker);
-
-		g_string_erase(buf, idx, strlen(geany_cursor_marker));
+		gint idx = utils_string_replace(buf, 0, -1, geany_cursor_marker, NULL);
 
 		sci_insert_text(sci, insert_pos, buf->str);
 		sci_set_current_position(sci, insert_pos + idx, FALSE);
@@ -2530,7 +2528,7 @@ static gssize snippets_make_replacements(GeanyEditor *editor, GString *pattern, 
 static gssize replace_cursor_markers(GeanyEditor *editor, GString *pattern, gsize indent_size)
 {
 	gssize cur_index = -1;
-	gint i, pos, idx, nl_count = 0;
+	gint i, idx, nl_count = 0;
 	GList *temp_list = NULL;
 	gint cursor_steps, old_cursor = 0;
 
@@ -2540,15 +2538,13 @@ static gssize replace_cursor_markers(GeanyEditor *editor, GString *pattern, gsiz
 	{
 		/* replace every newline (up to next cursor) with EOL,
 		 * count newlines and update cursor_steps after */
-		while ((pos = utils_strpos(pattern->str + idx, "\n")) != -1)
+		while (1)
 		{
-			idx += pos;
-			if (idx >= cursor_steps)
+			idx = utils_string_replace(pattern, idx, cursor_steps, "\n", editor_get_eol_char(editor));
+			if (idx == -1)
 				break;
 
 			nl_count++;
-			g_string_erase(pattern, idx, 1);
-			g_string_insert(pattern, idx, editor_get_eol_char(editor));
 			idx += editor_get_eol_char_len(editor);
 
 			cursor_steps = utils_strpos(pattern->str, geany_cursor_marker);
@@ -2571,11 +2567,12 @@ static gssize replace_cursor_markers(GeanyEditor *editor, GString *pattern, gsiz
 		old_cursor = cursor_steps;
 	}
 	/* replace remaining \n which may occur after the last cursor */
-	while ((pos = utils_strpos(pattern->str + idx, "\n")) != -1)
+	while (1)
 	{
-		idx += pos;
-		g_string_erase(pattern, idx, 1);
-		g_string_insert(pattern, idx, editor_get_eol_char(editor));
+		idx = utils_string_replace(pattern, idx, -1, "\n", editor_get_eol_char(editor));
+		if (idx == -1)
+			break;
+
 		idx += editor_get_eol_char_len(editor);
 	}
 

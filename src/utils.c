@@ -1530,39 +1530,39 @@ gboolean utils_str_has_upper(const gchar *str)
 }
 
 
-static guint utils_string_replace_helper(GString *haystack, const gchar *needle,
-										 const gchar *replace, const guint max_replaces)
+/* Replaces needle if in range.
+ * end can be -1 for haystack->len.
+ * returns: position of replaced text or -1. */
+gint utils_string_replace(GString *haystack, gint start, gint end,
+		const gchar *needle, const gchar *replace)
 {
-	const gchar *stack, *match;
-	guint ret = 0;
-	gssize pos;
+	gint pos;
 
-	g_return_val_if_fail(haystack != NULL, 0);
+	g_return_val_if_fail(haystack != NULL, -1);
 	if (haystack->len == 0)
-		return FALSE;
-	g_return_val_if_fail(NZV(needle), 0);
+		return -1;
 
-	stack = haystack->str;
-	if (! (match = strstr(stack, needle)))
-		return 0;
-	do
-	{
-		pos = match - haystack->str;
-		g_string_erase(haystack, pos, strlen(needle));
+	g_return_val_if_fail(start >= 0, -1);
+	if (start >= (gint)haystack->len)
+		return -1;
 
-		/* make next search after removed matching text.
-		 * (we have to be careful to only use haystack->str as its address may change) */
-		stack = haystack->str + pos;
+	g_return_val_if_fail(NZV(needle), -1);
 
-		if (G_LIKELY(replace))
-		{
-			g_string_insert(haystack, pos, replace);
-			stack = haystack->str + pos + strlen(replace);	/* skip past replacement */
-		}
-	}
-	while (++ret != max_replaces && (match = strstr(stack, needle)));
+	if (end < 0)
+		end = haystack->len;
 
-	return ret;
+	pos = utils_strpos(haystack->str + start, needle);
+	if (pos == -1)
+		return -1;
+
+	pos += start;
+	if (pos >= end)
+		return -1;
+
+	g_string_erase(haystack, pos, strlen(needle));
+	if (G_LIKELY(replace))
+		g_string_insert(haystack, pos, replace);
+	return pos;
 }
 
 
@@ -1579,7 +1579,21 @@ static guint utils_string_replace_helper(GString *haystack, const gchar *needle,
  **/
 guint utils_string_replace_all(GString *haystack, const gchar *needle, const gchar *replace)
 {
-	return utils_string_replace_helper(haystack, needle, replace, 0);
+	guint count = 0;
+	gint pos = 0;
+
+	while (1)
+	{
+		pos = utils_string_replace(haystack, pos, -1, needle, replace);
+
+		if (pos == -1)
+			break;
+
+		if (replace)
+			pos += strlen(replace);
+		count++;
+	}
+	return count;
 }
 
 
@@ -1598,7 +1612,7 @@ guint utils_string_replace_all(GString *haystack, const gchar *needle, const gch
  */
 guint utils_string_replace_first(GString *haystack, const gchar *needle, const gchar *replace)
 {
-	return utils_string_replace_helper(haystack, needle, replace, 1);
+	return utils_string_replace(haystack, 0, -1, needle, replace) == -1 ? 0 : 1;
 }
 
 
