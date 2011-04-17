@@ -261,4 +261,8 @@ void document_apply_indent_settings(GeanyDocument *doc);
 
 gint document_compare_by_display_name(gconstpointer a, gconstpointer b);
 
+gint document_compare_by_tab_order(gconstpointer a, gconstpointer b);
+
+gint document_compare_by_tab_order_reverse(gconstpointer a, gconstpointer b);
+
 #endif

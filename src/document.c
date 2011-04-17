@@ -3043,3 +3043,61 @@ gint document_compare_by_display_name(gconstpointer a, gconstpointer b)
 }
 
 
+/** Compares documents by their tab order.
+ * This matches @c GCompareFunc for use with e.g. @c g_ptr_array_sort().
+ *
+ * @param a @c GeanyDocument**.
+ * @param b @c GeanyDocument**.
+ * @warning The arguments take the address of each document pointer.
+ * @return Negative value if a < b; zero if a = b; positive value if a > b.
+ *
+ * @since 0.21 (GEANY_API_VERSION 209)
+ */
+gint document_compare_by_tab_order(gconstpointer a, gconstpointer b)
+{
+	GeanyDocument *doc_a = *((GeanyDocument**) a);
+	GeanyDocument *doc_b = *((GeanyDocument**) b);
+	gint notebook_position_doc_a;
+	gint notebook_position_doc_b;
+
+	notebook_position_doc_a = document_get_notebook_page(doc_a);
+	notebook_position_doc_b = document_get_notebook_page(doc_b);
+
+	if (notebook_position_doc_a < notebook_position_doc_b)
+		return -1;
+	if (notebook_position_doc_a > notebook_position_doc_b)
+		return 1;
+	/* equality */
+	return 0;
+}
+
+
+/** Compares documents by their tab order, in reverse order.
+ * This matches @c GCompareFunc for use with e.g. @c g_ptr_array_sort().
+ *
+ * @param a @c GeanyDocument**.
+ * @param b @c GeanyDocument**.
+ * @warning The arguments take the address of each document pointer.
+ * @return Negative value if a < b; zero if a = b; positive value if a > b.
+ *
+ * @since 0.21 (GEANY_API_VERSION 209)
+ */
+gint document_compare_by_tab_order_reverse(gconstpointer a, gconstpointer b)
+{
+	GeanyDocument *doc_a = *((GeanyDocument**) a);
+	GeanyDocument *doc_b = *((GeanyDocument**) b);
+	gint notebook_position_doc_a;
+	gint notebook_position_doc_b;
+
+	notebook_position_doc_a = document_get_notebook_page(doc_a);
+	notebook_position_doc_b = document_get_notebook_page(doc_b);
+
+	if (notebook_position_doc_a < notebook_position_doc_b)
+		return 1;
+	if (notebook_position_doc_a > notebook_position_doc_b)
+		return -1;
+	/* equality */
+	return 0;
+}
+
+

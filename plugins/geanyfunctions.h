@@ -74,6 +74,10 @@
 	geany_functions->p_document->document_get_notebook_page
 #define document_compare_by_display_name \
 	geany_functions->p_document->document_compare_by_display_name
+#define document_compare_by_tab_order \
+	geany_functions->p_document->document_compare_by_tab_order
+#define document_compare_by_tab_order_reverse \
+	geany_functions->p_document->document_compare_by_tab_order_reverse
 #define editor_get_indent_prefs \
 	geany_functions->p_editor->editor_get_indent_prefs
 #define editor_create_widget \

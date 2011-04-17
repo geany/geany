@@ -1,3 +1,11 @@
+2011-04-17  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/plugindata.h, src/document.c, src/plugins.c, src/document.h,
+   plugins/geanyfunctions.h:
+   Add document_compare_by_tab_order() and
+   document_compare_by_tab_order_reverse() to the plugin API.
+
+
 2011-04-15  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/utils.c, src/utils.h, src/editor.c:

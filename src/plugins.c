@@ -112,7 +112,9 @@ static DocumentFuncs doc_funcs = {
 	&document_get_status_color,
 	&document_get_basename_for_display,
 	&document_get_notebook_page,
-	&document_compare_by_display_name
+	&document_compare_by_display_name,
+	&document_compare_by_tab_order,
+	&document_compare_by_tab_order_reverse
 };
 
 static EditorFuncs editor_funcs = {
