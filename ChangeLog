@@ -4,6 +4,10 @@
    plugins/geanyfunctions.h:
    Add document_compare_by_tab_order() and
    document_compare_by_tab_order_reverse() to the plugin API.
+ * src/ui_uitls.c:
+   Use document_compare_by_tab_order() as default compare function
+   to sort the document list in the document notebook tab menu, this
+   fixes the currently broken default ordering.
 
 
 2011-04-15  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

@@ -2430,9 +2430,11 @@ void ui_menu_add_document_items_sorted(GtkMenu *menu, GeanyDocument *active,
 	{
 		g_ptr_array_add(sorted_documents, documents[i]);
 	}
+	if (compare_func == NULL)
+		compare_func = document_compare_by_tab_order;
+
 	/* and now sort it */
-	if (compare_func != NULL)
-		g_ptr_array_sort(sorted_documents, compare_func);
+	g_ptr_array_sort(sorted_documents, compare_func);
 
 	for (i = 0; i < sorted_documents->len; i++)
 	{
