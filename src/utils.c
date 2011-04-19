@@ -1530,11 +1530,9 @@ gboolean utils_str_has_upper(const gchar *str)
 }
 
 
-/* Replaces needle if in range.
- * end can be -1 for haystack->len.
- * returns: position of replaced text or -1. */
-gint utils_string_replace(GString *haystack, gint start, gint end,
-		const gchar *needle, const gchar *replace)
+/* end can be -1 for haystack->len.
+ * returns: position of found text or -1. */
+gint utils_string_find(GString *haystack, gint start, gint end, const gchar *needle)
 {
 	gint pos;
 
@@ -1558,11 +1556,19 @@ gint utils_string_replace(GString *haystack, gint start, gint end,
 	pos += start;
 	if (pos >= end)
 		return -1;
-
-	g_string_erase(haystack, pos, strlen(needle));
-	if (G_LIKELY(replace))
-		g_string_insert(haystack, pos, replace);
 	return pos;
+}
+
+
+/* Replaces @len characters from offset @a pos.
+ * len can be -1 for str->len.
+ * returns: pos + strlen(replace). */
+gint utils_string_replace(GString *str, gint pos, gint len, const gchar *replace)
+{
+	g_string_erase(str, pos, len);
+	g_string_insert(str, pos, replace);
+
+	return pos + strlen(replace);
 }
 
 
@@ -1584,13 +1590,12 @@ guint utils_string_replace_all(GString *haystack, const gchar *needle, const gch
 
 	while (1)
 	{
-		pos = utils_string_replace(haystack, pos, -1, needle, replace);
+		pos = utils_string_find(haystack, pos, -1, needle);
 
 		if (pos == -1)
 			break;
 
-		if (replace)
-			pos += strlen(replace);
+		pos = utils_string_replace(haystack, pos, strlen(needle), replace);
 		count++;
 	}
 	return count;
@@ -1612,7 +1617,13 @@ guint utils_string_replace_all(GString *haystack, const gchar *needle, const gch
  */
 guint utils_string_replace_first(GString *haystack, const gchar *needle, const gchar *replace)
 {
-	return utils_string_replace(haystack, 0, -1, needle, replace) == -1 ? 0 : 1;
+	gint pos = utils_string_find(haystack, 0, -1, needle);
+
+	if (pos == -1)
+		return 0;
+
+	utils_string_replace(haystack, pos, strlen(needle), replace);
+	return 1;
 }
 
 

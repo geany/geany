@@ -4,6 +4,10 @@
    Fix multiple snippet cursor positions for Tabs + Spaces mode.
    Simplify editor_insert_snippet() code now we use cursor marker
    strings.
+ * src/utils.c, src/utils.h, src/editor.c:
+   Add utils_string_find() to search in a fixed range.
+   Change utils_string_replace() to just replace a fixed number of
+   characters.
 
 
 2011-04-17  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

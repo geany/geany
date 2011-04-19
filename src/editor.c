@@ -2347,9 +2347,7 @@ static guint utils_string_regex_replace_all(GString *haystack,
 
 		g_return_val_if_fail(match->rm_so >= 0, FALSE);
 		pos += match->rm_so;
-		g_string_erase(haystack, pos, match->rm_eo - match->rm_so);
-		g_string_insert(haystack, pos, replace);
-		pos += strlen(replace);
+		pos = utils_string_replace(haystack, pos, match->rm_eo - match->rm_so, replace);
 		ret++;
 	}
 	return ret;
@@ -2534,9 +2532,11 @@ static gssize replace_cursor_markers(GeanyEditor *editor, GString *pattern)
 	i = 0;
 	while (1)
 	{
-		cursor_steps = utils_string_replace(pattern, cursor_steps, -1, geany_cursor_marker, NULL);
+		cursor_steps = utils_string_find(pattern, cursor_steps, -1, geany_cursor_marker);
 		if (cursor_steps == -1)
 			break;
+
+		g_string_erase(pattern, cursor_steps, strlen(geany_cursor_marker));
 
 		if (i++ > 0)
 		{
