@@ -117,8 +117,8 @@ static void read_current_word(GeanyEditor *editor, gint pos, gchar *word, size_t
 		const gchar *wc, gboolean stem);
 static gsize count_indent_size(GeanyEditor *editor, const gchar *base_indent);
 static const gchar *snippets_find_completion_by_name(const gchar *type, const gchar *name);
-static gssize snippets_make_replacements(GeanyEditor *editor, GString *pattern,
-		gsize indent_size);
+static void snippets_make_replacements(GeanyEditor *editor, GString *pattern);
+static gssize replace_cursor_markers(GeanyEditor *editor, GString *pattern);
 
 
 void editor_snippets_free(void)
@@ -2309,56 +2309,85 @@ static void snippets_replace_specials(gpointer key, gpointer value, gpointer use
 }
 
 
-/* this only works with spaces only indentation on the lines */
-static void fix_line_indents(GeanyEditor *editor, gint line_start, gint line_end)
+static gboolean utils_regex_find(regex_t *regex, const gchar *haystack, gsize start,
+		gsize nmatches, regmatch_t *matches)
 {
-	ScintillaObject *sci = editor->sci;
-	gint line, cur_line, cur_col, pos;
+	gint eflags = 0;
 
-	/* get the line, col position as fixing indentation will move cursor to start of line */
-	pos = sci_get_current_position(sci);
-	cur_col = sci_get_col_from_position(sci, pos);
-	cur_line = sci_get_current_line(sci);
-
-	for (line = line_start; line <= line_end; line++)
+	if (start > 0)
 	{
-		gint size = sci_get_line_indentation(sci, line);
+		gchar c = haystack[start - 1];
 
-		/* set to 0 first to trigger proper indent creation */
-		sci_set_line_indentation(sci, line, 0);
-		sci_set_line_indentation(sci, line, size);
+		if (c == '\n' || c == '\r')
+			eflags = REG_NOTBOL;
 	}
-	pos = scintilla_send_message(sci, SCI_FINDCOLUMN, cur_line, cur_col);
-	sci_set_current_position(sci, pos, FALSE);
+	return regexec(regex, haystack + start, nmatches, matches, eflags) == 0;
 }
 
 
-static void replace_leading_tabs(GString *str, const gchar *whitespace)
+/* match_index: which match to replace, 0 for whole regex.
+ * note: this doesn't support backreferences in replacements */
+static guint utils_string_regex_replace_all(GString *haystack,
+		regex_t *regex, guint match_index, const gchar *replace)
 {
-	regex_t regex;
 	gssize pos;
-	regmatch_t matches[2];
-	gchar *ptr;
+	regmatch_t matches[10];
+	guint ret = 0;
 
-	if (regcomp(&regex, "^ *(\t)", 0) != 0)
-	{
-		g_return_if_fail(FALSE);
-	}
-	ptr = str->str;
-	while (ptr)
-	{
-		if (regexec(&regex, ptr,
-			G_N_ELEMENTS(matches), matches, 0) != 0)
-			break;
+	g_return_val_if_fail(match_index < 10, 0);
 
-		pos = matches[1].rm_so;
-		g_return_if_fail(pos >= 0);
-		pos += ptr - str->str;
-		g_string_erase(str, pos, 1);
-		g_string_insert(str, pos, whitespace);
-		ptr = str->str + pos + strlen(whitespace);
+	/* ensure haystack->str is not null */
+	if (haystack->len == 0)
+		return 0;
+
+	pos = 0;
+	while (utils_regex_find(regex, haystack->str, pos, G_N_ELEMENTS(matches), matches))
+	{
+		regmatch_t *match = &matches[match_index];
+
+		g_return_val_if_fail(match->rm_so >= 0, FALSE);
+		pos += match->rm_so;
+		g_string_erase(haystack, pos, match->rm_eo - match->rm_so);
+		g_string_insert(haystack, pos, replace);
+		pos += strlen(replace);
+		ret++;
 	}
+	return ret;
+}
+
+
+static void fix_indentation(GeanyEditor *editor, GString *buf)
+{
+	const GeanyIndentPrefs *iprefs = editor_get_indent_prefs(editor);
+	gchar *whitespace;
+	regex_t regex;
+	gint cflags = REG_EXTENDED | REG_NEWLINE;
+
+	/* transform leading tabs into indent widths (in spaces) */
+	whitespace = g_strnfill(iprefs->width, ' ');
+	regcomp(&regex, "^ *(\t)", cflags);
+	while (utils_string_regex_replace_all(buf, &regex, 1, whitespace));
 	regfree(&regex);
+
+	/* remaining tabs are for alignment */
+	if (iprefs->type != GEANY_INDENT_TYPE_TABS)
+		utils_string_replace_all(buf, "\t", whitespace);
+
+	/* use leading tabs */
+	if (iprefs->type != GEANY_INDENT_TYPE_SPACES)
+	{
+		gchar *str;
+
+		/* for tabs+spaces mode we want the real tab width, not indent width */
+		setptr(whitespace, g_strnfill(sci_get_tab_width(editor->sci), ' '));
+		str = g_strdup_printf("^\t*(%s)", whitespace);
+
+		regcomp(&regex, str, cflags);
+		while (utils_string_regex_replace_all(buf, &regex, 1, "\t"));
+		regfree(&regex);
+		g_free(str);
+	}
+	g_free(whitespace);
 }
 
 
@@ -2385,11 +2414,10 @@ void editor_insert_text_block(GeanyEditor *editor, const gchar *text, gint inser
 {
 	ScintillaObject *sci = editor->sci;
 	gint line_start = sci_get_line_from_position(sci, insert_pos);
-	gint line_end;
 	gchar *whitespace;
 	GString *buf;
 	const gchar *eol = editor_get_eol_char(editor);
-	const GeanyIndentPrefs *iprefs = editor_get_indent_prefs(editor);
+	gint idx;
 
 	g_return_if_fail(text);
 	g_return_if_fail(editor != NULL);
@@ -2405,7 +2433,8 @@ void editor_insert_text_block(GeanyEditor *editor, const gchar *text, gint inser
 		/* count indent size up to insert_pos instead of asking sci
 		 * because there may be spaces after it */
 		gchar *tmp = sci_get_line(sci, line_start);
-		gint idx = insert_pos - sci_get_position_from_line(sci, line_start);
+
+		idx = insert_pos - sci_get_position_from_line(sci, line_start);
 		tmp[idx] = '\0';
 		newline_indent_size = count_indent_size(editor, tmp);
 		g_free(tmp);
@@ -2424,32 +2453,19 @@ void editor_insert_text_block(GeanyEditor *editor, const gchar *text, gint inser
 	if (replace_newlines)
 		utils_string_replace_all(buf, "\n", eol);
 
-	/* transform leading tabs into indent widths (in spaces) */
-	whitespace = g_strnfill(iprefs->width, ' ');
-	replace_leading_tabs(buf, whitespace);
-	/* remaining tabs are for alignment */
-	if (iprefs->type != GEANY_INDENT_TYPE_TABS)
-		utils_string_replace_all(buf, "\t", whitespace);
-	g_free(whitespace);
+	fix_indentation(editor, buf);
 
-	sci_start_undo_action(sci);
-
-	if (cursor_index >= 0)
+	idx = replace_cursor_markers(editor, buf);
+	if (idx >= 0)
 	{
-		gint idx = utils_string_replace(buf, 0, -1, geany_cursor_marker, NULL);
-
 		sci_insert_text(sci, insert_pos, buf->str);
 		sci_set_current_position(sci, insert_pos + idx, FALSE);
 	}
 	else
 		sci_insert_text(sci, insert_pos, buf->str);
 
-	/* fixup indentation (very useful for Tabs & Spaces indent type) */
-	line_end = sci_get_line_from_position(sci, insert_pos + buf->len);
-	fix_line_indents(editor, line_start, line_end);
 	snippet_cursor_insert_pos = sci_get_current_position(sci);
 
-	sci_end_undo_action(sci);
 	g_string_free(buf, TRUE);
 }
 
@@ -2480,13 +2496,9 @@ void editor_goto_next_snippet_cursor(GeanyEditor *editor)
 }
 
 
-static gssize replace_cursor_markers(GeanyEditor *editor, GString *pattern, gsize indent_size);
-
-static gssize snippets_make_replacements(GeanyEditor *editor, GString *pattern, gsize indent_size)
+static void snippets_make_replacements(GeanyEditor *editor, GString *pattern)
 {
-	gchar *whitespace;
 	GHashTable *specials;
-	const GeanyIndentPrefs *iprefs = editor_get_indent_prefs(editor);
 
 	/* replace 'special' completions */
 	specials = g_hash_table_lookup(snippet_hash, "Special");
@@ -2498,19 +2510,8 @@ static gssize snippets_make_replacements(GeanyEditor *editor, GString *pattern, 
 	}
 
 	/* now transform other wildcards */
-
 	utils_string_replace_all(pattern, "%newline%", "\n");
-
-	/* if spaces are used, replace tabs with spaces
-	 * otherwise replace all %ws% by \t */
-	if (iprefs->type == GEANY_INDENT_TYPE_SPACES)
-		utils_string_replace_all(pattern, "\t", "%ws%");
-	else
-		utils_string_replace_all(pattern, "%ws%", "\t");
-
-	whitespace = g_strnfill(iprefs->width, ' '); /* use spaces for indentation, will be fixed up */
-	utils_string_replace_all(pattern, "%ws%", whitespace);
-	g_free(whitespace);
+	utils_string_replace_all(pattern, "%ws%", "\t");
 
 	/* replace %cursor% by a very unlikely string marker */
 	utils_string_replace_all(pattern, "%cursor%", geany_cursor_marker);
@@ -2520,60 +2521,34 @@ static gssize snippets_make_replacements(GeanyEditor *editor, GString *pattern, 
 
 	/* replace any template {foo} wildcards */
 	templates_replace_common(pattern, editor->document->file_name, editor->document->file_type, NULL);
-
-	return replace_cursor_markers(editor, pattern, indent_size);
 }
 
 
-static gssize replace_cursor_markers(GeanyEditor *editor, GString *pattern, gsize indent_size)
+static gssize replace_cursor_markers(GeanyEditor *editor, GString *pattern)
 {
 	gssize cur_index = -1;
-	gint i, idx, nl_count = 0;
+	gint i;
 	GList *temp_list = NULL;
-	gint cursor_steps, old_cursor = 0;
+	gint cursor_steps = 0, old_cursor = 0;
 
 	i = 0;
-	idx = 0;
-	while ((cursor_steps = utils_strpos(pattern->str, geany_cursor_marker)) >= 0)
+	while (1)
 	{
-		/* replace every newline (up to next cursor) with EOL,
-		 * count newlines and update cursor_steps after */
-		while (1)
-		{
-			idx = utils_string_replace(pattern, idx, cursor_steps, "\n", editor_get_eol_char(editor));
-			if (idx == -1)
-				break;
-
-			nl_count++;
-			idx += editor_get_eol_char_len(editor);
-
-			cursor_steps = utils_strpos(pattern->str, geany_cursor_marker);
-		}
-		utils_string_replace_first(pattern, geany_cursor_marker, "");
-		idx = cursor_steps;
+		cursor_steps = utils_string_replace(pattern, cursor_steps, -1, geany_cursor_marker, NULL);
+		if (cursor_steps == -1)
+			break;
 
 		if (i++ > 0)
 		{
 			/* save the relative offset to each cursor position */
-			cursor_steps += (nl_count * indent_size);
 			temp_list = g_list_prepend(temp_list, GINT_TO_POINTER(cursor_steps - old_cursor));
 		}
 		else
 		{
 			/* first cursor already includes newline positions */
-			nl_count = 0;
 			cur_index = cursor_steps;
 		}
 		old_cursor = cursor_steps;
-	}
-	/* replace remaining \n which may occur after the last cursor */
-	while (1)
-	{
-		idx = utils_string_replace(pattern, idx, -1, "\n", editor_get_eol_char(editor));
-		if (idx == -1)
-			break;
-
-		idx += editor_get_eol_char_len(editor);
 	}
 
 	/* put the cursor positions for the most recent
@@ -5110,12 +5085,10 @@ const gchar *editor_find_snippet(GeanyEditor *editor, const gchar *snippet_name)
  */
 void editor_insert_snippet(GeanyEditor *editor, gint pos, const gchar *snippet)
 {
-	gint cursor_pos;
 	GString *pattern;
 
 	pattern = g_string_new(snippet);
-	read_indent(editor, pos);
-	cursor_pos = snippets_make_replacements(editor, pattern, strlen(indent));
-	editor_insert_text_block(editor, pattern->str, pos, cursor_pos, -1, FALSE);
+	snippets_make_replacements(editor, pattern);
+	editor_insert_text_block(editor, pattern->str, pos, -1, -1, FALSE);
 	g_string_free(pattern, TRUE);
 }
