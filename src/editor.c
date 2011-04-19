@@ -2289,22 +2289,17 @@ static const gchar *snippets_find_completion_by_name(const gchar *type, const gc
 }
 
 
-/* This is very ugly but passing the pattern to ac_replace_specials() doesn't work because it is
- * modified when replacing a completion but the foreach function still passes the old pointer
- * to ac_replace_specials, so we use a global pointer outside of ac_replace_specials and
- * ac_complete_constructs. Any hints to improve this are welcome. */
-static GString *snippets_global_pattern = NULL;
-
 static void snippets_replace_specials(gpointer key, gpointer value, gpointer user_data)
 {
 	gchar *needle;
+	GString *pattern = user_data;
 
 	g_return_if_fail(key != NULL);
 	g_return_if_fail(value != NULL);
 
 	needle = g_strconcat("%", (gchar*) key, "%", NULL);
 
-	utils_string_replace_all(snippets_global_pattern, needle, (gchar*) value);
+	utils_string_replace_all(pattern, needle, (gchar*) value);
 	g_free(needle);
 }
 
@@ -2502,9 +2497,7 @@ static void snippets_make_replacements(GeanyEditor *editor, GString *pattern)
 	specials = g_hash_table_lookup(snippet_hash, "Special");
 	if (G_LIKELY(specials != NULL))
 	{
-		/* ugly hack using global_pattern */
-		snippets_global_pattern = pattern;
-		g_hash_table_foreach(specials, snippets_replace_specials, NULL);
+		g_hash_table_foreach(specials, snippets_replace_specials, pattern);
 	}
 
 	/* now transform other wildcards */
