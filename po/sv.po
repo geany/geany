@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Geany 0.20\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-11-01 10:53+0100\n"
-"PO-Revision-Date: 2010-12-08 08:05+0100\n"
+"PO-Revision-Date: 2011-04-20 12:21+0100\n"
 "Last-Translator: Tony Mattsson <superxorn@gmail.com>\n"
 "Language-Team: Swedish <geany-i18n@uvena.de>\n"
 "MIME-Version: 1.0\n"
@@ -236,7 +236,7 @@ msgstr "Ingen filtyp"
 #: ../src/build.c:1980
 #: ../src/build.c:2015
 msgid "Error Regular Expression:"
-msgstr "Fel på \"Regular Expression\""
+msgstr "Fel på reguljärt uttryck"
 
 #: ../src/build.c:2008
 msgid "Non-Filetype Commands"
@@ -1344,7 +1344,7 @@ msgstr "Gå till rad"
 
 #: ../src/interface.c:805
 msgid "_More"
-msgstr "_More"
+msgstr "_Mer"
 
 #: ../src/interface.c:812
 #: ../src/keybindings.c:398
@@ -3820,11 +3820,11 @@ msgstr "Projekt \"%s\" öppnad."
 #: ../src/search.c:227
 #: ../src/search.c:826
 msgid "_Use regular expressions"
-msgstr "Använd regular expressions"
+msgstr "Använd reguljära uttryck"
 
 #: ../src/search.c:230
 msgid "Use POSIX-like regular expressions. For detailed information about using regular expressions, please read the documentation."
-msgstr "Använd POSIX Regular Expressions. För mer information, se dokumentationen."
+msgstr "Använd POSIX Reguljära uttryck. För mer information, se dokumentationen."
 
 #: ../src/search.c:237
 msgid "Search _backwards"
@@ -3854,7 +3854,7 @@ msgstr "Sök endast hela ord"
 
 #: ../src/search.c:271
 msgid "Match from s_tart of word"
-msgstr "Sök från början av ord"
+msgstr "Sök i början av ord"
 
 #: ../src/search.c:405
 msgid "_Previous"
@@ -3886,7 +3886,7 @@ msgstr "Markera alla träffar i detta dokument."
 #: ../src/search.c:455
 #: ../src/search.c:632
 msgid "In Sessi_on"
-msgstr "I Session"
+msgstr "I öppna dokument"
 
 #: ../src/search.c:460
 #: ../src/search.c:637
