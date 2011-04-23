@@ -54,7 +54,7 @@
  * @warning You should not test for values below 200 as previously
  * @c GEANY_API_VERSION was defined as an enum value, not a macro.
  */
-#define GEANY_API_VERSION 209
+#define GEANY_API_VERSION 210
 
 /** The Application Binary Interface (ABI) version, incremented whenever
  * existing fields in the plugin data types have to be changed or reordered.
@@ -439,6 +439,7 @@ typedef struct UtilsFuncs
 				GError **error);
 	gchar**		(*utils_copy_environment)(const gchar **exclude_vars, const gchar *first_varname, ...);
 	gchar*		(*utils_find_open_xml_tag) (const gchar sel[], gint size);
+	const gchar*	(*utils_find_open_xml_tag_pos) (const gchar sel[], gint size);
 }
 UtilsFuncs;
 

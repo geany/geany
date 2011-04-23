@@ -262,6 +262,8 @@
 	geany_functions->p_utils->utils_copy_environment
 #define utils_find_open_xml_tag \
 	geany_functions->p_utils->utils_find_open_xml_tag
+#define utils_find_open_xml_tag_pos \
+	geany_functions->p_utils->utils_find_open_xml_tag_pos
 #define ui_dialog_vbox_new \
 	geany_functions->p_ui->ui_dialog_vbox_new
 #define ui_frame_new_with_alignment \

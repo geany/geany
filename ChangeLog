@@ -1,3 +1,11 @@
+2011-04-23  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/utils.c, src/utils.h, src/plugindata.h, src/plugins.c,
+   plugins/geanyfunctions.h:
+   Add utils_find_open_xml_tag_pos() API function (patch by Eugene
+   Arshinov, thanks).
+
+
 2011-04-19  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/editor.c:

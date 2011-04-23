@@ -285,12 +285,37 @@ gint utils_write_file(const gchar *filename, const gchar *text)
 }
 
 
-/** Searches backward through @a size bytes looking for a '<', then returns the tag, if any.
+/** Searches backward through @a size bytes looking for a '<'.
  * @param sel .
  * @param size .
- * @return The tag name.
+ * @return The tag name (newly allocated) or @c NULL if no opening tag was found.
  */
 gchar *utils_find_open_xml_tag(const gchar sel[], gint size)
+{
+	const gchar *cur, *begin;
+	gint len;
+
+	cur = utils_find_open_xml_tag_pos(sel, size);
+	if (cur == NULL)
+		return NULL;
+
+	cur++; /* skip the bracket */
+	begin = cur;
+	while (strchr(":_-.", *cur) || isalnum(*cur))
+		cur++;
+
+	len = cur - begin;
+	g_return_val_if_fail(len, NULL);
+	return g_strndup(begin, len);
+}
+
+
+/** Searches backward through @a size bytes looking for a '<'.
+ * @param sel .
+ * @param size .
+ * @return pointer to '<' of the found opening tag within @a sel, or @c NULL if no opening tag was found.
+ */
+const gchar *utils_find_open_xml_tag_pos(const gchar sel[], gint size)
 {
 	/* stolen from anjuta and modified */
 	const gchar *begin, *cur;
@@ -319,27 +344,15 @@ gchar *utils_find_open_xml_tag(const gchar sel[], gint size)
 	{
 		if (*cur == '<')
 			break;
+		/* exit immediately if such non-valid XML/HTML is detected, e.g. "<script>if a >" */
 		else if (*cur == '>')
 			break;
 		--cur;
 	}
 
-	if (*cur == '<')
-	{
-		GString *result;
-
-		cur++;
-		if (*cur == '/')
-			return NULL; /* we found a closing tag */
-
-		result = g_string_sized_new(64);
-		while (strchr(":_-.", *cur) || isalnum(*cur))
-		{
-			g_string_append_c(result, *cur);
-			cur++;
-		}
-		return g_string_free(result, FALSE);
-	}
+	/* if the found tag is an opening, not a closing tag or empty <> */
+	if (*cur == '<' && *(cur + 1) != '/' && *(cur + 1) != '>')
+		return cur;
 
 	return NULL;
 }
