@@ -4,6 +4,8 @@
    plugins/geanyfunctions.h:
    Add utils_find_open_xml_tag_pos() API function (patch by Eugene
    Arshinov, thanks).
+ * src/templates.c:
+   Replace dates on template insertion, not when loading templates.
 
 
 2011-04-19  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

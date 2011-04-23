@@ -104,27 +104,6 @@ static void read_template(const gchar *name, gint id)
 }
 
 
-/* TODO the callers should use GStrings instead of char arrays */
-static gchar *replace_all(gchar *text, const gchar *year, const gchar *date, const gchar *datetime)
-{
-	GString *str;
-
-	if (text == NULL)
-		return NULL;
-
-	str = g_string_new(text);
-
-	g_free(text);
-	templates_replace_valist(str,
-		"{year}", year,
-		"{date}", date,
-		"{datetime}", datetime,
-		NULL);
-
-	return g_string_free(str, FALSE);
-}
-
-
 /* called when inserting templates into an existing document */
 static void convert_eol_characters(GString *template, GeanyDocument *doc)
 {
@@ -140,20 +119,14 @@ static void convert_eol_characters(GString *template, GeanyDocument *doc)
 }
 
 
-static void init_general_templates(const gchar *year, const gchar *date, const gchar *datetime)
+static void init_general_templates(void)
 {
-	guint id;
-
 	/* read the contents */
 	read_template("fileheader", GEANY_TEMPLATE_FILEHEADER);
 	read_template("gpl", GEANY_TEMPLATE_GPL);
 	read_template("bsd", GEANY_TEMPLATE_BSD);
 	read_template("function", GEANY_TEMPLATE_FUNCTION);
 	read_template("changelog", GEANY_TEMPLATE_CHANGELOG);
-
-	/* FIXME: we should replace the dates on insertion, not on loading */
-	for (id = 0; id < GEANY_MAX_TEMPLATES; id++)
-		templates[id] = replace_all(templates[id], year, date, datetime);
 }
 
 
@@ -344,16 +317,9 @@ static void on_document_save(G_GNUC_UNUSED GObject *object, GeanyDocument *doc)
 /* warning: also called when reloading template settings */
 void templates_init(void)
 {
-	gchar *year = utils_get_date_time(template_prefs.year_format, NULL);
-	gchar *date = utils_get_date_time(template_prefs.date_format, NULL);
-	gchar *datetime = utils_get_date_time(template_prefs.datetime_format, NULL);
 	static gboolean init_done = FALSE;
 
-	init_general_templates(year, date, datetime);
-
-	g_free(date);
-	g_free(datetime);
-	g_free(year);
+	init_general_templates();
 
 	create_file_template_menu();
 	/* we hold our own ref for the menu as it has no parent whilst being moved */
