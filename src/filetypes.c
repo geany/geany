@@ -1248,22 +1248,30 @@ static gchar *filetypes_get_filename(GeanyFiletype *ft, gboolean user)
 
 static void add_group_keys(GKeyFile *kf, const gchar *group, GeanyFiletype *ft)
 {
-	GKeyFile *src = g_key_file_new();
-	gchar *f;
+	gchar *files[2];
+	gboolean loaded = FALSE;
+	guint i;
 
-	f = filetypes_get_filename(ft, FALSE);
-	if (!g_file_test(f, G_FILE_TEST_EXISTS))
-		f = filetypes_get_filename(ft, TRUE);
+	files[0] = filetypes_get_filename(ft, FALSE);
+	files[1] = filetypes_get_filename(ft, TRUE);
 
-	if (!g_key_file_load_from_file(src, f, G_KEY_FILE_NONE, NULL))
+	for (i = 0; i < G_N_ELEMENTS(files); i++)
 	{
-		geany_debug("Could not read config file %s for [%s=%s]!", f, group, ft->name);
-		g_free(f);
-		return;
-	}
-	g_free(f);
+		GKeyFile *src = g_key_file_new();
 
-	add_keys(kf, group, src);
+		if (g_key_file_load_from_file(src, files[i], G_KEY_FILE_NONE, NULL))
+		{
+			add_keys(kf, group, src);
+			loaded = TRUE;
+		}
+		g_key_file_free(src);
+	}
+
+	if (!loaded)
+		geany_debug("Could not read config file %s for [%s=%s]!", files[0], group, ft->name);
+
+	g_free(files[0]);
+	g_free(files[1]);
 }
 
 
