@@ -86,7 +86,7 @@ static const gchar geany_cursor_marker[] = "__GEANY_CURSOR_MARKER__";
 static gchar current_word[GEANY_MAX_WORD_LENGTH];
 
 /* whether there is a tag list update pending */
-static gboolean document_tags_update_pending = FALSE;
+static guint document_tags_update_source = 0;
 
 /* Initialised in keyfile.c. */
 GeanyEditorPrefs editor_prefs;
@@ -1008,19 +1008,17 @@ static gboolean on_document_update_tags_idle(gpointer data)
 	if (!main_status.quitting && DOC_VALID(doc))
 		document_update_tag_list(doc, TRUE);
 
-	document_tags_update_pending = FALSE;
+	document_tags_update_source = 0;
 	return FALSE;
 }
 
 
 static void request_tag_list_update(GeanyDocument *doc)
 {
-	if (!document_tags_update_pending)
-	{
-		document_tags_update_pending = TRUE;
-		g_timeout_add_full(G_PRIORITY_LOW, editor_prefs.autocompletion_update_freq,
-				on_document_update_tags_idle, doc, NULL);
-	}
+	if (document_tags_update_source)
+		g_source_remove(document_tags_update_source);
+	document_tags_update_source = g_timeout_add_full(G_PRIORITY_LOW,
+		editor_prefs.autocompletion_update_freq, on_document_update_tags_idle, doc, NULL);
 }
 
 
