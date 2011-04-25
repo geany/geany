@@ -305,8 +305,7 @@ gchar *utils_find_open_xml_tag(const gchar sel[], gint size)
 		cur++;
 
 	len = cur - begin;
-	g_return_val_if_fail(len, NULL);
-	return g_strndup(begin, len);
+	return len ? g_strndup(begin, len) : NULL;
 }
 
 
