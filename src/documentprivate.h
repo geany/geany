@@ -84,6 +84,10 @@ typedef struct GeanyDocumentPrivate
 	time_t			 last_check;
 	/* Modification time of the document on disk, only used when legacy file monitoring is used. */
 	time_t			 mtime;
+	/* ID of the idle callback updating the tag list */
+	guint			 tag_list_update_source;
+	/* whether there is a tag list update we haven't had a chance to honor yet */
+	gboolean		 tag_list_update_needed;
 }
 GeanyDocumentPrivate;
 

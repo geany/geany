@@ -213,6 +213,8 @@ void sidebar_update_tag_list(GeanyDocument *doc, gboolean update)
 		return;
 	}
 
+	doc->priv->tag_list_update_needed = FALSE;
+
 	if (update)
 	{	/* updating the tag list in the left tag window */
 		if (doc->priv->tag_tree == NULL)

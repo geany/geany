@@ -231,6 +231,8 @@ void document_replace_sel(GeanyDocument *doc, const gchar *find_text, const gcha
 
 void document_update_tag_list(GeanyDocument *doc, gboolean update);
 
+void document_update_tag_list_in_idle(GeanyDocument *doc);
+
 void document_set_encoding(GeanyDocument *doc, const gchar *new_encoding);
 
 gboolean document_check_disk_status(GeanyDocument *doc, gboolean force);

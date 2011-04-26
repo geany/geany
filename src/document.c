@@ -395,6 +395,8 @@ static void init_doc_struct(GeanyDocument *new_doc)
 	priv->undo_actions = NULL;
 	priv->redo_actions = NULL;
 	priv->line_count = 0;
+	priv->tag_list_update_source = 0;
+	priv->tag_list_update_needed = FALSE;
 #if ! defined(USE_GIO_FILEMON)
 	priv->last_check = time(NULL);
 #endif
@@ -2321,6 +2323,38 @@ void document_update_tag_list(GeanyDocument *doc, gboolean update)
 			geany_debug("tag list updating failed");
 	}
 	sidebar_update_tag_list(doc, success);
+}
+
+
+static gboolean on_document_update_tag_list_idle(gpointer data)
+{
+	GeanyDocument *doc = data;
+
+	if (! DOC_VALID(doc))
+		return FALSE;
+
+	if (! main_status.quitting)
+	{
+		if (doc == document_get_current ())
+			document_update_tag_list(doc, TRUE);
+		else
+			doc->priv->tag_list_update_needed = TRUE;
+	}
+
+	doc->priv->tag_list_update_source = 0;
+	return FALSE;
+}
+
+
+void document_update_tag_list_in_idle(GeanyDocument *doc)
+{
+	if (editor_prefs.autocompletion_update_freq <= 0 || ! filetype_has_tags(doc->file_type))
+		return;
+
+	if (doc->priv->tag_list_update_source != 0)
+		g_source_remove(doc->priv->tag_list_update_source);
+	doc->priv->tag_list_update_source = g_timeout_add_full(G_PRIORITY_LOW,
+		editor_prefs.autocompletion_update_freq, on_document_update_tag_list_idle, doc, NULL);
 }
 
 

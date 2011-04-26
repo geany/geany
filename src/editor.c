@@ -85,9 +85,6 @@ static const gchar geany_cursor_marker[] = "__GEANY_CURSOR_MARKER__";
 /* holds word under the mouse or keyboard cursor */
 static gchar current_word[GEANY_MAX_WORD_LENGTH];
 
-/* whether there is a tag list update pending */
-static guint document_tags_update_source = 0;
-
 /* Initialised in keyfile.c. */
 GeanyEditorPrefs editor_prefs;
 
@@ -1001,27 +998,6 @@ void editor_sci_notify_cb(G_GNUC_UNUSED GtkWidget *widget, G_GNUC_UNUSED gint sc
 }
 
 
-static gboolean on_document_update_tags_idle(gpointer data)
-{
-	GeanyDocument *doc = data;
-
-	if (!main_status.quitting && DOC_VALID(doc))
-		document_update_tag_list(doc, TRUE);
-
-	document_tags_update_source = 0;
-	return FALSE;
-}
-
-
-static void request_tag_list_update(GeanyDocument *doc)
-{
-	if (document_tags_update_source)
-		g_source_remove(document_tags_update_source);
-	document_tags_update_source = g_timeout_add_full(G_PRIORITY_LOW,
-		editor_prefs.autocompletion_update_freq, on_document_update_tags_idle, doc, NULL);
-}
-
-
 static gboolean on_editor_notify(G_GNUC_UNUSED GObject *object, GeanyEditor *editor,
 								 SCNotification *nt, G_GNUC_UNUSED gpointer data)
 {
@@ -1083,11 +1059,9 @@ static gboolean on_editor_notify(G_GNUC_UNUSED GObject *object, GeanyEditor *edi
 				/* handle special fold cases, e.g. #1923350 */
 				fold_changed(sci, nt->line, nt->foldLevelNow, nt->foldLevelPrev);
 			}
-			if (editor_prefs.autocompletion_update_freq > 0 &&
-				(nt->modificationType & (SC_MOD_INSERTTEXT | SC_MOD_DELETETEXT)) &&
-				filetype_has_tags(doc->file_type))
+			if (nt->modificationType & (SC_MOD_INSERTTEXT | SC_MOD_DELETETEXT))
 			{
-				request_tag_list_update(doc);
+				document_update_tag_list_in_idle(doc);
 			}
 			break;
 

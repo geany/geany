@@ -1,3 +1,11 @@
+2011-04-26  Colomban Wendling  <colomban(at)geany(dot)org>
+
+ * src/callbacks.c, src/document.c, src/document.h,
+   src/documentprivate.h, src/editor.c, src/sidebar.c:
+   Make sure to update the tag list only for the current document,
+   avoiding idle updates to show the tag list for the wrong document.
+
+
 2011-04-25  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/utils.c:
