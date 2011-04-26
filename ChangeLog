@@ -6,6 +6,10 @@
    filetype_extensions.conf.
    Read filetype_extensions.conf when calling filetypes_init_types(),
    don't require doclist initialization.
+ * src/filetypes.c:
+   Change Programming Languages filetype group label -> Compiled
+   Languages.
+   Use 'source file' title for custom filetypes.
 
 
 2011-04-26  Colomban Wendling  <colomban(at)geany(dot)org>
