@@ -709,8 +709,6 @@ on_notebook1_switch_page_after         (GtkNotebook     *notebook,
 		ui_update_popup_reundo_items(doc);
 		ui_document_show_hide(doc); /* update the document menu */
 		build_menu_update(doc);
-		if (doc->priv->tag_list_update_needed)
-			document_update_tag_list_in_idle(doc);
 		sidebar_update_tag_list(doc, FALSE);
 
 		/* We delay the check to avoid weird fast, unintended switching of notebook pages when

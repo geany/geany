@@ -195,7 +195,10 @@ void sidebar_update_tag_list(GeanyDocument *doc, gboolean update)
 	/* changes the tree view to the given one, trying not to do useless changes */
 	#define CHANGE_TREE(new_child) \
 		G_STMT_START { \
-			if (child != new_child) \
+			/* only change the tag tree if it's actually not the same (to avoid flickering) and if
+			 * it's the one of the current document (to avoid problems when e.g. reloading
+			 * configuration files */ \
+			if (child != new_child && doc == document_get_current()) \
 			{ \
 				if (child) \
 					gtk_container_remove(GTK_CONTAINER(tag_window), child); \
@@ -212,8 +215,6 @@ void sidebar_update_tag_list(GeanyDocument *doc, gboolean update)
 		CHANGE_TREE(tv.default_tag_tree);
 		return;
 	}
-
-	doc->priv->tag_list_update_needed = FALSE;
 
 	if (update)
 	{	/* updating the tag list in the left tag window */

@@ -18,6 +18,11 @@
    src/documentprivate.h, src/editor.c, src/sidebar.c:
    Make sure to update the tag list only for the current document,
    avoiding idle updates to show the tag list for the wrong document.
+ * src/callbacks.c, src/document.c, src/documentprivate.h,
+   src/sidebar.c:
+   Avoid changing the tag tree if it's not the one of the current
+   document, fixing showing the wrong tag list when reloading
+   configuration files.
 
 
 2011-04-25  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

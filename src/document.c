@@ -396,7 +396,6 @@ static void init_doc_struct(GeanyDocument *new_doc)
 	priv->redo_actions = NULL;
 	priv->line_count = 0;
 	priv->tag_list_update_source = 0;
-	priv->tag_list_update_needed = FALSE;
 #if ! defined(USE_GIO_FILEMON)
 	priv->last_check = time(NULL);
 #endif
@@ -2334,12 +2333,7 @@ static gboolean on_document_update_tag_list_idle(gpointer data)
 		return FALSE;
 
 	if (! main_status.quitting)
-	{
-		if (doc == document_get_current ())
-			document_update_tag_list(doc, TRUE);
-		else
-			doc->priv->tag_list_update_needed = TRUE;
-	}
+		document_update_tag_list(doc, TRUE);
 
 	doc->priv->tag_list_update_source = 0;
 	return FALSE;
