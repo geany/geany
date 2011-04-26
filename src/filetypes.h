@@ -175,7 +175,7 @@ void filetypes_init(void);
 
 void filetypes_init_types(void);
 
-void filetypes_read_extensions(void);
+void filetypes_reload_extensions(void);
 
 void filetypes_reload(void);
 

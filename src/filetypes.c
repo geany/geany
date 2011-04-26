@@ -64,6 +64,7 @@ GSList *filetypes_by_title = NULL;
 static void create_radio_menu_item(GtkWidget *menu, GeanyFiletype *ftype);
 
 static gchar *filetypes_get_conf_extension(gint filetype_idx);
+static void read_filetype_config(void);
 
 
 enum TitleType
@@ -637,6 +638,8 @@ void filetypes_init_types()
 	/* sort last instead of on insertion to prevent exponential time */
 	filetypes_by_title = g_slist_sort_with_data(filetypes_by_title,
 		cmp_filetype, GINT_TO_POINTER(FALSE));
+
+	read_filetype_config();
 }
 
 
@@ -648,7 +651,7 @@ static void on_document_save(G_GNUC_UNUSED GObject *object, GeanyDocument *doc)
 
 	f = utils_build_path(app->configdir, "filetype_extensions.conf", NULL);
 	if (utils_str_equal(doc->real_path, f))
-		filetypes_read_extensions();
+		filetypes_reload_extensions();
 
 	g_free(f);
 	f = utils_build_path(app->configdir, GEANY_FILEDEFS_SUBDIR, "filetypes.common", NULL);
@@ -725,6 +728,7 @@ void filetypes_init()
 	GSList *node;
 
 	filetypes_init_types();
+
 	/* this has to be here as GTK isn't initialized in filetypes_init_types(). */
 	foreach_slist(node, filetypes_by_title)
 	{
@@ -1601,19 +1605,10 @@ static void convert_filetype_extensions_to_lower_case(gchar **patterns, gsize le
 #endif
 
 
-void filetypes_read_extensions(void)
+static void read_extensions(GKeyFile *sysconfig, GKeyFile *userconfig)
 {
 	guint i;
 	gsize len = 0;
-	gchar *sysconfigfile = g_strconcat(app->datadir, G_DIR_SEPARATOR_S,
-		"filetype_extensions.conf", NULL);
-	gchar *userconfigfile = g_strconcat(app->configdir, G_DIR_SEPARATOR_S,
-		"filetype_extensions.conf", NULL);
-	GKeyFile *sysconfig = g_key_file_new();
-	GKeyFile *userconfig = g_key_file_new();
-
-	g_key_file_load_from_file(sysconfig, sysconfigfile, G_KEY_FILE_NONE, NULL);
-	g_key_file_load_from_file(userconfig, userconfigfile, G_KEY_FILE_NONE, NULL);
 
 	/* read the keys */
 	for (i = 0; i < filetypes_array->len; i++)
@@ -1633,11 +1628,64 @@ void filetypes_read_extensions(void)
 		convert_filetype_extensions_to_lower_case(filetypes[i]->pattern, len);
 #endif
 	}
+}
+
+
+static void read_group(GKeyFile *config, const gchar *group_name, gint group_id)
+{
+	gchar **names = g_key_file_get_string_list(config, "Groups", group_name, NULL, NULL);
+	gchar **name;
+
+	foreach_strv(name, names)
+	{
+		GeanyFiletype *ft = filetypes_lookup_by_name(*name);
+
+		if (ft)
+			ft->group = group_id;
+		else
+			geany_debug("Filetype '%s' not found for group '%s'!", *name, group_name);
+	}
+}
+
+
+static void read_groups(GKeyFile *config)
+{
+	read_group(config, "Compiled", GEANY_FILETYPE_GROUP_COMPILED);
+	read_group(config, "Script", GEANY_FILETYPE_GROUP_SCRIPT);
+	read_group(config, "Markup", GEANY_FILETYPE_GROUP_MARKUP);
+	read_group(config, "Misc", GEANY_FILETYPE_GROUP_MISC);
+	read_group(config, "None", GEANY_FILETYPE_GROUP_NONE);
+}
+
+
+static void read_filetype_config(void)
+{
+	gchar *sysconfigfile = g_strconcat(app->datadir, G_DIR_SEPARATOR_S,
+		"filetype_extensions.conf", NULL);
+	gchar *userconfigfile = g_strconcat(app->configdir, G_DIR_SEPARATOR_S,
+		"filetype_extensions.conf", NULL);
+	GKeyFile *sysconfig = g_key_file_new();
+	GKeyFile *userconfig = g_key_file_new();
+
+	g_key_file_load_from_file(sysconfig, sysconfigfile, G_KEY_FILE_NONE, NULL);
+	g_key_file_load_from_file(userconfig, userconfigfile, G_KEY_FILE_NONE, NULL);
+
+	read_extensions(sysconfig, userconfig);
+	read_groups(sysconfig);
+	read_groups(userconfig);
 
 	g_free(sysconfigfile);
 	g_free(userconfigfile);
 	g_key_file_free(sysconfig);
 	g_key_file_free(userconfig);
+}
+
+
+void filetypes_reload_extensions(void)
+{
+	guint i;
+
+	read_filetype_config();
 
 	/* Redetect filetype of any documents with none set */
 	foreach_document(i)

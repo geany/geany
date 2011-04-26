@@ -1,3 +1,13 @@
+2011-04-26  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/filetypes.c, src/filetypes.h, src/main.c,
+   data/filetype_extensions.conf:
+   Make filetype groups configurable using [Groups] in
+   filetype_extensions.conf.
+   Read filetype_extensions.conf when calling filetypes_init_types(),
+   don't require doclist initialization.
+
+
 2011-04-26  Colomban Wendling  <colomban(at)geany(dot)org>
 
  * src/callbacks.c, src/document.c, src/document.h,
