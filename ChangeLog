@@ -10,6 +10,9 @@
    Change Programming Languages filetype group label -> Compiled
    Languages.
    Use 'source file' title for custom filetypes.
+ * src/prefs.c, doc/geany.txt, doc/geany.html:
+   Remove Preferences label warning about restarting after editing
+   template data - this is no longer necessary.
 
 
 2011-04-26  Colomban Wendling  <colomban(at)geany(dot)org>

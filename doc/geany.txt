@@ -2323,10 +2323,6 @@ This data is used as meta data for various template text to insert into
 a document, such as the file header. You only need to set fields that
 you want to use in your template files.
 
-.. note::
-    For changes made here to take effect, you must either select
-    *Tools->Reload Configuration* or restart Geany.
-
 .. image:: ./images/pref_dialog_templ.png
 
 Template data
@@ -4506,8 +4502,7 @@ meta data is only used for the ChangeLog and File header templates.
 
 In the configuration dialog you can find a tab "Templates" (see
 `Template preferences`_). You can define the default values
-which will be inserted in the templates. You should select
-*Tools->Reload Configuration* or restart Geany after making changes.
+which will be inserted in the templates.
 
 
 File templates

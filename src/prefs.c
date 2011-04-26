@@ -1651,11 +1651,6 @@ void prefs_show_dialog(void)
 		gtk_widget_show(label);
 		gtk_box_pack_start(GTK_BOX(ui_lookup_widget(ui_widgets.prefs_dialog, "vbox31")),
 			label, FALSE, TRUE, 5);
-		label = geany_wrap_label_new(_("<i>Notice: For all changes you make here to take effect, you need to restart Geany or force the reload of the settings using Tools->Reload Configuration.</i>"));
-		gtk_widget_show(label);
-		gtk_label_set_use_markup(GTK_LABEL(label), TRUE);
-		gtk_box_pack_start(GTK_BOX(ui_lookup_widget(ui_widgets.prefs_dialog, "vbox9")),
-			label, FALSE, TRUE, 5);
 		/* page Keybindings */
 		label = geany_wrap_label_new(_("Here you can change keyboard shortcuts for various actions. Select one and press the Change button to enter a new shortcut, or double click on an action to edit the string representation of the shortcut directly."));
 		gtk_widget_show(label);
