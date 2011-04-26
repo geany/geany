@@ -13,6 +13,16 @@
    <~foo> (oops).
 
 
+2011-04-24  Colomban Wendling  <colomban(at)geany(dot)org>
+
+ * src/editor.c:
+   Don't update the tag list when the user is typing (patch by Yura
+   Siamashka, thanks).
+ * src/filetypes.c:
+   When copying filetype groups, add keys from both system and user
+   ones, making sure user's ones have precedence over system ones.
+
+
 2011-04-23  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/utils.c, src/utils.h, src/plugindata.h, src/plugins.c,
