@@ -442,7 +442,7 @@ static void init_builtin_filetypes(void)
 	ft = filetypes[GEANY_FILETYPES_REST];
 	ft->lang = 28;
 	ft->name = g_strdup("reStructuredText");
-	filetype_make_title(ft, TITLE_FILE);
+	filetype_make_title(ft, TITLE_SOURCE_FILE);
 	ft->group = GEANY_FILETYPE_GROUP_MARKUP;
 
 #define MATLAB
@@ -573,7 +573,7 @@ static void add_custom_filetype(const gchar *filename)
 
 	ft = filetype_new();
 	ft->name = g_strdup(fn);
-	filetype_make_title(ft, TITLE_SOURCE_FILE);
+	filetype_make_title(ft, TITLE_FILE);
 	ft->priv->custom = TRUE;
 	filetype_add(ft);
 	geany_debug("Added filetype %s (%d).", ft->name, ft->id);
@@ -1640,7 +1640,15 @@ static void read_group(GKeyFile *config, const gchar *group_name, gint group_id)
 		GeanyFiletype *ft = filetypes_lookup_by_name(*name);
 
 		if (ft)
+		{
 			ft->group = group_id;
+			if (ft->priv->custom &&
+				(group_id == GEANY_FILETYPE_GROUP_COMPILED || group_id == GEANY_FILETYPE_GROUP_SCRIPT))
+			{
+				setptr(ft->title, NULL);
+				filetype_make_title(ft, TITLE_SOURCE_FILE);
+			}
+		}
 		else
 			geany_debug("Filetype '%s' not found for group '%s'!", *name, group_name);
 	}

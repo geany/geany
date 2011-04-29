@@ -9,6 +9,10 @@
    Fix filetype title for some languages.
    Don't use 'Languages' for Miscellaneous group label.
    These changes mostly proposed by Matthew Brush (thanks).
+ * src/filetypes.c:
+   Make custom filetype titles use 'source file' only if their group
+   is Compiled or Script.
+   Use 'source file' for reStructuredText title.
 
 
 2011-04-26  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
