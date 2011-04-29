@@ -279,7 +279,7 @@ static void init_builtin_filetypes(void)
 	ft->lang = 36;
 	ft->name = g_strdup("Markdown");
 	filetype_make_title(ft, TITLE_SOURCE_FILE);
-	ft->group = GEANY_FILETYPE_GROUP_MISC;
+	ft->group = GEANY_FILETYPE_GROUP_MARKUP;
 
 #define TXT2TAGS
 	ft = filetypes[GEANY_FILETYPES_TXT2TAGS];
@@ -287,20 +287,20 @@ static void init_builtin_filetypes(void)
 	ft->name = g_strdup("Txt2tags");
 	filetype_make_title(ft, TITLE_SOURCE_FILE);
 	ft->mime_type = g_strdup("text/x-txt2tags");
-	ft->group = GEANY_FILETYPE_GROUP_MISC;
+	ft->group = GEANY_FILETYPE_GROUP_MARKUP;
 
 #define ABC
 	ft = filetypes[GEANY_FILETYPES_ABC];
 	ft->lang = 38;
 	ft->name = g_strdup("Abc");
-	filetype_make_title(ft, TITLE_SOURCE_FILE);
+	filetype_make_title(ft, TITLE_FILE);
 	ft->group = GEANY_FILETYPE_GROUP_MISC;
 
 #define SH
 	ft = filetypes[GEANY_FILETYPES_SH];
 	ft->lang = 16;
 	ft->name = g_strdup("Sh");
-	ft->title = g_strdup(_("Shell script file"));
+	ft->title = g_strdup(_("Shell script"));
 	ft->mime_type = g_strdup("application/x-shellscript");
 	ft->group = GEANY_FILETYPE_GROUP_SCRIPT;
 
@@ -347,7 +347,7 @@ static void init_builtin_filetypes(void)
 	ft = filetypes[GEANY_FILETYPES_SQL];
 	ft->lang = 11;
 	ft->name = g_strdup("SQL");
-	ft->title = g_strdup(_("SQL Dump file"));
+	filetype_make_title(ft, TITLE_FILE);
 	ft->mime_type = g_strdup("text/x-sql");
 	ft->group = GEANY_FILETYPE_GROUP_MISC;
 
@@ -355,8 +355,8 @@ static void init_builtin_filetypes(void)
 	ft = filetypes[GEANY_FILETYPES_COBOL];
 	ft->lang = 41;
 	ft->name = g_strdup("COBOL");
-	filetype_make_title(ft, TITLE_FILE);
-	ft->group = GEANY_FILETYPE_GROUP_MISC;
+	filetype_make_title(ft, TITLE_SOURCE_FILE);
+	ft->group = GEANY_FILETYPE_GROUP_COMPILED;
 
 #define LATEX
 	ft = filetypes[GEANY_FILETYPES_LATEX];
@@ -364,7 +364,7 @@ static void init_builtin_filetypes(void)
 	ft->name = g_strdup("LaTeX");
 	filetype_make_title(ft, TITLE_SOURCE_FILE);
 	ft->mime_type = g_strdup("text/x-tex");
-	ft->group = GEANY_FILETYPE_GROUP_MISC;
+	ft->group = GEANY_FILETYPE_GROUP_MARKUP;
 
 #define VHDL
 	ft = filetypes[GEANY_FILETYPES_VHDL];
@@ -435,7 +435,7 @@ static void init_builtin_filetypes(void)
 	ft = filetypes[GEANY_FILETYPES_R];
 	ft->lang = 40;
 	ft->name = g_strdup("R");
-	ft->title = g_strdup_printf(_("%s script file"), "R");
+	filetype_make_title(ft, TITLE_SOURCE_FILE);
 	ft->group = GEANY_FILETYPE_GROUP_SCRIPT;
 
 #define REST
@@ -443,7 +443,7 @@ static void init_builtin_filetypes(void)
 	ft->lang = 28;
 	ft->name = g_strdup("reStructuredText");
 	filetype_make_title(ft, TITLE_FILE);
-	ft->group = GEANY_FILETYPE_GROUP_MISC;
+	ft->group = GEANY_FILETYPE_GROUP_MARKUP;
 
 #define MATLAB
 	ft = filetypes[GEANY_FILETYPES_MATLAB];
@@ -457,21 +457,21 @@ static void init_builtin_filetypes(void)
 	ft = filetypes[GEANY_FILETYPES_YAML];
 	ft->name = g_strdup("YAML");
 	filetype_make_title(ft, TITLE_SOURCE_FILE);
-	ft->group = GEANY_FILETYPE_GROUP_MISC;
+	ft->group = GEANY_FILETYPE_GROUP_MARKUP;
 
 #define CMAKE
 	ft = filetypes[GEANY_FILETYPES_CMAKE];
 	ft->name = g_strdup("CMake");
 	filetype_make_title(ft, TITLE_SOURCE_FILE);
 	ft->mime_type = g_strdup("text/x-cmake");
-	ft->group = GEANY_FILETYPE_GROUP_MISC;
+	ft->group = GEANY_FILETYPE_GROUP_SCRIPT;
 
 #define NSIS
 	ft = filetypes[GEANY_FILETYPES_NSIS];
 	ft->lang = 35;
 	ft->name = g_strdup("NSIS");
 	filetype_make_title(ft, TITLE_SOURCE_FILE);
-	ft->group = GEANY_FILETYPE_GROUP_MISC;
+	ft->group = GEANY_FILETYPE_GROUP_SCRIPT;
 
 #define ADA
 	ft = filetypes[GEANY_FILETYPES_ADA];
@@ -707,7 +707,7 @@ static void create_set_filetype_menu(void)
 	create_sub_menu(filetype_menu, GEANY_FILETYPE_GROUP_COMPILED, _("_Compiled Languages"));
 	create_sub_menu(filetype_menu, GEANY_FILETYPE_GROUP_SCRIPT, _("_Scripting Languages"));
 	create_sub_menu(filetype_menu, GEANY_FILETYPE_GROUP_MARKUP, _("_Markup Languages"));
-	create_sub_menu(filetype_menu, GEANY_FILETYPE_GROUP_MISC, _("M_iscellaneous Languages"));
+	create_sub_menu(filetype_menu, GEANY_FILETYPE_GROUP_MISC, _("M_iscellaneous"));
 
 	/* Append all filetypes to the filetype menu */
 	foreach_slist(node, filetypes_by_title)

@@ -2,6 +2,13 @@
 
  * src/filetypes.c, src/filetypes.h:
    Remove now unnecessary Custom filetype group.
+ * src/filetypes.c:
+   Move text markup languages into Markup filetype group.
+   Move some programming language filetypes out of the Miscellaneous
+   group.
+   Fix filetype title for some languages.
+   Don't use 'Languages' for Miscellaneous group label.
+   These changes mostly proposed by Matthew Brush (thanks).
 
 
 2011-04-26  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
