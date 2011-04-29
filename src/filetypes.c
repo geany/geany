@@ -493,6 +493,7 @@ static GeanyFiletype *filetype_new(void)
 {
 	GeanyFiletype *ft = g_new0(GeanyFiletype, 1);
 
+	ft->group = GEANY_FILETYPE_GROUP_NONE;
 	ft->lang = -2;	/* assume no tagmanager parser */
 	/* pattern must not be null */
 	ft->pattern = g_new0(gchar*, 1);
@@ -573,7 +574,6 @@ static void add_custom_filetype(const gchar *filename)
 	ft = filetype_new();
 	ft->name = g_strdup(fn);
 	filetype_make_title(ft, TITLE_SOURCE_FILE);
-	ft->group = GEANY_FILETYPE_GROUP_CUSTOM;
 	ft->priv->custom = TRUE;
 	filetype_add(ft);
 	geany_debug("Added filetype %s (%d).", ft->name, ft->id);
@@ -708,7 +708,6 @@ static void create_set_filetype_menu(void)
 	create_sub_menu(filetype_menu, GEANY_FILETYPE_GROUP_SCRIPT, _("_Scripting Languages"));
 	create_sub_menu(filetype_menu, GEANY_FILETYPE_GROUP_MARKUP, _("_Markup Languages"));
 	create_sub_menu(filetype_menu, GEANY_FILETYPE_GROUP_MISC, _("M_iscellaneous Languages"));
-	create_sub_menu(filetype_menu, GEANY_FILETYPE_GROUP_CUSTOM, _("_Custom Filetypes"));
 
 	/* Append all filetypes to the filetype menu */
 	foreach_slist(node, filetypes_by_title)

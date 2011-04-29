@@ -1,8 +1,14 @@
+2011-04-29  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/filetypes.c, src/filetypes.h:
+   Remove now unnecessary Custom filetype group.
+
+
 2011-04-26  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/filetypes.c, src/filetypes.h, src/main.c,
    data/filetype_extensions.conf:
-   Make filetype groups configurable using [Groups] in
+   Make filetype group membership configurable using [Groups] in
    filetype_extensions.conf.
    Read filetype_extensions.conf when calling filetypes_init_types(),
    don't require doclist initialization.
