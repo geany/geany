@@ -487,24 +487,19 @@ static void create_properties_dialog(PropertyDialogElements *e)
 	g_signal_connect(ui_lookup_widget(e->dialog, "radio_long_line_custom"), "toggled",
 		G_CALLBACK(on_radio_long_line_custom_toggled), ui_lookup_widget(e->dialog, "spin_long_line"));
 
-#if 0
 	label = gtk_label_new(_("File patterns:"));
-	/* <small>Separate multiple patterns by a new line</small> */
-	gtk_table_attach(GTK_TABLE(table), label, 0, 1, 6, 7,
+	gtk_table_attach(GTK_TABLE(table), label, 0, 1, 4, 5,
 					(GtkAttachOptions) (GTK_FILL),
-					(GtkAttachOptions) (GTK_FILL), 0, 0);
+					(GtkAttachOptions) (0), 0, 0);
 	gtk_misc_set_alignment(GTK_MISC(label), 0, 0);
 
-	e->patterns = gtk_text_view_new();
-	swin = gtk_scrolled_window_new(NULL, NULL);
-	gtk_widget_set_size_request(swin, -1, 80);
-	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(swin),
-				GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
-	gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(swin), GTK_WIDGET(e->patterns));
-	gtk_table_attach(GTK_TABLE(table), swin, 1, 2, 4, 5,
+	e->patterns = gtk_entry_new();
+	ui_widget_set_tooltip_text(e->patterns,
+		_("Space separated list of file patterns used for the find in files dialog "
+		  "(e.g. *.c *.h)"));
+	gtk_table_attach(GTK_TABLE(table), e->patterns, 1, 2, 4, 5,
 					(GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
 					(GtkAttachOptions) (0), 0, 0);
-#endif
 
 	label = gtk_label_new(_("Project"));
 	gtk_notebook_insert_page(GTK_NOTEBOOK(notebook), table, label, 0);
@@ -551,26 +546,14 @@ static void show_project_properties(gboolean show_build)
 		gtk_text_buffer_set_text(buffer, p->description, -1);
 	}
 
-#if 0
 	if (p->file_patterns != NULL)
 	{	/* set the file patterns */
-		gint i;
-		gint len = g_strv_length(p->file_patterns);
-		GtkTextBuffer *buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(e->patterns));
-		GString *str = g_string_sized_new(len * 4);
+		gchar *str;
 
-		for (i = 0; i < len; i++)
-		{
-			if (p->file_patterns[i] != NULL)
-			{
-				g_string_append(str, p->file_patterns[i]);
-				g_string_append_c(str, '\n');
-			}
-		}
-		gtk_text_buffer_set_text(buffer, str->str, -1);
-		g_string_free(str, TRUE);
+		str = g_strjoinv(" ", p->file_patterns);
+		gtk_entry_set_text(GTK_ENTRY(e->patterns), str);
+		g_free(str);
 	}
-#endif
 
 	g_signal_emit_by_name(geany_object, "project-dialog-create", e->notebook);
 	gtk_widget_show_all(e->dialog);
@@ -643,6 +626,8 @@ static GeanyProject *create_project(void)
 	indentation = *editor_get_indent_prefs(NULL);
 	priv.indentation = &indentation;
 	project->priv = &priv;
+
+	project->file_patterns = NULL;
 
 	project->long_line_behaviour = 1 /* use global settings */;
 	project->long_line_column = editor_prefs.long_line_column;
@@ -759,6 +744,8 @@ static gboolean update_config(const PropertyDialogElements *e, gboolean new_proj
 		GeanyBuildCommand *oldvalue;
 		GeanyFiletype *ft = doc ? doc->file_type : NULL;
 		GtkWidget *widget;
+		gchar *tmp;
+		GString *str;
 
 		/* get and set the project description */
 		buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(e->description));
@@ -798,16 +785,15 @@ static gboolean update_config(const PropertyDialogElements *e, gboolean new_proj
 		p->long_line_column = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));
 		apply_editor_prefs();
 
-#if 0
 		/* get and set the project file patterns */
-		buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(e->patterns));
-		gtk_text_buffer_get_start_iter(buffer, &start);
-		gtk_text_buffer_get_end_iter(buffer, &end);
-		tmp = gtk_text_buffer_get_text(buffer, &start, &end, FALSE);
+		tmp = g_strdup(gtk_entry_get_text(GTK_ENTRY(e->patterns)));
 		g_strfreev(p->file_patterns);
-		p->file_patterns = g_strsplit(tmp, "\n", -1);
+		g_strstrip(tmp);
+		str = g_string_new(tmp);
+		do {} while (utils_string_replace_all(str, "  ", " "));
+		p->file_patterns = g_strsplit(str->str, " ", -1);
+		g_string_free(str, TRUE);
 		g_free(tmp);
-#endif
 	}
 
 	update_ui();
