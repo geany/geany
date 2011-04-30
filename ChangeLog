@@ -3,6 +3,8 @@
  * src/filetypes.c, data/filetype_extensions.conf:
    Revert 'Compiled' filetype group back to 'Programming' (couldn't
    agree on whether e.g. Java is a compiled language).
+ * doc/geany.txt, doc/geany.html:
+   Add section 'Filetype group membership'.
 
 
 2011-04-29  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

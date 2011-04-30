@@ -4276,6 +4276,27 @@ should look like::
     [Extensions]
     Make=Makefile*;*.mk;Buildfile;
 
+Filetype group membership
+-------------------------
+Group membership is also stored in ``filetype_extensions.conf``. This
+file is used to store information Geany needs at startup, whereas the
+separate filetype definition files hold information only needed when
+a document with their filetype is used.
+
+The format looks like::
+
+    [Groups]
+    Programming=C;C++;
+    Script=Perl;Python;
+    Markup=HTML;XML;
+    Misc=Diff;Conf;
+    None=None;
+
+The key names cannot be configured.
+
+.. note::
+    Group membership is only read at startup.
+
 Preferences file format
 -----------------------
 
