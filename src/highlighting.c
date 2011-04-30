@@ -3600,7 +3600,7 @@ on_color_scheme_clicked(GtkMenuItem *menuitem, gpointer user_data)
 		filetypes_reload();
 		return;
 	}
-	fname = ui_menu_item_get_text(menuitem);
+	fname = g_strdup(g_object_get_data(G_OBJECT(menuitem), "colorscheme_file"));
 	setptr(fname, utils_get_locale_from_utf8(fname));
 
 	/* fname is just the basename from the menu item, so prepend the custom files path */
@@ -3632,15 +3632,36 @@ static void add_color_scheme_item(GtkWidget *menu, const gchar *fname)
 	static GSList *group = NULL;
 	GtkWidget *item;
 
-	if (fname)
+	if (!fname)
 	{
-		gchar *label = utils_get_utf8_from_locale(fname);
-
-		item = gtk_radio_menu_item_new_with_label(group, label);
-		g_free(label);
+		item = gtk_radio_menu_item_new_with_mnemonic(group, _("_Default"));
 	}
 	else
-		item = gtk_radio_menu_item_new_with_mnemonic(group, _("_Default"));
+	{
+		GKeyFile *hkeyfile, *skeyfile;
+		gchar *path, *theme_name, *tooltip;
+		gchar *theme_fn = utils_get_utf8_from_locale(fname);
+
+		path = utils_build_path(app->configdir, GEANY_COLORSCHEMES_SUBDIR, fname, NULL);
+		hkeyfile = utils_key_file_new(path);
+		setptr(path, utils_build_path(app->datadir, GEANY_COLORSCHEMES_SUBDIR, fname, NULL));
+		skeyfile = utils_key_file_new(path);
+
+		theme_name = utils_get_setting(string, hkeyfile, skeyfile, "theme_info", "name", theme_fn);
+		item = gtk_radio_menu_item_new_with_label(group, theme_name);
+		g_object_set_data_full(G_OBJECT(item), "colorscheme_file", theme_fn, g_free);
+
+		tooltip = utils_get_setting(string, hkeyfile, skeyfile, "theme_info", "description", NULL);
+		if (tooltip != NULL)
+		{
+			ui_widget_set_tooltip_text(item, tooltip);
+			g_free(tooltip);
+		}
+		g_free(path);
+		g_free(theme_name);
+		g_key_file_free(hkeyfile);
+		g_key_file_free(skeyfile);
+	}
 
 	group = gtk_radio_menu_item_get_group(GTK_RADIO_MENU_ITEM(item));
 	if (utils_str_equal(editor_prefs.color_scheme, fname))

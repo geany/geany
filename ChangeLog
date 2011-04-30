@@ -5,6 +5,10 @@
    agree on whether e.g. Java is a compiled language).
  * doc/geany.txt, doc/geany.html:
    Add section 'Filetype group membership'.
+ * src/highlighting.c, doc/geany.txt, doc/geany.html,
+   data/colorschemes/alt.conf:
+   Read color scheme name and description for menu item label and
+   tooltip (based on patch by Matthew Brush, thanks).
 
 
 2011-04-29  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
