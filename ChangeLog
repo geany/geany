@@ -3,6 +3,9 @@
  * src/project.c:
    Fix project patterns and make them visible (based on a patch
    by Jiří Techet, thanks).
+ * src/search.c:
+   Use project patterns in the FIF dialog (based on a patch
+   by Jiří Techet, thanks).
 
 
 2011-04-30  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

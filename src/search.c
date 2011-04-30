@@ -75,6 +75,14 @@ enum
 };
 
 
+enum
+{
+	FILES_MODE_ALL,
+	FILES_MODE_PROJECT,
+	FILES_MODE_CUSTOM
+};
+
+
 GeanySearchData search_data;
 GeanySearchPrefs search_prefs;
 
@@ -88,7 +96,7 @@ static struct
 	gboolean fif_recursive;
 	gboolean fif_use_extra_options;
 	gchar *fif_extra_options;
-	gboolean fif_use_files;
+	gint fif_files_mode;
 	gchar *fif_files;
 	gboolean find_regexp;
 	gboolean find_escape_sequences;
@@ -137,9 +145,10 @@ static struct
 	GtkWidget	*files_combo;
 	GtkWidget	*search_combo;
 	GtkWidget	*encoding_combo;
+	GtkWidget	*files_mode_combo;
 	gint		position[2]; /* x, y */
 }
-fif_dlg = {NULL, NULL, NULL, NULL, NULL, {0, 0}};
+fif_dlg = {NULL, NULL, NULL, NULL, NULL, NULL, {0, 0}};
 
 
 static gboolean search_read_io(GIOChannel *source, GIOCondition condition, gpointer data);
@@ -215,8 +224,8 @@ static void init_prefs(void)
 		"fif_use_extra_options", FALSE, "check_extra");
 	stash_group_add_entry(group, &settings.fif_files,
 		"fif_files", "", "entry_files");
-	stash_group_add_toggle_button(group, &settings.fif_use_files,
-		"fif_use_files", FALSE, "check_files");
+	stash_group_add_combo_box(group, &settings.fif_files_mode,
+		"fif_files_mode", FILES_MODE_ALL, "combo_files_mode");
 
 	group = stash_group_new("search");
 	find_prefs = group;
@@ -766,11 +775,92 @@ static void on_widget_toggled_set_sensitive(GtkToggleButton *togglebutton, gpoin
 }
 
 
+static void update_file_patterns(GtkWidget *mode_combo, GtkWidget *fcombo)
+{
+	gint selection;
+	GtkWidget *entry;
+
+	entry = gtk_bin_get_child(GTK_BIN(fcombo));
+
+	selection = gtk_combo_box_get_active(GTK_COMBO_BOX(mode_combo));
+
+	if (selection == FILES_MODE_ALL)
+	{
+		gtk_entry_set_text(GTK_ENTRY(entry), "");
+		gtk_widget_set_sensitive(fcombo, FALSE);
+	}
+	else if (selection == FILES_MODE_CUSTOM)
+	{
+		gtk_widget_set_sensitive(fcombo, TRUE);
+	}
+	else if (selection == FILES_MODE_PROJECT)
+	{
+		if (app->project && NZV(app->project->file_patterns))
+		{
+			gchar *patterns;
+
+			patterns = g_strjoinv(" ", app->project->file_patterns);
+			gtk_entry_set_text(GTK_ENTRY(entry), patterns);
+			g_free(patterns);
+		}
+		else
+		{
+			gtk_entry_set_text(GTK_ENTRY(entry), "");
+		}
+
+		gtk_widget_set_sensitive(fcombo, FALSE);
+	}
+}
+
+
+/* creates the combo to choose which files include in the search */
+static GtkWidget *create_fif_file_mode_combo(void)
+{
+	GtkWidget *combo;
+	GtkCellRenderer *renderer;
+	GtkListStore *store;
+	GtkTreeIter iter;
+
+	/* text/sensitive */
+	store = gtk_list_store_new(2, G_TYPE_STRING, G_TYPE_BOOLEAN);
+	gtk_list_store_append(store, &iter);
+	gtk_list_store_set(store, &iter, 0, _("all"), 1, TRUE, -1);
+	gtk_list_store_append(store, &iter);
+	gtk_list_store_set(store, &iter, 0, _("project"), 1, app->project != NULL, -1);
+	gtk_list_store_append(store, &iter);
+	gtk_list_store_set(store, &iter, 0, _("custom"), 1, TRUE, -1);
+
+	combo = gtk_combo_box_new_with_model(GTK_TREE_MODEL(store));
+	g_object_unref(store);
+	ui_widget_set_tooltip_text(combo, _("All: search all files in the directory\n"
+										"Project: use file patterns defined in the project settings\n"
+										"Custom: specify file patterns manually"));
+
+	renderer = gtk_cell_renderer_text_new();
+	gtk_cell_layout_pack_start(GTK_CELL_LAYOUT(combo), renderer, TRUE);
+	gtk_cell_layout_set_attributes(GTK_CELL_LAYOUT(combo), renderer, "text", 0, "sensitive", 1, NULL);
+
+	return combo;
+}
+
+
+/* updates the sensitivity of the project combo item */
+static void update_fif_file_mode_combo(void)
+{
+	GtkTreeModel *model = gtk_combo_box_get_model(GTK_COMBO_BOX(fif_dlg.files_mode_combo));
+	GtkTreeIter iter;
+
+	/* "1" refers to the second list entry, project  */
+	if (gtk_tree_model_get_iter_from_string(model, &iter, "1"))
+		gtk_list_store_set(GTK_LIST_STORE(model), &iter, 1, app->project != NULL, -1);
+}
+
+
 static void create_fif_dialog(void)
 {
 	GtkWidget *dir_combo, *combo, *fcombo, *e_combo, *entry;
-	GtkWidget *label, *label1, *label2, *checkbox1, *checkbox2, *check_wholeword,
-		*check_recursive, *check_extra, *entry_extra, *check_regexp, *check;
+	GtkWidget *label, *label1, *label2, *label3, *checkbox1, *checkbox2, *check_wholeword,
+		*check_recursive, *check_extra, *entry_extra, *check_regexp, *combo_files_mode;
 	GtkWidget *dbox, *sbox, *lbox, *rbox, *hbox, *vbox, *ebox;
 	GtkSizeGroup *size_group;
 	gchar *encoding_string;
@@ -809,17 +899,15 @@ static void create_fif_dialog(void)
 	size_group = gtk_size_group_new(GTK_SIZE_GROUP_HORIZONTAL);
 	gtk_size_group_add_widget(size_group, label);
 
-	check = gtk_check_button_new_with_mnemonic(_("Fi_les:"));
-	ui_hookup_widget(fif_dlg.dialog, check, "check_files");
-	gtk_button_set_focus_on_click(GTK_BUTTON(check), FALSE);
-	gtk_size_group_add_widget(size_group, check);
+	label3 = gtk_label_new_with_mnemonic(_("Fi_les:"));
+	gtk_misc_set_alignment(GTK_MISC(label3), 0, 0.5);
 
-	/* tab from search to the files checkbox */
-	g_signal_connect(entry, "key-press-event",
-		G_CALLBACK(on_widget_key_pressed_set_focus), check);
+	combo_files_mode = create_fif_file_mode_combo();
+	gtk_label_set_mnemonic_widget(GTK_LABEL(label3), combo_files_mode);
+	ui_hookup_widget(fif_dlg.dialog, combo_files_mode, "combo_files_mode");
+	fif_dlg.files_mode_combo = combo_files_mode;
 
 	fcombo = gtk_combo_box_entry_new_text();
-	gtk_widget_set_sensitive(fcombo, FALSE);
 	entry = gtk_bin_get_child(GTK_BIN(fcombo));
 	ui_entry_add_clear_icon(GTK_ENTRY(entry));
 	gtk_entry_set_activates_default(GTK_ENTRY(entry), TRUE);
@@ -827,12 +915,12 @@ static void create_fif_dialog(void)
 	ui_hookup_widget(fif_dlg.dialog, entry, "entry_files");
 	fif_dlg.files_combo = fcombo;
 
-	/* enable entry when check is checked */
-	g_signal_connect(check, "toggled",
-		G_CALLBACK(on_widget_toggled_set_sensitive), fcombo);
+	/* update the entry when selection is changed */
+	g_signal_connect(combo_files_mode, "changed", G_CALLBACK(update_file_patterns), fcombo);
 
 	hbox = gtk_hbox_new(FALSE, 6);
-	gtk_box_pack_start(GTK_BOX(hbox), check, FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(hbox), label3, FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(hbox), combo_files_mode, FALSE, FALSE, 0);
 	gtk_box_pack_start(GTK_BOX(hbox), fcombo, TRUE, TRUE, 0);
 
 	label1 = gtk_label_new_with_mnemonic(_("_Directory:"));
@@ -874,6 +962,7 @@ static void create_fif_dialog(void)
 
 	gtk_size_group_add_widget(size_group, label1);
 	gtk_size_group_add_widget(size_group, label2);
+	gtk_size_group_add_widget(size_group, label3);
 	g_object_unref(G_OBJECT(size_group));	/* auto destroy the size group */
 
 	gtk_box_pack_start(GTK_BOX(vbox), sbox, TRUE, FALSE, 0);
@@ -1006,6 +1095,9 @@ void search_show_find_in_files_dialog(const gchar *dir)
 		gtk_entry_set_text(GTK_ENTRY(entry), cur_dir);
 		g_free(cur_dir);
 	}
+
+	update_fif_file_mode_combo();
+	update_file_patterns(fif_dlg.files_mode_combo, fif_dlg.files_combo);
 
 	/* set the encoding of the current file */
 	if (doc != NULL)
@@ -1375,7 +1467,7 @@ static GString *get_grep_options(void)
 		}
 	}
 	g_strstrip(settings.fif_files);
-	if (settings.fif_use_files && *settings.fif_files)
+	if (settings.fif_files_mode != FILES_MODE_ALL && *settings.fif_files)
 	{
 		GString *tmp;
 
