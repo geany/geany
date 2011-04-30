@@ -71,7 +71,6 @@ static void prepare_msg_tree_view(void);
 static void prepare_status_tree_view(void);
 static void prepare_compiler_tree_view(void);
 static GtkWidget *create_message_popup_menu(gint type);
-static void msgwin_parse_grep_line(const gchar *string, gchar **filename, gint *line);
 static gboolean on_msgwin_button_press_event(GtkWidget *widget, GdkEventButton *event,
 																			gpointer user_data);
 static void on_scribble_populate(GtkTextView *textview, GtkMenu *arg1, gpointer user_data);
@@ -996,6 +995,51 @@ void msgwin_parse_compiler_error_line(const gchar *string, const gchar *dir,
 }
 
 
+/* Tries to parse strings of the file:line style, allowing line field to be missing
+ * * filename is filled with the filename, should be freed
+ * * line is filled with the line number or -1 */
+static void msgwin_parse_generic_line(const gchar *string, gchar **filename, gint *line)
+{
+	gchar **fields;
+	gboolean incertain = TRUE; /* whether we're reasonably certain of the result */
+
+	*filename = NULL;
+	*line = -1;
+
+	fields = g_strsplit(string, ":", 2);
+	/* extract the filename */
+	if (fields[0] != NULL)
+	{
+		*filename = g_strdup(fields[0]);
+		if (msgwindow.messages_dir != NULL)
+			make_absolute(filename, msgwindow.messages_dir);
+
+		/* now the line */
+		if (fields[1] != NULL)
+		{
+			gchar *end;
+
+			*line = strtol(fields[1], &end, 10);
+			if (end == fields[1])
+				*line = -1;
+			else if (*end == ':' || g_ascii_isspace(*end))
+			{	/* if we have a blank or a separator right after the number, assume we really got a
+				 * filename (it's a grep-like syntax) */
+				incertain = FALSE;
+			}
+		}
+
+		/* if we aren't sure we got a supposedly correct filename, check it */
+		if (incertain && ! g_file_test(*filename, G_FILE_TEST_EXISTS))
+		{
+			setptr(*filename, NULL);
+			*line = -1;
+		}
+	}
+	g_strfreev(fields);
+}
+
+
 gboolean msgwin_goto_messages_file_line(guint keyval)
 {
 	GtkTreeIter iter;
@@ -1023,14 +1067,15 @@ gboolean msgwin_goto_messages_file_line(guint keyval)
 		{
 			gchar *filename;
 
-			msgwin_parse_grep_line(string, &filename, &line);
-			if (filename != NULL && line > -1)
+			/* try with a file:line parsing */
+			msgwin_parse_generic_line(string, &filename, &line);
+			if (filename != NULL)
 			{
 				/* use document_open_file to find an already open file, or open it in place */
 				doc = document_open_file(filename, FALSE, NULL, NULL);
 				if (doc != NULL)
 				{
-					ret = navqueue_goto_line(old_doc, doc, line);
+					ret = (line < 0) ? TRUE : navqueue_goto_line(old_doc, doc, line);
 					if (ret && ui_is_keyval_enter_or_return(keyval))
 						gtk_widget_grab_focus(GTK_WIDGET(doc->editor->sci));
 				}
@@ -1040,36 +1085,6 @@ gboolean msgwin_goto_messages_file_line(guint keyval)
 		g_free(string);
 	}
 	return ret;
-}
-
-
-/* Try to parse the file and line number for string and when something useful is
- * found, store the line number in *line and the relevant file with the error in
- * *filename.
- * *line will be -1 if no error was found in string.
- * *filename must be freed unless NULL. */
-static void msgwin_parse_grep_line(const gchar *string, gchar **filename, gint *line)
-{
-	ParseData data;
-
-	*filename = NULL;
-	*line = -1;
-
-	if (string == NULL)
-		return;
-
-	/* conflict:3:conflicting types for `foo' */
-	data.string = string;
-	data.pattern = ":";
-	data.min_fields = 3;
-	data.line_idx = 1;
-	data.file_idx = 0;
-
-	parse_file_line(&data, filename, line);
-
-	/* FIF dir should be set, but a plugin might not have set it */
-	if (msgwindow.messages_dir != NULL)
-		make_absolute(filename, msgwindow.messages_dir);
 }
 
 

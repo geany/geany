@@ -6,6 +6,8 @@
  * src/search.c:
    Use project patterns in the FIF dialog (based on a patch
    by Jiří Techet, thanks).
+ * src/msgwindow.c:
+   Open the file in the msgwindow even if no line number is specified.
 
 
 2011-04-30  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
