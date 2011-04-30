@@ -456,8 +456,8 @@ static void init_builtin_filetypes(void)
 #define YAML
 	ft = filetypes[GEANY_FILETYPES_YAML];
 	ft->name = g_strdup("YAML");
-	filetype_make_title(ft, TITLE_SOURCE_FILE);
-	ft->group = GEANY_FILETYPE_GROUP_MARKUP;
+	filetype_make_title(ft, TITLE_FILE);
+	ft->group = GEANY_FILETYPE_GROUP_MISC;
 
 #define CMAKE
 	ft = filetypes[GEANY_FILETYPES_CMAKE];
