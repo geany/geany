@@ -1,3 +1,10 @@
+2011-04-30  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/filetypes.c, data/filetype_extensions.conf:
+   Revert 'Compiled' filetype group back to 'Programming' (couldn't
+   agree on whether e.g. Java is a compiled language).
+
+
 2011-04-29  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/filetypes.c, src/filetypes.h:

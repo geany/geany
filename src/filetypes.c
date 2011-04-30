@@ -704,7 +704,7 @@ static void create_set_filetype_menu(void)
 	GSList *node;
 	GtkWidget *filetype_menu = ui_lookup_widget(main_widgets.window, "set_filetype1_menu");
 
-	create_sub_menu(filetype_menu, GEANY_FILETYPE_GROUP_COMPILED, _("_Compiled Languages"));
+	create_sub_menu(filetype_menu, GEANY_FILETYPE_GROUP_COMPILED, _("_Programming Languages"));
 	create_sub_menu(filetype_menu, GEANY_FILETYPE_GROUP_SCRIPT, _("_Scripting Languages"));
 	create_sub_menu(filetype_menu, GEANY_FILETYPE_GROUP_MARKUP, _("_Markup Languages"));
 	create_sub_menu(filetype_menu, GEANY_FILETYPE_GROUP_MISC, _("M_iscellaneous"));
@@ -1657,7 +1657,7 @@ static void read_group(GKeyFile *config, const gchar *group_name, gint group_id)
 
 static void read_groups(GKeyFile *config)
 {
-	read_group(config, "Compiled", GEANY_FILETYPE_GROUP_COMPILED);
+	read_group(config, "Programming", GEANY_FILETYPE_GROUP_COMPILED);
 	read_group(config, "Script", GEANY_FILETYPE_GROUP_SCRIPT);
 	read_group(config, "Markup", GEANY_FILETYPE_GROUP_MARKUP);
 	read_group(config, "Misc", GEANY_FILETYPE_GROUP_MISC);
