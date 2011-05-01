@@ -1,3 +1,9 @@
+2011-05-01  Colomban Wendling  <colomban(at)geany(dot)org>
+
+ * src/search.c:
+   Fix pattern filtering when not searching in subdirectories.
+
+
 2011-04-30  Colomban Wendling  <colomban(at)geany(dot)org>
 
  * src/project.c:
