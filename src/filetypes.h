@@ -151,7 +151,6 @@ struct GeanyFiletype
 	gint			 project_list_entry;
 	gchar			 *projerror_regex_string;
 	gchar			 *homeerror_regex_string;
-	gboolean		  home_save_needed;
 #endif
 };
 
@@ -195,7 +194,7 @@ void filetypes_free_types(void);
 
 void filetypes_load_config(gint ft_id, gboolean reload);
 
-void filetypes_save_commands(void);
+void filetypes_save_commands(GeanyFiletype *ft);
 
 void filetypes_select_radio_item(const GeanyFiletype *ft);
 

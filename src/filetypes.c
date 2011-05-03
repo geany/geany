@@ -63,7 +63,7 @@ GSList *filetypes_by_title = NULL;
 
 static void create_radio_menu_item(GtkWidget *menu, GeanyFiletype *ftype);
 
-static gchar *filetypes_get_conf_extension(gint filetype_idx);
+static gchar *filetypes_get_conf_extension(const GeanyFiletype *ft);
 static void read_filetype_config(void);
 
 
@@ -1235,7 +1235,7 @@ static void add_keys(GKeyFile *dest, const gchar *group, GKeyFile *src)
 
 static gchar *filetypes_get_filename(GeanyFiletype *ft, gboolean user)
 {
-	gchar *ext = filetypes_get_conf_extension(ft->id);
+	gchar *ext = filetypes_get_conf_extension(ft);
 	gchar *f;
 
 	if (user)
@@ -1372,16 +1372,15 @@ void filetypes_load_config(gint ft_id, gboolean reload)
 }
 
 
-static gchar *filetypes_get_conf_extension(gint filetype_idx)
+static gchar *filetypes_get_conf_extension(const GeanyFiletype *ft)
 {
 	gchar *result;
-	GeanyFiletype *ft = filetypes[filetype_idx];
 
 	if (ft->priv->custom)
 		return g_strconcat(ft->name, ".conf", NULL);
 
 	/* Handle any special extensions different from lowercase filetype->name */
-	switch (filetype_idx)
+	switch (ft->id)
 	{
 		case GEANY_FILETYPES_CPP: result = g_strdup("cpp"); break;
 		case GEANY_FILETYPES_CS: result = g_strdup("cs"); break;
@@ -1397,29 +1396,20 @@ static gchar *filetypes_get_conf_extension(gint filetype_idx)
 }
 
 
-void filetypes_save_commands(void)
+void filetypes_save_commands(GeanyFiletype *ft)
 {
-	guint i;
+	GKeyFile *config_home;
+	gchar *fname, *data;
 
-	for (i = 0; i < filetypes_array->len; i++)
-	{
-		GKeyFile *config_home;
-		gchar *fname, *data;
-		GeanyFiletype *ft = filetypes[i];
-
-		if (ft->home_save_needed)
-		{
-			fname = filetypes_get_filename(ft, TRUE);
-			config_home = g_key_file_new();
-			g_key_file_load_from_file(config_home, fname, G_KEY_FILE_KEEP_COMMENTS, NULL);
-			build_save_menu(config_home, ft, GEANY_BCS_HOME_FT);
-			data = g_key_file_to_data(config_home, NULL, NULL);
-			utils_write_file(fname, data);
-			g_free(data);
-			g_key_file_free(config_home);
-			g_free(fname);
-		}
-	}
+	fname = filetypes_get_filename(ft, TRUE);
+	config_home = g_key_file_new();
+	g_key_file_load_from_file(config_home, fname, G_KEY_FILE_KEEP_COMMENTS, NULL);
+	build_save_menu(config_home, ft, GEANY_BCS_HOME_FT);
+	data = g_key_file_to_data(config_home, NULL, NULL);
+	utils_write_file(fname, data);
+	g_free(data);
+	g_key_file_free(config_home);
+	g_free(fname);
 }
 
 
@@ -1722,9 +1712,6 @@ void filetypes_reload(void)
 {
 	guint i;
 	GeanyDocument *current_doc;
-
-	/* save possibly changed commands before re-reading them */
-	filetypes_save_commands();
 
 	/* reload filetype configs */
 	for (i = 0; i < filetypes_array->len; i++)

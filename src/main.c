@@ -1171,7 +1171,6 @@ void main_quit()
 
 	navqueue_free();
 	keybindings_free();
-	filetypes_save_commands();
 	highlighting_free_styles();
 	templates_free_templates();
 	msgwin_finalize();

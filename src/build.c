@@ -2259,7 +2259,7 @@ static void show_build_commands_dialog(void)
 	}
 	prefdsts.nonfileregexstr = &regex_pref;
 	if (build_read_commands(&prefdsts, table_data, response) && ft != NULL)
-		ft->home_save_needed = TRUE;
+		filetypes_save_commands(ft);
 	build_free_fields(table_data);
 
 	build_menu_update(doc);

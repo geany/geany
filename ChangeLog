@@ -2,6 +2,9 @@
 
  * src/highlighting.c, doc/geany.txt, doc/geany.html:
    Allow translations for color scheme [theme_info] keys.
+ * src/build.c, src/filetypes.c, src/filetypes.h, src/main.c:
+   Save filetype build commands straight after editing them instead of
+   at shutdown (patch by Dimitar Zhekov, thanks).
 
 
 2011-05-02  Colomban Wendling  <colomban(at)geany(dot)org>
