@@ -1489,7 +1489,12 @@ The `[named_styles] section`_ is the same as for ``filetypes.common``.
 
 The ``[theme_info]`` section can contain information about the
 theme. The ``name`` and ``description`` keys are read to set the
-menu item text and tooltip, respectively.
+menu item text and tooltip, respectively. These keys can have
+translations, e.g.::
+
+    key=Hello
+    key[de]=Hallo
+    key[fr_FR]=Bonjour
 
 Tags
 ----

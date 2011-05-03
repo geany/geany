@@ -1,3 +1,9 @@
+2011-05-03  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/highlighting.c, doc/geany.txt, doc/geany.html:
+   Allow translations for color scheme [theme_info] keys.
+
+
 2011-05-02  Colomban Wendling  <colomban(at)geany(dot)org>
 
  * src/plugindata.h:

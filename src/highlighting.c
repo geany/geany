@@ -3627,6 +3627,15 @@ on_color_scheme_clicked(GtkMenuItem *menuitem, gpointer user_data)
 }
 
 
+static gchar *utils_get_setting_locale_string(GKeyFile *keyfile,
+		const gchar *group, const gchar *key, const gchar *default_value)
+{
+	gchar *result = g_key_file_get_locale_string(keyfile, group, key, NULL, NULL);
+
+	return NVL(result, g_strdup(default_value));
+}
+
+
 static void add_color_scheme_item(GtkWidget *menu, const gchar *fname)
 {
 	static GSList *group = NULL;
@@ -3647,11 +3656,11 @@ static void add_color_scheme_item(GtkWidget *menu, const gchar *fname)
 		setptr(path, utils_build_path(app->datadir, GEANY_COLORSCHEMES_SUBDIR, fname, NULL));
 		skeyfile = utils_key_file_new(path);
 
-		theme_name = utils_get_setting(string, hkeyfile, skeyfile, "theme_info", "name", theme_fn);
+		theme_name = utils_get_setting(locale_string, hkeyfile, skeyfile, "theme_info", "name", theme_fn);
 		item = gtk_radio_menu_item_new_with_label(group, theme_name);
 		g_object_set_data_full(G_OBJECT(item), "colorscheme_file", theme_fn, g_free);
 
-		tooltip = utils_get_setting(string, hkeyfile, skeyfile, "theme_info", "description", NULL);
+		tooltip = utils_get_setting(locale_string, hkeyfile, skeyfile, "theme_info", "description", NULL);
 		if (tooltip != NULL)
 		{
 			ui_widget_set_tooltip_text(item, tooltip);
