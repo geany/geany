@@ -1273,9 +1273,21 @@ utility. GNU Grep is recommended (see note below).
 
 .. image:: ./images/find_in_files_dialog.png
 
-The *Files* field optionally searches only files matching the
-patterns listed. Patterns are basic and shell-like, separated by a
-space. To search all ``.c`` and ``.h`` files, use: ``*.c *.h``.
+The *Files* setting allows to choose which files are included in the
+search, depending on the mode:
+
+All
+    Search in all files;
+Project
+    Use the current project's patterns, see `Project properties`_;
+Custom
+    Use custom patterns.
+
+Both project and custom patterns use a glob-style syntax, each
+pattern separated by a space. To search all ``.c`` and ``.h`` files,
+use: ``*.c *.h``.
+Note that an empty pattern list searches in all files rather
+than none.
 
 The *Encoding* field can be used to define the encoding of the files
 to be searched. The entered search text is converted to the chosen encoding
@@ -1285,9 +1297,9 @@ The *Extra options* field is used to pass any additional arguments to
 the grep tool.
 
 .. note::
-    The *Files* setting uses ``--include=``, *Recurse in subfolders*
-    uses ``-r``; both are GNU Grep options and may not work with other
-    Grep implementations.
+    The *Files* setting uses ``--include=`` when searching recursively,
+    *Recurse in subfolders* uses ``-r``; both are GNU Grep options and may
+    not work with other Grep implementations.
 
 
 Filtering out version control files
@@ -2516,6 +2528,9 @@ only used for a template wildcard - see `Template wildcards`_.
 The *Base path* field is used as the directory to run the Build menu commands.
 The specified path can be an absolute path or it is considered to be
 relative to the project's file name.
+
+The *File patterns* field allows to specify a list of file patterns for the
+project, which can be used in the `Find in files`_ dialog.
 
 The *Indentation* tab allows you to override the default
 `Indentation`_ settings.
