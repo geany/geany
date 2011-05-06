@@ -1,3 +1,9 @@
+2011-05-06  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/callbacks.c:
+   Fix 'Toolbar Preferences' popup menu item (oops).
+
+
 2011-05-03  Colomban Wendling  <colomban(at)geany(dot)org>
 
  * doc/geany.txt, doc/geany.html:

@@ -2225,21 +2225,29 @@ gboolean on_window_state_event         (GtkWidget           *widget,
 }
 
 
-void
-on_customize_toolbar1_activate         (GtkMenuItem     *menuitem,
-                                        gpointer         user_data)
+static void show_notebook_page(const gchar *notebook_name, const gchar *page_name)
 {
 	GtkWidget *widget;
 	GtkNotebook *notebook;
 
-	prefs_show_dialog();
-
-	/* select the KB page */
-	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "vbox15");
-	notebook = GTK_NOTEBOOK(ui_lookup_widget(ui_widgets.prefs_dialog, "notebook2"));
+	widget = ui_lookup_widget(ui_widgets.prefs_dialog, page_name);
+	notebook = GTK_NOTEBOOK(ui_lookup_widget(ui_widgets.prefs_dialog, notebook_name));
 
 	if (notebook != NULL && widget != NULL)
 		gtk_notebook_set_current_page(notebook, gtk_notebook_page_num(notebook, widget));
+}
+
+
+void
+on_customize_toolbar1_activate         (GtkMenuItem     *menuitem,
+                                        gpointer         user_data)
+{
+	prefs_show_dialog();
+
+	/* select the Interface page */
+	show_notebook_page("notebook2", "notebook6");
+	/* select the Toolbar subpage */
+	show_notebook_page("notebook6", "vbox15");
 }
 
 
