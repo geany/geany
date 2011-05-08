@@ -12,6 +12,9 @@
    called.
  * tagmanager/php.c:
    Fix memory leaks (reported by an anonymous IRC user).
+ * src/project.c:
+   Improve error checking when trying to write project files
+   (patch by Colomban Wendling, thanks).
 
 
 2011-01-05  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
