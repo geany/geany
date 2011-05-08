@@ -5,6 +5,8 @@
    Version bump for Geany 0.20.1.
  * *.*:
    Update copyright information.
+ * AUTHORS, src/about.c, README.Packagers, README:
+   Welcome Colomban Wendling, a new Geany developer.
 
 
 2011-01-05  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

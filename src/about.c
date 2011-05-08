@@ -40,7 +40,7 @@
 #define INFO "<span size=\"larger\" weight=\"bold\">%s</span>"
 #define CODENAME "<span weight=\"bold\">\"" GEANY_CODENAME "\"</span>"
 #define BUILDDATE "<span size=\"smaller\">%s</span>"
-#define COPYRIGHT "Copyright (c)  2005-2011\nNick Treleaven\nEnrico Tröger\nFrank Lanitz\nAll rights reserved."
+#define COPYRIGHT "Copyright (c)  2005-2011\nNick Treleaven\nColomban Wendling\nEnrico Tröger\nFrank Lanitz\nAll rights reserved."
 
 const gchar *translators[][2] = {
 	{ "ast", "Marcos Costales &lt;marcoscostales@gmail.com&gt;"},
@@ -262,7 +262,7 @@ static GtkWidget *create_dialog(void)
 	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(credits_scrollwin),
 		GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
 
-	table = gtk_table_new(18 + translators_len + prev_translators_len, 3, FALSE);
+	table = gtk_table_new(20 + translators_len + prev_translators_len, 3, FALSE);
 	gtk_table_set_col_spacings(GTK_TABLE(table), 10);
 
 	row = 0;
@@ -284,6 +284,14 @@ static GtkWidget *create_dialog(void)
 	ROW("", row, 0, 0, 0, 0);
 	row++;
 
+	g_snprintf(buffer, sizeof(buffer), "Colomban Wendling - %s", _("developer"));
+	ROW(buffer, row, 0, 0, 0, 1);
+	row++;
+	ROW("&lt;lists.ban@herbesfolles.org&gt;", row, 0, 0, 0, 1);
+	row++;
+	ROW("", row, 0, 0, 0, 0);
+	row++;
+
 	g_snprintf(buffer, sizeof(buffer), "Enrico Tröger - %s", _("developer"));
 	ROW(buffer, row, 0, 0, 0, 1);
 	row++;
@@ -293,7 +301,7 @@ static GtkWidget *create_dialog(void)
 	row++;
 
 	g_snprintf(buffer, sizeof(buffer), "Frank Lanitz - %s", _("translation maintainer"));
-	ROW(buffer, 7, 0, 0, 0, 1);
+	ROW(buffer, row, 0, 0, 0, 1);
 	row++;
 	ROW("&lt;frank@frank.uvena.de&gt;", row, 0, 0, 0, 1);
 	row++;
