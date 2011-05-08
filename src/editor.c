@@ -341,6 +341,9 @@ static gboolean on_editor_button_press_event(GtkWidget *widget, GdkEventButton *
 	{
 		gboolean can_goto;
 
+		/* ensure the editor widget has the focus after this operation */
+		gtk_widget_grab_focus(widget);
+
 		editor_find_current_word(editor, editor_info.click_pos,
 			current_word, sizeof current_word, NULL);
 

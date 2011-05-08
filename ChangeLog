@@ -7,6 +7,9 @@
    Update copyright information.
  * AUTHORS, src/about.c, README.Packagers, README:
    Welcome Colomban Wendling, a new Geany developer.
+ * src/editor.c:
+   Ensure the editor widget has the focus when the editor menu is
+   called.
 
 
 2011-01-05  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
