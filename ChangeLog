@@ -19,6 +19,8 @@
  * plugins/saveactions.c:
    Fix wrong warning on empty backup directory setting if
    'Backup Copy' is not enabled at all.
+ * plugins/export.c:
+   Fix off-by-one bug which hidden the last empty line of a document.
 
 
 2011-01-05  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

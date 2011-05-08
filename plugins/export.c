@@ -354,7 +354,7 @@ static void write_latex_file(GeanyDocument *doc, const gchar *filename, gboolean
 	/* read the document and write the LaTeX code */
 	body = g_string_new("");
 	doc_len = sci_get_length(doc->editor->sci);
-	for (i = 0; i < doc_len; i++)
+	for (i = 0; i <= doc_len; i++)
 	{
 		style = sci_get_style_at(doc->editor->sci, i);
 		c = sci_get_char_at(doc->editor->sci, i);
@@ -369,9 +369,11 @@ static void write_latex_file(GeanyDocument *doc, const gchar *filename, gboolean
 				g_string_append(body, "}\n");
 				block_open = FALSE;
 			}
-			g_string_append_printf(body, "\\style%s{", get_tex_style(style));
-
-			block_open = TRUE;
+			if (i < doc_len)
+			{
+				g_string_append_printf(body, "\\style%s{", get_tex_style(style));
+				block_open = TRUE;
+			}
 		}
 		/* escape the current character if necessary else just add it */
 		switch (c)
@@ -574,7 +576,7 @@ static void write_html_file(GeanyDocument *doc, const gchar *filename, gboolean 
 	/* read the document and write the HTML body */
 	body = g_string_new("");
 	doc_len = sci_get_length(doc->editor->sci);
-	for (i = 0; i < doc_len; i++)
+	for (i = 0; i <= doc_len; i++)
 	{
 		style = sci_get_style_at(doc->editor->sci, i);
 		c = sci_get_char_at(doc->editor->sci, i);
@@ -589,9 +591,11 @@ static void write_html_file(GeanyDocument *doc, const gchar *filename, gboolean 
 			{
 				g_string_append(body, "</span>");
 			}
-			g_string_append_printf(body, "<span class=\"style_%d\">", style);
-
-			span_open = TRUE;
+			if (i < doc_len)
+			{
+				g_string_append_printf(body, "<span class=\"style_%d\">", style);
+				span_open = TRUE;
+			}
 		}
 		/* escape the current character if necessary else just add it */
 		switch (c)
