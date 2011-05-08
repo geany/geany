@@ -15,6 +15,7 @@
  * src/project.c:
    Improve error checking when trying to write project files
    (patch by Colomban Wendling, thanks).
+   Add a warning if writing the project file fails on close.
 
 
 2011-01-05  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
