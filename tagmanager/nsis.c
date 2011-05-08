@@ -2,7 +2,7 @@
 *   $Id$
 *
 *   Copyright (c) 2000-2002, Darren Hiebert
-*   Copyright (c) 2009-2010, Enrico Tröger
+*   Copyright (c) 2009-2011, Enrico Tröger
 *
 *   This source code is released for free distribution under the terms of the
 *   GNU General Public License.

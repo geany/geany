@@ -3,6 +3,8 @@
  * configure.ac, doc/geany.txt, geany.nsi, geany_private.rc,
    win32-config.h, wscript:
    Version bump for Geany 0.20.1.
+ * *.*:
+   Update copyright information.
 
 
 2011-01-05  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

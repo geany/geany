@@ -1,5 +1,5 @@
 #!/usr/bin/env perl
-# Copyright:	2009-2010, Nick Treleaven
+# Copyright:	2009-2011, Nick Treleaven
 # License:		GNU GPL V2 or later, as published by the Free Software Foundation, USA.
 # Warranty:		NONE
 

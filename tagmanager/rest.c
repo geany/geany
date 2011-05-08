@@ -1,6 +1,6 @@
 /*
 *
-*   Copyright (c) 2007-2010, Nick Treleaven
+*   Copyright (c) 2007-2011, Nick Treleaven
 *
 *   This source code is released for free distribution under the terms of the
 *   GNU General Public License.
