@@ -10,6 +10,8 @@
  * src/editor.c:
    Ensure the editor widget has the focus when the editor menu is
    called.
+ * tagmanager/php.c:
+   Fix memory leaks (reported by an anonymous IRC user).
 
 
 2011-01-05  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
