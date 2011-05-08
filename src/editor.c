@@ -1527,7 +1527,6 @@ static gint brace_match(ScintillaObject *sci, gint pos)
 /* Called after typing '}'. */
 static void close_block(GeanyEditor *editor, gint pos)
 {
-	GeanyDocument *doc;
 	const GeanyIndentPrefs *iprefs = editor_get_indent_prefs(editor);
 	gint x = 0, cnt = 0;
 	gint line, line_len, eol_char_len;
@@ -1540,7 +1539,6 @@ static void close_block(GeanyEditor *editor, gint pos)
 	g_return_if_fail(editor != NULL && editor->document->file_type != NULL);
 
 	sci = editor->sci;
-	doc = editor->document;
 
 	if (! lexer_has_braces(sci))
 		return;
@@ -2137,7 +2135,7 @@ static gboolean autocomplete_doc_word(GeanyEditor *editor, gchar *root, gsize ro
 
 gboolean editor_start_auto_complete(GeanyEditor *editor, gint pos, gboolean force)
 {
-	gint line, line_start, line_len, line_pos, current, rootlen, startword, lexer, style;
+	gint line, line_start, current, rootlen, startword, lexer, style;
 	gchar *linebuf, *root;
 	ScintillaObject *sci;
 	gboolean ret = FALSE;
@@ -2159,8 +2157,6 @@ gboolean editor_start_auto_complete(GeanyEditor *editor, gint pos, gboolean forc
 
 	line = sci_get_line_from_position(sci, pos);
 	line_start = sci_get_position_from_line(sci, line);
-	line_len = sci_get_line_length(sci, line);
-	line_pos = pos - line_start - 1;
 	current = pos - line_start;
 	startword = current;
 	lexer = sci_get_lexer(sci);
