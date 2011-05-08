@@ -16,6 +16,9 @@
    Improve error checking when trying to write project files
    (patch by Colomban Wendling, thanks).
    Add a warning if writing the project file fails on close.
+ * plugins/saveactions.c:
+   Fix wrong warning on empty backup directory setting if
+   'Backup Copy' is not enabled at all.
 
 
 2011-01-05  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

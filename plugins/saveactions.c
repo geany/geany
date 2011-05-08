@@ -453,14 +453,17 @@ static void configure_response_cb(GtkDialog *dialog, gint response, G_GNUC_UNUSE
 		g_key_file_set_integer(config, "backupcopy", "dir_levels", backupcopy_dir_levels);
 		g_key_file_set_string(config, "backupcopy", "time_fmt", text_time);
 		setptr(backupcopy_time_fmt, g_strdup(text_time));
-		if (*text_dir != '\0' && backupcopy_set_backup_dir(text_dir))
+		if (enable_backupcopy)
 		{
-			g_key_file_set_string(config, "backupcopy", "backup_dir", text_dir);
-		}
-		else
-		{
-			dialogs_show_msgbox(GTK_MESSAGE_ERROR,
-					_("Backup directory does not exist or is not writable."));
+			if (NZV(text_dir) && backupcopy_set_backup_dir(text_dir))
+			{
+				g_key_file_set_string(config, "backupcopy", "backup_dir", text_dir);
+			}
+			else
+			{
+				dialogs_show_msgbox(GTK_MESSAGE_ERROR,
+						_("Backup directory does not exist or is not writable."));
+			}
 		}
 
 
