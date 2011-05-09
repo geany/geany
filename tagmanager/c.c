@@ -694,7 +694,7 @@ static const char *tokenString (const tokenType type)
 {
 	static const char *const names [] = {
 		"none", "args", "}", "{", "comma", "double colon", "keyword", "name",
-		"package", "paren-name", "semicolon", "specifier", "*", "[]", "count"
+		"package", "paren-name", "semicolon", "specifier", "*", "[]"
 	};
 	Assert (sizeof (names) / sizeof (names [0]) == TOKEN_COUNT);
 	Assert ((int) type < TOKEN_COUNT);
@@ -714,8 +714,9 @@ static const char *scopeString (const tagScope scope)
 static const char *declString (const declType declaration)
 {
 		static const char *const names [] = {
-			"?", "base", "class", "enum", "function", "ignore", "interface",
-			"namespace", "no mangle", "package", "struct", "union",
+			"?", "base", "class", "enum", "event", "signal", "function",
+			"function template", "ignore", "interface", "module", "namespace",
+			"no mangle", "package", "struct", "union",
 		};
 		Assert (sizeof (names) / sizeof (names [0]) == DECL_COUNT);
 		Assert ((int) declaration < DECL_COUNT);
