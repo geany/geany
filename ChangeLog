@@ -28,6 +28,9 @@
    Fix a few Doxygen warnings.
  * plugins/saveactions.c:
    Properly use 0 as the invalid timeout source ID.
+ * src/encodings.c:
+   Update regex used to find encodings for it to allow the encoding to
+   be quoted, adding support for XML (closes #3183506).
 
 
 2011-05-08  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

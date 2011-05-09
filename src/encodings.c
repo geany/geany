@@ -53,7 +53,7 @@
 /* <meta http-equiv="content-type" content="text/html; charset=UTF-8" /> */
 #define PATTERN_HTMLMETA "<meta[ \t\n\r\f]http-equiv[ \t\n\r\f]*=[ \t\n\r\f]*\"content-type\"[ \t\n\r\f]+content[ \t\n\r\f]*=[ \t\n\r\f]*\"text/x?html;[ \t\n\r\f]*charset=([a-z0-9_-]+)\"[ \t\n\r\f]*/?>"
 /* " geany_encoding=utf-8 " or " coding: utf-8 " */
-#define PATTERN_CODING "coding[\t ]*[:=][\t ]*([a-z0-9-]+)[\t ]*"
+#define PATTERN_CODING "coding[\t ]*[:=][\t ]*\"?([a-z0-9-]+)\"?[\t ]*"
 
 /* precompiled regexps */
 static regex_t pregs[2];
