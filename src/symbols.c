@@ -451,16 +451,27 @@ static gint compare_symbol(const TMTag *tag_a, const TMTag *tag_b)
 }
 
 
-/* sort by line only */
+/* sort by line, then scope */
 static gint compare_symbol_lines(gconstpointer a, gconstpointer b)
 {
 	const TMTag *tag_a = TM_TAG(a);
 	const TMTag *tag_b = TM_TAG(b);
+	gint ret;
 
 	if (a == NULL || b == NULL)
 		return 0;
 
-	return tag_a->atts.entry.line - tag_b->atts.entry.line;
+	ret = tag_a->atts.entry.line - tag_b->atts.entry.line;
+	if (ret == 0)
+	{
+		if (tag_a->atts.entry.scope == NULL)
+			return -(tag_a->atts.entry.scope != tag_b->atts.entry.scope);
+		if (tag_b->atts.entry.scope == NULL)
+			return tag_a->atts.entry.scope != tag_b->atts.entry.scope;
+		else
+			return strcmp(tag_a->atts.entry.scope, tag_b->atts.entry.scope);
+	}
+	return ret;
 }
 
 

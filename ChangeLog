@@ -4,6 +4,10 @@
    Don't remove and add the symbols tree view if we re-add the same one.
  * tagmanager/c.c:
    Plug a memory leak.
+ * src/symbols.c:
+   When sorting tags by line, also sort by scope if line is the same, avoiding
+   wrong sorting if a parent tag is on the same line than its children, and one
+   of it's children would be sorted before alphabetically (closes #3193982).
 
 
 2011-05-08  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
