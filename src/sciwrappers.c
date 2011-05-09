@@ -357,7 +357,8 @@ gint sci_marker_previous(ScintillaObject *sci, gint line, gint marker_mask, gboo
 
 /** Gets the line number from @a position.
  * @param sci Scintilla widget.
- * @param position Position. */
+ * @param position Position.
+ * @return The line. */
 gint sci_get_line_from_position(ScintillaObject *sci, gint position)
 {
 	return SSM(sci, SCI_LINEFROMPOSITION, position, 0);
@@ -366,7 +367,8 @@ gint sci_get_line_from_position(ScintillaObject *sci, gint position)
 
 /** Gets the column number relative to the start of the line that @a position is on.
  * @param sci Scintilla widget.
- * @param position Position. */
+ * @param position Position.
+ * @return The column. */
 gint sci_get_col_from_position(ScintillaObject *sci, gint position)
 {
 	return SSM(sci, SCI_GETCOLUMN, position, 0);
@@ -419,7 +421,8 @@ void sci_set_current_line(ScintillaObject *sci, gint line)
 
 
 /** Gets the total number of lines.
- * @param sci Scintilla widget. */
+ * @param sci Scintilla widget.
+ * @return The line count. */
 gint sci_get_line_count(ScintillaObject *sci)
 {
 	return SSM(sci, SCI_GETLINECOUNT, 0, 0);
@@ -451,8 +454,9 @@ void sci_set_selection(ScintillaObject *sci, gint anchorPos, gint currentPos)
 
 
 /** Gets the position at the end of a line
- * @param sci Scintilla widget
- * @param line Line */
+ * @param sci Scintilla widget.
+ * @param line Line.
+ * @return The position at the end of the line. */
 gint sci_get_line_end_position(ScintillaObject *sci, gint line)
 {
 	return SSM(sci, SCI_GETLINEENDPOSITION, line, 0);

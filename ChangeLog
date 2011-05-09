@@ -24,6 +24,8 @@
    Also change the hack used for the selection to be updated in the input
    handlers to call the GtkTreeView's handler manually rather than doing
    the actual job in IDLE callbacks for the TreeView's handler to have run.
+ * doc/pluginsymbols.c, src/sciwrappers.c:
+   Fix a few Doxygen warnings.
 
 
 2011-05-08  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

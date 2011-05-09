@@ -43,7 +43,7 @@ gint plugin_version_check(gint);
  * @param info The data struct which should be initialized by this function. */
 void plugin_set_info(PluginInfo *info);
 
-/** @deprecated Use @ref geany_plugin->info instead.
+/** @deprecated Use @ref GeanyPlugin.info instead.
  * Basic information about a plugin, which is set in plugin_set_info(). */
 const PluginInfo *plugin_info;
 
