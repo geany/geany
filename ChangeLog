@@ -14,6 +14,10 @@
  * src/callbacks.c:
    Create a new undo action when inserting templates, making sure the user
    can undo the template insertion without also undoing a previous action.
+ * src/document.c:
+   Update forced indent settings when setting the filetype. This makes
+   documents created or set to a filetype with forced indent setting
+   (Makefile, F77) to have the correct setting right away.
 
 
 2011-05-08  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
