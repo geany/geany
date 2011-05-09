@@ -1514,14 +1514,27 @@ search_find_in_files(const gchar *utf8_search_text, const gchar *dir, const gcha
 }
 
 
+static gboolean pattern_list_match(GSList *patterns, const gchar *str)
+{
+	GSList *item;
+
+	foreach_slist(item, patterns)
+	{
+		if (g_pattern_match_string(item->data, str))
+			return TRUE;
+	}
+	return FALSE;
+}
+
+
 /* Creates an argument vector of strings, copying argv_prefix[] values for
  * the first arguments, then followed by filenames found in dir.
  * Returns NULL if no files were found, otherwise returned vector should be fully freed. */
 static gchar **search_get_argv(const gchar **argv_prefix, const gchar *dir)
 {
-	guint prefix_len, list_len, i;
+	guint prefix_len, list_len, i, j;
 	gchar **argv;
-	GSList *list, *item;
+	GSList *list, *item, *patterns = NULL;
 	GError *error = NULL;
 
 	g_return_val_if_fail(dir != NULL, NULL);
@@ -1539,13 +1552,40 @@ static gchar **search_get_argv(const gchar **argv_prefix, const gchar *dir)
 
 	argv = g_new(gchar*, prefix_len + list_len + 1);
 
-	for (i = 0; i < prefix_len; i++)
-		argv[i] = g_strdup(argv_prefix[i]);
+	for (i = 0, j = 0; i < prefix_len; i++)
+	{
+		if (g_str_has_prefix(argv_prefix[i], "--include="))
+		{
+			const gchar *pat = &(argv_prefix[i][10]); /* the pattern part of the argument */
 
-	foreach_slist(item, list)
-		argv[i++] = item->data;
+			patterns = g_slist_prepend(patterns, g_pattern_spec_new(pat));
+		}
+		else
+			argv[j++] = g_strdup(argv_prefix[i]);
+	}
 
-	argv[i] = NULL;
+	if (patterns)
+	{
+		GSList *pat;
+
+		foreach_slist(item, list)
+		{
+			if (pattern_list_match(patterns, item->data))
+				argv[j++] = item->data;
+			else
+				g_free(item->data);
+		}
+		foreach_slist(pat, patterns)
+			g_pattern_spec_free(pat->data);
+		g_slist_free(patterns);
+	}
+	else
+	{
+		foreach_slist(item, list)
+			argv[j++] = item->data;
+	}
+
+	argv[j] = NULL;
 	g_slist_free(list);
 	return argv;
 }
