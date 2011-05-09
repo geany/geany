@@ -459,13 +459,13 @@ static void cc_insert_custom_command_items(GtkMenu *me, gchar *label, gint idx)
 		case 2: key_idx = GEANY_KEYS_FORMAT_SENDTOCMD3; break;
 	}
 
-	if (key_idx != -1)
-		kb = keybindings_lookup_item(GEANY_KEY_GROUP_FORMAT, key_idx);
-
 	item = gtk_menu_item_new_with_label(label);
 	if (key_idx != -1)
+	{
+		kb = keybindings_lookup_item(GEANY_KEY_GROUP_FORMAT, key_idx);
 		gtk_widget_add_accelerator(item, "activate", gtk_accel_group_new(),
 			kb->key, kb->mods, GTK_ACCEL_VISIBLE);
+	}
 	gtk_container_add(GTK_CONTAINER(me), item);
 	gtk_widget_show(item);
 	g_signal_connect(item, "activate", G_CALLBACK(cc_on_custom_command_activate),

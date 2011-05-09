@@ -31,6 +31,8 @@
  * src/encodings.c:
    Update regex used to find encodings for it to allow the encoding to
    be quoted, adding support for XML (closes #3183506).
+ * src/main.c, src/prefs.c, src/tools.c:
+   Fix loading and updating menu accelerators for custom commands.
 
 
 2011-05-08  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

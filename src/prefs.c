@@ -59,6 +59,7 @@
 #include "templates.h"
 #include "search.h"
 #include "toolbar.h"
+#include "tools.h"
 #include "stash.h"
 #include "keyfile.h"
 #include "filetypes.h"
@@ -1120,6 +1121,7 @@ on_prefs_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 		if (edited)
 		{
 			kb_update();
+			tools_create_insert_custom_command_menu_items();
 			keybindings_write_to_file();
 		}
 
@@ -1342,7 +1344,7 @@ static gboolean kb_grab_key_dialog_key_press_cb(GtkWidget *dialog, GdkEventKey *
 	gchar *str;
 	gint state;
 
-    state = event->state & gtk_accelerator_get_default_mod_mask();
+	state = event->state & gtk_accelerator_get_default_mod_mask();
 
 	if (event->keyval == GDK_Escape)
 		return FALSE;	/* close the dialog, don't allow escape when detecting keybindings. */

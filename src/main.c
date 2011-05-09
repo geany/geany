@@ -1030,7 +1030,6 @@ gint main(gint argc, gchar **argv)
 	ui_create_insert_menu_items();
 	ui_create_insert_date_menu_items();
 	keybindings_init();
-	tools_create_insert_custom_command_menu_items();
 	notebook_init();
 	filetypes_init();
 	templates_init();
@@ -1079,6 +1078,10 @@ gint main(gint argc, gchar **argv)
 
 	/* load keybinding settings after plugins have added their groups */
 	keybindings_load_keyfile();
+
+	/* create the custom command menu after the keybindings have been loaded to have the proper
+	 * accelerator shown for the menu items */
+	tools_create_insert_custom_command_menu_items();
 
 	/* load any command line files or session files */
 	main_status.opening_session_files = TRUE;
