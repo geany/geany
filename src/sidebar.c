@@ -62,12 +62,6 @@ static struct
 }
 doc_items = {NULL, NULL, NULL, NULL, NULL};
 
-static struct
-{
-	GtkTreeSelection *selection;
-	guint keyval;
-} selection_change = {NULL, 0};
-
 enum
 {
 	TREEVIEW_SYMBOL = 0,
@@ -97,9 +91,7 @@ static gboolean documents_show_paths;
 static GtkWidget *tag_window;	/* scrolled window that holds the symbol list GtkTreeView */
 
 /* callback prototypes */
-static gboolean on_openfiles_tree_selection_changed(gpointer data);
 static void on_openfiles_document_action(GtkMenuItem *menuitem, gpointer user_data);
-static gboolean on_taglist_tree_selection_changed(gpointer data);
 static gboolean sidebar_button_press_cb(GtkWidget *widget, GdkEventButton *event,
 		gpointer user_data);
 static gboolean sidebar_key_press_cb(GtkWidget *widget, GdkEventKey *event,
@@ -716,6 +708,7 @@ static void create_openfiles_popup_menu(void)
 	gtk_container_add(GTK_CONTAINER(openfiles_popup_menu), item);
 
 	doc_items.show_paths = gtk_check_menu_item_new_with_mnemonic(_("Show _Paths"));
+	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(doc_items.show_paths), documents_show_paths);
 	gtk_widget_show(doc_items.show_paths);
 	gtk_container_add(GTK_CONTAINER(openfiles_popup_menu), doc_items.show_paths);
 	g_signal_connect(doc_items.show_paths, "activate",
@@ -836,14 +829,14 @@ static void change_focus_to_editor(GeanyDocument *doc, GtkWidget *source_widget)
 }
 
 
-static gboolean on_openfiles_tree_selection_changed(gpointer data)
+static gboolean openfiles_go_to_selection(GtkTreeSelection *selection, guint keyval)
 {
 	GtkTreeIter iter;
 	GtkTreeModel *model;
 	GeanyDocument *doc = NULL;
 
 	/* use switch_notebook_page to ignore changing the notebook page because it is already done */
-	if (gtk_tree_selection_get_selected(selection_change.selection, &model, &iter) && ! ignore_callback)
+	if (gtk_tree_selection_get_selected(selection, &model, &iter) && ! ignore_callback)
 	{
 		gtk_tree_model_get(model, &iter, DOCUMENTS_DOCUMENT, &doc, -1);
 		if (! doc)
@@ -853,20 +846,20 @@ static gboolean on_openfiles_tree_selection_changed(gpointer data)
 		gtk_notebook_set_current_page(GTK_NOTEBOOK(main_widgets.notebook),
 			gtk_notebook_page_num(GTK_NOTEBOOK(main_widgets.notebook),
 			(GtkWidget*) doc->editor->sci));
-		if (selection_change.keyval != GDK_space)
+		if (keyval != GDK_space)
 			change_focus_to_editor(doc, tv.tree_openfiles);
 	}
 	return FALSE;
 }
 
 
-static gboolean on_taglist_tree_selection_changed(gpointer data)
+static gboolean taglist_go_to_selection(GtkTreeSelection *selection, guint keyval)
 {
 	GtkTreeIter iter;
 	GtkTreeModel *model;
 	gint line = 0;
 
-	if (gtk_tree_selection_get_selected(selection_change.selection, &model, &iter))
+	if (gtk_tree_selection_get_selected(selection, &model, &iter))
 	{
 		const TMTag *tag;
 
@@ -882,19 +875,12 @@ static gboolean on_taglist_tree_selection_changed(gpointer data)
 			if (doc != NULL)
 			{
 				navqueue_goto_line(doc, doc, line);
-				if (selection_change.keyval != GDK_space)
+				if (keyval != GDK_space)
 					change_focus_to_editor(doc, NULL);
 			}
 		}
 	}
 	return FALSE;
-}
-
-
-static void update_selection_change(GtkTreeSelection *selection, guint keyval)
-{
-	selection_change.selection = selection;
-	selection_change.keyval = keyval;
 }
 
 
@@ -904,16 +890,22 @@ static gboolean sidebar_key_press_cb(GtkWidget *widget, GdkEventKey *event,
 	may_steal_focus = FALSE;
 	if (ui_is_keyval_enter_or_return(event->keyval) || event->keyval == GDK_space)
 	{
+		GtkWidgetClass *widget_class = GTK_WIDGET_GET_CLASS(widget);
 		GtkTreeSelection *selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(widget));
 		may_steal_focus = TRUE;
-		/* delay the query of selection state because this callback is executed before GTK
-		 * changes the selection (g_signal_connect_after would be better but it doesn't work) */
-		update_selection_change(selection, event->keyval);
 
-		if (widget ==  tv.tree_openfiles) /* tag and doc list have separate handlers */
-			g_idle_add(on_openfiles_tree_selection_changed, NULL);
+		/* force the TreeView handler to run before us for it to do its job (selection & stuff).
+		 * doing so will prevent further handlers to be run in most cases, but the only one is our
+		 * own, so guess it's fine. */
+		if (widget_class->key_press_event)
+			widget_class->key_press_event(widget, event);
+
+		if (widget == tv.tree_openfiles) /* tag and doc list have separate handlers */
+			openfiles_go_to_selection(selection, event->keyval);
 		else
-			g_idle_add(on_taglist_tree_selection_changed, NULL);
+			taglist_go_to_selection(selection, event->keyval);
+
+		return TRUE;
 	}
 	return FALSE;
 }
@@ -923,6 +915,14 @@ static gboolean sidebar_button_press_cb(GtkWidget *widget, GdkEventButton *event
 		G_GNUC_UNUSED gpointer user_data)
 {
 	GtkTreeSelection *selection;
+	GtkWidgetClass *widget_class = GTK_WIDGET_GET_CLASS(widget);
+	gboolean handled = FALSE;
+
+	/* force the TreeView handler to run before us for it to do its job (selection & stuff).
+	 * doing so will prevent further handlers to be run in most cases, but the only one is our own,
+	 * so guess it's fine. */
+	if (widget_class->button_press_event)
+		handled = widget_class->button_press_event(widget, event);
 
 	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(widget));
 	may_steal_focus = TRUE;
@@ -950,14 +950,11 @@ static gboolean sidebar_button_press_cb(GtkWidget *widget, GdkEventButton *event
 	}
 	else if (event->button == 1)
 	{	/* allow reclicking of taglist treeview item */
-		/* delay the query of selection state because this callback is executed before GTK
-		 * changes the selection (g_signal_connect_after would be better but it doesn't work) */
-		update_selection_change(selection, 0);
-
 		if (widget == tv.tree_openfiles)
-			g_idle_add(on_openfiles_tree_selection_changed, NULL);
+			openfiles_go_to_selection(selection, 0);
 		else
-			g_idle_add(on_taglist_tree_selection_changed, NULL);
+			taglist_go_to_selection(selection, 0);
+		handled = TRUE;
 	}
 	else if (event->button == 3)
 	{
@@ -976,8 +973,9 @@ static gboolean sidebar_button_press_cb(GtkWidget *widget, GdkEventButton *event
 			gtk_menu_popup(GTK_MENU(tv.popup_taglist), NULL, NULL, NULL, NULL,
 					event->button, event->time);
 		}
+		handled = TRUE;
 	}
-	return FALSE;
+	return handled;
 }
 
 

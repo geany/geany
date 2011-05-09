@@ -18,6 +18,12 @@
    Update forced indent settings when setting the filetype. This makes
    documents created or set to a filetype with forced indent setting
    (Makefile, F77) to have the correct setting right away.
+ * src/sidebar.c:
+   Fix the sidebar popup menu to properly use the currently selected item
+   rather than the previous one.
+   Also change the hack used for the selection to be updated in the input
+   handlers to call the GtkTreeView's handler manually rather than doing
+   the actual job in IDLE callbacks for the TreeView's handler to have run.
 
 
 2011-05-08  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
