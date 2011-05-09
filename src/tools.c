@@ -583,7 +583,8 @@ void tools_word_count(void)
 	GtkWidget *dialog, *label, *vbox, *table;
 	GeanyDocument *doc;
 	guint chars = 0, lines = 0, words = 0;
-	gchar *text, *range;
+	gchar *text;
+	const gchar *range;
 
 	doc = document_get_current();
 	g_return_if_fail(doc != NULL);
