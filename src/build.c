@@ -189,10 +189,10 @@ static void set_command(GeanyBuildCommand *bc, gint id, gchar *str)
 }
 
 
-static const gchar *config_keys[] = {
-	[GEANY_BC_LABEL] = "LB",
-	[GEANY_BC_COMMAND] = "CM",
-	[GEANY_BC_WORKING_DIR] = "WD"
+static const gchar *config_keys[GEANY_BC_CMDENTRIES_COUNT] = {
+	"LB", /* label */
+	"CM", /* command */
+	"WD"  /* working directory */
 };
 
 /*-----------------------------------------------------
@@ -1762,7 +1762,7 @@ static void set_row_color(RowWidgets *r, GdkColor *color )
 
 	for (i = 0; i < GEANY_BC_CMDENTRIES_COUNT; i++)
 		gtk_widget_modify_text(r->entries[i], GTK_STATE_NORMAL, color);
-};
+}
 
 
 static void set_build_command_entry_text(GtkWidget *wid, const gchar *text)
