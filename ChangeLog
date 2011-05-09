@@ -33,6 +33,10 @@
    be quoted, adding support for XML (closes #3183506).
  * src/main.c, src/prefs.c, src/tools.c:
    Fix loading and updating menu accelerators for custom commands.
+ * src/sidebar.c:
+   Avoid changing the tag tree if it's not the one of the current
+   document, fixing showing the wrong tag list when reloading
+   configuration files.
 
 
 2011-05-08  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
