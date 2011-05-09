@@ -3,6 +3,8 @@
  * plugins/splitwindow.c:
    Remove widget reparenting in Split Window plugin. This fixes plugin
    issues on Windows (patch by Matthew Brush, thanks - closes #2725342).
+ * plugins/Makefile.am, plugins/makefile.win32, wscript:
+   Enable SplitWindow build on Windows again (re-apply Enrico's patch).
 
 
 2011-05-06  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
