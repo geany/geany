@@ -11,6 +11,9 @@
  * src/toolbar.c:
    Correctly expand the menubar if the toolbar is appended to it but
    not visible (closes #3204955).
+ * src/callbacks.c:
+   Create a new undo action when inserting templates, making sure the user
+   can undo the template insertion without also undoing a previous action.
 
 
 2011-05-08  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
