@@ -26,6 +26,8 @@
    the actual job in IDLE callbacks for the TreeView's handler to have run.
  * doc/pluginsymbols.c, src/sciwrappers.c:
    Fix a few Doxygen warnings.
+ * plugins/saveactions.c:
+   Properly use 0 as the invalid timeout source ID.
 
 
 2011-05-08  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
