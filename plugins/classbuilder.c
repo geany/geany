@@ -201,7 +201,7 @@ static const gchar templates_php_class_source[] = "<?php\n\
 {fileheader}\n\
 {namespace_decl}\n\
 {base_include}\n\
-{abstract_decl}class {class_name}{base_decl}{implements_decl}\n\{\n\
+{abstract_decl}class {class_name}{base_decl}{implements_decl}\n{\n\
 {singleton_impl}\
 {constructor_impl}\
 {destructor_impl}\n\
@@ -356,7 +356,7 @@ get_template_class_source(ClassInfo *class_info)
 }
 
 
-void show_dialog_create_class(gint type)
+static void show_dialog_create_class(gint type)
 {
 	CreateClassDialog *cc_dlg;
 	GtkWidget *main_box;

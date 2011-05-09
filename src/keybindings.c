@@ -1775,7 +1775,7 @@ static GtkWidget *create_switch_dialog(void)
 }
 
 
-static void update_filename_label()
+static void update_filename_label(void)
 {
 	if (!switch_dialog)
 	{
