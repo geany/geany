@@ -1089,7 +1089,9 @@ typedef struct
 	GtkWidget *dialog;
 	GtkWidget *tree;
 	GtkListStore *store;
+	GtkWidget *plugin_label;
 	GtkWidget *description_label;
+	GtkWidget *author_label;
 	GtkWidget *configure_button;
 	GtkWidget *help_button;
 }
@@ -1125,11 +1127,11 @@ static void pm_selection_changed(GtkTreeSelection *selection, gpointer user_data
 			PluginInfo *pi;
 
 			pi = &p->info;
-			text = g_strdup_printf(
-				_("Plugin: %s %s\nDescription: %s\nAuthor(s): %s"),
-				pi->name, pi->version, pi->description, pi->author);
-
-			geany_wrap_label_set_text(GTK_LABEL(pm_widgets.description_label), text);
+			/* Translators: <plugin name> <plugin version> */
+			text = g_strdup_printf(_("%s %s"), pi->name, pi->version);
+			geany_wrap_label_set_text(GTK_LABEL(pm_widgets.plugin_label), text);
+			geany_wrap_label_set_text(GTK_LABEL(pm_widgets.description_label), pi->description);
+			geany_wrap_label_set_text(GTK_LABEL(pm_widgets.author_label), pi->author);
 			g_free(text);
 
 			pm_update_buttons(p);
@@ -1305,9 +1307,25 @@ static void pm_dialog_response(GtkDialog *dialog, gint response, gpointer user_d
 }
 
 
+static GtkWidget *create_table_label(const gchar *text)
+{
+	GtkWidget *label;
+	PangoAttrList *attrs;
+
+	attrs = pango_attr_list_new();
+	pango_attr_list_insert(attrs, pango_attr_weight_new(PANGO_WEIGHT_BOLD));
+	label = gtk_label_new(text);
+	gtk_label_set_attributes(GTK_LABEL(label), attrs);
+	gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.0);
+	pango_attr_list_unref(attrs);
+
+	return label;
+}
+
+
 static void pm_show_dialog(GtkMenuItem *menuitem, gpointer user_data)
 {
-	GtkWidget *vbox, *vbox2, *label_vbox, *hbox, *swin, *label, *label2, *desc_win;
+	GtkWidget *vbox, *vbox2, *label_vbox, *hbox, *swin, *label, *label2, *desc_win, *table, *paned;
 
 	/* before showing the dialog, we need to create the list of available plugins */
 	load_all_plugins();
@@ -1348,12 +1366,22 @@ static void pm_show_dialog(GtkMenuItem *menuitem, gpointer user_data)
 	gtk_label_set_use_markup(GTK_LABEL(label2), TRUE);
 	gtk_misc_set_alignment(GTK_MISC(label2), 0, 0.5);
 
-	pm_widgets.description_label = geany_wrap_label_new("");
+	table = gtk_table_new(3, 2, FALSE);
+	gtk_table_set_col_spacings(GTK_TABLE(table), 6);
+	pm_widgets.plugin_label = geany_wrap_label_new(NULL);
+	pm_widgets.description_label = geany_wrap_label_new(NULL);
+	pm_widgets.author_label = geany_wrap_label_new(NULL);
+	gtk_table_attach(GTK_TABLE(table), create_table_label(_("Plugin:")), 0, 1, 0, 1, GTK_FILL, GTK_FILL, 0, 0);
+	gtk_table_attach(GTK_TABLE(table), create_table_label(_("Description:")), 0, 1, 1, 2, GTK_FILL, GTK_FILL, 0, 0);
+	gtk_table_attach(GTK_TABLE(table), create_table_label(_("Author(s):")), 0, 1, 2, 3, GTK_FILL, GTK_FILL, 0, 0);
+	gtk_table_attach(GTK_TABLE(table), pm_widgets.plugin_label, 1, 2, 0, 1, GTK_EXPAND | GTK_FILL, GTK_FILL, 0, 0);
+	gtk_table_attach(GTK_TABLE(table), pm_widgets.description_label, 1, 2, 1, 2, GTK_EXPAND | GTK_FILL, GTK_FILL, 0, 0);
+	gtk_table_attach(GTK_TABLE(table), pm_widgets.author_label, 1, 2, 2, 3, GTK_EXPAND | GTK_FILL, GTK_FILL, 0, 0);
+
 	desc_win = gtk_scrolled_window_new(NULL, NULL);
 	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(desc_win),
 		GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
-	gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(desc_win),
-		pm_widgets.description_label);
+	gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(desc_win), table);
 
 	hbox = gtk_hbox_new(FALSE, 0);
 	gtk_box_pack_start(GTK_BOX(hbox), label2, TRUE, TRUE, 0);
@@ -1362,12 +1390,15 @@ static void pm_show_dialog(GtkMenuItem *menuitem, gpointer user_data)
 
 	label_vbox = gtk_vbox_new(FALSE, 3);
 	gtk_box_pack_start(GTK_BOX(label_vbox), hbox, FALSE, FALSE, 0);
-	gtk_box_pack_start(GTK_BOX(label_vbox), desc_win, FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(label_vbox), desc_win, TRUE, TRUE, 0);
+
+	paned = gtk_vpaned_new();
+	gtk_paned_pack1(GTK_PANED(paned), swin, TRUE, FALSE);
+	gtk_paned_pack2(GTK_PANED(paned), label_vbox, FALSE, FALSE);
 
 	vbox2 = gtk_vbox_new(FALSE, 3);
 	gtk_box_pack_start(GTK_BOX(vbox2), label, FALSE, FALSE, 5);
-	gtk_box_pack_start(GTK_BOX(vbox2), swin, TRUE, TRUE, 0);
-	gtk_box_pack_start(GTK_BOX(vbox2), label_vbox, FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(vbox2), paned, TRUE, TRUE, 0);
 
 	g_signal_connect(pm_widgets.dialog, "response", G_CALLBACK(pm_dialog_response), NULL);
 
