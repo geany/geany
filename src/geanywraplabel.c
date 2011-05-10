@@ -56,6 +56,7 @@ struct _GeanyWrapLabel
 static void geany_wrap_label_size_request	(GtkWidget *widget, GtkRequisition *req);
 static void geany_wrap_label_size_allocate	(GtkWidget *widget, GtkAllocation *alloc);
 static void geany_wrap_label_set_wrap_width	(GtkWidget *widget, gsize width);
+static void geany_wrap_label_label_notify	(GObject *object, GParamSpec *pspec, gpointer data);
 
 G_DEFINE_TYPE(GeanyWrapLabel, geany_wrap_label, GTK_TYPE_LABEL)
 
@@ -80,6 +81,10 @@ static void geany_wrap_label_init(GeanyWrapLabel *self)
 
 	priv = self->priv;
 	priv->wrap_width = 0;
+
+	g_signal_connect(self, "notify::label", G_CALLBACK(geany_wrap_label_label_notify), NULL);
+	pango_layout_set_wrap(gtk_label_get_layout(GTK_LABEL(self)), PANGO_WRAP_WORD_CHAR);
+	gtk_misc_set_alignment(GTK_MISC(self), 0.0, 0.0);
 }
 
 
@@ -106,6 +111,15 @@ static void geany_wrap_label_set_wrap_width(GtkWidget *widget, gsize width)
 }
 
 
+/* updates the wrap width when the label text changes */
+static void geany_wrap_label_label_notify(GObject *object, GParamSpec *pspec, gpointer data)
+{
+	GeanyWrapLabelPrivate *priv = GEANY_WRAP_LABEL_GET_PRIVATE(object);
+
+	geany_wrap_label_set_wrap_width(GTK_WIDGET(object), priv->wrap_width);
+}
+
+
 /* Forces the height to be the size necessary for the Pango layout, while allowing the
  * width to be flexible. */
 static void geany_wrap_label_size_request(GtkWidget *widget, GtkRequisition *req)
@@ -128,24 +142,7 @@ static void geany_wrap_label_size_allocate(GtkWidget *widget, GtkAllocation *all
 }
 
 
-void geany_wrap_label_set_text(GtkLabel *label, const gchar *text)
-{
-	GeanyWrapLabelPrivate *priv = GEANY_WRAP_LABEL_GET_PRIVATE(label);
-
-	gtk_label_set_text(label, text);
-	geany_wrap_label_set_wrap_width(GTK_WIDGET(label), priv->wrap_width);
-}
-
-
 GtkWidget *geany_wrap_label_new(const gchar *text)
 {
-	GtkWidget *l = g_object_new(GEANY_WRAP_LABEL_TYPE, NULL);
-
-	if (NZV(text))
-		gtk_label_set_text(GTK_LABEL(l), text);
-
-	pango_layout_set_wrap(gtk_label_get_layout(GTK_LABEL(l)), PANGO_WRAP_WORD_CHAR);
-	gtk_misc_set_alignment(GTK_MISC(l), 0.0, 0.0);
-
-	return l;
+	return g_object_new(GEANY_WRAP_LABEL_TYPE, "label", text, NULL);
 }

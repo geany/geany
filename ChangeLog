@@ -2,6 +2,9 @@
 
  * src/plugins.c:
    Improve the plugin manager dialog a little.
+ * src/geanywraplabel.c, src/geanywraplabel.h, src/keybindings.c,
+   src/plugins.c:
+   Cleanup GeanyWrapLabel a bit.
 
 
 2011-05-09  Colomban Wendling  <colomban(at)geany(dot)org>

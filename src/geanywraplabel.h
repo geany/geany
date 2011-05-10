@@ -43,7 +43,6 @@ typedef struct _GeanyWrapLabelClass  GeanyWrapLabelClass;
 
 GType			geany_wrap_label_get_type			(void);
 GtkWidget*		geany_wrap_label_new				(const gchar *text);
-void			geany_wrap_label_set_text			(GtkLabel *label, const gchar *text);
 
 
 G_END_DECLS

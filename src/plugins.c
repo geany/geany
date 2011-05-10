@@ -1129,9 +1129,9 @@ static void pm_selection_changed(GtkTreeSelection *selection, gpointer user_data
 			pi = &p->info;
 			/* Translators: <plugin name> <plugin version> */
 			text = g_strdup_printf(_("%s %s"), pi->name, pi->version);
-			geany_wrap_label_set_text(GTK_LABEL(pm_widgets.plugin_label), text);
-			geany_wrap_label_set_text(GTK_LABEL(pm_widgets.description_label), pi->description);
-			geany_wrap_label_set_text(GTK_LABEL(pm_widgets.author_label), pi->author);
+			gtk_label_set_text(GTK_LABEL(pm_widgets.plugin_label), text);
+			gtk_label_set_text(GTK_LABEL(pm_widgets.description_label), pi->description);
+			gtk_label_set_text(GTK_LABEL(pm_widgets.author_label), pi->author);
 			g_free(text);
 
 			pm_update_buttons(p);

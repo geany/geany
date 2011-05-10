@@ -1788,8 +1788,7 @@ static void update_filename_label(void)
 		gtk_widget_show_all(switch_dialog);
 	}
 
-	geany_wrap_label_set_text(GTK_LABEL(switch_dialog_label),
-		DOC_FILENAME(document_get_current()));
+	gtk_label_set_text(GTK_LABEL(switch_dialog_label), DOC_FILENAME(document_get_current()));
 }
 
 
