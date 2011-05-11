@@ -1,3 +1,10 @@
+2011-05-12  Colomban Wendling  <colomban(at)geany(dot)org>
+
+ * src/encodings.c:
+   Update the HTML content-type encoding detection regexp to accept some
+   more valid inputs (closes #3300703).
+
+
 2011-05-11  Colomban Wendling  <colomban(at)geany(dot)org>
 
  * src/plugins.c:
