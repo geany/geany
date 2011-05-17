@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: geany 0.20\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-12-05 15:55+0100\n"
-"PO-Revision-Date: 2011-03-22 23:57+0100\n"
+"PO-Revision-Date: 2011-05-12 21:11+0100\n"
 "Last-Translator: Jože Klepec <joze.klepec@siol.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -508,7 +508,7 @@ msgstr ""
 
 #: ../src/dialogs.c:480
 msgid "Overwrite?"
-msgstr "Prepišem?"
+msgstr "Se prepiše?"
 
 #: ../src/dialogs.c:481
 msgid "Filename already exists!"
@@ -832,7 +832,7 @@ msgstr "\"%s\" ni bila najden."
 
 #: ../src/document.c:2084
 msgid "Wrap search and find again?"
-msgstr "Zaključim iskanje v preostanku?"
+msgstr "Se naj iskanje zaključi in ponovi v preostanku?"
 
 #: ../src/document.c:2163
 #: ../src/search.c:1146
@@ -956,7 +956,7 @@ msgstr "Romunsko"
 msgid "Arabic"
 msgstr "Arabsko"
 
-# sploh ni na voljo, ?
+# sploh ni na voljo, ? (je samo, potrebuješ nameščeno potrebno kodno stran)
 #. not available at all, ?
 #: ../src/encodings.c:104
 #: ../src/encodings.c:106
@@ -992,6 +992,7 @@ msgstr "Turško"
 msgid "Vietnamese"
 msgstr "Vietnamsko"
 
+# available, original comment fails
 #. maybe not available on Linux
 #: ../src/encodings.c:129
 #: ../src/encodings.c:130
@@ -1290,11 +1291,11 @@ msgstr "_Preklopi komentiranje vrstic"
 
 #: ../src/interface.c:602
 msgid "_Increase Indent"
-msgstr "_Povečaj zamik"
+msgstr "_Povečanje zamika"
 
 #: ../src/interface.c:610
 msgid "_Decrease Indent"
-msgstr "_Zmanjšaj zamik"
+msgstr "_Zmanjšanje zamika"
 
 #: ../src/interface.c:618
 #: ../src/keybindings.c:354
@@ -1856,7 +1857,7 @@ msgstr "Samodejno fokusiraj gradnike (fokus sledi miški)"
 # puščen delno nepreveden, bo dodelan - fokus ni najboljši prevod; will be done later, left partially undone - goto line fields?
 #: ../src/interface.c:3105
 msgid "Gives the focus automatically to widgets below the mouse cursor. Works for the main editor widget, the scribble, the toolbar search and goto line fields and the VTE."
-msgstr "Samodejno dodeli  fokus  gradnikom pod miškinim kazalcem. Deluje za gradnike glavnega urejevalnika, beležko, iskanje iz  orodne vrstice in VTE."
+msgstr "Samodejno dodeli fokus gradnikom pod miškinim kazalcem. Deluje za gradnike glavnega urejevalnika, beležko, iskanje iz  orodne vrstice in VTE."
 
 # Original needs rewording!
 #: ../src/interface.c:3107
@@ -1866,7 +1867,7 @@ msgstr "Uporabi menijske izbire sistemskih pogovornih oken ali privzetih GTK pog
 # Original needs rewording!
 #: ../src/interface.c:3110
 msgid "Defines whether to use the native Windows File Open/Save dialogs or whether to use the GTK default dialogs"
-msgstr "Določi ali uporabite  sistemska pogovorna okna ali privzeta GTK pogovorna okna"
+msgstr "Določi ali uporabite sistemska pogovorna okna ali privzeta GTK pogovorna okna"
 
 #: ../src/interface.c:3112
 #: ../src/interface.c:3491
@@ -2155,7 +2156,7 @@ msgstr "Zavijanje vrstic"
 
 #: ../src/interface.c:3701
 msgid "Wrap the line at the window border and continue it on the next line. Note: line wrapping has a high performance cost for large documents so should be disabled on slow machines."
-msgstr "Zavije vrstico na robu okna in jo nadaljuje v naslednji. Opomba: zavijanje vrstic ima močan vpliv na zmogljivost pri velikih dokumentih in bi moralo biti onemogočen na počasnejših računalnikih. "
+msgstr "Zavije vrstico na robu okna in jo nadaljuje v naslednji. Opomba: zavijanje vrstic ima močan vpliv na zmogljivost pri velikih dokumentih in bi moralo biti onemogočeno na počasnejših računalnikih. "
 
 #: ../src/interface.c:3703
 msgid "\"Smart\" home key"
@@ -2405,7 +2406,7 @@ msgstr "Dvojni narekovaji \" \""
 
 #: ../src/interface.c:4047
 msgid "Auto-close double quote when typing an opening one"
-msgstr "Samodejno zapri dvojni narekovaje med tipkanjem"
+msgstr "Samodejno zapri dvojne narekovaje med tipkanjem"
 
 #: ../src/interface.c:4049
 msgid "<b>Auto-close quotes and brackets</b>"
@@ -4901,7 +4902,7 @@ msgstr "Ali naj kazalka utripa ali ne?"
 
 #: ../src/vte.c:847
 msgid "Override Geany keybindings"
-msgstr "Zanemari  bližnjice Geany-ja"
+msgstr "Zanemari bližnjice Geany-ja"
 
 #: ../src/vte.c:849
 msgid "Allows the VTE to receive keyboard shortcuts (apart from focus commands)"
@@ -4913,7 +4914,7 @@ msgstr "Onemogoči bližnjico v meni (privzeto - F10)"
 
 #: ../src/vte.c:853
 msgid "This option disables the keybinding to popup the menu bar (default is F10). Disabling it can be useful if you use, for example, Midnight Commander within the VTE."
-msgstr "Ta možnost onemogoči bližnjico pojavljanja menijske vrstice (privzeto - F10). Onemogočenje je lahko uporabno, če na primer, uporabljate Midnight Comander znotraj VTE."
+msgstr "Ta možnost onemogoči hitre povezave s tipkami (bližnjice) pojavljanja menijske vrstice (privzeto - F10). Onemogočenje je lahko uporabno, če na primer, uporabljate Midnight Comander znotraj VTE."
 
 #: ../src/vte.c:856
 #: ../plugins/filebrowser.c:1228
@@ -5347,9 +5348,10 @@ msgstr[3] "Samodejno shranjenih %d datotek."
 msgid "Select Directory"
 msgstr "Izberite mapo"
 
+# Backup directory does not exist or you do not have write access to write into it. :)
 #: ../plugins/saveactions.c:463
 msgid "Backup directory does not exist or is not writable."
-msgstr "Mapa varnostne kopije ne obstaja ali ni zapisljiva."
+msgstr "Mapa varnostne kopije ne obstaja ali nimate dostopa za pisanje vanjo."
 
 #: ../plugins/saveactions.c:543
 msgid "Auto Save"
