@@ -1362,14 +1362,7 @@ on_replace_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 
 	if ((response != GEANY_RESPONSE_FIND) && (search_flags_re & SCFIND_MATCHCASE)
 		&& (strcmp(find, replace) == 0))
-	{
-		fail:
-		utils_beep();
-		gtk_widget_grab_focus(replace_dlg.find_entry);
-		g_free(find);
-		g_free(replace);
-		return;
-	}
+		goto fail;
 	if (search_flags_re & SCFIND_REGEXP)
 	{
 		if (! utils_str_replace_escape(find, TRUE) ||
@@ -1433,6 +1426,13 @@ on_replace_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 			if (settings.replace_close_dialog)
 				gtk_widget_hide(replace_dlg.dialog);
 	}
+	g_free(find);
+	g_free(replace);
+	return;
+
+fail:
+	utils_beep();
+	gtk_widget_grab_focus(replace_dlg.find_entry);
 	g_free(find);
 	g_free(replace);
 }
