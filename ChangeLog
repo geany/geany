@@ -4,6 +4,9 @@
    Remove unused variables (patch by Eugene Arshinov, thanks).
  * src/stash.c:
    Remove unused variables (suggested by Eugene Arshinov).
+ * src/ui_utils.c, doc/geany.txt, doc/geany.html:
+   Do not allow 'Save All' even if 'allow_always_save' is set
+   (patch by Dimitar Zhekov, thanks).
 
 
 2011-05-12  Colomban Wendling  <colomban(at)geany(dot)org>

@@ -661,7 +661,7 @@ void ui_save_buttons_toggle(gboolean enable)
 	gboolean dirty_tabs = FALSE;
 
 	if (ui_prefs.allow_always_save)
-		return;
+		enable = gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook)) > 0 ? TRUE : FALSE;
 
 	ui_widget_set_sensitive(widgets.save_buttons[0], enable);
 	ui_widget_set_sensitive(widgets.save_buttons[1], enable);

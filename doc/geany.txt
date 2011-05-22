@@ -4373,11 +4373,11 @@ show_symbol_list_expanders        Whether to show or hide the small expander   t
                                   available with GTK 2.12 or above).
 allow_always_save                 Whether files can be saved always, even if   false
                                   they don't have any changes. By default,
-                                  the Save buttons and menu items are
-                                  disabled when a file is unchanged. When
-                                  setting this option to true, the Save
-                                  buttons and menu items are always active
-                                  and files can be saved.
+                                  the Save button and menu item are disabled
+                                  when a file is unchanged. When setting
+                                  this option to true, the Save button and
+                                  menu item are always active and files can
+                                  be saved.
 compiler_tab_autoscroll           Whether to automatically scroll to the       true
                                   last line of the output in the Compiler
                                   tab.
