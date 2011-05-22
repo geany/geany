@@ -1654,11 +1654,8 @@ static void on_toolbutton_build_activate(GtkWidget *menuitem, gpointer user_data
 static void on_toolbutton_make_activate(GtkWidget *menuitem, gpointer user_data)
 {
 	gchar *msg;
-	gint grp, cmd;
 
 	last_toolbutton_action = user_data;
-	grp = GPOINTER_TO_GRP(user_data);
-	cmd = GPOINTER_TO_CMD(user_data);
 	if (last_toolbutton_action == GBO_TO_POINTER(GEANY_GBO_MAKE_ALL))
 			msg = _("Build the current file with Make and the default target");
 	else if (last_toolbutton_action == GBO_TO_POINTER(GEANY_GBO_CUSTOM))
@@ -2116,10 +2113,7 @@ static gboolean read_row(BuildDestination *dst, BuildTableData table_data, gint 
 {
 	gchar *entries[GEANY_BC_CMDENTRIES_COUNT];
 	gboolean changed = FALSE;
-	GeanyBuildSource src;
 	enum GeanyBuildCmdEntries i;
-
-	src = table_data->rows[drow]->src;
 
 	for (i = 0; i < GEANY_BC_CMDENTRIES_COUNT; i++)
 	{

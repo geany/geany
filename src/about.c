@@ -137,7 +137,6 @@ static GtkWidget *create_dialog(void)
 	GtkWidget *table;
 	GtkWidget *license_scrollwin;
 	GtkWidget *info_box;
-	GtkWidget *button;
 	GtkWidget *header_hbox;
 	GtkWidget *header_eventbox;
 	GdkPixbuf *icon;
@@ -154,7 +153,7 @@ static GtkWidget *create_dialog(void)
 	gtk_window_set_position(GTK_WINDOW(dialog), GTK_WIN_POS_CENTER_ON_PARENT);
 	gtk_window_set_title(GTK_WINDOW(dialog), _("About Geany"));
 	gtk_widget_set_name(dialog, "GeanyDialog");
-	button = gtk_dialog_add_button(GTK_DIALOG(dialog), GTK_STOCK_CLOSE, GTK_RESPONSE_CLOSE);
+	gtk_dialog_add_button(GTK_DIALOG(dialog), GTK_STOCK_CLOSE, GTK_RESPONSE_CLOSE);
 	gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_CLOSE);
 	gtk_dialog_set_has_separator(GTK_DIALOG(dialog), FALSE);
 	g_signal_connect(dialog, "key-press-event", G_CALLBACK(gb_on_key_pressed), NULL);
