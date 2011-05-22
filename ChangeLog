@@ -7,6 +7,9 @@
  * src/ui_utils.c, doc/geany.txt, doc/geany.html:
    Do not allow 'Save All' even if 'allow_always_save' is set
    (patch by Dimitar Zhekov, thanks).
+ * data/filetypes.java:
+   Add 'enum' to secondary keywords
+   (closes #3305737, patch by Matthew Brush, thanks).
 
 
 2011-05-12  Colomban Wendling  <colomban(at)geany(dot)org>
