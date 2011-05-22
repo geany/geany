@@ -29,6 +29,13 @@
    Enable SplitWindow build on Windows again (re-apply Enrico's patch).
 
 
+2011-05-08  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * HACKING:
+   Add note about patching Glade 2.12 to compile it with
+   newer GTK versions.
+
+
 2011-05-06  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/callbacks.c:
