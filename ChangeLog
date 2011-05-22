@@ -2,6 +2,8 @@
 
  * src/about.c, src/build.c, tagmanager/tm_workspace.c:
    Remove unused variables (patch by Eugene Arshinov, thanks).
+ * src/stash.c:
+   Remove unused variables (suggested by Eugene Arshinov).
 
 
 2011-05-12  Colomban Wendling  <colomban(at)geany(dot)org>

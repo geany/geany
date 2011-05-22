@@ -777,11 +777,9 @@ void stash_group_add_radio_buttons(StashGroup *group, gint *setting,
 	va_start(args, enum_id);
 	while (1)
 	{
-		gint dummy;
-
 		if (!va_arg(args, gpointer))
 			break;
-		dummy = va_arg(args, gint);
+		va_arg(args, gint);
 		count++;
 	}
 	va_end(args);
