@@ -3,6 +3,9 @@
  * tagmanager/makefile.win32:
    Replace escape character '\' by slash '/' in paths in the
    Windows Makefiles (patch by Matthew Brush, thanks).
+ * data/filetypes.java:
+   Add 'enum' to secondary keywords
+   (closes #3305737, patch by Matthew Brush, thanks).
 
 
 2011-05-09  Colomban Wendling  <colomban(at)geany(dot)org>

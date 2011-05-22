@@ -26,7 +26,7 @@ globalclass=type
 
 [keywords]
 primary=abstract assert break case catch class const continue default do else extends final finally for future generic goto if implements import inner instanceof interface native new outer package private protected public rest return static super switch synchronized this throw throws transient try var volatile while true false null
-secondary=boolean byte char double float int long short void
+secondary=boolean byte char double enum float int long short void
 # documentation keywords for javadoc
 doccomment=author deprecated exception param return see serial serialData serialField since throws todo version
 typedefs=
