@@ -93,6 +93,7 @@ static void on_open_encoding_toggled(GtkToggleButton *togglebutton, gpointer use
 static void on_sidebar_visible_toggled(GtkToggleButton *togglebutton, gpointer user_data);
 static void on_prefs_print_radio_button_toggled(GtkToggleButton *togglebutton, gpointer user_data);
 static void on_prefs_print_page_header_toggled(GtkToggleButton *togglebutton, gpointer user_data);
+static void open_preferences_help(void);
 
 
 typedef enum PrefCallbackAction
@@ -1224,7 +1225,11 @@ on_prefs_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 		configuration_save();
 	}
 
-	if (response != GTK_RESPONSE_APPLY)
+	if (response == GTK_RESPONSE_HELP)
+	{
+		open_preferences_help();
+	}
+	else if (response != GTK_RESPONSE_APPLY)
 	{
 		gtk_tree_store_clear(store);
 		gtk_widget_hide(GTK_WIDGET(dialog));
@@ -1592,18 +1597,6 @@ static gboolean prefs_dialog_key_press_response_cb(GtkWidget *dialog, GdkEventKe
 }
 
 
-static gboolean prefs_dialog_button_press_event_cb(GtkWidget *dialog, GdkEventButton *event,
-												   gpointer data)
-{
-	if (event->button == 1)
-	{
-		open_preferences_help();
-		return TRUE;
-	}
-	return FALSE;
-}
-
-
 void prefs_show_dialog(void)
 {
 	if (ui_widgets.prefs_dialog == NULL)
@@ -1767,8 +1760,6 @@ void prefs_show_dialog(void)
 		g_signal_connect(ui_lookup_widget(ui_widgets.prefs_dialog, "check_sidebar_visible"),
 				"toggled", G_CALLBACK(on_sidebar_visible_toggled), NULL);
 
-		g_signal_connect(ui_lookup_widget(ui_widgets.prefs_dialog, "button_help"),
-				"button-press-event", G_CALLBACK(prefs_dialog_button_press_event_cb), NULL);
 		g_signal_connect(ui_widgets.prefs_dialog,
 				"key-press-event", G_CALLBACK(prefs_dialog_key_press_response_cb), NULL);
 	}
