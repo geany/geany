@@ -3,6 +3,9 @@
  * tagmanager/python.c:
    When checking for literal strings to ignore, consider also
    unicode, binary and raw strings.
+ * src/plugins.c:
+   Define and use get_plugin_path() always and move platform dependent
+   code into the function definition.
 
 
 2011-05-27  Colomban Wendling  <colomban(at)geany(dot)org>

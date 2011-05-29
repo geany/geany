@@ -886,9 +886,9 @@ load_plugins_from_path(const gchar *path)
 }
 
 
-#ifdef G_OS_WIN32
 static gchar *get_plugin_path()
 {
+#ifdef G_OS_WIN32
 	gchar *install_dir = win32_get_installation_dir();
 	gchar *path;
 
@@ -896,8 +896,10 @@ static gchar *get_plugin_path()
 	g_free(install_dir);
 
 	return path;
-}
+#else
+	return g_strconcat(GEANY_LIBDIR, G_DIR_SEPARATOR_S "geany", NULL);
 #endif
+}
 
 
 /* Load (but don't initialize) all plugins for the Plugin Manager dialog */
@@ -915,11 +917,7 @@ static void load_all_plugins(void)
 		load_plugins_from_path(prefs.custom_plugin_path);
 
 	/* finally load plugins from $prefix/lib/geany */
-#ifdef G_OS_WIN32
 	path = get_plugin_path();
-#else
-	path = g_strconcat(GEANY_LIBDIR, G_DIR_SEPARATOR_S "geany", NULL);
-#endif
 	load_plugins_from_path(path);
 	g_free(path);
 }
