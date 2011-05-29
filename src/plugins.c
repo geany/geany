@@ -659,7 +659,13 @@ plugin_new(const gchar *fname, gboolean init_plugin, gboolean add_to_list)
 	{
 		geany_debug("Plugin \"%s\" already loaded.", fname);
 		if (add_to_list)
+		{
+			/* do not add the to list twice */
+			if (g_list_find(plugin_list, plugin) != NULL)
+				return NULL;
+
 			plugin_list = g_list_prepend(plugin_list, plugin);
+		}
 		return plugin;
 	}
 

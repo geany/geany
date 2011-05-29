@@ -6,6 +6,8 @@
  * src/plugins.c:
    Define and use get_plugin_path() always and move platform dependent
    code into the function definition.
+   Do not add active plugins to the list of plugins when they are
+   already in the list (closes #3308191).
 
 
 2011-05-27  Colomban Wendling  <colomban(at)geany(dot)org>
