@@ -406,7 +406,7 @@ geany_data_init(void)
 
 
 /* Prevent the same plugin filename being loaded more than once.
- * Note: g_module_name always returns the .so name, even when Plugin::filename is an .la file. */
+ * Note: g_module_name always returns the .so name, even when Plugin::filename is a .la file. */
 static gboolean
 plugin_loaded(GModule *module)
 {
