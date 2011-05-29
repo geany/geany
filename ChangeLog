@@ -1,3 +1,10 @@
+2011-05-29  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * tagmanager/python.c:
+   When checking for literal strings to ignore, consider also
+   unicode, binary and raw strings.
+
+
 2011-05-27  Colomban Wendling  <colomban(at)geany(dot)org>
 
  * src/prefs.c:
