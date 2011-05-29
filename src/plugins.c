@@ -895,8 +895,8 @@ load_plugins_from_path(const gchar *path)
 static gchar *get_plugin_path()
 {
 #ifdef G_OS_WIN32
-	gchar *install_dir = win32_get_installation_dir();
 	gchar *path;
+	gchar *install_dir = win32_get_installation_dir();
 
 	path = g_strconcat(install_dir, "\\lib", NULL);
 	g_free(install_dir);
@@ -908,24 +908,49 @@ static gchar *get_plugin_path()
 }
 
 
+static gboolean validate_custom_plugin_path(const gchar *plugin_path_custom,
+											const gchar *plugin_path_config,
+											const gchar *plugin_path_system)
+{
+	/* check whether the custom plugin path is one of the system or user plugin paths
+	 * and abort if so */
+	if (utils_str_equal(plugin_path_custom, plugin_path_config) ||
+		utils_str_equal(plugin_path_custom, plugin_path_system))
+		return FALSE;
+
+	return TRUE;
+}
+
+
 /* Load (but don't initialize) all plugins for the Plugin Manager dialog */
 static void load_all_plugins(void)
 {
-	gchar *path;
+	gchar *plugin_path_config;
+	gchar *plugin_path_system;
 
-	path = g_strconcat(app->configdir, G_DIR_SEPARATOR_S, "plugins", NULL);
+	plugin_path_config = g_strconcat(app->configdir, G_DIR_SEPARATOR_S, "plugins", NULL);
+	plugin_path_system = get_plugin_path();
+
 	/* first load plugins in ~/.config/geany/plugins/ */
-	load_plugins_from_path(path);
-	g_free(path);
+	load_plugins_from_path(plugin_path_config);
 
 	/* load plugins from a custom path */
 	if (NZV(prefs.custom_plugin_path))
-		load_plugins_from_path(prefs.custom_plugin_path);
+	{
+		gchar *plugin_path_custom = utils_get_locale_from_utf8(prefs.custom_plugin_path);
+		utils_tidy_path(plugin_path_custom);
+
+		if (validate_custom_plugin_path(plugin_path_custom, plugin_path_config, plugin_path_system))
+			load_plugins_from_path(plugin_path_custom);
+
+		g_free(plugin_path_custom);
+	}
 
 	/* finally load plugins from $prefix/lib/geany */
-	path = get_plugin_path();
-	load_plugins_from_path(path);
-	g_free(path);
+	load_plugins_from_path(plugin_path_system);
+
+	g_free(plugin_path_config);
+	g_free(plugin_path_system);
 }
 
 
