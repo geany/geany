@@ -1,3 +1,9 @@
+2011-05-30  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * data/filetypes.java:
+   Move keyword 'enum' to primary keywords (closes #3305737).
+
+
 2011-05-29  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * tagmanager/python.c:
