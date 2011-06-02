@@ -4,6 +4,12 @@
    Add ui_focus_current_document() and document_grab_focus().
  * src/project.c:
    Focus the editor widget after loading project session files.
+ * scripts/create_py_tags.py:
+   Ignore tags ending with an underscore.
+   Dynamically determine the path of Python's standard library instead
+   of hardcoding it.
+   Parse all modules of the Python standard library instead of a
+   hardcoded list of filenames.
 
 
 2011-05-30  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

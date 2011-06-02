@@ -15,10 +15,15 @@
 import datetime
 import imp
 import inspect
+import os
 import re
 import sys
 import types
 
+PYTHON_LIB_DIRECTORY = os.path.dirname(os.__file__)
+PYTHON_LIB_IGNORE_PACKAGES = (u'test', u'dist-packages', u'site-packages')
+# multiprocessing.util registers an atexit function which breaks this script on exit
+PYTHON_LIB_IGNORE_MODULES = (u'multiprocessing/util.py',)
 
 # (from tagmanager/tm_tag.c:32)
 TA_NAME = '%c' % 200,
@@ -34,6 +39,7 @@ tag_filename = 'data/python.tags'
 tag_regexp = '^[ \t]*(def|class)[ \t]+([a-zA-Z0-9_]+)[ \t]*(\(.*\))[:]'
 
 
+########################################################################
 class Parser:
 
     #----------------------------------------------------------------------
@@ -143,7 +149,7 @@ class Parser:
                     name = obj.__name__
                 except AttributeError:
                     name = obj_name
-                if not name or not isinstance(name, basestring) or name.startswith('_'):
+                if not name or not isinstance(name, basestring) or is_private_identifier(name):
                     # skip non-public tags
                     continue
                 if inspect.isfunction(obj):
@@ -152,11 +158,11 @@ class Parser:
                     self._add_tag(obj, TYPE_CLASS, self._get_superclass(obj))
                     try:
                         methods = inspect.getmembers(obj, inspect.ismethod)
-                    except AttributeError:
+                    except (TypeError, AttributeError):
                         methods = []
                     for m_name, m_obj in methods:
                         # skip non-public tags
-                        if m_name.startswith('_') or not inspect.ismethod(m_obj):
+                        if is_private_identifier(m_name) or not inspect.ismethod(m_obj):
                             continue
                         self._add_tag(m_obj, TYPE_FUNCTION, name)
         else:
@@ -166,7 +172,7 @@ class Parser:
                 m = self.re_matcher.match(line)
                 if m:
                     tag_type_str, tagname, args = m.groups()
-                    if not tagname or tagname.startswith('_'):
+                    if not tagname or is_private_identifier(tagname):
                         # skip non-public tags
                         continue
                     if tag_type_str == 'class':
@@ -200,43 +206,42 @@ class Parser:
         target_file.close()
 
 
-
-# files to include if none were specified on command line
-# (this list was created manually and probably needs review for sensible input files)
-default_files = map(lambda x: '/usr/lib/python2.5/' + x,
-[ 'anydbm.py', 'asynchat.py', 'asyncore.py', 'audiodev.py', 'base64.py', 'BaseHTTPServer.py',
-'Bastion.py', 'bdb.py', 'binhex.py', 'bisect.py', 'calendar.py', 'CGIHTTPServer.py',
-'cgi.py', 'cgitb.py', 'chunk.py', 'cmd.py', 'codecs.py', 'codeop.py', 'code.py', 'colorsys.py',
-'commands.py', 'compileall.py', 'ConfigParser.py', 'contextlib.py', 'cookielib.py', 'Cookie.py',
-'copy.py', 'copy_reg.py', 'cProfile.py', 'csv.py', 'dbhash.py', 'decimal.py', 'difflib.py',
-'dircache.py', 'dis.py', 'DocXMLRPCServer.py', 'filecmp.py', 'fileinput.py', 'fnmatch.py',
-'formatter.py', 'fpformat.py', 'ftplib.py', 'functools.py', 'getopt.py', 'getpass.py', 'gettext.py',
-'glob.py', 'gopherlib.py', 'gzip.py', 'hashlib.py', 'heapq.py', 'hmac.py', 'htmlentitydefs.py',
-'htmllib.py', 'HTMLParser.py', 'httplib.py', 'ihooks.py', 'imaplib.py', 'imghdr.py', 'imputil.py',
-'inspect.py', 'keyword.py', 'linecache.py', 'locale.py', 'mailbox.py', 'mailcap.py', 'markupbase.py',
-'md5.py', 'mhlib.py', 'mimetools.py', 'mimetypes.py', 'MimeWriter.py', 'mimify.py',
-'modulefinder.py', 'multifile.py', 'mutex.py', 'netrc.py', 'nntplib.py', 'ntpath.py',
-'nturl2path.py', 'opcode.py', 'optparse.py', 'os2emxpath.py', 'os.py', 'pdb.py', 'pickle.py',
-'pickletools.py', 'pipes.py', 'pkgutil.py', 'platform.py', 'plistlib.py', 'popen2.py',
-'poplib.py', 'posixfile.py', 'posixpath.py', 'pprint.py', 'pty.py', 'py_compile.py', 'pydoc.py',
-'Queue.py', 'quopri.py', 'random.py', 'repr.py', 're.py', 'rexec.py', 'rfc822.py', 'rlcompleter.py',
-'robotparser.py', 'runpy.py', 'sched.py', 'sets.py', 'sha.py', 'shelve.py', 'shlex.py', 'shutil.py',
-'SimpleHTTPServer.py', 'SimpleXMLRPCServer.py', 'site.py', 'smtpd.py', 'smtplib.py', 'sndhdr.py',
-'socket.py', 'SocketServer.py', 'stat.py', 'statvfs.py', 'StringIO.py', 'stringold.py',
-'stringprep.py', 'string.py', '_strptime.py', 'struct.py', 'subprocess.py', 'sunaudio.py',
-'sunau.py', 'symbol.py', 'symtable.py', 'tabnanny.py', 'tarfile.py', 'telnetlib.py', 'tempfile.py',
-'textwrap.py', 'this.py', 'threading.py', 'timeit.py', 'toaiff.py', 'tokenize.py', 'token.py',
-'traceback.py', 'trace.py', 'tty.py', 'types.py', 'unittest.py', 'urllib2.py', 'urllib.py',
-'urlparse.py', 'UserDict.py', 'UserList.py', 'user.py', 'UserString.py', 'uuid.py', 'uu.py',
-'warnings.py', 'wave.py', 'weakref.py', 'webbrowser.py', 'whichdb.py', 'xdrlib.py', 'zipfile.py'
-])
+#----------------------------------------------------------------------
+def is_private_identifier(tagname):
+    return tagname.startswith('_') or tagname.endswith('_')
 
 
+#----------------------------------------------------------------------
+def get_module_filenames(path):
+    def ignore_package(package):
+        for ignore in PYTHON_LIB_IGNORE_PACKAGES:
+            if ignore in package:
+                return True
+        return False
+
+    # the loop is quite slow but it doesn't matter for this script
+    filenames = list()
+    python_lib_directory_len = len(PYTHON_LIB_DIRECTORY)
+    for base, dirs, files in os.walk(path):
+        package = base[(python_lib_directory_len + 1):]
+        if ignore_package(package):
+            continue
+        for filename in files:
+            module_name = os.path.join(package, filename)
+            if module_name in PYTHON_LIB_IGNORE_MODULES:
+                continue
+            if filename.endswith('.py'):
+                module_filename = os.path.join(base, filename)
+                filenames.append(module_filename)
+    return filenames
+
+
+#----------------------------------------------------------------------
 def main():
     # process files given on command line
     args = sys.argv[1:]
     if not args:
-        args = default_files
+        args = get_module_filenames(PYTHON_LIB_DIRECTORY)
 
     parser = Parser()
 
