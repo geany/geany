@@ -1,3 +1,9 @@
+2011-06-02  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/document.c, src/document.h, src/ui_utils.c, src/ui_utils.h:
+   Add ui_focus_current_document() and document_grab_focus().
+
+
 2011-05-30  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * data/filetypes.java:

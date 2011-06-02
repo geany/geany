@@ -3129,3 +3129,9 @@ gint document_compare_by_tab_order_reverse(gconstpointer a, gconstpointer b)
 }
 
 
+void document_grab_focus(GeanyDocument *doc)
+{
+	g_return_if_fail(doc != NULL);
+
+	gtk_widget_grab_focus(GTK_WIDGET(doc->editor->sci));
+}

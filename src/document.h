@@ -267,4 +267,6 @@ gint document_compare_by_tab_order(gconstpointer a, gconstpointer b);
 
 gint document_compare_by_tab_order_reverse(gconstpointer a, gconstpointer b);
 
+void document_grab_focus(GeanyDocument *doc);
+
 #endif

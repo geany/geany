@@ -2572,3 +2572,11 @@ GdkPixbuf *ui_get_mime_icon(const gchar *mime_type, GtkIconSize size)
 	return icon;
 }
 
+
+void ui_focus_current_document(void)
+{
+	GeanyDocument *doc = document_get_current();
+
+	if (doc != NULL)
+		document_grab_focus(doc);
+}
