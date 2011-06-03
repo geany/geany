@@ -1386,9 +1386,9 @@ on_replace_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 	}
 
 	ui_combo_box_add_to_history(GTK_COMBO_BOX_ENTRY(
-		gtk_widget_get_parent(replace_dlg.find_entry)), find, 0);
+		gtk_widget_get_parent(replace_dlg.find_entry)), original_find, 0);
 	ui_combo_box_add_to_history(GTK_COMBO_BOX_ENTRY(
-		gtk_widget_get_parent(replace_dlg.replace_entry)), replace, 0);
+		gtk_widget_get_parent(replace_dlg.replace_entry)), original_replace, 0);
 
 	switch (response)
 	{

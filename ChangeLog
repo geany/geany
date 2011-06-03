@@ -4,6 +4,8 @@
    src/search.c, src/search.h:
    Show the actual text the user searched for in messages rather than
    the internal one (patch by Eugene Arshinov, thanks).
+ * src/search.c:
+   Also use the actual user search in the combo box history.
 
 
 2011-06-02  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
