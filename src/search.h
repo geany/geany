@@ -39,6 +39,8 @@ typedef struct GeanySearchData
 	/* set to TRUE when text was set by a search bar callback to keep track of
 	 * search bar background colour */
 	gboolean	search_bar;
+	/* text as it was entered by user */
+	gchar		*original_text;
 }
 GeanySearchData;
 
@@ -85,7 +87,7 @@ gint search_find_text(struct _ScintillaObject *sci, gint flags, struct Sci_TextT
 
 void search_find_again(gboolean change_direction);
 
-void search_find_usage(const gchar *search_text, gint flags, gboolean in_session);
+void search_find_usage(const gchar *search_text, const gchar *original_search_text, gint flags, gboolean in_session);
 
 void search_find_selection(GeanyDocument *doc, gboolean search_backwards);
 

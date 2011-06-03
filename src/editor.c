@@ -2791,7 +2791,7 @@ static void real_uncomment_multiline(GeanyEditor *editor)
 	doc = editor->document;
 
 	/* remove comment open chars */
-	pos = document_find_text(doc, doc->file_type->comment_open, 0, TRUE, FALSE, NULL);
+	pos = document_find_text(doc, doc->file_type->comment_open, NULL, 0, TRUE, FALSE, NULL);
 	SSM(editor->sci, SCI_DELETEBACK, 0, 0);
 
 	/* check whether the line is empty and can be deleted */
@@ -2804,7 +2804,7 @@ static void real_uncomment_multiline(GeanyEditor *editor)
 	g_free(linebuf);
 
 	/* remove comment close chars */
-	pos = document_find_text(doc, doc->file_type->comment_close, 0, FALSE, FALSE, NULL);
+	pos = document_find_text(doc, doc->file_type->comment_close, NULL, 0, FALSE, FALSE, NULL);
 	SSM(editor->sci, SCI_DELETEBACK, 0, 0);
 
 	/* check whether the line is empty and can be deleted */

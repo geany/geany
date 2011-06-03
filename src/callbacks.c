@@ -538,6 +538,7 @@ on_toolbutton_save_clicked             (GtkAction       *action,
 static void setup_find(const gchar *text, gboolean backwards)
 {
 	setptr(search_data.text, g_strdup(text));
+	setptr(search_data.original_text, g_strdup(text));
 	search_data.flags = 0;
 	search_data.backwards = backwards;
 	search_data.search_bar = TRUE;
@@ -1037,7 +1038,7 @@ static void find_usage(gboolean in_session)
 		flags = SCFIND_MATCHCASE | SCFIND_WHOLEWORD;
 	}
 
-	search_find_usage(search_text, flags, in_session);
+	search_find_usage(search_text, search_text, flags, in_session);
 	g_free(search_text);
 }
 
@@ -2414,4 +2415,3 @@ on_mark_all1_activate                  (GtkMenuItem     *menuitem,
 {
 	keybindings_send_command(GEANY_KEY_GROUP_SEARCH, GEANY_KEYS_SEARCH_MARKALL);
 }
-

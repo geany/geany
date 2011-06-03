@@ -1928,9 +1928,13 @@ gboolean document_search_bar_find(GeanyDocument *doc, const gchar *text, gint fl
 
 /* General search function, used from the find dialog.
  * Returns -1 on failure or the start position of the matching text.
- * Will skip past any selection, ignoring it. */
-gint document_find_text(GeanyDocument *doc, const gchar *text, gint flags, gboolean search_backwards,
-		gboolean scroll, GtkWidget *parent)
+ * Will skip past any selection, ignoring it.
+ *
+ * @param text Text to find.
+ * @param original_text Text as it was entered by user, or @c NULL to use @c text
+ */
+gint document_find_text(GeanyDocument *doc, const gchar *text, const gchar *original_text,
+		gint flags, gboolean search_backwards, gboolean scroll, GtkWidget *parent)
 {
 	gint selection_end, selection_start, search_pos;
 
@@ -1941,6 +1945,9 @@ gint document_find_text(GeanyDocument *doc, const gchar *text, gint flags, gbool
 	/* Sci doesn't support searching backwards with a regex */
 	if (flags & SCFIND_REGEXP)
 		search_backwards = FALSE;
+
+	if (!original_text)
+		original_text = text;
 
 	selection_start = sci_get_selection_start(doc->editor->sci);
 	selection_end = sci_get_selection_end(doc->editor->sci);
@@ -1974,7 +1981,7 @@ gint document_find_text(GeanyDocument *doc, const gchar *text, gint flags, gbool
 		if ((selection_end == 0 && ! search_backwards) ||
 			(selection_end == sci_len && search_backwards))
 		{
-			ui_set_statusbar(FALSE, _("\"%s\" was not found."), text);
+			ui_set_statusbar(FALSE, _("\"%s\" was not found."), original_text);
 			utils_beep();
 			return -1;
 		}
@@ -1982,12 +1989,12 @@ gint document_find_text(GeanyDocument *doc, const gchar *text, gint flags, gbool
 		/* we searched only part of the document, so ask whether to wraparound. */
 		if (search_prefs.suppress_dialogs ||
 			dialogs_show_question_full(parent, GTK_STOCK_FIND, GTK_STOCK_CANCEL,
-				_("Wrap search and find again?"), _("\"%s\" was not found."), text))
+				_("Wrap search and find again?"), _("\"%s\" was not found."), original_text))
 		{
 			gint ret;
 
 			sci_set_current_position(doc->editor->sci, (search_backwards) ? sci_len : 0, FALSE);
-			ret = document_find_text(doc, text, flags, search_backwards, scroll, parent);
+			ret = document_find_text(doc, text, original_text, flags, search_backwards, scroll, parent);
 			if (ret == -1)
 			{	/* return to original cursor position if not found */
 				sci_set_current_position(doc->editor->sci, selection_start, FALSE);
@@ -2000,9 +2007,13 @@ gint document_find_text(GeanyDocument *doc, const gchar *text, gint flags, gbool
 
 
 /* Replaces the selection if it matches, otherwise just finds the next match.
- * Returns: start of replaced text, or -1 if no replacement was made */
-gint document_replace_text(GeanyDocument *doc, const gchar *find_text, const gchar *replace_text,
-		gint flags, gboolean search_backwards)
+ * Returns: start of replaced text, or -1 if no replacement was made
+ *
+ * @param find_text Text to find.
+ * @param original_find_text Text to find as it was entered by user, or @c NULL to use @c find_text
+ */
+gint document_replace_text(GeanyDocument *doc, const gchar *find_text, const gchar *original_find_text,
+		const gchar *replace_text, gint flags, gboolean search_backwards)
 {
 	gint selection_end, selection_start, search_pos;
 
@@ -2015,12 +2026,15 @@ gint document_replace_text(GeanyDocument *doc, const gchar *find_text, const gch
 	if (flags & SCFIND_REGEXP)
 		search_backwards = FALSE;
 
+	if (!original_find_text)
+		original_find_text = find_text;
+
 	selection_start = sci_get_selection_start(doc->editor->sci);
 	selection_end = sci_get_selection_end(doc->editor->sci);
 	if (selection_end == selection_start)
 	{
 		/* no selection so just find the next match */
-		document_find_text(doc, find_text, flags, search_backwards, TRUE, NULL);
+		document_find_text(doc, find_text, original_find_text, flags, search_backwards, TRUE, NULL);
 		return -1;
 	}
 	/* there's a selection so go to the start before finding to search through it
@@ -2030,7 +2044,7 @@ gint document_replace_text(GeanyDocument *doc, const gchar *find_text, const gch
 	else
 		sci_goto_pos(doc->editor->sci, selection_start, TRUE);
 
-	search_pos = document_find_text(doc, find_text, flags, search_backwards, TRUE, NULL);
+	search_pos = document_find_text(doc, find_text, original_find_text, flags, search_backwards, TRUE, NULL);
 	/* return if the original selected text did not match (at the start of the selection) */
 	if (search_pos != selection_start)
 		return -1;
@@ -2054,37 +2068,22 @@ gint document_replace_text(GeanyDocument *doc, const gchar *find_text, const gch
 }
 
 
-static void show_replace_summary(GeanyDocument *doc, gint count, const gchar *find_text,
-		const gchar *replace_text, gboolean escaped_chars)
+static void show_replace_summary(GeanyDocument *doc, gint count, const gchar *original_find_text,
+	const gchar *original_replace_text)
 {
-	gchar *escaped_find_text, *escaped_replace_text, *filename;
+	gchar *filename;
 
 	if (count == 0)
 	{
-		ui_set_statusbar(FALSE, _("No matches found for \"%s\"."), find_text);
+		ui_set_statusbar(FALSE, _("No matches found for \"%s\"."), original_find_text);
 		return;
 	}
 
 	filename = g_path_get_basename(DOC_FILENAME(doc));
-
-	if (escaped_chars)
-	{	/* escape special characters for showing */
-		escaped_find_text = g_strescape(find_text, NULL);
-		escaped_replace_text = g_strescape(replace_text, NULL);
-		ui_set_statusbar(TRUE, ngettext(
-			"%s: replaced %d occurrence of \"%s\" with \"%s\".",
-			"%s: replaced %d occurrences of \"%s\" with \"%s\".",
-			count),	filename, count, escaped_find_text, escaped_replace_text);
-		g_free(escaped_find_text);
-		g_free(escaped_replace_text);
-	}
-	else
-	{
-		ui_set_statusbar(TRUE, ngettext(
-			"%s: replaced %d occurrence of \"%s\" with \"%s\".",
-			"%s: replaced %d occurrences of \"%s\" with \"%s\".",
-			count), filename, count, find_text, replace_text);
-	}
+	ui_set_statusbar(TRUE, ngettext(
+		"%s: replaced %d occurrence of \"%s\" with \"%s\".",
+		"%s: replaced %d occurrences of \"%s\" with \"%s\".",
+		count), filename, count, original_find_text, original_replace_text);
 	g_free(filename);
 }
 
@@ -2134,7 +2133,7 @@ document_replace_range(GeanyDocument *doc, const gchar *find_text, const gchar *
 
 
 void document_replace_sel(GeanyDocument *doc, const gchar *find_text, const gchar *replace_text,
-						  gint flags, gboolean escaped_chars)
+						  const gchar *original_find_text, const gchar *original_replace_text, gint flags)
 {
 	gint selection_end, selection_start, selection_mode, selected_lines, last_line = 0;
 	gint max_column = 0, count = 0;
@@ -2231,13 +2230,13 @@ void document_replace_sel(GeanyDocument *doc, const gchar *find_text, const gcha
 	else /* no replacements */
 		utils_beep();
 
-	show_replace_summary(doc, count, find_text, replace_text, escaped_chars);
+	show_replace_summary(doc, count, original_find_text, original_replace_text);
 }
 
 
 /* returns number of replacements made. */
 gint document_replace_all(GeanyDocument *doc, const gchar *find_text, const gchar *replace_text,
-		gint flags, gboolean escaped_chars)
+		const gchar *original_find_text, const gchar *original_replace_text, gint flags)
 {
 	gint len, count;
 	g_return_val_if_fail(doc != NULL && find_text != NULL && replace_text != NULL, FALSE);
@@ -2249,7 +2248,7 @@ gint document_replace_all(GeanyDocument *doc, const gchar *find_text, const gcha
 	count = document_replace_range(
 			doc, find_text, replace_text, flags, 0, len, TRUE, NULL);
 
-	show_replace_summary(doc, count, find_text, replace_text, escaped_chars);
+	show_replace_summary(doc, count, original_find_text, original_replace_text);
 	return count;
 }
 

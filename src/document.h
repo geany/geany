@@ -217,17 +217,17 @@ void document_open_files(const GSList *filenames, gboolean readonly, GeanyFilety
 gboolean document_search_bar_find(GeanyDocument *doc, const gchar *text, gint flags, gboolean inc,
 		gboolean backwards);
 
-gint document_find_text(GeanyDocument *doc, const gchar *text, gint flags, gboolean search_backwards,
-		gboolean scroll, GtkWidget *parent);
+gint document_find_text(GeanyDocument *doc, const gchar *text, const gchar *original_text,
+		gint flags, gboolean search_backwards, gboolean scroll, GtkWidget *parent);
 
-gint document_replace_text(GeanyDocument *doc, const gchar *find_text, const gchar *replace_text,
-		gint flags, gboolean search_backwards);
+gint document_replace_text(GeanyDocument *doc, const gchar *find_text, const gchar *original_find_text,
+		const gchar *replace_text, gint flags, gboolean search_backwards);
 
 gint document_replace_all(GeanyDocument *doc, const gchar *find_text, const gchar *replace_text,
-		gint flags, gboolean escaped_chars);
+		const gchar *original_find_text, const gchar *original_replace_text, gint flags);
 
-void document_replace_sel(GeanyDocument *doc, const gchar *find_text, const gchar *replace_text, gint flags,
-						  gboolean escaped_chars);
+void document_replace_sel(GeanyDocument *doc, const gchar *find_text, const gchar *replace_text,
+						  const gchar *original_find_text, const gchar *original_replace_text, gint flags);
 
 void document_update_tag_list(GeanyDocument *doc, gboolean update);
 
