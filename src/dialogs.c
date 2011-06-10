@@ -82,8 +82,16 @@ static struct FileSelState
 	} save;
 }
 filesel_state = {
-	{ 0, 0, 0, FALSE, FALSE },
-	{ FALSE }
+	{
+		0,
+		GEANY_ENCODINGS_MAX, /* default encoding is detect from file */
+		0,
+		FALSE,
+		FALSE
+	},
+	{
+		FALSE
+	}
 };
 
 
@@ -125,7 +133,6 @@ static void open_file_dialog_handle_response(GtkWidget *dialog, gint response)
 	if (response == GTK_RESPONSE_ACCEPT || response == GEANY_RESPONSE_VIEW)
 	{
 		GSList *filelist;
-		gint encoding_idx;
 		GtkTreeModel *encoding_model;
 		GtkTreeIter encoding_iter;
 		GeanyFiletype *ft = NULL;
@@ -138,7 +145,6 @@ static void open_file_dialog_handle_response(GtkWidget *dialog, gint response)
 		filesel_state.open.more_options_visible = gtk_expander_get_expanded(GTK_EXPANDER(expander));
 		filesel_state.open.filter_idx = file_chooser_get_filter_idx(GTK_FILE_CHOOSER(dialog));
 		filesel_state.open.filetype_idx = gtk_combo_box_get_active(GTK_COMBO_BOX(filetype_combo));
-		filesel_state.open.encoding_idx = gtk_combo_box_get_active(GTK_COMBO_BOX(encoding_combo));
 
 		/* ignore detect from file item */
 		if (filesel_state.open.filetype_idx > 0)
@@ -146,9 +152,9 @@ static void open_file_dialog_handle_response(GtkWidget *dialog, gint response)
 
 		encoding_model = gtk_combo_box_get_model(GTK_COMBO_BOX(encoding_combo));
 		gtk_combo_box_get_active_iter(GTK_COMBO_BOX(encoding_combo), &encoding_iter);
-		gtk_tree_model_get(encoding_model, &encoding_iter, 0, &encoding_idx, -1);
-		if (encoding_idx >= 0 && encoding_idx < GEANY_ENCODINGS_MAX)
-			charset = encodings[encoding_idx].charset;
+		gtk_tree_model_get(encoding_model, &encoding_iter, 0, &filesel_state.open.encoding_idx, -1);
+		if (filesel_state.open.encoding_idx >= 0 && filesel_state.open.encoding_idx < GEANY_ENCODINGS_MAX)
+			charset = encodings[filesel_state.open.encoding_idx].charset;
 
 		filelist = gtk_file_chooser_get_filenames(GTK_FILE_CHOOSER(dialog));
 		if (filelist != NULL)
@@ -252,6 +258,9 @@ static GtkTreeStore *create_encoding_combo_store(GtkTreeIter *iter_detect)
 		encoding_string = encodings_to_string(&encodings[i]);
 		gtk_tree_store_set(store, &iter_current, 0, i, 1, encoding_string, -1);
 		g_free(encoding_string);
+		/* restore the saved state */
+		if (i == filesel_state.open.encoding_idx)
+			*iter_detect = iter_current;
 	}
 
 	gtk_tree_sortable_set_sort_column_id(GTK_TREE_SORTABLE(store), 1, GTK_SORT_ASCENDING);
@@ -419,7 +428,6 @@ static void open_file_dialog_apply_settings(GtkWidget *dialog)
 	static gboolean initialized = FALSE;
 	GtkWidget *check_hidden = ui_lookup_widget(dialog, "check_hidden");
 	GtkWidget *filetype_combo = ui_lookup_widget(dialog, "filetype_combo");
-	GtkWidget *encoding_combo = ui_lookup_widget(dialog, "encoding_combo");
 	GtkWidget *expander = ui_lookup_widget(dialog, "more_options_expander");
 
 	/* we can't know the initial position of combo boxes, so retreive it the first time */
@@ -427,7 +435,6 @@ static void open_file_dialog_apply_settings(GtkWidget *dialog)
 	{
 		filesel_state.open.filter_idx = file_chooser_get_filter_idx(GTK_FILE_CHOOSER(dialog));
 		filesel_state.open.filetype_idx = gtk_combo_box_get_active(GTK_COMBO_BOX(filetype_combo));
-		filesel_state.open.encoding_idx = gtk_combo_box_get_active(GTK_COMBO_BOX(encoding_combo));
 
 		initialized = TRUE;
 	}
@@ -435,10 +442,10 @@ static void open_file_dialog_apply_settings(GtkWidget *dialog)
 	{
 		file_chooser_set_filter_idx(GTK_FILE_CHOOSER(dialog), filesel_state.open.filter_idx);
 		gtk_combo_box_set_active(GTK_COMBO_BOX(filetype_combo), filesel_state.open.filetype_idx);
-		gtk_combo_box_set_active(GTK_COMBO_BOX(encoding_combo), filesel_state.open.encoding_idx);
 	}
 	gtk_expander_set_expanded(GTK_EXPANDER(expander), filesel_state.open.more_options_visible);
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_hidden), filesel_state.open.show_hidden);
+	/* encoding combo is restored at creating time, see create_encoding_combo_store() */
 }
 
 
