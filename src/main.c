@@ -232,8 +232,6 @@ static void main_init(void)
 	app->project			= NULL;
 	ui_widgets.open_fontsel		= NULL;
 	ui_widgets.open_colorsel	= NULL;
-	ui_widgets.open_filesel		= NULL;
-	ui_widgets.save_filesel		= NULL;
 	ui_widgets.prefs_dialog		= NULL;
 	main_status.main_window_realized = FALSE;
 	file_prefs.tab_order_ltr		= FALSE;
@@ -1219,8 +1217,6 @@ void main_quit()
 	queue_free(ui_prefs.recent_projects_queue);
 
 	if (ui_widgets.prefs_dialog && GTK_IS_WIDGET(ui_widgets.prefs_dialog)) gtk_widget_destroy(ui_widgets.prefs_dialog);
-	if (ui_widgets.save_filesel && GTK_IS_WIDGET(ui_widgets.save_filesel)) gtk_widget_destroy(ui_widgets.save_filesel);
-	if (ui_widgets.open_filesel && GTK_IS_WIDGET(ui_widgets.open_filesel)) gtk_widget_destroy(ui_widgets.open_filesel);
 	if (ui_widgets.open_fontsel && GTK_IS_WIDGET(ui_widgets.open_fontsel)) gtk_widget_destroy(ui_widgets.open_fontsel);
 	if (ui_widgets.open_colorsel && GTK_IS_WIDGET(ui_widgets.open_colorsel)) gtk_widget_destroy(ui_widgets.open_colorsel);
 #ifdef HAVE_VTE

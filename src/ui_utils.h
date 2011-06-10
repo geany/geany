@@ -124,8 +124,6 @@ typedef struct UIWidgets
 	/* dialogs */
 	GtkWidget	*open_colorsel;
 	GtkWidget	*open_fontsel;
-	GtkWidget	*open_filesel;
-	GtkWidget	*save_filesel;
 	GtkWidget	*prefs_dialog;
 
 	/* other widgets not needed in GeanyMainWidgets */

@@ -66,45 +66,91 @@ enum
 };
 
 
-static gboolean handle_save_as(const gchar *utf8_filename, gboolean open_new_tab,
-	gboolean rename_file);
-
-
-static GtkWidget *add_file_open_extra_widget(void);
-
-
-static void
-on_file_open_dialog_response           (GtkDialog *dialog,
-                                        gint response,
-                                        gpointer user_data)
+static struct FileSelState
 {
-	gtk_widget_hide(ui_widgets.open_filesel);
+	struct
+	{
+		guint filter_idx;
+		gint encoding_idx;
+		gint filetype_idx;
+		gboolean show_hidden;
+		gboolean more_options_visible;
+	} open;
+	struct
+	{
+		gboolean open_in_new_tab;
+	} save;
+}
+filesel_state = {
+	{ 0, 0, 0, FALSE, FALSE },
+	{ FALSE }
+};
 
+
+/* gets the ID of the current file filter */
+static guint file_chooser_get_filter_idx(GtkFileChooser *chooser)
+{
+	guint idx = 0;
+	GtkFileFilter *current;
+	GSList *filters, *item;
+
+	current = gtk_file_chooser_get_filter(chooser);
+	filters = gtk_file_chooser_list_filters(chooser);
+	foreach_slist(item, filters)
+	{
+		if (item->data == current)
+			break;
+		idx ++;
+	}
+	g_slist_free(filters);
+	return idx;
+}
+
+
+/* sets the current file filter from its ID */
+static void file_chooser_set_filter_idx(GtkFileChooser *chooser, guint idx)
+{
+	GtkFileFilter *current;
+	GSList *filters;
+
+	filters = gtk_file_chooser_list_filters(chooser);
+	current = g_slist_nth_data(filters, idx);
+	g_slist_free(filters);
+	gtk_file_chooser_set_filter(chooser, current);
+}
+
+
+static void open_file_dialog_handle_response(GtkWidget *dialog, gint response)
+{
 	if (response == GTK_RESPONSE_ACCEPT || response == GEANY_RESPONSE_VIEW)
 	{
 		GSList *filelist;
-		gint filetype_idx = gtk_combo_box_get_active(GTK_COMBO_BOX(
-						ui_lookup_widget(GTK_WIDGET(dialog), "filetype_combo")));
 		gint encoding_idx;
 		GtkTreeModel *encoding_model;
 		GtkTreeIter encoding_iter;
 		GeanyFiletype *ft = NULL;
 		const gchar *charset = NULL;
+		GtkWidget *expander = ui_lookup_widget(dialog, "more_options_expander");
+		GtkWidget *filetype_combo = ui_lookup_widget(dialog, "filetype_combo");
+		GtkWidget *encoding_combo = ui_lookup_widget(dialog, "encoding_combo");
 		gboolean ro = (response == GEANY_RESPONSE_VIEW);	/* View clicked */
 
-		/* ignore detect from file item */
-		if (filetype_idx > 0)
-			ft = g_slist_nth_data(filetypes_by_title, filetype_idx);
+		filesel_state.open.more_options_visible = gtk_expander_get_expanded(GTK_EXPANDER(expander));
+		filesel_state.open.filter_idx = file_chooser_get_filter_idx(GTK_FILE_CHOOSER(dialog));
+		filesel_state.open.filetype_idx = gtk_combo_box_get_active(GTK_COMBO_BOX(filetype_combo));
+		filesel_state.open.encoding_idx = gtk_combo_box_get_active(GTK_COMBO_BOX(encoding_combo));
 
-		encoding_model = gtk_combo_box_get_model(GTK_COMBO_BOX(
-			ui_lookup_widget(GTK_WIDGET(dialog), "encoding_combo")));
-		gtk_combo_box_get_active_iter(GTK_COMBO_BOX(
-			ui_lookup_widget(GTK_WIDGET(dialog), "encoding_combo")), &encoding_iter);
+		/* ignore detect from file item */
+		if (filesel_state.open.filetype_idx > 0)
+			ft = g_slist_nth_data(filetypes_by_title, filesel_state.open.filetype_idx);
+
+		encoding_model = gtk_combo_box_get_model(GTK_COMBO_BOX(encoding_combo));
+		gtk_combo_box_get_active_iter(GTK_COMBO_BOX(encoding_combo), &encoding_iter);
 		gtk_tree_model_get(encoding_model, &encoding_iter, 0, &encoding_idx, -1);
 		if (encoding_idx >= 0 && encoding_idx < GEANY_ENCODINGS_MAX)
 			charset = encodings[encoding_idx].charset;
 
-		filelist = gtk_file_chooser_get_filenames(GTK_FILE_CHOOSER(ui_widgets.open_filesel));
+		filelist = gtk_file_chooser_get_filenames(GTK_FILE_CHOOSER(dialog));
 		if (filelist != NULL)
 		{
 			document_open_files(filelist, ro, ft, charset);
@@ -113,7 +159,7 @@ on_file_open_dialog_response           (GtkDialog *dialog,
 		g_slist_free(filelist);
 	}
 	if (app->project && NZV(app->project->base_path))
-		gtk_file_chooser_remove_shortcut_folder(GTK_FILE_CHOOSER(ui_widgets.open_filesel),
+		gtk_file_chooser_remove_shortcut_folder(GTK_FILE_CHOOSER(dialog),
 			app->project->base_path, NULL);
 }
 
@@ -132,11 +178,10 @@ static void on_file_open_notify(GObject *filechooser, GParamSpec *pspec, gpointe
 
 
 static void
-on_file_open_check_hidden_toggled(GtkToggleButton *togglebutton, gpointer user_data)
+on_file_open_check_hidden_toggled(GtkToggleButton *togglebutton, GtkWidget *dialog)
 {
-	gboolean is_on = gtk_toggle_button_get_active(togglebutton);
-
-	gtk_file_chooser_set_show_hidden(GTK_FILE_CHOOSER(ui_widgets.open_filesel), is_on);
+	filesel_state.open.show_hidden = gtk_toggle_button_get_active(togglebutton);
+	gtk_file_chooser_set_show_hidden(GTK_FILE_CHOOSER(dialog), filesel_state.open.show_hidden);
 }
 
 
@@ -228,127 +273,7 @@ static void encoding_combo_cell_data_func(GtkCellLayout *cell_layout,
 }
 
 
-static void create_open_file_dialog(void)
-{
-	GtkWidget *filetype_combo, *encoding_combo;
-	GtkWidget *viewbtn;
-	GtkCellRenderer *encoding_renderer;
-	GtkTreeIter encoding_iter;
-	GSList *node;
-
-	ui_widgets.open_filesel = gtk_file_chooser_dialog_new(_("Open File"), GTK_WINDOW(main_widgets.window),
-			GTK_FILE_CHOOSER_ACTION_OPEN, NULL, NULL);
-	gtk_widget_set_name(ui_widgets.open_filesel, "GeanyDialog");
-
-	viewbtn = gtk_dialog_add_button(GTK_DIALOG(ui_widgets.open_filesel), _("_View"),
-				GEANY_RESPONSE_VIEW);
-	ui_widget_set_tooltip_text(viewbtn,
-		_("Opens the file in read-only mode. If you choose more than one file to open, all files will be opened read-only."));
-
-	gtk_dialog_add_buttons(GTK_DIALOG(ui_widgets.open_filesel),
-		GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-		GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT, NULL);
-	gtk_dialog_set_default_response(GTK_DIALOG(ui_widgets.open_filesel), GTK_RESPONSE_ACCEPT);
-
-	gtk_widget_set_size_request(ui_widgets.open_filesel, -1, 460);
-	gtk_window_set_modal(GTK_WINDOW(ui_widgets.open_filesel), TRUE);
-	gtk_window_set_destroy_with_parent(GTK_WINDOW(ui_widgets.open_filesel), TRUE);
-	gtk_window_set_skip_taskbar_hint(GTK_WINDOW(ui_widgets.open_filesel), FALSE);
-	gtk_window_set_type_hint(GTK_WINDOW(ui_widgets.open_filesel), GDK_WINDOW_TYPE_HINT_DIALOG);
-	gtk_window_set_transient_for(GTK_WINDOW(ui_widgets.open_filesel), GTK_WINDOW(main_widgets.window));
-	gtk_file_chooser_set_select_multiple(GTK_FILE_CHOOSER(ui_widgets.open_filesel), TRUE);
-	if (gtk_check_version(2, 14, 0) == NULL)
-		gtk_file_chooser_set_local_only(GTK_FILE_CHOOSER(ui_widgets.open_filesel), FALSE);
-
-	/* add checkboxes and filename entry */
-	gtk_file_chooser_set_extra_widget(GTK_FILE_CHOOSER(ui_widgets.open_filesel),
-		add_file_open_extra_widget());
-	filetype_combo = ui_lookup_widget(ui_widgets.open_filesel, "filetype_combo");
-
-	gtk_combo_box_append_text(GTK_COMBO_BOX(filetype_combo), _("Detect by file extension"));
-	/* add FileFilters(start with "All Files") */
-	gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(ui_widgets.open_filesel),
-				filetypes_create_file_filter(filetypes[GEANY_FILETYPES_NONE]));
-	/* now create meta filter "All Source" */
-	gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(ui_widgets.open_filesel),
-				filetypes_create_file_filter_all_source());
-	foreach_slist(node, filetypes_by_title)
-	{
-		GeanyFiletype *ft = node->data;
-
-		if (G_UNLIKELY(ft->id == GEANY_FILETYPES_NONE))
-			continue;
-		gtk_combo_box_append_text(GTK_COMBO_BOX(filetype_combo), ft->title);
-		gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(ui_widgets.open_filesel),
-				filetypes_create_file_filter(ft));
-	}
-	gtk_combo_box_set_active(GTK_COMBO_BOX(filetype_combo), 0);
-
-	/* fill encoding combo box */
-	encoding_combo = ui_lookup_widget(ui_widgets.open_filesel, "encoding_combo");
-	gtk_combo_box_set_model(GTK_COMBO_BOX(encoding_combo), GTK_TREE_MODEL(
-		create_encoding_combo_store(&encoding_iter)));
-	gtk_combo_box_set_active_iter(GTK_COMBO_BOX(encoding_combo), &encoding_iter);
-	encoding_renderer = gtk_cell_renderer_text_new();
-	gtk_cell_layout_pack_start(GTK_CELL_LAYOUT(encoding_combo), encoding_renderer, TRUE);
-	gtk_cell_layout_add_attribute(GTK_CELL_LAYOUT(encoding_combo), encoding_renderer, "text", 1);
-	gtk_cell_layout_set_cell_data_func(GTK_CELL_LAYOUT(encoding_combo), encoding_renderer,
-		encoding_combo_cell_data_func, NULL, NULL);
-
-	g_signal_connect(ui_widgets.open_filesel, "notify::show-hidden",
-				G_CALLBACK(on_file_open_notify), NULL);
-	g_signal_connect(ui_widgets.open_filesel, "delete-event",
-				G_CALLBACK(gtk_widget_hide_on_delete), NULL);
-	g_signal_connect(ui_widgets.open_filesel, "response",
-				G_CALLBACK(on_file_open_dialog_response), NULL);
-}
-
-
-/* This shows the file selection dialog to open a file. */
-void dialogs_show_open_file()
-{
-	gchar *initdir;
-
-	/* set dialog directory to the current file's directory, if present */
-	initdir = utils_get_current_file_dir_utf8();
-
-	/* use project or default startup directory (if set) if no files are open */
-	/** TODO should it only be used when initally open the dialog and not on every show? */
-	if (! initdir)
-		initdir = g_strdup(utils_get_default_dir_utf8());
-
-	setptr(initdir, utils_get_locale_from_utf8(initdir));
-
-#ifdef G_OS_WIN32
-	if (interface_prefs.use_native_windows_dialogs)
-		win32_show_document_open_dialog(GTK_WINDOW(main_widgets.window), _("Open File"), initdir);
-	else
-#endif
-	{
-		/* We use the same file selection widget each time, so first of all we create it
-		 * if it hasn't already been created. */
-		if (ui_widgets.open_filesel == NULL)
-			create_open_file_dialog();
-
-		if (initdir != NULL)
-		{
-			if (g_path_is_absolute(initdir))
-				gtk_file_chooser_set_current_folder(
-					GTK_FILE_CHOOSER(ui_widgets.open_filesel), initdir);
-		}
-
-		if (app->project && NZV(app->project->base_path))
-			gtk_file_chooser_add_shortcut_folder(GTK_FILE_CHOOSER(ui_widgets.open_filesel),
-				app->project->base_path, NULL);
-
-		gtk_file_chooser_unselect_all(GTK_FILE_CHOOSER(ui_widgets.open_filesel));
-		gtk_window_present(GTK_WINDOW(ui_widgets.open_filesel));
-	}
-	g_free(initdir);
-}
-
-
-static GtkWidget *add_file_open_extra_widget()
+static GtkWidget *add_file_open_extra_widget(GtkWidget *dialog)
 {
 	GtkWidget *expander, *vbox, *table, *check_hidden;
 	GtkWidget *filetype_ebox, *filetype_label, *filetype_combo;
@@ -407,21 +332,160 @@ static GtkWidget *add_file_open_extra_widget()
 	gtk_box_pack_start(GTK_BOX(vbox), table, FALSE, FALSE, 0);
 	gtk_widget_show_all(vbox);
 
-	g_signal_connect(check_hidden, "toggled",
-				G_CALLBACK(on_file_open_check_hidden_toggled), NULL);
+	g_signal_connect(check_hidden, "toggled", G_CALLBACK(on_file_open_check_hidden_toggled), dialog);
 
-	ui_hookup_widget(ui_widgets.open_filesel, check_hidden, "check_hidden");
-	ui_hookup_widget(ui_widgets.open_filesel, filetype_combo, "filetype_combo");
-	ui_hookup_widget(ui_widgets.open_filesel, encoding_combo, "encoding_combo");
+	ui_hookup_widget(dialog, expander, "more_options_expander");
+	ui_hookup_widget(dialog, check_hidden, "check_hidden");
+	ui_hookup_widget(dialog, filetype_combo, "filetype_combo");
+	ui_hookup_widget(dialog, encoding_combo, "encoding_combo");
 
 	return expander;
 }
 
 
+static GtkWidget *create_open_file_dialog(void)
+{
+	GtkWidget *dialog;
+	GtkWidget *filetype_combo, *encoding_combo;
+	GtkWidget *viewbtn;
+	GtkCellRenderer *encoding_renderer;
+	GtkTreeIter encoding_iter;
+	GSList *node;
+
+	dialog = gtk_file_chooser_dialog_new(_("Open File"), GTK_WINDOW(main_widgets.window),
+			GTK_FILE_CHOOSER_ACTION_OPEN, NULL, NULL);
+	gtk_widget_set_name(dialog, "GeanyDialog");
+
+	viewbtn = gtk_dialog_add_button(GTK_DIALOG(dialog), _("_View"), GEANY_RESPONSE_VIEW);
+	ui_widget_set_tooltip_text(viewbtn,
+		_("Opens the file in read-only mode. If you choose more than one file to open, all files will be opened read-only."));
+
+	gtk_dialog_add_buttons(GTK_DIALOG(dialog),
+		GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+		GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT, NULL);
+	gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_ACCEPT);
+
+	gtk_widget_set_size_request(dialog, -1, 460);
+	gtk_window_set_modal(GTK_WINDOW(dialog), TRUE);
+	gtk_window_set_destroy_with_parent(GTK_WINDOW(dialog), TRUE);
+	gtk_window_set_skip_taskbar_hint(GTK_WINDOW(dialog), FALSE);
+	gtk_window_set_type_hint(GTK_WINDOW(dialog), GDK_WINDOW_TYPE_HINT_DIALOG);
+	gtk_window_set_transient_for(GTK_WINDOW(dialog), GTK_WINDOW(main_widgets.window));
+	gtk_file_chooser_set_select_multiple(GTK_FILE_CHOOSER(dialog), TRUE);
+	if (gtk_check_version(2, 14, 0) == NULL)
+		gtk_file_chooser_set_local_only(GTK_FILE_CHOOSER(dialog), FALSE);
+
+	/* add checkboxes and filename entry */
+	gtk_file_chooser_set_extra_widget(GTK_FILE_CHOOSER(dialog), add_file_open_extra_widget(dialog));
+	filetype_combo = ui_lookup_widget(dialog, "filetype_combo");
+
+	gtk_combo_box_append_text(GTK_COMBO_BOX(filetype_combo), _("Detect by file extension"));
+	/* add FileFilters(start with "All Files") */
+	gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(dialog),
+				filetypes_create_file_filter(filetypes[GEANY_FILETYPES_NONE]));
+	/* now create meta filter "All Source" */
+	gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(dialog),
+				filetypes_create_file_filter_all_source());
+	foreach_slist(node, filetypes_by_title)
+	{
+		GeanyFiletype *ft = node->data;
+
+		if (G_UNLIKELY(ft->id == GEANY_FILETYPES_NONE))
+			continue;
+		gtk_combo_box_append_text(GTK_COMBO_BOX(filetype_combo), ft->title);
+		gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(dialog), filetypes_create_file_filter(ft));
+	}
+	gtk_combo_box_set_active(GTK_COMBO_BOX(filetype_combo), 0);
+
+	/* fill encoding combo box */
+	encoding_combo = ui_lookup_widget(dialog, "encoding_combo");
+	gtk_combo_box_set_model(GTK_COMBO_BOX(encoding_combo), GTK_TREE_MODEL(
+			create_encoding_combo_store(&encoding_iter)));
+	gtk_combo_box_set_active_iter(GTK_COMBO_BOX(encoding_combo), &encoding_iter);
+	encoding_renderer = gtk_cell_renderer_text_new();
+	gtk_cell_layout_pack_start(GTK_CELL_LAYOUT(encoding_combo), encoding_renderer, TRUE);
+	gtk_cell_layout_add_attribute(GTK_CELL_LAYOUT(encoding_combo), encoding_renderer, "text", 1);
+	gtk_cell_layout_set_cell_data_func(GTK_CELL_LAYOUT(encoding_combo), encoding_renderer,
+			encoding_combo_cell_data_func, NULL, NULL);
+
+	g_signal_connect(dialog, "notify::show-hidden", G_CALLBACK(on_file_open_notify), NULL);
+
+	return dialog;
+}
+
+
+static void open_file_dialog_apply_settings(GtkWidget *dialog)
+{
+	static gboolean initialized = FALSE;
+	GtkWidget *check_hidden = ui_lookup_widget(dialog, "check_hidden");
+	GtkWidget *filetype_combo = ui_lookup_widget(dialog, "filetype_combo");
+	GtkWidget *encoding_combo = ui_lookup_widget(dialog, "encoding_combo");
+	GtkWidget *expander = ui_lookup_widget(dialog, "more_options_expander");
+
+	/* we can't know the initial position of combo boxes, so retreive it the first time */
+	if (! initialized)
+	{
+		filesel_state.open.filter_idx = file_chooser_get_filter_idx(GTK_FILE_CHOOSER(dialog));
+		filesel_state.open.filetype_idx = gtk_combo_box_get_active(GTK_COMBO_BOX(filetype_combo));
+		filesel_state.open.encoding_idx = gtk_combo_box_get_active(GTK_COMBO_BOX(encoding_combo));
+
+		initialized = TRUE;
+	}
+	else
+	{
+		file_chooser_set_filter_idx(GTK_FILE_CHOOSER(dialog), filesel_state.open.filter_idx);
+		gtk_combo_box_set_active(GTK_COMBO_BOX(filetype_combo), filesel_state.open.filetype_idx);
+		gtk_combo_box_set_active(GTK_COMBO_BOX(encoding_combo), filesel_state.open.encoding_idx);
+	}
+	gtk_expander_set_expanded(GTK_EXPANDER(expander), filesel_state.open.more_options_visible);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_hidden), filesel_state.open.show_hidden);
+}
+
+
+/* This shows the file selection dialog to open a file. */
+void dialogs_show_open_file(void)
+{
+	gchar *initdir;
+
+	/* set dialog directory to the current file's directory, if present */
+	initdir = utils_get_current_file_dir_utf8();
+
+	/* use project or default startup directory (if set) if no files are open */
+	/** TODO should it only be used when initally open the dialog and not on every show? */
+	if (! initdir)
+		initdir = g_strdup(utils_get_default_dir_utf8());
+
+	setptr(initdir, utils_get_locale_from_utf8(initdir));
+
+#ifdef G_OS_WIN32
+	if (interface_prefs.use_native_windows_dialogs)
+		win32_show_document_open_dialog(GTK_WINDOW(main_widgets.window), _("Open File"), initdir);
+	else
+#endif
+	{
+		GtkWidget *dialog = create_open_file_dialog();
+		gint response;
+
+		open_file_dialog_apply_settings(dialog);
+
+		if (initdir != NULL && g_path_is_absolute(initdir))
+				gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog), initdir);
+
+		if (app->project && NZV(app->project->base_path))
+			gtk_file_chooser_add_shortcut_folder(GTK_FILE_CHOOSER(dialog),
+					app->project->base_path, NULL);
+
+		response = gtk_dialog_run(GTK_DIALOG(dialog));
+		open_file_dialog_handle_response(dialog, response);
+		gtk_widget_destroy(dialog);
+	}
+	g_free(initdir);
+}
+
+
 static void on_save_as_new_tab_toggled(GtkToggleButton *togglebutton, gpointer user_data)
 {
-	gtk_widget_set_sensitive(GTK_WIDGET(user_data),
-		! gtk_toggle_button_get_active(togglebutton));
+	gtk_widget_set_sensitive(GTK_WIDGET(user_data), ! gtk_toggle_button_get_active(togglebutton));
 }
 
 
@@ -457,14 +521,11 @@ static gboolean handle_save_as(const gchar *utf8_filename, gboolean open_new_tab
 }
 
 
-static void
-on_file_save_dialog_response           (GtkDialog *dialog,
-                                        gint response,
-                                        gpointer user_data)
+static gboolean save_as_dialog_handle_response(GtkWidget *dialog, gint response)
 {
 	gboolean rename_file = FALSE;
 	gboolean success = FALSE;
-	gchar *new_filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(ui_widgets.save_filesel));
+	gchar *new_filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
 
 	switch (response)
 	{
@@ -485,94 +546,91 @@ on_file_save_dialog_response           (GtkDialog *dialog,
 		case GTK_RESPONSE_ACCEPT:
 		{
 			gboolean open_new_tab = gtk_toggle_button_get_active(
-					GTK_TOGGLE_BUTTON(ui_lookup_widget(ui_widgets.save_filesel, "check_open_new_tab")));
+					GTK_TOGGLE_BUTTON(ui_lookup_widget(dialog, "check_open_new_tab")));
 			gchar *utf8_filename;
 
 			utf8_filename = utils_get_utf8_from_locale(new_filename);
 			success = handle_save_as(utf8_filename, open_new_tab, rename_file);
 
+			if (success)
+				filesel_state.save.open_in_new_tab = open_new_tab;
+
 			g_free(utf8_filename);
 			break;
 		}
+		case GTK_RESPONSE_DELETE_EVENT:
 		case GTK_RESPONSE_CANCEL:
 			success = TRUE;
 			break;
 	}
 	g_free(new_filename);
 
-	if (success)
-		gtk_widget_hide(ui_widgets.save_filesel);
+	return success;
 }
 
 
-static void create_save_file_dialog(void)
+static GtkWidget *create_save_file_dialog(void)
 {
-	GtkWidget *vbox, *check_open_new_tab, *rename_btn;
+	GtkWidget *dialog, *vbox, *check_open_new_tab, *rename_btn;
 	const gchar *initdir;
 
-	ui_widgets.save_filesel = gtk_file_chooser_dialog_new(_("Save File"), GTK_WINDOW(main_widgets.window),
+	dialog = gtk_file_chooser_dialog_new(_("Save File"), GTK_WINDOW(main_widgets.window),
 				GTK_FILE_CHOOSER_ACTION_SAVE, NULL, NULL);
-	gtk_window_set_modal(GTK_WINDOW(ui_widgets.save_filesel), TRUE);
-	gtk_window_set_destroy_with_parent(GTK_WINDOW(ui_widgets.save_filesel), TRUE);
-	gtk_window_set_skip_taskbar_hint(GTK_WINDOW(ui_widgets.save_filesel), FALSE);
-	gtk_window_set_type_hint(GTK_WINDOW(ui_widgets.save_filesel), GDK_WINDOW_TYPE_HINT_DIALOG);
-	gtk_widget_set_name(ui_widgets.save_filesel, "GeanyDialog");
+	gtk_window_set_modal(GTK_WINDOW(dialog), TRUE);
+	gtk_window_set_destroy_with_parent(GTK_WINDOW(dialog), TRUE);
+	gtk_window_set_skip_taskbar_hint(GTK_WINDOW(dialog), FALSE);
+	gtk_window_set_type_hint(GTK_WINDOW(dialog), GDK_WINDOW_TYPE_HINT_DIALOG);
+	gtk_window_set_transient_for(GTK_WINDOW(dialog), GTK_WINDOW(main_widgets.window));
+	gtk_widget_set_name(dialog, "GeanyDialog");
 
-	rename_btn = gtk_dialog_add_button(GTK_DIALOG(ui_widgets.save_filesel), _("R_ename"),
-					GEANY_RESPONSE_RENAME);
+	rename_btn = gtk_dialog_add_button(GTK_DIALOG(dialog), _("R_ename"), GEANY_RESPONSE_RENAME);
 	ui_widget_set_tooltip_text(rename_btn, _("Save the file and rename it"));
 
-	gtk_dialog_add_buttons(GTK_DIALOG(ui_widgets.save_filesel),
+	gtk_dialog_add_buttons(GTK_DIALOG(dialog),
 		GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 		GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT, NULL);
-	gtk_dialog_set_default_response(GTK_DIALOG(ui_widgets.save_filesel), GTK_RESPONSE_ACCEPT);
+	gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_ACCEPT);
 
 	vbox = gtk_vbox_new(FALSE, 0);
 	check_open_new_tab = gtk_check_button_new_with_mnemonic(_("_Open file in a new tab"));
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_open_new_tab), filesel_state.save.open_in_new_tab);
 	ui_widget_set_tooltip_text(check_open_new_tab,
 		_("Keep the current unsaved document open"
 		" and open the newly saved file in a new tab"));
 	gtk_box_pack_start(GTK_BOX(vbox), check_open_new_tab, FALSE, FALSE, 0);
 	gtk_widget_show_all(vbox);
-	gtk_file_chooser_set_extra_widget(GTK_FILE_CHOOSER(ui_widgets.save_filesel), vbox);
-	gtk_file_chooser_set_do_overwrite_confirmation(GTK_FILE_CHOOSER(ui_widgets.save_filesel), TRUE);
+	gtk_file_chooser_set_extra_widget(GTK_FILE_CHOOSER(dialog), vbox);
+	gtk_file_chooser_set_do_overwrite_confirmation(GTK_FILE_CHOOSER(dialog), TRUE);
 	if (gtk_check_version(2, 14, 0) == NULL)
-		gtk_file_chooser_set_local_only(GTK_FILE_CHOOSER(ui_widgets.save_filesel), FALSE);
+		gtk_file_chooser_set_local_only(GTK_FILE_CHOOSER(dialog), FALSE);
 
 	/* set the folder by default to the project base dir or the global pref for opening files */
 	initdir = utils_get_default_dir_utf8();
 	if (initdir)
 	{
 		gchar *linitdir = utils_get_locale_from_utf8(initdir);
-		gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(ui_widgets.save_filesel), linitdir);
+		gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog), linitdir);
 		g_free(linitdir);
 	}
 
 	g_signal_connect(check_open_new_tab, "toggled",
 				G_CALLBACK(on_save_as_new_tab_toggled), rename_btn);
 
-	ui_hookup_widget(ui_widgets.save_filesel, check_open_new_tab, "check_open_new_tab");
+	ui_hookup_widget(dialog, check_open_new_tab, "check_open_new_tab");
 
-	g_signal_connect(ui_widgets.save_filesel, "delete-event",
-		G_CALLBACK(gtk_widget_hide_on_delete), NULL);
-	g_signal_connect(ui_widgets.save_filesel, "response",
-		G_CALLBACK(on_file_save_dialog_response), NULL);
-
-	gtk_window_set_transient_for(GTK_WINDOW(ui_widgets.save_filesel), GTK_WINDOW(main_widgets.window));
+	return dialog;
 }
 
 
-static gboolean gtk_show_save_as(void)
+static gboolean show_save_as_gtk(void)
 {
+	GtkWidget *dialog;
 	GeanyDocument *doc = document_get_current();
 	gint resp;
 
 	g_return_val_if_fail(doc != NULL, FALSE);
 
-	if (G_UNLIKELY(ui_widgets.save_filesel == NULL))
-		create_save_file_dialog();
-
-	gtk_file_chooser_unselect_all(GTK_FILE_CHOOSER(ui_widgets.save_filesel));
+	dialog = create_save_file_dialog();
 
 	if (doc->file_name != NULL)
 	{
@@ -582,18 +640,15 @@ static gboolean gtk_show_save_as(void)
 			gchar *locale_basename = g_path_get_basename(locale_filename);
 			gchar *locale_dirname = g_path_get_dirname(locale_filename);
 
-			gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(ui_widgets.save_filesel),
-				locale_dirname);
-			gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(ui_widgets.save_filesel),
-				locale_basename);
+			gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog), locale_dirname);
+			gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(dialog), locale_basename);
 
 			g_free(locale_filename);
 			g_free(locale_basename);
 			g_free(locale_dirname);
 		}
 		else
-			gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(ui_widgets.save_filesel),
-				doc->file_name);
+			gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(dialog), doc->file_name);
 	}
 	else
 	{
@@ -605,21 +660,27 @@ static gboolean gtk_show_save_as(void)
 		else
 			fname = g_strdup(GEANY_STRING_UNTITLED);
 
-		gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(ui_widgets.save_filesel), fname);
+		gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(dialog), fname);
 
 		g_free(fname);
 	}
 
 	if (app->project && NZV(app->project->base_path))
-		gtk_file_chooser_add_shortcut_folder(GTK_FILE_CHOOSER(ui_widgets.save_filesel),
+		gtk_file_chooser_add_shortcut_folder(GTK_FILE_CHOOSER(dialog),
 			app->project->base_path, NULL);
 
 	/* Run the dialog synchronously, pausing this function call */
-	resp = gtk_dialog_run(GTK_DIALOG(ui_widgets.save_filesel));
+	do
+	{
+		resp = gtk_dialog_run(GTK_DIALOG(dialog));
+	}
+	while (! save_as_dialog_handle_response(dialog, resp));
 
 	if (app->project && NZV(app->project->base_path))
-		gtk_file_chooser_remove_shortcut_folder(GTK_FILE_CHOOSER(ui_widgets.save_filesel),
+		gtk_file_chooser_remove_shortcut_folder(GTK_FILE_CHOOSER(dialog),
 			app->project->base_path, NULL);
+
+	gtk_widget_destroy(dialog);
 
 	return (resp == GTK_RESPONSE_ACCEPT);
 }
@@ -645,7 +706,7 @@ gboolean dialogs_show_save_as()
 	}
 	else
 #endif
-	result = gtk_show_save_as();
+	result = show_save_as_gtk();
 	return result;
 }
 

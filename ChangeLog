@@ -1,3 +1,11 @@
+2011-06-11  Colomban Wendling  <colomban(at)geany(dot)org>
+
+ * src/dialogs.c, src/main.c, src/ui_utils.h:
+   Always destroy open and save dialog after use. This also helps
+   working around a long-living GTK+ bug, hopefully closing #3311258,
+   #3304273, #3201050, #3163742, #3153120 and #2985896.
+
+
 2011-06-03  Colomban Wendling  <colomban(at)geany(dot)org>
 
  * src/callbacks.c, src/document.c, src/document.h, src/editor.c,
