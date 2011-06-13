@@ -380,17 +380,17 @@ static GtkWidget *create_custom_widget(GtkPrintOperation *operation, gpointer us
 
 	w->check_print_linenumbers = gtk_check_button_new_with_mnemonic(_("Print line numbers"));
 	gtk_box_pack_start(GTK_BOX(page), w->check_print_linenumbers, FALSE, FALSE, 0);
-	ui_widget_set_tooltip_text(w->check_print_linenumbers, _("Add line numbers to the printed page"));
+	gtk_widget_set_tooltip_text(w->check_print_linenumbers, _("Add line numbers to the printed page"));
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(w->check_print_linenumbers), printing_prefs.print_line_numbers);
 
 	w->check_print_pagenumbers = gtk_check_button_new_with_mnemonic(_("Print page numbers"));
 	gtk_box_pack_start(GTK_BOX(page), w->check_print_pagenumbers, FALSE, FALSE, 0);
-	ui_widget_set_tooltip_text(w->check_print_pagenumbers, _("Add page numbers at the bottom of each page. It takes 2 lines of the page."));
+	gtk_widget_set_tooltip_text(w->check_print_pagenumbers, _("Add page numbers at the bottom of each page. It takes 2 lines of the page."));
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(w->check_print_pagenumbers), printing_prefs.print_page_numbers);
 
 	w->check_print_pageheader = gtk_check_button_new_with_mnemonic(_("Print page header"));
 	gtk_box_pack_start(GTK_BOX(page), w->check_print_pageheader, FALSE, FALSE, 0);
-	ui_widget_set_tooltip_text(w->check_print_pageheader, _("Add a little header to every page containing the page number, the filename and the current date (see below). It takes 3 lines of the page."));
+	gtk_widget_set_tooltip_text(w->check_print_pageheader, _("Add a little header to every page containing the page number, the filename and the current date (see below). It takes 3 lines of the page."));
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(w->check_print_pageheader), printing_prefs.print_page_header);
 	g_signal_connect(w->check_print_pageheader, "toggled", G_CALLBACK(on_page_header_toggled), w);
 
@@ -408,7 +408,7 @@ static GtkWidget *create_custom_widget(GtkPrintOperation *operation, gpointer us
 
 	w->check_print_basename = gtk_check_button_new_with_mnemonic(_("Use the basename of the printed file"));
 	gtk_box_pack_start(GTK_BOX(vbox30), w->check_print_basename, FALSE, FALSE, 0);
-	ui_widget_set_tooltip_text(w->check_print_basename, _("Print only the basename(without the path) of the printed file"));
+	gtk_widget_set_tooltip_text(w->check_print_basename, _("Print only the basename(without the path) of the printed file"));
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(w->check_print_basename), printing_prefs.page_header_basename);
 
 	hbox10 = gtk_hbox_new(FALSE, 5);
@@ -420,7 +420,7 @@ static GtkWidget *create_custom_widget(GtkPrintOperation *operation, gpointer us
 	w->entry_print_dateformat = gtk_entry_new();
 	ui_entry_add_clear_icon(GTK_ENTRY(w->entry_print_dateformat));
 	gtk_box_pack_start(GTK_BOX(hbox10), w->entry_print_dateformat, TRUE, TRUE, 0);
-	ui_widget_set_tooltip_text(w->entry_print_dateformat, _("Specify a format for the date and time stamp which is added to the page header on each page. You can use any conversion specifiers which can be used with the ANSI C strftime function."));
+	gtk_widget_set_tooltip_text(w->entry_print_dateformat, _("Specify a format for the date and time stamp which is added to the page header on each page. You can use any conversion specifiers which can be used with the ANSI C strftime function."));
 	gtk_entry_set_text(GTK_ENTRY(w->entry_print_dateformat), printing_prefs.page_header_datefmt);
 
 	on_page_header_toggled(GTK_TOGGLE_BUTTON(w->check_print_pageheader), w);

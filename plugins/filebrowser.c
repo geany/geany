@@ -866,22 +866,22 @@ static GtkWidget *make_toolbar(void)
 	gtk_toolbar_set_style(GTK_TOOLBAR(toolbar), GTK_TOOLBAR_ICONS);
 
 	wid = GTK_WIDGET(gtk_tool_button_new_from_stock(GTK_STOCK_GO_UP));
-	ui_widget_set_tooltip_text(wid, _("Up"));
+	gtk_widget_set_tooltip_text(wid, _("Up"));
 	g_signal_connect(wid, "clicked", G_CALLBACK(on_go_up), NULL);
 	gtk_container_add(GTK_CONTAINER(toolbar), wid);
 
 	wid = GTK_WIDGET(gtk_tool_button_new_from_stock(GTK_STOCK_REFRESH));
-	ui_widget_set_tooltip_text(wid, _("Refresh"));
+	gtk_widget_set_tooltip_text(wid, _("Refresh"));
 	g_signal_connect(wid, "clicked", G_CALLBACK(refresh), NULL);
 	gtk_container_add(GTK_CONTAINER(toolbar), wid);
 
 	wid = GTK_WIDGET(gtk_tool_button_new_from_stock(GTK_STOCK_HOME));
-	ui_widget_set_tooltip_text(wid, _("Home"));
+	gtk_widget_set_tooltip_text(wid, _("Home"));
 	g_signal_connect(wid, "clicked", G_CALLBACK(on_go_home), NULL);
 	gtk_container_add(GTK_CONTAINER(toolbar), wid);
 
 	wid = GTK_WIDGET(gtk_tool_button_new_from_stock(GTK_STOCK_JUMP_TO));
-	ui_widget_set_tooltip_text(wid, _("Set path from document"));
+	gtk_widget_set_tooltip_text(wid, _("Set path from document"));
 	g_signal_connect(wid, "clicked", G_CALLBACK(on_current_path), NULL);
 	gtk_container_add(GTK_CONTAINER(toolbar), wid);
 
@@ -891,7 +891,7 @@ static GtkWidget *make_toolbar(void)
 		gtk_container_add(GTK_CONTAINER(toolbar), wid);
 
 		wid = GTK_WIDGET(gtk_tool_button_new_from_stock(GTK_STOCK_CLEAR));
-		ui_widget_set_tooltip_text(wid, _("Clear the filter"));
+		gtk_widget_set_tooltip_text(wid, _("Clear the filter"));
 		g_signal_connect(wid, "clicked", G_CALLBACK(on_clear_filter), NULL);
 		gtk_container_add(GTK_CONTAINER(toolbar), wid);
 	}
@@ -915,7 +915,7 @@ static GtkWidget *make_filterbar(void)
 		ui_entry_add_clear_icon(GTK_ENTRY(filter_entry));
 		g_signal_connect(filter_entry, "icon-release", G_CALLBACK(on_filter_clear), NULL);
 	}
-	ui_widget_set_tooltip_text(filter_entry,
+	gtk_widget_set_tooltip_text(filter_entry,
 		_("Filter your files with the usual wildcards. Separate multiple patterns with a space."));
 	g_signal_connect(filter_entry, "activate", G_CALLBACK(on_filter_activate), NULL);
 	g_signal_connect(filter_combo, "changed", G_CALLBACK(ui_combo_box_changed), NULL);
@@ -1233,7 +1233,7 @@ GtkWidget *plugin_configure(GtkDialog *dialog)
 	entry = gtk_entry_new();
 	if (open_cmd != NULL)
 		gtk_entry_set_text(GTK_ENTRY(entry), open_cmd);
-	ui_widget_set_tooltip_text(entry,
+	gtk_widget_set_tooltip_text(entry,
 		_("The command to execute when using \"Open with\". You can use %f and %d wildcards.\n"
 		  "%f will be replaced with the filename including full path\n"
 		  "%d will be replaced with the path name of the selected file without the filename"));
@@ -1278,7 +1278,7 @@ GtkWidget *plugin_configure(GtkDialog *dialog)
 	checkbox_pb = gtk_check_button_new_with_label(_("Use the project's base directory"));
 	gtk_button_set_focus_on_click(GTK_BUTTON(checkbox_pb), FALSE);
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(checkbox_pb), fb_set_project_base_path);
-	ui_widget_set_tooltip_text(checkbox_pb,
+	gtk_widget_set_tooltip_text(checkbox_pb,
 		_("Change the directory to the base directory of the currently opened project"));
 	gtk_box_pack_start(GTK_BOX(vbox), checkbox_pb, FALSE, FALSE, 0);
 	pref_widgets.set_project_base_path_checkbox = checkbox_pb;

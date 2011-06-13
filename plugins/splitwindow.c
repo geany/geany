@@ -221,7 +221,7 @@ static GtkWidget *ui_tool_button_new(const gchar *stock_id, const gchar *label, 
 	if (!tooltip)
 		tooltip = label;
 	if (tooltip)
-		ui_widget_set_tooltip_text(GTK_WIDGET(item), tooltip);
+		gtk_widget_set_tooltip_text(GTK_WIDGET(item), tooltip);
 
 	g_free(dupl);
 	return GTK_WIDGET(item);
@@ -268,7 +268,7 @@ static GtkWidget *create_toolbar(void)
 	tool_item = gtk_menu_tool_button_new(NULL, NULL);
 	gtk_tool_button_set_stock_id(GTK_TOOL_BUTTON(tool_item), GTK_STOCK_JUMP_TO);
 	item = (GtkWidget*)tool_item;
-	ui_widget_set_tooltip_text(item, _("Show the current document"));
+	gtk_widget_set_tooltip_text(item, _("Show the current document"));
 	gtk_container_add(GTK_CONTAINER(toolbar), item);
 	g_signal_connect(item, "clicked", G_CALLBACK(on_refresh), NULL);
 

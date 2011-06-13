@@ -3663,7 +3663,7 @@ static void add_color_scheme_item(GtkWidget *menu, const gchar *fname)
 		tooltip = utils_get_setting(locale_string, hkeyfile, skeyfile, "theme_info", "description", NULL);
 		if (tooltip != NULL)
 		{
-			ui_widget_set_tooltip_text(item, tooltip);
+			gtk_widget_set_tooltip_text(item, tooltip);
 			g_free(tooltip);
 		}
 		g_free(path);

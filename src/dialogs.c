@@ -314,7 +314,7 @@ static GtkWidget *add_file_open_extra_widget(GtkWidget *dialog)
 	/* the ebox is for the tooltip, because gtk_combo_box can't show tooltips */
 	encoding_ebox = gtk_event_box_new();
 	encoding_combo = gtk_combo_box_new();
-	ui_widget_set_tooltip_text(encoding_ebox,
+	gtk_widget_set_tooltip_text(encoding_ebox,
 		_("Explicitly defines an encoding for the file, if it would not be detected. This is useful when you know that the encoding of a file cannot be detected correctly by Geany.\nNote if you choose multiple files, they will all be opened with the chosen encoding."));
 	gtk_container_add(GTK_CONTAINER(encoding_ebox), encoding_combo);
 	gtk_table_attach(GTK_TABLE(table), encoding_ebox, 3, 4, 0, 1,
@@ -331,7 +331,7 @@ static GtkWidget *add_file_open_extra_widget(GtkWidget *dialog)
 	filetype_ebox = gtk_event_box_new();
 	filetype_combo = gtk_combo_box_new_text();
 	gtk_combo_box_set_wrap_width(GTK_COMBO_BOX(filetype_combo), 2);
-	ui_widget_set_tooltip_text(filetype_ebox,
+	gtk_widget_set_tooltip_text(filetype_ebox,
 		_("Explicitly defines a filetype for the file, if it would not be detected by filename extension.\nNote if you choose multiple files, they will all be opened with the chosen filetype."));
 	gtk_container_add(GTK_CONTAINER(filetype_ebox), filetype_combo);
 	gtk_table_attach(GTK_TABLE(table), filetype_ebox, 3, 4, 1, 2,
@@ -366,7 +366,7 @@ static GtkWidget *create_open_file_dialog(void)
 	gtk_widget_set_name(dialog, "GeanyDialog");
 
 	viewbtn = gtk_dialog_add_button(GTK_DIALOG(dialog), _("_View"), GEANY_RESPONSE_VIEW);
-	ui_widget_set_tooltip_text(viewbtn,
+	gtk_widget_set_tooltip_text(viewbtn,
 		_("Opens the file in read-only mode. If you choose more than one file to open, all files will be opened read-only."));
 
 	gtk_dialog_add_buttons(GTK_DIALOG(dialog),
@@ -591,7 +591,7 @@ static GtkWidget *create_save_file_dialog(void)
 	gtk_widget_set_name(dialog, "GeanyDialog");
 
 	rename_btn = gtk_dialog_add_button(GTK_DIALOG(dialog), _("R_ename"), GEANY_RESPONSE_RENAME);
-	ui_widget_set_tooltip_text(rename_btn, _("Save the file and rename it"));
+	gtk_widget_set_tooltip_text(rename_btn, _("Save the file and rename it"));
 
 	gtk_dialog_add_buttons(GTK_DIALOG(dialog),
 		GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
@@ -601,7 +601,7 @@ static GtkWidget *create_save_file_dialog(void)
 	vbox = gtk_vbox_new(FALSE, 0);
 	check_open_new_tab = gtk_check_button_new_with_mnemonic(_("_Open file in a new tab"));
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_open_new_tab), filesel_state.save.open_in_new_tab);
-	ui_widget_set_tooltip_text(check_open_new_tab,
+	gtk_widget_set_tooltip_text(check_open_new_tab,
 		_("Keep the current unsaved document open"
 		" and open the newly saved file in a new tab"));
 	gtk_box_pack_start(GTK_BOX(vbox), check_open_new_tab, FALSE, FALSE, 0);

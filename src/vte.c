@@ -772,7 +772,7 @@ void vte_append_preferences_tab(void)
 		gtk_table_attach(GTK_TABLE(table), font_term, 1, 2, 0, 1,
 					(GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
 					(GtkAttachOptions) (0), 0, 0);
-		ui_widget_set_tooltip_text(font_term, _("Sets the font for the terminal widget"));
+		gtk_widget_set_tooltip_text(font_term, _("Sets the font for the terminal widget"));
 
 		label = gtk_label_new(_("Foreground color:"));
 		gtk_table_attach(GTK_TABLE(table), label, 0, 1, 1, 2,
@@ -790,14 +790,14 @@ void vte_append_preferences_tab(void)
 		gtk_table_attach(GTK_TABLE(table), color_fore, 1, 2, 1, 2,
 					(GtkAttachOptions) (GTK_FILL),
 					(GtkAttachOptions) (0), 0, 0);
-		ui_widget_set_tooltip_text(color_fore, _("Sets the foreground color of the text in the terminal widget"));
+		gtk_widget_set_tooltip_text(color_fore, _("Sets the foreground color of the text in the terminal widget"));
 		gtk_color_button_set_title(GTK_COLOR_BUTTON(color_fore), _("Color Chooser"));
 
 		color_back = gtk_color_button_new();
 		gtk_table_attach(GTK_TABLE(table), color_back, 1, 2, 2, 3,
 					(GtkAttachOptions) (GTK_FILL),
 					(GtkAttachOptions) (0), 0, 0);
-		ui_widget_set_tooltip_text(color_back, _("Sets the background color of the text in the terminal widget"));
+		gtk_widget_set_tooltip_text(color_back, _("Sets the background color of the text in the terminal widget"));
 		gtk_color_button_set_title(GTK_COLOR_BUTTON(color_back), _("Color Chooser"));
 
 		label = gtk_label_new(_("Scrollback lines:"));
@@ -812,7 +812,7 @@ void vte_append_preferences_tab(void)
 		gtk_table_attach(GTK_TABLE(table), spin_scrollback, 1, 2, 3, 4,
 					(GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
 					(GtkAttachOptions) (0), 0, 0);
-		ui_widget_set_tooltip_text(spin_scrollback, _("Specifies the history in lines, which you can scroll back in the terminal widget"));
+		gtk_widget_set_tooltip_text(spin_scrollback, _("Specifies the history in lines, which you can scroll back in the terminal widget"));
 		gtk_spin_button_set_numeric(GTK_SPIN_BUTTON(spin_scrollback), TRUE);
 		gtk_spin_button_set_wrap(GTK_SPIN_BUTTON(spin_scrollback), TRUE);
 
@@ -824,7 +824,7 @@ void vte_append_preferences_tab(void)
 
 		entry_shell = gtk_entry_new();
 		ui_entry_add_clear_icon(GTK_ENTRY(entry_shell));
-		ui_widget_set_tooltip_text(entry_shell, _("Sets the path to the shell which should be started inside the terminal emulation"));
+		gtk_widget_set_tooltip_text(entry_shell, _("Sets the path to the shell which should be started inside the terminal emulation"));
 
 		button_shell = gtk_button_new();
 		gtk_widget_show(button_shell);
@@ -842,38 +842,38 @@ void vte_append_preferences_tab(void)
 
 		box = gtk_vbox_new(FALSE, 3);
 		check_scroll_key = gtk_check_button_new_with_mnemonic(_("Scroll on keystroke"));
-		ui_widget_set_tooltip_text(check_scroll_key, _("Whether to scroll to the bottom if a key was pressed"));
+		gtk_widget_set_tooltip_text(check_scroll_key, _("Whether to scroll to the bottom if a key was pressed"));
 		gtk_container_add(GTK_CONTAINER(box), check_scroll_key);
 
 		check_scroll_out = gtk_check_button_new_with_mnemonic(_("Scroll on output"));
-		ui_widget_set_tooltip_text(check_scroll_out, _("Whether to scroll to the bottom when output is generated"));
+		gtk_widget_set_tooltip_text(check_scroll_out, _("Whether to scroll to the bottom when output is generated"));
 		gtk_container_add(GTK_CONTAINER(box), check_scroll_out);
 
 		check_cursor_blinks = gtk_check_button_new_with_mnemonic(_("Cursor blinks"));
-		ui_widget_set_tooltip_text(check_cursor_blinks, _("Whether to blink the cursor"));
+		gtk_widget_set_tooltip_text(check_cursor_blinks, _("Whether to blink the cursor"));
 		gtk_container_add(GTK_CONTAINER(box), check_cursor_blinks);
 
 		check_enable_bash_keys = gtk_check_button_new_with_mnemonic(_("Override Geany keybindings"));
-		ui_widget_set_tooltip_text(check_enable_bash_keys,
+		gtk_widget_set_tooltip_text(check_enable_bash_keys,
 			_("Allows the VTE to receive keyboard shortcuts (apart from focus commands)"));
 		gtk_container_add(GTK_CONTAINER(box), check_enable_bash_keys);
 
 		check_ignore_menu_key = gtk_check_button_new_with_mnemonic(_("Disable menu shortcut key (F10 by default)"));
-		ui_widget_set_tooltip_text(check_ignore_menu_key, _("This option disables the keybinding to popup the menu bar (default is F10). Disabling it can be useful if you use, for example, Midnight Commander within the VTE."));
+		gtk_widget_set_tooltip_text(check_ignore_menu_key, _("This option disables the keybinding to popup the menu bar (default is F10). Disabling it can be useful if you use, for example, Midnight Commander within the VTE."));
 		gtk_container_add(GTK_CONTAINER(box), check_ignore_menu_key);
 
 		check_follow_path = gtk_check_button_new_with_mnemonic(_("Follow the path of the current file"));
-		ui_widget_set_tooltip_text(check_follow_path, _("Whether to execute \"cd $path\" when you switch between opened files"));
+		gtk_widget_set_tooltip_text(check_follow_path, _("Whether to execute \"cd $path\" when you switch between opened files"));
 		gtk_container_add(GTK_CONTAINER(box), check_follow_path);
 
 		/* create check_skip_script checkbox before the check_skip_script checkbox to be able to
 		 * use the object for the toggled handler of check_skip_script checkbox */
 		check_skip_script = gtk_check_button_new_with_mnemonic(_("Don't use run script"));
-		ui_widget_set_tooltip_text(check_skip_script, _("Don't use the simple run script which is usually used to display the exit status of the executed program"));
+		gtk_widget_set_tooltip_text(check_skip_script, _("Don't use the simple run script which is usually used to display the exit status of the executed program"));
 		gtk_widget_set_sensitive(check_skip_script, vc->run_in_vte);
 
 		check_run_in_vte = gtk_check_button_new_with_mnemonic(_("Execute programs in VTE"));
-		ui_widget_set_tooltip_text(check_run_in_vte, _("Run programs in VTE instead of opening a terminal emulation window. Please note, programs executed in VTE cannot be stopped"));
+		gtk_widget_set_tooltip_text(check_run_in_vte, _("Run programs in VTE instead of opening a terminal emulation window. Please note, programs executed in VTE cannot be stopped"));
 		gtk_container_add(GTK_CONTAINER(box), check_run_in_vte);
 		g_signal_connect(check_run_in_vte, "toggled",
 			G_CALLBACK(check_run_in_vte_toggled), check_skip_script);

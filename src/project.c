@@ -167,7 +167,7 @@ void project_new(void)
 
 	e->base_path = gtk_entry_new();
 	ui_entry_add_clear_icon(GTK_ENTRY(e->base_path));
-	ui_widget_set_tooltip_text(e->base_path,
+	gtk_widget_set_tooltip_text(e->base_path,
 		_("Base directory of all files that make up the project. "
 		"This can be a new path, or an existing directory tree. "
 		"You can use paths relative to the project filename."));
@@ -468,7 +468,7 @@ static void create_properties_dialog(PropertyDialogElements *e)
 
 	e->base_path = gtk_entry_new();
 	ui_entry_add_clear_icon(GTK_ENTRY(e->base_path));
-	ui_widget_set_tooltip_text(e->base_path,
+	gtk_widget_set_tooltip_text(e->base_path,
 		_("Base directory of all files that make up the project. "
 		"This can be a new path, or an existing directory tree. "
 		"You can use paths relative to the project filename."));
@@ -496,7 +496,7 @@ static void create_properties_dialog(PropertyDialogElements *e)
 	gtk_misc_set_alignment(GTK_MISC(label), 0, 0);
 
 	e->patterns = gtk_entry_new();
-	ui_widget_set_tooltip_text(e->patterns,
+	gtk_widget_set_tooltip_text(e->patterns,
 		_("Space separated list of file patterns used for the find in files dialog "
 		  "(e.g. *.c *.h)"));
 	gtk_table_attach(GTK_TABLE(table), e->patterns, 1, 2, 4, 5,

@@ -336,7 +336,7 @@ void document_update_tab_label(GeanyDocument *doc)
 
 	gtk_label_set_text(GTK_LABEL(doc->priv->tab_label), short_name);
 
-	ui_widget_set_tooltip_text(parent, DOC_FILENAME(doc));
+	gtk_widget_set_tooltip_text(parent, DOC_FILENAME(doc));
 
 	g_free(short_name);
 }

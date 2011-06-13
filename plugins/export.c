@@ -185,7 +185,7 @@ static void create_file_save_as_dialog(const gchar *extension, ExportFunc func,
 		GtkWidget *check_line_numbers;
 
 		check_line_numbers = gtk_check_button_new_with_mnemonic(_("_Insert line numbers"));
-		ui_widget_set_tooltip_text(check_line_numbers,
+		gtk_widget_set_tooltip_text(check_line_numbers,
 			_("Insert line numbers before each line in the exported document"));
 		gtk_box_pack_start(GTK_BOX(vbox), check_line_numbers, FALSE, FALSE, 0);
 		gtk_widget_show_all(vbox);
@@ -197,7 +197,7 @@ static void create_file_save_as_dialog(const gchar *extension, ExportFunc func,
 		GtkWidget *check_zoom_level;
 
 		check_zoom_level = gtk_check_button_new_with_mnemonic(_("_Use current zoom level"));
-		ui_widget_set_tooltip_text(check_zoom_level,
+		gtk_widget_set_tooltip_text(check_zoom_level,
 			_("Renders the font size of the document together with the current zoom level"));
 		gtk_box_pack_start(GTK_BOX(vbox), check_zoom_level, FALSE, FALSE, 0);
 		gtk_widget_show_all(vbox);

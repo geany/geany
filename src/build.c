@@ -1887,7 +1887,7 @@ static RowWidgets *build_add_dialog_row(GeanyDocument *doc, GtkTable *table, gui
 		{
 			GtkWidget *wid = roww->entries[i] = gtk_button_new();
 			gtk_button_set_use_underline(GTK_BUTTON(wid), TRUE);
-			ui_widget_set_tooltip_text(wid, _("Click to set menu item label"));
+			gtk_widget_set_tooltip_text(wid, _("Click to set menu item label"));
 			g_signal_connect(wid, "clicked", G_CALLBACK(on_label_button_clicked), roww);
 		}
 		else

@@ -2,6 +2,12 @@
 
  * configure.ac, src/Makefile.am, src/makefile.win32, wscript:
    Dump dependencies to GTK >= 2.12, GLib >= 2.16 and GIO.
+ * plugins/export.c, plugins/filebrowser.c, plugins/splitwindow.c,
+   src/build.c, src/dialogs.c, src/document.c, src/highlighting.c,
+   src/printing.c, src/project.c, src/search.c, src/ui_utils.c,
+   src/vte.c:
+   Deprecate ui_widget_set_tooltip_text() in favor of
+   gtk_widget_set_tooltip_text().
 
 
 2011-06-11  Colomban Wendling  <colomban(at)geany(dot)org>
