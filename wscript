@@ -141,17 +141,13 @@ def configure(conf):
     _load_intltool_if_available(conf)
 
     # GTK / GIO version check
-    conf.check_cfg(package='gtk+-2.0', atleast_version='2.8.0', uselib_store='GTK',
+    conf.check_cfg(package='gtk+-2.0', atleast_version='2.12.0', uselib_store='GTK',
         mandatory=True, args='--cflags --libs')
-    have_gtk_210 = False
-    gtk_version = conf.check_cfg(modversion='gtk+-2.0', uselib_store='GTK')
-    if gtk_version:
-        if version.LooseVersion(gtk_version) >= version.LooseVersion('2.10.0'):
-            have_gtk_210 = True
-    else:
-        gtk_version = 'Unknown'
+    conf.check_cfg(package='glib-2.0', atleast_version='2.16.0', uselib_store='GLIB',
+        mandatory=True, args='--cflags --libs')
+    conf.check_cfg(package='gio-2.0', uselib_store='GIO', args='--cflags --libs', mandatory=True)
+    gtk_version = conf.check_cfg(modversion='gtk+-2.0', uselib_store='GTK') or 'Unknown'
     conf.check_cfg(package='gthread-2.0', uselib_store='GTHREAD', args='--cflags --libs')
-    conf.check_cfg(package='gio-2.0', uselib_store='GIO', args='--cflags --libs', mandatory=False)
 
     # Windows specials
     if is_win32:
@@ -220,7 +216,6 @@ def configure(conf):
     Logs.pprint('BLUE', 'Summary:')
     conf.msg('Install Geany ' + VERSION + ' in', conf.env['PREFIX'])
     conf.msg('Using GTK version', gtk_version)
-    conf.msg('Build with GTK printing support', have_gtk_210 and 'yes' or 'no')
     conf.msg('Build with plugin support', conf.options.no_plugins and 'no' or 'yes')
     conf.msg('Use virtual terminal support', conf.options.no_vte and 'no' or 'yes')
     conf.msg('GNU regex library', conf.env['USE_INCLUDED_REGEX'] and 'built-in' or 'system')
@@ -276,7 +271,7 @@ def build(bld):
             includes                = ['.', 'src/', 'scintilla/include', 'tagmanager/include'],
             defines                 = 'G_LOG_DOMAIN="%s"' % plugin_name,
             target                  = plugin_name,
-            uselib                  = 'GTK',
+            uselib                  = ['GTK', 'GLIB'],
             install_path            = instpath)
 
 
@@ -290,7 +285,7 @@ def build(bld):
         target          = 'tagmanager',
         includes        = ['.', 'tagmanager', 'tagmanager/include'],
         defines         = 'G_LOG_DOMAIN="Tagmanager"',
-        uselib          = 'GTK',
+        uselib          = ['GTK', 'GLIB'],
         install_path    = None) # do not install this library
 
 
@@ -302,7 +297,7 @@ def build(bld):
         target          = 'mio',
         includes        = ['.', 'tagmanager/mio/'],
         defines         = 'G_LOG_DOMAIN="MIO"',
-        uselib          = 'GTK',
+        uselib          = ['GTK', 'GLIB'],
         install_path    = None) # do not install this library
 
 
@@ -333,7 +328,7 @@ def build(bld):
         source          = geany_sources,
         includes        = ['.', 'scintilla/include/', 'tagmanager/include/'],
         defines         = ['G_LOG_DOMAIN="Geany"', 'GEANY_PRIVATE'],
-        uselib          = ['GTK', 'GIO', 'GTHREAD', 'WIN32', 'SUNOS_SOCKET'],
+        uselib          = ['GTK', 'GLIB', 'GIO', 'GTHREAD', 'WIN32', 'SUNOS_SOCKET'],
         use             = ['scintilla', 'tagmanager', 'mio'])
 
     # geanyfunctions.h
