@@ -78,21 +78,6 @@ static void delegate_button_activated(GtkAction *action)
 }
 
 
-static void set_arrow_tooltip(GtkMenuToolButton *button, const gchar *tooltip)
-{
-#if GTK_CHECK_VERSION(2, 12, 0)
-	gtk_menu_tool_button_set_arrow_tooltip_text(button, tooltip);
-#else
-	static GtkTooltips *tooltips = NULL;
-
-	if (G_UNLIKELY(tooltips == NULL))
-		tooltips = gtk_tooltips_new();
-
-	gtk_menu_tool_button_set_arrow_tooltip(button, tooltips, tooltip, NULL);
-#endif
-}
-
-
 static void geany_menu_button_action_set_property(GObject *object, guint prop_id,
 												  const GValue *value, GParamSpec *pspec)
 {
@@ -118,7 +103,7 @@ static GtkWidget *geany_menu_button_action_create_tool_item(GtkAction *action)
 	GeanyMenubuttonActionPrivate *priv = GEANY_MENU_BUTTON_ACTION_GET_PRIVATE(action);
 
 	toolitem = g_object_new(GTK_TYPE_MENU_TOOL_BUTTON, NULL);
-	set_arrow_tooltip(GTK_MENU_TOOL_BUTTON(toolitem), priv->tooltip_arrow);
+	gtk_menu_tool_button_set_arrow_tooltip_text(GTK_MENU_TOOL_BUTTON(toolitem), priv->tooltip_arrow);
 
 	return toolitem;
 }
