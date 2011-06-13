@@ -14,6 +14,8 @@
    Enable GTK printing support unconditionally.
  * doc/geany.html, doc/geany.txt:
    Stop talking about pre-GTK 2.12 tricks.
+ * geany.glade, src/interface.c:
+   Fix Printing preferences page alignment.
 
 
 2011-06-11  Colomban Wendling  <colomban(at)geany(dot)org>

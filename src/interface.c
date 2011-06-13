@@ -4891,7 +4891,6 @@ create_prefs_dialog (void)
   vbox27 = gtk_vbox_new (FALSE, 10);
   gtk_widget_show (vbox27);
   gtk_container_add (GTK_CONTAINER (alignment49), vbox27);
-  gtk_container_set_border_width (GTK_CONTAINER (vbox27), 5);
 
   frame32 = gtk_frame_new (NULL);
   gtk_widget_show (frame32);
