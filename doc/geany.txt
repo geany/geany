@@ -1115,13 +1115,12 @@ can define keybindings for snippets under the *Keybindings* group in
 Inserting Unicode characters
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-With GTK 2.10 and above, you can insert Unicode code points by hitting
-Ctrl-Shift-u, then still holding Ctrl-Shift, type some hex digits representing
-the code point for the character you want and hit Enter or Return (still
-holding Ctrl-Shift). If you release Ctrl-Shift before hitting Enter or Return
-(or any other character), the code insertion is completed, but the typed
-character is also entered.  In the case of Enter/Return, it is a newline, as
-you might expect.
+You can insert Unicode code points by hitting Ctrl-Shift-u, then still holding
+Ctrl-Shift, type some hex digits representing the code point for the character
+you want and hit Enter or Return (still holding Ctrl-Shift). If you release
+Ctrl-Shift before hitting Enter or Return (or any other character), the code
+insertion is completed, but the typed character is also entered.  In the case
+of Enter/Return, it is a newline, as you might expect.
 
 
 In some earlier versions of Geany, you might need to first unbind Ctrl-Shift-u
@@ -1129,11 +1128,6 @@ in the `keybinding preferences`_, then select *Tools->Reload Configuration*
 or restart Geany. Note that it works slightly differently from other GTK
 applications, in that you'll need to continue to hold down the Ctrl and Shift
 keys while typing the code point hex digits (and the Enter or Return to finish the code point).
-
-For GTK < 2.10, it is also possible, but typing the first Ctrl-Shift-u
-is not necessary. One problem is that you may find the alphabetic
-keys conflict with other Geany keybindings.
-
 
 
 Search, replace and go to
