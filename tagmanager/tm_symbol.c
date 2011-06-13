@@ -13,25 +13,8 @@
 #include "tm_symbol.h"
 
 
-#if GLIB_CHECK_VERSION (2, 10, 0)
-/* Use GSlices if present */
-
 #define SYM_NEW(T)	((T) = g_slice_new0(TMSymbol))
 #define SYM_FREE(T)	g_slice_free(TMSymbol, (T))
-
-#else /* GLib < 2.10 */
-
-static GMemChunk *sym_mem_chunk = NULL;
-
-#define SYM_NEW(T) {\
-	if (!sym_mem_chunk) \
-		sym_mem_chunk = g_mem_chunk_new("TMSymbol MemChunk", sizeof(TMSymbol), 1024 \
-		  , G_ALLOC_AND_FREE); \
-	(T) = g_chunk_new0(TMSymbol, sym_mem_chunk);}
-
-#define SYM_FREE(T) g_mem_chunk_free(sym_mem_chunk, (T))
-
-#endif /* GLib version check */
 
 
 void tm_symbol_print(TMSymbol *sym, guint level)

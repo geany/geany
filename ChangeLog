@@ -18,6 +18,9 @@
    Fix Printing preferences page alignment.
  * src/notebook.c:
    Remove pre-GTK 2.10 tab DnD support.
+ * src/pluginutils.c, tagmanager/tm_file_entry.c,
+   tagmanager/tm_symbol.c, tagmanager/tm_tag.c:
+   Unconditionally use GSlice allocator.
 
 
 2011-06-11  Colomban Wendling  <colomban(at)geany(dot)org>

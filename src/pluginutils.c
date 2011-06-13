@@ -140,16 +140,6 @@ typedef struct PluginSourceData
 } PluginSourceData;
 
 
-/* use GSlice if available */
-#if GLIB_CHECK_VERSION(2,10,0)
-#	define PSD_ALLOC()		(g_slice_alloc(sizeof(PluginSourceData)))
-#	define PSD_FREE(psd)	(g_slice_free1(sizeof(PluginSourceData), (psd)))
-#else
-#	define PSD_ALLOC()		(g_malloc(sizeof(PluginSourceData)))
-#	define PSD_FREE(psd)	(g_free(psd))
-#endif
-
-
 /* prepend psd->list_link to psd->plugin->sources */
 static void psd_register(PluginSourceData *psd, GSource *source)
 {
@@ -179,7 +169,7 @@ static void on_plugin_source_destroy(gpointer data)
 	PluginSourceData *psd = data;
 
 	psd_unregister(psd);
-	PSD_FREE(psd);
+	g_slice_free1(sizeof *psd, psd);
 }
 
 
@@ -196,7 +186,7 @@ static gboolean on_plugin_source_callback(gpointer data)
 static guint plugin_source_add(GeanyPlugin *plugin, GSource *source, GSourceFunc func, gpointer data)
 {
 	guint id;
-	PluginSourceData *psd = PSD_ALLOC();
+	PluginSourceData *psd = g_slice_alloc(sizeof *psd);
 
 	psd->plugin = plugin->priv;
 	psd->function = func;

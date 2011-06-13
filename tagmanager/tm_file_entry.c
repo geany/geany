@@ -28,25 +28,8 @@
 #include "tm_file_entry.h"
 
 
-#if GLIB_CHECK_VERSION (2, 10, 0)
-/* Use GSlices if present */
-
 #define FILE_NEW(T)		((T) = g_slice_new0(TMFileEntry))
 #define FILE_FREE(T)	g_slice_free(TMFileEntry, (T))
-
-#else /* GLib < 2.10 */
-
-static GMemChunk *file_mem_chunk = NULL;
-
-#define FILE_NEW(T) {\
-	if (!file_mem_chunk) \
-		file_mem_chunk = g_mem_chunk_new("TMFileEntry MemChunk", sizeof(TMFileEntry), 1024 \
-		  , G_ALLOC_AND_FREE); \
-	(T) = g_chunk_new0(TMFileEntry, file_mem_chunk);}
-
-#define FILE_FREE(T) g_mem_chunk_free(file_mem_chunk, (T))
-
-#endif /* GLib version check */
 
 
 void tm_file_entry_print(TMFileEntry *entry, gpointer __unused__ user_data
