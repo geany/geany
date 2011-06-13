@@ -41,9 +41,7 @@ typedef struct PrintingPrefs
 extern PrintingPrefs printing_prefs;
 
 
-#if GTK_CHECK_VERSION(2, 10, 0)
 void printing_page_setup_gtk(void);
-#endif
 
 void printing_print_doc(GeanyDocument *doc);
 

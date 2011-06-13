@@ -2955,13 +2955,10 @@ like::
 at the end of the file. Of course, you can also use xpdf, kpdf or whatever
 as the print preview command.
 
-Unfortunately, native GTK printing support is only available if Geany was
-built against GTK 2.10 (or above) **and** is running with GTK 2.10 (or above).
-If not, Geany provides basic printing support. This means you can print a
-file by passing the filename of the current file to a command which
-actually prints the file. However, the printed document contains no syntax
-highlighting. You can adjust the command to which the filename is
-passed in the preferences dialog. The default command is::
+Geany also provides an alternative basic printing support using a custom
+print command. However, the printed document contains no syntax highlighting.
+You can adjust the command to which the filename is passed in the preferences
+dialog. The default command is::
 
     % lpr %f
 

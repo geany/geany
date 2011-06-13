@@ -655,13 +655,6 @@ static void prefs_init_dialog(void)
 		else
 			widget = ui_lookup_widget(ui_widgets.prefs_dialog, "radio_print_external");
 
-#if GTK_CHECK_VERSION(2, 10, 0)
-		if (gtk_check_version(2, 10, 0) != NULL)
-#endif
-		{
-			gtk_widget_set_sensitive(widget_gtk, FALSE); /* disable the whole option block */
-			widget = ui_lookup_widget(ui_widgets.prefs_dialog, "radio_print_external");
-		}
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), TRUE);
 
 		on_prefs_print_radio_button_toggled(GTK_TOGGLE_BUTTON(widget_gtk), NULL);
@@ -1648,12 +1641,6 @@ void prefs_show_dialog(void)
 		label = geany_wrap_label_new(_("Here you can change keyboard shortcuts for various actions. Select one and press the Change button to enter a new shortcut, or double click on an action to edit the string representation of the shortcut directly."));
 		gtk_widget_show(label);
 		gtk_box_pack_start(GTK_BOX(ui_lookup_widget(ui_widgets.prefs_dialog, "vbox32")),
-			label, FALSE, TRUE, 5);
-		/* page Printing */
-		label = geany_wrap_label_new(_("<i>Notice: Native GTK printing is only available if Geany was built against GTK 2.10 (or above) <b>and</b> Geany is running with GTK 2.10 (or above).</i>"));
-		gtk_widget_show(label);
-		gtk_label_set_use_markup(GTK_LABEL(label), TRUE);
-		gtk_box_pack_start(GTK_BOX(ui_lookup_widget(ui_widgets.prefs_dialog, "vbox27")),
 			label, FALSE, TRUE, 5);
 		/* page Editor->Indentation */
 		label = geany_wrap_label_new(_("<i>Warning: these settings are overridden by the current project. See <b>Project->Properties</b>.</i>"));

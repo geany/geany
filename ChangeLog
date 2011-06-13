@@ -8,6 +8,10 @@
    src/vte.c:
    Deprecate ui_widget_set_tooltip_text() in favor of
    gtk_widget_set_tooltip_text().
+ * configure.ac, doc/geany.html, doc/geany.txt, src/callbacks.c,
+   src/keyfile.c, src/main.c, src/prefs.c, src/printing.c,
+   src/printing.h:
+   Enable GTK printing support unconditionally.
 
 
 2011-06-11  Colomban Wendling  <colomban(at)geany(dot)org>

@@ -855,11 +855,7 @@ static void load_dialog_prefs(GKeyFile *config)
 	g_free(tmp_string);
 	g_free(tmp_string2);
 
-#if GTK_CHECK_VERSION(2, 10, 0)
 	printing_prefs.use_gtk_printing = utils_get_setting_boolean(config, "printing", "use_gtk_printing", TRUE);
-#else
-	printing_prefs.use_gtk_printing = utils_get_setting_boolean(config, "printing", "use_gtk_printing", FALSE);
-#endif
 	printing_prefs.print_line_numbers = utils_get_setting_boolean(config, "printing", "print_line_numbers", TRUE);
 	printing_prefs.print_page_numbers = utils_get_setting_boolean(config, "printing", "print_page_numbers", TRUE);
 	printing_prefs.print_page_header = utils_get_setting_boolean(config, "printing", "print_page_header", TRUE);

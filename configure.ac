@@ -221,15 +221,6 @@ fi
 GTK_VERSION=`$PKG_CONFIG --modversion gtk+-2.0`
 
 
-# GTK 2.10 printing support
-$PKG_CONFIG --exists 'gtk+-2.0 >= 2.10.0'
-if test "x$?" = "x0" ; then
-	enable_printing="yes"
-else
-	enable_printing="no (GTK >= 2.10 necessary)"
-fi
-
-
 # just for a laugh (it has absolutely no effect)
 AC_ARG_ENABLE(the-force, AC_HELP_STRING([--enable-the-force],
      [enable if you are Luke Skywalker and the force is with you [[default=no]]]), [be_luke="$enableval"], [be_luke="no"])
@@ -313,7 +304,6 @@ then
 	echo "Building Geany for                 : ${target}"
 fi
 echo "Using GTK version                  : ${GTK_VERSION}"
-echo "Build with GTK printing support    : ${enable_printing}"
 echo "Build with plugin support          : ${enable_plugins}"
 echo "Use virtual terminal support       : ${want_vte}"
 echo "Use (UNIX domain) socket support   : ${want_socket}"

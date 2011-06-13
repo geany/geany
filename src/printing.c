@@ -23,7 +23,7 @@
 
 
 /*
- * GTK 2.10 printing support
+ * GTK printing support
  * (basic code layout were adopted from Sylpheed's printing implementation, thanks)
  */
 
@@ -46,9 +46,6 @@
 
 
 PrintingPrefs printing_prefs;
-
-
-#if GTK_CHECK_VERSION(2, 10, 0)
 
 
 #define ROTATE_RGB(color) \
@@ -861,7 +858,6 @@ void printing_page_setup_gtk(void)
 
 	page_setup = new_page_setup;
 }
-#endif /* GTK 2.10 */
 
 
 /* simple file print using an external tool */
@@ -918,11 +914,9 @@ void printing_print_doc(GeanyDocument *doc)
 	if (doc == NULL)
 		return;
 
-#if GTK_CHECK_VERSION(2, 10, 0)
-	if (gtk_check_version(2, 10, 0) == NULL && printing_prefs.use_gtk_printing)
+	if (printing_prefs.use_gtk_printing)
 		printing_print_gtk(doc);
 	else
-#endif
 		print_external(doc);
 }
 

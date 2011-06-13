@@ -266,12 +266,8 @@ on_file1_activate                      (GtkMenuItem     *menuitem,
 {
 	gtk_widget_set_sensitive(ui_widgets.recent_files_menuitem,
 						g_queue_get_length(ui_prefs.recent_queue) > 0);
-#if GTK_CHECK_VERSION(2, 10, 0)
-	/* hide Page setup when GTK printing is not used
-	 * (on GTK < 2.10 the menu item is hidden completely) */
-	ui_widget_show_hide(ui_widgets.print_page_setup,
-		printing_prefs.use_gtk_printing || gtk_check_version(2, 10, 0) != NULL);
-#endif
+	/* hide Page setup when GTK printing is not used */
+	ui_widget_show_hide(ui_widgets.print_page_setup, printing_prefs.use_gtk_printing);
 }
 
 
@@ -2087,9 +2083,7 @@ void
 on_page_setup1_activate                (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-#if GTK_CHECK_VERSION(2, 10, 0)
 	printing_page_setup_gtk();
-#endif
 }
 
 
