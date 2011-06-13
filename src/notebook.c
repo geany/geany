@@ -52,10 +52,6 @@ static GtkTargetEntry files_drop_targets[] = {
 };
 
 
-static gboolean
-notebook_drag_motion_cb(GtkWidget *widget, GdkDragContext *dc,
-	gint x, gint y, guint event_time, gpointer user_data);
-
 static void
 notebook_page_reordered_cb(GtkNotebook *notebook, GtkWidget *child, guint page_num,
 	gpointer user_data);
@@ -64,9 +60,6 @@ static void
 on_window_drag_data_received(GtkWidget *widget, GdkDragContext *drag_context,
                              gint x, gint y, GtkSelectionData *data, guint info,
                              guint event_time, gpointer user_data);
-
-static gint
-notebook_find_tab_num_at_pos(GtkNotebook *notebook, gint x, gint y);
 
 static void
 notebook_tab_close_clicked_cb(GtkButton *button, gpointer user_data);
@@ -137,12 +130,8 @@ static gboolean is_position_on_tab_bar(GtkNotebook *notebook, GdkEventButton *ev
 	tab_pos = gtk_notebook_get_tab_pos(notebook);
 	nb = GTK_WIDGET(notebook);
 
-#if GTK_CHECK_VERSION(2, 10, 0)
 	gtk_widget_style_get(GTK_WIDGET(notebook), "scroll-arrow-hlength", &scroll_arrow_hlength,
 		"scroll-arrow-vlength", &scroll_arrow_vlength, NULL);
-#else
-	scroll_arrow_hlength = scroll_arrow_vlength = 16;
-#endif
 
 	if (! gdk_event_get_coords((GdkEvent*) event, &x, &y))
 	{
@@ -319,28 +308,7 @@ static void setup_tab_dnd()
 {
 	GtkWidget *notebook = main_widgets.notebook;
 
-	/* Due to a segfault with manual tab DnD setup on GTK 2.10, we must
-	*  use the built in gtk_notebook_set_tab_reorderable from GTK 2.10.
-	*  This means a binary compiled against < 2.10 but run on >= 2.10
-	*  will not have tab DnD support, but this is necessary until
-	*  there is a fix for the older tab DnD code or GTK 2.10. */
-	if (gtk_check_version(2, 10, 0) == NULL) /* null means version ok */
-	{
-#if GTK_CHECK_VERSION(2, 10, 0)
-		g_signal_connect(notebook, "page-reordered", G_CALLBACK(notebook_page_reordered_cb), NULL);
-#endif
-		return;
-	}
-
-	/* Set up drag movement callback */
-	g_signal_connect(notebook, "drag-motion", G_CALLBACK(notebook_drag_motion_cb), NULL);
-
-	/* set up drag motion for moving notebook pages */
-	gtk_drag_dest_set(notebook, GTK_DEST_DEFAULT_MOTION | GTK_DEST_DEFAULT_DROP,
-		drag_targets, G_N_ELEMENTS(drag_targets), GDK_ACTION_MOVE);
-	/* set drag source, but for GTK+2.6 it's changed in motion-notify-event handler */
-	gtk_drag_source_set(notebook, GDK_BUTTON1_MASK,
-		drag_targets, G_N_ELEMENTS(drag_targets), GDK_ACTION_MOVE);
+	g_signal_connect(notebook, "page-reordered", G_CALLBACK(notebook_page_reordered_cb), NULL);
 }
 
 
@@ -351,91 +319,6 @@ notebook_page_reordered_cb(GtkNotebook *notebook, GtkWidget *child, guint page_n
 	/* Not necessary to update open files treeview if it's sorted.
 	 * Note: if enabled, it's best to move the item instead of recreating all items. */
 	/*sidebar_openfiles_update_all();*/
-}
-
-
-static gboolean
-notebook_drag_motion_cb(GtkWidget *widget, GdkDragContext *dc,
-	gint x, gint y, guint event_time, gpointer user_data)
-{
-	static gint oldx, oldy; /* for determining direction of mouse drag */
-	GtkNotebook *notebook = GTK_NOTEBOOK(widget);
-	gint ndest = notebook_find_tab_num_at_pos(notebook, x, y);
-	gint ncurr = gtk_notebook_get_current_page(notebook);
-
-	if (ndest >= 0 && ndest != ncurr)
-	{
-		gboolean ok = FALSE;
-		/* prevent oscillation between non-homogeneous sized tabs */
-		switch (gtk_notebook_get_tab_pos(notebook))
-		{
-			case GTK_POS_LEFT:
-			case GTK_POS_RIGHT:
-			ok = ((ndest > ncurr) && (y > oldy)) || ((ndest < ncurr) && (y < oldy));
-			break;
-
-			case GTK_POS_TOP:
-			case GTK_POS_BOTTOM:
-			ok = ((ndest > ncurr) && (x > oldx)) || ((ndest < ncurr) && (x < oldx));
-			break;
-		}
-
-		if (ok)
-		{
-			gtk_notebook_reorder_child(notebook,
-							gtk_notebook_get_nth_page(notebook, ncurr), ndest);
-			notebook_page_reordered_cb(NULL, NULL, ndest, NULL);
-		}
-	}
-
-	oldx = x; oldy = y;
-	return FALSE;
-}
-
-
-/* Adapted from Epiphany absolute version in ephy-notebook.c, thanks.
- * x,y are co-ordinates local to the notebook (not including border padding)
- * notebook tab label widgets must not be NULL.
- * N.B. This only checks the dimension that the tabs are in,
- * e.g. for GTK_POS_TOP it does not check the y coordinate. */
-static gint
-notebook_find_tab_num_at_pos(GtkNotebook *notebook, gint x, gint y)
-{
-	GtkPositionType tab_pos;
-	int page_num = 0;
-	GtkWidget *page;
-
-	/* deal with less than 2 pages */
-	switch (gtk_notebook_get_n_pages(notebook))
-	{case 0: return -1; case 1: return 0;}
-
-	tab_pos = gtk_notebook_get_tab_pos(notebook); /* which edge */
-
-	while ((page = gtk_notebook_get_nth_page(notebook, page_num)))
-	{
-		gint max_x, max_y;
-		GtkWidget *tab = gtk_notebook_get_tab_label(notebook, page);
-
-		g_return_val_if_fail(tab != NULL, -1);
-
-		if (!GTK_WIDGET_MAPPED(GTK_WIDGET(tab)))
-		{ /* skip hidden tabs, e.g. tabs scrolled out of view */
-			page_num++;
-			continue;
-		}
-
-		/* subtract notebook pos to remove possible border padding */
-		max_x = tab->allocation.x + tab->allocation.width - GTK_WIDGET(notebook)->allocation.x;
-		max_y = tab->allocation.y + tab->allocation.height - GTK_WIDGET(notebook)->allocation.y;
-
-		if (((tab_pos == GTK_POS_TOP) || (tab_pos == GTK_POS_BOTTOM)) && (x <= max_x))
-			return page_num;
-		else if (((tab_pos == GTK_POS_LEFT) || (tab_pos == GTK_POS_RIGHT)) && (y <= max_y))
-			return page_num;
-
-		page_num++;
-	}
-	return -1;
 }
 
 
@@ -570,13 +453,9 @@ gint notebook_new_tab(GeanyDocument *this)
 
 	tab_count_changed();
 
-	/* This is where tab DnD is enabled for GTK 2.10 and higher */
-#if GTK_CHECK_VERSION(2, 10, 0)
-	if (gtk_check_version(2, 10, 0) == NULL) /* null means version ok */
-	{
-		gtk_notebook_set_tab_reorderable(GTK_NOTEBOOK(main_widgets.notebook), page, TRUE);
-	}
-#endif
+	/* enable tab DnD */
+	gtk_notebook_set_tab_reorderable(GTK_NOTEBOOK(main_widgets.notebook), page, TRUE);
+
 	return tabnum;
 }
 

@@ -16,6 +16,8 @@
    Stop talking about pre-GTK 2.12 tricks.
  * geany.glade, src/interface.c:
    Fix Printing preferences page alignment.
+ * src/notebook.c:
+   Remove pre-GTK 2.10 tab DnD support.
 
 
 2011-06-11  Colomban Wendling  <colomban(at)geany(dot)org>
