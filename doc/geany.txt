@@ -4360,8 +4360,7 @@ show_editor_scrollbars            Whether to display scrollbars. If set to     t
                                   scrollbars are hidden completely.
 **Interface related**
 show_symbol_list_expanders        Whether to show or hide the small expander   true
-                                  icons on the symbol list treeview (only
-                                  available with GTK 2.12 or above).
+                                  icons on the symbol list treeview.
 allow_always_save                 Whether files can be saved always, even if   false
                                   they don't have any changes. By default,
                                   the Save button and menu item are disabled
