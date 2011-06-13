@@ -841,9 +841,8 @@ static void prepare_file_view(void)
 
 	ui_widget_modify_font_from_string(file_view, geany->interface_prefs->tagbar_font);
 
-	/* GTK 2.12 tooltips */
-	if (gtk_check_version(2, 12, 0) == NULL)
-		g_object_set(file_view, "has-tooltip", TRUE, "tooltip-column", FILEVIEW_COLUMN_FILENAME, NULL);
+	/* tooltips */
+	gtk_tree_view_set_tooltip_column(file_view, FILEVIEW_COLUMN_FILENAME);
 
 	/* selection handling */
 	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(file_view));

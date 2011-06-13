@@ -306,9 +306,8 @@ static void prepare_openfiles(void)
 
 	ui_widget_modify_font_from_string(tv.tree_openfiles, interface_prefs.tagbar_font);
 
-	/* GTK 2.12 tooltips */
-	if (gtk_check_version(2, 12, 0) == NULL)
-		g_object_set(tv.tree_openfiles, "has-tooltip", TRUE, "tooltip-column", DOCUMENTS_FILENAME, NULL);
+	/* tooltips */
+	gtk_tree_view_set_tooltip_column(tv.tree_openfiles, DOCUMENTS_FILENAME);
 
 	/* selection handling */
 	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(tv.tree_openfiles));
@@ -1044,19 +1043,14 @@ void sidebar_init(void)
 	g_signal_connect(geany_object, "load-settings", on_load_settings, NULL);
 	g_signal_connect(geany_object, "save-settings", on_save_settings, NULL);
 
+	g_signal_connect(main_widgets.sidebar_notebook, "page-added",
+		G_CALLBACK(sidebar_tabs_show_hide), NULL);
+	g_signal_connect(main_widgets.sidebar_notebook, "page-removed",
+		G_CALLBACK(sidebar_tabs_show_hide), NULL);
+	/* tabs may have changed when sidebar is reshown */
+	g_signal_connect(main_widgets.sidebar_notebook, "show",
+		G_CALLBACK(sidebar_tabs_show_hide), NULL);
 
-	if (gtk_check_version(2, 10, 0) == NULL)
-	{
-		g_signal_connect(main_widgets.sidebar_notebook, "page-added",
-			G_CALLBACK(sidebar_tabs_show_hide), NULL);
-
-		g_signal_connect(main_widgets.sidebar_notebook, "page-removed",
-			G_CALLBACK(sidebar_tabs_show_hide), NULL);
-
-		/* tabs may have changed when sidebar is reshown */
-		g_signal_connect(main_widgets.sidebar_notebook, "show",
-			G_CALLBACK(sidebar_tabs_show_hide), NULL);
-	}
 	sidebar_tabs_show_hide(GTK_NOTEBOOK(main_widgets.sidebar_notebook), NULL, 0, NULL);
 }
 
@@ -1107,15 +1101,12 @@ void sidebar_focus_symbols_tab(void)
 static void sidebar_tabs_show_hide(GtkNotebook *notebook, GtkWidget *child,
 								   guint page_num, gpointer data)
 {
-	if (gtk_check_version(2, 10, 0) == NULL)
-	{
-		gint tabs = gtk_notebook_get_n_pages(notebook);
+	gint tabs = gtk_notebook_get_n_pages(notebook);
 
-		if (interface_prefs.sidebar_symbol_visible == FALSE)
-			tabs--;
-		if (interface_prefs.sidebar_openfiles_visible == FALSE)
-			tabs--;
+	if (interface_prefs.sidebar_symbol_visible == FALSE)
+		tabs--;
+	if (interface_prefs.sidebar_openfiles_visible == FALSE)
+		tabs--;
 
-		gtk_notebook_set_show_tabs(notebook, (tabs > 1));
-	}
+	gtk_notebook_set_show_tabs(notebook, (tabs > 1));
 }

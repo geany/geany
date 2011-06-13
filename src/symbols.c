@@ -1282,6 +1282,7 @@ static void add_tree_tag(GeanyDocument *doc, const TMTag *tag, GHashTable *paren
 		GtkTreeIter iter;
 		GtkTreeIter *child = NULL;
  		GdkPixbuf *icon = NULL;
+		gchar *tooltip;
 
  		child = &iter;
 		icon = get_child_icon(tree_store, parent);
@@ -1328,20 +1329,16 @@ static void add_tree_tag(GeanyDocument *doc, const TMTag *tag, GHashTable *paren
 		}
 
 		name = get_symbol_name(doc, tag, (parent_name != NULL));
+		tooltip = get_symbol_tooltip(doc, tag);
 		gtk_tree_store_set(tree_store, child,
 			SYMBOLS_COLUMN_ICON, icon,
 			SYMBOLS_COLUMN_NAME, name,
 			SYMBOLS_COLUMN_TAG, tag,
 			SYMBOLS_COLUMN_VALID, TRUE,
+			SYMBOLS_COLUMN_TOOLTIP, tooltip,
 			-1);
 
-		if (gtk_check_version(2, 12, 0) == NULL)
-		{
-			gchar *tooltip = get_symbol_tooltip(doc, tag);
-			gtk_tree_store_set(tree_store, child, SYMBOLS_COLUMN_TOOLTIP, tooltip, -1);
-			g_free(tooltip);
-		}
-
+		g_free(tooltip);
 		if (G_LIKELY(G_IS_OBJECT(icon)))
 			g_object_unref(icon);
 	}
