@@ -1,3 +1,11 @@
+2011-06-15  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * tagmanager/python.c:
+   Fix two bugs with triple quoted strings within comments
+   and missing indentation within triple quoted strings
+   (#3316966, synced from CTags SVN, patch by Elias Pschernig, thanks).
+
+
 2011-06-14  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * data/filetypes.python:

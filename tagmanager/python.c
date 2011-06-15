@@ -478,6 +478,9 @@ static char const *find_triple_start(char const *string, char const **which)
 
 	for (; *cp; cp++)
 	{
+		if (*cp == '#')
+			break;
+
 		if (*cp == '"' || *cp == '\'')
 		{
 			if (strncmp(cp, doubletriple, 3) == 0)
@@ -674,14 +677,14 @@ static void findPythonTags (void)
 		indent = cp - line;
 		line_skip = 0;
 
-		checkParent(nesting_levels, indent, parent);
-
 		/* Deal with multiline string ending. */
 		if (longStringLiteral)
 		{
 			find_triple_end(cp, &longStringLiteral);
 			continue;
 		}
+		
+		checkParent(nesting_levels, indent, parent);
 
 		/* Deal with multiline string start. */
 		longstring = find_triple_start(cp, &longStringLiteral);
