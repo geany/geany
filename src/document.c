@@ -390,7 +390,7 @@ static void init_doc_struct(GeanyDocument *new_doc)
 	priv->redo_actions = NULL;
 	priv->line_count = 0;
 	priv->tag_list_update_source = 0;
-#if ! defined(USE_GIO_FILEMON)
+#ifndef USE_GIO_FILEMON
 	priv->last_check = time(NULL);
 #endif
 }
@@ -426,7 +426,7 @@ static void queue_colourise(GeanyDocument *doc)
 }
 
 
-#if USE_GIO_FILEMON
+#ifdef USE_GIO_FILEMON
 static void monitor_file_changed_cb(G_GNUC_UNUSED GFileMonitor *monitor, G_GNUC_UNUSED GFile *file,
 									G_GNUC_UNUSED GFile *other_file, GFileMonitorEvent event,
 									GeanyDocument *doc)
@@ -485,7 +485,7 @@ static void monitor_file_setup(GeanyDocument *doc)
 	 * doesn't work at all for remote files and legacy polling is too slow. */
 	if (! doc->priv->is_remote)
 	{
-#if USE_GIO_FILEMON
+#ifdef USE_GIO_FILEMON
 		gchar *locale_filename;
 
 		/* stop any previous monitoring */
@@ -775,7 +775,7 @@ GeanyDocument *document_new_file(const gchar *utf8_filename, GeanyFiletype *ft, 
 	editor_goto_pos(doc->editor, 0, FALSE);
 	document_try_focus(doc, NULL);
 
-#if USE_GIO_FILEMON
+#ifdef USE_GIO_FILEMON
 	monitor_file_setup(doc);
 #else
 	doc->priv->mtime = time(NULL);
@@ -1356,7 +1356,7 @@ gboolean document_reload_file(GeanyDocument *doc, const gchar *forced_enc)
 
 static gboolean document_update_timestamp(GeanyDocument *doc, const gchar *locale_filename)
 {
-#if ! USE_GIO_FILEMON
+#ifndef USE_GIO_FILEMON
 	struct stat st;
 
 	g_return_val_if_fail(doc != NULL, FALSE);
@@ -2786,7 +2786,7 @@ const GdkColor *document_get_status_color(GeanyDocument *doc)
 {
 	static GdkColor red = {0, 0xFFFF, 0, 0};
 	static GdkColor green = {0, 0, 0x7FFF, 0};
-#if USE_GIO_FILEMON
+#ifdef USE_GIO_FILEMON
 	static GdkColor orange = {0, 0xFFFF, 0x7FFF, 0};
 #endif
 	GdkColor *color = NULL;
@@ -2795,7 +2795,7 @@ const GdkColor *document_get_status_color(GeanyDocument *doc)
 
 	if (doc->changed)
 		color = &red;
-#if USE_GIO_FILEMON
+#ifdef USE_GIO_FILEMON
 	else if (doc->priv->file_disk_status == FILE_CHANGED)
 		color = &orange;
 #endif
