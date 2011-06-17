@@ -267,7 +267,7 @@ static void makeConstTag (tokenInfo *const token, const sqlKind kind);
 *   DEBUG function
 */
 
-static void dispToken (tokenInfo *const token, char * location)
+static void dispToken (tokenInfo *const token, const char * location)
 {
 #ifdef DEBUG
     if ( isKeyword(token, KEYWORD_NONE) )

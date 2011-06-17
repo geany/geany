@@ -494,7 +494,7 @@ static int skipOverCplusComment (void)
 /* Skips over a D style comment.
  * Really we should match nested /+ comments. At least they're less common.
  */
-int skipOverDComment (void)
+static int skipOverDComment (void)
 {
 	int c = fileGetc ();
 

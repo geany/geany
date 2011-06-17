@@ -892,7 +892,7 @@ load_plugins_from_path(const gchar *path)
 }
 
 
-static gchar *get_plugin_path()
+static gchar *get_plugin_path(void)
 {
 #ifdef G_OS_WIN32
 	gchar *path;

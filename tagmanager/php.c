@@ -102,7 +102,7 @@ static void function_cb(const char *line, const regexMatch *matches, unsigned in
 {
 	char *name, *arglist;
 	char kind = 'f';
-	static char *kindName = "function";
+	static const char *kindName = "function";
 	tagEntryInfo e;
 	const regexMatch *match_funcname = NULL;
 	const regexMatch *match_arglist = NULL;
