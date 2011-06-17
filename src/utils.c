@@ -44,9 +44,7 @@
 
 #include <glib/gstdio.h>
 
-#ifdef HAVE_GIO
-# include <gio/gio.h>
-#endif
+#include <gio/gio.h>
 
 #include "prefs.h"
 #include "support.h"
@@ -1838,7 +1836,6 @@ gchar *utils_get_path_from_uri(const gchar *uri)
 
 	/* this will work only for 'file://' URIs */
 	locale_filename = g_filename_from_uri(uri, NULL, NULL);
-#ifdef HAVE_GIO
 	/* g_filename_from_uri() failed, so we probably have a non-local URI */
 	if (locale_filename == NULL)
 	{
@@ -1849,13 +1846,8 @@ gchar *utils_get_path_from_uri(const gchar *uri)
 		{
 			geany_debug("The URI '%s' could not be resolved to a local path. This means "
 				"that the URI is invalid or that you don't have gvfs-fuse installed.", uri);
-			return NULL;
 		}
 	}
-#endif
-	if (locale_filename == NULL)
-		geany_debug("The URI '%s' could not be resolved to a local path. This means that the "
-			"URI is invalid or that Geany can't use GVFS (maybe it is not installed).", uri);
 
 	return locale_filename;
 }

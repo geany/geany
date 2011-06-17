@@ -48,13 +48,7 @@
 
 /* uncomment to use GIO based file monitoring, though it is not completely stable yet */
 /*#define USE_GIO_FILEMON 1*/
-#ifdef HAVE_GIO
-# include <gio/gio.h>
-#else
-# if USE_GIO_FILEMON
-#  undef USE_GIO_FILEMON
-# endif
-#endif
+#include <gio/gio.h>
 
 #include "document.h"
 #include "documentprivate.h"

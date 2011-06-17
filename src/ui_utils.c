@@ -2517,7 +2517,7 @@ void ui_editable_insert_text_callback(GtkEditable *editable, gchar *new_text,
 GdkPixbuf *ui_get_mime_icon(const gchar *mime_type, GtkIconSize size)
 {
 	GdkPixbuf *icon = NULL;
-#if defined(HAVE_GIO) && GLIB_CHECK_VERSION(2, 18, 0)
+#if GLIB_CHECK_VERSION(2, 18, 0)
 	gchar *ctype;
 	GIcon *gicon;
 	GtkIconInfo *info;
@@ -2544,7 +2544,7 @@ GdkPixbuf *ui_get_mime_icon(const gchar *mime_type, GtkIconSize size)
 		}
 	}
 #endif
-	/* fallback for builds without GIO or if icon lookup failed, like it might happen on Windows */
+	/* fallback for builds with GIO < 2.18 or if icon lookup failed, like it might happen on Windows */
 	if (icon == NULL)
 	{
 		const gchar *stock_id = GTK_STOCK_FILE;

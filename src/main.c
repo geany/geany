@@ -96,9 +96,6 @@ CommandLineOptions cl_options;	/* fields initialised in parse_command_line_optio
 
 
 static const gchar geany_lib_versions[] = "GTK %u.%u.%u, GLib %u.%u.%u"
-#ifdef HAVE_GIO
-	", GIO"
-#endif
 #ifdef USE_INCLUDED_REGEX
 	", built-in regex"
 #endif
