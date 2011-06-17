@@ -30,7 +30,7 @@ typedef struct StashGroup StashGroup;
 
 /** Can be @c GtkWidget* or @c gchar* depending on whether the @a owner argument is used for
  * stash_group_display() and stash_group_update(). */
-typedef gpointer StashWidgetID;
+typedef gconstpointer StashWidgetID;
 
 
 StashGroup *stash_group_new(const gchar *name);

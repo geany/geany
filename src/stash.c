@@ -566,14 +566,13 @@ lookup_widget(GtkWidget *widget, const gchar *widget_name)
 static GtkWidget *
 get_widget(GtkWidget *owner, StashWidgetID widget_id)
 {
-	GtkWidget *widget = widget_id;
+	GtkWidget *widget;
 
 	if (owner)
-	{
-		const gchar *widget_name = widget_id;
+		widget = lookup_widget(owner, (const gchar *)widget_id);
+	else
+		widget = (GtkWidget *)widget_id;
 
-		widget = lookup_widget(owner, widget_name);
-	}
 	if (!GTK_IS_WIDGET(widget))
 	{
 		g_warning("Unknown widget in %s()!", G_STRFUNC);

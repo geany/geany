@@ -4,6 +4,9 @@
    Remove support of size being -1 in document_open_file_list().
  * src/utils.c src/utils.h:
    Remove support of size being -1 in utils_get_line_endings().
+ * src/stash.c, src/stash.h:
+   Make StashWidgetID map to gconstpointer, allowing use of const
+   strings as the widget key.
 
 
 2011-06-16  Colomban Wendling  <colomban(at)geany(dot)org>
