@@ -2,6 +2,8 @@
 
  * src/document.c, src/main.c, src/ui_utils.c, src/utils.c:
    Remove most of the checks for GIO.
+ * src/win32.c:
+   Remove last GLib >= 2.16 check.
 
 
 2011-06-15  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
