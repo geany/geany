@@ -209,7 +209,7 @@ GeanyDocument *document_clone(GeanyDocument *old_doc, const gchar *utf8_filename
 GeanyDocument *document_open_file_full(GeanyDocument *doc, const gchar *filename, gint pos,
 		gboolean readonly, GeanyFiletype *ft, const gchar *forced_enc);
 
-void document_open_file_list(const gchar *data, gssize length);
+void document_open_file_list(const gchar *data, gsize length);
 
 void document_open_files(const GSList *filenames, gboolean readonly, GeanyFiletype *ft,
 		const gchar *forced_enc);

@@ -307,7 +307,7 @@ gchar *document_get_basename_for_display(GeanyDocument *doc, gint length)
 		length = 30;
 
 	base_name = g_path_get_basename(DOC_FILENAME(doc));
-	short_name = utils_str_middle_truncate(base_name, length);
+	short_name = utils_str_middle_truncate(base_name, (guint)length);
 
 	g_free(base_name);
 
@@ -926,7 +926,7 @@ static gboolean detect_tabs_and_spaces(GeanyEditor *editor)
 	ScintillaObject *sci = editor->sci;
 	gsize count = 0;
 	struct Sci_TextToFind ttf;
-	gchar *soft_tab = g_strnfill(iprefs->width, ' ');
+	gchar *soft_tab = g_strnfill((gsize)iprefs->width, ' ');
 	gchar *regex = g_strconcat("^\t+", soft_tab, "[^ ]", NULL);
 
 	g_free(soft_tab);
@@ -955,7 +955,7 @@ static GeanyIndentType detect_indent_type(GeanyEditor *editor)
 {
 	const GeanyIndentPrefs *iprefs = editor_get_indent_prefs(editor);
 	ScintillaObject *sci = editor->sci;
-	guint line, line_count;
+	gint line, line_count;
 	gsize tabs = 0, spaces = 0;
 
 	if (detect_tabs_and_spaces(editor))
@@ -997,7 +997,7 @@ static gint detect_indent_width(GeanyEditor *editor, GeanyIndentType type)
 {
 	const GeanyIndentPrefs *iprefs = editor_get_indent_prefs(editor);
 	ScintillaObject *sci = editor->sci;
-	guint line, line_count;
+	gint line, line_count;
 	gint widths[7] = { 0 }; /* width can be from 2 to 8 */
 	gint count, width, i;
 
@@ -1282,17 +1282,14 @@ GeanyDocument *document_open_file_full(GeanyDocument *doc, const gchar *filename
 
 
 /* Takes a new line separated list of filename URIs and opens each file.
- * length is the length of the string or -1 if it should be detected */
-void document_open_file_list(const gchar *data, gssize length)
+ * length is the length of the string */
+void document_open_file_list(const gchar *data, gsize length)
 {
-	gint i;
+	guint i;
 	gchar *filename;
 	gchar **list;
 
 	g_return_if_fail(data != NULL);
-
-	if (length < 0)
-		length = strlen(data);
 
 	list = g_strsplit(data, utils_get_eol_char(utils_get_line_endings(data, length)), 0);
 

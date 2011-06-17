@@ -374,7 +374,7 @@ static GtkWidget *cc_option_label_new(const gchar *text)
 /* Attaches a new section label at the specified table row, optionally
  * padded at the top, and returns the new label. */
 static GtkWidget *cc_table_attach_section_label(GtkWidget *table, const gchar *text,
-		gint row, gboolean top_padding)
+		guint row, gboolean top_padding)
 {
 	gchar *markup;
 	GtkWidget *label, *align;
@@ -399,7 +399,7 @@ static GtkWidget *cc_table_attach_section_label(GtkWidget *table, const gchar *t
 
 /* Attach a new option label at the specified table row and returns
  * the label */
-static GtkWidget *cc_table_attach_option_label(GtkWidget *table, const gchar *text, gint row)
+static GtkWidget *cc_table_attach_option_label(GtkWidget *table, const gchar *text, guint row)
 {
 	GtkWidget *opt_label = cc_option_label_new(text);
 	gtk_table_attach(GTK_TABLE(table), opt_label,
@@ -412,7 +412,7 @@ static GtkWidget *cc_table_attach_option_label(GtkWidget *table, const gchar *te
  * The label associated with the widget is set as data on the entry
  * with the "label" key, if access to it is needed later.  The entry
  * widget is returned. */
-static GtkWidget *cc_table_attach_option_entry(GtkWidget *table, const gchar *text, gint row)
+static GtkWidget *cc_table_attach_option_entry(GtkWidget *table, const gchar *text, guint row)
 {
 	GtkWidget *label;
 	GtkWidget *entry;
@@ -430,7 +430,7 @@ static void show_dialog_create_class(gint type)
 	CreateClassDialog *cc_dlg;
 	GtkWidget *main_box, *table, *label, *hdr_hbox;
 	GtkWidget *opt_table, *align;
-	gint row;
+	guint row;
 
 	cc_dlg = g_new0(CreateClassDialog, 1);
 	cc_dlg->class_type = type;

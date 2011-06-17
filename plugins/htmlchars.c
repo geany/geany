@@ -649,10 +649,10 @@ static void replace_special_character(void)
 
 	if (doc != NULL && sci_has_selection(doc->editor->sci))
 	{
-		guint selection_len;
+		gsize selection_len;
 		gchar *selection;
 		GString *replacement = g_string_new(NULL);
-		guint i;
+		gsize i;
 		gchar *new;
 		const gchar *entity = NULL;
 		gchar buf[7];
@@ -664,7 +664,7 @@ static void replace_special_character(void)
 		for (i = 0; i < selection_len; i++)
 		{
 			len = g_unichar_to_utf8(g_utf8_get_char(selection + i), buf);
-			i = len - 1 + i;
+			i = (guint)len - 1 + i;
 
 			buf[len] = '\0';
 			entity = get_entity(buf);

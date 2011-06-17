@@ -132,7 +132,7 @@
 
 void utils_open_browser(const gchar *uri);
 
-gint utils_get_line_endings(const gchar* buffer, glong size);
+gint utils_get_line_endings(const gchar* buffer, gsize size);
 
 gboolean utils_isbrace(gchar c, gboolean include_angles);
 

@@ -221,7 +221,7 @@ static GtkTreeStore *create_encoding_combo_store(GtkTreeIter *iter_detect)
 				iter_utf8, iter_middleeast;
 	GtkTreeIter *iter_parent;
 	gchar *encoding_string;
-	guint i;
+	gint i;
 
 	store = gtk_tree_store_new(2, G_TYPE_INT, G_TYPE_STRING);
 

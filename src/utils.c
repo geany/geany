@@ -120,14 +120,11 @@ void utils_open_browser(const gchar *uri)
 
 
 /* taken from anjuta, to determine the EOL mode of the file */
-gint utils_get_line_endings(const gchar* buffer, glong size)
+gint utils_get_line_endings(const gchar* buffer, gsize size)
 {
-	gint i;
+	gsize i;
 	guint cr, lf, crlf, max_mode;
 	gint mode;
-
-	if (size == -1)
-		size = strlen(buffer);
 
 	cr = lf = crlf = 0;
 
@@ -247,7 +244,7 @@ gint utils_write_file(const gchar *filename, const gchar *text)
 	else
 	{
 		FILE *fp;
-		gint bytes_written, len;
+		gsize bytes_written, len;
 		gboolean fail = FALSE;
 
 		if (filename == NULL)
@@ -266,7 +263,7 @@ gint utils_write_file(const gchar *filename, const gchar *text)
 			{
 				fail = TRUE;
 				geany_debug(
-					"utils_write_file(): written only %d bytes, had to write %d bytes to %s",
+					"utils_write_file(): written only %"G_GSIZE_FORMAT" bytes, had to write %"G_GSIZE_FORMAT" bytes to %s",
 					bytes_written, len, filename);
 			}
 			if (fclose(fp) != 0)
@@ -291,7 +288,7 @@ gint utils_write_file(const gchar *filename, const gchar *text)
 gchar *utils_find_open_xml_tag(const gchar sel[], gint size)
 {
 	const gchar *cur, *begin;
-	gint len;
+	gsize len;
 
 	cur = utils_find_open_xml_tag_pos(sel, size);
 	if (cur == NULL)
@@ -302,7 +299,7 @@ gchar *utils_find_open_xml_tag(const gchar sel[], gint size)
 	while (strchr(":_-.", *cur) || isalnum(*cur))
 		cur++;
 
-	len = cur - begin;
+	len = (gsize)(cur - begin);
 	return len ? g_strndup(begin, len) : NULL;
 }
 

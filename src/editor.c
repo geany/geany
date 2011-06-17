@@ -1102,7 +1102,7 @@ static gboolean on_editor_notify(G_GNUC_UNUSED GObject *object, GeanyEditor *edi
 		case SCN_URIDROPPED:
 			if (nt->text != NULL)
 			{
-				document_open_file_list(nt->text, -1);
+				document_open_file_list(nt->text, strlen(nt->text));
 			}
 			break;
 
