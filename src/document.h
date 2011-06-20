@@ -61,6 +61,7 @@ typedef struct GeanyFilePrefs
 	gboolean		use_safe_file_saving;
 	gboolean		ensure_convert_new_lines;
 	gboolean		gio_unsafe_save_backup;
+	gboolean		use_gio_unsafe_file_saving; /* whether to use GIO as the unsafe backend */
 }
 GeanyFilePrefs;
 

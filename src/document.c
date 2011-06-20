@@ -1594,17 +1594,29 @@ static gchar *write_data_to_disk(const gchar *locale_filename,
 {
 	GError *error = NULL;
 
-	if (! file_prefs.use_safe_file_saving)
+	if (file_prefs.use_safe_file_saving)
 	{
+		/* Use old GLib API for safe saving (GVFS-safe, but alters ownership and permissons).
+		 * This is the only option that handles disk space exhaustion. */
+		if (g_file_set_contents(locale_filename, data, len, &error))
+			geany_debug("Wrote %s with g_file_set_contents().", locale_filename);
+	}
 #ifdef HAVE_GIO
+	else if (file_prefs.use_gio_unsafe_file_saving)
+	{
 		GFile *fp;
 
-		/* Use GIO API to save file (GVFS-safe) */
+		/* Use GIO API to save file (GVFS-safe)
+		 * It is best in most GVFS setups but don't seem to work correctly on some more complex
+		 * setups (saving from some VM to their host, over some SMB shares, etc.) */
 		fp = g_file_new_for_path(locale_filename);
 		g_file_replace_contents(fp, data, len, NULL, file_prefs.gio_unsafe_save_backup,
 			G_FILE_CREATE_NONE, NULL, NULL, &error);
 		g_object_unref(fp);
-#else
+	}
+#endif
+	else
+	{
 		FILE *fp;
 		int save_errno;
 		gchar *display_name = g_filename_display_name(locale_filename);
@@ -1659,14 +1671,6 @@ static gchar *write_data_to_disk(const gchar *locale_filename,
 		}
 
 		g_free(display_name);
-#endif
-	}
-	else
-	{
-		/* Use old GLib API for safe saving (GVFS-safe, but alters ownership and permissons).
-		 * This is the only option that handles disk space exhaustion. */
-		if (g_file_set_contents(locale_filename, data, len, &error))
-			geany_debug("Wrote %s with g_file_set_contents().", locale_filename);
 	}
 	if (error != NULL)
 	{
