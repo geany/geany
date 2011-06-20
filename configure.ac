@@ -138,8 +138,6 @@ gtk_modules="gtk+-2.0 >= 2.12 glib-2.0 >= 2.16 gio-2.0 >= 2.16"
 PKG_CHECK_MODULES(GTK, [$gtk_modules])
 AC_SUBST(GTK_CFLAGS)
 AC_SUBST(GTK_LIBS)
-# currently define it, but we will be able to drop the checks now we hard-depend on it
-AC_DEFINE(HAVE_GIO, 1, [Whether GIO is available])
 # GTHREAD checks
 gthread_modules="gthread-2.0"
 PKG_CHECK_MODULES(GTHREAD, [$gthread_modules])

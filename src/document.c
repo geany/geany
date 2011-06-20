@@ -1601,7 +1601,6 @@ static gchar *write_data_to_disk(const gchar *locale_filename,
 		if (g_file_set_contents(locale_filename, data, len, &error))
 			geany_debug("Wrote %s with g_file_set_contents().", locale_filename);
 	}
-#ifdef HAVE_GIO
 	else if (file_prefs.use_gio_unsafe_file_saving)
 	{
 		GFile *fp;
@@ -1614,7 +1613,6 @@ static gchar *write_data_to_disk(const gchar *locale_filename,
 			G_FILE_CREATE_NONE, NULL, NULL, &error);
 		g_object_unref(fp);
 	}
-#endif
 	else
 	{
 		FILE *fp;

@@ -4,6 +4,8 @@
    doc/geany.html:
    Add an hidden pref to choose between GIO and plain C unsafe
    file saving.
+ * configure.ac, src/document.c, win32-config.h:
+   Completely drop HAVE_GIO checks.
 
 
 2011-06-18  Colomban Wendling  <colomban(at)geany(dot)org>

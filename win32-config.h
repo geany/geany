@@ -321,9 +321,6 @@
 /* Define if you want to detect a running instance */
 #define HAVE_SOCKET 1
 
-/* Define if GIO should be used */
-#define HAVE_GIO 1
-
 /* Define if include regex library should be used */
 #define USE_INCLUDED_REGEX 1
 
