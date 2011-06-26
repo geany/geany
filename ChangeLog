@@ -2,6 +2,8 @@
 
  * src/highlighting.c:
    Recognize C# and Vala raw and verbatim strings as string styles.
+ * src/editor.c:
+   Fix indentation brace matching (closes #3309606).
 
 
 2011-06-26  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

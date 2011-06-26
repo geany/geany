@@ -1498,15 +1498,19 @@ static gint brace_match(ScintillaObject *sci, gint pos)
 	gint depth = 1;
 	gint styAtPos;
 
+	/* Hack: we need the style at @p pos but it isn't computed yet, so force styling
+	 * of this very position */
+	sci_colourise(sci, pos, pos + 1);
+
 	styBrace = sci_get_style_at(sci, pos);
 
 	if (utils_is_opening_brace(chBrace, editor_prefs.brace_match_ltgt))
 		direction = 1;
 
-	pos = pos + direction;
+	pos += direction;
 	while ((pos >= 0) && (pos < sci_get_length(sci)))
 	{
-		chAtPos = sci_get_char_at(sci, pos - 1);
+		chAtPos = sci_get_char_at(sci, pos);
 		styAtPos = sci_get_style_at(sci, pos);
 
 		if ((pos > sci_get_end_styled(sci)) || (styAtPos == styBrace))
@@ -1518,7 +1522,7 @@ static gint brace_match(ScintillaObject *sci, gint pos)
 			if (depth == 0)
 				return pos;
 		}
-		pos = pos + direction;
+		pos += direction;
 	}
 	return -1;
 }
