@@ -8,7 +8,7 @@ localedir=@localedir@
 
 Name: Geany
 Description: A fast and lightweight IDE using GTK2
-Requires: gtk+-2.0 >= 2.8.0
+Requires: gtk+-2.0 >= 2.12.0
 Version: @VERSION@
 Libs: -L${libdir}
 Cflags: -DGTK -I${includedir}/geany -I${includedir}/geany/tagmanager -I${includedir}/geany/scintilla

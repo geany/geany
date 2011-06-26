@@ -115,9 +115,9 @@ Doc-comments
 Glade
 -----
 Use the code generation features of Glade instead of editing interface.c
-or support.c. Glade 2.12 is recommended as long as we support GTK+ 2.8,
-because later versions of Glade are not 100% compatible with GTK+ 2.8
-(e.g. they may use functions added in GTK+ 2.10).
+or support.c. Glade 2.12 is required as later Glade versions do not
+have the code generation features anymore. At some point we'll switch to
+GtkBuilder, probably.
 
 You can build Glade 2.12 and run the binary in place, without installing
 it - this should work fine even if you have another version of Glade
@@ -156,8 +156,8 @@ Coding
   them down into smaller static functions where possible. This makes code
   much easier to read and maintain.
 * Use GLib types and functions - gint not int, g_free() not free().
-* Your code should build against GLib 2.8 and GTK 2.8. At least for the
-  moment, we want to keep the minimum requirement for GTK at 2.8 (of
+* Your code should build against GLib 2.16 and GTK 2.12. At least for the
+  moment, we want to keep the minimum requirement for GTK at 2.12 (of
   course, you can use the GTK_CHECK_VERSION macro to protect code using
   later versions).
 * Variables should be declared before statements. You can use
