@@ -3745,7 +3745,10 @@ gboolean highlighting_is_string_style(gint lexer, gint style)
 		case SCLEX_CPP:
 			return (style == SCE_C_CHARACTER ||
 				style == SCE_C_STRING ||
-				style == SCE_C_STRINGEOL);
+				style == SCE_C_STRINGEOL ||
+				style == SCE_C_STRINGRAW ||
+				style == SCE_C_VERBATIM ||
+				style == SCE_C_TRIPLEVERBATIM);
 
 		case SCLEX_PASCAL:
 			return (style == SCE_PAS_CHARACTER ||
