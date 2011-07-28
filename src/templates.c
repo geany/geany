@@ -77,7 +77,7 @@ static gchar *read_file(const gchar *locale_fname)
 		ui_set_statusbar(TRUE, _("Failed to convert template file \"%s\" to UTF-8"), utf8_fname);
 		g_free(utf8_fname);
 		g_free(contents);
-		return FALSE;
+		return NULL;
 	}
 
 	str = g_string_new(contents);
