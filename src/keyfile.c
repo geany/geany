@@ -179,10 +179,10 @@ static void init_pref_groups(void)
 	stash_group_add_spin_button_integer(group, &file_prefs.disk_check_timeout,
 		"disk_check_timeout", GEANY_DISK_CHECK_TIMEOUT, "spin_disk_check");
 
-	/* hidden prefs (don't overwrite them so users can edit them manually) */
+	/* various geany prefs */
 	group = stash_group_new(PACKAGE);
-	configuration_add_pref_group(group, FALSE);
-	stash_group_set_write_once(group, TRUE);
+	configuration_add_pref_group(group, TRUE);
+	stash_group_set_various(group, TRUE);
 
 	stash_group_add_boolean(group, &editor_prefs.show_scrollbars,
 		"show_editor_scrollbars", TRUE);
@@ -204,7 +204,19 @@ static void init_pref_groups(void)
 	stash_group_add_integer(group, (gint*)&search_prefs.find_selection_type,
 		"find_selection_type", GEANY_FIND_SEL_CURRENT_WORD);
 
-	/* Note: Interface-related hidden prefs are in ui_init_prefs() */
+	/* Note: Interface-related various prefs are in ui_init_prefs() */
+
+	/* various build-menu prefs */
+	group = stash_group_new("build-menu");
+	configuration_add_pref_group(group, TRUE);
+	stash_group_set_various(group, TRUE);
+
+	stash_group_add_integer(group, &build_menu_prefs.number_ft_menu_items,
+		"number_ft_menu_items", 0);
+	stash_group_add_integer(group, &build_menu_prefs.number_non_ft_menu_items,
+		"number_non_ft_menu_items", 0);
+	stash_group_add_integer(group, &build_menu_prefs.number_exec_menu_items,
+		"number_exec_menu_items", 0);
 }
 
 
@@ -378,10 +390,6 @@ static void save_dialog_prefs(GKeyFile *config)
 	g_key_file_set_boolean(config, PACKAGE, "tab_order_beside", file_prefs.tab_order_beside);
 	g_key_file_set_integer(config, PACKAGE, "tab_pos_editor", interface_prefs.tab_pos_editor);
 	g_key_file_set_integer(config, PACKAGE, "tab_pos_msgwin", interface_prefs.tab_pos_msgwin);
-	g_key_file_set_boolean(config, PACKAGE, "msgwin_status_visible", interface_prefs.msgwin_status_visible);
-	g_key_file_set_boolean(config, PACKAGE, "msgwin_compiler_visible", interface_prefs.msgwin_compiler_visible);
-	g_key_file_set_boolean(config, PACKAGE, "msgwin_messages_visible", interface_prefs.msgwin_messages_visible);
-	g_key_file_set_boolean(config, PACKAGE, "msgwin_scribble_visible", interface_prefs.msgwin_scribble_visible);
 	g_key_file_set_boolean(config, PACKAGE, "use_native_windows_dialogs", interface_prefs.use_native_windows_dialogs);
 
 	/* display */
@@ -688,10 +696,6 @@ static void load_dialog_prefs(GKeyFile *config)
 	interface_prefs.editor_font = utils_get_setting_string(config, PACKAGE, "editor_font", GEANY_DEFAULT_FONT_EDITOR);
 	interface_prefs.tagbar_font = utils_get_setting_string(config, PACKAGE, "tagbar_font", GEANY_DEFAULT_FONT_SYMBOL_LIST);
 	interface_prefs.msgwin_font = utils_get_setting_string(config, PACKAGE, "msgwin_font", GEANY_DEFAULT_FONT_MSG_WINDOW);
-	interface_prefs.msgwin_status_visible = utils_get_setting_boolean(config, PACKAGE, "msgwin_status_visible", TRUE);
-	interface_prefs.msgwin_compiler_visible = utils_get_setting_boolean(config, PACKAGE, "msgwin_compiler_visible", TRUE);
-	interface_prefs.msgwin_messages_visible = utils_get_setting_boolean(config, PACKAGE, "msgwin_messages_visible", TRUE);
-	interface_prefs.msgwin_scribble_visible = utils_get_setting_boolean(config, PACKAGE, "msgwin_scribble_visible", TRUE);
 	interface_prefs.use_native_windows_dialogs = utils_get_setting_boolean(config, PACKAGE, "use_native_windows_dialogs", FALSE);
 
 	/* display, editor */
@@ -840,9 +844,9 @@ static void load_dialog_prefs(GKeyFile *config)
 	tool_prefs.context_action_cmd = utils_get_setting_string(config, PACKAGE, "context_action_cmd", "");
 
 	/* build menu */
-	build_set_group_count(GEANY_GBG_FT, utils_get_setting_integer(config, "build-menu", "number_ft_menu_items", 0));
-	build_set_group_count(GEANY_GBG_NON_FT, utils_get_setting_integer(config, "build-menu", "number_non_ft_menu_items", 0));
-	build_set_group_count(GEANY_GBG_EXEC, utils_get_setting_integer(config, "build-menu", "number_exec_menu_items", 0));
+	build_set_group_count(GEANY_GBG_FT, build_menu_prefs.number_ft_menu_items);
+	build_set_group_count(GEANY_GBG_NON_FT, build_menu_prefs.number_non_ft_menu_items);
+	build_set_group_count(GEANY_GBG_EXEC, build_menu_prefs.number_exec_menu_items);
 	build_load_menu(config, GEANY_BCS_PREF, NULL);
 
 	/* printing */

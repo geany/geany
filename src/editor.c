@@ -4687,7 +4687,6 @@ static ScintillaObject *create_new_sci(GeanyEditor *editor)
 
 	sci_set_symbol_margin(sci, editor_prefs.show_markers_margin);
 	sci_set_lines_wrapped(sci, editor_prefs.line_wrapping);
-	sci_set_scrollbar_mode(sci, editor_prefs.show_scrollbars);
 	sci_set_caret_policy_x(sci, CARET_JUMPS | CARET_EVEN, 0);
 	/*sci_set_caret_policy_y(sci, CARET_JUMPS | CARET_EVEN, 0);*/
 	SSM(sci, SCI_AUTOCSETSEPARATOR, '\n', 0);
@@ -4933,6 +4932,8 @@ void editor_apply_update_prefs(GeanyEditor *editor)
 
 	/* (dis)allow scrolling past end of document */
 	sci_set_scroll_stop_at_last_line(sci, editor_prefs.scroll_stop_at_last_line);
+
+	sci_set_scrollbar_mode(sci, editor_prefs.show_scrollbars);
 }
 
 

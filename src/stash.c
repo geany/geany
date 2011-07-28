@@ -84,6 +84,8 @@
 
 
 #include "geany.h"		/* necessary for utils.h, otherwise use gtk/gtk.h */
+#include <stdlib.h>		/* only for atoi() */
+#include "support.h"	/* only for _("text") */
 #include "utils.h"		/* only for foreach_*, utils_get_setting_*(). Stash should not depend on Geany. */
 
 #include "stash.h"
@@ -106,7 +108,7 @@ struct StashGroup
 {
 	const gchar *name;			/* group name to use in the keyfile */
 	GArray *entries;			/* array of StashPref */
-	gboolean write_once;		/* only write settings if they don't already exist */
+	gboolean various;		/* mark group for display/edit in stash treeview */
 	gboolean use_defaults;		/* use default values if there's no keyfile entry */
 };
 
@@ -224,21 +226,11 @@ static void keyfile_action(SettingAction action, StashGroup *group, GKeyFile *ke
 
 	foreach_array(StashPref, entry, group->entries)
 	{
-		gpointer tmp = entry->setting;
-
 		/* don't override settings with default values */
 		if (!group->use_defaults && action == SETTING_READ &&
 			!g_key_file_has_key(keyfile, group->name, entry->key_name, NULL))
 			continue;
 
-		/* don't overwrite write_once prefs */
-		if (group->write_once && action == SETTING_WRITE)
-		{
-			if (g_key_file_has_key(keyfile, group->name, entry->key_name, NULL))
-				continue;
-			/* We temporarily use the default value for writing */
-			entry->setting = &entry->default_value;
-		}
 		switch (entry->setting_type)
 		{
 			case G_TYPE_BOOLEAN:
@@ -255,8 +247,6 @@ static void keyfile_action(SettingAction action, StashGroup *group, GKeyFile *ke
 					g_warning("Unhandled type for %s::%s in %s()!", group->name, entry->key_name,
 						G_STRFUNC);
 		}
-		if (group->write_once && action == SETTING_WRITE)
-			entry->setting = tmp;
 	}
 }
 
@@ -372,9 +362,9 @@ void stash_group_free(StashGroup *group)
 /* Useful so the user can edit the keyfile manually while the program is running,
  * and the setting won't be overridden.
  * @c FALSE by default. */
-void stash_group_set_write_once(StashGroup *group, gboolean write_once)
+void stash_group_set_various(StashGroup *group, gboolean various)
 {
-	group->write_once = write_once;
+	group->various = various;
 }
 
 
@@ -900,3 +890,286 @@ void stash_group_add_widget_property(StashGroup *group, gpointer setting,
 }
 
 
+enum
+{
+	STASH_TREE_NAME,
+	STASH_TREE_VALUE,
+	STASH_TREE_COUNT
+};
+
+
+struct StashTreeValue
+{
+	GType setting_type;
+	gpointer setting;
+	const gchar *key_name;
+	const gchar *group_name;
+};
+
+typedef struct StashTreeValue StashTreeValue;
+
+
+static void stash_tree_renderer_set_data(GtkCellLayout *cell_layout, GtkCellRenderer *cell,
+	GtkTreeModel *model, GtkTreeIter *iter, gpointer user_data)
+{
+	GType cell_type = GPOINTER_TO_SIZE(user_data);
+	StashTreeValue *value;
+	gboolean matches_type;
+
+	gtk_tree_model_get(model, iter, STASH_TREE_VALUE, &value, -1);
+	matches_type = value->setting_type == cell_type;
+	g_object_set(cell, "visible", matches_type, "sensitive", matches_type,
+		cell_type == G_TYPE_BOOLEAN ? "activatable" : "editable", matches_type, NULL);
+
+	if (matches_type)
+	{
+		switch (value->setting_type)
+		{
+			case G_TYPE_BOOLEAN:
+				g_object_set(cell, "active", GPOINTER_TO_INT(value->setting), NULL);
+				break;
+			case G_TYPE_INT:
+			{
+				gchar *text = g_strdup_printf("%d", GPOINTER_TO_INT(value->setting));
+				g_object_set(cell, "text", text, NULL);
+				g_free(text);
+				break;
+			}
+			case G_TYPE_STRING:
+				g_object_set(cell, "text", (gchararray) value->setting, NULL);
+				break;
+		}
+	}
+}
+
+
+static void stash_tree_renderer_edited(gchar *path_str, gchar *new_text, GtkTreeModel *model)
+{
+	GtkTreePath *path;
+	GtkTreeIter iter;
+	StashTreeValue *value;
+
+	path = gtk_tree_path_new_from_string(path_str);
+	gtk_tree_model_get_iter(model, &iter, path);
+	gtk_tree_model_get(model, &iter, STASH_TREE_VALUE, &value, -1);
+
+	switch (value->setting_type)
+	{
+		case G_TYPE_BOOLEAN:
+			value->setting = GINT_TO_POINTER(!GPOINTER_TO_INT(value->setting));
+			break;
+		case G_TYPE_INT:
+			value->setting = GINT_TO_POINTER(atoi(new_text));
+			break;
+		case G_TYPE_STRING:
+			g_free(value->setting);
+			value->setting = g_strdup(new_text);
+			break;
+	}
+
+	gtk_tree_model_row_changed(model, path, &iter);
+	gtk_tree_path_free(path);
+}
+
+
+static void stash_tree_boolean_toggled(GtkCellRendererToggle *cell, gchar *path_str,
+	GtkTreeModel *model)
+{
+	stash_tree_renderer_edited(path_str, NULL, model);
+}
+
+
+static void stash_tree_string_edited(GtkCellRenderer *cell, gchar *path_str, gchar *new_text,
+	GtkTreeModel *model)
+{
+	stash_tree_renderer_edited(path_str, new_text, model);
+}
+
+
+static gboolean stash_tree_discard_value(GtkTreeModel *model, GtkTreePath *path,
+	GtkTreeIter *iter, gpointer user_data)
+{
+	StashTreeValue *value;
+
+	gtk_tree_model_get(model, iter, STASH_TREE_VALUE, &value, -1);
+	if (value->setting_type == G_TYPE_STRING)
+		g_free(value->setting);
+	g_free(value);
+
+	return FALSE;
+}
+
+
+static void stash_tree_destroy_cb(GtkWidget *widget, gpointer user_data)
+{
+	GtkTreeModel *model = gtk_tree_view_get_model(GTK_TREE_VIEW(widget));
+	gtk_tree_model_foreach(model, stash_tree_discard_value, NULL);
+}
+
+
+typedef void (*stash_foreach_pref_func)(StashGroup *group, StashPref *entry, gpointer user_data);
+
+static void stash_foreach_various_pref(GPtrArray *group_array, stash_foreach_pref_func pref_func,
+	gpointer user_data)
+{
+	StashGroup *group;
+	guint i;
+	StashPref *entry;
+
+	foreach_ptr_array(group, i, group_array)
+	{
+		if (group->various)
+		{
+			foreach_array(StashPref, entry, group->entries)
+				pref_func(group, entry, user_data);
+		}
+	}
+}
+
+
+static void stash_tree_append_pref(StashGroup *group, StashPref *entry, GtkListStore *store)
+{
+	gboolean supported_type = TRUE;
+	gpointer setting;
+
+	switch (entry->setting_type)
+	{
+		case G_TYPE_BOOLEAN:
+			setting = GINT_TO_POINTER(*(gboolean *) entry->setting);
+			break;
+		case G_TYPE_INT:
+			setting = GINT_TO_POINTER(*(gint *) entry->setting);
+			break;
+		case G_TYPE_STRING:
+			setting = g_strdup(*(gchararray *) entry->setting);
+			break;
+		default:
+			supported_type = FALSE;
+	}
+
+	if (supported_type)
+	{
+		GtkTreeIter iter;
+		StashTreeValue *value = g_new(StashTreeValue, 1);
+
+		value->setting_type = entry->setting_type;
+		value->setting = setting;
+		value->key_name = entry->key_name;
+		value->group_name = group->name;
+
+		gtk_list_store_append(store, &iter);
+		gtk_list_store_set(store, &iter, STASH_TREE_NAME, value->key_name,
+			STASH_TREE_VALUE, value, -1);
+	}
+	else
+	{
+		g_warning("Unhandled type for %s::%s in %s()!", group->name,
+			entry->key_name, G_STRFUNC);
+	}
+}
+
+
+/* Setups a simple editor for stash preferences based on the widget arguments.
+ * group_array - Array of groups which's settings will be edited.
+ * tree - GtkTreeView in which to edit the preferences. Must be empty. */
+void stash_tree_setup(GPtrArray *group_array, GtkTreeView *tree)
+{
+	GtkListStore *store;
+	GtkTreeModel *model;
+	GtkCellRenderer *cell;
+	GtkTreeViewColumn *column;
+	GtkObject *adjustment;
+
+	store = gtk_list_store_new(STASH_TREE_COUNT, G_TYPE_STRING, G_TYPE_POINTER);
+	stash_foreach_various_pref(group_array,
+		(stash_foreach_pref_func) stash_tree_append_pref, store);
+	gtk_tree_sortable_set_sort_column_id(GTK_TREE_SORTABLE(store), STASH_TREE_NAME,
+		GTK_SORT_ASCENDING);
+
+	model = GTK_TREE_MODEL(store);
+	gtk_tree_view_set_model(tree, model);
+	g_object_unref(G_OBJECT(store));
+	g_signal_connect(tree, "destroy", G_CALLBACK(stash_tree_destroy_cb), NULL);
+
+	cell = gtk_cell_renderer_text_new();
+	column = gtk_tree_view_column_new_with_attributes(_("Name"), cell, "text",
+		STASH_TREE_NAME, NULL);
+	gtk_tree_view_column_set_sort_column_id(column, STASH_TREE_NAME);
+	gtk_tree_view_column_set_sort_indicator(column, TRUE);
+	gtk_tree_view_append_column(tree, column);
+
+	column = gtk_tree_view_column_new();
+	gtk_tree_view_column_set_title(column, _("Value"));
+	gtk_tree_view_append_column(tree, column);
+	/* boolean renderer */
+	cell = gtk_cell_renderer_toggle_new();
+	g_signal_connect(cell, "toggled", G_CALLBACK(stash_tree_boolean_toggled), model);
+	gtk_cell_layout_pack_start(GTK_CELL_LAYOUT(column), cell, FALSE);
+	gtk_cell_layout_set_cell_data_func(GTK_CELL_LAYOUT(column), cell,
+		stash_tree_renderer_set_data, GSIZE_TO_POINTER(G_TYPE_BOOLEAN), NULL);
+	/* string renderer */
+	cell = gtk_cell_renderer_text_new();
+	g_object_set(cell, "ellipsize", PANGO_ELLIPSIZE_END, NULL);
+	g_signal_connect(cell, "edited", G_CALLBACK(stash_tree_string_edited), model);
+	gtk_cell_layout_pack_start(GTK_CELL_LAYOUT(column), cell, TRUE);
+	gtk_cell_layout_set_cell_data_func(GTK_CELL_LAYOUT(column), cell,
+		stash_tree_renderer_set_data, GSIZE_TO_POINTER(G_TYPE_STRING), NULL);
+	/* integer renderer */
+	cell = gtk_cell_renderer_spin_new();
+	adjustment = gtk_adjustment_new(0, G_MININT, G_MAXINT, 1, 10, 0);
+	g_object_set(cell, "adjustment", adjustment, NULL);
+	g_signal_connect(cell, "edited", G_CALLBACK(stash_tree_string_edited), model);
+	gtk_cell_layout_pack_start(GTK_CELL_LAYOUT(column), cell, FALSE);
+	gtk_cell_layout_set_cell_data_func(GTK_CELL_LAYOUT(column), cell,
+		stash_tree_renderer_set_data, GSIZE_TO_POINTER(G_TYPE_INT), NULL);
+}
+
+
+/* These functions can handle about 200 settings on a 1GHz x86 CPU in ~0.06 seconds.
+ * For 250+ settings, you'd better write something more efficient. */
+static void stash_tree_update_pref(StashGroup *group, StashPref *entry, GtkTreeModel *model)
+{
+	GtkTreeIter iter;
+	gboolean valid = gtk_tree_model_get_iter_first(model, &iter);
+	StashTreeValue *value;
+	gpointer *setting;
+
+	while (valid)
+	{
+		gtk_tree_model_get(model, &iter, STASH_TREE_VALUE, &value, -1);
+
+		if (strcmp(group->name, value->group_name) == 0 &&
+			strcmp(entry->key_name, value->key_name) == 0)
+		{
+			setting = value->setting;
+
+			switch (entry->setting_type)
+			{
+				case G_TYPE_BOOLEAN:
+					*(gboolean *) entry->setting = GPOINTER_TO_INT(setting);
+					break;
+				case G_TYPE_INT:
+					*(gint *) entry->setting = GPOINTER_TO_INT(setting);
+					break;
+				case G_TYPE_STRING:
+				{
+					gchararray *text = entry->setting;
+					g_free(*text);
+					*text = g_strdup((gchararray) setting);
+					break;
+				}
+			}
+
+			break;
+		}
+
+		valid = gtk_tree_model_iter_next(model, &iter);
+	}
+}
+
+
+void stash_tree_update(GPtrArray *group_array, GtkTreeView *tree)
+{
+	stash_foreach_various_pref(group_array, (stash_foreach_pref_func) stash_tree_update_pref,
+		gtk_tree_view_get_model(tree));
+}

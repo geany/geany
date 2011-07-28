@@ -2895,6 +2895,18 @@ create_prefs_dialog (void)
   GtkWidget *radio_print_gtk;
   GtkWidget *label243;
   GtkWidget *label201;
+  GtkWidget *frame24;
+  GtkWidget *alignment14;
+  GtkWidget *vbox50;
+  GtkWidget *vbox51;
+  GtkWidget *scrolledwindow9;
+  GtkWidget *various_treeview;
+  GtkWidget *vbox28;
+  GtkWidget *alignment16;
+  GtkWidget *hbox15;
+  GtkWidget *label140;
+  GtkWidget *label139;
+  GtkWidget *label138;
   GtkWidget *dialog_action_area3;
   GtkWidget *button3;
   GtkWidget *button4;
@@ -5007,6 +5019,63 @@ create_prefs_dialog (void)
   gtk_widget_show (label201);
   gtk_notebook_set_tab_label (GTK_NOTEBOOK (notebook2), gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook2), 7), label201);
 
+  frame24 = gtk_frame_new (NULL);
+  gtk_widget_show (frame24);
+  gtk_container_add (GTK_CONTAINER (notebook2), frame24);
+  gtk_container_set_border_width (GTK_CONTAINER (frame24), 5);
+  gtk_frame_set_shadow_type (GTK_FRAME (frame24), GTK_SHADOW_NONE);
+
+  alignment14 = gtk_alignment_new (0.5, 0.5, 1, 1);
+  gtk_widget_show (alignment14);
+  gtk_container_add (GTK_CONTAINER (frame24), alignment14);
+  gtk_alignment_set_padding (GTK_ALIGNMENT (alignment14), 0, 0, 12, 0);
+
+  vbox50 = gtk_vbox_new (FALSE, 5);
+  gtk_widget_show (vbox50);
+  gtk_container_add (GTK_CONTAINER (alignment14), vbox50);
+
+  vbox51 = gtk_vbox_new (FALSE, 0);
+  gtk_widget_show (vbox51);
+  gtk_box_pack_start (GTK_BOX (vbox50), vbox51, FALSE, TRUE, 0);
+
+  scrolledwindow9 = gtk_scrolled_window_new (NULL, NULL);
+  gtk_widget_show (scrolledwindow9);
+  gtk_box_pack_start (GTK_BOX (vbox50), scrolledwindow9, TRUE, TRUE, 0);
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolledwindow9), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
+  gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (scrolledwindow9), GTK_SHADOW_IN);
+
+  various_treeview = gtk_tree_view_new ();
+  gtk_widget_show (various_treeview);
+  gtk_container_add (GTK_CONTAINER (scrolledwindow9), various_treeview);
+  gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (various_treeview), TRUE);
+
+  vbox28 = gtk_vbox_new (FALSE, 0);
+  gtk_widget_show (vbox28);
+  gtk_box_pack_start (GTK_BOX (vbox50), vbox28, FALSE, TRUE, 0);
+
+  alignment16 = gtk_alignment_new (0, 0.5, 1, 1);
+  gtk_widget_show (alignment16);
+  gtk_box_pack_start (GTK_BOX (vbox50), alignment16, FALSE, FALSE, 0);
+  gtk_alignment_set_padding (GTK_ALIGNMENT (alignment16), 0, 5, 0, 0);
+
+  hbox15 = gtk_hbox_new (FALSE, 5);
+  gtk_widget_show (hbox15);
+  gtk_container_add (GTK_CONTAINER (alignment16), hbox15);
+
+  label140 = gtk_label_new (_("<i>Please refer to the manual for more details about these preferences.</i>"));
+  gtk_widget_show (label140);
+  gtk_box_pack_start (GTK_BOX (hbox15), label140, FALSE, FALSE, 0);
+  gtk_label_set_use_markup (GTK_LABEL (label140), TRUE);
+
+  label139 = gtk_label_new (_("<b>Various preferences</b>"));
+  gtk_widget_show (label139);
+  gtk_frame_set_label_widget (GTK_FRAME (frame24), label139);
+  gtk_label_set_use_markup (GTK_LABEL (label139), TRUE);
+
+  label138 = gtk_label_new (_("Various"));
+  gtk_widget_show (label138);
+  gtk_notebook_set_tab_label (GTK_NOTEBOOK (notebook2), gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook2), 8), label138);
+
   dialog_action_area3 = GTK_DIALOG (prefs_dialog)->action_area;
   gtk_widget_show (dialog_action_area3);
   gtk_button_box_set_layout (GTK_BUTTON_BOX (dialog_action_area3), GTK_BUTTONBOX_END);
@@ -5420,6 +5489,18 @@ create_prefs_dialog (void)
   GLADE_HOOKUP_OBJECT (prefs_dialog, radio_print_gtk, "radio_print_gtk");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label243, "label243");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label201, "label201");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, frame24, "frame24");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, alignment14, "alignment14");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, vbox50, "vbox50");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, vbox51, "vbox51");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, scrolledwindow9, "scrolledwindow9");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, various_treeview, "various_treeview");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, vbox28, "vbox28");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, alignment16, "alignment16");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, hbox15, "hbox15");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, label140, "label140");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, label139, "label139");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, label138, "label138");
   GLADE_HOOKUP_OBJECT_NO_REF (prefs_dialog, dialog_action_area3, "dialog_action_area3");
   GLADE_HOOKUP_OBJECT (prefs_dialog, button3, "button3");
   GLADE_HOOKUP_OBJECT (prefs_dialog, button4, "button4");

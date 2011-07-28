@@ -122,6 +122,12 @@ static void prefs_action(PrefCallbackAction action)
 				break;
 		}
 	}
+
+	if (action == PREF_UPDATE)
+	{
+		GtkWidget *widget = ui_lookup_widget(ui_widgets.prefs_dialog, "various_treeview");
+		stash_tree_update(pref_groups, GTK_TREE_VIEW(widget));
+	}
 }
 
 
@@ -798,6 +804,7 @@ on_prefs_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 		guint autoclose_brackets[5];
 		gboolean old_invert_all = interface_prefs.highlighting_invert_all;
 		gboolean old_sidebar_pos = interface_prefs.sidebar_pos;
+		GeanyDocument *doc = document_get_current();
 
 		/* Synchronize Stash settings */
 		prefs_action(PREF_UPDATE);
@@ -1214,6 +1221,12 @@ on_prefs_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 		ui_document_show_hide(NULL);
 		ui_update_view_editor_menu_items();
 
+		/* various preferences */
+		doc = document_get_current();
+		ui_save_buttons_toggle((doc != NULL) ? doc->changed : FALSE);
+		msgwin_show_hide_tabs();
+		ui_update_statusbar(doc, -1);
+
 		/* store all settings */
 		configuration_save();
 	}
@@ -1567,6 +1580,8 @@ static void open_preferences_help(void)
 		suffix = "#keybinding-preferences";
 	else if (utils_str_equal(label, _("Printing")))
 		suffix = "#printing-preferences";
+	else if (utils_str_equal(label, _("Various")))
+		suffix = "#various-preferences";
 	else if (utils_str_equal(label, _("Terminal")))
 		suffix = "#terminal-vte-preferences";
 
@@ -1595,7 +1610,7 @@ void prefs_show_dialog(void)
 	if (ui_widgets.prefs_dialog == NULL)
 	{
 		GtkWidget *combo_new, *combo_open, *combo_eol;
-		GtkWidget *label;
+		GtkWidget *label, *various_tree;
 		guint i;
 		gchar *encoding_string;
 		GdkPixbuf *pb;
@@ -1677,6 +1692,10 @@ void prefs_show_dialog(void)
 			foreach_c_array(name, names, G_N_ELEMENTS(names))
 				ui_entry_add_clear_icon(GTK_ENTRY(ui_lookup_widget(ui_widgets.prefs_dialog, *name)));
 		}
+
+		/* page Various */
+		various_tree = ui_lookup_widget(ui_widgets.prefs_dialog, "various_treeview");
+		stash_tree_setup(pref_groups, GTK_TREE_VIEW(various_tree));
 
 #ifdef HAVE_VTE
 		vte_append_preferences_tab();

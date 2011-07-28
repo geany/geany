@@ -35,7 +35,7 @@ typedef gconstpointer StashWidgetID;
 
 StashGroup *stash_group_new(const gchar *name);
 
-void stash_group_set_write_once(StashGroup *group, gboolean write_once);
+void stash_group_set_various(StashGroup *group, gboolean write_once);
 
 void stash_group_set_use_defaults(StashGroup *group, gboolean use_defaults);
 
@@ -91,5 +91,9 @@ void stash_group_add_widget_property(StashGroup *group, gpointer setting,
 void stash_group_display(StashGroup *group, GtkWidget *owner);
 
 void stash_group_update(StashGroup *group, GtkWidget *owner);
+
+void stash_tree_setup(GPtrArray *group_array, GtkTreeView *tree);
+
+void stash_tree_update(GPtrArray *group_array, GtkTreeView *tree);
 
 #endif

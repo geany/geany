@@ -70,6 +70,8 @@
 
 GeanyBuildInfo build_info = {GEANY_GBG_FT, 0, 0, NULL, GEANY_FILETYPES_NONE, NULL, 0};
 
+GeanyBuildMenuPrefs build_menu_prefs;
+
 static gchar *current_dir_entered = NULL;
 
 typedef struct RunInfo

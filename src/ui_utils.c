@@ -2060,9 +2060,9 @@ void ui_init_prefs(void)
 {
 	StashGroup *group = stash_group_new(PACKAGE);
 
-	/* hidden prefs (don't overwrite them so users can edit them manually) */
-	configuration_add_pref_group(group, FALSE);
-	stash_group_set_write_once(group, TRUE);
+	/* various prefs */
+	configuration_add_pref_group(group, TRUE);
+	stash_group_set_various(group, TRUE);
 
 	stash_group_add_boolean(group, &interface_prefs.show_symbol_list_expanders,
 		"show_symbol_list_expanders", TRUE);
@@ -2074,6 +2074,14 @@ void ui_init_prefs(void)
 		"statusbar_template", "");
 	stash_group_add_boolean(group, &ui_prefs.new_document_after_close,
 		"new_document_after_close", FALSE);
+	stash_group_add_boolean(group, &interface_prefs.msgwin_status_visible,
+		"msgwin_status_visible", TRUE);
+	stash_group_add_boolean(group, &interface_prefs.msgwin_compiler_visible,
+		"msgwin_compiler_visible", TRUE);
+	stash_group_add_boolean(group, &interface_prefs.msgwin_messages_visible,
+		"msgwin_messages_visible", TRUE);
+	stash_group_add_boolean(group, &interface_prefs.msgwin_scribble_visible,
+		"msgwin_scribble_visible", TRUE);
 }
 
 

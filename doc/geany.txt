@@ -1233,7 +1233,7 @@ Find selection
 The *Find Next/Previous Selection* commands perform a search for the
 current selected text. If nothing is selected, by default the current
 word is used instead. This can be customized by the
-*find_selection_type* hidden pref - see `Hidden preferences`_.
+*find_selection_type* preference - see `Various preferences`_.
 
 =====   =============================================
 Value   *find_selection_type* behaviour
@@ -1716,8 +1716,6 @@ You may also adjust some View settings (under the View menu) that
 persist between Geany sessions. The settings under the Document menu,
 however, are only for the current document and revert to defaults
 when restarting Geany.
-
-There are also some rarer `Hidden preferences`_.
 
 .. note::
     In the paragraphs that follow, the text describing a dialog tab
@@ -2420,6 +2418,121 @@ Date format
     see http://man.cx/strftime.
 
 
+Various preferences
+^^^^^^^^^^^^^^^^^^^
+
+.. image:: ./images/pref_dialog_various.png
+
+Rarely used preferences, explained in the table below. A few of them require
+restart to take effect, and a few other will only affect newly opened or created
+documents before restart.
+
+================================  =========================================  ==========  ===========
+Key                               Description                                Default     Applies
+================================  =========================================  ==========  ===========
+**Editor related**
+use_gtk_word_boundaries           Whether to look for the end of a word      true        to new
+                                  when using word-boundary related                       documents
+                                  Scintilla commands (see `Scintilla
+                                  keyboard commands`_).
+brace_match_ltgt                  Whether to highlight <, > angle brackets.  false       immediately
+complete_snippets_whilst_editing  Whether to allow completion of snippets    false       immediately
+                                  when editing an existing line (i.e. there
+                                  is some text after the current cursor
+                                  position on the line). Only used when the
+                                  keybinding `Complete snippet` is set to
+                                  ``Space``.
+show_editor_scrollbars            Whether to display scrollbars. If set to   true        immediately
+                                  false, the horizontal and vertical
+                                  scrollbars are hidden completely.
+indent_hard_tab_width             The size of a tab character. Don't change  8           immediately
+                                  it unless you really need to; use the
+                                  indentation settings instead.
+**Interface related**
+show_symbol_list_expanders        Whether to show or hide the small          true        to new
+                                  expander icons on the symbol list                      documents
+allow_always_save                 treeview. Whether files can be saved       false       immediately
+                                  always, even if they don't have any
+                                  changes. By default, the Save button and
+                                  menu item are disabled when a file is
+                                  unchanged. When setting this option to
+                                  true, the Save button and menu item are
+                                  always active and files can be saved.
+compiler_tab_autoscroll           Whether to automatically scroll to the     true        immediately
+                                  last line of the output in the Compiler
+                                  tab.
+statusbar_template                The status bar statistics line format.     See below.  immediately
+                                  (Search in src/ui_utils.c for details).
+new_document_after_close          Whether to open a new document after all   false       immediately
+                                  documents have been closed.
+msgwin_status_visible             Whether to show the Status tab in the      true        immediately
+                                  Messages Window
+msgwin_compiler_visible           Whether to show the Compiler tab in the    true        immediately
+                                  Messages Window
+msgwin_messages_visible           Whether to show the Messages tab in the    true        immediately
+                                  Messages Window
+msgwin_scribble_visible           Whether to show the Scribble tab in the    true        immediately
+                                  Messages Window
+================================  =========================================  ==========  ===========
+
+By default, statusbar_template is empty. This tells Geany to use its
+internal default, which is currently:
+
+``line: %l / %L\t col: %c\t sel: %s\t %w      %t      %mmode: %M      encoding: %e      filetype: %f      scope: %S``
+
+Note that ``\t`` = tab.
+
+================================  ===========================================  ========  ===========
+Key                               Description                                  Default   Applies
+================================  ===========================================  ========  ===========
+**VTE related**
+emulation                         Terminal emulation mode. Only change this    xterm     immediately
+                                  if you have VTE termcap files other than
+                                  ``vte/termcap/xterm``.
+send_selection_unsafe             By default, Geany strips any trailing        false     immediately
+                                  newline characters from the current
+                                  selection before sending it to the terminal
+                                  to not execute arbitrary code. This is
+                                  mainly a security feature.
+                                  If, for whatever reasons, you really want
+                                  it to be executed directly, set this option
+                                  to true.
+**File related**
+use_safe_file_saving              Defines the mode how Geany saves files to    false     immediately
+                                  disk. If disabled, Geany directly writes
+                                  the content of the document to disk. This
+                                  might cause in loss of data when there is
+                                  no more free space on disk to save the
+                                  file. When set to true, Geany first saves
+                                  the contents into a temporary file and if
+                                  this succeeded, the temporary file is
+                                  moved to the real file to save.
+                                  This gives better error checking in case of
+                                  no more free disk space. But it also
+                                  destroys hard links of the original file
+                                  and its permissions (e.g. executable flags
+                                  are reset). Use this with care as it can
+                                  break things seriously.
+                                  The better approach would be to ensure your
+                                  disk won't run out of free space.
+use_gio_unsafe_file_saving        Whether to use GIO as the unsafe file        true      immediately
+                                  saving backend. It is better on most
+                                  situations but is known not to work
+                                  correctly on some complex setups.
+gio_unsafe_save_backup            Make a backup when using GIO unsafe file     false     immediately
+                                  saving. Backup is named `filename~`.
+**Search related**
+find_selection_type               See `Find selection`_.                       0         immediately
+**Build Menu related**
+number_ft_menu_items              The maximum number of menu items in the      2         on restart
+                                  filetype section of the Build menu.
+number_non_ft_menu_items          The maximum number of menu items in the      3         on restart
+                                  independent section of the Build menu.
+number_exec_menu_items            The maximum number of menu items in the      2         on restart
+                                  execute section of the Build menu.
+================================  ===========================================  ========  ===========
+
+
 Terminal (VTE) preferences
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -2751,9 +2864,9 @@ behaviors:
   * Show the build menu commands dialog.
 
 The maximum numbers of items in each of the configurable groups can be
-configured when Geany starts using hidden settings (see `Preferences file format`_).
-Even though the maximum number of items may have been increased, only
-those menu items that have values configured are shown in the menu.
+configured in the `Various preferences`_. Even though the maximum number of
+items may have been increased, only those menu items that have values
+configured are shown in the menu.
 
 The groups of menu items obtain their configuration from four potential
 sources.  The highest priority source that has the menu item defined will
@@ -4322,125 +4435,6 @@ in the preferences dialog. This file should not be edited while Geany is running
 as the file will be overwritten when the preferences in Geany are changed or Geany
 is quit.
 
-
-Hidden preferences
-^^^^^^^^^^^^^^^^^^
-
-There are some rarely used preferences that are not shown in the Preferences
-dialog. These can be set by editing the preferences file, then
-restarting Geany. Search for the key name, then edit the value. Example:
-
-    ``brace_match_ltgt=true``
-
-.. note::
-    If you just installed or updated Geany, you should restart it
-    first so Geany can write/update the config file and you can find
-    the key lines.
-
-The table below show the key names of hidden preferences in the
-configuration file.
-
-================================  ===========================================  ==================
-Key                               Description                                  Default
-================================  ===========================================  ==================
-**Editor related**
-brace_match_ltgt                  Whether to highlight <, > angle brackets.    false
-use_gtk_word_boundaries           Whether to look for the end of a word when   true
-                                  using word-boundary related Scintilla
-                                  commands (see `Scintilla keyboard
-                                  commands`_).
-complete_snippets_whilst_editing  Whether to allow completion of snippets      false
-                                  when editing an existing line (i.e. there
-                                  is some text after the current cursor
-                                  position on the line). Only used when the
-                                  keybinding `Complete snippet` is set to
-                                  ``Space``.
-show_editor_scrollbars            Whether to display scrollbars. If set to     true
-                                  false, the horizontal and vertical
-                                  scrollbars are hidden completely.
-**Interface related**
-show_symbol_list_expanders        Whether to show or hide the small expander   true
-                                  icons on the symbol list treeview.
-allow_always_save                 Whether files can be saved always, even if   false
-                                  they don't have any changes. By default,
-                                  the Save button and menu item are disabled
-                                  when a file is unchanged. When setting
-                                  this option to true, the Save button and
-                                  menu item are always active and files can
-                                  be saved.
-compiler_tab_autoscroll           Whether to automatically scroll to the       true
-                                  last line of the output in the Compiler
-                                  tab.
-statusbar_template                The status bar statistics line format.       See below.
-                                  (Search in src/ui_utils.c for details).
-new_document_after_close          Whether to open a new document after all     false
-                                  documents have been closed.
-msgwin_status_visible             Whether to show the Status tab in the        true
-                                  Messages Window
-msgwin_compiler_visible           Whether to show the Compiler tab in the      true
-                                  Messages Window
-msgwin_messages_visible           Whether to show the Messages tab in the      true
-                                  Messages Window
-msgwin_scribble_visible           Whether to show the Scribble tab in the      true
-                                  Messages Window
-================================  ===========================================  ==================
-
-By default, statusbar_template is empty. This tells Geany to use its
-internal default, which is currently:
-
-``line: %l / %L\t col: %c\t sel: %s\t %w      %t      %mmode: %M      encoding: %e      filetype: %f      scope: %S``
-
-Note that ``\t`` = tab.
-
-================================  ===========================================  ==================
-Key                               Description                                  Default
-================================  ===========================================  ==================
-**VTE related**
-emulation                         Terminal emulation mode. Only change this    xterm
-                                  if you have VTE termcap files other than
-                                  ``vte/termcap/xterm``.
-send_selection_unsafe             By default, Geany strips any trailing        false
-                                  newline characters from the current
-                                  selection before sending it to the terminal
-                                  to not execute arbitrary code. This is
-                                  mainly a security feature.
-                                  If, for whatever reasons, you really want
-                                  it to be executed directly, set this option
-                                  to true.
-**File related**
-use_safe_file_saving              Defines the mode how Geany saves files to    false
-                                  disk. If disabled, Geany directly writes
-                                  the content of the document to disk. This
-                                  might cause in loss of data when there is
-                                  no more free space on disk to save the
-                                  file. When set to true, Geany first saves
-                                  the contents into a temporary file and if
-                                  this succeeded, the temporary file is
-                                  moved to the real file to save.
-                                  This gives better error checking in case of
-                                  no more free disk space. But it also
-                                  destroys hard links of the original file
-                                  and its permissions (e.g. executable flags
-                                  are reset). Use this with care as it can
-                                  break things seriously.
-                                  The better approach would be to ensure your
-                                  disk won't run out of free space.
-use_gio_unsafe_file_saving        Whether to use GIO as the unsafe file        true
-                                  saving backend. It is better on most
-                                  situations but is know not to work
-                                  correctly on some complex setups.
-gio_unsafe_save_backup            Make a backup when using GIO unsafe file     false
-                                  saving. Backup is named `filename~`.
-**Search related**
-find_selection_type               See `Find selection`_.                       0
-**Build Menu related**
-number_ft_menu_items              The maximum number of menu items in the      2
-                                  filetype section of the Build menu.
-number_non_ft_menu_items          The maximum number of menu items in the      3
-                                  independent section of the Build menu.
-number_exec_menu_items            The maximum number of menu items in the      2
-                                  execute section of the Build menu.
-================================  ===========================================  ==================
 
 [build-menu] section
 ^^^^^^^^^^^^^^^^^^^^
