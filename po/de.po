@@ -11,14 +11,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: geany 0.20\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-07-16 18:59+0200\n"
-"PO-Revision-Date: 2011-04-12 23:13+0100\n"
+"POT-Creation-Date: 2011-07-28 17:44+0200\n"
+"PO-Revision-Date: 2011-07-28 17:42+0100\n"
 "Last-Translator: Frank Lanitz <frank@frank.uvena.de>\n"
 "Language-Team: German <geany-i18n@uvena.de>\n"
-"Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: de\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-Country: GERMANY\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -1011,9 +1011,8 @@ msgid "None"
 msgstr "Keiner"
 
 #: ../src/filetypes.c:303
-#, fuzzy
 msgid "Shell script"
-msgstr "Shellskript Datei"
+msgstr "Shellskript"
 
 #: ../src/filetypes.c:311
 msgid "Makefile"
@@ -1048,9 +1047,8 @@ msgid "_Markup Languages"
 msgstr "_Markup-Sprachen"
 
 #: ../src/filetypes.c:710
-#, fuzzy
 msgid "M_iscellaneous"
-msgstr "Sonstiges"
+msgstr "_Sonstiges"
 
 #: ../src/filetypes.c:1423 ../src/win32.c:105
 msgid "All Source"
@@ -2830,8 +2828,8 @@ msgid ""
 "specifiers which can be used with the ANSI C strftime function."
 msgstr ""
 "Geben Sie ein Datumsformat für den Platzhalter {datetime} an. Dabei können "
-"alle Platzhalter verwendet werden, die auch in der ANSI C Funktion "
-"»strftime« zum Einsatz kommen können."
+"alle Platzhalter verwendet werden, die auch in der ANSI C Funktion »strftime« "
+"zum Einsatz kommen können."
 
 #: ../src/interface.c:4815
 msgid ""
@@ -3594,7 +3592,7 @@ msgstr "[Dateien...]"
 #: ../src/main.c:520
 #, c-format
 msgid "built on %s with "
-msgstr "kompiliert am %s mit "
+msgstr "kompiliert am %s mit"
 
 #: ../src/main.c:610
 msgid "Move it now?"
@@ -3612,8 +3610,7 @@ msgid ""
 "Your configuration directory has been successfully moved from \"%s\" to \"%s"
 "\"."
 msgstr ""
-"Ihr Konfigurationsverzeichnis wurde erfolgreich von »%s« nach »%s« "
-"verschoben."
+"Ihr Konfigurationsverzeichnis wurde erfolgreich von »%s« nach »%s« verschoben."
 
 #. for translators: the third %s in brackets is the error message which
 #. * describes why moving the dir didn't work
@@ -3690,7 +3687,7 @@ msgstr "_Plugin-Verwaltung"
 #: ../src/plugins.c:1160
 #, c-format
 msgid "%s %s"
-msgstr ""
+msgstr "%s %s"
 
 #: ../src/plugins.c:1236
 msgid "Active"
@@ -3717,9 +3714,8 @@ msgid "<b>Plugin details:</b>"
 msgstr "<b>Plugindetails</b>"
 
 #: ../src/plugins.c:1403
-#, fuzzy
 msgid "Plugin:"
-msgstr "Plugin"
+msgstr "Plugin:"
 
 #: ../src/plugins.c:1404 ../src/project.c:446
 msgid "Description:"
@@ -3727,7 +3723,7 @@ msgstr "Beschreibung:"
 
 #: ../src/plugins.c:1405
 msgid "Author(s):"
-msgstr ""
+msgstr "Autor(en):"
 
 #: ../src/pluginutils.c:334
 msgid "Configure Plugins"
@@ -3966,6 +3962,8 @@ msgid ""
 "Space separated list of file patterns used for the find in files dialog (e."
 "g. *.c *.h)"
 msgstr ""
+"Mit Leerzeichen getrennte Liste mit Mustern für »in Dateien finden« (z.B. *.c "
+"*.h)"
 
 #: ../src/project.c:578
 #, c-format
@@ -4128,17 +4126,15 @@ msgstr "Ersetze alle Treffer im aktuell markierten Text"
 
 #: ../src/search.c:831
 msgid "all"
-msgstr ""
+msgstr "alle"
 
 #: ../src/search.c:833
-#, fuzzy
 msgid "project"
-msgstr "Projekte"
+msgstr "Projekt"
 
 #: ../src/search.c:835
-#, fuzzy
 msgid "custom"
-msgstr "Benutzerdefiniert"
+msgstr "benutzerdefiniert"
 
 #: ../src/search.c:839
 msgid ""
@@ -4146,6 +4142,10 @@ msgid ""
 "Project: use file patterns defined in the project settings\n"
 "Custom: specify file patterns manually"
 msgstr ""
+"Alle: Durchsuche alle Dateien im Verzeichnis\n"
+"Projekt: Benutzer Dateimuster, die in den Projekteinstellungen hinterlegt "
+"sind\n"
+"Benutzerdefiniert: Manuelles angeben der Dateimuster"
 
 #: ../src/search.c:906
 msgid "Fi_les:"
@@ -5060,8 +5060,8 @@ msgstr "Pfad der aktuellen Datei setzen"
 #: ../src/vte.c:866
 msgid "Whether to execute \"cd $path\" when you switch between opened files"
 msgstr ""
-"Legt fest, ob »cd $path« in der VTE ausgeführt werden soll, wenn Sie "
-"zwischen geöffneten Dateien wechseln"
+"Legt fest, ob »cd $path« in der VTE ausgeführt werden soll, wenn Sie zwischen "
+"geöffneten Dateien wechseln"
 
 #. create check_skip_script checkbox before the check_skip_script checkbox to be able to
 #. * use the object for the toggled handler of check_skip_script checkbox
