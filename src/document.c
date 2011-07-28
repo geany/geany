@@ -1023,18 +1023,15 @@ static gint detect_indent_width(GeanyEditor *editor, GeanyIndentType type)
 		for (i = G_N_ELEMENTS(widths) - 1; i >= 0; i--)
 		{
 			if ((width % (i + 2)) == 0)
-			{
 				widths[i]++;
-				break;
-			}
 		}
 	}
 	count = 0;
 	width = iprefs->width;
-	for (i = 0; i < (gint)G_N_ELEMENTS(widths); i++)
+	for (i = G_N_ELEMENTS(widths) - 1; i >= 0; i--)
 	{
-		/* give small lengths higher weight not for nested blocks to confuse detection */
-		if (widths[i] > count * 4)
+		/* give large indents higher weight not to be fooled by spurious indents */
+		if (widths[i] >= count * 1.5)
 		{
 			width = i + 2;
 			count = widths[i];

@@ -5,6 +5,9 @@
    src/ui_utils.c, geany.glade, doc/geany.txt, doc/geany.html:
    Allow to edit formerly hidden preferences in the prefs dialog
    (closes #3313315, patch by Dimitar Zhekov, thanks!).
+ * src/document.c:
+   Improve indentation width detection to better deal with Java
+   and Vala files.
 
 
 2011-06-26  Colomban Wendling  <colomban(at)geany(dot)org>
