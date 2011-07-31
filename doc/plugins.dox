@@ -381,7 +381,8 @@ void plugin_cleanup(void)
  * Now you might like to look at Geany's source code for core plugins such as
  * @a plugins/demoplugin.c.
  *
- * @section furtherimprovements Furter Improvements and next steps - Translatable plugin information
+ * @section furtherimprovements Furter Improvements and next steps
+ * @subsection translatable_plugin_information Translatable plugin information
  *
  * After we have done our first plugin, there is still some place for improvements.
  *
