@@ -42,12 +42,13 @@ GeanyPrefs;
 extern GeanyPrefs prefs;
 
 
+/** Tools preferences */
 typedef struct GeanyToolPrefs
 {
-	gchar			*browser_cmd;
-	gchar			*term_cmd;
-	gchar			*grep_cmd;
-	gchar			*context_action_cmd;
+	gchar			*browser_cmd;			/**< web browser command */
+	gchar			*term_cmd;				/**< terminal emulator command */
+	gchar			*grep_cmd;				/**< grep command */
+	gchar			*context_action_cmd;	/**< context action command */
 }
 GeanyToolPrefs;
 

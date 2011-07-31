@@ -37,27 +37,31 @@
 		g_object_ref(widget), (GDestroyNotify)g_object_unref);
 
 
+/** Interface preferences */
 typedef struct GeanyInterfacePrefs
 {
-	gboolean		sidebar_symbol_visible;
-	gboolean		sidebar_openfiles_visible;
-	gchar			*editor_font;
-	gchar			*tagbar_font;
-	gchar			*msgwin_font;
-	gboolean		show_notebook_tabs;
-	gint			tab_pos_editor;
-	gint			tab_pos_msgwin;
-	gint			tab_pos_sidebar;
-	gboolean		statusbar_visible;
-	gboolean		show_symbol_list_expanders;
+	gboolean		sidebar_symbol_visible;		/**< whether the symbol sidebar is visible */
+	gboolean		sidebar_openfiles_visible;	/**< whether the open file list is visible */
+	gchar			*editor_font;				/**< editor font */
+	gchar			*tagbar_font;				/**< symbol sidebar font */
+	gchar			*msgwin_font;				/**< message window font */
+	gboolean		show_notebook_tabs;			/**< whether editor tabs are visible */
+	gint			tab_pos_editor;				/**< positions of editor's tabs */
+	gint			tab_pos_msgwin;				/**< positions of message window's tabs */
+	gint			tab_pos_sidebar;			/**< positions of sidebar's tabs */
+	gboolean		statusbar_visible;			/**< whether the status bar is visible */
+	gboolean		show_symbol_list_expanders;	/**< whether to show expanders in the symbol list */
+	/** whether a double click on notebook tabs hides all other windows */
 	gboolean		notebook_double_click_hides_widgets;
-	gboolean		highlighting_invert_all;
-	gint			sidebar_pos;
-	gboolean		msgwin_status_visible;
-	gboolean		msgwin_compiler_visible;
-	gboolean		msgwin_messages_visible;
-	gboolean		msgwin_scribble_visible;
-	gboolean		use_native_windows_dialogs; /* only used on Windows */
+	gboolean		highlighting_invert_all; 	/**< whether highlighting colors are inverted */
+	gint			sidebar_pos; 				/**< position of the sidebar (left or right) */
+	gboolean		msgwin_status_visible; 		/**< whether message window's status tab is visible */
+	gboolean		msgwin_compiler_visible;	/**< whether message window's compiler tab is visible */
+	gboolean		msgwin_messages_visible;	/**< whether message window's messages tab is visible */
+	gboolean		msgwin_scribble_visible;	/**< whether message window's scribble tab is visible */
+	/** whether to use native Windows' dialogs (only used on Windows) */
+	gboolean		use_native_windows_dialogs;
+	/** whether compiler messages window is automatically scrolled to show new messages */
 	gboolean		compiler_tab_autoscroll;
 }
 GeanyInterfacePrefs;
