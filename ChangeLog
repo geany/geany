@@ -2,7 +2,7 @@
 
  * doc/plugins.dox:
    Adding some content about PLUGIN_SET_TRANSLATABLE_INFO() into plugin
-   HowTo.
+   HowTo as well as a hint to make usage of main_locale_init().
 
 
 

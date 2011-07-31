@@ -425,4 +425,30 @@ PLUGIN_SET_TRANSLATABLE_INFO(
  * been agreed to use if possible latin version of author's name
  * followed by in case of its apply able nativ spelling inside braces.
  *
+ * @subsection plugin_i18n Using i18n/l10n inside Plugin
+ *
+
+ * Not only the meta information of a plugin shall be translateable,
+ * but also the text like menu entries, information boxes or strings
+ * inside configuration dialog should be translateable too. Geany is
+ * offering a way to enable this from code point of view by using a
+ * function provided by the Geany API -- main_locale_init().
+
+ * The function is taking over two parameters LOCALEDIR and
+ * GETTEXT_PACKAGE which we already know from previous sesction.
+
+ * As the function is called best on plugin initialization, it should be
+ * placed into plugin_init() so the hello world example could look like:
+ * @code
+void plugin_init(GeanyData *data)
+{
+	main_locale_init(LOCALEDIR, GETTEXT_PACKAGE);
+	main_menu_item = gtk_menu_item_new_with_mnemonic("Hello World");
+	gtk_widget_show(main_menu_item);
+	gtk_container_add(GTK_CONTAINER(geany->main_widgets->tools_menu),
+		main_menu_item);
+	g_signal_connect(main_menu_item, "activate",
+		G_CALLBACK(item_activate_cb), NULL);
+}
+ * @endcode
  **/
