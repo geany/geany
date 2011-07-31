@@ -380,4 +380,48 @@ void plugin_cleanup(void)
  *
  * Now you might like to look at Geany's source code for core plugins such as
  * @a plugins/demoplugin.c.
+ *
+ * @section furtherimprovements Furter Improvements and next steps - Translatable plugin information
+ *
+ * After we have done our first plugin, there is still some place for improvements.
+ *
+ * Per default PLUGIN_SET_INFO() is not allowing to translate the basic plugin
+ * information for a plugin which is not shipped with Geany's core distribution.
+ * In most cases, a plugin is shipped as a standalone and so it might make sense
+ * to enable translation on loading time so it is localized also inside plugin manager.
+ * With Geany 0.19 the plugin API is shipping the PLUGIN_SET_TRANSLATABLE_INFO()
+ * macro which is enabling translation of the basic plugin details already on
+ * loading time.
+ *
+ * PLUGIN_SET_TRANSLATABLE_INFO() is taking in difference to
+ * PLUGIN_SET_INFO() two more parameters, which it makes to take 6 parameters.
+ *
+ *  - Localedir
+ *  - Gettextpackage
+ *  - Plugin name
+ *  - Short description
+ *  - Version
+ *  - Author
+ *
+ * Localdir and the gettext package shall be set inside the build system.
+ * If this has been done, the call for above mentioned HelloWorld-world
+ * plugin could look like:
+ *
+ * @code
+
+PLUGIN_SET_TRANSLATABLE_INFO(
+	LOCALEDIR, GETTEXT_PACKAGE, _("Hello World"),
+	_("Just another tool to say hello world"),
+	"1.0", "John Doe <john.doe@example.org>");
+ * @endcode
+ *
+ * When using the macro, you should use the gettext macro _() to mark
+ * the strings like name and the short description as translatable as well. You
+ * can see the usage inside the little example listed above.
+ *
+ * As you can see the author's informations are not marked translatable inside
+ * this little example. This has been discussed onto mailing list where it has
+ * been agreed to use if possible latin version of author's name
+ * followed by in case of its apply able nativ spelling inside braces.
+ *
  **/

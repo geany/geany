@@ -1,3 +1,11 @@
+2011-07-31  Frank Lanitz  <frlan@frank.uvena.de>
+
+ * doc/plugins.dox:
+   Adding some content about PLUGIN_SET_TRANSLATABLE_INFO() into plugin
+   HowTo.
+
+
+
 2011-07-28  Colomban Wendling  <colomban(at)geany(dot)org>
 
  * src/build.c, src/build.h, src/editor.c, src/interface.c,
