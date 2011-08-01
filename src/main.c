@@ -425,6 +425,9 @@ gboolean main_is_realized(void)
  *  to adjust the build system of your plugin to get internationalisation support
  *  working properly.
  *
+ *  If you have already used @ref PLUGIN_SET_TRANSLATABLE_INFO() you
+ *  don't need to call main_locale_init() again as it has already been done.
+ *
  *  @param locale_dir The location where the translation files should be searched. This is
  *                    usually the @c LOCALEDIR macro, defined by the build system.
  *                    E.g. @c $prefix/share/locale.

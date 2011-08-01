@@ -453,5 +453,5 @@ void plugin_init(GeanyData *data)
  * @endcode
  *
  * If you already did use PLUGIN_SET_TRANSLATABLE_INFO() you don't need
- * to add main_locale_init() as it has been already called.
+ * to add main_locale_init() as it has already been called.
  **/
