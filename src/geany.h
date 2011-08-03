@@ -27,8 +27,8 @@
 #ifndef GEANY_H
 #define GEANY_H
 
-#ifdef HAVE_CONFIG_H
-#  include <config.h>
+#if defined(HAVE_CONFIG_H) && defined(GEANY_PRIVATE)
+#	include "config.h"
 #endif
 
 #include <gtk/gtk.h>

@@ -25,6 +25,10 @@
 
 /* Class Builder - creates source files containing a new class interface and definition. */
 
+#ifdef HAVE_CONFIG_H
+#	include "config.h"
+#endif
+
 #include "geanyplugin.h"
 
 GeanyData		*geany_data;

@@ -25,6 +25,10 @@
 
 /* HTML Characters plugin (Inserts HTML character entities like '&amp;') */
 
+#ifdef HAVE_CONFIG_H
+#	include "config.h"
+#endif
+
 #include "geanyplugin.h"
 #include <string.h>
 #include "SciLexer.h"

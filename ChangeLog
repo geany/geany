@@ -1,9 +1,16 @@
+2011-08-03  Colomban Wendling  <colomban(at)geany(dot)org>
+
+ * src/geany.h, plugins/classbuilder.c, plugins/export.c,
+   plugins/filebrowser.c, plugins/htmlchars.c, plugins/saveactions.c,
+   plugins/splitwindow.c:
+   Only include config.h when building Geany (closes #3384026).
+
+
 2011-07-31  Frank Lanitz  <frlan@frank.uvena.de>
 
  * doc/plugins.dox:
    Adding some content about PLUGIN_SET_TRANSLATABLE_INFO() into plugin
    HowTo as well as a hint to make usage of main_locale_init().
-
 
 
 2011-07-28  Colomban Wendling  <colomban(at)geany(dot)org>
