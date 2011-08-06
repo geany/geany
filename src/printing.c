@@ -511,7 +511,7 @@ static void draw_page(GtkPrintOperation *operation, GtkPrintContext *context,
 	GeanyEditor *editor;
 	cairo_t *cr;
 	gdouble width, height;
-	gdouble x, y;
+	gdouble x = 0.0, y = 0.0;
 	/*gint layout_h;*/
 	gint count;
 	GString *str;
