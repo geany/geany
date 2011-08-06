@@ -1030,8 +1030,9 @@ static void stash_foreach_various_pref(GPtrArray *group_array, stash_foreach_pre
 
 static void stash_tree_append_pref(StashGroup *group, StashPref *entry, GtkListStore *store)
 {
-	gboolean supported_type = TRUE;
 	gpointer setting;
+	GtkTreeIter iter;
+	StashTreeValue *value;
 
 	switch (entry->setting_type)
 	{
@@ -1045,28 +1046,21 @@ static void stash_tree_append_pref(StashGroup *group, StashPref *entry, GtkListS
 			setting = g_strdup(*(gchararray *) entry->setting);
 			break;
 		default:
-			supported_type = FALSE;
+			g_warning("Unhandled type for %s::%s in %s()!", group->name,
+				entry->key_name, G_STRFUNC);
+			return;
 	}
 
-	if (supported_type)
-	{
-		GtkTreeIter iter;
-		StashTreeValue *value = g_new(StashTreeValue, 1);
+	value = g_new(StashTreeValue, 1);
 
-		value->setting_type = entry->setting_type;
-		value->setting = setting;
-		value->key_name = entry->key_name;
-		value->group_name = group->name;
+	value->setting_type = entry->setting_type;
+	value->setting = setting;
+	value->key_name = entry->key_name;
+	value->group_name = group->name;
 
-		gtk_list_store_append(store, &iter);
-		gtk_list_store_set(store, &iter, STASH_TREE_NAME, value->key_name,
-			STASH_TREE_VALUE, value, -1);
-	}
-	else
-	{
-		g_warning("Unhandled type for %s::%s in %s()!", group->name,
-			entry->key_name, G_STRFUNC);
-	}
+	gtk_list_store_append(store, &iter);
+	gtk_list_store_set(store, &iter, STASH_TREE_NAME, value->key_name,
+		STASH_TREE_VALUE, value, -1);
 }
 
 
