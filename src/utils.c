@@ -1392,17 +1392,17 @@ gchar **utils_strv_new(const gchar *first, ...)
 
 	strvlen = 1;	/* for first argument */
 
-    /* count other arguments */
-    va_start(args, first);
-    for (; va_arg(args, gchar*) != NULL; strvlen++);
+	/* count other arguments */
+	va_start(args, first);
+	for (; va_arg(args, gchar*) != NULL; strvlen++);
 	va_end(args);
 
 	strv = g_new(gchar*, strvlen + 1);	/* +1 for NULL terminator */
 	strv[0] = g_strdup(first);
 
-    va_start(args, first);
-    for (i = 1; str = va_arg(args, gchar*), str != NULL; i++)
-    {
+	va_start(args, first);
+	for (i = 1; str = va_arg(args, gchar*), str != NULL; i++)
+	{
 		strv[i] = g_strdup(str);
 	}
 	va_end(args);

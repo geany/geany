@@ -779,7 +779,7 @@ void dialogs_show_msgbox(GtkMessageType type, const gchar *text, ...)
 	win32_message_dialog(GTK_WIDGET(parent), type, string);
 #else
 	dialog = gtk_message_dialog_new(parent, GTK_DIALOG_DESTROY_WITH_PARENT,
-                                  type, GTK_BUTTONS_OK, "%s", string);
+			type, GTK_BUTTONS_OK, "%s", string);
 	show_msgbox_dialog(dialog, type, parent);
 #endif
 	g_free(string);
@@ -797,7 +797,7 @@ void dialogs_show_msgbox_with_secondary(GtkMessageType type, const gchar *text, 
 #else
 	GtkWidget *dialog;
 	dialog = gtk_message_dialog_new(parent, GTK_DIALOG_DESTROY_WITH_PARENT,
-                                  type, GTK_BUTTONS_OK, "%s", text);
+			type, GTK_BUTTONS_OK, "%s", text);
 	gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog), "%s", secondary);
 	show_msgbox_dialog(dialog, type, parent);
 #endif
@@ -811,7 +811,7 @@ static gint run_unsaved_dialog(const gchar *msg, const gchar *msg2)
 	gint ret;
 
 	dialog = gtk_message_dialog_new(GTK_WINDOW(main_widgets.window), GTK_DIALOG_DESTROY_WITH_PARENT,
-                                  GTK_MESSAGE_QUESTION, GTK_BUTTONS_NONE, "%s", msg);
+			GTK_MESSAGE_QUESTION, GTK_BUTTONS_NONE, "%s", msg);
 	gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog), "%s", msg2);
 	gtk_dialog_add_button(GTK_DIALOG(dialog), GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
 
@@ -883,8 +883,7 @@ gboolean dialogs_show_unsaved_file(GeanyDocument *doc)
 
 #ifndef G_OS_WIN32
 static void
-on_font_apply_button_clicked           (GtkButton       *button,
-                                        gpointer         user_data)
+on_font_apply_button_clicked(GtkButton *button, gpointer user_data)
 {
 	gchar *fontname;
 
@@ -896,8 +895,7 @@ on_font_apply_button_clicked           (GtkButton       *button,
 
 
 static void
-on_font_ok_button_clicked              (GtkButton       *button,
-                                        gpointer         user_data)
+on_font_ok_button_clicked(GtkButton *button, gpointer user_data)
 {
 	/* We do the same thing as apply, but we close the dialog after. */
 	on_font_apply_button_clicked(button, NULL);
@@ -906,8 +904,7 @@ on_font_ok_button_clicked              (GtkButton       *button,
 
 
 static void
-on_font_cancel_button_clicked         (GtkButton       *button,
-                                        gpointer         user_data)
+on_font_cancel_button_clicked(GtkButton *button, gpointer user_data)
 {
 	gtk_widget_hide(ui_widgets.open_fontsel);
 }
@@ -974,9 +971,7 @@ on_input_numeric_activate(GtkEntry *entry, GtkDialog *dialog)
 
 
 static void
-on_input_dialog_response(GtkDialog *dialog,
-                         gint response,
-                         GtkWidget *entry)
+on_input_dialog_response(GtkDialog *dialog, gint response, GtkWidget *entry)
 {
 	gboolean persistent = (gboolean) GPOINTER_TO_INT(g_object_get_data(G_OBJECT(dialog), "has_combo"));
 

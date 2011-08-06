@@ -424,8 +424,7 @@ void msgwin_status_add(const gchar *format, ...)
 
 
 static void
-on_message_treeview_clear_activate     (GtkMenuItem     *menuitem,
-                                        gpointer         user_data)
+on_message_treeview_clear_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
 	gint tabnum = GPOINTER_TO_INT(user_data);
 
@@ -434,8 +433,7 @@ on_message_treeview_clear_activate     (GtkMenuItem     *menuitem,
 
 
 static void
-on_compiler_treeview_copy_activate     (GtkMenuItem     *menuitem,
-                                        gpointer         user_data)
+on_compiler_treeview_copy_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
 	GtkWidget *tv = NULL;
 	GtkTreeSelection *selection;
@@ -531,8 +529,7 @@ static void on_compiler_treeview_copy_all_activate(GtkMenuItem *menuitem, gpoint
 
 
 static void
-on_hide_message_window                 (GtkMenuItem     *menuitem,
-                                        gpointer         user_data)
+on_hide_message_window(GtkMenuItem *menuitem, gpointer user_data)
 {
 	msgwin_show_hide(FALSE);
 }

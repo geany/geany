@@ -892,16 +892,14 @@ void tools_word_count(void)
  */
 #ifndef G_OS_WIN32
 static void
-on_color_cancel_button_clicked         (GtkButton       *button,
-                                        gpointer         user_data)
+on_color_cancel_button_clicked(GtkButton *button, gpointer user_data)
 {
 	gtk_widget_hide(ui_widgets.open_colorsel);
 }
 
 
 static void
-on_color_ok_button_clicked             (GtkButton       *button,
-                                        gpointer         user_data)
+on_color_ok_button_clicked(GtkButton *button, gpointer user_data)
 {
 	GdkColor color;
 	GeanyDocument *doc = document_get_current();

@@ -96,7 +96,7 @@ static void handler_printerr(const gchar *msg)
 static const gchar *get_log_prefix(GLogLevelFlags log_level)
 {
 	switch (log_level & G_LOG_LEVEL_MASK)
-    {
+	{
 		case G_LOG_LEVEL_ERROR:
 			return "ERROR\t\t";
 		case G_LOG_LEVEL_CRITICAL:

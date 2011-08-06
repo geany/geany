@@ -281,7 +281,7 @@ gchar *encodings_to_string(const GeanyEncoding* enc)
 	g_return_val_if_fail(enc->name != NULL, NULL);
 	g_return_val_if_fail(enc->charset != NULL, NULL);
 
-    return g_strdup_printf("%s (%s)", enc->name, enc->charset);
+	return g_strdup_printf("%s (%s)", enc->name, enc->charset);
 }
 
 

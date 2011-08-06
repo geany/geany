@@ -950,8 +950,8 @@ gint main(gint argc, gchar **argv)
 #endif
 	parse_command_line_options(&argc, &argv);
 
-    /* Initialize GLib's thread system in case any plugins want to use it or their
-     * dependencies (e.g. WebKit, Soup, ...) */
+	/* Initialize GLib's thread system in case any plugins want to use it or their
+	 * dependencies (e.g. WebKit, Soup, ...) */
 	if (!g_thread_supported())
 		g_thread_init(NULL);
 
@@ -965,7 +965,7 @@ gint main(gint argc, gchar **argv)
 
 	config_dir_result = setup_config_dir();
 #ifdef HAVE_SOCKET
-    /* check and create (unix domain) socket for remote operation */
+	/* check and create (unix domain) socket for remote operation */
 	if (! socket_info.ignore_socket)
 	{
 		socket_info.lock_socket = -1;

@@ -2258,9 +2258,9 @@ static GtkWidget *progress_bar_create(void)
 {
 	GtkWidget *bar = gtk_progress_bar_new();
 
-    /* Set the progressbar's height to 1 to fit it in the statusbar */
-    gtk_widget_set_size_request(bar, -1, 1);
-    gtk_box_pack_start (GTK_BOX(ui_widgets.statusbar), bar, FALSE, FALSE, 3);
+	/* Set the progressbar's height to 1 to fit it in the statusbar */
+	gtk_widget_set_size_request(bar, -1, 1);
+	gtk_box_pack_start (GTK_BOX(ui_widgets.statusbar), bar, FALSE, FALSE, 3);
 
 	return bar;
 }

@@ -614,8 +614,8 @@ static void prefs_init_dialog(void)
 
 	/* Tools Settings */
 
-    if (tool_prefs.term_cmd)
-            gtk_entry_set_text(GTK_ENTRY(ui_lookup_widget(ui_widgets.prefs_dialog, "entry_com_term")), tool_prefs.term_cmd);
+	if (tool_prefs.term_cmd)
+		gtk_entry_set_text(GTK_ENTRY(ui_lookup_widget(ui_widgets.prefs_dialog, "entry_com_term")), tool_prefs.term_cmd);
 
 	if (tool_prefs.browser_cmd)
 		gtk_entry_set_text(GTK_ENTRY(ui_lookup_widget(ui_widgets.prefs_dialog, "entry_browser")), tool_prefs.browser_cmd);

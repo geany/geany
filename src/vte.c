@@ -79,9 +79,9 @@ struct _VteTerminal
 #define VTE_TYPE_TERMINAL (vf->vte_terminal_get_type())
 
 typedef enum {
-        VTE_CURSOR_BLINK_SYSTEM,
-        VTE_CURSOR_BLINK_ON,
-        VTE_CURSOR_BLINK_OFF
+	VTE_CURSOR_BLINK_SYSTEM,
+	VTE_CURSOR_BLINK_ON,
+	VTE_CURSOR_BLINK_OFF
 } VteTerminalCursorBlinkMode;
 
 
@@ -266,7 +266,7 @@ static void create_vte(void)
 	vf->vte_terminal_set_mouse_autohide(VTE_TERMINAL(vte), TRUE);
 	vf->vte_terminal_set_word_chars(VTE_TERMINAL(vte), VTE_WORDCHARS);
 
-    gtk_drag_dest_set(vte, GTK_DEST_DEFAULT_ALL,
+	gtk_drag_dest_set(vte, GTK_DEST_DEFAULT_ALL,
 		dnd_targets, G_N_ELEMENTS(dnd_targets), GDK_ACTION_COPY);
 
 	g_signal_connect(vte, "child-exited", G_CALLBACK(vte_start), NULL);

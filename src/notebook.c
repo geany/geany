@@ -54,12 +54,12 @@ static GtkTargetEntry files_drop_targets[] = {
 
 static void
 notebook_page_reordered_cb(GtkNotebook *notebook, GtkWidget *child, guint page_num,
-	gpointer user_data);
+		gpointer user_data);
 
 static void
 on_window_drag_data_received(GtkWidget *widget, GdkDragContext *drag_context,
-                             gint x, gint y, GtkSelectionData *data, guint info,
-                             guint event_time, gpointer user_data);
+		gint x, gint y, GtkSelectionData *data, guint target_type,
+		guint event_time, gpointer user_data);
 
 static void
 notebook_tab_close_clicked_cb(GtkButton *button, gpointer user_data);
@@ -490,8 +490,8 @@ void notebook_remove_page(gint page_num)
 
 static void
 on_window_drag_data_received(GtkWidget *widget, GdkDragContext *drag_context,
-                             gint x, gint y, GtkSelectionData *data, guint target_type,
-                             guint event_time, gpointer user_data)
+		gint x, gint y, GtkSelectionData *data, guint target_type,
+		guint event_time, gpointer user_data)
 {
 	gboolean success = FALSE;
 

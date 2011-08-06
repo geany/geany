@@ -437,10 +437,10 @@ static gint compare_symbol(const TMTag *tag_a, const TMTag *tag_b)
 		return 0;
 
 	if (tag_a->name == NULL)
-        return -(tag_a->name != tag_b->name);
+		return -(tag_a->name != tag_b->name);
 
 	if (tag_b->name == NULL)
-        return tag_a->name != tag_b->name;
+		return tag_a->name != tag_b->name;
 
 	ret = strcmp(tag_a->name, tag_b->name);
 	if (ret == 0)
@@ -633,9 +633,9 @@ tag_list_add_groups(GtkTreeStore *tree_store, ...)
 
 	g_return_if_fail(top_level_iter_names);
 
-    va_start(args, tree_store);
-    for (; iter = va_arg(args, GtkTreeIter*), iter != NULL;)
-    {
+	va_start(args, tree_store);
+	for (; iter = va_arg(args, GtkTreeIter*), iter != NULL;)
+	{
 		gchar *title = va_arg(args, gchar*);
 		gchar *icon_name = va_arg(args, gchar *);
 		GdkPixbuf *icon = NULL;
@@ -645,7 +645,7 @@ tag_list_add_groups(GtkTreeStore *tree_store, ...)
 			icon = get_tag_icon(icon_name);
 		}
 
-    	g_assert(title != NULL);
+		g_assert(title != NULL);
 		g_ptr_array_add(top_level_iter_names, title);
 
 		if (!find_toplevel_iter(tree_store, iter, title))

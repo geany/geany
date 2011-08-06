@@ -1232,19 +1232,19 @@ static void pm_prepare_treeview(GtkWidget *tree, GtkListStore *store)
 	GtkTreeSelection *sel;
 
 	checkbox_renderer = gtk_cell_renderer_toggle_new();
-    column = gtk_tree_view_column_new_with_attributes(
+	column = gtk_tree_view_column_new_with_attributes(
 		_("Active"), checkbox_renderer, "active", PLUGIN_COLUMN_CHECK, NULL);
 	gtk_tree_view_append_column(GTK_TREE_VIEW(tree), column);
 	g_signal_connect(checkbox_renderer, "toggled", G_CALLBACK(pm_plugin_toggled), NULL);
 
 	text_renderer = gtk_cell_renderer_text_new();
-    column = gtk_tree_view_column_new_with_attributes(
+	column = gtk_tree_view_column_new_with_attributes(
 		_("Plugin"), text_renderer, "text", PLUGIN_COLUMN_NAME, NULL);
 	gtk_tree_view_append_column(GTK_TREE_VIEW(tree), column);
 
 	text_renderer = gtk_cell_renderer_text_new();
 	g_object_set(text_renderer, "ellipsize", PANGO_ELLIPSIZE_END, NULL);
-    column = gtk_tree_view_column_new_with_attributes(
+	column = gtk_tree_view_column_new_with_attributes(
 		_("File"), text_renderer, "text", PLUGIN_COLUMN_FILE, NULL);
 	gtk_tree_view_append_column(GTK_TREE_VIEW(tree), column);
 
