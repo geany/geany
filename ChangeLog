@@ -1,3 +1,10 @@
+2011-08-13  Colomban Wendling  <colomban(at)geany(dot)org>
+
+ * src/msgwindow.c, src/msgwindow.h, src/ui_utils.c, src/ui_utils.h:
+   Focus the editor upon double click on the message and compiler
+   windows (patch by Dimitar Zhekov, thanks).
+
+
 2011-08-03  Colomban Wendling  <colomban(at)geany(dot)org>
 
  * src/geany.h, plugins/classbuilder.c, plugins/export.c,

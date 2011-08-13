@@ -124,18 +124,20 @@ void msgwin_finalize(void)
 
 static gboolean on_msgwin_key_press_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 {
-	if (ui_is_keyval_enter_or_return(event->keyval) || event->keyval == GDK_space)
+	gboolean enter_or_return = ui_is_keyval_enter_or_return(event->keyval);
+
+	if (enter_or_return || event->keyval == GDK_space)
 	{
 		switch (GPOINTER_TO_INT(data))
 		{
 			case MSG_COMPILER:
-			{	/* single click in the compiler treeview */
-				msgwin_goto_compiler_file_line(event->keyval);
+			{	/* key press in the compiler treeview */
+				msgwin_goto_compiler_file_line(enter_or_return);
 				break;
 			}
 			case MSG_MESSAGE:
-			{	/* single click in the message treeview (results of 'Find usage') */
-				msgwin_goto_messages_file_line(event->keyval);
+			{	/* key press in the message treeview (results of 'Find usage') */
+				msgwin_goto_messages_file_line(enter_or_return);
 				break;
 			}
 		}
@@ -194,6 +196,9 @@ static void prepare_msg_tree_view(void)
 	 * (connect_after button-press-event doesn't work) */
 	g_signal_connect(msgwindow.tree_msg, "button-release-event",
 					G_CALLBACK(on_msgwin_button_press_event), GINT_TO_POINTER(MSG_MESSAGE));
+	/* for double-clicking only, after the first release */
+	g_signal_connect(msgwindow.tree_msg, "button-press-event",
+					G_CALLBACK(on_msgwin_button_press_event), GINT_TO_POINTER(MSG_MESSAGE));
 	g_signal_connect(msgwindow.tree_msg, "key-press-event",
 		G_CALLBACK(on_msgwin_key_press_event), GINT_TO_POINTER(MSG_MESSAGE));
 
@@ -226,6 +231,9 @@ static void prepare_compiler_tree_view(void)
 	/* use button-release-event so the selection has changed
 	 * (connect_after button-press-event doesn't work) */
 	g_signal_connect(msgwindow.tree_compiler, "button-release-event",
+					G_CALLBACK(on_msgwin_button_press_event), GINT_TO_POINTER(MSG_COMPILER));
+	/* for double-clicking only, after the first release */
+	g_signal_connect(msgwindow.tree_compiler, "button-press-event",
 					G_CALLBACK(on_msgwin_button_press_event), GINT_TO_POINTER(MSG_COMPILER));
 	g_signal_connect(msgwindow.tree_compiler, "key-press-event",
 		G_CALLBACK(on_msgwin_key_press_event), GINT_TO_POINTER(MSG_COMPILER));
@@ -619,7 +627,7 @@ find_prev_build_dir(GtkTreePath *cur, GtkTreeModel *model, gchar **prefix)
 }
 
 
-static gboolean goto_compiler_file_line(const gchar *filename, gint line, guint keyval)
+static gboolean goto_compiler_file_line(const gchar *filename, gint line, gboolean focus_editor)
 {
 	if (!filename || line <= -1)
 		return FALSE;
@@ -669,7 +677,7 @@ static gboolean goto_compiler_file_line(const gchar *filename, gint line, guint 
 				editor_indicator_set_on_line(doc->editor, GEANY_INDICATOR_ERROR, line - 1);
 
 			ret = navqueue_goto_line(old_doc, doc, line);
-			if (ret && ui_is_keyval_enter_or_return(keyval))
+			if (ret && focus_editor)
 				gtk_widget_grab_focus(GTK_WIDGET(doc->editor->sci));
 
 			return ret;
@@ -679,7 +687,7 @@ static gboolean goto_compiler_file_line(const gchar *filename, gint line, guint 
 }
 
 
-gboolean msgwin_goto_compiler_file_line(guint keyval)
+gboolean msgwin_goto_compiler_file_line(gboolean focus_editor)
 {
 	GtkTreeIter iter;
 	GtkTreeModel *model;
@@ -715,7 +723,7 @@ gboolean msgwin_goto_compiler_file_line(guint keyval)
 			g_free(string);
 			g_free(dir);
 
-			ret = goto_compiler_file_line(filename, line, keyval);
+			ret = goto_compiler_file_line(filename, line, focus_editor);
 			g_free(filename);
 			return ret;
 		}
@@ -1037,7 +1045,7 @@ static void msgwin_parse_generic_line(const gchar *string, gchar **filename, gin
 }
 
 
-gboolean msgwin_goto_messages_file_line(guint keyval)
+gboolean msgwin_goto_messages_file_line(gboolean focus_editor)
 {
 	GtkTreeIter iter;
 	GtkTreeModel *model;
@@ -1057,7 +1065,7 @@ gboolean msgwin_goto_messages_file_line(guint keyval)
 		if (line >= 0 && DOC_VALID(doc))
 		{
 			ret = navqueue_goto_line(old_doc, doc, line);
-			if (ret && ui_is_keyval_enter_or_return(keyval))
+			if (ret && focus_editor)
 				gtk_widget_grab_focus(GTK_WIDGET(doc->editor->sci));
 		}
 		else if (line < 0 && string != NULL)
@@ -1073,7 +1081,7 @@ gboolean msgwin_goto_messages_file_line(guint keyval)
 				if (doc != NULL)
 				{
 					ret = (line < 0) ? TRUE : navqueue_goto_line(old_doc, doc, line);
-					if (ret && ui_is_keyval_enter_or_return(keyval))
+					if (ret && focus_editor)
 						gtk_widget_grab_focus(GTK_WIDGET(doc->editor->sci));
 				}
 			}
@@ -1089,22 +1097,24 @@ static gboolean on_msgwin_button_press_event(GtkWidget *widget, GdkEventButton *
 											 gpointer user_data)
 {
 	/* user_data might be NULL, GPOINTER_TO_INT returns 0 if called with NULL */
+	gboolean double_click = event->type == GDK_2BUTTON_PRESS;
 
-	if (event->button == 1)
+	if (event->button == 1 && (event->type == GDK_BUTTON_RELEASE || double_click))
 	{
 		switch (GPOINTER_TO_INT(user_data))
 		{
 			case MSG_COMPILER:
-			{	/* single click in the compiler treeview */
-				msgwin_goto_compiler_file_line(0);
+			{	/* mouse click in the compiler treeview */
+				msgwin_goto_compiler_file_line(double_click);
 				break;
 			}
 			case MSG_MESSAGE:
-			{	/* single click in the message treeview (results of 'Find usage') */
-				msgwin_goto_messages_file_line(0);
+			{	/* mouse click in the message treeview (results of 'Find usage') */
+				msgwin_goto_messages_file_line(double_click);
 				break;
 			}
 		}
+		return double_click;	/* TRUE prevents message window re-focusing */
 	}
 
 	if (event->button == 3)
