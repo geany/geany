@@ -233,7 +233,7 @@ PLUGIN_SET_INFO("HelloWorld", "Just another tool to say hello world",
  *  need to implement the function that is called when your plugin is unloaded.
  *  These functions are called plugin_init() and plugin_cleanup(). Let's see how it could look like:
  *  @code
-PLUGIN_VERSION_CHECK(147)
+PLUGIN_VERSION_CHECK(211)
 
 PLUGIN_SET_INFO("HelloWorld", "Just another tool to say hello world",
 				"1.0", "Joe Doe <joe.doe@example.org>");
@@ -348,7 +348,7 @@ GeanyPlugin		*geany_plugin;
 GeanyData		*geany_data;
 GeanyFunctions	*geany_functions;
 
-PLUGIN_VERSION_CHECK(147)
+PLUGIN_VERSION_CHECK(211)
 
 PLUGIN_SET_INFO("HelloWorld", "Just another tool to say hello world",
 				"1.0", "John Doe <john.doe@example.org>");

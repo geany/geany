@@ -1,3 +1,10 @@
+2011-08-15  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * doc/plugins.dox:
+   Update API version used inside plugin howto to a more recent version
+   (API v211).
+
+
 2011-08-13  Colomban Wendling  <colomban(at)geany(dot)org>
 
  * src/msgwindow.c, src/msgwindow.h, src/ui_utils.c, src/ui_utils.h:
