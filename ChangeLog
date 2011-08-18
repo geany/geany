@@ -1,3 +1,10 @@
+2011-08-19  Colomban Wendling  <colomban(at)geany(dot)org>
+
+ * data/filetype_extensions.conf, data/filetypes.Cython.conf,
+   data/filetypes.python:
+   Add Cython filetype (patch by Matthew Brush, thanks).
+
+
 2011-08-15  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * doc/plugins.dox:
