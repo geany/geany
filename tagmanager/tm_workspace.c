@@ -258,8 +258,22 @@ static void append_to_temp_file(FILE *fp, GList *file_list)
 	}
 }
 
-gboolean tm_workspace_create_global_tags(const char *config_dir, const char *pre_process,
-	const char **includes, int includes_count, const char *tags_file, int lang)
+static gchar *create_temp_file(const gchar *tpl)
+{
+	gchar *name;
+	gint fd;
+
+	fd = g_file_open_tmp(tpl, &name, NULL);
+	if (fd < 0)
+		name = NULL;
+	else
+		close(fd);
+
+	return name;
+}
+
+gboolean tm_workspace_create_global_tags(const char *pre_process, const char **includes,
+	int includes_count, const char *tags_file, int lang)
 {
 #ifdef HAVE_GLOB_H
 	glob_t globbuf;
@@ -273,15 +287,11 @@ gboolean tm_workspace_create_global_tags(const char *config_dir, const char *pre
 	GPtrArray *tags_array;
 	GHashTable *includes_files_hash;
 	GList *includes_files = NULL;
-#ifdef G_OS_WIN32
-	char *temp_file = g_strdup_printf("%s\\_%d_%ld_1.cpp", config_dir, getpid(), time(NULL));
-	char *temp_file2 = g_strdup_printf("%s\\_%d_%ld_2.cpp", config_dir, getpid(), time(NULL));
-#else
-	char *temp_file = g_strdup_printf("%s/%d_%ld_1.cpp", config_dir, getpid(), time(NULL));
-	char *temp_file2 = g_strdup_printf("%s/%d_%ld_2.cpp", config_dir, getpid(), time(NULL));
-#endif
+	gchar *temp_file = create_temp_file("tmp_XXXXXX.cpp");
+	gchar *temp_file2 = create_temp_file("tmp_XXXXXX.cpp");
 
-	if (NULL == theWorkspace || NULL == (fp = g_fopen(temp_file, "w")))
+	if (NULL == temp_file || NULL == temp_file2 ||
+		NULL == theWorkspace || NULL == (fp = g_fopen(temp_file, "w")))
 	{
 		g_free(temp_file);
 		g_free(temp_file2);
@@ -387,6 +397,7 @@ gboolean tm_workspace_create_global_tags(const char *config_dir, const char *pre
 	else
 	{
 		/* no pre-processing needed, so temp_file2 = temp_file */
+		g_unlink(temp_file2);
 		g_free(temp_file2);
 		temp_file2 = temp_file;
 		temp_file = NULL;

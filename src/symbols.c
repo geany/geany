@@ -1624,8 +1624,7 @@ int symbols_generate_global_tags(int argc, char **argv, gboolean want_preprocess
 
 		geany_debug("Generating %s tags file.", ft->name);
 		tm_get_workspace();
-		status = tm_workspace_create_global_tags(app->configdir, command,
-												 (const char **) (argv + 2),
+		status = tm_workspace_create_global_tags(command, (const char **) (argv + 2),
 												 argc - 2, tags_file, ft->lang);
 		g_free(command);
 		symbols_finalize(); /* free c_tags_ignore data */

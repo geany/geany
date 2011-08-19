@@ -3,6 +3,10 @@
  * data/filetype_extensions.conf, data/filetypes.Cython.conf,
    data/filetypes.python:
    Add Cython filetype (patch by Matthew Brush, thanks).
+ * src/symbols.c, tagmanager/include/tm_workspace.h,
+   tagmanager/tm_workspace.c:
+   Create temporary files used for generating global tags files in the
+   system directory for temp files.
 
 
 2011-08-15  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
