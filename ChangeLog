@@ -3,6 +3,8 @@
  * doc/plugins.dox:
    Update of wording to fix some grammatical issues etc. on plugin howto.
    Patch provided by Matthew Brush. Thanks.
+ * data/filetype_extensions.conf:
+   Extend list of primary keywords. Patch by Alexander Eberspächer. Thanks.
 
 
 2011-08-19  Colomban Wendling  <colomban(at)geany(dot)org>
