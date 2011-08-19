@@ -16,6 +16,9 @@
    tagmanager/tm_workspace.c:
    Create temporary files used for generating global tags files in the
    system directory for temp files.
+ * tagmanager/diff.c:
+   Don't make tags for /dev/null in diff files but for the new file
+   instead (Based on a patch by Yang Hong, thanks).
 
 
 2011-08-15  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>

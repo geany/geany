@@ -31,58 +31,90 @@ static kindOption DiffKinds [] = {
 	{ TRUE, 'f', "function", "functions"}
 };
 
+enum {
+	DIFF_DELIM_MINUS = 0,
+	DIFF_DELIM_PLUS
+};
+
+static const char *DiffDelims[2] = {
+	"--- ",
+	"+++ "
+};
+
 /*
 *   FUNCTION DEFINITIONS
 */
+
+static const unsigned char *stripAbsolute (const unsigned char *filename)
+{
+	const unsigned char *tmp;
+
+	/* strip any absolute path */
+	if (*filename == '/' || *filename == '\\')
+	{
+		boolean skipSlash = TRUE;
+
+		tmp = (const unsigned char*) strrchr ((const char*) filename,  '/');
+		if (tmp == NULL)
+		{	/* if no / is contained try \ in case of a Windows filename */
+			tmp = (const unsigned char*) strrchr ((const char*) filename, '\\');
+			if (tmp == NULL)
+			{	/* last fallback, probably the filename doesn't contain a path, so take it */
+				tmp = filename;
+				skipSlash = FALSE;
+			}
+		}
+
+		/* skip the leading slash or backslash */
+		if (skipSlash)
+			tmp++;
+	}
+	else
+		tmp = filename;
+
+	return tmp;
+}
 
 static void findDiffTags (void)
 {
 	vString *filename = vStringNew ();
 	const unsigned char *line, *tmp;
+	int delim = DIFF_DELIM_MINUS;
 
 	while ((line = fileReadLine ()) != NULL)
 	{
 		const unsigned char* cp = line;
-		boolean skipSlash = FALSE;
 
-		if (strncmp((const char*) cp, "--- ", (size_t) 4) == 0)
+		if (strncmp ((const char*) cp, DiffDelims[delim], 4u) == 0)
 		{
 			cp += 4;
 			if (isspace ((int) *cp)) continue;
-
-			/* strip any absolute path */
-			if (*cp == '/' || *cp == '\\')
+			/* when original filename is /dev/null use the new one instead */
+			if (delim == DIFF_DELIM_MINUS &&
+				strncmp ((const char*) cp, "/dev/null", 9u) == 0 &&
+				(cp[9] == 0 || isspace (cp[9])))
 			{
-				skipSlash = TRUE;
-				tmp = (const unsigned char*) strrchr((const char*) cp,  '/');
-				if (tmp == NULL)
-				{	/* if no / is contained try \ in case of a Windows filename */
-					tmp = (const unsigned char*) strrchr((const char*) cp, '\\');
-					if (tmp == NULL)
-					{	/* last fallback, probably the filename doesn't contain a path, so take it */
-						if (cp[0] != 0)
-						{
-							tmp = cp;
-							skipSlash = FALSE;
-						}
-					}
-				}
+				delim = DIFF_DELIM_PLUS;
+				continue;
 			}
-			else
-				tmp = cp;
+
+			tmp = stripAbsolute (cp);
 
 			if (tmp != NULL)
 			{
-				if (skipSlash) tmp++; /* skip the leading slash or backslash */
 				while (! isspace(*tmp) && *tmp != '\0')
 				{
 					vStringPut(filename, *tmp);
 					tmp++;
 				}
+
 				vStringTerminate(filename);
 				makeSimpleTag (filename, DiffKinds, K_FUNCTION);
 				vStringClear (filename);
 			}
+
+			/* restore default delim */
+			delim = DIFF_DELIM_MINUS;
 		}
 	}
 	vStringDelete (filename);
