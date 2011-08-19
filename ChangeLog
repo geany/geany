@@ -1,3 +1,10 @@
+2011-08-19  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * doc/plugins.dox:
+   Update of wording to fix some grammatical issues etc. on plugin howto.
+   Patch provided by Matthew Brush. Thanks.
+
+
 2011-08-19  Colomban Wendling  <colomban(at)geany(dot)org>
 
  * data/filetype_extensions.conf, data/filetypes.Cython.conf,
