@@ -122,10 +122,10 @@ static int get_token(char *token, int n)
 	i++;
 	c = fileGetc();
     }
+    token[i] = '\0';
     if (c == EOF)
 	return 0;
     if (i != n) {
-	token[i] = '\0';
 	fileUngetc(c);
 	return 1;
     } else {
@@ -283,7 +283,6 @@ static void findHaskellTags (int is_literate)
             }
         }
 	token[0] = c;
-	token[1] = '\0';
 	if (!isident(c)) {
 		skip_rest_of_line();
 		c = get_next_char();
