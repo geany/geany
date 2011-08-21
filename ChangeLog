@@ -1,3 +1,10 @@
+2011-08-21  Colomban Wendling  <colomban(at)geany(dot)org>
+
+ * src/callbacks.c, src/editor.c, src/editor.h, src/keybindings.c:
+   Fix search for the current word if it isn't composed of only
+   GEANY_WORDCHARS (closes #3386129).
+
+
 2011-08-20  Colomban Wendling  <colomban(at)geany(dot)org>
 
  * tagmanager/haskell.c:

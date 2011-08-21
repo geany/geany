@@ -86,9 +86,9 @@ static GtkWidget *switch_dialog_label = NULL;
 static gboolean on_key_press_event(GtkWidget *widget, GdkEventKey *event, gpointer user_data);
 static gboolean on_key_release_event(GtkWidget *widget, GdkEventKey *event, gpointer user_data);
 
-static gboolean check_current_word(GeanyDocument *doc);
-static gboolean read_current_word(GeanyDocument *doc);
-static gchar *get_current_word_or_sel(GeanyDocument *doc);
+static gboolean check_current_word(GeanyDocument *doc, gboolean sci_word);
+static gboolean read_current_word(GeanyDocument *doc, gboolean sci_word);
+static gchar *get_current_word_or_sel(GeanyDocument *doc, gboolean sci_word);
 
 static gboolean cb_func_file_action(guint key_id);
 static gboolean cb_func_project_action(guint key_id);
@@ -1415,16 +1415,12 @@ static gboolean cb_func_search_action(guint key_id)
 		case GEANY_KEYS_SEARCH_PREVIOUSMESSAGE:
 			on_previous_message1_activate(NULL, NULL); break;
 		case GEANY_KEYS_SEARCH_FINDUSAGE:
-			read_current_word(doc);
-			on_find_usage1_activate(NULL, NULL);
-			break;
+			on_find_usage1_activate(NULL, NULL); break;
 		case GEANY_KEYS_SEARCH_FINDDOCUMENTUSAGE:
-			read_current_word(doc);
-			on_find_document_usage1_activate(NULL, NULL);
-			break;
+			on_find_document_usage1_activate(NULL, NULL); break;
 		case GEANY_KEYS_SEARCH_MARKALL:
 		{
-			gchar *text = get_current_word_or_sel(doc);
+			gchar *text = get_current_word_or_sel(doc, TRUE);
 
 			if (sci_has_selection(sci))
 				search_mark_all(doc, text, SCFIND_MATCHCASE);
@@ -1546,25 +1542,29 @@ static gboolean cb_func_build_action(guint key_id)
 }
 
 
-static gboolean read_current_word(GeanyDocument *doc)
+static gboolean read_current_word(GeanyDocument *doc, gboolean sci_word)
 {
-	gint pos;
-
 	if (doc == NULL)
 		return FALSE;
 
-	pos = sci_get_current_position(doc->editor->sci);
-
-	editor_find_current_word(doc->editor, pos,
-		editor_info.current_word, GEANY_MAX_WORD_LENGTH, NULL);
+	if (sci_word)
+	{
+		editor_find_current_word_sciwc(doc->editor, -1,
+			editor_info.current_word, GEANY_MAX_WORD_LENGTH);
+	}
+	else
+	{
+		editor_find_current_word(doc->editor, -1,
+			editor_info.current_word, GEANY_MAX_WORD_LENGTH, NULL);
+	}
 
 	return (*editor_info.current_word != 0);
 }
 
 
-static gboolean check_current_word(GeanyDocument *doc)
+static gboolean check_current_word(GeanyDocument *doc, gboolean sci_word)
 {
-	if (!read_current_word(doc))
+	if (! read_current_word(doc, sci_word))
 	{
 		utils_beep();
 		return FALSE;
@@ -1573,14 +1573,14 @@ static gboolean check_current_word(GeanyDocument *doc)
 }
 
 
-static gchar *get_current_word_or_sel(GeanyDocument *doc)
+static gchar *get_current_word_or_sel(GeanyDocument *doc, gboolean sci_word)
 {
 	ScintillaObject *sci = doc->editor->sci;
 
 	if (sci_has_selection(sci))
 		return sci_get_selection_contents(sci);
 
-	return read_current_word(doc) ? g_strdup(editor_info.current_word) : NULL;
+	return read_current_word(doc, sci_word) ? g_strdup(editor_info.current_word) : NULL;
 }
 
 
@@ -1934,7 +1934,7 @@ static gboolean cb_func_clipboard_action(guint key_id)
 
 static void goto_tag(GeanyDocument *doc, gboolean definition)
 {
-	gchar *text = get_current_word_or_sel(doc);
+	gchar *text = get_current_word_or_sel(doc, FALSE);
 
 	if (text)
 		symbols_goto_tag(text, definition);
@@ -2148,7 +2148,7 @@ static gboolean cb_func_editor_action(guint key_id)
 			editor_show_macro_list(doc->editor);
 			break;
 		case GEANY_KEYS_EDITOR_CONTEXTACTION:
-			if (check_current_word(doc))
+			if (check_current_word(doc, FALSE))
 				on_context_action1_activate(GTK_MENU_ITEM(ui_lookup_widget(main_widgets.editor_menu,
 					"context_action1")), NULL);
 			break;

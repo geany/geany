@@ -1664,6 +1664,32 @@ void editor_find_current_word(GeanyEditor *editor, gint pos, gchar *word, size_t
 }
 
 
+/* Same as editor_find_current_word() but uses editor's word boundaries to decide what the word
+ * is.  This should be used e.g. to get the word to search for */
+void editor_find_current_word_sciwc(GeanyEditor *editor, gint pos, gchar *word, gsize wordlen)
+{
+	gint start;
+	gint end;
+
+	g_return_if_fail(editor != NULL);
+
+	if (pos == -1)
+		pos = sci_get_current_position(editor->sci);
+
+	start = SSM(editor->sci, SCI_WORDSTARTPOSITION, pos, TRUE);
+	end = SSM(editor->sci, SCI_WORDENDPOSITION, pos, TRUE);
+
+	if (start == end) /* caret in whitespaces sequence */
+		*word = 0;
+	else
+	{
+		if ((guint)(end - start) >= wordlen)
+			end = start + (wordlen - 1);
+		sci_get_text_range(editor->sci, start, end, word);
+	}
+}
+
+
 /**
  *  Finds the word at the position specified by @a pos. If any word is found, it is returned.
  *  Otherwise NULL is returned.
@@ -3959,7 +3985,10 @@ void editor_finalize()
 
 
 /* wordchars: NULL or a string containing characters to match a word.
- * Returns: the current selection or the current word. */
+ * Returns: the current selection or the current word.
+ * 
+ * Passing NULL as wordchars is NOT the same as passing GEANY_WORDCHARS: NULL means
+ * using Scintillas's word boundaries. */
 gchar *editor_get_default_selection(GeanyEditor *editor, gboolean use_current_word,
 									const gchar *wordchars)
 {
@@ -3968,17 +3997,16 @@ gchar *editor_get_default_selection(GeanyEditor *editor, gboolean use_current_wo
 	g_return_val_if_fail(editor != NULL, NULL);
 
 	if (sci_get_lines_selected(editor->sci) == 1)
-	{
-		gint len = sci_get_selected_text_length(editor->sci);
-
-		s = g_malloc(len + 1);
-		sci_get_selected_text(editor->sci, s);
-	}
+		s = sci_get_selection_contents(editor->sci);
 	else if (sci_get_lines_selected(editor->sci) == 0 && use_current_word)
 	{	/* use the word at current cursor position */
 		gchar word[GEANY_MAX_WORD_LENGTH];
 
-		editor_find_current_word(editor, -1, word, sizeof(word), wordchars);
+		if (wordchars != NULL)
+			editor_find_current_word(editor, -1, word, sizeof(word), wordchars);
+		else
+			editor_find_current_word_sciwc(editor, -1, word, sizeof(word));
+
 		if (word[0] != '\0')
 			s = g_strdup(word);
 	}

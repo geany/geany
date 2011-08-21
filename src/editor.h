@@ -240,6 +240,8 @@ const GeanyEditorPrefs *editor_get_prefs(GeanyEditor *editor);
 void editor_find_current_word(GeanyEditor *editor, gint pos, gchar *word, size_t wordlen,
 	const gchar *wc);
 
+void editor_find_current_word_sciwc(GeanyEditor *editor, gint pos, gchar *word, gsize wordlen);
+
 gchar *editor_get_word_at_pos(GeanyEditor *editor, gint pos, const gchar *wordchars);
 
 gchar *editor_get_default_selection(GeanyEditor *editor, gboolean use_current_word, const gchar *wordchars);

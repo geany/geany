@@ -917,8 +917,8 @@ static void find_usage(gboolean in_session)
 	}
 	else
 	{
-		editor_find_current_word(doc->editor, -1,
-			editor_info.current_word, GEANY_MAX_WORD_LENGTH, NULL);
+		editor_find_current_word_sciwc(doc->editor, -1,
+			editor_info.current_word, GEANY_MAX_WORD_LENGTH);
 		search_text = g_strdup(editor_info.current_word);
 		flags = SCFIND_MATCHCASE | SCFIND_WHOLEWORD;
 	}
