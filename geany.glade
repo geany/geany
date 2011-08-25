@@ -1416,6 +1416,21 @@
 			    <widget class="GtkMenu" id="indent_type1_menu">
 
 			      <child>
+				<widget class="GtkMenuItem" id="detect_type_from_file">
+				  <property name="visible">True</property>
+				  <property name="label" translatable="yes">_Detect from Content</property>
+				  <property name="use_underline">True</property>
+				  <signal name="activate" handler="on_detect_type_from_file_activate" last_modification_time="Thu, 25 Aug 2011 15:36:43 GMT"/>
+				</widget>
+			      </child>
+
+			      <child>
+				<widget class="GtkSeparatorMenuItem" id="separator61">
+				  <property name="visible">True</property>
+				</widget>
+			      </child>
+
+			      <child>
 				<widget class="GtkRadioMenuItem" id="tabs1">
 				  <property name="visible">True</property>
 				  <property name="label" translatable="yes">_Tabs</property>
@@ -1459,6 +1474,21 @@
 
 			  <child>
 			    <widget class="GtkMenu" id="indent_width1_menu">
+
+			      <child>
+				<widget class="GtkMenuItem" id="detect_width_from_file">
+				  <property name="visible">True</property>
+				  <property name="label" translatable="yes">_Detect from Content</property>
+				  <property name="use_underline">True</property>
+				  <signal name="activate" handler="on_detect_width_from_file_activate" last_modification_time="Thu, 25 Aug 2011 15:36:43 GMT"/>
+				</widget>
+			      </child>
+
+			      <child>
+				<widget class="GtkSeparatorMenuItem" id="separator62">
+				  <property name="visible">True</property>
+				</widget>
+			      </child>
 
 			      <child>
 				<widget class="GtkRadioMenuItem" id="indent_width_1">

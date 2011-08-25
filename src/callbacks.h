@@ -662,3 +662,11 @@ on_reset_indentation1_activate         (GtkMenuItem     *menuitem,
 void
 on_mark_all1_activate                  (GtkMenuItem     *menuitem,
                                         gpointer         user_data);
+
+void
+on_detect_type_from_file_activate      (GtkMenuItem     *menuitem,
+                                        gpointer         user_data);
+
+void
+on_detect_width_from_file_activate     (GtkMenuItem     *menuitem,
+                                        gpointer         user_data);

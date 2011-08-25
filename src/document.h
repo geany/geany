@@ -33,6 +33,7 @@
 
 #include "Scintilla.h"
 #include "ScintillaWidget.h"
+#include "editor.h"
 
 #if defined(G_OS_WIN32)
 # define GEANY_DEFAULT_EOL_CHARACTER SC_EOL_CRLF
@@ -259,6 +260,10 @@ const GdkColor *document_get_status_color(GeanyDocument *doc);
 gchar *document_get_basename_for_display(GeanyDocument *doc, gint length);
 
 gboolean document_need_save_as(GeanyDocument *doc);
+
+gboolean document_detect_indent_type(GeanyDocument *doc, GeanyIndentType *type_);
+
+gboolean document_detect_indent_width(GeanyDocument *doc, gint *width_);
 
 void document_apply_indent_settings(GeanyDocument *doc);
 

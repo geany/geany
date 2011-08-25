@@ -6,6 +6,10 @@
    #3339420 and #3390435).
  * src/callbacks.c, src/editor.c, src/editor.h:
    Add editor_set_indent_width() to only set indentation width.
+ * src/callbacks.c, src/callbacks.h, src/document.c, src/document.h,
+   src/interface.c, geany.glade:
+   Add menu items to detect indentation settings from document's
+   content.
 
 
 2011-08-24  Colomban Wendling  <colomban(at)geany(dot)org>

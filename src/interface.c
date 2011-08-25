@@ -197,12 +197,16 @@ create_window1 (void)
   GtkWidget *menu_use_auto_indentation1;
   GtkWidget *indent_type1;
   GtkWidget *indent_type1_menu;
+  GtkWidget *detect_type_from_file;
+  GtkWidget *separator61;
   GSList *tabs1_group = NULL;
   GtkWidget *tabs1;
   GtkWidget *spaces1;
   GtkWidget *tabs_and_spaces1;
   GtkWidget *indent_width1;
   GtkWidget *indent_width1_menu;
+  GtkWidget *detect_width_from_file;
+  GtkWidget *separator62;
   GSList *indent_width_1_group = NULL;
   GtkWidget *indent_width_1;
   GtkWidget *indent_width_2;
@@ -987,6 +991,15 @@ create_window1 (void)
   indent_type1_menu = gtk_menu_new ();
   gtk_menu_item_set_submenu (GTK_MENU_ITEM (indent_type1), indent_type1_menu);
 
+  detect_type_from_file = gtk_menu_item_new_with_mnemonic (_("_Detect from Content"));
+  gtk_widget_show (detect_type_from_file);
+  gtk_container_add (GTK_CONTAINER (indent_type1_menu), detect_type_from_file);
+
+  separator61 = gtk_separator_menu_item_new ();
+  gtk_widget_show (separator61);
+  gtk_container_add (GTK_CONTAINER (indent_type1_menu), separator61);
+  gtk_widget_set_sensitive (separator61, FALSE);
+
   tabs1 = gtk_radio_menu_item_new_with_mnemonic (tabs1_group, _("_Tabs"));
   tabs1_group = gtk_radio_menu_item_get_group (GTK_RADIO_MENU_ITEM (tabs1));
   gtk_widget_show (tabs1);
@@ -1011,6 +1024,15 @@ create_window1 (void)
 
   indent_width1_menu = gtk_menu_new ();
   gtk_menu_item_set_submenu (GTK_MENU_ITEM (indent_width1), indent_width1_menu);
+
+  detect_width_from_file = gtk_menu_item_new_with_mnemonic (_("_Detect from Content"));
+  gtk_widget_show (detect_width_from_file);
+  gtk_container_add (GTK_CONTAINER (indent_width1_menu), detect_width_from_file);
+
+  separator62 = gtk_separator_menu_item_new ();
+  gtk_widget_show (separator62);
+  gtk_container_add (GTK_CONTAINER (indent_width1_menu), separator62);
+  gtk_widget_set_sensitive (separator62, FALSE);
 
   indent_width_1 = gtk_radio_menu_item_new_with_mnemonic (indent_width_1_group, _("_1"));
   indent_width_1_group = gtk_radio_menu_item_get_group (GTK_RADIO_MENU_ITEM (indent_width_1));
@@ -1683,6 +1705,9 @@ create_window1 (void)
   g_signal_connect ((gpointer) menu_use_auto_indentation1, "toggled",
                     G_CALLBACK (on_use_auto_indentation1_toggled),
                     NULL);
+  g_signal_connect ((gpointer) detect_type_from_file, "activate",
+                    G_CALLBACK (on_detect_type_from_file_activate),
+                    NULL);
   g_signal_connect ((gpointer) tabs1, "activate",
                     G_CALLBACK (on_tabs1_activate),
                     NULL);
@@ -1691,6 +1716,9 @@ create_window1 (void)
                     NULL);
   g_signal_connect ((gpointer) tabs_and_spaces1, "activate",
                     G_CALLBACK (on_tabs_and_spaces1_activate),
+                    NULL);
+  g_signal_connect ((gpointer) detect_width_from_file, "activate",
+                    G_CALLBACK (on_detect_width_from_file_activate),
                     NULL);
   g_signal_connect ((gpointer) indent_width_1, "activate",
                     G_CALLBACK (on_indent_width_activate),
@@ -1982,11 +2010,15 @@ create_window1 (void)
   GLADE_HOOKUP_OBJECT (window1, menu_use_auto_indentation1, "menu_use_auto_indentation1");
   GLADE_HOOKUP_OBJECT (window1, indent_type1, "indent_type1");
   GLADE_HOOKUP_OBJECT (window1, indent_type1_menu, "indent_type1_menu");
+  GLADE_HOOKUP_OBJECT (window1, detect_type_from_file, "detect_type_from_file");
+  GLADE_HOOKUP_OBJECT (window1, separator61, "separator61");
   GLADE_HOOKUP_OBJECT (window1, tabs1, "tabs1");
   GLADE_HOOKUP_OBJECT (window1, spaces1, "spaces1");
   GLADE_HOOKUP_OBJECT (window1, tabs_and_spaces1, "tabs_and_spaces1");
   GLADE_HOOKUP_OBJECT (window1, indent_width1, "indent_width1");
   GLADE_HOOKUP_OBJECT (window1, indent_width1_menu, "indent_width1_menu");
+  GLADE_HOOKUP_OBJECT (window1, detect_width_from_file, "detect_width_from_file");
+  GLADE_HOOKUP_OBJECT (window1, separator62, "separator62");
   GLADE_HOOKUP_OBJECT (window1, indent_width_1, "indent_width_1");
   GLADE_HOOKUP_OBJECT (window1, indent_width_2, "indent_width_2");
   GLADE_HOOKUP_OBJECT (window1, indent_width_3, "indent_width_3");

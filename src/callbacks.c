@@ -2101,3 +2101,29 @@ void on_mark_all1_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
 	keybindings_send_command(GEANY_KEY_GROUP_SEARCH, GEANY_KEYS_SEARCH_MARKALL);
 }
+
+
+void on_detect_type_from_file_activate(GtkMenuItem *menuitem, gpointer user_data)
+{
+	GeanyDocument *doc = document_get_current();
+	GeanyIndentType type;
+
+	if (doc != NULL && document_detect_indent_type(doc, &type))
+	{
+		editor_set_indent_type(doc->editor, type);
+		ui_document_show_hide(doc);
+	}
+}
+
+
+void on_detect_width_from_file_activate(GtkMenuItem *menuitem, gpointer user_data)
+{
+	GeanyDocument *doc = document_get_current();
+	gint width;
+
+	if (doc != NULL && document_detect_indent_width(doc, &width))
+	{
+		editor_set_indent_width(doc->editor, width);
+		ui_document_show_hide(doc);
+	}
+}

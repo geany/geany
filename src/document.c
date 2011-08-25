@@ -952,8 +952,9 @@ static gboolean detect_tabs_and_spaces(GeanyEditor *editor)
 
 /* Detect the indent type based on counting the leading indent characters for each line.
  * Returns whether detection succeeded, and the detected type in *type_ upon success */
-static gboolean detect_indent_type(GeanyEditor *editor, GeanyIndentType *type_)
+gboolean document_detect_indent_type(GeanyDocument *doc, GeanyIndentType *type_)
 {
+	GeanyEditor *editor = doc->editor;
 	ScintillaObject *sci = editor->sci;
 	gint line, line_count;
 	gsize tabs = 0, spaces = 0;
@@ -1052,13 +1053,20 @@ static gboolean detect_indent_width(GeanyEditor *editor, GeanyIndentType type, g
 }
 
 
+/* same as detect_indent_width() but uses editor's indent type */
+gboolean document_detect_indent_width(GeanyDocument *doc, gint *width_)
+{
+	return detect_indent_width(doc->editor, doc->editor->indent_type, width_);
+}
+
+
 void document_apply_indent_settings(GeanyDocument *doc)
 {
 	const GeanyIndentPrefs *iprefs = editor_get_indent_prefs(NULL);
 	GeanyIndentType type = iprefs->type;
 	gint width = iprefs->width;
 
-	if (iprefs->detect_type && detect_indent_type(doc->editor, &type))
+	if (iprefs->detect_type && document_detect_indent_type(doc, &type))
 	{
 		if (type != iprefs->type)
 		{
