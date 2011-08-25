@@ -1122,36 +1122,28 @@ static void load_settings(gint ft_id, GKeyFile *config, GKeyFile *configh)
 {
 	GeanyFiletype *ft = filetypes[ft_id];
 	gchar *result;
-	GError *error = NULL;
-	gboolean tmp;
 
 	/* default extension */
-	result = g_key_file_get_string(configh, "settings", "extension", NULL);
-	if (result == NULL) result = g_key_file_get_string(config, "settings", "extension", NULL);
+	result = utils_get_setting(string, configh, config, "settings", "extension", NULL);
 	if (result != NULL)
 	{
 		setptr(filetypes[ft_id]->extension, result);
 	}
 
 	/* read comment notes */
-	result = g_key_file_get_string(configh, "settings", "comment_open", NULL);
-	if (result == NULL) result = g_key_file_get_string(config, "settings", "comment_open", NULL);
+	result = utils_get_setting(string, configh, config, "settings", "comment_open", NULL);
 	if (result != NULL)
 	{
-		g_free(filetypes[ft_id]->comment_open);
-		filetypes[ft_id]->comment_open = result;
+		setptr(filetypes[ft_id]->comment_open, result);
 	}
 
-	result = g_key_file_get_string(configh, "settings", "comment_close", NULL);
-	if (result == NULL) result = g_key_file_get_string(config, "settings", "comment_close", NULL);
+	result = utils_get_setting(string, configh, config, "settings", "comment_close", NULL);
 	if (result != NULL)
 	{
-		g_free(filetypes[ft_id]->comment_close);
-		filetypes[ft_id]->comment_close = result;
+		setptr(filetypes[ft_id]->comment_close, result);
 	}
 
-	result = g_key_file_get_string(configh, "settings", "comment_single", NULL);
-	if (result == NULL) result = g_key_file_get_string(config, "settings", "comment_single", NULL);
+	result = utils_get_setting(string, configh, config, "settings", "comment_single", NULL);
 	if (result != NULL)
 	{
 		setptr(filetypes[ft_id]->comment_single, result);
@@ -1163,29 +1155,18 @@ static void load_settings(gint ft_id, GKeyFile *config, GKeyFile *configh)
 		filetypes[ft_id]->comment_open = NULL;
 	}
 
-	tmp = g_key_file_get_boolean(configh, "settings", "comment_use_indent", &error);
-	if (error)
-	{
-		g_error_free(error);
-		error = NULL;
-		tmp = g_key_file_get_boolean(config, "settings", "comment_use_indent", &error);
-		if (error) g_error_free(error);
-		else filetypes[ft_id]->comment_use_indent = tmp;
-	}
-	else filetypes[ft_id]->comment_use_indent = tmp;
+	filetypes[ft_id]->comment_use_indent = utils_get_setting(boolean, configh, config,
+			"settings", "comment_use_indent", FALSE);
 
 	/* read context action */
-	result = g_key_file_get_string(configh, "settings", "context_action_cmd", NULL);
-	if (result == NULL) result = g_key_file_get_string(config, "settings", "context_action_cmd", NULL);
+	result = utils_get_setting(string, configh, config, "settings", "context_action_cmd", NULL);
 	if (result != NULL)
 	{
 		setptr(filetypes[ft_id]->context_action_cmd, result);
 	}
 
-	result = utils_get_setting_string(configh, "settings", "tag_parser", NULL);
-	if (!result)
-		result = utils_get_setting_string(config, "settings", "tag_parser", NULL);
-	if (result)
+	result = utils_get_setting(string, configh, config, "settings", "tag_parser", NULL);
+	if (result != NULL)
 	{
 		ft->lang = tm_source_file_get_named_lang(result);
 		if (ft->lang < 0)
@@ -1193,10 +1174,8 @@ static void load_settings(gint ft_id, GKeyFile *config, GKeyFile *configh)
 		g_free(result);
 	}
 
-	result = utils_get_setting_string(configh, "settings", "lexer_filetype", NULL);
-	if (!result)
-		result = utils_get_setting_string(config, "settings", "lexer_filetype", NULL);
-	if (result)
+	result = utils_get_setting(string, configh, config, "settings", "lexer_filetype", NULL);
+	if (result != NULL)
 	{
 		ft->lexer_filetype = filetypes_lookup_by_name(result);
 		if (!ft->lexer_filetype)
