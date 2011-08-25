@@ -294,6 +294,8 @@ const GeanyIndentPrefs *editor_get_indent_prefs(GeanyEditor *editor);
 
 void editor_set_indent_type(GeanyEditor *editor, GeanyIndentType type);
 
+void editor_set_indent_width(GeanyEditor *editor, gint width);
+
 void editor_set_indent(GeanyEditor *editor, GeanyIndentType type, gint width);
 
 void editor_set_line_wrapping(GeanyEditor *editor, gboolean wrap);

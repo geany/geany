@@ -4468,6 +4468,12 @@ void editor_set_indent_type(GeanyEditor *editor, GeanyIndentType type)
 }
 
 
+void editor_set_indent_width(GeanyEditor *editor, gint width)
+{
+	editor_set_indent(editor, editor->indent_type, width);
+}
+
+
 void editor_set_indent(GeanyEditor *editor, GeanyIndentType type, gint width)
 {
 	const GeanyIndentPrefs *iprefs = editor_get_indent_prefs(editor);
