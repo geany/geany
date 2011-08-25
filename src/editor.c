@@ -1601,6 +1601,10 @@ static void close_block(GeanyEditor *editor, gint pos)
 }
 
 
+/* checks whether @p c is an ASCII character (e.g. < 0x80) */
+#define IS_ASCII(c) (((unsigned char)(c)) < 0x80)
+
+
 /* Reads the word at given cursor position and writes it into the given buffer. The buffer will be
  * NULL terminated in any case, even when the word is truncated because wordlen is too small.
  * position can be -1, then the current position is used.
@@ -1632,11 +1636,11 @@ static void read_current_word(GeanyEditor *editor, gint pos, gchar *word, size_t
 	/* the checks for "c < 0" are to allow any Unicode character which should make the code
 	 * a little bit more Unicode safe, anyway, this allows also any Unicode punctuation,
 	 * TODO: improve this code */
-	while (startword > 0 && (strchr(wc, chunk[startword - 1]) || chunk[startword - 1] < 0))
+	while (startword > 0 && (strchr(wc, chunk[startword - 1]) || ! IS_ASCII(chunk[startword - 1])))
 		startword--;
 	if (!stem)
 	{
-		while (chunk[endword] != 0 && (strchr(wc, chunk[endword]) || chunk[endword] < 0))
+		while (chunk[endword] != 0 && (strchr(wc, chunk[endword]) || ! IS_ASCII(chunk[endword])))
 			endword++;
 	}
 
