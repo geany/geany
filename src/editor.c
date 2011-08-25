@@ -110,7 +110,7 @@ static void auto_multiline(GeanyEditor *editor, gint pos);
 static void auto_close_chars(ScintillaObject *sci, gint pos, gchar c);
 static void close_block(GeanyEditor *editor, gint pos);
 static void editor_highlight_braces(GeanyEditor *editor, gint cur_pos);
-static void read_current_word(GeanyEditor *editor, gint pos, gchar *word, size_t wordlen,
+static void read_current_word(GeanyEditor *editor, gint pos, gchar *word, gsize wordlen,
 		const gchar *wc, gboolean stem);
 static gsize count_indent_size(GeanyEditor *editor, const gchar *base_indent);
 static const gchar *snippets_find_completion_by_name(const gchar *type, const gchar *name);
@@ -1609,7 +1609,7 @@ static void close_block(GeanyEditor *editor, gint pos)
  * NULL terminated in any case, even when the word is truncated because wordlen is too small.
  * position can be -1, then the current position is used.
  * wc are the wordchars to use, if NULL, GEANY_WORDCHARS will be used */
-static void read_current_word(GeanyEditor *editor, gint pos, gchar *word, size_t wordlen,
+static void read_current_word(GeanyEditor *editor, gint pos, gchar *word, gsize wordlen,
 		const gchar *wc, gboolean stem)
 {
 	gint line, line_start, startword, endword;
@@ -1661,7 +1661,7 @@ static void read_current_word(GeanyEditor *editor, gint pos, gchar *word, size_t
  * NULL terminated in any case, even when the word is truncated because wordlen is too small.
  * position can be -1, then the current position is used.
  * wc are the wordchars to use, if NULL, GEANY_WORDCHARS will be used */
-void editor_find_current_word(GeanyEditor *editor, gint pos, gchar *word, size_t wordlen,
+void editor_find_current_word(GeanyEditor *editor, gint pos, gchar *word, gsize wordlen,
 							  const gchar *wc)
 {
 	read_current_word(editor, pos, word, wordlen, wc, FALSE);

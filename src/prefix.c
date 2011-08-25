@@ -152,7 +152,7 @@ br_locate (void *symbol)
 		if (symbol >= (void *) start && symbol < (void *) end)
 		{
 			char *tmp;
-			size_t len;
+			gsize len;
 
 			/* Extract the filename; it is always an absolute path */
 			path = strchr (line, '/');

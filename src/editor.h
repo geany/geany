@@ -237,7 +237,7 @@ const GeanyEditorPrefs *editor_get_prefs(GeanyEditor *editor);
 
 /* General editing functions */
 
-void editor_find_current_word(GeanyEditor *editor, gint pos, gchar *word, size_t wordlen,
+void editor_find_current_word(GeanyEditor *editor, gint pos, gchar *word, gsize wordlen,
 	const gchar *wc);
 
 void editor_find_current_word_sciwc(GeanyEditor *editor, gint pos, gchar *word, gsize wordlen);
