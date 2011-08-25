@@ -136,6 +136,9 @@ struct GeanyFiletype
 	gchar			 *mime_type;
 	GdkPixbuf		 *icon;
 	gchar			 *comment_single; /* single-line comment */
+	/* filetype indent settings, -1 if not set */
+	gint			  indent_type;
+	gint			  indent_width;
 
 	struct GeanyFiletypePrivate	*priv;	/* must be last, append fields before this item */
 #ifdef GEANY_PRIVATE

@@ -41,3 +41,8 @@ comment_use_indent=false
 
 # context action command (please see Geany's main documentation for details)
 context_action_cmd=
+
+[indentation]
+#width=4
+# 0 is spaces, 1 is tabs, 2 is tab & spaces
+#type=1

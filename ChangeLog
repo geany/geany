@@ -1,3 +1,11 @@
+2011-08-25  Colomban Wendling  <colomban(at)geany(dot)org>
+
+ * src/document.c, src/filetypes.c, src/filetypes.h, doc/geany.txt,
+   doc/geany.html, data/filetypes.*:
+   Add support for filetype-specific indentation settings (closes
+   #3339420 and #3390435).
+
+
 2011-08-24  Colomban Wendling  <colomban(at)geany(dot)org>
 
  * src/editor.c:

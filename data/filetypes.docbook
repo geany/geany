@@ -67,3 +67,8 @@ context_action_cmd=
 # if this setting is set to true, a new line after a line ending with an
 # unclosed tag will be automatically indented
 xml_indent_tags=true
+
+[indentation]
+#width=4
+# 0 is spaces, 1 is tabs, 2 is tab & spaces
+#type=1

@@ -498,6 +498,8 @@ static GeanyFiletype *filetype_new(void)
 	/* pattern must not be null */
 	ft->pattern = g_new0(gchar*, 1);
 	ft->project_list_entry = -1; /* no entry */
+	ft->indent_width = -1;
+	ft->indent_type = -1;
 
 	ft->priv = g_new0(GeanyFiletypePrivate, 1);
 	return ft;
@@ -1118,6 +1120,27 @@ void filetypes_free_types(void)
 }
 
 
+static void load_indent_settings(GeanyFiletype *ft, GKeyFile *config, GKeyFile *configh)
+{
+	ft->indent_width = utils_get_setting(integer, configh, config, "indentation", "width", -1);
+	ft->indent_type = utils_get_setting(integer, configh, config, "indentation", "type", -1);
+	/* check whether the indent type is OK */
+	switch (ft->indent_type)
+	{
+		case GEANY_INDENT_TYPE_TABS:
+		case GEANY_INDENT_TYPE_SPACES:
+		case GEANY_INDENT_TYPE_BOTH:
+		case -1:
+			break;
+
+		default:
+			g_warning("Invalid indent type %d in file type %s", ft->indent_type, ft->name);
+			ft->indent_type = -1;
+			break;
+	}
+}
+
+
 static void load_settings(gint ft_id, GKeyFile *config, GKeyFile *configh)
 {
 	GeanyFiletype *ft = filetypes[ft_id];
@@ -1187,6 +1210,9 @@ static void load_settings(gint ft_id, GKeyFile *config, GKeyFile *configh)
 		"symbol_list_sort_mode", SYMBOLS_SORT_BY_NAME);
 	ft->priv->xml_indent_tags = utils_get_setting(boolean, configh, config, "settings",
 		"xml_indent_tags", FALSE);
+
+	/* read indent settings */
+	load_indent_settings(ft, config, configh);
 
 	/* read build settings */
 	build_load_menu(config, GEANY_BCS_FT, (gpointer)ft);

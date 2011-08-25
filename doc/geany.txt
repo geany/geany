@@ -4050,6 +4050,29 @@ xml_indent_tags
     this setting in their system configuration files.
 
 
+[indentation] section
+`````````````````````
+
+This section allows definition of default indentation settings specific to
+the file type, overriding the ones configured in the preferences.  This can
+be useful for file types requiring specific indentation settings (e.g. tabs
+only for Makefile).  These settings don't override auto-detection if activated.
+
+width
+    The forced indentation width.
+
+type
+    The forced indentation type.
+
+    =====   =======================
+    Value   Indentation type
+    =====   =======================
+    0       Spaces only
+    1       Tabs only
+    2       Mixed (tabs and spaces)
+    =====   =======================
+
+
 [build_settings] section
 ````````````````````````
 

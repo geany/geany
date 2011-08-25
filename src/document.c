@@ -950,16 +950,19 @@ static gboolean detect_tabs_and_spaces(GeanyEditor *editor)
 }
 
 
-/* Detect the indent type based on counting the leading indent characters for each line. */
-static GeanyIndentType detect_indent_type(GeanyEditor *editor)
+/* Detect the indent type based on counting the leading indent characters for each line.
+ * Returns whether detection succeeded, and the detected type in *type_ upon success */
+static gboolean detect_indent_type(GeanyEditor *editor, GeanyIndentType *type_)
 {
-	const GeanyIndentPrefs *iprefs = editor_get_indent_prefs(editor);
 	ScintillaObject *sci = editor->sci;
 	gint line, line_count;
 	gsize tabs = 0, spaces = 0;
 
 	if (detect_tabs_and_spaces(editor))
-		return GEANY_INDENT_TYPE_BOTH;
+	{
+		*type_ = GEANY_INDENT_TYPE_BOTH;
+		return TRUE;
+	}
 
 	line_count = sci_get_line_count(sci);
 	for (line = 0; line < line_count; line++)
@@ -980,20 +983,23 @@ static GeanyIndentType detect_indent_type(GeanyEditor *editor)
 			spaces++;
 	}
 	if (spaces == 0 && tabs == 0)
-		return iprefs->type;
+		return FALSE;
 
 	/* the factors may need to be tweaked */
 	if (spaces > tabs * 4)
-		return GEANY_INDENT_TYPE_SPACES;
+		*type_ = GEANY_INDENT_TYPE_SPACES;
 	else if (tabs > spaces * 4)
-		return GEANY_INDENT_TYPE_TABS;
+		*type_ = GEANY_INDENT_TYPE_TABS;
 	else
-		return GEANY_INDENT_TYPE_BOTH;
+		*type_ = GEANY_INDENT_TYPE_BOTH;
+
+	return TRUE;
 }
 
 
-/* Detect the indent width based on counting the leading indent characters for each line. */
-static gint detect_indent_width(GeanyEditor *editor, GeanyIndentType type)
+/* Detect the indent width based on counting the leading indent characters for each line.
+ * Returns whether detection succeeded, and the detected width in *width_ upon success */
+static gboolean detect_indent_width(GeanyEditor *editor, GeanyIndentType type, gint *width_)
 {
 	const GeanyIndentPrefs *iprefs = editor_get_indent_prefs(editor);
 	ScintillaObject *sci = editor->sci;
@@ -1003,7 +1009,7 @@ static gint detect_indent_width(GeanyEditor *editor, GeanyIndentType type)
 
 	/* can't easily detect the supposed width of a tab, guess the default is OK */
 	if (type == GEANY_INDENT_TYPE_TABS)
-		return iprefs->width;
+		return FALSE;
 
 	/* force 8 at detection time for tab & spaces -- anyway we don't use tabs at this point */
 	sci_set_tab_width(sci, 8);
@@ -1038,41 +1044,23 @@ static gint detect_indent_width(GeanyEditor *editor, GeanyIndentType type)
 		}
 	}
 
-	return width;
-}
+	if (count == 0)
+		return FALSE;
 
-
-/* returns the forced indent type or -1 if none is forced */
-static gint get_forced_indent_type(GeanyDocument *doc)
-{
-	switch (doc->file_type->id)
-	{
-		case GEANY_FILETYPES_MAKE:
-			/* force using tabs for indentation for Makefiles */
-			return GEANY_INDENT_TYPE_TABS;
-		case GEANY_FILETYPES_F77:
-			/* force using spaces for indentation for Fortran 77 */
-			return GEANY_INDENT_TYPE_SPACES;
-		default:
-			return -1;
-	}
+	*width_ = width;
+	return TRUE;
 }
 
 
 void document_apply_indent_settings(GeanyDocument *doc)
 {
 	const GeanyIndentPrefs *iprefs = editor_get_indent_prefs(NULL);
-	gint type;
+	GeanyIndentType type = iprefs->type;
 	gint width = iprefs->width;
 
-	type = get_forced_indent_type(doc);
-	if (type < 0 && ! iprefs->detect_type)
-		type = iprefs->type;
-	else if (type < 0)
+	if (iprefs->detect_type && detect_indent_type(doc->editor, &type))
 	{
-		type = detect_indent_type(doc->editor);
-
-		if (type != (gint)iprefs->type)
+		if (type != iprefs->type)
 		{
 			const gchar *name = NULL;
 
@@ -1094,16 +1082,20 @@ void document_apply_indent_settings(GeanyDocument *doc)
 				DOC_FILENAME(doc));
 		}
 	}
-	if (iprefs->detect_width)
-	{
-		width = detect_indent_width(doc->editor, type);
+	else if (doc->file_type->indent_type > -1)
+		type = doc->file_type->indent_type;
 
+	if (iprefs->detect_width && detect_indent_width(doc->editor, type, &width))
+	{
 		if (width != iprefs->width)
 		{
 			ui_set_statusbar(TRUE, _("Setting indentation width to %d for %s."), width,
 				DOC_FILENAME(doc));
 		}
 	}
+	else if (doc->file_type->indent_width > -1)
+		width = doc->file_type->indent_width;
+
 	editor_set_indent(doc->editor, type, width);
 }
 
@@ -2499,13 +2491,18 @@ void document_set_filetype(GeanyDocument *doc, GeanyFiletype *type)
 
 	if (ft_changed)
 	{
-		gint forced_indent_type = get_forced_indent_type(doc);
+		const GeanyIndentPrefs *iprefs = editor_get_indent_prefs(NULL);
 
-		if (forced_indent_type >= 0)
-		{	/* update forced indents, like Makefiles and F77 */
-			editor_set_indent_type(doc->editor, forced_indent_type);
+		/* assume that if previous filetype was none and the settings are the default ones, this
+		 * is the first time the filetype is carefully set, so we should apply indent settings */
+		if (old_ft && old_ft->id == GEANY_FILETYPES_NONE &&
+			doc->editor->indent_type == iprefs->type &&
+			doc->editor->indent_width == iprefs->width)
+		{
+			document_apply_indent_settings(doc);
 			ui_document_show_hide(doc);
 		}
+
 		sidebar_openfiles_update(doc); /* to update the icon */
 		g_signal_emit_by_name(geany_object, "document-filetype-set", doc, old_ft);
 	}
