@@ -2080,8 +2080,7 @@ static GSList *get_doc_words(ScintillaObject *sci, gchar *root, gsize rootlen)
 		word_end = pos_find + rootlen;
 		if (pos_find != current)
 		{
-			while (word_end < len && strchr(GEANY_WORDCHARS, sci_get_char_at(sci, word_end)) != NULL)
-				word_end++;
+			word_end = SSM(sci, SCI_WORDENDPOSITION, word_end, TRUE);
 
 			word_length = word_end - pos_find;
 			if (word_length > rootlen)
