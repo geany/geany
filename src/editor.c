@@ -2047,15 +2047,16 @@ static gboolean autocomplete_check_for_html(gint ft_id, gint style)
 }
 
 
-/* Algorithm based on based on Scite's StartAutoCompleteWord() */
-static GString *get_doc_words(ScintillaObject *sci, gchar *root, gsize rootlen)
+/* Algorithm based on based on Scite's StartAutoCompleteWord()
+ * @returns a sorted list of words matching @p root */
+static GSList *get_doc_words(ScintillaObject *sci, gchar *root, gsize rootlen)
 {
 	gchar *word;
 	gint len, current, word_end;
 	gint pos_find, flags;
 	guint word_length;
 	gsize nmatches = 0;
-	GString *words;
+	GSList *words = NULL;
 	struct Sci_TextToFind ttf;
 
 	len = sci_get_length(sci);
@@ -2067,10 +2068,6 @@ static GString *get_doc_words(ScintillaObject *sci, gchar *root, gsize rootlen)
 	ttf.chrgText.cpMin = 0;
 	ttf.chrgText.cpMax = 0;
 	flags = SCFIND_WORDSTART | SCFIND_MATCHCASE;
-
-	words = g_string_sized_new(256);
-	/* put space before first entry to make searching with strstr easy */
-	g_string_append_c(words, ' ');
 
 	/* search the whole document for the word root and collect results */
 	pos_find = scintilla_send_message(sci, SCI_FINDTEXT, flags, (uptr_t) &ttf);
@@ -2085,17 +2082,15 @@ static GString *get_doc_words(ScintillaObject *sci, gchar *root, gsize rootlen)
 			word_length = word_end - pos_find;
 			if (word_length > rootlen)
 			{
-				word = g_malloc0(word_length + 3);
-				sci_get_text_range(sci, pos_find, word_end, word + 1);
-				word[0] = ' ';
-				word[word_length + 1] = ' ';
-				/* search the words string whether we already have the word in, otherwise add it */
-				if (strstr(words->str, word) == NULL)
+				word = sci_get_contents_range(sci, pos_find, word_end);
+				/* search whether we already have the word in, otherwise add it */
+				if (g_slist_find_custom(words, word, (GCompareFunc)utils_str_casecmp) != NULL)
+					g_free(word);
+				else
 				{
-					g_string_append(words, word + 1);
+					words = g_slist_prepend(words, word);
 					nmatches++;
 				}
-				g_free(word);
 
 				if (nmatches == editor_prefs.autocompletion_max_entries)
 					break;
@@ -2105,24 +2100,16 @@ static GString *get_doc_words(ScintillaObject *sci, gchar *root, gsize rootlen)
 		pos_find = scintilla_send_message(sci, SCI_FINDTEXT, flags, (uptr_t) &ttf);
 	}
 
-	if (words->len > 1)
-	{
-		g_strdelimit(words->str, " ", '\n');
-		words->str[words->len - 1] = '\0'; /* remove the trailing '\n' */
-		return words;
-	}
-	g_string_free(words, TRUE);
-	return NULL;
+	return g_slist_sort(words, (GCompareFunc)utils_str_casecmp);
 }
 
 
 static gboolean autocomplete_doc_word(GeanyEditor *editor, gchar *root, gsize rootlen)
 {
 	ScintillaObject *sci = editor->sci;
-	GString *words;
+	GSList *words, *node;
 	GString *str;
-	gchar *ptr;
-	GSList *node, *list = NULL;
+	guint n_words = 0;
 
 	words = get_doc_words(sci, root, rootlen);
 	if (!words)
@@ -2131,31 +2118,19 @@ static gboolean autocomplete_doc_word(GeanyEditor *editor, gchar *root, gsize ro
 		return FALSE;
 	}
 
-	/* words are unsorted, make list of words */
-	foreach_str(ptr, words->str)
-	{
-		if (*ptr == '\n')
-		{
-			list = g_slist_prepend(list, ptr + 1);
-			/* terminate previous string in list */
-			ptr[0] = 0x0;
-			ptr++;
-		}
-	}
-	list = g_slist_sort(list, (GCompareFunc)utils_str_casecmp);
-
-	str = g_string_sized_new(words->len);
-	foreach_slist(node, list)
+	str = g_string_sized_new(editor_prefs.autocompletion_max_entries * (rootlen + 1));
+	foreach_slist(node, words)
 	{
 		g_string_append(str, node->data);
+		g_free(node->data);
 		if (node->next)
 			g_string_append_c(str, '\n');
+		n_words++;
 	}
-	if (g_slist_length(list) >= editor_prefs.autocompletion_max_entries)
+	if (n_words >= editor_prefs.autocompletion_max_entries)
 		g_string_append(str, "\n...");
 
-	g_slist_free(list);
-	g_string_free(words, TRUE);
+	g_slist_free(words);
 
 	show_autocomplete(sci, rootlen, str->str);
 	g_string_free(str, TRUE);
