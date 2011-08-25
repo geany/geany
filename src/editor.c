@@ -2144,17 +2144,18 @@ static gboolean autocomplete_doc_word(GeanyEditor *editor, gchar *root, gsize ro
 
 gboolean editor_start_auto_complete(GeanyEditor *editor, gint pos, gboolean force)
 {
-	gint line, line_start, current, rootlen, startword, lexer, style;
-	gchar *linebuf, *root;
+	gint rootlen, lexer, style;
+	gchar *root;
+	gchar cword[GEANY_MAX_WORD_LENGTH];
 	ScintillaObject *sci;
 	gboolean ret = FALSE;
 	const gchar *wordchars;
 	GeanyFiletype *ft;
 
+	g_return_val_if_fail(editor != NULL, FALSE);
+
 	if (! editor_prefs.auto_complete_symbols && ! force)
 		return FALSE;
-
-	g_return_val_if_fail(editor != NULL, FALSE);
 
 	/* If we are at the beginning of the document, we skip autocompletion as we can't determine the
 	 * necessary styling information */
@@ -2164,10 +2165,6 @@ gboolean editor_start_auto_complete(GeanyEditor *editor, gint pos, gboolean forc
 	sci = editor->sci;
 	ft = editor->document->file_type;
 
-	line = sci_get_line_from_position(sci, pos);
-	line_start = sci_get_position_from_line(sci, line);
-	current = pos - line_start;
-	startword = current;
 	lexer = sci_get_lexer(sci);
 	style = sci_get_style_at(sci, pos - 2);
 
@@ -2177,8 +2174,6 @@ gboolean editor_start_auto_complete(GeanyEditor *editor, gint pos, gboolean forc
 
 	autocomplete_scope(editor);
 
-	linebuf = sci_get_line(sci, line);
-
 	if (ft->id == GEANY_FILETYPES_LATEX)
 		wordchars = GEANY_WORDCHARS"\\"; /* add \ to word chars if we are in a LaTeX file */
 	else if (ft->id == GEANY_FILETYPES_HTML || ft->id == GEANY_FILETYPES_PHP)
@@ -2186,12 +2181,9 @@ gboolean editor_start_auto_complete(GeanyEditor *editor, gint pos, gboolean forc
 	else
 		wordchars = GEANY_WORDCHARS;
 
-	/* find the start of the current word */
-	while ((startword > 0) && (strchr(wordchars, linebuf[startword - 1])))
-		startword--;
-	linebuf[current] = '\0';
-	root = linebuf + startword;
-	rootlen = current - startword;
+	read_current_word(editor, pos, cword, sizeof(cword), wordchars, TRUE);
+	root = cword;
+	rootlen = strlen(root);
 
 	if (rootlen > 0)
 	{
@@ -2209,7 +2201,8 @@ gboolean editor_start_auto_complete(GeanyEditor *editor, gint pos, gboolean forc
 			ret = autocomplete_html(sci, root, rootlen);
 		}
 		else if (ft->id == GEANY_FILETYPES_PHP && style == SCE_HPHP_DEFAULT &&
-				 startword >= 2 && rootlen == 3 && strcmp(&root[-2], "<?php") == 0)
+				 rootlen == 3 && strcmp(root, "php") == 0 && pos >= 5 &&
+				 sci_get_char_at(sci, pos - 5) == '<' && sci_get_char_at(sci, pos - 4) == '?')
 		{
 			/* nothing, don't complete PHP open tags */
 		}
@@ -2232,7 +2225,6 @@ gboolean editor_start_auto_complete(GeanyEditor *editor, gint pos, gboolean forc
 	if (!ret && force)
 		utils_beep();
 
-	g_free(linebuf);
 	return ret;
 }
 
