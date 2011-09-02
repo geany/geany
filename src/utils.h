@@ -84,8 +84,8 @@
  * @param idx @c guint index into @a ptr_array.
  * @param ptr_array @c GPtrArray to traverse. */
 #define foreach_ptr_array(item, idx, ptr_array) \
-	for (idx = 0, item = g_ptr_array_index(ptr_array, 0); \
-		idx < ptr_array->len; ++idx, item = g_ptr_array_index(ptr_array, idx))
+	for (idx = 0, item = ((ptr_array)->len > 0 ? g_ptr_array_index((ptr_array), 0) : NULL); \
+		idx < (ptr_array)->len; ++idx, item = g_ptr_array_index((ptr_array), idx))
 
 /** Iterates all the nodes in @a list.
  * @param node should be a (@c GList*).
