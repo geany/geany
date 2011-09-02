@@ -969,6 +969,8 @@ gboolean encodings_convert_to_utf8_auto(gchar **buf, gsize *size, const gchar *f
 	*size = buffer.len;
 	if (used_encoding)
 		*used_encoding = buffer.enc;
+	else
+		g_free(buffer.enc);
 	if (has_bom)
 		*has_bom = buffer.bom;
 	if (partial)

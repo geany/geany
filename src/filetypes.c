@@ -1646,6 +1646,7 @@ static void read_group(GKeyFile *config, const gchar *group_name, gint group_id)
 		else
 			geany_debug("Filetype '%s' not found for group '%s'!", *name, group_name);
 	}
+	g_strfreev(names);
 }
 
 

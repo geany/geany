@@ -2,6 +2,8 @@
 
  * src/ui_utils.c:
    Fix check for enabling MIME type based icons.
+ * src/encodings.c, src/filetypes.c:
+   Plug a few memory leaks.
 
 
 2011-08-25  Colomban Wendling  <colomban(at)geany(dot)org>
