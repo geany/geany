@@ -1,3 +1,9 @@
+2011-09-02  Colomban Wendling  <colomban(at)geany(dot)org>
+
+ * src/ui_utils.c:
+   Fix check for enabling MIME type based icons.
+
+
 2011-08-25  Colomban Wendling  <colomban(at)geany(dot)org>
 
  * src/utils.h:

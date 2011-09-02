@@ -2525,7 +2525,7 @@ void ui_editable_insert_text_callback(GtkEditable *editable, gchar *new_text,
 GdkPixbuf *ui_get_mime_icon(const gchar *mime_type, GtkIconSize size)
 {
 	GdkPixbuf *icon = NULL;
-#if GLIB_CHECK_VERSION(2, 18, 0)
+#if GTK_CHECK_VERSION(2, 14, 0)
 	gchar *ctype;
 	GIcon *gicon;
 	GtkIconInfo *info;
