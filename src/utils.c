@@ -81,37 +81,28 @@ void utils_open_browser(const gchar *uri)
 	cmdline = g_strconcat(tool_prefs.browser_cmd, " \"", uri, "\"", NULL);
 	if (! g_spawn_command_line_async(cmdline, NULL))
 	{
+		static const gchar *browsers[] =
+		{
+			"xdg-open",
+			"firefox",
+			"mozilla",
+			"opera",
+			"konqueror",
+			"netscape"
+		};
 		const gchar *argv[3];
+		guint i;
 
-		argv[0] = "xdg-open";
+		argv[0] = NULL;
 		argv[1] = uri;
 		argv[2] = NULL;
-		if (! g_spawn_async(NULL, (gchar**)argv, NULL, G_SPAWN_SEARCH_PATH,
-				NULL, NULL, NULL, NULL))
+
+		for (i = 0; i < G_N_ELEMENTS (browsers); i++)
 		{
-			argv[0] = "firefox";
-			if (! g_spawn_async(NULL, (gchar**)argv, NULL, G_SPAWN_SEARCH_PATH,
+			argv[0] = browsers[i];
+			if (g_spawn_async(NULL, (gchar**)argv, NULL, G_SPAWN_SEARCH_PATH,
 					NULL, NULL, NULL, NULL))
-			{
-				argv[0] = "mozilla";
-				if (! g_spawn_async(NULL, (gchar**)argv, NULL, G_SPAWN_SEARCH_PATH, NULL,
-						NULL, NULL, NULL))
-				{
-					argv[0] = "opera";
-					if (! g_spawn_async(NULL, (gchar**)argv, NULL, G_SPAWN_SEARCH_PATH,
-							NULL, NULL, NULL, NULL))
-					{
-						argv[0] = "konqueror";
-						if (! g_spawn_async(NULL, (gchar**)argv, NULL, G_SPAWN_SEARCH_PATH,
-								NULL, NULL, NULL, NULL))
-						{
-							argv[0] = "netscape";
-							g_spawn_async(NULL, (gchar**)argv, NULL, G_SPAWN_SEARCH_PATH,
-								NULL, NULL, NULL, NULL);
-						}
-					}
-				}
-			}
+				break;
 		}
 	}
 	g_free(cmdline);
