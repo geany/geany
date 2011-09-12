@@ -4309,7 +4309,7 @@ line_wrap_visuals
     * 1 -- Visual flag at end of subline drawn near text
     * 2 -- Visual flag at begin of subline drawn near text
 
-    Only first and second argument is interpreted.
+    Only first and second arguments are interpreted.
 
     *Example:* ``line_wrap_visuals=3;0;false;false``
 
@@ -4324,7 +4324,7 @@ line_wrap_indent
     * 1 - Wrapped sublines are aligned to first subline indent (use the same indentation)
     * 2 - Wrapped sublines are aligned to first subline indent plus one more level of indentation
 
-    Only first and second argument is interpreted.
+    Only first and second arguments are interpreted.
 
     *Example:* ``line_wrap_indent=0;1;false;false``
 
@@ -4335,7 +4335,7 @@ translucency
     Note for Windows 95, 98 and ME users:
     keep this value at 256 to disable translucency otherwise Geany might crash.
 
-    Only the first and second argument is interpreted.
+    Only the first and second arguments are interpreted.
 
     *Example:* ``translucency=256;256;false;false``
 
@@ -4344,7 +4344,7 @@ marker_line
     The foreground color (first argument) is only used when the Markers margin
     is enabled (see View menu).
 
-    Only the first and second argument is interpreted.
+    Only the first and second arguments are interpreted.
 
     *Example:* ``marker_line=0x000000;0xffff00;false;false``
 
@@ -4361,7 +4361,7 @@ marker_mark
     (Ctrl-M)). The foreground color (first argument) is only used
     when the Markers margin is enabled (see View menu).
 
-    Only the first and second argument is interpreted.
+    Only the first and second arguments are interpreted.
 
     *Example:* ``marker_mark=0x000000;0xb8f4b8;false;false``
 
@@ -4372,7 +4372,7 @@ marker_translucency
     Note for Windows 95, 98 and ME users:
     keep this value at 256 to disable translucency otherwise Geany might crash.
 
-    Only the first and second argument is interpreted.
+    Only the first and second arguments are interpreted.
 
     *Example:* ``marker_translucency=256;256;false;false``
 
@@ -4381,7 +4381,7 @@ line_height
     The first argument defines the amount of space to be drawn above the line, the second
     argument defines the amount of space to be drawn below.
 
-    Only the first and second argument is interpreted.
+    Only the first and second arguments are interpreted.
 
     *Example:* ``line_height=0;0;false;false``
 

@@ -5,6 +5,8 @@
    #3405321).
  * src/filetypes.c:
    Add missing MIME type to a few filetypes.
+ * doc/geany.txt, doc/geany.html:
+   Fix a few typos.
 
 
 2011-09-12  Colomban Wendling  <colomban(at)geany(dot)org>
