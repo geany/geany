@@ -3,6 +3,8 @@
  * data/filetype_extensions.conf:
    Add Markdown extensions from Shared MIME-Info database (closes
    #3405321).
+ * src/filetypes.c:
+   Add missing MIME type to a few filetypes.
 
 
 2011-09-12  Colomban Wendling  <colomban(at)geany(dot)org>

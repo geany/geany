@@ -279,6 +279,7 @@ static void init_builtin_filetypes(void)
 	ft->lang = 36;
 	ft->name = g_strdup("Markdown");
 	filetype_make_title(ft, TITLE_SOURCE_FILE);
+	ft->mime_type = g_strdup("text/x-markdown");
 	ft->group = GEANY_FILETYPE_GROUP_MARKUP;
 
 #define TXT2TAGS
@@ -356,6 +357,7 @@ static void init_builtin_filetypes(void)
 	ft->lang = 41;
 	ft->name = g_strdup("COBOL");
 	filetype_make_title(ft, TITLE_SOURCE_FILE);
+	ft->mime_type = g_strdup("text/x-cobol");
 	ft->group = GEANY_FILETYPE_GROUP_COMPILED;
 
 #define LATEX
@@ -379,6 +381,7 @@ static void init_builtin_filetypes(void)
 	ft->lang = 39;
 	ft->name = g_strdup("Verilog");
 	filetype_make_title(ft, TITLE_SOURCE_FILE);
+	ft->mime_type = g_strdup("text/x-verilog");
 	ft->group = GEANY_FILETYPE_GROUP_COMPILED;
 
 #define DIFF
@@ -457,6 +460,7 @@ static void init_builtin_filetypes(void)
 	ft = filetypes[GEANY_FILETYPES_YAML];
 	ft->name = g_strdup("YAML");
 	filetype_make_title(ft, TITLE_FILE);
+	ft->mime_type = g_strdup("application/x-yaml");
 	ft->group = GEANY_FILETYPE_GROUP_MISC;
 
 #define CMAKE
