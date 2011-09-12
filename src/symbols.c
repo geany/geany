@@ -1191,7 +1191,9 @@ static gboolean tag_equal(gconstpointer v1, gconstpointer v2)
 	const TMTag *t2 = v2;
 
 	return (t1->type == t2->type && strcmp(t1->name, t2->name) == 0 &&
-			utils_str_equal(t1->atts.entry.scope, t2->atts.entry.scope));
+			utils_str_equal(t1->atts.entry.scope, t2->atts.entry.scope) &&
+			/* include arglist in match to support e.g. C++ overloading */
+			utils_str_equal(t1->atts.entry.arglist, t2->atts.entry.arglist));
 }
 
 
@@ -1208,6 +1210,12 @@ static guint tag_hash(gconstpointer v)
 	if (tag->atts.entry.scope)
 	{
 		for (p = tag->atts.entry.scope; *p != '\0'; p++)
+			h = (h << 5) + h + *p;
+	}
+	/* for e.g. C++ overloading */
+	if (tag->atts.entry.arglist)
+	{
+		for (p = tag->atts.entry.arglist; *p != '\0'; p++)
 			h = (h << 5) + h + *p;
 	}
 
