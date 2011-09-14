@@ -1,3 +1,71 @@
+Geany 0.21 (unreleased)
+
+    General
+    * Remove old filetype templates support - use custom file
+      templates instead.
+
+    Bug fixes
+    * Fix generating tag files (-g) and --ft-names segfault.
+    * Replace dates on template insertion, not when loading templates.
+    * Fix segfault when inserting e.g. fileheader template when the
+      template file is empty (#3070913, lphilpot).
+
+    Interface
+    * Add 'Save As' toolbar button option (Matthew Brush, #3153490).
+    * Add 'Open in New Window' command in the notebook tab menu
+      (Matthew Brush, #3118059).
+    * Color schemes: use name and description for menu item and
+      tooltip (Matthew Brush).
+      
+    Editor
+    * Update Scintilla to version 2.22.
+    * Fix snippets bug: {ob}pc{cb} replaced by '%' instead of {pc}.
+    * Fix multiple snippet cursor positions for Tabs + Spaces mode.
+
+    Configuration files
+    * Support copying filetype definition file group keys from a system
+      keyfile with e.g. [styling=C].
+    * Make filetype group membership configurable using [Groups] in
+      filetype_extensions.conf.
+
+    Search
+    * Don't auto-enable case-sensitive option when enabling regex in
+      Find/Replace dialogs.
+
+    Keybindings
+    * Add fixed shortcuts for VTE copy (Ctrl-Shift-C) and paste
+      (Ctrl-Shift-V).
+
+    Projects
+    * Store VTE path with the project session (Nicolas Sierro).
+
+    Filetypes
+    * Add Scala custom filetype (werg).
+    * Fix detecting Matlab and Txt2Tags extensions by default (#3167315,
+      #3154637).
+    * Fix detecting non-lowercase self-closing tags e.g. <BR> (#2226117).
+
+    Plugins
+    * File Browser: Make 'Hide object files' preference configurable with
+      file extensions.
+    * Split Window: Fix a crash when changing filetype (Matthew Brush,
+      #3255968).
+    * Split Window: Update styles when the filetype changes (Matthew
+      Brush).
+    * Class Builder: Improve dialog UI using a table (Matthew Brush).
+
+    Documentation
+    * Add 'Reading styles from another filetype' subsection (Matthew
+      Brush).
+    * Add 'Filenames' subsection for filetype definition files explaining
+      the filename extensions and special cases.
+    * Add section 'Filetype group membership'.
+
+    Plugin API
+    * Add filetypes_get_sorted_by_name(), utils_find_open_xml_tag_pos()
+      (Eugene Arshinov).
+
+
 Geany 0.20 (January 5, 2011)
 
     Fixes:
