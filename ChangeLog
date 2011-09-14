@@ -1,3 +1,10 @@
+2011-09-14  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/win32.c:
+   Fix uninitialized font size & other fields.
+   Remove unhooked font dialog apply button.
+
+
 2011-09-13  Colomban Wendling  <colomban(at)geany(dot)org>
 
  * data/filetype_extensions.conf:

@@ -536,11 +536,15 @@ void win32_show_font_dialog(void)
 	CHOOSEFONT cf;
 	LOGFONT lf;        /* logical font structure */
 
+	memset(&lf, 0, sizeof lf);
+	/* TODO: init lf members */
+	
 	memset(&cf, 0, sizeof cf);
 	cf.lStructSize = sizeof cf;
 	cf.hwndOwner = GDK_WINDOW_HWND(main_widgets.window->window);
 	cf.lpLogFont = &lf;
-	cf.Flags = CF_APPLY | CF_NOSCRIPTSEL | CF_FORCEFONTEXIST | CF_INITTOLOGFONTSTRUCT | CF_SCREENFONTS;
+	/* support CF_APPLY? */
+	cf.Flags = CF_NOSCRIPTSEL | CF_FORCEFONTEXIST | CF_INITTOLOGFONTSTRUCT | CF_SCREENFONTS;
 
 	retval = ChooseFont(&cf);
 
