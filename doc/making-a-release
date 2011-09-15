@@ -3,6 +3,10 @@ For major releases:
 * Agree string freeze period for translations.
 * Try to synchronize release date with geany-plugins.
 
+Update NEWS file - ideally each committer should review their changes 
+and summarise the interesting ones. Use scripts/changelist.pl to 
+format & filter commits by a particular developer name.
+
 Ensure version numbers are all updated in:
 	configure.ac geany.nsi geany_private.rc win32-config.h wscript
 	doc/geany.txt
@@ -10,7 +14,7 @@ Ensure release date is updated in:
 	doc/geany.1.in
 Regenerate doc/geany.html.
 Check GEANY_CODENAME is set in src/geany.h.
-Update NEWS & release date.
+Update NEWS release date.
 Add changelog entry for new release.
 
 Export the code into a new directory (i.e. not usual working copy).
