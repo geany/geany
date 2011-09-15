@@ -1,14 +1,26 @@
 Geany 0.21 (unreleased)
 
     General
+    * Bump dependencies to GTK >= 2.12, GLib >= 2.16 and GIO.
+    * Add support for real-time symbol parsing.
     * Remove old filetype templates support - use custom file
       templates instead.
+    * Add support for detecting the indentation width from the file
+      content.
 
     Bug fixes
     * Fix generating tag files (-g) and --ft-names segfault.
     * Replace dates on template insertion, not when loading templates.
     * Fix segfault when inserting e.g. fileheader template when the
       template file is empty (#3070913, lphilpot).
+    * Use the same indentation for all templates (Matthew Brush,
+      #3193527).
+    * Fix loading of non-UTF-8 templates.
+    * Fix completion and word completion with non-ASCII characters
+      (#3313351).
+    * Fix HTML content-type detection (#3300703).
+    * Fix pattern filtering when using Find in Files not to search in
+      sub-directories.
 
     Interface
     * Add 'Save As' toolbar button option (Matthew Brush, #3153490).
@@ -16,11 +28,20 @@ Geany 0.21 (unreleased)
       (Matthew Brush, #3118059).
     * Color schemes: use name and description for menu item and
       tooltip (Matthew Brush).
+    * Shift-Enter in search dialog and toolbar search entries now
+      searches backwards.
+    * Improve `Set Custom Commands` dialog.
+    * Always destroy open and save dialogs after use (#3311258,
+      #3304273, #3201050, #3163742, #3153120, #2985896).
+    * Add UI to edit formerly hidden preferences (Dimitar Zhekov,
+      #3313315).
       
     Editor
     * Update Scintilla to version 2.22.
     * Fix snippets bug: {ob}pc{cb} replaced by '%' instead of {pc}.
     * Fix multiple snippet cursor positions for Tabs + Spaces mode.
+    * Avoid triggering autocompletion on PHP open tags (#3199442).
+    * Fix indentation brace matching (#3309606).
 
     Configuration files
     * Support copying filetype definition file group keys from a system
@@ -41,9 +62,14 @@ Geany 0.21 (unreleased)
 
     Filetypes
     * Add Scala custom filetype (werg).
+    * Add Cython custom filetype (Matthew Brush).
+    * Add support for separate single and multiline comments.
+    * Add support for filetype-specific indentation settings (#3339420,
+      #3390435)
     * Fix detecting Matlab and Txt2Tags extensions by default (#3167315,
       #3154637).
     * Fix detecting non-lowercase self-closing tags e.g. <BR> (#2226117).
+    * Highlight C# and Vala raw and verbatim strings.
 
     Plugins
     * File Browser: Make 'Hide object files' preference configurable with
@@ -52,6 +78,8 @@ Geany 0.21 (unreleased)
       #3255968).
     * Split Window: Update styles when the filetype changes (Matthew
       Brush).
+    * Split Window: Enable code folding (Matthew Brush, #3097780).
+    * Split Window: Fix issues on Windows (Matthew Brush, #2725342).
     * Class Builder: Improve dialog UI using a table (Matthew Brush).
 
     Documentation
@@ -64,6 +92,10 @@ Geany 0.21 (unreleased)
     Plugin API
     * Add filetypes_get_sorted_by_name(), utils_find_open_xml_tag_pos()
       (Eugene Arshinov).
+    * Add plugin_idle_add(), plugin_timeout_add() and
+      plugin_timeout_add_seconds().
+    * Deprecate ui_widget_set_tooltip_text().
+    * Fix public inclusion of config.h (#3384026).
 
 
 Geany 0.20 (January 5, 2011)
