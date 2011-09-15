@@ -35,9 +35,9 @@ Geany 0.21 (unreleased)
       #3304273, #3201050, #3163742, #3153120, #2985896).
     * Add UI to edit formerly hidden preferences (Dimitar Zhekov,
       #3313315).
-      
+
     Editor
-    * Update Scintilla to version 2.22.
+    * Update Scintilla to version 2.25.
     * Fix snippets bug: {ob}pc{cb} replaced by '%' instead of {pc}.
     * Fix multiple snippet cursor positions for Tabs + Spaces mode.
     * Avoid triggering autocompletion on PHP open tags (#3199442).
@@ -52,10 +52,12 @@ Geany 0.21 (unreleased)
     Search
     * Don't auto-enable case-sensitive option when enabling regex in
       Find/Replace dialogs.
+    * Remember Find and Replace options across restarts (Dimitar Zhekov).
 
     Keybindings
     * Add fixed shortcuts for VTE copy (Ctrl-Shift-C) and paste
       (Ctrl-Shift-V).
+    * Add new keybinding 'Remove Markers and Error Indicators'.
 
     Projects
     * Store VTE path with the project session (Nicolas Sierro).
@@ -70,6 +72,9 @@ Geany 0.21 (unreleased)
       #3154637).
     * Fix detecting non-lowercase self-closing tags e.g. <BR> (#2226117).
     * Highlight C# and Vala raw and verbatim strings.
+    * Improve JavaScript keyword handling and keyword lists (Jason Oster).
+    * Add filetype Cobol (Seth Keiper).
+    * Add file template for Vala (Mark Trompell).
 
     Plugins
     * File Browser: Make 'Hide object files' preference configurable with
@@ -81,6 +86,7 @@ Geany 0.21 (unreleased)
     * Split Window: Enable code folding (Matthew Brush, #3097780).
     * Split Window: Fix issues on Windows (Matthew Brush, #2725342).
     * Class Builder: Improve dialog UI using a table (Matthew Brush).
+    * Export: Add option to insert line numbers (#3197150).
 
     Documentation
     * Add 'Reading styles from another filetype' subsection (Matthew
@@ -92,10 +98,12 @@ Geany 0.21 (unreleased)
     Plugin API
     * Add filetypes_get_sorted_by_name(), utils_find_open_xml_tag_pos()
       (Eugene Arshinov).
-    * Add plugin_idle_add(), plugin_timeout_add() and
-      plugin_timeout_add_seconds().
+    * Add plugin_idle_add(), plugin_timeout_add(), plugin_timeout_add_seconds(),
+      ui_menu_add_document_items_sorted(), document_compare_by_display_name(),
+      document_compare_by_tab_order(), document_compare_by_tab_order_reverse().
     * Deprecate ui_widget_set_tooltip_text().
     * Fix public inclusion of config.h (#3384026).
+    * Add new signal "document-reload".
 
 
 Geany 0.20 (January 5, 2011)
