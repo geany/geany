@@ -53,6 +53,7 @@
 #include "dialogs.h"
 #include "win32.h"
 #include "project.h"
+#include "ui_utils.h"
 
 #include "utils.h"
 
@@ -61,8 +62,7 @@
  *  Tries to open the given URI in a browser.
  *  On Windows, the system's default browser is opened.
  *  On non-Windows systems, the browser command set in the preferences dialog is used. In case
- *  that fails or it is unset, @c xdg-open is used as fallback as well as some other known
- *  browsers.
+ *  that fails or it is unset, the user is asked to correct or fill it.
  *
  *  @param uri The URI to open in the web browser.
  *
@@ -74,38 +74,30 @@ void utils_open_browser(const gchar *uri)
 	g_return_if_fail(uri != NULL);
 	win32_open_browser(uri);
 #else
-	gchar *cmdline;
+	gboolean again = TRUE;
 
 	g_return_if_fail(uri != NULL);
 
-	cmdline = g_strconcat(tool_prefs.browser_cmd, " \"", uri, "\"", NULL);
-	if (! g_spawn_command_line_async(cmdline, NULL))
+	while (again)
 	{
-		static const gchar *browsers[] =
-		{
-			"xdg-open",
-			"firefox",
-			"mozilla",
-			"opera",
-			"konqueror",
-			"netscape"
-		};
-		const gchar *argv[3];
-		guint i;
+		gchar *cmdline = g_strconcat(tool_prefs.browser_cmd, " \"", uri, "\"", NULL);
 
-		argv[0] = NULL;
-		argv[1] = uri;
-		argv[2] = NULL;
-
-		for (i = 0; i < G_N_ELEMENTS (browsers); i++)
+		if (g_spawn_command_line_async(cmdline, NULL))
+			again = FALSE;
+		else
 		{
-			argv[0] = browsers[i];
-			if (g_spawn_async(NULL, (gchar**)argv, NULL, G_SPAWN_SEARCH_PATH,
-					NULL, NULL, NULL, NULL))
-				break;
+			gchar *new_cmd = dialogs_show_input(_("Select Browser"), GTK_WINDOW(main_widgets.window),
+				_("Failed to spawn the configured browser command. "
+				  "Please correct it or select another one."),
+				tool_prefs.browser_cmd);
+
+			if (new_cmd == NULL) /* user canceled */
+				again = FALSE;
+			else
+				setptr(tool_prefs.browser_cmd, new_cmd);
 		}
+		g_free(cmdline);
 	}
-	g_free(cmdline);
 #endif
 }
 
