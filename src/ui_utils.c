@@ -720,6 +720,7 @@ static void init_document_widgets(void)
 	add_doc_widget("menu_reload_as1");
 	add_doc_widget("menu_select_all1");
 	add_doc_widget("insert_date1");
+	add_doc_widget("insert_alternative_white_space1");
 	add_doc_widget("menu_format1");
 	add_doc_widget("commands2");
 	add_doc_widget("menu_open_selected_file1");
@@ -727,14 +728,18 @@ static void init_document_widgets(void)
 	add_doc_widget("find1");
 	add_doc_widget("find_next1");
 	add_doc_widget("find_previous1");
+	add_doc_widget("go_to_next_marker1");
+	add_doc_widget("go_to_previous_marker1");
 	add_doc_widget("replace1");
 	add_doc_widget("find_nextsel1");
 	add_doc_widget("find_prevsel1");
 	add_doc_widget("find_usage1");
 	add_doc_widget("find_document_usage1");
+	add_doc_widget("mark_all1");
 	add_doc_widget("go_to_line1");
 	add_doc_widget("goto_tag_definition1");
 	add_doc_widget("goto_tag_declaration1");
+	add_doc_widget("reset_indentation1");
 	add_doc_toolitem("Close");
 	add_doc_toolitem("CloseAll");
 	add_doc_toolitem("Search");

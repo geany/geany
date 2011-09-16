@@ -1,3 +1,9 @@
+2011-09-16  Colomban Wendling  <colomban(at)geany(dot)org>
+
+ * src/ui_utils.c:
+   Fix document sensitivity of a few menu items.
+
+
 2011-09-16  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/interface.c, geany.glade:
