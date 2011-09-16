@@ -88,7 +88,7 @@ void utils_open_browser(const gchar *uri)
 		{
 			gchar *new_cmd = dialogs_show_input(_("Select Browser"), GTK_WINDOW(main_widgets.window),
 				_("Failed to spawn the configured browser command. "
-				  "Please correct it or select another one."),
+				  "Please correct it or enter another one."),
 				tool_prefs.browser_cmd);
 
 			if (new_cmd == NULL) /* user canceled */
