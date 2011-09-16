@@ -5094,7 +5094,7 @@ create_prefs_dialog (void)
   gtk_widget_show (hbox15);
   gtk_container_add (GTK_CONTAINER (alignment16), hbox15);
 
-  label140 = gtk_label_new (_("<i>Please refer to the manual for more details about these preferences.</i>"));
+  label140 = gtk_label_new (_("<i>Warning: read the manual before changing these preferences.</i>"));
   gtk_widget_show (label140);
   gtk_box_pack_start (GTK_BOX (hbox15), label140, FALSE, FALSE, 0);
   gtk_label_set_use_markup (GTK_LABEL (label140), TRUE);
