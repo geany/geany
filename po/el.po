@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: geany 0.19\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-12-05 15:55+0100\n"
+"POT-Creation-Date: 2011-09-17 09:51+0200\n"
 "PO-Revision-Date: 2008-02-01 12:02+0200\n"
 "Last-Translator: Stavros Temertzidis <bullgr@gmail.com>\n"
 "Language-Team: Greek\n"
@@ -23,7 +23,7 @@ msgstr ""
 msgid "A fast and lightweight IDE using GTK2"
 msgstr "Γρήγορο και ελαφρύ GTK2 IDE"
 
-#: ../geany.desktop.in.h:2 ../src/interface.c:309 ../src/interface.c:1806
+#: ../geany.desktop.in.h:2 ../src/interface.c:314 ../src/interface.c:1842
 msgid "Geany"
 msgstr "Geany"
 
@@ -31,68 +31,68 @@ msgstr "Geany"
 msgid "Integrated Development Environment"
 msgstr "Ενιαίο Περιβάλλον Ανάπτυξης"
 
-#: ../src/about.c:152
+#: ../src/about.c:155
 msgid "About Geany"
 msgstr "Περί Geany"
 
-#: ../src/about.c:202
+#: ../src/about.c:205
 msgid "A fast and lightweight IDE"
 msgstr "Γρήγορο και ελαφρύ IDE"
 
-#: ../src/about.c:223
+#: ../src/about.c:226
 #, c-format
 msgid "(built on or after %s)"
 msgstr "(δημιουργήθηκε την ή μετά %s)"
 
 #. gtk_container_add(GTK_CONTAINER(info_box), cop_label);
-#: ../src/about.c:254
+#: ../src/about.c:257
 msgid "Info"
 msgstr "Πληροφορίες"
 
-#: ../src/about.c:270
+#: ../src/about.c:273
 msgid "Developers"
 msgstr "Δημιουργοί"
 
-#: ../src/about.c:279
+#: ../src/about.c:282
 msgid "maintainer"
 msgstr "υπεύθυνος"
 
-#: ../src/about.c:287
+#: ../src/about.c:290 ../src/about.c:298
 msgid "developer"
 msgstr "δημιουργός"
 
-#: ../src/about.c:295
+#: ../src/about.c:306
 msgid "translation maintainer"
 msgstr "υπεύθυνος μετάφρασης"
 
-#: ../src/about.c:304
+#: ../src/about.c:315
 msgid "Translators"
 msgstr "Μεταφραστές"
 
-#: ../src/about.c:324
+#: ../src/about.c:335
 msgid "Previous Translators"
 msgstr "Προηγούμενοι Μεταφραστές"
 
-#: ../src/about.c:345
+#: ../src/about.c:356
 #, fuzzy
 msgid "Contributors"
 msgstr "Δημιουργία κατασκευής"
 
-#: ../src/about.c:355
+#: ../src/about.c:366
 #, c-format
 msgid ""
 "Some of the many contributors (for a more detailed list, see the file %s):"
 msgstr ""
 
-#: ../src/about.c:381
+#: ../src/about.c:392
 msgid "Credits"
 msgstr "Μνεία"
 
-#: ../src/about.c:395
+#: ../src/about.c:406
 msgid "License"
 msgstr "Άδεια Χρήσης"
 
-#: ../src/about.c:404
+#: ../src/about.c:415
 msgid ""
 "License text could not be found, please visit http://www.gnu.org/licenses/"
 "gpl-2.0.txt to view it online."
@@ -101,46 +101,46 @@ msgstr ""
 "www.gnu.org/licenses/gpl-2.0.txt να το δείτε online."
 
 #. fall back to %d
-#: ../src/build.c:655
+#: ../src/build.c:657
 #, c-format
 msgid "failed to substitute %%p, no project active"
 msgstr ""
 
-#: ../src/build.c:693
+#: ../src/build.c:695
 #, fuzzy
 msgid "Process failed, no working directory"
 msgstr "Αποτυχία μετάβασης στο φάκελο εργασίας \"%s\""
 
-#: ../src/build.c:719
+#: ../src/build.c:721
 #, c-format
 msgid "%s (in directory: %s)"
 msgstr "%s (στο φάκελο: %s)"
 
-#: ../src/build.c:739 ../src/build.c:964 ../src/search.c:1486
+#: ../src/build.c:741 ../src/build.c:963 ../src/search.c:1626
 #, c-format
 msgid "Process failed (%s)"
 msgstr "Η διαδικασία απέτυχε (%s)"
 
-#: ../src/build.c:810
+#: ../src/build.c:809
 #, c-format
 msgid "Failed to change the working directory to \"%s\""
 msgstr "Αποτυχία μετάβασης στο φάκελο εργασίας \"%s\""
 
-#: ../src/build.c:839
+#: ../src/build.c:838
 #, c-format
 msgid "Failed to execute \"%s\" (start-script could not be created)"
 msgstr ""
 "Αποτυχία εκτέλεσης  \"%s\" (δεν ήταν δυνατόν να δημιουργηθεί το script "
 "εκκίνησης)"
 
-#: ../src/build.c:893
+#: ../src/build.c:892
 msgid ""
 "Could not execute the file in the VTE because it probably contains a command."
 msgstr ""
 "Δεν ήταν δυνατόν να εκτελεστεί το αρχείο στο VTE επειδή πιθανόν να "
 "περιλαμβάνει μια εντολή."
 
-#: ../src/build.c:931
+#: ../src/build.c:930
 #, c-format
 msgid ""
 "Could not find terminal \"%s\" (check path for Terminal tool setting in "
@@ -149,220 +149,211 @@ msgstr ""
 "Δεν ήταν δυνατόν να βρεθεί το τερματικό \"%s\" (ελέγξτε τη διαδρομή στις "
 "ρυθμίσεις εργαλείων του τερματικού στις ιδιότητες)"
 
-#: ../src/build.c:1104
+#: ../src/build.c:1103
 msgid "Compilation failed."
 msgstr "Αποτυχία μεταγλώτισης."
 
-#: ../src/build.c:1118
+#: ../src/build.c:1117
 msgid "Compilation finished successfully."
 msgstr "Η μεταγλώτιση ολοκληρώθηκε με επιτυχία."
 
-#: ../src/build.c:1277
+#: ../src/build.c:1276
 #, fuzzy
 msgid "Custom Text"
 msgstr "Δημιουργία Προσαρμοσμένου Προορισμού"
 
-#: ../src/build.c:1278
+#: ../src/build.c:1277
 #, fuzzy
 msgid "Enter custom text here, all entered text is appended to the command."
 msgstr ""
 "Εισάγετε τις προσαρμοσμένες επιλογές εδώ, όλο το εισακτέο κείμενο θα "
 "μεταφερθεί στην εντολή δημιουργίας"
 
-#: ../src/build.c:1356
+#: ../src/build.c:1355
 msgid "_Next Error"
 msgstr "_Επόμενο Σφάλμα"
 
-#: ../src/build.c:1358
+#: ../src/build.c:1357
 #, fuzzy
 msgid "_Previous Error"
 msgstr "_Προηγούμενο"
 
-#: ../src/build.c:1368
+#. arguments
+#: ../src/build.c:1367 ../src/build.c:2745
 #, fuzzy
 msgid "_Set Build Commands"
 msgstr "Ρύθμιση Προσαρμοσμένων Εντολών"
 
-#: ../src/build.c:1652 ../src/toolbar.c:373
+#: ../src/build.c:1651 ../src/toolbar.c:374
 #, fuzzy
 msgid "Build the current file"
 msgstr "Μεταγλώτιση του τρέχοντος αρχείου"
 
-#: ../src/build.c:1666
+#: ../src/build.c:1662
 #, fuzzy
 msgid "Build the current file with Make and the default target"
 msgstr ""
 "Δημιουργεί το τρέχον αρχείο με το εργαλείο δημιουργίας και το προεπιλεγμένο "
 "προορισμό"
 
-#: ../src/build.c:1668
+#: ../src/build.c:1664
 #, fuzzy
 msgid "Build the current file with Make and the specified target"
 msgstr ""
 "Δημιουργεί το τρέχον αρχείο με το εργαλείο δημιουργίας και το καθορισμένο "
 "προορισμό"
 
-#: ../src/build.c:1670
+#: ../src/build.c:1666
 #, fuzzy
 msgid "Compile the current file with Make"
 msgstr "Μεταγλώτιση του τρέχοντος αρχείου"
 
-#: ../src/build.c:1697
+#: ../src/build.c:1693
 #, c-format
 msgid "Process could not be stopped (%s)."
 msgstr "Αδύνατη η διακοπή της διαδικασίας (%s)."
 
-#: ../src/build.c:1714 ../src/build.c:1726
+#: ../src/build.c:1710 ../src/build.c:1722
 #, fuzzy
 msgid "No more build errors."
 msgstr "Δεν έχει άλλα λάθη στη δημιουργία."
 
 #. FIXME: we should pass either build dialog or project dialog instead of NULL for parent
-#: ../src/build.c:1822
+#: ../src/build.c:1818
 msgid "Set menu item label"
 msgstr ""
 
-#: ../src/build.c:1847
-msgid "Item"
-msgstr ""
-
-#: ../src/build.c:1848 ../src/symbols.c:650
+#: ../src/build.c:1844 ../src/symbols.c:737
 msgid "Label"
 msgstr "Ετικέτα"
 
-#: ../src/build.c:1849 ../src/symbols.c:645
+#: ../src/build.c:1845 ../src/symbols.c:732 ../src/tools.c:526
 msgid "Command"
 msgstr "Εντολή"
 
-#: ../src/build.c:1850
+#: ../src/build.c:1846
 #, fuzzy
 msgid "Working directory"
 msgstr "%s (στο φάκελο: %s)"
 
-#: ../src/build.c:1851
+#: ../src/build.c:1847
 #, fuzzy
-msgid "Clear"
-msgstr "Μεταγλωτιστής"
+msgid "Reset"
+msgstr "Σμίκρυνση"
 
-#: ../src/build.c:1891
+#: ../src/build.c:1892
 msgid "Click to set menu item label"
 msgstr ""
 
-#: ../src/build.c:1975 ../src/build.c:1977
+#: ../src/build.c:1976 ../src/build.c:1978
 #, fuzzy, c-format
-msgid "%s Commands"
+msgid "%s commands"
 msgstr "%s εντολές"
 
-#: ../src/build.c:1977
+#: ../src/build.c:1978
 #, fuzzy
-msgid "No Filetype"
+msgid "No filetype"
 msgstr "Καθορισμός _Τύπου Αρχείου"
 
-#: ../src/build.c:1985 ../src/build.c:2020
-msgid "Error Regular Expression:"
+#: ../src/build.c:1987 ../src/build.c:2022
+msgid "Error regular expression:"
 msgstr ""
 
-#: ../src/build.c:2013
+#: ../src/build.c:2015
 #, fuzzy
-msgid "Independent Commands"
+msgid "Independent commands"
 msgstr "Εισαγωγή Σχολίων"
 
-#: ../src/build.c:2043
+#: ../src/build.c:2047
 msgid "Note: Item 2 opens a dialog and appends the response to the command."
 msgstr ""
 
-#: ../src/build.c:2052
+#: ../src/build.c:2056
 #, fuzzy
-msgid "Execute Commands"
+msgid "Execute commands"
 msgstr "Ρύθμιση Προσαρμοσμένων Εντολών"
 
-#: ../src/build.c:2063
+#: ../src/build.c:2068
 #, c-format
 msgid ""
 "%d, %e, %f, %p are substituted in command and directory fields, see manual "
 "for details."
 msgstr ""
 
-#: ../src/build.c:2223
+#: ../src/build.c:2225
 #, fuzzy
 msgid "Set Build Commands"
 msgstr "Ρύθμιση Προσαρμοσμένων Εντολών"
 
-#: ../src/build.c:2434
+#: ../src/build.c:2436
 msgid "_Compile"
 msgstr "_Μεταγλώτιση"
 
 #. build the code
-#: ../src/build.c:2441 ../src/build.c:2703 ../src/interface.c:1218
+#: ../src/build.c:2443 ../src/build.c:2705 ../src/interface.c:1245
 #, fuzzy
 msgid "_Build"
 msgstr "_Δημιουργία"
 
-#: ../src/build.c:2448 ../src/build.c:2478 ../src/build.c:2671
+#: ../src/build.c:2450 ../src/build.c:2480 ../src/build.c:2673
 #, fuzzy
 msgid "_Execute"
 msgstr "Εκτέλεση:"
 
 #. build the code with make custom
-#: ../src/build.c:2493 ../src/build.c:2669 ../src/build.c:2723
+#: ../src/build.c:2495 ../src/build.c:2671 ../src/build.c:2725
 msgid "Make Custom _Target"
 msgstr "Δημιουργία _Προσαρμοσμένου Προορισμού"
 
 #. build the code with make object
-#: ../src/build.c:2495 ../src/build.c:2670 ../src/build.c:2731
+#: ../src/build.c:2497 ../src/build.c:2672 ../src/build.c:2733
 msgid "Make _Object"
 msgstr "Δημιουργία _Αντικειμένου"
 
-#: ../src/build.c:2497 ../src/build.c:2668
+#: ../src/build.c:2499 ../src/build.c:2670
 #, fuzzy
 msgid "_Make"
 msgstr "Δημιουργία:"
 
 #. build the code with make all
-#: ../src/build.c:2715
+#: ../src/build.c:2717
 msgid "_Make All"
 msgstr "Δημιουργία _Όλων"
 
-#. arguments
-#: ../src/build.c:2743
-#, fuzzy
-msgid "_Set Build Menu Commands"
-msgstr "Ρύθμιση Προσαρμοσμένων Εντολών"
-
-#: ../src/callbacks.c:150
+#: ../src/callbacks.c:149
 msgid "Do you really want to quit?"
 msgstr "Θέλετε πραγματικά να εγκαταλείψετε;"
 
-#: ../src/callbacks.c:228
+#: ../src/callbacks.c:219
 #, fuzzy, c-format
 msgid "%d file saved."
 msgid_plural "%d files saved."
 msgstr[0] "Το αρχείο %s αποθηκεύτηκε."
 msgstr[1] "Το αρχείο %s αποθηκεύτηκε."
 
-#: ../src/callbacks.c:490 ../src/document.c:2996 ../src/interface.c:380
-#: ../src/sidebar.c:683
+#: ../src/callbacks.c:443 ../src/document.c:2925 ../src/interface.c:385
+#: ../src/sidebar.c:684
 msgid "_Reload"
 msgstr "_Επαναφόρτωση"
 
-#: ../src/callbacks.c:491
+#: ../src/callbacks.c:444
 msgid "Any unsaved changes will be lost."
 msgstr "Όλες οι αλλαγές που δεν έχουν αποθηκευτεί θα χαθούν."
 
-#: ../src/callbacks.c:492
+#: ../src/callbacks.c:445
 #, c-format
 msgid "Are you sure you want to reload '%s'?"
 msgstr "Είστε σίγουροι ότι θέλετε να επαναφορτώσετε '%s';"
 
-#: ../src/callbacks.c:1196 ../src/keybindings.c:424
+#: ../src/callbacks.c:1066 ../src/keybindings.c:425
 msgid "Go to Line"
 msgstr "Μετάβαση στη Γραμμή"
 
-#: ../src/callbacks.c:1197
+#: ../src/callbacks.c:1067
 msgid "Enter the line you want to go to:"
 msgstr "Εισάγετε τη γραμμή που θέλετε να μεταφερθείτε:"
 
-#: ../src/callbacks.c:1291 ../src/callbacks.c:1316
+#: ../src/callbacks.c:1150 ../src/callbacks.c:1175
 #, fuzzy
 msgid ""
 "Please set the filetype for the current file before using this function."
@@ -370,39 +361,39 @@ msgstr ""
 "Παρακαλώ καθορίστε τον τύπο αρχείου για το τρέχον αρχείο πριν τη χρήση αυτής "
 "της συνάρτησης."
 
-#: ../src/callbacks.c:1424 ../src/ui_utils.c:619
+#: ../src/callbacks.c:1280 ../src/ui_utils.c:619
 msgid "dd.mm.yyyy"
 msgstr "dd.mm.yyyy"
 
-#: ../src/callbacks.c:1426 ../src/ui_utils.c:620
+#: ../src/callbacks.c:1282 ../src/ui_utils.c:620
 msgid "mm.dd.yyyy"
 msgstr "mm.dd.yyyy"
 
-#: ../src/callbacks.c:1428 ../src/ui_utils.c:621
+#: ../src/callbacks.c:1284 ../src/ui_utils.c:621
 msgid "yyyy/mm/dd"
 msgstr "yyyy/mm/dd"
 
-#: ../src/callbacks.c:1430 ../src/ui_utils.c:630
+#: ../src/callbacks.c:1286 ../src/ui_utils.c:630
 msgid "dd.mm.yyyy hh:mm:ss"
 msgstr "dd.mm.yyyy hh:mm:ss"
 
-#: ../src/callbacks.c:1432 ../src/ui_utils.c:631
+#: ../src/callbacks.c:1288 ../src/ui_utils.c:631
 msgid "mm.dd.yyyy hh:mm:ss"
 msgstr "mm.dd.yyyy hh:mm:ss"
 
-#: ../src/callbacks.c:1434 ../src/ui_utils.c:632
+#: ../src/callbacks.c:1290 ../src/ui_utils.c:632
 msgid "yyyy/mm/dd hh:mm:ss"
 msgstr "yyyy/mm/dd hh:mm:ss"
 
-#: ../src/callbacks.c:1436 ../src/ui_utils.c:641
+#: ../src/callbacks.c:1292 ../src/ui_utils.c:641
 msgid "_Use Custom Date Format"
 msgstr "Χρησιμοποιείστε Προσαρμοσμένη Διάταξη Ημερομηνίας"
 
-#: ../src/callbacks.c:1440
+#: ../src/callbacks.c:1296
 msgid "Custom Date Format"
 msgstr "Προσαρμοσμένη Διάταξη Ημερομηνίας"
 
-#: ../src/callbacks.c:1441
+#: ../src/callbacks.c:1297
 msgid ""
 "Enter here a custom date and time format. You can use any conversion "
 "specifiers which can be used with the ANSI C strftime function."
@@ -411,86 +402,66 @@ msgstr ""
 "χρησιμοποιήσετε οποιαδήποτε μετατροπή προσδιορισμού που μπορεί να "
 "χρησιμοποιηθεί με τη ANSI C strftime συνάρτηση."
 
-#: ../src/callbacks.c:1462
+#: ../src/callbacks.c:1320
 msgid "Date format string could not be converted (possibly too long)."
 msgstr ""
 "Η μορφή της ημερομηνίας δεν ήταν δυνατόν να μετατραπεί (πιθανόν λόγω μεγάλου "
 "μήκους)."
 
-#: ../src/callbacks.c:1688 ../src/callbacks.c:1698
+#: ../src/callbacks.c:1515 ../src/callbacks.c:1523
 msgid "No more message items."
 msgstr "Δεν υπάρχουν άλλα στοιχεία μηνυμάτων."
 
-#: ../src/dialogs.c:178 ../src/interface.c:3873 ../src/interface.c:5492
+#: ../src/dialogs.c:229
 msgid "Detect from file"
 msgstr "Ανίχνευση από το αρχείο"
 
-#: ../src/dialogs.c:181
+#: ../src/dialogs.c:232
 #, fuzzy
 msgid "West European"
 msgstr "_Δυτικής Ευρώπης"
 
-#: ../src/dialogs.c:183
+#: ../src/dialogs.c:234
 #, fuzzy
 msgid "East European"
 msgstr "_Ανατολικής Ευρώπης"
 
-#: ../src/dialogs.c:185
+#: ../src/dialogs.c:236
 #, fuzzy
 msgid "East Asian"
 msgstr "Ανατολικής Α_σίας"
 
-#: ../src/dialogs.c:187
+#: ../src/dialogs.c:238
 #, fuzzy
 msgid "SE & SW Asian"
 msgstr "_ΝΑ & ΝΔ Ασίας"
 
-#: ../src/dialogs.c:189
+#: ../src/dialogs.c:240
 #, fuzzy
 msgid "Middle Eastern"
 msgstr "_Μέσης Ανατολής"
 
-#: ../src/dialogs.c:191 ../src/encodings.c:120 ../src/encodings.c:121
+#: ../src/dialogs.c:242 ../src/encodings.c:120 ../src/encodings.c:121
 #: ../src/encodings.c:122 ../src/encodings.c:123 ../src/encodings.c:124
 #: ../src/encodings.c:125 ../src/encodings.c:126 ../src/encodings.c:127
 msgid "Unicode"
 msgstr "Unicode"
 
-#: ../src/dialogs.c:239 ../src/dialogs.c:324
-msgid "Open File"
-msgstr "Άνοιγμα Αρχείου"
-
-#: ../src/dialogs.c:243 ../src/interface.c:868
-msgid "_View"
-msgstr "_Προβολή"
-
-#: ../src/dialogs.c:246
-msgid ""
-"Opens the file in read-only mode. If you choose more than one file to open, "
-"all files will be opened read-only."
-msgstr ""
-"Ανοίγει το αρχείο μόνο για ανάγνωση. Αν επιλέξετε περισσότερα από ένα αρχεία "
-"για άνοιγμα, όλα τα αρχεία θα ανοιχτούν μόνο για ανάγνωση."
-
-#: ../src/dialogs.c:268
-msgid "Detect by file extension"
-msgstr "Ανίχνευση από την επέκταση αρχείου"
-
-#: ../src/dialogs.c:357
+#: ../src/dialogs.c:291
 #, fuzzy
 msgid "_More Options"
 msgstr "Επιλογές"
 
 #. line 1 with checkbox and encoding combo
-#: ../src/dialogs.c:364
+#: ../src/dialogs.c:298
 msgid "Show _hidden files"
 msgstr "Εμφάνιση _κρυφών αρχείων"
 
-#: ../src/dialogs.c:375
+#: ../src/dialogs.c:309
 msgid "Set encoding:"
 msgstr "Καθορισμός κωδικοποίησης:"
 
-#: ../src/dialogs.c:384
+#: ../src/dialogs.c:318
 msgid ""
 "Explicitly defines an encoding for the file, if it would not be detected. "
 "This is useful when you know that the encoding of a file cannot be detected "
@@ -505,11 +476,11 @@ msgstr ""
 "επιλεγμένη κωδικοποίηση."
 
 #. line 2 with filetype combo
-#: ../src/dialogs.c:391
+#: ../src/dialogs.c:325
 msgid "Set filetype:"
 msgstr "Καθορισμός τύπου αρχείου:"
 
-#: ../src/dialogs.c:401
+#: ../src/dialogs.c:335
 msgid ""
 "Explicitly defines a filetype for the file, if it would not be detected by "
 "filename extension.\n"
@@ -521,32 +492,52 @@ msgstr ""
 "Σημειώστε ότι εάν επιλέξετε πολλαπλά αρχεία, θα ανοιχτούν όλα με τον "
 "επιλεγμένο τύπο αρχείου."
 
-#: ../src/dialogs.c:480
+#: ../src/dialogs.c:364 ../src/dialogs.c:469
+msgid "Open File"
+msgstr "Άνοιγμα Αρχείου"
+
+#: ../src/dialogs.c:368 ../src/interface.c:877
+msgid "_View"
+msgstr "_Προβολή"
+
+#: ../src/dialogs.c:370
+msgid ""
+"Opens the file in read-only mode. If you choose more than one file to open, "
+"all files will be opened read-only."
+msgstr ""
+"Ανοίγει το αρχείο μόνο για ανάγνωση. Αν επιλέξετε περισσότερα από ένα αρχεία "
+"για άνοιγμα, όλα τα αρχεία θα ανοιχτούν μόνο για ανάγνωση."
+
+#: ../src/dialogs.c:391
+msgid "Detect by file extension"
+msgstr "Ανίχνευση από την επέκταση αρχείου"
+
+#: ../src/dialogs.c:548
 msgid "Overwrite?"
 msgstr ""
 
-#: ../src/dialogs.c:481
+#: ../src/dialogs.c:549
 msgid "Filename already exists!"
 msgstr ""
 
-#: ../src/dialogs.c:513 ../src/dialogs.c:642
+#: ../src/dialogs.c:584 ../src/dialogs.c:710
 msgid "Save File"
 msgstr "Αποθήκευση Αρχείου"
 
-#: ../src/dialogs.c:521
+#: ../src/dialogs.c:593
 msgid "R_ename"
 msgstr "Μ_ετονομασία"
 
-#: ../src/dialogs.c:523
+#: ../src/dialogs.c:594
 #, fuzzy
 msgid "Save the file and rename it"
 msgstr "Αποθήκευση και μετονομασία αρχείου."
 
-#: ../src/dialogs.c:531
+#: ../src/dialogs.c:602
 msgid "_Open file in a new tab"
 msgstr "_Άνοιγμα αρχείου σε νέα ετικέτα"
 
-#: ../src/dialogs.c:533
+#: ../src/dialogs.c:605
 #, fuzzy
 msgid ""
 "Keep the current unsaved document open and open the newly saved file in a "
@@ -555,41 +546,41 @@ msgstr ""
 "Κρατήστε το τρέχον μη αποθηκευμένο κείμενο ανοιχτό και ανοίξτε το πρόσφατα "
 "αποθηκευμένο αρχείο σε νέα ετικέτα."
 
-#: ../src/dialogs.c:660 ../src/win32.c:681
+#: ../src/dialogs.c:728 ../src/win32.c:683
 msgid "Error"
 msgstr "Σφάλμα"
 
-#: ../src/dialogs.c:663 ../src/dialogs.c:1543 ../src/win32.c:687
-#: ../src/win32.c:746
+#: ../src/dialogs.c:731 ../src/dialogs.c:1609 ../src/win32.c:689
+#: ../src/win32.c:748
 msgid "Question"
 msgstr "Ερώτηση"
 
-#: ../src/dialogs.c:666 ../src/win32.c:693
+#: ../src/dialogs.c:734 ../src/win32.c:695
 msgid "Warning"
 msgstr "Προειδοποίηση"
 
-#: ../src/dialogs.c:669 ../src/win32.c:699
+#: ../src/dialogs.c:737 ../src/win32.c:701
 msgid "Information"
 msgstr "Πληροφορία"
 
-#: ../src/dialogs.c:750
+#: ../src/dialogs.c:818
 msgid "_Don't save"
 msgstr "_Απόρριψη"
 
-#: ../src/dialogs.c:781
+#: ../src/dialogs.c:849
 #, c-format
 msgid "The file '%s' is not saved."
 msgstr "Το αρχείο '%s' δεν αποθηκεύτηκε."
 
-#: ../src/dialogs.c:783
+#: ../src/dialogs.c:851
 msgid "Do you want to save it before closing?"
 msgstr "Θέλετε να κάνετε αποθήκευση προτού το κλείσετε;"
 
-#: ../src/dialogs.c:858
+#: ../src/dialogs.c:923
 msgid "Choose font"
 msgstr "Επιλογή γραμματοσειράς"
 
-#: ../src/dialogs.c:1157
+#: ../src/dialogs.c:1221
 msgid ""
 "An error occurred or file information could not be retrieved (e.g. from a "
 "new file)."
@@ -597,109 +588,123 @@ msgstr ""
 "Παρουσιάστηκε ένα σφάλμα ή οι πληροφορίες του αρχείου δεν μπόρεσαν να "
 "ανακτηθούν (π.χ. από ένα νέο αρχείο)."
 
-#: ../src/dialogs.c:1176 ../src/dialogs.c:1177 ../src/dialogs.c:1178
-#: ../src/dialogs.c:1184 ../src/dialogs.c:1185 ../src/dialogs.c:1186
-#: ../src/symbols.c:1751 ../src/symbols.c:1772 ../src/symbols.c:1824
+#: ../src/dialogs.c:1240 ../src/dialogs.c:1241 ../src/dialogs.c:1242
+#: ../src/dialogs.c:1248 ../src/dialogs.c:1249 ../src/dialogs.c:1250
+#: ../src/symbols.c:1999 ../src/symbols.c:2020 ../src/symbols.c:2072
 #: ../src/ui_utils.c:244
 msgid "unknown"
 msgstr "άγνωστο"
 
-#: ../src/dialogs.c:1191 ../src/symbols.c:800
+#: ../src/dialogs.c:1255 ../src/symbols.c:887
 msgid "Properties"
 msgstr "Ιδιότητες"
 
-#: ../src/dialogs.c:1220
+#: ../src/dialogs.c:1286
 msgid "<b>Type:</b>"
 msgstr "<b>Τύπος:</b>"
 
-#: ../src/dialogs.c:1234
+#: ../src/dialogs.c:1300
 msgid "<b>Size:</b>"
 msgstr "<b>Μέγεθος:</b>"
 
-#: ../src/dialogs.c:1250
+#: ../src/dialogs.c:1316
 msgid "<b>Location:</b>"
 msgstr "<b>Τοποθεσία:</b>"
 
-#: ../src/dialogs.c:1264
+#: ../src/dialogs.c:1330
 msgid "<b>Read-only:</b>"
 msgstr "<b>Μόνο για ανάγνωση:</b>"
 
-#: ../src/dialogs.c:1271
+#: ../src/dialogs.c:1337
 msgid "(only inside Geany)"
 msgstr "(μόνο εντός Geany)"
 
-#: ../src/dialogs.c:1280
+#: ../src/dialogs.c:1346
 msgid "<b>Encoding:</b>"
 msgstr "<b>Κωδικοποίηση:</b>"
 
-#: ../src/dialogs.c:1290 ../src/ui_utils.c:248
+#: ../src/dialogs.c:1356 ../src/ui_utils.c:248
 msgid "(with BOM)"
 msgstr "(με BOM)"
 
-#: ../src/dialogs.c:1290
+#: ../src/dialogs.c:1356
 msgid "(without BOM)"
 msgstr "(χωρίς BOM)"
 
-#: ../src/dialogs.c:1301
+#: ../src/dialogs.c:1367
 msgid "<b>Modified:</b>"
 msgstr "<b>Τροποποιημένο:</b>"
 
-#: ../src/dialogs.c:1315
+#: ../src/dialogs.c:1381
 msgid "<b>Changed:</b>"
 msgstr "<b>Μεταβλήθηκε:</b>"
 
-#: ../src/dialogs.c:1329
+#: ../src/dialogs.c:1395
 msgid "<b>Accessed:</b>"
 msgstr "<b>Προσπελάστηκε:</b>"
 
-#: ../src/dialogs.c:1351
+#: ../src/dialogs.c:1417
 msgid "<b>Permissions:</b>"
 msgstr "<b>Δικαιώματα</b>"
 
 #. Header
-#: ../src/dialogs.c:1359
+#: ../src/dialogs.c:1425
 msgid "Read:"
 msgstr "Ανάγνωση:"
 
-#: ../src/dialogs.c:1366
+#: ../src/dialogs.c:1432
 msgid "Write:"
 msgstr "Εγγραφή:"
 
-#: ../src/dialogs.c:1373
+#: ../src/dialogs.c:1439
 msgid "Execute:"
 msgstr "Εκτέλεση:"
 
 #. Owner
-#: ../src/dialogs.c:1381
+#: ../src/dialogs.c:1447
 msgid "Owner:"
 msgstr "Κάτοχος:"
 
 #. Group
-#: ../src/dialogs.c:1417
+#: ../src/dialogs.c:1483
 msgid "Group:"
 msgstr "Ομάδα:"
 
 #. Other
-#: ../src/dialogs.c:1453
+#: ../src/dialogs.c:1519
 msgid "Other:"
 msgstr "Άλλοι:"
 
-#: ../src/document.c:646
+#: ../src/document.c:641
 #, c-format
 msgid "File %s closed."
 msgstr "Το αρχείο %s έκλεισε."
 
-#: ../src/document.c:794
+#: ../src/document.c:789
 #, c-format
 msgid "New file \"%s\" opened."
 msgstr "Ανοίχθηκε νέο αρχείο \"%s\"."
 
-#: ../src/document.c:967 ../src/document.c:1485
+#: ../src/document.c:840 ../src/document.c:1362
 #, c-format
 msgid "Could not open file %s (%s)"
 msgstr "Δεν ήταν δυνατόν το άνοιγμα αρχείου %s (%s)"
 
-#: ../src/document.c:997
+#: ../src/document.c:860
+#, c-format
+msgid "The file \"%s\" is not valid %s."
+msgstr "Το αρχείο \"%s\" δεν είναι έγκυρο %s."
+
+#: ../src/document.c:866
+#, c-format
+msgid ""
+"The file \"%s\" does not look like a text file or the file encoding is not "
+"supported."
+msgstr ""
+"Το αρχείο \"%s\" δεν φαίνεται να είναι αρχείο κειμένου ή δεν υποστηρίζεται η "
+"κωδικοποίηση του αρχείου."
+
+#: ../src/document.c:876
 #, c-format
 msgid ""
 "The file \"%s\" could not be opened properly and has been truncated. This "
@@ -713,47 +718,36 @@ msgstr ""
 "δεδομένων.\n"
 "Το αρχείο τέθηκε μόνο προς ανάγνωση."
 
-#. For translators: the second wildcard is an encoding name, e.g.
-#. * The file \"test.txt\" is not valid UTF-8.
-#: ../src/document.c:1023
-#, c-format
-msgid "The file \"%s\" is not valid %s."
-msgstr "Το αρχείο \"%s\" δεν είναι έγκυρο %s."
-
-#: ../src/document.c:1033
-#, c-format
-msgid ""
-"The file \"%s\" does not look like a text file or the file encoding is not "
-"supported."
-msgstr ""
-"Το αρχείο \"%s\" δεν φαίνεται να είναι αρχείο κειμένου ή δεν υποστηρίζεται η "
-"κωδικοποίηση του αρχείου."
-
-#: ../src/document.c:1184
+#: ../src/document.c:1078
 msgid "Spaces"
 msgstr "Κενά"
 
-#: ../src/document.c:1187
+#: ../src/document.c:1081
 msgid "Tabs"
 msgstr "Ετικέτες"
 
-#: ../src/document.c:1190
+#: ../src/document.c:1084
 #, fuzzy
 msgid "Tabs and Spaces"
 msgstr "_Αντικατάσταση των Tab σε Κενά"
 
 #. For translators: first wildcard is the indentation mode (Spaces, Tabs, Tabs
 #. * and Spaces), the second one is the filename
-#: ../src/document.c:1195
+#: ../src/document.c:1089
 #, fuzzy, c-format
 msgid "Setting %s indentation mode for %s."
 msgstr "Ρύθμιση %s μεθόδου εσοχής"
 
-#: ../src/document.c:1248
+#: ../src/document.c:1100
+#, fuzzy, c-format
+msgid "Setting indentation width to %d for %s."
+msgstr "Ρύθμιση %s μεθόδου εσοχής"
+
+#: ../src/document.c:1137 ../src/document.c:1737
 msgid "Invalid filename"
 msgstr "Λάθος όνομα αρχείου"
 
-#: ../src/document.c:1363
+#: ../src/document.c:1251
 #, c-format
 msgid "File %s reloaded."
 msgstr "Το αρχείο %s επαναφορτώθηκε."
@@ -761,21 +755,21 @@ msgstr "Το αρχείο %s επαναφορτώθηκε."
 #. For translators: this is the status window message for opening a file. %d is the number
 #. * of the newly opened file, %s indicates whether the file is opened read-only
 #. * (it is replaced with the string ", read-only").
-#: ../src/document.c:1368
+#: ../src/document.c:1259
 #, c-format
 msgid "File %s opened(%d%s)."
 msgstr "Το αρχείο %s ανοίχθηκε(%d%s)."
 
-#: ../src/document.c:1370
+#: ../src/document.c:1261
 msgid ", read-only"
 msgstr ", μόνο για ανάγνωση"
 
-#: ../src/document.c:1579
+#: ../src/document.c:1456
 #, fuzzy
 msgid "Error renaming file."
 msgstr "Σφάλμα στην αποθήκευση αρχείου."
 
-#: ../src/document.c:1666
+#: ../src/document.c:1543
 #, c-format
 msgid ""
 "An error occurred while converting the file from UTF-8 in \"%s\". The file "
@@ -784,7 +778,7 @@ msgstr ""
 "Παρουσιάστηκε σφάλμα κατά την μετατροπή του αρχείου από UTF-8 σε \"%s\". Το "
 "αρχείο παραμένει μη αποθηκευμένο."
 
-#: ../src/document.c:1688
+#: ../src/document.c:1565
 #, c-format
 msgid ""
 "Error message: %s\n"
@@ -793,36 +787,32 @@ msgstr ""
 "Μήνυμα σφάλματος: %s\n"
 "Το σφάλμα παρουσιάστηκε στο \"%s\" (γραμμή: %d, στήλη: %d)."
 
-#: ../src/document.c:1693
+#: ../src/document.c:1570
 #, c-format
 msgid "Error message: %s."
 msgstr "Μήνυμα σφάλματος: %s."
 
-#: ../src/document.c:1743
+#: ../src/document.c:1630
 #, c-format
 msgid "Failed to open file '%s' for writing: fopen() failed: %s"
 msgstr ""
 
-#: ../src/document.c:1761
+#: ../src/document.c:1648
 #, c-format
 msgid "Failed to write file '%s': fwrite() failed: %s"
 msgstr ""
 
-#: ../src/document.c:1775
+#: ../src/document.c:1662
 #, c-format
 msgid "Failed to close file '%s': fclose() failed: %s"
 msgstr ""
 
-#: ../src/document.c:1855 ../src/document.c:1927
-msgid "Error saving file."
-msgstr "Σφάλμα στην αποθήκευση αρχείου."
-
-#: ../src/document.c:1920
+#: ../src/document.c:1737 ../src/document.c:1802
 #, c-format
 msgid "Error saving file (%s)."
 msgstr "Σφάλμα αποθήκευσης αρχείου (%s)."
 
-#: ../src/document.c:1925
+#: ../src/document.c:1807
 #, c-format
 msgid ""
 "%s\n"
@@ -830,38 +820,42 @@ msgid ""
 "The file on disk may now be truncated!"
 msgstr ""
 
-#: ../src/document.c:1951
+#: ../src/document.c:1809
+msgid "Error saving file."
+msgstr "Σφάλμα στην αποθήκευση αρχείου."
+
+#: ../src/document.c:1833
 #, c-format
 msgid "File %s saved."
 msgstr "Το αρχείο %s αποθηκεύτηκε."
 
-#: ../src/document.c:2019 ../src/document.c:2076 ../src/document.c:2084
+#: ../src/document.c:1910 ../src/document.c:1974 ../src/document.c:1982
 #, c-format
 msgid "\"%s\" was not found."
 msgstr "\"%s\" δεν βρέθηκε."
 
-#: ../src/document.c:2084
+#: ../src/document.c:1982
 msgid "Wrap search and find again?"
 msgstr "Ολοκλήρωση αναζήτησης και εύρεση ξανά;"
 
-#: ../src/document.c:2163 ../src/search.c:1146 ../src/search.c:1190
-#: ../src/search.c:1882 ../src/search.c:1883
+#: ../src/document.c:2068 ../src/search.c:1281 ../src/search.c:1325
+#: ../src/search.c:2063 ../src/search.c:2064
 #, c-format
 msgid "No matches found for \"%s\"."
 msgstr "Δεν βρέθηκαν αποτελέσματα για \"%s\"."
 
-#: ../src/document.c:2174 ../src/document.c:2183
+#: ../src/document.c:2074
 #, fuzzy, c-format
 msgid "%s: replaced %d occurrence of \"%s\" with \"%s\"."
 msgid_plural "%s: replaced %d occurrences of \"%s\" with \"%s\"."
 msgstr[0] "%s: αντικατάσταση %d εμφανιζόμενου(ων) του \"%s\" με \"%s\"."
 msgstr[1] "%s: αντικατάσταση %d εμφανιζόμενου(ων) του \"%s\" με \"%s\"."
 
-#: ../src/document.c:2997
+#: ../src/document.c:2926
 msgid "Do you want to reload it?"
 msgstr "Θέλετε να το επαναφορτώσετε;"
 
-#: ../src/document.c:2998
+#: ../src/document.c:2927
 #, c-format
 msgid ""
 "The file '%s' on the disk is more recent than\n"
@@ -870,29 +864,29 @@ msgstr ""
 "Το αρχείο '%s' στον δίσκο είναι πιο πρόσφατο από\n"
 "του τρέχοντος buffer."
 
-#: ../src/document.c:3016
+#: ../src/document.c:2945
 msgid "Close _without saving"
 msgstr ""
 
-#: ../src/document.c:3019
+#: ../src/document.c:2948
 msgid "Try to resave the file?"
 msgstr ""
 
-#: ../src/document.c:3020
+#: ../src/document.c:2949
 #, fuzzy, c-format
 msgid "File \"%s\" was not found on disk!"
 msgstr "\"%s\" δεν βρέθηκε."
 
-#: ../src/editor.c:4326
+#: ../src/editor.c:4341
 #, fuzzy
 msgid "Enter Tab Width"
 msgstr "Πλάτος του Tab:"
 
-#: ../src/editor.c:4327
+#: ../src/editor.c:4342
 msgid "Enter the amount of spaces which should be replaced by a tab character."
 msgstr ""
 
-#: ../src/editor.c:4477
+#: ../src/editor.c:4494
 #, c-format
 msgid "Warning: non-standard hard tab width: %d != 8!"
 msgstr ""
@@ -1001,112 +995,100 @@ msgstr "Κορεάτικη"
 msgid "Without encoding"
 msgstr "Χωρίς κωδικοποίηση"
 
-#: ../src/encodings.c:368
+#: ../src/encodings.c:430
 msgid "_West European"
 msgstr "_Δυτικής Ευρώπης"
 
-#: ../src/encodings.c:374
+#: ../src/encodings.c:436
 msgid "_East European"
 msgstr "_Ανατολικής Ευρώπης"
 
-#: ../src/encodings.c:380
+#: ../src/encodings.c:442
 msgid "East _Asian"
 msgstr "Ανατολικής Α_σίας"
 
-#: ../src/encodings.c:386
+#: ../src/encodings.c:448
 msgid "_SE & SW Asian"
 msgstr "_ΝΑ & ΝΔ Ασίας"
 
-#: ../src/encodings.c:392
+#: ../src/encodings.c:454
 msgid "_Middle Eastern"
 msgstr "_Μέσης Ανατολής"
 
-#: ../src/encodings.c:398
+#: ../src/encodings.c:460
 msgid "_Unicode"
 msgstr "_Unicode"
 
-#: ../src/filetypes.c:80 ../src/filetypes.c:162 ../src/filetypes.c:176
-#: ../src/filetypes.c:184 ../src/filetypes.c:198
+#: ../src/filetypes.c:84 ../src/filetypes.c:166 ../src/filetypes.c:180
+#: ../src/filetypes.c:188 ../src/filetypes.c:202
 #, c-format
 msgid "%s source file"
 msgstr "Πηγαίο αρχείο %s"
 
-#: ../src/filetypes.c:81
+#: ../src/filetypes.c:85
 #, fuzzy, c-format
 msgid "%s file"
 msgstr "Πηγαίο αρχείο %s"
 
-#: ../src/filetypes.c:99 ../src/filetypes.c:1553 ../src/interface.c:3816
-#: ../src/interface.c:5435
+#: ../src/filetypes.c:103 ../src/filetypes.c:1753 ../src/interface.c:3918
+#: ../src/interface.c:5636
 msgid "None"
 msgstr "Κανένα"
 
-#: ../src/filetypes.c:299
-msgid "Shell script file"
+#: ../src/filetypes.c:304
+#, fuzzy
+msgid "Shell script"
 msgstr "Αρχείο Shell script"
 
-#: ../src/filetypes.c:307
+#: ../src/filetypes.c:312
 msgid "Makefile"
 msgstr "Αρχείο δημιουργίας"
 
-#: ../src/filetypes.c:314
+#: ../src/filetypes.c:319
 msgid "XML document"
 msgstr "Έγγραφο XML"
 
-#: ../src/filetypes.c:338
+#: ../src/filetypes.c:343
 msgid "Cascading StyleSheet"
 msgstr "Cascading StyleSheet"
 
-#: ../src/filetypes.c:346
-msgid "SQL Dump file"
-msgstr "SQL Dump αρχείο"
-
-#: ../src/filetypes.c:398
+#: ../src/filetypes.c:412
 msgid "Config file"
 msgstr "Αρχείο Config"
 
-#: ../src/filetypes.c:404
+#: ../src/filetypes.c:418
 #, fuzzy
 msgid "Gettext translation file"
 msgstr "υπεύθυνος μετάφρασης"
 
-#: ../src/filetypes.c:427
-#, fuzzy, c-format
-msgid "%s script file"
-msgstr "Αρχείο Shell script"
-
-#: ../src/filetypes.c:661
+#: ../src/filetypes.c:713
 msgid "_Programming Languages"
 msgstr "_Γλώσσες Προγραμματισμού"
 
-#: ../src/filetypes.c:662
+#: ../src/filetypes.c:714
 msgid "_Scripting Languages"
 msgstr "Γλώσσες _Scripting"
 
-#: ../src/filetypes.c:663
+#: ../src/filetypes.c:715
 msgid "_Markup Languages"
 msgstr "Γλώσσες _Markup"
 
-#: ../src/filetypes.c:664
-msgid "M_iscellaneous Languages"
-msgstr "_Διάφορες Γλώσσες"
-
-#: ../src/filetypes.c:665
+#: ../src/filetypes.c:716
 #, fuzzy
-msgid "_Custom Filetypes"
-msgstr "Καθορισμός _Τύπου Αρχείου"
+msgid "M_iscellaneous"
+msgstr "<b>Διάφορα</b>"
 
-#: ../src/filetypes.c:1281 ../src/win32.c:105
+#: ../src/filetypes.c:1431 ../src/win32.c:105
 msgid "All Source"
 msgstr "Όλα τα Πηγαία"
 
 #. create meta file filter "All files"
-#: ../src/filetypes.c:1306 ../src/project.c:288 ../src/win32.c:95
+#: ../src/filetypes.c:1456 ../src/project.c:294 ../src/win32.c:95
 #: ../src/win32.c:143 ../src/win32.c:145
 msgid "All files"
 msgstr "Όλα τα αρχεία"
 
-#: ../src/filetypes.c:1364
+#: ../src/filetypes.c:1514
 #, c-format
 msgid "Bad regex for filetype %s: %s"
 msgstr ""
@@ -1115,613 +1097,618 @@ msgstr ""
 msgid "untitled"
 msgstr "χωρίς όνομα"
 
-#: ../src/highlighting.c:3595 ../src/main.c:814 ../src/socket.c:165
-#: ../src/templates.c:315
+#: ../src/highlighting.c:3623 ../src/main.c:808 ../src/socket.c:165
+#: ../src/templates.c:226
 #, c-format
 msgid "Could not find file '%s'."
 msgstr "Δεν ήταν δυνατόν να βρεθεί το αρχείο %s'."
 
-#: ../src/highlighting.c:3615
+#: ../src/highlighting.c:3646
 msgid "_Default"
 msgstr ""
 
-#: ../src/highlighting.c:3656
+#: ../src/highlighting.c:3714
 #, fuzzy
 msgid "_Color Schemes"
 msgstr "Επιλογέας _Χρωμάτων"
 
-#: ../src/interface.c:323
+#: ../src/interface.c:328
 msgid "_File"
 msgstr "_Αρχείο"
 
-#: ../src/interface.c:334
+#: ../src/interface.c:339
 msgid "New (with _Template)"
 msgstr "Νέο (με _Πρότυπο)"
 
-#: ../src/interface.c:351 ../src/interface.c:2332
+#: ../src/interface.c:356 ../src/interface.c:2378
 msgid "Open Selected F_ile"
 msgstr "Άνοιγμα _Επιλεγμένου Αρχείου"
 
-#: ../src/interface.c:355
+#: ../src/interface.c:360
 msgid "Recent _Files"
 msgstr "_Πρόσφατα Αρχεία"
 
-#: ../src/interface.c:372
+#: ../src/interface.c:377
 msgid "Save A_ll"
 msgstr "Αποθήκευση Ό_λων"
 
-#: ../src/interface.c:388
+#: ../src/interface.c:393
 msgid "R_eload As"
 msgstr "_Επαναφόρτωση Ως"
 
-#: ../src/interface.c:399 ../src/interface.c:634 ../src/interface.c:693
-#: ../src/interface.c:707 ../src/interface.c:1083 ../src/interface.c:1093
-#: ../src/interface.c:2297 ../src/interface.c:2311
+#: ../src/interface.c:404 ../src/interface.c:639 ../src/interface.c:698
+#: ../src/interface.c:712 ../src/interface.c:1110 ../src/interface.c:1120
+#: ../src/interface.c:2343 ../src/interface.c:2357
 msgid "invisible"
 msgstr "αόρατο"
 
-#: ../src/interface.c:416
+#: ../src/interface.c:421
 #, fuzzy
 msgid "Page Set_up"
 msgstr "Ρύθμιση σελίδας"
 
-#: ../src/interface.c:433 ../src/notebook.c:214
+#: ../src/interface.c:438 ../src/notebook.c:246
 #, fuzzy
 msgid "Close Ot_her Documents"
 msgstr "Κλείσιμο του τρέχοντος αρχείου"
 
-#: ../src/interface.c:441 ../src/notebook.c:219
+#: ../src/interface.c:446 ../src/notebook.c:251
 msgid "C_lose All"
 msgstr "_Κλείσιμο Όλων"
 
-#: ../src/interface.c:458 ../src/interface.c:2231
+#: ../src/interface.c:463 ../src/interface.c:2273
 msgid "_Edit"
 msgstr "Επε_ξεργασία"
 
-#: ../src/interface.c:508
+#: ../src/interface.c:513
 #, fuzzy
 msgid "_Commands"
 msgstr "Εντολή"
 
-#: ../src/interface.c:515 ../src/keybindings.c:311
+#: ../src/interface.c:520 ../src/keybindings.c:311
 #, fuzzy
 msgid "_Cut Current Line(s)"
 msgstr "Αποκοπή τρέχον γραμμής(ών)"
 
-#: ../src/interface.c:523 ../src/keybindings.c:308
+#: ../src/interface.c:528 ../src/keybindings.c:308
 #, fuzzy
 msgid "_Copy Current Line(s)"
 msgstr "Αντιγραφή τρέχον γραμμής(ών)"
 
-#: ../src/interface.c:531 ../src/keybindings.c:263
+#: ../src/interface.c:536 ../src/keybindings.c:263
 #, fuzzy
 msgid "_Delete Current Line(s)"
 msgstr "Διαγραφή τρέχον γραμμής(ών)"
 
-#: ../src/interface.c:535 ../src/keybindings.c:260
+#: ../src/interface.c:540 ../src/keybindings.c:260
 #, fuzzy
 msgid "_Duplicate Line or Selection"
 msgstr "Αντίγραφο της Γραμμής ή της Επιλογής"
 
-#: ../src/interface.c:544 ../src/keybindings.c:321
+#: ../src/interface.c:549 ../src/keybindings.c:321
 #, fuzzy
 msgid "_Select Current Line(s)"
 msgstr "Επιλογή τρέχον γραμμής(ών)"
 
-#: ../src/interface.c:548 ../src/keybindings.c:324
+#: ../src/interface.c:553 ../src/keybindings.c:324
 #, fuzzy
 msgid "_Select Current Paragraph"
 msgstr "Επιλογή τρέχουσας παραγράφου"
 
-#: ../src/interface.c:557 ../src/keybindings.c:363
+#: ../src/interface.c:562 ../src/keybindings.c:363
 #, fuzzy
 msgid "_Send Selection to Terminal"
 msgstr "Απ_οστολή Επιλογής προς"
 
-#: ../src/interface.c:561 ../src/interface.c:2235
+#: ../src/interface.c:566 ../src/interface.c:2277
 msgid "_Format"
 msgstr "_Διαμόρφωση"
 
-#: ../src/interface.c:568 ../src/keybindings.c:365
+#: ../src/interface.c:573 ../src/keybindings.c:365
 msgid "_Reflow Lines/Block"
 msgstr ""
 
-#: ../src/interface.c:572 ../src/keybindings.c:335
+#: ../src/interface.c:577 ../src/keybindings.c:335
 msgid "T_oggle Case of Selection"
 msgstr "Ενα_λλαγή Πεζών/Κεφαλαίων των Επιλεγμένων"
 
-#: ../src/interface.c:576 ../src/keybindings.c:270
+#: ../src/interface.c:581 ../src/keybindings.c:270
 #, fuzzy
 msgid "_Transpose Current Line"
 msgstr "Μετάθεση τρέχουσας γραμμής"
 
-#: ../src/interface.c:585
+#: ../src/interface.c:590
 msgid "_Comment Line(s)"
 msgstr "_Σχολιασμός της/των Γραμμής(ών)"
 
-#: ../src/interface.c:589
+#: ../src/interface.c:594
 msgid "U_ncomment Line(s)"
 msgstr "Α-ποσχολιασμός της/των Γραμμής(ών)"
 
-#: ../src/interface.c:593
+#: ../src/interface.c:598
 msgid "_Toggle Line Commentation"
 msgstr "Ενεργοποίηση/απενεργοποίηση Γραμμής _Σχολιασμού"
 
-#: ../src/interface.c:602
+#: ../src/interface.c:607
 msgid "_Increase Indent"
 msgstr "Αύξηση Εσο_χής"
 
-#: ../src/interface.c:610
+#: ../src/interface.c:615
 msgid "_Decrease Indent"
 msgstr "_Μείωση Εσοχής"
 
-#: ../src/interface.c:618 ../src/keybindings.c:354
+#: ../src/interface.c:623 ../src/keybindings.c:354
 #, fuzzy
 msgid "_Smart Line Indent"
 msgstr "Έξυπνη εσοχή γραμμής"
 
-#: ../src/interface.c:627
+#: ../src/interface.c:632
 msgid "_Send Selection to"
 msgstr "Απ_οστολή Επιλογής προς"
 
-#: ../src/interface.c:642
+#: ../src/interface.c:647
 msgid "I_nsert Comments"
 msgstr "Εισαγωγή Σχολί_ων"
 
-#: ../src/interface.c:653 ../src/interface.c:2246
+#: ../src/interface.c:658 ../src/interface.c:2292
 #, fuzzy
 msgid "Insert _ChangeLog Entry"
 msgstr "Εισαγωγή ChangeLog καταχώρησης"
 
-#: ../src/interface.c:657 ../src/interface.c:2250
+#: ../src/interface.c:662 ../src/interface.c:2296
 #, fuzzy
 msgid "Insert _Function Description"
 msgstr "Εισαγωγή Περιγραφής της Συνάρτησης"
 
-#: ../src/interface.c:661 ../src/interface.c:2254
+#: ../src/interface.c:666 ../src/interface.c:2300
 #, fuzzy
 msgid "Insert _Multiline Comment"
 msgstr "Εισαγωγή Σχολίου Πολλαπλών Γραμμών"
 
-#: ../src/interface.c:670 ../src/interface.c:2269
+#: ../src/interface.c:675 ../src/interface.c:2315
 #, fuzzy
 msgid "Insert File _Header"
 msgstr "Εισαγωγή Επικεφαλίδας Αρχείου"
 
-#: ../src/interface.c:674 ../src/interface.c:2273
+#: ../src/interface.c:679 ../src/interface.c:2319
 #, fuzzy
 msgid "Insert _GPL Notice"
 msgstr "Εισαγωγή GPL Σημειώματος"
 
-#: ../src/interface.c:678 ../src/interface.c:2277
+#: ../src/interface.c:683 ../src/interface.c:2323
 #, fuzzy
 msgid "Insert _BSD License Notice"
 msgstr "Εισαγωγή Σημειώματος BSD Άδειας"
 
-#: ../src/interface.c:682 ../src/interface.c:2286
+#: ../src/interface.c:687 ../src/interface.c:2332
 msgid "Insert Dat_e"
 msgstr "Εισαγωγή _Ημερομηνίας"
 
-#: ../src/interface.c:696 ../src/interface.c:2300
+#: ../src/interface.c:701 ../src/interface.c:2346
 msgid "_Insert \"include <...>\""
 msgstr "Εισαγωγή \"include <...>\""
 
-#: ../src/interface.c:715
-#, fuzzy
-msgid "Preference_s"
-msgstr "Ιδιότητες"
-
-#: ../src/interface.c:723 ../src/keybindings.c:386
-#, fuzzy
-msgid "P_lugin Preferences"
-msgstr "Ιδιότητες"
-
-#: ../src/interface.c:731 ../src/interface.c:2323
-msgid "_Search"
-msgstr "_Αναζήτηση"
-
-#: ../src/interface.c:742
-msgid "Find _Next"
-msgstr "Αναζήτηση _Επόμενου"
-
-#: ../src/interface.c:746
-msgid "Find _Previous"
-msgstr "Αναζήτηση _Προηγούμενου"
-
-#: ../src/interface.c:755
-msgid "Find in F_iles"
-msgstr "Αναζήτηση στα Α_ρχεία"
-
-#: ../src/interface.c:763 ../src/search.c:562
-msgid "_Replace"
-msgstr "Αν_τικατάσταση"
-
-#: ../src/interface.c:776
-msgid "Next _Message"
-msgstr "Επόμενο _Μήνυμα"
-
-#: ../src/interface.c:784
-#, fuzzy
-msgid "Pr_evious Message"
-msgstr "Επόμενο Μήνυμα"
-
-#: ../src/interface.c:797 ../src/keybindings.c:433
-#, fuzzy
-msgid "_Go to Next Marker"
-msgstr "Πήγαινε στον επόμενο δείκτη"
-
-#: ../src/interface.c:801 ../src/keybindings.c:436
-#, fuzzy
-msgid "_Go to Previous Marker"
-msgstr "Πήγαινε στον προηγούμενο δείκτη"
-
-#: ../src/interface.c:810
-msgid "_Go to Line"
-msgstr "Πήγαιν_ε στη Γραμμή"
-
-#: ../src/interface.c:818 ../src/interface.c:2258
-msgid "_More"
-msgstr ""
-
-#: ../src/interface.c:825 ../src/keybindings.c:398
-#, fuzzy
-msgid "Find Next _Selection"
-msgstr "Εύρεση Επόμενων Επιλεγμένων"
-
-#: ../src/interface.c:829 ../src/keybindings.c:400
-#, fuzzy
-msgid "Find Pre_vious Selection"
-msgstr "Εύρεση Προηγούμενων Επιλεγμένων"
-
-#: ../src/interface.c:838 ../src/interface.c:2340
-#, fuzzy
-msgid "Find _Usage"
-msgstr "Εύρεση Χρήσης"
-
-#: ../src/interface.c:842 ../src/interface.c:2348
-#, fuzzy
-msgid "Find _Document Usage"
-msgstr "Εύρεση Χρήσης"
-
-#: ../src/interface.c:851 ../src/keybindings.c:415
-#, fuzzy
-msgid "_Mark All"
-msgstr "Δημιουργία _Όλων"
-
-#: ../src/interface.c:860 ../src/interface.c:2356
-#, fuzzy
-msgid "Go to _Tag Definition"
-msgstr "Πήγαινε στον Ορισμό Ετικετών"
-
-#: ../src/interface.c:864
-#, fuzzy
-msgid "Go to T_ag Declaration"
-msgstr "Πήγαινε στη Δήλωση Ετικετών"
-
-#: ../src/interface.c:875
-msgid "Change _Font"
-msgstr "Αλλαγή Γραμμα_τοσειράς"
-
-#: ../src/interface.c:888
-#, fuzzy
-msgid "To_ggle All Additional Widgets"
-msgstr "Ενεργοποίηση όλων των επιπρόσθετων Widgets"
-
-#: ../src/interface.c:892
-msgid "Full_screen"
-msgstr "Πλήρης _Οθόνη"
-
-#: ../src/interface.c:896
-msgid "Show Message _Window"
-msgstr "Προβολή Παράθυρου Μηνυμάτων"
-
-#: ../src/interface.c:901
-msgid "Show _Toolbar"
-msgstr "Εμφάνιση _Μπάρας Εργαλείων"
-
-#: ../src/interface.c:906
-msgid "Show Side_bar"
-msgstr "Εμφάνιση Πλε_υρικής Μπάρας"
-
-#: ../src/interface.c:911 ../src/interface.c:4247 ../src/interface.c:5576
-#: ../src/keybindings.c:253 ../src/prefs.c:1557
-msgid "Editor"
-msgstr "Επεξεργαστής"
-
-#: ../src/interface.c:918
-msgid "Show _Markers Margin"
-msgstr "Εμφάνιση _Δεικτών Περιθωρίου"
-
-#: ../src/interface.c:923
-msgid "Show _Line Numbers"
-msgstr "Εμφάνιση Μ_ετρητή Γραμμών"
-
-#: ../src/interface.c:928
-#, fuzzy
-msgid "Show _White Space"
-msgstr "Εμφάνιση των κενών"
-
-#: ../src/interface.c:932
-#, fuzzy
-msgid "Show Line _Endings"
-msgstr "Εμφάνιση τέλους γραμμής"
-
-#: ../src/interface.c:936
-#, fuzzy
-msgid "Show _Indentation Guides"
-msgstr "Εμφάνιση οδηγών εσοχής"
-
-#: ../src/interface.c:957
-msgid "_Document"
-msgstr "Έγγ_ραφο"
-
-#: ../src/interface.c:964
-msgid "_Line Wrapping"
-msgstr "Αναδίπλ_ωση Γραμμής"
-
-#: ../src/interface.c:969
-#, fuzzy
-msgid "Line _Breaking"
-msgstr "Αναδίπλωση Γραμμής"
-
-#: ../src/interface.c:973
-msgid "_Auto-indentation"
-msgstr "Αυτόματη Εσοχή"
-
-#: ../src/interface.c:978
-msgid "In_dent Type"
-msgstr "Τύπος Εσοχής"
-
-#: ../src/interface.c:985 ../src/interface.c:3855 ../src/interface.c:5474
-#, fuzzy
-msgid "_Tabs"
-msgstr "Ετικέτες"
-
-#: ../src/interface.c:991 ../src/interface.c:3846 ../src/interface.c:5465
-#, fuzzy
-msgid "_Spaces"
-msgstr "Κενά"
-
-#: ../src/interface.c:997 ../src/interface.c:3864 ../src/interface.c:5483
-#, fuzzy
-msgid "T_abs and Spaces"
-msgstr "_Αντικατάσταση των Tab σε Κενά"
-
-#: ../src/interface.c:1003
-msgid "Indent Widt_h"
-msgstr ""
-
-#: ../src/interface.c:1010
-msgid "_1"
-msgstr ""
-
-#: ../src/interface.c:1016
-msgid "_2"
-msgstr ""
-
-#: ../src/interface.c:1022
-msgid "_3"
-msgstr ""
-
-#: ../src/interface.c:1028
-msgid "_4"
-msgstr ""
-
-#: ../src/interface.c:1034
-msgid "_5"
-msgstr ""
-
-#: ../src/interface.c:1040
-msgid "_6"
-msgstr ""
-
-#: ../src/interface.c:1046
-msgid "_7"
-msgstr ""
-
-#: ../src/interface.c:1052
-msgid "_8"
-msgstr ""
-
-#: ../src/interface.c:1063
-msgid "Read _Only"
-msgstr "Μόνο για Ανάγ_νωση"
-
-#: ../src/interface.c:1067
-msgid "_Write Unicode BOM"
-msgstr "Εγγραφή _Unicode BOM"
-
-#: ../src/interface.c:1076
-msgid "Set File_type"
-msgstr "Καθορισμός _Τύπου Αρχείου"
-
-#: ../src/interface.c:1086
-msgid "Set _Encoding"
-msgstr "Καθορισμός Κ_ωδικοποίησης"
-
-#: ../src/interface.c:1096
-msgid "Set Line E_ndings"
-msgstr "Καθορισμός Κατα_λίξεων Γραμμών"
-
-#: ../src/interface.c:1103
-msgid "Convert and Set to _CR/LF (Win)"
-msgstr "Μετατροπή και Καθορισμός σε _CR/LF (Win)"
-
-#: ../src/interface.c:1109
-msgid "Convert and Set to _LF (Unix)"
-msgstr "Μετατροπή και Καθορισμός σε _LF (Unix)"
-
-#: ../src/interface.c:1115
-msgid "Convert and Set to CR (_Mac)"
-msgstr "Μετατροπή και Καθορισμός σε CR (_Mac)"
-
-#: ../src/interface.c:1126
-msgid "_Strip Trailing Spaces"
-msgstr "_Διαγραφή Λωρίδων Κενών"
-
-#: ../src/interface.c:1130
-msgid "_Replace Tabs by Spaces"
-msgstr "_Αντικατάσταση των Tab σε Κενά"
-
-#: ../src/interface.c:1134
-#, fuzzy
-msgid "Replace Spaces b_y Tabs"
-msgstr "_Αντικατάσταση των Tab σε Κενά"
-
-#: ../src/interface.c:1143
-msgid "_Fold All"
-msgstr "Δίπλ-ωση Όλων"
-
-#: ../src/interface.c:1147
-msgid "_Unfold All"
-msgstr "Αναδ-ίπλωση Όλων"
-
-#: ../src/interface.c:1156
-msgid "Remove _Markers"
-msgstr "Απομάκρυνση _δεικτών"
-
-#: ../src/interface.c:1160
-msgid "Remove Error _Indicators"
-msgstr "Απομάκρυνση _Δεικτών Σφάλματος"
-
-#: ../src/interface.c:1164
-msgid "_Project"
-msgstr "Έρ_γο"
-
-#: ../src/interface.c:1171
-msgid "_New"
-msgstr "_Νέο"
-
-#: ../src/interface.c:1179
-msgid "_Open"
-msgstr "_Άνοιγμα"
-
-#: ../src/interface.c:1187
-#, fuzzy
-msgid "_Recent Projects"
-msgstr "Άνοιγμα Έργου"
-
-#: ../src/interface.c:1191
-msgid "_Close"
-msgstr "_Κλείσιμο"
-
-#: ../src/interface.c:1213
-#, fuzzy
-msgid "_Apply Default Indentation"
-msgstr "Αυτόματη Εσοχή"
-
-#: ../src/interface.c:1216
-msgid "Apply the default indentation settings to all documents"
-msgstr ""
-
-#: ../src/interface.c:1222
-msgid "_Tools"
-msgstr "_Εργαλεία"
-
-#: ../src/interface.c:1229
-msgid "_Reload Configuration"
-msgstr ""
-
-#: ../src/interface.c:1237
-#, fuzzy
-msgid "C_onfiguration Files"
-msgstr "Αποτυχία μεταγλώτισης."
-
-#: ../src/interface.c:1250
-msgid "_Color Chooser"
-msgstr "Επιλογέας _Χρωμάτων"
-
-#: ../src/interface.c:1258
-msgid "_Word Count"
-msgstr "_Μετρητής Λέξεων"
-
-#: ../src/interface.c:1262
-msgid "Load Ta_gs"
-msgstr "Φόρτωση Ε_τικετών"
-
-#: ../src/interface.c:1266 ../src/interface.c:1273
-msgid "_Help"
-msgstr "_Βοήθεια"
-
-#: ../src/interface.c:1281
-msgid "_Website"
-msgstr "_Ιστοσελίδα"
-
-#: ../src/interface.c:1285
-msgid "_Keyboard Shortcuts"
-msgstr "_Συντομεύσεις Πληκτρολογίου"
-
-#: ../src/interface.c:1289
-#, fuzzy
-msgid "_Debug Messages"
-msgstr "Μηνύματα"
-
-#: ../src/interface.c:1328 ../src/sidebar.c:132
-msgid "Symbols"
-msgstr "Σύμβολα"
-
-#: ../src/interface.c:1342
-msgid "Documents"
-msgstr "Έγγραφα"
-
-#: ../src/interface.c:1378
-msgid "Status"
-msgstr "Κατάσταση"
-
-#: ../src/interface.c:1392
-msgid "Compiler"
-msgstr "Μεταγλωτιστής"
-
-#: ../src/interface.c:1407
-msgid "Messages"
-msgstr "Μηνύματα"
-
-#: ../src/interface.c:1420
-msgid "Scribble"
-msgstr "Σημειωματάριο"
-
-#: ../src/interface.c:2094
-#, fuzzy
-msgid "_Toolbar Preferences"
-msgstr "Ιδιότητες"
-
-#: ../src/interface.c:2107
-#, fuzzy
-msgid "_Hide Toolbar"
-msgstr "Απόκρυψη μπάρας εργαλείων"
-
-#: ../src/interface.c:2239
-#, fuzzy
-msgid "I_nsert"
-msgstr "_Εισαγωγή"
-
-#: ../src/interface.c:2319 ../src/keybindings.c:374
+#: ../src/interface.c:715 ../src/interface.c:2365 ../src/keybindings.c:374
 #, fuzzy
 msgid "_Insert Alternative White Space"
 msgstr "Εισαγωγή εναλλακτικού whitespace"
 
-#: ../src/interface.c:2364
+#: ../src/interface.c:724
+#, fuzzy
+msgid "Preference_s"
+msgstr "Ιδιότητες"
+
+#: ../src/interface.c:732 ../src/keybindings.c:387
+#, fuzzy
+msgid "P_lugin Preferences"
+msgstr "Ιδιότητες"
+
+#: ../src/interface.c:740 ../src/interface.c:2369
+msgid "_Search"
+msgstr "_Αναζήτηση"
+
+#: ../src/interface.c:751
+msgid "Find _Next"
+msgstr "Αναζήτηση _Επόμενου"
+
+#: ../src/interface.c:755
+msgid "Find _Previous"
+msgstr "Αναζήτηση _Προηγούμενου"
+
+#: ../src/interface.c:764
+msgid "Find in F_iles"
+msgstr "Αναζήτηση στα Α_ρχεία"
+
+#: ../src/interface.c:772 ../src/search.c:632
+msgid "_Replace"
+msgstr "Αν_τικατάσταση"
+
+#: ../src/interface.c:785
+msgid "Next _Message"
+msgstr "Επόμενο _Μήνυμα"
+
+#: ../src/interface.c:793
+#, fuzzy
+msgid "Pr_evious Message"
+msgstr "Επόμενο Μήνυμα"
+
+#: ../src/interface.c:806 ../src/keybindings.c:434
+#, fuzzy
+msgid "_Go to Next Marker"
+msgstr "Πήγαινε στον επόμενο δείκτη"
+
+#: ../src/interface.c:810 ../src/keybindings.c:437
+#, fuzzy
+msgid "_Go to Previous Marker"
+msgstr "Πήγαινε στον προηγούμενο δείκτη"
+
+#: ../src/interface.c:819
+msgid "_Go to Line"
+msgstr "Πήγαιν_ε στη Γραμμή"
+
+#: ../src/interface.c:827 ../src/interface.c:2304
+msgid "_More"
+msgstr ""
+
+#: ../src/interface.c:834 ../src/keybindings.c:399
+#, fuzzy
+msgid "Find Next _Selection"
+msgstr "Εύρεση Επόμενων Επιλεγμένων"
+
+#: ../src/interface.c:838 ../src/keybindings.c:401
+#, fuzzy
+msgid "Find Pre_vious Selection"
+msgstr "Εύρεση Προηγούμενων Επιλεγμένων"
+
+#: ../src/interface.c:847 ../src/interface.c:2386
+#, fuzzy
+msgid "Find _Usage"
+msgstr "Εύρεση Χρήσης"
+
+#: ../src/interface.c:851 ../src/interface.c:2394
+#, fuzzy
+msgid "Find _Document Usage"
+msgstr "Εύρεση Χρήσης"
+
+#: ../src/interface.c:860 ../src/keybindings.c:416
+#, fuzzy
+msgid "_Mark All"
+msgstr "Δημιουργία _Όλων"
+
+#: ../src/interface.c:869 ../src/interface.c:2402
+#, fuzzy
+msgid "Go to _Tag Definition"
+msgstr "Πήγαινε στον Ορισμό Ετικετών"
+
+#: ../src/interface.c:873
+#, fuzzy
+msgid "Go to T_ag Declaration"
+msgstr "Πήγαινε στη Δήλωση Ετικετών"
+
+#: ../src/interface.c:884
+msgid "Change _Font"
+msgstr "Αλλαγή Γραμμα_τοσειράς"
+
+#: ../src/interface.c:897
+#, fuzzy
+msgid "To_ggle All Additional Widgets"
+msgstr "Ενεργοποίηση όλων των επιπρόσθετων Widgets"
+
+#: ../src/interface.c:901
+msgid "Full_screen"
+msgstr "Πλήρης _Οθόνη"
+
+#: ../src/interface.c:905
+msgid "Show Message _Window"
+msgstr "Προβολή Παράθυρου Μηνυμάτων"
+
+#: ../src/interface.c:910
+msgid "Show _Toolbar"
+msgstr "Εμφάνιση _Μπάρας Εργαλείων"
+
+#: ../src/interface.c:915
+msgid "Show Side_bar"
+msgstr "Εμφάνιση Πλε_υρικής Μπάρας"
+
+#: ../src/interface.c:920 ../src/interface.c:4354 ../src/interface.c:5766
+#: ../src/keybindings.c:253 ../src/prefs.c:1571
+msgid "Editor"
+msgstr "Επεξεργαστής"
+
+#: ../src/interface.c:927
+msgid "Show _Markers Margin"
+msgstr "Εμφάνιση _Δεικτών Περιθωρίου"
+
+#: ../src/interface.c:932
+msgid "Show _Line Numbers"
+msgstr "Εμφάνιση Μ_ετρητή Γραμμών"
+
+#: ../src/interface.c:937
+#, fuzzy
+msgid "Show _White Space"
+msgstr "Εμφάνιση των κενών"
+
+#: ../src/interface.c:941
+#, fuzzy
+msgid "Show Line _Endings"
+msgstr "Εμφάνιση τέλους γραμμής"
+
+#: ../src/interface.c:945
+#, fuzzy
+msgid "Show _Indentation Guides"
+msgstr "Εμφάνιση οδηγών εσοχής"
+
+#: ../src/interface.c:966
+msgid "_Document"
+msgstr "Έγγ_ραφο"
+
+#: ../src/interface.c:973
+msgid "_Line Wrapping"
+msgstr "Αναδίπλ_ωση Γραμμής"
+
+#: ../src/interface.c:978
+#, fuzzy
+msgid "Line _Breaking"
+msgstr "Αναδίπλωση Γραμμής"
+
+#: ../src/interface.c:982
+msgid "_Auto-indentation"
+msgstr "Αυτόματη Εσοχή"
+
+#: ../src/interface.c:987
+msgid "In_dent Type"
+msgstr "Τύπος Εσοχής"
+
+#: ../src/interface.c:994 ../src/interface.c:1028
+#, fuzzy
+msgid "_Detect from Content"
+msgstr "Ανίχνευση από το αρχείο"
+
+#: ../src/interface.c:1003 ../src/interface.c:3948 ../src/interface.c:5666
+#, fuzzy
+msgid "_Tabs"
+msgstr "Ετικέτες"
+
+#: ../src/interface.c:1009 ../src/interface.c:3939 ../src/interface.c:5657
+#, fuzzy
+msgid "_Spaces"
+msgstr "Κενά"
+
+#: ../src/interface.c:1015
+#, fuzzy
+msgid "T_abs and Spaces"
+msgstr "_Αντικατάσταση των Tab σε Κενά"
+
+#: ../src/interface.c:1021
+msgid "Indent Widt_h"
+msgstr ""
+
+#: ../src/interface.c:1037
+msgid "_1"
+msgstr ""
+
+#: ../src/interface.c:1043
+msgid "_2"
+msgstr ""
+
+#: ../src/interface.c:1049
+msgid "_3"
+msgstr ""
+
+#: ../src/interface.c:1055
+msgid "_4"
+msgstr ""
+
+#: ../src/interface.c:1061
+msgid "_5"
+msgstr ""
+
+#: ../src/interface.c:1067
+msgid "_6"
+msgstr ""
+
+#: ../src/interface.c:1073
+msgid "_7"
+msgstr ""
+
+#: ../src/interface.c:1079
+msgid "_8"
+msgstr ""
+
+#: ../src/interface.c:1090
+msgid "Read _Only"
+msgstr "Μόνο για Ανάγ_νωση"
+
+#: ../src/interface.c:1094
+msgid "_Write Unicode BOM"
+msgstr "Εγγραφή _Unicode BOM"
+
+#: ../src/interface.c:1103
+msgid "Set File_type"
+msgstr "Καθορισμός _Τύπου Αρχείου"
+
+#: ../src/interface.c:1113
+msgid "Set _Encoding"
+msgstr "Καθορισμός Κ_ωδικοποίησης"
+
+#: ../src/interface.c:1123
+msgid "Set Line E_ndings"
+msgstr "Καθορισμός Κατα_λίξεων Γραμμών"
+
+#: ../src/interface.c:1130
+msgid "Convert and Set to _CR/LF (Win)"
+msgstr "Μετατροπή και Καθορισμός σε _CR/LF (Win)"
+
+#: ../src/interface.c:1136
+msgid "Convert and Set to _LF (Unix)"
+msgstr "Μετατροπή και Καθορισμός σε _LF (Unix)"
+
+#: ../src/interface.c:1142
+msgid "Convert and Set to CR (_Mac)"
+msgstr "Μετατροπή και Καθορισμός σε CR (_Mac)"
+
+#: ../src/interface.c:1153
+msgid "_Strip Trailing Spaces"
+msgstr "_Διαγραφή Λωρίδων Κενών"
+
+#: ../src/interface.c:1157
+msgid "_Replace Tabs by Spaces"
+msgstr "_Αντικατάσταση των Tab σε Κενά"
+
+#: ../src/interface.c:1161
+#, fuzzy
+msgid "Replace Spaces b_y Tabs"
+msgstr "_Αντικατάσταση των Tab σε Κενά"
+
+#: ../src/interface.c:1170
+msgid "_Fold All"
+msgstr "Δίπλ-ωση Όλων"
+
+#: ../src/interface.c:1174
+msgid "_Unfold All"
+msgstr "Αναδ-ίπλωση Όλων"
+
+#: ../src/interface.c:1183
+msgid "Remove _Markers"
+msgstr "Απομάκρυνση _δεικτών"
+
+#: ../src/interface.c:1187
+msgid "Remove Error _Indicators"
+msgstr "Απομάκρυνση _Δεικτών Σφάλματος"
+
+#: ../src/interface.c:1191
+msgid "_Project"
+msgstr "Έρ_γο"
+
+#: ../src/interface.c:1198
+msgid "_New"
+msgstr "_Νέο"
+
+#: ../src/interface.c:1206
+msgid "_Open"
+msgstr "_Άνοιγμα"
+
+#: ../src/interface.c:1214
+#, fuzzy
+msgid "_Recent Projects"
+msgstr "Άνοιγμα Έργου"
+
+#: ../src/interface.c:1218
+msgid "_Close"
+msgstr "_Κλείσιμο"
+
+#: ../src/interface.c:1231
+#, fuzzy
+msgid "_Apply Default Indentation"
+msgstr "Αυτόματη Εσοχή"
+
+#: ../src/interface.c:1234
+msgid "Apply the default indentation settings to all documents"
+msgstr ""
+
+#: ../src/interface.c:1249
+msgid "_Tools"
+msgstr "_Εργαλεία"
+
+#: ../src/interface.c:1256
+msgid "_Reload Configuration"
+msgstr ""
+
+#: ../src/interface.c:1264
+#, fuzzy
+msgid "C_onfiguration Files"
+msgstr "Αποτυχία μεταγλώτισης."
+
+#: ../src/interface.c:1277
+msgid "_Color Chooser"
+msgstr "Επιλογέας _Χρωμάτων"
+
+#: ../src/interface.c:1285
+msgid "_Word Count"
+msgstr "_Μετρητής Λέξεων"
+
+#: ../src/interface.c:1289
+msgid "Load Ta_gs"
+msgstr "Φόρτωση Ε_τικετών"
+
+#: ../src/interface.c:1293 ../src/interface.c:1300
+msgid "_Help"
+msgstr "_Βοήθεια"
+
+#: ../src/interface.c:1308
+msgid "_Website"
+msgstr "_Ιστοσελίδα"
+
+#: ../src/interface.c:1312
+msgid "_Keyboard Shortcuts"
+msgstr "_Συντομεύσεις Πληκτρολογίου"
+
+#: ../src/interface.c:1316
+#, fuzzy
+msgid "_Debug Messages"
+msgstr "Μηνύματα"
+
+#: ../src/interface.c:1355 ../src/sidebar.c:124
+msgid "Symbols"
+msgstr "Σύμβολα"
+
+#: ../src/interface.c:1369
+msgid "Documents"
+msgstr "Έγγραφα"
+
+#: ../src/interface.c:1405
+msgid "Status"
+msgstr "Κατάσταση"
+
+#: ../src/interface.c:1419
+msgid "Compiler"
+msgstr "Μεταγλωτιστής"
+
+#: ../src/interface.c:1434
+msgid "Messages"
+msgstr "Μηνύματα"
+
+#: ../src/interface.c:1447
+msgid "Scribble"
+msgstr "Σημειωματάριο"
+
+#: ../src/interface.c:2135
+#, fuzzy
+msgid "_Toolbar Preferences"
+msgstr "Ιδιότητες"
+
+#: ../src/interface.c:2148
+#, fuzzy
+msgid "_Hide Toolbar"
+msgstr "Απόκρυψη μπάρας εργαλείων"
+
+#: ../src/interface.c:2281
+#, fuzzy
+msgid "I_nsert"
+msgstr "_Εισαγωγή"
+
+#: ../src/interface.c:2410
 #, fuzzy
 msgid "Conte_xt Action"
 msgstr "Δράση Πλαισίου"
 
-#: ../src/interface.c:2885 ../src/keybindings.c:383
+#: ../src/interface.c:2952 ../src/keybindings.c:384
 msgid "Preferences"
 msgstr "Ιδιότητες"
 
-#: ../src/interface.c:2921
+#: ../src/interface.c:2988
 msgid "Load files from the last session"
 msgstr "Φόρτωσε τα αρχεία από την τελευταία συνεδρία"
 
-#: ../src/interface.c:2924
+#: ../src/interface.c:2991
 msgid "Opens at startup the files from the last session"
 msgstr "Ανοίγει κατά την εκκίνηση τα αρχεία από την τελευταία συνεδρία"
 
-#: ../src/interface.c:2926
+#: ../src/interface.c:2993
 msgid "Load virtual terminal support"
 msgstr "Φόρτωση υποστήριξης virtual terminal"
 
-#: ../src/interface.c:2928
+#: ../src/interface.c:2995
 #, fuzzy
 msgid ""
 "Whether the virtual terminal emulation (VTE) should be loaded at startup, "
@@ -1730,42 +1717,42 @@ msgstr ""
 "Εάν και κατά πόσο το virtual terminal emulation (VTE) πρέπει να φορτώνεται "
 "κατά την εκκίνηση. Απενεργοποιήστε το εάν δεν το χρειάζεστε."
 
-#: ../src/interface.c:2930
+#: ../src/interface.c:2997
 msgid "Enable plugin support"
 msgstr "Ενεργοποίηση υποστήριξης επιπρόσθετων"
 
-#: ../src/interface.c:2934
+#: ../src/interface.c:3001
 msgid "<b>Startup</b>"
 msgstr "<b>Εκκίνηση</b>"
 
-#: ../src/interface.c:2953
+#: ../src/interface.c:3020
 msgid "Save window position and geometry"
 msgstr "Αποθήκευση της θέσης και γεωμετρίας του παραθύρου"
 
-#: ../src/interface.c:2956
+#: ../src/interface.c:3023
 msgid "Saves the window position and geometry and restores it at the start"
 msgstr ""
 "Αποθηκεύει την θέση και γεωμετρία του παραθύρου και τα επαναφέρει κατά την "
 "εκκίνηση"
 
-#: ../src/interface.c:2958
+#: ../src/interface.c:3025
 msgid "Confirm exit"
 msgstr "Επιβεβαίωση κατά την έξοδο"
 
-#: ../src/interface.c:2961
+#: ../src/interface.c:3028
 #, fuzzy
 msgid "Shows a confirmation dialog on exit"
 msgstr "Εμφανίζει έναν διάλογο επιβεβαίωσης κατά την έξοδο."
 
-#: ../src/interface.c:2963
+#: ../src/interface.c:3030
 msgid "<b>Shutdown</b>"
 msgstr "<b>Τερματισμός</b>"
 
-#: ../src/interface.c:2984
+#: ../src/interface.c:3051
 msgid "Startup path:"
 msgstr "Διαδρομή εκκίνησης:"
 
-#: ../src/interface.c:2996
+#: ../src/interface.c:3063
 msgid ""
 "Path to start in when opening or saving files. Must be an absolute path. "
 "Leave blank to use the current working directory."
@@ -1774,40 +1761,40 @@ msgstr ""
 "Πρέπει να είναι απόλυτη διαδρομή. Αφήστε το κενό για χρήση του τρέχοντος "
 "φακέλου εργασίας."
 
-#: ../src/interface.c:3009
+#: ../src/interface.c:3076
 msgid "Project files:"
 msgstr "Αρχεία έργου:"
 
-#: ../src/interface.c:3021
+#: ../src/interface.c:3088
 msgid "Path to start in when opening project files"
 msgstr "Η διαδρομή από την οποία θα ξεκινά για άνοιγμα των αρχείων του έργου"
 
-#: ../src/interface.c:3034
+#: ../src/interface.c:3101
 #, fuzzy
 msgid "Extra plugin path:"
 msgstr "Ενεργοποίηση υποστήριξης επιπρόσθετων"
 
-#: ../src/interface.c:3046
+#: ../src/interface.c:3113
 msgid ""
 "Geany looks by default in the global installation path and in the "
 "configuration directory. The path entered here will be searched additionally "
 "for plugins. Leave blank to disable."
 msgstr ""
 
-#: ../src/interface.c:3059
+#: ../src/interface.c:3126
 msgid "<b>Paths</b>"
 msgstr "<b>Διαδρομές</b>"
 
-#: ../src/interface.c:3064
+#: ../src/interface.c:3131
 #, fuzzy
 msgid "Startup"
 msgstr "Κατάσταση"
 
-#: ../src/interface.c:3087
+#: ../src/interface.c:3154
 msgid "Beep on errors or when compilation has finished"
 msgstr "Ηχητικό σήμα σε σφάλματα ή όταν έχει ολοκληρωθεί το compilation"
 
-#: ../src/interface.c:3090
+#: ../src/interface.c:3157
 #, fuzzy
 msgid ""
 "Whether to beep if an error occurred or when the compilation process has "
@@ -1816,11 +1803,11 @@ msgstr ""
 "Εάν θα ακούγεται ηχητικό σήμα στην εμφάνιση λάθους ή όταν η διαδικασία του "
 "compilation έχει ολοκληρωθεί."
 
-#: ../src/interface.c:3092
+#: ../src/interface.c:3159
 msgid "Switch to status message list at new message"
 msgstr "Μετάβαση στη λίστα κατάστασης μηνυμάτων όταν υπάρχει νέο μήνυμα"
 
-#: ../src/interface.c:3095
+#: ../src/interface.c:3162
 #, fuzzy
 msgid ""
 "Switch to the status message tab (in the notebook window at the bottom) if a "
@@ -1829,12 +1816,12 @@ msgstr ""
 "Μετάβαση στην ετικέτα κατάστασης μηνυμάτων (κάτω μέρος στο παράθυρο του "
 "σημειωματαρίου) όταν ένα νέο μήνυμα κατάστασης εμφανιστεί."
 
-#: ../src/interface.c:3097
+#: ../src/interface.c:3164
 msgid "Suppress status messages in the status bar"
 msgstr ""
 "Απόκρυψη των μηνυμάτων της κατάστασης λειτουργίας από την γραμμή κατάστασης"
 
-#: ../src/interface.c:3100
+#: ../src/interface.c:3167
 msgid ""
 "Removes all messages from the status bar. The messages are still displayed "
 "in the status messages window."
@@ -1842,12 +1829,12 @@ msgstr ""
 "Αφαιρεί όλα τα μηνύματα από την γραμμή κατάστασης. Τα μηνύματα θα συνεχίζουν "
 "να εμφανίζονται στο παράθυρο μηνυμάτων κατάστασης λειτουργίας."
 
-#: ../src/interface.c:3102
+#: ../src/interface.c:3169
 #, fuzzy
 msgid "Auto-focus widgets (focus follows mouse)"
 msgstr "Widget αυτόματης εστίασης (η εστίαση ακολουθεί το ποντίκι)"
 
-#: ../src/interface.c:3105
+#: ../src/interface.c:3172
 msgid ""
 "Gives the focus automatically to widgets below the mouse cursor. Works for "
 "the main editor widget, the scribble, the toolbar search and goto line "
@@ -1857,27 +1844,27 @@ msgstr ""
 "Λειτουργεί με τα widget τηςκύριας σύνταξης, τις σημειώσεις, την μπάρα "
 "εργαλείων, τη γραμμή πήγαινε και το VTE."
 
-#: ../src/interface.c:3107
+#: ../src/interface.c:3174
 msgid "Use Windows File Open/Save dialogs"
 msgstr ""
 
-#: ../src/interface.c:3110
+#: ../src/interface.c:3177
 msgid ""
 "Defines whether to use the native Windows File Open/Save dialogs or whether "
 "to use the GTK default dialogs"
 msgstr ""
 
-#: ../src/interface.c:3112 ../src/interface.c:3491 ../src/interface.c:4457
+#: ../src/interface.c:3179 ../src/interface.c:3415 ../src/interface.c:4564
 msgid "<b>Miscellaneous</b>"
 msgstr "<b>Διάφορα</b>"
 
-#: ../src/interface.c:3131
+#: ../src/interface.c:3198
 msgid "Always wrap search and hide the Find dialog"
 msgstr ""
 "Να γίνεται πάντα αναδίπλωση της αναζήτησης και απόκρυψη του διαλόγου "
 "αναζήτησης"
 
-#: ../src/interface.c:3134
+#: ../src/interface.c:3201
 #, fuzzy
 msgid ""
 "Always wrap search around the document and hide the Find dialog after "
@@ -1886,31 +1873,31 @@ msgstr ""
 "Να γίνεται πάντα αναδίπλωση της αναζήτησης γύρω από το κείμενο και απόκρυψη "
 "του διαλόγου αναζήτησης μετά από κλικ στο Εύρεση Επόμενο/Προηγούμενο"
 
-#: ../src/interface.c:3136
+#: ../src/interface.c:3203
 msgid "Use the current word under the cursor for Find dialogs"
 msgstr ""
 
-#: ../src/interface.c:3139
+#: ../src/interface.c:3206
 msgid ""
 "Use current word under the cursor when opening the Find, Find in Files or "
 "Replace dialog and there is no selection"
 msgstr ""
 
-#: ../src/interface.c:3141
+#: ../src/interface.c:3208
 #, fuzzy
 msgid "Use the current file's directory for Find in Files"
 msgstr "Ο φάκελος για αναζήτηση σε αρχεία δεν υπάρχει."
 
-#: ../src/interface.c:3145
+#: ../src/interface.c:3212
 #, fuzzy
 msgid "<b>Search</b>"
 msgstr "<b>Πλευρική μπάρα</b>"
 
-#: ../src/interface.c:3164
+#: ../src/interface.c:3231
 msgid "Use project-based session files"
 msgstr "Χρήση αρχείων συνεδρίας βασισμένα στο έργο"
 
-#: ../src/interface.c:3167
+#: ../src/interface.c:3234
 #, fuzzy
 msgid ""
 "Whether to store a project's session files and open them when re-opening the "
@@ -1919,12 +1906,12 @@ msgstr ""
 "Εάν θα αποθηκεύει τα αρχεία της συνεδρίας ενός έργου και θα τα ανοίγει όταν "
 "θα ξανανοίγει το έργο."
 
-#: ../src/interface.c:3169
+#: ../src/interface.c:3236
 #, fuzzy
 msgid "Store project file inside the project base directory"
 msgstr "Δημιουργία φακέλλου της βασικής διαδρομής του έργου;"
 
-#: ../src/interface.c:3172
+#: ../src/interface.c:3239
 msgid ""
 "When enabled, a project file is stored by default inside the project base "
 "directory when creating new projects instead of one directory above the base "
@@ -1932,11 +1919,11 @@ msgid ""
 "Project dialog."
 msgstr ""
 
-#: ../src/interface.c:3174
+#: ../src/interface.c:3241
 msgid "<b>Projects</b>"
 msgstr "<b>Έργα</b>"
 
-#: ../src/interface.c:3179
+#: ../src/interface.c:3246
 #, fuzzy
 msgid "Miscellaneous"
 msgstr "<b>Διάφορα</b>"
@@ -1945,87 +1932,102 @@ msgstr "<b>Διάφορα</b>"
 #. * corresponding chapter in the documentation, comparing translatable
 #. * strings is easy to break. Maybe attach an identifying string to the
 #. * tab label object.
-#: ../src/interface.c:3183 ../src/prefs.c:1551
+#: ../src/interface.c:3250 ../src/prefs.c:1565
 msgid "General"
 msgstr "Γενικά"
 
-#: ../src/interface.c:3220
+#: ../src/interface.c:3291
 msgid "Show symbol list"
 msgstr "Εμφάνιση λίστας συμβόλων"
 
-#: ../src/interface.c:3223
+#: ../src/interface.c:3294
 msgid "Toggle the symbol list on and off"
 msgstr "Ενεργοποίηση/απενεργοποίηση της λίστας των συμβόλων"
 
-#: ../src/interface.c:3225
+#: ../src/interface.c:3296
 msgid "Show documents list"
 msgstr "Εμφάνιση λίστας εγγράφων"
 
-#: ../src/interface.c:3228
+#: ../src/interface.c:3299
 msgid "Toggle the documents list on and off"
 msgstr "Ενεργοποίηση/απενεργοποίηση της λίστας των εγγράφων"
 
-#: ../src/interface.c:3230
+#: ../src/interface.c:3301
 #, fuzzy
 msgid "Show sidebar"
 msgstr "Εμφάνιση Πλε_υρικής Μπάρας"
 
-#: ../src/interface.c:3238
+#: ../src/interface.c:3309
 #, fuzzy
 msgid "Position:"
 msgstr "Περιγραφή:"
 
-#: ../src/interface.c:3242 ../src/interface.c:3365 ../src/interface.c:3426
-#: ../src/interface.c:3444 ../src/interface.c:3462
+#: ../src/interface.c:3313 ../src/interface.c:3469 ../src/interface.c:3530
+#: ../src/interface.c:3548 ../src/interface.c:3566
 msgid "Left"
 msgstr "Αριστερά"
 
-#: ../src/interface.c:3249 ../src/interface.c:3373 ../src/interface.c:3427
-#: ../src/interface.c:3445 ../src/interface.c:3463
+#: ../src/interface.c:3320 ../src/interface.c:3477 ../src/interface.c:3531
+#: ../src/interface.c:3549 ../src/interface.c:3567
 msgid "Right"
 msgstr "Δεξιά"
 
-#: ../src/interface.c:3255
+#: ../src/interface.c:3326
 msgid "<b>Sidebar</b>"
 msgstr "<b>Πλευρική μπάρα</b>"
 
-#: ../src/interface.c:3276
+#: ../src/interface.c:3347
 msgid "Symbol list:"
 msgstr "Λίστα συμβόλων:"
 
-#: ../src/interface.c:3283 ../src/interface.c:3413
+#: ../src/interface.c:3354 ../src/interface.c:3517
 msgid "Message window:"
 msgstr "Παράθυρο μηνυμάτων:"
 
-#: ../src/interface.c:3290 ../src/interface.c:3449
+#: ../src/interface.c:3361 ../src/interface.c:3553
 msgid "Editor:"
 msgstr "Επεξεργαστής:"
 
-#: ../src/interface.c:3302
+#: ../src/interface.c:3373
 msgid "Sets the font for the message window"
 msgstr "Καθορίζει τη γραμματοσειρά για το παράθυρο μηνυμάτων"
 
-#: ../src/interface.c:3310
+#: ../src/interface.c:3381
 msgid "Sets the font for the symbol list"
 msgstr "Καθορίζει τη γραμματοσειρά για τη λίστα των συμβόλων"
 
-#: ../src/interface.c:3318
+#: ../src/interface.c:3389
 msgid "Sets the editor font"
 msgstr "Καθορίζει τη γραμματοσειρά για τον επεξεργαστή"
 
-#: ../src/interface.c:3320
+#: ../src/interface.c:3391
 msgid "<b>Fonts</b>"
 msgstr "<b>Γραμματοσειρές</b>"
 
-#: ../src/interface.c:3339
+#: ../src/interface.c:3410
+msgid "Show status bar"
+msgstr "Εμφάνιση γραμμής κατάστασης"
+
+#: ../src/interface.c:3413
+#, fuzzy
+msgid "Whether to show the status bar at the bottom of the main window"
+msgstr ""
+"Κατά πόσο θα εμφανίζεται η γραμμή κατάστασης στο κάτω μέρος του κεντρικού "
+"παραθύρου"
+
+#: ../src/interface.c:3420 ../src/interface.c:3755 ../src/prefs.c:1567
+msgid "Interface"
+msgstr "Περιβάλλον εργασίας"
+
+#: ../src/interface.c:3443
 msgid "Show editor tabs"
 msgstr "Εμφάνιση των ετικετών του επεξεργαστή"
 
-#: ../src/interface.c:3343
+#: ../src/interface.c:3447
 msgid "Show close buttons"
 msgstr "Εμφάνιση κουμπιών τερματισμού"
 
-#: ../src/interface.c:3346
+#: ../src/interface.c:3450
 #, fuzzy
 msgid ""
 "Shows a small cross button in the file tabs to easily close files when "
@@ -2035,153 +2037,143 @@ msgstr ""
 "κλείσιμο των αρχείων όταν θα γίνεται κλικ πάνω σ' αυτό (απαιτεί επανεκκίνηση "
 "του Geany)."
 
-#: ../src/interface.c:3352
+#: ../src/interface.c:3456
 msgid "Placement of new file tabs:"
 msgstr "Τοποθέτηση των νέων ετικετών αρχείων:"
 
-#: ../src/interface.c:3368
+#: ../src/interface.c:3472
 msgid "File tabs will be placed on the left of the notebook"
 msgstr "Οι ετικέτες αρχείων θα τοποθετούνται στα αριστερά του σημειωματάριου"
 
-#: ../src/interface.c:3376
+#: ../src/interface.c:3480
 msgid "File tabs will be placed on the right of the notebook"
 msgstr "Οι ετικέτες αρχείων θα τοποθετούνται στα δεξιά του σημειωματάριου"
 
-#: ../src/interface.c:3380
+#: ../src/interface.c:3484
 #, fuzzy
 msgid "Next to current"
 msgstr "Αποθήκευση του τρέχοντος αρχείου"
 
-#: ../src/interface.c:3385
+#: ../src/interface.c:3489
 msgid ""
 "Whether to place file tabs next to the current tab rather than at the edges "
 "of the notebook"
 msgstr ""
 
-#: ../src/interface.c:3387
+#: ../src/interface.c:3491
 #, fuzzy
 msgid "Double-clicking hides all additional widgets"
 msgstr "Ενεργοποίηση όλων των επιπρόσθετων Widgets"
 
-#: ../src/interface.c:3390
+#: ../src/interface.c:3494
 #, fuzzy
 msgid "Calls the View->Toggle All Additional Widgets command"
 msgstr "Ενεργοποίηση όλων των επιπρόσθετων Widgets"
 
-#: ../src/interface.c:3392
+#: ../src/interface.c:3496
 msgid "<b>Editor tabs</b>"
 msgstr "<b>Ετικέτες επεξεργαστή</b>"
 
-#: ../src/interface.c:3428 ../src/interface.c:3446 ../src/interface.c:3464
+#: ../src/interface.c:3532 ../src/interface.c:3550 ../src/interface.c:3568
 msgid "Top"
 msgstr "Κορυφή"
 
-#: ../src/interface.c:3429 ../src/interface.c:3447 ../src/interface.c:3465
+#: ../src/interface.c:3533 ../src/interface.c:3551 ../src/interface.c:3569
 msgid "Bottom"
 msgstr "Κάτω μέρος"
 
-#: ../src/interface.c:3431
+#: ../src/interface.c:3535
 msgid "Sidebar:"
 msgstr "Πλευρική μπάρα:"
 
-#: ../src/interface.c:3467
+#: ../src/interface.c:3571
 msgid "<b>Tab positions</b>"
 msgstr "<b>Θέσεις ετικέτας</b>"
 
-#: ../src/interface.c:3486
-msgid "Show status bar"
-msgstr "Εμφάνιση γραμμής κατάστασης"
-
-#: ../src/interface.c:3489
+#: ../src/interface.c:3576
 #, fuzzy
-msgid "Whether to show the status bar at the bottom of the main window"
-msgstr ""
-"Κατά πόσο θα εμφανίζεται η γραμμή κατάστασης στο κάτω μέρος του κεντρικού "
-"παραθύρου"
+msgid "Notebook tabs"
+msgstr "Εντολές ετικετών σημειωματάριου"
 
-#: ../src/interface.c:3496 ../src/prefs.c:1553
-msgid "Interface"
-msgstr "Περιβάλλον εργασίας"
-
-#: ../src/interface.c:3527
+#: ../src/interface.c:3607
 #, fuzzy
-msgid "Show T_oolbar"
+msgid "Show t_oolbar"
 msgstr "Εμφάνιση μπάρας εργαλείων"
 
-#: ../src/interface.c:3531
-msgid "_Append Toolbar to the Menu"
+#: ../src/interface.c:3611
+msgid "_Append toolbar to the menu"
 msgstr ""
 
-#: ../src/interface.c:3534
+#: ../src/interface.c:3614
 msgid "Pack the toolbar to the main menu to save vertical space"
 msgstr ""
 
-#: ../src/interface.c:3556 ../src/toolbar.c:930
+#: ../src/interface.c:3636 ../src/toolbar.c:936
 #, fuzzy
 msgid "Customize Toolbar"
 msgstr "Εμφάνιση _Μπάρας Εργαλείων"
 
-#: ../src/interface.c:3576
-msgid "System _Default"
+#: ../src/interface.c:3656
+msgid "System _default"
 msgstr ""
 
-#: ../src/interface.c:3584
+#: ../src/interface.c:3664
 #, fuzzy
-msgid "Images _and Text"
+msgid "Images _and text"
 msgstr "Εικόνες και κείμενο"
 
-#: ../src/interface.c:3592
+#: ../src/interface.c:3672
 #, fuzzy
-msgid "_Images Only"
+msgid "_Images only"
 msgstr "Μόνο εικόνες"
 
-#: ../src/interface.c:3600
+#: ../src/interface.c:3680
 #, fuzzy
-msgid "_Text Only"
+msgid "_Text only"
 msgstr "Μόνο κείμενο"
 
-#: ../src/interface.c:3608
+#: ../src/interface.c:3688
 #, fuzzy
-msgid "<b>Icon Style</b>"
+msgid "<b>Icon style</b>"
 msgstr "<b>Γραμματοσειρές</b>"
 
-#: ../src/interface.c:3629
-msgid "S_ystem Default"
+#: ../src/interface.c:3709
+msgid "S_ystem default"
 msgstr ""
 
-#: ../src/interface.c:3637
+#: ../src/interface.c:3717
 #, fuzzy
-msgid "_Small Icons"
+msgid "_Small icons"
 msgstr "Μικρά εικονίδια"
 
-#: ../src/interface.c:3645
+#: ../src/interface.c:3725
 #, fuzzy
-msgid "_Very Small Icons"
+msgid "_Very small icons"
 msgstr "Μικρά εικονίδια"
 
-#: ../src/interface.c:3653
+#: ../src/interface.c:3733
 #, fuzzy
-msgid "_Large Icons"
+msgid "_Large icons"
 msgstr "Μεγάλα εικονίδια"
 
-#: ../src/interface.c:3661
+#: ../src/interface.c:3741
 #, fuzzy
-msgid "<b>Icon Size</b>"
+msgid "<b>Icon size</b>"
 msgstr "<b>Μέγεθος:</b>"
 
-#: ../src/interface.c:3666
+#: ../src/interface.c:3746
 msgid "<b>Toolbar</b>"
 msgstr "<b>Μπάρα εργαλείων</b>"
 
-#: ../src/interface.c:3671 ../src/prefs.c:1555
+#: ../src/interface.c:3751 ../src/prefs.c:1569
 msgid "Toolbar"
 msgstr "Μπάρα εργαλείων"
 
-#: ../src/interface.c:3698
+#: ../src/interface.c:3782
 msgid "Line wrapping"
 msgstr "Αναδίπλωση Γραμμής"
 
-#: ../src/interface.c:3701
+#: ../src/interface.c:3785
 msgid ""
 "Wrap the line at the window border and continue it on the next line. Note: "
 "line wrapping has a high performance cost for large documents so should be "
@@ -2191,12 +2183,12 @@ msgstr ""
 "επόμενη γραμμή. Σημείωση: η αναδίπλωση γραμμής έχει υψηλό κόστος απόδοσης σε "
 "μεγάλα έγγραφα άρα θα πρέπει να απενεργοποιείται σε αργά μηχανήματα."
 
-#: ../src/interface.c:3703
+#: ../src/interface.c:3787
 #, fuzzy
 msgid "\"Smart\" home key"
 msgstr "Ενεργοποίηση \"smart\" πλήκτρου αρχικού καταλόγου"
 
-#: ../src/interface.c:3706
+#: ../src/interface.c:3790
 msgid ""
 "When \"smart\" home is enabled, the HOME key will move the caret to the "
 "first non-blank character of the line, unless it is already there, it moves "
@@ -2211,11 +2203,11 @@ msgstr ""
 "παράλειψης στην αρχή της τρέχουσας γραμμής, ανεξάρτητα από τη τρέχουσα θέση "
 "του."
 
-#: ../src/interface.c:3708
+#: ../src/interface.c:3792
 msgid "Disable Drag and Drop"
 msgstr "Απενεργοποίηση του Drag και Drop"
 
-#: ../src/interface.c:3711
+#: ../src/interface.c:3795
 #, fuzzy
 msgid ""
 "Disable drag and drop completely in the editor window so you can't drag and "
@@ -2225,17 +2217,17 @@ msgstr ""
 "έτσι δεν μπορείτε να κάνετε drag και drop οποιεσδήποτε επιλογές μέσα ή έξω "
 "από το παράθυρο του επεξεργαστή."
 
-#: ../src/interface.c:3713
+#: ../src/interface.c:3797
 #, fuzzy
 msgid "Code folding"
 msgstr "Ενεργοποίηση δίπλωσης"
 
-#: ../src/interface.c:3717
+#: ../src/interface.c:3801
 #, fuzzy
 msgid "Fold/unfold all children of a fold point"
 msgstr "Δίπλωση/Αναδίπλωση όλων των παράγωγων ενός σημείου δίπλωσης"
 
-#: ../src/interface.c:3720
+#: ../src/interface.c:3804
 #, fuzzy
 msgid ""
 "Fold or unfold all children of a fold point. By pressing the Shift key while "
@@ -2245,11 +2237,11 @@ msgstr ""
 "πλήκτρο Shift ενώ κάνετε κλικ σε ένα σύμβολο δίπλωσης θα εκτελεστεί η "
 "αντίθετη συμπεριφορά της ενέργειας αυτής."
 
-#: ../src/interface.c:3722
+#: ../src/interface.c:3806
 msgid "Use indicators to show compile errors"
 msgstr "Χρήση δεικτών για την εμφάνιση σφαλμάτων του μεταγλωτιστή"
 
-#: ../src/interface.c:3725
+#: ../src/interface.c:3809
 #, fuzzy
 msgid ""
 "Whether to use indicators (a squiggly underline) to highlight the lines "
@@ -2258,92 +2250,80 @@ msgstr ""
 "Εάν θα χρησιμοποιούνται δείκτες (μια καμπυλωτή υπογράμμιση) για να εστιάζουν "
 "στις γραμμές που ο μεταγλωτιστής βρήκε μια προειδοποίηση ή ένα σφάλμα."
 
-#: ../src/interface.c:3727
+#: ../src/interface.c:3811
 #, fuzzy
 msgid "Newline strips trailing spaces"
 msgstr "Διαγραφή λωρίδων κενών από το newline"
 
-#: ../src/interface.c:3730
+#: ../src/interface.c:3814
 #, fuzzy
 msgid "Enable newline to strip the trailing spaces on the previous line"
 msgstr ""
 "Ενεργοποιεί το newline να διαγράφει τις λωρίδες κενών από την προηγούμενη "
 "γραμμή."
 
-#: ../src/interface.c:3736
+#: ../src/interface.c:3820
 msgid "Line breaking column:"
 msgstr ""
 
-#: ../src/interface.c:3750
+#: ../src/interface.c:3834
 #, fuzzy
 msgid "Comment toggle marker:"
 msgstr "Ενεργοποίηση/απενεργοποίηση δείκτη"
 
-#: ../src/interface.c:3757
+#: ../src/interface.c:3841
 msgid ""
 "A string which is added when toggling a line comment in a source file, it is "
 "used to mark the comment as toggled."
 msgstr ""
 
-#: ../src/interface.c:3759
+#: ../src/interface.c:3843
 msgid "<b>Features</b>"
 msgstr "<b>Χαρακτηριστικά</b>"
 
-#: ../src/interface.c:3764
+#: ../src/interface.c:3848
 #, fuzzy
 msgid "Features"
 msgstr "<b>Χαρακτηριστικά</b>"
 
-#: ../src/interface.c:3777
+#: ../src/interface.c:3861
 msgid ""
 "Note: To apply these settings to all currently open documents, use "
 "<i>Project->Apply Default Indentation</i>."
 msgstr ""
 
-#: ../src/interface.c:3804 ../src/interface.c:5423
-msgid "Auto-indent mode:"
-msgstr "Μέθοδος αυτόματης εσοχής:"
-
-#: ../src/interface.c:3817 ../src/interface.c:5436
-msgid "Basic"
-msgstr "Βασικό"
-
-#: ../src/interface.c:3818 ../src/interface.c:5437
-msgid "Current chars"
-msgstr "Τρέχον χαρακτήρες"
-
-#: ../src/interface.c:3819 ../src/interface.c:5438
-msgid "Match braces"
-msgstr ""
-
-#: ../src/interface.c:3821 ../src/interface.c:4147 ../src/interface.c:5440
-msgid "Type:"
-msgstr "Τύπος:"
-
-#: ../src/interface.c:3828 ../src/interface.c:5447
+#: ../src/interface.c:3888 ../src/interface.c:5606
 #, fuzzy
 msgid "Width:"
 msgstr "Εγγραφή:"
 
-#: ../src/interface.c:3841 ../src/interface.c:5460
+#: ../src/interface.c:3901 ../src/interface.c:5619
 #, fuzzy
 msgid "The width in chars of a single indent"
 msgstr "Το πλάτος σε χαρακτήρες, τους οποίους θα έχει ένας χαρακτήρας tab"
 
-#: ../src/interface.c:3851 ../src/interface.c:5470
-msgid "Use spaces when inserting indentation"
+#: ../src/interface.c:3906 ../src/interface.c:5624
+msgid "Auto-indent mode:"
+msgstr "Μέθοδος αυτόματης εσοχής:"
+
+#: ../src/interface.c:3919 ../src/interface.c:5637
+msgid "Basic"
+msgstr "Βασικό"
+
+#: ../src/interface.c:3920 ../src/interface.c:5638
+msgid "Current chars"
+msgstr "Τρέχον χαρακτήρες"
+
+#: ../src/interface.c:3921 ../src/interface.c:5639
+msgid "Match braces"
 msgstr ""
 
-#: ../src/interface.c:3860 ../src/interface.c:5479
-msgid "Use one tab per indent"
-msgstr ""
+#: ../src/interface.c:3923 ../src/interface.c:5641
+#, fuzzy
+msgid "Detect type from file"
+msgstr "Ανίχνευση από το αρχείο"
 
-#: ../src/interface.c:3869 ../src/interface.c:5488
-msgid ""
-"Use spaces if the total indent is less than the tab width, otherwise use both"
-msgstr ""
-
-#: ../src/interface.c:3878 ../src/interface.c:5497
+#: ../src/interface.c:3928 ../src/interface.c:5646
 #, fuzzy
 msgid ""
 "Whether to detect the indentation type from file contents when a file is "
@@ -2352,30 +2332,66 @@ msgstr ""
 "Εάν θα ανιχνεύεται ο τύπος της εσοχής από τα περιεχόμενα του αρχείου όταν "
 "ένα αρχείο θα είναι ανοιχτό."
 
-#: ../src/interface.c:3880
+#: ../src/interface.c:3930 ../src/interface.c:5648
+#, fuzzy
+msgid "T_abs and spaces"
+msgstr "_Αντικατάσταση των Tab σε Κενά"
+
+#: ../src/interface.c:3935 ../src/interface.c:5653
+msgid ""
+"Use spaces if the total indent is less than the tab width, otherwise use both"
+msgstr ""
+
+#: ../src/interface.c:3944 ../src/interface.c:5662
+msgid "Use spaces when inserting indentation"
+msgstr ""
+
+#: ../src/interface.c:3953 ../src/interface.c:5671
+msgid "Use one tab per indent"
+msgstr ""
+
+#: ../src/interface.c:3957 ../src/interface.c:5682
+#, fuzzy
+msgid "Detect width from file"
+msgstr "Ανίχνευση από το αρχείο"
+
+#: ../src/interface.c:3962 ../src/interface.c:5687
+#, fuzzy
+msgid ""
+"Whether to detect the indentation width from file contents when a file is "
+"opened"
+msgstr ""
+"Εάν θα ανιχνεύεται ο τύπος της εσοχής από τα περιεχόμενα του αρχείου όταν "
+"ένα αρχείο θα είναι ανοιχτό."
+
+#: ../src/interface.c:3964 ../src/interface.c:4254 ../src/interface.c:5675
+msgid "Type:"
+msgstr "Τύπος:"
+
+#: ../src/interface.c:3971
 #, fuzzy
 msgid "Tab key indents"
 msgstr "Έξυπνη εσοχή γραμμής"
 
-#: ../src/interface.c:3883
+#: ../src/interface.c:3974
 msgid ""
 "Pressing tab/shift-tab indents/unindents instead of inserting a tab character"
 msgstr ""
 
-#: ../src/interface.c:3885
+#: ../src/interface.c:3976
 msgid "<b>Indentation</b>"
 msgstr "<b>Εσοχή</b>"
 
-#: ../src/interface.c:3890 ../src/interface.c:5499
+#: ../src/interface.c:3981 ../src/interface.c:5689
 #, fuzzy
 msgid "Indentation"
 msgstr "<b>Εσοχή</b>"
 
-#: ../src/interface.c:3913
+#: ../src/interface.c:4004
 msgid "Snippet completion"
 msgstr "Ολοκλήρωση αποκομάτων"
 
-#: ../src/interface.c:3916
+#: ../src/interface.c:4007
 #, fuzzy
 msgid ""
 "Type a defined short character sequence and complete it to a more complex "
@@ -2384,30 +2400,30 @@ msgstr ""
 "Πληκτρολογήστε μια καθορισμένη σύντομη ακολουθία χαρακτήρων και ολοκληρώστε "
 "τη σε μια πιό σύνθετη σειρά χαρακτήρων χρησιμοποιώντας ένα πάτημα πλήκτρου."
 
-#: ../src/interface.c:3918
+#: ../src/interface.c:4009
 #, fuzzy
 msgid "XML/HTML tag auto-closing"
 msgstr "Αυτόματη ολοκλήρωση XML ετικετών"
 
-#: ../src/interface.c:3921
+#: ../src/interface.c:4012
 msgid "Insert matching closing tag for XML/HTML"
 msgstr ""
 
-#: ../src/interface.c:3923
+#: ../src/interface.c:4014
 msgid "Automatic continuation of multi-line comments"
 msgstr ""
 
-#: ../src/interface.c:3926
+#: ../src/interface.c:4017
 msgid ""
 "Continue automatically multi-line comments in languages like C, C++ and Java "
 "when a new line is entered inside such a comment"
 msgstr ""
 
-#: ../src/interface.c:3928
+#: ../src/interface.c:4019
 msgid "Autocomplete symbols"
 msgstr ""
 
-#: ../src/interface.c:3931
+#: ../src/interface.c:4022
 msgid ""
 "Automatic completion of known symbols in open files (function names, global "
 "variables, ...)"
@@ -2415,28 +2431,28 @@ msgstr ""
 "Αυτόματη ολοκλήρωση των γνωστών συμβόλων σε ανοιγμένα αρχεία (ονόματα "
 "συναρτήσεων, γενικές μεταβλητές, ...)"
 
-#: ../src/interface.c:3933
+#: ../src/interface.c:4024
 msgid "Autocomplete all words in document"
 msgstr ""
 
-#: ../src/interface.c:3937
+#: ../src/interface.c:4028
 msgid "Drop rest of word on completion"
 msgstr ""
 
-#: ../src/interface.c:3947
+#: ../src/interface.c:4038
 msgid "Max. symbol name suggestions:"
 msgstr ""
 
-#: ../src/interface.c:3954
+#: ../src/interface.c:4045
 msgid "Completion list height:"
 msgstr ""
 
-#: ../src/interface.c:3961
+#: ../src/interface.c:4052
 #, fuzzy
 msgid "Characters to type for autocompletion:"
 msgstr "Χαρακτήρες προς τύπωση για ολοκλήρωση:"
 
-#: ../src/interface.c:3974
+#: ../src/interface.c:4065
 #, fuzzy
 msgid ""
 "The amount of characters which are necessary to show the symbol "
@@ -2445,123 +2461,134 @@ msgstr ""
 "Το πλήθος των χαρακτήρων που είναι απαραίτητα για να εμφανίσουν τη λίστα "
 "αυτόματηςολοκλήρωσης συμβόλων."
 
-#: ../src/interface.c:3983
+#: ../src/interface.c:4074
 #, fuzzy
 msgid "Display height in rows for the autocompletion list"
 msgstr "Αριθμός των σειρών που θα εμφανίζει η λίστα αυτόματης ολοκλήρωσης."
 
-#: ../src/interface.c:3992
+#: ../src/interface.c:4083
 #, fuzzy
 msgid "Maximum number of entries to display in the autocompletion list"
 msgstr "Αριθμός των σειρών που θα εμφανίζει η λίστα αυτόματης ολοκλήρωσης."
 
-#: ../src/interface.c:3995
+#: ../src/interface.c:4086
+msgid "Symbol list update frequency:"
+msgstr ""
+
+#: ../src/interface.c:4099
+msgid ""
+"Minimal delay (in milliseconds) between two automatic updates of the symbol "
+"list. Note that a too short delay may have performance impact, especially "
+"with large files. A delay of 0 disables real-time updates."
+msgstr ""
+
+#: ../src/interface.c:4102
 msgid "<b>Completions</b>"
 msgstr "<b>Ολοκληρώσεις</b>"
 
-#: ../src/interface.c:4014
+#: ../src/interface.c:4121
 msgid "Parenthesis ( )"
 msgstr ""
 
-#: ../src/interface.c:4019
+#: ../src/interface.c:4126
 msgid "Auto-close parenthesis when typing an opening one"
 msgstr ""
 
-#: ../src/interface.c:4021
+#: ../src/interface.c:4128
 msgid "Single quotes ' '"
 msgstr ""
 
-#: ../src/interface.c:4026
+#: ../src/interface.c:4133
 msgid "Auto-close single quote when typing an opening one"
 msgstr ""
 
-#: ../src/interface.c:4028
+#: ../src/interface.c:4135
 msgid "Curly brackets { }"
 msgstr ""
 
-#: ../src/interface.c:4033
+#: ../src/interface.c:4140
 msgid "Auto-close curly bracket when typing an opening one"
 msgstr ""
 
-#: ../src/interface.c:4035
+#: ../src/interface.c:4142
 msgid "Square brackets [ ]"
 msgstr ""
 
-#: ../src/interface.c:4040
+#: ../src/interface.c:4147
 msgid "Auto-close square-bracket when typing an opening one"
 msgstr ""
 
-#: ../src/interface.c:4042
+#: ../src/interface.c:4149
 msgid "Double quotes \" \""
 msgstr ""
 
-#: ../src/interface.c:4047
+#: ../src/interface.c:4154
 msgid "Auto-close double quote when typing an opening one"
 msgstr ""
 
-#: ../src/interface.c:4049
+#: ../src/interface.c:4156
 msgid "<b>Auto-close quotes and brackets</b>"
 msgstr ""
 
-#: ../src/interface.c:4054
+#: ../src/interface.c:4161
 #, fuzzy
 msgid "Completions"
 msgstr "<b>Ολοκληρώσεις</b>"
 
-#: ../src/interface.c:4077
+#: ../src/interface.c:4184
 msgid "Invert syntax highlighting colors"
 msgstr "Αντιστροφή των χρωμάτων υπογράμμισηςτου συντάκτη"
 
-#: ../src/interface.c:4080
+#: ../src/interface.c:4187
 #, fuzzy
 msgid "Invert all colors, by default using white text on a black background"
 msgstr "Χρήση λευκού κειμένου σε μαύρο φόντο."
 
-#: ../src/interface.c:4082
+#: ../src/interface.c:4189
 msgid "Show indentation guides"
 msgstr "Εμφάνιση οδηγών εσοχής"
 
-#: ../src/interface.c:4085
+#: ../src/interface.c:4192
 #, fuzzy
 msgid "Shows small dotted lines to help you to use the right indentation"
 msgstr ""
 "Εμφανίζει μικρές γραμμές με κουκκίδες για να σας βοηθήσει να χρησιμοποιείτε "
 "τη σωστή εσοχής."
 
-#: ../src/interface.c:4087
+#: ../src/interface.c:4194
 msgid "Show white space"
 msgstr "Εμφάνιση των κενών"
 
-#: ../src/interface.c:4090
+#: ../src/interface.c:4197
 #, fuzzy
 msgid "Marks spaces with dots and tabs with arrows"
 msgstr "Μαρκάρει τα κενά με τελείες και τα tab με βελάκια."
 
-#: ../src/interface.c:4092
+#: ../src/interface.c:4199
 msgid "Show line endings"
 msgstr "Εμφάνιση τέλους γραμμής"
 
-#: ../src/interface.c:4095
+#: ../src/interface.c:4202
 #, fuzzy
 msgid "Shows the line ending character"
 msgstr "Εμφανίζει τον χαρακτήρα τέλους γραμμής"
 
-#: ../src/interface.c:4097
+#: ../src/interface.c:4204
 #, fuzzy
 msgid "Show line numbers"
 msgstr "Εμφάνιση Μ_ετρητή Γραμμών"
 
-#: ../src/interface.c:4100
+#: ../src/interface.c:4207
 #, fuzzy
 msgid "Shows or hides the Line Number margin"
 msgstr "Εμφανίζει ή κρύβει τον δείκτη του Μετρητή Γραμμών."
 
-#: ../src/interface.c:4102
+#: ../src/interface.c:4209
 #, fuzzy
 msgid "Show markers margin"
 msgstr "Εμφάνιση _Δεικτών Περιθωρίου"
 
-#: ../src/interface.c:4105
+#: ../src/interface.c:4212
 #, fuzzy
 msgid ""
 "Shows or hides the small margin right of the line numbers, which is used to "
@@ -2570,39 +2597,39 @@ msgstr ""
 "Εμφανίζει ή κρύβει τα μικρά περιθώρια δεξιά από τους αριθμούς των γραμμών, "
 "που χρησιμοποιούνται ως δείκτες των γραμμών."
 
-#: ../src/interface.c:4107
+#: ../src/interface.c:4214
 #, fuzzy
 msgid "Stop scrolling at last line"
 msgstr "Κύλιση στη τρέχουσα γραμμή"
 
-#: ../src/interface.c:4110
+#: ../src/interface.c:4217
 msgid "Whether to stop scrolling one page past the last line of a document"
 msgstr ""
 
-#: ../src/interface.c:4112
+#: ../src/interface.c:4219
 msgid "<b>Display</b>"
 msgstr "<b>Εμφάνιση</b>"
 
-#: ../src/interface.c:4133 ../src/interface.c:5531
+#: ../src/interface.c:4240 ../src/interface.c:5721
 #, fuzzy
 msgid "Column:"
 msgstr "Εταιρία:"
 
-#: ../src/interface.c:4140
+#: ../src/interface.c:4247
 #, fuzzy
 msgid "Color:"
 msgstr "Χρώμα"
 
-#: ../src/interface.c:4159
+#: ../src/interface.c:4266
 msgid "Sets the color of the long line marker"
 msgstr "Καθορίζει το χρώμα του μεγάλου δείκτη γραμμής"
 
-#: ../src/interface.c:4160 ../src/toolbar.c:71 ../src/tools.c:722
-#: ../src/vte.c:785 ../src/vte.c:792
+#: ../src/interface.c:4267 ../src/toolbar.c:72 ../src/tools.c:931
+#: ../src/vte.c:794 ../src/vte.c:801
 msgid "Color Chooser"
 msgstr "Επιλογέας Χρώματος"
 
-#: ../src/interface.c:4168
+#: ../src/interface.c:4275
 #, fuzzy
 msgid ""
 "The long line marker is a thin vertical line in the editor, it helps to mark "
@@ -2614,11 +2641,11 @@ msgstr ""
 "σπάσιμο της γραμμής. Θέστε τη τιμή μεγαλύτερη του 0 για να καθορίσετε που θα "
 "εμφανίζεται η στήλη."
 
-#: ../src/interface.c:4178
+#: ../src/interface.c:4285
 msgid "Line"
 msgstr "Γραμμή"
 
-#: ../src/interface.c:4181
+#: ../src/interface.c:4288
 #, fuzzy
 msgid ""
 "Prints a vertical line in the editor window at the given cursor position "
@@ -2627,11 +2654,11 @@ msgstr ""
 "Τυπώνει μια κάθετη γραμμή στο παράθυρο του επεξεργαστή κειμένου στη δοθείσα "
 "θέση του κέρσορα (δείτε παρακάτω)."
 
-#: ../src/interface.c:4185
+#: ../src/interface.c:4292
 msgid "Background"
 msgstr "Φόντο"
 
-#: ../src/interface.c:4188
+#: ../src/interface.c:4295
 #, fuzzy
 msgid ""
 "The background color of characters after the given cursor position (see "
@@ -2642,84 +2669,84 @@ msgstr ""
 "παρακάτω) άλλαξε στο παρακάτω καθορισμένο χρώμα. ( Προτείνεται εάν "
 "χρησιμοποιείτε ανάλογες γραμματοσειρές)"
 
-#: ../src/interface.c:4192
+#: ../src/interface.c:4299
 #, fuzzy
 msgid "Enabled"
 msgstr "Ενεργοποίηση δίπλωσης"
 
-#: ../src/interface.c:4198 ../src/interface.c:5571
+#: ../src/interface.c:4305 ../src/interface.c:5761
 msgid "<b>Long line marker</b>"
 msgstr "<b>Μεγάλος δείκτης γραμμής</b>"
 
-#: ../src/interface.c:4217 ../src/interface.c:5538
+#: ../src/interface.c:4324 ../src/interface.c:5728
 msgid "Disabled"
 msgstr "Απενεργοποιημένο"
 
-#: ../src/interface.c:4220
+#: ../src/interface.c:4327
 msgid "Do not show virtual spaces"
 msgstr ""
 
-#: ../src/interface.c:4224
+#: ../src/interface.c:4331
 msgid "Only for rectangular selections"
 msgstr ""
 
-#: ../src/interface.c:4227
+#: ../src/interface.c:4334
 msgid ""
 "Only show virtual spaces beyond the end of lines when drawing a rectangular "
 "selection"
 msgstr ""
 
-#: ../src/interface.c:4231
+#: ../src/interface.c:4338
 msgid "Always"
 msgstr ""
 
-#: ../src/interface.c:4234
+#: ../src/interface.c:4341
 #, fuzzy
 msgid "Always show virtual spaces beyond the end of lines"
 msgstr "Διαγράφει τις λωρίδες των κενών και των tab στο τέλος των γραμμών"
 
-#: ../src/interface.c:4238
+#: ../src/interface.c:4345
 #, fuzzy
 msgid "<b>Virtual spaces</b>"
 msgstr "<b>Διαδρομές εργαλείων</b>"
 
-#: ../src/interface.c:4243
+#: ../src/interface.c:4350
 msgid "Display"
 msgstr "Εμφάνιση"
 
-#: ../src/interface.c:4274
+#: ../src/interface.c:4381
 msgid "Open new documents from the command-line"
 msgstr ""
 
-#: ../src/interface.c:4277
+#: ../src/interface.c:4384
 msgid "Start a new file for each command-line filename that doesn't exist"
 msgstr ""
 
-#: ../src/interface.c:4291
+#: ../src/interface.c:4398
 #, fuzzy
 msgid "Default end of line characters:"
 msgstr "Προκαθορισμένη κωδικοποίηση (νέα αρχεία):"
 
-#: ../src/interface.c:4298
+#: ../src/interface.c:4405
 msgid "<b>New files</b>"
 msgstr "<b>Νέα αρχεία</b>"
 
-#: ../src/interface.c:4321
+#: ../src/interface.c:4428
 msgid "Default encoding (new files):"
 msgstr "Προκαθορισμένη κωδικοποίηση (νέα αρχεία):"
 
-#: ../src/interface.c:4329
+#: ../src/interface.c:4436
 #, fuzzy
 msgid "Sets the default encoding for newly created files"
 msgstr ""
 "Θέτει την προκαθορισμένη κωδικοποίηση για τα πρόσφατα δημιουργημένα αρχεία."
 
-#: ../src/interface.c:4335
+#: ../src/interface.c:4442
 #, fuzzy
 msgid "Use fixed encoding when opening non-Unicode files"
 msgstr "Χρήση σταθερής κωδικοποίησης κατά το άνοιγμα αρχείων"
 
-#: ../src/interface.c:4338
+#: ../src/interface.c:4445
 #, fuzzy
 msgid ""
 "This option disables the automatic detection of the file encoding when "
@@ -2730,99 +2757,99 @@ msgstr ""
 "αρχείου κατά το άνοιγμα των αρχείων και ανοίγει το αρχείο με την "
 "προσδιορισμένη κωδικοποίηση (συνήθως δεν χρειάζεται)."
 
-#: ../src/interface.c:4344
+#: ../src/interface.c:4451
 #, fuzzy
 msgid "Default encoding (existing non-Unicode files):"
 msgstr " προκαθορισμένη κωδικοποίηση (υπάρχοντα αρχεία):"
 
-#: ../src/interface.c:4352
+#: ../src/interface.c:4459
 #, fuzzy
 msgid "Sets the default encoding for opening existing non-Unicode files"
 msgstr ""
 "Θέτει τη προκαθορισμένη κωδικοποίηση για το άνοιγμα των υπαρχόντων αρχείων."
 
-#: ../src/interface.c:4358
+#: ../src/interface.c:4465
 #, fuzzy
 msgid "<b>Encodings</b>"
 msgstr "<b>Κωδικοποίηση:</b>"
 
-#: ../src/interface.c:4377
+#: ../src/interface.c:4484
 #, fuzzy
 msgid "Ensure new line at file end"
 msgstr "Σιγούρευση για new line στο τέλος του αρχείου"
 
-#: ../src/interface.c:4380
+#: ../src/interface.c:4487
 #, fuzzy
 msgid "Ensures that at the end of the file is a new line"
 msgstr "Σιγουρεύει ότι υπάρχει στο τέλος του αρχείου το new line"
 
-#: ../src/interface.c:4382
+#: ../src/interface.c:4489
 #, fuzzy
 msgid "Ensure consistent line endings"
 msgstr "Σιγούρευση για new line στο τέλος του αρχείου"
 
-#: ../src/interface.c:4385
+#: ../src/interface.c:4492
 msgid ""
 "Ensures that newline characters always get converted before saving, avoiding "
 "mixed line endings in the same file"
 msgstr ""
 
-#: ../src/interface.c:4387
+#: ../src/interface.c:4494
 #, fuzzy
 msgid "Strip trailing spaces and tabs"
 msgstr "Διαγραφή λωρίδων κενών"
 
-#: ../src/interface.c:4390
+#: ../src/interface.c:4497
 msgid "Removes trailing spaces and tabs and the end of lines"
 msgstr "Διαγράφει τις λωρίδες των κενών και των tab στο τέλος των γραμμών"
 
-#: ../src/interface.c:4392 ../src/keybindings.c:518
+#: ../src/interface.c:4499 ../src/keybindings.c:519
 msgid "Replace tabs by space"
 msgstr "Αντικατάσταση των tab με κενά"
 
-#: ../src/interface.c:4395
+#: ../src/interface.c:4502
 #, fuzzy
 msgid "Replaces all tabs in document by spaces"
 msgstr "Αντικαθιστά όλα τα tab σε κενά."
 
-#: ../src/interface.c:4397
+#: ../src/interface.c:4504
 msgid "<b>Saving files</b>"
 msgstr "<b>Αποθήκευση αρχείων</b>"
 
-#: ../src/interface.c:4422
+#: ../src/interface.c:4529
 msgid "Recent files list length:"
 msgstr "Μέγεθος λίστας Πρόσφατα αρχεία:"
 
-#: ../src/interface.c:4436
+#: ../src/interface.c:4543
 #, fuzzy
 msgid "Specifies the number of files which are stored in the Recent files list"
 msgstr ""
 "Καθορίζει τον αριθμό των αρχείων που αποθηκεύονται στη λίστα Πρόσφατα αρχεία."
 
-#: ../src/interface.c:4440
+#: ../src/interface.c:4547
 msgid "Disk check timeout:"
 msgstr ""
 
-#: ../src/interface.c:4453
+#: ../src/interface.c:4560
 msgid ""
 "How often to check for changes to document files on disk, in seconds. Zero "
 "disables checking."
 msgstr ""
 
-#: ../src/interface.c:4462 ../src/prefs.c:1559 ../src/symbols.c:605
-#: ../plugins/filebrowser.c:1112
+#: ../src/interface.c:4569 ../src/prefs.c:1573 ../src/symbols.c:682
+#: ../plugins/filebrowser.c:1133
 msgid "Files"
 msgstr "Αρχεία"
 
-#: ../src/interface.c:4495
+#: ../src/interface.c:4602
 msgid "Terminal:"
 msgstr "Τερματικό:"
 
-#: ../src/interface.c:4502
+#: ../src/interface.c:4609
 msgid "Browser:"
 msgstr "Φυλλομετρητής:"
 
-#: ../src/interface.c:4514
+#: ../src/interface.c:4621
 msgid ""
 "A terminal emulator like xterm, gnome-terminal or konsole (should accept the "
 "-e argument)"
@@ -2830,25 +2857,25 @@ msgstr ""
 "Ένας προσομοιωτής τερματικού όπως το xterm, gnome-terminal, ή κονσόλα (θα "
 "πρέπει να δέχεται το επιχείρημα -e)"
 
-#: ../src/interface.c:4521
+#: ../src/interface.c:4628
 msgid "Path (and possibly additional arguments) to your favorite browser"
 msgstr ""
 "Διαδρομή (και πιθανά επιπρόσθετα επιχειρήματα) του αγαπημένου σας "
 "φυλλομετρητή"
 
-#: ../src/interface.c:4543
+#: ../src/interface.c:4650
 msgid "Grep:"
 msgstr ""
 
-#: ../src/interface.c:4566
+#: ../src/interface.c:4673
 msgid "<b>Tool paths</b>"
 msgstr "<b>Διαδρομές εργαλείων</b>"
 
-#: ../src/interface.c:4587
+#: ../src/interface.c:4694
 msgid "Context action:"
 msgstr "Δράση πλαισίου:"
 
-#: ../src/interface.c:4598
+#: ../src/interface.c:4705
 #, c-format
 msgid ""
 "Context action command. The currently selected word can be used with %s. It "
@@ -2859,69 +2886,69 @@ msgstr ""
 "με %s. Μπορεί να εμφανιστεί οπουδήποτε στη δοθείσα εντολή και θα "
 "αντικαθιστάται πριν την εκτέλεση."
 
-#: ../src/interface.c:4611
+#: ../src/interface.c:4718
 msgid "<b>Commands</b>"
 msgstr "<b>Εντολές</b>"
 
-#: ../src/interface.c:4616 ../src/keybindings.c:556 ../src/prefs.c:1561
+#: ../src/interface.c:4723 ../src/keybindings.c:559 ../src/prefs.c:1575
 msgid "Tools"
 msgstr "Εργαλεία"
 
-#: ../src/interface.c:4654
+#: ../src/interface.c:4761
 msgid "email address of the developer"
 msgstr "διεύθυνση email του δημιουργού"
 
-#: ../src/interface.c:4661
+#: ../src/interface.c:4768
 msgid "Initials of the developer name"
 msgstr "Αρχικά του ονόματος του δημιουργού"
 
-#: ../src/interface.c:4663
+#: ../src/interface.c:4770
 msgid "Initial version:"
 msgstr "Αρχική έκδοση:"
 
-#: ../src/interface.c:4675
+#: ../src/interface.c:4782
 msgid "Version number, which a new file initially has"
 msgstr "Αριθμό έκδοσης, τον οποίο αρχικά έχει ένα νέο αρχείο"
 
-#: ../src/interface.c:4682
+#: ../src/interface.c:4789
 msgid "Company name"
 msgstr "Όνομα εταιρίας"
 
-#: ../src/interface.c:4684
+#: ../src/interface.c:4791
 msgid "Developer:"
 msgstr "Δημιουργός:"
 
-#: ../src/interface.c:4691
+#: ../src/interface.c:4798
 msgid "Company:"
 msgstr "Εταιρία:"
 
-#: ../src/interface.c:4698
+#: ../src/interface.c:4805
 msgid "Mail address:"
 msgstr "Διεύθυνση mail:"
 
-#: ../src/interface.c:4705
+#: ../src/interface.c:4812
 msgid "Initials:"
 msgstr "Αρχικά:"
 
-#: ../src/interface.c:4717
+#: ../src/interface.c:4824
 msgid "The name of the developer"
 msgstr "Το όνομα του δημιουργού"
 
-#: ../src/interface.c:4719
+#: ../src/interface.c:4826
 #, fuzzy
 msgid "Year:"
 msgstr "Πλευρική μπάρα:"
 
-#: ../src/interface.c:4726
+#: ../src/interface.c:4833
 #, fuzzy
 msgid "Date:"
 msgstr "Δημιουργία:"
 
-#: ../src/interface.c:4733
-msgid "Date & Time:"
+#: ../src/interface.c:4840
+msgid "Date & time:"
 msgstr ""
 
-#: ../src/interface.c:4745
+#: ../src/interface.c:4852
 #, fuzzy
 msgid ""
 "Specify a format for the the {datetime} wildcard. You can use any conversion "
@@ -2932,7 +2959,7 @@ msgstr ""
 "οποιουσδήποτε προσδιοριστές μετατροπής που μπορούν να χρησιμοποιηθούν με την "
 "ANSI C strftime συνάρτηση."
 
-#: ../src/interface.c:4752
+#: ../src/interface.c:4859
 #, fuzzy
 msgid ""
 "Specify a format for the the {year} wildcard. You can use any conversion "
@@ -2943,7 +2970,7 @@ msgstr ""
 "οποιουσδήποτε προσδιοριστές μετατροπής που μπορούν να χρησιμοποιηθούν με την "
 "ANSI C strftime συνάρτηση."
 
-#: ../src/interface.c:4759
+#: ../src/interface.c:4866
 #, fuzzy
 msgid ""
 "Specify a format for the the {date} wildcard. You can use any conversion "
@@ -2954,55 +2981,55 @@ msgstr ""
 "οποιουσδήποτε προσδιοριστές μετατροπής που μπορούν να χρησιμοποιηθούν με την "
 "ANSI C strftime συνάρτηση."
 
-#: ../src/interface.c:4761
+#: ../src/interface.c:4868
 msgid "<b>Template data</b>"
 msgstr "<b>Δεδομένα πρότυπου</b>"
 
-#: ../src/interface.c:4766 ../src/prefs.c:1563
+#: ../src/interface.c:4873 ../src/prefs.c:1577
 msgid "Templates"
 msgstr "Πρότυπα"
 
-#: ../src/interface.c:4804
+#: ../src/interface.c:4911
 msgid "C_hange"
 msgstr "Α_λλαγή"
 
-#: ../src/interface.c:4808
+#: ../src/interface.c:4915
 msgid "<b>Keyboard shortcuts</b>"
 msgstr "<b>Συντομεύσεις πλήκτων</b>"
 
-#: ../src/interface.c:4813 ../src/prefs.c:1565
+#: ../src/interface.c:4920 ../src/prefs.c:1579
 msgid "Keybindings"
 msgstr "Συνδυασμοί πλήκτων"
 
-#: ../src/interface.c:4847
+#: ../src/interface.c:4953
 msgid "Command:"
 msgstr "Εντολή:"
 
-#: ../src/interface.c:4854
+#: ../src/interface.c:4960
 #, fuzzy, c-format
 msgid "Path to the command for printing files (use %f for the filename)"
 msgstr ""
 "Διαδρομή της εντολής εκτύπωσης αρχείων (χρησιμοποιείστε %f για το όνομα "
 "αρχείου)."
 
-#: ../src/interface.c:4864
+#: ../src/interface.c:4970
 msgid "Use an external command for printing"
 msgstr "Χρησιμοποιείστε μια εξωτερική εντολή για εκτύπωση"
 
-#: ../src/interface.c:4884 ../src/printing.c:381
+#: ../src/interface.c:4990 ../src/printing.c:378
 msgid "Print line numbers"
 msgstr "Εκτύπωση αριθμών γραμμών"
 
-#: ../src/interface.c:4887 ../src/printing.c:383
+#: ../src/interface.c:4993 ../src/printing.c:380
 #, fuzzy
 msgid "Add line numbers to the printed page"
 msgstr "Προσθέτει αριθμούς γραμμών στην εκτυπωμένη σελίδα."
 
-#: ../src/interface.c:4889 ../src/printing.c:386
+#: ../src/interface.c:4995 ../src/printing.c:383
 msgid "Print page numbers"
 msgstr "Εκτύπωση αριθμών σελίδας"
 
-#: ../src/interface.c:4892 ../src/printing.c:388
+#: ../src/interface.c:4998 ../src/printing.c:385
 #, fuzzy
 msgid ""
 "Add page numbers at the bottom of each page. It takes 2 lines of the page."
@@ -3010,11 +3037,11 @@ msgstr ""
 "Προσθέτει αριθμούς σελίδας στο τέλος της κάθε σελίδας. Καταλαμβάνει 2 "
 "γραμμές από τη σελίδα."
 
-#: ../src/interface.c:4894 ../src/printing.c:391
+#: ../src/interface.c:5000 ../src/printing.c:388
 msgid "Print page header"
 msgstr "Εκτύπωση κεφαλής σελίδας"
 
-#: ../src/interface.c:4897 ../src/printing.c:393
+#: ../src/interface.c:5003 ../src/printing.c:390
 #, fuzzy
 msgid ""
 "Add a little header to every page containing the page number, the filename "
@@ -3024,21 +3051,21 @@ msgstr ""
 "το όνομα αρχείου και την τρέχουσα ημερομηνία (δείτε παρακάτω). Καταλαμβάνει "
 "3 γραμμές από τη σελίδα."
 
-#: ../src/interface.c:4914 ../src/printing.c:409
+#: ../src/interface.c:5020 ../src/printing.c:406
 msgid "Use the basename of the printed file"
 msgstr "Χρήση του βασικού ονόματος του εκτυπώμενου αρχείου"
 
-#: ../src/interface.c:4917
+#: ../src/interface.c:5023
 #, fuzzy
 msgid "Print only the basename (without the path) of the printed file"
 msgstr ""
 "Εκτυπώνει μόνο το βασικό όνομα (χωρίς τη διαδρομή) του εκτυπώμενου αρχείου."
 
-#: ../src/interface.c:4923 ../src/printing.c:417
+#: ../src/interface.c:5029 ../src/printing.c:414
 msgid "Date format:"
 msgstr "Μορφή ημερομηνίας:"
 
-#: ../src/interface.c:4930 ../src/printing.c:423
+#: ../src/interface.c:5036 ../src/printing.c:420
 msgid ""
 "Specify a format for the date and time stamp which is added to the page "
 "header on each page. You can use any conversion specifiers which can be used "
@@ -3049,38 +3076,52 @@ msgstr ""
 "οποιουσδήποτε προσδιοριστές μετατροπής που μπορούν να χρησιμοποιηθούν με την "
 "ANSI C strftime συνάρτηση."
 
-#: ../src/interface.c:4933
+#: ../src/interface.c:5039
 msgid "Use native GTK printing"
 msgstr "Χρήση εγγενής εκτύπωσης GTK"
 
-#: ../src/interface.c:4939
+#: ../src/interface.c:5045
 #, fuzzy
 msgid "<b>Printing</b>"
 msgstr "<b>Κωδικοποίηση:</b>"
 
-#: ../src/interface.c:4944 ../src/prefs.c:1567
+#: ../src/interface.c:5050 ../src/prefs.c:1581
 msgid "Printing"
 msgstr "Γίνεται η Εκτύπωση"
 
-#: ../src/interface.c:5406
+#: ../src/interface.c:5097
+msgid "<i>Warning: read the manual before changing these preferences.</i>"
+msgstr ""
+
+#: ../src/interface.c:5102
+#, fuzzy
+msgid "<b>Various preferences</b>"
+msgstr "<b>Διαδρομές εργαλείων</b>"
+
+#: ../src/interface.c:5107 ../src/prefs.c:1583
+#, fuzzy
+msgid "Various"
+msgstr "_Προηγούμενο"
+
+#: ../src/interface.c:5589
 msgid "Project Properties"
 msgstr "Ιδιότητες Έργου"
 
-#: ../src/interface.c:5524
+#: ../src/interface.c:5714
 #, fuzzy
 msgid "Display:"
 msgstr "Εμφάνιση"
 
-#: ../src/interface.c:5546
+#: ../src/interface.c:5736
 #, fuzzy
 msgid "Custom"
 msgstr "Αποκοπή"
 
-#: ../src/interface.c:5554
+#: ../src/interface.c:5744
 msgid "Use global settings"
 msgstr ""
 
-#: ../src/keybindings.c:220 ../src/plugins.c:1187
+#: ../src/keybindings.c:220 ../src/plugins.c:1248 ../src/symbols.c:709
 msgid "File"
 msgstr "Αρχείο"
 
@@ -3100,7 +3141,7 @@ msgstr "Άνοιγμα του επιλεγμένου αρχείου"
 msgid "Save"
 msgstr "Αποθήκευση"
 
-#: ../src/keybindings.c:232
+#: ../src/keybindings.c:232 ../src/toolbar.c:57
 msgid "Save as"
 msgstr "Αποθήκευση ως"
 
@@ -3128,7 +3169,7 @@ msgstr "Επαναφόρτωση αρχείου"
 msgid "Re-open last closed tab"
 msgstr ""
 
-#: ../src/keybindings.c:248 ../src/project.c:503
+#: ../src/keybindings.c:248 ../src/project.c:506
 #, fuzzy
 msgid "Project"
 msgstr "Έρ_γο"
@@ -3300,348 +3341,353 @@ msgstr "_Εισαγωγή"
 msgid "Insert date"
 msgstr "Εισαγωγή ημερομηνίας"
 
-#: ../src/keybindings.c:376
+#: ../src/keybindings.c:377
 msgid "Insert New Line Before Current"
 msgstr ""
 
-#: ../src/keybindings.c:378
+#: ../src/keybindings.c:379
 msgid "Insert New Line After Current"
 msgstr ""
 
-#: ../src/keybindings.c:380
+#: ../src/keybindings.c:381
 #, fuzzy
 msgid "Settings"
 msgstr "Ενότητες"
 
-#: ../src/keybindings.c:388 ../src/toolbar.c:381
+#: ../src/keybindings.c:389 ../src/toolbar.c:382
 #, fuzzy
 msgid "Search"
 msgstr "_Αναζήτηση"
 
-#: ../src/keybindings.c:391 ../src/search.c:398
+#: ../src/keybindings.c:392 ../src/search.c:465
 msgid "Find"
 msgstr "Εύρεση"
 
-#: ../src/keybindings.c:393
+#: ../src/keybindings.c:394
 msgid "Find Next"
 msgstr "Εύρεση Επόμενου"
 
-#: ../src/keybindings.c:395
+#: ../src/keybindings.c:396
 msgid "Find Previous"
 msgstr "Εύρεση Προηγούμενου"
 
-#: ../src/keybindings.c:402 ../src/search.c:552
+#: ../src/keybindings.c:403 ../src/search.c:622
 msgid "Replace"
 msgstr "Αντικατάσταση"
 
-#: ../src/keybindings.c:404 ../src/search.c:724
+#: ../src/keybindings.c:405 ../src/search.c:876
 msgid "Find in Files"
 msgstr "Εύρεση σε Αρχεία"
 
-#: ../src/keybindings.c:407
+#: ../src/keybindings.c:408
 msgid "Next Message"
 msgstr "Επόμενο Μήνυμα"
 
-#: ../src/keybindings.c:409
+#: ../src/keybindings.c:410
 #, fuzzy
 msgid "Previous Message"
 msgstr "Επόμενο Μήνυμα"
 
-#: ../src/keybindings.c:411
+#: ../src/keybindings.c:412
 msgid "Find Usage"
 msgstr "Εύρεση Χρήσης"
 
-#: ../src/keybindings.c:413
+#: ../src/keybindings.c:414
 #, fuzzy
 msgid "Find Document Usage"
 msgstr "Εύρεση Χρήσης"
 
-#: ../src/keybindings.c:417
+#: ../src/keybindings.c:418
 #, fuzzy
 msgid "Go to"
 msgstr "Μετάβαση στη Γραμμή"
 
-#: ../src/keybindings.c:420 ../src/toolbar.c:67
+#: ../src/keybindings.c:421 ../src/toolbar.c:68
 msgid "Navigate back a location"
 msgstr "Πλοήγηση μια θέση πίσω"
 
-#: ../src/keybindings.c:422 ../src/toolbar.c:68
+#: ../src/keybindings.c:423 ../src/toolbar.c:69
 msgid "Navigate forward a location"
 msgstr "Πλοήγηση μια θέση μπρος"
 
-#: ../src/keybindings.c:427
+#: ../src/keybindings.c:428
 msgid "Go to matching brace"
 msgstr ""
 
-#: ../src/keybindings.c:430
+#: ../src/keybindings.c:431
 msgid "Toggle marker"
 msgstr "Ενεργοποίηση/απενεργοποίηση δείκτη"
 
-#: ../src/keybindings.c:438
+#: ../src/keybindings.c:439
 msgid "Go to Tag Definition"
 msgstr "Πήγαινε στον Ορισμό Ετικετών"
 
-#: ../src/keybindings.c:440
+#: ../src/keybindings.c:441
 msgid "Go to Tag Declaration"
 msgstr "Πήγαινε στη Δήλωση Ετικετών"
 
-#: ../src/keybindings.c:442
+#: ../src/keybindings.c:443
 #, fuzzy
 msgid "Go to Start of Line"
 msgstr "Μετάβαση στη Γραμμή"
 
-#: ../src/keybindings.c:444
+#: ../src/keybindings.c:445
 #, fuzzy
 msgid "Go to End of Line"
 msgstr "Μετάβαση στη Γραμμή"
 
-#: ../src/keybindings.c:446
+#: ../src/keybindings.c:447
 #, fuzzy
 msgid "Go to End of Display Line"
 msgstr "Μετάβαση στη Γραμμή"
 
-#: ../src/keybindings.c:448
+#: ../src/keybindings.c:449
 #, fuzzy
 msgid "Go to Previous Word Part"
 msgstr "Πήγαινε στον προηγούμενο δείκτη"
 
-#: ../src/keybindings.c:450
+#: ../src/keybindings.c:451
 #, fuzzy
 msgid "Go to Next Word Part"
 msgstr "Πήγαινε στον επόμενο δείκτη"
 
-#: ../src/keybindings.c:452
+#: ../src/keybindings.c:453
 #, fuzzy
 msgid "View"
 msgstr "_Προβολή"
 
-#: ../src/keybindings.c:455
+#: ../src/keybindings.c:456
 msgid "Toggle All Additional Widgets"
 msgstr "Ενεργοποίηση όλων των επιπρόσθετων Widgets"
 
-#: ../src/keybindings.c:458
+#: ../src/keybindings.c:459
 msgid "Fullscreen"
 msgstr "Πλήρης Οθόνη"
 
-#: ../src/keybindings.c:460
+#: ../src/keybindings.c:461
 msgid "Toggle Messages Window"
 msgstr "Ενεργοποίηση Παράθυρου Μηνυμάτων"
 
-#: ../src/keybindings.c:463
+#: ../src/keybindings.c:464
 msgid "Toggle Sidebar"
 msgstr "Ενεργοποίηση Πλευρικής Μπάρας"
 
-#: ../src/keybindings.c:465
+#: ../src/keybindings.c:466
 msgid "Zoom In"
 msgstr "Μεγέθυνση"
 
-#: ../src/keybindings.c:467
+#: ../src/keybindings.c:468
 msgid "Zoom Out"
 msgstr "Σμίκρυνση"
 
-#: ../src/keybindings.c:469
+#: ../src/keybindings.c:470
 #, fuzzy
 msgid "Zoom Reset"
 msgstr "Σμίκρυνση"
 
-#: ../src/keybindings.c:471
+#: ../src/keybindings.c:472
 msgid "Focus"
 msgstr ""
 
-#: ../src/keybindings.c:474
+#: ../src/keybindings.c:475
 msgid "Switch to Editor"
 msgstr "Μετάβαση στον Επεξεργαστή"
 
-#: ../src/keybindings.c:476
+#: ../src/keybindings.c:477
 msgid "Switch to Search Bar"
 msgstr "Μετάβαση στη Μπάρα Αναζήτησης"
 
-#: ../src/keybindings.c:478
+#: ../src/keybindings.c:479
 #, fuzzy
 msgid "Switch to Message Window"
 msgstr "Προβολή Παράθυρου Μηνυμάτων"
 
-#: ../src/keybindings.c:480
+#: ../src/keybindings.c:481
 #, fuzzy
 msgid "Switch to Compiler"
 msgstr "Μετάβαση στη Μπάρα Αναζήτησης"
 
-#: ../src/keybindings.c:482
+#: ../src/keybindings.c:483
 #, fuzzy
 msgid "Switch to Messages"
 msgstr "Μετάβαση στη Μπάρα Αναζήτησης"
 
-#: ../src/keybindings.c:484
+#: ../src/keybindings.c:485
 msgid "Switch to Scribble"
 msgstr "Μετάβαση στο Σημειωματάριο"
 
-#: ../src/keybindings.c:486
+#: ../src/keybindings.c:487
 msgid "Switch to VTE"
 msgstr "Μετάβαση στο VTE"
 
-#: ../src/keybindings.c:488
+#: ../src/keybindings.c:489
 #, fuzzy
 msgid "Switch to Sidebar"
 msgstr "Μετάβαση στη Μπάρα Αναζήτησης"
 
-#: ../src/keybindings.c:490
+#: ../src/keybindings.c:491
 #, fuzzy
 msgid "Switch to Sidebar Symbol List"
 msgstr "Μετάβαση στη Μπάρα Αναζήτησης"
 
-#: ../src/keybindings.c:492
+#: ../src/keybindings.c:493
 #, fuzzy
 msgid "Switch to Sidebar Document List"
 msgstr "Μετάβαση στο αριστερό έγγραφο"
 
-#: ../src/keybindings.c:494
+#: ../src/keybindings.c:495
 #, fuzzy
 msgid "Notebook tab"
 msgstr "Εντολές ετικετών σημειωματάριου"
 
-#: ../src/keybindings.c:497
+#: ../src/keybindings.c:498
 msgid "Switch to left document"
 msgstr "Μετάβαση στο αριστερό έγγραφο"
 
-#: ../src/keybindings.c:499
+#: ../src/keybindings.c:500
 msgid "Switch to right document"
 msgstr "Μετάβαση στο δεξί έγγραφο"
 
-#: ../src/keybindings.c:501
+#: ../src/keybindings.c:502
 msgid "Switch to last used document"
 msgstr "Μετάβαση στο τελευταία χρησιμοποιημένο έγγραφο"
 
-#: ../src/keybindings.c:503
+#: ../src/keybindings.c:504
 msgid "Move document left"
 msgstr "Μετακίνηση εγγράφου αριστερά"
 
-#: ../src/keybindings.c:505
+#: ../src/keybindings.c:506
 msgid "Move document right"
 msgstr "Μετακίνηση εγγράφου δεξιά"
 
-#: ../src/keybindings.c:507
+#: ../src/keybindings.c:508
 msgid "Move document first"
 msgstr "Μετακίνηση εγγράφου ως πρώτο"
 
-#: ../src/keybindings.c:509
+#: ../src/keybindings.c:510
 msgid "Move document last"
 msgstr "Μετακίνηση εγγράφου ως τελευταίο"
 
-#: ../src/keybindings.c:511
+#: ../src/keybindings.c:512
 #, fuzzy
 msgid "Document"
 msgstr "Έγγ_ραφο"
 
-#: ../src/keybindings.c:514
+#: ../src/keybindings.c:515
 #, fuzzy
 msgid "Toggle Line wrapping"
 msgstr "Αναδίπλωση Γραμμής"
 
-#: ../src/keybindings.c:516
+#: ../src/keybindings.c:517
 #, fuzzy
 msgid "Toggle Line breaking"
 msgstr "Ενεργοποίηση/απενεργοποίηση Γραμμής _Σχολιασμού"
 
-#: ../src/keybindings.c:520
+#: ../src/keybindings.c:521
 #, fuzzy
 msgid "Replace spaces by tabs"
 msgstr "_Αντικατάσταση των Tab σε Κενά"
 
-#: ../src/keybindings.c:522
+#: ../src/keybindings.c:523
 #, fuzzy
 msgid "Toggle current fold"
 msgstr "Επιλογή τρέχουσας λέξης"
 
-#: ../src/keybindings.c:524
+#: ../src/keybindings.c:525
 msgid "Fold all"
 msgstr "Δίπλωση όλων"
 
-#: ../src/keybindings.c:526
+#: ../src/keybindings.c:527
 msgid "Unfold all"
 msgstr "Αναδίπλωση όλων"
 
-#: ../src/keybindings.c:528
+#: ../src/keybindings.c:529
 msgid "Reload symbol list"
 msgstr "Επαναφόρτωση λίστας συμβόλων"
 
-#: ../src/keybindings.c:530
+#: ../src/keybindings.c:531
 #, fuzzy
 msgid "Remove Markers"
 msgstr "Απομάκρυνση _δεικτών"
 
-#: ../src/keybindings.c:532
+#: ../src/keybindings.c:533
 #, fuzzy
 msgid "Remove Error Indicators"
 msgstr "Απομάκρυνση _Δεικτών Σφάλματος"
 
-#: ../src/keybindings.c:534 ../src/keybindings.c:539 ../src/project.c:476
-#: ../src/ui_utils.c:1912
+#: ../src/keybindings.c:535
+#, fuzzy
+msgid "Remove Markers and Error Indicators"
+msgstr "Απομάκρυνση _Δεικτών Σφάλματος"
+
+#: ../src/keybindings.c:537 ../src/keybindings.c:542 ../src/project.c:484
+#: ../src/ui_utils.c:1947
 #, fuzzy
 msgid "Build"
 msgstr "Δημιουργία"
 
-#: ../src/keybindings.c:537 ../src/toolbar.c:69
+#: ../src/keybindings.c:540 ../src/toolbar.c:70
 msgid "Compile"
 msgstr "Μεταγλώτιση"
 
-#: ../src/keybindings.c:541
+#: ../src/keybindings.c:544
 msgid "Make all"
 msgstr "Δημιουργία όλων"
 
-#: ../src/keybindings.c:544
+#: ../src/keybindings.c:547
 msgid "Make custom target"
 msgstr "Δημιουργία Προσαρμοσμένου Προορισμού"
 
-#: ../src/keybindings.c:546
+#: ../src/keybindings.c:549
 msgid "Make object"
 msgstr "Δημιουργία αντικειμένου"
 
-#: ../src/keybindings.c:548
+#: ../src/keybindings.c:551
 msgid "Next error"
 msgstr "Επόμενο σφάλμα"
 
-#: ../src/keybindings.c:550
+#: ../src/keybindings.c:553
 #, fuzzy
 msgid "Previous error"
 msgstr "Προηγούμενοι Μεταφραστές"
 
-#: ../src/keybindings.c:552
+#: ../src/keybindings.c:555
 msgid "Run"
 msgstr "Εκτέλεση"
 
-#: ../src/keybindings.c:554
+#: ../src/keybindings.c:557
 #, fuzzy
 msgid "Build options"
 msgstr "Επιλογές δημιουργίας"
 
-#: ../src/keybindings.c:559
+#: ../src/keybindings.c:562
 msgid "Show Color Chooser"
 msgstr "Εμφάνιση Επιλογέα Χρωμάτων"
 
-#: ../src/keybindings.c:561 ../src/keybindings.c:564
+#: ../src/keybindings.c:564 ../src/keybindings.c:567
 msgid "Help"
 msgstr "Βοήθεια"
 
-#: ../src/keybindings.c:846
+#: ../src/keybindings.c:849
 msgid "Keyboard Shortcuts"
 msgstr "Συντομεύσεις Πληκτρολογίου"
 
-#: ../src/keybindings.c:858
+#: ../src/keybindings.c:861
 msgid "The following keyboard shortcuts are configurable:"
 msgstr "Οι ακόλουθες συντομεύσεις πληκτρολογίου είναι διαμορφώσιμες:"
 
-#: ../src/keybindings.c:1756
+#: ../src/keybindings.c:1762
 #, fuzzy
 msgid "Switch to Document"
 msgstr "Μετάβαση στο αριστερό έγγραφο"
 
-#: ../src/keyfile.c:855
+#: ../src/keyfile.c:885
 msgid "Type here what you want, use it as a notice/scratch board"
 msgstr ""
 "Πληκτρολογείστε εδώ ότι θέλετε, χρησιμοποιείστε το ως ένα σημειωματάριο/"
 "πίνακα μηνυμάτων"
 
-#: ../src/keyfile.c:1063
+#: ../src/keyfile.c:1091
 msgid "Failed to load one or more session files."
 msgstr "Αποτυχία φόρτωσης ενός ή περισσότερων αρχείων συνεδρίας."
 
@@ -3655,7 +3701,7 @@ msgstr "Μηνύματα"
 msgid "Cl_ear"
 msgstr "_Αναζήτηση"
 
-#: ../src/main.c:131
+#: ../src/main.c:128
 msgid ""
 "Set initial column number for the first opened file (useful in conjunction "
 "with --line)"
@@ -3663,95 +3709,95 @@ msgstr ""
 "Καθορισμός αρχικών αριθμών στηλών για το πρώτο ανοιγμένο αρχείο (χρήσιμο σε "
 "συνδυασμό με το --line)"
 
-#: ../src/main.c:132
+#: ../src/main.c:129
 msgid "Use an alternate configuration directory"
 msgstr "Χρήση ενός εναλλακτικού φακέλλου ρυθμίσεων"
 
-#: ../src/main.c:133
+#: ../src/main.c:130
 msgid "Print internal filetype names"
 msgstr "Εκτύπωση εσωτερικών ονομάτων τύπων αρχείων"
 
-#: ../src/main.c:134
+#: ../src/main.c:131
 msgid "Generate global tags file (see documentation)"
 msgstr "Παραγωγή γενικού αρχείου ετικετών (δείτε την τεκμηρίωση)"
 
-#: ../src/main.c:135
+#: ../src/main.c:132
 msgid "Don't preprocess C/C++ files when generating tags"
 msgstr ""
 
-#: ../src/main.c:137
+#: ../src/main.c:134
 msgid "Don't open files in a running instance, force opening a new instance"
 msgstr ""
 
-#: ../src/main.c:138
+#: ../src/main.c:135
 msgid ""
 "Use this socket filename for communication with a running Geany instance"
 msgstr ""
 
-#: ../src/main.c:139
+#: ../src/main.c:136
 msgid "Return a list of open documents in a running Geany instance"
 msgstr ""
 
-#: ../src/main.c:141
+#: ../src/main.c:138
 msgid "Set initial line number for the first opened file"
 msgstr "Καθορισμός αρχικών αριθμών γραμμών για το πρώτο ανοιγμένο αρχείο"
 
-#: ../src/main.c:142
+#: ../src/main.c:139
 msgid "Don't show message window at startup"
 msgstr "Να μην εμφανίζεται το παράθυρο μηνυμάτων στην εκκίνηση"
 
-#: ../src/main.c:143
+#: ../src/main.c:140
 msgid "Don't load auto completion data (see documentation)"
 msgstr ""
 "Να μην φορτώνονται τα αυτόματα δεδομένα πλήρωσης (δείτε την τεκμηρίωση)"
 
-#: ../src/main.c:145
+#: ../src/main.c:142
 msgid "Don't load plugins"
 msgstr "Να μην φορτώνονται τα επιπρόσθετα"
 
-#: ../src/main.c:147
+#: ../src/main.c:144
 msgid "Print Geany's installation prefix"
 msgstr "Εκτύπωση προθέματος εγκατάστασης του Geany"
 
-#: ../src/main.c:148
+#: ../src/main.c:145
 msgid "Don't load the previous session's files"
 msgstr "να μην φορτώνονται να προηγούμενα αρχεία συνεδριών"
 
-#: ../src/main.c:150
+#: ../src/main.c:147
 msgid "Don't load terminal support"
 msgstr "Να μην φορτώνεται η υποστήριξη τερματικού"
 
-#: ../src/main.c:151
+#: ../src/main.c:148
 msgid "Filename of libvte.so"
 msgstr "Όνομα αρχείου του libvte.so"
 
-#: ../src/main.c:153
+#: ../src/main.c:150
 msgid "Be verbose"
 msgstr ""
 
-#: ../src/main.c:154
+#: ../src/main.c:151
 msgid "Show version and exit"
 msgstr "Εμφάνιση έκδοσης και έξοδος"
 
-#: ../src/main.c:508
+#: ../src/main.c:505
 msgid "[FILES...]"
 msgstr ""
 
 #. note for translators: library versions are printed after this
-#: ../src/main.c:526
+#: ../src/main.c:523
 #, fuzzy, c-format
 msgid "built on %s with "
 msgstr "(δημιουργήθηκε την ή μετά %s)"
 
-#: ../src/main.c:619
+#: ../src/main.c:613
 msgid "Move it now?"
 msgstr ""
 
-#: ../src/main.c:621
+#: ../src/main.c:615
 msgid "Geany needs to move your old configuration directory before starting."
 msgstr ""
 
-#: ../src/main.c:630
+#: ../src/main.c:624
 #, c-format
 msgid ""
 "Your configuration directory has been successfully moved from \"%s\" to \"%s"
@@ -3760,14 +3806,14 @@ msgstr ""
 
 #. for translators: the third %s in brackets is the error message which
 #. * describes why moving the dir didn't work
-#: ../src/main.c:640
+#: ../src/main.c:634
 #, c-format
 msgid ""
 "Your old configuration directory \"%s\" could not be moved to \"%s\" (%s). "
 "Please move manually the directory to the new location."
 msgstr ""
 
-#: ../src/main.c:721
+#: ../src/main.c:715
 #, c-format
 msgid ""
 "Configuration directory could not be created (%s).\n"
@@ -3779,154 +3825,162 @@ msgstr ""
 "ρυθμίσεων.\n"
 "Να γίνει εκκίνηση του Geany;"
 
-#: ../src/main.c:1060
+#: ../src/main.c:1057
 #, c-format
 msgid "This is Geany %s."
 msgstr "Αυτό είναι το Geany %s."
 
-#: ../src/main.c:1062
+#: ../src/main.c:1059
 #, c-format
 msgid "Configuration directory could not be created (%s)."
 msgstr "Δεν ήταν δυνατόν να δημιουργηθεί ο φάκελος ρυθμίσεων (%s)."
 
-#: ../src/main.c:1276
+#: ../src/main.c:1272
 #, fuzzy
 msgid "Configuration files reloaded."
 msgstr "Αποτυχία μεταγλώτισης."
 
-#: ../src/msgwindow.c:159
+#: ../src/msgwindow.c:160
 msgid "Status messages"
 msgstr "Μηνύματα κατάστασης λειτουργίας"
 
-#: ../src/msgwindow.c:554
+#: ../src/msgwindow.c:558
 #, fuzzy
 msgid "C_opy"
 msgstr "Αντιγραφή"
 
-#: ../src/msgwindow.c:563
+#: ../src/msgwindow.c:567
 #, fuzzy
 msgid "Copy _All"
 msgstr "_Κλείσιμο Όλων"
 
-#: ../src/msgwindow.c:593
+#: ../src/msgwindow.c:597
 msgid "_Hide Message Window"
 msgstr "_Απόκρυψη παράθυρου μηνυμάτων"
 
-#: ../src/msgwindow.c:649
+#: ../src/msgwindow.c:653
 #, fuzzy, c-format
 msgid "Could not find file '%s' - trying the current document path."
 msgstr "Απομακρύνει όλους τους δείκτες σφάλματος στο τρέχον έγγραφο."
 
-#: ../src/plugins.c:477
+#: ../src/plugins.c:487
 #, c-format
 msgid ""
 "The plugin \"%s\" is not binary compatible with this release of Geany - "
 "please recompile it."
 msgstr ""
 
-#: ../src/plugins.c:922
+#: ../src/plugins.c:994
 #, fuzzy
 msgid "_Plugin Manager"
 msgstr "Διαχειριστής Επιπρόσθετων"
 
-#: ../src/plugins.c:1099
+#. Translators: <plugin name> <plugin version>
+#: ../src/plugins.c:1160
 #, c-format
-msgid ""
-"Plugin: %s %s\n"
-"Description: %s\n"
-"Author(s): %s"
+msgid "%s %s"
 msgstr ""
-"Επιπρόσθετο: %s %s\n"
-"Περιγραφή: %s\n"
-"Δημιουργός(οί): %s"
 
-#: ../src/plugins.c:1175
+#: ../src/plugins.c:1236
 msgid "Active"
 msgstr "Ενεργό"
 
-#: ../src/plugins.c:1181
+#: ../src/plugins.c:1242
 msgid "Plugin"
 msgstr "Επιπρόσθετο"
 
-#: ../src/plugins.c:1205
+#: ../src/plugins.c:1266
 msgid "No plugins available."
 msgstr "Δεν υπάρχουν διαθέσιμα επιπρόσθετα."
 
-#: ../src/plugins.c:1285
+#: ../src/plugins.c:1362
 msgid "Plugins"
 msgstr "Επιπρόσθετα"
 
-#: ../src/plugins.c:1305
+#: ../src/plugins.c:1382
 msgid "Choose which plugins should be loaded at startup:"
 msgstr ""
 
-#: ../src/plugins.c:1317
+#: ../src/plugins.c:1394
 msgid "<b>Plugin details:</b>"
 msgstr "<b>Λεπτομέρειες επιπρόσθετου:</b>"
 
-#: ../src/pluginutils.c:207
+#: ../src/plugins.c:1403
+#, fuzzy
+msgid "Plugin:"
+msgstr "Επιπρόσθετο"
+
+#: ../src/plugins.c:1404 ../src/project.c:446
+msgid "Description:"
+msgstr "Περιγραφή:"
+
+#: ../src/plugins.c:1405
+msgid "Author(s):"
+msgstr ""
+
+#: ../src/pluginutils.c:334
 msgid "Configure Plugins"
 msgstr ""
 
-#: ../src/prefs.c:163
+#: ../src/prefs.c:172
 msgid "Grab Key"
 msgstr ""
 
-#: ../src/prefs.c:169
+#: ../src/prefs.c:178
 #, fuzzy, c-format
 msgid "Press the combination of the keys you want to use for \"%s\"."
 msgstr ""
 "Δώστε τον συνδυασμό πλήκτρων που θέλετε να χρησιμοποιήσετε για το \"%s\""
 
-#: ../src/prefs.c:209 ../src/symbols.c:1893
+#: ../src/prefs.c:218 ../src/symbols.c:2141
 #, fuzzy
 msgid "_Expand All"
 msgstr "Εύρεση Όλ_ων"
 
-#: ../src/prefs.c:214 ../src/symbols.c:1898
+#: ../src/prefs.c:223 ../src/symbols.c:2146
 #, fuzzy
 msgid "_Collapse All"
 msgstr "_Κλείσιμο Όλων"
 
-#: ../src/prefs.c:273
+#: ../src/prefs.c:282
 msgid "Action"
 msgstr "Δράση"
 
-#: ../src/prefs.c:278
+#: ../src/prefs.c:286
 msgid "Shortcut"
 msgstr "Συντόμευση"
 
-#: ../src/prefs.c:1435
+#: ../src/prefs.c:1449
 msgid "_Allow"
 msgstr ""
 
-#: ../src/prefs.c:1437
+#: ../src/prefs.c:1451
 msgid "_Override"
 msgstr ""
 
-#: ../src/prefs.c:1438
+#: ../src/prefs.c:1452
 msgid "Override that keybinding?"
 msgstr ""
 
-#: ../src/prefs.c:1439
+#: ../src/prefs.c:1453
 #, c-format
 msgid "The combination '%s' is already used for \"%s\"."
 msgstr "Ο συνδυασμός '%s' χρησιμοποιείται ήδη για \"%s\"."
 
-#: ../src/prefs.c:1569 ../src/vte.c:272 ../src/vte.c:743 ../src/vte.c:748
+#: ../src/prefs.c:1585 ../src/vte.c:283 ../src/vte.c:752 ../src/vte.c:757
 msgid "Terminal"
 msgstr "Τερματικό"
 
 #. add manually GeanyWrapLabels because they can't be added with Glade
 #. page Tools
-#: ../src/prefs.c:1642
+#: ../src/prefs.c:1646
 msgid "Enter tool paths below. Tools you do not need can be left blank."
 msgstr ""
 "Εισάγετε παρακάτω τις διαδρομές των εργαλείων. Τα εργαλεία που δεν "
 "χρειάζονται μπορούν να παραμείνουν κενά."
 
 #. page Templates
-#: ../src/prefs.c:1647
+#: ../src/prefs.c:1651
 msgid ""
 "Set the information to be used in templates. See the documentation for "
 "details."
@@ -3934,18 +3988,8 @@ msgstr ""
 "Καθορίστε τις πληροφορίες που θα χρησιμοποιούνται στα πρότυπα. Δείτε την "
 "τεκμηρίωση για λεπτομέρειες."
 
-#: ../src/prefs.c:1651
-#, fuzzy
-msgid ""
-"<i>Notice: For all changes you make here to take effect, you need to restart "
-"Geany or force the reload of the settings using Tools->Reload Configuration."
-"</i>"
-msgstr ""
-"<i>Ειδοποίηση: Για όλες τις αλλαγές που κάνετε εδώ θα πρέπει να "
-"επανεκκινήσετε το Geany για να πραγματοποιηθούν.</i>"
-
 #. page Keybindings
-#: ../src/prefs.c:1657
+#: ../src/prefs.c:1656
 msgid ""
 "Here you can change keyboard shortcuts for various actions. Select one and "
 "press the Change button to enter a new shortcut, or double click on an "
@@ -3956,72 +4000,62 @@ msgstr ""
 "συντόμευση, ή κάντε διπλό κλικ πάνω σε μια ενέργεια για να επεξεργαστείτε "
 "απευθείας τη αντίστοιχη συντόμευση."
 
-#. page Printing
-#: ../src/prefs.c:1662
-msgid ""
-"<i>Notice: Native GTK printing is only available if Geany was built against "
-"GTK 2.10 (or above) <b>and</b> Geany is running with GTK 2.10 (or above).</i>"
-msgstr ""
-"<i>Ειδοποίηση: Η εγγενής εκτύπωση GTK είναι διαθέσιμη μόνο εάν το Geany "
-"δημιουργήθηκε υπό το GTK 2.10 (ή μεγαλύτερο) <b>και</b> το Geany τρέχει με "
-"GTK 2.10 (η μεγαλύτερο).</i>"
-
 #. page Editor->Indentation
-#: ../src/prefs.c:1668
+#: ../src/prefs.c:1661
 msgid ""
 "<i>Warning: these settings are overridden by the current project. See "
 "<b>Project->Properties</b>.</i>"
 msgstr ""
 
-#: ../src/printing.c:188
+#: ../src/printing.c:185
 msgid "The editor font is not a monospaced font!"
 msgstr ""
 
-#: ../src/printing.c:189
+#: ../src/printing.c:186
 msgid "Text will be wrongly spaced."
 msgstr ""
 
-#: ../src/printing.c:306
+#: ../src/printing.c:303
 #, c-format
 msgid "<b>Page %d of %d</b>"
 msgstr "<b>Σελίδα %d από %d</b>"
 
-#: ../src/printing.c:376
+#: ../src/printing.c:373
 msgid "Document Setup"
 msgstr "Ρύθμιση Εγγράφου"
 
-#: ../src/printing.c:411
+#: ../src/printing.c:408
 #, fuzzy
 msgid "Print only the basename(without the path) of the printed file"
 msgstr ""
 "Εκτυπώνει μόνο το βασικό όνομα (χωρίς τη διαδρομή) του εκτυπώμενου αρχείου."
 
-#: ../src/printing.c:530
+#: ../src/printing.c:527
 #, fuzzy, c-format
 msgid "Page %d of %d"
 msgstr "<b>Σελίδα %d από %d</b>"
 
-#: ../src/printing.c:784
+#: ../src/printing.c:781
 #, c-format
 msgid "Did not send document %s to the printing subsystem."
 msgstr ""
 
-#: ../src/printing.c:786
+#: ../src/printing.c:783
 #, c-format
 msgid "Document %s was sent to the printing subsystem."
 msgstr ""
 
-#: ../src/printing.c:838
+#: ../src/printing.c:835
 #, c-format
 msgid "Printing of %s failed (%s)."
 msgstr "Η εκτύπωση του %s απέτυχε (%s)."
 
-#: ../src/printing.c:878
+#: ../src/printing.c:874
 #, fuzzy
 msgid "Please set a print command in the preferences dialog first."
 msgstr "Παρακαλώ καθορίστε πρώτα μια εντολή εκτύπωσης στο διάλογο ιδιοτήτων"
 
-#: ../src/printing.c:886
+#: ../src/printing.c:882
 #, c-format
 msgid ""
 "The file \"%s\" will be printed with the following command:\n"
@@ -4032,43 +4066,44 @@ msgstr ""
 "\n"
 "%s"
 
-#: ../src/printing.c:902
+#: ../src/printing.c:898
 #, c-format
 msgid "Printing of \"%s\" failed (return code: %s)."
 msgstr "Η εκτύπωση του \"%s\" απέτυχε (επιστροφή κωδικού: %s)."
 
-#: ../src/printing.c:908
+#: ../src/printing.c:904
 #, c-format
 msgid "File %s printed."
 msgstr "Το αρχείο %s εκτυπώθηκε."
 
 #. "projects" is part of the default project base path so be careful when translating
 #. * please avoid special characters and spaces, look at the source for details or ask Frank
-#: ../src/project.c:98
+#: ../src/project.c:99
 msgid "projects"
 msgstr "έργα"
 
-#: ../src/project.c:117
+#: ../src/project.c:118
 msgid "New Project"
 msgstr "Νέο Έργο"
 
-#: ../src/project.c:125
+#: ../src/project.c:126
 msgid "C_reate"
 msgstr "Δ_ημιουργία"
 
-#: ../src/project.c:139 ../src/project.c:425
+#: ../src/project.c:140 ../src/project.c:433 ../plugins/classbuilder.c:477
+#: ../plugins/classbuilder.c:487
 msgid "Name:"
 msgstr "Όνομα:"
 
-#: ../src/project.c:148 ../src/project.c:412
+#: ../src/project.c:149 ../src/project.c:420
 msgid "Filename:"
 msgstr "Όνομα αρχείου:"
 
-#: ../src/project.c:164 ../src/project.c:455
+#: ../src/project.c:165 ../src/project.c:463
 msgid "Base path:"
 msgstr "Βασική διαδρομή:"
 
-#: ../src/project.c:170 ../src/project.c:464
+#: ../src/project.c:171 ../src/project.c:472
 msgid ""
 "Base directory of all files that make up the project. This can be a new "
 "path, or an existing directory tree. You can use paths relative to the "
@@ -4078,117 +4113,124 @@ msgstr ""
 "μια νέα διαδρομή, ή ένας υπάρχον φάκελος. Μπορείτε να χρησιμοποιήσετε "
 "διαδρομές σχετικές με το όνομα του έργου."
 
-#: ../src/project.c:173 ../src/project.c:467
+#: ../src/project.c:174 ../src/project.c:475
 msgid "Choose Project Base Path"
 msgstr "Επιλογή Βασικής Διαδρομής Έργου"
 
-#: ../src/project.c:195
+#: ../src/project.c:196 ../src/project.c:575
+#, fuzzy
+msgid "Project file could not be written"
+msgstr "Το αρχείο του έργου δεν ήταν δυνατόν να γραφεί (%s)."
+
+#: ../src/project.c:199
 #, c-format
 msgid "Project \"%s\" created."
 msgstr "Το έργο \"%s\" δημιουργήθηκε."
 
-#: ../src/project.c:234 ../src/project.c:266 ../src/project.c:962
+#: ../src/project.c:240 ../src/project.c:272 ../src/project.c:960
 #, c-format
 msgid "Project file \"%s\" could not be loaded."
 msgstr "Το αρχείο έργου \"%s\" δεν ήταν δυνατόν να φορτωθεί."
 
-#: ../src/project.c:260 ../src/project.c:272
+#: ../src/project.c:266 ../src/project.c:278
 msgid "Open Project"
 msgstr "Άνοιγμα Έργου"
 
-#: ../src/project.c:292
+#: ../src/project.c:298
 msgid "Project files"
 msgstr "Αρχεία Έργου"
 
-#: ../src/project.c:342
+#: ../src/project.c:348
 #, c-format
 msgid "Project \"%s\" closed."
 msgstr "Το έργο \"%s\" έκλεισε."
 
-#: ../src/project.c:438
-msgid "Description:"
-msgstr "Περιγραφή:"
-
-#: ../src/project.c:485
+#: ../src/project.c:492
 #, fuzzy
 msgid "File patterns:"
 msgstr "Δομή Αρχείων:"
 
-#: ../src/project.c:584
+#: ../src/project.c:500
+msgid ""
+"Space separated list of file patterns used for the find in files dialog (e."
+"g. *.c *.h)"
+msgstr ""
+
+#: ../src/project.c:578
 #, c-format
 msgid "Project \"%s\" saved."
 msgstr "Το έργο \"%s\" αποθηκεύτηκε."
 
-#: ../src/project.c:614
+#: ../src/project.c:609
 msgid "Do you want to close it before proceeding?"
 msgstr "Θέλετε να το κλείσετε πρίν προχωρήσετε;"
 
-#: ../src/project.c:615
+#: ../src/project.c:610
 #, c-format
 msgid "The '%s' project is already open."
 msgstr "Το έργο '%s' είναι ήδη ανοιχτό."
 
-#: ../src/project.c:662
+#: ../src/project.c:658
 msgid "The specified project name is too short."
 msgstr "Το καθορισμένο όνομα έργου είναι πολύ μικρό."
 
-#: ../src/project.c:668
+#: ../src/project.c:664
 #, c-format
 msgid "The specified project name is too long (max. %d characters)."
 msgstr "Το καθορισμένο όνομα έργου είναι πολύ μεγάλο (max. %d χαρακτήρες)."
 
-#: ../src/project.c:680
+#: ../src/project.c:676
 msgid "You have specified an invalid project filename."
 msgstr "Καθορίσατε ένα άκυρο όνομα αρχείου του έργου."
 
-#: ../src/project.c:703
+#: ../src/project.c:699
 msgid "Create the project's base path directory?"
 msgstr "Δημιουργία φακέλλου της βασικής διαδρομής του έργου;"
 
-#: ../src/project.c:704
+#: ../src/project.c:700
 #, c-format
 msgid "The path \"%s\" does not exist."
 msgstr "Η διαδρομή \"%s\" δεν υπάρχει."
 
-#: ../src/project.c:713
+#: ../src/project.c:709
 #, fuzzy, c-format
 msgid "Project base directory could not be created (%s)."
 msgstr "Δεν ήταν δυνατόν να δημιουργηθεί ο φάκελος ρυθμίσεων (%s)."
 
-#: ../src/project.c:725
+#: ../src/project.c:722
 #, c-format
 msgid "Project file could not be written (%s)."
 msgstr "Το αρχείο του έργου δεν ήταν δυνατόν να γραφεί (%s)."
 
 #. initialise the dialog
-#: ../src/project.c:866 ../src/project.c:877
+#: ../src/project.c:864 ../src/project.c:875
 msgid "Choose Project Filename"
 msgstr "Επιλογή Όνομα Αρχείου Έργου"
 
-#: ../src/project.c:952
+#: ../src/project.c:950
 #, c-format
 msgid "Project \"%s\" opened."
 msgstr "Το έργο \"%s\" άνοιξε."
 
-#: ../src/search.c:227 ../src/search.c:826
+#: ../src/search.c:292 ../src/search.c:977
 msgid "_Use regular expressions"
 msgstr ""
 
-#: ../src/search.c:230
+#: ../src/search.c:295
 msgid ""
 "Use POSIX-like regular expressions. For detailed information about using "
 "regular expressions, please read the documentation."
 msgstr ""
 
-#: ../src/search.c:237
+#: ../src/search.c:302
 msgid "Search _backwards"
 msgstr "Αναζήτηση προς τα _πίσω"
 
-#: ../src/search.c:250
+#: ../src/search.c:315
 msgid "Use _escape sequences"
 msgstr "Χρήση ακολουθιών _διαφυγής"
 
-#: ../src/search.c:254
+#: ../src/search.c:319
 #, fuzzy
 msgid ""
 "Replace \\\\, \\t, \\n, \\r and \\uXXXX (Unicode chararacters) with the "
@@ -4197,184 +4239,205 @@ msgstr ""
 "Αντικατάσταση \\\\, \\t, \\n, \\r και \\uXXXX (Unicode χαρακτήρες) με τους "
 "αντίστοιχους χαρακτήρες ελέγχου."
 
-#: ../src/search.c:263 ../src/search.c:835
+#: ../src/search.c:328 ../src/search.c:986
 msgid "C_ase sensitive"
 msgstr "Δ_ιάκριση κεφαλαίων/πεζών"
 
-#: ../src/search.c:267 ../src/search.c:840
+#: ../src/search.c:332 ../src/search.c:991
 msgid "Match only a _whole word"
 msgstr "Ταίριασμα μόνο _ολόκληρης λέξης"
 
-#: ../src/search.c:271
+#: ../src/search.c:336
 msgid "Match from s_tart of word"
 msgstr "Ταίριασμα από την _αρχή της λέξης"
 
-#: ../src/search.c:405
+#: ../src/search.c:472
 msgid "_Previous"
 msgstr "_Προηγούμενο"
 
-#: ../src/search.c:410
+#: ../src/search.c:477
 msgid "_Next"
 msgstr "_Επόμενο"
 
-#: ../src/search.c:414 ../src/search.c:573 ../src/search.c:734
+#: ../src/search.c:481 ../src/search.c:643 ../src/search.c:886
 msgid "_Search for:"
 msgstr "Αναζήτηση για:"
 
 #. Now add the multiple match options
-#: ../src/search.c:441
+#: ../src/search.c:511
 msgid "_Find All"
 msgstr "Εύρεση Όλ_ων"
 
-#: ../src/search.c:448
+#: ../src/search.c:518
 msgid "_Mark"
 msgstr "_Μαρκάρισμα"
 
-#: ../src/search.c:450
+#: ../src/search.c:520
 #, fuzzy
 msgid "Mark all matches in the current document"
 msgstr "Μαρκάρει τα ευρήματα της αναζήτησης στο τρέχον έγγραφο."
 
-#: ../src/search.c:455 ../src/search.c:632
+#: ../src/search.c:525 ../src/search.c:702
 msgid "In Sessi_on"
 msgstr "Στη _Συνεδρία"
 
-#: ../src/search.c:460 ../src/search.c:637
+#: ../src/search.c:530 ../src/search.c:707
 msgid "_In Document"
 msgstr "Στο Έγγρα_φο"
 
 #. close window checkbox
-#: ../src/search.c:466 ../src/search.c:650
+#: ../src/search.c:536 ../src/search.c:720
 msgid "Close _dialog"
 msgstr "Κλείσιμο Διαλόγο_υ"
 
-#: ../src/search.c:470 ../src/search.c:654
+#: ../src/search.c:540 ../src/search.c:724
 #, fuzzy
 msgid "Disable this option to keep the dialog open"
 msgstr "Απενεργοποίηση αυτής της επιλογής για να παραμένει διάλογος ανοιχτός."
 
-#: ../src/search.c:567
+#: ../src/search.c:637
 msgid "Replace & Fi_nd"
 msgstr "Αντικατάσταση & Εύ_ρεση"
 
-#: ../src/search.c:576
+#: ../src/search.c:646
 msgid "Replace wit_h:"
 msgstr "Αντικα_τάσταση με:"
 
 #. Now add the multiple replace options
-#: ../src/search.c:625
+#: ../src/search.c:695
 msgid "Re_place All"
 msgstr "Αντι_κατάσταση Όλων"
 
-#: ../src/search.c:642
+#: ../src/search.c:712
 msgid "In Se_lection"
 msgstr "Στην Επιλο_γή"
 
-#: ../src/search.c:644
+#: ../src/search.c:714
 msgid "Replace all matches found in the currently selected text"
 msgstr "Αντικαθιστά τα ευρήματα της αναζήτησης στο τρέχον επιλεγμένο κείμενο."
 
-#: ../src/search.c:754
+#: ../src/search.c:831
+msgid "all"
+msgstr ""
+
+#: ../src/search.c:833
+#, fuzzy
+msgid "project"
+msgstr "έργα"
+
+#: ../src/search.c:835
+#, fuzzy
+msgid "custom"
+msgstr "Αποκοπή"
+
+#: ../src/search.c:839
+msgid ""
+"All: search all files in the directory\n"
+"Project: use file patterns defined in the project settings\n"
+"Custom: specify file patterns manually"
+msgstr ""
+
+#: ../src/search.c:906
 msgid "Fi_les:"
 msgstr ""
 
-#: ../src/search.c:768
+#: ../src/search.c:918
 #, fuzzy
 msgid "File patterns, e.g. *.c *.h"
 msgstr "Δομή Αρχείων:"
 
-#: ../src/search.c:780
+#: ../src/search.c:930
 msgid "_Directory:"
 msgstr "Φάκε_λος:"
 
-#: ../src/search.c:799
+#: ../src/search.c:949
 #, fuzzy
 msgid "E_ncoding:"
 msgstr "Καθορισμός κωδικοποίησης:"
 
-#: ../src/search.c:829
+#: ../src/search.c:980
 msgid "See grep's manual page for more information"
 msgstr ""
 
-#: ../src/search.c:831
+#: ../src/search.c:982
 msgid "_Recurse in subfolders"
 msgstr ""
 
-#: ../src/search.c:844
+#: ../src/search.c:995
 msgid "_Invert search results"
 msgstr "_Αντιστροφή αποτελεσμάτων αναζήτησης"
 
-#: ../src/search.c:848
+#: ../src/search.c:999
 #, fuzzy
 msgid "Invert the sense of matching, to select non-matching lines"
 msgstr ""
 "Αντιστροφή των αποτελεσμάτων αναζήτησης, για επιλογή των γραμμών που δεν "
 "είχαν αποτελέσματα αναζήτησης."
 
-#: ../src/search.c:865
+#: ../src/search.c:1016
 msgid "E_xtra options:"
 msgstr "Έ_ξτρα επιλογές:"
 
-#: ../src/search.c:872
+#: ../src/search.c:1023
 msgid "Other options to pass to Grep"
 msgstr ""
 
-#: ../src/search.c:1149 ../src/search.c:1888 ../src/search.c:1891
+#: ../src/search.c:1284 ../src/search.c:2069 ../src/search.c:2072
 #, fuzzy, c-format
 msgid "Found %d match for \"%s\"."
 msgid_plural "Found %d matches for \"%s\"."
 msgstr[0] "Βρέθηκαν %d αποτελέσματα αναζήτησης για \"%s\"."
 msgstr[1] "Βρέθηκαν %d αποτελέσματα αναζήτησης για \"%s\"."
 
-#: ../src/search.c:1196
+#: ../src/search.c:1331
 #, fuzzy, c-format
 msgid "Replaced %u matches in %u documents."
 msgstr "Μαρκάρει τα ευρήματα της αναζήτησης στο τρέχον έγγραφο."
 
-#: ../src/search.c:1378
+#: ../src/search.c:1518
 msgid "Invalid directory for find in files."
 msgstr "Ο φάκελος για αναζήτηση σε αρχεία δεν υπάρχει."
 
-#: ../src/search.c:1399
+#: ../src/search.c:1539
 msgid "No text to find."
 msgstr "Δεν υπάρχει κείμενο για αναζήτηση."
 
-#: ../src/search.c:1426
+#: ../src/search.c:1566
 #, c-format
 msgid "Cannot execute grep tool '%s'; check the path setting in Preferences."
 msgstr ""
 
-#: ../src/search.c:1494
+#: ../src/search.c:1634
 #, fuzzy
 msgid "Searching..."
 msgstr "_Αναζήτηση"
 
-#: ../src/search.c:1505
+#: ../src/search.c:1645
 #, c-format
 msgid "%s %s -- %s (in directory: %s)"
 msgstr "%s %s -- %s (στο φάκελο: %s)"
 
-#: ../src/search.c:1533
+#: ../src/search.c:1686
 #, c-format
 msgid "Could not open directory (%s)"
 msgstr "Δεν ήταν δυνατόν να ανοιχτεί ο φάκελος (%s)"
 
-#: ../src/search.c:1608
+#: ../src/search.c:1788
 msgid "Search failed."
 msgstr "Η αναζήτηση απέτυχε."
 
-#: ../src/search.c:1628
+#: ../src/search.c:1808
 #, fuzzy, c-format
 msgid "Search completed with %d match."
 msgid_plural "Search completed with %d matches."
 msgstr[0] "Η αναζήτηση ολοκληρώθηκε με %d αποτελέσματα."
 msgstr[1] "Η αναζήτηση ολοκληρώθηκε με %d αποτελέσματα."
 
-#: ../src/search.c:1636
+#: ../src/search.c:1816
 msgid "No matches found."
 msgstr "Δεν υπάρχουν αποτελέσματα αναζήτησης."
 
-#: ../src/search.c:1668
+#: ../src/search.c:1848
 #, c-format
 msgid "Bad regex: %s"
 msgstr ""
@@ -4387,248 +4450,285 @@ msgid ""
 "This is a fatal error and Geany will now quit."
 msgstr ""
 
-#: ../src/symbols.c:611 ../src/symbols.c:651 ../src/symbols.c:718
+#: ../src/symbols.c:688 ../src/symbols.c:738 ../src/symbols.c:805
 msgid "Chapter"
 msgstr "Κεφάλαιο"
 
-#: ../src/symbols.c:612 ../src/symbols.c:647 ../src/symbols.c:719
+#: ../src/symbols.c:689 ../src/symbols.c:734 ../src/symbols.c:806
 msgid "Section"
 msgstr "Ενότητα"
 
-#: ../src/symbols.c:613
+#: ../src/symbols.c:690
 msgid "Sect1"
 msgstr "Ενότ1"
 
-#: ../src/symbols.c:614
+#: ../src/symbols.c:691
 msgid "Sect2"
 msgstr "Ενότ2"
 
-#: ../src/symbols.c:615
+#: ../src/symbols.c:692
 msgid "Sect3"
 msgstr "Ενότ3"
 
-#: ../src/symbols.c:616
+#: ../src/symbols.c:693
 msgid "Appendix"
 msgstr "Παράρτημα"
 
-#: ../src/symbols.c:617 ../src/symbols.c:652 ../src/symbols.c:668
-#: ../src/symbols.c:679 ../src/symbols.c:766 ../src/symbols.c:777
-#: ../src/symbols.c:789 ../src/symbols.c:803 ../src/symbols.c:815
-#: ../src/symbols.c:827 ../src/symbols.c:842 ../src/symbols.c:887
+#: ../src/symbols.c:694 ../src/symbols.c:739 ../src/symbols.c:755
+#: ../src/symbols.c:766 ../src/symbols.c:853 ../src/symbols.c:864
+#: ../src/symbols.c:876 ../src/symbols.c:890 ../src/symbols.c:902
+#: ../src/symbols.c:914 ../src/symbols.c:929 ../src/symbols.c:958
+#: ../src/symbols.c:987
 msgid "Other"
 msgstr "Άλλα"
 
-#: ../src/symbols.c:623 ../src/symbols.c:835 ../src/symbols.c:867
+#: ../src/symbols.c:700 ../src/symbols.c:922 ../src/symbols.c:967
 msgid "Module"
 msgstr "Μονάδα"
 
-#: ../src/symbols.c:624 ../src/symbols.c:762 ../src/symbols.c:813
-#: ../src/symbols.c:825 ../src/symbols.c:840 ../src/symbols.c:852
+#: ../src/symbols.c:701 ../src/symbols.c:849 ../src/symbols.c:900
+#: ../src/symbols.c:912 ../src/symbols.c:927 ../src/symbols.c:939
 msgid "Types"
 msgstr "Τύποι"
 
-#: ../src/symbols.c:625
+#: ../src/symbols.c:702
 msgid "Type constructors"
 msgstr ""
 
-#: ../src/symbols.c:626 ../src/symbols.c:638 ../src/symbols.c:659
-#: ../src/symbols.c:667 ../src/symbols.c:676 ../src/symbols.c:688
-#: ../src/symbols.c:697 ../src/symbols.c:750 ../src/symbols.c:799
-#: ../src/symbols.c:822 ../src/symbols.c:837 ../src/symbols.c:874
+#: ../src/symbols.c:703 ../src/symbols.c:725 ../src/symbols.c:746
+#: ../src/symbols.c:754 ../src/symbols.c:763 ../src/symbols.c:775
+#: ../src/symbols.c:784 ../src/symbols.c:837 ../src/symbols.c:886
+#: ../src/symbols.c:909 ../src/symbols.c:924 ../src/symbols.c:952
+#: ../src/symbols.c:974
 #, fuzzy
 msgid "Functions"
 msgstr "Συναρτήσεις"
 
-#: ../src/symbols.c:631 ../src/symbols.c:637
+#: ../src/symbols.c:708
+msgid "Program"
+msgstr ""
+
+#: ../src/symbols.c:710 ../src/symbols.c:718 ../src/symbols.c:724
 msgid "Sections"
 msgstr "Ενότητες"
 
-#: ../src/symbols.c:632
+#: ../src/symbols.c:711
+msgid "Paragraph"
+msgstr ""
+
+#: ../src/symbols.c:712
+#, fuzzy
+msgid "Group"
+msgstr "Ομάδα:"
+
+#: ../src/symbols.c:713
+msgid "Data"
+msgstr ""
+
+#: ../src/symbols.c:719
 msgid "Keys"
 msgstr "Πλήκτρα"
 
-#: ../src/symbols.c:639 ../src/symbols.c:690 ../src/symbols.c:751
-#: ../src/symbols.c:776 ../src/symbols.c:801 ../src/symbols.c:814
-#: ../src/symbols.c:823 ../src/symbols.c:839 ../src/symbols.c:886
+#: ../src/symbols.c:726 ../src/symbols.c:777 ../src/symbols.c:838
+#: ../src/symbols.c:863 ../src/symbols.c:888 ../src/symbols.c:901
+#: ../src/symbols.c:910 ../src/symbols.c:926 ../src/symbols.c:986
 msgid "Variables"
 msgstr "Μεταβλητές"
 
-#: ../src/symbols.c:646
+#: ../src/symbols.c:733
 msgid "Environment"
 msgstr "Περιβάλλον"
 
-#: ../src/symbols.c:648 ../src/symbols.c:720
+#: ../src/symbols.c:735 ../src/symbols.c:807
 msgid "Subsection"
 msgstr "Υποενότητα"
 
-#: ../src/symbols.c:649 ../src/symbols.c:721
+#: ../src/symbols.c:736 ../src/symbols.c:808
 #, fuzzy
 msgid "Subsubsection"
 msgstr "Υπο-υποενότητα"
 
-#: ../src/symbols.c:660
+#: ../src/symbols.c:747
 #, fuzzy
 msgid "Structures"
 msgstr "Κατάσταση"
 
-#: ../src/symbols.c:675 ../src/symbols.c:759 ../src/symbols.c:784
-#: ../src/symbols.c:796
+#: ../src/symbols.c:762 ../src/symbols.c:846 ../src/symbols.c:871
+#: ../src/symbols.c:883
 msgid "Package"
 msgstr "Πακέτο"
 
-#: ../src/symbols.c:677 ../src/symbols.c:826 ../src/symbols.c:849
+#: ../src/symbols.c:764 ../src/symbols.c:913 ../src/symbols.c:936
 msgid "Labels"
 msgstr "Ετικέτες"
 
-#: ../src/symbols.c:678 ../src/symbols.c:689 ../src/symbols.c:802
-#: ../src/symbols.c:824
+#: ../src/symbols.c:765 ../src/symbols.c:776 ../src/symbols.c:889
+#: ../src/symbols.c:911
 msgid "Constants"
 msgstr "Σταθερές"
 
-#: ../src/symbols.c:686 ../src/symbols.c:785 ../src/symbols.c:797
-#: ../src/symbols.c:810 ../src/symbols.c:836
+#: ../src/symbols.c:773 ../src/symbols.c:872 ../src/symbols.c:884
+#: ../src/symbols.c:897 ../src/symbols.c:923
 msgid "Interfaces"
 msgstr ""
 
-#: ../src/symbols.c:687 ../src/symbols.c:708 ../src/symbols.c:729
-#: ../src/symbols.c:739 ../src/symbols.c:748 ../src/symbols.c:786
-#: ../src/symbols.c:798 ../src/symbols.c:811 ../src/symbols.c:873
+#: ../src/symbols.c:774 ../src/symbols.c:795 ../src/symbols.c:816
+#: ../src/symbols.c:826 ../src/symbols.c:835 ../src/symbols.c:873
+#: ../src/symbols.c:885 ../src/symbols.c:898 ../src/symbols.c:973
 msgid "Classes"
 msgstr "Κλάσεις"
 
-#: ../src/symbols.c:698
+#: ../src/symbols.c:785
 msgid "Anchors"
 msgstr ""
 
-#: ../src/symbols.c:699
+#: ../src/symbols.c:786
 msgid "H1 Headings"
 msgstr ""
 
-#: ../src/symbols.c:700
+#: ../src/symbols.c:787
 msgid "H2 Headings"
 msgstr ""
 
-#: ../src/symbols.c:701
+#: ../src/symbols.c:788
 msgid "H3 Headings"
 msgstr ""
 
-#: ../src/symbols.c:709
+#: ../src/symbols.c:796
 #, fuzzy
 msgid "ID Selectors"
 msgstr "Στην Επιλο_γή"
 
-#: ../src/symbols.c:710
+#: ../src/symbols.c:797
 #, fuzzy
 msgid "Type Selectors"
 msgstr "Επιλογή Όλων"
 
-#: ../src/symbols.c:728 ../src/symbols.c:774
+#: ../src/symbols.c:815 ../src/symbols.c:861
 msgid "Modules"
 msgstr "Μονάδες"
 
-#: ../src/symbols.c:730
+#: ../src/symbols.c:817
 msgid "Singletons"
 msgstr "Σίνγκλετον"
 
-#: ../src/symbols.c:731 ../src/symbols.c:740 ../src/symbols.c:749
-#: ../src/symbols.c:787 ../src/symbols.c:812
+#: ../src/symbols.c:818 ../src/symbols.c:827 ../src/symbols.c:836
+#: ../src/symbols.c:874 ../src/symbols.c:899
 msgid "Methods"
 msgstr "Μέθοδοι"
 
-#: ../src/symbols.c:738 ../src/symbols.c:870
+#: ../src/symbols.c:825 ../src/symbols.c:970
 msgid "Namespaces"
 msgstr ""
 
-#: ../src/symbols.c:741
+#: ../src/symbols.c:828 ../src/symbols.c:953
 #, fuzzy
 msgid "Procedures"
 msgstr "Ιδιότητες"
 
-#: ../src/symbols.c:752
+#: ../src/symbols.c:839
 #, fuzzy
 msgid "Imports"
 msgstr "Εξαγωγή"
 
-#: ../src/symbols.c:760
+#: ../src/symbols.c:847
 #, fuzzy
 msgid "Entities"
 msgstr "χωρίς όνομα"
 
-#: ../src/symbols.c:761
+#: ../src/symbols.c:848
 #, fuzzy
 msgid "Architectures"
 msgstr "Κατάσταση"
 
-#: ../src/symbols.c:763
+#: ../src/symbols.c:850
 #, fuzzy
 msgid "Functions / Procedures"
 msgstr "Ιδιότητες"
 
-#: ../src/symbols.c:764
+#: ../src/symbols.c:851
 #, fuzzy
 msgid "Variables / Signals"
 msgstr "Μεταβλητές"
 
-#: ../src/symbols.c:765
+#: ../src/symbols.c:852
 msgid "Processes / Components"
 msgstr ""
 
-#: ../src/symbols.c:773
+#: ../src/symbols.c:860
 msgid "Events"
 msgstr ""
 
-#: ../src/symbols.c:775
+#: ../src/symbols.c:862
 #, fuzzy
 msgid "Functions / Tasks"
 msgstr "Συναρτήσεις"
 
-#: ../src/symbols.c:788 ../src/symbols.c:875
+#: ../src/symbols.c:875 ../src/symbols.c:975
 msgid "Members"
 msgstr "Μέλη"
 
-#: ../src/symbols.c:838
+#: ../src/symbols.c:925
 msgid "Subroutines"
 msgstr ""
 
-#: ../src/symbols.c:841
+#: ../src/symbols.c:928
 msgid "Blocks"
 msgstr ""
 
-#: ../src/symbols.c:850 ../src/symbols.c:859 ../src/symbols.c:883
+#: ../src/symbols.c:937 ../src/symbols.c:946 ../src/symbols.c:983
 msgid "Macros"
 msgstr "Μακροεντολές"
 
-#: ../src/symbols.c:851
+#: ../src/symbols.c:938
 #, fuzzy
 msgid "Defines"
 msgstr "Γραμμές:"
 
-#: ../src/symbols.c:858
+#: ../src/symbols.c:945
 msgid "Targets"
 msgstr ""
 
-#: ../src/symbols.c:876
+#: ../src/symbols.c:954
+msgid "Indexes"
+msgstr ""
+
+#: ../src/symbols.c:955
+#, fuzzy
+msgid "Tables"
+msgstr "Μεταβλητές"
+
+#: ../src/symbols.c:956
+msgid "Triggers"
+msgstr ""
+
+#: ../src/symbols.c:957
+#, fuzzy
+msgid "Views"
+msgstr "_Προβολή"
+
+#: ../src/symbols.c:976
 #, fuzzy
 msgid "Structs"
 msgstr "Κατάσταση"
 
-#: ../src/symbols.c:877
+#: ../src/symbols.c:977
 msgid "Typedefs / Enums"
 msgstr ""
 
-#: ../src/symbols.c:1371
+#: ../src/symbols.c:1618
 #, c-format
 msgid "Unknown filetype extension for \"%s\".\n"
 msgstr "Άγνωστη προέκταση τύπου αρχείου για \"%s\".\n"
 
-#: ../src/symbols.c:1395
+#: ../src/symbols.c:1641
 #, c-format
 msgid "Failed to create tags file, perhaps because no tags were found.\n"
 msgstr ""
 "Αποτυχία δημιουργίας αρχείου ετικετών, πιθανόν λόγω του ότι δεν βρέθηκαν "
 "ετικέτες.\n"
 
-#: ../src/symbols.c:1402
+#: ../src/symbols.c:1648
 #, c-format
 msgid ""
 "Usage: %s -g <Tag File> <File list>\n"
@@ -4637,7 +4737,7 @@ msgstr ""
 "Χρήση: %s -g <Αρχείο Ετικέτας> <Λίστα Αρχείου>\n"
 "\n"
 
-#: ../src/symbols.c:1403
+#: ../src/symbols.c:1649
 #, c-format
 msgid ""
 "Example:\n"
@@ -4648,45 +4748,46 @@ msgstr ""
 "CFLAGS=`pkg-config gtk+-2.0 --cflags` %s -g gtk2.c.tags /usr/include/gtk-2.0/"
 "gtk/gtk.h\n"
 
-#: ../src/symbols.c:1417
+#: ../src/symbols.c:1663
 msgid "Load Tags"
 msgstr "Φόρτωση ετικετών"
 
-#: ../src/symbols.c:1424
+#: ../src/symbols.c:1670
 msgid "Geany tag files (*.tags)"
 msgstr "Αρχεία ετικέτας Geany (*.tags)"
 
 #. For translators: the first wildcard is the filetype, the second the filename
-#: ../src/symbols.c:1444
+#: ../src/symbols.c:1690
 #, c-format
 msgid "Loaded %s tags file '%s'."
 msgstr "Φορτωμένες %s ετικέτες αρχείου '%s'."
 
-#: ../src/symbols.c:1447
+#: ../src/symbols.c:1693
 #, c-format
 msgid "Could not load tags file '%s'."
 msgstr "Δεν ήταν δυνατόν να φορτωθεί το αρχείο ετικετών '%s'."
 
-#: ../src/symbols.c:1600
+#: ../src/symbols.c:1848
 #, c-format
 msgid "Forward declaration \"%s\" not found."
 msgstr ""
 
-#: ../src/symbols.c:1602
+#: ../src/symbols.c:1850
 #, c-format
 msgid "Definition of \"%s\" not found."
 msgstr "Ο καθορισμός του \"%s\" δεν βρέθηκε."
 
-#: ../src/symbols.c:1908
+#: ../src/symbols.c:2156
 msgid "Sort by _Name"
 msgstr "Ταξινόμηση κατά _Όνομα"
 
-#: ../src/symbols.c:1915
+#: ../src/symbols.c:2163
 msgid "Sort by _Appearance"
 msgstr "Ταξινόμηση κατά _Εμφάνιση"
 
-#: ../src/templates.c:206
-msgid "Old"
+#: ../src/templates.c:77
+#, c-format
+msgid "Failed to convert template file \"%s\" to UTF-8"
 msgstr ""
 
 #. custom actions defined in toolbar_init(): "New", "Open", "SearchEntry", "GotoEntry", "Build"
@@ -4694,185 +4795,195 @@ msgstr ""
 msgid "Save the current file"
 msgstr "Αποθήκευση του τρέχοντος αρχείου"
 
-#: ../src/toolbar.c:57
+#: ../src/toolbar.c:58
 msgid "Save all open files"
 msgstr "Αποθήκευση όλων των ανοιγμένων αρχείων"
 
-#: ../src/toolbar.c:58
+#: ../src/toolbar.c:59
 msgid "Reload the current file from disk"
 msgstr "Επαναφόρτωση του τρέχοντος αρχείου από τον δίσκο"
 
-#: ../src/toolbar.c:59
+#: ../src/toolbar.c:60
 msgid "Close the current file"
 msgstr "Κλείσιμο του τρέχοντος αρχείου"
 
-#: ../src/toolbar.c:60
+#: ../src/toolbar.c:61
 #, fuzzy
 msgid "Close all open files"
 msgstr "Κλείσιμο όλων των ανοιγμένων αρχείων"
 
-#: ../src/toolbar.c:61
+#: ../src/toolbar.c:62
 #, fuzzy
 msgid "Cut the current selection"
 msgstr "Μετατροπή σε πεζά/κεφαλαία των επιλεγμένων"
 
-#: ../src/toolbar.c:62
+#: ../src/toolbar.c:63
 #, fuzzy
 msgid "Copy the current selection"
 msgstr "Μεταγλώτιση του τρέχοντος αρχείου"
 
-#: ../src/toolbar.c:63
+#: ../src/toolbar.c:64
 msgid "Paste the contents of the clipboard"
 msgstr ""
 
-#: ../src/toolbar.c:64
+#: ../src/toolbar.c:65
 #, fuzzy
 msgid "Delete the current selection"
 msgstr "Μετατροπή σε πεζά/κεφαλαία των επιλεγμένων"
 
-#: ../src/toolbar.c:65
+#: ../src/toolbar.c:66
 msgid "Undo the last modification"
 msgstr "Αναίρεση της τελευταίας τροποποίησης"
 
-#: ../src/toolbar.c:66
+#: ../src/toolbar.c:67
 msgid "Redo the last modification"
 msgstr "Επανάληψη της τελευταίας τροποποίησης"
 
-#: ../src/toolbar.c:69
+#: ../src/toolbar.c:70
 msgid "Compile the current file"
 msgstr "Μεταγλώτιση του τρέχοντος αρχείου"
 
-#: ../src/toolbar.c:70
+#: ../src/toolbar.c:71
 msgid "Run or view the current file"
 msgstr "Εκτελέση ή εμφάνιση του τρέχοντος αρχείου"
 
-#: ../src/toolbar.c:71
+#: ../src/toolbar.c:72
 #, fuzzy
 msgid ""
 "Open a color chooser dialog, to interactively pick colors from a palette"
 msgstr ""
 "Ανοίγει έναν επιλογέα χρωμάτων, για να επιλέξετε χρώματα από μια παλέτα."
 
-#: ../src/toolbar.c:72
+#: ../src/toolbar.c:73
 msgid "Zoom in the text"
 msgstr "Μεγέθυνση στο κείμενο"
 
-#: ../src/toolbar.c:73
+#: ../src/toolbar.c:74
 msgid "Zoom out the text"
 msgstr "Σμίκρυνση από το κείμενο"
 
-#: ../src/toolbar.c:74
+#: ../src/toolbar.c:75
 msgid "Decrease indentation"
 msgstr "Μείωση εσοχής"
 
-#: ../src/toolbar.c:75
+#: ../src/toolbar.c:76
 msgid "Increase indentation"
 msgstr "Αύξηση εσοχής"
 
-#: ../src/toolbar.c:76 ../src/toolbar.c:381
+#: ../src/toolbar.c:77 ../src/toolbar.c:382
 msgid "Find the entered text in the current file"
 msgstr " Βρείτε το εισακτέο κείμενο στο τρέχον αρχείο"
 
-#: ../src/toolbar.c:77 ../src/toolbar.c:389
+#: ../src/toolbar.c:78 ../src/toolbar.c:392
 #, fuzzy
 msgid "Jump to the entered line number"
 msgstr "Μετάβαση στον εισακτέο αριθμό γραμμής."
 
-#: ../src/toolbar.c:78
+#: ../src/toolbar.c:79
 msgid "Show the preferences dialog"
 msgstr ""
 
-#: ../src/toolbar.c:79
+#: ../src/toolbar.c:80
 msgid "Quit Geany"
 msgstr "Κλείσιμου του Geany"
 
-#: ../src/toolbar.c:80
+#: ../src/toolbar.c:81
 #, fuzzy
 msgid "Print document"
 msgstr "Έγγραφο XML"
 
-#: ../src/toolbar.c:81
+#: ../src/toolbar.c:82
 #, fuzzy
 msgid "Replace text in the current document"
 msgstr "Μαρκάρει τα ευρήματα της αναζήτησης στο τρέχον έγγραφο."
 
-#: ../src/toolbar.c:357
+#: ../src/toolbar.c:358
 msgid "Create a new file"
 msgstr "Δημιουργία νέου αρχείου"
 
-#: ../src/toolbar.c:358
+#: ../src/toolbar.c:359
 #, fuzzy
 msgid "Create a new file from a template"
 msgstr "Δημιουργία νέου αρχείου"
 
-#: ../src/toolbar.c:365
+#: ../src/toolbar.c:366
 msgid "Open an existing file"
 msgstr "Άνοιγμα υπάρχοντος αρχείου"
 
-#: ../src/toolbar.c:366
+#: ../src/toolbar.c:367
 #, fuzzy
 msgid "Open a recent file"
 msgstr "Άνοιγμα του επιλεγμένου αρχείου"
 
-#: ../src/toolbar.c:374
+#: ../src/toolbar.c:375
 #, fuzzy
 msgid "Choose more build actions"
 msgstr "Δεν έχει άλλα λάθη στη δημιουργία."
 
-#: ../src/toolbar.c:389
+#: ../src/toolbar.c:392
 #, fuzzy
 msgid "Goto"
 msgstr "Μετάβαση στη Γραμμή"
 
-#: ../src/toolbar.c:578
+#: ../src/toolbar.c:582
 msgid "Separator"
 msgstr ""
 
-#: ../src/toolbar.c:579
+#: ../src/toolbar.c:583
 msgid "--- Separator ---"
 msgstr ""
 
-#: ../src/toolbar.c:946
+#: ../src/toolbar.c:952
 msgid ""
 "Select items to be displayed on the toolbar. Items can be reordered by drag "
 "and drop."
 msgstr ""
 
-#: ../src/toolbar.c:962
+#: ../src/toolbar.c:968
 msgid "Available Items"
 msgstr ""
 
-#: ../src/toolbar.c:983
+#: ../src/toolbar.c:989
 #, fuzzy
 msgid "Displayed Items"
 msgstr "Εμφάνιση"
 
-#: ../src/tools.c:153
+#: ../src/tools.c:110 ../src/tools.c:115
+#, fuzzy, c-format
+msgid "Invalid command: %s"
+msgstr "Εκτέλεση εντολής:"
+
+#: ../src/tools.c:110
+#, fuzzy
+msgid "Command not found"
+msgstr "\"%s\" δεν βρέθηκε."
+
+#: ../src/tools.c:256
 #, c-format
 msgid ""
 "The executed custom command returned an error. Your selection was not "
 "changed. Error message: %s"
 msgstr ""
 
-#: ../src/tools.c:219
+#: ../src/tools.c:322
 msgid "The executed custom command exited with an unsuccessful exit code."
 msgstr ""
 
-#: ../src/tools.c:247 ../src/tools.c:295
+#: ../src/tools.c:350 ../src/tools.c:398
 #, fuzzy, c-format
 msgid "Custom command failed: %s"
 msgstr "Δεν καθορίστηκαν προσαρμοσμένες εντολές."
 
-#: ../src/tools.c:251
+#: ../src/tools.c:354
 #, c-format
 msgid "Passing data and executing custom command: %s"
 msgstr "Πέρασμα των δεδομένων και εκτέλεση προσαρμοσμένης εντολής: %s"
 
-#: ../src/tools.c:309 ../src/tools.c:516
+#: ../src/tools.c:500 ../src/tools.c:733
 msgid "Set Custom Commands"
 msgstr "Ρύθμιση Προσαρμοσμένων Εντολών"
 
-#: ../src/tools.c:316
+#: ../src/tools.c:508
 msgid ""
 "You can send the current selection to any of these commands and the output "
 "of the command replaces the current selection."
@@ -4880,60 +4991,64 @@ msgstr ""
 "Μπορείτε να στείλετε την τρέχουσα επιλογή σε οποιαδήποτε από αυτές τις "
 "εντολές και το αποτέλεσμα της εντολής αντικαθιστά την τρέχουσα επιλογή."
 
-#: ../src/tools.c:491
+#: ../src/tools.c:522
+msgid "ID"
+msgstr ""
+
+#: ../src/tools.c:708
 msgid "No custom commands defined."
 msgstr "Δεν καθορίστηκαν προσαρμοσμένες εντολές."
 
-#: ../src/tools.c:591
+#: ../src/tools.c:802
 msgid "Word Count"
 msgstr "Μέτρηση Λέξεων"
 
-#: ../src/tools.c:601
+#: ../src/tools.c:812
 msgid "selection"
 msgstr "επιλογή"
 
-#: ../src/tools.c:607
+#: ../src/tools.c:818
 msgid "whole document"
 msgstr "ολόκληρο έγγραφο"
 
-#: ../src/tools.c:616
+#: ../src/tools.c:827
 #, fuzzy
 msgid "Range:"
 msgstr "Σειρά:"
 
-#: ../src/tools.c:628
+#: ../src/tools.c:839
 msgid "Lines:"
 msgstr "Γραμμές:"
 
-#: ../src/tools.c:642
+#: ../src/tools.c:853
 msgid "Words:"
 msgstr "Λέξεις:"
 
-#: ../src/tools.c:656
+#: ../src/tools.c:867
 msgid "Characters:"
 msgstr "Χαρακτήρες:"
 
-#: ../src/sidebar.c:188
+#: ../src/sidebar.c:175
 msgid "No tags found"
 msgstr "Δεν βρέθηκαν ετικέτες"
 
-#: ../src/sidebar.c:586
+#: ../src/sidebar.c:587
 msgid "Show S_ymbol List"
 msgstr "Εμφάνιση Λίστας _Συμβόλων"
 
-#: ../src/sidebar.c:594
+#: ../src/sidebar.c:595
 msgid "Show _Document List"
 msgstr "Εμφάνιση Λίστας Ε_γγράφων"
 
-#: ../src/sidebar.c:602 ../plugins/filebrowser.c:648
+#: ../src/sidebar.c:603 ../plugins/filebrowser.c:660
 msgid "H_ide Sidebar"
 msgstr "Από_κρυψη Πλευρικής Μπάρας"
 
-#: ../src/sidebar.c:696 ../plugins/filebrowser.c:619
+#: ../src/sidebar.c:697 ../plugins/filebrowser.c:631
 msgid "_Find in Files"
 msgstr "_Εύρεση σε Αρχεία"
 
-#: ../src/sidebar.c:706
+#: ../src/sidebar.c:707
 #, fuzzy
 msgid "Show _Paths"
 msgstr "Εμφάνιση _Πλήρης Διαδρομής Ονόματος"
@@ -5011,23 +5126,34 @@ msgstr ""
 msgid "_Set Custom Date Format"
 msgstr "_Ρύθμιση Προσαρμοσμένης Διάταξης Ημερομηνίας"
 
-#: ../src/ui_utils.c:1756
+#: ../src/ui_utils.c:1791
 msgid "Select Folder"
 msgstr "Επιλογή Φακέλου"
 
-#: ../src/ui_utils.c:1756
+#: ../src/ui_utils.c:1791
 msgid "Select File"
 msgstr "Επιλογή Αρχείου"
 
-#: ../src/ui_utils.c:1910
+#: ../src/ui_utils.c:1945
 #, fuzzy
 msgid "Save All"
 msgstr "Αποθήκευση Ό_λων"
 
-#: ../src/ui_utils.c:1911
+#: ../src/ui_utils.c:1946
 #, fuzzy
 msgid "Close All"
 msgstr "_Κλείσιμο Όλων"
+
+#: ../src/utils.c:89
+#, fuzzy
+msgid "Select Browser"
+msgstr "Φυλλομετρητής Αρχείων"
+
+#: ../src/utils.c:90
+msgid ""
+"Failed to spawn the configured browser command. Please correct it or enter "
+"another one."
+msgstr ""
 
 #: ../src/utils.c:368
 msgid "Win (CRLF)"
@@ -5041,21 +5167,21 @@ msgstr "Mac (CR)"
 msgid "Unix (LF)"
 msgstr "Unix (LF)"
 
-#: ../src/vte.c:536
+#: ../src/vte.c:545
 #, fuzzy
 msgid "_Set Path From Document"
 msgstr "Ρύθμιση Διαδρομής από το Έγγραφο"
 
-#: ../src/vte.c:541
+#: ../src/vte.c:550
 #, fuzzy
 msgid "_Restart Terminal"
 msgstr "Επανεκκίνηση Τερματικού"
 
-#: ../src/vte.c:564
+#: ../src/vte.c:573
 msgid "_Input Methods"
 msgstr "_Εισαγωγή Μεθόδων"
 
-#: ../src/vte.c:658
+#: ../src/vte.c:667
 msgid ""
 "Could not change the directory in the VTE because it probably contains a "
 "command."
@@ -5063,38 +5189,38 @@ msgstr ""
 "Δεν ήταν δυνατόν να αλλαχθεί ο φάκελος στο VTE επειδή πιθανόν περιέχει μια "
 "εντολή."
 
-#: ../src/vte.c:756
+#: ../src/vte.c:765
 msgid "Font:"
 msgstr ""
 
-#: ../src/vte.c:766
+#: ../src/vte.c:775
 #, fuzzy
 msgid "Sets the font for the terminal widget"
 msgstr "Καθορίζει την γραμματοσειρά για το τερματικό."
 
-#: ../src/vte.c:768
+#: ../src/vte.c:777
 msgid "Foreground color:"
 msgstr "Χρώμα πρώτου πλάνου:"
 
-#: ../src/vte.c:774
+#: ../src/vte.c:783
 msgid "Background color:"
 msgstr "Χρώμα υπόβαθρου:"
 
-#: ../src/vte.c:784
+#: ../src/vte.c:793
 #, fuzzy
 msgid "Sets the foreground color of the text in the terminal widget"
 msgstr "Καθορίζει το χρώμα πρώτου πλάνου για το κείμενο του τερματικού."
 
-#: ../src/vte.c:791
+#: ../src/vte.c:800
 #, fuzzy
 msgid "Sets the background color of the text in the terminal widget"
 msgstr "Καθορίζει το χρώμα υπόβαθρου για το κείμενο του τερματικού."
 
-#: ../src/vte.c:794
+#: ../src/vte.c:803
 msgid "Scrollback lines:"
 msgstr "Ιστορικό γραμμών:"
 
-#: ../src/vte.c:806
+#: ../src/vte.c:815
 #, fuzzy
 msgid ""
 "Specifies the history in lines, which you can scroll back in the terminal "
@@ -5103,11 +5229,11 @@ msgstr ""
 "Καθορίζει το ιστορικό των γραμμών, που μπορείτε να γυρίζετε πίσω στο "
 "τερματικό"
 
-#: ../src/vte.c:810
+#: ../src/vte.c:819
 msgid "Shell:"
 msgstr "Κέλυφος:"
 
-#: ../src/vte.c:818
+#: ../src/vte.c:827
 #, fuzzy
 msgid ""
 "Sets the path to the shell which should be started inside the terminal "
@@ -5116,37 +5242,37 @@ msgstr ""
 "Καθορίζει τη διαδρομή στο κέλυφος από την οποία θα ξεκινά μέσα στην "
 "εξομοίωση του τερματικού."
 
-#: ../src/vte.c:835
+#: ../src/vte.c:844
 msgid "Scroll on keystroke"
 msgstr ""
 
-#: ../src/vte.c:836
+#: ../src/vte.c:845
 msgid "Whether to scroll to the bottom if a key was pressed"
 msgstr ""
 
-#: ../src/vte.c:839
+#: ../src/vte.c:848
 msgid "Scroll on output"
 msgstr ""
 
-#: ../src/vte.c:840
+#: ../src/vte.c:849
 #, fuzzy
 msgid "Whether to scroll to the bottom when output is generated"
 msgstr "Εάν θα γίνεται χρήση των tab ή των κενών όταν θα εισάγεται μια εσοχή."
 
-#: ../src/vte.c:843
+#: ../src/vte.c:852
 msgid "Cursor blinks"
 msgstr ""
 
-#: ../src/vte.c:844
+#: ../src/vte.c:853
 #, fuzzy
 msgid "Whether to blink the cursor"
 msgstr "Εάν θα ενεργοποιείται η δίπλωση του κώδικα"
 
-#: ../src/vte.c:847
+#: ../src/vte.c:856
 msgid "Override Geany keybindings"
 msgstr ""
 
-#: ../src/vte.c:849
+#: ../src/vte.c:858
 #, fuzzy
 msgid ""
 "Allows the VTE to receive keyboard shortcuts (apart from focus commands)"
@@ -5154,11 +5280,11 @@ msgstr ""
 "Επιτρέπει το VTE να λαμβάνει συντομεύσεις πλήκτρων (εκτός από τις εντολές "
 "εστίασης)."
 
-#: ../src/vte.c:852
+#: ../src/vte.c:861
 msgid "Disable menu shortcut key (F10 by default)"
 msgstr "Απενεργοποίηση συντόμευσης του πλήκτρου μενού (προκαθορισμένο το F10)"
 
-#: ../src/vte.c:853
+#: ../src/vte.c:862
 msgid ""
 "This option disables the keybinding to popup the menu bar (default is F10). "
 "Disabling it can be useful if you use, for example, Midnight Commander "
@@ -5168,11 +5294,11 @@ msgstr ""
 "μπάρας του μενού (προκαθορισμένο το F10). Απενεργοποιώντας το μπορεί να "
 "είναι χρήσιμο, για παράδειγμα, στο Midnight Commander μέσα από το VTE."
 
-#: ../src/vte.c:856 ../plugins/filebrowser.c:1228
+#: ../src/vte.c:865 ../plugins/filebrowser.c:1275
 msgid "Follow the path of the current file"
 msgstr "Ακολούθησε τη διαδρομή του τρέχοντος αρχείου"
 
-#: ../src/vte.c:857
+#: ../src/vte.c:866
 #, fuzzy
 msgid "Whether to execute \"cd $path\" when you switch between opened files"
 msgstr ""
@@ -5181,11 +5307,11 @@ msgstr ""
 
 #. create check_skip_script checkbox before the check_skip_script checkbox to be able to
 #. * use the object for the toggled handler of check_skip_script checkbox
-#: ../src/vte.c:862
+#: ../src/vte.c:871
 msgid "Don't use run script"
 msgstr ""
 
-#: ../src/vte.c:863
+#: ../src/vte.c:872
 #, fuzzy
 msgid ""
 "Don't use the simple run script which is usually used to display the exit "
@@ -5195,11 +5321,11 @@ msgstr ""
 "χρησιμοποιείται για να εμφανίζει τη κατάσταση εξόδου του εκτελέσιμου "
 "προγράμματος."
 
-#: ../src/vte.c:866
+#: ../src/vte.c:875
 msgid "Execute programs in VTE"
 msgstr "Εκτέλεση προγραμμάτων στο VTE"
 
-#: ../src/vte.c:867
+#: ../src/vte.c:876
 #, fuzzy
 msgid ""
 "Run programs in VTE instead of opening a terminal emulation window. Please "
@@ -5217,179 +5343,186 @@ msgstr "Αρχεία έργου Geany"
 msgid "Executables"
 msgstr "Εκτελέσιμα"
 
-#: ../plugins/classbuilder.c:36
+#: ../plugins/classbuilder.c:40
 msgid "Class Builder"
 msgstr "Δημιουργός Κλάσης"
 
-#: ../plugins/classbuilder.c:36
+#: ../plugins/classbuilder.c:40
 msgid "Creates source files for new class types."
 msgstr "Δημιουργεί τα πηγαία αρχεία για το νέο τύπο κλάσης."
 
-#: ../plugins/classbuilder.c:372
+#: ../plugins/classbuilder.c:442
 msgid "Create Class"
 msgstr "Δημιουργία Κλάσης"
 
-#: ../plugins/classbuilder.c:384
+#: ../plugins/classbuilder.c:453
+#, fuzzy
+msgid "Create C++ Class"
+msgstr "Δημιουργία Κλάσης"
+
+#: ../plugins/classbuilder.c:456
+#, fuzzy
+msgid "Create GTK+ Class"
+msgstr "Δημιουργία Κλάσης"
+
+#: ../plugins/classbuilder.c:459
+#, fuzzy
+msgid "Create PHP Class"
+msgstr "Δημιουργία Κλάσης"
+
+#: ../plugins/classbuilder.c:476
 #, fuzzy
 msgid "Namespace"
 msgstr "Αντικατάσταση"
 
-#: ../plugins/classbuilder.c:393
-#, fuzzy
-msgid "Namespace:"
-msgstr "Όνομα:"
-
-#: ../plugins/classbuilder.c:402
+#: ../plugins/classbuilder.c:483 ../plugins/classbuilder.c:485
 msgid "Class"
 msgstr "Κλάση"
 
-#: ../plugins/classbuilder.c:411
-msgid "Class name:"
-msgstr "Όνομα κλάσης:"
-
-#: ../plugins/classbuilder.c:424
+#: ../plugins/classbuilder.c:492
 msgid "Header file:"
 msgstr "Αρχείο κεφαλής:"
 
-#: ../plugins/classbuilder.c:434
+#: ../plugins/classbuilder.c:494
 msgid "Source file:"
 msgstr "Πηγαίο αρχείο:"
 
-#: ../plugins/classbuilder.c:440
+#: ../plugins/classbuilder.c:496
 #, fuzzy
 msgid "Inheritance"
 msgstr "Κληρονομιά"
 
-#: ../plugins/classbuilder.c:449
+#: ../plugins/classbuilder.c:498
 msgid "Base class:"
 msgstr "Βασική κλάση:"
 
-#: ../plugins/classbuilder.c:463
+#: ../plugins/classbuilder.c:506
 #, fuzzy
 msgid "Base source:"
 msgstr "Πηγαίο αρχείο %s"
 
-#: ../plugins/classbuilder.c:465
+#: ../plugins/classbuilder.c:511
 msgid "Base header:"
 msgstr "Βασική κεφαλή:"
 
-#: ../plugins/classbuilder.c:475
+#: ../plugins/classbuilder.c:519
 msgid "Global"
 msgstr "Γενικά"
 
-#: ../plugins/classbuilder.c:485
+#: ../plugins/classbuilder.c:538
 #, fuzzy
 msgid "Base GType:"
 msgstr "Βασική GType:"
 
-#: ../plugins/classbuilder.c:498
+#: ../plugins/classbuilder.c:543
 msgid "Implements:"
 msgstr ""
 
-#: ../plugins/classbuilder.c:505
+#: ../plugins/classbuilder.c:545
 msgid "Options"
 msgstr "Επιλογές"
 
-#: ../plugins/classbuilder.c:514
+#: ../plugins/classbuilder.c:562
 msgid "Create constructor"
 msgstr "Δημιουργία κατασκευής"
 
-#: ../plugins/classbuilder.c:518
+#: ../plugins/classbuilder.c:567
 msgid "Create destructor"
 msgstr ""
 
-#: ../plugins/classbuilder.c:526
+#: ../plugins/classbuilder.c:574
 msgid "Is abstract"
 msgstr ""
 
-#: ../plugins/classbuilder.c:529
+#: ../plugins/classbuilder.c:577
 #, fuzzy
 msgid "Is singleton"
 msgstr "Σίνγκλετον"
 
-#: ../plugins/classbuilder.c:540
-msgid "GTK+ constructor type"
-msgstr ""
+#: ../plugins/classbuilder.c:587
+#, fuzzy
+msgid "Constructor type:"
+msgstr "Δημιουργία κατασκευής"
 
-#: ../plugins/classbuilder.c:1040
+#: ../plugins/classbuilder.c:1096
 msgid "Create Cla_ss"
 msgstr "Δημιουργία Κλά_σης"
 
-#: ../plugins/classbuilder.c:1046
+#: ../plugins/classbuilder.c:1102
 #, fuzzy
 msgid "_C++ Class"
 msgstr "C++ Κλάση"
 
-#: ../plugins/classbuilder.c:1049
+#: ../plugins/classbuilder.c:1105
 #, fuzzy
 msgid "_GTK+ Class"
 msgstr "GTK+ Κλάση"
 
-#: ../plugins/classbuilder.c:1052
+#: ../plugins/classbuilder.c:1108
 #, fuzzy
 msgid "_PHP Class"
 msgstr "C++ Κλάση"
 
-#: ../plugins/htmlchars.c:39
+#: ../plugins/htmlchars.c:43
 msgid "HTML Characters"
 msgstr "Χαρακτήρες HTML"
 
-#: ../plugins/htmlchars.c:39
+#: ../plugins/htmlchars.c:43
 msgid "Inserts HTML character entities like '&amp;'."
 msgstr "Εισάγει οντότητες HTML χαρακτήρων όπως &amp;'."
 
-#: ../plugins/htmlchars.c:40 ../plugins/export.c:38
-#: ../plugins/filebrowser.c:44 ../plugins/saveactions.c:40
-#: ../plugins/splitwindow.c:33
+#: ../plugins/htmlchars.c:44 ../plugins/export.c:42
+#: ../plugins/filebrowser.c:48 ../plugins/saveactions.c:44
+#: ../plugins/splitwindow.c:37
 msgid "The Geany developer team"
 msgstr "Η δημιουργική ομάδα του Geany"
 
-#: ../plugins/htmlchars.c:76
+#: ../plugins/htmlchars.c:80
 msgid "HTML characters"
 msgstr "HTML χαρακτήρες"
 
-#: ../plugins/htmlchars.c:82
+#: ../plugins/htmlchars.c:86
 msgid "ISO 8859-1 characters"
 msgstr "ISO 8859-1 χαρακτήρες"
 
-#: ../plugins/htmlchars.c:180
+#: ../plugins/htmlchars.c:184
 msgid "Greek characters"
 msgstr "Ελληνικοί χαρακτήρες"
 
-#: ../plugins/htmlchars.c:235
+#: ../plugins/htmlchars.c:239
 msgid "Mathematical characters"
 msgstr "Μαθηματικοί χαρακτήρες"
 
-#: ../plugins/htmlchars.c:276
+#: ../plugins/htmlchars.c:280
 msgid "Technical characters"
 msgstr "Τεχνικοί χαρακτήρες"
 
-#: ../plugins/htmlchars.c:284
+#: ../plugins/htmlchars.c:288
 msgid "Arrow characters"
 msgstr ""
 
-#: ../plugins/htmlchars.c:297
+#: ../plugins/htmlchars.c:301
 msgid "Punctuation characters"
 msgstr "Χαρακτήρες στίξης"
 
-#: ../plugins/htmlchars.c:313
+#: ../plugins/htmlchars.c:317
 msgid "Miscellaneous characters"
 msgstr "Διάφοροι χαρακτήρες"
 
-#: ../plugins/htmlchars.c:368 ../plugins/filebrowser.c:1145
-#: ../plugins/saveactions.c:470
+#: ../plugins/htmlchars.c:372 ../plugins/filebrowser.c:1167
+#: ../plugins/saveactions.c:477
 msgid "Plugin configuration directory could not be created."
 msgstr "Δεν ήταν δυνατόν να δημιουργηθεί ο φάκελος ρυθμίσεων των επιπρόσθετων."
 
-#: ../plugins/htmlchars.c:489
+#: ../plugins/htmlchars.c:493
 msgid "Special Characters"
 msgstr "Ειδικοί Χαρακτήρες"
 
-#: ../plugins/htmlchars.c:491
+#: ../plugins/htmlchars.c:495
 msgid "_Insert"
 msgstr "_Εισαγωγή"
 
-#: ../plugins/htmlchars.c:500
+#: ../plugins/htmlchars.c:504
 msgid ""
 "Choose a special character from the list below and double click on it or use "
 "the button to insert it at the current cursor position."
@@ -5398,65 +5531,74 @@ msgstr ""
 "σε αυτό ή με τη χρήση του κουμπιού εισάγετέ το στην τρέχουσα θέση του "
 "κέρσορα."
 
-#: ../plugins/htmlchars.c:514
+#: ../plugins/htmlchars.c:518
 msgid "Character"
 msgstr "Χαρακτήρας"
 
-#: ../plugins/htmlchars.c:520
+#: ../plugins/htmlchars.c:524
 msgid "HTML (name)"
 msgstr "HTML (όνομα)"
 
-#: ../plugins/htmlchars.c:738
+#: ../plugins/htmlchars.c:742
 msgid "_Insert Special HTML Characters"
 msgstr "Εισαγωγή Ει_δικών HTML Χαρακτήρων"
 
 #. Add menuitem for html replacement functions
-#: ../plugins/htmlchars.c:753
+#: ../plugins/htmlchars.c:757
 #, fuzzy
 msgid "_HTML Replacement"
 msgstr "Αντικατάσταση"
 
-#: ../plugins/htmlchars.c:760
+#: ../plugins/htmlchars.c:764
 #, fuzzy
 msgid "_Auto-replace Special Characters"
 msgstr "Ειδικοί Χαρακτήρες"
 
-#: ../plugins/htmlchars.c:769
+#: ../plugins/htmlchars.c:773
 #, fuzzy
 msgid "_Replace Characters in Selection"
 msgstr "Αντίγραφο της Γραμμής ή της Επιλογής"
 
-#: ../plugins/htmlchars.c:784
+#: ../plugins/htmlchars.c:788
 msgid "Insert Special HTML Characters"
 msgstr "Εισαγωγή Ειδικών Χαρακτήρων HTML"
 
-#: ../plugins/htmlchars.c:787
+#: ../plugins/htmlchars.c:791
 #, fuzzy
 msgid "Replace special characters"
 msgstr "Ειδικοί Χαρακτήρες"
 
-#: ../plugins/htmlchars.c:790
+#: ../plugins/htmlchars.c:794
 #, fuzzy
 msgid "Toggle plugin status"
 msgstr "Ενεργοποίηση/απενεργοποίηση σχολίων γραμμής"
 
-#: ../plugins/export.c:37
+#: ../plugins/export.c:41
 msgid "Export"
 msgstr "Εξαγωγή"
 
-#: ../plugins/export.c:37
+#: ../plugins/export.c:41
 msgid "Exports the current file into different formats."
 msgstr "Εξάγει το τρέχον αρχείο σε διάφορες μορφές."
 
-#: ../plugins/export.c:166
+#: ../plugins/export.c:173
 msgid "Export File"
 msgstr "Εξαγωγή Αρχείου"
 
-#: ../plugins/export.c:183
+#: ../plugins/export.c:191
+#, fuzzy
+msgid "_Insert line numbers"
+msgstr "Εκτύπωση αριθμών γραμμών"
+
+#: ../plugins/export.c:193
+msgid "Insert line numbers before each line in the exported document"
+msgstr ""
+
+#: ../plugins/export.c:203
 msgid "_Use current zoom level"
 msgstr "_Χρήση τρέχοντος επιπέδου μεγέθυνσης"
 
-#: ../plugins/export.c:185
+#: ../plugins/export.c:205
 #, fuzzy
 msgid ""
 "Renders the font size of the document together with the current zoom level"
@@ -5464,107 +5606,109 @@ msgstr ""
 "Αποδίδει το μέγεθος της γραμματοσειράς του εγγράφου μαζί με το τρέχον "
 "επίπεδο μεγέθυνσης."
 
-#: ../plugins/export.c:267
+#: ../plugins/export.c:283
 #, c-format
 msgid "Document successfully exported as '%s'."
 msgstr "Η εξαγωγή του εγγράφου ως '%s'έγινε με επιτυχία."
 
-#: ../plugins/export.c:269
+#: ../plugins/export.c:285
 #, c-format
 msgid "File '%s' could not be written (%s)."
 msgstr "Το αρχείο '%s' δεν ήταν δυνατόν να γραφεί (%s)."
 
-#: ../plugins/export.c:316
+#: ../plugins/export.c:335
 #, c-format
 msgid "The file '%s' already exists. Do you want to overwrite it?"
 msgstr "Το αρχείο '%s' υπάρχει ήδη. Θέλετε να αντικατασταθεί;"
 
-#: ../plugins/export.c:703
+#: ../plugins/export.c:783
 msgid "_Export"
 msgstr "_Εξαγωγή"
 
 #. HTML
-#: ../plugins/export.c:710
+#: ../plugins/export.c:790
 #, fuzzy
 msgid "As _HTML"
 msgstr "Ως HTML"
 
 #. LaTeX
-#: ../plugins/export.c:716
+#: ../plugins/export.c:796
 #, fuzzy
 msgid "As _LaTeX"
 msgstr "Ως LaTeX"
 
-#: ../plugins/filebrowser.c:43
+#: ../plugins/filebrowser.c:47
 msgid "File Browser"
 msgstr "Φυλλομετρητής Αρχείων"
 
-#: ../plugins/filebrowser.c:43
+#: ../plugins/filebrowser.c:47
 msgid "Adds a file browser tab to the sidebar."
 msgstr "Προσθέτει μια ετικέτα φιλλομετρητή αρχείων στη πλευρική μπάρα."
 
-#: ../plugins/filebrowser.c:359
+#: ../plugins/filebrowser.c:370
 msgid "Too many items selected!"
 msgstr "Επιλέχθηκαν πάρα πολλά αντικείμενα!"
 
-#: ../plugins/filebrowser.c:435
+#: ../plugins/filebrowser.c:446
 #, c-format
 msgid "Could not execute configured external command '%s' (%s)."
 msgstr ""
 "Δεν ήταν δυνατόν να εκτελεστεί η προσαρμοσμένη εξωτερική εντολή %s' (%s)."
 
-#: ../plugins/filebrowser.c:604
+#: ../plugins/filebrowser.c:616
 msgid "Open _externally"
 msgstr "Άνοιγμα εξωτερι_κά"
 
-#: ../plugins/filebrowser.c:629
+#: ../plugins/filebrowser.c:641
 msgid "Show _Hidden Files"
 msgstr "Εμφάνιση Κ_ρυφών Αρχείων"
 
-#: ../plugins/filebrowser.c:850
+#: ../plugins/filebrowser.c:872
 msgid "Up"
 msgstr "Πάνω"
 
-#: ../plugins/filebrowser.c:855
+#: ../plugins/filebrowser.c:877
 msgid "Refresh"
 msgstr "Ανανέωση"
 
-#: ../plugins/filebrowser.c:860
+#: ../plugins/filebrowser.c:882
 msgid "Home"
 msgstr "Αρχικός Κατάλογος"
 
-#: ../plugins/filebrowser.c:865
+#: ../plugins/filebrowser.c:887
 msgid "Set path from document"
 msgstr "Καθορισμός διαδρομής από το έγγραφο"
 
-#: ../plugins/filebrowser.c:875
+#: ../plugins/filebrowser.c:897
 #, fuzzy
 msgid "Clear the filter"
 msgstr "Κλείσιμο του τρέχοντος αρχείου"
 
-#: ../plugins/filebrowser.c:889
+#: ../plugins/filebrowser.c:911
 #, fuzzy
 msgid "Filter:"
 msgstr "Αρχείο"
 
-#: ../plugins/filebrowser.c:899
-msgid "Filter your files with usual wildcards"
+#: ../plugins/filebrowser.c:922
+msgid ""
+"Filter your files with the usual wildcards. Separate multiple patterns with "
+"a space."
 msgstr ""
 
-#: ../plugins/filebrowser.c:1118
+#: ../plugins/filebrowser.c:1137
 msgid "Focus File List"
 msgstr ""
 
-#: ../plugins/filebrowser.c:1120
+#: ../plugins/filebrowser.c:1139
 msgid "Focus Path Entry"
 msgstr ""
 
-#: ../plugins/filebrowser.c:1196
+#: ../plugins/filebrowser.c:1232
 #, fuzzy
 msgid "External open command:"
 msgstr "Άλλες εντολές"
 
-#: ../plugins/filebrowser.c:1205
+#: ../plugins/filebrowser.c:1240
 #, c-format
 msgid ""
 "The command to execute when using \"Open with\". You can use %f and %d "
@@ -5580,59 +5724,52 @@ msgstr ""
 "Το %d θα αντικαθίσταται με το όνομα διαδρομής του επιλεγμένου αρχείου χωρίς "
 "το όνομα αρχείου"
 
-#: ../plugins/filebrowser.c:1213
+#: ../plugins/filebrowser.c:1248
 msgid "Show hidden files"
 msgstr "Εμφάνιση κρυφών αρχείων"
 
-#: ../plugins/filebrowser.c:1219
-msgid "Hide object files"
-msgstr "Απόκρυψη αρχείων αντικειμένου"
+#: ../plugins/filebrowser.c:1256
+#, fuzzy
+msgid "Hide file extensions:"
+msgstr "Ανίχνευση από την επέκταση αρχείου"
 
-#: ../plugins/filebrowser.c:1223
-msgid ""
-"Don't show generated object files in the file browser, this includes *.o, *."
-"obj. *.so, *.dll, *.a, *.lib"
-msgstr ""
-"Να μην εμφανίζονται τα παραγόμενα αρχεία του αντικειμένου στον φυλλομετρητή "
-"αρχείων, τα οποία συμπεριλαμβάνουν τα *.o, *.obj, *.so, *.dll, *.a, *.lib"
-
-#: ../plugins/filebrowser.c:1234
+#: ../plugins/filebrowser.c:1281
 #, fuzzy
 msgid "Use the project's base directory"
 msgstr "Δημιουργία φακέλλου της βασικής διαδρομής του έργου;"
 
-#: ../plugins/filebrowser.c:1238
+#: ../plugins/filebrowser.c:1285
 #, fuzzy
 msgid ""
 "Change the directory to the base directory of the currently opened project"
 msgstr "Δημιουργία diff από τον φάκελο του τρέχοντος ενεργού αρχείου"
 
-#: ../plugins/saveactions.c:39
+#: ../plugins/saveactions.c:43
 #, fuzzy
 msgid "Save Actions"
 msgstr "Ενότητες"
 
-#: ../plugins/saveactions.c:39
+#: ../plugins/saveactions.c:43
 msgid "This plugin provides different actions related to saving of files."
 msgstr ""
 
-#: ../plugins/saveactions.c:169
+#: ../plugins/saveactions.c:173
 #, fuzzy, c-format
 msgid "Backup Copy: Directory could not be created (%s)."
 msgstr "Δεν ήταν δυνατόν να δημιουργηθεί ο φάκελος ρυθμίσεων (%s)."
 
 #. it's unlikely that this happens
-#: ../plugins/saveactions.c:201
+#: ../plugins/saveactions.c:205
 #, fuzzy, c-format
 msgid "Backup Copy: File could not be read (%s)."
 msgstr "Το αρχείο '%s' δεν ήταν δυνατόν να γραφεί (%s)."
 
-#: ../plugins/saveactions.c:219
+#: ../plugins/saveactions.c:223
 #, fuzzy, c-format
 msgid "Backup Copy: File could not be saved (%s)."
 msgstr "Αδύνατη η διακοπή της διαδικασίας (%s)."
 
-#: ../plugins/saveactions.c:311
+#: ../plugins/saveactions.c:315
 #, fuzzy, c-format
 msgid "Autosave: Saved %d file automatically."
 msgid_plural "Autosave: Saved %d files automatically."
@@ -5640,112 +5777,180 @@ msgstr[0] "Αυτόματη αποθήκευση: Αποθηκεύτηκαν %d 
 msgstr[1] "Αυτόματη αποθήκευση: Αποθηκεύτηκαν %d αρχεία αυτόματα."
 
 #. initialize the dialog
-#: ../plugins/saveactions.c:380
+#: ../plugins/saveactions.c:384
 #, fuzzy
 msgid "Select Directory"
 msgstr "Επιλογή τρέχουσας λέξης"
 
-#: ../plugins/saveactions.c:463
+#: ../plugins/saveactions.c:469
 msgid "Backup directory does not exist or is not writable."
 msgstr ""
 
-#: ../plugins/saveactions.c:543
+#: ../plugins/saveactions.c:550
 msgid "Auto Save"
 msgstr "Αυτόματη Αποθήκευση"
 
-#: ../plugins/saveactions.c:545 ../plugins/saveactions.c:607
-#: ../plugins/saveactions.c:648
+#: ../plugins/saveactions.c:552 ../plugins/saveactions.c:614
+#: ../plugins/saveactions.c:655
 msgid "_Enable"
 msgstr ""
 
-#: ../plugins/saveactions.c:553
+#: ../plugins/saveactions.c:560
 msgid "Auto save _interval:"
 msgstr ""
 
-#: ../plugins/saveactions.c:561
+#: ../plugins/saveactions.c:568
 #, fuzzy
 msgid "seconds"
 msgstr "%s εντολές"
 
-#: ../plugins/saveactions.c:570
+#: ../plugins/saveactions.c:577
 #, fuzzy
 msgid "_Print status message if files have been automatically saved"
 msgstr "Εκτύπωση μηνύματος κατάστασης εάν έχουν αποθηκευτεί αρχεία αυτόματα"
 
-#: ../plugins/saveactions.c:578
+#: ../plugins/saveactions.c:585
 #, fuzzy
 msgid "Save only current open _file"
 msgstr "Αποθήκευση μόνο του τρέχοντος αρχείου"
 
-#: ../plugins/saveactions.c:585
+#: ../plugins/saveactions.c:592
 #, fuzzy
 msgid "Sa_ve all open files"
 msgstr "Αποθήκευση όλων των ανοιγμένων αρχείων"
 
-#: ../plugins/saveactions.c:605
+#: ../plugins/saveactions.c:612
 #, fuzzy
 msgid "Instant Save"
 msgstr "Εισαγωγή ημερομηνίας"
 
-#: ../plugins/saveactions.c:615
+#: ../plugins/saveactions.c:622
 #, fuzzy
 msgid "_Filetype to use for newly opened files:"
 msgstr ""
 "Θέτει την προκαθορισμένη κωδικοποίηση για τα πρόσφατα δημιουργημένα αρχεία."
 
-#: ../plugins/saveactions.c:646
+#: ../plugins/saveactions.c:653
 msgid "Backup Copy"
 msgstr ""
 
-#: ../plugins/saveactions.c:656
+#: ../plugins/saveactions.c:663
 msgid "_Directory to save backup files in:"
 msgstr ""
 
-#: ../plugins/saveactions.c:679
+#: ../plugins/saveactions.c:686
 msgid "Date/_Time format for backup files (\"man strftime\" for details):"
 msgstr ""
 
-#: ../plugins/saveactions.c:692
+#: ../plugins/saveactions.c:699
 msgid "Directory _levels to include in the backup destination:"
 msgstr ""
 
-#: ../plugins/splitwindow.c:32
+#: ../plugins/splitwindow.c:36
 msgid "Split Window"
 msgstr ""
 
-#: ../plugins/splitwindow.c:32
+#: ../plugins/splitwindow.c:36
 msgid "Splits the editor view into two windows."
 msgstr ""
 
-#: ../plugins/splitwindow.c:240
+#: ../plugins/splitwindow.c:275
 #, fuzzy
 msgid "Show the current document"
 msgstr "Μαρκάρει τα ευρήματα της αναζήτησης στο τρέχον έγγραφο."
 
-#: ../plugins/splitwindow.c:257 ../plugins/splitwindow.c:385
-#: ../plugins/splitwindow.c:400
+#: ../plugins/splitwindow.c:292 ../plugins/splitwindow.c:426
+#: ../plugins/splitwindow.c:441
 msgid "_Unsplit"
 msgstr ""
 
-#: ../plugins/splitwindow.c:367
+#: ../plugins/splitwindow.c:408
 msgid "_Split Window"
 msgstr ""
 
-#: ../plugins/splitwindow.c:375
-msgid "_Horizontally"
+#: ../plugins/splitwindow.c:416
+#, fuzzy
+msgid "_Side by Side"
+msgstr "Από_κρυψη Πλευρικής Μπάρας"
+
+#: ../plugins/splitwindow.c:421
+msgid "_Top and Bottom"
 msgstr ""
 
-#: ../plugins/splitwindow.c:380
-msgid "_Vertically"
-msgstr ""
-
-#: ../plugins/splitwindow.c:396
+#: ../plugins/splitwindow.c:437
 msgid "Split Horizontally"
 msgstr ""
 
-#: ../plugins/splitwindow.c:398
+#: ../plugins/splitwindow.c:439
 msgid "Split Vertically"
 msgstr ""
+
+#, fuzzy
+#~ msgid "Clear"
+#~ msgstr "Μεταγλωτιστής"
+
+#, fuzzy
+#~ msgid "_Set Build Menu Commands"
+#~ msgstr "Ρύθμιση Προσαρμοσμένων Εντολών"
+
+#~ msgid "SQL Dump file"
+#~ msgstr "SQL Dump αρχείο"
+
+#, fuzzy
+#~ msgid "%s script file"
+#~ msgstr "Αρχείο Shell script"
+
+#~ msgid "M_iscellaneous Languages"
+#~ msgstr "_Διάφορες Γλώσσες"
+
+#, fuzzy
+#~ msgid "_Custom Filetypes"
+#~ msgstr "Καθορισμός _Τύπου Αρχείου"
+
+#~ msgid ""
+#~ "Plugin: %s %s\n"
+#~ "Description: %s\n"
+#~ "Author(s): %s"
+#~ msgstr ""
+#~ "Επιπρόσθετο: %s %s\n"
+#~ "Περιγραφή: %s\n"
+#~ "Δημιουργός(οί): %s"
+
+#, fuzzy
+#~ msgid ""
+#~ "<i>Notice: For all changes you make here to take effect, you need to "
+#~ "restart Geany or force the reload of the settings using Tools->Reload "
+#~ "Configuration.</i>"
+#~ msgstr ""
+#~ "<i>Ειδοποίηση: Για όλες τις αλλαγές που κάνετε εδώ θα πρέπει να "
+#~ "επανεκκινήσετε το Geany για να πραγματοποιηθούν.</i>"
+
+#~ msgid ""
+#~ "<i>Notice: Native GTK printing is only available if Geany was built "
+#~ "against GTK 2.10 (or above) <b>and</b> Geany is running with GTK 2.10 (or "
+#~ "above).</i>"
+#~ msgstr ""
+#~ "<i>Ειδοποίηση: Η εγγενής εκτύπωση GTK είναι διαθέσιμη μόνο εάν το Geany "
+#~ "δημιουργήθηκε υπό το GTK 2.10 (ή μεγαλύτερο) <b>και</b> το Geany τρέχει "
+#~ "με GTK 2.10 (η μεγαλύτερο).</i>"
+
+#, fuzzy
+#~ msgid "Namespace:"
+#~ msgstr "Όνομα:"
+
+#~ msgid "Class name:"
+#~ msgstr "Όνομα κλάσης:"
+
+#~ msgid "Hide object files"
+#~ msgstr "Απόκρυψη αρχείων αντικειμένου"
+
+#~ msgid ""
+#~ "Don't show generated object files in the file browser, this includes *.o, "
+#~ "*.obj. *.so, *.dll, *.a, *.lib"
+#~ msgstr ""
+#~ "Να μην εμφανίζονται τα παραγόμενα αρχεία του αντικειμένου στον "
+#~ "φυλλομετρητή αρχείων, τα οποία συμπεριλαμβάνουν τα *.o, *.obj, *.so, *."
+#~ "dll, *.a, *.lib"
 
 #~ msgid "Find _Selected"
 #~ msgstr "Αναζήτηση Ε_πιλεγμένου"
@@ -5904,9 +6109,6 @@ msgstr ""
 
 #~ msgid "Make in base path"
 #~ msgstr "Δημιουργία στη βασική διαδρομή"
-
-#~ msgid "Run command:"
-#~ msgstr "Εκτέλεση εντολής:"
 
 #~ msgid ""
 #~ "Command-line to run in the project base directory. Options can be "

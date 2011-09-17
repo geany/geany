@@ -8,14 +8,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Geany 0.19\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-09-13 20:04+0200\n"
+"POT-Creation-Date: 2011-09-17 09:51+0200\n"
 "PO-Revision-Date: 2011-09-13 20:02+0100\n"
 "Last-Translator: Peter Scholtens <peter.scholtens@xs4all.nl>\n"
 "Language-Team: Dutch <geany-i18n@uvena.de>\n"
+"Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: nl\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: KBabel 1.9.1\n"
 "X-Poedit-Language: Dutch\n"
@@ -32,53 +32,53 @@ msgstr "Geany"
 msgid "Integrated Development Environment"
 msgstr "Geintegreerde Ontwikkel Omgeving"
 
-#: ../src/about.c:154
+#: ../src/about.c:155
 msgid "About Geany"
 msgstr "Over Geany"
 
-#: ../src/about.c:204
+#: ../src/about.c:205
 msgid "A fast and lightweight IDE"
 msgstr "Een snel en lichtgewicht IDE"
 
-#: ../src/about.c:225
+#: ../src/about.c:226
 #, c-format
 msgid "(built on or after %s)"
 msgstr "(gebouwd op of na %s)"
 
 #. gtk_container_add(GTK_CONTAINER(info_box), cop_label);
-#: ../src/about.c:256
+#: ../src/about.c:257
 msgid "Info"
 msgstr "Info"
 
-#: ../src/about.c:272
+#: ../src/about.c:273
 msgid "Developers"
 msgstr "Ontwikkelaars"
 
-#: ../src/about.c:281
+#: ../src/about.c:282
 msgid "maintainer"
 msgstr "beheerder"
 
-#: ../src/about.c:289 ../src/about.c:297
+#: ../src/about.c:290 ../src/about.c:298
 msgid "developer"
 msgstr "ontwikkelaar"
 
-#: ../src/about.c:305
+#: ../src/about.c:306
 msgid "translation maintainer"
 msgstr "vertalingscoördinator"
 
-#: ../src/about.c:314
+#: ../src/about.c:315
 msgid "Translators"
 msgstr "Vertalers"
 
-#: ../src/about.c:334
+#: ../src/about.c:335
 msgid "Previous Translators"
 msgstr "Vorige vertalers"
 
-#: ../src/about.c:355
+#: ../src/about.c:356
 msgid "Contributors"
 msgstr "Ontwikkelaars"
 
-#: ../src/about.c:365
+#: ../src/about.c:366
 #, c-format
 msgid ""
 "Some of the many contributors (for a more detailed list, see the file %s):"
@@ -86,15 +86,15 @@ msgstr ""
 "Enkele van de vele ontwikkelaars (voor een gedetailleerde lijst, raadpleeg "
 "bestand %s):"
 
-#: ../src/about.c:391
+#: ../src/about.c:392
 msgid "Credits"
 msgstr "Credits"
 
-#: ../src/about.c:405
+#: ../src/about.c:406
 msgid "License"
 msgstr "Licentie"
 
-#: ../src/about.c:414
+#: ../src/about.c:415
 msgid ""
 "License text could not be found, please visit http://www.gnu.org/licenses/"
 "gpl-2.0.txt to view it online."
@@ -518,20 +518,20 @@ msgstr ""
 "Houdt het huidige (veranderde) document open en open nieuw weggeschreven "
 "bestand in een nieuw tabblad"
 
-#: ../src/dialogs.c:728 ../src/win32.c:679
+#: ../src/dialogs.c:728 ../src/win32.c:683
 msgid "Error"
 msgstr "Fout"
 
-#: ../src/dialogs.c:731 ../src/dialogs.c:1609 ../src/win32.c:685
-#: ../src/win32.c:744
+#: ../src/dialogs.c:731 ../src/dialogs.c:1609 ../src/win32.c:689
+#: ../src/win32.c:748
 msgid "Question"
 msgstr "Vraag"
 
-#: ../src/dialogs.c:734 ../src/win32.c:691
+#: ../src/dialogs.c:734 ../src/win32.c:695
 msgid "Warning"
 msgstr "Waarschuwing"
 
-#: ../src/dialogs.c:737 ../src/win32.c:697
+#: ../src/dialogs.c:737 ../src/win32.c:701
 msgid "Information"
 msgstr "Informatie"
 
@@ -2934,8 +2934,8 @@ msgid "Printing"
 msgstr "Afdrukken"
 
 #: ../src/interface.c:5097
-msgid ""
-"<i>Please refer to the manual for more details about these preferences.</i>"
+#, fuzzy
+msgid "<i>Warning: read the manual before changing these preferences.</i>"
 msgstr "<i>Kijk in de handleiding voor meer details over deze voorkeuren.</i>"
 
 #: ../src/interface.c:5102
@@ -3423,7 +3423,7 @@ msgid "Remove Markers and Error Indicators"
 msgstr "Verwijder markeer en fout_indicatoren"
 
 #: ../src/keybindings.c:537 ../src/keybindings.c:542 ../src/project.c:484
-#: ../src/ui_utils.c:1942
+#: ../src/ui_utils.c:1947
 msgid "Build"
 msgstr "Bouwen"
 
@@ -4904,31 +4904,42 @@ msgstr "C++ STL"
 msgid "_Set Custom Date Format"
 msgstr "Aangepast _datumformaat instellen"
 
-#: ../src/ui_utils.c:1786
+#: ../src/ui_utils.c:1791
 msgid "Select Folder"
 msgstr "Map selecteren"
 
-#: ../src/ui_utils.c:1786
+#: ../src/ui_utils.c:1791
 msgid "Select File"
 msgstr "Bestand selecteren"
 
-#: ../src/ui_utils.c:1940
+#: ../src/ui_utils.c:1945
 msgid "Save All"
 msgstr "Alles opslaan"
 
-#: ../src/ui_utils.c:1941
+#: ../src/ui_utils.c:1946
 msgid "Close All"
 msgstr "Alles sluiten"
 
-#: ../src/utils.c:376
+#: ../src/utils.c:89
+#, fuzzy
+msgid "Select Browser"
+msgstr "Bestandsbrowser"
+
+#: ../src/utils.c:90
+msgid ""
+"Failed to spawn the configured browser command. Please correct it or enter "
+"another one."
+msgstr ""
+
+#: ../src/utils.c:368
 msgid "Win (CRLF)"
 msgstr "Win (CRLF)"
 
-#: ../src/utils.c:377
+#: ../src/utils.c:369
 msgid "Mac (CR)"
 msgstr "Mac (CR)"
 
-#: ../src/utils.c:378
+#: ../src/utils.c:370
 msgid "Unix (LF)"
 msgstr "Unix (LF)"
 
@@ -5438,8 +5449,8 @@ msgid ""
 "%d will be replaced with the path name of the selected file without the "
 "filename"
 msgstr ""
-"Het commando dat wordt uitgevoerd als \"Openen met\" wordt gebruikt. U kunt %"
-"f en %d wildcards gebruiken.\n"
+"Het commando dat wordt uitgevoerd als \"Openen met\" wordt gebruikt. U kunt "
+"%f en %d wildcards gebruiken.\n"
 "%f wordt vervangen door de bestandsnaam met het volle pad\n"
 "%d wordt vervangen door het pad van het geselecteerde bestand zonder de "
 "bestandsnaam"

@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: geany 0.20\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-08-27 21:01+0200\n"
+"POT-Creation-Date: 2011-09-17 09:51+0200\n"
 "PO-Revision-Date: 2011-07-29 13:44+0100\n"
 "Last-Translator: Frank Lanitz <frank@frank.uvena.de>\n"
 "Language-Team: German <geany-i18n@uvena.de>\n"
@@ -36,53 +36,53 @@ msgstr "Geany"
 msgid "Integrated Development Environment"
 msgstr "Integrierte Entwicklungsumgebung"
 
-#: ../src/about.c:154
+#: ../src/about.c:155
 msgid "About Geany"
 msgstr "Über Geany"
 
-#: ../src/about.c:204
+#: ../src/about.c:205
 msgid "A fast and lightweight IDE"
 msgstr "Eine kleine und schnelle Entwicklungsumgebung"
 
-#: ../src/about.c:225
+#: ../src/about.c:226
 #, c-format
 msgid "(built on or after %s)"
 msgstr "(kompiliert am %s oder später)"
 
 #. gtk_container_add(GTK_CONTAINER(info_box), cop_label);
-#: ../src/about.c:256
+#: ../src/about.c:257
 msgid "Info"
 msgstr "Info"
 
-#: ../src/about.c:272
+#: ../src/about.c:273
 msgid "Developers"
 msgstr "Entwickler"
 
-#: ../src/about.c:281
+#: ../src/about.c:282
 msgid "maintainer"
 msgstr "Hauptentwickler"
 
-#: ../src/about.c:289 ../src/about.c:297
+#: ../src/about.c:290 ../src/about.c:298
 msgid "developer"
 msgstr "Entwickler"
 
-#: ../src/about.c:305
+#: ../src/about.c:306
 msgid "translation maintainer"
 msgstr "Übersetzungskoordinator"
 
-#: ../src/about.c:314
+#: ../src/about.c:315
 msgid "Translators"
 msgstr "Übersetzer"
 
-#: ../src/about.c:334
+#: ../src/about.c:335
 msgid "Previous Translators"
 msgstr "Ehemalige Übersetzer"
 
-#: ../src/about.c:355
+#: ../src/about.c:356
 msgid "Contributors"
 msgstr "Mitwirkende"
 
-#: ../src/about.c:365
+#: ../src/about.c:366
 #, c-format
 msgid ""
 "Some of the many contributors (for a more detailed list, see the file %s):"
@@ -90,15 +90,15 @@ msgstr ""
 "Einige der vielen Leute, die an Geany mitgearbeitet haben (eine "
 "detailliertere Liste findet sich in der Datei %s):"
 
-#: ../src/about.c:391
+#: ../src/about.c:392
 msgid "Credits"
 msgstr "Credits"
 
-#: ../src/about.c:405
+#: ../src/about.c:406
 msgid "License"
 msgstr "Lizenz"
 
-#: ../src/about.c:414
+#: ../src/about.c:415
 msgid ""
 "License text could not be found, please visit http://www.gnu.org/licenses/"
 "gpl-2.0.txt to view it online."
@@ -517,20 +517,20 @@ msgstr ""
 "Lässt das ungesicherte Dokument geöffnet und öffnet das gesicherte in einem "
 "neuen Reiter."
 
-#: ../src/dialogs.c:728 ../src/win32.c:679
+#: ../src/dialogs.c:728 ../src/win32.c:683
 msgid "Error"
 msgstr "Fehler"
 
-#: ../src/dialogs.c:731 ../src/dialogs.c:1609 ../src/win32.c:685
-#: ../src/win32.c:744
+#: ../src/dialogs.c:731 ../src/dialogs.c:1609 ../src/win32.c:689
+#: ../src/win32.c:748
 msgid "Question"
 msgstr "Frage"
 
-#: ../src/dialogs.c:734 ../src/win32.c:691
+#: ../src/dialogs.c:734 ../src/win32.c:695
 msgid "Warning"
 msgstr "Warnung"
 
-#: ../src/dialogs.c:737 ../src/win32.c:697
+#: ../src/dialogs.c:737 ../src/win32.c:701
 msgid "Information"
 msgstr "Information"
 
@@ -561,7 +561,7 @@ msgstr ""
 
 #: ../src/dialogs.c:1240 ../src/dialogs.c:1241 ../src/dialogs.c:1242
 #: ../src/dialogs.c:1248 ../src/dialogs.c:1249 ../src/dialogs.c:1250
-#: ../src/symbols.c:1991 ../src/symbols.c:2012 ../src/symbols.c:2064
+#: ../src/symbols.c:1999 ../src/symbols.c:2020 ../src/symbols.c:2072
 #: ../src/ui_utils.c:244
 msgid "unknown"
 msgstr "unbekannt"
@@ -1005,62 +1005,62 @@ msgstr "%s Quelldatei"
 msgid "%s file"
 msgstr "%s Quelldatei"
 
-#: ../src/filetypes.c:103 ../src/filetypes.c:1748 ../src/interface.c:3918
+#: ../src/filetypes.c:103 ../src/filetypes.c:1753 ../src/interface.c:3918
 #: ../src/interface.c:5636
 msgid "None"
 msgstr "Keiner"
 
-#: ../src/filetypes.c:303
+#: ../src/filetypes.c:304
 msgid "Shell script"
 msgstr "Shellskript"
 
-#: ../src/filetypes.c:311
+#: ../src/filetypes.c:312
 msgid "Makefile"
 msgstr "Makefile"
 
-#: ../src/filetypes.c:318
+#: ../src/filetypes.c:319
 msgid "XML document"
 msgstr "XML-Dokument"
 
-#: ../src/filetypes.c:342
+#: ../src/filetypes.c:343
 msgid "Cascading StyleSheet"
 msgstr "Cascading StyleSheet"
 
-#: ../src/filetypes.c:409
+#: ../src/filetypes.c:412
 msgid "Config file"
 msgstr "Konfigurationsdatei"
 
-#: ../src/filetypes.c:415
+#: ../src/filetypes.c:418
 msgid "Gettext translation file"
 msgstr "Gettext-Übersetzungsdatei"
 
-#: ../src/filetypes.c:709
+#: ../src/filetypes.c:713
 msgid "_Programming Languages"
 msgstr "_Kompilersprachen"
 
-#: ../src/filetypes.c:710
+#: ../src/filetypes.c:714
 msgid "_Scripting Languages"
 msgstr "_Interpretersprachen"
 
-#: ../src/filetypes.c:711
+#: ../src/filetypes.c:715
 msgid "_Markup Languages"
 msgstr "_Markup-Sprachen"
 
-#: ../src/filetypes.c:712
+#: ../src/filetypes.c:716
 msgid "M_iscellaneous"
 msgstr "_Sonstiges"
 
-#: ../src/filetypes.c:1427 ../src/win32.c:105
+#: ../src/filetypes.c:1431 ../src/win32.c:105
 msgid "All Source"
 msgstr "Alle Quellen"
 
 #. create meta file filter "All files"
-#: ../src/filetypes.c:1452 ../src/project.c:294 ../src/win32.c:95
+#: ../src/filetypes.c:1456 ../src/project.c:294 ../src/win32.c:95
 #: ../src/win32.c:143 ../src/win32.c:145
 msgid "All files"
 msgstr "Alle Dateien"
 
-#: ../src/filetypes.c:1510
+#: ../src/filetypes.c:1514
 #, c-format
 msgid "Bad regex for filetype %s: %s"
 msgstr "Schlechter RegEx für Dateityp %s: %s"
@@ -2954,8 +2954,8 @@ msgid "Printing"
 msgstr "Drucken"
 
 #: ../src/interface.c:5097
-msgid ""
-"<i>Please refer to the manual for more details about these preferences.</i>"
+#, fuzzy
+msgid "<i>Warning: read the manual before changing these preferences.</i>"
 msgstr ""
 "<i>Bitte konsultieren Sie die Dokumentation für diese Einstellungen</i>"
 
@@ -3444,7 +3444,7 @@ msgid "Remove Markers and Error Indicators"
 msgstr "Fehlermarkierungen und andere Markierungen entfernen"
 
 #: ../src/keybindings.c:537 ../src/keybindings.c:542 ../src/project.c:484
-#: ../src/ui_utils.c:1942
+#: ../src/ui_utils.c:1947
 msgid "Build"
 msgstr "Erstellen"
 
@@ -3757,11 +3757,11 @@ msgstr "Tasten festlegen"
 msgid "Press the combination of the keys you want to use for \"%s\"."
 msgstr "Welche Tastenkombination soll für »%s« genutzt werden?"
 
-#: ../src/prefs.c:218 ../src/symbols.c:2133
+#: ../src/prefs.c:218 ../src/symbols.c:2141
 msgid "_Expand All"
 msgstr "Alle a_usklappen"
 
-#: ../src/prefs.c:223 ../src/symbols.c:2138
+#: ../src/prefs.c:223 ../src/symbols.c:2146
 msgid "_Collapse All"
 msgstr "Alle _einklappen"
 
@@ -4529,19 +4529,19 @@ msgstr "Strukturen"
 msgid "Typedefs / Enums"
 msgstr "Typendefinition und Enumerates"
 
-#: ../src/symbols.c:1610
+#: ../src/symbols.c:1618
 #, c-format
 msgid "Unknown filetype extension for \"%s\".\n"
 msgstr "Unbekannte Dateierweiterung für »%s«.\n"
 
-#: ../src/symbols.c:1633
+#: ../src/symbols.c:1641
 #, c-format
 msgid "Failed to create tags file, perhaps because no tags were found.\n"
 msgstr ""
 "Die Tag-Datei konnte nicht erstellt werden, möglicherweise konnten keine "
 "Tags gefunden werden.\n"
 
-#: ../src/symbols.c:1640
+#: ../src/symbols.c:1648
 #, c-format
 msgid ""
 "Usage: %s -g <Tag File> <File list>\n"
@@ -4550,7 +4550,7 @@ msgstr ""
 "Verwendung: %s -g <Tag-Datei> <Datei-Liste>\n"
 "\n"
 
-#: ../src/symbols.c:1641
+#: ../src/symbols.c:1649
 #, c-format
 msgid ""
 "Example:\n"
@@ -4561,40 +4561,40 @@ msgstr ""
 "CFLAGS=`pkg-config gtk+-2.0 --cflags` %s -g gtk2.c.tags /usr/include/gtk-2.0/"
 "gtk/gtk.h\n"
 
-#: ../src/symbols.c:1655
+#: ../src/symbols.c:1663
 msgid "Load Tags"
 msgstr "Tags laden"
 
-#: ../src/symbols.c:1662
+#: ../src/symbols.c:1670
 msgid "Geany tag files (*.tags)"
 msgstr "Geany Tag-Datei (*.tags)"
 
 #. For translators: the first wildcard is the filetype, the second the filename
-#: ../src/symbols.c:1682
+#: ../src/symbols.c:1690
 #, c-format
 msgid "Loaded %s tags file '%s'."
 msgstr "%s Tag-Datei »%s« geladen."
 
-#: ../src/symbols.c:1685
+#: ../src/symbols.c:1693
 #, c-format
 msgid "Could not load tags file '%s'."
 msgstr "Konnte Tag-Datei »%s« nicht laden."
 
-#: ../src/symbols.c:1840
+#: ../src/symbols.c:1848
 #, c-format
 msgid "Forward declaration \"%s\" not found."
 msgstr "(Vorwärts-)Deklaration von »%s« nicht gefunden."
 
-#: ../src/symbols.c:1842
+#: ../src/symbols.c:1850
 #, c-format
 msgid "Definition of \"%s\" not found."
 msgstr "Definition von »%s« nicht gefunden."
 
-#: ../src/symbols.c:2148
+#: ../src/symbols.c:2156
 msgid "Sort by _Name"
 msgstr "Nach _Namen sortieren"
 
-#: ../src/symbols.c:2155
+#: ../src/symbols.c:2163
 msgid "Sort by _Appearance"
 msgstr "Nach _Auftreten sortieren"
 
@@ -4928,31 +4928,42 @@ msgstr "C++ STL"
 msgid "_Set Custom Date Format"
 msgstr "_Benutzerdefiniertes Datumsformat einstellen"
 
-#: ../src/ui_utils.c:1786
+#: ../src/ui_utils.c:1791
 msgid "Select Folder"
 msgstr "Ordner wählen"
 
-#: ../src/ui_utils.c:1786
+#: ../src/ui_utils.c:1791
 msgid "Select File"
 msgstr "Datei wählen"
 
-#: ../src/ui_utils.c:1940
+#: ../src/ui_utils.c:1945
 msgid "Save All"
 msgstr "Alle speichern"
 
-#: ../src/ui_utils.c:1941
+#: ../src/ui_utils.c:1946
 msgid "Close All"
 msgstr "Alle schließen"
 
-#: ../src/utils.c:385
+#: ../src/utils.c:89
+#, fuzzy
+msgid "Select Browser"
+msgstr "Dateibrowser"
+
+#: ../src/utils.c:90
+msgid ""
+"Failed to spawn the configured browser command. Please correct it or enter "
+"another one."
+msgstr ""
+
+#: ../src/utils.c:368
 msgid "Win (CRLF)"
 msgstr "Win (CRLF)"
 
-#: ../src/utils.c:386
+#: ../src/utils.c:369
 msgid "Mac (CR)"
 msgstr "Mac (CR)"
 
-#: ../src/utils.c:387
+#: ../src/utils.c:370
 msgid "Unix (LF)"
 msgstr "Unix (LF)"
 

@@ -1,5 +1,6 @@
 2011-09-17  Frank Lanitz  <frlan@frank.uvena.de>
 
+ * *.po: Update po-files for string freeze of Geany 0.21.
  * it.po: Update of Italian translation. Thanks to Giuliano Manzitti
           for providing the update.
  * fa.po: Adding Persian translation. Thanks to Moein Owhadi Kareshk for

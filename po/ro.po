@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Geany 0.19\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-12-05 15:55+0100\n"
+"POT-Creation-Date: 2011-09-17 09:51+0200\n"
 "PO-Revision-Date: 2008-10-15 01:47+0200\n"
 "Last-Translator: Alex Eftimie <alexeftimie(at)gmail(dot)com>\n"
 "Language-Team: Romanian\n"
@@ -22,7 +22,7 @@ msgstr ""
 msgid "A fast and lightweight IDE using GTK2"
 msgstr "Un IDE rapid folosind GTK2"
 
-#: ../geany.desktop.in.h:2 ../src/interface.c:309 ../src/interface.c:1806
+#: ../geany.desktop.in.h:2 ../src/interface.c:314 ../src/interface.c:1842
 msgid "Geany"
 msgstr "Geany"
 
@@ -30,53 +30,53 @@ msgstr "Geany"
 msgid "Integrated Development Environment"
 msgstr "Mediu de dezvoltare"
 
-#: ../src/about.c:152
+#: ../src/about.c:155
 msgid "About Geany"
 msgstr "Despre Geany"
 
-#: ../src/about.c:202
+#: ../src/about.c:205
 msgid "A fast and lightweight IDE"
 msgstr "Un IDE rapid și puțin consumator de resurse"
 
-#: ../src/about.c:223
+#: ../src/about.c:226
 #, c-format
 msgid "(built on or after %s)"
 msgstr "(construit la sau după %s)"
 
 #. gtk_container_add(GTK_CONTAINER(info_box), cop_label);
-#: ../src/about.c:254
+#: ../src/about.c:257
 msgid "Info"
 msgstr "Informații"
 
-#: ../src/about.c:270
+#: ../src/about.c:273
 msgid "Developers"
 msgstr "Dezvoltatori"
 
-#: ../src/about.c:279
+#: ../src/about.c:282
 msgid "maintainer"
 msgstr "responsabil"
 
-#: ../src/about.c:287
+#: ../src/about.c:290 ../src/about.c:298
 msgid "developer"
 msgstr "dezvoltator"
 
-#: ../src/about.c:295
+#: ../src/about.c:306
 msgid "translation maintainer"
 msgstr "responsabil traducere"
 
-#: ../src/about.c:304
+#: ../src/about.c:315
 msgid "Translators"
 msgstr "Traducători"
 
-#: ../src/about.c:324
+#: ../src/about.c:335
 msgid "Previous Translators"
 msgstr "Traducători precedenți"
 
-#: ../src/about.c:345
+#: ../src/about.c:356
 msgid "Contributors"
 msgstr "Contribuitori"
 
-#: ../src/about.c:355
+#: ../src/about.c:366
 #, c-format
 msgid ""
 "Some of the many contributors (for a more detailed list, see the file %s):"
@@ -84,15 +84,15 @@ msgstr ""
 "Câțiva dintre mulții contribuitori (pentru o listă mai detaliată, consultați "
 "fișierul %s):"
 
-#: ../src/about.c:381
+#: ../src/about.c:392
 msgid "Credits"
 msgstr "Mulțumiri"
 
-#: ../src/about.c:395
+#: ../src/about.c:406
 msgid "License"
 msgstr "Licență"
 
-#: ../src/about.c:404
+#: ../src/about.c:415
 msgid ""
 "License text could not be found, please visit http://www.gnu.org/licenses/"
 "gpl-2.0.txt to view it online."
@@ -101,43 +101,43 @@ msgstr ""
 "licenses/gpl-2.0.txt pentru al vizualiza online."
 
 #. fall back to %d
-#: ../src/build.c:655
+#: ../src/build.c:657
 #, c-format
 msgid "failed to substitute %%p, no project active"
 msgstr ""
 
-#: ../src/build.c:693
+#: ../src/build.c:695
 #, fuzzy
 msgid "Process failed, no working directory"
 msgstr "Nu am putut schimba dosarul de lucru în \"%s\""
 
-#: ../src/build.c:719
+#: ../src/build.c:721
 #, c-format
 msgid "%s (in directory: %s)"
 msgstr "%s (în dosarul: %s)"
 
-#: ../src/build.c:739 ../src/build.c:964 ../src/search.c:1486
+#: ../src/build.c:741 ../src/build.c:963 ../src/search.c:1626
 #, c-format
 msgid "Process failed (%s)"
 msgstr "Procesul a eșuat (%s)"
 
-#: ../src/build.c:810
+#: ../src/build.c:809
 #, c-format
 msgid "Failed to change the working directory to \"%s\""
 msgstr "Nu am putut schimba dosarul de lucru în \"%s\""
 
-#: ../src/build.c:839
+#: ../src/build.c:838
 #, c-format
 msgid "Failed to execute \"%s\" (start-script could not be created)"
 msgstr "Nu am putut executa \"%s\" (scriptul de pornire nu a putut fi creat)"
 
-#: ../src/build.c:893
+#: ../src/build.c:892
 msgid ""
 "Could not execute the file in the VTE because it probably contains a command."
 msgstr ""
 "Nu am putut executa fișierul în VTE deoarece probabil conține o comandă."
 
-#: ../src/build.c:931
+#: ../src/build.c:930
 #, c-format
 msgid ""
 "Could not find terminal \"%s\" (check path for Terminal tool setting in "
@@ -146,183 +146,174 @@ msgstr ""
 "Nu am putut găsi terminalul \"%s\" (verificați calea pentru Terminal în "
 "Preferințe)"
 
-#: ../src/build.c:1104
+#: ../src/build.c:1103
 msgid "Compilation failed."
 msgstr "Compilare eșuată"
 
-#: ../src/build.c:1118
+#: ../src/build.c:1117
 msgid "Compilation finished successfully."
 msgstr "Compilare terminată cu succes."
 
-#: ../src/build.c:1277
+#: ../src/build.c:1276
 #, fuzzy
 msgid "Custom Text"
 msgstr "Format dată personalizat"
 
-#: ../src/build.c:1278
+#: ../src/build.c:1277
 msgid "Enter custom text here, all entered text is appended to the command."
 msgstr ""
 
-#: ../src/build.c:1356
+#: ../src/build.c:1355
 msgid "_Next Error"
 msgstr "Eroarea ur_mătoare"
 
-#: ../src/build.c:1358
+#: ../src/build.c:1357
 msgid "_Previous Error"
 msgstr "Eroare a_nterioră"
 
-#: ../src/build.c:1368
+#. arguments
+#: ../src/build.c:1367 ../src/build.c:2745
 #, fuzzy
 msgid "_Set Build Commands"
 msgstr "Stabilește comenzi personalizate"
 
-#: ../src/build.c:1652 ../src/toolbar.c:373
+#: ../src/build.c:1651 ../src/toolbar.c:374
 #, fuzzy
 msgid "Build the current file"
 msgstr "Compilează fișierul curent"
 
-#: ../src/build.c:1666
+#: ../src/build.c:1662
 #, fuzzy
 msgid "Build the current file with Make and the default target"
 msgstr "Construiește fișierul curent cu unealta make și ținta implicită"
 
-#: ../src/build.c:1668
+#: ../src/build.c:1664
 #, fuzzy
 msgid "Build the current file with Make and the specified target"
 msgstr "Construiește fișierul curent cu unealta make și ținta implicită"
 
-#: ../src/build.c:1670
+#: ../src/build.c:1666
 #, fuzzy
 msgid "Compile the current file with Make"
 msgstr "Compilează fișierul curent"
 
-#: ../src/build.c:1697
+#: ../src/build.c:1693
 #, c-format
 msgid "Process could not be stopped (%s)."
 msgstr "Procesul nu a putut fi oprit (%s)."
 
-#: ../src/build.c:1714 ../src/build.c:1726
+#: ../src/build.c:1710 ../src/build.c:1722
 msgid "No more build errors."
 msgstr "Nu mai sunt erori de construire."
 
 #. FIXME: we should pass either build dialog or project dialog instead of NULL for parent
-#: ../src/build.c:1822
+#: ../src/build.c:1818
 msgid "Set menu item label"
 msgstr ""
 
-#: ../src/build.c:1847
-msgid "Item"
-msgstr ""
-
-#: ../src/build.c:1848 ../src/symbols.c:650
+#: ../src/build.c:1844 ../src/symbols.c:737
 msgid "Label"
 msgstr "Etichetă"
 
-#: ../src/build.c:1849 ../src/symbols.c:645
+#: ../src/build.c:1845 ../src/symbols.c:732 ../src/tools.c:526
 msgid "Command"
 msgstr "Comandă"
 
-#: ../src/build.c:1850
+#: ../src/build.c:1846
 #, fuzzy
 msgid "Working directory"
 msgstr "%s (în dosarul: %s)"
 
-#: ../src/build.c:1851
+#: ../src/build.c:1847
 #, fuzzy
-msgid "Clear"
-msgstr "Compilator"
+msgid "Reset"
+msgstr "Micșorează"
 
-#: ../src/build.c:1891
+#: ../src/build.c:1892
 msgid "Click to set menu item label"
 msgstr ""
 
-#: ../src/build.c:1975 ../src/build.c:1977
+#: ../src/build.c:1976 ../src/build.c:1978
 #, fuzzy, c-format
-msgid "%s Commands"
+msgid "%s commands"
 msgstr "Comenzi pentru %s"
 
-#: ../src/build.c:1977
+#: ../src/build.c:1978
 #, fuzzy
-msgid "No Filetype"
+msgid "No filetype"
 msgstr "Stabilește _tipul de fișier"
 
 # FUZZY
-#: ../src/build.c:1985 ../src/build.c:2020
+#: ../src/build.c:1987 ../src/build.c:2022
 #, fuzzy
-msgid "Error Regular Expression:"
+msgid "Error regular expression:"
 msgstr "Expresii regulate Grep"
 
-#: ../src/build.c:2013
+#: ../src/build.c:2015
 #, fuzzy
-msgid "Independent Commands"
+msgid "Independent commands"
 msgstr "Stabilește comenzi personalizate"
 
-#: ../src/build.c:2043
+#: ../src/build.c:2047
 msgid "Note: Item 2 opens a dialog and appends the response to the command."
 msgstr ""
 
-#: ../src/build.c:2052
+#: ../src/build.c:2056
 #, fuzzy
-msgid "Execute Commands"
+msgid "Execute commands"
 msgstr "Stabilește comenzi personalizate"
 
-#: ../src/build.c:2063
+#: ../src/build.c:2068
 #, c-format
 msgid ""
 "%d, %e, %f, %p are substituted in command and directory fields, see manual "
 "for details."
 msgstr ""
 
-#: ../src/build.c:2223
+#: ../src/build.c:2225
 #, fuzzy
 msgid "Set Build Commands"
 msgstr "Stabilește comenzi personalizate"
 
-#: ../src/build.c:2434
+#: ../src/build.c:2436
 msgid "_Compile"
 msgstr "_Compilează"
 
 #. build the code
-#: ../src/build.c:2441 ../src/build.c:2703 ../src/interface.c:1218
+#: ../src/build.c:2443 ../src/build.c:2705 ../src/interface.c:1245
 msgid "_Build"
 msgstr "Cons_truiește"
 
-#: ../src/build.c:2448 ../src/build.c:2478 ../src/build.c:2671
+#: ../src/build.c:2450 ../src/build.c:2480 ../src/build.c:2673
 #, fuzzy
 msgid "_Execute"
 msgstr "Execuție:"
 
 #. build the code with make custom
-#: ../src/build.c:2493 ../src/build.c:2669 ../src/build.c:2723
+#: ../src/build.c:2495 ../src/build.c:2671 ../src/build.c:2725
 msgid "Make Custom _Target"
 msgstr ""
 
 #. build the code with make object
-#: ../src/build.c:2495 ../src/build.c:2670 ../src/build.c:2731
+#: ../src/build.c:2497 ../src/build.c:2672 ../src/build.c:2733
 msgid "Make _Object"
 msgstr ""
 
-#: ../src/build.c:2497 ../src/build.c:2668
+#: ../src/build.c:2499 ../src/build.c:2670
 #, fuzzy
 msgid "_Make"
 msgstr "Make:"
 
 #. build the code with make all
-#: ../src/build.c:2715
+#: ../src/build.c:2717
 msgid "_Make All"
 msgstr ""
 
-#. arguments
-#: ../src/build.c:2743
-#, fuzzy
-msgid "_Set Build Menu Commands"
-msgstr "Stabilește comenzi personalizate"
-
-#: ../src/callbacks.c:150
+#: ../src/callbacks.c:149
 msgid "Do you really want to quit?"
 msgstr "Sigur doriți să părăsiți programul?"
 
-#: ../src/callbacks.c:228
+#: ../src/callbacks.c:219
 #, fuzzy, c-format
 msgid "%d file saved."
 msgid_plural "%d files saved."
@@ -330,68 +321,68 @@ msgstr[0] "Fișierul %s a fost salvat."
 msgstr[1] "Fișierul %s a fost salvat."
 msgstr[2] "Fișierul %s a fost salvat."
 
-#: ../src/callbacks.c:490 ../src/document.c:2996 ../src/interface.c:380
-#: ../src/sidebar.c:683
+#: ../src/callbacks.c:443 ../src/document.c:2925 ../src/interface.c:385
+#: ../src/sidebar.c:684
 msgid "_Reload"
 msgstr "_Reîncarcă"
 
-#: ../src/callbacks.c:491
+#: ../src/callbacks.c:444
 msgid "Any unsaved changes will be lost."
 msgstr "Orice schimbări nesalvate se vor pierde."
 
-#: ../src/callbacks.c:492
+#: ../src/callbacks.c:445
 #, c-format
 msgid "Are you sure you want to reload '%s'?"
 msgstr "Sunteți sigur că doriți să reîncărcați '%s'?"
 
-#: ../src/callbacks.c:1196 ../src/keybindings.c:424
+#: ../src/callbacks.c:1066 ../src/keybindings.c:425
 msgid "Go to Line"
 msgstr "Mergi la linia"
 
-#: ../src/callbacks.c:1197
+#: ../src/callbacks.c:1067
 msgid "Enter the line you want to go to:"
 msgstr "Introduceți linia la care doriți să mergeți:"
 
-#: ../src/callbacks.c:1291 ../src/callbacks.c:1316
+#: ../src/callbacks.c:1150 ../src/callbacks.c:1175
 msgid ""
 "Please set the filetype for the current file before using this function."
 msgstr ""
 "Vă rugăm setați tipul de fișier pentru fișierul curent înainte de a folosi "
 "această funcție."
 
-#: ../src/callbacks.c:1424 ../src/ui_utils.c:619
+#: ../src/callbacks.c:1280 ../src/ui_utils.c:619
 msgid "dd.mm.yyyy"
 msgstr "zz.ll.aaaa"
 
-#: ../src/callbacks.c:1426 ../src/ui_utils.c:620
+#: ../src/callbacks.c:1282 ../src/ui_utils.c:620
 msgid "mm.dd.yyyy"
 msgstr "ll.zz.aaaa"
 
-#: ../src/callbacks.c:1428 ../src/ui_utils.c:621
+#: ../src/callbacks.c:1284 ../src/ui_utils.c:621
 msgid "yyyy/mm/dd"
 msgstr "aaaa/ll/zz"
 
-#: ../src/callbacks.c:1430 ../src/ui_utils.c:630
+#: ../src/callbacks.c:1286 ../src/ui_utils.c:630
 msgid "dd.mm.yyyy hh:mm:ss"
 msgstr "zz.ll.aaaa oo:mm:ss"
 
-#: ../src/callbacks.c:1432 ../src/ui_utils.c:631
+#: ../src/callbacks.c:1288 ../src/ui_utils.c:631
 msgid "mm.dd.yyyy hh:mm:ss"
 msgstr "ll.zz.aaaa oo:mm:ss"
 
-#: ../src/callbacks.c:1434 ../src/ui_utils.c:632
+#: ../src/callbacks.c:1290 ../src/ui_utils.c:632
 msgid "yyyy/mm/dd hh:mm:ss"
 msgstr "aaaa/ll/zz oo:mm:ss"
 
-#: ../src/callbacks.c:1436 ../src/ui_utils.c:641
+#: ../src/callbacks.c:1292 ../src/ui_utils.c:641
 msgid "_Use Custom Date Format"
 msgstr "_Folosește format dată personalizat"
 
-#: ../src/callbacks.c:1440
+#: ../src/callbacks.c:1296
 msgid "Custom Date Format"
 msgstr "Format dată personalizat"
 
-#: ../src/callbacks.c:1441
+#: ../src/callbacks.c:1297
 msgid ""
 "Enter here a custom date and time format. You can use any conversion "
 "specifiers which can be used with the ANSI C strftime function."
@@ -399,84 +390,64 @@ msgstr ""
 "Introduceți un format de dată și timp. Puteți folosi oricare dintre "
 "specificatorii de conversie folosiți cu funcția ANSI C strftime."
 
-#: ../src/callbacks.c:1462
+#: ../src/callbacks.c:1320
 msgid "Date format string could not be converted (possibly too long)."
 msgstr "Formatul de dată nu a putut fi convertit (posibil este prea lung)."
 
-#: ../src/callbacks.c:1688 ../src/callbacks.c:1698
+#: ../src/callbacks.c:1515 ../src/callbacks.c:1523
 msgid "No more message items."
 msgstr "Nu mai sunt mesaje."
 
-#: ../src/dialogs.c:178 ../src/interface.c:3873 ../src/interface.c:5492
+#: ../src/dialogs.c:229
 msgid "Detect from file"
 msgstr "Determină din fișier"
 
-#: ../src/dialogs.c:181
+#: ../src/dialogs.c:232
 #, fuzzy
 msgid "West European"
 msgstr "_Vest europeană"
 
-#: ../src/dialogs.c:183
+#: ../src/dialogs.c:234
 #, fuzzy
 msgid "East European"
 msgstr "_Este europeană"
 
-#: ../src/dialogs.c:185
+#: ../src/dialogs.c:236
 #, fuzzy
 msgid "East Asian"
 msgstr "_Asia de est"
 
-#: ../src/dialogs.c:187
+#: ../src/dialogs.c:238
 #, fuzzy
 msgid "SE & SW Asian"
 msgstr "Asia de _SE & SV"
 
-#: ../src/dialogs.c:189
+#: ../src/dialogs.c:240
 #, fuzzy
 msgid "Middle Eastern"
 msgstr "_Orientul mijlociu"
 
-#: ../src/dialogs.c:191 ../src/encodings.c:120 ../src/encodings.c:121
+#: ../src/dialogs.c:242 ../src/encodings.c:120 ../src/encodings.c:121
 #: ../src/encodings.c:122 ../src/encodings.c:123 ../src/encodings.c:124
 #: ../src/encodings.c:125 ../src/encodings.c:126 ../src/encodings.c:127
 msgid "Unicode"
 msgstr "Unicod"
 
-#: ../src/dialogs.c:239 ../src/dialogs.c:324
-msgid "Open File"
-msgstr "Deschide fișier"
-
-#: ../src/dialogs.c:243 ../src/interface.c:868
-msgid "_View"
-msgstr "_Vizualizare"
-
-#: ../src/dialogs.c:246
-msgid ""
-"Opens the file in read-only mode. If you choose more than one file to open, "
-"all files will be opened read-only."
-msgstr ""
-"Deschide fișierul în mod doar-citire. Dacă alegeți mai mult de un fișier, "
-"toate fișierele vor fi deschise în mod doar-citire."
-
-#: ../src/dialogs.c:268
-msgid "Detect by file extension"
-msgstr "Determină după extensie"
-
-#: ../src/dialogs.c:357
+#: ../src/dialogs.c:291
 #, fuzzy
 msgid "_More Options"
 msgstr "Opțiuni"
 
 #. line 1 with checkbox and encoding combo
-#: ../src/dialogs.c:364
+#: ../src/dialogs.c:298
 msgid "Show _hidden files"
 msgstr "Arată fișierele _ascunse"
 
-#: ../src/dialogs.c:375
+#: ../src/dialogs.c:309
 msgid "Set encoding:"
 msgstr "Stabilește codarea:"
 
-#: ../src/dialogs.c:384
+#: ../src/dialogs.c:318
 msgid ""
 "Explicitly defines an encoding for the file, if it would not be detected. "
 "This is useful when you know that the encoding of a file cannot be detected "
@@ -486,11 +457,11 @@ msgid ""
 msgstr ""
 
 #. line 2 with filetype combo
-#: ../src/dialogs.c:391
+#: ../src/dialogs.c:325
 msgid "Set filetype:"
 msgstr "Stabilește tipul de fișier:"
 
-#: ../src/dialogs.c:401
+#: ../src/dialogs.c:335
 msgid ""
 "Explicitly defines a filetype for the file, if it would not be detected by "
 "filename extension.\n"
@@ -498,33 +469,53 @@ msgid ""
 "filetype."
 msgstr ""
 
-#: ../src/dialogs.c:480
+#: ../src/dialogs.c:364 ../src/dialogs.c:469
+msgid "Open File"
+msgstr "Deschide fișier"
+
+#: ../src/dialogs.c:368 ../src/interface.c:877
+msgid "_View"
+msgstr "_Vizualizare"
+
+#: ../src/dialogs.c:370
+msgid ""
+"Opens the file in read-only mode. If you choose more than one file to open, "
+"all files will be opened read-only."
+msgstr ""
+"Deschide fișierul în mod doar-citire. Dacă alegeți mai mult de un fișier, "
+"toate fișierele vor fi deschise în mod doar-citire."
+
+#: ../src/dialogs.c:391
+msgid "Detect by file extension"
+msgstr "Determină după extensie"
+
+#: ../src/dialogs.c:548
 #, fuzzy
 msgid "Overwrite?"
 msgstr "S_uprascrie"
 
-#: ../src/dialogs.c:481
+#: ../src/dialogs.c:549
 msgid "Filename already exists!"
 msgstr ""
 
-#: ../src/dialogs.c:513 ../src/dialogs.c:642
+#: ../src/dialogs.c:584 ../src/dialogs.c:710
 msgid "Save File"
 msgstr "Salvează fișier"
 
-#: ../src/dialogs.c:521
+#: ../src/dialogs.c:593
 msgid "R_ename"
 msgstr "R_edenumește"
 
-#: ../src/dialogs.c:523
+#: ../src/dialogs.c:594
 #, fuzzy
 msgid "Save the file and rename it"
 msgstr "Salvează fișierul și redenumește-l."
 
-#: ../src/dialogs.c:531
+#: ../src/dialogs.c:602
 msgid "_Open file in a new tab"
 msgstr "_Deschide fișierul într-un nou tab"
 
-#: ../src/dialogs.c:533
+#: ../src/dialogs.c:605
 #, fuzzy
 msgid ""
 "Keep the current unsaved document open and open the newly saved file in a "
@@ -533,41 +524,41 @@ msgstr ""
 "Păstrează deschis fișierul nesalvat curent și deschide proaspăt salvatul "
 "fișier într-un nou tab."
 
-#: ../src/dialogs.c:660 ../src/win32.c:681
+#: ../src/dialogs.c:728 ../src/win32.c:683
 msgid "Error"
 msgstr "Eroare"
 
-#: ../src/dialogs.c:663 ../src/dialogs.c:1543 ../src/win32.c:687
-#: ../src/win32.c:746
+#: ../src/dialogs.c:731 ../src/dialogs.c:1609 ../src/win32.c:689
+#: ../src/win32.c:748
 msgid "Question"
 msgstr "Întrebare"
 
-#: ../src/dialogs.c:666 ../src/win32.c:693
+#: ../src/dialogs.c:734 ../src/win32.c:695
 msgid "Warning"
 msgstr "Avertizare"
 
-#: ../src/dialogs.c:669 ../src/win32.c:699
+#: ../src/dialogs.c:737 ../src/win32.c:701
 msgid "Information"
 msgstr "Informație"
 
-#: ../src/dialogs.c:750
+#: ../src/dialogs.c:818
 msgid "_Don't save"
 msgstr "_Nu salva"
 
-#: ../src/dialogs.c:781
+#: ../src/dialogs.c:849
 #, c-format
 msgid "The file '%s' is not saved."
 msgstr "Fișierul '%s' nu este salvat."
 
-#: ../src/dialogs.c:783
+#: ../src/dialogs.c:851
 msgid "Do you want to save it before closing?"
 msgstr "Doriți să-l salvați înainte de a-l închide?"
 
-#: ../src/dialogs.c:858
+#: ../src/dialogs.c:923
 msgid "Choose font"
 msgstr "Alege font"
 
-#: ../src/dialogs.c:1157
+#: ../src/dialogs.c:1221
 msgid ""
 "An error occurred or file information could not be retrieved (e.g. from a "
 "new file)."
@@ -575,109 +566,123 @@ msgstr ""
 "O eroare s-a produs, sau informațiile despre fișier nu au putut fi obținute "
 "(e.g. dintr-un fișier nou)"
 
-#: ../src/dialogs.c:1176 ../src/dialogs.c:1177 ../src/dialogs.c:1178
-#: ../src/dialogs.c:1184 ../src/dialogs.c:1185 ../src/dialogs.c:1186
-#: ../src/symbols.c:1751 ../src/symbols.c:1772 ../src/symbols.c:1824
+#: ../src/dialogs.c:1240 ../src/dialogs.c:1241 ../src/dialogs.c:1242
+#: ../src/dialogs.c:1248 ../src/dialogs.c:1249 ../src/dialogs.c:1250
+#: ../src/symbols.c:1999 ../src/symbols.c:2020 ../src/symbols.c:2072
 #: ../src/ui_utils.c:244
 msgid "unknown"
 msgstr "necunoscut"
 
-#: ../src/dialogs.c:1191 ../src/symbols.c:800
+#: ../src/dialogs.c:1255 ../src/symbols.c:887
 msgid "Properties"
 msgstr "Proprietăți"
 
-#: ../src/dialogs.c:1220
+#: ../src/dialogs.c:1286
 msgid "<b>Type:</b>"
 msgstr "<b>Tip:</b>"
 
-#: ../src/dialogs.c:1234
+#: ../src/dialogs.c:1300
 msgid "<b>Size:</b>"
 msgstr "<b>Dimensiune:</b>"
 
-#: ../src/dialogs.c:1250
+#: ../src/dialogs.c:1316
 msgid "<b>Location:</b>"
 msgstr "<b>Locație:</b>"
 
-#: ../src/dialogs.c:1264
+#: ../src/dialogs.c:1330
 msgid "<b>Read-only:</b>"
 msgstr "<b>Doar citire:</b>"
 
-#: ../src/dialogs.c:1271
+#: ../src/dialogs.c:1337
 msgid "(only inside Geany)"
 msgstr "(numai în Geany)"
 
-#: ../src/dialogs.c:1280
+#: ../src/dialogs.c:1346
 msgid "<b>Encoding:</b>"
 msgstr "<b>Codare:</b>"
 
-#: ../src/dialogs.c:1290 ../src/ui_utils.c:248
+#: ../src/dialogs.c:1356 ../src/ui_utils.c:248
 msgid "(with BOM)"
 msgstr "(cu BOM)"
 
-#: ../src/dialogs.c:1290
+#: ../src/dialogs.c:1356
 msgid "(without BOM)"
 msgstr "(fără BOM)"
 
-#: ../src/dialogs.c:1301
+#: ../src/dialogs.c:1367
 msgid "<b>Modified:</b>"
 msgstr "<b>Modificat:</b>"
 
-#: ../src/dialogs.c:1315
+#: ../src/dialogs.c:1381
 msgid "<b>Changed:</b>"
 msgstr "<b>Schimbat:</b>"
 
-#: ../src/dialogs.c:1329
+#: ../src/dialogs.c:1395
 msgid "<b>Accessed:</b>"
 msgstr "<b>Accesat:</b>"
 
-#: ../src/dialogs.c:1351
+#: ../src/dialogs.c:1417
 msgid "<b>Permissions:</b>"
 msgstr "<b>Permisiuni</b>"
 
 #. Header
-#: ../src/dialogs.c:1359
+#: ../src/dialogs.c:1425
 msgid "Read:"
 msgstr "Citire:"
 
-#: ../src/dialogs.c:1366
+#: ../src/dialogs.c:1432
 msgid "Write:"
 msgstr "Scriere"
 
-#: ../src/dialogs.c:1373
+#: ../src/dialogs.c:1439
 msgid "Execute:"
 msgstr "Execuție:"
 
 #. Owner
-#: ../src/dialogs.c:1381
+#: ../src/dialogs.c:1447
 msgid "Owner:"
 msgstr "Proprietar:"
 
 #. Group
-#: ../src/dialogs.c:1417
+#: ../src/dialogs.c:1483
 msgid "Group:"
 msgstr "Grup:"
 
 #. Other
-#: ../src/dialogs.c:1453
+#: ../src/dialogs.c:1519
 msgid "Other:"
 msgstr "Altul:"
 
-#: ../src/document.c:646
+#: ../src/document.c:641
 #, c-format
 msgid "File %s closed."
 msgstr "Fișierul %s a fost închis."
 
-#: ../src/document.c:794
+#: ../src/document.c:789
 #, c-format
 msgid "New file \"%s\" opened."
 msgstr "Fișierul nou \"%s\" a fost deschis."
 
-#: ../src/document.c:967 ../src/document.c:1485
+#: ../src/document.c:840 ../src/document.c:1362
 #, c-format
 msgid "Could not open file %s (%s)"
 msgstr "Nu am putut deschide fișierul %s (%s)"
 
-#: ../src/document.c:997
+# FUZZY?
+#: ../src/document.c:860
+#, c-format
+msgid "The file \"%s\" is not valid %s."
+msgstr "Fișierul \"%s\" nu este un valid %s."
+
+#: ../src/document.c:866
+#, c-format
+msgid ""
+"The file \"%s\" does not look like a text file or the file encoding is not "
+"supported."
+msgstr ""
+"Fișierul\"%s\" nu arată ca un fișier text sau codarea nu este suportată."
+
+#: ../src/document.c:876
 #, c-format
 msgid ""
 "The file \"%s\" could not be opened properly and has been truncated. This "
@@ -690,46 +695,35 @@ msgstr ""
 "salvarea lui poate cauza pierderi de date.\n"
 "Fișierul a fost setat ca doar-citire."
 
-# FUZZY?
-#. For translators: the second wildcard is an encoding name, e.g.
-#. * The file \"test.txt\" is not valid UTF-8.
-#: ../src/document.c:1023
-#, c-format
-msgid "The file \"%s\" is not valid %s."
-msgstr "Fișierul \"%s\" nu este un valid %s."
-
-#: ../src/document.c:1033
-#, c-format
-msgid ""
-"The file \"%s\" does not look like a text file or the file encoding is not "
-"supported."
-msgstr ""
-"Fișierul\"%s\" nu arată ca un fișier text sau codarea nu este suportată."
-
-#: ../src/document.c:1184
+#: ../src/document.c:1078
 msgid "Spaces"
 msgstr "Spații"
 
-#: ../src/document.c:1187
+#: ../src/document.c:1081
 msgid "Tabs"
 msgstr "Tab-uri"
 
-#: ../src/document.c:1190
+#: ../src/document.c:1084
 msgid "Tabs and Spaces"
 msgstr "Tab-uri și spații"
 
 #. For translators: first wildcard is the indentation mode (Spaces, Tabs, Tabs
 #. * and Spaces), the second one is the filename
-#: ../src/document.c:1195
+#: ../src/document.c:1089
 #, c-format
 msgid "Setting %s indentation mode for %s."
 msgstr "Stabilesc modul de indentare %s pentru %s."
 
-#: ../src/document.c:1248
+#: ../src/document.c:1100
+#, fuzzy, c-format
+msgid "Setting indentation width to %d for %s."
+msgstr "Stabilesc modul de indentare %s pentru %s."
+
+#: ../src/document.c:1137 ../src/document.c:1737
 msgid "Invalid filename"
 msgstr "Nume de fișier invalid"
 
-#: ../src/document.c:1363
+#: ../src/document.c:1251
 #, c-format
 msgid "File %s reloaded."
 msgstr "Fișierul %s a fost reîncărcat."
@@ -737,21 +731,21 @@ msgstr "Fișierul %s a fost reîncărcat."
 #. For translators: this is the status window message for opening a file. %d is the number
 #. * of the newly opened file, %s indicates whether the file is opened read-only
 #. * (it is replaced with the string ", read-only").
-#: ../src/document.c:1368
+#: ../src/document.c:1259
 #, c-format
 msgid "File %s opened(%d%s)."
 msgstr "Fișierul %s a fost deschis(%d%s)"
 
-#: ../src/document.c:1370
+#: ../src/document.c:1261
 msgid ", read-only"
 msgstr ", doar-citire"
 
-#: ../src/document.c:1579
+#: ../src/document.c:1456
 #, fuzzy
 msgid "Error renaming file."
 msgstr "Eroare la salvarea fișierului."
 
-#: ../src/document.c:1666
+#: ../src/document.c:1543
 #, c-format
 msgid ""
 "An error occurred while converting the file from UTF-8 in \"%s\". The file "
@@ -760,7 +754,7 @@ msgstr ""
 "O eroare s-a produs la conversia fișierului din UTF-8 în \"%s\". Fișierul "
 "rămâne nesalvat."
 
-#: ../src/document.c:1688
+#: ../src/document.c:1565
 #, c-format
 msgid ""
 "Error message: %s\n"
@@ -769,36 +763,32 @@ msgstr ""
 "Mesaj de eroare: %s\n"
 "Eroarea s-a produs la \"%s\" (linia: %d, coloana: %d)."
 
-#: ../src/document.c:1693
+#: ../src/document.c:1570
 #, c-format
 msgid "Error message: %s."
 msgstr "Mesaj de eroare: %s."
 
-#: ../src/document.c:1743
+#: ../src/document.c:1630
 #, c-format
 msgid "Failed to open file '%s' for writing: fopen() failed: %s"
 msgstr ""
 
-#: ../src/document.c:1761
+#: ../src/document.c:1648
 #, c-format
 msgid "Failed to write file '%s': fwrite() failed: %s"
 msgstr ""
 
-#: ../src/document.c:1775
+#: ../src/document.c:1662
 #, c-format
 msgid "Failed to close file '%s': fclose() failed: %s"
 msgstr ""
 
-#: ../src/document.c:1855 ../src/document.c:1927
-msgid "Error saving file."
-msgstr "Eroare la salvarea fișierului."
-
-#: ../src/document.c:1920
+#: ../src/document.c:1737 ../src/document.c:1802
 #, c-format
 msgid "Error saving file (%s)."
 msgstr "Eroare la salvarea fișierului (%s)."
 
-#: ../src/document.c:1925
+#: ../src/document.c:1807
 #, c-format
 msgid ""
 "%s\n"
@@ -806,27 +796,31 @@ msgid ""
 "The file on disk may now be truncated!"
 msgstr ""
 
-#: ../src/document.c:1951
+#: ../src/document.c:1809
+msgid "Error saving file."
+msgstr "Eroare la salvarea fișierului."
+
+#: ../src/document.c:1833
 #, c-format
 msgid "File %s saved."
 msgstr "Fișierul %s a fost salvat."
 
-#: ../src/document.c:2019 ../src/document.c:2076 ../src/document.c:2084
+#: ../src/document.c:1910 ../src/document.c:1974 ../src/document.c:1982
 #, c-format
 msgid "\"%s\" was not found."
 msgstr "\"%s\" nu a fost găsit."
 
-#: ../src/document.c:2084
+#: ../src/document.c:1982
 msgid "Wrap search and find again?"
 msgstr ""
 
-#: ../src/document.c:2163 ../src/search.c:1146 ../src/search.c:1190
-#: ../src/search.c:1882 ../src/search.c:1883
+#: ../src/document.c:2068 ../src/search.c:1281 ../src/search.c:1325
+#: ../src/search.c:2063 ../src/search.c:2064
 #, c-format
 msgid "No matches found for \"%s\"."
 msgstr "Nu am găsit nici o potrivire pentru \"%s\"."
 
-#: ../src/document.c:2174 ../src/document.c:2183
+#: ../src/document.c:2074
 #, c-format
 msgid "%s: replaced %d occurrence of \"%s\" with \"%s\"."
 msgid_plural "%s: replaced %d occurrences of \"%s\" with \"%s\"."
@@ -834,11 +828,11 @@ msgstr[0] "%s: am înlocuit %d apariție a lui \"%s\" cu \"%s\""
 msgstr[1] "%s: am înlocuit %d apariții ale \"%s\" cu \"%s\""
 msgstr[2] "%s: am înlocuit %d apariții ale \"%s\" cu \"%s\""
 
-#: ../src/document.c:2997
+#: ../src/document.c:2926
 msgid "Do you want to reload it?"
 msgstr "Doriți să-l reîncărcați?"
 
-#: ../src/document.c:2998
+#: ../src/document.c:2927
 #, c-format
 msgid ""
 "The file '%s' on the disk is more recent than\n"
@@ -847,29 +841,29 @@ msgstr ""
 "Fișierul '%s' de pe disc este mai recent decât\n"
 "tamponul curent."
 
-#: ../src/document.c:3016
+#: ../src/document.c:2945
 msgid "Close _without saving"
 msgstr ""
 
-#: ../src/document.c:3019
+#: ../src/document.c:2948
 msgid "Try to resave the file?"
 msgstr "Încearcă să salveze din nou fișierul?"
 
-#: ../src/document.c:3020
+#: ../src/document.c:2949
 #, fuzzy, c-format
 msgid "File \"%s\" was not found on disk!"
 msgstr "Fișierul \"%s\" nu a fost găsit!"
 
-#: ../src/editor.c:4326
+#: ../src/editor.c:4341
 msgid "Enter Tab Width"
 msgstr "Introduceți lățimea tabului"
 
-#: ../src/editor.c:4327
+#: ../src/editor.c:4342
 msgid "Enter the amount of spaces which should be replaced by a tab character."
 msgstr ""
 "Introduceți numărul de spații care să fie înlocuite de un caracter tab."
 
-#: ../src/editor.c:4477
+#: ../src/editor.c:4494
 #, c-format
 msgid "Warning: non-standard hard tab width: %d != 8!"
 msgstr ""
@@ -978,112 +972,100 @@ msgstr "Koreană"
 msgid "Without encoding"
 msgstr "Fără codare"
 
-#: ../src/encodings.c:368
+#: ../src/encodings.c:430
 msgid "_West European"
 msgstr "_Vest europeană"
 
-#: ../src/encodings.c:374
+#: ../src/encodings.c:436
 msgid "_East European"
 msgstr "_Este europeană"
 
-#: ../src/encodings.c:380
+#: ../src/encodings.c:442
 msgid "East _Asian"
 msgstr "_Asia de est"
 
-#: ../src/encodings.c:386
+#: ../src/encodings.c:448
 msgid "_SE & SW Asian"
 msgstr "Asia de _SE & SV"
 
-#: ../src/encodings.c:392
+#: ../src/encodings.c:454
 msgid "_Middle Eastern"
 msgstr "_Orientul mijlociu"
 
-#: ../src/encodings.c:398
+#: ../src/encodings.c:460
 msgid "_Unicode"
 msgstr "_Unicode"
 
-#: ../src/filetypes.c:80 ../src/filetypes.c:162 ../src/filetypes.c:176
-#: ../src/filetypes.c:184 ../src/filetypes.c:198
+#: ../src/filetypes.c:84 ../src/filetypes.c:166 ../src/filetypes.c:180
+#: ../src/filetypes.c:188 ../src/filetypes.c:202
 #, c-format
 msgid "%s source file"
 msgstr "Sursă %s"
 
-#: ../src/filetypes.c:81
+#: ../src/filetypes.c:85
 #, fuzzy, c-format
 msgid "%s file"
 msgstr "Sursă %s"
 
-#: ../src/filetypes.c:99 ../src/filetypes.c:1553 ../src/interface.c:3816
-#: ../src/interface.c:5435
+#: ../src/filetypes.c:103 ../src/filetypes.c:1753 ../src/interface.c:3918
+#: ../src/interface.c:5636
 msgid "None"
 msgstr "Nimic"
 
-#: ../src/filetypes.c:299
-msgid "Shell script file"
+#: ../src/filetypes.c:304
+#, fuzzy
+msgid "Shell script"
 msgstr "Script consolă"
 
-#: ../src/filetypes.c:307
+#: ../src/filetypes.c:312
 msgid "Makefile"
 msgstr "Fișier make"
 
-#: ../src/filetypes.c:314
+#: ../src/filetypes.c:319
 msgid "XML document"
 msgstr "Document XML"
 
-#: ../src/filetypes.c:338
+#: ../src/filetypes.c:343
 msgid "Cascading StyleSheet"
 msgstr "Stiluri în cascadă"
 
-#: ../src/filetypes.c:346
-msgid "SQL Dump file"
-msgstr "Fișier SQL Dump"
-
-#: ../src/filetypes.c:398
+#: ../src/filetypes.c:412
 msgid "Config file"
 msgstr "Fișier configurare"
 
-#: ../src/filetypes.c:404
+#: ../src/filetypes.c:418
 msgid "Gettext translation file"
 msgstr "Fișier traducere gettext"
 
-#: ../src/filetypes.c:427
-#, c-format
-msgid "%s script file"
-msgstr "Fișier script %s"
-
-#: ../src/filetypes.c:661
+#: ../src/filetypes.c:713
 msgid "_Programming Languages"
 msgstr "Limbaje de _programare"
 
 # FUZZY
-#: ../src/filetypes.c:662
+#: ../src/filetypes.c:714
 msgid "_Scripting Languages"
 msgstr "Limbaje de _scripting"
 
-#: ../src/filetypes.c:663
+#: ../src/filetypes.c:715
 msgid "_Markup Languages"
 msgstr "Limbaje de pre_zentare"
 
-#: ../src/filetypes.c:664
-msgid "M_iscellaneous Languages"
-msgstr "Limbaje di_verse"
-
-#: ../src/filetypes.c:665
+#: ../src/filetypes.c:716
 #, fuzzy
-msgid "_Custom Filetypes"
-msgstr "Stabilește _tipul de fișier"
+msgid "M_iscellaneous"
+msgstr "<b>Diverse</b>"
 
-#: ../src/filetypes.c:1281 ../src/win32.c:105
+#: ../src/filetypes.c:1431 ../src/win32.c:105
 msgid "All Source"
 msgstr ""
 
 #. create meta file filter "All files"
-#: ../src/filetypes.c:1306 ../src/project.c:288 ../src/win32.c:95
+#: ../src/filetypes.c:1456 ../src/project.c:294 ../src/win32.c:95
 #: ../src/win32.c:143 ../src/win32.c:145
 msgid "All files"
 msgstr "Toate fișierele"
 
-#: ../src/filetypes.c:1364
+#: ../src/filetypes.c:1514
 #, c-format
 msgid "Bad regex for filetype %s: %s"
 msgstr "Expresie regulată greșită pentru tipul de fișier %s: %s"
@@ -1092,596 +1074,601 @@ msgstr "Expresie regulată greșită pentru tipul de fișier %s: %s"
 msgid "untitled"
 msgstr "fără titlu"
 
-#: ../src/highlighting.c:3595 ../src/main.c:814 ../src/socket.c:165
-#: ../src/templates.c:315
+#: ../src/highlighting.c:3623 ../src/main.c:808 ../src/socket.c:165
+#: ../src/templates.c:226
 #, c-format
 msgid "Could not find file '%s'."
 msgstr "Nu am putut găsi fișierul '%s'."
 
-#: ../src/highlighting.c:3615
+#: ../src/highlighting.c:3646
 msgid "_Default"
 msgstr ""
 
-#: ../src/highlighting.c:3656
+#: ../src/highlighting.c:3714
 #, fuzzy
 msgid "_Color Schemes"
 msgstr "Selector _culoare"
 
-#: ../src/interface.c:323
+#: ../src/interface.c:328
 msgid "_File"
 msgstr "_Fișier"
 
-#: ../src/interface.c:334
+#: ../src/interface.c:339
 msgid "New (with _Template)"
 msgstr "Nou (din șa_blon)"
 
-#: ../src/interface.c:351 ../src/interface.c:2332
+#: ../src/interface.c:356 ../src/interface.c:2378
 msgid "Open Selected F_ile"
 msgstr "Deschide fi_șierul selectat"
 
-#: ../src/interface.c:355
+#: ../src/interface.c:360
 msgid "Recent _Files"
 msgstr "_Fișiere recente"
 
-#: ../src/interface.c:372
+#: ../src/interface.c:377
 msgid "Save A_ll"
 msgstr "Sa_lvează tot"
 
-#: ../src/interface.c:388
+#: ../src/interface.c:393
 msgid "R_eload As"
 msgstr "R_eîncarcă"
 
-#: ../src/interface.c:399 ../src/interface.c:634 ../src/interface.c:693
-#: ../src/interface.c:707 ../src/interface.c:1083 ../src/interface.c:1093
-#: ../src/interface.c:2297 ../src/interface.c:2311
+#: ../src/interface.c:404 ../src/interface.c:639 ../src/interface.c:698
+#: ../src/interface.c:712 ../src/interface.c:1110 ../src/interface.c:1120
+#: ../src/interface.c:2343 ../src/interface.c:2357
 msgid "invisible"
 msgstr "invizibil"
 
-#: ../src/interface.c:416
+#: ../src/interface.c:421
 msgid "Page Set_up"
 msgstr "Setări pa_gină"
 
-#: ../src/interface.c:433 ../src/notebook.c:214
+#: ../src/interface.c:438 ../src/notebook.c:246
 msgid "Close Ot_her Documents"
 msgstr "Închide celelal_te fișiere"
 
-#: ../src/interface.c:441 ../src/notebook.c:219
+#: ../src/interface.c:446 ../src/notebook.c:251
 msgid "C_lose All"
 msgstr "Înc_hide toate"
 
-#: ../src/interface.c:458 ../src/interface.c:2231
+#: ../src/interface.c:463 ../src/interface.c:2273
 msgid "_Edit"
 msgstr "_Editare"
 
-#: ../src/interface.c:508
+#: ../src/interface.c:513
 #, fuzzy
 msgid "_Commands"
 msgstr "Comandă"
 
-#: ../src/interface.c:515 ../src/keybindings.c:311
+#: ../src/interface.c:520 ../src/keybindings.c:311
 #, fuzzy
 msgid "_Cut Current Line(s)"
 msgstr "Taie liniile curente"
 
-#: ../src/interface.c:523 ../src/keybindings.c:308
+#: ../src/interface.c:528 ../src/keybindings.c:308
 #, fuzzy
 msgid "_Copy Current Line(s)"
 msgstr "Copiază liniile curente"
 
-#: ../src/interface.c:531 ../src/keybindings.c:263
+#: ../src/interface.c:536 ../src/keybindings.c:263
 #, fuzzy
 msgid "_Delete Current Line(s)"
 msgstr "Șterge liniile curente"
 
-#: ../src/interface.c:535 ../src/keybindings.c:260
+#: ../src/interface.c:540 ../src/keybindings.c:260
 #, fuzzy
 msgid "_Duplicate Line or Selection"
 msgstr "Du_plică linia sau selecția"
 
-#: ../src/interface.c:544 ../src/keybindings.c:321
+#: ../src/interface.c:549 ../src/keybindings.c:321
 #, fuzzy
 msgid "_Select Current Line(s)"
 msgstr "Selectează liniile curente"
 
-#: ../src/interface.c:548 ../src/keybindings.c:324
+#: ../src/interface.c:553 ../src/keybindings.c:324
 #, fuzzy
 msgid "_Select Current Paragraph"
 msgstr "Selectează paragraful curent"
 
-#: ../src/interface.c:557 ../src/keybindings.c:363
+#: ../src/interface.c:562 ../src/keybindings.c:363
 #, fuzzy
 msgid "_Send Selection to Terminal"
 msgstr "Trimite _selecția la"
 
-#: ../src/interface.c:561 ../src/interface.c:2235
+#: ../src/interface.c:566 ../src/interface.c:2277
 msgid "_Format"
 msgstr "F_ormat"
 
-#: ../src/interface.c:568 ../src/keybindings.c:365
+#: ../src/interface.c:573 ../src/keybindings.c:365
 msgid "_Reflow Lines/Block"
 msgstr ""
 
-#: ../src/interface.c:572 ../src/keybindings.c:335
+#: ../src/interface.c:577 ../src/keybindings.c:335
 msgid "T_oggle Case of Selection"
 msgstr ""
 
-#: ../src/interface.c:576 ../src/keybindings.c:270
+#: ../src/interface.c:581 ../src/keybindings.c:270
 #, fuzzy
 msgid "_Transpose Current Line"
 msgstr "Transpune linia curentă"
 
 # FUZZY
-#: ../src/interface.c:585
+#: ../src/interface.c:590
 msgid "_Comment Line(s)"
 msgstr "_Comentează linia/liniile"
 
-#: ../src/interface.c:589
+#: ../src/interface.c:594
 msgid "U_ncomment Line(s)"
 msgstr "Decome_ntează linia/liniile"
 
-#: ../src/interface.c:593
+#: ../src/interface.c:598
 msgid "_Toggle Line Commentation"
 msgstr "_Comută comentarea liniilor"
 
-#: ../src/interface.c:602
+#: ../src/interface.c:607
 msgid "_Increase Indent"
 msgstr "_Mărește indentarea"
 
-#: ../src/interface.c:610
+#: ../src/interface.c:615
 msgid "_Decrease Indent"
 msgstr "Mi_cșorează indentarea"
 
-#: ../src/interface.c:618 ../src/keybindings.c:354
+#: ../src/interface.c:623 ../src/keybindings.c:354
 #, fuzzy
 msgid "_Smart Line Indent"
 msgstr "Indentare inteligentă"
 
-#: ../src/interface.c:627
+#: ../src/interface.c:632
 msgid "_Send Selection to"
 msgstr "Trimite _selecția la"
 
-#: ../src/interface.c:642
+#: ../src/interface.c:647
 msgid "I_nsert Comments"
 msgstr "I_nserează comentarii"
 
-#: ../src/interface.c:653 ../src/interface.c:2246
+#: ../src/interface.c:658 ../src/interface.c:2292
 msgid "Insert _ChangeLog Entry"
 msgstr "Inserează intrare _ChangeLog"
 
-#: ../src/interface.c:657 ../src/interface.c:2250
+#: ../src/interface.c:662 ../src/interface.c:2296
 msgid "Insert _Function Description"
 msgstr "Inserează descrierea _funcției"
 
-#: ../src/interface.c:661 ../src/interface.c:2254
+#: ../src/interface.c:666 ../src/interface.c:2300
 msgid "Insert _Multiline Comment"
 msgstr "Inserează comentariu _multi-linie"
 
-#: ../src/interface.c:670 ../src/interface.c:2269
+#: ../src/interface.c:675 ../src/interface.c:2315
 msgid "Insert File _Header"
 msgstr "Inserează _antet fișier"
 
-#: ../src/interface.c:674 ../src/interface.c:2273
+#: ../src/interface.c:679 ../src/interface.c:2319
 msgid "Insert _GPL Notice"
 msgstr "Inserează notiță GPL"
 
-#: ../src/interface.c:678 ../src/interface.c:2277
+#: ../src/interface.c:683 ../src/interface.c:2323
 msgid "Insert _BSD License Notice"
 msgstr "Insereză notiță licență _BSD"
 
-#: ../src/interface.c:682 ../src/interface.c:2286
+#: ../src/interface.c:687 ../src/interface.c:2332
 msgid "Insert Dat_e"
 msgstr "In_serează dată"
 
-#: ../src/interface.c:696 ../src/interface.c:2300
+#: ../src/interface.c:701 ../src/interface.c:2346
 msgid "_Insert \"include <...>\""
 msgstr "_Inserează \"include <...>\""
 
-#: ../src/interface.c:715
+#: ../src/interface.c:715 ../src/interface.c:2365 ../src/keybindings.c:374
+#, fuzzy
+msgid "_Insert Alternative White Space"
+msgstr "Inserează spațiu alb alternativ"
+
+#: ../src/interface.c:724
 #, fuzzy
 msgid "Preference_s"
 msgstr "Preferințe"
 
-#: ../src/interface.c:723 ../src/keybindings.c:386
+#: ../src/interface.c:732 ../src/keybindings.c:387
 #, fuzzy
 msgid "P_lugin Preferences"
 msgstr "Preferințe"
 
-#: ../src/interface.c:731 ../src/interface.c:2323
+#: ../src/interface.c:740 ../src/interface.c:2369
 msgid "_Search"
 msgstr "_Căutare"
 
-#: ../src/interface.c:742
+#: ../src/interface.c:751
 msgid "Find _Next"
 msgstr "Caută ur_mător"
 
-#: ../src/interface.c:746
+#: ../src/interface.c:755
 msgid "Find _Previous"
 msgstr "Caută _precedent"
 
-#: ../src/interface.c:755
+#: ../src/interface.c:764
 msgid "Find in F_iles"
 msgstr "Caută în f_ișiere"
 
-#: ../src/interface.c:763 ../src/search.c:562
+#: ../src/interface.c:772 ../src/search.c:632
 msgid "_Replace"
 msgstr "Î_nlocuiește"
 
-#: ../src/interface.c:776
+#: ../src/interface.c:785
 msgid "Next _Message"
 msgstr "_Mesaj următor"
 
-#: ../src/interface.c:784
+#: ../src/interface.c:793
 msgid "Pr_evious Message"
 msgstr "Mesajul ant_erior"
 
-#: ../src/interface.c:797 ../src/keybindings.c:433
+#: ../src/interface.c:806 ../src/keybindings.c:434
 msgid "_Go to Next Marker"
 msgstr ""
 
-#: ../src/interface.c:801 ../src/keybindings.c:436
+#: ../src/interface.c:810 ../src/keybindings.c:437
 #, fuzzy
 msgid "_Go to Previous Marker"
 msgstr "Eroare a_nterioră"
 
-#: ../src/interface.c:810
+#: ../src/interface.c:819
 msgid "_Go to Line"
 msgstr "Mer_gi la linia"
 
-#: ../src/interface.c:818 ../src/interface.c:2258
+#: ../src/interface.c:827 ../src/interface.c:2304
 msgid "_More"
 msgstr ""
 
-#: ../src/interface.c:825 ../src/keybindings.c:398
+#: ../src/interface.c:834 ../src/keybindings.c:399
 #, fuzzy
 msgid "Find Next _Selection"
 msgstr "Caută selecția următoare"
 
-#: ../src/interface.c:829 ../src/keybindings.c:400
+#: ../src/interface.c:838 ../src/keybindings.c:401
 #, fuzzy
 msgid "Find Pre_vious Selection"
 msgstr "Caută selecția precedentă"
 
 # FUZZY
-#: ../src/interface.c:838 ../src/interface.c:2340
+#: ../src/interface.c:847 ../src/interface.c:2386
 msgid "Find _Usage"
 msgstr "Caută f_olosiri"
 
 # FUZZY
-#: ../src/interface.c:842 ../src/interface.c:2348
+#: ../src/interface.c:851 ../src/interface.c:2394
 msgid "Find _Document Usage"
 msgstr "Caută folosiri în _document"
 
-#: ../src/interface.c:851 ../src/keybindings.c:415
+#: ../src/interface.c:860 ../src/keybindings.c:416
 #, fuzzy
 msgid "_Mark All"
 msgstr "Sa_lvează tot"
 
-#: ../src/interface.c:860 ../src/interface.c:2356
+#: ../src/interface.c:869 ../src/interface.c:2402
 msgid "Go to _Tag Definition"
 msgstr "Mergi la definiția e_tichetei"
 
-#: ../src/interface.c:864
+#: ../src/interface.c:873
 msgid "Go to T_ag Declaration"
 msgstr "Mergi la decl_arearea etichetei"
 
-#: ../src/interface.c:875
+#: ../src/interface.c:884
 msgid "Change _Font"
 msgstr "Schimbă _font"
 
-#: ../src/interface.c:888
+#: ../src/interface.c:897
 msgid "To_ggle All Additional Widgets"
 msgstr "Comută toate controalele adiționale"
 
-#: ../src/interface.c:892
+#: ../src/interface.c:901
 msgid "Full_screen"
 msgstr "Ecran c_omplet"
 
-#: ../src/interface.c:896
+#: ../src/interface.c:905
 msgid "Show Message _Window"
 msgstr "Arată _fereastra de mesaje"
 
-#: ../src/interface.c:901
+#: ../src/interface.c:910
 msgid "Show _Toolbar"
 msgstr "Arată _bara de unelte"
 
-#: ../src/interface.c:906
+#: ../src/interface.c:915
 msgid "Show Side_bar"
 msgstr "Arată bara _laterală"
 
-#: ../src/interface.c:911 ../src/interface.c:4247 ../src/interface.c:5576
-#: ../src/keybindings.c:253 ../src/prefs.c:1557
+#: ../src/interface.c:920 ../src/interface.c:4354 ../src/interface.c:5766
+#: ../src/keybindings.c:253 ../src/prefs.c:1571
 msgid "Editor"
 msgstr "Editor"
 
-#: ../src/interface.c:918
+#: ../src/interface.c:927
 msgid "Show _Markers Margin"
 msgstr "Arată _marginile de marcare"
 
-#: ../src/interface.c:923
+#: ../src/interface.c:932
 msgid "Show _Line Numbers"
 msgstr "Arată numerele de _linie"
 
-#: ../src/interface.c:928
+#: ../src/interface.c:937
 #, fuzzy
 msgid "Show _White Space"
 msgstr "Arată spațiu albe"
 
-#: ../src/interface.c:932
+#: ../src/interface.c:941
 #, fuzzy
 msgid "Show Line _Endings"
 msgstr "Arată sfârșiturile de linie"
 
-#: ../src/interface.c:936
+#: ../src/interface.c:945
 #, fuzzy
 msgid "Show _Indentation Guides"
 msgstr "Arată ghidări indentare"
 
-#: ../src/interface.c:957
+#: ../src/interface.c:966
 msgid "_Document"
 msgstr "_Document"
 
-#: ../src/interface.c:964
+#: ../src/interface.c:973
 msgid "_Line Wrapping"
 msgstr "Despărțire pe _linii"
 
-#: ../src/interface.c:969
+#: ../src/interface.c:978
 #, fuzzy
 msgid "Line _Breaking"
 msgstr "Încadrare linii"
 
-#: ../src/interface.c:973
+#: ../src/interface.c:982
 msgid "_Auto-indentation"
 msgstr "Indentare _automată"
 
-#: ../src/interface.c:978
+#: ../src/interface.c:987
 msgid "In_dent Type"
 msgstr "Tip in_dentare"
 
-#: ../src/interface.c:985 ../src/interface.c:3855 ../src/interface.c:5474
+#: ../src/interface.c:994 ../src/interface.c:1028
+#, fuzzy
+msgid "_Detect from Content"
+msgstr "Determină din fișier"
+
+#: ../src/interface.c:1003 ../src/interface.c:3948 ../src/interface.c:5666
 msgid "_Tabs"
 msgstr "_Tab-uri"
 
-#: ../src/interface.c:991 ../src/interface.c:3846 ../src/interface.c:5465
+#: ../src/interface.c:1009 ../src/interface.c:3939 ../src/interface.c:5657
 msgid "_Spaces"
 msgstr "_Spații"
 
-#: ../src/interface.c:997 ../src/interface.c:3864 ../src/interface.c:5483
+#: ../src/interface.c:1015
 msgid "T_abs and Spaces"
 msgstr "T_ab-uri și spații"
 
-#: ../src/interface.c:1003
+#: ../src/interface.c:1021
 msgid "Indent Widt_h"
 msgstr ""
 
-#: ../src/interface.c:1010
+#: ../src/interface.c:1037
 msgid "_1"
 msgstr ""
 
-#: ../src/interface.c:1016
+#: ../src/interface.c:1043
 msgid "_2"
 msgstr ""
 
-#: ../src/interface.c:1022
+#: ../src/interface.c:1049
 msgid "_3"
 msgstr ""
 
-#: ../src/interface.c:1028
+#: ../src/interface.c:1055
 msgid "_4"
 msgstr ""
 
-#: ../src/interface.c:1034
+#: ../src/interface.c:1061
 msgid "_5"
 msgstr ""
 
-#: ../src/interface.c:1040
+#: ../src/interface.c:1067
 msgid "_6"
 msgstr ""
 
-#: ../src/interface.c:1046
+#: ../src/interface.c:1073
 msgid "_7"
 msgstr ""
 
-#: ../src/interface.c:1052
+#: ../src/interface.c:1079
 msgid "_8"
 msgstr ""
 
-#: ../src/interface.c:1063
+#: ../src/interface.c:1090
 msgid "Read _Only"
 msgstr "Doar _citire"
 
-#: ../src/interface.c:1067
+#: ../src/interface.c:1094
 msgid "_Write Unicode BOM"
 msgstr "Sc_rie caracter Unicod BOM"
 
-#: ../src/interface.c:1076
+#: ../src/interface.c:1103
 msgid "Set File_type"
 msgstr "Stabilește _tipul de fișier"
 
-#: ../src/interface.c:1086
+#: ../src/interface.c:1113
 msgid "Set _Encoding"
 msgstr "Stabilește codar_ea"
 
-#: ../src/interface.c:1096
+#: ../src/interface.c:1123
 msgid "Set Line E_ndings"
 msgstr "Stabilește sfârșiturile de li_nie"
 
-#: ../src/interface.c:1103
+#: ../src/interface.c:1130
 msgid "Convert and Set to _CR/LF (Win)"
 msgstr "Convertește și stabilește _CR/LF (Win)"
 
-#: ../src/interface.c:1109
+#: ../src/interface.c:1136
 msgid "Convert and Set to _LF (Unix)"
 msgstr "Convertește și stabilește _LF (Unix)"
 
-#: ../src/interface.c:1115
+#: ../src/interface.c:1142
 msgid "Convert and Set to CR (_Mac)"
 msgstr "Convertește și stabilește CR (_Mac)"
 
-#: ../src/interface.c:1126
+#: ../src/interface.c:1153
 msgid "_Strip Trailing Spaces"
 msgstr "_Elimină dâra de spații"
 
-#: ../src/interface.c:1130
+#: ../src/interface.c:1157
 msgid "_Replace Tabs by Spaces"
 msgstr "Î_nlocuiește tab-urile cu spații"
 
-#: ../src/interface.c:1134
+#: ../src/interface.c:1161
 msgid "Replace Spaces b_y Tabs"
 msgstr "Î_nlocuiește tab-urile _cu spații"
 
 # FUZZY
-#: ../src/interface.c:1143
+#: ../src/interface.c:1170
 msgid "_Fold All"
 msgstr "_Restrânge toate"
 
-#: ../src/interface.c:1147
+#: ../src/interface.c:1174
 msgid "_Unfold All"
 msgstr "_Extinde toate"
 
-#: ../src/interface.c:1156
+#: ../src/interface.c:1183
 msgid "Remove _Markers"
 msgstr "Șterge _marcatori"
 
-#: ../src/interface.c:1160
+#: ../src/interface.c:1187
 msgid "Remove Error _Indicators"
 msgstr "Șterge _indicatori de eroare"
 
-#: ../src/interface.c:1164
+#: ../src/interface.c:1191
 msgid "_Project"
 msgstr "_Proiect"
 
-#: ../src/interface.c:1171
+#: ../src/interface.c:1198
 msgid "_New"
 msgstr "_Nou"
 
-#: ../src/interface.c:1179
+#: ../src/interface.c:1206
 msgid "_Open"
 msgstr "_Deschide"
 
-#: ../src/interface.c:1187
+#: ../src/interface.c:1214
 #, fuzzy
 msgid "_Recent Projects"
 msgstr "Deschide proiect"
 
-#: ../src/interface.c:1191
+#: ../src/interface.c:1218
 msgid "_Close"
 msgstr "Înc_hide"
 
-#: ../src/interface.c:1213
+#: ../src/interface.c:1231
 #, fuzzy
 msgid "_Apply Default Indentation"
 msgstr "Indentare _automată"
 
-#: ../src/interface.c:1216
+#: ../src/interface.c:1234
 msgid "Apply the default indentation settings to all documents"
 msgstr ""
 
-#: ../src/interface.c:1222
+#: ../src/interface.c:1249
 msgid "_Tools"
 msgstr "_Unelte"
 
-#: ../src/interface.c:1229
+#: ../src/interface.c:1256
 msgid "_Reload Configuration"
 msgstr "_Reîncarcă configurația"
 
-#: ../src/interface.c:1237
+#: ../src/interface.c:1264
 #, fuzzy
 msgid "C_onfiguration Files"
 msgstr "Fișierele de configurare au fost reîncărcate"
 
-#: ../src/interface.c:1250
+#: ../src/interface.c:1277
 msgid "_Color Chooser"
 msgstr "Selector _culoare"
 
-#: ../src/interface.c:1258
+#: ../src/interface.c:1285
 msgid "_Word Count"
 msgstr "Contor cu_vinte"
 
-#: ../src/interface.c:1262
+#: ../src/interface.c:1289
 msgid "Load Ta_gs"
 msgstr "Încarcă _etichete"
 
-#: ../src/interface.c:1266 ../src/interface.c:1273
+#: ../src/interface.c:1293 ../src/interface.c:1300
 msgid "_Help"
 msgstr "_Ajutor"
 
-#: ../src/interface.c:1281
+#: ../src/interface.c:1308
 msgid "_Website"
 msgstr "Site _web"
 
-#: ../src/interface.c:1285
+#: ../src/interface.c:1312
 msgid "_Keyboard Shortcuts"
 msgstr "S_curtături"
 
-#: ../src/interface.c:1289
+#: ../src/interface.c:1316
 msgid "_Debug Messages"
 msgstr "Mesaje _depanare"
 
-#: ../src/interface.c:1328 ../src/sidebar.c:132
+#: ../src/interface.c:1355 ../src/sidebar.c:124
 msgid "Symbols"
 msgstr "Simboluri"
 
-#: ../src/interface.c:1342
+#: ../src/interface.c:1369
 msgid "Documents"
 msgstr "Documente"
 
-#: ../src/interface.c:1378
+#: ../src/interface.c:1405
 msgid "Status"
 msgstr "Stare"
 
-#: ../src/interface.c:1392
+#: ../src/interface.c:1419
 msgid "Compiler"
 msgstr "Compilator"
 
-#: ../src/interface.c:1407
+#: ../src/interface.c:1434
 msgid "Messages"
 msgstr "Mesaje"
 
-#: ../src/interface.c:1420
+#: ../src/interface.c:1447
 msgid "Scribble"
 msgstr ""
 
-#: ../src/interface.c:2094
+#: ../src/interface.c:2135
 #, fuzzy
 msgid "_Toolbar Preferences"
 msgstr "Preferințe"
 
-#: ../src/interface.c:2107
+#: ../src/interface.c:2148
 #, fuzzy
 msgid "_Hide Toolbar"
 msgstr "_Ascunde bara de unelte"
 
-#: ../src/interface.c:2239
+#: ../src/interface.c:2281
 #, fuzzy
 msgid "I_nsert"
 msgstr "Inserează"
 
-#: ../src/interface.c:2319 ../src/keybindings.c:374
-#, fuzzy
-msgid "_Insert Alternative White Space"
-msgstr "Inserează spațiu alb alternativ"
-
-#: ../src/interface.c:2364
+#: ../src/interface.c:2410
 msgid "Conte_xt Action"
 msgstr "Acțiune conte_xtuală"
 
-#: ../src/interface.c:2885 ../src/keybindings.c:383
+#: ../src/interface.c:2952 ../src/keybindings.c:384
 msgid "Preferences"
 msgstr "Preferințe"
 
-#: ../src/interface.c:2921
+#: ../src/interface.c:2988
 msgid "Load files from the last session"
 msgstr "Încarcă fișierele din ultima sesiune"
 
-#: ../src/interface.c:2924
+#: ../src/interface.c:2991
 msgid "Opens at startup the files from the last session"
 msgstr "Deschide la pornire fișierele din ultima sesiune"
 
-#: ../src/interface.c:2926
+#: ../src/interface.c:2993
 msgid "Load virtual terminal support"
 msgstr "Încarcă suport pentru terminal virtual"
 
-#: ../src/interface.c:2928
+#: ../src/interface.c:2995
 #, fuzzy
 msgid ""
 "Whether the virtual terminal emulation (VTE) should be loaded at startup, "
@@ -1690,40 +1677,40 @@ msgstr ""
 "Dacă suportul pentru emularea consolei virtuale să fie încărcat. Dezactivați-"
 "l dacă nu-l folosiți."
 
-#: ../src/interface.c:2930
+#: ../src/interface.c:2997
 msgid "Enable plugin support"
 msgstr "Activează suport pentru module"
 
-#: ../src/interface.c:2934
+#: ../src/interface.c:3001
 msgid "<b>Startup</b>"
 msgstr "<b>Pornire</b>"
 
-#: ../src/interface.c:2953
+#: ../src/interface.c:3020
 msgid "Save window position and geometry"
 msgstr "Salveză poziția și geometria ferestrei"
 
-#: ../src/interface.c:2956
+#: ../src/interface.c:3023
 msgid "Saves the window position and geometry and restores it at the start"
 msgstr "Salveză poziția și geometria ferestrei și restabilește-le la pornire"
 
-#: ../src/interface.c:2958
+#: ../src/interface.c:3025
 msgid "Confirm exit"
 msgstr "Confirmă ieșirea"
 
-#: ../src/interface.c:2961
+#: ../src/interface.c:3028
 #, fuzzy
 msgid "Shows a confirmation dialog on exit"
 msgstr "Arată un dialog de confirmare la ieșire."
 
-#: ../src/interface.c:2963
+#: ../src/interface.c:3030
 msgid "<b>Shutdown</b>"
 msgstr "<b>Închidere</b>"
 
-#: ../src/interface.c:2984
+#: ../src/interface.c:3051
 msgid "Startup path:"
 msgstr "Cale de pornire:"
 
-#: ../src/interface.c:2996
+#: ../src/interface.c:3063
 msgid ""
 "Path to start in when opening or saving files. Must be an absolute path. "
 "Leave blank to use the current working directory."
@@ -1731,40 +1718,40 @@ msgstr ""
 "Calea de pornire la deschiderea sau salvarea de fișiere. Trebuie să fie o "
 "cale absolută. Lăsați vidă pentru a folosi dosarul de lucru curent."
 
-#: ../src/interface.c:3009
+#: ../src/interface.c:3076
 msgid "Project files:"
 msgstr "Fișierele proiectului:"
 
-#: ../src/interface.c:3021
+#: ../src/interface.c:3088
 msgid "Path to start in when opening project files"
 msgstr "Calea de pornire la deschidere fișierelor de proiect"
 
-#: ../src/interface.c:3034
+#: ../src/interface.c:3101
 #, fuzzy
 msgid "Extra plugin path:"
 msgstr "Activează suport pentru module"
 
-#: ../src/interface.c:3046
+#: ../src/interface.c:3113
 msgid ""
 "Geany looks by default in the global installation path and in the "
 "configuration directory. The path entered here will be searched additionally "
 "for plugins. Leave blank to disable."
 msgstr ""
 
-#: ../src/interface.c:3059
+#: ../src/interface.c:3126
 msgid "<b>Paths</b>"
 msgstr "<b>Căi</b>"
 
-#: ../src/interface.c:3064
+#: ../src/interface.c:3131
 #, fuzzy
 msgid "Startup"
 msgstr "Stare"
 
-#: ../src/interface.c:3087
+#: ../src/interface.c:3154
 msgid "Beep on errors or when compilation has finished"
 msgstr "Bipăie la erori sau la sfârșitul compilării"
 
-#: ../src/interface.c:3090
+#: ../src/interface.c:3157
 #, fuzzy
 msgid ""
 "Whether to beep if an error occurred or when the compilation process has "
@@ -1773,11 +1760,11 @@ msgstr ""
 "Dacă programul să bipăie la producerea de erori sau la sfârșitul procesului "
 "de compilare."
 
-#: ../src/interface.c:3092
+#: ../src/interface.c:3159
 msgid "Switch to status message list at new message"
 msgstr "Comută la lista de mesaje de stare la un mesaj nou"
 
-#: ../src/interface.c:3095
+#: ../src/interface.c:3162
 #, fuzzy
 msgid ""
 "Switch to the status message tab (in the notebook window at the bottom) if a "
@@ -1786,11 +1773,11 @@ msgstr ""
 "Comută la tab-ul listei de mesaje de stare (în partea de jos a ferestrei) "
 "dacă apare un nou mesaj de stare."
 
-#: ../src/interface.c:3097
+#: ../src/interface.c:3164
 msgid "Suppress status messages in the status bar"
 msgstr "Suprimă mesajele de stare în bara de stare"
 
-#: ../src/interface.c:3100
+#: ../src/interface.c:3167
 msgid ""
 "Removes all messages from the status bar. The messages are still displayed "
 "in the status messages window."
@@ -1798,47 +1785,47 @@ msgstr ""
 "Șterge toate mesajele din bara de stare. Mesajele sunt totuși afișate în "
 "fereastra de mesaje de stare."
 
-#: ../src/interface.c:3102
+#: ../src/interface.c:3169
 #, fuzzy
 msgid "Auto-focus widgets (focus follows mouse)"
 msgstr "Focalizeză automat controalele (focusul urmărește mouse-ul)"
 
-#: ../src/interface.c:3105
+#: ../src/interface.c:3172
 msgid ""
 "Gives the focus automatically to widgets below the mouse cursor. Works for "
 "the main editor widget, the scribble, the toolbar search and goto line "
 "fields and the VTE."
 msgstr ""
 
-#: ../src/interface.c:3107
+#: ../src/interface.c:3174
 msgid "Use Windows File Open/Save dialogs"
 msgstr ""
 
-#: ../src/interface.c:3110
+#: ../src/interface.c:3177
 msgid ""
 "Defines whether to use the native Windows File Open/Save dialogs or whether "
 "to use the GTK default dialogs"
 msgstr ""
 
-#: ../src/interface.c:3112 ../src/interface.c:3491 ../src/interface.c:4457
+#: ../src/interface.c:3179 ../src/interface.c:3415 ../src/interface.c:4564
 msgid "<b>Miscellaneous</b>"
 msgstr "<b>Diverse</b>"
 
-#: ../src/interface.c:3131
+#: ../src/interface.c:3198
 msgid "Always wrap search and hide the Find dialog"
 msgstr ""
 
-#: ../src/interface.c:3134
+#: ../src/interface.c:3201
 msgid ""
 "Always wrap search around the document and hide the Find dialog after "
 "clicking Find Next/Previous"
 msgstr ""
 
-#: ../src/interface.c:3136
+#: ../src/interface.c:3203
 msgid "Use the current word under the cursor for Find dialogs"
 msgstr "Folosește cuvântul de sub cursor pentru dialogurile de căutare"
 
-#: ../src/interface.c:3139
+#: ../src/interface.c:3206
 #, fuzzy
 msgid ""
 "Use current word under the cursor when opening the Find, Find in Files or "
@@ -1847,20 +1834,20 @@ msgstr ""
 "Folosește cuvântul de sub cursor când se deschide unul dintre dialogurile "
 "Caută, Caută în fișiere sau Înlocuiește și nu este nimic selectat."
 
-#: ../src/interface.c:3141
+#: ../src/interface.c:3208
 #, fuzzy
 msgid "Use the current file's directory for Find in Files"
 msgstr "Folosește cuvântul de sub cursor pentru dialogurile de căutare"
 
-#: ../src/interface.c:3145
+#: ../src/interface.c:3212
 msgid "<b>Search</b>"
 msgstr "<b>Căutare</b>"
 
-#: ../src/interface.c:3164
+#: ../src/interface.c:3231
 msgid "Use project-based session files"
 msgstr "Folosește fișiere de sesiune bazate pe proiect"
 
-#: ../src/interface.c:3167
+#: ../src/interface.c:3234
 #, fuzzy
 msgid ""
 "Whether to store a project's session files and open them when re-opening the "
@@ -1869,11 +1856,11 @@ msgstr ""
 "Dacă să salveze fișierele de sesiune ale proiectului și să le redeschidă o "
 "dată cu acesta."
 
-#: ../src/interface.c:3169
+#: ../src/interface.c:3236
 msgid "Store project file inside the project base directory"
 msgstr "Salvează fișierul proiect în dosarul de bază al proiectului"
 
-#: ../src/interface.c:3172
+#: ../src/interface.c:3239
 msgid ""
 "When enabled, a project file is stored by default inside the project base "
 "directory when creating new projects instead of one directory above the base "
@@ -1881,11 +1868,11 @@ msgid ""
 "Project dialog."
 msgstr ""
 
-#: ../src/interface.c:3174
+#: ../src/interface.c:3241
 msgid "<b>Projects</b>"
 msgstr "<b>Proiect</b>"
 
-#: ../src/interface.c:3179
+#: ../src/interface.c:3246
 #, fuzzy
 msgid "Miscellaneous"
 msgstr "<b>Diverse</b>"
@@ -1894,87 +1881,100 @@ msgstr "<b>Diverse</b>"
 #. * corresponding chapter in the documentation, comparing translatable
 #. * strings is easy to break. Maybe attach an identifying string to the
 #. * tab label object.
-#: ../src/interface.c:3183 ../src/prefs.c:1551
+#: ../src/interface.c:3250 ../src/prefs.c:1565
 msgid "General"
 msgstr "General"
 
-#: ../src/interface.c:3220
+#: ../src/interface.c:3291
 msgid "Show symbol list"
 msgstr "Arată lista de simboluri"
 
-#: ../src/interface.c:3223
+#: ../src/interface.c:3294
 msgid "Toggle the symbol list on and off"
 msgstr "Comută vizibilitatea listei de simboluri"
 
-#: ../src/interface.c:3225
+#: ../src/interface.c:3296
 msgid "Show documents list"
 msgstr "Arată lista de documente"
 
-#: ../src/interface.c:3228
+#: ../src/interface.c:3299
 msgid "Toggle the documents list on and off"
 msgstr "Comută vizibilitatea listei de documente"
 
-#: ../src/interface.c:3230
+#: ../src/interface.c:3301
 #, fuzzy
 msgid "Show sidebar"
 msgstr "Arată bara _laterală"
 
-#: ../src/interface.c:3238
+#: ../src/interface.c:3309
 #, fuzzy
 msgid "Position:"
 msgstr "Descriere:"
 
-#: ../src/interface.c:3242 ../src/interface.c:3365 ../src/interface.c:3426
-#: ../src/interface.c:3444 ../src/interface.c:3462
+#: ../src/interface.c:3313 ../src/interface.c:3469 ../src/interface.c:3530
+#: ../src/interface.c:3548 ../src/interface.c:3566
 msgid "Left"
 msgstr "Stânga"
 
-#: ../src/interface.c:3249 ../src/interface.c:3373 ../src/interface.c:3427
-#: ../src/interface.c:3445 ../src/interface.c:3463
+#: ../src/interface.c:3320 ../src/interface.c:3477 ../src/interface.c:3531
+#: ../src/interface.c:3549 ../src/interface.c:3567
 msgid "Right"
 msgstr "Dreapta"
 
-#: ../src/interface.c:3255
+#: ../src/interface.c:3326
 msgid "<b>Sidebar</b>"
 msgstr "<b>Bară laterală</b>"
 
-#: ../src/interface.c:3276
+#: ../src/interface.c:3347
 msgid "Symbol list:"
 msgstr "Listă simboluri:"
 
-#: ../src/interface.c:3283 ../src/interface.c:3413
+#: ../src/interface.c:3354 ../src/interface.c:3517
 msgid "Message window:"
 msgstr "Fereastra de mesaje:"
 
-#: ../src/interface.c:3290 ../src/interface.c:3449
+#: ../src/interface.c:3361 ../src/interface.c:3553
 msgid "Editor:"
 msgstr "Editor:"
 
-#: ../src/interface.c:3302
+#: ../src/interface.c:3373
 msgid "Sets the font for the message window"
 msgstr "Stabilește font-ul ferestrei de mesaje"
 
-#: ../src/interface.c:3310
+#: ../src/interface.c:3381
 msgid "Sets the font for the symbol list"
 msgstr "Stabilește font-ul listei de simboluri"
 
-#: ../src/interface.c:3318
+#: ../src/interface.c:3389
 msgid "Sets the editor font"
 msgstr "Stabilește font-ul editorului"
 
-#: ../src/interface.c:3320
+#: ../src/interface.c:3391
 msgid "<b>Fonts</b>"
 msgstr "<b>Font-uri</b>"
 
-#: ../src/interface.c:3339
+#: ../src/interface.c:3410
+msgid "Show status bar"
+msgstr "Arată bara de stare"
+
+#: ../src/interface.c:3413
+#, fuzzy
+msgid "Whether to show the status bar at the bottom of the main window"
+msgstr "Dacă să arate bara de stare la baza ferestrei principale."
+
+#: ../src/interface.c:3420 ../src/interface.c:3755 ../src/prefs.c:1567
+msgid "Interface"
+msgstr "Interfață"
+
+#: ../src/interface.c:3443
 msgid "Show editor tabs"
 msgstr "Arată tab-uri în editor"
 
-#: ../src/interface.c:3343
+#: ../src/interface.c:3447
 msgid "Show close buttons"
 msgstr "Arată butoane de închidere"
 
-#: ../src/interface.c:3346
+#: ../src/interface.c:3450
 #, fuzzy
 msgid ""
 "Shows a small cross button in the file tabs to easily close files when "
@@ -1983,146 +1983,142 @@ msgstr ""
 "Arată o cruciuliță în tab-urile de fișiere pentru închiderea rapidă prin "
 "click (necesită repornirea Geany)."
 
-#: ../src/interface.c:3352
+#: ../src/interface.c:3456
 msgid "Placement of new file tabs:"
 msgstr "Poziționarea tab-urilor de fișier nou:"
 
-#: ../src/interface.c:3368
+#: ../src/interface.c:3472
 msgid "File tabs will be placed on the left of the notebook"
 msgstr "Tab-urile de fișier vor fi plasate în stânga"
 
-#: ../src/interface.c:3376
+#: ../src/interface.c:3480
 msgid "File tabs will be placed on the right of the notebook"
 msgstr "Tab-urile de fișier vor fi plasate în dreapta"
 
-#: ../src/interface.c:3380
+#: ../src/interface.c:3484
 #, fuzzy
 msgid "Next to current"
 msgstr "Salvează fișierul curent"
 
-#: ../src/interface.c:3385
+#: ../src/interface.c:3489
 msgid ""
 "Whether to place file tabs next to the current tab rather than at the edges "
 "of the notebook"
 msgstr ""
 
-#: ../src/interface.c:3387
+#: ../src/interface.c:3491
 #, fuzzy
 msgid "Double-clicking hides all additional widgets"
 msgstr "Comută toate controalele adiționale"
 
-#: ../src/interface.c:3390
+#: ../src/interface.c:3494
 #, fuzzy
 msgid "Calls the View->Toggle All Additional Widgets command"
 msgstr "Comută toate controalele adiționale"
 
-#: ../src/interface.c:3392
+#: ../src/interface.c:3496
 msgid "<b>Editor tabs</b>"
 msgstr "<b>Tab-uri editor</b>"
 
-#: ../src/interface.c:3428 ../src/interface.c:3446 ../src/interface.c:3464
+#: ../src/interface.c:3532 ../src/interface.c:3550 ../src/interface.c:3568
 msgid "Top"
 msgstr "Sus"
 
-#: ../src/interface.c:3429 ../src/interface.c:3447 ../src/interface.c:3465
+#: ../src/interface.c:3533 ../src/interface.c:3551 ../src/interface.c:3569
 msgid "Bottom"
 msgstr "Jos"
 
-#: ../src/interface.c:3431
+#: ../src/interface.c:3535
 msgid "Sidebar:"
 msgstr "Bară laterală:"
 
-#: ../src/interface.c:3467
+#: ../src/interface.c:3571
 msgid "<b>Tab positions</b>"
 msgstr "<b>Poziții tab-uri</b>"
 
-#: ../src/interface.c:3486
-msgid "Show status bar"
-msgstr "Arată bara de stare"
-
-#: ../src/interface.c:3489
-#, fuzzy
-msgid "Whether to show the status bar at the bottom of the main window"
-msgstr "Dacă să arate bara de stare la baza ferestrei principale."
-
-#: ../src/interface.c:3496 ../src/prefs.c:1553
-msgid "Interface"
-msgstr "Interfață"
-
-#: ../src/interface.c:3527
-#, fuzzy
-msgid "Show T_oolbar"
-msgstr "Arată bară de unelte"
-
-#: ../src/interface.c:3531
-msgid "_Append Toolbar to the Menu"
+#: ../src/interface.c:3576
+msgid "Notebook tabs"
 msgstr ""
 
-#: ../src/interface.c:3534
+#: ../src/interface.c:3607
+#, fuzzy
+msgid "Show t_oolbar"
+msgstr "Arată bară de unelte"
+
+#: ../src/interface.c:3611
+msgid "_Append toolbar to the menu"
+msgstr ""
+
+#: ../src/interface.c:3614
 msgid "Pack the toolbar to the main menu to save vertical space"
 msgstr ""
 
-#: ../src/interface.c:3556 ../src/toolbar.c:930
+#: ../src/interface.c:3636 ../src/toolbar.c:936
 #, fuzzy
 msgid "Customize Toolbar"
 msgstr "Arată _bara de unelte"
 
-#: ../src/interface.c:3576
-msgid "System _Default"
+#: ../src/interface.c:3656
+msgid "System _default"
 msgstr ""
 
-#: ../src/interface.c:3584
-msgid "Images _and Text"
+#: ../src/interface.c:3664
+#, fuzzy
+msgid "Images _and text"
 msgstr "Imagini _și text"
 
-#: ../src/interface.c:3592
-msgid "_Images Only"
+#: ../src/interface.c:3672
+#, fuzzy
+msgid "_Images only"
 msgstr "Doar _imagini"
 
-#: ../src/interface.c:3600
-msgid "_Text Only"
+#: ../src/interface.c:3680
+#, fuzzy
+msgid "_Text only"
 msgstr "Doar _text"
 
-#: ../src/interface.c:3608
+#: ../src/interface.c:3688
 #, fuzzy
-msgid "<b>Icon Style</b>"
+msgid "<b>Icon style</b>"
 msgstr "<b>Font-uri</b>"
 
-#: ../src/interface.c:3629
-msgid "S_ystem Default"
+#: ../src/interface.c:3709
+msgid "S_ystem default"
 msgstr ""
 
-#: ../src/interface.c:3637
-msgid "_Small Icons"
-msgstr "Icon-uri m_ici"
-
-#: ../src/interface.c:3645
+#: ../src/interface.c:3717
 #, fuzzy
-msgid "_Very Small Icons"
+msgid "_Small icons"
 msgstr "Icon-uri m_ici"
 
-#: ../src/interface.c:3653
-msgid "_Large Icons"
+#: ../src/interface.c:3725
+#, fuzzy
+msgid "_Very small icons"
+msgstr "Icon-uri m_ici"
+
+#: ../src/interface.c:3733
+#, fuzzy
+msgid "_Large icons"
 msgstr "Icon-uri _mari"
 
-#: ../src/interface.c:3661
+#: ../src/interface.c:3741
 #, fuzzy
-msgid "<b>Icon Size</b>"
+msgid "<b>Icon size</b>"
 msgstr "<b>Dimensiune:</b>"
 
-#: ../src/interface.c:3666
+#: ../src/interface.c:3746
 msgid "<b>Toolbar</b>"
 msgstr "<b>Bară de unelte</b>"
 
-#: ../src/interface.c:3671 ../src/prefs.c:1555
+#: ../src/interface.c:3751 ../src/prefs.c:1569
 msgid "Toolbar"
 msgstr "Bară de unelte"
 
-#: ../src/interface.c:3698
+#: ../src/interface.c:3782
 msgid "Line wrapping"
 msgstr "Încadrare linii"
 
-#: ../src/interface.c:3701
+#: ../src/interface.c:3785
 msgid ""
 "Wrap the line at the window border and continue it on the next line. Note: "
 "line wrapping has a high performance cost for large documents so should be "
@@ -2132,12 +2128,12 @@ msgstr ""
 "următoare. Notă: despărțirea pe linii consumă multe resurse pe documente "
 "mari, așa că ar trebuie dezactivată pe mașini încete."
 
-#: ../src/interface.c:3703
+#: ../src/interface.c:3787
 #, fuzzy
 msgid "\"Smart\" home key"
 msgstr "Activează tastă acasă \"inteligentă\""
 
-#: ../src/interface.c:3706
+#: ../src/interface.c:3790
 msgid ""
 "When \"smart\" home is enabled, the HOME key will move the caret to the "
 "first non-blank character of the line, unless it is already there, it moves "
@@ -2152,27 +2148,27 @@ msgstr ""
 "liniei curente, indiferent de poziția curentă a acestuia."
 
 # FUZZY
-#: ../src/interface.c:3708
+#: ../src/interface.c:3792
 msgid "Disable Drag and Drop"
 msgstr "Dezactivează trage și plasează"
 
-#: ../src/interface.c:3711
+#: ../src/interface.c:3795
 msgid ""
 "Disable drag and drop completely in the editor window so you can't drag and "
 "drop any selections within or outside of the editor window"
 msgstr ""
 
-#: ../src/interface.c:3713
+#: ../src/interface.c:3797
 #, fuzzy
 msgid "Code folding"
 msgstr "Activează restrângerea/extinderea"
 
-#: ../src/interface.c:3717
+#: ../src/interface.c:3801
 #, fuzzy
 msgid "Fold/unfold all children of a fold point"
 msgstr "Restrânge/extinde toți copii unui punct de restrângere"
 
-#: ../src/interface.c:3720
+#: ../src/interface.c:3804
 #, fuzzy
 msgid ""
 "Fold or unfold all children of a fold point. By pressing the Shift key while "
@@ -2182,11 +2178,11 @@ msgstr ""
 "Shift când se dă click pe un simbol de restrângere, este utilizat "
 "comportamentul contrar."
 
-#: ../src/interface.c:3722
+#: ../src/interface.c:3806
 msgid "Use indicators to show compile errors"
 msgstr "Folosește indicatori pentru a arăta erorile de compilare"
 
-#: ../src/interface.c:3725
+#: ../src/interface.c:3809
 #, fuzzy
 msgid ""
 "Whether to use indicators (a squiggly underline) to highlight the lines "
@@ -2195,88 +2191,74 @@ msgstr ""
 "Dacă să folosesc indicatori (subliniere mișcată) pentru a evidenția liniile "
 "în care compilatorul a raportat un avertisment sau o eroare."
 
-#: ../src/interface.c:3727
+#: ../src/interface.c:3811
 msgid "Newline strips trailing spaces"
 msgstr "Linia nouă șterge dâra de spații"
 
-#: ../src/interface.c:3730
+#: ../src/interface.c:3814
 #, fuzzy
 msgid "Enable newline to strip the trailing spaces on the previous line"
 msgstr "Permite liniei noi să șteargă dâra de spații de pe linia precedentă."
 
-#: ../src/interface.c:3736
+#: ../src/interface.c:3820
 msgid "Line breaking column:"
 msgstr ""
 
-#: ../src/interface.c:3750
+#: ../src/interface.c:3834
 #, fuzzy
 msgid "Comment toggle marker:"
 msgstr "Marcaj linie lungă:"
 
-#: ../src/interface.c:3757
+#: ../src/interface.c:3841
 msgid ""
 "A string which is added when toggling a line comment in a source file, it is "
 "used to mark the comment as toggled."
 msgstr ""
 
-#: ../src/interface.c:3759
+#: ../src/interface.c:3843
 msgid "<b>Features</b>"
 msgstr "<b>Funcții</b>"
 
-#: ../src/interface.c:3764
+#: ../src/interface.c:3848
 msgid "Features"
 msgstr "Funcții"
 
-#: ../src/interface.c:3777
+#: ../src/interface.c:3861
 msgid ""
 "Note: To apply these settings to all currently open documents, use "
 "<i>Project->Apply Default Indentation</i>."
 msgstr ""
 
-#: ../src/interface.c:3804 ../src/interface.c:5423
-msgid "Auto-indent mode:"
-msgstr "Mod indentare automată"
-
-#: ../src/interface.c:3817 ../src/interface.c:5436
-msgid "Basic"
-msgstr "Fundamental"
-
-#: ../src/interface.c:3818 ../src/interface.c:5437
-msgid "Current chars"
-msgstr "Caractere curente"
-
-#: ../src/interface.c:3819 ../src/interface.c:5438
-msgid "Match braces"
-msgstr "Potrivește paranteze"
-
-#: ../src/interface.c:3821 ../src/interface.c:4147 ../src/interface.c:5440
-msgid "Type:"
-msgstr "Tip:"
-
-#: ../src/interface.c:3828 ../src/interface.c:5447
+#: ../src/interface.c:3888 ../src/interface.c:5606
 msgid "Width:"
 msgstr "Lățime:"
 
-#: ../src/interface.c:3841 ../src/interface.c:5460
+#: ../src/interface.c:3901 ../src/interface.c:5619
 msgid "The width in chars of a single indent"
 msgstr "Lățimea în caractere  a indentării"
 
-#: ../src/interface.c:3851 ../src/interface.c:5470
-msgid "Use spaces when inserting indentation"
-msgstr "Folosește spații la indentare"
+#: ../src/interface.c:3906 ../src/interface.c:5624
+msgid "Auto-indent mode:"
+msgstr "Mod indentare automată"
 
-#: ../src/interface.c:3860 ../src/interface.c:5479
-msgid "Use one tab per indent"
-msgstr "Folosește indentare la un tab"
+#: ../src/interface.c:3919 ../src/interface.c:5637
+msgid "Basic"
+msgstr "Fundamental"
 
-#: ../src/interface.c:3869 ../src/interface.c:5488
-msgid ""
-"Use spaces if the total indent is less than the tab width, otherwise use both"
-msgstr ""
-"Folosește spații dacă indentarea totală este mai mică decât lătimea tab-"
-"ului, altfel amândouă"
+#: ../src/interface.c:3920 ../src/interface.c:5638
+msgid "Current chars"
+msgstr "Caractere curente"
 
-#: ../src/interface.c:3878 ../src/interface.c:5497
+#: ../src/interface.c:3921 ../src/interface.c:5639
+msgid "Match braces"
+msgstr "Potrivește paranteze"
+
+#: ../src/interface.c:3923 ../src/interface.c:5641
+#, fuzzy
+msgid "Detect type from file"
+msgstr "Determină din fișier"
+
+#: ../src/interface.c:3928 ../src/interface.c:5646
 #, fuzzy
 msgid ""
 "Whether to detect the indentation type from file contents when a file is "
@@ -2285,59 +2267,97 @@ msgstr ""
 "Dacă să detectez tipul de indentare din conținutul fișierului la deschiderea "
 "acestuia."
 
-#: ../src/interface.c:3880
+#: ../src/interface.c:3930 ../src/interface.c:5648
+#, fuzzy
+msgid "T_abs and spaces"
+msgstr "T_ab-uri și spații"
+
+#: ../src/interface.c:3935 ../src/interface.c:5653
+msgid ""
+"Use spaces if the total indent is less than the tab width, otherwise use both"
+msgstr ""
+"Folosește spații dacă indentarea totală este mai mică decât lătimea tab-"
+"ului, altfel amândouă"
+
+#: ../src/interface.c:3944 ../src/interface.c:5662
+msgid "Use spaces when inserting indentation"
+msgstr "Folosește spații la indentare"
+
+#: ../src/interface.c:3953 ../src/interface.c:5671
+msgid "Use one tab per indent"
+msgstr "Folosește indentare la un tab"
+
+#: ../src/interface.c:3957 ../src/interface.c:5682
+#, fuzzy
+msgid "Detect width from file"
+msgstr "Determină din fișier"
+
+#: ../src/interface.c:3962 ../src/interface.c:5687
+#, fuzzy
+msgid ""
+"Whether to detect the indentation width from file contents when a file is "
+"opened"
+msgstr ""
+"Dacă să detectez tipul de indentare din conținutul fișierului la deschiderea "
+"acestuia."
+
+#: ../src/interface.c:3964 ../src/interface.c:4254 ../src/interface.c:5675
+msgid "Type:"
+msgstr "Tip:"
+
+#: ../src/interface.c:3971
 #, fuzzy
 msgid "Tab key indents"
 msgstr "Indentare inteligentă"
 
-#: ../src/interface.c:3883
+#: ../src/interface.c:3974
 msgid ""
 "Pressing tab/shift-tab indents/unindents instead of inserting a tab character"
 msgstr ""
 
-#: ../src/interface.c:3885
+#: ../src/interface.c:3976
 msgid "<b>Indentation</b>"
 msgstr "<b>Indentare</b>"
 
-#: ../src/interface.c:3890 ../src/interface.c:5499
+#: ../src/interface.c:3981 ../src/interface.c:5689
 #, fuzzy
 msgid "Indentation"
 msgstr "<b>Indentare</b>"
 
-#: ../src/interface.c:3913
+#: ../src/interface.c:4004
 msgid "Snippet completion"
 msgstr ""
 
-#: ../src/interface.c:3916
+#: ../src/interface.c:4007
 msgid ""
 "Type a defined short character sequence and complete it to a more complex "
 "string using a single keypress"
 msgstr ""
 
-#: ../src/interface.c:3918
+#: ../src/interface.c:4009
 #, fuzzy
 msgid "XML/HTML tag auto-closing"
 msgstr "Completare automată etichete XML"
 
-#: ../src/interface.c:3921
+#: ../src/interface.c:4012
 msgid "Insert matching closing tag for XML/HTML"
 msgstr ""
 
-#: ../src/interface.c:3923
+#: ../src/interface.c:4014
 msgid "Automatic continuation of multi-line comments"
 msgstr ""
 
-#: ../src/interface.c:3926
+#: ../src/interface.c:4017
 msgid ""
 "Continue automatically multi-line comments in languages like C, C++ and Java "
 "when a new line is entered inside such a comment"
 msgstr ""
 
-#: ../src/interface.c:3928
+#: ../src/interface.c:4019
 msgid "Autocomplete symbols"
 msgstr ""
 
-#: ../src/interface.c:3931
+#: ../src/interface.c:4022
 msgid ""
 "Automatic completion of known symbols in open files (function names, global "
 "variables, ...)"
@@ -2345,28 +2365,28 @@ msgstr ""
 "Completarea automată a simbolurilor cunoscute în fișierele deschise (nume de "
 "funcții, variabile globale, ...)"
 
-#: ../src/interface.c:3933
+#: ../src/interface.c:4024
 msgid "Autocomplete all words in document"
 msgstr ""
 
-#: ../src/interface.c:3937
+#: ../src/interface.c:4028
 msgid "Drop rest of word on completion"
 msgstr ""
 
-#: ../src/interface.c:3947
+#: ../src/interface.c:4038
 msgid "Max. symbol name suggestions:"
 msgstr ""
 
-#: ../src/interface.c:3954
+#: ../src/interface.c:4045
 msgid "Completion list height:"
 msgstr ""
 
-#: ../src/interface.c:3961
+#: ../src/interface.c:4052
 #, fuzzy
 msgid "Characters to type for autocompletion:"
 msgstr "Caractere de tastat pentru completarea automată:"
 
-#: ../src/interface.c:3974
+#: ../src/interface.c:4065
 #, fuzzy
 msgid ""
 "The amount of characters which are necessary to show the symbol "
@@ -2375,121 +2395,132 @@ msgstr ""
 "Câte caractere sunt necesare pentru a arăta lista de completarea automată a "
 "simbolurilor."
 
-#: ../src/interface.c:3983
+#: ../src/interface.c:4074
 #, fuzzy
 msgid "Display height in rows for the autocompletion list"
 msgstr "Număr de rânduri pentru lista de completarea automată."
 
-#: ../src/interface.c:3992
+#: ../src/interface.c:4083
 #, fuzzy
 msgid "Maximum number of entries to display in the autocompletion list"
 msgstr "Număr de rânduri pentru lista de completarea automată."
 
-#: ../src/interface.c:3995
+#: ../src/interface.c:4086
+msgid "Symbol list update frequency:"
+msgstr ""
+
+#: ../src/interface.c:4099
+msgid ""
+"Minimal delay (in milliseconds) between two automatic updates of the symbol "
+"list. Note that a too short delay may have performance impact, especially "
+"with large files. A delay of 0 disables real-time updates."
+msgstr ""
+
+#: ../src/interface.c:4102
 msgid "<b>Completions</b>"
 msgstr "<b>Completări</b>"
 
-#: ../src/interface.c:4014
+#: ../src/interface.c:4121
 msgid "Parenthesis ( )"
 msgstr ""
 
-#: ../src/interface.c:4019
+#: ../src/interface.c:4126
 msgid "Auto-close parenthesis when typing an opening one"
 msgstr ""
 
-#: ../src/interface.c:4021
+#: ../src/interface.c:4128
 msgid "Single quotes ' '"
 msgstr ""
 
-#: ../src/interface.c:4026
+#: ../src/interface.c:4133
 msgid "Auto-close single quote when typing an opening one"
 msgstr ""
 
-#: ../src/interface.c:4028
+#: ../src/interface.c:4135
 msgid "Curly brackets { }"
 msgstr ""
 
-#: ../src/interface.c:4033
+#: ../src/interface.c:4140
 msgid "Auto-close curly bracket when typing an opening one"
 msgstr ""
 
-#: ../src/interface.c:4035
+#: ../src/interface.c:4142
 msgid "Square brackets [ ]"
 msgstr ""
 
-#: ../src/interface.c:4040
+#: ../src/interface.c:4147
 msgid "Auto-close square-bracket when typing an opening one"
 msgstr ""
 
-#: ../src/interface.c:4042
+#: ../src/interface.c:4149
 msgid "Double quotes \" \""
 msgstr ""
 
-#: ../src/interface.c:4047
+#: ../src/interface.c:4154
 msgid "Auto-close double quote when typing an opening one"
 msgstr ""
 
-#: ../src/interface.c:4049
+#: ../src/interface.c:4156
 msgid "<b>Auto-close quotes and brackets</b>"
 msgstr ""
 
-#: ../src/interface.c:4054
+#: ../src/interface.c:4161
 msgid "Completions"
 msgstr "Completări"
 
-#: ../src/interface.c:4077
+#: ../src/interface.c:4184
 msgid "Invert syntax highlighting colors"
 msgstr "Inversează culorile de evidențiere"
 
-#: ../src/interface.c:4080
+#: ../src/interface.c:4187
 #, fuzzy
 msgid "Invert all colors, by default using white text on a black background"
 msgstr "Folosește text alb pe fundal negru"
 
-#: ../src/interface.c:4082
+#: ../src/interface.c:4189
 msgid "Show indentation guides"
 msgstr "Arată ghidări indentare"
 
-#: ../src/interface.c:4085
+#: ../src/interface.c:4192
 #, fuzzy
 msgid "Shows small dotted lines to help you to use the right indentation"
 msgstr ""
 "Arată linii punctate pentru a te ajuta să folosești indentarea potrivită."
 
-#: ../src/interface.c:4087
+#: ../src/interface.c:4194
 msgid "Show white space"
 msgstr "Arată spațiu albe"
 
-#: ../src/interface.c:4090
+#: ../src/interface.c:4197
 #, fuzzy
 msgid "Marks spaces with dots and tabs with arrows"
 msgstr "Marchează spațiile cu puncte și tab-urile cu săgeți."
 
-#: ../src/interface.c:4092
+#: ../src/interface.c:4199
 msgid "Show line endings"
 msgstr "Arată sfârșiturile de linie"
 
-#: ../src/interface.c:4095
+#: ../src/interface.c:4202
 #, fuzzy
 msgid "Shows the line ending character"
 msgstr "Arată caracterul de sfârșit de linie"
 
-#: ../src/interface.c:4097
+#: ../src/interface.c:4204
 #, fuzzy
 msgid "Show line numbers"
 msgstr "Arată numerele de _linie"
 
-#: ../src/interface.c:4100
+#: ../src/interface.c:4207
 #, fuzzy
 msgid "Shows or hides the Line Number margin"
 msgstr "Arată sau ascunde marginea cu numere de linie."
 
-#: ../src/interface.c:4102
+#: ../src/interface.c:4209
 #, fuzzy
 msgid "Show markers margin"
 msgstr "Arată _marginile de marcare"
 
-#: ../src/interface.c:4105
+#: ../src/interface.c:4212
 #, fuzzy
 msgid ""
 "Shows or hides the small margin right of the line numbers, which is used to "
@@ -2498,141 +2529,141 @@ msgstr ""
 "Comută marginea din dreapta numerelor de linie, folosită pentru marcarea "
 "liniilor."
 
-#: ../src/interface.c:4107
+#: ../src/interface.c:4214
 msgid "Stop scrolling at last line"
 msgstr ""
 
-#: ../src/interface.c:4110
+#: ../src/interface.c:4217
 msgid "Whether to stop scrolling one page past the last line of a document"
 msgstr ""
 
-#: ../src/interface.c:4112
+#: ../src/interface.c:4219
 msgid "<b>Display</b>"
 msgstr "<b>Afișare</b>"
 
-#: ../src/interface.c:4133 ../src/interface.c:5531
+#: ../src/interface.c:4240 ../src/interface.c:5721
 #, fuzzy
 msgid "Column:"
 msgstr "Companie:"
 
-#: ../src/interface.c:4140
+#: ../src/interface.c:4247
 #, fuzzy
 msgid "Color:"
 msgstr "Culoare"
 
-#: ../src/interface.c:4159
+#: ../src/interface.c:4266
 msgid "Sets the color of the long line marker"
 msgstr "Stabilește culoarea marcajului de linie lungă"
 
-#: ../src/interface.c:4160 ../src/toolbar.c:71 ../src/tools.c:722
-#: ../src/vte.c:785 ../src/vte.c:792
+#: ../src/interface.c:4267 ../src/toolbar.c:72 ../src/tools.c:931
+#: ../src/vte.c:794 ../src/vte.c:801
 msgid "Color Chooser"
 msgstr "Selector culoare"
 
-#: ../src/interface.c:4168
+#: ../src/interface.c:4275
 msgid ""
 "The long line marker is a thin vertical line in the editor, it helps to mark "
 "long lines, or as a hint to break the line. Set this value to a value "
 "greater than 0 to specify the column where it should appear."
 msgstr ""
 
-#: ../src/interface.c:4178
+#: ../src/interface.c:4285
 msgid "Line"
 msgstr "Linie"
 
-#: ../src/interface.c:4181
+#: ../src/interface.c:4288
 msgid ""
 "Prints a vertical line in the editor window at the given cursor position "
 "(see below)"
 msgstr ""
 
-#: ../src/interface.c:4185
+#: ../src/interface.c:4292
 msgid "Background"
 msgstr "Fundal"
 
-#: ../src/interface.c:4188
+#: ../src/interface.c:4295
 msgid ""
 "The background color of characters after the given cursor position (see "
 "below) changed to the color set below, (this is recommended if you use "
 "proportional fonts)"
 msgstr ""
 
-#: ../src/interface.c:4192
+#: ../src/interface.c:4299
 #, fuzzy
 msgid "Enabled"
 msgstr "_Activează"
 
-#: ../src/interface.c:4198 ../src/interface.c:5571
+#: ../src/interface.c:4305 ../src/interface.c:5761
 msgid "<b>Long line marker</b>"
 msgstr "<b>Marcaj linie lungă</b>"
 
-#: ../src/interface.c:4217 ../src/interface.c:5538
+#: ../src/interface.c:4324 ../src/interface.c:5728
 msgid "Disabled"
 msgstr "Dezactivat"
 
-#: ../src/interface.c:4220
+#: ../src/interface.c:4327
 msgid "Do not show virtual spaces"
 msgstr ""
 
-#: ../src/interface.c:4224
+#: ../src/interface.c:4331
 msgid "Only for rectangular selections"
 msgstr ""
 
-#: ../src/interface.c:4227
+#: ../src/interface.c:4334
 msgid ""
 "Only show virtual spaces beyond the end of lines when drawing a rectangular "
 "selection"
 msgstr ""
 
-#: ../src/interface.c:4231
+#: ../src/interface.c:4338
 msgid "Always"
 msgstr ""
 
-#: ../src/interface.c:4234
+#: ../src/interface.c:4341
 #, fuzzy
 msgid "Always show virtual spaces beyond the end of lines"
 msgstr "Șterge dâra de spații și tab-uri de la sfârșitul liniilor."
 
-#: ../src/interface.c:4238
+#: ../src/interface.c:4345
 #, fuzzy
 msgid "<b>Virtual spaces</b>"
 msgstr "<b>Căi unelte</b>"
 
-#: ../src/interface.c:4243
+#: ../src/interface.c:4350
 msgid "Display"
 msgstr "Afișare"
 
-#: ../src/interface.c:4274
+#: ../src/interface.c:4381
 msgid "Open new documents from the command-line"
 msgstr ""
 
-#: ../src/interface.c:4277
+#: ../src/interface.c:4384
 msgid "Start a new file for each command-line filename that doesn't exist"
 msgstr ""
 
-#: ../src/interface.c:4291
+#: ../src/interface.c:4398
 msgid "Default end of line characters:"
 msgstr "Caracter sfârșit de linie implicit:"
 
-#: ../src/interface.c:4298
+#: ../src/interface.c:4405
 msgid "<b>New files</b>"
 msgstr "<b>Fișiere noi</b>"
 
-#: ../src/interface.c:4321
+#: ../src/interface.c:4428
 msgid "Default encoding (new files):"
 msgstr "Codare implicită (fișiere noi):"
 
-#: ../src/interface.c:4329
+#: ../src/interface.c:4436
 #, fuzzy
 msgid "Sets the default encoding for newly created files"
 msgstr "Stabilește codarea implicită pentru fișierele proaspăt create."
 
-#: ../src/interface.c:4335
+#: ../src/interface.c:4442
 #, fuzzy
 msgid "Use fixed encoding when opening non-Unicode files"
 msgstr "Folosește codare fixă la deschiderea de fișiere"
 
-#: ../src/interface.c:4338
+#: ../src/interface.c:4445
 #, fuzzy
 msgid ""
 "This option disables the automatic detection of the file encoding when "
@@ -2643,95 +2674,95 @@ msgstr ""
 "deschiderea fișierelor și deschide fișierul cu codarea specificată (nu este "
 "necesară în mod normal)"
 
-#: ../src/interface.c:4344
+#: ../src/interface.c:4451
 #, fuzzy
 msgid "Default encoding (existing non-Unicode files):"
 msgstr "Codare implicită (fișiere existente):"
 
-#: ../src/interface.c:4352
+#: ../src/interface.c:4459
 #, fuzzy
 msgid "Sets the default encoding for opening existing non-Unicode files"
 msgstr "Stabilește codarea implicită pentru deschiderea fișierelor existente."
 
-#: ../src/interface.c:4358
+#: ../src/interface.c:4465
 msgid "<b>Encodings</b>"
 msgstr "Codări"
 
-#: ../src/interface.c:4377
+#: ../src/interface.c:4484
 msgid "Ensure new line at file end"
 msgstr "Asigură linie nouă la sfârșitul fișierului"
 
-#: ../src/interface.c:4380
+#: ../src/interface.c:4487
 msgid "Ensures that at the end of the file is a new line"
 msgstr "Asigură că la sfârșitul fișierului este o linie nouă"
 
-#: ../src/interface.c:4382
+#: ../src/interface.c:4489
 #, fuzzy
 msgid "Ensure consistent line endings"
 msgstr "Asigură linie nouă la sfârșitul fișierului"
 
-#: ../src/interface.c:4385
+#: ../src/interface.c:4492
 msgid ""
 "Ensures that newline characters always get converted before saving, avoiding "
 "mixed line endings in the same file"
 msgstr ""
 
-#: ../src/interface.c:4387
+#: ../src/interface.c:4494
 #, fuzzy
 msgid "Strip trailing spaces and tabs"
 msgstr "Elimină dâra de spații"
 
-#: ../src/interface.c:4390
+#: ../src/interface.c:4497
 msgid "Removes trailing spaces and tabs and the end of lines"
 msgstr "Șterge dâra de spații și tab-uri de la sfârșitul liniilor."
 
-#: ../src/interface.c:4392 ../src/keybindings.c:518
+#: ../src/interface.c:4499 ../src/keybindings.c:519
 msgid "Replace tabs by space"
 msgstr "Înlocuiește tab-urile cu spații"
 
-#: ../src/interface.c:4395
+#: ../src/interface.c:4502
 #, fuzzy
 msgid "Replaces all tabs in document by spaces"
 msgstr "Înlocuiește toate tab-urile în document cu spații."
 
-#: ../src/interface.c:4397
+#: ../src/interface.c:4504
 msgid "<b>Saving files</b>"
 msgstr "<b>Salvare fișiere</b>"
 
-#: ../src/interface.c:4422
+#: ../src/interface.c:4529
 msgid "Recent files list length:"
 msgstr "Lungime listă fișiere recente:"
 
-#: ../src/interface.c:4436
+#: ../src/interface.c:4543
 #, fuzzy
 msgid "Specifies the number of files which are stored in the Recent files list"
 msgstr ""
 "Specifică numărul de fișiere care sunt reținute în lista de fișiere recente."
 
-#: ../src/interface.c:4440
+#: ../src/interface.c:4547
 msgid "Disk check timeout:"
 msgstr ""
 
-#: ../src/interface.c:4453
+#: ../src/interface.c:4560
 msgid ""
 "How often to check for changes to document files on disk, in seconds. Zero "
 "disables checking."
 msgstr ""
 
-#: ../src/interface.c:4462 ../src/prefs.c:1559 ../src/symbols.c:605
-#: ../plugins/filebrowser.c:1112
+#: ../src/interface.c:4569 ../src/prefs.c:1573 ../src/symbols.c:682
+#: ../plugins/filebrowser.c:1133
 msgid "Files"
 msgstr "Fișiere"
 
-#: ../src/interface.c:4495
+#: ../src/interface.c:4602
 msgid "Terminal:"
 msgstr "Terminal:"
 
-#: ../src/interface.c:4502
+#: ../src/interface.c:4609
 msgid "Browser:"
 msgstr "Navigator:"
 
-#: ../src/interface.c:4514
+#: ../src/interface.c:4621
 msgid ""
 "A terminal emulator like xterm, gnome-terminal or konsole (should accept the "
 "-e argument)"
@@ -2739,23 +2770,23 @@ msgstr ""
 "Un emulator de terminal ca xterm, gnome-terminal sau konsole (trebuie să "
 "accepte parametrul -e)"
 
-#: ../src/interface.c:4521
+#: ../src/interface.c:4628
 msgid "Path (and possibly additional arguments) to your favorite browser"
 msgstr "Calee (eventual parametrii adiționali) către navigatorul favorit"
 
-#: ../src/interface.c:4543
+#: ../src/interface.c:4650
 msgid "Grep:"
 msgstr "Grep:"
 
-#: ../src/interface.c:4566
+#: ../src/interface.c:4673
 msgid "<b>Tool paths</b>"
 msgstr "<b>Căi unelte</b>"
 
-#: ../src/interface.c:4587
+#: ../src/interface.c:4694
 msgid "Context action:"
 msgstr "Acțiune contextuală:"
 
-#: ../src/interface.c:4598
+#: ../src/interface.c:4705
 #, c-format
 msgid ""
 "Context action command. The currently selected word can be used with %s. It "
@@ -2765,67 +2796,68 @@ msgstr ""
 "Comandă acțiune contextuală. Cuvântul selectat poate fi referit prin %s. "
 "Poate apărea oriunde în comanda dată și va fi înlocuit înainte de execuție."
 
-#: ../src/interface.c:4611
+#: ../src/interface.c:4718
 msgid "<b>Commands</b>"
 msgstr "<b>Comenzi</b>"
 
-#: ../src/interface.c:4616 ../src/keybindings.c:556 ../src/prefs.c:1561
+#: ../src/interface.c:4723 ../src/keybindings.c:559 ../src/prefs.c:1575
 msgid "Tools"
 msgstr "Unelte"
 
-#: ../src/interface.c:4654
+#: ../src/interface.c:4761
 msgid "email address of the developer"
 msgstr "adresa email a dezvoltatorului"
 
-#: ../src/interface.c:4661
+#: ../src/interface.c:4768
 msgid "Initials of the developer name"
 msgstr "Inițialele dezvoltatorului"
 
-#: ../src/interface.c:4663
+#: ../src/interface.c:4770
 msgid "Initial version:"
 msgstr "Versiunea inițială:"
 
-#: ../src/interface.c:4675
+#: ../src/interface.c:4782
 msgid "Version number, which a new file initially has"
 msgstr "Numărul de versiune, pe care îl are un fișier nou"
 
-#: ../src/interface.c:4682
+#: ../src/interface.c:4789
 msgid "Company name"
 msgstr "Nume companie"
 
-#: ../src/interface.c:4684
+#: ../src/interface.c:4791
 msgid "Developer:"
 msgstr "Dezvoltator:"
 
-#: ../src/interface.c:4691
+#: ../src/interface.c:4798
 msgid "Company:"
 msgstr "Companie:"
 
-#: ../src/interface.c:4698
+#: ../src/interface.c:4805
 msgid "Mail address:"
 msgstr "Adresă mail:"
 
-#: ../src/interface.c:4705
+#: ../src/interface.c:4812
 msgid "Initials:"
 msgstr "Inițiale:"
 
-#: ../src/interface.c:4717
+#: ../src/interface.c:4824
 msgid "The name of the developer"
 msgstr "Numele dezvoltatorului"
 
-#: ../src/interface.c:4719
+#: ../src/interface.c:4826
 msgid "Year:"
 msgstr "An:"
 
-#: ../src/interface.c:4726
+#: ../src/interface.c:4833
 msgid "Date:"
 msgstr "Data:"
 
-#: ../src/interface.c:4733
-msgid "Date & Time:"
+#: ../src/interface.c:4840
+#, fuzzy
+msgid "Date & time:"
 msgstr "Data & ora:"
 
-#: ../src/interface.c:4745
+#: ../src/interface.c:4852
 #, fuzzy
 msgid ""
 "Specify a format for the the {datetime} wildcard. You can use any conversion "
@@ -2834,7 +2866,7 @@ msgstr ""
 "Introduceți un format de dată și timp. Puteți folosi oricare dintre "
 "specificatorii de conversie folosiți cu funcția ANSI C strftime."
 
-#: ../src/interface.c:4752
+#: ../src/interface.c:4859
 #, fuzzy
 msgid ""
 "Specify a format for the the {year} wildcard. You can use any conversion "
@@ -2843,7 +2875,7 @@ msgstr ""
 "Introduceți un format de dată și timp. Puteți folosi oricare dintre "
 "specificatorii de conversie folosiți cu funcția ANSI C strftime."
 
-#: ../src/interface.c:4759
+#: ../src/interface.c:4866
 #, fuzzy
 msgid ""
 "Specify a format for the the {date} wildcard. You can use any conversion "
@@ -2852,55 +2884,55 @@ msgstr ""
 "Introduceți un format de dată și timp. Puteți folosi oricare dintre "
 "specificatorii de conversie folosiți cu funcția ANSI C strftime."
 
-#: ../src/interface.c:4761
+#: ../src/interface.c:4868
 msgid "<b>Template data</b>"
 msgstr "<b>Date șablon</b>"
 
-#: ../src/interface.c:4766 ../src/prefs.c:1563
+#: ../src/interface.c:4873 ../src/prefs.c:1577
 msgid "Templates"
 msgstr "Șabloane"
 
-#: ../src/interface.c:4804
+#: ../src/interface.c:4911
 msgid "C_hange"
 msgstr "Sc_himbă"
 
-#: ../src/interface.c:4808
+#: ../src/interface.c:4915
 msgid "<b>Keyboard shortcuts</b>"
 msgstr "<b>Scurtături</b>"
 
-#: ../src/interface.c:4813 ../src/prefs.c:1565
+#: ../src/interface.c:4920 ../src/prefs.c:1579
 msgid "Keybindings"
 msgstr "Combinații de taste"
 
-#: ../src/interface.c:4847
+#: ../src/interface.c:4953
 msgid "Command:"
 msgstr "Comandă:"
 
-#: ../src/interface.c:4854
+#: ../src/interface.c:4960
 #, fuzzy, c-format
 msgid "Path to the command for printing files (use %f for the filename)"
 msgstr ""
 "Cale către comanda pentru imprimare fișiere (folosiți %f pentru numele de "
 "fișier)."
 
-#: ../src/interface.c:4864
+#: ../src/interface.c:4970
 msgid "Use an external command for printing"
 msgstr "Folosește o comandă externă pentru imprimare"
 
-#: ../src/interface.c:4884 ../src/printing.c:381
+#: ../src/interface.c:4990 ../src/printing.c:378
 msgid "Print line numbers"
 msgstr "Imprimă numere de linie"
 
-#: ../src/interface.c:4887 ../src/printing.c:383
+#: ../src/interface.c:4993 ../src/printing.c:380
 #, fuzzy
 msgid "Add line numbers to the printed page"
 msgstr "Adaugă numerele de linie la pagina imprimată"
 
-#: ../src/interface.c:4889 ../src/printing.c:386
+#: ../src/interface.c:4995 ../src/printing.c:383
 msgid "Print page numbers"
 msgstr "Imprimă numerele de pagină"
 
-#: ../src/interface.c:4892 ../src/printing.c:388
+#: ../src/interface.c:4998 ../src/printing.c:385
 #, fuzzy
 msgid ""
 "Add page numbers at the bottom of each page. It takes 2 lines of the page."
@@ -2908,11 +2940,11 @@ msgstr ""
 "Adaugă numerele de pagină la baza fiecărei pagini. Ocupă două linii din "
 "pagină."
 
-#: ../src/interface.c:4894 ../src/printing.c:391
+#: ../src/interface.c:5000 ../src/printing.c:388
 msgid "Print page header"
 msgstr "Imprimă antetul paginii"
 
-#: ../src/interface.c:4897 ../src/printing.c:393
+#: ../src/interface.c:5003 ../src/printing.c:390
 #, fuzzy
 msgid ""
 "Add a little header to every page containing the page number, the filename "
@@ -2921,58 +2953,72 @@ msgstr ""
 "Adaugă un mic antet la fiecare pagină conținând numărul de pagină, numele de "
 "fișier și data curentă (vezi mai jos). Ocupă 3 linii din pagină."
 
-#: ../src/interface.c:4914 ../src/printing.c:409
+#: ../src/interface.c:5020 ../src/printing.c:406
 msgid "Use the basename of the printed file"
 msgstr "Folosește numele fișierului imprimat"
 
-#: ../src/interface.c:4917
+#: ../src/interface.c:5023
 #, fuzzy
 msgid "Print only the basename (without the path) of the printed file"
 msgstr "Imprimă numai numele (fără cale) fișierului imprimat."
 
-#: ../src/interface.c:4923 ../src/printing.c:417
+#: ../src/interface.c:5029 ../src/printing.c:414
 msgid "Date format:"
 msgstr "Format dată:"
 
-#: ../src/interface.c:4930 ../src/printing.c:423
+#: ../src/interface.c:5036 ../src/printing.c:420
 msgid ""
 "Specify a format for the date and time stamp which is added to the page "
 "header on each page. You can use any conversion specifiers which can be used "
 "with the ANSI C strftime function."
 msgstr ""
 
-#: ../src/interface.c:4933
+#: ../src/interface.c:5039
 msgid "Use native GTK printing"
 msgstr "Folosește imprimare GTK nativă"
 
-#: ../src/interface.c:4939
+#: ../src/interface.c:5045
 #, fuzzy
 msgid "<b>Printing</b>"
 msgstr "<b>Codare:</b>"
 
-#: ../src/interface.c:4944 ../src/prefs.c:1567
+#: ../src/interface.c:5050 ../src/prefs.c:1581
 msgid "Printing"
 msgstr "Imprimare"
 
-#: ../src/interface.c:5406
+#: ../src/interface.c:5097
+msgid "<i>Warning: read the manual before changing these preferences.</i>"
+msgstr ""
+
+#: ../src/interface.c:5102
+#, fuzzy
+msgid "<b>Various preferences</b>"
+msgstr "<b>Căi unelte</b>"
+
+#: ../src/interface.c:5107 ../src/prefs.c:1583
+#, fuzzy
+msgid "Various"
+msgstr "A_nterior"
+
+#: ../src/interface.c:5589
 msgid "Project Properties"
 msgstr "Proprietăți proiect"
 
-#: ../src/interface.c:5524
+#: ../src/interface.c:5714
 #, fuzzy
 msgid "Display:"
 msgstr "Afișare"
 
-#: ../src/interface.c:5546
+#: ../src/interface.c:5736
 #, fuzzy
 msgid "Custom"
 msgstr "Taie"
 
-#: ../src/interface.c:5554
+#: ../src/interface.c:5744
 msgid "Use global settings"
 msgstr ""
 
-#: ../src/keybindings.c:220 ../src/plugins.c:1187
+#: ../src/keybindings.c:220 ../src/plugins.c:1248 ../src/symbols.c:709
 msgid "File"
 msgstr "Fișier"
 
@@ -2992,7 +3038,7 @@ msgstr "Deschide fișierul selectat"
 msgid "Save"
 msgstr "Salvează"
 
-#: ../src/keybindings.c:232
+#: ../src/keybindings.c:232 ../src/toolbar.c:57
 msgid "Save as"
 msgstr "Salvează ca"
 
@@ -3020,7 +3066,7 @@ msgstr "Reîncarcă fișier"
 msgid "Re-open last closed tab"
 msgstr ""
 
-#: ../src/keybindings.c:248 ../src/project.c:503
+#: ../src/keybindings.c:248 ../src/project.c:506
 msgid "Project"
 msgstr "Proiect"
 
@@ -3185,331 +3231,336 @@ msgstr "Inserează"
 msgid "Insert date"
 msgstr "Inserează dată"
 
-#: ../src/keybindings.c:376
+#: ../src/keybindings.c:377
 msgid "Insert New Line Before Current"
 msgstr ""
 
-#: ../src/keybindings.c:378
+#: ../src/keybindings.c:379
 msgid "Insert New Line After Current"
 msgstr ""
 
-#: ../src/keybindings.c:380
+#: ../src/keybindings.c:381
 msgid "Settings"
 msgstr "Setări"
 
-#: ../src/keybindings.c:388 ../src/toolbar.c:381
+#: ../src/keybindings.c:389 ../src/toolbar.c:382
 msgid "Search"
 msgstr "Căutare"
 
-#: ../src/keybindings.c:391 ../src/search.c:398
+#: ../src/keybindings.c:392 ../src/search.c:465
 msgid "Find"
 msgstr "Caută"
 
-#: ../src/keybindings.c:393
+#: ../src/keybindings.c:394
 msgid "Find Next"
 msgstr "Caută următor"
 
-#: ../src/keybindings.c:395
+#: ../src/keybindings.c:396
 msgid "Find Previous"
 msgstr "Caută precedent"
 
-#: ../src/keybindings.c:402 ../src/search.c:552
+#: ../src/keybindings.c:403 ../src/search.c:622
 msgid "Replace"
 msgstr "Înlocuiește"
 
-#: ../src/keybindings.c:404 ../src/search.c:724
+#: ../src/keybindings.c:405 ../src/search.c:876
 msgid "Find in Files"
 msgstr "Caută în fișiere"
 
-#: ../src/keybindings.c:407
+#: ../src/keybindings.c:408
 msgid "Next Message"
 msgstr "Mesajul următor"
 
-#: ../src/keybindings.c:409
+#: ../src/keybindings.c:410
 msgid "Previous Message"
 msgstr "Mesajul anterior"
 
-#: ../src/keybindings.c:411
+#: ../src/keybindings.c:412
 msgid "Find Usage"
 msgstr "Caută folosiri"
 
-#: ../src/keybindings.c:413
+#: ../src/keybindings.c:414
 #, fuzzy
 msgid "Find Document Usage"
 msgstr "Caută folosiri"
 
-#: ../src/keybindings.c:417
+#: ../src/keybindings.c:418
 msgid "Go to"
 msgstr "Mergi la"
 
-#: ../src/keybindings.c:420 ../src/toolbar.c:67
+#: ../src/keybindings.c:421 ../src/toolbar.c:68
 msgid "Navigate back a location"
 msgstr "Mergi înapoi cu o locație"
 
-#: ../src/keybindings.c:422 ../src/toolbar.c:68
+#: ../src/keybindings.c:423 ../src/toolbar.c:69
 msgid "Navigate forward a location"
 msgstr "Mergi înainte cu o locație"
 
-#: ../src/keybindings.c:427
+#: ../src/keybindings.c:428
 msgid "Go to matching brace"
 msgstr ""
 
-#: ../src/keybindings.c:430
+#: ../src/keybindings.c:431
 msgid "Toggle marker"
 msgstr ""
 
-#: ../src/keybindings.c:438
+#: ../src/keybindings.c:439
 msgid "Go to Tag Definition"
 msgstr "Mergi la definiția etichetei"
 
-#: ../src/keybindings.c:440
+#: ../src/keybindings.c:441
 msgid "Go to Tag Declaration"
 msgstr "Mergi la declarația etichetei"
 
-#: ../src/keybindings.c:442
+#: ../src/keybindings.c:443
 msgid "Go to Start of Line"
 msgstr "Mergi la începutul liniei"
 
-#: ../src/keybindings.c:444
+#: ../src/keybindings.c:445
 msgid "Go to End of Line"
 msgstr "Mergi la finalul liniei"
 
-#: ../src/keybindings.c:446
+#: ../src/keybindings.c:447
 #, fuzzy
 msgid "Go to End of Display Line"
 msgstr "Mergi la finalul liniei"
 
-#: ../src/keybindings.c:448
+#: ../src/keybindings.c:449
 msgid "Go to Previous Word Part"
 msgstr ""
 
-#: ../src/keybindings.c:450
+#: ../src/keybindings.c:451
 msgid "Go to Next Word Part"
 msgstr ""
 
-#: ../src/keybindings.c:452
+#: ../src/keybindings.c:453
 msgid "View"
 msgstr ""
 
-#: ../src/keybindings.c:455
+#: ../src/keybindings.c:456
 msgid "Toggle All Additional Widgets"
 msgstr "Comută toate controalele adiționale"
 
-#: ../src/keybindings.c:458
+#: ../src/keybindings.c:459
 msgid "Fullscreen"
 msgstr "Ecran complet"
 
-#: ../src/keybindings.c:460
+#: ../src/keybindings.c:461
 msgid "Toggle Messages Window"
 msgstr "Comută fereastra de mesaje"
 
-#: ../src/keybindings.c:463
+#: ../src/keybindings.c:464
 msgid "Toggle Sidebar"
 msgstr "Comută bara laterală"
 
-#: ../src/keybindings.c:465
+#: ../src/keybindings.c:466
 msgid "Zoom In"
 msgstr "Mărește"
 
-#: ../src/keybindings.c:467
+#: ../src/keybindings.c:468
 msgid "Zoom Out"
 msgstr "Micșorează"
 
-#: ../src/keybindings.c:469
+#: ../src/keybindings.c:470
 #, fuzzy
 msgid "Zoom Reset"
 msgstr "Micșorează"
 
-#: ../src/keybindings.c:471
+#: ../src/keybindings.c:472
 msgid "Focus"
 msgstr "Focalizează"
 
-#: ../src/keybindings.c:474
+#: ../src/keybindings.c:475
 msgid "Switch to Editor"
 msgstr "Treci la editor"
 
-#: ../src/keybindings.c:476
+#: ../src/keybindings.c:477
 msgid "Switch to Search Bar"
 msgstr "Treci la bara de căutare"
 
-#: ../src/keybindings.c:478
+#: ../src/keybindings.c:479
 #, fuzzy
 msgid "Switch to Message Window"
 msgstr "Arată _fereastra de mesaje"
 
-#: ../src/keybindings.c:480
+#: ../src/keybindings.c:481
 msgid "Switch to Compiler"
 msgstr "Comută la compilator"
 
-#: ../src/keybindings.c:482
+#: ../src/keybindings.c:483
 #, fuzzy
 msgid "Switch to Messages"
 msgstr "Treci la bara laterală"
 
-#: ../src/keybindings.c:484
+#: ../src/keybindings.c:485
 msgid "Switch to Scribble"
 msgstr "Treci la scribble"
 
-#: ../src/keybindings.c:486
+#: ../src/keybindings.c:487
 msgid "Switch to VTE"
 msgstr "Treci la VTE"
 
-#: ../src/keybindings.c:488
+#: ../src/keybindings.c:489
 msgid "Switch to Sidebar"
 msgstr "Treci la bara laterală"
 
-#: ../src/keybindings.c:490
+#: ../src/keybindings.c:491
 #, fuzzy
 msgid "Switch to Sidebar Symbol List"
 msgstr "Treci la bara laterală"
 
-#: ../src/keybindings.c:492
+#: ../src/keybindings.c:493
 #, fuzzy
 msgid "Switch to Sidebar Document List"
 msgstr "Treci la documentul din stânga"
 
-#: ../src/keybindings.c:494
+#: ../src/keybindings.c:495
 msgid "Notebook tab"
 msgstr ""
 
-#: ../src/keybindings.c:497
+#: ../src/keybindings.c:498
 msgid "Switch to left document"
 msgstr "Treci la documentul din stânga"
 
-#: ../src/keybindings.c:499
+#: ../src/keybindings.c:500
 msgid "Switch to right document"
 msgstr "Treci la documentul din dreapta"
 
-#: ../src/keybindings.c:501
+#: ../src/keybindings.c:502
 msgid "Switch to last used document"
 msgstr "Treci la ultimul document folosit"
 
-#: ../src/keybindings.c:503
+#: ../src/keybindings.c:504
 msgid "Move document left"
 msgstr "Mută documentul în stânga"
 
-#: ../src/keybindings.c:505
+#: ../src/keybindings.c:506
 msgid "Move document right"
 msgstr "Mută documentul în dreapta"
 
-#: ../src/keybindings.c:507
+#: ../src/keybindings.c:508
 msgid "Move document first"
 msgstr "Mută documentul la început"
 
-#: ../src/keybindings.c:509
+#: ../src/keybindings.c:510
 msgid "Move document last"
 msgstr "Mută documentul la final"
 
-#: ../src/keybindings.c:511
+#: ../src/keybindings.c:512
 msgid "Document"
 msgstr "Document"
 
-#: ../src/keybindings.c:514
+#: ../src/keybindings.c:515
 #, fuzzy
 msgid "Toggle Line wrapping"
 msgstr "Încadrare linii"
 
-#: ../src/keybindings.c:516
+#: ../src/keybindings.c:517
 #, fuzzy
 msgid "Toggle Line breaking"
 msgstr "Încadrare linii"
 
-#: ../src/keybindings.c:520
+#: ../src/keybindings.c:521
 #, fuzzy
 msgid "Replace spaces by tabs"
 msgstr "Î_nlocuiește tab-urile cu spații"
 
-#: ../src/keybindings.c:522
+#: ../src/keybindings.c:523
 #, fuzzy
 msgid "Toggle current fold"
 msgstr "Selectează cuvântul curent"
 
-#: ../src/keybindings.c:524
+#: ../src/keybindings.c:525
 msgid "Fold all"
 msgstr "Restrânge toate"
 
-#: ../src/keybindings.c:526
+#: ../src/keybindings.c:527
 msgid "Unfold all"
 msgstr "Extinde toate"
 
-#: ../src/keybindings.c:528
+#: ../src/keybindings.c:529
 msgid "Reload symbol list"
 msgstr "Reîncarcă lista de simboluri"
 
-#: ../src/keybindings.c:530
+#: ../src/keybindings.c:531
 #, fuzzy
 msgid "Remove Markers"
 msgstr "Șterge _marcatori"
 
-#: ../src/keybindings.c:532
+#: ../src/keybindings.c:533
 #, fuzzy
 msgid "Remove Error Indicators"
 msgstr "Șterge _indicatori de eroare"
 
-#: ../src/keybindings.c:534 ../src/keybindings.c:539 ../src/project.c:476
-#: ../src/ui_utils.c:1912
+#: ../src/keybindings.c:535
+#, fuzzy
+msgid "Remove Markers and Error Indicators"
+msgstr "Șterge _indicatori de eroare"
+
+#: ../src/keybindings.c:537 ../src/keybindings.c:542 ../src/project.c:484
+#: ../src/ui_utils.c:1947
 msgid "Build"
 msgstr "Construiește"
 
-#: ../src/keybindings.c:537 ../src/toolbar.c:69
+#: ../src/keybindings.c:540 ../src/toolbar.c:70
 msgid "Compile"
 msgstr "Compilează"
 
-#: ../src/keybindings.c:541
+#: ../src/keybindings.c:544
 msgid "Make all"
 msgstr ""
 
-#: ../src/keybindings.c:544
+#: ../src/keybindings.c:547
 msgid "Make custom target"
 msgstr ""
 
-#: ../src/keybindings.c:546
+#: ../src/keybindings.c:549
 msgid "Make object"
 msgstr ""
 
-#: ../src/keybindings.c:548
+#: ../src/keybindings.c:551
 msgid "Next error"
 msgstr "Eroarea următoare"
 
-#: ../src/keybindings.c:550
+#: ../src/keybindings.c:553
 msgid "Previous error"
 msgstr "Eroarea anterioară"
 
-#: ../src/keybindings.c:552
+#: ../src/keybindings.c:555
 msgid "Run"
 msgstr "Rulează"
 
-#: ../src/keybindings.c:554
+#: ../src/keybindings.c:557
 msgid "Build options"
 msgstr "Opțiuni construcție"
 
-#: ../src/keybindings.c:559
+#: ../src/keybindings.c:562
 msgid "Show Color Chooser"
 msgstr "Arată Selector culoare"
 
-#: ../src/keybindings.c:561 ../src/keybindings.c:564
+#: ../src/keybindings.c:564 ../src/keybindings.c:567
 msgid "Help"
 msgstr "Ajutor"
 
-#: ../src/keybindings.c:846
+#: ../src/keybindings.c:849
 msgid "Keyboard Shortcuts"
 msgstr "Scurtături"
 
-#: ../src/keybindings.c:858
+#: ../src/keybindings.c:861
 msgid "The following keyboard shortcuts are configurable:"
 msgstr "Următoarele scurtături sunt configurabile:"
 
-#: ../src/keybindings.c:1756
+#: ../src/keybindings.c:1762
 #, fuzzy
 msgid "Switch to Document"
 msgstr "Treci la documentul din stânga"
 
-#: ../src/keyfile.c:855
+#: ../src/keyfile.c:885
 msgid "Type here what you want, use it as a notice/scratch board"
 msgstr ""
 "Scrieți orice doriți, folosiți spațiul ca pe o zonă de notițe/mâzgălituri"
 
-#: ../src/keyfile.c:1063
+#: ../src/keyfile.c:1091
 msgid "Failed to load one or more session files."
 msgstr "Încărcarea unuia sau mai multor fișiere de sesiune eșuată."
 
@@ -3522,103 +3573,103 @@ msgstr "Mesaje depanare"
 msgid "Cl_ear"
 msgstr "_Căutare"
 
-#: ../src/main.c:131
+#: ../src/main.c:128
 msgid ""
 "Set initial column number for the first opened file (useful in conjunction "
 "with --line)"
 msgstr ""
 
-#: ../src/main.c:132
+#: ../src/main.c:129
 msgid "Use an alternate configuration directory"
 msgstr "Folosește un dosar de configurare alternativ"
 
 # FUZZY
-#: ../src/main.c:133
+#: ../src/main.c:130
 msgid "Print internal filetype names"
 msgstr "Imprimă numele interne de tipuri de fișier"
 
-#: ../src/main.c:134
+#: ../src/main.c:131
 msgid "Generate global tags file (see documentation)"
 msgstr "Generează fișier global de etichete (vezi documentația)"
 
-#: ../src/main.c:135
+#: ../src/main.c:132
 msgid "Don't preprocess C/C++ files when generating tags"
 msgstr ""
 
-#: ../src/main.c:137
+#: ../src/main.c:134
 msgid "Don't open files in a running instance, force opening a new instance"
 msgstr ""
 "Nu deschide fișierele în instanța curentă, forțează deschiderea unei noi "
 "instanțe"
 
-#: ../src/main.c:138
+#: ../src/main.c:135
 msgid ""
 "Use this socket filename for communication with a running Geany instance"
 msgstr ""
 
-#: ../src/main.c:139
+#: ../src/main.c:136
 msgid "Return a list of open documents in a running Geany instance"
 msgstr ""
 
-#: ../src/main.c:141
+#: ../src/main.c:138
 msgid "Set initial line number for the first opened file"
 msgstr ""
 
-#: ../src/main.c:142
+#: ../src/main.c:139
 msgid "Don't show message window at startup"
 msgstr "Nu arăta fereastra de mesaje la pornire"
 
-#: ../src/main.c:143
+#: ../src/main.c:140
 msgid "Don't load auto completion data (see documentation)"
 msgstr "Nu încărca datele de completare automată (vezi documentația)"
 
-#: ../src/main.c:145
+#: ../src/main.c:142
 msgid "Don't load plugins"
 msgstr "Nu încărca module"
 
-#: ../src/main.c:147
+#: ../src/main.c:144
 msgid "Print Geany's installation prefix"
 msgstr "Afișează prefixul de instalare al Geany"
 
-#: ../src/main.c:148
+#: ../src/main.c:145
 msgid "Don't load the previous session's files"
 msgstr "Nu încărca fișierele din sesiunea anterioară"
 
-#: ../src/main.c:150
+#: ../src/main.c:147
 msgid "Don't load terminal support"
 msgstr "Nu încărca suport pentru terminal"
 
-#: ../src/main.c:151
+#: ../src/main.c:148
 msgid "Filename of libvte.so"
 msgstr "Numele de fișier pentru libvte.so"
 
-#: ../src/main.c:153
+#: ../src/main.c:150
 msgid "Be verbose"
 msgstr ""
 
-#: ../src/main.c:154
+#: ../src/main.c:151
 msgid "Show version and exit"
 msgstr "Arată versiunea și ieși"
 
-#: ../src/main.c:508
+#: ../src/main.c:505
 msgid "[FILES...]"
 msgstr "[FIȘIERE...]"
 
 #. note for translators: library versions are printed after this
-#: ../src/main.c:526
+#: ../src/main.c:523
 #, fuzzy, c-format
 msgid "built on %s with "
 msgstr "(construit la sau după %s)"
 
-#: ../src/main.c:619
+#: ../src/main.c:613
 msgid "Move it now?"
 msgstr ""
 
-#: ../src/main.c:621
+#: ../src/main.c:615
 msgid "Geany needs to move your old configuration directory before starting."
 msgstr ""
 
-#: ../src/main.c:630
+#: ../src/main.c:624
 #, c-format
 msgid ""
 "Your configuration directory has been successfully moved from \"%s\" to \"%s"
@@ -3627,14 +3678,14 @@ msgstr ""
 
 #. for translators: the third %s in brackets is the error message which
 #. * describes why moving the dir didn't work
-#: ../src/main.c:640
+#: ../src/main.c:634
 #, c-format
 msgid ""
 "Your old configuration directory \"%s\" could not be moved to \"%s\" (%s). "
 "Please move manually the directory to the new location."
 msgstr ""
 
-#: ../src/main.c:721
+#: ../src/main.c:715
 #, c-format
 msgid ""
 "Configuration directory could not be created (%s).\n"
@@ -3645,44 +3696,44 @@ msgstr ""
 "Ar putea fi probleme la rularea Geany fără un dosar de configurație.\n"
 "Porniți oricum Geany?"
 
-#: ../src/main.c:1060
+#: ../src/main.c:1057
 #, c-format
 msgid "This is Geany %s."
 msgstr "Acesta este Geany %s."
 
-#: ../src/main.c:1062
+#: ../src/main.c:1059
 #, c-format
 msgid "Configuration directory could not be created (%s)."
 msgstr "Dosarul de configurație nu a putut fi creat (%s)."
 
-#: ../src/main.c:1276
+#: ../src/main.c:1272
 msgid "Configuration files reloaded."
 msgstr "Fișierele de configurare au fost reîncărcate"
 
-#: ../src/msgwindow.c:159
+#: ../src/msgwindow.c:160
 msgid "Status messages"
 msgstr "Mesaje de stare"
 
-#: ../src/msgwindow.c:554
+#: ../src/msgwindow.c:558
 #, fuzzy
 msgid "C_opy"
 msgstr "Copiază"
 
-#: ../src/msgwindow.c:563
+#: ../src/msgwindow.c:567
 #, fuzzy
 msgid "Copy _All"
 msgstr "Înc_hide toate"
 
-#: ../src/msgwindow.c:593
+#: ../src/msgwindow.c:597
 msgid "_Hide Message Window"
 msgstr "_Ascunde fereastra de mesaje"
 
-#: ../src/msgwindow.c:649
+#: ../src/msgwindow.c:653
 #, fuzzy, c-format
 msgid "Could not find file '%s' - trying the current document path."
 msgstr "Șterge toți indicatorii de eroare din documentul curent."
 
-#: ../src/plugins.c:477
+#: ../src/plugins.c:487
 #, c-format
 msgid ""
 "The plugin \"%s\" is not binary compatible with this release of Geany - "
@@ -3691,108 +3742,116 @@ msgstr ""
 "Modulul \"%s\" nu este compatibil binar cu această versiune de Geany - vă "
 "rugăm compilați-l din nou."
 
-#: ../src/plugins.c:922
+#: ../src/plugins.c:994
 msgid "_Plugin Manager"
 msgstr "Manager _module"
 
-#: ../src/plugins.c:1099
+#. Translators: <plugin name> <plugin version>
+#: ../src/plugins.c:1160
 #, c-format
-msgid ""
-"Plugin: %s %s\n"
-"Description: %s\n"
-"Author(s): %s"
+msgid "%s %s"
 msgstr ""
-"Modul: %s %s\n"
-"Descriere: %s\n"
-"Autor(i): %s"
 
-#: ../src/plugins.c:1175
+#: ../src/plugins.c:1236
 msgid "Active"
 msgstr "Activ"
 
-#: ../src/plugins.c:1181
+#: ../src/plugins.c:1242
 msgid "Plugin"
 msgstr "Modul"
 
-#: ../src/plugins.c:1205
+#: ../src/plugins.c:1266
 msgid "No plugins available."
 msgstr "Nu există module disponibile."
 
-#: ../src/plugins.c:1285
+#: ../src/plugins.c:1362
 msgid "Plugins"
 msgstr "Module"
 
-#: ../src/plugins.c:1305
+#: ../src/plugins.c:1382
 msgid "Choose which plugins should be loaded at startup:"
 msgstr ""
 
-#: ../src/plugins.c:1317
+#: ../src/plugins.c:1394
 msgid "<b>Plugin details:</b>"
 msgstr "<b>Detalii modul:</b>"
 
-#: ../src/pluginutils.c:207
+#: ../src/plugins.c:1403
+#, fuzzy
+msgid "Plugin:"
+msgstr "Modul"
+
+#: ../src/plugins.c:1404 ../src/project.c:446
+msgid "Description:"
+msgstr "Descriere:"
+
+#: ../src/plugins.c:1405
+msgid "Author(s):"
+msgstr ""
+
+#: ../src/pluginutils.c:334
 msgid "Configure Plugins"
 msgstr ""
 
-#: ../src/prefs.c:163
+#: ../src/prefs.c:172
 msgid "Grab Key"
 msgstr "Înhață tasta"
 
-#: ../src/prefs.c:169
+#: ../src/prefs.c:178
 #, c-format
 msgid "Press the combination of the keys you want to use for \"%s\"."
 msgstr ""
 "Tastați combinația de taste pe care doriți să o folosiți pentru \"%s\"."
 
-#: ../src/prefs.c:209 ../src/symbols.c:1893
+#: ../src/prefs.c:218 ../src/symbols.c:2141
 #, fuzzy
 msgid "_Expand All"
 msgstr "Găsește to_ate"
 
-#: ../src/prefs.c:214 ../src/symbols.c:1898
+#: ../src/prefs.c:223 ../src/symbols.c:2146
 #, fuzzy
 msgid "_Collapse All"
 msgstr "Înc_hide toate"
 
-#: ../src/prefs.c:273
+#: ../src/prefs.c:282
 msgid "Action"
 msgstr "Acțiune"
 
-#: ../src/prefs.c:278
+#: ../src/prefs.c:286
 msgid "Shortcut"
 msgstr "Scurtătură"
 
-#: ../src/prefs.c:1435
+#: ../src/prefs.c:1449
 msgid "_Allow"
 msgstr ""
 
-#: ../src/prefs.c:1437
+#: ../src/prefs.c:1451
 msgid "_Override"
 msgstr "S_uprascrie"
 
-#: ../src/prefs.c:1438
+#: ../src/prefs.c:1452
 msgid "Override that keybinding?"
 msgstr "Suprascrieți combinația de taste?"
 
-#: ../src/prefs.c:1439
+#: ../src/prefs.c:1453
 #, c-format
 msgid "The combination '%s' is already used for \"%s\"."
 msgstr "Combinația '%s' este deja în uz pentru  \"%s\"."
 
-#: ../src/prefs.c:1569 ../src/vte.c:272 ../src/vte.c:743 ../src/vte.c:748
+#: ../src/prefs.c:1585 ../src/vte.c:283 ../src/vte.c:752 ../src/vte.c:757
 msgid "Terminal"
 msgstr "Terminal"
 
 #. add manually GeanyWrapLabels because they can't be added with Glade
 #. page Tools
-#: ../src/prefs.c:1642
+#: ../src/prefs.c:1646
 msgid "Enter tool paths below. Tools you do not need can be left blank."
 msgstr ""
 "Introduceți căile către unelte. Numele uneltelor de care nu aveți nevoie pot "
 "fi lăsate goale."
 
 #. page Templates
-#: ../src/prefs.c:1647
+#: ../src/prefs.c:1651
 msgid ""
 "Set the information to be used in templates. See the documentation for "
 "details."
@@ -3800,18 +3859,8 @@ msgstr ""
 "Stabiliți informația folosită în șabloane. Vedeți documentația pentru "
 "detalii."
 
-#: ../src/prefs.c:1651
-msgid ""
-"<i>Notice: For all changes you make here to take effect, you need to restart "
-"Geany or force the reload of the settings using Tools->Reload Configuration."
-"</i>"
-msgstr ""
-"<i>Notiță: Pentru ca schimbările făcute să aibă efect, trebuie să reporniți "
-"Geany sau să forțați reîncărcare setărilor folosind Unelte->Reîncarcă "
-"configurația.</i>"
-
 #. page Keybindings
-#: ../src/prefs.c:1657
+#: ../src/prefs.c:1656
 msgid ""
 "Here you can change keyboard shortcuts for various actions. Select one and "
 "press the Change button to enter a new shortcut, or double click on an "
@@ -3821,70 +3870,63 @@ msgstr ""
 "apăsați butonul Schimbă pentru a introduce o nouă scurtătură, sau dați dublu "
 "click pe o acțiune și editați direct reprezentarea ca șir a scurtăturii."
 
-#. page Printing
-#: ../src/prefs.c:1662
-msgid ""
-"<i>Notice: Native GTK printing is only available if Geany was built against "
-"GTK 2.10 (or above) <b>and</b> Geany is running with GTK 2.10 (or above).</i>"
-msgstr ""
-
 #. page Editor->Indentation
-#: ../src/prefs.c:1668
+#: ../src/prefs.c:1661
 msgid ""
 "<i>Warning: these settings are overridden by the current project. See "
 "<b>Project->Properties</b>.</i>"
 msgstr ""
 
-#: ../src/printing.c:188
+#: ../src/printing.c:185
 msgid "The editor font is not a monospaced font!"
 msgstr ""
 
-#: ../src/printing.c:189
+#: ../src/printing.c:186
 msgid "Text will be wrongly spaced."
 msgstr ""
 
-#: ../src/printing.c:306
+#: ../src/printing.c:303
 #, c-format
 msgid "<b>Page %d of %d</b>"
 msgstr "<b>Pagina %d din %d</b>"
 
 # FUZZY
-#: ../src/printing.c:376
+#: ../src/printing.c:373
 msgid "Document Setup"
 msgstr "Setare document"
 
-#: ../src/printing.c:411
+#: ../src/printing.c:408
 #, fuzzy
 msgid "Print only the basename(without the path) of the printed file"
 msgstr "Imprimă numai numele (fără cale) fișierului imprimat."
 
-#: ../src/printing.c:530
+#: ../src/printing.c:527
 #, fuzzy, c-format
 msgid "Page %d of %d"
 msgstr "<b>Pagina %d din %d</b>"
 
-#: ../src/printing.c:784
+#: ../src/printing.c:781
 #, c-format
 msgid "Did not send document %s to the printing subsystem."
 msgstr ""
 
-#: ../src/printing.c:786
+#: ../src/printing.c:783
 #, c-format
 msgid "Document %s was sent to the printing subsystem."
 msgstr ""
 
-#: ../src/printing.c:838
+#: ../src/printing.c:835
 #, c-format
 msgid "Printing of %s failed (%s)."
 msgstr "Imprimarea lui %s a eșuat (%s)."
 
-#: ../src/printing.c:878
+#: ../src/printing.c:874
 #, fuzzy
 msgid "Please set a print command in the preferences dialog first."
 msgstr ""
 "Vă rugăm setați mai întâi o comandă de imprimare în dialogul de preferințe."
 
-#: ../src/printing.c:886
+#: ../src/printing.c:882
 #, c-format
 msgid ""
 "The file \"%s\" will be printed with the following command:\n"
@@ -3895,43 +3937,44 @@ msgstr ""
 "\n"
 "%s"
 
-#: ../src/printing.c:902
+#: ../src/printing.c:898
 #, c-format
 msgid "Printing of \"%s\" failed (return code: %s)."
 msgstr "Imprimarea \"%s\" a eșuat (cod returnat: %s)."
 
-#: ../src/printing.c:908
+#: ../src/printing.c:904
 #, c-format
 msgid "File %s printed."
 msgstr "Fișierul %s a fost imprimat."
 
 #. "projects" is part of the default project base path so be careful when translating
 #. * please avoid special characters and spaces, look at the source for details or ask Frank
-#: ../src/project.c:98
+#: ../src/project.c:99
 msgid "projects"
 msgstr "proiecte"
 
-#: ../src/project.c:117
+#: ../src/project.c:118
 msgid "New Project"
 msgstr "Proiect nou"
 
-#: ../src/project.c:125
+#: ../src/project.c:126
 msgid "C_reate"
 msgstr "C_rează"
 
-#: ../src/project.c:139 ../src/project.c:425
+#: ../src/project.c:140 ../src/project.c:433 ../plugins/classbuilder.c:477
+#: ../plugins/classbuilder.c:487
 msgid "Name:"
 msgstr "Nume:"
 
-#: ../src/project.c:148 ../src/project.c:412
+#: ../src/project.c:149 ../src/project.c:420
 msgid "Filename:"
 msgstr "Nume fișier:"
 
-#: ../src/project.c:164 ../src/project.c:455
+#: ../src/project.c:165 ../src/project.c:463
 msgid "Base path:"
 msgstr "Cale de bază:"
 
-#: ../src/project.c:170 ../src/project.c:464
+#: ../src/project.c:171 ../src/project.c:472
 msgid ""
 "Base directory of all files that make up the project. This can be a new "
 "path, or an existing directory tree. You can use paths relative to the "
@@ -3941,102 +3984,109 @@ msgstr ""
 "nouă, sau un arbore de directoare existent. Puteți folosi căi relative la "
 "numele de fișier al proiectului."
 
-#: ../src/project.c:173 ../src/project.c:467
+#: ../src/project.c:174 ../src/project.c:475
 msgid "Choose Project Base Path"
 msgstr "Alegeți calea de bază a proiectului"
 
-#: ../src/project.c:195
+#: ../src/project.c:196 ../src/project.c:575
+#, fuzzy
+msgid "Project file could not be written"
+msgstr "Fișierul proiect nu a putut fi scris (%s)."
+
+#: ../src/project.c:199
 #, c-format
 msgid "Project \"%s\" created."
 msgstr "Proiectul \"%s\" a fost creat."
 
-#: ../src/project.c:234 ../src/project.c:266 ../src/project.c:962
+#: ../src/project.c:240 ../src/project.c:272 ../src/project.c:960
 #, c-format
 msgid "Project file \"%s\" could not be loaded."
 msgstr "Fișierul proiect \"%s\" nu a putut fi încărcat."
 
-#: ../src/project.c:260 ../src/project.c:272
+#: ../src/project.c:266 ../src/project.c:278
 msgid "Open Project"
 msgstr "Deschide proiect"
 
-#: ../src/project.c:292
+#: ../src/project.c:298
 msgid "Project files"
 msgstr "Fișiere proiect"
 
-#: ../src/project.c:342
+#: ../src/project.c:348
 #, c-format
 msgid "Project \"%s\" closed."
 msgstr "Proiectul \"%s\" a fost închis."
 
-#: ../src/project.c:438
-msgid "Description:"
-msgstr "Descriere:"
-
-#: ../src/project.c:485
+#: ../src/project.c:492
 msgid "File patterns:"
 msgstr "Modele fișier:"
 
-#: ../src/project.c:584
+#: ../src/project.c:500
+msgid ""
+"Space separated list of file patterns used for the find in files dialog (e."
+"g. *.c *.h)"
+msgstr ""
+
+#: ../src/project.c:578
 #, c-format
 msgid "Project \"%s\" saved."
 msgstr "Proiectul \"%s\" a fost salvat."
 
-#: ../src/project.c:614
+#: ../src/project.c:609
 msgid "Do you want to close it before proceeding?"
 msgstr "Doriți să-l închideți înainte de a merge mai departe?"
 
-#: ../src/project.c:615
+#: ../src/project.c:610
 #, c-format
 msgid "The '%s' project is already open."
 msgstr "Proiectul '%s' este deja deschis."
 
-#: ../src/project.c:662
+#: ../src/project.c:658
 msgid "The specified project name is too short."
 msgstr "Numele de proiect specificat este prea scurt"
 
-#: ../src/project.c:668
+#: ../src/project.c:664
 #, c-format
 msgid "The specified project name is too long (max. %d characters)."
 msgstr "Numele de proiect specificat este prea lung (max. %d caractere)."
 
-#: ../src/project.c:680
+#: ../src/project.c:676
 msgid "You have specified an invalid project filename."
 msgstr "Ați ales un nume de proiect invalid."
 
-#: ../src/project.c:703
+#: ../src/project.c:699
 msgid "Create the project's base path directory?"
 msgstr "Creez dosarul cale de bază al proiectului?"
 
-#: ../src/project.c:704
+#: ../src/project.c:700
 #, c-format
 msgid "The path \"%s\" does not exist."
 msgstr "Calea \"%s\" nu există."
 
-#: ../src/project.c:713
+#: ../src/project.c:709
 #, c-format
 msgid "Project base directory could not be created (%s)."
 msgstr "Dosarul de bază al proiectului nu a putut fi creat (%s)."
 
-#: ../src/project.c:725
+#: ../src/project.c:722
 #, c-format
 msgid "Project file could not be written (%s)."
 msgstr "Fișierul proiect nu a putut fi scris (%s)."
 
 #. initialise the dialog
-#: ../src/project.c:866 ../src/project.c:877
+#: ../src/project.c:864 ../src/project.c:875
 msgid "Choose Project Filename"
 msgstr "Alegeți numele fișierului proiect"
 
-#: ../src/project.c:952
+#: ../src/project.c:950
 #, c-format
 msgid "Project \"%s\" opened."
 msgstr "Proiectul \"%s\" a fost deschis."
 
-#: ../src/search.c:227 ../src/search.c:826
+#: ../src/search.c:292 ../src/search.c:977
 msgid "_Use regular expressions"
 msgstr "F_olosește expresii regulate"
 
-#: ../src/search.c:230
+#: ../src/search.c:295
 msgid ""
 "Use POSIX-like regular expressions. For detailed information about using "
 "regular expressions, please read the documentation."
@@ -4044,15 +4094,15 @@ msgstr ""
 "Folosește expresii regulate POSIX. Pentru informații detaliate despre "
 "folosirea expresiilor regulate, citiți documentația"
 
-#: ../src/search.c:237
+#: ../src/search.c:302
 msgid "Search _backwards"
 msgstr "Caută îna_poi"
 
-#: ../src/search.c:250
+#: ../src/search.c:315
 msgid "Use _escape sequences"
 msgstr "Folosește s_ecvențe întârziate"
 
-#: ../src/search.c:254
+#: ../src/search.c:319
 #, fuzzy
 msgid ""
 "Replace \\\\, \\t, \\n, \\r and \\uXXXX (Unicode chararacters) with the "
@@ -4061,129 +4111,150 @@ msgstr ""
 "Înlocuiește \\\\, \\t, \\n, \\r și \\uXXXX (caractere Unicode) cu "
 "caracterele de control corespunzătoare."
 
-#: ../src/search.c:263 ../src/search.c:835
+#: ../src/search.c:328 ../src/search.c:986
 msgid "C_ase sensitive"
 msgstr "Ma_juscule semnificative"
 
-#: ../src/search.c:267 ../src/search.c:840
+#: ../src/search.c:332 ../src/search.c:991
 msgid "Match only a _whole word"
 msgstr "Potrivește numai cu_vinte întregi"
 
-#: ../src/search.c:271
+#: ../src/search.c:336
 msgid "Match from s_tart of word"
 msgstr "Potriveș_te numai de la începutul cuvântului"
 
-#: ../src/search.c:405
+#: ../src/search.c:472
 msgid "_Previous"
 msgstr "A_nterior"
 
-#: ../src/search.c:410
+#: ../src/search.c:477
 msgid "_Next"
 msgstr "_Următor"
 
-#: ../src/search.c:414 ../src/search.c:573 ../src/search.c:734
+#: ../src/search.c:481 ../src/search.c:643 ../src/search.c:886
 msgid "_Search for:"
 msgstr "_Caută după:"
 
 #. Now add the multiple match options
-#: ../src/search.c:441
+#: ../src/search.c:511
 msgid "_Find All"
 msgstr "Găsește to_ate"
 
-#: ../src/search.c:448
+#: ../src/search.c:518
 msgid "_Mark"
 msgstr "_Marchează"
 
-#: ../src/search.c:450
+#: ../src/search.c:520
 #, fuzzy
 msgid "Mark all matches in the current document"
 msgstr "Marchează toate potrivirile în documentul curent."
 
-#: ../src/search.c:455 ../src/search.c:632
+#: ../src/search.c:525 ../src/search.c:702
 msgid "In Sessi_on"
 msgstr "În _sesiune"
 
-#: ../src/search.c:460 ../src/search.c:637
+#: ../src/search.c:530 ../src/search.c:707
 msgid "_In Document"
 msgstr "_În document"
 
 #. close window checkbox
-#: ../src/search.c:466 ../src/search.c:650
+#: ../src/search.c:536 ../src/search.c:720
 msgid "Close _dialog"
 msgstr "Închide _dialogul"
 
-#: ../src/search.c:470 ../src/search.c:654
+#: ../src/search.c:540 ../src/search.c:724
 #, fuzzy
 msgid "Disable this option to keep the dialog open"
 msgstr "Dezactivați aceast opțiune pentru a ține dialogul deschis."
 
-#: ../src/search.c:567
+#: ../src/search.c:637
 msgid "Replace & Fi_nd"
 msgstr "Î_nlocuiește & Caută"
 
-#: ../src/search.c:576
+#: ../src/search.c:646
 msgid "Replace wit_h:"
 msgstr "Înlocuiește c_u:"
 
 #. Now add the multiple replace options
-#: ../src/search.c:625
+#: ../src/search.c:695
 msgid "Re_place All"
 msgstr "Înlocuie_ște peste tot"
 
-#: ../src/search.c:642
+#: ../src/search.c:712
 msgid "In Se_lection"
 msgstr "În se_lecție"
 
-#: ../src/search.c:644
+#: ../src/search.c:714
 msgid "Replace all matches found in the currently selected text"
 msgstr "Înlocuiește toate potrivirile din textul selctat curent"
 
-#: ../src/search.c:754
+#: ../src/search.c:831
+msgid "all"
+msgstr ""
+
+#: ../src/search.c:833
+#, fuzzy
+msgid "project"
+msgstr "proiecte"
+
+#: ../src/search.c:835
+#, fuzzy
+msgid "custom"
+msgstr "Taie"
+
+#: ../src/search.c:839
+msgid ""
+"All: search all files in the directory\n"
+"Project: use file patterns defined in the project settings\n"
+"Custom: specify file patterns manually"
+msgstr ""
+
+#: ../src/search.c:906
 msgid "Fi_les:"
 msgstr ""
 
-#: ../src/search.c:768
+#: ../src/search.c:918
 #, fuzzy
 msgid "File patterns, e.g. *.c *.h"
 msgstr "Modele fișier:"
 
-#: ../src/search.c:780
+#: ../src/search.c:930
 msgid "_Directory:"
 msgstr "_Dosar:"
 
-#: ../src/search.c:799
+#: ../src/search.c:949
 #, fuzzy
 msgid "E_ncoding:"
 msgstr "Stabilește codarea:"
 
-#: ../src/search.c:829
+#: ../src/search.c:980
 #, fuzzy
 msgid "See grep's manual page for more information"
 msgstr "Vezi pagina de manual a grep pentru mai multe informații."
 
-#: ../src/search.c:831
+#: ../src/search.c:982
 msgid "_Recurse in subfolders"
 msgstr "Pa_rcurge recursiv subdirectoarele"
 
-#: ../src/search.c:844
+#: ../src/search.c:995
 msgid "_Invert search results"
 msgstr "_Inversează rezultatele căutării"
 
-#: ../src/search.c:848
+#: ../src/search.c:999
 #, fuzzy
 msgid "Invert the sense of matching, to select non-matching lines"
 msgstr ""
 "Inversează sensul potrivirii, pentru a selecta liniile care nu se potrivesc."
 
-#: ../src/search.c:865
+#: ../src/search.c:1016
 msgid "E_xtra options:"
 msgstr "Opțiuni e_xtra:"
 
-#: ../src/search.c:872
+#: ../src/search.c:1023
 msgid "Other options to pass to Grep"
 msgstr "Alte opțiuni pentru Grep"
 
-#: ../src/search.c:1149 ../src/search.c:1888 ../src/search.c:1891
+#: ../src/search.c:1284 ../src/search.c:2069 ../src/search.c:2072
 #, c-format
 msgid "Found %d match for \"%s\"."
 msgid_plural "Found %d matches for \"%s\"."
@@ -4191,46 +4262,46 @@ msgstr[0] "Am găsit %d potrivire \"%s\"."
 msgstr[1] "Am găsit %d potriviri \"%s\"."
 msgstr[2] "Am găsit %d potriviri \"%s\"."
 
-#: ../src/search.c:1196
+#: ../src/search.c:1331
 #, fuzzy, c-format
 msgid "Replaced %u matches in %u documents."
 msgstr "Marchează toate potrivirile în documentul curent."
 
-#: ../src/search.c:1378
+#: ../src/search.c:1518
 msgid "Invalid directory for find in files."
 msgstr "Dosar invalid pentru căutare în fișiere."
 
-#: ../src/search.c:1399
+#: ../src/search.c:1539
 msgid "No text to find."
 msgstr "Nici un text de căutat."
 
-#: ../src/search.c:1426
+#: ../src/search.c:1566
 #, c-format
 msgid "Cannot execute grep tool '%s'; check the path setting in Preferences."
 msgstr ""
 "Nu am putut executa unealta grep '%s'; verificați setările de cale din "
 "Preferințe."
 
-#: ../src/search.c:1494
+#: ../src/search.c:1634
 #, fuzzy
 msgid "Searching..."
 msgstr "Căutare"
 
-#: ../src/search.c:1505
+#: ../src/search.c:1645
 #, c-format
 msgid "%s %s -- %s (in directory: %s)"
 msgstr "%s %s -- %s (în dosar: %s)"
 
-#: ../src/search.c:1533
+#: ../src/search.c:1686
 #, c-format
 msgid "Could not open directory (%s)"
 msgstr "Nu am putut deschide dosarul (%s)"
 
-#: ../src/search.c:1608
+#: ../src/search.c:1788
 msgid "Search failed."
 msgstr "Căutare eșuată."
 
-#: ../src/search.c:1628
+#: ../src/search.c:1808
 #, c-format
 msgid "Search completed with %d match."
 msgid_plural "Search completed with %d matches."
@@ -4238,11 +4309,11 @@ msgstr[0] "Căutare finalizată cu %d potrivire."
 msgstr[1] "Căutare finalizată cu %d potriviri."
 msgstr[2] "Căutare finalizată cu %d potriviri."
 
-#: ../src/search.c:1636
+#: ../src/search.c:1816
 msgid "No matches found."
 msgstr "Nici o potrivire nu a fost găsită."
 
-#: ../src/search.c:1668
+#: ../src/search.c:1848
 #, fuzzy, c-format
 msgid "Bad regex: %s"
 msgstr "Expresie regulată greșită pentru tipul de fișier %s: %s"
@@ -4255,248 +4326,285 @@ msgid ""
 "This is a fatal error and Geany will now quit."
 msgstr ""
 
-#: ../src/symbols.c:611 ../src/symbols.c:651 ../src/symbols.c:718
+#: ../src/symbols.c:688 ../src/symbols.c:738 ../src/symbols.c:805
 msgid "Chapter"
 msgstr "Capitol"
 
-#: ../src/symbols.c:612 ../src/symbols.c:647 ../src/symbols.c:719
+#: ../src/symbols.c:689 ../src/symbols.c:734 ../src/symbols.c:806
 msgid "Section"
 msgstr "Secțiune"
 
-#: ../src/symbols.c:613
+#: ../src/symbols.c:690
 msgid "Sect1"
 msgstr "Sect1"
 
-#: ../src/symbols.c:614
+#: ../src/symbols.c:691
 msgid "Sect2"
 msgstr "Sect2"
 
-#: ../src/symbols.c:615
+#: ../src/symbols.c:692
 msgid "Sect3"
 msgstr "Sect3"
 
-#: ../src/symbols.c:616
+#: ../src/symbols.c:693
 msgid "Appendix"
 msgstr "Anexă"
 
-#: ../src/symbols.c:617 ../src/symbols.c:652 ../src/symbols.c:668
-#: ../src/symbols.c:679 ../src/symbols.c:766 ../src/symbols.c:777
-#: ../src/symbols.c:789 ../src/symbols.c:803 ../src/symbols.c:815
-#: ../src/symbols.c:827 ../src/symbols.c:842 ../src/symbols.c:887
+#: ../src/symbols.c:694 ../src/symbols.c:739 ../src/symbols.c:755
+#: ../src/symbols.c:766 ../src/symbols.c:853 ../src/symbols.c:864
+#: ../src/symbols.c:876 ../src/symbols.c:890 ../src/symbols.c:902
+#: ../src/symbols.c:914 ../src/symbols.c:929 ../src/symbols.c:958
+#: ../src/symbols.c:987
 msgid "Other"
 msgstr "Altul"
 
-#: ../src/symbols.c:623 ../src/symbols.c:835 ../src/symbols.c:867
+#: ../src/symbols.c:700 ../src/symbols.c:922 ../src/symbols.c:967
 msgid "Module"
 msgstr "Modul"
 
-#: ../src/symbols.c:624 ../src/symbols.c:762 ../src/symbols.c:813
-#: ../src/symbols.c:825 ../src/symbols.c:840 ../src/symbols.c:852
+#: ../src/symbols.c:701 ../src/symbols.c:849 ../src/symbols.c:900
+#: ../src/symbols.c:912 ../src/symbols.c:927 ../src/symbols.c:939
 msgid "Types"
 msgstr "Tipuri"
 
-#: ../src/symbols.c:625
+#: ../src/symbols.c:702
 msgid "Type constructors"
 msgstr "Constructori tip"
 
-#: ../src/symbols.c:626 ../src/symbols.c:638 ../src/symbols.c:659
-#: ../src/symbols.c:667 ../src/symbols.c:676 ../src/symbols.c:688
-#: ../src/symbols.c:697 ../src/symbols.c:750 ../src/symbols.c:799
-#: ../src/symbols.c:822 ../src/symbols.c:837 ../src/symbols.c:874
+#: ../src/symbols.c:703 ../src/symbols.c:725 ../src/symbols.c:746
+#: ../src/symbols.c:754 ../src/symbols.c:763 ../src/symbols.c:775
+#: ../src/symbols.c:784 ../src/symbols.c:837 ../src/symbols.c:886
+#: ../src/symbols.c:909 ../src/symbols.c:924 ../src/symbols.c:952
+#: ../src/symbols.c:974
 msgid "Functions"
 msgstr "Funcții"
 
-#: ../src/symbols.c:631 ../src/symbols.c:637
+#: ../src/symbols.c:708
+msgid "Program"
+msgstr ""
+
+#: ../src/symbols.c:710 ../src/symbols.c:718 ../src/symbols.c:724
 msgid "Sections"
 msgstr "Secțiuni"
 
-#: ../src/symbols.c:632
+#: ../src/symbols.c:711
+msgid "Paragraph"
+msgstr ""
+
+#: ../src/symbols.c:712
+#, fuzzy
+msgid "Group"
+msgstr "Grup:"
+
+#: ../src/symbols.c:713
+msgid "Data"
+msgstr ""
+
+#: ../src/symbols.c:719
 msgid "Keys"
 msgstr "Chei"
 
-#: ../src/symbols.c:639 ../src/symbols.c:690 ../src/symbols.c:751
-#: ../src/symbols.c:776 ../src/symbols.c:801 ../src/symbols.c:814
-#: ../src/symbols.c:823 ../src/symbols.c:839 ../src/symbols.c:886
+#: ../src/symbols.c:726 ../src/symbols.c:777 ../src/symbols.c:838
+#: ../src/symbols.c:863 ../src/symbols.c:888 ../src/symbols.c:901
+#: ../src/symbols.c:910 ../src/symbols.c:926 ../src/symbols.c:986
 msgid "Variables"
 msgstr "Variabile"
 
-#: ../src/symbols.c:646
+#: ../src/symbols.c:733
 msgid "Environment"
 msgstr "Mediu"
 
-#: ../src/symbols.c:648 ../src/symbols.c:720
+#: ../src/symbols.c:735 ../src/symbols.c:807
 msgid "Subsection"
 msgstr "Subsecțiune"
 
-#: ../src/symbols.c:649 ../src/symbols.c:721
+#: ../src/symbols.c:736 ../src/symbols.c:808
 msgid "Subsubsection"
 msgstr "Subsubsecțiune"
 
-#: ../src/symbols.c:660
+#: ../src/symbols.c:747
 #, fuzzy
 msgid "Structures"
 msgstr "Stare"
 
-#: ../src/symbols.c:675 ../src/symbols.c:759 ../src/symbols.c:784
-#: ../src/symbols.c:796
+#: ../src/symbols.c:762 ../src/symbols.c:846 ../src/symbols.c:871
+#: ../src/symbols.c:883
 msgid "Package"
 msgstr "Pachet"
 
-#: ../src/symbols.c:677 ../src/symbols.c:826 ../src/symbols.c:849
+#: ../src/symbols.c:764 ../src/symbols.c:913 ../src/symbols.c:936
 msgid "Labels"
 msgstr "Etichete"
 
-#: ../src/symbols.c:678 ../src/symbols.c:689 ../src/symbols.c:802
-#: ../src/symbols.c:824
+#: ../src/symbols.c:765 ../src/symbols.c:776 ../src/symbols.c:889
+#: ../src/symbols.c:911
 msgid "Constants"
 msgstr "Constante"
 
-#: ../src/symbols.c:686 ../src/symbols.c:785 ../src/symbols.c:797
-#: ../src/symbols.c:810 ../src/symbols.c:836
+#: ../src/symbols.c:773 ../src/symbols.c:872 ../src/symbols.c:884
+#: ../src/symbols.c:897 ../src/symbols.c:923
 msgid "Interfaces"
 msgstr "Interfețe"
 
-#: ../src/symbols.c:687 ../src/symbols.c:708 ../src/symbols.c:729
-#: ../src/symbols.c:739 ../src/symbols.c:748 ../src/symbols.c:786
-#: ../src/symbols.c:798 ../src/symbols.c:811 ../src/symbols.c:873
+#: ../src/symbols.c:774 ../src/symbols.c:795 ../src/symbols.c:816
+#: ../src/symbols.c:826 ../src/symbols.c:835 ../src/symbols.c:873
+#: ../src/symbols.c:885 ../src/symbols.c:898 ../src/symbols.c:973
 msgid "Classes"
 msgstr "Clase"
 
-#: ../src/symbols.c:698
+#: ../src/symbols.c:785
 #, fuzzy
 msgid "Anchors"
 msgstr "Ancoră"
 
-#: ../src/symbols.c:699
+#: ../src/symbols.c:786
 #, fuzzy
 msgid "H1 Headings"
 msgstr "Antet (H1)"
 
-#: ../src/symbols.c:700
+#: ../src/symbols.c:787
 #, fuzzy
 msgid "H2 Headings"
 msgstr "Antet (H1)"
 
-#: ../src/symbols.c:701
+#: ../src/symbols.c:788
 #, fuzzy
 msgid "H3 Headings"
 msgstr "Antet (H1)"
 
-#: ../src/symbols.c:709
+#: ../src/symbols.c:796
 #, fuzzy
 msgid "ID Selectors"
 msgstr "În se_lecție"
 
-#: ../src/symbols.c:710
+#: ../src/symbols.c:797
 #, fuzzy
 msgid "Type Selectors"
 msgstr "Constructori tip"
 
-#: ../src/symbols.c:728 ../src/symbols.c:774
+#: ../src/symbols.c:815 ../src/symbols.c:861
 msgid "Modules"
 msgstr "Module"
 
-#: ../src/symbols.c:730
+#: ../src/symbols.c:817
 msgid "Singletons"
 msgstr ""
 
-#: ../src/symbols.c:731 ../src/symbols.c:740 ../src/symbols.c:749
-#: ../src/symbols.c:787 ../src/symbols.c:812
+#: ../src/symbols.c:818 ../src/symbols.c:827 ../src/symbols.c:836
+#: ../src/symbols.c:874 ../src/symbols.c:899
 msgid "Methods"
 msgstr "Metode"
 
-#: ../src/symbols.c:738 ../src/symbols.c:870
+#: ../src/symbols.c:825 ../src/symbols.c:970
 msgid "Namespaces"
 msgstr "Spațiu de nume"
 
-#: ../src/symbols.c:741
+#: ../src/symbols.c:828 ../src/symbols.c:953
 #, fuzzy
 msgid "Procedures"
 msgstr "Proprietăți"
 
-#: ../src/symbols.c:752
+#: ../src/symbols.c:839
 #, fuzzy
 msgid "Imports"
 msgstr "Exportă"
 
-#: ../src/symbols.c:760
+#: ../src/symbols.c:847
 #, fuzzy
 msgid "Entities"
 msgstr "fără titlu"
 
-#: ../src/symbols.c:761
+#: ../src/symbols.c:848
 #, fuzzy
 msgid "Architectures"
 msgstr "Stare"
 
-#: ../src/symbols.c:763
+#: ../src/symbols.c:850
 #, fuzzy
 msgid "Functions / Procedures"
 msgstr "Proprietăți"
 
-#: ../src/symbols.c:764
+#: ../src/symbols.c:851
 #, fuzzy
 msgid "Variables / Signals"
 msgstr "Variabile"
 
-#: ../src/symbols.c:765
+#: ../src/symbols.c:852
 msgid "Processes / Components"
 msgstr ""
 
-#: ../src/symbols.c:773
+#: ../src/symbols.c:860
 msgid "Events"
 msgstr ""
 
-#: ../src/symbols.c:775
+#: ../src/symbols.c:862
 #, fuzzy
 msgid "Functions / Tasks"
 msgstr "Funcții"
 
-#: ../src/symbols.c:788 ../src/symbols.c:875
+#: ../src/symbols.c:875 ../src/symbols.c:975
 msgid "Members"
 msgstr "Membri"
 
-#: ../src/symbols.c:838
+#: ../src/symbols.c:925
 msgid "Subroutines"
 msgstr "Subrutine"
 
-#: ../src/symbols.c:841
+#: ../src/symbols.c:928
 msgid "Blocks"
 msgstr "Blocuri"
 
-#: ../src/symbols.c:850 ../src/symbols.c:859 ../src/symbols.c:883
+#: ../src/symbols.c:937 ../src/symbols.c:946 ../src/symbols.c:983
 msgid "Macros"
 msgstr "Macrocomenzi"
 
-#: ../src/symbols.c:851
+#: ../src/symbols.c:938
 msgid "Defines"
 msgstr "Constante"
 
-#: ../src/symbols.c:858
+#: ../src/symbols.c:945
 msgid "Targets"
 msgstr "Ținte"
 
-#: ../src/symbols.c:876
+#: ../src/symbols.c:954
+msgid "Indexes"
+msgstr ""
+
+#: ../src/symbols.c:955
+#, fuzzy
+msgid "Tables"
+msgstr "Variabile"
+
+#: ../src/symbols.c:956
+msgid "Triggers"
+msgstr ""
+
+#: ../src/symbols.c:957
+#, fuzzy
+msgid "Views"
+msgstr "_Vizualizare"
+
+#: ../src/symbols.c:976
 #, fuzzy
 msgid "Structs"
 msgstr "Stare"
 
-#: ../src/symbols.c:877
+#: ../src/symbols.c:977
 msgid "Typedefs / Enums"
 msgstr ""
 
-#: ../src/symbols.c:1371
+#: ../src/symbols.c:1618
 #, c-format
 msgid "Unknown filetype extension for \"%s\".\n"
 msgstr "Extensie necunoscută pentru \"%s\".\n"
 
-#: ../src/symbols.c:1395
+#: ../src/symbols.c:1641
 #, c-format
 msgid "Failed to create tags file, perhaps because no tags were found.\n"
 msgstr ""
 "Crearea fișierului de etichete a eșuat, probabil nu s-au găsit etichete.\n"
 
-#: ../src/symbols.c:1402
+#: ../src/symbols.c:1648
 #, c-format
 msgid ""
 "Usage: %s -g <Tag File> <File list>\n"
@@ -4505,7 +4613,7 @@ msgstr ""
 "Folosire: %s -g <Fișier etichete> <Listă fișiere>\n"
 "\n"
 
-#: ../src/symbols.c:1403
+#: ../src/symbols.c:1649
 #, c-format
 msgid ""
 "Example:\n"
@@ -4516,45 +4624,46 @@ msgstr ""
 "CFLAGS=`pkg-config gtk+-2.0 --cflags` %s -g gtk2.c.tags /usr/include/gtk-2.0/"
 "gtk/gtk.h\n"
 
-#: ../src/symbols.c:1417
+#: ../src/symbols.c:1663
 msgid "Load Tags"
 msgstr "Încarcă etichete"
 
-#: ../src/symbols.c:1424
+#: ../src/symbols.c:1670
 msgid "Geany tag files (*.tags)"
 msgstr "Fișiere de etichetă Geany (*.tags)"
 
 #. For translators: the first wildcard is the filetype, the second the filename
-#: ../src/symbols.c:1444
+#: ../src/symbols.c:1690
 #, c-format
 msgid "Loaded %s tags file '%s'."
 msgstr "Am încărcat %s fișier de etichete '%s'."
 
-#: ../src/symbols.c:1447
+#: ../src/symbols.c:1693
 #, c-format
 msgid "Could not load tags file '%s'."
 msgstr "Nu am putut încărca fișierul de etichete '%s'."
 
-#: ../src/symbols.c:1600
+#: ../src/symbols.c:1848
 #, c-format
 msgid "Forward declaration \"%s\" not found."
 msgstr ""
 
-#: ../src/symbols.c:1602
+#: ../src/symbols.c:1850
 #, c-format
 msgid "Definition of \"%s\" not found."
 msgstr "Nu am găsit definiția \"%s\"."
 
-#: ../src/symbols.c:1908
+#: ../src/symbols.c:2156
 msgid "Sort by _Name"
 msgstr "Sortează după _nume"
 
-#: ../src/symbols.c:1915
+#: ../src/symbols.c:2163
 msgid "Sort by _Appearance"
 msgstr "Sortează după _apariție"
 
-#: ../src/templates.c:206
-msgid "Old"
+#: ../src/templates.c:77
+#, c-format
+msgid "Failed to convert template file \"%s\" to UTF-8"
 msgstr ""
 
 #. custom actions defined in toolbar_init(): "New", "Open", "SearchEntry", "GotoEntry", "Build"
@@ -4562,59 +4671,59 @@ msgstr ""
 msgid "Save the current file"
 msgstr "Salvează fișierul curent"
 
-#: ../src/toolbar.c:57
+#: ../src/toolbar.c:58
 msgid "Save all open files"
 msgstr "Salvează toate fișierele deschise"
 
-#: ../src/toolbar.c:58
+#: ../src/toolbar.c:59
 msgid "Reload the current file from disk"
 msgstr "Reîncarcă fișierul curent de pe disc"
 
-#: ../src/toolbar.c:59
+#: ../src/toolbar.c:60
 msgid "Close the current file"
 msgstr "Închide fișierul curent"
 
-#: ../src/toolbar.c:60
+#: ../src/toolbar.c:61
 #, fuzzy
 msgid "Close all open files"
 msgstr "Închide toate fișierele deschide"
 
-#: ../src/toolbar.c:61
+#: ../src/toolbar.c:62
 #, fuzzy
 msgid "Cut the current selection"
 msgstr "Taie liniile curente"
 
-#: ../src/toolbar.c:62
+#: ../src/toolbar.c:63
 #, fuzzy
 msgid "Copy the current selection"
 msgstr "Compilează fișierul curent"
 
-#: ../src/toolbar.c:63
+#: ../src/toolbar.c:64
 msgid "Paste the contents of the clipboard"
 msgstr ""
 
-#: ../src/toolbar.c:64
+#: ../src/toolbar.c:65
 #, fuzzy
 msgid "Delete the current selection"
 msgstr "Șterge liniile curente"
 
-#: ../src/toolbar.c:65
+#: ../src/toolbar.c:66
 msgid "Undo the last modification"
 msgstr "Anulează ultima modificare"
 
-#: ../src/toolbar.c:66
+#: ../src/toolbar.c:67
 msgid "Redo the last modification"
 msgstr "Reface ultima modificare"
 
-#: ../src/toolbar.c:69
+#: ../src/toolbar.c:70
 msgid "Compile the current file"
 msgstr "Compilează fișierul curent"
 
-#: ../src/toolbar.c:70
+#: ../src/toolbar.c:71
 msgid "Run or view the current file"
 msgstr "Execută sau vizualizează fișierul curent"
 
-#: ../src/toolbar.c:71
+#: ../src/toolbar.c:72
 #, fuzzy
 msgid ""
 "Open a color chooser dialog, to interactively pick colors from a palette"
@@ -4623,185 +4732,199 @@ msgstr ""
 "culori dintr-o paletă."
 
 # FUZZY
-#: ../src/toolbar.c:72
+#: ../src/toolbar.c:73
 msgid "Zoom in the text"
 msgstr "Mărește textul"
 
-#: ../src/toolbar.c:73
+#: ../src/toolbar.c:74
 msgid "Zoom out the text"
 msgstr "Micșorează textul"
 
-#: ../src/toolbar.c:74
+#: ../src/toolbar.c:75
 msgid "Decrease indentation"
 msgstr "Micșorează indentarea"
 
-#: ../src/toolbar.c:75
+#: ../src/toolbar.c:76
 msgid "Increase indentation"
 msgstr "Mărește indentarea"
 
-#: ../src/toolbar.c:76 ../src/toolbar.c:381
+#: ../src/toolbar.c:77 ../src/toolbar.c:382
 msgid "Find the entered text in the current file"
 msgstr "Caută textul introdus în fișierul curent"
 
-#: ../src/toolbar.c:77 ../src/toolbar.c:389
+#: ../src/toolbar.c:78 ../src/toolbar.c:392
 #, fuzzy
 msgid "Jump to the entered line number"
 msgstr "Sari la numărul de linie introdus."
 
-#: ../src/toolbar.c:78
+#: ../src/toolbar.c:79
 msgid "Show the preferences dialog"
 msgstr ""
 
-#: ../src/toolbar.c:79
+#: ../src/toolbar.c:80
 msgid "Quit Geany"
 msgstr "Părăsește Geany"
 
-#: ../src/toolbar.c:80
+#: ../src/toolbar.c:81
 #, fuzzy
 msgid "Print document"
 msgstr "Document XML"
 
-#: ../src/toolbar.c:81
+#: ../src/toolbar.c:82
 #, fuzzy
 msgid "Replace text in the current document"
 msgstr "Marchează toate potrivirile în documentul curent."
 
-#: ../src/toolbar.c:357
+#: ../src/toolbar.c:358
 msgid "Create a new file"
 msgstr "Crează un fișier nou"
 
-#: ../src/toolbar.c:358
+#: ../src/toolbar.c:359
 #, fuzzy
 msgid "Create a new file from a template"
 msgstr "Crează un fișier nou"
 
-#: ../src/toolbar.c:365
+#: ../src/toolbar.c:366
 msgid "Open an existing file"
 msgstr "Deschide un fișier existent"
 
-#: ../src/toolbar.c:366
+#: ../src/toolbar.c:367
 #, fuzzy
 msgid "Open a recent file"
 msgstr "Deschide fișierul selectat"
 
-#: ../src/toolbar.c:374
+#: ../src/toolbar.c:375
 #, fuzzy
 msgid "Choose more build actions"
 msgstr "Nu mai sunt erori de construire."
 
-#: ../src/toolbar.c:389
+#: ../src/toolbar.c:392
 #, fuzzy
 msgid "Goto"
 msgstr "Mergi la"
 
-#: ../src/toolbar.c:578
+#: ../src/toolbar.c:582
 msgid "Separator"
 msgstr ""
 
-#: ../src/toolbar.c:579
+#: ../src/toolbar.c:583
 msgid "--- Separator ---"
 msgstr ""
 
-#: ../src/toolbar.c:946
+#: ../src/toolbar.c:952
 msgid ""
 "Select items to be displayed on the toolbar. Items can be reordered by drag "
 "and drop."
 msgstr ""
 
-#: ../src/toolbar.c:962
+#: ../src/toolbar.c:968
 msgid "Available Items"
 msgstr ""
 
-#: ../src/toolbar.c:983
+#: ../src/toolbar.c:989
 #, fuzzy
 msgid "Displayed Items"
 msgstr "Afișare"
 
-#: ../src/tools.c:153
+#: ../src/tools.c:110 ../src/tools.c:115
+#, fuzzy, c-format
+msgid "Invalid command: %s"
+msgstr "Comandă rulare:"
+
+#: ../src/tools.c:110
+#, fuzzy
+msgid "Command not found"
+msgstr "\"%s\" nu a fost găsit."
+
+#: ../src/tools.c:256
 #, c-format
 msgid ""
 "The executed custom command returned an error. Your selection was not "
 "changed. Error message: %s"
 msgstr ""
 
-#: ../src/tools.c:219
+#: ../src/tools.c:322
 msgid "The executed custom command exited with an unsuccessful exit code."
 msgstr ""
 
-#: ../src/tools.c:247 ../src/tools.c:295
+#: ../src/tools.c:350 ../src/tools.c:398
 #, c-format
 msgid "Custom command failed: %s"
 msgstr "Comandă personalizată eșuată: %s"
 
-#: ../src/tools.c:251
+#: ../src/tools.c:354
 #, c-format
 msgid "Passing data and executing custom command: %s"
 msgstr ""
 
-#: ../src/tools.c:309 ../src/tools.c:516
+#: ../src/tools.c:500 ../src/tools.c:733
 msgid "Set Custom Commands"
 msgstr "Stabilește comenzi personalizate"
 
-#: ../src/tools.c:316
+#: ../src/tools.c:508
 msgid ""
 "You can send the current selection to any of these commands and the output "
 "of the command replaces the current selection."
 msgstr ""
 
+#: ../src/tools.c:522
+msgid "ID"
+msgstr ""
+
 # FUZZY
-#: ../src/tools.c:491
+#: ../src/tools.c:708
 msgid "No custom commands defined."
 msgstr "Nici o comandă personalizată."
 
-#: ../src/tools.c:591
+#: ../src/tools.c:802
 msgid "Word Count"
 msgstr "Contor cuvinte"
 
-#: ../src/tools.c:601
+#: ../src/tools.c:812
 msgid "selection"
 msgstr "selecție"
 
-#: ../src/tools.c:607
+#: ../src/tools.c:818
 msgid "whole document"
 msgstr "întregul document"
 
-#: ../src/tools.c:616
+#: ../src/tools.c:827
 msgid "Range:"
 msgstr "Interval:"
 
-#: ../src/tools.c:628
+#: ../src/tools.c:839
 msgid "Lines:"
 msgstr "Linii:"
 
-#: ../src/tools.c:642
+#: ../src/tools.c:853
 msgid "Words:"
 msgstr "Cuvinte:"
 
-#: ../src/tools.c:656
+#: ../src/tools.c:867
 msgid "Characters:"
 msgstr "Caractere:"
 
-#: ../src/sidebar.c:188
+#: ../src/sidebar.c:175
 msgid "No tags found"
 msgstr "Nu am găsit etichete"
 
-#: ../src/sidebar.c:586
+#: ../src/sidebar.c:587
 msgid "Show S_ymbol List"
 msgstr "Arată lista de s_imboluri"
 
-#: ../src/sidebar.c:594
+#: ../src/sidebar.c:595
 msgid "Show _Document List"
 msgstr "Arată lista de _documente"
 
-#: ../src/sidebar.c:602 ../plugins/filebrowser.c:648
+#: ../src/sidebar.c:603 ../plugins/filebrowser.c:660
 msgid "H_ide Sidebar"
 msgstr "Ascun_de bara laterală"
 
-#: ../src/sidebar.c:696 ../plugins/filebrowser.c:619
+#: ../src/sidebar.c:697 ../plugins/filebrowser.c:631
 msgid "_Find in Files"
 msgstr "_Caută în fișiere"
 
-#: ../src/sidebar.c:706
+#: ../src/sidebar.c:707
 #, fuzzy
 msgid "Show _Paths"
 msgstr "Arată calea com_pletă"
@@ -4879,23 +5002,34 @@ msgstr "C++ STL"
 msgid "_Set Custom Date Format"
 msgstr "_Stabilește format personalizat dată"
 
-#: ../src/ui_utils.c:1756
+#: ../src/ui_utils.c:1791
 msgid "Select Folder"
 msgstr "Selectați dosar"
 
-#: ../src/ui_utils.c:1756
+#: ../src/ui_utils.c:1791
 msgid "Select File"
 msgstr "Selectați fișier"
 
-#: ../src/ui_utils.c:1910
+#: ../src/ui_utils.c:1945
 #, fuzzy
 msgid "Save All"
 msgstr "Sa_lvează tot"
 
-#: ../src/ui_utils.c:1911
+#: ../src/ui_utils.c:1946
 #, fuzzy
 msgid "Close All"
 msgstr "Înc_hide toate"
+
+#: ../src/utils.c:89
+#, fuzzy
+msgid "Select Browser"
+msgstr "Navigator fișiere"
+
+#: ../src/utils.c:90
+msgid ""
+"Failed to spawn the configured browser command. Please correct it or enter "
+"another one."
+msgstr ""
 
 #: ../src/utils.c:368
 msgid "Win (CRLF)"
@@ -4909,19 +5043,19 @@ msgstr "Mac (CR)"
 msgid "Unix (LF)"
 msgstr "Unix (LF)"
 
-#: ../src/vte.c:536
+#: ../src/vte.c:545
 msgid "_Set Path From Document"
 msgstr "_Stabilește calea din document"
 
-#: ../src/vte.c:541
+#: ../src/vte.c:550
 msgid "_Restart Terminal"
 msgstr "_Repornește consola"
 
-#: ../src/vte.c:564
+#: ../src/vte.c:573
 msgid "_Input Methods"
 msgstr "Metode _intrare"
 
-#: ../src/vte.c:658
+#: ../src/vte.c:667
 msgid ""
 "Could not change the directory in the VTE because it probably contains a "
 "command."
@@ -4929,38 +5063,38 @@ msgstr ""
 "Nu am putut schimba directorul în VTE deoarece acesta probabil conține o "
 "comandă."
 
-#: ../src/vte.c:756
+#: ../src/vte.c:765
 msgid "Font:"
 msgstr ""
 
-#: ../src/vte.c:766
+#: ../src/vte.c:775
 #, fuzzy
 msgid "Sets the font for the terminal widget"
 msgstr "Stabilește fontul pentru controlul terminal."
 
-#: ../src/vte.c:768
+#: ../src/vte.c:777
 msgid "Foreground color:"
 msgstr "Culoare text:"
 
-#: ../src/vte.c:774
+#: ../src/vte.c:783
 msgid "Background color:"
 msgstr "Culoare fundal:"
 
-#: ../src/vte.c:784
+#: ../src/vte.c:793
 #, fuzzy
 msgid "Sets the foreground color of the text in the terminal widget"
 msgstr "Stabilește culoarea textului pentru controlul terminal."
 
-#: ../src/vte.c:791
+#: ../src/vte.c:800
 #, fuzzy
 msgid "Sets the background color of the text in the terminal widget"
 msgstr "Stabilește culoarea fundalului pentru controlul terminal."
 
-#: ../src/vte.c:794
+#: ../src/vte.c:803
 msgid "Scrollback lines:"
 msgstr "Linii istoric:"
 
-#: ../src/vte.c:806
+#: ../src/vte.c:815
 #, fuzzy
 msgid ""
 "Specifies the history in lines, which you can scroll back in the terminal "
@@ -4969,11 +5103,11 @@ msgstr ""
 "Specifică istoricul în linii, pe care le puteți derula înapoi în controlul "
 "terminal."
 
-#: ../src/vte.c:810
+#: ../src/vte.c:819
 msgid "Shell:"
 msgstr "Shell:"
 
-#: ../src/vte.c:818
+#: ../src/vte.c:827
 #, fuzzy
 msgid ""
 "Sets the path to the shell which should be started inside the terminal "
@@ -4982,38 +5116,38 @@ msgstr ""
 "Stabilește calea către consola care să fie pornită în interiorul emulării de "
 "terminal."
 
-#: ../src/vte.c:835
+#: ../src/vte.c:844
 msgid "Scroll on keystroke"
 msgstr "Derulare la atingere de tastă"
 
-#: ../src/vte.c:836
+#: ../src/vte.c:845
 #, fuzzy
 msgid "Whether to scroll to the bottom if a key was pressed"
 msgstr "Dacă să deruleze la final atunci când se apasă pe o tastă."
 
-#: ../src/vte.c:839
+#: ../src/vte.c:848
 msgid "Scroll on output"
 msgstr "Derulare la ieșire"
 
-#: ../src/vte.c:840
+#: ../src/vte.c:849
 #, fuzzy
 msgid "Whether to scroll to the bottom when output is generated"
 msgstr "Dacă să deruleze la final când o ieșire este generată."
 
-#: ../src/vte.c:843
+#: ../src/vte.c:852
 msgid "Cursor blinks"
 msgstr ""
 
-#: ../src/vte.c:844
+#: ../src/vte.c:853
 #, fuzzy
 msgid "Whether to blink the cursor"
 msgstr "Activează restrângerea respectiv extinderea codului"
 
-#: ../src/vte.c:847
+#: ../src/vte.c:856
 msgid "Override Geany keybindings"
 msgstr "Suprascrie asocierile de taste ale Geany"
 
-#: ../src/vte.c:849
+#: ../src/vte.c:858
 #, fuzzy
 msgid ""
 "Allows the VTE to receive keyboard shortcuts (apart from focus commands)"
@@ -5021,11 +5155,11 @@ msgstr ""
 "Permite VTE să primească scurtături de la tastatură (în afară de comenzile "
 "de focalizare)."
 
-#: ../src/vte.c:852
+#: ../src/vte.c:861
 msgid "Disable menu shortcut key (F10 by default)"
 msgstr "Dezactivează scurtătura de meniu (implicit F10)"
 
-#: ../src/vte.c:853
+#: ../src/vte.c:862
 msgid ""
 "This option disables the keybinding to popup the menu bar (default is F10). "
 "Disabling it can be useful if you use, for example, Midnight Commander "
@@ -5035,22 +5169,22 @@ msgstr ""
 "(implicit F10). Dezactivarea este utilă dacă vreți să folosiți, de exemplu, "
 "Midnight Commander în VTE."
 
-#: ../src/vte.c:856 ../plugins/filebrowser.c:1228
+#: ../src/vte.c:865 ../plugins/filebrowser.c:1275
 msgid "Follow the path of the current file"
 msgstr "Urmărește calea fișierului curent"
 
-#: ../src/vte.c:857
+#: ../src/vte.c:866
 #, fuzzy
 msgid "Whether to execute \"cd $path\" when you switch between opened files"
 msgstr "Dacă să execute \"cd $path\" când comutați între fișierele deschise."
 
 #. create check_skip_script checkbox before the check_skip_script checkbox to be able to
 #. * use the object for the toggled handler of check_skip_script checkbox
-#: ../src/vte.c:862
+#: ../src/vte.c:871
 msgid "Don't use run script"
 msgstr "Nu folosi scriptul de rulare."
 
-#: ../src/vte.c:863
+#: ../src/vte.c:872
 #, fuzzy
 msgid ""
 "Don't use the simple run script which is usually used to display the exit "
@@ -5059,11 +5193,11 @@ msgstr ""
 "Nu folosi scriptul simplu de rulare care este folosit pentru a afișa starea "
 "de ieșire a programului executat."
 
-#: ../src/vte.c:866
+#: ../src/vte.c:875
 msgid "Execute programs in VTE"
 msgstr "Execută programele în VTE"
 
-#: ../src/vte.c:867
+#: ../src/vte.c:876
 #, fuzzy
 msgid ""
 "Run programs in VTE instead of opening a terminal emulation window. Please "
@@ -5080,174 +5214,181 @@ msgstr "Fișiere de proiect Geany"
 msgid "Executables"
 msgstr "Executabile"
 
-#: ../plugins/classbuilder.c:36
+#: ../plugins/classbuilder.c:40
 msgid "Class Builder"
 msgstr "Constructor clasă"
 
-#: ../plugins/classbuilder.c:36
+#: ../plugins/classbuilder.c:40
 msgid "Creates source files for new class types."
 msgstr "Crează fișiere sursă pentru noile tipuri de clase."
 
-#: ../plugins/classbuilder.c:372
+#: ../plugins/classbuilder.c:442
 msgid "Create Class"
 msgstr "Crează clasă"
 
-#: ../plugins/classbuilder.c:384
+#: ../plugins/classbuilder.c:453
+#, fuzzy
+msgid "Create C++ Class"
+msgstr "Crează clasă"
+
+#: ../plugins/classbuilder.c:456
+#, fuzzy
+msgid "Create GTK+ Class"
+msgstr "Crează clasă"
+
+#: ../plugins/classbuilder.c:459
+#, fuzzy
+msgid "Create PHP Class"
+msgstr "Crează clasă"
+
+#: ../plugins/classbuilder.c:476
 #, fuzzy
 msgid "Namespace"
 msgstr "Spațiu de nume"
 
-#: ../plugins/classbuilder.c:393
-#, fuzzy
-msgid "Namespace:"
-msgstr "Spațiu de nume"
-
-#: ../plugins/classbuilder.c:402
+#: ../plugins/classbuilder.c:483 ../plugins/classbuilder.c:485
 msgid "Class"
 msgstr "Clasă"
 
-#: ../plugins/classbuilder.c:411
-msgid "Class name:"
-msgstr "Nume clasă:"
-
-#: ../plugins/classbuilder.c:424
+#: ../plugins/classbuilder.c:492
 msgid "Header file:"
 msgstr "Fișier antet:"
 
-#: ../plugins/classbuilder.c:434
+#: ../plugins/classbuilder.c:494
 msgid "Source file:"
 msgstr "Fișier sursă:"
 
-#: ../plugins/classbuilder.c:440
+#: ../plugins/classbuilder.c:496
 msgid "Inheritance"
 msgstr "Moștenire"
 
-#: ../plugins/classbuilder.c:449
+#: ../plugins/classbuilder.c:498
 msgid "Base class:"
 msgstr "Clasă de bază:"
 
-#: ../plugins/classbuilder.c:463
+#: ../plugins/classbuilder.c:506
 #, fuzzy
 msgid "Base source:"
 msgstr "Sursă %s"
 
-#: ../plugins/classbuilder.c:465
+#: ../plugins/classbuilder.c:511
 msgid "Base header:"
 msgstr "Antet de bază:"
 
-#: ../plugins/classbuilder.c:475
+#: ../plugins/classbuilder.c:519
 msgid "Global"
 msgstr "Global"
 
-#: ../plugins/classbuilder.c:485
+#: ../plugins/classbuilder.c:538
 msgid "Base GType:"
 msgstr "GType de bază:"
 
-#: ../plugins/classbuilder.c:498
+#: ../plugins/classbuilder.c:543
 msgid "Implements:"
 msgstr ""
 
-#: ../plugins/classbuilder.c:505
+#: ../plugins/classbuilder.c:545
 msgid "Options"
 msgstr "Opțiuni"
 
-#: ../plugins/classbuilder.c:514
+#: ../plugins/classbuilder.c:562
 msgid "Create constructor"
 msgstr "Crează constructor"
 
-#: ../plugins/classbuilder.c:518
+#: ../plugins/classbuilder.c:567
 msgid "Create destructor"
 msgstr "Crează destructor"
 
-#: ../plugins/classbuilder.c:526
+#: ../plugins/classbuilder.c:574
 msgid "Is abstract"
 msgstr ""
 
-#: ../plugins/classbuilder.c:529
+#: ../plugins/classbuilder.c:577
 msgid "Is singleton"
 msgstr ""
 
-#: ../plugins/classbuilder.c:540
-msgid "GTK+ constructor type"
+#: ../plugins/classbuilder.c:587
+#, fuzzy
+msgid "Constructor type:"
 msgstr "Tip constructor GTK+"
 
-#: ../plugins/classbuilder.c:1040
+#: ../plugins/classbuilder.c:1096
 msgid "Create Cla_ss"
 msgstr "Crează cla_să"
 
-#: ../plugins/classbuilder.c:1046
+#: ../plugins/classbuilder.c:1102
 msgid "_C++ Class"
 msgstr "Clasă _C++"
 
-#: ../plugins/classbuilder.c:1049
+#: ../plugins/classbuilder.c:1105
 msgid "_GTK+ Class"
 msgstr "Clasă _GTK+"
 
-#: ../plugins/classbuilder.c:1052
+#: ../plugins/classbuilder.c:1108
 #, fuzzy
 msgid "_PHP Class"
 msgstr "Clasă _C++"
 
-#: ../plugins/htmlchars.c:39
+#: ../plugins/htmlchars.c:43
 msgid "HTML Characters"
 msgstr "Caractere HTML"
 
-#: ../plugins/htmlchars.c:39
+#: ../plugins/htmlchars.c:43
 msgid "Inserts HTML character entities like '&amp;'."
 msgstr "Inserează entități HTML precum '&amp;'."
 
-#: ../plugins/htmlchars.c:40 ../plugins/export.c:38
-#: ../plugins/filebrowser.c:44 ../plugins/saveactions.c:40
-#: ../plugins/splitwindow.c:33
+#: ../plugins/htmlchars.c:44 ../plugins/export.c:42
+#: ../plugins/filebrowser.c:48 ../plugins/saveactions.c:44
+#: ../plugins/splitwindow.c:37
 msgid "The Geany developer team"
 msgstr "Echipa dezvoltatorilor Geany"
 
-#: ../plugins/htmlchars.c:76
+#: ../plugins/htmlchars.c:80
 msgid "HTML characters"
 msgstr "Caractere HTML"
 
-#: ../plugins/htmlchars.c:82
+#: ../plugins/htmlchars.c:86
 msgid "ISO 8859-1 characters"
 msgstr "Caractere ISO 8859-1"
 
-#: ../plugins/htmlchars.c:180
+#: ../plugins/htmlchars.c:184
 msgid "Greek characters"
 msgstr "Caractere grecești"
 
-#: ../plugins/htmlchars.c:235
+#: ../plugins/htmlchars.c:239
 msgid "Mathematical characters"
 msgstr "Operatori matematici"
 
-#: ../plugins/htmlchars.c:276
+#: ../plugins/htmlchars.c:280
 msgid "Technical characters"
 msgstr "Caractere tehnice"
 
-#: ../plugins/htmlchars.c:284
+#: ../plugins/htmlchars.c:288
 msgid "Arrow characters"
 msgstr "Săgețele"
 
-#: ../plugins/htmlchars.c:297
+#: ../plugins/htmlchars.c:301
 msgid "Punctuation characters"
 msgstr "Semne de punctuație"
 
-#: ../plugins/htmlchars.c:313
+#: ../plugins/htmlchars.c:317
 msgid "Miscellaneous characters"
 msgstr "Caractere diverse"
 
-#: ../plugins/htmlchars.c:368 ../plugins/filebrowser.c:1145
-#: ../plugins/saveactions.c:470
+#: ../plugins/htmlchars.c:372 ../plugins/filebrowser.c:1167
+#: ../plugins/saveactions.c:477
 msgid "Plugin configuration directory could not be created."
 msgstr "Dosarul de setări al modulelor nu a putut fi creat."
 
-#: ../plugins/htmlchars.c:489
+#: ../plugins/htmlchars.c:493
 msgid "Special Characters"
 msgstr "Caractere speciale"
 
-#: ../plugins/htmlchars.c:491
+#: ../plugins/htmlchars.c:495
 msgid "_Insert"
 msgstr "_Inserează"
 
-#: ../plugins/htmlchars.c:500
+#: ../plugins/htmlchars.c:504
 msgid ""
 "Choose a special character from the list below and double click on it or use "
 "the button to insert it at the current cursor position."
@@ -5255,164 +5396,175 @@ msgstr ""
 "Alegeți un caracter special din lista de mai jos și faceți dublu click pe el "
 "sau folosiți butonul pentru a-l insera la poziția curentă a cursorului."
 
-#: ../plugins/htmlchars.c:514
+#: ../plugins/htmlchars.c:518
 msgid "Character"
 msgstr "Caracter"
 
-#: ../plugins/htmlchars.c:520
+#: ../plugins/htmlchars.c:524
 msgid "HTML (name)"
 msgstr "HTML (cuvântul)"
 
-#: ../plugins/htmlchars.c:738
+#: ../plugins/htmlchars.c:742
 msgid "_Insert Special HTML Characters"
 msgstr "_Inserează caracter HTML special"
 
 #. Add menuitem for html replacement functions
-#: ../plugins/htmlchars.c:753
+#: ../plugins/htmlchars.c:757
 #, fuzzy
 msgid "_HTML Replacement"
 msgstr "Înlocuiește"
 
-#: ../plugins/htmlchars.c:760
+#: ../plugins/htmlchars.c:764
 #, fuzzy
 msgid "_Auto-replace Special Characters"
 msgstr "Caractere speciale"
 
-#: ../plugins/htmlchars.c:769
+#: ../plugins/htmlchars.c:773
 #, fuzzy
 msgid "_Replace Characters in Selection"
 msgstr "Du_plică linia sau selecția"
 
-#: ../plugins/htmlchars.c:784
+#: ../plugins/htmlchars.c:788
 msgid "Insert Special HTML Characters"
 msgstr "Inserează caracter HTML special"
 
-#: ../plugins/htmlchars.c:787
+#: ../plugins/htmlchars.c:791
 #, fuzzy
 msgid "Replace special characters"
 msgstr "Caractere speciale"
 
-#: ../plugins/htmlchars.c:790
+#: ../plugins/htmlchars.c:794
 msgid "Toggle plugin status"
 msgstr ""
 
-#: ../plugins/export.c:37
+#: ../plugins/export.c:41
 msgid "Export"
 msgstr "Exportă"
 
-#: ../plugins/export.c:37
+#: ../plugins/export.c:41
 msgid "Exports the current file into different formats."
 msgstr "Exportă fișierul curent în diferite formate."
 
-#: ../plugins/export.c:166
+#: ../plugins/export.c:173
 msgid "Export File"
 msgstr "Exportă fișier"
 
-#: ../plugins/export.c:183
+#: ../plugins/export.c:191
+#, fuzzy
+msgid "_Insert line numbers"
+msgstr "Imprimă numere de linie"
+
+#: ../plugins/export.c:193
+msgid "Insert line numbers before each line in the exported document"
+msgstr ""
+
+#: ../plugins/export.c:203
 msgid "_Use current zoom level"
 msgstr "_Folosește nivelul curent de zoom"
 
-#: ../plugins/export.c:185
+#: ../plugins/export.c:205
 #, fuzzy
 msgid ""
 "Renders the font size of the document together with the current zoom level"
 msgstr "Randează dimensiunea fontului la nivelul curent de zoom."
 
-#: ../plugins/export.c:267
+#: ../plugins/export.c:283
 #, c-format
 msgid "Document successfully exported as '%s'."
 msgstr "Documentul a fost exportat cu succes ca '%s'."
 
-#: ../plugins/export.c:269
+#: ../plugins/export.c:285
 #, c-format
 msgid "File '%s' could not be written (%s)."
 msgstr "Fișierul '%s' nu a putut fi scris (%s)."
 
-#: ../plugins/export.c:316
+#: ../plugins/export.c:335
 #, c-format
 msgid "The file '%s' already exists. Do you want to overwrite it?"
 msgstr "Fișierul '%s' există deja. Doriți să-l suprascrieți?"
 
-#: ../plugins/export.c:703
+#: ../plugins/export.c:783
 msgid "_Export"
 msgstr "_Exportă"
 
 #. HTML
-#: ../plugins/export.c:710
+#: ../plugins/export.c:790
 msgid "As _HTML"
 msgstr "Ca _HTML"
 
 #. LaTeX
-#: ../plugins/export.c:716
+#: ../plugins/export.c:796
 msgid "As _LaTeX"
 msgstr "Ca _LaTeX"
 
-#: ../plugins/filebrowser.c:43
+#: ../plugins/filebrowser.c:47
 msgid "File Browser"
 msgstr "Navigator fișiere"
 
-#: ../plugins/filebrowser.c:43
+#: ../plugins/filebrowser.c:47
 msgid "Adds a file browser tab to the sidebar."
 msgstr "Adaugă un tab navigator fișiere la bara laterală."
 
-#: ../plugins/filebrowser.c:359
+#: ../plugins/filebrowser.c:370
 msgid "Too many items selected!"
 msgstr "Prea mulți itemi selectați!"
 
-#: ../plugins/filebrowser.c:435
+#: ../plugins/filebrowser.c:446
 #, c-format
 msgid "Could not execute configured external command '%s' (%s)."
 msgstr "Nu am putut executa comanda externă '%s' (%s)."
 
-#: ../plugins/filebrowser.c:604
+#: ../plugins/filebrowser.c:616
 msgid "Open _externally"
 msgstr "Deschide _extern"
 
-#: ../plugins/filebrowser.c:629
+#: ../plugins/filebrowser.c:641
 msgid "Show _Hidden Files"
 msgstr "Arată fișierele a_scunse"
 
-#: ../plugins/filebrowser.c:850
+#: ../plugins/filebrowser.c:872
 msgid "Up"
 msgstr "Sus"
 
-#: ../plugins/filebrowser.c:855
+#: ../plugins/filebrowser.c:877
 msgid "Refresh"
 msgstr "Reîmprospătare"
 
-#: ../plugins/filebrowser.c:860
+#: ../plugins/filebrowser.c:882
 msgid "Home"
 msgstr "Acasă"
 
-#: ../plugins/filebrowser.c:865
+#: ../plugins/filebrowser.c:887
 msgid "Set path from document"
 msgstr "Stabilește calea din document"
 
-#: ../plugins/filebrowser.c:875
+#: ../plugins/filebrowser.c:897
 msgid "Clear the filter"
 msgstr "Elimină filtrul"
 
-#: ../plugins/filebrowser.c:889
+#: ../plugins/filebrowser.c:911
 msgid "Filter:"
 msgstr "Filtru:"
 
-#: ../plugins/filebrowser.c:899
-msgid "Filter your files with usual wildcards"
+#: ../plugins/filebrowser.c:922
+msgid ""
+"Filter your files with the usual wildcards. Separate multiple patterns with "
+"a space."
 msgstr ""
 
-#: ../plugins/filebrowser.c:1118
+#: ../plugins/filebrowser.c:1137
 msgid "Focus File List"
 msgstr "Focalizează lista de fișiere"
 
-#: ../plugins/filebrowser.c:1120
+#: ../plugins/filebrowser.c:1139
 msgid "Focus Path Entry"
 msgstr "Focalizează introducerea căii"
 
-#: ../plugins/filebrowser.c:1196
+#: ../plugins/filebrowser.c:1232
 msgid "External open command:"
 msgstr "Comandă deschidere externă:"
 
-#: ../plugins/filebrowser.c:1205
+#: ../plugins/filebrowser.c:1240
 #, c-format
 msgid ""
 "The command to execute when using \"Open with\". You can use %f and %d "
@@ -5426,58 +5578,51 @@ msgstr ""
 "%f va fi înlocuit cu numele de fișier incluzând calea completă\n"
 "%d va fi înlocuit cu calea fișierului fără numele acestuia"
 
-#: ../plugins/filebrowser.c:1213
+#: ../plugins/filebrowser.c:1248
 msgid "Show hidden files"
 msgstr "Arată fișierele ascunse"
 
-#: ../plugins/filebrowser.c:1219
-msgid "Hide object files"
-msgstr "Ascunde fișierele obiect"
+#: ../plugins/filebrowser.c:1256
+#, fuzzy
+msgid "Hide file extensions:"
+msgstr "Determină după extensie"
 
-#: ../plugins/filebrowser.c:1223
-msgid ""
-"Don't show generated object files in the file browser, this includes *.o, *."
-"obj. *.so, *.dll, *.a, *.lib"
-msgstr ""
-"Nu afișa fișierele obiect generate în navigatorul de fișiere, aceasta "
-"include *.o, *.obj. *.so, *.dll, *.a, *.lib"
-
-#: ../plugins/filebrowser.c:1234
+#: ../plugins/filebrowser.c:1281
 #, fuzzy
 msgid "Use the project's base directory"
 msgstr "Creez dosarul cale de bază al proiectului?"
 
-#: ../plugins/filebrowser.c:1238
+#: ../plugins/filebrowser.c:1285
 #, fuzzy
 msgid ""
 "Change the directory to the base directory of the currently opened project"
 msgstr "Fă diff de la directorul fișierului activ"
 
-#: ../plugins/saveactions.c:39
+#: ../plugins/saveactions.c:43
 msgid "Save Actions"
 msgstr "Acțiuni salvare"
 
-#: ../plugins/saveactions.c:39
+#: ../plugins/saveactions.c:43
 msgid "This plugin provides different actions related to saving of files."
 msgstr "Acest modul oferă acțiuni diferite legat€ de salvarea fișierelor."
 
-#: ../plugins/saveactions.c:169
+#: ../plugins/saveactions.c:173
 #, c-format
 msgid "Backup Copy: Directory could not be created (%s)."
 msgstr "Copie de siguranță: Dosarul nu a putut fi creat (%s)."
 
 #. it's unlikely that this happens
-#: ../plugins/saveactions.c:201
+#: ../plugins/saveactions.c:205
 #, c-format
 msgid "Backup Copy: File could not be read (%s)."
 msgstr "Copie de siguranță: Fișierul nu a putut fi citit (%s)."
 
-#: ../plugins/saveactions.c:219
+#: ../plugins/saveactions.c:223
 #, c-format
 msgid "Backup Copy: File could not be saved (%s)."
 msgstr "Copie de siguranță: Fișierul nu a putut fi salvat (%s)."
 
-#: ../plugins/saveactions.c:311
+#: ../plugins/saveactions.c:315
 #, c-format
 msgid "Autosave: Saved %d file automatically."
 msgid_plural "Autosave: Saved %d files automatically."
@@ -5486,109 +5631,169 @@ msgstr[1] "Salvare automată: %d fișiere au fost salvate."
 msgstr[2] "Salvare automată: %d fișiere au fost salvate."
 
 #. initialize the dialog
-#: ../plugins/saveactions.c:380
+#: ../plugins/saveactions.c:384
 msgid "Select Directory"
 msgstr "Selectați dosar"
 
-#: ../plugins/saveactions.c:463
+#: ../plugins/saveactions.c:469
 msgid "Backup directory does not exist or is not writable."
 msgstr "Dosarul copii de siguranță nu există sau nu poate fi scris."
 
-#: ../plugins/saveactions.c:543
+#: ../plugins/saveactions.c:550
 msgid "Auto Save"
 msgstr "Salvare automată"
 
-#: ../plugins/saveactions.c:545 ../plugins/saveactions.c:607
-#: ../plugins/saveactions.c:648
+#: ../plugins/saveactions.c:552 ../plugins/saveactions.c:614
+#: ../plugins/saveactions.c:655
 msgid "_Enable"
 msgstr "_Activează"
 
-#: ../plugins/saveactions.c:553
+#: ../plugins/saveactions.c:560
 msgid "Auto save _interval:"
 msgstr "_Interval salvare automată:"
 
-#: ../plugins/saveactions.c:561
+#: ../plugins/saveactions.c:568
 msgid "seconds"
 msgstr "secunde"
 
-#: ../plugins/saveactions.c:570
+#: ../plugins/saveactions.c:577
 msgid "_Print status message if files have been automatically saved"
 msgstr "_Afișează mesaj de stare la salvarea automată a fișierelor."
 
-#: ../plugins/saveactions.c:578
+#: ../plugins/saveactions.c:585
 msgid "Save only current open _file"
 msgstr "Salvează numai _fișierul deschis curent"
 
-#: ../plugins/saveactions.c:585
+#: ../plugins/saveactions.c:592
 msgid "Sa_ve all open files"
 msgstr "S_alvează toate fișierele deschise"
 
-#: ../plugins/saveactions.c:605
+#: ../plugins/saveactions.c:612
 msgid "Instant Save"
 msgstr "Salvare instantanee"
 
-#: ../plugins/saveactions.c:615
+#: ../plugins/saveactions.c:622
 msgid "_Filetype to use for newly opened files:"
 msgstr "Tip de _fișier folosit pentru fișierele nou deschise:"
 
-#: ../plugins/saveactions.c:646
+#: ../plugins/saveactions.c:653
 msgid "Backup Copy"
 msgstr "Copie de siguranță"
 
-#: ../plugins/saveactions.c:656
+#: ../plugins/saveactions.c:663
 msgid "_Directory to save backup files in:"
 msgstr "_Dosar copii de siguranță:"
 
-#: ../plugins/saveactions.c:679
+#: ../plugins/saveactions.c:686
 msgid "Date/_Time format for backup files (\"man strftime\" for details):"
 msgstr ""
 "Format Dată/_Timp pentru copiile de siguranță (\"man strftime\" pentru "
 "detalii:"
 
-#: ../plugins/saveactions.c:692
+#: ../plugins/saveactions.c:699
 msgid "Directory _levels to include in the backup destination:"
 msgstr ""
 "Nive_luri de directoare pentru includerea în destinația copiei de siguranță:"
 
-#: ../plugins/splitwindow.c:32
+#: ../plugins/splitwindow.c:36
 msgid "Split Window"
 msgstr "Împarte fereastra"
 
-#: ../plugins/splitwindow.c:32
+#: ../plugins/splitwindow.c:36
 msgid "Splits the editor view into two windows."
 msgstr "Împarte vizualizarea editorului în două ferestre."
 
-#: ../plugins/splitwindow.c:240
+#: ../plugins/splitwindow.c:275
 #, fuzzy
 msgid "Show the current document"
 msgstr "Marchează toate potrivirile în documentul curent."
 
-#: ../plugins/splitwindow.c:257 ../plugins/splitwindow.c:385
-#: ../plugins/splitwindow.c:400
+#: ../plugins/splitwindow.c:292 ../plugins/splitwindow.c:426
+#: ../plugins/splitwindow.c:441
 #, fuzzy
 msgid "_Unsplit"
 msgstr "_Reunește"
 
-#: ../plugins/splitwindow.c:367
+#: ../plugins/splitwindow.c:408
 msgid "_Split Window"
 msgstr "Î_mparte fereastra"
 
-#: ../plugins/splitwindow.c:375
-msgid "_Horizontally"
-msgstr "_Orizontal"
+#: ../plugins/splitwindow.c:416
+#, fuzzy
+msgid "_Side by Side"
+msgstr "Ascun_de bara laterală"
 
-#: ../plugins/splitwindow.c:380
-msgid "_Vertically"
+#: ../plugins/splitwindow.c:421
+msgid "_Top and Bottom"
 msgstr ""
 
-#: ../plugins/splitwindow.c:396
+#: ../plugins/splitwindow.c:437
 #, fuzzy
 msgid "Split Horizontally"
 msgstr "_Orizontal"
 
-#: ../plugins/splitwindow.c:398
+#: ../plugins/splitwindow.c:439
 msgid "Split Vertically"
 msgstr ""
+
+#, fuzzy
+#~ msgid "Clear"
+#~ msgstr "Compilator"
+
+#, fuzzy
+#~ msgid "_Set Build Menu Commands"
+#~ msgstr "Stabilește comenzi personalizate"
+
+#~ msgid "SQL Dump file"
+#~ msgstr "Fișier SQL Dump"
+
+#~ msgid "%s script file"
+#~ msgstr "Fișier script %s"
+
+#~ msgid "M_iscellaneous Languages"
+#~ msgstr "Limbaje di_verse"
+
+#, fuzzy
+#~ msgid "_Custom Filetypes"
+#~ msgstr "Stabilește _tipul de fișier"
+
+#~ msgid ""
+#~ "Plugin: %s %s\n"
+#~ "Description: %s\n"
+#~ "Author(s): %s"
+#~ msgstr ""
+#~ "Modul: %s %s\n"
+#~ "Descriere: %s\n"
+#~ "Autor(i): %s"
+
+#~ msgid ""
+#~ "<i>Notice: For all changes you make here to take effect, you need to "
+#~ "restart Geany or force the reload of the settings using Tools->Reload "
+#~ "Configuration.</i>"
+#~ msgstr ""
+#~ "<i>Notiță: Pentru ca schimbările făcute să aibă efect, trebuie să "
+#~ "reporniți Geany sau să forțați reîncărcare setărilor folosind Unelte-"
+#~ ">Reîncarcă configurația.</i>"
+
+#, fuzzy
+#~ msgid "Namespace:"
+#~ msgstr "Spațiu de nume"
+
+#~ msgid "Class name:"
+#~ msgstr "Nume clasă:"
+
+#~ msgid "Hide object files"
+#~ msgstr "Ascunde fișierele obiect"
+
+#~ msgid ""
+#~ "Don't show generated object files in the file browser, this includes *.o, "
+#~ "*.obj. *.so, *.dll, *.a, *.lib"
+#~ msgstr ""
+#~ "Nu afișa fișierele obiect generate în navigatorul de fișiere, aceasta "
+#~ "include *.o, *.obj. *.so, *.dll, *.a, *.lib"
+
+#~ msgid "_Horizontally"
+#~ msgstr "_Orizontal"
 
 #~ msgid "Find _Selected"
 #~ msgstr "Caută _selecția"
@@ -5748,9 +5953,6 @@ msgstr ""
 
 #~ msgid "Printing of file %s was cancelled."
 #~ msgstr "Imprimarea fișierului %s a fost revocată."
-
-#~ msgid "Run command:"
-#~ msgstr "Comandă rulare:"
 
 #~ msgid "Choose Project Run Command"
 #~ msgstr "Alegeți comanda de rulare a proiectului"

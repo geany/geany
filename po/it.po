@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Geany 0.21\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-09-17 09:34+0200\n"
+"POT-Creation-Date: 2011-09-17 09:51+0200\n"
 "PO-Revision-Date: 2011-09-16 16:48+0100\n"
 "Last-Translator: Giuliano Manzitti <giuliano1979@hotmail.com>\n"
 "Language-Team:  <geany-i18n@uvena.de>\n"
@@ -33,53 +33,53 @@ msgstr "Geany"
 msgid "Integrated Development Environment"
 msgstr "Ambiente di sviluppo integrato"
 
-#: ../src/about.c:154
+#: ../src/about.c:155
 msgid "About Geany"
 msgstr "Informazioni su Geany"
 
-#: ../src/about.c:204
+#: ../src/about.c:205
 msgid "A fast and lightweight IDE"
 msgstr "Un IDE veloce e leggero"
 
-#: ../src/about.c:225
+#: ../src/about.c:226
 #, c-format
 msgid "(built on or after %s)"
 msgstr "(generato il %s)"
 
 #. gtk_container_add(GTK_CONTAINER(info_box), cop_label);
-#: ../src/about.c:256
+#: ../src/about.c:257
 msgid "Info"
 msgstr "Informazioni"
 
-#: ../src/about.c:272
+#: ../src/about.c:273
 msgid "Developers"
 msgstr "Sviluppatori"
 
-#: ../src/about.c:281
+#: ../src/about.c:282
 msgid "maintainer"
 msgstr "curatore"
 
-#: ../src/about.c:289 ../src/about.c:297
+#: ../src/about.c:290 ../src/about.c:298
 msgid "developer"
 msgstr "sviluppatore"
 
-#: ../src/about.c:305
+#: ../src/about.c:306
 msgid "translation maintainer"
 msgstr "curatore delle traduzioni"
 
-#: ../src/about.c:314
+#: ../src/about.c:315
 msgid "Translators"
 msgstr "Traduttori"
 
-#: ../src/about.c:334
+#: ../src/about.c:335
 msgid "Previous Translators"
 msgstr "Traduttori precedenti"
 
-#: ../src/about.c:355
+#: ../src/about.c:356
 msgid "Contributors"
 msgstr "Contributori"
 
-#: ../src/about.c:365
+#: ../src/about.c:366
 #, c-format
 msgid ""
 "Some of the many contributors (for a more detailed list, see the file %s):"
@@ -87,15 +87,15 @@ msgstr ""
 "Alcuni dei principali contributori (per una lista più dettagliata vedere il "
 "file %s):"
 
-#: ../src/about.c:391
+#: ../src/about.c:392
 msgid "Credits"
 msgstr "Ringraziamenti"
 
-#: ../src/about.c:405
+#: ../src/about.c:406
 msgid "License"
 msgstr "Licenza"
 
-#: ../src/about.c:414
+#: ../src/about.c:415
 msgid ""
 "License text could not be found, please visit http://www.gnu.org/licenses/"
 "gpl-2.0.txt to view it online."
