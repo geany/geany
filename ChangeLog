@@ -1,5 +1,7 @@
 2011-09-17  Frank Lanitz  <frlan@frank.uvena.de>
 
+ * po/fa.po, THANKS, src/about.c:
+   Adding Persian translation. Thanks to Moein Owhadi Kareshk
  * THANKS: Adding Giuliano Manzitti to THANKS-file.
 
 
