@@ -1,18 +1,17 @@
-# Portuguese translations for PACKAGE package.
+# Brailian Portuguese translations for PACKAGE package.
 # Copyright (C) 2006-2011 GEANY'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # Alexandre Moreira <alexandream@gmail.com>, 2006
-# Adrovane Marques Kade <adrovane@gmail.com>, 2007-2010
+# Adrovane Marques Kade <adrovane@gmail.com>, 2007-2011
 # Rafael Peregrino da Silva <rperegrino@linuxmagazine.com.br>, 2011
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Geany 0.20\n"
+"Project-Id-Version: Geany 0.21\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-09-17 09:51+0200\n"
-"PO-Revision-Date: 2011-01-10 20:14-0300\n"
-"Last-Translator: Rafael Peregrino da Silva <rperegrino@linuxmagazine.com."
-"br>\n"
+"POT-Creation-Date: 2011-09-19 18:13+0200\n"
+"PO-Revision-Date: 2011-09-17 09:54-0300\n"
+"Last-Translator: Adrovane Marques Kade <adrovane@gmail.com>\n"
 "Language-Team: Portuguese <geany-i18n@uvena.de>\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
@@ -223,42 +222,37 @@ msgid "Working directory"
 msgstr "Diretório de trabalho"
 
 #: ../src/build.c:1847
-#, fuzzy
 msgid "Reset"
-msgstr "Redefinir Zoom"
+msgstr "Redefinir"
 
 #: ../src/build.c:1892
 msgid "Click to set menu item label"
 msgstr "Clique para definir o rótulo do item de menu"
 
 #: ../src/build.c:1976 ../src/build.c:1978
-#, fuzzy, c-format
+#, c-format
 msgid "%s commands"
-msgstr " %s Comandos"
+msgstr " %s comandos"
 
 #: ../src/build.c:1978
-#, fuzzy
 msgid "No filetype"
-msgstr "Nenhum Tipo de Arquivo"
+msgstr "Nenhum tipo de arquivo"
 
 #: ../src/build.c:1987 ../src/build.c:2022
-#, fuzzy
 msgid "Error regular expression:"
-msgstr "Expressão Regular de Erro:"
+msgstr "Expressão regular de erro:"
 
 #: ../src/build.c:2015
-#, fuzzy
 msgid "Independent commands"
-msgstr "Comandos Independentes"
+msgstr "Comandos independentes"
 
 #: ../src/build.c:2047
 msgid "Note: Item 2 opens a dialog and appends the response to the command."
 msgstr "Nota: o item 2 abre um diálogo e anexa a resposta ao comando."
 
 #: ../src/build.c:2056
-#, fuzzy
 msgid "Execute commands"
-msgstr "Executar Comandos"
+msgstr "Executar comandos"
 
 #: ../src/build.c:2068
 #, c-format
@@ -709,12 +703,12 @@ msgstr "Tabs e Espaços"
 #: ../src/document.c:1089
 #, c-format
 msgid "Setting %s indentation mode for %s."
-msgstr "Definindo %s modo de recuo para %s."
+msgstr "Definindo %s modo de endentação para %s."
 
 #: ../src/document.c:1100
-#, fuzzy, c-format
+#, c-format
 msgid "Setting indentation width to %d for %s."
-msgstr "Definindo %s modo de recuo para %s."
+msgstr "Definindo largura de endentação para %d para %s."
 
 #: ../src/document.c:1137 ../src/document.c:1737
 msgid "Invalid filename"
@@ -1012,9 +1006,8 @@ msgid "None"
 msgstr "Nenhum"
 
 #: ../src/filetypes.c:304
-#, fuzzy
 msgid "Shell script"
-msgstr "Arquivo script Shell"
+msgstr "Script do Shell"
 
 #: ../src/filetypes.c:312
 msgid "Makefile"
@@ -1049,9 +1042,8 @@ msgid "_Markup Languages"
 msgstr "Linguagens de _Marcação"
 
 #: ../src/filetypes.c:716
-#, fuzzy
 msgid "M_iscellaneous"
-msgstr "Miscelânea"
+msgstr "M_iscelânea"
 
 #: ../src/filetypes.c:1431 ../src/win32.c:105
 msgid "All Source"
@@ -1194,15 +1186,15 @@ msgstr "A_lternar Comentário de Linha"
 
 #: ../src/interface.c:607
 msgid "_Increase Indent"
-msgstr "Aumen_tar Recuo"
+msgstr "Aumen_tar Endentação"
 
 #: ../src/interface.c:615
 msgid "_Decrease Indent"
-msgstr "Dimi_nuir Recuo"
+msgstr "Dimi_nuir Endentação"
 
 #: ../src/interface.c:623 ../src/keybindings.c:354
 msgid "_Smart Line Indent"
-msgstr "Recuo Inteligente de Linha_s"
+msgstr "Endentação Inteligente de Linha_s"
 
 #: ../src/interface.c:632
 msgid "_Send Selection to"
@@ -1375,7 +1367,7 @@ msgstr "_Exibir Fim de Linha"
 
 #: ../src/interface.c:945
 msgid "Show _Indentation Guides"
-msgstr "Ex_ibir Guias de Recuo"
+msgstr "Ex_ibir Guias de Endentação"
 
 #: ../src/interface.c:966
 msgid "_Document"
@@ -1391,16 +1383,15 @@ msgstr "Que_bra de Linha"
 
 #: ../src/interface.c:982
 msgid "_Auto-indentation"
-msgstr "Recuo _Automático"
+msgstr "Endentação _Automática"
 
 #: ../src/interface.c:987
 msgid "In_dent Type"
-msgstr "T_ipo de recuo"
+msgstr "T_ipo de endentação"
 
 #: ../src/interface.c:994 ../src/interface.c:1028
-#, fuzzy
 msgid "_Detect from Content"
-msgstr "Detectar a partir do arquivo"
+msgstr "_Detectar do Conteúdo"
 
 #: ../src/interface.c:1003 ../src/interface.c:3948 ../src/interface.c:5666
 msgid "_Tabs"
@@ -1416,7 +1407,7 @@ msgstr "T_abs e Espaços"
 
 #: ../src/interface.c:1021
 msgid "Indent Widt_h"
-msgstr "_Quantidade de Recuo"
+msgstr "_Largura da Endentação"
 
 #: ../src/interface.c:1037
 msgid "_1"
@@ -1532,11 +1523,11 @@ msgstr "_Fechar"
 
 #: ../src/interface.c:1231
 msgid "_Apply Default Indentation"
-msgstr "_Aplicar recuo padrão"
+msgstr "_Aplicar endentação padrão"
 
 #: ../src/interface.c:1234
 msgid "Apply the default indentation settings to all documents"
-msgstr "Aplicar configuração de recuo padrão a todos os documentos"
+msgstr "Aplicar configuração de endentação padrão a todos os documentos"
 
 #: ../src/interface.c:1249
 msgid "_Tools"
@@ -2001,19 +1992,16 @@ msgid "<b>Tab positions</b>"
 msgstr "<b>Posições das abas</b>"
 
 #: ../src/interface.c:3576
-#, fuzzy
 msgid "Notebook tabs"
-msgstr "Aba do Bloco de Notas"
+msgstr "Abas do Bloco de Notas"
 
 #: ../src/interface.c:3607
-#, fuzzy
 msgid "Show t_oolbar"
-msgstr "Exibir Barra de Ferramen_tas"
+msgstr "Exibir barra de ferramen_tas"
 
 #: ../src/interface.c:3611
-#, fuzzy
 msgid "_Append toolbar to the menu"
-msgstr "_Anexar Barra de Ferramentas ao Menu"
+msgstr "_Anexar barra de ferramentas ao menu"
 
 #: ../src/interface.c:3614
 msgid "Pack the toolbar to the main menu to save vertical space"
@@ -2026,54 +2014,44 @@ msgid "Customize Toolbar"
 msgstr "Personalizar Barra de Ferramentas"
 
 #: ../src/interface.c:3656
-#, fuzzy
 msgid "System _default"
-msgstr "_Default do Sistema"
+msgstr "_Default do sistema"
 
 #: ../src/interface.c:3664
-#, fuzzy
 msgid "Images _and text"
-msgstr "Im_agens e Texto"
+msgstr "Im_agens e texto"
 
 #: ../src/interface.c:3672
-#, fuzzy
 msgid "_Images only"
-msgstr "Somente _Imagens"
+msgstr "Apenas _imagens"
 
 #: ../src/interface.c:3680
-#, fuzzy
 msgid "_Text only"
-msgstr "Somente _Texto"
+msgstr "Apenas _texto"
 
 #: ../src/interface.c:3688
-#, fuzzy
 msgid "<b>Icon style</b>"
-msgstr "<b>Estilo do Ícone</b>"
+msgstr "<b>Estilo do ícone</b>"
 
 #: ../src/interface.c:3709
-#, fuzzy
 msgid "S_ystem default"
-msgstr "Default do S_istema"
+msgstr "Default do s_istema"
 
 #: ../src/interface.c:3717
-#, fuzzy
 msgid "_Small icons"
-msgstr "Ícone_s Pequenos"
+msgstr "Ícone_s pequenos"
 
 #: ../src/interface.c:3725
-#, fuzzy
 msgid "_Very small icons"
-msgstr "Ícones _Muito Pequenos"
+msgstr "Ícones _muito pequenos"
 
 #: ../src/interface.c:3733
-#, fuzzy
 msgid "_Large icons"
-msgstr "Ícones _Grandes"
+msgstr "Ícones _grandes"
 
 #: ../src/interface.c:3741
-#, fuzzy
 msgid "<b>Icon size</b>"
-msgstr "<b>Tamanho do Ícone</b>"
+msgstr "<b>Tamanho do ícone</b>"
 
 #: ../src/interface.c:3746
 msgid "<b>Toolbar</b>"
@@ -2195,7 +2173,7 @@ msgid ""
 "<i>Project->Apply Default Indentation</i>."
 msgstr ""
 "Observação: Para aplicar essa configuração a todos os documentos abertos no "
-"momento, use <i>Projeto->Aplicar Recuo Padrão</i>."
+"momento, use <i>Projeto->Aplicar Endentação Padrão</i>."
 
 #: ../src/interface.c:3888 ../src/interface.c:5606
 msgid "Width:"
@@ -2203,11 +2181,11 @@ msgstr "Largura:"
 
 #: ../src/interface.c:3901 ../src/interface.c:5619
 msgid "The width in chars of a single indent"
-msgstr "Largura em caracteres de um único recuo"
+msgstr "Largura em caracteres de uma única endentação"
 
 #: ../src/interface.c:3906 ../src/interface.c:5624
 msgid "Auto-indent mode:"
-msgstr "Modo de recuo automático:"
+msgstr "Modo de endentação automática:"
 
 #: ../src/interface.c:3919 ../src/interface.c:5637
 msgid "Basic"
@@ -2222,51 +2200,47 @@ msgid "Match braces"
 msgstr "Casar delimitadores"
 
 #: ../src/interface.c:3923 ../src/interface.c:5641
-#, fuzzy
 msgid "Detect type from file"
-msgstr "Detectar a partir do arquivo"
+msgstr "Detectar tipo do arquivo"
 
 #: ../src/interface.c:3928 ../src/interface.c:5646
 msgid ""
 "Whether to detect the indentation type from file contents when a file is "
 "opened"
 msgstr ""
-"Detectar ou não o tipo de recuo a partir do conteúdo de um arquivo quando "
-"ele for aberto"
+"Detectar ou não o tipo de endentação a partir do conteúdo de um arquivo "
+"quando ele for aberto"
 
 #: ../src/interface.c:3930 ../src/interface.c:5648
-#, fuzzy
 msgid "T_abs and spaces"
-msgstr "T_abs e Espaços"
+msgstr "T_abs e espaços"
 
 #: ../src/interface.c:3935 ../src/interface.c:5653
 msgid ""
 "Use spaces if the total indent is less than the tab width, otherwise use both"
 msgstr ""
-"Usar espaços se o recuo total for menor do que a largura da tabulação, senão "
-"usa ambos"
+"Usar espaços se a endentação total for menor do que a largura da tabulação, "
+"senão usa ambos"
 
 #: ../src/interface.c:3944 ../src/interface.c:5662
 msgid "Use spaces when inserting indentation"
-msgstr "Usar espaços quando inserir recuo"
+msgstr "Usar espaços quando inserir endentação"
 
 #: ../src/interface.c:3953 ../src/interface.c:5671
 msgid "Use one tab per indent"
-msgstr "Usa um tab por recuo"
+msgstr "Usar um tab por endentação"
 
 #: ../src/interface.c:3957 ../src/interface.c:5682
-#, fuzzy
 msgid "Detect width from file"
-msgstr "Detectar a partir do arquivo"
+msgstr "Detectar largura do arquivo"
 
 #: ../src/interface.c:3962 ../src/interface.c:5687
-#, fuzzy
 msgid ""
 "Whether to detect the indentation width from file contents when a file is "
 "opened"
 msgstr ""
-"Detectar ou não o tipo de recuo a partir do conteúdo de um arquivo quando "
-"ele for aberto"
+"Detectar ou não a largura da ententação a partir do conteúdo quando um "
+"arquivo for aberto"
 
 #: ../src/interface.c:3964 ../src/interface.c:4254 ../src/interface.c:5675
 msgid "Type:"
@@ -2274,22 +2248,22 @@ msgstr "Tipo:"
 
 #: ../src/interface.c:3971
 msgid "Tab key indents"
-msgstr "Recuos da tecla Tab"
+msgstr "Endentações da tecla Tab"
 
 #: ../src/interface.c:3974
 msgid ""
 "Pressing tab/shift-tab indents/unindents instead of inserting a tab character"
 msgstr ""
-"Pressionar tab/shift-tab insere/remove recuo em vez de inserir um caracter "
-"de tabulação"
+"Pressionar tab/shift-tab insere/remove endentação em vez de inserir um "
+"caracter de tabulação"
 
 #: ../src/interface.c:3976
 msgid "<b>Indentation</b>"
-msgstr "<b>Recuo</b>"
+msgstr "<b>Endentação</b>"
 
 #: ../src/interface.c:3981 ../src/interface.c:5689
 msgid "Indentation"
-msgstr "Recuo"
+msgstr "Endentação"
 
 #: ../src/interface.c:4004
 msgid "Snippet completion"
@@ -2373,7 +2347,7 @@ msgstr "Número máximo de entradas para exibir na lista de auto-completamento"
 
 #: ../src/interface.c:4086
 msgid "Symbol list update frequency:"
-msgstr ""
+msgstr "Frequência de atualização da lista de símbolos:"
 
 #: ../src/interface.c:4099
 msgid ""
@@ -2381,6 +2355,10 @@ msgid ""
 "list. Note that a too short delay may have performance impact, especially "
 "with large files. A delay of 0 disables real-time updates."
 msgstr ""
+"Atraso mínimo (em milissegundos) entre duas atualizações automáticas da "
+"lista de símbolos. Perceba que um atraso muito curto pode impactar o "
+"desempenho, especialmente para arquivos grandes. Um atraso de 0 desabilita "
+"atualiações em tempo real"
 
 #: ../src/interface.c:4102
 msgid "<b>Completions</b>"
@@ -2449,7 +2427,8 @@ msgstr "Exibir guias de indentação"
 
 #: ../src/interface.c:4192
 msgid "Shows small dotted lines to help you to use the right indentation"
-msgstr "Exibir pequenas linhas pontilhadas para ajudar no uso do recuo correto"
+msgstr ""
+"Exibir pequenas linhas pontilhadas para ajudar no uso da endentação correta"
 
 #: ../src/interface.c:4194
 msgid "Show white space"
@@ -2816,9 +2795,8 @@ msgid "Date:"
 msgstr "Data:"
 
 #: ../src/interface.c:4840
-#, fuzzy
 msgid "Date & time:"
-msgstr "Data & Hora:"
+msgstr "Data & hora:"
 
 #: ../src/interface.c:4852
 msgid ""
@@ -2947,17 +2925,15 @@ msgstr "Impressão"
 
 #: ../src/interface.c:5097
 msgid "<i>Warning: read the manual before changing these preferences.</i>"
-msgstr ""
+msgstr "<i>Atenção: leia o manual antes de alterar essas preferências.</i>"
 
 #: ../src/interface.c:5102
-#, fuzzy
 msgid "<b>Various preferences</b>"
-msgstr "<b>Espaços virtuais</b>"
+msgstr "<b>Várias preferências</b>"
 
 #: ../src/interface.c:5107 ../src/prefs.c:1583
-#, fuzzy
 msgid "Various"
-msgstr "_Anterior"
+msgstr "Várias"
 
 #: ../src/interface.c:5589
 msgid "Project Properties"
@@ -3157,11 +3133,11 @@ msgstr "Diminuir indentação"
 
 #: ../src/keybindings.c:350
 msgid "Increase indent by one space"
-msgstr "Aumentar recuo em um espaço"
+msgstr "Aumentar endentação em um espaço"
 
 #: ../src/keybindings.c:352
 msgid "Decrease indent by one space"
-msgstr "Diminuir recuo em um espaço"
+msgstr "Diminuir endentação em um espaço"
 
 #: ../src/keybindings.c:356
 msgid "Send to Custom Command 1"
@@ -3432,9 +3408,8 @@ msgid "Remove Error Indicators"
 msgstr "Remover Indicadores de Erro"
 
 #: ../src/keybindings.c:535
-#, fuzzy
 msgid "Remove Markers and Error Indicators"
-msgstr "Remover Indicadores de Erro"
+msgstr "Remover Marcadores e Indicadores de Erro"
 
 #: ../src/keybindings.c:537 ../src/keybindings.c:542 ../src/project.c:484
 #: ../src/ui_utils.c:1947
@@ -3695,7 +3670,7 @@ msgstr "Gerenciador de _Plugins"
 #: ../src/plugins.c:1160
 #, c-format
 msgid "%s %s"
-msgstr ""
+msgstr "%s %s"
 
 #: ../src/plugins.c:1236
 msgid "Active"
@@ -3722,9 +3697,8 @@ msgid "<b>Plugin details:</b>"
 msgstr "<b>Detalhes do plugin:</b>"
 
 #: ../src/plugins.c:1403
-#, fuzzy
 msgid "Plugin:"
-msgstr "Plugin"
+msgstr "Plugin:"
 
 #: ../src/plugins.c:1404 ../src/project.c:446
 msgid "Description:"
@@ -3732,7 +3706,7 @@ msgstr "Descrição:"
 
 #: ../src/plugins.c:1405
 msgid "Author(s):"
-msgstr ""
+msgstr "Autor(es):"
 
 #: ../src/pluginutils.c:334
 msgid "Configure Plugins"
@@ -3931,9 +3905,8 @@ msgid "Choose Project Base Path"
 msgstr "Escolher Caminho Base do Projeto"
 
 #: ../src/project.c:196 ../src/project.c:575
-#, fuzzy
 msgid "Project file could not be written"
-msgstr "O arquivo de projeto não pôde ser gravado (%s)."
+msgstr "O arquivo de projeto não pôde ser gravado"
 
 #: ../src/project.c:199
 #, c-format
@@ -3967,6 +3940,8 @@ msgid ""
 "Space separated list of file patterns used for the find in files dialog (e."
 "g. *.c *.h)"
 msgstr ""
+"Lista separada de espaçoes de padrões de arquivo usados para o diálogo "
+"Localizar em Arquivos (p.ex., *.c *.h)"
 
 #: ../src/project.c:578
 #, c-format
@@ -4130,17 +4105,15 @@ msgstr ""
 
 #: ../src/search.c:831
 msgid "all"
-msgstr ""
+msgstr "todos"
 
 #: ../src/search.c:833
-#, fuzzy
 msgid "project"
-msgstr "projects"
+msgstr "project"
 
 #: ../src/search.c:835
-#, fuzzy
 msgid "custom"
-msgstr "Personalizado"
+msgstr "personalizado"
 
 #: ../src/search.c:839
 msgid ""
@@ -4148,6 +4121,9 @@ msgid ""
 "Project: use file patterns defined in the project settings\n"
 "Custom: specify file patterns manually"
 msgstr ""
+"Todos: pesquisa todos os arquivos do diretório\n"
+"Projeto: usa padrões de arquivo definidos nas configurações do projeto\n"
+"Personalizado: especifica manualmente os padrões de arquivo"
 
 #: ../src/search.c:906
 msgid "Fi_les:"
@@ -4317,7 +4293,7 @@ msgstr "Funções"
 
 #: ../src/symbols.c:708
 msgid "Program"
-msgstr ""
+msgstr "Programa"
 
 #: ../src/symbols.c:710 ../src/symbols.c:718 ../src/symbols.c:724
 msgid "Sections"
@@ -4325,16 +4301,15 @@ msgstr "Seções"
 
 #: ../src/symbols.c:711
 msgid "Paragraph"
-msgstr ""
+msgstr "Parágrafo"
 
 #: ../src/symbols.c:712
-#, fuzzy
 msgid "Group"
-msgstr "Grupo:"
+msgstr "Grupo"
 
 #: ../src/symbols.c:713
 msgid "Data"
-msgstr ""
+msgstr "Dados"
 
 #: ../src/symbols.c:719
 msgid "Keys"
@@ -4490,21 +4465,19 @@ msgstr "Destinos"
 
 #: ../src/symbols.c:954
 msgid "Indexes"
-msgstr ""
+msgstr "Índices"
 
 #: ../src/symbols.c:955
-#, fuzzy
 msgid "Tables"
-msgstr "Variáveis"
+msgstr "Tabelas"
 
 #: ../src/symbols.c:956
 msgid "Triggers"
-msgstr ""
+msgstr "Gatilhos"
 
 #: ../src/symbols.c:957
-#, fuzzy
 msgid "Views"
-msgstr "Exibir"
+msgstr "Visões"
 
 #: ../src/symbols.c:976
 msgid "Structs"
@@ -4585,7 +4558,7 @@ msgstr "Ordenar por _Aparecimento"
 #: ../src/templates.c:77
 #, c-format
 msgid "Failed to convert template file \"%s\" to UTF-8"
-msgstr ""
+msgstr "Falhou ao converter o arquivo de modelo \"%s\" para UTF-8"
 
 #. custom actions defined in toolbar_init(): "New", "Open", "SearchEntry", "GotoEntry", "Build"
 #: ../src/toolbar.c:56
@@ -4657,11 +4630,11 @@ msgstr "Diminui o zoom do texto"
 
 #: ../src/toolbar.c:75
 msgid "Decrease indentation"
-msgstr "Diminuir recuo"
+msgstr "Diminuir endentação"
 
 #: ../src/toolbar.c:76
 msgid "Increase indentation"
-msgstr "Aumentar recuo"
+msgstr "Aumentar endentação"
 
 #: ../src/toolbar.c:77 ../src/toolbar.c:382
 msgid "Find the entered text in the current file"
@@ -4736,14 +4709,13 @@ msgid "Displayed Items"
 msgstr "Itens Exibidos"
 
 #: ../src/tools.c:110 ../src/tools.c:115
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid command: %s"
-msgstr "Comando para executar:"
+msgstr "Comando inválido: %s"
 
 #: ../src/tools.c:110
-#, fuzzy
 msgid "Command not found"
-msgstr "\"%s\" não foi encontrado."
+msgstr "Comando não encontrado"
 
 #: ../src/tools.c:256
 #, c-format
@@ -4784,7 +4756,7 @@ msgstr ""
 
 #: ../src/tools.c:522
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #: ../src/tools.c:708
 msgid "No custom commands defined."
@@ -4844,13 +4816,12 @@ msgstr "Exibir _Caminhos"
 
 #. Status bar statistics: col = column, sel = selection.
 #: ../src/ui_utils.c:175
-#, fuzzy
 msgid ""
 "line: %l / %L\t col: %c\t sel: %s\t %w      %t      %mmode: %M      "
 "encoding: %e      filetype: %f      scope: %S"
 msgstr ""
-"linha: %d\t col: %d\t sel: %d\t %s      %s      modo: %s      codificação: "
-"%s %s      tipo arquivo: %s      escopo: %s"
+"linha: %l / %L\t col: %c\t sel: %s\t %w      %t      %mmode: %M      "
+"codificação: %e      tipo arq.: %f      escopo: %S"
 
 #. RO = read-only
 #: ../src/ui_utils.c:205 ../src/ui_utils.c:212
@@ -4934,15 +4905,16 @@ msgid "Close All"
 msgstr "Fechar Tudo"
 
 #: ../src/utils.c:89
-#, fuzzy
 msgid "Select Browser"
-msgstr "Navegador de Arquivos"
+msgstr "Selecionar Navegador"
 
 #: ../src/utils.c:90
 msgid ""
 "Failed to spawn the configured browser command. Please correct it or enter "
 "another one."
 msgstr ""
+"Falhou ao iniciar o comando de navegador configurado. Por favor, corrija-o "
+"ou informe outro."
 
 #: ../src/utils.c:368
 msgid "Win (CRLF)"
@@ -5129,19 +5101,16 @@ msgid "Create Class"
 msgstr "Criar Classe"
 
 #: ../plugins/classbuilder.c:453
-#, fuzzy
 msgid "Create C++ Class"
-msgstr "Criar Classe"
+msgstr "Criar Classe C++"
 
 #: ../plugins/classbuilder.c:456
-#, fuzzy
 msgid "Create GTK+ Class"
-msgstr "Criar Classe"
+msgstr "Criar Classe GTK+"
 
 #: ../plugins/classbuilder.c:459
-#, fuzzy
 msgid "Create PHP Class"
-msgstr "Criar Classe"
+msgstr "Criar Classe PHP"
 
 #: ../plugins/classbuilder.c:476
 msgid "Namespace"
@@ -5208,9 +5177,8 @@ msgid "Is singleton"
 msgstr "É singleton"
 
 #: ../plugins/classbuilder.c:587
-#, fuzzy
 msgid "Constructor type:"
-msgstr "Tipo de construtor GTK+"
+msgstr "Tipo de Construtor:"
 
 #: ../plugins/classbuilder.c:1096
 msgid "Create Cla_ss"
@@ -5345,13 +5313,12 @@ msgid "Export File"
 msgstr "Exportar arquivo"
 
 #: ../plugins/export.c:191
-#, fuzzy
 msgid "_Insert line numbers"
-msgstr "Imprimir números de linhas"
+msgstr "_Inserir números de linha"
 
 #: ../plugins/export.c:193
 msgid "Insert line numbers before each line in the exported document"
-msgstr ""
+msgstr "Inserir números de linha antes de cada linha no documento exportado"
 
 #: ../plugins/export.c:203
 msgid "_Use current zoom level"
@@ -5441,11 +5408,12 @@ msgid "Filter:"
 msgstr "Filtro:"
 
 #: ../plugins/filebrowser.c:922
-#, fuzzy
 msgid ""
 "Filter your files with the usual wildcards. Separate multiple patterns with "
 "a space."
-msgstr "Filtrar os seus arquivos com coringas usuais"
+msgstr ""
+"Filtre os seus arquivos com os coringas usuais. Separe padrões múltiplos com "
+"um espaço."
 
 #: ../plugins/filebrowser.c:1137
 msgid "Focus File List"
@@ -5479,9 +5447,8 @@ msgid "Show hidden files"
 msgstr "Exibir Arquivos _Ocultos"
 
 #: ../plugins/filebrowser.c:1256
-#, fuzzy
 msgid "Hide file extensions:"
-msgstr "Detectar a partir da extensão do arquivo"
+msgstr "Ocultar extensões dos arquivos:"
 
 #: ../plugins/filebrowser.c:1281
 msgid "Use the project's base directory"
@@ -5612,13 +5579,12 @@ msgid "_Split Window"
 msgstr "_Dividir Janela"
 
 #: ../plugins/splitwindow.c:416
-#, fuzzy
 msgid "_Side by Side"
-msgstr "_Ocultar Barra Lateral"
+msgstr "Mo_strar Lado a Lado"
 
 #: ../plugins/splitwindow.c:421
 msgid "_Top and Bottom"
-msgstr ""
+msgstr "_Topo e Base"
 
 #: ../plugins/splitwindow.c:437
 msgid "Split Horizontally"
