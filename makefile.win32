@@ -21,18 +21,12 @@ MAKE = make
 
 # Note: && is needed after cd because each line is executed in a different
 # shell. (cd .. is just for clarity).
-all: check-tools config.h
+all: config.h
 	cd tagmanager/mio && $(MAKE) -f makefile.win32 && cd ../..
 	cd tagmanager && $(MAKE) -f makefile.win32 && cd ..
 	cd scintilla && $(MAKE) -f makefile.win32 && cd ..
 	cd plugins && $(MAKE) -f makefile.win32 && cd ..
 	cd src && $(MAKE) -f makefile.win32 && cd ..
-
-# first check the required tools are installed
-check-tools:
-	$(WINDRES) --version
-	$(CC) --version
-	$(CXX) --version
 
 config.h: win32-config.h
 	$(CP) $< $@
