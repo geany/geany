@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Geany 0.19\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-09-17 09:51+0200\n"
-"PO-Revision-Date: 2011-09-13 20:02+0100\n"
+"POT-Creation-Date: 2011-09-19 20:42+0200\n"
+"PO-Revision-Date: 2011-09-19 20:41+0100\n"
 "Last-Translator: Peter Scholtens <peter.scholtens@xs4all.nl>\n"
 "Language-Team: Dutch <geany-i18n@uvena.de>\n"
 "Language: nl\n"
@@ -2934,9 +2934,8 @@ msgid "Printing"
 msgstr "Afdrukken"
 
 #: ../src/interface.c:5097
-#, fuzzy
 msgid "<i>Warning: read the manual before changing these preferences.</i>"
-msgstr "<i>Kijk in de handleiding voor meer details over deze voorkeuren.</i>"
+msgstr "<i>Lees de handleiding voor meer details over deze voorkeuren.</i>"
 
 #: ../src/interface.c:5102
 msgid "<b>Various preferences</b>"
@@ -4921,15 +4920,16 @@ msgid "Close All"
 msgstr "Alles sluiten"
 
 #: ../src/utils.c:89
-#, fuzzy
 msgid "Select Browser"
-msgstr "Bestandsbrowser"
+msgstr "Selecteer browser"
 
 #: ../src/utils.c:90
 msgid ""
 "Failed to spawn the configured browser command. Please correct it or enter "
 "another one."
 msgstr ""
+"Kon geconfigureerde browser niet starten. Corrigeer of geef een ander "
+"commando."
 
 #: ../src/utils.c:368
 msgid "Win (CRLF)"
