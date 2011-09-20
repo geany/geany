@@ -92,8 +92,10 @@ static GPtrArray *session_files = NULL;
 static gint session_notebook_page;
 static gint hpan_position;
 static gint vpan_position;
+static const gchar atomic_file_saving_key[] = "use_atomic_file_saving";
 
 static GPtrArray *keyfile_groups = NULL;
+
 GPtrArray *pref_groups = NULL;
 
 
@@ -193,7 +195,7 @@ static void init_pref_groups(void)
 	stash_group_add_boolean(group, &editor_prefs.complete_snippets_whilst_editing,
 		"complete_snippets_whilst_editing", FALSE);
 	stash_group_add_boolean(group, &file_prefs.use_safe_file_saving,
-		"use_safe_file_saving", FALSE);
+		atomic_file_saving_key, FALSE);
 	stash_group_add_boolean(group, &file_prefs.gio_unsafe_save_backup,
 		"gio_unsafe_save_backup", FALSE);
 	stash_group_add_boolean(group, &file_prefs.use_gio_unsafe_file_saving,
@@ -664,12 +666,20 @@ void configuration_load_session_files(GKeyFile *config, gboolean read_recent_fil
 }
 
 
+/* note: new settings should be added in init_pref_groups() */
 static void load_dialog_prefs(GKeyFile *config)
 {
 	gchar *tmp_string, *tmp_string2;
 	const gchar *default_charset = NULL;
 
-	/* new settings should be added in init_pref_groups() */
+	/* compatibility with Geany 0.20 */
+	if (!g_key_file_has_key(config, PACKAGE, atomic_file_saving_key, NULL))
+	{
+		g_key_file_set_boolean(config, PACKAGE, atomic_file_saving_key,
+			utils_get_setting_boolean(config, PACKAGE, "use_safe_file_saving", FALSE));
+	}
+	
+	/* read stash prefs */
 	settings_action(config, SETTING_READ);
 
 	/* general */
