@@ -74,11 +74,14 @@ GeanyPrefs prefs;
 GeanyToolPrefs tool_prefs;
 
 
+/* keybinding globals, should be put in a struct */
 static GtkTreeIter g_iter;
 static GtkTreeStore *store = NULL;
 static GtkTreeView *tree = NULL;
 static GtkWidget *dialog_label;
 static gboolean edited = FALSE;
+
+static GtkTreeView *various_treeview = NULL;
 
 static void kb_cell_edited_cb(GtkCellRendererText *cellrenderertext, gchar *path, gchar *new_text, gpointer user_data);
 static gboolean kb_grab_key_dialog_key_press_cb(GtkWidget *dialog, GdkEventKey *event, gpointer user_data);
@@ -109,7 +112,6 @@ static void prefs_action(PrefCallbackAction action)
 {
 	StashGroup *group;
 	guint i;
-	GtkWidget *widget = ui_lookup_widget(ui_widgets.prefs_dialog, "various_treeview");
 
 	foreach_ptr_array(group, i, pref_groups)
 	{
@@ -127,10 +129,10 @@ static void prefs_action(PrefCallbackAction action)
 	switch (action)
 	{
 		case PREF_DISPLAY:
-			stash_tree_display(pref_groups, GTK_TREE_VIEW(widget));
+			stash_tree_display(pref_groups, various_treeview);
 			break;
 		case PREF_UPDATE:
-			stash_tree_update(pref_groups, GTK_TREE_VIEW(widget));
+			stash_tree_update(pref_groups, various_treeview);
 			break;
 	}
 }
@@ -1615,7 +1617,7 @@ void prefs_show_dialog(void)
 	if (ui_widgets.prefs_dialog == NULL)
 	{
 		GtkWidget *combo_new, *combo_open, *combo_eol;
-		GtkWidget *label, *various_tree;
+		GtkWidget *label;
 		guint i;
 		gchar *encoding_string;
 		GdkPixbuf *pb;
@@ -1699,8 +1701,9 @@ void prefs_show_dialog(void)
 		}
 
 		/* page Various */
-		various_tree = ui_lookup_widget(ui_widgets.prefs_dialog, "various_treeview");
-		stash_tree_setup(pref_groups, GTK_TREE_VIEW(various_tree));
+		various_treeview = GTK_TREE_VIEW(ui_lookup_widget(ui_widgets.prefs_dialog,
+			"various_treeview"));
+		stash_tree_setup(pref_groups, various_treeview);
 
 #ifdef HAVE_VTE
 		vte_append_preferences_tab();
