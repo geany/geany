@@ -109,6 +109,7 @@ static void prefs_action(PrefCallbackAction action)
 {
 	StashGroup *group;
 	guint i;
+	GtkWidget *widget = ui_lookup_widget(ui_widgets.prefs_dialog, "various_treeview");
 
 	foreach_ptr_array(group, i, pref_groups)
 	{
@@ -123,10 +124,14 @@ static void prefs_action(PrefCallbackAction action)
 		}
 	}
 
-	if (action == PREF_UPDATE)
+	switch (action)
 	{
-		GtkWidget *widget = ui_lookup_widget(ui_widgets.prefs_dialog, "various_treeview");
-		stash_tree_update(pref_groups, GTK_TREE_VIEW(widget));
+		case PREF_DISPLAY:
+			stash_tree_display(pref_groups, GTK_TREE_VIEW(widget));
+			break;
+		case PREF_UPDATE:
+			stash_tree_update(pref_groups, GTK_TREE_VIEW(widget));
+			break;
 	}
 }
 

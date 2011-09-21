@@ -1008,10 +1008,11 @@ static void stash_tree_destroy_cb(GtkWidget *widget, gpointer user_data)
 }
 
 
-typedef void (*stash_foreach_pref_func)(StashGroup *group, StashPref *entry, gpointer user_data);
+typedef void (*stash_foreach_pref_func)(StashGroup *group, StashPref *entry, gpointer container,
+	PrefAction action);
 
 static void stash_foreach_various_pref(GPtrArray *group_array, stash_foreach_pref_func pref_func,
-	gpointer user_data)
+	gpointer container, PrefAction action)
 {
 	StashGroup *group;
 	guint i;
@@ -1022,39 +1023,22 @@ static void stash_foreach_various_pref(GPtrArray *group_array, stash_foreach_pre
 		if (group->various)
 		{
 			foreach_array(StashPref, entry, group->entries)
-				pref_func(group, entry, user_data);
+				pref_func(group, entry, container, action);
 		}
 	}
 }
 
 
-static void stash_tree_append_pref(StashGroup *group, StashPref *entry, GtkListStore *store)
+static void stash_tree_append_pref(StashGroup *group, StashPref *entry, GtkListStore *store,
+	PrefAction action)
 {
-	gpointer setting;
 	GtkTreeIter iter;
 	StashTreeValue *value;
-
-	switch (entry->setting_type)
-	{
-		case G_TYPE_BOOLEAN:
-			setting = GINT_TO_POINTER(*(gboolean *) entry->setting);
-			break;
-		case G_TYPE_INT:
-			setting = GINT_TO_POINTER(*(gint *) entry->setting);
-			break;
-		case G_TYPE_STRING:
-			setting = g_strdup(*(gchararray *) entry->setting);
-			break;
-		default:
-			g_warning("Unhandled type for %s::%s in %s()!", group->name,
-				entry->key_name, G_STRFUNC);
-			return;
-	}
 
 	value = g_new(StashTreeValue, 1);
 
 	value->setting_type = entry->setting_type;
-	value->setting = setting;
+	value->setting = NULL;
 	value->key_name = entry->key_name;
 	value->group_name = group->name;
 
@@ -1077,7 +1061,7 @@ void stash_tree_setup(GPtrArray *group_array, GtkTreeView *tree)
 
 	store = gtk_list_store_new(STASH_TREE_COUNT, G_TYPE_STRING, G_TYPE_POINTER);
 	stash_foreach_various_pref(group_array,
-		(stash_foreach_pref_func) stash_tree_append_pref, store);
+		(stash_foreach_pref_func) stash_tree_append_pref, store, PREF_DISPLAY);
 	gtk_tree_sortable_set_sort_column_id(GTK_TREE_SORTABLE(store), STASH_TREE_NAME,
 		GTK_SORT_ASCENDING);
 
@@ -1120,14 +1104,62 @@ void stash_tree_setup(GPtrArray *group_array, GtkTreeView *tree)
 }
 
 
+static void stash_tree_display_pref(StashTreeValue *value, StashPref *entry)
+{
+	switch (entry->setting_type)
+	{
+		case G_TYPE_BOOLEAN:
+			value->setting = GINT_TO_POINTER(*(gboolean *) entry->setting);
+			break;
+		case G_TYPE_INT:
+			value->setting = GINT_TO_POINTER(*(gint *) entry->setting);
+			break;
+		case G_TYPE_STRING:
+		{
+			g_free(value->setting);
+			value->setting = g_strdup(*(gchararray *) entry->setting);
+			break;
+		}
+		default:
+			g_warning("Unhandled type for %s::%s in %s()!", value->group_name,
+				entry->key_name, G_STRFUNC);
+	}
+}
+
+
+static void stash_tree_update_pref(StashTreeValue *value, StashPref *entry)
+{
+	gpointer *setting = value->setting;
+
+	switch (entry->setting_type)
+	{
+		case G_TYPE_BOOLEAN:
+			*(gboolean *) entry->setting = GPOINTER_TO_INT(setting);
+			break;
+		case G_TYPE_INT:
+			*(gint *) entry->setting = GPOINTER_TO_INT(setting);
+			break;
+		case G_TYPE_STRING:
+		{
+			gchararray *text = entry->setting;
+			g_free(*text);
+			*text = g_strdup((gchararray) setting);
+			break;
+		}
+		default:
+			g_warning("Unhandled type for %s::%s in %s()!", value->group_name,
+				value->key_name, G_STRFUNC);
+	}
+}
+
 /* These functions can handle about 200 settings on a 1GHz x86 CPU in ~0.06 seconds.
  * For 250+ settings, you'd better write something more efficient. */
-static void stash_tree_update_pref(StashGroup *group, StashPref *entry, GtkTreeModel *model)
+static void stash_tree_handle_pref(StashGroup *group, StashPref *entry, GtkTreeModel *model,
+	PrefAction action)
 {
 	GtkTreeIter iter;
 	gboolean valid = gtk_tree_model_get_iter_first(model, &iter);
 	StashTreeValue *value;
-	gpointer *setting;
 
 	while (valid)
 	{
@@ -1136,23 +1168,14 @@ static void stash_tree_update_pref(StashGroup *group, StashPref *entry, GtkTreeM
 		if (strcmp(group->name, value->group_name) == 0 &&
 			strcmp(entry->key_name, value->key_name) == 0)
 		{
-			setting = value->setting;
-
-			switch (entry->setting_type)
+			switch (action)
 			{
-				case G_TYPE_BOOLEAN:
-					*(gboolean *) entry->setting = GPOINTER_TO_INT(setting);
+				case PREF_DISPLAY:
+					stash_tree_display_pref(value, entry);
 					break;
-				case G_TYPE_INT:
-					*(gint *) entry->setting = GPOINTER_TO_INT(setting);
+				case PREF_UPDATE:
+					stash_tree_update_pref(value, entry);
 					break;
-				case G_TYPE_STRING:
-				{
-					gchararray *text = entry->setting;
-					g_free(*text);
-					*text = g_strdup((gchararray) setting);
-					break;
-				}
 			}
 
 			break;
@@ -1163,8 +1186,15 @@ static void stash_tree_update_pref(StashGroup *group, StashPref *entry, GtkTreeM
 }
 
 
+void stash_tree_display(GPtrArray *group_array, GtkTreeView *tree)
+{
+	stash_foreach_various_pref(group_array, (stash_foreach_pref_func) stash_tree_handle_pref,
+		gtk_tree_view_get_model(tree), PREF_DISPLAY);
+}
+
+
 void stash_tree_update(GPtrArray *group_array, GtkTreeView *tree)
 {
-	stash_foreach_various_pref(group_array, (stash_foreach_pref_func) stash_tree_update_pref,
-		gtk_tree_view_get_model(tree));
+	stash_foreach_various_pref(group_array, (stash_foreach_pref_func) stash_tree_handle_pref,
+		gtk_tree_view_get_model(tree), PREF_UPDATE);
 }
