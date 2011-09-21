@@ -3,6 +3,9 @@
  * src/build.c:
    Use #ifdef SYNC_SPAWN instead of G_OS_WIN32 for easier testing with 
    glib's asynchronous spawning (currently doesn't work on Windows).
+ * src/win32.c, src/win32.h, src/dialogs.c:
+   Use GTK unsaved file dialog on Windows too because the button names 
+   should be specific.
 
 
 2011-09-20  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
