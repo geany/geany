@@ -2498,10 +2498,10 @@ send_selection_unsafe             By default, Geany strips any trailing        f
                                   it to be executed directly, set this option
                                   to true.
 **File related**
-use_safe_file_saving              Defines the mode how Geany saves files to    false     immediately
+use_atomic_file_saving            Defines the mode how Geany saves files to    false     immediately
                                   disk. If disabled, Geany directly writes
                                   the content of the document to disk. This
-                                  might cause in loss of data when there is
+                                  might cause loss of data when there is
                                   no more free space on disk to save the
                                   file. When set to true, Geany first saves
                                   the contents into a temporary file and if
