@@ -210,11 +210,11 @@ static void handle_strv_setting(StashGroup *group, StashPref *se,
 		case SETTING_WRITE:
 		{
 			/* don't try to save a NULL string vector */
-			gchar *dummy[] = { "", NULL };
-			gchar **strv = *setting ? *setting : dummy;
+			const gchar *dummy[] = { "", NULL };
+			const gchar **strv = *setting ? (const gchar **)*setting : dummy;
 
 			g_key_file_set_string_list(config, group->name, se->key_name,
-				(const gchar**)strv, g_strv_length(strv));
+				strv, g_strv_length((gchar **)strv));
 			break;
 		}
 	}

@@ -233,7 +233,7 @@ static GtkWidget *create_dialog(void)
 	box = gtk_hbutton_box_new();
 	url_button = gtk_button_new();
 	gtk_button_set_relief(GTK_BUTTON(url_button), GTK_RELIEF_NONE);
-	g_signal_connect(url_button, "clicked", G_CALLBACK(homepage_clicked), GEANY_HOMEPAGE);
+	g_signal_connect(url_button, "clicked", G_CALLBACK(homepage_clicked), (gpointer)GEANY_HOMEPAGE);
 	label = gtk_label_new(NULL);
 	gtk_label_set_text(GTK_LABEL(label), GEANY_HOMEPAGE);
 	gtk_widget_show(label);
