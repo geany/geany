@@ -1588,7 +1588,7 @@ static gint show_prompt(GtkWidget *parent,
 
 #ifdef G_OS_WIN32
 	/* our native dialog code doesn't support custom buttons */
-	if (btn_3 == GTK_STOCK_YES && btn_2 == GTK_STOCK_NO && btn_1 == NULL)
+	if (btn_3 == (gchar*)GTK_STOCK_YES && btn_2 == (gchar*)GTK_STOCK_NO && btn_1 == NULL)
 	{
 		gchar *string = (extra_text == NULL) ? g_strdup(question_text) :
 			g_strconcat(question_text, "\n\n", extra_text, NULL);
