@@ -81,9 +81,6 @@ void interface_set_object(GObject *obj, const gchar *name)
 
 	g_return_if_fail(name);
 
-	if (g_strcmp0("entry_shell", name) == 0)
-		g_debug("I know i added the entry_shell object.");
-
 	g_object_set_data_full(obj, "name", g_strdup(name), g_free);
 
 	objects = g_slist_append(objects, g_object_ref(obj));
