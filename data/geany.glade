@@ -389,7 +389,7 @@
       </object>
     </child>
     <child>
-      <object class="GtkImageMenuItem" id="find_usage1">
+      <object class="GtkImageMenuItem" id="item_find_usage1">
         <property name="label" translatable="yes">Find _Usage</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
@@ -665,7 +665,7 @@
   </object>
   <object class="GtkListStore" id="liststore1">
     <columns>
-      <!-- column-name item text -->
+      <!-- column-name item -->
       <column type="gchararray"/>
     </columns>
     <data>
@@ -688,7 +688,7 @@
   </object>
   <object class="GtkListStore" id="liststore2">
     <columns>
-      <!-- column-name item text -->
+      <!-- column-name item -->
       <column type="gchararray"/>
     </columns>
     <data>
@@ -711,7 +711,7 @@
   </object>
   <object class="GtkListStore" id="liststore3">
     <columns>
-      <!-- column-name item text -->
+      <!-- column-name item -->
       <column type="gchararray"/>
     </columns>
     <data>
@@ -734,7 +734,7 @@
   </object>
   <object class="GtkListStore" id="liststore4">
     <columns>
-      <!-- column-name item text -->
+      <!-- column-name item -->
       <column type="gchararray"/>
     </columns>
     <data>
@@ -754,7 +754,7 @@
   </object>
   <object class="GtkListStore" id="liststore5">
     <columns>
-      <!-- column-name item text -->
+      <!-- column-name item -->
       <column type="gchararray"/>
     </columns>
     <data>
@@ -772,8 +772,25 @@
       </row>
     </data>
   </object>
+  <object class="GtkListStore" id="liststore6">
+    <columns>
+      <!-- column-name text -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
+  <object class="GtkListStore" id="liststore7">
+    <columns>
+      <!-- column-name text -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
+  <object class="GtkListStore" id="liststore8">
+    <columns>
+      <!-- column-name item -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
   <object class="GtkDialog" id="prefs_dialog">
-    <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="title" translatable="yes">Preferences</property>
     <property name="modal">True</property>
@@ -2169,7 +2186,7 @@
                                   <object class="GtkComboBox" id="combo_tab_sidebar">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
-                                    <property name="model">liststore2</property>
+                                    <property name="model">liststore1</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext2"/>
                                       <attributes>
@@ -2202,7 +2219,7 @@
                                   <object class="GtkComboBox" id="combo_tab_editor">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
-                                    <property name="model">liststore3</property>
+                                    <property name="model">liststore1</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext3"/>
                                       <attributes>
@@ -4204,6 +4221,7 @@
                                       <object class="GtkComboBox" id="combo_eol">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
+                                        <property name="model">liststore8</property>
                                       </object>
                                       <packing>
                                         <property name="left_attach">1</property>
@@ -4299,6 +4317,7 @@
                                       <object class="GtkComboBox" id="combo_new_encoding">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
+                                        <property name="model">liststore6</property>
                                       </object>
                                     </child>
                                   </object>
@@ -4358,6 +4377,7 @@
                                       <object class="GtkComboBox" id="combo_open_encoding">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
+                                        <property name="model">liststore7</property>
                                       </object>
                                     </child>
                                   </object>
@@ -5877,7 +5897,6 @@
     </action-widgets>
   </object>
   <object class="GtkDialog" id="project_dialog">
-    <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="title" translatable="yes">Project Properties</property>
     <property name="type_hint">dialog</property>
@@ -5957,7 +5976,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkSpinButton" id="spin_indent_width">
+                  <object class="GtkSpinButton" id="spin_indent_width_project">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="tooltip_text" translatable="yes">The width in chars of a single indent</property>
@@ -5992,12 +6011,12 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkComboBox" id="combo_auto_indent_mode">
+                  <object class="GtkComboBox" id="combo_auto_indent_mode_project">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="model">liststore5</property>
                     <child>
-                      <object class="GtkCellRendererText" id="cellrenderertext1"/>
+                      <object class="GtkCellRendererText" id="cellrenderertext1_project"/>
                       <attributes>
                         <attribute name="text">0</attribute>
                       </attributes>
@@ -6013,7 +6032,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkCheckButton" id="check_detect_indent_type">
+                  <object class="GtkCheckButton" id="check_detect_indent_type_project">
                     <property name="label" translatable="yes">Detect type from file</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -6033,7 +6052,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkRadioButton" id="radio_indent_both">
+                  <object class="GtkRadioButton" id="radio_indent_both_project">
                     <property name="label" translatable="yes">T_abs and spaces</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -6053,7 +6072,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkRadioButton" id="radio_indent_spaces">
+                  <object class="GtkRadioButton" id="radio_indent_spaces_project">
                     <property name="label" translatable="yes">_Spaces</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -6062,7 +6081,7 @@
                     <property name="use_action_appearance">False</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
-                    <property name="group">radio_indent_both</property>
+                    <property name="group">radio_indent_both_project</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -6074,7 +6093,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkRadioButton" id="radio_indent_tabs">
+                  <object class="GtkRadioButton" id="radio_indent_tabs_project">
                     <property name="label" translatable="yes">_Tabs</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -6083,7 +6102,7 @@
                     <property name="use_action_appearance">False</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
-                    <property name="group">radio_indent_both</property>
+                    <property name="group">radio_indent_both_project</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -6109,7 +6128,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkCheckButton" id="check_detect_indent_width">
+                  <object class="GtkCheckButton" id="check_detect_indent_width_project">
                     <property name="label" translatable="yes">Detect width from file</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -6159,7 +6178,7 @@
                 <property name="border_width">5</property>
                 <property name="spacing">10</property>
                 <child>
-                  <object class="GtkFrame" id="frame40">
+                  <object class="GtkFrame" id="frame40_project">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="label_xalign">0</property>
@@ -6261,7 +6280,7 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkSpinButton" id="spin_long_line">
+                              <object class="GtkSpinButton" id="spin_long_line_project">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="primary_icon_activatable">False</property>
@@ -6313,7 +6332,7 @@
               </packing>
             </child>
             <child type="tab">
-              <object class="GtkLabel" id="label238">
+              <object class="GtkLabel" id="label238_project">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">Editor</property>
@@ -6778,7 +6797,7 @@
                               <object class="GtkMenu" id="commands2_menu">
                                 <property name="can_focus">False</property>
                                 <child>
-                                  <object class="GtkImageMenuItem" id="cut_current_line(s)1">
+                                  <object class="GtkImageMenuItem" id="cut_current_lines1">
                                     <property name="label" translatable="yes">_Cut Current Line(s)</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
@@ -6786,11 +6805,11 @@
                                     <property name="use_underline">True</property>
                                     <property name="image">image4062</property>
                                     <property name="use_stock">False</property>
-                                    <signal name="activate" handler="on_cut_current_line(s)1_activate" swapped="no"/>
+                                    <signal name="activate" handler="on_cut_current_lines1_activate" swapped="no"/>
                                   </object>
                                 </child>
                                 <child>
-                                  <object class="GtkImageMenuItem" id="copy_current_line(s)1">
+                                  <object class="GtkImageMenuItem" id="copy_current_lines1">
                                     <property name="label" translatable="yes">_Copy Current Line(s)</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
@@ -6798,17 +6817,17 @@
                                     <property name="use_underline">True</property>
                                     <property name="image">image4063</property>
                                     <property name="use_stock">False</property>
-                                    <signal name="activate" handler="on_copy_current_line(s)1_activate" swapped="no"/>
+                                    <signal name="activate" handler="on_copy_current_lines1_activate" swapped="no"/>
                                   </object>
                                 </child>
                                 <child>
-                                  <object class="GtkMenuItem" id="delete_current_line(s)1">
+                                  <object class="GtkMenuItem" id="delete_current_lines1">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="use_action_appearance">False</property>
                                     <property name="label" translatable="yes">_Delete Current Line(s)</property>
                                     <property name="use_underline">True</property>
-                                    <signal name="activate" handler="on_delete_current_line(s)1_activate" swapped="no"/>
+                                    <signal name="activate" handler="on_delete_current_lines1_activate" swapped="no"/>
                                   </object>
                                 </child>
                                 <child>
@@ -6828,13 +6847,13 @@
                                   </object>
                                 </child>
                                 <child>
-                                  <object class="GtkMenuItem" id="select_current_line(s)1">
+                                  <object class="GtkMenuItem" id="select_current_lines1">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="use_action_appearance">False</property>
                                     <property name="label" translatable="yes">_Select Current Line(s)</property>
                                     <property name="use_underline">True</property>
-                                    <signal name="activate" handler="on_select_current_line(s)1_activate" swapped="no"/>
+                                    <signal name="activate" handler="on_select_current_lines1_activate" swapped="no"/>
                                   </object>
                                 </child>
                                 <child>
@@ -6878,13 +6897,13 @@
                               <object class="GtkMenu" id="menu_format1_menu">
                                 <property name="can_focus">False</property>
                                 <child>
-                                  <object class="GtkMenuItem" id="reflow_lines/block1">
+                                  <object class="GtkMenuItem" id="reflow_lines_block1">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="use_action_appearance">False</property>
                                     <property name="label" translatable="yes">_Reflow Lines/Block</property>
                                     <property name="use_underline">True</property>
-                                    <signal name="activate" handler="on_reflow_lines/block1_activate" swapped="no"/>
+                                    <signal name="activate" handler="on_reflow_lines_block1_activate" swapped="no"/>
                                   </object>
                                 </child>
                                 <child>
@@ -7152,7 +7171,7 @@
                           </object>
                         </child>
                         <child>
-                          <object class="GtkMenuItem" id="insert_alternative_white_space1">
+                          <object class="GtkMenuItem" id="insert_alternative_white_space1_project">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="use_action_appearance">False</property>
@@ -7389,7 +7408,7 @@
                                   </object>
                                 </child>
                                 <child>
-                                  <object class="GtkMenuItem" id="find_document_usage1">
+                                  <object class="GtkMenuItem" id="item_find_document_usage1">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="use_action_appearance">False</property>
@@ -7421,7 +7440,7 @@
                                   </object>
                                 </child>
                                 <child>
-                                  <object class="GtkMenuItem" id="goto_tag_definition1">
+                                  <object class="GtkMenuItem" id="item_goto_tag_definition1">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="use_action_appearance">False</property>
