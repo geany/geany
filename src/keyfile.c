@@ -98,6 +98,14 @@ static GPtrArray *keyfile_groups = NULL;
 
 GPtrArray *pref_groups = NULL;
 
+static struct
+{
+	int number_ft_menu_items;
+	int number_non_ft_menu_items;
+	int number_exec_menu_items;
+}
+build_menu_prefs;
+
 
 /* The group will be free'd on quitting.
  * @param for_prefs_dialog is whether the group also has Prefs dialog items. */

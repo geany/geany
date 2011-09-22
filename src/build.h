@@ -158,14 +158,6 @@ typedef struct BuildDestination
 /* opaque pointers returned from build functions and passed back to them */
 typedef struct BuildTableFields *BuildTableData;
 
-typedef struct GeanyBuildMenuPrefs
-{
-	int number_ft_menu_items;
-	int number_non_ft_menu_items;
-	int number_exec_menu_items;
-} GeanyBuildMenuPrefs;
-
-extern GeanyBuildMenuPrefs build_menu_prefs;
 
 void build_init(void);
 
