@@ -2214,22 +2214,6 @@ void ui_widget_set_tooltip_text(GtkWidget *widget, const gchar *text)
 }
 
 
-/** Sets a name to lookup @a widget from @a owner.
- * @param owner Usually a window, dialog or popup menu.
- * @param widget Widget.
- * @param widget_name Name.
- * @see ui_lookup_widget().
- *
- *  @since 0.16
- **/
-void ui_hookup_widget_real(GtkWidget *owner, GObject *widget, const gchar *widget_name)
-{
-	g_return_if_fail(GTK_IS_WIDGET(widget));
-	g_return_if_fail(widget_name != NULL);
-	interface_set_object(G_OBJECT(widget), widget_name);
-}
-
-
 /** Returns a widget from a name in a component, usually created by Glade.
  * Call it with the toplevel widget in the component (i.e. a window/dialog),
  * or alternatively any widget in the component, and the name of the widget

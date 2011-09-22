@@ -223,6 +223,8 @@ static void apply_settings(void)
 static void main_init(void)
 {
 	/* inits */
+	interface_init();
+
 	main_widgets.window				= NULL;
 	app->project			= NULL;
 	ui_widgets.open_fontsel		= NULL;
@@ -1179,6 +1181,7 @@ void main_quit()
 	filetypes_free_types();
 	ui_finalize();
 	log_finalize();
+	interface_finalize();
 
 	tm_workspace_free(TM_WORK_OBJECT(app->tm_workspace));
 	g_free(app->configdir);
