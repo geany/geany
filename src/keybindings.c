@@ -284,7 +284,7 @@ static void init_default_kb(void)
 		LW(duplicate_line_or_selection1));
 	keybindings_set_item(group, GEANY_KEYS_EDITOR_DELETELINE, NULL,
 		GDK_k, GDK_CONTROL_MASK, "edit_deleteline", _("_Delete Current Line(s)"),
-		LW(delete_current_line_s_1));
+		LW(delete_current_lines1));
 	keybindings_set_item(group, GEANY_KEYS_EDITOR_DELETELINETOEND, NULL,
 		GDK_Delete, GDK_SHIFT_MASK | GDK_CONTROL_MASK, "edit_deletelinetoend",
 		_("Delete to line end"), NULL);
@@ -329,10 +329,10 @@ static void init_default_kb(void)
 		GDK_v, GDK_CONTROL_MASK, "menu_paste", _("Paste"), NULL);
 	keybindings_set_item(group, GEANY_KEYS_CLIPBOARD_COPYLINE, NULL,
 		GDK_c, GDK_CONTROL_MASK | GDK_SHIFT_MASK, "edit_copyline", _("_Copy Current Line(s)"),
-		LW(copy_current_line_s_1));
+		LW(copy_current_lines1));
 	keybindings_set_item(group, GEANY_KEYS_CLIPBOARD_CUTLINE, NULL,
 		GDK_x, GDK_CONTROL_MASK | GDK_SHIFT_MASK, "edit_cutline", _("_Cut Current Line(s)"),
-		LW(cut_current_line_s_1));
+		LW(cut_current_lines1));
 
 	group = keybindings_get_core_group(GEANY_KEY_GROUP_SELECT);
 
@@ -342,7 +342,7 @@ static void init_default_kb(void)
 		GDK_w, GDK_SHIFT_MASK | GDK_MOD1_MASK, "edit_selectword", _("Select current word"), NULL);
 	keybindings_set_item(group, GEANY_KEYS_SELECT_LINE, NULL,
 		GDK_l, GDK_SHIFT_MASK | GDK_MOD1_MASK, "edit_selectline", _("_Select Current Line(s)"),
-		LW(select_current_line_s_1));
+		LW(select_current_lines1));
 	keybindings_set_item(group, GEANY_KEYS_SELECT_PARAGRAPH, NULL,
 		GDK_p, GDK_SHIFT_MASK | GDK_MOD1_MASK, "edit_selectparagraph", _("_Select Current Paragraph"),
 		LW(select_current_paragraph1));
