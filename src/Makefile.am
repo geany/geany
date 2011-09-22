@@ -98,7 +98,7 @@ AM_CFLAGS = -DGEANY_DATADIR=\"data\" \
 			-DGTK \
 			-DG_LOG_DOMAIN=\""Geany"\"
 
-geany_LDFLAGS =	-mwindows -mms-bitfields
+geany_LDFLAGS =	-mwindows -mms-bitfields -Wl,--export-dynamic
 
 WINDRES = $(host_alias)-windres
 
@@ -124,6 +124,8 @@ AM_CFLAGS = -DGEANY_DATADIR=\""$(datadir)"\" \
 			-DGEANY_PRIVATE \
 			-DGTK \
 			-DG_LOG_DOMAIN=\""Geany"\"
+
+geany_LDFLAGS = -Wl,--export-dynamic
 
 clean-local:
 
