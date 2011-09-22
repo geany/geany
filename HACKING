@@ -135,20 +135,21 @@ And then simply apply it like so::
     $ /tmp/glade-2.12.2% patch -p1 < glade-2.12.2-build-fixes.patch
 
 
-GTK API documentation
----------------------
-The official GTK 2.8 API documentation is not available online anymore,
-so we put them on http://www.geany.org/manual/gtk/.
-There is also a tarball with all available files for download and use
-with devhelp.
+GTK versions & API documentation
+--------------------------------
+Geany requires GTK >= 2.12 and GLib >= 2.16. API symbols from newer 
+GTK/GLib versions should be avoided or made optional to keep the source 
+code building on older systems.
 
-Using the 2.8 API documentation of the GTK libs (including GLib, GDK and
-Pango) has the advantages that you don't get confused by any newer API
-additions and you don't have to take care about whether you can use
-them or not.
-This is because Geany depends on GTK 2.8. API symbols from newer
-GTK/GLib versions should be avoided to keep the source code building
-against GTK 2.8.
+The official GTK 2.12 API documentation may not be available online 
+anymore, so we put it on http://www.geany.org/manual/gtk/. There 
+is also a tarball with all available files for download and use with 
+devhelp.
+
+Using the 2.12 API documentation of the GTK libs (including GLib, GDK 
+and Pango) has the advantages that you don't get confused by any 
+newer API additions and you don't have to take care about whether 
+you can use them or not.
 
 Coding
 ------
