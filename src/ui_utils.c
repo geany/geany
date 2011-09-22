@@ -2214,6 +2214,22 @@ void ui_widget_set_tooltip_text(GtkWidget *widget, const gchar *text)
 }
 
 
+/** Sets a name to lookup @a widget from @a owner.
+ * @param owner Usually a window, dialog or popup menu.
+ * @param widget Widget.
+ * @param widget_name Name.
+ * @see ui_lookup_widget().
+ *
+ *  @since 0.16
+ **/
+void ui_hookup_widget_real(GtkWidget *owner, GObject *widget, const gchar *widget_name)
+{
+	g_return_if_fail(GTK_IS_WIDGET(widget));
+	g_return_if_fail(widget_name != NULL);
+	interface_set_object(G_OBJECT(widget), widget_name);
+}
+
+
 /** Returns a widget from a name in a component, usually created by Glade.
  * Call it with the toplevel widget in the component (i.e. a window/dialog),
  * or alternatively any widget in the component, and the name of the widget
@@ -2227,27 +2243,14 @@ void ui_widget_set_tooltip_text(GtkWidget *widget, const gchar *text)
  */
 GtkWidget *ui_lookup_widget(GtkWidget *widget, const gchar *widget_name)
 {
-	GtkWidget *parent, *found_widget;
+	GtkWidget *found_widget;
 
-	g_return_val_if_fail(widget != NULL, NULL);
 	g_return_val_if_fail(widget_name != NULL, NULL);
 
-	for (;;)
-	{
-		if (GTK_IS_MENU(widget))
-			parent = gtk_menu_get_attach_widget(GTK_MENU(widget));
-		else
-			parent = widget->parent;
-		if (parent == NULL)
-			parent = (GtkWidget*) g_object_get_data(G_OBJECT(widget), "GladeParentKey");
-		if (parent == NULL)
-			break;
-		widget = parent;
-	}
-
-	found_widget = (GtkWidget*) g_object_get_data(G_OBJECT(widget), widget_name);
+	found_widget = GTK_WIDGET(interface_get_object(widget_name));
 	if (G_UNLIKELY(found_widget == NULL))
 		g_warning("Widget not found: %s", widget_name);
+
 	return found_widget;
 }
 

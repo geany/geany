@@ -22,6 +22,7 @@
 #ifndef GEANY_UI_UTILS_H
 #define GEANY_UI_UTILS_H 1
 
+
 /** Sets a name to lookup @a widget from @a owner.
  * @param owner Usually a window, dialog or popup menu.
  * @param widget Widget.
@@ -31,8 +32,7 @@
  *  @since 0.16
  **/
 #define ui_hookup_widget(owner, widget, widget_name) \
-	g_object_set_data_full(G_OBJECT(owner), widget_name, \
-		g_object_ref(widget), (GDestroyNotify)g_object_unref);
+	ui_hookup_widget_real(owner, G_OBJECT(widget), widget_name)
 
 
 /** Interface preferences */
@@ -204,6 +204,8 @@ void ui_table_add_row(GtkTable *table, gint row, ...) G_GNUC_NULL_TERMINATED;
 void ui_auto_separator_add_ref(GeanyAutoSeparator *autosep, GtkWidget *item);
 
 void ui_widget_set_tooltip_text(GtkWidget *widget, const gchar *text);
+
+void ui_hookup_widget_real(GtkWidget *owner, GObject *widget, const gchar *widget_name);
 
 GtkWidget *ui_lookup_widget(GtkWidget *widget, const gchar *widget_name);
 
