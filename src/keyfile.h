@@ -37,6 +37,8 @@ struct StashGroup;
 
 void configuration_add_pref_group(struct StashGroup *group, gboolean for_prefs_dialog);
 
+void configuration_add_various_pref_group(struct StashGroup *group);
+
 void configuration_save(void);
 
 gboolean configuration_load(void);

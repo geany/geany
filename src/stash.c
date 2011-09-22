@@ -360,8 +360,7 @@ void stash_group_free(StashGroup *group)
 }
 
 
-/* Useful so the user can edit the keyfile manually while the program is running,
- * and the setting won't be overridden.
+/* Used for selecting groups passed to stash_tree_setup().
  * @c FALSE by default. */
 void stash_group_set_various(StashGroup *group, gboolean various)
 {

@@ -110,6 +110,14 @@ void configuration_add_pref_group(struct StashGroup *group, gboolean for_prefs_d
 }
 
 
+/* The group will be free'd on quitting. */
+void configuration_add_various_pref_group(struct StashGroup *group)
+{
+	configuration_add_pref_group(group, TRUE);
+	stash_group_set_various(group, TRUE);
+}
+
+
 static void init_pref_groups(void)
 {
 	StashGroup *group;
@@ -183,8 +191,7 @@ static void init_pref_groups(void)
 
 	/* various geany prefs */
 	group = stash_group_new(PACKAGE);
-	configuration_add_pref_group(group, TRUE);
-	stash_group_set_various(group, TRUE);
+	configuration_add_various_pref_group(group);
 
 	stash_group_add_boolean(group, &editor_prefs.show_scrollbars,
 		"show_editor_scrollbars", TRUE);
@@ -210,8 +217,7 @@ static void init_pref_groups(void)
 
 	/* various build-menu prefs */
 	group = stash_group_new("build-menu");
-	configuration_add_pref_group(group, TRUE);
-	stash_group_set_various(group, TRUE);
+	configuration_add_various_pref_group(group);
 
 	stash_group_add_integer(group, &build_menu_prefs.number_ft_menu_items,
 		"number_ft_menu_items", 0);

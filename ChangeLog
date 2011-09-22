@@ -1,3 +1,9 @@
+2011-09-22  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/stash.c, src/keyfile.c, src/keyfile.h, src/ui_utils.c:
+   Add configuration_add_various_pref_group().
+
+
 2011-09-20  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/keyfile.c:

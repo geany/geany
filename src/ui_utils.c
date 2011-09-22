@@ -2066,8 +2066,7 @@ void ui_init_prefs(void)
 	StashGroup *group = stash_group_new(PACKAGE);
 
 	/* various prefs */
-	configuration_add_pref_group(group, TRUE);
-	stash_group_set_various(group, TRUE);
+	configuration_add_various_pref_group(group);
 
 	stash_group_add_boolean(group, &interface_prefs.show_symbol_list_expanders,
 		"show_symbol_list_expanders", TRUE);
