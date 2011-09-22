@@ -121,11 +121,8 @@ static wchar_t *get_file_filters(void)
 
 	/* replace all "\t"s by \0 */
 	len = strlen(string);
-	for (i = 0; i < len; i++)
-	{
-		if (string[i] == '\t')
-			string[i] = '\0';
-	}
+	g_strdelimit(string, "\t", '\0');
+	g_assert(string[len - 1] == 0x0);
 	MultiByteToWideChar(CP_UTF8, 0, string, len, title, sizeof(title));
 	g_free(string);
 
@@ -140,9 +137,11 @@ static wchar_t *get_file_filter_all_files(void)
 	gchar *filter;
 
 	/* create meta file filter "All files" */
-	filter = g_strdup_printf("%s\0*\0", _("All files"));
+	filter = g_strdup_printf("%s\t*\t", _("All files"));
 
-	len = strlen(_("All files")) + 3;
+	len = strlen(filter);
+	g_strdelimit(filter, "\t", '\0');
+	g_assert(filter[len - 1] == 0x0);
 	MultiByteToWideChar(CP_UTF8, 0, filter, len, title, sizeof(title));
 	g_free(filter);
 
@@ -153,7 +152,7 @@ static wchar_t *get_file_filter_all_files(void)
 static wchar_t *get_filters(gboolean project_files)
 {
 	gchar *string;
-	gint i, len;
+	gint len;
 	static wchar_t title[1024];
 
 	if (project_files)
@@ -171,10 +170,8 @@ static wchar_t *get_filters(gboolean project_files)
 
 	/* replace all "\t"s by \0 */
 	len = strlen(string);
-	for (i = 0; i < len; i++)
-	{
-		if (string[i] == '\t') string[i] = '\0';
-	}
+	g_strdelimit(string, "\t", '\0');
+	g_assert(string[len - 1] == 0x0);
 	MultiByteToWideChar(CP_UTF8, 0, string, len, title, sizeof(title));
 	g_free(string);
 
