@@ -34,7 +34,27 @@
 
 static gchar*		interface_file = NULL;
 static GtkBuilder*	builder = NULL;
-static GSList*		local_objects = NULL;
+static GHashTable*	objects_table = NULL;
+
+
+/* Used to find out the name of the GtkBuilder object since some objects
+ * will be buildable and use it's name for that and those that aren't
+ * will have "gtk-builder-name" data field set on the object. */
+static const gchar *interface_guess_object_name(GObject *obj)
+{
+	const gchar *name;
+
+	g_return_val_if_fail(G_IS_OBJECT(obj), NULL);
+
+	name = g_object_get_data(obj, "gtk-builder-name");
+	if (! name && GTK_IS_BUILDABLE(obj))
+		name = gtk_buildable_get_name(GTK_BUILDABLE(obj));
+
+	if (! name)
+		return NULL;
+
+	return name;
+}
 
 
 /* Returns a widget from a name.
@@ -56,33 +76,17 @@ static GSList*		local_objects = NULL;
  */
 GObject *interface_get_object(const gchar *name)
 {
-	GSList *iter;
+	gpointer *found;
 
 	g_return_val_if_fail(name != NULL, NULL);
-	g_return_val_if_fail(local_objects != NULL, NULL);
+	g_return_val_if_fail(objects_table != NULL, NULL);
 
-	for (iter = local_objects; iter != NULL; iter = g_slist_next(iter))
-	{
-		if (G_IS_OBJECT(iter->data))
-		{
-			if (g_strcmp0(g_object_get_data(iter->data, "name"), name) == 0)
-				return G_OBJECT(iter->data);
-			else if (g_strcmp0(g_object_get_data(iter->data, "gtk-builder-name"), name) == 0)
-				return G_OBJECT(iter->data);
-			else if (GTK_IS_BUILDABLE(iter->data) &&
-				g_strcmp0(gtk_buildable_get_name(GTK_BUILDABLE(iter->data)), name) == 0)
-			{
-				return G_OBJECT(iter->data);
-			}
-			else if (GTK_IS_WIDGET(iter->data) &&
-				g_strcmp0(gtk_widget_get_name(GTK_WIDGET(iter->data)), name) == 0)
-			{
-				return G_OBJECT(iter->data);
-			}
-		}
-	}
+	found = g_hash_table_lookup(objects_table, (gconstpointer) name);
 
-	return NULL;
+	if (found == NULL)
+		return NULL;
+
+	return G_OBJECT(found);
 }
 
 
@@ -100,26 +104,15 @@ GObject *interface_get_object(const gchar *name)
 void interface_add_object(GObject *obj, const gchar *name)
 {
 	g_return_if_fail(G_IS_OBJECT(obj));
+	g_return_if_fail(objects_table != NULL);
 
-	if (! name)
-		name = g_object_get_data(obj, "name");
-	if (! name)
-		name = g_object_get_data(obj, "gtk-builder-name");
-	if (! name && GTK_IS_BUILDABLE(obj))
-		name = gtk_buildable_get_name(GTK_BUILDABLE(obj));
-	if (! name && GTK_IS_WIDGET(obj))
-		name = gtk_widget_get_name(GTK_WIDGET(obj));
-
-	g_return_if_fail(name);
-
-	g_object_set_data_full(obj, "name", g_strdup(name), g_free);
-
-	local_objects = g_slist_append(local_objects, g_object_ref(obj));
+	g_hash_table_insert(objects_table, g_strdup(name), g_object_ref(obj));
 }
 
 
 void interface_init(void)
 {
+	const gchar *name;
 	GError *error;
 	GSList *iter, *all_objects;
 	GtkCellRenderer *renderer;
@@ -146,10 +139,19 @@ void interface_init(void)
 
 	/* TODO: set translation domain on GtkBuilder? */;
 
+	objects_table = g_hash_table_new_full(g_str_hash, g_str_equal, g_free, g_object_unref);
+
 	all_objects = gtk_builder_get_objects(builder);
 	for (iter = all_objects; iter != NULL; iter = g_slist_next(iter))
 	{
-		interface_add_object(iter->data, NULL);
+		name = interface_guess_object_name(iter->data);
+		if (! name)
+		{
+			g_warning("Unable to get name from GtkBuilder object");
+			continue;
+		}
+
+		interface_add_object(iter->data, name);
 
 		/* FIXME: Hack to get Glade 3/GtkBuilder combo boxes working */
 		if (GTK_IS_COMBO_BOX(iter->data))
@@ -166,11 +168,11 @@ void interface_init(void)
 
 void interface_finalize(void)
 {
-	g_return_if_fail(GTK_IS_BUILDER(builder));
-
-	g_slist_free(local_objects);
 	g_free(interface_file);
-	g_object_unref(builder);
+	if (objects_table != NULL)
+		g_hash_table_destroy(objects_table);
+	if (builder != NULL)
+		g_object_unref(builder);
 }
 
 
