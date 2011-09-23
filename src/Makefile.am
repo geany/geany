@@ -98,7 +98,7 @@ AM_CFLAGS = -DGEANY_DATADIR=\"data\" \
 			-DGTK \
 			-DG_LOG_DOMAIN=\""Geany"\"
 
-geany_LDFLAGS =	-mwindows -mms-bitfields -Wl,--export-dynamic
+geany_LDFLAGS =	-mwindows -mms-bitfields
 
 WINDRES = $(host_alias)-windres
 
