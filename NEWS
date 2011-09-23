@@ -21,6 +21,8 @@ Geany 0.21 (unreleased)
     * Fix HTML content-type detection (#3300703).
     * Fix pattern filtering when using Find in Files not to search in
       sub-directories.
+    * Add a workaround to prevent Geany from crashing during loading of
+      a LaTeX-file containing linebreaks inside headings.
 
     Interface
     * Add 'Save As' toolbar button option (Matthew Brush, #3153490).
@@ -104,6 +106,10 @@ Geany 0.21 (unreleased)
     * Deprecate ui_widget_set_tooltip_text().
     * Fix public inclusion of config.h (#3384026).
     * Add new signal "document-reload".
+
+    Internationalisation:
+    * Add translations: fa
+    * Update translations:
 
 
 Geany 0.20 (January 5, 2011)
