@@ -46,10 +46,10 @@ static const gchar *interface_guess_object_name(GObject *obj)
 
 	g_return_val_if_fail(G_IS_OBJECT(obj), NULL);
 
-	name = g_object_get_data(obj, "gtk-builder-name");
-	if (! name && GTK_IS_BUILDABLE(obj))
+	if (GTK_IS_BUILDABLE(obj))
 		name = gtk_buildable_get_name(GTK_BUILDABLE(obj));
-
+	if (! name)
+		name = g_object_get_data(obj, "gtk-builder-name");
 	if (! name)
 		return NULL;
 
