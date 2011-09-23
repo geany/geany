@@ -783,11 +783,8 @@ msgstr "Fout bij het opslaan van het bestand (%s)."
 
 #: ../src/document.c:1807
 #, c-format
-msgid ""
-"%s\n"
-"\n"
-"The file on disk may now be truncated!"
-msgstr "Het bestand is wellicht (verkeerd) afgebroken!"
+msgid "%s\n\nThe file on disk may now be truncated!"
+msgstr "%s\n\nHet bestand is wellicht (verkeerd) afgebroken!"
 
 #: ../src/document.c:1809
 msgid "Error saving file."
