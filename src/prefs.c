@@ -1630,7 +1630,7 @@ void prefs_show_dialog(void)
 		gchar *encoding_string;
 		GdkPixbuf *pb;
 
-		ui_widgets.prefs_dialog = create_prefs_dialog();
+		ui_widgets.prefs_dialog = ui_lookup_widget(NULL, "prefs_dialog");
 		gtk_widget_set_name(ui_widgets.prefs_dialog, "GeanyPrefsDialog");
 		gtk_window_set_transient_for(GTK_WINDOW(ui_widgets.prefs_dialog), GTK_WINDOW(main_widgets.window));
 		pb = ui_new_pixbuf_from_inline(GEANY_IMAGE_LOGO);

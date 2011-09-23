@@ -174,37 +174,3 @@ void interface_finalize(void)
 	if (builder != NULL)
 		g_object_unref(builder);
 }
-
-
-/* Compatibility functions with Glade 2 generated code.
- *
- * TODO: remove these
- */
-GtkWidget *create_window1(void)
-{
-	return GTK_WIDGET(gtk_builder_get_object(builder, "window1"));
-}
-
-
-GtkWidget *create_toolbar_popup_menu1(void)
-{
-	return GTK_WIDGET(gtk_builder_get_object(builder, "toolbar_popup_menu1"));
-}
-
-
-GtkWidget *create_edit_menu1(void)
-{
-	return GTK_WIDGET(gtk_builder_get_object(builder, "edit_menu1"));
-}
-
-
-GtkWidget *create_prefs_dialog(void)
-{
-	return GTK_WIDGET(gtk_builder_get_object(builder, "prefs_dialog"));
-}
-
-
-GtkWidget *create_project_dialog(void)
-{
-	return GTK_WIDGET(gtk_builder_get_object(builder, "project_dialog"));
-}

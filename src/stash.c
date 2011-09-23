@@ -86,6 +86,7 @@
 #include <string.h>		/* only for strcmp() */
 #include "support.h"	/* only for _("text") */
 #include "utils.h"		/* only for foreach_*, utils_get_setting_*(). Stash should not depend on Geany. */
+#include "interface.h"  /* only for interface_get_object(). Stash should not depend on Geany. */
 
 #include "stash.h"
 

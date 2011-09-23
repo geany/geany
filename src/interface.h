@@ -26,11 +26,3 @@ void		interface_init				(void);
 void		interface_finalize			(void);
 GObject*	interface_get_object		(const gchar *name);
 void		interface_add_object		(GObject *obj, const gchar *name);
-
-
-/* TODO: remove these and just use ui_lookup_widget() */
-GtkWidget*	create_window1				(void);
-GtkWidget*	create_toolbar_popup_menu1	(void);
-GtkWidget*	create_edit_menu1			(void);
-GtkWidget*	create_prefs_dialog			(void);
-GtkWidget*	create_project_dialog		(void);

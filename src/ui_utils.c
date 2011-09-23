@@ -52,6 +52,7 @@
 #include "main.h"
 #include "stash.h"
 #include "keyfile.h"
+#include "interface.h"
 
 
 GeanyInterfacePrefs	interface_prefs;
