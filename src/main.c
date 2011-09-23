@@ -1181,7 +1181,6 @@ void main_quit()
 	filetypes_free_types();
 	ui_finalize();
 	log_finalize();
-	interface_finalize();
 
 	tm_workspace_free(TM_WORK_OBJECT(app->tm_workspace));
 	g_free(app->configdir);
@@ -1238,6 +1237,8 @@ void main_quit()
 	geany_object = NULL;
 
 	g_free(app);
+
+	interface_finalize(); /* After all widgets are cleaned up */
 
 	gtk_main_quit();
 }
