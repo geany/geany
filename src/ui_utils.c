@@ -2219,6 +2219,10 @@ void ui_widget_set_tooltip_text(GtkWidget *widget, const gchar *text)
  * Call it with the toplevel widget in the component (i.e. a window/dialog),
  * or alternatively any widget in the component, and the name of the widget
  * you want returned.
+ *
+ * @note Since 0.21 the @a widget parameter is not used and can be set
+ * to NULL if you like.
+ *
  * @param widget Widget with the @a widget_name property set.
  * @param widget_name Name to lookup.
  * @return The widget found.
@@ -2229,6 +2233,8 @@ void ui_widget_set_tooltip_text(GtkWidget *widget, const gchar *text)
 GtkWidget *ui_lookup_widget(GtkWidget *widget, const gchar *widget_name)
 {
 	GtkWidget *found_widget;
+
+	(void) widget; /* not used anymore */
 
 	g_return_val_if_fail(widget_name != NULL, NULL);
 
