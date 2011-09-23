@@ -9,11 +9,11 @@
 2011-09-20  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/keyfile.c:
-   Rename use_safe_file_saving various pref to use_atomic_file_saving 
-   as it's not 'safe'. Use old pref if new one is missing for 
+   Rename use_safe_file_saving various pref to use_atomic_file_saving
+   as it's not 'safe'. Use old pref if new one is missing for
    compatibility with Geany <= 0.20.
  * src/prefs.c, src/stash.h, src/stash.c:
-   Fix making various prefs tree sync with data values when showing 
+   Fix making various prefs tree sync with data values when showing
    the prefs dialog (patch by Dimitar Zhekov, thanks).
 
 
@@ -121,7 +121,7 @@
  * doc/plugins.dox:
    Update of wording to fix some grammatical issues etc. on plugin howto.
    Patch provided by Matthew Brush. Thanks.
- * data/filetype_extensions.conf:
+ * data/filetypes.Cython.conf:
    Extend list of primary keywords. Patch by Alexander Eberspächer. Thanks.
 
 
