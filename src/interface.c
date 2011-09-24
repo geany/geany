@@ -1,8 +1,7 @@
 /*
  *      interface.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2006-2011 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2006-2011 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2011 Matthew Brush <mbrush(at)codebrainz(dot)ca>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -21,6 +20,10 @@
  * $Id$
  */
 
+/* This file replaces the previous Glade 2 generated code to allow
+ * similar use but supporting a Glade 3/GtkBuilder user-interface
+ * file instead. */
+
 #ifdef HAVE_CONFIG_H
 #  include <config.h>
 #endif
@@ -35,9 +38,10 @@
 static GHashTable*	objects_table = NULL;
 
 
-/* Used to find out the name of the GtkBuilder object since some objects
- * will be buildable and use it's name for that and those that aren't
- * will have "gtk-builder-name" data field set on the object. */
+/* Used to find out the name of the GtkBuilder retrieved object since
+ * some objects will be GTK_IS_BUILDABLE() and use the GtkBuildable
+ * 'name' property for that and those that don't implement GtkBuildable
+ * will have a "gtk-builder-name" stored in the GObject's data list. */
 static const gchar *interface_guess_object_name(GObject *obj)
 {
 	const gchar *name;
@@ -68,8 +72,8 @@ static const gchar *interface_guess_object_name(GObject *obj)
  * @param widget_name Name to lookup.
  * @return The widget found.
  *
- * @see ui_hookup_widget().
- * @see interface_add_object().
+ * @see interface_add_object()
+ * @see ui_hookup_widget()
  * @since 0.21
  */
 GObject *interface_get_object(const gchar *name)
@@ -96,7 +100,8 @@ GObject *interface_get_object(const gchar *name)
  * @param obj GObject.
  * @param name Name.
  *
- * @see ui_hookup_widget().
+ * @see interface_get_object
+ * @see ui_hookup_widget()
  * @since 0.21
  **/
 void interface_add_object(GObject *obj, const gchar *name)
@@ -140,8 +145,6 @@ void interface_init(void)
 
 	gtk_builder_connect_signals(builder, NULL);
 
-	/* TODO: set translation domain on GtkBuilder? */;
-
 	objects_table = g_hash_table_new_full(g_str_hash, g_str_equal, g_free, g_object_unref);
 
 	all_objects = gtk_builder_get_objects(builder);
@@ -156,7 +159,8 @@ void interface_init(void)
 
 		interface_add_object(iter->data, name);
 
-		/* FIXME: Hack to get Glade 3/GtkBuilder combo boxes working */
+		/* Glade doesn't seem to add cell renderers for the combo boxes,
+		 * so they are added here. */
 		if (GTK_IS_COMBO_BOX(iter->data))
 		{
 			renderer = gtk_cell_renderer_text_new();
