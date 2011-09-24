@@ -43,7 +43,6 @@
 #include "main.h"
 #include "prefix.h"
 #include "prefs.h"
-#include "interface.h"
 #include "support.h"
 #include "callbacks.h"
 #include "log.h"
@@ -223,7 +222,7 @@ static void apply_settings(void)
 static void main_init(void)
 {
 	/* inits */
-	interface_init();
+	ui_init_builder();
 
 	main_widgets.window				= NULL;
 	app->project			= NULL;
@@ -1238,7 +1237,7 @@ void main_quit()
 
 	g_free(app);
 
-	interface_finalize(); /* After all widgets are cleaned up */
+	ui_finalize_builder(); /* After all widgets are cleaned up */
 
 	gtk_main_quit();
 }

@@ -27,12 +27,14 @@
  * @param owner Usually a window, dialog or popup menu.
  * @param widget Widget.
  * @param widget_name Name.
- * @see ui_lookup_widget().
+ * @see ui_hookup_object().
+ * @see ui_lookup_object().
+ * @deprecated Use ui_hookup_object() instead.
  *
  *  @since 0.16
  **/
 #define ui_hookup_widget(owner, widget, widget_name) \
-	interface_add_object(G_OBJECT(widget), widget_name)
+	ui_hookup_object(G_OBJECT(widget), widget_name)
 
 
 /** Interface preferences */
@@ -63,6 +65,7 @@ typedef struct GeanyInterfacePrefs
 	gboolean		compiler_tab_autoscroll;
 }
 GeanyInterfacePrefs;
+
 
 extern GeanyInterfacePrefs interface_prefs;
 
@@ -207,6 +210,10 @@ void ui_widget_set_tooltip_text(GtkWidget *widget, const gchar *text);
 
 GtkWidget *ui_lookup_widget(GtkWidget *widget, const gchar *widget_name);
 
+GObject *ui_lookup_object(const gchar *object_name);
+
+void ui_hookup_object(GObject *obj, const gchar *object_name);
+
 void ui_widget_set_sensitive(GtkWidget *widget, gboolean set);
 
 void ui_entry_add_clear_icon(GtkEntry *entry);
@@ -222,10 +229,13 @@ void ui_label_set_markup(GtkLabel *label, const gchar *format, ...) G_GNUC_PRINT
 
 /* End of general widget functions */
 
+void ui_init_builder(void);
 
 void ui_init(void);
 
 void ui_init_prefs(void);
+
+void ui_finalize_builder(void);
 
 void ui_finalize(void);
 

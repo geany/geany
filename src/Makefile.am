@@ -21,7 +21,6 @@ SRCS = \
 	geanyobject.c geanyobject.h \
 	geanywraplabel.c geanywraplabel.h \
 	highlighting.c highlighting.h \
-	interface.c interface.h \
 	keybindings.c keybindings.h \
 	keyfile.c keyfile.h \
 	log.c log.h \

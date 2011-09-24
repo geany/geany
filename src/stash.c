@@ -86,7 +86,7 @@
 #include <string.h>		/* only for strcmp() */
 #include "support.h"	/* only for _("text") */
 #include "utils.h"		/* only for foreach_*, utils_get_setting_*(). Stash should not depend on Geany. */
-#include "interface.h"  /* only for interface_get_object(). Stash should not depend on Geany. */
+#include "ui_utils.h"  /* only for ui_lookup_object(). Stash should not depend on Geany. */
 
 #include "stash.h"
 
@@ -533,7 +533,9 @@ lookup_widget(GtkWidget *widget, const gchar *widget_name)
 {
 	GtkWidget *found_widget;
 
-	found_widget = GTK_WIDGET(interface_get_object(widget_name));
+	(void) widget; /* not used anymore */
+
+	found_widget = GTK_WIDGET(ui_lookup_object(widget_name));
 	if (!found_widget)
 		g_warning ("Widget not found: %s", widget_name);
 	return found_widget;

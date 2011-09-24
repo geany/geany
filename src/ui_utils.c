@@ -3,6 +3,7 @@
  *
  *      Copyright 2006-2011 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
  *      Copyright 2006-2011 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ * 		Copyright 2011 Matthew Brush <mbrush(at)codebrainz(dot)ca>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -24,6 +25,8 @@
  */
 
 #include "geany.h"
+
+#include "support.h"
 
 #include <string.h>
 #include <ctype.h>
@@ -52,8 +55,9 @@
 #include "main.h"
 #include "stash.h"
 #include "keyfile.h"
-#include "interface.h"
 
+
+GHashTable*	objects_table = NULL;
 
 GeanyInterfacePrefs	interface_prefs;
 GeanyMainWidgets	main_widgets;
@@ -2088,6 +2092,89 @@ void ui_init_prefs(void)
 }
 
 
+/* Used to find out the name of the GtkBuilder retrieved object since
+ * some objects will be GTK_IS_BUILDABLE() and use the GtkBuildable
+ * 'name' property for that and those that don't implement GtkBuildable
+ * will have a "gtk-builder-name" stored in the GObject's data list. */
+static const gchar *ui_guess_object_name(GObject *obj)
+{
+	const gchar *name;
+
+	g_return_val_if_fail(G_IS_OBJECT(obj), NULL);
+
+	if (GTK_IS_BUILDABLE(obj))
+		name = gtk_buildable_get_name(GTK_BUILDABLE(obj));
+	if (! name)
+		name = g_object_get_data(obj, "gtk-builder-name");
+	if (! name)
+		return NULL;
+
+	return name;
+}
+
+
+void ui_init_builder(void)
+{
+	gchar *interface_file;
+	const gchar *name;
+	GError *error;
+	GSList *iter, *all_objects;
+	GtkBuilder *builder;
+	GtkCellRenderer *renderer;
+
+	g_return_if_fail(builder == NULL);
+
+	builder = gtk_builder_new();
+	if (! builder)
+	{
+		g_error("Failed to initialize the user-interface");
+		return;
+	}
+
+	error = NULL;
+	interface_file = g_build_filename(GEANY_DATADIR, "geany", "geany.glade", NULL);
+	if (! gtk_builder_add_from_file(builder, interface_file, &error))
+	{
+		g_error("Failed to load the user-interface file: %s", error->message);
+		g_error_free(error);
+		g_free(interface_file);
+		g_object_unref(builder);
+		return;
+	}
+	g_free(interface_file);
+
+	gtk_builder_connect_signals(builder, NULL);
+
+	objects_table = g_hash_table_new_full(g_str_hash, g_str_equal, g_free, g_object_unref);
+
+	all_objects = gtk_builder_get_objects(builder);
+	for (iter = all_objects; iter != NULL; iter = g_slist_next(iter))
+	{
+		name = ui_guess_object_name(iter->data);
+		if (! name)
+		{
+			g_warning("Unable to get name from GtkBuilder object");
+			continue;
+		}
+
+		ui_hookup_object(iter->data, name);
+
+		/* Glade doesn't seem to add cell renderers for the combo boxes,
+		 * so they are added here. */
+		if (GTK_IS_COMBO_BOX(iter->data))
+		{
+			renderer = gtk_cell_renderer_text_new();
+			gtk_cell_layout_pack_start(GTK_CELL_LAYOUT(iter->data), renderer, TRUE);
+			gtk_cell_layout_set_attributes(GTK_CELL_LAYOUT(iter->data),
+				renderer, "text", 0, NULL);
+		}
+	}
+	g_slist_free(all_objects);
+
+	g_object_unref(builder);
+}
+
+
 void ui_init(void)
 {
 	init_recent_files();
@@ -2136,6 +2223,13 @@ void ui_init(void)
 	ui_init_toolbar_widgets();
 	init_document_widgets();
 	create_config_files_menu();
+}
+
+
+void ui_finalize_builder(void)
+{
+	if (objects_table != NULL)
+		g_hash_table_destroy(objects_table);
 }
 
 
@@ -2227,6 +2321,7 @@ void ui_widget_set_tooltip_text(GtkWidget *widget, const gchar *text)
  * @param widget_name Name to lookup.
  * @return The widget found.
  * @see ui_hookup_widget().
+ * @deprecated Use ui_lookup_object instead.
  *
  *  @since 0.16
  */
@@ -2238,11 +2333,66 @@ GtkWidget *ui_lookup_widget(GtkWidget *widget, const gchar *widget_name)
 
 	g_return_val_if_fail(widget_name != NULL, NULL);
 
-	found_widget = GTK_WIDGET(interface_get_object(widget_name));
+	found_widget = GTK_WIDGET(ui_lookup_object(widget_name));
 	if (G_UNLIKELY(found_widget == NULL))
 		g_warning("Widget not found: %s", widget_name);
 
 	return found_widget;
+}
+
+
+/** Returns a widget from a name.
+ *
+ * Call it with the name of the GObject you want returned.  This is
+ * similar to @a ui_lookup_widget except that it supports arbitrary
+ * GObjects.
+ *
+ * @note The GObject must either be in the GtkBuilder/Glade file or
+ * have been added with the function @a interface_add_object.
+ *
+ * @param widget Widget with the @a widget_name property set.
+ * @param widget_name Name to lookup.
+ * @return The widget found.
+ *
+ * @see ui_hookup_object()
+ * @see ui_lookup_widget()
+ * @since 0.21
+ */
+GObject *ui_lookup_object(const gchar *object_name)
+{
+	gpointer *found;
+
+	g_return_val_if_fail(object_name != NULL, NULL);
+	g_return_val_if_fail(objects_table != NULL, NULL);
+
+	found = g_hash_table_lookup(objects_table, (gconstpointer) object_name);
+
+	if (found == NULL)
+		return NULL;
+
+	return G_OBJECT(found);
+}
+
+
+/** Sets a name to lookup GObject @a obj.
+ *
+ * This is similar to @a ui_hookup_widget() except that it supports
+ * arbitrary GObjects.
+ *
+ * @param obj GObject.
+ * @param name Name.
+ *
+ * @see ui_lookup_object()
+ * @see ui_hookup_widget()
+ * @since 0.21
+ **/
+void ui_hookup_object(GObject *obj, const gchar *object_name)
+{
+	g_return_if_fail(G_IS_OBJECT(obj));
+	g_return_if_fail(object_name != NULL);
+	g_return_if_fail(objects_table != NULL);
+
+	g_hash_table_insert(objects_table, g_strdup(object_name), g_object_ref(obj));
 }
 
 

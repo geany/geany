@@ -42,7 +42,6 @@
 #include "keyfile.h"
 #include "win32.h"
 #include "build.h"
-#include "interface.h"
 #include "editor.h"
 #include "stash.h"
 #include "sidebar.h"
