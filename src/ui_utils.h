@@ -24,6 +24,10 @@
 
 
 /** Sets a name to lookup @a widget from @a owner.
+ *
+ * @note Since 0.21 the @a owner parameter is not used and can be set
+ * to NULL if you like.
+ *
  * @param owner Usually a window, dialog or popup menu.
  * @param widget Widget.
  * @param widget_name Name.
