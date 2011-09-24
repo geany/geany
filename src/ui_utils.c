@@ -3,7 +3,7 @@
  *
  *      Copyright 2006-2011 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
  *      Copyright 2006-2011 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
- * 		Copyright 2011 Matthew Brush <mbrush(at)codebrainz(dot)ca>
+ *      Copyright 2011 Matthew Brush <mbrush(at)codebrainz(dot)ca>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -2320,7 +2320,8 @@ void ui_widget_set_tooltip_text(GtkWidget *widget, const gchar *text)
  * @param widget Widget with the @a widget_name property set.
  * @param widget_name Name to lookup.
  * @return The widget found.
- * @see ui_hookup_widget().
+ * @see ui_hookup_object().
+ * @see ui_lookup_object().
  * @deprecated Use ui_lookup_object instead.
  *
  *  @since 0.16
@@ -2343,19 +2344,16 @@ GtkWidget *ui_lookup_widget(GtkWidget *widget, const gchar *widget_name)
 
 /** Returns a widget from a name.
  *
- * Call it with the name of the GObject you want returned.  This is
- * similar to @a ui_lookup_widget except that it supports arbitrary
- * GObjects.
+ * Call it with the name of the GObject you want returned.
  *
  * @note The GObject must either be in the GtkBuilder/Glade file or
- * have been added with the function @a interface_add_object.
+ * have been added with the function @a ui_hookup_object.
  *
  * @param widget Widget with the @a widget_name property set.
  * @param widget_name Name to lookup.
  * @return The widget found.
  *
  * @see ui_hookup_object()
- * @see ui_lookup_widget()
  * @since 0.21
  */
 GObject *ui_lookup_object(const gchar *object_name)
@@ -2376,14 +2374,13 @@ GObject *ui_lookup_object(const gchar *object_name)
 
 /** Sets a name to lookup GObject @a obj.
  *
- * This is similar to @a ui_hookup_widget() except that it supports
- * arbitrary GObjects.
+ * The GObject can later be looked-up by the @a name using the
+ * @a ui_lookup_object() function.
  *
  * @param obj GObject.
  * @param name Name.
  *
  * @see ui_lookup_object()
- * @see ui_hookup_widget()
  * @since 0.21
  **/
 void ui_hookup_object(GObject *obj, const gchar *object_name)
