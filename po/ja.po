@@ -1,14 +1,14 @@
 # Japanese translations for geany package.
-# Copyright (C) 2006-2010 THE geany'S COPYRIGHT HOLDER
+# Copyright (C) 2006-2011 THE geany'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the geany package.
 # Tarot Osuji <tarot@sdf.lonestar.org>, 2008.
-# Chikahiro Masami <cmasa.z321@gmail.com>, 2008-2010.
+# Chikahiro Masami <cmasa.z321@gmail.com>, 2008-2011.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: geany 0.20\n"
+"Project-Id-Version: geany 0.21\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-09-17 09:51+0200\n"
+"POT-Creation-Date: 2011-09-24 22:27+0200\n"
 "PO-Revision-Date: 2009-01-01 13:44+0100\n"
 "Last-Translator: Chikahiro Masami <cmasa.z321@gmail.com>\n"
 "Language-Team: Japanese <ja@li.org>\n"
@@ -102,41 +102,41 @@ msgstr ""
 "gpl-2.0.txt を確認してください。"
 
 #. fall back to %d
-#: ../src/build.c:657
+#: ../src/build.c:655
 #, c-format
 msgid "failed to substitute %%p, no project active"
 msgstr "%%p を置き換えに失敗, アクティブなプロジェクトがありません"
 
-#: ../src/build.c:695
+#: ../src/build.c:693
 msgid "Process failed, no working directory"
 msgstr "プロセス失敗, 作業用ディレクトリがありません"
 
-#: ../src/build.c:721
+#: ../src/build.c:719
 #, c-format
 msgid "%s (in directory: %s)"
 msgstr "%s（ディレクトリ: %s）"
 
-#: ../src/build.c:741 ../src/build.c:963 ../src/search.c:1626
+#: ../src/build.c:739 ../src/build.c:961 ../src/search.c:1626
 #, c-format
 msgid "Process failed (%s)"
 msgstr "プロセス失敗（%s）"
 
-#: ../src/build.c:809
+#: ../src/build.c:807
 #, c-format
 msgid "Failed to change the working directory to \"%s\""
 msgstr "作業用ディレクトリを \"%s\" へ変更するのに失敗"
 
-#: ../src/build.c:838
+#: ../src/build.c:836
 #, c-format
 msgid "Failed to execute \"%s\" (start-script could not be created)"
 msgstr "\"%s\" の実行に失敗（開始スクリプトを作成できませんでした）"
 
-#: ../src/build.c:892
+#: ../src/build.c:890
 msgid ""
 "Could not execute the file in the VTE because it probably contains a command."
 msgstr "コマンドが含まれているため、仮想端末でファイルが実行できません"
 
-#: ../src/build.c:930
+#: ../src/build.c:928
 #, c-format
 msgid ""
 "Could not find terminal \"%s\" (check path for Terminal tool setting in "
@@ -145,118 +145,113 @@ msgstr ""
 "端末 \"%s\" が見つかりません（「設定」にある端末ツールのパス設定を確認してく"
 "ださい）"
 
-#: ../src/build.c:1103
+#: ../src/build.c:1101
 msgid "Compilation failed."
 msgstr "コンパイル失敗"
 
-#: ../src/build.c:1117
+#: ../src/build.c:1115
 msgid "Compilation finished successfully."
 msgstr "コンパイル完了"
 
-#: ../src/build.c:1276
+#: ../src/build.c:1274
 msgid "Custom Text"
 msgstr "カスタムテキスト"
 
-#: ../src/build.c:1277
+#: ../src/build.c:1275
 msgid "Enter custom text here, all entered text is appended to the command."
 msgstr ""
 "ここにカスタムテキストを入力してください。入力されたテキストはコマンドに追加"
 "されます。"
 
-#: ../src/build.c:1355
+#: ../src/build.c:1353
 msgid "_Next Error"
 msgstr "次のエラー(_N)"
 
-#: ../src/build.c:1357
+#: ../src/build.c:1355
 msgid "_Previous Error"
 msgstr "前のエラー(_P)"
 
 #. arguments
-#: ../src/build.c:1367 ../src/build.c:2745
+#: ../src/build.c:1365 ../src/build.c:2743
 msgid "_Set Build Commands"
 msgstr "ビルドコマンドを設定(_S)"
 
-#: ../src/build.c:1651 ../src/toolbar.c:374
+#: ../src/build.c:1649 ../src/toolbar.c:374
 msgid "Build the current file"
 msgstr "現在のファイルをビルド"
 
-#: ../src/build.c:1662
+#: ../src/build.c:1660
 msgid "Build the current file with Make and the default target"
 msgstr "現在のファイルをメイクとデフォルトのターゲットでビルドします"
 
-#: ../src/build.c:1664
+#: ../src/build.c:1662
 msgid "Build the current file with Make and the specified target"
 msgstr "現在のファイルをメイクと指定のターゲットでビルドします"
 
-#: ../src/build.c:1666
+#: ../src/build.c:1664
 msgid "Compile the current file with Make"
 msgstr "現在のファイルをメイクを使ってコンパイル"
 
-#: ../src/build.c:1693
+#: ../src/build.c:1691
 #, c-format
 msgid "Process could not be stopped (%s)."
 msgstr "プロセスを停止できません（%s）"
 
-#: ../src/build.c:1710 ../src/build.c:1722
+#: ../src/build.c:1708 ../src/build.c:1720
 msgid "No more build errors."
 msgstr "これ以上ビルドエラーはありません"
 
 #. FIXME: we should pass either build dialog or project dialog instead of NULL for parent
-#: ../src/build.c:1818
+#: ../src/build.c:1816
 msgid "Set menu item label"
 msgstr "メニュー項目ラベルを設定"
 
-#: ../src/build.c:1844 ../src/symbols.c:737
+#: ../src/build.c:1842 ../src/symbols.c:737
 msgid "Label"
 msgstr "ラベル"
 
-#: ../src/build.c:1845 ../src/symbols.c:732 ../src/tools.c:526
+#: ../src/build.c:1843 ../src/symbols.c:732 ../src/tools.c:526
 msgid "Command"
 msgstr "コマンド"
 
-#: ../src/build.c:1846
+#: ../src/build.c:1844
 msgid "Working directory"
 msgstr "作業ディレクトリ"
 
-#: ../src/build.c:1847
-#, fuzzy
+#: ../src/build.c:1845
 msgid "Reset"
-msgstr "標準サイズ"
+msgstr "リセット"
 
-#: ../src/build.c:1892
+#: ../src/build.c:1890
 msgid "Click to set menu item label"
 msgstr "メニュー項目ラベルを設定するためにクリック"
 
-#: ../src/build.c:1976 ../src/build.c:1978
-#, fuzzy, c-format
+#: ../src/build.c:1974 ../src/build.c:1976
+#, c-format
 msgid "%s commands"
 msgstr "%s コマンド"
 
-#: ../src/build.c:1978
-#, fuzzy
+#: ../src/build.c:1976
 msgid "No filetype"
 msgstr "ファイル種類なし"
 
-#: ../src/build.c:1987 ../src/build.c:2022
-#, fuzzy
+#: ../src/build.c:1985 ../src/build.c:2020
 msgid "Error regular expression:"
 msgstr "正規表現エラー:"
 
-#: ../src/build.c:2015
-#, fuzzy
+#: ../src/build.c:2013
 msgid "Independent commands"
-msgstr "独自のコマンド"
+msgstr "独立したコマンド"
 
-#: ../src/build.c:2047
+#: ../src/build.c:2045
 msgid "Note: Item 2 opens a dialog and appends the response to the command."
 msgstr "注意: 項目 2 はダイアログを表示し、結果をコマンドに渡します"
 
-#: ../src/build.c:2056
-#, fuzzy
+#: ../src/build.c:2054
 msgid "Execute commands"
 msgstr "コマンドを実行"
 
-#: ../src/build.c:2068
+#: ../src/build.c:2066
 #, c-format
 msgid ""
 "%d, %e, %f, %p are substituted in command and directory fields, see manual "
@@ -265,39 +260,39 @@ msgstr ""
 "%d, %e, %f, %p はコマンドやディレクトリ項目に置き換えられます, 詳細はマニュア"
 "ルを参照してください"
 
-#: ../src/build.c:2225
+#: ../src/build.c:2223
 msgid "Set Build Commands"
 msgstr "ビルドコマンドを設定"
 
-#: ../src/build.c:2436
+#: ../src/build.c:2434
 msgid "_Compile"
 msgstr "コンパイル(_C)"
 
 #. build the code
-#: ../src/build.c:2443 ../src/build.c:2705 ../src/interface.c:1245
+#: ../src/build.c:2441 ../src/build.c:2703 ../src/interface.c:1245
 msgid "_Build"
 msgstr "ビルド(_B)"
 
-#: ../src/build.c:2450 ../src/build.c:2480 ../src/build.c:2673
+#: ../src/build.c:2448 ../src/build.c:2478 ../src/build.c:2671
 msgid "_Execute"
 msgstr "実行(_E)"
 
 #. build the code with make custom
-#: ../src/build.c:2495 ../src/build.c:2671 ../src/build.c:2725
+#: ../src/build.c:2493 ../src/build.c:2669 ../src/build.c:2723
 msgid "Make Custom _Target"
 msgstr "カスタム ターゲットをメイク(_T)"
 
 #. build the code with make object
-#: ../src/build.c:2497 ../src/build.c:2672 ../src/build.c:2733
+#: ../src/build.c:2495 ../src/build.c:2670 ../src/build.c:2731
 msgid "Make _Object"
 msgstr "オブジェクトをメイク(_O)"
 
-#: ../src/build.c:2499 ../src/build.c:2670
+#: ../src/build.c:2497 ../src/build.c:2668
 msgid "_Make"
 msgstr "メイク(_M)"
 
 #. build the code with make all
-#: ../src/build.c:2717
+#: ../src/build.c:2715
 msgid "_Make All"
 msgstr "すべてメイク(_M)"
 
@@ -512,20 +507,20 @@ msgstr ""
 "現在の保存されていない文書を開いたまま、新しく保存されたファイルを新しいタブ"
 "に開きます。"
 
-#: ../src/dialogs.c:728 ../src/win32.c:683
+#: ../src/dialogs.c:728 ../src/win32.c:680
 msgid "Error"
 msgstr "エラー"
 
-#: ../src/dialogs.c:731 ../src/dialogs.c:1609 ../src/win32.c:689
-#: ../src/win32.c:748
+#: ../src/dialogs.c:731 ../src/dialogs.c:1609 ../src/win32.c:686
+#: ../src/win32.c:745
 msgid "Question"
 msgstr "質問"
 
-#: ../src/dialogs.c:734 ../src/win32.c:695
+#: ../src/dialogs.c:734 ../src/win32.c:692
 msgid "Warning"
 msgstr "警告"
 
-#: ../src/dialogs.c:737 ../src/win32.c:701
+#: ../src/dialogs.c:737 ../src/win32.c:698
 msgid "Information"
 msgstr "情報"
 
@@ -701,9 +696,9 @@ msgid "Setting %s indentation mode for %s."
 msgstr "%s インデント形式に設定(ファイル %s )"
 
 #: ../src/document.c:1100
-#, fuzzy, c-format
+#, c-format
 msgid "Setting indentation width to %d for %s."
-msgstr "%s インデント形式に設定(ファイル %s )"
+msgstr "インデント幅を %d に設定(ファイル %s )"
 
 #: ../src/document.c:1137 ../src/document.c:1737
 msgid "Invalid filename"
@@ -998,9 +993,8 @@ msgid "None"
 msgstr "なし"
 
 #: ../src/filetypes.c:304
-#, fuzzy
 msgid "Shell script"
-msgstr "シェルスクリプトファイル"
+msgstr "シェルスクリプト"
 
 #: ../src/filetypes.c:312
 msgid "Makefile"
@@ -1035,9 +1029,8 @@ msgid "_Markup Languages"
 msgstr "マークアップ言語(_M)"
 
 #: ../src/filetypes.c:716
-#, fuzzy
 msgid "M_iscellaneous"
-msgstr "その他"
+msgstr "その他(_I)"
 
 #: ../src/filetypes.c:1431 ../src/win32.c:105
 msgid "All Source"
@@ -1045,7 +1038,7 @@ msgstr "すべてのソース"
 
 #. create meta file filter "All files"
 #: ../src/filetypes.c:1456 ../src/project.c:294 ../src/win32.c:95
-#: ../src/win32.c:143 ../src/win32.c:145
+#: ../src/win32.c:140
 msgid "All files"
 msgstr "すべてのファイル"
 
@@ -1339,7 +1332,7 @@ msgid "Show Side_bar"
 msgstr "サイドバーを表示(_B)"
 
 #: ../src/interface.c:920 ../src/interface.c:4354 ../src/interface.c:5766
-#: ../src/keybindings.c:253 ../src/prefs.c:1571
+#: ../src/keybindings.c:253 ../src/prefs.c:1578
 msgid "Editor"
 msgstr "エディタ"
 
@@ -1384,9 +1377,8 @@ msgid "In_dent Type"
 msgstr "インデント形式(_D)"
 
 #: ../src/interface.c:994 ../src/interface.c:1028
-#, fuzzy
 msgid "_Detect from Content"
-msgstr "ファイルから検出"
+msgstr "内容から検出(_D)"
 
 #: ../src/interface.c:1003 ../src/interface.c:3948 ../src/interface.c:5666
 msgid "_Tabs"
@@ -1833,7 +1825,7 @@ msgstr "その他"
 #. * corresponding chapter in the documentation, comparing translatable
 #. * strings is easy to break. Maybe attach an identifying string to the
 #. * tab label object.
-#: ../src/interface.c:3250 ../src/prefs.c:1565
+#: ../src/interface.c:3250 ../src/prefs.c:1572
 msgid "General"
 msgstr "全般"
 
@@ -1911,7 +1903,7 @@ msgstr "ステータスバーを表示"
 msgid "Whether to show the status bar at the bottom of the main window"
 msgstr "ステータスバーをメインウィンドウの下部に表示するかどうか"
 
-#: ../src/interface.c:3420 ../src/interface.c:3755 ../src/prefs.c:1567
+#: ../src/interface.c:3420 ../src/interface.c:3755 ../src/prefs.c:1574
 msgid "Interface"
 msgstr "インターフェース"
 
@@ -1982,17 +1974,14 @@ msgid "<b>Tab positions</b>"
 msgstr "<b>タブ位置</b>"
 
 #: ../src/interface.c:3576
-#, fuzzy
 msgid "Notebook tabs"
 msgstr "走り書きタブ"
 
 #: ../src/interface.c:3607
-#, fuzzy
 msgid "Show t_oolbar"
 msgstr "ツールバーを表示(_O)"
 
 #: ../src/interface.c:3611
-#, fuzzy
 msgid "_Append toolbar to the menu"
 msgstr "メニューにツールバーを追加(_A)"
 
@@ -2005,52 +1994,42 @@ msgid "Customize Toolbar"
 msgstr "ツールバーをカスタマイズ"
 
 #: ../src/interface.c:3656
-#, fuzzy
 msgid "System _default"
 msgstr "システム標準(_D)"
 
 #: ../src/interface.c:3664
-#, fuzzy
 msgid "Images _and text"
 msgstr "画像とテキスト(_A)"
 
 #: ../src/interface.c:3672
-#, fuzzy
 msgid "_Images only"
 msgstr "画像のみ(_I)"
 
 #: ../src/interface.c:3680
-#, fuzzy
 msgid "_Text only"
 msgstr "テキストのみ(_T)"
 
 #: ../src/interface.c:3688
-#, fuzzy
 msgid "<b>Icon style</b>"
 msgstr "<b>アイコンのスタイル</b>"
 
 #: ../src/interface.c:3709
-#, fuzzy
 msgid "S_ystem default"
 msgstr "システム標準(_Y)"
 
 #: ../src/interface.c:3717
-#, fuzzy
 msgid "_Small icons"
 msgstr "小さいアイコン(_S)"
 
 #: ../src/interface.c:3725
-#, fuzzy
 msgid "_Very small icons"
 msgstr "最小のアイコン(_V)"
 
 #: ../src/interface.c:3733
-#, fuzzy
 msgid "_Large icons"
 msgstr "大きいアイコン(_L)"
 
 #: ../src/interface.c:3741
-#, fuzzy
 msgid "<b>Icon size</b>"
 msgstr "<b>アイコンのサイズ</b>"
 
@@ -2058,7 +2037,7 @@ msgstr "<b>アイコンのサイズ</b>"
 msgid "<b>Toolbar</b>"
 msgstr "<b>ツールバー</b>"
 
-#: ../src/interface.c:3751 ../src/prefs.c:1569
+#: ../src/interface.c:3751 ../src/prefs.c:1576
 msgid "Toolbar"
 msgstr "ツールバー"
 
@@ -2197,20 +2176,18 @@ msgid "Match braces"
 msgstr "括弧の対応"
 
 #: ../src/interface.c:3923 ../src/interface.c:5641
-#, fuzzy
 msgid "Detect type from file"
-msgstr "ファイルから検出"
+msgstr "ファイルから種類を検出"
 
 #: ../src/interface.c:3928 ../src/interface.c:5646
 msgid ""
 "Whether to detect the indentation type from file contents when a file is "
 "opened"
 msgstr ""
-"ファイルが開かれたときに、ファイルの内容からインデントのタイプを検出するかど"
-"うか"
+"ファイルが開かれたときに、ファイルの内容からインデントの種類を検出するかどう"
+"か"
 
 #: ../src/interface.c:3930 ../src/interface.c:5648
-#, fuzzy
 msgid "T_abs and spaces"
 msgstr "タブと空白(_A)"
 
@@ -2228,18 +2205,15 @@ msgid "Use one tab per indent"
 msgstr "インデントにタブを使用"
 
 #: ../src/interface.c:3957 ../src/interface.c:5682
-#, fuzzy
 msgid "Detect width from file"
-msgstr "ファイルから検出"
+msgstr "ファイルから幅を検出"
 
 #: ../src/interface.c:3962 ../src/interface.c:5687
-#, fuzzy
 msgid ""
 "Whether to detect the indentation width from file contents when a file is "
 "opened"
 msgstr ""
-"ファイルが開かれたときに、ファイルの内容からインデントのタイプを検出するかど"
-"うか"
+"ファイルが開かれたときに、ファイルの内容からインデントの幅を検出するかどうか"
 
 #: ../src/interface.c:3964 ../src/interface.c:4254 ../src/interface.c:5675
 msgid "Type:"
@@ -2673,7 +2647,7 @@ msgstr ""
 "ディスク上の文書ファイルが変更されているかどうかを確認する頻度を秒単位で指定"
 "します。0は確認しません。"
 
-#: ../src/interface.c:4569 ../src/prefs.c:1573 ../src/symbols.c:682
+#: ../src/interface.c:4569 ../src/prefs.c:1580 ../src/symbols.c:682
 #: ../plugins/filebrowser.c:1133
 msgid "Files"
 msgstr "ファイル"
@@ -2724,7 +2698,7 @@ msgstr ""
 msgid "<b>Commands</b>"
 msgstr "<b>コマンド</b>"
 
-#: ../src/interface.c:4723 ../src/keybindings.c:559 ../src/prefs.c:1575
+#: ../src/interface.c:4723 ../src/keybindings.c:559 ../src/prefs.c:1582
 msgid "Tools"
 msgstr "ツール"
 
@@ -2777,9 +2751,8 @@ msgid "Date:"
 msgstr "日:"
 
 #: ../src/interface.c:4840
-#, fuzzy
 msgid "Date & time:"
-msgstr "日時"
+msgstr "日時:"
 
 #: ../src/interface.c:4852
 msgid ""
@@ -2809,7 +2782,7 @@ msgstr ""
 msgid "<b>Template data</b>"
 msgstr "<b>テンプレートのデータ</b>"
 
-#: ../src/interface.c:4873 ../src/prefs.c:1577
+#: ../src/interface.c:4873 ../src/prefs.c:1584
 msgid "Templates"
 msgstr "テンプレート"
 
@@ -2821,7 +2794,7 @@ msgstr "変更(_H)"
 msgid "<b>Keyboard shortcuts</b>"
 msgstr "<b>ショートカットキー</b>"
 
-#: ../src/interface.c:4920 ../src/prefs.c:1579
+#: ../src/interface.c:4920 ../src/prefs.c:1586
 msgid "Keybindings"
 msgstr "キーバインド"
 
@@ -2896,7 +2869,7 @@ msgstr "ネイティブな GTK の印刷機能を使用"
 msgid "<b>Printing</b>"
 msgstr "<b>印刷</b>"
 
-#: ../src/interface.c:5050 ../src/prefs.c:1581
+#: ../src/interface.c:5050 ../src/prefs.c:1588
 msgid "Printing"
 msgstr "印刷"
 
@@ -2905,14 +2878,12 @@ msgid "<i>Warning: read the manual before changing these preferences.</i>"
 msgstr ""
 
 #: ../src/interface.c:5102
-#, fuzzy
 msgid "<b>Various preferences</b>"
-msgstr "<b>仮の空白</b>"
+msgstr "<b>各種の設定</b>"
 
-#: ../src/interface.c:5107 ../src/prefs.c:1583
-#, fuzzy
+#: ../src/interface.c:5107 ../src/prefs.c:1590
 msgid "Various"
-msgstr "前へ(_P)"
+msgstr "各種"
 
 #: ../src/interface.c:5589
 msgid "Project Properties"
@@ -3387,9 +3358,8 @@ msgid "Remove Error Indicators"
 msgstr "エラーインジケータを消去"
 
 #: ../src/keybindings.c:535
-#, fuzzy
 msgid "Remove Markers and Error Indicators"
-msgstr "エラーインジケータを消去"
+msgstr "マーカーとエラーインジケータを消去"
 
 #: ../src/keybindings.c:537 ../src/keybindings.c:542 ../src/project.c:484
 #: ../src/ui_utils.c:1947
@@ -3448,11 +3418,11 @@ msgstr "以下のショートカットキーが設定できます:"
 msgid "Switch to Document"
 msgstr "文書に切り替える"
 
-#: ../src/keyfile.c:885
+#: ../src/keyfile.c:909
 msgid "Type here what you want, use it as a notice/scratch board"
 msgstr "メモとして、ここには自由に入力できます。"
 
-#: ../src/keyfile.c:1091
+#: ../src/keyfile.c:1115
 msgid "Failed to load one or more session files."
 msgstr "セッションファイルの読み込みに失敗"
 
@@ -3641,7 +3611,7 @@ msgstr "プラグインマネージャ(_P)"
 #: ../src/plugins.c:1160
 #, c-format
 msgid "%s %s"
-msgstr ""
+msgstr "%s %s"
 
 #: ../src/plugins.c:1236
 msgid "Active"
@@ -3668,9 +3638,8 @@ msgid "<b>Plugin details:</b>"
 msgstr "<b>プラグインの詳細:</b>"
 
 #: ../src/plugins.c:1403
-#, fuzzy
 msgid "Plugin:"
-msgstr "プラグイン"
+msgstr "プラグイン:"
 
 #: ../src/plugins.c:1404 ../src/project.c:446
 msgid "Description:"
@@ -3678,67 +3647,67 @@ msgstr "説明:"
 
 #: ../src/plugins.c:1405
 msgid "Author(s):"
-msgstr ""
+msgstr "著者:"
 
 #: ../src/pluginutils.c:334
 msgid "Configure Plugins"
 msgstr "プラグインを設定"
 
-#: ../src/prefs.c:172
+#: ../src/prefs.c:179
 msgid "Grab Key"
 msgstr "キーの読み取り"
 
-#: ../src/prefs.c:178
+#: ../src/prefs.c:185
 #, c-format
 msgid "Press the combination of the keys you want to use for \"%s\"."
 msgstr "\"%s\"を使用するためのキーの組み合わせをタイプします"
 
-#: ../src/prefs.c:218 ../src/symbols.c:2141
+#: ../src/prefs.c:225 ../src/symbols.c:2141
 msgid "_Expand All"
 msgstr "すべて展開(_E)"
 
-#: ../src/prefs.c:223 ../src/symbols.c:2146
+#: ../src/prefs.c:230 ../src/symbols.c:2146
 msgid "_Collapse All"
 msgstr "すべて閉じる(_C)"
 
-#: ../src/prefs.c:282
+#: ../src/prefs.c:289
 msgid "Action"
 msgstr "アクション"
 
-#: ../src/prefs.c:286
+#: ../src/prefs.c:293
 msgid "Shortcut"
 msgstr "ショートカット"
 
-#: ../src/prefs.c:1449
+#: ../src/prefs.c:1456
 msgid "_Allow"
 msgstr "許可(_A)"
 
-#: ../src/prefs.c:1451
+#: ../src/prefs.c:1458
 msgid "_Override"
 msgstr "変更(_O)"
 
-#: ../src/prefs.c:1452
+#: ../src/prefs.c:1459
 msgid "Override that keybinding?"
 msgstr "ショートカットキーを変更しますか?"
 
-#: ../src/prefs.c:1453
+#: ../src/prefs.c:1460
 #, c-format
 msgid "The combination '%s' is already used for \"%s\"."
 msgstr "キーの組み合わせ '%s' は \"%s\" に割り当て済みです"
 
-#: ../src/prefs.c:1585 ../src/vte.c:283 ../src/vte.c:752 ../src/vte.c:757
+#: ../src/prefs.c:1592 ../src/vte.c:283 ../src/vte.c:752 ../src/vte.c:757
 msgid "Terminal"
 msgstr "端末"
 
 #. add manually GeanyWrapLabels because they can't be added with Glade
 #. page Tools
-#: ../src/prefs.c:1646
+#: ../src/prefs.c:1653
 msgid "Enter tool paths below. Tools you do not need can be left blank."
 msgstr ""
 "ツールのパスを下に入力してください。不要なツールは空白のままで構いません。"
 
 #. page Templates
-#: ../src/prefs.c:1651
+#: ../src/prefs.c:1658
 msgid ""
 "Set the information to be used in templates. See the documentation for "
 "details."
@@ -3747,7 +3716,7 @@ msgstr ""
 "ださい。"
 
 #. page Keybindings
-#: ../src/prefs.c:1656
+#: ../src/prefs.c:1663
 msgid ""
 "Here you can change keyboard shortcuts for various actions. Select one and "
 "press the Change button to enter a new shortcut, or double click on an "
@@ -3758,7 +3727,7 @@ msgstr ""
 "表現を直接編集するには２回クリックします。"
 
 #. page Editor->Indentation
-#: ../src/prefs.c:1661
+#: ../src/prefs.c:1668
 msgid ""
 "<i>Warning: these settings are overridden by the current project. See "
 "<b>Project->Properties</b>.</i>"
@@ -3874,9 +3843,8 @@ msgid "Choose Project Base Path"
 msgstr "プロジェクトの基本パスを選択"
 
 #: ../src/project.c:196 ../src/project.c:575
-#, fuzzy
 msgid "Project file could not be written"
-msgstr "プロジェクトファイルが書き込めません（%s）"
+msgstr "プロジェクトファイルが書き込めません"
 
 #: ../src/project.c:199
 #, c-format
@@ -3910,6 +3878,8 @@ msgid ""
 "Space separated list of file patterns used for the find in files dialog (e."
 "g. *.c *.h)"
 msgstr ""
+"ファイルダイアログでファイルを検索するのに使用する、ファイルパターンを空白で"
+"区切ったリスト(例 *.c *.h)"
 
 #: ../src/project.c:578
 #, c-format
@@ -4072,15 +4042,13 @@ msgstr "現在選択されているテキストで一致しているものをす
 
 #: ../src/search.c:831
 msgid "all"
-msgstr ""
+msgstr "すべて"
 
 #: ../src/search.c:833
-#, fuzzy
 msgid "project"
 msgstr "プロジェクト"
 
 #: ../src/search.c:835
-#, fuzzy
 msgid "custom"
 msgstr "カスタム"
 
@@ -4090,6 +4058,9 @@ msgid ""
 "Project: use file patterns defined in the project settings\n"
 "Custom: specify file patterns manually"
 msgstr ""
+"すべて: ディレクトリ内の全てのファイルを検索\n"
+"プロジェクト: プロジェクトの設定で定義されたファイルパターンを使用\n"
+"カスタム: ファイルパターンを指定"
 
 #: ../src/search.c:906
 msgid "Fi_les:"
@@ -4254,7 +4225,7 @@ msgstr "関数"
 
 #: ../src/symbols.c:708
 msgid "Program"
-msgstr ""
+msgstr "プログラム"
 
 #: ../src/symbols.c:710 ../src/symbols.c:718 ../src/symbols.c:724
 msgid "Sections"
@@ -4262,16 +4233,15 @@ msgstr "セクション"
 
 #: ../src/symbols.c:711
 msgid "Paragraph"
-msgstr ""
+msgstr "段落"
 
 #: ../src/symbols.c:712
-#, fuzzy
 msgid "Group"
-msgstr "グループ:"
+msgstr "グループ"
 
 #: ../src/symbols.c:713
 msgid "Data"
-msgstr ""
+msgstr "データ"
 
 #: ../src/symbols.c:719
 msgid "Keys"
@@ -4427,21 +4397,19 @@ msgstr "ターゲット"
 
 #: ../src/symbols.c:954
 msgid "Indexes"
-msgstr ""
+msgstr "インデックス"
 
 #: ../src/symbols.c:955
-#, fuzzy
 msgid "Tables"
-msgstr "変数"
+msgstr "テーブル"
 
 #: ../src/symbols.c:956
 msgid "Triggers"
-msgstr ""
+msgstr "トリガ"
 
 #: ../src/symbols.c:957
-#, fuzzy
 msgid "Views"
-msgstr "表示"
+msgstr "ビュー"
 
 #: ../src/symbols.c:976
 msgid "Structs"
@@ -4521,7 +4489,7 @@ msgstr "出現順に並び替え(_A)"
 #: ../src/templates.c:77
 #, c-format
 msgid "Failed to convert template file \"%s\" to UTF-8"
-msgstr ""
+msgstr "テンプレートファイル \"%s\" を UTF-8 に変換失敗"
 
 #. custom actions defined in toolbar_init(): "New", "Open", "SearchEntry", "GotoEntry", "Build"
 #: ../src/toolbar.c:56
@@ -4670,14 +4638,13 @@ msgid "Displayed Items"
 msgstr "表示される項目"
 
 #: ../src/tools.c:110 ../src/tools.c:115
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid command: %s"
-msgstr "実行コマンド:"
+msgstr "無効なコマンド: %s"
 
 #: ../src/tools.c:110
-#, fuzzy
 msgid "Command not found"
-msgstr "\"%s\" が見つかりません"
+msgstr "コマンドが見つかりません"
 
 #: ../src/tools.c:256
 #, c-format
@@ -4716,7 +4683,7 @@ msgstr ""
 
 #: ../src/tools.c:522
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #: ../src/tools.c:708
 msgid "No custom commands defined."
@@ -4865,15 +4832,16 @@ msgid "Close All"
 msgstr "すべて閉じる"
 
 #: ../src/utils.c:89
-#, fuzzy
 msgid "Select Browser"
-msgstr "ファイルブラウザ"
+msgstr "ブラウザを選択"
 
 #: ../src/utils.c:90
 msgid ""
 "Failed to spawn the configured browser command. Please correct it or enter "
 "another one."
 msgstr ""
+"設定したブラウザ コマンドの実行に失敗しました。コマンドを修正するか別のブラウ"
+"ザを指定してください。"
 
 #: ../src/utils.c:368
 msgid "Win (CRLF)"
@@ -5032,11 +5000,11 @@ msgstr ""
 "端末エミュレーションウィンドウを開くかわりに、VTEの中でプログラムを実行しま"
 "す。VTEの中で実行したプログラムは中止できないことに注意してください。"
 
-#: ../src/win32.c:161
+#: ../src/win32.c:160
 msgid "Geany project files"
 msgstr "Geany プロジェクトファイル"
 
-#: ../src/win32.c:167
+#: ../src/win32.c:166
 msgid "Executables"
 msgstr "実行ファイル"
 
@@ -5053,19 +5021,16 @@ msgid "Create Class"
 msgstr "クラスを作成"
 
 #: ../plugins/classbuilder.c:453
-#, fuzzy
 msgid "Create C++ Class"
-msgstr "クラスを作成"
+msgstr "C++ クラスを作成"
 
 #: ../plugins/classbuilder.c:456
-#, fuzzy
 msgid "Create GTK+ Class"
-msgstr "クラスを作成"
+msgstr "GTK+ クラスを作成"
 
 #: ../plugins/classbuilder.c:459
-#, fuzzy
 msgid "Create PHP Class"
-msgstr "クラスを作成"
+msgstr "PHP クラスを作成"
 
 #: ../plugins/classbuilder.c:476
 msgid "Namespace"
@@ -5132,9 +5097,8 @@ msgid "Is singleton"
 msgstr "シングルトン"
 
 #: ../plugins/classbuilder.c:587
-#, fuzzy
 msgid "Constructor type:"
-msgstr "GTK+ コンストラクタ型"
+msgstr "コンストラクタ型:"
 
 #: ../plugins/classbuilder.c:1096
 msgid "Create Cla_ss"
@@ -5269,13 +5233,12 @@ msgid "Export File"
 msgstr "ファイルをエクスポート"
 
 #: ../plugins/export.c:191
-#, fuzzy
 msgid "_Insert line numbers"
-msgstr "行番号を印刷"
+msgstr "行番号を挿入(_I)"
 
 #: ../plugins/export.c:193
 msgid "Insert line numbers before each line in the exported document"
-msgstr ""
+msgstr "エクスポートしたファイルの行頭に、行番号を挿入します"
 
 #: ../plugins/export.c:203
 msgid "_Use current zoom level"
@@ -5365,11 +5328,11 @@ msgid "Filter:"
 msgstr "フィルタ:"
 
 #: ../plugins/filebrowser.c:922
-#, fuzzy
 msgid ""
 "Filter your files with the usual wildcards. Separate multiple patterns with "
 "a space."
-msgstr "ワイルドカードでファイルを制限します"
+msgstr ""
+"ワイルドカードでファイルを絞り込みます。複数のパターンを空白で区切ります。"
 
 #: ../plugins/filebrowser.c:1137
 msgid "Focus File List"
@@ -5402,9 +5365,8 @@ msgid "Show hidden files"
 msgstr "隠しファイルを表示"
 
 #: ../plugins/filebrowser.c:1256
-#, fuzzy
 msgid "Hide file extensions:"
-msgstr "拡張子から検出"
+msgstr "拡張子を非表示:"
 
 #: ../plugins/filebrowser.c:1281
 msgid "Use the project's base directory"
@@ -5530,13 +5492,12 @@ msgid "_Split Window"
 msgstr "ウィンドウを分割(_S)"
 
 #: ../plugins/splitwindow.c:416
-#, fuzzy
 msgid "_Side by Side"
-msgstr "サイドバーを隠す(_I)"
+msgstr "左右に並べる(_S)"
 
 #: ../plugins/splitwindow.c:421
 msgid "_Top and Bottom"
-msgstr ""
+msgstr "上下に並べる(_T)"
 
 #: ../plugins/splitwindow.c:437
 msgid "Split Horizontally"
