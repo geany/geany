@@ -32,8 +32,6 @@
 #include "support.h"
 
 
-static gchar*		interface_file = NULL;
-static GtkBuilder*	builder = NULL;
 static GHashTable*	objects_table = NULL;
 
 
@@ -112,28 +110,33 @@ void interface_add_object(GObject *obj, const gchar *name)
 
 void interface_init(void)
 {
+	gchar *interface_file;
 	const gchar *name;
 	GError *error;
 	GSList *iter, *all_objects;
+	GtkBuilder *builder;
 	GtkCellRenderer *renderer;
 
 	g_return_if_fail(builder == NULL);
 
-	interface_file = g_build_filename(GEANY_DATADIR, "geany", "geany.glade", NULL);
-
-	if (! (builder = gtk_builder_new()))
+	builder = gtk_builder_new();
+	if (! builder)
 	{
 		g_error("Failed to initialize the user-interface");
 		return;
 	}
 
 	error = NULL;
+	interface_file = g_build_filename(GEANY_DATADIR, "geany", "geany.glade", NULL);
 	if (! gtk_builder_add_from_file(builder, interface_file, &error))
 	{
 		g_error("Failed to load the user-interface file: %s", error->message);
 		g_error_free(error);
+		g_free(interface_file);
+		g_object_unref(builder);
 		return;
 	}
+	g_free(interface_file);
 
 	gtk_builder_connect_signals(builder, NULL);
 
@@ -163,14 +166,13 @@ void interface_init(void)
 		}
 	}
 	g_slist_free(all_objects);
+
+	g_object_unref(builder);
 }
 
 
 void interface_finalize(void)
 {
-	g_free(interface_file);
 	if (objects_table != NULL)
 		g_hash_table_destroy(objects_table);
-	if (builder != NULL)
-		g_object_unref(builder);
 }
