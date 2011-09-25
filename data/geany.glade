@@ -8167,7 +8167,6 @@
                                     <property name="use_action_appearance">False</property>
                                     <property name="label" translatable="yes">_Spaces</property>
                                     <property name="use_underline">True</property>
-                                    <property name="active">True</property>
                                     <property name="group">tabs1</property>
                                     <signal name="activate" handler="on_spaces1_activate" swapped="no"/>
                                   </object>
@@ -8179,7 +8178,6 @@
                                     <property name="use_action_appearance">False</property>
                                     <property name="label" translatable="yes">T_abs and Spaces</property>
                                     <property name="use_underline">True</property>
-                                    <property name="active">True</property>
                                     <property name="group">tabs1</property>
                                     <signal name="activate" handler="on_tabs_and_spaces1_activate" swapped="no"/>
                                   </object>
@@ -8221,7 +8219,6 @@
                                     <property name="use_action_appearance">False</property>
                                     <property name="label" translatable="yes">_1</property>
                                     <property name="use_underline">True</property>
-                                    <property name="active">True</property>
                                     <signal name="activate" handler="on_indent_width_activate" swapped="no"/>
                                   </object>
                                 </child>
@@ -8232,7 +8229,6 @@
                                     <property name="use_action_appearance">False</property>
                                     <property name="label" translatable="yes">_2</property>
                                     <property name="use_underline">True</property>
-                                    <property name="active">True</property>
                                     <property name="group">indent_width_1</property>
                                     <signal name="activate" handler="on_indent_width_activate" swapped="no"/>
                                   </object>
@@ -8244,7 +8240,6 @@
                                     <property name="use_action_appearance">False</property>
                                     <property name="label" translatable="yes">_3</property>
                                     <property name="use_underline">True</property>
-                                    <property name="active">True</property>
                                     <property name="group">indent_width_1</property>
                                     <signal name="activate" handler="on_indent_width_activate" swapped="no"/>
                                   </object>
@@ -8268,7 +8263,6 @@
                                     <property name="use_action_appearance">False</property>
                                     <property name="label" translatable="yes">_5</property>
                                     <property name="use_underline">True</property>
-                                    <property name="active">True</property>
                                     <property name="group">indent_width_1</property>
                                     <signal name="activate" handler="on_indent_width_activate" swapped="no"/>
                                   </object>
@@ -8280,7 +8274,6 @@
                                     <property name="use_action_appearance">False</property>
                                     <property name="label" translatable="yes">_6</property>
                                     <property name="use_underline">True</property>
-                                    <property name="active">True</property>
                                     <property name="group">indent_width_1</property>
                                     <signal name="activate" handler="on_indent_width_activate" swapped="no"/>
                                   </object>
@@ -8292,7 +8285,6 @@
                                     <property name="use_action_appearance">False</property>
                                     <property name="label" translatable="yes">_7</property>
                                     <property name="use_underline">True</property>
-                                    <property name="active">True</property>
                                     <property name="group">indent_width_1</property>
                                     <signal name="activate" handler="on_indent_width_activate" swapped="no"/>
                                   </object>
@@ -8304,7 +8296,6 @@
                                     <property name="use_action_appearance">False</property>
                                     <property name="label" translatable="yes">_8</property>
                                     <property name="use_underline">True</property>
-                                    <property name="active">True</property>
                                     <property name="group">indent_width_1</property>
                                     <signal name="activate" handler="on_indent_width_activate" swapped="no"/>
                                   </object>
@@ -8406,7 +8397,6 @@
                                     <property name="use_action_appearance">False</property>
                                     <property name="label" translatable="yes">Convert and Set to _CR/LF (Win)</property>
                                     <property name="use_underline">True</property>
-                                    <property name="active">True</property>
                                     <signal name="activate" handler="on_crlf_activate" swapped="no"/>
                                   </object>
                                 </child>
@@ -8429,7 +8419,6 @@
                                     <property name="use_action_appearance">False</property>
                                     <property name="label" translatable="yes">Convert and Set to CR (_Mac)</property>
                                     <property name="use_underline">True</property>
-                                    <property name="active">True</property>
                                     <property name="group">crlf</property>
                                     <signal name="activate" handler="on_cr_activate" swapped="no"/>
                                   </object>
