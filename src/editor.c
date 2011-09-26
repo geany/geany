@@ -5059,6 +5059,6 @@ void editor_insert_snippet(GeanyEditor *editor, gint pos, const gchar *snippet)
 
 	pattern = g_string_new(snippet);
 	snippets_make_replacements(editor, pattern);
-	editor_insert_text_block(editor, pattern->str, pos, -1, -1, FALSE);
+	editor_insert_text_block(editor, pattern->str, pos, -1, -1, TRUE);
 	g_string_free(pattern, TRUE);
 }
