@@ -1,7 +1,7 @@
 # French translations for geany package.
-# Copyright (C) 2006-2009 THE geany'S COPYRIGHT HOLDER
+# Copyright (C) 2006-20011 THE geany'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the geany package.
-# Jean-Philippe Moal <skateinmars@skateinmars.net>, 2006 - 2010
+# Jean-Philippe Moal <skateinmars@skateinmars.net>, 2006 - 2011
 # Roland Baudin <roland.baudin@thalesaleniaspace.com>, 2008
 # Lionel Fuentes <funto66@gmail.com>, 2009
 # Colomban Wendling <colomban@geany.org>, 2011
@@ -9,11 +9,11 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: geany 0.20\n"
+"Project-Id-Version: geany 0.21\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-09-17 09:51+0200\n"
-"PO-Revision-Date: 2011-07-16 18:29+0100\n"
-"Last-Translator: Benjamin Ballet <benjamin.ballet@gmail.com>\n"
+"POT-Creation-Date: 2011-09-26 20:10+0200\n"
+"PO-Revision-Date: 2011-09-26 11:41+0100\n"
+"Last-Translator: Jean-Philippe Moal <skateinmars@skateinmars.net>\n"
 "Language-Team: French <geany-i18n@uvena.de>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -104,44 +104,44 @@ msgstr ""
 "org/licenses/gpl-2.0.txt pour le consulter en ligne."
 
 #. fall back to %d
-#: ../src/build.c:657
+#: ../src/build.c:655
 #, c-format
 msgid "failed to substitute %%p, no project active"
 msgstr "impossible de substituer %%p, aucun projet actif"
 
-#: ../src/build.c:695
+#: ../src/build.c:693
 msgid "Process failed, no working directory"
 msgstr "Échec du processus, pas de dossier de travail"
 
-#: ../src/build.c:721
+#: ../src/build.c:719
 #, c-format
 msgid "%s (in directory: %s)"
 msgstr "%s (dans le dossier : %s)"
 
-#: ../src/build.c:741 ../src/build.c:963 ../src/search.c:1626
+#: ../src/build.c:739 ../src/build.c:961 ../src/search.c:1626
 #, c-format
 msgid "Process failed (%s)"
 msgstr "Processus échoué (%s)"
 
-#: ../src/build.c:809
+#: ../src/build.c:807
 #, c-format
 msgid "Failed to change the working directory to \"%s\""
 msgstr "Impossible de changer le dossier de travail pour \"%s\""
 
-#: ../src/build.c:838
+#: ../src/build.c:836
 #, c-format
 msgid "Failed to execute \"%s\" (start-script could not be created)"
 msgstr ""
 "Impossible d'exécuter \"%s\" (le script de lancement n'a pas pu être créé)"
 
-#: ../src/build.c:892
+#: ../src/build.c:890
 msgid ""
 "Could not execute the file in the VTE because it probably contains a command."
 msgstr ""
 "Impossible d'exécuter le fichier dans le VTE car il contient probablement "
 "une commande."
 
-#: ../src/build.c:930
+#: ../src/build.c:928
 #, c-format
 msgid ""
 "Could not find terminal \"%s\" (check path for Terminal tool setting in "
@@ -150,115 +150,115 @@ msgstr ""
 "Impossible de trouver le terminal \"%s\" (vérifiez le chemin vers l'outil "
 "Terminal dans les préférences)"
 
-#: ../src/build.c:1103
+#: ../src/build.c:1101
 msgid "Compilation failed."
 msgstr "Compilation échouée."
 
-#: ../src/build.c:1117
+#: ../src/build.c:1115
 msgid "Compilation finished successfully."
 msgstr "Compilation terminée avec succès."
 
-#: ../src/build.c:1276
+#: ../src/build.c:1274
 msgid "Custom Text"
 msgstr "Texte personnalisé"
 
-#: ../src/build.c:1277
+#: ../src/build.c:1275
 msgid "Enter custom text here, all entered text is appended to the command."
 msgstr ""
 "Entrez votre texte personnalisé ici, tout texte entré ici ajouté à la "
 "commande."
 
-#: ../src/build.c:1355
+#: ../src/build.c:1353
 msgid "_Next Error"
 msgstr "Erreur suiva_nte"
 
-#: ../src/build.c:1357
+#: ../src/build.c:1355
 msgid "_Previous Error"
 msgstr "_Erreur précédente"
 
 #. arguments
-#: ../src/build.c:1367 ../src/build.c:2745
+#: ../src/build.c:1365 ../src/build.c:2743
 msgid "_Set Build Commands"
 msgstr "Définir les commande_s de construction"
 
-#: ../src/build.c:1651 ../src/toolbar.c:374
+#: ../src/build.c:1649 ../src/toolbar.c:374
 msgid "Build the current file"
 msgstr "Construit le fichier courant"
 
-#: ../src/build.c:1662
+#: ../src/build.c:1660
 msgid "Build the current file with Make and the default target"
 msgstr "Construit le fichier courant avec l'outil make et la cible par défaut"
 
-#: ../src/build.c:1664
+#: ../src/build.c:1662
 msgid "Build the current file with Make and the specified target"
 msgstr "Construit le fichier courant avec l'outil make et la cible spécifiée"
 
-#: ../src/build.c:1666
+#: ../src/build.c:1664
 msgid "Compile the current file with Make"
 msgstr "Compile le fichier courant avec make"
 
-#: ../src/build.c:1693
+#: ../src/build.c:1691
 #, c-format
 msgid "Process could not be stopped (%s)."
 msgstr "Le processus n'a pas pu être stoppé (%s)."
 
-#: ../src/build.c:1710 ../src/build.c:1722
+#: ../src/build.c:1708 ../src/build.c:1720
 msgid "No more build errors."
 msgstr "Plus d'erreurs de construction."
 
 #. FIXME: we should pass either build dialog or project dialog instead of NULL for parent
-#: ../src/build.c:1818
+#: ../src/build.c:1816
 msgid "Set menu item label"
 msgstr "Définir l'étiquette de l'élément du menu"
 
-#: ../src/build.c:1844 ../src/symbols.c:737
+#: ../src/build.c:1842 ../src/symbols.c:737
 msgid "Label"
 msgstr "Étiquette"
 
-#: ../src/build.c:1845 ../src/symbols.c:732 ../src/tools.c:526
+#: ../src/build.c:1843 ../src/symbols.c:732 ../src/tools.c:526
 msgid "Command"
 msgstr "Commande"
 
-#: ../src/build.c:1846
+#: ../src/build.c:1844
 msgid "Working directory"
 msgstr "Dossier de travail"
 
-#: ../src/build.c:1847
+#: ../src/build.c:1845
 msgid "Reset"
 msgstr "Remettre à zéro"
 
-#: ../src/build.c:1892
+#: ../src/build.c:1890
 msgid "Click to set menu item label"
 msgstr "Cliquez pour définir l'étiquette de l'élément du menu"
 
-#: ../src/build.c:1976 ../src/build.c:1978
+#: ../src/build.c:1974 ../src/build.c:1976
 #, c-format
 msgid "%s commands"
 msgstr "Commandes pour %s"
 
-#: ../src/build.c:1978
+#: ../src/build.c:1976
 msgid "No filetype"
 msgstr "Pas de type de fichier"
 
-#: ../src/build.c:1987 ../src/build.c:2022
+#: ../src/build.c:1985 ../src/build.c:2020
 msgid "Error regular expression:"
 msgstr "Expression régulière pour les erreurs :"
 
-#: ../src/build.c:2015
+#: ../src/build.c:2013
 msgid "Independent commands"
 msgstr "Commandes indépendantes"
 
-#: ../src/build.c:2047
+#: ../src/build.c:2045
 msgid "Note: Item 2 opens a dialog and appends the response to the command."
 msgstr ""
 "Note : le deuxième élément ouvre une boite de dialogue et ajoute la réponse "
 "à la commande."
 
-#: ../src/build.c:2056
+#: ../src/build.c:2054
 msgid "Execute commands"
 msgstr "Commandes d'exécution"
 
-#: ../src/build.c:2068
+#: ../src/build.c:2066
 #, c-format
 msgid ""
 "%d, %e, %f, %p are substituted in command and directory fields, see manual "
@@ -267,39 +267,39 @@ msgstr ""
 "%d, %e, %f et %p sont remplacés par les répertoires et nom de commandes, "
 "voir le manuel pour plus de détails."
 
-#: ../src/build.c:2225
+#: ../src/build.c:2223
 msgid "Set Build Commands"
 msgstr "Définir les commandes de construction"
 
-#: ../src/build.c:2436
+#: ../src/build.c:2434
 msgid "_Compile"
 msgstr "_Compiler"
 
 #. build the code
-#: ../src/build.c:2443 ../src/build.c:2705 ../src/interface.c:1245
+#: ../src/build.c:2441 ../src/build.c:2703 ../src/interface.c:1245
 msgid "_Build"
 msgstr "Const_ruire"
 
-#: ../src/build.c:2450 ../src/build.c:2480 ../src/build.c:2673
+#: ../src/build.c:2448 ../src/build.c:2478 ../src/build.c:2671
 msgid "_Execute"
 msgstr "_Exécuter"
 
 #. build the code with make custom
-#: ../src/build.c:2495 ../src/build.c:2671 ../src/build.c:2725
+#: ../src/build.c:2493 ../src/build.c:2669 ../src/build.c:2723
 msgid "Make Custom _Target"
 msgstr "Make Custom _Target"
 
 #. build the code with make object
-#: ../src/build.c:2497 ../src/build.c:2672 ../src/build.c:2733
+#: ../src/build.c:2495 ../src/build.c:2670 ../src/build.c:2731
 msgid "Make _Object"
 msgstr "Make _Object"
 
-#: ../src/build.c:2499 ../src/build.c:2670
+#: ../src/build.c:2497 ../src/build.c:2668
 msgid "_Make"
 msgstr "_Make"
 
 #. build the code with make all
-#: ../src/build.c:2717
+#: ../src/build.c:2715
 msgid "_Make All"
 msgstr "_Make All"
 
@@ -517,20 +517,20 @@ msgstr ""
 "Conserve le document en cours non enregistré et ouvre le nouveau fichier "
 "enregistré dans un nouvel onglet."
 
-#: ../src/dialogs.c:728 ../src/win32.c:683
+#: ../src/dialogs.c:728 ../src/win32.c:680
 msgid "Error"
 msgstr "Erreur"
 
-#: ../src/dialogs.c:731 ../src/dialogs.c:1609 ../src/win32.c:689
-#: ../src/win32.c:748
+#: ../src/dialogs.c:731 ../src/dialogs.c:1609 ../src/win32.c:686
+#: ../src/win32.c:745
 msgid "Question"
 msgstr "Question"
 
-#: ../src/dialogs.c:734 ../src/win32.c:695
+#: ../src/dialogs.c:734 ../src/win32.c:692
 msgid "Warning"
 msgstr "Avertissement"
 
-#: ../src/dialogs.c:737 ../src/win32.c:701
+#: ../src/dialogs.c:737 ../src/win32.c:698
 msgid "Information"
 msgstr "Information"
 
@@ -849,15 +849,15 @@ msgstr "Essayer de sauvegarder à nouveau le fichier ?"
 msgid "File \"%s\" was not found on disk!"
 msgstr "Le fichier \"%s\" n'a pu être trouvé sur le disque !"
 
-#: ../src/editor.c:4341
+#: ../src/editor.c:4343
 msgid "Enter Tab Width"
 msgstr "Largeur des tabulations"
 
-#: ../src/editor.c:4342
+#: ../src/editor.c:4344
 msgid "Enter the amount of spaces which should be replaced by a tab character."
 msgstr "Entrer le nombre d'espaces à remplacer par une tabulation."
 
-#: ../src/editor.c:4494
+#: ../src/editor.c:4496
 #, c-format
 msgid "Warning: non-standard hard tab width: %d != 8!"
 msgstr "Avertissement : largeur de tabulation non standard : %d != 8 !"
@@ -1052,7 +1052,7 @@ msgstr "Tout fichier source"
 
 #. create meta file filter "All files"
 #: ../src/filetypes.c:1456 ../src/project.c:294 ../src/win32.c:95
-#: ../src/win32.c:143 ../src/win32.c:145
+#: ../src/win32.c:140
 msgid "All files"
 msgstr "Tous les fichiers"
 
@@ -1346,7 +1346,7 @@ msgid "Show Side_bar"
 msgstr "Afficher la _barre latérale"
 
 #: ../src/interface.c:920 ../src/interface.c:4354 ../src/interface.c:5766
-#: ../src/keybindings.c:253 ../src/prefs.c:1571
+#: ../src/keybindings.c:253 ../src/prefs.c:1578
 msgid "Editor"
 msgstr "Éditeur"
 
@@ -1391,9 +1391,8 @@ msgid "In_dent Type"
 msgstr "T_ype d'indentation"
 
 #: ../src/interface.c:994 ../src/interface.c:1028
-#, fuzzy
 msgid "_Detect from Content"
-msgstr "Détecter depuis le fichier"
+msgstr "_Détecter depuis le contenu"
 
 #: ../src/interface.c:1003 ../src/interface.c:3948 ../src/interface.c:5666
 msgid "_Tabs"
@@ -1853,7 +1852,7 @@ msgstr "Divers"
 #. * corresponding chapter in the documentation, comparing translatable
 #. * strings is easy to break. Maybe attach an identifying string to the
 #. * tab label object.
-#: ../src/interface.c:3250 ../src/prefs.c:1565
+#: ../src/interface.c:3250 ../src/prefs.c:1572
 msgid "General"
 msgstr "Général"
 
@@ -1931,7 +1930,7 @@ msgstr "Afficher la barre d'état"
 msgid "Whether to show the status bar at the bottom of the main window"
 msgstr "Montrer ou cacher la barre d'état au bas de la fenêtre principale"
 
-#: ../src/interface.c:3420 ../src/interface.c:3755 ../src/prefs.c:1567
+#: ../src/interface.c:3420 ../src/interface.c:3755 ../src/prefs.c:1574
 msgid "Interface"
 msgstr "Interface"
 
@@ -2075,7 +2074,7 @@ msgstr "<b>Taille des icônes</b>"
 msgid "<b>Toolbar</b>"
 msgstr "<b>Barre d'outils</b>"
 
-#: ../src/interface.c:3751 ../src/prefs.c:1569
+#: ../src/interface.c:3751 ../src/prefs.c:1576
 msgid "Toolbar"
 msgstr "Barre d'outils"
 
@@ -2729,7 +2728,7 @@ msgstr ""
 "disque, en secondes. Zéro signifie qu'aucune vérification péridoque n'est "
 "faite."
 
-#: ../src/interface.c:4569 ../src/prefs.c:1573 ../src/symbols.c:682
+#: ../src/interface.c:4569 ../src/prefs.c:1580 ../src/symbols.c:682
 #: ../plugins/filebrowser.c:1133
 msgid "Files"
 msgstr "Fichiers"
@@ -2783,7 +2782,7 @@ msgstr ""
 msgid "<b>Commands</b>"
 msgstr "<b>Commandes</b>"
 
-#: ../src/interface.c:4723 ../src/keybindings.c:559 ../src/prefs.c:1575
+#: ../src/interface.c:4723 ../src/keybindings.c:559 ../src/prefs.c:1582
 msgid "Tools"
 msgstr "Outils"
 
@@ -2870,7 +2869,7 @@ msgstr ""
 msgid "<b>Template data</b>"
 msgstr "<b>Données des modèles</b>"
 
-#: ../src/interface.c:4873 ../src/prefs.c:1577
+#: ../src/interface.c:4873 ../src/prefs.c:1584
 msgid "Templates"
 msgstr "Modèles"
 
@@ -2882,7 +2881,7 @@ msgstr "C_hanger"
 msgid "<b>Keyboard shortcuts</b>"
 msgstr "<b>Raccourcis clavier</b>"
 
-#: ../src/interface.c:4920 ../src/prefs.c:1579
+#: ../src/interface.c:4920 ../src/prefs.c:1586
 msgid "Keybindings"
 msgstr "Raccourcis"
 
@@ -2962,23 +2961,22 @@ msgstr "Utiliser l'impression GTK native"
 msgid "<b>Printing</b>"
 msgstr "<b>Impression</b>"
 
-#: ../src/interface.c:5050 ../src/prefs.c:1581
+#: ../src/interface.c:5050 ../src/prefs.c:1588
 msgid "Printing"
 msgstr "Imprimer"
 
 #: ../src/interface.c:5097
 msgid "<i>Warning: read the manual before changing these preferences.</i>"
 msgstr ""
+"<i>Avertissement : lisez le manuel avant de modifier ces préférences.</i>"
 
 #: ../src/interface.c:5102
-#, fuzzy
 msgid "<b>Various preferences</b>"
-msgstr "<b>Espaces virtuels</b>"
+msgstr "<b>Préférences diverses</b>"
 
-#: ../src/interface.c:5107 ../src/prefs.c:1583
-#, fuzzy
+#: ../src/interface.c:5107 ../src/prefs.c:1590
 msgid "Various"
-msgstr "_Précédent"
+msgstr "Divers"
 
 #: ../src/interface.c:5589
 msgid "Project Properties"
@@ -3514,13 +3512,13 @@ msgstr "Les raccourcis clavier suivants peuvent être configurés :"
 msgid "Switch to Document"
 msgstr "Basculer vers le document"
 
-#: ../src/keyfile.c:885
+#: ../src/keyfile.c:909
 msgid "Type here what you want, use it as a notice/scratch board"
 msgstr ""
 "Écrivez ici ce que vous souhaitez, utilisez cela comme comme un tableau de "
 "notes"
 
-#: ../src/keyfile.c:1091
+#: ../src/keyfile.c:1115
 msgid "Failed to load one or more session files."
 msgstr "Impossible de charger un ou plusieurs fichiers de session."
 
@@ -3766,63 +3764,63 @@ msgstr "Auteur(s) :"
 msgid "Configure Plugins"
 msgstr "Configurer les plugins"
 
-#: ../src/prefs.c:172
+#: ../src/prefs.c:179
 msgid "Grab Key"
 msgstr "Entrer une touche"
 
-#: ../src/prefs.c:178
+#: ../src/prefs.c:185
 #, c-format
 msgid "Press the combination of the keys you want to use for \"%s\"."
 msgstr ""
 "Tapez la combinaison de touches que vous souhaitez utiliser pour \"%s\""
 
-#: ../src/prefs.c:218 ../src/symbols.c:2141
+#: ../src/prefs.c:225 ../src/symbols.c:2141
 msgid "_Expand All"
 msgstr "Tout dépli_er"
 
-#: ../src/prefs.c:223 ../src/symbols.c:2146
+#: ../src/prefs.c:230 ../src/symbols.c:2146
 msgid "_Collapse All"
 msgstr "Tout _replier"
 
-#: ../src/prefs.c:282
+#: ../src/prefs.c:289
 msgid "Action"
 msgstr "Action"
 
-#: ../src/prefs.c:286
+#: ../src/prefs.c:293
 msgid "Shortcut"
 msgstr "Raccourci"
 
-#: ../src/prefs.c:1449
+#: ../src/prefs.c:1456
 msgid "_Allow"
 msgstr "_Autoriser les deux"
 
-#: ../src/prefs.c:1451
+#: ../src/prefs.c:1458
 msgid "_Override"
 msgstr "Écras_er"
 
-#: ../src/prefs.c:1452
+#: ../src/prefs.c:1459
 msgid "Override that keybinding?"
 msgstr "Écraser ce raccourci ?"
 
-#: ../src/prefs.c:1453
+#: ../src/prefs.c:1460
 #, c-format
 msgid "The combination '%s' is already used for \"%s\"."
 msgstr "La combinaison '%s' est déjà utilisée pour \"%s\"."
 
-#: ../src/prefs.c:1585 ../src/vte.c:283 ../src/vte.c:752 ../src/vte.c:757
+#: ../src/prefs.c:1592 ../src/vte.c:283 ../src/vte.c:752 ../src/vte.c:757
 msgid "Terminal"
 msgstr "Terminal"
 
 #. add manually GeanyWrapLabels because they can't be added with Glade
 #. page Tools
-#: ../src/prefs.c:1646
+#: ../src/prefs.c:1653
 msgid "Enter tool paths below. Tools you do not need can be left blank."
 msgstr ""
 "Entrer les chemins vers les outils ici. Les chemins vers les outils dont "
 "vous n'avez pas besoin peuvent être laissés vides."
 
 #. page Templates
-#: ../src/prefs.c:1651
+#: ../src/prefs.c:1658
 msgid ""
 "Set the information to be used in templates. See the documentation for "
 "details."
@@ -3831,7 +3829,7 @@ msgstr ""
 "documentation pour plus de détails."
 
 #. page Keybindings
-#: ../src/prefs.c:1656
+#: ../src/prefs.c:1663
 msgid ""
 "Here you can change keyboard shortcuts for various actions. Select one and "
 "press the Change button to enter a new shortcut, or double click on an "
@@ -3843,7 +3841,7 @@ msgstr ""
 "caractères représentant le raccourci."
 
 #. page Editor->Indentation
-#: ../src/prefs.c:1661
+#: ../src/prefs.c:1668
 msgid ""
 "<i>Warning: these settings are overridden by the current project. See "
 "<b>Project->Properties</b>.</i>"
@@ -4969,15 +4967,16 @@ msgid "Close All"
 msgstr "Tout fermer"
 
 #: ../src/utils.c:89
-#, fuzzy
 msgid "Select Browser"
-msgstr "Navigateur de fichier"
+msgstr "Sélection du navigateur"
 
 #: ../src/utils.c:90
 msgid ""
 "Failed to spawn the configured browser command. Please correct it or enter "
 "another one."
 msgstr ""
+"Impossible d'appeler la commande configurée pour le navigateur. Corrigez-la "
+"ou entrez en une différente."
 
 #: ../src/utils.c:368
 msgid "Win (CRLF)"
@@ -5144,11 +5143,11 @@ msgstr ""
 "d'ouvrir une fenêtre d'émulation de terminal. Veuillez noter que les "
 "programmes exécutés dans le VTE ne peuvent pas être stoppés"
 
-#: ../src/win32.c:161
+#: ../src/win32.c:160
 msgid "Geany project files"
 msgstr "Fichiers de projet Geany"
 
-#: ../src/win32.c:167
+#: ../src/win32.c:166
 msgid "Executables"
 msgstr "Exécutables"
 
