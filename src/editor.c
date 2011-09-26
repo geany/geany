@@ -2375,7 +2375,6 @@ void editor_insert_text_block(GeanyEditor *editor, const gchar *text, gint inser
 {
 	ScintillaObject *sci = editor->sci;
 	gint line_start = sci_get_line_from_position(sci, insert_pos);
-	gchar *whitespace;
 	GString *buf;
 	const gchar *eol = editor_get_eol_char(editor);
 	gint idx;
@@ -2404,9 +2403,12 @@ void editor_insert_text_block(GeanyEditor *editor, const gchar *text, gint inser
 	/* Add line indents (in spaces) */
 	if (newline_indent_size > 0)
 	{
+		const gchar *nl = replace_newlines ? "\n" : eol;
+		gchar *whitespace;
+		
 		whitespace = g_strnfill(newline_indent_size, ' ');
-		setptr(whitespace, g_strconcat(eol, whitespace, NULL));
-		utils_string_replace_all(buf, eol, whitespace);
+		setptr(whitespace, g_strconcat(nl, whitespace, NULL));
+		utils_string_replace_all(buf, nl, whitespace);
 		g_free(whitespace);
 	}
 

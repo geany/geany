@@ -2,6 +2,9 @@
 
  * src/editor.c:
    Fix not converting \n to document line endings in snippets.
+ * src/editor.c:
+   Fix not indenting snippet contents for documents with non-\n line 
+   endings.
 
 
 2011-09-22  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
