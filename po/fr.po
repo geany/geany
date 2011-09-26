@@ -1,5 +1,5 @@
 # French translations for geany package.
-# Copyright (C) 2006-20011 THE geany'S COPYRIGHT HOLDER
+# Copyright (C) 2006-2011 THE geany'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the geany package.
 # Jean-Philippe Moal <skateinmars@skateinmars.net>, 2006 - 2011
 # Roland Baudin <roland.baudin@thalesaleniaspace.com>, 2008
