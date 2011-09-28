@@ -1556,9 +1556,13 @@ gint utils_string_find(GString *haystack, gint start, gint end, const gchar *nee
 gint utils_string_replace(GString *str, gint pos, gint len, const gchar *replace)
 {
 	g_string_erase(str, pos, len);
-	g_string_insert(str, pos, replace);
+	if (replace)
+	{
+		g_string_insert(str, pos, replace);
+		pos += strlen(replace);
+	}
 
-	return pos + strlen(replace);
+	return pos;
 }
 
 
