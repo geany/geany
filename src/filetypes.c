@@ -1059,20 +1059,6 @@ static void create_radio_menu_item(GtkWidget *menu, GeanyFiletype *ftype)
 }
 
 
-#if 0
-/* Remove a filetype pointer from the list of available filetypes. */
-static void filetype_remove(GeanyFiletype *ft)
-{
-	g_return_if_fail(ft);
-
-	g_ptr_array_remove(filetypes_array, ft);
-
-	if (!g_hash_table_remove(filetypes_hash, ft))
-		g_warning("Could not remove filetype %p!", ft);
-}
-#endif
-
-
 static void set_error_regex(GeanyFiletype *ft, gchar *string)
 {
 	setptr(ft->error_regex_string, string);
