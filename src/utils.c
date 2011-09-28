@@ -1581,6 +1581,7 @@ guint utils_string_replace_all(GString *haystack, const gchar *needle, const gch
 {
 	guint count = 0;
 	gint pos = 0;
+	gsize needle_length = strlen(needle);
 
 	while (1)
 	{
@@ -1589,7 +1590,7 @@ guint utils_string_replace_all(GString *haystack, const gchar *needle, const gch
 		if (pos == -1)
 			break;
 
-		pos = utils_string_replace(haystack, pos, strlen(needle), replace);
+		pos = utils_string_replace(haystack, pos, needle_length, replace);
 		count++;
 	}
 	return count;
