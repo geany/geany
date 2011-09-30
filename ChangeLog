@@ -3,6 +3,14 @@
  * src/utils.c, src/utils.h, src/editor.c:
    Use GRegex for snippet indentation replacement - fixes wrong 
    behaviour with Mac line endings.
+ * tagmanager/lregex.c, TODO:
+   Use GRegex for CTags instead of POSIX regex - GRegex is more 
+   powerful. This also fixes a (HTML) performance issue on Windows. 
+   Geany will now print a debug warning when using the "b" CTags 
+   regex flag option for non-extended syntax. This is not currently 
+   used by Geany's parsers.
+   Note: GNU regex can't be removed yet as it's still used elsewhere 
+   by Geany.
 
 
 2011-09-29  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

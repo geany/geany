@@ -14,7 +14,7 @@ Note: features included in brackets have lower priority.
 	o common default highlighting styles configurable for all
 	  programming languages (done for C-like filetypes using
 	  filetypes.common named styles)
-	o update included regex library (and other CTags improvements)
+	o use GRegex only and remove GNU regex
 	o asynchronous build commands on Windows
 	o (filetype-independent run command in build dialog & keybinding)
 	o (better custom filetype support)
