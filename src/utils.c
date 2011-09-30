@@ -1617,6 +1617,45 @@ guint utils_string_replace_first(GString *haystack, const gchar *needle, const g
 }
 
 
+/* Similar to g_regex_replace but allows matching a subgroup.
+ * match_num: which match to replace, 0 for whole match.
+ * literal: FALSE to interpret escape sequences in @a replace.
+ * returns: number of replacements.
+ * bug: replaced text can affect matching of ^ or \b */
+guint utils_string_regex_replace_all(GString *haystack, GRegex *regex,
+		guint match_num, const gchar *replace, gboolean literal)
+{
+	GMatchInfo *minfo;
+	guint ret = 0;
+	gint start = 0;
+
+	g_assert(literal); /* escapes not implemented yet */
+	g_return_val_if_fail(replace, 0);
+
+	/* ensure haystack->str is not null */
+	if (haystack->len == 0)
+		return 0;
+
+	/* passing a start position makes G_REGEX_MATCH_NOTBOL automatic */
+	while (g_regex_match_full(regex, haystack->str, -1, start, 0, &minfo, NULL))
+	{
+		gint end, len;
+		
+		g_match_info_fetch_pos(minfo, match_num, &start, &end);
+		len = end - start;
+		utils_string_replace(haystack, start, len, replace);
+		ret++;
+		
+		/* skip past whole match */
+		g_match_info_fetch_pos(minfo, 0, NULL, &end);
+		start = end - len + strlen(replace);
+		g_match_info_free(minfo);
+	}
+	g_match_info_free(minfo);
+	return ret;
+}
+
+
 /* Get project or default startup directory (if set), or NULL. */
 const gchar *utils_get_default_dir_utf8(void)
 {

@@ -2272,63 +2272,18 @@ static void snippets_replace_specials(gpointer key, gpointer value, gpointer use
 }
 
 
-static gboolean utils_regex_find(regex_t *regex, const gchar *haystack, gsize start,
-		gsize nmatches, regmatch_t *matches)
-{
-	gint eflags = 0;
-
-	if (start > 0)
-	{
-		gchar c = haystack[start - 1];
-
-		if (c == '\n' || c == '\r')
-			eflags = REG_NOTBOL;
-	}
-	return regexec(regex, haystack + start, nmatches, matches, eflags) == 0;
-}
-
-
-/* match_index: which match to replace, 0 for whole regex.
- * note: this doesn't support backreferences in replacements */
-static guint utils_string_regex_replace_all(GString *haystack,
-		regex_t *regex, guint match_index, const gchar *replace)
-{
-	gssize pos;
-	regmatch_t matches[10];
-	guint ret = 0;
-
-	g_return_val_if_fail(match_index < 10, 0);
-
-	/* ensure haystack->str is not null */
-	if (haystack->len == 0)
-		return 0;
-
-	pos = 0;
-	while (utils_regex_find(regex, haystack->str, pos, G_N_ELEMENTS(matches), matches))
-	{
-		regmatch_t *match = &matches[match_index];
-
-		g_return_val_if_fail(match->rm_so >= 0, FALSE);
-		pos += match->rm_so;
-		pos = utils_string_replace(haystack, pos, match->rm_eo - match->rm_so, replace);
-		ret++;
-	}
-	return ret;
-}
-
-
 static void fix_indentation(GeanyEditor *editor, GString *buf)
 {
 	const GeanyIndentPrefs *iprefs = editor_get_indent_prefs(editor);
 	gchar *whitespace;
-	regex_t regex;
-	gint cflags = REG_EXTENDED | REG_NEWLINE;
+	GRegex *regex;
+	gint cflags = G_REGEX_MULTILINE;
 
 	/* transform leading tabs into indent widths (in spaces) */
 	whitespace = g_strnfill(iprefs->width, ' ');
-	regcomp(&regex, "^ *(\t)", cflags);
-	while (utils_string_regex_replace_all(buf, &regex, 1, whitespace));
-	regfree(&regex);
+	regex = g_regex_new("^ *(\t)", cflags, 0, NULL);
+	while (utils_string_regex_replace_all(buf, regex, 1, whitespace, TRUE));
+	g_regex_unref(regex);
 
 	/* remaining tabs are for alignment */
 	if (iprefs->type != GEANY_INDENT_TYPE_TABS)
@@ -2343,9 +2298,9 @@ static void fix_indentation(GeanyEditor *editor, GString *buf)
 		setptr(whitespace, g_strnfill(sci_get_tab_width(editor->sci), ' '));
 		str = g_strdup_printf("^\t*(%s)", whitespace);
 
-		regcomp(&regex, str, cflags);
-		while (utils_string_regex_replace_all(buf, &regex, 1, "\t"));
-		regfree(&regex);
+		regex = g_regex_new(str, cflags, 0, NULL);
+		while (utils_string_regex_replace_all(buf, regex, 1, "\t", TRUE));
+		g_regex_unref(regex);
 		g_free(str);
 	}
 	g_free(whitespace);
