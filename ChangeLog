@@ -2,6 +2,8 @@
 
  * doc/images/*.png:
    Update documentation images.
+ * doc/geany.txt, doc/geany.html:
+   Update documentation for new images.
 
 
 2011-09-28  Colomban Wendling  <colomban(at)geany(dot)org>

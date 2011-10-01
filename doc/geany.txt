@@ -1840,7 +1840,7 @@ Store project file inside the project base directory
 Interface preferences
 ^^^^^^^^^^^^^^^^^^^^^
 
-.. image:: ./images/pref_dialog_interface.png
+.. image:: ./images/pref_dialog_interface_interface.png
 
 Sidebar
 ```````
@@ -1882,6 +1882,8 @@ Show status bar
 
 Interface Notebook tab preferences
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. image:: ./images/pref_dialog_interface_notebook.png
 
 Editor tabs
 ```````````
@@ -1927,7 +1929,7 @@ Interface Toolbar preferences
 
 Affects the main toolbar underneath the menu bar.
 
-.. image:: ./images/pref_dialog_toolbar.png
+.. image:: ./images/pref_dialog_interface_toolbar.png
 
 Toolbar
 ```````
