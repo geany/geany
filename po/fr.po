@@ -11,9 +11,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: geany 0.21\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-09-26 20:10+0200\n"
-"PO-Revision-Date: 2011-09-26 11:41+0100\n"
-"Last-Translator: Jean-Philippe Moal <skateinmars@skateinmars.net>\n"
+"POT-Creation-Date: 2011-10-01 16:16+0200\n"
+"PO-Revision-Date: 2011-10-01 16:39+0200\n"
+"Last-Translator: Colomban Wendling <colomban@geany.org>\n"
 "Language-Team: French <geany-i18n@uvena.de>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -1001,7 +1001,7 @@ msgstr "Fichier source %s"
 msgid "%s file"
 msgstr "Fichier %s"
 
-#: ../src/filetypes.c:103 ../src/filetypes.c:1753 ../src/interface.c:3918
+#: ../src/filetypes.c:103 ../src/filetypes.c:1739 ../src/interface.c:3918
 #: ../src/interface.c:5636
 msgid "None"
 msgstr "Aucun"
@@ -1046,17 +1046,17 @@ msgstr "Langages de _Balisage"
 msgid "M_iscellaneous"
 msgstr "D_ivers"
 
-#: ../src/filetypes.c:1431 ../src/win32.c:105
+#: ../src/filetypes.c:1417 ../src/win32.c:105
 msgid "All Source"
 msgstr "Tout fichier source"
 
 #. create meta file filter "All files"
-#: ../src/filetypes.c:1456 ../src/project.c:294 ../src/win32.c:95
+#: ../src/filetypes.c:1442 ../src/project.c:294 ../src/win32.c:95
 #: ../src/win32.c:140
 msgid "All files"
 msgstr "Tous les fichiers"
 
-#: ../src/filetypes.c:1514
+#: ../src/filetypes.c:1500
 #, c-format
 msgid "Bad regex for filetype %s: %s"
 msgstr "Mauvaise expression régulière pour le type de fichier %s : %s"
@@ -4297,6 +4297,14 @@ msgstr ""
 "Geany a essayé d'accéder au socket de domaine Unix d'une autre instance d'un "
 "autre utilisateur.\n"
 "Ceci est une erreur fatale et Geany va maintenant fermer."
+
+#: ../src/stash.c:1073
+msgid "Name"
+msgstr "Nom"
+
+#: ../src/stash.c:1080
+msgid "Value"
+msgstr "Valeur"
 
 #: ../src/symbols.c:688 ../src/symbols.c:738 ../src/symbols.c:805
 msgid "Chapter"
