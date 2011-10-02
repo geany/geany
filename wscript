@@ -652,7 +652,7 @@ def _get_svn_rev(conf):
             pass
         except (IndexError, ValueError):
             Logs.pprint('RED', 'Unparseable revision number')
-    return 0
+    return -1
 
 
 def _load_intltool_if_available(conf):
