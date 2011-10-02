@@ -10,7 +10,8 @@
 
 :Authors: Enrico Tröger,
           Nick Treleaven,
-          Frank Lanitz
+          Frank Lanitz,
+          Colomban Wendling
 :Date: $Date$
 :Version: |(version)|
 
