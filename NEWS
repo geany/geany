@@ -1,4 +1,4 @@
-Geany 0.21 (unreleased)
+Geany 0.21 (October 2, 2011)
 
     General
     * Bump dependencies to GTK >= 2.12, GLib >= 2.16 and GIO.
