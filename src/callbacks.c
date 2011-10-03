@@ -740,7 +740,9 @@ void on_toggle_case1_activate(GtkMenuItem *menuitem, gpointer user_data)
 		keybindings_send_command(GEANY_KEY_GROUP_SELECT, GEANY_KEYS_SELECT_WORD);
 		keep_sel = FALSE;
 	}
-	else
+
+	/* either we already had a selection or we created one for current word */
+	if (sci_has_selection(sci))
 	{
 		gchar *result = NULL;
 		gint cmd = SCI_LOWERCASE;

@@ -3,6 +3,8 @@
  * TODO, configure.ac, doc/geany.txt, geany.nsi, geany_private.rc,
    src/geany.h, win32-config.h, wscript:
    Post-release version bump.
+ * src/callbacks.c:
+   Fix "toggle case" when there is no selection.
 
 
 2011-10-03  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
