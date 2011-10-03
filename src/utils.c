@@ -444,6 +444,25 @@ gdouble utils_scale_round(gdouble val, gdouble factor)
 }
 
 
+/* like g_utf8_strdown() but if @str is not valid UTF8, convert it from locale first.
+ * returns NULL on charset conversion failure */
+static gchar *utf8_strdown(const gchar *str)
+{
+	gchar *down;
+
+	if (g_utf8_validate(str, -1, NULL))
+		down = g_utf8_strdown(str, -1);
+	else
+	{
+		down = g_locale_to_utf8(str, -1, NULL, NULL, NULL);
+		if (down)
+			setptr(down, g_utf8_strdown(down, -1));
+	}
+
+	return down;
+}
+
+
 /**
  *  A replacement function for g_strncasecmp() to compare strings case-insensitive.
  *  It converts both strings into lowercase using g_utf8_strdown() and then compare
@@ -469,29 +488,16 @@ gint utils_str_casecmp(const gchar *s1, const gchar *s2)
 	g_return_val_if_fail(s1 != NULL, 1);
 	g_return_val_if_fail(s2 != NULL, -1);
 
-	tmp1 = g_strdup(s1);
-	tmp2 = g_strdup(s2);
-
-	/* first ensure strings are UTF-8 */
-	if (! g_utf8_validate(s1, -1, NULL))
-		setptr(tmp1, g_locale_to_utf8(s1, -1, NULL, NULL, NULL));
-	if (! g_utf8_validate(s2, -1, NULL))
-		setptr(tmp2, g_locale_to_utf8(s2, -1, NULL, NULL, NULL));
-
-	if (tmp1 == NULL)
-	{
-		g_free(tmp2);
+	/* ensure strings are UTF-8 and lowercase */
+	tmp1 = utf8_strdown(s1);
+	if (! tmp1)
 		return 1;
-	}
-	if (tmp2 == NULL)
+	tmp2 = utf8_strdown(s2);
+	if (! tmp2)
 	{
 		g_free(tmp1);
 		return -1;
 	}
-
-	/* then convert the strings into a case-insensitive form */
-	setptr(tmp1, g_utf8_strdown(tmp1, -1));
-	setptr(tmp2, g_utf8_strdown(tmp2, -1));
 
 	/* compare */
 	result = strcmp(tmp1, tmp2);
