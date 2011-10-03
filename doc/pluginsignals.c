@@ -187,7 +187,7 @@ signal void (*project_dialog_confirmed)(GObject *obj, GtkWidget *notebook, gpoin
  */
 signal void (*geany_startup_complete)(GObject *obj, gpointer user_data);
 
-/** Sent before build is started. Plugins can use this signal e.g. to save the opened documents
+/** Sent before build is started. A plugin could use this signal e.g. to save all unsaved documents
  *  before the build starts.
  *
  *  @param obj a GeanyObject instance, should be ignored.

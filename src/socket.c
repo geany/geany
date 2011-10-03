@@ -588,7 +588,7 @@ gboolean socket_lock_input_cb(GIOChannel *source, GIOCondition condition, gpoint
 	gint fd, sock;
 	gchar buf[BUFFER_LENGTH];
 	struct sockaddr_in caddr;
-	guint caddr_len = sizeof(caddr);
+	socklen_t caddr_len = sizeof(caddr);
 	GtkWidget *window = data;
 	gboolean popup = FALSE;
 

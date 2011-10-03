@@ -1,3 +1,31 @@
+2011-10-03  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * Merge branches/unstable:
+ - tagmanager/php.c:
+   Fix parsing keyword-qualified functions strictly, e.g. don't 
+   parse 'staticfunction' or 'fatfunction'.
+ - src/utils.c, src/utils.h, src/editor.c:
+   Use GRegex for snippet indentation replacement - fixes wrong 
+   behaviour with Mac line endings.
+ - tagmanager/lregex.c, TODO:
+   Use GRegex for CTags instead of POSIX regex - GRegex is more 
+   powerful. This also fixes a (HTML) performance issue on Windows. 
+   Geany will now print a debug warning when using the "b" CTags 
+   regex flag option for non-extended syntax. This is not currently 
+   used by Geany's parsers.
+   Note: GNU regex can't be removed yet as it's still used elsewhere 
+   by Geany.
+ - src/build.c, doc/pluginsignals.c:
+   When saving on build, prompt for a filename if necessary.
+   Emit the "build-start" signal only if saving succeeds.
+ - src/build.c:
+   Use #ifdef SYNC_SPAWN instead of G_OS_WIN32 for easier testing with 
+   glib's asynchronous spawning (which doesn't work on Windows).
+ - src/win32.c, src/win32.h, src/dialogs.c:
+   Use GTK unsaved file dialog on Windows too because the button names 
+   should be specific.
+
+
 2011-10-02  Colomban Wendling  <colomban(at)geany(dot)org>
 
  * doc/geany.txt, doc/geany.html:

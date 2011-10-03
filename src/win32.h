@@ -40,8 +40,6 @@ void win32_show_color_dialog(const gchar *colour);
 
 gboolean win32_message_dialog(GtkWidget *parent, GtkMessageType type, const gchar *msg);
 
-gint win32_message_dialog_unsaved(const gchar *msg);
-
 void win32_open_browser(const gchar *uri);
 
 gchar *win32_show_project_open_dialog(GtkWidget *parent, const gchar *title,

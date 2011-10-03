@@ -28,11 +28,6 @@
 # ifdef HAVE_SYS_TYPES_H
 #  include <sys/types.h>  /* declare off_t (not known to regex.h on FreeBSD) */
 # endif
-# ifdef HAVE_REGEX_H
-#  include <regex.h>
-# else
-#  include "gnuregex.h"
-# endif
 #endif
 
 #include "main.h"
@@ -70,7 +65,7 @@ struct sKind {
 enum pType { PTRN_TAG, PTRN_CALLBACK };
 
 typedef struct {
-	regex_t *pattern;
+	GRegex *pattern;
 	enum pType type;
 	union {
 		struct {
@@ -113,10 +108,7 @@ static void clearPatternSet (const langType language)
 		for (i = 0  ;  i < set->count  ;  ++i)
 		{
 			regexPattern *p = &set->patterns [i];
-#if defined (POSIX_REGEX)
-			regfree (p->pattern);
-#endif
-			eFree (p->pattern);
+			g_regex_unref(p->pattern);
 			p->pattern = NULL;
 
 			if (p->type == PTRN_TAG)
@@ -255,7 +247,7 @@ static boolean parseTagRegex (
 }
 
 static void addCompiledTagPattern (
-		const langType language, regex_t* const pattern,
+		const langType language, GRegex* const pattern,
 		char* const name, const char kind, char* const kindName,
 		char *const description)
 {
@@ -287,7 +279,7 @@ static void addCompiledTagPattern (
 }
 
 static void addCompiledCallbackPattern (
-		const langType language, regex_t* const pattern,
+		const langType language, GRegex* const pattern,
 		const regexCallback callback)
 {
 	patternSet* set;
@@ -315,32 +307,27 @@ static void addCompiledCallbackPattern (
 
 #if defined (POSIX_REGEX)
 
-static regex_t* compileRegex (const char* const regexp, const char* const flags)
+static GRegex* compileRegex (const char* const regexp, const char* const flags)
 {
-	int cflags = REG_EXTENDED | REG_NEWLINE;
-	regex_t *result = NULL;
-	int errcode;
+	int cflags = G_REGEX_MULTILINE;
+	GRegex *result = NULL;
+	GError *error = NULL;
 	int i;
 	for (i = 0  ; flags != NULL  &&  flags [i] != '\0'  ;  ++i)
 	{
 		switch ((int) flags [i])
 		{
-			case 'b': cflags &= ~REG_EXTENDED; break;
-			case 'e': cflags |= REG_EXTENDED;  break;
-			case 'i': cflags |= REG_ICASE;     break;
+			case 'b': g_warning("CTags 'b' flag not supported by Geany!"); break;
+			case 'e': break;
+			case 'i': cflags |= G_REGEX_CASELESS; break;
 			default: printf ("regex: unknown regex flag: '%c'\n", *flags); break;
 		}
 	}
-	result = xMalloc (1, regex_t);
-	errcode = regcomp (result, regexp, cflags);
-	if (errcode != 0)
+	result = g_regex_new(regexp, cflags, 0, &error);
+	if (error)
 	{
-		char errmsg[256];
-		regerror (errcode, result, errmsg, 256);
-		printf ("regex: regcomp %s: %s\n", regexp, errmsg);
-		regfree (result);
-		eFree (result);
-		result = NULL;
+		printf ("regex: regcomp %s: %s\n", regexp, error->message);
+		g_error_free(error);
 	}
 	return result;
 }
@@ -433,7 +420,7 @@ static void processLanguageRegex (const langType language,
 
 static vString* substitute (
 		const char* const in, const char* out,
-		const int nmatch, const regmatch_t* const pmatch)
+		const int nmatch, const GMatchInfo* const minfo)
 {
 	vString* result = vStringNew ();
 	const char* p;
@@ -442,10 +429,12 @@ static vString* substitute (
 		if (*p == '\\'  &&  isdigit ((int) *++p))
 		{
 			const int dig = *p - '0';
-			if (0 < dig  &&  dig < nmatch  &&  pmatch [dig].rm_so != -1)
+			int so, eo;
+			if (0 < dig  &&  dig < nmatch  &&
+				g_match_info_fetch_pos(minfo, dig, &so, &eo) && so != -1)
 			{
-				const int diglen = pmatch [dig].rm_eo - pmatch [dig].rm_so;
-				vStringNCatS (result, in + pmatch [dig].rm_so, diglen);
+				const int diglen = eo - so;
+				vStringNCatS (result, in + so, diglen);
 			}
 		}
 		else if (*p != '\n'  &&  *p != '\r')
@@ -457,10 +446,10 @@ static vString* substitute (
 
 static void matchTagPattern (const vString* const line,
 		const regexPattern* const patbuf,
-		const regmatch_t* const pmatch)
+		const GMatchInfo* const minfo)
 {
 	vString *const name = substitute (vStringValue (line),
-			patbuf->u.tag.name_pattern, BACK_REFERENCE_COUNT, pmatch);
+			patbuf->u.tag.name_pattern, BACK_REFERENCE_COUNT, minfo);
 	vStringStripLeading (name);
 	vStringStripTrailing (name);
 	if (vStringLength (name) > 0)
@@ -474,15 +463,18 @@ static void matchTagPattern (const vString* const line,
 
 static void matchCallbackPattern (
 		const vString* const line, const regexPattern* const patbuf,
-		const regmatch_t* const pmatch)
+		const GMatchInfo* const minfo)
 {
 	regexMatch matches [BACK_REFERENCE_COUNT];
 	unsigned int count = 0;
 	int i;
-	for (i = 0  ;  i < BACK_REFERENCE_COUNT  &&  pmatch [i].rm_so != -1  ;  ++i)
+	for (i = 0  ;  i < BACK_REFERENCE_COUNT  ;  ++i)
 	{
-		matches [i].start  = pmatch [i].rm_so;
-		matches [i].length = pmatch [i].rm_eo - pmatch [i].rm_so;
+		int so, eo;
+		if (!g_match_info_fetch_pos(minfo, i, &so, &eo) || so == -1)
+			break;
+		matches [i].start  = so;
+		matches [i].length = eo - so;
 		++count;
 	}
 	patbuf->u.callback.function (vStringValue (line), matches, count);
@@ -492,22 +484,21 @@ static boolean matchRegexPattern (const vString* const line,
 		const regexPattern* const patbuf)
 {
 	boolean result = FALSE;
-	regmatch_t pmatch [BACK_REFERENCE_COUNT];
-	const int match = regexec (patbuf->pattern, vStringValue (line),
-							   BACK_REFERENCE_COUNT, pmatch, 0);
-	if (match == 0)
+	GMatchInfo *minfo;
+	if (g_regex_match(patbuf->pattern, vStringValue(line), 0, &minfo))
 	{
 		result = TRUE;
 		if (patbuf->type == PTRN_TAG)
-			matchTagPattern (line, patbuf, pmatch);
+			matchTagPattern (line, patbuf, minfo);
 		else if (patbuf->type == PTRN_CALLBACK)
-			matchCallbackPattern (line, patbuf, pmatch);
+			matchCallbackPattern (line, patbuf, minfo);
 		else
 		{
 			Assert ("invalid pattern type" == NULL);
 			result = FALSE;
 		}
 	}
+	g_match_info_free(minfo);
 	return result;
 }
 
@@ -554,7 +545,7 @@ extern void addTagRegex (
 	Assert (name != NULL);
 	if (! regexBroken)
 	{
-		regex_t* const cp = compileRegex (regex, flags);
+		GRegex* const cp = compileRegex (regex, flags);
 		if (cp != NULL)
 		{
 			char kind;
@@ -578,7 +569,7 @@ extern void addCallbackRegex (
 	Assert (regex != NULL);
 	if (! regexBroken)
 	{
-		regex_t* const cp = compileRegex (regex, flags);
+		GRegex* const cp = compileRegex (regex, flags);
 		if (cp != NULL)
 			addCompiledCallbackPattern (language, cp, callback);
 	}
@@ -695,7 +686,7 @@ extern void freeRegexResources (void)
 /* Check for broken regcomp() on Cygwin */
 extern void checkRegex (void)
 {
-#if defined (HAVE_REGEX) && defined (CHECK_REGCOMP)
+#if 0 && defined (HAVE_REGEX) && defined (CHECK_REGCOMP)
 	regex_t patbuf;
 	int errcode;
 	if (regcomp (&patbuf, "/hello/", 0) != 0)

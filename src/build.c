@@ -64,6 +64,11 @@
 #include "toolbar.h"
 #include "geanymenubuttonaction.h"
 
+/* g_spawn_async_with_pipes doesn't work on Windows */
+#ifdef G_OS_WIN32
+#define SYNC_SPAWN
+#endif
+
 /* Number of editor indicators to draw - limited as this can affect performance */
 #define GEANY_BUILD_ERR_HIGHLIGHT_MAX 50
 
@@ -114,7 +119,7 @@ widgets;
 static gint build_groups_count[GEANY_GBG_COUNT] = { 3, 4, 2 };
 static gint build_items_count = 9;
 
-#ifndef G_OS_WIN32
+#ifndef SYNC_SPAWN
 static void build_exit_cb(GPid child_pid, gint status, gpointer user_data);
 static gboolean build_iofunc(GIOChannel *ioc, GIOCondition cond, gpointer data);
 #endif
@@ -571,7 +576,7 @@ static void clear_errors(GeanyDocument *doc)
 }
 
 
-#ifdef G_OS_WIN32
+#ifdef SYNC_SPAWN
 static void parse_build_output(const gchar **output, gint status)
 {
 	guint x, i, len;
@@ -590,7 +595,7 @@ static void parse_build_output(const gchar **output, gint status)
 				{
 					line = lines[i];
 					while (*line != '\0')
-					{	/* replace any conrol characters in the output */
+					{	/* replace any control characters in the output */
 						if (*line < 32)
 							*line = 32;
 						line++;
@@ -679,7 +684,7 @@ static GPid build_spawn_cmd(GeanyDocument *doc, const gchar *cmd, const gchar *d
 	gchar *utf8_working_dir;
 	gchar *cmd_string;
 	gchar *utf8_cmd_string;
-#ifdef G_OS_WIN32
+#ifdef SYNC_SPAWN
 	gchar *output[2];
 	gint status;
 #else
@@ -726,7 +731,7 @@ static GPid build_spawn_cmd(GeanyDocument *doc, const gchar *cmd, const gchar *d
 	build_info.file_type_id = (doc == NULL) ? GEANY_FILETYPES_NONE : doc->file_type->id;
 	build_info.message_count = 0;
 
-#ifdef G_OS_WIN32
+#ifdef SYNC_SPAWN
 	if (! utils_spawn_sync(working_dir, argv, NULL, G_SPAWN_SEARCH_PATH,
 			NULL, NULL, &output[0], &output[1], &status, &error))
 #else
@@ -744,7 +749,7 @@ static GPid build_spawn_cmd(GeanyDocument *doc, const gchar *cmd, const gchar *d
 		return (GPid) 0;
 	}
 
-#ifdef G_OS_WIN32
+#ifdef SYNC_SPAWN
 	parse_build_output((const gchar**) output, status);
 	g_free(output[0]);
 	g_free(output[1]);
@@ -1026,7 +1031,7 @@ static void process_build_output_line(const gchar *str, gint color)
 }
 
 
-#ifndef G_OS_WIN32
+#ifndef SYNC_SPAWN
 static gboolean build_iofunc(GIOChannel *ioc, GIOCondition cond, gpointer data)
 {
 	if (cond & (G_IO_IN | G_IO_PRI))
@@ -1121,11 +1126,14 @@ static void show_build_result_message(gboolean failure)
 }
 
 
-#ifndef G_OS_WIN32
+#ifndef SYNC_SPAWN
 static void build_exit_cb(GPid child_pid, gint status, gpointer user_data)
 {
 	gboolean failure = FALSE;
 
+#ifdef G_OS_WIN32
+	failure = status;
+#else
 	if (WIFEXITED(status))
 	{
 		if (WEXITSTATUS(status) != EXIT_SUCCESS)
@@ -1140,6 +1148,7 @@ static void build_exit_cb(GPid child_pid, gint status, gpointer user_data)
 	{	/* any other failure occured */
 		failure = TRUE;
 	}
+#endif
 	show_build_result_message(failure);
 
 	utils_beep();
@@ -1261,10 +1270,16 @@ static void on_build_menu_item(GtkWidget *w, gpointer user_data)
 	gint grp = GPOINTER_TO_GRP(user_data);
 	gint cmd = GPOINTER_TO_CMD(user_data);
 
+	if (doc && doc->changed)
+	{
+		if (document_need_save_as(doc) && !dialogs_show_save_as())
+			return;
+			
+		if (!document_save_file(doc, FALSE))
+			return;
+	}
 	g_signal_emit_by_name(geany_object, "build-start");
 
-	if (doc && doc->changed)
-		document_save_file(doc, FALSE);
 	if (grp == GEANY_GBG_NON_FT && cmd == GBO_TO_CMD(GEANY_GBO_CUSTOM))
 	{
 		static GtkWidget *dialog = NULL; /* keep dialog for combo history */

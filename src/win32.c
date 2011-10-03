@@ -732,33 +732,6 @@ gint win32_check_write_permission(const gchar *dir)
 }
 
 
-/* Special dialog to ask for an action when closing an unsaved file */
-gint win32_message_dialog_unsaved(const gchar *msg)
-{
-	static wchar_t w_msg[512];
-	static wchar_t w_title[512];
-	HWND parent_hwnd = NULL;
-	gint ret;
-
-	/* convert the Unicode chars to wide chars */
-	MultiByteToWideChar(CP_UTF8, 0, msg, -1, w_msg, G_N_ELEMENTS(w_msg));
-	MultiByteToWideChar(CP_UTF8, 0, _("Question"), -1, w_title, G_N_ELEMENTS(w_title));
-
-	if (main_widgets.window != NULL)
-		parent_hwnd = GDK_WINDOW_HWND(main_widgets.window->window);
-
-	ret = MessageBoxW(parent_hwnd, w_msg, w_title, MB_YESNOCANCEL | MB_ICONQUESTION);
-	switch (ret)
-	{
-		case IDYES: ret = GTK_RESPONSE_YES; break;
-		case IDNO: ret = GTK_RESPONSE_NO; break;
-		case IDCANCEL: ret = GTK_RESPONSE_CANCEL; break;
-	}
-
-	return ret;
-}
-
-
 /* Just a simple wrapper function to open a browser window */
 void win32_open_browser(const gchar *uri)
 {

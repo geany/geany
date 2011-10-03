@@ -804,7 +804,6 @@ void dialogs_show_msgbox_with_secondary(GtkMessageType type, const gchar *text, 
 }
 
 
-#ifndef G_OS_WIN32
 static gint run_unsaved_dialog(const gchar *msg, const gchar *msg2)
 {
 	GtkWidget *dialog, *button;
@@ -812,6 +811,7 @@ static gint run_unsaved_dialog(const gchar *msg, const gchar *msg2)
 
 	dialog = gtk_message_dialog_new(GTK_WINDOW(main_widgets.window), GTK_DIALOG_DESTROY_WITH_PARENT,
 			GTK_MESSAGE_QUESTION, GTK_BUTTONS_NONE, "%s", msg);
+	gtk_window_set_title(GTK_WINDOW(dialog), _("Question"));
 	gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog), "%s", msg2);
 	gtk_dialog_add_button(GTK_DIALOG(dialog), GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
 
@@ -828,7 +828,6 @@ static gint run_unsaved_dialog(const gchar *msg, const gchar *msg2)
 
 	return ret;
 }
-#endif
 
 
 gboolean dialogs_show_unsaved_file(GeanyDocument *doc)
@@ -851,12 +850,7 @@ gboolean dialogs_show_unsaved_file(GeanyDocument *doc)
 	msg2 = _("Do you want to save it before closing?");
 	g_free(short_fn);
 
-#ifdef G_OS_WIN32
-	setptr(msg, g_strconcat(msg, "\n", msg2, NULL));
-	ret = win32_message_dialog_unsaved(msg);
-#else
 	ret = run_unsaved_dialog(msg, msg2);
-#endif
 	g_free(msg);
 
 	switch (ret)

@@ -79,9 +79,13 @@ static void installPHPRegex (const langType language)
 		"\\1", "m,macro,macros", NULL);
 	addTagRegex(language, "^[ \t]*const[ \t]*([" ALPHA "_][" ALNUM "_]*)[ \t]*[=;]",
 		"\\1", "m,macro,macros", NULL);
-	/* Note: Using [] to match words is wrong, but using () doesn't seem to match 'function' on its own */
 	addCallbackRegex(language,
-		"^[ \t]*[(public|protected|private|static|final)[ \t]*]*[ \t]*function[ \t]+&?[ \t]*([" ALPHA "_][" ALNUM "_]*)[[:space:]]*(\\(.*\\))",
+		"^[ \t]*((public|protected|private|static|final)[ \t]+)+function[ \t]+&?[ \t]*([" ALPHA "_][" ALNUM "_]*)[[:space:]]*(\\(.*\\))",
+		NULL, function_cb);
+	/* note: using (qualifiers)* instead of (qualifiers)+ in the above regex doesn't seem to
+	 * match 'function' on its own, so we handle that separately: */
+	addCallbackRegex(language,
+		"^[ \t]*function[ \t]+&?[ \t]*([" ALPHA "_][" ALNUM "_]*)[[:space:]]*(\\(.*\\))",
 		NULL, function_cb);
 	addTagRegex(language, "^[ \t]*(\\$|::\\$|\\$this->)([" ALPHA "_][" ALNUM "_]*)[ \t]*=",
 		"\\2", "v,variable,variables", NULL);
