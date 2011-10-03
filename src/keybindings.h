@@ -78,7 +78,7 @@ extern GPtrArray *keybinding_groups;	/* array of GeanyKeyGroup pointers */
  * the existing enum values stay the same. */
 
 /** Keybinding group IDs for use with keybindings_send_command(). */
-/* Groups must be added in this order. */
+/* These IDs are used to lookup a group. */
 enum GeanyKeyGroupID
 {
 	GEANY_KEY_GROUP_FILE,			/**< Group. */
@@ -102,7 +102,7 @@ enum GeanyKeyGroupID
 };
 
 /** Keybinding command IDs for use with keybindings_send_command(). */
-/* These IDs are used to lookup a keybinding; keybindings can be added in any order. */
+/* These IDs are used to lookup a keybinding. */
 enum GeanyKeyBindingID
 {
 	GEANY_KEYS_EDITOR_TRANSPOSELINE,			/**< Keybinding. */
@@ -248,6 +248,8 @@ void keybindings_init(void);
 void keybindings_load_keyfile(void);
 
 void keybindings_free(void);
+
+GeanyKeyGroup *keybindings_get_core_group(guint id);
 
 GeanyKeyGroup *keybindings_set_group(GeanyKeyGroup *group, const gchar *section_name,
 		const gchar *label, gsize count, GeanyKeyGroupCallback callback) G_GNUC_WARN_UNUSED_RESULT;

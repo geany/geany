@@ -1409,7 +1409,7 @@ static void create_build_menu(BuildMenuItems *build_menu_items)
 {
 	GtkWidget *menu;
 	GtkAccelGroup *accel_group = gtk_accel_group_new();
-	GeanyKeyGroup *keygroup = g_ptr_array_index(keybinding_groups, GEANY_KEY_GROUP_BUILD);
+	GeanyKeyGroup *keygroup = keybindings_get_core_group(GEANY_KEY_GROUP_BUILD);
 	gint i, j;
 
 	menu = gtk_menu_new();

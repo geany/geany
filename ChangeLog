@@ -31,6 +31,16 @@
  - src/win32.c, src/win32.h, src/dialogs.c:
    Use GTK unsaved file dialog on Windows too because the button names 
    should be specific.
+ * src/build.c, src/keybindings.c, src/keybindings.h, src/prefs.c:
+   Support visual reordering of keybinding groups without breaking the 
+   plugin ABI.
+   Reorder Project group to follow main menu order.
+   Move Focus, Notebook tab groups last as they don't have 
+   corresponding menu items.
+   Use keybindings_get_core_group() for fixed group IDs instead of 
+   indexing keybinding_groups.
+   Make keybindings_lookup_item() only work with a GEANY_KEY_GROUP_ 
+   ID, not an index into keybinding_groups.
 
 
 2011-10-02  Colomban Wendling  <colomban(at)geany(dot)org>

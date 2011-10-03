@@ -753,6 +753,16 @@ static void prefs_init_dialog(void)
 }
 
 
+/* note: uses group index, not group id, unlike keybindings_lookup_item(). */
+static GeanyKeyBinding *kb_index(guint gidx, guint kid)
+{
+	GeanyKeyGroup *group;
+
+	group = g_ptr_array_index(keybinding_groups, gidx);
+	return keybindings_get_item(group, kid);
+}
+
+
 /* read the treeview shortcut fields into keybindings */
 static void kb_update(void)
 {
@@ -783,7 +793,7 @@ static void kb_update(void)
 			gtk_tree_model_get(model, &child, KB_TREE_INDEX, &kid, KB_TREE_SHORTCUT, &str, -1);
 			gtk_accelerator_parse(str, &key, &mods);
 			g_free(str);
-			kb = keybindings_lookup_item(gid, kid);
+			kb = kb_index(gid, kid);
 			if (kb->key != key || kb->mods != mods)
 				keybindings_update_combo(kb, key, mods);
 
@@ -1317,7 +1327,7 @@ static GeanyKeyBinding *kb_lookup_kb_from_iter(G_GNUC_UNUSED GtkTreeModel *model
 	gtk_tree_model_iter_parent(GTK_TREE_MODEL(store), &parent, iter);
 	gtk_tree_model_get(GTK_TREE_MODEL(store), &parent, KB_TREE_INDEX, &group_idx, -1);
 
-	return keybindings_lookup_item(group_idx, keybinding_idx);
+	return kb_index(group_idx, keybinding_idx);
 }
 
 
