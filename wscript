@@ -52,7 +52,7 @@ from waflib.TaskGen import feature
 
 
 APPNAME = 'geany'
-VERSION = '0.21'
+VERSION = '1.22'
 LINGUAS_FILE = 'po/LINGUAS'
 
 top = '.'

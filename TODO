@@ -27,9 +27,9 @@ Note: features included in brackets have lower priority.
 	   workspace-sockets branch)
 
 
-	1.0:
-	o stable plugin ABI for the 1.0 series? (Split up geany_data, prefs,
-	  GeanyKeyCommand enum into groups)
+	Someday:
+	o stable plugin ABI? (Split up geany_data, prefs, GeanyKeyCommand
+	  enum into groups)
 	o review documentation
 
 
