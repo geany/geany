@@ -596,7 +596,7 @@ gchar *utils_remove_ext_from_filename(const gchar *filename)
 {
 	gchar *last_dot;
 	gchar *result;
-	gint i;
+	gsize len;
 
 	g_return_val_if_fail(filename != NULL, NULL);
 
@@ -604,15 +604,11 @@ gchar *utils_remove_ext_from_filename(const gchar *filename)
 	if (! last_dot)
 		return g_strdup(filename);
 
-	/* assumes extension is small, so extra bytes don't matter */
-	result = g_malloc(strlen(filename));
-	i = 0;
-	while ((filename + i) != last_dot)
-	{
-		result[i] = filename[i];
-		i++;
-	}
-	result[i] = 0;
+	len = (gsize) (last_dot - filename);
+	result = g_malloc(len + 1);
+	memcpy(result, filename, len);
+	result[len] = 0;
+
 	return result;
 }
 
