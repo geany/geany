@@ -697,39 +697,16 @@ void utils_str_replace_all(gchar **haystack, const gchar *needle, const gchar *r
 
 gint utils_strpos(const gchar *haystack, const gchar *needle)
 {
-	gint haystack_length = strlen(haystack);
-	gint needle_length = strlen(needle);
-	gint i, j, pos = -1;
+	const gchar *sub;
 
-	if (needle_length > haystack_length)
-	{
+	if (! *needle)
 		return -1;
-	}
-	else
-	{
-		for (i = 0; (i < haystack_length) && pos == -1; i++)
-		{
-			if (haystack[i] == needle[0] && needle_length == 1)
-				return i;
-			else if (haystack[i] == needle[0])
-			{
-				for (j = 1; (j < needle_length); j++)
-				{
-					if (haystack[i + j] == needle[j])
-					{
-						if (pos == -1)
-							pos = i;
-					}
-					else
-					{
-						pos = -1;
-						break;
-					}
-				}
-			}
-		}
-		return pos;
-	}
+
+	sub = strstr(haystack, needle);
+	if (! sub)
+		return -1;
+
+	return sub - haystack;
 }
 
 
