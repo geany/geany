@@ -410,6 +410,18 @@ http://sf.net/projects/ctags - see the tracker.
 
 (You can also try the Anjuta project's tagmanager codebase.)
 
+.. note::
+    From Geany 1.22 GLib's GRegex engine is used instead of POSIX 
+    regex, unlike CTags. It should be close enough to POSIX to work 
+    OK.
+    We no longer support regex parsers with the "b" regex flag 
+    option set and Geany will print debug warnings if it's used. 
+    CTags supports it but doesn't currently (2011) include any 
+    parsers that use it. It should be easy to convert to extended 
+    regex syntax anyway.
+
+Method
+``````
 * Add foo.c to SRCS in Makefile.am.
 * Add foo.o to OBJS in makefile.win32.
 * Add path/foo.c to geany_sources in wscript.
