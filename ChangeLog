@@ -1,3 +1,9 @@
+2011-10-04  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * tagmanager/js.c:
+   Update from CTags SVN jscript.c.
+
+
 2011-10-03  Colomban Wendling  <colomban(at)geany(dot)org>
 
  * TODO, configure.ac, doc/geany.txt, geany.nsi, geany_private.rc,

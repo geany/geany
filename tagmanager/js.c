@@ -256,26 +256,56 @@ static void makeJsTag (tokenInfo *const token, const jsKind kind)
 }
 
 static void makeClassTag (tokenInfo *const token)
-{
+{ 
+	vString *	fulltag;
+
 	if ( ! token->ignoreTag )
 	{
-		if ( ! stringListHas(ClassNames, vStringValue (token->string)) )
+		fulltag = vStringNew ();
+		if (vStringLength (token->scope) > 0)
 		{
-			stringListAdd (ClassNames, vStringNewCopy (token->string));
+			vStringCopy(fulltag, token->scope);
+			vStringCatS (fulltag, ".");
+			vStringCatS (fulltag, vStringValue(token->string));
+		}
+		else
+		{
+			vStringCopy(fulltag, token->string);
+		}
+		vStringTerminate(fulltag);
+		if ( ! stringListHas(ClassNames, vStringValue (fulltag)) )
+		{
+			stringListAdd (ClassNames, vStringNewCopy (fulltag));
 			makeJsTag (token, JSTAG_CLASS);
 		}
+		vStringDelete (fulltag);
 	}
 }
 
 static void makeFunctionTag (tokenInfo *const token)
-{
+{ 
+	vString *	fulltag;
+
 	if ( ! token->ignoreTag )
 	{
-		if ( ! stringListHas(FunctionNames, vStringValue (token->string)) )
+		fulltag = vStringNew ();
+		if (vStringLength (token->scope) > 0)
 		{
-			stringListAdd (FunctionNames, vStringNewCopy (token->string));
+			vStringCopy(fulltag, token->scope);
+			vStringCatS (fulltag, ".");
+			vStringCatS (fulltag, vStringValue(token->string));
+		}
+		else
+		{
+			vStringCopy(fulltag, token->string);
+		}
+		vStringTerminate(fulltag);
+		if ( ! stringListHas(FunctionNames, vStringValue (fulltag)) )
+		{
+			stringListAdd (FunctionNames, vStringNewCopy (fulltag));
 			makeJsTag (token, JSTAG_FUNCTION);
 		}
+		vStringDelete (fulltag);
 	}
 }
 
@@ -742,6 +772,14 @@ static boolean parseIf (tokenInfo *const token)
 
 	readToken (token);
 
+	if (isKeyword (token, KEYWORD_if))
+	{
+		/*
+		 * Check for an "else if" and consume the "if"
+		 */
+		readToken (token);
+	}
+
 	if (isType (token, TOKEN_OPEN_PAREN))
 	{
 		/*
@@ -940,20 +978,32 @@ static boolean parseBlock (tokenInfo *const token, tokenInfo *const parent)
 	return is_class;
 }
 
-static void parseMethods (tokenInfo *const token, tokenInfo *const class)
+static boolean parseMethods (tokenInfo *const token, tokenInfo *const class)
 {
 	tokenInfo *const name = newToken ();
+	boolean has_methods = FALSE;
 
 	/*
 	 * This deals with these formats
 	 *	   validProperty  : 2,
 	 *	   validMethod    : function(a,b) {}
 	 *	   'validMethod2' : function(a,b) {}
+     *     container.dirtyTab = {'url': false, 'title':false, 'snapshot':false, '*': false}		
 	 */
 
 	do
 	{
 		readToken (token);
+		if (isType (token, TOKEN_CLOSE_CURLY)) 
+		{
+			/*
+			 * This was most likely a variable declaration of a hash table.
+			 * indicate there were no methods and return.
+			 */
+			has_methods = FALSE;
+			goto cleanUp;
+		}
+
 		if (isType (token, TOKEN_STRING) || isKeyword(token, KEYWORD_NONE))
 		{
 			copyToken(name, token);
@@ -972,6 +1022,7 @@ static void parseMethods (tokenInfo *const token, tokenInfo *const class)
 
 					if (isType (token, TOKEN_OPEN_CURLY))
 					{
+						has_methods = TRUE;
 						addToScope (name, class->string);
 						makeJsTag (name, JSTAG_METHOD);
 						parseBlock (token, name);
@@ -985,6 +1036,7 @@ static void parseMethods (tokenInfo *const token, tokenInfo *const class)
 				}
 				else
 				{
+						has_methods = TRUE;
 						addToScope (name, class->string);
 						makeJsTag (name, JSTAG_PROPERTY);
 
@@ -1000,7 +1052,10 @@ static void parseMethods (tokenInfo *const token, tokenInfo *const class)
 
 	findCmdTerm (token);
 
+cleanUp:
 	deleteToken (name);
+
+	return has_methods;
 }
 
 static boolean parseStatement (tokenInfo *const token, boolean is_inside_class)
@@ -1012,6 +1067,8 @@ static boolean parseStatement (tokenInfo *const token, boolean is_inside_class)
 	boolean is_terminated = TRUE;
 	boolean is_global = FALSE;
 	boolean is_prototype = FALSE;
+	boolean has_methods = FALSE;
+	vString *	fulltag;
 
 	vStringClear(saveScope);
 	/*
@@ -1324,8 +1381,62 @@ static boolean parseStatement (tokenInfo *const token, boolean is_inside_class)
 			 *         'validMethodOne' : function(a,b) {},
 			 *         'validMethodTwo' : function(a,b) {}
 			 *     }
+			 * Or checks if this is a hash variable.
+			 *     var z = {};
 			 */
-			parseMethods(token, name);
+			has_methods = parseMethods(token, name);
+			if ( ! has_methods )
+			{
+				/*
+				 * Only create variables for global scope
+			 */
+				if ( token->nestLevel == 0 && is_global )
+				{
+					/*
+					 * A pointer can be created to the function.  
+					 * If we recognize the function/class name ignore the variable.
+					 * This format looks identical to a variable definition.
+					 * A variable defined outside of a block is considered
+					 * a global variable:
+					 *	   var g_var1 = 1;
+					 *	   var g_var2;
+					 * This is not a global variable:
+					 *	   var g_var = function;
+					 * This is a global variable:
+					 *	   var g_var = different_var_name;
+					 */
+					fulltag = vStringNew ();
+					if (vStringLength (token->scope) > 0)
+					{
+						vStringCopy(fulltag, token->scope);
+						vStringCatS (fulltag, ".");
+						vStringCatS (fulltag, vStringValue(token->string));
+					}
+					else
+					{
+						vStringCopy(fulltag, token->string);
+					}
+					vStringTerminate(fulltag);
+					if ( ! stringListHas(FunctionNames, vStringValue (fulltag)) &&
+							! stringListHas(ClassNames, vStringValue (fulltag)) )
+					{
+						readToken (token);
+						if ( ! isType (token, TOKEN_SEMICOLON)) 
+							findCmdTerm (token);
+						if (isType (token, TOKEN_SEMICOLON)) 
+							makeJsTag (name, JSTAG_VARIABLE);
+					}
+					vStringDelete (fulltag);
+				}
+			}
+			if (isType (token, TOKEN_CLOSE_CURLY)) 
+			{
+				/*
+				 * Assume the closing parantheses terminates
+				 * this statements.
+				 */
+				is_terminated = TRUE;
+			}
 		}
 		else if (isKeyword (token, KEYWORD_new))
 		{
@@ -1345,11 +1456,14 @@ static boolean parseStatement (tokenInfo *const token, boolean is_inside_class)
 
 				if (isType (token, TOKEN_SEMICOLON))
 				{
-					if ( is_class )
+					if ( token->nestLevel == 0 )
 					{
-						makeClassTag (name);
-					} else {
-						makeFunctionTag (name);
+						if ( is_class )
+						{
+							makeClassTag (name);
+						} else {
+							makeFunctionTag (name);
+						}
 					}
 				}
 			}
@@ -1374,13 +1488,26 @@ static boolean parseStatement (tokenInfo *const token, boolean is_inside_class)
 				 * This is a global variable:
 				 *	   var g_var = different_var_name;
 				 */
-				if ( ! stringListHas(FunctionNames, vStringValue (token->string)) &&
-						! stringListHas(ClassNames, vStringValue (token->string)) )
+				fulltag = vStringNew ();
+				if (vStringLength (token->scope) > 0)
+				{
+					vStringCopy(fulltag, token->scope);
+					vStringCatS (fulltag, ".");
+					vStringCatS (fulltag, vStringValue(token->string));
+				}
+				else
+				{
+					vStringCopy(fulltag, token->string);
+				}
+				vStringTerminate(fulltag);
+				if ( ! stringListHas(FunctionNames, vStringValue (fulltag)) &&
+						! stringListHas(ClassNames, vStringValue (fulltag)) )
 				{
 					findCmdTerm (token);
 					if (isType (token, TOKEN_SEMICOLON))
 						makeJsTag (name, JSTAG_VARIABLE);
 				}
+				vStringDelete (fulltag);
 			}
 		}
 	}
@@ -1398,7 +1525,7 @@ static boolean parseStatement (tokenInfo *const token, boolean is_inside_class)
 	 *	   return 1;
 	 * }
 	 */
-	if (isType (token, TOKEN_CLOSE_CURLY))
+	if ( ! is_terminated && isType (token, TOKEN_CLOSE_CURLY)) 
 		is_terminated = FALSE;
 
 
