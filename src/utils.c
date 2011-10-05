@@ -1530,7 +1530,7 @@ gint utils_string_find(GString *haystack, gint start, gint end, const gchar *nee
 
 
 /* Replaces @len characters from offset @a pos.
- * len can be -1 for str->len.
+ * len can be -1 to replace the remainder of @a str.
  * returns: pos + strlen(replace). */
 gint utils_string_replace(GString *str, gint pos, gint len, const gchar *replace)
 {
@@ -1540,7 +1540,6 @@ gint utils_string_replace(GString *str, gint pos, gint len, const gchar *replace
 		g_string_insert(str, pos, replace);
 		pos += strlen(replace);
 	}
-
 	return pos;
 }
 
