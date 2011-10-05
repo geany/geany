@@ -1,3 +1,14 @@
+2011-10-05  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * tagmanager/lregex.c, tagmanager/php.c:
+   Fix CTags bug 2970274 - when using addCallbackRegex the callback 
+   receives less than the number of matches. The number is still not 
+   correct (due to POSIX regex compatibility) but at least includes 
+   all non-empty matches now.
+   http://sourceforge.net/tracker/index.php?func=detail&aid=2970274
+   &group_id=6556&atid=106556
+
+
 2011-10-04  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * tagmanager/js.c:
