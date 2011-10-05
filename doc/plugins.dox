@@ -184,7 +184,7 @@
  *
  *  Let's start with the very basic headers and add more later if necessary.
  *  @code
-#include "geanyplugin.h"
+#include <geanyplugin.h>
  *  @endcode
  *
  *  @a geanyplugin.h includes all of the Geany API and also the necessary GTK header files,
@@ -343,7 +343,7 @@ void plugin_cleanup(void)
  *  @section listing Complete listing (without comments)
  *
  *  @code
-#include "geanyplugin.h"
+#include <geanyplugin.h>
 
 GeanyPlugin		*geany_plugin;
 GeanyData		*geany_data;
