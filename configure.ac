@@ -80,56 +80,13 @@ GEANY_CHECK_GNU_REGEX
 
 
 # check for mingw specific settings
-case "${host}" in
-	*mingw*)
-		AC_CHECK_LIB([iberty], [fnmatch], [],
-				[AC_MSG_ERROR([fnmatch does not present in libiberty. You need to update it, read http://www.geany.org/Support/CrossCompile for details.])])
-		AC_DEFINE([WIN32], [1], [we are cross compiling for WIN32])
-		AC_DEFINE([HAVE_SOCKET], [1], [Define if you want to detect a running instance])
-		AM_CONDITIONAL([MINGW], true)
-		want_vte="no"
-		want_socket="yes"
-		;;
-	*)
-		AM_CONDITIONAL([MINGW], false)
-		;;
-esac
+GEANY_CHECK_MINGW
 
 
-# skip check if already decided
-if test "x$want_socket" = "x"; then
-	# socket support
-	AC_ARG_ENABLE([socket],
-			[AS_HELP_STRING([--enable-socket],
-					[enable if you want to detect a running instance [default=yes]])],
-			[want_socket="$enableval"],
-			[want_socket="yes"])
-
-	if test "x$want_socket" = "xyes"; then
-		AC_DEFINE([HAVE_SOCKET], [1], [Define if you want to detect a running instance])
-		# this should bring in libsocket on Solaris:
-		AC_SEARCH_LIBS([connect],[socket])
-	fi
-fi
+GEANY_CHECK_SOCKET
 
 
-# skip check if already decided
-if test "x$want_vte" = "x"; then
-	# VTE support
-	AC_ARG_ENABLE([vte],
-			[AS_HELP_STRING([--enable-vte],
-					[enable if you want virtual terminal support [default=yes]])],
-			[want_vte="$enableval"],
-			[want_vte="yes"])
-	if test "x$want_vte" = "xyes"; then
-		AC_DEFINE([HAVE_VTE], [1], [Define if you want VTE support])
-	fi
-	AC_ARG_WITH([vte-module-path],
-			[AS_HELP_STRING([--with-vte-module-path=PATH],
-					[Path to a loadable libvte [default=None]])],
-			[AC_DEFINE_UNQUOTED([VTE_MODULE_PATH],
-					["$withval"], [Path to a loadable libvte])])
-fi
+GEANY_CHECK_VTE
 
 
 # just for a laugh (it has absolutely no effect)
@@ -201,8 +158,8 @@ if test -n "${build}" -a -n "${target}"; then
 fi
 echo "Using GTK version                  : ${GTK_VERSION}"
 echo "Build with plugin support          : ${geany_enable_plugins}"
-echo "Use virtual terminal support       : ${want_vte}"
-echo "Use (UNIX domain) socket support   : ${want_socket}"
+echo "Use virtual terminal support       : ${geany_enable_vte}"
+echo "Use (UNIX domain) socket support   : ${geany_enable_socket}"
 if test "x$enable_gnu_regex" = "xyes" ; then
 	echo "GNU regex library                  : built-in"
 else
