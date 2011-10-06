@@ -470,9 +470,10 @@ static void matchCallbackPattern (
 	int i;
 	for (i = 0  ;  i < BACK_REFERENCE_COUNT  ;  ++i)
 	{
-		int so, eo;
-		if (!g_match_info_fetch_pos(minfo, i, &so, &eo))
-			break;
+		int so = -1, eo = -1;
+		/* with GRegex we could get the real match count, but that might
+		 * cause incompatibilities with CTags */
+		g_match_info_fetch_pos(minfo, i, &so, &eo);
 		matches [i].start  = so;
 		matches [i].length = eo - so;
 		/* a valid match may have both offsets == -1,
