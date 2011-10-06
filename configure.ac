@@ -42,6 +42,8 @@ AC_CHECK_FUNCS([gethostname ftruncate fgetpos mkstemp strerror strstr])
 
 # autoscan end
 
+GEANY_PREFIX
+GEANY_DOCDIR
 
 # check for SVN revision
 GEANY_CHECK_REVISION([dnl force debug mode for a SVN working copy
@@ -106,19 +108,6 @@ fi
 # i18n
 GEANY_I18N
 
-
-# Set ${datadir}
-if test "x${datadir}" = 'x${prefix}/share' -o "x${datarootdir}" = 'x${prefix}/share'; then
-	if test "x${prefix}" = "xNONE"; then
-		prefix=${ac_default_prefix}
-	fi
-fi
-
-# Set ${docdir} if it is empty
-if test -z "${docdir}"; then
-	docdir='${datadir}/doc/${PACKAGE}'
-	AC_SUBST([docdir])
-fi
 
 GEANY_DATA_DIR=`eval echo ${datarootdir}/geany`
 AC_SUBST([GEANY_DATA_DIR])
