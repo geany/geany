@@ -2,8 +2,8 @@
 
  * autogen.sh, configure.ac:
    Modernize configure.ac a bit.
- * configure.ac, m4/geany-revision.m4:
-   Extract some configure logic to a separate file for better
+ * configure.ac, m4/geany-revision.m4, m4/geany-binreloc.m4:
+   Extract some configure logic to separate files for better
    readability.
 
 
