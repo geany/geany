@@ -126,4 +126,5 @@ marshallers: gtk/scintilla-marshal.list
 	glib-genmarshal --prefix scintilla_marshal gtk/scintilla-marshal.list --header > gtk/scintilla-marshal.h
 	glib-genmarshal --prefix scintilla_marshal gtk/scintilla-marshal.list --body > gtk/scintilla-marshal.c
 
-EXTRA_DIST=gtk/scintilla-marshal.list License.txt README version.txt
+EXTRA_DIST=gtk/scintilla-marshal.list License.txt README version.txt \
+	makefile.win32

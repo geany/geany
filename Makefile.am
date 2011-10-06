@@ -9,10 +9,7 @@ ACLOCAL_AMFLAGS = -I m4
 WIN32_BUILD_FILES = \
 	geany_private.rc \
 	win32-config.h \
-	makefile.win32 \
-	scintilla/makefile.win32 \
-	tagmanager/makefile.win32 \
-	src/makefile.win32
+	makefile.win32
 
 SYS_DATA_FILES = \
 	data/c99.tags \

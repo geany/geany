@@ -2,6 +2,10 @@
 
  * doc/Makefile.am, doc/makefile.win32:
    Add doc/makefile.win32 for docs generation.
+ * scintilla/Makefile.am, src/Makefile.am, 
+   tagmanager/mio/Makefile.am, tagmanager/Makefile.am, Makefile.am:
+   Fix missing tagmanager/mio/makefile.win32 in EXTRA_DIST.
+   Include makefile.win32 in EXTRA_DIST recursively, not at top-level.
 
 
 2011-10-06  Colomban Wendling  <colomban(at)geany(dot)org>
