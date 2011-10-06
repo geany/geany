@@ -12,6 +12,15 @@ AC_CONFIG_HEADERS([config.h])
 
 m4_ifdef([AM_SILENT_RULES],[AM_SILENT_RULES([yes])])
 
+GEANY_PREFIX
+GEANY_DOCDIR
+
+GEANY_STATUS_ADD([Install Geany in], [${prefix}])
+if test -n "${build}" -a -n "${target}"; then
+	GEANY_STATUS_ADD([Building Geany on], [${build}])
+	GEANY_STATUS_ADD([Building Geany for], [${target}])
+fi
+
 # why do we use this?
 AC_USE_SYSTEM_EXTENSIONS
 
@@ -42,23 +51,10 @@ AC_CHECK_FUNCS([gethostname ftruncate fgetpos mkstemp strerror strstr])
 
 # autoscan end
 
-GEANY_PREFIX
-GEANY_DOCDIR
-
-GEANY_STATUS_ADD([Install Geany in], [${prefix}])
-if test -n "${build}" -a -n "${target}"; then
-	GEANY_STATUS_ADD([Building Geany on], [${build}])
-	GEANY_STATUS_ADD([Building Geany for], [${target}])
-fi
-
 
 # check for SVN revision
 GEANY_CHECK_REVISION([dnl force debug mode for a SVN working copy
 					  CFLAGS="-g -DGEANY_DEBUG $CFLAGS"])
-
-
-# Check for binary relocation support
-GEANY_CHECK_BINRELOC
 
 
 # GTK/GLib/GIO checks
@@ -81,23 +77,17 @@ AC_ARG_ENABLE([deprecated],
 		[])
 
 
+# Check for binary relocation support
+GEANY_CHECK_BINRELOC
 # Plugins support
 GEANY_CHECK_PLUGINS
-
-
 # check whether to use included GNU regex library
 GEANY_CHECK_GNU_REGEX
-
-
 # check for mingw specific settings
 GEANY_CHECK_MINGW
 
-
 GEANY_CHECK_SOCKET
-
-
 GEANY_CHECK_VTE
-
 
 # just for a laugh (it has absolutely no effect)
 AC_ARG_ENABLE([the-force],
@@ -112,15 +102,11 @@ else
 	AC_MSG_RESULT([no])
 fi
 
-
 # i18n
 GEANY_I18N
 
-
 GEANY_DATA_DIR=`eval echo ${datarootdir}/geany`
 AC_SUBST([GEANY_DATA_DIR])
-
-
 
 # Output
 AC_CONFIG_FILES([
@@ -144,7 +130,6 @@ AC_CONFIG_FILES([
 		doc/Doxyfile
 ])
 AC_OUTPUT
-
 
 # Summary
 GEANY_STATUS_OUTPUT
