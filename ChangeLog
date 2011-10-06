@@ -1,3 +1,9 @@
+2011-10-06  Colomban Wendling  <colomban(at)geany(dot)org>
+
+ * autogen.sh, configure.ac:
+   Modernize configure.ac a bit.
+
+
 2011-10-05  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * tagmanager/lregex.c, tagmanager/php.c:
