@@ -28,11 +28,6 @@ AC_PROG_INSTALL
 AC_PROG_LN_S
 AC_PROG_INTLTOOL
 
-# for plugins
-AC_DISABLE_STATIC
-AM_PROG_LIBTOOL
-LIBTOOL="$LIBTOOL --silent"
-
 # autoscan start
 
 # Checks for header files.
@@ -78,17 +73,7 @@ AC_ARG_ENABLE([deprecated],
 
 
 # Plugins support
-AC_ARG_ENABLE([plugins],
-		[AS_HELP_STRING([--disable-plugins], [compile without plugin support  [default=no]])],
-		,
-		[enable_plugins=yes])
-
-if test "x$enable_plugins" = "xyes" ; then
-	AC_DEFINE([HAVE_PLUGINS], [1], [Define if plugins are enabled.])
-	AM_CONDITIONAL([PLUGINS], true)
-else
-	AM_CONDITIONAL([PLUGINS], false)
-fi
+GEANY_CHECK_PLUGINS
 
 
 # check whether to use included GNU regex library
@@ -238,7 +223,7 @@ if test -n "${build}" -a -n "${target}"; then
 	echo "Building Geany for                 : ${target}"
 fi
 echo "Using GTK version                  : ${GTK_VERSION}"
-echo "Build with plugin support          : ${enable_plugins}"
+echo "Build with plugin support          : ${geany_enable_plugins}"
 echo "Use virtual terminal support       : ${want_vte}"
 echo "Use (UNIX domain) socket support   : ${want_socket}"
 if test "x$enable_gnu_regex" = "xyes" ; then
