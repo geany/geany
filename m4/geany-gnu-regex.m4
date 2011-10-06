@@ -18,7 +18,9 @@ AC_DEFUN([GEANY_CHECK_GNU_REGEX],
 		AC_DEFINE([USE_INCLUDED_REGEX], [1], [Define if included GNU regex code should be used.])
 		AC_DEFINE([HAVE_REGCOMP], [1], [Define if you have the 'regcomp' function.])
 		AM_CONDITIONAL([USE_INCLUDED_REGEX], true)
+		GEANY_STATUS_ADD([GNU regex library], [built-in])
 	else
 		AM_CONDITIONAL([USE_INCLUDED_REGEX], false)
+		GEANY_STATUS_ADD([GNU regex library], [system])
 	fi
 ])

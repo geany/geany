@@ -24,4 +24,6 @@ AC_DEFUN([GEANY_CHECK_PLUGINS],
 	else
 		AM_CONDITIONAL([PLUGINS], false)
 	fi
+
+	GEANY_STATUS_ADD([Build with plugin support], [$geany_enable_plugins])
 ])

@@ -45,6 +45,13 @@ AC_CHECK_FUNCS([gethostname ftruncate fgetpos mkstemp strerror strstr])
 GEANY_PREFIX
 GEANY_DOCDIR
 
+GEANY_STATUS_ADD([Install Geany in], [${prefix}])
+if test -n "${build}" -a -n "${target}"; then
+	GEANY_STATUS_ADD([Building Geany on], [${build}])
+	GEANY_STATUS_ADD([Building Geany for], [${target}])
+fi
+
+
 # check for SVN revision
 GEANY_CHECK_REVISION([dnl force debug mode for a SVN working copy
 					  CFLAGS="-g -DGEANY_DEBUG $CFLAGS"])
@@ -60,6 +67,7 @@ PKG_CHECK_MODULES([GTK], [$gtk_modules])
 AC_SUBST([GTK_CFLAGS])
 AC_SUBST([GTK_LIBS])
 GTK_VERSION=`$PKG_CONFIG --modversion gtk+-2.0`
+GEANY_STATUS_ADD([Using GTK version], [${GTK_VERSION}])
 # GTHREAD checks
 gthread_modules="gthread-2.0"
 PKG_CHECK_MODULES([GTHREAD], [$gthread_modules])
@@ -139,25 +147,7 @@ AC_OUTPUT
 
 
 # Summary
-echo "----------------------------------------"
-echo "Install Geany in                   : ${prefix}"
-if test -n "${build}" -a -n "${target}"; then
-	echo "Building Geany on                  : ${build}"
-	echo "Building Geany for                 : ${target}"
-fi
-echo "Using GTK version                  : ${GTK_VERSION}"
-echo "Build with plugin support          : ${geany_enable_plugins}"
-echo "Use virtual terminal support       : ${geany_enable_vte}"
-echo "Use (UNIX domain) socket support   : ${geany_enable_socket}"
-if test "x$enable_gnu_regex" = "xyes" ; then
-	echo "GNU regex library                  : built-in"
-else
-	echo "GNU regex library                  : system"
-fi
-
-if test "${REVISION}" != "-1"; then
-	echo "Compiling Subversion revision      : ${REVISION}"
-fi
+GEANY_STATUS_OUTPUT
 echo ""
 echo "Configuration is done OK."
 echo ""

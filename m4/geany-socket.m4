@@ -37,6 +37,7 @@ AC_DEFUN([GEANY_CHECK_SOCKET],
 			AC_SEARCH_LIBS([connect],[socket])
 		fi
 
+		GEANY_STATUS_ADD([Use (UNIX domain) socket support], [$geany_enable_socket])
 		_geany_enable_socket_done=yes
 	fi
 ])

@@ -55,4 +55,6 @@ AC_DEFUN([GEANY_CHECK_BINRELOC],
 	if test "$enable_binreloc" = "yes"; then
 		AC_DEFINE([ENABLE_BINRELOC],,[Use AutoPackage?])
 	fi
+
+	GEANY_STATUS_ADD([Enable binary relocation], [$enable_binreloc])
 ])

@@ -30,6 +30,7 @@ AC_DEFUN([GEANY_CHECK_REVISION],
 
 	if test "x${REVISION}" != "xr0"; then
 		AC_MSG_RESULT([$REVISION])
+		GEANY_STATUS_ADD([Compiling Subversion revision], [$REVISION])
 
 		# call action-if-found
 		$1
