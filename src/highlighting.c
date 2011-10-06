@@ -162,50 +162,15 @@ static void free_styleset(gint file_type_id)
 static void get_keyfile_keywords(GKeyFile *config, GKeyFile *configh,
 				const gchar *key, gint ft_id, gint pos)
 {
-	const gchar section[] = "keywords";
-	gchar *result;
-	const gchar *default_value = "";
-
-	if (config == NULL || configh == NULL)
-	{
-		style_sets[ft_id].keywords[pos] = g_strdup(default_value);
-		return;
-	}
-
-	result = g_key_file_get_string(configh, section, key, NULL);
-	if (result == NULL)
-		result = g_key_file_get_string(config, section, key, NULL);
-
-	if (result == NULL)
-	{
-		style_sets[ft_id].keywords[pos] = g_strdup(default_value);
-	}
-	else
-	{
-		style_sets[ft_id].keywords[pos] = result;
-	}
+	style_sets[ft_id].keywords[pos] =
+		utils_get_setting(string, configh, config, "keywords", key, "");
 }
 
 
 static void get_keyfile_wordchars(GKeyFile *config, GKeyFile *configh, gchar **wordchars)
 {
-	gchar *result;
-
-	if (config == NULL || configh == NULL)
-	{
-		*wordchars = g_strdup(GEANY_WORDCHARS);
-		return;
-	}
-
-	result = g_key_file_get_string(configh, "settings", "wordchars", NULL);
-	if (result == NULL) result = g_key_file_get_string(config, "settings", "wordchars", NULL);
-
-	if (result == NULL)
-	{
-		*wordchars = g_strdup(GEANY_WORDCHARS);
-	}
-	else
-		*wordchars = result;
+	*wordchars = utils_get_setting(string, configh, config,
+		"settings", "wordchars", GEANY_WORDCHARS);
 }
 
 
@@ -465,21 +430,8 @@ static GString *get_global_typenames(gint lang)
 static gchar*
 get_keyfile_whitespace_chars(GKeyFile *config, GKeyFile *configh)
 {
-	gchar *result;
-
-	if (config == NULL || configh == NULL)
-	{
-		result = NULL;
-	}
-	else
-	{
-		result = g_key_file_get_string(configh, "settings", "whitespace_chars", NULL);
-		if (result == NULL)
-			result = g_key_file_get_string(config, "settings", "whitespace_chars", NULL);
-	}
-	if (result == NULL)
-		result = g_strdup(GEANY_WHITESPACE_CHARS);
-	return result;
+	return utils_get_setting(string, configh, config,
+		"settings", "whitespace_chars", GEANY_WHITESPACE_CHARS);
 }
 
 
