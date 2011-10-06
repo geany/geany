@@ -87,7 +87,7 @@ test -d build-aux || mkdir build-aux
 echo "no" | glib-gettextize --force --copy
 intltoolize --copy --force --automake
 libtoolize --copy --force || glibtoolize --copy --force
-aclocal
+aclocal -I m4
 autoheader
 automake --add-missing --copy --gnu
 autoconf
