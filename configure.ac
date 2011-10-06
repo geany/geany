@@ -88,19 +88,7 @@ GEANY_CHECK_MINGW
 
 GEANY_CHECK_SOCKET
 GEANY_CHECK_VTE
-
-# just for a laugh (it has absolutely no effect)
-AC_ARG_ENABLE([the-force],
-		[AS_HELP_STRING([--enable-the-force],
-				[enable if you are Luke Skywalker and the force is with you [default=no]])],
-		[be_luke="$enableval"],
-		[be_luke="no"])
-AC_MSG_CHECKING([whether the force is with you])
-if test "x$be_luke" = "xyes"; then
-	AC_MSG_RESULT([yes])
-else
-	AC_MSG_RESULT([no])
-fi
+GEANY_CHECK_THE_FORCE dnl hehe
 
 # i18n
 GEANY_I18N
