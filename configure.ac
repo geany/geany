@@ -26,7 +26,6 @@ fi
 
 AC_PROG_INSTALL
 AC_PROG_LN_S
-AC_PROG_INTLTOOL
 
 # autoscan start
 
@@ -148,24 +147,7 @@ fi
 
 
 # i18n
-GETTEXT_PACKAGE="$PACKAGE"
-AC_SUBST([GETTEXT_PACKAGE])
-AC_DEFINE_UNQUOTED([GETTEXT_PACKAGE], ["$GETTEXT_PACKAGE"], [Gettext package.])
-
-if test -n "${LINGUAS}"; then
-	ALL_LINGUAS="${LINGUAS}"
-else
-	if test -z "$conf_dir"; then
-		conf_dir="."
-	fi
-	ALL_LINGUAS=`cd "$conf_dir/po" 2>/dev/null && ls *.po 2>/dev/null | $AWK 'BEGIN { FS="."; ORS=" " } { print $1 }'`
-fi
-
-AM_GLIB_GNU_GETTEXT
-# workaround for intltool bug (http://bugzilla.gnome.org/show_bug.cgi?id=490845)
-if test "x$MSGFMT" = "xno"; then
-	AC_MSG_ERROR([msgfmt not found. Please install the gettext package.])
-fi
+GEANY_I18N
 
 
 # Set ${datadir}
@@ -184,11 +166,6 @@ fi
 GEANY_DATA_DIR=`eval echo ${datarootdir}/geany`
 AC_SUBST([GEANY_DATA_DIR])
 
-# intltool hack to define install_sh on Debian/Ubuntu systems
-if test "x$install_sh" = "x"; then
-	install_sh="`pwd`/install-sh"
-	AC_SUBST([install_sh])
-fi
 
 
 # Output
