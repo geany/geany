@@ -1,0 +1,21 @@
+# Optional documentation generation.
+# localwin32.mk is an optional file to override make variables.
+# Use localwin32.mk instead of editing variables as it is included in sub
+# makefiles.
+# Use localwin32.mk to override RST2HTML, DOXYGEN
+# For MSYS use localwin32.mk to set CP and RM.
+
+RST2HTML=python rst2html.py
+DOXYGEN=doxygen
+RM = del
+-include ../localwin32.mk
+
+doc: geany.txt
+	$(RST2HTML) -stg --stylesheet=geany.css $^ geany.html
+
+hacking-doc: ../HACKING
+	$(RST2HTML) -stg --stylesheet=geany.css $^ hacking.html
+
+api-doc: Doxyfile
+	$(DOXYGEN)
+
