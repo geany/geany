@@ -703,7 +703,6 @@ gboolean dialogs_show_save_as()
 	gboolean result = FALSE;
 
 	g_return_val_if_fail(doc, FALSE);
-	document_show_tab(doc);
 
 #ifdef G_OS_WIN32
 	if (interface_prefs.use_native_windows_dialogs)
