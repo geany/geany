@@ -202,8 +202,7 @@ void on_save_all1_activate(GtkMenuItem *menuitem, gpointer user_data)
 		if (document_need_save_as(doc))
 		{
 			/* display unnamed document */
-			gtk_notebook_set_current_page(GTK_NOTEBOOK(main_widgets.notebook),
-				document_get_notebook_page(doc));
+			document_show_tab(doc);
 			if (dialogs_show_save_as())
 				count++;
 		}

@@ -4496,8 +4496,6 @@ gboolean editor_goto_line(GeanyEditor *editor, gint line_no, gint offset)
  **/
 gboolean editor_goto_pos(GeanyEditor *editor, gint pos, gboolean mark)
 {
-	gint page_num;
-
 	g_return_val_if_fail(editor, FALSE);
 	if (G_UNLIKELY(pos < 0))
 		return FALSE;
@@ -4515,9 +4513,7 @@ gboolean editor_goto_pos(GeanyEditor *editor, gint pos, gboolean mark)
 	editor->scroll_percent = 0.25F;
 
 	/* finally switch to the page */
-	page_num = gtk_notebook_page_num(GTK_NOTEBOOK(main_widgets.notebook), GTK_WIDGET(editor->sci));
-	gtk_notebook_set_current_page(GTK_NOTEBOOK(main_widgets.notebook), page_num);
-
+	document_show_tab(editor->document);
 	return TRUE;
 }
 

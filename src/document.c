@@ -1108,6 +1108,13 @@ void document_apply_indent_settings(GeanyDocument *doc)
 }
 
 
+void document_show_tab(GeanyDocument *doc)
+{
+	gtk_notebook_set_current_page(GTK_NOTEBOOK(main_widgets.notebook),
+		document_get_notebook_page(doc));
+}
+
+
 /* To open a new file, set doc to NULL; filename should be locale encoded.
  * To reload a file, set the doc for the document to be reloaded; filename should be NULL.
  * pos is the cursor position, which can be overridden by --line and --column.
@@ -1156,9 +1163,7 @@ GeanyDocument *document_open_file_full(GeanyDocument *doc, const gchar *filename
 		{
 			ui_add_recent_file(utf8_filename);	/* either add or reorder recent item */
 			/* show the doc before reload dialog */
-			gtk_notebook_set_current_page(GTK_NOTEBOOK(main_widgets.notebook),
-				gtk_notebook_page_num(GTK_NOTEBOOK(main_widgets.notebook),
-				(GtkWidget*) doc->editor->sci));
+			document_show_tab(doc);
 			document_check_disk_status(doc, TRUE);	/* force a file changed check */
 		}
 	}

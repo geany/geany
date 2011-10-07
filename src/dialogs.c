@@ -629,10 +629,9 @@ static GtkWidget *create_save_file_dialog(void)
 }
 
 
-static gboolean show_save_as_gtk(void)
+static gboolean show_save_as_gtk(GeanyDocument *doc)
 {
 	GtkWidget *dialog;
-	GeanyDocument *doc = document_get_current();
 	gint resp;
 
 	g_return_val_if_fail(doc != NULL, FALSE);
@@ -700,12 +699,15 @@ static gboolean show_save_as_gtk(void)
  **/
 gboolean dialogs_show_save_as()
 {
+	GeanyDocument *doc = document_get_current();
 	gboolean result = FALSE;
+
+	g_return_val_if_fail(doc, FALSE);
+	document_show_tab(doc);
 
 #ifdef G_OS_WIN32
 	if (interface_prefs.use_native_windows_dialogs)
 	{
-		GeanyDocument *doc = document_get_current();
 		gchar *utf8_name = win32_show_document_save_as_dialog(GTK_WINDOW(main_widgets.window),
 						_("Save File"), DOC_FILENAME(doc));
 		if (utf8_name != NULL)
@@ -713,7 +715,7 @@ gboolean dialogs_show_save_as()
 	}
 	else
 #endif
-	result = show_save_as_gtk();
+	result = show_save_as_gtk(doc);
 	return result;
 }
 
@@ -839,8 +841,7 @@ gboolean dialogs_show_unsaved_file(GeanyDocument *doc)
 
 	/* display the file tab to remind the user of the document */
 	main_status.quitting = FALSE;
-	gtk_notebook_set_current_page(GTK_NOTEBOOK(main_widgets.notebook),
-		document_get_notebook_page(doc));
+	document_show_tab(doc);
 	main_status.quitting = old_quitting_state;
 
 	short_fn = document_get_basename_for_display(doc, -1);

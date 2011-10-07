@@ -177,8 +177,7 @@ static void tab_bar_menu_activate_cb(GtkMenuItem *menuitem, gpointer data)
 	if (! DOC_VALID(doc))
 		return;
 
-	gtk_notebook_set_current_page(GTK_NOTEBOOK(main_widgets.notebook),
-		document_get_notebook_page(doc));
+	document_show_tab(doc);
 }
 
 

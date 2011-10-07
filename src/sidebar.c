@@ -840,9 +840,7 @@ static gboolean openfiles_go_to_selection(GtkTreeSelection *selection, guint key
 			return FALSE;	/* parent */
 
 		/* switch to the doc and grab the focus */
-		gtk_notebook_set_current_page(GTK_NOTEBOOK(main_widgets.notebook),
-			gtk_notebook_page_num(GTK_NOTEBOOK(main_widgets.notebook),
-			(GtkWidget*) doc->editor->sci));
+		document_show_tab(doc);
 		if (keyval != GDK_space)
 			change_focus_to_editor(doc, tv.tree_openfiles);
 	}

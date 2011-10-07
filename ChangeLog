@@ -1,3 +1,10 @@
+2011-10-07  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/keybindings.c, src/sidebar.c, src/dialogs.c, src/callbacks.c,
+   src/notebook.c, src/document.c, src/document.h, src/editor.c:
+   Add document_show_tab().
+
+
 2011-10-06  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * doc/Makefile.am, doc/makefile.win32:

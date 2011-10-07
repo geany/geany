@@ -1842,8 +1842,7 @@ static void cb_func_switch_tablastused(G_GNUC_UNUSED guint key_id)
 	if (! DOC_VALID(last_doc))
 		return;
 
-	gtk_notebook_set_current_page(GTK_NOTEBOOK(main_widgets.notebook),
-		document_get_notebook_page(last_doc));
+	document_show_tab(last_doc);
 
 	/* if there's a modifier key, we can switch back in MRU order each time unless
 	 * the key is released */

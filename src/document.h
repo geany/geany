@@ -192,6 +192,8 @@ GeanyDocument* document_get_from_page(guint page_num);
 
 GeanyDocument *document_get_current(void);
 
+void document_show_tab(GeanyDocument *doc);
+
 void document_init_doclist(void);
 
 void document_finalize(void);
