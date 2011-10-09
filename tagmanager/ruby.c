@@ -1,6 +1,4 @@
 /*
-*   $Id$
-*
 *   Copyright (c) 2000-2001, Thaddeus Covert <sahuagin@mediaone.net>
 *   Copyright (c) 2002 Matthias Veit <matthias_veit@yahoo.de>
 *   Copyright (c) 2004 Elliott Hughes <enh@acm.org>

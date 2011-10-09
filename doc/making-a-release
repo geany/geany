@@ -11,7 +11,7 @@ Ensure version numbers are all updated in:
 	configure.ac geany.nsi geany_private.rc win32-config.h wscript
 	doc/geany.txt
 Ensure release date is updated in:
-	doc/geany.1.in
+	doc/geany.txt doc/geany.1.in
 Regenerate doc/geany.html.
 Check GEANY_CODENAME is set in src/geany.h.
 Update NEWS release date.

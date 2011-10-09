@@ -1,5 +1,4 @@
 ## Process this file with automake to produce Makefile.in
-# $Id$
 
 SUBDIRS = mio include
 INCLUDES = -I$(srcdir)/include $(GTK_CFLAGS) -I$(srcdir)/mio -I$(srcdir)

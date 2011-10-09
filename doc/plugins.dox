@@ -20,8 +20,6 @@
  *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  *      MA 02110-1301, USA.
  *
- * $Id$
- *
  * This file contains additional plugin documentation like the signal system and a small howto.
  * It is best viewed when filetype is set to C or C++.
  */
@@ -32,7 +30,6 @@
  * @mainpage Geany Plugin API Documentation
  *
  * @author Enrico Tröger, Nick Treleaven, Frank Lanitz
- * $Date$
  *
  * @section Intro
  * This is the Geany API documentation. It should be considered work in progress.

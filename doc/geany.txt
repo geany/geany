@@ -12,7 +12,7 @@
           Nick Treleaven,
           Frank Lanitz,
           Colomban Wendling
-:Date: $Date$
+:Date: 2011-10-02
 :Version: |(version)|
 
 Copyright © 2005-2011

@@ -1,6 +1,4 @@
 /*
-*   $Id$
-*
 *   Copyright (c) 2003-2004, Ascher Stefan <stievie@utanet.at>
 *
 *   This source code is released for free distribution under the terms of the

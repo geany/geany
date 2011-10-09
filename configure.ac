@@ -1,5 +1,4 @@
 dnl Process this file with autoconf to produce a configure script.
-dnl $Id$
 
 AC_PREREQ([2.60])
 AC_INIT([Geany], [1.22],

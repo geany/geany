@@ -1,6 +1,4 @@
 /*
-*   $Id$
-*
 *   Copyright (c) 2000-2002, Darren Hiebert
 *   Copyright (c) 2009-2011, Enrico Tröger
 *

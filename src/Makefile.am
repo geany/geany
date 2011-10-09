@@ -1,5 +1,4 @@
 ## Process this file with automake to produce Makefile.in
-# $Id$
 
 
 EXTRA_DIST = images.c gb.c win32.c win32.h plugindata.h \

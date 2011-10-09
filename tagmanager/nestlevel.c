@@ -1,6 +1,4 @@
 /*
-*   $Id$
-*
 *   Copyright (c) 1999-2002, Darren Hiebert
 *   Copyright 2009-2011 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
 *

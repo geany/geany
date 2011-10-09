@@ -1,6 +1,4 @@
 /*
- *   $Id$
- *
  *   Copyright (c) 2000-2001, Jérôme Plût
  *   Copyright (c) 2006, Enrico Tröger
  *

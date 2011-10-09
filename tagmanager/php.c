@@ -1,6 +1,4 @@
 /*
-*   $Id$
-*
 *   Copyright (c) 2000, Jesus Castagnetto <jmcastagnetto@zkey.com>
 *
 *   This source code is released for free distribution under the terms of the
