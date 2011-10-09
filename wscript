@@ -186,7 +186,7 @@ def configure(conf):
     conf.define('GEANY_PREFIX', '' if is_win32 else conf.env['PREFIX'], quote=True)
     conf.define('PACKAGE', APPNAME, quote=True)
     conf.define('VERSION', VERSION, quote=True)
-    conf.define('REVISION', revision, quote=True)
+    conf.define('REVISION', revision or '-1', quote=True)
 
     conf.define('GETTEXT_PACKAGE', APPNAME, quote=True)
 
