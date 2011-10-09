@@ -39,14 +39,21 @@ We are happy to receive patches, but it's best to check with us by email
 or mailing list whether a new feature is appropriate, and whether someone
 is already working on similar code.
 
-In general it's best to work from the current SVN, but we accept patches
-against other releases::
+In general it's best to provide git-formatted patches made from the
+current Git (see `Committing`_)::
 
-    $ svn diff > fix-some-bug.patch
+    $ git commit -a
+    $ git format-patch HEAD^
 
-If you're not using SVN, you can use the diff command::
+We also accept patches against other releases, but it's more work for us.
+
+If you're not using Git, although you're strongly suggested to used it,
+you can use the diff command::
 
     $ diff -u originalpath modifiedpath > new-feature.patch
+
+However, such a patch won't contain the authoring information nor the
+patch's description.
 
 .. note::
     Please make sure patches follow the style of existing code - In
@@ -54,7 +61,7 @@ If you're not using SVN, you can use the diff command::
 
 Windows tools
 -------------
-* Subversion (SVN): http://subversion.tigris.org/
+* Git: http://git-scm.com/ and http://code.google.com/p/msysgit/
 * diff, grep, etc: http://mingw.org/ or http://unxutils.sourceforge.net/
 
 See also the 'Building on Windows' document on the website.
@@ -192,7 +199,7 @@ Style
 * Use the multiline comment ``/* */`` to comment small blocks of code,
   functions descriptions or longer explanations of code, etc. C++ single
   line comments will cause portability issues. The more comments are in
-  your code the better. (See also ``scripts/fix-cxx-comments.pl`` in SVN).
+  your code the better. (See also ``scripts/fix-cxx-comments.pl`` in Git).
 * Lines should not be longer than about 100 characters and after 100
   characters the lines should be wrapped and indented once more to
   show that the line is continued.
@@ -211,7 +218,7 @@ Style
 * Try to fit in with the existing code style.
 
 .. note::
-    A few of the above can be done with the SVN
+    A few of the above can be done with the Git
     ``scripts/fix-alignment.pl``, but it is quite dumb and it's much better
     to write it correctly in the first place.
 
@@ -250,6 +257,41 @@ Example::
     gint another_function(void)
     {
         ...
+
+
+Committing
+----------
+
+Commit one thing at a time, do small commits.  Commits should be
+meaningful and not too big when possible; multiple small commits are
+good if there is no good reason to group them.
+
+When working on a new feature, create a new branch for it.  When merging
+it, use the --no-ff option to make sure a merge commit will be created
+to better track what happened.  However, if the feature only took one
+commit you might merge it fast-forward since there is not history to
+keep together.
+
+Commit messages
+^^^^^^^^^^^^^^^
+Follow the standard Git formatting:
+
+* First line is the commit's summary and should use less than about 80
+  characters, and is followed by an empty line.  See it like the subject
+  of an email: keep it concise and as precise as you can, but not tool
+  long.
+* Following lines are optional detailed commit information, with
+  paragraphs separated by blank lines.
+
+Example::
+
+    Ask the user if spawn fails in utils_open_browser()
+
+    Ask the user to configure a valid browser command if spawning it
+    fails rather than falling back to some arbitrary hardcoded defaults.
+
+    This avoid spawning an unexpected browser when the configured one is
+    wrong, and gives the user a chance to correctly fix the preference.
 
 
 Testing
