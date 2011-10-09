@@ -179,7 +179,7 @@ def configure(conf):
         _define_from_opt(conf, 'LIBDIR', conf.options.libdir, libdir)
         _define_from_opt(conf, 'MANDIR', conf.options.mandir, mandir)
 
-    svn_rev = _get_svn_rev(conf)
+    revision = _get_git_rev(conf)
 
     conf.define('ENABLE_NLS', 1)
     conf.define('GEANY_LOCALEDIR', '' if is_win32 else conf.env['LOCALEDIR'], quote=True)
@@ -189,7 +189,7 @@ def configure(conf):
     conf.define('GEANY_PREFIX', '' if is_win32 else conf.env['PREFIX'], quote=True)
     conf.define('PACKAGE', APPNAME, quote=True)
     conf.define('VERSION', VERSION, quote=True)
-    conf.define('REVISION', str(svn_rev), quote=True)
+    conf.define('REVISION', revision, quote=True)
 
     conf.define('GETTEXT_PACKAGE', APPNAME, quote=True)
 
@@ -205,7 +205,7 @@ def configure(conf):
 
     # some more compiler flags
     conf.env.append_value('CFLAGS', ['-DHAVE_CONFIG_H'])
-    if svn_rev > -1:
+    if revision is not None:
         conf.env.append_value('CFLAGS', ['-g', '-DGEANY_DEBUG'])
     # Scintilla flags
     conf.env.append_value('CFLAGS', ['-DGTK'])
@@ -219,8 +219,8 @@ def configure(conf):
     conf.msg('Build with plugin support', conf.options.no_plugins and 'no' or 'yes')
     conf.msg('Use virtual terminal support', conf.options.no_vte and 'no' or 'yes')
     conf.msg('GNU regex library', conf.env['USE_INCLUDED_REGEX'] and 'built-in' or 'system')
-    if svn_rev > -1:
-        conf.msg('Compiling Subversion revision', svn_rev)
+    if revision is not None:
+        conf.msg('Compiling Git revision', revision)
 
 
 def options(opt):
@@ -614,45 +614,17 @@ def _define_from_opt(conf, define_name, opt_value, default_value, quote=1):
         conf.undefine(define_name)
 
 
-def _get_svn_rev(conf):
-    def in_git():
-        cmd = 'git ls-files >/dev/null 2>&1'
-        return (conf.exec_command(cmd) == 0)
+def _get_git_rev(conf):
+    if not os.path.isdir('.git'):
+        return
 
-    def in_svn():
-        return os.path.exists('.svn')
-
-    # try GIT
-    if in_git():
-        cmds = [ 'git svn find-rev HEAD 2>/dev/null',
-                 'git svn find-rev origin/trunk 2>/dev/null',
-                 'git svn find-rev trunk 2>/dev/null',
-                 'git svn find-rev master 2>/dev/null'
-                ]
-        for cmd in cmds:
-            try:
-                stdout = conf.cmd_and_log(cmd)
-                if stdout:
-                    return int(stdout.strip())
-            except WafError:
-                pass
-            except ValueError:
-                Logs.pprint('RED', 'Unparseable revision number')
-    # try SVN
-    elif in_svn():
-        try:
-            _env = None if _target_is_win32(conf) else dict(LANG='C')
-            stdout = conf.cmd_and_log(cmd='svn info --non-interactive', env=_env)
-            lines = stdout.splitlines(True)
-            for line in lines:
-                if line.startswith('Last Changed Rev'):
-                    value = line.split(': ', 1)[1]
-                    return int(value.strip())
-        except WafError:
-            pass
-        except (IndexError, ValueError):
-            Logs.pprint('RED', 'Unparseable revision number')
-    return -1
+    try:
+        cmd = 'git rev-parse --short --revs-only HEAD'
+        revision = conf.cmd_and_log(cmd)
+    except WafError:
+        return None
+    else:
+        return revision
 
 
 def _load_intltool_if_available(conf):
