@@ -44,7 +44,6 @@ Requires WAF 1.6.1 and Python 2.5 (or later).
 import sys
 import os
 import tempfile
-from distutils import version
 from waflib import Logs, Options, Scripting, Utils
 from waflib.Configure import ConfigurationContext
 from waflib.Errors import ConfigurationError, WafError
@@ -358,7 +357,7 @@ def build(bld):
             appname         = 'geany')
 
     # geany.pc
-    task = bld.new_task_gen(
+    bld.new_task_gen(
         source          = 'geany.pc.in',
         dct             = {'VERSION' : VERSION,
                            'prefix': bld.env['PREFIX'],
