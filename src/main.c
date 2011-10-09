@@ -279,7 +279,7 @@ static void main_init(void)
 
 const gchar *main_get_version_string(void)
 {
-	static gchar full[] = VERSION " (svn >= " REVISION ")";
+	static gchar full[] = VERSION " (git >= " REVISION ")";
 
 	if (utils_str_equal(REVISION, "-1"))
 		return VERSION;
