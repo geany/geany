@@ -36,6 +36,7 @@ EXTRA_DIST = \
 	geany.gladep \
 	ChangeLog.pre-0-17 \
 	HACKING \
+	README.rst \
 	README.I18N \
 	README.Packagers \
 	po/intl_stats.sh \
