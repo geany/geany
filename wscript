@@ -617,7 +617,7 @@ def _get_git_rev(conf):
 
     try:
         cmd = 'git rev-parse --short --revs-only HEAD'
-        revision = conf.cmd_and_log(cmd)
+        revision = conf.cmd_and_log(cmd).strip()
     except WafError:
         return None
     else:
