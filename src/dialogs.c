@@ -170,14 +170,13 @@ static void open_file_dialog_handle_response(GtkWidget *dialog, gint response)
 
 static void on_file_open_notify(GObject *filechooser, GParamSpec *pspec, gpointer data)
 {
-	GValue *value;
+	GValue value = { 0 };
 
-	value = g_new0(GValue, 1);
-	g_value_init(value, pspec->value_type);
-	g_object_get_property(filechooser, pspec->name, value);
+	g_value_init(&value, pspec->value_type);
+	g_object_get_property(filechooser, pspec->name, &value);
 
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(
-		ui_lookup_widget(GTK_WIDGET(filechooser), "check_hidden")), g_value_get_boolean(value));
+		ui_lookup_widget(GTK_WIDGET(filechooser), "check_hidden")), g_value_get_boolean(&value));
 }
 
 
