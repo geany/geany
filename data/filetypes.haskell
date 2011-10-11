@@ -1,23 +1,23 @@
 # For complete documentation of this file, please see Geany's main documentation
 [styling]
-# foreground;background;bold;italic
-default=0x000000;0xffffff;false;false
-commentline=0x808080;0xffffff;false;false
-commentblock=0x808080;0xffffff;false;false
-commentblock2=0x808080;0xffffff;false;false
-commentblock3=0x808080;0xffffff;false;false
-number=0x007f00;0xffffff;false;false
-keyword=0x00007f;0xffffff;true;false
-import=0x991111;0xffffff;false;false
-string=0xff901e;0xffffff;false;false
-character=0x7f007f;0xffffff;false;false
-class=0x0000d0;0xffffff;false;false
-operator=0x301010;0xffffff;false;false
-identifier=0x000000;0xffffff;false;false
-instance=0x000000;0xffffff;false;false
-capital=0x635b00;0xffffff;false;false
-module=0x007f7f;0xffffff;false;false
-data=0x000000;0xffffff;false;false
+# Edit these in the colorscheme .conf file instead
+default=default
+commentline=comment
+commentblock=comment
+commentblock2=comment
+commentblock3=comment
+number=number_1
+keyword=keyword_1
+import=preprocessor
+string=string_1
+character=string_2
+class=class
+operator=operator
+identifier=identifier_1
+instance=type
+capital=string_2
+module=function
+data=number_2
 
 [keywords]
 # all items must be in one line

@@ -1,23 +1,23 @@
 # For complete documentation of this file, please see Geany's main documentation
 [styling]
-# foreground;background;bold;italic
-default=0x000000;0xffffff;false;false
-strong=0xff0000;0xffffff;false;false
-emphasis=0xff0000;0xffffff;false;false
-header1=0x0000bb;0xffffff;false;false
-header2=0x0000bb;0xffffff;false;false
-header3=0x0000bb;0xffffff;false;false
-header4=0x0000bb;0xffffff;false;false
-header5=0x0000bb;0xffffff;false;false
-header6=0x0000bb;0xffffff;false;false
-ulist_item=0x007f00;0xffffff;false;false
-olist_item=0x007f00;0xffffff;false;false
-blockquote=0xff0000;0xffffff;false;false
-strikeout=0xaa00ff;0xffffff;false;false
-hrule=0xff901e;0xffffff;false;false
-link=0x0000ff;0xffffff;false;false
-code=0x009f00;0xffffff;false;false
-codebk=0x005f00;0xffffff;false;false
+# Edit these in the colorscheme .conf file instead
+default=default
+strong=string_3
+emphasis=string_4
+header1=keyword_1
+header2=keyword_1
+header3=keyword_1
+header4=keyword_1
+header5=keyword_1
+header6=keyword_1
+ulist_item=tag_unknown
+olist_item=tag_unknown
+blockquote=tag_unknown
+strikeout=tag_unknown
+hrule=tag_unknown
+link=keyword_1
+code=attribute_unknown
+codebk=attribute_unknown
 
 [settings]
 # default extension used when saving files

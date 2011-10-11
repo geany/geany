@@ -1,18 +1,18 @@
 # For complete documentation of this file, please see Geany's main documentation
 [styling]
-# foreground;background;bold;italic
+# Edit these in the colorscheme .conf file instead
 default=default
-comment=commentdoc
-commentml=comment
-identifier=default
-control=0x301010;0xffffff;true;false
-keyword=0x301060;0xffffff;true;false
-defword=0x000080;;false;true
-preword1=0x000000;0xe0c0e0;false;false
-preword2=0xaaaaaa;0xffffff;false;true
-number=0x007f00;0xffffff;false;false
-string=string
-locale=0xff0000;0xffffff;false;true
+comment=comment
+commentml=comment_doc
+identifier=identifier_1
+control=keyword_1
+keyword=keyword_1
+defword=keyword_2
+preword1=keyword_3
+preword2=keyword_4
+number=number_1
+string=string_1
+locale=other
 
 [keywords]
 # all items must be in one line
@@ -27,7 +27,7 @@ extension=fs
 #wordchars=_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
 
 # single comments, like # in this file
-comment_single=\\ 
+comment_single=\\
 # multiline comments
 comment_open=(
 comment_close= )

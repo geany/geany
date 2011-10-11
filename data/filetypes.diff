@@ -1,14 +1,14 @@
 # For complete documentation of this file, please see Geany's main documentation
 [styling]
-# foreground;background;bold;italic
-default=0x000000;0xffffff;false;false
-comment=0x808080;0xffffff;false;false
-command=0x7f7f00;0xffffff;false;false
-header=0x7f0000;0xffffff;false;false
-position=0x00007f;0xffffff;false;false
-deleted=0xff2727;0xffffff;false;false
-added=0x34b034;0xffffff;false;false
-changed=0x7f007f;0xffffff;false;false
+# Edit these in the colorscheme .conf file instead
+default=default
+comment=comment
+command=function
+header=preprocessor
+position=number
+deleted=line_removed
+added=line_added
+changed=line_changed
 
 
 [settings]
@@ -30,4 +30,3 @@ context_action_cmd=
 #width=4
 # 0 is spaces, 1 is tabs, 2 is tab & spaces
 #type=1
-

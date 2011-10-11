@@ -1,35 +1,5 @@
 # For complete documentation of this file, please see Geany's main documentation
-[styling]
-# foreground;background;bold;italic
-default=0x000000;0xffffff;false;false
-tag=0x000099;0xffffff;false;false
-tagunknown=0xff0000;0xffffff;false;false
-attribute=0x007f00;0xffffff;false;false
-attributeunknown=0xff0000;0xffffff;false;false
-number=0x800080;0xffffff;false;false
-doublestring=0xff901e;0xffffff;false;false
-singlestring=0xff901e;0xffffff;false;false
-other=0x800080;0xffffff;false;false
-comment=0x808080;0xffffff;false;false
-entity=0x800080;0xffffff;false;false
-tagend=0x000099;0xffffff;false;false
-xmlstart=0x000099;0xffffff;false;false
-xmlend=0x000099;0xffffff;false;false
-cdata=0x660099;0xffffff;false;false
-question=0x0000ff;0xffffff;false;false
-value=0x660099;0xffffff;false;false
-xccomment=0x660099;0xffffff;false;false
-sgml_default=0x000000;0xffffff;false;false
-sgml_comment=0x303030;0xffffff;false;false
-sgml_special=0x007f00;0xffffff;false;false
-sgml_command=0x111199;0xffffff;true;false
-sgml_doublestring=0xff901e;0xffffff;false;false
-sgml_simplestring=0x202020;0xffffff;false;false
-sgml_1st_param=0x404080;0xffffff;false;false
-sgml_entity=0x301010;0xffffff;false;false
-sgml_block_default=0x000000;0xffffff;false;false
-sgml_1st_param_comment=0x406090;0xffffff;false;false
-sgml_error=0xff0000;0xffffff;false;false
+[styling=XML]
 
 [keywords]
 # all items must be in one line

@@ -1,18 +1,18 @@
 # For complete documentation of this file, please see Geany's main documentation
 [styling]
-# foreground;background;bold;italic
-default=0x000000;0xffffff;false;false
-word=0x00007f;0xffffff;true;false
-identifier=0x000000;0xffffff;false;false
-number=0x007f00;0xffffff;false;false
-delimiter=0x301010;0xffffff;false;false
-character=0xff901e;0xffffff;false;false
-charactereol=0x000000;0xe0c0e0;false;false
-string=0xff901e;0xffffff;false;false
-stringeol=0x000000;0xe0c0e0;false;false
-label=0xaaaaaa;0xffffff;false;true
-commentline=0xd00000;0xffffff;false;false
-illegal=0xff0000;0xffffff;false;true
+# Edit these in the colorscheme .conf file instead
+default=default
+word=keyword_1
+identifier=identifier_1
+number=number
+delimiter=operator
+character=string_1
+charactereol=string_eol
+string=string_1
+stringeol=string_eol
+label=preprocessor
+commentline=comment
+illegal=error
 
 [keywords]
 # all items must be in one line
