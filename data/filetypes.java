@@ -1,28 +1,5 @@
 # For complete documentation of this file, please see Geany's main documentation
-[styling]
-# foreground;background;bold;italic
-default=default
-comment=comment
-commentline=comment
-commentdoc=commentdoc
-number=number
-word=keyword
-word2=keyword2
-string=string
-character=string
-uuid=extra
-preprocessor=preprocessor
-operator=operator
-identifier=default
-stringeol=stringeol
-# @"verbatim"
-verbatim=extra
-# (/regex/)
-regex=extra
-commentlinedoc=commentdoc,bold
-commentdockeyword=commentdoc,bold,italic
-commentdockeyworderror=commentdoc
-globalclass=type
+[styling=C]
 
 [keywords]
 primary=abstract assert break case catch class const continue default do else enum extends final finally for future generic goto if implements import inner instanceof interface native new outer package private protected public rest return static super switch synchronized this throw throws transient try var volatile while true false null
@@ -60,7 +37,6 @@ context_action_cmd=
 #width=4
 # 0 is spaces, 1 is tabs, 2 is tab & spaces
 #type=1
-
 
 [build_settings]
 # %f will be replaced by the complete filename

@@ -1,26 +1,26 @@
 # For complete documentation of this file, please see Geany's main documentation
 [styling]
-# foreground;background;bold;italic
-default=0x000000;0xffffff;false;false
-comment=0xd00000;0xffffff;false;false
-commentline=0xd00000;0xffffff;false;false
-commentdoc=0x3f5fbf;0xffffff;true;false
-number=0x007f00;0xffffff;false;false
-word=0x00007f;0xffffff;true;false
-string=0xff901e;0xffffff;false;false
-character=0x008000;0xffffff;false;false
-literalstring=0x008020;0xffffff;false;false
-preprocessor=0x007f7f;0xffffff;false;false
-operator=0x301010;0xffffff;false;false
-identifier=0x000000;0xffffff;false;false
-stringeol=0x000000;0xe0c0e0;false;false
-function_basic=0x991111;0xffffff;false;false
-function_other=0x690000;0xffffff;false;false
-coroutines=0x66005c;0xffffff;false;false
-word5=0x7979ff;0xffffff;false;false
-word6=0xad00ff;0xffffff;false;false
-word7=0x03D000;0xffffff;false;false
-word8=0xff7600;0xffffff;false;false
+# Edit these in the colorscheme .conf file instead
+default=default
+comment=comment
+commentline=comment_line
+commentdoc=comment_line_doc
+number=number_1
+word=keyword_1
+string=string_1
+character=character
+literalstring=string_2
+preprocessor=preprocess
+operator=operator
+identifier=identifier_1
+stringeol=string_eol
+function_basic=function
+function_other=type
+coroutines=class
+word5=keyword_1
+word6=keyword_2
+word7=keyword_3
+word8=keyword_4
 
 [keywords]
 # all items must be in one line

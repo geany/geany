@@ -277,18 +277,18 @@ static GtkWidget *create_dialog(void)
 	gtk_misc_set_alignment(GTK_MISC(label), 0, 0);
 	row++;
 
-	g_snprintf(buffer, sizeof(buffer), "Nick Treleaven - %s", _("maintainer"));
+	g_snprintf(buffer, sizeof(buffer), "Colomban Wendling - %s", _("maintainer"));
 	ROW(buffer, row, 0, 0, 0, 1);
 	row++;
-	ROW("&lt;nick.treleaven@btinternet.com&gt;", row, 0, 0, 0, 1);
+	ROW("&lt;lists.ban@herbesfolles.org&gt;", row, 0, 0, 0, 1);
 	row++;
 	ROW("", row, 0, 0, 0, 0);
 	row++;
 
-	g_snprintf(buffer, sizeof(buffer), "Colomban Wendling - %s", _("developer"));
+	g_snprintf(buffer, sizeof(buffer), "Nick Treleaven - %s", _("developer"));
 	ROW(buffer, row, 0, 0, 0, 1);
 	row++;
-	ROW("&lt;lists.ban@herbesfolles.org&gt;", row, 0, 0, 0, 1);
+	ROW("&lt;nick.treleaven@btinternet.com&gt;", row, 0, 0, 0, 1);
 	row++;
 	ROW("", row, 0, 0, 0, 0);
 	row++;

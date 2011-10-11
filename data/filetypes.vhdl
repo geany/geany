@@ -1,21 +1,21 @@
 # For complete documentation of this file, please see Geany's main documentation
 [styling]
-# foreground;background;bold;italic
-default=0x000000;0xffffff;false;false
-comment=0xd00000;0xffffff;false;false
-comment_line_bang=0x3f5fbf;0xffffff;false;false;
-number=0x007f00;0xffffff;false;false
-string=0xff901e;0xffffff;false;false
-operator=0x301010;0xffffff;false;false
-identifier=0x000000;0xffffff;false;false
-stringeol=0x000000;0xe0c0e0;false;false
-keyword=0x001a7f;0xffffff;true;false
-stdoperator=0x007f7f;0xffffff;false;false
-attribute=0x804020;0xffffff;false;false
-stdfunction=0x808020;0xffffff;true;false
-stdpackage=0x208020;0xffffff;false;false
-stdtype=0x208080;0xffffff;false;false
-userword=0x804020;0xffffff;true;false
+# Edit these in the colorscheme .conf file instead
+default=default
+comment=comment
+comment_line_bang=comment_line
+number=number_1
+string=string_1
+operator=operator
+identifier=identifier_1
+stringeol=string_eol
+keyword=keyword_1
+stdoperator=operator
+attribute=attribute
+stdfunction=function
+stdpackage=preprocessor
+stdtype=type
+userword=keyword_2
 
 [keywords]
 # all items must be in one line
@@ -55,5 +55,3 @@ context_action_cmd=
 #width=4
 # 0 is spaces, 1 is tabs, 2 is tab & spaces
 #type=1
-
-

@@ -170,14 +170,13 @@ static void open_file_dialog_handle_response(GtkWidget *dialog, gint response)
 
 static void on_file_open_notify(GObject *filechooser, GParamSpec *pspec, gpointer data)
 {
-	GValue *value;
+	GValue value = { 0 };
 
-	value = g_new0(GValue, 1);
-	g_value_init(value, pspec->value_type);
-	g_object_get_property(filechooser, pspec->name, value);
+	g_value_init(&value, pspec->value_type);
+	g_object_get_property(filechooser, pspec->name, &value);
 
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(
-		ui_lookup_widget(GTK_WIDGET(filechooser), "check_hidden")), g_value_get_boolean(value));
+		ui_lookup_widget(GTK_WIDGET(filechooser), "check_hidden")), g_value_get_boolean(&value));
 }
 
 
@@ -833,7 +832,7 @@ gboolean dialogs_show_unsaved_file(GeanyDocument *doc)
 {
 	gchar *msg, *short_fn = NULL;
 	const gchar *msg2;
-	gint ret;
+	gint response;
 	gboolean old_quitting_state = main_status.quitting;
 
 	/* display the file tab to remind the user of the document */
@@ -843,33 +842,32 @@ gboolean dialogs_show_unsaved_file(GeanyDocument *doc)
 
 	short_fn = document_get_basename_for_display(doc, -1);
 
-	msg = g_strdup_printf(_("The file '%s' is not saved."),
-		(short_fn != NULL) ? short_fn : GEANY_STRING_UNTITLED);
+	msg = g_strdup_printf(_("The file '%s' is not saved."), short_fn);
 	msg2 = _("Do you want to save it before closing?");
 	g_free(short_fn);
 
-	ret = run_unsaved_dialog(msg, msg2);
+	response = run_unsaved_dialog(msg, msg2);
 	g_free(msg);
 
-	switch (ret)
+	switch (response)
 	{
 		case GTK_RESPONSE_YES:
 		{
 			if (document_need_save_as(doc))
 			{
-				ret = dialogs_show_save_as();
+				return dialogs_show_save_as();
 			}
 			else
 				/* document_save_file() returns the status if the file could be saved */
-				ret = document_save_file(doc, FALSE);
-			break;
+				return document_save_file(doc, FALSE);
 		}
-		case GTK_RESPONSE_NO: ret = TRUE; break;
+		case GTK_RESPONSE_NO:
+			return TRUE;
+		
 		case GTK_RESPONSE_CANCEL: /* fall through to default and leave the function */
-		default: ret = FALSE; break;
+		default:
+			return FALSE;
 	}
-
-	return (gboolean) ret;
 }
 
 

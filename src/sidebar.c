@@ -540,12 +540,9 @@ void sidebar_remove_document(GeanyDocument *doc)
 
 	if (GTK_IS_WIDGET(doc->priv->tag_tree))
 	{
-		gtk_widget_destroy(doc->priv->tag_tree);
-		if (GTK_IS_TREE_VIEW(doc->priv->tag_tree))
-		{
-			/* Because it was ref'd in sidebar_update_tag_list, it needs unref'ing */
-			g_object_unref((gpointer)doc->priv->tag_tree);
-		}
+		gtk_widget_destroy(doc->priv->tag_tree); /* make GTK release its references, if any */
+		/* Because it was ref'd in sidebar_update_tag_list, it needs unref'ing */
+		g_object_unref(doc->priv->tag_tree);
 		doc->priv->tag_tree = NULL;
 	}
 }
@@ -1056,11 +1053,8 @@ void sidebar_finalize(void)
 {
 	if (WIDGET(tv.default_tag_tree))
 	{
-		g_object_unref(tv.default_tag_tree);
-		/* This is not exactly clean, default_tag_tree's ref_count is 2 when it is shown,
-		 * 1 oherwise. We should probably handle the ref_count more accurate. */
-		if (WIDGET(tv.default_tag_tree))
-			gtk_widget_destroy(tv.default_tag_tree);
+		gtk_widget_destroy(tv.default_tag_tree); /* make GTK release its references, if any... */
+		g_object_unref(tv.default_tag_tree); /* ...and release our own */
 	}
 	if (WIDGET(tv.popup_taglist))
 		gtk_widget_destroy(tv.popup_taglist);

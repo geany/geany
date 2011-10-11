@@ -1,24 +1,24 @@
 # For complete documentation of this file, please see Geany's main documentation
 [styling]
-# foreground;background;bold;italic
+# Edit these in the colorscheme .conf file instead
 default=default
 comment=comment
 commentline=comment
-commentdoc=commentdoc
-commentdocnested=commentdoc
-number=number
-word=keyword
-word2=keyword2
-word3=keyword2
+commentdoc=comment_doc
+commentdocnested=comment_doc
+number=number_1
+word=keyword_1
+word2=keyword_2
+word3=keyword_3
 typedef=type
-string=string
-stringeol=stringeol
-character=string
+string=string_1
+stringeol=string_eol
+character=string_1
 operator=operator
-identifier=default
-commentlinedoc=commentdoc,bold
-commentdockeyword=commentdoc,bold,italic
-commentdockeyworderror=commentdoc
+identifier=identifier_1
+commentlinedoc=comment_doc
+commentdockeyword=comment_doc_keyword
+commentdockeyworderror=comment_doc_keyword_error
 
 [keywords]
 # all items must be in one line
