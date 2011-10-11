@@ -1,16 +1,13 @@
 # For complete documentation of this file, please see Geany's main documentation
 [styling]
-# foreground;background;bold;italic
-default=0x00002f;0xffffff;false;false
-comment=0xd00000;0xffffff;false;false
-preprocessor=0x007f7f;0xffffff;false;false
-identifier=0x007f00;0xffffff;false;false
-operator=0x301010;0xffffff;false;false
-target=0x0000ff;0xffffff;false;false
-ideol=0x008000;0xffffff;false;false
-
-# there are no keywords available otherwise mail me
-
+# Edit these in the colorscheme .conf file intead
+default=default
+comment=comment
+preprocessor=preprocessor
+identifier=identifier_4
+operator=operator
+target=label
+ideol=type
 
 [settings]
 # default extension used when saving files

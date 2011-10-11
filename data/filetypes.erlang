@@ -1,28 +1,28 @@
 [styling]
-# Each of these (...) refers to the lexer state SCE_ERLANG_(...)
+# Edit these in the colorscheme .conf file intead
 default=default
 comment=comment
 variable=default
-number=number
-keyword=keyword
-string=string
+number=number_1
+keyword=keyword_1
+string=string_1
 operator=operator
 atom=default
-function_name=default,bold
-character=default
+function_name=function
+character=character
 macro=preprocessor
 record=type
 preproc=preprocessor
 node_name=default
 comment_function=comment
 comment_module=comment
-comment_doc=comment
-comment_doc_macro=comment
+comment_doc=comment_doc
+comment_doc_macro=comment_doc
 atom_quoted=default
 macro_quoted=default
 record_quoted=default
 node_name_quoted=default
-bifs=keyword2
+bifs=keyword_2
 modules=default
 modules_att=preprocessor
 unknown=default

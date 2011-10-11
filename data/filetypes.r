@@ -1,23 +1,18 @@
 # For complete documentation of this file, please see Geany's main documentation
 [styling]
-# foreground;background;bold;italic
-default=0x000000;0xffffff;false;false
-comment=0x808080;0xffffff;false;false
-# primary keyword
-kword=0x00007f;0xffffff;false;false
-operator=0x301010;0xffffff;false;false
-# package keyword
-basekword=0x991111;0xffffff;false;false
-# package_other keyword
-otherkword=0x991111;0xffffff;false;false
-number=0x007f00;0xffffff;false;false
-# "blah" string
-string=0xff901e;0xffffff;false;false
-# 'blah' string
-string2=0xff901e;0xffffff;false;false
-identifier=0x000000;0xffffff;false;false
-infix=0x008000;0xffffff;false;false
-infixeol=0x000000;0xe0c0e0;false;false
+# Edit these in the colorscheme .conf file intead
+default=default
+comment=comment
+kword=keyword_1
+operator=operator
+basekword=keyword_2
+otherkword=keyword_3
+number=number_1
+string=string_1
+string2=string_2
+identifier=identifier
+infix=function
+infixeol=function
 
 [keywords]
 # all items must be in one line

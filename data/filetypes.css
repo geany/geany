@@ -1,29 +1,29 @@
 # For complete documentation of this file, please see Geany's main documentation
 [styling]
-# foreground;background;bold;italic
-default=0x003399;0xffffff;false;false
-comment=0x808080;0xffffff;false;false
-tag=0x2166a4;0xffffff;true;false
-class=0x007f00;0xffffff;true;false
-pseudoclass=0x660010;0xffffff;true;true
-unknown_pseudoclass=0xff0099;0xffffff;false;false
-unknown_identifier=0xff0099;0xffffff;false;false
-operator=0x301010;0xffffff;false;false
-identifier=0x000099;0xffffff;true;false
-doublestring=0x330066;0xffffff;false;false
-singlestring=0x330066;0xffffff;false;false
-attribute=0x007f00;0xffffff;false;false
-value=0x303030;0xffffff;false;false
-id=0xff9000;0xffffff;true;false
-identifier2=0x6b6bff;0xffffff;true;false
-important=0x990000;0xffffff;true;false
-directive=0x006bff;0xffffff;false;true
-identifier3=0x00c8ff;0xffffff;true;false
-pseudoelement=0x666610;0xffffff;true;true
-extended_identifier=0x9090a0;0xffffff;true;false
-extended_pseudoclass=0x907080;0xffffff;true;true
-extended_pseudoelement=0x909080;0xffffff;true;true
-media=0x006bff;0xffffff;false;true
+# Edit these in the colorscheme .conf file intead
+default=default
+comment=comment
+tag=tag
+class=class
+pseudoclass=class
+unknown_pseudoclass=class
+unknown_identifier=class
+operator=operator
+identifier=keyword_1
+doublestring=string_1
+singlestring=string_1
+attribute=attribute
+value=value
+id=number
+identifier2=keyword_2
+important=extra
+directive=preprocessor
+identifier3=keyword_3
+pseudoelement=element
+extended_identifier=keyword_4
+extended_pseudoclass=class
+extended_pseudoelement=element
+media=string_2
 
 [keywords]
 # CSS 1 properties

@@ -1,21 +1,21 @@
 # For complete documentation of this file, please see Geany's main documentation
 [styling]
-# foreground;background;bold;italic
+# Edit these in the colorscheme .conf file intead
 default=default
 comment=comment
 multicomment=comment
-number=number
-keyword=0x0071FD;;true;false
-special_keyword=0x0071FD;;true;false
-symbol=keyword2
-string=string
-stringeol=stringeol
-identifier=default
-operator=default
-special=keyword
-character=default
-macro=keyword2
-macrodispatch=keyword2
+number=number_1
+keyword=keyword_1
+special_keyword=type
+symbol=keyword_2
+string=string_1
+stringeol=string_eol
+identifier=identifier_1
+operator=operator
+special=function
+character=character
+macro=preprocessor
+macrodispatch=number_2
 
 [keywords]
 # all items must be in one line

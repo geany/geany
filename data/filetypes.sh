@@ -1,20 +1,20 @@
 # For complete documentation of this file, please see Geany's main documentation
 [styling]
-# foreground;background;bold;italic
-default=0x000000;0xffffff;false;false
-commentline=0xd00000;0xffffff;false;false
-number=0x007f00;0xffffff;false;false
-word=0x111199;0xffffff;true;false
-string=0xff901e;0xffffff;false;false
-character=0x404000;0xffffff;false;false
-operator=0x301010;0xffffff;false;false
-identifier=0x000000;0xffffff;false;false
-backticks=0x000000;0xd0d0d0;false;false
-param=0x009f00;0xffffff;false;false
-scalar=0x105090;0xffffff;false;false
-error=0xff0000;0xffffff;false;false
-here_delim=0x000000;0xddd0dd;false;false
-here_q=0x7f007f;0xddd0dd;false;false
+# Edit these in the colorscheme .conf file intead
+default=default
+commentline=comment
+number=number_1
+word=keyword_1
+string=string_1
+character=string_1
+operator=operator
+identifier=identifier_1
+backticks=backtick
+param=parameter
+scalar=scalar
+error=error
+here_delim=here_doc
+here_q=here_doc
 
 [keywords]
 primary=break case continue do done elif else esac eval exit export fi for function goto if in integer return set shift then until while

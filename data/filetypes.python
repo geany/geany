@@ -1,23 +1,22 @@
 # For complete documentation of this file, please see Geany's main documentation
 [styling]
-# foreground;background;bold;italic
+# Edit these in the colorscheme .conf file intead
 default=default
 commentline=comment
-number=number
-string=string
-character=string
-word=keyword
-triple=string
-tripledouble=commentdoc
-classname=type,bold
+number=number_1
+string=string_1
+character=character
+word=keyword_1
+triple=string_2
+tripledouble=string_2
+classname=type
 defname=function
 operator=operator
-identifier=default
+identifier=identifier_1
 commentblock=comment
-stringeol=stringeol
-# flip bold for identifiers
-word2=keyword2,bold
-decorator=preprocessor
+stringeol=string_eol
+word2=keyword_2
+decorator=decorator
 
 [keywords]
 # all items must be in one line

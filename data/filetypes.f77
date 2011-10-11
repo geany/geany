@@ -1,23 +1,21 @@
 # For complete documentation of this file, please see Geany's main documentation
 [styling]
-# foreground;background;bold;italic
-default=0x000000;0xffffff;false;false
-comment=0x808080;0xffffff;false;false
-number=0x007f00;0xffffff;false;false
-string=0xff901e;0xffffff;false;false
-operator=0x301010;0xffffff;false;false
-identifier=0x000000;0xffffff;false;false
-string2=0x111199;0xffffff;true;false
-word=0x7f0000;0xffffff;true;false
-word2=0x000099;0xffffff;true;false
-word3=0x3d670f;0xffffff;true;false
-preprocessor=0x007f7f;0xffffff;false;false
-operator2=0x301010;0xffffff;true;false
-continuation=0x000000;0xffffff;false;false
-#continuation=0xff901e;0xf0e080;false;false
-stringeol=0x000000;0xe0c0e0;false;false
-label=0xa861a8;0xffffff;true;false
-
+# Edit these in the colorscheme .conf file intead
+default=default
+comment=comment
+number=number_1
+string=string_1
+operator=operator
+identifier=identifier_1
+string2=string_2
+word=keyword_1
+word2=keyword_2
+word3=keyword_3
+preprocessor=preprocessor
+operator2=operator
+continuation=default
+stringeol=string_eol
+label=type
 
 [keywords]
 # all items must be in one line

@@ -1,23 +1,22 @@
 # For complete documentation of this file; please see Geany's main documentation
 [styling]
-# foreground;background;bold;italic
-default=0x000000;0xffffff;false;false
-comment=0xd00000;0xffffff;false;false
-commentline=0xd00000;0xffffff;false;false
-number=0x007f00;0xffffff;false;false
-operator=0x301010;0xffffff;false;false
-identifier=0xa20000;0xffffff;false;false
-wordinquote=0x7f007f;0xffffff;false;false
-inquote=0x7f007f;0xffffff;false;false
-substitution=0x111199;0xffffff;false;false
-modifier=0x7f007f;0xffffff;false;false
-expand=0x000000;0xffffff;false;false
-wordtcl=0x111199;0xffffff;true;false
-wordtk=0x7f0000;0xffffff;true;false
-worditcl=0x111199;0xffffff;true;false
-wordtkcmds=0x7f0000;0xffffff;true;false
-wordexpand=0x7f0000;0xffffff;true;false
-
+# Edit these in the colorscheme .conf file intead
+default=default
+comment=comment
+commentline=comment_line
+number=number_1
+operator=operator
+identifier=identifier_1
+wordinquote=string_1
+inquote=string_1
+substitution=function
+modifier=operator
+expand=default
+wordtcl=keyword_1
+wordtk=keyword_2
+worditcl=keyword_3
+wordtkcmds=keyword_4
+wordexpand=keyword_4
 
 [keywords]
 # all items must be in one line
@@ -55,7 +54,6 @@ context_action_cmd=
 #width=4
 # 0 is spaces, 1 is tabs, 2 is tab & spaces
 #type=1
-
 
 [build_settings]
 # %f will be replaced by the complete filename

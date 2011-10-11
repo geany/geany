@@ -1,21 +1,21 @@
 # For complete documentation of this file, please see Geany's main documentation
 [styling]
-# foreground;background;bold;italic
-default=0x000000;0xffffff;false;false
-identifier=0x000000;0xffffff;false;false
-comment=0xd00000;0xffffff;false;false
-comment2=0x3f5fbf;0xffffff;false;false
-commentline=0xd00000;0xffffff;false;false
-preprocessor=0x007f7f;0xffffff;false;false
-preprocessor2=0x007f7f;0xffffff;false;false
-number=0x007F00;0xffffff;false;false
-hexnumber=0x007F00;0xffffff;false;false
-word=0x111199;0xffffff;true;false
-string=0xff901e;0xffffff;false;false
-stringeol=0x000000;0xe0c0e0;false;false
-character=0x404000;0xffffff;false;false
-operator=0x301010;0xffffff;false;false
-asm=0x804080;0xffffff;false;false
+# Edit these in the colorscheme .conf file intead
+default=default
+identifier=identifier_1
+comment=comment
+comment2=comment
+commentline=comment
+preprocessor=preprocessor
+preprocessor2=preprocessor
+number=number_1
+hexnumber=number_1
+word=keyword_1
+string=string
+stringeol=string_eol
+character=character
+operator=operator
+asm=number_2
 
 
 [keywords]

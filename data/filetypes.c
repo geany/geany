@@ -1,28 +1,28 @@
 # For complete documentation of this file, please see Geany's main documentation
 [styling]
-# foreground;background;bold;italic
+# Edit these in the colorscheme .conf file intead
 default=default
 comment=comment
 commentline=comment
-commentdoc=commentdoc
-number=number
-word=keyword
-word2=keyword2
-string=string
-character=string
-uuid=extra
+commentdoc=comment_doc
+number=number_1
+word=keyword_1
+word2=keyword_2
+string=string_1
+character=string_1
+uuid=other
 preprocessor=preprocessor
 operator=operator
-identifier=default
-stringeol=stringeol
-# @"verbatim" and """multi-line verbatim"""
-verbatim=extra
-# (/regex/)
-regex=extra
-commentlinedoc=commentdoc,bold
-commentdockeyword=commentdoc,bold,italic
-commentdockeyworderror=commentdoc
-globalclass=type
+identifier=identifier_1
+stringeol=string_eol
+verbatim=string_2
+regex=regex
+commentlinedoc=comment_doc
+commentdockeyword=comment_doc_keyword
+commentdockeyworderror=comment_doc_keyword_error
+globalclass=class
+# """verbatim"""
+tripleverbatim=string_2
 
 [keywords]
 # all items must be in one line
