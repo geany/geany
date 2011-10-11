@@ -1,6 +1,6 @@
 # For complete documentation of this file, please see Geany's main documentation
 [styling]
-# Edit these in the colorscheme .conf file intead
+# Edit these in the colorscheme .conf file instead
 default=default
 comment=comment
 commentline=comment_line
