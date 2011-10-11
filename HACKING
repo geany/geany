@@ -262,26 +262,40 @@ Example::
 Committing
 ----------
 
-Commit one thing at a time, do small commits.  Commits should be
-meaningful and not too big when possible; multiple small commits are
-good if there is no good reason to group them.
-
-When working on a new feature, create a new branch for it.  When merging
-it, use the --no-ff option to make sure a merge commit will be created
-to better track what happened.  However, if the feature only took one
-commit you might merge it fast-forward since there is not history to
-keep together.
+* Commit one thing at a time, do small commits.  Commits should be
+  meaningful and not too big when possible; multiple small commits are
+  good if there is no good reason to group them.
+* Use meaningful name and email in the Author and Committer fields.
+  This helps knowing who did what and allows to contact the author if
+  there is a good reason to do so (unlikely, but can happen).
+* When working on a new feature, create a new branch for it.  When
+  merging it, use the --no-ff option to make sure a merge commit will
+  be created to better track what happened.  However, if the feature
+  only took one commit you might merge it fast-forward since there is
+  not history to keep together.
 
 Commit messages
 ^^^^^^^^^^^^^^^
 Follow the standard Git formatting:
 
-* First line is the commit's summary and should use less than about 80
-  characters, and is followed by an empty line.  See it like the subject
-  of an email: keep it concise and as precise as you can, but not tool
-  long.
+* No line should use more than about 80 characters (around 72 is best).
+* The first line is the commit's summary and is followed by an empty
+  line.  This summary should be one line and one line only, thus less
+  than 80 characters.  This summary should not include any punctuation
+  unless really needed.  See it as the subject of an email: keep it
+  concise and as precise as you can, but not tool long.
 * Following lines are optional detailed commit information, with
-  paragraphs separated by blank lines.
+  paragraphs separated by blank lines.  This part should be as long as
+  needed to describe the commit in depth, should use proper
+  punctuation and should include any useful information, like the
+  motivation for the patch and/or any valuable details the diff itself
+  don't provide or don't make clear.  Make it as complete as you think
+  it makes sense, but don't include an information that is better
+  explained by the commit's diff.
+
+  It is OK to use ASCII formatting like bullet list using "*" or "-",
+  etc. if useful, but emphasis (bold, italic, underline) should be
+  avoided.
 
 Example::
 
