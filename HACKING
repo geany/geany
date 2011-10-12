@@ -196,6 +196,9 @@ Style
 * We use a tab width of 4 and indent completely with tabs not spaces.
   Note the documentation files use (4) spaces instead, so you may want
   to use the 'Detect from file' indent pref.
+* Do not add whitespace at the end of lines, this adds to commit noise.
+  When editing with Geany set preference files->Strip trailing spaces
+  and tabs.
 * Use the multiline comment ``/* */`` to comment small blocks of code,
   functions descriptions or longer explanations of code, etc. C++ single
   line comments will cause portability issues. The more comments are in
@@ -221,6 +224,8 @@ Style
     A few of the above can be done with the Git
     ``scripts/fix-alignment.pl``, but it is quite dumb and it's much better
     to write it correctly in the first place.
+    ``scripts/rstrip-whitespace.py`` just removes trailing whitespace.
+
 
 .. below tabs should be used, but spaces are required for reST.
 
