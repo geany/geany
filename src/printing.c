@@ -917,4 +917,3 @@ void printing_print_doc(GeanyDocument *doc)
 	else
 		print_external(doc);
 }
-

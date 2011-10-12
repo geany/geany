@@ -805,5 +805,3 @@ void plugin_cleanup(void)
 	if (config_file != NULL)
 		g_free(config_file);
 }
-
-

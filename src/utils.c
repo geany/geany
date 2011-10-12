@@ -1621,12 +1621,12 @@ guint utils_string_regex_replace_all(GString *haystack, GRegex *regex,
 	while (g_regex_match_full(regex, haystack->str, -1, start, 0, &minfo, NULL))
 	{
 		gint end, len;
-		
+
 		g_match_info_fetch_pos(minfo, match_num, &start, &end);
 		len = end - start;
 		utils_string_replace(haystack, start, len, replace);
 		ret++;
-		
+
 		/* skip past whole match */
 		g_match_info_fetch_pos(minfo, 0, NULL, &end);
 		start = end - len + strlen(replace);

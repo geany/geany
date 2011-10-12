@@ -5816,4 +5816,3 @@ create_project_dialog (void)
 
   return project_dialog;
 }
-

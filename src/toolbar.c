@@ -1114,5 +1114,3 @@ void toolbar_configure(GtkWindow *parent)
 	tb_editor_free_path(tbw);
 	g_free(tbw);
 }
-
-

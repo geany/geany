@@ -863,7 +863,7 @@ gboolean dialogs_show_unsaved_file(GeanyDocument *doc)
 		}
 		case GTK_RESPONSE_NO:
 			return TRUE;
-		
+
 		case GTK_RESPONSE_CANCEL: /* fall through to default and leave the function */
 		default:
 			return FALSE;
@@ -1703,5 +1703,3 @@ gint dialogs_show_prompt(GtkWidget *parent,
 	g_free(string);
 	return result;
 }
-
-

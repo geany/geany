@@ -690,7 +690,7 @@ static void load_dialog_prefs(GKeyFile *config)
 		g_key_file_set_boolean(config, PACKAGE, atomic_file_saving_key,
 			utils_get_setting_boolean(config, PACKAGE, "use_safe_file_saving", FALSE));
 	}
-	
+
 	/* read stash prefs */
 	settings_action(config, SETTING_READ);
 

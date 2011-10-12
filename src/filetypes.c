@@ -1736,4 +1736,3 @@ const gchar *filetypes_get_display_name(GeanyFiletype *ft)
 {
 	return ft->id == GEANY_FILETYPES_NONE ? _("None") : ft->name;
 }
-

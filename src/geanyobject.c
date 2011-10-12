@@ -369,4 +369,3 @@ GObject *geany_object_new(void)
 {
 	return g_object_new(GEANY_OBJECT_TYPE, NULL);
 }
-

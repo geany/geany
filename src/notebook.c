@@ -505,5 +505,3 @@ on_window_drag_data_received(GtkWidget *widget, GdkDragContext *drag_context,
 	}
 	gtk_drag_finish(drag_context, success, FALSE, event_time);
 }
-
-

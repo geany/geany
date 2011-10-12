@@ -533,7 +533,7 @@ void win32_show_font_dialog(void)
 
 	memset(&lf, 0, sizeof lf);
 	/* TODO: init lf members */
-	
+
 	memset(&cf, 0, sizeof cf);
 	cf.lStructSize = sizeof cf;
 	cf.hwndOwner = GDK_WINDOW_HWND(main_widgets.window->window);
