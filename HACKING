@@ -144,18 +144,18 @@ And then simply apply it like so::
 
 GTK versions & API documentation
 --------------------------------
-Geany requires GTK >= 2.12 and GLib >= 2.16. API symbols from newer 
-GTK/GLib versions should be avoided or made optional to keep the source 
+Geany requires GTK >= 2.12 and GLib >= 2.16. API symbols from newer
+GTK/GLib versions should be avoided or made optional to keep the source
 code building on older systems.
 
-The official GTK 2.12 API documentation may not be available online 
-anymore, so we put it on http://www.geany.org/manual/gtk/. There 
-is also a tarball with all available files for download and use with 
+The official GTK 2.12 API documentation may not be available online
+anymore, so we put it on http://www.geany.org/manual/gtk/. There
+is also a tarball with all available files for download and use with
 devhelp.
 
-Using the 2.12 API documentation of the GTK libs (including GLib, GDK 
-and Pango) has the advantages that you don't get confused by any 
-newer API additions and you don't have to take care about whether 
+Using the 2.12 API documentation of the GTK libs (including GLib, GDK
+and Pango) has the advantages that you don't get confused by any
+newer API additions and you don't have to take care about whether
 you can use them or not.
 
 Coding
@@ -467,13 +467,13 @@ http://sf.net/projects/ctags - see the tracker.
 (You can also try the Anjuta project's tagmanager codebase.)
 
 .. note::
-    From Geany 1.22 GLib's GRegex engine is used instead of POSIX 
-    regex, unlike CTags. It should be close enough to POSIX to work 
+    From Geany 1.22 GLib's GRegex engine is used instead of POSIX
+    regex, unlike CTags. It should be close enough to POSIX to work
     OK.
-    We no longer support regex parsers with the "b" regex flag 
-    option set and Geany will print debug warnings if it's used. 
-    CTags supports it but doesn't currently (2011) include any 
-    parsers that use it. It should be easy to convert to extended 
+    We no longer support regex parsers with the "b" regex flag
+    option set and Geany will print debug warnings if it's used.
+    CTags supports it but doesn't currently (2011) include any
+    parsers that use it. It should be easy to convert to extended
     regex syntax anyway.
 
 Method
@@ -552,3 +552,24 @@ Example::
     ** INFO: Unloaded: ./plugins/.libs/demoplugin.so
     (gdb) c
     Continuing.
+
+Building Plugins
+^^^^^^^^^^^^^^^^
+
+The geany-plugins autotools script automatically detects the
+installed system Geany and builds the plugins against that.
+
+To use plugins with a development version of Geany built with
+a different prefix, the plugins will need to be compiled against
+that version if the ABI has changed.
+
+To do this you need to specify both --prefix and --with-geany-libdir
+to the plugin configure.  Normally the plugin prefix is the
+same as the Geany prefix to keep plugins with the version of Geany
+that they are compiled against, and with-geany-libdir is the Geany
+prefix/lib.
+
+Whilst it is possible for the plugin prefix to be different to
+the prefix of the libdir (which is why there are two settings),
+it is probably better to keep the version of Geany and its plugins
+together.
