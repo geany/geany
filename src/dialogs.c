@@ -170,14 +170,13 @@ static void open_file_dialog_handle_response(GtkWidget *dialog, gint response)
 
 static void on_file_open_notify(GObject *filechooser, GParamSpec *pspec, gpointer data)
 {
-	GValue *value;
+	GValue value = { 0 };
 
-	value = g_new0(GValue, 1);
-	g_value_init(value, pspec->value_type);
-	g_object_get_property(filechooser, pspec->name, value);
+	g_value_init(&value, pspec->value_type);
+	g_object_get_property(filechooser, pspec->name, &value);
 
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(
-		ui_lookup_widget(GTK_WIDGET(filechooser), "check_hidden")), g_value_get_boolean(value));
+		ui_lookup_widget(GTK_WIDGET(filechooser), "check_hidden")), g_value_get_boolean(&value));
 }
 
 
@@ -864,7 +863,7 @@ gboolean dialogs_show_unsaved_file(GeanyDocument *doc)
 		}
 		case GTK_RESPONSE_NO:
 			return TRUE;
-		
+
 		case GTK_RESPONSE_CANCEL: /* fall through to default and leave the function */
 		default:
 			return FALSE;
@@ -1001,7 +1000,7 @@ static void add_input_widgets(GtkWidget *dialog, GtkWidget *vbox,
 	{
 		GtkWidget *combo = gtk_combo_box_entry_new_text();
 
-		entry = GTK_BIN(combo)->child;
+		entry = gtk_bin_get_child(GTK_BIN(combo));
 		ui_entry_add_clear_icon(GTK_ENTRY(entry));
 		g_object_set_data(G_OBJECT(dialog), "combo", combo);
 		gtk_container_add(GTK_CONTAINER(vbox), combo);
@@ -1704,5 +1703,3 @@ gint dialogs_show_prompt(GtkWidget *parent,
 	g_free(string);
 	return result;
 }
-
-

@@ -1209,5 +1209,3 @@ void msgwin_clear_tab(gint tabnum)
 		return;
 	gtk_list_store_clear(store);
 }
-
-

@@ -2358,7 +2358,7 @@ void editor_insert_text_block(GeanyEditor *editor, const gchar *text, gint inser
 	{
 		const gchar *nl = replace_newlines ? "\n" : eol;
 		gchar *whitespace;
-		
+
 		whitespace = g_strnfill(newline_indent_size, ' ');
 		setptr(whitespace, g_strconcat(nl, whitespace, NULL));
 		utils_string_replace_all(buf, nl, whitespace);
@@ -3911,7 +3911,7 @@ void editor_finalize()
 
 /* wordchars: NULL or a string containing characters to match a word.
  * Returns: the current selection or the current word.
- * 
+ *
  * Passing NULL as wordchars is NOT the same as passing GEANY_WORDCHARS: NULL means
  * using Scintillas's word boundaries. */
 gchar *editor_get_default_selection(GeanyEditor *editor, gboolean use_current_word,

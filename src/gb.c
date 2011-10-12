@@ -1811,5 +1811,3 @@ static gboolean gb_on_key_pressed(GtkWidget *widget, GdkEventKey *event, gpointe
 		}
 	}
 }
-
-

@@ -1,11 +1,11 @@
 # For complete documentation of this file, please see Geany's main documentation
 [styling]
-# foreground;background;bold;italic
-default=0x00002f;0xffffff;false;false
-command=0xff0000;0xffffff;true;false
-tag=0x007f7f;0xffffff;true;false
-math=0x00007f;0xffffff;false;false
-comment=0x007f00;0xffffff;false;true
+# Edit these in the colorscheme .conf file instead
+default=default
+command=keyword_1
+tag=tag
+math=number_1
+comment=comment
 
 [keywords]
 # all items must be in one line

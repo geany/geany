@@ -1159,9 +1159,9 @@ gchar *ui_menu_item_get_text(GtkMenuItem *menu_item)
 {
 	const gchar *text = NULL;
 
-	if (GTK_BIN(menu_item)->child)
+	if (gtk_bin_get_child(GTK_BIN(menu_item)))
 	{
-		GtkWidget *child = GTK_BIN(menu_item)->child;
+		GtkWidget *child = gtk_bin_get_child(GTK_BIN(menu_item));
 
 		if (GTK_IS_LABEL(child))
 			text = gtk_label_get_text(GTK_LABEL(child));
@@ -1534,7 +1534,7 @@ void ui_combo_box_add_to_history(GtkComboBoxEntry *combo_entry,
 	if (history_len <= 0)
 		history_len = 10;
 	if (!text)
-		text = gtk_entry_get_text(GTK_ENTRY(GTK_BIN(combo)->child));
+		text = gtk_entry_get_text(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(combo))));
 
 	model = gtk_combo_box_get_model(combo);
 

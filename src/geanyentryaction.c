@@ -184,4 +184,3 @@ GtkAction *geany_entry_action_new(const gchar *name, const gchar *label,
 
 	return action;
 }
-

@@ -3978,4 +3978,3 @@ gboolean highlighting_is_code_style(gint lexer, gint style)
 	return !(highlighting_is_comment_style(lexer, style) ||
 		highlighting_is_string_style(lexer, style));
 }
-

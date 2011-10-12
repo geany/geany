@@ -960,5 +960,3 @@ void tools_color_chooser(const gchar *color)
 	gtk_window_present(GTK_WINDOW(ui_widgets.open_colorsel));
 #endif
 }
-
-

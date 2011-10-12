@@ -1,26 +1,25 @@
 # For complete documentation of this file, please see Geany's main documentation
 [styling]
-# foreground;background;bold;italic
-default=0x000000;0xffffff;false;false;
-comment=0x808080;0xffffff;false;false;
-number=0x007f00;0xffffff;false;false;
-word=0x00007f;0xffffff;true;false;
-string=0xff901e;0xffffff;false;false;
-preprocessor=0x007f7f;0xffffff;false;false;
-operator=0x301010;0xffffff;false;false;
-identifier=0x000000;0xffffff;false;false;
-date=0x1a6500;0xffffff;false;false;
-stringeol=0x000000;0xe0c0e0;false;false;
-word2=0x007f7f;0xffffff;true;false;
-word3=0x991111;0xffffff;false;false;
-word4=0x0000d0;0xffffff;false;false;
-constant=0x007f7f;0xffffff;false;false;
-# asm is still unused
-asm=0x105090;0xffffff;false;false;
-label=0x007f7f;0xffffff;false;false;
-error=0xd00000;0xffffff;false;false;
-hexnumber=0x007f00;0xffffff;false;false;
-binnumber=0x007f00;0xffffff;false;false;
+# Edit these in the colorscheme .conf file instead
+default=default
+comment=comment
+number=number_1
+word=keyword_1
+string=string_1
+preprocessor=preprocessor
+operator=operator
+identifier=identifier_1
+date=number_2
+stringeol=string_eol
+word2=keyword_2
+word3=keyword_3
+word4=keyword_4
+constant=identifier_2
+asm=type
+label=identifier_3
+error=error
+hexnumber=number_1
+binnumber=number_1
 
 [keywords]
 # all items must be in one line

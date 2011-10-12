@@ -1,19 +1,19 @@
 # For complete documentation of this file, please see Geany's main documentation
 [styling]
-# foreground;background;bold;italic
+# Edit these in the colorscheme .conf file instead
 default=default
 comment=comment
-comment_line=comment
-comment_line_bang=comment
-number=number
-word=keyword
-word2=keyword2
-word3=0x5ea01f;;true
-string=string
+comment_line=comment_line
+comment_line_bang=comment_line
+number=number_1
+word=keyword_1
+word2=keyword_2
+word3=keyword_3
+string=string_1
 preprocessor=preprocessor
 operator=operator
-identifier=default
-stringeol=stringeol
+identifier=identifier_1
+stringeol=string_eol
 userword=type
 
 [keywords]
@@ -50,5 +50,3 @@ context_action_cmd=
 #width=4
 # 0 is spaces, 1 is tabs, 2 is tab & spaces
 #type=1
-
-

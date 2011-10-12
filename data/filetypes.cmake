@@ -1,21 +1,21 @@
 # For complete documentation of this file, please see Geany's main documentation
 [styling]
 # foreground;background;bold;italic
-default=0x000000;0xffffff;false;false;
-comment=0x808080;0xffffff;false;false;
-stringdq=0xff901e;0xffffff;false;false;
-stringlq=0x008000;0xffffff;false;false;
-stringrq=0x008000;0xffffff;false;false;
-command=0x00007f;0xffffff;false;false;
-parameters=0x991111;0xffffff;false;false;
-variable=0x007f7f;0xffffff;false;false;
-userdefined=0x0000d0;0xffffff;true;false;
-whiledef=0x00007f;0xffffff;true;false;
-foreachdef=0x00007f;0xffffff;true;false;
-ifdefinedef=0x00007f;0xffffff;true;false;
-macrodef=0x00007f;0xffffff;true;false;
-stringvar=0x007f7f;0xffffff;false;false;
-number=0x007f00;0xffffff;false;false;
+default=default
+comment=comment
+stringdq=string_1
+stringlq=string_1
+stringrq=string_1
+command=function
+parameters=parameter
+variable=identifier_1
+userdefined=type
+whiledef=keyword_1
+foreachdef=keyword_1
+ifdefinedef=keyword_1
+macrodef=preprocessor
+stringvar=string_2
+number=number_1
 
 [keywords]
 # all items must be in one line

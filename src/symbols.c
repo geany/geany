@@ -2202,5 +2202,3 @@ void symbols_finalize(void)
 	g_strfreev(html_entities);
 	g_strfreev(c_tags_ignore);
 }
-
-

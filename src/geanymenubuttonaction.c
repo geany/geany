@@ -194,7 +194,12 @@ static void menu_items_changed_cb(GtkContainer *container, GtkWidget *widget, Ge
 
 	priv = GEANY_MENU_BUTTON_ACTION_GET_PRIVATE(action);
 	if (priv->menu != NULL)
-		enable = (g_list_length(gtk_container_get_children(GTK_CONTAINER(priv->menu))) > 0);
+	{
+		GList *children = gtk_container_get_children(GTK_CONTAINER(priv->menu));
+
+		enable = (g_list_length(children) > 0);
+		g_list_free(children);
+	}
 	else
 		enable = FALSE;
 

@@ -1,76 +1,66 @@
 # For complete documentation of this file, please see Geany's main documentation
 [styling]
-# foreground;background;bold;italic
-html_default=0x000000;0xffffff;false;false
-html_tag=0x000099;0xffffff;false;false
-html_tagunknown=0xff0000;0xffffff;false;false
-html_attribute=0x007f00;0xffffff;false;false
-html_attributeunknown=0xff0000;0xffffff;false;false
-html_number=0x800080;0xffffff;false;false
-html_doublestring=0xff901e;0xffffff;false;false
-html_singlestring=0xff901e;0xffffff;false;false
-html_other=0x800080;0xffffff;false;false
-html_comment=0x808080;0xffffff;false;false
-html_entity=0x800080;0xffffff;false;false
-html_tagend=0x000080;0xffffff;false;false
-# <?
-html_xmlstart=0x000099;0xf0f0f0;false;false
-# ?>
-html_xmlend=0x000099;0xf0f0f0;false;false
-# <script
-html_script=0x000080;0xf0f0f0;false;false
-# <% ... %>
-html_asp=0x004f4f;0xf0f0f0;false;false
-# <%@ ... %>
-html_aspat=0x004f4f;0xf0f0f0;false;false
-html_cdata=0x660099;0xffffff;false;false
-html_question=0x0000ff;0xffffff;false;false
-html_value=0x660099;0xffffff;false;false
-html_xccomment=0x660099;0xffffff;false;false
+# Edit these in the colorscheme .conf file instead
+html_default=default
+html_tag=tag
+html_tagunknown=tag_unknown
+html_attribute=attribute
+html_attributeunknown=attribute_unknown
+html_number=number_1
+html_doublestring=string_1
+html_singlestring=string_1
+html_other=other
+html_comment=comment
+html_entity=entity
+html_tagend=tag_end
+html_xmlstart=tag
+html_xmlend=tag_end
+html_script=tag
+html_asp=tag
+html_aspat=tag
+html_cdata=string_2
+html_question=number_2
+html_value=value
+html_xccomment=comment
 
-sgml_default=0x000000;0xffffff;false;false
-sgml_comment=0x808080;0xffffff;false;false
-sgml_special=0x007f00;0xffffff;false;false
-sgml_command=0x111199;0xffffff;true;false
-sgml_doublestring=0xff901e;0xffffff;false;false
-sgml_simplestring=0xff901e;0xffffff;false;false
-sgml_1st_param=0x404080;0xffffff;false;false
-sgml_entity=0x301010;0xffffff;false;false
-sgml_block_default=0x000000;0xffffff;false;false
-sgml_1st_param_comment=0x406090;0xffffff;false;false
-sgml_error=0xff0000;0xffffff;false;false
+sgml_default=default
+sgml_comment=comment
+sgml_special=number_1
+sgml_command=number_2
+sgml_doublestring=string_1
+sgml_simplestring=string_1
+sgml_1st_param=attribute
+sgml_entity=entity
+sgml_block_default=default
+sgml_1st_param_comment=comment
+sgml_error=error
 
-php_default=0x000000;0xffffff;false;false
-php_simplestring=0xff901e;0xffffff;false;false
-php_hstring=0x008000;0xffffff;false;false
-php_number=0x606000;0xffffff;false;false
-php_word=0x000099;0xffffff;false;false
-php_variable=0x7f0000;0xffffff;false;false
-php_comment=0x808080;0xffffff;false;false
-php_commentline=0x808080;0xffffff;false;false
-php_operator=0x102060;0xffffff;false;false
-php_hstring_variable=0x101060;0xffffff;false;false
-php_complex_variable=0x105010;0xffffff;false;false
+php_default=default
+php_simplestring=string_1
+php_hstring=string_1
+php_number=number_1
+php_word=number_2
+php_variable=identifier_4
+php_comment=comment
+php_commentline=comment
+php_operator=operator
+php_hstring_variable=string_2
+php_complex_variable=identifier_2
 
-# used for JavaScript, ASP Javascript, VBScript
-jscript_start=0x008080;0xffffff;false;false
-jscript_default=0x000000;0xffffff;false;false
-jscript_comment=0xd00000;0xffffff;false;false
-jscript_commentline=0xd00000;0xffffff;false;false
-jscript_commentdoc=0x3f5fbf;0xffffff;true;false
-jscript_number=0x007f00;0xffffff;false;false
-jscript_word=0x000000;0xffffff;false;false
-jscript_keyword=0x00007f;0xffffff;true;false
-jscript_doublestring=0xff901e;0xffffff;false;false
-jscript_singlestring=0xff901e;0xffffff;false;false
-# same as operators
-jscript_symbols=0x301010;0xffffff;false;false
-jscript_stringeol=0x000000;0xe0c0e0;false;false
-jscript_regex=0x105090;0xffffff;false;false
+jscript_start=tag
+jscript_default=default
+jscript_comment=comment
+jscript_commentline=comment
+jscript_commentdoc=comment_doc
+jscript_number=number_1
+jscript_word=number_2
+jscript_keyword=keyword_1
+jscript_doublestring=string_1
+jscript_singlestring=string_1
 
-# for embedded Python script (<script language="python">...</script>), Python styles from
-# filetypes.python are used
-
+jscript_symbols=operator
+jscript_stringeol=string_eol
+jscript_regex=regex
 
 [keywords]
 html=a abbr acronym address applet area b base basefont bdo big blockquote body br button caption center cite code col colgroup dd del dfn dir div dl dt em embed fieldset font form frame frameset h1 h2 h3 h4 h5 h6 head hr html i iframe img input ins isindex kbd label legend li link map menu meta noframes noscript object ol optgroup option p param pre q quality s samp script select small span strike strong style sub sup table tbody td textarea tfoot th thead title tr tt u ul var xmlns leftmargin topmargin abbr accept-charset accept accesskey action align alink alt archive axis background bgcolor border cellpadding cellspacing char charoff charset checked cite class classid clear codebase codetype color cols colspan compact content coords data datafld dataformatas datapagesize datasrc datetime declare defer dir disabled enctype face for frame frameborder selected headers height href hreflang hspace http-equiv id ismap label lang language link longdesc marginwidth marginheight maxlength media framespacing method multiple name nohref noresize noshade nowrap object onblur onchange onclick ondblclick onfocus onkeydown onkeypress onkeyup onload onmousedown onmousemove onmouseover onmouseout onmouseup onreset onselect onsubmit onunload profile prompt pluginspage readonly rel rev rows rowspan rules scheme scope scrolling shape size span src standby start style summary tabindex target text title type usemap valign value valuetype version vlink vspace width text password checkbox radio submit reset file hidden image public doctype xml xml:lang article aside audio canvas command details datalist figure figcaption footer header hgroup keygen mark meter nav output progress section time video wbr async autocomplete autofocus contenteditable contextmenu draggable formaction formenctype formnovalidate formtarget list manifest max min novalidate pattern ping placeholder required reversed role sandbox scoped seamless sizes spellcheck srcdoc step ^data- ^aria-

@@ -1272,7 +1272,7 @@ static void on_build_menu_item(GtkWidget *w, gpointer user_data)
 	{
 		if (document_need_save_as(doc) && !dialogs_show_save_as())
 			return;
-			
+
 		if (!document_save_file(doc, FALSE))
 			return;
 	}
@@ -2767,5 +2767,3 @@ void build_init(void)
 	/* set the submenu to the toolbar item */
 	geany_menu_button_action_set_menu(GEANY_MENU_BUTTON_ACTION(widgets.build_action), toolmenu);
 }
-
-
