@@ -791,7 +791,7 @@ static void ui_combo_box_changed(GtkComboBox *combo, gpointer user_data)
 {
 	/* we get this callback on typing as well as choosing an item */
 	if (gtk_combo_box_get_active(combo) >= 0)
-		gtk_widget_activate(GTK_BIN(combo)->child);
+		gtk_widget_activate(gtk_bin_get_child(GTK_BIN(combo)));
 }
 
 
@@ -909,7 +909,7 @@ static GtkWidget *make_filterbar(void)
 	label = gtk_label_new(_("Filter:"));
 
 	filter_combo = gtk_combo_box_entry_new_text();
-	filter_entry = GTK_BIN(filter_combo)->child;
+	filter_entry = gtk_bin_get_child(GTK_BIN(filter_combo));
 
 	if (gtk_check_version(2, 15, 2) == NULL)
 	{
@@ -1107,7 +1107,7 @@ void plugin_init(GeanyData *data)
 	path_combo = gtk_combo_box_entry_new_text();
 	gtk_box_pack_start(GTK_BOX(file_view_vbox), path_combo, FALSE, FALSE, 2);
 	g_signal_connect(path_combo, "changed", G_CALLBACK(ui_combo_box_changed), NULL);
-	path_entry = GTK_BIN(path_combo)->child;
+	path_entry = gtk_bin_get_child(GTK_BIN(path_combo));
 	g_signal_connect(path_entry, "activate", G_CALLBACK(on_path_entry_activate), NULL);
 
 	file_view = gtk_tree_view_new();

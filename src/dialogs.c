@@ -1000,7 +1000,7 @@ static void add_input_widgets(GtkWidget *dialog, GtkWidget *vbox,
 	{
 		GtkWidget *combo = gtk_combo_box_entry_new_text();
 
-		entry = GTK_BIN(combo)->child;
+		entry = gtk_bin_get_child(GTK_BIN(combo));
 		ui_entry_add_clear_icon(GTK_ENTRY(entry));
 		g_object_set_data(G_OBJECT(dialog), "combo", combo);
 		gtk_container_add(GTK_CONTAINER(vbox), combo);

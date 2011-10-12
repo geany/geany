@@ -484,7 +484,7 @@ static void create_find_dialog(void)
 	gtk_label_set_mnemonic_widget(GTK_LABEL(label), entry);
 	gtk_entry_set_max_length(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(entry))), 248);
 	gtk_entry_set_width_chars(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(entry))), 50);
-	find_dlg.entry = GTK_BIN(entry)->child;
+	find_dlg.entry = gtk_bin_get_child(GTK_BIN(entry));
 	ui_hookup_widget(find_dlg.dialog, entry, "entry");
 
 	g_signal_connect(gtk_bin_get_child(GTK_BIN(entry)), "activate",
@@ -650,7 +650,7 @@ static void create_replace_dialog(void)
 	gtk_entry_set_max_length(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(entry_find))), 248);
 	gtk_entry_set_width_chars(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(entry_find))), 50);
 	ui_hookup_widget(replace_dlg.dialog, entry_find, "entry_find");
-	replace_dlg.find_entry = GTK_BIN(entry_find)->child;
+	replace_dlg.find_entry = gtk_bin_get_child(GTK_BIN(entry_find));
 
 	entry_replace = gtk_combo_box_entry_new_text();
 	ui_entry_add_clear_icon(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(entry_replace))));
@@ -658,7 +658,7 @@ static void create_replace_dialog(void)
 	gtk_entry_set_max_length(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(entry_replace))), 248);
 	gtk_entry_set_width_chars(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(entry_replace))), 50);
 	ui_hookup_widget(replace_dlg.dialog, entry_replace, "entry_replace");
-	replace_dlg.replace_entry = GTK_BIN(entry_replace)->child;
+	replace_dlg.replace_entry = gtk_bin_get_child(GTK_BIN(entry_replace));
 
 	/* tab from find to the replace entry */
 	g_signal_connect(gtk_bin_get_child(GTK_BIN(entry_find)),
@@ -1060,7 +1060,7 @@ void search_show_find_in_files_dialog(const gchar *dir)
 	if (doc && ! sel && ! GTK_WIDGET_VISIBLE(fif_dlg.dialog))
 		sel = editor_get_default_selection(doc->editor, search_prefs.use_current_word, NULL);
 
-	entry = GTK_BIN(fif_dlg.search_combo)->child;
+	entry = gtk_bin_get_child(GTK_BIN(fif_dlg.search_combo));
 	if (sel)
 		gtk_entry_set_text(GTK_ENTRY(entry), sel);
 	g_free(sel);
@@ -1073,7 +1073,7 @@ void search_show_find_in_files_dialog(const gchar *dir)
 			app->project->base_path);
 	}
 
-	entry = GTK_BIN(fif_dlg.dir_combo)->child;
+	entry = gtk_bin_get_child(GTK_BIN(fif_dlg.dir_combo));
 	if (NZV(dir))
 		cur_dir = g_strdup(dir);	/* custom directory argument passed */
 	else
