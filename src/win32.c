@@ -75,7 +75,8 @@ typedef struct _geany_win32_spawn geany_win32_spawn;
 
 static gboolean GetContentFromHandle(HANDLE hFile, gchar **content, GError **error);
 static HANDLE GetTempFileHandle(GError **error);
-static gboolean CreateChildProcess(geany_win32_spawn *gw_spawn, TCHAR *szCmdline, const TCHAR *dir, GError **error);
+static gboolean CreateChildProcess(geany_win32_spawn *gw_spawn, TCHAR *szCmdline,
+		const TCHAR *dir, GError **error);
 static VOID ReadFromPipe(HANDLE hRead, HANDLE hWrite, HANDLE hFile, GError **error);
 
 
@@ -952,8 +953,6 @@ gboolean win32_spawn(const gchar *dir, gchar **argv, gchar **env, GSpawnFlags fl
 	if (! fSuccess)
 	{
 		geany_debug("win32_spawn: Create process failed");
-		if (error != NULL)
-			*error = g_error_new(G_SPAWN_ERROR, G_SPAWN_ERROR_FAILED, "Create process failed");
 		return FALSE;
 	}
 
@@ -1044,7 +1043,8 @@ gchar *win32_expand_environment_variables(const gchar *str)
 }
 
 
-static gboolean CreateChildProcess(geany_win32_spawn *gw_spawn, TCHAR *szCmdline, const TCHAR *dir, GError **error)
+static gboolean CreateChildProcess(geany_win32_spawn *gw_spawn, TCHAR *szCmdline,
+		const TCHAR *dir, GError **error)
 {
 	PROCESS_INFORMATION piProcInfo;
 	STARTUPINFOW siStartInfo;
@@ -1089,7 +1089,7 @@ static gboolean CreateChildProcess(geany_win32_spawn *gw_spawn, TCHAR *szCmdline
 	{
 		gchar *msg = g_win32_error_message(GetLastError());
 		geany_debug("CreateChildProcess: CreateProcess failed (%s)", msg);
-		if (*error != NULL)
+		if (error != NULL)
 			*error = g_error_new(G_SPAWN_ERROR, G_SPAWN_ERROR_FAILED, "%s", msg);
 		g_free(msg);
 		return FALSE;
