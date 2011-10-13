@@ -1090,7 +1090,6 @@ gint main(gint argc, gchar **argv)
 	ui_save_buttons_toggle(FALSE);
 
 	doc = document_get_current();
-	gtk_widget_grab_focus(GTK_WIDGET(doc->editor->sci));
 	sidebar_select_openfiles_item(doc);
 	build_menu_update(doc);
 	sidebar_update_tag_list(doc, FALSE);
@@ -1103,6 +1102,7 @@ gint main(gint argc, gchar **argv)
 	setup_window_position();
 
 	/* finally show the window */
+	document_grab_focus(doc);
 	gtk_widget_show(main_widgets.window);
 	main_status.main_window_realized = TRUE;
 
