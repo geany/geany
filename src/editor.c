@@ -3019,6 +3019,10 @@ void editor_do_comment_toggle(GeanyEditor *editor)
 
 		while (isspace(sel[x])) x++;
 
+		/* skip blank lines */
+		if (x == line_len-1)
+			continue;
+
 		/* use single line comment */
 		if (! NZV(cc))
 		{
