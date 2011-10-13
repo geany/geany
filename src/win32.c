@@ -1105,7 +1105,7 @@ static gboolean CreateChildProcess(geany_win32_spawn *gw_spawn, TCHAR *szCmdline
 			TerminateProcess(piProcInfo.hProcess, WAIT_TIMEOUT); /* NOTE: This will not kill grandkids. */
 		}
 
-		if (GetExitCodeProcess(piProcInfo.hProcess, &gw_spawn->dwExitCode) != 0)
+		if (!GetExitCodeProcess(piProcInfo.hProcess, &gw_spawn->dwExitCode))
 		{
 			gchar *msg = g_win32_error_message(GetLastError());
 			geany_debug("GetExitCodeProcess failed: %s", msg);
