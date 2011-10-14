@@ -2098,7 +2098,7 @@ void ui_init_prefs(void)
  * will have a "gtk-builder-name" stored in the GObject's data list. */
 static const gchar *ui_guess_object_name(GObject *obj)
 {
-	const gchar *name;
+	const gchar *name = NULL;
 
 	g_return_val_if_fail(G_IS_OBJECT(obj), NULL);
 
