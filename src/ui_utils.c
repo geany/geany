@@ -2122,8 +2122,6 @@ void ui_init_builder(void)
 	GtkBuilder *builder;
 	GtkCellRenderer *renderer;
 
-	g_return_if_fail(builder == NULL);
-
 	builder = gtk_builder_new();
 	if (! builder)
 	{
