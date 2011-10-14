@@ -2130,7 +2130,7 @@ void ui_init_builder(void)
 	}
 
 	error = NULL;
-	interface_file = g_build_filename(GEANY_DATADIR, "geany", "geany.glade", NULL);
+	interface_file = g_build_filename(app->datadir, "geany.glade", NULL);
 	if (! gtk_builder_add_from_file(builder, interface_file, &error))
 	{
 		g_error("Failed to load the user-interface file: %s", error->message);
