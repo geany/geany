@@ -59,7 +59,6 @@ static gboolean clean = TRUE;
 static GModule *module = NULL;
 static struct VteFunctions *vf;
 static gchar *gtk_menu_key_accel = NULL;
-static gint vte_prefs_tab_num = -1;
 
 /* use vte wordchars to select paths */
 static const gchar VTE_WORDCHARS[] = "-A-Za-z0-9,./?%&#:_";
