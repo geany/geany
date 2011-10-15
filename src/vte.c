@@ -490,13 +490,16 @@ static void vte_popup_menu_clicked(GtkMenuItem *menuitem, gpointer user_data)
 		}
 		case POPUP_PREFERENCES:
 		{
-			GtkWidget *notebook;
+			GObject *notebook, *tab_page;
 
 			prefs_show_dialog();
 
-			notebook = ui_lookup_widget(ui_widgets.prefs_dialog, "notebook2");
+			notebook = ui_lookup_object("notebook2");
+			tab_page = ui_lookup_object("frame_term");
 
-			gtk_notebook_set_current_page(GTK_NOTEBOOK(notebook), vte_prefs_tab_num);
+			gtk_notebook_set_current_page(GTK_NOTEBOOK(notebook),
+				gtk_notebook_page_num(GTK_NOTEBOOK(notebook), GTK_WIDGET(tab_page)));
+
 			break;
 		}
 	}
