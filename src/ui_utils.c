@@ -57,13 +57,13 @@
 #include "keyfile.h"
 
 
-GHashTable*	objects_table = NULL;
-
 GeanyInterfacePrefs	interface_prefs;
 GeanyMainWidgets	main_widgets;
 
 UIPrefs			ui_prefs;
 UIWidgets		ui_widgets;
+
+static GHashTable *objects_table = NULL;
 
 static struct
 {
