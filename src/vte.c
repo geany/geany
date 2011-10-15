@@ -735,6 +735,7 @@ void vte_append_preferences_tab(void)
 	{
 		GtkWidget *frame_term, *button_shell, *entry_shell;
 		GtkWidget *check_run_in_vte, *check_skip_script;
+		GObject *font_button, *fg_color_button, *bg_color_button;
 
 		button_shell = GTK_WIDGET(ui_lookup_widget(ui_widgets.prefs_dialog, "button_term_shell"));
 		entry_shell = GTK_WIDGET(ui_lookup_widget(ui_widgets.prefs_dialog, "entry_shell"));
@@ -747,6 +748,15 @@ void vte_append_preferences_tab(void)
 		check_run_in_vte = GTK_WIDGET(ui_lookup_widget(ui_widgets.prefs_dialog, "check_run_in_vte"));
 		g_signal_connect(G_OBJECT(check_run_in_vte), "toggled",
 			G_CALLBACK(on_check_run_in_vte_toggled), check_skip_script);
+
+		font_button = ui_lookup_object("font_term");
+		g_signal_connect(font_button, "font-set",  G_CALLBACK(on_term_font_set), NULL);
+
+		fg_color_button = ui_lookup_object("color_fore");
+		g_signal_connect(fg_color_button, "color-set", G_CALLBACK(on_term_fg_color_set), NULL);
+
+		bg_color_button = ui_lookup_object("color_back");
+		g_signal_connect(bg_color_button, "color-set", G_CALLBACK(on_term_bg_color_set), NULL);
 
 		frame_term = GTK_WIDGET(ui_lookup_widget(ui_widgets.prefs_dialog, "frame_term"));
 		gtk_widget_show_all(frame_term);

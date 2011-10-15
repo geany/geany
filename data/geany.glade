@@ -5802,7 +5802,6 @@
                                 <property name="tooltip_text" translatable="yes">Sets the font for the terminal widget</property>
                                 <property name="use_action_appearance">False</property>
                                 <property name="title" translatable="yes">Choose Terminal Font</property>
-                                <signal name="font-set" handler="on_term_font_set" swapped="no"/>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
