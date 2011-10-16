@@ -631,7 +631,7 @@ void on_notebook1_switch_page_after(GtkNotebook *notebook, GtkNotebookPage *page
 		ui_update_popup_reundo_items(doc);
 		ui_document_show_hide(doc); /* update the document menu */
 		build_menu_update(doc);
-		document_reload_config(doc);
+		sidebar_update_tag_list(doc, FALSE);
 
 		/* We delay the check to avoid weird fast, unintended switching of notebook pages when
 		 * the 'file has changed' dialog is shown while the switch event is not yet completely
