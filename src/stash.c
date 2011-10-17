@@ -66,18 +66,15 @@
  */
 
 /* Implementation Note
- * We use a GArray to hold prefs. It would be more efficient for user code to declare
+ * We dynamically allocate prefs. It would be more efficient for user code to declare
  * a static array of StashPref structs, but we don't do this because:
  *
  * * It would be more ugly (lots of casts and NULLs).
  * * Less type checking.
- * * The API would have to break when adding/changing fields.
+ * * The API & ABI would have to break when adding/changing fields.
  *
  * Usually the prefs code isn't what user code will spend most of its time doing, so this
- * should be efficient enough. But, if desired we could add a stash_group_set_size() function
- * to reduce reallocation (or perhaps use a different container).
- *
- * Note: Maybe using GSlice chunks with an extra 'next' pointer would be more efficient.
+ * should be efficient enough.
  */
 
 
@@ -106,7 +103,7 @@ typedef struct StashPref StashPref;
 struct StashGroup
 {
 	const gchar *name;			/* group name to use in the keyfile */
-	GArray *entries;			/* array of StashPref */
+	GPtrArray *entries;			/* array of (StashPref*) */
 	gboolean various;		/* mark group for display/edit in stash treeview */
 	gboolean use_defaults;		/* use default values if there's no keyfile entry */
 };
@@ -222,8 +219,9 @@ static void handle_strv_setting(StashGroup *group, StashPref *se,
 static void keyfile_action(SettingAction action, StashGroup *group, GKeyFile *keyfile)
 {
 	StashPref *entry;
+	guint i;
 
-	foreach_array(StashPref, entry, group->entries)
+	foreach_ptr_array(entry, i, group->entries)
 	{
 		/* don't override settings with default values */
 		if (!group->use_defaults && action == SETTING_READ &&
@@ -332,7 +330,7 @@ StashGroup *stash_group_new(const gchar *name)
 	StashGroup *group = g_new0(StashGroup, 1);
 
 	group->name = name;
-	group->entries = g_array_new(FALSE, FALSE, sizeof(StashPref));
+	group->entries = g_ptr_array_new();
 	group->use_defaults = TRUE;
 	return group;
 }
@@ -343,17 +341,21 @@ StashGroup *stash_group_new(const gchar *name)
 void stash_group_free(StashGroup *group)
 {
 	StashPref *entry;
+	guint i;
 
-	foreach_array(StashPref, entry, group->entries)
+	foreach_ptr_array(entry, i, group->entries)
 	{
 		if (entry->widget_type == GTK_TYPE_RADIO_BUTTON)
+		{
 			g_free(entry->fields);
-		else if (entry->widget_type == G_TYPE_PARAM)
-			continue;
-		else
+		}
+		else if (entry->widget_type != G_TYPE_PARAM)
+		{
 			g_assert(entry->fields == NULL);	/* to prevent memory leaks, must handle fields above */
+		}
+		g_slice_free(StashPref, entry);
 	}
-	g_array_free(group->entries, TRUE);
+	g_ptr_array_free(group->entries, TRUE);
 	g_free(group);
 }
 
@@ -379,8 +381,10 @@ static StashPref *
 add_pref(StashGroup *group, GType type, gpointer setting,
 		const gchar *key_name, gpointer default_value)
 {
-	StashPref entry = {type, setting, key_name, default_value, G_TYPE_NONE, NULL, NULL};
-	GArray *array = group->entries;
+	StashPref init = {type, setting, key_name, default_value, G_TYPE_NONE, NULL, NULL};
+	StashPref *entry = g_slice_new(StashPref);
+
+	*entry = init;
 
 	/* init any pointer settings to NULL so they can be freed later */
 	if (type == G_TYPE_STRING ||
@@ -388,9 +392,8 @@ add_pref(StashGroup *group, GType type, gpointer setting,
 		if (group->use_defaults)
 			*(gpointer**)setting = NULL;
 
-	g_array_append_val(array, entry);
-
-	return &g_array_index(array, StashPref, array->len - 1);
+	g_ptr_array_add(group->entries, entry);
+	return entry;
 }
 
 
@@ -638,8 +641,9 @@ static void handle_widget_property(GtkWidget *widget, StashPref *entry,
 static void pref_action(PrefAction action, StashGroup *group, GtkWidget *owner)
 {
 	StashPref *entry;
+	guint i;
 
-	foreach_array(StashPref, entry, group->entries)
+	foreach_ptr_array(entry, i, group->entries)
 	{
 		GtkWidget *widget;
 
@@ -1012,14 +1016,14 @@ static void stash_foreach_various_pref(GPtrArray *group_array, stash_foreach_pre
 	gpointer container, PrefAction action)
 {
 	StashGroup *group;
-	guint i;
+	guint i, j;
 	StashPref *entry;
 
 	foreach_ptr_array(group, i, group_array)
 	{
 		if (group->various)
 		{
-			foreach_array(StashPref, entry, group->entries)
+			foreach_ptr_array(entry, j, group->entries)
 				pref_func(group, entry, container, action);
 		}
 	}
