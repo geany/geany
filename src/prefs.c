@@ -127,10 +127,10 @@ static void prefs_action(PrefCallbackAction action)
 	switch (action)
 	{
 		case PREF_DISPLAY:
-			stash_tree_display(pref_groups, various_treeview);
+			stash_tree_display(various_treeview);
 			break;
 		case PREF_UPDATE:
-			stash_tree_update(pref_groups, various_treeview);
+			stash_tree_update(various_treeview);
 			break;
 	}
 }

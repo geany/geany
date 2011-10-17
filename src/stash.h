@@ -92,8 +92,8 @@ void stash_group_update(StashGroup *group, GtkWidget *owner);
 
 void stash_tree_setup(GPtrArray *group_array, GtkTreeView *tree);
 
-void stash_tree_display(GPtrArray *group_array, GtkTreeView *tree);
+void stash_tree_display(GtkTreeView *tree);
 
-void stash_tree_update(GPtrArray *group_array, GtkTreeView *tree);
+void stash_tree_update(GtkTreeView *tree);
 
 #endif

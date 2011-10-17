@@ -80,7 +80,6 @@
 
 #include "geany.h"		/* necessary for utils.h, otherwise use gtk/gtk.h */
 #include <stdlib.h>		/* only for atoi() */
-#include <string.h>		/* only for strcmp() */
 #include "support.h"	/* only for _("text") */
 #include "utils.h"		/* only for foreach_*, utils_get_setting_*(). Stash should not depend on Geany. */
 
@@ -906,6 +905,7 @@ struct StashTreeValue
 	gpointer setting;
 	const gchar *key_name;
 	const gchar *group_name;
+	StashPref *pref;
 };
 
 typedef struct StashTreeValue StashTreeValue;
@@ -1042,6 +1042,7 @@ static void stash_tree_append_pref(StashGroup *group, StashPref *entry, GtkListS
 	value->setting = NULL;
 	value->key_name = entry->key_name;
 	value->group_name = group->name;
+	value->pref = entry;
 
 	gtk_list_store_append(store, &iter);
 	gtk_list_store_set(store, &iter, STASH_TREE_NAME, value->key_name,
@@ -1153,10 +1154,8 @@ static void stash_tree_update_pref(StashTreeValue *value, StashPref *entry)
 	}
 }
 
-/* These functions can handle about 200 settings on a 1GHz x86 CPU in ~0.06 seconds.
- * For 250+ settings, you'd better write something more efficient. */
-static void stash_tree_handle_pref(StashGroup *group, StashPref *entry, GtkTreeModel *model,
-	PrefAction action)
+
+static void stash_tree_action(GtkTreeModel *model, PrefAction action)
 {
 	GtkTreeIter iter;
 	gboolean valid = gtk_tree_model_get_iter_first(model, &iter);
@@ -1166,36 +1165,27 @@ static void stash_tree_handle_pref(StashGroup *group, StashPref *entry, GtkTreeM
 	{
 		gtk_tree_model_get(model, &iter, STASH_TREE_VALUE, &value, -1);
 
-		if (strcmp(group->name, value->group_name) == 0 &&
-			strcmp(entry->key_name, value->key_name) == 0)
+		switch (action)
 		{
-			switch (action)
-			{
-				case PREF_DISPLAY:
-					stash_tree_display_pref(value, entry);
-					break;
-				case PREF_UPDATE:
-					stash_tree_update_pref(value, entry);
-					break;
-			}
-
-			break;
+			case PREF_DISPLAY:
+				stash_tree_display_pref(value, value->pref);
+				break;
+			case PREF_UPDATE:
+				stash_tree_update_pref(value, value->pref);
+				break;
 		}
-
 		valid = gtk_tree_model_iter_next(model, &iter);
 	}
 }
 
 
-void stash_tree_display(GPtrArray *group_array, GtkTreeView *tree)
+void stash_tree_display(GtkTreeView *tree)
 {
-	stash_foreach_various_pref(group_array, (stash_foreach_pref_func) stash_tree_handle_pref,
-		gtk_tree_view_get_model(tree), PREF_DISPLAY);
+	stash_tree_action(gtk_tree_view_get_model(tree), PREF_DISPLAY);
 }
 
 
-void stash_tree_update(GPtrArray *group_array, GtkTreeView *tree)
+void stash_tree_update(GtkTreeView *tree)
 {
-	stash_foreach_various_pref(group_array, (stash_foreach_pref_func) stash_tree_handle_pref,
-		gtk_tree_view_get_model(tree), PREF_UPDATE);
+	stash_tree_action(gtk_tree_view_get_model(tree), PREF_UPDATE);
 }
