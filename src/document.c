@@ -3017,10 +3017,11 @@ gboolean document_check_disk_status(GeanyDocument *doc, gboolean force)
 		/* doc may be closed now */
 		ret = TRUE;
 	}
-	else if (G_UNLIKELY(! use_gio_filemon && /* ignore these checks when using GIO */
-			 (doc->priv->mtime > cur_time || st.st_mtime > cur_time)))
+	else if (! use_gio_filemon && /* ignore check when using GIO */
+		doc->priv->mtime > cur_time)
 	{
 		g_warning("%s: Something is wrong with the time stamps.", G_STRFUNC);
+		/* Note: on Windows st.st_mtime can be newer than cur_time */
 	}
 	else if (doc->priv->mtime < st.st_mtime)
 	{
