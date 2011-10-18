@@ -1,4 +1,4 @@
-A patch to Scintilla 2.25 containing our changes to Scintilla
+A patch to Scintilla 2.29 containing our changes to Scintilla
 (removing unused lexers and an updated marshallers file).
 diff -Naur scintilla_orig/gtk/scintilla-marshal.c scintilla/gtk/scintilla-marshal.c
 --- scintilla_orig/gtk/scintilla-marshal.c	2010-10-27 23:15:45.000000000 +0200
