@@ -2448,6 +2448,39 @@ static gboolean update_type_keywords(GeanyDocument *doc, gint lang)
 }
 
 
+/*
+ * Updates the keywords in a document and re-colourizes it.
+ *
+ * @param doc The document
+ */
+void document_update_highlighting(GeanyDocument *doc)
+{
+	const GString *s = NULL;
+	ScintillaObject *sci;
+	gint keyword_idx;
+
+	g_return_if_fail(DOC_VALID(doc));
+	g_return_if_fail(IS_SCINTILLA(doc->editor->sci));
+
+	sci = doc->editor->sci;
+
+	/* get possibly cached list of keywords for the current language.
+	 * we don't care whether the cached keywords have changed. */
+	get_project_typenames(&s, doc->file_type->lang);
+
+	if (s)
+	{
+		keyword_idx = editor_lexer_get_type_keyword_idx(sci_get_lexer(sci));
+
+		if (keyword_idx > 0)
+		{
+			sci_set_keywords(sci, keyword_idx, s->str);
+			queue_colourise(doc);
+		}
+	}
+}
+
+
 static void document_load_config(GeanyDocument *doc, GeanyFiletype *type,
 		gboolean filetype_changed)
 {
