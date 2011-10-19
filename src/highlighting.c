@@ -3764,7 +3764,7 @@ gboolean highlighting_is_string_style(gint lexer, gint style)
 				style == SCE_F_STRINGEOL);
 
 		case SCLEX_PERL:
-			return (/*style == SCE_PL_STRING ||*/ /* may want variable autocompletion "$(foo)" */
+			return (style == SCE_PL_STRING ||
 				style == SCE_PL_CHARACTER ||
 				style == SCE_PL_HERE_DELIM ||
 				style == SCE_PL_HERE_Q ||
@@ -3776,7 +3776,9 @@ gboolean highlighting_is_string_style(gint lexer, gint style)
 				style == SCE_PL_STRING_QX ||
 				style == SCE_PL_STRING_QR ||
 				style == SCE_PL_STRING_QW ||
-				style == SCE_PL_POD_VERB);
+				style == SCE_PL_POD_VERB ||
+				style == SCE_PL_XLAT
+				/* we don't include any STRING_*_VAR for autocompletion */);
 
 		case SCLEX_R:
 			return (style == SCE_R_STRING);
@@ -3920,7 +3922,8 @@ gboolean highlighting_is_comment_style(gint lexer, gint style)
 			return (style == SCE_PO_COMMENT);
 
 		case SCLEX_LATEX:
-			return (style == SCE_L_COMMENT);
+			return (style == SCE_L_COMMENT ||
+				style == SCE_L_COMMENT2);
 
 		case SCLEX_MAKEFILE:
 			return (style == SCE_MAKE_COMMENT);
