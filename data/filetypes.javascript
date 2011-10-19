@@ -30,9 +30,6 @@ comment_use_indent=true
 # context action command (please see Geany's main documentation for details)
 context_action_cmd=
 
-# sort tags by appearance
-symbol_list_sort_mode=1
-
 [indentation]
 #width=4
 # 0 is spaces, 1 is tabs, 2 is tab & spaces
