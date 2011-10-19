@@ -489,12 +489,12 @@ static void vte_popup_menu_clicked(GtkMenuItem *menuitem, gpointer user_data)
 		}
 		case POPUP_PREFERENCES:
 		{
-			GObject *notebook, *tab_page;
+			GtkWidget *notebook, *tab_page;
 
 			prefs_show_dialog();
 
-			notebook = ui_lookup_object("notebook2");
-			tab_page = ui_lookup_object("frame_term");
+			notebook = ui_lookup_widget(ui_widgets.prefs_dialog, "notebook2");
+			tab_page = ui_lookup_widget(ui_widgets.prefs_dialog, "frame_term");
 
 			gtk_notebook_set_current_page(GTK_NOTEBOOK(notebook),
 				gtk_notebook_page_num(GTK_NOTEBOOK(notebook), GTK_WIDGET(tab_page)));
@@ -737,7 +737,7 @@ void vte_append_preferences_tab(void)
 	{
 		GtkWidget *frame_term, *button_shell, *entry_shell;
 		GtkWidget *check_run_in_vte, *check_skip_script;
-		GObject *font_button, *fg_color_button, *bg_color_button;
+		GtkWidget *font_button, *fg_color_button, *bg_color_button;
 
 		button_shell = GTK_WIDGET(ui_lookup_widget(ui_widgets.prefs_dialog, "button_term_shell"));
 		entry_shell = GTK_WIDGET(ui_lookup_widget(ui_widgets.prefs_dialog, "entry_shell"));
@@ -751,16 +751,16 @@ void vte_append_preferences_tab(void)
 		g_signal_connect(G_OBJECT(check_run_in_vte), "toggled",
 			G_CALLBACK(on_check_run_in_vte_toggled), check_skip_script);
 
-		font_button = ui_lookup_object("font_term");
+		font_button = ui_lookup_widget(ui_widgets.prefs_dialog, "font_term");
 		g_signal_connect(font_button, "font-set",  G_CALLBACK(on_term_font_set), NULL);
 
-		fg_color_button = ui_lookup_object("color_fore");
+		fg_color_button = ui_lookup_widget(ui_widgets.prefs_dialog, "color_fore");
 		g_signal_connect(fg_color_button, "color-set", G_CALLBACK(on_term_fg_color_set), NULL);
 
-		bg_color_button = ui_lookup_object("color_back");
+		bg_color_button = ui_lookup_widget(ui_widgets.prefs_dialog, "color_back");
 		g_signal_connect(bg_color_button, "color-set", G_CALLBACK(on_term_bg_color_set), NULL);
 
-		frame_term = GTK_WIDGET(ui_lookup_widget(ui_widgets.prefs_dialog, "frame_term"));
+		frame_term = ui_lookup_widget(ui_widgets.prefs_dialog, "frame_term");
 		gtk_widget_show_all(frame_term);
 	}
 }

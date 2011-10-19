@@ -246,9 +246,7 @@ static UIUtilsFuncs uiutils_funcs = {
 	&ui_is_keyval_enter_or_return,
 	&ui_get_gtk_settings_integer,
 	&ui_combo_box_add_to_history,
-	&ui_menu_add_document_items_sorted,
-	&ui_hookup_object,
-	&ui_lookup_object
+	&ui_menu_add_document_items_sorted
 };
 
 static DialogFuncs dialog_funcs = {

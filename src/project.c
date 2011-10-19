@@ -402,7 +402,7 @@ static void create_properties_dialog(PropertyDialogElements *e)
 	GeanyDocument *doc = document_get_current();
 	GeanyFiletype *ft = NULL;
 
-	e->dialog = ui_lookup_widget(NULL, "project_dialog");
+	e->dialog = create_project_dialog();
 	gtk_window_set_transient_for(GTK_WINDOW(e->dialog), GTK_WINDOW(main_widgets.window));
 	gtk_window_set_destroy_with_parent(GTK_WINDOW(e->dialog), TRUE);
 	gtk_widget_set_name(e->dialog, "GeanyDialogProject");

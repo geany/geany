@@ -63,7 +63,12 @@ GeanyMainWidgets	main_widgets;
 UIPrefs			ui_prefs;
 UIWidgets		ui_widgets;
 
-static GHashTable *objects_table = NULL;
+static GtkBuilder *builder = NULL;
+static GtkWidget* window1 = NULL;
+static GtkWidget* toolbar_popup_menu1 = NULL;
+static GtkWidget* edit_menu1 = NULL;
+static GtkWidget* prefs_dialog = NULL;
+static GtkWidget* project_dialog = NULL;
 
 static struct
 {
@@ -2113,14 +2118,72 @@ static const gchar *ui_guess_object_name(GObject *obj)
 }
 
 
+/* Compatibility functions */
+GtkWidget *create_edit_menu1(void)
+{
+	return edit_menu1;
+}
+
+
+GtkWidget *create_prefs_dialog(void)
+{
+	return prefs_dialog;
+}
+
+
+GtkWidget *create_project_dialog(void)
+{
+	return project_dialog;
+}
+
+
+GtkWidget *create_toolbar_popup_menu1(void)
+{
+	return toolbar_popup_menu1;
+}
+
+
+GtkWidget *create_window1(void)
+{
+	return window1;
+}
+
+
+static GtkWidget *ui_get_top_parent(GtkWidget *widget)
+{
+	GtkWidget *parent, *found_widget;
+
+	g_return_val_if_fail(GTK_IS_WIDGET(widget), NULL);
+
+	for (;;)
+	{
+		if (GTK_IS_MENU(widget))
+			parent = gtk_menu_get_attach_widget(GTK_MENU(widget));
+		else
+			parent = gtk_widget_get_parent(widget);
+		if (parent == NULL)
+			parent = (GtkWidget*) g_object_get_data(G_OBJECT(widget), "GladeParentKey");
+		if (parent == NULL)
+			break;
+		widget = parent;
+	}
+
+	return widget;
+}
+
+
 void ui_init_builder(void)
 {
 	gchar *interface_file;
-	const gchar *name;
+	const gchar *name, *toplevel_name;
 	GError *error;
 	GSList *iter, *all_objects;
-	GtkBuilder *builder;
 	GtkCellRenderer *renderer;
+	GtkWidget *widget, *toplevel;
+
+	/* prevent function from being called twice */
+	if (GTK_IS_BUILDER(builder))
+		return;
 
 	builder = gtk_builder_new();
 	if (! builder)
@@ -2143,33 +2206,52 @@ void ui_init_builder(void)
 
 	gtk_builder_connect_signals(builder, NULL);
 
-	objects_table = g_hash_table_new_full(g_str_hash, g_str_equal, g_free, g_object_unref);
+	edit_menu1 = GTK_WIDGET(gtk_builder_get_object(builder, "edit_menu1"));
+	prefs_dialog = GTK_WIDGET(gtk_builder_get_object(builder, "prefs_dialog"));
+	project_dialog = GTK_WIDGET(gtk_builder_get_object(builder, "project_dialog"));
+	toolbar_popup_menu1 = GTK_WIDGET(gtk_builder_get_object(builder, "toolbar_popup_menu1"));
+	window1 = GTK_WIDGET(gtk_builder_get_object(builder, "window1"));
+
+	g_object_set_data(G_OBJECT(edit_menu1), "edit_menu1", edit_menu1);
+	g_object_set_data(G_OBJECT(prefs_dialog), "prefs_dialog", prefs_dialog);
+	g_object_set_data(G_OBJECT(project_dialog), "project_dialog", project_dialog);
+	g_object_set_data(G_OBJECT(toolbar_popup_menu1), "toolbar_popup_menu1", toolbar_popup_menu1);
+	g_object_set_data(G_OBJECT(window1), "window1", window1);
 
 	all_objects = gtk_builder_get_objects(builder);
 	for (iter = all_objects; iter != NULL; iter = g_slist_next(iter))
 	{
-		name = ui_guess_object_name(iter->data);
+		if (! GTK_IS_WIDGET(iter->data))
+			continue;
+
+		widget = GTK_WIDGET(iter->data);
+
+		name = ui_guess_object_name(G_OBJECT(widget));
 		if (! name)
 		{
 			g_warning("Unable to get name from GtkBuilder object");
 			continue;
 		}
 
-		ui_hookup_object(iter->data, name);
+		toplevel = ui_get_top_parent(widget);
+		if (toplevel)
+			ui_hookup_widget(toplevel, widget, name);
 
 		/* Glade doesn't seem to add cell renderers for the combo boxes,
 		 * so they are added here. */
-		if (GTK_IS_COMBO_BOX(iter->data))
+		if (GTK_IS_COMBO_BOX(widget))
 		{
 			renderer = gtk_cell_renderer_text_new();
-			gtk_cell_layout_pack_start(GTK_CELL_LAYOUT(iter->data), renderer, TRUE);
-			gtk_cell_layout_set_attributes(GTK_CELL_LAYOUT(iter->data),
+			gtk_cell_layout_pack_start(GTK_CELL_LAYOUT(widget), renderer, TRUE);
+			gtk_cell_layout_set_attributes(GTK_CELL_LAYOUT(widget),
 				renderer, "text", 0, NULL);
 		}
 	}
 	g_slist_free(all_objects);
 
-	g_object_unref(builder);
+	/* FIXME: we don't want to loose all the unpacked GObjects which
+	 * gets destroyed here, so we'll free the builder at the end */
+	//g_object_unref(builder);
 }
 
 
@@ -2226,8 +2308,20 @@ void ui_init(void)
 
 void ui_finalize_builder(void)
 {
-	if (objects_table != NULL)
-		g_hash_table_destroy(objects_table);
+	if (GTK_IS_BUILDER(builder))
+		g_object_unref(builder);
+
+	/* cleanup refs lingering even after GtkBuilder is destroyed */
+	if (GTK_IS_WIDGET(edit_menu1))
+		gtk_widget_destroy(edit_menu1);
+	if (GTK_IS_WIDGET(prefs_dialog))
+		gtk_widget_destroy(prefs_dialog);
+	if (GTK_IS_WIDGET(project_dialog))
+		gtk_widget_destroy(project_dialog);
+	if (GTK_IS_WIDGET(toolbar_popup_menu1))
+		gtk_widget_destroy(toolbar_popup_menu1);
+	if (GTK_IS_WIDGET(window1))
+		gtk_widget_destroy(window1);
 }
 
 
@@ -2311,83 +2405,37 @@ void ui_widget_set_tooltip_text(GtkWidget *widget, const gchar *text)
  * Call it with the toplevel widget in the component (i.e. a window/dialog),
  * or alternatively any widget in the component, and the name of the widget
  * you want returned.
- *
- * @note Since 0.21 the @a widget parameter is not used and can be set
- * to NULL if you like.
- *
  * @param widget Widget with the @a widget_name property set.
  * @param widget_name Name to lookup.
  * @return The widget found.
- * @see ui_hookup_object().
- * @see ui_lookup_object().
- * @deprecated Use ui_lookup_object instead.
+ * @see ui_hookup_widget().
  *
  *  @since 0.16
  */
 GtkWidget *ui_lookup_widget(GtkWidget *widget, const gchar *widget_name)
 {
-	GtkWidget *found_widget;
+	GtkWidget *parent, *found_widget;
 
-	(void) widget; /* not used anymore */
-
+	g_return_val_if_fail(widget != NULL, NULL);
 	g_return_val_if_fail(widget_name != NULL, NULL);
 
-	found_widget = GTK_WIDGET(ui_lookup_object(widget_name));
+	for (;;)
+	{
+		if (GTK_IS_MENU(widget))
+			parent = gtk_menu_get_attach_widget(GTK_MENU(widget));
+		else
+			parent = widget->parent;
+		if (parent == NULL)
+			parent = (GtkWidget*) g_object_get_data(G_OBJECT(widget), "GladeParentKey");
+		if (parent == NULL)
+			break;
+		widget = parent;
+	}
+
+	found_widget = (GtkWidget*) g_object_get_data(G_OBJECT(widget), widget_name);
 	if (G_UNLIKELY(found_widget == NULL))
 		g_warning("Widget not found: %s", widget_name);
-
 	return found_widget;
-}
-
-
-/** Returns a widget from a name.
- *
- * Call it with the name of the GObject you want returned.
- *
- * @note The GObject must either be in the GtkBuilder/Glade file or
- * have been added with the function @a ui_hookup_object.
- *
- * @param widget Widget with the @a widget_name property set.
- * @param widget_name Name to lookup.
- * @return The widget found.
- *
- * @see ui_hookup_object()
- * @since 0.21
- */
-GObject *ui_lookup_object(const gchar *object_name)
-{
-	gpointer *found;
-
-	g_return_val_if_fail(object_name != NULL, NULL);
-	g_return_val_if_fail(objects_table != NULL, NULL);
-
-	found = g_hash_table_lookup(objects_table, (gconstpointer) object_name);
-
-	if (found == NULL)
-		return NULL;
-
-	return G_OBJECT(found);
-}
-
-
-/** Sets a name to lookup GObject @a obj.
- *
- * The GObject can later be looked-up by the @a name using the
- * @a ui_lookup_object() function.
- *
- * @param obj GObject.
- * @param name Name.
- *
- * @see ui_lookup_object()
- * @since 0.21
- **/
-void ui_hookup_object(GObject *obj, const gchar *object_name)
-{
-	g_return_if_fail(G_IS_OBJECT(obj));
-	g_return_if_fail(object_name != NULL);
-	g_return_if_fail(objects_table != NULL);
-
-	g_hash_table_insert(objects_table, g_strdup(object_name), g_object_ref(obj));
 }
 
 

@@ -24,21 +24,16 @@
 
 
 /** Sets a name to lookup @a widget from @a owner.
- *
- * @note Since 0.21 the @a owner parameter is not used and can be set
- * to NULL if you like.
- *
  * @param owner Usually a window, dialog or popup menu.
  * @param widget Widget.
  * @param widget_name Name.
- * @see ui_hookup_object().
- * @see ui_lookup_object().
- * @deprecated Use ui_hookup_object() instead.
+ * @see ui_lookup_widget().
  *
  *  @since 0.16
  **/
 #define ui_hookup_widget(owner, widget, widget_name) \
-	ui_hookup_object(G_OBJECT(widget), widget_name)
+	g_object_set_data_full(G_OBJECT(owner), widget_name, \
+		g_object_ref(widget), (GDestroyNotify)g_object_unref);
 
 
 /** Interface preferences */
@@ -214,9 +209,12 @@ void ui_widget_set_tooltip_text(GtkWidget *widget, const gchar *text);
 
 GtkWidget *ui_lookup_widget(GtkWidget *widget, const gchar *widget_name);
 
-GObject *ui_lookup_object(const gchar *object_name);
-
-void ui_hookup_object(GObject *obj, const gchar *object_name);
+/* Compatibility functions */
+GtkWidget *create_edit_menu1(void);
+GtkWidget *create_prefs_dialog(void);
+GtkWidget *create_project_dialog(void);
+GtkWidget *create_toolbar_popup_menu1(void);
+GtkWidget *create_window1(void);
 
 void ui_widget_set_sensitive(GtkWidget *widget, gboolean set);
 

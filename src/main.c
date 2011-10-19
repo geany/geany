@@ -241,7 +241,7 @@ static void main_init(void)
 
 	ui_init_stock_items();
 
-	main_widgets.window = ui_lookup_widget(NULL, "window1");
+	main_widgets.window = create_window1();
 
 	/* add recent projects to the Project menu */
 	ui_widgets.recent_projects_menuitem = ui_lookup_widget(main_widgets.window, "recent_projects1");
@@ -253,12 +253,12 @@ static void main_init(void)
 	main_widgets.toolbar = toolbar_init();
 	main_widgets.sidebar_notebook = ui_lookup_widget(main_widgets.window, "notebook3");
 	main_widgets.notebook = ui_lookup_widget(main_widgets.window, "notebook1");
-	main_widgets.editor_menu = ui_lookup_widget(NULL, "edit_menu1");
+	main_widgets.editor_menu = create_edit_menu1();
 	main_widgets.tools_menu = ui_lookup_widget(main_widgets.window, "tools1_menu");
 	main_widgets.message_window_notebook = ui_lookup_widget(main_widgets.window, "notebook_info");
 	main_widgets.project_menu = ui_lookup_widget(main_widgets.window, "menu_project1_menu");
 
-	ui_widgets.toolbar_menu = ui_lookup_widget(NULL, "toolbar_popup_menu1");
+	ui_widgets.toolbar_menu = create_toolbar_popup_menu1();
 	ui_init();
 
 	/* set widget names for matching with .gtkrc-2.0 */
@@ -1237,7 +1237,7 @@ void main_quit()
 
 	g_free(app);
 
-	ui_finalize_builder(); /* After all widgets are cleaned up */
+	ui_finalize_builder();
 
 	gtk_main_quit();
 }
