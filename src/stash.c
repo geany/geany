@@ -1009,27 +1009,6 @@ static void stash_tree_destroy_cb(GtkWidget *widget, gpointer user_data)
 }
 
 
-typedef void (*stash_foreach_pref_func)(StashGroup *group, StashPref *entry, gpointer container,
-	PrefAction action);
-
-static void stash_foreach_various_pref(GPtrArray *group_array, stash_foreach_pref_func pref_func,
-	gpointer container, PrefAction action)
-{
-	StashGroup *group;
-	guint i, j;
-	StashPref *entry;
-
-	foreach_ptr_array(group, i, group_array)
-	{
-		if (group->various)
-		{
-			foreach_ptr_array(entry, j, group->entries)
-				pref_func(group, entry, container, action);
-		}
-	}
-}
-
-
 static void stash_tree_append_pref(StashGroup *group, StashPref *entry, GtkListStore *store,
 	PrefAction action)
 {
@@ -1050,6 +1029,24 @@ static void stash_tree_append_pref(StashGroup *group, StashPref *entry, GtkListS
 }
 
 
+static void stash_tree_append_prefs(GPtrArray *group_array,
+	GtkListStore *store, PrefAction action)
+{
+	StashGroup *group;
+	guint i, j;
+	StashPref *entry;
+
+	foreach_ptr_array(group, i, group_array)
+	{
+		if (group->various)
+		{
+			foreach_ptr_array(entry, j, group->entries)
+				stash_tree_append_pref(group, entry, store, action);
+		}
+	}
+}
+
+
 /* Setups a simple editor for stash preferences based on the widget arguments.
  * group_array - Array of groups which's settings will be edited.
  * tree - GtkTreeView in which to edit the preferences. Must be empty. */
@@ -1062,8 +1059,7 @@ void stash_tree_setup(GPtrArray *group_array, GtkTreeView *tree)
 	GtkObject *adjustment;
 
 	store = gtk_list_store_new(STASH_TREE_COUNT, G_TYPE_STRING, G_TYPE_POINTER);
-	stash_foreach_various_pref(group_array,
-		(stash_foreach_pref_func) stash_tree_append_pref, store, PREF_DISPLAY);
+	stash_tree_append_prefs(group_array, store, PREF_DISPLAY);
 	gtk_tree_sortable_set_sort_column_id(GTK_TREE_SORTABLE(store), STASH_TREE_NAME,
 		GTK_SORT_ASCENDING);
 
