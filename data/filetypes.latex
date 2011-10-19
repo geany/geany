@@ -6,6 +6,15 @@ command=keyword_1
 tag=tag
 math=number_1
 comment=comment
+# mappings below may need checking
+tag2=tag
+math2=number_1
+comment2=comment
+verbatim=default
+shortcmd=keyword_1
+special=keyword_2
+cmdopt=keyword_1
+error=error
 
 [keywords]
 # all items must be in one line

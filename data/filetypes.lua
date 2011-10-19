@@ -21,6 +21,7 @@ word5=keyword_1
 word6=keyword_2
 word7=keyword_3
 word8=keyword_4
+label=label
 
 [keywords]
 # all items must be in one line
