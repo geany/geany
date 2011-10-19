@@ -1883,6 +1883,12 @@ static void on_config_file_clicked(GtkWidget *widget, gpointer user_data)
 }
 
 
+static void free_on_closure_notify(gpointer data, GClosure *closure)
+{
+	g_free(data);
+}
+
+
 /* @note You should connect to the "document-save" signal yourself to detect
  * if the user has just saved the config file, reloading it. */
 void ui_add_config_file_menu_item(const gchar *real_path, const gchar *label, GtkContainer *parent)
@@ -1905,9 +1911,8 @@ void ui_add_config_file_menu_item(const gchar *real_path, const gchar *label, Gt
 
 	gtk_widget_show(item);
 	gtk_container_add(parent, item);
-	g_signal_connect(item, "activate", G_CALLBACK(on_config_file_clicked),
-		/* this memory is kept */
-		g_strdup(real_path));
+	g_signal_connect_data(item, "activate", G_CALLBACK(on_config_file_clicked),
+			g_strdup(real_path), free_on_closure_notify, 0);
 }
 
 

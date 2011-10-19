@@ -248,6 +248,7 @@ static void create_vte(void)
 
 	/* create menu now so copy/paste shortcuts work */
 	vc->menu = vte_create_popup_menu();
+	g_object_ref_sink(vc->menu);
 
 	frame = gtk_frame_new(NULL);
 
@@ -291,6 +292,7 @@ void vte_close(void)
 	 * this prevents a segfault on X close window if the message window is hidden */
 	gtk_widget_destroy(vc->vte);
 	gtk_widget_destroy(vc->menu);
+	g_object_unref(vc->menu);
 	g_free(vc->emulation);
 	g_free(vc->shell);
 	g_free(vc->font);

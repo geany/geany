@@ -844,11 +844,25 @@ static void parse_compiler_error_line(const gchar *string,
 		case GEANY_FILETYPES_PYTHON:
 		{
 			/* File "HyperArch.py", line 37, in ?
-			 * (file "clrdial.tcl" line 12) */
-			data.pattern = " \"";
-			data.min_fields = 6;
-			data.line_idx = 5;
-			data.file_idx = 2;
+			 * (file "clrdial.tcl" line 12)
+			 * */
+			if (strstr(string, " line ") != NULL)
+			{
+				/* Tcl and old Python format (<= Python 2.5) */
+				data.pattern = " \"";
+				data.min_fields = 6;
+				data.line_idx = 5;
+				data.file_idx = 2;
+			}
+			else
+			{
+				/* SyntaxError: ('invalid syntax', ('sender.py', 149, 20, ' ...'))
+				 * (used since Python 2.6) */
+				data.pattern = ",'";
+				data.min_fields = 8;
+				data.line_idx = 6;
+				data.file_idx = 4;
+			}
 			break;
 		}
 		case GEANY_FILETYPES_BASIC:
