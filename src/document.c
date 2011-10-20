@@ -2348,59 +2348,24 @@ void document_update_tag_list_in_idle(GeanyDocument *doc)
 }
 
 
-/* Caches the list of project typenames, as a space separated GString.
- * Returns: TRUE if typenames have changed.
- * (*types) is set to the list of typenames, or NULL if there are none. */
-static gboolean get_project_typenames(const GString **types, gint lang)
+/*
+ * Updates the type keywords in the document's Scintilla widget.
+ *
+ * @param doc The document
+ */
+void document_update_type_keywords(GeanyDocument *doc)
 {
-	static GString *last_typenames = NULL;
-	GString *s = NULL;
+	gint keyword_idx;
+	gchar *keywords = NULL;
+	GString *str;
+	GPtrArray *tags_array;
 
-	if (app->tm_workspace)
-	{
-		GPtrArray *tags_array = app->tm_workspace->work_object.tags_array;
-
-		if (tags_array)
-		{
-			s = symbols_find_tags_as_string(tags_array, TM_GLOBAL_TYPE_MASK, lang);
-		}
-	}
-
-	if (s && last_typenames && g_string_equal(s, last_typenames))
-	{
-		g_string_free(s, TRUE);
-		*types = last_typenames;
-		return FALSE;	/* project typenames haven't changed */
-	}
-	/* cache typename list for next time */
-	if (last_typenames)
-		g_string_free(last_typenames, TRUE);
-	last_typenames = s;
-
-	*types = s;
-	if (s == NULL)
-		return FALSE;
-	return TRUE;
-}
-
-
-/* If sci is NULL, update project typenames for all documents that support typenames,
- * if typenames have changed.
- * If sci is not NULL, then if sci supports typenames, project typenames are updated
- * if necessary, and typename keywords are set for sci.
- * Returns: TRUE if any scintilla type keywords were updated. */
-static gboolean update_type_keywords(GeanyDocument *doc, gint lang)
-{
-	gboolean ret = FALSE;
-	guint n;
-	const GString *s;
-	ScintillaObject *sci;
-
-	g_return_val_if_fail(doc != NULL, FALSE);
-	sci = doc->editor->sci;
+	g_return_if_fail(DOC_VALID(doc));
+	g_return_if_fail(IS_SCINTILLA(doc->editor->sci));
 
 	switch (doc->file_type->id)
-	{	/* continue working with the following languages, skip on all others */
+	{
+		/* continue working with the following languages, skip on all others */
 		case GEANY_FILETYPES_C:
 		case GEANY_FILETYPES_CPP:
 		case GEANY_FILETYPES_CS:
@@ -2409,73 +2374,25 @@ static gboolean update_type_keywords(GeanyDocument *doc, gint lang)
 		case GEANY_FILETYPES_VALA:
 			break;
 		default:
-			return FALSE;
+			return;
 	}
 
-	sci = doc->editor->sci;
-	if (sci != NULL && editor_lexer_get_type_keyword_idx(sci_get_lexer(sci)) == -1)
-		return FALSE;
+	keyword_idx = editor_lexer_get_type_keyword_idx(sci_get_lexer(doc->editor->sci));
+	if (G_UNLIKELY(keyword_idx < 1))
+		return;
 
-	if (! get_project_typenames(&s, lang))
-	{	/* typenames have not changed */
-		if (s != NULL && sci != NULL)
-		{
-			gint keyword_idx = editor_lexer_get_type_keyword_idx(sci_get_lexer(sci));
+	if (G_UNLIKELY(app->tm_workspace == NULL))
+		return;
 
-			sci_set_keywords(sci, keyword_idx, s->str);
-			queue_colourise(doc);
-		}
-		return FALSE;
-	}
-	g_return_val_if_fail(s != NULL, FALSE);
-
-	for (n = 0; n < documents_array->len; n++)
+	tags_array = app->tm_workspace->work_object.tags_array;
+	if (tags_array)
 	{
-		if (documents[n]->is_valid)
+		str = symbols_find_tags_as_string(tags_array, TM_GLOBAL_TYPE_MASK, doc->file_type->lang);
+		if (str)
 		{
-			ScintillaObject *wid = documents[n]->editor->sci;
-			gint keyword_idx = editor_lexer_get_type_keyword_idx(sci_get_lexer(wid));
-
-			if (keyword_idx > 0)
-			{
-				sci_set_keywords(wid, keyword_idx, s->str);
-				queue_colourise(documents[n]);
-				ret = TRUE;
-			}
-		}
-	}
-	return ret;
-}
-
-
-/*
- * Updates the keywords in a document and re-colourizes it.
- *
- * @param doc The document
- */
-void document_update_highlighting(GeanyDocument *doc)
-{
-	const GString *s = NULL;
-	ScintillaObject *sci;
-	gint keyword_idx;
-
-	g_return_if_fail(DOC_VALID(doc));
-	g_return_if_fail(IS_SCINTILLA(doc->editor->sci));
-
-	sci = doc->editor->sci;
-
-	/* get possibly cached list of keywords for the current language.
-	 * we don't care whether the cached keywords have changed. */
-	get_project_typenames(&s, doc->file_type->lang);
-
-	if (s)
-	{
-		keyword_idx = editor_lexer_get_type_keyword_idx(sci_get_lexer(sci));
-
-		if (keyword_idx > 0)
-		{
-			sci_set_keywords(sci, keyword_idx, s->str);
-			queue_colourise(doc);
+			keywords = g_string_free(str, FALSE);
+			sci_set_keywords(doc->editor->sci, keyword_idx, keywords);
+			g_free(keywords);
 		}
 	}
 }
@@ -2512,7 +2429,7 @@ static void document_load_config(GeanyDocument *doc, GeanyFiletype *type,
 	document_update_tag_list(doc, TRUE);
 
 	/* Update session typename keywords. */
-	update_type_keywords(doc, type->lang);
+	document_update_type_keywords(doc);
 }
 
 

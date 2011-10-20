@@ -235,7 +235,7 @@ void document_update_tag_list(GeanyDocument *doc, gboolean update);
 
 void document_update_tag_list_in_idle(GeanyDocument *doc);
 
-void document_update_highlighting(GeanyDocument *doc);
+void document_update_type_keywords(GeanyDocument *doc);
 
 void document_set_encoding(GeanyDocument *doc, const gchar *new_encoding);
 
