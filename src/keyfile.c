@@ -82,6 +82,7 @@
 #define GEANY_TOGGLE_MARK				"~ "
 #define GEANY_MAX_AUTOCOMPLETE_WORDS	30
 #define GEANY_MAX_SYMBOLS_UPDATE_FREQ	250
+#define GEANY_DEFAULT_FILETYPE_REGEX    "-\\*-\\s*([^\\s]+)\\s*-\\*-"
 
 
 static gchar *scribble_text = NULL;
@@ -218,6 +219,8 @@ static void init_pref_groups(void)
 		"indent_hard_tab_width", 8);
 	stash_group_add_integer(group, (gint*)&search_prefs.find_selection_type,
 		"find_selection_type", GEANY_FIND_SEL_CURRENT_WORD);
+	stash_group_add_string(group, &file_prefs.extract_filetype_regex,
+		"extract_filetype_regex", GEANY_DEFAULT_FILETYPE_REGEX);
 
 	/* Note: Interface-related various prefs are in ui_init_prefs() */
 
