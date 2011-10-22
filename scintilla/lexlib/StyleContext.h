@@ -55,7 +55,6 @@ public:
 		styler(styler_),
 		endPos(startPos + length),
 		currentPos(startPos),
-		atLineStart(true),
 		atLineEnd(false),
 		state(initStyle & chMask), // Mask off all bits which aren't in the chMask.
 		chPrev(0),
@@ -63,6 +62,7 @@ public:
 		chNext(0) {
 		styler.StartAt(startPos, chMask);
 		styler.StartSegment(startPos);
+		atLineStart = static_cast<unsigned int>(styler.LineStart(styler.GetLine(startPos))) == startPos;
 		unsigned int pos = currentPos;
 		ch = static_cast<unsigned char>(styler.SafeGetCharAt(pos));
 		if (styler.IsLeadByte(static_cast<char>(ch))) {

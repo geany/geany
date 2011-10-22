@@ -24,6 +24,7 @@ class XPM {
 	char codeTransparent;
 	char *codes;
 	ColourPair *colours;
+	ColourDesired ColourDesiredFromCode(int ch) const;
 	ColourAllocated ColourFromCode(int ch) const;
 	void FillRun(Surface *surface, int code, int startX, int y, int x);
 	char **lines;
@@ -46,6 +47,7 @@ public:
 	int GetId() const { return pid; }
 	int GetHeight() const { return height; }
 	int GetWidth() const { return width; }
+	void PixelAt(int x, int y, ColourDesired &colour, bool &transparent) const;
 	static const char **LinesFormFromTextForm(const char *textForm);
 };
 
@@ -64,13 +66,57 @@ public:
 	/// Remove all XPMs.
 	void Clear();
 	/// Add a XPM.
-	void Add(int id, const char *textForm);
+	void Add(int ident, const char *textForm);
 	/// Get XPM by id.
-	XPM *Get(int id);
+	XPM *Get(int ident);
 	/// Give the largest height of the set.
 	int GetHeight();
 	/// Give the largest width of the set.
 	int GetWidth();
+};
+
+/**
+ * An translucent image stoed as a sequence of RGBA bytes.
+ */
+class RGBAImage {
+	// Private so RGBAImage objects can not be copied
+	RGBAImage(const RGBAImage &);
+	RGBAImage &operator=(const RGBAImage &);
+	int height;
+	int width;
+	std::vector<unsigned char> pixelBytes;
+public:
+	RGBAImage(int width_, int height_, const unsigned char *pixels_);
+	RGBAImage(const XPM &xpm);
+	virtual ~RGBAImage();
+	int GetHeight() const { return height; }
+	int GetWidth() const { return width; }
+	int CountBytes() const;
+	const unsigned char *Pixels() const;
+	void SetPixel(int x, int y, ColourDesired colour, int alpha=0xff); 
+};
+
+/**
+ * A collection of RGBAImage pixmaps indexed by integer id.
+ */
+class RGBAImageSet {
+	typedef std::map<int, RGBAImage*> ImageMap;
+	ImageMap images;
+	mutable int height;	///< Memorize largest height of the set.
+	mutable int width;	///< Memorize largest width of the set.
+public:
+	RGBAImageSet();
+	~RGBAImageSet();
+	/// Remove all images.
+	void Clear();
+	/// Add an image.
+	void Add(int ident, RGBAImage *image);
+	/// Get image by id.
+	RGBAImage *Get(int ident);
+	/// Give the largest height of the set.
+	int GetHeight() const;
+	/// Give the largest width of the set.
+	int GetWidth() const;
 };
 
 #ifdef SCI_NAMESPACE
