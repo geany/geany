@@ -1662,6 +1662,17 @@ will be loaded instead of the default c99.tags. You should keep a
 copy of the generated tags file because it will get overwritten when
 upgrading Geany.
 
+*Generating tag files on Windows:*
+
+This works basically the same as on other platforms but you need to make
+sure you have grep installed and Geany can find it, i.e. it must be
+in the PATH environment variable. To test this, open a console window
+and type ``grep`` and see whether it is executed.
+If it is, then you can create a tags file like the following::
+
+    "c:\program files\geany\bin\geany" -g c:\mytags.php.tags c:\code\somefile.php
+
+
 
 C ignore.tags
 ^^^^^^^^^^^^^
