@@ -14,7 +14,7 @@ operator=operator
 identifier=identifier_1
 sqlplus=default
 sqlplus_prompt=default
-sqlplus_comment=default
+sqlplus_comment=comment
 quotedidentifier=identifier_2
 
 [keywords]

@@ -3,7 +3,7 @@
 # Edit these in the colorscheme .conf file instead
 default=default
 error=error
-commentline=comment
+commentline=comment_line
 number=number_1
 word=keyword_1
 string=string_1

@@ -4,8 +4,8 @@
 default=default
 identifier=identifier_1
 comment=comment
-comment2=comment
-commentline=comment
+comment2=comment_doc
+commentline=comment_line
 preprocessor=preprocessor
 preprocessor2=preprocessor
 number=number_1

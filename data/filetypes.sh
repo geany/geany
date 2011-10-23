@@ -2,11 +2,11 @@
 [styling]
 # Edit these in the colorscheme .conf file instead
 default=default
-commentline=comment
+commentline=comment_line
 number=number_1
 word=keyword_1
 string=string_1
-character=string_1
+character=character
 operator=operator
 identifier=identifier_1
 backticks=backticks
