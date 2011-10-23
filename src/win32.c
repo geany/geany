@@ -787,6 +787,13 @@ static void debug_setup_console()
 	fp = _fdopen(hConHandle, "w");
 	*stderr = *fp;
 	setvbuf(stderr, NULL, _IONBF, 0);
+
+	/* redirect unbuffered STDIN to the console */
+	lStdHandle = (long)GetStdHandle(STD_INPUT_HANDLE);
+	hConHandle = _open_osfhandle(lStdHandle, _O_TEXT);
+	fp = _fdopen( hConHandle, "r" );
+	*stdin = *fp;
+	setvbuf(stdin, NULL, _IONBF, 0);
 }
 
 
@@ -794,8 +801,8 @@ void win32_init_debug_code(void)
 {
 	if (app->debug_mode)
 	{
-		/* create a console window to get log messages on Windows */
-		/** TODO remove me? */
+		/* create a console window to get log messages on Windows, 
+		 * especially useful when generating tags files */
 		debug_setup_console();
 		/* Enable GLib process spawn debug mode when Geany was started with the debug flag */
 		g_setenv("G_SPAWN_WIN32_DEBUG", "1", FALSE);
