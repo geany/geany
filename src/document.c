@@ -2250,21 +2250,19 @@ gint document_replace_all(GeanyDocument *doc, const gchar *find_text, const gcha
 
 static gboolean update_tags_from_buffer(GeanyDocument *doc)
 {
-	gboolean result;
-#if 0
-		/* old code */
-		result = tm_source_file_update(doc->tm_file, TRUE, FALSE, TRUE);
-#else
-		gsize len = sci_get_length(doc->editor->sci) + 1;
-		gchar *text = g_malloc(len);
+	guchar *buffer_ptr;
+	gsize len;
 
-		/* we copy the whole text into memory instead using a direct char pointer from
-		 * Scintilla because tm_source_file_buffer_update() does modify the string slightly */
-		sci_get_text(doc->editor->sci, len, text);
-		result = tm_source_file_buffer_update(doc->tm_file, (guchar*) text, len, TRUE);
-		g_free(text);
-#endif
-	return result;
+	len = sci_get_length(doc->editor->sci);
+
+	/* gets a direct character pointer from Scintilla.
+	 * this is OK because tm_source_file_buffer_update() does not modify the
+	 * buffer, it only requires that buffer doesn't change while it's running,
+	 * which it won't since it runs in this thread (ie. synchronously).
+	 * see tagmanager/read.c:bufferOpen */
+	buffer_ptr = (guchar *) scintilla_send_message(doc->editor->sci, SCI_GETCHARACTERPOINTER, 0, 0);
+
+	return tm_source_file_buffer_update(doc->tm_file, buffer_ptr, len, TRUE);
 }
 
 
