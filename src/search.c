@@ -482,7 +482,6 @@ static void create_find_dialog(void)
 	entry = gtk_combo_box_entry_new_text();
 	ui_entry_add_clear_icon(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(entry))));
 	gtk_label_set_mnemonic_widget(GTK_LABEL(label), entry);
-	gtk_entry_set_max_length(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(entry))), 248);
 	gtk_entry_set_width_chars(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(entry))), 50);
 	find_dlg.entry = gtk_bin_get_child(GTK_BIN(entry));
 	ui_hookup_widget(find_dlg.dialog, entry, "entry");
@@ -647,7 +646,6 @@ static void create_replace_dialog(void)
 	entry_find = gtk_combo_box_entry_new_text();
 	ui_entry_add_clear_icon(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(entry_find))));
 	gtk_label_set_mnemonic_widget(GTK_LABEL(label_find), entry_find);
-	gtk_entry_set_max_length(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(entry_find))), 248);
 	gtk_entry_set_width_chars(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(entry_find))), 50);
 	ui_hookup_widget(replace_dlg.dialog, entry_find, "entry_find");
 	replace_dlg.find_entry = gtk_bin_get_child(GTK_BIN(entry_find));
@@ -655,7 +653,6 @@ static void create_replace_dialog(void)
 	entry_replace = gtk_combo_box_entry_new_text();
 	ui_entry_add_clear_icon(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(entry_replace))));
 	gtk_label_set_mnemonic_widget(GTK_LABEL(label_replace), entry_replace);
-	gtk_entry_set_max_length(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(entry_replace))), 248);
 	gtk_entry_set_width_chars(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(entry_replace))), 50);
 	ui_hookup_widget(replace_dlg.dialog, entry_replace, "entry_replace");
 	replace_dlg.replace_entry = gtk_bin_get_child(GTK_BIN(entry_replace));
@@ -888,7 +885,6 @@ static void create_fif_dialog(void)
 	entry = gtk_bin_get_child(GTK_BIN(combo));
 	ui_entry_add_clear_icon(GTK_ENTRY(entry));
 	gtk_label_set_mnemonic_widget(GTK_LABEL(label), entry);
-	gtk_entry_set_max_length(GTK_ENTRY(entry), 248);
 	gtk_entry_set_width_chars(GTK_ENTRY(entry), 50);
 	gtk_entry_set_activates_default(GTK_ENTRY(entry), TRUE);
 	fif_dlg.search_combo = combo;
@@ -932,7 +928,6 @@ static void create_fif_dialog(void)
 	entry = gtk_bin_get_child(GTK_BIN(dir_combo));
 	ui_entry_add_clear_icon(GTK_ENTRY(entry));
 	gtk_label_set_mnemonic_widget(GTK_LABEL(label1), entry);
-	gtk_entry_set_max_length(GTK_ENTRY(entry), 248);
 	gtk_entry_set_width_chars(GTK_ENTRY(entry), 50);
 	fif_dlg.dir_combo = dir_combo;
 
