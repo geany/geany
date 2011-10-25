@@ -43,12 +43,12 @@ public:
 	}
 	void Set(int position, T value) {
 		Delete(position);
-		if ((states.size() == 0) || (value != states[states.size()-1].value)) {
+		if (states.empty() || (value != states[states.size()-1].value)) {
 			states.push_back(State(position, value));
 		}
 	}
 	T ValueAt(int position) {
-		if (!states.size())
+		if (states.empty())
 			return T();
 		if (position < states[0].position)
 			return T();
@@ -92,7 +92,7 @@ public:
 				changed = true;
 			}
 			typename stateVector::const_iterator startOther = other.states.begin();
-			if (!states.empty() && states.back().value == startOther->value)
+			if (!states.empty() && !other.states.empty() && states.back().value == startOther->value)
 				++startOther;
 			if (startOther != other.states.end()) {
 				states.insert(states.end(), startOther, other.states.end());

@@ -3,7 +3,7 @@
 # Edit these in the colorscheme .conf file instead
 default=default
 error=error
-commentline=comment
+commentline=comment_line
 number=number_1
 word=keyword_1
 string=string_1
@@ -31,6 +31,18 @@ string_qx=string_2
 string_qr=string_2
 string_qw=string_2
 variable_indexer=default
+# *_var mappings may need checking
+string_var=identifier_1
+regex_var=identifier_2
+regsubst_var=identifier_2
+backticks_var=identifier_2
+here_qq_var=identifier_2
+here_qx_var=identifier_2
+string_qq_var=identifier_2
+string_qx_var=identifier_2
+string_qr_var=identifier_2
+# translation: tr{}{} y{}{}
+xlat=string_2
 # not used
 punctuation=default
 # obsolete: replaced by qq, qx, qr, qw

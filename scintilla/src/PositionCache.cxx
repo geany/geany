@@ -12,6 +12,7 @@
 
 #include <string>
 #include <vector>
+#include <map>
 
 #include "Platform.h"
 
@@ -151,15 +152,15 @@ void LineLayout::SetLineStart(int line, int start) {
 }
 
 void LineLayout::SetBracesHighlight(Range rangeLine, Position braces[],
-                                    char bracesMatchStyle, int xHighlight) {
-	if (rangeLine.ContainsCharacter(braces[0])) {
+                                    char bracesMatchStyle, int xHighlight, bool ignoreStyle) {
+	if (!ignoreStyle && rangeLine.ContainsCharacter(braces[0])) {
 		int braceOffset = braces[0] - rangeLine.start;
 		if (braceOffset < numCharsInLine) {
 			bracePreviousStyles[0] = styles[braceOffset];
 			styles[braceOffset] = bracesMatchStyle;
 		}
 	}
-	if (rangeLine.ContainsCharacter(braces[1])) {
+	if (!ignoreStyle && rangeLine.ContainsCharacter(braces[1])) {
 		int braceOffset = braces[1] - rangeLine.start;
 		if (braceOffset < numCharsInLine) {
 			bracePreviousStyles[1] = styles[braceOffset];
@@ -172,14 +173,14 @@ void LineLayout::SetBracesHighlight(Range rangeLine, Position braces[],
 	}
 }
 
-void LineLayout::RestoreBracesHighlight(Range rangeLine, Position braces[]) {
-	if (rangeLine.ContainsCharacter(braces[0])) {
+void LineLayout::RestoreBracesHighlight(Range rangeLine, Position braces[], bool ignoreStyle) {
+	if (!ignoreStyle && rangeLine.ContainsCharacter(braces[0])) {
 		int braceOffset = braces[0] - rangeLine.start;
 		if (braceOffset < numCharsInLine) {
 			styles[braceOffset] = bracePreviousStyles[0];
 		}
 	}
-	if (rangeLine.ContainsCharacter(braces[1])) {
+	if (!ignoreStyle && rangeLine.ContainsCharacter(braces[1])) {
 		int braceOffset = braces[1] - rangeLine.start;
 		if (braceOffset < numCharsInLine) {
 			styles[braceOffset] = bracePreviousStyles[1];
@@ -391,18 +392,19 @@ static int NextBadU(const char *s, int p, int len, int &trailBytes) {
 	return -1;
 }
 
-BreakFinder::BreakFinder(LineLayout *ll_, int lineStart_, int lineEnd_, int posLineStart_, bool utf8_, int xStart, bool breakForSelection) :
+BreakFinder::BreakFinder(LineLayout *ll_, int lineStart_, int lineEnd_, int posLineStart_,
+	int xStart, bool breakForSelection, Document *pdoc_) :
 	ll(ll_),
 	lineStart(lineStart_),
 	lineEnd(lineEnd_),
 	posLineStart(posLineStart_),
-	utf8(utf8_),
 	nextBreak(lineStart_),
 	saeSize(0),
 	saeLen(0),
 	saeCurrentPos(0),
 	saeNext(0),
-	subBreak(-1) {
+	subBreak(-1),
+	pdoc(pdoc_) {
 	saeSize = 8;
 	selAndEdge = new int[saeSize];
 	for (unsigned int j=0; j < saeSize; j++) {
@@ -435,7 +437,7 @@ BreakFinder::BreakFinder(LineLayout *ll_, int lineStart_, int lineEnd_, int posL
 	Insert(ll->edgeColumn - 1);
 	Insert(lineEnd - 1);
 
-	if (utf8) {
+	if (pdoc && (SC_CP_UTF8 == pdoc->dbcsCodePage)) {
 		int trailBytes=0;
 		for (int pos = -1;;) {
 			pos = NextBadU(ll->chars, pos, lineEnd, trailBytes);
@@ -454,10 +456,6 @@ BreakFinder::~BreakFinder() {
 
 int BreakFinder::First() const {
 	return nextBreak;
-}
-
-static bool IsTrailByte(int ch) {
-	return (ch >= 0x80) && (ch < (0x80 + 0x40));
 }
 
 int BreakFinder::Next() {
@@ -490,34 +488,7 @@ int BreakFinder::Next() {
 		subBreak = -1;
 		return nextBreak;
 	} else {
-		int lastGoodBreak = -1;
-		int lastOKBreak = -1;
-		int lastUTF8Break = -1;
-		int j;
-		for (j = subBreak + 1; j <= nextBreak; j++) {
-			if (IsSpaceOrTab(ll->chars[j - 1]) && !IsSpaceOrTab(ll->chars[j])) {
-				lastGoodBreak = j;
-			}
-			if (static_cast<unsigned char>(ll->chars[j]) < 'A') {
-				lastOKBreak = j;
-			}
-			if (utf8 && !IsTrailByte(static_cast<unsigned char>(ll->chars[j]))) {
-				lastUTF8Break = j;
-			}
-			if (((j - subBreak) >= lengthEachSubdivision) &&
-				((lastGoodBreak >= 0) || (lastOKBreak >= 0) || (lastUTF8Break >= 0))) {
-				break;
-			}
-		}
-		if (lastGoodBreak >= 0) {
-			subBreak = lastGoodBreak;
-		} else if (lastOKBreak >= 0) {
-			subBreak = lastOKBreak;
-		} else if (lastUTF8Break >= 0) {
-			subBreak = lastUTF8Break;
-		} else {
-			subBreak = nextBreak;
-		}
+		subBreak += pdoc->SafeSegment(ll->chars + subBreak, nextBreak-subBreak, lengthEachSubdivision);
 		if (subBreak >= nextBreak) {
 			subBreak = -1;
 			return nextBreak;
@@ -571,16 +542,16 @@ bool PositionCacheEntry::Retrieve(unsigned int styleNumber_, const char *s_,
 	}
 }
 
-int PositionCacheEntry::Hash(unsigned int styleNumber, const char *s, unsigned int len) {
+int PositionCacheEntry::Hash(unsigned int styleNumber_, const char *s, unsigned int len_) {
 	unsigned int ret = s[0] << 7;
-	for (unsigned int i=0; i<len; i++) {
+	for (unsigned int i=0; i<len_; i++) {
 		ret *= 1000003;
 		ret ^= s[i];
 	}
 	ret *= 1000003;
-	ret ^= len;
+	ret ^= len_;
 	ret *= 1000003;
-	ret ^= styleNumber;
+	ret ^= styleNumber_;
 	return ret;
 }
 
@@ -624,7 +595,8 @@ void PositionCache::SetSize(size_t size_) {
 }
 
 void PositionCache::MeasureWidths(Surface *surface, ViewStyle &vstyle, unsigned int styleNumber,
-	const char *s, unsigned int len, int *positions) {
+	const char *s, unsigned int len, int *positions, Document *pdoc) {
+
 	allClear = false;
 	int probe = -1;
 	if ((size > 0) && (len < 30)) {
@@ -633,11 +605,11 @@ void PositionCache::MeasureWidths(Surface *surface, ViewStyle &vstyle, unsigned 
 
 		// Two way associative: try two probe positions.
 		int hashValue = PositionCacheEntry::Hash(styleNumber, s, len);
-		probe = hashValue % size;
+		probe = static_cast<int>(hashValue % size);
 		if (pces[probe].Retrieve(styleNumber, s, len, positions)) {
 			return;
 		}
-		int probe2 = (hashValue * 37) % size;
+		int probe2 = static_cast<int>((hashValue * 37) % size);
 		if (pces[probe2].Retrieve(styleNumber, s, len, positions)) {
 			return;
 		}
@@ -646,7 +618,22 @@ void PositionCache::MeasureWidths(Surface *surface, ViewStyle &vstyle, unsigned 
 			probe = probe2;
 		}
 	}
-	surface->MeasureWidths(vstyle.styles[styleNumber].font, s, len, positions);
+	if (len > BreakFinder::lengthStartSubdivision) {
+		// Break up into segments
+		unsigned int startSegment = 0;
+		int xStartSegment = 0;
+		while (startSegment < len) {
+			unsigned int lenSegment = pdoc->SafeSegment(s + startSegment, len - startSegment, BreakFinder::lengthEachSubdivision);
+			surface->MeasureWidths(vstyle.styles[styleNumber].font, s + startSegment, lenSegment, positions + startSegment);
+			for (unsigned int inSeg = 0; inSeg < lenSegment; inSeg++) {
+				positions[startSegment + inSeg] += xStartSegment;
+			}
+			xStartSegment = positions[startSegment + lenSegment - 1];
+			startSegment += lenSegment;
+		}
+	} else {
+		surface->MeasureWidths(vstyle.styles[styleNumber].font, s, len, positions);
+	}
 	if (probe >= 0) {
 		clock++;
 		if (clock > 60000) {

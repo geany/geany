@@ -82,6 +82,7 @@
 #define GEANY_TOGGLE_MARK				"~ "
 #define GEANY_MAX_AUTOCOMPLETE_WORDS	30
 #define GEANY_MAX_SYMBOLS_UPDATE_FREQ	250
+#define GEANY_DEFAULT_FILETYPE_REGEX    "-\\*-\\s*([^\\s]+)\\s*-\\*-"
 
 
 static gchar *scribble_text = NULL;
@@ -218,6 +219,8 @@ static void init_pref_groups(void)
 		"indent_hard_tab_width", 8);
 	stash_group_add_integer(group, (gint*)&search_prefs.find_selection_type,
 		"find_selection_type", GEANY_FIND_SEL_CURRENT_WORD);
+	stash_group_add_string(group, &file_prefs.extract_filetype_regex,
+		"extract_filetype_regex", GEANY_DEFAULT_FILETYPE_REGEX);
 
 	/* Note: Interface-related various prefs are in ui_init_prefs() */
 
@@ -290,18 +293,14 @@ static gchar *get_session_file_string(GeanyDocument *doc)
 {
 	gchar *fname;
 	gchar *locale_filename;
+	gchar *escaped_filename;
 	GeanyFiletype *ft = doc->file_type;
 
 	if (ft == NULL) /* can happen when saving a new file when quitting */
 		ft = filetypes[GEANY_FILETYPES_NONE];
 
 	locale_filename = utils_get_locale_from_utf8(doc->file_name);
-	/* If the filename contains any ';' (semi-colons) we need to escape them otherwise
-	 * g_key_file_get_string_list() would fail reading them, so we replace them before
-	 * writing with usual colons which must never appear in a filename and replace them
-	 * back when we read the file again from the file.
-	 * (g_path_skip_root() to skip C:\... on Windows) */
-	g_strdelimit((gchar*) utils_path_skip_root(locale_filename), ";", ':');
+	escaped_filename = g_uri_escape_string(locale_filename, NULL, TRUE);
 
 	fname = g_strdup_printf("%d;%s;%d;%d;%d;%d;%d;%s;%d;%d",
 		sci_get_current_position(doc->editor->sci),
@@ -311,9 +310,10 @@ static gchar *get_session_file_string(GeanyDocument *doc)
 		doc->editor->indent_type,
 		doc->editor->auto_indent,
 		doc->editor->line_wrapping,
-		locale_filename,
+		escaped_filename,
 		doc->editor->line_breaking,
 		doc->editor->indent_width);
+	g_free(escaped_filename);
 	g_free(locale_filename);
 	return fname;
 }
@@ -1016,6 +1016,7 @@ static gboolean open_session_file(gchar **tmp, guint len)
 	guint pos;
 	const gchar *ft_name;
 	gchar *locale_filename;
+	gchar *unescaped_filename;
 	gint enc_idx, indent_type;
 	gboolean ro, auto_indent, line_wrapping;
 	/** TODO when we have a global pref for line breaking, use its value */
@@ -1030,9 +1031,8 @@ static gboolean open_session_file(gchar **tmp, guint len)
 	auto_indent = atoi(tmp[5]);
 	line_wrapping = atoi(tmp[6]);
 	/* try to get the locale equivalent for the filename */
-	locale_filename = utils_get_locale_from_utf8(tmp[7]);
-	/* replace ':' back with ';' (see get_session_file_string for details) */
-	g_strdelimit((gchar*) utils_path_skip_root(locale_filename), ":", ';');
+	unescaped_filename = g_uri_unescape_string(tmp[7], NULL);
+	locale_filename = utils_get_locale_from_utf8(unescaped_filename);
 
 	if (len > 8)
 		line_breaking = atoi(tmp[8]);
@@ -1064,6 +1064,7 @@ static gboolean open_session_file(gchar **tmp, guint len)
 	}
 
 	g_free(locale_filename);
+	g_free(unescaped_filename);
 	return ret;
 }
 

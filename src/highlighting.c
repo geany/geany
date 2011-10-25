@@ -1173,12 +1173,20 @@ static void styleset_erlang(ScintillaObject *sci, gint ft_id)
 
 static void styleset_latex_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
 {
-	new_styleset(ft_id, 5);
+	new_styleset(ft_id, 13);
 	get_keyfile_style(config, config_home, "default", &style_sets[ft_id].styling[0]);
 	get_keyfile_style(config, config_home, "command", &style_sets[ft_id].styling[1]);
 	get_keyfile_style(config, config_home, "tag", &style_sets[ft_id].styling[2]);
 	get_keyfile_style(config, config_home, "math", &style_sets[ft_id].styling[3]);
 	get_keyfile_style(config, config_home, "comment", &style_sets[ft_id].styling[4]);
+	get_keyfile_style(config, config_home, "tag2", &style_sets[ft_id].styling[5]);
+	get_keyfile_style(config, config_home, "math2", &style_sets[ft_id].styling[6]);
+	get_keyfile_style(config, config_home, "comment2", &style_sets[ft_id].styling[7]);
+	get_keyfile_style(config, config_home, "verbatim", &style_sets[ft_id].styling[8]);
+	get_keyfile_style(config, config_home, "shortcmd", &style_sets[ft_id].styling[9]);
+	get_keyfile_style(config, config_home, "special", &style_sets[ft_id].styling[10]);
+	get_keyfile_style(config, config_home, "cmdopt", &style_sets[ft_id].styling[11]);
+	get_keyfile_style(config, config_home, "error", &style_sets[ft_id].styling[12]);
 
 	style_sets[ft_id].keywords = g_new(gchar*, 2);
 	get_keyfile_keywords(config, config_home, "primary", ft_id, 0);
@@ -1198,6 +1206,14 @@ static void styleset_latex(ScintillaObject *sci, gint ft_id)
 	set_sci_style(sci, SCE_L_TAG, ft_id, 2);
 	set_sci_style(sci, SCE_L_MATH, ft_id, 3);
 	set_sci_style(sci, SCE_L_COMMENT, ft_id, 4);
+	set_sci_style(sci, SCE_L_TAG2, ft_id, 5);
+	set_sci_style(sci, SCE_L_MATH2, ft_id, 6);
+	set_sci_style(sci, SCE_L_COMMENT2, ft_id, 7);
+	set_sci_style(sci, SCE_L_VERBATIM, ft_id, 8);
+	set_sci_style(sci, SCE_L_SHORTCMD, ft_id, 9);
+	set_sci_style(sci, SCE_L_SPECIAL, ft_id, 10);
+	set_sci_style(sci, SCE_L_CMDOPT, ft_id, 11);
+	set_sci_style(sci, SCE_L_ERROR, ft_id, 12);
 }
 
 
@@ -1495,7 +1511,7 @@ static void styleset_java(ScintillaObject *sci, gint ft_id)
 
 static void styleset_perl_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
 {
-	new_styleset(ft_id, 35);
+	new_styleset(ft_id, 45);
 	get_keyfile_style(config, config_home, "default", &style_sets[ft_id].styling[0]);
 	get_keyfile_style(config, config_home, "error", &style_sets[ft_id].styling[1]);
 	get_keyfile_style(config, config_home, "commentline", &style_sets[ft_id].styling[2]);
@@ -1531,6 +1547,16 @@ static void styleset_perl_init(gint ft_id, GKeyFile *config, GKeyFile *config_ho
 	get_keyfile_style(config, config_home, "sub_prototype", &style_sets[ft_id].styling[32]);
 	get_keyfile_style(config, config_home, "format_ident", &style_sets[ft_id].styling[33]);
 	get_keyfile_style(config, config_home, "format", &style_sets[ft_id].styling[34]);
+	get_keyfile_style(config, config_home, "string_var", &style_sets[ft_id].styling[35]);
+	get_keyfile_style(config, config_home, "xlat", &style_sets[ft_id].styling[36]);
+	get_keyfile_style(config, config_home, "regex_var", &style_sets[ft_id].styling[37]);
+	get_keyfile_style(config, config_home, "regsubst_var", &style_sets[ft_id].styling[38]);
+	get_keyfile_style(config, config_home, "backticks_var", &style_sets[ft_id].styling[39]);
+	get_keyfile_style(config, config_home, "here_qq_var", &style_sets[ft_id].styling[40]);
+	get_keyfile_style(config, config_home, "here_qx_var", &style_sets[ft_id].styling[41]);
+	get_keyfile_style(config, config_home, "string_qq_var", &style_sets[ft_id].styling[42]);
+	get_keyfile_style(config, config_home, "string_qx_var", &style_sets[ft_id].styling[43]);
+	get_keyfile_style(config, config_home, "string_qr_var", &style_sets[ft_id].styling[44]);
 
 
 	style_sets[ft_id].keywords = g_new(gchar*, 2);
@@ -1581,6 +1607,16 @@ static void styleset_perl(ScintillaObject *sci, gint ft_id)
 	set_sci_style(sci, SCE_PL_SUB_PROTOTYPE, ft_id, 32);
 	set_sci_style(sci, SCE_PL_FORMAT_IDENT, ft_id, 33);
 	set_sci_style(sci, SCE_PL_FORMAT, ft_id, 34);
+	set_sci_style(sci, SCE_PL_STRING_VAR, ft_id, 35);
+	set_sci_style(sci, SCE_PL_XLAT, ft_id, 36);
+	set_sci_style(sci, SCE_PL_REGEX_VAR, ft_id, 37);
+	set_sci_style(sci, SCE_PL_REGSUBST_VAR, ft_id, 38);
+	set_sci_style(sci, SCE_PL_BACKTICKS_VAR, ft_id, 39);
+	set_sci_style(sci, SCE_PL_HERE_QQ_VAR, ft_id, 40);
+	set_sci_style(sci, SCE_PL_HERE_QX_VAR, ft_id, 41);
+	set_sci_style(sci, SCE_PL_STRING_QQ_VAR, ft_id, 42);
+	set_sci_style(sci, SCE_PL_STRING_QX_VAR, ft_id, 43);
+	set_sci_style(sci, SCE_PL_STRING_QR_VAR, ft_id, 44);
 }
 
 
@@ -3065,7 +3101,7 @@ static void styleset_js(ScintillaObject *sci, gint ft_id)
 
 static void styleset_lua_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
 {
-	new_styleset(ft_id, 20);
+	new_styleset(ft_id, 21);
 
 	get_keyfile_style(config, config_home, "default", &style_sets[ft_id].styling[0]);
 	get_keyfile_style(config, config_home, "comment", &style_sets[ft_id].styling[1]);
@@ -3087,6 +3123,7 @@ static void styleset_lua_init(gint ft_id, GKeyFile *config, GKeyFile *config_hom
 	get_keyfile_style(config, config_home, "word6", &style_sets[ft_id].styling[17]);
 	get_keyfile_style(config, config_home, "word7", &style_sets[ft_id].styling[18]);
 	get_keyfile_style(config, config_home, "word8", &style_sets[ft_id].styling[19]);
+	get_keyfile_style(config, config_home, "label", &style_sets[ft_id].styling[20]);
 
 	style_sets[ft_id].keywords = g_new(gchar*, 9);
 	get_keyfile_keywords(config, config_home, "keywords", ft_id, 0);
@@ -3135,6 +3172,7 @@ static void styleset_lua(ScintillaObject *sci, gint ft_id)
 	set_sci_style(sci, SCE_LUA_WORD6, ft_id, 17);
 	set_sci_style(sci, SCE_LUA_WORD7, ft_id, 18);
 	set_sci_style(sci, SCE_LUA_WORD8, ft_id, 19);
+	set_sci_style(sci, SCE_LUA_LABEL, ft_id, 20);
 }
 
 
@@ -3726,7 +3764,7 @@ gboolean highlighting_is_string_style(gint lexer, gint style)
 				style == SCE_F_STRINGEOL);
 
 		case SCLEX_PERL:
-			return (/*style == SCE_PL_STRING ||*/ /* may want variable autocompletion "$(foo)" */
+			return (style == SCE_PL_STRING ||
 				style == SCE_PL_CHARACTER ||
 				style == SCE_PL_HERE_DELIM ||
 				style == SCE_PL_HERE_Q ||
@@ -3738,7 +3776,9 @@ gboolean highlighting_is_string_style(gint lexer, gint style)
 				style == SCE_PL_STRING_QX ||
 				style == SCE_PL_STRING_QR ||
 				style == SCE_PL_STRING_QW ||
-				style == SCE_PL_POD_VERB);
+				style == SCE_PL_POD_VERB ||
+				style == SCE_PL_XLAT
+				/* we don't include any STRING_*_VAR for autocompletion */);
 
 		case SCLEX_R:
 			return (style == SCE_R_STRING);
@@ -3882,7 +3922,8 @@ gboolean highlighting_is_comment_style(gint lexer, gint style)
 			return (style == SCE_PO_COMMENT);
 
 		case SCLEX_LATEX:
-			return (style == SCE_L_COMMENT);
+			return (style == SCE_L_COMMENT ||
+				style == SCE_L_COMMENT2);
 
 		case SCLEX_MAKEFILE:
 			return (style == SCE_MAKE_COMMENT);

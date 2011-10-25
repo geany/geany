@@ -3,7 +3,7 @@
 # Edit these in the colorscheme .conf file instead
 default=default
 comment=comment
-commentline=comment
+commentline=comment_line
 commentdoc=comment_doc
 number=number_1
 word=keyword_1
@@ -17,7 +17,7 @@ identifier=identifier_1
 stringeol=string_eol
 verbatim=string_2
 regex=regex
-commentlinedoc=comment_doc
+commentlinedoc=comment_line_doc
 commentdockeyword=comment_doc_keyword
 commentdockeyworderror=comment_doc_keyword_error
 globalclass=class

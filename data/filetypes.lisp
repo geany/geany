@@ -2,7 +2,7 @@
 [styling]
 # Edit these in the colorscheme .conf file instead
 default=default
-comment=comment
+comment=comment_line
 multicomment=comment
 number=number_1
 keyword=keyword_1

@@ -16,7 +16,6 @@
 #include "Scintilla.h"
 #include "SciLexer.h"
 
-#include "PropSetSimple.h"
 #include "WordList.h"
 #include "LexAccessor.h"
 #include "Accessor.h"
@@ -1729,7 +1728,13 @@ static void FoldRbDoc(unsigned int startPos, int length, int initStyle,
                           ) {
 				levelCurrent++;
             }
-        }
+		} else if (style == SCE_RB_HERE_DELIM) {
+			if (styler.SafeGetCharAt(i-2) == '<' && styler.SafeGetCharAt(i-1) == '<') {
+				levelCurrent++;
+			} else if (styleNext == SCE_RB_DEFAULT) {
+				levelCurrent--;
+			}
+		}
 		if (atEOL) {
 			int lev = levelPrev;
 			if (visibleChars == 0 && foldCompact)
@@ -1765,4 +1770,4 @@ static const char * const rubyWordListDesc[] = {
 	0
 };
 
-LexerModule lmRuby(SCLEX_RUBY, ColouriseRbDoc, "ruby", FoldRbDoc, rubyWordListDesc);
+LexerModule lmRuby(SCLEX_RUBY, ColouriseRbDoc, "ruby", FoldRbDoc, rubyWordListDesc, 6);

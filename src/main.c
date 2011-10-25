@@ -479,6 +479,18 @@ static void print_filetypes(void)
 }
 
 
+static void wait_for_input_on_windows(void)
+{
+#ifdef G_OS_WIN32
+	if (verbose_mode)
+	{
+		geany_debug("Press any key to continue");
+		getchar();
+	}
+#endif
+}
+
+
 static void parse_command_line_options(gint *argc, gchar ***argv)
 {
 	GError *error = NULL;
@@ -514,6 +526,12 @@ static void parse_command_line_options(gint *argc, gchar ***argv)
 		exit(1);
 	}
 
+	app->debug_mode = verbose_mode;
+
+#ifdef G_OS_WIN32
+	win32_init_debug_code();
+#endif
+
 	if (show_version)
 	{
 		printf(PACKAGE " %s (", main_get_version_string());
@@ -523,6 +541,7 @@ static void parse_command_line_options(gint *argc, gchar ***argv)
 			GTK_MAJOR_VERSION, GTK_MINOR_VERSION, GTK_MICRO_VERSION,
 			GLIB_MAJOR_VERSION, GLIB_MINOR_VERSION, GLIB_MICRO_VERSION);
 		printf(")\n");
+		wait_for_input_on_windows();
 		exit(0);
 	}
 
@@ -532,14 +551,9 @@ static void parse_command_line_options(gint *argc, gchar ***argv)
 		printf("%s\n", GEANY_DATADIR);
 		printf("%s\n", GEANY_LIBDIR);
 		printf("%s\n", GEANY_LOCALEDIR);
+		wait_for_input_on_windows();
 		exit(0);
 	}
-
-	app->debug_mode = verbose_mode;
-
-#ifdef G_OS_WIN32
-	win32_init_debug_code();
-#endif
 
 	if (alternate_config)
 	{
@@ -558,12 +572,14 @@ static void parse_command_line_options(gint *argc, gchar ***argv)
 		filetypes_init_types();
 		ret = symbols_generate_global_tags(*argc, *argv, ! no_preprocessing);
 		filetypes_free_types();
+		wait_for_input_on_windows();
 		exit(ret);
 	}
 
 	if (ft_names)
 	{
 		print_filetypes();
+		wait_for_input_on_windows();
 		exit(0);
 	}
 

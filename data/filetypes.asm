@@ -2,7 +2,7 @@
 [styling]
 # Edit these in the colorscheme .conf file instead
 default=default
-comment=comment
+comment=comment_line
 number=number_1
 string=string_1
 operator=operator
