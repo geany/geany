@@ -57,7 +57,7 @@ GEANY_CHECK_REVISION([dnl force debug mode for a SVN working copy
 
 
 # GTK/GLib/GIO checks
-gtk_modules="gtk+-2.0 >= 2.12 glib-2.0 >= 2.16 gio-2.0 >= 2.16"
+gtk_modules="gtk+-2.0 >= 2.16 glib-2.0 >= 2.19.7 gio-2.0 >= 2.19.7"
 PKG_CHECK_MODULES([GTK], [$gtk_modules])
 AC_SUBST([GTK_CFLAGS])
 AC_SUBST([GTK_LIBS])

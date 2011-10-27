@@ -1871,23 +1871,21 @@ gboolean utils_is_remote_path(const gchar *path)
 		return TRUE;
 
 #ifndef G_OS_WIN32
-	if (glib_check_version(2, 16, 0) == NULL) /* no need to check for this with GLib < 2.16 */
-	{
-		static gchar *fuse_path = NULL;
-		static gsize len = 0;
+	static gchar *fuse_path = NULL;
+	static gsize len = 0;
 
-		if (G_UNLIKELY(fuse_path == NULL))
-		{
-			fuse_path = g_build_filename(g_get_home_dir(), ".gvfs", NULL);
-			len = strlen(fuse_path);
-		}
-		/* Comparing the file path against a hardcoded path is not the most elegant solution
-		 * but for now it is better than nothing. Ideally, g_file_new_for_path() should create
-		 * proper GFile objects for Fuse paths, but it only does in future GVFS
-		 * versions (gvfs 1.1.1). */
-		return (strncmp(path, fuse_path, len) == 0);
+	if (G_UNLIKELY(fuse_path == NULL))
+	{
+		fuse_path = g_build_filename(g_get_home_dir(), ".gvfs", NULL);
+		len = strlen(fuse_path);
 	}
+	/* Comparing the file path against a hardcoded path is not the most elegant solution
+	 * but for now it is better than nothing. Ideally, g_file_new_for_path() should create
+	 * proper GFile objects for Fuse paths, but it only does in future GVFS
+	 * versions (gvfs 1.1.1). */
+	return (strncmp(path, fuse_path, len) == 0);
 #endif
+
 	return FALSE;
 }
 
