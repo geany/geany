@@ -1117,7 +1117,7 @@ static void add_recent_file(const gchar *utf8_filename, GeanyRecentFiles *grf)
 {
 	if (g_queue_find_custom(grf->recent_queue, utf8_filename, (GCompareFunc) strcmp) == NULL)
 	{
-#if GTK_CHECK_VERSION(2, 10, 0)
+
 		if (grf->type == RECENT_FILE_FILE)
 		{
 			GtkRecentManager *manager = gtk_recent_manager_get_default();
@@ -1128,7 +1128,7 @@ static void add_recent_file(const gchar *utf8_filename, GeanyRecentFiles *grf)
 				g_free(uri);
 			}
 		}
-#endif
+
 		g_queue_push_head(grf->recent_queue, g_strdup(utf8_filename));
 		if (g_queue_get_length(grf->recent_queue) > file_prefs.mru_length)
 		{
@@ -1421,21 +1421,14 @@ static void entry_clear_icon_release_cb(GtkEntry *entry, gint icon_pos,
 /** Adds a small clear icon to the right end of the passed @a entry.
  *  A callback to clear the contents of the GtkEntry is automatically added.
  *
- *  This feature is only available with GTK 2.16 but implemented as a runtime check,
- *  so it is safe to just use this function, if the code is ran with older versions,
- *  nothing happens. If ran with GTK 2.16 or newer, the icon is displayed.
- *
  * @param entry The GtkEntry object to which the icon should be attached.
  *
  *  @since 0.16
  */
 void ui_entry_add_clear_icon(GtkEntry *entry)
 {
-	if (gtk_check_version(2, 15, 2) == NULL)
-	{
-		g_object_set(entry, "secondary-icon-stock", "gtk-clear", NULL);
-		g_signal_connect(entry, "icon-release", G_CALLBACK(entry_clear_icon_release_cb), NULL);
-	}
+	g_object_set(entry, "secondary-icon-stock", "gtk-clear", NULL);
+	g_signal_connect(entry, "icon-release", G_CALLBACK(entry_clear_icon_release_cb), NULL);
 }
 
 
@@ -2532,7 +2525,6 @@ void ui_editable_insert_text_callback(GtkEditable *editable, gchar *new_text,
 GdkPixbuf *ui_get_mime_icon(const gchar *mime_type, GtkIconSize size)
 {
 	GdkPixbuf *icon = NULL;
-#if GTK_CHECK_VERSION(2, 14, 0)
 	gchar *ctype;
 	GIcon *gicon;
 	GtkIconInfo *info;
@@ -2558,7 +2550,7 @@ GdkPixbuf *ui_get_mime_icon(const gchar *mime_type, GtkIconSize size)
 			gtk_icon_info_free(info);
 		}
 	}
-#endif
+
 	/* fallback for builds with GIO < 2.18 or if icon lookup failed, like it might happen on Windows */
 	if (icon == NULL)
 	{
