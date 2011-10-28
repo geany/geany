@@ -138,9 +138,9 @@ def configure(conf):
     _load_intltool_if_available(conf)
 
     # GTK / GIO version check
-    conf.check_cfg(package='gtk+-2.0', atleast_version='2.12.0', uselib_store='GTK',
+    conf.check_cfg(package='gtk+-2.0', atleast_version='2.16.0', uselib_store='GTK',
         mandatory=True, args='--cflags --libs')
-    conf.check_cfg(package='glib-2.0', atleast_version='2.16.0', uselib_store='GLIB',
+    conf.check_cfg(package='glib-2.0', atleast_version='2.19.7', uselib_store='GLIB',
         mandatory=True, args='--cflags --libs')
     conf.check_cfg(package='gio-2.0', uselib_store='GIO', args='--cflags --libs', mandatory=True)
     gtk_version = conf.check_cfg(modversion='gtk+-2.0', uselib_store='GTK') or 'Unknown'
