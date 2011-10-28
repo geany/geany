@@ -1032,6 +1032,7 @@ static gboolean create_class(CreateClassDialog *cc_dlg)
 		text = get_template_class_source(class_info);
 		editor_insert_text_block(doc->editor, text, 0, -1, 0, TRUE);
 		g_free(text);
+		sci_set_current_position(doc->editor->sci, 0, TRUE);
 	}
 
 	if (! utils_str_equal(class_info->header, "") && class_info->type != GEANY_CLASS_TYPE_PHP)
@@ -1040,6 +1041,7 @@ static gboolean create_class(CreateClassDialog *cc_dlg)
 		text = get_template_class_header(class_info);
 		editor_insert_text_block(doc->editor, text, 0, -1, 0, TRUE);
 		g_free(text);
+		sci_set_current_position(doc->editor->sci, 0, TRUE);
 	}
 
 	free_pointers(24, tmp, class_info->namespace, class_info->namespace_up,
