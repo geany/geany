@@ -1427,7 +1427,7 @@ static void entry_clear_icon_release_cb(GtkEntry *entry, gint icon_pos,
  */
 void ui_entry_add_clear_icon(GtkEntry *entry)
 {
-	g_object_set(entry, "secondary-icon-stock", "gtk-clear", NULL);
+	g_object_set(entry, "secondary-icon-stock", GTK_STOCK_CLEAR, NULL);
 	g_signal_connect(entry, "icon-release", G_CALLBACK(entry_clear_icon_release_cb), NULL);
 }
 

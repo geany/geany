@@ -1627,21 +1627,21 @@ static void set_stop_button(gboolean stop)
 	if (run_button != NULL)
 		button_stock_id = gtk_tool_button_get_stock_id(run_button);
 
-	if (stop && utils_str_equal(button_stock_id, "gtk-stop"))
+	if (stop && utils_str_equal(button_stock_id, GTK_STOCK_STOP))
 		return;
-	if (! stop && utils_str_equal(button_stock_id, "gtk-execute"))
+	if (! stop && utils_str_equal(button_stock_id, GTK_STOCK_EXECUTE))
 		return;
 
 	 /* use the run button also as stop button  */
 	if (stop)
 	{
 		if (run_button != NULL)
-			gtk_tool_button_set_stock_id(run_button, "gtk-stop");
+			gtk_tool_button_set_stock_id(run_button, GTK_STOCK_STOP);
 	}
 	else
 	{
 		if (run_button != NULL)
-			gtk_tool_button_set_stock_id(run_button, "gtk-execute");
+			gtk_tool_button_set_stock_id(run_button, GTK_STOCK_EXECUTE);
 	}
 }
 

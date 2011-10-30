@@ -597,7 +597,7 @@ void sidebar_add_common_menu_items(GtkMenu *menu)
 
 	item = gtk_image_menu_item_new_with_mnemonic(_("H_ide Sidebar"));
 	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item),
-		gtk_image_new_from_stock("gtk-close", GTK_ICON_SIZE_MENU));
+		gtk_image_new_from_stock(GTK_STOCK_CLOSE, GTK_ICON_SIZE_MENU));
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	g_signal_connect(item, "activate", G_CALLBACK(on_hide_sidebar), NULL);
@@ -658,7 +658,7 @@ static void create_openfiles_popup_menu(void)
 
 	openfiles_popup_menu = gtk_menu_new();
 
-	item = gtk_image_menu_item_new_from_stock("gtk-close", NULL);
+	item = gtk_image_menu_item_new_from_stock(GTK_STOCK_CLOSE, NULL);
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(openfiles_popup_menu), item);
 	g_signal_connect(item, "activate",
@@ -669,7 +669,7 @@ static void create_openfiles_popup_menu(void)
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(openfiles_popup_menu), item);
 
-	item = gtk_image_menu_item_new_from_stock("gtk-save", NULL);
+	item = gtk_image_menu_item_new_from_stock(GTK_STOCK_SAVE, NULL);
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(openfiles_popup_menu), item);
 	g_signal_connect(item, "activate",
@@ -678,7 +678,7 @@ static void create_openfiles_popup_menu(void)
 
 	item = gtk_image_menu_item_new_with_mnemonic(_("_Reload"));
 	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item),
-		gtk_image_new_from_stock("gtk-revert-to-saved", GTK_ICON_SIZE_MENU));
+		gtk_image_new_from_stock(GTK_STOCK_REVERT_TO_SAVED, GTK_ICON_SIZE_MENU));
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(openfiles_popup_menu), item);
 	g_signal_connect(item, "activate",

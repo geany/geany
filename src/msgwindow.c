@@ -547,7 +547,7 @@ static GtkWidget *create_message_popup_menu(gint type)
 
 	message_popup_menu = gtk_menu_new();
 
-	clear = gtk_image_menu_item_new_from_stock("gtk-clear", NULL);
+	clear = gtk_image_menu_item_new_from_stock(GTK_STOCK_CLEAR, NULL);
 	gtk_widget_show(clear);
 	gtk_container_add(GTK_CONTAINER(message_popup_menu), clear);
 	g_signal_connect(clear, "activate",
@@ -556,7 +556,7 @@ static GtkWidget *create_message_popup_menu(gint type)
 	copy = gtk_image_menu_item_new_with_mnemonic(_("C_opy"));
 	gtk_widget_show(copy);
 	gtk_container_add(GTK_CONTAINER(message_popup_menu), copy);
-	image = gtk_image_new_from_stock("gtk-copy", GTK_ICON_SIZE_MENU);
+	image = gtk_image_new_from_stock(GTK_STOCK_COPY, GTK_ICON_SIZE_MENU);
 	gtk_widget_show(image);
 	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(copy), image);
 	g_signal_connect(copy, "activate",
@@ -565,7 +565,7 @@ static GtkWidget *create_message_popup_menu(gint type)
 	copy_all = gtk_image_menu_item_new_with_mnemonic(_("Copy _All"));
 	gtk_widget_show(copy_all);
 	gtk_container_add(GTK_CONTAINER(message_popup_menu), copy_all);
-	image = gtk_image_new_from_stock("gtk-copy", GTK_ICON_SIZE_MENU);
+	image = gtk_image_new_from_stock(GTK_STOCK_COPY, GTK_ICON_SIZE_MENU);
 	gtk_widget_show(image);
 	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(copy_all), image);
 	g_signal_connect(copy_all, "activate",

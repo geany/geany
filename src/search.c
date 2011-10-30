@@ -874,7 +874,7 @@ static void create_fif_dialog(void)
 	gtk_box_set_spacing(GTK_BOX(vbox), 9);
 	gtk_widget_set_name(fif_dlg.dialog, "GeanyDialogSearch");
 
-	gtk_dialog_add_button(GTK_DIALOG(fif_dlg.dialog), "gtk-find", GTK_RESPONSE_ACCEPT);
+	gtk_dialog_add_button(GTK_DIALOG(fif_dlg.dialog), GTK_STOCK_FIND, GTK_RESPONSE_ACCEPT);
 	gtk_dialog_set_default_response(GTK_DIALOG(fif_dlg.dialog),
 		GTK_RESPONSE_ACCEPT);
 
