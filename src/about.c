@@ -61,7 +61,6 @@ const gchar *translators[][2] = {
 	{ "kk", "Baurzhan Muftakhidinov &lt;baurthefirst@gmail.com&gt;"},
 	{ "lb", "Laurent Hoeltgen &lt;hoeltgman@gmail.com&gt;" },
 	{ "nl", "Peter Scholtens &lt;peter.scholtens@xs4all.nl&gt;\nAyke van Laethem &lt;aykevanlaethem@gmail.com&gt;" },
-	{ "pl_PL", "Jarosław Foksa &lt;jfoksa@gmail.com&gt;" },
 	{ "pt_BR", "Alexandra Moreire &lt;alexandream@gmail.com&gt;\n"
 			   "Adrovane Marques Kade &lt;adrovane@gmail.com&gt;\n"
 			   "Rafael Peregrino da Silva &lt;rperegrino@linuxnewmedia.com.br&gt;"},
@@ -79,7 +78,7 @@ static const gint translators_len = G_N_ELEMENTS(translators);
 
 const gchar *prev_translators[][2] = {
 	{ "es", "Damián Viano &lt;debian@damianv.com.ar&gt;\nNacho Cabanes &lt;ncabanes@gmail.com&gt;" },
-	{ "pl_PL", "Jacek Wolszczak &lt;shutdownrunner@o2.pl&gt;" },
+	{ "pl_PL", "Jacek Wolszczak &lt;shutdownrunner@o2.pl&gt;\nJarosław Foksa &lt;jfoksa@gmail.com&gt;" },
 	{ "nl", "Kurt De Bree &lt;kdebree@telenet.be&gt;" }
 };
 static const gint prev_translators_len = G_N_ELEMENTS(prev_translators);
