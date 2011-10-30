@@ -57,8 +57,10 @@ static struct
 	GtkWidget *reload;
 	GtkWidget *show_paths;
 	GtkWidget *find_in_files;
+	GtkWidget *expand_all;
+	GtkWidget *collapse_all;
 }
-doc_items = {NULL, NULL, NULL, NULL, NULL};
+doc_items = {NULL, NULL, NULL, NULL, NULL, NULL, NULL};
 
 enum
 {
@@ -652,6 +654,17 @@ static void on_find_in_files(GtkMenuItem *menuitem, gpointer user_data)
 }
 
 
+static void on_openfiles_expand_collapse(GtkMenuItem *menuitem, gpointer user_data)
+{
+	gboolean expand = GPOINTER_TO_INT(user_data);
+
+	if (expand)
+		gtk_tree_view_expand_all(GTK_TREE_VIEW(tv.tree_openfiles));
+	else
+		gtk_tree_view_collapse_all(GTK_TREE_VIEW(tv.tree_openfiles));
+}
+
+
 static void create_openfiles_popup_menu(void)
 {
 	GtkWidget *item;
@@ -705,6 +718,22 @@ static void create_openfiles_popup_menu(void)
 	gtk_container_add(GTK_CONTAINER(openfiles_popup_menu), doc_items.show_paths);
 	g_signal_connect(doc_items.show_paths, "activate",
 			G_CALLBACK(on_openfiles_show_paths_activate), NULL);
+
+	item = gtk_separator_menu_item_new();
+	gtk_widget_show(item);
+	gtk_container_add(GTK_CONTAINER(openfiles_popup_menu), item);
+
+	doc_items.expand_all = ui_image_menu_item_new(GTK_STOCK_ADD, _("_Expand All"));
+	gtk_widget_show(doc_items.expand_all);
+	gtk_container_add(GTK_CONTAINER(openfiles_popup_menu), doc_items.expand_all);
+	g_signal_connect(doc_items.expand_all, "activate",
+					 G_CALLBACK(on_openfiles_expand_collapse), GINT_TO_POINTER(TRUE));
+
+	doc_items.collapse_all = ui_image_menu_item_new(GTK_STOCK_REMOVE, _("_Collapse All"));
+	gtk_widget_show(doc_items.collapse_all);
+	gtk_container_add(GTK_CONTAINER(openfiles_popup_menu), doc_items.collapse_all);
+	g_signal_connect(doc_items.collapse_all, "activate",
+					 G_CALLBACK(on_openfiles_expand_collapse), GINT_TO_POINTER(FALSE));
 
 	sidebar_add_common_menu_items(GTK_MENU(openfiles_popup_menu));
 }
@@ -996,8 +1025,9 @@ static void documents_menu_update(GtkTreeSelection *selection)
 	gtk_widget_set_sensitive(doc_items.find_in_files, sel);
 	g_free(shortname);
 
-	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(doc_items.show_paths),
-		documents_show_paths);
+	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(doc_items.show_paths), documents_show_paths);
+	gtk_widget_set_sensitive(doc_items.expand_all, documents_show_paths);
+	gtk_widget_set_sensitive(doc_items.collapse_all, documents_show_paths);
 }
 
 
