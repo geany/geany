@@ -1292,12 +1292,11 @@ static void update_recent_menu(GeanyRecentFiles *grf)
 
 void ui_toggle_editor_features(GeanyUIEditorFeatures feature)
 {
-	gint i, max = gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook));
-	GeanyDocument *doc;
+	guint i;
 
-	for (i = 0; i < max; i++)
+	foreach_document (i)
 	{
-		doc = document_get_from_page(i);
+		GeanyDocument *doc = documents[i];
 
 		switch (feature)
 		{
@@ -1718,7 +1717,7 @@ void ui_setup_open_button_callback(GtkWidget *open_btn, const gchar *title,
 	if (title)
 		g_object_set_data_full(G_OBJECT(open_btn), "title", g_strdup(title),
 				(GDestroyNotify) g_free);
-	g_object_set_data(G_OBJECT(open_btn), "action", (gpointer) action);
+	g_object_set_data(G_OBJECT(open_btn), "action", GINT_TO_POINTER(action));
 	ui_hookup_widget(open_btn, path_entry, "entry");
 	g_signal_connect(open_btn, "clicked", G_CALLBACK(ui_path_box_open_clicked), open_btn);
 }
@@ -1766,10 +1765,8 @@ static gchar *run_file_chooser(const gchar *title, GtkFileChooserAction action,
 static void ui_path_box_open_clicked(GtkButton *button, gpointer user_data)
 {
 	GtkWidget *path_box = GTK_WIDGET(user_data);
-	GtkFileChooserAction action =
-		(GtkFileChooserAction) g_object_get_data(G_OBJECT(path_box), "action");
-	GtkEntry *entry =
-		(GtkEntry *) g_object_get_data(G_OBJECT(path_box), "entry");
+	GtkFileChooserAction action = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(path_box), "action"));
+	GtkEntry *entry = g_object_get_data(G_OBJECT(path_box), "entry");
 	const gchar *title = g_object_get_data(G_OBJECT(path_box), "title");
 	gchar *utf8_path = NULL;
 
@@ -1832,7 +1829,7 @@ void ui_statusbar_showhide(gboolean state)
 void ui_table_add_row(GtkTable *table, gint row, ...)
 {
 	va_list args;
-	gint i;
+	guint i;
 	GtkWidget *widget;
 
 	va_start(args, row);
@@ -1935,7 +1932,7 @@ void ui_init_stock_items(void)
 	GtkIconSet *icon_set;
 	GtkIconFactory *factory = gtk_icon_factory_new();
 	GdkPixbuf *pb;
-	gsize i, len;
+	guint i, len;
 	GtkStockItem items[] =
 	{
 		{ GEANY_STOCK_SAVE_ALL, N_("Save All"), 0, 0, GETTEXT_PACKAGE },
@@ -2251,7 +2248,7 @@ GtkWidget *ui_lookup_widget(GtkWidget *widget, const gchar *widget_name)
 
 
 /* Progress Bar */
-static guint progress_bar_timer_id = (guint) -1;
+static guint progress_bar_timer_id = 0;
 
 
 static GtkWidget *progress_bar_create(void)
@@ -2294,7 +2291,7 @@ static gboolean progress_bar_pulse(gpointer data)
  **/
 void ui_progress_bar_start(const gchar *text)
 {
-	g_return_if_fail(progress_bar_timer_id == (guint) -1);
+	g_return_if_fail(progress_bar_timer_id == 0);
 
 	if (! interface_prefs.statusbar_visible)
 		return;
@@ -2315,10 +2312,10 @@ void ui_progress_bar_stop(void)
 {
 	gtk_widget_hide(GTK_WIDGET(main_widgets.progressbar));
 
-	if (progress_bar_timer_id != (guint) -1)
+	if (progress_bar_timer_id != 0)
 	{
 		g_source_remove(progress_bar_timer_id);
-		progress_bar_timer_id = (guint) -1;
+		progress_bar_timer_id = 0;
 	}
 }
 
@@ -2422,7 +2419,7 @@ void ui_menu_add_document_items_sorted(GtkMenu *menu, GeanyDocument *active,
 	gchar *base_name, *label;
 	GPtrArray *sorted_documents;
 
-	len = gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook));
+	len = (guint) gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook));
 
 	sorted_documents = g_ptr_array_sized_new(len);
 	/* copy the documents_array into the new one */
@@ -2507,7 +2504,7 @@ void ui_editable_insert_text_callback(GtkEditable *editable, gchar *new_text,
 	gint i;
 
 	if (new_text_len == -1)
-		new_text_len = strlen(new_text);
+		new_text_len = (gint) strlen(new_text);
 
 	for (i = 0; i < new_text_len; i++, new_text++)
 	{
