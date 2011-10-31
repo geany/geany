@@ -114,6 +114,7 @@ static gsize count_indent_size(GeanyEditor *editor, const gchar *base_indent);
 static const gchar *snippets_find_completion_by_name(const gchar *type, const gchar *name);
 static void snippets_make_replacements(GeanyEditor *editor, GString *pattern);
 static gssize replace_cursor_markers(GeanyEditor *editor, GString *pattern);
+static GeanyFiletype *editor_get_filetype_at_current_pos(GeanyEditor *editor);
 
 
 void editor_snippets_free(void)
@@ -2711,17 +2712,74 @@ static gsize count_indent_size(GeanyEditor *editor, const gchar *base_indent)
 }
 
 
+/* Handles special cases where HTML is embedded in another language or
+ * another language is embedded in HTML */
+static GeanyFiletype *editor_get_filetype_at_current_pos(GeanyEditor *editor)
+{
+	gint style, line_start;
+	GeanyFiletype *current_ft;
+
+	g_return_val_if_fail(editor != NULL, NULL);
+	g_return_val_if_fail(editor->document->file_type != NULL, NULL);
+
+	current_ft = editor->document->file_type;
+	line_start = sci_get_position_from_line(editor->sci, sci_get_current_line(editor->sci));
+	style = sci_get_style_at(editor->sci, line_start);
+
+	/* Handle PHP filetype with embedded HTML */
+	if (current_ft->id == GEANY_FILETYPES_PHP && ! is_style_php(style))
+		current_ft = filetypes[GEANY_FILETYPES_HTML];
+
+	/* Handle languages embedded in HTML */
+	if (current_ft->id == GEANY_FILETYPES_HTML)
+	{
+		/* Embedded JS */
+		if (style >= SCE_HJ_DEFAULT && style <= SCE_HJ_REGEX)
+			current_ft = filetypes[GEANY_FILETYPES_JS];
+		/* ASP JS */
+		else if (style >= SCE_HJA_DEFAULT && style <= SCE_HJA_REGEX)
+			current_ft = filetypes[GEANY_FILETYPES_JS];
+		/* Embedded VB */
+		else if (style >= SCE_HB_DEFAULT && style <= SCE_HB_STRINGEOL)
+			current_ft = filetypes[GEANY_FILETYPES_BASIC];
+		/* ASP VB */
+		else if (style >= SCE_HBA_DEFAULT && style <= SCE_HBA_STRINGEOL)
+			current_ft = filetypes[GEANY_FILETYPES_BASIC];
+		/* Embedded Python */
+		else if (style >= SCE_HP_DEFAULT && style <= SCE_HP_IDENTIFIER)
+			current_ft = filetypes[GEANY_FILETYPES_PYTHON];
+		/* ASP Python */
+		else if (style >= SCE_HPA_DEFAULT && style <= SCE_HPA_IDENTIFIER)
+			current_ft = filetypes[GEANY_FILETYPES_PYTHON];
+		/* Embedded PHP */
+		else if ((style >= SCE_HPHP_DEFAULT && style <= SCE_HPHP_OPERATOR) ||
+			style == SCE_HPHP_COMPLEX_VARIABLE)
+		{
+			current_ft = filetypes[GEANY_FILETYPES_PHP];
+		}
+	}
+
+	/* Ensure the filetype's config is loaded */
+	filetypes_load_config(current_ft->id, FALSE);
+
+	return current_ft;
+}
+
+
 static void real_comment_multiline(GeanyEditor *editor, gint line_start, gint last_line)
 {
 	const gchar *eol;
 	gchar *str_begin, *str_end, *co, *cc;
 	gint line_len;
+	GeanyFiletype *ft;
 
 	g_return_if_fail(editor != NULL && editor->document->file_type != NULL);
 
+	ft = editor_get_filetype_at_current_pos(editor);
+
 	eol = editor_get_eol_char(editor);
-	co = editor->document->file_type->comment_open;
-	cc = editor->document->file_type->comment_close;
+	co = ft->comment_open;
+	cc = ft->comment_close;
 	str_begin = g_strdup_printf("%s%s", (co != NULL) ? co : "", eol);
 	str_end = g_strdup_printf("%s%s", (cc != NULL) ? cc : "", eol);
 
@@ -2741,12 +2799,15 @@ static void real_uncomment_multiline(GeanyEditor *editor)
 	gint pos, line, len, x;
 	gchar *linebuf;
 	GeanyDocument *doc;
+	GeanyFiletype *ft;
 
 	g_return_if_fail(editor != NULL && editor->document->file_type != NULL);
 	doc = editor->document;
 
+	ft = editor_get_filetype_at_current_pos(editor);
+
 	/* remove comment open chars */
-	pos = document_find_text(doc, doc->file_type->comment_open, NULL, 0, TRUE, FALSE, NULL);
+	pos = document_find_text(doc, ft->comment_open, NULL, 0, TRUE, FALSE, NULL);
 	SSM(editor->sci, SCI_DELETEBACK, 0, 0);
 
 	/* check whether the line is empty and can be deleted */
@@ -2759,7 +2820,7 @@ static void real_uncomment_multiline(GeanyEditor *editor)
 	g_free(linebuf);
 
 	/* remove comment close chars */
-	pos = document_find_text(doc, doc->file_type->comment_close, NULL, 0, FALSE, FALSE, NULL);
+	pos = document_find_text(doc, ft->comment_close, NULL, 0, FALSE, FALSE, NULL);
 	SSM(editor->sci, SCI_DELETEBACK, 0, 0);
 
 	/* check whether the line is empty and can be deleted */
@@ -2837,16 +2898,8 @@ gint editor_do_uncomment(GeanyEditor *editor, gint line, gboolean toggle)
 		sel_start = sel_end = sci_get_position_from_line(editor->sci, line);
 	}
 
-	ft = editor->document->file_type;
+	ft = editor_get_filetype_at_current_pos(editor);
 	eol_char_len = editor_get_eol_char_len(editor);
-
-	/* detection of HTML vs PHP code, if non-PHP set filetype to XML */
-	line_start = sci_get_position_from_line(editor->sci, first_line);
-	if (ft->id == GEANY_FILETYPES_PHP)
-	{
-		if (! is_style_php(sci_get_style_at(editor->sci, line_start)))
-			ft = filetypes[GEANY_FILETYPES_XML];
-	}
 
 	co = ft->comment_single;
 	if (NZV(co))
@@ -2968,7 +3021,6 @@ void editor_do_comment_toggle(GeanyEditor *editor)
 	sel_start = sci_get_selection_start(editor->sci);
 	sel_end = sci_get_selection_end(editor->sci);
 
-	ft = editor->document->file_type;
 	eol_char_len = editor_get_eol_char_len(editor);
 
 	first_line = sci_get_line_from_position(editor->sci,
@@ -2978,13 +3030,9 @@ void editor_do_comment_toggle(GeanyEditor *editor)
 		sci_get_selection_end(editor->sci) - editor_get_eol_char_len(editor));
 	last_line = MAX(first_line, last_line);
 
-	/* detection of HTML vs PHP code, if non-PHP set filetype to XML */
 	first_line_start = sci_get_position_from_line(editor->sci, first_line);
-	if (ft->id == GEANY_FILETYPES_PHP)
-	{
-		if (! is_style_php(sci_get_style_at(editor->sci, first_line_start)))
-			ft = filetypes[GEANY_FILETYPES_XML];
-	}
+
+	ft = editor_get_filetype_at_current_pos(editor);
 
 	co = ft->comment_single;
 	if (NZV(co))
@@ -3149,16 +3197,9 @@ void editor_do_comment(GeanyEditor *editor, gint line, gboolean allow_empty_line
 		sel_start = sel_end = sci_get_position_from_line(editor->sci, line);
 	}
 
-	ft = editor->document->file_type;
 	eol_char_len = editor_get_eol_char_len(editor);
 
-	/* detection of HTML vs PHP code, if non-PHP set filetype to XML */
-	line_start = sci_get_position_from_line(editor->sci, first_line);
-	if (ft->id == GEANY_FILETYPES_PHP)
-	{
-		if (! is_style_php(sci_get_style_at(editor->sci, line_start)))
-			ft = filetypes[GEANY_FILETYPES_XML];
-	}
+	ft = editor_get_filetype_at_current_pos(editor);
 
 	co = ft->comment_single;
 	if (NZV(co))

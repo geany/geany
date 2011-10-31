@@ -671,7 +671,7 @@ GtkWidget *plugin_configure(GtkDialog *dialog)
 		g_signal_connect(button, "clicked",
 			G_CALLBACK(backupcopy_dir_button_clicked_cb), entry_dir);
 
-		image = gtk_image_new_from_stock("gtk-open", GTK_ICON_SIZE_BUTTON);
+		image = gtk_image_new_from_stock(GTK_STOCK_OPEN, GTK_ICON_SIZE_BUTTON);
 		gtk_container_add(GTK_CONTAINER(button), image);
 
 		hbox = gtk_hbox_new(FALSE, 6);

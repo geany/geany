@@ -101,7 +101,7 @@ Installation
 Requirements
 ------------
 
-You will need the GTK (>= 2.12.0) libraries and their dependencies
+You will need the GTK (>= 2.16.0) libraries and their dependencies
 (Pango, GLib and ATK). Your distro should provide packages for these,
 usually installed by default. For Windows, you can download an installer
 from the website which bundles these libraries.
@@ -118,7 +118,7 @@ Source compilation
 ------------------
 
 Compiling Geany is quite easy.
-To do so, you need the GTK (>= 2.12.0) libraries and header files.
+To do so, you need the GTK (>= 2.16.0) libraries and header files.
 You also need the Pango, GLib and ATK libraries and header files.
 All these files are available at http://www.gtk.org, but very often
 your distro will provide development packages to save the trouble of
@@ -1662,6 +1662,17 @@ will be loaded instead of the default c99.tags. You should keep a
 copy of the generated tags file because it will get overwritten when
 upgrading Geany.
 
+*Generating tag files on Windows:*
+
+This works basically the same as on other platforms but you need to make
+sure you have grep installed and Geany can find it, i.e. it must be
+in the PATH environment variable. To test this, open a console window
+and type ``grep`` and see whether it is executed.
+If it is, then you can create a tags file like the following::
+
+    "c:\program files\geany\bin\geany" -g c:\mytags.php.tags c:\code\somefile.php
+
+
 
 C ignore.tags
 ^^^^^^^^^^^^^
@@ -2485,14 +2496,14 @@ internal default, which is currently:
 
 Note that ``\t`` = tab.
 
-================================  ===========================================  ========  ===========
-Key                               Description                                  Default   Applies
-================================  ===========================================  ========  ===========
+================================  ===========================================  ==========  ===========
+Key                               Description                                  Default     Applies
+================================  ===========================================  ==========  ===========
 **VTE related**
-emulation                         Terminal emulation mode. Only change this    xterm     immediately
+emulation                         Terminal emulation mode. Only change this    xterm       immediately
                                   if you have VTE termcap files other than
                                   ``vte/termcap/xterm``.
-send_selection_unsafe             By default, Geany strips any trailing        false     immediately
+send_selection_unsafe             By default, Geany strips any trailing        false       immediately
                                   newline characters from the current
                                   selection before sending it to the terminal
                                   to not execute arbitrary code. This is
@@ -2501,7 +2512,7 @@ send_selection_unsafe             By default, Geany strips any trailing        f
                                   it to be executed directly, set this option
                                   to true.
 **File related**
-use_atomic_file_saving            Defines the mode how Geany saves files to    false     immediately
+use_atomic_file_saving            Defines the mode how Geany saves files to    false       immediately
                                   disk. If disabled, Geany directly writes
                                   the content of the document to disk. This
                                   might cause loss of data when there is
@@ -2518,23 +2529,27 @@ use_atomic_file_saving            Defines the mode how Geany saves files to    f
                                   break things seriously.
                                   The better approach would be to ensure your
                                   disk won't run out of free space.
-use_gio_unsafe_file_saving        Whether to use GIO as the unsafe file        true      immediately
+use_gio_unsafe_file_saving        Whether to use GIO as the unsafe file        true        immediately
                                   saving backend. It is better on most
                                   situations but is known not to work
                                   correctly on some complex setups.
-gio_unsafe_save_backup            Make a backup when using GIO unsafe file     false     immediately
+gio_unsafe_save_backup            Make a backup when using GIO unsafe file     false       immediately
                                   saving. Backup is named `filename~`.
+**Filetype related**
+extract_filetype_regex            Regex to extract filetype name from file     See below.  immediately
+                                  via capture group one.
 **Search related**
-find_selection_type               See `Find selection`_.                       0         immediately
+find_selection_type               See `Find selection`_.                       0           immediately
 **Build Menu related**
-number_ft_menu_items              The maximum number of menu items in the      2         on restart
+number_ft_menu_items              The maximum number of menu items in the      2           on restart
                                   filetype section of the Build menu.
-number_non_ft_menu_items          The maximum number of menu items in the      3         on restart
+number_non_ft_menu_items          The maximum number of menu items in the      3           on restart
                                   independent section of the Build menu.
-number_exec_menu_items            The maximum number of menu items in the      2         on restart
+number_exec_menu_items            The maximum number of menu items in the      2           on restart
                                   execute section of the Build menu.
-================================  ===========================================  ========  ===========
+================================  ===========================================  ==========  ===========
 
+The extract_filetype_regex has the default value GEANY_DEFAULT_FILETYPE_REGEX.
 
 Terminal (VTE) preferences
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -5100,6 +5115,16 @@ GEANY_PROJECT_EXT               The default filename extension for Geany      ge
                                 open dialog.
 ==============================  ============================================  ==================
 
+filetypes.c
+-----------
+
+==============================  ============================================  ==================
+Option                          Description                                   Default
+==============================  ============================================  ==================
+GEANY_FILETYPE_SEARCH_LINES     The number of lines to search for the         2
+                                filetype with the extract filetype regex.
+==============================  ============================================  ==================
+
 editor.h
 --------
 
@@ -5142,7 +5167,11 @@ GEANY_TOGGLE_MARK               A string which is used to mark a toggled      "~
                                 comment.
 GEANY_MAX_AUTOCOMPLETE_WORDS    How many autocompletion suggestions should    30
                                 Geany provide.
+GEANY_DEFAULT_FILETYPE_REGEX    The default regex to extract filetypes from   See below.
+                                files.
 ==============================  ============================================  ==================
+
+The GEANY_DEFAULT_FILETYPE_REGEX default value is  -\\*-\\s*([^\\s]+)\\s*-\\*- which finds Emacs filetypes.
 
 build.c
 -------

@@ -886,16 +886,6 @@ static GtkWidget *make_toolbar(void)
 	g_signal_connect(wid, "clicked", G_CALLBACK(on_current_path), NULL);
 	gtk_container_add(GTK_CONTAINER(toolbar), wid);
 
-	if (gtk_check_version(2, 15, 2) != NULL)
-	{
-		wid = GTK_WIDGET(gtk_separator_tool_item_new());
-		gtk_container_add(GTK_CONTAINER(toolbar), wid);
-
-		wid = GTK_WIDGET(gtk_tool_button_new_from_stock(GTK_STOCK_CLEAR));
-		gtk_widget_set_tooltip_text(wid, _("Clear the filter"));
-		g_signal_connect(wid, "clicked", G_CALLBACK(on_clear_filter), NULL);
-		gtk_container_add(GTK_CONTAINER(toolbar), wid);
-	}
 	return toolbar;
 }
 
@@ -911,11 +901,9 @@ static GtkWidget *make_filterbar(void)
 	filter_combo = gtk_combo_box_entry_new_text();
 	filter_entry = gtk_bin_get_child(GTK_BIN(filter_combo));
 
-	if (gtk_check_version(2, 15, 2) == NULL)
-	{
-		ui_entry_add_clear_icon(GTK_ENTRY(filter_entry));
-		g_signal_connect(filter_entry, "icon-release", G_CALLBACK(on_filter_clear), NULL);
-	}
+	ui_entry_add_clear_icon(GTK_ENTRY(filter_entry));
+	g_signal_connect(filter_entry, "icon-release", G_CALLBACK(on_filter_clear), NULL);
+
 	gtk_widget_set_tooltip_text(filter_entry,
 		_("Filter your files with the usual wildcards. Separate multiple patterns with a space."));
 	g_signal_connect(filter_entry, "activate", G_CALLBACK(on_filter_activate), NULL);

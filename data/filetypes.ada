@@ -10,8 +10,8 @@ character=string_1
 charactereol=string_eol
 string=string_1
 stringeol=string_eol
-label=preprocessor
-commentline=comment
+label=label
+commentline=comment_line
 illegal=error
 
 [keywords]

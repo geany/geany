@@ -632,6 +632,7 @@ void on_notebook1_switch_page_after(GtkNotebook *notebook, GtkNotebookPage *page
 		ui_document_show_hide(doc); /* update the document menu */
 		build_menu_update(doc);
 		sidebar_update_tag_list(doc, FALSE);
+		document_update_type_keywords(doc);
 
 		/* We delay the check to avoid weird fast, unintended switching of notebook pages when
 		 * the 'file has changed' dialog is shown while the switch event is not yet completely
@@ -1427,14 +1428,12 @@ void on_menu_show_sidebar1_toggled(GtkCheckMenuItem *checkmenuitem, gpointer use
 		interface_prefs.sidebar_symbol_visible = TRUE;
 	}
 
-#if GTK_CHECK_VERSION(2, 14, 0)
 	/* if window has input focus, set it back to the editor before toggling off */
 	if (! ui_prefs.sidebar_visible &&
 		gtk_container_get_focus_child(GTK_CONTAINER(main_widgets.sidebar_notebook)) != NULL)
 	{
 		keybindings_send_command(GEANY_KEY_GROUP_FOCUS, GEANY_KEYS_FOCUS_EDITOR);
 	}
-#endif
 
 	ui_sidebar_show_hide();
 }

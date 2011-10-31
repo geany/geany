@@ -75,7 +75,8 @@ typedef struct _geany_win32_spawn geany_win32_spawn;
 
 static gboolean GetContentFromHandle(HANDLE hFile, gchar **content, GError **error);
 static HANDLE GetTempFileHandle(GError **error);
-static gboolean CreateChildProcess(geany_win32_spawn *gw_spawn, TCHAR *szCmdline, const TCHAR *dir, GError **error);
+static gboolean CreateChildProcess(geany_win32_spawn *gw_spawn, TCHAR *szCmdline,
+		const TCHAR *dir, GError **error);
 static VOID ReadFromPipe(HANDLE hRead, HANDLE hWrite, HANDLE hFile, GError **error);
 
 
@@ -786,6 +787,13 @@ static void debug_setup_console()
 	fp = _fdopen(hConHandle, "w");
 	*stderr = *fp;
 	setvbuf(stderr, NULL, _IONBF, 0);
+
+	/* redirect unbuffered STDIN to the console */
+	lStdHandle = (long)GetStdHandle(STD_INPUT_HANDLE);
+	hConHandle = _open_osfhandle(lStdHandle, _O_TEXT);
+	fp = _fdopen( hConHandle, "r" );
+	*stdin = *fp;
+	setvbuf(stdin, NULL, _IONBF, 0);
 }
 
 
@@ -793,8 +801,8 @@ void win32_init_debug_code(void)
 {
 	if (app->debug_mode)
 	{
-		/* create a console window to get log messages on Windows */
-		/** TODO remove me? */
+		/* create a console window to get log messages on Windows, 
+		 * especially useful when generating tags files */
 		debug_setup_console();
 		/* Enable GLib process spawn debug mode when Geany was started with the debug flag */
 		g_setenv("G_SPAWN_WIN32_DEBUG", "1", FALSE);
@@ -952,8 +960,6 @@ gboolean win32_spawn(const gchar *dir, gchar **argv, gchar **env, GSpawnFlags fl
 	if (! fSuccess)
 	{
 		geany_debug("win32_spawn: Create process failed");
-		if (error != NULL)
-			*error = g_error_new(G_SPAWN_ERROR, G_SPAWN_ERROR_FAILED, "Create process failed");
 		return FALSE;
 	}
 
@@ -1044,7 +1050,8 @@ gchar *win32_expand_environment_variables(const gchar *str)
 }
 
 
-static gboolean CreateChildProcess(geany_win32_spawn *gw_spawn, TCHAR *szCmdline, const TCHAR *dir, GError **error)
+static gboolean CreateChildProcess(geany_win32_spawn *gw_spawn, TCHAR *szCmdline,
+		const TCHAR *dir, GError **error)
 {
 	PROCESS_INFORMATION piProcInfo;
 	STARTUPINFOW siStartInfo;
@@ -1089,7 +1096,7 @@ static gboolean CreateChildProcess(geany_win32_spawn *gw_spawn, TCHAR *szCmdline
 	{
 		gchar *msg = g_win32_error_message(GetLastError());
 		geany_debug("CreateChildProcess: CreateProcess failed (%s)", msg);
-		if (*error != NULL)
+		if (error != NULL)
 			*error = g_error_new(G_SPAWN_ERROR, G_SPAWN_ERROR_FAILED, "%s", msg);
 		g_free(msg);
 		return FALSE;
@@ -1105,7 +1112,7 @@ static gboolean CreateChildProcess(geany_win32_spawn *gw_spawn, TCHAR *szCmdline
 			TerminateProcess(piProcInfo.hProcess, WAIT_TIMEOUT); /* NOTE: This will not kill grandkids. */
 		}
 
-		if (GetExitCodeProcess(piProcInfo.hProcess, &gw_spawn->dwExitCode) != 0)
+		if (!GetExitCodeProcess(piProcInfo.hProcess, &gw_spawn->dwExitCode))
 		{
 			gchar *msg = g_win32_error_message(GetLastError());
 			geany_debug("GetExitCodeProcess failed: %s", msg);

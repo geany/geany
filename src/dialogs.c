@@ -378,8 +378,7 @@ static GtkWidget *create_open_file_dialog(void)
 	gtk_window_set_type_hint(GTK_WINDOW(dialog), GDK_WINDOW_TYPE_HINT_DIALOG);
 	gtk_window_set_transient_for(GTK_WINDOW(dialog), GTK_WINDOW(main_widgets.window));
 	gtk_file_chooser_set_select_multiple(GTK_FILE_CHOOSER(dialog), TRUE);
-	if (gtk_check_version(2, 14, 0) == NULL)
-		gtk_file_chooser_set_local_only(GTK_FILE_CHOOSER(dialog), FALSE);
+	gtk_file_chooser_set_local_only(GTK_FILE_CHOOSER(dialog), FALSE);
 
 	/* add checkboxes and filename entry */
 	gtk_file_chooser_set_extra_widget(GTK_FILE_CHOOSER(dialog), add_file_open_extra_widget(dialog));
@@ -605,8 +604,7 @@ static GtkWidget *create_save_file_dialog(void)
 	gtk_widget_show_all(vbox);
 	gtk_file_chooser_set_extra_widget(GTK_FILE_CHOOSER(dialog), vbox);
 	gtk_file_chooser_set_do_overwrite_confirmation(GTK_FILE_CHOOSER(dialog), TRUE);
-	if (gtk_check_version(2, 14, 0) == NULL)
-		gtk_file_chooser_set_local_only(GTK_FILE_CHOOSER(dialog), FALSE);
+	gtk_file_chooser_set_local_only(GTK_FILE_CHOOSER(dialog), FALSE);
 
 	/* set the folder by default to the project base dir or the global pref for opening files */
 	initdir = utils_get_default_dir_utf8();
