@@ -795,8 +795,7 @@ gint utils_get_setting_integer(GKeyFile *config, const gchar *section, const gch
 	gint tmp;
 	GError *error = NULL;
 
-	if (G_UNLIKELY(config == NULL))
-		return default_value;
+	g_return_val_if_fail(config, default_value);
 
 	tmp = g_key_file_get_integer(config, section, key, &error);
 	if (error)
@@ -826,8 +825,7 @@ gboolean utils_get_setting_boolean(GKeyFile *config, const gchar *section, const
 	gboolean tmp;
 	GError *error = NULL;
 
-	if (G_UNLIKELY(config == NULL))
-		return default_value;
+	g_return_val_if_fail(config, default_value);
 
 	tmp = g_key_file_get_boolean(config, section, key, &error);
 	if (error)
@@ -856,8 +854,7 @@ gchar *utils_get_setting_string(GKeyFile *config, const gchar *section, const gc
 {
 	gchar *tmp;
 
-	if (G_UNLIKELY(config == NULL))
-		return g_strdup(default_value);
+	g_return_val_if_fail(config, g_strdup(default_value));
 
 	tmp = g_key_file_get_string(config, section, key, NULL);
 	if (!tmp)

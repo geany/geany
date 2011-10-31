@@ -1134,11 +1134,7 @@ GeanyDocument *document_open_file_full(GeanyDocument *doc, const gchar *filename
 	else
 	{
 		/* filename must not be NULL when opening a file */
-		if (filename == NULL)
-		{
-			ui_set_statusbar(FALSE, _("Invalid filename"));
-			return NULL;
-		}
+		g_return_val_if_fail(filename, NULL);
 
 #ifdef G_OS_WIN32
 		/* if filename is a shortcut, try to resolve it */
