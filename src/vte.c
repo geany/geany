@@ -515,14 +515,14 @@ static GtkWidget *vte_create_popup_menu(void)
 	accel_group = gtk_accel_group_new();
 	gtk_window_add_accel_group(GTK_WINDOW(main_widgets.window), accel_group);
 
-	item = gtk_image_menu_item_new_from_stock("gtk-copy", NULL);
+	item = gtk_image_menu_item_new_from_stock(GTK_STOCK_COPY, NULL);
 	gtk_widget_add_accelerator(item, "activate", accel_group,
 		GDK_c, GDK_CONTROL_MASK | GDK_SHIFT_MASK, GTK_ACCEL_VISIBLE);
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	g_signal_connect(item, "activate", G_CALLBACK(vte_popup_menu_clicked), GINT_TO_POINTER(POPUP_COPY));
 
-	item = gtk_image_menu_item_new_from_stock("gtk-paste", NULL);
+	item = gtk_image_menu_item_new_from_stock(GTK_STOCK_PASTE, NULL);
 	gtk_widget_add_accelerator(item, "activate", accel_group,
 		GDK_v, GDK_CONTROL_MASK | GDK_SHIFT_MASK, GTK_ACCEL_VISIBLE);
 	gtk_widget_show(item);
@@ -533,7 +533,7 @@ static GtkWidget *vte_create_popup_menu(void)
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 
-	item = gtk_image_menu_item_new_from_stock("gtk-select-all", NULL);
+	item = gtk_image_menu_item_new_from_stock(GTK_STOCK_SELECT_ALL, NULL);
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	g_signal_connect(item, "activate", G_CALLBACK(vte_popup_menu_clicked), GINT_TO_POINTER(POPUP_SELECTALL));
@@ -556,7 +556,7 @@ static GtkWidget *vte_create_popup_menu(void)
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 
-	item = gtk_image_menu_item_new_from_stock("gtk-preferences", NULL);
+	item = gtk_image_menu_item_new_from_stock(GTK_STOCK_PREFERENCES, NULL);
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	g_signal_connect(item, "activate", G_CALLBACK(vte_popup_menu_clicked), GINT_TO_POINTER(POPUP_PREFERENCES));
@@ -836,7 +836,7 @@ void vte_append_preferences_tab(void)
 					(GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
 					(GtkAttachOptions) (0), 0, 0);
 
-		image_shell = gtk_image_new_from_stock("gtk-open", GTK_ICON_SIZE_BUTTON);
+		image_shell = gtk_image_new_from_stock(GTK_STOCK_OPEN, GTK_ICON_SIZE_BUTTON);
 		gtk_widget_show(image_shell);
 		gtk_container_add(GTK_CONTAINER(button_shell), image_shell);
 

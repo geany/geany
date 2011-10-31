@@ -2115,7 +2115,7 @@ static void on_symbol_tree_menu_show(GtkWidget *widget,
 
 static void on_expand_collapse(GtkWidget *widget, gpointer user_data)
 {
-	gboolean expand = utils_str_equal(user_data, GTK_STOCK_ADD);
+	gboolean expand = GPOINTER_TO_INT(user_data);
 	GeanyDocument *doc = document_get_current();
 
 	if (! doc)
@@ -2139,12 +2139,12 @@ static void create_taglist_popup_menu(void)
 	symbol_menu.expand_all = item = ui_image_menu_item_new(GTK_STOCK_ADD, _("_Expand All"));
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
-	g_signal_connect(item, "activate", G_CALLBACK(on_expand_collapse), (gpointer)GTK_STOCK_ADD);
+	g_signal_connect(item, "activate", G_CALLBACK(on_expand_collapse), GINT_TO_POINTER(TRUE));
 
 	symbol_menu.collapse_all = item = ui_image_menu_item_new(GTK_STOCK_REMOVE, _("_Collapse All"));
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
-	g_signal_connect(item, "activate", G_CALLBACK(on_expand_collapse), (gpointer)GTK_STOCK_REMOVE);
+	g_signal_connect(item, "activate", G_CALLBACK(on_expand_collapse), GINT_TO_POINTER(FALSE));
 
 	item = gtk_separator_menu_item_new();
 	gtk_widget_show(item);

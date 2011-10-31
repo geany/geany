@@ -28,7 +28,7 @@ The basic features of Geany are:
 
 Requirements
 ------------
-For compiling Geany yourself, you will need the GTK (>= 2.12.0)
+For compiling Geany yourself, you will need the GTK (>= 2.16.0)
 libraries and header files. You will also need its dependency libraries
 and header files, such as Pango, Glib and ATK. All these files are
 available at http://www.gtk.org.

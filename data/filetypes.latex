@@ -57,8 +57,8 @@ context_action_cmd=
 compiler=latex --file-line-error-style "%f"
 # it is called linker, but here it is an alternative compiler command
 linker=pdflatex --file-line-error-style "%f"
-run_cmd=xdvi "%e.dvi"
-run_cmd2=xpdf "%e.pdf"
+run_cmd=evince "%e.dvi"
+run_cmd2=evince "%e.pdf"
 
 [build-menu]
 FT_00_LB=LaTeX -> _DVI
@@ -68,8 +68,8 @@ FT_01_LB=LaTeX -> _PDF
 FT_01_CM=pdflatex --file-line-error-style "%f"
 FT_01_BD=false
 EX_00_LB=V_iew PDF File
-EX_00_CM=xpdf "%e.pdf"
+EX_00_CM=evince "%e.pdf"
 EX_00_BD=false
 EX_01_LB=_View DVI File
-EX_01_CM=xdvi "%e.dvi"
+EX_01_CM=evince "%e.dvi"
 EX_01_BD=false
