@@ -343,6 +343,16 @@ static gboolean find_tree_iter_dir(GtkTreeIter *iter, const gchar *dir)
 }
 
 
+static gboolean utils_filename_has_prefix(const gchar *str, const gchar *prefix)
+{
+	gchar *head = g_strndup(str, strlen(prefix));
+	gint ret = utils_filenamecmp(head, prefix);
+
+	g_free(head);
+	return ret == 0;
+}
+
+
 static gchar *get_doc_folder(const gchar *path)
 {
 	gchar *tmp_dirname = g_strdup(path);
@@ -362,7 +372,7 @@ static gchar *get_doc_folder(const gchar *path)
 			project_base_path[len-1] = '\0';
 
 		/* check whether the dir name matches or uses the project base path */
-		if (g_str_has_prefix(tmp_dirname, project_base_path))
+		if (utils_filename_has_prefix(tmp_dirname, project_base_path))
 		{
 			rest = tmp_dirname + len;
 			if (*rest == G_DIR_SEPARATOR || *rest == '\0')
@@ -377,7 +387,7 @@ static gchar *get_doc_folder(const gchar *path)
 		dirname = tmp_dirname;
 
 		/* If matches home dir, replace with tilde */
-		if (home_dir && *home_dir != 0 && g_str_has_prefix(dirname, home_dir))
+		if (NZV(home_dir) && utils_filename_has_prefix(dirname, home_dir))
 		{
 			rest = dirname + strlen(home_dir);
 			if (*rest == G_DIR_SEPARATOR || *rest == '\0')
