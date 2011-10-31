@@ -104,13 +104,6 @@ static void document_redo_add(GeanyDocument *doc, guint type, gpointer data);
 static gboolean update_tags_from_buffer(GeanyDocument *doc);
 
 
-/* ignore the case of filenames and paths under WIN32, causes errors if not */
-#ifdef G_OS_WIN32
-#define filenamecmp(a, b)	utils_str_casecmp((a), (b))
-#else
-#define filenamecmp(a, b)	strcmp((a), (b))
-#endif
-
 /**
  * Finds a document whose @c real_path field matches the given filename.
  *
@@ -138,7 +131,7 @@ GeanyDocument* document_find_by_real_path(const gchar *realname)
 		if (! doc->is_valid || ! doc->real_path)
 			continue;
 
-		if (filenamecmp(realname, doc->real_path) == 0)
+		if (utils_filenamecmp(realname, doc->real_path) == 0)
 		{
 			return doc;
 		}
@@ -186,7 +179,7 @@ GeanyDocument *document_find_by_filename(const gchar *utf8_filename)
 		if (! doc->is_valid || doc->file_name == NULL)
 			continue;
 
-		if (filenamecmp(utf8_filename, doc->file_name) == 0)
+		if (utils_filenamecmp(utf8_filename, doc->file_name) == 0)
 		{
 			return doc;
 		}
