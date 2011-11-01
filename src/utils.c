@@ -1903,6 +1903,10 @@ void utils_tidy_path(gchar *filename)
 	if (str->len >= 2 && strncmp(str->str, "\\\\", 2) == 0)
 		preserve_double_backslash = TRUE;
 
+#ifdef G_OS_WIN32
+	/* using MSYS we can get Unix-style separators */
+	utils_string_replace_all(str, "/", G_DIR_SEPARATOR_S);
+#endif
 	/* replace "/./" and "//" */
 	utils_string_replace_all(str, G_DIR_SEPARATOR_S "." G_DIR_SEPARATOR_S, G_DIR_SEPARATOR_S);
 	utils_string_replace_all(str, G_DIR_SEPARATOR_S G_DIR_SEPARATOR_S, G_DIR_SEPARATOR_S);
