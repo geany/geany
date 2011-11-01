@@ -2350,7 +2350,6 @@ void document_update_type_keywords(GeanyDocument *doc)
 	GPtrArray *tags_array;
 
 	g_return_if_fail(DOC_VALID(doc));
-	g_return_if_fail(IS_SCINTILLA(doc->editor->sci));
 
 	switch (doc->file_type->id)
 	{
@@ -2367,10 +2366,10 @@ void document_update_type_keywords(GeanyDocument *doc)
 	}
 
 	keyword_idx = editor_lexer_get_type_keyword_idx(sci_get_lexer(doc->editor->sci));
-	if (G_UNLIKELY(keyword_idx < 1))
+	if (keyword_idx == -1)
 		return;
 
-	if (G_UNLIKELY(app->tm_workspace == NULL))
+	if (app->tm_workspace == NULL)
 		return;
 
 	tags_array = app->tm_workspace->work_object.tags_array;

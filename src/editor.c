@@ -3486,7 +3486,8 @@ static gboolean editor_lexer_is_c_like(gint lexer)
 #endif
 
 
-/* Returns: -1 if lexer doesn't support type keywords */
+/* Returns: -1 if lexer doesn't support type keywords.
+ * @see document_update_type_keywords(). */
 gint editor_lexer_get_type_keyword_idx(gint lexer)
 {
 	switch (lexer)
