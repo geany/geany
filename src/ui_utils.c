@@ -659,7 +659,7 @@ void ui_save_buttons_toggle(gboolean enable)
 	gboolean dirty_tabs = FALSE;
 
 	if (ui_prefs.allow_always_save)
-		enable = gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook)) > 0 ? TRUE : FALSE;
+		enable = gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook)) > 0;
 
 	ui_widget_set_sensitive(widgets.save_buttons[0], enable);
 	ui_widget_set_sensitive(widgets.save_buttons[1], enable);
@@ -769,7 +769,7 @@ static void init_document_widgets(void)
 void ui_document_buttons_update(void)
 {
 	guint i;
-	gboolean enable = gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook)) ? TRUE : FALSE;
+	gboolean enable = gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook)) > 0;
 
 	for (i = 0; i < widgets.document_buttons->len; i++)
 	{
@@ -797,7 +797,7 @@ static void on_doc_sensitive_widget_destroy(GtkWidget *widget, G_GNUC_UNUSED gpo
  **/
 void ui_add_document_sensitive(GtkWidget *widget)
 {
-	gboolean enable = gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook)) ? TRUE : FALSE;
+	gboolean enable = gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook)) > 0;
 
 	ui_widget_set_sensitive(widget, enable);
 

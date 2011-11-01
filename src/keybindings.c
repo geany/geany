@@ -975,8 +975,7 @@ static gboolean check_fixed_kb(guint keyval, guint state)
 			if (keyval == GDK_Page_Up)
 				gtk_notebook_set_current_page(GTK_NOTEBOOK(main_widgets.notebook), 0);
 			if (keyval == GDK_Page_Down)
-				gtk_notebook_set_current_page(GTK_NOTEBOOK(main_widgets.notebook),
-					gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook)) - 1);
+				gtk_notebook_set_current_page(GTK_NOTEBOOK(main_widgets.notebook), -1);
 			return TRUE;
 		}
 	}

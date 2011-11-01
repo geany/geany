@@ -330,7 +330,7 @@ void configuration_save_session_files(GKeyFile *config)
 	npage = gtk_notebook_get_current_page(GTK_NOTEBOOK(main_widgets.notebook));
 	g_key_file_set_integer(config, "files", "current_page", npage);
 
-	/* store the filenames to reopen them the next time */
+	/* store the filenames in the notebook tab order to reopen them the next time */
 	max = gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook));
 	for (i = 0; i < max; i++)
 	{

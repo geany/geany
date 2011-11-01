@@ -2758,13 +2758,14 @@ GeanyDocument *document_clone(GeanyDocument *old_doc, const gchar *utf8_filename
  * @return TRUE if all files were saved or had their changes discarded. */
 gboolean document_account_for_unsaved(void)
 {
-	guint i, p, page_count, len = documents_array->len;
-	GeanyDocument *doc;
+	guint i, p, page_count;
 
 	page_count = gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook));
+	/* iterate over documents in tabs order */
 	for (p = 0; p < page_count; p++)
 	{
-		doc = document_get_from_page(p);
+		GeanyDocument *doc = document_get_from_page(p);
+
 		if (DOC_VALID(doc) && doc->changed)
 		{
 			if (! dialogs_show_unsaved_file(doc))
@@ -2772,13 +2773,9 @@ gboolean document_account_for_unsaved(void)
 		}
 	}
 	/* all documents should now be accounted for, so ignore any changes */
-	for (i = 0; i < len; i++)
+	foreach_document (i)
 	{
-		doc = documents[i];
-		if (doc->is_valid && doc->changed)
-		{
-			doc->changed = FALSE;
-		}
+		documents[i]->changed = FALSE;
 	}
 	return TRUE;
 }

@@ -189,6 +189,7 @@ void on_save_all1_activate(GtkMenuItem *menuitem, gpointer user_data)
 	GeanyDocument *doc, *cur_doc = document_get_current();
 	gint count = 0;
 
+	/* iterate over documents in tabs order */
 	for (i = 0; i < max; i++)
 	{
 		doc = document_get_from_page(i);

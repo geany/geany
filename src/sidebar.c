@@ -530,18 +530,13 @@ void sidebar_openfiles_update(GeanyDocument *doc)
 
 void sidebar_openfiles_update_all()
 {
-	guint i, page_count;
+	guint i;
 	GeanyDocument *doc;
 
 	gtk_tree_store_clear(store_openfiles);
-	page_count = gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook));
-	for (i = 0; i < page_count; i++)
+	foreach_document (i)
 	{
-		doc = document_get_from_page(i);
-		if (G_UNLIKELY(doc == NULL))
-			continue;
-
-		sidebar_openfiles_add(doc);
+		sidebar_openfiles_add(documents[i]);
 	}
 }
 
