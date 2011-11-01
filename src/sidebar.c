@@ -336,7 +336,7 @@ static gboolean find_tree_iter_dir(GtkTreeIter *iter, const gchar *dir)
 
 	gtk_tree_model_get(GTK_TREE_MODEL(store_openfiles), iter, DOCUMENTS_SHORTNAME, &name, -1);
 
-	result = utils_str_equal(name, dir);
+	result = utils_filenamecmp(name, dir) == 0;
 	g_free(name);
 
 	return result;
@@ -346,10 +346,10 @@ static gboolean find_tree_iter_dir(GtkTreeIter *iter, const gchar *dir)
 static gboolean utils_filename_has_prefix(const gchar *str, const gchar *prefix)
 {
 	gchar *head = g_strndup(str, strlen(prefix));
-	gint ret = utils_filenamecmp(head, prefix);
+	gboolean ret = utils_filenamecmp(head, prefix) == 0;
 
 	g_free(head);
-	return ret == 0;
+	return ret;
 }
 
 
