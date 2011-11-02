@@ -1270,9 +1270,6 @@ static void on_build_menu_item(GtkWidget *w, gpointer user_data)
 
 	if (doc && doc->changed)
 	{
-		if (document_need_save_as(doc) && !dialogs_show_save_as())
-			return;
-
 		if (!document_save_file(doc, FALSE))
 			return;
 	}

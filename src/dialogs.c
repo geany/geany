@@ -850,15 +850,9 @@ gboolean dialogs_show_unsaved_file(GeanyDocument *doc)
 	switch (response)
 	{
 		case GTK_RESPONSE_YES:
-		{
-			if (document_need_save_as(doc))
-			{
-				return dialogs_show_save_as();
-			}
-			else
-				/* document_save_file() returns the status if the file could be saved */
-				return document_save_file(doc, FALSE);
-		}
+			/* document_save_file() returns the status if the file could be saved */
+			return document_save_file(doc, FALSE);
+
 		case GTK_RESPONSE_NO:
 			return TRUE;
 

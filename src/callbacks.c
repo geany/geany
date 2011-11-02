@@ -172,10 +172,7 @@ void on_save1_activate(GtkMenuItem *menuitem, gpointer user_data)
 
 	if (doc != NULL && cur_page >= 0)
 	{
-		if (document_need_save_as(doc))
-			dialogs_show_save_as();
-		else
-			document_save_file(doc, FALSE);
+		document_save_file(doc, FALSE);
 	}
 }
 
@@ -197,18 +194,9 @@ void on_save_all1_activate(GtkMenuItem *menuitem, gpointer user_data)
 		doc = document_get_from_page(i);
 		if (! doc->changed)
 			continue;
-		if (document_need_save_as(doc))
-		{
-			/* display unnamed document */
-			document_show_tab(doc);
-			if (dialogs_show_save_as())
-				count++;
-		}
-		else
-		{
-			if (document_save_file(doc, FALSE))
-				count++;
-		}
+
+		if (document_save_file(doc, FALSE))
+			count++;
 	}
 	if (!count)
 		return;

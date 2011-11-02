@@ -1698,20 +1698,27 @@ static gchar *save_doc(GeanyDocument *doc, const gchar *locale_filename,
 
 
 /**
- *  Saves the document. Saving may include replacing tabs by spaces,
+ *  Saves the document.
+ *  Also shows the Save As dialog if necessary.
+ *  If the file is not modified, this function may do nothing unless @a force is set to @c TRUE.
+ *
+ *  Saving may include replacing tabs by spaces,
  *  stripping trailing spaces and adding a final new line at the end of the file, depending
  *  on user preferences. Then the @c "document-before-save" signal is emitted,
  *  allowing plugins to modify the document before it is saved, and data is
- *  actually written to disk. The filetype is set again or auto-detected if it wasn't set yet.
- *  Afterwards, the @c "document-save" signal is emitted for plugins.
+ *  actually written to disk.
  *
- *  If the file is not modified, this functions does nothing unless force is set to @c TRUE.
+ *  On successful saving:
+ *  - GeanyDocument::real_path is set.
+ *  - The filetype is set again or auto-detected if it wasn't set yet.
+ *  - The @c "document-save" signal is emitted for plugins.
  *
- *  @note You should ensure @c doc->file_name is not @c NULL before calling this; otherwise
- *  call dialogs_show_save_as().
+ *  @warning You should ensure @c doc->file_name has an absolute path unless you want the
+ *  Save As dialog to be shown. A @c NULL value also shows the dialog. This behaviour was
+ *  added in Geany 1.22.
  *
  *  @param doc The document to save.
- *  @param force Whether to save the file even if it is not modified (e.g. for Save As).
+ *  @param force Whether to save the file even if it is not modified.
  *
  *  @return @c TRUE if the file was saved or @c FALSE if the file could not or should not be saved.
  **/
@@ -1724,16 +1731,16 @@ gboolean document_save_file(GeanyDocument *doc, gboolean force)
 
 	g_return_val_if_fail(doc != NULL, FALSE);
 
+	if (document_need_save_as(doc))
+	{
+		/* ensure doc is the current tab before showing the dialog */
+		document_show_tab(doc);
+		return dialogs_show_save_as();
+	}
+
 	/* the "changed" flag should exclude the "readonly" flag, but check it anyway for safety */
 	if (! force && ! ui_prefs.allow_always_save && (! doc->changed || doc->readonly))
 		return FALSE;
-
-	if (G_UNLIKELY(doc->file_name == NULL))
-	{
-		ui_set_statusbar(TRUE, _("Error saving file (%s)."), _("Invalid filename"));
-		utils_beep();
-		return FALSE;
-	}
 
 	/* replaces tabs by spaces but only if the current file is not a Makefile */
 	if (file_prefs.replace_tabs && doc->file_type->id != GEANY_FILETYPES_MAKE)
