@@ -32,7 +32,8 @@
  * @link plugindata.h @endlink.
  */
 
-/** Use the PLUGIN_VERSION_CHECK() macro instead. Required by Geany. */
+/** Use the PLUGIN_VERSION_CHECK() macro instead. Required by Geany.
+ * @return . */
 gint plugin_version_check(gint);
 
 /** Use the PLUGIN_SET_INFO() macro to define it. Required by Geany.

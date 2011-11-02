@@ -7,6 +7,7 @@
 
 RST2HTML=python rst2html.py
 DOXYGEN=doxygen
+CP = copy
 RM = del
 -include ../localwin32.mk
 
@@ -15,6 +16,10 @@ doc: geany.txt
 
 hacking-doc: ../HACKING
 	$(RST2HTML) -stg --stylesheet=geany.css $^ hacking.html
+
+# FIXME: we should also replace anything like @VERSION@
+Doxyfile: Doxyfile.in
+	$(CP) $< $@
 
 api-doc: Doxyfile
 	$(DOXYGEN)
