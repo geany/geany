@@ -296,8 +296,8 @@ static gboolean auto_save(gpointer data)
 		{
 			doc = document_get_from_page(i);
 
-			/* skip current file to save it lastly, skip files without name */
-			if (doc != cur_doc && cur_doc->file_name != NULL)
+			/* skip current file (save it last), skip files without name */
+			if (doc != cur_doc && doc->file_name != NULL)
 				if (document_save_file(doc, FALSE))
 					saved_files++;
 		}
