@@ -146,7 +146,10 @@ static void send_open_command(gint sock, gint argc, gchar **argv)
 		g_free(col);
 	}
 
-	socket_fd_write_all(sock, "open\n", 5);
+	if (cl_options.readonly) /* append "ro" to denote readonly status for new docs */
+		socket_fd_write_all(sock, "openro\n", 7);
+	else
+		socket_fd_write_all(sock, "open\n", 5);
 
 	for (i = 1; i < argc && argv[i] != NULL; i++)
 	{
@@ -598,10 +601,13 @@ gboolean socket_lock_input_cb(GIOChannel *source, GIOCondition condition, gpoint
 	{
 		if (strncmp(buf, "open", 4) == 0)
 		{
+			if (strncmp(buf+4, "ro", 2) == 0) /* open in readonly? */
+				cl_options.readonly = TRUE;
 			while (socket_fd_gets(sock, buf, sizeof(buf)) != -1 && *buf != '.')
 			{
 				handle_input_filename(g_strstrip(buf));
 			}
+			cl_options.readonly = FALSE; /* disable again for future files */
 			popup = TRUE;
 		}
 		else if (strncmp(buf, "doclist", 7) == 0)
