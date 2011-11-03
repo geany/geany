@@ -588,7 +588,7 @@ static gboolean remove_page(guint page_num)
 
 	/* Checking real_path makes it likely the file exists on disk */
 	if (! main_status.closing_all && doc->real_path != NULL)
-		ui_add_recent_file(doc->file_name);
+		ui_add_recent_document(doc);
 
 	doc->is_valid = FALSE;
 
@@ -1113,7 +1113,7 @@ GeanyDocument *document_open_file_full(GeanyDocument *doc, const gchar *filename
 		doc = document_find_by_filename(utf8_filename);
 		if (doc != NULL)
 		{
-			ui_add_recent_file(utf8_filename);	/* either add or reorder recent item */
+			ui_add_recent_document(doc);	/* either add or reorder recent item */
 			/* show the doc before reload dialog */
 			document_show_tab(doc);
 			document_check_disk_status(doc, TRUE);	/* force a file changed check */
@@ -1200,7 +1200,7 @@ GeanyDocument *document_open_file_full(GeanyDocument *doc, const gchar *filename
 
 		/* finally add current file to recent files menu, but not the files from the last session */
 		if (! main_status.opening_session_files)
-			ui_add_recent_file(utf8_filename);
+			ui_add_recent_document(doc);
 
 		if (reload)
 		{
@@ -1475,7 +1475,7 @@ gboolean document_save_file_as(GeanyDocument *doc, const gchar *utf8_fname)
 	doc->priv->file_disk_status = FILE_IGNORE;
 
 	if (ret)
-		ui_add_recent_file(doc->file_name);
+		ui_add_recent_document(doc);
 	return ret;
 }
 

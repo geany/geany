@@ -776,7 +776,7 @@ gboolean main_handle_filename(const gchar *locale_filename)
 		doc = document_open_file(filename, FALSE, NULL, NULL);
 		/* add recent file manually if opening_session_files is set */
 		if (doc != NULL && main_status.opening_session_files)
-			ui_add_recent_file(doc->file_name);
+			ui_add_recent_document(doc);
 		g_free(filename);
 		return TRUE;
 	}
@@ -786,7 +786,7 @@ gboolean main_handle_filename(const gchar *locale_filename)
 
 		doc = document_new_file(utf8_filename, NULL, NULL);
 		if (doc != NULL)
-			ui_add_recent_file(doc->file_name);
+			ui_add_recent_document(doc);
 		g_free(utf8_filename);
 		g_free(filename);
 		return TRUE;

@@ -1113,18 +1113,19 @@ static void recent_project_activate_cb(GtkMenuItem *menuitem, G_GNUC_UNUSED gpoi
 }
 
 
-static void add_recent_file(const gchar *utf8_filename, GeanyRecentFiles *grf)
+static void add_recent_file(const gchar *utf8_filename, GeanyRecentFiles *grf,
+		const GtkRecentData *rdata)
 {
 	if (g_queue_find_custom(grf->recent_queue, utf8_filename, (GCompareFunc) strcmp) == NULL)
 	{
 
-		if (grf->type == RECENT_FILE_FILE)
+		if (grf->type == RECENT_FILE_FILE && rdata)
 		{
 			GtkRecentManager *manager = gtk_recent_manager_get_default();
 			gchar *uri = g_filename_to_uri(utf8_filename, NULL, NULL);
 			if (uri != NULL)
 			{
-				gtk_recent_manager_add_item(manager, uri);
+				gtk_recent_manager_add_full(manager, uri, rdata);
 				g_free(uri);
 			}
 		}
@@ -1142,15 +1143,34 @@ static void add_recent_file(const gchar *utf8_filename, GeanyRecentFiles *grf)
 }
 
 
-void ui_add_recent_file(const gchar *utf8_filename)
+void ui_add_recent_document(GeanyDocument *doc)
 {
-	add_recent_file(utf8_filename, recent_get_recent_files());
+	/* what are the groups for actually? */
+	static const gchar *groups[2] = {
+		"geany",
+		NULL
+	};
+	GtkRecentData rdata;
+
+	/* Prepare the data for gtk_recent_manager_add_full() */
+	rdata.display_name = NULL;
+	rdata.description = NULL;
+	rdata.mime_type = doc->file_type->mime_type;
+	/* if we ain't got no mime-type, fallback to plain text */
+	if (! rdata.mime_type)
+		rdata.mime_type = (gchar *) "text/plain";
+	rdata.app_name = (gchar *) "geany";
+	rdata.app_exec = (gchar *) "geany %u";
+	rdata.groups = (gchar **) groups;
+	rdata.is_private = FALSE;
+
+	add_recent_file(doc->file_name, recent_get_recent_files(), &rdata);
 }
 
 
 void ui_add_recent_project_file(const gchar *utf8_filename)
 {
-	add_recent_file(utf8_filename, recent_get_recent_projects());
+	add_recent_file(utf8_filename, recent_get_recent_projects(), NULL);
 }
 
 
