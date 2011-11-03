@@ -164,8 +164,6 @@ Coding
   them down into smaller static functions where possible. This makes code
   much easier to read and maintain.
 * Use GLib types and functions - gint not int, g_free() not free().
-* Do not use G_LIKELY or G_UNLIKELY (except in critical loops). These
-  add noise to the code with little real benefit.
 * Your code should build against GLib 2.20 and GTK 2.16. At least for the
   moment, we want to keep the minimum requirement for GTK at 2.16 (of
   course, you can use the GTK_CHECK_VERSION macro to protect code using
@@ -174,6 +172,8 @@ Coding
   gcc's -Wdeclaration-after-statement to warn about this.
 * Don't let variable names shadow outer variables - use gcc's -Wshadow
   option.
+* Do not use G_LIKELY or G_UNLIKELY (except in critical loops). These
+  add noise to the code with little real benefit.
 
 Compiler options & warnings
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -233,14 +233,32 @@ Style
 
 Example::
 
+    struct Bar;
+
+    typedef struct Foo  /* struct names normally are the same as typedef names */
+    {
+        gint    foo;    /* names are somewhat aligned visually */
+        gint    bar;    /* fields don't share the same line */
+        SomeLongTypeName baz; /* alignment is not strict */
+        gchar   *ptr;   /* pointer symbol must go next to variable name, not type */
+        Bar     public; /**< only plugin API fields have a doc-comment */
+    }
+    Foo;
+
+
     gint some_func(void);
 
+    gint some_other_func(void);
 
+
+    /* optional function comment explains something important */
     gint function_long_name(gchar arg1, <too many args to fit on this line>,
             gchar argN)
     {
-        /* variable declarations go before code in each scope */
+        /* variable declarations always go before code in each scope */
+        /* variable names should NOT be aligned at all */
         gint foo, bar;  /* variables can go on the same line */
+        gint baz;       /* but often don't */
         gchar *ptr;     /* pointer symbol must go next to variable name, not type */
         gchar *another; /* pointers should normally go on separate lines */
 
@@ -249,7 +267,8 @@ Example::
          * lines to explain */
         if (foo)
         {
-            gint dir = -1;    /* -1 to search backwards */
+            /* variables only used in one scope should normally be declared there */
+            gint dir = -1;
 
             bar = foo;
             if ((bar & (guint)dir) != 7)
@@ -261,6 +280,12 @@ Example::
     }
 
 
+    /** Explains using doc-comments for plugin API functions.
+     * First line should be short and use the third person tense - 'explains',
+     * not 'explain'.
+     *
+     * @return Some number.
+     * @since 1.22. */
     gint another_function(void)
     {
         ...
