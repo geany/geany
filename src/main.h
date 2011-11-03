@@ -32,6 +32,7 @@ typedef struct
 	gint		goto_column;
 	gboolean	ignore_global_tags;
 	gboolean	list_documents;
+	gboolean 	readonly;
 }
 CommandLineOptions;
 
