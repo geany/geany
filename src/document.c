@@ -72,6 +72,8 @@
 #include "search.h"
 #include "filetypesprivate.h"
 
+#include "SciLexer.h"
+
 
 GeanyFilePrefs file_prefs;
 
@@ -2352,32 +2354,25 @@ void document_update_tag_list_in_idle(GeanyDocument *doc)
 void document_update_type_keywords(GeanyDocument *doc)
 {
 	gint keyword_idx;
-	gchar *keywords = NULL;
+	gchar *keywords;
 	GString *str;
 	GPtrArray *tags_array;
 
 	g_return_if_fail(DOC_VALID(doc));
+	g_return_if_fail(app->tm_workspace != NULL);
 
-	switch (doc->file_type->id)
+	switch (sci_get_lexer(doc->editor->sci))
 	{
-		/* continue working with the following languages, skip on all others */
-		case GEANY_FILETYPES_C:
-		case GEANY_FILETYPES_CPP:
-		case GEANY_FILETYPES_CS:
-		case GEANY_FILETYPES_D:
-		case GEANY_FILETYPES_JAVA:
-		case GEANY_FILETYPES_VALA:
+		case SCLEX_CPP:
+		case SCLEX_D:
+			/* index of the keyword set in the Scintilla lexer, for 
+			 * example in LexCPP.cxx, see "cppWordLists" global array. */
+			keyword_idx = 3;
 			break;
+		/* early out if the lexer doesn't support user type keywords */
 		default:
 			return;
 	}
-
-	keyword_idx = editor_lexer_get_type_keyword_idx(sci_get_lexer(doc->editor->sci));
-	if (keyword_idx == -1)
-		return;
-
-	if (app->tm_workspace == NULL)
-		return;
 
 	tags_array = app->tm_workspace->work_object.tags_array;
 	if (tags_array)

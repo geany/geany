@@ -3486,22 +3486,6 @@ static gboolean editor_lexer_is_c_like(gint lexer)
 #endif
 
 
-/* Returns: -1 if lexer doesn't support type keywords.
- * @see document_update_type_keywords(). */
-gint editor_lexer_get_type_keyword_idx(gint lexer)
-{
-	switch (lexer)
-	{
-		case SCLEX_CPP:
-		case SCLEX_D:
-		return 3;
-
-		default:
-		return -1;
-	}
-}
-
-
 /* inserts a three-line comment at one line above current cursor position */
 void editor_insert_multiline_comment(GeanyEditor *editor)
 {
