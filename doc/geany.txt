@@ -4368,7 +4368,7 @@ marker_line
 
 marker_search
     The style for a marked search results (when using "Mark" in Search dialogs).
-    The second argument sets the background colour for the drawn rectangle.
+    The second argument sets the background color for the drawn rectangle.
 
     Only the second argument is interpreted.
 
