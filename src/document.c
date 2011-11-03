@@ -104,6 +104,7 @@ typedef struct
 static void document_undo_clear(GeanyDocument *doc);
 static void document_redo_add(GeanyDocument *doc, guint type, gpointer data);
 static gboolean update_tags_from_buffer(GeanyDocument *doc);
+static gboolean remove_page(guint page_num);
 
 
 /**
@@ -357,42 +358,6 @@ void document_set_text_changed(GeanyDocument *doc, gboolean changed)
 }
 
 
-/* Sets is_valid to FALSE and initializes some members to NULL, to mark it uninitialized.
- * The flag is_valid is set to TRUE in document_create(). */
-static void init_doc_struct(GeanyDocument *new_doc)
-{
-	GeanyDocumentPrivate *priv;
-
-	memset(new_doc, 0, sizeof(GeanyDocument));
-
-	new_doc->is_valid = FALSE;
-	new_doc->has_tags = FALSE;
-	new_doc->readonly = FALSE;
-	new_doc->file_name = NULL;
-	new_doc->file_type = NULL;
-	new_doc->tm_file = NULL;
-	new_doc->encoding = NULL;
-	new_doc->has_bom = FALSE;
-	new_doc->editor = NULL;
-	new_doc->changed = FALSE;
-	new_doc->real_path = NULL;
-
-	new_doc->priv = g_new0(GeanyDocumentPrivate, 1);
-	priv = new_doc->priv;
-	priv->tag_store = NULL;
-	priv->tag_tree = NULL;
-	priv->saved_encoding.encoding = NULL;
-	priv->saved_encoding.has_bom = FALSE;
-	priv->undo_actions = NULL;
-	priv->redo_actions = NULL;
-	priv->line_count = 0;
-	priv->tag_list_update_source = 0;
-#ifndef USE_GIO_FILEMON
-	priv->last_check = time(NULL);
-#endif
-}
-
-
 /* returns the next free place in the document list,
  * or -1 if the documents_array is full */
 static gint document_get_new_idx(void)
@@ -533,8 +498,6 @@ static gboolean on_idle_focus(gpointer doc)
 }
 
 
-static gboolean remove_page(guint page_num);
-
 /* Creates a new document and editor, adding a tab in the notebook.
  * @return The created document */
 static GeanyDocument *document_create(const gchar *utf8_filename)
@@ -545,9 +508,9 @@ static GeanyDocument *document_create(const gchar *utf8_filename)
 
 	if (cur_pages == 1)
 	{
-		GeanyDocument *cur = document_get_current();
+		doc = document_get_current();
 		/* remove the empty document first */
-		if (cur != NULL && cur->file_name == NULL && ! cur->changed)
+		if (doc != NULL && doc->file_name == NULL && ! doc->changed)
 			/* prevent immediately opening another new doc with
 			 * new_document_after_close pref */
 			remove_page(0);
@@ -556,18 +519,22 @@ static GeanyDocument *document_create(const gchar *utf8_filename)
 	new_idx = document_get_new_idx();
 	if (new_idx == -1)	/* expand the array, no free places */
 	{
-		GeanyDocument *new_doc = g_new0(GeanyDocument, 1);
+		doc = g_new0(GeanyDocument, 1);
 
 		new_idx = documents_array->len;
-		g_ptr_array_add(documents_array, new_doc);
+		g_ptr_array_add(documents_array, doc);
 	}
+	
 	doc = documents[new_idx];
-	init_doc_struct(doc);	/* initialize default document settings */
+	
+	/* initialize default document settings */
+	doc->priv = g_new0(GeanyDocumentPrivate, 1);
 	doc->index = new_idx;
-
 	doc->file_name = g_strdup(utf8_filename);
-
 	doc->editor = editor_create(doc);
+#ifndef USE_GIO_FILEMON
+	doc->priv->last_check = time(NULL);
+#endif
 
 	sidebar_openfiles_add(doc);	/* sets doc->iter */
 
@@ -605,21 +572,16 @@ gboolean document_close(GeanyDocument *doc)
 }
 
 
-/* Call document_remove_page() instead, this is only needed for document_create(). */
+/* Call document_remove_page() instead, this is only needed for document_create()
+ * to prevent re-opening a new document when the last document is closed (if enabled). */
 static gboolean remove_page(guint page_num)
 {
 	GeanyDocument *doc = document_get_from_page(page_num);
 
-	if (G_UNLIKELY(doc == NULL))
-	{
-		g_warning("%s: page_num: %d", G_STRFUNC, page_num);
-		return FALSE;
-	}
+	g_return_val_if_fail(doc != NULL, FALSE);
 
 	if (doc->changed && ! dialogs_show_unsaved_file(doc))
-	{
 		return FALSE;
-	}
 
 	/* tell any plugins that the document is about to be closed */
 	g_signal_emit_by_name(geany_object, "document-close", doc);
@@ -644,23 +606,20 @@ static gboolean remove_page(guint page_num)
 	tm_workspace_remove_object(doc->tm_file, TRUE, TRUE);
 
 	editor_destroy(doc->editor);
-	doc->editor = NULL;
+	doc->editor = NULL; /* needs to be NULL for document_undo_clear() call below */
 
 	document_stop_file_monitoring(doc);
 
-	doc->file_name = NULL;
-	doc->real_path = NULL;
-	doc->file_type = NULL;
-	doc->encoding = NULL;
-	doc->has_bom = FALSE;
-	doc->tm_file = NULL;
 	document_undo_clear(doc);
+
 	g_free(doc->priv);
+
+	/* reset document settings to defaults for re-use */
+	memset(doc, 0, sizeof(GeanyDocument));
 
 	if (gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook)) == 0)
 	{
 		sidebar_update_tag_list(NULL, FALSE);
-		/*on_notebook1_switch_page(GTK_NOTEBOOK(main_widgets.notebook), NULL, 0, NULL);*/
 		ui_set_window_title(NULL);
 		ui_save_buttons_toggle(FALSE);
 		ui_update_popup_reundo_items(NULL);
