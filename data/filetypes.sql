@@ -4,7 +4,10 @@
 default=default
 comment=comment
 commentline=comment_line
+commentlinedoc=comment_line_doc
 commentdoc=comment_doc
+commentdockeyword=comment_doc_keyword
+commentdockeyworderror=comment_doc_keyword_error
 number=number_1
 word=keyword_1
 word2=keyword_2

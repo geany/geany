@@ -1035,22 +1035,19 @@ static void styleset_diff(ScintillaObject *sci, gint ft_id)
 
 static void styleset_lisp_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
 {
-	new_styleset(ft_id, 15);
+	new_styleset(ft_id, 12);
 	get_keyfile_style(config, config_home, "default", &style_sets[ft_id].styling[0]);
 	get_keyfile_style(config, config_home, "comment", &style_sets[ft_id].styling[1]);
 	get_keyfile_style(config, config_home, "multicomment", &style_sets[ft_id].styling[2]);
 	get_keyfile_style(config, config_home, "number", &style_sets[ft_id].styling[3]);
 	get_keyfile_style(config, config_home, "keyword", &style_sets[ft_id].styling[4]);
-	get_keyfile_style(config, config_home, "special_keyword", &style_sets[ft_id].styling[5]);
-	get_keyfile_style(config, config_home, "symbol", &style_sets[ft_id].styling[6]);
-	get_keyfile_style(config, config_home, "string", &style_sets[ft_id].styling[7]);
-	get_keyfile_style(config, config_home, "stringeol", &style_sets[ft_id].styling[8]);
-	get_keyfile_style(config, config_home, "identifier", &style_sets[ft_id].styling[9]);
-	get_keyfile_style(config, config_home, "operator", &style_sets[ft_id].styling[10]);
-	get_keyfile_style(config, config_home, "special", &style_sets[ft_id].styling[11]);
-	get_keyfile_style(config, config_home, "character", &style_sets[ft_id].styling[12]);
-	get_keyfile_style(config, config_home, "macro", &style_sets[ft_id].styling[13]);
-	get_keyfile_style(config, config_home, "macrodispatch", &style_sets[ft_id].styling[14]);
+	get_keyfile_style(config, config_home, "symbol", &style_sets[ft_id].styling[5]);
+	get_keyfile_style(config, config_home, "string", &style_sets[ft_id].styling[6]);
+	get_keyfile_style(config, config_home, "stringeol", &style_sets[ft_id].styling[7]);
+	get_keyfile_style(config, config_home, "identifier", &style_sets[ft_id].styling[8]);
+	get_keyfile_style(config, config_home, "operator", &style_sets[ft_id].styling[9]);
+	get_keyfile_style(config, config_home, "special", &style_sets[ft_id].styling[10]);
+	get_keyfile_style(config, config_home, "keywordkw", &style_sets[ft_id].styling[11]);
 
 	style_sets[ft_id].keywords = g_new(gchar*, 3);
 	get_keyfile_keywords(config, config_home, "keywords", ft_id, 0);
@@ -1072,20 +1069,13 @@ static void styleset_lisp(ScintillaObject *sci, gint ft_id)
 	set_sci_style(sci, SCE_LISP_MULTI_COMMENT, ft_id, 2);
 	set_sci_style(sci, SCE_LISP_NUMBER, ft_id, 3);
 	set_sci_style(sci, SCE_LISP_KEYWORD, ft_id, 4);
-/*
-	set_sci_style(sci, SCE_LISP_SPECIAL_KEYWORD, ft_id, 5);
-*/
-	set_sci_style(sci, SCE_LISP_SYMBOL, ft_id, 6);
-	set_sci_style(sci, SCE_LISP_STRING, ft_id, 7);
-	set_sci_style(sci, SCE_LISP_STRINGEOL, ft_id, 8);
-	set_sci_style(sci, SCE_LISP_IDENTIFIER, ft_id, 9);
-	set_sci_style(sci, SCE_LISP_OPERATOR, ft_id, 10);
-	set_sci_style(sci, SCE_LISP_SPECIAL, ft_id, 11);
-/*
-	set_sci_style(sci, SCE_LISP_CHARACTER, ft_id, 12);
-	set_sci_style(sci, SCE_LISP_MACRO, ft_id, 13);
-	set_sci_style(sci, SCE_LISP_MACRO_DISPATCH, ft_id, 14);
-*/
+	set_sci_style(sci, SCE_LISP_SYMBOL, ft_id, 5);
+	set_sci_style(sci, SCE_LISP_STRING, ft_id, 6);
+	set_sci_style(sci, SCE_LISP_STRINGEOL, ft_id, 7);
+	set_sci_style(sci, SCE_LISP_IDENTIFIER, ft_id, 8);
+	set_sci_style(sci, SCE_LISP_OPERATOR, ft_id, 9);
+	set_sci_style(sci, SCE_LISP_SPECIAL, ft_id, 10);
+	set_sci_style(sci, SCE_LISP_KEYWORD_KW, ft_id, 11);
 }
 
 
@@ -1431,6 +1421,7 @@ static void styleset_markup(ScintillaObject *sci, gboolean set_keywords)
 	set_sci_style(sci, SCE_HJA_SINGLESTRING, GEANY_FILETYPES_XML, 52);
 	set_sci_style(sci, SCE_HJA_SYMBOLS, GEANY_FILETYPES_XML, 53);
 	set_sci_style(sci, SCE_HJA_STRINGEOL, GEANY_FILETYPES_XML, 54);
+	set_sci_style(sci, SCE_HJA_REGEX, GEANY_FILETYPES_XML, 55);
 
 	/* for embedded Python we use the Python styles */
 	set_sci_style(sci, SCE_HP_START, GEANY_FILETYPES_XML, 43);
@@ -1801,7 +1792,7 @@ static void styleset_r(ScintillaObject *sci, gint ft_id)
 
 static void styleset_ruby_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
 {
-	new_styleset(ft_id, 35);
+	new_styleset(ft_id, 34);
 	get_keyfile_style(config, config_home, "default", &style_sets[ft_id].styling[0]);
 	get_keyfile_style(config, config_home, "commentline", &style_sets[ft_id].styling[1]);
 	get_keyfile_style(config, config_home, "number", &style_sets[ft_id].styling[2]);
@@ -1824,19 +1815,18 @@ static void styleset_ruby_init(gint ft_id, GKeyFile *config, GKeyFile *config_ho
 	get_keyfile_style(config, config_home, "stdin", &style_sets[ft_id].styling[19]);
 	get_keyfile_style(config, config_home, "stdout", &style_sets[ft_id].styling[20]);
 	get_keyfile_style(config, config_home, "stderr", &style_sets[ft_id].styling[21]);
-	get_keyfile_style(config, config_home, "datasection", &style_sets[ft_id].styling[22]);
-	get_keyfile_style(config, config_home, "regex", &style_sets[ft_id].styling[23]);
-	get_keyfile_style(config, config_home, "here_q", &style_sets[ft_id].styling[24]);
-	get_keyfile_style(config, config_home, "here_qq", &style_sets[ft_id].styling[25]);
-	get_keyfile_style(config, config_home, "here_qx", &style_sets[ft_id].styling[26]);
-	get_keyfile_style(config, config_home, "string_q", &style_sets[ft_id].styling[27]);
-	get_keyfile_style(config, config_home, "string_qq", &style_sets[ft_id].styling[28]);
-	get_keyfile_style(config, config_home, "string_qx", &style_sets[ft_id].styling[29]);
-	get_keyfile_style(config, config_home, "string_qr", &style_sets[ft_id].styling[30]);
-	get_keyfile_style(config, config_home, "string_qw", &style_sets[ft_id].styling[31]);
-	get_keyfile_style(config, config_home, "upper_bound", &style_sets[ft_id].styling[32]);
-	get_keyfile_style(config, config_home, "error", &style_sets[ft_id].styling[33]);
-	get_keyfile_style(config, config_home, "pod", &style_sets[ft_id].styling[34]);
+	get_keyfile_style(config, config_home, "regex", &style_sets[ft_id].styling[22]);
+	get_keyfile_style(config, config_home, "here_q", &style_sets[ft_id].styling[23]);
+	get_keyfile_style(config, config_home, "here_qq", &style_sets[ft_id].styling[24]);
+	get_keyfile_style(config, config_home, "here_qx", &style_sets[ft_id].styling[25]);
+	get_keyfile_style(config, config_home, "string_q", &style_sets[ft_id].styling[26]);
+	get_keyfile_style(config, config_home, "string_qq", &style_sets[ft_id].styling[27]);
+	get_keyfile_style(config, config_home, "string_qx", &style_sets[ft_id].styling[28]);
+	get_keyfile_style(config, config_home, "string_qr", &style_sets[ft_id].styling[29]);
+	get_keyfile_style(config, config_home, "string_qw", &style_sets[ft_id].styling[30]);
+	get_keyfile_style(config, config_home, "upper_bound", &style_sets[ft_id].styling[31]);
+	get_keyfile_style(config, config_home, "error", &style_sets[ft_id].styling[32]);
+	get_keyfile_style(config, config_home, "pod", &style_sets[ft_id].styling[33]);
 
 	style_sets[ft_id].keywords = g_new(gchar*, 2);
 	get_keyfile_keywords(config, config_home, "primary", ft_id, 0);
@@ -1873,19 +1863,18 @@ static void styleset_ruby(ScintillaObject *sci, gint ft_id)
 	set_sci_style(sci, SCE_RB_STDIN, ft_id, 19);
 	set_sci_style(sci, SCE_RB_STDOUT, ft_id, 20);
 	set_sci_style(sci, SCE_RB_STDERR, ft_id, 21);
-	set_sci_style(sci, SCE_RB_DATASECTION, ft_id, 22);
-	set_sci_style(sci, SCE_RB_REGEX, ft_id, 23);
-	set_sci_style(sci, SCE_RB_HERE_Q, ft_id, 24);
-	set_sci_style(sci, SCE_RB_HERE_QQ, ft_id, 25);
-	set_sci_style(sci, SCE_RB_HERE_QX, ft_id, 26);
-	set_sci_style(sci, SCE_RB_STRING_Q, ft_id, 27);
-	set_sci_style(sci, SCE_RB_STRING_QQ, ft_id, 28);
-	set_sci_style(sci, SCE_RB_STRING_QX, ft_id, 29);
-	set_sci_style(sci, SCE_RB_STRING_QR, ft_id, 30);
-	set_sci_style(sci, SCE_RB_STRING_QW, ft_id, 31);
-	set_sci_style(sci, SCE_RB_UPPER_BOUND, ft_id, 32);
-	set_sci_style(sci, SCE_RB_ERROR, ft_id, 33);
-	set_sci_style(sci, SCE_RB_POD, ft_id, 34);
+	set_sci_style(sci, SCE_RB_REGEX, ft_id, 22);
+	set_sci_style(sci, SCE_RB_HERE_Q, ft_id, 23);
+	set_sci_style(sci, SCE_RB_HERE_QQ, ft_id, 24);
+	set_sci_style(sci, SCE_RB_HERE_QX, ft_id, 25);
+	set_sci_style(sci, SCE_RB_STRING_Q, ft_id, 26);
+	set_sci_style(sci, SCE_RB_STRING_QQ, ft_id, 27);
+	set_sci_style(sci, SCE_RB_STRING_QX, ft_id, 28);
+	set_sci_style(sci, SCE_RB_STRING_QR, ft_id, 29);
+	set_sci_style(sci, SCE_RB_STRING_QW, ft_id, 30);
+	set_sci_style(sci, SCE_RB_UPPER_BOUND, ft_id, 31);
+	set_sci_style(sci, SCE_RB_ERROR, ft_id, 32);
+	set_sci_style(sci, SCE_RB_POD, ft_id, 33);
 }
 
 
@@ -2247,7 +2236,7 @@ static void styleset_conf(ScintillaObject *sci, gint ft_id)
 
 static void styleset_asm_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
 {
-	new_styleset(ft_id, 15);
+	new_styleset(ft_id, 16);
 	get_keyfile_style(config, config_home, "default", &style_sets[ft_id].styling[0]);
 	get_keyfile_style(config, config_home, "comment", &style_sets[ft_id].styling[1]);
 	get_keyfile_style(config, config_home, "number", &style_sets[ft_id].styling[2]);
@@ -2263,6 +2252,7 @@ static void styleset_asm_init(gint ft_id, GKeyFile *config, GKeyFile *config_hom
 	get_keyfile_style(config, config_home, "character", &style_sets[ft_id].styling[12]);
 	get_keyfile_style(config, config_home, "stringeol", &style_sets[ft_id].styling[13]);
 	get_keyfile_style(config, config_home, "extinstruction", &style_sets[ft_id].styling[14]);
+	get_keyfile_style(config, config_home, "commentdirective", &style_sets[ft_id].styling[15]);
 
 	style_sets[ft_id].keywords = g_new(gchar*, 4);
 	get_keyfile_keywords(config, config_home, "instructions", ft_id, 0);
@@ -2298,6 +2288,7 @@ static void styleset_asm(ScintillaObject *sci, gint ft_id)
 	set_sci_style(sci, SCE_ASM_CHARACTER, ft_id, 12);
 	set_sci_style(sci, SCE_ASM_STRINGEOL, ft_id, 13);
 	set_sci_style(sci, SCE_ASM_EXTINSTRUCTION, ft_id, 14);
+	set_sci_style(sci, SCE_ASM_COMMENTDIRECTIVE, ft_id, 15);
 }
 
 
@@ -2457,22 +2448,29 @@ static void styleset_fortran(ScintillaObject *sci, gint ft_id)
 
 static void styleset_sql_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
 {
-	new_styleset(ft_id, 15);
+	new_styleset(ft_id, 18);
 	get_keyfile_style(config, config_home, "default", &style_sets[ft_id].styling[0]);
 	get_keyfile_style(config, config_home, "comment", &style_sets[ft_id].styling[1]);
 	get_keyfile_style(config, config_home, "commentline", &style_sets[ft_id].styling[2]);
 	get_keyfile_style(config, config_home, "commentdoc", &style_sets[ft_id].styling[3]);
-	get_keyfile_style(config, config_home, "number", &style_sets[ft_id].styling[4]);
-	get_keyfile_style(config, config_home, "word", &style_sets[ft_id].styling[5]);
-	get_keyfile_style(config, config_home, "word2", &style_sets[ft_id].styling[6]);
-	get_keyfile_style(config, config_home, "string", &style_sets[ft_id].styling[7]);
-	get_keyfile_style(config, config_home, "character", &style_sets[ft_id].styling[8]);
-	get_keyfile_style(config, config_home, "operator", &style_sets[ft_id].styling[9]);
-	get_keyfile_style(config, config_home, "identifier", &style_sets[ft_id].styling[10]);
-	get_keyfile_style(config, config_home, "sqlplus", &style_sets[ft_id].styling[11]);
-	get_keyfile_style(config, config_home, "sqlplus_prompt", &style_sets[ft_id].styling[12]);
-	get_keyfile_style(config, config_home, "sqlplus_comment", &style_sets[ft_id].styling[13]);
-	get_keyfile_style(config, config_home, "quotedidentifier", &style_sets[ft_id].styling[14]);
+	get_keyfile_style(config, config_home, "commentlinedoc", &style_sets[ft_id].styling[4]);
+	get_keyfile_style(config, config_home, "commentdockeyword", &style_sets[ft_id].styling[5]);
+	get_keyfile_style(config, config_home, "commentdockeyworderror", &style_sets[ft_id].styling[6]);
+	get_keyfile_style(config, config_home, "number", &style_sets[ft_id].styling[7]);
+	get_keyfile_style(config, config_home, "word", &style_sets[ft_id].styling[8]);
+	get_keyfile_style(config, config_home, "word2", &style_sets[ft_id].styling[9]);
+	get_keyfile_style(config, config_home, "string", &style_sets[ft_id].styling[10]);
+	get_keyfile_style(config, config_home, "character", &style_sets[ft_id].styling[11]);
+	get_keyfile_style(config, config_home, "operator", &style_sets[ft_id].styling[12]);
+	get_keyfile_style(config, config_home, "identifier", &style_sets[ft_id].styling[13]);
+	get_keyfile_style(config, config_home, "sqlplus", &style_sets[ft_id].styling[14]);
+	get_keyfile_style(config, config_home, "sqlplus_prompt", &style_sets[ft_id].styling[15]);
+	get_keyfile_style(config, config_home, "sqlplus_comment", &style_sets[ft_id].styling[16]);
+	get_keyfile_style(config, config_home, "quotedidentifier", &style_sets[ft_id].styling[17]);
+	/*get_keyfile_style(config, config_home, "user1", &style_sets[ft_id].styling[18]);
+	get_keyfile_style(config, config_home, "user2", &style_sets[ft_id].styling[19]);
+	get_keyfile_style(config, config_home, "user3", &style_sets[ft_id].styling[20]);
+	get_keyfile_style(config, config_home, "user4", &style_sets[ft_id].styling[21]);*/
 
 	style_sets[ft_id].keywords = g_new(gchar*, 2);
 	get_keyfile_keywords(config, config_home, "keywords", ft_id, 0);
@@ -2491,17 +2489,25 @@ static void styleset_sql(ScintillaObject *sci, gint ft_id)
 	set_sci_style(sci, SCE_SQL_COMMENT, ft_id, 1);
 	set_sci_style(sci, SCE_SQL_COMMENTLINE, ft_id, 2);
 	set_sci_style(sci, SCE_SQL_COMMENTDOC, ft_id, 3);
-	set_sci_style(sci, SCE_SQL_NUMBER, ft_id, 4);
-	set_sci_style(sci, SCE_SQL_WORD, ft_id, 5);
-	set_sci_style(sci, SCE_SQL_WORD2, ft_id, 6);
-	set_sci_style(sci, SCE_SQL_STRING, ft_id, 7);
-	set_sci_style(sci, SCE_SQL_CHARACTER, ft_id, 8);
-	set_sci_style(sci, SCE_SQL_OPERATOR, ft_id, 9);
-	set_sci_style(sci, SCE_SQL_IDENTIFIER, ft_id, 10);
-	set_sci_style(sci, SCE_SQL_SQLPLUS, ft_id, 11);
-	set_sci_style(sci, SCE_SQL_SQLPLUS_PROMPT, ft_id, 12);
-	set_sci_style(sci, SCE_SQL_SQLPLUS_COMMENT, ft_id, 13);
-	set_sci_style(sci, SCE_SQL_QUOTEDIDENTIFIER, ft_id, 14);
+	set_sci_style(sci, SCE_SQL_COMMENTLINEDOC, ft_id, 4);
+	set_sci_style(sci, SCE_SQL_COMMENTDOCKEYWORD, ft_id, 5);
+	set_sci_style(sci, SCE_SQL_COMMENTDOCKEYWORDERROR, ft_id, 6);
+	set_sci_style(sci, SCE_SQL_NUMBER, ft_id, 7);
+	set_sci_style(sci, SCE_SQL_WORD, ft_id, 8);
+	set_sci_style(sci, SCE_SQL_WORD2, ft_id, 9);
+	set_sci_style(sci, SCE_SQL_STRING, ft_id, 10);
+	set_sci_style(sci, SCE_SQL_CHARACTER, ft_id, 11);
+	set_sci_style(sci, SCE_SQL_OPERATOR, ft_id, 12);
+	set_sci_style(sci, SCE_SQL_IDENTIFIER, ft_id, 13);
+	set_sci_style(sci, SCE_SQL_SQLPLUS, ft_id, 14);
+	set_sci_style(sci, SCE_SQL_SQLPLUS_PROMPT, ft_id, 15);
+	set_sci_style(sci, SCE_SQL_SQLPLUS_COMMENT, ft_id, 16);
+	set_sci_style(sci, SCE_SQL_QUOTEDIDENTIFIER, ft_id, 17);
+	/* these are for user-defined keywords we don't set yet */
+	/*set_sci_style(sci, SCE_SQL_USER1, ft_id, 18);
+	set_sci_style(sci, SCE_SQL_USER2, ft_id, 19);
+	set_sci_style(sci, SCE_SQL_USER3, ft_id, 20);
+	set_sci_style(sci, SCE_SQL_USER4, ft_id, 21);*/
 }
 
 
@@ -2618,7 +2624,7 @@ static void styleset_haskell(ScintillaObject *sci, gint ft_id)
 
 static void styleset_caml_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
 {
-	new_styleset(ft_id, 14);
+	new_styleset(ft_id, 16);
 
 	get_keyfile_style(config, config_home, "default", &style_sets[ft_id].styling[0]);
 	get_keyfile_style(config, config_home, "comment", &style_sets[ft_id].styling[1]);
@@ -2628,12 +2634,14 @@ static void styleset_caml_init(gint ft_id, GKeyFile *config, GKeyFile *config_ho
 	get_keyfile_style(config, config_home, "number", &style_sets[ft_id].styling[5]);
 	get_keyfile_style(config, config_home, "keyword", &style_sets[ft_id].styling[6]);
 	get_keyfile_style(config, config_home, "keyword2", &style_sets[ft_id].styling[7]);
-	get_keyfile_style(config, config_home, "string", &style_sets[ft_id].styling[8]);
-	get_keyfile_style(config, config_home, "char", &style_sets[ft_id].styling[9]);
-	get_keyfile_style(config, config_home, "operator", &style_sets[ft_id].styling[10]);
-	get_keyfile_style(config, config_home, "identifier", &style_sets[ft_id].styling[11]);
-	get_keyfile_style(config, config_home, "tagname", &style_sets[ft_id].styling[12]);
-	get_keyfile_style(config, config_home, "linenum", &style_sets[ft_id].styling[13]);
+	get_keyfile_style(config, config_home, "keyword3", &style_sets[ft_id].styling[8]);
+	get_keyfile_style(config, config_home, "string", &style_sets[ft_id].styling[9]);
+	get_keyfile_style(config, config_home, "char", &style_sets[ft_id].styling[10]);
+	get_keyfile_style(config, config_home, "operator", &style_sets[ft_id].styling[11]);
+	get_keyfile_style(config, config_home, "identifier", &style_sets[ft_id].styling[12]);
+	get_keyfile_style(config, config_home, "tagname", &style_sets[ft_id].styling[13]);
+	get_keyfile_style(config, config_home, "linenum", &style_sets[ft_id].styling[14]);
+	get_keyfile_style(config, config_home, "white", &style_sets[ft_id].styling[15]);
 
 	style_sets[ft_id].keywords = g_new(gchar*, 3);
 	get_keyfile_keywords(config, config_home, "keywords", ft_id, 0);
@@ -2658,18 +2666,20 @@ static void styleset_caml(ScintillaObject *sci, gint ft_id)
 	set_sci_style(sci, SCE_CAML_NUMBER, ft_id, 5);
 	set_sci_style(sci, SCE_CAML_KEYWORD, ft_id, 6);
 	set_sci_style(sci, SCE_CAML_KEYWORD2, ft_id, 7);
-	set_sci_style(sci, SCE_CAML_STRING, ft_id, 8);
-	set_sci_style(sci, SCE_CAML_CHAR, ft_id, 9);
-	set_sci_style(sci, SCE_CAML_OPERATOR, ft_id, 10);
-	set_sci_style(sci, SCE_CAML_IDENTIFIER, ft_id, 11);
-	set_sci_style(sci, SCE_CAML_TAGNAME, ft_id, 12);
-	set_sci_style(sci, SCE_CAML_LINENUM, ft_id, 13);
+	set_sci_style(sci, SCE_CAML_KEYWORD3, ft_id, 8);
+	set_sci_style(sci, SCE_CAML_STRING, ft_id, 9);
+	set_sci_style(sci, SCE_CAML_CHAR, ft_id, 10);
+	set_sci_style(sci, SCE_CAML_OPERATOR, ft_id, 11);
+	set_sci_style(sci, SCE_CAML_IDENTIFIER, ft_id, 12);
+	set_sci_style(sci, SCE_CAML_TAGNAME, ft_id, 13);
+	set_sci_style(sci, SCE_CAML_LINENUM, ft_id, 14);
+	set_sci_style(sci, SCE_CAML_WHITE, ft_id, 15);
 }
 
 
 static void styleset_tcl_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
 {
-	new_styleset(ft_id, 16);
+	new_styleset(ft_id, 18);
 	get_keyfile_style(config, config_home, "default", &style_sets[ft_id].styling[0]);
 	get_keyfile_style(config, config_home, "comment", &style_sets[ft_id].styling[1]);
 	get_keyfile_style(config, config_home, "commentline", &style_sets[ft_id].styling[2]);
@@ -2686,6 +2696,11 @@ static void styleset_tcl_init(gint ft_id, GKeyFile *config, GKeyFile *config_hom
 	get_keyfile_style(config, config_home, "worditcl", &style_sets[ft_id].styling[13]);
 	get_keyfile_style(config, config_home, "wordtkcmds", &style_sets[ft_id].styling[14]);
 	get_keyfile_style(config, config_home, "wordexpand", &style_sets[ft_id].styling[15]);
+	get_keyfile_style(config, config_home, "commentbox", &style_sets[ft_id].styling[16]);
+	get_keyfile_style(config, config_home, "blockcomment", &style_sets[ft_id].styling[17]);
+	/*get_keyfile_style(config, config_home, "user1", &style_sets[ft_id].styling[18]);
+	get_keyfile_style(config, config_home, "user2", &style_sets[ft_id].styling[19]);
+	get_keyfile_style(config, config_home, "user3", &style_sets[ft_id].styling[20]);*/
 
 	style_sets[ft_id].keywords = g_new(gchar*, 6);
 	get_keyfile_keywords(config, config_home, "tcl", ft_id, 0);
@@ -2724,6 +2739,12 @@ static void styleset_tcl(ScintillaObject *sci, gint ft_id)
 	set_sci_style(sci, SCE_TCL_WORD3, ft_id, 13);
 	set_sci_style(sci, SCE_TCL_WORD4, ft_id, 14);
 	set_sci_style(sci, SCE_TCL_WORD5, ft_id, 15);
+	set_sci_style(sci, SCE_TCL_COMMENT_BOX, ft_id, 16);
+	set_sci_style(sci, SCE_TCL_BLOCK_COMMENT, ft_id, 17);
+	/* these are for user-defined keywords we don't set yet */
+	/*set_sci_style(sci, SCE_TCL_WORD6, ft_id, 18);
+	set_sci_style(sci, SCE_TCL_WORD7, ft_id, 19);
+	set_sci_style(sci, SCE_TCL_WORD8, ft_id, 20);*/
 }
 
 static void styleset_txt2tags_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
@@ -2852,6 +2873,8 @@ static void styleset_d_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
 	get_keyfile_style(config, config_home, "commentlinedoc", &style_sets[ft_id].styling[15]);
 	get_keyfile_style(config, config_home, "commentdockeyword", &style_sets[ft_id].styling[16]);
 	get_keyfile_style(config, config_home, "commentdockeyworderror", &style_sets[ft_id].styling[17]);
+	/*get_keyfile_style(config, config_home, "word6", &style_sets[ft_id].styling[18]);
+	get_keyfile_style(config, config_home, "word7", &style_sets[ft_id].styling[19]);*/
 
 	style_sets[ft_id].keywords = g_new(gchar*, 5);
 	get_keyfile_keywords(config, config_home, "primary", ft_id, 0);
@@ -2897,6 +2920,9 @@ static void styleset_d(ScintillaObject *sci, gint ft_id)
 	set_sci_style(sci, SCE_D_COMMENTLINEDOC, ft_id, 15);
 	set_sci_style(sci, SCE_D_COMMENTDOCKEYWORD, ft_id, 16);
 	set_sci_style(sci, SCE_D_COMMENTDOCKEYWORDERROR, ft_id, 17);
+	/* these are for user-defined keywords we don't set yet */
+	/*set_sci_style(sci, SCE_D_WORD6, ft_id, 18);
+	set_sci_style(sci, SCE_D_WORD7, ft_id, 19);*/
 }
 
 
@@ -3940,7 +3966,10 @@ gboolean highlighting_is_comment_style(gint lexer, gint style)
 		case SCLEX_SQL:
 			return (style == SCE_SQL_COMMENT ||
 				style == SCE_SQL_COMMENTLINE ||
-				style == SCE_SQL_COMMENTDOC);
+				style == SCE_SQL_COMMENTDOC ||
+				style == SCE_SQL_COMMENTLINEDOC ||
+				style == SCE_SQL_COMMENTDOCKEYWORD ||
+				style == SCE_SQL_COMMENTDOCKEYWORDERROR);
 
 		case SCLEX_TCL:
 			return (style == SCE_TCL_COMMENT ||
@@ -3995,6 +4024,11 @@ gboolean highlighting_is_comment_style(gint lexer, gint style)
 		case SCLEX_ADA:
 			return (style == SCE_ADA_COMMENTLINE ||
 				style == SCE_NSIS_COMMENTBOX);
+
+		case SCLEX_ASM:
+			return (style == SCE_ASM_COMMENT ||
+				style == SCE_ASM_COMMENTBLOCK ||
+				style == SCE_ASM_COMMENTDIRECTIVE);
 	}
 	return FALSE;
 }

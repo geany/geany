@@ -6,16 +6,13 @@ comment=comment_line
 multicomment=comment
 number=number_1
 keyword=keyword_1
-special_keyword=type
+keywordkw=keyword_2
 symbol=keyword_2
 string=string_1
 stringeol=string_eol
 identifier=identifier_1
 operator=operator
 special=function
-character=character
-macro=preprocessor
-macrodispatch=number_2
 
 [keywords]
 # all items must be in one line
