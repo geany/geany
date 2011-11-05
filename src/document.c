@@ -2318,15 +2318,19 @@ void document_update_type_keywords(GeanyDocument *doc)
 	g_return_if_fail(DOC_VALID(doc));
 	g_return_if_fail(app->tm_workspace != NULL);
 
-	switch (sci_get_lexer(doc->editor->sci))
+	switch (doc->file_type->id)
 	{
-		case SCLEX_CPP:
-		case SCLEX_D:
+		case GEANY_FILETYPES_C:
+		case GEANY_FILETYPES_CPP:
+		case GEANY_FILETYPES_CS:
+		case GEANY_FILETYPES_D:
+		case GEANY_FILETYPES_JAVA:
+		case GEANY_FILETYPES_VALA:
 			/* index of the keyword set in the Scintilla lexer, for 
 			 * example in LexCPP.cxx, see "cppWordLists" global array. */
 			keyword_idx = 3;
 			break;
-		/* early out if the lexer doesn't support user type keywords */
+		/* early out if user type keywords are not supported */
 		default:
 			return;
 	}
