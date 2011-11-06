@@ -167,10 +167,13 @@ static void open_file_dialog_handle_response(GtkWidget *dialog, gint response)
 			app->project->base_path, NULL);
 }
 
+#ifndef G_VALUE_INIT
+#define G_VALUE_INIT { 0 }
+#endif
 
 static void on_file_open_notify(GObject *filechooser, GParamSpec *pspec, gpointer data)
 {
-	GValue value;
+	GValue value = G_VALUE_INIT;
 
 	g_value_init(&value, pspec->value_type);
 	g_object_get_property(filechooser, pspec->name, &value);
