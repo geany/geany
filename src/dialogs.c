@@ -170,7 +170,7 @@ static void open_file_dialog_handle_response(GtkWidget *dialog, gint response)
 
 static void on_file_open_notify(GObject *filechooser, GParamSpec *pspec, gpointer data)
 {
-	GValue value = { 0 };
+	GValue value;
 
 	g_value_init(&value, pspec->value_type);
 	g_object_get_property(filechooser, pspec->name, &value);

@@ -1064,7 +1064,6 @@ static boolean parseStatement (tokenInfo *const token, boolean is_inside_class)
 	boolean is_class = FALSE;
 	boolean is_terminated = TRUE;
 	boolean is_global = FALSE;
-	boolean is_prototype = FALSE;
 	boolean has_methods = FALSE;
 	vString *	fulltag;
 
@@ -1176,7 +1175,6 @@ static boolean parseStatement (tokenInfo *const token, boolean is_inside_class)
 					 */
 					makeClassTag (name);
 					is_class = TRUE;
-					is_prototype = TRUE;
 
 					/*
 					 * There should a ".function_name" next.

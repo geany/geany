@@ -531,7 +531,6 @@ void sidebar_openfiles_update(GeanyDocument *doc)
 void sidebar_openfiles_update_all()
 {
 	guint i;
-	GeanyDocument *doc;
 
 	gtk_tree_store_clear(store_openfiles);
 	foreach_document (i)
