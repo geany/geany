@@ -2989,7 +2989,6 @@ gboolean document_close_all(void)
 }
 
 
-
 /* *
  * Shows a message related to a document.
  *
@@ -3102,25 +3101,28 @@ static GtkWidget* document_show_message(GeanyDocument *doc, GtkMessageType msgty
 	return info_widget;
 }
 
+static void on_monitor_reload_file_response(GtkWidget *bar, gint response_id, GeanyDocument *doc)
+{
+	if (response_id == GTK_RESPONSE_ACCEPT)
+		document_reload_file(doc, doc->encoding);
+}
+
+
 static void monitor_reload_file(GeanyDocument *doc)
 {
 	gchar *base_name = g_path_get_basename(doc->file_name);
-	gint ret;
 
-	/* we use No instead of Cancel to avoid mnemonic clash */
-	ret = dialogs_show_prompt(NULL,
-		GTK_STOCK_CLOSE, GTK_RESPONSE_CLOSE,
-		GTK_STOCK_NO, GTK_RESPONSE_CANCEL,
+	document_show_message(doc, GTK_MESSAGE_QUESTION, on_monitor_reload_file_response,
 		_("_Reload"), GTK_RESPONSE_ACCEPT,
+		GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+		NULL, GTK_RESPONSE_NONE,
 		_("Do you want to reload it?"),
-		_("The file '%s' on the disk is more recent than\nthe current buffer."),
+		_("The file '%s' on the disk is more recent than the current buffer."),
 		base_name);
-	g_free(base_name);
 
-	if (ret == GTK_RESPONSE_ACCEPT)
-		document_reload_file(doc, doc->encoding);
-	else if (ret == GTK_RESPONSE_CLOSE)
-		document_close(doc);
+	document_set_text_changed(doc, TRUE);
+
+	g_free(base_name);
 }
 
 
