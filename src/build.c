@@ -1390,7 +1390,7 @@ static void create_build_menu_item(GtkWidget *menu, GeanyKeyGroup *group, GtkAcc
 	}
 	gtk_widget_show(item);
 	if (bs->key_binding >= 0)
-		add_menu_accel(group, bs->key_binding, ag, item);
+		add_menu_accel(group, (guint) bs->key_binding, ag, item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	if (bs->cb != NULL)
 	{
@@ -2304,7 +2304,8 @@ static const gchar *fixedkey="xx_xx_xx";
 static void build_load_menu_grp(GKeyFile *config, GeanyBuildCommand **dst, gint grp,
 								gchar *prefix, gboolean loc)
 {
-	gint cmd, prefixlen; /* NOTE prefixlen used in macros above */
+	gint cmd;
+	gsize prefixlen; /* NOTE prefixlen used in macros above */
 	GeanyBuildCommand *dstcmd;
 	gchar *key;
 	static gchar cmdbuf[3] = "  ";
@@ -2515,7 +2516,8 @@ void build_load_menu(GKeyFile *config, GeanyBuildSource src, gpointer p)
 
 static gint build_save_menu_grp(GKeyFile *config, GeanyBuildCommand *src, gint grp, gchar *prefix)
 {
-	gint cmd, prefixlen; /* NOTE prefixlen used in macros above */
+	gint cmd;
+	gsize prefixlen; /* NOTE prefixlen used in macros above */
 	gchar *key;
 	gint count = 0;
 	enum GeanyBuildCmdEntries i;

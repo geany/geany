@@ -2310,7 +2310,7 @@ void document_update_tag_list_in_idle(GeanyDocument *doc)
  */
 void document_update_type_keywords(GeanyDocument *doc)
 {
-	gint keyword_idx;
+	guint keyword_idx;
 	gchar *keywords;
 	GString *str;
 	GPtrArray *tags_array;

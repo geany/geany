@@ -1179,7 +1179,7 @@ static void load_indent_settings(GeanyFiletype *ft, GKeyFile *config, GKeyFile *
 }
 
 
-static void load_settings(gint ft_id, GKeyFile *config, GKeyFile *configh)
+static void load_settings(guint ft_id, GKeyFile *config, GKeyFile *configh)
 {
 	GeanyFiletype *ft = filetypes[ft_id];
 	gchar *result;
@@ -1369,13 +1369,13 @@ static void load_system_keyfile(GKeyFile *key_file, const gchar *file, GKeyFileF
 /* Load the configuration file for the associated filetype id.
  * This should only be called when the filetype is needed, to save loading
  * 20+ configuration files all at once. */
-void filetypes_load_config(gint ft_id, gboolean reload)
+void filetypes_load_config(guint ft_id, gboolean reload)
 {
 	GKeyFile *config, *config_home;
 	GeanyFiletypePrivate *pft;
 	GeanyFiletype *ft;
 
-	g_return_if_fail(ft_id >= 0 && ft_id < (gint) filetypes_array->len);
+	g_return_if_fail(ft_id < filetypes_array->len);
 
 	ft = filetypes[ft_id];
 	pft = ft->priv;
@@ -1528,7 +1528,7 @@ GeanyFiletype *filetypes_lookup_by_name(const gchar *name)
 }
 
 
-static gchar *get_regex_match_string(const gchar *message, regmatch_t *pmatch, gint match_idx)
+static gchar *get_regex_match_string(const gchar *message, regmatch_t *pmatch, guint match_idx)
 {
 	return g_strndup(&message[pmatch[match_idx].rm_so],
 		pmatch[match_idx].rm_eo - pmatch[match_idx].rm_so);

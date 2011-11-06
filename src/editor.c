@@ -600,10 +600,10 @@ static void check_line_breaking(GeanyEditor *editor, gint pos, gchar c)
 }
 
 
-static void show_autocomplete(ScintillaObject *sci, gint rootlen, const gchar *words)
+static void show_autocomplete(ScintillaObject *sci, gsize rootlen, const gchar *words)
 {
 	/* store whether a calltip is showing, so we can reshow it after autocompletion */
-	calltip.set = SSM(sci, SCI_CALLTIPACTIVE, 0, 0);
+	calltip.set = (gboolean) SSM(sci, SCI_CALLTIPACTIVE, 0, 0);
 	SSM(sci, SCI_AUTOCSHOW, rootlen, (sptr_t) words);
 }
 

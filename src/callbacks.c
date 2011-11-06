@@ -185,9 +185,9 @@ void on_save_as1_activate(GtkMenuItem *menuitem, gpointer user_data)
 
 void on_save_all1_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
-	gint i, max = gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook));
+	guint i, max = (guint) gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook));
 	GeanyDocument *doc, *cur_doc = document_get_current();
-	gint count = 0;
+	guint count = 0;
 
 	/* iterate over documents in tabs order */
 	for (i = 0; i < max; i++)
@@ -734,7 +734,7 @@ void on_toggle_case1_activate(GtkMenuItem *menuitem, gpointer user_data)
 		gchar *result = NULL;
 		gint cmd = SCI_LOWERCASE;
 		gint text_len = sci_get_selected_text_length(sci);
-		gboolean rectsel = scintilla_send_message(sci, SCI_SELECTIONISRECTANGLE, 0, 0);
+		gboolean rectsel = (gboolean) scintilla_send_message(sci, SCI_SELECTIONISRECTANGLE, 0, 0);
 
 		text = g_malloc(text_len + 1);
 		sci_get_selected_text(sci, text);
