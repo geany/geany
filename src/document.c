@@ -220,10 +220,36 @@ GeanyDocument *document_find_by_sci(ScintillaObject *sci)
  * @since 0.19 */
 gint document_get_notebook_page(GeanyDocument *doc)
 {
+	GtkWidget *parent;
+
 	g_return_val_if_fail(doc != NULL, -1);
 
-	return gtk_notebook_page_num(GTK_NOTEBOOK(main_widgets.notebook),
-		GTK_WIDGET(doc->editor->sci));
+	parent = gtk_widget_get_parent(GTK_WIDGET(doc->editor->sci));
+	g_return_val_if_fail(GTK_IS_BOX(parent), -1);
+
+	return gtk_notebook_page_num(GTK_NOTEBOOK(main_widgets.notebook), parent);
+}
+
+
+static ScintillaObject *locate_sci_in_container(GtkWidget *container)
+{
+	ScintillaObject *sci = NULL;
+	GList *children, *iter;
+
+	g_return_val_if_fail(GTK_IS_CONTAINER(container), NULL);
+
+	children = gtk_container_get_children(GTK_CONTAINER(container));
+	for (iter = children; iter != NULL; iter = g_list_next(iter))
+	{
+		if (IS_SCINTILLA(iter->data))
+		{
+			sci = SCINTILLA(iter->data);
+			break;
+		}
+	}
+	g_list_free(children);
+
+	return sci;
 }
 
 
@@ -236,13 +262,17 @@ gint document_get_notebook_page(GeanyDocument *doc)
  **/
 GeanyDocument *document_get_from_page(guint page_num)
 {
+	GtkWidget *parent;
 	ScintillaObject *sci;
 
 	if (page_num >= documents_array->len)
 		return NULL;
 
-	sci = (ScintillaObject*)gtk_notebook_get_nth_page(
-				GTK_NOTEBOOK(main_widgets.notebook), page_num);
+	parent = gtk_notebook_get_nth_page(GTK_NOTEBOOK(main_widgets.notebook), page_num);
+	g_return_val_if_fail(GTK_IS_BOX(parent), NULL);
+
+	sci = locate_sci_in_container(parent);
+	g_return_val_if_fail(IS_SCINTILLA(sci), NULL);
 
 	return document_find_by_sci(sci);
 }
@@ -255,14 +285,21 @@ GeanyDocument *document_get_from_page(guint page_num)
  **/
 GeanyDocument *document_get_current(void)
 {
-	gint cur_page = gtk_notebook_get_current_page(GTK_NOTEBOOK(main_widgets.notebook));
+	gint cur_page;
+	GtkWidget *parent;
+	ScintillaObject *sci;
+
+	cur_page = gtk_notebook_get_current_page(GTK_NOTEBOOK(main_widgets.notebook));
 
 	if (cur_page == -1)
 		return NULL;
 	else
 	{
-		ScintillaObject *sci = (ScintillaObject*)
-			gtk_notebook_get_nth_page(GTK_NOTEBOOK(main_widgets.notebook), cur_page);
+		parent = gtk_notebook_get_nth_page(GTK_NOTEBOOK(main_widgets.notebook), cur_page);
+		g_return_val_if_fail(GTK_IS_BOX(parent), NULL);
+
+		sci = locate_sci_in_container(parent);
+		g_return_val_if_fail(IS_SCINTILLA(sci), NULL);
 
 		return document_find_by_sci(sci);
 	}
