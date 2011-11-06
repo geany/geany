@@ -38,7 +38,7 @@
 #define INFO "<span size=\"larger\" weight=\"bold\">%s</span>"
 #define CODENAME "<span weight=\"bold\">\"" GEANY_CODENAME "\"</span>"
 #define BUILDDATE "<span size=\"smaller\">%s</span>"
-#define COPYRIGHT "Copyright (c)  2005-2011\nNick Treleaven\nColomban Wendling\nEnrico Tröger\nFrank Lanitz\nAll rights reserved."
+#define COPYRIGHT "Copyright (c)  2005-2011\nColomban Wendling\nNick Treleaven\nMatthew Brush\nEnrico Tröger\nFrank Lanitz\nAll rights reserved."
 
 const gchar *translators[][2] = {
 	{ "ast", "Marcos Costales &lt;marcoscostales@gmail.com&gt;"},
