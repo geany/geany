@@ -244,7 +244,7 @@ gchar *win32_show_folder_dialog(GtkWidget *parent, const gchar *title, const gch
 		parent = main_widgets.window;
 
 	memset(&bi, 0, sizeof bi);
-	bi.hwndOwner = GDK_WINDOW_HWND(parent->window);
+	bi.hwndOwner = GDK_WINDOW_HWND(gtk_widget_get_window(parent));
 	bi.pidlRoot = NULL;
 	bi.lpszTitle = w_title;
 	bi.lpfn = BrowseCallbackProc;
@@ -297,7 +297,7 @@ gchar *win32_show_project_open_dialog(GtkWidget *parent, const gchar *title,
 #else
 	of.lStructSize = sizeof of;
 #endif
-	of.hwndOwner = GDK_WINDOW_HWND(parent->window);
+	of.hwndOwner = GDK_WINDOW_HWND(gtk_widget_get_window(parent));
 	of.lpstrFilter = get_filters(project_file_filter);
 
 	of.lpstrCustomFilter = NULL;
@@ -359,7 +359,7 @@ gboolean win32_show_document_open_dialog(GtkWindow *parent, const gchar *title, 
 #else
 	of.lStructSize = sizeof of;
 #endif
-	of.hwndOwner = GDK_WINDOW_HWND(GTK_WIDGET(parent)->window);
+	of.hwndOwner = GDK_WINDOW_HWND(gtk_widget_get_window(GTK_WIDGET(parent)));
 	of.lpstrFilter = get_file_filters();
 
 	of.lpstrCustomFilter = NULL;
@@ -442,7 +442,7 @@ gchar *win32_show_document_save_as_dialog(GtkWindow *parent, const gchar *title,
 #else
 	of.lStructSize = sizeof of;
 #endif
-	of.hwndOwner = GDK_WINDOW_HWND(GTK_WIDGET(parent)->window);
+	of.hwndOwner = GDK_WINDOW_HWND(gtk_widget_get_window(GTK_WIDGET(parent)));
 
 	of.lpstrFilter = get_file_filter_all_files();
 	of.lpstrCustomFilter = NULL;
@@ -498,7 +498,7 @@ gchar *win32_show_file_dialog(GtkWindow *parent, const gchar *title, const gchar
 #else
 	of.lStructSize = sizeof of;
 #endif
-	of.hwndOwner = GDK_WINDOW_HWND(GTK_WIDGET(parent)->window);
+	of.hwndOwner = GDK_WINDOW_HWND(gtk_widget_get_window(GTK_WIDGET(parent)));
 
 	of.lpstrFile = w_file;
 	of.nMaxFile = 2048;
@@ -537,7 +537,7 @@ void win32_show_font_dialog(void)
 
 	memset(&cf, 0, sizeof cf);
 	cf.lStructSize = sizeof cf;
-	cf.hwndOwner = GDK_WINDOW_HWND(main_widgets.window->window);
+	cf.hwndOwner = GDK_WINDOW_HWND(gtk_widget_get_window(main_widgets.window));
 	cf.lpLogFont = &lf;
 	/* support CF_APPLY? */
 	cf.Flags = CF_NOSCRIPTSEL | CF_FORCEFONTEXIST | CF_INITTOLOGFONTSTRUCT | CF_SCREENFONTS;
@@ -564,7 +564,7 @@ void win32_show_color_dialog(const gchar *colour)
 	/* Initialize CHOOSECOLOR */
 	memset(&cc, 0, sizeof cc);
 	cc.lStructSize = sizeof(cc);
-	cc.hwndOwner = GDK_WINDOW_HWND(main_widgets.window->window);
+	cc.hwndOwner = GDK_WINDOW_HWND(gtk_widget_get_window(main_widgets.window));
 	cc.lpCustColors = (LPDWORD) acr_cust_clr;
 	cc.rgbResult = (colour != NULL) ? utils_strtod(colour, NULL, colour[0] == '#') : 0;
 	cc.Flags = CC_FULLOPEN | CC_RGBINIT;
@@ -612,7 +612,7 @@ void win32_show_pref_file_dialog(GtkEntry *item)
 #else
 	of.lStructSize = sizeof of;
 #endif
-	of.hwndOwner = GDK_WINDOW_HWND(ui_widgets.prefs_dialog->window);
+	of.hwndOwner = GDK_WINDOW_HWND(gtk_widget_get_window(ui_widgets.prefs_dialog));
 
 	of.lpstrFilter = get_filters(FALSE);
 	of.lpstrCustomFilter = NULL;
@@ -705,9 +705,9 @@ gboolean win32_message_dialog(GtkWidget *parent, GtkMessageType type, const gcha
 	MultiByteToWideChar(CP_UTF8, 0, title, -1, w_title, G_N_ELEMENTS(w_title));
 
 	if (parent != NULL)
-		parent_hwnd = GDK_WINDOW_HWND(parent->window);
+		parent_hwnd = GDK_WINDOW_HWND(gtk_widget_get_window(parent));
 	else if (main_widgets.window != NULL)
-		parent_hwnd = GDK_WINDOW_HWND(main_widgets.window->window);
+		parent_hwnd = GDK_WINDOW_HWND(gtk_widget_get_window(main_widgets.window));
 
 	/* display the message box */
 	rc = MessageBoxW(parent_hwnd, w_msg, w_title, t);
@@ -801,7 +801,7 @@ void win32_init_debug_code(void)
 {
 	if (app->debug_mode)
 	{
-		/* create a console window to get log messages on Windows, 
+		/* create a console window to get log messages on Windows,
 		 * especially useful when generating tags files */
 		debug_setup_console();
 		/* Enable GLib process spawn debug mode when Geany was started with the debug flag */
@@ -1291,7 +1291,7 @@ gchar *win32_get_shortcut_target(const gchar *file_name)
 	gchar *path = NULL;
 	wchar_t *wfilename = g_utf8_to_utf16(file_name, -1, NULL, NULL, NULL);
 
-	resolve_link(GDK_WINDOW_HWND(main_widgets.window->window), wfilename, &path);
+	resolve_link(GDK_WINDOW_HWND(gtk_widget_get_window(main_widgets.window)), wfilename, &path);
 	g_free(wfilename);
 
 	if (path == NULL)

@@ -1013,7 +1013,7 @@ static void trigger_button_event(GtkWidget *widget, guint32 event_time)
 	if (GTK_IS_TEXT_VIEW(widget))
 		event->window = gtk_text_view_get_window(GTK_TEXT_VIEW(widget), GTK_TEXT_WINDOW_TEXT);
 	else
-		event->window = widget->window;
+		event->window = gtk_widget_get_window(widget);
 	event->time = event_time;
 	event->type = GDK_BUTTON_PRESS;
 	event->button = 3;

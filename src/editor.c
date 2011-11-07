@@ -3563,7 +3563,7 @@ void editor_scroll_to_line(GeanyEditor *editor, gint line, gfloat percent_of_vie
 
 	wid = GTK_WIDGET(editor->sci);
 
-	if (! wid->window || ! gdk_window_is_viewable(wid->window))
+	if (! gtk_widget_get_window(wid) || ! gdk_window_is_viewable(gtk_widget_get_window(wid)))
 		return;	/* prevent gdk_window_scroll warning */
 
 	if (line == -1)

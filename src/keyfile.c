@@ -553,7 +553,7 @@ static void save_ui_prefs(GKeyFile *config)
 
 		gtk_window_get_position(GTK_WINDOW(main_widgets.window), &ui_prefs.geometry[0], &ui_prefs.geometry[1]);
 		gtk_window_get_size(GTK_WINDOW(main_widgets.window), &ui_prefs.geometry[2], &ui_prefs.geometry[3]);
-		if (gdk_window_get_state(main_widgets.window->window) & GDK_WINDOW_STATE_MAXIMIZED)
+		if (gdk_window_get_state(gtk_widget_get_window(main_widgets.window)) & GDK_WINDOW_STATE_MAXIMIZED)
 			ui_prefs.geometry[4] = 1;
 		else
 			ui_prefs.geometry[4] = 0;
