@@ -244,7 +244,7 @@ static void create_vte(void)
 
 	vc->vte = vte = vf->vte_terminal_new();
 	scrollbar = gtk_vscrollbar_new(GTK_ADJUSTMENT(VTE_TERMINAL(vte)->adjustment));
-	GTK_WIDGET_UNSET_FLAGS(scrollbar, GTK_CAN_FOCUS);
+	gtk_widget_set_can_focus(scrollbar, FALSE);
 
 	/* create menu now so copy/paste shortcuts work */
 	vc->menu = vte_create_popup_menu();
@@ -681,9 +681,13 @@ static void vte_drag_data_received(GtkWidget *widget, GdkDragContext *drag_conte
 {
 	if (info == TARGET_TEXT_PLAIN)
 	{
-		if (data->format == 8 && data->length > 0)
+		if (gtk_selection_data_get_length(data) > 0 &&
+			gtk_selection_data_get_format(data) == 8)
+		{
 			vf->vte_terminal_feed_child(VTE_TERMINAL(widget),
-				(const gchar*) data->data, data->length);
+				(const gchar*) gtk_selection_data_get_data(data),
+				gtk_selection_data_get_length(data));
+		}
 	}
 	else
 	{

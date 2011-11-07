@@ -78,7 +78,7 @@ static gboolean focus_sci(GtkWidget *widget, GdkEventButton *event, gpointer use
 
 static gboolean gtk_notebook_show_arrows(GtkNotebook *notebook)
 {
-	return notebook->scrollable;
+	return gtk_notebook_get_scrollable(notebook);
 #if 0
 	/* To get this working we would need to define at least the first two fields of
 	 * GtkNotebookPage since it is a private field. The better way would be to
@@ -116,6 +116,8 @@ static gboolean is_position_on_tab_bar(GtkNotebook *notebook, GdkEventButton *ev
 	GtkWidget *tab;
 	GtkWidget *nb;
 	GtkPositionType tab_pos;
+	GtkAllocation nb_alloc = { 0 };
+	GtkAllocation tab_alloc = { 0 };
 	gint scroll_arrow_hlength, scroll_arrow_vlength;
 	gdouble x, y;
 
@@ -127,6 +129,9 @@ static gboolean is_position_on_tab_bar(GtkNotebook *notebook, GdkEventButton *ev
 
 	tab_pos = gtk_notebook_get_tab_pos(notebook);
 	nb = GTK_WIDGET(notebook);
+
+	gtk_widget_get_allocation(tab, &tab_alloc);
+	gtk_widget_get_allocation(nb, &nb_alloc);
 
 	gtk_widget_style_get(GTK_WIDGET(notebook), "scroll-arrow-hlength", &scroll_arrow_hlength,
 		"scroll-arrow-vlength", &scroll_arrow_vlength, NULL);
@@ -142,11 +147,11 @@ static gboolean is_position_on_tab_bar(GtkNotebook *notebook, GdkEventButton *ev
 		case GTK_POS_TOP:
 		case GTK_POS_BOTTOM:
 		{
-			if (event->y >= 0 && event->y <= tab->allocation.height)
+			if (event->y >= 0 && event->y <= tab_alloc.height)
 			{
 				if (! gtk_notebook_show_arrows(notebook) || (
 					x > scroll_arrow_hlength &&
-					x < nb->allocation.width - scroll_arrow_hlength))
+					x < nb_alloc.width - scroll_arrow_hlength))
 					return TRUE;
 			}
 			break;
@@ -154,11 +159,11 @@ static gboolean is_position_on_tab_bar(GtkNotebook *notebook, GdkEventButton *ev
 		case GTK_POS_LEFT:
 		case GTK_POS_RIGHT:
 		{
-			if (event->x >= 0 && event->x <= tab->allocation.width)
+			if (event->x >= 0 && event->x <= tab_alloc.width)
 			{
 				if (! gtk_notebook_show_arrows(notebook) || (
 					y > scroll_arrow_vlength &&
-					y < nb->allocation.height - scroll_arrow_vlength))
+					y < nb_alloc.height - scroll_arrow_vlength))
 					return TRUE;
 			}
 		}
@@ -259,7 +264,8 @@ static gboolean notebook_tab_bar_click_cb(GtkWidget *widget, GdkEventButton *eve
 {
 	if (event->type == GDK_2BUTTON_PRESS)
 	{
-		/* accessing ::event_window is a little hacky but we need to make sure the click
+		/* FIXME: this needs to be fixed to pass -DGSEAL_ENABLE build
+		 * accessing ::event_window is a little hacky but we need to make sure the click
 		 * was in the tab bar and not inside the child */
 		if (event->window != GTK_NOTEBOOK(main_widgets.notebook)->event_window)
 			return FALSE;
@@ -400,7 +406,7 @@ gint notebook_new_tab(GeanyDocument *this)
 	/* get button press events for the tab label and the space between it and
 	 * the close button, if any */
 	ebox = gtk_event_box_new();
-	GTK_WIDGET_SET_FLAGS(ebox, GTK_NO_WINDOW);
+	gtk_widget_set_has_window(ebox, FALSE);
 	g_signal_connect(ebox, "button-press-event", G_CALLBACK(notebook_tab_click), page);
 	/* focus the current document after clicking on a tab */
 	g_signal_connect_after(ebox, "button-release-event",
@@ -492,14 +498,16 @@ on_window_drag_data_received(GtkWidget *widget, GdkDragContext *drag_context,
 {
 	gboolean success = FALSE;
 
-	if (data->length > 0 && data->format == 8)
+	if (gtk_selection_data_get_length(data) > 0 &&
+		gtk_selection_data_get_format(data) == 8)
 	{
-		if (drag_context->action == GDK_ACTION_ASK)
-		{
-			drag_context->action = GDK_ACTION_COPY;
-		}
+		GdkDragAction action = gdk_drag_context_get_selected_action(drag_context);
 
-		document_open_file_list((const gchar *)data->data, data->length);
+		if (action == GDK_ACTION_ASK)
+			gdk_drag_status(drag_context, GDK_ACTION_COPY, event_time);
+
+		document_open_file_list((const gchar *)gtk_selection_data_get_data(data),
+			gtk_selection_data_get_length(data));
 
 		success = TRUE;
 	}

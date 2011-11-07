@@ -3604,7 +3604,7 @@ on_color_scheme_clicked(GtkMenuItem *menuitem, gpointer user_data)
 	gchar *path;
 
 	/* prevent callback on setting initial value */
-	if (!GTK_WIDGET_MAPPED(menuitem))
+	if (!gtk_widget_get_mapped(GTK_WIDGET(menuitem)))
 		return;
 
 	/* check if default item */

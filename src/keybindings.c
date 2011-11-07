@@ -1078,7 +1078,7 @@ static gboolean check_menu_key(GeanyDocument *doc, guint keyval, guint state, gu
 static gboolean on_menu_expose_event(GtkWidget *widget, GdkEventExpose *event,
 		gpointer user_data)
 {
-	if (!GTK_WIDGET_SENSITIVE(widget))
+	if (!gtk_widget_get_sensitive(widget))
 		gtk_widget_set_sensitive(GTK_WIDGET(widget), TRUE);
 	return FALSE;
 }
@@ -1518,7 +1518,7 @@ static gboolean cb_func_build_action(guint key_id)
 	if (doc == NULL)
 		return TRUE;
 
-	if (!GTK_WIDGET_IS_SENSITIVE(ui_lookup_widget(main_widgets.window, "menu_build1")))
+	if (!gtk_widget_get_sensitive(ui_lookup_widget(main_widgets.window, "menu_build1")))
 		return TRUE;
 
 	menu_items = build_get_menu_items(doc->file_type->id);
@@ -1558,7 +1558,7 @@ static gboolean cb_func_build_action(guint key_id)
 	/* Note: For Build menu items it's OK (at the moment) to assume they are in the correct
 	 * sensitive state, but some other menus don't update the sensitive status until
 	 * they are redrawn. */
-	if (item && GTK_WIDGET_IS_SENSITIVE(item))
+	if (item && gtk_widget_is_sensitive(item))
 		gtk_menu_item_activate(GTK_MENU_ITEM(item));
 	return TRUE;
 }
@@ -1641,7 +1641,7 @@ static gboolean cb_func_switch_action(guint key_id)
 			if (doc != NULL)
 			{
 				GtkWidget *sci = GTK_WIDGET(doc->editor->sci);
-				if (GTK_WIDGET_HAS_FOCUS(sci))
+				if (gtk_widget_has_focus(sci))
 					ui_update_statusbar(doc, -1);
 				else
 					gtk_widget_grab_focus(sci);
@@ -1992,7 +1992,7 @@ static gboolean cb_func_goto_action(guint key_id)
 				GtkWidget *wid = toolbar_get_widget_child_by_name("GotoEntry");
 
 				/* use toolbar item if shown & not in the drop down overflow menu */
-				if (wid && GTK_WIDGET_MAPPED(wid))
+				if (wid && gtk_widget_get_mapped(wid))
 				{
 					gtk_widget_grab_focus(wid);
 					return TRUE;

@@ -868,7 +868,7 @@ gboolean dialogs_show_unsaved_file(GeanyDocument *doc)
 
 #ifndef G_OS_WIN32
 static void
-on_font_apply_button_clicked(GtkButton *button, gpointer user_data)
+on_font_ok_button_clicked(GtkButton *button, gpointer user_data)
 {
 	gchar *fontname;
 
@@ -876,14 +876,7 @@ on_font_apply_button_clicked(GtkButton *button, gpointer user_data)
 		GTK_FONT_SELECTION_DIALOG(ui_widgets.open_fontsel));
 	ui_set_editor_font(fontname);
 	g_free(fontname);
-}
 
-
-static void
-on_font_ok_button_clicked(GtkButton *button, gpointer user_data)
-{
-	/* We do the same thing as apply, but we close the dialog after. */
-	on_font_apply_button_clicked(button, NULL);
 	gtk_widget_hide(ui_widgets.open_fontsel);
 }
 
@@ -902,6 +895,7 @@ void dialogs_show_open_font()
 #ifdef G_OS_WIN32
 	win32_show_font_dialog();
 #else
+	GtkWidget *ok_button, *cancel_button;
 
 	if (ui_widgets.open_fontsel == NULL)
 	{
@@ -913,16 +907,12 @@ void dialogs_show_open_font()
 		gtk_window_set_type_hint(GTK_WINDOW(ui_widgets.open_fontsel), GDK_WINDOW_TYPE_HINT_DIALOG);
 		gtk_widget_set_name(ui_widgets.open_fontsel, "GeanyDialog");
 
-		gtk_widget_show(GTK_FONT_SELECTION_DIALOG(ui_widgets.open_fontsel)->apply_button);
+		ok_button = gtk_font_selection_dialog_get_ok_button(GTK_FONT_SELECTION_DIALOG(ui_widgets.open_fontsel));
+		cancel_button = gtk_font_selection_dialog_get_cancel_button(GTK_FONT_SELECTION_DIALOG(ui_widgets.open_fontsel));
 
-		g_signal_connect(ui_widgets.open_fontsel,
-					"delete-event", G_CALLBACK(gtk_widget_hide_on_delete), NULL);
-		g_signal_connect(GTK_FONT_SELECTION_DIALOG(ui_widgets.open_fontsel)->ok_button,
-					"clicked", G_CALLBACK(on_font_ok_button_clicked), NULL);
-		g_signal_connect(GTK_FONT_SELECTION_DIALOG(ui_widgets.open_fontsel)->cancel_button,
-					"clicked", G_CALLBACK(on_font_cancel_button_clicked), NULL);
-		g_signal_connect(GTK_FONT_SELECTION_DIALOG(ui_widgets.open_fontsel)->apply_button,
-					"clicked", G_CALLBACK(on_font_apply_button_clicked), NULL);
+		g_signal_connect(ui_widgets.open_fontsel, "delete-event", G_CALLBACK(gtk_widget_hide_on_delete), NULL);
+		g_signal_connect(ok_button, "clicked", G_CALLBACK(on_font_ok_button_clicked), NULL);
+		g_signal_connect(cancel_button, "clicked", G_CALLBACK(on_font_cancel_button_clicked), NULL);
 
 		gtk_font_selection_dialog_set_font_name(
 			GTK_FONT_SELECTION_DIALOG(ui_widgets.open_fontsel), interface_prefs.editor_font);
