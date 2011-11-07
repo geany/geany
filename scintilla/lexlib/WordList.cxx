@@ -11,6 +11,8 @@
 #include <stdio.h>
 #include <stdarg.h>
 
+#include <algorithm>
+
 #include "WordList.h"
 
 #ifdef SCI_NAMESPACE
@@ -86,22 +88,34 @@ void WordList::Clear() {
 	len = 0;
 }
 
-extern "C" int cmpString(const void *a1, const void *a2) {
-	// Can't work out the correct incantation to use modern casts here
-	return strcmp(*(char **)(a1), *(char **)(a2));
+#ifdef _MSC_VER
+
+static bool cmpWords(const char *a, const char *b) {
+	return strcmp(a, b) == -1;
+}
+
+#else
+
+static int cmpWords(const void *a, const void *b) {
+	return strcmp(*static_cast<const char * const *>(a), *static_cast<const char * const *>(b));
 }
 
 static void SortWordList(char **words, unsigned int len) {
-	qsort(reinterpret_cast<void *>(words), len, sizeof(*words),
-	      cmpString);
+	qsort(reinterpret_cast<void *>(words), len, sizeof(*words), cmpWords);
 }
+
+#endif
 
 void WordList::Set(const char *s) {
 	Clear();
 	list = new char[strlen(s) + 1];
 	strcpy(list, s);
 	words = ArrayFromWordList(list, &len, onlyLineEnds);
+#ifdef _MSC_VER
+	std::sort(words, words + len, cmpWords);
+#else
 	SortWordList(words, len);
+#endif
 	for (unsigned int k = 0; k < (sizeof(starts) / sizeof(starts[0])); k++)
 		starts[k] = -1;
 	for (int l = len - 1; l >= 0; l--) {
@@ -121,7 +135,7 @@ bool WordList::InList(const char *s) const {
 	unsigned char firstChar = s[0];
 	int j = starts[firstChar];
 	if (j >= 0) {
-		while ((unsigned char)words[j][0] == firstChar) {
+		while (static_cast<unsigned char>(words[j][0]) == firstChar) {
 			if (s[1] == words[j][1]) {
 				const char *a = words[j] + 1;
 				const char *b = s + 1;
@@ -163,7 +177,7 @@ bool WordList::InListAbbreviated(const char *s, const char marker) const {
 	unsigned char firstChar = s[0];
 	int j = starts[firstChar];
 	if (j >= 0) {
-		while (words[j][0] == firstChar) {
+		while (static_cast<unsigned char>(words[j][0]) == firstChar) {
 			bool isSubword = false;
 			int start = 1;
 			if (words[j][1] == marker) {

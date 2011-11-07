@@ -304,7 +304,7 @@ GtkWidget *ui_new_image_from_inline(gint img);
 
 void ui_create_recent_menus(void);
 
-void ui_add_recent_file(const gchar *utf8_filename);
+void ui_add_recent_document(GeanyDocument *doc);
 
 void ui_add_recent_project_file(const gchar *utf8_filename);
 

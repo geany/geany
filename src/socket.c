@@ -636,7 +636,8 @@ gboolean socket_lock_input_cb(GIOChannel *source, GIOCondition condition, gpoint
 #ifdef G_OS_WIN32
 		else if (strncmp(buf, "window", 6) == 0)
 		{
-			HWND hwnd = (HWND) gdk_win32_drawable_get_handle(GDK_DRAWABLE(window->window));
+			HWND hwnd = (HWND) gdk_win32_drawable_get_handle(
+				GDK_DRAWABLE(gtk_widget_get_window(window)));
 			socket_fd_write(sock, (gchar *)&hwnd, sizeof(hwnd));
 		}
 #endif
@@ -649,11 +650,12 @@ gboolean socket_lock_input_cb(GIOChannel *source, GIOCondition condition, gpoint
 		 * gtk_window_present() really bring the main window into the foreground on some
 		 * window managers like Gnome's metacity.
 		 * Code taken from Gedit. */
-		gdk_x11_window_set_user_time(window->window, gdk_x11_get_server_time(window->window));
+		gdk_x11_window_set_user_time(gtk_widget_get_window(window),
+			gdk_x11_get_server_time(gtk_widget_get_window(window)));
 #endif
 		gtk_window_present(GTK_WINDOW(window));
 #ifdef G_OS_WIN32
-		gdk_window_show(window->window);
+		gdk_window_show(gtk_widget_get_window(window));
 #endif
 	}
 
@@ -788,5 +790,3 @@ gint socket_fd_write(gint fd, const gchar *buf, gint len)
 
 
 #endif
-
-

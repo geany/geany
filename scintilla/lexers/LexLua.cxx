@@ -59,10 +59,11 @@ static void ColouriseLuaDoc(
 
 	// Accepts accented characters
 	CharacterSet setWordStart(CharacterSet::setAlpha, "_", 0x80, true);
-	CharacterSet setWord(CharacterSet::setAlphaNum, "._", 0x80, true);
+	CharacterSet setWord(CharacterSet::setAlphaNum, "_", 0x80, true);
 	// Not exactly following number definition (several dots are seen as OK, etc.)
-	// but probably enough in most cases.
-	CharacterSet setNumber(CharacterSet::setDigits, ".-+abcdefABCDEF");
+	// but probably enough in most cases. [pP] is for hex floats.
+	CharacterSet setNumber(CharacterSet::setDigits, ".-+abcdefpABCDEFP");
+	CharacterSet setExponent(CharacterSet::setNone, "eEpP");
 	CharacterSet setLuaOperator(CharacterSet::setNone, "*/-+()={}~[];<>,.^%:#");
 	CharacterSet setEscapeSkip(CharacterSet::setNone, "\"'\\");
 
@@ -70,12 +71,16 @@ static void ColouriseLuaDoc(
 	// Initialize long string [[ ... ]] or block comment --[[ ... ]] nesting level,
 	// if we are inside such a string. Block comment was introduced in Lua 5.0,
 	// blocks with separators [=[ ... ]=] in Lua 5.1.
+	// Continuation of a string (\z whitespace escaping) is controlled by stringWs.
 	int nestLevel = 0;
 	int sepCount = 0;
-	if (initStyle == SCE_LUA_LITERALSTRING || initStyle == SCE_LUA_COMMENT) {
+	int stringWs = 0;
+	if (initStyle == SCE_LUA_LITERALSTRING || initStyle == SCE_LUA_COMMENT ||
+		initStyle == SCE_LUA_STRING || initStyle == SCE_LUA_CHARACTER) {
 		int lineState = styler.GetLineState(currentLine - 1);
-		nestLevel = lineState >> 8;
+		nestLevel = lineState >> 9;
 		sepCount = lineState & 0xFF;
+		stringWs = lineState & 0x100;
 	}
 
 	// Do not leak onto next line
@@ -95,8 +100,10 @@ static void ColouriseLuaDoc(
 			switch (sc.state) {
 			case SCE_LUA_LITERALSTRING:
 			case SCE_LUA_COMMENT:
-				// Inside a literal string or block comment, we set the line state
-				styler.SetLineState(currentLine, (nestLevel << 8) | sepCount);
+			case SCE_LUA_STRING:
+			case SCE_LUA_CHARACTER:
+				// Inside a literal string, block comment or string, we set the line state
+				styler.SetLineState(currentLine, (nestLevel << 9) | stringWs | sepCount);
 				break;
 			default:
 				// Reset the line state
@@ -123,21 +130,91 @@ static void ColouriseLuaDoc(
 
 		// Determine if the current state should terminate.
 		if (sc.state == SCE_LUA_OPERATOR) {
+			if (sc.ch == ':' && sc.chPrev == ':') {	// :: <label> :: forward scan
+				sc.Forward();
+				int ln = 0, maxln = startPos + length - sc.currentPos;
+				int c;
+				while (ln < maxln) {		// determine line extent
+					c = sc.GetRelative(ln);
+					if (c == '\r' || c == '\n')
+						break;
+					ln++;
+				}
+				maxln = ln; ln = 0;
+				while (ln < maxln) {		// skip over spaces/tabs
+					if (!IsASpaceOrTab(sc.GetRelative(ln)))
+						break;
+					ln++;
+				}
+				int ws1 = ln;
+				if (setWordStart.Contains(sc.GetRelative(ln))) {
+					int i = 0;
+					char s[100];
+					while (ln < maxln) {	// get potential label
+						c = sc.GetRelative(ln);
+						if (!setWord.Contains(c))
+							break;
+						if (i < 90)
+							s[i++] = c;
+						ln++;
+					}
+					s[i] = '\0'; int lbl = ln;
+					if (!keywords.InList(s)) {
+						while (ln < maxln) {		// skip over spaces/tabs
+							if (!IsASpaceOrTab(sc.GetRelative(ln)))
+								break;
+							ln++;
+						}
+						int ws2 = ln - lbl;
+						if (sc.GetRelative(ln) == ':' && sc.GetRelative(ln + 1) == ':') {
+							// final :: found, complete valid label construct
+							sc.ChangeState(SCE_LUA_LABEL);
+							if (ws1) {
+								sc.SetState(SCE_LUA_DEFAULT);
+								sc.Forward(ws1);
+							}
+							sc.SetState(SCE_LUA_LABEL);
+							sc.Forward(lbl - ws1);
+							if (ws2) {
+								sc.SetState(SCE_LUA_DEFAULT);
+								sc.Forward(ws2);
+							}
+							sc.SetState(SCE_LUA_LABEL);
+							sc.Forward(2);
+						}
+					}
+				}
+			}
 			sc.SetState(SCE_LUA_DEFAULT);
 		} else if (sc.state == SCE_LUA_NUMBER) {
-			// We stop the number definition on non-numerical non-dot non-eE non-sign non-hexdigit char
+			// We stop the number definition on non-numerical non-dot non-eEpP non-sign non-hexdigit char
 			if (!setNumber.Contains(sc.ch)) {
 				sc.SetState(SCE_LUA_DEFAULT);
 			} else if (sc.ch == '-' || sc.ch == '+') {
-				if (sc.chPrev != 'E' && sc.chPrev != 'e')
+				if (!setExponent.Contains(sc.chPrev))
 					sc.SetState(SCE_LUA_DEFAULT);
 			}
 		} else if (sc.state == SCE_LUA_IDENTIFIER) {
-			if (!setWord.Contains(sc.ch) || sc.Match('.', '.')) {
+			if (!(setWord.Contains(sc.ch) || sc.ch == '.') || sc.Match('.', '.')) {
 				char s[100];
 				sc.GetCurrent(s, sizeof(s));
 				if (keywords.InList(s)) {
 					sc.ChangeState(SCE_LUA_WORD);
+					if (strcmp(s, "goto") == 0) {	// goto <label> forward scan
+						sc.SetState(SCE_LUA_DEFAULT);
+						while (IsASpaceOrTab(sc.ch) && !sc.atLineEnd)
+							sc.Forward();
+						if (setWordStart.Contains(sc.ch)) {
+							sc.SetState(SCE_LUA_LABEL);
+							sc.Forward();
+							while (setWord.Contains(sc.ch))
+								sc.Forward();
+							sc.GetCurrent(s, sizeof(s));
+							if (keywords.InList(s))
+								sc.ChangeState(SCE_LUA_WORD);
+						}
+						sc.SetState(SCE_LUA_DEFAULT);
+					}
 				} else if (keywords2.InList(s)) {
 					sc.ChangeState(SCE_LUA_WORD2);
 				} else if (keywords3.InList(s)) {
@@ -160,24 +237,38 @@ static void ColouriseLuaDoc(
 				sc.ForwardSetState(SCE_LUA_DEFAULT);
 			}
 		} else if (sc.state == SCE_LUA_STRING) {
+			if (stringWs) {
+				if (!IsASpace(sc.ch))
+					stringWs = 0;
+			}
 			if (sc.ch == '\\') {
 				if (setEscapeSkip.Contains(sc.chNext)) {
 					sc.Forward();
+				} else if (sc.chNext == 'z') {
+					sc.Forward();
+					stringWs = 0x100;
 				}
 			} else if (sc.ch == '\"') {
 				sc.ForwardSetState(SCE_LUA_DEFAULT);
-			} else if (sc.atLineEnd) {
+			} else if (stringWs == 0 && sc.atLineEnd) {
 				sc.ChangeState(SCE_LUA_STRINGEOL);
 				sc.ForwardSetState(SCE_LUA_DEFAULT);
 			}
 		} else if (sc.state == SCE_LUA_CHARACTER) {
+			if (stringWs) {
+				if (!IsASpace(sc.ch))
+					stringWs = 0;
+			}
 			if (sc.ch == '\\') {
 				if (setEscapeSkip.Contains(sc.chNext)) {
 					sc.Forward();
+				} else if (sc.chNext == 'z') {
+					sc.Forward();
+					stringWs = 0x100;
 				}
 			} else if (sc.ch == '\'') {
 				sc.ForwardSetState(SCE_LUA_DEFAULT);
-			} else if (sc.atLineEnd) {
+			} else if (stringWs == 0 && sc.atLineEnd) {
 				sc.ChangeState(SCE_LUA_STRINGEOL);
 				sc.ForwardSetState(SCE_LUA_DEFAULT);
 			}
@@ -214,8 +305,10 @@ static void ColouriseLuaDoc(
 				sc.SetState(SCE_LUA_IDENTIFIER);
 			} else if (sc.ch == '\"') {
 				sc.SetState(SCE_LUA_STRING);
+				stringWs = 0;
 			} else if (sc.ch == '\'') {
 				sc.SetState(SCE_LUA_CHARACTER);
+				stringWs = 0;
 			} else if (sc.ch == '[') {
 				sepCount = LongDelimCheck(sc);
 				if (sepCount == 0) {
@@ -246,7 +339,7 @@ static void ColouriseLuaDoc(
 		}
 	}
 
-	if (setWord.Contains(sc.chPrev)) {
+	if (setWord.Contains(sc.chPrev) || sc.chPrev == '.') {
 		char s[100];
 		sc.GetCurrent(s, sizeof(s));
 		if (keywords.InList(s)) {

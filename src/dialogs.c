@@ -167,10 +167,13 @@ static void open_file_dialog_handle_response(GtkWidget *dialog, gint response)
 			app->project->base_path, NULL);
 }
 
+#ifndef G_VALUE_INIT
+#define G_VALUE_INIT { 0 }
+#endif
 
 static void on_file_open_notify(GObject *filechooser, GParamSpec *pspec, gpointer data)
 {
-	GValue value = { 0 };
+	GValue value = G_VALUE_INIT;
 
 	g_value_init(&value, pspec->value_type);
 	g_object_get_property(filechooser, pspec->name, &value);
@@ -378,8 +381,7 @@ static GtkWidget *create_open_file_dialog(void)
 	gtk_window_set_type_hint(GTK_WINDOW(dialog), GDK_WINDOW_TYPE_HINT_DIALOG);
 	gtk_window_set_transient_for(GTK_WINDOW(dialog), GTK_WINDOW(main_widgets.window));
 	gtk_file_chooser_set_select_multiple(GTK_FILE_CHOOSER(dialog), TRUE);
-	if (gtk_check_version(2, 14, 0) == NULL)
-		gtk_file_chooser_set_local_only(GTK_FILE_CHOOSER(dialog), FALSE);
+	gtk_file_chooser_set_local_only(GTK_FILE_CHOOSER(dialog), FALSE);
 
 	/* add checkboxes and filename entry */
 	gtk_file_chooser_set_extra_widget(GTK_FILE_CHOOSER(dialog), add_file_open_extra_widget(dialog));
@@ -605,8 +607,7 @@ static GtkWidget *create_save_file_dialog(void)
 	gtk_widget_show_all(vbox);
 	gtk_file_chooser_set_extra_widget(GTK_FILE_CHOOSER(dialog), vbox);
 	gtk_file_chooser_set_do_overwrite_confirmation(GTK_FILE_CHOOSER(dialog), TRUE);
-	if (gtk_check_version(2, 14, 0) == NULL)
-		gtk_file_chooser_set_local_only(GTK_FILE_CHOOSER(dialog), FALSE);
+	gtk_file_chooser_set_local_only(GTK_FILE_CHOOSER(dialog), FALSE);
 
 	/* set the folder by default to the project base dir or the global pref for opening files */
 	initdir = utils_get_default_dir_utf8();
@@ -852,18 +853,12 @@ gboolean dialogs_show_unsaved_file(GeanyDocument *doc)
 	switch (response)
 	{
 		case GTK_RESPONSE_YES:
-		{
-			if (document_need_save_as(doc))
-			{
-				return dialogs_show_save_as();
-			}
-			else
-				/* document_save_file() returns the status if the file could be saved */
-				return document_save_file(doc, FALSE);
-		}
+			/* document_save_file() returns the status if the file could be saved */
+			return document_save_file(doc, FALSE);
+
 		case GTK_RESPONSE_NO:
 			return TRUE;
-		
+
 		case GTK_RESPONSE_CANCEL: /* fall through to default and leave the function */
 		default:
 			return FALSE;
@@ -1000,7 +995,7 @@ static void add_input_widgets(GtkWidget *dialog, GtkWidget *vbox,
 	{
 		GtkWidget *combo = gtk_combo_box_entry_new_text();
 
-		entry = GTK_BIN(combo)->child;
+		entry = gtk_bin_get_child(GTK_BIN(combo));
 		ui_entry_add_clear_icon(GTK_ENTRY(entry));
 		g_object_set_data(G_OBJECT(dialog), "combo", combo);
 		gtk_container_add(GTK_CONTAINER(vbox), combo);
@@ -1703,5 +1698,3 @@ gint dialogs_show_prompt(GtkWidget *parent,
 	g_free(string);
 	return result;
 }
-
-

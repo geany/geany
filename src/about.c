@@ -38,7 +38,7 @@
 #define INFO "<span size=\"larger\" weight=\"bold\">%s</span>"
 #define CODENAME "<span weight=\"bold\">\"" GEANY_CODENAME "\"</span>"
 #define BUILDDATE "<span size=\"smaller\">%s</span>"
-#define COPYRIGHT "Copyright (c)  2005-2011\nNick Treleaven\nColomban Wendling\nEnrico Tröger\nFrank Lanitz\nAll rights reserved."
+#define COPYRIGHT "Copyright (c)  2005-2011\nColomban Wendling\nNick Treleaven\nMatthew Brush\nEnrico Tröger\nFrank Lanitz\nAll rights reserved."
 
 const gchar *translators[][2] = {
 	{ "ast", "Marcos Costales &lt;marcoscostales@gmail.com&gt;"},
@@ -60,8 +60,9 @@ const gchar *translators[][2] = {
 	{ "ko", "Park Jang-heon &lt;dotkabi@gmail.com&gt;" },
 	{ "kk", "Baurzhan Muftakhidinov &lt;baurthefirst@gmail.com&gt;"},
 	{ "lb", "Laurent Hoeltgen &lt;hoeltgman@gmail.com&gt;" },
+	{ "mn", "tsetsee &lt;tsetsee.yugi@gmail.com&gt;"},
 	{ "nl", "Peter Scholtens &lt;peter.scholtens@xs4all.nl&gt;\nAyke van Laethem &lt;aykevanlaethem@gmail.com&gt;" },
-	{ "pl_PL", "Jarosław Foksa &lt;jfoksa@gmail.com&gt;" },
+	{ "pl", "Wojciech Świderski &lt;woj.swiderski@gmail.com&gt;"},
 	{ "pt_BR", "Alexandra Moreire &lt;alexandream@gmail.com&gt;\n"
 			   "Adrovane Marques Kade &lt;adrovane@gmail.com&gt;\n"
 			   "Rafael Peregrino da Silva &lt;rperegrino@linuxnewmedia.com.br&gt;"},
@@ -79,7 +80,7 @@ static const gint translators_len = G_N_ELEMENTS(translators);
 
 const gchar *prev_translators[][2] = {
 	{ "es", "Damián Viano &lt;debian@damianv.com.ar&gt;\nNacho Cabanes &lt;ncabanes@gmail.com&gt;" },
-	{ "pl_PL", "Jacek Wolszczak &lt;shutdownrunner@o2.pl&gt;" },
+	{ "pl", "Jacek Wolszczak &lt;shutdownrunner@o2.pl&gt;\nJarosław Foksa &lt;jfoksa@gmail.com&gt;" },
 	{ "nl", "Kurt De Bree &lt;kdebree@telenet.be&gt;" }
 };
 static const gint prev_translators_len = G_N_ELEMENTS(prev_translators);

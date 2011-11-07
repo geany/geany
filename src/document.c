@@ -72,6 +72,8 @@
 #include "search.h"
 #include "filetypesprivate.h"
 
+#include "SciLexer.h"
+
 
 GeanyFilePrefs file_prefs;
 
@@ -102,14 +104,8 @@ typedef struct
 static void document_undo_clear(GeanyDocument *doc);
 static void document_redo_add(GeanyDocument *doc, guint type, gpointer data);
 static gboolean update_tags_from_buffer(GeanyDocument *doc);
+static gboolean remove_page(guint page_num);
 
-
-/* ignore the case of filenames and paths under WIN32, causes errors if not */
-#ifdef G_OS_WIN32
-#define filenamecmp(a, b)	utils_str_casecmp((a), (b))
-#else
-#define filenamecmp(a, b)	strcmp((a), (b))
-#endif
 
 /**
  * Finds a document whose @c real_path field matches the given filename.
@@ -138,7 +134,7 @@ GeanyDocument* document_find_by_real_path(const gchar *realname)
 		if (! doc->is_valid || ! doc->real_path)
 			continue;
 
-		if (filenamecmp(realname, doc->real_path) == 0)
+		if (utils_filenamecmp(realname, doc->real_path) == 0)
 		{
 			return doc;
 		}
@@ -186,7 +182,7 @@ GeanyDocument *document_find_by_filename(const gchar *utf8_filename)
 		if (! doc->is_valid || doc->file_name == NULL)
 			continue;
 
-		if (filenamecmp(utf8_filename, doc->file_name) == 0)
+		if (utils_filenamecmp(utf8_filename, doc->file_name) == 0)
 		{
 			return doc;
 		}
@@ -362,42 +358,6 @@ void document_set_text_changed(GeanyDocument *doc, gboolean changed)
 }
 
 
-/* Sets is_valid to FALSE and initializes some members to NULL, to mark it uninitialized.
- * The flag is_valid is set to TRUE in document_create(). */
-static void init_doc_struct(GeanyDocument *new_doc)
-{
-	GeanyDocumentPrivate *priv;
-
-	memset(new_doc, 0, sizeof(GeanyDocument));
-
-	new_doc->is_valid = FALSE;
-	new_doc->has_tags = FALSE;
-	new_doc->readonly = FALSE;
-	new_doc->file_name = NULL;
-	new_doc->file_type = NULL;
-	new_doc->tm_file = NULL;
-	new_doc->encoding = NULL;
-	new_doc->has_bom = FALSE;
-	new_doc->editor = NULL;
-	new_doc->changed = FALSE;
-	new_doc->real_path = NULL;
-
-	new_doc->priv = g_new0(GeanyDocumentPrivate, 1);
-	priv = new_doc->priv;
-	priv->tag_store = NULL;
-	priv->tag_tree = NULL;
-	priv->saved_encoding.encoding = NULL;
-	priv->saved_encoding.has_bom = FALSE;
-	priv->undo_actions = NULL;
-	priv->redo_actions = NULL;
-	priv->line_count = 0;
-	priv->tag_list_update_source = 0;
-#ifndef USE_GIO_FILEMON
-	priv->last_check = time(NULL);
-#endif
-}
-
-
 /* returns the next free place in the document list,
  * or -1 if the documents_array is full */
 static gint document_get_new_idx(void)
@@ -538,8 +498,6 @@ static gboolean on_idle_focus(gpointer doc)
 }
 
 
-static gboolean remove_page(guint page_num);
-
 /* Creates a new document and editor, adding a tab in the notebook.
  * @return The created document */
 static GeanyDocument *document_create(const gchar *utf8_filename)
@@ -550,9 +508,9 @@ static GeanyDocument *document_create(const gchar *utf8_filename)
 
 	if (cur_pages == 1)
 	{
-		GeanyDocument *cur = document_get_current();
+		doc = document_get_current();
 		/* remove the empty document first */
-		if (cur != NULL && cur->file_name == NULL && ! cur->changed)
+		if (doc != NULL && doc->file_name == NULL && ! doc->changed)
 			/* prevent immediately opening another new doc with
 			 * new_document_after_close pref */
 			remove_page(0);
@@ -561,18 +519,22 @@ static GeanyDocument *document_create(const gchar *utf8_filename)
 	new_idx = document_get_new_idx();
 	if (new_idx == -1)	/* expand the array, no free places */
 	{
-		GeanyDocument *new_doc = g_new0(GeanyDocument, 1);
+		doc = g_new0(GeanyDocument, 1);
 
 		new_idx = documents_array->len;
-		g_ptr_array_add(documents_array, new_doc);
+		g_ptr_array_add(documents_array, doc);
 	}
+	
 	doc = documents[new_idx];
-	init_doc_struct(doc);	/* initialize default document settings */
+	
+	/* initialize default document settings */
+	doc->priv = g_new0(GeanyDocumentPrivate, 1);
 	doc->index = new_idx;
-
 	doc->file_name = g_strdup(utf8_filename);
-
 	doc->editor = editor_create(doc);
+#ifndef USE_GIO_FILEMON
+	doc->priv->last_check = time(NULL);
+#endif
 
 	sidebar_openfiles_add(doc);	/* sets doc->iter */
 
@@ -610,28 +572,23 @@ gboolean document_close(GeanyDocument *doc)
 }
 
 
-/* Call document_remove_page() instead, this is only needed for document_create(). */
+/* Call document_remove_page() instead, this is only needed for document_create()
+ * to prevent re-opening a new document when the last document is closed (if enabled). */
 static gboolean remove_page(guint page_num)
 {
 	GeanyDocument *doc = document_get_from_page(page_num);
 
-	if (G_UNLIKELY(doc == NULL))
-	{
-		g_warning("%s: page_num: %d", G_STRFUNC, page_num);
-		return FALSE;
-	}
+	g_return_val_if_fail(doc != NULL, FALSE);
 
 	if (doc->changed && ! dialogs_show_unsaved_file(doc))
-	{
 		return FALSE;
-	}
 
 	/* tell any plugins that the document is about to be closed */
 	g_signal_emit_by_name(geany_object, "document-close", doc);
 
 	/* Checking real_path makes it likely the file exists on disk */
 	if (! main_status.closing_all && doc->real_path != NULL)
-		ui_add_recent_file(doc->file_name);
+		ui_add_recent_document(doc);
 
 	doc->is_valid = FALSE;
 
@@ -649,23 +606,20 @@ static gboolean remove_page(guint page_num)
 	tm_workspace_remove_object(doc->tm_file, TRUE, TRUE);
 
 	editor_destroy(doc->editor);
-	doc->editor = NULL;
+	doc->editor = NULL; /* needs to be NULL for document_undo_clear() call below */
 
 	document_stop_file_monitoring(doc);
 
-	doc->file_name = NULL;
-	doc->real_path = NULL;
-	doc->file_type = NULL;
-	doc->encoding = NULL;
-	doc->has_bom = FALSE;
-	doc->tm_file = NULL;
 	document_undo_clear(doc);
+
 	g_free(doc->priv);
+
+	/* reset document settings to defaults for re-use */
+	memset(doc, 0, sizeof(GeanyDocument));
 
 	if (gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook)) == 0)
 	{
 		sidebar_update_tag_list(NULL, FALSE);
-		/*on_notebook1_switch_page(GTK_NOTEBOOK(main_widgets.notebook), NULL, 0, NULL);*/
 		ui_set_window_title(NULL);
 		ui_save_buttons_toggle(FALSE);
 		ui_update_popup_reundo_items(NULL);
@@ -1141,11 +1095,7 @@ GeanyDocument *document_open_file_full(GeanyDocument *doc, const gchar *filename
 	else
 	{
 		/* filename must not be NULL when opening a file */
-		if (filename == NULL)
-		{
-			ui_set_statusbar(FALSE, _("Invalid filename"));
-			return NULL;
-		}
+		g_return_val_if_fail(filename, NULL);
 
 #ifdef G_OS_WIN32
 		/* if filename is a shortcut, try to resolve it */
@@ -1163,7 +1113,7 @@ GeanyDocument *document_open_file_full(GeanyDocument *doc, const gchar *filename
 		doc = document_find_by_filename(utf8_filename);
 		if (doc != NULL)
 		{
-			ui_add_recent_file(utf8_filename);	/* either add or reorder recent item */
+			ui_add_recent_document(doc);	/* either add or reorder recent item */
 			/* show the doc before reload dialog */
 			document_show_tab(doc);
 			document_check_disk_status(doc, TRUE);	/* force a file changed check */
@@ -1250,7 +1200,7 @@ GeanyDocument *document_open_file_full(GeanyDocument *doc, const gchar *filename
 
 		/* finally add current file to recent files menu, but not the files from the last session */
 		if (! main_status.opening_session_files)
-			ui_add_recent_file(utf8_filename);
+			ui_add_recent_document(doc);
 
 		if (reload)
 		{
@@ -1525,7 +1475,7 @@ gboolean document_save_file_as(GeanyDocument *doc, const gchar *utf8_fname)
 	doc->priv->file_disk_status = FILE_IGNORE;
 
 	if (ret)
-		ui_add_recent_file(doc->file_name);
+		ui_add_recent_document(doc);
 	return ret;
 }
 
@@ -1709,20 +1659,27 @@ static gchar *save_doc(GeanyDocument *doc, const gchar *locale_filename,
 
 
 /**
- *  Saves the document. Saving may include replacing tabs by spaces,
+ *  Saves the document.
+ *  Also shows the Save As dialog if necessary.
+ *  If the file is not modified, this function may do nothing unless @a force is set to @c TRUE.
+ *
+ *  Saving may include replacing tabs by spaces,
  *  stripping trailing spaces and adding a final new line at the end of the file, depending
  *  on user preferences. Then the @c "document-before-save" signal is emitted,
  *  allowing plugins to modify the document before it is saved, and data is
- *  actually written to disk. The filetype is set again or auto-detected if it wasn't set yet.
- *  Afterwards, the @c "document-save" signal is emitted for plugins.
+ *  actually written to disk.
  *
- *  If the file is not modified, this functions does nothing unless force is set to @c TRUE.
+ *  On successful saving:
+ *  - GeanyDocument::real_path is set.
+ *  - The filetype is set again or auto-detected if it wasn't set yet.
+ *  - The @c "document-save" signal is emitted for plugins.
  *
- *  @note You should ensure @c doc->file_name is not @c NULL before calling this; otherwise
- *  call dialogs_show_save_as().
+ *  @warning You should ensure @c doc->file_name has an absolute path unless you want the
+ *  Save As dialog to be shown. A @c NULL value also shows the dialog. This behaviour was
+ *  added in Geany 1.22.
  *
  *  @param doc The document to save.
- *  @param force Whether to save the file even if it is not modified (e.g. for Save As).
+ *  @param force Whether to save the file even if it is not modified.
  *
  *  @return @c TRUE if the file was saved or @c FALSE if the file could not or should not be saved.
  **/
@@ -1735,16 +1692,16 @@ gboolean document_save_file(GeanyDocument *doc, gboolean force)
 
 	g_return_val_if_fail(doc != NULL, FALSE);
 
+	if (document_need_save_as(doc))
+	{
+		/* ensure doc is the current tab before showing the dialog */
+		document_show_tab(doc);
+		return dialogs_show_save_as();
+	}
+
 	/* the "changed" flag should exclude the "readonly" flag, but check it anyway for safety */
 	if (! force && ! ui_prefs.allow_always_save && (! doc->changed || doc->readonly))
 		return FALSE;
-
-	if (G_UNLIKELY(doc->file_name == NULL))
-	{
-		ui_set_statusbar(TRUE, _("Error saving file (%s)."), _("Invalid filename"));
-		utils_beep();
-		return FALSE;
-	}
 
 	/* replaces tabs by spaces but only if the current file is not a Makefile */
 	if (file_prefs.replace_tabs && doc->file_type->id != GEANY_FILETYPES_MAKE)
@@ -2252,21 +2209,19 @@ gint document_replace_all(GeanyDocument *doc, const gchar *find_text, const gcha
 
 static gboolean update_tags_from_buffer(GeanyDocument *doc)
 {
-	gboolean result;
-#if 0
-		/* old code */
-		result = tm_source_file_update(doc->tm_file, TRUE, FALSE, TRUE);
-#else
-		gsize len = sci_get_length(doc->editor->sci) + 1;
-		gchar *text = g_malloc(len);
+	guchar *buffer_ptr;
+	gsize len;
 
-		/* we copy the whole text into memory instead using a direct char pointer from
-		 * Scintilla because tm_source_file_buffer_update() does modify the string slightly */
-		sci_get_text(doc->editor->sci, len, text);
-		result = tm_source_file_buffer_update(doc->tm_file, (guchar*) text, len, TRUE);
-		g_free(text);
-#endif
-	return result;
+	len = sci_get_length(doc->editor->sci);
+
+	/* gets a direct character pointer from Scintilla.
+	 * this is OK because tm_source_file_buffer_update() does not modify the
+	 * buffer, it only requires that buffer doesn't change while it's running,
+	 * which it won't since it runs in this thread (ie. synchronously).
+	 * see tagmanager/read.c:bufferOpen */
+	buffer_ptr = (guchar *) scintilla_send_message(doc->editor->sci, SCI_GETCHARACTERPOINTER, 0, 0);
+
+	return tm_source_file_buffer_update(doc->tm_file, buffer_ptr, len, TRUE);
 }
 
 
@@ -2348,103 +2303,49 @@ void document_update_tag_list_in_idle(GeanyDocument *doc)
 }
 
 
-/* Caches the list of project typenames, as a space separated GString.
- * Returns: TRUE if typenames have changed.
- * (*types) is set to the list of typenames, or NULL if there are none. */
-static gboolean get_project_typenames(const GString **types, gint lang)
+/*
+ * Updates the type keywords in the document's Scintilla widget.
+ *
+ * @param doc The document
+ */
+void document_update_type_keywords(GeanyDocument *doc)
 {
-	static GString *last_typenames = NULL;
-	GString *s = NULL;
+	guint keyword_idx;
+	gchar *keywords;
+	GString *str;
+	GPtrArray *tags_array;
 
-	if (app->tm_workspace)
-	{
-		GPtrArray *tags_array = app->tm_workspace->work_object.tags_array;
-
-		if (tags_array)
-		{
-			s = symbols_find_tags_as_string(tags_array, TM_GLOBAL_TYPE_MASK, lang);
-		}
-	}
-
-	if (s && last_typenames && g_string_equal(s, last_typenames))
-	{
-		g_string_free(s, TRUE);
-		*types = last_typenames;
-		return FALSE;	/* project typenames haven't changed */
-	}
-	/* cache typename list for next time */
-	if (last_typenames)
-		g_string_free(last_typenames, TRUE);
-	last_typenames = s;
-
-	*types = s;
-	if (s == NULL)
-		return FALSE;
-	return TRUE;
-}
-
-
-/* If sci is NULL, update project typenames for all documents that support typenames,
- * if typenames have changed.
- * If sci is not NULL, then if sci supports typenames, project typenames are updated
- * if necessary, and typename keywords are set for sci.
- * Returns: TRUE if any scintilla type keywords were updated. */
-static gboolean update_type_keywords(GeanyDocument *doc, gint lang)
-{
-	gboolean ret = FALSE;
-	guint n;
-	const GString *s;
-	ScintillaObject *sci;
-
-	g_return_val_if_fail(doc != NULL, FALSE);
-	sci = doc->editor->sci;
+	g_return_if_fail(DOC_VALID(doc));
+	g_return_if_fail(app->tm_workspace != NULL);
 
 	switch (doc->file_type->id)
-	{	/* continue working with the following languages, skip on all others */
+	{
 		case GEANY_FILETYPES_C:
 		case GEANY_FILETYPES_CPP:
 		case GEANY_FILETYPES_CS:
 		case GEANY_FILETYPES_D:
 		case GEANY_FILETYPES_JAVA:
 		case GEANY_FILETYPES_VALA:
+			/* index of the keyword set in the Scintilla lexer, for 
+			 * example in LexCPP.cxx, see "cppWordLists" global array. */
+			keyword_idx = 3;
 			break;
+		/* early out if user type keywords are not supported */
 		default:
-			return FALSE;
+			return;
 	}
 
-	sci = doc->editor->sci;
-	if (sci != NULL && editor_lexer_get_type_keyword_idx(sci_get_lexer(sci)) == -1)
-		return FALSE;
-
-	if (! get_project_typenames(&s, lang))
-	{	/* typenames have not changed */
-		if (s != NULL && sci != NULL)
-		{
-			gint keyword_idx = editor_lexer_get_type_keyword_idx(sci_get_lexer(sci));
-
-			sci_set_keywords(sci, keyword_idx, s->str);
-			queue_colourise(doc);
-		}
-		return FALSE;
-	}
-	g_return_val_if_fail(s != NULL, FALSE);
-
-	for (n = 0; n < documents_array->len; n++)
+	tags_array = app->tm_workspace->work_object.tags_array;
+	if (tags_array)
 	{
-		if (documents[n]->is_valid)
+		str = symbols_find_tags_as_string(tags_array, TM_GLOBAL_TYPE_MASK, doc->file_type->lang);
+		if (str)
 		{
-			ScintillaObject *wid = documents[n]->editor->sci;
-			gint keyword_idx = editor_lexer_get_type_keyword_idx(sci_get_lexer(wid));
-
-			if (keyword_idx > 0)
-			{
-				sci_set_keywords(wid, keyword_idx, s->str);
-				queue_colourise(documents[n]);
-				ret = TRUE;
-			}
+			keywords = g_string_free(str, FALSE);
+			sci_set_keywords(doc->editor->sci, keyword_idx, keywords);
+			g_free(keywords);
 		}
 	}
-	return ret;
 }
 
 
@@ -2479,7 +2380,7 @@ static void document_load_config(GeanyDocument *doc, GeanyFiletype *type,
 	document_update_tag_list(doc, TRUE);
 
 	/* Update session typename keywords. */
-	update_type_keywords(doc, type->lang);
+	document_update_type_keywords(doc);
 }
 
 
@@ -2861,13 +2762,14 @@ GeanyDocument *document_clone(GeanyDocument *old_doc, const gchar *utf8_filename
  * @return TRUE if all files were saved or had their changes discarded. */
 gboolean document_account_for_unsaved(void)
 {
-	guint i, p, page_count, len = documents_array->len;
-	GeanyDocument *doc;
+	guint i, p, page_count;
 
 	page_count = gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook));
+	/* iterate over documents in tabs order */
 	for (p = 0; p < page_count; p++)
 	{
-		doc = document_get_from_page(p);
+		GeanyDocument *doc = document_get_from_page(p);
+
 		if (DOC_VALID(doc) && doc->changed)
 		{
 			if (! dialogs_show_unsaved_file(doc))
@@ -2875,13 +2777,9 @@ gboolean document_account_for_unsaved(void)
 		}
 	}
 	/* all documents should now be accounted for, so ignore any changes */
-	for (i = 0; i < len; i++)
+	foreach_document (i)
 	{
-		doc = documents[i];
-		if (doc->is_valid && doc->changed)
-		{
-			doc->changed = FALSE;
-		}
+		documents[i]->changed = FALSE;
 	}
 	return TRUE;
 }
@@ -3017,10 +2915,11 @@ gboolean document_check_disk_status(GeanyDocument *doc, gboolean force)
 		/* doc may be closed now */
 		ret = TRUE;
 	}
-	else if (G_UNLIKELY(! use_gio_filemon && /* ignore these checks when using GIO */
-			 (doc->priv->mtime > cur_time || st.st_mtime > cur_time)))
+	else if (! use_gio_filemon && /* ignore check when using GIO */
+		doc->priv->mtime > cur_time)
 	{
 		g_warning("%s: Something is wrong with the time stamps.", G_STRFUNC);
+		/* Note: on Windows st.st_mtime can be newer than cur_time */
 	}
 	else if (doc->priv->mtime < st.st_mtime)
 	{

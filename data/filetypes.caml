@@ -9,12 +9,14 @@ comment3=comment
 number=number_1
 keyword=keyword_1
 keyword2=keyword_2
+keyword3=keyword_3
 string=string_1
-char=string_1
+char=character
 operator=operator
 identifier=identifier_1
 tagname=preprocessor
 linenum=number_2
+white=default
 
 [keywords]
 # all items must be in one line

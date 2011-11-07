@@ -970,7 +970,7 @@ gint sci_replace_target(ScintillaObject *sci, const gchar *text, gboolean regex)
 }
 
 
-void sci_set_keywords(ScintillaObject *sci, gint k, const gchar *text)
+void sci_set_keywords(ScintillaObject *sci, guint k, const gchar *text)
 {
 	SSM(sci, SCI_SETKEYWORDS, k, (sptr_t) text);
 }

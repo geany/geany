@@ -193,7 +193,7 @@ GeanyFiletype *filetypes_detect_from_file(const gchar *utf8_filename);
 
 void filetypes_free_types(void);
 
-void filetypes_load_config(gint ft_id, gboolean reload);
+void filetypes_load_config(guint ft_id, gboolean reload);
 
 void filetypes_save_commands(GeanyFiletype *ft);
 

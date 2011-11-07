@@ -2,7 +2,9 @@
 [styling]
 # Edit these in the colorscheme .conf file instead
 default=default
-comment=comment
+comment=comment_line
+commentblock=comment
+commentdirective=comment
 number=number_1
 string=string_1
 operator=operator
@@ -12,7 +14,6 @@ mathinstruction=keyword_2
 register=type
 directive=preprocessor
 directiveoperand=keyword_3
-commentblock=comment
 character=string_1
 stringeol=string_eol
 extinstruction=keyword_4

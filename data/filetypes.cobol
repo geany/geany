@@ -3,7 +3,7 @@
 # Edit these in the colorscheme .conf file instead
 default=default
 comment=comment
-commentline=comment
+commentline=comment_line
 commentdoc=comment_doc
 number=number_1
 word=keyword_1

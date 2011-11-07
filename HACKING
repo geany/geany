@@ -144,18 +144,18 @@ And then simply apply it like so::
 
 GTK versions & API documentation
 --------------------------------
-Geany requires GTK >= 2.12 and GLib >= 2.16. API symbols from newer 
-GTK/GLib versions should be avoided or made optional to keep the source 
+Geany requires GTK >= 2.16 and GLib >= 2.20. API symbols from newer
+GTK/GLib versions should be avoided or made optional to keep the source
 code building on older systems.
 
-The official GTK 2.12 API documentation may not be available online 
-anymore, so we put it on http://www.geany.org/manual/gtk/. There 
-is also a tarball with all available files for download and use with 
+The official GTK 2.16 API documentation may not be available online
+anymore, so we put it on http://www.geany.org/manual/gtk/. There
+is also a tarball with all available files for download and use with
 devhelp.
 
-Using the 2.12 API documentation of the GTK libs (including GLib, GDK 
-and Pango) has the advantages that you don't get confused by any 
-newer API additions and you don't have to take care about whether 
+Using the 2.16 API documentation of the GTK libs (including GLib, GDK
+and Pango) has the advantages that you don't get confused by any
+newer API additions and you don't have to take care about whether
 you can use them or not.
 
 Coding
@@ -164,14 +164,16 @@ Coding
   them down into smaller static functions where possible. This makes code
   much easier to read and maintain.
 * Use GLib types and functions - gint not int, g_free() not free().
-* Your code should build against GLib 2.16 and GTK 2.12. At least for the
-  moment, we want to keep the minimum requirement for GTK at 2.12 (of
+* Your code should build against GLib 2.20 and GTK 2.16. At least for the
+  moment, we want to keep the minimum requirement for GTK at 2.16 (of
   course, you can use the GTK_CHECK_VERSION macro to protect code using
   later versions).
 * Variables should be declared before statements. You can use
   gcc's -Wdeclaration-after-statement to warn about this.
 * Don't let variable names shadow outer variables - use gcc's -Wshadow
   option.
+* Do not use G_LIKELY or G_UNLIKELY (except in critical loops). These
+  add noise to the code with little real benefit.
 
 Compiler options & warnings
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -196,6 +198,9 @@ Style
 * We use a tab width of 4 and indent completely with tabs not spaces.
   Note the documentation files use (4) spaces instead, so you may want
   to use the 'Detect from file' indent pref.
+* Do not add whitespace at the end of lines, this adds to commit noise.
+  When editing with Geany set preference files->Strip trailing spaces
+  and tabs.
 * Use the multiline comment ``/* */`` to comment small blocks of code,
   functions descriptions or longer explanations of code, etc. C++ single
   line comments will cause portability issues. The more comments are in
@@ -221,19 +226,39 @@ Style
     A few of the above can be done with the Git
     ``scripts/fix-alignment.pl``, but it is quite dumb and it's much better
     to write it correctly in the first place.
+    ``scripts/rstrip-whitespace.py`` just removes trailing whitespace.
+
 
 .. below tabs should be used, but spaces are required for reST.
 
 Example::
 
+    struct Bar;
+
+    typedef struct Foo  /* struct names normally are the same as typedef names */
+    {
+        gint    foo;    /* names are somewhat aligned visually */
+        gint    bar;    /* fields don't share the same line */
+        SomeLongTypeName baz; /* alignment is not strict */
+        gchar   *ptr;   /* pointer symbol must go next to variable name, not type */
+        Bar     public; /**< only plugin API fields have a doc-comment */
+    }
+    Foo;
+
+
     gint some_func(void);
 
+    gint some_other_func(void);
 
+
+    /* optional function comment explains something important */
     gint function_long_name(gchar arg1, <too many args to fit on this line>,
             gchar argN)
     {
-        /* variable declarations go before code in each scope */
+        /* variable declarations always go before code in each scope */
+        /* variable names should NOT be aligned at all */
         gint foo, bar;  /* variables can go on the same line */
+        gint baz;       /* but often don't */
         gchar *ptr;     /* pointer symbol must go next to variable name, not type */
         gchar *another; /* pointers should normally go on separate lines */
 
@@ -242,7 +267,8 @@ Example::
          * lines to explain */
         if (foo)
         {
-            gint dir = -1;    /* -1 to search backwards */
+            /* variables only used in one scope should normally be declared there */
+            gint dir = -1;
 
             bar = foo;
             if ((bar & (guint)dir) != 7)
@@ -254,6 +280,12 @@ Example::
     }
 
 
+    /** Explains using doc-comments for plugin API functions.
+     * First line should be short and use the third person tense - 'explains',
+     * not 'explain'.
+     *
+     * @return Some number.
+     * @since 1.22. */
     gint another_function(void)
     {
         ...
@@ -262,26 +294,40 @@ Example::
 Committing
 ----------
 
-Commit one thing at a time, do small commits.  Commits should be
-meaningful and not too big when possible; multiple small commits are
-good if there is no good reason to group them.
-
-When working on a new feature, create a new branch for it.  When merging
-it, use the --no-ff option to make sure a merge commit will be created
-to better track what happened.  However, if the feature only took one
-commit you might merge it fast-forward since there is not history to
-keep together.
+* Commit one thing at a time, do small commits.  Commits should be
+  meaningful and not too big when possible; multiple small commits are
+  good if there is no good reason to group them.
+* Use meaningful name and email in the Author and Committer fields.
+  This helps knowing who did what and allows to contact the author if
+  there is a good reason to do so (unlikely, but can happen).
+* When working on a new feature, create a new branch for it.  When
+  merging it, use the --no-ff option to make sure a merge commit will
+  be created to better track what happened.  However, if the feature
+  only took one commit you might merge it fast-forward since there is
+  not history to keep together.
 
 Commit messages
 ^^^^^^^^^^^^^^^
 Follow the standard Git formatting:
 
-* First line is the commit's summary and should use less than about 80
-  characters, and is followed by an empty line.  See it like the subject
-  of an email: keep it concise and as precise as you can, but not tool
-  long.
+* No line should use more than about 80 characters (around 72 is best).
+* The first line is the commit's summary and is followed by an empty
+  line.  This summary should be one line and one line only, thus less
+  than 80 characters.  This summary should not include any punctuation
+  unless really needed.  See it as the subject of an email: keep it
+  concise and as precise as you can, but not tool long.
 * Following lines are optional detailed commit information, with
-  paragraphs separated by blank lines.
+  paragraphs separated by blank lines.  This part should be as long as
+  needed to describe the commit in depth, should use proper
+  punctuation and should include any useful information, like the
+  motivation for the patch and/or any valuable details the diff itself
+  don't provide or don't make clear.  Make it as complete as you think
+  it makes sense, but don't include an information that is better
+  explained by the commit's diff.
+
+  It is OK to use ASCII formatting like bullet list using "*" or "-",
+  etc. if useful, but emphasis (bold, italic, underline) should be
+  avoided.
 
 Example::
 
@@ -440,7 +486,7 @@ For brace indentation, update lexer_has_braces() in editor.c;
 indentation after ':' is done from on_new_line_added().
 
 If the Scintilla lexer supports user type keyword highlighting (e.g.
-SCLEX_CPP), update editor_lexer_get_type_keyword_idx() in editor.c.
+SCLEX_CPP), update document_update_type_keywords() in document.c.
 
 Adding a TagManager parser
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -453,13 +499,13 @@ http://sf.net/projects/ctags - see the tracker.
 (You can also try the Anjuta project's tagmanager codebase.)
 
 .. note::
-    From Geany 1.22 GLib's GRegex engine is used instead of POSIX 
-    regex, unlike CTags. It should be close enough to POSIX to work 
+    From Geany 1.22 GLib's GRegex engine is used instead of POSIX
+    regex, unlike CTags. It should be close enough to POSIX to work
     OK.
-    We no longer support regex parsers with the "b" regex flag 
-    option set and Geany will print debug warnings if it's used. 
-    CTags supports it but doesn't currently (2011) include any 
-    parsers that use it. It should be easy to convert to extended 
+    We no longer support regex parsers with the "b" regex flag
+    option set and Geany will print debug warnings if it's used.
+    CTags supports it but doesn't currently (2011) include any
+    parsers that use it. It should be easy to convert to extended
     regex syntax anyway.
 
 Method
@@ -538,3 +584,24 @@ Example::
     ** INFO: Unloaded: ./plugins/.libs/demoplugin.so
     (gdb) c
     Continuing.
+
+Building Plugins
+^^^^^^^^^^^^^^^^
+
+The geany-plugins autotools script automatically detects the
+installed system Geany and builds the plugins against that.
+
+To use plugins with a development version of Geany built with
+a different prefix, the plugins will need to be compiled against
+that version if the ABI has changed.
+
+To do this you need to specify both --prefix and --with-geany-libdir
+to the plugin configure.  Normally the plugin prefix is the
+same as the Geany prefix to keep plugins with the version of Geany
+that they are compiled against, and with-geany-libdir is the Geany
+prefix/lib.
+
+Whilst it is possible for the plugin prefix to be different to
+the prefix of the libdir (which is why there are two settings),
+it is probably better to keep the version of Geany and its plugins
+together.

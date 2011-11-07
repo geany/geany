@@ -132,36 +132,30 @@ static const gchar templates_gtk_class_header[] = "{fileheader}\n\n\
 {base_include}\n\
 G_BEGIN_DECLS\n\
 \n\n\
-#define {namespace_up}TYPE_{class_name_up}				({namespace_low}{class_name_low}_get_type())\n\
-#define {namespace_up}{class_name_up}(obj)				(G_TYPE_CHECK_INSTANCE_CAST((obj),\\\n\
-			{namespace_up}TYPE_{class_name_up}, {namespace}{class_name}))\n\
-#define {namespace_up}{class_name_up}_CLASS(klass)		(G_TYPE_CHECK_CLASS_CAST((klass),\\\n\
-			{namespace_up}TYPE_{class_name_up}, {namespace}{class_name}Class))\n\
-#define {namespace_up}IS_{class_name_up}(obj)			(G_TYPE_CHECK_INSTANCE_TYPE((obj),\\\n\
-			{namespace_up}TYPE_{class_name_up}))\n\
-#define {namespace_up}IS_{class_name_up}_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE((klass),\\\n\
-			{namespace_up}TYPE_{class_name_up}))\n\
-#define {namespace_up}{class_name_up}_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS((obj),\\\n\
-			{namespace_up}TYPE_{class_name_up}, {namespace}{class_name}Class))\n\
+#define {namespace_up}TYPE_{class_name_up}             ({namespace_low}{class_name_low}_get_type ())\n\
+#define {namespace_up}{class_name_up}(obj)             (G_TYPE_CHECK_INSTANCE_CAST ((obj), {namespace_up}TYPE_{class_name_up}, {namespace}{class_name}))\n\
+#define {namespace_up}{class_name_up}_CLASS(klass)     (G_TYPE_CHECK_CLASS_CAST ((klass), {namespace_up}TYPE_{class_name_up}, {namespace}{class_name}Class))\n\
+#define {namespace_up}IS_{class_name_up}(obj)          (G_TYPE_CHECK_INSTANCE_TYPE ((obj), {namespace_up}TYPE_{class_name_up}))\n\
+#define {namespace_up}IS_{class_name_up}_CLASS(klass)  (G_TYPE_CHECK_CLASS_TYPE ((klass), {namespace_up}TYPE_{class_name_up}))\n\
+#define {namespace_up}{class_name_up}_GET_CLASS(obj)   (G_TYPE_INSTANCE_GET_CLASS ((obj), {namespace_up}TYPE_{class_name_up}, {namespace}{class_name}Class))\n\
 \n\
-typedef struct _{namespace}{class_name}			{namespace}{class_name};\n\
-typedef struct _{namespace}{class_name}Class		{namespace}{class_name}Class;\n\
-typedef struct _{namespace}{class_name}Private		{namespace}{class_name}Private;\n\
+typedef struct _{namespace}{class_name}         {namespace}{class_name};\n\
+typedef struct _{namespace}{class_name}Class    {namespace}{class_name}Class;\n\
+typedef struct _{namespace}{class_name}Private  {namespace}{class_name}Private;\n\
 \n\
 struct _{namespace}{class_name}\n\
 {\n\
-	{base_name} parent;\n\
-	/* add your public declarations here */\n\
-	\n\
-	{namespace}{class_name}Private *priv;\n\
+  {base_name} parent;\n\
+  /* add your public declarations here */\n\
+  {namespace}{class_name}Private *priv;\n\
 };\n\
 \n\
 struct _{namespace}{class_name}Class\n\
 {\n\
-	{base_name}Class parent_class;\n\
+  {base_name}Class parent_class;\n\
 };\n\
 \n\n\
-GType		{namespace_low}{class_name_low}_get_type		(void);\n\
+GType {namespace_low}{class_name_low}_get_type (void);\n\n\
 {constructor_decl}\
 \n\n\
 G_END_DECLS\n\
@@ -174,26 +168,27 @@ static const gchar templates_gtk_class_source[] = "{fileheader}\n\
 \n\
 struct _{namespace}{class_name}Private\n\
 {\n\
-	/* add your private declarations here */\n\
+  /* add your private declarations here */\n\
+  gpointer delete_me;\n\
 };\n\
 \n\
 {destructor_decl}\
 \n\
-G_DEFINE_TYPE({namespace}{class_name}, {namespace_low}{class_name_low}, {base_gtype})\n\
+G_DEFINE_TYPE ({namespace}{class_name}, {namespace_low}{class_name_low}, {base_gtype})\n\
 \n\n\
-static void {namespace_low}{class_name_low}_class_init({namespace}{class_name}Class *klass)\n\
+static void\n\
+{namespace_low}{class_name_low}_class_init ({namespace}{class_name}Class *klass)\n\
 {\n\
-	{gtk_destructor_registration}\n\
-	g_type_class_add_private((gpointer)klass, sizeof({namespace}{class_name}Private));\n\
+  {gtk_destructor_registration}\n\
+  g_type_class_add_private ((gpointer)klass, sizeof ({namespace}{class_name}Private));\n\
 }\n\
 \n\
 {destructor_impl}\n\
 \n\
-static void {namespace_low}{class_name_low}_init({namespace}{class_name} *self)\n\
+static void\n\
+{namespace_low}{class_name_low}_init ({namespace}{class_name} *self)\n\
 {\n\
-	self->priv = G_TYPE_INSTANCE_GET_PRIVATE(self,\n\
-		{namespace_up}TYPE_{class_name_up}, {namespace}{class_name}Private);\n\
-	\n\
+  self->priv = G_TYPE_INSTANCE_GET_PRIVATE (self, {namespace_up}TYPE_{class_name_up}, {namespace}{class_name}Private);\n\
 }\n\
 \n\
 {constructor_impl}\n\
@@ -876,14 +871,15 @@ static gboolean create_class(CreateClassDialog *cc_dlg)
 			class_info->source = g_strdup(gtk_entry_get_text(GTK_ENTRY(cc_dlg->source_entry)));
 			if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(cc_dlg->create_constructor_box)))
 			{
-				class_info->constructor_decl = g_strdup_printf("%s*\t%s%s_new\t\t\t(void);\n",
+				class_info->constructor_decl = g_strdup_printf("%s *%s%s_new (void);\n",
 						gtk_entry_get_text(GTK_ENTRY(cc_dlg->gtk_constructor_type_entry)),
 						class_info->namespace_low, class_info->class_name_low);
 				class_info->constructor_impl = g_strdup_printf("\n"
-						"%s *%s%s_new(void)\n"
+						"%s *\n"
+						"%s%s_new (void)\n"
 						"{\n"
-						"\treturn g_object_new(%sTYPE_%s, NULL);\n"
-						"}\n",
+						"  return g_object_new (%sTYPE_%s, NULL);\n"
+						"}",
 						gtk_entry_get_text(GTK_ENTRY(cc_dlg->gtk_constructor_type_entry)),
 						class_info->namespace_low, class_info->class_name_low,
 						class_info->namespace_up, class_info->class_name_up);
@@ -897,20 +893,20 @@ static gboolean create_class(CreateClassDialog *cc_dlg)
 			{
 				class_info->gtk_destructor_registration =
 						g_strdup_printf("GObjectClass *g_object_class;\n\n"
-						"\tg_object_class = G_OBJECT_CLASS(klass);\n\n"
-						"\tg_object_class->finalize = %s%s_finalize;\n",
+						"  g_object_class = G_OBJECT_CLASS (klass);\n\n"
+						"  g_object_class->finalize = %s%s_finalize;\n",
 						class_info->namespace_low, class_info->class_name_low);
 				class_info->destructor_decl =
-						g_strdup_printf("static void %s%s_finalize\t\t\t(GObject *object);\n",
+						g_strdup_printf("static void %s%s_finalize (GObject *object);\n",
 						class_info->namespace_low, class_info->class_name_low);
 				class_info->destructor_impl = g_strdup_printf("\n"
-						"static void %s%s_finalize(GObject *object)\n"
+						"static void\n"
+						"%s%s_finalize (GObject *object)\n"
 						"{\n"
-						"\t%s%s *self;\n\n"
-						"\tg_return_if_fail(object != NULL);\n"
-						"\tg_return_if_fail(%sIS_%s(object));\n\n"
-						"\tself = %s%s(object);\n\n"
-						"\tG_OBJECT_CLASS(%s%s_parent_class)->finalize(object);\n"
+						"  %s%s *self;\n\n"
+						"  g_return_if_fail (%sIS_%s (object));\n\n"
+						"  self = %s%s (object);\n\n"
+						"  G_OBJECT_CLASS (%s%s_parent_class)->finalize (object);\n"
 						"}\n",
 						class_info->namespace_low,	class_info->class_name_low,
 						class_info->namespace,		class_info->class_name,
@@ -1036,6 +1032,7 @@ static gboolean create_class(CreateClassDialog *cc_dlg)
 		text = get_template_class_source(class_info);
 		editor_insert_text_block(doc->editor, text, 0, -1, 0, TRUE);
 		g_free(text);
+		sci_set_current_position(doc->editor->sci, 0, TRUE);
 	}
 
 	if (! utils_str_equal(class_info->header, "") && class_info->type != GEANY_CLASS_TYPE_PHP)
@@ -1044,6 +1041,7 @@ static gboolean create_class(CreateClassDialog *cc_dlg)
 		text = get_template_class_header(class_info);
 		editor_insert_text_block(doc->editor, text, 0, -1, 0, TRUE);
 		g_free(text);
+		sci_set_current_position(doc->editor->sci, 0, TRUE);
 	}
 
 	free_pointers(24, tmp, class_info->namespace, class_info->namespace_up,

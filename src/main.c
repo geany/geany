@@ -480,6 +480,18 @@ static void print_filetypes(void)
 }
 
 
+static void wait_for_input_on_windows(void)
+{
+#ifdef G_OS_WIN32
+	if (verbose_mode)
+	{
+		geany_debug("Press any key to continue");
+		getchar();
+	}
+#endif
+}
+
+
 static void parse_command_line_options(gint *argc, gchar ***argv)
 {
 	GError *error = NULL;
@@ -515,6 +527,12 @@ static void parse_command_line_options(gint *argc, gchar ***argv)
 		exit(1);
 	}
 
+	app->debug_mode = verbose_mode;
+
+#ifdef G_OS_WIN32
+	win32_init_debug_code();
+#endif
+
 	if (show_version)
 	{
 		printf(PACKAGE " %s (", main_get_version_string());
@@ -524,6 +542,7 @@ static void parse_command_line_options(gint *argc, gchar ***argv)
 			GTK_MAJOR_VERSION, GTK_MINOR_VERSION, GTK_MICRO_VERSION,
 			GLIB_MAJOR_VERSION, GLIB_MINOR_VERSION, GLIB_MICRO_VERSION);
 		printf(")\n");
+		wait_for_input_on_windows();
 		exit(0);
 	}
 
@@ -533,14 +552,9 @@ static void parse_command_line_options(gint *argc, gchar ***argv)
 		printf("%s\n", GEANY_DATADIR);
 		printf("%s\n", GEANY_LIBDIR);
 		printf("%s\n", GEANY_LOCALEDIR);
+		wait_for_input_on_windows();
 		exit(0);
 	}
-
-	app->debug_mode = verbose_mode;
-
-#ifdef G_OS_WIN32
-	win32_init_debug_code();
-#endif
 
 	if (alternate_config)
 	{
@@ -559,12 +573,14 @@ static void parse_command_line_options(gint *argc, gchar ***argv)
 		filetypes_init_types();
 		ret = symbols_generate_global_tags(*argc, *argv, ! no_preprocessing);
 		filetypes_free_types();
+		wait_for_input_on_windows();
 		exit(ret);
 	}
 
 	if (ft_names)
 	{
 		print_filetypes();
+		wait_for_input_on_windows();
 		exit(0);
 	}
 
@@ -761,7 +777,7 @@ gboolean main_handle_filename(const gchar *locale_filename)
 		doc = document_open_file(filename, FALSE, NULL, NULL);
 		/* add recent file manually if opening_session_files is set */
 		if (doc != NULL && main_status.opening_session_files)
-			ui_add_recent_file(doc->file_name);
+			ui_add_recent_document(doc);
 		g_free(filename);
 		return TRUE;
 	}
@@ -771,7 +787,7 @@ gboolean main_handle_filename(const gchar *locale_filename)
 
 		doc = document_new_file(utf8_filename, NULL, NULL);
 		if (doc != NULL)
-			ui_add_recent_file(doc->file_name);
+			ui_add_recent_document(doc);
 		g_free(utf8_filename);
 		g_free(filename);
 		return TRUE;
@@ -1091,7 +1107,6 @@ gint main(gint argc, gchar **argv)
 	ui_save_buttons_toggle(FALSE);
 
 	doc = document_get_current();
-	gtk_widget_grab_focus(GTK_WIDGET(doc->editor->sci));
 	sidebar_select_openfiles_item(doc);
 	build_menu_update(doc);
 	sidebar_update_tag_list(doc, FALSE);
@@ -1104,6 +1119,7 @@ gint main(gint argc, gchar **argv)
 	setup_window_position();
 
 	/* finally show the window */
+	document_grab_focus(doc);
 	gtk_widget_show(main_widgets.window);
 	main_status.main_window_realized = TRUE;
 

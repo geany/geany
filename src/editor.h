@@ -206,8 +206,6 @@ void editor_do_comment(GeanyEditor *editor, gint line, gboolean allow_empty_line
 
 gint editor_do_uncomment(GeanyEditor *editor, gint line, gboolean toggle);
 
-gint editor_lexer_get_type_keyword_idx(gint lexer);
-
 void editor_insert_multiline_comment(GeanyEditor *editor);
 
 void editor_insert_alternative_whitespace(GeanyEditor *editor);

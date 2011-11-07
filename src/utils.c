@@ -795,8 +795,7 @@ gint utils_get_setting_integer(GKeyFile *config, const gchar *section, const gch
 	gint tmp;
 	GError *error = NULL;
 
-	if (G_UNLIKELY(config == NULL))
-		return default_value;
+	g_return_val_if_fail(config, default_value);
 
 	tmp = g_key_file_get_integer(config, section, key, &error);
 	if (error)
@@ -826,8 +825,7 @@ gboolean utils_get_setting_boolean(GKeyFile *config, const gchar *section, const
 	gboolean tmp;
 	GError *error = NULL;
 
-	if (G_UNLIKELY(config == NULL))
-		return default_value;
+	g_return_val_if_fail(config, default_value);
 
 	tmp = g_key_file_get_boolean(config, section, key, &error);
 	if (error)
@@ -856,8 +854,7 @@ gchar *utils_get_setting_string(GKeyFile *config, const gchar *section, const gc
 {
 	gchar *tmp;
 
-	if (G_UNLIKELY(config == NULL))
-		return g_strdup(default_value);
+	g_return_val_if_fail(config, g_strdup(default_value));
 
 	tmp = g_key_file_get_string(config, section, key, NULL);
 	if (!tmp)
@@ -1621,12 +1618,12 @@ guint utils_string_regex_replace_all(GString *haystack, GRegex *regex,
 	while (g_regex_match_full(regex, haystack->str, -1, start, 0, &minfo, NULL))
 	{
 		gint end, len;
-		
+
 		g_match_info_fetch_pos(minfo, match_num, &start, &end);
 		len = end - start;
 		utils_string_replace(haystack, start, len, replace);
 		ret++;
-		
+
 		/* skip past whole match */
 		g_match_info_fetch_pos(minfo, 0, NULL, &end);
 		start = end - len + strlen(replace);
@@ -1871,23 +1868,21 @@ gboolean utils_is_remote_path(const gchar *path)
 		return TRUE;
 
 #ifndef G_OS_WIN32
-	if (glib_check_version(2, 16, 0) == NULL) /* no need to check for this with GLib < 2.16 */
-	{
-		static gchar *fuse_path = NULL;
-		static gsize len = 0;
+	static gchar *fuse_path = NULL;
+	static gsize len = 0;
 
-		if (G_UNLIKELY(fuse_path == NULL))
-		{
-			fuse_path = g_build_filename(g_get_home_dir(), ".gvfs", NULL);
-			len = strlen(fuse_path);
-		}
-		/* Comparing the file path against a hardcoded path is not the most elegant solution
-		 * but for now it is better than nothing. Ideally, g_file_new_for_path() should create
-		 * proper GFile objects for Fuse paths, but it only does in future GVFS
-		 * versions (gvfs 1.1.1). */
-		return (strncmp(path, fuse_path, len) == 0);
+	if (G_UNLIKELY(fuse_path == NULL))
+	{
+		fuse_path = g_build_filename(g_get_home_dir(), ".gvfs", NULL);
+		len = strlen(fuse_path);
 	}
+	/* Comparing the file path against a hardcoded path is not the most elegant solution
+	 * but for now it is better than nothing. Ideally, g_file_new_for_path() should create
+	 * proper GFile objects for Fuse paths, but it only does in future GVFS
+	 * versions (gvfs 1.1.1). */
+	return (strncmp(path, fuse_path, len) == 0);
 #endif
+
 	return FALSE;
 }
 
@@ -1908,6 +1903,10 @@ void utils_tidy_path(gchar *filename)
 	if (str->len >= 2 && strncmp(str->str, "\\\\", 2) == 0)
 		preserve_double_backslash = TRUE;
 
+#ifdef G_OS_WIN32
+	/* using MSYS we can get Unix-style separators */
+	utils_string_replace_all(str, "/", G_DIR_SEPARATOR_S);
+#endif
 	/* replace "/./" and "//" */
 	utils_string_replace_all(str, G_DIR_SEPARATOR_S "." G_DIR_SEPARATOR_S, G_DIR_SEPARATOR_S);
 	utils_string_replace_all(str, G_DIR_SEPARATOR_S G_DIR_SEPARATOR_S, G_DIR_SEPARATOR_S);

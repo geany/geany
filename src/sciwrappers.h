@@ -144,7 +144,7 @@ void				sci_set_target_end			(ScintillaObject *sci, gint end);
 gint				sci_get_target_end			(ScintillaObject *sci);
 gint				sci_replace_target			(ScintillaObject *sci, const gchar *text, gboolean regex);
 
-void				sci_set_keywords			(ScintillaObject *sci, gint k, const gchar *text);
+void				sci_set_keywords			(ScintillaObject *sci, guint k, const gchar *text);
 gint				sci_get_lexer				(ScintillaObject *sci);
 void				sci_set_readonly			(ScintillaObject *sci, gboolean readonly);
 gint				sci_get_zoom				(ScintillaObject *sci);

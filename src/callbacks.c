@@ -172,10 +172,7 @@ G_MODULE_EXPORT void on_save1_activate(GtkMenuItem *menuitem, gpointer user_data
 
 	if (doc != NULL && cur_page >= 0)
 	{
-		if (document_need_save_as(doc))
-			dialogs_show_save_as();
-		else
-			document_save_file(doc, FALSE);
+		document_save_file(doc, FALSE);
 	}
 }
 
@@ -188,27 +185,19 @@ G_MODULE_EXPORT void on_save_as1_activate(GtkMenuItem *menuitem, gpointer user_d
 
 G_MODULE_EXPORT void on_save_all1_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
-	gint i, max = gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook));
+	guint i, max = (guint) gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook));
 	GeanyDocument *doc, *cur_doc = document_get_current();
-	gint count = 0;
+	guint count = 0;
 
+	/* iterate over documents in tabs order */
 	for (i = 0; i < max; i++)
 	{
 		doc = document_get_from_page(i);
 		if (! doc->changed)
 			continue;
-		if (document_need_save_as(doc))
-		{
-			/* display unnamed document */
-			document_show_tab(doc);
-			if (dialogs_show_save_as())
-				count++;
-		}
-		else
-		{
-			if (document_save_file(doc, FALSE))
-				count++;
-		}
+
+		if (document_save_file(doc, FALSE))
+			count++;
 	}
 	if (!count)
 		return;
@@ -632,6 +621,7 @@ G_MODULE_EXPORT void on_notebook1_switch_page_after(GtkNotebook *notebook, GtkNo
 		ui_document_show_hide(doc); /* update the document menu */
 		build_menu_update(doc);
 		sidebar_update_tag_list(doc, FALSE);
+		document_update_type_keywords(doc);
 
 		/* We delay the check to avoid weird fast, unintended switching of notebook pages when
 		 * the 'file has changed' dialog is shown while the switch event is not yet completely
@@ -744,7 +734,7 @@ G_MODULE_EXPORT void on_toggle_case1_activate(GtkMenuItem *menuitem, gpointer us
 		gchar *result = NULL;
 		gint cmd = SCI_LOWERCASE;
 		gint text_len = sci_get_selected_text_length(sci);
-		gboolean rectsel = scintilla_send_message(sci, SCI_SELECTIONISRECTANGLE, 0, 0);
+		gboolean rectsel = (gboolean) scintilla_send_message(sci, SCI_SELECTIONISRECTANGLE, 0, 0);
 
 		text = g_malloc(text_len + 1);
 		sci_get_selected_text(sci, text);
@@ -1427,14 +1417,12 @@ G_MODULE_EXPORT void on_menu_show_sidebar1_toggled(GtkCheckMenuItem *checkmenuit
 		interface_prefs.sidebar_symbol_visible = TRUE;
 	}
 
-#if GTK_CHECK_VERSION(2, 14, 0)
 	/* if window has input focus, set it back to the editor before toggling off */
 	if (! ui_prefs.sidebar_visible &&
 		gtk_container_get_focus_child(GTK_CONTAINER(main_widgets.sidebar_notebook)) != NULL)
 	{
 		keybindings_send_command(GEANY_KEY_GROUP_FOCUS, GEANY_KEYS_FOCUS_EDITOR);
 	}
-#endif
 
 	ui_sidebar_show_hide();
 }

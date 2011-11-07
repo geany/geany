@@ -4,6 +4,8 @@
 default=default
 comment=comment
 commentline=comment_line
+commentbox=comment
+blockcomment=comment
 number=number_1
 operator=operator
 identifier=identifier_1

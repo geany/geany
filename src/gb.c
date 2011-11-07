@@ -90,15 +90,15 @@ static void create_window(GtkWindow *parent)
 	gtk_box_pack_start(GTK_BOX(vbox1), hbox1, TRUE, FALSE, 5);
 	gtk_container_set_border_width(GTK_CONTAINER(hbox1), 4);
 
-	image1 = gtk_image_new_from_stock("gtk-cancel", GTK_ICON_SIZE_BUTTON);
+	image1 = gtk_image_new_from_stock(GTK_STOCK_CANCEL, GTK_ICON_SIZE_BUTTON);
 	gtk_widget_show(image1);
 	gtk_box_pack_start(GTK_BOX(hbox1), image1, TRUE, FALSE, 0);
 
-	image2 = gtk_image_new_from_stock("gtk-cancel", GTK_ICON_SIZE_BUTTON);
+	image2 = gtk_image_new_from_stock(GTK_STOCK_CANCEL, GTK_ICON_SIZE_BUTTON);
 	gtk_widget_show(image2);
 	gtk_box_pack_start(GTK_BOX(hbox1), image2, TRUE, FALSE, 0);
 
-	image3 = gtk_image_new_from_stock("gtk-cancel", GTK_ICON_SIZE_BUTTON);
+	image3 = gtk_image_new_from_stock(GTK_STOCK_CANCEL, GTK_ICON_SIZE_BUTTON);
 	gtk_widget_set_name(image3, "image3");
 	gtk_widget_show(image3);
 	gtk_box_pack_start(GTK_BOX(hbox1), image3, TRUE, FALSE, 0);
@@ -127,12 +127,12 @@ static void create_window(GtkWindow *parent)
 	gtk_box_set_homogeneous(GTK_BOX(hbox2), TRUE);
 	gtk_box_pack_start(GTK_BOX(vbox1), hbox2, TRUE, FALSE, 0);
 
-	button4 = gtk_button_new_from_stock("gtk-help");
+	button4 = gtk_button_new_from_stock(GTK_STOCK_HELP);
 	gtk_widget_show(button4);
 	gtk_box_pack_start(GTK_BOX(hbox2), button4, FALSE, FALSE, 0);
 	gtk_container_set_border_width(GTK_CONTAINER(button4), 5);
 
-	button5 = gtk_button_new_from_stock("gtk-close");
+	button5 = gtk_button_new_from_stock(GTK_STOCK_CLOSE);
 	gtk_widget_show(button5);
 	gtk_box_pack_start(GTK_BOX(hbox2), button5, FALSE, FALSE, 0);
 	gtk_container_set_border_width(GTK_CONTAINER(button5), 5);
@@ -188,7 +188,7 @@ static GtkWidget *create_help_dialog(GtkWindow *parent)
 	gtk_widget_show(dialog_action_area1);
 	gtk_button_box_set_layout(GTK_BUTTON_BOX(dialog_action_area1), GTK_BUTTONBOX_END);
 
-	okbutton1 = gtk_button_new_from_stock("gtk-ok");
+	okbutton1 = gtk_button_new_from_stock(GTK_STOCK_OK);
 	gtk_widget_show(okbutton1);
 	gtk_dialog_add_action_widget(GTK_DIALOG(help_dialog), okbutton1, GTK_RESPONSE_OK);
 	GTK_WIDGET_SET_FLAGS(okbutton1, GTK_CAN_DEFAULT);
@@ -1811,5 +1811,3 @@ static gboolean gb_on_key_pressed(GtkWidget *widget, GdkEventKey *event, gpointe
 		}
 	}
 }
-
-

@@ -791,7 +791,7 @@ static void ui_combo_box_changed(GtkComboBox *combo, gpointer user_data)
 {
 	/* we get this callback on typing as well as choosing an item */
 	if (gtk_combo_box_get_active(combo) >= 0)
-		gtk_widget_activate(GTK_BIN(combo)->child);
+		gtk_widget_activate(gtk_bin_get_child(GTK_BIN(combo)));
 }
 
 
@@ -886,16 +886,6 @@ static GtkWidget *make_toolbar(void)
 	g_signal_connect(wid, "clicked", G_CALLBACK(on_current_path), NULL);
 	gtk_container_add(GTK_CONTAINER(toolbar), wid);
 
-	if (gtk_check_version(2, 15, 2) != NULL)
-	{
-		wid = GTK_WIDGET(gtk_separator_tool_item_new());
-		gtk_container_add(GTK_CONTAINER(toolbar), wid);
-
-		wid = GTK_WIDGET(gtk_tool_button_new_from_stock(GTK_STOCK_CLEAR));
-		gtk_widget_set_tooltip_text(wid, _("Clear the filter"));
-		g_signal_connect(wid, "clicked", G_CALLBACK(on_clear_filter), NULL);
-		gtk_container_add(GTK_CONTAINER(toolbar), wid);
-	}
 	return toolbar;
 }
 
@@ -909,13 +899,11 @@ static GtkWidget *make_filterbar(void)
 	label = gtk_label_new(_("Filter:"));
 
 	filter_combo = gtk_combo_box_entry_new_text();
-	filter_entry = GTK_BIN(filter_combo)->child;
+	filter_entry = gtk_bin_get_child(GTK_BIN(filter_combo));
 
-	if (gtk_check_version(2, 15, 2) == NULL)
-	{
-		ui_entry_add_clear_icon(GTK_ENTRY(filter_entry));
-		g_signal_connect(filter_entry, "icon-release", G_CALLBACK(on_filter_clear), NULL);
-	}
+	ui_entry_add_clear_icon(GTK_ENTRY(filter_entry));
+	g_signal_connect(filter_entry, "icon-release", G_CALLBACK(on_filter_clear), NULL);
+
 	gtk_widget_set_tooltip_text(filter_entry,
 		_("Filter your files with the usual wildcards. Separate multiple patterns with a space."));
 	g_signal_connect(filter_entry, "activate", G_CALLBACK(on_filter_activate), NULL);
@@ -1107,7 +1095,7 @@ void plugin_init(GeanyData *data)
 	path_combo = gtk_combo_box_entry_new_text();
 	gtk_box_pack_start(GTK_BOX(file_view_vbox), path_combo, FALSE, FALSE, 2);
 	g_signal_connect(path_combo, "changed", G_CALLBACK(ui_combo_box_changed), NULL);
-	path_entry = GTK_BIN(path_combo)->child;
+	path_entry = gtk_bin_get_child(GTK_BIN(path_combo));
 	g_signal_connect(path_entry, "activate", G_CALLBACK(on_path_entry_activate), NULL);
 
 	file_view = gtk_tree_view_new();

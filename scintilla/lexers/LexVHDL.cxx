@@ -235,7 +235,7 @@ static void FoldNoBoxVHDLDoc(
       }
     }
   }
-  for(j=j+strlen(prevWord); j<endPos; j++)
+  for(j=j+static_cast<unsigned int>(strlen(prevWord)); j<endPos; j++)
   {
     char ch       = styler.SafeGetCharAt(j);
     int style     = styler.StyleAt(j);

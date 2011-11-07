@@ -46,6 +46,7 @@
 
 #include <stdlib.h>
 
+#define GEANY_FILETYPE_SEARCH_LINES 2 /* lines of file to search for filetype */
 
 GPtrArray *filetypes_array = NULL;	/* Dynamic array of filetype pointers */
 
@@ -955,13 +956,48 @@ static GeanyFiletype *find_shebang(const gchar *utf8_filename, const gchar *line
 
 /* Detect the filetype checking for a shebang, then filename extension. */
 static GeanyFiletype *filetypes_detect_from_file_internal(const gchar *utf8_filename,
-														  const gchar *line)
+														  gchar **lines)
 {
-	GeanyFiletype *ft;
+	GeanyFiletype	*ft;
+	gint			 i;
+	GRegex			*ft_regex;
+	GMatchInfo		*match;
+	GError			*regerr = NULL;
 
 	/* try to find a shebang and if found use it prior to the filename extension
 	 * also checks for <?xml */
-	ft = find_shebang(utf8_filename, line);
+	ft = find_shebang(utf8_filename, lines[0]);
+	if (ft != NULL)
+		return ft;
+
+	/* try to extract the filetype using a regex capture */
+	ft_regex = g_regex_new( file_prefs.extract_filetype_regex,
+							G_REGEX_RAW | G_REGEX_MULTILINE,
+							0,
+							&regerr);
+	if (regerr == NULL)
+	{
+		for (i = 0; i < GEANY_FILETYPE_SEARCH_LINES; i++)
+		{
+			if (g_regex_match(ft_regex, lines[i], 0, &match))
+			{
+				gchar *capture = g_match_info_fetch(match, 1);
+				if (capture != NULL)
+				{
+					ft = filetypes_lookup_by_name(capture);
+					g_free(capture);
+				}
+			}
+			g_match_info_free(match);
+			if (ft != NULL)
+				break;
+		}
+	}
+	else
+	{
+		g_error_free(regerr);
+	}
+	g_regex_unref(ft_regex);
 	if (ft != NULL)
 		return ft;
 
@@ -975,15 +1011,22 @@ static GeanyFiletype *filetypes_detect_from_file_internal(const gchar *utf8_file
 /* Detect the filetype for the document, checking for a shebang, then filename extension. */
 GeanyFiletype *filetypes_detect_from_document(GeanyDocument *doc)
 {
-	GeanyFiletype *ft;
-	gchar *line;
+	GeanyFiletype 	*ft;
+	gchar 			*lines[GEANY_FILETYPE_SEARCH_LINES];
+	gint			 i;
 
 	if (doc == NULL)
 		return filetypes[GEANY_FILETYPES_NONE];
 
-	line = sci_get_line(doc->editor->sci, 0);
-	ft = filetypes_detect_from_file_internal(doc->file_name, line);
-	g_free(line);
+	for (i = 0; i < GEANY_FILETYPE_SEARCH_LINES; ++i)
+	{
+		lines[i] = sci_get_line(doc->editor->sci, i);
+	}
+	ft = filetypes_detect_from_file_internal(doc->file_name, lines);
+	for (i = 0; i < GEANY_FILETYPE_SEARCH_LINES; ++i)
+	{
+		g_free(lines[i]);
+	}
 	return ft;
 }
 
@@ -1001,8 +1044,10 @@ GeanyFiletype *filetypes_detect_from_document(GeanyDocument *doc)
 GeanyFiletype *filetypes_detect_from_file(const gchar *utf8_filename)
 {
 	gchar line[1024];
-	FILE *f;
+	gchar *lines[GEANY_FILETYPE_SEARCH_LINES];
+	FILE  *f;
 	gchar *locale_name = utils_get_locale_from_utf8(utf8_filename);
+	gint  i;
 
 	f = g_fopen(locale_name, "r");
 	g_free(locale_name);
@@ -1011,7 +1056,12 @@ GeanyFiletype *filetypes_detect_from_file(const gchar *utf8_filename)
 		if (fgets(line, sizeof(line), f) != NULL)
 		{
 			fclose(f);
-			return filetypes_detect_from_file_internal(utf8_filename, line);
+			for (i = 0; i < GEANY_FILETYPE_SEARCH_LINES; ++i)
+			{
+				lines[i] = NULL;
+			}
+			lines[0] = line;
+			return filetypes_detect_from_file_internal(utf8_filename, lines);
 		}
 		fclose(f);
 	}
@@ -1129,7 +1179,7 @@ static void load_indent_settings(GeanyFiletype *ft, GKeyFile *config, GKeyFile *
 }
 
 
-static void load_settings(gint ft_id, GKeyFile *config, GKeyFile *configh)
+static void load_settings(guint ft_id, GKeyFile *config, GKeyFile *configh)
 {
 	GeanyFiletype *ft = filetypes[ft_id];
 	gchar *result;
@@ -1319,13 +1369,13 @@ static void load_system_keyfile(GKeyFile *key_file, const gchar *file, GKeyFileF
 /* Load the configuration file for the associated filetype id.
  * This should only be called when the filetype is needed, to save loading
  * 20+ configuration files all at once. */
-void filetypes_load_config(gint ft_id, gboolean reload)
+void filetypes_load_config(guint ft_id, gboolean reload)
 {
 	GKeyFile *config, *config_home;
 	GeanyFiletypePrivate *pft;
 	GeanyFiletype *ft;
 
-	g_return_if_fail(ft_id >= 0 && ft_id < (gint) filetypes_array->len);
+	g_return_if_fail(ft_id < filetypes_array->len);
 
 	ft = filetypes[ft_id];
 	pft = ft->priv;
@@ -1478,7 +1528,7 @@ GeanyFiletype *filetypes_lookup_by_name(const gchar *name)
 }
 
 
-static gchar *get_regex_match_string(const gchar *message, regmatch_t *pmatch, gint match_idx)
+static gchar *get_regex_match_string(const gchar *message, regmatch_t *pmatch, guint match_idx)
 {
 	return g_strndup(&message[pmatch[match_idx].rm_so],
 		pmatch[match_idx].rm_eo - pmatch[match_idx].rm_so);
@@ -1736,4 +1786,3 @@ const gchar *filetypes_get_display_name(GeanyFiletype *ft)
 {
 	return ft->id == GEANY_FILETYPES_NONE ? _("None") : ft->name;
 }
-

@@ -3,7 +3,7 @@
 # Edit these in the colorscheme .conf file instead
 default=default
 error=error
-commentline=comment
+commentline=comment_line
 number=number_1
 word=keyword_1
 string=string_1
@@ -31,13 +31,25 @@ string_qx=string_2
 string_qr=string_2
 string_qw=string_2
 variable_indexer=default
+# *_var mappings may need checking
+string_var=identifier_1
+regex_var=identifier_2
+regsubst_var=identifier_2
+backticks_var=identifier_2
+here_qq_var=identifier_2
+here_qx_var=identifier_2
+string_qq_var=identifier_2
+string_qx_var=identifier_2
+string_qr_var=identifier_2
+# translation: tr{}{} y{}{}
+xlat=string_2
 # not used
 punctuation=default
 # obsolete: replaced by qq, qx, qr, qw
-longquote=perl_here_qq
-sub_prototype=perl_here_qx
-format_ident=perl_string_qr
-format=perl_string_qw
+longquote=here_doc
+sub_prototype=here_doc
+format_ident=string_2
+format=string_2
 
 [keywords]
 primary=NULL __FILE__ __LINE__ __PACKAGE__ __DATA__ __END__ AUTOLOAD BEGIN CORE DESTROY END EQ GE GT INIT LE LT NE CHECK abs accept alarm and atan2 bind binmode bless caller chdir chmod chomp chop chown chr chroot close closedir cmp connect continue cos crypt dbmclose dbmopen defined delete die do dump each else elsif endgrent endhostent endnetent endprotoent endpwent endservent eof eq eval exec exists exit exp fcntl fileno flock for foreach fork format formline ge getc getgrent getgrgid getgrnam gethostbyaddr gethostbyname gethostent getlogin getnetbyaddr getnetbyname getnetent getpeername getpgrp getppid getpriority getprotobyname getprotobynumber getprotoent getpwent getpwnam getpwuid getservbyname getservbyport getservent getsockname getsockopt glob gmtime goto grep gt hex if index int ioctl join keys kill last lc lcfirst le length link listen local localtime lock log lstat lt m map mkdir msgctl msgget msgrcv msgsnd my ne next no not oct open opendir or ord our pack package pipe pop pos print printf prototype push q qq qr quotemeta qu qw qx rand read readdir readline readlink readpipe recv redo ref rename require reset return reverse rewinddir rindex rmdir s scalar seek seekdir select semctl semget semop send setgrent sethostent setnetent setpgrp setpriority setprotoent setpwent setservent setsockopt shift shmctl shmget shmread shmwrite shutdown sin sleep socket socketpair sort splice split sprintf sqrt srand stat study sub substr symlink syscall sysopen sysread sysseek system syswrite tell telldir tie tied time times tr truncate uc ucfirst umask undef unless unlink unpack unshift untie until use utime values vec wait waitpid wantarray warn while write x xor y

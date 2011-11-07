@@ -669,7 +669,7 @@ void ui_save_buttons_toggle(gboolean enable)
 	gboolean dirty_tabs = FALSE;
 
 	if (ui_prefs.allow_always_save)
-		enable = gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook)) > 0 ? TRUE : FALSE;
+		enable = gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook)) > 0;
 
 	ui_widget_set_sensitive(widgets.save_buttons[0], enable);
 	ui_widget_set_sensitive(widgets.save_buttons[1], enable);
@@ -779,7 +779,7 @@ static void init_document_widgets(void)
 void ui_document_buttons_update(void)
 {
 	guint i;
-	gboolean enable = gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook)) ? TRUE : FALSE;
+	gboolean enable = gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook)) > 0;
 
 	for (i = 0; i < widgets.document_buttons->len; i++)
 	{
@@ -807,7 +807,7 @@ static void on_doc_sensitive_widget_destroy(GtkWidget *widget, G_GNUC_UNUSED gpo
  **/
 void ui_add_document_sensitive(GtkWidget *widget)
 {
-	gboolean enable = gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook)) ? TRUE : FALSE;
+	gboolean enable = gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook)) > 0;
 
 	ui_widget_set_sensitive(widget, enable);
 
@@ -1123,22 +1123,23 @@ static void recent_project_activate_cb(GtkMenuItem *menuitem, G_GNUC_UNUSED gpoi
 }
 
 
-static void add_recent_file(const gchar *utf8_filename, GeanyRecentFiles *grf)
+static void add_recent_file(const gchar *utf8_filename, GeanyRecentFiles *grf,
+		const GtkRecentData *rdata)
 {
 	if (g_queue_find_custom(grf->recent_queue, utf8_filename, (GCompareFunc) strcmp) == NULL)
 	{
-#if GTK_CHECK_VERSION(2, 10, 0)
-		if (grf->type == RECENT_FILE_FILE)
+
+		if (grf->type == RECENT_FILE_FILE && rdata)
 		{
 			GtkRecentManager *manager = gtk_recent_manager_get_default();
 			gchar *uri = g_filename_to_uri(utf8_filename, NULL, NULL);
 			if (uri != NULL)
 			{
-				gtk_recent_manager_add_item(manager, uri);
+				gtk_recent_manager_add_full(manager, uri, rdata);
 				g_free(uri);
 			}
 		}
-#endif
+
 		g_queue_push_head(grf->recent_queue, g_strdup(utf8_filename));
 		if (g_queue_get_length(grf->recent_queue) > file_prefs.mru_length)
 		{
@@ -1152,15 +1153,34 @@ static void add_recent_file(const gchar *utf8_filename, GeanyRecentFiles *grf)
 }
 
 
-void ui_add_recent_file(const gchar *utf8_filename)
+void ui_add_recent_document(GeanyDocument *doc)
 {
-	add_recent_file(utf8_filename, recent_get_recent_files());
+	/* what are the groups for actually? */
+	static const gchar *groups[2] = {
+		"geany",
+		NULL
+	};
+	GtkRecentData rdata;
+
+	/* Prepare the data for gtk_recent_manager_add_full() */
+	rdata.display_name = NULL;
+	rdata.description = NULL;
+	rdata.mime_type = doc->file_type->mime_type;
+	/* if we ain't got no mime-type, fallback to plain text */
+	if (! rdata.mime_type)
+		rdata.mime_type = (gchar *) "text/plain";
+	rdata.app_name = (gchar *) "geany";
+	rdata.app_exec = (gchar *) "geany %u";
+	rdata.groups = (gchar **) groups;
+	rdata.is_private = FALSE;
+
+	add_recent_file(doc->file_name, recent_get_recent_files(), &rdata);
 }
 
 
 void ui_add_recent_project_file(const gchar *utf8_filename)
 {
-	add_recent_file(utf8_filename, recent_get_recent_projects());
+	add_recent_file(utf8_filename, recent_get_recent_projects(), NULL);
 }
 
 
@@ -1169,9 +1189,9 @@ gchar *ui_menu_item_get_text(GtkMenuItem *menu_item)
 {
 	const gchar *text = NULL;
 
-	if (GTK_BIN(menu_item)->child)
+	if (gtk_bin_get_child(GTK_BIN(menu_item)))
 	{
-		GtkWidget *child = GTK_BIN(menu_item)->child;
+		GtkWidget *child = gtk_bin_get_child(GTK_BIN(menu_item));
 
 		if (GTK_IS_LABEL(child))
 			text = gtk_label_get_text(GTK_LABEL(child));
@@ -1302,12 +1322,11 @@ static void update_recent_menu(GeanyRecentFiles *grf)
 
 void ui_toggle_editor_features(GeanyUIEditorFeatures feature)
 {
-	gint i, max = gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook));
-	GeanyDocument *doc;
+	guint i;
 
-	for (i = 0; i < max; i++)
+	foreach_document (i)
 	{
-		doc = document_get_from_page(i);
+		GeanyDocument *doc = documents[i];
 
 		switch (feature)
 		{
@@ -1431,21 +1450,14 @@ static void entry_clear_icon_release_cb(GtkEntry *entry, gint icon_pos,
 /** Adds a small clear icon to the right end of the passed @a entry.
  *  A callback to clear the contents of the GtkEntry is automatically added.
  *
- *  This feature is only available with GTK 2.16 but implemented as a runtime check,
- *  so it is safe to just use this function, if the code is ran with older versions,
- *  nothing happens. If ran with GTK 2.16 or newer, the icon is displayed.
- *
  * @param entry The GtkEntry object to which the icon should be attached.
  *
  *  @since 0.16
  */
 void ui_entry_add_clear_icon(GtkEntry *entry)
 {
-	if (gtk_check_version(2, 15, 2) == NULL)
-	{
-		g_object_set(entry, "secondary-icon-stock", "gtk-clear", NULL);
-		g_signal_connect(entry, "icon-release", G_CALLBACK(entry_clear_icon_release_cb), NULL);
-	}
+	g_object_set(entry, "secondary-icon-stock", GTK_STOCK_CLEAR, NULL);
+	g_signal_connect(entry, "icon-release", G_CALLBACK(entry_clear_icon_release_cb), NULL);
 }
 
 
@@ -1544,7 +1556,7 @@ void ui_combo_box_add_to_history(GtkComboBoxEntry *combo_entry,
 	if (history_len <= 0)
 		history_len = 10;
 	if (!text)
-		text = gtk_entry_get_text(GTK_ENTRY(GTK_BIN(combo)->child));
+		text = gtk_entry_get_text(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(combo))));
 
 	model = gtk_combo_box_get_model(combo);
 
@@ -1735,7 +1747,7 @@ void ui_setup_open_button_callback(GtkWidget *open_btn, const gchar *title,
 	if (title)
 		g_object_set_data_full(G_OBJECT(open_btn), "title", g_strdup(title),
 				(GDestroyNotify) g_free);
-	g_object_set_data(G_OBJECT(open_btn), "action", (gpointer) action);
+	g_object_set_data(G_OBJECT(open_btn), "action", GINT_TO_POINTER(action));
 	ui_hookup_widget(open_btn, path_entry, "entry");
 	g_signal_connect(open_btn, "clicked", G_CALLBACK(ui_path_box_open_clicked), open_btn);
 }
@@ -1783,10 +1795,8 @@ static gchar *run_file_chooser(const gchar *title, GtkFileChooserAction action,
 static void ui_path_box_open_clicked(GtkButton *button, gpointer user_data)
 {
 	GtkWidget *path_box = GTK_WIDGET(user_data);
-	GtkFileChooserAction action =
-		(GtkFileChooserAction) g_object_get_data(G_OBJECT(path_box), "action");
-	GtkEntry *entry =
-		(GtkEntry *) g_object_get_data(G_OBJECT(path_box), "entry");
+	GtkFileChooserAction action = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(path_box), "action"));
+	GtkEntry *entry = g_object_get_data(G_OBJECT(path_box), "entry");
 	const gchar *title = g_object_get_data(G_OBJECT(path_box), "title");
 	gchar *utf8_path = NULL;
 
@@ -1849,7 +1859,7 @@ void ui_statusbar_showhide(gboolean state)
 void ui_table_add_row(GtkTable *table, gint row, ...)
 {
 	va_list args;
-	gint i;
+	guint i;
 	GtkWidget *widget;
 
 	va_start(args, row);
@@ -1893,6 +1903,12 @@ static void on_config_file_clicked(GtkWidget *widget, gpointer user_data)
 }
 
 
+static void free_on_closure_notify(gpointer data, GClosure *closure)
+{
+	g_free(data);
+}
+
+
 /* @note You should connect to the "document-save" signal yourself to detect
  * if the user has just saved the config file, reloading it. */
 void ui_add_config_file_menu_item(const gchar *real_path, const gchar *label, GtkContainer *parent)
@@ -1915,9 +1931,8 @@ void ui_add_config_file_menu_item(const gchar *real_path, const gchar *label, Gt
 
 	gtk_widget_show(item);
 	gtk_container_add(parent, item);
-	g_signal_connect(item, "activate", G_CALLBACK(on_config_file_clicked),
-		/* this memory is kept */
-		g_strdup(real_path));
+	g_signal_connect_data(item, "activate", G_CALLBACK(on_config_file_clicked),
+			g_strdup(real_path), free_on_closure_notify, 0);
 }
 
 
@@ -1947,7 +1962,7 @@ void ui_init_stock_items(void)
 	GtkIconSet *icon_set;
 	GtkIconFactory *factory = gtk_icon_factory_new();
 	GdkPixbuf *pb;
-	gsize i, len;
+	guint i, len;
 	GtkStockItem items[] =
 	{
 		{ GEANY_STOCK_SAVE_ALL, N_("Save All"), 0, 0, GETTEXT_PACKAGE },
@@ -2440,7 +2455,7 @@ GtkWidget *ui_lookup_widget(GtkWidget *widget, const gchar *widget_name)
 
 
 /* Progress Bar */
-static guint progress_bar_timer_id = (guint) -1;
+static guint progress_bar_timer_id = 0;
 
 
 static GtkWidget *progress_bar_create(void)
@@ -2483,7 +2498,7 @@ static gboolean progress_bar_pulse(gpointer data)
  **/
 void ui_progress_bar_start(const gchar *text)
 {
-	g_return_if_fail(progress_bar_timer_id == (guint) -1);
+	g_return_if_fail(progress_bar_timer_id == 0);
 
 	if (! interface_prefs.statusbar_visible)
 		return;
@@ -2504,10 +2519,10 @@ void ui_progress_bar_stop(void)
 {
 	gtk_widget_hide(GTK_WIDGET(main_widgets.progressbar));
 
-	if (progress_bar_timer_id != (guint) -1)
+	if (progress_bar_timer_id != 0)
 	{
 		g_source_remove(progress_bar_timer_id);
-		progress_bar_timer_id = (guint) -1;
+		progress_bar_timer_id = 0;
 	}
 }
 
@@ -2611,7 +2626,7 @@ void ui_menu_add_document_items_sorted(GtkMenu *menu, GeanyDocument *active,
 	gchar *base_name, *label;
 	GPtrArray *sorted_documents;
 
-	len = gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook));
+	len = (guint) gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook));
 
 	sorted_documents = g_ptr_array_sized_new(len);
 	/* copy the documents_array into the new one */
@@ -2696,7 +2711,7 @@ void ui_editable_insert_text_callback(GtkEditable *editable, gchar *new_text,
 	gint i;
 
 	if (new_text_len == -1)
-		new_text_len = strlen(new_text);
+		new_text_len = (gint) strlen(new_text);
 
 	for (i = 0; i < new_text_len; i++, new_text++)
 	{
@@ -2714,7 +2729,6 @@ void ui_editable_insert_text_callback(GtkEditable *editable, gchar *new_text,
 GdkPixbuf *ui_get_mime_icon(const gchar *mime_type, GtkIconSize size)
 {
 	GdkPixbuf *icon = NULL;
-#if GTK_CHECK_VERSION(2, 14, 0)
 	gchar *ctype;
 	GIcon *gicon;
 	GtkIconInfo *info;
@@ -2740,7 +2754,7 @@ GdkPixbuf *ui_get_mime_icon(const gchar *mime_type, GtkIconSize size)
 			gtk_icon_info_free(info);
 		}
 	}
-#endif
+
 	/* fallback for builds with GIO < 2.18 or if icon lookup failed, like it might happen on Windows */
 	if (icon == NULL)
 	{

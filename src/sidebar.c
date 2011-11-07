@@ -57,8 +57,10 @@ static struct
 	GtkWidget *reload;
 	GtkWidget *show_paths;
 	GtkWidget *find_in_files;
+	GtkWidget *expand_all;
+	GtkWidget *collapse_all;
 }
-doc_items = {NULL, NULL, NULL, NULL, NULL};
+doc_items = {NULL, NULL, NULL, NULL, NULL, NULL, NULL};
 
 enum
 {
@@ -334,10 +336,20 @@ static gboolean find_tree_iter_dir(GtkTreeIter *iter, const gchar *dir)
 
 	gtk_tree_model_get(GTK_TREE_MODEL(store_openfiles), iter, DOCUMENTS_SHORTNAME, &name, -1);
 
-	result = utils_str_equal(name, dir);
+	result = utils_filenamecmp(name, dir) == 0;
 	g_free(name);
 
 	return result;
+}
+
+
+static gboolean utils_filename_has_prefix(const gchar *str, const gchar *prefix)
+{
+	gchar *head = g_strndup(str, strlen(prefix));
+	gboolean ret = utils_filenamecmp(head, prefix) == 0;
+
+	g_free(head);
+	return ret;
 }
 
 
@@ -360,7 +372,7 @@ static gchar *get_doc_folder(const gchar *path)
 			project_base_path[len-1] = '\0';
 
 		/* check whether the dir name matches or uses the project base path */
-		if (g_str_has_prefix(tmp_dirname, project_base_path))
+		if (utils_filename_has_prefix(tmp_dirname, project_base_path))
 		{
 			rest = tmp_dirname + len;
 			if (*rest == G_DIR_SEPARATOR || *rest == '\0')
@@ -375,7 +387,7 @@ static gchar *get_doc_folder(const gchar *path)
 		dirname = tmp_dirname;
 
 		/* If matches home dir, replace with tilde */
-		if (home_dir && *home_dir != 0 && g_str_has_prefix(dirname, home_dir))
+		if (NZV(home_dir) && utils_filename_has_prefix(dirname, home_dir))
 		{
 			rest = dirname + strlen(home_dir);
 			if (*rest == G_DIR_SEPARATOR || *rest == '\0')
@@ -518,18 +530,12 @@ void sidebar_openfiles_update(GeanyDocument *doc)
 
 void sidebar_openfiles_update_all()
 {
-	guint i, page_count;
-	GeanyDocument *doc;
+	guint i;
 
 	gtk_tree_store_clear(store_openfiles);
-	page_count = gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook));
-	for (i = 0; i < page_count; i++)
+	foreach_document (i)
 	{
-		doc = document_get_from_page(i);
-		if (G_UNLIKELY(doc == NULL))
-			continue;
-
-		sidebar_openfiles_add(doc);
+		sidebar_openfiles_add(documents[i]);
 	}
 }
 
@@ -597,7 +603,7 @@ void sidebar_add_common_menu_items(GtkMenu *menu)
 
 	item = gtk_image_menu_item_new_with_mnemonic(_("H_ide Sidebar"));
 	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item),
-		gtk_image_new_from_stock("gtk-close", GTK_ICON_SIZE_MENU));
+		gtk_image_new_from_stock(GTK_STOCK_CLOSE, GTK_ICON_SIZE_MENU));
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	g_signal_connect(item, "activate", G_CALLBACK(on_hide_sidebar), NULL);
@@ -652,13 +658,24 @@ static void on_find_in_files(GtkMenuItem *menuitem, gpointer user_data)
 }
 
 
+static void on_openfiles_expand_collapse(GtkMenuItem *menuitem, gpointer user_data)
+{
+	gboolean expand = GPOINTER_TO_INT(user_data);
+
+	if (expand)
+		gtk_tree_view_expand_all(GTK_TREE_VIEW(tv.tree_openfiles));
+	else
+		gtk_tree_view_collapse_all(GTK_TREE_VIEW(tv.tree_openfiles));
+}
+
+
 static void create_openfiles_popup_menu(void)
 {
 	GtkWidget *item;
 
 	openfiles_popup_menu = gtk_menu_new();
 
-	item = gtk_image_menu_item_new_from_stock("gtk-close", NULL);
+	item = gtk_image_menu_item_new_from_stock(GTK_STOCK_CLOSE, NULL);
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(openfiles_popup_menu), item);
 	g_signal_connect(item, "activate",
@@ -669,7 +686,7 @@ static void create_openfiles_popup_menu(void)
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(openfiles_popup_menu), item);
 
-	item = gtk_image_menu_item_new_from_stock("gtk-save", NULL);
+	item = gtk_image_menu_item_new_from_stock(GTK_STOCK_SAVE, NULL);
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(openfiles_popup_menu), item);
 	g_signal_connect(item, "activate",
@@ -678,7 +695,7 @@ static void create_openfiles_popup_menu(void)
 
 	item = gtk_image_menu_item_new_with_mnemonic(_("_Reload"));
 	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item),
-		gtk_image_new_from_stock("gtk-revert-to-saved", GTK_ICON_SIZE_MENU));
+		gtk_image_new_from_stock(GTK_STOCK_REVERT_TO_SAVED, GTK_ICON_SIZE_MENU));
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(openfiles_popup_menu), item);
 	g_signal_connect(item, "activate",
@@ -705,6 +722,22 @@ static void create_openfiles_popup_menu(void)
 	gtk_container_add(GTK_CONTAINER(openfiles_popup_menu), doc_items.show_paths);
 	g_signal_connect(doc_items.show_paths, "activate",
 			G_CALLBACK(on_openfiles_show_paths_activate), NULL);
+
+	item = gtk_separator_menu_item_new();
+	gtk_widget_show(item);
+	gtk_container_add(GTK_CONTAINER(openfiles_popup_menu), item);
+
+	doc_items.expand_all = ui_image_menu_item_new(GTK_STOCK_ADD, _("_Expand All"));
+	gtk_widget_show(doc_items.expand_all);
+	gtk_container_add(GTK_CONTAINER(openfiles_popup_menu), doc_items.expand_all);
+	g_signal_connect(doc_items.expand_all, "activate",
+					 G_CALLBACK(on_openfiles_expand_collapse), GINT_TO_POINTER(TRUE));
+
+	doc_items.collapse_all = ui_image_menu_item_new(GTK_STOCK_REMOVE, _("_Collapse All"));
+	gtk_widget_show(doc_items.collapse_all);
+	gtk_container_add(GTK_CONTAINER(openfiles_popup_menu), doc_items.collapse_all);
+	g_signal_connect(doc_items.collapse_all, "activate",
+					 G_CALLBACK(on_openfiles_expand_collapse), GINT_TO_POINTER(FALSE));
 
 	sidebar_add_common_menu_items(GTK_MENU(openfiles_popup_menu));
 }
@@ -996,8 +1029,9 @@ static void documents_menu_update(GtkTreeSelection *selection)
 	gtk_widget_set_sensitive(doc_items.find_in_files, sel);
 	g_free(shortname);
 
-	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(doc_items.show_paths),
-		documents_show_paths);
+	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(doc_items.show_paths), documents_show_paths);
+	gtk_widget_set_sensitive(doc_items.expand_all, documents_show_paths);
+	gtk_widget_set_sensitive(doc_items.collapse_all, documents_show_paths);
 }
 
 

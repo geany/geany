@@ -1270,9 +1270,6 @@ static void on_build_menu_item(GtkWidget *w, gpointer user_data)
 
 	if (doc && doc->changed)
 	{
-		if (document_need_save_as(doc) && !dialogs_show_save_as())
-			return;
-			
 		if (!document_save_file(doc, FALSE))
 			return;
 	}
@@ -1393,7 +1390,7 @@ static void create_build_menu_item(GtkWidget *menu, GeanyKeyGroup *group, GtkAcc
 	}
 	gtk_widget_show(item);
 	if (bs->key_binding >= 0)
-		add_menu_accel(group, bs->key_binding, ag, item);
+		add_menu_accel(group, (guint) bs->key_binding, ag, item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	if (bs->cb != NULL)
 	{
@@ -1627,21 +1624,21 @@ static void set_stop_button(gboolean stop)
 	if (run_button != NULL)
 		button_stock_id = gtk_tool_button_get_stock_id(run_button);
 
-	if (stop && utils_str_equal(button_stock_id, "gtk-stop"))
+	if (stop && utils_str_equal(button_stock_id, GTK_STOCK_STOP))
 		return;
-	if (! stop && utils_str_equal(button_stock_id, "gtk-execute"))
+	if (! stop && utils_str_equal(button_stock_id, GTK_STOCK_EXECUTE))
 		return;
 
 	 /* use the run button also as stop button  */
 	if (stop)
 	{
 		if (run_button != NULL)
-			gtk_tool_button_set_stock_id(run_button, "gtk-stop");
+			gtk_tool_button_set_stock_id(run_button, GTK_STOCK_STOP);
 	}
 	else
 	{
 		if (run_button != NULL)
-			gtk_tool_button_set_stock_id(run_button, "gtk-execute");
+			gtk_tool_button_set_stock_id(run_button, GTK_STOCK_EXECUTE);
 	}
 }
 
@@ -2307,7 +2304,8 @@ static const gchar *fixedkey="xx_xx_xx";
 static void build_load_menu_grp(GKeyFile *config, GeanyBuildCommand **dst, gint grp,
 								gchar *prefix, gboolean loc)
 {
-	gint cmd, prefixlen; /* NOTE prefixlen used in macros above */
+	gint cmd;
+	gsize prefixlen; /* NOTE prefixlen used in macros above */
 	GeanyBuildCommand *dstcmd;
 	gchar *key;
 	static gchar cmdbuf[3] = "  ";
@@ -2518,7 +2516,8 @@ void build_load_menu(GKeyFile *config, GeanyBuildSource src, gpointer p)
 
 static gint build_save_menu_grp(GKeyFile *config, GeanyBuildCommand *src, gint grp, gchar *prefix)
 {
-	gint cmd, prefixlen; /* NOTE prefixlen used in macros above */
+	gint cmd;
+	gsize prefixlen; /* NOTE prefixlen used in macros above */
 	gchar *key;
 	gint count = 0;
 	enum GeanyBuildCmdEntries i;
@@ -2767,5 +2766,3 @@ void build_init(void)
 	/* set the submenu to the toolbar item */
 	geany_menu_button_action_set_menu(GEANY_MENU_BUTTON_ACTION(widgets.build_action), toolmenu);
 }
-
-

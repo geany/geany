@@ -547,7 +547,7 @@ static GtkWidget *create_message_popup_menu(gint type)
 
 	message_popup_menu = gtk_menu_new();
 
-	clear = gtk_image_menu_item_new_from_stock("gtk-clear", NULL);
+	clear = gtk_image_menu_item_new_from_stock(GTK_STOCK_CLEAR, NULL);
 	gtk_widget_show(clear);
 	gtk_container_add(GTK_CONTAINER(message_popup_menu), clear);
 	g_signal_connect(clear, "activate",
@@ -556,7 +556,7 @@ static GtkWidget *create_message_popup_menu(gint type)
 	copy = gtk_image_menu_item_new_with_mnemonic(_("C_opy"));
 	gtk_widget_show(copy);
 	gtk_container_add(GTK_CONTAINER(message_popup_menu), copy);
-	image = gtk_image_new_from_stock("gtk-copy", GTK_ICON_SIZE_MENU);
+	image = gtk_image_new_from_stock(GTK_STOCK_COPY, GTK_ICON_SIZE_MENU);
 	gtk_widget_show(image);
 	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(copy), image);
 	g_signal_connect(copy, "activate",
@@ -565,7 +565,7 @@ static GtkWidget *create_message_popup_menu(gint type)
 	copy_all = gtk_image_menu_item_new_with_mnemonic(_("Copy _All"));
 	gtk_widget_show(copy_all);
 	gtk_container_add(GTK_CONTAINER(message_popup_menu), copy_all);
-	image = gtk_image_new_from_stock("gtk-copy", GTK_ICON_SIZE_MENU);
+	image = gtk_image_new_from_stock(GTK_STOCK_COPY, GTK_ICON_SIZE_MENU);
 	gtk_widget_show(image);
 	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(copy_all), image);
 	g_signal_connect(copy_all, "activate",
@@ -844,11 +844,25 @@ static void parse_compiler_error_line(const gchar *string,
 		case GEANY_FILETYPES_PYTHON:
 		{
 			/* File "HyperArch.py", line 37, in ?
-			 * (file "clrdial.tcl" line 12) */
-			data.pattern = " \"";
-			data.min_fields = 6;
-			data.line_idx = 5;
-			data.file_idx = 2;
+			 * (file "clrdial.tcl" line 12)
+			 * */
+			if (strstr(string, " line ") != NULL)
+			{
+				/* Tcl and old Python format (<= Python 2.5) */
+				data.pattern = " \"";
+				data.min_fields = 6;
+				data.line_idx = 5;
+				data.file_idx = 2;
+			}
+			else
+			{
+				/* SyntaxError: ('invalid syntax', ('sender.py', 149, 20, ' ...'))
+				 * (used since Python 2.6) */
+				data.pattern = ",'";
+				data.min_fields = 8;
+				data.line_idx = 6;
+				data.file_idx = 4;
+			}
 			break;
 		}
 		case GEANY_FILETYPES_BASIC:
@@ -1209,5 +1223,3 @@ void msgwin_clear_tab(gint tabnum)
 		return;
 	gtk_list_store_clear(store);
 }
-
-

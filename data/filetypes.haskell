@@ -2,7 +2,7 @@
 [styling]
 # Edit these in the colorscheme .conf file instead
 default=default
-commentline=comment
+commentline=comment_line
 commentblock=comment
 commentblock2=comment
 commentblock3=comment
@@ -10,7 +10,7 @@ number=number_1
 keyword=keyword_1
 import=preprocessor
 string=string_1
-character=string_2
+character=character
 class=class
 operator=operator
 identifier=identifier_1
