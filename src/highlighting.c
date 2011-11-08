@@ -796,51 +796,26 @@ apply_filetype_properties(ScintillaObject *sci, guint lexer, guint ft_id)
 }
 
 
-/* styles: the HLStyle entries for the filetype. */
-static void load_style_entries_hlm(GKeyFile *config, GKeyFile *config_home, guint filetype_idx,
-		const HLStyle *styles, gsize n_styles)
-{
-	guint i;
-
-	foreach_range(i, n_styles)
-	{
-		GeanyLexerStyle *style = &style_sets[filetype_idx].styling[i];
-
-		get_keyfile_style(config, config_home, styles[i].name, style);
-	}
-}
-
-
-/* styles: the style entries for the filetype.
- * STYLE_DEFAULT will be set to match the first style. */
-static void apply_style_entries_hlm(ScintillaObject *sci, guint filetype_idx,
-		const HLStyle *styles, gsize n_styles)
-{
-	guint i;
-
-	g_return_if_fail(n_styles > 0);
-
-	set_sci_style(sci, STYLE_DEFAULT, filetype_idx, 0);
-
-	foreach_range(i, n_styles)
-		set_sci_style(sci, styles[i].style, filetype_idx, i);
-}
-
-
 static void styleset_init_from_mapping(guint ft_id, GKeyFile *config, GKeyFile *config_home,
 		const HLStyle *styles, gsize n_styles,
 		const HLKeyword *keywords, gsize n_keywords)
 {
+	gsize i;
+
 	/* styles */
 	new_styleset(ft_id, n_styles);
-	load_style_entries_hlm(config, config_home, ft_id, styles, n_styles);
+	foreach_range(i, n_styles)
+	{
+		GeanyLexerStyle *style = &style_sets[ft_id].styling[i];
+
+		get_keyfile_style(config, config_home, styles[i].name, style);
+	}
+
 	/* keywords */
 	if (n_keywords < 1)
 		style_sets[ft_id].keywords = NULL;
 	else
 	{
-		gsize i;
-
 		style_sets[ft_id].keywords = g_new(gchar*, n_keywords + 1);
 		foreach_range(i, n_keywords)
 			get_keyfile_keywords(config, config_home, keywords[i].key, ft_id, i);
@@ -857,6 +832,7 @@ static void styleset_init_from_mapping(guint ft_id, GKeyFile *config, GKeyFile *
 			highlighting_keywords_##lang_name ? G_N_ELEMENTS(highlighting_keywords_##lang_name) : 0)
 
 
+/* STYLE_DEFAULT will be set to match the first style. */
 static void styleset_from_mapping(ScintillaObject *sci, guint ft_id, guint lexer,
 		const HLStyle *styles, gsize n_styles,
 		const HLKeyword *keywords, gsize n_keywords,
@@ -866,7 +842,14 @@ static void styleset_from_mapping(ScintillaObject *sci, guint ft_id, guint lexer
 
 	/* styles */
 	apply_filetype_properties(sci, lexer, ft_id);
-	apply_style_entries_hlm(sci, ft_id, styles, n_styles);
+	if (n_styles > 0)
+	{
+		/* first style is also default one */
+		set_sci_style(sci, STYLE_DEFAULT, ft_id, 0);
+		foreach_range(i, n_styles)
+			set_sci_style(sci, styles[i].style, ft_id, i);
+	}
+
 	/* keywords */
 	foreach_range(i, n_keywords)
 	{
@@ -875,6 +858,7 @@ static void styleset_from_mapping(ScintillaObject *sci, guint ft_id, guint lexer
 		else
 			sci_set_keywords(sci, keywords[i].id, style_sets[ft_id].keywords[i]);
 	}
+
 	/* properties */
 	foreach_range(i, n_properties)
 		sci_set_property(sci, properties[i].property, properties[i].value);
