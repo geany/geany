@@ -865,8 +865,8 @@ static void styleset_from_mapping(ScintillaObject *sci, guint ft_id, guint lexer
 }
 
 
-#define STYLESET_FROM_MAPPING(sci, ft_id, lexer, lang_name) \
-	styleset_from_mapping(sci, ft_id, lexer, \
+#define STYLESET_FROM_MAPPING(sci, ft_id, lang_name) \
+	styleset_from_mapping(sci, ft_id, highlighting_lexer_##lang_name, \
 			highlighting_styles_##lang_name, \
 			highlighting_styles_##lang_name ? G_N_ELEMENTS(highlighting_styles_##lang_name) : 0, \
 			highlighting_keywords_##lang_name, \
@@ -1394,7 +1394,7 @@ void highlighting_init_styles(guint filetype_idx, GKeyFile *config, GKeyFile *co
 
 #define styleset_case_auto(LANG_NAME) \
 	case (GEANY_FILETYPES_##LANG_NAME): \
-		STYLESET_FROM_MAPPING(sci, ft->id, highlighting_lexer_##LANG_NAME, LANG_NAME); \
+		STYLESET_FROM_MAPPING(sci, ft->id, LANG_NAME); \
 		break
 
 /** Sets up highlighting and other visual settings.
