@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.22\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-11-06 12:27+0100\n"
-"PO-Revision-Date: 2011-11-04 14:52+0530\n"
+"POT-Creation-Date: 2011-11-08 17:15+0100\n"
+"PO-Revision-Date: 2011-11-08 16:33+0530\n"
 "Last-Translator: Цэцэнцэнгэл <tsetsee.yugi@gmail.com>\n"
 "Language-Team: Монгол <tsetsee.yugi@gmail.com>\n"
 "Language: mn\n"
@@ -25,75 +25,75 @@ msgstr "Хурдан авсаархан IDE"
 
 #: ../geany.desktop.in.h:2 ../src/interface.c:314 ../src/interface.c:1842
 msgid "Geany"
-msgstr ""
+msgstr "Жиени"
 
 #: ../geany.desktop.in.h:3
 msgid "Integrated Development Environment"
 msgstr ""
 
-#: ../src/about.c:153
+#: ../src/about.c:154
 msgid "About Geany"
 msgstr "Жиенигийн тухай"
 
-#: ../src/about.c:203
+#: ../src/about.c:204
 msgid "A fast and lightweight IDE"
 msgstr "Хурдан авсаархан IDE"
 
-#: ../src/about.c:224
+#: ../src/about.c:225
 #, fuzzy, c-format
 msgid "(built on or after %s)"
 msgstr "(%s-ийг боловсруулах)"
 
 #. gtk_container_add(GTK_CONTAINER(info_box), cop_label);
-#: ../src/about.c:255
+#: ../src/about.c:256
 msgid "Info"
 msgstr "Мэдээлэл"
 
-#: ../src/about.c:271
+#: ../src/about.c:272
 msgid "Developers"
 msgstr "Хөгжүүлэгчид"
 
-#: ../src/about.c:280
+#: ../src/about.c:281
 #, fuzzy
 msgid "maintainer"
 msgstr "Засварлагчид"
 
-#: ../src/about.c:288 ../src/about.c:296
+#: ../src/about.c:289 ../src/about.c:297
 msgid "developer"
 msgstr "хөгжүүлэгч"
 
-#: ../src/about.c:304
+#: ../src/about.c:305
 msgid "translation maintainer"
 msgstr "Орчуулга засварлагчид"
 
-#: ../src/about.c:313
+#: ../src/about.c:314
 msgid "Translators"
 msgstr "Орчуулагчид"
 
-#: ../src/about.c:333
+#: ../src/about.c:334
 #, fuzzy
 msgid "Previous Translators"
 msgstr "Орчуулагчид"
 
-#: ../src/about.c:354
+#: ../src/about.c:355
 msgid "Contributors"
 msgstr ""
 
-#: ../src/about.c:364
+#: ../src/about.c:365
 #, c-format
 msgid ""
 "Some of the many contributors (for a more detailed list, see the file %s):"
 msgstr ""
 
-#: ../src/about.c:390
+#: ../src/about.c:391
 msgid "Credits"
 msgstr "Талархал"
 
-#: ../src/about.c:404
+#: ../src/about.c:405
 msgid "License"
 msgstr "Лиценз"
 
-#: ../src/about.c:413
+#: ../src/about.c:414
 msgid ""
 "License text could not be found, please visit http://www.gnu.org/licenses/"
 "gpl-2.0.txt to view it online."
@@ -168,10 +168,10 @@ msgstr "_Дараачийн Алдаа"
 #: ../src/build.c:1365
 #, fuzzy
 msgid "_Previous Error"
-msgstr "_Дараачийн Алдаа"
+msgstr "Хойшоо Хай"
 
 #. arguments
-#: ../src/build.c:1375 ../src/build.c:2755
+#: ../src/build.c:1375 ../src/build.c:2759
 msgid "_Set Build Commands"
 msgstr ""
 
@@ -204,103 +204,102 @@ msgstr "Процесс зогсож чадахгүй байсан (%s)."
 msgid "No more build errors."
 msgstr "Боловсруулахад алдаа гараагүй"
 
-#. FIXME: we should pass either build dialog or project dialog instead of NULL for parent
-#: ../src/build.c:1826
+#: ../src/build.c:1829 ../src/build.c:1831
 msgid "Set menu item label"
 msgstr ""
 
-#: ../src/build.c:1852 ../src/symbols.c:735
+#: ../src/build.c:1856 ../src/symbols.c:735
 msgid "Label"
 msgstr ""
 
-#: ../src/build.c:1853 ../src/symbols.c:730 ../src/tools.c:524
+#: ../src/build.c:1857 ../src/symbols.c:730 ../src/tools.c:524
 #, fuzzy
 msgid "Command"
 msgstr " командууд"
 
-#: ../src/build.c:1854
+#: ../src/build.c:1858
 #, fuzzy
 msgid "Working directory"
 msgstr "%s (%s хавтасд)"
 
-#: ../src/build.c:1855
+#: ../src/build.c:1859
 msgid "Reset"
 msgstr ""
 
-#: ../src/build.c:1900
+#: ../src/build.c:1904
 msgid "Click to set menu item label"
 msgstr ""
 
-#: ../src/build.c:1984 ../src/build.c:1986
+#: ../src/build.c:1988 ../src/build.c:1990
 #, fuzzy, c-format
 msgid "%s commands"
 msgstr " командууд"
 
-#: ../src/build.c:1986
+#: ../src/build.c:1990
 #, fuzzy
 msgid "No filetype"
 msgstr "Файлын төрлийг заа:"
 
-#: ../src/build.c:1995 ../src/build.c:2030
+#: ../src/build.c:1999 ../src/build.c:2034
 msgid "Error regular expression:"
 msgstr ""
 
-#: ../src/build.c:2023
+#: ../src/build.c:2027
 #, fuzzy
 msgid "Independent commands"
 msgstr " командууд"
 
-#: ../src/build.c:2055
+#: ../src/build.c:2059
 msgid "Note: Item 2 opens a dialog and appends the response to the command."
 msgstr ""
 
-#: ../src/build.c:2064
+#: ../src/build.c:2068
 #, fuzzy
 msgid "Execute commands"
 msgstr " командууд"
 
-#: ../src/build.c:2076
+#: ../src/build.c:2080
 #, c-format
 msgid ""
 "%d, %e, %f, %p are substituted in command and directory fields, see manual "
 "for details."
 msgstr ""
 
-#: ../src/build.c:2233
+#: ../src/build.c:2237
 msgid "Set Build Commands"
 msgstr ""
 
-#: ../src/build.c:2445
+#: ../src/build.c:2449
 msgid "_Compile"
 msgstr "_Хөрвүүл"
 
 #. build the code
-#: ../src/build.c:2452 ../src/build.c:2715 ../src/interface.c:1245
+#: ../src/build.c:2456 ../src/build.c:2719 ../src/interface.c:1245
 msgid "_Build"
 msgstr "_Боловсруул"
 
-#: ../src/build.c:2459 ../src/build.c:2489 ../src/build.c:2683
+#: ../src/build.c:2463 ../src/build.c:2493 ../src/build.c:2687
 #, fuzzy
 msgid "_Execute"
 msgstr "Ажиллуул:"
 
 #. build the code with make custom
-#: ../src/build.c:2504 ../src/build.c:2681 ../src/build.c:2735
+#: ../src/build.c:2508 ../src/build.c:2685 ../src/build.c:2739
 msgid "Make Custom _Target"
 msgstr "_Аргументтэйгээр Үүсгэх"
 
 #. build the code with make object
-#: ../src/build.c:2506 ../src/build.c:2682 ../src/build.c:2743
+#: ../src/build.c:2510 ../src/build.c:2686 ../src/build.c:2747
 msgid "Make _Object"
 msgstr "_Объектыг боловсруул"
 
-#: ../src/build.c:2508 ../src/build.c:2680
+#: ../src/build.c:2512 ../src/build.c:2684
 #, fuzzy
 msgid "_Make"
-msgstr "_Бүгдийг Үүсгэх\t"
+msgstr "Үүсгэх:"
 
 #. build the code with make all
-#: ../src/build.c:2727
+#: ../src/build.c:2731
 msgid "_Make All"
 msgstr "_Бүгдийг Үүсгэх\t"
 
@@ -312,8 +311,8 @@ msgstr "Гармаар байна уу?"
 #, fuzzy, c-format
 msgid "%d file saved."
 msgid_plural "%d files saved."
-msgstr[0] "Шинэ файл нээгдлээ."
-msgstr[1] "Шинэ файл нээгдлээ."
+msgstr[0] "%s файл хадгалагдлаа."
+msgstr[1] "%s файл хадгалагдлаа."
 
 #: ../src/callbacks.c:429 ../src/document.c:2830 ../src/interface.c:385
 #: ../src/sidebar.c:696
@@ -331,7 +330,7 @@ msgstr "'%s'-ийг дахин ачааллуулах уу?"
 
 #: ../src/callbacks.c:1055 ../src/keybindings.c:448
 msgid "Go to Line"
-msgstr ""
+msgstr "Мөрлүү оч"
 
 #: ../src/callbacks.c:1056
 msgid "Enter the line you want to go to:"
@@ -398,30 +397,35 @@ msgid "Detect from file"
 msgstr "Файлаас тогтоо"
 
 #: ../src/dialogs.c:232
+#, fuzzy
 msgid "West European"
-msgstr ""
+msgstr "_Баруун Европ"
 
 #: ../src/dialogs.c:234
+#, fuzzy
 msgid "East European"
-msgstr ""
+msgstr "_Зүүн Европ"
 
 #: ../src/dialogs.c:236
+#, fuzzy
 msgid "East Asian"
-msgstr ""
+msgstr "Зүүн _Ази"
 
 #: ../src/dialogs.c:238
+#, fuzzy
 msgid "SE & SW Asian"
-msgstr ""
+msgstr "_ЗӨ болон БӨ Ази"
 
 #: ../src/dialogs.c:240
+#, fuzzy
 msgid "Middle Eastern"
-msgstr ""
+msgstr "_Ойрх Дорнод "
 
 #: ../src/dialogs.c:242 ../src/encodings.c:118 ../src/encodings.c:119
 #: ../src/encodings.c:120 ../src/encodings.c:121 ../src/encodings.c:122
 #: ../src/encodings.c:123 ../src/encodings.c:124 ../src/encodings.c:125
 msgid "Unicode"
-msgstr ""
+msgstr "Юникод"
 
 #: ../src/dialogs.c:291
 msgid "_More Options"
@@ -662,16 +666,14 @@ msgstr "%s файлыг нээж чадахгүй байна (%s)"
 #: ../src/document.c:816
 #, c-format
 msgid "The file \"%s\" is not valid %s."
-msgstr "The file \"%s\" is not valid %s."
+msgstr "\"%s\" файл %s-д зөв биш."
 
 #: ../src/document.c:822
 #, c-format
 msgid ""
 "The file \"%s\" does not look like a text file or the file encoding is not "
 "supported."
-msgstr ""
-"The file \"%s\" does not look like a text file or the file encoding is not "
-"supported."
+msgstr "\"%s\" файл текст файл биш эсвэл файлын энкодчлолыг дэмжихгүй байна."
 
 #: ../src/document.c:832
 #, c-format
@@ -681,10 +683,9 @@ msgid ""
 "cause data loss.\n"
 "The file was set to read-only."
 msgstr ""
-"The file \"%s\" could not be opened properly and has been truncated. This "
-"can occur if the file contains a NULL byte. Be aware that saving it can "
-"cause data loss.\n"
-"The file was set to read-only."
+"\"%s\" файлыг таслагдаж нээгдлээ. Файлд NULL байт байвал ийм зүйл "
+"тохиолдоно. Файлыг хадгалахад өгөгдөл алдагдана.\n"
+"Файл зөвхөн-харах-аар заагдсан."
 
 #: ../src/document.c:1034
 msgid "Spaces"
@@ -695,8 +696,9 @@ msgid "Tabs"
 msgstr ""
 
 #: ../src/document.c:1040
+#, fuzzy
 msgid "Tabs and Spaces"
-msgstr ""
+msgstr "Догол мөрийг Зайгаар орлуулах"
 
 #. For translators: first wildcard is the indentation mode (Spaces, Tabs, Tabs
 #. * and Spaces), the second one is the filename
@@ -713,7 +715,7 @@ msgstr ""
 #: ../src/document.c:1208
 #, c-format
 msgid "File %s reloaded."
-msgstr "File %s reloaded."
+msgstr "%s файл дахин ачааллагдлаа."
 
 #. For translators: this is the status window message for opening a file. %d is the number
 #. * of the newly opened file, %s indicates whether the file is opened read-only
@@ -721,22 +723,25 @@ msgstr "File %s reloaded."
 #: ../src/document.c:1216
 #, c-format
 msgid "File %s opened(%d%s)."
-msgstr "File %s opened(%d%s)."
+msgstr "%s файл нээгдлээ(%d%s)."
 
 #: ../src/document.c:1218
 msgid ", read-only"
-msgstr ""
+msgstr ", зөвхөн-харах"
 
 #: ../src/document.c:1413
+#, fuzzy
 msgid "Error renaming file."
-msgstr ""
+msgstr "Файлыг хадгалахад гарсан алдаа"
 
 #: ../src/document.c:1500
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "An error occurred while converting the file from UTF-8 in \"%s\". The file "
 "remains unsaved."
 msgstr ""
+"\"%s\"-д UTF-8-ээс файлыг хөрвүүлэхэд алдаа гарлаа. Файл хадгалагдсангүй.\n"
+"Алдааны мэдээ: %s\n"
 
 #: ../src/document.c:1522
 #, c-format
@@ -748,7 +753,7 @@ msgstr ""
 #: ../src/document.c:1527
 #, fuzzy, c-format
 msgid "Error message: %s."
-msgstr "Мэдээ дууссан."
+msgstr "Файл хадгалахад гарсан алдаа (%s)."
 
 #: ../src/document.c:1587
 #, c-format
@@ -768,7 +773,7 @@ msgstr ""
 #: ../src/document.c:1766
 #, c-format
 msgid "Error saving file (%s)."
-msgstr ""
+msgstr "Файл хадгалахад гарсан алдаа (%s)."
 
 #: ../src/document.c:1771
 #, c-format
@@ -780,34 +785,34 @@ msgstr ""
 
 #: ../src/document.c:1773
 msgid "Error saving file."
-msgstr ""
+msgstr "Файлыг хадгалахад гарсан алдаа"
 
 #: ../src/document.c:1797
 #, c-format
 msgid "File %s saved."
-msgstr ""
+msgstr "%s файл хадгалагдлаа."
 
 #: ../src/document.c:1874 ../src/document.c:1938 ../src/document.c:1946
 #, c-format
 msgid "\"%s\" was not found."
-msgstr ""
+msgstr "\"%s\" олдсонгүй."
 
 #: ../src/document.c:1946
 msgid "Wrap search and find again?"
-msgstr ""
+msgstr "Wrap search and find again?"
 
 #: ../src/document.c:2032 ../src/search.c:1274 ../src/search.c:1318
 #: ../src/search.c:2056 ../src/search.c:2057
-#, c-format
+#, fuzzy, c-format
 msgid "No matches found for \"%s\"."
-msgstr ""
+msgstr "Олдсонгүй."
 
 #: ../src/document.c:2038
-#, c-format
+#, fuzzy, c-format
 msgid "%s: replaced %d occurrence of \"%s\" with \"%s\"."
 msgid_plural "%s: replaced %d occurrences of \"%s\" with \"%s\"."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%s: replaced %d occurrences of \"%s\" with \"%s\"."
+msgstr[1] "%s: replaced %d occurrences of \"%s\" with \"%s\"."
 
 #: ../src/document.c:2831
 #, fuzzy
@@ -830,13 +835,14 @@ msgid "Try to resave the file?"
 msgstr ""
 
 #: ../src/document.c:2854
-#, c-format
+#, fuzzy, c-format
 msgid "File \"%s\" was not found on disk!"
-msgstr ""
+msgstr "\"%s\" олдсонгүй."
 
 #: ../src/editor.c:4322
+#, fuzzy
 msgid "Enter Tab Width"
-msgstr ""
+msgstr "Хэсгийн өргөх:"
 
 #: ../src/editor.c:4323
 msgid "Enter the amount of spaces which should be replaced by a tab character."
@@ -849,155 +855,156 @@ msgstr ""
 
 #: ../src/encodings.c:73
 msgid "Celtic"
-msgstr ""
+msgstr "Кельт"
 
 #: ../src/encodings.c:74 ../src/encodings.c:75
 msgid "Greek"
-msgstr ""
+msgstr "Грек"
 
 #: ../src/encodings.c:76
 msgid "Nordic"
-msgstr ""
+msgstr "Скандинов"
 
 #: ../src/encodings.c:77
 msgid "South European"
-msgstr ""
+msgstr "Өмнөд Европ"
 
 #: ../src/encodings.c:78 ../src/encodings.c:79 ../src/encodings.c:80
 #: ../src/encodings.c:81
 msgid "Western"
-msgstr ""
+msgstr "Баруун"
 
 #: ../src/encodings.c:83 ../src/encodings.c:84 ../src/encodings.c:85
 msgid "Baltic"
-msgstr ""
+msgstr "Балт"
 
 #: ../src/encodings.c:86 ../src/encodings.c:87 ../src/encodings.c:88
 msgid "Central European"
-msgstr ""
+msgstr "Төв Европ"
 
 #. ISO-IR-111 not available on Windows
 #: ../src/encodings.c:89 ../src/encodings.c:90 ../src/encodings.c:92
 #: ../src/encodings.c:93 ../src/encodings.c:94
 msgid "Cyrillic"
-msgstr ""
+msgstr "Крилл"
 
 #: ../src/encodings.c:95
 msgid "Cyrillic/Russian"
-msgstr ""
+msgstr "Крилл/Орос"
 
 #: ../src/encodings.c:96
 msgid "Cyrillic/Ukrainian"
-msgstr ""
+msgstr "Крилл/Украйн"
 
 #: ../src/encodings.c:97
 msgid "Romanian"
-msgstr ""
+msgstr "Румин"
 
 #: ../src/encodings.c:99 ../src/encodings.c:100 ../src/encodings.c:101
 msgid "Arabic"
-msgstr ""
+msgstr "Араб"
 
 #. not available at all, ?
 #: ../src/encodings.c:102 ../src/encodings.c:104 ../src/encodings.c:105
 msgid "Hebrew"
-msgstr ""
+msgstr "Еврей"
 
 #: ../src/encodings.c:106
 msgid "Hebrew Visual"
-msgstr ""
+msgstr "Еврей Visual"
 
 #: ../src/encodings.c:108
 msgid "Armenian"
-msgstr ""
+msgstr "Армен"
 
 #: ../src/encodings.c:109
 msgid "Georgian"
-msgstr ""
+msgstr "Гүрж"
 
 #: ../src/encodings.c:110
 msgid "Thai"
-msgstr ""
+msgstr "Таи"
 
 #: ../src/encodings.c:111 ../src/encodings.c:112 ../src/encodings.c:113
 msgid "Turkish"
-msgstr ""
+msgstr "Турк"
 
 #: ../src/encodings.c:114 ../src/encodings.c:115 ../src/encodings.c:116
 msgid "Vietnamese"
-msgstr ""
+msgstr "Вьетнам"
 
 #. maybe not available on Linux
 #: ../src/encodings.c:127 ../src/encodings.c:128 ../src/encodings.c:129
 #: ../src/encodings.c:131
 msgid "Chinese Simplified"
-msgstr ""
+msgstr "Хятад"
 
 #: ../src/encodings.c:132 ../src/encodings.c:133 ../src/encodings.c:134
 msgid "Chinese Traditional"
-msgstr ""
+msgstr "Хуучин Хятад"
 
 #: ../src/encodings.c:135 ../src/encodings.c:136 ../src/encodings.c:137
 #: ../src/encodings.c:138
 msgid "Japanese"
-msgstr ""
+msgstr "Япон"
 
 #: ../src/encodings.c:139 ../src/encodings.c:140 ../src/encodings.c:141
 #: ../src/encodings.c:142
 msgid "Korean"
-msgstr ""
+msgstr "Солонгос"
 
 #: ../src/encodings.c:144
 msgid "Without encoding"
-msgstr ""
+msgstr "Энкодчлолгүй"
 
 #: ../src/encodings.c:428
 msgid "_West European"
-msgstr ""
+msgstr "_Баруун Европ"
 
 #: ../src/encodings.c:434
 msgid "_East European"
-msgstr ""
+msgstr "_Зүүн Европ"
 
 #: ../src/encodings.c:440
 msgid "East _Asian"
-msgstr ""
+msgstr "Зүүн _Ази"
 
 #: ../src/encodings.c:446
 msgid "_SE & SW Asian"
-msgstr ""
+msgstr "_ЗӨ болон БӨ Ази"
 
 #: ../src/encodings.c:452
 msgid "_Middle Eastern"
-msgstr ""
+msgstr "_Ойрх Дорнод "
 
 #: ../src/encodings.c:458
 msgid "_Unicode"
-msgstr ""
+msgstr "_Юникод"
 
 #: ../src/filetypes.c:83 ../src/filetypes.c:165 ../src/filetypes.c:179
 #: ../src/filetypes.c:187 ../src/filetypes.c:201
-#, c-format
+#, fuzzy, c-format
 msgid "%s source file"
-msgstr ""
+msgstr "Си код"
 
 #: ../src/filetypes.c:84
-#, c-format
+#, fuzzy, c-format
 msgid "%s file"
-msgstr ""
+msgstr "Diff файл"
 
 #: ../src/filetypes.c:102 ../src/filetypes.c:1787 ../src/interface.c:3918
 #: ../src/interface.c:5636
 msgid "None"
-msgstr ""
+msgstr "Юу ч биш"
 
 #: ../src/filetypes.c:303
+#, fuzzy
 msgid "Shell script"
-msgstr ""
+msgstr "Шэлл код"
 
 #: ../src/filetypes.c:311
 msgid "Makefile"
-msgstr ""
+msgstr "Үүсгэхфайл"
 
 #: ../src/filetypes.c:318
 #, fuzzy
@@ -1006,11 +1013,11 @@ msgstr "бүх барим"
 
 #: ../src/filetypes.c:342
 msgid "Cascading StyleSheet"
-msgstr ""
+msgstr "Cascading StyleSheet"
 
 #: ../src/filetypes.c:411
 msgid "Config file"
-msgstr ""
+msgstr "Config файл"
 
 #: ../src/filetypes.c:417
 #, fuzzy
@@ -1041,7 +1048,7 @@ msgstr ""
 #: ../src/filetypes.c:1490 ../src/project.c:292 ../src/win32.c:94
 #: ../src/win32.c:139
 msgid "All files"
-msgstr ""
+msgstr "Бүх файл"
 
 #: ../src/filetypes.c:1548
 #, c-format
@@ -1050,7 +1057,7 @@ msgstr ""
 
 #: ../src/geany.h:50
 msgid "untitled"
-msgstr ""
+msgstr "нэргүй"
 
 #: ../src/highlighting.c:3637 ../src/main.c:822 ../src/socket.c:163
 #: ../src/templates.c:224
@@ -1063,54 +1070,56 @@ msgid "_Default"
 msgstr ""
 
 #: ../src/highlighting.c:3728
+#, fuzzy
 msgid "_Color Schemes"
-msgstr ""
+msgstr "Өнгө Сонгогч"
 
 #: ../src/interface.c:328
 msgid "_File"
-msgstr ""
+msgstr "_Файл"
 
 #: ../src/interface.c:339
 msgid "New (with _Template)"
-msgstr ""
+msgstr "Шинэ (_Template-тэй)"
 
 #: ../src/interface.c:356 ../src/interface.c:2378
 msgid "Open Selected F_ile"
-msgstr ""
+msgstr "Сонгосон Файлыг нээх"
 
 #: ../src/interface.c:360
 msgid "Recent _Files"
-msgstr ""
+msgstr "Сая Хэрэглэсэн Файл"
 
 #: ../src/interface.c:377
 msgid "Save A_ll"
-msgstr ""
+msgstr "Бүх Файлыг Хадгал"
 
 #: ../src/interface.c:393
 msgid "R_eload As"
-msgstr ""
+msgstr "Дахин ачаалал"
 
 #: ../src/interface.c:404 ../src/interface.c:639 ../src/interface.c:698
 #: ../src/interface.c:712 ../src/interface.c:1110 ../src/interface.c:1120
 #: ../src/interface.c:2343 ../src/interface.c:2357
 msgid "invisible"
-msgstr ""
+msgstr "үл үзэгдэх"
 
 #: ../src/interface.c:421
 msgid "Page Set_up"
 msgstr ""
 
 #: ../src/interface.c:438 ../src/notebook.c:243
+#, fuzzy
 msgid "Close Ot_her Documents"
-msgstr ""
+msgstr "Файлыг хаа"
 
 #: ../src/interface.c:446 ../src/notebook.c:248
 msgid "C_lose All"
-msgstr ""
+msgstr "Бүх Файлыг Хаа"
 
 #: ../src/interface.c:463 ../src/interface.c:2273
 msgid "_Edit"
-msgstr ""
+msgstr "_Засах"
 
 #: ../src/interface.c:513
 #, fuzzy
@@ -1118,72 +1127,81 @@ msgid "_Commands"
 msgstr " командууд"
 
 #: ../src/interface.c:520 ../src/keybindings.c:334
+#, fuzzy
 msgid "_Cut Current Line(s)"
-msgstr ""
+msgstr "_Тайлбарын мөр(үүд)"
 
 #: ../src/interface.c:528 ../src/keybindings.c:331
+#, fuzzy
 msgid "_Copy Current Line(s)"
-msgstr ""
+msgstr "_Тайлбарын мөр(үүд)"
 
 #: ../src/interface.c:536 ../src/keybindings.c:286
+#, fuzzy
 msgid "_Delete Current Line(s)"
-msgstr ""
+msgstr "_Тайлбарын мөр(үүд)"
 
 #: ../src/interface.c:540 ../src/keybindings.c:283
+#, fuzzy
 msgid "_Duplicate Line or Selection"
-msgstr ""
+msgstr "Давхардсан Мөр эсвэл Идэвхжилт"
 
 #: ../src/interface.c:549 ../src/keybindings.c:344
+#, fuzzy
 msgid "_Select Current Line(s)"
-msgstr ""
+msgstr "_Тайлбарын мөр(үүд)"
 
 #: ../src/interface.c:553 ../src/keybindings.c:347
 msgid "_Select Current Paragraph"
 msgstr ""
 
 #: ../src/interface.c:562 ../src/keybindings.c:386
+#, fuzzy
 msgid "_Send Selection to Terminal"
-msgstr ""
+msgstr "Идэвхжсэнийг жижиг үсэг болгох"
 
 #: ../src/interface.c:566 ../src/interface.c:2277
 msgid "_Format"
-msgstr ""
+msgstr "_Хэлбэржилт"
 
 #: ../src/interface.c:573 ../src/keybindings.c:388
 msgid "_Reflow Lines/Block"
 msgstr ""
 
 #: ../src/interface.c:577 ../src/keybindings.c:358
+#, fuzzy
 msgid "T_oggle Case of Selection"
-msgstr ""
+msgstr "Давхардсан Мөр эсвэл Идэвхжилт"
 
 #: ../src/interface.c:581 ../src/keybindings.c:293
+#, fuzzy
 msgid "_Transpose Current Line"
-msgstr ""
+msgstr "Файлыг хэвлэ"
 
 #: ../src/interface.c:590
 msgid "_Comment Line(s)"
-msgstr ""
+msgstr "_Тайлбарын мөр(үүд)"
 
 #: ../src/interface.c:594
 msgid "U_ncomment Line(s)"
-msgstr ""
+msgstr "Тайлбар биш Мөр(үүд)"
 
 #: ../src/interface.c:598
 msgid "_Toggle Line Commentation"
-msgstr ""
+msgstr "_Идэвхжсэн Мөрийн Тайлбар"
 
 #: ../src/interface.c:607
 msgid "_Increase Indent"
-msgstr ""
+msgstr "Догол мөрийг Өсгөх"
 
 #: ../src/interface.c:615
 msgid "_Decrease Indent"
-msgstr ""
+msgstr "Догол мөрийг Багасгах"
 
 #: ../src/interface.c:623 ../src/keybindings.c:377
+#, fuzzy
 msgid "_Smart Line Indent"
-msgstr ""
+msgstr "Мөрийн төгсгөлийг заа"
 
 #: ../src/interface.c:632
 msgid "_Send Selection to"
@@ -1191,79 +1209,88 @@ msgstr ""
 
 #: ../src/interface.c:647
 msgid "I_nsert Comments"
-msgstr ""
+msgstr "Тайлбар Оруулах"
 
 #: ../src/interface.c:658 ../src/interface.c:2292
+#, fuzzy
 msgid "Insert _ChangeLog Entry"
-msgstr ""
+msgstr "ChangeLog-ийг оруулах"
 
 #: ../src/interface.c:662 ../src/interface.c:2296
+#, fuzzy
 msgid "Insert _Function Description"
-msgstr ""
+msgstr "Функцын Тайлбар Оруулах"
 
 #: ../src/interface.c:666 ../src/interface.c:2300
+#, fuzzy
 msgid "Insert _Multiline Comment"
-msgstr ""
+msgstr "Олон мөрийн Тайлбар Оруулах"
 
 #: ../src/interface.c:675 ../src/interface.c:2315
+#, fuzzy
 msgid "Insert File _Header"
-msgstr ""
+msgstr "Толгой Файл Оруулах"
 
 #: ../src/interface.c:679 ../src/interface.c:2319
+#, fuzzy
 msgid "Insert _GPL Notice"
-msgstr ""
+msgstr "GPL-ийг оруулах"
 
 #: ../src/interface.c:683 ../src/interface.c:2323
+#, fuzzy
 msgid "Insert _BSD License Notice"
-msgstr ""
+msgstr "BSD Лиценз оруулах"
 
 #: ../src/interface.c:687 ../src/interface.c:2332
 msgid "Insert Dat_e"
-msgstr ""
+msgstr "Огноо Оруулах"
 
 #: ../src/interface.c:701 ../src/interface.c:2346
 msgid "_Insert \"include <...>\""
-msgstr ""
+msgstr "\"include <...>\"-ийг оруулах"
 
 #: ../src/interface.c:715 ../src/interface.c:2365 ../src/keybindings.c:397
 msgid "_Insert Alternative White Space"
 msgstr ""
 
 #: ../src/interface.c:724
+#, fuzzy
 msgid "Preference_s"
-msgstr ""
+msgstr "Тохиргоо"
 
 #: ../src/interface.c:732 ../src/keybindings.c:410
+#, fuzzy
 msgid "P_lugin Preferences"
-msgstr ""
+msgstr "Тохиргоо"
 
 #: ../src/interface.c:740 ../src/interface.c:2369
 msgid "_Search"
-msgstr ""
+msgstr "Хайх"
 
 #: ../src/interface.c:751
 msgid "Find _Next"
-msgstr ""
+msgstr "Урагшаа Хай"
 
 #: ../src/interface.c:755
 msgid "Find _Previous"
-msgstr ""
+msgstr "Хойшоо Хай"
 
 #: ../src/interface.c:764
 msgid "Find in F_iles"
-msgstr ""
+msgstr "Файлуудаас Хай"
 
 #: ../src/interface.c:772 ../src/search.c:629
 msgid "_Replace"
-msgstr ""
+msgstr "Орлуулах"
 
 #: ../src/interface.c:785
 msgid "Next _Message"
-msgstr ""
+msgstr "Даргаагийн Мэдээ"
 
 #: ../src/interface.c:793
+#, fuzzy
 msgid "Pr_evious Message"
-msgstr ""
+msgstr "Даргаагийн Мэдээ"
 
 #: ../src/interface.c:806 ../src/keybindings.c:457
 msgid "_Go to Next Marker"
@@ -1275,27 +1302,31 @@ msgstr ""
 
 #: ../src/interface.c:819
 msgid "_Go to Line"
-msgstr ""
+msgstr "Мөр-лүү Оч"
 
 #: ../src/interface.c:827 ../src/interface.c:2304
 msgid "_More"
 msgstr ""
 
 #: ../src/interface.c:834 ../src/keybindings.c:422
+#, fuzzy
 msgid "Find Next _Selection"
-msgstr ""
+msgstr "Сонгосныг Хай"
 
 #: ../src/interface.c:838 ../src/keybindings.c:424
+#, fuzzy
 msgid "Find Pre_vious Selection"
-msgstr ""
+msgstr "Урьд Сонгосныг Хай"
 
 #: ../src/interface.c:847 ../src/interface.c:2386
+#, fuzzy
 msgid "Find _Usage"
-msgstr ""
+msgstr "Хэрэглээг хай"
 
 #: ../src/interface.c:851 ../src/interface.c:2394
+#, fuzzy
 msgid "Find _Document Usage"
-msgstr ""
+msgstr "Хэрэглээг хай"
 
 #: ../src/interface.c:860 ../src/keybindings.c:439
 #, fuzzy
@@ -1303,16 +1334,18 @@ msgid "_Mark All"
 msgstr "_Бүгдийг Үүсгэх\t"
 
 #: ../src/interface.c:869 ../src/interface.c:2402
+#, fuzzy
 msgid "Go to _Tag Definition"
-msgstr ""
+msgstr "Go to Tag Definition"
 
 #: ../src/interface.c:873
+#, fuzzy
 msgid "Go to T_ag Declaration"
-msgstr ""
+msgstr "Go to Tag Declaration"
 
 #: ../src/interface.c:884
 msgid "Change _Font"
-msgstr ""
+msgstr "Фонт Өөрчлөх"
 
 #: ../src/interface.c:897
 msgid "To_ggle All Additional Widgets"
@@ -1320,62 +1353,65 @@ msgstr ""
 
 #: ../src/interface.c:901
 msgid "Full_screen"
-msgstr ""
+msgstr "Бүтэн дэлгэц"
 
 #: ../src/interface.c:905
 msgid "Show Message _Window"
-msgstr ""
+msgstr "Мэдээний Цонхыг Харуул"
 
 #: ../src/interface.c:910
 msgid "Show _Toolbar"
-msgstr ""
+msgstr "Багаж Самбарыг Харуул"
 
 #: ../src/interface.c:915
 msgid "Show Side_bar"
-msgstr ""
+msgstr "Хажуу самбарыг Харуул"
 
 #: ../src/interface.c:920 ../src/interface.c:4354 ../src/interface.c:5766
 #: ../src/keybindings.c:222 ../src/prefs.c:1586
 msgid "Editor"
-msgstr ""
+msgstr "Засварлагч"
 
 #: ../src/interface.c:927
 msgid "Show _Markers Margin"
-msgstr ""
+msgstr "Тэмдэгийн Захыг Харуул"
 
 #: ../src/interface.c:932
 msgid "Show _Line Numbers"
-msgstr ""
+msgstr "Мөрийн Дугаарыг Харуул"
 
 #: ../src/interface.c:937
 #, fuzzy
 msgid "Show _White Space"
-msgstr "_Нууц файлуудыг харуул"
+msgstr "Хоосон зайг харуул"
 
 #: ../src/interface.c:941
+#, fuzzy
 msgid "Show Line _Endings"
-msgstr ""
+msgstr "Мөрийн төгсгөлийг харуул"
 
 #: ../src/interface.c:945
 #, fuzzy
 msgid "Show _Indentation Guides"
-msgstr "_Нууц файлуудыг харуул"
+msgstr "Show indentation guides"
 
 #: ../src/interface.c:966
 msgid "_Document"
-msgstr ""
+msgstr "Баримт"
 
 #: ../src/interface.c:973
 msgid "_Line Wrapping"
-msgstr ""
+msgstr "_Line Wrapping"
 
 #: ../src/interface.c:978
+#, fuzzy
 msgid "Line _Breaking"
-msgstr ""
+msgstr "Line wrapping"
 
 #: ../src/interface.c:982
+#, fuzzy
 msgid "_Auto-indentation"
-msgstr ""
+msgstr "Автомат тодорхойологч"
 
 #: ../src/interface.c:987
 msgid "In_dent Type"
@@ -1395,8 +1431,9 @@ msgid "_Spaces"
 msgstr ""
 
 #: ../src/interface.c:1015
+#, fuzzy
 msgid "T_abs and Spaces"
-msgstr ""
+msgstr "Догол мөрийг Зайгаар орлуулах"
 
 #: ../src/interface.c:1021
 msgid "Indent Widt_h"
@@ -1436,55 +1473,57 @@ msgstr ""
 
 #: ../src/interface.c:1090
 msgid "Read _Only"
-msgstr ""
+msgstr "Зөвхөн Харах"
 
 #: ../src/interface.c:1094
 msgid "_Write Unicode BOM"
-msgstr ""
+msgstr "Юникод BOM бичих"
 
 #: ../src/interface.c:1103
 msgid "Set File_type"
-msgstr ""
+msgstr "Файлын төрлийг заа"
 
 #: ../src/interface.c:1113
 msgid "Set _Encoding"
-msgstr ""
+msgstr "Энкодчлолыг заа"
 
 #: ../src/interface.c:1123
 msgid "Set Line E_ndings"
-msgstr ""
+msgstr "Мөрийн төгсгөлийг заа"
 
 #: ../src/interface.c:1130
 msgid "Convert and Set to _CR/LF (Win)"
-msgstr ""
+msgstr "CR/LF (Виндөвс)-д Хувирга эсвэл Зааж өгөх"
 
 #: ../src/interface.c:1136
 msgid "Convert and Set to _LF (Unix)"
-msgstr ""
+msgstr "LF (Юникс)-д Хувирга эсвэл Зааж өгөх"
 
 #: ../src/interface.c:1142
 msgid "Convert and Set to CR (_Mac)"
-msgstr ""
+msgstr "CR (Мак)-д Хувирга эсвэл Зааж өгөх"
 
 #: ../src/interface.c:1153
+#, fuzzy
 msgid "_Strip Trailing Spaces"
-msgstr ""
+msgstr "Strip trailing spaces"
 
 #: ../src/interface.c:1157
 msgid "_Replace Tabs by Spaces"
-msgstr ""
+msgstr "Догол мөрийг Зайгаар орлуулах"
 
 #: ../src/interface.c:1161
+#, fuzzy
 msgid "Replace Spaces b_y Tabs"
-msgstr ""
+msgstr "Догол мөрийг Зайгаар орлуулах"
 
 #: ../src/interface.c:1170
 msgid "_Fold All"
-msgstr ""
+msgstr "_Fold All"
 
 #: ../src/interface.c:1174
 msgid "_Unfold All"
-msgstr ""
+msgstr "_Unfold All"
 
 #: ../src/interface.c:1183
 msgid "Remove _Markers"
@@ -1492,31 +1531,33 @@ msgstr ""
 
 #: ../src/interface.c:1187
 msgid "Remove Error _Indicators"
-msgstr ""
+msgstr "Алдаа Заагчдыг Арилгах"
 
 #: ../src/interface.c:1191
 msgid "_Project"
-msgstr ""
+msgstr "Төсөл"
 
 #: ../src/interface.c:1198
 msgid "_New"
-msgstr ""
+msgstr "Шинээр"
 
 #: ../src/interface.c:1206
 msgid "_Open"
-msgstr ""
+msgstr "Нээх"
 
 #: ../src/interface.c:1214
+#, fuzzy
 msgid "_Recent Projects"
-msgstr ""
+msgstr "Төсөл"
 
 #: ../src/interface.c:1218
 msgid "_Close"
-msgstr ""
+msgstr "Хаах"
 
 #: ../src/interface.c:1231
+#, fuzzy
 msgid "_Apply Default Indentation"
-msgstr ""
+msgstr "Автомат тодорхойологч"
 
 #: ../src/interface.c:1234
 msgid "Apply the default indentation settings to all documents"
@@ -1524,7 +1565,7 @@ msgstr ""
 
 #: ../src/interface.c:1249
 msgid "_Tools"
-msgstr ""
+msgstr "Хэрэгсэл"
 
 #: ../src/interface.c:1256
 msgid "_Reload Configuration"
@@ -1533,7 +1574,7 @@ msgstr ""
 #: ../src/interface.c:1264
 #, fuzzy
 msgid "C_onfiguration Files"
-msgstr "Хөрвүүлэлтийн алдаа гарлаа."
+msgstr "Config файл"
 
 #: ../src/interface.c:1277
 #, fuzzy
@@ -1542,7 +1583,7 @@ msgstr "Өнгө Сонгогч"
 
 #: ../src/interface.c:1285
 msgid "_Word Count"
-msgstr ""
+msgstr "Үг Тоол"
 
 #: ../src/interface.c:1289
 msgid "Load Ta_gs"
@@ -1550,56 +1591,60 @@ msgstr ""
 
 #: ../src/interface.c:1293 ../src/interface.c:1300
 msgid "_Help"
-msgstr ""
+msgstr "Тусламж"
 
 #: ../src/interface.c:1308
 msgid "_Website"
-msgstr ""
+msgstr "Веб хуудас"
 
 #: ../src/interface.c:1312
 msgid "_Keyboard Shortcuts"
-msgstr ""
+msgstr "Товчлуурын Хослол"
 
 #: ../src/interface.c:1316
+#, fuzzy
 msgid "_Debug Messages"
-msgstr ""
+msgstr "Мэдээ"
 
 #: ../src/interface.c:1355 ../src/sidebar.c:124
 msgid "Symbols"
-msgstr ""
+msgstr "Тэмдэгт"
 
 #: ../src/interface.c:1369
 #, fuzzy
 msgid "Documents"
-msgstr "бүх барим"
+msgstr "Баримт"
 
 #: ../src/interface.c:1405
 msgid "Status"
-msgstr ""
+msgstr "Төлөв"
 
 #: ../src/interface.c:1419
 msgid "Compiler"
-msgstr ""
+msgstr "Хөрвүүлэгч"
 
 #: ../src/interface.c:1434
 msgid "Messages"
-msgstr ""
+msgstr "Мэдээ"
 
 #: ../src/interface.c:1447
 msgid "Scribble"
-msgstr ""
+msgstr "Scribble"
 
 #: ../src/interface.c:2135
+#, fuzzy
 msgid "_Toolbar Preferences"
-msgstr ""
+msgstr "Тохиргоо"
 
 #: ../src/interface.c:2148
+#, fuzzy
 msgid "_Hide Toolbar"
-msgstr ""
+msgstr "Багаж самбарыг нуу"
 
 #: ../src/interface.c:2281
+#, fuzzy
 msgid "I_nsert"
-msgstr ""
+msgstr "Огноо Оруулах"
 
 #: ../src/interface.c:2410
 msgid "Conte_xt Action"
@@ -1607,25 +1652,29 @@ msgstr ""
 
 #: ../src/interface.c:2952 ../src/keybindings.c:407
 msgid "Preferences"
-msgstr ""
+msgstr "Тохиргоо"
 
 #: ../src/interface.c:2988
 msgid "Load files from the last session"
-msgstr ""
+msgstr "Сүүлд ажиллаж байсан файлуудыг ачаалал"
 
 #: ../src/interface.c:2991
 msgid "Opens at startup the files from the last session"
-msgstr ""
+msgstr "Сүүлд ажиллаж байснаас эхлэх файлыг нээ"
 
 #: ../src/interface.c:2993
+#, fuzzy
 msgid "Load virtual terminal support"
-msgstr ""
+msgstr "Load virtual terminal emulation at startup"
 
 #: ../src/interface.c:2995
+#, fuzzy
 msgid ""
 "Whether the virtual terminal emulation (VTE) should be loaded at startup, "
 "disable it if you do not need it"
 msgstr ""
+"Whether the virtual terminal emulation(VTE) should be loaded at startup. "
+"Disable it if you do not need it."
 
 #: ../src/interface.c:2997
 msgid "Enable plugin support"
@@ -1634,28 +1683,29 @@ msgstr ""
 #: ../src/interface.c:3001
 #, fuzzy
 msgid "<b>Startup</b>"
-msgstr "<b>Хэмжээ:</b>"
+msgstr "<b>Хажуу самбар</b>"
 
 #: ../src/interface.c:3020
 msgid "Save window position and geometry"
-msgstr ""
+msgstr "Цонхны байрлал хэлбэрийг хадгал"
 
 #: ../src/interface.c:3023
 msgid "Saves the window position and geometry and restores it at the start"
-msgstr ""
+msgstr "Цонхны байрлал хэлбэрийг хадгалаад эхлэлд буцааж сэргээ"
 
 #: ../src/interface.c:3025
 msgid "Confirm exit"
-msgstr ""
+msgstr "Гарахыг баталгаажуул"
 
 #: ../src/interface.c:3028
+#, fuzzy
 msgid "Shows a confirmation dialog on exit"
-msgstr ""
+msgstr "Гарахад баталгаажуулах асуултыг харуул."
 
 #: ../src/interface.c:3030
 #, fuzzy
 msgid "<b>Shutdown</b>"
-msgstr "<b>Байршил:</b>"
+msgstr "<b>Эхлүүлэх унтраах</b>"
 
 #: ../src/interface.c:3051
 msgid "Startup path:"
@@ -1668,8 +1718,9 @@ msgid ""
 msgstr ""
 
 #: ../src/interface.c:3076
+#, fuzzy
 msgid "Project files:"
-msgstr ""
+msgstr "Төсөл"
 
 #: ../src/interface.c:3088
 msgid "Path to start in when opening project files"
@@ -1689,7 +1740,7 @@ msgstr ""
 #: ../src/interface.c:3126
 #, fuzzy
 msgid "<b>Paths</b>"
-msgstr "<b>Байршил:</b>"
+msgstr "<b>Багажийн зам</b>"
 
 #: ../src/interface.c:3131
 msgid "Startup"
@@ -1697,23 +1748,25 @@ msgstr ""
 
 #: ../src/interface.c:3154
 msgid "Beep on errors or when compilation has finished"
-msgstr ""
+msgstr "Алдаа гарахад эсвэл хөрвүүлэлт дуусахад дуугарах"
 
 #: ../src/interface.c:3157
+#, fuzzy
 msgid ""
 "Whether to beep if an error occurred or when the compilation process has "
 "finished"
-msgstr ""
+msgstr "Алдаа гарах эсвэл хөрвүүлэлт дуусахад дуу гарах эсэх"
 
 #: ../src/interface.c:3159
 msgid "Switch to status message list at new message"
-msgstr ""
+msgstr "Шинэ мэдээд төлвийн мэдээний жагсаалтруу шилжих"
 
 #: ../src/interface.c:3162
+#, fuzzy
 msgid ""
 "Switch to the status message tab (in the notebook window at the bottom) if a "
 "new status message arrives"
-msgstr ""
+msgstr "Шинэ төлвийн мэдээ гарвал төлвийн мэдээрүү (Цонхны доод хэсэгт) шилж."
 
 #: ../src/interface.c:3164
 msgid "Suppress status messages in the status bar"
@@ -1747,18 +1800,21 @@ msgid ""
 msgstr ""
 
 #: ../src/interface.c:3179 ../src/interface.c:3415 ../src/interface.c:4564
+#, fuzzy
 msgid "<b>Miscellaneous</b>"
-msgstr ""
+msgstr "<b>Misc.</b>"
 
 #: ../src/interface.c:3198
 msgid "Always wrap search and hide the Find dialog"
-msgstr ""
+msgstr "Always wrap search and hide the Find dialog"
 
 #: ../src/interface.c:3201
 msgid ""
 "Always wrap search around the document and hide the Find dialog after "
 "clicking Find Next/Previous"
 msgstr ""
+"Always wrap search around the document and hide the Find dialog after "
+"clicking Find Next/Previous"
 
 #: ../src/interface.c:3203
 msgid "Use the current word under the cursor for Find dialogs"
@@ -1778,7 +1834,7 @@ msgstr "Файлыг PDF файл-руу хөрвүүлэх"
 #: ../src/interface.c:3212
 #, fuzzy
 msgid "<b>Search</b>"
-msgstr "<b>Хэмжээ:</b>"
+msgstr "<b>Хажуу самбар</b>"
 
 #: ../src/interface.c:3231
 msgid "Use project-based session files"
@@ -1805,7 +1861,7 @@ msgstr ""
 #: ../src/interface.c:3241
 #, fuzzy
 msgid "<b>Projects</b>"
-msgstr "<b>Хандах эрх:</b>"
+msgstr "<b>Фонт</b>"
 
 #: ../src/interface.c:3246
 msgid "Miscellaneous"
@@ -1817,28 +1873,30 @@ msgstr ""
 #. * tab label object.
 #: ../src/interface.c:3250 ../src/prefs.c:1580
 msgid "General"
-msgstr ""
+msgstr "Ерөнхий"
 
 #: ../src/interface.c:3291
 msgid "Show symbol list"
-msgstr ""
+msgstr "Тэмдэгтийн жагсаалтыг харуул"
 
 #: ../src/interface.c:3294
 msgid "Toggle the symbol list on and off"
-msgstr ""
+msgstr "Тэмдэгтийн жагсаалтыг нээх хаахыг заа"
 
 #: ../src/interface.c:3296
 #, fuzzy
 msgid "Show documents list"
-msgstr "бүх барим"
+msgstr "Нээлттэй файлыг жагсаалтыг харуул"
 
 #: ../src/interface.c:3299
+#, fuzzy
 msgid "Toggle the documents list on and off"
-msgstr ""
+msgstr "Тэмдэгтийн жагсаалтыг нээх хаахыг заа"
 
 #: ../src/interface.c:3301
+#, fuzzy
 msgid "Show sidebar"
-msgstr ""
+msgstr "Хажуу самбарыг Харуул"
 
 #: ../src/interface.c:3309
 msgid "Position:"
@@ -1847,44 +1905,44 @@ msgstr ""
 #: ../src/interface.c:3313 ../src/interface.c:3469 ../src/interface.c:3530
 #: ../src/interface.c:3548 ../src/interface.c:3566
 msgid "Left"
-msgstr ""
+msgstr "Зүүн"
 
 #: ../src/interface.c:3320 ../src/interface.c:3477 ../src/interface.c:3531
 #: ../src/interface.c:3549 ../src/interface.c:3567
 msgid "Right"
-msgstr ""
+msgstr "Баруун"
 
 #: ../src/interface.c:3326
 msgid "<b>Sidebar</b>"
-msgstr ""
+msgstr "<b>Хажуу самбар</b>"
 
 #: ../src/interface.c:3347
 msgid "Symbol list:"
-msgstr ""
+msgstr "Тэмдэгтийн жагсаалт:"
 
 #: ../src/interface.c:3354 ../src/interface.c:3517
 msgid "Message window:"
-msgstr ""
+msgstr "Мэдээний цонх:"
 
 #: ../src/interface.c:3361 ../src/interface.c:3553
 msgid "Editor:"
-msgstr ""
+msgstr "Засварлагч:"
 
 #: ../src/interface.c:3373
 msgid "Sets the font for the message window"
-msgstr ""
+msgstr "Мэдээний цонхны фонтыг заа"
 
 #: ../src/interface.c:3381
 msgid "Sets the font for the symbol list"
-msgstr ""
+msgstr "Тэмдэгтийн жагсаалтын фонтыг заа"
 
 #: ../src/interface.c:3389
 msgid "Sets the editor font"
-msgstr ""
+msgstr "Засварлагчийн фонтыг заа"
 
 #: ../src/interface.c:3391
 msgid "<b>Fonts</b>"
-msgstr ""
+msgstr "<b>Фонт</b>"
 
 #: ../src/interface.c:3410
 msgid "Show status bar"
@@ -1896,15 +1954,16 @@ msgstr ""
 
 #: ../src/interface.c:3420 ../src/interface.c:3755 ../src/prefs.c:1582
 msgid "Interface"
-msgstr ""
+msgstr "Интерфейс"
 
 #: ../src/interface.c:3443
 msgid "Show editor tabs"
-msgstr ""
+msgstr "Засварлагчийн хэсгийг харуул"
 
 #: ../src/interface.c:3447
+#, fuzzy
 msgid "Show close buttons"
-msgstr ""
+msgstr "Өнгө сонгох товчийг харуул"
 
 #: ../src/interface.c:3450
 msgid ""
@@ -1914,19 +1973,20 @@ msgstr ""
 
 #: ../src/interface.c:3456
 msgid "Placement of new file tabs:"
-msgstr ""
+msgstr "Placement of new file tabs:"
 
 #: ../src/interface.c:3472
 msgid "File tabs will be placed on the left of the notebook"
-msgstr ""
+msgstr "File tabs will be placed on the left of the notebook"
 
 #: ../src/interface.c:3480
 msgid "File tabs will be placed on the right of the notebook"
-msgstr ""
+msgstr "File tabs will be placed on the right of the notebook"
 
 #: ../src/interface.c:3484
+#, fuzzy
 msgid "Next to current"
-msgstr ""
+msgstr "Файлыг хадгал"
 
 #: ../src/interface.c:3489
 msgid ""
@@ -1943,20 +2003,21 @@ msgid "Calls the View->Toggle All Additional Widgets command"
 msgstr ""
 
 #: ../src/interface.c:3496
+#, fuzzy
 msgid "<b>Editor tabs</b>"
-msgstr ""
+msgstr "<b>Фонт</b>"
 
 #: ../src/interface.c:3532 ../src/interface.c:3550 ../src/interface.c:3568
 msgid "Top"
-msgstr ""
+msgstr "Дээш"
 
 #: ../src/interface.c:3533 ../src/interface.c:3551 ../src/interface.c:3569
 msgid "Bottom"
-msgstr ""
+msgstr "Доош"
 
 #: ../src/interface.c:3535
 msgid "Sidebar:"
-msgstr ""
+msgstr "Хажуу самбар:"
 
 #: ../src/interface.c:3571
 #, fuzzy
@@ -1968,8 +2029,9 @@ msgid "Notebook tabs"
 msgstr ""
 
 #: ../src/interface.c:3607
+#, fuzzy
 msgid "Show t_oolbar"
-msgstr ""
+msgstr "Багаж Самбарыг Харуул"
 
 #: ../src/interface.c:3611
 msgid "_Append toolbar to the menu"
@@ -1980,45 +2042,52 @@ msgid "Pack the toolbar to the main menu to save vertical space"
 msgstr ""
 
 #: ../src/interface.c:3636 ../src/toolbar.c:933
+#, fuzzy
 msgid "Customize Toolbar"
-msgstr ""
+msgstr "Багаж самбарыг харуул"
 
 #: ../src/interface.c:3656
 msgid "System _default"
 msgstr ""
 
 #: ../src/interface.c:3664
+#, fuzzy
 msgid "Images _and text"
-msgstr ""
+msgstr "Зураг болон текст"
 
 #: ../src/interface.c:3672
+#, fuzzy
 msgid "_Images only"
-msgstr ""
+msgstr "Зөвхөн зураг"
 
 #: ../src/interface.c:3680
+#, fuzzy
 msgid "_Text only"
-msgstr ""
+msgstr "Зөвхөн текст"
 
 #: ../src/interface.c:3688
 #, fuzzy
 msgid "<b>Icon style</b>"
-msgstr "<b>Төрөл:</b>"
+msgstr "Icon style:"
 
 #: ../src/interface.c:3709
 msgid "S_ystem default"
 msgstr ""
 
 #: ../src/interface.c:3717
+#, fuzzy
 msgid "_Small icons"
-msgstr ""
+msgstr "Жижиг icon"
 
 #: ../src/interface.c:3725
+#, fuzzy
 msgid "_Very small icons"
-msgstr ""
+msgstr "Жижиг icon"
 
 #: ../src/interface.c:3733
+#, fuzzy
 msgid "_Large icons"
-msgstr ""
+msgstr "Том icon"
 
 #: ../src/interface.c:3741
 #, fuzzy
@@ -2028,15 +2097,15 @@ msgstr "<b>Хэмжээ:</b>"
 #: ../src/interface.c:3746
 #, fuzzy
 msgid "<b>Toolbar</b>"
-msgstr "<b>Төрөл:</b>"
+msgstr "<b>Багажийн зам</b>"
 
 #: ../src/interface.c:3751 ../src/prefs.c:1584
 msgid "Toolbar"
-msgstr ""
+msgstr "Багаж самбар"
 
 #: ../src/interface.c:3782
 msgid "Line wrapping"
-msgstr ""
+msgstr "Line wrapping"
 
 #: ../src/interface.c:3785
 msgid ""
@@ -2044,6 +2113,9 @@ msgid ""
 "line wrapping has a high performance cost for large documents so should be "
 "disabled on slow machines."
 msgstr ""
+"Wrap the line at the window border and continue it on the next line. Note: "
+"line wrapping has a high performance cost for large documents so should be "
+"disabled on slow machines."
 
 #: ../src/interface.c:3787
 msgid "\"Smart\" home key"
@@ -2060,22 +2132,24 @@ msgstr ""
 
 #: ../src/interface.c:3792
 msgid "Disable Drag and Drop"
-msgstr ""
+msgstr "Чирэх үйлдлийг идэвхгүй болгох"
 
 #: ../src/interface.c:3795
+#, fuzzy
 msgid ""
 "Disable drag and drop completely in the editor window so you can't drag and "
 "drop any selections within or outside of the editor window"
-msgstr ""
+msgstr "Чирэх үйлдлийг идэвхгүй болгосон болохоор чирэх үйлдэл хийх боломжгүй."
 
 #: ../src/interface.c:3797
 #, fuzzy
 msgid "Code folding"
-msgstr "Фонтыг сонго"
+msgstr "Enable folding"
 
 #: ../src/interface.c:3801
+#, fuzzy
 msgid "Fold/unfold all children of a fold point"
-msgstr ""
+msgstr "Unfold all children of a fold point"
 
 #: ../src/interface.c:3804
 msgid ""
@@ -2085,17 +2159,19 @@ msgstr ""
 
 #: ../src/interface.c:3806
 msgid "Use indicators to show compile errors"
-msgstr ""
+msgstr "Хөрвүүлэлтийн алдааг харуулахад заагчийг ашигла"
 
 #: ../src/interface.c:3809
+#, fuzzy
 msgid ""
 "Whether to use indicators (a squiggly underline) to highlight the lines "
 "where the compiler found a warning or an error"
-msgstr ""
+msgstr "Хөрвүүлэгч анхааруулга эсвэл алдааг олоход заагч тэр мөрийг тодруулна."
 
 #: ../src/interface.c:3811
+#, fuzzy
 msgid "Newline strips trailing spaces"
-msgstr ""
+msgstr "Strip trailing spaces"
 
 #: ../src/interface.c:3814
 msgid "Enable newline to strip the trailing spaces on the previous line"
@@ -2106,8 +2182,9 @@ msgid "Line breaking column:"
 msgstr ""
 
 #: ../src/interface.c:3834
+#, fuzzy
 msgid "Comment toggle marker:"
-msgstr ""
+msgstr "Long line marker:"
 
 #: ../src/interface.c:3841
 msgid ""
@@ -2117,11 +2194,12 @@ msgstr ""
 
 #: ../src/interface.c:3843
 msgid "<b>Features</b>"
-msgstr ""
+msgstr "<b>Үзүүлэлт</b>"
 
 #: ../src/interface.c:3848
+#, fuzzy
 msgid "Features"
-msgstr ""
+msgstr "<b>Үзүүлэлт</b>"
 
 #: ../src/interface.c:3861
 msgid ""
@@ -2130,16 +2208,19 @@ msgid ""
 msgstr ""
 
 #: ../src/interface.c:3888 ../src/interface.c:5606
+#, fuzzy
 msgid "Width:"
-msgstr ""
+msgstr "Хэсгийн өргөх:"
 
 #: ../src/interface.c:3901 ../src/interface.c:5619
+#, fuzzy
 msgid "The width in chars of a single indent"
-msgstr ""
+msgstr "The width in chars, which one tab character will take"
 
 #: ../src/interface.c:3906 ../src/interface.c:5624
+#, fuzzy
 msgid "Auto-indent mode:"
-msgstr ""
+msgstr "Автомат тодорхойологч"
 
 #: ../src/interface.c:3919 ../src/interface.c:5637
 msgid "Basic"
@@ -2174,8 +2255,9 @@ msgid ""
 msgstr ""
 
 #: ../src/interface.c:3944 ../src/interface.c:5662
+#, fuzzy
 msgid "Use spaces when inserting indentation"
-msgstr ""
+msgstr "Хоосон зай оруулахад tabulator-ыг хэрэглэ"
 
 #: ../src/interface.c:3953 ../src/interface.c:5671
 msgid "Use one tab per indent"
@@ -2194,7 +2276,7 @@ msgstr ""
 
 #: ../src/interface.c:3964 ../src/interface.c:4254 ../src/interface.c:5675
 msgid "Type:"
-msgstr ""
+msgstr "Төрөл:"
 
 #: ../src/interface.c:3971
 msgid "Tab key indents"
@@ -2211,12 +2293,14 @@ msgid "<b>Indentation</b>"
 msgstr "<b>Байршил:</b>"
 
 #: ../src/interface.c:3981 ../src/interface.c:5689
+#, fuzzy
 msgid "Indentation"
-msgstr ""
+msgstr "Автомат тодорхойологч"
 
 #: ../src/interface.c:4004
+#, fuzzy
 msgid "Snippet completion"
-msgstr ""
+msgstr "Гүйцээлтийг байгуул"
 
 #: ../src/interface.c:4007
 msgid ""
@@ -2225,8 +2309,9 @@ msgid ""
 msgstr ""
 
 #: ../src/interface.c:4009
+#, fuzzy
 msgid "XML/HTML tag auto-closing"
-msgstr ""
+msgstr "XML тагийн гүйцээлт"
 
 #: ../src/interface.c:4012
 msgid "Insert matching closing tag for XML/HTML"
@@ -2247,10 +2332,12 @@ msgid "Autocomplete symbols"
 msgstr ""
 
 #: ../src/interface.c:4022
+#, fuzzy
 msgid ""
 "Automatic completion of known symbols in open files (function names, global "
 "variables, ...)"
 msgstr ""
+"Нээлттэй код дахь мэдэгдэж буй үгүүдийг (функц, гадаад хувьсагч,...) гүйцээлт"
 
 #: ../src/interface.c:4024
 msgid "Autocomplete all words in document"
@@ -2269,8 +2356,9 @@ msgid "Completion list height:"
 msgstr ""
 
 #: ../src/interface.c:4052
+#, fuzzy
 msgid "Characters to type for autocompletion:"
-msgstr ""
+msgstr "Гүйцээлтийг байгуул"
 
 #: ../src/interface.c:4065
 msgid ""
@@ -2279,12 +2367,14 @@ msgid ""
 msgstr ""
 
 #: ../src/interface.c:4074
+#, fuzzy
 msgid "Display height in rows for the autocompletion list"
-msgstr ""
+msgstr "Гүйцээлтийн жагсаалтийн мөр:"
 
 #: ../src/interface.c:4083
+#, fuzzy
 msgid "Maximum number of entries to display in the autocompletion list"
-msgstr ""
+msgstr "Гүйцээлтийн жагсаалтийн мөрийн тоог харуул."
 
 #: ../src/interface.c:4086
 msgid "Symbol list update frequency:"
@@ -2300,7 +2390,7 @@ msgstr ""
 #: ../src/interface.c:4102
 #, fuzzy
 msgid "<b>Completions</b>"
-msgstr "<b>Байршил:</b>"
+msgstr "<b>Гүйцээлт</b>"
 
 #: ../src/interface.c:4121
 msgid "Parenthesis ( )"
@@ -2349,57 +2439,66 @@ msgstr ""
 #: ../src/interface.c:4161
 #, fuzzy
 msgid "Completions"
-msgstr "_Хөрвүүл"
+msgstr "Хөрвүүлэх"
 
 #: ../src/interface.c:4184
+#, fuzzy
 msgid "Invert syntax highlighting colors"
-msgstr ""
+msgstr "Кодуудыг тодруулалтын өнгийг урвуулах"
 
 #: ../src/interface.c:4187
+#, fuzzy
 msgid "Invert all colors, by default using white text on a black background"
-msgstr ""
+msgstr "Хар дэвсгэр дээр цагаан үсгээр бичих."
 
 #: ../src/interface.c:4189
 msgid "Show indentation guides"
-msgstr ""
+msgstr "Show indentation guides"
 
 #: ../src/interface.c:4192
+#, fuzzy
 msgid "Shows small dotted lines to help you to use the right indentation"
-msgstr ""
+msgstr "Shows small dotted lines to help you to use the right indentation."
 
 #: ../src/interface.c:4194
 msgid "Show white space"
-msgstr ""
+msgstr "Хоосон зайг харуул"
 
 #: ../src/interface.c:4197
+#, fuzzy
 msgid "Marks spaces with dots and tabs with arrows"
-msgstr ""
+msgstr "Зайг цэгээр, догол мөрийг сумаар тэмдэглэ."
 
 #: ../src/interface.c:4199
 msgid "Show line endings"
-msgstr ""
+msgstr "Мөрийн төгсгөлийг харуул"
 
 #: ../src/interface.c:4202
+#, fuzzy
 msgid "Shows the line ending character"
-msgstr ""
+msgstr "Мөрийн төгсгөлийн тэмдэгтийг харуул"
 
 #: ../src/interface.c:4204
+#, fuzzy
 msgid "Show line numbers"
-msgstr ""
+msgstr "Мөрийн Дугаарыг Харуул"
 
 #: ../src/interface.c:4207
+#, fuzzy
 msgid "Shows or hides the Line Number margin"
-msgstr ""
+msgstr "Мөрийн Дугаарын ирмэгийг харуул эсвэл нуу"
 
 #: ../src/interface.c:4209
+#, fuzzy
 msgid "Show markers margin"
-msgstr ""
+msgstr "Тэмдэгийн Захыг Харуул"
 
 #: ../src/interface.c:4212
+#, fuzzy
 msgid ""
 "Shows or hides the small margin right of the line numbers, which is used to "
 "mark lines"
-msgstr ""
+msgstr "Тэмдэглэсэн мөрийн дугаарын баруун ирмэгийг харуул эсвэл нуу."
 
 #: ../src/interface.c:4214
 msgid "Stop scrolling at last line"
@@ -2411,19 +2510,20 @@ msgstr ""
 
 #: ../src/interface.c:4219
 msgid "<b>Display</b>"
-msgstr ""
+msgstr "<b>Дэлгэц</b>"
 
 #: ../src/interface.c:4240 ../src/interface.c:5721
 msgid "Column:"
 msgstr ""
 
 #: ../src/interface.c:4247
+#, fuzzy
 msgid "Color:"
-msgstr ""
+msgstr "Өнгө"
 
 #: ../src/interface.c:4266
 msgid "Sets the color of the long line marker"
-msgstr ""
+msgstr "Sets the color of the long line marker"
 
 #: ../src/interface.c:4267 ../src/toolbar.c:70 ../src/tools.c:929
 #: ../src/vte.c:794 ../src/vte.c:801
@@ -2431,44 +2531,53 @@ msgid "Color Chooser"
 msgstr "Өнгө Сонгогч"
 
 #: ../src/interface.c:4275
+#, fuzzy
 msgid ""
 "The long line marker is a thin vertical line in the editor, it helps to mark "
 "long lines, or as a hint to break the line. Set this value to a value "
 "greater than 0 to specify the column where it should appear."
 msgstr ""
+"The long line marker is a thin vertical line in the editor. It helps to mark "
+"long lines, or as a hint to break the line. Set this value to a value "
+"greater than 0 to specify the column where it should appear."
 
 #: ../src/interface.c:4285
 msgid "Line"
-msgstr ""
+msgstr "Шулуун"
 
 #: ../src/interface.c:4288
+#, fuzzy
 msgid ""
 "Prints a vertical line in the editor window at the given cursor position "
 "(see below)"
-msgstr ""
+msgstr "Заагчийн байрлалд босоо шулуун хэвлэх (доодохыг хар)"
 
 #: ../src/interface.c:4292
 msgid "Background"
-msgstr ""
+msgstr "Дэвсгэр"
 
 #: ../src/interface.c:4295
+#, fuzzy
 msgid ""
 "The background color of characters after the given cursor position (see "
 "below) changed to the color set below, (this is recommended if you use "
 "proportional fonts)"
 msgstr ""
+"Заагчийн байрлалаас хойшхи тэмдэгтийн дэвсгэр өнгийг доор заасан өнгөөр "
+"солигдсон. (Ялгаатай фонт хэрэглэж байгаа үед санал болгоно)"
 
 #: ../src/interface.c:4299
+#, fuzzy
 msgid "Enabled"
-msgstr ""
+msgstr "Enable folding"
 
 #: ../src/interface.c:4305 ../src/interface.c:5761
 msgid "<b>Long line marker</b>"
-msgstr ""
+msgstr "<b>Long line marker</b>"
 
 #: ../src/interface.c:4324 ../src/interface.c:5728
 msgid "Disabled"
-msgstr ""
+msgstr "Идэвхгүй"
 
 #: ../src/interface.c:4327
 msgid "Do not show virtual spaces"
@@ -2489,16 +2598,19 @@ msgid "Always"
 msgstr ""
 
 #: ../src/interface.c:4341
+#, fuzzy
 msgid "Always show virtual spaces beyond the end of lines"
-msgstr ""
+msgstr "Мөрийн эцэс дэх зай, догол мөрийг устгах"
 
 #: ../src/interface.c:4345
+#, fuzzy
 msgid "<b>Virtual spaces</b>"
-msgstr ""
+msgstr "<b>Хэсгүүдийн байршуулалт</b>"
 
 #: ../src/interface.c:4350
+#, fuzzy
 msgid "Display"
-msgstr ""
+msgstr "<b>Дэлгэц</b>"
 
 #: ../src/interface.c:4381
 msgid "Open new documents from the command-line"
@@ -2514,15 +2626,17 @@ msgstr ""
 
 #: ../src/interface.c:4405
 msgid "<b>New files</b>"
-msgstr ""
+msgstr "<b>Шинэ файлууд</b>"
 
 #: ../src/interface.c:4428
+#, fuzzy
 msgid "Default encoding (new files):"
-msgstr ""
+msgstr "Энкодчлол:"
 
 #: ../src/interface.c:4436
+#, fuzzy
 msgid "Sets the default encoding for newly created files"
-msgstr ""
+msgstr "Шинээр үүссэн файлын энкодчлолыг заах."
 
 #: ../src/interface.c:4442
 msgid "Use fixed encoding when opening non-Unicode files"
@@ -2540,8 +2654,9 @@ msgid "Default encoding (existing non-Unicode files):"
 msgstr ""
 
 #: ../src/interface.c:4459
+#, fuzzy
 msgid "Sets the default encoding for opening existing non-Unicode files"
-msgstr ""
+msgstr "Шинээр үүссэн файлын энкодчлолыг заах."
 
 #: ../src/interface.c:4465
 #, fuzzy
@@ -2550,15 +2665,16 @@ msgstr "<b>Энкодчлол:</b>"
 
 #: ../src/interface.c:4484
 msgid "Ensure new line at file end"
-msgstr ""
+msgstr "Мөрийн эцэст шинэ файлыг тодорхойл"
 
 #: ../src/interface.c:4487
 msgid "Ensures that at the end of the file is a new line"
-msgstr ""
+msgstr "Мөрийн эцэст шинэ мөр байгааг тодорхойл"
 
 #: ../src/interface.c:4489
+#, fuzzy
 msgid "Ensure consistent line endings"
-msgstr ""
+msgstr "Мөрийн эцэст шинэ файлыг тодорхойл"
 
 #: ../src/interface.c:4492
 msgid ""
@@ -2567,32 +2683,35 @@ msgid ""
 msgstr ""
 
 #: ../src/interface.c:4494
+#, fuzzy
 msgid "Strip trailing spaces and tabs"
-msgstr ""
+msgstr "Strip trailing spaces"
 
 #: ../src/interface.c:4497
 msgid "Removes trailing spaces and tabs and the end of lines"
-msgstr ""
+msgstr "Мөрийн эцэс дэх зай, догол мөрийг устгах"
 
 #: ../src/interface.c:4499 ../src/keybindings.c:542
 msgid "Replace tabs by space"
-msgstr ""
+msgstr "Догол мөрийг зайгаа орлуулах"
 
 #: ../src/interface.c:4502
+#, fuzzy
 msgid "Replaces all tabs in document by spaces"
-msgstr ""
+msgstr "Баримтын бүх догол мөрийг зайгаар орлуулах"
 
 #: ../src/interface.c:4504
 msgid "<b>Saving files</b>"
-msgstr ""
+msgstr "<b>Файлуудыг хадгал</b>"
 
 #: ../src/interface.c:4529
 msgid "Recent files list length:"
-msgstr ""
+msgstr "Сая хэрэглэсэн файлуудын жагсаалтын урт:"
 
 #: ../src/interface.c:4543
+#, fuzzy
 msgid "Specifies the number of files which are stored in the Recent files list"
-msgstr ""
+msgstr "Саяхан хэрэглэсэн файлуудын жагсаалтын хэмжээг заах"
 
 #: ../src/interface.c:4547
 msgid "Disk check timeout:"
@@ -2607,37 +2726,39 @@ msgstr ""
 #: ../src/interface.c:4569 ../src/prefs.c:1588 ../src/symbols.c:680
 #: ../plugins/filebrowser.c:1119
 msgid "Files"
-msgstr ""
+msgstr "Файлууд"
 
 #: ../src/interface.c:4602
 msgid "Terminal:"
-msgstr ""
+msgstr "Терминал:"
 
 #: ../src/interface.c:4609
 msgid "Browser:"
-msgstr ""
+msgstr "Хөтөч:"
 
 #: ../src/interface.c:4621
 msgid ""
 "A terminal emulator like xterm, gnome-terminal or konsole (should accept the "
 "-e argument)"
 msgstr ""
+"Терминал нь xterm, gnome-terminal эсвэл konsole шиг (-e аргумент дамжуулдаг)"
 
 #: ../src/interface.c:4628
 msgid "Path (and possibly additional arguments) to your favorite browser"
-msgstr ""
+msgstr "Дуртай хөтөчийнхөө зам (нэмэлт аргумент зөвшөөрнө)"
 
 #: ../src/interface.c:4650
 msgid "Grep:"
-msgstr ""
+msgstr "Grep:"
 
 #: ../src/interface.c:4673
 msgid "<b>Tool paths</b>"
-msgstr ""
+msgstr "<b>Багажийн зам</b>"
 
 #: ../src/interface.c:4694
+#, fuzzy
 msgid "Context action:"
-msgstr ""
+msgstr "Гүйцээлтийг байгуул"
 
 #: ../src/interface.c:4705
 #, c-format
@@ -2650,31 +2771,32 @@ msgstr ""
 #: ../src/interface.c:4718
 #, fuzzy
 msgid "<b>Commands</b>"
-msgstr "<b>Өөрчилсөн:</b>"
+msgstr "<b>Фонт</b>"
 
 #: ../src/interface.c:4723 ../src/keybindings.c:234 ../src/prefs.c:1590
 msgid "Tools"
-msgstr ""
+msgstr "Багаж"
 
 #: ../src/interface.c:4761
 msgid "email address of the developer"
-msgstr ""
+msgstr "хөгжүүлэгчийн цахим хаяг"
 
 #: ../src/interface.c:4768
 msgid "Initials of the developer name"
-msgstr ""
+msgstr "Анхны хөгжүүлэгчийн нэр"
 
 #: ../src/interface.c:4770
+#, fuzzy
 msgid "Initial version:"
-msgstr ""
+msgstr "Эхний Хувилбар:"
 
 #: ../src/interface.c:4782
 msgid "Version number, which a new file initially has"
-msgstr ""
+msgstr "Шинээр үүссэн файлын хувилбар нь"
 
 #: ../src/interface.c:4789
 msgid "Company name"
-msgstr ""
+msgstr "Компаний нэр"
 
 #: ../src/interface.c:4791
 #, fuzzy
@@ -2684,19 +2806,21 @@ msgstr "Хөгжүүлэгчид"
 #: ../src/interface.c:4798
 #, fuzzy
 msgid "Company:"
-msgstr "Хөрвүүл:"
+msgstr "Компаний нэр"
 
 #: ../src/interface.c:4805
 msgid "Mail address:"
 msgstr ""
 
 #: ../src/interface.c:4812
+#, fuzzy
 msgid "Initials:"
-msgstr ""
+msgstr "Эхний Хувилбар:"
 
 #: ../src/interface.c:4824
+#, fuzzy
 msgid "The name of the developer"
-msgstr ""
+msgstr "хөгжүүлэгчийн цахим хаяг"
 
 #: ../src/interface.c:4826
 msgid "Year:"
@@ -2743,7 +2867,7 @@ msgstr ""
 #: ../src/interface.c:4868
 #, fuzzy
 msgid "<b>Template data</b>"
-msgstr "<b>Төрөл:</b>"
+msgstr "<b>Хэсгүүдийн байршуулалт</b>"
 
 #: ../src/interface.c:4873 ../src/prefs.c:1592
 msgid "Templates"
@@ -2752,7 +2876,7 @@ msgstr ""
 #: ../src/interface.c:4911
 #, fuzzy
 msgid "C_hange"
-msgstr "Зай:"
+msgstr "Фонт Өөрчлөх"
 
 #: ../src/interface.c:4915
 #, fuzzy
@@ -2769,17 +2893,18 @@ msgid "Command:"
 msgstr " командууд"
 
 #: ../src/interface.c:4960
-#, c-format
+#, fuzzy, c-format
 msgid "Path to the command for printing files (use %f for the filename)"
-msgstr ""
+msgstr "Хэвлэх файлын команд зам (Файлын нэрийг %f гэж ашигла)"
 
 #: ../src/interface.c:4970
 msgid "Use an external command for printing"
 msgstr ""
 
 #: ../src/interface.c:4990 ../src/printing.c:376
+#, fuzzy
 msgid "Print line numbers"
-msgstr ""
+msgstr "Мөрийн Дугаарыг Харуул"
 
 #: ../src/interface.c:4993 ../src/printing.c:378
 msgid "Add line numbers to the printed page"
@@ -2846,8 +2971,9 @@ msgid "<i>Warning: read the manual before changing these preferences.</i>"
 msgstr ""
 
 #: ../src/interface.c:5102
+#, fuzzy
 msgid "<b>Various preferences</b>"
-msgstr ""
+msgstr "<b>Харагдац</b>"
 
 #: ../src/interface.c:5107 ../src/prefs.c:1598
 msgid "Various"
@@ -2859,8 +2985,9 @@ msgid "Project Properties"
 msgstr "Шинж чанар"
 
 #: ../src/interface.c:5714
+#, fuzzy
 msgid "Display:"
-msgstr ""
+msgstr "<b>Дэлгэц</b>"
 
 #: ../src/interface.c:5736
 msgid "Custom"
@@ -2874,7 +3001,7 @@ msgstr ""
 #: ../src/keybindings.c:221 ../src/plugins.c:1246 ../src/symbols.c:707
 #, fuzzy
 msgid "File"
-msgstr "Файл Нээх"
+msgstr "_Файл"
 
 #: ../src/keybindings.c:223
 msgid "Clipboard"
@@ -2883,23 +3010,26 @@ msgstr ""
 #: ../src/keybindings.c:224
 #, fuzzy
 msgid "Select"
-msgstr "сонголт"
+msgstr "Бүгдийг Сонгох"
 
 #: ../src/keybindings.c:225
+#, fuzzy
 msgid "Format"
-msgstr ""
+msgstr "_Хэлбэржилт"
 
 #: ../src/keybindings.c:226
+#, fuzzy
 msgid "Insert"
-msgstr ""
+msgstr "Огноо Оруулах"
 
 #: ../src/keybindings.c:227
 msgid "Settings"
 msgstr ""
 
 #: ../src/keybindings.c:228 ../src/toolbar.c:380
+#, fuzzy
 msgid "Search"
-msgstr ""
+msgstr "Хайх"
 
 #: ../src/keybindings.c:229
 #, fuzzy
@@ -2914,11 +3044,12 @@ msgstr "_Харагдац"
 #: ../src/keybindings.c:231
 #, fuzzy
 msgid "Document"
-msgstr "бүх барим"
+msgstr "Баримт"
 
 #: ../src/keybindings.c:232 ../src/project.c:504
+#, fuzzy
 msgid "Project"
-msgstr ""
+msgstr "Төсөл"
 
 #: ../src/keybindings.c:233 ../src/keybindings.c:565 ../src/project.c:482
 #: ../src/ui_utils.c:1960
@@ -2927,8 +3058,9 @@ msgid "Build"
 msgstr "_Боловсруул"
 
 #: ../src/keybindings.c:235 ../src/keybindings.c:590
+#, fuzzy
 msgid "Help"
-msgstr ""
+msgstr "Тусламж"
 
 #: ../src/keybindings.c:236
 msgid "Focus"
@@ -2939,43 +3071,47 @@ msgid "Notebook tab"
 msgstr ""
 
 #: ../src/keybindings.c:246
+#, fuzzy
 msgid "New"
-msgstr ""
+msgstr "Шинээр"
 
 #: ../src/keybindings.c:248
 #, fuzzy
 msgid "Open"
-msgstr "Файл Нээх"
+msgstr "Нээх"
 
 #: ../src/keybindings.c:251
+#, fuzzy
 msgid "Open selected file"
-msgstr ""
+msgstr "Сонгосон Файлыг нээх"
 
 #: ../src/keybindings.c:253
 #, fuzzy
 msgid "Save"
-msgstr "Файлыг Хадгал"
+msgstr "Бүгдийг хадгал"
 
 #: ../src/keybindings.c:255 ../src/toolbar.c:55
 #, fuzzy
 msgid "Save as"
-msgstr "Файлыг Хадгал"
+msgstr "Бүгдийг хадгал"
 
 #: ../src/keybindings.c:257
 msgid "Save all"
-msgstr ""
+msgstr "Бүгдийг хадгал"
 
 #: ../src/keybindings.c:260
 msgid "Print"
 msgstr ""
 
 #: ../src/keybindings.c:262
+#, fuzzy
 msgid "Close"
-msgstr ""
+msgstr "Хаах"
 
 #: ../src/keybindings.c:264
+#, fuzzy
 msgid "Close all"
-msgstr ""
+msgstr "Бүх Файлыг Хаа"
 
 #: ../src/keybindings.c:267
 #, fuzzy
@@ -3017,8 +3153,9 @@ msgid "Scroll down the view by one line"
 msgstr ""
 
 #: ../src/keybindings.c:302
+#, fuzzy
 msgid "Complete snippet"
-msgstr ""
+msgstr "Файлыг хөрвүүл"
 
 #: ../src/keybindings.c:304
 msgid "Move cursor in snippet"
@@ -3033,20 +3170,23 @@ msgid "Context Action"
 msgstr ""
 
 #: ../src/keybindings.c:310
+#, fuzzy
 msgid "Complete word"
-msgstr ""
+msgstr "Хөрвүүлэгч"
 
 #: ../src/keybindings.c:312
 msgid "Show calltip"
 msgstr ""
 
 #: ../src/keybindings.c:314
+#, fuzzy
 msgid "Show macro list"
-msgstr ""
+msgstr "Тэмдэгтийн жагсаалтыг харуул"
 
 #: ../src/keybindings.c:316
+#, fuzzy
 msgid "Word part completion"
-msgstr ""
+msgstr "Үгийн гүйцээлт"
 
 #: ../src/keybindings.c:318
 msgid "Move line(s) up"
@@ -3069,12 +3209,14 @@ msgid "Paste"
 msgstr ""
 
 #: ../src/keybindings.c:340
+#, fuzzy
 msgid "Select All"
-msgstr ""
+msgstr "Бүгдийг Сонгох"
 
 #: ../src/keybindings.c:342
+#, fuzzy
 msgid "Select current word"
-msgstr ""
+msgstr "Файлыг хадгал"
 
 #: ../src/keybindings.c:350
 msgid "Select to previous word part"
@@ -3085,32 +3227,39 @@ msgid "Select to next word part"
 msgstr ""
 
 #: ../src/keybindings.c:360
+#, fuzzy
 msgid "Toggle line commentation"
-msgstr ""
+msgstr "_Идэвхжсэн Мөрийн Тайлбар"
 
 #: ../src/keybindings.c:363
+#, fuzzy
 msgid "Comment line(s)"
-msgstr ""
+msgstr "_Тайлбарын мөр(үүд)"
 
 #: ../src/keybindings.c:365
+#, fuzzy
 msgid "Uncomment line(s)"
-msgstr ""
+msgstr "Тайлбар биш Мөр(үүд)"
 
 #: ../src/keybindings.c:367
+#, fuzzy
 msgid "Increase indent"
-msgstr ""
+msgstr "Догол мөрийг Өсгөх"
 
 #: ../src/keybindings.c:370
+#, fuzzy
 msgid "Decrease indent"
-msgstr ""
+msgstr "Догол мөрийг Багасгах"
 
 #: ../src/keybindings.c:373
+#, fuzzy
 msgid "Increase indent by one space"
-msgstr ""
+msgstr "Догол мөрийг Өсгөх"
 
 #: ../src/keybindings.c:375
+#, fuzzy
 msgid "Decrease indent by one space"
-msgstr ""
+msgstr "Догол мөрийг Багасгах"
 
 #: ../src/keybindings.c:379
 msgid "Send to Custom Command 1"
@@ -3125,8 +3274,9 @@ msgid "Send to Custom Command 3"
 msgstr ""
 
 #: ../src/keybindings.c:394
+#, fuzzy
 msgid "Insert date"
-msgstr ""
+msgstr "Огноо Оруулах"
 
 #: ../src/keybindings.c:400
 msgid "Insert New Line Before Current"
@@ -3141,36 +3291,43 @@ msgid "Find"
 msgstr ""
 
 #: ../src/keybindings.c:417
+#, fuzzy
 msgid "Find Next"
-msgstr ""
+msgstr "Урагшаа Хай"
 
 #: ../src/keybindings.c:419
+#, fuzzy
 msgid "Find Previous"
-msgstr ""
+msgstr "Хойшоо Хай"
 
 #: ../src/keybindings.c:426 ../src/search.c:619
+#, fuzzy
 msgid "Replace"
-msgstr ""
+msgstr "Орлуулах"
 
 #: ../src/keybindings.c:428 ../src/search.c:871
+#, fuzzy
 msgid "Find in Files"
-msgstr ""
+msgstr "Файлуудаас Хай"
 
 #: ../src/keybindings.c:431
+#, fuzzy
 msgid "Next Message"
-msgstr ""
+msgstr "Даргаагийн Мэдээ"
 
 #: ../src/keybindings.c:433
+#, fuzzy
 msgid "Previous Message"
-msgstr ""
+msgstr "Даргаагийн Мэдээ"
 
 #: ../src/keybindings.c:435
 msgid "Find Usage"
-msgstr ""
+msgstr "Хэрэглээг хай"
 
 #: ../src/keybindings.c:437
+#, fuzzy
 msgid "Find Document Usage"
-msgstr ""
+msgstr "Хэрэглээг хай"
 
 #: ../src/keybindings.c:444 ../src/toolbar.c:66
 msgid "Navigate back a location"
@@ -3186,26 +3343,27 @@ msgid "Go to matching brace"
 msgstr "Мөр-лүү оч"
 
 #: ../src/keybindings.c:454
+#, fuzzy
 msgid "Toggle marker"
-msgstr ""
+msgstr "Long line marker:"
 
 #: ../src/keybindings.c:462
 msgid "Go to Tag Definition"
-msgstr ""
+msgstr "Go to Tag Definition"
 
 #: ../src/keybindings.c:464
 msgid "Go to Tag Declaration"
-msgstr ""
+msgstr "Go to Tag Declaration"
 
 #: ../src/keybindings.c:466
 #, fuzzy
 msgid "Go to Start of Line"
-msgstr "Мөр-лүү оч"
+msgstr "Мөрлүү оч"
 
 #: ../src/keybindings.c:468
 #, fuzzy
 msgid "Go to End of Line"
-msgstr "Мөр-лүү оч"
+msgstr "Мөрлүү оч"
 
 #: ../src/keybindings.c:470
 msgid "Go to End of Display Line"
@@ -3224,16 +3382,19 @@ msgid "Toggle All Additional Widgets"
 msgstr ""
 
 #: ../src/keybindings.c:482
+#, fuzzy
 msgid "Fullscreen"
-msgstr ""
+msgstr "Бүтэн дэлгэц"
 
 #: ../src/keybindings.c:484
+#, fuzzy
 msgid "Toggle Messages Window"
-msgstr ""
+msgstr "Мэдээний Цонхыг Харуул"
 
 #: ../src/keybindings.c:487
+#, fuzzy
 msgid "Toggle Sidebar"
-msgstr ""
+msgstr "Хажуу самбарыг Харуул"
 
 #: ../src/keybindings.c:489
 msgid "Zoom In"
@@ -3244,8 +3405,9 @@ msgid "Zoom Out"
 msgstr ""
 
 #: ../src/keybindings.c:493
+#, fuzzy
 msgid "Zoom Reset"
-msgstr ""
+msgstr "Текст-рүү ойртох"
 
 #: ../src/keybindings.c:498
 msgid "Switch to Editor"
@@ -3256,28 +3418,33 @@ msgid "Switch to Search Bar"
 msgstr ""
 
 #: ../src/keybindings.c:502
+#, fuzzy
 msgid "Switch to Message Window"
-msgstr ""
+msgstr "Мэдээний Цонхыг Харуул"
 
 #: ../src/keybindings.c:504
+#, fuzzy
 msgid "Switch to Compiler"
-msgstr ""
+msgstr "Хөрвүүлэгч"
 
 #: ../src/keybindings.c:506
+#, fuzzy
 msgid "Switch to Messages"
-msgstr ""
+msgstr "Мэдээ"
 
 #: ../src/keybindings.c:508
+#, fuzzy
 msgid "Switch to Scribble"
-msgstr ""
+msgstr "Scribble"
 
 #: ../src/keybindings.c:510
 msgid "Switch to VTE"
 msgstr ""
 
 #: ../src/keybindings.c:512
+#, fuzzy
 msgid "Switch to Sidebar"
-msgstr ""
+msgstr "Хажуу самбарыг Харуул"
 
 #: ../src/keybindings.c:514
 msgid "Switch to Sidebar Symbol List"
@@ -3323,16 +3490,19 @@ msgid "Move document last"
 msgstr "бүх барим"
 
 #: ../src/keybindings.c:538
+#, fuzzy
 msgid "Toggle Line wrapping"
-msgstr ""
+msgstr "Line wrapping"
 
 #: ../src/keybindings.c:540
+#, fuzzy
 msgid "Toggle Line breaking"
-msgstr ""
+msgstr "_Идэвхжсэн Мөрийн Тайлбар"
 
 #: ../src/keybindings.c:544
+#, fuzzy
 msgid "Replace spaces by tabs"
-msgstr ""
+msgstr "Догол мөрийг Зайгаар орлуулах"
 
 #: ../src/keybindings.c:546
 #, fuzzy
@@ -3340,32 +3510,37 @@ msgid "Toggle current fold"
 msgstr "Файлыг хөрвүүл"
 
 #: ../src/keybindings.c:548
+#, fuzzy
 msgid "Fold all"
-msgstr ""
+msgstr "_Fold All"
 
 #: ../src/keybindings.c:550
+#, fuzzy
 msgid "Unfold all"
-msgstr ""
+msgstr "_Unfold All"
 
 #: ../src/keybindings.c:552
+#, fuzzy
 msgid "Reload symbol list"
-msgstr ""
+msgstr "Тэмдэгтийн жагсаалтыг харуул"
 
 #: ../src/keybindings.c:554
 msgid "Remove Markers"
 msgstr ""
 
 #: ../src/keybindings.c:556
+#, fuzzy
 msgid "Remove Error Indicators"
-msgstr ""
+msgstr "Алдаа Заагчдыг Арилгах"
 
 #: ../src/keybindings.c:558
+#, fuzzy
 msgid "Remove Markers and Error Indicators"
-msgstr ""
+msgstr "Алдаа Заагчдыг Арилгах"
 
 #: ../src/keybindings.c:563 ../src/toolbar.c:68
 msgid "Compile"
-msgstr ""
+msgstr "Хөрвүүлэх"
 
 #: ../src/keybindings.c:567
 #, fuzzy
@@ -3407,7 +3582,7 @@ msgstr "Өнгө Сонгогч"
 #: ../src/keybindings.c:872
 #, fuzzy
 msgid "Keyboard Shortcuts"
-msgstr "Товчлуурын хослолууд"
+msgstr "Товчлуурын Хослол"
 
 #: ../src/keybindings.c:884
 #, fuzzy
@@ -3428,8 +3603,9 @@ msgid "Failed to load one or more session files."
 msgstr ""
 
 #: ../src/log.c:180
+#, fuzzy
 msgid "Debug Messages"
-msgstr ""
+msgstr "Мэдээ"
 
 #: ../src/log.c:182
 msgid "Cl_ear"
@@ -3568,8 +3744,9 @@ msgid "Configuration files reloaded."
 msgstr "Хөрвүүлэлтийн алдаа гарлаа."
 
 #: ../src/msgwindow.c:158
+#, fuzzy
 msgid "Status messages"
-msgstr ""
+msgstr "Мэдээ"
 
 #: ../src/msgwindow.c:556
 msgid "C_opy"
@@ -3580,13 +3757,14 @@ msgid "Copy _All"
 msgstr ""
 
 #: ../src/msgwindow.c:595
+#, fuzzy
 msgid "_Hide Message Window"
-msgstr ""
+msgstr "Мэдээний Цонхыг Харуул"
 
 #: ../src/msgwindow.c:651
-#, c-format
+#, fuzzy, c-format
 msgid "Could not find file '%s' - trying the current document path."
-msgstr ""
+msgstr "Баримтын бүх алдаа заагчийг арилгах"
 
 #: ../src/plugins.c:485
 #, c-format
@@ -3626,8 +3804,9 @@ msgid "Choose which plugins should be loaded at startup:"
 msgstr ""
 
 #: ../src/plugins.c:1392
+#, fuzzy
 msgid "<b>Plugin details:</b>"
-msgstr ""
+msgstr "<b>Файлуудыг хадгал</b>"
 
 #: ../src/plugins.c:1401
 msgid "Plugin:"
@@ -3658,12 +3837,12 @@ msgstr ""
 #: ../src/prefs.c:223 ../src/symbols.c:2139 ../src/sidebar.c:730
 #, fuzzy
 msgid "_Expand All"
-msgstr "_Бүгдийг Үүсгэх\t"
+msgstr "_Unfold All"
 
 #: ../src/prefs.c:228 ../src/symbols.c:2144 ../src/sidebar.c:736
 #, fuzzy
 msgid "_Collapse All"
-msgstr "_Бүгдийг Үүсгэх\t"
+msgstr "Бүх Файлыг Хаа"
 
 #: ../src/prefs.c:287
 #, fuzzy
@@ -3692,21 +3871,22 @@ msgid "The combination '%s' is already used for \"%s\"."
 msgstr ""
 
 #: ../src/prefs.c:1600 ../src/vte.c:282 ../src/vte.c:752 ../src/vte.c:757
+#, fuzzy
 msgid "Terminal"
-msgstr ""
+msgstr "Терминал:"
 
 #. add manually GeanyWrapLabels because they can't be added with Glade
 #. page Tools
 #: ../src/prefs.c:1661
 msgid "Enter tool paths below. Tools you do not need can be left blank."
-msgstr ""
+msgstr "Багажийн замыг доор оруул. Багаж хоосон үлдээх хэрэггүй."
 
 #. page Templates
 #: ../src/prefs.c:1666
 msgid ""
 "Set the information to be used in templates. See the documentation for "
 "details."
-msgstr ""
+msgstr "Темплэйтүүдэд мэдээллийг заа. Дэлгэрэнгүйг бичиг баримтаас үзнэ үү."
 
 #. page Keybindings
 #: ../src/prefs.c:1671
@@ -3737,8 +3917,9 @@ msgid "<b>Page %d of %d</b>"
 msgstr "<b>Өөрчилсөн:</b>"
 
 #: ../src/printing.c:371
+#, fuzzy
 msgid "Document Setup"
-msgstr ""
+msgstr "Баримт"
 
 #: ../src/printing.c:406
 msgid "Print only the basename(without the path) of the printed file"
@@ -3762,7 +3943,7 @@ msgstr ""
 #: ../src/printing.c:833
 #, fuzzy, c-format
 msgid "Printing of %s failed (%s)."
-msgstr "Процесс-д алдаа гарлаа (%s)"
+msgstr "\"%s\"-ийг хэвлэхэд алдаа гарлаа (буцаасан код: %d)."
 
 #: ../src/printing.c:872
 msgid "Please set a print command in the preferences dialog first."
@@ -3775,26 +3956,31 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
+"\"%s\" файл дараах командаар хэвлэгдэнэ:\n"
+"\n"
+"%s"
 
 #: ../src/printing.c:896
-#, c-format
+#, fuzzy, c-format
 msgid "Printing of \"%s\" failed (return code: %s)."
-msgstr ""
+msgstr "\"%s\"-ийг хэвлэхэд алдаа гарлаа (буцаасан код: %d)."
 
 #: ../src/printing.c:902
 #, c-format
 msgid "File %s printed."
-msgstr ""
+msgstr "%s файл хэвлэгдлээ."
 
 #. "projects" is part of the default project base path so be careful when translating
 #. * please avoid special characters and spaces, look at the source for details or ask Frank
 #: ../src/project.c:97
+#, fuzzy
 msgid "projects"
-msgstr ""
+msgstr "Төсөл"
 
 #: ../src/project.c:116
+#, fuzzy
 msgid "New Project"
-msgstr ""
+msgstr "Төсөл"
 
 #: ../src/project.c:124
 msgid "C_reate"
@@ -3806,8 +3992,9 @@ msgid "Name:"
 msgstr ""
 
 #: ../src/project.c:147 ../src/project.c:418
+#, fuzzy
 msgid "Filename:"
-msgstr ""
+msgstr "Вьетнам"
 
 #: ../src/project.c:163 ../src/project.c:461
 msgid "Base path:"
@@ -3840,12 +4027,14 @@ msgid "Project file \"%s\" could not be loaded."
 msgstr "Процесс зогсож чадахгүй байсан (%s)."
 
 #: ../src/project.c:264 ../src/project.c:276
+#, fuzzy
 msgid "Open Project"
-msgstr ""
+msgstr "Төсөл"
 
 #: ../src/project.c:296
+#, fuzzy
 msgid "Project files"
-msgstr ""
+msgstr "Төсөл"
 
 #: ../src/project.c:346
 #, fuzzy, c-format
@@ -3853,8 +4042,9 @@ msgid "Project \"%s\" closed."
 msgstr "%s файл хаагдлаа."
 
 #: ../src/project.c:490
+#, fuzzy
 msgid "File patterns:"
-msgstr ""
+msgstr "_Ойрх Дорнод "
 
 #: ../src/project.c:498
 msgid ""
@@ -3863,9 +4053,9 @@ msgid ""
 msgstr ""
 
 #: ../src/project.c:576
-#, c-format
+#, fuzzy, c-format
 msgid "Project \"%s\" saved."
-msgstr ""
+msgstr "%s файл хадгалагдлаа."
 
 #: ../src/project.c:607
 #, fuzzy
@@ -3897,7 +4087,7 @@ msgstr ""
 #: ../src/project.c:698
 #, fuzzy, c-format
 msgid "The path \"%s\" does not exist."
-msgstr "The file \"%s\" is not valid %s."
+msgstr "\"%s\" файл %s-д зөв биш."
 
 #: ../src/project.c:707
 #, fuzzy, c-format
@@ -3956,30 +4146,34 @@ msgid "Match from s_tart of word"
 msgstr ""
 
 #: ../src/search.c:470
+#, fuzzy
 msgid "_Previous"
-msgstr ""
+msgstr "Хойшоо Хай"
 
 #: ../src/search.c:475
 #, fuzzy
 msgid "_Next"
-msgstr "_Дараачийн Алдаа"
+msgstr "Урагшаа Хай"
 
 #: ../src/search.c:479 ../src/search.c:640 ../src/search.c:881
+#, fuzzy
 msgid "_Search for:"
-msgstr ""
+msgstr "Хайх"
 
 #. Now add the multiple match options
 #: ../src/search.c:508
+#, fuzzy
 msgid "_Find All"
-msgstr ""
+msgstr "_Fold All"
 
 #: ../src/search.c:515
 msgid "_Mark"
 msgstr ""
 
 #: ../src/search.c:517
+#, fuzzy
 msgid "Mark all matches in the current document"
-msgstr ""
+msgstr "Баримтын бүх алдаа заагчийг арилгах"
 
 #: ../src/search.c:522 ../src/search.c:697
 msgid "In Sessi_on"
@@ -3988,30 +4182,33 @@ msgstr ""
 #: ../src/search.c:527 ../src/search.c:702
 #, fuzzy
 msgid "_In Document"
-msgstr "бүх барим"
+msgstr "Баримт"
 
 #. close window checkbox
 #: ../src/search.c:533 ../src/search.c:715
+#, fuzzy
 msgid "Close _dialog"
-msgstr ""
+msgstr "Бүх Файлыг Хаа"
 
 #: ../src/search.c:537 ../src/search.c:719
 msgid "Disable this option to keep the dialog open"
 msgstr ""
 
 #: ../src/search.c:634
+#, fuzzy
 msgid "Replace & Fi_nd"
-msgstr ""
+msgstr "Орлуулах"
 
 #: ../src/search.c:643
+#, fuzzy
 msgid "Replace wit_h:"
-msgstr ""
+msgstr "Орлуулах"
 
 #. Now add the multiple replace options
 #: ../src/search.c:690
 #, fuzzy
 msgid "Re_place All"
-msgstr "_Бүгдийг Үүсгэх\t"
+msgstr "Орлуулах"
 
 #: ../src/search.c:707
 #, fuzzy
@@ -4027,8 +4224,9 @@ msgid "all"
 msgstr ""
 
 #: ../src/search.c:828
+#, fuzzy
 msgid "project"
-msgstr ""
+msgstr "Төсөл"
 
 #: ../src/search.c:830
 msgid "custom"
@@ -4090,9 +4288,9 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: ../src/search.c:1324
-#, c-format
+#, fuzzy, c-format
 msgid "Replaced %u matches in %u documents."
-msgstr ""
+msgstr "Баримтын бүх догол мөрийг зайгаар орлуулах"
 
 #: ../src/search.c:1511
 msgid "Invalid directory for find in files."
@@ -4109,8 +4307,9 @@ msgstr ""
 "'%s'-ээс терминалыг олсонгүй (Тохиргоо цэснээс Терминалын замыг шалгана уу)"
 
 #: ../src/search.c:1627
+#, fuzzy
 msgid "Searching..."
-msgstr ""
+msgstr "Хайх"
 
 #: ../src/search.c:1638
 #, fuzzy, c-format
@@ -4123,8 +4322,9 @@ msgid "Could not open directory (%s)"
 msgstr "%s файлыг нээж чадахгүй байна (%s)"
 
 #: ../src/search.c:1781
+#, fuzzy
 msgid "Search failed."
-msgstr ""
+msgstr "Хайлтын талбарыг харуул"
 
 #: ../src/search.c:1801
 #, c-format
@@ -4135,7 +4335,7 @@ msgstr[1] ""
 
 #: ../src/search.c:1809
 msgid "No matches found."
-msgstr ""
+msgstr "Олдсонгүй."
 
 #: ../src/search.c:1841
 #, c-format
@@ -4198,8 +4398,9 @@ msgstr ""
 
 #: ../src/symbols.c:699 ../src/symbols.c:847 ../src/symbols.c:898
 #: ../src/symbols.c:910 ../src/symbols.c:925 ../src/symbols.c:937
+#, fuzzy
 msgid "Types"
-msgstr ""
+msgstr "Төрөл:"
 
 #: ../src/symbols.c:700
 msgid "Type constructors"
@@ -4279,8 +4480,9 @@ msgstr ""
 
 #: ../src/symbols.c:771 ../src/symbols.c:870 ../src/symbols.c:882
 #: ../src/symbols.c:895 ../src/symbols.c:921
+#, fuzzy
 msgid "Interfaces"
-msgstr ""
+msgstr "Интерфейс"
 
 #: ../src/symbols.c:772 ../src/symbols.c:793 ../src/symbols.c:814
 #: ../src/symbols.c:824 ../src/symbols.c:833 ../src/symbols.c:871
@@ -4338,8 +4540,9 @@ msgid "Imports"
 msgstr ""
 
 #: ../src/symbols.c:845
+#, fuzzy
 msgid "Entities"
-msgstr ""
+msgstr "нэргүй"
 
 #: ../src/symbols.c:846
 msgid "Architectures"
@@ -4474,8 +4677,9 @@ msgid "Sort by _Name"
 msgstr ""
 
 #: ../src/symbols.c:2161
+#, fuzzy
 msgid "Sort by _Appearance"
-msgstr ""
+msgstr "<b>Харагдац</b>"
 
 #: ../src/templates.c:75
 #, c-format
@@ -4485,28 +4689,29 @@ msgstr ""
 #. custom actions defined in toolbar_init(): "New", "Open", "SearchEntry", "GotoEntry", "Build"
 #: ../src/toolbar.c:54
 msgid "Save the current file"
-msgstr ""
+msgstr "Файлыг хадгал"
 
 #: ../src/toolbar.c:56
 msgid "Save all open files"
-msgstr ""
+msgstr "Бүх нээлттэй файлыг хадгал"
 
 #: ../src/toolbar.c:57
 msgid "Reload the current file from disk"
-msgstr ""
+msgstr "Дискээс файлыг дахин ачаалал"
 
 #: ../src/toolbar.c:58
 msgid "Close the current file"
-msgstr ""
+msgstr "Файлыг хаа"
 
 #: ../src/toolbar.c:59
+#, fuzzy
 msgid "Close all open files"
-msgstr ""
+msgstr "Бүх нээлттэй файлыг хаа"
 
 #: ../src/toolbar.c:60
 #, fuzzy
 msgid "Cut the current selection"
-msgstr "Файлыг хөрвүүл"
+msgstr "Идэвхжсэнийг Хөрвүүл"
 
 #: ../src/toolbar.c:61
 #, fuzzy
@@ -4520,52 +4725,56 @@ msgstr ""
 #: ../src/toolbar.c:63
 #, fuzzy
 msgid "Delete the current selection"
-msgstr "Файлыг хөрвүүл"
+msgstr "Идэвхжсэнийг Хөрвүүл"
 
 #: ../src/toolbar.c:64
 msgid "Undo the last modification"
-msgstr ""
+msgstr "Сүүлийн засварыг буцаа"
 
 #: ../src/toolbar.c:65
 msgid "Redo the last modification"
-msgstr ""
+msgstr "Сүүлийн засварыг сэргээх"
 
 #: ../src/toolbar.c:68
 msgid "Compile the current file"
-msgstr ""
+msgstr "Файлыг хөрвүүл"
 
 #: ../src/toolbar.c:69
 msgid "Run or view the current file"
 msgstr "Файлыг харах эсвэл ажиллуулах"
 
 #: ../src/toolbar.c:70
+#, fuzzy
 msgid ""
 "Open a color chooser dialog, to interactively pick colors from a palette"
-msgstr ""
+msgstr "Өнгө санал болгох өнгө сонгогчийн асуултыг нээ."
 
 #: ../src/toolbar.c:71
 msgid "Zoom in the text"
-msgstr ""
+msgstr "Текст-рүү ойртох"
 
 #: ../src/toolbar.c:72
 msgid "Zoom out the text"
-msgstr ""
+msgstr "Текстээс холдох"
 
 #: ../src/toolbar.c:73
+#, fuzzy
 msgid "Decrease indentation"
-msgstr ""
+msgstr "Догол мөрийг Багасгах"
 
 #: ../src/toolbar.c:74
+#, fuzzy
 msgid "Increase indentation"
-msgstr ""
+msgstr "Догол мөрийг Өсгөх"
 
 #: ../src/toolbar.c:75 ../src/toolbar.c:380
 msgid "Find the entered text in the current file"
-msgstr ""
+msgstr "Файлаас өгөгдсөн текстийг хай"
 
 #: ../src/toolbar.c:76 ../src/toolbar.c:390
+#, fuzzy
 msgid "Jump to the entered line number"
-msgstr ""
+msgstr "Оруулсан мөрлүү оч."
 
 #: ../src/toolbar.c:77
 msgid "Show the preferences dialog"
@@ -4573,7 +4782,7 @@ msgstr ""
 
 #: ../src/toolbar.c:78
 msgid "Quit Geany"
-msgstr ""
+msgstr "Жиени-г Гаргах"
 
 #: ../src/toolbar.c:79
 #, fuzzy
@@ -4581,25 +4790,27 @@ msgid "Print document"
 msgstr "бүх барим"
 
 #: ../src/toolbar.c:80
+#, fuzzy
 msgid "Replace text in the current document"
-msgstr ""
+msgstr "Баримтын бүх алдаа заагчийг арилгах"
 
 #: ../src/toolbar.c:356
 msgid "Create a new file"
-msgstr ""
+msgstr "Шинээр файл үүсгэх"
 
 #: ../src/toolbar.c:357
+#, fuzzy
 msgid "Create a new file from a template"
-msgstr ""
+msgstr "Шинээр файл үүсгэх"
 
 #: ../src/toolbar.c:364
 msgid "Open an existing file"
-msgstr ""
+msgstr "Үүссэн файлыг нээх"
 
 #: ../src/toolbar.c:365
 #, fuzzy
 msgid "Open a recent file"
-msgstr "Файлыг хөрвүүл"
+msgstr "Үүссэн файлыг нээх"
 
 #: ../src/toolbar.c:373
 #, fuzzy
@@ -4638,8 +4849,9 @@ msgid "Invalid command: %s"
 msgstr " командууд"
 
 #: ../src/tools.c:108
+#, fuzzy
 msgid "Command not found"
-msgstr ""
+msgstr "\"%s\" олдсонгүй."
 
 #: ../src/tools.c:254
 #, c-format
@@ -4709,25 +4921,29 @@ msgid "Characters:"
 msgstr "Тэмдэгт:"
 
 #: ../src/sidebar.c:175
+#, fuzzy
 msgid "No tags found"
-msgstr ""
+msgstr "Олдсонгүй."
 
 #: ../src/sidebar.c:588
+#, fuzzy
 msgid "Show S_ymbol List"
-msgstr ""
+msgstr "Тэмдэгтийн жагсаалтыг харуул"
 
 #: ../src/sidebar.c:596
 #, fuzzy
 msgid "Show _Document List"
-msgstr "бүх барим"
+msgstr "Баримт"
 
 #: ../src/sidebar.c:604 ../plugins/filebrowser.c:658
+#, fuzzy
 msgid "H_ide Sidebar"
-msgstr ""
+msgstr "Хажуу самбар:"
 
 #: ../src/sidebar.c:709 ../plugins/filebrowser.c:629
+#, fuzzy
 msgid "_Find in Files"
-msgstr ""
+msgstr "Файлуудаас Хай"
 
 #: ../src/sidebar.c:719
 msgid "Show _Paths"
@@ -4807,26 +5023,29 @@ msgid "_Set Custom Date Format"
 msgstr "Огнооны Хэлбэрүүдийг Хэрэглэх"
 
 #: ../src/ui_utils.c:1799
+#, fuzzy
 msgid "Select Folder"
-msgstr ""
+msgstr "Бүгдийг Сонгох"
 
 #: ../src/ui_utils.c:1799
 #, fuzzy
 msgid "Select File"
-msgstr "Файлыг Хадгал"
+msgstr "Сонгосон Файлыг нээх"
 
 #: ../src/ui_utils.c:1958
 #, fuzzy
 msgid "Save All"
-msgstr "_Бүгдийг Үүсгэх\t"
+msgstr "Бүх Файлыг Хадгал"
 
 #: ../src/ui_utils.c:1959
+#, fuzzy
 msgid "Close All"
-msgstr ""
+msgstr "Бүх Файлыг Хаа"
 
 #: ../src/utils.c:87
+#, fuzzy
 msgid "Select Browser"
-msgstr ""
+msgstr "Хөтөч:"
 
 #: ../src/utils.c:88
 msgid ""
@@ -4836,23 +5055,24 @@ msgstr ""
 
 #: ../src/utils.c:366
 msgid "Win (CRLF)"
-msgstr ""
+msgstr "Виндөвс (CRLF)"
 
 #: ../src/utils.c:367
 msgid "Mac (CR)"
-msgstr ""
+msgstr "Мак (CR)"
 
 #: ../src/utils.c:368
 msgid "Unix (LF)"
-msgstr ""
+msgstr "Юникс (LF)"
 
 #: ../src/vte.c:545
 msgid "_Set Path From Document"
 msgstr ""
 
 #: ../src/vte.c:550
+#, fuzzy
 msgid "_Restart Terminal"
-msgstr ""
+msgstr "Терминал:"
 
 #: ../src/vte.c:573
 msgid "_Input Methods"
@@ -4869,24 +5089,28 @@ msgid "Font:"
 msgstr ""
 
 #: ../src/vte.c:775
+#, fuzzy
 msgid "Sets the font for the terminal widget"
-msgstr ""
+msgstr "Тэмдэгтийн жагсаалтын фонтыг заа"
 
 #: ../src/vte.c:777
 msgid "Foreground color:"
 msgstr ""
 
 #: ../src/vte.c:783
+#, fuzzy
 msgid "Background color:"
-msgstr ""
+msgstr "Дэвсгэр"
 
 #: ../src/vte.c:793
+#, fuzzy
 msgid "Sets the foreground color of the text in the terminal widget"
-msgstr ""
+msgstr "Sets the color of the long line marker"
 
 #: ../src/vte.c:800
+#, fuzzy
 msgid "Sets the background color of the text in the terminal widget"
-msgstr ""
+msgstr "Sets the color of the long line marker"
 
 #: ../src/vte.c:803
 msgid "Scrollback lines:"
@@ -4929,8 +5153,9 @@ msgid "Cursor blinks"
 msgstr ""
 
 #: ../src/vte.c:853
+#, fuzzy
 msgid "Whether to blink the cursor"
-msgstr ""
+msgstr "Whether to enable folding the code"
 
 #: ../src/vte.c:856
 msgid "Override Geany keybindings"
@@ -4955,7 +5180,7 @@ msgstr ""
 #: ../src/vte.c:865 ../plugins/filebrowser.c:1261
 #, fuzzy
 msgid "Follow the path of the current file"
-msgstr "Файлыг хөрвүүлээд харах"
+msgstr "Файлыг хаа"
 
 #: ../src/vte.c:866
 msgid "Whether to execute \"cd $path\" when you switch between opened files"
@@ -5025,13 +5250,14 @@ msgid "Class"
 msgstr ""
 
 #: ../plugins/classbuilder.c:485
+#, fuzzy
 msgid "Header file:"
-msgstr ""
+msgstr "Үүсгэхфайл"
 
 #: ../plugins/classbuilder.c:487
 #, fuzzy
 msgid "Source file:"
-msgstr "Файлын төрлийг заа:"
+msgstr "Си код"
 
 #: ../plugins/classbuilder.c:489
 msgid "Inheritance"
@@ -5042,8 +5268,9 @@ msgid "Base class:"
 msgstr ""
 
 #: ../plugins/classbuilder.c:499
+#, fuzzy
 msgid "Base source:"
-msgstr ""
+msgstr "LaTeX код"
 
 #: ../plugins/classbuilder.c:504
 msgid "Base header:"
@@ -5054,8 +5281,9 @@ msgid "Global"
 msgstr ""
 
 #: ../plugins/classbuilder.c:531
+#, fuzzy
 msgid "Base GType:"
-msgstr ""
+msgstr "Төрөл:"
 
 #: ../plugins/classbuilder.c:536
 msgid "Implements:"
@@ -5082,8 +5310,9 @@ msgid "Is singleton"
 msgstr ""
 
 #: ../plugins/classbuilder.c:580
+#, fuzzy
 msgid "Constructor type:"
-msgstr ""
+msgstr "Гүйцээлтийг байгуул"
 
 #: ../plugins/classbuilder.c:1092
 msgid "Create Cla_ss"
@@ -5159,11 +5388,12 @@ msgstr ""
 #: ../plugins/htmlchars.c:491
 #, fuzzy
 msgid "Special Characters"
-msgstr "Тэмдэгт:"
+msgstr "Тусгай HTML Тэмдэгт Оруул"
 
 #: ../plugins/htmlchars.c:493
+#, fuzzy
 msgid "_Insert"
-msgstr ""
+msgstr "Огноо Оруулах"
 
 #: ../plugins/htmlchars.c:502
 msgid ""
@@ -5182,28 +5412,33 @@ msgstr ""
 
 #: ../plugins/htmlchars.c:740
 msgid "_Insert Special HTML Characters"
-msgstr ""
+msgstr "Тусгай HTML Тэмдэгт Оруул"
 
 #. Add menuitem for html replacement functions
 #: ../plugins/htmlchars.c:755
+#, fuzzy
 msgid "_HTML Replacement"
-msgstr ""
+msgstr "Орлуулах"
 
 #: ../plugins/htmlchars.c:762
+#, fuzzy
 msgid "_Auto-replace Special Characters"
-msgstr ""
+msgstr "Тусгай HTML Тэмдэгт Оруул"
 
 #: ../plugins/htmlchars.c:771
+#, fuzzy
 msgid "_Replace Characters in Selection"
-msgstr ""
+msgstr "Давхардсан Мөр эсвэл Идэвхжилт"
 
 #: ../plugins/htmlchars.c:786
+#, fuzzy
 msgid "Insert Special HTML Characters"
-msgstr ""
+msgstr "Тусгай HTML Тэмдэгт Оруул"
 
 #: ../plugins/htmlchars.c:789
+#, fuzzy
 msgid "Replace special characters"
-msgstr ""
+msgstr "Тусгай HTML Тэмдэгт Оруул"
 
 #: ../plugins/htmlchars.c:792
 msgid "Toggle plugin status"
@@ -5224,8 +5459,9 @@ msgid "Export File"
 msgstr "Файл Нээх"
 
 #: ../plugins/export.c:189
+#, fuzzy
 msgid "_Insert line numbers"
-msgstr ""
+msgstr "Олон мөрийн Тайлбар Оруулах"
 
 #: ../plugins/export.c:191
 msgid "Insert line numbers before each line in the exported document"
@@ -5270,8 +5506,9 @@ msgid "As _LaTeX"
 msgstr ""
 
 #: ../plugins/filebrowser.c:45
+#, fuzzy
 msgid "File Browser"
-msgstr ""
+msgstr "Хөтөч:"
 
 #: ../plugins/filebrowser.c:45
 msgid "Adds a file browser tab to the sidebar."
@@ -5331,8 +5568,9 @@ msgid "Focus Path Entry"
 msgstr ""
 
 #: ../plugins/filebrowser.c:1218
+#, fuzzy
 msgid "External open command:"
-msgstr ""
+msgstr "Хэвлэх команд:"
 
 #: ../plugins/filebrowser.c:1226
 #, c-format
@@ -5425,20 +5663,23 @@ msgid "_Print status message if files have been automatically saved"
 msgstr ""
 
 #: ../plugins/saveactions.c:583
+#, fuzzy
 msgid "Save only current open _file"
-msgstr ""
+msgstr "Файлыг хадгал"
 
 #: ../plugins/saveactions.c:590
+#, fuzzy
 msgid "Sa_ve all open files"
-msgstr ""
+msgstr "Бүх нээлттэй файлыг хадгал"
 
 #: ../plugins/saveactions.c:610
 msgid "Instant Save"
 msgstr ""
 
 #: ../plugins/saveactions.c:620
+#, fuzzy
 msgid "_Filetype to use for newly opened files:"
-msgstr ""
+msgstr "Шинээр үүссэн файлын энкодчлолыг заах."
 
 #: ../plugins/saveactions.c:651
 msgid "Backup Copy"
@@ -5467,7 +5708,7 @@ msgstr ""
 #: ../plugins/splitwindow.c:273
 #, fuzzy
 msgid "Show the current document"
-msgstr "бүх барим"
+msgstr "Файлыг хадгал"
 
 #: ../plugins/splitwindow.c:290 ../plugins/splitwindow.c:424
 #: ../plugins/splitwindow.c:439
@@ -5511,6 +5752,9 @@ msgstr ""
 #~ msgstr ""
 #~ "%s-ийг ажиллуулахад алдаа гарлаа (боловсруулагдсан эсэхийг шалгана уу)"
 
+#~ msgid "Compiles the current file"
+#~ msgstr "Файлыг хөрвүүл"
+
 #~ msgid "Builds the current file (generate an executable file)"
 #~ msgstr "Файлыг боловсруул (ажиллуулах файлыг үүсгэ)"
 
@@ -5534,6 +5778,9 @@ msgstr ""
 
 #~ msgid "View DVI File"
 #~ msgstr "DVI файлыг харах"
+
+#~ msgid "Compiles and view the current file"
+#~ msgstr "Файлыг хөрвүүлээд харах"
 
 #~ msgid "View PDF File"
 #~ msgstr "PDF файлыг харах"
@@ -5575,8 +5822,224 @@ msgstr ""
 #~ msgid "Set the commands for building and running programs."
 #~ msgstr "Програмыг боловсруулах болон ажиллуулах командуудыг заа."
 
+#~ msgid "Compile:"
+#~ msgstr "Хөрвүүл:"
+
 #~ msgid "Build:"
 #~ msgstr "Боловсруул:"
 
 #~ msgid "Invalid filename"
-#~ msgstr "Invalid filename"
+#~ msgstr "Буруу файлын нэр"
+
+#~ msgid "C++ source file"
+#~ msgstr "С++ код"
+
+#~ msgid "D source file"
+#~ msgstr "Дэ код"
+
+#~ msgid "Java source file"
+#~ msgstr "Жава код"
+
+#~ msgid "Pascal source file"
+#~ msgstr "Паскал код"
+
+#~ msgid "Assembler source file"
+#~ msgstr "Ассемблер код"
+
+#~ msgid "Fortran source file (F77)"
+#~ msgstr "Фортран код (F77)"
+
+#~ msgid "(O)Caml source file"
+#~ msgstr "(O)Camal код"
+
+#~ msgid "Perl source file"
+#~ msgstr "Перл код"
+
+#~ msgid "PHP source file"
+#~ msgstr "PHP код"
+
+#~ msgid "Javascript source file"
+#~ msgstr "Жаваскрипт код"
+
+#~ msgid "Python source file"
+#~ msgstr "Пайтон код"
+
+#~ msgid "Ruby source file"
+#~ msgstr "Руби код"
+
+#~ msgid "Tcl source file"
+#~ msgstr "Tcl код"
+
+#~ msgid "Lua source file"
+#~ msgstr "Луа код"
+
+#~ msgid "Ferite source file"
+#~ msgstr "Ferite код"
+
+#~ msgid "XML source file"
+#~ msgstr "XML код"
+
+#~ msgid "Docbook source file"
+#~ msgstr "Докбүүк код"
+
+#~ msgid "HTML source file"
+#~ msgstr "HTML код"
+
+#~ msgid "SQL Dump file"
+#~ msgstr "SQL файл"
+
+#~ msgid "O-Matrix source file"
+#~ msgstr "О-Матрикс код"
+
+#~ msgid "VHDL source file"
+#~ msgstr "VHDL код"
+
+#~ msgid "Saves all open files"
+#~ msgstr "Бүх нээлттэй файлыг хадгал"
+
+#~ msgid "Convert Selection to _Upper-case"
+#~ msgstr "Идэвхжсэнийг том үсэг болгох"
+
+#~ msgid "Inserts a typical ChangeLog entry in the current file"
+#~ msgstr "Файлд ChangeLog оруулах"
+
+#~ msgid "Inserts a file header at the beginning of the file"
+#~ msgstr "Файлын эхэнд толгой файл оруулах"
+
+#~ msgid "Inserts a description before the current function"
+#~ msgstr "Файлын өмнө тайлбар оруулах"
+
+#~ msgid "Inserts a multiline comment"
+#~ msgstr "Олон мөрийн тайлбар оруулах"
+
+#~ msgid "Inserts a GPL notice (should be done at the beginning of the file)"
+#~ msgstr "GPL-ийг оруулах (файлын эхэнд байна)"
+
+#~ msgid ""
+#~ "Inserts a BSD licence notice (should be done at the beginning of the file)"
+#~ msgstr "BSD лиценз оруулах (файлын эхэнд байна)"
+
+#~ msgid "Change the default font"
+#~ msgstr "Заагдсан фонтыг өөрчлөх"
+
+#~ msgid "Toggle the window with status and compiler messages on and off"
+#~ msgstr "Хөрвүүлэгчийн мэдээ(тэй/гүй) цонхыг төлөвийг заах"
+
+#~ msgid "Toggle the toolbar on and off"
+#~ msgstr "Багаж самбар(тай/үгүй)-г заа"
+
+#~ msgid "_Use Auto-indentation"
+#~ msgstr "Автомат догол мөрийг хэрэглэ"
+
+#~ msgid "Treat this file as read-only. No changes can be made."
+#~ msgstr "Файлд зөвхөн-харахаар хандсан. Өөрчлөлт орохгүй."
+
+#~ msgid "Folds all contractible code blocks"
+#~ msgstr "Folds all contractible code blocks"
+
+#~ msgid "Unfolds all contracted code blocks"
+#~ msgstr "Unfolds all contracted code blocks"
+
+#~ msgid ""
+#~ "Counts the words and characters in the current selection or the whole "
+#~ "document"
+#~ msgstr "Идэвжүүлснээс эсвэл баримтаас үг болон тэмдэгтийг тоол"
+
+#~ msgid "Shows a list of all keyboard shortcuts for Geany."
+#~ msgstr "Жиенигийн бүх товчлуурын хослолыг харуул."
+
+#~ msgid "Enter a line number and jump to it."
+#~ msgstr "Мөрийн дугаарыг оруулад оч."
+
+#~ msgid "Open files"
+#~ msgstr "Файлууд нээх"
+
+#~ msgid "Insert \"include <...>\""
+#~ msgstr "\"include <...>\" оруул"
+
+#~ msgid "Insert Comments"
+#~ msgstr "Тайбар оруул"
+
+#~ msgid "Insert BSD license Notice"
+#~ msgstr "BSD лиценз оруул"
+
+#~ msgid "Goto to the entered line"
+#~ msgstr "Оруулсан мөрлүү оч"
+
+#~ msgid "<b>Behaviour</b>"
+#~ msgstr "<b>Төлөв</b>"
+
+#~ msgid "Show file operation buttons"
+#~ msgstr "Файл дээр үйлдэл хийх товчуудыг харуул"
+
+#~ msgid "Display the New, Open, Close, Save and Reload buttons in the toolbar"
+#~ msgstr ""
+#~ "Багаж самбар дээр Шинээр, Нээх, Хаах, Хадгал, Дахин ачааллах товчийг "
+#~ "гаргах"
+
+#~ msgid "Show Compile and Run"
+#~ msgstr "Хөрвүүлэх, Ажиллуулах-ыг харуулах"
+
+#~ msgid "Display the Compile and Run buttons in the toolbar"
+#~ msgstr "Багаж самбар дээр Хөрвүүл, Ажиллуулах товчийг гаргах"
+
+#~ msgid "Display the Colour Chooser button in the toolbar"
+#~ msgstr "Багаж самбар дээр Өнгө сонгох товчийг гаргах"
+
+#~ msgid "Show Zoom In and Zoom Out"
+#~ msgstr "Ойртуулалт, Холтгол харуул"
+
+#~ msgid "Display the Zoom In and Zoom Out buttons in the toolbar"
+#~ msgstr "Багаж самбар дээр Ортуулалт Холтголыг гаргах"
+
+#~ msgid "Show Redo and Undo buttons"
+#~ msgstr "Буцаах, Сэргээх товчийг харуул"
+
+#~ msgid "Display the Redo and Undo buttons in the toolbar"
+#~ msgstr "Багаж самбар дээр Буцаах, Сэргээх товчийг гаргах"
+
+#~ msgid "Display the search field and button in the toolbar"
+#~ msgstr "Багаж самбар дээр хайлтын талбарыг гаргах"
+
+#~ msgid "Show Goto line field"
+#~ msgstr "Мөрлүү үсрэх талбарыг харуул"
+
+#~ msgid "Display the line number field and button in the toolbar"
+#~ msgstr "Багаж самбар дээр мөр дугаарын талбар болон товчийг гаргах"
+
+#~ msgid "Show Quit button"
+#~ msgstr "Гарах товчийг харуулах"
+
+#~ msgid "Display the quit button in the toolbar"
+#~ msgstr "Багаж самбар дээр гарах товчийг гаргах"
+
+#~ msgid "<b>Items</b>"
+#~ msgstr "<b>Items</b>"
+
+#~ msgid "Icon size:"
+#~ msgstr "Icon size:"
+
+#~ msgid "Long line marker color:"
+#~ msgstr "Long line marker color:"
+
+#~ msgid "Add the same indentation as the previous line after pressing enter"
+#~ msgstr "Enter дарсны дараа өмнөх мөр дээр ижил тодорхойлогч нэм"
+
+#~ msgid "Unfold all children of a fold point when unfolding it."
+#~ msgstr "Unfold all children of a fold point when unfolding it."
+
+#~ msgid ""
+#~ "Whenever some whitespace is inserted by Geany it will use tabulators when "
+#~ "enabled otherwise Geany will use just spaces."
+#~ msgstr ""
+#~ "Whenever some whitespace is inserted by Geany it will use tabulators when "
+#~ "enabled otherwise Geany will use just spaces."
+
+#~ msgid "Automatic completion of often used constructs like if and for"
+#~ msgstr "if, for мэтийн бүтцүүд дээр гүйцээлтийг хийдэг"
+
+#~ msgid "Automatic completion of open XML tags (includes HTML tags)"
+#~ msgstr "XML таг (HTML-ын таг орсон)-ийг нээх гүйцээлт"
+
+#~ msgid "Path and options for the make tool"
+#~ msgstr "Үүсгэх хэрэгслийн зам болон тохиргоо"
