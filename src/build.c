@@ -2174,8 +2174,9 @@ static gboolean read_regex(GtkWidget *regexentry, gchar **src, gchar **dst)
 	if (((src == NULL			/* originally there was no regex */
 		|| *src == NULL)		/* or it was NULL*/
 		&& NZV(reg))			/* and something was typed */
-		|| (src != NULL				/* originally there was a regex*/
-		&& strcmp(*src, reg) != 0))	/* and it has been changed */
+		|| (src != NULL			/* originally there was a regex*/
+		&& (*src == NULL 		/* and either it was NULL */
+		|| strcmp(*src, reg) != 0)))	/* or it has been changed */
 	{
 		if (dst != NULL)
 		{
