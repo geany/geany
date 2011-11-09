@@ -1,7 +1,7 @@
 # For complete documentation of this file, please see Geany's main documentation
-[styling=XML]
+[styling=HTML]
 
-[keywords=XML]
+[keywords=HTML]
 
 [lexer_properties]
 phpscript.mode=1
