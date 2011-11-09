@@ -1153,90 +1153,6 @@ static void styleset_xml(ScintillaObject *sci, guint ft_id)
 }
 
 
-static void styleset_docbook_init(guint ft_id, GKeyFile *config, GKeyFile *config_home)
-{
-	new_styleset(ft_id, 29);
-	get_keyfile_style(config, config_home, "default", &style_sets[ft_id].styling[0]);
-	get_keyfile_style(config, config_home, "tag", &style_sets[ft_id].styling[1]);
-	get_keyfile_style(config, config_home, "tagunknown", &style_sets[ft_id].styling[2]);
-	get_keyfile_style(config, config_home, "attribute", &style_sets[ft_id].styling[3]);
-	get_keyfile_style(config, config_home, "attributeunknown", &style_sets[ft_id].styling[4]);
-	get_keyfile_style(config, config_home, "number", &style_sets[ft_id].styling[5]);
-	get_keyfile_style(config, config_home, "doublestring", &style_sets[ft_id].styling[6]);
-	get_keyfile_style(config, config_home, "singlestring", &style_sets[ft_id].styling[7]);
-	get_keyfile_style(config, config_home, "other", &style_sets[ft_id].styling[8]);
-	get_keyfile_style(config, config_home, "comment", &style_sets[ft_id].styling[9]);
-	get_keyfile_style(config, config_home, "entity", &style_sets[ft_id].styling[10]);
-	get_keyfile_style(config, config_home, "tagend", &style_sets[ft_id].styling[11]);
-	get_keyfile_style(config, config_home, "xmlstart", &style_sets[ft_id].styling[12]);
-	get_keyfile_style(config, config_home, "xmlend", &style_sets[ft_id].styling[13]);
-	get_keyfile_style(config, config_home, "cdata", &style_sets[ft_id].styling[14]);
-	get_keyfile_style(config, config_home, "question", &style_sets[ft_id].styling[15]);
-	get_keyfile_style(config, config_home, "value", &style_sets[ft_id].styling[16]);
-	get_keyfile_style(config, config_home, "xccomment", &style_sets[ft_id].styling[17]);
-	get_keyfile_style(config, config_home, "sgml_default", &style_sets[ft_id].styling[18]);
-	get_keyfile_style(config, config_home, "sgml_comment", &style_sets[ft_id].styling[19]);
-	get_keyfile_style(config, config_home, "sgml_special", &style_sets[ft_id].styling[20]);
-	get_keyfile_style(config, config_home, "sgml_command", &style_sets[ft_id].styling[21]);
-	get_keyfile_style(config, config_home, "sgml_doublestring", &style_sets[ft_id].styling[22]);
-	get_keyfile_style(config, config_home, "sgml_simplestring", &style_sets[ft_id].styling[23]);
-	get_keyfile_style(config, config_home, "sgml_1st_param", &style_sets[ft_id].styling[24]);
-	get_keyfile_style(config, config_home, "sgml_entity", &style_sets[ft_id].styling[25]);
-	get_keyfile_style(config, config_home, "sgml_block_default", &style_sets[ft_id].styling[26]);
-	get_keyfile_style(config, config_home, "sgml_1st_param_comment", &style_sets[ft_id].styling[27]);
-	get_keyfile_style(config, config_home, "sgml_error", &style_sets[ft_id].styling[28]);
-
-	style_sets[ft_id].keywords = g_new(gchar*, 3);
-	get_keyfile_keywords(config, config_home, "elements", ft_id, 0);
-	get_keyfile_keywords(config, config_home, "dtd", ft_id, 1);
-	style_sets[ft_id].keywords[2] = NULL;
-}
-
-
-static void styleset_docbook(ScintillaObject *sci, guint ft_id)
-{
-	apply_filetype_properties(sci, SCLEX_XML, ft_id);
-
-	sci_set_keywords(sci, 0, style_sets[ft_id].keywords[0]);
-	sci_set_keywords(sci, 5, style_sets[ft_id].keywords[1]);
-
-	/* Unknown tags and attributes are highlighed in red.
-	 * If a tag is actually OK, it should be added in lower case to the htmlKeyWords string. */
-
-	set_sci_style(sci, STYLE_DEFAULT, ft_id, 0);
-	set_sci_style(sci, SCE_H_DEFAULT, ft_id, 0);
-	set_sci_style(sci, SCE_H_TAG, ft_id, 1);
-	set_sci_style(sci, SCE_H_TAGUNKNOWN, ft_id, 2);
-	set_sci_style(sci, SCE_H_ATTRIBUTE, ft_id, 3);
-	set_sci_style(sci, SCE_H_ATTRIBUTEUNKNOWN, ft_id, 4);
-	set_sci_style(sci, SCE_H_NUMBER, ft_id, 5);
-	set_sci_style(sci, SCE_H_DOUBLESTRING, ft_id, 6);
-	set_sci_style(sci, SCE_H_SINGLESTRING, ft_id, 7);
-	set_sci_style(sci, SCE_H_OTHER, ft_id, 8);
-	set_sci_style(sci, SCE_H_COMMENT, ft_id, 9);
-	set_sci_style(sci, SCE_H_ENTITY, ft_id, 10);
-	set_sci_style(sci, SCE_H_TAGEND, ft_id, 11);
-	SSM(sci, SCI_STYLESETEOLFILLED, SCE_H_XMLSTART, 1);
-	set_sci_style(sci, SCE_H_XMLSTART, ft_id, 12);
-	set_sci_style(sci, SCE_H_XMLEND, ft_id, 13);
-	set_sci_style(sci, SCE_H_CDATA, ft_id, 14);
-	set_sci_style(sci, SCE_H_QUESTION, ft_id, 15);
-	set_sci_style(sci, SCE_H_VALUE, ft_id, 16);
-	set_sci_style(sci, SCE_H_XCCOMMENT, ft_id, 17);
-	set_sci_style(sci, SCE_H_SGML_DEFAULT, ft_id, 18);
-	set_sci_style(sci, SCE_H_DEFAULT, ft_id, 19);
-	set_sci_style(sci, SCE_H_SGML_SPECIAL, ft_id, 20);
-	set_sci_style(sci, SCE_H_SGML_COMMAND, ft_id, 21);
-	set_sci_style(sci, SCE_H_SGML_DOUBLESTRING, ft_id, 22);
-	set_sci_style(sci, SCE_H_SGML_SIMPLESTRING, ft_id, 23);
-	set_sci_style(sci, SCE_H_SGML_1ST_PARAM, ft_id, 24);
-	set_sci_style(sci, SCE_H_SGML_ENTITY, ft_id, 25);
-	set_sci_style(sci, SCE_H_SGML_BLOCK_DEFAULT, ft_id, 26);
-	set_sci_style(sci, SCE_H_SGML_1ST_PARAM_COMMENT, ft_id, 27);
-	set_sci_style(sci, SCE_H_SGML_ERROR, ft_id, 28);
-}
-
-
 static void styleset_default(ScintillaObject *sci, guint ft_id)
 {
 	SSM(sci, SCI_SETLEXER, SCLEX_NULL, 0);
@@ -1347,7 +1263,7 @@ void highlighting_init_styles(guint filetype_idx, GKeyFile *config, GKeyFile *co
 		init_styleset_case_auto(DIFF);
 		init_styleset_case_auto(LISP);
 		init_styleset_case_auto(ERLANG);
-		init_styleset_case(GEANY_FILETYPES_DOCBOOK,	styleset_docbook_init);
+		init_styleset_case_auto(DOCBOOK);
 		init_styleset_case_auto(FERITE);
 		init_styleset_case_auto(F77);
 		init_styleset_case_auto(FORTH);
@@ -1425,7 +1341,7 @@ void highlighting_set_styles(ScintillaObject *sci, GeanyFiletype *ft)
 		styleset_case_auto(DIFF);
 		styleset_case_auto(LISP);
 		styleset_case_auto(ERLANG);
-		styleset_case(GEANY_FILETYPES_DOCBOOK,	styleset_docbook);
+		styleset_case_auto(DOCBOOK);
 		styleset_case_auto(FERITE);
 		styleset_case_auto(F77);
 		styleset_case_auto(FORTH);

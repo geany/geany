@@ -423,6 +423,47 @@ static const HLStyle highlighting_styles_DIFF[] =
 #define highlighting_properties_DIFF	EMPTY_PROPERTIES
 
 
+#define highlighting_lexer_DOCBOOK			SCLEX_XML
+static const HLStyle highlighting_styles_DOCBOOK[] =
+{
+	{ SCE_H_DEFAULT,				"default"						 },
+	{ SCE_H_TAG,					"tag"							 },
+	{ SCE_H_TAGUNKNOWN,				"tagunknown"					 },
+	{ SCE_H_ATTRIBUTE,				"attribute"						 },
+	{ SCE_H_ATTRIBUTEUNKNOWN,		"attributeunknown"				 },
+	{ SCE_H_NUMBER,					"number"						 },
+	{ SCE_H_DOUBLESTRING,			"doublestring"					 },
+	{ SCE_H_SINGLESTRING,			"singlestring"					 },
+	{ SCE_H_OTHER,					"other"							 },
+	{ SCE_H_COMMENT,				"comment"						 },
+	{ SCE_H_ENTITY,					"entity"						 },
+	{ SCE_H_TAGEND,					"tagend"						 },
+	{ SCE_H_XMLSTART,				"xmlstart",					TRUE },
+	{ SCE_H_XMLEND,					"xmlend"						 },
+	{ SCE_H_CDATA,					"cdata"							 },
+	{ SCE_H_QUESTION,				"question"						 },
+	{ SCE_H_VALUE,					"value"							 },
+	{ SCE_H_XCCOMMENT,				"xccomment"						 },
+	{ SCE_H_SGML_DEFAULT,			"sgml_default"					 },
+	{ SCE_H_DEFAULT,				"sgml_comment"					 },
+	{ SCE_H_SGML_SPECIAL,			"sgml_special"					 },
+	{ SCE_H_SGML_COMMAND,			"sgml_command"					 },
+	{ SCE_H_SGML_DOUBLESTRING,		"sgml_doublestring"				 },
+	{ SCE_H_SGML_SIMPLESTRING,		"sgml_simplestring"				 },
+	{ SCE_H_SGML_1ST_PARAM,			"sgml_1st_param"				 },
+	{ SCE_H_SGML_ENTITY,			"sgml_entity"					 },
+	{ SCE_H_SGML_BLOCK_DEFAULT,		"sgml_block_default"			 },
+	{ SCE_H_SGML_1ST_PARAM_COMMENT,	"sgml_1st_param_comment"		 },
+	{ SCE_H_SGML_ERROR,				"sgml_error"					 }
+};
+static const HLKeyword highlighting_keywords_DOCBOOK[] =
+{
+	{ 0, "elements" },
+	{ 5, "dtd" }
+};
+#define highlighting_properties_DOCBOOK		EMPTY_PROPERTIES
+
+
 /* Erlang */
 #define highlighting_lexer_ERLANG		SCLEX_ERLANG
 static const HLStyle highlighting_styles_ERLANG[] =
