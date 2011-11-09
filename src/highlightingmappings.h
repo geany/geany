@@ -445,7 +445,7 @@ static const HLStyle highlighting_styles_DOCBOOK[] =
 	{ SCE_H_VALUE,					"value"							 },
 	{ SCE_H_XCCOMMENT,				"xccomment"						 },
 	{ SCE_H_SGML_DEFAULT,			"sgml_default"					 },
-	{ SCE_H_DEFAULT,				"sgml_comment"					 },
+	{ SCE_H_SGML_COMMENT,			"sgml_comment"					 },
 	{ SCE_H_SGML_SPECIAL,			"sgml_special"					 },
 	{ SCE_H_SGML_COMMAND,			"sgml_command"					 },
 	{ SCE_H_SGML_DOUBLESTRING,		"sgml_doublestring"				 },
