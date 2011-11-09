@@ -54,9 +54,6 @@
 static gchar *whitespace_chars;
 
 
-static void styleset_markup(ScintillaObject *sci, gboolean set_keywords);
-
-
 typedef struct
 {
 	gsize			count;		/* number of styles */
@@ -879,279 +876,6 @@ static void styleset_from_mapping(ScintillaObject *sci, guint ft_id, guint lexer
 			highlighting_properties_##lang_name ? G_N_ELEMENTS(highlighting_properties_##lang_name) : 0)
 
 
-static void styleset_php_init(guint ft_id, GKeyFile *config, GKeyFile *config_home)
-{
-	style_sets[ft_id].styling = NULL;
-	style_sets[ft_id].keywords = NULL;
-}
-
-
-static void styleset_php(ScintillaObject *sci, guint ft_id)
-{
-	apply_filetype_properties(sci, SCLEX_HTML, ft_id);
-
-	/* use the same colouring as for XML */
-	styleset_markup(sci, TRUE);
-}
-
-
-static void styleset_html_init(guint ft_id, GKeyFile *config, GKeyFile *config_home)
-{
-	style_sets[ft_id].styling = NULL;
-	style_sets[ft_id].keywords = NULL;
-}
-
-
-static void styleset_html(ScintillaObject *sci, guint ft_id)
-{
-	apply_filetype_properties(sci, SCLEX_HTML, ft_id);
-
-	/* use the same colouring for HTML; XML and so on */
-	styleset_markup(sci, TRUE);
-}
-
-
-static void styleset_markup_init(guint ft_id, GKeyFile *config, GKeyFile *config_home)
-{
-	new_styleset(GEANY_FILETYPES_XML, 56);
-	get_keyfile_style(config, config_home, "html_default", &style_sets[GEANY_FILETYPES_XML].styling[0]);
-	get_keyfile_style(config, config_home, "html_tag", &style_sets[GEANY_FILETYPES_XML].styling[1]);
-	get_keyfile_style(config, config_home, "html_tagunknown", &style_sets[GEANY_FILETYPES_XML].styling[2]);
-	get_keyfile_style(config, config_home, "html_attribute", &style_sets[GEANY_FILETYPES_XML].styling[3]);
-	get_keyfile_style(config, config_home, "html_attributeunknown", &style_sets[GEANY_FILETYPES_XML].styling[4]);
-	get_keyfile_style(config, config_home, "html_number", &style_sets[GEANY_FILETYPES_XML].styling[5]);
-	get_keyfile_style(config, config_home, "html_doublestring", &style_sets[GEANY_FILETYPES_XML].styling[6]);
-	get_keyfile_style(config, config_home, "html_singlestring", &style_sets[GEANY_FILETYPES_XML].styling[7]);
-	get_keyfile_style(config, config_home, "html_other", &style_sets[GEANY_FILETYPES_XML].styling[8]);
-	get_keyfile_style(config, config_home, "html_comment", &style_sets[GEANY_FILETYPES_XML].styling[9]);
-	get_keyfile_style(config, config_home, "html_entity", &style_sets[GEANY_FILETYPES_XML].styling[10]);
-	get_keyfile_style(config, config_home, "html_tagend", &style_sets[GEANY_FILETYPES_XML].styling[11]);
-	get_keyfile_style(config, config_home, "html_xmlstart", &style_sets[GEANY_FILETYPES_XML].styling[12]);
-	get_keyfile_style(config, config_home, "html_xmlend", &style_sets[GEANY_FILETYPES_XML].styling[13]);
-	get_keyfile_style(config, config_home, "html_script", &style_sets[GEANY_FILETYPES_XML].styling[14]);
-	get_keyfile_style(config, config_home, "html_asp", &style_sets[GEANY_FILETYPES_XML].styling[15]);
-	get_keyfile_style(config, config_home, "html_aspat", &style_sets[GEANY_FILETYPES_XML].styling[16]);
-	get_keyfile_style(config, config_home, "html_cdata", &style_sets[GEANY_FILETYPES_XML].styling[17]);
-	get_keyfile_style(config, config_home, "html_question", &style_sets[GEANY_FILETYPES_XML].styling[18]);
-	get_keyfile_style(config, config_home, "html_value", &style_sets[GEANY_FILETYPES_XML].styling[19]);
-	get_keyfile_style(config, config_home, "html_xccomment", &style_sets[GEANY_FILETYPES_XML].styling[20]);
-
-	get_keyfile_style(config, config_home, "sgml_default", &style_sets[GEANY_FILETYPES_XML].styling[21]);
-	get_keyfile_style(config, config_home, "sgml_comment", &style_sets[GEANY_FILETYPES_XML].styling[22]);
-	get_keyfile_style(config, config_home, "sgml_special", &style_sets[GEANY_FILETYPES_XML].styling[23]);
-	get_keyfile_style(config, config_home, "sgml_command", &style_sets[GEANY_FILETYPES_XML].styling[24]);
-	get_keyfile_style(config, config_home, "sgml_doublestring", &style_sets[GEANY_FILETYPES_XML].styling[25]);
-	get_keyfile_style(config, config_home, "sgml_simplestring", &style_sets[GEANY_FILETYPES_XML].styling[26]);
-	get_keyfile_style(config, config_home, "sgml_1st_param", &style_sets[GEANY_FILETYPES_XML].styling[27]);
-	get_keyfile_style(config, config_home, "sgml_entity", &style_sets[GEANY_FILETYPES_XML].styling[28]);
-	get_keyfile_style(config, config_home, "sgml_block_default", &style_sets[GEANY_FILETYPES_XML].styling[29]);
-	get_keyfile_style(config, config_home, "sgml_1st_param_comment", &style_sets[GEANY_FILETYPES_XML].styling[30]);
-	get_keyfile_style(config, config_home, "sgml_error", &style_sets[GEANY_FILETYPES_XML].styling[31]);
-
-	get_keyfile_style(config, config_home, "php_default", &style_sets[GEANY_FILETYPES_XML].styling[32]);
-	get_keyfile_style(config, config_home, "php_simplestring", &style_sets[GEANY_FILETYPES_XML].styling[33]);
-	get_keyfile_style(config, config_home, "php_hstring", &style_sets[GEANY_FILETYPES_XML].styling[34]);
-	get_keyfile_style(config, config_home, "php_number", &style_sets[GEANY_FILETYPES_XML].styling[35]);
-	get_keyfile_style(config, config_home, "php_word", &style_sets[GEANY_FILETYPES_XML].styling[36]);
-	get_keyfile_style(config, config_home, "php_variable", &style_sets[GEANY_FILETYPES_XML].styling[37]);
-	get_keyfile_style(config, config_home, "php_comment", &style_sets[GEANY_FILETYPES_XML].styling[38]);
-	get_keyfile_style(config, config_home, "php_commentline", &style_sets[GEANY_FILETYPES_XML].styling[39]);
-	get_keyfile_style(config, config_home, "php_operator", &style_sets[GEANY_FILETYPES_XML].styling[40]);
-	get_keyfile_style(config, config_home, "php_hstring_variable", &style_sets[GEANY_FILETYPES_XML].styling[41]);
-	get_keyfile_style(config, config_home, "php_complex_variable", &style_sets[GEANY_FILETYPES_XML].styling[42]);
-
-	get_keyfile_style(config, config_home, "jscript_start", &style_sets[GEANY_FILETYPES_XML].styling[43]);
-	get_keyfile_style(config, config_home, "jscript_default", &style_sets[GEANY_FILETYPES_XML].styling[44]);
-	get_keyfile_style(config, config_home, "jscript_comment", &style_sets[GEANY_FILETYPES_XML].styling[45]);
-	get_keyfile_style(config, config_home, "jscript_commentline", &style_sets[GEANY_FILETYPES_XML].styling[46]);
-	get_keyfile_style(config, config_home, "jscript_commentdoc", &style_sets[GEANY_FILETYPES_XML].styling[47]);
-	get_keyfile_style(config, config_home, "jscript_number", &style_sets[GEANY_FILETYPES_XML].styling[48]);
-	get_keyfile_style(config, config_home, "jscript_word", &style_sets[GEANY_FILETYPES_XML].styling[49]);
-	get_keyfile_style(config, config_home, "jscript_keyword", &style_sets[GEANY_FILETYPES_XML].styling[50]);
-	get_keyfile_style(config, config_home, "jscript_doublestring", &style_sets[GEANY_FILETYPES_XML].styling[51]);
-	get_keyfile_style(config, config_home, "jscript_singlestring", &style_sets[GEANY_FILETYPES_XML].styling[52]);
-	get_keyfile_style(config, config_home, "jscript_symbols", &style_sets[GEANY_FILETYPES_XML].styling[53]);
-	get_keyfile_style(config, config_home, "jscript_stringeol", &style_sets[GEANY_FILETYPES_XML].styling[54]);
-	get_keyfile_style(config, config_home, "jscript_regex", &style_sets[GEANY_FILETYPES_XML].styling[55]);
-
-	style_sets[GEANY_FILETYPES_XML].keywords = g_new(gchar*, 7);
-	get_keyfile_keywords(config, config_home, "html", GEANY_FILETYPES_XML, 0);
-	get_keyfile_keywords(config, config_home, "javascript", GEANY_FILETYPES_XML, 1);
-	get_keyfile_keywords(config, config_home, "vbscript", GEANY_FILETYPES_XML, 2);
-	get_keyfile_keywords(config, config_home, "python", GEANY_FILETYPES_XML, 3);
-	get_keyfile_keywords(config, config_home, "php", GEANY_FILETYPES_XML, 4);
-	get_keyfile_keywords(config, config_home, "sgml", GEANY_FILETYPES_XML, 5);
-	style_sets[GEANY_FILETYPES_XML].keywords[6] = NULL;
-}
-
-
-static void styleset_markup(ScintillaObject *sci, gboolean set_keywords)
-{
-	guint i;
-	const gchar *keywords;
-
-	/* Used by several filetypes */
-	if (style_sets[GEANY_FILETYPES_XML].styling == NULL)
-		filetypes_load_config(GEANY_FILETYPES_XML, FALSE);
-
-	/* manually initialise filetype Python for use with embedded Python */
-	filetypes_load_config(GEANY_FILETYPES_PYTHON, FALSE);
-
-	/* Set keywords. If we don't want to use keywords, we must at least unset maybe previously set
-	 * keywords, e.g. when switching between filetypes. */
-	for (i = 0; i < 5; i++)
-	{
-		keywords = (set_keywords) ? style_sets[GEANY_FILETYPES_XML].keywords[i] : "";
-		sci_set_keywords(sci, i, keywords);
-	}
-	/* always set SGML keywords */
-	sci_set_keywords(sci, 5, style_sets[GEANY_FILETYPES_XML].keywords[5]);
-
-	set_sci_style(sci, STYLE_DEFAULT, GEANY_FILETYPES_XML, 0);
-	set_sci_style(sci, SCE_H_DEFAULT, GEANY_FILETYPES_XML, 0);
-	set_sci_style(sci, SCE_H_TAG, GEANY_FILETYPES_XML, 1);
-	set_sci_style(sci, SCE_H_TAGUNKNOWN, GEANY_FILETYPES_XML, 2);
-	set_sci_style(sci, SCE_H_ATTRIBUTE, GEANY_FILETYPES_XML, 3);
-	set_sci_style(sci, SCE_H_ATTRIBUTEUNKNOWN, GEANY_FILETYPES_XML, 4);
-	set_sci_style(sci, SCE_H_NUMBER, GEANY_FILETYPES_XML, 5);
-	set_sci_style(sci, SCE_H_DOUBLESTRING, GEANY_FILETYPES_XML, 6);
-	set_sci_style(sci, SCE_H_SINGLESTRING, GEANY_FILETYPES_XML, 7);
-	set_sci_style(sci, SCE_H_OTHER, GEANY_FILETYPES_XML, 8);
-	set_sci_style(sci, SCE_H_COMMENT, GEANY_FILETYPES_XML, 9);
-	set_sci_style(sci, SCE_H_ENTITY, GEANY_FILETYPES_XML, 10);
-	set_sci_style(sci, SCE_H_TAGEND, GEANY_FILETYPES_XML, 11);
-	SSM(sci, SCI_STYLESETEOLFILLED, SCE_H_XMLSTART, 1);
-	set_sci_style(sci, SCE_H_XMLSTART, GEANY_FILETYPES_XML, 12);
-	set_sci_style(sci, SCE_H_XMLEND, GEANY_FILETYPES_XML, 13);
-	set_sci_style(sci, SCE_H_SCRIPT, GEANY_FILETYPES_XML, 14);
-	SSM(sci, SCI_STYLESETEOLFILLED, SCE_H_ASP, 1);
-	set_sci_style(sci, SCE_H_ASP, GEANY_FILETYPES_XML, 15);
-	SSM(sci, SCI_STYLESETEOLFILLED, SCE_H_ASPAT, 1);
-	set_sci_style(sci, SCE_H_ASPAT, GEANY_FILETYPES_XML, 16);
-	set_sci_style(sci, SCE_H_CDATA, GEANY_FILETYPES_XML, 17);
-	set_sci_style(sci, SCE_H_QUESTION, GEANY_FILETYPES_XML, 18);
-	set_sci_style(sci, SCE_H_VALUE, GEANY_FILETYPES_XML, 19);
-	set_sci_style(sci, SCE_H_XCCOMMENT, GEANY_FILETYPES_XML, 20);
-
-	set_sci_style(sci, SCE_H_SGML_DEFAULT, GEANY_FILETYPES_XML, 21);
-	set_sci_style(sci, SCE_H_SGML_COMMENT, GEANY_FILETYPES_XML, 22);
-	set_sci_style(sci, SCE_H_SGML_SPECIAL, GEANY_FILETYPES_XML, 23);
-	set_sci_style(sci, SCE_H_SGML_COMMAND, GEANY_FILETYPES_XML, 24);
-	set_sci_style(sci, SCE_H_SGML_DOUBLESTRING, GEANY_FILETYPES_XML, 25);
-	set_sci_style(sci, SCE_H_SGML_SIMPLESTRING, GEANY_FILETYPES_XML, 26);
-	set_sci_style(sci, SCE_H_SGML_1ST_PARAM, GEANY_FILETYPES_XML, 27);
-	set_sci_style(sci, SCE_H_SGML_ENTITY, GEANY_FILETYPES_XML, 28);
-	set_sci_style(sci, SCE_H_SGML_BLOCK_DEFAULT, GEANY_FILETYPES_XML, 29);
-	set_sci_style(sci, SCE_H_SGML_1ST_PARAM_COMMENT, GEANY_FILETYPES_XML, 30);
-	set_sci_style(sci, SCE_H_SGML_ERROR, GEANY_FILETYPES_XML, 31);
-
-	/* embedded JavaScript */
-	set_sci_style(sci, SCE_HJ_START, GEANY_FILETYPES_XML, 43);
-	set_sci_style(sci, SCE_HJ_DEFAULT, GEANY_FILETYPES_XML, 44);
-	set_sci_style(sci, SCE_HJ_COMMENT, GEANY_FILETYPES_XML, 45);
-	set_sci_style(sci, SCE_HJ_COMMENTLINE, GEANY_FILETYPES_XML, 46);
-	set_sci_style(sci, SCE_HJ_COMMENTDOC, GEANY_FILETYPES_XML, 47);
-	set_sci_style(sci, SCE_HJ_NUMBER, GEANY_FILETYPES_XML, 48);
-	set_sci_style(sci, SCE_HJ_WORD, GEANY_FILETYPES_XML, 49);
-	set_sci_style(sci, SCE_HJ_KEYWORD, GEANY_FILETYPES_XML, 50);
-	set_sci_style(sci, SCE_HJ_DOUBLESTRING, GEANY_FILETYPES_XML, 51);
-	set_sci_style(sci, SCE_HJ_SINGLESTRING, GEANY_FILETYPES_XML, 52);
-	set_sci_style(sci, SCE_HJ_SYMBOLS, GEANY_FILETYPES_XML, 53);
-	set_sci_style(sci, SCE_HJ_STRINGEOL, GEANY_FILETYPES_XML, 54);
-	set_sci_style(sci, SCE_HJ_REGEX, GEANY_FILETYPES_XML, 55);
-
-	/* for HB, VBScript?, use the same styles as for JavaScript */
-	set_sci_style(sci, SCE_HB_START, GEANY_FILETYPES_XML, 43);
-	set_sci_style(sci, SCE_HB_DEFAULT, GEANY_FILETYPES_XML, 44);
-	set_sci_style(sci, SCE_HB_COMMENTLINE, GEANY_FILETYPES_XML, 46);
-	set_sci_style(sci, SCE_HB_NUMBER, GEANY_FILETYPES_XML, 48);
-	set_sci_style(sci, SCE_HB_WORD, GEANY_FILETYPES_XML, 50);	/* keywords */
-	set_sci_style(sci, SCE_HB_STRING, GEANY_FILETYPES_XML, 51);
-	set_sci_style(sci, SCE_HB_IDENTIFIER, GEANY_FILETYPES_XML, 53);
-	set_sci_style(sci, SCE_HB_STRINGEOL, GEANY_FILETYPES_XML, 54);
-
-	/* for HBA, VBScript?, use the same styles as for JavaScript */
-	set_sci_style(sci, SCE_HBA_START, GEANY_FILETYPES_XML, 43);
-	set_sci_style(sci, SCE_HBA_DEFAULT, GEANY_FILETYPES_XML, 44);
-	set_sci_style(sci, SCE_HBA_COMMENTLINE, GEANY_FILETYPES_XML, 46);
-	set_sci_style(sci, SCE_HBA_NUMBER, GEANY_FILETYPES_XML, 48);
-	set_sci_style(sci, SCE_HBA_WORD, GEANY_FILETYPES_XML, 50);	/* keywords */
-	set_sci_style(sci, SCE_HBA_STRING, GEANY_FILETYPES_XML, 51);
-	set_sci_style(sci, SCE_HBA_IDENTIFIER, GEANY_FILETYPES_XML, 53);
-	set_sci_style(sci, SCE_HBA_STRINGEOL, GEANY_FILETYPES_XML, 54);
-
-	/* for HJA, ASP Javascript, use the same styles as for JavaScript */
-	set_sci_style(sci, SCE_HJA_START, GEANY_FILETYPES_XML, 43);
-	set_sci_style(sci, SCE_HJA_DEFAULT, GEANY_FILETYPES_XML, 44);
-	set_sci_style(sci, SCE_HJA_COMMENT, GEANY_FILETYPES_XML, 45);
-	set_sci_style(sci, SCE_HJA_COMMENTLINE, GEANY_FILETYPES_XML, 46);
-	set_sci_style(sci, SCE_HJA_COMMENTDOC, GEANY_FILETYPES_XML, 47);
-	set_sci_style(sci, SCE_HJA_NUMBER, GEANY_FILETYPES_XML, 48);
-	set_sci_style(sci, SCE_HJA_WORD, GEANY_FILETYPES_XML, 49);
-	set_sci_style(sci, SCE_HJA_KEYWORD, GEANY_FILETYPES_XML, 50);
-	set_sci_style(sci, SCE_HJA_DOUBLESTRING, GEANY_FILETYPES_XML, 51);
-	set_sci_style(sci, SCE_HJA_SINGLESTRING, GEANY_FILETYPES_XML, 52);
-	set_sci_style(sci, SCE_HJA_SYMBOLS, GEANY_FILETYPES_XML, 53);
-	set_sci_style(sci, SCE_HJA_STRINGEOL, GEANY_FILETYPES_XML, 54);
-	set_sci_style(sci, SCE_HJA_REGEX, GEANY_FILETYPES_XML, 55);
-
-	/* for embedded Python we use the Python styles */
-	set_sci_style(sci, SCE_HP_START, GEANY_FILETYPES_XML, 43);
-	set_sci_style(sci, SCE_HP_DEFAULT, GEANY_FILETYPES_PYTHON, 0);
-	set_sci_style(sci, SCE_HP_COMMENTLINE, GEANY_FILETYPES_PYTHON, 1);
-	set_sci_style(sci, SCE_HP_NUMBER, GEANY_FILETYPES_PYTHON, 2);
-	set_sci_style(sci, SCE_HP_STRING, GEANY_FILETYPES_PYTHON, 3);
-	set_sci_style(sci, SCE_HP_CHARACTER, GEANY_FILETYPES_PYTHON, 4);
-	set_sci_style(sci, SCE_HP_WORD, GEANY_FILETYPES_PYTHON, 5);
-	set_sci_style(sci, SCE_HP_TRIPLE, GEANY_FILETYPES_PYTHON, 6);
-	set_sci_style(sci, SCE_HP_TRIPLEDOUBLE, GEANY_FILETYPES_PYTHON, 7);
-	set_sci_style(sci, SCE_HP_CLASSNAME, GEANY_FILETYPES_PYTHON, 8);
-	set_sci_style(sci, SCE_HP_DEFNAME, GEANY_FILETYPES_PYTHON, 9);
-	set_sci_style(sci, SCE_HP_OPERATOR, GEANY_FILETYPES_PYTHON, 10);
-	set_sci_style(sci, SCE_HP_IDENTIFIER, GEANY_FILETYPES_PYTHON, 11);
-
-	/* for embedded HPA (what is this?) we use the Python styles */
-	set_sci_style(sci, SCE_HPA_START, GEANY_FILETYPES_XML, 43);
-	set_sci_style(sci, SCE_HPA_DEFAULT, GEANY_FILETYPES_PYTHON, 0);
-	set_sci_style(sci, SCE_HPA_COMMENTLINE, GEANY_FILETYPES_PYTHON, 1);
-	set_sci_style(sci, SCE_HPA_NUMBER, GEANY_FILETYPES_PYTHON, 2);
-	set_sci_style(sci, SCE_HPA_STRING, GEANY_FILETYPES_PYTHON, 3);
-	set_sci_style(sci, SCE_HPA_CHARACTER, GEANY_FILETYPES_PYTHON, 4);
-	set_sci_style(sci, SCE_HPA_WORD, GEANY_FILETYPES_PYTHON, 5);
-	set_sci_style(sci, SCE_HPA_TRIPLE, GEANY_FILETYPES_PYTHON, 6);
-	set_sci_style(sci, SCE_HPA_TRIPLEDOUBLE, GEANY_FILETYPES_PYTHON, 7);
-	set_sci_style(sci, SCE_HPA_CLASSNAME, GEANY_FILETYPES_PYTHON, 8);
-	set_sci_style(sci, SCE_HPA_DEFNAME, GEANY_FILETYPES_PYTHON, 9);
-	set_sci_style(sci, SCE_HPA_OPERATOR, GEANY_FILETYPES_PYTHON, 10);
-	set_sci_style(sci, SCE_HPA_IDENTIFIER, GEANY_FILETYPES_PYTHON, 11);
-
-	/* PHP */
-	set_sci_style(sci, SCE_HPHP_DEFAULT, GEANY_FILETYPES_XML, 32);
-	set_sci_style(sci, SCE_HPHP_SIMPLESTRING, GEANY_FILETYPES_XML, 33);
-	set_sci_style(sci, SCE_HPHP_HSTRING, GEANY_FILETYPES_XML, 34);
-	set_sci_style(sci, SCE_HPHP_NUMBER, GEANY_FILETYPES_XML, 35);
-	set_sci_style(sci, SCE_HPHP_WORD, GEANY_FILETYPES_XML, 36);
-	set_sci_style(sci, SCE_HPHP_VARIABLE, GEANY_FILETYPES_XML, 37);
-	set_sci_style(sci, SCE_HPHP_COMMENT, GEANY_FILETYPES_XML, 38);
-	set_sci_style(sci, SCE_HPHP_COMMENTLINE, GEANY_FILETYPES_XML, 39);
-	set_sci_style(sci, SCE_HPHP_OPERATOR, GEANY_FILETYPES_XML, 40);
-	set_sci_style(sci, SCE_HPHP_HSTRING_VARIABLE, GEANY_FILETYPES_XML, 41);
-	set_sci_style(sci, SCE_HPHP_COMPLEX_VARIABLE, GEANY_FILETYPES_XML, 42);
-
-	/* note: normally this would be in the filetype file instead */
-	sci_set_property(sci, "fold.html", "1");
-	sci_set_property(sci, "fold.html.preprocessor", "0");
-}
-
-
-static void styleset_xml(ScintillaObject *sci, guint ft_id)
-{
-	apply_filetype_properties(sci, SCLEX_XML, ft_id);
-
-	/* use the same colouring for HTML; XML and so on */
-	styleset_markup(sci, FALSE);
-}
-
 
 static void styleset_default(ScintillaObject *sci, guint ft_id)
 {
@@ -1271,7 +995,7 @@ void highlighting_init_styles(guint filetype_idx, GKeyFile *config, GKeyFile *co
 		init_styleset_case_auto(HASKELL);
 		init_styleset_case_auto(HAXE);
 		init_styleset_case_auto(AS);
-		init_styleset_case(GEANY_FILETYPES_HTML,	styleset_html_init);
+		init_styleset_case_auto(HTML);
 		init_styleset_case_auto(JAVA);
 		init_styleset_case_auto(JS);
 		init_styleset_case_auto(LATEX);
@@ -1282,7 +1006,7 @@ void highlighting_init_styles(guint filetype_idx, GKeyFile *config, GKeyFile *co
 		init_styleset_case_auto(NSIS);
 		init_styleset_case_auto(PASCAL);
 		init_styleset_case_auto(PERL);
-		init_styleset_case(GEANY_FILETYPES_PHP,		styleset_php_init);
+		init_styleset_case_auto(PHP);
 		init_styleset_case_auto(PO);
 		init_styleset_case_auto(PYTHON);
 		init_styleset_case_auto(R);
@@ -1293,7 +1017,7 @@ void highlighting_init_styles(guint filetype_idx, GKeyFile *config, GKeyFile *co
 		init_styleset_case_auto(TXT2TAGS);
 		init_styleset_case_auto(VHDL);
 		init_styleset_case_auto(VERILOG);
-		init_styleset_case(GEANY_FILETYPES_XML,		styleset_markup_init);
+		init_styleset_case_auto(XML);
 		init_styleset_case_auto(YAML);
 		default:
 			if (ft->lexer_filetype)
@@ -1349,7 +1073,7 @@ void highlighting_set_styles(ScintillaObject *sci, GeanyFiletype *ft)
 		styleset_case_auto(HASKELL);
 		styleset_case_auto(HAXE);
 		styleset_case_auto(AS);
-		styleset_case(GEANY_FILETYPES_HTML,		styleset_html);
+		styleset_case_auto(HTML);
 		styleset_case_auto(JAVA);
 		styleset_case_auto(JS);
 		styleset_case_auto(LATEX);
@@ -1360,7 +1084,7 @@ void highlighting_set_styles(ScintillaObject *sci, GeanyFiletype *ft)
 		styleset_case_auto(NSIS);
 		styleset_case_auto(PASCAL);
 		styleset_case_auto(PERL);
-		styleset_case(GEANY_FILETYPES_PHP,		styleset_php);
+		styleset_case_auto(PHP);
 		styleset_case_auto(PO);
 		styleset_case_auto(PYTHON);
 		styleset_case_auto(R);
@@ -1371,7 +1095,7 @@ void highlighting_set_styles(ScintillaObject *sci, GeanyFiletype *ft)
 		styleset_case_auto(TXT2TAGS);
 		styleset_case_auto(VHDL);
 		styleset_case_auto(VERILOG);
-		styleset_case(GEANY_FILETYPES_XML,		styleset_xml);
+		styleset_case_auto(XML);
 		styleset_case_auto(YAML);
 		case GEANY_FILETYPES_NONE:
 		default:

@@ -621,6 +621,153 @@ static const HLKeyword highlighting_keywords_HAXE[] =
 #define highlighting_properties_HAXE	highlighting_properties_C
 
 
+/* HTML */
+#define highlighting_lexer_HTML		SCLEX_HTML
+static const HLStyle highlighting_styles_HTML[] =
+{
+	{ SCE_H_DEFAULT,				"html_default"				 },
+	{ SCE_H_TAG,					"html_tag"					 },
+	{ SCE_H_TAGUNKNOWN,				"html_tagunknown"			 },
+	{ SCE_H_ATTRIBUTE,				"html_attribute"			 },
+	{ SCE_H_ATTRIBUTEUNKNOWN,		"html_attributeunknown"		 },
+	{ SCE_H_NUMBER,					"html_number"				 },
+	{ SCE_H_DOUBLESTRING,			"html_doublestring"			 },
+	{ SCE_H_SINGLESTRING,			"html_singlestring"			 },
+	{ SCE_H_OTHER,					"html_other"				 },
+	{ SCE_H_COMMENT,				"html_comment"				 },
+	{ SCE_H_ENTITY,					"html_entity"				 },
+	{ SCE_H_TAGEND,					"html_tagend"				 },
+	{ SCE_H_XMLSTART,				"html_xmlstart", 		TRUE },
+	{ SCE_H_XMLEND,					"html_xmlend"				 },
+	{ SCE_H_SCRIPT,					"html_script"				 },
+	{ SCE_H_ASP,					"html_asp",				TRUE },
+	{ SCE_H_ASPAT,					"html_aspat",			TRUE },
+	{ SCE_H_CDATA,					"html_cdata"				 },
+	{ SCE_H_QUESTION,				"html_question"				 },
+	{ SCE_H_VALUE,					"html_value"				 },
+	{ SCE_H_XCCOMMENT,				"html_xccomment"			 },
+
+	{ SCE_H_SGML_DEFAULT,			"sgml_default"				 },
+	{ SCE_H_SGML_COMMENT,			"sgml_comment"				 },
+	{ SCE_H_SGML_SPECIAL,			"sgml_special"				 },
+	{ SCE_H_SGML_COMMAND,			"sgml_command"				 },
+	{ SCE_H_SGML_DOUBLESTRING,		"sgml_doublestring"			 },
+	{ SCE_H_SGML_SIMPLESTRING,		"sgml_simplestring"			 },
+	{ SCE_H_SGML_1ST_PARAM,			"sgml_1st_param"			 },
+	{ SCE_H_SGML_ENTITY,			"sgml_entity"				 },
+	{ SCE_H_SGML_BLOCK_DEFAULT,		"sgml_block_default"		 },
+	{ SCE_H_SGML_1ST_PARAM_COMMENT,	"sgml_1st_param_comment"	 },
+	{ SCE_H_SGML_ERROR,				"sgml_error"				 },
+
+	/* embedded JavaScript */
+	{ SCE_HJ_START,					"jscript_start"				 },
+	{ SCE_HJ_DEFAULT,				"jscript_default"			 },
+	{ SCE_HJ_COMMENT,				"jscript_comment"			 },
+	{ SCE_HJ_COMMENTLINE,			"jscript_commentline"		 },
+	{ SCE_HJ_COMMENTDOC,			"jscript_commentdoc"		 },
+	{ SCE_HJ_NUMBER,				"jscript_number"			 },
+	{ SCE_HJ_WORD,					"jscript_word"				 },
+	{ SCE_HJ_KEYWORD,				"jscript_keyword"			 },
+	{ SCE_HJ_DOUBLESTRING,			"jscript_doublestring"		 },
+	{ SCE_HJ_SINGLESTRING,			"jscript_singlestring"		 },
+	{ SCE_HJ_SYMBOLS,				"jscript_symbols"			 },
+	{ SCE_HJ_STRINGEOL,				"jscript_stringeol"			 },
+	{ SCE_HJ_REGEX,					"jscript_regex"				 },
+
+	/* for HB, VBScript?, use the same styles as for JavaScript */
+	{ SCE_HB_START,					"jscript_start"				 },
+	{ SCE_HB_DEFAULT,				"jscript_default"			 },
+	{ SCE_HB_COMMENTLINE,			"jscript_commentline"		 },
+	{ SCE_HB_NUMBER,				"jscript_number"			 },
+	{ SCE_HB_WORD,					"jscript_keyword"			 }, /* keywords */
+	{ SCE_HB_STRING,				"jscript_doublestring"		 },
+	{ SCE_HB_IDENTIFIER,			"jscript_symbols"			 },
+	{ SCE_HB_STRINGEOL,				"jscript_stringeol"			 },
+
+	/* for HBA, VBScript?, use the same styles as for JavaScript */
+	{ SCE_HBA_START,				"jscript_start"				 },
+	{ SCE_HBA_DEFAULT,				"jscript_default"			 },
+	{ SCE_HBA_COMMENTLINE,			"jscript_commentline"		 },
+	{ SCE_HBA_NUMBER,				"jscript_number"			 },
+	{ SCE_HBA_WORD,					"jscript_keyword"			 }, /* keywords */
+	{ SCE_HBA_STRING,				"jscript_doublestring"		 },
+	{ SCE_HBA_IDENTIFIER,			"jscript_symbols"			 },
+	{ SCE_HBA_STRINGEOL,			"jscript_stringeol"			 },
+
+	/* for HJA, ASP Javascript, use the same styles as for JavaScript */
+	{ SCE_HJA_START,				"jscript_start"				 },
+	{ SCE_HJA_DEFAULT,				"jscript_default"			 },
+	{ SCE_HJA_COMMENT,				"jscript_comment"			 },
+	{ SCE_HJA_COMMENTLINE,			"jscript_commentline"		 },
+	{ SCE_HJA_COMMENTDOC,			"jscript_commentdoc"		 },
+	{ SCE_HJA_NUMBER,				"jscript_number"			 },
+	{ SCE_HJA_WORD,					"jscript_word"				 },
+	{ SCE_HJA_KEYWORD,				"jscript_keyword"			 },
+	{ SCE_HJA_DOUBLESTRING,			"jscript_doublestring"		 },
+	{ SCE_HJA_SINGLESTRING,			"jscript_singlestring"		 },
+	{ SCE_HJA_SYMBOLS,				"jscript_symbols"			 },
+	{ SCE_HJA_STRINGEOL,			"jscript_stringeol"			 },
+	{ SCE_HJA_REGEX,				"jscript_regex"				 },
+
+	/* embedded Python */
+	{ SCE_HP_START,					"jscript_start"				 },
+	{ SCE_HP_DEFAULT,				"python_default"			 },
+	{ SCE_HP_COMMENTLINE,			"python_commentline"		 },
+	{ SCE_HP_NUMBER,				"python_number"				 },
+	{ SCE_HP_STRING,				"python_string"				 },
+	{ SCE_HP_CHARACTER,				"python_character"			 },
+	{ SCE_HP_WORD,					"python_word"				 },
+	{ SCE_HP_TRIPLE,				"python_triple"				 },
+	{ SCE_HP_TRIPLEDOUBLE,			"python_tripledouble"		 },
+	{ SCE_HP_CLASSNAME,				"python_classname"			 },
+	{ SCE_HP_DEFNAME,				"python_defname"			 },
+	{ SCE_HP_OPERATOR,				"python_operator"			 },
+	{ SCE_HP_IDENTIFIER,			"python_identifier"			 },
+
+	/* for embedded HPA (what is this?) we use the Python styles */
+	{ SCE_HPA_START,				"jscript_start"				 },
+	{ SCE_HPA_DEFAULT,				"python_default"			 },
+	{ SCE_HPA_COMMENTLINE,			"python_commentline"		 },
+	{ SCE_HPA_NUMBER,				"python_number"				 },
+	{ SCE_HPA_STRING,				"python_string"				 },
+	{ SCE_HPA_CHARACTER,			"python_character"			 },
+	{ SCE_HPA_WORD,					"python_word"				 },
+	{ SCE_HPA_TRIPLE,				"python_triple"				 },
+	{ SCE_HPA_TRIPLEDOUBLE,			"python_tripledouble"		 },
+	{ SCE_HPA_CLASSNAME,			"python_classname"			 },
+	{ SCE_HPA_DEFNAME,				"python_defname"			 },
+	{ SCE_HPA_OPERATOR,				"python_operator"			 },
+	{ SCE_HPA_IDENTIFIER,			"python_identifier"			 },
+
+	/* PHP */
+	{ SCE_HPHP_DEFAULT,				"php_default"				 },
+	{ SCE_HPHP_SIMPLESTRING,		"php_simplestring"			 },
+	{ SCE_HPHP_HSTRING,				"php_hstring"				 },
+	{ SCE_HPHP_NUMBER,				"php_number"				 },
+	{ SCE_HPHP_WORD,				"php_word"					 },
+	{ SCE_HPHP_VARIABLE,			"php_variable"				 },
+	{ SCE_HPHP_COMMENT,				"php_comment"				 },
+	{ SCE_HPHP_COMMENTLINE,			"php_commentline"			 },
+	{ SCE_HPHP_OPERATOR,			"php_operator"				 },
+	{ SCE_HPHP_HSTRING_VARIABLE,	"php_hstring_variable"		 },
+	{ SCE_HPHP_COMPLEX_VARIABLE,	"php_complex_variable"		 }
+};
+static const HLKeyword highlighting_keywords_HTML[] =
+{
+	{ 0, "html" },
+	{ 1, "javascript" },
+	{ 2, "vbscript" },
+	{ 3, "python" },
+	{ 4, "php" },
+	{ 5, "sgml" }
+};
+static const HLProperty highlighting_properties_HTML[] =
+{
+	{ "fold.html",				"1" },
+	{ "fold.html.preprocessor",	"0" }
+};
+
+
 /* Java */
 #define highlighting_lexer_JAVA			SCLEX_CPP
 #define highlighting_styles_JAVA		highlighting_styles_C
@@ -921,6 +1068,13 @@ static const HLKeyword highlighting_keywords_PERL[] =
 	{ 0, "primary" }
 };
 #define highlighting_properties_PERL	EMPTY_PROPERTIES
+
+
+/* PHP */
+#define highlighting_lexer_PHP			SCLEX_HTML
+#define highlighting_styles_PHP			highlighting_styles_HTML
+#define highlighting_keywords_PHP		highlighting_keywords_HTML
+#define highlighting_properties_PHP		highlighting_properties_HTML
 
 
 /* PO (gettext) */
@@ -1235,6 +1389,16 @@ static const HLKeyword highlighting_keywords_VERILOG[] =
 	{ 2, "word3" }
 };
 #define highlighting_properties_VERILOG		EMPTY_PROPERTIES
+
+
+/* XML */
+#define highlighting_lexer_XML			SCLEX_XML
+#define highlighting_styles_XML			highlighting_styles_HTML
+static const HLKeyword highlighting_keywords_XML[] =
+{
+	{ 5, "sgml" }
+};
+#define highlighting_properties_XML		highlighting_properties_HTML
 
 
 /* YAML */

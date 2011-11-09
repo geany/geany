@@ -1,6 +1,7 @@
 # For complete documentation of this file, please see Geany's main documentation
-[styling]
-# styling for PHP/HTML is done in filetypes.xml
+[styling=XML]
+
+[keywords=XML]
 
 [lexer_properties]
 phpscript.mode=1
