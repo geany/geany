@@ -70,8 +70,9 @@
 /* first HLStyle array entry should always be the default style for that lexer */
 typedef struct
 {
-	guint		 style;	/* SCI style */
-	const gchar	*name;	/* style name in the filetypes.* file */
+	guint		 style;		/* SCI style */
+	const gchar	*name;		/* style name in the filetypes.* file */
+	gboolean	 fill_eol;	/* whether to set EOLFILLED flag to this style */
 } HLStyle;
 
 typedef struct

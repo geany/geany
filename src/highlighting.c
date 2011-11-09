@@ -847,7 +847,11 @@ static void styleset_from_mapping(ScintillaObject *sci, guint ft_id, guint lexer
 		/* first style is also default one */
 		set_sci_style(sci, STYLE_DEFAULT, ft_id, 0);
 		foreach_range(i, n_styles)
+		{
+			if (styles[i].fill_eol)
+				SSM(sci, SCI_STYLESETEOLFILLED, styles[i].style, TRUE);
 			set_sci_style(sci, styles[i].style, ft_id, i);
+		}
 	}
 
 	/* keywords */
