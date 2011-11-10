@@ -938,13 +938,7 @@ static guint get_lexer_filetype(GeanyFiletype *ft)
 }
 
 
-/* lang_name is the name used for the styleset_foo_init function, e.g. foo. */
-#define init_styleset_case(ft_id, init_styleset_func) \
-	case (ft_id): \
-		init_styleset_func(filetype_idx, config, configh); \
-		break
-
-#define init_styleset_case_auto(LANG_NAME) \
+#define init_styleset_case(LANG_NAME) \
 	case (GEANY_FILETYPES_##LANG_NAME): \
 		STYLESET_INIT_FROM_MAPPING(filetype_idx, config, configh, LANG_NAME); \
 		break
@@ -974,51 +968,51 @@ void highlighting_init_styles(guint filetype_idx, GKeyFile *config, GKeyFile *co
 
 	switch (lexer_id)
 	{
-		init_styleset_case_auto(ADA);
-		init_styleset_case_auto(ASM);
-		init_styleset_case_auto(BASIC);
-		init_styleset_case_auto(C);
-		init_styleset_case_auto(CAML);
-		init_styleset_case_auto(CMAKE);
-		init_styleset_case_auto(COBOL);
-		init_styleset_case_auto(CONF);
-		init_styleset_case_auto(CSS);
-		init_styleset_case_auto(D);
-		init_styleset_case_auto(DIFF);
-		init_styleset_case_auto(LISP);
-		init_styleset_case_auto(ERLANG);
-		init_styleset_case_auto(DOCBOOK);
-		init_styleset_case_auto(FERITE);
-		init_styleset_case_auto(F77);
-		init_styleset_case_auto(FORTH);
-		init_styleset_case_auto(FORTRAN);
-		init_styleset_case_auto(HASKELL);
-		init_styleset_case_auto(HAXE);
-		init_styleset_case_auto(AS);
-		init_styleset_case_auto(HTML);
-		init_styleset_case_auto(JAVA);
-		init_styleset_case_auto(JS);
-		init_styleset_case_auto(LATEX);
-		init_styleset_case_auto(LUA);
-		init_styleset_case_auto(MAKE);
-		init_styleset_case_auto(MATLAB);
-		init_styleset_case_auto(MARKDOWN);
-		init_styleset_case_auto(NSIS);
-		init_styleset_case_auto(PASCAL);
-		init_styleset_case_auto(PERL);
-		init_styleset_case_auto(PHP);
-		init_styleset_case_auto(PO);
-		init_styleset_case_auto(PYTHON);
-		init_styleset_case_auto(R);
-		init_styleset_case_auto(RUBY);
-		init_styleset_case_auto(SH);
-		init_styleset_case_auto(SQL);
-		init_styleset_case_auto(TCL);
-		init_styleset_case_auto(TXT2TAGS);
-		init_styleset_case_auto(VHDL);
-		init_styleset_case_auto(VERILOG);
-		init_styleset_case_auto(XML);
-		init_styleset_case_auto(YAML);
+		init_styleset_case(ADA);
+		init_styleset_case(ASM);
+		init_styleset_case(BASIC);
+		init_styleset_case(C);
+		init_styleset_case(CAML);
+		init_styleset_case(CMAKE);
+		init_styleset_case(COBOL);
+		init_styleset_case(CONF);
+		init_styleset_case(CSS);
+		init_styleset_case(D);
+		init_styleset_case(DIFF);
+		init_styleset_case(LISP);
+		init_styleset_case(ERLANG);
+		init_styleset_case(DOCBOOK);
+		init_styleset_case(FERITE);
+		init_styleset_case(F77);
+		init_styleset_case(FORTH);
+		init_styleset_case(FORTRAN);
+		init_styleset_case(HASKELL);
+		init_styleset_case(HAXE);
+		init_styleset_case(AS);
+		init_styleset_case(HTML);
+		init_styleset_case(JAVA);
+		init_styleset_case(JS);
+		init_styleset_case(LATEX);
+		init_styleset_case(LUA);
+		init_styleset_case(MAKE);
+		init_styleset_case(MATLAB);
+		init_styleset_case(MARKDOWN);
+		init_styleset_case(NSIS);
+		init_styleset_case(PASCAL);
+		init_styleset_case(PERL);
+		init_styleset_case(PHP);
+		init_styleset_case(PO);
+		init_styleset_case(PYTHON);
+		init_styleset_case(R);
+		init_styleset_case(RUBY);
+		init_styleset_case(SH);
+		init_styleset_case(SQL);
+		init_styleset_case(TCL);
+		init_styleset_case(TXT2TAGS);
+		init_styleset_case(VHDL);
+		init_styleset_case(VERILOG);
+		init_styleset_case(XML);
+		init_styleset_case(YAML);
 		default:
 			if (ft->lexer_filetype)
 				geany_debug("Filetype %s has a recursive lexer_filetype %s set!",
@@ -1030,13 +1024,7 @@ void highlighting_init_styles(guint filetype_idx, GKeyFile *config, GKeyFile *co
 }
 
 
-/* lang_name is the name used for the styleset_foo function, e.g. foo. */
-#define styleset_case(ft_id, styleset_func) \
-	case (ft_id): \
-		styleset_func(sci, ft->id); \
-		break
-
-#define styleset_case_auto(LANG_NAME) \
+#define styleset_case(LANG_NAME) \
 	case (GEANY_FILETYPES_##LANG_NAME): \
 		STYLESET_FROM_MAPPING(sci, ft->id, LANG_NAME); \
 		break
@@ -1052,51 +1040,51 @@ void highlighting_set_styles(ScintillaObject *sci, GeanyFiletype *ft)
 
 	switch (lexer_id)
 	{
-		styleset_case_auto(ADA);
-		styleset_case_auto(ASM);
-		styleset_case_auto(BASIC);
-		styleset_case_auto(C);
-		styleset_case_auto(CAML);
-		styleset_case_auto(CMAKE);
-		styleset_case_auto(COBOL);
-		styleset_case_auto(CONF);
-		styleset_case_auto(CSS);
-		styleset_case_auto(D);
-		styleset_case_auto(DIFF);
-		styleset_case_auto(LISP);
-		styleset_case_auto(ERLANG);
-		styleset_case_auto(DOCBOOK);
-		styleset_case_auto(FERITE);
-		styleset_case_auto(F77);
-		styleset_case_auto(FORTH);
-		styleset_case_auto(FORTRAN);
-		styleset_case_auto(HASKELL);
-		styleset_case_auto(HAXE);
-		styleset_case_auto(AS);
-		styleset_case_auto(HTML);
-		styleset_case_auto(JAVA);
-		styleset_case_auto(JS);
-		styleset_case_auto(LATEX);
-		styleset_case_auto(LUA);
-		styleset_case_auto(MAKE);
-		styleset_case_auto(MARKDOWN);
-		styleset_case_auto(MATLAB);
-		styleset_case_auto(NSIS);
-		styleset_case_auto(PASCAL);
-		styleset_case_auto(PERL);
-		styleset_case_auto(PHP);
-		styleset_case_auto(PO);
-		styleset_case_auto(PYTHON);
-		styleset_case_auto(R);
-		styleset_case_auto(RUBY);
-		styleset_case_auto(SH);
-		styleset_case_auto(SQL);
-		styleset_case_auto(TCL);
-		styleset_case_auto(TXT2TAGS);
-		styleset_case_auto(VHDL);
-		styleset_case_auto(VERILOG);
-		styleset_case_auto(XML);
-		styleset_case_auto(YAML);
+		styleset_case(ADA);
+		styleset_case(ASM);
+		styleset_case(BASIC);
+		styleset_case(C);
+		styleset_case(CAML);
+		styleset_case(CMAKE);
+		styleset_case(COBOL);
+		styleset_case(CONF);
+		styleset_case(CSS);
+		styleset_case(D);
+		styleset_case(DIFF);
+		styleset_case(LISP);
+		styleset_case(ERLANG);
+		styleset_case(DOCBOOK);
+		styleset_case(FERITE);
+		styleset_case(F77);
+		styleset_case(FORTH);
+		styleset_case(FORTRAN);
+		styleset_case(HASKELL);
+		styleset_case(HAXE);
+		styleset_case(AS);
+		styleset_case(HTML);
+		styleset_case(JAVA);
+		styleset_case(JS);
+		styleset_case(LATEX);
+		styleset_case(LUA);
+		styleset_case(MAKE);
+		styleset_case(MARKDOWN);
+		styleset_case(MATLAB);
+		styleset_case(NSIS);
+		styleset_case(PASCAL);
+		styleset_case(PERL);
+		styleset_case(PHP);
+		styleset_case(PO);
+		styleset_case(PYTHON);
+		styleset_case(R);
+		styleset_case(RUBY);
+		styleset_case(SH);
+		styleset_case(SQL);
+		styleset_case(TCL);
+		styleset_case(TXT2TAGS);
+		styleset_case(VHDL);
+		styleset_case(VERILOG);
+		styleset_case(XML);
+		styleset_case(YAML);
 		case GEANY_FILETYPES_NONE:
 		default:
 			styleset_default(sci, ft->id);
