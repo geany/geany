@@ -781,18 +781,6 @@ static void merge_type_keywords(ScintillaObject *sci, guint ft_id, guint keyword
 }
 
 
-/* All stylesets except None should call this. */
-static void
-apply_filetype_properties(ScintillaObject *sci, guint lexer, guint ft_id)
-{
-	g_assert(ft_id != GEANY_FILETYPES_NONE);
-
-	SSM(sci, SCI_SETLEXER, lexer, 0);
-
-	styleset_common(sci, ft_id);
-}
-
-
 static void styleset_init_from_mapping(guint ft_id, GKeyFile *config, GKeyFile *config_home,
 		const HLStyle *styles, gsize n_styles,
 		const HLKeyword *keywords, gsize n_keywords)
@@ -837,8 +825,13 @@ static void styleset_from_mapping(ScintillaObject *sci, guint ft_id, guint lexer
 {
 	gsize i;
 
+	g_assert(ft_id != GEANY_FILETYPES_NONE);
+
+	/* lexer */
+	SSM(sci, SCI_SETLEXER, lexer, 0);
+
 	/* styles */
-	apply_filetype_properties(sci, lexer, ft_id);
+	styleset_common(sci, ft_id);
 	if (n_styles > 0)
 	{
 		/* first style is also default one */
