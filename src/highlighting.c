@@ -809,14 +809,6 @@ static void styleset_init_from_mapping(guint ft_id, GKeyFile *config, GKeyFile *
 }
 
 
-#define STYLESET_INIT_FROM_MAPPING(ft_id, config, config_home, lang_name) \
-	styleset_init_from_mapping(ft_id, config, config_home, \
-			highlighting_styles_##lang_name, \
-			highlighting_styles_##lang_name ? G_N_ELEMENTS(highlighting_styles_##lang_name) : 0, \
-			highlighting_keywords_##lang_name, \
-			highlighting_keywords_##lang_name ? G_N_ELEMENTS(highlighting_keywords_##lang_name) : 0)
-
-
 /* STYLE_DEFAULT will be set to match the first style. */
 static void styleset_from_mapping(ScintillaObject *sci, guint ft_id, guint lexer,
 		const HLStyle *styles, gsize n_styles,
@@ -857,16 +849,6 @@ static void styleset_from_mapping(ScintillaObject *sci, guint ft_id, guint lexer
 	foreach_range(i, n_properties)
 		sci_set_property(sci, properties[i].property, properties[i].value);
 }
-
-
-#define STYLESET_FROM_MAPPING(sci, ft_id, lang_name) \
-	styleset_from_mapping(sci, ft_id, highlighting_lexer_##lang_name, \
-			highlighting_styles_##lang_name, \
-			highlighting_styles_##lang_name ? G_N_ELEMENTS(highlighting_styles_##lang_name) : 0, \
-			highlighting_keywords_##lang_name, \
-			highlighting_keywords_##lang_name ? G_N_ELEMENTS(highlighting_keywords_##lang_name) : 0, \
-			highlighting_properties_##lang_name, \
-			highlighting_properties_##lang_name ? G_N_ELEMENTS(highlighting_properties_##lang_name) : 0)
 
 
 
@@ -933,7 +915,11 @@ static guint get_lexer_filetype(GeanyFiletype *ft)
 
 #define init_styleset_case(LANG_NAME) \
 	case (GEANY_FILETYPES_##LANG_NAME): \
-		STYLESET_INIT_FROM_MAPPING(filetype_idx, config, configh, LANG_NAME); \
+		styleset_init_from_mapping(filetype_idx, config, configh, \
+				highlighting_styles_##LANG_NAME, \
+				HL_N_ENTRIES(highlighting_styles_##LANG_NAME), \
+				highlighting_keywords_##LANG_NAME, \
+				HL_N_ENTRIES(highlighting_keywords_##LANG_NAME)); \
 		break
 
 /* Called by filetypes_load_config(). */
@@ -1019,7 +1005,13 @@ void highlighting_init_styles(guint filetype_idx, GKeyFile *config, GKeyFile *co
 
 #define styleset_case(LANG_NAME) \
 	case (GEANY_FILETYPES_##LANG_NAME): \
-		STYLESET_FROM_MAPPING(sci, ft->id, LANG_NAME); \
+		styleset_from_mapping(sci, ft->id, highlighting_lexer_##LANG_NAME, \
+				highlighting_styles_##LANG_NAME, \
+				HL_N_ENTRIES(highlighting_styles_##LANG_NAME), \
+				highlighting_keywords_##LANG_NAME, \
+				HL_N_ENTRIES(highlighting_keywords_##LANG_NAME), \
+				highlighting_properties_##LANG_NAME, \
+				HL_N_ENTRIES(highlighting_properties_##LANG_NAME)); \
 		break
 
 /** Sets up highlighting and other visual settings.

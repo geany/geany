@@ -92,6 +92,9 @@ typedef struct
 #define EMPTY_KEYWORDS		((HLKeyword *) NULL)
 #define EMPTY_PROPERTIES	((HLProperty *) NULL)
 
+/* like G_N_ELEMENTS() but supports @array being NULL (for empty entries) */
+#define HL_N_ENTRIES(array) ((array) ? G_N_ELEMENTS(array) : 0)
+
 
 /* Ada */
 #define highlighting_lexer_ADA			SCLEX_ADA
