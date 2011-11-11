@@ -486,7 +486,7 @@ For brace indentation, update lexer_has_braces() in editor.c;
 indentation after ':' is done from on_new_line_added().
 
 If the Scintilla lexer supports user type keyword highlighting (e.g.
-SCLEX_CPP), update document_update_type_keywords() in document.c.
+SCLEX_CPP), update document_update_tags() in document.c.
 
 Adding a TagManager parser
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
