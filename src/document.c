@@ -2279,6 +2279,7 @@ void document_update_tags(GeanyDocument *doc)
 		case GEANY_FILETYPES_CS:
 		case GEANY_FILETYPES_D:
 		case GEANY_FILETYPES_JAVA:
+		case GEANY_FILETYPES_OBJECTIVEC:
 		case GEANY_FILETYPES_VALA:
 		{
 

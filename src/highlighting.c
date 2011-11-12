@@ -977,6 +977,7 @@ void highlighting_init_styles(guint filetype_idx, GKeyFile *config, GKeyFile *co
 		init_styleset_case(MATLAB);
 		init_styleset_case(MARKDOWN);
 		init_styleset_case(NSIS);
+		init_styleset_case(OBJECTIVEC);
 		init_styleset_case(PASCAL);
 		init_styleset_case(PERL);
 		init_styleset_case(PHP);
@@ -1055,6 +1056,7 @@ void highlighting_set_styles(ScintillaObject *sci, GeanyFiletype *ft)
 		styleset_case(MARKDOWN);
 		styleset_case(MATLAB);
 		styleset_case(NSIS);
+		styleset_case(OBJECTIVEC);
 		styleset_case(PASCAL);
 		styleset_case(PERL);
 		styleset_case(PHP);

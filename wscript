@@ -66,7 +66,7 @@ tagmanager_sources = set([
     'tagmanager/haskell.c', 'tagmanager/haxe.c', 'tagmanager/html.c', 'tagmanager/js.c',
     'tagmanager/keyword.c', 'tagmanager/latex.c', 'tagmanager/lregex.c', 'tagmanager/lua.c',
     'tagmanager/make.c', 'tagmanager/markdown.c', 'tagmanager/matlab.c', 'tagmanager/nsis.c',
-    'tagmanager/nestlevel.c', 'tagmanager/options.c',
+    'tagmanager/nestlevel.c', 'tagmanager/objc.c', 'tagmanager/options.c',
     'tagmanager/parse.c', 'tagmanager/pascal.c', 'tagmanager/r.c',
     'tagmanager/perl.c', 'tagmanager/php.c', 'tagmanager/python.c', 'tagmanager/read.c',
     'tagmanager/rest.c', 'tagmanager/ruby.c', 'tagmanager/sh.c', 'tagmanager/sort.c',

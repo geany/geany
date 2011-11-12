@@ -56,7 +56,8 @@
     AbcParser, \
     VerilogParser, \
     RParser, \
-    CobolParser
+    CobolParser, \
+    ObjcParser
 /*
 langType of each parser
  0	CParser
@@ -101,6 +102,7 @@ langType of each parser
 39  Verilog
 40	RParser
 41	CobolParser
+42	ObjcParser
 */
 #endif	/* _PARSERS_H */
 

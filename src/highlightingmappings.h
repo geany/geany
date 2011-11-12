@@ -989,6 +989,20 @@ static const HLKeyword highlighting_keywords_NSIS[] =
 #define highlighting_properties_NSIS	EMPTY_PROPERTIES
 
 
+/* Objective-C */
+#define highlighting_lexer_OBJECTIVEC		highlighting_lexer_C
+#define highlighting_styles_OBJECTIVEC		highlighting_styles_C
+static const HLKeyword highlighting_keywords_OBJECTIVEC[] =
+{
+	{ 0, "primary" },
+	/* SCI_SETKEYWORDS = 1 - secondary + global tags file types, see below */
+	{ 1, "secondary", TRUE },
+	{ 2, "docComment" }
+	/* SCI_SETKEYWORDS = 3 is for current session types - see editor_lexer_get_type_keyword_idx() */
+};
+#define highlighting_properties_OBJECTIVEC	highlighting_properties_C
+
+
 /* Pascal */
 #define highlighting_lexer_PASCAL		SCLEX_PASCAL
 static const HLStyle highlighting_styles_PASCAL[] =
