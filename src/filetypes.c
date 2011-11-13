@@ -985,7 +985,7 @@ static GeanyFiletype *filetypes_detect_from_file_internal(const gchar *utf8_file
 							&regerr);
 	if (regerr == NULL)
 	{
-		for (i = 0; i < GEANY_FILETYPE_SEARCH_LINES; i++)
+		for (i = 0; i < GEANY_FILETYPE_SEARCH_LINES && NZV(lines[i]); i++)
 		{
 			if (g_regex_match(ft_regex, lines[i], 0, &match))
 			{
