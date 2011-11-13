@@ -377,7 +377,7 @@ GtkWidget *toolbar_init(void)
 	gtk_action_group_add_action(group, action_build);
 
 	action_searchentry = geany_entry_action_new(
-		"SearchEntry", _("Search"), _("Find the entered text in the current file"), FALSE);
+		"SearchEntry", _("Search Field"), _("Find the entered text in the current file"), FALSE);
 	g_signal_connect(action_searchentry, "entry-activate",
 		G_CALLBACK(on_toolbar_search_entry_activate), GINT_TO_POINTER(FALSE));
 	g_signal_connect(action_searchentry, "entry-activate-backward",
@@ -387,7 +387,7 @@ GtkWidget *toolbar_init(void)
 	gtk_action_group_add_action(group, action_searchentry);
 
 	action_gotoentry = geany_entry_action_new(
-		"GotoEntry", _("Goto"), _("Jump to the entered line number"), TRUE);
+		"GotoEntry", _("Goto Field"), _("Jump to the entered line number"), TRUE);
 	g_signal_connect(action_gotoentry, "entry-activate",
 		G_CALLBACK(on_toolbutton_goto_entry_activate), NULL);
 	gtk_action_group_add_action(group, action_gotoentry);
