@@ -1,19 +1,22 @@
 # For complete documentation of this file, please see Geany's main documentation
-[styling=HTML]
+[styling=C]
 
-[keywords=HTML]
+[keywords]
+# all items must be in one line
+primary=asm auto break case char const continue default do double else enum extern float for goto if inline int long register restrict return short signed sizeof static struct switch typedef union unsigned void volatile while FALSE NULL TRUE
+secondary=@class @defs @dynamic @encode @end @implementation @interface @optional @package @public @private @property @protocol @protected @required @selector @synthesize @synchronized
+# these are some doxygen keywords (incomplete)
+docComment=attention author brief bug class code date def enum example exception file fn namespace note param remarks return see since struct throw todo typedef var version warning union
 
-[lexer_properties]
-phpscript.mode=1
+[lexer_properties=C]
 
 [settings]
 # default extension used when saving files
-extension=php
+extension=m
 
 # the following characters are these which a "word" can contains, see documentation
 #wordchars=_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
 
-# these comments are used for PHP, the comments used in HTML are in filetypes.xml
 # single comments, like # in this file
 comment_single=//
 # multiline comments
@@ -31,10 +34,6 @@ comment_use_indent=true
 # context action command (please see Geany's main documentation for details)
 context_action_cmd=
 
-# if this setting is set to true, a new line after a line ending with an
-# unclosed tag will be automatically indented
-xml_indent_tags=true
-
 [indentation]
 #width=4
 # 0 is spaces, 1 is tabs, 2 is tab & spaces
@@ -44,8 +43,6 @@ xml_indent_tags=true
 # %f will be replaced by the complete filename
 # %e will be replaced by the filename without extension
 # (use only one of it at one time)
-compiler=php -l "%f"
-run_cmd=php "%f"
-
-# use can also use something like this, to view your PHP or HTML files through a browser and webserver
-#run_cmd=firefox http://localhost/test_site/%f
+compiler=gcc -Wall -c "%f"
+linker=gcc -Wall -o "%e" "%f" -lobjc
+run_cmd="./%e"

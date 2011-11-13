@@ -167,19 +167,16 @@ static void open_file_dialog_handle_response(GtkWidget *dialog, gint response)
 			app->project->base_path, NULL);
 }
 
-#ifndef G_VALUE_INIT
-#define G_VALUE_INIT { 0 }
-#endif
 
-static void on_file_open_notify(GObject *filechooser, GParamSpec *pspec, gpointer data)
+static void on_file_open_show_hidden_notify(GObject *filechooser,
+	GParamSpec *pspec, gpointer data)
 {
-	GValue value = G_VALUE_INIT;
+	GtkWidget *toggle_button;
 
-	g_value_init(&value, pspec->value_type);
-	g_object_get_property(filechooser, pspec->name, &value);
+	toggle_button = ui_lookup_widget(GTK_WIDGET(filechooser), "check_hidden");
 
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(
-		ui_lookup_widget(GTK_WIDGET(filechooser), "check_hidden")), g_value_get_boolean(&value));
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(toggle_button),
+		gtk_file_chooser_get_show_hidden(GTK_FILE_CHOOSER(filechooser)));
 }
 
 
@@ -416,7 +413,8 @@ static GtkWidget *create_open_file_dialog(void)
 	gtk_cell_layout_set_cell_data_func(GTK_CELL_LAYOUT(encoding_combo), encoding_renderer,
 			encoding_combo_cell_data_func, NULL, NULL);
 
-	g_signal_connect(dialog, "notify::show-hidden", G_CALLBACK(on_file_open_notify), NULL);
+	g_signal_connect(dialog, "notify::show-hidden",
+		G_CALLBACK(on_file_open_show_hidden_notify), NULL);
 
 	return dialog;
 }

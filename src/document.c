@@ -2279,6 +2279,7 @@ void document_update_tags(GeanyDocument *doc)
 		case GEANY_FILETYPES_CS:
 		case GEANY_FILETYPES_D:
 		case GEANY_FILETYPES_JAVA:
+		case GEANY_FILETYPES_OBJECTIVEC:
 		case GEANY_FILETYPES_VALA:
 		{
 
@@ -2301,6 +2302,7 @@ void document_update_tags(GeanyDocument *doc)
 		keywords = g_string_free(keywords_str, FALSE);
 		sci_set_keywords(doc->editor->sci, keyword_idx, keywords);
 		g_free(keywords);
+		queue_colourise(doc); /* force re-highlighting the entire document */
 	}
 }
 

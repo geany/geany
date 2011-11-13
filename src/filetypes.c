@@ -118,6 +118,14 @@ static void init_builtin_filetypes(void)
 	ft->mime_type = g_strdup("text/x-c++src");
 	ft->group = GEANY_FILETYPE_GROUP_COMPILED;
 
+#define OBJECTIVEC
+	ft = filetypes[GEANY_FILETYPES_OBJECTIVEC];
+	ft->lang = 42;
+	ft->name = g_strdup("Objective-C");
+	filetype_make_title(ft, TITLE_SOURCE_FILE);
+	ft->mime_type = g_strdup("text/x-objc");
+	ft->group = GEANY_FILETYPE_GROUP_COMPILED;
+
 #define CS
 	ft = filetypes[GEANY_FILETYPES_CS];
 	ft->lang = 25;
@@ -1430,6 +1438,8 @@ static gchar *filetypes_get_conf_extension(const GeanyFiletype *ft)
 		case GEANY_FILETYPES_NONE: result = g_strdup("common"); break;
 		/* name is Matlab/Octave */
 		case GEANY_FILETYPES_MATLAB: result = g_strdup("matlab"); break;
+		/* name is Objective-C, and we don't want the hyphen */
+		case GEANY_FILETYPES_OBJECTIVEC: result = g_strdup("objectivec"); break;
 		default:
 			result = g_ascii_strdown(ft->name, -1);
 			break;
