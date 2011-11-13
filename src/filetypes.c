@@ -962,7 +962,8 @@ static GeanyFiletype *find_shebang(const gchar *utf8_filename, const gchar *line
 }
 
 
-/* Detect the filetype checking for a shebang, then filename extension. */
+/* Detect the filetype checking for a shebang, then filename extension.
+ * @lines: an strv of the lines to scan (must containing at least one line) */
 static GeanyFiletype *filetypes_detect_from_file_internal(const gchar *utf8_filename,
 														  gchar **lines)
 {
@@ -970,7 +971,6 @@ static GeanyFiletype *filetypes_detect_from_file_internal(const gchar *utf8_file
 	gint			 i;
 	GRegex			*ft_regex;
 	GMatchInfo		*match;
-	GError			*regerr = NULL;
 
 	/* try to find a shebang and if found use it prior to the filename extension
 	 * also checks for <?xml */
@@ -979,13 +979,11 @@ static GeanyFiletype *filetypes_detect_from_file_internal(const gchar *utf8_file
 		return ft;
 
 	/* try to extract the filetype using a regex capture */
-	ft_regex = g_regex_new( file_prefs.extract_filetype_regex,
-							G_REGEX_RAW | G_REGEX_MULTILINE,
-							0,
-							&regerr);
-	if (regerr == NULL)
+	ft_regex = g_regex_new(file_prefs.extract_filetype_regex,
+			G_REGEX_RAW | G_REGEX_MULTILINE, 0, NULL);
+	if (ft_regex != NULL)
 	{
-		for (i = 0; i < GEANY_FILETYPE_SEARCH_LINES; i++)
+		for (i = 0; ft == NULL && lines[i] != NULL; i++)
 		{
 			if (g_regex_match(ft_regex, lines[i], 0, &match))
 			{
@@ -997,15 +995,9 @@ static GeanyFiletype *filetypes_detect_from_file_internal(const gchar *utf8_file
 				}
 			}
 			g_match_info_free(match);
-			if (ft != NULL)
-				break;
 		}
+		g_regex_unref(ft_regex);
 	}
-	else
-	{
-		g_error_free(regerr);
-	}
-	g_regex_unref(ft_regex);
 	if (ft != NULL)
 		return ft;
 
@@ -1020,7 +1012,7 @@ static GeanyFiletype *filetypes_detect_from_file_internal(const gchar *utf8_file
 GeanyFiletype *filetypes_detect_from_document(GeanyDocument *doc)
 {
 	GeanyFiletype 	*ft;
-	gchar 			*lines[GEANY_FILETYPE_SEARCH_LINES];
+	gchar 			*lines[GEANY_FILETYPE_SEARCH_LINES + 1];
 	gint			 i;
 
 	if (doc == NULL)
@@ -1030,6 +1022,7 @@ GeanyFiletype *filetypes_detect_from_document(GeanyDocument *doc)
 	{
 		lines[i] = sci_get_line(doc->editor->sci, i);
 	}
+	lines[i] = NULL;
 	ft = filetypes_detect_from_file_internal(doc->file_name, lines);
 	for (i = 0; i < GEANY_FILETYPE_SEARCH_LINES; ++i)
 	{
@@ -1052,10 +1045,9 @@ GeanyFiletype *filetypes_detect_from_document(GeanyDocument *doc)
 GeanyFiletype *filetypes_detect_from_file(const gchar *utf8_filename)
 {
 	gchar line[1024];
-	gchar *lines[GEANY_FILETYPE_SEARCH_LINES];
+	gchar *lines[2];
 	FILE  *f;
 	gchar *locale_name = utils_get_locale_from_utf8(utf8_filename);
-	gint  i;
 
 	f = g_fopen(locale_name, "r");
 	g_free(locale_name);
@@ -1064,11 +1056,8 @@ GeanyFiletype *filetypes_detect_from_file(const gchar *utf8_filename)
 		if (fgets(line, sizeof(line), f) != NULL)
 		{
 			fclose(f);
-			for (i = 0; i < GEANY_FILETYPE_SEARCH_LINES; ++i)
-			{
-				lines[i] = NULL;
-			}
 			lines[0] = line;
+			lines[1] = NULL;
 			return filetypes_detect_from_file_internal(utf8_filename, lines);
 		}
 		fclose(f);
