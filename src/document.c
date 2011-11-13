@@ -2302,6 +2302,7 @@ void document_update_tags(GeanyDocument *doc)
 		keywords = g_string_free(keywords_str, FALSE);
 		sci_set_keywords(doc->editor->sci, keyword_idx, keywords);
 		g_free(keywords);
+		queue_colourise(doc); /* force re-highlighting the entire document */
 	}
 }
 
