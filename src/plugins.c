@@ -1104,7 +1104,7 @@ enum
 {
 	PLUGIN_COLUMN_CHECK = 0,
 	PLUGIN_COLUMN_NAME,
-	PLUGIN_COLUMN_FILE,
+	PLUGIN_COLUMN_DESCRIPTION,
 	PLUGIN_COLUMN_PLUGIN,
 	PLUGIN_N_COLUMNS,
 	PM_BUTTON_CONFIGURE,
@@ -1117,7 +1117,7 @@ typedef struct
 	GtkWidget *tree;
 	GtkListStore *store;
 	GtkWidget *plugin_label;
-	GtkWidget *description_label;
+	GtkWidget *filename_label;
 	GtkWidget *author_label;
 	GtkWidget *configure_button;
 	GtkWidget *help_button;
@@ -1157,7 +1157,7 @@ static void pm_selection_changed(GtkTreeSelection *selection, gpointer user_data
 			/* Translators: <plugin name> <plugin version> */
 			text = g_strdup_printf(_("%s %s"), pi->name, pi->version);
 			gtk_label_set_text(GTK_LABEL(pm_widgets.plugin_label), text);
-			gtk_label_set_text(GTK_LABEL(pm_widgets.description_label), pi->description);
+			gtk_label_set_text(GTK_LABEL(pm_widgets.filename_label), p->filename);
 			gtk_label_set_text(GTK_LABEL(pm_widgets.author_label), pi->author);
 			g_free(text);
 
@@ -1243,7 +1243,7 @@ static void pm_prepare_treeview(GtkWidget *tree, GtkListStore *store)
 	text_renderer = gtk_cell_renderer_text_new();
 	g_object_set(text_renderer, "ellipsize", PANGO_ELLIPSIZE_END, NULL);
 	column = gtk_tree_view_column_new_with_attributes(
-		_("File"), text_renderer, "text", PLUGIN_COLUMN_FILE, NULL);
+		_("Description"), text_renderer, "text", PLUGIN_COLUMN_DESCRIPTION, NULL);
 	gtk_tree_view_append_column(GTK_TREE_VIEW(tree), column);
 
 	gtk_tree_view_set_rules_hint(GTK_TREE_VIEW(tree), TRUE);
@@ -1262,7 +1262,7 @@ static void pm_prepare_treeview(GtkWidget *tree, GtkListStore *store)
 		gtk_list_store_append(store, &iter);
 		gtk_list_store_set(store, &iter, PLUGIN_COLUMN_CHECK, FALSE,
 				PLUGIN_COLUMN_NAME, _("No plugins available."),
-				PLUGIN_COLUMN_FILE, "", PLUGIN_COLUMN_PLUGIN, NULL, -1);
+				PLUGIN_COLUMN_DESCRIPTION, "", PLUGIN_COLUMN_PLUGIN, NULL, -1);
 	}
 	else
 	{
@@ -1275,7 +1275,7 @@ static void pm_prepare_treeview(GtkWidget *tree, GtkListStore *store)
 			gtk_list_store_set(store, &iter,
 				PLUGIN_COLUMN_CHECK, is_active_plugin(p),
 				PLUGIN_COLUMN_NAME, p->info.name,
-				PLUGIN_COLUMN_FILE, p->filename,
+				PLUGIN_COLUMN_DESCRIPTION, p->info.description,
 				PLUGIN_COLUMN_PLUGIN, p,
 				-1);
 		}
@@ -1396,14 +1396,14 @@ static void pm_show_dialog(GtkMenuItem *menuitem, gpointer user_data)
 	table = gtk_table_new(3, 2, FALSE);
 	gtk_table_set_col_spacings(GTK_TABLE(table), 6);
 	pm_widgets.plugin_label = geany_wrap_label_new(NULL);
-	pm_widgets.description_label = geany_wrap_label_new(NULL);
+	pm_widgets.filename_label = geany_wrap_label_new(NULL);
 	pm_widgets.author_label = geany_wrap_label_new(NULL);
 	gtk_table_attach(GTK_TABLE(table), create_table_label(_("Plugin:")), 0, 1, 0, 1, GTK_FILL, GTK_FILL, 0, 0);
-	gtk_table_attach(GTK_TABLE(table), create_table_label(_("Description:")), 0, 1, 1, 2, GTK_FILL, GTK_FILL, 0, 0);
-	gtk_table_attach(GTK_TABLE(table), create_table_label(_("Author(s):")), 0, 1, 2, 3, GTK_FILL, GTK_FILL, 0, 0);
+	gtk_table_attach(GTK_TABLE(table), create_table_label(_("Author(s):")), 0, 1, 1, 2, GTK_FILL, GTK_FILL, 0, 0);
+	gtk_table_attach(GTK_TABLE(table), create_table_label(_("Filename:")), 0, 1, 2, 3, GTK_FILL, GTK_FILL, 0, 0);
 	gtk_table_attach(GTK_TABLE(table), pm_widgets.plugin_label, 1, 2, 0, 1, GTK_EXPAND | GTK_FILL, GTK_FILL, 0, 0);
-	gtk_table_attach(GTK_TABLE(table), pm_widgets.description_label, 1, 2, 1, 2, GTK_EXPAND | GTK_FILL, GTK_FILL, 0, 0);
-	gtk_table_attach(GTK_TABLE(table), pm_widgets.author_label, 1, 2, 2, 3, GTK_EXPAND | GTK_FILL, GTK_FILL, 0, 0);
+	gtk_table_attach(GTK_TABLE(table), pm_widgets.author_label, 1, 2, 1, 2, GTK_EXPAND | GTK_FILL, GTK_FILL, 0, 0);
+	gtk_table_attach(GTK_TABLE(table), pm_widgets.filename_label, 1, 2, 2, 3, GTK_EXPAND | GTK_FILL, GTK_FILL, 0, 0);
 
 	desc_win = gtk_scrolled_window_new(NULL, NULL);
 	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(desc_win),
