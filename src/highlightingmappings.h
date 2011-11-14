@@ -29,13 +29,15 @@
 
 /* contains all filtypes informations in the form of:
  *  - highlighting_lexer_LANG:		the SCI lexer
- *  - highlighting_styles_LANG:		SCI style/named style mappings
+ *  - highlighting_styles_LANG:		SCI style/named style mappings.  The first
+ * 									item is also used for the default style.
  *  - highlighting_keywords_LANG:	keywords ID/name mappings
  *  - highlighting_properties_LANG:	default SCI properties and their value
  * where LANG is the lang part from GEANY_FILETYPE_LANG
  *
  * Using this scheme makes possible to automate style setup by simply listing LANG
- * and let STYLESET_[INIT_]FROM_MAPPING() macro prepare the correct calls.
+ * and let [init_]styleset_case() macros (in highlighting.c) prepare the correct
+ * calls.
  */
 
 
@@ -61,7 +63,6 @@
  */
 
 
-/* first HLStyle array entry should always be the default style for that lexer */
 typedef struct
 {
 	guint		 style;		/* SCI style */
