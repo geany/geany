@@ -33,7 +33,7 @@
  *  - highlighting_keywords_LANG:	keywords ID/name mappings
  *  - highlighting_properties_LANG:	default SCI properties and their value
  * where LANG is the lang part from GEANY_FILETYPE_LANG
- * 
+ *
  * Using this scheme makes possible to automate style setup by simply listing LANG
  * and let STYLESET_[INIT_]FROM_MAPPING() macro prepare the correct calls.
  */
@@ -87,7 +87,7 @@ typedef struct
 #define EMPTY_PROPERTIES	((HLProperty *) NULL)
 
 /* like G_N_ELEMENTS() but supports @array being NULL (for empty entries) */
-#define HL_N_ENTRIES(array) ((array) ? G_N_ELEMENTS(array) : 0)
+#define HL_N_ENTRIES(array) ((array != NULL) ? G_N_ELEMENTS(array) : 0)
 
 
 /* Ada */
@@ -828,7 +828,7 @@ static const HLStyle highlighting_styles_LISP[] =
 	{ SCE_LISP_SYMBOL,			"symbol"		 },
 	{ SCE_LISP_STRING,			"string"		 },
 	{ SCE_LISP_STRINGEOL,		"stringeol"		 },
-	{ SCE_LISP_IDENTIFIER,		"identifier"	 }, 
+	{ SCE_LISP_IDENTIFIER,		"identifier"	 },
 	{ SCE_LISP_OPERATOR,		"operator"		 },
 	{ SCE_LISP_SPECIAL,			"special"		 },
 	{ SCE_LISP_KEYWORD_KW,		"keywordkw"		 }
