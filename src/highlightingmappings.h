@@ -42,24 +42,18 @@
 /*
  * Note about initializer lists below:
  *
- * Quoting C99 201x draft at 6.7.9§21:
+ * Quoting C89 X3 draft at 3.5.7:16 (corresponds to C99 201x draft at 6.7.9:21):
  *
- *   If there are fewer initializers in a brace-enclosed list than there are elements or
- *   members of an aggregate, or fewer characters in a string literal used to initialize
- *   an array of known size than there are elements in the array, the remainder of the
- *   aggregate shall be initialized implicitly the same as objects that have static
- *   storage duration.
+ *   If there are fewer initializers in a list than there are members of
+ *   an aggregate, the remainder of the aggregate shall be initialized
+ *   implicitly the same as objects that have static storage duration.
  *
- * Which refers to 6.7.9§10:
+ * Which refers to 3.5.7:7 (corresponds to C99 201x draft at 6.7.9:10):
  *
- *   [...] If an object that has static or thread storage duration is not initialized
- *   explicitly, then:
- *   - if it has pointer type, it is initialized to a null pointer;
- *   - if it has arithmetic type, it is initialized to (positive or unsigned) zero;
- *   - if it is an aggregate, every member is initialized (recursively) according to
- *     these rules, and any padding is initialized to zero bits;
- *   - if it is a union, the first named member is initialized (recursively) according
- *     to these rules, and any padding is initialized to zero bits;
+ *   If an object that has static storage duration is not initialized
+ *   explicitly, it is initialized implicitly as if every member that has
+ *   arithmetic type were assigned 0 and every member that has pointer type
+ *   were assigned a null pointer constant.  [...]
  *
  * We can then safely leave initializing of ending members to the implicit rules if we
  * want them to be 0 (FALSE is 0, of course).  This is used in the initializers below
