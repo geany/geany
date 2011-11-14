@@ -971,6 +971,7 @@ static GeanyFiletype *filetypes_detect_from_file_internal(const gchar *utf8_file
 	gint			 i;
 	GRegex			*ft_regex;
 	GMatchInfo		*match;
+	GError			*regex_error = NULL;
 
 	/* try to find a shebang and if found use it prior to the filename extension
 	 * also checks for <?xml */
@@ -980,7 +981,7 @@ static GeanyFiletype *filetypes_detect_from_file_internal(const gchar *utf8_file
 
 	/* try to extract the filetype using a regex capture */
 	ft_regex = g_regex_new(file_prefs.extract_filetype_regex,
-			G_REGEX_RAW | G_REGEX_MULTILINE, 0, NULL);
+			G_REGEX_RAW | G_REGEX_MULTILINE, 0, &regex_error);
 	if (ft_regex != NULL)
 	{
 		for (i = 0; ft == NULL && lines[i] != NULL; i++)
@@ -997,6 +998,11 @@ static GeanyFiletype *filetypes_detect_from_file_internal(const gchar *utf8_file
 			g_match_info_free(match);
 		}
 		g_regex_unref(ft_regex);
+	}
+	else if (regex_error != NULL)
+	{
+		geany_debug("Filetype extract regex ignored: %s", regex_error->message);
+		g_error_free(regex_error);
 	}
 	if (ft != NULL)
 		return ft;
