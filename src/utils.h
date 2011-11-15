@@ -37,14 +37,18 @@
 
 /** Assigns @a result to @a ptr, then frees the old value.
  * @a result can be an expression using the 'old' value of @a ptr.
- * E.g. @code setptr(str, g_strndup(str, 5)); @endcode
+ * E.g. @code SETPTR(str, g_strndup(str, 5)); @endcode
  **/
+#define SETPTR(ptr, result) \
+	do setptr(ptr, result) while (0)
+
+/** @deprecated 2011/11/15 - use SETPTR() instead. */
 #define setptr(ptr, result) \
-	do {\
+	{\
 		gpointer setptr_tmp = ptr;\
 		ptr = result;\
 		g_free(setptr_tmp);\
-	} while (0)
+	}
 
 /** Duplicates a string on the stack using @c g_alloca().
  * Like glibc's @c strdupa(), but portable.
