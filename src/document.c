@@ -1485,7 +1485,7 @@ static gsize save_convert_to_encoding(GeanyDocument *doc, gchar **data, gsize *l
 	gsize bytes_read;
 	gsize conv_len;
 
-	g_return_val_if_fail(data != NULL || *data == NULL, FALSE);
+	g_return_val_if_fail(data != NULL && *data != NULL, FALSE);
 	g_return_val_if_fail(len != NULL, FALSE);
 
 	/* try to convert it from UTF-8 to original encoding */
