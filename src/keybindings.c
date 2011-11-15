@@ -432,18 +432,20 @@ static void init_default_kb(void)
 	keybindings_set_item(group, GEANY_KEYS_SEARCH_PREVIOUSMESSAGE, NULL,
 		0, 0, "menu_previousmessage", _("Previous Message"), LW(previous_message1));
 	keybindings_set_item(group, GEANY_KEYS_SEARCH_FINDUSAGE, NULL,
-		0, 0, "popup_findusage", _("Find Usage"), LW(find_usage1));
+		GDK_e, GDK_CONTROL_MASK | GDK_SHIFT_MASK, "popup_findusage",
+		_("Find Usage"), LW(find_usage1));
 	keybindings_set_item(group, GEANY_KEYS_SEARCH_FINDDOCUMENTUSAGE, NULL,
-		0, 0, "popup_finddocumentusage", _("Find Document Usage"), LW(find_document_usage1));
+		GDK_d, GDK_CONTROL_MASK | GDK_SHIFT_MASK, "popup_finddocumentusage",
+		_("Find Document Usage"), LW(find_document_usage1));
 	keybindings_set_item(group, GEANY_KEYS_SEARCH_MARKALL, NULL,
 		GDK_m, GDK_CONTROL_MASK | GDK_SHIFT_MASK, "find_markall", _("_Mark All"), LW(mark_all1));
 
 	group = keybindings_get_core_group(GEANY_KEY_GROUP_GOTO);
 
 	keybindings_set_item(group, GEANY_KEYS_GOTO_BACK, NULL,
-		0, 0, "nav_back", _("Navigate back a location"), NULL);
+		GDK_Left, GDK_MOD1_MASK, "nav_back", _("Navigate back a location"), NULL);
 	keybindings_set_item(group, GEANY_KEYS_GOTO_FORWARD, NULL,
-		0, 0, "nav_forward", _("Navigate forward a location"), NULL);
+		GDK_Right, GDK_MOD1_MASK, "nav_forward", _("Navigate forward a location"), NULL);
 	keybindings_set_item(group, GEANY_KEYS_GOTO_LINE, NULL,
 		GDK_l, GDK_CONTROL_MASK, "menu_gotoline", _("Go to Line"), LW(go_to_line1));
 	keybindings_set_item(group, GEANY_KEYS_GOTO_MATCHINGBRACE, NULL,
@@ -569,7 +571,7 @@ static void init_default_kb(void)
 		GDK_F9, GDK_SHIFT_MASK | GDK_CONTROL_MASK, "build_makeowntarget",
 		_("Make custom target"), NULL);
 	keybindings_set_item(group, GEANY_KEYS_BUILD_MAKEOBJECT, NULL,
-		0, 0, "build_makeobject", _("Make object"), NULL);
+		GDK_F8, GDK_SHIFT_MASK, "build_makeobject", _("Make object"), NULL);
 	keybindings_set_item(group, GEANY_KEYS_BUILD_NEXTERROR, NULL,
 		0, 0, "build_nexterror", _("Next error"), NULL);
 	keybindings_set_item(group, GEANY_KEYS_BUILD_PREVIOUSERROR, NULL,

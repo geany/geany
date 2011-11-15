@@ -3428,12 +3428,12 @@ Next message                                              Jumps to the line with
 Previous message                                          Jumps to the line with the previous message
                                                           in the Messages window.
 
-Find Usage                                                Finds all occurrences of the current word (near
+Find Usage                      Ctrl-Shift-E              Finds all occurrences of the current word (near
                                                           the keyboard cursor) or selection in all open
                                                           documents and displays them in the messages
                                                           window.
 
-Find Document Usage                                       Finds all occurrences of the current word (near
+Find Document Usage             Ctrl-Shift-D              Finds all occurrences of the current word (near
                                                           the keyboard cursor) or selection in the current
                                                           document and displays them in the messages
                                                           window.
@@ -3450,11 +3450,11 @@ Go to keybindings
 =============================== ========================= ==================================================
 Action                          Default shortcut          Description
 =============================== ========================= ==================================================
-Navigate forward a location                               Switches to the next location in the navigation
+Navigate forward a location     Alt-Right  (C)            Switches to the next location in the navigation
                                                           history. See the section called `Code Navigation
                                                           History`_.
 
-Navigate back a location                                  Switches to the previous location in the
+Navigate back a location        Alt-Left  (C)             Switches to the previous location in the
                                                           navigation history. See the section called
                                                           `Code navigation history`_.
 
@@ -3636,7 +3636,7 @@ Make all                        Shift-F9                  Builds the current fil
 Make custom target              Ctrl-Shift-F9             Builds the current file with the Make tool and a
                                                           given target.
 
-Make object                                               Compiles the current file with the Make tool.
+Make object                     Shift-F8                  Compiles the current file with the Make tool.
 
 Next error                                                Jumps to the line with the next error from the
                                                           last build process.
