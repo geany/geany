@@ -1753,14 +1753,13 @@ static gint find_previous_brace(ScintillaObject *sci, gint pos)
 
 static gint find_start_bracket(ScintillaObject *sci, gint pos)
 {
-	gchar c;
 	gint brackets = 0;
 	gint orig_pos = pos;
 
-	c = sci_get_char_at(sci, pos);
 	while (pos > 0 && pos > orig_pos - 300)
 	{
-		c = sci_get_char_at(sci, pos);
+		gchar c = sci_get_char_at(sci, pos);
+
 		if (c == ')') brackets++;
 		else if (c == '(') brackets--;
 		pos--;
@@ -2876,7 +2875,7 @@ gint editor_do_uncomment(GeanyEditor *editor, gint line, gboolean toggle)
 	gint count = 0;
 	gsize co_len;
 	gchar sel[256], *co, *cc;
-	gboolean break_loop = FALSE, single_line = FALSE;
+	gboolean single_line = FALSE;
 	GeanyFiletype *ft;
 
 	g_return_val_if_fail(editor != NULL && editor->document->file_type != NULL, 0);
@@ -2918,7 +2917,7 @@ gint editor_do_uncomment(GeanyEditor *editor, gint line, gboolean toggle)
 
 	sci_start_undo_action(editor->sci);
 
-	for (i = first_line; (i <= last_line) && (! break_loop); i++)
+	for (i = first_line; i <= last_line; i++)
 	{
 		gint buf_len;
 
@@ -2975,7 +2974,6 @@ gint editor_do_uncomment(GeanyEditor *editor, gint line, gboolean toggle)
 				}
 
 				/* break because we are already on the last line */
-				break_loop = TRUE;
 				break;
 			}
 		}

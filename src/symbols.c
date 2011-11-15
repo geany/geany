@@ -1390,15 +1390,15 @@ static gint compare_top_level_names(const gchar *a, const gchar *b)
 	guint i;
 	const gchar *name;
 
+	/* This should never happen as it would mean that two or more top
+	 * level items have the same name but it can happen by typos in the translations. */
+	g_return_val_if_fail(! utils_str_equal(a, b), 1);
+
 	foreach_ptr_array(name, i, top_level_iter_names)
 	{
 		if (utils_str_equal(name, a))
 			return -1;
 		if (utils_str_equal(name, b))
-			return 1;
-		/* This should never happen as it would mean that two or more top
-		 * level items have the same name but it can happen by typos in the translations. */
-		if (utils_str_equal(a, b))
 			return 1;
 	}
 	g_warning("Couldn't find top level node '%s' or '%s'!", a, b);
@@ -1450,7 +1450,7 @@ static gint tree_sort_func(GtkTreeModel *model, GtkTreeIter *a, GtkTreeIter *b,
 			/* this is what g_strcmp0() does */
 			if (! astr)
 				cmp = -(astr != bstr);
-			if (! bstr)
+			else if (! bstr)
 				cmp = astr != bstr;
 			else
 			{
