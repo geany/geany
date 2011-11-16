@@ -245,7 +245,7 @@ On Unix-like systems this is commonly ``/usr`` if you installed from
 a binary package, or ``/usr/local`` if you build from source.
 
 .. note::
-    Editing system files is not necessary as you can use the
+    Editing system files is not necessary as you should use the
     per-user configuration files instead, which don't need root
     permissions. See `Configuration files`_.
 
@@ -1773,12 +1773,13 @@ Project files
     Path to start in when opening project files.
 
 Extra plugin path
-	By default Geany looks in the global installation path and in the
-	configuration directory. In addition the path entered here will be searched
-	for plugins. Usually you do not need to set an additional path to search for
-	plugins. It might be useful when Geany is installed on a multi-user machine
-	and additional plugins are available in a common location for all users.
-	Leave blank to not set an additional lookup path.
+    By default Geany looks in the system installation and the user
+    configuration - see `Plugins`_. In addition the path entered here will be
+    searched.
+    Usually you do not need to set an additional path to search for
+    plugins. It might be useful when Geany is installed on a multi-user machine
+    and additional plugins are available in a common location for all users.
+    Leave blank to not set an additional lookup path.
 
 
 General Miscellaneous preferences
@@ -3109,7 +3110,8 @@ general preference is set. There is also a command-line option,
 ``-p``, which prevents plugins being loaded. Plugins are scanned in
 the following directories:
 
-* ``$prefix/lib/geany`` (see `Installation prefix`_)
+* ``$prefix/lib/geany`` on Unix-like systems (see `Installation prefix`_)
+* The ``lib`` subfolder of the installation path on Windows.
 * The ``plugins`` subfolder of the user configuration directory - see
   `Configuration file paths`_.
 * The `Extra plugin path` preference (usually blank) - see `Paths`_.
@@ -3703,8 +3705,16 @@ Paths on Unix-like systems
 The system path is ``$prefix/share/geany``, where ``$prefix`` is the
 path where Geany is installed (see `Installation prefix`_).
 
-The user configuration directory is normally
-``/home/username/.config/geany/``.
+The user configuration directory is normally:
+``/home/username/.config/geany``
+
+Paths on Windows
+^^^^^^^^^^^^^^^^
+The system path is the ``data`` subfolder of the installation path
+on Windows.
+
+The user configuration directory might vary, but on Windows XP it's:
+``C:\Documents and Settings\UserName\Application Data\geany``
 
 
 Tools menu items
