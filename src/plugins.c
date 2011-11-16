@@ -75,6 +75,7 @@ static GList *failed_plugins_list = NULL;	/* plugins the user wants active but c
 
 static GtkWidget *menu_separator = NULL;
 
+static gchar *get_plugin_path(void);
 static void pm_show_dialog(GtkMenuItem *menuitem, gpointer user_data);
 
 
@@ -658,7 +659,7 @@ plugin_new(const gchar *fname, gboolean init_plugin, gboolean add_to_list)
 		geany_debug("Plugin \"%s\" already loaded.", fname);
 		if (add_to_list)
 		{
-			/* do not add the to list twice */
+			/* do not add to the list twice */
 			if (g_list_find(plugin_list, plugin) != NULL)
 				return NULL;
 
@@ -839,6 +840,60 @@ plugin_free(Plugin *plugin)
 }
 
 
+static gchar *get_custom_plugin_path(const gchar *plugin_path_config,
+									 const gchar *plugin_path_system)
+{
+	gchar *plugin_path_custom;
+
+	if (!NZV(prefs.custom_plugin_path))
+		return NULL;
+
+	plugin_path_custom = utils_get_locale_from_utf8(prefs.custom_plugin_path);
+	utils_tidy_path(plugin_path_custom);
+
+	/* check whether the custom plugin path is one of the system or user plugin paths
+	 * and abort if so */
+	if (utils_str_equal(plugin_path_custom, plugin_path_config) ||
+		utils_str_equal(plugin_path_custom, plugin_path_system))
+	{
+		g_free(plugin_path_custom);
+		return NULL;
+	}
+	return plugin_path_custom;
+}
+
+
+/* all 3 paths Geany looks for plugins in can change (even system path on Windows)
+ * so we need to check active plugins are in the right place before loading */
+static gboolean check_plugin_path(const gchar *fname)
+{
+	gchar *plugin_path_config;
+	gchar *plugin_path_system;
+	gchar *plugin_path_custom;
+	gboolean ret = FALSE;
+
+	plugin_path_config = g_strconcat(app->configdir, G_DIR_SEPARATOR_S, "plugins", NULL);
+	if (g_str_has_prefix(fname, plugin_path_config))
+		ret = TRUE;
+
+	plugin_path_system = get_plugin_path();
+	if (g_str_has_prefix(fname, plugin_path_system))
+		ret = TRUE;
+
+	plugin_path_custom = get_custom_plugin_path(plugin_path_config, plugin_path_system);
+	if (plugin_path_custom)
+	{
+		if (g_str_has_prefix(fname, plugin_path_custom))
+			ret = TRUE;
+
+		g_free(plugin_path_custom);
+	}
+	g_free(plugin_path_config);
+	g_free(plugin_path_system);
+	return ret;
+}
+
+
 /* load active plugins at startup */
 static void
 load_active_plugins(void)
@@ -854,7 +909,7 @@ load_active_plugins(void)
 
 		if (NZV(fname) && g_file_test(fname, G_FILE_TEST_EXISTS))
 		{
-			if (plugin_new(fname, TRUE, FALSE) == NULL)
+			if (!check_plugin_path(fname) || plugin_new(fname, TRUE, FALSE) == NULL)
 				failed_plugins_list = g_list_prepend(failed_plugins_list, g_strdup(fname));
 		}
 	}
@@ -886,7 +941,7 @@ load_plugins_from_path(const gchar *path)
 	g_slist_free(list);
 
 	if (count)
-		geany_debug("Found %d plugin(s) in '%s'.", count, path);
+		geany_debug("Added %d plugin(s) in '%s'.", count, path);
 }
 
 
@@ -906,25 +961,12 @@ static gchar *get_plugin_path(void)
 }
 
 
-static gboolean validate_custom_plugin_path(const gchar *plugin_path_custom,
-											const gchar *plugin_path_config,
-											const gchar *plugin_path_system)
-{
-	/* check whether the custom plugin path is one of the system or user plugin paths
-	 * and abort if so */
-	if (utils_str_equal(plugin_path_custom, plugin_path_config) ||
-		utils_str_equal(plugin_path_custom, plugin_path_system))
-		return FALSE;
-
-	return TRUE;
-}
-
-
 /* Load (but don't initialize) all plugins for the Plugin Manager dialog */
 static void load_all_plugins(void)
 {
 	gchar *plugin_path_config;
 	gchar *plugin_path_system;
+	gchar *plugin_path_custom;
 
 	plugin_path_config = g_strconcat(app->configdir, G_DIR_SEPARATOR_S, "plugins", NULL);
 	plugin_path_system = get_plugin_path();
@@ -933,14 +975,10 @@ static void load_all_plugins(void)
 	load_plugins_from_path(plugin_path_config);
 
 	/* load plugins from a custom path */
-	if (NZV(prefs.custom_plugin_path))
+	plugin_path_custom = get_custom_plugin_path(plugin_path_config, plugin_path_system);
+	if (plugin_path_custom)
 	{
-		gchar *plugin_path_custom = utils_get_locale_from_utf8(prefs.custom_plugin_path);
-		utils_tidy_path(plugin_path_custom);
-
-		if (validate_custom_plugin_path(plugin_path_custom, plugin_path_config, plugin_path_system))
-			load_plugins_from_path(plugin_path_custom);
-
+		load_plugins_from_path(plugin_path_custom);
 		g_free(plugin_path_custom);
 	}
 
