@@ -2512,6 +2512,15 @@ send_selection_unsafe             By default, Geany strips any trailing        f
                                   If, for whatever reasons, you really want
                                   it to be executed directly, set this option
                                   to true.
+send_cmd_prefix                   String with which prefix the commands sent   Empty       immediately
+                                  to the shell.  This may be used to tell
+                                  some shells (BASH with ``HISTCONTROL`` set
+                                  to ``ignorespace``, ZSH with
+                                  ``HIST_IGNORE_SPACE`` enabled, etc.) from
+                                  putting these commands in their history by
+                                  setting this to a space.  Note that leading
+                                  spaces must be escaped using `\s` in the
+                                  configuration file.
 **File related**
 use_atomic_file_saving            Defines the mode how Geany saves files to    false       immediately
                                   disk. If disabled, Geany directly writes

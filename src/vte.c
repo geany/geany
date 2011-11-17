@@ -298,6 +298,7 @@ void vte_close(void)
 	g_free(vc->font);
 	g_free(vc->colour_back);
 	g_free(vc->colour_fore);
+	g_free(vc->send_cmd_prefix);
 	g_free(vc);
 	g_free(gtk_menu_key_accel);
 	/* Don't unload the module explicitly because it causes a segfault on FreeBSD. The segfault
@@ -660,7 +661,7 @@ void vte_cwd(const gchar *filename, gboolean force)
 		{
 			/* use g_shell_quote to avoid problems with spaces, '!' or something else in path */
 			gchar *quoted_path = g_shell_quote(path);
-			gchar *cmd = g_strconcat("cd ", quoted_path, "\n", NULL);
+			gchar *cmd = g_strconcat(vc->send_cmd_prefix, "cd ", quoted_path, "\n", NULL);
 			if (! vte_send_cmd(cmd))
 			{
 				ui_set_statusbar(FALSE,
