@@ -362,6 +362,11 @@ Short option  Long option              Function
                                        stdout, one line each. This is mainly intended for plugin
                                        authors to detect installation paths.
 
+-r            --read-only              Open all files given on the command line in read-only mode.
+									   This only applies to files opened explicitly from the command
+									   line, so files from previous sessions or project files are
+									   unaffected.
+
 -s            --no-session             Do not load the previous session's files.
 
 -t            --no-terminal            Do not load terminal support. Use this option if you do

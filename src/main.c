@@ -140,6 +140,7 @@ static GOptionEntry entries[] =
 	{ "no-plugins", 'p', 0, G_OPTION_ARG_NONE, &no_plugins, N_("Don't load plugins"), NULL },
 #endif
 	{ "print-prefix", 0, 0, G_OPTION_ARG_NONE, &print_prefix, N_("Print Geany's installation prefix"), NULL },
+	{ "read-only", 'r', 0, G_OPTION_ARG_NONE, &cl_options.readonly, N_("Open all FILES in read-only mode (see documention)"), NULL },
 	{ "no-session", 's', G_OPTION_FLAG_REVERSE, G_OPTION_ARG_NONE, &cl_options.load_session, N_("Don't load the previous session's files"), NULL },
 #ifdef HAVE_VTE
 	{ "no-terminal", 't', 0, G_OPTION_ARG_NONE, &no_vte, N_("Don't load terminal support"), NULL },
@@ -886,13 +887,19 @@ void main_load_project_from_command_line(const gchar *locale_filename, gboolean 
 static void load_startup_files(gint argc, gchar **argv)
 {
 	gboolean load_project_from_cl = FALSE;
+	gboolean cl_files_opened = FALSE;
 
 	/* ATM when opening a project file any other filenames are ignored */
 	load_project_from_cl = (argc > 1) && g_str_has_suffix(argv[1], ".geany");
 	if (load_project_from_cl && argc > 2)
 		g_print("Ignoring extra filenames after %s", argv[1]);
 
-	if (load_project_from_cl || ! open_cl_files(argc, argv))
+	if (!load_project_from_cl)
+		cl_files_opened = open_cl_files(argc, argv);
+	/* switch readonly mode off for session files, future files and projects */
+	cl_options.readonly = FALSE;
+
+	if (! cl_files_opened)
 	{
 		if (prefs.load_session)
 		{
