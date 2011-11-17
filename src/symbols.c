@@ -1392,7 +1392,8 @@ static gint compare_top_level_names(const gchar *a, const gchar *b)
 
 	/* This should never happen as it would mean that two or more top
 	 * level items have the same name but it can happen by typos in the translations. */
-	g_return_val_if_fail(! utils_str_equal(a, b), 1);
+	if (utils_str_equal(a, b))
+		return 1;
 
 	foreach_ptr_array(name, i, top_level_iter_names)
 	{
