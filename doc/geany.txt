@@ -3240,7 +3240,7 @@ Delete to line end              Ctrl-Shift-Delete         Deletes from the curre
 
 Duplicate line or selection     Ctrl-D                    Duplicates the current line or selection.
 
-Transpose current line          Ctrl-T                    Transposes the current line with the previous one.
+Transpose current line                                    Transposes the current line with the previous one.
 
 Scroll to current line          Ctrl-Shift-L              Scrolls the current line into the centre of the
                                                           view. The cursor position and or an existing
@@ -3489,13 +3489,13 @@ Goto next marker                Ctrl-.                    Goto the next marker i
 
 Goto previous marker            Ctrl-,                    Goto the previous marker in the current document.
 
-Go to tag definition                                      Jump to the definition of the current word (near
+Go to tag definition            Ctrl-T                    Jump to the definition of the current word (near
                                                           the keyboard cursor). If the definition cannot be
                                                           found (e.g. the relevant file is not open) Geany
                                                           will beep and do nothing. See the section called
                                                           `Go to tag definition`_.
 
-Go to tag declaration                                     Jump to the declaration of the current word (near
+Go to tag declaration           Ctrl-Shift-T              Jump to the declaration of the current word (near
                                                           the keyboard cursor). If the declaration cannot be
                                                           found (e.g. the relevant file is not open) Geany
                                                           will beep and do nothing. See the section called

@@ -290,7 +290,7 @@ static void init_default_kb(void)
 		_("Delete to line end"), NULL);
 	/* transpose may fit better in format group */
 	keybindings_set_item(group, GEANY_KEYS_EDITOR_TRANSPOSELINE, NULL,
-		GDK_t, GDK_CONTROL_MASK, "edit_transposeline", _("_Transpose Current Line"),
+		0, 0, "edit_transposeline", _("_Transpose Current Line"),
 		LW(transpose_current_line1));
 	keybindings_set_item(group, GEANY_KEYS_EDITOR_SCROLLTOLINE, NULL,
 		GDK_l, GDK_SHIFT_MASK | GDK_CONTROL_MASK, "edit_scrolltoline", _("Scroll to current line"), NULL);
@@ -461,9 +461,11 @@ static void init_default_kb(void)
 		GDK_comma, GDK_CONTROL_MASK, "edit_gotopreviousmarker",
 		_("_Go to Previous Marker"), LW(go_to_previous_marker1));
 	keybindings_set_item(group, GEANY_KEYS_GOTO_TAGDEFINITION, NULL,
-		0, 0, "popup_gototagdefinition", _("Go to Tag Definition"), LW(goto_tag_definition1));
+		GDK_t, GDK_CONTROL_MASK, "popup_gototagdefinition",
+		_("Go to Tag Definition"), LW(goto_tag_definition1));
 	keybindings_set_item(group, GEANY_KEYS_GOTO_TAGDECLARATION, NULL,
-		0, 0, "popup_gototagdeclaration", _("Go to Tag Declaration"), LW(goto_tag_declaration1));
+		GDK_t, GDK_CONTROL_MASK | GDK_SHIFT_MASK, "popup_gototagdeclaration",
+		_("Go to Tag Declaration"), LW(goto_tag_declaration1));
 	keybindings_set_item(group, GEANY_KEYS_GOTO_LINESTART, NULL,
 		GDK_Home, 0, "edit_gotolinestart", _("Go to Start of Line"), NULL);
 	keybindings_set_item(group, GEANY_KEYS_GOTO_LINEEND, NULL,
