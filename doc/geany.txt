@@ -1356,24 +1356,24 @@ in the current selection of the current document.
 Go to tag definition
 ^^^^^^^^^^^^^^^^^^^^
 
-If the current word is the name of a tag definition (like a function
-body) and the file containing the tag definition is open, this command
-will switch to that file and go to the corresponding line number. The
-current word is either the word nearest the edit cursor,
-or the word underneath the popup menu click position when the popup
-menu is used.
+If the current word or selection is the name of a tag definition
+(e.g. a function name) and the file containing the tag definition is
+open, this command will switch to that file and go to the
+corresponding line number. The current word is either the word
+nearest the edit cursor, or the word underneath the popup menu click
+position when the popup menu is used.
 
 .. note::
-    If the current word's tag is on the current line, Geany will try
-    to look for a tag declaration instead, as this is more useful.
-    Likewise 'Go to tag declaration' will search for a tag definition
-    in this case also.
+    If the corresponding tag is on the current line, Geany will first
+    look for a tag declaration instead, as this is more useful.
+    Likewise *Go to tag declaration* will search for a tag definition
+    first in this case also.
 
 
 Go to tag declaration
 ^^^^^^^^^^^^^^^^^^^^^
 
-Like Go to tag definition, but for a forward declaration such as a
+Like *Go to tag definition*, but for a forward declaration such as a
 C function prototype or ``extern`` declaration instead of a function
 body.
 
@@ -3489,17 +3489,11 @@ Goto next marker                Ctrl-.                    Goto the next marker i
 
 Goto previous marker            Ctrl-,                    Goto the previous marker in the current document.
 
-Go to tag definition            Ctrl-T                    Jump to the definition of the current word (near
-                                                          the keyboard cursor). If the definition cannot be
-                                                          found (e.g. the relevant file is not open) Geany
-                                                          will beep and do nothing. See the section called
-                                                          `Go to tag definition`_.
+Go to tag definition            Ctrl-T                    Jump to the definition of the current word or
+                                                          selection. See `Go to tag definition`_.
 
-Go to tag declaration           Ctrl-Shift-T              Jump to the declaration of the current word (near
-                                                          the keyboard cursor). If the declaration cannot be
-                                                          found (e.g. the relevant file is not open) Geany
-                                                          will beep and do nothing. See the section called
-                                                          `Go to tag declaration`_.
+Go to tag declaration           Ctrl-Shift-T              Jump to the declaration of the current word or
+                                                          selection. See `Go to tag declaration`_.
 
 Go to Start of Line             Home                      Move the caret to the end of the line indentation
                                                           unless it is already there, in which case it moves
