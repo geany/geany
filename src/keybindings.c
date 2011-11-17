@@ -315,9 +315,9 @@ static void init_default_kb(void)
 	keybindings_set_item(group, GEANY_KEYS_EDITOR_WORDPARTCOMPLETION, NULL,
 		GDK_Tab, 0, "edit_wordpartcompletion", _("Word part completion"), NULL);
 	keybindings_set_item(group, GEANY_KEYS_EDITOR_MOVELINEUP, NULL,
-		0, 0, "edit_movelineup", _("Move line(s) up"), NULL);
+		GDK_Page_Up, GDK_MOD1_MASK, "edit_movelineup", _("Move line(s) up"), NULL);
 	keybindings_set_item(group, GEANY_KEYS_EDITOR_MOVELINEDOWN, NULL,
-		0, 0, "edit_movelinedown", _("Move line(s) down"), NULL);
+		GDK_Page_Down, GDK_MOD1_MASK, "edit_movelinedown", _("Move line(s) down"), NULL);
 
 	group = keybindings_get_core_group(GEANY_KEY_GROUP_CLIPBOARD);
 
@@ -526,9 +526,11 @@ static void init_default_kb(void)
 	keybindings_set_item(group, GEANY_KEYS_NOTEBOOK_SWITCHTABLASTUSED, cb_func_switch_tablastused,
 		GDK_Tab, GDK_CONTROL_MASK, "switch_tablastused", _("Switch to last used document"), NULL);
 	keybindings_set_item(group, GEANY_KEYS_NOTEBOOK_MOVETABLEFT, cb_func_move_tab,
-		GDK_Page_Up, GDK_MOD1_MASK, "move_tableft", _("Move document left"), NULL);
+		GDK_Page_Up, GDK_CONTROL_MASK | GDK_SHIFT_MASK, "move_tableft",
+		_("Move document left"), NULL);
 	keybindings_set_item(group, GEANY_KEYS_NOTEBOOK_MOVETABRIGHT, cb_func_move_tab,
-		GDK_Page_Down, GDK_MOD1_MASK, "move_tabright", _("Move document right"), NULL);
+		GDK_Page_Down, GDK_CONTROL_MASK | GDK_SHIFT_MASK, "move_tabright",
+		_("Move document right"), NULL);
 	keybindings_set_item(group, GEANY_KEYS_NOTEBOOK_MOVETABFIRST, cb_func_move_tab,
 		0, 0, "move_tabfirst", _("Move document first"), NULL);
 	keybindings_set_item(group, GEANY_KEYS_NOTEBOOK_MOVETABLAST, cb_func_move_tab,
@@ -969,6 +971,7 @@ static gboolean check_fixed_kb(guint keyval, guint state)
 		gtk_notebook_set_current_page(GTK_NOTEBOOK(main_widgets.notebook), page);
 		return TRUE;
 	}
+	/* note: these are now overridden by default with move tab bindings */
 	if (keyval == GDK_Page_Up || keyval == GDK_Page_Down)
 	{
 		/* switch to first or last document */

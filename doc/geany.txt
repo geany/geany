@@ -3158,7 +3158,7 @@ by any custom keybindings with the same keyboard shortcut.
 Switching documents
 ^^^^^^^^^^^^^^^^^^^
 
-There are a few non-configurable bindings to switch between documents,
+There are some non-configurable bindings to switch between documents,
 listed below. These can also be overridden by custom keybindings.
 
 =============== ==================================
@@ -3166,9 +3166,9 @@ Key             Action
 =============== ==================================
 Alt-[1-9]       Select left-most tab, from 1 to 9.
 Alt-0           Select right-most tab.
-Ctrl-Shift-PgUp Select left-most tab.
-Ctrl-Shift-PgDn Select right-most tab.
 =============== ==================================
+
+See also `Notebook tab keybindings`_.
 
 
 Configurable keybindings
@@ -3288,10 +3288,10 @@ Word part completion            Tab                       When the autocompletio
                                                           the currently selected item up to the next word
                                                           part.
 
-Move line(s) up                                           Move the current line or selected lines up by
+Move line(s) up                 Alt-PageUp                Move the current line or selected lines up by
                                                           one line.
 
-Move line(s) down                                         Move the current line or selected lines down by
+Move line(s) down               Alt-PageDown              Move the current line or selected lines down by
                                                           one line.
 =============================== ========================= ==================================================
 
@@ -3591,10 +3591,10 @@ Switch to last used document    Ctrl-Tab                  Switches to the previo
                                                           used document, 3rd-last, etc. Also known as
                                                           Most-Recently-Used documents switching.
 
-Move document left              Alt-PageUp                Changes the current document with the left hand
+Move document left              Ctrl-Shift-PageUp         Changes the current document with the left hand
                                                           one.
 
-Move document right             Alt-PageDown              Changes the current document with the right hand
+Move document right             Ctrl-Shift-PageDown       Changes the current document with the right hand
                                                           one.
 
 Move document first                                       Moves the current document to the first position.
