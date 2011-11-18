@@ -558,14 +558,15 @@ static GdkPixbuf *get_tag_icon(const gchar *icon_name)
 
 /* finds the next iter at any level
  * @param iter in/out, the current iter, will be changed to the next one
+ * @param down whether to try the child iter
  * @return TRUE if there @p iter was set, or FALSE if there is no next iter */
-static gboolean next_iter(GtkTreeModel *model, GtkTreeIter *iter)
+static gboolean next_iter(GtkTreeModel *model, GtkTreeIter *iter, gboolean down)
 {
 	GtkTreeIter guess;
 	GtkTreeIter copy = *iter;
 
 	/* go down if the item has children */
-	if (gtk_tree_model_iter_children(model, &guess, iter))
+	if (down && gtk_tree_model_iter_children(model, &guess, iter))
 		*iter = guess;
 	/* or to the next item at the same level */
 	else if (gtk_tree_model_iter_next(model, &copy))
@@ -1240,7 +1241,7 @@ static GHashTable *build_iter_table(GtkTreeStore *store)
 		if (tag)
 			g_hash_table_insert(table, tag, gtk_tree_model_get_path(model, &iter));
 	}
-	while (next_iter(model, &iter));
+	while (next_iter(model, &iter, TRUE));
 
 	return table;
 }
@@ -1495,7 +1496,7 @@ static void invalidate_rows(GtkTreeStore *store)
 	{
 		gtk_tree_store_set(store, &iter, SYMBOLS_COLUMN_VALID, FALSE, -1);
 	}
-	while (next_iter(model, &iter));
+	while (next_iter(model, &iter, TRUE));
 }
 
 
@@ -1522,11 +1523,11 @@ static void remove_invalid_rows(GtkTreeStore *store)
 			if (!cont && have_parent)
 			{
 				iter = parent;
-				cont = next_iter(model, &iter);
+				cont = next_iter(model, &iter, FALSE);
 			}
 		}
 		else
-			cont = next_iter(model, &iter);
+			cont = next_iter(model, &iter, TRUE);
 	}
 }
 
