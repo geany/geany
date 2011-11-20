@@ -1104,9 +1104,8 @@ static gboolean CreateChildProcess(geany_win32_spawn *gw_spawn, TCHAR *szCmdline
 	else
 	{
 		gint i;
-		DWORD dwStatus;
 
-		for (i = 0; i < 2 && (dwStatus = WaitForSingleObject(piProcInfo.hProcess, 30*1000)) == WAIT_TIMEOUT; i++)
+		for (i = 0; i < 2 && WaitForSingleObject(piProcInfo.hProcess, 30*1000) == WAIT_TIMEOUT; i++)
 		{
 			geany_debug("CreateChildProcess: CreateProcess failed");
 			TerminateProcess(piProcInfo.hProcess, WAIT_TIMEOUT); /* NOTE: This will not kill grandkids. */
