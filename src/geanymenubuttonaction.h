@@ -20,8 +20,8 @@
  */
 
 
-#ifndef __GEANY_MENU_BUTTON_ACTION_H__
-#define __GEANY_MENU_BUTTON_ACTION_H__
+#ifndef GEANY_MENU_BUTTON_ACTION_H
+#define GEANY_MENU_BUTTON_ACTION_H
 
 G_BEGIN_DECLS
 
@@ -63,4 +63,4 @@ void		geany_menu_button_action_set_menu	(GeanyMenubuttonAction *action, GtkWidge
 
 G_END_DECLS
 
-#endif /* __GEANY_MENU_BUTTON_ACTION_H__ */
+#endif /* GEANY_MENU_BUTTON_ACTION_H */
