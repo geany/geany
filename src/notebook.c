@@ -207,11 +207,12 @@ static void on_open_in_new_window_activate(GtkMenuItem *menuitem, gpointer user_
 }
 
 
-static void show_tab_bar_popup_menu(GdkEventButton *event)
+static void show_tab_bar_popup_menu(GdkEventButton *event, GtkWidget *page)
 {
 	GtkWidget *menu_item;
 	static GtkWidget *menu = NULL;
 	GeanyDocument *doc = NULL;
+	gint page_num;
 
 	if (menu == NULL)
 		menu = gtk_menu_new();
@@ -226,14 +227,19 @@ static void show_tab_bar_popup_menu(GdkEventButton *event)
 	gtk_widget_show(menu_item);
 	gtk_container_add(GTK_CONTAINER(menu), menu_item);
 
-	doc = document_get_current();
+	if (page != NULL)
+	{
+		page_num = gtk_notebook_page_num(GTK_NOTEBOOK(main_widgets.notebook), page);
+		doc = document_get_from_page(page_num);
+	}
+
 	menu_item = ui_image_menu_item_new(GTK_STOCK_OPEN, "Open in New _Window");
 	gtk_widget_show(menu_item);
 	gtk_container_add(GTK_CONTAINER(menu), menu_item);
 	g_signal_connect(menu_item, "activate",
 		G_CALLBACK(on_open_in_new_window_activate), doc);
 	/* disable if not on disk */
-	if (!doc->real_path)
+	if (doc == NULL || !doc->real_path)
 		gtk_widget_set_sensitive(menu_item, FALSE);
 
 	menu_item = gtk_separator_menu_item_new();
@@ -243,7 +249,8 @@ static void show_tab_bar_popup_menu(GdkEventButton *event)
 	menu_item = ui_image_menu_item_new(GTK_STOCK_CLOSE, _("Close Ot_her Documents"));
 	gtk_widget_show(menu_item);
 	gtk_container_add(GTK_CONTAINER(menu), menu_item);
-	g_signal_connect(menu_item, "activate", G_CALLBACK(on_close_other_documents1_activate), NULL);
+	g_signal_connect(menu_item, "activate", G_CALLBACK(on_close_other_documents1_activate), page);
+	gtk_widget_set_sensitive(GTK_WIDGET(menu_item), (page != NULL));
 
 	menu_item = ui_image_menu_item_new(GTK_STOCK_CLOSE, _("C_lose All"));
 	gtk_widget_show(menu_item);
@@ -270,9 +277,12 @@ static gboolean notebook_tab_bar_click_cb(GtkWidget *widget, GdkEventButton *eve
 			return TRUE;
 		}
 	}
+	/* right-click is also handled here if it happened on the notebook tab bar but not
+	 * on a tab directly */
 	else if (event->button == 3)
 	{
-		show_tab_bar_popup_menu(event);
+		show_tab_bar_popup_menu(event, NULL);
+		return TRUE;
 	}
 	return FALSE;
 }
@@ -369,6 +379,13 @@ static gboolean notebook_tab_click(GtkWidget *widget, GdkEventButton *event, gpo
 			GEANY_KEYS_NOTEBOOK_SWITCHTABLASTUSED);
 		return TRUE;
 	}
+	/* right-click is first handled here if it happened on a notebook tab */
+	if (event->button == 3)
+	{
+		show_tab_bar_popup_menu(event, data);
+		return TRUE;
+	}
+
 	return FALSE;
 }
 

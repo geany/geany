@@ -1881,11 +1881,22 @@ void on_search1_activate(GtkMenuItem *menuitem, gpointer user_data)
 }
 
 
-/* simple implementation (vs. close all which doesn't close documents if cancelled) */
+/* simple implementation (vs. close all which doesn't close documents if cancelled),
+ * if user_data is set, it is a GtkNotebook child widget */
 void on_close_other_documents1_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
 	guint i;
-	GeanyDocument *doc, *cur_doc = document_get_current();
+	GeanyDocument *doc, *cur_doc;
+
+	if (user_data != NULL)
+	{
+		gint page_num = gtk_notebook_page_num(
+			GTK_NOTEBOOK(main_widgets.notebook), GTK_WIDGET(user_data));
+		cur_doc = document_get_from_page(page_num);
+	}
+	else
+		cur_doc = document_get_current();
+
 
 	for (i = 0; i < documents_array->len; i++)
 	{
