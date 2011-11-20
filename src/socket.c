@@ -40,7 +40,7 @@
  * The command window is only available on Windows and takes no additional data, instead it
  * writes back a Windows handle (HWND) for the main window to set it to the foreground (focus).
  *
- * At the moment the commands window, doclist, open, line and column are available.
+ * At the moment the commands window, doclist, open, openro, line and column are available.
  *
  * About the socket files on Unix-like systems:
  * Geany creates a socket in /tmp (or any other directory returned by g_get_tmp_dir()) and
