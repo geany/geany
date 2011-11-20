@@ -1260,8 +1260,14 @@ static void update_parents_table(GHashTable *table, const TMTag *tag, const gcha
 	if (g_hash_table_lookup_extended(table, tag->name, NULL, NULL) &&
 		! utils_str_equal(parent_name, tag->name) /* prevent Foo::Foo from making parent = child */)
 	{
-		g_hash_table_insert(table, tag->name, g_memdup(iter, sizeof *iter));
+		g_hash_table_insert(table, tag->name, g_slice_dup(GtkTreeIter, iter));
 	}
+}
+
+
+static void free_iter_slice(gpointer iter)
+{
+	g_slice_free(GtkTreeIter, iter);
 }
 
 
@@ -1295,7 +1301,7 @@ static void update_tree_tags(GeanyDocument *doc, GList **tags)
 
 	/* Build hash tables holding tags and parents */
 	/* parent table holds "tag-name":GtkTreeIter */
-	parents_table = g_hash_table_new_full(g_str_hash, g_str_equal, NULL, g_free);
+	parents_table = g_hash_table_new_full(g_str_hash, g_str_equal, NULL, free_iter_slice);
 	/* tags table is another representation of the @tags list, TMTag:GList<TMTag> */
 	tags_table = g_hash_table_new_full(tag_hash, tag_equal, NULL, NULL);
 	foreach_list(item, *tags)
