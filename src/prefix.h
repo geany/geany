@@ -14,8 +14,8 @@
  * to br_*", try renaming prefix.c to prefix.cpp
  */
 
-#ifndef _PREFIX_H_
-#define _PREFIX_H_
+#ifndef GEANY_PREFIX_H
+#define GEANY_PREFIX_H
 
 
 /*
@@ -93,4 +93,4 @@ char *br_prepend_prefix	(void *symbol, char *path);
 
 #endif /* ENABLE_BINRELOC */
 
-#endif /* _PREFIX_H_ */
+#endif /* GEANY_PREFIX_H */
