@@ -63,6 +63,14 @@
  */
 
 
+/* temporarily disable warnings about missing initializers (re-enabled at the bottom of the file) */
+#ifdef __GNUC__ /* try to avoid warnings about unrecognized pragma on non-GCC */
+#	pragma GCC diagnostic push
+#	pragma GCC diagnostic ignored "-Wmissing-field-initializers"
+#endif
+
+
+
 typedef struct
 {
 	guint		 style;		/* SCI style */
@@ -1435,5 +1443,10 @@ static const HLKeyword highlighting_keywords_YAML[] =
 #define highlighting_properties_YAML	EMPTY_PROPERTIES
 
 
+
+/* restore diagnose state (missing initializers, see the top of the file */
+#ifdef __GNUC__
+#	pragma GCC diagnostic pop
 #endif
 
+#endif /* guard */
