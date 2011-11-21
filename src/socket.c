@@ -601,13 +601,11 @@ gboolean socket_lock_input_cb(GIOChannel *source, GIOCondition condition, gpoint
 	{
 		if (strncmp(buf, "open", 4) == 0)
 		{
-			if (strncmp(buf+4, "ro", 2) == 0) /* open in readonly? */
-				cl_options.readonly = TRUE;
+			cl_options.readonly = strncmp(buf+4, "ro", 2) == 0; /* open in readonly? */
 			while (socket_fd_gets(sock, buf, sizeof(buf)) != -1 && *buf != '.')
 			{
 				handle_input_filename(g_strstrip(buf));
 			}
-			cl_options.readonly = FALSE; /* disable again for future files */
 			popup = TRUE;
 		}
 		else if (strncmp(buf, "doclist", 7) == 0)

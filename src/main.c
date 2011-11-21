@@ -497,7 +497,7 @@ static void parse_command_line_options(gint *argc, gchar ***argv)
 	GError *error = NULL;
 	GOptionContext *context;
 	gint i;
-	CommandLineOptions def_clo = {FALSE, NULL, TRUE, -1, -1, FALSE, FALSE};
+	CommandLineOptions def_clo = {FALSE, NULL, TRUE, -1, -1, FALSE, FALSE, FALSE};
 
 	/* first initialise cl_options fields with default values */
 	cl_options = def_clo;
@@ -774,7 +774,7 @@ gboolean main_handle_filename(const gchar *locale_filename)
 
 	if (g_file_test(filename, G_FILE_TEST_IS_REGULAR))
 	{
-		doc = document_open_file(filename, FALSE, NULL, NULL);
+		doc = document_open_file(filename, cl_options.readonly, NULL, NULL);
 		/* add recent file manually if opening_session_files is set */
 		if (doc != NULL && main_status.opening_session_files)
 			ui_add_recent_document(doc);
@@ -887,19 +887,13 @@ void main_load_project_from_command_line(const gchar *locale_filename, gboolean 
 static void load_startup_files(gint argc, gchar **argv)
 {
 	gboolean load_project_from_cl = FALSE;
-	gboolean cl_files_opened = FALSE;
 
 	/* ATM when opening a project file any other filenames are ignored */
 	load_project_from_cl = (argc > 1) && g_str_has_suffix(argv[1], ".geany");
 	if (load_project_from_cl && argc > 2)
 		g_print("Ignoring extra filenames after %s", argv[1]);
 
-	if (!load_project_from_cl)
-		cl_files_opened = open_cl_files(argc, argv);
-	/* switch readonly mode off for session files, future files and projects */
-	cl_options.readonly = FALSE;
-
-	if (! cl_files_opened)
+	if (load_project_from_cl || ! open_cl_files(argc, argv))
 	{
 		if (prefs.load_session)
 		{

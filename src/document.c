@@ -1162,7 +1162,7 @@ GeanyDocument *document_open_file_full(GeanyDocument *doc, const gchar *filename
 		doc->has_bom = filedata.bom;
 		store_saved_encoding(doc);	/* store the opened encoding for undo/redo */
 
-		doc->readonly = readonly || filedata.readonly || cl_options.readonly;
+		doc->readonly = readonly || filedata.readonly;
 		sci_set_readonly(doc->editor->sci, doc->readonly);
 
 		/* update line number margin width */
