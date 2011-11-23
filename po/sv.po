@@ -4781,8 +4781,8 @@ msgid ""
 "line: %l / %L\t col: %c\t sel: %s\t %w      %t      %mmode: %M      "
 "encoding: %e      filetype: %f      scope: %S"
 msgstr ""
-"rad: %d\t kolumn: %d\t vald: %d\t %s      %s      läge: %s      kodning: %s "
-"%s      filtyp: %s      omfång: %s"
+"rad: %l / %L\t kol: %c\t vald: %s\t %w      %t      %mläge: %M      "
+"kodning: %e      filtyp: %f      omfång: %S"
 
 #. RO = read-only
 #: ../src/ui_utils.c:205 ../src/ui_utils.c:212
