@@ -1791,3 +1791,40 @@ const gchar *filetypes_get_display_name(GeanyFiletype *ft)
 {
 	return ft->id == GEANY_FILETYPES_NONE ? _("None") : ft->name;
 }
+
+
+/* gets comment_open/comment_close/comment_single strings from the filetype
+ * @param single_first: whether single comment is preferred if both available
+ * returns true if at least comment_open is set, false otherwise */
+gboolean filetype_get_comment_open_close(const GeanyFiletype *ft, gboolean single_first,
+		const gchar **co, const gchar **cc)
+{
+	g_return_val_if_fail(ft != NULL, FALSE);
+	g_return_val_if_fail(co != NULL, FALSE);
+	g_return_val_if_fail(cc != NULL, FALSE);
+
+	if (single_first)
+	{
+		*co = ft->comment_single;
+		if (NZV(*co))
+			*cc = NULL;
+		else
+		{
+			*co = ft->comment_open;
+			*cc = ft->comment_close;
+		}
+	}
+	else
+	{
+		*co = ft->comment_open;
+		if (NZV(*co))
+			*cc = ft->comment_close;
+		else
+		{
+			*co = ft->comment_single;
+			*cc = NULL;
+		}
+	}
+
+	return NZV(*co);
+}

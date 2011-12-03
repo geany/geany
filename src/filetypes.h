@@ -209,4 +209,7 @@ gboolean filetype_has_tags(GeanyFiletype *ft);
 gboolean filetypes_parse_error_message(GeanyFiletype *ft, const gchar *message,
 		gchar **filename, gint *line);
 
+gboolean filetype_get_comment_open_close(const GeanyFiletype *ft, gboolean single_first,
+		const gchar **co, const gchar **cc);
+
 #endif

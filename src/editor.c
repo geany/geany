@@ -2768,7 +2768,8 @@ static GeanyFiletype *editor_get_filetype_at_current_pos(GeanyEditor *editor)
 static void real_comment_multiline(GeanyEditor *editor, gint line_start, gint last_line)
 {
 	const gchar *eol;
-	gchar *str_begin, *str_end, *co, *cc;
+	gchar *str_begin, *str_end;
+	const gchar *co, *cc;
 	gint line_len;
 	GeanyFiletype *ft;
 
@@ -2777,8 +2778,8 @@ static void real_comment_multiline(GeanyEditor *editor, gint line_start, gint la
 	ft = editor_get_filetype_at_current_pos(editor);
 
 	eol = editor_get_eol_char(editor);
-	co = ft->comment_open;
-	cc = ft->comment_close;
+	if (! filetype_get_comment_open_close(ft, FALSE, &co, &cc))
+		g_return_if_reached();
 	str_begin = g_strdup_printf("%s%s", (co != NULL) ? co : "", eol);
 	str_end = g_strdup_printf("%s%s", (cc != NULL) ? cc : "", eol);
 
@@ -2799,14 +2800,17 @@ static void real_uncomment_multiline(GeanyEditor *editor)
 	gchar *linebuf;
 	GeanyDocument *doc;
 	GeanyFiletype *ft;
+	const gchar *co, *cc;
 
 	g_return_if_fail(editor != NULL && editor->document->file_type != NULL);
 	doc = editor->document;
 
 	ft = editor_get_filetype_at_current_pos(editor);
+	if (! filetype_get_comment_open_close(ft, FALSE, &co, &cc))
+		g_return_if_reached();
 
 	/* remove comment open chars */
-	pos = document_find_text(doc, ft->comment_open, NULL, 0, TRUE, FALSE, NULL);
+	pos = document_find_text(doc, co, NULL, 0, TRUE, FALSE, NULL);
 	SSM(editor->sci, SCI_DELETEBACK, 0, 0);
 
 	/* check whether the line is empty and can be deleted */
@@ -2819,7 +2823,7 @@ static void real_uncomment_multiline(GeanyEditor *editor)
 	g_free(linebuf);
 
 	/* remove comment close chars */
-	pos = document_find_text(doc, ft->comment_close, NULL, 0, FALSE, FALSE, NULL);
+	pos = document_find_text(doc, cc, NULL, 0, FALSE, FALSE, NULL);
 	SSM(editor->sci, SCI_DELETEBACK, 0, 0);
 
 	/* check whether the line is empty and can be deleted */
@@ -2874,7 +2878,8 @@ gint editor_do_uncomment(GeanyEditor *editor, gint line, gboolean toggle)
 	gint sel_start, sel_end;
 	gint count = 0;
 	gsize co_len;
-	gchar sel[256], *co, *cc;
+	gchar sel[256];
+	const gchar *co, *cc;
 	gboolean single_line = FALSE;
 	GeanyFiletype *ft;
 
@@ -2900,16 +2905,8 @@ gint editor_do_uncomment(GeanyEditor *editor, gint line, gboolean toggle)
 	ft = editor_get_filetype_at_current_pos(editor);
 	eol_char_len = editor_get_eol_char_len(editor);
 
-	co = ft->comment_single;
-	if (NZV(co))
-		cc = NULL;
-	else
-	{
-		co = ft->comment_open;
-		cc = ft->comment_close;
-		if (co == NULL)
-			return 0;
-	}
+	if (! filetype_get_comment_open_close(ft, TRUE, &co, &cc))
+		return 0;
 
 	co_len = strlen(co);
 	if (co_len == 0)
@@ -3007,7 +3004,8 @@ void editor_do_comment_toggle(GeanyEditor *editor)
 	gint x, i, line_start, line_len, first_line_start;
 	gint sel_start, sel_end;
 	gint count_commented = 0, count_uncommented = 0;
-	gchar sel[256], *co, *cc;
+	gchar sel[256];
+	const gchar *co, *cc;
 	gboolean break_loop = FALSE, single_line = FALSE;
 	gboolean first_line_was_comment = FALSE;
 	gsize co_len;
@@ -3032,16 +3030,8 @@ void editor_do_comment_toggle(GeanyEditor *editor)
 
 	ft = editor_get_filetype_at_current_pos(editor);
 
-	co = ft->comment_single;
-	if (NZV(co))
-		cc = NULL;
-	else
-	{
-		co = ft->comment_open;
-		cc = ft->comment_close;
-		if (co == NULL)
-			return;
-	}
+	if (! filetype_get_comment_open_close(ft, TRUE, &co, &cc))
+		return;
 
 	co_len = strlen(co);
 	if (co_len == 0)
@@ -3168,7 +3158,8 @@ void editor_do_comment(GeanyEditor *editor, gint line, gboolean allow_empty_line
 	gint first_line, last_line, eol_char_len;
 	gint x, i, line_start, line_len;
 	gint sel_start, sel_end, co_len;
-	gchar sel[256], *co, *cc;
+	gchar sel[256];
+	const gchar *co, *cc;
 	gboolean break_loop = FALSE, single_line = FALSE;
 	GeanyFiletype *ft;
 
@@ -3195,16 +3186,8 @@ void editor_do_comment(GeanyEditor *editor, gint line, gboolean allow_empty_line
 
 	ft = editor_get_filetype_at_current_pos(editor);
 
-	co = ft->comment_single;
-	if (NZV(co))
-		cc = NULL;
-	else
-	{
-		co = ft->comment_open;
-		cc = ft->comment_close;
-		if (co == NULL)
-			return;
-	}
+	if (! filetype_get_comment_open_close(ft, TRUE, &co, &cc))
+		return;
 
 	co_len = strlen(co);
 	if (co_len == 0)
@@ -3232,7 +3215,7 @@ void editor_do_comment(GeanyEditor *editor, gint line, gboolean allow_empty_line
 		if (allow_empty_lines || (x < line_len && sel[x] != '\0'))
 		{
 			/* use single line comment */
-			if (cc == NULL || cc[0] == '\0')
+			if (! NZV(cc))
 			{
 				gint start = line_start;
 				single_line = TRUE;
@@ -3493,17 +3476,18 @@ void editor_insert_multiline_comment(GeanyEditor *editor)
 	gint pos;
 	gboolean have_multiline_comment = FALSE;
 	GeanyDocument *doc;
+	const gchar *co, *cc;
 
-	g_return_if_fail(editor != NULL && editor->document->file_type != NULL &&
-		(editor->document->file_type->comment_open != NULL ||
-		 editor->document->file_type->comment_single != NULL));
+	g_return_if_fail(editor != NULL && editor->document->file_type != NULL);
+
+	if (! filetype_get_comment_open_close(editor->document->file_type, FALSE, &co, &cc))
+		g_return_if_reached();
+	if (NZV(cc))
+		have_multiline_comment = TRUE;
 
 	sci_start_undo_action(editor->sci);
 
 	doc = editor->document;
-
-	if (NZV(doc->file_type->comment_close))
-		have_multiline_comment = TRUE;
 
 	/* insert three lines one line above of the current position */
 	line = sci_get_line_from_position(editor->sci, editor_info.click_pos);
@@ -3533,7 +3517,7 @@ void editor_insert_multiline_comment(GeanyEditor *editor)
 	editor_do_comment(editor, -1, TRUE, FALSE);
 
 	/* set the current position to the start of the first inserted line */
-	pos += strlen(doc->file_type->comment_open);
+	pos += strlen(co);
 
 	/* on multi line comment jump to the next line, otherwise add the length of added indentation */
 	if (have_multiline_comment)
