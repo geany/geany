@@ -3077,7 +3077,7 @@ void editor_do_comment_toggle(GeanyEditor *editor)
 			}
 
 			/* we are still here, so the above lines were not already comments, so comment it */
-			editor_do_comment(editor, i, TRUE, TRUE);
+			editor_do_comment(editor, i, TRUE, TRUE, TRUE);
 			count_commented++;
 		}
 		/* use multi line comment */
@@ -3153,7 +3153,8 @@ void editor_do_comment_toggle(GeanyEditor *editor)
 
 
 /* set toggle to TRUE if the caller is the toggle function, FALSE otherwise */
-void editor_do_comment(GeanyEditor *editor, gint line, gboolean allow_empty_lines, gboolean toggle)
+void editor_do_comment(GeanyEditor *editor, gint line, gboolean allow_empty_lines, gboolean toggle,
+		gboolean single_comment)
 {
 	gint first_line, last_line, eol_char_len;
 	gint x, i, line_start, line_len;
@@ -3186,7 +3187,7 @@ void editor_do_comment(GeanyEditor *editor, gint line, gboolean allow_empty_line
 
 	ft = editor_get_filetype_at_current_pos(editor);
 
-	if (! filetype_get_comment_open_close(ft, TRUE, &co, &cc))
+	if (! filetype_get_comment_open_close(ft, single_comment, &co, &cc))
 		return;
 
 	co_len = strlen(co);
@@ -3514,7 +3515,7 @@ void editor_insert_multiline_comment(GeanyEditor *editor)
 	sci_set_selection_start(editor->sci, pos);
 	sci_set_selection_end(editor->sci, pos + text_len);
 
-	editor_do_comment(editor, -1, TRUE, FALSE);
+	editor_do_comment(editor, -1, TRUE, FALSE, FALSE);
 
 	/* set the current position to the start of the first inserted line */
 	pos += strlen(co);
