@@ -2574,7 +2574,8 @@ create_prefs_dialog (void)
   GtkWidget *frame36;
   GtkWidget *alignment39;
   GtkWidget *vbox36;
-  GtkWidget *check_ask_suppress_search_dialogs;
+  GtkWidget *check_always_wrap_search;
+  GtkWidget *check_hide_find_dialog;
   GtkWidget *check_search_use_current_word;
   GtkWidget *check_fif_current_dir;
   GtkWidget *label215;
@@ -3195,10 +3196,15 @@ create_prefs_dialog (void)
   gtk_widget_show (vbox36);
   gtk_container_add (GTK_CONTAINER (alignment39), vbox36);
 
-  check_ask_suppress_search_dialogs = gtk_check_button_new_with_mnemonic (_("Always wrap search and hide the Find dialog"));
-  gtk_widget_show (check_ask_suppress_search_dialogs);
-  gtk_box_pack_start (GTK_BOX (vbox36), check_ask_suppress_search_dialogs, FALSE, FALSE, 0);
-  gtk_tooltips_set_tip (tooltips, check_ask_suppress_search_dialogs, _("Always wrap search around the document and hide the Find dialog after clicking Find Next/Previous"), NULL);
+  check_always_wrap_search = gtk_check_button_new_with_mnemonic (_("Always wrap search"));
+  gtk_widget_show (check_always_wrap_search);
+  gtk_box_pack_start (GTK_BOX (vbox36), check_always_wrap_search, FALSE, FALSE, 0);
+  gtk_tooltips_set_tip (tooltips, check_always_wrap_search, _("Always wrap search around the document"), NULL);
+
+  check_hide_find_dialog = gtk_check_button_new_with_mnemonic (_("Hide the Find dialog"));
+  gtk_widget_show (check_hide_find_dialog);
+  gtk_box_pack_start (GTK_BOX (vbox36), check_hide_find_dialog, FALSE, FALSE, 0);
+  gtk_tooltips_set_tip (tooltips, check_hide_find_dialog, _("Hide the Find dialog after clicking Find Next/Previous"), NULL);
 
   check_search_use_current_word = gtk_check_button_new_with_mnemonic (_("Use the current word under the cursor for Find dialogs"));
   gtk_widget_show (check_search_use_current_word);
@@ -5185,7 +5191,8 @@ create_prefs_dialog (void)
   GLADE_HOOKUP_OBJECT (prefs_dialog, frame36, "frame36");
   GLADE_HOOKUP_OBJECT (prefs_dialog, alignment39, "alignment39");
   GLADE_HOOKUP_OBJECT (prefs_dialog, vbox36, "vbox36");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, check_ask_suppress_search_dialogs, "check_ask_suppress_search_dialogs");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, check_always_wrap_search, "check_always_wrap_search");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, check_hide_find_dialog, "check_hide_find_dialog");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_search_use_current_word, "check_search_use_current_word");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_fif_current_dir, "check_fif_current_dir");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label215, "label215");
