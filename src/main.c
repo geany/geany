@@ -139,6 +139,7 @@ static GOptionEntry entries[] =
 	{ "no-plugins", 'p', 0, G_OPTION_ARG_NONE, &no_plugins, N_("Don't load plugins"), NULL },
 #endif
 	{ "print-prefix", 0, 0, G_OPTION_ARG_NONE, &print_prefix, N_("Print Geany's installation prefix"), NULL },
+	{ "read-only", 'r', 0, G_OPTION_ARG_NONE, &cl_options.readonly, N_("Open all FILES in read-only mode (see documention)"), NULL },
 	{ "no-session", 's', G_OPTION_FLAG_REVERSE, G_OPTION_ARG_NONE, &cl_options.load_session, N_("Don't load the previous session's files"), NULL },
 #ifdef HAVE_VTE
 	{ "no-terminal", 't', 0, G_OPTION_ARG_NONE, &no_vte, N_("Don't load terminal support"), NULL },
@@ -497,7 +498,7 @@ static void parse_command_line_options(gint *argc, gchar ***argv)
 	GError *error = NULL;
 	GOptionContext *context;
 	gint i;
-	CommandLineOptions def_clo = {FALSE, NULL, TRUE, -1, -1, FALSE, FALSE};
+	CommandLineOptions def_clo = {FALSE, NULL, TRUE, -1, -1, FALSE, FALSE, FALSE};
 
 	/* first initialise cl_options fields with default values */
 	cl_options = def_clo;
@@ -774,7 +775,7 @@ gboolean main_handle_filename(const gchar *locale_filename)
 
 	if (g_file_test(filename, G_FILE_TEST_IS_REGULAR))
 	{
-		doc = document_open_file(filename, FALSE, NULL, NULL);
+		doc = document_open_file(filename, cl_options.readonly, NULL, NULL);
 		/* add recent file manually if opening_session_files is set */
 		if (doc != NULL && main_status.opening_session_files)
 			ui_add_recent_document(doc);

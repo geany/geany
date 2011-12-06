@@ -20,8 +20,8 @@
  */
 
 
-#ifndef __GEANY_ENTRY_ACTION_H__
-#define __GEANY_ENTRY_ACTION_H__
+#ifndef GEANY_ENTRY_ACTION_H
+#define GEANY_ENTRY_ACTION_H
 
 G_BEGIN_DECLS
 
@@ -60,4 +60,4 @@ GtkWidget*	geany_entry_action_get_menu	(GeanyEntryAction *action);
 
 G_END_DECLS
 
-#endif /* __GEANY_ENTRY_ACTION_H__ */
+#endif /* GEANY_ENTRY_ACTION_H */

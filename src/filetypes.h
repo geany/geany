@@ -87,6 +87,7 @@ typedef enum
 	GEANY_FILETYPES_LISP,
 	GEANY_FILETYPES_ERLANG,
 	GEANY_FILETYPES_COBOL,
+	GEANY_FILETYPES_OBJECTIVEC,
 	/* ^ append items here */
 	GEANY_MAX_BUILT_IN_FILETYPES	/* Don't use this, use filetypes_array->len instead */
 }
@@ -207,5 +208,8 @@ gboolean filetype_has_tags(GeanyFiletype *ft);
 
 gboolean filetypes_parse_error_message(GeanyFiletype *ft, const gchar *message,
 		gchar **filename, gint *line);
+
+gboolean filetype_get_comment_open_close(const GeanyFiletype *ft, gboolean single_first,
+		const gchar **co, const gchar **cc);
 
 #endif

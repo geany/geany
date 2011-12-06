@@ -118,6 +118,14 @@ static void init_builtin_filetypes(void)
 	ft->mime_type = g_strdup("text/x-c++src");
 	ft->group = GEANY_FILETYPE_GROUP_COMPILED;
 
+#define OBJECTIVEC
+	ft = filetypes[GEANY_FILETYPES_OBJECTIVEC];
+	ft->lang = 42;
+	ft->name = g_strdup("Objective-C");
+	filetype_make_title(ft, TITLE_SOURCE_FILE);
+	ft->mime_type = g_strdup("text/x-objc");
+	ft->group = GEANY_FILETYPE_GROUP_COMPILED;
+
 #define CS
 	ft = filetypes[GEANY_FILETYPES_CS];
 	ft->lang = 25;
@@ -954,7 +962,8 @@ static GeanyFiletype *find_shebang(const gchar *utf8_filename, const gchar *line
 }
 
 
-/* Detect the filetype checking for a shebang, then filename extension. */
+/* Detect the filetype checking for a shebang, then filename extension.
+ * @lines: an strv of the lines to scan (must containing at least one line) */
 static GeanyFiletype *filetypes_detect_from_file_internal(const gchar *utf8_filename,
 														  gchar **lines)
 {
@@ -962,7 +971,7 @@ static GeanyFiletype *filetypes_detect_from_file_internal(const gchar *utf8_file
 	gint			 i;
 	GRegex			*ft_regex;
 	GMatchInfo		*match;
-	GError			*regerr = NULL;
+	GError			*regex_error = NULL;
 
 	/* try to find a shebang and if found use it prior to the filename extension
 	 * also checks for <?xml */
@@ -971,13 +980,11 @@ static GeanyFiletype *filetypes_detect_from_file_internal(const gchar *utf8_file
 		return ft;
 
 	/* try to extract the filetype using a regex capture */
-	ft_regex = g_regex_new( file_prefs.extract_filetype_regex,
-							G_REGEX_RAW | G_REGEX_MULTILINE,
-							0,
-							&regerr);
-	if (regerr == NULL)
+	ft_regex = g_regex_new(file_prefs.extract_filetype_regex,
+			G_REGEX_RAW | G_REGEX_MULTILINE, 0, &regex_error);
+	if (ft_regex != NULL)
 	{
-		for (i = 0; i < GEANY_FILETYPE_SEARCH_LINES; i++)
+		for (i = 0; ft == NULL && lines[i] != NULL; i++)
 		{
 			if (g_regex_match(ft_regex, lines[i], 0, &match))
 			{
@@ -989,15 +996,14 @@ static GeanyFiletype *filetypes_detect_from_file_internal(const gchar *utf8_file
 				}
 			}
 			g_match_info_free(match);
-			if (ft != NULL)
-				break;
 		}
+		g_regex_unref(ft_regex);
 	}
-	else
+	else if (regex_error != NULL)
 	{
-		g_error_free(regerr);
+		geany_debug("Filetype extract regex ignored: %s", regex_error->message);
+		g_error_free(regex_error);
 	}
-	g_regex_unref(ft_regex);
 	if (ft != NULL)
 		return ft;
 
@@ -1012,7 +1018,7 @@ static GeanyFiletype *filetypes_detect_from_file_internal(const gchar *utf8_file
 GeanyFiletype *filetypes_detect_from_document(GeanyDocument *doc)
 {
 	GeanyFiletype 	*ft;
-	gchar 			*lines[GEANY_FILETYPE_SEARCH_LINES];
+	gchar 			*lines[GEANY_FILETYPE_SEARCH_LINES + 1];
 	gint			 i;
 
 	if (doc == NULL)
@@ -1022,6 +1028,7 @@ GeanyFiletype *filetypes_detect_from_document(GeanyDocument *doc)
 	{
 		lines[i] = sci_get_line(doc->editor->sci, i);
 	}
+	lines[i] = NULL;
 	ft = filetypes_detect_from_file_internal(doc->file_name, lines);
 	for (i = 0; i < GEANY_FILETYPE_SEARCH_LINES; ++i)
 	{
@@ -1044,10 +1051,9 @@ GeanyFiletype *filetypes_detect_from_document(GeanyDocument *doc)
 GeanyFiletype *filetypes_detect_from_file(const gchar *utf8_filename)
 {
 	gchar line[1024];
-	gchar *lines[GEANY_FILETYPE_SEARCH_LINES];
+	gchar *lines[2];
 	FILE  *f;
 	gchar *locale_name = utils_get_locale_from_utf8(utf8_filename);
-	gint  i;
 
 	f = g_fopen(locale_name, "r");
 	g_free(locale_name);
@@ -1056,11 +1062,8 @@ GeanyFiletype *filetypes_detect_from_file(const gchar *utf8_filename)
 		if (fgets(line, sizeof(line), f) != NULL)
 		{
 			fclose(f);
-			for (i = 0; i < GEANY_FILETYPE_SEARCH_LINES; ++i)
-			{
-				lines[i] = NULL;
-			}
 			lines[0] = line;
+			lines[1] = NULL;
 			return filetypes_detect_from_file_internal(utf8_filename, lines);
 		}
 		fclose(f);
@@ -1430,6 +1433,8 @@ static gchar *filetypes_get_conf_extension(const GeanyFiletype *ft)
 		case GEANY_FILETYPES_NONE: result = g_strdup("common"); break;
 		/* name is Matlab/Octave */
 		case GEANY_FILETYPES_MATLAB: result = g_strdup("matlab"); break;
+		/* name is Objective-C, and we don't want the hyphen */
+		case GEANY_FILETYPES_OBJECTIVEC: result = g_strdup("objectivec"); break;
 		default:
 			result = g_ascii_strdown(ft->name, -1);
 			break;
@@ -1785,4 +1790,41 @@ void filetypes_reload(void)
 const gchar *filetypes_get_display_name(GeanyFiletype *ft)
 {
 	return ft->id == GEANY_FILETYPES_NONE ? _("None") : ft->name;
+}
+
+
+/* gets comment_open/comment_close/comment_single strings from the filetype
+ * @param single_first: whether single comment is preferred if both available
+ * returns true if at least comment_open is set, false otherwise */
+gboolean filetype_get_comment_open_close(const GeanyFiletype *ft, gboolean single_first,
+		const gchar **co, const gchar **cc)
+{
+	g_return_val_if_fail(ft != NULL, FALSE);
+	g_return_val_if_fail(co != NULL, FALSE);
+	g_return_val_if_fail(cc != NULL, FALSE);
+
+	if (single_first)
+	{
+		*co = ft->comment_single;
+		if (NZV(*co))
+			*cc = NULL;
+		else
+		{
+			*co = ft->comment_open;
+			*cc = ft->comment_close;
+		}
+	}
+	else
+	{
+		*co = ft->comment_open;
+		if (NZV(*co))
+			*cc = ft->comment_close;
+		else
+		{
+			*co = ft->comment_single;
+			*cc = NULL;
+		}
+	}
+
+	return NZV(*co);
 }

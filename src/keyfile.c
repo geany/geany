@@ -150,8 +150,6 @@ static void init_pref_groups(void)
 	stash_group_add_toggle_button(group, &interface_prefs.highlighting_invert_all,
 		"highlighting_invert_all", FALSE, "check_highlighting_invert");
 
-	stash_group_add_toggle_button(group, &search_prefs.suppress_dialogs,
-		"pref_main_suppress_search_dialogs", FALSE, "check_ask_suppress_search_dialogs");
 	stash_group_add_toggle_button(group, &search_prefs.use_current_word,
 		"pref_main_search_use_current_word", TRUE, "check_search_use_current_word");
 
@@ -496,6 +494,8 @@ static void save_dialog_prefs(GKeyFile *config)
 		if (!g_key_file_has_key(config, "VTE", "send_selection_unsafe", NULL))	/* hidden */
 			g_key_file_set_boolean(config, "VTE", "send_selection_unsafe",
 				vc->send_selection_unsafe);
+		if (!g_key_file_has_key(config, "VTE", "send_cmd_prefix", NULL))	/* hidden */
+			g_key_file_set_string(config, "VTE", "send_cmd_prefix", vc->send_cmd_prefix);
 		g_key_file_set_string(config, "VTE", "font", vc->font);
 		g_key_file_set_boolean(config, "VTE", "scroll_on_key", vc->scroll_on_key);
 		g_key_file_set_boolean(config, "VTE", "scroll_on_out", vc->scroll_on_out);
@@ -691,6 +691,17 @@ static void load_dialog_prefs(GKeyFile *config)
 			utils_get_setting_boolean(config, PACKAGE, "use_safe_file_saving", FALSE));
 	}
 
+	/* compatibility with Geany 0.21 */
+	{
+		gboolean suppress_search_dialogs = utils_get_setting_boolean(config, PACKAGE, "pref_main_suppress_search_dialogs", FALSE);
+
+		if (!g_key_file_has_key(config, "search", "pref_search_always_wrap", NULL))
+			g_key_file_set_boolean(config, "search", "pref_search_always_wrap", suppress_search_dialogs);
+
+		if (!g_key_file_has_key(config, "search", "pref_search_hide_find_dialog", NULL))
+			g_key_file_set_boolean(config, "search", "pref_search_hide_find_dialog", suppress_search_dialogs);
+	}
+
 	/* read stash prefs */
 	settings_action(config, SETTING_READ);
 
@@ -826,6 +837,7 @@ static void load_dialog_prefs(GKeyFile *config)
 		vc->enable_bash_keys = utils_get_setting_boolean(config, "VTE", "enable_bash_keys", TRUE);
 		vc->ignore_menu_bar_accel = utils_get_setting_boolean(config, "VTE", "ignore_menu_bar_accel", FALSE);
 		vc->follow_path = utils_get_setting_boolean(config, "VTE", "follow_path", FALSE);
+		vc->send_cmd_prefix = utils_get_setting_string(config, "VTE", "send_cmd_prefix", "");
 		vc->run_in_vte = utils_get_setting_boolean(config, "VTE", "run_in_vte", FALSE);
 		vc->skip_run_script = utils_get_setting_boolean(config, "VTE", "skip_run_script", FALSE);
 		vc->cursor_blinks = utils_get_setting_boolean(config, "VTE", "cursor_blinks", FALSE);

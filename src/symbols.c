@@ -558,14 +558,15 @@ static GdkPixbuf *get_tag_icon(const gchar *icon_name)
 
 /* finds the next iter at any level
  * @param iter in/out, the current iter, will be changed to the next one
+ * @param down whether to try the child iter
  * @return TRUE if there @p iter was set, or FALSE if there is no next iter */
-static gboolean next_iter(GtkTreeModel *model, GtkTreeIter *iter)
+static gboolean next_iter(GtkTreeModel *model, GtkTreeIter *iter, gboolean down)
 {
 	GtkTreeIter guess;
 	GtkTreeIter copy = *iter;
 
 	/* go down if the item has children */
-	if (gtk_tree_model_iter_children(model, &guess, iter))
+	if (down && gtk_tree_model_iter_children(model, &guess, iter))
 		*iter = guess;
 	/* or to the next item at the same level */
 	else if (gtk_tree_model_iter_next(model, &copy))
@@ -654,7 +655,7 @@ tag_list_add_groups(GtkTreeStore *tree_store, ...)
 			gtk_tree_store_set(tree_store, iter, SYMBOLS_COLUMN_ICON, icon, -1);
 			g_object_unref(icon);
 		}
-		gtk_tree_store_set(tree_store, iter, SYMBOLS_COLUMN_NAME, title, SYMBOLS_COLUMN_VALID, TRUE, -1);
+		gtk_tree_store_set(tree_store, iter, SYMBOLS_COLUMN_NAME, title, -1);
 	}
 	va_end(args);
 }
@@ -1221,165 +1222,208 @@ static guint tag_hash(gconstpointer v)
 }
 
 
-static GHashTable *build_iter_table(GtkTreeStore *store)
+/* like gtk_tree_view_expand_to_path() but with an iter */
+static void tree_view_expand_to_iter(GtkTreeView *view, GtkTreeIter *iter)
 {
+	GtkTreeModel *model = gtk_tree_view_get_model(view);
+	GtkTreePath *path = gtk_tree_model_get_path(model, iter);
+
+	gtk_tree_view_expand_to_path(view, path);
+	gtk_tree_path_free(path);
+}
+
+
+/* like gtk_tree_store_remove() but finds the next iter at any level */
+static gboolean tree_store_remove_row(GtkTreeStore *store, GtkTreeIter *iter)
+{
+	GtkTreeIter parent;
+	gboolean has_parent;
+	gboolean cont;
+
+	has_parent = gtk_tree_model_iter_parent(GTK_TREE_MODEL(store), &parent, iter);
+	cont = gtk_tree_store_remove(store, iter);
+	/* if there is no next at this level but there is a parent iter, continue from it */
+	if (! cont && has_parent)
+	{
+		*iter = parent;
+		cont = next_iter(GTK_TREE_MODEL(store), iter, FALSE);
+	}
+
+	return cont;
+}
+
+
+/* updates @table adding @tag->name:@iter if necessary */
+static void update_parents_table(GHashTable *table, const TMTag *tag, const gchar *parent_name,
+		const GtkTreeIter *iter)
+{
+	if (g_hash_table_lookup_extended(table, tag->name, NULL, NULL) &&
+		! utils_str_equal(parent_name, tag->name) /* prevent Foo::Foo from making parent = child */)
+	{
+		g_hash_table_insert(table, tag->name, g_slice_dup(GtkTreeIter, iter));
+	}
+}
+
+
+static void free_iter_slice(gpointer iter)
+{
+	g_slice_free(GtkTreeIter, iter);
+}
+
+
+/*
+ * Updates the tag tree for a document with the tags in *list.
+ * @param doc a document
+ * @param tags a pointer to a GList* holding the tags to add/update.  This
+ *             list may be updated, removing updated elements.
+ * 
+ * The update is done in two passes:
+ * 1) walking the current tree, update tags that still exist and remove the
+ *    obsolescent ones;
+ * 2) walking the remaining (non updated) tags, adds them in the list.
+ * 
+ * For better performances, we use 2 hash tables:
+ * - one containing all the tags for lookup in the first pass (actually stores a
+ *   reference in the tags list for removing it efficiently), avoiding list search
+ *   on each tag;
+ * - the other holding "tag-name":row references for tags having children, used to
+ *   lookup for a parent in both passes, avoiding tree traversal.
+ */
+static void update_tree_tags(GeanyDocument *doc, GList **tags)
+{
+	GtkTreeStore *store = doc->priv->tag_store;
 	GtkTreeModel *model = GTK_TREE_MODEL(store);
-	GHashTable *table;
+	GHashTable *parents_table;
+	GHashTable *tags_table;
 	GtkTreeIter iter;
+	gboolean cont;
+	GList *item;
 
-	table = g_hash_table_new_full(tag_hash, tag_equal,
-			(GDestroyNotify)tm_tag_unref, (GDestroyNotify)gtk_tree_path_free);
+	/* Build hash tables holding tags and parents */
+	/* parent table holds "tag-name":GtkTreeIter */
+	parents_table = g_hash_table_new_full(g_str_hash, g_str_equal, NULL, free_iter_slice);
+	/* tags table is another representation of the @tags list, TMTag:GList<TMTag> */
+	tags_table = g_hash_table_new_full(tag_hash, tag_equal, NULL, NULL);
+	foreach_list(item, *tags)
+	{
+		TMTag *tag = item->data;
+		const gchar *name;
 
-	if (!gtk_tree_model_get_iter_first(model, &iter))
-		return table;
-	do
+		g_hash_table_insert(tags_table, tag, item);
+
+		name = get_parent_name(tag, doc->file_type->id);
+		if (name)
+			g_hash_table_insert(parents_table, (gpointer) name, NULL);
+	}
+
+	/* First pass, update existing rows or delete them.
+	 * It is OK to delete them since we walk top down so we would remove
+	 * parents before checking for their children, thus never implicitly
+	 * deleting an updated child */
+	cont = gtk_tree_model_get_iter_first(model, &iter);
+	while (cont)
 	{
 		TMTag *tag;
 
 		gtk_tree_model_get(model, &iter, SYMBOLS_COLUMN_TAG, &tag, -1);
-		if (tag)
-			g_hash_table_insert(table, tag, gtk_tree_model_get_path(model, &iter));
-	}
-	while (next_iter(model, &iter));
-
-	return table;
-}
-
-
-static gboolean find_iter(GtkTreeStore *store, GHashTable *iter_hash, const TMTag *tag,
-		GtkTreeIter *iter)
-{
-	GtkTreePath *path;
-
-	path = g_hash_table_lookup(iter_hash, tag);
-	if (path)
-	{
-		GtkTreeIter tmp;
-		gboolean valid;
-
-		if (!gtk_tree_model_get_iter(GTK_TREE_MODEL(store), &tmp, path))
-			return FALSE;
-		gtk_tree_model_get(GTK_TREE_MODEL(store), &tmp, SYMBOLS_COLUMN_VALID, &valid, -1);
-		/* if the row is valid it has already been updated, so it's simply a duplicate */
-		if (!valid)
+		if (! tag) /* most probably a toplevel, skip it */
+			cont = next_iter(model, &iter, TRUE);
+		else
 		{
-			*iter = tmp;
-			return TRUE;
+			GList *found_item;
+
+			found_item = g_hash_table_lookup(tags_table, tag);
+			if (! found_item) /* tag doesn't exist, remove it */
+				cont = tree_store_remove_row(store, &iter);
+			else /* tag still exist, update it */
+			{
+				const gchar *name;
+				const gchar *parent_name;
+				TMTag *found = found_item->data;
+
+				parent_name = get_parent_name(found, doc->file_type->id);
+				/* if parent is unknown, ignore it */
+				if (parent_name && ! g_hash_table_lookup(parents_table, parent_name))
+					parent_name = NULL;
+
+				/* only update fields that (can) have changed (name that holds line
+				 * number, and the tag itself) */
+				name = get_symbol_name(doc, found, parent_name != NULL);
+				gtk_tree_store_set(store, &iter,
+						SYMBOLS_COLUMN_NAME, name,
+						SYMBOLS_COLUMN_TAG, found,
+						-1);
+
+				update_parents_table(parents_table, found, parent_name, &iter);
+
+				/* remove the updated tag from the table and list */
+				g_hash_table_remove(tags_table, found);
+				*tags = g_list_delete_link(*tags, found_item);
+
+				cont = next_iter(model, &iter, TRUE);
+			}
+
+			tm_tag_unref(tag);
 		}
 	}
 
-	return FALSE;
-}
-
-
-static void add_tree_tag(GeanyDocument *doc, const TMTag *tag, GHashTable *parent_hash,
-		GHashTable *iter_hash)
-{
-	filetype_id ft_id = doc->file_type->id;
-	GtkTreeStore *tree_store = doc->priv->tag_store;
-	GtkTreeIter *parent = NULL;
-
-	parent = get_tag_type_iter(tag->type, ft_id);
-
-	if (G_LIKELY(parent))
+	/* Second pass, now we have a tree cleaned up from invalid rows,
+	 * we simply add new ones */
+	foreach_list (item, *tags)
 	{
-		const gchar *name;
-		const gchar *parent_name = get_parent_name(tag, ft_id);
-		GtkTreeIter iter;
-		GtkTreeIter *child = NULL;
- 		GdkPixbuf *icon = NULL;
-		gchar *tooltip;
+		TMTag *tag = item->data;
+		GtkTreeIter *parent;
 
- 		child = &iter;
-		icon = get_child_icon(tree_store, parent);
-
-		if (parent_name)
+		parent = get_tag_type_iter(tag->type, doc->file_type->id);
+		if (G_UNLIKELY(! parent))
+			geany_debug("Missing symbol-tree parent iter for type %d!", tag->type);
+		else
 		{
-			GtkTreeIter *parent_search =
-				(GtkTreeIter *)g_hash_table_lookup(parent_hash, parent_name);
+			gboolean expand;
+			const gchar *name;
+			const gchar *parent_name;
+			gchar *tooltip;
+			GdkPixbuf *icon = get_child_icon(store, parent);
 
-			if (parent_search)
-				parent = parent_search;
-			else
-				parent_name = NULL;
-		}
+			parent_name = get_parent_name(tag, doc->file_type->id);
+			if (parent_name)
+			{
+				GtkTreeIter *parent_search;
 
-		/* check if the current tag is a parent of other tags */
-		if (g_hash_table_lookup_extended(parent_hash, tag->name, NULL, NULL) &&
-			!utils_str_equal(tag->name, parent_name))	/* prevent Foo::Foo from making parent = child */
-		{
-			GtkTreeIter *new_iter = g_new0(GtkTreeIter, 1);
-
-			/* set an iter value for the hash key */
-			g_hash_table_insert(parent_hash, tag->name, new_iter);
-			/* instead of ignoring the appended child iter below, use the one in the hash table */
-			child = new_iter;
-		}
-
-		if (!find_iter(tree_store, iter_hash, tag, child))
-		{
-			gboolean expand = FALSE;
+				parent_search = g_hash_table_lookup(parents_table, parent_name);
+				if (parent_search)
+					parent = parent_search;
+				else
+					parent_name = NULL;
+			}
 
 			/* only expand to the iter if the parent was empty, otherwise we let the
 			 * folding as it was before (already expanded, or closed by the user) */
-			expand = !gtk_tree_model_iter_has_child(GTK_TREE_MODEL(tree_store), parent);
-			gtk_tree_store_append(tree_store, child, parent);
+			expand = ! gtk_tree_model_iter_has_child(model, parent);
+
+			/* insert the new element */
+			gtk_tree_store_append(store, &iter, parent);
+			name = get_symbol_name(doc, tag, parent_name != NULL);
+			tooltip = get_symbol_tooltip(doc, tag);
+			gtk_tree_store_set(store, &iter,
+					SYMBOLS_COLUMN_NAME, name,
+					SYMBOLS_COLUMN_TOOLTIP, tooltip,
+					SYMBOLS_COLUMN_ICON, icon,
+					SYMBOLS_COLUMN_TAG, tag,
+					-1);
+			g_free(tooltip);
+			if (G_LIKELY(icon))
+				g_object_unref(icon);
+
+			update_parents_table(parents_table, tag, parent_name, &iter);
+
 			if (expand)
-			{
-				GtkTreePath *path;
-
-				path = gtk_tree_model_get_path(GTK_TREE_MODEL(tree_store), child);
-				gtk_tree_view_expand_to_path(GTK_TREE_VIEW(doc->priv->tag_tree), path);
-				gtk_tree_path_free(path);
-			}
+				tree_view_expand_to_iter(GTK_TREE_VIEW(doc->priv->tag_tree), &iter);
 		}
-
-		name = get_symbol_name(doc, tag, (parent_name != NULL));
-		tooltip = get_symbol_tooltip(doc, tag);
-		gtk_tree_store_set(tree_store, child,
-			SYMBOLS_COLUMN_ICON, icon,
-			SYMBOLS_COLUMN_NAME, name,
-			SYMBOLS_COLUMN_TAG, tag,
-			SYMBOLS_COLUMN_VALID, TRUE,
-			SYMBOLS_COLUMN_TOOLTIP, tooltip,
-			-1);
-
-		g_free(tooltip);
-		if (G_LIKELY(G_IS_OBJECT(icon)))
-			g_object_unref(icon);
 	}
-	else
-		geany_debug("Missing symbol-tree parent iter for type %d!", tag->type);
-}
 
-
-static void add_tree_tags(GeanyDocument *doc, const GList *tags)
-{
-	const GList *item;
-	GHashTable *parent_hash;
-	GHashTable *iter_hash;
-
-	/* Create a hash table "parent_tag_name":(GtkTreeIter*) */
-	parent_hash = g_hash_table_new_full(g_str_hash, g_str_equal, NULL, g_free);
-	iter_hash = build_iter_table(doc->priv->tag_store);
-
-	/* find and store all parent names in the hash table */
-	for (item = tags; item; item = g_list_next(item))
-	{
-		const TMTag *tag = item->data;
-		const gchar *name = get_parent_name(tag, doc->file_type->id);
-
-		if (name)
-			g_hash_table_insert(parent_hash, (gpointer)name, NULL);
-	}
-	for (item = tags; item; item = g_list_next(item))
-	{
-		const TMTag *tag = item->data;
-
-		add_tree_tag(doc, tag, parent_hash, iter_hash);
-	}
-	g_hash_table_destroy(iter_hash);
-	g_hash_table_destroy(parent_hash);
+	g_hash_table_destroy(parents_table);
+	g_hash_table_destroy(tags_table);
 }
 
 
@@ -1390,15 +1434,16 @@ static gint compare_top_level_names(const gchar *a, const gchar *b)
 	guint i;
 	const gchar *name;
 
+	/* This should never happen as it would mean that two or more top
+	 * level items have the same name but it can happen by typos in the translations. */
+	if (utils_str_equal(a, b))
+		return 1;
+
 	foreach_ptr_array(name, i, top_level_iter_names)
 	{
 		if (utils_str_equal(name, a))
 			return -1;
 		if (utils_str_equal(name, b))
-			return 1;
-		/* This should never happen as it would mean that two or more top
-		 * level items have the same name but it can happen by typos in the translations. */
-		if (utils_str_equal(a, b))
 			return 1;
 	}
 	g_warning("Couldn't find top level node '%s' or '%s'!", a, b);
@@ -1450,7 +1495,7 @@ static gint tree_sort_func(GtkTreeModel *model, GtkTreeIter *a, GtkTreeIter *b,
 			/* this is what g_strcmp0() does */
 			if (! astr)
 				cmp = -(astr != bstr);
-			if (! bstr)
+			else if (! bstr)
 				cmp = astr != bstr;
 			else
 			{
@@ -1483,53 +1528,6 @@ static void sort_tree(GtkTreeStore *store, gboolean sort_by_name)
 }
 
 
-static void invalidate_rows(GtkTreeStore *store)
-{
-	GtkTreeIter iter;
-	GtkTreeModel *model = GTK_TREE_MODEL(store);
-
-	if (!gtk_tree_model_get_iter_first(model, &iter))
-		return;
-	do
-	{
-		gtk_tree_store_set(store, &iter, SYMBOLS_COLUMN_VALID, FALSE, -1);
-	}
-	while (next_iter(model, &iter));
-}
-
-
-static void remove_invalid_rows(GtkTreeStore *store)
-{
-	GtkTreeIter iter;
-	GtkTreeModel *model = GTK_TREE_MODEL(store);
-	gboolean cont;
-
-	cont = gtk_tree_model_get_iter_first(model, &iter);
-	while (cont)
-	{
-		gboolean valid;
-
-		gtk_tree_model_get(model, &iter, SYMBOLS_COLUMN_VALID, &valid, -1);
-		if (!valid)
-		{
-			GtkTreeIter parent;
-			gboolean have_parent;
-
-			have_parent = gtk_tree_model_iter_parent(model, &parent, &iter);
-			cont = gtk_tree_store_remove(store, &iter);
-			/* if there is no next at this level but there is a parent iter, continue from it */
-			if (!cont && have_parent)
-			{
-				iter = parent;
-				cont = next_iter(model, &iter);
-			}
-		}
-		else
-			cont = next_iter(model, &iter);
-	}
-}
-
-
 gboolean symbols_recreate_tag_list(GeanyDocument *doc, gint sort_mode)
 {
 	GList *tags;
@@ -1546,16 +1544,12 @@ gboolean symbols_recreate_tag_list(GeanyDocument *doc, gint sort_mode)
 	 * models that are currently being built */
 	gtk_tree_sortable_set_sort_column_id(GTK_TREE_SORTABLE(doc->priv->tag_store), GTK_TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID, 0);
 
-	/* invalidate all content */
-	invalidate_rows(doc->priv->tag_store);
-
 	/* add grandparent type iters */
 	add_top_level_items(doc);
 
-	add_tree_tags(doc, tags);
+	update_tree_tags(doc, &tags);
 	g_list_free(tags);
 
-	remove_invalid_rows(doc->priv->tag_store);
 	hide_empty_rows(doc->priv->tag_store);
 
 	if (sort_mode == SYMBOLS_SORT_USE_PREVIOUS)

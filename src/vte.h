@@ -55,6 +55,7 @@ typedef struct
 	gchar *emulation;
 	gchar *shell;
 	gchar *font;
+	gchar *send_cmd_prefix;
 	GdkColor *colour_fore;
 	GdkColor *colour_back;
 } VteConfig;

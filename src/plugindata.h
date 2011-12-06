@@ -30,8 +30,8 @@
  * when making changes (see 'Keeping the plugin ABI stable' in the HACKING file). */
 
 
-#ifndef PLUGINDATA_H
-#define PLUGINDATA_H
+#ifndef GEANY_PLUGINDATA_H
+#define GEANY_PLUGINDATA_H
 
 /* Compatibility for sharing macros between API and core.
  * First include geany.h, then plugindata.h, then other API headers. */

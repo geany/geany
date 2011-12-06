@@ -364,12 +364,7 @@ static void make_comment_block(GString *comment_text, gint filetype_idx, guint i
 	template_eol_mode = utils_get_line_endings(comment_text->str, comment_text->len);
 	template_eol_char = utils_get_eol_char(template_eol_mode);
 
-	co = ft->comment_open;
-	cc = NULL;
-	if (NZV(co))
-		cc = ft->comment_close;
-	else
-		co = ft->comment_single;
+	filetype_get_comment_open_close(ft, FALSE, &co, &cc);
 	if (NZV(co))
 	{
 		if (NZV(cc))

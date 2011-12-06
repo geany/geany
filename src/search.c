@@ -189,6 +189,10 @@ static void init_prefs(void)
 
 	group = stash_group_new("search");
 	configuration_add_pref_group(group, TRUE);
+	stash_group_add_toggle_button(group, &search_prefs.always_wrap,
+		"pref_search_hide_find_dialog", FALSE, "check_always_wrap_search");
+	stash_group_add_toggle_button(group, &search_prefs.hide_find_dialog,
+		"pref_search_always_wrap", FALSE, "check_hide_find_dialog");
 	stash_group_add_toggle_button(group, &search_prefs.use_current_file_dir,
 		"pref_search_current_file_dir", TRUE, "check_fif_current_dir");
 	stash_group_add_boolean(group, &find_dlg.all_expanded, "find_all_expanded", FALSE);
@@ -1253,9 +1257,7 @@ on_find_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 				gint result = document_find_text(doc, search_data.text, search_data.original_text, search_data.flags,
 					(response == GEANY_RESPONSE_FIND_PREVIOUS), TRUE, GTK_WIDGET(find_dlg.dialog));
 				ui_set_search_entry_background(find_dlg.entry, (result > -1));
-				check_close = FALSE;
-				if (search_prefs.suppress_dialogs)
-					check_close = TRUE;
+				check_close = search_prefs.hide_find_dialog;
 				break;
 			}
 			case GEANY_RESPONSE_FIND_IN_FILE:

@@ -60,6 +60,10 @@ Don't load plugin support.
 Print installation prefix, the data directory, the lib directory and the locale directory (in
 this order) to stdout, each per line. This is mainly intended for plugin authors to detect
 installation paths.
+.IP "\fB-r\fP, \fB\-\-read-only\fP         " 10
+Open all files given on the command line in read-only mode. This only applies to files
+opened explicitly from the command line, so files from previous sessions or project
+files are unaffected.
 .IP "\fB-s\fP, \fB\-\-no-session\fP         " 10
 Don't load the previous session's files.
 .IP "\fB-t\fP, \fB\-\-no-terminal\fP         " 10

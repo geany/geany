@@ -621,7 +621,6 @@ G_MODULE_EXPORT void on_notebook1_switch_page_after(GtkNotebook *notebook, GtkNo
 		ui_document_show_hide(doc); /* update the document menu */
 		build_menu_update(doc);
 		sidebar_update_tag_list(doc, FALSE);
-		document_update_type_keywords(doc);
 
 		/* We delay the check to avoid weird fast, unintended switching of notebook pages when
 		 * the 'file has changed' dialog is shown while the switch event is not yet completely
@@ -1455,7 +1454,7 @@ G_MODULE_EXPORT void on_menu_comment_line1_activate(GtkMenuItem *menuitem, gpoin
 	GeanyDocument *doc = document_get_current();
 	g_return_if_fail(doc != NULL);
 
-	editor_do_comment(doc->editor, -1, FALSE, FALSE);
+	editor_do_comment(doc->editor, -1, FALSE, FALSE, TRUE);
 }
 
 
@@ -1882,11 +1881,22 @@ G_MODULE_EXPORT void on_search1_activate(GtkMenuItem *menuitem, gpointer user_da
 }
 
 
-/* simple implementation (vs. close all which doesn't close documents if cancelled) */
+/* simple implementation (vs. close all which doesn't close documents if cancelled),
+ * if user_data is set, it is a GtkNotebook child widget */
 G_MODULE_EXPORT void on_close_other_documents1_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
 	guint i;
-	GeanyDocument *doc, *cur_doc = document_get_current();
+	GeanyDocument *doc, *cur_doc;
+
+	if (user_data != NULL)
+	{
+		gint page_num = gtk_notebook_page_num(
+			GTK_NOTEBOOK(main_widgets.notebook), GTK_WIDGET(user_data));
+		cur_doc = document_get_from_page(page_num);
+	}
+	else
+		cur_doc = document_get_current();
+
 
 	for (i = 0; i < documents_array->len; i++)
 	{

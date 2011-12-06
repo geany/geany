@@ -21,8 +21,8 @@
  */
 
 
-#ifndef PLUGINS_H
-#define PLUGINS_H
+#ifndef GEANY_PLUGINS_H
+#define GEANY_PLUGINS_H
 
 #ifdef HAVE_PLUGINS
 

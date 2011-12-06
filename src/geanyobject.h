@@ -21,8 +21,8 @@
  */
 
 
-#ifndef __GEANYOBJECT_H__
-#define __GEANYOBJECT_H__
+#ifndef GEANYOBJECT_H
+#define GEANYOBJECT_H
 
 #include <glib-object.h>
 
@@ -105,4 +105,4 @@ GObject*	geany_object_new		(void);
 
 G_END_DECLS
 
-#endif /* __GEANYOBJECT_H__ */
+#endif /* GEANYOBJECT_H */

@@ -21,8 +21,8 @@
  */
 
 
-#ifndef PLUGINPRIVATE_H
-#define PLUGINPRIVATE_H
+#ifndef GEANY_PLUGINPRIVATE_H
+#define GEANY_PLUGINPRIVATE_H
 
 #include "plugindata.h"
 #include "ui_utils.h"	/* GeanyAutoSeparator */
@@ -62,4 +62,4 @@ GeanyPluginPrivate;
 typedef GeanyPluginPrivate Plugin;	/* shorter alias */
 
 
-#endif /* PLUGINPRIVATE_H */
+#endif /* GEANY_PLUGINPRIVATE_H */

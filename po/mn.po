@@ -8,435 +8,377 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.22\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-11-06 12:27+0100\n"
-"PO-Revision-Date: 2011-11-04 14:52+0530\n"
+"POT-Creation-Date: 2007-02-14 20:21+0100\n"
+"PO-Revision-Date: 2011-11-09 01:15+0530\n"
 "Last-Translator: Цэцэнцэнгэл <tsetsee.yugi@gmail.com>\n"
 "Language-Team: Монгол <tsetsee.yugi@gmail.com>\n"
-"Language: mn\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bits\n"
+"Language: mn\n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n"
 
-#: ../geany.desktop.in.h:1
-#, fuzzy
-msgid "A fast and lightweight IDE using GTK2"
-msgstr "Хурдан авсаархан IDE"
-
-#: ../geany.desktop.in.h:2 ../src/interface.c:314 ../src/interface.c:1842
-msgid "Geany"
-msgstr ""
-
-#: ../geany.desktop.in.h:3
-msgid "Integrated Development Environment"
-msgstr ""
-
-#: ../src/about.c:153
+#: src/about.c:122
 msgid "About Geany"
 msgstr "Жиенигийн тухай"
 
-#: ../src/about.c:203
+#: src/about.c:171
 msgid "A fast and lightweight IDE"
 msgstr "Хурдан авсаархан IDE"
 
-#: ../src/about.c:224
-#, fuzzy, c-format
-msgid "(built on or after %s)"
+#: src/about.c:192
+#, c-format
+msgid "(built on %s)"
 msgstr "(%s-ийг боловсруулах)"
 
 #. gtk_container_add(GTK_CONTAINER(info_box), cop_label);
-#: ../src/about.c:255
+#: src/about.c:223
 msgid "Info"
 msgstr "Мэдээлэл"
 
-#: ../src/about.c:271
+#: src/about.c:235
 msgid "Developers"
 msgstr "Хөгжүүлэгчид"
 
-#: ../src/about.c:280
-#, fuzzy
-msgid "maintainer"
+#: src/about.c:235
+msgid "Maintainer"
 msgstr "Засварлагчид"
 
-#: ../src/about.c:288 ../src/about.c:296
+#: src/about.c:235
 msgid "developer"
 msgstr "хөгжүүлэгч"
 
-#: ../src/about.c:304
+#: src/about.c:236
 msgid "translation maintainer"
 msgstr "Орчуулга засварлагчид"
 
-#: ../src/about.c:313
+#: src/about.c:236
 msgid "Translators"
 msgstr "Орчуулагчид"
 
-#: ../src/about.c:333
-#, fuzzy
-msgid "Previous Translators"
-msgstr "Орчуулагчид"
+#: src/about.c:237
+msgid "language"
+msgstr "хэл"
 
-#: ../src/about.c:354
-msgid "Contributors"
-msgstr ""
-
-#: ../src/about.c:364
-#, c-format
-msgid ""
-"Some of the many contributors (for a more detailed list, see the file %s):"
-msgstr ""
-
-#: ../src/about.c:390
+#: src/about.c:243
 msgid "Credits"
 msgstr "Талархал"
 
-#: ../src/about.c:404
+#: src/about.c:256
 msgid "License"
 msgstr "Лиценз"
 
-#: ../src/about.c:413
-msgid ""
-"License text could not be found, please visit http://www.gnu.org/licenses/"
-"gpl-2.0.txt to view it online."
-msgstr ""
-
-#. fall back to %d
-#: ../src/build.c:658
+#: src/build.c:155
 #, c-format
-msgid "failed to substitute %%p, no project active"
-msgstr ""
+msgid "Failed to view %s (make sure it is already compiled)"
+msgstr "%s-ийг харахад алдаа гарлаа (Хөрвүүлэгдсэн эсэхийг шалгана уу)"
 
-#: ../src/build.c:696
-#, fuzzy
-msgid "Process failed, no working directory"
-msgstr "%s-ийн хавтасыг солиход алдаа гарлаа"
-
-#: ../src/build.c:722
+#: src/build.c:188 src/build.c:584
 #, c-format
-msgid "%s (in directory: %s)"
-msgstr "%s (%s хавтасд)"
-
-#: ../src/build.c:742 ../src/build.c:964 ../src/search.c:1619
-#, c-format
-msgid "Process failed (%s)"
-msgstr "Процесс-д алдаа гарлаа (%s)"
-
-#: ../src/build.c:810
-#, fuzzy, c-format
-msgid "Failed to change the working directory to \"%s\""
-msgstr "%s-ийн хавтасыг солиход алдаа гарлаа"
-
-#: ../src/build.c:839
-#, fuzzy, c-format
-msgid "Failed to execute \"%s\" (start-script could not be created)"
-msgstr "%s-ийг ажиллуулахад алдаа гарлаа (start-script үүссэнгүй)"
-
-#: ../src/build.c:893
 msgid ""
-"Could not execute the file in the VTE because it probably contains a command."
-msgstr ""
-
-#: ../src/build.c:931
-#, fuzzy, c-format
-msgid ""
-"Could not find terminal \"%s\" (check path for Terminal tool setting in "
+"Could not find terminal '%s' (check path for Terminal tool setting in "
 "Preferences)"
 msgstr ""
 "'%s'-ээс терминалыг олсонгүй (Тохиргоо цэснээс Терминалын замыг шалгана уу)"
 
-#: ../src/build.c:1104
+#: src/build.c:202 src/build.c:621
+#, c-format
+msgid "Failed to execute %s (start-script could not be created)"
+msgstr "%s-ийг ажиллуулахад алдаа гарлаа (start-script үүссэнгүй)"
+
+#: src/build.c:230 src/build.c:455 src/build.c:666 src/search.c:1113
+#, c-format
+msgid "Process failed (%s)"
+msgstr "Процесс-д алдаа гарлаа (%s)"
+
+#: src/build.c:340 src/build.c:545
+msgid "Command stopped because the current file has no extension."
+msgstr "Файлд өргөтгөл байхгүй учраас комманд зогслоо."
+
+# stat гэж юу вэ???
+#: src/build.c:364
+#, c-format
+msgid "Something very strange is occurred, could not stat %s (%s)."
+msgstr "Тодорхойгүй шалтгаанаар %s-ийг эхлүүлж чадсангүй (%s)."
+
+#: src/build.c:443
+#, c-format
+msgid "%s (in directory: %s)"
+msgstr "%s (%s хавтасд)"
+
+#: src/build.c:560
+#, c-format
+msgid "Failed to execute %s (make sure it is already built)"
+msgstr "%s-ийг ажиллуулахад алдаа гарлаа (боловсруулагдсан эсэхийг шалгана уу)"
+
+#: src/build.c:598
+#, c-format
+msgid "Failed to change the working directory to %s"
+msgstr "%s-ийн хавтасыг солиход алдаа гарлаа"
+
+#: src/build.c:794
 msgid "Compilation failed."
 msgstr "Хөрвүүлэлтийн алдаа гарлаа."
 
-#: ../src/build.c:1118
+#: src/build.c:808
 msgid "Compilation finished successfully."
 msgstr "Амжилттай хөрвүүлэгдлээ."
 
-#: ../src/build.c:1284
-#, fuzzy
-msgid "Custom Text"
-msgstr "Аргументтэйгээр Үүсгэх"
+#. compile the code
+#: src/build.c:913
+msgid "_Compile"
+msgstr "_Хөрвүүл"
 
-#: ../src/build.c:1285
-#, fuzzy
-msgid "Enter custom text here, all entered text is appended to the command."
-msgstr "Тохиргоогоо энд бич. Бичсэн текст үүсгэх командад орно."
+#: src/build.c:916
+msgid "Compiles the current file"
+msgstr "Файлыг хөрвүүл"
 
-#: ../src/build.c:1363
+#. build the code
+#: src/build.c:925 src/interface.c:879
+msgid "_Build"
+msgstr "_Боловсруул"
+
+#: src/build.c:929
+msgid "Builds the current file (generate an executable file)"
+msgstr "Файлыг боловсруул (ажиллуулах файлыг үүсгэ)"
+
+#. build the code with make all
+#: src/build.c:939 src/build.c:1061
+msgid "_Make All"
+msgstr "_Бүгдийг Үүсгэх"
+
+#: src/build.c:942 src/build.c:1064
+msgid "Builds the current file with the make tool and the default target"
+msgstr "Файлыг үүсгэх хэрэгсэл болон аргументтэйгээр боловсруул"
+
+#. build the code with make custom
+#: src/build.c:950 src/build.c:1072
+msgid "Make Custom _Target"
+msgstr "_Аргументтэйгээр Үүсгэх"
+
+#: src/build.c:954 src/build.c:1076
+msgid "Builds the current file with the make tool and the specified target"
+msgstr "Файлыг үүсгэх хэрэгсэл болон заагдсан аргументтэйгээр боловсруул"
+
+#. build the code with make object
+#: src/build.c:961
+msgid "Make _Object"
+msgstr "_Объектыг боловсруул"
+
+#: src/build.c:965
+msgid "Compiles the current file using the make tool"
+msgstr "Үүсгэх хэрэгслээр файлыг хөрвүүл"
+
+#. next error
+#: src/build.c:977 src/build.c:1088
 msgid "_Next Error"
 msgstr "_Дараачийн Алдаа"
 
-#: ../src/build.c:1365
-#, fuzzy
-msgid "_Previous Error"
-msgstr "_Дараачийн Алдаа"
+#: src/build.c:992 src/interface.c:1007
+msgid "Run or view the current file"
+msgstr "Файлыг харах эсвэл ажиллуулах"
 
 #. arguments
-#: ../src/build.c:1375 ../src/build.c:2755
-msgid "_Set Build Commands"
+#: src/build.c:1003
+msgid "_Set Includes and Arguments"
+msgstr "_Оруулалт болон Аргументийг зааж өгөх"
+
+#: src/build.c:1008
+msgid ""
+"Sets the includes and library paths for the compiler and the program "
+"arguments for execution"
 msgstr ""
+"Хөрвүүлэгчийн оруулалт болон сангийн зам, програмын аргументийг зааж өгөх"
 
-#: ../src/build.c:1659 ../src/toolbar.c:372
-#, fuzzy
-msgid "Build the current file"
-msgstr "Файлыг хөрвүүл"
+#. DVI
+#: src/build.c:1031
+msgid "LaTeX -> DVI"
+msgstr "LaTex -> DVI"
 
-#: ../src/build.c:1670
-#, fuzzy
-msgid "Build the current file with Make and the default target"
-msgstr "Файлыг үүсгэх хэрэгсэл болон аргументтэйгээр боловсруул"
+#: src/build.c:1034
+msgid "Compiles the current file into a DVI file"
+msgstr "Файлыг DVI файл-руу хөрвүүл"
 
-#: ../src/build.c:1672
-#, fuzzy
-msgid "Build the current file with Make and the specified target"
-msgstr "Файлыг үүсгэх хэрэгсэл болон заагдсан аргументтэйгээр боловсруул"
+#. PDF
+#: src/build.c:1044
+msgid "LaTeX -> PDF"
+msgstr "LaTeX -> PDF"
 
-#: ../src/build.c:1674
-#, fuzzy
-msgid "Compile the current file with Make"
-msgstr "Файлыг хөрвүүл"
+#: src/build.c:1047
+msgid "Compiles the current file into a PDF file"
+msgstr "Файлыг PDF файл-руу хөрвүүлэх"
 
-#: ../src/build.c:1701
+#. DVI view
+#: src/build.c:1100
+msgid "View DVI File"
+msgstr "DVI файлыг харах"
+
+#: src/build.c:1105 src/build.c:1118
+msgid "Compiles and view the current file"
+msgstr "Файлыг хөрвүүлээд харах"
+
+#. PDF view
+#: src/build.c:1114
+msgid "View PDF File"
+msgstr "PDF файлыг харах"
+
+#. arguments
+#: src/build.c:1133 src/dialogs.c:642
+msgid "Set Arguments"
+msgstr "Аргументийг зааж өгөх"
+
+#: src/build.c:1138
+msgid "Sets the program paths and arguments"
+msgstr "Програмын зам болон аргументийг зааж өгөх"
+
+#: src/build.c:1405
+msgid "Make Custom Target"
+msgstr "Аргументтэйгээр Үүсгэх"
+
+#: src/build.c:1406
+msgid ""
+"Enter custom options here, all entered text is passed to the make command."
+msgstr "Тохиргоогоо энд бич. Бичсэн текст үүсгэх командад орно."
+
+#: src/build.c:1445
+msgid "Failed to execute the view program"
+msgstr "View програмыг ажиллуулахад алдаа гарлаа"
+
+#: src/build.c:1464
+msgid "Failed to execute the terminal program"
+msgstr "Terminal програмыг ажиллуулахад алдаа гарлаа"
+
+#: src/build.c:1523
 #, c-format
 msgid "Process could not be stopped (%s)."
 msgstr "Процесс зогсож чадахгүй байсан (%s)."
 
-#: ../src/build.c:1718 ../src/build.c:1730
+#: src/build.c:1539
 msgid "No more build errors."
 msgstr "Боловсруулахад алдаа гараагүй"
 
-#. FIXME: we should pass either build dialog or project dialog instead of NULL for parent
-#: ../src/build.c:1826
-msgid "Set menu item label"
-msgstr ""
-
-#: ../src/build.c:1852 ../src/symbols.c:735
-msgid "Label"
-msgstr ""
-
-#: ../src/build.c:1853 ../src/symbols.c:730 ../src/tools.c:524
-#, fuzzy
-msgid "Command"
-msgstr " командууд"
-
-#: ../src/build.c:1854
-#, fuzzy
-msgid "Working directory"
-msgstr "%s (%s хавтасд)"
-
-#: ../src/build.c:1855
-msgid "Reset"
-msgstr ""
-
-#: ../src/build.c:1900
-msgid "Click to set menu item label"
-msgstr ""
-
-#: ../src/build.c:1984 ../src/build.c:1986
-#, fuzzy, c-format
-msgid "%s commands"
-msgstr " командууд"
-
-#: ../src/build.c:1986
-#, fuzzy
-msgid "No filetype"
-msgstr "Файлын төрлийг заа:"
-
-#: ../src/build.c:1995 ../src/build.c:2030
-msgid "Error regular expression:"
-msgstr ""
-
-#: ../src/build.c:2023
-#, fuzzy
-msgid "Independent commands"
-msgstr " командууд"
-
-#: ../src/build.c:2055
-msgid "Note: Item 2 opens a dialog and appends the response to the command."
-msgstr ""
-
-#: ../src/build.c:2064
-#, fuzzy
-msgid "Execute commands"
-msgstr " командууд"
-
-#: ../src/build.c:2076
-#, c-format
-msgid ""
-"%d, %e, %f, %p are substituted in command and directory fields, see manual "
-"for details."
-msgstr ""
-
-#: ../src/build.c:2233
-msgid "Set Build Commands"
-msgstr ""
-
-#: ../src/build.c:2445
-msgid "_Compile"
-msgstr "_Хөрвүүл"
-
-#. build the code
-#: ../src/build.c:2452 ../src/build.c:2715 ../src/interface.c:1245
-msgid "_Build"
-msgstr "_Боловсруул"
-
-#: ../src/build.c:2459 ../src/build.c:2489 ../src/build.c:2683
-#, fuzzy
-msgid "_Execute"
-msgstr "Ажиллуул:"
-
-#. build the code with make custom
-#: ../src/build.c:2504 ../src/build.c:2681 ../src/build.c:2735
-msgid "Make Custom _Target"
-msgstr "_Аргументтэйгээр Үүсгэх"
-
-#. build the code with make object
-#: ../src/build.c:2506 ../src/build.c:2682 ../src/build.c:2743
-msgid "Make _Object"
-msgstr "_Объектыг боловсруул"
-
-#: ../src/build.c:2508 ../src/build.c:2680
-#, fuzzy
-msgid "_Make"
-msgstr "_Бүгдийг Үүсгэх\t"
-
-#. build the code with make all
-#: ../src/build.c:2727
-msgid "_Make All"
-msgstr "_Бүгдийг Үүсгэх\t"
-
-#: ../src/callbacks.c:147
+#: src/callbacks.c:175
 msgid "Do you really want to quit?"
 msgstr "Гармаар байна уу?"
 
-#: ../src/callbacks.c:205
-#, fuzzy, c-format
-msgid "%d file saved."
-msgid_plural "%d files saved."
-msgstr[0] "Шинэ файл нээгдлээ."
-msgstr[1] "Шинэ файл нээгдлээ."
-
-#: ../src/callbacks.c:429 ../src/document.c:2830 ../src/interface.c:385
-#: ../src/sidebar.c:696
+#: src/callbacks.c:491 src/interface.c:334 src/utils.c:347
 msgid "_Reload"
 msgstr "_Дахин ачаал"
 
-#: ../src/callbacks.c:430
+#: src/callbacks.c:492
 msgid "Any unsaved changes will be lost."
 msgstr "Хадгалаагүй өөрчлөлтүүд алга болно."
 
-#: ../src/callbacks.c:431
+#: src/callbacks.c:493
 #, c-format
 msgid "Are you sure you want to reload '%s'?"
 msgstr "'%s'-ийг дахин ачааллуулах уу?"
 
-#: ../src/callbacks.c:1055 ../src/keybindings.c:448
-msgid "Go to Line"
-msgstr ""
+#: src/callbacks.c:878
+#, c-format
+msgid "The file '%s' already exists. Do you want to overwrite it?"
+msgstr "'%s' файл үүсчихсэн байна. Дарж бичих үү?"
 
-#: ../src/callbacks.c:1056
-msgid "Enter the line you want to go to:"
-msgstr "Очих мөрөө оруул:"
+#: src/callbacks.c:1251
+#, c-format
+msgid "Forward declaration \"%s\" not found."
+msgstr "\"%s\" Forward declaration олдсонгүй."
 
-#: ../src/callbacks.c:1139 ../src/callbacks.c:1164
+#: src/callbacks.c:1253
+#, c-format
+msgid "Definition of \"%s\" not found."
+msgstr "\"%s\"-ийн тодорхойлолт олдсонгүй."
+
+#: src/callbacks.c:1474 src/callbacks.c:1498
 msgid ""
 "Please set the filetype for the current file before using this function."
 msgstr "Энэ функцыг хэрэглэхийн өмнө файлынхаа төрлийг зааж өгнө үү."
 
-#: ../src/callbacks.c:1269 ../src/ui_utils.c:617
+#: src/callbacks.c:1609 src/ui_utils.c:416
 msgid "dd.mm.yyyy"
 msgstr "өдөр.сар.жил"
 
-#: ../src/callbacks.c:1271 ../src/ui_utils.c:618
+#: src/callbacks.c:1611 src/ui_utils.c:417
 msgid "mm.dd.yyyy"
 msgstr "сар.өдөр.жил"
 
-#: ../src/callbacks.c:1273 ../src/ui_utils.c:619
+#: src/callbacks.c:1613 src/ui_utils.c:418
 msgid "yyyy/mm/dd"
 msgstr "жил/сар/өдөр"
 
-#: ../src/callbacks.c:1275 ../src/ui_utils.c:628
+#: src/callbacks.c:1615 src/ui_utils.c:427
 msgid "dd.mm.yyyy hh:mm:ss"
 msgstr "өдөр.сар.жил цаг:мин:сек"
 
-#: ../src/callbacks.c:1277 ../src/ui_utils.c:629
+#: src/callbacks.c:1617 src/ui_utils.c:428
 msgid "mm.dd.yyyy hh:mm:ss"
 msgstr "сар.өдөр.жил цаг:мин:сек"
 
-#: ../src/callbacks.c:1279 ../src/ui_utils.c:630
+#: src/callbacks.c:1619 src/ui_utils.c:429
 msgid "yyyy/mm/dd hh:mm:ss"
 msgstr "жил/сар/өдөр цаг:мин:сек"
 
-#: ../src/callbacks.c:1281 ../src/ui_utils.c:639
-#, fuzzy
-msgid "_Use Custom Date Format"
+#: src/callbacks.c:1621 src/ui_utils.c:438
+msgid "Use Custom Date Format"
 msgstr "Огнооны Хэлбэрүүдийг Хэрэглэх"
 
-#: ../src/callbacks.c:1285
+#: src/callbacks.c:1632
 msgid "Custom Date Format"
 msgstr "Огнооны Хэлбэр"
 
-#: ../src/callbacks.c:1286
-#, fuzzy
+#: src/callbacks.c:1633
 msgid ""
 "Enter here a custom date and time format. You can use any conversion "
-"specifiers which can be used with the ANSI C strftime function."
+"specifiers which can be used with the ANSI C strftime function. See \"man "
+"strftime\" for more information."
 msgstr ""
 "Огноо болон цагны хэлбэрийг оруул. Хувиргалт хийхдээ ANSI Cи хэлний strftime "
 "функцийг хэрэглэж болно. Дэлгэрэнгүй мэдээллийг \"man strftime\" гэж харна "
 "уу."
 
-#: ../src/callbacks.c:1309
+#: src/callbacks.c:1653
 msgid "Date format string could not be converted (possibly too long)."
 msgstr "Огнооны хэлбэр тэмдэгт мөр-лүү хөрвөгдсөнгүй (Хэт урт байна)."
 
-#: ../src/callbacks.c:1502 ../src/callbacks.c:1510
+#: src/callbacks.c:2041
 msgid "No more message items."
 msgstr "Мэдээ дууссан."
 
-#: ../src/dialogs.c:229
+#. initialize the dialog
+#: src/dialogs.c:75 src/prefs.c:1048
+msgid "Open File"
+msgstr "Файл Нээх"
+
+#: src/dialogs.c:78 src/interface.c:656
+msgid "_View"
+msgstr "_Харагдац"
+
+#: src/dialogs.c:80
+msgid ""
+"Opens the file in read-only mode. If you choose more than one file to open, "
+"all files will be opened read-only."
+msgstr ""
+"Файлыг зөвхөн харахаар нээх. Нэгээс олон файл нээх бол бүх файл харахаар л "
+"нээгдэнэ."
+
+#: src/dialogs.c:113
+msgid "Detect by file extension"
+msgstr "Файлыг өргөтгөлийг тогтоо"
+
+#: src/dialogs.c:124
 msgid "Detect from file"
 msgstr "Файлаас тогтоо"
 
-#: ../src/dialogs.c:232
-msgid "West European"
-msgstr ""
-
-#: ../src/dialogs.c:234
-msgid "East European"
-msgstr ""
-
-#: ../src/dialogs.c:236
-msgid "East Asian"
-msgstr ""
-
-#: ../src/dialogs.c:238
-msgid "SE & SW Asian"
-msgstr ""
-
-#: ../src/dialogs.c:240
-msgid "Middle Eastern"
-msgstr ""
-
-#: ../src/dialogs.c:242 ../src/encodings.c:118 ../src/encodings.c:119
-#: ../src/encodings.c:120 ../src/encodings.c:121 ../src/encodings.c:122
-#: ../src/encodings.c:123 ../src/encodings.c:124 ../src/encodings.c:125
-msgid "Unicode"
-msgstr ""
-
-#: ../src/dialogs.c:291
-msgid "_More Options"
-msgstr ""
-
 #. line 1 with checkbox and encoding combo
-#: ../src/dialogs.c:298
+#: src/dialogs.c:170
 msgid "Show _hidden files"
 msgstr "_Нууц файлуудыг харуул"
 
-#: ../src/dialogs.c:309
+#: src/dialogs.c:182
 msgid "Set encoding:"
 msgstr "Энкодчиллыг заа:"
 
-#: ../src/dialogs.c:318
+#: src/dialogs.c:192
 msgid ""
 "Explicitly defines an encoding for the file, if it would not be detected. "
 "This is useful when you know that the encoding of a file cannot be detected "
@@ -448,12 +390,11 @@ msgstr ""
 "зааж өгсөн байна.\n"
 "Жич: Олон файлыг сонгосон бол бүгд сонгогдсон энкодчиллоор нээгдэнэ."
 
-#. line 2 with filetype combo
-#: ../src/dialogs.c:325
+#: src/dialogs.c:212
 msgid "Set filetype:"
 msgstr "Файлын төрлийг заа:"
 
-#: ../src/dialogs.c:335
+#: src/dialogs.c:222
 msgid ""
 "Explicitly defines a filetype for the file, if it would not be detected by "
 "filename extension.\n"
@@ -464,92 +405,121 @@ msgstr ""
 "цаанаас нь зааж өгсөн.\n"
 "Жич: Олон файл сонгосон бол бүгд сонгогдсон файлын төрлөөр нээгдэнэ."
 
-#: ../src/dialogs.c:364 ../src/dialogs.c:468
-msgid "Open File"
-msgstr "Файл Нээх"
-
-#: ../src/dialogs.c:368 ../src/interface.c:877
-msgid "_View"
-msgstr "_Харагдац"
-
-#: ../src/dialogs.c:370
-msgid ""
-"Opens the file in read-only mode. If you choose more than one file to open, "
-"all files will be opened read-only."
-msgstr ""
-"Файлыг зөвхөн харахаар нээх. Нэгээс олон файл нээх бол бүх файл харахаар л "
-"нээгдэнэ."
-
-#: ../src/dialogs.c:390
-msgid "Detect by file extension"
-msgstr "Файлыг өргөтгөлийг тогтоо"
-
-#: ../src/dialogs.c:547
-msgid "Overwrite?"
-msgstr ""
-
-#: ../src/dialogs.c:548
-msgid "Filename already exists!"
-msgstr ""
-
-#: ../src/dialogs.c:583 ../src/dialogs.c:709
+#: src/dialogs.c:261
 msgid "Save File"
 msgstr "Файлыг Хадгал"
 
-#: ../src/dialogs.c:592
-msgid "R_ename"
-msgstr ""
-
-#: ../src/dialogs.c:593
-msgid "Save the file and rename it"
-msgstr ""
-
-#: ../src/dialogs.c:601
-msgid "_Open file in a new tab"
-msgstr ""
-
-#: ../src/dialogs.c:604
-msgid ""
-"Keep the current unsaved document open and open the newly saved file in a "
-"new tab"
-msgstr ""
-
-#: ../src/dialogs.c:727 ../src/win32.c:679
-#, fuzzy
-msgid "Error"
-msgstr "_Дараачийн Алдаа"
-
-#: ../src/dialogs.c:730 ../src/dialogs.c:813 ../src/dialogs.c:1594
-#: ../src/win32.c:685
-msgid "Question"
-msgstr ""
-
-#: ../src/dialogs.c:733 ../src/win32.c:691
-msgid "Warning"
-msgstr ""
-
-#: ../src/dialogs.c:736 ../src/win32.c:697
-msgid "Information"
-msgstr ""
-
-#: ../src/dialogs.c:817
-msgid "_Don't save"
-msgstr "_Хадгалахгүй"
-
-#: ../src/dialogs.c:846
+#: src/dialogs.c:353
 #, c-format
 msgid "The file '%s' is not saved."
 msgstr "'%s' файл хадгалагдсангүй."
 
-#: ../src/dialogs.c:847
+#: src/dialogs.c:363
 msgid "Do you want to save it before closing?"
 msgstr "Хаахын өмнө хадгалах уу?"
 
-#: ../src/dialogs.c:908
+#: src/dialogs.c:366
+msgid "_Don't save"
+msgstr "_Хадгалахгүй"
+
+#: src/dialogs.c:410
 msgid "Choose font"
 msgstr "Фонтыг сонго"
 
-#: ../src/dialogs.c:1206
+#: src/dialogs.c:448
+msgid "Word Count"
+msgstr "Үгийг Тоол"
+
+#: src/dialogs.c:457
+msgid "selection"
+msgstr "сонголт"
+
+#: src/dialogs.c:463
+msgid "whole document"
+msgstr "бүх барим"
+
+#: src/dialogs.c:472
+msgid "Range:"
+msgstr "Зай:"
+
+#: src/dialogs.c:484
+msgid "Lines:"
+msgstr "Мөр:"
+
+#: src/dialogs.c:498
+msgid "Words:"
+msgstr "Үг:"
+
+#: src/dialogs.c:512
+msgid "Characters:"
+msgstr "Тэмдэгт:"
+
+#: src/dialogs.c:544 src/interface.c:3208 src/vte.c:552 src/vte.c:559
+msgid "Color Chooser"
+msgstr "Өнгө Сонгогч"
+
+#: src/dialogs.c:611 src/keybindings.c:157
+msgid "Go to line"
+msgstr "Мөр-лүү оч"
+
+#: src/dialogs.c:617
+msgid "Enter the line you want to go to:"
+msgstr "Очих мөрөө оруул:"
+
+#: src/dialogs.c:648
+msgid "Set programs and options for compiling and viewing (La)TeX files."
+msgstr "(La)Tex файлыг хөрвүүлэх болон харах програм болон тохиргоог оруул."
+
+#: src/dialogs.c:659
+msgid "DVI creation:"
+msgstr "DVI үүсэлт:"
+
+#: src/dialogs.c:678
+msgid "PDF creation:"
+msgstr "PDF үүсэлт:"
+
+#: src/dialogs.c:697
+msgid "DVI preview:"
+msgstr "DVI харагдац:"
+
+#: src/dialogs.c:716
+msgid "PDF preview:"
+msgstr "PDF харагдац:"
+
+#: src/dialogs.c:732 src/dialogs.c:847
+#, c-format
+msgid ""
+"%f will be replaced by the current filename, e.g. test_file.c\n"
+"%e will be replaced by the filename without extension, e.g. test_file"
+msgstr ""
+"%f файлын нэрээр солигдоно: test_file.c\n"
+"%e өртгөтгөлгүй файлын нэрээр солигдоно: test_file"
+
+#: src/dialogs.c:759
+msgid "Set Includes and Arguments"
+msgstr "Оруулалт болон Аргументийг заа"
+
+#: src/dialogs.c:765
+msgid "Set the commands for building and running programs."
+msgstr "Програмыг боловсруулах болон ажиллуулах командуудыг заа."
+
+#: src/dialogs.c:772
+msgid " commands"
+msgstr " командууд"
+
+#: src/dialogs.c:787
+msgid "Compile:"
+msgstr "Хөрвүүл:"
+
+#: src/dialogs.c:808
+msgid "Build:"
+msgstr "Боловсруул:"
+
+#: src/dialogs.c:829 src/dialogs.c:1101
+msgid "Execute:"
+msgstr "Ажиллуул:"
+
+#: src/dialogs.c:894
 msgid ""
 "An error occurred or file information could not be retrieved (e.g. from a "
 "new file)."
@@ -557,5026 +527,1624 @@ msgstr ""
 "Алдаа гарсан эсвэл файлын мэдээллийг татаж чадахгүй байна (жишээ: шинэ "
 "файлаас)."
 
-#: ../src/dialogs.c:1225 ../src/dialogs.c:1226 ../src/dialogs.c:1227
-#: ../src/dialogs.c:1233 ../src/dialogs.c:1234 ../src/dialogs.c:1235
-#: ../src/symbols.c:1997 ../src/symbols.c:2018 ../src/symbols.c:2070
-#: ../src/ui_utils.c:242
+#: src/dialogs.c:913 src/dialogs.c:914 src/dialogs.c:915 src/dialogs.c:921
+#: src/dialogs.c:922 src/dialogs.c:923 src/ui_utils.c:121 src/ui_utils.c:124
+#: src/utils.c:515 src/utils.c:567
 msgid "unknown"
 msgstr "үл танигдах"
 
-#: ../src/dialogs.c:1240 ../src/symbols.c:885
+#: src/dialogs.c:927
 msgid "Properties"
 msgstr "Шинж чанар"
 
-#: ../src/dialogs.c:1271
+#: src/dialogs.c:955
 msgid "<b>Type:</b>"
 msgstr "<b>Төрөл:</b>"
 
-#: ../src/dialogs.c:1285
+#: src/dialogs.c:968
 msgid "<b>Size:</b>"
 msgstr "<b>Хэмжээ:</b>"
 
-#: ../src/dialogs.c:1301
+#: src/dialogs.c:983
 msgid "<b>Location:</b>"
 msgstr "<b>Байршил:</b>"
 
-#: ../src/dialogs.c:1315
+#: src/dialogs.c:996
 msgid "<b>Read-only:</b>"
 msgstr "<b>Зөвхөн-нээхээр:</b>"
 
-#: ../src/dialogs.c:1322
+#: src/dialogs.c:1003
 msgid "(only inside Geany)"
 msgstr "(зөвхөн Жиени-д)"
 
-#: ../src/dialogs.c:1331
+#: src/dialogs.c:1012
 msgid "<b>Encoding:</b>"
 msgstr "<b>Энкодчлол:</b>"
 
-#: ../src/dialogs.c:1341 ../src/ui_utils.c:246
+#: src/dialogs.c:1022 src/ui_utils.c:123
 msgid "(with BOM)"
 msgstr "(BOM-ээр)"
 
-#: ../src/dialogs.c:1341
+#: src/dialogs.c:1022 src/ui_utils.c:123
 msgid "(without BOM)"
 msgstr "(BOM-гүй)"
 
-#: ../src/dialogs.c:1352
+#: src/dialogs.c:1032
 msgid "<b>Modified:</b>"
 msgstr "<b>Сайжруулсан:</b>"
 
-#: ../src/dialogs.c:1366
+#: src/dialogs.c:1045
 msgid "<b>Changed:</b>"
 msgstr "<b>Өөрчилсөн:</b>"
 
-#: ../src/dialogs.c:1380
+#: src/dialogs.c:1058
 msgid "<b>Accessed:</b>"
 msgstr "<b>Хандсан:</b>"
 
-#: ../src/dialogs.c:1402
+#: src/dialogs.c:1079
 msgid "<b>Permissions:</b>"
 msgstr "<b>Хандах эрх:</b>"
 
 #. Header
-#: ../src/dialogs.c:1410
+#: src/dialogs.c:1087
 msgid "Read:"
 msgstr "Харах:"
 
-#: ../src/dialogs.c:1417
+#: src/dialogs.c:1094
 msgid "Write:"
 msgstr "Бичих:"
 
-#: ../src/dialogs.c:1424
-msgid "Execute:"
-msgstr "Ажиллуул:"
-
 #. Owner
-#: ../src/dialogs.c:1432
+#: src/dialogs.c:1109
 msgid "Owner:"
 msgstr "Эзэмшигч:"
 
 #. Group
-#: ../src/dialogs.c:1468
+#: src/dialogs.c:1145
 msgid "Group:"
 msgstr "Бүлэг:"
 
 #. Other
-#: ../src/dialogs.c:1504
+#: src/dialogs.c:1181
 msgid "Other:"
 msgstr "Бусад:"
 
-#: ../src/document.c:600
+#: src/dialogs.c:1302
+msgid "Keyboard shortcuts"
+msgstr "Товчлуурын хослолууд"
+
+#: src/dialogs.c:1311
+msgid "The following keyboard shortcuts are defined:"
+msgstr "Дараах хослолууд тодорхойлогдсон:"
+
+#: src/document.c:351
 #, c-format
 msgid "File %s closed."
 msgstr "%s файл хаагдлаа."
 
-#: ../src/document.c:745
-#, fuzzy, c-format
-msgid "New file \"%s\" opened."
+#: src/document.c:437
+msgid "New file opened."
 msgstr "Шинэ файл нээгдлээ."
 
-#: ../src/document.c:796 ../src/document.c:1319
+#: src/document.c:587 src/document.c:872
 #, c-format
 msgid "Could not open file %s (%s)"
 msgstr "%s файлыг нээж чадахгүй байна (%s)"
 
-#: ../src/document.c:816
+#: src/document.c:610
+#, c-format
+msgid ""
+"The file \"%s\" could not be opened properly and has been truncated. This "
+"can occur if the file contains a NULL byte. Be aware that saving it can "
+"cause data loss.\n"
+"The file was set to read-only."
+msgstr ""
+"\"%s\" файлыг таслагдаж нээгдлээ. Файлд NULL байт байвал ийм зүйл "
+"тохиолдоно. Файлыг хадгалахад өгөгдөл алдагдана.\n"
+"Файл зөвхөн-харах-аар заагдсан."
+
+#: src/document.c:634
 #, c-format
 msgid "The file \"%s\" is not valid %s."
-msgstr "The file \"%s\" is not valid %s."
+msgstr "\"%s\" файл %s-д зөв биш."
 
-#: ../src/document.c:822
+#: src/document.c:643
 #, c-format
 msgid ""
 "The file \"%s\" does not look like a text file or the file encoding is not "
 "supported."
-msgstr ""
-"The file \"%s\" does not look like a text file or the file encoding is not "
-"supported."
+msgstr "\"%s\" файл текст файл биш эсвэл файлын энкодчлолыг дэмжихгүй байна."
 
-#: ../src/document.c:832
-#, c-format
-msgid ""
-"The file \"%s\" could not be opened properly and has been truncated. This "
-"can occur if the file contains a NULL byte. Be aware that saving it can "
-"cause data loss.\n"
-"The file was set to read-only."
-msgstr ""
-"The file \"%s\" could not be opened properly and has been truncated. This "
-"can occur if the file contains a NULL byte. Be aware that saving it can "
-"cause data loss.\n"
-"The file was set to read-only."
+#: src/document.c:711
+msgid "Invalid filename"
+msgstr "Буруу файлын нэр"
 
-#: ../src/document.c:1034
-msgid "Spaces"
-msgstr ""
-
-#: ../src/document.c:1037
-msgid "Tabs"
-msgstr ""
-
-#: ../src/document.c:1040
-msgid "Tabs and Spaces"
-msgstr ""
-
-#. For translators: first wildcard is the indentation mode (Spaces, Tabs, Tabs
-#. * and Spaces), the second one is the filename
-#: ../src/document.c:1045
-#, c-format
-msgid "Setting %s indentation mode for %s."
-msgstr ""
-
-#: ../src/document.c:1056
-#, c-format
-msgid "Setting indentation width to %d for %s."
-msgstr ""
-
-#: ../src/document.c:1208
+#: src/document.c:798
 #, c-format
 msgid "File %s reloaded."
-msgstr "File %s reloaded."
+msgstr "%s файл дахин ачааллагдлаа."
 
-#. For translators: this is the status window message for opening a file. %d is the number
-#. * of the newly opened file, %s indicates whether the file is opened read-only
-#. * (it is replaced with the string ", read-only").
-#: ../src/document.c:1216
+#: src/document.c:800
 #, c-format
 msgid "File %s opened(%d%s)."
-msgstr "File %s opened(%d%s)."
+msgstr "%s файл нээгдлээ(%d%s)."
 
-#: ../src/document.c:1218
+#: src/document.c:802
 msgid ", read-only"
-msgstr ""
+msgstr ", зөвхөн-харах"
 
-#: ../src/document.c:1413
-msgid "Error renaming file."
-msgstr ""
+#: src/document.c:900 src/document.c:983
+msgid "Error saving file."
+msgstr "Файлыг хадгалахад гарсан алдаа"
 
-#: ../src/document.c:1500
+#: src/document.c:947
 #, c-format
 msgid ""
 "An error occurred while converting the file from UTF-8 in \"%s\". The file "
-"remains unsaved."
-msgstr ""
-
-#: ../src/document.c:1522
-#, c-format
-msgid ""
+"remains unsaved.\n"
 "Error message: %s\n"
-"The error occurred at \"%s\" (line: %d, column: %d)."
 msgstr ""
+"\"%s\"-д UTF-8-ээс файлыг хөрвүүлэхэд алдаа гарлаа. Файл хадгалагдсангүй.\n"
+"Алдааны мэдээ: %s\n"
 
-#: ../src/document.c:1527
-#, fuzzy, c-format
-msgid "Error message: %s."
-msgstr "Мэдээ дууссан."
-
-#: ../src/document.c:1587
-#, c-format
-msgid "Failed to open file '%s' for writing: fopen() failed: %s"
-msgstr ""
-
-#: ../src/document.c:1605
-#, c-format
-msgid "Failed to write file '%s': fwrite() failed: %s"
-msgstr ""
-
-#: ../src/document.c:1619
-#, c-format
-msgid "Failed to close file '%s': fclose() failed: %s"
-msgstr ""
-
-#: ../src/document.c:1766
+#: src/document.c:971
 #, c-format
 msgid "Error saving file (%s)."
-msgstr ""
+msgstr "Файл хадгалахад гарсан алдаа (%s)."
 
-#: ../src/document.c:1771
-#, c-format
-msgid ""
-"%s\n"
-"\n"
-"The file on disk may now be truncated!"
-msgstr ""
-
-#: ../src/document.c:1773
-msgid "Error saving file."
-msgstr ""
-
-#: ../src/document.c:1797
+#: src/document.c:1014
 #, c-format
 msgid "File %s saved."
-msgstr ""
+msgstr "%s файл хадгалагдлаа."
 
-#: ../src/document.c:1874 ../src/document.c:1938 ../src/document.c:1946
+#: src/document.c:1062 src/document.c:1114 src/document.c:1122
 #, c-format
 msgid "\"%s\" was not found."
-msgstr ""
+msgstr "\"%s\" олдсонгүй."
 
-#: ../src/document.c:1946
+#: src/document.c:1122
 msgid "Wrap search and find again?"
-msgstr ""
+msgstr "Wrap search and find again?"
 
-#: ../src/document.c:2032 ../src/search.c:1274 ../src/search.c:1318
-#: ../src/search.c:2056 ../src/search.c:2057
+#: src/document.c:1197 src/search.c:1232
+msgid "No matches found."
+msgstr "Олдсонгүй."
+
+#: src/document.c:1207 src/document.c:1214
 #, c-format
-msgid "No matches found for \"%s\"."
-msgstr ""
+msgid "%s: replaced %d occurrences of \"%s\" with \"%s\"."
+msgstr "%s: replaced %d occurrences of \"%s\" with \"%s\"."
 
-#: ../src/document.c:2038
-#, c-format
-msgid "%s: replaced %d occurrence of \"%s\" with \"%s\"."
-msgid_plural "%s: replaced %d occurrences of \"%s\" with \"%s\"."
-msgstr[0] ""
-msgstr[1] ""
+#: src/document.c:1468
+msgid "Win (CRLF)"
+msgstr "Виндөвс (CRLF)"
 
-#: ../src/document.c:2831
-#, fuzzy
-msgid "Do you want to reload it?"
-msgstr "'%s'-ийг дахин ачааллуулах уу?"
+#: src/document.c:1469
+msgid "Mac (CR)"
+msgstr "Мак (CR)"
 
-#: ../src/document.c:2832
-#, c-format
-msgid ""
-"The file '%s' on the disk is more recent than\n"
-"the current buffer."
-msgstr ""
+#: src/document.c:1471
+msgid "Unix (LF)"
+msgstr "Юникс (LF)"
 
-#: ../src/document.c:2850
-msgid "Close _without saving"
-msgstr ""
-
-#: ../src/document.c:2853
-msgid "Try to resave the file?"
-msgstr ""
-
-#: ../src/document.c:2854
-#, c-format
-msgid "File \"%s\" was not found on disk!"
-msgstr ""
-
-#: ../src/editor.c:4322
-msgid "Enter Tab Width"
-msgstr ""
-
-#: ../src/editor.c:4323
-msgid "Enter the amount of spaces which should be replaced by a tab character."
-msgstr ""
-
-#: ../src/editor.c:4475
-#, c-format
-msgid "Warning: non-standard hard tab width: %d != 8!"
-msgstr ""
-
-#: ../src/encodings.c:73
-msgid "Celtic"
-msgstr ""
-
-#: ../src/encodings.c:74 ../src/encodings.c:75
-msgid "Greek"
-msgstr ""
-
-#: ../src/encodings.c:76
-msgid "Nordic"
-msgstr ""
-
-#: ../src/encodings.c:77
-msgid "South European"
-msgstr ""
-
-#: ../src/encodings.c:78 ../src/encodings.c:79 ../src/encodings.c:80
-#: ../src/encodings.c:81
-msgid "Western"
-msgstr ""
-
-#: ../src/encodings.c:83 ../src/encodings.c:84 ../src/encodings.c:85
-msgid "Baltic"
-msgstr ""
-
-#: ../src/encodings.c:86 ../src/encodings.c:87 ../src/encodings.c:88
-msgid "Central European"
-msgstr ""
-
-#. ISO-IR-111 not available on Windows
-#: ../src/encodings.c:89 ../src/encodings.c:90 ../src/encodings.c:92
-#: ../src/encodings.c:93 ../src/encodings.c:94
-msgid "Cyrillic"
-msgstr ""
-
-#: ../src/encodings.c:95
-msgid "Cyrillic/Russian"
-msgstr ""
-
-#: ../src/encodings.c:96
-msgid "Cyrillic/Ukrainian"
-msgstr ""
-
-#: ../src/encodings.c:97
-msgid "Romanian"
-msgstr ""
-
-#: ../src/encodings.c:99 ../src/encodings.c:100 ../src/encodings.c:101
-msgid "Arabic"
-msgstr ""
-
-#. not available at all, ?
-#: ../src/encodings.c:102 ../src/encodings.c:104 ../src/encodings.c:105
-msgid "Hebrew"
-msgstr ""
-
-#: ../src/encodings.c:106
-msgid "Hebrew Visual"
-msgstr ""
-
-#: ../src/encodings.c:108
-msgid "Armenian"
-msgstr ""
-
-#: ../src/encodings.c:109
-msgid "Georgian"
-msgstr ""
-
-#: ../src/encodings.c:110
-msgid "Thai"
-msgstr ""
-
-#: ../src/encodings.c:111 ../src/encodings.c:112 ../src/encodings.c:113
-msgid "Turkish"
-msgstr ""
-
-#: ../src/encodings.c:114 ../src/encodings.c:115 ../src/encodings.c:116
-msgid "Vietnamese"
-msgstr ""
-
-#. maybe not available on Linux
-#: ../src/encodings.c:127 ../src/encodings.c:128 ../src/encodings.c:129
-#: ../src/encodings.c:131
-msgid "Chinese Simplified"
-msgstr ""
-
-#: ../src/encodings.c:132 ../src/encodings.c:133 ../src/encodings.c:134
-msgid "Chinese Traditional"
-msgstr ""
-
-#: ../src/encodings.c:135 ../src/encodings.c:136 ../src/encodings.c:137
-#: ../src/encodings.c:138
-msgid "Japanese"
-msgstr ""
-
-#: ../src/encodings.c:139 ../src/encodings.c:140 ../src/encodings.c:141
-#: ../src/encodings.c:142
-msgid "Korean"
-msgstr ""
-
-#: ../src/encodings.c:144
-msgid "Without encoding"
-msgstr ""
-
-#: ../src/encodings.c:428
-msgid "_West European"
-msgstr ""
-
-#: ../src/encodings.c:434
-msgid "_East European"
-msgstr ""
-
-#: ../src/encodings.c:440
-msgid "East _Asian"
-msgstr ""
-
-#: ../src/encodings.c:446
-msgid "_SE & SW Asian"
-msgstr ""
-
-#: ../src/encodings.c:452
-msgid "_Middle Eastern"
-msgstr ""
-
-#: ../src/encodings.c:458
-msgid "_Unicode"
-msgstr ""
-
-#: ../src/filetypes.c:83 ../src/filetypes.c:165 ../src/filetypes.c:179
-#: ../src/filetypes.c:187 ../src/filetypes.c:201
-#, c-format
-msgid "%s source file"
-msgstr ""
-
-#: ../src/filetypes.c:84
-#, c-format
-msgid "%s file"
-msgstr ""
-
-#: ../src/filetypes.c:102 ../src/filetypes.c:1787 ../src/interface.c:3918
-#: ../src/interface.c:5636
-msgid "None"
-msgstr ""
-
-#: ../src/filetypes.c:303
-msgid "Shell script"
-msgstr ""
-
-#: ../src/filetypes.c:311
-msgid "Makefile"
-msgstr ""
-
-#: ../src/filetypes.c:318
-#, fuzzy
-msgid "XML document"
-msgstr "бүх барим"
-
-#: ../src/filetypes.c:342
-msgid "Cascading StyleSheet"
-msgstr ""
-
-#: ../src/filetypes.c:411
-msgid "Config file"
-msgstr ""
-
-#: ../src/filetypes.c:417
-#, fuzzy
-msgid "Gettext translation file"
-msgstr "Орчуулга засварлагчид"
-
-#: ../src/filetypes.c:712
-msgid "_Programming Languages"
-msgstr ""
-
-#: ../src/filetypes.c:713
-msgid "_Scripting Languages"
-msgstr ""
-
-#: ../src/filetypes.c:714
-msgid "_Markup Languages"
-msgstr ""
-
-#: ../src/filetypes.c:715
-msgid "M_iscellaneous"
-msgstr ""
-
-#: ../src/filetypes.c:1465 ../src/win32.c:104
-msgid "All Source"
-msgstr ""
-
-#. create meta file filter "All files"
-#: ../src/filetypes.c:1490 ../src/project.c:292 ../src/win32.c:94
-#: ../src/win32.c:139
-msgid "All files"
-msgstr ""
-
-#: ../src/filetypes.c:1548
-#, c-format
-msgid "Bad regex for filetype %s: %s"
-msgstr ""
-
-#: ../src/geany.h:50
-msgid "untitled"
-msgstr ""
-
-#: ../src/highlighting.c:3637 ../src/main.c:822 ../src/socket.c:163
-#: ../src/templates.c:224
-#, fuzzy, c-format
-msgid "Could not find file '%s'."
-msgstr "%s файлыг нээж чадахгүй байна (%s)"
-
-#: ../src/highlighting.c:3660
-msgid "_Default"
-msgstr ""
-
-#: ../src/highlighting.c:3728
-msgid "_Color Schemes"
-msgstr ""
-
-#: ../src/interface.c:328
-msgid "_File"
-msgstr ""
-
-#: ../src/interface.c:339
-msgid "New (with _Template)"
-msgstr ""
-
-#: ../src/interface.c:356 ../src/interface.c:2378
-msgid "Open Selected F_ile"
-msgstr ""
-
-#: ../src/interface.c:360
-msgid "Recent _Files"
-msgstr ""
-
-#: ../src/interface.c:377
-msgid "Save A_ll"
-msgstr ""
-
-#: ../src/interface.c:393
-msgid "R_eload As"
-msgstr ""
-
-#: ../src/interface.c:404 ../src/interface.c:639 ../src/interface.c:698
-#: ../src/interface.c:712 ../src/interface.c:1110 ../src/interface.c:1120
-#: ../src/interface.c:2343 ../src/interface.c:2357
-msgid "invisible"
-msgstr ""
-
-#: ../src/interface.c:421
-msgid "Page Set_up"
-msgstr ""
-
-#: ../src/interface.c:438 ../src/notebook.c:243
-msgid "Close Ot_her Documents"
-msgstr ""
-
-#: ../src/interface.c:446 ../src/notebook.c:248
-msgid "C_lose All"
-msgstr ""
-
-#: ../src/interface.c:463 ../src/interface.c:2273
-msgid "_Edit"
-msgstr ""
-
-#: ../src/interface.c:513
-#, fuzzy
-msgid "_Commands"
-msgstr " командууд"
-
-#: ../src/interface.c:520 ../src/keybindings.c:334
-msgid "_Cut Current Line(s)"
-msgstr ""
-
-#: ../src/interface.c:528 ../src/keybindings.c:331
-msgid "_Copy Current Line(s)"
-msgstr ""
-
-#: ../src/interface.c:536 ../src/keybindings.c:286
-msgid "_Delete Current Line(s)"
-msgstr ""
-
-#: ../src/interface.c:540 ../src/keybindings.c:283
-msgid "_Duplicate Line or Selection"
-msgstr ""
-
-#: ../src/interface.c:549 ../src/keybindings.c:344
-msgid "_Select Current Line(s)"
-msgstr ""
-
-#: ../src/interface.c:553 ../src/keybindings.c:347
-msgid "_Select Current Paragraph"
-msgstr ""
-
-#: ../src/interface.c:562 ../src/keybindings.c:386
-msgid "_Send Selection to Terminal"
-msgstr ""
-
-#: ../src/interface.c:566 ../src/interface.c:2277
-msgid "_Format"
-msgstr ""
-
-#: ../src/interface.c:573 ../src/keybindings.c:388
-msgid "_Reflow Lines/Block"
-msgstr ""
-
-#: ../src/interface.c:577 ../src/keybindings.c:358
-msgid "T_oggle Case of Selection"
-msgstr ""
-
-#: ../src/interface.c:581 ../src/keybindings.c:293
-msgid "_Transpose Current Line"
-msgstr ""
-
-#: ../src/interface.c:590
-msgid "_Comment Line(s)"
-msgstr ""
-
-#: ../src/interface.c:594
-msgid "U_ncomment Line(s)"
-msgstr ""
-
-#: ../src/interface.c:598
-msgid "_Toggle Line Commentation"
-msgstr ""
-
-#: ../src/interface.c:607
-msgid "_Increase Indent"
-msgstr ""
-
-#: ../src/interface.c:615
-msgid "_Decrease Indent"
-msgstr ""
-
-#: ../src/interface.c:623 ../src/keybindings.c:377
-msgid "_Smart Line Indent"
-msgstr ""
-
-#: ../src/interface.c:632
-msgid "_Send Selection to"
-msgstr ""
-
-#: ../src/interface.c:647
-msgid "I_nsert Comments"
-msgstr ""
-
-#: ../src/interface.c:658 ../src/interface.c:2292
-msgid "Insert _ChangeLog Entry"
-msgstr ""
-
-#: ../src/interface.c:662 ../src/interface.c:2296
-msgid "Insert _Function Description"
-msgstr ""
-
-#: ../src/interface.c:666 ../src/interface.c:2300
-msgid "Insert _Multiline Comment"
-msgstr ""
-
-#: ../src/interface.c:675 ../src/interface.c:2315
-msgid "Insert File _Header"
-msgstr ""
-
-#: ../src/interface.c:679 ../src/interface.c:2319
-msgid "Insert _GPL Notice"
-msgstr ""
-
-#: ../src/interface.c:683 ../src/interface.c:2323
-msgid "Insert _BSD License Notice"
-msgstr ""
-
-#: ../src/interface.c:687 ../src/interface.c:2332
-msgid "Insert Dat_e"
-msgstr ""
-
-#: ../src/interface.c:701 ../src/interface.c:2346
-msgid "_Insert \"include <...>\""
-msgstr ""
-
-#: ../src/interface.c:715 ../src/interface.c:2365 ../src/keybindings.c:397
-msgid "_Insert Alternative White Space"
-msgstr ""
-
-#: ../src/interface.c:724
-msgid "Preference_s"
-msgstr ""
-
-#: ../src/interface.c:732 ../src/keybindings.c:410
-msgid "P_lugin Preferences"
-msgstr ""
-
-#: ../src/interface.c:740 ../src/interface.c:2369
-msgid "_Search"
-msgstr ""
-
-#: ../src/interface.c:751
-msgid "Find _Next"
-msgstr ""
-
-#: ../src/interface.c:755
-msgid "Find _Previous"
-msgstr ""
-
-#: ../src/interface.c:764
-msgid "Find in F_iles"
-msgstr ""
-
-#: ../src/interface.c:772 ../src/search.c:629
-msgid "_Replace"
-msgstr ""
-
-#: ../src/interface.c:785
-msgid "Next _Message"
-msgstr ""
-
-#: ../src/interface.c:793
-msgid "Pr_evious Message"
-msgstr ""
-
-#: ../src/interface.c:806 ../src/keybindings.c:457
-msgid "_Go to Next Marker"
-msgstr ""
-
-#: ../src/interface.c:810 ../src/keybindings.c:460
-msgid "_Go to Previous Marker"
-msgstr ""
-
-#: ../src/interface.c:819
-msgid "_Go to Line"
-msgstr ""
-
-#: ../src/interface.c:827 ../src/interface.c:2304
-msgid "_More"
-msgstr ""
-
-#: ../src/interface.c:834 ../src/keybindings.c:422
-msgid "Find Next _Selection"
-msgstr ""
-
-#: ../src/interface.c:838 ../src/keybindings.c:424
-msgid "Find Pre_vious Selection"
-msgstr ""
-
-#: ../src/interface.c:847 ../src/interface.c:2386
-msgid "Find _Usage"
-msgstr ""
-
-#: ../src/interface.c:851 ../src/interface.c:2394
-msgid "Find _Document Usage"
-msgstr ""
-
-#: ../src/interface.c:860 ../src/keybindings.c:439
-#, fuzzy
-msgid "_Mark All"
-msgstr "_Бүгдийг Үүсгэх\t"
-
-#: ../src/interface.c:869 ../src/interface.c:2402
-msgid "Go to _Tag Definition"
-msgstr ""
-
-#: ../src/interface.c:873
-msgid "Go to T_ag Declaration"
-msgstr ""
-
-#: ../src/interface.c:884
-msgid "Change _Font"
-msgstr ""
-
-#: ../src/interface.c:897
-msgid "To_ggle All Additional Widgets"
-msgstr ""
-
-#: ../src/interface.c:901
-msgid "Full_screen"
-msgstr ""
-
-#: ../src/interface.c:905
-msgid "Show Message _Window"
-msgstr ""
-
-#: ../src/interface.c:910
-msgid "Show _Toolbar"
-msgstr ""
-
-#: ../src/interface.c:915
-msgid "Show Side_bar"
-msgstr ""
-
-#: ../src/interface.c:920 ../src/interface.c:4354 ../src/interface.c:5766
-#: ../src/keybindings.c:222 ../src/prefs.c:1586
-msgid "Editor"
-msgstr ""
-
-#: ../src/interface.c:927
-msgid "Show _Markers Margin"
-msgstr ""
-
-#: ../src/interface.c:932
-msgid "Show _Line Numbers"
-msgstr ""
-
-#: ../src/interface.c:937
-#, fuzzy
-msgid "Show _White Space"
-msgstr "_Нууц файлуудыг харуул"
-
-#: ../src/interface.c:941
-msgid "Show Line _Endings"
-msgstr ""
-
-#: ../src/interface.c:945
-#, fuzzy
-msgid "Show _Indentation Guides"
-msgstr "_Нууц файлуудыг харуул"
-
-#: ../src/interface.c:966
-msgid "_Document"
-msgstr ""
-
-#: ../src/interface.c:973
-msgid "_Line Wrapping"
-msgstr ""
-
-#: ../src/interface.c:978
-msgid "Line _Breaking"
-msgstr ""
-
-#: ../src/interface.c:982
-msgid "_Auto-indentation"
-msgstr ""
-
-#: ../src/interface.c:987
-msgid "In_dent Type"
-msgstr ""
-
-#: ../src/interface.c:994 ../src/interface.c:1028
-#, fuzzy
-msgid "_Detect from Content"
-msgstr "Файлаас тогтоо"
-
-#: ../src/interface.c:1003 ../src/interface.c:3948 ../src/interface.c:5666
-msgid "_Tabs"
-msgstr ""
-
-#: ../src/interface.c:1009 ../src/interface.c:3939 ../src/interface.c:5657
-msgid "_Spaces"
-msgstr ""
-
-#: ../src/interface.c:1015
-msgid "T_abs and Spaces"
-msgstr ""
-
-#: ../src/interface.c:1021
-msgid "Indent Widt_h"
-msgstr ""
-
-#: ../src/interface.c:1037
-msgid "_1"
-msgstr ""
-
-#: ../src/interface.c:1043
-msgid "_2"
-msgstr ""
-
-#: ../src/interface.c:1049
-msgid "_3"
-msgstr ""
-
-#: ../src/interface.c:1055
-msgid "_4"
-msgstr ""
-
-#: ../src/interface.c:1061
-msgid "_5"
-msgstr ""
-
-#: ../src/interface.c:1067
-msgid "_6"
-msgstr ""
-
-#: ../src/interface.c:1073
-msgid "_7"
-msgstr ""
-
-#: ../src/interface.c:1079
-msgid "_8"
-msgstr ""
-
-#: ../src/interface.c:1090
-msgid "Read _Only"
-msgstr ""
-
-#: ../src/interface.c:1094
-msgid "_Write Unicode BOM"
-msgstr ""
-
-#: ../src/interface.c:1103
-msgid "Set File_type"
-msgstr ""
-
-#: ../src/interface.c:1113
-msgid "Set _Encoding"
-msgstr ""
-
-#: ../src/interface.c:1123
-msgid "Set Line E_ndings"
-msgstr ""
-
-#: ../src/interface.c:1130
-msgid "Convert and Set to _CR/LF (Win)"
-msgstr ""
-
-#: ../src/interface.c:1136
-msgid "Convert and Set to _LF (Unix)"
-msgstr ""
-
-#: ../src/interface.c:1142
-msgid "Convert and Set to CR (_Mac)"
-msgstr ""
-
-#: ../src/interface.c:1153
-msgid "_Strip Trailing Spaces"
-msgstr ""
-
-#: ../src/interface.c:1157
-msgid "_Replace Tabs by Spaces"
-msgstr ""
-
-#: ../src/interface.c:1161
-msgid "Replace Spaces b_y Tabs"
-msgstr ""
-
-#: ../src/interface.c:1170
-msgid "_Fold All"
-msgstr ""
-
-#: ../src/interface.c:1174
-msgid "_Unfold All"
-msgstr ""
-
-#: ../src/interface.c:1183
-msgid "Remove _Markers"
-msgstr ""
-
-#: ../src/interface.c:1187
-msgid "Remove Error _Indicators"
-msgstr ""
-
-#: ../src/interface.c:1191
-msgid "_Project"
-msgstr ""
-
-#: ../src/interface.c:1198
-msgid "_New"
-msgstr ""
-
-#: ../src/interface.c:1206
-msgid "_Open"
-msgstr ""
-
-#: ../src/interface.c:1214
-msgid "_Recent Projects"
-msgstr ""
-
-#: ../src/interface.c:1218
-msgid "_Close"
-msgstr ""
-
-#: ../src/interface.c:1231
-msgid "_Apply Default Indentation"
-msgstr ""
-
-#: ../src/interface.c:1234
-msgid "Apply the default indentation settings to all documents"
-msgstr ""
-
-#: ../src/interface.c:1249
-msgid "_Tools"
-msgstr ""
-
-#: ../src/interface.c:1256
-msgid "_Reload Configuration"
-msgstr ""
-
-#: ../src/interface.c:1264
-#, fuzzy
-msgid "C_onfiguration Files"
-msgstr "Хөрвүүлэлтийн алдаа гарлаа."
-
-#: ../src/interface.c:1277
-#, fuzzy
-msgid "_Color Chooser"
-msgstr "Өнгө Сонгогч"
-
-#: ../src/interface.c:1285
-msgid "_Word Count"
-msgstr ""
-
-#: ../src/interface.c:1289
-msgid "Load Ta_gs"
-msgstr ""
-
-#: ../src/interface.c:1293 ../src/interface.c:1300
-msgid "_Help"
-msgstr ""
-
-#: ../src/interface.c:1308
-msgid "_Website"
-msgstr ""
-
-#: ../src/interface.c:1312
-msgid "_Keyboard Shortcuts"
-msgstr ""
-
-#: ../src/interface.c:1316
-msgid "_Debug Messages"
-msgstr ""
-
-#: ../src/interface.c:1355 ../src/sidebar.c:124
-msgid "Symbols"
-msgstr ""
-
-#: ../src/interface.c:1369
-#, fuzzy
-msgid "Documents"
-msgstr "бүх барим"
-
-#: ../src/interface.c:1405
-msgid "Status"
-msgstr ""
-
-#: ../src/interface.c:1419
-msgid "Compiler"
-msgstr ""
-
-#: ../src/interface.c:1434
-msgid "Messages"
-msgstr ""
-
-#: ../src/interface.c:1447
-msgid "Scribble"
-msgstr ""
-
-#: ../src/interface.c:2135
-msgid "_Toolbar Preferences"
-msgstr ""
-
-#: ../src/interface.c:2148
-msgid "_Hide Toolbar"
-msgstr ""
-
-#: ../src/interface.c:2281
-msgid "I_nsert"
-msgstr ""
-
-#: ../src/interface.c:2410
-msgid "Conte_xt Action"
-msgstr ""
-
-#: ../src/interface.c:2952 ../src/keybindings.c:407
-msgid "Preferences"
-msgstr ""
-
-#: ../src/interface.c:2988
-msgid "Load files from the last session"
-msgstr ""
-
-#: ../src/interface.c:2991
-msgid "Opens at startup the files from the last session"
-msgstr ""
-
-#: ../src/interface.c:2993
-msgid "Load virtual terminal support"
-msgstr ""
-
-#: ../src/interface.c:2995
-msgid ""
-"Whether the virtual terminal emulation (VTE) should be loaded at startup, "
-"disable it if you do not need it"
-msgstr ""
-
-#: ../src/interface.c:2997
-msgid "Enable plugin support"
-msgstr ""
-
-#: ../src/interface.c:3001
-#, fuzzy
-msgid "<b>Startup</b>"
-msgstr "<b>Хэмжээ:</b>"
-
-#: ../src/interface.c:3020
-msgid "Save window position and geometry"
-msgstr ""
-
-#: ../src/interface.c:3023
-msgid "Saves the window position and geometry and restores it at the start"
-msgstr ""
-
-#: ../src/interface.c:3025
-msgid "Confirm exit"
-msgstr ""
-
-#: ../src/interface.c:3028
-msgid "Shows a confirmation dialog on exit"
-msgstr ""
-
-#: ../src/interface.c:3030
-#, fuzzy
-msgid "<b>Shutdown</b>"
-msgstr "<b>Байршил:</b>"
-
-#: ../src/interface.c:3051
-msgid "Startup path:"
-msgstr ""
-
-#: ../src/interface.c:3063
-msgid ""
-"Path to start in when opening or saving files. Must be an absolute path. "
-"Leave blank to use the current working directory."
-msgstr ""
-
-#: ../src/interface.c:3076
-msgid "Project files:"
-msgstr ""
-
-#: ../src/interface.c:3088
-msgid "Path to start in when opening project files"
-msgstr ""
-
-#: ../src/interface.c:3101
-msgid "Extra plugin path:"
-msgstr ""
-
-#: ../src/interface.c:3113
-msgid ""
-"Geany looks by default in the global installation path and in the "
-"configuration directory. The path entered here will be searched additionally "
-"for plugins. Leave blank to disable."
-msgstr ""
-
-#: ../src/interface.c:3126
-#, fuzzy
-msgid "<b>Paths</b>"
-msgstr "<b>Байршил:</b>"
-
-#: ../src/interface.c:3131
-msgid "Startup"
-msgstr ""
-
-#: ../src/interface.c:3154
-msgid "Beep on errors or when compilation has finished"
-msgstr ""
-
-#: ../src/interface.c:3157
-msgid ""
-"Whether to beep if an error occurred or when the compilation process has "
-"finished"
-msgstr ""
-
-#: ../src/interface.c:3159
-msgid "Switch to status message list at new message"
-msgstr ""
-
-#: ../src/interface.c:3162
-msgid ""
-"Switch to the status message tab (in the notebook window at the bottom) if a "
-"new status message arrives"
-msgstr ""
-
-#: ../src/interface.c:3164
-msgid "Suppress status messages in the status bar"
-msgstr ""
-
-#: ../src/interface.c:3167
-msgid ""
-"Removes all messages from the status bar. The messages are still displayed "
-"in the status messages window."
-msgstr ""
-
-#: ../src/interface.c:3169
-msgid "Auto-focus widgets (focus follows mouse)"
-msgstr ""
-
-#: ../src/interface.c:3172
-msgid ""
-"Gives the focus automatically to widgets below the mouse cursor. Works for "
-"the main editor widget, the scribble, the toolbar search and goto line "
-"fields and the VTE."
-msgstr ""
-
-#: ../src/interface.c:3174
-msgid "Use Windows File Open/Save dialogs"
-msgstr ""
-
-#: ../src/interface.c:3177
-msgid ""
-"Defines whether to use the native Windows File Open/Save dialogs or whether "
-"to use the GTK default dialogs"
-msgstr ""
-
-#: ../src/interface.c:3179 ../src/interface.c:3415 ../src/interface.c:4564
-msgid "<b>Miscellaneous</b>"
-msgstr ""
-
-#: ../src/interface.c:3198
-msgid "Always wrap search and hide the Find dialog"
-msgstr ""
-
-#: ../src/interface.c:3201
-msgid ""
-"Always wrap search around the document and hide the Find dialog after "
-"clicking Find Next/Previous"
-msgstr ""
-
-#: ../src/interface.c:3203
-msgid "Use the current word under the cursor for Find dialogs"
-msgstr ""
-
-#: ../src/interface.c:3206
-msgid ""
-"Use current word under the cursor when opening the Find, Find in Files or "
-"Replace dialog and there is no selection"
-msgstr ""
-
-#: ../src/interface.c:3208
-#, fuzzy
-msgid "Use the current file's directory for Find in Files"
-msgstr "Файлыг PDF файл-руу хөрвүүлэх"
-
-#: ../src/interface.c:3212
-#, fuzzy
-msgid "<b>Search</b>"
-msgstr "<b>Хэмжээ:</b>"
-
-#: ../src/interface.c:3231
-msgid "Use project-based session files"
-msgstr ""
-
-#: ../src/interface.c:3234
-msgid ""
-"Whether to store a project's session files and open them when re-opening the "
-"project"
-msgstr ""
-
-#: ../src/interface.c:3236
-msgid "Store project file inside the project base directory"
-msgstr ""
-
-#: ../src/interface.c:3239
-msgid ""
-"When enabled, a project file is stored by default inside the project base "
-"directory when creating new projects instead of one directory above the base "
-"directory. You can still change the path of the project file in the New "
-"Project dialog."
-msgstr ""
-
-#: ../src/interface.c:3241
-#, fuzzy
-msgid "<b>Projects</b>"
-msgstr "<b>Хандах эрх:</b>"
-
-#: ../src/interface.c:3246
-msgid "Miscellaneous"
-msgstr ""
-
-#. TODO Find a better way to map the current notebook page to the
-#. * corresponding chapter in the documentation, comparing translatable
-#. * strings is easy to break. Maybe attach an identifying string to the
-#. * tab label object.
-#: ../src/interface.c:3250 ../src/prefs.c:1580
-msgid "General"
-msgstr ""
-
-#: ../src/interface.c:3291
-msgid "Show symbol list"
-msgstr ""
-
-#: ../src/interface.c:3294
-msgid "Toggle the symbol list on and off"
-msgstr ""
-
-#: ../src/interface.c:3296
-#, fuzzy
-msgid "Show documents list"
-msgstr "бүх барим"
-
-#: ../src/interface.c:3299
-msgid "Toggle the documents list on and off"
-msgstr ""
-
-#: ../src/interface.c:3301
-msgid "Show sidebar"
-msgstr ""
-
-#: ../src/interface.c:3309
-msgid "Position:"
-msgstr ""
-
-#: ../src/interface.c:3313 ../src/interface.c:3469 ../src/interface.c:3530
-#: ../src/interface.c:3548 ../src/interface.c:3566
-msgid "Left"
-msgstr ""
-
-#: ../src/interface.c:3320 ../src/interface.c:3477 ../src/interface.c:3531
-#: ../src/interface.c:3549 ../src/interface.c:3567
-msgid "Right"
-msgstr ""
-
-#: ../src/interface.c:3326
-msgid "<b>Sidebar</b>"
-msgstr ""
-
-#: ../src/interface.c:3347
-msgid "Symbol list:"
-msgstr ""
-
-#: ../src/interface.c:3354 ../src/interface.c:3517
-msgid "Message window:"
-msgstr ""
-
-#: ../src/interface.c:3361 ../src/interface.c:3553
-msgid "Editor:"
-msgstr ""
-
-#: ../src/interface.c:3373
-msgid "Sets the font for the message window"
-msgstr ""
-
-#: ../src/interface.c:3381
-msgid "Sets the font for the symbol list"
-msgstr ""
-
-#: ../src/interface.c:3389
-msgid "Sets the editor font"
-msgstr ""
-
-#: ../src/interface.c:3391
-msgid "<b>Fonts</b>"
-msgstr ""
-
-#: ../src/interface.c:3410
-msgid "Show status bar"
-msgstr ""
-
-#: ../src/interface.c:3413
-msgid "Whether to show the status bar at the bottom of the main window"
-msgstr ""
-
-#: ../src/interface.c:3420 ../src/interface.c:3755 ../src/prefs.c:1582
-msgid "Interface"
-msgstr ""
-
-#: ../src/interface.c:3443
-msgid "Show editor tabs"
-msgstr ""
-
-#: ../src/interface.c:3447
-msgid "Show close buttons"
-msgstr ""
-
-#: ../src/interface.c:3450
-msgid ""
-"Shows a small cross button in the file tabs to easily close files when "
-"clicking on it (requires restart of Geany)"
-msgstr ""
-
-#: ../src/interface.c:3456
-msgid "Placement of new file tabs:"
-msgstr ""
-
-#: ../src/interface.c:3472
-msgid "File tabs will be placed on the left of the notebook"
-msgstr ""
-
-#: ../src/interface.c:3480
-msgid "File tabs will be placed on the right of the notebook"
-msgstr ""
-
-#: ../src/interface.c:3484
-msgid "Next to current"
-msgstr ""
-
-#: ../src/interface.c:3489
-msgid ""
-"Whether to place file tabs next to the current tab rather than at the edges "
-"of the notebook"
-msgstr ""
-
-#: ../src/interface.c:3491
-msgid "Double-clicking hides all additional widgets"
-msgstr ""
-
-#: ../src/interface.c:3494
-msgid "Calls the View->Toggle All Additional Widgets command"
-msgstr ""
-
-#: ../src/interface.c:3496
-msgid "<b>Editor tabs</b>"
-msgstr ""
-
-#: ../src/interface.c:3532 ../src/interface.c:3550 ../src/interface.c:3568
-msgid "Top"
-msgstr ""
-
-#: ../src/interface.c:3533 ../src/interface.c:3551 ../src/interface.c:3569
-msgid "Bottom"
-msgstr ""
-
-#: ../src/interface.c:3535
-msgid "Sidebar:"
-msgstr ""
-
-#: ../src/interface.c:3571
-#, fuzzy
-msgid "<b>Tab positions</b>"
-msgstr "<b>Байршил:</b>"
-
-#: ../src/interface.c:3576
-msgid "Notebook tabs"
-msgstr ""
-
-#: ../src/interface.c:3607
-msgid "Show t_oolbar"
-msgstr ""
-
-#: ../src/interface.c:3611
-msgid "_Append toolbar to the menu"
-msgstr ""
-
-#: ../src/interface.c:3614
-msgid "Pack the toolbar to the main menu to save vertical space"
-msgstr ""
-
-#: ../src/interface.c:3636 ../src/toolbar.c:933
-msgid "Customize Toolbar"
-msgstr ""
-
-#: ../src/interface.c:3656
-msgid "System _default"
-msgstr ""
-
-#: ../src/interface.c:3664
-msgid "Images _and text"
-msgstr ""
-
-#: ../src/interface.c:3672
-msgid "_Images only"
-msgstr ""
-
-#: ../src/interface.c:3680
-msgid "_Text only"
-msgstr ""
-
-#: ../src/interface.c:3688
-#, fuzzy
-msgid "<b>Icon style</b>"
-msgstr "<b>Төрөл:</b>"
-
-#: ../src/interface.c:3709
-msgid "S_ystem default"
-msgstr ""
-
-#: ../src/interface.c:3717
-msgid "_Small icons"
-msgstr ""
-
-#: ../src/interface.c:3725
-msgid "_Very small icons"
-msgstr ""
-
-#: ../src/interface.c:3733
-msgid "_Large icons"
-msgstr ""
-
-#: ../src/interface.c:3741
-#, fuzzy
-msgid "<b>Icon size</b>"
-msgstr "<b>Хэмжээ:</b>"
-
-#: ../src/interface.c:3746
-#, fuzzy
-msgid "<b>Toolbar</b>"
-msgstr "<b>Төрөл:</b>"
-
-#: ../src/interface.c:3751 ../src/prefs.c:1584
-msgid "Toolbar"
-msgstr ""
-
-#: ../src/interface.c:3782
-msgid "Line wrapping"
-msgstr ""
-
-#: ../src/interface.c:3785
-msgid ""
-"Wrap the line at the window border and continue it on the next line. Note: "
-"line wrapping has a high performance cost for large documents so should be "
-"disabled on slow machines."
-msgstr ""
-
-#: ../src/interface.c:3787
-msgid "\"Smart\" home key"
-msgstr ""
-
-#: ../src/interface.c:3790
-msgid ""
-"When \"smart\" home is enabled, the HOME key will move the caret to the "
-"first non-blank character of the line, unless it is already there, it moves "
-"to the very beginning of the line. When this feature is disabled, the HOME "
-"key always moves the caret to the start of the current line, regardless of "
-"its current position."
-msgstr ""
-
-#: ../src/interface.c:3792
-msgid "Disable Drag and Drop"
-msgstr ""
-
-#: ../src/interface.c:3795
-msgid ""
-"Disable drag and drop completely in the editor window so you can't drag and "
-"drop any selections within or outside of the editor window"
-msgstr ""
-
-#: ../src/interface.c:3797
-#, fuzzy
-msgid "Code folding"
-msgstr "Фонтыг сонго"
-
-#: ../src/interface.c:3801
-msgid "Fold/unfold all children of a fold point"
-msgstr ""
-
-#: ../src/interface.c:3804
-msgid ""
-"Fold or unfold all children of a fold point. By pressing the Shift key while "
-"clicking on a fold symbol the contrary behavior is used."
-msgstr ""
-
-#: ../src/interface.c:3806
-msgid "Use indicators to show compile errors"
-msgstr ""
-
-#: ../src/interface.c:3809
-msgid ""
-"Whether to use indicators (a squiggly underline) to highlight the lines "
-"where the compiler found a warning or an error"
-msgstr ""
-
-#: ../src/interface.c:3811
-msgid "Newline strips trailing spaces"
-msgstr ""
-
-#: ../src/interface.c:3814
-msgid "Enable newline to strip the trailing spaces on the previous line"
-msgstr ""
-
-#: ../src/interface.c:3820
-msgid "Line breaking column:"
-msgstr ""
-
-#: ../src/interface.c:3834
-msgid "Comment toggle marker:"
-msgstr ""
-
-#: ../src/interface.c:3841
-msgid ""
-"A string which is added when toggling a line comment in a source file, it is "
-"used to mark the comment as toggled."
-msgstr ""
-
-#: ../src/interface.c:3843
-msgid "<b>Features</b>"
-msgstr ""
-
-#: ../src/interface.c:3848
-msgid "Features"
-msgstr ""
-
-#: ../src/interface.c:3861
-msgid ""
-"Note: To apply these settings to all currently open documents, use "
-"<i>Project->Apply Default Indentation</i>."
-msgstr ""
-
-#: ../src/interface.c:3888 ../src/interface.c:5606
-msgid "Width:"
-msgstr ""
-
-#: ../src/interface.c:3901 ../src/interface.c:5619
-msgid "The width in chars of a single indent"
-msgstr ""
-
-#: ../src/interface.c:3906 ../src/interface.c:5624
-msgid "Auto-indent mode:"
-msgstr ""
-
-#: ../src/interface.c:3919 ../src/interface.c:5637
-msgid "Basic"
-msgstr ""
-
-#: ../src/interface.c:3920 ../src/interface.c:5638
-msgid "Current chars"
-msgstr ""
-
-#: ../src/interface.c:3921 ../src/interface.c:5639
-msgid "Match braces"
-msgstr ""
-
-#: ../src/interface.c:3923 ../src/interface.c:5641
-#, fuzzy
-msgid "Detect type from file"
-msgstr "Файлаас тогтоо"
-
-#: ../src/interface.c:3928 ../src/interface.c:5646
-msgid ""
-"Whether to detect the indentation type from file contents when a file is "
-"opened"
-msgstr ""
-
-#: ../src/interface.c:3930 ../src/interface.c:5648
-msgid "T_abs and spaces"
-msgstr ""
-
-#: ../src/interface.c:3935 ../src/interface.c:5653
-msgid ""
-"Use spaces if the total indent is less than the tab width, otherwise use both"
-msgstr ""
-
-#: ../src/interface.c:3944 ../src/interface.c:5662
-msgid "Use spaces when inserting indentation"
-msgstr ""
-
-#: ../src/interface.c:3953 ../src/interface.c:5671
-msgid "Use one tab per indent"
-msgstr ""
-
-#: ../src/interface.c:3957 ../src/interface.c:5682
-#, fuzzy
-msgid "Detect width from file"
-msgstr "Файлаас тогтоо"
-
-#: ../src/interface.c:3962 ../src/interface.c:5687
-msgid ""
-"Whether to detect the indentation width from file contents when a file is "
-"opened"
-msgstr ""
-
-#: ../src/interface.c:3964 ../src/interface.c:4254 ../src/interface.c:5675
-msgid "Type:"
-msgstr ""
-
-#: ../src/interface.c:3971
-msgid "Tab key indents"
-msgstr ""
-
-#: ../src/interface.c:3974
-msgid ""
-"Pressing tab/shift-tab indents/unindents instead of inserting a tab character"
-msgstr ""
-
-#: ../src/interface.c:3976
-#, fuzzy
-msgid "<b>Indentation</b>"
-msgstr "<b>Байршил:</b>"
-
-#: ../src/interface.c:3981 ../src/interface.c:5689
-msgid "Indentation"
-msgstr ""
-
-#: ../src/interface.c:4004
-msgid "Snippet completion"
-msgstr ""
-
-#: ../src/interface.c:4007
-msgid ""
-"Type a defined short character sequence and complete it to a more complex "
-"string using a single keypress"
-msgstr ""
-
-#: ../src/interface.c:4009
-msgid "XML/HTML tag auto-closing"
-msgstr ""
-
-#: ../src/interface.c:4012
-msgid "Insert matching closing tag for XML/HTML"
-msgstr ""
-
-#: ../src/interface.c:4014
-msgid "Automatic continuation of multi-line comments"
-msgstr ""
-
-#: ../src/interface.c:4017
-msgid ""
-"Continue automatically multi-line comments in languages like C, C++ and Java "
-"when a new line is entered inside such a comment"
-msgstr ""
-
-#: ../src/interface.c:4019
-msgid "Autocomplete symbols"
-msgstr ""
-
-#: ../src/interface.c:4022
-msgid ""
-"Automatic completion of known symbols in open files (function names, global "
-"variables, ...)"
-msgstr ""
-
-#: ../src/interface.c:4024
-msgid "Autocomplete all words in document"
-msgstr ""
-
-#: ../src/interface.c:4028
-msgid "Drop rest of word on completion"
-msgstr ""
-
-#: ../src/interface.c:4038
-msgid "Max. symbol name suggestions:"
-msgstr ""
-
-#: ../src/interface.c:4045
-msgid "Completion list height:"
-msgstr ""
-
-#: ../src/interface.c:4052
-msgid "Characters to type for autocompletion:"
-msgstr ""
-
-#: ../src/interface.c:4065
-msgid ""
-"The amount of characters which are necessary to show the symbol "
-"autocompletion list"
-msgstr ""
-
-#: ../src/interface.c:4074
-msgid "Display height in rows for the autocompletion list"
-msgstr ""
-
-#: ../src/interface.c:4083
-msgid "Maximum number of entries to display in the autocompletion list"
-msgstr ""
-
-#: ../src/interface.c:4086
-msgid "Symbol list update frequency:"
-msgstr ""
-
-#: ../src/interface.c:4099
-msgid ""
-"Minimal delay (in milliseconds) between two automatic updates of the symbol "
-"list. Note that a too short delay may have performance impact, especially "
-"with large files. A delay of 0 disables real-time updates."
-msgstr ""
-
-#: ../src/interface.c:4102
-#, fuzzy
-msgid "<b>Completions</b>"
-msgstr "<b>Байршил:</b>"
-
-#: ../src/interface.c:4121
-msgid "Parenthesis ( )"
-msgstr ""
-
-#: ../src/interface.c:4126
-msgid "Auto-close parenthesis when typing an opening one"
-msgstr ""
-
-#: ../src/interface.c:4128
-msgid "Single quotes ' '"
-msgstr ""
-
-#: ../src/interface.c:4133
-msgid "Auto-close single quote when typing an opening one"
-msgstr ""
-
-#: ../src/interface.c:4135
-msgid "Curly brackets { }"
-msgstr ""
-
-#: ../src/interface.c:4140
-msgid "Auto-close curly bracket when typing an opening one"
-msgstr ""
-
-#: ../src/interface.c:4142
-msgid "Square brackets [ ]"
-msgstr ""
-
-#: ../src/interface.c:4147
-msgid "Auto-close square-bracket when typing an opening one"
-msgstr ""
-
-#: ../src/interface.c:4149
-msgid "Double quotes \" \""
-msgstr ""
-
-#: ../src/interface.c:4154
-msgid "Auto-close double quote when typing an opening one"
-msgstr ""
-
-#: ../src/interface.c:4156
-msgid "<b>Auto-close quotes and brackets</b>"
-msgstr ""
-
-#: ../src/interface.c:4161
-#, fuzzy
-msgid "Completions"
-msgstr "_Хөрвүүл"
-
-#: ../src/interface.c:4184
-msgid "Invert syntax highlighting colors"
-msgstr ""
-
-#: ../src/interface.c:4187
-msgid "Invert all colors, by default using white text on a black background"
-msgstr ""
-
-#: ../src/interface.c:4189
-msgid "Show indentation guides"
-msgstr ""
-
-#: ../src/interface.c:4192
-msgid "Shows small dotted lines to help you to use the right indentation"
-msgstr ""
-
-#: ../src/interface.c:4194
-msgid "Show white space"
-msgstr ""
-
-#: ../src/interface.c:4197
-msgid "Marks spaces with dots and tabs with arrows"
-msgstr ""
-
-#: ../src/interface.c:4199
-msgid "Show line endings"
-msgstr ""
-
-#: ../src/interface.c:4202
-msgid "Shows the line ending character"
-msgstr ""
-
-#: ../src/interface.c:4204
-msgid "Show line numbers"
-msgstr ""
-
-#: ../src/interface.c:4207
-msgid "Shows or hides the Line Number margin"
-msgstr ""
-
-#: ../src/interface.c:4209
-msgid "Show markers margin"
-msgstr ""
-
-#: ../src/interface.c:4212
-msgid ""
-"Shows or hides the small margin right of the line numbers, which is used to "
-"mark lines"
-msgstr ""
-
-#: ../src/interface.c:4214
-msgid "Stop scrolling at last line"
-msgstr ""
-
-#: ../src/interface.c:4217
-msgid "Whether to stop scrolling one page past the last line of a document"
-msgstr ""
-
-#: ../src/interface.c:4219
-msgid "<b>Display</b>"
-msgstr ""
-
-#: ../src/interface.c:4240 ../src/interface.c:5721
-msgid "Column:"
-msgstr ""
-
-#: ../src/interface.c:4247
-msgid "Color:"
-msgstr ""
-
-#: ../src/interface.c:4266
-msgid "Sets the color of the long line marker"
-msgstr ""
-
-#: ../src/interface.c:4267 ../src/toolbar.c:70 ../src/tools.c:929
-#: ../src/vte.c:794 ../src/vte.c:801
-msgid "Color Chooser"
-msgstr "Өнгө Сонгогч"
-
-#: ../src/interface.c:4275
-msgid ""
-"The long line marker is a thin vertical line in the editor, it helps to mark "
-"long lines, or as a hint to break the line. Set this value to a value "
-"greater than 0 to specify the column where it should appear."
-msgstr ""
-
-#: ../src/interface.c:4285
-msgid "Line"
-msgstr ""
-
-#: ../src/interface.c:4288
-msgid ""
-"Prints a vertical line in the editor window at the given cursor position "
-"(see below)"
-msgstr ""
-
-#: ../src/interface.c:4292
-msgid "Background"
-msgstr ""
-
-#: ../src/interface.c:4295
-msgid ""
-"The background color of characters after the given cursor position (see "
-"below) changed to the color set below, (this is recommended if you use "
-"proportional fonts)"
-msgstr ""
-
-#: ../src/interface.c:4299
-msgid "Enabled"
-msgstr ""
-
-#: ../src/interface.c:4305 ../src/interface.c:5761
-msgid "<b>Long line marker</b>"
-msgstr ""
-
-#: ../src/interface.c:4324 ../src/interface.c:5728
-msgid "Disabled"
-msgstr ""
-
-#: ../src/interface.c:4327
-msgid "Do not show virtual spaces"
-msgstr ""
-
-#: ../src/interface.c:4331
-msgid "Only for rectangular selections"
-msgstr ""
-
-#: ../src/interface.c:4334
-msgid ""
-"Only show virtual spaces beyond the end of lines when drawing a rectangular "
-"selection"
-msgstr ""
-
-#: ../src/interface.c:4338
-msgid "Always"
-msgstr ""
-
-#: ../src/interface.c:4341
-msgid "Always show virtual spaces beyond the end of lines"
-msgstr ""
-
-#: ../src/interface.c:4345
-msgid "<b>Virtual spaces</b>"
-msgstr ""
-
-#: ../src/interface.c:4350
-msgid "Display"
-msgstr ""
-
-#: ../src/interface.c:4381
-msgid "Open new documents from the command-line"
-msgstr ""
-
-#: ../src/interface.c:4384
-msgid "Start a new file for each command-line filename that doesn't exist"
-msgstr ""
-
-#: ../src/interface.c:4398
-msgid "Default end of line characters:"
-msgstr ""
-
-#: ../src/interface.c:4405
-msgid "<b>New files</b>"
-msgstr ""
-
-#: ../src/interface.c:4428
-msgid "Default encoding (new files):"
-msgstr ""
-
-#: ../src/interface.c:4436
-msgid "Sets the default encoding for newly created files"
-msgstr ""
-
-#: ../src/interface.c:4442
-msgid "Use fixed encoding when opening non-Unicode files"
-msgstr ""
-
-#: ../src/interface.c:4445
-msgid ""
-"This option disables the automatic detection of the file encoding when "
-"opening non-Unicode files and opens the file with the specified encoding "
-"(usually not needed)"
-msgstr ""
-
-#: ../src/interface.c:4451
-msgid "Default encoding (existing non-Unicode files):"
-msgstr ""
-
-#: ../src/interface.c:4459
-msgid "Sets the default encoding for opening existing non-Unicode files"
-msgstr ""
-
-#: ../src/interface.c:4465
-#, fuzzy
-msgid "<b>Encodings</b>"
-msgstr "<b>Энкодчлол:</b>"
-
-#: ../src/interface.c:4484
-msgid "Ensure new line at file end"
-msgstr ""
-
-#: ../src/interface.c:4487
-msgid "Ensures that at the end of the file is a new line"
-msgstr ""
-
-#: ../src/interface.c:4489
-msgid "Ensure consistent line endings"
-msgstr ""
-
-#: ../src/interface.c:4492
-msgid ""
-"Ensures that newline characters always get converted before saving, avoiding "
-"mixed line endings in the same file"
-msgstr ""
-
-#: ../src/interface.c:4494
-msgid "Strip trailing spaces and tabs"
-msgstr ""
-
-#: ../src/interface.c:4497
-msgid "Removes trailing spaces and tabs and the end of lines"
-msgstr ""
-
-#: ../src/interface.c:4499 ../src/keybindings.c:542
-msgid "Replace tabs by space"
-msgstr ""
-
-#: ../src/interface.c:4502
-msgid "Replaces all tabs in document by spaces"
-msgstr ""
-
-#: ../src/interface.c:4504
-msgid "<b>Saving files</b>"
-msgstr ""
-
-#: ../src/interface.c:4529
-msgid "Recent files list length:"
-msgstr ""
-
-#: ../src/interface.c:4543
-msgid "Specifies the number of files which are stored in the Recent files list"
-msgstr ""
-
-#: ../src/interface.c:4547
-msgid "Disk check timeout:"
-msgstr ""
-
-#: ../src/interface.c:4560
-msgid ""
-"How often to check for changes to document files on disk, in seconds. Zero "
-"disables checking."
-msgstr ""
-
-#: ../src/interface.c:4569 ../src/prefs.c:1588 ../src/symbols.c:680
-#: ../plugins/filebrowser.c:1119
-msgid "Files"
-msgstr ""
-
-#: ../src/interface.c:4602
-msgid "Terminal:"
-msgstr ""
-
-#: ../src/interface.c:4609
-msgid "Browser:"
-msgstr ""
-
-#: ../src/interface.c:4621
-msgid ""
-"A terminal emulator like xterm, gnome-terminal or konsole (should accept the "
-"-e argument)"
-msgstr ""
-
-#: ../src/interface.c:4628
-msgid "Path (and possibly additional arguments) to your favorite browser"
-msgstr ""
-
-#: ../src/interface.c:4650
-msgid "Grep:"
-msgstr ""
-
-#: ../src/interface.c:4673
-msgid "<b>Tool paths</b>"
-msgstr ""
-
-#: ../src/interface.c:4694
-msgid "Context action:"
-msgstr ""
-
-#: ../src/interface.c:4705
-#, c-format
-msgid ""
-"Context action command. The currently selected word can be used with %s. It "
-"can appear anywhere in the given command and will be replaced before "
-"execution."
-msgstr ""
-
-#: ../src/interface.c:4718
-#, fuzzy
-msgid "<b>Commands</b>"
-msgstr "<b>Өөрчилсөн:</b>"
-
-#: ../src/interface.c:4723 ../src/keybindings.c:234 ../src/prefs.c:1590
-msgid "Tools"
-msgstr ""
-
-#: ../src/interface.c:4761
-msgid "email address of the developer"
-msgstr ""
-
-#: ../src/interface.c:4768
-msgid "Initials of the developer name"
-msgstr ""
-
-#: ../src/interface.c:4770
-msgid "Initial version:"
-msgstr ""
-
-#: ../src/interface.c:4782
-msgid "Version number, which a new file initially has"
-msgstr ""
-
-#: ../src/interface.c:4789
-msgid "Company name"
-msgstr ""
-
-#: ../src/interface.c:4791
-#, fuzzy
-msgid "Developer:"
-msgstr "Хөгжүүлэгчид"
-
-#: ../src/interface.c:4798
-#, fuzzy
-msgid "Company:"
-msgstr "Хөрвүүл:"
-
-#: ../src/interface.c:4805
-msgid "Mail address:"
-msgstr ""
-
-#: ../src/interface.c:4812
-msgid "Initials:"
-msgstr ""
-
-#: ../src/interface.c:4824
-msgid "The name of the developer"
-msgstr ""
-
-#: ../src/interface.c:4826
-msgid "Year:"
-msgstr ""
-
-#: ../src/interface.c:4833
-msgid "Date:"
-msgstr ""
-
-#: ../src/interface.c:4840
-msgid "Date & time:"
-msgstr ""
-
-#: ../src/interface.c:4852
-#, fuzzy
-msgid ""
-"Specify a format for the the {datetime} wildcard. You can use any conversion "
-"specifiers which can be used with the ANSI C strftime function."
-msgstr ""
-"Огноо болон цагны хэлбэрийг оруул. Хувиргалт хийхдээ ANSI Cи хэлний strftime "
-"функцийг хэрэглэж болно. Дэлгэрэнгүй мэдээллийг \"man strftime\" гэж харна "
-"уу."
-
-#: ../src/interface.c:4859
-#, fuzzy
-msgid ""
-"Specify a format for the the {year} wildcard. You can use any conversion "
-"specifiers which can be used with the ANSI C strftime function."
-msgstr ""
-"Огноо болон цагны хэлбэрийг оруул. Хувиргалт хийхдээ ANSI Cи хэлний strftime "
-"функцийг хэрэглэж болно. Дэлгэрэнгүй мэдээллийг \"man strftime\" гэж харна "
-"уу."
-
-#: ../src/interface.c:4866
-#, fuzzy
-msgid ""
-"Specify a format for the the {date} wildcard. You can use any conversion "
-"specifiers which can be used with the ANSI C strftime function."
-msgstr ""
-"Огноо болон цагны хэлбэрийг оруул. Хувиргалт хийхдээ ANSI Cи хэлний strftime "
-"функцийг хэрэглэж болно. Дэлгэрэнгүй мэдээллийг \"man strftime\" гэж харна "
-"уу."
-
-#: ../src/interface.c:4868
-#, fuzzy
-msgid "<b>Template data</b>"
-msgstr "<b>Төрөл:</b>"
-
-#: ../src/interface.c:4873 ../src/prefs.c:1592
-msgid "Templates"
-msgstr ""
-
-#: ../src/interface.c:4911
-#, fuzzy
-msgid "C_hange"
-msgstr "Зай:"
-
-#: ../src/interface.c:4915
-#, fuzzy
-msgid "<b>Keyboard shortcuts</b>"
-msgstr "Товчлуурын хослолууд"
-
-#: ../src/interface.c:4920 ../src/prefs.c:1594
-msgid "Keybindings"
-msgstr ""
-
-#: ../src/interface.c:4953
-#, fuzzy
-msgid "Command:"
-msgstr " командууд"
-
-#: ../src/interface.c:4960
-#, c-format
-msgid "Path to the command for printing files (use %f for the filename)"
-msgstr ""
-
-#: ../src/interface.c:4970
-msgid "Use an external command for printing"
-msgstr ""
-
-#: ../src/interface.c:4990 ../src/printing.c:376
-msgid "Print line numbers"
-msgstr ""
-
-#: ../src/interface.c:4993 ../src/printing.c:378
-msgid "Add line numbers to the printed page"
-msgstr ""
-
-#: ../src/interface.c:4995 ../src/printing.c:381
-msgid "Print page numbers"
-msgstr ""
-
-#: ../src/interface.c:4998 ../src/printing.c:383
-msgid ""
-"Add page numbers at the bottom of each page. It takes 2 lines of the page."
-msgstr ""
-
-#: ../src/interface.c:5000 ../src/printing.c:386
-msgid "Print page header"
-msgstr ""
-
-#: ../src/interface.c:5003 ../src/printing.c:388
-msgid ""
-"Add a little header to every page containing the page number, the filename "
-"and the current date (see below). It takes 3 lines of the page."
-msgstr ""
-
-#: ../src/interface.c:5020 ../src/printing.c:404
-msgid "Use the basename of the printed file"
-msgstr ""
-
-#: ../src/interface.c:5023
-msgid "Print only the basename (without the path) of the printed file"
-msgstr ""
-
-#: ../src/interface.c:5029 ../src/printing.c:412
-#, fuzzy
-msgid "Date format:"
-msgstr "Огнооны Хэлбэр"
-
-#: ../src/interface.c:5036 ../src/printing.c:418
-#, fuzzy
-msgid ""
-"Specify a format for the date and time stamp which is added to the page "
-"header on each page. You can use any conversion specifiers which can be used "
-"with the ANSI C strftime function."
-msgstr ""
-"Огноо болон цагны хэлбэрийг оруул. Хувиргалт хийхдээ ANSI Cи хэлний strftime "
-"функцийг хэрэглэж болно. Дэлгэрэнгүй мэдээллийг \"man strftime\" гэж харна "
-"уу."
-
-#: ../src/interface.c:5039
-msgid "Use native GTK printing"
-msgstr ""
-
-#: ../src/interface.c:5045
-#, fuzzy
-msgid "<b>Printing</b>"
-msgstr "<b>Энкодчлол:</b>"
-
-#: ../src/interface.c:5050 ../src/prefs.c:1596
-msgid "Printing"
-msgstr ""
-
-#: ../src/interface.c:5097
-msgid "<i>Warning: read the manual before changing these preferences.</i>"
-msgstr ""
-
-#: ../src/interface.c:5102
-msgid "<b>Various preferences</b>"
-msgstr ""
-
-#: ../src/interface.c:5107 ../src/prefs.c:1598
-msgid "Various"
-msgstr ""
-
-#: ../src/interface.c:5589
-#, fuzzy
-msgid "Project Properties"
-msgstr "Шинж чанар"
-
-#: ../src/interface.c:5714
-msgid "Display:"
-msgstr ""
-
-#: ../src/interface.c:5736
-msgid "Custom"
-msgstr ""
-
-#: ../src/interface.c:5744
-msgid "Use global settings"
-msgstr ""
-
-#. visual group order
-#: ../src/keybindings.c:221 ../src/plugins.c:1246 ../src/symbols.c:707
-#, fuzzy
-msgid "File"
-msgstr "Файл Нээх"
-
-#: ../src/keybindings.c:223
-msgid "Clipboard"
-msgstr ""
-
-#: ../src/keybindings.c:224
-#, fuzzy
-msgid "Select"
-msgstr "сонголт"
-
-#: ../src/keybindings.c:225
-msgid "Format"
-msgstr ""
-
-#: ../src/keybindings.c:226
-msgid "Insert"
-msgstr ""
-
-#: ../src/keybindings.c:227
-msgid "Settings"
-msgstr ""
-
-#: ../src/keybindings.c:228 ../src/toolbar.c:380
-msgid "Search"
-msgstr ""
-
-#: ../src/keybindings.c:229
-#, fuzzy
-msgid "Go to"
-msgstr "Мөр-лүү оч"
-
-#: ../src/keybindings.c:230
-#, fuzzy
-msgid "View"
-msgstr "_Харагдац"
-
-#: ../src/keybindings.c:231
-#, fuzzy
-msgid "Document"
-msgstr "бүх барим"
-
-#: ../src/keybindings.c:232 ../src/project.c:504
-msgid "Project"
-msgstr ""
-
-#: ../src/keybindings.c:233 ../src/keybindings.c:565 ../src/project.c:482
-#: ../src/ui_utils.c:1960
-#, fuzzy
-msgid "Build"
-msgstr "_Боловсруул"
-
-#: ../src/keybindings.c:235 ../src/keybindings.c:590
-msgid "Help"
-msgstr ""
-
-#: ../src/keybindings.c:236
-msgid "Focus"
-msgstr ""
-
-#: ../src/keybindings.c:237
-msgid "Notebook tab"
-msgstr ""
-
-#: ../src/keybindings.c:246
-msgid "New"
-msgstr ""
-
-#: ../src/keybindings.c:248
-#, fuzzy
-msgid "Open"
-msgstr "Файл Нээх"
-
-#: ../src/keybindings.c:251
-msgid "Open selected file"
-msgstr ""
-
-#: ../src/keybindings.c:253
-#, fuzzy
-msgid "Save"
-msgstr "Файлыг Хадгал"
-
-#: ../src/keybindings.c:255 ../src/toolbar.c:55
-#, fuzzy
-msgid "Save as"
-msgstr "Файлыг Хадгал"
-
-#: ../src/keybindings.c:257
-msgid "Save all"
-msgstr ""
-
-#: ../src/keybindings.c:260
-msgid "Print"
-msgstr ""
-
-#: ../src/keybindings.c:262
-msgid "Close"
-msgstr ""
-
-#: ../src/keybindings.c:264
-msgid "Close all"
-msgstr ""
-
-#: ../src/keybindings.c:267
-#, fuzzy
-msgid "Reload file"
-msgstr "_Дахин ачаал"
-
-#: ../src/keybindings.c:269
-msgid "Re-open last closed tab"
-msgstr ""
-
-#: ../src/keybindings.c:274
-#, fuzzy
-msgid "Project properties"
-msgstr "Шинж чанар"
-
-#: ../src/keybindings.c:279
-msgid "Undo"
-msgstr ""
-
-#: ../src/keybindings.c:281
-msgid "Redo"
-msgstr ""
-
-#: ../src/keybindings.c:290
-msgid "Delete to line end"
-msgstr ""
-
-#: ../src/keybindings.c:296
-#, fuzzy
-msgid "Scroll to current line"
-msgstr "Файлыг хөрвүүл"
-
-#: ../src/keybindings.c:298
-msgid "Scroll up the view by one line"
-msgstr ""
-
-#: ../src/keybindings.c:300
-msgid "Scroll down the view by one line"
-msgstr ""
-
-#: ../src/keybindings.c:302
-msgid "Complete snippet"
-msgstr ""
-
-#: ../src/keybindings.c:304
-msgid "Move cursor in snippet"
-msgstr ""
-
-#: ../src/keybindings.c:306
-msgid "Suppress snippet completion"
-msgstr ""
-
-#: ../src/keybindings.c:308
-msgid "Context Action"
-msgstr ""
-
-#: ../src/keybindings.c:310
-msgid "Complete word"
-msgstr ""
-
-#: ../src/keybindings.c:312
-msgid "Show calltip"
-msgstr ""
-
-#: ../src/keybindings.c:314
-msgid "Show macro list"
-msgstr ""
-
-#: ../src/keybindings.c:316
-msgid "Word part completion"
-msgstr ""
-
-#: ../src/keybindings.c:318
-msgid "Move line(s) up"
-msgstr ""
-
-#: ../src/keybindings.c:320
-msgid "Move line(s) down"
-msgstr ""
-
-#: ../src/keybindings.c:325
-msgid "Cut"
-msgstr ""
-
-#: ../src/keybindings.c:327
-msgid "Copy"
-msgstr ""
-
-#: ../src/keybindings.c:329
-msgid "Paste"
-msgstr ""
-
-#: ../src/keybindings.c:340
-msgid "Select All"
-msgstr ""
-
-#: ../src/keybindings.c:342
-msgid "Select current word"
-msgstr ""
-
-#: ../src/keybindings.c:350
-msgid "Select to previous word part"
-msgstr ""
-
-#: ../src/keybindings.c:352
-msgid "Select to next word part"
-msgstr ""
-
-#: ../src/keybindings.c:360
-msgid "Toggle line commentation"
-msgstr ""
-
-#: ../src/keybindings.c:363
-msgid "Comment line(s)"
-msgstr ""
-
-#: ../src/keybindings.c:365
-msgid "Uncomment line(s)"
-msgstr ""
-
-#: ../src/keybindings.c:367
-msgid "Increase indent"
-msgstr ""
-
-#: ../src/keybindings.c:370
-msgid "Decrease indent"
-msgstr ""
-
-#: ../src/keybindings.c:373
-msgid "Increase indent by one space"
-msgstr ""
-
-#: ../src/keybindings.c:375
-msgid "Decrease indent by one space"
-msgstr ""
-
-#: ../src/keybindings.c:379
-msgid "Send to Custom Command 1"
-msgstr ""
-
-#: ../src/keybindings.c:381
-msgid "Send to Custom Command 2"
-msgstr ""
-
-#: ../src/keybindings.c:383
-msgid "Send to Custom Command 3"
-msgstr ""
-
-#: ../src/keybindings.c:394
-msgid "Insert date"
-msgstr ""
-
-#: ../src/keybindings.c:400
-msgid "Insert New Line Before Current"
-msgstr ""
-
-#: ../src/keybindings.c:402
-msgid "Insert New Line After Current"
-msgstr ""
-
-#: ../src/keybindings.c:415 ../src/search.c:463
-msgid "Find"
-msgstr ""
-
-#: ../src/keybindings.c:417
-msgid "Find Next"
-msgstr ""
-
-#: ../src/keybindings.c:419
-msgid "Find Previous"
-msgstr ""
-
-#: ../src/keybindings.c:426 ../src/search.c:619
-msgid "Replace"
-msgstr ""
-
-#: ../src/keybindings.c:428 ../src/search.c:871
-msgid "Find in Files"
-msgstr ""
-
-#: ../src/keybindings.c:431
-msgid "Next Message"
-msgstr ""
-
-#: ../src/keybindings.c:433
-msgid "Previous Message"
-msgstr ""
-
-#: ../src/keybindings.c:435
-msgid "Find Usage"
-msgstr ""
-
-#: ../src/keybindings.c:437
-msgid "Find Document Usage"
-msgstr ""
-
-#: ../src/keybindings.c:444 ../src/toolbar.c:66
-msgid "Navigate back a location"
-msgstr ""
-
-#: ../src/keybindings.c:446 ../src/toolbar.c:67
-msgid "Navigate forward a location"
-msgstr ""
-
-#: ../src/keybindings.c:451
-#, fuzzy
-msgid "Go to matching brace"
-msgstr "Мөр-лүү оч"
-
-#: ../src/keybindings.c:454
-msgid "Toggle marker"
-msgstr ""
-
-#: ../src/keybindings.c:462
-msgid "Go to Tag Definition"
-msgstr ""
-
-#: ../src/keybindings.c:464
-msgid "Go to Tag Declaration"
-msgstr ""
-
-#: ../src/keybindings.c:466
-#, fuzzy
-msgid "Go to Start of Line"
-msgstr "Мөр-лүү оч"
-
-#: ../src/keybindings.c:468
-#, fuzzy
-msgid "Go to End of Line"
-msgstr "Мөр-лүү оч"
-
-#: ../src/keybindings.c:470
-msgid "Go to End of Display Line"
-msgstr ""
-
-#: ../src/keybindings.c:472
-msgid "Go to Previous Word Part"
-msgstr ""
-
-#: ../src/keybindings.c:474
-msgid "Go to Next Word Part"
-msgstr ""
-
-#: ../src/keybindings.c:479
-msgid "Toggle All Additional Widgets"
-msgstr ""
-
-#: ../src/keybindings.c:482
-msgid "Fullscreen"
-msgstr ""
-
-#: ../src/keybindings.c:484
-msgid "Toggle Messages Window"
-msgstr ""
-
-#: ../src/keybindings.c:487
-msgid "Toggle Sidebar"
-msgstr ""
-
-#: ../src/keybindings.c:489
-msgid "Zoom In"
-msgstr ""
-
-#: ../src/keybindings.c:491
-msgid "Zoom Out"
-msgstr ""
-
-#: ../src/keybindings.c:493
-msgid "Zoom Reset"
-msgstr ""
-
-#: ../src/keybindings.c:498
-msgid "Switch to Editor"
-msgstr ""
-
-#: ../src/keybindings.c:500
-msgid "Switch to Search Bar"
-msgstr ""
-
-#: ../src/keybindings.c:502
-msgid "Switch to Message Window"
-msgstr ""
-
-#: ../src/keybindings.c:504
-msgid "Switch to Compiler"
-msgstr ""
-
-#: ../src/keybindings.c:506
-msgid "Switch to Messages"
-msgstr ""
-
-#: ../src/keybindings.c:508
-msgid "Switch to Scribble"
-msgstr ""
-
-#: ../src/keybindings.c:510
-msgid "Switch to VTE"
-msgstr ""
-
-#: ../src/keybindings.c:512
-msgid "Switch to Sidebar"
-msgstr ""
-
-#: ../src/keybindings.c:514
-msgid "Switch to Sidebar Symbol List"
-msgstr ""
-
-#: ../src/keybindings.c:516
-msgid "Switch to Sidebar Document List"
-msgstr ""
-
-#: ../src/keybindings.c:521
-#, fuzzy
-msgid "Switch to left document"
-msgstr "бүх барим"
-
-#: ../src/keybindings.c:523
-#, fuzzy
-msgid "Switch to right document"
-msgstr "бүх барим"
-
-#: ../src/keybindings.c:525
-#, fuzzy
-msgid "Switch to last used document"
-msgstr "бүх барим"
-
-#: ../src/keybindings.c:527
-#, fuzzy
-msgid "Move document left"
-msgstr "бүх барим"
-
-#: ../src/keybindings.c:529
-#, fuzzy
-msgid "Move document right"
-msgstr "бүх барим"
-
-#: ../src/keybindings.c:531
-#, fuzzy
-msgid "Move document first"
-msgstr "бүх барим"
-
-#: ../src/keybindings.c:533
-#, fuzzy
-msgid "Move document last"
-msgstr "бүх барим"
-
-#: ../src/keybindings.c:538
-msgid "Toggle Line wrapping"
-msgstr ""
-
-#: ../src/keybindings.c:540
-msgid "Toggle Line breaking"
-msgstr ""
-
-#: ../src/keybindings.c:544
-msgid "Replace spaces by tabs"
-msgstr ""
-
-#: ../src/keybindings.c:546
-#, fuzzy
-msgid "Toggle current fold"
-msgstr "Файлыг хөрвүүл"
-
-#: ../src/keybindings.c:548
-msgid "Fold all"
-msgstr ""
-
-#: ../src/keybindings.c:550
-msgid "Unfold all"
-msgstr ""
-
-#: ../src/keybindings.c:552
-msgid "Reload symbol list"
-msgstr ""
-
-#: ../src/keybindings.c:554
-msgid "Remove Markers"
-msgstr ""
-
-#: ../src/keybindings.c:556
-msgid "Remove Error Indicators"
-msgstr ""
-
-#: ../src/keybindings.c:558
-msgid "Remove Markers and Error Indicators"
-msgstr ""
-
-#: ../src/keybindings.c:563 ../src/toolbar.c:68
-msgid "Compile"
-msgstr ""
-
-#: ../src/keybindings.c:567
-#, fuzzy
-msgid "Make all"
-msgstr "_Бүгдийг Үүсгэх\t"
-
-#: ../src/keybindings.c:570
-#, fuzzy
-msgid "Make custom target"
-msgstr "Аргументтэйгээр Үүсгэх"
-
-#: ../src/keybindings.c:572
-#, fuzzy
-msgid "Make object"
-msgstr "_Объектыг боловсруул"
-
-#: ../src/keybindings.c:574
-#, fuzzy
-msgid "Next error"
-msgstr "_Дараачийн Алдаа"
-
-#: ../src/keybindings.c:576
-msgid "Previous error"
-msgstr ""
-
-#: ../src/keybindings.c:578
-msgid "Run"
-msgstr ""
-
-#: ../src/keybindings.c:580
-msgid "Build options"
-msgstr ""
-
-#: ../src/keybindings.c:585
-#, fuzzy
-msgid "Show Color Chooser"
-msgstr "Өнгө Сонгогч"
-
-#: ../src/keybindings.c:872
-#, fuzzy
-msgid "Keyboard Shortcuts"
-msgstr "Товчлуурын хослолууд"
-
-#: ../src/keybindings.c:884
-#, fuzzy
-msgid "The following keyboard shortcuts are configurable:"
-msgstr "Дараах хослолууд тодорхойлогдсон:"
-
-#: ../src/keybindings.c:1784
-#, fuzzy
-msgid "Switch to Document"
-msgstr "бүх барим"
-
-#: ../src/keyfile.c:907
-msgid "Type here what you want, use it as a notice/scratch board"
-msgstr ""
-
-#: ../src/keyfile.c:1114
-msgid "Failed to load one or more session files."
-msgstr ""
-
-#: ../src/log.c:180
-msgid "Debug Messages"
-msgstr ""
-
-#: ../src/log.c:182
-msgid "Cl_ear"
-msgstr ""
-
-#: ../src/main.c:126
-msgid ""
-"Set initial column number for the first opened file (useful in conjunction "
-"with --line)"
-msgstr ""
-
-#: ../src/main.c:127
-msgid "Use an alternate configuration directory"
-msgstr ""
-
-#: ../src/main.c:128
-msgid "Print internal filetype names"
-msgstr ""
-
-#: ../src/main.c:129
-msgid "Generate global tags file (see documentation)"
-msgstr ""
-
-#: ../src/main.c:130
-msgid "Don't preprocess C/C++ files when generating tags"
-msgstr ""
-
-#: ../src/main.c:132
-msgid "Don't open files in a running instance, force opening a new instance"
-msgstr ""
-
-#: ../src/main.c:133
-msgid ""
-"Use this socket filename for communication with a running Geany instance"
-msgstr ""
-
-#: ../src/main.c:134
-msgid "Return a list of open documents in a running Geany instance"
-msgstr ""
-
-#: ../src/main.c:136
-msgid "Set initial line number for the first opened file"
-msgstr ""
-
-#: ../src/main.c:137
-msgid "Don't show message window at startup"
-msgstr ""
-
-#: ../src/main.c:138
-msgid "Don't load auto completion data (see documentation)"
-msgstr ""
-
-#: ../src/main.c:140
-msgid "Don't load plugins"
-msgstr ""
-
-#: ../src/main.c:142
-msgid "Print Geany's installation prefix"
-msgstr ""
-
-#: ../src/main.c:143
-msgid "Don't load the previous session's files"
-msgstr ""
-
-#: ../src/main.c:145
-msgid "Don't load terminal support"
-msgstr ""
-
-#: ../src/main.c:146
-msgid "Filename of libvte.so"
-msgstr ""
-
-#: ../src/main.c:148
-msgid "Be verbose"
-msgstr ""
-
-#: ../src/main.c:149
-msgid "Show version and exit"
-msgstr ""
-
-#: ../src/main.c:515
-msgid "[FILES...]"
-msgstr ""
-
-#. note for translators: library versions are printed after this
-#: ../src/main.c:539
-#, fuzzy, c-format
-msgid "built on %s with "
-msgstr "(%s-ийг боловсруулах)"
-
-#: ../src/main.c:627
-msgid "Move it now?"
-msgstr ""
-
-#: ../src/main.c:629
-msgid "Geany needs to move your old configuration directory before starting."
-msgstr ""
-
-#: ../src/main.c:638
-#, c-format
-msgid ""
-"Your configuration directory has been successfully moved from \"%s\" to \"%s"
-"\"."
-msgstr ""
-
-#. for translators: the third %s in brackets is the error message which
-#. * describes why moving the dir didn't work
-#: ../src/main.c:648
-#, c-format
-msgid ""
-"Your old configuration directory \"%s\" could not be moved to \"%s\" (%s). "
-"Please move manually the directory to the new location."
-msgstr ""
-
-#: ../src/main.c:729
-#, c-format
-msgid ""
-"Configuration directory could not be created (%s).\n"
-"There could be some problems using Geany without a configuration directory.\n"
-"Start Geany anyway?"
-msgstr ""
-
-#: ../src/main.c:1071
-#, c-format
-msgid "This is Geany %s."
-msgstr ""
-
-#: ../src/main.c:1073
-#, fuzzy, c-format
-msgid "Configuration directory could not be created (%s)."
-msgstr "Процесс зогсож чадахгүй байсан (%s)."
-
-#: ../src/main.c:1286
-#, fuzzy
-msgid "Configuration files reloaded."
-msgstr "Хөрвүүлэлтийн алдаа гарлаа."
-
-#: ../src/msgwindow.c:158
-msgid "Status messages"
-msgstr ""
-
-#: ../src/msgwindow.c:556
-msgid "C_opy"
-msgstr ""
-
-#: ../src/msgwindow.c:565
-msgid "Copy _All"
-msgstr ""
-
-#: ../src/msgwindow.c:595
-msgid "_Hide Message Window"
-msgstr ""
-
-#: ../src/msgwindow.c:651
-#, c-format
-msgid "Could not find file '%s' - trying the current document path."
-msgstr ""
-
-#: ../src/plugins.c:485
-#, c-format
-msgid ""
-"The plugin \"%s\" is not binary compatible with this release of Geany - "
-"please recompile it."
-msgstr ""
-
-#: ../src/plugins.c:992
-msgid "_Plugin Manager"
-msgstr ""
-
-#. Translators: <plugin name> <plugin version>
-#: ../src/plugins.c:1158
-#, c-format
-msgid "%s %s"
-msgstr ""
-
-#: ../src/plugins.c:1234
-msgid "Active"
-msgstr ""
-
-#: ../src/plugins.c:1240
-msgid "Plugin"
-msgstr ""
-
-#: ../src/plugins.c:1264
-msgid "No plugins available."
-msgstr ""
-
-#: ../src/plugins.c:1360
-msgid "Plugins"
-msgstr ""
-
-#: ../src/plugins.c:1380
-msgid "Choose which plugins should be loaded at startup:"
-msgstr ""
-
-#: ../src/plugins.c:1392
-msgid "<b>Plugin details:</b>"
-msgstr ""
-
-#: ../src/plugins.c:1401
-msgid "Plugin:"
-msgstr ""
-
-#: ../src/plugins.c:1402 ../src/project.c:444
-#, fuzzy
-msgid "Description:"
-msgstr "DVI үүсэлт:"
-
-#: ../src/plugins.c:1403
-msgid "Author(s):"
-msgstr ""
-
-#: ../src/pluginutils.c:332
-msgid "Configure Plugins"
-msgstr ""
-
-#: ../src/prefs.c:177
-msgid "Grab Key"
-msgstr ""
-
-#: ../src/prefs.c:183
-#, c-format
-msgid "Press the combination of the keys you want to use for \"%s\"."
-msgstr ""
-
-#: ../src/prefs.c:223 ../src/symbols.c:2139 ../src/sidebar.c:730
-#, fuzzy
-msgid "_Expand All"
-msgstr "_Бүгдийг Үүсгэх\t"
-
-#: ../src/prefs.c:228 ../src/symbols.c:2144 ../src/sidebar.c:736
-#, fuzzy
-msgid "_Collapse All"
-msgstr "_Бүгдийг Үүсгэх\t"
-
-#: ../src/prefs.c:287
-#, fuzzy
-msgid "Action"
-msgstr "сонголт"
-
-#: ../src/prefs.c:291
-msgid "Shortcut"
-msgstr ""
-
-#: ../src/prefs.c:1464
-msgid "_Allow"
-msgstr ""
-
-#: ../src/prefs.c:1466
-msgid "_Override"
-msgstr ""
-
-#: ../src/prefs.c:1467
-msgid "Override that keybinding?"
-msgstr ""
-
-#: ../src/prefs.c:1468
-#, c-format
-msgid "The combination '%s' is already used for \"%s\"."
-msgstr ""
-
-#: ../src/prefs.c:1600 ../src/vte.c:282 ../src/vte.c:752 ../src/vte.c:757
-msgid "Terminal"
-msgstr ""
-
-#. add manually GeanyWrapLabels because they can't be added with Glade
-#. page Tools
-#: ../src/prefs.c:1661
-msgid "Enter tool paths below. Tools you do not need can be left blank."
-msgstr ""
-
-#. page Templates
-#: ../src/prefs.c:1666
-msgid ""
-"Set the information to be used in templates. See the documentation for "
-"details."
-msgstr ""
-
-#. page Keybindings
-#: ../src/prefs.c:1671
-msgid ""
-"Here you can change keyboard shortcuts for various actions. Select one and "
-"press the Change button to enter a new shortcut, or double click on an "
-"action to edit the string representation of the shortcut directly."
-msgstr ""
-
-#. page Editor->Indentation
-#: ../src/prefs.c:1676
-msgid ""
-"<i>Warning: these settings are overridden by the current project. See "
-"<b>Project->Properties</b>.</i>"
-msgstr ""
-
-#: ../src/printing.c:183
-msgid "The editor font is not a monospaced font!"
-msgstr ""
-
-#: ../src/printing.c:184
-msgid "Text will be wrongly spaced."
-msgstr ""
-
-#: ../src/printing.c:301
-#, fuzzy, c-format
-msgid "<b>Page %d of %d</b>"
-msgstr "<b>Өөрчилсөн:</b>"
-
-#: ../src/printing.c:371
-msgid "Document Setup"
-msgstr ""
-
-#: ../src/printing.c:406
-msgid "Print only the basename(without the path) of the printed file"
-msgstr ""
-
-#: ../src/printing.c:525
-#, c-format
-msgid "Page %d of %d"
-msgstr ""
-
-#: ../src/printing.c:779
-#, c-format
-msgid "Did not send document %s to the printing subsystem."
-msgstr ""
-
-#: ../src/printing.c:781
-#, c-format
-msgid "Document %s was sent to the printing subsystem."
-msgstr ""
-
-#: ../src/printing.c:833
-#, fuzzy, c-format
-msgid "Printing of %s failed (%s)."
-msgstr "Процесс-д алдаа гарлаа (%s)"
-
-#: ../src/printing.c:872
-msgid "Please set a print command in the preferences dialog first."
-msgstr ""
-
-#: ../src/printing.c:880
+#: src/document.c:1569
 #, c-format
 msgid ""
 "The file \"%s\" will be printed with the following command:\n"
 "\n"
 "%s"
 msgstr ""
+"\"%s\" файл дараах командаар хэвлэгдэнэ:\n"
+"\n"
+"%s"
 
-#: ../src/printing.c:896
+#: src/document.c:1578
 #, c-format
-msgid "Printing of \"%s\" failed (return code: %s)."
-msgstr ""
+msgid "Printing of \"%s\" failed (return code: %d)."
+msgstr "\"%s\"-ийг хэвлэхэд алдаа гарлаа (буцаасан код: %d)."
 
-#: ../src/printing.c:902
+#: src/document.c:1583
 #, c-format
 msgid "File %s printed."
-msgstr ""
-
-#. "projects" is part of the default project base path so be careful when translating
-#. * please avoid special characters and spaces, look at the source for details or ask Frank
-#: ../src/project.c:97
-msgid "projects"
-msgstr ""
-
-#: ../src/project.c:116
-msgid "New Project"
-msgstr ""
-
-#: ../src/project.c:124
-msgid "C_reate"
-msgstr ""
-
-#: ../src/project.c:138 ../src/project.c:431 ../plugins/classbuilder.c:470
-#: ../plugins/classbuilder.c:480
-msgid "Name:"
-msgstr ""
-
-#: ../src/project.c:147 ../src/project.c:418
-msgid "Filename:"
-msgstr ""
-
-#: ../src/project.c:163 ../src/project.c:461
-msgid "Base path:"
-msgstr ""
-
-#: ../src/project.c:169 ../src/project.c:470
-msgid ""
-"Base directory of all files that make up the project. This can be a new "
-"path, or an existing directory tree. You can use paths relative to the "
-"project filename."
-msgstr ""
-
-#: ../src/project.c:172 ../src/project.c:473
-msgid "Choose Project Base Path"
-msgstr ""
-
-#: ../src/project.c:194 ../src/project.c:573
-#, fuzzy
-msgid "Project file could not be written"
-msgstr "Процесс зогсож чадахгүй байсан (%s)."
-
-#: ../src/project.c:197
-#, c-format
-msgid "Project \"%s\" created."
-msgstr ""
-
-#: ../src/project.c:238 ../src/project.c:270 ../src/project.c:958
-#, fuzzy, c-format
-msgid "Project file \"%s\" could not be loaded."
-msgstr "Процесс зогсож чадахгүй байсан (%s)."
-
-#: ../src/project.c:264 ../src/project.c:276
-msgid "Open Project"
-msgstr ""
-
-#: ../src/project.c:296
-msgid "Project files"
-msgstr ""
-
-#: ../src/project.c:346
-#, fuzzy, c-format
-msgid "Project \"%s\" closed."
-msgstr "%s файл хаагдлаа."
-
-#: ../src/project.c:490
-msgid "File patterns:"
-msgstr ""
-
-#: ../src/project.c:498
-msgid ""
-"Space separated list of file patterns used for the find in files dialog (e."
-"g. *.c *.h)"
-msgstr ""
-
-#: ../src/project.c:576
-#, c-format
-msgid "Project \"%s\" saved."
-msgstr ""
-
-#: ../src/project.c:607
-#, fuzzy
-msgid "Do you want to close it before proceeding?"
-msgstr "Хаахын өмнө хадгалах уу?"
-
-#: ../src/project.c:608
-#, c-format
-msgid "The '%s' project is already open."
-msgstr ""
-
-#: ../src/project.c:656
-msgid "The specified project name is too short."
-msgstr ""
-
-#: ../src/project.c:662
-#, c-format
-msgid "The specified project name is too long (max. %d characters)."
-msgstr ""
-
-#: ../src/project.c:674
-msgid "You have specified an invalid project filename."
-msgstr ""
-
-#: ../src/project.c:697
-msgid "Create the project's base path directory?"
-msgstr ""
-
-#: ../src/project.c:698
-#, fuzzy, c-format
-msgid "The path \"%s\" does not exist."
-msgstr "The file \"%s\" is not valid %s."
-
-#: ../src/project.c:707
-#, fuzzy, c-format
-msgid "Project base directory could not be created (%s)."
-msgstr "Процесс зогсож чадахгүй байсан (%s)."
-
-#: ../src/project.c:720
-#, fuzzy, c-format
-msgid "Project file could not be written (%s)."
-msgstr "Процесс зогсож чадахгүй байсан (%s)."
-
-#. initialise the dialog
-#: ../src/project.c:862 ../src/project.c:873
-msgid "Choose Project Filename"
-msgstr ""
-
-#: ../src/project.c:948
-#, c-format
-msgid "Project \"%s\" opened."
-msgstr ""
-
-#: ../src/search.c:290 ../src/search.c:970
-msgid "_Use regular expressions"
-msgstr ""
-
-#: ../src/search.c:293
-msgid ""
-"Use POSIX-like regular expressions. For detailed information about using "
-"regular expressions, please read the documentation."
-msgstr ""
-
-#: ../src/search.c:300
-msgid "Search _backwards"
-msgstr ""
-
-#: ../src/search.c:313
-msgid "Use _escape sequences"
-msgstr ""
-
-#: ../src/search.c:317
-msgid ""
-"Replace \\\\, \\t, \\n, \\r and \\uXXXX (Unicode chararacters) with the "
-"corresponding control characters"
-msgstr ""
-
-#: ../src/search.c:326 ../src/search.c:979
-msgid "C_ase sensitive"
-msgstr ""
-
-#: ../src/search.c:330 ../src/search.c:984
-msgid "Match only a _whole word"
-msgstr ""
-
-#: ../src/search.c:334
-msgid "Match from s_tart of word"
-msgstr ""
-
-#: ../src/search.c:470
-msgid "_Previous"
-msgstr ""
-
-#: ../src/search.c:475
-#, fuzzy
-msgid "_Next"
-msgstr "_Дараачийн Алдаа"
-
-#: ../src/search.c:479 ../src/search.c:640 ../src/search.c:881
-msgid "_Search for:"
-msgstr ""
-
-#. Now add the multiple match options
-#: ../src/search.c:508
-msgid "_Find All"
-msgstr ""
-
-#: ../src/search.c:515
-msgid "_Mark"
-msgstr ""
-
-#: ../src/search.c:517
-msgid "Mark all matches in the current document"
-msgstr ""
-
-#: ../src/search.c:522 ../src/search.c:697
-msgid "In Sessi_on"
-msgstr ""
-
-#: ../src/search.c:527 ../src/search.c:702
-#, fuzzy
-msgid "_In Document"
-msgstr "бүх барим"
-
-#. close window checkbox
-#: ../src/search.c:533 ../src/search.c:715
-msgid "Close _dialog"
-msgstr ""
-
-#: ../src/search.c:537 ../src/search.c:719
-msgid "Disable this option to keep the dialog open"
-msgstr ""
-
-#: ../src/search.c:634
-msgid "Replace & Fi_nd"
-msgstr ""
-
-#: ../src/search.c:643
-msgid "Replace wit_h:"
-msgstr ""
-
-#. Now add the multiple replace options
-#: ../src/search.c:690
-#, fuzzy
-msgid "Re_place All"
-msgstr "_Бүгдийг Үүсгэх\t"
-
-#: ../src/search.c:707
-#, fuzzy
-msgid "In Se_lection"
-msgstr "сонголт"
-
-#: ../src/search.c:709
-msgid "Replace all matches found in the currently selected text"
-msgstr ""
-
-#: ../src/search.c:826
-msgid "all"
-msgstr ""
-
-#: ../src/search.c:828
-msgid "project"
-msgstr ""
-
-#: ../src/search.c:830
-msgid "custom"
-msgstr ""
-
-#: ../src/search.c:834
-msgid ""
-"All: search all files in the directory\n"
-"Project: use file patterns defined in the project settings\n"
-"Custom: specify file patterns manually"
-msgstr ""
-
-#: ../src/search.c:900
-msgid "Fi_les:"
-msgstr ""
-
-#: ../src/search.c:912
-msgid "File patterns, e.g. *.c *.h"
-msgstr ""
-
-#: ../src/search.c:924
-msgid "_Directory:"
-msgstr ""
-
-#: ../src/search.c:942
-#, fuzzy
-msgid "E_ncoding:"
-msgstr "Энкодчиллыг заа:"
-
-#: ../src/search.c:973
-msgid "See grep's manual page for more information"
-msgstr ""
-
-#: ../src/search.c:975
-msgid "_Recurse in subfolders"
-msgstr ""
-
-#: ../src/search.c:988
-msgid "_Invert search results"
-msgstr ""
-
-#: ../src/search.c:992
-msgid "Invert the sense of matching, to select non-matching lines"
-msgstr ""
-
-#: ../src/search.c:1009
-msgid "E_xtra options:"
-msgstr ""
-
-#: ../src/search.c:1016
-msgid "Other options to pass to Grep"
-msgstr ""
-
-#: ../src/search.c:1277 ../src/search.c:2062 ../src/search.c:2065
-#, c-format
-msgid "Found %d match for \"%s\"."
-msgid_plural "Found %d matches for \"%s\"."
-msgstr[0] ""
-msgstr[1] ""
-
-#: ../src/search.c:1324
-#, c-format
-msgid "Replaced %u matches in %u documents."
-msgstr ""
-
-#: ../src/search.c:1511
-msgid "Invalid directory for find in files."
-msgstr ""
-
-#: ../src/search.c:1532
-msgid "No text to find."
-msgstr ""
-
-#: ../src/search.c:1559
-#, fuzzy, c-format
-msgid "Cannot execute grep tool '%s'; check the path setting in Preferences."
-msgstr ""
-"'%s'-ээс терминалыг олсонгүй (Тохиргоо цэснээс Терминалын замыг шалгана уу)"
-
-#: ../src/search.c:1627
-msgid "Searching..."
-msgstr ""
-
-#: ../src/search.c:1638
-#, fuzzy, c-format
-msgid "%s %s -- %s (in directory: %s)"
-msgstr "%s (%s хавтасд)"
-
-#: ../src/search.c:1679
-#, fuzzy, c-format
-msgid "Could not open directory (%s)"
-msgstr "%s файлыг нээж чадахгүй байна (%s)"
-
-#: ../src/search.c:1781
-msgid "Search failed."
-msgstr ""
-
-#: ../src/search.c:1801
-#, c-format
-msgid "Search completed with %d match."
-msgid_plural "Search completed with %d matches."
-msgstr[0] ""
-msgstr[1] ""
-
-#: ../src/search.c:1809
-msgid "No matches found."
-msgstr ""
-
-#: ../src/search.c:1841
-#, c-format
-msgid "Bad regex: %s"
-msgstr ""
-
-#. TODO maybe this message needs a rewording
-#: ../src/socket.c:225
-msgid ""
-"Geany tried to access the Unix Domain socket of another instance running as "
-"another user.\n"
-"This is a fatal error and Geany will now quit."
-msgstr ""
-
-#: ../src/stash.c:1072
-msgid "Name"
-msgstr ""
-
-#: ../src/stash.c:1079
-msgid "Value"
-msgstr ""
-
-#: ../src/symbols.c:686 ../src/symbols.c:736 ../src/symbols.c:803
-msgid "Chapter"
-msgstr ""
-
-#: ../src/symbols.c:687 ../src/symbols.c:732 ../src/symbols.c:804
-#, fuzzy
-msgid "Section"
-msgstr "сонголт"
-
-#: ../src/symbols.c:688
-msgid "Sect1"
-msgstr ""
-
-#: ../src/symbols.c:689
-msgid "Sect2"
-msgstr ""
-
-#: ../src/symbols.c:690
-msgid "Sect3"
-msgstr ""
-
-#: ../src/symbols.c:691
-msgid "Appendix"
-msgstr ""
-
-#: ../src/symbols.c:692 ../src/symbols.c:737 ../src/symbols.c:753
-#: ../src/symbols.c:764 ../src/symbols.c:851 ../src/symbols.c:862
-#: ../src/symbols.c:874 ../src/symbols.c:888 ../src/symbols.c:900
-#: ../src/symbols.c:912 ../src/symbols.c:927 ../src/symbols.c:956
-#: ../src/symbols.c:985
-#, fuzzy
-msgid "Other"
-msgstr "Бусад:"
-
-#: ../src/symbols.c:698 ../src/symbols.c:920 ../src/symbols.c:965
-msgid "Module"
-msgstr ""
-
-#: ../src/symbols.c:699 ../src/symbols.c:847 ../src/symbols.c:898
-#: ../src/symbols.c:910 ../src/symbols.c:925 ../src/symbols.c:937
-msgid "Types"
-msgstr ""
-
-#: ../src/symbols.c:700
-msgid "Type constructors"
-msgstr ""
-
-#: ../src/symbols.c:701 ../src/symbols.c:723 ../src/symbols.c:744
-#: ../src/symbols.c:752 ../src/symbols.c:761 ../src/symbols.c:773
-#: ../src/symbols.c:782 ../src/symbols.c:835 ../src/symbols.c:884
-#: ../src/symbols.c:907 ../src/symbols.c:922 ../src/symbols.c:950
-#: ../src/symbols.c:972
-msgid "Functions"
-msgstr ""
-
-#: ../src/symbols.c:706
-msgid "Program"
-msgstr ""
-
-#: ../src/symbols.c:708 ../src/symbols.c:716 ../src/symbols.c:722
-#, fuzzy
-msgid "Sections"
-msgstr "сонголт"
-
-#: ../src/symbols.c:709
-msgid "Paragraph"
-msgstr ""
-
-#: ../src/symbols.c:710
-#, fuzzy
-msgid "Group"
-msgstr "Бүлэг:"
-
-#: ../src/symbols.c:711
-msgid "Data"
-msgstr ""
-
-#: ../src/symbols.c:717
-msgid "Keys"
-msgstr ""
-
-#: ../src/symbols.c:724 ../src/symbols.c:775 ../src/symbols.c:836
-#: ../src/symbols.c:861 ../src/symbols.c:886 ../src/symbols.c:899
-#: ../src/symbols.c:908 ../src/symbols.c:924 ../src/symbols.c:984
-msgid "Variables"
-msgstr ""
-
-#: ../src/symbols.c:731
-msgid "Environment"
-msgstr ""
-
-#: ../src/symbols.c:733 ../src/symbols.c:805
-#, fuzzy
-msgid "Subsection"
-msgstr "сонголт"
-
-#: ../src/symbols.c:734 ../src/symbols.c:806
-#, fuzzy
-msgid "Subsubsection"
-msgstr "сонголт"
-
-#: ../src/symbols.c:745
-msgid "Structures"
-msgstr ""
-
-#: ../src/symbols.c:760 ../src/symbols.c:844 ../src/symbols.c:869
-#: ../src/symbols.c:881
-msgid "Package"
-msgstr ""
-
-#: ../src/symbols.c:762 ../src/symbols.c:911 ../src/symbols.c:934
-msgid "Labels"
-msgstr ""
-
-#: ../src/symbols.c:763 ../src/symbols.c:774 ../src/symbols.c:887
-#: ../src/symbols.c:909
-msgid "Constants"
-msgstr ""
-
-#: ../src/symbols.c:771 ../src/symbols.c:870 ../src/symbols.c:882
-#: ../src/symbols.c:895 ../src/symbols.c:921
-msgid "Interfaces"
-msgstr ""
-
-#: ../src/symbols.c:772 ../src/symbols.c:793 ../src/symbols.c:814
-#: ../src/symbols.c:824 ../src/symbols.c:833 ../src/symbols.c:871
-#: ../src/symbols.c:883 ../src/symbols.c:896 ../src/symbols.c:971
-msgid "Classes"
-msgstr ""
-
-#: ../src/symbols.c:783
-msgid "Anchors"
-msgstr ""
-
-#: ../src/symbols.c:784
-msgid "H1 Headings"
-msgstr ""
-
-#: ../src/symbols.c:785
-msgid "H2 Headings"
-msgstr ""
-
-#: ../src/symbols.c:786
-msgid "H3 Headings"
-msgstr ""
-
-#: ../src/symbols.c:794
-msgid "ID Selectors"
-msgstr ""
-
-#: ../src/symbols.c:795
-msgid "Type Selectors"
-msgstr ""
-
-#: ../src/symbols.c:813 ../src/symbols.c:859
-msgid "Modules"
-msgstr ""
-
-#: ../src/symbols.c:815
-msgid "Singletons"
-msgstr ""
-
-#: ../src/symbols.c:816 ../src/symbols.c:825 ../src/symbols.c:834
-#: ../src/symbols.c:872 ../src/symbols.c:897
-msgid "Methods"
-msgstr ""
-
-#: ../src/symbols.c:823 ../src/symbols.c:968
-msgid "Namespaces"
-msgstr ""
-
-#: ../src/symbols.c:826 ../src/symbols.c:951
-msgid "Procedures"
-msgstr ""
-
-#: ../src/symbols.c:837
-msgid "Imports"
-msgstr ""
-
-#: ../src/symbols.c:845
-msgid "Entities"
-msgstr ""
-
-#: ../src/symbols.c:846
-msgid "Architectures"
-msgstr ""
-
-#: ../src/symbols.c:848
-msgid "Functions / Procedures"
-msgstr ""
-
-#: ../src/symbols.c:849
-msgid "Variables / Signals"
-msgstr ""
-
-#: ../src/symbols.c:850
-msgid "Processes / Components"
-msgstr ""
-
-#: ../src/symbols.c:858
-msgid "Events"
-msgstr ""
-
-#: ../src/symbols.c:860
-msgid "Functions / Tasks"
-msgstr ""
-
-#: ../src/symbols.c:873 ../src/symbols.c:973
-msgid "Members"
-msgstr ""
-
-#: ../src/symbols.c:923
-msgid "Subroutines"
-msgstr ""
-
-#: ../src/symbols.c:926
-msgid "Blocks"
-msgstr ""
-
-#: ../src/symbols.c:935 ../src/symbols.c:944 ../src/symbols.c:981
-msgid "Macros"
-msgstr ""
-
-#: ../src/symbols.c:936
-#, fuzzy
-msgid "Defines"
-msgstr "Мөр:"
-
-#: ../src/symbols.c:943
-msgid "Targets"
-msgstr ""
-
-#: ../src/symbols.c:952
-msgid "Indexes"
-msgstr ""
-
-#: ../src/symbols.c:953
-msgid "Tables"
-msgstr ""
-
-#: ../src/symbols.c:954
-msgid "Triggers"
-msgstr ""
-
-#: ../src/symbols.c:955
-#, fuzzy
-msgid "Views"
-msgstr "_Харагдац"
-
-#: ../src/symbols.c:974
-msgid "Structs"
-msgstr ""
-
-#: ../src/symbols.c:975
-msgid "Typedefs / Enums"
-msgstr ""
-
-#: ../src/symbols.c:1616
-#, c-format
-msgid "Unknown filetype extension for \"%s\".\n"
-msgstr ""
-
-#: ../src/symbols.c:1639
-#, c-format
-msgid "Failed to create tags file, perhaps because no tags were found.\n"
-msgstr ""
-
-#: ../src/symbols.c:1646
-#, c-format
-msgid ""
-"Usage: %s -g <Tag File> <File list>\n"
-"\n"
-msgstr ""
-
-#: ../src/symbols.c:1647
-#, c-format
-msgid ""
-"Example:\n"
-"CFLAGS=`pkg-config gtk+-2.0 --cflags` %s -g gtk2.c.tags /usr/include/gtk-2.0/"
-"gtk/gtk.h\n"
-msgstr ""
-
-#: ../src/symbols.c:1661
-msgid "Load Tags"
-msgstr ""
-
-#: ../src/symbols.c:1668
-msgid "Geany tag files (*.tags)"
-msgstr ""
-
-#. For translators: the first wildcard is the filetype, the second the filename
-#: ../src/symbols.c:1688
-#, c-format
-msgid "Loaded %s tags file '%s'."
-msgstr ""
-
-#: ../src/symbols.c:1691
-#, fuzzy, c-format
-msgid "Could not load tags file '%s'."
-msgstr "%s файлыг нээж чадахгүй байна (%s)"
-
-#: ../src/symbols.c:1846
-#, c-format
-msgid "Forward declaration \"%s\" not found."
-msgstr "\"%s\" Forward declaration олдсонгүй."
-
-#: ../src/symbols.c:1848
-#, c-format
-msgid "Definition of \"%s\" not found."
-msgstr "\"%s\"-ийн тодорхойлолт олдсонгүй."
-
-#: ../src/symbols.c:2154
-msgid "Sort by _Name"
-msgstr ""
-
-#: ../src/symbols.c:2161
-msgid "Sort by _Appearance"
-msgstr ""
-
-#: ../src/templates.c:75
-#, c-format
-msgid "Failed to convert template file \"%s\" to UTF-8"
-msgstr ""
-
-#. custom actions defined in toolbar_init(): "New", "Open", "SearchEntry", "GotoEntry", "Build"
-#: ../src/toolbar.c:54
-msgid "Save the current file"
-msgstr ""
-
-#: ../src/toolbar.c:56
-msgid "Save all open files"
-msgstr ""
-
-#: ../src/toolbar.c:57
-msgid "Reload the current file from disk"
-msgstr ""
-
-#: ../src/toolbar.c:58
-msgid "Close the current file"
-msgstr ""
-
-#: ../src/toolbar.c:59
-msgid "Close all open files"
-msgstr ""
-
-#: ../src/toolbar.c:60
-#, fuzzy
-msgid "Cut the current selection"
-msgstr "Файлыг хөрвүүл"
-
-#: ../src/toolbar.c:61
-#, fuzzy
-msgid "Copy the current selection"
-msgstr "Файлыг хөрвүүл"
-
-#: ../src/toolbar.c:62
-msgid "Paste the contents of the clipboard"
-msgstr ""
-
-#: ../src/toolbar.c:63
-#, fuzzy
-msgid "Delete the current selection"
-msgstr "Файлыг хөрвүүл"
-
-#: ../src/toolbar.c:64
-msgid "Undo the last modification"
-msgstr ""
-
-#: ../src/toolbar.c:65
-msgid "Redo the last modification"
-msgstr ""
-
-#: ../src/toolbar.c:68
-msgid "Compile the current file"
-msgstr ""
-
-#: ../src/toolbar.c:69
-msgid "Run or view the current file"
-msgstr "Файлыг харах эсвэл ажиллуулах"
-
-#: ../src/toolbar.c:70
-msgid ""
-"Open a color chooser dialog, to interactively pick colors from a palette"
-msgstr ""
-
-#: ../src/toolbar.c:71
-msgid "Zoom in the text"
-msgstr ""
-
-#: ../src/toolbar.c:72
-msgid "Zoom out the text"
-msgstr ""
-
-#: ../src/toolbar.c:73
-msgid "Decrease indentation"
-msgstr ""
-
-#: ../src/toolbar.c:74
-msgid "Increase indentation"
-msgstr ""
-
-#: ../src/toolbar.c:75 ../src/toolbar.c:380
-msgid "Find the entered text in the current file"
-msgstr ""
-
-#: ../src/toolbar.c:76 ../src/toolbar.c:390
-msgid "Jump to the entered line number"
-msgstr ""
-
-#: ../src/toolbar.c:77
-msgid "Show the preferences dialog"
-msgstr ""
-
-#: ../src/toolbar.c:78
+msgstr "%s файл хэвлэгдлээ."
+
+#: src/encodings.c:52
+msgid "Celtic"
+msgstr "Кельт"
+
+#: src/encodings.c:53 src/encodings.c:54
+msgid "Greek"
+msgstr "Грек"
+
+#: src/encodings.c:55
+msgid "Nordic"
+msgstr "Скандинов"
+
+#: src/encodings.c:56
+msgid "South European"
+msgstr "Өмнөд Европ"
+
+#: src/encodings.c:57 src/encodings.c:58 src/encodings.c:59 src/encodings.c:60
+msgid "Western"
+msgstr "Баруун"
+
+#: src/encodings.c:62 src/encodings.c:63 src/encodings.c:64
+msgid "Baltic"
+msgstr "Балт"
+
+#: src/encodings.c:65 src/encodings.c:66 src/encodings.c:67
+msgid "Central European"
+msgstr "Төв Европ"
+
+#: src/encodings.c:68 src/encodings.c:69 src/encodings.c:70 src/encodings.c:71
+#: src/encodings.c:72
+msgid "Cyrillic"
+msgstr "Крилл"
+
+#: src/encodings.c:73
+msgid "Cyrillic/Russian"
+msgstr "Крилл/Орос"
+
+#: src/encodings.c:74
+msgid "Cyrillic/Ukrainian"
+msgstr "Крилл/Украйн"
+
+#: src/encodings.c:75
+msgid "Romanian"
+msgstr "Румин"
+
+#: src/encodings.c:77 src/encodings.c:78 src/encodings.c:79
+msgid "Arabic"
+msgstr "Араб"
+
+#: src/encodings.c:80 src/encodings.c:81 src/encodings.c:82
+msgid "Hebrew"
+msgstr "Еврей"
+
+#: src/encodings.c:83
+msgid "Hebrew Visual"
+msgstr "Еврей Visual"
+
+#: src/encodings.c:85
+msgid "Armenian"
+msgstr "Армен"
+
+#: src/encodings.c:86
+msgid "Georgian"
+msgstr "Гүрж"
+
+#: src/encodings.c:87
+msgid "Thai"
+msgstr "Таи"
+
+#: src/encodings.c:88 src/encodings.c:89 src/encodings.c:90
+msgid "Turkish"
+msgstr "Турк"
+
+#: src/encodings.c:91 src/encodings.c:92 src/encodings.c:93
+msgid "Vietnamese"
+msgstr "Вьетнам"
+
+#: src/encodings.c:95 src/encodings.c:96 src/encodings.c:97 src/encodings.c:98
+#: src/encodings.c:99 src/encodings.c:100 src/encodings.c:101
+#: src/encodings.c:102
+msgid "Unicode"
+msgstr "Юникод"
+
+#: src/encodings.c:104 src/encodings.c:105 src/encodings.c:106
+#: src/encodings.c:107
+msgid "Chinese Simplified"
+msgstr "Хятад"
+
+#: src/encodings.c:108 src/encodings.c:109 src/encodings.c:110
+msgid "Chinese Traditional"
+msgstr "Хуучин Хятад"
+
+#: src/encodings.c:111 src/encodings.c:112 src/encodings.c:113
+msgid "Japanese"
+msgstr "Япон"
+
+#: src/encodings.c:114 src/encodings.c:115 src/encodings.c:116
+#: src/encodings.c:117
+msgid "Korean"
+msgstr "Солонгос"
+
+#: src/encodings.c:119
+msgid "Without encoding"
+msgstr "Энкодчлолгүй"
+
+#: src/encodings.c:212
+msgid "_West European"
+msgstr "_Баруун Европ"
+
+#: src/encodings.c:218
+msgid "_East European"
+msgstr "_Зүүн Европ"
+
+#: src/encodings.c:224
+msgid "East _Asian"
+msgstr "_Зүүн Ази"
+
+#: src/encodings.c:230
+msgid "_SE & SW Asian"
+msgstr "_ЗӨ болон БӨ Ази"
+
+#: src/encodings.c:236
+msgid "_Middle Eastern"
+msgstr "_Ойрх Дорнод "
+
+#: src/encodings.c:242
+msgid "_Unicode"
+msgstr "_Юникод"
+
+#: src/filetypes.c:136
+msgid "C source file"
+msgstr "Си код"
+
+#: src/filetypes.c:156
+msgid "C++ source file"
+msgstr "С++ код"
+
+#: src/filetypes.c:184
+msgid "D source file"
+msgstr "Дэ код"
+
+#: src/filetypes.c:204
+msgid "Java source file"
+msgstr "Жава код"
+
+#: src/filetypes.c:224
+msgid "Pascal source file"
+msgstr "Паскал код"
+
+#: src/filetypes.c:247
+msgid "Assembler source file"
+msgstr "Ассемблер код"
+
+#: src/filetypes.c:266
+msgid "Fortran source file (F77)"
+msgstr "Фортран код (F77)"
+
+#: src/filetypes.c:290
+msgid "(O)Caml source file"
+msgstr "(O)Camal код"
+
+#: src/filetypes.c:310
+msgid "Perl source file"
+msgstr "Перл код"
+
+#: src/filetypes.c:332
+msgid "PHP source file"
+msgstr "PHP код"
+
+#: src/filetypes.c:355
+msgid "Javascript source file"
+msgstr "Жаваскрипт код"
+
+#: src/filetypes.c:374
+msgid "Python source file"
+msgstr "Пайтон код"
+
+#: src/filetypes.c:394
+msgid "Ruby source file"
+msgstr "Руби код"
+
+#: src/filetypes.c:414
+msgid "Tcl source file"
+msgstr "Tcl код"
+
+#: src/filetypes.c:435
+msgid "Lua source file"
+msgstr "Луа код"
+
+#: src/filetypes.c:454
+msgid "Ferite source file"
+msgstr "Ferite код"
+
+#: src/filetypes.c:473
+msgid "Shell script file"
+msgstr "Шэлл код"
+
+#: src/filetypes.c:498
+msgid "Makefile"
+msgstr "Үүсгэхфайл"
+
+#: src/filetypes.c:516
+msgid "XML source file"
+msgstr "XML код"
+
+#: src/filetypes.c:534
+msgid "Docbook source file"
+msgstr "Докбүүк код"
+
+#: src/filetypes.c:553
+msgid "HTML source file"
+msgstr "HTML код"
+
+#: src/filetypes.c:571
+msgid "Cascading StyleSheet"
+msgstr "Cascading StyleSheet"
+
+#: src/filetypes.c:590
+msgid "SQL Dump file"
+msgstr "SQL файл"
+
+#: src/filetypes.c:609
+msgid "LaTeX source file"
+msgstr "LaTeX код"
+
+#: src/filetypes.c:630
+msgid "O-Matrix source file"
+msgstr "О-Матрикс код"
+
+#: src/filetypes.c:649
+msgid "VHDL source file"
+msgstr "VHDL код"
+
+#: src/filetypes.c:669
+msgid "Diff file"
+msgstr "Diff файл"
+
+#: src/filetypes.c:686
+msgid "Config file"
+msgstr "Config файл"
+
+#: src/filetypes.c:709 src/project.c:109
+msgid "All files"
+msgstr "Бүх файл"
+
+#: src/filetypes.c:718
+msgid "None"
+msgstr "Юу ч биш"
+
+#: src/geany.h:50
+msgid "untitled"
+msgstr "нэргүй"
+
+#: src/interface.c:260 src/interface.c:1508
+msgid "Geany"
+msgstr "Жиени"
+
+#: src/interface.c:270
+msgid "_File"
+msgstr "_Файл"
+
+#: src/interface.c:281
+msgid "New (with _Template)"
+msgstr "Шинэ (_Template-тэй)"
+
+#: src/interface.c:292 src/interface.c:353 src/interface.c:527
+#: src/interface.c:578 src/interface.c:766 src/interface.c:776
+#: src/interface.c:2022 src/interface.c:2073
+msgid "invisible"
+msgstr "үл үзэгдэх"
+
+#: src/interface.c:304 src/interface.c:1940
+msgid "Open Selected F_ile"
+msgstr "Сонгосон Ф_айлыг нээх"
+
+#: src/interface.c:308
+msgid "Recent _Files"
+msgstr "Сая Хэрэглэсэн _Файл"
+
+#: src/interface.c:325
+msgid "Save A_ll"
+msgstr "Б_үх Файлыг Хадгал"
+
+#: src/interface.c:328
+msgid "Saves all open files"
+msgstr "Бүх нээлттэй файлыг хадгал"
+
+#: src/interface.c:342
+msgid "R_eload As"
+msgstr "Д_ахин ачаалал"
+
+#: src/interface.c:373
+msgid "Prints the current file"
+msgstr "Файлыг хэвлэ"
+
+#: src/interface.c:384
+msgid "C_lose All"
+msgstr "Бүх Файлыг Х_аа"
+
+#: src/interface.c:387
+msgid "Closes all open files"
+msgstr "Бүх нээлттэй файлыг хаа"
+
+#: src/interface.c:401 src/interface.c:1080
 msgid "Quit Geany"
+msgstr "Жиени-г Гаргах"
+
+#: src/interface.c:403
+msgid "_Edit"
+msgstr "_Засах"
+
+#: src/interface.c:444 src/interface.c:1931
+msgid "Select _All"
+msgstr "_Бүгдийг Сонгох"
+
+#: src/interface.c:453 src/interface.c:1949
+msgid "_Format"
+msgstr "_Хэлбэржилт"
+
+#: src/interface.c:456
+msgid "Convert the case of the current selection"
+msgstr "Идэвхжсэнийг Хөрвүүл"
+
+#: src/interface.c:461 src/interface.c:1956
+msgid "Convert Selection to _Lower-case"
+msgstr "Идэвхжсэнийг _жижиг үсэг болгох"
+
+#: src/interface.c:465 src/interface.c:1960
+msgid "Convert Selection to _Upper-case"
+msgstr "Идэвхжсэнийг _том үсэг болгох"
+
+#: src/interface.c:474 src/interface.c:1969
+msgid "_Comment Line(s)"
+msgstr "_Тайлбарын мөр(үүд)"
+
+#: src/interface.c:478 src/interface.c:1973
+msgid "U_ncomment Line(s)"
+msgstr "Тайлбар _биш Мөр(үүд)"
+
+#: src/interface.c:482 src/interface.c:1977
+msgid "_Toggle Line Commentation"
+msgstr "_Идэвхжсэн Мөрийн Тайлбар"
+
+#: src/interface.c:486 src/interface.c:1981
+msgid "Du_plicate Line or Selection"
+msgstr "Дав_хардсан Мөр эсвэл Идэвхжилт"
+
+#: src/interface.c:495 src/interface.c:1990
+msgid "_Increase Indent"
+msgstr "Догол мөрийг _Өсгөх"
+
+#: src/interface.c:503 src/interface.c:1998
+msgid "_Decrease Indent"
+msgstr "Догол мөрийг _Багасгах"
+
+#: src/interface.c:516
+msgid "_Insert \"include <...>\""
+msgstr "\"include <...>\"-ийг _оруулах"
+
+#: src/interface.c:530
+msgid "I_nsert Comments"
+msgstr "Тайлбар О_руулах"
+
+#: src/interface.c:541 src/interface.c:2036
+msgid "Insert ChangeLog Entry"
+msgstr "ChangeLog-ийг оруулах"
+
+#: src/interface.c:544 src/interface.c:2039
+msgid "Inserts a typical ChangeLog entry in the current file"
+msgstr "Файлд ChangeLog оруулах"
+
+#: src/interface.c:546 src/interface.c:2041
+msgid "Insert File Header"
+msgstr "Толгой Файл Оруулах"
+
+#: src/interface.c:549 src/interface.c:2044
+msgid "Inserts a file header at the beginning of the file"
+msgstr "Файлын эхэнд толгой файл оруулах"
+
+#: src/interface.c:551 src/interface.c:2046
+msgid "Insert Function Description"
+msgstr "Функцын Тайлбар Оруулах"
+
+#: src/interface.c:554 src/interface.c:2049
+msgid "Inserts a description before the current function"
+msgstr "Файлын өмнө тайлбар оруулах"
+
+#: src/interface.c:556 src/interface.c:2051
+msgid "Insert Multiline Comment"
+msgstr "Олон мөрийн Тайлбар Оруулах"
+
+#: src/interface.c:559 src/interface.c:2054
+msgid "Inserts a multiline comment"
+msgstr "Олон мөрийн тайлбар оруулах"
+
+#: src/interface.c:561 src/interface.c:2056
+msgid "Insert GPL Notice"
+msgstr "GPL-ийг оруулах"
+
+#: src/interface.c:564 src/interface.c:2059
+msgid "Inserts a GPL notice (should be done at the beginning of the file)"
+msgstr "GPL-ийг оруулах (файлын эхэнд байна)"
+
+#: src/interface.c:566
+msgid "Insert BSD License Notice"
+msgstr "BSD Лиценз оруулах"
+
+#: src/interface.c:569 src/interface.c:2064
+msgid ""
+"Inserts a BSD licence notice (should be done at the beginning of the file)"
+msgstr "BSD лиценз оруулах (файлын эхэнд байна)"
+
+#: src/interface.c:571 src/interface.c:2066
+msgid "Insert Dat_e"
+msgstr "Огн_оо Оруулах"
+
+#: src/interface.c:590
+msgid "_Search"
+msgstr "_Хайх"
+
+#: src/interface.c:601
+msgid "Find _Next"
+msgstr "Ур_агшаа Хай"
+
+#: src/interface.c:605
+msgid "Find _Previous"
+msgstr "_Хойшоо Хай"
+
+#: src/interface.c:609
+msgid "Find in F_iles"
+msgstr "Ф_айлуудаас Хай"
+
+#: src/interface.c:613 src/search.c:429
+msgid "_Replace"
+msgstr "_Орлуулах"
+
+#: src/interface.c:626
+msgid "Find _Selected"
+msgstr "_Сонгосныг Хай"
+
+#: src/interface.c:630
+msgid "Find Pre_v Selected"
+msgstr "_Урьд Сонгосныг Хай"
+
+#: src/interface.c:639
+msgid "Next _Message"
+msgstr "Даргаагийн _Мэдээ"
+
+#: src/interface.c:648
+msgid "_Go to Line"
+msgstr "_Мөр-лүү Оч"
+
+#: src/interface.c:663
+msgid "Change _Font"
+msgstr "_Фонт Өөрчлөх"
+
+#: src/interface.c:666
+msgid "Change the default font"
+msgstr "Заагдсан фонтыг өөрчлөх"
+
+#: src/interface.c:677
+msgid "Full_screen"
+msgstr "Бүтэн _дэлгэц"
+
+#: src/interface.c:681
+msgid "Show Message _Window"
+msgstr "Мэдээний _Цонхыг Харуул"
+
+#: src/interface.c:684
+msgid "Toggle the window with status and compiler messages on and off"
+msgstr "Хөрвүүлэгчийн мэдээ(тэй/гүй) цонхыг төлөвийг заах"
+
+#: src/interface.c:687
+msgid "Show _Toolbar"
+msgstr "Багаж _Самбарыг Харуул"
+
+#: src/interface.c:690
+msgid "Toggle the toolbar on and off"
+msgstr "Багаж самбар(тай/үгүй)-г заа"
+
+#: src/interface.c:693
+msgid "Show Side_bar"
+msgstr "Ха_жуу самбарыг Харуул"
+
+#: src/interface.c:698
+msgid "Show _Markers Margin"
+msgstr "_Тэмдэгийн Захыг Харуул"
+
+#: src/interface.c:701
+msgid ""
+"Shows or hides the small margin right of the line numbers, which is used to "
+"mark lines."
+msgstr "Тэмдэглэсэн мөрийн дугаарын баруун ирмэгийг харуул эсвэл нуу."
+
+#: src/interface.c:704
+msgid "Show _Line Numbers"
+msgstr "_Мөрийн Дугаарыг Харуул"
+
+#: src/interface.c:707
+msgid "Shows or hides the Line Number margin."
+msgstr "Мөрийн Дугаарын ирмэгийг харуул эсвэл нуу"
+
+#: src/interface.c:727
+msgid "_Document"
+msgstr "_Баримт"
+
+#: src/interface.c:734
+msgid "_Line Wrapping"
+msgstr "_Line Wrapping"
+
+#: src/interface.c:737 src/interface.c:3273
+msgid ""
+"Wrap the line at the window border and continue it on the next line. Note: "
+"line wrapping has a high performance cost for large documents so should be "
+"disabled on slow machines."
 msgstr ""
+"Wrap the line at the window border and continue it on the next line. Note: "
+"line wrapping has a high performance cost for large documents so should be "
+"disabled on slow machines."
 
-#: ../src/toolbar.c:79
-#, fuzzy
-msgid "Print document"
-msgstr "бүх барим"
+#: src/interface.c:740
+msgid "_Use Auto-indentation"
+msgstr "Автомат догол мөрийг _хэрэглэ"
 
-#: ../src/toolbar.c:80
-msgid "Replace text in the current document"
-msgstr ""
+#: src/interface.c:745
+msgid "Read _Only"
+msgstr "_Зөвхөн Харах"
 
-#: ../src/toolbar.c:356
+#: src/interface.c:748
+msgid "Treat this file as read-only. No changes can be made."
+msgstr "Файлд зөвхөн-харахаар хандсан. Өөрчлөлт орохгүй."
+
+#: src/interface.c:750
+msgid "_Write Unicode BOM"
+msgstr "_Юникод BOM бичих"
+
+#: src/interface.c:759
+msgid "Set File_type"
+msgstr "Файлын _төрлийг заа"
+
+#: src/interface.c:769
+msgid "Set _Encoding"
+msgstr "_Энкодчлолыг заа"
+
+#: src/interface.c:779
+msgid "Set Line E_ndings"
+msgstr "Мөрийн _төгсгөлийг заа"
+
+#: src/interface.c:786
+msgid "Convert and Set to _CR/LF (Win)"
+msgstr "_CR/LF (Виндөвс)-д Хувирга эсвэл Зааж өгөх"
+
+#: src/interface.c:792
+msgid "Convert and Set to _LF (Unix)"
+msgstr "_LF (Юникс)-д Хувирга эсвэл Зааж өгөх"
+
+#: src/interface.c:798
+msgid "Convert and Set to CR (_Mac)"
+msgstr "CR (_Мак)-д Хувирга эсвэл Зааж өгөх"
+
+#: src/interface.c:809
+msgid "_Replace Tabs by Spaces"
+msgstr "Догол мөрийг Зайгаар _орлуулах"
+
+#: src/interface.c:812 src/interface.c:3041
+msgid "Replaces all tabs in document by spaces."
+msgstr "Баримтын бүх догол мөрийг зайгаар орлуулах"
+
+#: src/interface.c:819
+msgid "_Fold All"
+msgstr "_Fold All"
+
+#: src/interface.c:822
+msgid "Folds all contractible code blocks"
+msgstr "Folds all contractible code blocks"
+
+#: src/interface.c:824
+msgid "_Unfold All"
+msgstr "_Unfold All"
+
+#: src/interface.c:827
+msgid "Unfolds all contracted code blocks"
+msgstr "Unfolds all contracted code blocks"
+
+#: src/interface.c:834
+msgid "Remove Error _Indicators"
+msgstr "Алдаа _Заагчдыг Арилгах"
+
+#: src/interface.c:837
+msgid "Removes all error indicators in the current document."
+msgstr "Баримтын бүх алдаа заагчийг арилгах"
+
+#: src/interface.c:839
+msgid "_Project"
+msgstr "_Төсөл"
+
+#: src/interface.c:846
+msgid "_New"
+msgstr "_Шинээр"
+
+#: src/interface.c:854
+msgid "_Open"
+msgstr "_Нээх"
+
+#: src/interface.c:862
+msgid "_Close"
+msgstr "_Хаах"
+
+#: src/interface.c:883
+msgid "_Tools"
+msgstr "_Хэрэгсэл"
+
+#: src/interface.c:890
+msgid "_Colour Chooser"
+msgstr "_Өнгө Сонгогч"
+
+#: src/interface.c:893 src/interface.c:1018
+msgid ""
+"Open a color chooser dialog, to interactively pick colors from a palette."
+msgstr "Өнгө санал болгох өнгө сонгогчийн асуултыг нээ."
+
+#: src/interface.c:899
+msgid "_Word Count"
+msgstr "_Үг Тоол"
+
+#: src/interface.c:902
+msgid ""
+"Counts the words and characters in the current selection or the whole "
+"document"
+msgstr "Идэвжүүлснээс эсвэл баримтаас үг болон тэмдэгтийг тоол"
+
+#: src/interface.c:904
+msgid "_Insert Special HTML Characters"
+msgstr "_Тусгай HTML Тэмдэгт Оруул"
+
+#: src/interface.c:908
+msgid "_Help"
+msgstr "_Тусламж"
+
+#: src/interface.c:919
+msgid "_Keyboard Shortcuts"
+msgstr "_Товчлуурын Хослол"
+
+#: src/interface.c:922
+msgid "Shows a list of all keyboard shortcuts for Geany."
+msgstr "Жиенигийн бүх товчлуурын хослолыг харуул."
+
+#: src/interface.c:924
+msgid "_Website"
+msgstr "_Веб хуудас"
+
+#: src/interface.c:947
 msgid "Create a new file"
-msgstr ""
+msgstr "Шинээр файл үүсгэх"
 
-#: ../src/toolbar.c:357
-msgid "Create a new file from a template"
-msgstr ""
-
-#: ../src/toolbar.c:364
+#: src/interface.c:953
 msgid "Open an existing file"
-msgstr ""
+msgstr "Үүссэн файлыг нээх"
 
-#: ../src/toolbar.c:365
-#, fuzzy
-msgid "Open a recent file"
+#: src/interface.c:958
+msgid "Save the current file"
+msgstr "Файлыг хадгал"
+
+#: src/interface.c:960 src/keybindings.c:123
+msgid "Save all"
+msgstr "Бүгдийг хадгал"
+
+#: src/interface.c:963
+msgid "Save all open files"
+msgstr "Бүх нээлттэй файлыг хадгал"
+
+#: src/interface.c:972
+msgid "Reload the current file from disk"
+msgstr "Дискээс файлыг дахин ачаалал"
+
+#: src/interface.c:977
+msgid "Close the current file"
+msgstr "Файлыг хаа"
+
+#: src/interface.c:986
+msgid "Undo the last modification"
+msgstr "Сүүлийн засварыг буцаа"
+
+#: src/interface.c:991
+msgid "Redo the last modification"
+msgstr "Сүүлийн засварыг сэргээх"
+
+#: src/interface.c:999 src/keybindings.c:179
+msgid "Compile"
+msgstr "Хөрвүүлэх"
+
+#: src/interface.c:1002
+msgid "Compile the current file"
 msgstr "Файлыг хөрвүүл"
 
-#: ../src/toolbar.c:373
-#, fuzzy
-msgid "Choose more build actions"
-msgstr "Боловсруулахад алдаа гараагүй"
+#: src/interface.c:1015
+msgid "Color"
+msgstr "Өнгө"
 
-#: ../src/toolbar.c:390
-msgid "Goto"
-msgstr ""
+#: src/interface.c:1027
+msgid "Zoom in the text"
+msgstr "Текст-рүү ойртох"
 
-#: ../src/toolbar.c:579
-msgid "Separator"
-msgstr ""
+#: src/interface.c:1032
+msgid "Zoom out the text"
+msgstr "Текстээс холдох"
 
-#: ../src/toolbar.c:580
-msgid "--- Separator ---"
-msgstr ""
+#: src/interface.c:1045 src/interface.c:1050
+msgid "Find the entered text in the current file"
+msgstr "Файлаас өгөгдсөн текстийг хай"
 
-#: ../src/toolbar.c:949
+#: src/interface.c:1063
+msgid "Enter a line number and jump to it."
+msgstr "Мөрийн дугаарыг оруулад оч."
+
+#: src/interface.c:1070
+msgid "Jump to the entered line number."
+msgstr "Оруулсан мөрлүү оч."
+
+#: src/interface.c:1108 src/treeviews.c:73
+msgid "Symbols"
+msgstr "Тэмдэгт"
+
+#: src/interface.c:1121 src/treeviews.c:182
+msgid "Open files"
+msgstr "Файлууд нээх"
+
+#: src/interface.c:1156
+msgid "Status"
+msgstr "Төлөв"
+
+#: src/interface.c:1170
+msgid "Compiler"
+msgstr "Хөрвүүлэгч"
+
+#: src/interface.c:1184
+msgid "Messages"
+msgstr "Мэдээ"
+
+#: src/interface.c:1197
+msgid "Scribble"
+msgstr "Scribble"
+
+#: src/interface.c:1753 src/interface.c:2896
+msgid "Images and text"
+msgstr "Зураг болон текст"
+
+#: src/interface.c:1759 src/interface.c:2928
+msgid "Images only"
+msgstr "Зөвхөн зураг"
+
+#: src/interface.c:1765 src/interface.c:2920
+msgid "Text only"
+msgstr "Зөвхөн текст"
+
+#: src/interface.c:1776 src/interface.c:2912
+msgid "Large icons"
+msgstr "Том icon"
+
+#: src/interface.c:1781 src/interface.c:2904
+msgid "Small icons"
+msgstr "Жижиг icon"
+
+#: src/interface.c:1791
+msgid "Hide toolbar"
+msgstr "Багаж самбарыг нуу"
+
+#: src/interface.c:2011
+msgid "Insert \"include <...>\""
+msgstr "\"include <...>\" оруул"
+
+#: src/interface.c:2025
+msgid "Insert Comments"
+msgstr "Тайбар оруул"
+
+#: src/interface.c:2061
+msgid "Insert BSD license Notice"
+msgstr "BSD лиценз оруул"
+
+#: src/interface.c:2081 src/keybindings.c:245
+msgid "Find Usage"
+msgstr "Хэрэглээг хай"
+
+#: src/interface.c:2089
+msgid "Go to Tag Definition"
+msgstr "Go to Tag Definition"
+
+#: src/interface.c:2093
+msgid "Go to Tag Declaration"
+msgstr "Go to Tag Declaration"
+
+#: src/interface.c:2102
+msgid "Go to Line"
+msgstr "Мөрлүү оч"
+
+#: src/interface.c:2105
+msgid "Goto to the entered line"
+msgstr "Оруулсан мөрлүү оч"
+
+#: src/interface.c:2477 src/keybindings.c:141
+msgid "Preferences"
+msgstr "Тохиргоо"
+
+#: src/interface.c:2510
+msgid "Load files from the last session"
+msgstr "Сүүлд ажиллаж байсан файлуудыг ачаалал"
+
+#: src/interface.c:2514
+msgid "Opens at startup the files from the last session"
+msgstr "Сүүлд ажиллаж байснаас эхлэх файлыг нээ"
+
+#: src/interface.c:2517
+msgid "Save window position and geometry"
+msgstr "Цонхны байрлал хэлбэрийг хадгал"
+
+#: src/interface.c:2521
+msgid "Saves the window position and geometry and restores it at the start"
+msgstr "Цонхны байрлал хэлбэрийг хадгалаад эхлэлд буцааж сэргээ"
+
+#: src/interface.c:2524
+msgid "Load virtual terminal emulation at startup"
+msgstr "Load virtual terminal emulation at startup"
+
+#: src/interface.c:2526
 msgid ""
-"Select items to be displayed on the toolbar. Items can be reordered by drag "
-"and drop."
+"Whether the virtual terminal emulation(VTE) should be loaded at startup. "
+"Disable it if you do not need it."
 msgstr ""
+"Whether the virtual terminal emulation(VTE) should be loaded at startup. "
+"Disable it if you do not need it."
 
-#: ../src/toolbar.c:965
-msgid "Available Items"
+#: src/interface.c:2529
+msgid "Confirm exit"
+msgstr "Гарахыг баталгаажуул"
+
+#: src/interface.c:2533
+msgid "Shows a confirmation dialog on exit."
+msgstr "Гарахад баталгаажуулах асуултыг харуул."
+
+#: src/interface.c:2536
+msgid "<b>Startup and shutdown</b>"
+msgstr "<b>Эхлүүлэх унтраах</b>"
+
+#: src/interface.c:2555
+msgid "Beep on errors or when compilation has finished"
+msgstr "Алдаа гарахад эсвэл хөрвүүлэлт дуусахад дуугарах"
+
+#: src/interface.c:2558
+msgid ""
+"Whether to beep if an error occured or when the compilation process has "
+"finished."
+msgstr "Алдаа гарах эсвэл хөрвүүлэлт дуусахад дуу гарах эсэх"
+
+#: src/interface.c:2561
+msgid "Switch to status message list at new message"
+msgstr "Шинэ мэдээд төлвийн мэдээний жагсаалтруу шилжих"
+
+#: src/interface.c:2564
+msgid ""
+"Switch to the status message tab (in the notebook window at the bottom) if a "
+"new status message arrives."
+msgstr "Шинэ төлвийн мэдээ гарвал төлвийн мэдээрүү (Цонхны доод хэсэгт) шилж."
+
+#: src/interface.c:2567
+msgid "Always wrap search and hide the Find dialog"
+msgstr "Always wrap search and hide the Find dialog"
+
+#: src/interface.c:2571
+msgid ""
+"Always wrap search around the document and hide the Find dialog after "
+"clicking Find Next/Previous"
 msgstr ""
+"Always wrap search around the document and hide the Find dialog after "
+"clicking Find Next/Previous"
 
-#: ../src/toolbar.c:986
-msgid "Displayed Items"
+#: src/interface.c:2574
+msgid "<b>Behaviour</b>"
+msgstr "<b>Төлөв</b>"
+
+#: src/interface.c:2579
+msgid "General"
+msgstr "Ерөнхий"
+
+#: src/interface.c:2601
+msgid "Show symbol list"
+msgstr "Тэмдэгтийн жагсаалтыг харуул"
+
+#: src/interface.c:2604 src/interface.c:2610
+msgid "Toggle the symbol list on and off"
+msgstr "Тэмдэгтийн жагсаалтыг нээх хаахыг заа"
+
+#: src/interface.c:2607
+msgid "Show open files list"
+msgstr "Нээлттэй файлыг жагсаалтыг харуул"
+
+#: src/interface.c:2613
+msgid "<b>Sidebar</b>"
+msgstr "<b>Хажуу самбар</b>"
+
+#: src/interface.c:2634
+msgid "Symbol list:"
+msgstr "Тэмдэгтийн жагсаалт:"
+
+#: src/interface.c:2641 src/interface.c:2706
+msgid "Message window:"
+msgstr "Мэдээний цонх:"
+
+#: src/interface.c:2648 src/interface.c:2713
+msgid "Editor:"
+msgstr "Засварлагч:"
+
+#: src/interface.c:2660
+msgid "Sets the font for the message window"
+msgstr "Мэдээний цонхны фонтыг заа"
+
+#: src/interface.c:2668
+msgid "Sets the font for the symbol list"
+msgstr "Тэмдэгтийн жагсаалтын фонтыг заа"
+
+#: src/interface.c:2676
+msgid "Sets the editor font"
+msgstr "Засварлагчийн фонтыг заа"
+
+#: src/interface.c:2678
+msgid "<b>Fonts</b>"
+msgstr "<b>Фонт</b>"
+
+#: src/interface.c:2699
+msgid "Sidebar:"
+msgstr "Хажуу самбар:"
+
+#: src/interface.c:2720
+msgid "Show editor tabs"
+msgstr "Засварлагчийн хэсгийг харуул"
+
+#: src/interface.c:2731 src/interface.c:2741 src/interface.c:2751
+#: src/interface.c:3088
+msgid "Left"
+msgstr "Зүүн"
+
+#: src/interface.c:2732 src/interface.c:2742 src/interface.c:2752
+#: src/interface.c:3096
+msgid "Right"
+msgstr "Баруун"
+
+#: src/interface.c:2733 src/interface.c:2743 src/interface.c:2753
+msgid "Top"
+msgstr "Дээш"
+
+#: src/interface.c:2734 src/interface.c:2744 src/interface.c:2754
+msgid "Bottom"
+msgstr "Доош"
+
+#: src/interface.c:2756
+msgid "<b>Tab placement</b>"
+msgstr "<b>Хэсгүүдийн байршуулалт</b>"
+
+#: src/interface.c:2761
+msgid "Interface"
+msgstr "Интерфейс"
+
+#: src/interface.c:2780
+msgid "Show Toolbar"
+msgstr "Багаж самбарыг харуул"
+
+#: src/interface.c:2805
+msgid "Show file operation buttons"
+msgstr "Файл дээр үйлдэл хийх товчуудыг харуул"
+
+#: src/interface.c:2809
+msgid "Display the New, Open, Close, Save and Reload buttons in the toolbar"
 msgstr ""
+"Багаж самбар дээр Шинээр, Нээх, Хаах, Хадгал, Дахин ачааллах товчийг гаргах"
 
-#: ../src/tools.c:108 ../src/tools.c:113
-#, fuzzy, c-format
-msgid "Invalid command: %s"
-msgstr " командууд"
+#: src/interface.c:2812
+msgid "Show Compile and Run"
+msgstr "Хөрвүүлэх, Ажиллуулах-ыг харуулах"
 
-#: ../src/tools.c:108
-msgid "Command not found"
+#: src/interface.c:2816
+msgid "Display the Compile and Run buttons in the toolbar"
+msgstr "Багаж самбар дээр Хөрвүүл, Ажиллуулах товчийг гаргах"
+
+#: src/interface.c:2819
+msgid "Show Colour Chooser button"
+msgstr "Өнгө сонгох товчийг харуул"
+
+#: src/interface.c:2823
+msgid "Display the Colour Chooser button in the toolbar"
+msgstr "Багаж самбар дээр Өнгө сонгох товчийг гаргах"
+
+#: src/interface.c:2826
+msgid "Show Zoom In and Zoom Out"
+msgstr "Ойртуулалт, Холтгол харуул"
+
+#: src/interface.c:2830
+msgid "Display the Zoom In and Zoom Out buttons in the toolbar"
+msgstr "Багаж самбар дээр Ортуулалт Холтголыг гаргах"
+
+#: src/interface.c:2833
+msgid "Show Redo and Undo buttons"
+msgstr "Буцаах, Сэргээх товчийг харуул"
+
+#: src/interface.c:2837
+msgid "Display the Redo and Undo buttons in the toolbar"
+msgstr "Багаж самбар дээр Буцаах, Сэргээх товчийг гаргах"
+
+#: src/interface.c:2840
+msgid "Show Search field"
+msgstr "Хайлтын талбарыг харуул"
+
+#: src/interface.c:2844
+msgid "Display the search field and button in the toolbar"
+msgstr "Багаж самбар дээр хайлтын талбарыг гаргах"
+
+#: src/interface.c:2847
+msgid "Show Goto line field"
+msgstr "Мөрлүү үсрэх талбарыг харуул"
+
+#: src/interface.c:2851
+msgid "Display the line number field and button in the toolbar"
+msgstr "Багаж самбар дээр мөр дугаарын талбар болон товчийг гаргах"
+
+#: src/interface.c:2854
+msgid "Show Quit button"
+msgstr "Гарах товчийг харуулах"
+
+#: src/interface.c:2858
+msgid "Display the quit button in the toolbar"
+msgstr "Багаж самбар дээр гарах товчийг гаргах"
+
+#: src/interface.c:2861
+msgid "<b>Items</b>"
+msgstr "<b>Items</b>"
+
+#: src/interface.c:2882
+msgid "Icon style:"
+msgstr "Icon style:"
+
+#: src/interface.c:2889
+msgid "Icon size:"
+msgstr "Icon size:"
+
+#: src/interface.c:2936
+msgid "<b>Appearance</b>"
+msgstr "<b>Харагдац</b>"
+
+#: src/interface.c:2941
+msgid "Toolbar"
+msgstr "Багаж самбар"
+
+#: src/interface.c:2969
+msgid "Tab Width:"
+msgstr "Хэсгийн өргөх:"
+
+#: src/interface.c:2981
+msgid "Sets the default encoding for newly created files."
+msgstr "Шинээр үүссэн файлын энкодчлолыг заах."
+
+#: src/interface.c:2993
+msgid "The width in chars, which one tab character will take"
+msgstr "The width in chars, which one tab character will take"
+
+#: src/interface.c:2998
+msgid "Default encoding:"
+msgstr "Энкодчлол:"
+
+#: src/interface.c:3004
+msgid "<b>New files</b>"
+msgstr "<b>Шинэ файлууд</b>"
+
+#: src/interface.c:3023
+msgid "Strip trailing spaces"
+msgstr "Strip trailing spaces"
+
+#: src/interface.c:3027
+msgid "Removes trailing spaces and tabs and the end of lines"
+msgstr "Мөрийн эцэс дэх зай, догол мөрийг устгах"
+
+#: src/interface.c:3030
+msgid "Ensure new line at file end"
+msgstr "Мөрийн эцэст шинэ файлыг тодорхойл"
+
+#: src/interface.c:3034
+msgid "Ensures that at the end of the file is a new line"
+msgstr "Мөрийн эцэст шинэ мөр байгааг тодорхойл"
+
+#: src/interface.c:3037 src/keybindings.c:171
+msgid "Replace tabs by space"
+msgstr "Догол мөрийг зайгаа орлуулах"
+
+#: src/interface.c:3044
+msgid "<b>Saving files</b>"
+msgstr "<b>Файлуудыг хадгал</b>"
+
+#: src/interface.c:3065
+msgid "Placement of new file tabs:"
+msgstr "Placement of new file tabs:"
+
+#: src/interface.c:3078
+msgid ""
+"Specifies the number of files which are stored in the Recent files list."
+msgstr "Саяхан хэрэглэсэн файлуудын жагсаалтын хэмжээг заах"
+
+#: src/interface.c:3091
+msgid "File tabs will be placed on the left of the notebook"
+msgstr "File tabs will be placed on the left of the notebook"
+
+#: src/interface.c:3099
+msgid "File tabs will be placed on the right of the notebook"
+msgstr "File tabs will be placed on the right of the notebook"
+
+#: src/interface.c:3103
+msgid "Recent files list length:"
+msgstr "Сая хэрэглэсэн файлуудын жагсаалтын урт:"
+
+#: src/interface.c:3111
+msgid "<b>Misc.</b>"
+msgstr "<b>Misc.</b>"
+
+#: src/interface.c:3116 src/symbols.c:405
+msgid "Files"
+msgstr "Файлууд"
+
+#: src/interface.c:3138
+msgid "Invert syntax highlighting colours"
+msgstr "Кодуудыг тодруулалтын өнгийг урвуулах"
+
+#: src/interface.c:3140
+msgid "Use white text on a black background."
+msgstr "Хар дэвсгэр дээр цагаан үсгээр бичих."
+
+#: src/interface.c:3142
+msgid "Show indentation guides"
+msgstr "Show indentation guides"
+
+#: src/interface.c:3145
+msgid "Shows small dotted lines to help you to use the right indentation."
+msgstr "Shows small dotted lines to help you to use the right indentation."
+
+#: src/interface.c:3148
+msgid "Show white space"
+msgstr "Хоосон зайг харуул"
+
+#: src/interface.c:3151
+msgid "Marks spaces with dots and tabs with arrows."
+msgstr "Зайг цэгээр, догол мөрийг сумаар тэмдэглэ."
+
+#: src/interface.c:3154
+msgid "Show line endings"
+msgstr "Мөрийн төгсгөлийг харуул"
+
+#: src/interface.c:3157
+msgid "Show the line ending character"
+msgstr "Мөрийн төгсгөлийн тэмдэгтийг харуул"
+
+#: src/interface.c:3160
+msgid "<b>Display</b>"
+msgstr "<b>Дэлгэц</b>"
+
+#: src/interface.c:3181
+msgid "Long line marker:"
+msgstr "Long line marker:"
+
+#: src/interface.c:3188
+msgid "Long line marker color:"
+msgstr "Long line marker color:"
+
+#: src/interface.c:3195
+msgid "Type:"
+msgstr "Төрөл:"
+
+#: src/interface.c:3207
+msgid "Sets the color of the long line marker"
+msgstr "Sets the color of the long line marker"
+
+#: src/interface.c:3216
+msgid ""
+"The long line marker is a thin vertical line in the editor. It helps to mark "
+"long lines, or as a hint to break the line. Set this value to a value "
+"greater than 0 to specify the column where it should appear."
 msgstr ""
+"The long line marker is a thin vertical line in the editor. It helps to mark "
+"long lines, or as a hint to break the line. Set this value to a value "
+"greater than 0 to specify the column where it should appear."
 
-#: ../src/tools.c:254
+#: src/interface.c:3226
+msgid "Line"
+msgstr "Шулуун"
+
+#: src/interface.c:3229
+msgid ""
+"Prints a vertical line in the editor window at the given cursor position "
+"(see below)."
+msgstr "Заагчийн байрлалд босоо шулуун хэвлэх (доодохыг хар)"
+
+#: src/interface.c:3233
+msgid "Background"
+msgstr "Дэвсгэр"
+
+#: src/interface.c:3236
+msgid ""
+"The background colour of characters after the given cursor position (see "
+"below) changed to the colour set below. (This is recommended if you use "
+"proportional fonts)"
+msgstr ""
+"Заагчийн байрлалаас хойшхи тэмдэгтийн дэвсгэр өнгийг доор заасан өнгөөр "
+"солигдсон. (Ялгаатай фонт хэрэглэж байгаа үед санал болгоно)"
+
+#: src/interface.c:3240
+msgid "Disabled"
+msgstr "Идэвхгүй"
+
+#: src/interface.c:3246
+msgid "<b>Long line marker</b>"
+msgstr "<b>Long line marker</b>"
+
+#: src/interface.c:3265
+msgid "Auto indentation"
+msgstr "Автомат тодорхойологч"
+
+#: src/interface.c:3268
+msgid "Add the same indentation as the previous line after pressing enter"
+msgstr "Enter дарсны дараа өмнөх мөр дээр ижил тодорхойлогч нэм"
+
+#: src/interface.c:3270
+msgid "Line wrapping"
+msgstr "Line wrapping"
+
+#: src/interface.c:3275
+msgid "Enable folding"
+msgstr "Enable folding"
+
+#: src/interface.c:3278
+msgid "Whether to enable folding the code"
+msgstr "Whether to enable folding the code"
+
+#: src/interface.c:3281
+msgid "Unfold all children of a fold point"
+msgstr "Unfold all children of a fold point"
+
+#: src/interface.c:3284
+msgid "Unfold all children of a fold point when unfolding it."
+msgstr "Unfold all children of a fold point when unfolding it."
+
+#: src/interface.c:3287
+msgid "Use indicators to show compile errors"
+msgstr "Хөрвүүлэлтийн алдааг харуулахад заагчийг ашигла"
+
+#: src/interface.c:3290
+msgid ""
+"Whether to use indicators (a squiggly underline) to highlight the lines "
+"where the compiler found a warning or an error."
+msgstr "Хөрвүүлэгч анхааруулга эсвэл алдааг олоход заагч тэр мөрийг тодруулна."
+
+#: src/interface.c:3293
+msgid "Disable Drag and Drop"
+msgstr "Чирэх үйлдлийг идэвхгүй болгох"
+
+#: src/interface.c:3296
+msgid ""
+"Disable drag and drop completely in the editor window so you can't drag and "
+"drop any selections within or outside of the editor window."
+msgstr "Чирэх үйлдлийг идэвхгүй болгосон болохоор чирэх үйлдэл хийх боломжгүй."
+
+#: src/interface.c:3299
+msgid "Use tabulators when inserting whitespace"
+msgstr "Хоосон зай оруулахад tabulator-ыг хэрэглэ"
+
+#: src/interface.c:3302
+msgid ""
+"Whenever some whitespace is inserted by Geany it will use tabulators when "
+"enabled otherwise Geany will use just spaces."
+msgstr ""
+"Whenever some whitespace is inserted by Geany it will use tabulators when "
+"enabled otherwise Geany will use just spaces."
+
+#: src/interface.c:3305
+msgid "<b>Features</b>"
+msgstr "<b>Үзүүлэлт</b>"
+
+#: src/interface.c:3324
+msgid "Construct autocompletion"
+msgstr "Гүйцээлтийг байгуул"
+
+#: src/interface.c:3327
+msgid "Automatic completion of often used constructs like if and for"
+msgstr "if, for мэтийн бүтцүүд дээр гүйцээлтийг хийдэг"
+
+#: src/interface.c:3330
+msgid "XML tag autocompletion"
+msgstr "XML тагийн гүйцээлт"
+
+#: src/interface.c:3333
+msgid "Automatic completion of open XML tags (includes HTML tags)"
+msgstr "XML таг (HTML-ын таг орсон)-ийг нээх гүйцээлт"
+
+#: src/interface.c:3336
+msgid "Symbol autocompletion"
+msgstr "Үгийн гүйцээлт"
+
+#: src/interface.c:3339
+msgid ""
+"Automatic completion of known symbols in open source file(s) (function, "
+"global variables, ...)"
+msgstr ""
+"Нээлттэй код дахь мэдэгдэж буй үгүүдийг (функц, гадаад хувьсагч,...) гүйцээлт"
+
+#: src/interface.c:3350
+msgid "Rows of autocompletion list:"
+msgstr "Гүйцээлтийн жагсаалтийн мөр:"
+
+#: src/interface.c:3359
+msgid "Number of rows to display in the autocompletion list."
+msgstr "Гүйцээлтийн жагсаалтийн мөрийн тоог харуул."
+
+#: src/interface.c:3362
+msgid "<b>Autocompletion</b>"
+msgstr "<b>Гүйцээлт</b>"
+
+#: src/interface.c:3367
+msgid "Editor"
+msgstr "Засварлагч"
+
+#: src/interface.c:3385
+msgid "Enter tool paths below. Tools you do not need can be left blank."
+msgstr "Багажийн замыг доор оруул. Багаж хоосон үлдээх хэрэггүй."
+
+#: src/interface.c:3397
+msgid "Make:"
+msgstr "Үүсгэх:"
+
+#: src/interface.c:3404
+msgid "Terminal:"
+msgstr "Терминал:"
+
+#: src/interface.c:3411
+msgid "Browser:"
+msgstr "Хөтөч:"
+
+#: src/interface.c:3423
+msgid "Path and options for the make tool"
+msgstr "Үүсгэх хэрэгслийн зам болон тохиргоо"
+
+#: src/interface.c:3430
+msgid ""
+"A terminal emulator like xterm, gnome-terminal or konsole (should accept the "
+"-e argument)"
+msgstr ""
+"Терминал нь xterm, gnome-terminal эсвэл konsole шиг (-e аргумент дамжуулдаг)"
+
+#: src/interface.c:3437
+msgid "Path (and possibly additional arguments) to your favorite browser"
+msgstr "Дуртай хөтөчийнхөө зам (нэмэлт аргумент зөвшөөрнө)"
+
+#: src/interface.c:3469
+msgid "Print command:"
+msgstr "Хэвлэх команд:"
+
+#: src/interface.c:3481
 #, c-format
+msgid "Path to the command for printing files (use %f for the filename)."
+msgstr "Хэвлэх файлын команд зам (Файлын нэрийг %f гэж ашигла)"
+
+#: src/interface.c:3493
+msgid "Grep:"
+msgstr "Grep:"
+
+#: src/interface.c:3516
+msgid "<b>Tool paths</b>"
+msgstr "<b>Багажийн зам</b>"
+
+#: src/interface.c:3521
+msgid "Tools"
+msgstr "Багаж"
+
+#: src/interface.c:3539
 msgid ""
-"The executed custom command returned an error. Your selection was not "
-"changed. Error message: %s"
-msgstr ""
-
-#: ../src/tools.c:320
-msgid "The executed custom command exited with an unsuccessful exit code."
-msgstr ""
-
-#: ../src/tools.c:348 ../src/tools.c:396
-#, c-format
-msgid "Custom command failed: %s"
-msgstr ""
-
-#: ../src/tools.c:352
-#, c-format
-msgid "Passing data and executing custom command: %s"
-msgstr ""
-
-#: ../src/tools.c:498 ../src/tools.c:731
-msgid "Set Custom Commands"
-msgstr ""
-
-#: ../src/tools.c:506
-msgid ""
-"You can send the current selection to any of these commands and the output "
-"of the command replaces the current selection."
-msgstr ""
-
-#: ../src/tools.c:520
-msgid "ID"
-msgstr ""
-
-#: ../src/tools.c:706
-msgid "No custom commands defined."
-msgstr ""
-
-#: ../src/tools.c:800
-msgid "Word Count"
-msgstr "Үгийг Тоол"
-
-#: ../src/tools.c:810
-msgid "selection"
-msgstr "сонголт"
-
-#: ../src/tools.c:816
-msgid "whole document"
-msgstr "бүх барим"
-
-#: ../src/tools.c:825
-msgid "Range:"
-msgstr "Зай:"
-
-#: ../src/tools.c:837
-msgid "Lines:"
-msgstr "Мөр:"
-
-#: ../src/tools.c:851
-msgid "Words:"
-msgstr "Үг:"
-
-#: ../src/tools.c:865
-msgid "Characters:"
-msgstr "Тэмдэгт:"
-
-#: ../src/sidebar.c:175
-msgid "No tags found"
-msgstr ""
-
-#: ../src/sidebar.c:588
-msgid "Show S_ymbol List"
-msgstr ""
-
-#: ../src/sidebar.c:596
-#, fuzzy
-msgid "Show _Document List"
-msgstr "бүх барим"
-
-#: ../src/sidebar.c:604 ../plugins/filebrowser.c:658
-msgid "H_ide Sidebar"
-msgstr ""
-
-#: ../src/sidebar.c:709 ../plugins/filebrowser.c:629
-msgid "_Find in Files"
-msgstr ""
-
-#: ../src/sidebar.c:719
-msgid "Show _Paths"
-msgstr ""
-
-#. Status bar statistics: col = column, sel = selection.
-#: ../src/ui_utils.c:173
-msgid ""
-"line: %l / %L\t col: %c\t sel: %s\t %w      %t      %mmode: %M      "
-"encoding: %e      filetype: %f      scope: %S"
-msgstr ""
-
-#. RO = read-only
-#: ../src/ui_utils.c:203 ../src/ui_utils.c:210
-msgid "RO "
-msgstr ""
-
-#. OVR = overwrite/overtype, INS = insert
-#: ../src/ui_utils.c:205
-msgid "OVR"
-msgstr ""
-
-#: ../src/ui_utils.c:205
-msgid "INS"
-msgstr ""
-
-#: ../src/ui_utils.c:219
-msgid "TAB"
-msgstr ""
-
-#. SP = space
-#: ../src/ui_utils.c:222
-msgid "SP"
-msgstr ""
-
-#. T/S = tabs and spaces
-#: ../src/ui_utils.c:225
-msgid "T/S"
-msgstr ""
-
-#: ../src/ui_utils.c:233
-msgid "MOD"
-msgstr ""
-
-#: ../src/ui_utils.c:360
-msgid " (new instance)"
-msgstr ""
-
-#: ../src/ui_utils.c:390
-#, c-format
-msgid "Font updated (%s)."
-msgstr ""
-
-#: ../src/ui_utils.c:586
-msgid "C Standard Library"
-msgstr ""
-
-#: ../src/ui_utils.c:587
-msgid "ISO C99"
-msgstr ""
-
-#: ../src/ui_utils.c:588
-msgid "C++ (C Standard Library)"
-msgstr ""
-
-#: ../src/ui_utils.c:589
-msgid "C++ Standard Library"
-msgstr ""
-
-#: ../src/ui_utils.c:590
-msgid "C++ STL"
-msgstr ""
-
-#: ../src/ui_utils.c:652
-#, fuzzy
-msgid "_Set Custom Date Format"
-msgstr "Огнооны Хэлбэрүүдийг Хэрэглэх"
-
-#: ../src/ui_utils.c:1799
-msgid "Select Folder"
-msgstr ""
-
-#: ../src/ui_utils.c:1799
-#, fuzzy
-msgid "Select File"
-msgstr "Файлыг Хадгал"
-
-#: ../src/ui_utils.c:1958
-#, fuzzy
-msgid "Save All"
-msgstr "_Бүгдийг Үүсгэх\t"
-
-#: ../src/ui_utils.c:1959
-msgid "Close All"
-msgstr ""
-
-#: ../src/utils.c:87
-msgid "Select Browser"
-msgstr ""
-
-#: ../src/utils.c:88
-msgid ""
-"Failed to spawn the configured browser command. Please correct it or enter "
-"another one."
-msgstr ""
-
-#: ../src/utils.c:366
-msgid "Win (CRLF)"
-msgstr ""
-
-#: ../src/utils.c:367
-msgid "Mac (CR)"
-msgstr ""
-
-#: ../src/utils.c:368
-msgid "Unix (LF)"
-msgstr ""
-
-#: ../src/vte.c:545
-msgid "_Set Path From Document"
-msgstr ""
-
-#: ../src/vte.c:550
-msgid "_Restart Terminal"
-msgstr ""
-
-#: ../src/vte.c:573
-msgid "_Input Methods"
-msgstr ""
-
-#: ../src/vte.c:667
-msgid ""
-"Could not change the directory in the VTE because it probably contains a "
-"command."
-msgstr ""
-
-#: ../src/vte.c:765
-msgid "Font:"
-msgstr ""
-
-#: ../src/vte.c:775
-msgid "Sets the font for the terminal widget"
-msgstr ""
-
-#: ../src/vte.c:777
-msgid "Foreground color:"
-msgstr ""
-
-#: ../src/vte.c:783
-msgid "Background color:"
-msgstr ""
-
-#: ../src/vte.c:793
-msgid "Sets the foreground color of the text in the terminal widget"
-msgstr ""
-
-#: ../src/vte.c:800
-msgid "Sets the background color of the text in the terminal widget"
-msgstr ""
-
-#: ../src/vte.c:803
-msgid "Scrollback lines:"
-msgstr ""
-
-#: ../src/vte.c:815
-msgid ""
-"Specifies the history in lines, which you can scroll back in the terminal "
-"widget"
-msgstr ""
-
-#: ../src/vte.c:819
-msgid "Shell:"
-msgstr ""
-
-#: ../src/vte.c:827
-msgid ""
-"Sets the path to the shell which should be started inside the terminal "
-"emulation"
-msgstr ""
-
-#: ../src/vte.c:844
-msgid "Scroll on keystroke"
-msgstr ""
-
-#: ../src/vte.c:845
-msgid "Whether to scroll to the bottom if a key was pressed"
-msgstr ""
-
-#: ../src/vte.c:848
-msgid "Scroll on output"
-msgstr ""
-
-#: ../src/vte.c:849
-msgid "Whether to scroll to the bottom when output is generated"
-msgstr ""
-
-#: ../src/vte.c:852
-msgid "Cursor blinks"
-msgstr ""
-
-#: ../src/vte.c:853
-msgid "Whether to blink the cursor"
-msgstr ""
-
-#: ../src/vte.c:856
-msgid "Override Geany keybindings"
-msgstr ""
-
-#: ../src/vte.c:858
-msgid ""
-"Allows the VTE to receive keyboard shortcuts (apart from focus commands)"
-msgstr ""
-
-#: ../src/vte.c:861
-msgid "Disable menu shortcut key (F10 by default)"
-msgstr ""
-
-#: ../src/vte.c:862
-msgid ""
-"This option disables the keybinding to popup the menu bar (default is F10). "
-"Disabling it can be useful if you use, for example, Midnight Commander "
-"within the VTE."
-msgstr ""
-
-#: ../src/vte.c:865 ../plugins/filebrowser.c:1261
-#, fuzzy
-msgid "Follow the path of the current file"
-msgstr "Файлыг хөрвүүлээд харах"
-
-#: ../src/vte.c:866
-msgid "Whether to execute \"cd $path\" when you switch between opened files"
-msgstr ""
-
-#. create check_skip_script checkbox before the check_skip_script checkbox to be able to
-#. * use the object for the toggled handler of check_skip_script checkbox
-#: ../src/vte.c:871
-msgid "Don't use run script"
-msgstr ""
-
-#: ../src/vte.c:872
-msgid ""
-"Don't use the simple run script which is usually used to display the exit "
-"status of the executed program"
-msgstr ""
-
-#: ../src/vte.c:875
-msgid "Execute programs in VTE"
-msgstr ""
-
-#: ../src/vte.c:876
-msgid ""
-"Run programs in VTE instead of opening a terminal emulation window. Please "
-"note, programs executed in VTE cannot be stopped"
-msgstr ""
-
-#: ../src/win32.c:159
-msgid "Geany project files"
-msgstr ""
-
-#: ../src/win32.c:165
-#, fuzzy
-msgid "Executables"
-msgstr "Ажиллуул:"
-
-#: ../plugins/classbuilder.c:38
-msgid "Class Builder"
-msgstr ""
-
-#: ../plugins/classbuilder.c:38
-msgid "Creates source files for new class types."
-msgstr ""
-
-#: ../plugins/classbuilder.c:435
-msgid "Create Class"
-msgstr ""
-
-#: ../plugins/classbuilder.c:446
-msgid "Create C++ Class"
-msgstr ""
-
-#: ../plugins/classbuilder.c:449
-msgid "Create GTK+ Class"
-msgstr ""
-
-#: ../plugins/classbuilder.c:452
-msgid "Create PHP Class"
-msgstr ""
-
-#: ../plugins/classbuilder.c:469
-msgid "Namespace"
-msgstr ""
-
-#: ../plugins/classbuilder.c:476 ../plugins/classbuilder.c:478
-msgid "Class"
-msgstr ""
-
-#: ../plugins/classbuilder.c:485
-msgid "Header file:"
-msgstr ""
-
-#: ../plugins/classbuilder.c:487
-#, fuzzy
-msgid "Source file:"
-msgstr "Файлын төрлийг заа:"
-
-#: ../plugins/classbuilder.c:489
-msgid "Inheritance"
-msgstr ""
-
-#: ../plugins/classbuilder.c:491
-msgid "Base class:"
-msgstr ""
-
-#: ../plugins/classbuilder.c:499
-msgid "Base source:"
-msgstr ""
-
-#: ../plugins/classbuilder.c:504
-msgid "Base header:"
-msgstr ""
-
-#: ../plugins/classbuilder.c:512
-msgid "Global"
-msgstr ""
-
-#: ../plugins/classbuilder.c:531
-msgid "Base GType:"
-msgstr ""
-
-#: ../plugins/classbuilder.c:536
-msgid "Implements:"
-msgstr ""
-
-#: ../plugins/classbuilder.c:538
-msgid "Options"
-msgstr ""
-
-#: ../plugins/classbuilder.c:555
-msgid "Create constructor"
-msgstr ""
-
-#: ../plugins/classbuilder.c:560
-msgid "Create destructor"
-msgstr ""
-
-#: ../plugins/classbuilder.c:567
-msgid "Is abstract"
-msgstr ""
-
-#: ../plugins/classbuilder.c:570
-msgid "Is singleton"
-msgstr ""
-
-#: ../plugins/classbuilder.c:580
-msgid "Constructor type:"
-msgstr ""
-
-#: ../plugins/classbuilder.c:1092
-msgid "Create Cla_ss"
-msgstr ""
-
-#: ../plugins/classbuilder.c:1098
-msgid "_C++ Class"
-msgstr ""
-
-#: ../plugins/classbuilder.c:1101
-msgid "_GTK+ Class"
-msgstr ""
-
-#: ../plugins/classbuilder.c:1104
-msgid "_PHP Class"
-msgstr ""
-
-#: ../plugins/htmlchars.c:41
-#, fuzzy
-msgid "HTML Characters"
-msgstr "Тэмдэгт:"
-
-#: ../plugins/htmlchars.c:41
-msgid "Inserts HTML character entities like '&amp;'."
-msgstr ""
-
-#: ../plugins/htmlchars.c:42 ../plugins/export.c:40
-#: ../plugins/filebrowser.c:46 ../plugins/saveactions.c:42
-#: ../plugins/splitwindow.c:35
-msgid "The Geany developer team"
-msgstr ""
-
-#: ../plugins/htmlchars.c:78
-#, fuzzy
-msgid "HTML characters"
-msgstr "Тэмдэгт:"
-
-#: ../plugins/htmlchars.c:84
-msgid "ISO 8859-1 characters"
-msgstr ""
-
-#: ../plugins/htmlchars.c:182
-#, fuzzy
-msgid "Greek characters"
-msgstr "Тэмдэгт:"
-
-#: ../plugins/htmlchars.c:237
-msgid "Mathematical characters"
-msgstr ""
-
-#: ../plugins/htmlchars.c:278
-msgid "Technical characters"
-msgstr ""
-
-#: ../plugins/htmlchars.c:286
-#, fuzzy
-msgid "Arrow characters"
-msgstr "Тэмдэгт:"
-
-#: ../plugins/htmlchars.c:299
-msgid "Punctuation characters"
-msgstr ""
-
-#: ../plugins/htmlchars.c:315
-msgid "Miscellaneous characters"
-msgstr ""
-
-#: ../plugins/htmlchars.c:370 ../plugins/filebrowser.c:1153
-#: ../plugins/saveactions.c:475
-msgid "Plugin configuration directory could not be created."
-msgstr ""
-
-#: ../plugins/htmlchars.c:491
-#, fuzzy
-msgid "Special Characters"
-msgstr "Тэмдэгт:"
-
-#: ../plugins/htmlchars.c:493
-msgid "_Insert"
-msgstr ""
-
-#: ../plugins/htmlchars.c:502
-msgid ""
-"Choose a special character from the list below and double click on it or use "
-"the button to insert it at the current cursor position."
-msgstr ""
-
-#: ../plugins/htmlchars.c:516
-#, fuzzy
-msgid "Character"
-msgstr "Тэмдэгт:"
-
-#: ../plugins/htmlchars.c:522
-msgid "HTML (name)"
-msgstr ""
-
-#: ../plugins/htmlchars.c:740
-msgid "_Insert Special HTML Characters"
-msgstr ""
-
-#. Add menuitem for html replacement functions
-#: ../plugins/htmlchars.c:755
-msgid "_HTML Replacement"
-msgstr ""
-
-#: ../plugins/htmlchars.c:762
-msgid "_Auto-replace Special Characters"
-msgstr ""
-
-#: ../plugins/htmlchars.c:771
-msgid "_Replace Characters in Selection"
-msgstr ""
-
-#: ../plugins/htmlchars.c:786
-msgid "Insert Special HTML Characters"
-msgstr ""
-
-#: ../plugins/htmlchars.c:789
-msgid "Replace special characters"
-msgstr ""
-
-#: ../plugins/htmlchars.c:792
-msgid "Toggle plugin status"
-msgstr ""
-
-#: ../plugins/export.c:39
-msgid "Export"
-msgstr ""
-
-#: ../plugins/export.c:39
-#, fuzzy
-msgid "Exports the current file into different formats."
-msgstr "Файлыг DVI файл-руу хөрвүүл"
-
-#: ../plugins/export.c:171
-#, fuzzy
-msgid "Export File"
-msgstr "Файл Нээх"
-
-#: ../plugins/export.c:189
-msgid "_Insert line numbers"
-msgstr ""
-
-#: ../plugins/export.c:191
-msgid "Insert line numbers before each line in the exported document"
-msgstr ""
-
-#: ../plugins/export.c:201
-msgid "_Use current zoom level"
-msgstr ""
-
-#: ../plugins/export.c:203
-msgid ""
-"Renders the font size of the document together with the current zoom level"
-msgstr ""
-
-#: ../plugins/export.c:281
-#, c-format
-msgid "Document successfully exported as '%s'."
-msgstr ""
-
-#: ../plugins/export.c:283
-#, fuzzy, c-format
-msgid "File '%s' could not be written (%s)."
-msgstr "Процесс зогсож чадахгүй байсан (%s)."
-
-#: ../plugins/export.c:333
-#, c-format
-msgid "The file '%s' already exists. Do you want to overwrite it?"
-msgstr "'%s' файл үүсчихсэн байна. Дарж бичих үү?"
-
-#: ../plugins/export.c:781
-msgid "_Export"
-msgstr ""
-
-#. HTML
-#: ../plugins/export.c:788
-msgid "As _HTML"
-msgstr ""
-
-#. LaTeX
-#: ../plugins/export.c:794
-msgid "As _LaTeX"
-msgstr ""
-
-#: ../plugins/filebrowser.c:45
-msgid "File Browser"
-msgstr ""
-
-#: ../plugins/filebrowser.c:45
-msgid "Adds a file browser tab to the sidebar."
-msgstr ""
-
-#: ../plugins/filebrowser.c:368
-msgid "Too many items selected!"
-msgstr ""
-
-#: ../plugins/filebrowser.c:444
-#, c-format
-msgid "Could not execute configured external command '%s' (%s)."
-msgstr ""
-
-#: ../plugins/filebrowser.c:614
-msgid "Open _externally"
-msgstr ""
-
-#: ../plugins/filebrowser.c:639
-#, fuzzy
-msgid "Show _Hidden Files"
-msgstr "_Нууц файлуудыг харуул"
-
-#: ../plugins/filebrowser.c:870
-msgid "Up"
-msgstr ""
-
-#: ../plugins/filebrowser.c:875
-msgid "Refresh"
-msgstr ""
-
-#: ../plugins/filebrowser.c:880
-msgid "Home"
-msgstr ""
-
-#: ../plugins/filebrowser.c:885
-#, fuzzy
-msgid "Set path from document"
-msgstr "бүх барим"
-
-#: ../plugins/filebrowser.c:899
-msgid "Filter:"
-msgstr ""
-
-#: ../plugins/filebrowser.c:908
-msgid ""
-"Filter your files with the usual wildcards. Separate multiple patterns with "
-"a space."
-msgstr ""
-
-#: ../plugins/filebrowser.c:1123
-msgid "Focus File List"
-msgstr ""
-
-#: ../plugins/filebrowser.c:1125
-msgid "Focus Path Entry"
-msgstr ""
-
-#: ../plugins/filebrowser.c:1218
-msgid "External open command:"
-msgstr ""
-
-#: ../plugins/filebrowser.c:1226
-#, c-format
-msgid ""
-"The command to execute when using \"Open with\". You can use %f and %d "
-"wildcards.\n"
-"%f will be replaced with the filename including full path\n"
-"%d will be replaced with the path name of the selected file without the "
-"filename"
-msgstr ""
-
-#: ../plugins/filebrowser.c:1234
-#, fuzzy
-msgid "Show hidden files"
-msgstr "_Нууц файлуудыг харуул"
-
-#: ../plugins/filebrowser.c:1242
-#, fuzzy
-msgid "Hide file extensions:"
-msgstr "Файлыг өргөтгөлийг тогтоо"
-
-#: ../plugins/filebrowser.c:1267
-msgid "Use the project's base directory"
-msgstr ""
-
-#: ../plugins/filebrowser.c:1271
-msgid ""
-"Change the directory to the base directory of the currently opened project"
-msgstr ""
-
-#: ../plugins/saveactions.c:41
-msgid "Save Actions"
-msgstr ""
-
-#: ../plugins/saveactions.c:41
-msgid "This plugin provides different actions related to saving of files."
-msgstr ""
-
-#: ../plugins/saveactions.c:171
-#, fuzzy, c-format
-msgid "Backup Copy: Directory could not be created (%s)."
-msgstr "Процесс зогсож чадахгүй байсан (%s)."
-
-#. it's unlikely that this happens
-#: ../plugins/saveactions.c:203
-#, fuzzy, c-format
-msgid "Backup Copy: File could not be read (%s)."
-msgstr "Процесс зогсож чадахгүй байсан (%s)."
-
-#: ../plugins/saveactions.c:221
-#, fuzzy, c-format
-msgid "Backup Copy: File could not be saved (%s)."
-msgstr "Процесс зогсож чадахгүй байсан (%s)."
-
-#: ../plugins/saveactions.c:313
-#, c-format
-msgid "Autosave: Saved %d file automatically."
-msgid_plural "Autosave: Saved %d files automatically."
-msgstr[0] ""
-msgstr[1] ""
-
-#. initialize the dialog
-#: ../plugins/saveactions.c:382
-msgid "Select Directory"
-msgstr ""
-
-#: ../plugins/saveactions.c:467
-msgid "Backup directory does not exist or is not writable."
-msgstr ""
-
-#: ../plugins/saveactions.c:548
-msgid "Auto Save"
-msgstr ""
-
-#: ../plugins/saveactions.c:550 ../plugins/saveactions.c:612
-#: ../plugins/saveactions.c:653
-msgid "_Enable"
-msgstr ""
-
-#: ../plugins/saveactions.c:558
-msgid "Auto save _interval:"
-msgstr ""
-
-#: ../plugins/saveactions.c:566
-msgid "seconds"
-msgstr ""
-
-#: ../plugins/saveactions.c:575
-msgid "_Print status message if files have been automatically saved"
-msgstr ""
-
-#: ../plugins/saveactions.c:583
-msgid "Save only current open _file"
-msgstr ""
-
-#: ../plugins/saveactions.c:590
-msgid "Sa_ve all open files"
-msgstr ""
-
-#: ../plugins/saveactions.c:610
-msgid "Instant Save"
-msgstr ""
-
-#: ../plugins/saveactions.c:620
-msgid "_Filetype to use for newly opened files:"
-msgstr ""
-
-#: ../plugins/saveactions.c:651
-msgid "Backup Copy"
-msgstr ""
-
-#: ../plugins/saveactions.c:661
-msgid "_Directory to save backup files in:"
-msgstr ""
-
-#: ../plugins/saveactions.c:684
-msgid "Date/_Time format for backup files (\"man strftime\" for details):"
-msgstr ""
-
-#: ../plugins/saveactions.c:697
-msgid "Directory _levels to include in the backup destination:"
-msgstr ""
-
-#: ../plugins/splitwindow.c:34
-msgid "Split Window"
-msgstr ""
-
-#: ../plugins/splitwindow.c:34
-msgid "Splits the editor view into two windows."
-msgstr ""
-
-#: ../plugins/splitwindow.c:273
-#, fuzzy
-msgid "Show the current document"
-msgstr "бүх барим"
-
-#: ../plugins/splitwindow.c:290 ../plugins/splitwindow.c:424
-#: ../plugins/splitwindow.c:439
-msgid "_Unsplit"
-msgstr ""
-
-#: ../plugins/splitwindow.c:406
-msgid "_Split Window"
-msgstr ""
-
-#: ../plugins/splitwindow.c:414
-msgid "_Side by Side"
-msgstr ""
-
-#: ../plugins/splitwindow.c:419
-msgid "_Top and Bottom"
-msgstr ""
-
-#: ../plugins/splitwindow.c:435
-msgid "Split Horizontally"
-msgstr ""
-
-#: ../plugins/splitwindow.c:437
-msgid "Split Vertically"
-msgstr ""
-
-#~ msgid "language"
-#~ msgstr "хэл"
-
-#~ msgid "Failed to view %s (make sure it is already compiled)"
-#~ msgstr "%s-ийг харахад алдаа гарлаа (Хөрвүүлэгдсэн эсэхийг шалгана уу)"
-
-#~ msgid "Command stopped because the current file has no extension."
-#~ msgstr "Файлд өргөтгөл байхгүй учраас комманд зогслоо."
-
-# stat гэж юу вэ???
-#~ msgid "Something very strange is occurred, could not stat %s (%s)."
-#~ msgstr "Тодорхойгүй шалтгаанаар %s-ийг эхлүүлж чадсангүй (%s)."
-
-#~ msgid "Failed to execute %s (make sure it is already built)"
-#~ msgstr ""
-#~ "%s-ийг ажиллуулахад алдаа гарлаа (боловсруулагдсан эсэхийг шалгана уу)"
-
-#~ msgid "Builds the current file (generate an executable file)"
-#~ msgstr "Файлыг боловсруул (ажиллуулах файлыг үүсгэ)"
-
-#~ msgid "Compiles the current file using the make tool"
-#~ msgstr "Үүсгэх хэрэгслээр файлыг хөрвүүл"
-
-#~ msgid "_Set Includes and Arguments"
-#~ msgstr "_Оруулалт болон Аргументийг зааж өгөх"
-
-#~ msgid ""
-#~ "Sets the includes and library paths for the compiler and the program "
-#~ "arguments for execution"
-#~ msgstr ""
-#~ "Хөрвүүлэгчийн оруулалт болон сангийн зам, програмын аргументийг зааж өгөх"
-
-#~ msgid "LaTeX -> DVI"
-#~ msgstr "LaTex -> DVI"
-
-#~ msgid "LaTeX -> PDF"
-#~ msgstr "LaTeX -> PDF"
-
-#~ msgid "View DVI File"
-#~ msgstr "DVI файлыг харах"
-
-#~ msgid "View PDF File"
-#~ msgstr "PDF файлыг харах"
-
-#~ msgid "Set Arguments"
-#~ msgstr "Аргументийг зааж өгөх"
-
-#~ msgid "Sets the program paths and arguments"
-#~ msgstr "Програмын зам болон аргументийг зааж өгөх"
-
-#~ msgid "Failed to execute the view program"
-#~ msgstr "View програмыг ажиллуулахад алдаа гарлаа"
-
-#~ msgid "Failed to execute the terminal program"
-#~ msgstr "Terminal програмыг ажиллуулахад алдаа гарлаа"
-
-#~ msgid "Set programs and options for compiling and viewing (La)TeX files."
-#~ msgstr "(La)Tex файлыг хөрвүүлэх болон харах програм болон тохиргоог оруул."
-
-#~ msgid "PDF creation:"
-#~ msgstr "PDF үүсэлт:"
-
-#~ msgid "DVI preview:"
-#~ msgstr "DVI харагдац:"
-
-#~ msgid "PDF preview:"
-#~ msgstr "PDF харагдац:"
-
-#~ msgid ""
-#~ "%f will be replaced by the current filename, e.g. test_file.c\n"
-#~ "%e will be replaced by the filename without extension, e.g. test_file"
-#~ msgstr ""
-#~ "%f файлын нэрээр солигдоно: test_file.c\n"
-#~ "%e өртгөтгөлгүй файлын нэрээр солигдоно: test_file"
-
-#~ msgid "Set Includes and Arguments"
-#~ msgstr "Оруулалт болон Аргументийг заа"
-
-#~ msgid "Set the commands for building and running programs."
-#~ msgstr "Програмыг боловсруулах болон ажиллуулах командуудыг заа."
-
-#~ msgid "Build:"
-#~ msgstr "Боловсруул:"
-
-#~ msgid "Invalid filename"
-#~ msgstr "Invalid filename"
+"Set the information to be used in templates. See the documentation for "
+"details."
+msgstr "Темплэйтүүдэд мэдээллийг заа. Дэлгэрэнгүйг бичиг баримтаас үзнэ үү."
+
+#: src/interface.c:3557
+msgid "email address of the developer"
+msgstr "хөгжүүлэгчийн цахим хаяг"
+
+#: src/interface.c:3564
+msgid "Initials of the developer name"
+msgstr "Анхны хөгжүүлэгчийн нэр"
+
+#: src/interface.c:3566
+msgid "Initial Version:"
+msgstr "Эхний Хувилбар:"
+
+#: src/interface.c:3578
+msgid "Version number, which a new file initially has"
+msgstr "Шинээр үүссэн файлын хувилбар нь"
+
+#: src/interface.c:3585
+msgid "Company name"
+msgstr "Компаний нэр"

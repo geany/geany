@@ -419,8 +419,8 @@ Programming languages should have:
 * [build_settings] for commands to run.
 
 For languages with a Scintilla lexer, there should be a [styling] section,
-to correspond to the styles used in styleset_foo() in highlighting.c -
-see below.
+to correspond to the styles used in highlighting_styles_FOO[] in
+highlightingmappings.h - see below.
 
 Syntax highlighting
 ^^^^^^^^^^^^^^^^^^^
@@ -440,21 +440,33 @@ When adding a lexer, update:
 * wscript
 * scintilla/KeyWords.cxx - add a LINK_LEXER command *manually*
 
-For syntax highlighting, you will need to edit highlighting.c and add
-the following things:
+For syntax highlighting, you will need to edit highlighting.c and
+highlightingmappings.h and add the following things:
 
-1. Write styleset_foo_init() to setup lexer styles and load style
-   settings from the filetypes.foo configuration file. You should probably
-   start by copying and adapting another filetype's initialization, such
-   as styleset_tcl_init(). You may want to use load_style_entries().
-2. Write styleset_foo() to apply styles when a new scintilla widget
-   is created. Again you could copy and adapt a function like
-   styleset_tcl(). You may want to use apply_style_entries().
-3. In highlighting_init_styles(), add
-   ``init_styleset_case(GEANY_FILETYPES_FOO, styleset_foo_init);``.
-4. In highlighting_set_styles(), add
-   ``styleset_case(GEANY_FILETYPES_FOO, styleset_foo);``.
-5. Write data/filetypes.foo configuration file [styling] section. See
+1. In highlightingmappings.h:
+
+   a. define ``highlighting_lexer_FOO`` to the Scintilla lexer ID for
+      this filtype, e.g. ``SCLEX_CPP``.
+   b. define the ``highlighting_styles_FOO`` array that maps Scintilla
+      style states to style names in the configuration file.
+   c. define ``highlighting_keywords_FOO`` to ``EMPTY_KEYWORDS`` if the
+      filtype has no keywords, or as an ``HLKeyword`` array mapping
+      the Scintilla keyword IDs to names in the configuration file.
+   d. define ``highlighting_properties_FOO`` to ``EMPTY_PROPERTIES``, or
+      as an array of ``HLProperty`` if the filetype requires some lexer
+      properties to be set.  However, note that properties should
+      normally be set in the ``[lexer_properties]`` section of the
+      configuration file instead.
+
+   You may look at other filtype's definitions for some examples
+   (Ada, CSS or Diff being good examples).
+
+2. In highlighting.c:
+
+   a. Add ``init_styleset_case(FOO);`` in ``highlighting_init_styles()``.
+   b. Add ``styleset_case(FOO);`` in ``highlighting_set_styles()``.
+
+3. Write data/filetypes.foo configuration file [styling] section. See
    the manual and see data/filetypes.d for a named style example.
 
 .. note::
@@ -486,7 +498,7 @@ For brace indentation, update lexer_has_braces() in editor.c;
 indentation after ':' is done from on_new_line_added().
 
 If the Scintilla lexer supports user type keyword highlighting (e.g.
-SCLEX_CPP), update document_update_type_keywords() in document.c.
+SCLEX_CPP), update document_update_tags() in document.c.
 
 Adding a TagManager parser
 ^^^^^^^^^^^^^^^^^^^^^^^^^^

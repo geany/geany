@@ -232,11 +232,9 @@ gint document_replace_all(GeanyDocument *doc, const gchar *find_text, const gcha
 void document_replace_sel(GeanyDocument *doc, const gchar *find_text, const gchar *replace_text,
 						  const gchar *original_find_text, const gchar *original_replace_text, gint flags);
 
-void document_update_tag_list(GeanyDocument *doc, gboolean update);
+void document_update_tags(GeanyDocument *doc);
 
 void document_update_tag_list_in_idle(GeanyDocument *doc);
-
-void document_update_type_keywords(GeanyDocument *doc);
 
 void document_set_encoding(GeanyDocument *doc, const gchar *new_encoding);
 

@@ -6,7 +6,7 @@ PREFIX = C:\libs
 RM = del
 -include ../localwin32.mk
 .SUFFIXES:
-.SUFFIXES: .c .dll
+.SUFFIXES: .c .o .dll
 
 GTK_INCLUDES= \
 	-I$(PREFIX)/include/gtk-2.0 \
@@ -46,9 +46,11 @@ endif
 
 all: plugins
 
-.c.dll:
-	$(CC) $(CFLAGS) $(DEFINES) $(INCLUDEDIRS) -o $@.o -c $<
-	$(CC) -shared $@.o $(ALL_GTK_LIBS) $(DLL_LD_FLAGS) -o $@
+.c.o:
+	$(CC) $(CFLAGS) $(DEFINES) $(INCLUDEDIRS) -o $@ -c $<
+
+.o.dll:
+	$(CC) -shared $< $(ALL_GTK_LIBS) $(DLL_LD_FLAGS) -o $@
 
 plugins: \
 		htmlchars.dll \

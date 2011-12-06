@@ -1821,10 +1821,14 @@ static void on_clear_dialog_regex_row(GtkEntry *regex, gpointer unused)
 static void on_label_button_clicked(GtkWidget *wid, gpointer user_data)
 {
 	RowWidgets *r = user_data;
+	GtkWidget *top_level = gtk_widget_get_toplevel(wid);
 	const gchar *old = gtk_button_get_label(GTK_BUTTON(wid));
-	/* FIXME: we should pass either build dialog or project dialog instead of NULL for parent */
-	gchar *str = dialogs_show_input(_("Set menu item label"),
-		NULL, NULL, old);
+	gchar *str;
+
+	if (GTK_WIDGET_TOPLEVEL(top_level) && GTK_IS_WINDOW(top_level))
+		str = dialogs_show_input(_("Set menu item label"), GTK_WINDOW(top_level), NULL, old);
+	else
+		str = dialogs_show_input(_("Set menu item label"), NULL, NULL, old);
 
 	if (!str)
 		return;
@@ -2170,8 +2174,9 @@ static gboolean read_regex(GtkWidget *regexentry, gchar **src, gchar **dst)
 	if (((src == NULL			/* originally there was no regex */
 		|| *src == NULL)		/* or it was NULL*/
 		&& NZV(reg))			/* and something was typed */
-		|| (src != NULL				/* originally there was a regex*/
-		&& strcmp(*src, reg) != 0))	/* and it has been changed */
+		|| (src != NULL			/* originally there was a regex*/
+		&& (*src == NULL 		/* and either it was NULL */
+		|| strcmp(*src, reg) != 0)))	/* or it has been changed */
 	{
 		if (dst != NULL)
 		{

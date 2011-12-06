@@ -245,7 +245,7 @@ On Unix-like systems this is commonly ``/usr`` if you installed from
 a binary package, or ``/usr/local`` if you build from source.
 
 .. note::
-    Editing system files is not necessary as you can use the
+    Editing system files is not necessary as you should use the
     per-user configuration files instead, which don't need root
     permissions. See `Configuration files`_.
 
@@ -361,6 +361,11 @@ Short option  Long option              Function
                                        directory and the locale directory (in that order) to
                                        stdout, one line each. This is mainly intended for plugin
                                        authors to detect installation paths.
+
+-r            --read-only              Open all files given on the command line in read-only mode.
+                                       This only applies to files opened explicitly from the command
+                                       line, so files from previous sessions or project files are
+                                       unaffected.
 
 -s            --no-session             Do not load the previous session's files.
 
@@ -1351,24 +1356,24 @@ in the current selection of the current document.
 Go to tag definition
 ^^^^^^^^^^^^^^^^^^^^
 
-If the current word is the name of a tag definition (like a function
-body) and the file containing the tag definition is open, this command
-will switch to that file and go to the corresponding line number. The
-current word is either the word nearest the edit cursor,
-or the word underneath the popup menu click position when the popup
-menu is used.
+If the current word or selection is the name of a tag definition
+(e.g. a function name) and the file containing the tag definition is
+open, this command will switch to that file and go to the
+corresponding line number. The current word is either the word
+nearest the edit cursor, or the word underneath the popup menu click
+position when the popup menu is used.
 
 .. note::
-    If the current word's tag is on the current line, Geany will try
-    to look for a tag declaration instead, as this is more useful.
-    Likewise 'Go to tag declaration' will search for a tag definition
-    in this case also.
+    If the corresponding tag is on the current line, Geany will first
+    look for a tag declaration instead, as this is more useful.
+    Likewise *Go to tag declaration* will search for a tag definition
+    first in this case also.
 
 
 Go to tag declaration
 ^^^^^^^^^^^^^^^^^^^^^
 
-Like Go to tag definition, but for a forward declaration such as a
+Like *Go to tag definition*, but for a forward declaration such as a
 C function prototype or ``extern`` declaration instead of a function
 body.
 
@@ -1773,12 +1778,13 @@ Project files
     Path to start in when opening project files.
 
 Extra plugin path
-	By default Geany looks in the global installation path and in the
-	configuration directory. In addition the path entered here will be searched
-	for plugins. Usually you do not need to set an additional path to search for
-	plugins. It might be useful when Geany is installed on a multi-user machine
-	and additional plugins are available in a common location for all users.
-	Leave blank to not set an additional lookup path.
+    By default Geany looks in the system installation and the user
+    configuration - see `Plugins`_. In addition the path entered here will be
+    searched.
+    Usually you do not need to set an additional path to search for
+    plugins. It might be useful when Geany is installed on a multi-user machine
+    and additional plugins are available in a common location for all users.
+    Leave blank to not set an additional lookup path.
 
 
 General Miscellaneous preferences
@@ -2511,6 +2517,15 @@ send_selection_unsafe             By default, Geany strips any trailing        f
                                   If, for whatever reasons, you really want
                                   it to be executed directly, set this option
                                   to true.
+send_cmd_prefix                   String with which prefix the commands sent   Empty       immediately
+                                  to the shell.  This may be used to tell
+                                  some shells (BASH with ``HISTCONTROL`` set
+                                  to ``ignorespace``, ZSH with
+                                  ``HIST_IGNORE_SPACE`` enabled, etc.) from
+                                  putting these commands in their history by
+                                  setting this to a space.  Note that leading
+                                  spaces must be escaped using `\s` in the
+                                  configuration file.
 **File related**
 use_atomic_file_saving            Defines the mode how Geany saves files to    false       immediately
                                   disk. If disabled, Geany directly writes
@@ -3109,7 +3124,8 @@ general preference is set. There is also a command-line option,
 ``-p``, which prevents plugins being loaded. Plugins are scanned in
 the following directories:
 
-* ``$prefix/lib/geany`` (see `Installation prefix`_)
+* ``$prefix/lib/geany`` on Unix-like systems (see `Installation prefix`_)
+* The ``lib`` subfolder of the installation path on Windows.
 * The ``plugins`` subfolder of the user configuration directory - see
   `Configuration file paths`_.
 * The `Extra plugin path` preference (usually blank) - see `Paths`_.
@@ -3142,7 +3158,7 @@ by any custom keybindings with the same keyboard shortcut.
 Switching documents
 ^^^^^^^^^^^^^^^^^^^
 
-There are a few non-configurable bindings to switch between documents,
+There are some non-configurable bindings to switch between documents,
 listed below. These can also be overridden by custom keybindings.
 
 =============== ==================================
@@ -3150,9 +3166,9 @@ Key             Action
 =============== ==================================
 Alt-[1-9]       Select left-most tab, from 1 to 9.
 Alt-0           Select right-most tab.
-Ctrl-Shift-PgUp Select left-most tab.
-Ctrl-Shift-PgDn Select right-most tab.
 =============== ==================================
+
+See also `Notebook tab keybindings`_.
 
 
 Configurable keybindings
@@ -3224,7 +3240,7 @@ Delete to line end              Ctrl-Shift-Delete         Deletes from the curre
 
 Duplicate line or selection     Ctrl-D                    Duplicates the current line or selection.
 
-Transpose current line          Ctrl-T                    Transposes the current line with the previous one.
+Transpose current line                                    Transposes the current line with the previous one.
 
 Scroll to current line          Ctrl-Shift-L              Scrolls the current line into the centre of the
                                                           view. The cursor position and or an existing
@@ -3272,10 +3288,10 @@ Word part completion            Tab                       When the autocompletio
                                                           the currently selected item up to the next word
                                                           part.
 
-Move line(s) up                                           Move the current line or selected lines up by
+Move line(s) up                 Alt-PageUp                Move the current line or selected lines up by
                                                           one line.
 
-Move line(s) down                                         Move the current line or selected lines down by
+Move line(s) down               Alt-PageDown              Move the current line or selected lines down by
                                                           one line.
 =============================== ========================= ==================================================
 
@@ -3428,12 +3444,12 @@ Next message                                              Jumps to the line with
 Previous message                                          Jumps to the line with the previous message
                                                           in the Messages window.
 
-Find Usage                                                Finds all occurrences of the current word (near
+Find Usage                      Ctrl-Shift-E              Finds all occurrences of the current word (near
                                                           the keyboard cursor) or selection in all open
                                                           documents and displays them in the messages
                                                           window.
 
-Find Document Usage                                       Finds all occurrences of the current word (near
+Find Document Usage             Ctrl-Shift-D              Finds all occurrences of the current word (near
                                                           the keyboard cursor) or selection in the current
                                                           document and displays them in the messages
                                                           window.
@@ -3450,11 +3466,11 @@ Go to keybindings
 =============================== ========================= ==================================================
 Action                          Default shortcut          Description
 =============================== ========================= ==================================================
-Navigate forward a location                               Switches to the next location in the navigation
+Navigate forward a location     Alt-Right  (C)            Switches to the next location in the navigation
                                                           history. See the section called `Code Navigation
                                                           History`_.
 
-Navigate back a location                                  Switches to the previous location in the
+Navigate back a location        Alt-Left  (C)             Switches to the previous location in the
                                                           navigation history. See the section called
                                                           `Code navigation history`_.
 
@@ -3473,17 +3489,11 @@ Goto next marker                Ctrl-.                    Goto the next marker i
 
 Goto previous marker            Ctrl-,                    Goto the previous marker in the current document.
 
-Go to tag definition                                      Jump to the definition of the current word (near
-                                                          the keyboard cursor). If the definition cannot be
-                                                          found (e.g. the relevant file is not open) Geany
-                                                          will beep and do nothing. See the section called
-                                                          `Go to tag definition`_.
+Go to tag definition            Ctrl-T                    Jump to the definition of the current word or
+                                                          selection. See `Go to tag definition`_.
 
-Go to tag declaration                                     Jump to the declaration of the current word (near
-                                                          the keyboard cursor). If the declaration cannot be
-                                                          found (e.g. the relevant file is not open) Geany
-                                                          will beep and do nothing. See the section called
-                                                          `Go to tag declaration`_.
+Go to tag declaration           Ctrl-Shift-T              Jump to the declaration of the current word or
+                                                          selection. See `Go to tag declaration`_.
 
 Go to Start of Line             Home                      Move the caret to the end of the line indentation
                                                           unless it is already there, in which case it moves
@@ -3575,10 +3585,10 @@ Switch to last used document    Ctrl-Tab                  Switches to the previo
                                                           used document, 3rd-last, etc. Also known as
                                                           Most-Recently-Used documents switching.
 
-Move document left              Alt-PageUp                Changes the current document with the left hand
+Move document left              Ctrl-Shift-PageUp         Changes the current document with the left hand
                                                           one.
 
-Move document right             Alt-PageDown              Changes the current document with the right hand
+Move document right             Ctrl-Shift-PageDown       Changes the current document with the right hand
                                                           one.
 
 Move document first                                       Moves the current document to the first position.
@@ -3636,7 +3646,7 @@ Make all                        Shift-F9                  Builds the current fil
 Make custom target              Ctrl-Shift-F9             Builds the current file with the Make tool and a
                                                           given target.
 
-Make object                                               Compiles the current file with the Make tool.
+Make object                     Shift-F8                  Compiles the current file with the Make tool.
 
 Next error                                                Jumps to the line with the next error from the
                                                           last build process.
@@ -3703,8 +3713,16 @@ Paths on Unix-like systems
 The system path is ``$prefix/share/geany``, where ``$prefix`` is the
 path where Geany is installed (see `Installation prefix`_).
 
-The user configuration directory is normally
-``/home/username/.config/geany/``.
+The user configuration directory is normally:
+``/home/username/.config/geany``
+
+Paths on Windows
+^^^^^^^^^^^^^^^^
+The system path is the ``data`` subfolder of the installation path
+on Windows.
+
+The user configuration directory might vary, but on Windows XP it's:
+``C:\Documents and Settings\UserName\Application Data\geany``
 
 
 Tools menu items

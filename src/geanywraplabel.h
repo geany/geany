@@ -19,8 +19,8 @@
  *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef __GEANY_WRAP_LABEL_H__
-#define __GEANY_WRAP_LABEL_H__
+#ifndef GEANY_WRAP_LABEL_H
+#define GEANY_WRAP_LABEL_H
 
 G_BEGIN_DECLS
 
@@ -45,4 +45,4 @@ GtkWidget*		geany_wrap_label_new				(const gchar *text);
 
 G_END_DECLS
 
-#endif /* __GEANY_WRAP_LABEL_H__ */
+#endif /* GEANY_WRAP_LABEL_H */

@@ -103,7 +103,6 @@ typedef struct
 
 static void document_undo_clear(GeanyDocument *doc);
 static void document_redo_add(GeanyDocument *doc, guint type, gpointer data);
-static gboolean update_tags_from_buffer(GeanyDocument *doc);
 static gboolean remove_page(guint page_num);
 
 
@@ -718,11 +717,10 @@ GeanyDocument *document_new_file(const gchar *utf8_filename, GeanyFiletype *ft, 
 	if (ft == NULL && utf8_filename != NULL) /* guess the filetype from the filename if one is given */
 		ft = filetypes_detect_from_document(doc);
 
-	document_set_filetype(doc, ft);	/* also clears taglist */
+	document_set_filetype(doc, ft); /* also re-parses tags */
 
 	ui_set_window_title(doc);
 	build_menu_update(doc);
-	document_update_tag_list(doc, FALSE);
 	document_set_text_changed(doc, FALSE);
 	ui_document_show_hide(doc); /* update the document menu */
 
@@ -1487,7 +1485,7 @@ static gsize save_convert_to_encoding(GeanyDocument *doc, gchar **data, gsize *l
 	gsize bytes_read;
 	gsize conv_len;
 
-	g_return_val_if_fail(data != NULL || *data == NULL, FALSE);
+	g_return_val_if_fail(data != NULL && *data != NULL, FALSE);
 	g_return_val_if_fail(len != NULL, FALSE);
 
 	/* try to convert it from UTF-8 to original encoding */
@@ -1941,7 +1939,7 @@ gint document_find_text(GeanyDocument *doc, const gchar *text, const gchar *orig
 		}
 
 		/* we searched only part of the document, so ask whether to wraparound. */
-		if (search_prefs.suppress_dialogs ||
+		if (search_prefs.always_wrap ||
 			dialogs_show_question_full(parent, GTK_STOCK_FIND, GTK_STOCK_CANCEL,
 				_("Wrap search and find again?"), _("\"%s\" was not found."), original_text))
 		{
@@ -2207,41 +2205,35 @@ gint document_replace_all(GeanyDocument *doc, const gchar *find_text, const gcha
 }
 
 
-static gboolean update_tags_from_buffer(GeanyDocument *doc)
+/*
+ * Parses or re-parses the document's buffer and updates the type
+ * keywords and symbol list.
+ *
+ * @param doc The document.
+ */
+void document_update_tags(GeanyDocument *doc)
 {
 	guchar *buffer_ptr;
 	gsize len;
+	GString *keywords_str;
+	gchar *keywords;
+	gint keyword_idx;
 
-	len = sci_get_length(doc->editor->sci);
+	g_return_if_fail(DOC_VALID(doc));
+	g_return_if_fail(app->tm_workspace != NULL);
 
-	/* gets a direct character pointer from Scintilla.
-	 * this is OK because tm_source_file_buffer_update() does not modify the
-	 * buffer, it only requires that buffer doesn't change while it's running,
-	 * which it won't since it runs in this thread (ie. synchronously).
-	 * see tagmanager/read.c:bufferOpen */
-	buffer_ptr = (guchar *) scintilla_send_message(doc->editor->sci, SCI_GETCHARACTERPOINTER, 0, 0);
-
-	return tm_source_file_buffer_update(doc->tm_file, buffer_ptr, len, TRUE);
-}
-
-
-void document_update_tag_list(GeanyDocument *doc, gboolean update)
-{
-	/* We must call sidebar_update_tag_list() before returning,
-	 * to ensure that the symbol list is always updated properly (e.g.
-	 * when creating a new document with a partial filename set. */
-	gboolean success = FALSE;
-
-	/* if the filetype doesn't have a tag parser or it is a new file */
-	if (doc == NULL || doc->file_type == NULL || app->tm_workspace == NULL ||
-		! filetype_has_tags(doc->file_type) || ! doc->file_name)
+	/* early out if it's a new file or doesn't support tags */
+	if (! doc->file_name || ! doc->file_type || !filetype_has_tags(doc->file_type))
 	{
-		/* set the default (empty) tag list */
+		/* We must call sidebar_update_tag_list() before returning,
+		 * to ensure that the symbol list is always updated properly (e.g.
+		 * when creating a new document with a partial filename set. */
 		sidebar_update_tag_list(doc, FALSE);
 		return;
 	}
 
-	if (doc->tm_file == NULL)
+	/* create a new TM file if there isn't one yet */
+	if (! doc->tm_file)
 	{
 		gchar *locale_filename = utils_get_locale_from_utf8(doc->file_name);
 		const gchar *name;
@@ -2251,28 +2243,76 @@ void document_update_tag_list(GeanyDocument *doc, gboolean update)
 		doc->tm_file = tm_source_file_new(locale_filename, FALSE, name);
 		g_free(locale_filename);
 
-		if (doc->tm_file)
+		if (doc->tm_file && !tm_workspace_add_object(doc->tm_file))
 		{
-			if (!tm_workspace_add_object(doc->tm_file))
-			{
-				tm_work_object_free(doc->tm_file);
-				doc->tm_file = NULL;
-			}
-			else
-			{
-				if (update)
-					update_tags_from_buffer(doc);
-				success = TRUE;
-			}
+			tm_work_object_free(doc->tm_file);
+			doc->tm_file = NULL;
 		}
 	}
-	else
+
+	/* early out if there's no work object and we couldn't create one */
+	if (doc->tm_file == NULL)
 	{
-		success = update_tags_from_buffer(doc);
-		if (G_UNLIKELY(! success))
-			geany_debug("tag list updating failed");
+		/* We must call sidebar_update_tag_list() before returning,
+		 * to ensure that the symbol list is always updated properly (e.g.
+		 * when creating a new document with a partial filename set. */
+		sidebar_update_tag_list(doc, FALSE);
+		return;
 	}
-	sidebar_update_tag_list(doc, success);
+
+	len = sci_get_length(doc->editor->sci);
+	/* tm_source_file_buffer_update() below don't support 0-length data,
+	 * so just empty the tags array and leave */
+	if (len < 1)
+	{
+		tm_tags_array_free(doc->tm_file->tags_array, FALSE);
+		sidebar_update_tag_list(doc, FALSE);
+		return;
+	}
+
+	/* Parse Scintilla's buffer directly using TagManager
+	 * Note: this buffer *MUST NOT* be modified */
+	buffer_ptr = (guchar *) scintilla_send_message(doc->editor->sci, SCI_GETCHARACTERPOINTER, 0, 0);
+	tm_source_file_buffer_update(doc->tm_file, buffer_ptr, len, TRUE);
+
+	sidebar_update_tag_list(doc, TRUE);
+
+	/* some filetypes support type keywords (such as struct names), but not
+	 * necessarily all filetypes for a particular scintilla lexer.  this
+	 * tells us whether the filetype supports keywords, and if so
+	 * which index to use for the scintilla keywords set. */
+	switch (doc->file_type->id)
+	{
+		case GEANY_FILETYPES_C:
+		case GEANY_FILETYPES_CPP:
+		case GEANY_FILETYPES_CS:
+		case GEANY_FILETYPES_D:
+		case GEANY_FILETYPES_JAVA:
+		case GEANY_FILETYPES_OBJECTIVEC:
+		case GEANY_FILETYPES_VALA:
+		{
+
+			/* index of the keyword set in the Scintilla lexer, for
+			 * example in LexCPP.cxx, see "cppWordLists" global array.
+			 * TODO: this magic number should be a member of the filetype */
+			keyword_idx = 3;
+			break;
+		}
+		default:
+			return; /* early out if type keywords are not supported */
+	}
+
+	/* get any type keywords and tell scintilla about them
+	 * this will cause the type keywords to be colourized in scintilla */
+	keywords_str = symbols_find_tags_as_string(app->tm_workspace->work_object.tags_array,
+		TM_GLOBAL_TYPE_MASK, doc->file_type->lang);
+	if (keywords_str)
+	{
+		keywords = g_string_free(keywords_str, FALSE);
+		sci_set_keywords(doc->editor->sci, keyword_idx, keywords);
+		g_free(keywords);
+		queue_colourise(doc); /* force re-highlighting the entire document */
+	}
 }
 
 
@@ -2284,9 +2324,11 @@ static gboolean on_document_update_tag_list_idle(gpointer data)
 		return FALSE;
 
 	if (! main_status.quitting)
-		document_update_tag_list(doc, TRUE);
+		document_update_tags(doc);
 
 	doc->priv->tag_list_update_source = 0;
+
+	/* don't update the tags until another modification of the buffer */
 	return FALSE;
 }
 
@@ -2296,56 +2338,12 @@ void document_update_tag_list_in_idle(GeanyDocument *doc)
 	if (editor_prefs.autocompletion_update_freq <= 0 || ! filetype_has_tags(doc->file_type))
 		return;
 
+	/* prevent "stacking up" callback handlers, we only need one to run soon */
 	if (doc->priv->tag_list_update_source != 0)
 		g_source_remove(doc->priv->tag_list_update_source);
+
 	doc->priv->tag_list_update_source = g_timeout_add_full(G_PRIORITY_LOW,
 		editor_prefs.autocompletion_update_freq, on_document_update_tag_list_idle, doc, NULL);
-}
-
-
-/*
- * Updates the type keywords in the document's Scintilla widget.
- *
- * @param doc The document
- */
-void document_update_type_keywords(GeanyDocument *doc)
-{
-	guint keyword_idx;
-	gchar *keywords;
-	GString *str;
-	GPtrArray *tags_array;
-
-	g_return_if_fail(DOC_VALID(doc));
-	g_return_if_fail(app->tm_workspace != NULL);
-
-	switch (doc->file_type->id)
-	{
-		case GEANY_FILETYPES_C:
-		case GEANY_FILETYPES_CPP:
-		case GEANY_FILETYPES_CS:
-		case GEANY_FILETYPES_D:
-		case GEANY_FILETYPES_JAVA:
-		case GEANY_FILETYPES_VALA:
-			/* index of the keyword set in the Scintilla lexer, for 
-			 * example in LexCPP.cxx, see "cppWordLists" global array. */
-			keyword_idx = 3;
-			break;
-		/* early out if user type keywords are not supported */
-		default:
-			return;
-	}
-
-	tags_array = app->tm_workspace->work_object.tags_array;
-	if (tags_array)
-	{
-		str = symbols_find_tags_as_string(tags_array, TM_GLOBAL_TYPE_MASK, doc->file_type->lang);
-		if (str)
-		{
-			keywords = g_string_free(str, FALSE);
-			sci_set_keywords(doc->editor->sci, keyword_idx, keywords);
-			g_free(keywords);
-		}
-	}
 }
 
 
@@ -2377,10 +2375,7 @@ static void document_load_config(GeanyDocument *doc, GeanyFiletype *type,
 		doc->priv->symbol_list_sort_mode = type->priv->symbol_list_sort_mode;
 	}
 
-	document_update_tag_list(doc, TRUE);
-
-	/* Update session typename keywords. */
-	document_update_type_keywords(doc);
+	document_update_tags(doc);
 }
 
 

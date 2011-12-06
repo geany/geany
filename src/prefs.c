@@ -83,7 +83,7 @@ static GtkTreeView *various_treeview = NULL;
 static void kb_cell_edited_cb(GtkCellRendererText *cellrenderertext, gchar *path, gchar *new_text, gpointer user_data);
 static gboolean kb_grab_key_dialog_key_press_cb(GtkWidget *dialog, GdkEventKey *event, gpointer user_data);
 static void kb_grab_key_dialog_response_cb(GtkWidget *dialog, gint response, gpointer user_data);
-static gboolean kb_find_duplicate(GtkWidget *parent, GeanyKeyBinding *search_kb,
+static gboolean kb_find_duplicate(GtkWidget *parent, GtkTreeIter *old_iter,
 		guint key, GdkModifierType mods, const gchar *shortcut);
 static void on_toolbar_show_toggled(GtkToggleButton *togglebutton, gpointer user_data);
 static void on_show_notebook_tabs_toggled(GtkToggleButton *togglebutton, gpointer user_data);
@@ -1236,7 +1236,6 @@ on_prefs_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 		ui_update_view_editor_menu_items();
 
 		/* various preferences */
-		doc = document_get_current();
 		ui_save_buttons_toggle((doc != NULL) ? doc->changed : FALSE);
 		msgwin_show_hide_tabs();
 		ui_update_statusbar(doc, -1);
@@ -1312,33 +1311,14 @@ static void on_prefs_font_choosed(GtkFontButton *widget, gpointer user_data)
 }
 
 
-static GeanyKeyBinding *kb_lookup_kb_from_iter(G_GNUC_UNUSED GtkTreeModel *model, GtkTreeIter *iter)
-{
-	guint group_idx, keybinding_idx;
-	GtkTreeIter parent;
-
-	/* get kb index */
-	gtk_tree_model_get(GTK_TREE_MODEL(store), iter, KB_TREE_INDEX, &keybinding_idx, -1);
-
-	/* lookup the parent to get group index */
-	gtk_tree_model_iter_parent(GTK_TREE_MODEL(store), &parent, iter);
-	gtk_tree_model_get(GTK_TREE_MODEL(store), &parent, KB_TREE_INDEX, &group_idx, -1);
-
-	return kb_index(group_idx, keybinding_idx);
-}
-
-
 static void kb_change_iter_shortcut(GtkTreeIter *iter, const gchar *new_text)
 {
 	guint lkey;
 	GdkModifierType lmods;
-	GeanyKeyBinding *kb;
 
 	gtk_accelerator_parse(new_text, &lkey, &lmods);
 
-	kb = kb_lookup_kb_from_iter(GTK_TREE_MODEL(store), iter);
-
-	if (kb_find_duplicate(ui_widgets.prefs_dialog, kb, lkey, lmods, new_text))
+	if (kb_find_duplicate(ui_widgets.prefs_dialog, iter, lkey, lmods, new_text))
 		return;
 
 	/* set the values here, because of the above check, setting it in
@@ -1396,70 +1376,56 @@ static void kb_grab_key_dialog_response_cb(GtkWidget *dialog, gint response, G_G
 }
 
 
-/* Look for a (1st-level) child of parent whose KB_TREE_INDEX matches i,
- * setting iter to point to the node if found.
- * If parent is NULL, look for a parent node whose KB_TREE_INDEX matches i. */
-static gboolean kb_find_child_iter(GtkTreeIter *parent, guint i, GtkTreeIter *iter)
-{
-	GtkTreeModel *model = GTK_TREE_MODEL(store);
-	guint idx;
-
-	/* get first child of parent */
-	if (! gtk_tree_model_iter_children(model, iter, parent))
-		return FALSE;
-
-	while (TRUE)	/* foreach child */
-	{
-		gtk_tree_model_get(model, iter, KB_TREE_INDEX, &idx, -1);
-		if (idx == i)
-			return TRUE;
-		if (! gtk_tree_model_iter_next(model, iter))
-			return FALSE;	/* no more children */
-	}
-}
-
-
-static void kb_clear_tree_shortcut(gsize group_id, gsize keybinding_id)
-{
-	GtkTreeIter parent;
-	GtkTreeIter child;
-
-	/* find parent kb group */
-	if (! kb_find_child_iter(NULL, group_id, &parent))
-		return;
-
-	/* find child kb node*/
-	if (! kb_find_child_iter(&parent, keybinding_id, &child))
-		return;
-
-	gtk_tree_store_set(store, &child, KB_TREE_SHORTCUT, NULL, -1);	/* clear shortcut */
-}
-
-
 /* test if the entered key combination is already used
  * returns true if cancelling duplicate */
-static gboolean kb_find_duplicate(GtkWidget *parent, GeanyKeyBinding *search_kb,
+static gboolean kb_find_duplicate(GtkWidget *parent, GtkTreeIter *old_iter,
 		guint key, GdkModifierType mods, const gchar *shortcut)
 {
-	gsize g, i;
-	GeanyKeyGroup *group;
-	GeanyKeyBinding *kb;
+	GtkTreeModel *model = GTK_TREE_MODEL(store);
+	GtkTreeIter parent_iter;
+	gchar *kb_str;
+	guint kb_key;
+	GdkModifierType kb_mods;
 
 	/* allow duplicate if there is no key combination */
 	if (key == 0 && mods == 0)
 		return FALSE;
 
-	foreach_ptr_array(group, g, keybinding_groups)
+	/* don't check if the new keybinding is the same as the old one */
+	gtk_tree_model_get(model, old_iter, KB_TREE_SHORTCUT, &kb_str, -1);
+	if (kb_str)
 	{
-		foreach_ptr_array(kb, i, group->key_items)
+		gtk_accelerator_parse(kb_str, &kb_key, &kb_mods);
+		g_free(kb_str);
+		if (key == kb_key && mods == kb_mods)
+			return FALSE;
+	}
+
+	if (! gtk_tree_model_get_iter_first(model, &parent_iter))
+		return FALSE;
+	do	/* foreach top level */
+	{
+		GtkTreeIter iter;
+
+		if (! gtk_tree_model_iter_children(model, &iter, &parent_iter))
+			continue;
+		do	/* foreach children */
 		{
-			/* search another item with the same key,
-			 * but don't search the key we're looking for(!) */
-			if (kb->key == key && kb->mods == mods
-				&& ! (kb->key == search_kb->key && kb->mods == search_kb->mods))
+
+			gtk_tree_model_get(model, &iter, KB_TREE_SHORTCUT, &kb_str, -1);
+			if (! kb_str)
+				continue;
+
+			gtk_accelerator_parse(kb_str, &kb_key, &kb_mods);
+			g_free(kb_str);
+			/* search another item with the same key and modifiers */
+			if (kb_key == key && kb_mods == mods)
 			{
-				gchar *label = keybindings_get_label(kb);
-				gint ret = dialogs_show_prompt(parent,
+				gchar *label;
+				gint ret;
+
+				gtk_tree_model_get(model, &iter, KB_TREE_ACTION, &label, -1);
+				ret = dialogs_show_prompt(parent,
 					_("_Allow"), GTK_RESPONSE_APPLY,
 					GTK_STOCK_CANCEL, GTK_RESPONSE_NO,
 					_("_Override"), GTK_RESPONSE_YES,
@@ -1471,14 +1437,17 @@ static gboolean kb_find_duplicate(GtkWidget *parent, GeanyKeyBinding *search_kb,
 
 				if (ret == GTK_RESPONSE_YES)
 				{
-					kb_clear_tree_shortcut(g, kb->id);
+					gtk_tree_store_set(store, &iter, KB_TREE_SHORTCUT, NULL, -1);	/* clear shortcut */
 					/* carry on looking for other duplicates if overriding */
 					continue;
 				}
 				return ret == GTK_RESPONSE_NO;
 			}
 		}
+		while (gtk_tree_model_iter_next(model, &iter));
 	}
+	while (gtk_tree_model_iter_next(model, &parent_iter));
+
 	return FALSE;
 }
 

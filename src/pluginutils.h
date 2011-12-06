@@ -21,8 +21,8 @@
  */
 
 
-#ifndef PLUGINUTILS_H
-#define PLUGINUTILS_H
+#ifndef GEANY_PLUGINUTILS_H
+#define GEANY_PLUGINUTILS_H
 
 #ifdef HAVE_PLUGINS
 
@@ -55,4 +55,4 @@ struct GeanyKeyGroup *plugin_set_key_group(struct GeanyPlugin *plugin,
 void plugin_show_configure(struct GeanyPlugin *plugin);
 
 #endif /* HAVE_PLUGINS */
-#endif /* PLUGINUTILS_H */
+#endif /* GEANY_PLUGINUTILS_H */

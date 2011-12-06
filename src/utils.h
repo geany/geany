@@ -35,11 +35,14 @@
 #define NZV(ptr) \
 	((ptr) && (ptr)[0])
 
-/**
- *  Frees @a ptr (if not @c NULL), then assigns @a result to it.
- *  @a result can be an expression using the 'old' value of @a ptr.
- *  It prevents a memory leak compared with: @code ptr = func(ptr); @endcode
+/** Assigns @a result to @a ptr, then frees the old value.
+ * @a result can be an expression using the 'old' value of @a ptr.
+ * E.g. @code SETPTR(str, g_strndup(str, 5)); @endcode
  **/
+#define SETPTR(ptr, result) \
+	do setptr(ptr, result) while (0)
+
+/** @deprecated 2011/11/15 - use SETPTR() instead. */
 #define setptr(ptr, result) \
 	{\
 		gpointer setptr_tmp = ptr;\

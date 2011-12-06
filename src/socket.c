@@ -40,7 +40,7 @@
  * The command window is only available on Windows and takes no additional data, instead it
  * writes back a Windows handle (HWND) for the main window to set it to the foreground (focus).
  *
- * At the moment the commands window, doclist, open, line and column are available.
+ * At the moment the commands window, doclist, open, openro, line and column are available.
  *
  * About the socket files on Unix-like systems:
  * Geany creates a socket in /tmp (or any other directory returned by g_get_tmp_dir()) and
@@ -146,7 +146,10 @@ static void send_open_command(gint sock, gint argc, gchar **argv)
 		g_free(col);
 	}
 
-	socket_fd_write_all(sock, "open\n", 5);
+	if (cl_options.readonly) /* append "ro" to denote readonly status for new docs */
+		socket_fd_write_all(sock, "openro\n", 7);
+	else
+		socket_fd_write_all(sock, "open\n", 5);
 
 	for (i = 1; i < argc && argv[i] != NULL; i++)
 	{
@@ -598,6 +601,7 @@ gboolean socket_lock_input_cb(GIOChannel *source, GIOCondition condition, gpoint
 	{
 		if (strncmp(buf, "open", 4) == 0)
 		{
+			cl_options.readonly = strncmp(buf+4, "ro", 2) == 0; /* open in readonly? */
 			while (socket_fd_gets(sock, buf, sizeof(buf)) != -1 && *buf != '.')
 			{
 				handle_input_filename(g_strstrip(buf));

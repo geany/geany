@@ -264,7 +264,7 @@ static GtkWidget *create_dialog(void)
 	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(credits_scrollwin),
 		GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
 
-	table = gtk_table_new(20 + translators_len + prev_translators_len, 3, FALSE);
+	table = gtk_table_new(23 + translators_len + prev_translators_len, 3, FALSE);
 	gtk_table_set_col_spacings(GTK_TABLE(table), 10);
 
 	row = 0;
@@ -298,6 +298,14 @@ static GtkWidget *create_dialog(void)
 	ROW(buffer, row, 0, 0, 0, 1);
 	row++;
 	ROW("&lt;enrico.troeger@uvena.de&gt;", row, 0, 0, 0, 1);
+	row++;
+	ROW("", row, 0, 0, 0, 0);
+	row++;
+
+	g_snprintf(buffer, sizeof(buffer), "Matthew Brush - %s", _("developer"));
+	ROW(buffer, row, 0, 0, 0, 1);
+	row++;
+	ROW("&lt;mbrush@codebrainz.ca&gt;", row, 0, 0, 0, 1);
 	row++;
 	ROW("", row, 0, 0, 0, 0);
 	row++;

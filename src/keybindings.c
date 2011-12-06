@@ -290,7 +290,7 @@ static void init_default_kb(void)
 		_("Delete to line end"), NULL);
 	/* transpose may fit better in format group */
 	keybindings_set_item(group, GEANY_KEYS_EDITOR_TRANSPOSELINE, NULL,
-		GDK_t, GDK_CONTROL_MASK, "edit_transposeline", _("_Transpose Current Line"),
+		0, 0, "edit_transposeline", _("_Transpose Current Line"),
 		LW(transpose_current_line1));
 	keybindings_set_item(group, GEANY_KEYS_EDITOR_SCROLLTOLINE, NULL,
 		GDK_l, GDK_SHIFT_MASK | GDK_CONTROL_MASK, "edit_scrolltoline", _("Scroll to current line"), NULL);
@@ -315,9 +315,9 @@ static void init_default_kb(void)
 	keybindings_set_item(group, GEANY_KEYS_EDITOR_WORDPARTCOMPLETION, NULL,
 		GDK_Tab, 0, "edit_wordpartcompletion", _("Word part completion"), NULL);
 	keybindings_set_item(group, GEANY_KEYS_EDITOR_MOVELINEUP, NULL,
-		0, 0, "edit_movelineup", _("Move line(s) up"), NULL);
+		GDK_Page_Up, GDK_MOD1_MASK, "edit_movelineup", _("Move line(s) up"), NULL);
 	keybindings_set_item(group, GEANY_KEYS_EDITOR_MOVELINEDOWN, NULL,
-		0, 0, "edit_movelinedown", _("Move line(s) down"), NULL);
+		GDK_Page_Down, GDK_MOD1_MASK, "edit_movelinedown", _("Move line(s) down"), NULL);
 
 	group = keybindings_get_core_group(GEANY_KEY_GROUP_CLIPBOARD);
 
@@ -432,18 +432,20 @@ static void init_default_kb(void)
 	keybindings_set_item(group, GEANY_KEYS_SEARCH_PREVIOUSMESSAGE, NULL,
 		0, 0, "menu_previousmessage", _("Previous Message"), LW(previous_message1));
 	keybindings_set_item(group, GEANY_KEYS_SEARCH_FINDUSAGE, NULL,
-		0, 0, "popup_findusage", _("Find Usage"), LW(find_usage1));
+		GDK_e, GDK_CONTROL_MASK | GDK_SHIFT_MASK, "popup_findusage",
+		_("Find Usage"), LW(find_usage1));
 	keybindings_set_item(group, GEANY_KEYS_SEARCH_FINDDOCUMENTUSAGE, NULL,
-		0, 0, "popup_finddocumentusage", _("Find Document Usage"), LW(find_document_usage1));
+		GDK_d, GDK_CONTROL_MASK | GDK_SHIFT_MASK, "popup_finddocumentusage",
+		_("Find Document Usage"), LW(find_document_usage1));
 	keybindings_set_item(group, GEANY_KEYS_SEARCH_MARKALL, NULL,
 		GDK_m, GDK_CONTROL_MASK | GDK_SHIFT_MASK, "find_markall", _("_Mark All"), LW(mark_all1));
 
 	group = keybindings_get_core_group(GEANY_KEY_GROUP_GOTO);
 
 	keybindings_set_item(group, GEANY_KEYS_GOTO_BACK, NULL,
-		0, 0, "nav_back", _("Navigate back a location"), NULL);
+		GDK_Left, GDK_MOD1_MASK, "nav_back", _("Navigate back a location"), NULL);
 	keybindings_set_item(group, GEANY_KEYS_GOTO_FORWARD, NULL,
-		0, 0, "nav_forward", _("Navigate forward a location"), NULL);
+		GDK_Right, GDK_MOD1_MASK, "nav_forward", _("Navigate forward a location"), NULL);
 	keybindings_set_item(group, GEANY_KEYS_GOTO_LINE, NULL,
 		GDK_l, GDK_CONTROL_MASK, "menu_gotoline", _("Go to Line"), LW(go_to_line1));
 	keybindings_set_item(group, GEANY_KEYS_GOTO_MATCHINGBRACE, NULL,
@@ -459,9 +461,11 @@ static void init_default_kb(void)
 		GDK_comma, GDK_CONTROL_MASK, "edit_gotopreviousmarker",
 		_("_Go to Previous Marker"), LW(go_to_previous_marker1));
 	keybindings_set_item(group, GEANY_KEYS_GOTO_TAGDEFINITION, NULL,
-		0, 0, "popup_gototagdefinition", _("Go to Tag Definition"), LW(goto_tag_definition1));
+		GDK_t, GDK_CONTROL_MASK, "popup_gototagdefinition",
+		_("Go to Tag Definition"), LW(goto_tag_definition1));
 	keybindings_set_item(group, GEANY_KEYS_GOTO_TAGDECLARATION, NULL,
-		0, 0, "popup_gototagdeclaration", _("Go to Tag Declaration"), LW(goto_tag_declaration1));
+		GDK_t, GDK_CONTROL_MASK | GDK_SHIFT_MASK, "popup_gototagdeclaration",
+		_("Go to Tag Declaration"), LW(goto_tag_declaration1));
 	keybindings_set_item(group, GEANY_KEYS_GOTO_LINESTART, NULL,
 		GDK_Home, 0, "edit_gotolinestart", _("Go to Start of Line"), NULL);
 	keybindings_set_item(group, GEANY_KEYS_GOTO_LINEEND, NULL,
@@ -524,9 +528,11 @@ static void init_default_kb(void)
 	keybindings_set_item(group, GEANY_KEYS_NOTEBOOK_SWITCHTABLASTUSED, cb_func_switch_tablastused,
 		GDK_Tab, GDK_CONTROL_MASK, "switch_tablastused", _("Switch to last used document"), NULL);
 	keybindings_set_item(group, GEANY_KEYS_NOTEBOOK_MOVETABLEFT, cb_func_move_tab,
-		GDK_Page_Up, GDK_MOD1_MASK, "move_tableft", _("Move document left"), NULL);
+		GDK_Page_Up, GDK_CONTROL_MASK | GDK_SHIFT_MASK, "move_tableft",
+		_("Move document left"), NULL);
 	keybindings_set_item(group, GEANY_KEYS_NOTEBOOK_MOVETABRIGHT, cb_func_move_tab,
-		GDK_Page_Down, GDK_MOD1_MASK, "move_tabright", _("Move document right"), NULL);
+		GDK_Page_Down, GDK_CONTROL_MASK | GDK_SHIFT_MASK, "move_tabright",
+		_("Move document right"), NULL);
 	keybindings_set_item(group, GEANY_KEYS_NOTEBOOK_MOVETABFIRST, cb_func_move_tab,
 		0, 0, "move_tabfirst", _("Move document first"), NULL);
 	keybindings_set_item(group, GEANY_KEYS_NOTEBOOK_MOVETABLAST, cb_func_move_tab,
@@ -569,7 +575,7 @@ static void init_default_kb(void)
 		GDK_F9, GDK_SHIFT_MASK | GDK_CONTROL_MASK, "build_makeowntarget",
 		_("Make custom target"), NULL);
 	keybindings_set_item(group, GEANY_KEYS_BUILD_MAKEOBJECT, NULL,
-		0, 0, "build_makeobject", _("Make object"), NULL);
+		GDK_F8, GDK_SHIFT_MASK, "build_makeobject", _("Make object"), NULL);
 	keybindings_set_item(group, GEANY_KEYS_BUILD_NEXTERROR, NULL,
 		0, 0, "build_nexterror", _("Next error"), NULL);
 	keybindings_set_item(group, GEANY_KEYS_BUILD_PREVIOUSERROR, NULL,
@@ -967,6 +973,7 @@ static gboolean check_fixed_kb(guint keyval, guint state)
 		gtk_notebook_set_current_page(GTK_NOTEBOOK(main_widgets.notebook), page);
 		return TRUE;
 	}
+	/* note: these are now overridden by default with move tab bindings */
 	if (keyval == GDK_Page_Up || keyval == GDK_Page_Down)
 	{
 		/* switch to first or last document */
@@ -2544,7 +2551,7 @@ static gboolean cb_func_document_action(guint key_id)
 			ui_document_show_hide(doc);
 			break;
 		case GEANY_KEYS_DOCUMENT_RELOADTAGLIST:
-			document_update_tag_list(doc, TRUE);
+			document_update_tags(doc);
 			break;
 		case GEANY_KEYS_DOCUMENT_FOLDALL:
 			editor_fold_all(doc->editor);
