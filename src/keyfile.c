@@ -546,6 +546,8 @@ static void save_ui_prefs(GKeyFile *config)
 
 	if (prefs.save_winpos)
 	{
+		GdkWindowState wstate;
+
 		g_key_file_set_integer(config, PACKAGE, "treeview_position",
 				gtk_paned_get_position(GTK_PANED(ui_lookup_widget(main_widgets.window, "hpaned1"))));
 		g_key_file_set_integer(config, PACKAGE, "msgwindow_position",
@@ -553,11 +555,8 @@ static void save_ui_prefs(GKeyFile *config)
 
 		gtk_window_get_position(GTK_WINDOW(main_widgets.window), &ui_prefs.geometry[0], &ui_prefs.geometry[1]);
 		gtk_window_get_size(GTK_WINDOW(main_widgets.window), &ui_prefs.geometry[2], &ui_prefs.geometry[3]);
-		if (gdk_window_get_state(gtk_widget_get_window(main_widgets.window)) & GDK_WINDOW_STATE_MAXIMIZED)
-			ui_prefs.geometry[4] = 1;
-		else
-			ui_prefs.geometry[4] = 0;
-
+		wstate = gdk_window_get_state(gtk_widget_get_window(main_widgets.window));
+		ui_prefs.geometry[4] = (wstate & GDK_WINDOW_STATE_MAXIMIZED) ? 1 : 0;
 		g_key_file_set_integer_list(config, PACKAGE, "geometry", ui_prefs.geometry, 5);
 	}
 
@@ -938,13 +937,11 @@ static void load_ui_prefs(GKeyFile *config)
 
 		/* don't use insane values but when main windows was maximized last time, pos might be
 		 * negative (due to differences in root window and window decorations) */
-		if (ui_prefs.geometry[4] != 1)
+		/* quitting when minimized can make pos -32000, -32000 on Windows! */
+		for (i = 0; i < 4; i++)
 		{
-			for (i = 2; i < 4; i++)
-			{
-				if (ui_prefs.geometry[i] < -1)
-					ui_prefs.geometry[i] = -1;
-			}
+			if (ui_prefs.geometry[i] < -1)
+				ui_prefs.geometry[i] = -1;
 		}
 	}
 	hpan_position = utils_get_setting_integer(config, PACKAGE, "treeview_position", 156);
