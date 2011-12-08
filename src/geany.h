@@ -93,4 +93,49 @@ void geany_debug(gchar const *format, ...) G_GNUC_PRINTF (1, 2);
 #define G_GNUC_WARN_UNUSED_RESULT
 #endif
 
+
+/* These functions aren't available until GTK+ 2.18.
+ * Delete them when we require that as a minimum version. */
+#if !GTK_CHECK_VERSION(2, 18, 0)
+#define gtk_widget_get_allocation(widget, alloc) (*(alloc) = (widget)->allocation)
+#define gtk_widget_set_can_default(widget, can_default) \
+	{ \
+		if (can_default) \
+			GTK_WIDGET_SET_FLAGS(widget, GTK_WIDGET_CAN_DEFAULT); \
+		else \
+			GTK_WIDGET_UNSET_FLAGS(widget, GTK_WIDGET_CAN_DEFAULT); \
+	}
+#define gtk_widget_set_can_focus(widget, can_focus) \
+	{ \
+		if (can_focus) \
+			GTK_WIDGET_SET_FLAGS(widget, GTK_WIDGET_CAN_FOCUS); \
+		else \
+			GTK_WIDGET_UNSET_FLAGS(widget, GTK_WIDGET_CAN_FOCUS); \
+	}
+#define gtk_widget_has_focus(widget) GTK_WIDGET_HAS_FOCUS(widget)
+#define gtk_widget_get_sensitive(widget) GTK_WIDGET_SENSITIVE(widget)
+#define gtk_widget_is_sensitive(widget) GTK_WIDGET_IS_SENSITIVE(widget)
+#define gtk_widget_set_has_window(widget, has_window) \
+	{ \
+		if (has_window) \
+			GTK_WIDGET_UNSET_FLAGS(widget, GTK_NO_WINDOW); \
+		else \
+			GTK_WIDGET_SET_FLAGS(widget, GTK_NO_WINDOW); \
+	}
+#define gtk_widget_get_visible(widget) GTK_WIDGET_VISIBLE(widget)
 #endif
+
+/* These functions aren't available until GTK+ 2.20.
+ * Delete them when we require that as a minimum version. */
+#if !GTK_CHECK_VERSION(2, 20, 0)
+#define gtk_widget_get_mapped(widget) GTK_WIDGET_MAPPED(widget)
+#endif
+
+/* These functions aren't available until GTK+ 2.22.
+ * Delete them when we require taht as a minum version. */
+#if !GTK_CHECK_VERSION(2, 22, 0)
+#define gdk_drag_context_get_selected_action(ctx) (ctx)->action
+#endif
+
+
+#endif /* GEANY_H */

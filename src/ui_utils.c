@@ -1383,7 +1383,7 @@ GtkWidget *ui_dialog_vbox_new(GtkDialog *dialog)
 	GtkWidget *vbox = gtk_vbox_new(FALSE, 12);	/* need child vbox to set a separate border. */
 
 	gtk_container_set_border_width(GTK_CONTAINER(vbox), 6);
-	gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), vbox);
+	gtk_container_add(GTK_CONTAINER(gtk_dialog_get_content_area(GTK_DIALOG(dialog))), vbox);
 	return vbox;
 }
 
@@ -1992,6 +1992,7 @@ void ui_swap_sidebar_pos(void)
 	GtkWidget *left = gtk_paned_get_child1(GTK_PANED(pane));
 	GtkWidget *right = gtk_paned_get_child2(GTK_PANED(pane));
 	GtkWidget *box = ui_lookup_widget(main_widgets.window, "vbox1");
+	GtkAllocation pane_alloc = { 0 };
 
 	/* reparenting avoids scintilla problem with middle click paste */
 	gtk_widget_reparent(left, box);
@@ -1999,8 +2000,10 @@ void ui_swap_sidebar_pos(void)
 	gtk_widget_reparent(right, pane);
 	gtk_widget_reparent(left, pane);
 
-	gtk_paned_set_position(GTK_PANED(pane), pane->allocation.width
-		- gtk_paned_get_position(GTK_PANED(pane)));
+	gtk_widget_get_allocation(pane, &pane_alloc);
+
+	gtk_paned_set_position(GTK_PANED(pane),
+		pane_alloc.width - gtk_paned_get_position(GTK_PANED(pane)));
 }
 
 
@@ -2172,7 +2175,7 @@ static void on_auto_separator_item_show_hide(GtkWidget *widget, gpointer user_da
 {
 	GeanyAutoSeparator *autosep = user_data;
 
-	if (GTK_WIDGET_VISIBLE(widget))
+	if (gtk_widget_get_visible(widget))
 		autosep->ref_count++;
 	else
 		autosep->ref_count--;
@@ -2203,7 +2206,7 @@ void ui_auto_separator_add_ref(GeanyAutoSeparator *autosep, GtkWidget *item)
 		g_signal_connect(autosep->widget, "destroy",
 			G_CALLBACK(gtk_widget_destroyed), &autosep->widget);
 
-	if (GTK_WIDGET_VISIBLE(item))
+	if (gtk_widget_get_visible(item))
 	{
 		autosep->ref_count++;
 		auto_separator_update(autosep);
@@ -2252,7 +2255,7 @@ GtkWidget *ui_lookup_widget(GtkWidget *widget, const gchar *widget_name)
 		if (GTK_IS_MENU(widget))
 			parent = gtk_menu_get_attach_widget(GTK_MENU(widget));
 		else
-			parent = widget->parent;
+			parent = gtk_widget_get_parent(widget);
 		if (parent == NULL)
 			parent = (GtkWidget*) g_object_get_data(G_OBJECT(widget), "GladeParentKey");
 		if (parent == NULL)

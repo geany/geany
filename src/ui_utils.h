@@ -34,7 +34,6 @@
 	g_object_set_data_full(G_OBJECT(owner), widget_name, \
 		g_object_ref(widget), (GDestroyNotify)g_object_unref);
 
-
 /** Interface preferences */
 typedef struct GeanyInterfacePrefs
 {
