@@ -1086,6 +1086,11 @@ static void on_save_settings(GKeyFile *config)
 void plugins_init(void)
 {
 	StashGroup *group;
+	gchar *path;
+
+	path = get_plugin_path();
+	geany_debug("System plugin path: %s", path);
+	g_free(path);
 
 	group = stash_group_new("plugins");
 	configuration_add_pref_group(group, TRUE);
