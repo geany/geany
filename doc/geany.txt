@@ -1567,7 +1567,7 @@ Default global tags files
 For some languages, a list of global tags is loaded when the
 corresponding filetype is first used. Currently these are for:
 
-* C -- GTK+ and GLib
+* C
 * Pascal
 * PHP
 * HTML -- &symbol; completion, e.g. for ampersand, copyright, etc.
