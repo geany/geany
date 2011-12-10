@@ -42,7 +42,6 @@
 #include "keyfile.h"
 #include "win32.h"
 #include "build.h"
-#include "interface.h"
 #include "editor.h"
 #include "stash.h"
 #include "sidebar.h"
@@ -408,7 +407,7 @@ static void create_properties_dialog(PropertyDialogElements *e)
 	gtk_window_set_destroy_with_parent(GTK_WINDOW(e->dialog), TRUE);
 	gtk_widget_set_name(e->dialog, "GeanyDialogProject");
 
-	ui_entry_add_clear_icon(GTK_ENTRY(ui_lookup_widget(e->dialog, "spin_indent_width")));
+	ui_entry_add_clear_icon(GTK_ENTRY(ui_lookup_widget(e->dialog, "spin_indent_width_project")));
 
 	table = gtk_table_new(5, 2, FALSE);
 	gtk_container_set_border_width(GTK_CONTAINER(table), 6);
@@ -484,8 +483,8 @@ static void create_properties_dialog(PropertyDialogElements *e)
 	build_page_num = gtk_notebook_insert_page(GTK_NOTEBOOK(notebook), build_table, label, 2);
 	e->notebook = notebook;
 
-	g_signal_connect(ui_lookup_widget(e->dialog, "radio_long_line_custom"), "toggled",
-		G_CALLBACK(on_radio_long_line_custom_toggled), ui_lookup_widget(e->dialog, "spin_long_line"));
+	g_signal_connect(ui_lookup_widget(e->dialog, "radio_long_line_custom_project"), "toggled",
+		G_CALLBACK(on_radio_long_line_custom_toggled), ui_lookup_widget(e->dialog, "spin_long_line_project"));
 
 	label = gtk_label_new(_("File patterns:"));
 	gtk_table_attach(GTK_TABLE(table), label, 0, 1, 4, 5,
@@ -527,16 +526,16 @@ static void show_project_properties(gboolean show_build)
 	gtk_label_set_text(GTK_LABEL(e->file_name), p->file_name);
 	gtk_entry_set_text(GTK_ENTRY(e->base_path), p->base_path);
 
-	radio_long_line_custom = ui_lookup_widget(e->dialog, "radio_long_line_custom");
+	radio_long_line_custom = ui_lookup_widget(e->dialog, "radio_long_line_custom_project");
 	switch (p->long_line_behaviour)
 	{
-		case 0: widget = ui_lookup_widget(e->dialog, "radio_long_line_disabled"); break;
-		case 1: widget = ui_lookup_widget(e->dialog, "radio_long_line_default"); break;
+		case 0: widget = ui_lookup_widget(e->dialog, "radio_long_line_disabled_project"); break;
+		case 1: widget = ui_lookup_widget(e->dialog, "radio_long_line_default_project"); break;
 		case 2: widget = radio_long_line_custom; break;
 	}
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), TRUE);
 
-	widget = ui_lookup_widget(e->dialog, "spin_long_line");
+	widget = ui_lookup_widget(e->dialog, "spin_long_line_project");
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget), (gdouble)p->long_line_column);
 	on_radio_long_line_custom_toggled(GTK_TOGGLE_BUTTON(radio_long_line_custom), widget);
 
@@ -768,12 +767,12 @@ static gboolean update_config(const PropertyDialogElements *e, gboolean new_proj
 		}
 		build_menu_update(doc);
 
-		widget = ui_lookup_widget(e->dialog, "radio_long_line_disabled");
+		widget = ui_lookup_widget(e->dialog, "radio_long_line_disabled_project");
 		if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)))
 			p->long_line_behaviour = 0;
 		else
 		{
-			widget = ui_lookup_widget(e->dialog, "radio_long_line_default");
+			widget = ui_lookup_widget(e->dialog, "radio_long_line_default_project");
 			if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)))
 				p->long_line_behaviour = 1;
 			else
@@ -781,7 +780,7 @@ static gboolean update_config(const PropertyDialogElements *e, gboolean new_proj
 				p->long_line_behaviour = 2;
 		}
 
-		widget = ui_lookup_widget(e->dialog, "spin_long_line");
+		widget = ui_lookup_widget(e->dialog, "spin_long_line_project");
 		p->long_line_column = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));
 		apply_editor_prefs();
 
@@ -1185,22 +1184,22 @@ void project_init(void)
 	indent_group = group;
 
 	stash_group_add_spin_button_integer(group, &indentation.width,
-		"indent_width", 4, "spin_indent_width");
+		"indent_width", 4, "spin_indent_width_project");
 	stash_group_add_radio_buttons(group, (gint*)(gpointer)&indentation.type,
 		"indent_type", GEANY_INDENT_TYPE_TABS,
-		"radio_indent_spaces", GEANY_INDENT_TYPE_SPACES,
-		"radio_indent_tabs", GEANY_INDENT_TYPE_TABS,
-		"radio_indent_both", GEANY_INDENT_TYPE_BOTH,
+		"radio_indent_spaces_project", GEANY_INDENT_TYPE_SPACES,
+		"radio_indent_tabs_project", GEANY_INDENT_TYPE_TABS,
+		"radio_indent_both_project", GEANY_INDENT_TYPE_BOTH,
 		NULL);
 	/* This is a 'hidden' pref for backwards-compatibility */
 	stash_group_add_integer(group, &indentation.hard_tab_width,
 		"indent_hard_tab_width", 8);
 	stash_group_add_toggle_button(group, &indentation.detect_type,
-		"detect_indent", FALSE, "check_detect_indent_type");
+		"detect_indent", FALSE, "check_detect_indent_type_project");
 	stash_group_add_toggle_button(group, &indentation.detect_width,
-		"detect_indent_width", FALSE, "check_detect_indent_width");
+		"detect_indent_width", FALSE, "check_detect_indent_width_project");
 	stash_group_add_combo_box(group, (gint*)(gpointer)&indentation.auto_indent_mode,
-		"indent_mode", GEANY_AUTOINDENT_CURRENTCHARS, "combo_auto_indent_mode");
+		"indent_mode", GEANY_AUTOINDENT_CURRENTCHARS, "combo_auto_indent_mode_project");
 }
 
 

@@ -23,7 +23,8 @@ SYS_DATA_FILES = \
 	data/ui_toolbar.xml \
 	$(srcdir)/data/templates/* \
 	$(srcdir)/data/templates/files/* \
-	$(srcdir)/data/colorschemes/*
+	$(srcdir)/data/colorschemes/* \
+	$(top_srcdir)/data/geany.glade
 
 EXTRA_DIST = \
 	autogen.sh \
@@ -32,8 +33,6 @@ EXTRA_DIST = \
 	geany.desktop.in \
 	geany.pc.in \
 	geany.spec \
-	geany.glade \
-	geany.gladep \
 	ChangeLog.pre-0-17 \
 	HACKING \
 	README.I18N \

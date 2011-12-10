@@ -59,7 +59,6 @@ static gboolean clean = TRUE;
 static GModule *module = NULL;
 static struct VteFunctions *vf;
 static gchar *gtk_menu_key_accel = NULL;
-static gint vte_prefs_tab_num = -1;
 
 /* use vte wordchars to select paths */
 static const gchar VTE_WORDCHARS[] = "-A-Za-z0-9,./?%&#:_";
@@ -493,13 +492,16 @@ static void vte_popup_menu_clicked(GtkMenuItem *menuitem, gpointer user_data)
 		}
 		case POPUP_PREFERENCES:
 		{
-			GtkWidget *notebook;
+			GtkWidget *notebook, *tab_page;
 
 			prefs_show_dialog();
 
 			notebook = ui_lookup_widget(ui_widgets.prefs_dialog, "notebook2");
+			tab_page = ui_lookup_widget(ui_widgets.prefs_dialog, "frame_term");
 
-			gtk_notebook_set_current_page(GTK_NOTEBOOK(notebook), vte_prefs_tab_num);
+			gtk_notebook_set_current_page(GTK_NOTEBOOK(notebook),
+				gtk_notebook_page_num(GTK_NOTEBOOK(notebook), GTK_WIDGET(tab_page)));
+
 			break;
 		}
 	}
@@ -697,13 +699,14 @@ static void vte_drag_data_received(GtkWidget *widget, GdkDragContext *drag_conte
 }
 
 
-static void check_run_in_vte_toggled(GtkToggleButton *togglebutton, GtkWidget *user_data)
+G_MODULE_EXPORT void on_check_run_in_vte_toggled(GtkToggleButton *togglebutton, GtkWidget *user_data)
 {
+	g_return_if_fail(GTK_IS_WIDGET(user_data));
 	gtk_widget_set_sensitive(user_data, gtk_toggle_button_get_active(togglebutton));
 }
 
 
-static void font_button_clicked_cb(GtkFontButton *widget, gpointer user_data)
+G_MODULE_EXPORT void on_term_font_set(GtkFontButton *widget, gpointer user_data)
 {
 	const gchar *fontbtn = gtk_font_button_get_font_name(widget);
 
@@ -715,25 +718,19 @@ static void font_button_clicked_cb(GtkFontButton *widget, gpointer user_data)
 }
 
 
-static void on_color_button_choose_cb(GtkColorButton *widget, gpointer user_data)
+G_MODULE_EXPORT void on_term_fg_color_set(GtkColorButton *widget, gpointer user_data)
 {
-	switch (GPOINTER_TO_INT(user_data))
-	{
-		case 1:
-		{
-			g_free(vc->colour_fore);
-			vc->colour_fore = g_new0(GdkColor, 1);
-			gtk_color_button_get_color(widget, vc->colour_fore);
-			break;
-		}
-		case 2:
-		{
-			g_free(vc->colour_back);
-			vc->colour_back = g_new0(GdkColor, 1);
-			gtk_color_button_get_color(widget, vc->colour_back);
-			break;
-		}
-	}
+	g_free(vc->colour_fore);
+	vc->colour_fore = g_new0(GdkColor, 1);
+	gtk_color_button_get_color(widget, vc->colour_fore);
+}
+
+
+G_MODULE_EXPORT void on_term_bg_color_set(GtkColorButton *widget, gpointer user_data)
+{
+	g_free(vc->colour_back);
+	vc->colour_back = g_new0(GdkColor, 1);
+	gtk_color_button_get_color(widget, vc->colour_back);
 }
 
 
@@ -741,172 +738,33 @@ void vte_append_preferences_tab(void)
 {
 	if (vte_info.have_vte)
 	{
-		GtkWidget *notebook, *vbox, *label, *alignment, *table, *frame, *box;
-		GtkWidget *font_term, *color_fore, *color_back, *spin_scrollback;
-		GtkWidget *check_scroll_key, *check_scroll_out, *check_follow_path;
-		GtkWidget *check_enable_bash_keys, *check_ignore_menu_key, *check_cursor_blinks;
-		GtkWidget *check_run_in_vte, *check_skip_script, *entry_shell, *button_shell, *image_shell;
-		GtkObject *spin_scrollback_adj;
+		GtkWidget *frame_term, *button_shell, *entry_shell;
+		GtkWidget *check_run_in_vte, *check_skip_script;
+		GtkWidget *font_button, *fg_color_button, *bg_color_button;
 
-		notebook = ui_lookup_widget(ui_widgets.prefs_dialog, "notebook2");
-
-		frame = ui_frame_new_with_alignment(_("Terminal"), &alignment);
-		gtk_container_set_border_width(GTK_CONTAINER(frame), 5);
-		vbox = gtk_vbox_new(FALSE, 12);
-		gtk_container_add(GTK_CONTAINER(alignment), vbox);
-
-		label = gtk_label_new(_("Terminal"));
-		vte_prefs_tab_num = gtk_notebook_append_page(GTK_NOTEBOOK(notebook), frame, label);
-
-		table = gtk_table_new(6, 2, FALSE);
-		gtk_box_pack_start(GTK_BOX(vbox), table, FALSE, FALSE, 0);
-		gtk_table_set_row_spacings(GTK_TABLE(table), 3);
-		gtk_table_set_col_spacings(GTK_TABLE(table), 10);
-
-		label = gtk_label_new(_("Font:"));
-		gtk_table_attach(GTK_TABLE(table), label, 0, 1, 0, 1,
-					(GtkAttachOptions) (GTK_FILL),
-					(GtkAttachOptions) (0), 0, 0);
-		gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
-
-		font_term = gtk_font_button_new();
-		gtk_table_attach(GTK_TABLE(table), font_term, 1, 2, 0, 1,
-					(GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
-					(GtkAttachOptions) (0), 0, 0);
-		gtk_widget_set_tooltip_text(font_term, _("Sets the font for the terminal widget"));
-
-		label = gtk_label_new(_("Foreground color:"));
-		gtk_table_attach(GTK_TABLE(table), label, 0, 1, 1, 2,
-					(GtkAttachOptions) (GTK_FILL),
-					(GtkAttachOptions) (0), 0, 0);
-		gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
-
-		label = gtk_label_new(_("Background color:"));
-		gtk_table_attach(GTK_TABLE(table), label, 0, 1, 2, 3,
-					(GtkAttachOptions) (GTK_FILL),
-					(GtkAttachOptions) (0), 0, 0);
-		gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
-
-		color_fore = gtk_color_button_new();
-		gtk_table_attach(GTK_TABLE(table), color_fore, 1, 2, 1, 2,
-					(GtkAttachOptions) (GTK_FILL),
-					(GtkAttachOptions) (0), 0, 0);
-		gtk_widget_set_tooltip_text(color_fore, _("Sets the foreground color of the text in the terminal widget"));
-		gtk_color_button_set_title(GTK_COLOR_BUTTON(color_fore), _("Color Chooser"));
-
-		color_back = gtk_color_button_new();
-		gtk_table_attach(GTK_TABLE(table), color_back, 1, 2, 2, 3,
-					(GtkAttachOptions) (GTK_FILL),
-					(GtkAttachOptions) (0), 0, 0);
-		gtk_widget_set_tooltip_text(color_back, _("Sets the background color of the text in the terminal widget"));
-		gtk_color_button_set_title(GTK_COLOR_BUTTON(color_back), _("Color Chooser"));
-
-		label = gtk_label_new(_("Scrollback lines:"));
-		gtk_table_attach(GTK_TABLE(table), label, 0, 1, 3, 4,
-					(GtkAttachOptions) (GTK_FILL),
-					(GtkAttachOptions) (0), 0, 0);
-		gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
-
-		spin_scrollback_adj = gtk_adjustment_new(500, 0, 5000, 1, 10, 0);
-		spin_scrollback = gtk_spin_button_new(GTK_ADJUSTMENT(spin_scrollback_adj), 1, 0);
-		ui_entry_add_clear_icon(GTK_ENTRY(spin_scrollback));
-		gtk_table_attach(GTK_TABLE(table), spin_scrollback, 1, 2, 3, 4,
-					(GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
-					(GtkAttachOptions) (0), 0, 0);
-		gtk_widget_set_tooltip_text(spin_scrollback, _("Specifies the history in lines, which you can scroll back in the terminal widget"));
-		gtk_spin_button_set_numeric(GTK_SPIN_BUTTON(spin_scrollback), TRUE);
-		gtk_spin_button_set_wrap(GTK_SPIN_BUTTON(spin_scrollback), TRUE);
-
-		label = gtk_label_new(_("Shell:"));
-		gtk_table_attach(GTK_TABLE(table), label, 0, 1, 5, 6,
-					(GtkAttachOptions) (GTK_FILL),
-					(GtkAttachOptions) (0), 0, 0);
-		gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
-
-		entry_shell = gtk_entry_new();
-		ui_entry_add_clear_icon(GTK_ENTRY(entry_shell));
-		gtk_widget_set_tooltip_text(entry_shell, _("Sets the path to the shell which should be started inside the terminal emulation"));
-
-		button_shell = gtk_button_new();
-		gtk_widget_show(button_shell);
-
-		box = gtk_hbox_new(FALSE, 6);
-		gtk_box_pack_start_defaults(GTK_BOX(box), entry_shell);
-		gtk_box_pack_start(GTK_BOX(box), button_shell, FALSE, FALSE, 0);
-		gtk_table_attach(GTK_TABLE(table), box, 1, 2, 5, 6,
-					(GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
-					(GtkAttachOptions) (0), 0, 0);
-
-		image_shell = gtk_image_new_from_stock(GTK_STOCK_OPEN, GTK_ICON_SIZE_BUTTON);
-		gtk_widget_show(image_shell);
-		gtk_container_add(GTK_CONTAINER(button_shell), image_shell);
-
-		box = gtk_vbox_new(FALSE, 3);
-		check_scroll_key = gtk_check_button_new_with_mnemonic(_("Scroll on keystroke"));
-		gtk_widget_set_tooltip_text(check_scroll_key, _("Whether to scroll to the bottom if a key was pressed"));
-		gtk_container_add(GTK_CONTAINER(box), check_scroll_key);
-
-		check_scroll_out = gtk_check_button_new_with_mnemonic(_("Scroll on output"));
-		gtk_widget_set_tooltip_text(check_scroll_out, _("Whether to scroll to the bottom when output is generated"));
-		gtk_container_add(GTK_CONTAINER(box), check_scroll_out);
-
-		check_cursor_blinks = gtk_check_button_new_with_mnemonic(_("Cursor blinks"));
-		gtk_widget_set_tooltip_text(check_cursor_blinks, _("Whether to blink the cursor"));
-		gtk_container_add(GTK_CONTAINER(box), check_cursor_blinks);
-
-		check_enable_bash_keys = gtk_check_button_new_with_mnemonic(_("Override Geany keybindings"));
-		gtk_widget_set_tooltip_text(check_enable_bash_keys,
-			_("Allows the VTE to receive keyboard shortcuts (apart from focus commands)"));
-		gtk_container_add(GTK_CONTAINER(box), check_enable_bash_keys);
-
-		check_ignore_menu_key = gtk_check_button_new_with_mnemonic(_("Disable menu shortcut key (F10 by default)"));
-		gtk_widget_set_tooltip_text(check_ignore_menu_key, _("This option disables the keybinding to popup the menu bar (default is F10). Disabling it can be useful if you use, for example, Midnight Commander within the VTE."));
-		gtk_container_add(GTK_CONTAINER(box), check_ignore_menu_key);
-
-		check_follow_path = gtk_check_button_new_with_mnemonic(_("Follow the path of the current file"));
-		gtk_widget_set_tooltip_text(check_follow_path, _("Whether to execute \"cd $path\" when you switch between opened files"));
-		gtk_container_add(GTK_CONTAINER(box), check_follow_path);
-
-		/* create check_skip_script checkbox before the check_skip_script checkbox to be able to
-		 * use the object for the toggled handler of check_skip_script checkbox */
-		check_skip_script = gtk_check_button_new_with_mnemonic(_("Don't use run script"));
-		gtk_widget_set_tooltip_text(check_skip_script, _("Don't use the simple run script which is usually used to display the exit status of the executed program"));
-		gtk_widget_set_sensitive(check_skip_script, vc->run_in_vte);
-
-		check_run_in_vte = gtk_check_button_new_with_mnemonic(_("Execute programs in VTE"));
-		gtk_widget_set_tooltip_text(check_run_in_vte, _("Run programs in VTE instead of opening a terminal emulation window. Please note, programs executed in VTE cannot be stopped"));
-		gtk_container_add(GTK_CONTAINER(box), check_run_in_vte);
-		g_signal_connect(check_run_in_vte, "toggled",
-			G_CALLBACK(check_run_in_vte_toggled), check_skip_script);
-
-		/* now add the check_skip_script checkbox after the check_run_in_vte checkbox */
-		gtk_container_add(GTK_CONTAINER(box), check_skip_script);
-
-		gtk_box_pack_start(GTK_BOX(vbox), box, FALSE, FALSE, 0);
-
-		ui_hookup_widget(ui_widgets.prefs_dialog, font_term, "font_term");
-		ui_hookup_widget(ui_widgets.prefs_dialog, color_fore, "color_fore");
-		ui_hookup_widget(ui_widgets.prefs_dialog, color_back, "color_back");
-		ui_hookup_widget(ui_widgets.prefs_dialog, spin_scrollback, "spin_scrollback");
-		ui_hookup_widget(ui_widgets.prefs_dialog, entry_shell, "entry_shell");
-		ui_hookup_widget(ui_widgets.prefs_dialog, check_scroll_key, "check_scroll_key");
-		ui_hookup_widget(ui_widgets.prefs_dialog, check_scroll_out, "check_scroll_out");
-		ui_hookup_widget(ui_widgets.prefs_dialog, check_cursor_blinks, "check_cursor_blinks");
-		ui_hookup_widget(ui_widgets.prefs_dialog, check_enable_bash_keys, "check_enable_bash_keys");
-		ui_hookup_widget(ui_widgets.prefs_dialog, check_ignore_menu_key, "check_ignore_menu_key");
-		ui_hookup_widget(ui_widgets.prefs_dialog, check_follow_path, "check_follow_path");
-		ui_hookup_widget(ui_widgets.prefs_dialog, check_run_in_vte, "check_run_in_vte");
-		ui_hookup_widget(ui_widgets.prefs_dialog, check_skip_script, "check_skip_script");
-
-		gtk_widget_show_all(frame);
-
-		g_signal_connect(font_term, "font-set", G_CALLBACK(font_button_clicked_cb), NULL);
-		g_signal_connect(color_fore, "color-set", G_CALLBACK(on_color_button_choose_cb),
-															GINT_TO_POINTER(1));
-		g_signal_connect(color_back, "color-set", G_CALLBACK(on_color_button_choose_cb),
-															GINT_TO_POINTER(2));
+		button_shell = GTK_WIDGET(ui_lookup_widget(ui_widgets.prefs_dialog, "button_term_shell"));
+		entry_shell = GTK_WIDGET(ui_lookup_widget(ui_widgets.prefs_dialog, "entry_shell"));
 		ui_setup_open_button_callback(button_shell, NULL,
 			GTK_FILE_CHOOSER_ACTION_OPEN, GTK_ENTRY(entry_shell));
+
+		check_skip_script = GTK_WIDGET(ui_lookup_widget(ui_widgets.prefs_dialog, "check_skip_script"));
+		gtk_widget_set_sensitive(check_skip_script, vc->run_in_vte);
+
+		check_run_in_vte = GTK_WIDGET(ui_lookup_widget(ui_widgets.prefs_dialog, "check_run_in_vte"));
+		g_signal_connect(G_OBJECT(check_run_in_vte), "toggled",
+			G_CALLBACK(on_check_run_in_vte_toggled), check_skip_script);
+
+		font_button = ui_lookup_widget(ui_widgets.prefs_dialog, "font_term");
+		g_signal_connect(font_button, "font-set",  G_CALLBACK(on_term_font_set), NULL);
+
+		fg_color_button = ui_lookup_widget(ui_widgets.prefs_dialog, "color_fore");
+		g_signal_connect(fg_color_button, "color-set", G_CALLBACK(on_term_fg_color_set), NULL);
+
+		bg_color_button = ui_lookup_widget(ui_widgets.prefs_dialog, "color_back");
+		g_signal_connect(bg_color_button, "color-set", G_CALLBACK(on_term_bg_color_set), NULL);
+
+		frame_term = ui_lookup_widget(ui_widgets.prefs_dialog, "frame_term");
+		gtk_widget_show_all(frame_term);
 	}
 }
 

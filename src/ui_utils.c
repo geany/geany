@@ -3,6 +3,7 @@
  *
  *      Copyright 2006-2011 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
  *      Copyright 2006-2011 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2011 Matthew Brush <mbrush(at)codebrainz(dot)ca>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -24,6 +25,8 @@
  */
 
 #include "geany.h"
+
+#include "support.h"
 
 #include <string.h>
 #include <ctype.h>
@@ -59,6 +62,13 @@ GeanyMainWidgets	main_widgets;
 
 UIPrefs			ui_prefs;
 UIWidgets		ui_widgets;
+
+static GtkBuilder *builder = NULL;
+static GtkWidget* window1 = NULL;
+static GtkWidget* toolbar_popup_menu1 = NULL;
+static GtkWidget* edit_menu1 = NULL;
+static GtkWidget* prefs_dialog = NULL;
+static GtkWidget* project_dialog = NULL;
 
 static struct
 {
@@ -2102,6 +2112,166 @@ void ui_init_prefs(void)
 }
 
 
+/* Used to find out the name of the GtkBuilder retrieved object since
+ * some objects will be GTK_IS_BUILDABLE() and use the GtkBuildable
+ * 'name' property for that and those that don't implement GtkBuildable
+ * will have a "gtk-builder-name" stored in the GObject's data list. */
+static const gchar *ui_guess_object_name(GObject *obj)
+{
+	const gchar *name = NULL;
+
+	g_return_val_if_fail(G_IS_OBJECT(obj), NULL);
+
+	if (GTK_IS_BUILDABLE(obj))
+		name = gtk_buildable_get_name(GTK_BUILDABLE(obj));
+	if (! name)
+		name = g_object_get_data(obj, "gtk-builder-name");
+	if (! name)
+		return NULL;
+
+	return name;
+}
+
+
+/* Compatibility functions */
+GtkWidget *create_edit_menu1(void)
+{
+	return edit_menu1;
+}
+
+
+GtkWidget *create_prefs_dialog(void)
+{
+	return prefs_dialog;
+}
+
+
+GtkWidget *create_project_dialog(void)
+{
+	return project_dialog;
+}
+
+
+GtkWidget *create_toolbar_popup_menu1(void)
+{
+	return toolbar_popup_menu1;
+}
+
+
+GtkWidget *create_window1(void)
+{
+	return window1;
+}
+
+
+static GtkWidget *ui_get_top_parent(GtkWidget *widget)
+{
+	GtkWidget *parent, *found_widget;
+
+	g_return_val_if_fail(GTK_IS_WIDGET(widget), NULL);
+
+	for (;;)
+	{
+		if (GTK_IS_MENU(widget))
+			parent = gtk_menu_get_attach_widget(GTK_MENU(widget));
+		else
+			parent = gtk_widget_get_parent(widget);
+		if (parent == NULL)
+			parent = (GtkWidget*) g_object_get_data(G_OBJECT(widget), "GladeParentKey");
+		if (parent == NULL)
+			break;
+		widget = parent;
+	}
+
+	return widget;
+}
+
+
+void ui_init_builder(void)
+{
+	gchar *interface_file;
+	const gchar *name, *toplevel_name;
+	GError *error;
+	GSList *iter, *all_objects;
+	GtkCellRenderer *renderer;
+	GtkWidget *widget, *toplevel;
+
+	/* prevent function from being called twice */
+	if (GTK_IS_BUILDER(builder))
+		return;
+
+	builder = gtk_builder_new();
+	if (! builder)
+	{
+		g_error("Failed to initialize the user-interface");
+		return;
+	}
+
+	gtk_builder_set_translation_domain(builder, GETTEXT_PACKAGE);
+
+	error = NULL;
+	interface_file = g_build_filename(app->datadir, "geany.glade", NULL);
+	if (! gtk_builder_add_from_file(builder, interface_file, &error))
+	{
+		/* Show the user this message so they know WTF happened */
+		dialogs_show_msgbox_with_secondary(GTK_MESSAGE_ERROR,
+			_("Geany cannot start!"), error->message);
+		/* Aborts */
+		g_error("Cannot create user-interface: %s", error->message);
+		g_error_free(error);
+		g_free(interface_file);
+		g_object_unref(builder);
+		return;
+	}
+	g_free(interface_file);
+
+	gtk_builder_connect_signals(builder, NULL);
+
+	edit_menu1 = GTK_WIDGET(gtk_builder_get_object(builder, "edit_menu1"));
+	prefs_dialog = GTK_WIDGET(gtk_builder_get_object(builder, "prefs_dialog"));
+	project_dialog = GTK_WIDGET(gtk_builder_get_object(builder, "project_dialog"));
+	toolbar_popup_menu1 = GTK_WIDGET(gtk_builder_get_object(builder, "toolbar_popup_menu1"));
+	window1 = GTK_WIDGET(gtk_builder_get_object(builder, "window1"));
+
+	g_object_set_data(G_OBJECT(edit_menu1), "edit_menu1", edit_menu1);
+	g_object_set_data(G_OBJECT(prefs_dialog), "prefs_dialog", prefs_dialog);
+	g_object_set_data(G_OBJECT(project_dialog), "project_dialog", project_dialog);
+	g_object_set_data(G_OBJECT(toolbar_popup_menu1), "toolbar_popup_menu1", toolbar_popup_menu1);
+	g_object_set_data(G_OBJECT(window1), "window1", window1);
+
+	all_objects = gtk_builder_get_objects(builder);
+	for (iter = all_objects; iter != NULL; iter = g_slist_next(iter))
+	{
+		if (! GTK_IS_WIDGET(iter->data))
+			continue;
+
+		widget = GTK_WIDGET(iter->data);
+
+		name = ui_guess_object_name(G_OBJECT(widget));
+		if (! name)
+		{
+			g_warning("Unable to get name from GtkBuilder object");
+			continue;
+		}
+
+		toplevel = ui_get_top_parent(widget);
+		if (toplevel)
+			ui_hookup_widget(toplevel, widget, name);
+
+		/* Glade doesn't seem to add cell renderers for the combo boxes,
+		 * so they are added here. */
+		if (GTK_IS_COMBO_BOX(widget))
+		{
+			renderer = gtk_cell_renderer_text_new();
+			gtk_cell_layout_pack_start(GTK_CELL_LAYOUT(widget), renderer, TRUE);
+			gtk_cell_layout_set_attributes(GTK_CELL_LAYOUT(widget),
+				renderer, "text", 0, NULL);
+		}
+	}
+	g_slist_free(all_objects);
+}
+
+
 void ui_init(void)
 {
 	init_recent_files();
@@ -2112,10 +2282,10 @@ void ui_init(void)
 	main_widgets.progressbar = progress_bar_create();
 
 	/* current word sensitive items */
-	widgets.popup_goto_items[0] = ui_lookup_widget(main_widgets.editor_menu, "goto_tag_definition1");
+	widgets.popup_goto_items[0] = ui_lookup_widget(main_widgets.editor_menu, "goto_tag_definition2");
 	widgets.popup_goto_items[1] = ui_lookup_widget(main_widgets.editor_menu, "context_action1");
-	widgets.popup_goto_items[2] = ui_lookup_widget(main_widgets.editor_menu, "find_usage1");
-	widgets.popup_goto_items[3] = ui_lookup_widget(main_widgets.editor_menu, "find_document_usage1");
+	widgets.popup_goto_items[2] = ui_lookup_widget(main_widgets.editor_menu, "find_usage2");
+	widgets.popup_goto_items[3] = ui_lookup_widget(main_widgets.editor_menu, "find_document_usage2");
 
 	widgets.popup_copy_items[0] = ui_lookup_widget(main_widgets.editor_menu, "cut1");
 	widgets.popup_copy_items[1] = ui_lookup_widget(main_widgets.editor_menu, "copy1");
@@ -2150,6 +2320,25 @@ void ui_init(void)
 	ui_init_toolbar_widgets();
 	init_document_widgets();
 	create_config_files_menu();
+}
+
+
+void ui_finalize_builder(void)
+{
+	if (GTK_IS_BUILDER(builder))
+		g_object_unref(builder);
+
+	/* cleanup refs lingering even after GtkBuilder is destroyed */
+	if (GTK_IS_WIDGET(edit_menu1))
+		gtk_widget_destroy(edit_menu1);
+	if (GTK_IS_WIDGET(prefs_dialog))
+		gtk_widget_destroy(prefs_dialog);
+	if (GTK_IS_WIDGET(project_dialog))
+		gtk_widget_destroy(project_dialog);
+	if (GTK_IS_WIDGET(toolbar_popup_menu1))
+		gtk_widget_destroy(toolbar_popup_menu1);
+	if (GTK_IS_WIDGET(window1))
+		gtk_widget_destroy(window1);
 }
 
 

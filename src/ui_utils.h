@@ -22,6 +22,7 @@
 #ifndef GEANY_UI_UTILS_H
 #define GEANY_UI_UTILS_H 1
 
+
 /** Sets a name to lookup @a widget from @a owner.
  * @param owner Usually a window, dialog or popup menu.
  * @param widget Widget.
@@ -63,6 +64,7 @@ typedef struct GeanyInterfacePrefs
 	gboolean		compiler_tab_autoscroll;
 }
 GeanyInterfacePrefs;
+
 
 extern GeanyInterfacePrefs interface_prefs;
 
@@ -207,6 +209,13 @@ void ui_widget_set_tooltip_text(GtkWidget *widget, const gchar *text);
 
 GtkWidget *ui_lookup_widget(GtkWidget *widget, const gchar *widget_name);
 
+/* Compatibility functions */
+GtkWidget *create_edit_menu1(void);
+GtkWidget *create_prefs_dialog(void);
+GtkWidget *create_project_dialog(void);
+GtkWidget *create_toolbar_popup_menu1(void);
+GtkWidget *create_window1(void);
+
 void ui_widget_set_sensitive(GtkWidget *widget, gboolean set);
 
 void ui_entry_add_clear_icon(GtkEntry *entry);
@@ -222,10 +231,13 @@ void ui_label_set_markup(GtkLabel *label, const gchar *format, ...) G_GNUC_PRINT
 
 /* End of general widget functions */
 
+void ui_init_builder(void);
 
 void ui_init(void);
 
 void ui_init_prefs(void);
+
+void ui_finalize_builder(void);
 
 void ui_finalize(void);
 

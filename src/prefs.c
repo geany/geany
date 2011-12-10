@@ -46,7 +46,6 @@
 #include "msgwindow.h"
 #include "keyfile.h"
 #include "keybindings.h"
-#include "interface.h"
 #include "encodings.h"
 #include "project.h"
 #include "editor.h"

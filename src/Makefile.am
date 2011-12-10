@@ -22,7 +22,6 @@ SRCS = \
 	geanywraplabel.c geanywraplabel.h \
 	highlighting.c highlighting.h \
 	highlightingmappings.h \
-	interface.c interface.h \
 	keybindings.c keybindings.h \
 	keyfile.c keyfile.h \
 	log.c log.h \
@@ -125,6 +124,8 @@ AM_CFLAGS = -DGEANY_DATADIR=\""$(datadir)"\" \
 			-DGEANY_PRIVATE \
 			-DGTK \
 			-DG_LOG_DOMAIN=\""Geany"\"
+
+geany_LDFLAGS = -Wl,--export-dynamic
 
 clean-local:
 

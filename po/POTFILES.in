@@ -1,6 +1,7 @@
 # List of source files containing translatable strings.
 
 geany.desktop.in
+data/geany.glade
 src/about.c
 src/build.c
 src/callbacks.c
@@ -14,7 +15,6 @@ src/geanymenubuttonaction.c
 src/geanyentryaction.c
 src/highlighting.c
 src/images.c
-src/interface.c
 src/keybindings.c
 src/keyfile.c
 src/log.c
