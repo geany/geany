@@ -756,17 +756,17 @@ static void add_popup_menu_accels(void)
 
 	group = keybindings_get_core_group(GEANY_KEY_GROUP_INSERT);
 	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_INSERT_DATE, insert_date_custom2);
-	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_INSERT_ALTWHITESPACE, insert_alternative_white_space1);
+	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_INSERT_ALTWHITESPACE, insert_alternative_white_space2);
 
 	group = keybindings_get_core_group(GEANY_KEY_GROUP_FILE);
 	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_FILE_OPENSELECTED, menu_open_selected_file2);
 
 	group = keybindings_get_core_group(GEANY_KEY_GROUP_SEARCH);
-	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_SEARCH_FINDUSAGE, find_usage1);
-	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_SEARCH_FINDDOCUMENTUSAGE, find_document_usage1);
+	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_SEARCH_FINDUSAGE, find_usage2);
+	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_SEARCH_FINDDOCUMENTUSAGE, find_document_usage2);
 
 	group = keybindings_get_core_group(GEANY_KEY_GROUP_GOTO);
-	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_GOTO_TAGDEFINITION, goto_tag_definition1);
+	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_GOTO_TAGDEFINITION, goto_tag_definition2);
 
 	/* Format and Commands share the menu bar submenus */
 	/* Build menu items are set if the build menus are created */

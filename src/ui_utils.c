@@ -2280,10 +2280,10 @@ void ui_init(void)
 	main_widgets.progressbar = progress_bar_create();
 
 	/* current word sensitive items */
-	widgets.popup_goto_items[0] = ui_lookup_widget(main_widgets.editor_menu, "goto_tag_definition1");
+	widgets.popup_goto_items[0] = ui_lookup_widget(main_widgets.editor_menu, "goto_tag_definition2");
 	widgets.popup_goto_items[1] = ui_lookup_widget(main_widgets.editor_menu, "context_action1");
-	widgets.popup_goto_items[2] = ui_lookup_widget(main_widgets.editor_menu, "find_usage1");
-	widgets.popup_goto_items[3] = ui_lookup_widget(main_widgets.editor_menu, "find_document_usage1");
+	widgets.popup_goto_items[2] = ui_lookup_widget(main_widgets.editor_menu, "find_usage2");
+	widgets.popup_goto_items[3] = ui_lookup_widget(main_widgets.editor_menu, "find_document_usage2");
 
 	widgets.popup_copy_items[0] = ui_lookup_widget(main_widgets.editor_menu, "cut1");
 	widgets.popup_copy_items[1] = ui_lookup_widget(main_widgets.editor_menu, "copy1");

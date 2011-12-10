@@ -354,7 +354,7 @@
               </object>
             </child>
             <child>
-              <object class="GtkMenuItem" id="insert_alternative_white_space1">
+              <object class="GtkMenuItem" id="insert_alternative_white_space2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="use_action_appearance">False</property>
@@ -395,7 +395,7 @@
       </object>
     </child>
     <child>
-      <object class="GtkImageMenuItem" id="item_find_usage1">
+      <object class="GtkImageMenuItem" id="find_usage2">
         <property name="label" translatable="yes">Find _Usage</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
@@ -407,7 +407,7 @@
       </object>
     </child>
     <child>
-      <object class="GtkImageMenuItem" id="find_document_usage1">
+      <object class="GtkImageMenuItem" id="find_document_usage2">
         <property name="label" translatable="yes">Find _Document Usage</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
@@ -419,7 +419,7 @@
       </object>
     </child>
     <child>
-      <object class="GtkImageMenuItem" id="goto_tag_definition1">
+      <object class="GtkImageMenuItem" id="goto_tag_definition2">
         <property name="label" translatable="yes">Go to _Tag Definition</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
@@ -7608,7 +7608,7 @@
                           </object>
                         </child>
                         <child>
-                          <object class="GtkMenuItem" id="insert_alternative_white_space1_project">
+                          <object class="GtkMenuItem" id="insert_alternative_white_space1">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="use_action_appearance">False</property>
@@ -7845,7 +7845,7 @@
                                   </object>
                                 </child>
                                 <child>
-                                  <object class="GtkMenuItem" id="item_find_document_usage1">
+                                  <object class="GtkMenuItem" id="find_document_usage1">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="use_action_appearance">False</property>
@@ -7877,7 +7877,7 @@
                                   </object>
                                 </child>
                                 <child>
-                                  <object class="GtkMenuItem" id="item_goto_tag_definition1">
+                                  <object class="GtkMenuItem" id="goto_tag_definition1">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="use_action_appearance">False</property>
