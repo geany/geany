@@ -2213,7 +2213,11 @@ void ui_init_builder(void)
 	interface_file = g_build_filename(app->datadir, "geany.glade", NULL);
 	if (! gtk_builder_add_from_file(builder, interface_file, &error))
 	{
-		g_error("Failed to load the user-interface file: %s", error->message);
+		/* Show the user this message so they know WTF happened */
+		dialogs_show_msgbox_with_secondary(GTK_MESSAGE_ERROR,
+			_("Geany cannot start!"), error->message);
+		/* Aborts */
+		g_error("Cannot create user-interface: %s", error->message);
 		g_error_free(error);
 		g_free(interface_file);
 		g_object_unref(builder);
@@ -2265,10 +2269,6 @@ void ui_init_builder(void)
 		}
 	}
 	g_slist_free(all_objects);
-
-	/* FIXME: we don't want to loose all the unpacked GObjects which
-	 * gets destroyed here, so we'll free the builder at the end */
-	//g_object_unref(builder);
 }
 
 
