@@ -921,9 +921,6 @@ static void load_ui_prefs(GKeyFile *config)
 	geo = g_key_file_get_integer_list(config, PACKAGE, "geometry", &geo_len, NULL);
 	if (! geo || geo_len < 5)
 	{
-		if (geo_len < 5)
-			g_warning("Cannot restore window geometry: invalid geometry saved");
-
 		ui_prefs.geometry[0] = -1;
 		ui_prefs.geometry[1] = -1;
 		ui_prefs.geometry[2] = -1;
