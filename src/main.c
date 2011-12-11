@@ -275,10 +275,6 @@ static void main_init(void)
 	gtk_widget_set_name(ui_lookup_widget(main_widgets.window, "menubar1"), "GeanyMenubar");
 	gtk_widget_set_name(main_widgets.toolbar, "GeanyToolbar");
 
-	/* for some reason we need to set the initial size request,
-	 * otherwise the main window gets crazy dimensions */
-	gtk_widget_set_size_request(main_widgets.window,
-		GEANY_WINDOW_DEFAULT_WIDTH, GEANY_WINDOW_DEFAULT_HEIGHT);
 	gtk_window_set_default_size(GTK_WINDOW(main_widgets.window),
 		GEANY_WINDOW_DEFAULT_WIDTH, GEANY_WINDOW_DEFAULT_HEIGHT);
 }
