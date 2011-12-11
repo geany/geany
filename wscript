@@ -82,7 +82,7 @@ geany_sources = set([
     'src/about.c', 'src/build.c', 'src/callbacks.c', 'src/dialogs.c', 'src/document.c',
     'src/editor.c', 'src/encodings.c', 'src/filetypes.c', 'src/geanyentryaction.c',
     'src/geanymenubuttonaction.c', 'src/geanyobject.c', 'src/geanywraplabel.c',
-    'src/highlighting.c', 'src/interface.c', 'src/keybindings.c',
+    'src/highlighting.c', 'src/keybindings.c',
     'src/keyfile.c', 'src/log.c', 'src/main.c', 'src/msgwindow.c', 'src/navqueue.c', 'src/notebook.c',
     'src/plugins.c', 'src/pluginutils.c', 'src/prefix.c', 'src/prefs.c', 'src/printing.c', 'src/project.c',
     'src/sciwrappers.c', 'src/search.c', 'src/socket.c', 'src/stash.c',
@@ -445,6 +445,7 @@ def build(bld):
     bld.install_as('${DATADIR}/%s/GPL-2' % data_dir, 'COPYING')
     bld.install_files('${DATADIR}/%s' % data_dir, start_dir.ant_glob('filetype*'), cwd=start_dir)
     bld.install_files('${DATADIR}/%s' % data_dir, start_dir.ant_glob('*.tags'), cwd=start_dir)
+    bld.install_files('${DATADIR}/%s' % data_dir, 'data/geany.glade')
     bld.install_files('${DATADIR}/%s' % data_dir, 'data/snippets.conf')
     bld.install_files('${DATADIR}/%s' % data_dir, 'data/ui_toolbar.xml')
     start_dir = bld.path.find_dir('data/colorschemes')
