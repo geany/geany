@@ -922,6 +922,10 @@ static void load_ui_prefs(GKeyFile *config)
 	if (error)
 	{
 		ui_prefs.geometry[0] = -1;
+		ui_prefs.geometry[1] = -1;
+		ui_prefs.geometry[2] = -1;
+		ui_prefs.geometry[3] = -1;
+		ui_prefs.geometry[4] = 0;
 		g_error_free(error);
 		error = NULL;
 	}
