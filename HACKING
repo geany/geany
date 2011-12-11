@@ -121,26 +121,8 @@ Doc-comments
 
 Glade
 -----
-Use the code generation features of Glade instead of editing interface.c
-or support.c. Glade 2.12 is required as later Glade versions do not
-have the code generation features anymore. At some point we'll switch to
-GtkBuilder, probably.
-
-You can build Glade 2.12 and run the binary in place, without installing
-it - this should work fine even if you have another version of Glade
-installed on the system.
-
-You can download Glade 2.12.2 here:
-http://download.geany.org/glade-2.12.2.tar.gz
-
-On recent GTK versions, you need a small patch to make it compile.
-You can get the patch from:
-http://download.geany.org/glade-2.12.2-build-fixes.patch
-
-And then simply apply it like so::
-
-    $ /tmp/glade-2.12.2% patch -p1 < glade-2.12.2-build-fixes.patch
-
+Add user-interface widgets to the Glade 3 file ``data/geany.glade``.
+Callbacks for the user-interface should go in ``src/callbacks.c``.
 
 GTK versions & API documentation
 --------------------------------
