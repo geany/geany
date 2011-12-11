@@ -906,7 +906,7 @@ static void load_dialog_prefs(GKeyFile *config)
 static void load_ui_prefs(GKeyFile *config)
 {
 	gint *geo;
-	GError *error = NULL;
+	gsize geo_len;
 
 	ui_prefs.sidebar_visible = utils_get_setting_boolean(config, PACKAGE, "sidebar_visible", TRUE);
 	ui_prefs.msgwindow_visible = utils_get_setting_boolean(config, PACKAGE, "msgwindow_visible", TRUE);
@@ -918,35 +918,28 @@ static void load_ui_prefs(GKeyFile *config)
 				_("Type here what you want, use it as a notice/scratch board"));
 	scribble_pos = utils_get_setting_integer(config, PACKAGE, "scribble_pos", -1);
 
-	geo = g_key_file_get_integer_list(config, PACKAGE, "geometry", NULL, &error);
-	if (error)
+	geo = g_key_file_get_integer_list(config, PACKAGE, "geometry", &geo_len, NULL);
+	if (! geo || geo_len < 5)
 	{
+		if (geo_len < 5)
+			g_warning("Cannot restore window geometry: invalid geometry saved");
+
 		ui_prefs.geometry[0] = -1;
 		ui_prefs.geometry[1] = -1;
 		ui_prefs.geometry[2] = -1;
 		ui_prefs.geometry[3] = -1;
 		ui_prefs.geometry[4] = 0;
-		g_error_free(error);
-		error = NULL;
 	}
 	else
 	{
-		gint i;
-
-		ui_prefs.geometry[0] = geo[0];
-		ui_prefs.geometry[1] = geo[1];
-		ui_prefs.geometry[2] = geo[2];
-		ui_prefs.geometry[3] = geo[3];
-		ui_prefs.geometry[4] = geo[4];
-
 		/* don't use insane values but when main windows was maximized last time, pos might be
 		 * negative (due to differences in root window and window decorations) */
 		/* quitting when minimized can make pos -32000, -32000 on Windows! */
-		for (i = 0; i < 4; i++)
-		{
-			if (ui_prefs.geometry[i] < -1)
-				ui_prefs.geometry[i] = -1;
-		}
+		ui_prefs.geometry[0] = MAX(-1, geo[0]);
+		ui_prefs.geometry[1] = MAX(-1, geo[1]);
+		ui_prefs.geometry[2] = MAX(-1, geo[2]);
+		ui_prefs.geometry[3] = MAX(-1, geo[3]);
+		ui_prefs.geometry[4] = geo[4] != 0;
 	}
 	hpan_position = utils_get_setting_integer(config, PACKAGE, "treeview_position", 156);
 	vpan_position = utils_get_setting_integer(config, PACKAGE, "msgwindow_position", (geo) ?
