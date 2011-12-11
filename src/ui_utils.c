@@ -33,6 +33,7 @@
 #include <gdk/gdkkeysyms.h>
 
 #include "ui_utils.h"
+#include "dialogs.h"
 #include "prefs.h"
 #include "sciwrappers.h"
 #include "document.h"
@@ -2166,7 +2167,7 @@ GtkWidget *create_window1(void)
 
 static GtkWidget *ui_get_top_parent(GtkWidget *widget)
 {
-	GtkWidget *parent, *found_widget;
+	GtkWidget *parent;
 
 	g_return_val_if_fail(GTK_IS_WIDGET(widget), NULL);
 
@@ -2190,7 +2191,7 @@ static GtkWidget *ui_get_top_parent(GtkWidget *widget)
 void ui_init_builder(void)
 {
 	gchar *interface_file;
-	const gchar *name, *toplevel_name;
+	const gchar *name;
 	GError *error;
 	GSList *iter, *all_objects;
 	GtkCellRenderer *renderer;
