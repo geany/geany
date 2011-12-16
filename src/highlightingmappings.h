@@ -349,7 +349,7 @@ static const HLStyle highlighting_styles_D[] =
 	{ SCE_D_COMMENT,				"comment",					FALSE },
 	{ SCE_D_COMMENTLINE,			"commentline",				FALSE },
 	{ SCE_D_COMMENTDOC,				"commentdoc",				FALSE },
-	{ SCE_D_COMMENTNESTED,			"commentdocnested",			FALSE },
+	{ SCE_D_COMMENTNESTED,			"commentnested",			FALSE },
 	{ SCE_D_NUMBER,					"number",					FALSE },
 	{ SCE_D_WORD,					"word",						FALSE },
 	{ SCE_D_WORD2,					"word2",					FALSE },
