@@ -2117,6 +2117,18 @@
                                     <property name="position">3</property>
                                   </packing>
                                 </child>
+                                <child>
+                                  <object class="GtkCheckButton" id="check_tab_close_switch_to_mru">
+                                    <property name="label" translatable="yes">Switch to last used document after closing a tab</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="receives_default">False</property>
+                                    <property name="draw_indicator">True</property>
+                                  </object>
+                                  <packing>
+                                    <property name="position">4</property>
+                                  </packing>
+                                </child>
                               </object>
                             </child>
                           </object>
