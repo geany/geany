@@ -642,7 +642,7 @@ static gboolean update_config(const PropertyDialogElements *e, gboolean new_proj
 {
 	const gchar *name, *file_name, *base_path;
 	gchar *locale_filename;
-	gint name_len;
+	gsize name_len;
 	gint err_code = 0;
 	GeanyProject *p;
 

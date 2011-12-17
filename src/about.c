@@ -76,14 +76,14 @@ const gchar *translators[][2] = {
 	{ "zh_CN", "Dormouse Young &lt;mouselinux@163.com&gt;,\nXhacker Liu &lt;liu.dongyuan@gmail.com&gt;" },
 	{ "zh_TW", "KoViCH &lt;kovich.ian@gmail.com&gt;\nWei-Lun Chao &lt;chaoweilun@gmail.com&gt;" }
 };
-static const gint translators_len = G_N_ELEMENTS(translators);
+static const guint translators_len = G_N_ELEMENTS(translators);
 
 const gchar *prev_translators[][2] = {
 	{ "es", "Damián Viano &lt;debian@damianv.com.ar&gt;\nNacho Cabanes &lt;ncabanes@gmail.com&gt;" },
 	{ "pl", "Jacek Wolszczak &lt;shutdownrunner@o2.pl&gt;\nJarosław Foksa &lt;jfoksa@gmail.com&gt;" },
 	{ "nl", "Kurt De Bree &lt;kdebree@telenet.be&gt;" }
 };
-static const gint prev_translators_len = G_N_ELEMENTS(prev_translators);
+static const guint prev_translators_len = G_N_ELEMENTS(prev_translators);
 
 static const gchar *contributors =
 "Adam Ples, "
@@ -144,7 +144,7 @@ static GtkWidget *create_dialog(void)
 	gchar *license_text = NULL;
 	gchar buffer[512];
 	gchar buffer2[128];
-	gint i, row = 0;
+	guint i, row = 0;
 
 	dialog = gtk_dialog_new();
 
@@ -271,9 +271,7 @@ static GtkWidget *create_dialog(void)
 	g_snprintf(buffer, sizeof(buffer),
 		"<span size=\"larger\" weight=\"bold\">%s</span>", _("Developers"));
 	label = gtk_label_new(buffer);
-	gtk_table_attach(GTK_TABLE(table), label, 0, 2, row, row + 1,
-					(GtkAttachOptions) (GTK_FILL),
-					(GtkAttachOptions) (0), 0, 5);
+	gtk_table_attach(GTK_TABLE(table), label, 0, 2, row, row + 1, GTK_FILL, 0, 0, 5);
 	gtk_label_set_use_markup(GTK_LABEL(label), TRUE);
 	gtk_misc_set_alignment(GTK_MISC(label), 0, 0);
 	row++;
@@ -422,7 +420,7 @@ static GtkWidget *create_dialog(void)
 			_("License text could not be found, please visit http://www.gnu.org/licenses/gpl-2.0.txt to view it online."));
 	}
 	tb = gtk_text_view_get_buffer(GTK_TEXT_VIEW(license_textview));
-	gtk_text_buffer_set_text(tb, license_text, strlen(license_text));
+	gtk_text_buffer_set_text(tb, license_text, -1);
 
 	g_free(license_text);
 

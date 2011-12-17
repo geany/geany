@@ -213,20 +213,11 @@ static void close_clicked_cb(GtkButton *button, gpointer user_data)
 static gint get_points(gushort a, gushort b, gushort c)
 {
 	if (a == b && b == c)
-	{
 		return 2;
-	}
+	else if (a == b || b == c || a == c)
+		return 1;
 	else
-	{
-		if (a == b || b == c || a == c)
-		{
-			return 1;
-		}
-		else
-		{
-			return 0;
-		}
-	}
+		return 0;
 }
 
 
@@ -234,23 +225,16 @@ static gint get_points(gushort a, gushort b, gushort c)
 static void ensure_different_icons(gushort *a, gushort *b, gushort *c)
 {
 	if (*a == *b)
-	{
-		(*b)++;
-		if (*b > 9)
-			*b = 0;
-	}
+		*b = (gushort) ((*b + 1) % MAX_PICS);
 	if (*b == *c)
-	{
-		(*c)++;
-		if (*c > 9)
-			*c = 0;
-	}
+		*c = (gushort) ((*c + 1) % MAX_PICS);
 }
 
 
 static void arm_clicked_cb(GtkButton *button, gpointer user_data)
 {
-	gushort erg_a, erg_b, erg_c, i, l, m, n, loops;
+	gushort erg_a, erg_b, erg_c, l, m, n;
+	gint i, loops;
 
 	if (is_running)
 		return;	/* prevent multiple clicks */
@@ -261,12 +245,12 @@ static void arm_clicked_cb(GtkButton *button, gpointer user_data)
 	bout++;
 	update_labels(gb_window, FALSE, 3);
 
-	l = g_random_int_range(0, MAX_PICS);
-	m = g_random_int_range(0, MAX_PICS);
-	n = g_random_int_range(0, MAX_PICS);
-	erg_a = g_random_int_range(0, MAX_PICS);
-	erg_b = g_random_int_range(0, MAX_PICS);
-	erg_c = g_random_int_range(0, MAX_PICS);
+	l = (gushort) g_random_int_range(0, MAX_PICS);
+	m = (gushort) g_random_int_range(0, MAX_PICS);
+	n = (gushort) g_random_int_range(0, MAX_PICS);
+	erg_a = (gushort) g_random_int_range(0, MAX_PICS);
+	erg_b = (gushort) g_random_int_range(0, MAX_PICS);
+	erg_c = (gushort) g_random_int_range(0, MAX_PICS);
 
 	ensure_different_icons(&l, &m, &n);
 
@@ -298,7 +282,7 @@ static void arm_clicked_cb(GtkButton *button, gpointer user_data)
 	gtk_image_set_from_pixbuf(GTK_IMAGE(image3), icons[erg_c]);
 
 	i = get_points(erg_a, erg_b, erg_c);
-	points += (i * 50);
+	points += i * 50;
 
 	update_labels(gb_window, FALSE, i);
 
@@ -318,7 +302,7 @@ static void help_clicked_cb(GtkButton *button, gpointer user_data)
 	g_signal_connect(okbutton1, "clicked", G_CALLBACK(destroydialog), G_OBJECT(dialog));
 
 	buffer = gtk_text_buffer_new(NULL);
-	gtk_text_buffer_set_text(buffer, help_text, strlen(help_text));
+	gtk_text_buffer_set_text(buffer, help_text, -1);
 	gtk_text_view_set_buffer(GTK_TEXT_VIEW(textview1), buffer);
 
 	gtk_widget_show(dialog);
@@ -1721,9 +1705,9 @@ static void init_images(void)
 	gushort l, m, n;
 
 	/* define start images */
-	l = g_random_int_range(0, MAX_PICS);
-	m = g_random_int_range(0, MAX_PICS);
-	n = g_random_int_range(0, MAX_PICS);
+	l = (gushort) g_random_int_range(0, MAX_PICS);
+	m = (gushort) g_random_int_range(0, MAX_PICS);
+	n = (gushort) g_random_int_range(0, MAX_PICS);
 
 	ensure_different_icons(&l, &m, &n);
 

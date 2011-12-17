@@ -1542,7 +1542,7 @@ _("An error occurred while converting the file from UTF-8 in \"%s\". The file re
 
 
 static gchar *write_data_to_disk(const gchar *locale_filename,
-								 const gchar *data, gint len)
+								 const gchar *data, gsize len)
 {
 	GError *error = NULL;
 
@@ -1588,7 +1588,7 @@ static gchar *write_data_to_disk(const gchar *locale_filename,
 		}
 		else
 		{
-			gint bytes_written;
+			gsize bytes_written;
 
 			errno = 0;
 			bytes_written = fwrite(data, sizeof(gchar), len, fp);
@@ -1634,7 +1634,7 @@ static gchar *write_data_to_disk(const gchar *locale_filename,
 
 
 static gchar *save_doc(GeanyDocument *doc, const gchar *locale_filename,
-								 const gchar *data, gint len)
+								 const gchar *data, gsize len)
 {
 	gchar *err;
 

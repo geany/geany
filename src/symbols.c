@@ -371,7 +371,7 @@ symbols_find_tm_tag(const GPtrArray *tags, const gchar *tag_name)
 
 
 static TMTag *find_work_object_tag(const TMWorkObject *workobj,
-		const gchar *tag_name, gint type)
+		const gchar *tag_name, guint type)
 {
 	GPtrArray *tags;
 	TMTag *tmtag;
@@ -393,7 +393,7 @@ static TMTag *find_work_object_tag(const TMWorkObject *workobj,
 }
 
 
-static TMTag *find_workspace_tag(const gchar *tag_name, gint type)
+static TMTag *find_workspace_tag(const gchar *tag_name, guint type)
 {
 	guint j;
 	const GPtrArray *work_objects = NULL;
@@ -1785,7 +1785,7 @@ static void load_user_tags(filetype_id ft_id)
 static gboolean goto_tag(const gchar *name, gboolean definition)
 {
 	const gint forward_types = tm_tag_prototype_t | tm_tag_externvar_t;
-	gint type;
+	guint type;
 	TMTag *tmtag = NULL;
 	GeanyDocument *old_doc = document_get_current();
 

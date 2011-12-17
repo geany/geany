@@ -51,7 +51,7 @@ PrintingPrefs printing_prefs;
 #define ADD_ATTR(l, a) \
 	pango_attr_list_insert((l), (a)); \
 	(a)->start_index = 0; \
-	(a)->end_index = -1;
+	(a)->end_index = G_MAXUINT;
 
 
 enum

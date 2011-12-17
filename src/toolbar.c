@@ -1063,7 +1063,7 @@ void toolbar_configure(GtkWindow *parent)
 
 	/* read the current active toolbar items */
 	markup = gtk_ui_manager_get_ui(uim);
-	used_items = tb_editor_parse_ui(markup, strlen(markup), NULL);
+	used_items = tb_editor_parse_ui(markup, -1, NULL);
 	g_free(markup);
 
 	/* get all available actions */

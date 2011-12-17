@@ -30,7 +30,7 @@ struct socket_info_struct
 	gchar		*file_name;
 	GIOChannel	*read_ioc;
 	gint 		 lock_socket;
-	gint 		 lock_socket_tag;
+	guint 		 lock_socket_tag;
 };
 
 extern struct socket_info_struct socket_info;

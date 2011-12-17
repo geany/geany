@@ -107,7 +107,7 @@ typedef enum
 typedef struct GeanyBuildInfo
 {
 	GeanyBuildGroup	 grp;
-	gint			 cmd;
+	guint			 cmd;
 	GPid			 pid;	/* process id of the spawned process */
 	gchar			*dir;
 	guint			 file_type_id;
@@ -179,9 +179,9 @@ void build_toolbutton_build_clicked(GtkAction *action, gpointer user_data);
 
 void build_remove_menu_item(GeanyBuildSource src, GeanyBuildGroup grp, gint cmd);
 
-GeanyBuildCommand *build_get_menu_item(GeanyBuildSource src, GeanyBuildGroup grp, gint cmd);
+GeanyBuildCommand *build_get_menu_item(GeanyBuildSource src, GeanyBuildGroup grp, guint cmd);
 
-GeanyBuildCommand *build_get_current_menu_item(GeanyBuildGroup grp, gint cmd, gint *src);
+GeanyBuildCommand *build_get_current_menu_item(GeanyBuildGroup grp, guint cmd, guint *src);
 
 BuildMenuItems *build_get_menu_items(gint filetype_idx);
 
@@ -192,8 +192,8 @@ void build_save_menu(GKeyFile *config, gpointer ptr, GeanyBuildSource src);
 
 void build_set_group_count(GeanyBuildGroup grp, gint count);
 
-gint build_get_group_count(GeanyBuildGroup grp);
+guint build_get_group_count(GeanyBuildGroup grp);
 
-gchar **build_get_regex(GeanyBuildGroup grp, GeanyFiletype *ft, gint *from);
+gchar **build_get_regex(GeanyBuildGroup grp, GeanyFiletype *ft, guint *from);
 
 #endif

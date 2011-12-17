@@ -213,7 +213,8 @@ static void kb_show_popup_menu(GtkWidget *widget, GdkEventButton *event)
 {
 	GtkWidget *item;
 	static GtkWidget *menu = NULL;
-	gint button, event_time;
+	guint button;
+	guint32 event_time;
 
 	if (menu == NULL)
 	{
@@ -815,7 +816,7 @@ on_prefs_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 	{
 		GtkWidget *widget;
 		guint i;
-		guint autoclose_brackets[5];
+		gboolean autoclose_brackets[5];
 		gboolean old_invert_all = interface_prefs.highlighting_invert_all;
 		gboolean old_sidebar_pos = interface_prefs.sidebar_pos;
 		GeanyDocument *doc = document_get_current();
@@ -1078,11 +1079,11 @@ on_prefs_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 		autoclose_brackets[4] = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
 		editor_prefs.autoclose_chars =
-		  (autoclose_brackets[0] ? GEANY_AC_PARENTHESIS : 0)
-		| (autoclose_brackets[1] ? GEANY_AC_CBRACKET : 0)
-		| (autoclose_brackets[2] ? GEANY_AC_SBRACKET : 0)
-		| (autoclose_brackets[3] ? GEANY_AC_SQUOTE : 0)
-		| (autoclose_brackets[4] ? GEANY_AC_DQUOTE : 0);
+		  (autoclose_brackets[0] ? GEANY_AC_PARENTHESIS : 0u)
+		| (autoclose_brackets[1] ? GEANY_AC_CBRACKET : 0u)
+		| (autoclose_brackets[2] ? GEANY_AC_SBRACKET : 0u)
+		| (autoclose_brackets[3] ? GEANY_AC_SQUOTE : 0u)
+		| (autoclose_brackets[4] ? GEANY_AC_DQUOTE : 0u);
 
 		/* Tools Settings */
 
@@ -1348,7 +1349,7 @@ static void kb_cell_edited_cb(GtkCellRendererText *cellrenderertext,
 static gboolean kb_grab_key_dialog_key_press_cb(GtkWidget *dialog, GdkEventKey *event, gpointer user_data)
 {
 	gchar *str;
-	gint state;
+	guint state;
 
 	state = event->state & gtk_accelerator_get_default_mod_mask();
 

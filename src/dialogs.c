@@ -146,7 +146,7 @@ static void open_file_dialog_handle_response(GtkWidget *dialog, gint response)
 
 		/* ignore detect from file item */
 		if (filesel_state.open.filetype_idx > 0)
-			ft = g_slist_nth_data(filetypes_by_title, filesel_state.open.filetype_idx);
+			ft = g_slist_nth_data(filetypes_by_title, (guint) filesel_state.open.filetype_idx);
 
 		encoding_model = gtk_combo_box_get_model(GTK_COMBO_BOX(encoding_combo));
 		gtk_combo_box_get_active_iter(GTK_COMBO_BOX(encoding_combo), &encoding_iter);

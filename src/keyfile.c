@@ -99,9 +99,9 @@ GPtrArray *pref_groups = NULL;
 
 static struct
 {
-	int number_ft_menu_items;
-	int number_non_ft_menu_items;
-	int number_exec_menu_items;
+	gint number_ft_menu_items;
+	gint number_non_ft_menu_items;
+	gint number_exec_menu_items;
 }
 build_menu_prefs;
 

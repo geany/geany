@@ -41,7 +41,7 @@ struct _GeanyWrapLabelClass
 
 typedef struct
 {
-	gsize wrap_width;
+	gint wrap_width;
 } GeanyWrapLabelPrivate;
 
 struct _GeanyWrapLabel
@@ -53,7 +53,7 @@ struct _GeanyWrapLabel
 
 static void geany_wrap_label_size_request	(GtkWidget *widget, GtkRequisition *req);
 static void geany_wrap_label_size_allocate	(GtkWidget *widget, GtkAllocation *alloc);
-static void geany_wrap_label_set_wrap_width	(GtkWidget *widget, gsize width);
+static void geany_wrap_label_set_wrap_width	(GtkWidget *widget, gint width);
 static void geany_wrap_label_label_notify	(GObject *object, GParamSpec *pspec, gpointer data);
 
 G_DEFINE_TYPE(GeanyWrapLabel, geany_wrap_label, GTK_TYPE_LABEL)
@@ -87,11 +87,11 @@ static void geany_wrap_label_init(GeanyWrapLabel *self)
 
 
 /* Sets the point at which the text should wrap. */
-static void geany_wrap_label_set_wrap_width(GtkWidget *widget, gsize width)
+static void geany_wrap_label_set_wrap_width(GtkWidget *widget, gint width)
 {
 	GeanyWrapLabelPrivate *priv;
 
-	if (width == 0)
+	if (width <= 0)
 		return;
 
 	/*
