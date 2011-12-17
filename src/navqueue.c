@@ -57,6 +57,9 @@ void navqueue_init()
 
 	navigation_buttons[0] = toolbar_get_action_by_name("NavBack");
 	navigation_buttons[1] = toolbar_get_action_by_name("NavFor");
+
+	gtk_action_set_sensitive(navigation_buttons[0], FALSE);
+	gtk_action_set_sensitive(navigation_buttons[1], FALSE);
 }
 
 

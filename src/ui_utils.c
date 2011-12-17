@@ -753,8 +753,6 @@ static void init_document_widgets(void)
 	add_doc_toolitem("CloseAll");
 	add_doc_toolitem("Search");
 	add_doc_toolitem("SearchEntry");
-	add_doc_toolitem("NavBack");
-	add_doc_toolitem("NavFor");
 	add_doc_toolitem("ZoomIn");
 	add_doc_toolitem("ZoomOut");
 	add_doc_toolitem("Indent");
