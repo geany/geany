@@ -562,14 +562,13 @@ GeanyBuildCommand *build_get_current_menu_item(GeanyBuildGroup grp, gint cmd, gi
 
 
 /* Clear all error indicators in all documents. */
-static void clear_errors(GeanyDocument *doc)
+static void clear_all_errors(void)
 {
 	guint i;
 
-	for (i = 0; i < documents_array->len; i++)
+	foreach_document(i)
 	{
-		if (documents[i]->is_valid)
-			editor_indicator_clear_errors(documents[i]->editor);
+		editor_indicator_clear_errors(documents[i]->editor);
 	}
 }
 
@@ -697,8 +696,7 @@ static GPid build_spawn_cmd(GeanyDocument *doc, const gchar *cmd, const gchar *d
 		return (GPid) 1;
 	}
 
-	if (doc != NULL)
-		clear_errors(doc);
+	clear_all_errors();
 	setptr(current_dir_entered, NULL);
 
 	cmd_string = g_strdup(cmd);
