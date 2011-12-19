@@ -105,16 +105,32 @@ static void set_line_numbers(ScintillaObject * sci, gboolean set)
 }
 
 
-static void on_sci_notify(ScintillaObject *sci, gint param, SCNotification *notif, gpointer data)
+static void on_sci_notify(ScintillaObject *sci, gint param,
+		SCNotification *nt, gpointer data)
 {
 	gint line;
 
-	switch (notif->nmhdr.code)
+	switch (nt->nmhdr.code)
 	{
+		/* adapted from editor.c: on_margin_click() */
 		case SCN_MARGINCLICK:
-			if (notif->margin == 2)
+			/* left click to marker margin toggles marker */
+			if (nt->margin == 1)
 			{
-				line = sci_get_line_from_position(sci, notif->position);
+				gboolean set;
+				gint marker = 1;
+
+				line = sci_get_line_from_position(sci, nt->position);
+				set = sci_is_marker_set_at_line(sci, line, marker);
+				if (!set)
+					sci_set_marker_at_line(sci, line, marker);
+				else
+					sci_delete_marker_at_line(sci, line, marker);
+			}
+			/* left click on the folding margin to toggle folding state of current line */
+			if (nt->margin == 2)
+			{
+				line = sci_get_line_from_position(sci, nt->position);
 				scintilla_send_message(sci, SCI_TOGGLEFOLD, line, 0);
 			}
 			break;
@@ -139,7 +155,9 @@ static void sync_to_current(ScintillaObject *sci, ScintillaObject *current)
 
 	/* override some defaults */
 	set_line_numbers(sci, geany->editor_prefs->show_linenumber_margin);
-	scintilla_send_message(sci, SCI_SETMARGINWIDTHN, 1, 0 ); /* hide marker margin (no commands) */
+	/* marker margin */
+	scintilla_send_message(sci, SCI_SETMARGINWIDTHN, 1,
+		scintilla_send_message(current, SCI_GETMARGINWIDTHN, 1, 0));
 	if (!geany->editor_prefs->folding)
 		scintilla_send_message(sci, SCI_SETMARGINWIDTHN, 2, 0);
 }
