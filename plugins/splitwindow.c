@@ -140,6 +140,8 @@ static void sync_to_current(ScintillaObject *sci, ScintillaObject *current)
 	/* override some defaults */
 	set_line_numbers(sci, geany->editor_prefs->show_linenumber_margin);
 	scintilla_send_message(sci, SCI_SETMARGINWIDTHN, 1, 0 ); /* hide marker margin (no commands) */
+	if (!geany->editor_prefs->folding)
+		scintilla_send_message(sci, SCI_SETMARGINWIDTHN, 2, 0);
 }
 
 
@@ -158,11 +160,9 @@ static void set_editor(EditWindow *editwin, GeanyEditor *editor)
 
 	sync_to_current(editwin->sci, editor->sci);
 
-	/* margins */
+	/* for margin events */
 	g_signal_connect(editwin->sci, "sci-notify",
 			G_CALLBACK(on_sci_notify), NULL);
-	if (!geany->editor_prefs->folding)
-		scintilla_send_message(editwin->sci, SCI_SETMARGINWIDTHN, 2, 0);
 
 	gtk_label_set_text(GTK_LABEL(editwin->name_label), DOC_FILENAME(editor->document));
 }
