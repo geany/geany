@@ -75,11 +75,10 @@ typedef struct EditWindow
 	ScintillaObject	*sci;		/* new editor widget */
 	GtkWidget		*vbox;
 	GtkWidget		*name_label;
-	gint 			handler_id;
 }
 EditWindow;
 
-static EditWindow edit_window = {NULL, NULL, NULL, NULL, 0 };
+static EditWindow edit_window = {NULL, NULL, NULL, NULL};
 
 
 static void on_unsplit(GtkMenuItem *menuitem, gpointer user_data);
@@ -106,7 +105,7 @@ static void set_line_numbers(ScintillaObject * sci, gboolean set)
 }
 
 
-static void on_sci_notify (ScintillaObject *sci, gint param, SCNotification *notif, gpointer data)
+static void on_sci_notify(ScintillaObject *sci, gint param, SCNotification *notif, gpointer data)
 {
 	gint line;
 
@@ -148,12 +147,6 @@ static void set_editor(EditWindow *editwin, GeanyEditor *editor)
 {
 	editwin->editor = editor;
 
-	if (editwin->handler_id > 0 && editwin->sci != NULL)
-	{
-		g_signal_handler_disconnect(editwin->sci, editwin->handler_id);
-		editwin->handler_id = 0;
-	}
-
 	/* first destroy any widget, otherwise its signals will have an
 	 * invalid document as user_data */
 	if (editwin->sci != NULL)
@@ -165,10 +158,10 @@ static void set_editor(EditWindow *editwin, GeanyEditor *editor)
 
 	sync_to_current(editwin->sci, editor->sci);
 
-	if (geany->editor_prefs->folding)
-		editwin->handler_id = g_signal_connect(editwin->sci, "sci-notify",
-				G_CALLBACK(on_sci_notify), NULL);
-	else
+	/* margins */
+	g_signal_connect(editwin->sci, "sci-notify",
+			G_CALLBACK(on_sci_notify), NULL);
+	if (!geany->editor_prefs->folding)
 		scintilla_send_message(editwin->sci, SCI_SETMARGINWIDTHN, 2, 0);
 
 	gtk_label_set_text(GTK_LABEL(editwin->name_label), DOC_FILENAME(editor->document));
@@ -362,12 +355,6 @@ static void on_unsplit(GtkMenuItem *menuitem, gpointer user_data)
 
 	gtk_widget_ref(notebook);
 	gtk_container_remove(GTK_CONTAINER(pane), notebook);
-
-	if (edit_window.sci != NULL && edit_window.handler_id > 0)
-	{
-		g_signal_handler_disconnect(edit_window.sci, edit_window.handler_id);
-		edit_window.handler_id = 0;
-	}
 
 	gtk_widget_destroy(pane);
 	edit_window.editor = NULL;
