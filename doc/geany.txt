@@ -3604,7 +3604,7 @@ Action                               Default shortcut     Description
 ==================================== ==================== ==================================================
 Replace tabs by space                                     Replaces all tabs with the right amount of spaces.
 
-Replace spaces by tabs                                    Replaces all spaces with tab characters.
+Replace spaces by tabs                                    Replaces leading spaces with tab characters.
 
 Toggle current fold                                       Toggles the folding state of the current code block.
 

@@ -4320,7 +4320,13 @@ void editor_replace_spaces(GeanyEditor *editor)
 		search_pos = sci_find_text(editor->sci, SCFIND_MATCHCASE, &ttf);
 		if (search_pos == -1)
 			break;
-
+		/* only replace indentation because otherwise we can mess up alignment */
+		if (search_pos > sci_get_line_indent_position(editor->sci,
+			sci_get_line_from_position(editor->sci, search_pos)))
+		{
+			ttf.chrg.cpMin = search_pos + tab_len;
+			continue;
+		}
 		sci_set_target_start(editor->sci, search_pos);
 		sci_set_target_end(editor->sci, search_pos + tab_len);
 		sci_replace_target(editor->sci, "\t", FALSE);
