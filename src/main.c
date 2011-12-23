@@ -1183,6 +1183,7 @@ void main_quit()
 
 	navqueue_free();
 	keybindings_free();
+	notebook_free();
 	highlighting_free_styles();
 	templates_free_templates();
 	msgwin_finalize();

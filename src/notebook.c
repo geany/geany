@@ -24,6 +24,9 @@
  */
 
 #include "geany.h"
+
+#include <gdk/gdkkeysyms.h>
+
 #include "notebook.h"
 #include "document.h"
 #include "editor.h"
@@ -34,6 +37,7 @@
 #include "callbacks.h"
 #include "utils.h"
 #include "keybindings.h"
+#include "main.h"
 
 #define GEANY_DND_NOTEBOOK_TAB_TYPE	"geany_dnd_notebook_tab"
 
@@ -49,6 +53,14 @@ static GtkTargetEntry files_drop_targets[] = {
 	{ "text/uri-list",	0, 0 }
 };
 
+static const gsize MAX_MRU_DOCS = 20;
+static GQueue *mru_docs = NULL;
+static guint mru_pos = 0;
+
+static gboolean switch_in_progress = FALSE;
+static GtkWidget *switch_dialog = NULL;
+static GtkWidget *switch_dialog_label = NULL;
+
 
 static void
 notebook_page_reordered_cb(GtkNotebook *notebook, GtkWidget *child, guint page_num,
@@ -63,6 +75,238 @@ static void
 notebook_tab_close_clicked_cb(GtkButton *button, gpointer user_data);
 
 static void setup_tab_dnd(void);
+
+
+static void update_mru_docs_head(GeanyDocument *doc)
+{
+	if (doc)
+	{
+		g_queue_remove(mru_docs, doc);
+		g_queue_push_head(mru_docs, doc);
+
+		if (g_queue_get_length(mru_docs) > MAX_MRU_DOCS)
+			g_queue_pop_tail(mru_docs);
+	}
+}
+
+
+/* before the tab changes, add the current document to the MRU list */
+static void on_notebook_switch_page(GtkNotebook *notebook,
+	GtkNotebookPage *page, guint page_num, gpointer user_data)
+{
+	GeanyDocument *new;
+
+	new = document_get_from_page(page_num);
+
+	/* insert the very first document (when adding the second document
+	 * and switching to it) */
+	if (g_queue_get_length(mru_docs) == 0 && gtk_notebook_get_n_pages(notebook) == 2)
+		update_mru_docs_head(document_get_current());
+
+	if (!switch_in_progress)
+		update_mru_docs_head(new);
+}
+
+
+static void on_document_close(GObject *obj, GeanyDocument *doc)
+{
+	if (! main_status.quitting)
+	{
+		/* switch to appropriate page when closing current doc */
+		if (document_get_current() == doc)
+		{
+			gint page;
+
+			page = gtk_notebook_get_current_page(GTK_NOTEBOOK(main_widgets.notebook)) +
+				(file_prefs.tab_order_ltr ? 1 : -1);
+
+			if (file_prefs.tab_close_switch_to_mru)
+			{
+				GeanyDocument *last_doc;
+
+				last_doc = g_queue_peek_nth(mru_docs, 1);
+				if (DOC_VALID(last_doc))
+					page = document_get_notebook_page(last_doc);
+			}
+
+			gtk_notebook_set_current_page(GTK_NOTEBOOK(main_widgets.notebook), page);
+		}
+
+		g_queue_remove(mru_docs, doc);
+		/* this prevents the pop up window from showing when there's a single
+		 * document */
+		if (gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook)) == 2)
+			g_queue_clear(mru_docs);
+	}
+}
+
+
+static GtkWidget *ui_minimal_dialog_new(GtkWindow *parent, const gchar *title)
+{
+	GtkWidget *dialog;
+
+	dialog = gtk_window_new(GTK_WINDOW_POPUP);
+
+	if (parent)
+	{
+		gtk_window_set_transient_for(GTK_WINDOW(dialog), parent);
+		gtk_window_set_destroy_with_parent(GTK_WINDOW(dialog), TRUE);
+	}
+	gtk_window_set_title(GTK_WINDOW(dialog), title);
+	gtk_window_set_type_hint(GTK_WINDOW(dialog), GDK_WINDOW_TYPE_HINT_DIALOG);
+	gtk_window_set_position(GTK_WINDOW(dialog), GTK_WIN_POS_CENTER_ON_PARENT);
+
+	gtk_widget_set_name(dialog, "GeanyDialog");
+	return dialog;
+}
+
+
+static gboolean is_modifier_key(guint keyval)
+{
+	switch (keyval)
+	{
+		case GDK_Shift_L:
+		case GDK_Shift_R:
+		case GDK_Control_L:
+		case GDK_Control_R:
+		case GDK_Meta_L:
+		case GDK_Meta_R:
+		case GDK_Alt_L:
+		case GDK_Alt_R:
+		case GDK_Super_L:
+		case GDK_Super_R:
+		case GDK_Hyper_L:
+		case GDK_Hyper_R:
+			return TRUE;
+		default:
+			return FALSE;
+	}
+}
+
+
+static gboolean on_key_release_event(GtkWidget *widget, GdkEventKey *ev, gpointer user_data)
+{
+	/* user may have rebound keybinding to a different modifier than Ctrl, so check all */
+	if (switch_in_progress && is_modifier_key(ev->keyval))
+	{
+		switch_in_progress = FALSE;
+
+		if (switch_dialog)
+		{
+			gtk_widget_destroy(switch_dialog);
+			switch_dialog = NULL;
+		}
+
+		update_mru_docs_head(document_get_current());
+		mru_pos = 0;
+	}
+	return FALSE;
+}
+
+
+static GtkWidget *create_switch_dialog(void)
+{
+	GtkWidget *dialog, *widget, *vbox;
+
+	dialog = ui_minimal_dialog_new(GTK_WINDOW(main_widgets.window), _("Switch to Document"));
+	gtk_window_set_decorated(GTK_WINDOW(dialog), FALSE);
+	gtk_window_set_default_size(GTK_WINDOW(dialog), 200, -1);
+
+	vbox = gtk_vbox_new(FALSE, 6);
+	gtk_container_set_border_width(GTK_CONTAINER(vbox), 12);
+	gtk_container_add(GTK_CONTAINER(dialog), vbox);
+
+	widget = gtk_image_new_from_stock(GTK_STOCK_JUMP_TO, GTK_ICON_SIZE_BUTTON);
+	gtk_container_add(GTK_CONTAINER(vbox), widget);
+
+	widget = gtk_label_new(NULL);
+	gtk_label_set_justify(GTK_LABEL(widget), GTK_JUSTIFY_CENTER);
+	gtk_container_add(GTK_CONTAINER(vbox), widget);
+	switch_dialog_label = widget;
+
+	g_signal_connect(dialog, "key-release-event", G_CALLBACK(on_key_release_event), NULL);
+	return dialog;
+}
+
+
+static void update_filename_label(void)
+{
+	guint i;
+	gchar *msg;
+	guint queue_length;
+	GeanyDocument *doc;
+
+	if (!switch_dialog)
+	{
+		switch_dialog = create_switch_dialog();
+		gtk_widget_show_all(switch_dialog);
+	}
+
+	queue_length = g_queue_get_length(mru_docs);
+	for (i = mru_pos; (i <= mru_pos + 3) && (doc = g_queue_peek_nth(mru_docs, i % queue_length)); i++)
+	{
+		gchar *basename;
+
+		basename = g_path_get_basename(DOC_FILENAME(doc));
+		if (i == mru_pos)
+			msg = g_markup_printf_escaped ("<b>%s</b>", basename);
+		else if (i % queue_length == mru_pos)    /* && i != mru_pos */
+		{
+			/* We have wrapped around and got to the starting document again */
+			g_free(basename);
+			break;
+		}
+		else
+		{
+			setptr(basename, g_markup_printf_escaped ("\n%s", basename));
+			setptr(msg, g_strconcat(msg, basename, NULL));
+		}
+		g_free(basename);
+	}
+	gtk_label_set_markup(GTK_LABEL(switch_dialog_label), msg);
+	g_free(msg);
+}
+
+
+static gboolean on_switch_timeout(G_GNUC_UNUSED gpointer data)
+{
+	if (!switch_in_progress || switch_dialog)
+	{
+		return FALSE;
+	}
+
+	update_filename_label();
+	return FALSE;
+}
+
+
+void notebook_switch_tablastused(void)
+{
+	GeanyDocument *last_doc;
+	gboolean switch_start = !switch_in_progress;
+
+	mru_pos += 1;
+	last_doc = g_queue_peek_nth(mru_docs, mru_pos);
+
+	if (! DOC_VALID(last_doc))
+	{
+		utils_beep();
+		mru_pos = 0;
+		last_doc = g_queue_peek_nth(mru_docs, mru_pos);
+	}
+	if (! DOC_VALID(last_doc))
+		return;
+
+	switch_in_progress = TRUE;
+	document_show_tab(last_doc);
+
+	/* if there's a modifier key, we can switch back in MRU order each time unless
+	 * the key is released */
+	if (switch_start)
+		g_timeout_add(600, on_switch_timeout, NULL);
+	else
+		update_filename_label();
+}
 
 
 static gboolean focus_sci(GtkWidget *widget, GdkEventButton *event, gpointer user_data)
@@ -313,7 +557,22 @@ void notebook_init()
 	g_signal_connect(main_widgets.notebook, "drag-data-received",
 		G_CALLBACK(on_window_drag_data_received), NULL);
 
+	mru_docs = g_queue_new();
+	g_signal_connect(main_widgets.notebook, "switch-page",
+		G_CALLBACK(on_notebook_switch_page), NULL);
+	g_signal_connect(geany_object, "document-close",
+		G_CALLBACK(on_document_close), NULL);
+
+	/* in case the switch dialog misses an event while drawing the dialog */
+	g_signal_connect(main_widgets.window, "key-release-event", G_CALLBACK(on_key_release_event), NULL);
+
 	setup_tab_dnd();
+}
+
+
+void notebook_free(void)
+{
+	g_queue_free(mru_docs);
 }
 
 
