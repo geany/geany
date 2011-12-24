@@ -51,12 +51,6 @@
 # include <sys/wait.h>
 #endif
 
-#ifdef HAVE_REGEX_H
-# include <regex.h>
-#else
-# include "gnuregex.h"
-#endif
-
 
 enum
 {
@@ -1822,84 +1816,106 @@ static void search_close_pid(GPid child_pid, gint status, gpointer user_data)
 }
 
 
-static gboolean compile_regex(regex_t *regex, const gchar *str, gint sflags)
+static GRegex *compile_regex(const gchar *str, gint sflags)
 {
-	gint err;
-	gint rflags = REG_EXTENDED | REG_NEWLINE;
+	GRegex *regex;
+	GError *error = NULL;
+	gint rflags = G_REGEX_MULTILINE;
 
 	if (~sflags & SCFIND_MATCHCASE)
-		rflags |= REG_ICASE;
+		rflags |= G_REGEX_CASELESS;
 	if (sflags & (SCFIND_WHOLEWORD | SCFIND_WORDSTART))
 	{
 		geany_debug("%s: Unsupported regex flags found!", G_STRFUNC);
 	}
 
-	err = regcomp(regex, str, rflags);
-	if (err != 0)
+	regex = g_regex_new(str, rflags, 0, &error);
+	if (!regex)
 	{
-		gchar buf[256];
-
-		regerror(err, regex, buf, sizeof buf);
-		ui_set_statusbar(FALSE, _("Bad regex: %s"), buf);
-		return FALSE;
+		ui_set_statusbar(FALSE, _("Bad regex: %s"), error->message);
+		g_error_free(error);
 	}
-	return TRUE;
+	return regex;
 }
 
+
+typedef struct CharOffsets
+{
+	gint start, end;
+} CharOffsets;
+
+static CharOffsets regex_matches[10];
 
 /* groups that don't exist are handled OK as len = end - start = (-1) - (-1) = 0 */
-static gchar *get_regex_match_string(const gchar *text, regmatch_t *pmatch, gint match_idx)
+static gchar *get_regex_match_string(const gchar *text, CharOffsets *match)
 {
-	return g_strndup(&text[pmatch[match_idx].rm_so],
-		pmatch[match_idx].rm_eo - pmatch[match_idx].rm_so);
+	return g_strndup(&text[match->start], match->end - match->start);
 }
 
 
-static regmatch_t regex_matches[10];
-/* All matching text from regex_matches[0].rm_so to regex_matches[0].rm_eo */
+/* All matching text from regex_matches[0].start to regex_matches[0].end */
 static gchar *regex_match_text = NULL;
 
-static gint find_regex(ScintillaObject *sci, guint pos, regex_t *regex)
+static gint find_regex(ScintillaObject *sci, guint pos, GRegex *regex)
 {
 	const gchar *text;
 	gint flags = 0;
+	GMatchInfo *minfo;
+	gint ret = -1;
 
 	g_return_val_if_fail(pos <= (guint)sci_get_length(sci), FALSE);
 
+	/* clear old match */
+	setptr(regex_match_text, NULL);
+
 	if (sci_get_col_from_position(sci, pos) != 0)
-		flags = REG_NOTBOL;
+		flags = G_REGEX_MATCH_NOTBOL;
 	/* Warning: any SCI calls will invalidate 'text' after calling SCI_GETCHARACTERPOINTER */
 	text = (void*)scintilla_send_message(sci, SCI_GETCHARACTERPOINTER, 0, 0);
 	text += pos;
 
-	if (regexec(regex, text, G_N_ELEMENTS(regex_matches), regex_matches, flags) == 0)
+	/* Warning: minfo will become invalid when 'text' does! */
+	if (g_regex_match(regex, text, flags, &minfo))
 	{
-		setptr(regex_match_text, get_regex_match_string(text, regex_matches, 0));
-		return regex_matches[0].rm_so + pos;
+		gint i;
+
+		/* copy whole match text and offsets before they become invalid */
+		regex_match_text = g_match_info_fetch(minfo, 0);
+
+		foreach_range(i, G_N_ELEMENTS(regex_matches))
+		{
+			gint start = -1, end = -1;
+
+			g_match_info_fetch_pos(minfo, i, &start, &end);
+			regex_matches[i].start = start;
+			regex_matches[i].end = end;
+		}
+		ret = regex_matches[0].start + pos;
 	}
-	setptr(regex_match_text, NULL);
-	return -1;
+	g_match_info_free(minfo);
+	return ret;
 }
 
 
 gint search_find_next(ScintillaObject *sci, const gchar *str, gint flags)
 {
-	regex_t regex;
+	GRegex *regex;
 	gint ret = -1;
 	gint pos;
 
 	if (~flags & SCFIND_REGEXP)
 		return sci_search_next(sci, flags, str);
 
-	if (!compile_regex(&regex, str, flags))
+	regex = compile_regex(str, flags);
+	if (!regex)
 		return -1;
 
 	pos = sci_get_current_position(sci);
-	ret = find_regex(sci, pos, &regex);
+	ret = find_regex(sci, pos, regex);
 	if (ret >= 0)
-		sci_set_selection(sci, ret, regex_matches[0].rm_eo + pos);
+		sci_set_selection(sci, ret, regex_matches[0].end + pos);
 
-	regfree(&regex);
+	g_regex_unref(regex);
 	return ret;
 }
 
@@ -1937,8 +1953,8 @@ gint search_replace_target(ScintillaObject *sci, const gchar *replace_text,
 		/* digit escape */
 		g_string_erase(str, i, 2);
 		/* fix match offsets by subtracting index of whole match start from the string */
-		grp = get_regex_match_string(regex_match_text - regex_matches[0].rm_so,
-			regex_matches, c - '0');
+		grp = get_regex_match_string(regex_match_text - regex_matches[0].start,
+			&regex_matches[c - '0']);
 		g_string_insert(str, i, grp);
 		i += strlen(grp);
 		g_free(grp);
@@ -1951,27 +1967,27 @@ gint search_replace_target(ScintillaObject *sci, const gchar *replace_text,
 
 gint search_find_text(ScintillaObject *sci, gint flags, struct Sci_TextToFind *ttf)
 {
-	regex_t regex;
+	GRegex *regex;
 	gint pos;
 	gint ret;
 
 	if (~flags & SCFIND_REGEXP)
 		return sci_find_text(sci, flags, ttf);
 
-	if (!compile_regex(&regex, ttf->lpstrText, flags))
+	regex = compile_regex(ttf->lpstrText, flags);
+	if (!regex)
 		return -1;
 
 	pos = ttf->chrg.cpMin;
-	ret = find_regex(sci, pos, &regex);
-	regfree(&regex);
+	ret = find_regex(sci, pos, regex);
 
 	if (ret >= 0 && ret < ttf->chrg.cpMax)
 	{
-		ttf->chrgText.cpMin = regex_matches[0].rm_so + pos;
-		ttf->chrgText.cpMax = regex_matches[0].rm_eo + pos;
-		return ret;
+		ttf->chrgText.cpMin = regex_matches[0].start + pos;
+		ttf->chrgText.cpMax = regex_matches[0].end + pos;
 	}
-	return -1;
+	g_regex_unref(regex);
+	return ret;
 }
 
 
