@@ -112,26 +112,6 @@ static void on_document_close(GObject *obj, GeanyDocument *doc)
 {
 	if (! main_status.quitting)
 	{
-		/* switch to appropriate page when closing current doc */
-		if (document_get_current() == doc)
-		{
-			gint page;
-
-			page = gtk_notebook_get_current_page(GTK_NOTEBOOK(main_widgets.notebook)) +
-				(file_prefs.tab_order_ltr ? 1 : -1);
-
-			if (file_prefs.tab_close_switch_to_mru)
-			{
-				GeanyDocument *last_doc;
-
-				last_doc = g_queue_peek_nth(mru_docs, 1);
-				if (DOC_VALID(last_doc))
-					page = document_get_notebook_page(last_doc);
-			}
-
-			gtk_notebook_set_current_page(GTK_NOTEBOOK(main_widgets.notebook), page);
-		}
-
 		g_queue_remove(mru_docs, doc);
 		/* this prevents the pop up window from showing when there's a single
 		 * document */
@@ -752,6 +732,25 @@ notebook_tab_close_clicked_cb(GtkButton *button, gpointer user_data)
 /* Always use this instead of gtk_notebook_remove_page(). */
 void notebook_remove_page(gint page_num)
 {
+	gint page = gtk_notebook_get_current_page(GTK_NOTEBOOK(main_widgets.notebook));
+
+	if (page_num == page)
+	{
+		page += (file_prefs.tab_order_ltr) ? 1 : -1;
+
+		if (file_prefs.tab_close_switch_to_mru)
+		{
+			GeanyDocument *last_doc;
+
+			last_doc = g_queue_peek_nth(mru_docs, 0);
+			if (DOC_VALID(last_doc))
+				page = document_get_notebook_page(last_doc);
+		}
+
+		gtk_notebook_set_current_page(GTK_NOTEBOOK(main_widgets.notebook), page);
+	}
+
+	/* now remove the page (so we don't temporarily switch to the previous page) */
 	gtk_notebook_remove_page(GTK_NOTEBOOK(main_widgets.notebook), page_num);
 
 	tab_count_changed();
