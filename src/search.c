@@ -1868,7 +1868,7 @@ static gint find_regex(ScintillaObject *sci, guint pos, GRegex *regex)
 	/* Warning: minfo will become invalid when 'text' does! */
 	if (g_regex_match_full(regex, text, -1, pos, 0, &minfo, NULL))
 	{
-		gint i;
+		guint i;
 
 		/* copy whole match text and offsets before they become invalid */
 		regex_match_text = g_match_info_fetch(minfo, 0);
@@ -1877,7 +1877,7 @@ static gint find_regex(ScintillaObject *sci, guint pos, GRegex *regex)
 		{
 			gint start = -1, end = -1;
 
-			g_match_info_fetch_pos(minfo, i, &start, &end);
+			g_match_info_fetch_pos(minfo, (gint)i, &start, &end);
 			regex_matches[i].start = start;
 			regex_matches[i].end = end;
 		}
