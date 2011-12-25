@@ -210,10 +210,11 @@ static gboolean read_named_style(const gchar *named_style, GeanyLexerStyle *styl
  * an abbreviated HTML color (ex. #09c) or a hex string color
  * (ex. 0x0099cc). The result of the conversion is stored into the
  * location pointed to by `clr`. */
-static void parse_color(const gchar *str, gint *clr)
+static void parse_color(GKeyFile *kf, const gchar *str, gint *clr)
 {
 	gint c;
 	gchar hex_clr[9] = { 0 };
+	gchar *named_color = NULL;
 	const gchar *start;
 
 	g_return_if_fail(clr != NULL);
@@ -221,9 +222,13 @@ static void parse_color(const gchar *str, gint *clr)
 	if (G_UNLIKELY(! NZV(str)))
 		return;
 
+	named_color = g_key_file_get_string(kf, "named_colors", str, NULL);
+	if  (named_color)
+		str = named_color;
+
 	if (str[0] == '#')
 		start = str + 1;
-	else if (str[0] == '0' && (str[1] == 'x' || str[1] == 'X'))
+	else if (strlen(str) > 1 && str[0] == '0' && (str[1] == 'x' || str[1] == 'X'))
 		start = str + 2;
 	else
 		start = str;
@@ -236,6 +241,8 @@ static void parse_color(const gchar *str, gint *clr)
 	else
 		snprintf(hex_clr, 9, "0x%s", start);
 
+	g_free(named_color);
+
 	c = utils_strtod(hex_clr, NULL, FALSE);
 
 	if (c > -1)
@@ -247,7 +254,7 @@ static void parse_color(const gchar *str, gint *clr)
 }
 
 
-static void parse_keyfile_style(gchar **list,
+static void parse_keyfile_style(GKeyFile *kf, gchar **list,
 		const GeanyLexerStyle *default_style, GeanyLexerStyle *style)
 {
 	gsize len;
@@ -280,9 +287,9 @@ static void parse_keyfile_style(gchar **list,
 			case 3:
 				style->bold = utils_atob(list[2]);
 			case 2:
-				parse_color(list[1], &style->background);
+				parse_color(kf, list[1], &style->background);
 			case 1:
-				parse_color(list[0], &style->foreground);
+				parse_color(kf, list[0], &style->foreground);
 		}
 	}
 }
@@ -301,9 +308,13 @@ static void get_keyfile_style(GKeyFile *config, GKeyFile *configh,
 
 	list = g_key_file_get_string_list(configh, "styling", key_name, &len, NULL);
 	if (list == NULL)
+	{
 		list = g_key_file_get_string_list(config, "styling", key_name, &len, NULL);
+		parse_keyfile_style(config, list, &gsd_default, style);
+	}
+	else
+		parse_keyfile_style(configh, list, &gsd_default, style);
 
-	parse_keyfile_style(list, &gsd_default, style);
 	g_strfreev(list);
 }
 
@@ -467,7 +478,7 @@ static void add_named_style(GKeyFile *config, const gchar *key)
 	{
 		GeanyLexerStyle *style = g_new0(GeanyLexerStyle, 1);
 
-		parse_keyfile_style(list, &gsd_default, style);
+		parse_keyfile_style(config, list, &gsd_default, style);
 		g_hash_table_insert(named_style_hash, g_strdup(key), style);
 	}
 	g_strfreev(list);
