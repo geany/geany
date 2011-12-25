@@ -93,7 +93,7 @@ struct _MIOPos {
 #endif
   union {
     fpos_t file;
-    size_t mem;
+    gsize  mem;
   } impl;
 };
 
