@@ -169,6 +169,9 @@ to set warning options (as well as anything else e.g. -g -O2).
   use C ``/* */`` comments and function_name(void) instead of
   function_name(). This is for compatibility with various Unix-like
   compilers. You should use -ansi to help check this.
+  Note that MIO (tagmanager/mio) requires ``MIO_FORCE_ANSI``
+  preprocessor constant to be defined to build with ``-ansi``, so you
+  should add ``-DMIO_FORCE_ANSI`` together with ``-ansi``.
 
 .. tip::
     Remember for gcc you need to enable optimization to get certain
