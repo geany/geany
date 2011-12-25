@@ -206,15 +206,38 @@ static gboolean read_named_style(const gchar *named_style, GeanyLexerStyle *styl
 }
 
 
+/* Parses a color in `str` which can be an HTML color (ex. #0099cc),
+ * an abbreviated HTML color (ex. #09c) or a hex string color
+ * (ex. 0x0099cc). The result of the conversion is stored into the
+ * location pointed to by `clr`. */
 static void parse_color(const gchar *str, gint *clr)
 {
 	gint c;
+	gchar hex_clr[9] = { 0 };
+	const gchar *start;
 
-	/* ignore empty strings */
+	g_return_if_fail(clr != NULL);
+
 	if (G_UNLIKELY(! NZV(str)))
 		return;
 
-	c = utils_strtod(str, NULL, FALSE);
+	if (str[0] == '#')
+		start = str + 1;
+	else if (str[0] == '0' && (str[1] == 'x' || str[1] == 'X'))
+		start = str + 2;
+	else
+		start = str;
+
+	if (strlen(start) == 3)
+	{
+		snprintf(hex_clr, 9, "0x%c%c%c%c%c%c", start[0], start[0],
+			start[1], start[1], start[2], start[2]);
+	}
+	else
+		snprintf(hex_clr, 9, "0x%s", start);
+
+	c = utils_strtod(hex_clr, NULL, FALSE);
+
 	if (c > -1)
 	{
 		*clr = c;
