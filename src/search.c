@@ -1859,7 +1859,6 @@ static gchar *regex_match_text = NULL;
 static gint find_regex(ScintillaObject *sci, guint pos, GRegex *regex)
 {
 	const gchar *text;
-	gint flags = 0;
 	GMatchInfo *minfo;
 	gint ret = -1;
 
@@ -1868,14 +1867,11 @@ static gint find_regex(ScintillaObject *sci, guint pos, GRegex *regex)
 	/* clear old match */
 	setptr(regex_match_text, NULL);
 
-	if (sci_get_col_from_position(sci, pos) != 0)
-		flags = G_REGEX_MATCH_NOTBOL;
 	/* Warning: any SCI calls will invalidate 'text' after calling SCI_GETCHARACTERPOINTER */
 	text = (void*)scintilla_send_message(sci, SCI_GETCHARACTERPOINTER, 0, 0);
-	text += pos;
 
 	/* Warning: minfo will become invalid when 'text' does! */
-	if (g_regex_match(regex, text, flags, &minfo))
+	if (g_regex_match_full(regex, text, -1, pos, 0, &minfo, NULL))
 	{
 		gint i;
 
@@ -1890,7 +1886,7 @@ static gint find_regex(ScintillaObject *sci, guint pos, GRegex *regex)
 			regex_matches[i].start = start;
 			regex_matches[i].end = end;
 		}
-		ret = regex_matches[0].start + pos;
+		ret = regex_matches[0].start;
 	}
 	g_match_info_free(minfo);
 	return ret;
@@ -1913,7 +1909,7 @@ gint search_find_next(ScintillaObject *sci, const gchar *str, gint flags)
 	pos = sci_get_current_position(sci);
 	ret = find_regex(sci, pos, regex);
 	if (ret >= 0)
-		sci_set_selection(sci, ret, regex_matches[0].end + pos);
+		sci_set_selection(sci, ret, regex_matches[0].end);
 
 	g_regex_unref(regex);
 	return ret;
@@ -1983,8 +1979,8 @@ gint search_find_text(ScintillaObject *sci, gint flags, struct Sci_TextToFind *t
 
 	if (ret >= 0 && ret < ttf->chrg.cpMax)
 	{
-		ttf->chrgText.cpMin = regex_matches[0].start + pos;
-		ttf->chrgText.cpMax = regex_matches[0].end + pos;
+		ttf->chrgText.cpMin = regex_matches[0].start;
+		ttf->chrgText.cpMax = regex_matches[0].end;
 	}
 	g_regex_unref(regex);
 	return ret;
