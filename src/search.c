@@ -1236,9 +1236,9 @@ on_find_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 			gtk_widget_grab_focus(find_dlg.entry);
 			return;
 		}
-		if (settings.find_escape_sequences || search_data.flags & SCFIND_REGEXP)
+		if (settings.find_escape_sequences && ~search_data.flags & SCFIND_REGEXP)
 		{
-			if (! utils_str_replace_escape(search_data.text, search_data.flags & SCFIND_REGEXP))
+			if (! utils_str_replace_escape(search_data.text, FALSE))
 				goto fail;
 		}
 		ui_combo_box_add_to_history(GTK_COMBO_BOX_ENTRY(user_data), search_data.original_text, 0);
@@ -1361,13 +1361,8 @@ on_replace_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 
 	original_find = g_strdup(find);
 	original_replace = g_strdup(replace);
-	if (search_flags_re & SCFIND_REGEXP)
-	{
-		if (! utils_str_replace_escape(find, TRUE) ||
-			! utils_str_replace_escape(replace, TRUE))
-			goto fail;
-	}
-	else if (search_replace_escape_re)
+
+	if (search_replace_escape_re && ~search_flags_re & SCFIND_REGEXP)
 	{
 		if (! utils_str_replace_escape(find, FALSE) ||
 			! utils_str_replace_escape(replace, FALSE))
