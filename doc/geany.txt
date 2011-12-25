@@ -1493,11 +1493,8 @@ the ``colorschemes`` subdirectory. They should have the extension
 ``.conf``. The default color scheme
 is read from ``filetypes.common``.
 
-The `[named_styles] section`_ is the same as for ``filetypes.common``.
-
-.. note::
-    Some filetypes do not yet support named styles so will ignore
-    any chosen color scheme.
+The `[named_styles] section`_  and `[named_colors] section`_ are the
+same as for ``filetypes.common``.
 
 The ``[theme_info]`` section can contain information about the
 theme. The ``name`` and ``description`` keys are read to set the
@@ -3885,9 +3882,14 @@ manual format is:
 * ``key=foreground_color;background_color;bold_flag;italic_flag``
 
 Colors have to be specified as RGB hex values prefixed by
-0x. For example red is 0xff0000, blue is 0x0000ff. The values are
-case-insensitive, but it is a good idea to use small letters. Bold
-and italic are flags and should only be "true" or "false". If their
+0x or # similar to HTML/CSS hex triplets. For example, all of the following
+are valid values for pure red; 0xff0000, 0xf00, #ff0000, or #f00.  The
+values are case-insensitive but it is a good idea to use lower-case.
+Note that you can also use *named colors* as well by substituting the
+color value with the name of a color as defined in the ``[named_colors]``
+section, see the `[named_colors] Section`_ for more information.
+
+Bold and italic are flags and should only be "true" or "false". If their
 value is something other than "true" or "false", "false" is assumed.
 
 You can omit fields to use the values from the style named ``"default"``.
@@ -4211,8 +4213,23 @@ different files.
     entry in the above example, but they must be declared after the
     original style.
 
-This section can be overridden with color scheme files - see the `Color
-schemes menu`_.
+
+[named_colors] section
+``````````````````````
+Named colors declared here can be used in the ``[styling]`` or
+``[named_styles]`` section of any filetypes.* file or color scheme.
+
+For example::
+
+    [named_colors]
+    my_red_color=#FF0000
+    my_blue_color=#0000FF
+
+    [named_styles]
+    foo=my_red_color;my_blue_color;false;true
+
+This allows to define a color pallete by name so that to change a color
+scheme-wide only involves changing the hex value in a single location.
 
 [styling] section
 `````````````````
