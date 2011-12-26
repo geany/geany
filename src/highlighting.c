@@ -271,26 +271,25 @@ static void parse_keyfile_style(GKeyFile *kf, gchar **list,
 	len = g_strv_length(list);
 
 	str = list[0];
+
+	/* It might be a named style so try and parse it as such */
 	if (len == 1 && isalpha(str[0]))
 	{
-		if (!read_named_style(str, style))
-			geany_debug(
-				"No named style '%s'! Check filetype styles or %s color scheme.",
-				str, NVL(editor_prefs.color_scheme, "filetypes.common"));
+		if (read_named_style(str, style))
+			return;
+		/* It must start with a named color (or error), fall through */
 	}
-	else
+
+	switch (len)
 	{
-		switch (len)
-		{
-			case 4:
-				style->italic = utils_atob(list[3]);
-			case 3:
-				style->bold = utils_atob(list[2]);
-			case 2:
-				parse_color(kf, list[1], &style->background);
-			case 1:
-				parse_color(kf, list[0], &style->foreground);
-		}
+		case 4:
+			style->italic = utils_atob(list[3]);
+		case 3:
+			style->bold = utils_atob(list[2]);
+		case 2:
+			parse_color(kf, list[1], &style->background);
+		case 1:
+			parse_color(kf, list[0], &style->foreground);
 	}
 }
 
