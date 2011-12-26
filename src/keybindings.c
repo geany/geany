@@ -52,6 +52,7 @@
 #include "vte.h"
 #include "toolbar.h"
 #include "sidebar.h"
+#include "notebook.h"
 #include "geanywraplabel.h"
 #include "main.h"
 #include "search.h"
