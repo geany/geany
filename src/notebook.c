@@ -212,7 +212,7 @@ static GtkWidget *create_switch_dialog(void)
 static void update_filename_label(void)
 {
 	guint i;
-	gchar *msg;
+	gchar *msg = NULL;
 	guint queue_length;
 	GeanyDocument *doc;
 
