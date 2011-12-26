@@ -736,7 +736,10 @@ void notebook_remove_page(gint page_num)
 
 	if (page_num == page)
 	{
-		page += (file_prefs.tab_order_ltr) ? 1 : -1;
+		if (file_prefs.tab_order_ltr)
+			page += 1;
+		else if (page > 0) /* never go negative, it would select the last page */
+			page -= 1;
 
 		if (file_prefs.tab_close_switch_to_mru)
 		{
