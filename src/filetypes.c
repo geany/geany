@@ -1110,18 +1110,6 @@ static void create_radio_menu_item(GtkWidget *menu, GeanyFiletype *ftype)
 }
 
 
-static void set_error_regex(GeanyFiletype *ft, gchar *string)
-{
-	setptr(ft->error_regex_string, string);
-
-	if (ft->priv->error_regex)
-		g_regex_unref(ft->priv->error_regex);
-
-	ft->priv->error_regex = NULL;
-	/* regex will be compiled when needed */
-}
-
-
 static void filetype_free(gpointer data, G_GNUC_UNUSED gpointer user_data)
 {
 	GeanyFiletype *ft = data;
@@ -1139,7 +1127,9 @@ static void filetype_free(gpointer data, G_GNUC_UNUSED gpointer user_data)
 	g_free(ft->filecmds);
 	g_free(ft->ftdefcmds);
 	g_free(ft->execcmds);
-	set_error_regex(ft, NULL);
+	g_free(ft->error_regex_string);
+	if (ft->priv->error_regex)
+		g_regex_unref(ft->priv->error_regex);
 	if (ft->icon)
 		g_object_unref(ft->icon);
 
@@ -1544,8 +1534,9 @@ static void compile_regex(GeanyFiletype *ft, gchar *regstr)
 			filetypes_get_display_name(ft), error->message);
 		g_error_free(error);
 	}
+	if (ft->priv->error_regex)
+		g_regex_unref(ft->priv->error_regex);
 	ft->priv->error_regex = regex;
-	/* regex will be freed in set_error_regex(). */
 }
 
 
