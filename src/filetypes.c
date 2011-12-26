@@ -1114,10 +1114,10 @@ static void set_error_regex(GeanyFiletype *ft, gchar *string)
 {
 	setptr(ft->error_regex_string, string);
 
-	if (ft->priv->error_regex_compiled)
-		regfree(&ft->priv->error_regex);
+	if (ft->priv->error_regex)
+		g_regex_unref(ft->priv->error_regex);
 
-	ft->priv->error_regex_compiled = FALSE;
+	ft->priv->error_regex = NULL;
 	/* regex will be compiled when needed */
 }
 
@@ -1533,26 +1533,18 @@ GeanyFiletype *filetypes_lookup_by_name(const gchar *name)
 }
 
 
-static gchar *get_regex_match_string(const gchar *message, regmatch_t *pmatch, guint match_idx)
+static void compile_regex(GeanyFiletype *ft, gchar *regstr)
 {
-	return g_strndup(&message[pmatch[match_idx].rm_so],
-		pmatch[match_idx].rm_eo - pmatch[match_idx].rm_so);
-}
+	GError *error = NULL;
+	GRegex *regex = g_regex_new(regstr, 0, 0, &error);
 
-
-static void compile_regex(GeanyFiletype *ft, regex_t *regex, gchar *regstr)
-{
-	gint retval = regcomp(regex, regstr, REG_EXTENDED);
-
-	ft->priv->error_regex_compiled = (retval == 0);	/* prevent recompilation */
-
-	if (G_UNLIKELY(retval != 0))
+	if (!regex)
 	{
-		gchar buf[256];
-		regerror(retval, regex, buf, sizeof buf);
 		ui_set_statusbar(TRUE, _("Bad regex for filetype %s: %s"),
-			filetypes_get_display_name(ft), buf);
+			filetypes_get_display_name(ft), error->message);
+		g_error_free(error);
 	}
+	ft->priv->error_regex = regex;
 	/* regex will be freed in set_error_regex(). */
 }
 
@@ -1563,8 +1555,7 @@ gboolean filetypes_parse_error_message(GeanyFiletype *ft, const gchar *message,
 	gchar *regstr;
 	gchar **tmp;
 	GeanyDocument *doc;
-	regex_t *regex;
-	regmatch_t pmatch[3];
+	GMatchInfo *minfo;
 
 	if (ft == NULL)
 	{
@@ -1576,7 +1567,6 @@ gboolean filetypes_parse_error_message(GeanyFiletype *ft, const gchar *message,
 	if (tmp == NULL)
 		return FALSE;
 	regstr = *tmp;
-	regex = &ft->priv->error_regex;
 
 	*filename = NULL;
 	*line = -1;
@@ -1584,24 +1574,26 @@ gboolean filetypes_parse_error_message(GeanyFiletype *ft, const gchar *message,
 	if (G_UNLIKELY(! NZV(regstr)))
 		return FALSE;
 
-	if (!ft->priv->error_regex_compiled || regstr != ft->priv->last_string)
+	if (!ft->priv->error_regex || regstr != ft->priv->last_error_pattern)
 	{
-		compile_regex(ft, regex, regstr);
-		ft->priv->last_string = regstr;
+		compile_regex(ft, regstr);
+		ft->priv->last_error_pattern = regstr;
 	}
-	if (!ft->priv->error_regex_compiled)	/* regex error */
+	if (!ft->priv->error_regex)
 		return FALSE;
 
-	if (regexec(regex, message, G_N_ELEMENTS(pmatch), pmatch, 0) != 0)
+	if (!g_regex_match(ft->priv->error_regex, message, 0, &minfo))
+	{
+		g_match_info_free(minfo);
 		return FALSE;
-
-	if (pmatch[0].rm_so != -1 && pmatch[1].rm_so != -1 && pmatch[2].rm_so != -1)
+	}
+	if (g_match_info_get_match_count(minfo) >= 3)
 	{
 		gchar *first, *second, *end;
 		glong l;
 
-		first = get_regex_match_string(message, pmatch, 1);
-		second = get_regex_match_string(message, pmatch, 2);
+		first = g_match_info_fetch(minfo, 1);
+		second = g_match_info_fetch(minfo, 2);
 		l = strtol(first, &end, 10);
 		if (*end == '\0')	/* first is purely decimals */
 		{
@@ -1625,6 +1617,7 @@ gboolean filetypes_parse_error_message(GeanyFiletype *ft, const gchar *message,
 			}
 		}
 	}
+	g_match_info_free(minfo);
 	return *filename != NULL;
 }
 

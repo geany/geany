@@ -24,21 +24,13 @@
 #ifndef GEANY_FILETYPES_PRIVATE_H
 #define GEANY_FILETYPES_PRIVATE_H
 
-#ifdef HAVE_REGEX_H
-# include <regex.h>
-#else
-# include "gnuregex.h"
-#endif
-
-
 /* Private GeanyFiletype fields */
 typedef struct GeanyFiletypePrivate
 {
 	GtkWidget	*menu_item;			/* holds a pointer to the menu item for this filetype */
 	gboolean	keyfile_loaded;
-	regex_t		error_regex;
-	gboolean	error_regex_compiled;
-	gchar		*last_string; /* last one compiled */
+	GRegex		*error_regex;
+	gchar		*last_error_pattern;
 	gboolean	custom;
 	gint		symbol_list_sort_mode;
 	gboolean	xml_indent_tags; /* XML tag autoindentation, for HTML and XML filetypes */
