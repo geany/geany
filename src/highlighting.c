@@ -231,7 +231,11 @@ static void parse_color(GKeyFile *kf, const gchar *str, gint *clr)
 	else if (strlen(str) > 1 && str[0] == '0' && (str[1] == 'x' || str[1] == 'X'))
 		start = str + 2;
 	else
-		start = str;
+	{
+		geany_debug("Bad color '%s'", str);
+		g_free(named_color);
+		return;
+	}
 
 	if (strlen(start) == 3)
 	{
@@ -258,7 +262,6 @@ static void parse_keyfile_style(GKeyFile *kf, gchar **list,
 		const GeanyLexerStyle *default_style, GeanyLexerStyle *style)
 {
 	gsize len;
-	gchar *str;
 
 	g_return_if_fail(default_style);
 	g_return_if_fail(style);
@@ -269,15 +272,31 @@ static void parse_keyfile_style(GKeyFile *kf, gchar **list,
 		return;
 
 	len = g_strv_length(list);
-
-	str = list[0];
-
-	/* It might be a named style so try and parse it as such */
-	if (len == 1 && isalpha(str[0]))
+	if (len == 0)
+		return;
+	else if (len == 1)
 	{
-		if (read_named_style(str, style))
-			return;
-		/* It must start with a named color (or error), fall through */
+		gchar **items = g_strsplit(list[0], ",", 0);
+		if (items != NULL)
+		{
+			if (g_strv_length(items) > 0)
+			{
+				if (g_hash_table_lookup(named_style_hash, items[0]) != NULL)
+				{
+					if (!read_named_style(list[0], style))
+						geany_debug("Unable to read named style '%s'", items[0]);
+					g_strfreev(items);
+					return;
+				}
+				else if (strchr(list[0], ',') != NULL)
+				{
+					geany_debug("Unknown named style '%s'", items[0]);
+					g_strfreev(items);
+					return;
+				}
+			}
+			g_strfreev(items);
+		}
 	}
 
 	switch (len)
