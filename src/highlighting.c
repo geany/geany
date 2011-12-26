@@ -583,7 +583,7 @@ static void load_named_styles(GKeyFile *config, GKeyFile *config_home)
 }
 
 
-static void styleset_common_init(guint ft_id, GKeyFile *config, GKeyFile *config_home)
+static void styleset_common_init(GKeyFile *config, GKeyFile *config_home)
 {
 	load_named_styles(config, config_home);
 
@@ -991,7 +991,7 @@ void highlighting_init_styles(guint filetype_idx, GKeyFile *config, GKeyFile *co
 	/* None filetype handled specially */
 	if (filetype_idx == GEANY_FILETYPES_NONE)
 	{
-		styleset_common_init(GEANY_FILETYPES_NONE, config, configh);
+		styleset_common_init(config, configh);
 		return;
 	}
 	/* All stylesets depend on filetypes.common */
