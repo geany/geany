@@ -359,7 +359,7 @@ void tools_execute_custom_command(GeanyDocument *doc, const gchar *command)
 		gchar *sel;
 		gint len, remaining, wrote;
 
-		if (pid > 0)
+		if (pid != 0)
 			g_child_watch_add(pid, (GChildWatchFunc) cc_exit_cb, doc);
 
 		/* use GIOChannel to monitor stdout */
