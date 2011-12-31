@@ -88,6 +88,7 @@ typedef enum
 	GEANY_FILETYPES_ERLANG,
 	GEANY_FILETYPES_COBOL,
 	GEANY_FILETYPES_OBJECTIVEC,
+	GEANY_FILETYPES_SCSS,
 	/* ^ append items here */
 	GEANY_MAX_BUILT_IN_FILETYPES	/* Don't use this, use filetypes_array->len instead */
 }

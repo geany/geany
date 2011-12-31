@@ -1186,6 +1186,50 @@ static const HLKeyword highlighting_keywords_RUBY[] =
 #define highlighting_properties_RUBY	EMPTY_PROPERTIES
 
 
+/* Sassy CSS (SCSS) */
+#define highlighting_lexer_SCSS			SCLEX_SCSS
+static const HLStyle highlighting_styles_SCSS[] =
+{
+	{ SCE_SCSS_DEFAULT,					"default",					FALSE },
+	{ SCE_SCSS_COMMENT,					"comment",					FALSE },
+	{ SCE_SCSS_TAG,						"tag",						FALSE },
+	{ SCE_SCSS_CLASS,					"class",					FALSE },
+	{ SCE_SCSS_PSEUDOCLASS,				"pseudoclass",				FALSE },
+	{ SCE_SCSS_UNKNOWN_PSEUDOCLASS,		"unknown_pseudoclass",		FALSE },
+	{ SCE_SCSS_UNKNOWN_IDENTIFIER,		"unknown_identifier",		FALSE },
+	{ SCE_SCSS_OPERATOR,				"operator",					FALSE },
+	{ SCE_SCSS_IDENTIFIER,				"identifier",				FALSE },
+	{ SCE_SCSS_DOUBLESTRING,			"doublestring",				FALSE },
+	{ SCE_SCSS_SINGLESTRING,			"singlestring",				FALSE },
+	{ SCE_SCSS_ATTRIBUTE,				"attribute",				FALSE },
+	{ SCE_SCSS_VALUE,					"value",					FALSE },
+	{ SCE_SCSS_ID,						"id",						FALSE },
+	{ SCE_SCSS_IDENTIFIER2,				"identifier2",				FALSE },
+	{ SCE_SCSS_IMPORTANT,				"important",				FALSE },
+	{ SCE_SCSS_DIRECTIVE,				"directive",				FALSE },
+	{ SCE_SCSS_IDENTIFIER3,				"identifier3",				FALSE },
+	{ SCE_SCSS_PSEUDOELEMENT,			"pseudoelement",			FALSE },
+	{ SCE_SCSS_EXTENDED_IDENTIFIER,		"extended_identifier",		FALSE },
+	{ SCE_SCSS_EXTENDED_PSEUDOCLASS,	"extended_pseudoclass",		FALSE },
+	{ SCE_SCSS_EXTENDED_PSEUDOELEMENT,	"extended_pseudoelement",	FALSE },
+	{ SCE_SCSS_MEDIA,					"media",					FALSE },
+	{ SCE_SCSS_COMMENTLINE,				"commentline",				FALSE },
+	{ SCE_SCSS_VARIABLE,				"variable",					FALSE }
+};
+static const HLKeyword highlighting_keywords_SCSS[] =
+{
+	{ 0, "primary",					FALSE },
+	{ 1, "pseudoclasses",			FALSE },
+	{ 2, "secondary",				FALSE },
+	{ 3, "css3_properties",			FALSE },
+	{ 4, "pseudo_elements",			FALSE },
+	{ 5, "browser_css_properties",	FALSE },
+	{ 6, "browser_pseudo_classes",	FALSE },
+	{ 7, "browser_pseudo_elements",	FALSE }
+};
+#define highlighting_properties_SCSS		EMPTY_PROPERTIES
+
+
 /* SH */
 #define highlighting_lexer_SH		SCLEX_BASH
 static const HLStyle highlighting_styles_SH[] =

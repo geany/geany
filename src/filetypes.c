@@ -496,6 +496,13 @@ static void init_builtin_filetypes(void)
 	ft->name = g_strdup("Forth");
 	filetype_make_title(ft, TITLE_SOURCE_FILE);
 	ft->group = GEANY_FILETYPE_GROUP_SCRIPT;
+
+#define SCSS
+	ft = filetypes[GEANY_FILETYPES_SCSS];
+	//~ ft->lang = 13;
+	ft->name = g_strdup("SCSS");
+	ft->title = g_strdup(_("SCSS"));
+	ft->group = GEANY_FILETYPE_GROUP_MARKUP;	/* like CSS, not really markup but fit quite well to HTML */
 }
 
 
