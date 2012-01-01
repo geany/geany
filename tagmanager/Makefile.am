@@ -5,17 +5,10 @@ INCLUDES = -I$(srcdir)/include $(GTK_CFLAGS) -I$(srcdir)/mio -I$(srcdir)
 
 AM_CFLAGS = -DG_LOG_DOMAIN=\""Tagmanager"\"
 
-# regex.c is the GNU regex implementation needed for Windows
-EXTRA_DIST = regex.c \
+EXTRA_DIST =\
 	makefile.win32
 
 noinst_LIBRARIES = libtagmanager.a
-
-if USE_INCLUDED_REGEX
-regex_sources = regex.c
-else
-regex_sources =
-endif
 
 libtagmanager_a_SOURCES =\
 	general.h\
@@ -88,6 +81,5 @@ libtagmanager_a_SOURCES =\
 	tm_tag.c\
 	tm_symbol.c\
 	tm_file_entry.c\
-	tm_tagmanager.c \
-	$(regex_sources)
+	tm_tagmanager.c
 

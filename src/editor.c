@@ -42,12 +42,6 @@
 #include "SciLexer.h"
 #include "geany.h"
 
-#ifdef HAVE_REGEX_H
-# include <regex.h>
-#else
-# include "gnuregex.h"
-#endif
-
 #include "support.h"
 #include "editor.h"
 #include "document.h"

@@ -1389,16 +1389,14 @@ Regular expressions
 
 You can use regular expressions in the Find and Replace dialogs
 by selecting the *Use regular expressions* check box (see `Matching
-options`_). The syntax is POSIX compatible, as described in the table
-below.
+options`_). The syntax is Perl compatible. Basic syntax is described
+in the table below. For full details, see
+http://www.geany.org/manual/gtk/glib/glib-regex-syntax.html.
 
 .. note::
     1. The *Use escape sequences* dialog option always applies for regular
        expressions.
     2. Searching backwards with regular expressions is not supported.
-    3. \\b, \\d, \\s, \\w are GNU extensions and may not be available
-       on non-GNU POSIX systems unless you built Geany with the
-       ``--enable-gnu-regex`` option (this is always used on Windows).
 
 **In a regular expression, the following characters are interpreted:**
 
@@ -4118,7 +4116,7 @@ As of Geany 0.19 this section is supplemented by the `[build-menu] section`_.
 Values that are set in the [build-menu] section will override those in this section.
 
 error_regex
-    This is a GNU-style extended regular expression to parse a filename
+    This is a regular expression to parse a filename
     and line number from build output. If undefined, Geany will fall
     back to its default error message parsing.
 

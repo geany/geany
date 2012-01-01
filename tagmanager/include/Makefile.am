@@ -1,6 +1,3 @@
-noinst_HEADERS = \
-	gnuregex.h
-
 tagmanager_includedir = $(includedir)/geany/tagmanager
 tagmanager_include_HEADERS = \
 	tm_project.h \
