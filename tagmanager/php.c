@@ -78,7 +78,7 @@ static void installPHPRegex (const langType language)
 	addTagRegex(language, "^[ \t]*const[ \t]*([" ALPHA "_][" ALNUM "_]*)[ \t]*[=;]",
 		"\\1", "m,macro,macros", NULL);
 	addCallbackRegex(language,
-		"^[ \t]*((public|protected|private|static|final)[ \t]+)*function[ \t]+&?[ \t]*([" ALPHA "_][" ALNUM "_]*)[[:space:]]*(\\(.*\\))",
+		"^[ \t]*((public|protected|private|static|final)[ \t]+)*function[ \t]+&?[ \t]*([" ALPHA "_][" ALNUM "_]*)[[:space:]]*(\\(.*\\)|\\(.*)",
 		NULL, function_cb);
 	addTagRegex(language, "^[ \t]*(\\$|::\\$|\\$this->)([" ALPHA "_][" ALNUM "_]*)[ \t]*=",
 		"\\2", "v,variable,variables", NULL);
