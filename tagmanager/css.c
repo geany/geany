@@ -12,6 +12,7 @@
 #include "parse.h"
 #include "read.h"
 
+// TODO: add support for SCSS and Less, e.g. single line comments
 
 typedef enum eCssKinds {
     K_NONE = -1, K_SELECTOR, K_ID, K_CLASS
