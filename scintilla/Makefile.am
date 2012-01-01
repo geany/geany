@@ -32,7 +32,6 @@ lexers/LexPerl.cxx \
 lexers/LexPython.cxx \
 lexers/LexR.cxx \
 lexers/LexRuby.cxx \
-lexers/LexSassyCSS.cxx \
 lexers/LexSQL.cxx \
 lexers/LexTCL.cxx \
 lexers/LexTxt2tags.cxx \

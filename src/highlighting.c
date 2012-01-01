@@ -1038,7 +1038,6 @@ void highlighting_init_styles(guint filetype_idx, GKeyFile *config, GKeyFile *co
 		init_styleset_case(R);
 		init_styleset_case(RUBY);
 		init_styleset_case(SH);
-		init_styleset_case(SCSS);
 		init_styleset_case(SQL);
 		init_styleset_case(TCL);
 		init_styleset_case(TXT2TAGS);
@@ -1118,7 +1117,6 @@ void highlighting_set_styles(ScintillaObject *sci, GeanyFiletype *ft)
 		styleset_case(R);
 		styleset_case(RUBY);
 		styleset_case(SH);
-		styleset_case(SCSS);
 		styleset_case(SQL);
 		styleset_case(TCL);
 		styleset_case(TXT2TAGS);

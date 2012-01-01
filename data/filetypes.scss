@@ -6,7 +6,7 @@ tag=tag
 class=class
 pseudoclass=class
 unknown_pseudoclass=class
-unknown_identifier=0x00ff00
+unknown_identifier=class
 operator=operator
 identifier=keyword_1
 doublestring=string_1
@@ -23,10 +23,7 @@ extended_identifier=keyword_4
 extended_pseudoclass=class
 extended_pseudoelement=element
 media=string_3
-
-commentline=comment
-variable=keyword_1
-
+variable=keyword_4
 
 [keywords]
 # CSS 1 properties
@@ -40,8 +37,12 @@ browser_css_properties=
 browser_pseudo_classes=
 browser_pseudo_elements=
 
+[lexer_properties]
+lexer.css.scss.language=1
 
 [settings]
+lexer_filetype=CSS
+tag_parser=CSS
 # default extension used when saving files
 extension=scss
 

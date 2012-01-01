@@ -1,11 +1,18 @@
+// TODO: @import needs its own styling
+// TODO: identifiers following nesting are dropped back to default, not identifier
+
 // Scintilla source code edit control
 /** @file LexCSS.cxx
  ** Lexer for Cascading Style Sheets
  ** Written by Jakub Vrána
  ** Improved by Philippe Lhoste (CSS2)
+ ** SCSS and Less modes added by Ross McKay
  **/
 // Copyright 1998-2002 by Neil Hodgson <neilh@scintilla.org>
 // The License.txt file describes the conditions under which this software may be distributed.
+
+// ref http://sass-lang.com/docs/yardoc/file.SASS_REFERENCE.html
+// ref http://lesscss.org/
 
 #include <stdlib.h>
 #include <string.h>
@@ -29,6 +36,10 @@
 using namespace Scintilla;
 #endif
 
+
+//~ static inline bool IsWhitespaceChar(const int ch) {
+	//~ return strchr(" \t\r\n\f", ch) != NULL;
+//~ }
 
 static inline bool IsAWordChar(const unsigned int ch) {
 	/* FIXME:
@@ -66,11 +77,21 @@ static void ColouriseCssDoc(unsigned int startPos, int length, int initStyle, Wo
 	int lastState = -1; // before operator
 	int lastStateC = -1; // before comment
 	int lastStateS = -1; // before single-quoted/double-quoted string
+	int lastStateV = -1; // before variable
 	int op = ' '; // last operator
 	int opPrev = ' '; // last operator
 
+	// check for variations on CSS
+	bool isScssDocument = styler.GetPropertyInt("lexer.css.scss.language") != 0;
+	//~ bool isLessDocument = styler.GetPropertyInt("lexer.css.less.language") != 0;
+
+	// SCSS and Less both support single-line comments
+	typedef enum _CommentModes { eCommentBlock = 0, eCommentLine = 1} CommentMode;
+	CommentMode comment_mode;
+
+	// "the loop"
 	for (; sc.More(); sc.Forward()) {
-		if (sc.state == SCE_CSS_COMMENT && sc.Match('*', '/')) {
+		if (sc.state == SCE_CSS_COMMENT && ((comment_mode == eCommentBlock && sc.Match('*', '/')) || (comment_mode == eCommentLine && sc.atLineEnd))) {
 			if (lastStateC == -1) {
 				// backtrack to get last state:
 				// comments are like whitespace, so we must return to the previous state
@@ -94,8 +115,12 @@ static void ColouriseCssDoc(unsigned int startPos, int length, int initStyle, Wo
 				if (i == 0)
 					lastStateC = SCE_CSS_DEFAULT;
 			}
-			sc.Forward();
-			sc.ForwardSetState(lastStateC);
+			if (comment_mode == eCommentBlock) {
+				sc.Forward();
+				sc.ForwardSetState(lastStateC);
+			} else /* eCommentLine */ {
+				sc.SetState(lastStateC);
+			}
 		}
 
 		if (sc.state == SCE_CSS_COMMENT)
@@ -193,10 +218,21 @@ static void ColouriseCssDoc(unsigned int startPos, int length, int initStyle, Wo
 					sc.SetState(SCE_CSS_DEFAULT);
 				break;
 			case ';':
-				if (lastState == SCE_CSS_DIRECTIVE)
+				switch (lastState) {
+				case SCE_CSS_DIRECTIVE:
 					sc.SetState(SCE_CSS_DEFAULT);
-				else if (lastState == SCE_CSS_VALUE || lastState == SCE_CSS_IMPORTANT)
+					break;
+				case SCE_CSS_VALUE:
+				case SCE_CSS_IMPORTANT:
 					sc.SetState(SCE_CSS_IDENTIFIER);
+					break;
+				case SCE_CSS_VARIABLE:
+					if (lastStateV == SCE_CSS_VALUE)
+						sc.SetState(SCE_CSS_IDENTIFIER);
+					else
+						sc.SetState(SCE_CSS_DEFAULT);
+					break;
+				}
 				break;
 			case '!':
 				if (lastState == SCE_CSS_VALUE)
@@ -205,14 +241,65 @@ static void ColouriseCssDoc(unsigned int startPos, int length, int initStyle, Wo
 			}
 		}
 
-		if (IsAWordChar(sc.ch)) {
-			if (sc.state == SCE_CSS_DEFAULT)
-				sc.SetState(SCE_CSS_TAG);
+		if (sc.ch == '*' && sc.state == SCE_CSS_DEFAULT) {
+			sc.SetState(SCE_CSS_TAG);
 			continue;
 		}
 
-		if (sc.ch == '*' && sc.state == SCE_CSS_DEFAULT) {
-			sc.SetState(SCE_CSS_TAG);
+		// SCSS special characters
+		if (isScssDocument) {
+			// variable name
+			if (sc.ch == '$') {
+				switch (sc.state) {
+				case SCE_CSS_DEFAULT:
+				case SCE_CSS_VALUE:
+					lastStateV = sc.state;
+					sc.SetState(SCE_CSS_VARIABLE);
+					continue;
+				}
+			}
+			if (sc.state == SCE_CSS_VARIABLE) {
+				if (IsAWordChar(sc.ch)) {
+					// still looking at the variable name
+					continue;
+				}
+				if (lastStateV == SCE_CSS_VALUE) {
+					// not looking at the variable name any more, and it was part of a value
+					sc.SetState(SCE_CSS_VALUE);
+					//~ continue;
+				}
+			}
+
+			// nested rule parent selector
+			if (sc.ch == '&') {
+				switch (sc.state) {
+				case SCE_CSS_DEFAULT:
+				case SCE_CSS_IDENTIFIER:
+					sc.SetState(SCE_CSS_TAG);
+					continue;
+				}
+			}
+
+			// check for nested rule selector
+			if (sc.state == SCE_CSS_IDENTIFIER && IsAWordChar(sc.ch)) {
+				// look ahead to see whether { comes before next ; and }
+				int endPos = startPos + length;
+				int ch;
+				for (int i = sc.currentPos; i < endPos; i++) {
+					ch = styler.SafeGetCharAt(i);
+					if (ch == ';' || ch == '}')
+						break;
+					if (ch == '{') {
+						sc.SetState(SCE_CSS_DEFAULT);
+						continue;
+					}
+				}
+			}
+		}
+
+		if (IsAWordChar(sc.ch)) {
+			if (sc.state == SCE_CSS_DEFAULT)
+				sc.SetState(SCE_CSS_TAG);
 			continue;
 		}
 
@@ -287,6 +374,12 @@ static void ColouriseCssDoc(unsigned int startPos, int length, int initStyle, Wo
 
 		if (sc.Match('/', '*')) {
 			lastStateC = sc.state;
+			comment_mode = eCommentBlock;
+			sc.SetState(SCE_CSS_COMMENT);
+			sc.Forward();
+		} else if (sc.ch == '/' && sc.chNext == '/') {
+			lastStateC = sc.state;
+			comment_mode = eCommentLine;
 			sc.SetState(SCE_CSS_COMMENT);
 			sc.Forward();
 		} else if ((sc.state == SCE_CSS_VALUE || sc.state == SCE_CSS_ATTRIBUTE)
