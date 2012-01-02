@@ -8,7 +8,6 @@
 // Copyright 1998-2002 by Neil Hodgson <neilh@scintilla.org>
 // The License.txt file describes the conditions under which this software may be distributed.
 
-// FIXME: nesting still has some bugs
 // TODO: handle SCSS nested properties like font: { weight: bold; size: 1em; }
 // TODO: add features for Less if somebody feels like contributing; http://lesscss.org/
 // TODO: refactor this monster so that the next poor slob can read it!
@@ -340,7 +339,7 @@ static void ColouriseCssDoc(unsigned int startPos, int length, int initStyle, Wo
 		// nesting rules that apply to SCSS and Less
 		if (isScssDocument || isLessDocument) {
 			// check for nested rule selector
-			if (sc.state == SCE_CSS_IDENTIFIER && (IsAWordChar(sc.ch) || sc.ch == ':')) {
+			if (sc.state == SCE_CSS_IDENTIFIER && IsAWordChar(sc.ch) || sc.state == SCE_CSS_OPERATOR && (op == ':' || op == '.' || op == '#')) {
 				// look ahead to see whether { comes before next ; and }
 				unsigned int endPos = startPos + length;
 				int ch;
@@ -354,6 +353,7 @@ static void ColouriseCssDoc(unsigned int startPos, int length, int initStyle, Wo
 					}
 				}
 			}
+
 		}
 
 		if (IsAWordChar(sc.ch)) {
