@@ -970,7 +970,7 @@ static GPid build_run_cmd(GeanyDocument *doc, guint cmdindex)
 			run_info[cmdindex].pid = (GPid) 0;
 		}
 
-		if (run_info[cmdindex].pid > 0)
+		if (run_info[cmdindex].pid != 0)
 		{
 			g_child_watch_add(run_info[cmdindex].pid, (GChildWatchFunc) run_exit_cb,
 								(gpointer)&(run_info[cmdindex]));

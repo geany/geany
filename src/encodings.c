@@ -42,19 +42,13 @@
 #include "callbacks.h"
 #include "ui_utils.h"
 
-#ifdef HAVE_REGEX_H
-# include <regex.h>
-#else
-# include "gnuregex.h"
-#endif
-
 /* <meta http-equiv="content-type" content="text/html; charset=UTF-8" /> */
-#define PATTERN_HTMLMETA "<meta[ \t\n\r\f]+http-equiv[ \t\n\r\f]*=[ \t\n\r\f]*\"?content-type\"?[ \t\n\r\f]+content[ \t\n\r\f]*=[ \t\n\r\f]*\"text/x?html;[ \t\n\r\f]*charset=([a-z0-9_-]+)\"[ \t\n\r\f]*/?>"
+#define PATTERN_HTMLMETA "<meta\\s+http-equiv\\s*=\\s*\"?content-type\"?\\s+content\\s*=\\s*\"text/x?html;\\s*charset=([a-z0-9_-]+)\"\\s*/?>"
 /* " geany_encoding=utf-8 " or " coding: utf-8 " */
 #define PATTERN_CODING "coding[\t ]*[:=][\t ]*\"?([a-z0-9-]+)\"?[\t ]*"
 
 /* precompiled regexps */
-static regex_t pregs[2];
+static GRegex *pregs[2];
 static gboolean pregs_loaded = FALSE;
 
 
@@ -321,42 +315,40 @@ void encodings_select_radio_item(const gchar *charset)
  * regex_compile() is used to compile regular expressions on program init and keep it in memory
  * for faster access when opening a file. Pre-compiled regexps will be freed on program exit.
  */
-static void regex_compile(regex_t *preg, const gchar *pattern)
+static GRegex *regex_compile(const gchar *pattern)
 {
-	gint retval = regcomp(preg, pattern, REG_EXTENDED | REG_ICASE);
-	if (retval != 0)
+	GError *error = NULL;
+	GRegex *regex = g_regex_new(pattern, G_REGEX_CASELESS, 0, &error);
+
+	if (!regex)
 	{
-		gchar errmsg[512];
-		regerror(retval, preg, errmsg, 512);
-		geany_debug("regcomp() failed (%s)", errmsg);
-		regfree(preg);
-		return;
+		geany_debug("Failed to compile encoding regex (%s)", error->message);
+		g_error_free(error);
 	}
+	return regex;
 }
 
 
-static gchar *regex_match(regex_t *preg, const gchar *buffer, gsize size)
+static gchar *regex_match(GRegex *preg, const gchar *buffer, gsize size)
 {
-	gint retval;
-	gchar *tmp_buf = NULL;
 	gchar *encoding = NULL;
-	regmatch_t pmatch[10];
+	GMatchInfo *minfo;
 
 	if (G_UNLIKELY(! pregs_loaded || buffer == NULL))
 		return NULL;
 
-	if (size > 512)
-		tmp_buf = g_strndup(buffer, 512); /* scan only the first 512 characters in the buffer */
+	/* scan only the first 512 characters in the buffer */
+	size = MIN(size, 512);
 
-	retval = regexec(preg, (tmp_buf != NULL) ? tmp_buf : buffer, 10, pmatch, 0);
-	if (retval == 0 && pmatch[0].rm_so != -1 && pmatch[1].rm_so != -1)
+	if (g_regex_match_full(preg, buffer, size, 0, 0, &minfo, NULL) &&
+		g_match_info_get_match_count(minfo) >= 2)
 	{
-		encoding = g_strndup(&buffer[pmatch[1].rm_so], pmatch[1].rm_eo - pmatch[1].rm_so);
+		encoding = g_match_info_fetch(minfo, 1);
 		geany_debug("Detected encoding by regex search: %s", encoding);
 
 		setptr(encoding, g_utf8_strup(encoding, -1));
 	}
-	g_free(tmp_buf);
+	g_match_info_free(minfo);
 	return encoding;
 }
 
@@ -390,7 +382,7 @@ void encodings_finalize(void)
 		len = G_N_ELEMENTS(pregs);
 		for (i = 0; i < len; i++)
 		{
-			regfree(&pregs[i]);
+			g_regex_unref(pregs[i]);
 		}
 	}
 }
@@ -411,8 +403,8 @@ void encodings_init(void)
 
 	if (! pregs_loaded)
 	{
-		regex_compile(&pregs[0], PATTERN_HTMLMETA);
-		regex_compile(&pregs[1], PATTERN_CODING);
+		pregs[0] = regex_compile(PATTERN_HTMLMETA);
+		pregs[1] = regex_compile(PATTERN_CODING);
 		pregs_loaded = TRUE;
 	}
 
@@ -568,7 +560,7 @@ static gchar *encodings_check_regexes(const gchar *buffer, gsize size)
 	{
 		gchar *charset;
 
-		if ((charset = regex_match(&pregs[i], buffer, size)) != NULL)
+		if ((charset = regex_match(pregs[i], buffer, size)) != NULL)
 			return charset;
 	}
 	return NULL;
