@@ -42,6 +42,7 @@ lexer.css.scss.language=1
 
 [settings]
 lexer_filetype=CSS
+# for now, use CSS parser (even though it breaks right now)
 tag_parser=CSS
 # default extension used when saving files
 extension=scss
