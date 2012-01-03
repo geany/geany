@@ -523,9 +523,9 @@ static GeanyDocument *document_create(const gchar *utf8_filename)
 		new_idx = documents_array->len;
 		g_ptr_array_add(documents_array, doc);
 	}
-	
+
 	doc = documents[new_idx];
-	
+
 	/* initialize default document settings */
 	doc->priv = g_new0(GeanyDocumentPrivate, 1);
 	doc->index = new_idx;
@@ -2215,9 +2215,6 @@ void document_update_tags(GeanyDocument *doc)
 {
 	guchar *buffer_ptr;
 	gsize len;
-	GString *keywords_str;
-	gchar *keywords;
-	gint keyword_idx;
 
 	g_return_if_fail(DOC_VALID(doc));
 	g_return_if_fail(app->tm_workspace != NULL);
@@ -2276,6 +2273,16 @@ void document_update_tags(GeanyDocument *doc)
 	tm_source_file_buffer_update(doc->tm_file, buffer_ptr, len, TRUE);
 
 	sidebar_update_tag_list(doc, TRUE);
+	document_highlight_tags(doc);
+}
+
+
+/* Re-highlights type keywords without re-parsing the whole document. */
+void document_highlight_tags(GeanyDocument *doc)
+{
+	GString *keywords_str;
+	gchar *keywords;
+	gint keyword_idx;
 
 	/* some filetypes support type keywords (such as struct names), but not
 	 * necessarily all filetypes for a particular scintilla lexer.  this
