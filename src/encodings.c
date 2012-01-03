@@ -509,7 +509,7 @@ void encodings_init(void)
  *  @return If the conversion was successful, a newly allocated nul-terminated string,
  *    which must be freed with @c g_free(). Otherwise @c NULL.
  **/
-gchar *encodings_convert_to_utf8_from_charset(const gchar *buffer, gsize size,
+gchar *encodings_convert_to_utf8_from_charset(const gchar *buffer, gssize size,
 											  const gchar *charset, gboolean fast)
 {
 	gchar *utf8_content = NULL;
@@ -567,7 +567,7 @@ static gchar *encodings_check_regexes(const gchar *buffer, gsize size)
 }
 
 
-static gchar *encodings_convert_to_utf8_with_suggestion(const gchar *buffer, gsize size,
+static gchar *encodings_convert_to_utf8_with_suggestion(const gchar *buffer, gssize size,
 		const gchar *suggested_charset, gchar **used_encoding)
 {
 	const gchar *locale_charset = NULL;
@@ -577,7 +577,7 @@ static gchar *encodings_convert_to_utf8_with_suggestion(const gchar *buffer, gsi
 	gboolean check_locale = FALSE;
 	gint i, preferred_charset;
 
-	if ((gint)size == -1)
+	if (size == -1)
 	{
 		size = strlen(buffer);
 	}
@@ -667,7 +667,7 @@ static gchar *encodings_convert_to_utf8_with_suggestion(const gchar *buffer, gsi
  *  @return If the conversion was successful, a newly allocated nul-terminated string,
  *    which must be freed with @c g_free(). Otherwise @c NULL.
  **/
-gchar *encodings_convert_to_utf8(const gchar *buffer, gsize size, gchar **used_encoding)
+gchar *encodings_convert_to_utf8(const gchar *buffer, gssize size, gchar **used_encoding)
 {
 	gchar *regex_charset;
 	gchar *utf8;

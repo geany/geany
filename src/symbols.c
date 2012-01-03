@@ -1023,7 +1023,7 @@ static const gchar *get_symbol_name(GeanyDocument *doc, const TMTag *tag, gboole
 
 	if (! doc_is_utf8)
 		utf8_name = encodings_convert_to_utf8_from_charset(tag->name,
-			(gsize) -1, doc->encoding, TRUE);
+			-1, doc->encoding, TRUE);
 	else
 		utf8_name = tag->name;
 
@@ -1066,7 +1066,7 @@ static gchar *get_symbol_tooltip(GeanyDocument *doc, const TMTag *tag)
 		! utils_str_equal(doc->encoding, "None"))
 	{
 		setptr(utf8_name,
-			encodings_convert_to_utf8_from_charset(utf8_name, (gsize) -1, doc->encoding, TRUE));
+			encodings_convert_to_utf8_from_charset(utf8_name, -1, doc->encoding, TRUE));
 	}
 
 	if (utf8_name != NULL)
@@ -1276,12 +1276,12 @@ static void free_iter_slice(gpointer iter)
  * @param doc a document
  * @param tags a pointer to a GList* holding the tags to add/update.  This
  *             list may be updated, removing updated elements.
- * 
+ *
  * The update is done in two passes:
  * 1) walking the current tree, update tags that still exist and remove the
  *    obsolescent ones;
  * 2) walking the remaining (non updated) tags, adds them in the list.
- * 
+ *
  * For better performances, we use 2 hash tables:
  * - one containing all the tags for lookup in the first pass (actually stores a
  *   reference in the tags list for removing it efficiently), avoiding list search
