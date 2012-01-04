@@ -136,7 +136,7 @@ static void ColouriseCssDoc(unsigned int startPos, int length, int initStyle, Wo
 				sc.Forward();
 				sc.ForwardSetState(lastStateC);
 			} else /* eCommentLine */ {
-				sc.SetState(lastStateC);
+				sc.ForwardSetState(lastStateC);
 			}
 		}
 
