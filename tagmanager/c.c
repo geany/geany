@@ -2881,10 +2881,18 @@ static void tagCheck (statementInfo *const st)
 					qualifyFunctionTag (st, st->blockName);
 				else if (st->haveQualifyingName)
 				{
-					st->declaration = DECL_FUNCTION;
 					if (isType (prev2, TOKEN_NAME))
 						copyToken (st->blockName, prev2);
-					qualifyFunctionTag (st, prev2);
+					/* D structure templates */
+					if (isLanguage (Lang_d) &&
+						(st->declaration == DECL_CLASS || st->declaration == DECL_STRUCT ||
+						st->declaration == DECL_INTERFACE))
+						qualifyBlockTag (st, prev2);
+					else
+					{
+						st->declaration = DECL_FUNCTION;
+						qualifyFunctionTag (st, prev2);
+					}
 				}
 			}
 			else if (isContextualStatement (st))
