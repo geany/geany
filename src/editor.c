@@ -1828,7 +1828,8 @@ static gchar *find_calltip(const gchar *word, GeanyFiletype *ft)
 
 	tag = TM_TAG(tags->pdata[0]);
 
-	if (tag->type == tm_tag_class_t && FILETYPE_ID(ft) == GEANY_FILETYPES_D)
+	if (ft->id == GEANY_FILETYPES_D &&
+		(tag->type == tm_tag_class_t || tag->type == tm_tag_struct_t))
 	{
 		/* user typed e.g. 'new Classname(' so lookup D constructor Classname::this() */
 		tags = tm_workspace_find_scoped("this", tag->name,
