@@ -24,6 +24,8 @@ extended_identifier=keyword_4
 extended_pseudoclass=class
 extended_pseudoelement=element
 media=string_3
+# extended styles for languages such as SCSS, Less
+variable=keyword_4
 
 [keywords]
 # CSS 1 properties
