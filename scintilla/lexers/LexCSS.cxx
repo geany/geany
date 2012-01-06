@@ -9,6 +9,7 @@
 // The License.txt file describes the conditions under which this software may be distributed.
 
 // TODO: handle SCSS nested properties like font: { weight: bold; size: 1em; }
+// TODO: handle SCSS interpolation: #{}
 // TODO: add features for Less if somebody feels like contributing; http://lesscss.org/
 // TODO: refactor this monster so that the next poor slob can read it!
 
@@ -136,6 +137,7 @@ static void ColouriseCssDoc(unsigned int startPos, int length, int initStyle, Wo
 				sc.Forward();
 				sc.ForwardSetState(lastStateC);
 			} else /* eCommentLine */ {
+				sc.Forward();
 				sc.SetState(lastStateC);
 			}
 		}
@@ -437,7 +439,7 @@ static void ColouriseCssDoc(unsigned int startPos, int length, int initStyle, Wo
 			comment_mode = eCommentBlock;
 			sc.SetState(SCE_CSS_COMMENT);
 			sc.Forward();
-		} else if (sc.ch == '/' && sc.chNext == '/') {
+		} else if (sc.Match('/', '/')) {
 			lastStateC = sc.state;
 			comment_mode = eCommentLine;
 			sc.SetState(SCE_CSS_COMMENT);
