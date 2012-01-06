@@ -551,7 +551,7 @@ static void handle_input_filename(const gchar *buf)
 
 	/* we never know how the input is encoded, so do the best auto detection we can */
 	if (! g_utf8_validate(buf, -1, NULL))
-		utf8_filename = encodings_convert_to_utf8(buf, (gsize) -1, NULL);
+		utf8_filename = encodings_convert_to_utf8(buf, -1, NULL);
 	else
 		utf8_filename = g_strdup(buf);
 

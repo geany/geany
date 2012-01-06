@@ -512,6 +512,7 @@ struct TreeviewSymbols
 	GtkTreeIter		 tag_variable;
 	GtkTreeIter		 tag_namespace;
 	GtkTreeIter		 tag_struct;
+	GtkTreeIter		 tag_interface;
 	GtkTreeIter		 tag_type;
 	GtkTreeIter		 tag_other;
 } tv_iters;
@@ -528,6 +529,7 @@ static void init_tag_iters(void)
 	tv_iters.tag_variable.stamp = -1;
 	tv_iters.tag_namespace.stamp = -1;
 	tv_iters.tag_struct.stamp = -1;
+	tv_iters.tag_interface.stamp = -1;
 	tv_iters.tag_type.stamp = -1;
 	tv_iters.tag_other.stamp = -1;
 }
@@ -769,7 +771,7 @@ static void add_top_level_items(GeanyDocument *doc)
 		case GEANY_FILETYPES_PHP:
 		{
 			tag_list_add_groups(tag_store,
-				&(tv_iters.tag_struct), _("Interfaces"), "classviewer-struct",
+				&(tv_iters.tag_interface), _("Interfaces"), "classviewer-struct",
 				&(tv_iters.tag_class), _("Classes"), "classviewer-class",
 				&(tv_iters.tag_function), _("Functions"), "classviewer-method",
 				&(tv_iters.tag_macro), _("Constants"), "classviewer-macro",
@@ -868,7 +870,7 @@ static void add_top_level_items(GeanyDocument *doc)
 		{
 			tag_list_add_groups(tag_store,
 				&(tv_iters.tag_namespace), _("Package"), "classviewer-namespace",
-				&(tv_iters.tag_struct), _("Interfaces"), "classviewer-struct",
+				&(tv_iters.tag_interface), _("Interfaces"), "classviewer-struct",
 				&(tv_iters.tag_class), _("Classes"), "classviewer-class",
 				&(tv_iters.tag_function), _("Methods"), "classviewer-method",
 				&(tv_iters.tag_member), _("Members"), "classviewer-member",
@@ -880,7 +882,7 @@ static void add_top_level_items(GeanyDocument *doc)
 		{
 			tag_list_add_groups(tag_store,
 				&(tv_iters.tag_namespace), _("Package"), "classviewer-namespace",
-				&(tv_iters.tag_struct), _("Interfaces"), "classviewer-struct",
+				&(tv_iters.tag_interface), _("Interfaces"), "classviewer-struct",
 				&(tv_iters.tag_class), _("Classes"), "classviewer-class",
 				&(tv_iters.tag_function), _("Functions"), "classviewer-method",
 				&(tv_iters.tag_member), _("Properties"), "classviewer-member",
@@ -893,7 +895,7 @@ static void add_top_level_items(GeanyDocument *doc)
 		case GEANY_FILETYPES_HAXE:
 		{
 			tag_list_add_groups(tag_store,
-				&(tv_iters.tag_struct), _("Interfaces"), "classviewer-struct",
+				&(tv_iters.tag_interface), _("Interfaces"), "classviewer-struct",
 				&(tv_iters.tag_class), _("Classes"), "classviewer-class",
 				&(tv_iters.tag_function), _("Methods"), "classviewer-method",
 				&(tv_iters.tag_type), _("Types"), "classviewer-macro",
@@ -919,7 +921,7 @@ static void add_top_level_items(GeanyDocument *doc)
 		{
 			tag_list_add_groups(tag_store,
 				&(tv_iters.tag_namespace), _("Module"), "classviewer-class",
-				&(tv_iters.tag_struct), _("Interfaces"), "classviewer-struct",
+				&(tv_iters.tag_interface), _("Interfaces"), "classviewer-struct",
 				&(tv_iters.tag_function), _("Functions"), "classviewer-method",
 				&(tv_iters.tag_member), _("Subroutines"), "classviewer-method",
 				&(tv_iters.tag_variable), _("Variables"), "classviewer-var",
@@ -970,6 +972,7 @@ static void add_top_level_items(GeanyDocument *doc)
 
 			tag_list_add_groups(tag_store,
 				&(tv_iters.tag_class), _("Classes"), "classviewer-class",
+				&(tv_iters.tag_interface), _("Interfaces"), "classviewer-struct",
 				&(tv_iters.tag_function), _("Functions"), "classviewer-method",
 				&(tv_iters.tag_member), _("Members"), "classviewer-member",
 				&(tv_iters.tag_struct), _("Structs"), "classviewer-struct",
@@ -1023,7 +1026,7 @@ static const gchar *get_symbol_name(GeanyDocument *doc, const TMTag *tag, gboole
 
 	if (! doc_is_utf8)
 		utf8_name = encodings_convert_to_utf8_from_charset(tag->name,
-			(gsize) -1, doc->encoding, TRUE);
+			-1, doc->encoding, TRUE);
 	else
 		utf8_name = tag->name;
 
@@ -1066,7 +1069,7 @@ static gchar *get_symbol_tooltip(GeanyDocument *doc, const TMTag *tag)
 		! utils_str_equal(doc->encoding, "None"))
 	{
 		setptr(utf8_name,
-			encodings_convert_to_utf8_from_charset(utf8_name, (gsize) -1, doc->encoding, TRUE));
+			encodings_convert_to_utf8_from_charset(utf8_name, -1, doc->encoding, TRUE));
 	}
 
 	if (utf8_name != NULL)
@@ -1141,11 +1144,13 @@ static GtkTreeIter *get_tag_type_iter(TMTagType tag_type, filetype_id ft_id)
 		}
 		case tm_tag_union_t:
 		case tm_tag_struct_t:
-		case tm_tag_interface_t:
 		{
 			iter = &tv_iters.tag_struct;
 			break;
 		}
+		case tm_tag_interface_t:
+			iter = &tv_iters.tag_interface;
+			break;
 		case tm_tag_variable_t:
 		{
 			iter = &tv_iters.tag_variable;
@@ -1276,12 +1281,12 @@ static void free_iter_slice(gpointer iter)
  * @param doc a document
  * @param tags a pointer to a GList* holding the tags to add/update.  This
  *             list may be updated, removing updated elements.
- * 
+ *
  * The update is done in two passes:
  * 1) walking the current tree, update tags that still exist and remove the
  *    obsolescent ones;
  * 2) walking the remaining (non updated) tags, adds them in the list.
- * 
+ *
  * For better performances, we use 2 hash tables:
  * - one containing all the tags for lookup in the first pass (actually stores a
  *   reference in the tags list for removing it efficiently), avoiding list search

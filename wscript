@@ -107,17 +107,7 @@ def configure(conf):
     conf.check_cc(header_name='sys/stat.h', mandatory=False)
     conf.define('HAVE_STDLIB_H', 1) # are there systems without stdlib.h?
     conf.define('STDC_HEADERS', 1) # an optimistic guess ;-)
-
-    if conf.options.gnu_regex:
-        _add_to_env_and_define(conf, 'HAVE_REGCOMP', 1)
-        _add_to_env_and_define(conf, 'USE_INCLUDED_REGEX', 1)
-    else:
-        try:
-            conf.check_cc(header_name='regex.h')
-            conf.check_cc(function_name='regcomp', header_name='regex.h')
-        except ConfigurationError:
-            _add_to_env_and_define(conf, 'HAVE_REGCOMP', 1)
-            _add_to_env_and_define(conf, 'USE_INCLUDED_REGEX', 1)
+    _add_to_env_and_define(conf, 'HAVE_REGCOMP', 1) # needed for CTags
 
     conf.check_cc(function_name='fgetpos', header_name='stdio.h', mandatory=False)
     conf.check_cc(function_name='ftruncate', header_name='unistd.h', mandatory=False)
@@ -215,7 +205,6 @@ def configure(conf):
     conf.msg('Using GTK version', gtk_version)
     conf.msg('Build with plugin support', conf.options.no_plugins and 'no' or 'yes')
     conf.msg('Use virtual terminal support', conf.options.no_vte and 'no' or 'yes')
-    conf.msg('GNU regex library', conf.env['USE_INCLUDED_REGEX'] and 'built-in' or 'system')
     if revision is not None:
         conf.msg('Compiling Git revision', revision)
 
@@ -234,8 +223,6 @@ def options(opt):
     opt.add_option('--disable-vte', action='store_true', default=False,
         help='compile without support for an embedded virtual terminal [[default: No]',
         dest='no_vte')
-    opt.add_option('--enable-gnu-regex', action='store_true', default=False,
-        help='compile with included GNU regex library [default: No]', dest='gnu_regex')
     # Paths
     opt.add_option('--mandir', type='string', default='',
         help='man documentation', dest='mandir')
@@ -273,8 +260,6 @@ def build(bld):
 
 
     # Tagmanager
-    if bld.env['USE_INCLUDED_REGEX'] == 1:
-        tagmanager_sources.add('tagmanager/regex.c')
     bld.new_task_gen(
         features        = ['c', 'cstlib'],
         source          = tagmanager_sources,

@@ -144,7 +144,7 @@
 /* Define to 1 if you have the `realpath' function. */
 #define HAVE_REALPATH 1
 
-/* Define to 1 if you have the `regcomp' function. */
+/* Should always be 1, required for CTags. */
 #define HAVE_REGCOMP 1
 
 /* Define to 1 if you have the `setenv' function. */
@@ -320,7 +320,4 @@
 
 /* Define if you want to detect a running instance */
 #define HAVE_SOCKET 1
-
-/* Define if include regex library should be used */
-#define USE_INCLUDED_REGEX 1
 

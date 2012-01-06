@@ -1789,17 +1789,15 @@ body.</p>
 <h3><a class="toc-backref" href="#id74">Regular expressions</a></h3>
 <p>You can use regular expressions in the Find and Replace dialogs
 by selecting the <em>Use regular expressions</em> check box (see <a class="reference internal" href="#matching-options">Matching
-options</a>). The syntax is POSIX compatible, as described in the table
-below.</p>
+options</a>). The syntax is Perl compatible. Basic syntax is described
+in the table below. For full details, see
+<a class="reference external" href="http://www.geany.org/manual/gtk/glib/glib-regex-syntax.html">http://www.geany.org/manual/gtk/glib/glib-regex-syntax.html</a>.</p>
 <div class="note">
 <p class="first admonition-title">Note</p>
 <ol class="last arabic simple">
 <li>The <em>Use escape sequences</em> dialog option always applies for regular
 expressions.</li>
 <li>Searching backwards with regular expressions is not supported.</li>
-<li>\b, \d, \s, \w are GNU extensions and may not be available
-on non-GNU POSIX systems unless you built Geany with the
-<tt class="docutils literal"><span class="pre">--enable-gnu-regex</span></tt> option (this is always used on Windows).</li>
 </ol>
 </div>
 <p><strong>In a regular expression, the following characters are interpreted:</strong></p>
@@ -5001,7 +4999,7 @@ only for Makefile).  These settings don't override auto-detection if activated.<
 Values that are set in the [build-menu] section will override those in this section.</p>
 <dl class="docutils">
 <dt>error_regex</dt>
-<dd><p class="first">This is a GNU-style extended regular expression to parse a filename
+<dd><p class="first">This is a regular expression to parse a filename
 and line number from build output. If undefined, Geany will fall
 back to its default error message parsing.</p>
 <p>Only the first two matches will be read by Geany. Geany will look for

@@ -150,6 +150,8 @@ static void search_close_pid(GPid child_pid, gint status, gpointer user_data);
 
 static gchar **search_get_argv(const gchar **argv_prefix, const gchar *dir);
 
+static GRegex *compile_regex(const gchar *str, gint sflags);
+
 
 static void
 on_find_replace_checkbutton_toggled(GtkToggleButton *togglebutton, gpointer user_data);
@@ -1236,7 +1238,14 @@ on_find_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 			gtk_widget_grab_focus(find_dlg.entry);
 			return;
 		}
-		if (settings.find_escape_sequences && ~search_data.flags & SCFIND_REGEXP)
+		if (search_data.flags & SCFIND_REGEXP)
+		{
+			GRegex *regex = compile_regex(search_data.text, search_data.flags);
+			g_regex_unref(regex);
+			if (!regex)
+				goto fail;
+		}
+		else if (settings.find_escape_sequences)
 		{
 			if (! utils_str_replace_escape(search_data.text, FALSE))
 				goto fail;
@@ -1364,8 +1373,10 @@ on_replace_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 
 	if (search_flags_re & SCFIND_REGEXP)
 	{
+		GRegex *regex = compile_regex(find, search_flags_re);
+		g_regex_unref(regex);
 		/* find escapes will be handled by GRegex */
-		if (! utils_str_replace_escape(replace, TRUE))
+		if (!regex || !utils_str_replace_escape(replace, TRUE))
 			goto fail;
 	}
 	else if (search_replace_escape_re)

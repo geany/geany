@@ -483,7 +483,8 @@ static const keywordDesc KeywordTable [] = {
 	{ "switch",         KEYWORD_SWITCH,         { 1, 1, 1, 1, 0, 1, 1 } },
 	{ "synchronized",   KEYWORD_SYNCHRONIZED,   { 0, 0, 0, 1, 0, 0, 1 } },
 	{ "task",           KEYWORD_TASK,           { 0, 0, 0, 0, 1, 0, 0 } },
-	{ "template",       KEYWORD_TEMPLATE,       { 0, 1, 0, 0, 0, 0, 1 } },
+	{ "template",       KEYWORD_TEMPLATE,       { 0, 1, 0, 0, 0, 0, 0 } },
+	{ "template",       KEYWORD_NAMESPACE,      { 0, 0, 0, 0, 0, 0, 1 } },	/* parse block */
 	{ "this",           KEYWORD_THIS,           { 0, 0, 1, 1, 0, 1, 0 } },	/* 0 to allow D ctor tags */
 	{ "throw",          KEYWORD_THROW,          { 0, 1, 1, 1, 0, 1, 1 } },
 	{ "throws",         KEYWORD_THROWS,         { 0, 0, 0, 1, 0, 1, 0 } },
@@ -2881,10 +2882,18 @@ static void tagCheck (statementInfo *const st)
 					qualifyFunctionTag (st, st->blockName);
 				else if (st->haveQualifyingName)
 				{
-					st->declaration = DECL_FUNCTION;
 					if (isType (prev2, TOKEN_NAME))
 						copyToken (st->blockName, prev2);
-					qualifyFunctionTag (st, prev2);
+					/* D structure templates */
+					if (isLanguage (Lang_d) &&
+						(st->declaration == DECL_CLASS || st->declaration == DECL_STRUCT ||
+						st->declaration == DECL_INTERFACE || st->declaration == DECL_NAMESPACE))
+						qualifyBlockTag (st, prev2);
+					else
+					{
+						st->declaration = DECL_FUNCTION;
+						qualifyFunctionTag (st, prev2);
+					}
 				}
 			}
 			else if (isContextualStatement (st))

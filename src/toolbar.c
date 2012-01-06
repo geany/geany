@@ -49,7 +49,7 @@ static GSList *plugin_items = NULL;
 
 /* Available toolbar actions
  * Fields: name, stock_id, label, accelerator, tooltip, callback */
-const GtkActionEntry ui_entries[] = {
+static const GtkActionEntry ui_entries[] = {
 	/* custom actions defined in toolbar_init(): "New", "Open", "SearchEntry", "GotoEntry", "Build" */
 	{ "Save", GTK_STOCK_SAVE, NULL, NULL, N_("Save the current file"), G_CALLBACK(on_toolbutton_save_clicked) },
 	{ "SaveAs", GTK_STOCK_SAVE_AS, NULL, NULL, N_("Save as"), G_CALLBACK(on_save_as1_activate) },
@@ -79,11 +79,11 @@ const GtkActionEntry ui_entries[] = {
 	{ "Print", GTK_STOCK_PRINT, NULL, NULL, N_("Print document"), G_CALLBACK(on_print1_activate) },
 	{ "Replace", GTK_STOCK_FIND_AND_REPLACE, NULL, NULL, N_("Replace text in the current document"), G_CALLBACK(on_replace1_activate) }
 };
-const guint ui_entries_n = G_N_ELEMENTS(ui_entries);
+static const guint ui_entries_n = G_N_ELEMENTS(ui_entries);
 
 
 /* fallback UI definition */
-const gchar *toolbar_markup =
+static const gchar *toolbar_markup =
 "<ui>"
 	"<toolbar name='GeanyToolbar'>"
 	"<toolitem action='New'/>"

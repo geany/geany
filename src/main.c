@@ -92,11 +92,7 @@ GeanyStatus	 main_status;
 CommandLineOptions cl_options;	/* fields initialised in parse_command_line_options */
 
 
-static const gchar geany_lib_versions[] = "GTK %u.%u.%u, GLib %u.%u.%u"
-#ifdef USE_INCLUDED_REGEX
-	", built-in regex"
-#endif
-	;
+static const gchar geany_lib_versions[] = "GTK %u.%u.%u, GLib %u.%u.%u";
 
 static gboolean want_plugins;
 

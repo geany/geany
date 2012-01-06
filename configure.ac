@@ -38,7 +38,7 @@ AC_PROG_LN_S
 # autoscan start
 
 # Checks for header files.
-AC_CHECK_HEADERS([fcntl.h fnmatch.h glob.h regex.h stdlib.h sys/time.h])
+AC_CHECK_HEADERS([fcntl.h fnmatch.h glob.h stdlib.h sys/time.h])
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_TYPE_OFF_T
@@ -78,10 +78,10 @@ AC_ARG_ENABLE([deprecated],
 
 # Check for binary relocation support
 GEANY_CHECK_BINRELOC
+# CTags source compatibility (we actually use GRegex instead of POSIX regcomp)
+AC_DEFINE([HAVE_REGCOMP], [1], [Should always be 1, required for CTags.])
 # Plugins support
 GEANY_CHECK_PLUGINS
-# check whether to use included GNU regex library
-GEANY_CHECK_GNU_REGEX
 # check for mingw specific settings
 GEANY_CHECK_MINGW
 

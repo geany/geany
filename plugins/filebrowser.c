@@ -280,6 +280,7 @@ static void refresh(void)
 
 	utf8_dir = utils_get_utf8_from_locale(current_dir);
 	gtk_entry_set_text(GTK_ENTRY(path_entry), utf8_dir);
+	gtk_widget_set_tooltip_text(path_entry, utf8_dir);
 	ui_combo_box_add_to_history(GTK_COMBO_BOX_ENTRY(path_combo), utf8_dir, 0);
 	g_free(utf8_dir);
 

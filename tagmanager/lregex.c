@@ -690,15 +690,7 @@ extern void freeRegexResources (void)
 /* Check for broken regcomp() on Cygwin */
 extern void checkRegex (void)
 {
-#if 0 && defined (HAVE_REGEX) && defined (CHECK_REGCOMP)
-	regex_t patbuf;
-	int errcode;
-	if (regcomp (&patbuf, "/hello/", 0) != 0)
-	{
-		error (WARNING, "Disabling broken regex");
-		regexBroken = TRUE;
-	}
-#endif
+	/* not needed now we have GRegex */
 }
 
 /* vi:set tabstop=4 shiftwidth=4: */
