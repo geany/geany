@@ -512,6 +512,7 @@ struct TreeviewSymbols
 	GtkTreeIter		 tag_variable;
 	GtkTreeIter		 tag_namespace;
 	GtkTreeIter		 tag_struct;
+	GtkTreeIter		 tag_interface;
 	GtkTreeIter		 tag_type;
 	GtkTreeIter		 tag_other;
 } tv_iters;
@@ -528,6 +529,7 @@ static void init_tag_iters(void)
 	tv_iters.tag_variable.stamp = -1;
 	tv_iters.tag_namespace.stamp = -1;
 	tv_iters.tag_struct.stamp = -1;
+	tv_iters.tag_interface.stamp = -1;
 	tv_iters.tag_type.stamp = -1;
 	tv_iters.tag_other.stamp = -1;
 }
@@ -769,7 +771,7 @@ static void add_top_level_items(GeanyDocument *doc)
 		case GEANY_FILETYPES_PHP:
 		{
 			tag_list_add_groups(tag_store,
-				&(tv_iters.tag_struct), _("Interfaces"), "classviewer-struct",
+				&(tv_iters.tag_interface), _("Interfaces"), "classviewer-struct",
 				&(tv_iters.tag_class), _("Classes"), "classviewer-class",
 				&(tv_iters.tag_function), _("Functions"), "classviewer-method",
 				&(tv_iters.tag_macro), _("Constants"), "classviewer-macro",
@@ -868,7 +870,7 @@ static void add_top_level_items(GeanyDocument *doc)
 		{
 			tag_list_add_groups(tag_store,
 				&(tv_iters.tag_namespace), _("Package"), "classviewer-namespace",
-				&(tv_iters.tag_struct), _("Interfaces"), "classviewer-struct",
+				&(tv_iters.tag_interface), _("Interfaces"), "classviewer-struct",
 				&(tv_iters.tag_class), _("Classes"), "classviewer-class",
 				&(tv_iters.tag_function), _("Methods"), "classviewer-method",
 				&(tv_iters.tag_member), _("Members"), "classviewer-member",
@@ -880,7 +882,7 @@ static void add_top_level_items(GeanyDocument *doc)
 		{
 			tag_list_add_groups(tag_store,
 				&(tv_iters.tag_namespace), _("Package"), "classviewer-namespace",
-				&(tv_iters.tag_struct), _("Interfaces"), "classviewer-struct",
+				&(tv_iters.tag_interface), _("Interfaces"), "classviewer-struct",
 				&(tv_iters.tag_class), _("Classes"), "classviewer-class",
 				&(tv_iters.tag_function), _("Functions"), "classviewer-method",
 				&(tv_iters.tag_member), _("Properties"), "classviewer-member",
@@ -893,7 +895,7 @@ static void add_top_level_items(GeanyDocument *doc)
 		case GEANY_FILETYPES_HAXE:
 		{
 			tag_list_add_groups(tag_store,
-				&(tv_iters.tag_struct), _("Interfaces"), "classviewer-struct",
+				&(tv_iters.tag_interface), _("Interfaces"), "classviewer-struct",
 				&(tv_iters.tag_class), _("Classes"), "classviewer-class",
 				&(tv_iters.tag_function), _("Methods"), "classviewer-method",
 				&(tv_iters.tag_type), _("Types"), "classviewer-macro",
@@ -919,7 +921,7 @@ static void add_top_level_items(GeanyDocument *doc)
 		{
 			tag_list_add_groups(tag_store,
 				&(tv_iters.tag_namespace), _("Module"), "classviewer-class",
-				&(tv_iters.tag_struct), _("Interfaces"), "classviewer-struct",
+				&(tv_iters.tag_interface), _("Interfaces"), "classviewer-struct",
 				&(tv_iters.tag_function), _("Functions"), "classviewer-method",
 				&(tv_iters.tag_member), _("Subroutines"), "classviewer-method",
 				&(tv_iters.tag_variable), _("Variables"), "classviewer-var",
@@ -970,6 +972,7 @@ static void add_top_level_items(GeanyDocument *doc)
 
 			tag_list_add_groups(tag_store,
 				&(tv_iters.tag_class), _("Classes"), "classviewer-class",
+				&(tv_iters.tag_interface), _("Interfaces"), "classviewer-struct",
 				&(tv_iters.tag_function), _("Functions"), "classviewer-method",
 				&(tv_iters.tag_member), _("Members"), "classviewer-member",
 				&(tv_iters.tag_struct), _("Structs"), "classviewer-struct",
@@ -1141,11 +1144,13 @@ static GtkTreeIter *get_tag_type_iter(TMTagType tag_type, filetype_id ft_id)
 		}
 		case tm_tag_union_t:
 		case tm_tag_struct_t:
-		case tm_tag_interface_t:
 		{
 			iter = &tv_iters.tag_struct;
 			break;
 		}
+		case tm_tag_interface_t:
+			iter = &tv_iters.tag_interface;
+			break;
 		case tm_tag_variable_t:
 		{
 			iter = &tv_iters.tag_variable;
