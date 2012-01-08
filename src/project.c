@@ -550,7 +550,7 @@ static void show_project_properties(gboolean show_build)
 	else
 		gtk_notebook_set_current_page(GTK_NOTEBOOK(e->notebook), 0);
 
-	if (gtk_dialog_run(GTK_DIALOG(e->dialog)) == GTK_RESPONSE_OK)
+	while (gtk_dialog_run(GTK_DIALOG(e->dialog)) == GTK_RESPONSE_OK)
 	{
 		if (update_config(e, FALSE))
 		{
@@ -558,7 +558,10 @@ static void show_project_properties(gboolean show_build)
 			if (!write_config(TRUE))
 				SHOW_ERR(_("Project file could not be written"));
 			else
+			{
 				ui_set_statusbar(TRUE, _("Project \"%s\" saved."), app->project->name);
+				break;
+			}
 		}
 	}
 
