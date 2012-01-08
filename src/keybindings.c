@@ -262,6 +262,8 @@ static void init_default_kb(void)
 
 	group = keybindings_get_core_group(GEANY_KEY_GROUP_PROJECT);
 
+	keybindings_set_item(group, GEANY_KEYS_PROJECT_OPEN, NULL,
+		0, 0, "project_open", _("Open"), LW(project_open1));
 	keybindings_set_item(group, GEANY_KEYS_PROJECT_PROPERTIES, NULL,
 		0, 0, "project_properties", _("Project properties"), LW(project_properties1));
 
@@ -1301,6 +1303,9 @@ static gboolean cb_func_project_action(guint key_id)
 {
 	switch (key_id)
 	{
+		case GEANY_KEYS_PROJECT_OPEN:
+			on_project_open1_activate(NULL, NULL);
+			break;
 		case GEANY_KEYS_PROJECT_PROPERTIES:
 			if (app->project)
 				on_project_properties1_activate(NULL, NULL);
