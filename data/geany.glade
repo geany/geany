@@ -668,7 +668,7 @@
     <property name="stock">gtk-help</property>
     <property name="icon-size">1</property>
   </object>
-  <object class="GtkListStore" id="liststore1">
+  <object class="GtkListStore" id="tab_pos_list">
     <columns>
       <!-- column-name item -->
       <column type="gchararray"/>
@@ -688,47 +688,7 @@
       </row>
     </data>
   </object>
-  <object class="GtkListStore" id="liststore2">
-    <columns>
-      <!-- column-name item -->
-      <column type="gchararray"/>
-    </columns>
-    <data>
-      <row>
-        <col id="0" translatable="yes">Left</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Right</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Top</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Bottom</col>
-      </row>
-    </data>
-  </object>
-  <object class="GtkListStore" id="liststore3">
-    <columns>
-      <!-- column-name item -->
-      <column type="gchararray"/>
-    </columns>
-    <data>
-      <row>
-        <col id="0" translatable="yes">Left</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Right</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Top</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Bottom</col>
-      </row>
-    </data>
-  </object>
-  <object class="GtkListStore" id="liststore4">
+  <object class="GtkListStore" id="indent_mode_list">
     <columns>
       <!-- column-name item -->
       <column type="gchararray"/>
@@ -748,41 +708,9 @@
       </row>
     </data>
   </object>
-  <object class="GtkListStore" id="liststore5">
-    <columns>
-      <!-- column-name item -->
-      <column type="gchararray"/>
-    </columns>
-    <data>
-      <row>
-        <col id="0" translatable="yes">None</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Basic</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Current chars</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Match braces</col>
-      </row>
-    </data>
-  </object>
-  <object class="GtkListStore" id="liststore6">
+  <object class="GtkListStore" id="empty_chararray_list">
     <columns>
       <!-- column-name text -->
-      <column type="gchararray"/>
-    </columns>
-  </object>
-  <object class="GtkListStore" id="liststore7">
-    <columns>
-      <!-- column-name text -->
-      <column type="gchararray"/>
-    </columns>
-  </object>
-  <object class="GtkListStore" id="liststore8">
-    <columns>
-      <!-- column-name item -->
       <column type="gchararray"/>
     </columns>
   </object>
@@ -2176,7 +2104,7 @@
                                   <object class="GtkComboBox" id="combo_tab_msgwin">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
-                                    <property name="model">liststore1</property>
+                                    <property name="model">tab_pos_list</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext1"/>
                                       <attributes>
@@ -2211,7 +2139,7 @@
                                   <object class="GtkComboBox" id="combo_tab_sidebar">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
-                                    <property name="model">liststore1</property>
+                                    <property name="model">tab_pos_list</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext2"/>
                                       <attributes>
@@ -2244,7 +2172,7 @@
                                   <object class="GtkComboBox" id="combo_tab_editor">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
-                                    <property name="model">liststore1</property>
+                                    <property name="model">tab_pos_list</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext3"/>
                                       <attributes>
@@ -3075,7 +3003,7 @@
                                       <object class="GtkComboBox" id="combo_auto_indent_mode">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="model">liststore4</property>
+                                        <property name="model">indent_mode_list</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext4"/>
                                           <attributes>
@@ -4246,7 +4174,7 @@
                                       <object class="GtkComboBox" id="combo_eol">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="model">liststore8</property>
+                                        <property name="model">empty_chararray_list</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext5"/>
                                           <attributes>
@@ -4348,7 +4276,7 @@
                                       <object class="GtkComboBox" id="combo_new_encoding">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="model">liststore6</property>
+                                        <property name="model">empty_chararray_list</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext6"/>
                                           <attributes>
@@ -4414,7 +4342,7 @@
                                       <object class="GtkComboBox" id="combo_open_encoding">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="model">liststore7</property>
+                                        <property name="model">empty_chararray_list</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext7"/>
                                           <attributes>
@@ -6472,7 +6400,7 @@
                   <object class="GtkComboBox" id="combo_auto_indent_mode_project">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="model">liststore5</property>
+                    <property name="model">indent_mode_list</property>
                     <child>
                       <object class="GtkCellRendererText" id="cellrenderertext1_project"/>
                       <attributes>
