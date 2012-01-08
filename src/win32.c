@@ -157,14 +157,12 @@ static wchar_t *get_filters(gboolean project_files)
 	if (project_files)
 	{
 		string = g_strconcat(_("Geany project files"), "\t", "*." GEANY_PROJECT_EXT, "\t",
-			filetypes[GEANY_FILETYPES_NONE]->title, "\t",
-			filetypes[GEANY_FILETYPES_NONE]->pattern[0], "\t", NULL);
+			_("All files"), "\t", "*", "\t", NULL);
 	}
 	else
 	{
 		string = g_strconcat(_("Executables"), "\t", "*.exe;*.bat;*.cmd", "\t",
-			filetypes[GEANY_FILETYPES_NONE]->title, "\t",
-			filetypes[GEANY_FILETYPES_NONE]->pattern[0], "\t", NULL);
+			_("All files"), "\t", "*", "\t", NULL);
 	}
 
 	/* replace all "\t"s by \0 */
