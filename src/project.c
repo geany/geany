@@ -484,8 +484,6 @@ static void create_properties_dialog(PropertyDialogElements *e)
 			G_CALLBACK(on_radio_long_line_custom_toggled),
 			ui_lookup_widget(e->dialog, "spin_long_line_project"));
 	}
-
-	insert_build_page(e);
 }
 
 
@@ -494,41 +492,40 @@ static void show_project_properties(gboolean show_build)
 	GeanyProject *p = app->project;
 	GtkWidget *widget = NULL;
 	GtkWidget *radio_long_line_custom;
-	static PropertyDialogElements *e = NULL;
+	static PropertyDialogElements e = { 0 };
 
 	g_return_if_fail(app->project != NULL);
 
-	/* note: leaks one per run of Geany */
-	if (e == NULL)
-		e = g_new0(PropertyDialogElements, 1);
-
 	entries_modified = FALSE;
 
-	create_properties_dialog(e);
+	if (e.dialog == NULL)
+		create_properties_dialog(&e);
 
-	stash_group_display(indent_group, e->dialog);
+	insert_build_page(&e);
+
+	stash_group_display(indent_group, e.dialog);
 
 	/* fill the elements with the appropriate data */
-	gtk_entry_set_text(GTK_ENTRY(e->name), p->name);
-	gtk_label_set_text(GTK_LABEL(e->file_name), p->file_name);
-	gtk_entry_set_text(GTK_ENTRY(e->base_path), p->base_path);
+	gtk_entry_set_text(GTK_ENTRY(e.name), p->name);
+	gtk_label_set_text(GTK_LABEL(e.file_name), p->file_name);
+	gtk_entry_set_text(GTK_ENTRY(e.base_path), p->base_path);
 
-	radio_long_line_custom = ui_lookup_widget(e->dialog, "radio_long_line_custom_project");
+	radio_long_line_custom = ui_lookup_widget(e.dialog, "radio_long_line_custom_project");
 	switch (p->long_line_behaviour)
 	{
-		case 0: widget = ui_lookup_widget(e->dialog, "radio_long_line_disabled_project"); break;
-		case 1: widget = ui_lookup_widget(e->dialog, "radio_long_line_default_project"); break;
+		case 0: widget = ui_lookup_widget(e.dialog, "radio_long_line_disabled_project"); break;
+		case 1: widget = ui_lookup_widget(e.dialog, "radio_long_line_default_project"); break;
 		case 2: widget = radio_long_line_custom; break;
 	}
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), TRUE);
 
-	widget = ui_lookup_widget(e->dialog, "spin_long_line_project");
+	widget = ui_lookup_widget(e.dialog, "spin_long_line_project");
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget), (gdouble)p->long_line_column);
 	on_radio_long_line_custom_toggled(GTK_TOGGLE_BUTTON(radio_long_line_custom), widget);
 
 	if (p->description != NULL)
 	{	/* set text */
-		GtkTextBuffer *buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(e->description));
+		GtkTextBuffer *buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(e.description));
 		gtk_text_buffer_set_text(buffer, p->description, -1);
 	}
 
@@ -537,24 +534,24 @@ static void show_project_properties(gboolean show_build)
 		gchar *str;
 
 		str = g_strjoinv(" ", p->file_patterns);
-		gtk_entry_set_text(GTK_ENTRY(e->patterns), str);
+		gtk_entry_set_text(GTK_ENTRY(e.patterns), str);
 		g_free(str);
 	}
 
-	g_signal_emit_by_name(geany_object, "project-dialog-create", e->notebook);
-	gtk_widget_show_all(e->dialog);
+	g_signal_emit_by_name(geany_object, "project-dialog-create", e.notebook);
+	gtk_widget_show_all(e.dialog);
 
 	/* note: notebook page must be shown before setting current page */
 	if (show_build)
-		gtk_notebook_set_current_page(GTK_NOTEBOOK(e->notebook), e->build_page_num);
+		gtk_notebook_set_current_page(GTK_NOTEBOOK(e.notebook), e.build_page_num);
 	else
-		gtk_notebook_set_current_page(GTK_NOTEBOOK(e->notebook), 0);
+		gtk_notebook_set_current_page(GTK_NOTEBOOK(e.notebook), 0);
 
-	while (gtk_dialog_run(GTK_DIALOG(e->dialog)) == GTK_RESPONSE_OK)
+	while (gtk_dialog_run(GTK_DIALOG(e.dialog)) == GTK_RESPONSE_OK)
 	{
-		if (update_config(e, FALSE))
+		if (update_config(&e, FALSE))
 		{
-			g_signal_emit_by_name(geany_object, "project-dialog-confirmed", e->notebook);
+			g_signal_emit_by_name(geany_object, "project-dialog-confirmed", e.notebook);
 			if (!write_config(TRUE))
 				SHOW_ERR(_("Project file could not be written"));
 			else
@@ -565,9 +562,9 @@ static void show_project_properties(gboolean show_build)
 		}
 	}
 
-	build_free_fields(e->build_properties);
-	gtk_notebook_remove_page(GTK_NOTEBOOK(e->notebook), e->build_page_num);
-	gtk_widget_hide(e->dialog);
+	build_free_fields(e.build_properties);
+	gtk_notebook_remove_page(GTK_NOTEBOOK(e.notebook), e.build_page_num);
+	gtk_widget_hide(e.dialog);
 }
 
 
