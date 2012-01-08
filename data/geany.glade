@@ -686,9 +686,6 @@
       <row>
         <col id="0" translatable="yes">Bottom</col>
       </row>
-      <row>
-        <col id="0" translatable="yes"></col>
-      </row>
     </data>
   </object>
   <object class="GtkListStore" id="liststore2">
@@ -709,9 +706,6 @@
       <row>
         <col id="0" translatable="yes">Bottom</col>
       </row>
-      <row>
-        <col id="0" translatable="yes"></col>
-      </row>
     </data>
   </object>
   <object class="GtkListStore" id="liststore3">
@@ -731,9 +725,6 @@
       </row>
       <row>
         <col id="0" translatable="yes">Bottom</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes"></col>
       </row>
     </data>
   </object>
