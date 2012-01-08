@@ -902,6 +902,8 @@ static GeanyFiletype *find_shebang(const gchar *utf8_filename, const gchar *line
 			ft = filetypes[GEANY_FILETYPES_SH];
 		else if (strncmp(basename_interpreter, "bash", 4) == 0)
 			ft = filetypes[GEANY_FILETYPES_SH];
+		else if (strncmp(basename_interpreter, "dash", 4) == 0)
+			ft = filetypes[GEANY_FILETYPES_SH];
 		else if (strncmp(basename_interpreter, "perl", 4) == 0)
 			ft = filetypes[GEANY_FILETYPES_PERL];
 		else if (strncmp(basename_interpreter, "python", 6) == 0)
