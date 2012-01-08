@@ -2784,3 +2784,19 @@ void ui_focus_current_document(void)
 	if (doc != NULL)
 		document_grab_focus(doc);
 }
+
+
+/** Finds the label text associated with @a stock_id.
+ * @p stock_id e.g. @c GTK_STOCK_OPEN.
+ * @return .
+ * @since Geany 1.22 */
+const gchar *ui_lookup_stock_label(const gchar *stock_id)
+{
+	GtkStockItem item;
+
+	if (gtk_stock_lookup(stock_id, &item))
+		return item.label;
+
+	g_warning("No stock id '%s'!", stock_id);
+	return NULL;
+}

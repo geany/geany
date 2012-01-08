@@ -477,6 +477,7 @@ typedef struct UIUtilsFuncs
 				const gchar *text, gint history_len);
 	void		(*ui_menu_add_document_items_sorted) (GtkMenu *menu, struct GeanyDocument *active,
 				GCallback callback, GCompareFunc compare_func);
+	const gchar* (*ui_lookup_stock_label)(const gchar *stock_id);
 }
 UIUtilsFuncs;
 

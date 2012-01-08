@@ -265,7 +265,8 @@ static void init_default_kb(void)
 	keybindings_set_item(group, GEANY_KEYS_PROJECT_OPEN, NULL,
 		0, 0, "project_open", _("Open"), LW(project_open1));
 	keybindings_set_item(group, GEANY_KEYS_PROJECT_PROPERTIES, NULL,
-		0, 0, "project_properties", _("Project properties"), LW(project_properties1));
+		0, 0, "project_properties",
+		ui_lookup_stock_label(GTK_STOCK_PROPERTIES), LW(project_properties1));
 
 	group = keybindings_get_core_group(GEANY_KEY_GROUP_EDITOR);
 
