@@ -4256,6 +4256,12 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="model">liststore8</property>
+                                        <child>
+                                          <object class="GtkCellRendererText" id="cellrenderertext5"/>
+                                          <attributes>
+                                            <attribute name="text">0</attribute>
+                                          </attributes>
+                                        </child>
                                       </object>
                                       <packing>
                                         <property name="left_attach">1</property>
@@ -4352,6 +4358,12 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="model">liststore6</property>
+                                        <child>
+                                          <object class="GtkCellRendererText" id="cellrenderertext6"/>
+                                          <attributes>
+                                            <attribute name="text">0</attribute>
+                                          </attributes>
+                                        </child>
                                       </object>
                                     </child>
                                   </object>
@@ -4412,6 +4424,12 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="model">liststore7</property>
+                                        <child>
+                                          <object class="GtkCellRendererText" id="cellrenderertext7"/>
+                                          <attributes>
+                                            <attribute name="text">0</attribute>
+                                          </attributes>
+                                        </child>
                                       </object>
                                     </child>
                                   </object>
