@@ -3631,8 +3631,10 @@ Project keybindings
 =============================== ========================= ==================================================
 Action                          Default shortcut          Description
 =============================== ========================= ==================================================
+New                                                       Create a new project.
 Open                                                      Opens a project file.
-Properties                                                Shows the `Project properties`_.
+Properties                                                Shows project properties.
+Close                                                     Close the current project.
 =============================== ========================= ==================================================
 
 
