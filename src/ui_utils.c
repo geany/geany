@@ -2192,7 +2192,6 @@ void ui_init_builder(void)
 	const gchar *name;
 	GError *error;
 	GSList *iter, *all_objects;
-	GtkCellRenderer *renderer;
 	GtkWidget *widget, *toplevel;
 
 	/* prevent function from being called twice */
