@@ -492,7 +492,9 @@ static void show_project_properties(gboolean show_build)
 	GeanyProject *p = app->project;
 	GtkWidget *widget = NULL;
 	GtkWidget *radio_long_line_custom;
-	static PropertyDialogElements e = { 0 };
+	static PropertyDialogElements e;
+
+	memset(&e, 0, sizeof(PropertyDialogElements));
 
 	g_return_if_fail(app->project != NULL);
 
