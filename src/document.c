@@ -2891,7 +2891,8 @@ gboolean document_check_disk_status(GeanyDocument *doc, gboolean force)
 	g_return_val_if_fail(doc != NULL, FALSE);
 
 	/* ignore remote files and documents that have never been saved to disk */
-	if (file_prefs.disk_check_timeout == 0 || doc->real_path == NULL || doc->priv->is_remote)
+	if (notebook_switch_in_progress() || file_prefs.disk_check_timeout == 0 
+			|| doc->real_path == NULL || doc->priv->is_remote)
 		return FALSE;
 
 	use_gio_filemon = (doc->priv->monitor != NULL);

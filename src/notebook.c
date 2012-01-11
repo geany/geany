@@ -169,6 +169,8 @@ static gboolean on_key_release_event(GtkWidget *widget, GdkEventKey *ev, gpointe
 	/* user may have rebound keybinding to a different modifier than Ctrl, so check all */
 	if (switch_in_progress && is_modifier_key(ev->keyval))
 	{
+		GeanyDocument *doc;
+
 		switch_in_progress = FALSE;
 
 		if (switch_dialog)
@@ -177,8 +179,10 @@ static gboolean on_key_release_event(GtkWidget *widget, GdkEventKey *ev, gpointe
 			switch_dialog = NULL;
 		}
 
-		update_mru_docs_head(document_get_current());
+		doc = document_get_current();
+		update_mru_docs_head(doc);
 		mru_pos = 0;
+		document_check_disk_status(doc, TRUE);
 	}
 	return FALSE;
 }
@@ -286,6 +290,12 @@ void notebook_switch_tablastused(void)
 		g_timeout_add(600, on_switch_timeout, NULL);
 	else
 		update_filename_label();
+}
+
+
+gboolean notebook_switch_in_progress(void)
+{
+	return switch_in_progress;
 }
 
 
