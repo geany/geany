@@ -75,6 +75,7 @@ typedef struct _PropertyDialogElements
 	GtkWidget *base_path;
 	GtkWidget *patterns;
 	BuildTableData build_properties;
+	gint build_page_num;
 } PropertyDialogElements;
 
 
@@ -96,6 +97,9 @@ static void apply_editor_prefs(void);
 #define PROJECT_DIR _("projects")
 
 
+/* TODO: this should be ported to Glade like the project preferences dialog,
+ * then we can get rid of the PropertyDialogElements struct altogether as
+ * widgets pointers can be accessed through ui_lookup_widget(). */
 void project_new(void)
 {
 	GtkWidget *vbox;
@@ -390,158 +394,138 @@ void project_close(gboolean open_default)
 }
 
 
-static gint build_page_num = 0;
+/* Shows the file chooser dialog when base path button is clicked
+ * FIXME: this should be connected in Glade but 3.8.1 has a bug
+ * where it won't pass any objects as user data (#588824). */
+G_MODULE_EXPORT void
+on_project_properties_base_path_button_clicked(GtkWidget *button,
+	GtkWidget *base_path_entry)
+{
+	GtkWidget *dialog;
+
+	g_return_if_fail(base_path_entry != NULL);
+	g_return_if_fail(GTK_IS_WIDGET(base_path_entry));
+
+	dialog = gtk_file_chooser_dialog_new(_("Choose Project Base Path"),
+		NULL, GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
+		GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+		GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
+		NULL);
+
+	if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_ACCEPT)
+	{
+		gtk_entry_set_text(GTK_ENTRY(base_path_entry),
+			gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog)));
+	}
+
+	gtk_widget_destroy(dialog);
+}
+
+
+static void insert_build_page(PropertyDialogElements *e)
+{
+	GtkWidget *build_table, *label, *editor_tab;
+	GeanyDocument *doc = document_get_current();
+	GeanyFiletype *ft = NULL;
+	gint page_num;
+
+	/* lookup the "Editor" tab page so the "Build" tab can be inserted
+	 * right after it. */
+	editor_tab = ui_lookup_widget(e->dialog, "vbox_project_dialog_editor");
+	page_num = gtk_notebook_page_num(GTK_NOTEBOOK(e->notebook), editor_tab);
+
+	if (doc != NULL)
+		ft = doc->file_type;
+
+	build_table = build_commands_table(doc, GEANY_BCS_PROJ, &(e->build_properties), ft);
+	gtk_container_set_border_width(GTK_CONTAINER(build_table), 6);
+	label = gtk_label_new(_("Build"));
+	e->build_page_num = gtk_notebook_insert_page(GTK_NOTEBOOK(e->notebook),
+		build_table, label, ++page_num);
+}
 
 
 static void create_properties_dialog(PropertyDialogElements *e)
 {
-	GtkWidget *table, *notebook, *build_table;
-	GtkWidget *bbox;
-	GtkWidget *label;
-	GtkWidget *swin;
-	GeanyDocument *doc = document_get_current();
-	GeanyFiletype *ft = NULL;
+	GtkWidget *base_path_button;
+	static guint base_path_button_handler_id = 0;
+	static guint radio_long_line_handler_id = 0;
 
 	e->dialog = create_project_dialog();
-	gtk_window_set_transient_for(GTK_WINDOW(e->dialog), GTK_WINDOW(main_widgets.window));
-	gtk_window_set_destroy_with_parent(GTK_WINDOW(e->dialog), TRUE);
-	gtk_widget_set_name(e->dialog, "GeanyDialogProject");
+	e->notebook = ui_lookup_widget(e->dialog, "project_notebook");
+	e->file_name = ui_lookup_widget(e->dialog, "label_project_dialog_filename");
+	e->name = ui_lookup_widget(e->dialog, "entry_project_dialog_name");
+	e->description = ui_lookup_widget(e->dialog, "textview_project_dialog_description");
+	e->base_path = ui_lookup_widget(e->dialog, "entry_project_dialog_base_path");
+	e->patterns = ui_lookup_widget(e->dialog, "entry_project_dialog_file_patterns");
 
-	ui_entry_add_clear_icon(GTK_ENTRY(ui_lookup_widget(e->dialog, "spin_indent_width_project")));
-
-	table = gtk_table_new(5, 2, FALSE);
-	gtk_container_set_border_width(GTK_CONTAINER(table), 6);
-	gtk_table_set_row_spacings(GTK_TABLE(table), 5);
-	gtk_table_set_col_spacings(GTK_TABLE(table), 10);
-
-	label = gtk_label_new(_("Filename:"));
-	gtk_table_attach(GTK_TABLE(table), label, 0, 1, 0, 1,
-					(GtkAttachOptions) (GTK_FILL),
-					(GtkAttachOptions) (0), 0, 0);
-	gtk_misc_set_alignment(GTK_MISC(label), 0, 0);
-
-	e->file_name = gtk_label_new("");
-	gtk_label_set_selectable(GTK_LABEL(e->file_name), TRUE);
-	gtk_table_attach(GTK_TABLE(table), e->file_name, 1, 2, 0, 1,
-					(GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
-					(GtkAttachOptions) (0), 0, 0);
-	gtk_misc_set_alignment(GTK_MISC(e->file_name), 0, 0);
-
-	label = gtk_label_new(_("Name:"));
-	gtk_table_attach(GTK_TABLE(table), label, 0, 1, 1, 2,
-					(GtkAttachOptions) (GTK_FILL),
-					(GtkAttachOptions) (0), 0, 0);
-	gtk_misc_set_alignment(GTK_MISC(label), 0, 0);
-
-	e->name = gtk_entry_new();
-	ui_entry_add_clear_icon(GTK_ENTRY(e->name));
 	gtk_entry_set_max_length(GTK_ENTRY(e->name), MAX_NAME_LEN);
-	gtk_table_attach(GTK_TABLE(table), e->name, 1, 2, 1, 2,
-					(GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
-					(GtkAttachOptions) (0), 0, 0);
 
-	label = gtk_label_new(_("Description:"));
-	gtk_table_attach(GTK_TABLE(table), label, 0, 1, 2, 3,
-					(GtkAttachOptions) (GTK_FILL),
-					(GtkAttachOptions) (GTK_FILL), 0, 0);
-	gtk_misc_set_alignment(GTK_MISC(label), 0, 0);
-
-	e->description = gtk_text_view_new();
-	gtk_text_view_set_wrap_mode(GTK_TEXT_VIEW(e->description), GTK_WRAP_WORD);
-	swin = gtk_scrolled_window_new(NULL, NULL);
-	gtk_widget_set_size_request(swin, 250, 80);
-	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(swin),
-				GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
-	gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(swin), GTK_WIDGET(e->description));
-	gtk_table_attach(GTK_TABLE(table), swin, 1, 2, 2, 3,
-					(GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
-					(GtkAttachOptions) (0), 0, 0);
-
-	label = gtk_label_new(_("Base path:"));
-	gtk_table_attach(GTK_TABLE(table), label, 0, 1, 3, 4,
-					(GtkAttachOptions) (GTK_FILL),
-					(GtkAttachOptions) (0), 0, 0);
-	gtk_misc_set_alignment(GTK_MISC(label), 0, 0);
-
-	e->base_path = gtk_entry_new();
+	ui_entry_add_clear_icon(GTK_ENTRY(e->name));
 	ui_entry_add_clear_icon(GTK_ENTRY(e->base_path));
-	gtk_widget_set_tooltip_text(e->base_path,
-		_("Base directory of all files that make up the project. "
-		"This can be a new path, or an existing directory tree. "
-		"You can use paths relative to the project filename."));
-	bbox = ui_path_box_new(_("Choose Project Base Path"),
-		GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER, GTK_ENTRY(e->base_path));
-	gtk_table_attach(GTK_TABLE(table), bbox, 1, 2, 3, 4,
-					(GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
-					(GtkAttachOptions) (0), 0, 0);
+	ui_entry_add_clear_icon(GTK_ENTRY(e->patterns));
 
-	if (doc != NULL) ft = doc->file_type;
-	build_table = build_commands_table(doc, GEANY_BCS_PROJ, &(e->build_properties), ft);
-	gtk_container_set_border_width(GTK_CONTAINER(build_table), 6);
-	label = gtk_label_new(_("Build"));
-	notebook = ui_lookup_widget(e->dialog, "project_notebook");
-	build_page_num = gtk_notebook_insert_page(GTK_NOTEBOOK(notebook), build_table, label, 2);
-	e->notebook = notebook;
+	/* Workaround for bug in Glade 3.8.1, see comment above signal handler */
+	if (base_path_button_handler_id == 0)
+	{
+		base_path_button = ui_lookup_widget(e->dialog, "button_project_dialog_base_path");
+		base_path_button_handler_id =
+			g_signal_connect(base_path_button, "clicked",
+			G_CALLBACK(on_project_properties_base_path_button_clicked),
+			e->base_path);
+	}
 
-	g_signal_connect(ui_lookup_widget(e->dialog, "radio_long_line_custom_project"), "toggled",
-		G_CALLBACK(on_radio_long_line_custom_toggled), ui_lookup_widget(e->dialog, "spin_long_line_project"));
-
-	label = gtk_label_new(_("File patterns:"));
-	gtk_table_attach(GTK_TABLE(table), label, 0, 1, 4, 5,
-					(GtkAttachOptions) (GTK_FILL),
-					(GtkAttachOptions) (0), 0, 0);
-	gtk_misc_set_alignment(GTK_MISC(label), 0, 0);
-
-	e->patterns = gtk_entry_new();
-	gtk_widget_set_tooltip_text(e->patterns,
-		_("Space separated list of file patterns used for the find in files dialog "
-		  "(e.g. *.c *.h)"));
-	gtk_table_attach(GTK_TABLE(table), e->patterns, 1, 2, 4, 5,
-					(GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
-					(GtkAttachOptions) (0), 0, 0);
-
-	label = gtk_label_new(_("Project"));
-	gtk_notebook_insert_page(GTK_NOTEBOOK(notebook), table, label, 0);
-	build_page_num++;
+	/* Same as above, should be in Glade but can't due to bug in 3.8.1 */
+	if (radio_long_line_handler_id == 0)
+	{
+		radio_long_line_handler_id =
+			g_signal_connect(ui_lookup_widget(e->dialog,
+			"radio_long_line_custom_project"), "toggled",
+			G_CALLBACK(on_radio_long_line_custom_toggled),
+			ui_lookup_widget(e->dialog, "spin_long_line_project"));
+	}
 }
 
 
 static void show_project_properties(gboolean show_build)
 {
-	PropertyDialogElements *e = g_new(PropertyDialogElements, 1);
 	GeanyProject *p = app->project;
 	GtkWidget *widget = NULL;
 	GtkWidget *radio_long_line_custom;
+	static PropertyDialogElements e;
 
 	g_return_if_fail(app->project != NULL);
 
 	entries_modified = FALSE;
 
-	create_properties_dialog(e);
+	if (e.dialog == NULL)
+		create_properties_dialog(&e);
 
-	stash_group_display(indent_group, e->dialog);
+	insert_build_page(&e);
+
+	stash_group_display(indent_group, e.dialog);
 
 	/* fill the elements with the appropriate data */
-	gtk_entry_set_text(GTK_ENTRY(e->name), p->name);
-	gtk_label_set_text(GTK_LABEL(e->file_name), p->file_name);
-	gtk_entry_set_text(GTK_ENTRY(e->base_path), p->base_path);
+	gtk_entry_set_text(GTK_ENTRY(e.name), p->name);
+	gtk_label_set_text(GTK_LABEL(e.file_name), p->file_name);
+	gtk_entry_set_text(GTK_ENTRY(e.base_path), p->base_path);
 
-	radio_long_line_custom = ui_lookup_widget(e->dialog, "radio_long_line_custom_project");
+	radio_long_line_custom = ui_lookup_widget(e.dialog, "radio_long_line_custom_project");
 	switch (p->long_line_behaviour)
 	{
-		case 0: widget = ui_lookup_widget(e->dialog, "radio_long_line_disabled_project"); break;
-		case 1: widget = ui_lookup_widget(e->dialog, "radio_long_line_default_project"); break;
+		case 0: widget = ui_lookup_widget(e.dialog, "radio_long_line_disabled_project"); break;
+		case 1: widget = ui_lookup_widget(e.dialog, "radio_long_line_default_project"); break;
 		case 2: widget = radio_long_line_custom; break;
 	}
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), TRUE);
 
-	widget = ui_lookup_widget(e->dialog, "spin_long_line_project");
+	widget = ui_lookup_widget(e.dialog, "spin_long_line_project");
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget), (gdouble)p->long_line_column);
 	on_radio_long_line_custom_toggled(GTK_TOGGLE_BUTTON(radio_long_line_custom), widget);
 
 	if (p->description != NULL)
 	{	/* set text */
-		GtkTextBuffer *buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(e->description));
+		GtkTextBuffer *buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(e.description));
 		gtk_text_buffer_set_text(buffer, p->description, -1);
 	}
 
@@ -550,24 +534,24 @@ static void show_project_properties(gboolean show_build)
 		gchar *str;
 
 		str = g_strjoinv(" ", p->file_patterns);
-		gtk_entry_set_text(GTK_ENTRY(e->patterns), str);
+		gtk_entry_set_text(GTK_ENTRY(e.patterns), str);
 		g_free(str);
 	}
 
-	g_signal_emit_by_name(geany_object, "project-dialog-create", e->notebook);
-	gtk_widget_show_all(e->dialog);
+	g_signal_emit_by_name(geany_object, "project-dialog-create", e.notebook);
+	gtk_widget_show_all(e.dialog);
 
 	/* note: notebook page must be shown before setting current page */
 	if (show_build)
-		gtk_notebook_set_current_page(GTK_NOTEBOOK(e->notebook), build_page_num);
+		gtk_notebook_set_current_page(GTK_NOTEBOOK(e.notebook), e.build_page_num);
 	else
-		gtk_notebook_set_current_page(GTK_NOTEBOOK(e->notebook), 0);
+		gtk_notebook_set_current_page(GTK_NOTEBOOK(e.notebook), 0);
 
-	while (gtk_dialog_run(GTK_DIALOG(e->dialog)) == GTK_RESPONSE_OK)
+	while (gtk_dialog_run(GTK_DIALOG(e.dialog)) == GTK_RESPONSE_OK)
 	{
-		if (update_config(e, FALSE))
+		if (update_config(&e, FALSE))
 		{
-			g_signal_emit_by_name(geany_object, "project-dialog-confirmed", e->notebook);
+			g_signal_emit_by_name(geany_object, "project-dialog-confirmed", e.notebook);
 			if (!write_config(TRUE))
 				SHOW_ERR(_("Project file could not be written"));
 			else
@@ -577,9 +561,10 @@ static void show_project_properties(gboolean show_build)
 			}
 		}
 	}
-	build_free_fields(e->build_properties);
-	gtk_widget_destroy(e->dialog);
-	g_free(e);
+
+	build_free_fields(e.build_properties);
+	gtk_notebook_remove_page(GTK_NOTEBOOK(e.notebook), e.build_page_num);
+	gtk_widget_hide(e.dialog);
 }
 
 

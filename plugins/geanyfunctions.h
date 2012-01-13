@@ -302,6 +302,8 @@
 	geany_functions->p_ui->ui_combo_box_add_to_history
 #define ui_menu_add_document_items_sorted \
 	geany_functions->p_ui->ui_menu_add_document_items_sorted
+#define ui_lookup_stock_label \
+	geany_functions->p_ui->ui_lookup_stock_label
 #define dialogs_show_question \
 	geany_functions->p_dialogs->dialogs_show_question
 #define dialogs_show_msgbox \

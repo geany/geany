@@ -229,6 +229,8 @@ GtkWidget *ui_label_new_bold(const gchar *text);
 
 void ui_label_set_markup(GtkLabel *label, const gchar *format, ...) G_GNUC_PRINTF(2, 3);
 
+const gchar *ui_lookup_stock_label(const gchar *stock_id);
+
 /* End of general widget functions */
 
 void ui_init_builder(void);

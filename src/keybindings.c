@@ -262,8 +262,15 @@ static void init_default_kb(void)
 
 	group = keybindings_get_core_group(GEANY_KEY_GROUP_PROJECT);
 
+	keybindings_set_item(group, GEANY_KEYS_PROJECT_NEW, NULL,
+		0, 0, "project_new", _("New"), LW(project_new1));
+	keybindings_set_item(group, GEANY_KEYS_PROJECT_OPEN, NULL,
+		0, 0, "project_open", _("Open"), LW(project_open1));
 	keybindings_set_item(group, GEANY_KEYS_PROJECT_PROPERTIES, NULL,
-		0, 0, "project_properties", _("Project properties"), LW(project_properties1));
+		0, 0, "project_properties",
+		ui_lookup_stock_label(GTK_STOCK_PROPERTIES), LW(project_properties1));
+	keybindings_set_item(group, GEANY_KEYS_PROJECT_CLOSE, NULL,
+		0, 0, "project_close", _("Close"), LW(project_close1));
 
 	group = keybindings_get_core_group(GEANY_KEY_GROUP_EDITOR);
 
@@ -1301,6 +1308,16 @@ static gboolean cb_func_project_action(guint key_id)
 {
 	switch (key_id)
 	{
+		case GEANY_KEYS_PROJECT_NEW:
+			on_project_new1_activate(NULL, NULL);
+			break;
+		case GEANY_KEYS_PROJECT_OPEN:
+			on_project_open1_activate(NULL, NULL);
+			break;
+		case GEANY_KEYS_PROJECT_CLOSE:
+			if (app->project)
+				on_project_close1_activate(NULL, NULL);
+			break;
 		case GEANY_KEYS_PROJECT_PROPERTIES:
 			if (app->project)
 				on_project_properties1_activate(NULL, NULL);

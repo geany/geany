@@ -199,18 +199,6 @@ static void set_state(enum State id)
 }
 
 
-static const gchar *ui_get_stock_label(const gchar *stock_id)
-{
-	GtkStockItem item;
-
-	if (gtk_stock_lookup(stock_id, &item))
-		return item.label;
-
-	g_warning("No stock id '%s'!", stock_id);
-	return "";
-}
-
-
 /* Create a GtkToolButton with stock icon, label and tooltip.
  * @param label can be NULL to use stock label text. @a label can contain underscores,
  * which will be removed.
@@ -222,7 +210,7 @@ static GtkWidget *ui_tool_button_new(const gchar *stock_id, const gchar *label, 
 
 	if (stock_id && !label)
 	{
-		label = ui_get_stock_label(stock_id);
+		label = ui_lookup_stock_label(stock_id);
 	}
 	dupl = utils_str_remove_chars(g_strdup(label), "_");
 	label = dupl;

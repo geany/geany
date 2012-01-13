@@ -2192,7 +2192,6 @@ void ui_init_builder(void)
 	const gchar *name;
 	GError *error;
 	GSList *iter, *all_objects;
-	GtkCellRenderer *renderer;
 	GtkWidget *widget, *toplevel;
 
 	/* prevent function from being called twice */
@@ -2256,16 +2255,6 @@ void ui_init_builder(void)
 		toplevel = ui_get_top_parent(widget);
 		if (toplevel)
 			ui_hookup_widget(toplevel, widget, name);
-
-		/* Glade doesn't seem to add cell renderers for the combo boxes,
-		 * so they are added here. */
-		if (GTK_IS_COMBO_BOX(widget))
-		{
-			renderer = gtk_cell_renderer_text_new();
-			gtk_cell_layout_pack_start(GTK_CELL_LAYOUT(widget), renderer, TRUE);
-			gtk_cell_layout_set_attributes(GTK_CELL_LAYOUT(widget),
-				renderer, "text", 0, NULL);
-		}
 	}
 	g_slist_free(all_objects);
 }
@@ -2783,4 +2772,20 @@ void ui_focus_current_document(void)
 
 	if (doc != NULL)
 		document_grab_focus(doc);
+}
+
+
+/** Finds the label text associated with @a stock_id.
+ * @p stock_id e.g. @c GTK_STOCK_OPEN.
+ * @return .
+ * @since Geany 1.22 */
+const gchar *ui_lookup_stock_label(const gchar *stock_id)
+{
+	GtkStockItem item;
+
+	if (gtk_stock_lookup(stock_id, &item))
+		return item.label;
+
+	g_warning("No stock id '%s'!", stock_id);
+	return NULL;
 }
