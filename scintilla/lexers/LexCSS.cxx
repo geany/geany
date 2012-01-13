@@ -93,17 +93,24 @@ static void ColouriseCssDoc(unsigned int startPos, int length, int initStyle, Wo
 	int op = ' '; // last operator
 	int opPrev = ' '; // last operator
 
-	// check for variations on CSS
+	// property lexer.css.scss.language
+	//	Set to 1 for Sassy CSS (.scss)
 	bool isScssDocument = styler.GetPropertyInt("lexer.css.scss.language") != 0;
+
+	// property lexer.css.less.language
+	//  Set to 1 Less CSS (.less), not yet implemented
 	bool isLessDocument = styler.GetPropertyInt("lexer.css.less.language") != 0;
 
 	// SCSS and Less both support single-line comments
 	typedef enum _CommentModes { eCommentBlock = 0, eCommentLine = 1} CommentMode;
-	CommentMode comment_mode;
+	CommentMode comment_mode = eCommentBlock;
+	bool hasSingleLineComments = isScssDocument || isLessDocument;
 
 	// must keep track of nesting level in document types that support it (SCSS, Less)
+	bool hasNesting = false;
 	int nestingLevel = 0;
 	if (isScssDocument || isLessDocument) {
+		hasNesting = true;
 		nestingLevel = NestingLevelLookBehind(startPos, styler);
 	}
 
@@ -209,7 +216,7 @@ static void ColouriseCssDoc(unsigned int startPos, int length, int initStyle, Wo
 				case SCE_CSS_IDENTIFIER:
 				case SCE_CSS_IDENTIFIER2:
 				case SCE_CSS_IDENTIFIER3:
-					if (isScssDocument || isLessDocument)
+					if (hasNesting)
 						sc.SetState(nestingLevel > 0 ? SCE_CSS_IDENTIFIER : SCE_CSS_DEFAULT);
 					else
 						sc.SetState(SCE_CSS_DEFAULT);
@@ -271,7 +278,7 @@ static void ColouriseCssDoc(unsigned int startPos, int length, int initStyle, Wo
 			case ';':
 				switch (lastState) {
 				case SCE_CSS_DIRECTIVE:
-					if (isScssDocument || isLessDocument) {
+					if (hasNesting) {
 						sc.SetState(nestingLevel > 0 ? SCE_CSS_IDENTIFIER : SCE_CSS_DEFAULT);
 					} else {
 						sc.SetState(SCE_CSS_DEFAULT);
@@ -339,7 +346,7 @@ static void ColouriseCssDoc(unsigned int startPos, int length, int initStyle, Wo
 		}
 
 		// nesting rules that apply to SCSS and Less
-		if (isScssDocument || isLessDocument) {
+		if (hasNesting) {
 			// check for nested rule selector
 			if (sc.state == SCE_CSS_IDENTIFIER && (IsAWordChar(sc.ch) || sc.ch == ':' || sc.ch == '.' || sc.ch == '#')) {
 				// look ahead to see whether { comes before next ; and }
@@ -439,7 +446,8 @@ static void ColouriseCssDoc(unsigned int startPos, int length, int initStyle, Wo
 			comment_mode = eCommentBlock;
 			sc.SetState(SCE_CSS_COMMENT);
 			sc.Forward();
-		} else if (sc.Match('/', '/')) {
+		} else if (hasSingleLineComments && sc.Match('/', '/') && sc.state == SCE_CSS_OPERATOR && op == '(' && lastState == SCE_CSS_VALUE) {
+			// note that we've had to treat (// as the start of a URL not a comment, e.g. url(http://example.com), url(//example.com)
 			lastStateC = sc.state;
 			comment_mode = eCommentLine;
 			sc.SetState(SCE_CSS_COMMENT);
