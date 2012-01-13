@@ -92,6 +92,7 @@ static void ColouriseCssDoc(unsigned int startPos, int length, int initStyle, Wo
 	int lastStateVal = -1; // before value (SCSS)
 	int op = ' '; // last operator
 	int opPrev = ' '; // last operator
+	bool insideParentheses = false; // true if currently in a CSS url() or similar construct
 
 	// property lexer.css.scss.language
 	//	Set to 1 for Sassy CSS (.scss)
@@ -311,6 +312,12 @@ static void ColouriseCssDoc(unsigned int startPos, int length, int initStyle, Wo
 			continue;
 		}
 
+		// check for inside parentheses (whether part of an "operator" or not)
+		if (sc.ch == '(')
+			insideParentheses = true;
+		else if (sc.ch == ')')
+			insideParentheses = false;
+
 		// SCSS special modes
 		if (isScssDocument) {
 			// variable name
@@ -446,8 +453,8 @@ static void ColouriseCssDoc(unsigned int startPos, int length, int initStyle, Wo
 			comment_mode = eCommentBlock;
 			sc.SetState(SCE_CSS_COMMENT);
 			sc.Forward();
-		} else if (hasSingleLineComments && sc.Match('/', '/') && sc.state == SCE_CSS_OPERATOR && op == '(' && lastState == SCE_CSS_VALUE) {
-			// note that we've had to treat (// as the start of a URL not a comment, e.g. url(http://example.com), url(//example.com)
+		} else if (hasSingleLineComments && sc.Match('/', '/') && !insideParentheses) {
+			// note that we've had to treat ([...]// as the start of a URL not a comment, e.g. url(http://example.com), url(//example.com)
 			lastStateC = sc.state;
 			comment_mode = eCommentLine;
 			sc.SetState(SCE_CSS_COMMENT);
