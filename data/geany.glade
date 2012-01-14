@@ -3,6 +3,13 @@
   <requires lib="gtk+" version="2.16"/>
   <!-- interface-naming-policy toplevel-contextual -->
   <object class="GtkAccelGroup" id="accelgroup1"/>
+  <object class="GtkAdjustment" id="adjustment1">
+    <property name="lower">3</property>
+    <property name="upper">1000</property>
+    <property name="value">72</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
   <object class="GtkAdjustment" id="adjustment10">
     <property name="lower">1</property>
     <property name="upper">99</property>
@@ -2802,6 +2809,7 @@
                                         <property name="secondary_icon_activatable">False</property>
                                         <property name="primary_icon_sensitive">True</property>
                                         <property name="secondary_icon_sensitive">True</property>
+                                        <property name="adjustment">adjustment1</property>
                                         <property name="climb_rate">1</property>
                                         <property name="numeric">True</property>
                                       </object>
