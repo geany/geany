@@ -98,9 +98,8 @@ static void ColouriseCssDoc(unsigned int startPos, int length, int initStyle, Wo
 	//	Set to 1 for Sassy CSS (.scss)
 	bool isScssDocument = styler.GetPropertyInt("lexer.css.scss.language") != 0;
 
-	// property lexer.css.less.language
-	//  Set to 1 Less CSS (.less), not yet implemented
-	bool isLessDocument = styler.GetPropertyInt("lexer.css.less.language") != 0;
+	// TODO: implement Less support
+	bool isLessDocument = false;
 
 	// SCSS and Less both support single-line comments
 	typedef enum _CommentModes { eCommentBlock = 0, eCommentLine = 1} CommentMode;
@@ -177,7 +176,7 @@ static void ColouriseCssDoc(unsigned int startPos, int length, int initStyle, Wo
 			}
 			switch (op) {
 			case '@':
-				if (lastState == SCE_CSS_DEFAULT || (isScssDocument || isLessDocument))
+				if (lastState == SCE_CSS_DEFAULT || hasNesting)
 					sc.SetState(SCE_CSS_DIRECTIVE);
 				break;
 			case '>':
