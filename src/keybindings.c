@@ -2019,10 +2019,6 @@ static void join_lines(GeanyEditor *editor)
 	end = sci_get_line_from_position(editor->sci,
 		sci_get_selection_end(editor->sci));
 
-	/* if there is only one line in selection, join it with the following one */
-	if (end == start)
-		end = start + 1;
-
 	/*
 	 * remove trailing spaces for every line except the last one
 	 * so that these spaces won't appear within text after joining
