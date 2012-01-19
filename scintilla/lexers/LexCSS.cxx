@@ -144,7 +144,6 @@ static void ColouriseCssDoc(unsigned int startPos, int length, int initStyle, Wo
 				sc.Forward();
 				sc.ForwardSetState(lastStateC);
 			} else /* eCommentLine */ {
-				sc.Forward();
 				sc.SetState(lastStateC);
 			}
 		}
@@ -286,16 +285,28 @@ static void ColouriseCssDoc(unsigned int startPos, int length, int initStyle, Wo
 					break;
 				case SCE_CSS_VALUE:
 				case SCE_CSS_IMPORTANT:
-					if (lastStateVal == SCE_CSS_VARIABLE)
-						sc.SetState(SCE_CSS_DEFAULT);
-					else
-						sc.SetState(SCE_CSS_IDENTIFIER);
+					// data URLs can have semicolons; simplistically check for wrapping parentheses and move along
+					if (insideParentheses) {
+						sc.SetState(lastState);
+					} else {
+						if (lastStateVal == SCE_CSS_VARIABLE) {
+							sc.SetState(SCE_CSS_DEFAULT);
+						} else {
+							sc.SetState(SCE_CSS_IDENTIFIER);
+						}
+					}
 					break;
 				case SCE_CSS_VARIABLE:
-					if (lastStateVar == SCE_CSS_VALUE)
-						sc.SetState(SCE_CSS_IDENTIFIER);
-					else
+					if (lastStateVar == SCE_CSS_VALUE) {
+						// data URLs can have semicolons; simplistically check for wrapping parentheses and move along
+						if (insideParentheses) {
+							sc.SetState(SCE_CSS_VALUE);
+						} else {
+							sc.SetState(SCE_CSS_IDENTIFIER);
+						}
+					} else {
 						sc.SetState(SCE_CSS_DEFAULT);
+					}
 					break;
 				}
 				break;
