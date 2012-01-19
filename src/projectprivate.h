@@ -28,6 +28,10 @@
 typedef struct GeanyProjectPrivate
 {
 	struct GeanyIndentPrefs *indentation;
+	gboolean	final_new_line;
+	gboolean	strip_trailing_spaces;
+	gboolean	replace_tabs;
+	gboolean	ensure_convert_new_lines;
 }
 GeanyProjectPrivate;
 

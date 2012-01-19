@@ -84,6 +84,8 @@ gboolean project_load_file_with_session(const gchar *locale_file_name);
 gchar *project_get_base_path(void);
 
 
+const struct GeanyFilePrefs *project_get_file_prefs(void);
+
 void project_save_prefs(GKeyFile *config);
 
 void project_load_prefs(GKeyFile *config);
