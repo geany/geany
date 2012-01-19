@@ -2019,42 +2019,18 @@ static void join_lines(GeanyEditor *editor)
 	end = sci_get_line_from_position(editor->sci,
 		sci_get_selection_end(editor->sci));
 
-	/*
-	 * remove trailing spaces for every line except the last one
-	 * so that these spaces won't appear within text after joining
-	 */
+	/* remove spaces surrounding the lines so that these spaces
+	 * won't appear within text after joining */
 	for (i = start; i < end; i++)
 		editor_strip_line_trailing_spaces(editor, i);
-
-	/* remove starting spaces from second and following lines due to the same reason */
 	for (i = start + 1; i <= end; i++)
 		sci_set_line_indentation(editor->sci, i, 0);
-
-	/*
-	 * SCI_LINESJOIN automatically adds spaces between joined lines, including
-	 * empty ones. We should drop empty lines if we want only one space to be
-	 * inserted (see also example below). I don't think we should care of that.
-	 */
 
 	sci_set_target_start(editor->sci,
 		sci_get_position_from_line(editor->sci, start));
 	sci_set_target_end(editor->sci,
 		sci_get_position_from_line(editor->sci, end));
 	sci_lines_join(editor->sci);
-
-	/*
-	 * Example: joining
-	 *
-	 * [TAB]if (something_wrong)
-	 * [TAB]{
-	 * [TAB][TAB]
-	 * [TAB][TAB]exit(1);[SPACE][SPACE]
-	 * [TAB]}[SPACE]
-	 *
-	 * gives
-	 *
-	 * [TAB]if (something_wrong) {  exit(1); }[SPACE]
-	 */
 }
 
 
@@ -2062,20 +2038,12 @@ static gint reflow_get_breaking_column(GeanyEditor *editor)
 {
 	const GeanyEditorPrefs *eprefs = editor_get_prefs(editor);
 	if (editor->line_breaking)
-	{
-		/* use line break column if enabled */
 		return eprefs->line_break_column;
-	}
 	else if (eprefs->long_line_type != 2)
-	{
-		/* use long line if enabled */
 		return eprefs->long_line_column;
-	}
 	else
-	{
-		/* do nothing if no column is defined */
+		/* do nothing */
 		return -1;
-	}
 }
 
 
@@ -2093,16 +2061,11 @@ static void reflow_lines(GeanyEditor *editor, gint column)
 	start = sci_get_line_from_position(editor->sci,
 		sci_get_selection_start(editor->sci));
 
-	/*
-	 * If several lines are selected, first join them.
-	 * This allows to reformat text paragraphs easily.
-	 */
+	/* if several lines are selected, join them. */
 	if (sci_get_lines_selected(editor->sci) > 1)
 		join_lines(editor);
 
-	/*
-	 * If this line is short enough, just return
-	 */
+	/* if this line is short enough, do nothing */
 	if (column > sci_get_line_end_position(editor->sci, start) -
 		sci_get_position_from_line(editor->sci, start))
 	{
@@ -2142,10 +2105,8 @@ static void reflow_lines(GeanyEditor *editor, gint column)
 
 	/* Remove trailing spaces. */
 	if (editor_prefs.newline_strip || file_prefs.strip_trailing_spaces)
-	{
 		for (i = start; i <= start + linescount; i++)
 			editor_strip_line_trailing_spaces(editor, i);
-	}
 }
 
 
