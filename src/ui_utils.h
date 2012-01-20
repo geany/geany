@@ -209,6 +209,8 @@ void ui_widget_set_tooltip_text(GtkWidget *widget, const gchar *text);
 
 GtkWidget *ui_lookup_widget(GtkWidget *widget, const gchar *widget_name);
 
+gpointer ui_builder_get_object (const gchar *name);
+
 /* Compatibility functions */
 GtkWidget *create_edit_menu1(void);
 GtkWidget *create_prefs_dialog(void);

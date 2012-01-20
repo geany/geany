@@ -2444,6 +2444,15 @@ GtkWidget *ui_lookup_widget(GtkWidget *widget, const gchar *widget_name)
 }
 
 
+/* wraps gtk_builder_get_object()
+ * unlike ui_lookup_widget(), it does only support getting object created from the main
+ * UI file, but it can fetch any object, not only widgets */
+gpointer ui_builder_get_object (const gchar *name)
+{
+	return gtk_builder_get_object (builder, name);
+}
+
+
 /* Progress Bar */
 static guint progress_bar_timer_id = 0;
 
