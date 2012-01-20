@@ -1589,11 +1589,21 @@ static gboolean prefs_dialog_key_press_response_cb(GtkWidget *dialog, GdkEventKe
 }
 
 
+static void list_store_append_text(GtkListStore *list, const gchar *text)
+{
+	GtkTreeIter iter;
+
+	gtk_list_store_append(list, &iter);
+	gtk_list_store_set(list, &iter, 0, text, -1);
+}
+
+
 void prefs_show_dialog(void)
 {
 	if (ui_widgets.prefs_dialog == NULL)
 	{
-		GtkWidget *combo_new, *combo_open, *combo_eol;
+		GtkWidget *combo_new, *combo_open;
+		GtkListStore *encoding_list, *eol_list;
 		GtkWidget *label;
 		guint i;
 		gchar *encoding_string;
@@ -1606,24 +1616,24 @@ void prefs_show_dialog(void)
 		gtk_window_set_icon(GTK_WINDOW(ui_widgets.prefs_dialog), pb);
 		g_object_unref(pb);	/* free our reference */
 
-		/* init the default file encoding combo box */
+		/* init the file encoding combo boxes */
 		combo_new = ui_lookup_widget(ui_widgets.prefs_dialog, "combo_new_encoding");
 		combo_open = ui_lookup_widget(ui_widgets.prefs_dialog, "combo_open_encoding");
 		gtk_combo_box_set_wrap_width(GTK_COMBO_BOX(combo_new), 3);
 		gtk_combo_box_set_wrap_width(GTK_COMBO_BOX(combo_open), 3);
+		encoding_list = ui_builder_get_object("encoding_list");
 		for (i = 0; i < GEANY_ENCODINGS_MAX; i++)
 		{
 			encoding_string = encodings_to_string(&encodings[i]);
-			gtk_combo_box_append_text(GTK_COMBO_BOX(combo_new), encoding_string);
-			gtk_combo_box_append_text(GTK_COMBO_BOX(combo_open), encoding_string);
+			list_store_append_text(encoding_list, encoding_string);
 			g_free(encoding_string);
 		}
 
 		/* init the eol character combo box */
-		combo_eol = ui_lookup_widget(ui_widgets.prefs_dialog, "combo_eol");
-		gtk_combo_box_append_text(GTK_COMBO_BOX(combo_eol), utils_get_eol_name(SC_EOL_CRLF));
-		gtk_combo_box_append_text(GTK_COMBO_BOX(combo_eol), utils_get_eol_name(SC_EOL_CR));
-		gtk_combo_box_append_text(GTK_COMBO_BOX(combo_eol), utils_get_eol_name(SC_EOL_LF));
+		eol_list = ui_builder_get_object("eol_list");
+		list_store_append_text(eol_list, utils_get_eol_name(SC_EOL_CRLF));
+		list_store_append_text(eol_list, utils_get_eol_name(SC_EOL_CR));
+		list_store_append_text(eol_list, utils_get_eol_name(SC_EOL_LF));
 
 		/* add manually GeanyWrapLabels because they can't be added with Glade */
 		/* page Tools */

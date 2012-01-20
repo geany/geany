@@ -440,7 +440,13 @@
       </object>
     </child>
   </object>
-  <object class="GtkListStore" id="empty_chararray_list">
+  <object class="GtkListStore" id="encoding_list">
+    <columns>
+      <!-- column-name text -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
+  <object class="GtkListStore" id="eol_list">
     <columns>
       <!-- column-name text -->
       <column type="gchararray"/>
@@ -4157,7 +4163,7 @@
                                       <object class="GtkComboBox" id="combo_eol">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="model">empty_chararray_list</property>
+                                        <property name="model">eol_list</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext5"/>
                                           <attributes>
@@ -4259,7 +4265,7 @@
                                       <object class="GtkComboBox" id="combo_new_encoding">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="model">empty_chararray_list</property>
+                                        <property name="model">encoding_list</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext6"/>
                                           <attributes>
@@ -4325,7 +4331,7 @@
                                       <object class="GtkComboBox" id="combo_open_encoding">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="model">empty_chararray_list</property>
+                                        <property name="model">encoding_list</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext7"/>
                                           <attributes>
