@@ -1602,7 +1602,6 @@ void prefs_show_dialog(void)
 {
 	if (ui_widgets.prefs_dialog == NULL)
 	{
-		GtkWidget *combo_new, *combo_open;
 		GtkListStore *encoding_list, *eol_list;
 		GtkWidget *label;
 		guint i;
@@ -1617,10 +1616,6 @@ void prefs_show_dialog(void)
 		g_object_unref(pb);	/* free our reference */
 
 		/* init the file encoding combo boxes */
-		combo_new = ui_lookup_widget(ui_widgets.prefs_dialog, "combo_new_encoding");
-		combo_open = ui_lookup_widget(ui_widgets.prefs_dialog, "combo_open_encoding");
-		gtk_combo_box_set_wrap_width(GTK_COMBO_BOX(combo_new), 3);
-		gtk_combo_box_set_wrap_width(GTK_COMBO_BOX(combo_open), 3);
 		encoding_list = ui_builder_get_object("encoding_list");
 		for (i = 0; i < GEANY_ENCODINGS_MAX; i++)
 		{
