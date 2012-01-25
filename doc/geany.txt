@@ -747,12 +747,13 @@ Column mode editing (rectangular selections)
 
 There is basic support for column mode editing. To use it, create a
 rectangular selection by holding down the Control and Shift keys
-(or Control and Alt if it doesn't work) while
-selecting some text. It is also possible to create a zero-column selection.
+(or Alt and Shift on Windows) while selecting some text.
 Once a rectangular selection exists you can start editing the text within
 this selection and the modifications will be done for every line in the
 selection.
 
+It is also possible to create a zero-column selection - this is
+useful to insert text on multiple lines.
 
 Drag and drop of text
 ^^^^^^^^^^^^^^^^^^^^^
@@ -5032,8 +5033,10 @@ Keyboard commands
 Keyboard commands for Scintilla mostly follow common Windows and GTK+
 conventions. All move keys (arrows, page up/down, home and end)
 allows to extend or reduce the stream selection when holding the
-Shift key, and the rectangular selection when holding the Shift and
-Ctrl keys. Some keys may not be available with some national keyboards
+Shift key, and the rectangular selection when holding the
+appropriate keys (see `Column mode editing (rectangular selections)`_).
+
+Some keys may not be available with some national keyboards
 or because they are taken by the system such as by a window manager
 or GTK. Keyboard equivalents of menu commands are listed in the
 menus. Some less common commands with no menu equivalent are:
