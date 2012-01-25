@@ -197,9 +197,17 @@ GeanyKeyGroup *keybindings_get_core_group(guint id)
 }
 
 
-/* Lookup a widget in the main window */
-#define LW(widget_name) \
-	ui_lookup_widget(main_widgets.window, G_STRINGIFY(widget_name))
+static void add_kb(GeanyKeyGroup *group, gsize key_id,
+		GeanyKeyCallback callback, guint key, GdkModifierType mod,
+		const gchar *kf_name, const gchar *label, const gchar *widget_name)
+{
+	GtkWidget *widget = widget_name ?
+		ui_lookup_widget(main_widgets.window, widget_name) : NULL;
+
+	keybindings_set_item(group, key_id, callback,
+		key, mod, kf_name, label, widget);
+}
+
 
 #define ADD_KB_GROUP(group_id, label, callback) \
 	add_kb_group(keybindings_get_core_group(group_id),\
@@ -234,365 +242,365 @@ static void init_default_kb(void)
 
 	group = keybindings_get_core_group(GEANY_KEY_GROUP_FILE);
 
-	keybindings_set_item(group, GEANY_KEYS_FILE_NEW, NULL,
+	add_kb(group, GEANY_KEYS_FILE_NEW, NULL,
 		GDK_n, GDK_CONTROL_MASK, "menu_new", _("New"), NULL);
-	keybindings_set_item(group, GEANY_KEYS_FILE_OPEN, NULL,
+	add_kb(group, GEANY_KEYS_FILE_OPEN, NULL,
 		GDK_o, GDK_CONTROL_MASK, "menu_open", _("Open"), NULL);
-	keybindings_set_item(group, GEANY_KEYS_FILE_OPENSELECTED, NULL,
+	add_kb(group, GEANY_KEYS_FILE_OPENSELECTED, NULL,
 		GDK_o, GDK_SHIFT_MASK | GDK_CONTROL_MASK, "menu_open_selected",
-		_("Open selected file"), LW(menu_open_selected_file1));
-	keybindings_set_item(group, GEANY_KEYS_FILE_SAVE, NULL,
+		_("Open selected file"), "menu_open_selected_file1");
+	add_kb(group, GEANY_KEYS_FILE_SAVE, NULL,
 		GDK_s, GDK_CONTROL_MASK, "menu_save", _("Save"), NULL);
-	keybindings_set_item(group, GEANY_KEYS_FILE_SAVEAS, NULL,
-		0, 0, "menu_saveas", _("Save as"), LW(menu_save_as1));
-	keybindings_set_item(group, GEANY_KEYS_FILE_SAVEALL, NULL,
+	add_kb(group, GEANY_KEYS_FILE_SAVEAS, NULL,
+		0, 0, "menu_saveas", _("Save as"), "menu_save_as1");
+	add_kb(group, GEANY_KEYS_FILE_SAVEALL, NULL,
 		GDK_S, GDK_SHIFT_MASK | GDK_CONTROL_MASK, "menu_saveall", _("Save all"),
-		LW(menu_save_all1));
-	keybindings_set_item(group, GEANY_KEYS_FILE_PRINT, NULL,
-		GDK_p, GDK_CONTROL_MASK, "menu_print", _("Print"), LW(print1));
-	keybindings_set_item(group, GEANY_KEYS_FILE_CLOSE, NULL,
-		GDK_w, GDK_CONTROL_MASK, "menu_close", _("Close"), LW(menu_close1));
-	keybindings_set_item(group, GEANY_KEYS_FILE_CLOSEALL, NULL,
+		"menu_save_all1");
+	add_kb(group, GEANY_KEYS_FILE_PRINT, NULL,
+		GDK_p, GDK_CONTROL_MASK, "menu_print", _("Print"), "print1");
+	add_kb(group, GEANY_KEYS_FILE_CLOSE, NULL,
+		GDK_w, GDK_CONTROL_MASK, "menu_close", _("Close"), "menu_close1");
+	add_kb(group, GEANY_KEYS_FILE_CLOSEALL, NULL,
 		GDK_w, GDK_CONTROL_MASK | GDK_SHIFT_MASK, "menu_closeall", _("Close all"),
-		LW(menu_close_all1));
-	keybindings_set_item(group, GEANY_KEYS_FILE_RELOAD, NULL,
-		GDK_r, GDK_CONTROL_MASK, "menu_reloadfile", _("Reload file"), LW(menu_reload1));
-	keybindings_set_item(group, GEANY_KEYS_FILE_OPENLASTTAB, NULL,
+		"menu_close_all1");
+	add_kb(group, GEANY_KEYS_FILE_RELOAD, NULL,
+		GDK_r, GDK_CONTROL_MASK, "menu_reloadfile", _("Reload file"), "menu_reload1");
+	add_kb(group, GEANY_KEYS_FILE_OPENLASTTAB, NULL,
 		0, 0, "file_openlasttab", _("Re-open last closed tab"), NULL);
 
 	group = keybindings_get_core_group(GEANY_KEY_GROUP_PROJECT);
 
-	keybindings_set_item(group, GEANY_KEYS_PROJECT_NEW, NULL,
-		0, 0, "project_new", _("New"), LW(project_new1));
-	keybindings_set_item(group, GEANY_KEYS_PROJECT_OPEN, NULL,
-		0, 0, "project_open", _("Open"), LW(project_open1));
-	keybindings_set_item(group, GEANY_KEYS_PROJECT_PROPERTIES, NULL,
+	add_kb(group, GEANY_KEYS_PROJECT_NEW, NULL,
+		0, 0, "project_new", _("New"), "project_new1");
+	add_kb(group, GEANY_KEYS_PROJECT_OPEN, NULL,
+		0, 0, "project_open", _("Open"), "project_open1");
+	add_kb(group, GEANY_KEYS_PROJECT_PROPERTIES, NULL,
 		0, 0, "project_properties",
-		ui_lookup_stock_label(GTK_STOCK_PROPERTIES), LW(project_properties1));
-	keybindings_set_item(group, GEANY_KEYS_PROJECT_CLOSE, NULL,
-		0, 0, "project_close", _("Close"), LW(project_close1));
+		ui_lookup_stock_label(GTK_STOCK_PROPERTIES), "project_properties1");
+	add_kb(group, GEANY_KEYS_PROJECT_CLOSE, NULL,
+		0, 0, "project_close", _("Close"), "project_close1");
 
 	group = keybindings_get_core_group(GEANY_KEY_GROUP_EDITOR);
 
-	keybindings_set_item(group, GEANY_KEYS_EDITOR_UNDO, NULL,
-		GDK_z, GDK_CONTROL_MASK, "menu_undo", _("Undo"), LW(menu_undo2));
-	keybindings_set_item(group, GEANY_KEYS_EDITOR_REDO, NULL,
-		GDK_y, GDK_CONTROL_MASK, "menu_redo", _("Redo"), LW(menu_redo2));
-	keybindings_set_item(group, GEANY_KEYS_EDITOR_DUPLICATELINE, NULL,
+	add_kb(group, GEANY_KEYS_EDITOR_UNDO, NULL,
+		GDK_z, GDK_CONTROL_MASK, "menu_undo", _("Undo"), "menu_undo2");
+	add_kb(group, GEANY_KEYS_EDITOR_REDO, NULL,
+		GDK_y, GDK_CONTROL_MASK, "menu_redo", _("Redo"), "menu_redo2");
+	add_kb(group, GEANY_KEYS_EDITOR_DUPLICATELINE, NULL,
 		GDK_d, GDK_CONTROL_MASK, "edit_duplicateline", _("_Duplicate Line or Selection"),
-		LW(duplicate_line_or_selection1));
-	keybindings_set_item(group, GEANY_KEYS_EDITOR_DELETELINE, NULL,
+		"duplicate_line_or_selection1");
+	add_kb(group, GEANY_KEYS_EDITOR_DELETELINE, NULL,
 		GDK_k, GDK_CONTROL_MASK, "edit_deleteline", _("_Delete Current Line(s)"),
-		LW(delete_current_lines1));
-	keybindings_set_item(group, GEANY_KEYS_EDITOR_DELETELINETOEND, NULL,
+		"delete_current_lines1");
+	add_kb(group, GEANY_KEYS_EDITOR_DELETELINETOEND, NULL,
 		GDK_Delete, GDK_SHIFT_MASK | GDK_CONTROL_MASK, "edit_deletelinetoend",
 		_("Delete to line end"), NULL);
 	/* transpose may fit better in format group */
-	keybindings_set_item(group, GEANY_KEYS_EDITOR_TRANSPOSELINE, NULL,
+	add_kb(group, GEANY_KEYS_EDITOR_TRANSPOSELINE, NULL,
 		0, 0, "edit_transposeline", _("_Transpose Current Line"),
-		LW(transpose_current_line1));
-	keybindings_set_item(group, GEANY_KEYS_EDITOR_SCROLLTOLINE, NULL,
+		"transpose_current_line1");
+	add_kb(group, GEANY_KEYS_EDITOR_SCROLLTOLINE, NULL,
 		GDK_l, GDK_SHIFT_MASK | GDK_CONTROL_MASK, "edit_scrolltoline", _("Scroll to current line"), NULL);
-	keybindings_set_item(group, GEANY_KEYS_EDITOR_SCROLLLINEUP, NULL,
+	add_kb(group, GEANY_KEYS_EDITOR_SCROLLLINEUP, NULL,
 		GDK_Up, GDK_MOD1_MASK, "edit_scrolllineup", _("Scroll up the view by one line"), NULL);
-	keybindings_set_item(group, GEANY_KEYS_EDITOR_SCROLLLINEDOWN, NULL,
+	add_kb(group, GEANY_KEYS_EDITOR_SCROLLLINEDOWN, NULL,
 		GDK_Down, GDK_MOD1_MASK, "edit_scrolllinedown", _("Scroll down the view by one line"), NULL);
-	keybindings_set_item(group, GEANY_KEYS_EDITOR_COMPLETESNIPPET, NULL,
+	add_kb(group, GEANY_KEYS_EDITOR_COMPLETESNIPPET, NULL,
 		GDK_Tab, 0, "edit_completesnippet", _("Complete snippet"), NULL);
-	keybindings_set_item(group, GEANY_KEYS_EDITOR_SNIPPETNEXTCURSOR, NULL,
+	add_kb(group, GEANY_KEYS_EDITOR_SNIPPETNEXTCURSOR, NULL,
 		0, 0, "move_snippetnextcursor", _("Move cursor in snippet"), NULL);
-	keybindings_set_item(group, GEANY_KEYS_EDITOR_SUPPRESSSNIPPETCOMPLETION, NULL,
+	add_kb(group, GEANY_KEYS_EDITOR_SUPPRESSSNIPPETCOMPLETION, NULL,
 		0, 0, "edit_suppresssnippetcompletion", _("Suppress snippet completion"), NULL);
-	keybindings_set_item(group, GEANY_KEYS_EDITOR_CONTEXTACTION, NULL,
+	add_kb(group, GEANY_KEYS_EDITOR_CONTEXTACTION, NULL,
 		0, 0, "popup_contextaction", _("Context Action"), NULL);
-	keybindings_set_item(group, GEANY_KEYS_EDITOR_AUTOCOMPLETE, NULL,
+	add_kb(group, GEANY_KEYS_EDITOR_AUTOCOMPLETE, NULL,
 		GDK_space, GDK_CONTROL_MASK, "edit_autocomplete", _("Complete word"), NULL);
-	keybindings_set_item(group, GEANY_KEYS_EDITOR_CALLTIP, NULL,
+	add_kb(group, GEANY_KEYS_EDITOR_CALLTIP, NULL,
 		GDK_space, GDK_CONTROL_MASK | GDK_SHIFT_MASK, "edit_calltip", _("Show calltip"), NULL);
-	keybindings_set_item(group, GEANY_KEYS_EDITOR_MACROLIST, NULL,
+	add_kb(group, GEANY_KEYS_EDITOR_MACROLIST, NULL,
 		GDK_Return, GDK_CONTROL_MASK, "edit_macrolist", _("Show macro list"), NULL);
-	keybindings_set_item(group, GEANY_KEYS_EDITOR_WORDPARTCOMPLETION, NULL,
+	add_kb(group, GEANY_KEYS_EDITOR_WORDPARTCOMPLETION, NULL,
 		GDK_Tab, 0, "edit_wordpartcompletion", _("Word part completion"), NULL);
-	keybindings_set_item(group, GEANY_KEYS_EDITOR_MOVELINEUP, NULL,
+	add_kb(group, GEANY_KEYS_EDITOR_MOVELINEUP, NULL,
 		GDK_Page_Up, GDK_MOD1_MASK, "edit_movelineup", _("Move line(s) up"), NULL);
-	keybindings_set_item(group, GEANY_KEYS_EDITOR_MOVELINEDOWN, NULL,
+	add_kb(group, GEANY_KEYS_EDITOR_MOVELINEDOWN, NULL,
 		GDK_Page_Down, GDK_MOD1_MASK, "edit_movelinedown", _("Move line(s) down"), NULL);
 
 	group = keybindings_get_core_group(GEANY_KEY_GROUP_CLIPBOARD);
 
-	keybindings_set_item(group, GEANY_KEYS_CLIPBOARD_CUT, NULL,
+	add_kb(group, GEANY_KEYS_CLIPBOARD_CUT, NULL,
 		GDK_x, GDK_CONTROL_MASK, "menu_cut", _("Cut"), NULL);
-	keybindings_set_item(group, GEANY_KEYS_CLIPBOARD_COPY, NULL,
+	add_kb(group, GEANY_KEYS_CLIPBOARD_COPY, NULL,
 		GDK_c, GDK_CONTROL_MASK, "menu_copy", _("Copy"), NULL);
-	keybindings_set_item(group, GEANY_KEYS_CLIPBOARD_PASTE, NULL,
+	add_kb(group, GEANY_KEYS_CLIPBOARD_PASTE, NULL,
 		GDK_v, GDK_CONTROL_MASK, "menu_paste", _("Paste"), NULL);
-	keybindings_set_item(group, GEANY_KEYS_CLIPBOARD_COPYLINE, NULL,
+	add_kb(group, GEANY_KEYS_CLIPBOARD_COPYLINE, NULL,
 		GDK_c, GDK_CONTROL_MASK | GDK_SHIFT_MASK, "edit_copyline", _("_Copy Current Line(s)"),
-		LW(copy_current_lines1));
-	keybindings_set_item(group, GEANY_KEYS_CLIPBOARD_CUTLINE, NULL,
+		"copy_current_lines1");
+	add_kb(group, GEANY_KEYS_CLIPBOARD_CUTLINE, NULL,
 		GDK_x, GDK_CONTROL_MASK | GDK_SHIFT_MASK, "edit_cutline", _("_Cut Current Line(s)"),
-		LW(cut_current_lines1));
+		"cut_current_lines1");
 
 	group = keybindings_get_core_group(GEANY_KEY_GROUP_SELECT);
 
-	keybindings_set_item(group, GEANY_KEYS_SELECT_ALL, NULL,
-		GDK_a, GDK_CONTROL_MASK, "menu_selectall", _("Select All"), LW(menu_select_all1));
-	keybindings_set_item(group, GEANY_KEYS_SELECT_WORD, NULL,
+	add_kb(group, GEANY_KEYS_SELECT_ALL, NULL,
+		GDK_a, GDK_CONTROL_MASK, "menu_selectall", _("Select All"), "menu_select_all1");
+	add_kb(group, GEANY_KEYS_SELECT_WORD, NULL,
 		GDK_w, GDK_SHIFT_MASK | GDK_MOD1_MASK, "edit_selectword", _("Select current word"), NULL);
-	keybindings_set_item(group, GEANY_KEYS_SELECT_LINE, NULL,
+	add_kb(group, GEANY_KEYS_SELECT_LINE, NULL,
 		GDK_l, GDK_SHIFT_MASK | GDK_MOD1_MASK, "edit_selectline", _("_Select Current Line(s)"),
-		LW(select_current_lines1));
-	keybindings_set_item(group, GEANY_KEYS_SELECT_PARAGRAPH, NULL,
+		"select_current_lines1");
+	add_kb(group, GEANY_KEYS_SELECT_PARAGRAPH, NULL,
 		GDK_p, GDK_SHIFT_MASK | GDK_MOD1_MASK, "edit_selectparagraph", _("_Select Current Paragraph"),
-		LW(select_current_paragraph1));
-	keybindings_set_item(group, GEANY_KEYS_SELECT_WORDPARTLEFT, NULL,
+		"select_current_paragraph1");
+	add_kb(group, GEANY_KEYS_SELECT_WORDPARTLEFT, NULL,
 		0, 0, "edit_selectwordpartleft", _("Select to previous word part"), NULL);
-	keybindings_set_item(group, GEANY_KEYS_SELECT_WORDPARTRIGHT, NULL,
+	add_kb(group, GEANY_KEYS_SELECT_WORDPARTRIGHT, NULL,
 		0, 0, "edit_selectwordpartright", _("Select to next word part"), NULL);
 
 	group = keybindings_get_core_group(GEANY_KEY_GROUP_FORMAT);
 
-	keybindings_set_item(group, GEANY_KEYS_FORMAT_TOGGLECASE, NULL,
+	add_kb(group, GEANY_KEYS_FORMAT_TOGGLECASE, NULL,
 		GDK_u, GDK_CONTROL_MASK | GDK_MOD1_MASK, "edit_togglecase",
-		_("T_oggle Case of Selection"), LW(menu_toggle_case2));
-	keybindings_set_item(group, GEANY_KEYS_FORMAT_COMMENTLINETOGGLE, NULL,
+		_("T_oggle Case of Selection"), "menu_toggle_case2");
+	add_kb(group, GEANY_KEYS_FORMAT_COMMENTLINETOGGLE, NULL,
 		GDK_e, GDK_CONTROL_MASK, "edit_commentlinetoggle", _("Toggle line commentation"),
-		LW(menu_toggle_line_commentation1));
-	keybindings_set_item(group, GEANY_KEYS_FORMAT_COMMENTLINE, NULL,
-		0, 0, "edit_commentline", _("Comment line(s)"), LW(menu_comment_line1));
-	keybindings_set_item(group, GEANY_KEYS_FORMAT_UNCOMMENTLINE, NULL,
-		0, 0, "edit_uncommentline", _("Uncomment line(s)"), LW(menu_uncomment_line1));
-	keybindings_set_item(group, GEANY_KEYS_FORMAT_INCREASEINDENT, NULL,
+		"menu_toggle_line_commentation1");
+	add_kb(group, GEANY_KEYS_FORMAT_COMMENTLINE, NULL,
+		0, 0, "edit_commentline", _("Comment line(s)"), "menu_comment_line1");
+	add_kb(group, GEANY_KEYS_FORMAT_UNCOMMENTLINE, NULL,
+		0, 0, "edit_uncommentline", _("Uncomment line(s)"), "menu_uncomment_line1");
+	add_kb(group, GEANY_KEYS_FORMAT_INCREASEINDENT, NULL,
 		GDK_i, GDK_CONTROL_MASK, "edit_increaseindent", _("Increase indent"),
-		LW(menu_increase_indent1));
-	keybindings_set_item(group, GEANY_KEYS_FORMAT_DECREASEINDENT, NULL,
+		"menu_increase_indent1");
+	add_kb(group, GEANY_KEYS_FORMAT_DECREASEINDENT, NULL,
 		GDK_u, GDK_CONTROL_MASK, "edit_decreaseindent", _("Decrease indent"),
-		LW(menu_decrease_indent1));
-	keybindings_set_item(group, GEANY_KEYS_FORMAT_INCREASEINDENTBYSPACE, NULL,
+		"menu_decrease_indent1");
+	add_kb(group, GEANY_KEYS_FORMAT_INCREASEINDENTBYSPACE, NULL,
 		0, 0, "edit_increaseindentbyspace", _("Increase indent by one space"), NULL);
-	keybindings_set_item(group, GEANY_KEYS_FORMAT_DECREASEINDENTBYSPACE, NULL,
+	add_kb(group, GEANY_KEYS_FORMAT_DECREASEINDENTBYSPACE, NULL,
 		0, 0, "edit_decreaseindentbyspace", _("Decrease indent by one space"), NULL);
-	keybindings_set_item(group, GEANY_KEYS_FORMAT_AUTOINDENT, NULL,
-		0, 0, "edit_autoindent", _("_Smart Line Indent"), LW(smart_line_indent1));
-	keybindings_set_item(group, GEANY_KEYS_FORMAT_SENDTOCMD1, NULL,
+	add_kb(group, GEANY_KEYS_FORMAT_AUTOINDENT, NULL,
+		0, 0, "edit_autoindent", _("_Smart Line Indent"), "smart_line_indent1");
+	add_kb(group, GEANY_KEYS_FORMAT_SENDTOCMD1, NULL,
 		GDK_1, GDK_CONTROL_MASK, "edit_sendtocmd1", _("Send to Custom Command 1"), NULL);
-	keybindings_set_item(group, GEANY_KEYS_FORMAT_SENDTOCMD2, NULL,
+	add_kb(group, GEANY_KEYS_FORMAT_SENDTOCMD2, NULL,
 		GDK_2, GDK_CONTROL_MASK, "edit_sendtocmd2", _("Send to Custom Command 2"), NULL);
-	keybindings_set_item(group, GEANY_KEYS_FORMAT_SENDTOCMD3, NULL,
+	add_kb(group, GEANY_KEYS_FORMAT_SENDTOCMD3, NULL,
 		GDK_3, GDK_CONTROL_MASK, "edit_sendtocmd3", _("Send to Custom Command 3"), NULL);
 	/* may fit better in editor group */
-	keybindings_set_item(group, GEANY_KEYS_FORMAT_SENDTOVTE, NULL,
-		0, 0, "edit_sendtovte", _("_Send Selection to Terminal"), LW(send_selection_to_vte1));
-	keybindings_set_item(group, GEANY_KEYS_FORMAT_REFLOWPARAGRAPH, NULL,
+	add_kb(group, GEANY_KEYS_FORMAT_SENDTOVTE, NULL,
+		0, 0, "edit_sendtovte", _("_Send Selection to Terminal"), "send_selection_to_vte1");
+	add_kb(group, GEANY_KEYS_FORMAT_REFLOWPARAGRAPH, NULL,
 		GDK_j, GDK_CONTROL_MASK, "format_reflowparagraph", _("_Reflow Lines/Block"),
-		LW(reflow_lines_block1));
+		"reflow_lines_block1");
 
 	group = keybindings_get_core_group(GEANY_KEY_GROUP_INSERT);
 
-	keybindings_set_item(group, GEANY_KEYS_INSERT_DATE, NULL,
+	add_kb(group, GEANY_KEYS_INSERT_DATE, NULL,
 		GDK_d, GDK_SHIFT_MASK | GDK_MOD1_MASK, "menu_insert_date", _("Insert date"),
-		LW(insert_date_custom1));
-	keybindings_set_item(group, GEANY_KEYS_INSERT_ALTWHITESPACE, NULL,
+		"insert_date_custom1");
+	add_kb(group, GEANY_KEYS_INSERT_ALTWHITESPACE, NULL,
 		0, 0, "edit_insertwhitespace", _("_Insert Alternative White Space"),
-		LW(insert_alternative_white_space1));
-	keybindings_set_item(group, GEANY_KEYS_INSERT_LINEBEFORE, NULL,
+		"insert_alternative_white_space1");
+	add_kb(group, GEANY_KEYS_INSERT_LINEBEFORE, NULL,
 		0, 0, "edit_insertlinebefore", _("Insert New Line Before Current"), NULL);
-	keybindings_set_item(group, GEANY_KEYS_INSERT_LINEAFTER, NULL,
+	add_kb(group, GEANY_KEYS_INSERT_LINEAFTER, NULL,
 		0, 0, "edit_insertlineafter", _("Insert New Line After Current"), NULL);
 
 	group = keybindings_get_core_group(GEANY_KEY_GROUP_SETTINGS);
 
-	keybindings_set_item(group, GEANY_KEYS_SETTINGS_PREFERENCES, cb_func_menu_preferences,
+	add_kb(group, GEANY_KEYS_SETTINGS_PREFERENCES, cb_func_menu_preferences,
 		GDK_p, GDK_CONTROL_MASK | GDK_MOD1_MASK, "menu_preferences", _("Preferences"),
-		LW(preferences1));
-	keybindings_set_item(group, GEANY_KEYS_SETTINGS_PLUGINPREFERENCES, cb_func_menu_preferences,
-		0, 0, "menu_pluginpreferences", _("P_lugin Preferences"), LW(plugin_preferences1));
+		"preferences1");
+	add_kb(group, GEANY_KEYS_SETTINGS_PLUGINPREFERENCES, cb_func_menu_preferences,
+		0, 0, "menu_pluginpreferences", _("P_lugin Preferences"), "plugin_preferences1");
 
 	group = keybindings_get_core_group(GEANY_KEY_GROUP_SEARCH);
 
-	keybindings_set_item(group, GEANY_KEYS_SEARCH_FIND, NULL,
-		GDK_f, GDK_CONTROL_MASK, "menu_find", _("Find"), LW(find1));
-	keybindings_set_item(group, GEANY_KEYS_SEARCH_FINDNEXT, NULL,
-		GDK_g, GDK_CONTROL_MASK, "menu_findnext", _("Find Next"), LW(find_next1));
-	keybindings_set_item(group, GEANY_KEYS_SEARCH_FINDPREVIOUS, NULL,
+	add_kb(group, GEANY_KEYS_SEARCH_FIND, NULL,
+		GDK_f, GDK_CONTROL_MASK, "menu_find", _("Find"), "find1");
+	add_kb(group, GEANY_KEYS_SEARCH_FINDNEXT, NULL,
+		GDK_g, GDK_CONTROL_MASK, "menu_findnext", _("Find Next"), "find_next1");
+	add_kb(group, GEANY_KEYS_SEARCH_FINDPREVIOUS, NULL,
 		GDK_g, GDK_CONTROL_MASK | GDK_SHIFT_MASK, "menu_findprevious", _("Find Previous"),
-		LW(find_previous1));
-	keybindings_set_item(group, GEANY_KEYS_SEARCH_FINDNEXTSEL, NULL,
-		0, 0, "menu_findnextsel", _("Find Next _Selection"), LW(find_nextsel1));
-	keybindings_set_item(group, GEANY_KEYS_SEARCH_FINDPREVSEL, NULL,
-		0, 0, "menu_findprevsel", _("Find Pre_vious Selection"), LW(find_prevsel1));
-	keybindings_set_item(group, GEANY_KEYS_SEARCH_REPLACE, NULL,
-		GDK_h, GDK_CONTROL_MASK, "menu_replace", _("Replace"), LW(replace1));
-	keybindings_set_item(group, GEANY_KEYS_SEARCH_FINDINFILES, NULL, GDK_f,
+		"find_previous1");
+	add_kb(group, GEANY_KEYS_SEARCH_FINDNEXTSEL, NULL,
+		0, 0, "menu_findnextsel", _("Find Next _Selection"), "find_nextsel1");
+	add_kb(group, GEANY_KEYS_SEARCH_FINDPREVSEL, NULL,
+		0, 0, "menu_findprevsel", _("Find Pre_vious Selection"), "find_prevsel1");
+	add_kb(group, GEANY_KEYS_SEARCH_REPLACE, NULL,
+		GDK_h, GDK_CONTROL_MASK, "menu_replace", _("Replace"), "replace1");
+	add_kb(group, GEANY_KEYS_SEARCH_FINDINFILES, NULL, GDK_f,
 		GDK_CONTROL_MASK | GDK_SHIFT_MASK, "menu_findinfiles", _("Find in Files"),
-		LW(find_in_files1));
-	keybindings_set_item(group, GEANY_KEYS_SEARCH_NEXTMESSAGE, NULL,
-		0, 0, "menu_nextmessage", _("Next Message"), LW(next_message1));
-	keybindings_set_item(group, GEANY_KEYS_SEARCH_PREVIOUSMESSAGE, NULL,
-		0, 0, "menu_previousmessage", _("Previous Message"), LW(previous_message1));
-	keybindings_set_item(group, GEANY_KEYS_SEARCH_FINDUSAGE, NULL,
+		"find_in_files1");
+	add_kb(group, GEANY_KEYS_SEARCH_NEXTMESSAGE, NULL,
+		0, 0, "menu_nextmessage", _("Next Message"), "next_message1");
+	add_kb(group, GEANY_KEYS_SEARCH_PREVIOUSMESSAGE, NULL,
+		0, 0, "menu_previousmessage", _("Previous Message"), "previous_message1");
+	add_kb(group, GEANY_KEYS_SEARCH_FINDUSAGE, NULL,
 		GDK_e, GDK_CONTROL_MASK | GDK_SHIFT_MASK, "popup_findusage",
-		_("Find Usage"), LW(find_usage1));
-	keybindings_set_item(group, GEANY_KEYS_SEARCH_FINDDOCUMENTUSAGE, NULL,
+		_("Find Usage"), "find_usage1");
+	add_kb(group, GEANY_KEYS_SEARCH_FINDDOCUMENTUSAGE, NULL,
 		GDK_d, GDK_CONTROL_MASK | GDK_SHIFT_MASK, "popup_finddocumentusage",
-		_("Find Document Usage"), LW(find_document_usage1));
-	keybindings_set_item(group, GEANY_KEYS_SEARCH_MARKALL, NULL,
-		GDK_m, GDK_CONTROL_MASK | GDK_SHIFT_MASK, "find_markall", _("_Mark All"), LW(mark_all1));
+		_("Find Document Usage"), "find_document_usage1");
+	add_kb(group, GEANY_KEYS_SEARCH_MARKALL, NULL,
+		GDK_m, GDK_CONTROL_MASK | GDK_SHIFT_MASK, "find_markall", _("_Mark All"), "mark_all1");
 
 	group = keybindings_get_core_group(GEANY_KEY_GROUP_GOTO);
 
-	keybindings_set_item(group, GEANY_KEYS_GOTO_BACK, NULL,
+	add_kb(group, GEANY_KEYS_GOTO_BACK, NULL,
 		GDK_Left, GDK_MOD1_MASK, "nav_back", _("Navigate back a location"), NULL);
-	keybindings_set_item(group, GEANY_KEYS_GOTO_FORWARD, NULL,
+	add_kb(group, GEANY_KEYS_GOTO_FORWARD, NULL,
 		GDK_Right, GDK_MOD1_MASK, "nav_forward", _("Navigate forward a location"), NULL);
-	keybindings_set_item(group, GEANY_KEYS_GOTO_LINE, NULL,
-		GDK_l, GDK_CONTROL_MASK, "menu_gotoline", _("Go to Line"), LW(go_to_line1));
-	keybindings_set_item(group, GEANY_KEYS_GOTO_MATCHINGBRACE, NULL,
+	add_kb(group, GEANY_KEYS_GOTO_LINE, NULL,
+		GDK_l, GDK_CONTROL_MASK, "menu_gotoline", _("Go to Line"), "go_to_line1");
+	add_kb(group, GEANY_KEYS_GOTO_MATCHINGBRACE, NULL,
 		GDK_b, GDK_CONTROL_MASK, "edit_gotomatchingbrace",
 		_("Go to matching brace"), NULL);
-	keybindings_set_item(group, GEANY_KEYS_GOTO_TOGGLEMARKER, NULL,
+	add_kb(group, GEANY_KEYS_GOTO_TOGGLEMARKER, NULL,
 		GDK_m, GDK_CONTROL_MASK, "edit_togglemarker",
 		_("Toggle marker"), NULL);
-	keybindings_set_item(group, GEANY_KEYS_GOTO_NEXTMARKER, NULL,
+	add_kb(group, GEANY_KEYS_GOTO_NEXTMARKER, NULL,
 		GDK_period, GDK_CONTROL_MASK, "edit_gotonextmarker",
-		_("_Go to Next Marker"), LW(go_to_next_marker1));
-	keybindings_set_item(group, GEANY_KEYS_GOTO_PREVIOUSMARKER, NULL,
+		_("_Go to Next Marker"), "go_to_next_marker1");
+	add_kb(group, GEANY_KEYS_GOTO_PREVIOUSMARKER, NULL,
 		GDK_comma, GDK_CONTROL_MASK, "edit_gotopreviousmarker",
-		_("_Go to Previous Marker"), LW(go_to_previous_marker1));
-	keybindings_set_item(group, GEANY_KEYS_GOTO_TAGDEFINITION, NULL,
+		_("_Go to Previous Marker"), "go_to_previous_marker1");
+	add_kb(group, GEANY_KEYS_GOTO_TAGDEFINITION, NULL,
 		GDK_t, GDK_CONTROL_MASK, "popup_gototagdefinition",
-		_("Go to Tag Definition"), LW(goto_tag_definition1));
-	keybindings_set_item(group, GEANY_KEYS_GOTO_TAGDECLARATION, NULL,
+		_("Go to Tag Definition"), "goto_tag_definition1");
+	add_kb(group, GEANY_KEYS_GOTO_TAGDECLARATION, NULL,
 		GDK_t, GDK_CONTROL_MASK | GDK_SHIFT_MASK, "popup_gototagdeclaration",
-		_("Go to Tag Declaration"), LW(goto_tag_declaration1));
-	keybindings_set_item(group, GEANY_KEYS_GOTO_LINESTART, NULL,
+		_("Go to Tag Declaration"), "goto_tag_declaration1");
+	add_kb(group, GEANY_KEYS_GOTO_LINESTART, NULL,
 		GDK_Home, 0, "edit_gotolinestart", _("Go to Start of Line"), NULL);
-	keybindings_set_item(group, GEANY_KEYS_GOTO_LINEEND, NULL,
+	add_kb(group, GEANY_KEYS_GOTO_LINEEND, NULL,
 		GDK_End, 0, "edit_gotolineend", _("Go to End of Line"), NULL);
-	keybindings_set_item(group, GEANY_KEYS_GOTO_LINEENDVISUAL, NULL,
+	add_kb(group, GEANY_KEYS_GOTO_LINEENDVISUAL, NULL,
 		GDK_End, GDK_MOD1_MASK, "edit_gotolineendvisual", _("Go to End of Display Line"), NULL);
-	keybindings_set_item(group, GEANY_KEYS_GOTO_PREVWORDPART, NULL,
+	add_kb(group, GEANY_KEYS_GOTO_PREVWORDPART, NULL,
 		GDK_slash, GDK_CONTROL_MASK, "edit_prevwordstart", _("Go to Previous Word Part"), NULL);
-	keybindings_set_item(group, GEANY_KEYS_GOTO_NEXTWORDPART, NULL,
+	add_kb(group, GEANY_KEYS_GOTO_NEXTWORDPART, NULL,
 		GDK_backslash, GDK_CONTROL_MASK, "edit_nextwordstart", _("Go to Next Word Part"), NULL);
 
 	group = keybindings_get_core_group(GEANY_KEY_GROUP_VIEW);
 
-	keybindings_set_item(group, GEANY_KEYS_VIEW_TOGGLEALL, NULL,
+	add_kb(group, GEANY_KEYS_VIEW_TOGGLEALL, NULL,
 		0, 0, "menu_toggleall", _("Toggle All Additional Widgets"),
-		LW(menu_toggle_all_additional_widgets1));
-	keybindings_set_item(group, GEANY_KEYS_VIEW_FULLSCREEN, cb_func_menu_fullscreen,
-		GDK_F11, 0, "menu_fullscreen", _("Fullscreen"), LW(menu_fullscreen1));
-	keybindings_set_item(group, GEANY_KEYS_VIEW_MESSAGEWINDOW, cb_func_menu_messagewindow,
+		"menu_toggle_all_additional_widgets1");
+	add_kb(group, GEANY_KEYS_VIEW_FULLSCREEN, cb_func_menu_fullscreen,
+		GDK_F11, 0, "menu_fullscreen", _("Fullscreen"), "menu_fullscreen1");
+	add_kb(group, GEANY_KEYS_VIEW_MESSAGEWINDOW, cb_func_menu_messagewindow,
 		0, 0, "menu_messagewindow", _("Toggle Messages Window"),
-		LW(menu_show_messages_window1));
-	keybindings_set_item(group, GEANY_KEYS_VIEW_SIDEBAR, NULL,
-		0, 0, "toggle_sidebar", _("Toggle Sidebar"), LW(menu_show_sidebar1));
-	keybindings_set_item(group, GEANY_KEYS_VIEW_ZOOMIN, NULL,
-		GDK_plus, GDK_CONTROL_MASK, "menu_zoomin", _("Zoom In"), LW(menu_zoom_in1));
-	keybindings_set_item(group, GEANY_KEYS_VIEW_ZOOMOUT, NULL,
-		GDK_minus, GDK_CONTROL_MASK, "menu_zoomout", _("Zoom Out"), LW(menu_zoom_out1));
-	keybindings_set_item(group, GEANY_KEYS_VIEW_ZOOMRESET, NULL,
-		GDK_0, GDK_CONTROL_MASK, "normal_size", _("Zoom Reset"), LW(normal_size1));
+		"menu_show_messages_window1");
+	add_kb(group, GEANY_KEYS_VIEW_SIDEBAR, NULL,
+		0, 0, "toggle_sidebar", _("Toggle Sidebar"), "menu_show_sidebar1");
+	add_kb(group, GEANY_KEYS_VIEW_ZOOMIN, NULL,
+		GDK_plus, GDK_CONTROL_MASK, "menu_zoomin", _("Zoom In"), "menu_zoom_in1");
+	add_kb(group, GEANY_KEYS_VIEW_ZOOMOUT, NULL,
+		GDK_minus, GDK_CONTROL_MASK, "menu_zoomout", _("Zoom Out"), "menu_zoom_out1");
+	add_kb(group, GEANY_KEYS_VIEW_ZOOMRESET, NULL,
+		GDK_0, GDK_CONTROL_MASK, "normal_size", _("Zoom Reset"), "normal_size1");
 
 	group = keybindings_get_core_group(GEANY_KEY_GROUP_FOCUS);
 
-	keybindings_set_item(group, GEANY_KEYS_FOCUS_EDITOR, NULL,
+	add_kb(group, GEANY_KEYS_FOCUS_EDITOR, NULL,
 		GDK_F2, 0, "switch_editor", _("Switch to Editor"), NULL);
-	keybindings_set_item(group, GEANY_KEYS_FOCUS_SEARCHBAR, NULL,
+	add_kb(group, GEANY_KEYS_FOCUS_SEARCHBAR, NULL,
 		GDK_F7, 0, "switch_search_bar", _("Switch to Search Bar"), NULL);
-	keybindings_set_item(group, GEANY_KEYS_FOCUS_MESSAGE_WINDOW, NULL,
+	add_kb(group, GEANY_KEYS_FOCUS_MESSAGE_WINDOW, NULL,
 		0, 0, "switch_message_window", _("Switch to Message Window"), NULL);
-	keybindings_set_item(group, GEANY_KEYS_FOCUS_COMPILER, NULL,
+	add_kb(group, GEANY_KEYS_FOCUS_COMPILER, NULL,
 		0, 0, "switch_compiler", _("Switch to Compiler"), NULL);
-	keybindings_set_item(group, GEANY_KEYS_FOCUS_MESSAGES, NULL,
+	add_kb(group, GEANY_KEYS_FOCUS_MESSAGES, NULL,
 		0, 0, "switch_messages", _("Switch to Messages"), NULL);
-	keybindings_set_item(group, GEANY_KEYS_FOCUS_SCRIBBLE, NULL,
+	add_kb(group, GEANY_KEYS_FOCUS_SCRIBBLE, NULL,
 		GDK_F6, 0, "switch_scribble", _("Switch to Scribble"), NULL);
-	keybindings_set_item(group, GEANY_KEYS_FOCUS_VTE, NULL,
+	add_kb(group, GEANY_KEYS_FOCUS_VTE, NULL,
 		GDK_F4, 0, "switch_vte", _("Switch to VTE"), NULL);
-	keybindings_set_item(group, GEANY_KEYS_FOCUS_SIDEBAR, NULL,
+	add_kb(group, GEANY_KEYS_FOCUS_SIDEBAR, NULL,
 		0, 0, "switch_sidebar", _("Switch to Sidebar"), NULL);
-	keybindings_set_item(group, GEANY_KEYS_FOCUS_SIDEBAR_SYMBOL_LIST, NULL,
+	add_kb(group, GEANY_KEYS_FOCUS_SIDEBAR_SYMBOL_LIST, NULL,
 		0, 0, "switch_sidebar_symbol_list", _("Switch to Sidebar Symbol List"), NULL);
-	keybindings_set_item(group, GEANY_KEYS_FOCUS_SIDEBAR_DOCUMENT_LIST, NULL,
+	add_kb(group, GEANY_KEYS_FOCUS_SIDEBAR_DOCUMENT_LIST, NULL,
 		0, 0, "switch_sidebar_doc_list", _("Switch to Sidebar Document List"), NULL);
 
 	group = keybindings_get_core_group(GEANY_KEY_GROUP_NOTEBOOK);
 
-	keybindings_set_item(group, GEANY_KEYS_NOTEBOOK_SWITCHTABLEFT, cb_func_switch_tableft,
+	add_kb(group, GEANY_KEYS_NOTEBOOK_SWITCHTABLEFT, cb_func_switch_tableft,
 		GDK_Page_Up, GDK_CONTROL_MASK, "switch_tableft", _("Switch to left document"), NULL);
-	keybindings_set_item(group, GEANY_KEYS_NOTEBOOK_SWITCHTABRIGHT, cb_func_switch_tabright,
+	add_kb(group, GEANY_KEYS_NOTEBOOK_SWITCHTABRIGHT, cb_func_switch_tabright,
 		GDK_Page_Down, GDK_CONTROL_MASK, "switch_tabright", _("Switch to right document"), NULL);
-	keybindings_set_item(group, GEANY_KEYS_NOTEBOOK_SWITCHTABLASTUSED, cb_func_switch_tablastused,
+	add_kb(group, GEANY_KEYS_NOTEBOOK_SWITCHTABLASTUSED, cb_func_switch_tablastused,
 		GDK_Tab, GDK_CONTROL_MASK, "switch_tablastused", _("Switch to last used document"), NULL);
-	keybindings_set_item(group, GEANY_KEYS_NOTEBOOK_MOVETABLEFT, cb_func_move_tab,
+	add_kb(group, GEANY_KEYS_NOTEBOOK_MOVETABLEFT, cb_func_move_tab,
 		GDK_Page_Up, GDK_CONTROL_MASK | GDK_SHIFT_MASK, "move_tableft",
 		_("Move document left"), NULL);
-	keybindings_set_item(group, GEANY_KEYS_NOTEBOOK_MOVETABRIGHT, cb_func_move_tab,
+	add_kb(group, GEANY_KEYS_NOTEBOOK_MOVETABRIGHT, cb_func_move_tab,
 		GDK_Page_Down, GDK_CONTROL_MASK | GDK_SHIFT_MASK, "move_tabright",
 		_("Move document right"), NULL);
-	keybindings_set_item(group, GEANY_KEYS_NOTEBOOK_MOVETABFIRST, cb_func_move_tab,
+	add_kb(group, GEANY_KEYS_NOTEBOOK_MOVETABFIRST, cb_func_move_tab,
 		0, 0, "move_tabfirst", _("Move document first"), NULL);
-	keybindings_set_item(group, GEANY_KEYS_NOTEBOOK_MOVETABLAST, cb_func_move_tab,
+	add_kb(group, GEANY_KEYS_NOTEBOOK_MOVETABLAST, cb_func_move_tab,
 		0, 0, "move_tablast", _("Move document last"), NULL);
 
 	group = keybindings_get_core_group(GEANY_KEY_GROUP_DOCUMENT);
 
-	keybindings_set_item(group, GEANY_KEYS_DOCUMENT_LINEWRAP, NULL,
-		0, 0, "menu_linewrap", _("Toggle Line wrapping"), LW(menu_line_wrapping1));
-	keybindings_set_item(group, GEANY_KEYS_DOCUMENT_LINEBREAK, NULL,
-		0, 0, "menu_linebreak", _("Toggle Line breaking"), LW(line_breaking1));
-	keybindings_set_item(group, GEANY_KEYS_DOCUMENT_REPLACETABS, NULL,
-		0, 0, "menu_replacetabs", _("Replace tabs by space"), LW(menu_replace_tabs));
-	keybindings_set_item(group, GEANY_KEYS_DOCUMENT_REPLACESPACES, NULL,
-		0, 0, "menu_replacespaces", _("Replace spaces by tabs"), LW(menu_replace_spaces));
-	keybindings_set_item(group, GEANY_KEYS_DOCUMENT_TOGGLEFOLD, NULL,
+	add_kb(group, GEANY_KEYS_DOCUMENT_LINEWRAP, NULL,
+		0, 0, "menu_linewrap", _("Toggle Line wrapping"), "menu_line_wrapping1");
+	add_kb(group, GEANY_KEYS_DOCUMENT_LINEBREAK, NULL,
+		0, 0, "menu_linebreak", _("Toggle Line breaking"), "line_breaking1");
+	add_kb(group, GEANY_KEYS_DOCUMENT_REPLACETABS, NULL,
+		0, 0, "menu_replacetabs", _("Replace tabs by space"), "menu_replace_tabs");
+	add_kb(group, GEANY_KEYS_DOCUMENT_REPLACESPACES, NULL,
+		0, 0, "menu_replacespaces", _("Replace spaces by tabs"), "menu_replace_spaces");
+	add_kb(group, GEANY_KEYS_DOCUMENT_TOGGLEFOLD, NULL,
 		0, 0, "menu_togglefold", _("Toggle current fold"), NULL);
-	keybindings_set_item(group, GEANY_KEYS_DOCUMENT_FOLDALL, NULL,
-		0, 0, "menu_foldall", _("Fold all"), LW(menu_fold_all1));
-	keybindings_set_item(group, GEANY_KEYS_DOCUMENT_UNFOLDALL, NULL,
-		0, 0, "menu_unfoldall", _("Unfold all"), LW(menu_unfold_all1));
-	keybindings_set_item(group, GEANY_KEYS_DOCUMENT_RELOADTAGLIST, NULL,
+	add_kb(group, GEANY_KEYS_DOCUMENT_FOLDALL, NULL,
+		0, 0, "menu_foldall", _("Fold all"), "menu_fold_all1");
+	add_kb(group, GEANY_KEYS_DOCUMENT_UNFOLDALL, NULL,
+		0, 0, "menu_unfoldall", _("Unfold all"), "menu_unfold_all1");
+	add_kb(group, GEANY_KEYS_DOCUMENT_RELOADTAGLIST, NULL,
 		GDK_r, GDK_SHIFT_MASK | GDK_CONTROL_MASK, "reloadtaglist", _("Reload symbol list"), NULL);
-	keybindings_set_item(group, GEANY_KEYS_DOCUMENT_REMOVE_MARKERS, NULL,
-		0, 0, "remove_markers", _("Remove Markers"), LW(remove_markers1));
-	keybindings_set_item(group, GEANY_KEYS_DOCUMENT_REMOVE_ERROR_INDICATORS, NULL,
-		0, 0, "remove_error_indicators", _("Remove Error Indicators"), LW(menu_remove_indicators1));
-	keybindings_set_item(group, GEANY_KEYS_DOCUMENT_REMOVE_MARKERS_INDICATORS, NULL,
+	add_kb(group, GEANY_KEYS_DOCUMENT_REMOVE_MARKERS, NULL,
+		0, 0, "remove_markers", _("Remove Markers"), "remove_markers1");
+	add_kb(group, GEANY_KEYS_DOCUMENT_REMOVE_ERROR_INDICATORS, NULL,
+		0, 0, "remove_error_indicators", _("Remove Error Indicators"), "menu_remove_indicators1");
+	add_kb(group, GEANY_KEYS_DOCUMENT_REMOVE_MARKERS_INDICATORS, NULL,
 		0, 0, "remove_markers_and_indicators", _("Remove Markers and Error Indicators"), NULL);
 
 	group = keybindings_get_core_group(GEANY_KEY_GROUP_BUILD);
 
-	keybindings_set_item(group, GEANY_KEYS_BUILD_COMPILE, NULL,
+	add_kb(group, GEANY_KEYS_BUILD_COMPILE, NULL,
 		GDK_F8, 0, "build_compile", _("Compile"), NULL);
-	keybindings_set_item(group, GEANY_KEYS_BUILD_LINK, NULL,
+	add_kb(group, GEANY_KEYS_BUILD_LINK, NULL,
 		GDK_F9, 0, "build_link", _("Build"), NULL);
-	keybindings_set_item(group, GEANY_KEYS_BUILD_MAKE, NULL,
+	add_kb(group, GEANY_KEYS_BUILD_MAKE, NULL,
 		GDK_F9, GDK_SHIFT_MASK, "build_make", _("Make all"), NULL);
-	keybindings_set_item(group, GEANY_KEYS_BUILD_MAKEOWNTARGET, NULL,
+	add_kb(group, GEANY_KEYS_BUILD_MAKEOWNTARGET, NULL,
 		GDK_F9, GDK_SHIFT_MASK | GDK_CONTROL_MASK, "build_makeowntarget",
 		_("Make custom target"), NULL);
-	keybindings_set_item(group, GEANY_KEYS_BUILD_MAKEOBJECT, NULL,
+	add_kb(group, GEANY_KEYS_BUILD_MAKEOBJECT, NULL,
 		GDK_F8, GDK_SHIFT_MASK, "build_makeobject", _("Make object"), NULL);
-	keybindings_set_item(group, GEANY_KEYS_BUILD_NEXTERROR, NULL,
+	add_kb(group, GEANY_KEYS_BUILD_NEXTERROR, NULL,
 		0, 0, "build_nexterror", _("Next error"), NULL);
-	keybindings_set_item(group, GEANY_KEYS_BUILD_PREVIOUSERROR, NULL,
+	add_kb(group, GEANY_KEYS_BUILD_PREVIOUSERROR, NULL,
 		0, 0, "build_previouserror", _("Previous error"), NULL);
-	keybindings_set_item(group, GEANY_KEYS_BUILD_RUN, NULL,
+	add_kb(group, GEANY_KEYS_BUILD_RUN, NULL,
 		GDK_F5, 0, "build_run", _("Run"), NULL);
-	keybindings_set_item(group, GEANY_KEYS_BUILD_OPTIONS, NULL,
+	add_kb(group, GEANY_KEYS_BUILD_OPTIONS, NULL,
 		0, 0, "build_options", _("Build options"), NULL);
 
 	group = keybindings_get_core_group(GEANY_KEY_GROUP_TOOLS);
 
-	keybindings_set_item(group, GEANY_KEYS_TOOLS_OPENCOLORCHOOSER, cb_func_menu_opencolorchooser,
-		0, 0, "menu_opencolorchooser", _("Show Color Chooser"), LW(menu_choose_color1));
+	add_kb(group, GEANY_KEYS_TOOLS_OPENCOLORCHOOSER, cb_func_menu_opencolorchooser,
+		0, 0, "menu_opencolorchooser", _("Show Color Chooser"), "menu_choose_color1");
 
 	group = keybindings_get_core_group(GEANY_KEY_GROUP_HELP);
 
-	keybindings_set_item(group, GEANY_KEYS_HELP_HELP, cb_func_menu_help,
-		GDK_F1, 0, "menu_help", _("Help"), LW(help1));
+	add_kb(group, GEANY_KEYS_HELP_HELP, cb_func_menu_help,
+		GDK_F1, 0, "menu_help", _("Help"), "help1");
 }
 
 
