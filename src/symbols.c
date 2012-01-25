@@ -1068,12 +1068,12 @@ static gchar *get_symbol_tooltip(GeanyDocument *doc, const TMTag *tag)
 		! utils_str_equal(doc->encoding, "UTF-8") &&
 		! utils_str_equal(doc->encoding, "None"))
 	{
-		setptr(utf8_name,
+		SETPTR(utf8_name,
 			encodings_convert_to_utf8_from_charset(utf8_name, -1, doc->encoding, TRUE));
 	}
 
 	if (utf8_name != NULL)
-		setptr(utf8_name, g_markup_escape_text(utf8_name, -1));
+		SETPTR(utf8_name, g_markup_escape_text(utf8_name, -1));
 
 	return utf8_name;
 }
@@ -1740,7 +1740,7 @@ static GHashTable *init_user_tags(void)
 	}
 	file_list = utils_get_file_list_full(dir, TRUE, TRUE, NULL);
 
-	setptr(dir, utils_build_path(app->datadir, "tags", NULL));
+	SETPTR(dir, utils_build_path(app->datadir, "tags", NULL));
 	list = utils_get_file_list_full(dir, TRUE, TRUE, NULL);
 	g_free(dir);
 

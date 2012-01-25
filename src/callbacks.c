@@ -468,8 +468,8 @@ G_MODULE_EXPORT void on_toolbutton_save_clicked(GtkAction *action, gpointer user
 /* store text, clear search flags so we can use Search->Find Next/Previous */
 static void setup_find(const gchar *text, gboolean backwards)
 {
-	setptr(search_data.text, g_strdup(text));
-	setptr(search_data.original_text, g_strdup(text));
+	SETPTR(search_data.text, g_strdup(text));
+	SETPTR(search_data.original_text, g_strdup(text));
 	search_data.flags = 0;
 	search_data.backwards = backwards;
 	search_data.search_bar = TRUE;
@@ -1287,7 +1287,7 @@ G_MODULE_EXPORT void on_insert_date_activate(GtkMenuItem *menuitem, gpointer use
 				"You can use any conversion specifiers which can be used with the ANSI C strftime function."),
 				ui_prefs.custom_date_format);
 		if (str)
-			setptr(ui_prefs.custom_date_format, str);
+			SETPTR(ui_prefs.custom_date_format, str);
 		return;
 	}
 
@@ -1603,7 +1603,7 @@ G_MODULE_EXPORT void on_menu_open_selected_file1_activate(GtkMenuItem *menuitem,
 	g_return_if_fail(doc != NULL);
 
 	sel = editor_get_default_selection(doc->editor, TRUE, wc);
-	setptr(sel, utils_get_locale_from_utf8(sel));
+	SETPTR(sel, utils_get_locale_from_utf8(sel));
 
 	if (sel != NULL)
 	{
@@ -1616,7 +1616,7 @@ G_MODULE_EXPORT void on_menu_open_selected_file1_activate(GtkMenuItem *menuitem,
 			gchar *path;
 
 			path = utils_get_current_file_dir_utf8();
-			setptr(path, utils_get_locale_from_utf8(path));
+			SETPTR(path, utils_get_locale_from_utf8(path));
 			if (!path)
 				path = g_get_current_dir();
 
@@ -1626,17 +1626,17 @@ G_MODULE_EXPORT void on_menu_open_selected_file1_activate(GtkMenuItem *menuitem,
 				app->project != NULL && NZV(app->project->base_path))
 			{
 				/* try the project's base path */
-				setptr(path, project_get_base_path());
-				setptr(path, utils_get_locale_from_utf8(path));
-				setptr(filename, g_build_path(G_DIR_SEPARATOR_S, path, sel, NULL));
+				SETPTR(path, project_get_base_path());
+				SETPTR(path, utils_get_locale_from_utf8(path));
+				SETPTR(filename, g_build_path(G_DIR_SEPARATOR_S, path, sel, NULL));
 			}
 			g_free(path);
 #ifdef G_OS_UNIX
 			if (! g_file_test(filename, G_FILE_TEST_EXISTS))
-				setptr(filename, g_build_path(G_DIR_SEPARATOR_S, "/usr/local/include", sel, NULL));
+				SETPTR(filename, g_build_path(G_DIR_SEPARATOR_S, "/usr/local/include", sel, NULL));
 
 			if (! g_file_test(filename, G_FILE_TEST_EXISTS))
-				setptr(filename, g_build_path(G_DIR_SEPARATOR_S, "/usr/include", sel, NULL));
+				SETPTR(filename, g_build_path(G_DIR_SEPARATOR_S, "/usr/include", sel, NULL));
 #endif
 		}
 
@@ -1644,7 +1644,7 @@ G_MODULE_EXPORT void on_menu_open_selected_file1_activate(GtkMenuItem *menuitem,
 			document_open_file(filename, FALSE, NULL, NULL);
 		else
 		{
-			setptr(sel, utils_get_utf8_from_locale(sel));
+			SETPTR(sel, utils_get_utf8_from_locale(sel));
 			ui_set_statusbar(TRUE, _("Could not open file %s (File not found)"), sel);
 		}
 

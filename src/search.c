@@ -1877,7 +1877,7 @@ static gint find_regex(ScintillaObject *sci, guint pos, GRegex *regex)
 	g_return_val_if_fail(pos <= (guint)sci_get_length(sci), FALSE);
 
 	/* clear old match */
-	setptr(regex_match_text, NULL);
+	SETPTR(regex_match_text, NULL);
 
 	/* Warning: any SCI calls will invalidate 'text' after calling SCI_GETCHARACTERPOINTER */
 	text = (void*)scintilla_send_message(sci, SCI_GETCHARACTERPOINTER, 0, 0);

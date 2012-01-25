@@ -107,7 +107,7 @@ static gboolean backupcopy_set_backup_dir(const gchar *utf8_dir)
 	}
 	/** TODO add utils_is_file_writeable() to the plugin API and make use of it **/
 
-	setptr(backupcopy_backup_dir, tmp);
+	SETPTR(backupcopy_backup_dir, tmp);
 
 	return TRUE;
 }
@@ -259,7 +259,7 @@ static void instantsave_document_new_cb(GObject *obj, GeanyDocument *doc, gpoint
 
 		if (ft != NULL)
 			/* add the filetype's default extension to the new filename */
-			setptr(new_filename, g_strconcat(new_filename, ".", ft->extension, NULL));
+			SETPTR(new_filename, g_strconcat(new_filename, ".", ft->extension, NULL));
 
 		doc->file_name = new_filename;
 
@@ -454,7 +454,7 @@ static void configure_response_cb(GtkDialog *dialog, gint response, G_GNUC_UNUSE
 
 		g_key_file_set_integer(config, "backupcopy", "dir_levels", backupcopy_dir_levels);
 		g_key_file_set_string(config, "backupcopy", "time_fmt", text_time);
-		setptr(backupcopy_time_fmt, g_strdup(text_time));
+		SETPTR(backupcopy_time_fmt, g_strdup(text_time));
 		if (enable_backupcopy)
 		{
 			if (NZV(text_dir) && backupcopy_set_backup_dir(text_dir))

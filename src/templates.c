@@ -94,7 +94,7 @@ static void read_template(const gchar *name, gint id)
 
 	/* try system if user template doesn't exist */
 	if (!g_file_test(fname, G_FILE_TEST_EXISTS))
-		setptr(fname, g_build_path(G_DIR_SEPARATOR_S, app->datadir,
+		SETPTR(fname, g_build_path(G_DIR_SEPARATOR_S, app->datadir,
 			GEANY_TEMPLATES_SUBDIR, name, NULL));
 
 	templates[id] = read_file(fname);
@@ -199,7 +199,7 @@ on_new_with_file_template(GtkMenuItem *menuitem, G_GNUC_UNUSED gpointer user_dat
 	gchar *path;
 
 	ft = filetypes_detect_from_extension(fname);
-	setptr(fname, utils_get_locale_from_utf8(fname));
+	SETPTR(fname, utils_get_locale_from_utf8(fname));
 
 	/* fname is just the basename from the menu item, so prepend the custom files path */
 	path = g_build_path(G_DIR_SEPARATOR_S, app->configdir, GEANY_TEMPLATES_SUBDIR,
@@ -220,7 +220,7 @@ on_new_with_file_template(GtkMenuItem *menuitem, G_GNUC_UNUSED gpointer user_dat
 	}
 	else
 	{
-		setptr(fname, utils_get_utf8_from_locale(fname));
+		SETPTR(fname, utils_get_utf8_from_locale(fname));
 		ui_set_statusbar(TRUE, _("Could not find file '%s'."), fname);
 	}
 	g_free(template);
@@ -391,7 +391,7 @@ static void make_comment_block(GString *comment_text, gint filetype_idx, guint i
 	if (NZV(frame_start) && frame_start[1] == '*')
 	{
 		/* prefix the string with a space */
-		setptr(frame_end, g_strconcat(" ", frame_end, NULL));
+		SETPTR(frame_end, g_strconcat(" ", frame_end, NULL));
 		line_prefix = " *";
 	}
 

@@ -156,8 +156,8 @@ GeanyKeyBinding *keybindings_set_item(GeanyKeyGroup *group, gsize key_id,
 	if (group->plugin)
 	{
 		/* some plugins e.g. GeanyLua need these fields duplicated */
-		setptr(kb->name, g_strdup(kf_name));
-		setptr(kb->label, g_strdup(label));
+		SETPTR(kb->name, g_strdup(kf_name));
+		SETPTR(kb->label, g_strdup(label));
 	}
 	else
 	{

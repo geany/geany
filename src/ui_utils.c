@@ -960,7 +960,7 @@ static gboolean have_tango_icon_theme(void)
 		gchar *theme_name;
 
 		g_object_get(G_OBJECT(gtk_settings_get_default()), "gtk-icon-theme-name", &theme_name, NULL);
-		setptr(theme_name, g_utf8_strdown(theme_name, -1));
+		SETPTR(theme_name, g_utf8_strdown(theme_name, -1));
 
 		result = (strstr(theme_name, "tango") != NULL);
 		checked = TRUE;

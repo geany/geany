@@ -271,7 +271,7 @@ void editor_snippets_init(void)
 
 	/* check for old autocomplete.conf files (backwards compatibility) */
 	if (! g_file_test(userconfigfile, G_FILE_TEST_IS_REGULAR))
-		setptr(userconfigfile,
+		SETPTR(userconfigfile,
 			g_strconcat(app->configdir, G_DIR_SEPARATOR_S, "autocomplete.conf", NULL));
 
 	/* load the actual config files */
@@ -2288,7 +2288,7 @@ static void fix_indentation(GeanyEditor *editor, GString *buf)
 		gchar *str;
 
 		/* for tabs+spaces mode we want the real tab width, not indent width */
-		setptr(whitespace, g_strnfill(sci_get_tab_width(editor->sci), ' '));
+		SETPTR(whitespace, g_strnfill(sci_get_tab_width(editor->sci), ' '));
 		str = g_strdup_printf("^\t*(%s)", whitespace);
 
 		regex = g_regex_new(str, cflags, 0, NULL);
@@ -2355,7 +2355,7 @@ void editor_insert_text_block(GeanyEditor *editor, const gchar *text, gint inser
 		gchar *whitespace;
 
 		whitespace = g_strnfill(newline_indent_size, ' ');
-		setptr(whitespace, g_strconcat(nl, whitespace, NULL));
+		SETPTR(whitespace, g_strconcat(nl, whitespace, NULL));
 		utils_string_replace_all(buf, nl, whitespace);
 		g_free(whitespace);
 	}

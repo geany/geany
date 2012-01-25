@@ -991,7 +991,7 @@ on_prefs_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 
 		/* Editor settings */
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "entry_toggle_mark");
-		setptr(editor_prefs.comment_toggle_mark,
+		SETPTR(editor_prefs.comment_toggle_mark,
 			gtk_editable_get_chars(GTK_EDITABLE(widget), 0, -1));
 
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "spin_long_line");
@@ -1262,7 +1262,7 @@ static void on_color_button_choose_cb(GtkColorButton *widget, gpointer user_data
 	GdkColor color;
 
 	gtk_color_button_get_color(widget, &color);
-	setptr(editor_prefs.long_line_color, utils_get_hex_from_color(&color));
+	SETPTR(editor_prefs.long_line_color, utils_get_hex_from_color(&color));
 }
 
 
@@ -1278,7 +1278,7 @@ static void on_prefs_font_choosed(GtkFontButton *widget, gpointer user_data)
 			if (strcmp(fontbtn, interface_prefs.tagbar_font) == 0)
 				break;
 
-			setptr(interface_prefs.tagbar_font, g_strdup(fontbtn));
+			SETPTR(interface_prefs.tagbar_font, g_strdup(fontbtn));
 			for (i = 0; i < documents_array->len; i++)
 			{
 				GeanyDocument *doc = documents[i];
@@ -1296,7 +1296,7 @@ static void on_prefs_font_choosed(GtkFontButton *widget, gpointer user_data)
 		{
 			if (strcmp(fontbtn, interface_prefs.msgwin_font) == 0)
 				break;
-			setptr(interface_prefs.msgwin_font, g_strdup(fontbtn));
+			SETPTR(interface_prefs.msgwin_font, g_strdup(fontbtn));
 			ui_widget_modify_font_from_string(msgwindow.tree_compiler, interface_prefs.msgwin_font);
 			ui_widget_modify_font_from_string(msgwindow.tree_msg, interface_prefs.msgwin_font);
 			ui_widget_modify_font_from_string(msgwindow.tree_status, interface_prefs.msgwin_font);

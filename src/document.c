@@ -1136,7 +1136,7 @@ GeanyDocument *document_open_file_full(GeanyDocument *doc, const gchar *filename
 			g_return_val_if_fail(doc != NULL, NULL); /* really should not happen */
 
 			/* file exists on disk, set real_path */
-			setptr(doc->real_path, tm_get_real_path(locale_filename));
+			SETPTR(doc->real_path, tm_get_real_path(locale_filename));
 
 			doc->priv->is_remote = utils_is_remote_path(locale_filename);
 			monitor_file_setup(doc);
@@ -1446,10 +1446,10 @@ gboolean document_save_file_as(GeanyDocument *doc, const gchar *utf8_fname)
 	g_return_val_if_fail(doc != NULL, FALSE);
 
 	if (utf8_fname != NULL)
-		setptr(doc->file_name, g_strdup(utf8_fname));
+		SETPTR(doc->file_name, g_strdup(utf8_fname));
 
 	/* reset real path, it's retrieved again in document_save() */
-	setptr(doc->real_path, NULL);
+	SETPTR(doc->real_path, NULL);
 
 	/* detect filetype */
 	if (doc->file_type->id == GEANY_FILETYPES_NONE)
@@ -1768,7 +1768,7 @@ gboolean document_save_file(GeanyDocument *doc, gboolean force)
 
 		if (!file_prefs.use_safe_file_saving)
 		{
-			setptr(errmsg,
+			SETPTR(errmsg,
 				g_strdup_printf(_("%s\n\nThe file on disk may now be truncated!"), errmsg));
 		}
 		dialogs_show_msgbox_with_secondary(GTK_MESSAGE_ERROR, _("Error saving file."), errmsg);
@@ -2872,7 +2872,7 @@ static gboolean monitor_resave_missing_file(GeanyDocument *doc)
 		/* file is missing - set unsaved state */
 		document_set_text_changed(doc, TRUE);
 		/* don't prompt more than once */
-		setptr(doc->real_path, NULL);
+		SETPTR(doc->real_path, NULL);
 	}
 
 	return want_reload;

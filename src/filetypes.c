@@ -689,7 +689,7 @@ static void setup_config_file_menus(void)
 
 	f = utils_build_path(app->configdir, "filetype_extensions.conf", NULL);
 	ui_add_config_file_menu_item(f, NULL, NULL);
-	setptr(f, utils_build_path(app->configdir, GEANY_FILEDEFS_SUBDIR, "filetypes.common", NULL));
+	SETPTR(f, utils_build_path(app->configdir, GEANY_FILEDEFS_SUBDIR, "filetypes.common", NULL));
 	ui_add_config_file_menu_item(f, NULL, NULL);
 	g_free(f);
 
@@ -806,13 +806,13 @@ static GeanyFiletype *check_builtin_filenames(const gchar *utf8_filename)
 #else
 	lfn = g_strdup(utf8_filename);
 #endif
-	setptr(lfn, utils_get_locale_from_utf8(lfn));
+	SETPTR(lfn, utils_get_locale_from_utf8(lfn));
 
 	path = utils_build_path(app->configdir, GEANY_FILEDEFS_SUBDIR, "filetypes.", NULL);
 	if (g_str_has_prefix(lfn, path))
 		found = TRUE;
 
-	setptr(path, utils_build_path(app->datadir, "filetypes.", NULL));
+	SETPTR(path, utils_build_path(app->datadir, "filetypes.", NULL));
 	if (g_str_has_prefix(lfn, path))
 		found = TRUE;
 
@@ -837,7 +837,7 @@ GeanyFiletype *filetypes_detect_from_extension(const gchar *utf8_filename)
 	base_filename = g_path_get_basename(utf8_filename);
 #ifdef G_OS_WIN32
 	/* use lower case basename */
-	setptr(base_filename, g_utf8_strdown(base_filename, -1));
+	SETPTR(base_filename, g_utf8_strdown(base_filename, -1));
 #endif
 
 	ft = filetypes_find(match_basename, base_filename);
@@ -1183,31 +1183,31 @@ static void load_settings(guint ft_id, GKeyFile *config, GKeyFile *configh)
 	result = utils_get_setting(string, configh, config, "settings", "extension", NULL);
 	if (result != NULL)
 	{
-		setptr(filetypes[ft_id]->extension, result);
+		SETPTR(filetypes[ft_id]->extension, result);
 	}
 
 	/* read comment notes */
 	result = utils_get_setting(string, configh, config, "settings", "comment_open", NULL);
 	if (result != NULL)
 	{
-		setptr(filetypes[ft_id]->comment_open, result);
+		SETPTR(filetypes[ft_id]->comment_open, result);
 	}
 
 	result = utils_get_setting(string, configh, config, "settings", "comment_close", NULL);
 	if (result != NULL)
 	{
-		setptr(filetypes[ft_id]->comment_close, result);
+		SETPTR(filetypes[ft_id]->comment_close, result);
 	}
 
 	result = utils_get_setting(string, configh, config, "settings", "comment_single", NULL);
 	if (result != NULL)
 	{
-		setptr(filetypes[ft_id]->comment_single, result);
+		SETPTR(filetypes[ft_id]->comment_single, result);
 	}
 	/* import correctly filetypes that use old-style single comments */
 	else if (! NZV(filetypes[ft_id]->comment_close))
 	{
-		setptr(filetypes[ft_id]->comment_single, filetypes[ft_id]->comment_open);
+		SETPTR(filetypes[ft_id]->comment_single, filetypes[ft_id]->comment_open);
 		filetypes[ft_id]->comment_open = NULL;
 	}
 
@@ -1218,7 +1218,7 @@ static void load_settings(guint ft_id, GKeyFile *config, GKeyFile *configh)
 	result = utils_get_setting(string, configh, config, "settings", "context_action_cmd", NULL);
 	if (result != NULL)
 	{
-		setptr(filetypes[ft_id]->context_action_cmd, result);
+		SETPTR(filetypes[ft_id]->context_action_cmd, result);
 	}
 
 	result = utils_get_setting(string, configh, config, "settings", "tag_parser", NULL);
@@ -1393,7 +1393,7 @@ void filetypes_load_config(guint ft_id, gboolean reload)
 		f = filetypes_get_filename(ft, FALSE);
 		load_system_keyfile(config, f, G_KEY_FILE_KEEP_COMMENTS, ft);
 
-		setptr(f, filetypes_get_filename(ft, TRUE));
+		SETPTR(f, filetypes_get_filename(ft, TRUE));
 		g_key_file_load_from_file(config_home, f, G_KEY_FILE_KEEP_COMMENTS, NULL);
 		g_free(f);
 	}
@@ -1621,7 +1621,7 @@ static void convert_filetype_extensions_to_lower_case(gchar **patterns, gsize le
 	guint i;
 	for (i = 0; i < len; i++)
 	{
-		setptr(patterns[i], g_ascii_strdown(patterns[i], -1));
+		SETPTR(patterns[i], g_ascii_strdown(patterns[i], -1));
 	}
 }
 #endif
@@ -1668,7 +1668,7 @@ static void read_group(GKeyFile *config, const gchar *group_name, gint group_id)
 			if (ft->priv->custom &&
 				(group_id == GEANY_FILETYPE_GROUP_COMPILED || group_id == GEANY_FILETYPE_GROUP_SCRIPT))
 			{
-				setptr(ft->title, NULL);
+				SETPTR(ft->title, NULL);
 				filetype_make_title(ft, TITLE_SOURCE_FILE);
 			}
 		}

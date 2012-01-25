@@ -238,8 +238,8 @@ static void update_filename_label(void)
 		}
 		else
 		{
-			setptr(basename, g_markup_printf_escaped ("\n%s", basename));
-			setptr(msg, g_strconcat(msg, basename, NULL));
+			SETPTR(basename, g_markup_printf_escaped ("\n%s", basename));
+			SETPTR(msg, g_strconcat(msg, basename, NULL));
 		}
 		g_free(basename);
 	}

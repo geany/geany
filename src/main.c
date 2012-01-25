@@ -721,7 +721,7 @@ static gint setup_config_dir(void)
 	gint mkdir_result = 0;
 
 	/* convert configdir to locale encoding to avoid troubles */
-	setptr(app->configdir, utils_get_locale_from_utf8(app->configdir));
+	SETPTR(app->configdir, utils_get_locale_from_utf8(app->configdir));
 
 	mkdir_result = create_config_dir();
 	if (mkdir_result != 0)
@@ -736,7 +736,7 @@ static gint setup_config_dir(void)
 	}
 	/* make configdir a real path */
 	if (g_file_test(app->configdir, G_FILE_TEST_EXISTS))
-		setptr(app->configdir, tm_get_real_path(app->configdir));
+		SETPTR(app->configdir, tm_get_real_path(app->configdir));
 
 	return mkdir_result;
 }
@@ -816,7 +816,7 @@ static gboolean open_cl_files(gint argc, gchar **argv)
 
 #ifdef G_OS_WIN32
 		/* It seems argv elements are encoded in CP1252 on a German Windows */
-		setptr(filename, g_locale_to_utf8(filename, -1, NULL, NULL, NULL));
+		SETPTR(filename, g_locale_to_utf8(filename, -1, NULL, NULL, NULL));
 #endif
 		if (filename && ! main_handle_filename(filename))
 		{
