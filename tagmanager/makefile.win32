@@ -9,7 +9,7 @@ RM = del
 
 COMPLIB=tagmanager.a
 
-REGEX_DEFINES = -DHAVE_REGCOMP -DREGEX_MALLOC -DSTDC_HEADERS=1
+REGEX_DEFINES = -DHAVE_REGCOMP -DSTDC_HEADERS=1
 
 GTK_INCLUDES= \
 	-I$(PREFIX)/include/gtk-2.0 \
@@ -45,7 +45,7 @@ actionscript.o nsis.o objc.o \
 haskell.o haxe.o html.o python.o lregex.o rest.o sh.o ctags.o entry.o get.o keyword.o nestlevel.o \
 options.o \
 parse.o basic.o read.o sort.o strlist.o latex.o markdown.o matlab.o docbook.o tcl.o ruby.o asm.o sql.o txt2tags.o css.o \
-vstring.o regex.o tm_workspace.o tm_work_object.o tm_source_file.o tm_project.o tm_tag.o \
+vstring.o tm_workspace.o tm_work_object.o tm_source_file.o tm_project.o tm_tag.o \
 tm_symbol.o tm_file_entry.o tm_tagmanager.o r.o
 	$(AR) rc $@ $^
 	$(RANLIB) $@
