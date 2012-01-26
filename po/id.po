@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: geany 0.21\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-01-26 11:33+0100\n"
+"POT-Creation-Date: 2012-01-26 11:41+0100\n"
 "PO-Revision-Date: 2012-01-24 11:53+0700\n"
 "Last-Translator: Fajar Wahyu <fajarwahyuabdillah@gmail.com>\n"
 "Language-Team: Indonesian <>\n"
@@ -2432,7 +2432,7 @@ msgid "Do you really want to quit?"
 msgstr "Serius mau keluar?"
 
 #: ../src/callbacks.c:205
-#, c-format
+#, fuzzy, c-format
 msgid "%d file saved."
 msgid_plural "%d files saved."
 msgstr[0] "%d file tersimpan."
@@ -2933,7 +2933,7 @@ msgid "No matches found for \"%s\"."
 msgstr "Kesamaan tidak ditemukan untuk pencarian \"%s\"."
 
 #: ../src/document.c:2039
-#, c-format
+#, fuzzy, c-format
 msgid "%s: replaced %d occurrence of \"%s\" with \"%s\"."
 msgid_plural "%s: replaced %d occurrences of \"%s\" with \"%s\"."
 msgstr[0] "%s: menggantikan %d temuan dari \"%s\" menjadi \"%s\"."
@@ -4381,7 +4381,7 @@ msgid "Other options to pass to Grep"
 msgstr "Opsi lain untuk diberikan pada Grep"
 
 #: ../src/search.c:1282 ../src/search.c:2088 ../src/search.c:2091
-#, c-format
+#, fuzzy, c-format
 msgid "Found %d match for \"%s\"."
 msgid_plural "Found %d matches for \"%s\"."
 msgstr[0] "Ditemukan %d untuk \"%s\"."
@@ -4426,7 +4426,7 @@ msgid "Search failed."
 msgstr "Pencarian gagal."
 
 #: ../src/search.c:1809
-#, c-format
+#, fuzzy, c-format
 msgid "Search completed with %d match."
 msgid_plural "Search completed with %d matches."
 msgstr[0] "Pencarian selesai dimana ada %d yang ditemukan."
@@ -5599,7 +5599,7 @@ msgid "Backup Copy: File could not be saved (%s)."
 msgstr "Copy-an Backup: File tidak bisa disimpan (%s)."
 
 #: ../plugins/saveactions.c:313
-#, c-format
+#, fuzzy, c-format
 msgid "Autosave: Saved %d file automatically."
 msgid_plural "Autosave: Saved %d files automatically."
 msgstr[0] "Simpan Otomatis: Menyimpan file %d secara otomatis."
