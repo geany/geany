@@ -866,13 +866,9 @@ static void load_settings(void)
 
 void main_load_project_from_command_line(const gchar *locale_filename, gboolean use_session)
 {
-	gchar *pfile = NULL;
+	gchar *pfile;
 
-	if (utils_is_uri(locale_filename))
-		pfile = utils_get_path_from_uri(locale_filename);
-	else
-		pfile = g_strdup(locale_filename);
-
+	pfile = utils_get_path_from_uri(locale_filename);
 	if (pfile != NULL)
 	{
 		if (use_session)
