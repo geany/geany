@@ -1246,10 +1246,11 @@ void document_open_file_list(const gchar *data, gsize length)
 
 	list = g_strsplit(data, utils_get_eol_char(utils_get_line_endings(data, length)), 0);
 
-	for (i = 0; list[i] != NULL; i++)
+	/* stop at the end or first empty item, because last item is empty but not null */
+	for (i = 0; list[i] != NULL && list[i][0] != '\0'; i++)
 	{
-		filename = g_filename_from_uri(list[i], NULL, NULL);
-		if (G_UNLIKELY(filename == NULL))
+		filename = utils_get_path_from_uri(list[i]);
+		if (filename == NULL)
 			continue;
 		document_open_file(filename, FALSE, NULL, NULL);
 		g_free(filename);
