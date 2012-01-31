@@ -1037,7 +1037,6 @@ gint main(gint argc, gchar **argv)
 	sidebar_init();
 	load_settings();	/* load keyfile */
 
-	highlighting_init();
 	msgwin_init();
 	build_init();
 	ui_create_insert_menu_items();
@@ -1045,6 +1044,9 @@ gint main(gint argc, gchar **argv)
 	keybindings_init();
 	notebook_init();
 	filetypes_init();
+	/* depends on filetypes_array being not NULL so must be after
+	 * filetypes_init(). */
+	highlighting_init();
 	templates_init();
 	navqueue_init();
 	document_init_doclist();

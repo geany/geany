@@ -1172,10 +1172,6 @@ on_color_scheme_clicked(GtkMenuItem *menuitem, gpointer user_data)
 	gchar *fname;
 	gchar *path;
 
-	/* prevent callback on setting initial value */
-	if (!GTK_WIDGET_MAPPED(menuitem))
-		return;
-
 	/* check if default item */
 	if (!user_data)
 	{
@@ -1255,14 +1251,15 @@ static void add_color_scheme_item(GtkWidget *menu, const gchar *fname)
 		g_key_file_free(skeyfile);
 	}
 
+	g_signal_connect(item, "activate",
+		G_CALLBACK(on_color_scheme_clicked), GINT_TO_POINTER(fname != NULL));
+
 	group = gtk_radio_menu_item_get_group(GTK_RADIO_MENU_ITEM(item));
 	if (utils_str_equal(editor_prefs.color_scheme, fname))
 		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(item), TRUE);
 
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
-	g_signal_connect(item, "activate",
-		G_CALLBACK(on_color_scheme_clicked), GINT_TO_POINTER(fname != NULL));
 }
 
 
