@@ -2091,17 +2091,23 @@ static void join_lines(GeanyEditor *editor)
 }
 
 
+/* deselect last newline of selection, if any */
+static void sci_deselect_last_newline(ScintillaObject *sci)
+{
+	gint start, end;
+
+	start = sci_get_selection_start(sci);
+	end = sci_get_selection_end(sci);
+	if (end > start && sci_get_col_from_position(sci, end) == 0)
+		sci_set_selection(sci, start, end-1);
+}
+
+
 static void split_lines(GeanyEditor *editor, gint column)
 {
-	gint start, indent, linescount, i, end;
-	gchar c;
-	ScintillaObject *sci = editor->sci;
+	gint start, indent, linescount, i;
 
-	/* don't include trailing newlines */
-	end = sci_get_selection_end(sci);
-	while ((c = sci_get_char_at(sci, end - 1)) == '\n' || c == '\r') end--;
-	sci_set_selection_end(sci, end);
-
+	sci_deselect_last_newline(editor->sci);
 	start = sci_get_line_from_position(editor->sci,
 		sci_get_selection_start(editor->sci));
 
