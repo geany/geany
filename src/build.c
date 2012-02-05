@@ -1222,7 +1222,8 @@ static gboolean build_create_shellscript(const gchar *fname, const gchar *cmd, g
 
 	if (fclose(fp) != 0)
 	{
-		set_file_error_from_errno(error, errno, "Failed to close file");
+		if (error && ! *error) /* don't set error twice */
+			set_file_error_from_errno(error, errno, "Failed to close file");
 		success = FALSE;
 	}
 
