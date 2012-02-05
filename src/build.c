@@ -121,7 +121,7 @@ static guint build_items_count = 9;
 static void build_exit_cb(GPid child_pid, gint status, gpointer user_data);
 static gboolean build_iofunc(GIOChannel *ioc, GIOCondition cond, gpointer data);
 #endif
-static gboolean build_create_shellscript(const gchar *fname, const gchar *cmd, gboolean autoclose);
+static gboolean build_create_shellscript(const gchar *fname, const gchar *cmd, gboolean autoclose, GError **error);
 static GPid build_spawn_cmd(GeanyDocument *doc, const gchar *cmd, const gchar *dir);
 static void set_stop_button(gboolean stop);
 static void run_exit_cb(GPid child_pid, gint status, gpointer user_data);
@@ -789,6 +789,7 @@ static gchar *prepare_run_script(GeanyDocument *doc, gchar **vte_cmd_nonscript, 
 	gboolean result = FALSE;
 	gchar *tmp;
 	gchar *cmd_string;
+	GError *error = NULL;
 
 	if (vte_cmd_nonscript != NULL)
 		*vte_cmd_nonscript = NULL;
@@ -835,11 +836,12 @@ static gchar *prepare_run_script(GeanyDocument *doc, gchar **vte_cmd_nonscript, 
 	/* RUN_SCRIPT_CMD should be ok in UTF8 without converting in locale because it
 	 * contains no umlauts */
 	tmp = g_build_filename(working_dir, RUN_SCRIPT_CMD, NULL);
-	result = build_create_shellscript(tmp, cmd_string, autoclose);
+	result = build_create_shellscript(tmp, cmd_string, autoclose, &error);
 	if (! result)
 	{
-		ui_set_statusbar(TRUE, _("Failed to execute \"%s\" (start-script could not be created)"),
-			NZV(cmd_string) ? cmd_string : NULL);
+		ui_set_statusbar(TRUE, _("Failed to execute \"%s\" (start-script could not be created: %s)"),
+			NZV(cmd_string) ? cmd_string : NULL, error->message);
+		g_error_free(error);
 	}
 
 	utils_free_pointers(4, cmd_string, tmp, executable, locale_filename, NULL);
@@ -1174,19 +1176,30 @@ static void run_exit_cb(GPid child_pid, gint status, gpointer user_data)
 }
 
 
+static void set_file_error_from_errno(GError **error, gint err, const gchar *prefix)
+{
+	g_set_error(error, G_FILE_ERROR, g_file_error_from_errno(err), "%s%s%s",
+		prefix ? prefix : "", prefix ? ": " : "", g_strerror(err));
+}
+
+
 /* write a little shellscript to call the executable (similar to anjuta_launcher but "internal")
  * fname is the full file name (including path) for the script to create */
-static gboolean build_create_shellscript(const gchar *fname, const gchar *cmd, gboolean autoclose)
+static gboolean build_create_shellscript(const gchar *fname, const gchar *cmd, gboolean autoclose, GError **error)
 {
 	FILE *fp;
 	gchar *str;
+	gboolean success = TRUE;
 #ifdef G_OS_WIN32
 	gchar *expanded_cmd;
 #endif
 
 	fp = g_fopen(fname, "w");
 	if (! fp)
+	{
+		set_file_error_from_errno(error, errno, "Failed to create file");
 		return FALSE;
+	}
 #ifdef G_OS_WIN32
 	/* Expand environment variables like %blah%. */
 	expanded_cmd = win32_expand_environment_variables(cmd);
@@ -1200,12 +1213,20 @@ static gboolean build_create_shellscript(const gchar *fname, const gchar *cmd, g
 			"dash\ndummy_var=\"\"\nread dummy_var");
 #endif
 
-	fputs(str, fp);
+	if (fputs(str, fp) < 0)
+	{
+		set_file_error_from_errno(error, errno, "Failed to write file");
+		success = FALSE;
+	}
 	g_free(str);
 
-	fclose(fp);
+	if (fclose(fp) != 0)
+	{
+		set_file_error_from_errno(error, errno, "Failed to close file");
+		success = FALSE;
+	}
 
-	return TRUE;
+	return success;
 }
 
 
