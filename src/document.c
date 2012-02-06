@@ -1767,8 +1767,7 @@ gboolean document_save_file(GeanyDocument *doc, gboolean force)
 	{
 		ui_set_statusbar(TRUE, _("Error saving file (%s)."), errmsg);
 
-		if (!file_prefs.use_safe_file_saving &&
-			g_file_test(locale_filename, G_FILE_TEST_IS_REGULAR))
+		if (!file_prefs.use_safe_file_saving)
 		{
 			SETPTR(errmsg,
 				g_strdup_printf(_("%s\n\nThe file on disk may now be truncated!"), errmsg));
