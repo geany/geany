@@ -1793,30 +1793,6 @@ gchar *utils_build_path(const gchar *first, ...)
 }
 
 
-/* Concatenates a path with other strings.
- * @param path A path, which will have a separator added before the other strings.
- * @param ... Strings to concatenate (no directory separators will be
- * 	inserted between them).
- * E.g. filename = utils_make_filename(app->datadir, "filetypes.", ext, NULL); */
-gchar *utils_make_filename(const gchar *path, ...)
-{
-	static GString *buffer = NULL;
-	va_list args;
-
-	if (! buffer)
-		buffer = g_string_new(path);
-	else
-		g_string_assign(buffer, path);
-
-	g_string_append_c(buffer, G_DIR_SEPARATOR);
-
-	va_start(args, path);
-	utils_string_vappend(buffer, NULL, args);
-	va_end(args);
-	return g_strdup(buffer->str);
-}
-
-
 /* Retrieves the path for the given URI.
  * It returns:
  * - the path which was determined by g_filename_from_uri() or GIO

@@ -1276,10 +1276,10 @@ static gchar *filetypes_get_filename(GeanyFiletype *ft, gboolean user)
 	gchar *f;
 
 	if (user)
-		f = utils_make_filename(app->configdir,
+		f = g_strconcat(app->configdir, G_DIR_SEPARATOR_S
 			GEANY_FILEDEFS_SUBDIR G_DIR_SEPARATOR_S, "filetypes.", ext, NULL);
 	else
-		f = utils_make_filename(app->datadir, "filetypes.", ext, NULL);
+		f = g_strconcat(app->datadir, G_DIR_SEPARATOR_S "filetypes.", ext, NULL);
 
 	g_free(ext);
 	return f;
