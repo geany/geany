@@ -298,7 +298,7 @@ static void on_file_menu_hide(GtkWidget *item)
 /* reload templates if any file in the templates path is saved */
 static void on_document_save(G_GNUC_UNUSED GObject *object, GeanyDocument *doc)
 {
-	gchar *path = utils_build_path(app->configdir, GEANY_TEMPLATES_SUBDIR, NULL);
+	gchar *path = g_build_filename(app->configdir, GEANY_TEMPLATES_SUBDIR, NULL);
 
 	g_return_if_fail(NZV(doc->real_path));
 

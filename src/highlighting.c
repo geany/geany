@@ -1230,9 +1230,9 @@ static void add_color_scheme_item(GtkWidget *menu, const gchar *fname)
 		gchar *path, *theme_name, *tooltip;
 		gchar *theme_fn = utils_get_utf8_from_locale(fname);
 
-		path = utils_build_path(app->configdir, GEANY_COLORSCHEMES_SUBDIR, fname, NULL);
+		path = g_build_filename(app->configdir, GEANY_COLORSCHEMES_SUBDIR, fname, NULL);
 		hkeyfile = utils_key_file_new(path);
-		SETPTR(path, utils_build_path(app->datadir, GEANY_COLORSCHEMES_SUBDIR, fname, NULL));
+		SETPTR(path, g_build_filename(app->datadir, GEANY_COLORSCHEMES_SUBDIR, fname, NULL));
 		skeyfile = utils_key_file_new(path);
 
 		theme_name = utils_get_setting(locale_string, hkeyfile, skeyfile, "theme_info", "name", theme_fn);

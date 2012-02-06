@@ -215,7 +215,7 @@ static GtkWidget *toolbar_reload(const gchar *markup)
 	else
 	{
 		/* Load the toolbar UI XML file from disk (first from config dir, then try data dir) */
-		filename = utils_build_path(app->configdir, "ui_toolbar.xml", NULL);
+		filename = g_build_filename(app->configdir, "ui_toolbar.xml", NULL);
 		merge_id = gtk_ui_manager_add_ui_from_file(uim, filename, &error);
 		if (merge_id == 0)
 		{
@@ -224,7 +224,7 @@ static GtkWidget *toolbar_reload(const gchar *markup)
 			g_error_free(error);
 			error = NULL;
 
-			SETPTR(filename, utils_build_path(app->datadir, "ui_toolbar.xml", NULL));
+			SETPTR(filename, g_build_filename(app->datadir, "ui_toolbar.xml", NULL));
 			merge_id = gtk_ui_manager_add_ui_from_file(uim, filename, &error);
 		}
 		g_free(filename);
@@ -897,7 +897,7 @@ at http://www.geany.org/manual/current/index.html#customizing-the-toolbar.\n-->\
 
 	toolbar_reload(str->str);
 
-	filename = utils_build_path(app->configdir, "ui_toolbar.xml", NULL);
+	filename = g_build_filename(app->configdir, "ui_toolbar.xml", NULL);
 	utils_write_file(filename, str->str);
 	g_free(filename);
 

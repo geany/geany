@@ -4734,7 +4734,7 @@ void editor_destroy(GeanyEditor *editor)
 
 static void on_document_save(GObject *obj, GeanyDocument *doc)
 {
-	gchar *f = utils_build_path(app->configdir, "snippets.conf", NULL);
+	gchar *f = g_build_filename(app->configdir, "snippets.conf", NULL);
 
 	g_return_if_fail(NZV(doc->real_path));
 
@@ -4781,7 +4781,7 @@ void editor_init(void)
 	 * handler (on_editor_notify) is called */
 	g_signal_connect_after(geany_object, "editor-notify", G_CALLBACK(on_editor_notify), NULL);
 
-	f = utils_build_path(app->configdir, "snippets.conf", NULL);
+	f = g_build_filename(app->configdir, "snippets.conf", NULL);
 	ui_add_config_file_menu_item(f, NULL, NULL);
 	g_free(f);
 	g_signal_connect(geany_object, "document-save", G_CALLBACK(on_document_save), NULL);

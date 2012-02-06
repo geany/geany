@@ -644,7 +644,7 @@ void filetypes_init_types()
 		filetype_add(filetypes[ft_id]);
 	}
 	init_custom_filetypes(app->datadir);
-	f = utils_build_path(app->configdir, GEANY_FILEDEFS_SUBDIR, NULL);
+	f = g_build_filename(app->configdir, GEANY_FILEDEFS_SUBDIR, NULL);
 	init_custom_filetypes(f);
 	g_free(f);
 
@@ -662,12 +662,12 @@ static void on_document_save(G_GNUC_UNUSED GObject *object, GeanyDocument *doc)
 
 	g_return_if_fail(NZV(doc->real_path));
 
-	f = utils_build_path(app->configdir, "filetype_extensions.conf", NULL);
+	f = g_build_filename(app->configdir, "filetype_extensions.conf", NULL);
 	if (utils_str_equal(doc->real_path, f))
 		filetypes_reload_extensions();
 
 	g_free(f);
-	f = utils_build_path(app->configdir, GEANY_FILEDEFS_SUBDIR, "filetypes.common", NULL);
+	f = g_build_filename(app->configdir, GEANY_FILEDEFS_SUBDIR, "filetypes.common", NULL);
 	if (utils_str_equal(doc->real_path, f))
 	{
 		guint i;
@@ -687,9 +687,9 @@ static void setup_config_file_menus(void)
 {
 	gchar *f;
 
-	f = utils_build_path(app->configdir, "filetype_extensions.conf", NULL);
+	f = g_build_filename(app->configdir, "filetype_extensions.conf", NULL);
 	ui_add_config_file_menu_item(f, NULL, NULL);
-	SETPTR(f, utils_build_path(app->configdir, GEANY_FILEDEFS_SUBDIR, "filetypes.common", NULL));
+	SETPTR(f, g_build_filename(app->configdir, GEANY_FILEDEFS_SUBDIR, "filetypes.common", NULL));
 	ui_add_config_file_menu_item(f, NULL, NULL);
 	g_free(f);
 
@@ -808,11 +808,11 @@ static GeanyFiletype *check_builtin_filenames(const gchar *utf8_filename)
 #endif
 	SETPTR(lfn, utils_get_locale_from_utf8(lfn));
 
-	path = utils_build_path(app->configdir, GEANY_FILEDEFS_SUBDIR, "filetypes.", NULL);
+	path = g_build_filename(app->configdir, GEANY_FILEDEFS_SUBDIR, "filetypes.", NULL);
 	if (g_str_has_prefix(lfn, path))
 		found = TRUE;
 
-	SETPTR(path, utils_build_path(app->datadir, "filetypes.", NULL));
+	SETPTR(path, g_build_filename(app->datadir, "filetypes.", NULL));
 	if (g_str_has_prefix(lfn, path))
 		found = TRUE;
 

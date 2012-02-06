@@ -264,8 +264,6 @@ gboolean utils_spawn_async(const gchar *dir, gchar **argv, gchar **env, GSpawnFl
 
 gint utils_str_casecmp(const gchar *s1, const gchar *s2);
 
-gchar *utils_build_path(const gchar *first, ...) G_GNUC_NULL_TERMINATED;
-
 gchar *utils_get_path_from_uri(const gchar *uri);
 
 gboolean utils_is_uri(const gchar *uri);

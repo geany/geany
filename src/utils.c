@@ -1754,45 +1754,6 @@ gboolean utils_spawn_async(const gchar *dir, gchar **argv, gchar **env, GSpawnFl
 }
 
 
-static gboolean utils_string_vappend(GString *buffer, const gchar *sep, va_list args)
-{
-	const gchar *str = va_arg(args, const gchar *);
-
-	if (!str)
-		return FALSE;
-	do
-	{
-		g_string_append(buffer, str);
-		str = va_arg(args, const gchar *);
-		if (str && sep)
-			g_string_append(buffer, sep);
-	}
-	while (str);
-
-	return TRUE;
-}
-
-
-/* Like g_build_path() but without first argument. */
-gchar *utils_build_path(const gchar *first, ...)
-{
-	static GString *buffer = NULL;
-	va_list args;
-
-	if (! buffer)
-		buffer = g_string_new(first);
-	else
-		g_string_assign(buffer, first);
-
-	g_string_append_c(buffer, G_DIR_SEPARATOR);
-
-	va_start(args, first);
-	utils_string_vappend(buffer, G_DIR_SEPARATOR_S, args);
-	va_end(args);
-	return g_strdup(buffer->str);
-}
-
-
 /* Retrieves the path for the given URI.
  * It returns:
  * - the path which was determined by g_filename_from_uri() or GIO
