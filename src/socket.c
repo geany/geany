@@ -283,6 +283,9 @@ gint socket_init(gint argc, gchar **argv)
 		*p = '\0';
 	while ((p = strchr(display_name, ':')) != NULL)
 		*p = '_';
+	/* strip out any backslashes (mac has them in DISPLAY) */
+	while ((p = strchr(display_name, '/')) != NULL)
+		*p = '_';
 
 	if (socket_info.file_name == NULL)
 		socket_info.file_name = g_strdup_printf("%s%cgeany_socket_%s_%s",
