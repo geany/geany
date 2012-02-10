@@ -281,8 +281,12 @@ gint socket_init(gint argc, gchar **argv)
 	/* these lines are taken from dcopc.c in kdelibs */
 	if ((p = strrchr(display_name, '.')) > strrchr(display_name, ':') && p != NULL)
 		*p = '\0';
-	while ((p = strchr(display_name, ':')) != NULL)
-		*p = '_';
+	/* remove characters that may not be acceptable in a filename */
+	for (p = display_name; *p; p++)
+	{
+		if (*p == ':' || *p == '/')
+			*p = '_';
+	}
 
 	if (socket_info.file_name == NULL)
 		socket_info.file_name = g_strdup_printf("%s%cgeany_socket_%s_%s",
