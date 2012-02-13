@@ -529,6 +529,13 @@ gint sci_get_lexer(ScintillaObject *sci)
 }
 
 
+void sci_set_lexer(ScintillaObject *sci, guint lexer_id)
+{
+	SSM(sci, SCI_SETLEXER, lexer_id, 0);
+	SSM(sci, SCI_CLEARDOCUMENTSTYLE, 0, 0);
+}
+
+
 /** Gets line length.
  * @param sci Scintilla widget.
  * @param line Line number.

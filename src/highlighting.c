@@ -872,7 +872,7 @@ static void styleset_from_mapping(ScintillaObject *sci, guint ft_id, guint lexer
 	g_assert(ft_id != GEANY_FILETYPES_NONE);
 
 	/* lexer */
-	SSM(sci, SCI_SETLEXER, lexer, 0);
+	sci_set_lexer(sci, lexer);
 
 	/* styles */
 	styleset_common(sci, ft_id);
@@ -906,7 +906,7 @@ static void styleset_from_mapping(ScintillaObject *sci, guint ft_id, guint lexer
 
 static void styleset_default(ScintillaObject *sci, guint ft_id)
 {
-	SSM(sci, SCI_SETLEXER, SCLEX_NULL, 0);
+	sci_set_lexer(sci, SCLEX_NULL);
 
 	/* we need to set STYLE_DEFAULT before we call SCI_STYLECLEARALL in styleset_common() */
 	set_sci_style(sci, STYLE_DEFAULT, GEANY_FILETYPES_NONE, GCS_DEFAULT);
