@@ -19,7 +19,7 @@
  *      Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-/* * @file build.h Interface to the Build menu functionality. */
+/** @file build.h Interface to the Build menu functionality. */
 
 #ifndef GEANY_BUILD_H
 #define GEANY_BUILD_H 1
@@ -40,7 +40,7 @@ typedef enum
 	GEANY_GBO_COUNT			/* *< count of how many */
 } GeanyBuildType;
 
-/* * Groups of Build menu items. */
+/** Groups of Build menu items. */
 typedef enum
 {
 	GEANY_GBG_FT,		/* *< filetype items */
@@ -92,7 +92,7 @@ enum GeanyBuildFixedMenuItems
 	GBF_COUNT
 };
 
-/* * Build menu item sources in increasing priority */
+/** Build menu item sources in increasing priority */
 typedef enum
 {
 	GEANY_BCS_DEF,		/* *< Default values. */
@@ -117,7 +117,7 @@ typedef struct GeanyBuildInfo
 
 extern GeanyBuildInfo build_info;
 
-/* * The entries of a command for a menu item */
+/** The entries of a command for a menu item */
 typedef enum GeanyBuildCmdEntries
 {
 	GEANY_BC_LABEL,				/* *< The menu item label, _ marks mnemonic */
@@ -177,11 +177,17 @@ void build_menu_update(GeanyDocument *doc);
 
 void build_toolbutton_build_clicked(GtkAction *action, gpointer user_data);
 
-void build_remove_menu_item(GeanyBuildSource src, GeanyBuildGroup grp, gint cmd);
+void build_remove_menu_item(const GeanyBuildSource src, const GeanyBuildGroup grp, const gint cmd);
 
-GeanyBuildCommand *build_get_menu_item(GeanyBuildSource src, GeanyBuildGroup grp, guint cmd);
+GeanyBuildCommand *build_get_menu_item(const GeanyBuildSource src, const GeanyBuildGroup grp, const guint cmd);
 
-GeanyBuildCommand *build_get_current_menu_item(GeanyBuildGroup grp, guint cmd, guint *src);
+const gchar *build_get_current_menu_item(const GeanyBuildGroup grp, const guint cmd, 
+                                         const GeanyBuildCmdEntries field);
+
+void build_set_menu_item(const GeanyBuildSource src, const GeanyBuildGroup grp,
+                         const guint cmd, const GeanyBuildCmdEntries field, const gchar *value);
+
+void build_activate_menu_item(const GeanyBuildGroup grp, const guint cmd);
 
 BuildMenuItems *build_get_menu_items(gint filetype_idx);
 
@@ -192,7 +198,7 @@ void build_save_menu(GKeyFile *config, gpointer ptr, GeanyBuildSource src);
 
 void build_set_group_count(GeanyBuildGroup grp, gint count);
 
-guint build_get_group_count(GeanyBuildGroup grp);
+guint build_get_group_count(const GeanyBuildGroup grp);
 
 gchar **build_get_regex(GeanyBuildGroup grp, GeanyFiletype *ft, guint *from);
 

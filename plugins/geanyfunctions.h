@@ -420,5 +420,15 @@
 	geany_functions->p_stash->stash_group_update
 #define symbols_get_context_separator \
 	geany_functions->p_symbols->symbols_get_context_separator
+#define build_activate_menu_item \
+	geany_functions->p_build->build_activate_menu_item
+#define build_get_current_menu_item \
+	geany_functions->p_build->build_get_current_menu_item
+#define build_remove_menu_item \
+	geany_functions->p_build->build_remove_menu_item
+#define build_set_menu_item \
+	geany_functions->p_build->build_set_menu_item
+#define build_get_group_count \
+	geany_functions->p_build->build_get_group_count
 
 #endif

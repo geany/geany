@@ -46,7 +46,7 @@
 #include "msgwindow.h"
 #include "prefs.h"
 #include "geanywraplabel.h"
-#include "build.h"
+/* #include "build.h" included in plugindata.h so it can use enums */
 #include "encodings.h"
 #include "search.h"
 #include "highlighting.h"
@@ -353,6 +353,14 @@ static SymbolsFuncs symbols_funcs = {
 	&symbols_get_context_separator
 };
 
+static BuildFuncs build_funcs = {
+	&build_activate_menu_item,
+	&build_get_current_menu_item,
+	&build_remove_menu_item,
+	&build_set_menu_item,
+	&build_get_group_count
+};
+
 static GeanyFunctions geany_functions = {
 	&doc_funcs,
 	&sci_funcs,
@@ -375,7 +383,8 @@ static GeanyFunctions geany_functions = {
 	&scintilla_funcs,
 	&msgwin_funcs,
 	&stash_funcs,
-	&symbols_funcs
+	&symbols_funcs,
+	&build_funcs
 };
 
 static GeanyData geany_data;

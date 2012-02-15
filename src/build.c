@@ -132,7 +132,7 @@ static void kill_process(GPid *pid);
 static void show_build_result_message(gboolean failure);
 static void process_build_output_line(const gchar *line, gint color);
 static void show_build_commands_dialog(void);
-
+static void on_build_menu_item(GtkWidget *w, gpointer user_data);
 
 void build_finalize(void)
 {
@@ -422,8 +422,7 @@ gchar **build_get_regex(GeanyBuildGroup grp, GeanyFiletype *ft, guint *from)
 }
 
 
-/* get pointer to the command group array */
-static GeanyBuildCommand *get_build_group(GeanyBuildSource src, GeanyBuildGroup grp)
+static GeanyBuildCommand **get_build_group_pointer(const GeanyBuildSource src, const GeanyBuildGroup grp)
 {
 	GeanyDocument *doc;
 	GeanyFiletype *ft = NULL;
@@ -435,23 +434,22 @@ static GeanyBuildCommand *get_build_group(GeanyBuildSource src, GeanyBuildGroup 
 				return NULL;
 			if ((ft = doc->file_type) == NULL)
 				return NULL;
-
 			switch (src)
 			{
-				case GEANY_BCS_DEF:	 return ft->ftdefcmds;
-				case GEANY_BCS_FT:	  return ft->filecmds;
-				case GEANY_BCS_HOME_FT: return ft->homefilecmds;
-				case GEANY_BCS_PREF:	return ft->homefilecmds;
-				case GEANY_BCS_PROJ:	return ft->projfilecmds;
+				case GEANY_BCS_DEF:	 return &(ft->ftdefcmds);
+				case GEANY_BCS_FT:	  return &(ft->filecmds);
+				case GEANY_BCS_HOME_FT: return &(ft->homefilecmds);
+				case GEANY_BCS_PREF:	return &(ft->homefilecmds);
+				case GEANY_BCS_PROJ:	return &(ft->projfilecmds);
 				default: return NULL;
 			}
 			break;
 		case GEANY_GBG_NON_FT:
 			switch (src)
 			{
-				case GEANY_BCS_DEF:	 return non_ft_def;
-				case GEANY_BCS_PREF:	return non_ft_pref;
-				case GEANY_BCS_PROJ:	return non_ft_proj;
+				case GEANY_BCS_DEF:	 return &(non_ft_def);
+				case GEANY_BCS_PREF:	return &(non_ft_pref);
+				case GEANY_BCS_PROJ:	return &(non_ft_proj);
 				default: return NULL;
 			}
 			break;
@@ -460,12 +458,12 @@ static GeanyBuildCommand *get_build_group(GeanyBuildSource src, GeanyBuildGroup 
 				ft = doc->file_type;
 			switch (src)
 			{
-				case GEANY_BCS_DEF:	 return exec_def;
-				case GEANY_BCS_FT:	  return ft ? ft->execcmds: NULL;
-				case GEANY_BCS_HOME_FT: return ft ? ft->homeexeccmds: NULL;
-				case GEANY_BCS_PROJ_FT: return ft ? ft->projexeccmds: NULL;
-				case GEANY_BCS_PREF:	return exec_pref;
-				case GEANY_BCS_PROJ:	return exec_proj;
+				case GEANY_BCS_DEF:	 return &(exec_def);
+				case GEANY_BCS_FT:	  return ft ? &(ft->execcmds): NULL;
+				case GEANY_BCS_HOME_FT: return ft ? &(ft->homeexeccmds): NULL;
+				case GEANY_BCS_PROJ_FT: return ft ? &(ft->projexeccmds): NULL;
+				case GEANY_BCS_PREF:	return &(exec_pref);
+				case GEANY_BCS_PROJ:	return &(exec_proj);
 				default: return NULL;
 			}
 			break;
@@ -475,7 +473,16 @@ static GeanyBuildCommand *get_build_group(GeanyBuildSource src, GeanyBuildGroup 
 }
 
 
-/* * Remove the specified Build menu item.
+/* get pointer to the command group array */
+static GeanyBuildCommand *get_build_group(const GeanyBuildSource src, const GeanyBuildGroup grp)
+{
+	GeanyBuildCommand **g = get_build_group_pointer(src, grp);
+	if (g == NULL) return NULL;
+	return *g;
+};
+
+
+/** Remove the specified Build menu item.
  *
  * Makes the specified menu item configuration no longer exist. This
  * is different to setting fields to blank because the menu item
@@ -490,9 +497,10 @@ static GeanyBuildCommand *get_build_group(GeanyBuildSource src, GeanyBuildGroup 
  *
  * If any parameter is out of range does nothing.
  *
- * @see build_menu_update
+ * Updates the menu.
+ * 
  **/
-void build_remove_menu_item(GeanyBuildSource src, GeanyBuildGroup grp, gint cmd)
+void build_remove_menu_item(const GeanyBuildSource src, const GeanyBuildGroup grp, const gint cmd)
 {
 	GeanyBuildCommand *bc;
 	guint i;
@@ -539,30 +547,109 @@ GeanyBuildCommand *build_get_menu_item(GeanyBuildSource src, GeanyBuildGroup grp
 }
 
 
-/* * Get the @a GeanyBuildCommand structure for the menu item.
+/** Get the string for the menu item field.
  *
  * Get the current highest priority command specified by @a grp and @a cmd.  This is the one
  * that the menu item will use if activated.
  *
  * @param grp the group of the specified menu item.
  * @param cmd the index of the command within the group.
- * @param src pointer to @a gint to return which source provided the command. Ignored if @a NULL.
- *        Values are one of @a GeanyBuildSource but returns a signed type not the enum.
+ * @param fld the field to return
  *
- * @return a pointer to the @a GeanyBuildCommand structure or @a NULL if it doesn't exist.
+ * @return a pointer to the constant string or @a NULL if it doesn't exist.
  *         This is a pointer to an internal structure and must not be freed.
  *
- * @see build_menu_update
  **/
-/* parameter checked version of get_build_cmd for external interface */
-GeanyBuildCommand *build_get_current_menu_item(GeanyBuildGroup grp, guint cmd, guint *src)
+const gchar *build_get_current_menu_item(const GeanyBuildGroup grp, const guint cmd, 
+                                         const GeanyBuildCmdEntries fld)
 {
-	g_return_val_if_fail(*src < GEANY_BCS_COUNT, NULL);
+	GeanyBuildCommand *c;
+	gchar *str = NULL;
+	
 	g_return_val_if_fail(grp < GEANY_GBG_COUNT, NULL);
+	g_return_val_if_fail(fld < GEANY_BC_CMDENTRIES_COUNT, NULL);
 	g_return_val_if_fail(cmd < build_groups_count[grp], NULL);
 
-	return get_build_cmd(NULL, grp, cmd, src);
-}
+	c = get_build_cmd(NULL, grp, cmd, NULL);
+	if (c == NULL) return NULL;
+	switch (fld)
+	{
+		case GEANY_BC_COMMAND:
+			str = c->command;
+			break;
+		case GEANY_BC_LABEL:
+			str = c->label;
+			break;
+		case GEANY_BC_WORKING_DIR:
+			str = c->working_dir;
+			break;
+		default:
+			break;
+	}
+	return str;
+};
+
+/** Set the string for the menu item field.
+ *
+ * Set the specified field of the command specified by @a src, @a grp and @a cmd.
+ *
+ * @param src the source of the menu item 
+ * @param grp the group of the specified menu item.
+ * @param cmd the index of the menu item within the group.
+ * @param fld the field in the menu item command to set
+ * @param val the value to set the field to, is copied
+ *
+ **/
+ 
+void build_set_menu_item(const GeanyBuildSource src, const GeanyBuildGroup grp, 
+                         const guint cmd, const GeanyBuildCmdEntries fld, const gchar *val)
+{
+	GeanyBuildCommand **g;
+	
+	g_return_if_fail(src < GEANY_BCS_COUNT);
+	g_return_if_fail(grp < GEANY_GBG_COUNT);
+	g_return_if_fail(fld < GEANY_BC_CMDENTRIES_COUNT);
+	g_return_if_fail(cmd < build_groups_count[grp]);
+
+	g = get_build_group_pointer(src, grp);
+	if (g == NULL) return;
+	if (*g == NULL )
+	{
+		*g = g_new0(GeanyBuildCommand, build_groups_count[grp]);
+	}
+	switch (fld)
+	{
+		case GEANY_BC_COMMAND:
+			SETPTR((*g)[cmd].command, g_strdup(val));
+			(*g)[cmd].exists = TRUE;
+			break;
+		case GEANY_BC_LABEL:
+			SETPTR((*g)[cmd].label, g_strdup(val));
+			(*g)[cmd].exists = TRUE;
+			break;
+		case GEANY_BC_WORKING_DIR:
+			SETPTR((*g)[cmd].working_dir, g_strdup(val));
+			(*g)[cmd].exists = TRUE;
+			break;
+		default:
+			break;
+	}
+	build_menu_update(NULL);
+};
+
+/** Set the string for the menu item field.
+ *
+ * Set the specified field of the command specified by @a src, @a grp and @a cmd.
+ *
+ * @param grp the group of the specified menu item.
+ * @param cmd the index of the command within the group.
+ *
+ **/
+
+void build_activate_menu_item(const GeanyBuildGroup grp, const guint cmd)
+{
+	on_build_menu_item(NULL, GRP_CMD_TO_POINTER(grp, cmd));
+};
 
 
 /* Clear all error indicators in all documents. */
@@ -2688,8 +2775,19 @@ void build_set_group_count(GeanyBuildGroup grp, gint count)
 }
 
 
-guint build_get_group_count(GeanyBuildGroup grp)
+/** Get the count of commands for the group
+ *
+ * Get the number of commands in the group specified by @a grp.
+ *
+ * @param grp the group of the specified menu item.
+ *
+ * @return a count of the number of commands in the group
+ *
+ **/
+
+guint build_get_group_count(const GeanyBuildGroup grp)
 {
+	g_return_val_if_fail(grp < GEANY_GBG_COUNT, 0);
 	return build_groups_count[grp];
 }
 

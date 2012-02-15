@@ -39,6 +39,7 @@
 #define GEANY(symbol_name) geany->symbol_name
 
 #include "editor.h"	/* GeanyIndentType */
+#include "build.h"  /* GeanyBuildGroup, GeanyBuildSource, GeanyBuildCmdEntries enums */
 
 
 /** The Application Programming Interface (API) version, incremented
@@ -52,7 +53,7 @@
  * @warning You should not test for values below 200 as previously
  * @c GEANY_API_VERSION was defined as an enum value, not a macro.
  */
-#define GEANY_API_VERSION 212
+#define GEANY_API_VERSION 213
 
 /** The Application Binary Interface (ABI) version, incremented whenever
  * existing fields in the plugin data types have to be changed or reordered.
@@ -266,14 +267,15 @@ typedef struct GeanyFunctions
 	struct SearchFuncs			*p_search;			/**< See search.h */
 	struct HighlightingFuncs	*p_highlighting;	/**< See highlighting.h */
 	struct FiletypeFuncs		*p_filetypes;		/**< See filetypes.h */
-	struct NavQueueFuncs        *p_navqueue;		/**< See navqueue.h */
-	struct EditorFuncs        	*p_editor;			/**< See editor.h */
-	struct MainFuncs        	*p_main;			/**< See main.h */
-	struct PluginFuncs        	*p_plugin;			/**< See pluginutils.c */
+	struct NavQueueFuncs		*p_navqueue;		/**< See navqueue.h */
+	struct EditorFuncs			*p_editor;			/**< See editor.h */
+	struct MainFuncs			*p_main;			/**< See main.h */
+	struct PluginFuncs			*p_plugin;			/**< See pluginutils.c */
 	struct ScintillaFuncs		*p_scintilla;		/**< See ScintillaFuncs */
 	struct MsgWinFuncs			*p_msgwin;			/**< See msgwindow.h */
 	struct StashFuncs			*p_stash;			/**< See stash.h */
 	struct SymbolsFuncs			*p_symbols;			/**< See symbols.h */
+	struct BuildFuncs			*p_build;			/**< See build.h */
 }
 GeanyFunctions;
 
@@ -708,6 +710,19 @@ typedef struct SymbolsFuncs
 }
 SymbolsFuncs;
 
+/* See build.h */
+typedef struct BuildFuncs
+{
+	void (*build_activate_menu_item)(const GeanyBuildGroup grp, const guint cmd);
+	const gchar *(*build_get_current_menu_item)(const GeanyBuildGroup grp, const guint cmd, 
+			const GeanyBuildCmdEntries field);
+	void (*build_remove_menu_item)(const GeanyBuildSource src, const GeanyBuildGroup grp,
+			const gint cmd);
+	void (*build_set_menu_item)(const GeanyBuildSource src, const GeanyBuildGroup grp,
+			const guint cmd, const GeanyBuildCmdEntries field, const gchar *value);
+	guint (*build_get_group_count)(const GeanyBuildGroup grp);
+}
+BuildFuncs;
 
 /* Deprecated aliases */
 #ifndef GEANY_DISABLE_DEPRECATED
