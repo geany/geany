@@ -53,6 +53,7 @@ geany_includedir = $(includedir)/geany
 
 # only install headers that define types or macros, not just functions
 geany_include_HEADERS = \
+	build.h \
 	document.h \
 	editor.h \
 	encodings.h \
