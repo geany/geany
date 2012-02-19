@@ -2784,9 +2784,9 @@ void ui_focus_current_document(void)
 }
 
 
-/** Finds the label text associated with @a stock_id.
- * @p stock_id e.g. @c GTK_STOCK_OPEN.
- * @return .
+/** Finds the label text associated with stock_id
+ * @param stock_id stock_id to lookup e.g. @c GTK_STOCK_OPEN.
+ * @return The label text for stock
  * @since Geany 1.22 */
 const gchar *ui_lookup_stock_label(const gchar *stock_id)
 {
