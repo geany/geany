@@ -184,4 +184,7 @@ void				sci_lines_split				(ScintillaObject *sci, gint pixelWidth);
 void				sci_lines_join				(ScintillaObject *sci);
 gint				sci_text_width				(ScintillaObject *sci, gint styleNumber, const gchar *text);
 
+void				sci_move_selected_lines_down    (ScintillaObject *sci);
+void				sci_move_selected_lines_up      (ScintillaObject *sci);
+
 #endif

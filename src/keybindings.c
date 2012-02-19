@@ -1916,37 +1916,6 @@ static void delete_lines(GeanyEditor *editor)
 }
 
 
-static void move_lines(GeanyEditor *editor, gboolean down)
-{
-	ScintillaObject *sci = editor->sci;
-	gchar *text;
-	gint pos, line, len;
-
-	sci_start_undo_action(sci);
-	editor_select_lines(editor, FALSE);
-	len = sci_get_selected_text_length(sci);
-
-	pos = sci_get_selection_start(sci);
-	line = sci_get_line_from_position(sci, pos);
-	if (down)
-		line++;
-	else
-		line--;
-
-	text = sci_get_selection_contents(sci);
-	sci_clear(sci);
-
-	pos = sci_get_position_from_line(sci, line);
-	sci_insert_text(sci, pos, text);
-	g_free(text);
-
-	sci_set_current_position(sci, pos, TRUE);
-	sci_set_selection_end(sci, pos + len - 1);
-
-	sci_end_undo_action(sci);
-}
-
-
 /* common function for editor keybindings, only valid when scintilla has focus. */
 static gboolean cb_func_editor_action(guint key_id)
 {
@@ -2029,10 +1998,10 @@ static gboolean cb_func_editor_action(guint key_id)
 			return editor_complete_word_part(doc->editor);
 
 		case GEANY_KEYS_EDITOR_MOVELINEUP:
-			move_lines(doc->editor, FALSE);
+			sci_move_selected_lines_up(doc->editor->sci);
 			break;
 		case GEANY_KEYS_EDITOR_MOVELINEDOWN:
-			move_lines(doc->editor, TRUE);
+			sci_move_selected_lines_down(doc->editor->sci);
 			break;
 	}
 	return TRUE;
