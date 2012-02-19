@@ -1916,33 +1916,98 @@ static void delete_lines(GeanyEditor *editor)
 }
 
 
+/* deselect last newline of selection, if any */
+static void sci_deselect_last_newline(ScintillaObject *sci)
+{
+	gint start, end;
+
+	start = sci_get_selection_start(sci);
+	end = sci_get_selection_end(sci);
+	if (end > start && sci_get_col_from_position(sci, end) == 0)
+	{
+		end = sci_get_line_end_position(sci, sci_get_line_from_position(sci, end) - 1);
+		sci_set_selection(sci, start, end);
+	}
+}
+
+
 static void move_lines(GeanyEditor *editor, gboolean down)
 {
 	ScintillaObject *sci = editor->sci;
+	const gchar *eol = editor_get_eol_char(editor);
+	gint start, end, line1, line2, pos1, pos2, len, pos;
+	gboolean at_document_end;
 	gchar *text;
-	gint pos, line, len;
 
+	sci_deselect_last_newline(sci);
+	start = sci_get_selection_start(sci);
+	end = sci_get_selection_end(sci);
+
+	line1 = sci_get_line_from_position(sci, start);
+	line2 = sci_get_line_from_position(sci, end);
+	at_document_end = (sci_get_line_end_position(sci, line2) == sci_get_length(sci));
+
+	if (down && at_document_end)
+	{
+		/* Return early; otherwise the code below will move the selection beyond
+		 * the end of the document, generating an additional line */
+		utils_beep();
+		return;
+	}
+
+	if (!down && line1 == 0)
+	{
+		/* Return early; otherwise the code below will generate an additional line
+		 * after the selection, increasing total document's line count */
+		utils_beep();
+		return;
+	}
+
+	pos1 = sci_get_position_from_line(sci, line1);
+	pos2 = sci_get_line_end_position(sci, line2);
+	len = pos2 - pos1;
+	text = sci_get_contents_range(sci, pos1, pos2);
 	sci_start_undo_action(sci);
-	editor_select_lines(editor, FALSE);
-	len = sci_get_selected_text_length(sci);
 
-	pos = sci_get_selection_start(sci);
-	line = sci_get_line_from_position(sci, pos);
-	if (down)
-		line++;
-	else
-		line--;
-
-	text = sci_get_selection_contents(sci);
+	sci_set_selection_start(sci, sci_get_line_end_position(sci, line1-1));
+	sci_set_selection_end(sci, sci_get_position_from_line(sci, line2+1));
 	sci_clear(sci);
 
-	pos = sci_get_position_from_line(sci, line);
-	sci_insert_text(sci, pos, text);
+	if (down)
+	{
+		if (line1 > 0)
+			sci_insert_text(sci, -1, eol);
+		pos = sci_get_position_from_line(sci, line1+1);
+		sci_set_current_position(sci, pos, TRUE);
+
+		if (sci_get_current_line(sci) == line1)
+		{
+			/* inserting to the end of the document without trailing newline */
+			at_document_end = TRUE;
+			sci_insert_text(sci, -1, eol);
+			pos = sci_get_length(sci);
+			sci_set_current_position(sci, pos, TRUE);
+		}
+
+		sci_insert_text(sci, -1, text);
+		if (!at_document_end)
+			sci_insert_text(sci, pos + len, eol);
+		sci_set_selection_end(sci, pos + len);
+	}
+	else
+	{
+		if (!at_document_end)
+			/* unless we are moving up the last document line not ending with \n */
+			sci_insert_text(sci, -1, eol);
+
+		pos = sci_get_position_from_line(sci, line1-1);
+		sci_set_current_position(sci, pos, TRUE);
+		sci_insert_text(sci, -1, text);
+		sci_insert_text(sci, pos + len, eol);
+		sci_set_selection_end(sci, pos + len);
+	}
+
 	g_free(text);
-
-	sci_set_current_position(sci, pos, TRUE);
-	sci_set_selection_end(sci, pos + len - 1);
-
 	sci_end_undo_action(sci);
 }
 
@@ -2093,15 +2158,9 @@ static void join_lines(GeanyEditor *editor)
 
 static void split_lines(GeanyEditor *editor, gint column)
 {
-	gint start, indent, linescount, i, end;
-	gchar c;
-	ScintillaObject *sci = editor->sci;
+	gint start, indent, linescount, i;
 
-	/* don't include trailing newlines */
-	end = sci_get_selection_end(sci);
-	while ((c = sci_get_char_at(sci, end - 1)) == '\n' || c == '\r') end--;
-	sci_set_selection_end(sci, end);
-
+	sci_deselect_last_newline(editor->sci);
 	start = sci_get_line_from_position(editor->sci,
 		sci_get_selection_start(editor->sci));
 
