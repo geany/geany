@@ -542,7 +542,7 @@ static void show_project_properties(gboolean show_build)
 		g_free(str);
 	}
 
-	g_signal_emit_by_name(geany_object, "project-dialog-create", e.notebook);
+	g_signal_emit_by_name(geany_object, "project-dialog-open", e.notebook);
 	gtk_widget_show_all(e.dialog);
 
 	/* note: notebook page must be shown before setting current page */
@@ -567,6 +567,7 @@ static void show_project_properties(gboolean show_build)
 	}
 
 	build_free_fields(e.build_properties);
+	g_signal_emit_by_name(geany_object, "project-dialog-close", e.notebook);
 	gtk_notebook_remove_page(GTK_NOTEBOOK(e.notebook), e.build_page_num);
 	gtk_widget_hide(e.dialog);
 }
