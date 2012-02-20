@@ -798,11 +798,9 @@ gboolean main_handle_filename(const gchar *locale_filename)
 
 
 /* open files from command line */
-static gboolean open_cl_files(gint argc, gchar **argv)
+static void open_cl_files(gint argc, gchar **argv)
 {
 	gint i;
-
-	if (argc <= 1) return FALSE;
 
 	for (i = 1; i < argc; i++)
 	{
@@ -828,7 +826,6 @@ static gboolean open_cl_files(gint argc, gchar **argv)
 		}
 		g_free(filename);
 	}
-	return TRUE;
 }
 
 
@@ -882,39 +879,42 @@ void main_load_project_from_command_line(const gchar *locale_filename, gboolean 
 
 static void load_startup_files(gint argc, gchar **argv)
 {
-	gboolean load_project_from_cl = FALSE;
+	gboolean load_session = FALSE;
 
-	/* ATM when opening a project file any other filenames are ignored */
-	load_project_from_cl = (argc > 1) && g_str_has_suffix(argv[1], ".geany");
-	if (load_project_from_cl && argc > 2)
-		g_print("Ignoring extra filenames after %s", argv[1]);
-
-	if (load_project_from_cl || ! open_cl_files(argc, argv))
+	if (argc > 1 && g_str_has_suffix(argv[1], ".geany"))
 	{
-		if (prefs.load_session)
+		/* project file specified: load it, but decide the session later */
+		main_load_project_from_command_line(argv[1], FALSE);
+		argc--, argv++;
+		/* force session load if using project-based session files */
+		load_session = project_prefs.project_session;
+	}
+
+	/* Load the default session if:
+	 * 1. "Load files from the last session" is active.
+	 * 2. --no-session is not specified.
+	 * 3. We are a primary instance.
+	 * Has no effect if a CL project is loaded and using project-based session files. */
+	if (prefs.load_session && cl_options.load_session && !cl_options.new_instance)
+	{
+		if (app->project == NULL)
+			load_session_project_file();
+		load_session = TRUE;
+	}
+
+	if (load_session)
+	{
+		/* load session files into tabs, as they are found in the session_files variable */
+		configuration_open_files();
+
+		if (gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook)) == 0)
 		{
-			if (load_project_from_cl)
-			{
-				main_load_project_from_command_line(argv[1], FALSE);
-			}
-			else if (cl_options.load_session && !cl_options.new_instance)
-				load_session_project_file();
-
-			/* when we want a new instance, we still load project session files unless -s
-			 * was passed */
-			if (!cl_options.load_session || (!load_project_from_cl && cl_options.new_instance))
-				return;
-
-			/* load session files into tabs, as they are found in the session_files variable */
-			configuration_open_files();
-
-			if (gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook)) == 0)
-			{
-				ui_update_popup_copy_items(NULL);
-				ui_update_popup_reundo_items(NULL);
-			}
+			ui_update_popup_copy_items(NULL);
+			ui_update_popup_reundo_items(NULL);
 		}
 	}
+
+	open_cl_files(argc, argv);
 }
 
 
