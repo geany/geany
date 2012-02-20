@@ -1268,7 +1268,8 @@ static const HLStyle highlighting_styles_TCL[] =
 	{ SCE_TCL_WORD4,			"wordtkcmds",		FALSE },
 	{ SCE_TCL_WORD5,			"wordexpand",		FALSE },
 	{ SCE_TCL_COMMENT_BOX,		"commentbox",		FALSE },
-	{ SCE_TCL_BLOCK_COMMENT,	"blockcomment",		FALSE }
+	{ SCE_TCL_BLOCK_COMMENT,	"blockcomment",		FALSE },
+	{ SCE_TCL_SUB_BRACE,		"subbrace",			FALSE }
 	/* these are for user-defined keywords we don't set yet */
 	/*{ SCE_TCL_WORD6,			"user2",			FALSE },
 	{ SCE_TCL_WORD7,			"user3",			FALSE },
