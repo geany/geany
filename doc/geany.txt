@@ -424,17 +424,17 @@ Startup
 
 At startup, Geany loads all files from the last time Geany was
 launched. You can disable this feature in the preferences dialog
-(see `General Startup preferences`_). If you specify some
-files on the command line, only these files will be opened, but you
-can find the files from the last session in the file menu under the
-"Recent files" item. By default this contains the last 10 recently
-opened files. You can change the number of recently opened files in
-the preferences dialog.
+(see `General Startup preferences`_).
 
 You can start several instances of Geany, but only the first will
-load files from the last session. To run a second instance of Geany,
-do not specify any filenames on the command-line, or disable opening
-files in a running instance using the appropriate command line option.
+load files from the last session. In the subsequent instances, you
+can find these files in the file menu under the "Recent files" item.
+By default this contains the last 10 recently opened files. You can
+change the number of recently opened files in the preferences dialog.
+
+To run a second instance of Geany, do not specify any filenames on
+the command-line, or disable opening files in a running instance
+using the appropriate command line option.
 
 
 Opening files from the command-line in a running instance
