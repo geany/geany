@@ -2112,7 +2112,7 @@ static void sci_deselect_last_newline(ScintillaObject *sci)
     end = sci_get_selection_end(sci);
     if (end > start && sci_get_col_from_position(sci, end) == 0)
     {
-        end = sci_get_line_end_position(sci, sci_get_line_from_position(sci, end));
+        end = sci_get_line_end_position(sci, sci_get_line_from_position(sci, end-1));
         sci_set_selection(sci, start, end);
     }
 }
