@@ -394,6 +394,8 @@ static void init_default_kb(void)
 	add_kb(group, GEANY_KEYS_FORMAT_REFLOWPARAGRAPH, NULL,
 		GDK_j, GDK_CONTROL_MASK, "format_reflowparagraph", _("_Reflow Lines/Block"),
 		"reflow_lines_block1");
+	keybindings_set_item(group, GEANY_KEYS_FORMAT_JOINLINES, NULL,
+		0, 0, "edit_joinlines", _("Join lines"), NULL);
 
 	group = keybindings_get_core_group(GEANY_KEY_GROUP_INSERT);
 
@@ -2060,7 +2062,28 @@ static void join_lines(GeanyEditor *editor)
 }
 
 
-static void split_lines(GeanyEditor *editor, gint column)
+static gint reflow_get_breaking_column(GeanyEditor *editor)
+{
+	const GeanyEditorPrefs *eprefs = editor_get_prefs(editor);
+	if (editor->line_breaking)
+	{
+		/* use line break column if enabled */
+		return eprefs->line_break_column;
+	}
+	else if (eprefs->long_line_type != 2)
+	{
+		/* use long line if enabled */
+		return eprefs->long_line_column;
+	}
+	else
+	{
+		/* do nothing if no column is defined */
+		return -1;
+	}
+}
+
+
+static void reflow_lines(GeanyEditor *editor, gint column)
 {
 	gint start, indent, linescount, i, end;
 	gchar c;
@@ -2130,8 +2153,23 @@ static void split_lines(GeanyEditor *editor, gint column)
 }
 
 
+/* deselect last newline of selection, if any */
+static void sci_deselect_last_newline(ScintillaObject *sci)
+{
+    gint start, end;
+
+    start = sci_get_selection_start(sci);
+    end = sci_get_selection_end(sci);
+    if (end > start && sci_get_col_from_position(sci, end) == 0)
+    {
+        end = sci_get_line_end_position(sci, sci_get_line_from_position(sci, end));
+        sci_set_selection(sci, start, end);
+    }
+}
+
+
 /* if cursor < anchor, swap them */
-static void sci_fix_selection(ScintillaObject *sci)
+static void sci_fix_selection_anchors(ScintillaObject *sci)
 {
 	gint start, end;
 
@@ -2145,45 +2183,49 @@ static void reflow_paragraph(GeanyEditor *editor)
 {
 	ScintillaObject *sci = editor->sci;
 	gboolean sel;
-	gint column = -1;
-	const GeanyEditorPrefs *eprefs = editor_get_prefs(editor);
+	gint column;
 
-	if (editor->line_breaking)
+	column = reflow_get_breaking_column(editor);
+	if (column == -1)
 	{
-		/* use line break column if enabled */
-		column = eprefs->line_break_column;
-	}
-	else if (eprefs->long_line_type != 2)
-	{
-		/* use long line if enabled */
-		column = eprefs->long_line_column;
-	}
-	else
-	{
-		/* do nothing if no column is defined */
 		utils_beep();
 		return;
 	}
+
 	sci_start_undo_action(sci);
 	sel = sci_has_selection(sci);
 	if (!sel)
-	{
-		gint line, pos;
-
 		editor_select_indent_block(editor);
+	sci_deselect_last_newline(sci);
+	sci_fix_selection_anchors(sci);
+	reflow_lines(editor, column);
+	if (!sel)
+		sci_set_anchor(sci, -1);
 
-		/* deselect last line break */
-		pos = sci_get_selection_end(sci);
-		line = sci_get_line_from_position(sci, pos);
-		if (line < sci_get_line_count(sci) - 1)
-		{
-			/* not last line */
-			pos = sci_get_line_end_position(sci, line - 1);
-			sci_set_selection_end(sci, pos);
-		}
+	sci_end_undo_action(sci);
+}
+
+
+static void join_paragraph(GeanyEditor *editor)
+{
+	ScintillaObject *sci = editor->sci;
+	gboolean sel;
+	gint column;
+
+	column = reflow_get_breaking_column(editor);
+	if (column == -1)
+	{
+		utils_beep();
+		return;
 	}
-	sci_fix_selection(sci);
-	split_lines(editor, column);
+
+	sci_start_undo_action(sci);
+	sel = sci_has_selection(sci);
+	if (!sel)
+		editor_select_indent_block(editor);
+	sci_deselect_last_newline(sci);
+	//sci_fix_selection_anchors(sci);
+	join_lines(editor);
 	if (!sel)
 		sci_set_anchor(sci, -1);
 
@@ -2247,6 +2289,9 @@ static gboolean cb_func_format_action(guint key_id)
 			break;
 		case GEANY_KEYS_FORMAT_REFLOWPARAGRAPH:
 			reflow_paragraph(doc->editor);
+			break;
+		case GEANY_KEYS_FORMAT_JOINLINES:
+			join_paragraph(doc->editor);
 			break;
 	}
 	return TRUE;
