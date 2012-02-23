@@ -2042,8 +2042,7 @@ static gint reflow_get_breaking_column(GeanyEditor *editor)
 	else if (eprefs->long_line_type != 2)
 		return eprefs->long_line_column;
 	else
-		/* do nothing */
-		return -1;
+		return -1; /* do nothing */
 }
 
 
@@ -2098,8 +2097,10 @@ static void reflow_lines(GeanyEditor *editor, gint column)
 
 	/* Remove trailing spaces. */
 	if (editor_prefs.newline_strip || file_prefs.strip_trailing_spaces)
+	{
 		for (i = start; i <= start + linescount; i++)
 			editor_strip_line_trailing_spaces(editor, i);
+	}
 }
 
 
@@ -2174,7 +2175,7 @@ static void join_paragraph(GeanyEditor *editor)
 	if (!sel)
 		editor_select_indent_block(editor);
 	sci_deselect_last_newline(sci);
-	//sci_fix_selection_anchors(sci);
+	/*sci_fix_selection_anchors(sci);*/
 	join_lines(editor);
 	if (!sel)
 		sci_set_anchor(sci, -1);
