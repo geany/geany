@@ -2034,7 +2034,7 @@ static void join_lines(GeanyEditor *editor)
 }
 
 
-static gint reflow_get_breaking_column(GeanyEditor *editor)
+static gint get_reflow_column(GeanyEditor *editor)
 {
 	const GeanyEditorPrefs *eprefs = editor_get_prefs(editor);
 	if (editor->line_breaking)
@@ -2136,7 +2136,7 @@ static void reflow_paragraph(GeanyEditor *editor)
 	gboolean sel;
 	gint column;
 
-	column = reflow_get_breaking_column(editor);
+	column = get_reflow_column(editor);
 	if (column == -1)
 	{
 		utils_beep();
@@ -2163,7 +2163,7 @@ static void join_paragraph(GeanyEditor *editor)
 	gboolean sel;
 	gint column;
 
-	column = reflow_get_breaking_column(editor);
+	column = get_reflow_column(editor);
 	if (column == -1)
 	{
 		utils_beep();
