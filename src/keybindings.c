@@ -2080,15 +2080,11 @@ static void reflow_lines(GeanyEditor *editor, gint column)
 	indent = sci_get_line_indentation(editor->sci, start);
 	sci_set_line_indentation(editor->sci, start, 0);
 
-	/*
-	 * Use sci_get_line_count() to determine how many new lines
-	 * appeared during splitting. SCI_LINESSPLIT should better return
-	 * this value itself...
-	 */
 	sci_target_from_selection(editor->sci);
 	linescount = sci_get_line_count(editor->sci);
 	sci_lines_split(editor->sci,
 		(column - indent) *	sci_text_width(editor->sci, STYLE_DEFAULT, " "));
+	/* use lines count to determine how many lines appeared after splitting */
 	linescount = sci_get_line_count(editor->sci) - linescount;
 
 	/* Fix indentation. */
