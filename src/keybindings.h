@@ -240,6 +240,7 @@ enum GeanyKeyBindingID
 	GEANY_KEYS_PROJECT_OPEN,					/**< Keybinding. */
 	GEANY_KEYS_PROJECT_NEW,						/**< Keybinding. */
 	GEANY_KEYS_PROJECT_CLOSE,					/**< Keybinding. */
+	GEANY_KEYS_FORMAT_JOINLINES,				/**< Keybinding. */
 	GEANY_KEYS_COUNT	/* must not be used by plugins */
 };
 

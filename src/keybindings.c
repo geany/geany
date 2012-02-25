@@ -394,6 +394,8 @@ static void init_default_kb(void)
 	add_kb(group, GEANY_KEYS_FORMAT_REFLOWPARAGRAPH, NULL,
 		GDK_j, GDK_CONTROL_MASK, "format_reflowparagraph", _("_Reflow Lines/Block"),
 		"reflow_lines_block1");
+	keybindings_set_item(group, GEANY_KEYS_FORMAT_JOINLINES, NULL,
+		0, 0, "edit_joinlines", _("Join lines"), NULL);
 
 	group = keybindings_get_core_group(GEANY_KEY_GROUP_INSERT);
 
@@ -2017,73 +2019,45 @@ static void join_lines(GeanyEditor *editor)
 	end = sci_get_line_from_position(editor->sci,
 		sci_get_selection_end(editor->sci));
 
-	/* if there is only one line in selection, join it with the following one */
-	if (end == start)
-		end = start + 1;
-
-	/*
-	 * remove trailing spaces for every line except the last one
-	 * so that these spaces won't appear within text after joining
-	 */
+	/* remove spaces surrounding the lines so that these spaces
+	 * won't appear within text after joining */
 	for (i = start; i < end; i++)
 		editor_strip_line_trailing_spaces(editor, i);
-
-	/* remove starting spaces from second and following lines due to the same reason */
 	for (i = start + 1; i <= end; i++)
 		sci_set_line_indentation(editor->sci, i, 0);
-
-	/*
-	 * SCI_LINESJOIN automatically adds spaces between joined lines, including
-	 * empty ones. We should drop empty lines if we want only one space to be
-	 * inserted (see also example below). I don't think we should care of that.
-	 */
 
 	sci_set_target_start(editor->sci,
 		sci_get_position_from_line(editor->sci, start));
 	sci_set_target_end(editor->sci,
 		sci_get_position_from_line(editor->sci, end));
 	sci_lines_join(editor->sci);
-
-	/*
-	 * Example: joining
-	 *
-	 * [TAB]if (something_wrong)
-	 * [TAB]{
-	 * [TAB][TAB]
-	 * [TAB][TAB]exit(1);[SPACE][SPACE]
-	 * [TAB]}[SPACE]
-	 *
-	 * gives
-	 *
-	 * [TAB]if (something_wrong) {  exit(1); }[SPACE]
-	 */
 }
 
 
-static void split_lines(GeanyEditor *editor, gint column)
+static gint get_reflow_column(GeanyEditor *editor)
 {
-	gint start, indent, linescount, i, end;
-	gchar c;
-	ScintillaObject *sci = editor->sci;
+	const GeanyEditorPrefs *eprefs = editor_get_prefs(editor);
+	if (editor->line_breaking)
+		return eprefs->line_break_column;
+	else if (eprefs->long_line_type != 2)
+		return eprefs->long_line_column;
+	else
+		return -1; /* do nothing */
+}
 
-	/* don't include trailing newlines */
-	end = sci_get_selection_end(sci);
-	while ((c = sci_get_char_at(sci, end - 1)) == '\n' || c == '\r') end--;
-	sci_set_selection_end(sci, end);
+
+static void reflow_lines(GeanyEditor *editor, gint column)
+{
+	gint start, indent, linescount, i;
 
 	start = sci_get_line_from_position(editor->sci,
 		sci_get_selection_start(editor->sci));
 
-	/*
-	 * If several lines are selected, first join them.
-	 * This allows to reformat text paragraphs easily.
-	 */
+	/* if several lines are selected, join them. */
 	if (sci_get_lines_selected(editor->sci) > 1)
 		join_lines(editor);
 
-	/*
-	 * If this line is short enough, just return
-	 */
+	/* if this line is short enough, do nothing */
 	if (column > sci_get_line_end_position(editor->sci, start) -
 		sci_get_position_from_line(editor->sci, start))
 	{
@@ -2106,15 +2080,11 @@ static void split_lines(GeanyEditor *editor, gint column)
 	indent = sci_get_line_indentation(editor->sci, start);
 	sci_set_line_indentation(editor->sci, start, 0);
 
-	/*
-	 * Use sci_get_line_count() to determine how many new lines
-	 * appeared during splitting. SCI_LINESSPLIT should better return
-	 * this value itself...
-	 */
 	sci_target_from_selection(editor->sci);
 	linescount = sci_get_line_count(editor->sci);
 	sci_lines_split(editor->sci,
 		(column - indent) *	sci_text_width(editor->sci, STYLE_DEFAULT, " "));
+	/* use lines count to determine how many lines appeared after splitting */
 	linescount = sci_get_line_count(editor->sci) - linescount;
 
 	/* Fix indentation. */
@@ -2130,14 +2100,18 @@ static void split_lines(GeanyEditor *editor, gint column)
 }
 
 
-/* if cursor < anchor, swap them */
-static void sci_fix_selection(ScintillaObject *sci)
+/* deselect last newline of selection, if any */
+static void sci_deselect_last_newline(ScintillaObject *sci)
 {
-	gint start, end;
+    gint start, end;
 
-	start = sci_get_selection_start(sci);
-	end = sci_get_selection_end(sci);
-	sci_set_selection(sci, start, end);
+    start = sci_get_selection_start(sci);
+    end = sci_get_selection_end(sci);
+    if (end > start && sci_get_col_from_position(sci, end) == 0)
+    {
+        end = sci_get_line_end_position(sci, sci_get_line_from_position(sci, end-1));
+        sci_set_selection(sci, start, end);
+    }
 }
 
 
@@ -2145,45 +2119,47 @@ static void reflow_paragraph(GeanyEditor *editor)
 {
 	ScintillaObject *sci = editor->sci;
 	gboolean sel;
-	gint column = -1;
-	const GeanyEditorPrefs *eprefs = editor_get_prefs(editor);
+	gint column;
 
-	if (editor->line_breaking)
+	column = get_reflow_column(editor);
+	if (column == -1)
 	{
-		/* use line break column if enabled */
-		column = eprefs->line_break_column;
-	}
-	else if (eprefs->long_line_type != 2)
-	{
-		/* use long line if enabled */
-		column = eprefs->long_line_column;
-	}
-	else
-	{
-		/* do nothing if no column is defined */
 		utils_beep();
 		return;
 	}
+
 	sci_start_undo_action(sci);
 	sel = sci_has_selection(sci);
 	if (!sel)
-	{
-		gint line, pos;
-
 		editor_select_indent_block(editor);
+	sci_deselect_last_newline(sci);
+	reflow_lines(editor, column);
+	if (!sel)
+		sci_set_anchor(sci, -1);
 
-		/* deselect last line break */
-		pos = sci_get_selection_end(sci);
-		line = sci_get_line_from_position(sci, pos);
-		if (line < sci_get_line_count(sci) - 1)
-		{
-			/* not last line */
-			pos = sci_get_line_end_position(sci, line - 1);
-			sci_set_selection_end(sci, pos);
-		}
+	sci_end_undo_action(sci);
+}
+
+
+static void join_paragraph(GeanyEditor *editor)
+{
+	ScintillaObject *sci = editor->sci;
+	gboolean sel;
+	gint column;
+
+	column = get_reflow_column(editor);
+	if (column == -1)
+	{
+		utils_beep();
+		return;
 	}
-	sci_fix_selection(sci);
-	split_lines(editor, column);
+
+	sci_start_undo_action(sci);
+	sel = sci_has_selection(sci);
+	if (!sel)
+		editor_select_indent_block(editor);
+	sci_deselect_last_newline(sci);
+	join_lines(editor);
 	if (!sel)
 		sci_set_anchor(sci, -1);
 
@@ -2247,6 +2223,9 @@ static gboolean cb_func_format_action(guint key_id)
 			break;
 		case GEANY_KEYS_FORMAT_REFLOWPARAGRAPH:
 			reflow_paragraph(doc->editor);
+			break;
+		case GEANY_KEYS_FORMAT_JOINLINES:
+			join_paragraph(doc->editor);
 			break;
 	}
 	return TRUE;
