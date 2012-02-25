@@ -2119,17 +2119,6 @@ static void sci_deselect_last_newline(ScintillaObject *sci)
 }
 
 
-/* if cursor < anchor, swap them */
-static void sci_fix_selection_anchors(ScintillaObject *sci)
-{
-	gint start, end;
-
-	start = sci_get_selection_start(sci);
-	end = sci_get_selection_end(sci);
-	sci_set_selection(sci, start, end);
-}
-
-
 static void reflow_paragraph(GeanyEditor *editor)
 {
 	ScintillaObject *sci = editor->sci;
@@ -2148,7 +2137,6 @@ static void reflow_paragraph(GeanyEditor *editor)
 	if (!sel)
 		editor_select_indent_block(editor);
 	sci_deselect_last_newline(sci);
-	sci_fix_selection_anchors(sci);
 	reflow_lines(editor, column);
 	if (!sel)
 		sci_set_anchor(sci, -1);
@@ -2175,7 +2163,6 @@ static void join_paragraph(GeanyEditor *editor)
 	if (!sel)
 		editor_select_indent_block(editor);
 	sci_deselect_last_newline(sci);
-	/*sci_fix_selection_anchors(sci);*/
 	join_lines(editor);
 	if (!sel)
 		sci_set_anchor(sci, -1);
