@@ -41,8 +41,9 @@ typedef enum
 	GCB_PROJECT_OPEN,
 	GCB_PROJECT_SAVE,
 	GCB_PROJECT_CLOSE,
-	GCB_PROJECT_DIALOG_CREATE,
+	GCB_PROJECT_DIALOG_OPEN,
 	GCB_PROJECT_DIALOG_CONFIRMED,
+	GCB_PROJECT_DIALOG_CLOSE,
 	GCB_UPDATE_EDITOR_MENU,
 	GCB_EDITOR_NOTIFY,
 	GCB_GEANY_STARTUP_COMPLETE,
@@ -90,8 +91,9 @@ struct _GeanyObjectClass
 	void (*project_open)(GKeyFile *keyfile);
 	void (*project_save)(GKeyFile *keyfile);
 	void (*project_close)(void);
-	void (*project_dialog_create)(GtkWidget *notebook);
+	void (*project_dialog_open)(GtkWidget *notebook);
 	void (*project_dialog_confirmed)(GtkWidget *notebook);
+	void (*project_dialog_close)(GtkWidget *notebook);
 	void (*update_editor_menu)(const gchar *word, gint click_pos, GeanyDocument *doc);
 	gboolean (*editor_notify)(GeanyEditor *editor, gpointer scnt);
 	void (*geany_startup_complete)(void);

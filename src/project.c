@@ -542,7 +542,7 @@ static void show_project_properties(gboolean show_build)
 		g_free(str);
 	}
 
-	g_signal_emit_by_name(geany_object, "project-dialog-create", e.notebook);
+	g_signal_emit_by_name(geany_object, "project-dialog-open", e.notebook);
 	gtk_widget_show_all(e.dialog);
 
 	/* note: notebook page must be shown before setting current page */
@@ -567,6 +567,7 @@ static void show_project_properties(gboolean show_build)
 	}
 
 	build_free_fields(e.build_properties);
+	g_signal_emit_by_name(geany_object, "project-dialog-close", e.notebook);
 	gtk_notebook_remove_page(GTK_NOTEBOOK(e.notebook), e.build_page_num);
 	gtk_widget_hide(e.dialog);
 }
@@ -593,7 +594,7 @@ gboolean project_ask_close(void)
 	{
 		if (dialogs_show_question_full(NULL, GTK_STOCK_CLOSE, GTK_STOCK_CANCEL,
 			_("Do you want to close it before proceeding?"),
-			_("The '%s' project is already open."), app->project->name))
+			_("The '%s' project is open."), app->project->name))
 		{
 			project_close(FALSE);
 			return TRUE;
