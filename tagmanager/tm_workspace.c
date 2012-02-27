@@ -384,15 +384,21 @@ gboolean tm_workspace_create_global_tags(const char *pre_process, const char **i
 	 */
 	if (pre_process != NULL)
 	{
+		gint ret;
 		command = g_strdup_printf("%s %s | grep -v -E '^\\s*(G_BEGIN_DECLS|G_END_DECLS)\\s*$' > %s",
 							  pre_process, temp_file, temp_file2);
 #ifdef TM_DEBUG
 		g_message("Executing: %s", command);
 #endif
-		system(command);
+		ret = system(command);
 		g_free(command);
 		g_unlink(temp_file);
 		g_free(temp_file);
+		if (ret == -1)
+		{
+			g_unlink(temp_file2);
+			return FALSE;
+		}
 	}
 	else
 	{

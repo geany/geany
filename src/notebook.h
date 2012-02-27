@@ -36,4 +36,8 @@ void notebook_remove_page(gint page_num);
  * previous tabs. */
 void notebook_switch_tablastused(void);
 
+/* Returns TRUE when MRU tab switch is in progress (i.e. not at the final 
+ * document yet). */
+gboolean notebook_switch_in_progress(void);
+
 #endif
