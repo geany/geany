@@ -268,7 +268,16 @@ on_website1_activate				   (GtkMenuItem	 *menuitem,
 										gpointer		 user_data);
 
 G_MODULE_EXPORT void
-on_line_wrapping1_toggled			  (GtkCheckMenuItem *checkmenuitem,
+on_help_menu_item_donate_activate(GtkMenuItem *item, gpointer user_data);
+
+G_MODULE_EXPORT void
+on_help_menu_item_wiki_activate(GtkMenuItem *item, gpointer user_data);
+
+G_MODULE_EXPORT void
+on_help_menu_item_bug_report_activate(GtkMenuItem *item, gpointer user_data);
+
+G_MODULE_EXPORT void
+on_line_wrapping1_toggled			   (GtkCheckMenuItem *checkmenuitem,
 										gpointer		 user_data);
 
 G_MODULE_EXPORT void

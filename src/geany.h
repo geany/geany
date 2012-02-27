@@ -47,6 +47,9 @@
 #define GEANY_TEMPLATES_SUBDIR			"templates"
 #define GEANY_CODENAME					"Tavira"
 #define GEANY_HOMEPAGE					"http://www.geany.org/"
+#define GEANY_WIKI						"http://wiki.geany.org/"
+#define GEANY_BUG_REPORT				"http://www.geany.org/Support/Bugs"
+#define GEANY_DONATE					"https://sourceforge.net/donate/index.php?group_id=153444"
 #define GEANY_STRING_UNTITLED			_("untitled")
 #define GEANY_DEFAULT_DIALOG_HEIGHT		350
 #define GEANY_WINDOW_DEFAULT_WIDTH		900

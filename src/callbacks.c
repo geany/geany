@@ -1126,6 +1126,24 @@ G_MODULE_EXPORT void on_website1_activate(GtkMenuItem *menuitem, gpointer user_d
 }
 
 
+G_MODULE_EXPORT void on_help_menu_item_donate_activate(GtkMenuItem *item, gpointer user_data)
+{
+	utils_open_browser(GEANY_DONATE);
+}
+
+
+G_MODULE_EXPORT void on_help_menu_item_wiki_activate(GtkMenuItem *item, gpointer user_data)
+{
+	utils_open_browser(GEANY_WIKI);
+}
+
+
+G_MODULE_EXPORT void on_help_menu_item_bug_report_activate(GtkMenuItem *item, gpointer user_data)
+{
+	utils_open_browser(GEANY_BUG_REPORT);
+}
+
+
 G_MODULE_EXPORT void on_comments_function_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
 	GeanyDocument *doc = document_get_current();
