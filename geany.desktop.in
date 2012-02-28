@@ -12,9 +12,3 @@ MimeType=text/plain;text/x-chdr;text/x-csrc;text/x-c++hdr;text/x-c++src;text/x-j
 StartupNotify=true
 TargetEnvironment=Unity
 _Keywords=Code;Editor;Programming
-X-Ayatana-Desktop-Shortcuts=New
-
-[New Shortcut Group]
-Name=Open a new instance
-Exec=geany --new-instance
-TargetEnvironment=Unity
