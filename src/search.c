@@ -1064,8 +1064,10 @@ void search_show_find_in_files_dialog(const gchar *dir)
 	 * (in create_fif_dialog() it would fail if a project is opened after dialog creation) */
 	if (app->project != NULL && NZV(app->project->base_path))
 	{
+		gchar *base_path = project_get_base_path();
 		ui_combo_box_prepend_text_once(GTK_COMBO_BOX(fif_dlg.dir_combo),
-			app->project->base_path);
+			base_path);
+		g_free(base_path);
 	}
 
 	entry = gtk_bin_get_child(GTK_BIN(fif_dlg.dir_combo));
@@ -1082,7 +1084,7 @@ void search_show_find_in_files_dialog(const gchar *dir)
 			/* use default_open_path if no directory could be determined
 			 * (e.g. when no files are open) */
 			if (!cur_dir)
-				cur_dir = g_strdup(utils_get_default_dir_utf8());
+				cur_dir = utils_get_default_dir_utf8();
 			if (!cur_dir)
 				cur_dir = g_get_current_dir();
 		}

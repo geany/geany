@@ -207,7 +207,7 @@ gchar *utils_get_hex_from_color(GdkColor *color);
 
 guint utils_invert_color(guint color);
 
-const gchar *utils_get_default_dir_utf8(void);
+gchar *utils_get_default_dir_utf8(void);
 
 gchar *utils_get_current_file_dir_utf8(void);
 
