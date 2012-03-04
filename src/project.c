@@ -1077,11 +1077,17 @@ static gboolean write_config(gboolean emit_signal)
 }
 
 
-/* Constructs the project's base path which is used for "Make all" and "Execute".
- * The result is an absolute string in UTF-8 encoding which is either the same as
- * base path if it is absolute or it is built out of project file name's dir and base_path.
- * If there is no project or project's base_path is invalid, NULL will be returned.
- * The returned string should be freed when no longer needed. */
+/**
+ * Constructs the project's base path. The result is an absolute string in UTF-8
+ * encoding which is either the same as base path if it is absolute or it is 
+ * built out of project file name's dir and base_path. If there is no project or
+ * project's base_path is invalid, NULL will be returned. The returned string 
+ * should be freed when no longer needed.
+ *
+ * @return Absolute base path or NULL on error.
+ *
+ * @since 1.22
+ **/
 gchar *project_get_base_path(void)
 {
 	GeanyProject *project = app->project;

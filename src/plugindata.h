@@ -53,7 +53,7 @@
  * @warning You should not test for values below 200 as previously
  * @c GEANY_API_VERSION was defined as an enum value, not a macro.
  */
-#define GEANY_API_VERSION 214
+#define GEANY_API_VERSION 215
 
 /** The Application Binary Interface (ABI) version, incremented whenever
  * existing fields in the plugin data types have to be changed or reordered.
@@ -276,6 +276,7 @@ typedef struct GeanyFunctions
 	struct StashFuncs			*p_stash;			/**< See stash.h */
 	struct SymbolsFuncs			*p_symbols;			/**< See symbols.h */
 	struct BuildFuncs			*p_build;			/**< See build.h */
+	struct ProjectFuncs			*p_project;			/**< See project.h */
 }
 GeanyFunctions;
 
@@ -723,6 +724,13 @@ typedef struct BuildFuncs
 	guint (*build_get_group_count)(const GeanyBuildGroup grp);
 }
 BuildFuncs;
+
+/* See project.h */
+typedef struct ProjectFuncs
+{
+	gchar *(*project_get_base_path)(void);
+}
+ProjectFuncs;
 
 /* Deprecated aliases */
 #ifndef GEANY_DISABLE_DEPRECATED

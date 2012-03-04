@@ -313,16 +313,19 @@ static void on_go_home(void)
 /* TODO: use utils_get_default_dir_utf8() */
 static gchar *get_default_dir(void)
 {
-	const gchar *dir = NULL;
+	gchar *dir = NULL;
 	GeanyProject *project = geany->app->project;
 
 	if (project)
-		dir = project->base_path;
+		dir = project_get_base_path();
 	else
-		dir = geany->prefs->default_open_path;
+		dir = g_strdup(geany->prefs->default_open_path);
 
 	if (NZV(dir))
-		return utils_get_locale_from_utf8(dir);
+	{
+		SETPTR(dir, utils_get_locale_from_utf8(dir));
+		return dir;
+	}
 
 	return g_get_current_dir();
 }
@@ -1010,18 +1013,7 @@ static void project_change_cb(G_GNUC_UNUSED GObject *obj, G_GNUC_UNUSED GKeyFile
 	if (! fb_set_project_base_path || project == NULL || ! NZV(project->base_path))
 		return;
 
-	/* TODO this is a copy of project_get_base_path(), add it to the plugin API */
-	if (g_path_is_absolute(project->base_path))
-		new_dir = g_strdup(project->base_path);
-	else
-	{	/* build base_path out of project file name's dir and base_path */
-		gchar *dir = g_path_get_dirname(project->file_name);
-
-		new_dir = g_strconcat(dir, G_DIR_SEPARATOR_S, project->base_path, NULL);
-		g_free(dir);
-	}
-	/* get it into locale encoding */
-	SETPTR(new_dir, utils_get_locale_from_utf8(new_dir));
+	new_dir = project_get_base_path();
 
 	if (! utils_str_equal(current_dir, new_dir))
 	{
