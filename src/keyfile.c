@@ -978,10 +978,11 @@ void configuration_save_default_session(void)
  */
 void configuration_reload_default_session(void)
 {
-	const gchar *configfile = g_build_filename(app->configdir, "geany.conf", NULL);
+	gchar *configfile = g_build_filename(app->configdir, "geany.conf", NULL);
 	GKeyFile *config = g_key_file_new();
 
 	g_key_file_load_from_file(config, configfile, G_KEY_FILE_NONE, NULL);
+	g_free(configfile);
 
 	configuration_load_session_files(config, FALSE);
 
