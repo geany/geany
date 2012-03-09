@@ -41,6 +41,7 @@
 #define COPYRIGHT "Copyright (c)  2005-2011\nColomban Wendling\nNick Treleaven\nMatthew Brush\nEnrico Tröger\nFrank Lanitz\nAll rights reserved."
 
 const gchar *translators[][2] = {
+	{ "ar", "Fayssal Chamekh &lt;chamfay@gmail.com&gt;"},
 	{ "ast", "Marcos Costales &lt;marcoscostales@gmail.com&gt;"},
 	{ "be_BY", "Yura Siamashka &lt;yurand2@gmail.com&gt;" },
 	{ "bg", "Dilyan Rusev &lt;dilyanrusev@gmail.com&gt;" },
