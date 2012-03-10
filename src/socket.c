@@ -86,7 +86,7 @@
 #include "utils.h"
 #include "dialogs.h"
 #include "encodings.h"
-
+#include "project.h"
 
 
 #ifdef G_OS_WIN32
@@ -563,7 +563,10 @@ static void handle_input_filename(const gchar *buf)
 	if (locale_filename)
 	{
 		if (g_str_has_suffix(locale_filename, ".geany"))
-			main_load_project_from_command_line(locale_filename, TRUE);
+		{
+			if (project_ask_close())
+				main_load_project_from_command_line(locale_filename, TRUE);
+		}
 		else
 			main_handle_filename(locale_filename);
 	}
