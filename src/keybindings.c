@@ -131,6 +131,9 @@ GeanyKeyBinding *keybindings_get_item(GeanyKeyGroup *group, gsize key_id)
 /* This is used to set default keybindings on startup.
  * Menu accels are set in apply_kb_accel(). */
 /** Fills a GeanyKeyBinding struct item.
+ * @note Always set @a key and @a mod to 0, otherwise you will likely
+ * cause conflicts with the user's custom, other plugin's keybindings or 
+ * future default keybindings.
  * @param group Group.
  * @param key_id Keybinding index for the group.
  * @param callback Function to call when activated, or @c NULL to use the group callback.
