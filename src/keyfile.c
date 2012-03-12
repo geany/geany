@@ -1138,7 +1138,7 @@ void configuration_open_files(void)
 	main_status.opening_session_files = TRUE;
 
 	i = file_prefs.tab_order_ltr ? 0 : (session_files->len - 1);
-	while (TRUE)
+	while (i >= 0 && i < (gint)session_files->len)
 	{
 		gchar **tmp = g_ptr_array_index(session_files, i);
 		guint len;
@@ -1151,17 +1151,9 @@ void configuration_open_files(void)
 		g_strfreev(tmp);
 
 		if (file_prefs.tab_order_ltr)
-		{
 			i++;
-			if (i >= (gint)session_files->len)
-				break;
-		}
 		else
-		{
 			i--;
-			if (i < 0)
-				break;
-		}
 	}
 
 	g_ptr_array_free(session_files, TRUE);
