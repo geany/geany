@@ -44,3 +44,12 @@ clean: deps
 	cd scintilla && $(MAKE) -f makefile.win32 clean && cd ..
 	cd plugins && $(MAKE) -f makefile.win32 clean && cd ..
 	cd src && $(MAKE) -f makefile.win32 clean && cd ..
+
+.PHONY: install
+DESTDIR='C:/Program Files/Geany'
+
+# requires admin privileges and MSYS
+install:
+	cp -r data $(DESTDIR)
+	cp plugins/*.dll $(DESTDIR)/lib
+	cp geany.exe $(DESTDIR)/bin
