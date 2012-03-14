@@ -1166,20 +1166,36 @@ const GeanyLexerStyle *highlighting_get_style(gint ft_id, gint style_id)
 }
 
 
-static void
-on_color_scheme_clicked(GtkMenuItem *menuitem, gpointer user_data)
+static GtkWidget *scheme_tree = NULL;
+
+enum
 {
+	SCHEME_MARKUP,
+	SCHEME_FILE,
+	SCHEME_COLUMNS
+};
+
+static void
+on_color_scheme_changed(void)
+{
+	GtkTreeSelection *treesel;
+	GtkTreeModel *model;
+	GtkTreeIter iter;
 	gchar *fname;
 	gchar *path;
 
+	treesel = gtk_tree_view_get_selection(GTK_TREE_VIEW(scheme_tree));
+	if (!gtk_tree_selection_get_selected(treesel, &model, &iter))
+		return;
+	gtk_tree_model_get(model, &iter, SCHEME_FILE, &fname, -1);
+
 	/* check if default item */
-	if (!user_data)
+	if (!fname)
 	{
 		SETPTR(editor_prefs.color_scheme, NULL);
 		filetypes_reload();
 		return;
 	}
-	fname = g_strdup(g_object_get_data(G_OBJECT(menuitem), "colorscheme_file"));
 	SETPTR(fname, utils_get_locale_from_utf8(fname));
 
 	/* fname is just the basename from the menu item, so prepend the custom files path */
@@ -1215,61 +1231,63 @@ static gchar *utils_get_setting_locale_string(GKeyFile *keyfile,
 }
 
 
-static void add_color_scheme_item(GtkWidget *menu, const gchar *fname)
+static void add_color_scheme_item(GtkListStore *store,
+	gchar *name, gchar *desc, const gchar *fn)
 {
-	static GSList *group = NULL;
-	GtkWidget *item;
+	GtkTreeIter iter;
+	gchar *markup;
 
-	if (!fname)
+	/* reuse parameters */
+	name = g_markup_escape_text(name, -1);
+	desc = g_markup_escape_text(desc, -1);
+	markup = g_strdup_printf("<big><b>%s</b></big>\n%s", name, desc);
+	g_free(name);
+	g_free(desc);
+
+	gtk_list_store_append(store, &iter);
+	gtk_list_store_set(store, &iter, SCHEME_MARKUP, markup,
+		SCHEME_FILE, fn, -1);
+	g_free(markup);
+
+	if (utils_str_equal(fn, editor_prefs.color_scheme))
 	{
-		item = gtk_radio_menu_item_new_with_mnemonic(group, _("_Default"));
+		GtkTreeSelection *treesel =
+			gtk_tree_view_get_selection(GTK_TREE_VIEW(scheme_tree));
+
+		gtk_tree_selection_select_iter(treesel, &iter);
 	}
-	else
-	{
-		GKeyFile *hkeyfile, *skeyfile;
-		gchar *path, *theme_name, *tooltip;
-		gchar *theme_fn = utils_get_utf8_from_locale(fname);
-
-		path = g_build_filename(app->configdir, GEANY_COLORSCHEMES_SUBDIR, fname, NULL);
-		hkeyfile = utils_key_file_new(path);
-		SETPTR(path, g_build_filename(app->datadir, GEANY_COLORSCHEMES_SUBDIR, fname, NULL));
-		skeyfile = utils_key_file_new(path);
-
-		theme_name = utils_get_setting(locale_string, hkeyfile, skeyfile, "theme_info", "name", theme_fn);
-		item = gtk_radio_menu_item_new_with_label(group, theme_name);
-		g_object_set_data_full(G_OBJECT(item), "colorscheme_file", theme_fn, g_free);
-
-		tooltip = utils_get_setting(locale_string, hkeyfile, skeyfile, "theme_info", "description", NULL);
-		if (tooltip != NULL)
-		{
-			gtk_widget_set_tooltip_text(item, tooltip);
-			g_free(tooltip);
-		}
-		g_free(path);
-		g_free(theme_name);
-		g_key_file_free(hkeyfile);
-		g_key_file_free(skeyfile);
-	}
-
-	g_signal_connect(item, "activate",
-		G_CALLBACK(on_color_scheme_clicked), GINT_TO_POINTER(fname != NULL));
-
-	group = gtk_radio_menu_item_get_group(GTK_RADIO_MENU_ITEM(item));
-	if (utils_str_equal(editor_prefs.color_scheme, fname))
-		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(item), TRUE);
-
-	gtk_widget_show(item);
-	gtk_container_add(GTK_CONTAINER(menu), item);
 }
 
 
-static gboolean add_color_scheme_items(GtkWidget *menu)
+static void add_color_scheme_file(GtkListStore *store, const gchar *fname)
+{
+	GKeyFile *hkeyfile, *skeyfile;
+	gchar *path, *theme_name, *theme_desc;
+	gchar *theme_fn = utils_get_utf8_from_locale(fname);
+
+	path = g_build_filename(app->configdir, GEANY_COLORSCHEMES_SUBDIR, fname, NULL);
+	hkeyfile = utils_key_file_new(path);
+	SETPTR(path, g_build_filename(app->datadir, GEANY_COLORSCHEMES_SUBDIR, fname, NULL));
+	skeyfile = utils_key_file_new(path);
+
+	theme_name = utils_get_setting(locale_string, hkeyfile, skeyfile, "theme_info", "name", theme_fn);
+	theme_desc = utils_get_setting(locale_string, hkeyfile, skeyfile, "theme_info", "description", NULL);
+	add_color_scheme_item(store, theme_name, theme_desc, theme_fn);
+
+	g_free(path);
+	g_free(theme_fn);
+	g_free(theme_name);
+	g_free(theme_desc);
+	g_key_file_free(hkeyfile);
+	g_key_file_free(skeyfile);
+}
+
+
+static gboolean add_color_scheme_items(GtkListStore *store)
 {
 	GSList *list, *node;
 
-	g_return_val_if_fail(menu, FALSE);
-
-	add_color_scheme_item(menu, NULL);
+	add_color_scheme_item(store, _("Default"), _("Default"), NULL);
 	list = utils_get_config_files(GEANY_COLORSCHEMES_SUBDIR);
 
 	foreach_slist(node, list)
@@ -1277,7 +1295,7 @@ static gboolean add_color_scheme_items(GtkWidget *menu)
 		gchar *fname = node->data;
 
 		if (g_str_has_suffix(fname, ".conf"))
-			add_color_scheme_item(menu, fname);
+			add_color_scheme_file(store, fname);
 
 		g_free(fname);
 	}
@@ -1286,20 +1304,58 @@ static gboolean add_color_scheme_items(GtkWidget *menu)
 }
 
 
+static void show_color_scheme_dialog(void)
+{
+	static GtkWidget *dialog = NULL;
+	GtkListStore *store = gtk_list_store_new(SCHEME_COLUMNS,
+		G_TYPE_STRING, G_TYPE_STRING);
+	GtkCellRenderer *text_renderer;
+	GtkTreeViewColumn *column;
+	GtkWidget *vbox, *swin, *tree;
+
+	scheme_tree = tree = gtk_tree_view_new_with_model(GTK_TREE_MODEL(store));
+	g_object_unref(store);
+	gtk_tree_view_set_rules_hint(GTK_TREE_VIEW(tree), TRUE);
+	gtk_tree_view_set_headers_visible(GTK_TREE_VIEW(tree), FALSE);
+	g_signal_connect(tree, "cursor-changed", on_color_scheme_changed, NULL);
+
+	text_renderer = gtk_cell_renderer_text_new();
+	g_object_set(text_renderer, "wrap-mode", PANGO_WRAP_WORD, NULL);
+	column = gtk_tree_view_column_new_with_attributes(
+		NULL, text_renderer, "markup", SCHEME_MARKUP, NULL);
+	gtk_tree_view_append_column(GTK_TREE_VIEW(tree), column);
+
+	add_color_scheme_items(store);
+
+	if (dialog)
+		gtk_widget_destroy(dialog);
+	dialog = gtk_dialog_new_with_buttons(_("Color Schemes"),
+		GTK_WINDOW(main_widgets.window), GTK_DIALOG_DESTROY_WITH_PARENT,
+		GTK_STOCK_CLOSE, GTK_RESPONSE_CLOSE, NULL);
+	vbox = ui_dialog_vbox_new(GTK_DIALOG(dialog));
+	gtk_box_set_spacing(GTK_BOX(vbox), 6);
+	gtk_widget_set_name(dialog, "GeanyDialog");
+	gtk_window_set_default_size(GTK_WINDOW(dialog),
+		GEANY_DEFAULT_DIALOG_HEIGHT * 7/4, GEANY_DEFAULT_DIALOG_HEIGHT);
+
+	swin = gtk_scrolled_window_new(NULL, NULL);
+	gtk_container_add(GTK_CONTAINER(swin), tree);
+	gtk_container_add(GTK_CONTAINER(vbox), swin);
+	g_signal_connect(dialog, "response", G_CALLBACK(gtk_widget_hide), NULL);
+	gtk_widget_show_all(dialog);
+}
+
+
 static void create_color_scheme_menu(void)
 {
-	GtkWidget *item, *menu, *root;
+	GtkWidget *item, *menu;
 
 	menu = ui_lookup_widget(main_widgets.window, "menu_view_editor1_menu");
 	item = ui_image_menu_item_new(GTK_STOCK_SELECT_COLOR, _("_Color Schemes"));
 	gtk_menu_shell_prepend(GTK_MENU_SHELL(menu), item);
-	root = item;
 
-	menu = gtk_menu_new();
-	gtk_menu_item_set_submenu(GTK_MENU_ITEM(item), menu);
-
-	add_color_scheme_items(menu);
-	gtk_widget_show_all(root);
+	g_signal_connect(item, "activate", G_CALLBACK(show_color_scheme_dialog), NULL);
+	gtk_widget_show(item);
 }
 
 
