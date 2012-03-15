@@ -1304,6 +1304,14 @@ static gboolean add_color_scheme_items(GtkListStore *store)
 }
 
 
+static void on_color_scheme_dialog_response(GtkWidget *dialog,
+	gint response, gpointer *dialog_ptr)
+{
+	*dialog_ptr = NULL;
+	gtk_widget_destroy(dialog);
+}
+
+
 static void show_color_scheme_dialog(void)
 {
 	static GtkWidget *dialog = NULL;
@@ -1327,6 +1335,7 @@ static void show_color_scheme_dialog(void)
 
 	add_color_scheme_items(store);
 
+	/* old dialog may still be showing */
 	if (dialog)
 		gtk_widget_destroy(dialog);
 	dialog = gtk_dialog_new_with_buttons(_("Color Schemes"),
@@ -1344,7 +1353,7 @@ static void show_color_scheme_dialog(void)
 		GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
 	gtk_container_add(GTK_CONTAINER(swin), tree);
 	gtk_container_add(GTK_CONTAINER(vbox), swin);
-	g_signal_connect(dialog, "response", G_CALLBACK(gtk_widget_hide), NULL);
+	g_signal_connect(dialog, "response", G_CALLBACK(on_color_scheme_dialog_response), &dialog);
 	gtk_widget_show_all(dialog);
 }
 
