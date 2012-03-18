@@ -1258,21 +1258,105 @@ static gboolean tree_store_remove_row(GtkTreeStore *store, GtkTreeIter *iter)
 }
 
 
-/* updates @table adding @tag->name:@iter if necessary */
+/* adds a new element in the parent table if it's key is known.
+ * duplicates are kept */
 static void update_parents_table(GHashTable *table, const TMTag *tag, const gchar *parent_name,
 		const GtkTreeIter *iter)
 {
-	if (g_hash_table_lookup_extended(table, tag->name, NULL, NULL) &&
+	GList **list;
+	if (g_hash_table_lookup_extended(table, tag->name, NULL, (gpointer *) &list) &&
 		! utils_str_equal(parent_name, tag->name) /* prevent Foo::Foo from making parent = child */)
 	{
-		g_hash_table_insert(table, tag->name, g_slice_dup(GtkTreeIter, iter));
+		if (! list)
+		{
+			list = g_slice_alloc(sizeof *list);
+			*list = NULL;
+			g_hash_table_insert(table, tag->name, list);
+		}
+		*list = g_list_prepend(*list, g_slice_dup(GtkTreeIter, iter));
 	}
 }
 
 
-static void free_iter_slice(gpointer iter)
+static void free_iter_slice_list(gpointer data)
 {
-	g_slice_free(GtkTreeIter, iter);
+	GList **list = data;
+
+	if (list)
+	{
+		GList *node;
+		foreach_list(node, *list)
+			g_slice_free(GtkTreeIter, node->data);
+		g_list_free(*list);
+		g_slice_free1(sizeof *list, list);
+	}
+}
+
+
+/* inserts a @data in @table on key @tag.
+ * previous data is not overwritten if the key is duplicated, but rather the
+ * two values are kept in a list
+ * 
+ * table is: GHashTable<TMTag, GList<GList<TMTag>>> */
+static void tags_table_insert(GHashTable *table, TMTag *tag, GList *data)
+{
+	GList *list = g_hash_table_lookup(table, tag);
+	list = g_list_prepend(list, data);
+	g_hash_table_insert(table, tag, list);
+}
+
+
+/* looks up the entry in @table that better matches @tag.
+ * if there are more than one candidate, the one that has closest line position to @tag is chosen */
+static GList *tags_table_lookup(GHashTable *table, TMTag *tag)
+{
+	GList *data = NULL;
+	GList *node = g_hash_table_lookup(table, tag);
+	if (node)
+	{
+		glong delta;
+		data = node->data;
+
+#define TAG_DELTA(a, b) ABS((glong) TM_TAG(a)->atts.entry.line - (glong) TM_TAG(b)->atts.entry.line)
+
+		delta = TAG_DELTA(((GList *) node->data)->data, tag);
+		for (node = node->next; node; node = node->next)
+		{
+			glong d = TAG_DELTA(((GList *) node->data)->data, tag);
+
+			if (d < delta)
+			{
+				data = node->data;
+				delta = d;
+			}
+		}
+
+#undef TAG_DELTA
+
+	}
+	return data;
+}
+
+
+/* removes the element at @tag from @table.
+ * @tag must be the exact pointer used at insertion time */
+static void tags_table_remove(GHashTable *table, TMTag *tag)
+{
+	GList *list = g_hash_table_lookup(table, tag);
+	if (list)
+	{
+		GList *node;
+		foreach_list(node, list)
+		{
+			if (((GList *) node->data)->data == tag)
+				break;
+		}
+		list = g_list_delete_link(list, node);
+		if (list)
+			g_hash_table_insert(table, tag, list);
+		else
+			g_hash_table_remove(table, tag);
+	}
 }
 
 
@@ -1306,7 +1390,7 @@ static void update_tree_tags(GeanyDocument *doc, GList **tags)
 
 	/* Build hash tables holding tags and parents */
 	/* parent table holds "tag-name":GtkTreeIter */
-	parents_table = g_hash_table_new_full(g_str_hash, g_str_equal, NULL, free_iter_slice);
+	parents_table = g_hash_table_new_full(g_str_hash, g_str_equal, NULL, free_iter_slice_list);
 	/* tags table is another representation of the @tags list, TMTag:GList<TMTag> */
 	tags_table = g_hash_table_new_full(tag_hash, tag_equal, NULL, NULL);
 	foreach_list(item, *tags)
@@ -1314,7 +1398,7 @@ static void update_tree_tags(GeanyDocument *doc, GList **tags)
 		TMTag *tag = item->data;
 		const gchar *name;
 
-		g_hash_table_insert(tags_table, tag, item);
+		tags_table_insert(tags_table, tag, item);
 
 		name = get_parent_name(tag, doc->file_type->id);
 		if (name)
@@ -1337,7 +1421,7 @@ static void update_tree_tags(GeanyDocument *doc, GList **tags)
 		{
 			GList *found_item;
 
-			found_item = g_hash_table_lookup(tags_table, tag);
+			found_item = tags_table_lookup(tags_table, tag);
 			if (! found_item) /* tag doesn't exist, remove it */
 				cont = tree_store_remove_row(store, &iter);
 			else /* tag still exist, update it */
@@ -1362,7 +1446,7 @@ static void update_tree_tags(GeanyDocument *doc, GList **tags)
 				update_parents_table(parents_table, found, parent_name, &iter);
 
 				/* remove the updated tag from the table and list */
-				g_hash_table_remove(tags_table, found);
+				tags_table_remove(tags_table, found);
 				*tags = g_list_delete_link(*tags, found_item);
 
 				cont = next_iter(model, &iter, TRUE);
@@ -1393,9 +1477,34 @@ static void update_tree_tags(GeanyDocument *doc, GList **tags)
 			parent_name = get_parent_name(tag, doc->file_type->id);
 			if (parent_name)
 			{
-				GtkTreeIter *parent_search;
+				GList **candidates;
+				GtkTreeIter *parent_search = NULL;
 
-				parent_search = g_hash_table_lookup(parents_table, parent_name);
+				/* walk parent candidates to find the better one.
+				 * if there are more than one, take the one that has the closest line number
+				 * after the tag we're searching the parent for */
+				candidates = g_hash_table_lookup(parents_table, parent_name);
+				if (candidates)
+				{
+					GList *node;
+					glong delta = G_MAXLONG;
+					foreach_list(node, *candidates)
+					{
+						TMTag *parent_tag;
+						glong  d;
+
+						gtk_tree_model_get(GTK_TREE_MODEL(store), node->data,
+								SYMBOLS_COLUMN_TAG, &parent_tag, -1);
+
+						d = tag->atts.entry.line - parent_tag->atts.entry.line;
+						if (! parent_search || (d >= 0 && d < delta))
+						{
+							delta = d;
+							parent_search = node->data;
+						}
+					}
+				}
+
 				if (parent_search)
 					parent = parent_search;
 				else
