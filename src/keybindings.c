@@ -656,7 +656,22 @@ static void load_kb(GeanyKeyGroup *group, GeanyKeyBinding *kb, gpointer user_dat
 static void load_user_kb(void)
 {
 	gchar *configfile = g_strconcat(app->configdir, G_DIR_SEPARATOR_S, "keybindings.conf", NULL);
+	gchar *geanyconf = g_strconcat(app->configdir, G_DIR_SEPARATOR_S, "geany.conf", NULL);
 	GKeyFile *config = g_key_file_new();
+
+	/* backwards compatibility with Geany 0.21 defaults */
+	if (!g_file_test(configfile, G_FILE_TEST_EXISTS) &&
+		g_file_test(geanyconf, G_FILE_TEST_EXISTS))
+	{
+		utils_write_file(configfile, "[Bindings]\n"
+			"popup_gototagdefinition=\n"
+			"edit_transposeline=<Control>t\n"
+			"edit_movelineup=\n"
+			"edit_movelinedown=\n"
+			"move_tableft=<Alt>Page_Up\n"
+			"move_tabright=<Alt>Page_Down\n");
+	}
+	g_free(geanyconf);
 
 	/* now load user defined keys */
 	if (g_key_file_load_from_file(config, configfile, G_KEY_FILE_KEEP_COMMENTS, NULL))
