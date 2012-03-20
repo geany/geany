@@ -656,22 +656,24 @@ static void load_kb(GeanyKeyGroup *group, GeanyKeyBinding *kb, gpointer user_dat
 static void load_user_kb(void)
 {
 	gchar *configfile = g_strconcat(app->configdir, G_DIR_SEPARATOR_S, "keybindings.conf", NULL);
-	gchar *geanyconf = g_strconcat(app->configdir, G_DIR_SEPARATOR_S, "geany.conf", NULL);
 	GKeyFile *config = g_key_file_new();
 
 	/* backwards compatibility with Geany 0.21 defaults */
-	if (!g_file_test(configfile, G_FILE_TEST_EXISTS) &&
-		g_file_test(geanyconf, G_FILE_TEST_EXISTS))
+	if (!g_file_test(configfile, G_FILE_TEST_EXISTS))
 	{
-		utils_write_file(configfile, "[Bindings]\n"
+		gchar *geanyconf = g_strconcat(app->configdir, G_DIR_SEPARATOR_S, "geany.conf", NULL);
+		const gchar data[] = "[Bindings]\n"
 			"popup_gototagdefinition=\n"
 			"edit_transposeline=<Control>t\n"
 			"edit_movelineup=\n"
 			"edit_movelinedown=\n"
 			"move_tableft=<Alt>Page_Up\n"
-			"move_tabright=<Alt>Page_Down\n");
+			"move_tabright=<Alt>Page_Down\n";
+
+		utils_write_file(configfile, g_file_test(geanyconf, G_FILE_TEST_EXISTS) ?
+			data : "");
+		g_free(geanyconf);
 	}
-	g_free(geanyconf);
 
 	/* now load user defined keys */
 	if (g_key_file_load_from_file(config, configfile, G_KEY_FILE_KEEP_COMMENTS, NULL))
@@ -766,14 +768,7 @@ void keybindings_write_to_file(void)
 	gchar *data;
 	GKeyFile *config = g_key_file_new();
 
- 	/* add comment if the file is newly created */
-	if (! g_key_file_load_from_file(config, configfile, G_KEY_FILE_KEEP_COMMENTS, NULL))
-	{
-		g_key_file_set_comment(config, NULL, NULL,
-			"Keybindings for Geany\nThe format looks like \"<Control>a\" or \"<Shift><Alt>F1\".\n"
-			"But you can also change the keys in Geany's preferences dialog.", NULL);
-	}
-
+	g_key_file_load_from_file(config, configfile, 0, NULL);
 	keybindings_foreach(set_keyfile_kb, config);
 
 	/* write the file */
