@@ -73,34 +73,34 @@ mem_free (MIO *mio)
 
 static gsize
 mem_read (MIO    *mio,
-          void   *ptr,
+          void   *ptr_,
           gsize   size,
           gsize   nmemb)
 {
   gsize n_read = 0;
   
   if (size != 0 && nmemb != 0) {
-    if (mio->impl.mem.ungetch != EOF) {
-      *((guchar *)ptr) = (guchar)mio->impl.mem.ungetch;
-      mio->impl.mem.ungetch = EOF;
-      mio->impl.mem.pos++;
-      if (size == 1) {
-        n_read++;
-      } else if (mio->impl.mem.pos + (size - 1) <= mio->impl.mem.size) {
-        memcpy (&(((guchar *)ptr)[1]),
-                &mio->impl.mem.buf[mio->impl.mem.pos], size - 1);
-        mio->impl.mem.pos += size - 1;
-        n_read++;
-      }
+    gsize   size_avail  = mio->impl.mem.size - mio->impl.mem.pos;
+    gsize   copy_bytes  = size * nmemb;
+    guchar *ptr         = ptr_;
+    
+    if (size_avail < copy_bytes) {
+      copy_bytes = size_avail;
     }
-    for (; n_read < nmemb; n_read++) {
-      if (mio->impl.mem.pos + size > mio->impl.mem.size) {
-        break;
-      } else {
-        memcpy (&(((guchar *)ptr)[n_read * size]),
-                &mio->impl.mem.buf[mio->impl.mem.pos], size);
-        mio->impl.mem.pos += size;
+    
+    if (copy_bytes > 0) {
+      n_read = copy_bytes / size;
+      
+      if (mio->impl.mem.ungetch != EOF) {
+        *ptr = (guchar) mio->impl.mem.ungetch;
+        mio->impl.mem.ungetch = EOF;
+        copy_bytes--;
+        mio->impl.mem.pos++;
+        ptr++;
       }
+      
+      memcpy (ptr, &mio->impl.mem.buf[mio->impl.mem.pos], copy_bytes);
+      mio->impl.mem.pos += copy_bytes;
     }
     if (mio->impl.mem.pos >= mio->impl.mem.size) {
       mio->impl.mem.eof = TRUE;
