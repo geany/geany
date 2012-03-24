@@ -440,6 +440,7 @@ typedef struct UtilsFuncs
 	gchar**		(*utils_copy_environment)(const gchar **exclude_vars, const gchar *first_varname, ...);
 	gchar*		(*utils_find_open_xml_tag) (const gchar sel[], gint size);
 	const gchar*	(*utils_find_open_xml_tag_pos) (const gchar sel[], gint size);
+	gchar*		(*utils_relpath)(const gchar *origin, const gchar *dest);
 }
 UtilsFuncs;
 

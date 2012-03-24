@@ -49,7 +49,7 @@ void configuration_save_default_session(void);
 
 void configuration_load_session_files(GKeyFile *config, gboolean read_recent_files);
 
-void configuration_save_session_files(GKeyFile *config);
+void configuration_save_session_files(GKeyFile *config, gboolean relative);
 
 /* set some settings which are already read from the config file, but need other things, like the
  * realisation of the main window */

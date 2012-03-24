@@ -1059,7 +1059,11 @@ static gboolean write_config(gboolean emit_signal)
 
 	/* store the session files into the project too */
 	if (project_prefs.project_session)
-		configuration_save_session_files(config);
+	{
+		/* save both absolute and relative paths for open files */
+		configuration_save_session_files(config, FALSE);
+		configuration_save_session_files(config, TRUE);
+	}
 	build_save_menu(config, (gpointer)p, GEANY_BCS_PROJ);
 	if (emit_signal)
 	{

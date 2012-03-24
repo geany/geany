@@ -2094,3 +2094,55 @@ gchar **utils_strv_join(gchar **first, gchar **second)
 	g_free(second);
 	return strv;
 }
+
+
+/**
+ * Generates relative path from the origin directory to the destination directory.
+ *
+ * @param origin_dir The origin directory.
+ * @param dest_dir The destination directory.
+ *
+ * @return The relative path or NULL when not successful.
+ **/
+gchar *utils_relpath(const gchar *origin_dir, const gchar *dest_dir)
+{
+	gchar *origin, *dest;
+	gchar **originv, **destv;
+	gchar *ret = NULL;
+	guint i, j;
+
+	origin = tm_get_real_path(origin_dir);
+	dest = tm_get_real_path(dest_dir);
+
+	if (!NZV(origin) || !NZV(dest) || origin[0] != dest[0])
+	{
+		g_free(origin);
+		g_free(dest);
+		return NULL;
+	}
+
+	originv = g_strsplit_set(g_path_skip_root(origin), "/\\", -1);
+	destv = g_strsplit_set(g_path_skip_root(dest), "/\\", -1);
+
+	for (i = 0; originv[i] != NULL && destv[i] != NULL; i++)
+		if (g_strcmp0(originv[i], destv[i]) != 0)
+			break;
+
+	ret = g_strdup("");
+
+	for (j = i; originv[j] != NULL; j++)
+		setptr(ret, g_build_filename(ret, "..", NULL));
+
+	for (j = i; destv[j] != NULL; j++)
+		setptr(ret, g_build_filename(ret, destv[j], NULL));
+
+	if (strlen(ret) == 0)
+		setptr(ret, g_strdup("./"));
+
+	g_free(origin);
+	g_free(dest);
+	g_strfreev(originv);
+	g_strfreev(destv);
+	
+	return ret;
+}
