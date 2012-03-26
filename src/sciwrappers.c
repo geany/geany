@@ -375,6 +375,17 @@ gint sci_get_col_from_position(ScintillaObject *sci, gint position)
 }
 
 
+/** Gets the position corresponding to the specified column on the specified line.
+ * @param sci Scintilla widget.
+ * @param line Line.
+ * @param col Column.
+ * @return The position. */
+gint sci_get_position_from_col(ScintillaObject *sci, gint line, gint col)
+{
+	return (gint) SSM(sci, SCI_FINDCOLUMN, line, col);
+}
+
+
 /** Gets the position for the start of @a line.
  * @param sci Scintilla widget.
  * @param line Line.
