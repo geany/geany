@@ -599,7 +599,7 @@ static void check_line_breaking(GeanyEditor *editor, gint pos, gchar c)
 			last_pos = sci_get_line_end_position(sci, line);
 			last_col = sci_get_col_from_position(sci, last_pos); /* get last column on line */
 			/* last column - distance is the desired column, then retrieve its document position */
-			pos = SSM(sci, SCI_FINDCOLUMN, line, last_col - diff);
+			pos = sci_get_position_from_col(sci, line, last_col - diff);
 			sci_set_current_position(sci, pos, FALSE);
 			sci_scroll_caret(sci);
 			return;

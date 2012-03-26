@@ -60,6 +60,7 @@ gint				sci_marker_next				(ScintillaObject *sci, gint line, gint marker_mask, g
 gint				sci_marker_previous			(ScintillaObject *sci, gint line, gint marker_mask, gboolean wrap);
 
 gint 				sci_get_col_from_position	(ScintillaObject *sci, gint position);
+gint 				sci_get_position_from_col (ScintillaObject *sci, gint line, gint col);
 gint 				sci_get_line_from_position	(ScintillaObject *sci, gint position);
 gint 				sci_get_position_from_line	(ScintillaObject *sci, gint line);
 gint 				sci_get_current_position	(ScintillaObject *sci);
