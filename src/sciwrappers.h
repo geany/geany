@@ -181,7 +181,6 @@ void				sci_cancel					(ScintillaObject *sci);
 
 gint				sci_get_position_after		(ScintillaObject *sci, gint start);
 
-void				sci_lines_split				(ScintillaObject *sci, gint pixelWidth);
 void				sci_lines_join				(ScintillaObject *sci);
 gint				sci_text_width				(ScintillaObject *sci, gint styleNumber, const gchar *text);
 
