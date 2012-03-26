@@ -1253,12 +1253,6 @@ gint sci_get_position_after(ScintillaObject *sci, gint start)
 }
 
 
-void sci_lines_split(ScintillaObject *sci, gint pixelWidth)
-{
-	SSM(sci, SCI_LINESSPLIT, (uptr_t) pixelWidth, 0);
-}
-
-
 void sci_lines_join(ScintillaObject *sci)
 {
 	SSM(sci, SCI_LINESJOIN, 0, 0);
