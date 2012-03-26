@@ -2099,6 +2099,20 @@ static gint get_reflow_column(GeanyEditor *editor)
 }
 
 
+/* Split the line where the cursor is positioned, on `column`,
+   possibly many times if the line is long.
+   Return the number of lines added because of the splitting. */
+static gint split_line(GeanyEditor *editor, gint column)
+{
+	gint linescount = sci_get_line_count(editor->sci);
+	sci_set_anchor(editor->sci, -1);
+	sci_target_from_selection(editor->sci);
+	sci_lines_split(editor->sci, column * sci_text_width(editor->sci, STYLE_DEFAULT, " "));
+	/* use lines count to determine how many lines appeared after splitting */
+	return sci_get_line_count(editor->sci) - linescount;
+}
+
+
 static void reflow_lines(GeanyEditor *editor, gint column)
 {
 	gint start, indent, linescount, i;
@@ -2133,12 +2147,7 @@ static void reflow_lines(GeanyEditor *editor, gint column)
 	indent = sci_get_line_indentation(editor->sci, start);
 	sci_set_line_indentation(editor->sci, start, 0);
 
-	sci_target_from_selection(editor->sci);
-	linescount = sci_get_line_count(editor->sci);
-	sci_lines_split(editor->sci,
-		(column - indent) *	sci_text_width(editor->sci, STYLE_DEFAULT, " "));
-	/* use lines count to determine how many lines appeared after splitting */
-	linescount = sci_get_line_count(editor->sci) - linescount;
+	linescount = split_line(editor, column - indent);
 
 	/* Fix indentation. */
 	for (i = start; i <= start + linescount; i++)
