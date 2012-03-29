@@ -28,6 +28,8 @@
 #ifndef GEANY_SEARCH_H
 #define GEANY_SEARCH_H 1
 
+G_BEGIN_DECLS
+
 /* the flags given in the search dialog for "find next", also used by the search bar */
 typedef struct GeanySearchData
 {
@@ -97,5 +99,7 @@ gint search_replace_target(struct _ScintillaObject *sci, const gchar *replace_te
 
 guint search_replace_range(struct _ScintillaObject *sci, struct Sci_TextToFind *ttf,
 		gint flags, const gchar *replace_text);
+
+G_END_DECLS
 
 #endif

@@ -23,6 +23,8 @@
 #ifndef GEANY_STASH_H
 #define GEANY_STASH_H
 
+G_BEGIN_DECLS
+
 /** Opaque type for a group of settings. */
 typedef struct StashGroup StashGroup;
 
@@ -95,5 +97,7 @@ void stash_tree_setup(GPtrArray *group_array, GtkTreeView *tree);
 void stash_tree_display(GtkTreeView *tree);
 
 void stash_tree_update(GtkTreeView *tree);
+
+G_END_DECLS
 
 #endif

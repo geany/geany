@@ -23,6 +23,8 @@
 #ifndef GEANY_EDITOR_H
 #define GEANY_EDITOR_H 1
 
+G_BEGIN_DECLS
+
 #include "Scintilla.h"
 #include "ScintillaWidget.h"
 
@@ -316,5 +318,7 @@ void editor_toggle_fold(GeanyEditor *editor, gint line, gint modifiers);
 const gchar *editor_find_snippet(GeanyEditor *editor, const gchar *snippet_name);
 
 void editor_insert_snippet(GeanyEditor *editor, gint pos, const gchar *snippet);
+
+G_END_DECLS
 
 #endif

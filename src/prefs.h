@@ -23,6 +23,8 @@
 #ifndef GEANY_PREFS_H
 #define GEANY_PREFS_H 1
 
+G_BEGIN_DECLS
+
 /** General Preferences dialog settings. */
 typedef struct GeanyPrefs
 {
@@ -56,5 +58,7 @@ extern GeanyToolPrefs tool_prefs;
 
 
 void prefs_show_dialog(void);
+
+G_END_DECLS
 
 #endif

@@ -128,7 +128,7 @@ static void init_general_templates(void)
 }
 
 
-void templates_replace_common(GString *template, const gchar *fname,
+void templates_replace_common(GString *tmpl, const gchar *fname,
 							  GeanyFiletype *ft, const gchar *func_name)
 {
 	gchar *shortname;
@@ -143,18 +143,18 @@ void templates_replace_common(GString *template, const gchar *fname,
 	else
 		shortname = g_path_get_basename(fname);
 
-	templates_replace_valist(template,
+	templates_replace_valist(tmpl,
 		"{filename}", shortname,
 		"{project}", app->project ? app->project->name : "",
 		"{description}", app->project ? app->project->description : "",
 		NULL);
 	g_free(shortname);
 
-	templates_replace_default_dates(template);
-	templates_replace_command(template, fname, ft->name, func_name);
+	templates_replace_default_dates(tmpl);
+	templates_replace_command(tmpl, fname, ft->name, func_name);
 	/* Bug: command results could have {ob} {cb} strings in! */
 	/* replace braces last */
-	templates_replace_valist(template,
+	templates_replace_valist(tmpl,
 		"{ob}", "{",
 		"{cb}", "}",
 		NULL);

@@ -22,6 +22,7 @@
 #ifndef GEANY_MSGWINDOW_H
 #define GEANY_MSGWINDOW_H 1
 
+G_BEGIN_DECLS
 
 /**
  * Various colors for use in the compiler and messages treeviews when adding messages.
@@ -100,5 +101,7 @@ void msgwin_parse_compiler_error_line(const gchar *string, const gchar *dir,
 									  gchar **filename, gint *line);
 
 gboolean msgwin_goto_messages_file_line(gboolean focus_editor);
+
+G_END_DECLS
 
 #endif

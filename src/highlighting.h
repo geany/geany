@@ -23,6 +23,8 @@
 #ifndef GEANY_HIGHLIGHTING_H
 #define GEANY_HIGHLIGHTING_H 1
 
+G_BEGIN_DECLS
+
 #include "Scintilla.h"
 #include "ScintillaWidget.h"
 
@@ -52,5 +54,7 @@ void highlighting_free_styles(void);
 gboolean highlighting_is_string_style(gint lexer, gint style);
 gboolean highlighting_is_comment_style(gint lexer, gint style);
 gboolean highlighting_is_code_style(gint lexer, gint style);
+
+G_END_DECLS
 
 #endif

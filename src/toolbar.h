@@ -22,6 +22,8 @@
 #ifndef GEANY_TOOLBAR_H
 #define GEANY_TOOLBAR_H
 
+G_BEGIN_DECLS
+
 /** Toolbar settings. */
 typedef struct GeanyToolbarPrefs
 {
@@ -58,5 +60,7 @@ GtkWidget *toolbar_init(void);
 void toolbar_finalize(void);
 
 void toolbar_configure(GtkWindow *parent);
+
+G_END_DECLS
 
 #endif

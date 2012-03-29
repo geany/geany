@@ -24,6 +24,8 @@
 #ifndef GEANY_BUILD_H
 #define GEANY_BUILD_H 1
 
+G_BEGIN_DECLS
+
 /* Order is important (see GBO_TO_GBG, GBO_TO_CMD below) */
 /* * Geany Known Build Commands.
  * These commands are named after their default use.
@@ -201,5 +203,7 @@ void build_set_group_count(GeanyBuildGroup grp, gint count);
 guint build_get_group_count(const GeanyBuildGroup grp);
 
 gchar **build_get_regex(GeanyBuildGroup grp, GeanyFiletype *ft, guint *from);
+
+G_END_DECLS
 
 #endif

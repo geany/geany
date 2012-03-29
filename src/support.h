@@ -25,6 +25,7 @@
  * @see GLib's @c gi18n-lib.h.
  **/
 
+G_BEGIN_DECLS
 
 #include "geany.h"
 
@@ -39,3 +40,5 @@
 # define Q_(String) g_strip_context((String), (String))
 # define N_(String) String
 #endif
+
+G_END_DECLS

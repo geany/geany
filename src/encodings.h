@@ -36,6 +36,7 @@
 #ifndef GEANY_ENCODINGS_H
 #define GEANY_ENCODINGS_H
 
+G_BEGIN_DECLS
 
 typedef enum
 {
@@ -186,5 +187,7 @@ extern GeanyEncoding encodings[GEANY_ENCODINGS_MAX];
 GeanyEncodingIndex encodings_scan_unicode_bom(const gchar *string, gsize len, guint *bom_len);
 
 GeanyEncodingIndex encodings_get_idx_from_charset(const gchar *charset);
+
+G_END_DECLS
 
 #endif

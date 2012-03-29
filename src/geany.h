@@ -25,11 +25,13 @@
 #ifndef GEANY_H
 #define GEANY_H
 
+#include <gtk/gtk.h>
+
+G_BEGIN_DECLS
+
 #if defined(HAVE_CONFIG_H) && defined(GEANY_PRIVATE)
 #	include "config.h"
 #endif
-
-#include <gtk/gtk.h>
 
 #include "tm_tagmanager.h"
 
@@ -95,5 +97,7 @@ void geany_debug(gchar const *format, ...) G_GNUC_PRINTF (1, 2);
 #ifndef G_GNUC_WARN_UNUSED_RESULT
 #define G_GNUC_WARN_UNUSED_RESULT
 #endif
+
+G_END_DECLS
 
 #endif

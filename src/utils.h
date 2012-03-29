@@ -27,6 +27,7 @@
 #ifndef GEANY_UTILS_H
 #define GEANY_UTILS_H 1
 
+G_BEGIN_DECLS
 
 #include <time.h>
 
@@ -275,5 +276,7 @@ gchar *utils_str_middle_truncate(const gchar *string, guint truncate_length);
 gchar *utils_str_remove_chars(gchar *string, const gchar *chars);
 
 gchar **utils_copy_environment(const gchar **exclude_vars, const gchar *first_varname, ...) G_GNUC_NULL_TERMINATED;
+
+G_END_DECLS
 
 #endif

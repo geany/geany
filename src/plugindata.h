@@ -33,6 +33,8 @@
 #ifndef GEANY_PLUGINDATA_H
 #define GEANY_PLUGINDATA_H
 
+G_BEGIN_DECLS
+
 /* Compatibility for sharing macros between API and core.
  * First include geany.h, then plugindata.h, then other API headers. */
 #undef GEANY
@@ -738,5 +740,7 @@ BuildFuncs;
 #define GEANY_WINDOW_MINIMAL_HEIGHT		GEANY_DEFAULT_DIALOG_HEIGHT
 
 #endif	/* GEANY_DISABLE_DEPRECATED */
+
+G_END_DECLS
 
 #endif

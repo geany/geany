@@ -22,6 +22,8 @@
 #ifndef GEANY_KEYBINDINGS_H
 #define GEANY_KEYBINDINGS_H 1
 
+G_BEGIN_DECLS
+
 /** Function pointer type used for keybinding callbacks. */
 typedef void (*GeanyKeyCallback) (guint key_id);
 
@@ -278,5 +280,7 @@ void keybindings_write_to_file(void);
 void keybindings_show_shortcuts(void);
 
 gboolean keybindings_check_event(GdkEventKey *ev, GeanyKeyBinding *kb);
+
+G_END_DECLS
 
 #endif

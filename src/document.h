@@ -29,6 +29,8 @@
 #ifndef GEANY_DOCUMENT_H
 #define GEANY_DOCUMENT_H 1
 
+G_BEGIN_DECLS
+
 #include "Scintilla.h"
 #include "ScintillaWidget.h"
 #include "editor.h"
@@ -278,5 +280,7 @@ gint document_compare_by_tab_order(gconstpointer a, gconstpointer b);
 gint document_compare_by_tab_order_reverse(gconstpointer a, gconstpointer b);
 
 void document_grab_focus(GeanyDocument *doc);
+
+G_END_DECLS
 
 #endif

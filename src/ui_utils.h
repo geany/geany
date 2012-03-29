@@ -22,6 +22,8 @@
 #ifndef GEANY_UI_UTILS_H
 #define GEANY_UI_UTILS_H 1
 
+G_BEGIN_DECLS
+
 
 /** Sets a name to lookup @a widget from @a owner.
  * @param owner Usually a window, dialog or popup menu.
@@ -345,5 +347,6 @@ GdkPixbuf *ui_get_mime_icon(const gchar *mime_type, GtkIconSize size);
 
 void ui_focus_current_document(void);
 
+G_END_DECLS
 
 #endif

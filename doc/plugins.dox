@@ -145,7 +145,7 @@
  *
  *  Since Geany 0.12 there is a plugin interface to extend Geany's functionality and
  *  add new features. This document gives a brief overview about how to add new
- *  plugins by writing a simple "Hello World" plugin in C.
+ *  plugins by writing a simple "Hello World" plugin in C or C++.
  *
  *
  *  @section buildenv Build environment
@@ -249,6 +249,22 @@ void plugin_cleanup(void)
  *  some memory, you are right. But it should compile and load/unload in Geany nicely.
  *  Now you have the very basic layout of a new plugin. Great, isn't it?
  *
+ *  @note
+ *
+ *  If you would rather write the plugin in C++, you can do that by marking the
+ *  plugin functions that it implements as @c extern @c "C", for example:
+ *
+ *  @code
+ *
+extern "C" void plugin_init(GeanyData *data)
+{
+}
+
+extern "C" void plugin_cleanup(void)
+{
+}
+ *  @endcode
+ *
  *  @section building Building
  *
  *  First make plugin.o:
@@ -261,6 +277,11 @@ void plugin_cleanup(void)
  *
  *  If all went OK, put the library into one of the paths Geany looks for plugins,
  *  e.g. $prefix/lib/geany. See @ref paths "Installation paths" for details.
+ *
+ *  @note
+ *
+ *  If you are writing the plugin in C++, then you will need to use your C++
+ *  compiler here, for example @c g++.
  *
  *  @section realfunc Adding functionality
  *

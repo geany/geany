@@ -23,6 +23,8 @@
 #ifndef GEANY_FILETYPES_H
 #define GEANY_FILETYPES_H 1
 
+G_BEGIN_DECLS
+
 #include "Scintilla.h"
 #include "ScintillaWidget.h"
 
@@ -211,5 +213,7 @@ gboolean filetypes_parse_error_message(GeanyFiletype *ft, const gchar *message,
 
 gboolean filetype_get_comment_open_close(const GeanyFiletype *ft, gboolean single_first,
 		const gchar **co, const gchar **cc);
+
+G_END_DECLS
 
 #endif
