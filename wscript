@@ -132,6 +132,8 @@ def configure(conf):
         mandatory=True, args='--cflags --libs')
     conf.check_cfg(package='glib-2.0', atleast_version='2.20.0', uselib_store='GLIB',
         mandatory=True, args='--cflags --libs')
+    conf.check_cfg(package='gmodule-2.0', uselib_store='GMODULE',
+        mandatory=True, args='--cflags --libs')
     conf.check_cfg(package='gio-2.0', uselib_store='GIO', args='--cflags --libs', mandatory=True)
     gtk_version = conf.check_cfg(modversion='gtk+-2.0', uselib_store='GTK') or 'Unknown'
     conf.check_cfg(package='gthread-2.0', uselib_store='GTHREAD', args='--cflags --libs')
@@ -255,7 +257,7 @@ def build(bld):
             includes                = ['.', 'src/', 'scintilla/include', 'tagmanager/include'],
             defines                 = 'G_LOG_DOMAIN="%s"' % plugin_name,
             target                  = plugin_name,
-            uselib                  = ['GTK', 'GLIB'],
+            uselib                  = ['GTK', 'GLIB', 'GMODULE'],
             install_path            = instpath)
 
 
@@ -311,7 +313,7 @@ def build(bld):
         includes        = ['.', 'scintilla/include/', 'tagmanager/include/'],
         defines         = ['G_LOG_DOMAIN="Geany"', 'GEANY_PRIVATE'],
         linkflags       = [] if is_win32 else ['-Wl,--export-dynamic'],
-        uselib          = ['GTK', 'GLIB', 'GIO', 'GTHREAD', 'WIN32', 'SUNOS_SOCKET'],
+        uselib          = ['GTK', 'GLIB', 'GMODULE', 'GIO', 'GTHREAD', 'WIN32', 'SUNOS_SOCKET'],
         use             = ['scintilla', 'tagmanager', 'mio'])
 
     # geanyfunctions.h
