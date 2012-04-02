@@ -294,7 +294,7 @@ def build(bld):
         target          = 'scintilla',
         source          = scintilla_sources,
         includes        = ['.', 'scintilla/include', 'scintilla/src', 'scintilla/lexlib'],
-        uselib          = 'GTK',
+        uselib          = ['GTK', 'GLIB', 'GMODULE'],
         install_path    = None) # do not install this library
 
 
