@@ -140,7 +140,9 @@ enum
 	KB_TREE_ACTION,
 	KB_TREE_SHORTCUT,
 	KB_TREE_INDEX,
-	KB_TREE_EDITABLE
+	KB_TREE_EDITABLE,
+	KB_TREE_WEIGHT,
+	KB_TREE_COLUMNS
 };
 
 
@@ -279,17 +281,20 @@ static void kb_init_tree(void)
 
 	tree = GTK_TREE_VIEW(ui_lookup_widget(ui_widgets.prefs_dialog, "treeview7"));
 
-	store = gtk_tree_store_new(4, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_INT, G_TYPE_BOOLEAN);
+	store = gtk_tree_store_new(KB_TREE_COLUMNS,
+		G_TYPE_STRING, G_TYPE_STRING, G_TYPE_INT, G_TYPE_BOOLEAN, G_TYPE_INT);
 	gtk_tree_view_set_model(GTK_TREE_VIEW(tree), GTK_TREE_MODEL(store));
 	g_object_unref(store);
 
 	renderer = gtk_cell_renderer_text_new();
-	column = gtk_tree_view_column_new_with_attributes(_("Action"), renderer, "text", KB_TREE_ACTION, NULL);
+	column = gtk_tree_view_column_new_with_attributes(_("Action"), renderer,
+		"text", KB_TREE_ACTION, "weight", KB_TREE_WEIGHT, NULL);
 	gtk_tree_view_append_column(GTK_TREE_VIEW(tree), column);
 
 	renderer = gtk_cell_renderer_text_new();
 	column = gtk_tree_view_column_new_with_attributes(_("Shortcut"), renderer,
-		"text", KB_TREE_SHORTCUT, "editable", KB_TREE_EDITABLE, NULL);
+		"text", KB_TREE_SHORTCUT, "editable", KB_TREE_EDITABLE,
+		"weight", KB_TREE_WEIGHT, NULL);
 	gtk_tree_view_append_column(GTK_TREE_VIEW(tree), column);
 
 	/* set policy settings for the scrolled window around the treeview again, because glade
@@ -329,7 +334,10 @@ static void kb_init(void)
 			key_string = gtk_accelerator_name(kb->key, kb->mods);
 			gtk_tree_store_append(store, &iter, &parent);
 			gtk_tree_store_set(store, &iter, KB_TREE_ACTION, label,
-				KB_TREE_SHORTCUT, key_string, KB_TREE_EDITABLE, TRUE, KB_TREE_INDEX, kb->id, -1);
+				KB_TREE_SHORTCUT, key_string, KB_TREE_EDITABLE, TRUE,
+				KB_TREE_INDEX, kb->id, -1);
+			if (kb->key != kb->default_key || kb->mods != kb->default_mods)
+				gtk_tree_store_set(store, &iter, KB_TREE_WEIGHT, PANGO_WEIGHT_BOLD, -1);
 			g_free(key_string);
 			g_free(label);
 		}

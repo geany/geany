@@ -42,6 +42,8 @@ typedef struct GeanyKeyBinding
 	GeanyKeyCallback callback;
 	GtkWidget *menu_item;	/**< Optional widget to set an accelerator for, or @c NULL */
 	guint id;
+	guint default_key;
+	GdkModifierType default_mods;
 }
 GeanyKeyBinding;
 

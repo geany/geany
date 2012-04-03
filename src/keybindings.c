@@ -167,6 +167,8 @@ GeanyKeyBinding *keybindings_set_item(GeanyKeyGroup *group, gsize key_id,
 	}
 	kb->key = key;
 	kb->mods = mod;
+	kb->default_key = key;
+	kb->default_mods = mod;
 	kb->callback = callback;
 	kb->menu_item = menu_item;
 	kb->id = key_id;
