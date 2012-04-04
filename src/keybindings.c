@@ -256,7 +256,7 @@ static void init_default_kb(void)
 	add_kb(group, GEANY_KEYS_FILE_SAVEAS, NULL,
 		0, 0, "menu_saveas", _("Save as"), "menu_save_as1");
 	add_kb(group, GEANY_KEYS_FILE_SAVEALL, NULL,
-		GDK_S, GDK_SHIFT_MASK | GDK_CONTROL_MASK, "menu_saveall", _("Save all"),
+		GDK_s, GDK_SHIFT_MASK | GDK_CONTROL_MASK, "menu_saveall", _("Save all"),
 		"menu_save_all1");
 	add_kb(group, GEANY_KEYS_FILE_PRINT, NULL,
 		GDK_p, GDK_CONTROL_MASK, "menu_print", _("Print"), "print1");
