@@ -80,6 +80,7 @@ static gboolean edited = FALSE;
 
 static GtkTreeView *various_treeview = NULL;
 
+static GeanyKeyBinding *kb_index(guint gidx, guint kid);
 static void kb_cell_edited_cb(GtkCellRendererText *cellrenderertext, gchar *path, gchar *new_text, gpointer user_data);
 static gboolean kb_grab_key_dialog_key_press_cb(GtkWidget *dialog, GdkEventKey *event, gpointer user_data);
 static void kb_grab_key_dialog_response_cb(GtkWidget *dialog, gint response, gpointer user_data);
@@ -311,11 +312,33 @@ static void kb_init_tree(void)
 }
 
 
+static void kb_set_shortcut(GtkTreeStore *store, GtkTreeIter *iter,
+		guint key, GdkModifierType mods)
+{
+	gchar *key_string = gtk_accelerator_name(key, mods);
+	GtkTreeIter parent;
+	guint kid, gid;
+	GeanyKeyBinding *kb;
+	gboolean bold;
+
+	gtk_tree_store_set(store, iter, KB_TREE_SHORTCUT, key_string, -1);
+	g_free(key_string);
+
+	gtk_tree_model_get(GTK_TREE_MODEL(store), iter, KB_TREE_INDEX, &kid, -1);
+	gtk_tree_model_iter_parent(GTK_TREE_MODEL(store), &parent, iter);
+	gtk_tree_model_get(GTK_TREE_MODEL(store), &parent, KB_TREE_INDEX, &gid, -1);
+	kb = kb_index(gid, kid);
+	bold = key != kb->default_key || mods != kb->default_mods;
+	gtk_tree_store_set(store, iter, KB_TREE_WEIGHT,
+		bold ? PANGO_WEIGHT_BOLD : PANGO_WEIGHT_NORMAL, -1);
+}
+
+
 static void kb_init(void)
 {
 	GtkTreeIter parent, iter;
 	gsize g, i;
-	gchar *key_string, *label;
+	gchar *label;
 	GeanyKeyGroup *group;
 	GeanyKeyBinding *kb;
 
@@ -331,14 +354,10 @@ static void kb_init(void)
 		foreach_ptr_array(kb, i, group->key_items)
 		{
 			label = keybindings_get_label(kb);
-			key_string = gtk_accelerator_name(kb->key, kb->mods);
 			gtk_tree_store_append(store, &iter, &parent);
 			gtk_tree_store_set(store, &iter, KB_TREE_ACTION, label,
-				KB_TREE_SHORTCUT, key_string, KB_TREE_EDITABLE, TRUE,
-				KB_TREE_INDEX, kb->id, -1);
-			if (kb->key != kb->default_key || kb->mods != kb->default_mods)
-				gtk_tree_store_set(store, &iter, KB_TREE_WEIGHT, PANGO_WEIGHT_BOLD, -1);
-			g_free(key_string);
+				KB_TREE_EDITABLE, TRUE, KB_TREE_INDEX, kb->id, -1);
+			kb_set_shortcut(store, &iter, kb->key, kb->mods);
 			g_free(label);
 		}
 	}
@@ -1332,7 +1351,7 @@ static void kb_change_iter_shortcut(GtkTreeIter *iter, const gchar *new_text)
 
 	/* set the values here, because of the above check, setting it in
 	 * gtk_accelerator_parse would return a wrong key combination if it is duplicate */
-	gtk_tree_store_set(store, iter, KB_TREE_SHORTCUT, new_text, -1);
+	kb_set_shortcut(store, iter, lkey, lmods);
 
 	edited = TRUE;
 }
@@ -1420,7 +1439,6 @@ static gboolean kb_find_duplicate(GtkWidget *parent, GtkTreeIter *old_iter,
 			continue;
 		do	/* foreach children */
 		{
-
 			gtk_tree_model_get(model, &iter, KB_TREE_SHORTCUT, &kb_str, -1);
 			if (! kb_str)
 				continue;
@@ -1446,7 +1464,7 @@ static gboolean kb_find_duplicate(GtkWidget *parent, GtkTreeIter *old_iter,
 
 				if (ret == GTK_RESPONSE_YES)
 				{
-					gtk_tree_store_set(store, &iter, KB_TREE_SHORTCUT, NULL, -1);	/* clear shortcut */
+					kb_set_shortcut(store, &iter, 0, 0);	/* clear shortcut */
 					/* carry on looking for other duplicates if overriding */
 					continue;
 				}
