@@ -335,6 +335,29 @@ StashGroup *stash_group_new(const gchar *name)
 }
 
 
+/** Frees the memory allocated for setting values in a group.
+ * Useful e.g. to avoid freeing strings individually.
+ * @note This is *not* called by stash_group_free().
+ * @param group . */
+void stash_group_free_settings(StashGroup *group)
+{
+	StashPref *entry;
+	guint i;
+
+	foreach_ptr_array(entry, i, group->entries)
+	{
+		if (entry->setting_type == G_TYPE_STRING)
+			g_free(*(gchararray *) entry->setting);
+		else if (entry->setting_type == G_TYPE_STRV)
+			g_strfreev(*(gchararray **) entry->setting);
+		else
+			continue;
+
+		*(gpointer**) entry->setting = NULL;
+	}
+}
+
+
 /** Frees a group.
  * @param group . */
 void stash_group_free(StashGroup *group)

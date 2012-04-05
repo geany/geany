@@ -418,6 +418,8 @@
 	geany_functions->p_stash->stash_group_display
 #define stash_group_update \
 	geany_functions->p_stash->stash_group_update
+#define stash_group_free_settings \
+	geany_functions->p_stash->stash_group_free_settings
 #define symbols_get_context_separator \
 	geany_functions->p_symbols->symbols_get_context_separator
 #define build_activate_menu_item \

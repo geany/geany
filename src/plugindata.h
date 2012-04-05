@@ -55,7 +55,7 @@ G_BEGIN_DECLS
  * @warning You should not test for values below 200 as previously
  * @c GEANY_API_VERSION was defined as an enum value, not a macro.
  */
-#define GEANY_API_VERSION 214
+#define GEANY_API_VERSION 215
 
 /** The Application Binary Interface (ABI) version, incremented whenever
  * existing fields in the plugin data types have to be changed or reordered.
@@ -701,6 +701,7 @@ typedef struct StashFuncs
 			const gchar *property_name, GType type);
 	void (*stash_group_display)(struct StashGroup *group, GtkWidget *owner);
 	void (*stash_group_update)(struct StashGroup *group, GtkWidget *owner);
+	void (*stash_group_free_settings)(struct StashGroup *group);
 }
 StashFuncs;
 
@@ -716,7 +717,7 @@ SymbolsFuncs;
 typedef struct BuildFuncs
 {
 	void (*build_activate_menu_item)(const GeanyBuildGroup grp, const guint cmd);
-	const gchar *(*build_get_current_menu_item)(const GeanyBuildGroup grp, const guint cmd, 
+	const gchar *(*build_get_current_menu_item)(const GeanyBuildGroup grp, const guint cmd,
 			const GeanyBuildCmdEntries field);
 	void (*build_remove_menu_item)(const GeanyBuildSource src, const GeanyBuildGroup grp,
 			const gint cmd);

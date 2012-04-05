@@ -346,7 +346,8 @@ static StashFuncs stash_funcs = {
 	&stash_group_add_entry,
 	&stash_group_add_widget_property,
 	&stash_group_display,
-	&stash_group_update
+	&stash_group_update,
+	&stash_group_free_settings
 };
 
 static SymbolsFuncs symbols_funcs = {

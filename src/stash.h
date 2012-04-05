@@ -60,6 +60,8 @@ gboolean stash_group_load_from_file(StashGroup *group, const gchar *filename);
 gint stash_group_save_to_file(StashGroup *group, const gchar *filename,
 		GKeyFileFlags flags);
 
+void stash_group_free_settings(StashGroup *group);
+
 void stash_group_free(StashGroup *group);
 
 
