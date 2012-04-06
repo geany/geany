@@ -94,7 +94,11 @@ struct StashPref
 	gpointer default_value;		/* Default value, e.g. (gpointer)1 */
 	GType widget_type;			/* e.g. GTK_TYPE_TOGGLE_BUTTON */
 	StashWidgetID widget_id;	/* (GtkWidget*) or (gchar*) */
-	gpointer fields;			/* extra fields */
+	union
+	{
+		struct EnumWidget *radio_buttons;
+		const gchar *property_name;
+	} extra;	/* extra fields depending on widget_type */
 };
 
 typedef struct StashPref StashPref;
@@ -369,11 +373,7 @@ void stash_group_free(StashGroup *group)
 	{
 		if (entry->widget_type == GTK_TYPE_RADIO_BUTTON)
 		{
-			g_free(entry->fields);
-		}
-		else if (entry->widget_type != G_TYPE_PARAM)
-		{
-			g_assert(entry->fields == NULL);	/* to prevent memory leaks, must handle fields above */
+			g_free(entry->extra.radio_buttons);
 		}
 		g_slice_free(StashPref, entry);
 	}
@@ -403,7 +403,7 @@ static StashPref *
 add_pref(StashGroup *group, GType type, gpointer setting,
 		const gchar *key_name, gpointer default_value)
 {
-	StashPref init = {type, setting, key_name, default_value, G_TYPE_NONE, NULL, NULL};
+	StashPref init = {type, setting, key_name, default_value, G_TYPE_NONE, NULL, {NULL}};
 	StashPref *entry = g_slice_new(StashPref);
 
 	*entry = init;
@@ -615,11 +615,10 @@ static void handle_radio_button(GtkWidget *widget, gint enum_id, gboolean *setti
 }
 
 
-static void handle_radio_buttons(GtkWidget *owner, EnumWidget *fields,
-		gboolean *setting,
+static void handle_radio_buttons(GtkWidget *owner, StashPref *entry,
 		PrefAction action)
 {
-	EnumWidget *field = fields;
+	EnumWidget *field = entry->extra.radio_buttons;
 	gsize count = 0;
 	GtkWidget *widget = NULL;
 
@@ -631,7 +630,7 @@ static void handle_radio_buttons(GtkWidget *owner, EnumWidget *fields,
 			continue;
 
 		count++;
-		handle_radio_button(widget, field->enum_id, setting, action);
+		handle_radio_button(widget, field->enum_id, entry->setting, action);
 		field++;
 		if (!field->widget_id)
 			break;
@@ -645,7 +644,7 @@ static void handle_widget_property(GtkWidget *widget, StashPref *entry,
 		PrefAction action)
 {
 	GObject *object = G_OBJECT(widget);
-	const gchar *name = entry->fields;
+	const gchar *name = entry->extra.property_name;
 
 	switch (action)
 	{
@@ -679,7 +678,7 @@ static void pref_action(PrefAction action, StashGroup *group, GtkWidget *owner)
 		/* radio buttons have several widgets */
 		if (entry->widget_type == GTK_TYPE_RADIO_BUTTON)
 		{
-			handle_radio_buttons(owner, entry->fields, entry->setting, action);
+			handle_radio_buttons(owner, entry, action);
 			continue;
 		}
 
@@ -801,7 +800,7 @@ void stash_group_add_radio_buttons(StashGroup *group, gint *setting,
 	va_end(args);
 
 	array = g_new0(EnumWidget, count + 1);
-	entry->fields = array;
+	entry->extra.radio_buttons = array;
 
 	va_start(args, enum_id);
 	foreach_c_array(item, array, count)
@@ -913,7 +912,7 @@ void stash_group_add_widget_property(StashGroup *group, gpointer setting,
 		type = object_get_property_type(G_OBJECT(widget_id), property_name);
 
 	add_widget_pref(group, type, setting, key_name, default_value,
-		G_TYPE_PARAM, widget_id)->fields = (gchar*)property_name;
+		G_TYPE_PARAM, widget_id)->extra.property_name = property_name;
 }
 
 
