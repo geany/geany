@@ -926,8 +926,6 @@ enum
 
 struct StashTreeValue
 {
-	GType setting_type;
-	const gchar *key_name;
 	const gchar *group_name;
 	StashPref *pref;
 	union
@@ -945,16 +943,18 @@ static void stash_tree_renderer_set_data(GtkCellLayout *cell_layout, GtkCellRend
 {
 	GType cell_type = GPOINTER_TO_SIZE(user_data);
 	StashTreeValue *value;
+	StashPref *pref;
 	gboolean matches_type;
 
 	gtk_tree_model_get(model, iter, STASH_TREE_VALUE, &value, -1);
-	matches_type = value->setting_type == cell_type;
+	pref = value->pref;
+	matches_type = pref->setting_type == cell_type;
 	g_object_set(cell, "visible", matches_type, "sensitive", matches_type,
 		cell_type == G_TYPE_BOOLEAN ? "activatable" : "editable", matches_type, NULL);
 
 	if (matches_type)
 	{
-		switch (value->setting_type)
+		switch (pref->setting_type)
 		{
 			case G_TYPE_BOOLEAN:
 				g_object_set(cell, "active", value->data.tree_int, NULL);
@@ -979,12 +979,14 @@ static void stash_tree_renderer_edited(gchar *path_str, gchar *new_text, GtkTree
 	GtkTreePath *path;
 	GtkTreeIter iter;
 	StashTreeValue *value;
+	StashPref *pref;
 
 	path = gtk_tree_path_new_from_string(path_str);
 	gtk_tree_model_get_iter(model, &iter, path);
 	gtk_tree_model_get(model, &iter, STASH_TREE_VALUE, &value, -1);
+	pref = value->pref;
 
-	switch (value->setting_type)
+	switch (pref->setting_type)
 	{
 		case G_TYPE_BOOLEAN:
 			value->data.tree_int = !value->data.tree_int;
@@ -1022,7 +1024,7 @@ static gboolean stash_tree_discard_value(GtkTreeModel *model, GtkTreePath *path,
 	StashTreeValue *value;
 
 	gtk_tree_model_get(model, iter, STASH_TREE_VALUE, &value, -1);
-	if (value->setting_type == G_TYPE_STRING)
+	if (value->pref->setting_type == G_TYPE_STRING)
 		g_free(value->data.tree_string);
 	g_free(value);
 
@@ -1045,13 +1047,11 @@ static void stash_tree_append_pref(StashGroup *group, StashPref *entry, GtkListS
 
 	value = g_new0(StashTreeValue, 1);
 
-	value->setting_type = entry->setting_type;
-	value->key_name = entry->key_name;
 	value->group_name = group->name;
 	value->pref = entry;
 
 	gtk_list_store_append(store, &iter);
-	gtk_list_store_set(store, &iter, STASH_TREE_NAME, value->key_name,
+	gtk_list_store_set(store, &iter, STASH_TREE_NAME, entry->key_name,
 		STASH_TREE_VALUE, value, -1);
 }
 
@@ -1167,7 +1167,7 @@ static void stash_tree_update_pref(StashTreeValue *value, StashPref *entry)
 		}
 		default:
 			g_warning("Unhandled type for %s::%s in %s()!", value->group_name,
-				value->key_name, G_STRFUNC);
+				entry->key_name, G_STRFUNC);
 	}
 }
 
