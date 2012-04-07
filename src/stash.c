@@ -927,10 +927,14 @@ enum
 struct StashTreeValue
 {
 	GType setting_type;
-	gpointer setting;
 	const gchar *key_name;
 	const gchar *group_name;
 	StashPref *pref;
+	union
+	{
+		gchararray tree_string;
+		gint tree_int;
+	} data;
 };
 
 typedef struct StashTreeValue StashTreeValue;
@@ -953,17 +957,17 @@ static void stash_tree_renderer_set_data(GtkCellLayout *cell_layout, GtkCellRend
 		switch (value->setting_type)
 		{
 			case G_TYPE_BOOLEAN:
-				g_object_set(cell, "active", GPOINTER_TO_INT(value->setting), NULL);
+				g_object_set(cell, "active", value->data.tree_int, NULL);
 				break;
 			case G_TYPE_INT:
 			{
-				gchar *text = g_strdup_printf("%d", GPOINTER_TO_INT(value->setting));
+				gchar *text = g_strdup_printf("%d", value->data.tree_int);
 				g_object_set(cell, "text", text, NULL);
 				g_free(text);
 				break;
 			}
 			case G_TYPE_STRING:
-				g_object_set(cell, "text", (gchararray) value->setting, NULL);
+				g_object_set(cell, "text", value->data.tree_string, NULL);
 				break;
 		}
 	}
@@ -983,14 +987,13 @@ static void stash_tree_renderer_edited(gchar *path_str, gchar *new_text, GtkTree
 	switch (value->setting_type)
 	{
 		case G_TYPE_BOOLEAN:
-			value->setting = GINT_TO_POINTER(!GPOINTER_TO_INT(value->setting));
+			value->data.tree_int = !value->data.tree_int;
 			break;
 		case G_TYPE_INT:
-			value->setting = GINT_TO_POINTER(atoi(new_text));
+			value->data.tree_int = atoi(new_text);
 			break;
 		case G_TYPE_STRING:
-			g_free(value->setting);
-			value->setting = g_strdup(new_text);
+			SETPTR(value->data.tree_string, g_strdup(new_text));
 			break;
 	}
 
@@ -1020,7 +1023,7 @@ static gboolean stash_tree_discard_value(GtkTreeModel *model, GtkTreePath *path,
 
 	gtk_tree_model_get(model, iter, STASH_TREE_VALUE, &value, -1);
 	if (value->setting_type == G_TYPE_STRING)
-		g_free(value->setting);
+		g_free(value->data.tree_string);
 	g_free(value);
 
 	return FALSE;
@@ -1040,10 +1043,9 @@ static void stash_tree_append_pref(StashGroup *group, StashPref *entry, GtkListS
 	GtkTreeIter iter;
 	StashTreeValue *value;
 
-	value = g_new(StashTreeValue, 1);
+	value = g_new0(StashTreeValue, 1);
 
 	value->setting_type = entry->setting_type;
-	value->setting = NULL;
 	value->key_name = entry->key_name;
 	value->group_name = group->name;
 	value->pref = entry;
@@ -1132,17 +1134,14 @@ static void stash_tree_display_pref(StashTreeValue *value, StashPref *entry)
 	switch (entry->setting_type)
 	{
 		case G_TYPE_BOOLEAN:
-			value->setting = GINT_TO_POINTER(*(gboolean *) entry->setting);
+			value->data.tree_int = *(gboolean *) entry->setting;
 			break;
 		case G_TYPE_INT:
-			value->setting = GINT_TO_POINTER(*(gint *) entry->setting);
+			value->data.tree_int = *(gint *) entry->setting;
 			break;
 		case G_TYPE_STRING:
-		{
-			g_free(value->setting);
-			value->setting = g_strdup(*(gchararray *) entry->setting);
+			SETPTR(value->data.tree_string, g_strdup(*(gchararray *) entry->setting));
 			break;
-		}
 		default:
 			g_warning("Unhandled type for %s::%s in %s()!", value->group_name,
 				entry->key_name, G_STRFUNC);
@@ -1152,21 +1151,18 @@ static void stash_tree_display_pref(StashTreeValue *value, StashPref *entry)
 
 static void stash_tree_update_pref(StashTreeValue *value, StashPref *entry)
 {
-	gpointer *setting = value->setting;
-
 	switch (entry->setting_type)
 	{
 		case G_TYPE_BOOLEAN:
-			*(gboolean *) entry->setting = GPOINTER_TO_INT(setting);
+			*(gboolean *) entry->setting = value->data.tree_int;
 			break;
 		case G_TYPE_INT:
-			*(gint *) entry->setting = GPOINTER_TO_INT(setting);
+			*(gint *) entry->setting = value->data.tree_int;
 			break;
 		case G_TYPE_STRING:
 		{
 			gchararray *text = entry->setting;
-			g_free(*text);
-			*text = g_strdup((gchararray) setting);
+			SETPTR(*text, g_strdup(value->data.tree_string));
 			break;
 		}
 		default:
