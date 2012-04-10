@@ -1551,7 +1551,7 @@ search_find_in_files(const gchar *utf8_search_text, const gchar *dir, const gcha
 	gchar **argv_prefix, **argv, **opts_argv;
 	gchar *command_grep;
 	gchar *search_text = NULL;
-	guint opts_argv_len, i;
+	gint opts_argv_len, i;
 	GPid child_pid;
 	gint stdout_fd;
 	gint stderr_fd;
@@ -1569,6 +1569,14 @@ search_find_in_files(const gchar *utf8_search_text, const gchar *dir, const gcha
 		return FALSE;
 	}
 
+	if (! g_shell_parse_argv(opts, &opts_argv_len, &opts_argv, &error))
+	{
+		ui_set_statusbar(TRUE, _("Cannot parse extra options: %s"), error->message);
+		g_error_free(error);
+		g_free(command_grep);
+		return FALSE;
+	}
+
 	/* convert the search text in the preferred encoding (if the text is not valid UTF-8. assume
 	 * it is already in the preferred encoding) */
 	utf8_text_len = strlen(utf8_search_text);
@@ -1578,9 +1586,6 @@ search_find_in_files(const gchar *utf8_search_text, const gchar *dir, const gcha
 	}
 	if (search_text == NULL)
 		search_text = g_strdup(utf8_search_text);
-
-	opts_argv = g_strsplit(opts, " ", -1);
-	opts_argv_len = g_strv_length(opts_argv);
 
 	/* set grep command and options */
 	argv_prefix = g_new0(gchar*, 1 + opts_argv_len + 3 + 1);	/* last +1 for recursive arg */

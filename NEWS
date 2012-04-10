@@ -3,6 +3,10 @@ Geany 1.22 (unreleased)
     Editor
     * Update Scintilla to version 2.29.
 
+    Search
+    * Extra options passed to grep through Find in Files now follows a
+      real shell-style syntax (#3516263).
+
 
 Geany 0.21 (October 2, 2011)
 
