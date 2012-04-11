@@ -1,11 +1,11 @@
-# Norwegian Nynorsk translations for PACKAGE package.
+# Norwegian Nynorsk translations for Geany package.
 # Copyright (C) 2012 THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # Håkon Vågsether <hauk142@gmail.com>, 2012.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: geany 1.22\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-02-08 04:39+0000\n"
 "PO-Revision-Date: 2012-02-08 22:39+0100\n"
