@@ -346,6 +346,7 @@ def build(bld):
     bld.new_task_gen(
         source          = 'geany.pc.in',
         dct             = {'VERSION' : VERSION,
+                           'DEPENDENCIES': 'gtk+-2.0 >= 2.16 glib-2.0 >= 2.20',
                            'prefix': bld.env['PREFIX'],
                            'exec_prefix': '${prefix}',
                            'libdir': '${exec_prefix}/lib',

@@ -57,8 +57,10 @@ GEANY_CHECK_REVISION([dnl force debug mode for a SVN working copy
 
 
 # GTK/GLib/GIO checks
-gtk_modules="gtk+-2.0 >= 2.16 glib-2.0 >= 2.20 gio-2.0 >= 2.20 gmodule-2.0"
-PKG_CHECK_MODULES([GTK], [$gtk_modules])
+gtk_modules="gtk+-2.0 >= 2.16 glib-2.0 >= 2.20"
+gtk_modules_private="gio-2.0 >= 2.20 gmodule-2.0"
+PKG_CHECK_MODULES([GTK], [$gtk_modules $gtk_modules_private])
+AC_SUBST([DEPENDENCIES], [$gtk_modules])
 AC_SUBST([GTK_CFLAGS])
 AC_SUBST([GTK_LIBS])
 GTK_VERSION=`$PKG_CONFIG --modversion gtk+-2.0`
