@@ -594,11 +594,18 @@ static void check_line_breaking(GeanyEditor *editor, gint pos, gchar c)
 }
 
 
-static void show_autocomplete(ScintillaObject *sci, gsize rootlen, const gchar *words)
+static void show_autocomplete(ScintillaObject *sci, gsize rootlen, GString *words)
 {
+	/* hide autocompletion if only option is already typed */
+	if (rootlen >= words->len ||
+		(words->str[rootlen] == '?' && rootlen >= words->len - 2))
+	{
+		sci_send_command(sci, SCI_AUTOCCANCEL);
+		return;
+	}
 	/* store whether a calltip is showing, so we can reshow it after autocompletion */
 	calltip.set = (gboolean) SSM(sci, SCI_CALLTIPACTIVE, 0, 0);
-	SSM(sci, SCI_AUTOCSHOW, rootlen, (sptr_t) words);
+	SSM(sci, SCI_AUTOCSHOW, rootlen, (sptr_t) words->str);
 }
 
 
@@ -633,7 +640,7 @@ static void show_tags_list(GeanyEditor *editor, const GPtrArray *tags, gsize roo
 			else
 				g_string_append(words, "?1");
 		}
-		show_autocomplete(sci, rootlen, words->str);
+		show_autocomplete(sci, rootlen, words);
 		g_string_free(words, TRUE);
 	}
 }
@@ -1994,7 +2001,7 @@ autocomplete_html(ScintillaObject *sci, const gchar *root, gsize rootlen)
 		}
 	}
 	if (found)
-		show_autocomplete(sci, rootlen, words->str);
+		show_autocomplete(sci, rootlen, words);
 
 	g_string_free(words, TRUE);
 	return found;
@@ -2128,7 +2135,7 @@ static gboolean autocomplete_doc_word(GeanyEditor *editor, gchar *root, gsize ro
 
 	g_slist_free(words);
 
-	show_autocomplete(sci, rootlen, str->str);
+	show_autocomplete(sci, rootlen, str);
 	g_string_free(str, TRUE);
 	return TRUE;
 }
