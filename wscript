@@ -44,7 +44,7 @@ import os
 import tempfile
 from waflib import Logs, Options, Scripting, Utils
 from waflib.Configure import ConfigurationContext
-from waflib.Errors import ConfigurationError, WafError
+from waflib.Errors import WafError
 from waflib.TaskGen import feature
 
 
@@ -93,7 +93,6 @@ geany_sources = set([
     'src/ui_utils.c', 'src/utils.c'])
 
 
-
 def configure(conf):
 
     conf.check_waf_version(mini='1.6.1')
@@ -107,9 +106,9 @@ def configure(conf):
     conf.check_cc(header_name='sys/time.h', mandatory=False)
     conf.check_cc(header_name='sys/types.h', mandatory=False)
     conf.check_cc(header_name='sys/stat.h', mandatory=False)
-    conf.define('HAVE_STDLIB_H', 1) # are there systems without stdlib.h?
-    conf.define('STDC_HEADERS', 1) # an optimistic guess ;-)
-    _add_to_env_and_define(conf, 'HAVE_REGCOMP', 1) # needed for CTags
+    conf.define('HAVE_STDLIB_H', 1)  # are there systems without stdlib.h?
+    conf.define('STDC_HEADERS', 1)  # an optimistic guess ;-)
+    _add_to_env_and_define(conf, 'HAVE_REGCOMP', 1)  # needed for CTags
 
     conf.check_cc(function_name='fgetpos', header_name='stdio.h', mandatory=False)
     conf.check_cc(function_name='ftruncate', header_name='unistd.h', mandatory=False)
@@ -262,7 +261,6 @@ def build(bld):
             uselib                  = ['GTK', 'GLIB', 'GMODULE'],
             install_path            = instpath)
 
-
     # Tagmanager
     bld.new_task_gen(
         features        = ['c', 'cstlib'],
@@ -272,8 +270,7 @@ def build(bld):
         includes        = ['.', 'tagmanager', 'tagmanager/include'],
         defines         = 'G_LOG_DOMAIN="Tagmanager"',
         uselib          = ['GTK', 'GLIB'],
-        install_path    = None) # do not install this library
-
+        install_path    = None)  # do not install this library
 
     # MIO
     bld.new_task_gen(
@@ -284,8 +281,7 @@ def build(bld):
         includes        = ['.', 'tagmanager/mio/'],
         defines         = 'G_LOG_DOMAIN="MIO"',
         uselib          = ['GTK', 'GLIB'],
-        install_path    = None) # do not install this library
-
+        install_path    = None)  # do not install this library
 
     # Scintilla
     files = bld.srcnode.ant_glob('scintilla/**/*.cxx', src=True, dir=False)
@@ -297,8 +293,7 @@ def build(bld):
         source          = scintilla_sources,
         includes        = ['.', 'scintilla/include', 'scintilla/src', 'scintilla/lexlib'],
         uselib          = ['GTK', 'GLIB', 'GMODULE'],
-        install_path    = None) # do not install this library
-
+        install_path    = None)  # do not install this library
 
     # Geany
     if bld.env['HAVE_VTE'] == 1:
@@ -347,7 +342,7 @@ def build(bld):
     # geany.pc
     bld.new_task_gen(
         source          = 'geany.pc.in',
-        dct             = {'VERSION' : VERSION,
+        dct             = {'VERSION': VERSION,
                            'DEPENDENCIES': 'gtk+-2.0 >= %s glib-2.0 >= %s' % \
                                 (MINIMUM_GTK_VERSION, MINIMUM_GLIB_VERSION),
                            'prefix': bld.env['PREFIX'],
@@ -364,7 +359,7 @@ def build(bld):
             bld.new_task_gen(
                 features        = 'intltool_in',
                 source          = 'geany.desktop.in',
-                flags           = [ '-d', '-q', '-u', '-c' ],
+                flags           = ['-d', '-q', '-u', '-c'],
                 install_path    = '${DATADIR}/applications')
 
         # geany.1
@@ -372,7 +367,7 @@ def build(bld):
             features        = 'subst',
             source          = 'doc/geany.1.in',
             target          = 'geany.1',
-            dct             = {'VERSION' : VERSION,
+            dct             = {'VERSION': VERSION,
                                 'GEANY_DATA_DIR': bld.env['DATADIR'] + '/geany'},
             install_path    = '${MANDIR}/man1')
 
@@ -382,7 +377,7 @@ def build(bld):
             source          = 'geany.spec.in',
             target          = 'geany.spec',
             install_path    = None,
-            dct             = {'VERSION' : VERSION})
+            dct             = {'VERSION': VERSION})
 
         # Doxyfile
         bld.new_task_gen(
@@ -390,7 +385,7 @@ def build(bld):
             source          = 'doc/Doxyfile.in',
             target          = 'doc/Doxyfile',
             install_path    = None,
-            dct             = {'VERSION' : VERSION})
+            dct             = {'VERSION': VERSION})
 
     ###
     # Install files
@@ -480,7 +475,7 @@ def write_linguas_file(self):
     if 'LINGUAS' in self.env:
         files = self.env['LINGUAS']
         for po_filename in files.split(' '):
-            if os.path.exists ('po/%s.po' % po_filename):
+            if os.path.exists('po/%s.po' % po_filename):
                 linguas += '%s ' % po_filename
     else:
         files = os.listdir('%s/po' % self.path.abspath())
@@ -652,5 +647,3 @@ def _uc_first(string, ctx):
     if _target_is_win32(ctx):
         return string.title()
     return string
-
-
