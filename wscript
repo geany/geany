@@ -51,6 +51,8 @@ from waflib.TaskGen import feature
 APPNAME = 'geany'
 VERSION = '1.22'
 LINGUAS_FILE = 'po/LINGUAS'
+MINIMUM_GTK_VERSION = '2.16.0'
+MINIMUM_GLIB_VERSION = '2.20.0'
 
 top = '.'
 out = '_build_'
@@ -128,9 +130,9 @@ def configure(conf):
     _load_intltool_if_available(conf)
 
     # GTK / GIO version check
-    conf.check_cfg(package='gtk+-2.0', atleast_version='2.16.0', uselib_store='GTK',
+    conf.check_cfg(package='gtk+-2.0', atleast_version=MINIMUM_GTK_VERSION, uselib_store='GTK',
         mandatory=True, args='--cflags --libs')
-    conf.check_cfg(package='glib-2.0', atleast_version='2.20.0', uselib_store='GLIB',
+    conf.check_cfg(package='glib-2.0', atleast_version=MINIMUM_GLIB_VERSION, uselib_store='GLIB',
         mandatory=True, args='--cflags --libs')
     conf.check_cfg(package='gmodule-2.0', uselib_store='GMODULE',
         mandatory=True, args='--cflags --libs')
@@ -346,7 +348,8 @@ def build(bld):
     bld.new_task_gen(
         source          = 'geany.pc.in',
         dct             = {'VERSION' : VERSION,
-                           'DEPENDENCIES': 'gtk+-2.0 >= 2.16 glib-2.0 >= 2.20',
+                           'DEPENDENCIES': 'gtk+-2.0 >= %s glib-2.0 >= %s' % \
+                                (MINIMUM_GTK_VERSION, MINIMUM_GLIB_VERSION),
                            'prefix': bld.env['PREFIX'],
                            'exec_prefix': '${prefix}',
                            'libdir': '${exec_prefix}/lib',
