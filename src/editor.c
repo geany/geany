@@ -1976,7 +1976,7 @@ gchar *editor_get_calltip_text(GeanyEditor *editor, const TMTag *tag)
 static gboolean
 autocomplete_html(ScintillaObject *sci, const gchar *root, gsize rootlen)
 {
-	guint i, j = 0;
+	guint i;
 	gboolean found = FALSE;
 	GString *words;
 	const gchar **entities = symbols_get_html_entities();
@@ -1994,8 +1994,9 @@ autocomplete_html(ScintillaObject *sci, const gchar *root, gsize rootlen)
 
 		if (! strncmp(entities[i], root, rootlen))
 		{
-			if (j++ > 0)
+			if (words->len)
 				g_string_append_c(words, '\n');
+
 			g_string_append(words, entities[i]);
 			found = TRUE;
 		}
@@ -2030,23 +2031,35 @@ autocomplete_tags(GeanyEditor *editor, const gchar *root, gsize rootlen)
 }
 
 
-/* Check whether to use entity autocompletion:
- * - always in a HTML file except when inside embedded JavaScript, Python, ASP, ...
- * - in a PHP file only when we are outside of <? ?> */
-static gboolean autocomplete_check_for_html(gint ft_id, gint style)
+static gboolean autocomplete_check_html(GeanyEditor *editor, gint style,
+		const gchar *root, gint rootlen)
 {
+	GeanyFiletype *ft = editor->document->file_type;
+	gboolean try = FALSE;
+
 	/* use entity completion when style is not JavaScript, ASP, Python, PHP, ...
 	 * (everything after SCE_HJ_START is for embedded scripting languages) */
-	if (ft_id == GEANY_FILETYPES_HTML && style < SCE_HJ_START)
-		return TRUE;
-
-	if (ft_id == GEANY_FILETYPES_PHP)
+	if (ft->id == GEANY_FILETYPES_HTML && style < SCE_HJ_START)
+		try = TRUE;
+	else if (ft->id == GEANY_FILETYPES_PHP)
 	{
 		/* use entity completion when style is outside of PHP styles */
 		if (! is_style_php(style))
-			return TRUE;
+			try = TRUE;
 	}
+	if (try)
+	{
+		/* Allow something like "&quot;some text&quot;".
+		 * for entity completion we want to have completion for '&' within words. */
+		gchar *tmp = strchr(root, '&');
 
+		if (tmp != NULL)
+		{
+			root = tmp;
+			rootlen = strlen(tmp);
+			return autocomplete_html(editor->sci, root, rootlen);
+		}
+	}
 	return FALSE;
 }
 
@@ -2186,22 +2199,11 @@ gboolean editor_start_auto_complete(GeanyEditor *editor, gint pos, gboolean forc
 
 	if (rootlen > 0)
 	{
-		if (autocomplete_check_for_html(ft->id, style))
-		{
-			/* Allow something like "&quot;some text&quot;". The above startword calculation
-			 * only works on words but for HTML entity completion we also want to have completion
-			 * based on '&' within words. */
-			gchar *tmp = strchr(root, '&');
-			if (tmp != NULL)
-			{
-				root = tmp;
-				rootlen = strlen(tmp);
-			}
-			ret = autocomplete_html(sci, root, rootlen);
-		}
-		else if (ft->id == GEANY_FILETYPES_PHP && style == SCE_HPHP_DEFAULT &&
-				 rootlen == 3 && strcmp(root, "php") == 0 && pos >= 5 &&
-				 sci_get_char_at(sci, pos - 5) == '<' && sci_get_char_at(sci, pos - 4) == '?')
+		ret = autocomplete_check_html(editor, style, root, rootlen);
+		if (ret || (ft->id == GEANY_FILETYPES_PHP && style == SCE_HPHP_DEFAULT &&
+			rootlen == 3 && strcmp(root, "php") == 0 && pos >= 5 &&
+			sci_get_char_at(sci, pos - 5) == '<' &&
+			sci_get_char_at(sci, pos - 4) == '?'))
 		{
 			/* nothing, don't complete PHP open tags */
 		}
