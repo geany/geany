@@ -2031,8 +2031,7 @@ autocomplete_tags(GeanyEditor *editor, const gchar *root, gsize rootlen)
 }
 
 
-static gboolean autocomplete_check_html(GeanyEditor *editor, gint style,
-		const gchar *root, gint rootlen)
+static gboolean autocomplete_check_html(GeanyEditor *editor, gint style, gint pos)
 {
 	GeanyFiletype *ft = editor->document->file_type;
 	gboolean try = FALSE;
@@ -2040,6 +2039,8 @@ static gboolean autocomplete_check_html(GeanyEditor *editor, gint style,
 	/* use entity completion when style is not JavaScript, ASP, Python, PHP, ...
 	 * (everything after SCE_HJ_START is for embedded scripting languages) */
 	if (ft->id == GEANY_FILETYPES_HTML && style < SCE_HJ_START)
+		try = TRUE;
+	else if (sci_get_lexer(editor->sci) == SCLEX_XML)
 		try = TRUE;
 	else if (ft->id == GEANY_FILETYPES_PHP)
 	{
@@ -2049,15 +2050,17 @@ static gboolean autocomplete_check_html(GeanyEditor *editor, gint style,
 	}
 	if (try)
 	{
+		gchar root[GEANY_MAX_WORD_LENGTH];
+		gchar *tmp;
+
+		read_current_word(editor, pos, root, sizeof(root), GEANY_WORDCHARS"&", TRUE);
+
 		/* Allow something like "&quot;some text&quot;".
 		 * for entity completion we want to have completion for '&' within words. */
-		gchar *tmp = strchr(root, '&');
-
+		tmp = strchr(root, '&');
 		if (tmp != NULL)
 		{
-			root = tmp;
-			rootlen = strlen(tmp);
-			return autocomplete_html(editor->sci, root, rootlen);
+			return autocomplete_html(editor->sci, tmp, strlen(tmp));
 		}
 	}
 	return FALSE;
@@ -2188,8 +2191,6 @@ gboolean editor_start_auto_complete(GeanyEditor *editor, gint pos, gboolean forc
 
 	if (ft->id == GEANY_FILETYPES_LATEX)
 		wordchars = GEANY_WORDCHARS"\\"; /* add \ to word chars if we are in a LaTeX file */
-	else if (ft->id == GEANY_FILETYPES_HTML || ft->id == GEANY_FILETYPES_PHP)
-		wordchars = GEANY_WORDCHARS"&"; /* add & to word chars if we are in a PHP or HTML file */
 	else
 		wordchars = GEANY_WORDCHARS;
 
@@ -2199,7 +2200,7 @@ gboolean editor_start_auto_complete(GeanyEditor *editor, gint pos, gboolean forc
 
 	if (rootlen > 0)
 	{
-		ret = autocomplete_check_html(editor, style, root, rootlen);
+		ret = autocomplete_check_html(editor, style, pos);
 		if (ret || (ft->id == GEANY_FILETYPES_PHP && style == SCE_HPHP_DEFAULT &&
 			rootlen == 3 && strcmp(root, "php") == 0 && pos >= 5 &&
 			sci_get_char_at(sci, pos - 5) == '<' &&

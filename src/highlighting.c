@@ -1479,6 +1479,7 @@ gboolean highlighting_is_string_style(gint lexer, gint style)
 			return (style == SCE_MATLAB_STRING ||
 				style == SCE_MATLAB_DOUBLEQUOTESTRING);
 
+		case SCLEX_XML:
 		case SCLEX_HTML:
 			return (
 				style == SCE_HBA_STRING ||
@@ -1631,6 +1632,7 @@ gboolean highlighting_is_comment_style(gint lexer, gint style)
 		case SCLEX_YAML:
 			return (style == SCE_YAML_COMMENT);
 
+		case SCLEX_XML:
 		case SCLEX_HTML:
 			return (
 				style == SCE_HBA_COMMENTLINE ||
