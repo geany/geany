@@ -2040,7 +2040,7 @@ static gboolean autocomplete_check_html(GeanyEditor *editor, gint style, gint po
 	 * (everything after SCE_HJ_START is for embedded scripting languages) */
 	if (ft->id == GEANY_FILETYPES_HTML && style < SCE_HJ_START)
 		try = TRUE;
-	else if (sci_get_lexer(editor->sci) == SCLEX_XML)
+	else if (sci_get_lexer(editor->sci) == SCLEX_XML && style < SCE_HJ_START)
 		try = TRUE;
 	else if (ft->id == GEANY_FILETYPES_PHP)
 	{
