@@ -2188,6 +2188,7 @@ gboolean editor_start_auto_complete(GeanyEditor *editor, gint pos, gboolean forc
 		return FALSE;
 
 	autocomplete_scope(editor);
+	ret = autocomplete_check_html(editor, style, pos);
 
 	if (ft->id == GEANY_FILETYPES_LATEX)
 		wordchars = GEANY_WORDCHARS"\\"; /* add \ to word chars if we are in a LaTeX file */
@@ -2198,13 +2199,12 @@ gboolean editor_start_auto_complete(GeanyEditor *editor, gint pos, gboolean forc
 	root = cword;
 	rootlen = strlen(root);
 
-	if (rootlen > 0)
+	if (!ret && rootlen > 0)
 	{
-		ret = autocomplete_check_html(editor, style, pos);
-		if (ret || (ft->id == GEANY_FILETYPES_PHP && style == SCE_HPHP_DEFAULT &&
+		if (ft->id == GEANY_FILETYPES_PHP && style == SCE_HPHP_DEFAULT &&
 			rootlen == 3 && strcmp(root, "php") == 0 && pos >= 5 &&
 			sci_get_char_at(sci, pos - 5) == '<' &&
-			sci_get_char_at(sci, pos - 4) == '?'))
+			sci_get_char_at(sci, pos - 4) == '?')
 		{
 			/* nothing, don't complete PHP open tags */
 		}
