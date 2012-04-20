@@ -225,6 +225,9 @@ gboolean tm_tag_write(TMTag *tag, FILE *file, guint attrs);
 */
 int tm_tag_compare(const void *ptr1, const void *ptr2);
 
+gboolean tm_tags_merge(GPtrArray *tags_array, gsize orig_len,
+	TMTagAttrType *sort_attributes, gboolean dedup);
+
 /*!
  Sort an array of tags on the specified attribuites using the inbuilt comparison
  function.

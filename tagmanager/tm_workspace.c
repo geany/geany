@@ -142,6 +142,7 @@ static TMTagAttrType global_tags_sort_attrs[] =
 
 gboolean tm_workspace_load_global_tags(const char *tags_file, gint mode)
 {
+	gsize orig_len;
 	guchar buf[BUFSIZ];
 	FILE *fp;
 	TMTag *tag;
@@ -153,6 +154,7 @@ gboolean tm_workspace_load_global_tags(const char *tags_file, gint mode)
 		return FALSE;
 	if (NULL == theWorkspace->global_tags)
 		theWorkspace->global_tags = g_ptr_array_new();
+	orig_len = theWorkspace->global_tags->len;
 	if ((NULL == fgets((gchar*) buf, BUFSIZ, fp)) || ('\0' == *buf))
 	{
 		fclose(fp);
@@ -182,10 +184,8 @@ gboolean tm_workspace_load_global_tags(const char *tags_file, gint mode)
 		g_ptr_array_add(theWorkspace->global_tags, tag);
 	fclose(fp);
 
-	/* resort the whole array, because tm_tags_find expects a sorted array and it is not sorted
-	 * when c99.tags, php.tags and latex.tags are loaded at the same time */
-	tm_tags_sort(theWorkspace->global_tags, global_tags_sort_attrs, TRUE);
-
+	/* reorder the whole array, because tm_tags_find expects a sorted array */
+	tm_tags_merge(theWorkspace->global_tags, orig_len, global_tags_sort_attrs, TRUE);
 	return TRUE;
 }
 
