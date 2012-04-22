@@ -178,6 +178,7 @@ static void add_statusbar_statistics(GString *stats_str,
 	const gchar *fmt;
 	const gchar *expos;	/* % expansion position */
 	const gchar sp[] = "      ";
+	ScintillaObject *sci = doc->editor->sci;
 
 	fmt = NZV(statusbar_template) ? statusbar_template :
 		/* Status bar statistics: col = column, sel = selection. */
@@ -206,9 +207,19 @@ static void add_statusbar_statistics(GString *stats_str,
 				g_string_append_printf(stats_str, "%d", col + 1);
 				break;
 			case 's':
-				g_string_append_printf(stats_str, "%d",
-					sci_get_selected_text_length(doc->editor->sci) - 1);
+			{
+				gint len = sci_get_selected_text_length(sci) - 1;
+				/* check if whole lines are selected */
+				if (!len || sci_get_col_from_position(sci,
+						sci_get_selection_start(sci)) != 0 ||
+					sci_get_col_from_position(sci,
+						sci_get_selection_end(sci)) != 0)
+					g_string_append_printf(stats_str, "%d", len);
+				else /* L = lines */
+					g_string_append_printf(stats_str, _("%dL"),
+						sci_get_lines_selected(doc->editor->sci) - 1);
 				break;
+			}
 			case 'w':
 				/* RO = read-only */
 				g_string_append(stats_str, (doc->readonly) ? _("RO ") :
