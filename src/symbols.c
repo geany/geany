@@ -1296,7 +1296,7 @@ static void free_iter_slice_list(gpointer data)
 /* inserts a @data in @table on key @tag.
  * previous data is not overwritten if the key is duplicated, but rather the
  * two values are kept in a list
- * 
+ *
  * table is: GHashTable<TMTag, GList<GList<TMTag>>> */
 static void tags_table_insert(GHashTable *table, TMTag *tag, GList *data)
 {
@@ -1702,9 +1702,8 @@ static GeanyFiletype *detect_global_tags_filetype(const gchar *utf8_filename)
  * CFLAGS=-I/home/user/libname-1.x geany -g libname.d.tags libname.h */
 int symbols_generate_global_tags(int argc, char **argv, gboolean want_preprocess)
 {
-	/* -E pre-process, -dD output user macros, -p prof info (?),
-	 * -undef remove builtin macros (seems to be needed with FC5 gcc 4.1.1) */
-	const char pre_process[] = "gcc -E -dD -p -undef";
+	/* -E pre-process, -dD output user macros, -p prof info (?) */
+	const char pre_process[] = "gcc -E -dD -p";
 
 	if (argc > 2)
 	{
