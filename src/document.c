@@ -2312,6 +2312,8 @@ void document_highlight_tags(GeanyDocument *doc)
 		default:
 			return; /* early out if type keywords are not supported */
 	}
+	if (!app->tm_workspace->work_object.tags_array)
+		return;
 
 	/* get any type keywords and tell scintilla about them
 	 * this will cause the type keywords to be colourized in scintilla */
@@ -2895,7 +2897,7 @@ gboolean document_check_disk_status(GeanyDocument *doc, gboolean force)
 	g_return_val_if_fail(doc != NULL, FALSE);
 
 	/* ignore remote files and documents that have never been saved to disk */
-	if (notebook_switch_in_progress() || file_prefs.disk_check_timeout == 0 
+	if (notebook_switch_in_progress() || file_prefs.disk_check_timeout == 0
 			|| doc->real_path == NULL || doc->priv->is_remote)
 		return FALSE;
 
