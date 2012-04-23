@@ -1681,17 +1681,18 @@ gboolean symbols_recreate_tag_list(GeanyDocument *doc, gint sort_mode)
 static GeanyFiletype *detect_global_tags_filetype(const gchar *utf8_filename)
 {
 	gchar *tags_ext;
-	gchar *shortname = g_strdup(utf8_filename);
+	gchar *shortname = utils_strdupa(utf8_filename);
 	GeanyFiletype *ft = NULL;
 
-	tags_ext = strstr(shortname, ".tags");
+	tags_ext = g_strrstr(shortname, ".tags");
 	if (tags_ext)
 	{
 		*tags_ext = '\0';	/* remove .tags extension */
 		ft = filetypes_detect_from_extension(shortname);
+		if (ft->id != GEANY_FILETYPES_NONE)
+			return ft;
 	}
-	g_free(shortname);
-	return ft;
+	return NULL;
 }
 
 
@@ -1772,8 +1773,8 @@ void symbols_show_load_tags_dialog(void)
 		NULL);
 	gtk_widget_set_name(dialog, "GeanyDialog");
 	filter = gtk_file_filter_new();
-	gtk_file_filter_set_name(filter, _("Geany tag files (*.tags)"));
-	gtk_file_filter_add_pattern(filter, "*.tags");
+	gtk_file_filter_set_name(filter, _("Geany tag files (*.*.tags)"));
+	gtk_file_filter_add_pattern(filter, "*.*.tags");
 	gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(dialog), filter);
 
 	if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_OK)
