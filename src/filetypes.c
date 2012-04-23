@@ -890,44 +890,40 @@ static GeanyFiletype *find_shebang(const gchar *utf8_filename, const gchar *line
 
 	if (strlen(line) > 2 && line[0] == '#' && line[1] == '!')
 	{
+		static const struct {
+			const gchar *name;
+			filetype_id filetype;
+		} intepreter_map[] = {
+			{ "sh",		GEANY_FILETYPES_SH },
+			{ "bash",	GEANY_FILETYPES_SH },
+			{ "dash",	GEANY_FILETYPES_SH },
+			{ "perl",	GEANY_FILETYPES_PERL },
+			{ "python",	GEANY_FILETYPES_PYTHON },
+			{ "php",	GEANY_FILETYPES_PHP },
+			{ "ruby",	GEANY_FILETYPES_RUBY },
+			{ "tcl",	GEANY_FILETYPES_TCL },
+			{ "make",	GEANY_FILETYPES_MAKE },
+			{ "zsh",	GEANY_FILETYPES_SH },
+			{ "ksh",	GEANY_FILETYPES_SH },
+			{ "csh",	GEANY_FILETYPES_SH },
+			{ "ash",	GEANY_FILETYPES_SH },
+			{ "dmd",	GEANY_FILETYPES_D },
+			{ "wish",	GEANY_FILETYPES_TCL }
+		};
 		gchar *tmp = g_path_get_basename(line + 2);
 		gchar *basename_interpreter = tmp;
+		guint i;
 
 		if (strncmp(tmp, "env ", 4) == 0 && strlen(tmp) > 4)
 		{	/* skip "env" and read the following interpreter */
 			basename_interpreter += 4;
 		}
 
-		if (strncmp(basename_interpreter, "sh", 2) == 0)
-			ft = filetypes[GEANY_FILETYPES_SH];
-		else if (strncmp(basename_interpreter, "bash", 4) == 0)
-			ft = filetypes[GEANY_FILETYPES_SH];
-		else if (strncmp(basename_interpreter, "dash", 4) == 0)
-			ft = filetypes[GEANY_FILETYPES_SH];
-		else if (strncmp(basename_interpreter, "perl", 4) == 0)
-			ft = filetypes[GEANY_FILETYPES_PERL];
-		else if (strncmp(basename_interpreter, "python", 6) == 0)
-			ft = filetypes[GEANY_FILETYPES_PYTHON];
-		else if (strncmp(basename_interpreter, "php", 3) == 0)
-			ft = filetypes[GEANY_FILETYPES_PHP];
-		else if (strncmp(basename_interpreter, "ruby", 4) == 0)
-			ft = filetypes[GEANY_FILETYPES_RUBY];
-		else if (strncmp(basename_interpreter, "tcl", 3) == 0)
-			ft = filetypes[GEANY_FILETYPES_TCL];
-		else if (strncmp(basename_interpreter, "make", 4) == 0)
-			ft = filetypes[GEANY_FILETYPES_MAKE];
-		else if (strncmp(basename_interpreter, "zsh", 3) == 0)
-			ft = filetypes[GEANY_FILETYPES_SH];
-		else if (strncmp(basename_interpreter, "ksh", 3) == 0)
-			ft = filetypes[GEANY_FILETYPES_SH];
-		else if (strncmp(basename_interpreter, "csh", 3) == 0)
-			ft = filetypes[GEANY_FILETYPES_SH];
-		else if (strncmp(basename_interpreter, "ash", 3) == 0)
-			ft = filetypes[GEANY_FILETYPES_SH];
-		else if (strncmp(basename_interpreter, "dmd", 3) == 0)
-			ft = filetypes[GEANY_FILETYPES_D];
-		else if (strncmp(basename_interpreter, "wish", 4) == 0)
-			ft = filetypes[GEANY_FILETYPES_TCL];
+		for (i = 0; ! ft && i < G_N_ELEMENTS(intepreter_map); i++)
+		{
+			if (g_str_has_prefix(basename_interpreter, intepreter_map[i].name))
+				ft = filetypes[intepreter_map[i].filetype];
+		}
 
 		g_free(tmp);
 	}
