@@ -376,16 +376,10 @@ gboolean tm_workspace_create_global_tags(const char *pre_process, const char **i
 	includes_files = NULL;
 	fclose(fp);
 
-	/* FIXME: The following grep command removes the lines
-	 * G_BEGIN_DECLS and G_END_DECLS from the header files. The reason is
-	 * that in tagmanager, the files are not correctly parsed and the typedefs
-	 * following these lines are incorrectly parsed. The real fix should,
-	 * of course be in tagmanager (c) parser. This is just a temporary fix.
-	 */
 	if (pre_process != NULL)
 	{
 		gint ret;
-		command = g_strdup_printf("%s %s | grep -v -E '^\\s*(G_BEGIN_DECLS|G_END_DECLS)\\s*$' > %s",
+		command = g_strdup_printf("%s %s > %s",
 							  pre_process, temp_file, temp_file2);
 #ifdef TM_DEBUG
 		g_message("Executing: %s", command);

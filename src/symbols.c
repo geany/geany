@@ -117,6 +117,9 @@ static void load_c_ignore_tags(void)
 
 	if (g_file_get_contents(path, &content, NULL, NULL))
 	{
+		/* historically we ignore the glib _DECLS for tag generation */
+		SETPTR(content, g_strconcat("G_BEGIN_DECLS G_END_DECLS\n", content, NULL));
+
 		g_strfreev(c_tags_ignore);
 		c_tags_ignore = g_strsplit_set(content, " \n\r", -1);
 		g_free(content);
