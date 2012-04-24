@@ -379,8 +379,10 @@ gboolean tm_workspace_create_global_tags(const char *pre_process, const char **i
 	if (pre_process != NULL)
 	{
 		gint ret;
-		command = g_strdup_printf("%s %s > %s",
-							  pre_process, temp_file, temp_file2);
+		gchar *tmp_errfile = create_temp_file("tmp_XXXXXX");
+		gchar *errors = NULL;
+		command = g_strdup_printf("%s %s >%s 2>%s",
+								pre_process, temp_file, temp_file2, tmp_errfile);
 #ifdef TM_DEBUG
 		g_message("Executing: %s", command);
 #endif
@@ -388,6 +390,11 @@ gboolean tm_workspace_create_global_tags(const char *pre_process, const char **i
 		g_free(command);
 		g_unlink(temp_file);
 		g_free(temp_file);
+		g_file_get_contents(tmp_errfile, &errors, NULL, NULL);
+		if (errors && *errors)
+			g_printerr("%s", errors);
+		g_free(errors);
+		g_free(tmp_errfile);
 		if (ret == -1)
 		{
 			g_unlink(temp_file2);
