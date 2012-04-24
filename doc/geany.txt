@@ -1593,6 +1593,8 @@ Different tag attributes like the return value or the argument list
 are separated with different characters indicating the type of the
 following argument.
 
+Pipe-separated format
+*********************
 The Pipe-separated format is easier to read and write.
 There is one tag per line and different tag attributes are separated
 by the pipe character (``|``). A line looks like::
@@ -1637,12 +1639,15 @@ Example for the wxD library for the D programming language::
     geany -g wxd.d.tags /home/username/wxd/wx/*.d
 
 
-*Generating C/C++ tag files:*
+Generating C/C++ tag files
+**************************
+You may need to first setup the `C ignore.tags`_ file.
 
-For C/C++ tag files, gcc and grep are required, so that header files
-can be preprocessed to include any other headers they depend upon.
+For C/C++ tag files gcc is required by default, so that header files
+can be preprocessed to include any other headers they depend upon. If
+you do not want this, use the ``-P`` option described above.
 
-For C/C++ files, the environment variable CFLAGS should be set with
+For preprocessing, the environment variable CFLAGS should be set with
 appropriate ``-I/path`` include paths. The following example works with
 the bash shell, generating tags for the GnomeUI library::
 
@@ -1653,26 +1658,11 @@ You can adapt this command to use CFLAGS and header files appropriate
 for whichever libraries you want.
 
 
-*Replacing the default C/C++ tags file:*
-
-Geany currently uses a default global tags file c99.tags for
-C and C++, commonly installed in /usr/share/geany. This file can
-be replaced with one containing tags parsed from a different set
-of header files. When Geany is next started, your custom tags file
-will be loaded instead of the default c99.tags. You should keep a
-copy of the generated tags file because it will get overwritten when
-upgrading Geany.
-
-*Generating tag files on Windows:*
-
-This works basically the same as on other platforms but you need to make
-sure you have grep installed and Geany can find it, i.e. it must be
-in the PATH environment variable. To test this, open a console window
-and type ``grep`` and see whether it is executed.
-If it is, then you can create a tags file like the following::
+Generating tag files on Windows
+*******************************
+This works basically the same as on other platforms::
 
     "c:\program files\geany\bin\geany" -g c:\mytags.php.tags c:\code\somefile.php
-
 
 
 C ignore.tags
