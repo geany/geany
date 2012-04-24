@@ -1707,7 +1707,7 @@ static GeanyFiletype *detect_global_tags_filetype(const gchar *utf8_filename)
 int symbols_generate_global_tags(int argc, char **argv, gboolean want_preprocess)
 {
 	/* -E pre-process, -dD output user macros, -p prof info (?) */
-	const char pre_process[] = "gcc -E -dD -p";
+	const char pre_process[] = "gcc -E -dD -p -I.";
 
 	if (argc > 2)
 	{
