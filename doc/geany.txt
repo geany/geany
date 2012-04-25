@@ -1704,6 +1704,11 @@ manual page:
 For even more detailed information please read the manual page of
 Exuberant Ctags.
 
+Geany extends Ctags with a '*' character suffix - this means use
+prefix matching, e.g. G_GNUC_* will match G_GNUC_NULL_TERMINATED, etc.
+Note that prefix match items should be put after other items to ensure
+that items like G_GNUC_PRINTF+ get parsed correctly.
+
 
 Preferences
 -----------

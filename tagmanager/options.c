@@ -175,11 +175,16 @@ extern boolean isIgnoreToken (const char *const name,
 		for (i = 0  ;  i < len ;  ++i)
 		{
 			vString *token = vStringNewInit (c_tags_ignore[i]);
+			const size_t tokenLen = vStringLength (token);
 
+			if (tokenLen >= 2 && vStringChar (token, tokenLen - 1) == '*' &&
+				strncmp (vStringValue (token), name, tokenLen - 1) == 0)
+			{
+				result = TRUE;
+				break;
+			}
 			if (strncmp (vStringValue (token), name, nameLen) == 0)
 			{
-				const size_t tokenLen = vStringLength (token);
-
 				if (nameLen == tokenLen)
 				{
 					result = TRUE;
