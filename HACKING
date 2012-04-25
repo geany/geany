@@ -340,6 +340,7 @@ Bugs to watch out for
 * Inserting fields into structs in the plugin API instead of appending.
 * Not breaking the plugin ABI when necessary.
 * Using an idle callback that doesn't check main_status.quitting.
+* Forgetting to call vStringTerminate in CTags code.
 * Forgetting CRLF line endings on Windows.
 * Not handling Tabs & Spaces indent mode.
 

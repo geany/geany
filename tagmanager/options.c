@@ -168,14 +168,18 @@ extern boolean isIgnoreToken (const char *const name,
 		const size_t nameLen = strlen (name);
 		unsigned int i;
 		guint len = g_strv_length (c_tags_ignore);
+		vString *token = vStringNew();
 
 		if (pIgnoreParens != NULL)
 			*pIgnoreParens = FALSE;
 
 		for (i = 0  ;  i < len ;  ++i)
 		{
-			vString *token = vStringNewInit (c_tags_ignore[i]);
-			const size_t tokenLen = vStringLength (token);
+			size_t tokenLen;
+
+			vStringCopyS (token, c_tags_ignore[i]);
+			vStringTerminate (token);
+			tokenLen = vStringLength (token);
 
 			if (tokenLen >= 2 && vStringChar (token, tokenLen - 1) == '*' &&
 				strncmp (vStringValue (token), name, tokenLen - 1) == 0)
@@ -205,8 +209,8 @@ extern boolean isIgnoreToken (const char *const name,
 					break;
 				}
 			}
-			vStringDelete (token);
 		}
+		vStringDelete (token);
 	}
 	return result;
 }
