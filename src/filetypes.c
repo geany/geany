@@ -914,7 +914,7 @@ static GeanyFiletype *find_shebang(const gchar *utf8_filename, const gchar *line
 		gchar *basename_interpreter = tmp;
 		guint i;
 
-		if (strncmp(tmp, "env ", 4) == 0 && strlen(tmp) > 4)
+		if (g_str_has_prefix(tmp, "env "))
 		{	/* skip "env" and read the following interpreter */
 			basename_interpreter += 4;
 		}
@@ -924,11 +924,10 @@ static GeanyFiletype *find_shebang(const gchar *utf8_filename, const gchar *line
 			if (g_str_has_prefix(basename_interpreter, intepreter_map[i].name))
 				ft = filetypes[intepreter_map[i].filetype];
 		}
-
 		g_free(tmp);
 	}
 	/* detect HTML files */
-	if (strncmp(line, "<!DOCTYPE html", 14) == 0 || strncmp(line, "<html", 5) == 0)
+	if (g_str_has_prefix(line, "<!DOCTYPE html") || g_str_has_prefix(line, "<html"))
 	{
 		/* PHP, Perl and Python files might also start with <html, so detect them based on filename
 		 * extension and use the detected filetype, else assume HTML */
@@ -939,7 +938,7 @@ static GeanyFiletype *find_shebang(const gchar *utf8_filename, const gchar *line
 		}
 	}
 	/* detect XML files */
-	else if (utf8_filename && strncmp(line, "<?xml", 5) == 0)
+	else if (utf8_filename && g_str_has_prefix(line, "<?xml"))
 	{
 		/* HTML and DocBook files might also start with <?xml, so detect them based on filename
 		 * extension and use the detected filetype, else assume XML */
@@ -951,11 +950,10 @@ static GeanyFiletype *find_shebang(const gchar *utf8_filename, const gchar *line
 			ft = filetypes[GEANY_FILETYPES_XML];
 		}
 	}
-	else if (strncmp(line, "<?php", 5) == 0)
+	else if (g_str_has_prefix(line, "<?php"))
 	{
 		ft = filetypes[GEANY_FILETYPES_PHP];
 	}
-
 	return ft;
 }
 
