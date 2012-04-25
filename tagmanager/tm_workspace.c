@@ -394,6 +394,7 @@ gboolean tm_workspace_create_global_tags(const char *pre_process, const char **i
 		if (errors && *errors)
 			g_printerr("%s", errors);
 		g_free(errors);
+		g_unlink(tmp_errfile);
 		g_free(tmp_errfile);
 		if (ret == -1)
 		{
