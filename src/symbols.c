@@ -53,6 +53,7 @@
 #include "ui_utils.h"
 #include "editor.h"
 #include "sciwrappers.h"
+#include "filetypesprivate.h"
 
 
 const guint TM_GLOBAL_TYPE_MASK =
@@ -1810,15 +1811,12 @@ void symbols_show_load_tags_dialog(void)
 }
 
 
-/* Fills a hash table with filetype keys that hold a linked list of filenames. */
-static GHashTable *get_tagfile_hash(const GSList *file_list)
+static void detect_tag_files(const GSList *file_list)
 {
 	const GSList *node;
-	GHashTable *hash = g_hash_table_new(NULL, NULL);
 
 	for (node = file_list; node != NULL; node = g_slist_next(node))
 	{
-		GList *fnames;
 		gchar *fname = node->data;
 		gchar *utf8_fname = utils_get_utf8_from_locale(fname);
 		GeanyFiletype *ft = detect_global_tags_filetype(utf8_fname);
@@ -1827,21 +1825,17 @@ static GHashTable *get_tagfile_hash(const GSList *file_list)
 
 		if (FILETYPE_ID(ft) != GEANY_FILETYPES_NONE)
 		{
-			fnames = g_hash_table_lookup(hash, ft);	/* may be NULL */
-			fnames = g_list_append(fnames, fname);
-			g_hash_table_insert(hash, ft, fnames);
+			ft->priv->tag_files = g_slist_append(ft->priv->tag_files, fname);
 		}
 		else
 			geany_debug("Unknown filetype for file '%s'.", fname);
 	}
-	return hash;
 }
 
 
-static GHashTable *init_user_tags(void)
+static void init_user_tags(void)
 {
 	GSList *file_list = NULL, *list = NULL;
-	GHashTable *lang_hash;
 	gchar *dir;
 
 	dir = g_build_filename(app->configdir, "tags", NULL);
@@ -1857,21 +1851,17 @@ static GHashTable *init_user_tags(void)
 	g_free(dir);
 
 	file_list = g_slist_concat(file_list, list);
-
-	lang_hash = get_tagfile_hash(file_list);
-	/* don't need to delete list contents because they are now used for hash contents */
+	detect_tag_files(file_list);
+	/* don't need to delete list contents because they are stored in ft->priv->tag_files */
 	g_slist_free(file_list);
-
-	return lang_hash;
 }
 
 
 static void load_user_tags(filetype_id ft_id)
 {
 	static guchar *tags_loaded = NULL;
-	static GHashTable *lang_hash = NULL;
-	GList *fnames;
-	const GList *node;
+	static gboolean init_tags = FALSE;
+	const GSList *node;
 	GeanyFiletype *ft = filetypes[ft_id];
 
 	g_return_if_fail(ft_id > 0);
@@ -1882,20 +1872,18 @@ static void load_user_tags(filetype_id ft_id)
 		return;
 	tags_loaded[ft_id] = TRUE;	/* prevent reloading */
 
-	if (lang_hash == NULL)
-		lang_hash = init_user_tags();
+	if (!init_tags)
+	{
+		init_user_tags();
+		init_tags = TRUE;
+	}
 
-	fnames = g_hash_table_lookup(lang_hash, ft);
-
-	for (node = fnames; node != NULL; node = g_list_next(node))
+	for (node = ft->priv->tag_files; node != NULL; node = g_slist_next(node))
 	{
 		const gchar *fname = node->data;
 
 		symbols_load_global_tags(fname, ft);
 	}
-	g_list_foreach(fnames, (GFunc) g_free, NULL);
-	g_list_free(fnames);
-	g_hash_table_remove(lang_hash, (gpointer) ft);
 }
 
 

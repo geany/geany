@@ -1124,12 +1124,15 @@ static void filetype_free(gpointer data, G_GNUC_UNUSED gpointer user_data)
 	g_free(ft->ftdefcmds);
 	g_free(ft->execcmds);
 	g_free(ft->error_regex_string);
-	if (ft->priv->error_regex)
-		g_regex_unref(ft->priv->error_regex);
 	if (ft->icon)
 		g_object_unref(ft->icon);
-
 	g_strfreev(ft->pattern);
+
+	if (ft->priv->error_regex)
+		g_regex_unref(ft->priv->error_regex);
+	g_slist_foreach(ft->priv->tag_files, (GFunc) g_free, NULL);
+	g_slist_free(ft->priv->tag_files);
+
 	g_free(ft->priv);
 	g_free(ft);
 }
