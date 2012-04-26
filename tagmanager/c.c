@@ -2042,6 +2042,14 @@ static void processToken (tokenInfo *const token, statementInfo *const st)
 			}
 			break;
 		}
+		case KEYWORD_IF:
+			if (isLanguage (Lang_d))
+			{	/* static if (is(typeof(__traits(getMember, a, name)) == function)) */
+				int c = skipToNonWhite ();
+				if (c == '(')
+					skipToMatch ("()");
+			}
+			break;
 	}
 }
 
