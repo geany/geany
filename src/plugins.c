@@ -59,6 +59,7 @@
 #include "keyfile.h"
 #include "win32.h"
 #include "pluginutils.h"
+#include "project.h"
 #include "pluginprivate.h"
 
 
@@ -362,6 +363,10 @@ static BuildFuncs build_funcs = {
 	&build_get_group_count
 };
 
+static ProjectFuncs project_funcs = {
+	&project_get_base_path
+};
+
 static GeanyFunctions geany_functions = {
 	&doc_funcs,
 	&sci_funcs,
@@ -385,7 +390,8 @@ static GeanyFunctions geany_functions = {
 	&msgwin_funcs,
 	&stash_funcs,
 	&symbols_funcs,
-	&build_funcs
+	&build_funcs,
+	&project_funcs
 };
 
 static GeanyData geany_data;
