@@ -4994,11 +4994,13 @@ geany-|(version)|.pdf.
 
 __ http://docutils.sourceforge.net/rst.html
 
-After you are happy with your changes, create a patch::
+After you are happy with your changes, create a patch e.g. by using::
 
-    % svn diff geany.txt > foo.patch
+    % git diff geany.txt > foo.patch
 
 and then submit that file to the mailing list for review.
+
+Also you can clone the Geany at github and send a pullrequest.
 
 Note, you will need the Python docutils software package installed
 to build the docs. The package is named ``python-docutils`` on Debian
