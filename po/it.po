@@ -100,11 +100,11 @@ msgstr "Apri f_ile selezionato"
 
 #: ../data/geany.glade.h:17
 msgid "Find _Usage"
-msgstr "_Utilizzo del Trova"
+msgstr "Mostra _utilizzo"
 
 #: ../data/geany.glade.h:18
 msgid "Find _Document Usage"
-msgstr "_Utilizzo del Trova"
+msgstr "Mostra utilizzo nel _documento"
 
 #: ../data/geany.glade.h:19
 msgid "Go to _Tag Definition"
@@ -3499,7 +3499,7 @@ msgstr "Mostra utilizzo"
 
 #: ../src/keybindings.c:450
 msgid "Find Document Usage"
-msgstr "Uso del Trova Documento"
+msgstr "Mostra utilizzo nel documento"
 
 #: ../src/keybindings.c:457 ../src/toolbar.c:66
 msgid "Navigate back a location"
