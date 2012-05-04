@@ -30,7 +30,9 @@ Creates macros for each plugin API function pointer, e.g.:
 """
 
 
-import re, sys
+import re
+import sys
+
 
 def get_function_names():
     names = []
@@ -46,6 +48,7 @@ def get_function_names():
                 names.append(symbol)
     filep.close()
     return names
+
 
 def get_api_tuple(source):
     match = re.match("^([a-z]+)_([a-z][a-z0-9_]+)$", source)
