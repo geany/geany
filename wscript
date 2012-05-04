@@ -319,7 +319,7 @@ def build(bld):
         name    = 'geanyfunctions.h',
         before  = ['c', 'cxx'],
         cwd     = '%s/plugins' % bld.path.abspath(),
-        rule    = 'python genapi.py -q')
+        rule    = '%s genapi.py -q' % sys.executable)
 
     # Plugins
     if bld.env['HAVE_PLUGINS'] == 1:
