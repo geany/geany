@@ -1842,10 +1842,10 @@ static void init_user_tags(void)
 	{
 		utils_mkdir(dir, FALSE);
 	}
-	file_list = utils_get_file_list_full(dir, TRUE, TRUE, NULL);
+	file_list = utils_get_file_list_full(dir, TRUE, FALSE, NULL);
 
 	SETPTR(dir, g_build_filename(app->datadir, "tags", NULL));
-	list = utils_get_file_list_full(dir, TRUE, TRUE, NULL);
+	list = utils_get_file_list_full(dir, TRUE, FALSE, NULL);
 	g_free(dir);
 
 	file_list = g_slist_concat(file_list, list);
