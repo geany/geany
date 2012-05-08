@@ -1440,8 +1440,6 @@ GSList *utils_get_file_list_full(const gchar *path, gboolean full_path, gboolean
 	/* sorting last is quicker than on insertion */
 	if (sort)
 		list = g_slist_sort(list, (GCompareFunc) utils_str_casecmp);
-	else
-		list = g_slist_reverse(list);
 	return list;
 }
 
