@@ -1824,9 +1824,7 @@ static void detect_tag_files(const GSList *file_list)
 		g_free(utf8_fname);
 
 		if (FILETYPE_ID(ft) != GEANY_FILETYPES_NONE)
-		{
-			ft->priv->tag_files = g_slist_append(ft->priv->tag_files, fname);
-		}
+			ft->priv->tag_files = g_slist_prepend(ft->priv->tag_files, fname);
 		else
 			geany_debug("Unknown filetype for file '%s'.", fname);
 	}
