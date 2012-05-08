@@ -105,8 +105,9 @@ AC_CONFIG_FILES([
 		icons/48x48/Makefile
 		icons/scalable/Makefile
 		tagmanager/Makefile
-		tagmanager/include/Makefile
+		tagmanager/ctags/Makefile
 		tagmanager/mio/Makefile
+		tagmanager/src/Makefile
 		scintilla/Makefile
 		scintilla/include/Makefile
 		src/Makefile

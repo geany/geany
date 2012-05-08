@@ -38,7 +38,7 @@ MINGW_CFLAGS = \
 			-DGTK \
 			-I$(top_srcdir) \
 			-I$(top_srcdir)/src \
-			-I$(top_srcdir)/tagmanager/include \
+			-I$(top_srcdir)/tagmanager/src \
 			-I$(top_srcdir)/scintilla/include \
 			$(GTK_CFLAGS) \
 			$(PLUGIN_CFLAGS)
@@ -106,7 +106,7 @@ AM_CPPFLAGS = \
 	-DDATADIR=\"$(datadir)\" \
 	-DGTK \
 	-I$(top_srcdir)/src \
-	-I$(top_srcdir)/tagmanager/include \
+	-I$(top_srcdir)/tagmanager/src \
 	-I$(top_srcdir)/scintilla/include \
 	$(GTK_CFLAGS) \
 	$(PLUGIN_CFLAGS)
