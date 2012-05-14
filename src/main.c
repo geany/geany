@@ -1221,6 +1221,7 @@ void main_quit()
 	g_free(printing_prefs.external_print_cmd);
 	g_free(printing_prefs.page_header_datefmt);
 	g_strfreev(ui_prefs.custom_commands);
+	g_strfreev(ui_prefs.custom_commands_labels);
 
 	queue_free(ui_prefs.recent_queue);
 	queue_free(ui_prefs.recent_projects_queue);

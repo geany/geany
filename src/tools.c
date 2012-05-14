@@ -57,6 +57,7 @@ enum
 	CC_COLUMN_STATUS,
 	CC_COLUMN_TOOLTIP,
 	CC_COLUMN_CMD,
+	CC_COLUMN_LABEL,
 	CC_COLUMN_COUNT
 };
 
@@ -123,14 +124,19 @@ static void cc_dialog_update_row_status(GtkListStore *store, GtkTreeIter *iter, 
 static void cc_dialog_add_command(struct cc_dialog *cc, gint idx, gboolean start_editing)
 {
 	GtkTreeIter iter;
-	const gchar *cmd;
+	const gchar *cmd = NULL;
+	const gchar *label = NULL;
 	guint id = cc->count;
 
-	cmd = (idx >= 0) ? ui_prefs.custom_commands[idx] : NULL;
+	if (idx >= 0)
+	{
+		cmd = ui_prefs.custom_commands[idx];
+		label = ui_prefs.custom_commands_labels[idx];
+	}
 
 	cc->count++;
 	gtk_list_store_append(cc->store, &iter);
-	gtk_list_store_set(cc->store, &iter, CC_COLUMN_ID, id, CC_COLUMN_CMD, cmd, -1);
+	gtk_list_store_set(cc->store, &iter, CC_COLUMN_ID, id, CC_COLUMN_CMD, cmd, CC_COLUMN_LABEL, label, -1);
 	cc_dialog_update_row_status(cc->store, &iter, cmd);
 
 	if (start_editing)
@@ -412,6 +418,16 @@ static void cc_dialog_on_command_edited(GtkCellRendererText *renderer, gchar *pa
 }
 
 
+static void cc_dialog_on_label_edited(GtkCellRendererText *renderer, gchar *path, gchar *text,
+		struct cc_dialog *cc)
+{
+	GtkTreeIter iter;
+
+	gtk_tree_model_get_iter_from_string(GTK_TREE_MODEL(cc->store), &iter, path);
+	gtk_list_store_set(cc->store, &iter, CC_COLUMN_LABEL, text, -1);
+}
+
+
 /* re-compute IDs to reflect the current store state */
 static void cc_dialog_update_ids(struct cc_dialog *cc)
 {
@@ -510,7 +526,7 @@ static void cc_show_dialog_custom_commands(void)
 
 	cc.count = 1;
 	cc.store = gtk_list_store_new(CC_COLUMN_COUNT, G_TYPE_UINT, G_TYPE_STRING, G_TYPE_STRING,
-			G_TYPE_STRING);
+			G_TYPE_STRING, G_TYPE_STRING);
 	cc.view = gtk_tree_view_new_with_model(GTK_TREE_MODEL(cc.store));
 	gtk_tree_view_set_tooltip_column(GTK_TREE_VIEW(cc.view), CC_COLUMN_TOOLTIP);
 	gtk_tree_view_set_reorderable(GTK_TREE_VIEW(cc.view), TRUE);
@@ -520,8 +536,7 @@ static void cc_show_dialog_custom_commands(void)
 	column = gtk_tree_view_column_new_with_attributes(_("ID"), renderer, "text", CC_COLUMN_ID, NULL);
 	gtk_tree_view_append_column(GTK_TREE_VIEW(cc.view), column);
 	/* command column, holding status and command display */
-	column = gtk_tree_view_column_new();
-	gtk_tree_view_column_set_title(column, _("Command"));
+	column = g_object_new(GTK_TYPE_TREE_VIEW_COLUMN, "title", _("Command"), "expand", TRUE, "resizable", TRUE, NULL);
 	renderer = gtk_cell_renderer_pixbuf_new();
 	gtk_tree_view_column_pack_start(column, renderer, FALSE);
 	gtk_tree_view_column_set_attributes(column, renderer, "stock-id", CC_COLUMN_STATUS, NULL);
@@ -531,6 +546,13 @@ static void cc_show_dialog_custom_commands(void)
 	gtk_tree_view_column_pack_start(column, renderer, TRUE);
 	gtk_tree_view_column_set_attributes(column, renderer, "text", CC_COLUMN_CMD, NULL);
 	cc.edit_column = column;
+	gtk_tree_view_append_column(GTK_TREE_VIEW(cc.view), column);
+	/* label column */
+	renderer = gtk_cell_renderer_text_new();
+	g_object_set(renderer, "editable", TRUE, "ellipsize", PANGO_ELLIPSIZE_END, NULL);
+	g_signal_connect(renderer, "edited", G_CALLBACK(cc_dialog_on_label_edited), &cc);
+	column = gtk_tree_view_column_new_with_attributes(_("Label"), renderer, "text", CC_COLUMN_LABEL, NULL);
+	g_object_set(column, "expand", TRUE, "resizable", TRUE, NULL);
 	gtk_tree_view_append_column(GTK_TREE_VIEW(cc.view), column);
 
 	scroll = gtk_scrolled_window_new(NULL, NULL);
@@ -591,9 +613,11 @@ static void cc_show_dialog_custom_commands(void)
 
 	if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_ACCEPT)
 	{
-		GSList *result_list = NULL;
+		GSList *cmd_list = NULL;
+		GSList *lbl_list = NULL;
 		gint len = 0;
-		gchar **result = NULL;
+		gchar **commands = NULL;
+		gchar **labels = NULL;
 		GtkTreeIter iter;
 
 		if (gtk_tree_model_get_iter_first(GTK_TREE_MODEL(cc.store), &iter))
@@ -601,40 +625,54 @@ static void cc_show_dialog_custom_commands(void)
 			do
 			{
 				gchar *cmd;
+				gchar *lbl;
 
-				gtk_tree_model_get(GTK_TREE_MODEL(cc.store), &iter, CC_COLUMN_CMD, &cmd, -1);
+				gtk_tree_model_get(GTK_TREE_MODEL(cc.store), &iter, CC_COLUMN_CMD, &cmd, CC_COLUMN_LABEL, &lbl, -1);
 				if (NZV(cmd))
 				{
-					result_list = g_slist_prepend(result_list, cmd);
+					cmd_list = g_slist_prepend(cmd_list, cmd);
+					lbl_list = g_slist_prepend(lbl_list, lbl);
 					len++;
 				}
 				else
+				{
 					g_free(cmd);
+					g_free(lbl);
+				}
 			}
 			while (gtk_tree_model_iter_next(GTK_TREE_MODEL(cc.store), &iter));
 		}
-		result_list = g_slist_reverse(result_list);
+		cmd_list = g_slist_reverse(cmd_list);
+		lbl_list = g_slist_reverse(lbl_list);
 		/* create a new null-terminated array but only if there is any commands defined */
 		if (len > 0)
 		{
 			gint j = 0;
-			GSList *node;
+			GSList *cmd_node, *lbl_node;
 
-			result = g_new(gchar*, len + 1);
-			foreach_list(node, result_list)
+			commands = g_new(gchar*, len + 1);
+			labels = g_new(gchar*, len + 1);
+			/* walk commands and labels lists */
+			for (cmd_node = cmd_list, lbl_node = lbl_list; cmd_node != NULL; cmd_node = cmd_node->next, lbl_node = lbl_node->next)
 			{
-				result[j] = (gchar*) node->data;
+				commands[j] = (gchar*) cmd_node->data;
+				labels[j] = (gchar*) lbl_node->data;
 				j++;
 			}
-			result[j] = NULL; /* null-terminate the array */
+			/* null-terminate the arrays */
+			commands[j] = NULL;
+			labels[j] = NULL;
 		}
-		/* set the new array */
+		/* set the new arrays */
 		g_strfreev(ui_prefs.custom_commands);
-		ui_prefs.custom_commands = result;
+		ui_prefs.custom_commands = commands;
+		g_strfreev(ui_prefs.custom_commands_labels);
+		ui_prefs.custom_commands_labels = labels;
 		/* rebuild the menu items */
 		tools_create_insert_custom_command_menu_items();
 
-		g_slist_free(result_list);
+		g_slist_free(cmd_list);
+		g_slist_free(lbl_list);
 	}
 	gtk_widget_destroy(dialog);
 }
@@ -662,7 +700,7 @@ static void cc_on_custom_command_activate(GtkMenuItem *menuitem, gpointer user_d
 }
 
 
-static void cc_insert_custom_command_items(GtkMenu *me, gchar *label, gint idx)
+static void cc_insert_custom_command_items(GtkMenu *me, const gchar *label, const gchar *tooltip, gint idx)
 {
 	GtkWidget *item;
 	gint key_idx = -1;
@@ -676,6 +714,7 @@ static void cc_insert_custom_command_items(GtkMenu *me, gchar *label, gint idx)
 	}
 
 	item = gtk_menu_item_new_with_label(label);
+	gtk_widget_set_tooltip_text(item, tooltip);
 	if (key_idx != -1)
 	{
 		kb = keybindings_lookup_item(GEANY_KEY_GROUP_FORMAT, key_idx);
@@ -715,9 +754,13 @@ void tools_create_insert_custom_command_menu_items(void)
 		len = g_strv_length(ui_prefs.custom_commands);
 		for (i = 0; i < len; i++)
 		{
-			if (ui_prefs.custom_commands[i][0] != '\0') /* skip empty fields */
+			const gchar *label = ui_prefs.custom_commands_labels[i];
+
+			if (! NZV(label))
+				label = ui_prefs.custom_commands[i];
+			if (NZV(label)) /* skip empty items */
 			{
-				cc_insert_custom_command_items(menu_edit, ui_prefs.custom_commands[i], idx);
+				cc_insert_custom_command_items(menu_edit, label, ui_prefs.custom_commands[i], idx);
 				idx++;
 			}
 		}
@@ -728,7 +771,7 @@ void tools_create_insert_custom_command_menu_items(void)
 	gtk_container_add(GTK_CONTAINER(menu_edit), item);
 	gtk_widget_show(item);
 
-	cc_insert_custom_command_items(menu_edit, _("Set Custom Commands"), -1);
+	cc_insert_custom_command_items(menu_edit, _("Set Custom Commands"), NULL, -1);
 }
 
 

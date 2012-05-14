@@ -110,6 +110,7 @@ typedef struct UIPrefs
 	GQueue		*recent_projects_queue;
 	gchar		*custom_date_format;
 	gchar		**custom_commands;
+	gchar		**custom_commands_labels;
 }
 UIPrefs;
 
