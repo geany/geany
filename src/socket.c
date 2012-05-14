@@ -289,8 +289,8 @@ gint socket_init(gint argc, gchar **argv)
 	}
 
 	if (socket_info.file_name == NULL)
-		socket_info.file_name = g_strdup_printf("%s%cgeany_socket_%s_%s",
-			app->configdir, G_DIR_SEPARATOR, hostname, display_name);
+		socket_info.file_name = g_strdup_printf("%s%cgeany_socket_%s_%s_%i",
+			app->configdir, G_DIR_SEPARATOR, hostname, display_name, getuid());
 
 	g_free(display_name);
 	g_free(hostname);
