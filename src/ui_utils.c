@@ -381,6 +381,10 @@ void ui_set_window_title(GeanyDocument *doc)
 	{
 		g_string_append(str, _(" (new instance)"));
 	}
+	if (0 == getuid())
+	{
+		g_string_append(str, _(" (as root)"));
+	}
 	gtk_window_set_title(GTK_WINDOW(main_widgets.window), str->str);
 	g_string_free(str, TRUE);
 }
