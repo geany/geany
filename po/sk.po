@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.22\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-04-12 04:40+0000\n"
-"PO-Revision-Date: 2012-04-19 09:01+0200\n"
+"POT-Creation-Date: 2012-05-16 09:31+0200\n"
+"PO-Revision-Date: 2012-05-15 17:40+0200\n"
 "Last-Translator: Tomáš Vadina <kyberdev@gmail.com>\n"
 "Language-Team: slovenčina <slovenska-lokalizacia-xfce@googlegroups.com>\n"
 "Language: sk\n"
@@ -132,7 +132,7 @@ msgstr "<b>Umiestnenie záložiek</b>"
 
 #: ../data/geany.glade.h:26
 msgid "<b>Template data</b>"
-msgstr ""
+msgstr "<b>Umiestnenie šablón</b>"
 
 #: ../data/geany.glade.h:27
 msgid "<b>Terminal</b>"
@@ -232,7 +232,7 @@ msgstr ""
 
 #: ../data/geany.glade.h:49
 msgid "Auto-focus widgets (focus follows mouse)"
-msgstr ""
+msgstr "Automaticky zaostriť panely (ostrenie sleduje myš)"
 
 #: ../data/geany.glade.h:50
 msgid "Auto-indent mode:"
@@ -281,7 +281,7 @@ msgstr ""
 
 #: ../data/geany.glade.h:60
 msgid "Beep on errors or when compilation has finished"
-msgstr ""
+msgstr "Pípnuť pri chybe alebo dokončení kompilície"
 
 #: ../data/geany.glade.h:61
 msgid "Bottom"
@@ -327,7 +327,7 @@ msgstr ""
 msgid "Code folding"
 msgstr ""
 
-#: ../data/geany.glade.h:72 ../src/toolbar.c:70 ../src/tools.c:929
+#: ../data/geany.glade.h:72 ../src/toolbar.c:70 ../src/tools.c:972
 msgid "Color Chooser"
 msgstr ""
 
@@ -365,11 +365,11 @@ msgstr ""
 
 #: ../data/geany.glade.h:81
 msgid "Completions"
-msgstr ""
+msgstr "Doplňovanie"
 
 #: ../data/geany.glade.h:82
 msgid "Confirm exit"
-msgstr ""
+msgstr "Potvrdzovať ukončenie"
 
 #: ../data/geany.glade.h:83
 msgid "Conte_xt Action"
@@ -423,19 +423,19 @@ msgstr ""
 
 #: ../data/geany.glade.h:95 ../src/toolbar.c:933
 msgid "Customize Toolbar"
-msgstr ""
+msgstr "Prispôsobenie panela nástrojov"
 
 #: ../data/geany.glade.h:96
 msgid "Date & time:"
-msgstr ""
+msgstr "Dátum & čas:"
 
 #: ../data/geany.glade.h:97 ../src/printing.c:412
 msgid "Date format:"
-msgstr ""
+msgstr "Formát dátumu:"
 
 #: ../data/geany.glade.h:98
 msgid "Date:"
-msgstr ""
+msgstr "Dátum:"
 
 #: ../data/geany.glade.h:99
 msgid "Debug _Messages"
@@ -499,7 +499,7 @@ msgstr ""
 
 #: ../data/geany.glade.h:113
 msgid "Display"
-msgstr ""
+msgstr "Zobrazenie"
 
 #: ../data/geany.glade.h:114
 msgid "Display height in rows for the autocompletion list"
@@ -507,7 +507,7 @@ msgstr ""
 
 #: ../data/geany.glade.h:115
 msgid "Display:"
-msgstr ""
+msgstr "Zobrazenie:"
 
 #: ../data/geany.glade.h:116
 msgid "Do not show virtual spaces"
@@ -541,11 +541,11 @@ msgstr ""
 
 #: ../data/geany.glade.h:123 ../src/keybindings.c:224 ../src/prefs.c:1581
 msgid "Editor"
-msgstr ""
+msgstr "Editor"
 
 #: ../data/geany.glade.h:124
 msgid "Editor:"
-msgstr ""
+msgstr "Editor:"
 
 #: ../data/geany.glade.h:125
 msgid "Enable newline to strip the trailing spaces on the previous line"
@@ -553,7 +553,7 @@ msgstr ""
 
 #: ../data/geany.glade.h:126
 msgid "Enable plugin support"
-msgstr ""
+msgstr "Zapnúť podporu zásuvných modulov"
 
 #: ../data/geany.glade.h:127
 msgid "Enabled"
@@ -583,11 +583,11 @@ msgstr ""
 
 #: ../data/geany.glade.h:133
 msgid "Extra plugin path:"
-msgstr ""
+msgstr "Extra cesta pre zásuvné moduly:"
 
 #: ../data/geany.glade.h:134
 msgid "Features"
-msgstr ""
+msgstr "Vlastnosti"
 
 #: ../data/geany.glade.h:135
 msgid "File patterns:"
@@ -605,10 +605,10 @@ msgstr ""
 msgid "Filename:"
 msgstr ""
 
-#: ../data/geany.glade.h:139 ../src/prefs.c:1583 ../src/symbols.c:683
+#: ../data/geany.glade.h:139 ../src/prefs.c:1583 ../src/symbols.c:687
 #: ../plugins/filebrowser.c:1120
 msgid "Files"
-msgstr ""
+msgstr "Súbory"
 
 #: ../data/geany.glade.h:140 ../src/keybindings.c:433
 msgid "Find Next _Selection"
@@ -677,7 +677,7 @@ msgstr ""
 #. * tab label object.
 #: ../data/geany.glade.h:155 ../src/prefs.c:1575
 msgid "General"
-msgstr ""
+msgstr "Hlavné"
 
 #: ../data/geany.glade.h:156
 msgid ""
@@ -718,7 +718,7 @@ msgstr ""
 
 #: ../data/geany.glade.h:164
 msgid "I_nsert Comments"
-msgstr ""
+msgstr "Vložiť _komentáre"
 
 #: ../data/geany.glade.h:165
 msgid "Images _and text"
@@ -750,7 +750,7 @@ msgstr ""
 
 #: ../data/geany.glade.h:172
 msgid "Insert Dat_e"
-msgstr ""
+msgstr "Vložit _dátum"
 
 #: ../data/geany.glade.h:173
 msgid "Insert File _Header"
@@ -782,7 +782,7 @@ msgstr ""
 
 #: ../data/geany.glade.h:180 ../src/prefs.c:1577
 msgid "Interface"
-msgstr ""
+msgstr "Rozhranie"
 
 #: ../data/geany.glade.h:181
 msgid "Invert all colors, by default using white text on a black background"
@@ -794,7 +794,7 @@ msgstr ""
 
 #: ../data/geany.glade.h:183 ../src/prefs.c:1589
 msgid "Keybindings"
-msgstr ""
+msgstr "Priradenie klávesov"
 
 #: ../data/geany.glade.h:184
 msgid "Left"
@@ -822,11 +822,11 @@ msgstr ""
 
 #: ../data/geany.glade.h:190
 msgid "Load files from the last session"
-msgstr ""
+msgstr "Načítať súbory z posledného sedenia"
 
 #: ../data/geany.glade.h:191
 msgid "Load virtual terminal support"
-msgstr ""
+msgstr "Načítať podporu virtuálneho terminálu"
 
 #: ../data/geany.glade.h:192
 msgid "Mail address:"
@@ -865,7 +865,7 @@ msgstr ""
 
 #: ../data/geany.glade.h:200
 msgid "Miscellaneous"
-msgstr ""
+msgstr "Rôzne"
 
 #: ../data/geany.glade.h:201 ../src/project.c:141
 #: ../plugins/classbuilder.c:470 ../plugins/classbuilder.c:480
@@ -874,7 +874,7 @@ msgstr ""
 
 #: ../data/geany.glade.h:202
 msgid "New (with _Template)"
-msgstr ""
+msgstr "Nový (zo š_ablóny)"
 
 #: ../data/geany.glade.h:203
 msgid "Newline strips trailing spaces"
@@ -888,7 +888,7 @@ msgstr ""
 msgid "Next to current"
 msgstr ""
 
-#: ../data/geany.glade.h:206 ../src/filetypes.c:102 ../src/filetypes.c:1778
+#: ../data/geany.glade.h:206 ../src/filetypes.c:102 ../src/filetypes.c:1775
 msgid "None"
 msgstr ""
 
@@ -900,7 +900,7 @@ msgstr ""
 
 #: ../data/geany.glade.h:208
 msgid "Notebook tabs"
-msgstr ""
+msgstr "Záložky dokumentov"
 
 #: ../data/geany.glade.h:209
 msgid "Only for rectangular selections"
@@ -930,7 +930,7 @@ msgstr ""
 
 #: ../data/geany.glade.h:215 ../src/keybindings.c:421
 msgid "P_lugin Preferences"
-msgstr ""
+msgstr "Nastavenia zásuvných modu_lov"
 
 #: ../data/geany.glade.h:216
 msgid "Pack the toolbar to the main menu to save vertical space"
@@ -981,7 +981,7 @@ msgstr ""
 
 #: ../data/geany.glade.h:228 ../src/keybindings.c:418
 msgid "Preferences"
-msgstr ""
+msgstr "Predvoľby"
 
 #: ../data/geany.glade.h:229
 msgid ""
@@ -1006,7 +1006,7 @@ msgstr ""
 
 #: ../data/geany.glade.h:234 ../src/prefs.c:1591
 msgid "Printing"
-msgstr ""
+msgstr "Tlač"
 
 #: ../data/geany.glade.h:235
 msgid ""
@@ -1024,7 +1024,7 @@ msgstr ""
 
 #: ../data/geany.glade.h:238
 msgid "Project files:"
-msgstr ""
+msgstr "Projektové súbory:"
 
 #: ../data/geany.glade.h:239
 msgid "R_eload As"
@@ -1096,7 +1096,7 @@ msgstr ""
 
 #: ../data/geany.glade.h:255
 msgid "Save window position and geometry"
-msgstr ""
+msgstr "Uložiť pozíciu a rozmery okna"
 
 #: ../data/geany.glade.h:256
 msgid "Saves the window position and geometry and restores it at the start"
@@ -1347,11 +1347,11 @@ msgstr ""
 
 #: ../data/geany.glade.h:313
 msgid "Startup"
-msgstr ""
+msgstr "Pri spustení"
 
 #: ../data/geany.glade.h:314
 msgid "Startup path:"
-msgstr ""
+msgstr "Predvolená cesta:"
 
 #: ../data/geany.glade.h:315
 msgid "Status"
@@ -1363,7 +1363,7 @@ msgstr ""
 
 #: ../data/geany.glade.h:317
 msgid "Store project file inside the project base directory"
-msgstr ""
+msgstr "Projektový súbor ukladať v koreňovom priečinku projektu"
 
 #: ../data/geany.glade.h:318
 msgid "Strip trailing spaces and tabs"
@@ -1379,7 +1379,7 @@ msgstr ""
 
 #: ../data/geany.glade.h:321
 msgid "Switch to status message list at new message"
-msgstr ""
+msgstr "Prepnúť do zoznamu stavových správ pri novej správe"
 
 #: ../data/geany.glade.h:322
 msgid ""
@@ -1421,7 +1421,7 @@ msgstr ""
 
 #: ../data/geany.glade.h:331 ../src/prefs.c:1587
 msgid "Templates"
-msgstr ""
+msgstr "Šablóny"
 
 #: ../data/geany.glade.h:332 ../src/prefs.c:1595 ../src/vte.c:281
 msgid "Terminal"
@@ -1547,7 +1547,7 @@ msgstr ""
 
 #: ../data/geany.glade.h:358
 msgid "Use project-based session files"
-msgstr ""
+msgstr "Používať súbory v sedení podľa projektu"
 
 #: ../data/geany.glade.h:359
 msgid ""
@@ -1564,11 +1564,11 @@ msgstr ""
 
 #: ../data/geany.glade.h:362
 msgid "Use the current file's directory for Find in Files"
-msgstr ""
+msgstr "Použiť priečinok aktuálneho súboru pre dialógové okno Nájsť v súboroch"
 
 #: ../data/geany.glade.h:363
 msgid "Use the current word under the cursor for Find dialogs"
-msgstr ""
+msgstr "Použiť aktuálne slovo pod kurzorom pre dialógové okno Nájsť"
 
 #: ../data/geany.glade.h:364 ../src/prefs.c:1593
 msgid "Various"
@@ -1683,39 +1683,39 @@ msgstr ""
 
 #: ../data/geany.glade.h:385
 msgid "Year:"
-msgstr ""
+msgstr "Rok:"
 
 #: ../data/geany.glade.h:386
 msgid "_1"
-msgstr ""
+msgstr "_1"
 
 #: ../data/geany.glade.h:387
 msgid "_2"
-msgstr ""
+msgstr "_2"
 
 #: ../data/geany.glade.h:388
 msgid "_3"
-msgstr ""
+msgstr "_3"
 
 #: ../data/geany.glade.h:389
 msgid "_4"
-msgstr ""
+msgstr "_4"
 
 #: ../data/geany.glade.h:390
 msgid "_5"
-msgstr ""
+msgstr "_5"
 
 #: ../data/geany.glade.h:391
 msgid "_6"
-msgstr ""
+msgstr "_6"
 
 #: ../data/geany.glade.h:392
 msgid "_7"
-msgstr ""
+msgstr "_7"
 
 #: ../data/geany.glade.h:393
 msgid "_8"
-msgstr ""
+msgstr "_8"
 
 #: ../data/geany.glade.h:394
 msgid "_Append toolbar to the menu"
@@ -1732,11 +1732,11 @@ msgstr ""
 #. build the code
 #: ../data/geany.glade.h:397 ../src/build.c:2568 ../src/build.c:2845
 msgid "_Build"
-msgstr ""
+msgstr "_Zostaviť"
 
 #: ../data/geany.glade.h:398
 msgid "_Close"
-msgstr ""
+msgstr "_Zavrieť"
 
 #: ../data/geany.glade.h:399
 msgid "_Color Chooser"
@@ -1744,7 +1744,7 @@ msgstr ""
 
 #: ../data/geany.glade.h:400
 msgid "_Commands"
-msgstr ""
+msgstr "_Príkazy"
 
 #: ../data/geany.glade.h:401
 msgid "_Comment Line(s)"
@@ -1772,7 +1772,7 @@ msgstr ""
 
 #: ../data/geany.glade.h:407
 msgid "_Document"
-msgstr ""
+msgstr "_Dokument"
 
 #: ../data/geany.glade.h:408
 msgid "_Donate"
@@ -1796,19 +1796,19 @@ msgstr ""
 
 #: ../data/geany.glade.h:413
 msgid "_Format"
-msgstr ""
+msgstr "_Transformovať"
 
 #: ../data/geany.glade.h:414
 msgid "_Go to Line"
-msgstr ""
+msgstr "Prej_sť na riadok"
 
 #: ../data/geany.glade.h:415 ../src/keybindings.c:470
 msgid "_Go to Next Marker"
-msgstr ""
+msgstr "Prejsť na ďalšiu _značku"
 
 #: ../data/geany.glade.h:416 ../src/keybindings.c:473
 msgid "_Go to Previous Marker"
-msgstr ""
+msgstr "prejsť na predchádzajúcu z_načku"
 
 #: ../data/geany.glade.h:417
 msgid "_Help"
@@ -1820,7 +1820,7 @@ msgstr "_Skryť panel nástrojov"
 
 #: ../data/geany.glade.h:419
 msgid "_Images only"
-msgstr ""
+msgstr "Iba _ikony"
 
 #: ../data/geany.glade.h:420
 msgid "_Increase Indent"
@@ -1828,11 +1828,11 @@ msgstr ""
 
 #: ../data/geany.glade.h:421
 msgid "_Insert \"include <...>\""
-msgstr ""
+msgstr "Vložiť \"_include <...>\""
 
 #: ../data/geany.glade.h:422 ../src/keybindings.c:408
 msgid "_Insert Alternative White Space"
-msgstr ""
+msgstr "Vložiť _alternatívne biele znaky"
 
 #: ../data/geany.glade.h:423
 msgid "_Keyboard Shortcuts"
@@ -1852,15 +1852,15 @@ msgstr ""
 
 #: ../data/geany.glade.h:427
 msgid "_More"
-msgstr ""
+msgstr "_Viac"
 
 #: ../data/geany.glade.h:428
 msgid "_New"
-msgstr ""
+msgstr "_Nový"
 
 #: ../data/geany.glade.h:429
 msgid "_Open"
-msgstr ""
+msgstr "_Otvoriť"
 
 #: ../data/geany.glade.h:430
 msgid "_Project"
@@ -1868,16 +1868,16 @@ msgstr "_Projekt"
 
 #: ../data/geany.glade.h:431
 msgid "_Recent Projects"
-msgstr ""
+msgstr "_Nedávne projekty"
 
 #: ../data/geany.glade.h:432 ../src/keybindings.c:397
 msgid "_Reflow Lines/Block"
 msgstr ""
 
-#: ../data/geany.glade.h:433 ../src/callbacks.c:429 ../src/document.c:2836
+#: ../data/geany.glade.h:433 ../src/callbacks.c:429 ../src/document.c:2838
 #: ../src/sidebar.c:696
 msgid "_Reload"
-msgstr ""
+msgstr "_Znova načítať súbor"
 
 #: ../data/geany.glade.h:434
 msgid "_Reload Configuration"
@@ -1921,7 +1921,7 @@ msgstr ""
 
 #: ../data/geany.glade.h:444
 msgid "_Spaces"
-msgstr ""
+msgstr "_Medzery"
 
 #: ../data/geany.glade.h:445
 msgid "_Strip Trailing Spaces"
@@ -1941,7 +1941,7 @@ msgstr ""
 
 #: ../data/geany.glade.h:449
 msgid "_Toolbar Preferences"
-msgstr ""
+msgstr "Nastavenia panela nás_trojov"
 
 #: ../data/geany.glade.h:450
 msgid "_Tools"
@@ -1969,7 +1969,7 @@ msgstr "_Webové stránky"
 
 #: ../data/geany.glade.h:456
 msgid "_Word Count"
-msgstr ""
+msgstr "_Počet slov"
 
 #: ../data/geany.glade.h:457
 msgid "_Write Unicode BOM"
@@ -1977,73 +1977,73 @@ msgstr ""
 
 #: ../data/geany.glade.h:458
 msgid "email address of the developer"
-msgstr ""
+msgstr "emailová adresa vývojára"
 
 #: ../data/geany.glade.h:459
 msgid "invisible"
 msgstr ""
 
-#: ../src/about.c:156
+#: ../src/about.c:157
 msgid "About Geany"
-msgstr ""
+msgstr "O Geany"
 
-#: ../src/about.c:206
+#: ../src/about.c:207
 msgid "A fast and lightweight IDE"
-msgstr ""
+msgstr "Rýchle a ľahké IDE"
 
-#: ../src/about.c:227
+#: ../src/about.c:228
 #, c-format
 msgid "(built on or after %s)"
-msgstr ""
+msgstr "(zostavené %s alebo neskôr)"
 
 #. gtk_container_add(GTK_CONTAINER(info_box), cop_label);
-#: ../src/about.c:258
+#: ../src/about.c:259
 msgid "Info"
 msgstr "Informácie"
 
-#: ../src/about.c:274
+#: ../src/about.c:275
 msgid "Developers"
 msgstr "Vývojári"
 
-#: ../src/about.c:281
+#: ../src/about.c:282
 msgid "maintainer"
 msgstr "správca"
 
-#: ../src/about.c:289 ../src/about.c:297 ../src/about.c:305
+#: ../src/about.c:290 ../src/about.c:298 ../src/about.c:306
 msgid "developer"
 msgstr "vývojár"
 
-#: ../src/about.c:313
+#: ../src/about.c:314
 msgid "translation maintainer"
 msgstr "správca prekladu"
 
-#: ../src/about.c:322
+#: ../src/about.c:323
 msgid "Translators"
 msgstr "Prekladatelia"
 
-#: ../src/about.c:342
+#: ../src/about.c:343
 msgid "Previous Translators"
 msgstr "Predchádzajúci prekladatelia"
 
-#: ../src/about.c:363
+#: ../src/about.c:364
 msgid "Contributors"
 msgstr "Prispievatelia"
 
-#: ../src/about.c:373
+#: ../src/about.c:374
 #, c-format
 msgid ""
 "Some of the many contributors (for a more detailed list, see the file %s):"
 msgstr ""
 
-#: ../src/about.c:399
+#: ../src/about.c:400
 msgid "Credits"
 msgstr "Autori"
 
-#: ../src/about.c:413
+#: ../src/about.c:414
 msgid "License"
 msgstr "Licencia"
 
-#: ../src/about.c:422
+#: ../src/about.c:423
 msgid ""
 "License text could not be found, please visit http://www.gnu.org/licenses/"
 "gpl-2.0.txt to view it online."
@@ -2067,7 +2067,7 @@ msgstr ""
 #: ../src/build.c:831 ../src/build.c:1055 ../src/search.c:1632
 #, c-format
 msgid "Process failed (%s)"
-msgstr ""
+msgstr "Proces zlyhal (%s)"
 
 #: ../src/build.c:900
 #, c-format
@@ -2149,11 +2149,12 @@ msgstr ""
 msgid "Set menu item label"
 msgstr ""
 
-#: ../src/build.c:1967 ../src/symbols.c:738
+#: ../src/build.c:1967 ../src/symbols.c:742 ../src/tools.c:554
 msgid "Label"
 msgstr ""
 
-#: ../src/build.c:1968 ../src/symbols.c:733 ../src/tools.c:524
+#. command column, holding status and command display
+#: ../src/build.c:1968 ../src/symbols.c:737 ../src/tools.c:539
 msgid "Command"
 msgstr ""
 
@@ -2234,15 +2235,15 @@ msgstr ""
 
 #: ../src/callbacks.c:147
 msgid "Do you really want to quit?"
-msgstr ""
+msgstr "Naozaj chcete ukončiť program?"
 
 #: ../src/callbacks.c:205
 #, c-format
 msgid "%d file saved."
 msgid_plural "%d files saved."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "%d súborov uložených."
+msgstr[1] "%d súbor uložený."
+msgstr[2] "%d súbory uložené."
 
 #: ../src/callbacks.c:430
 msgid "Any unsaved changes will be lost."
@@ -2266,31 +2267,31 @@ msgid ""
 "Please set the filetype for the current file before using this function."
 msgstr ""
 
-#: ../src/callbacks.c:1287 ../src/ui_utils.c:628
+#: ../src/callbacks.c:1287 ../src/ui_utils.c:639
 msgid "dd.mm.yyyy"
-msgstr ""
+msgstr "dd.mm.yyyy"
 
-#: ../src/callbacks.c:1289 ../src/ui_utils.c:629
+#: ../src/callbacks.c:1289 ../src/ui_utils.c:640
 msgid "mm.dd.yyyy"
-msgstr ""
+msgstr "mm.dd.yyyy"
 
-#: ../src/callbacks.c:1291 ../src/ui_utils.c:630
+#: ../src/callbacks.c:1291 ../src/ui_utils.c:641
 msgid "yyyy/mm/dd"
-msgstr ""
+msgstr "yyyy/mm/dd"
 
-#: ../src/callbacks.c:1293 ../src/ui_utils.c:639
+#: ../src/callbacks.c:1293 ../src/ui_utils.c:650
 msgid "dd.mm.yyyy hh:mm:ss"
-msgstr ""
+msgstr "dd.mm.yyyy hh:mm:ss"
 
-#: ../src/callbacks.c:1295 ../src/ui_utils.c:640
+#: ../src/callbacks.c:1295 ../src/ui_utils.c:651
 msgid "mm.dd.yyyy hh:mm:ss"
-msgstr ""
+msgstr "mm.dd.yyyy hh:mm:ss"
 
-#: ../src/callbacks.c:1297 ../src/ui_utils.c:641
+#: ../src/callbacks.c:1297 ../src/ui_utils.c:652
 msgid "yyyy/mm/dd hh:mm:ss"
-msgstr ""
+msgstr "yyyy/mm/dd hh:mm:ss"
 
-#: ../src/callbacks.c:1299 ../src/ui_utils.c:650
+#: ../src/callbacks.c:1299 ../src/ui_utils.c:661
 msgid "_Use Custom Date Format"
 msgstr ""
 
@@ -2398,7 +2399,7 @@ msgstr ""
 
 #: ../src/dialogs.c:545
 msgid "Overwrite?"
-msgstr ""
+msgstr "Prepísať?"
 
 #: ../src/dialogs.c:546
 msgid "Filename already exists!"
@@ -2406,7 +2407,7 @@ msgstr ""
 
 #: ../src/dialogs.c:581 ../src/dialogs.c:707
 msgid "Save File"
-msgstr ""
+msgstr "Uložiť súbor"
 
 #: ../src/dialogs.c:590
 msgid "R_ename"
@@ -2428,20 +2429,20 @@ msgstr ""
 
 #: ../src/dialogs.c:725 ../src/win32.c:677
 msgid "Error"
-msgstr ""
+msgstr "Chyba"
 
 #: ../src/dialogs.c:728 ../src/dialogs.c:811 ../src/dialogs.c:1592
 #: ../src/win32.c:683
 msgid "Question"
-msgstr ""
+msgstr "Otázka"
 
 #: ../src/dialogs.c:731 ../src/win32.c:689
 msgid "Warning"
-msgstr ""
+msgstr "Varovanie"
 
 #: ../src/dialogs.c:734 ../src/win32.c:695
 msgid "Information"
-msgstr ""
+msgstr "Informácia"
 
 #: ../src/dialogs.c:815
 msgid "_Don't save"
@@ -2468,40 +2469,40 @@ msgstr ""
 
 #: ../src/dialogs.c:1223 ../src/dialogs.c:1224 ../src/dialogs.c:1225
 #: ../src/dialogs.c:1231 ../src/dialogs.c:1232 ../src/dialogs.c:1233
-#: ../src/symbols.c:2105 ../src/symbols.c:2126 ../src/symbols.c:2178
-#: ../src/ui_utils.c:253
+#: ../src/symbols.c:2096 ../src/symbols.c:2117 ../src/symbols.c:2169
+#: ../src/ui_utils.c:264
 msgid "unknown"
-msgstr ""
+msgstr "neznámy"
 
-#: ../src/dialogs.c:1238 ../src/symbols.c:888
+#: ../src/dialogs.c:1238 ../src/symbols.c:892
 msgid "Properties"
-msgstr ""
+msgstr "Vlastnosti"
 
 #: ../src/dialogs.c:1269
 msgid "<b>Type:</b>"
-msgstr ""
+msgstr "<b>Typ:</b>"
 
 #: ../src/dialogs.c:1283
 msgid "<b>Size:</b>"
-msgstr ""
+msgstr "<b>Veľkosť:</b>"
 
 #: ../src/dialogs.c:1299
 msgid "<b>Location:</b>"
-msgstr ""
+msgstr "<b>Umiestnenie:</b>"
 
 #: ../src/dialogs.c:1313
 msgid "<b>Read-only:</b>"
-msgstr ""
+msgstr "<b>Len pre čítanie:</b>"
 
 #: ../src/dialogs.c:1320
 msgid "(only inside Geany)"
-msgstr ""
+msgstr "(iba pre Geany)"
 
 #: ../src/dialogs.c:1329
 msgid "<b>Encoding:</b>"
-msgstr ""
+msgstr "<b>Kódovanie:</b>"
 
-#: ../src/dialogs.c:1339 ../src/ui_utils.c:257
+#: ../src/dialogs.c:1339 ../src/ui_utils.c:268
 msgid "(with BOM)"
 msgstr ""
 
@@ -2713,39 +2714,39 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: ../src/document.c:2837
+#: ../src/document.c:2839
 msgid "Do you want to reload it?"
 msgstr ""
 
-#: ../src/document.c:2838
+#: ../src/document.c:2840
 #, c-format
 msgid ""
 "The file '%s' on the disk is more recent than\n"
 "the current buffer."
 msgstr ""
 
-#: ../src/document.c:2856
+#: ../src/document.c:2858
 msgid "Close _without saving"
 msgstr ""
 
-#: ../src/document.c:2859
+#: ../src/document.c:2861
 msgid "Try to resave the file?"
 msgstr ""
 
-#: ../src/document.c:2860
+#: ../src/document.c:2862
 #, c-format
 msgid "File \"%s\" was not found on disk!"
 msgstr ""
 
-#: ../src/editor.c:4300
+#: ../src/editor.c:4310
 msgid "Enter Tab Width"
 msgstr ""
 
-#: ../src/editor.c:4301
+#: ../src/editor.c:4311
 msgid "Enter the amount of spaces which should be replaced by a tab character."
 msgstr ""
 
-#: ../src/editor.c:4459
+#: ../src/editor.c:4469
 #, c-format
 msgid "Warning: non-standard hard tab width: %d != 8!"
 msgstr ""
@@ -2929,17 +2930,17 @@ msgstr ""
 msgid "M_iscellaneous"
 msgstr ""
 
-#: ../src/filetypes.c:1462 ../src/win32.c:104
+#: ../src/filetypes.c:1459 ../src/win32.c:104
 msgid "All Source"
 msgstr ""
 
 #. create meta file filter "All files"
-#: ../src/filetypes.c:1487 ../src/project.c:295 ../src/win32.c:94
+#: ../src/filetypes.c:1484 ../src/project.c:295 ../src/win32.c:94
 #: ../src/win32.c:139 ../src/win32.c:160 ../src/win32.c:165
 msgid "All files"
 msgstr ""
 
-#: ../src/filetypes.c:1535
+#: ../src/filetypes.c:1532
 #, c-format
 msgid "Bad regex for filetype %s: %s"
 msgstr ""
@@ -2967,7 +2968,7 @@ msgid "_Color Schemes"
 msgstr ""
 
 #. visual group order
-#: ../src/keybindings.c:223 ../src/symbols.c:710
+#: ../src/keybindings.c:223 ../src/symbols.c:714
 msgid "File"
 msgstr "Súbor"
 
@@ -3008,7 +3009,7 @@ msgid "Document"
 msgstr "Dokument"
 
 #: ../src/keybindings.c:235 ../src/keybindings.c:582 ../src/project.c:444
-#: ../src/ui_utils.c:1969
+#: ../src/ui_utils.c:1980
 msgid "Build"
 msgstr "Zostaviť"
 
@@ -3102,7 +3103,7 @@ msgstr ""
 
 #: ../src/keybindings.c:315
 msgid "Suppress snippet completion"
-msgstr ""
+msgstr "Zakázať kompletizáciu kúskov kódu"
 
 #: ../src/keybindings.c:317
 msgid "Context Action"
@@ -3462,7 +3463,7 @@ msgstr ""
 
 #: ../src/keybindings.c:597
 msgid "Build options"
-msgstr ""
+msgstr "Možnosti zostavenia"
 
 #: ../src/keybindings.c:602
 msgid "Show Color Chooser"
@@ -3476,11 +3477,11 @@ msgstr ""
 msgid "The following keyboard shortcuts are configurable:"
 msgstr ""
 
-#: ../src/keyfile.c:920
+#: ../src/keyfile.c:950
 msgid "Type here what you want, use it as a notice/scratch board"
 msgstr ""
 
-#: ../src/keyfile.c:1120
+#: ../src/keyfile.c:1150
 msgid "Failed to load one or more session files."
 msgstr ""
 
@@ -3623,7 +3624,7 @@ msgstr "Vitajte v Geany %s."
 msgid "Configuration directory could not be created (%s)."
 msgstr ""
 
-#: ../src/main.c:1288
+#: ../src/main.c:1289
 msgid "Configuration files reloaded."
 msgstr ""
 
@@ -3718,11 +3719,11 @@ msgstr ""
 msgid "Press the combination of the keys you want to use for \"%s\"."
 msgstr ""
 
-#: ../src/prefs.c:226 ../src/symbols.c:2247 ../src/sidebar.c:730
+#: ../src/prefs.c:226 ../src/symbols.c:2238 ../src/sidebar.c:730
 msgid "_Expand All"
 msgstr ""
 
-#: ../src/prefs.c:231 ../src/symbols.c:2252 ../src/sidebar.c:736
+#: ../src/prefs.c:231 ../src/symbols.c:2243 ../src/sidebar.c:736
 msgid "_Collapse All"
 msgstr ""
 
@@ -3794,7 +3795,7 @@ msgstr ""
 
 #: ../src/printing.c:371
 msgid "Document Setup"
-msgstr ""
+msgstr "Nastavenie dokumentu"
 
 #: ../src/printing.c:406
 msgid "Print only the basename(without the path) of the printed file"
@@ -3880,7 +3881,7 @@ msgstr ""
 
 #: ../src/project.c:299
 msgid "Project files"
-msgstr ""
+msgstr "Súbory projektu"
 
 #: ../src/project.c:351
 #, c-format
@@ -4183,273 +4184,273 @@ msgstr ""
 msgid "Value"
 msgstr ""
 
-#: ../src/symbols.c:689 ../src/symbols.c:739 ../src/symbols.c:806
+#: ../src/symbols.c:693 ../src/symbols.c:743 ../src/symbols.c:810
 msgid "Chapter"
 msgstr ""
 
-#: ../src/symbols.c:690 ../src/symbols.c:735 ../src/symbols.c:807
+#: ../src/symbols.c:694 ../src/symbols.c:739 ../src/symbols.c:811
 msgid "Section"
 msgstr ""
 
-#: ../src/symbols.c:691
+#: ../src/symbols.c:695
 msgid "Sect1"
 msgstr ""
 
-#: ../src/symbols.c:692
+#: ../src/symbols.c:696
 msgid "Sect2"
 msgstr ""
 
-#: ../src/symbols.c:693
+#: ../src/symbols.c:697
 msgid "Sect3"
 msgstr ""
 
-#: ../src/symbols.c:694
+#: ../src/symbols.c:698
 msgid "Appendix"
 msgstr ""
 
-#: ../src/symbols.c:695 ../src/symbols.c:740 ../src/symbols.c:756
-#: ../src/symbols.c:767 ../src/symbols.c:854 ../src/symbols.c:865
-#: ../src/symbols.c:877 ../src/symbols.c:891 ../src/symbols.c:903
-#: ../src/symbols.c:915 ../src/symbols.c:930 ../src/symbols.c:959
-#: ../src/symbols.c:989
+#: ../src/symbols.c:699 ../src/symbols.c:744 ../src/symbols.c:760
+#: ../src/symbols.c:771 ../src/symbols.c:858 ../src/symbols.c:869
+#: ../src/symbols.c:881 ../src/symbols.c:895 ../src/symbols.c:907
+#: ../src/symbols.c:919 ../src/symbols.c:934 ../src/symbols.c:963
+#: ../src/symbols.c:993
 msgid "Other"
 msgstr ""
 
-#: ../src/symbols.c:701 ../src/symbols.c:923 ../src/symbols.c:968
+#: ../src/symbols.c:705 ../src/symbols.c:927 ../src/symbols.c:972
 msgid "Module"
 msgstr ""
 
-#: ../src/symbols.c:702 ../src/symbols.c:850 ../src/symbols.c:901
-#: ../src/symbols.c:913 ../src/symbols.c:928 ../src/symbols.c:940
+#: ../src/symbols.c:706 ../src/symbols.c:854 ../src/symbols.c:905
+#: ../src/symbols.c:917 ../src/symbols.c:932 ../src/symbols.c:944
 msgid "Types"
 msgstr ""
 
-#: ../src/symbols.c:703
+#: ../src/symbols.c:707
 msgid "Type constructors"
 msgstr ""
 
-#: ../src/symbols.c:704 ../src/symbols.c:726 ../src/symbols.c:747
-#: ../src/symbols.c:755 ../src/symbols.c:764 ../src/symbols.c:776
-#: ../src/symbols.c:785 ../src/symbols.c:838 ../src/symbols.c:887
-#: ../src/symbols.c:910 ../src/symbols.c:925 ../src/symbols.c:953
-#: ../src/symbols.c:976
+#: ../src/symbols.c:708 ../src/symbols.c:730 ../src/symbols.c:751
+#: ../src/symbols.c:759 ../src/symbols.c:768 ../src/symbols.c:780
+#: ../src/symbols.c:789 ../src/symbols.c:842 ../src/symbols.c:891
+#: ../src/symbols.c:914 ../src/symbols.c:929 ../src/symbols.c:957
+#: ../src/symbols.c:980
 msgid "Functions"
 msgstr ""
 
-#: ../src/symbols.c:709
+#: ../src/symbols.c:713
 msgid "Program"
 msgstr ""
 
-#: ../src/symbols.c:711 ../src/symbols.c:719 ../src/symbols.c:725
+#: ../src/symbols.c:715 ../src/symbols.c:723 ../src/symbols.c:729
 msgid "Sections"
 msgstr ""
 
-#: ../src/symbols.c:712
+#: ../src/symbols.c:716
 msgid "Paragraph"
 msgstr ""
 
-#: ../src/symbols.c:713
+#: ../src/symbols.c:717
 msgid "Group"
 msgstr ""
 
-#: ../src/symbols.c:714
+#: ../src/symbols.c:718
 msgid "Data"
 msgstr ""
 
-#: ../src/symbols.c:720
+#: ../src/symbols.c:724
 msgid "Keys"
 msgstr ""
 
-#: ../src/symbols.c:727 ../src/symbols.c:778 ../src/symbols.c:839
-#: ../src/symbols.c:864 ../src/symbols.c:889 ../src/symbols.c:902
-#: ../src/symbols.c:911 ../src/symbols.c:927 ../src/symbols.c:988
+#: ../src/symbols.c:731 ../src/symbols.c:782 ../src/symbols.c:843
+#: ../src/symbols.c:868 ../src/symbols.c:893 ../src/symbols.c:906
+#: ../src/symbols.c:915 ../src/symbols.c:931 ../src/symbols.c:992
 msgid "Variables"
 msgstr "Premenné"
 
-#: ../src/symbols.c:734
+#: ../src/symbols.c:738
 msgid "Environment"
 msgstr ""
 
-#: ../src/symbols.c:736 ../src/symbols.c:808
+#: ../src/symbols.c:740 ../src/symbols.c:812
 msgid "Subsection"
 msgstr ""
 
-#: ../src/symbols.c:737 ../src/symbols.c:809
+#: ../src/symbols.c:741 ../src/symbols.c:813
 msgid "Subsubsection"
 msgstr ""
 
-#: ../src/symbols.c:748
+#: ../src/symbols.c:752
 msgid "Structures"
 msgstr ""
 
-#: ../src/symbols.c:763 ../src/symbols.c:847 ../src/symbols.c:872
-#: ../src/symbols.c:884
+#: ../src/symbols.c:767 ../src/symbols.c:851 ../src/symbols.c:876
+#: ../src/symbols.c:888
 msgid "Package"
 msgstr ""
 
-#: ../src/symbols.c:765 ../src/symbols.c:914 ../src/symbols.c:937
+#: ../src/symbols.c:769 ../src/symbols.c:918 ../src/symbols.c:941
 msgid "Labels"
 msgstr ""
 
-#: ../src/symbols.c:766 ../src/symbols.c:777 ../src/symbols.c:890
-#: ../src/symbols.c:912
+#: ../src/symbols.c:770 ../src/symbols.c:781 ../src/symbols.c:894
+#: ../src/symbols.c:916
 msgid "Constants"
 msgstr ""
 
-#: ../src/symbols.c:774 ../src/symbols.c:873 ../src/symbols.c:885
-#: ../src/symbols.c:898 ../src/symbols.c:924 ../src/symbols.c:975
+#: ../src/symbols.c:778 ../src/symbols.c:877 ../src/symbols.c:889
+#: ../src/symbols.c:902 ../src/symbols.c:928 ../src/symbols.c:979
 msgid "Interfaces"
-msgstr ""
+msgstr "Rozhrania"
 
-#: ../src/symbols.c:775 ../src/symbols.c:796 ../src/symbols.c:817
-#: ../src/symbols.c:827 ../src/symbols.c:836 ../src/symbols.c:874
-#: ../src/symbols.c:886 ../src/symbols.c:899 ../src/symbols.c:974
+#: ../src/symbols.c:779 ../src/symbols.c:800 ../src/symbols.c:821
+#: ../src/symbols.c:831 ../src/symbols.c:840 ../src/symbols.c:878
+#: ../src/symbols.c:890 ../src/symbols.c:903 ../src/symbols.c:978
 msgid "Classes"
 msgstr ""
 
-#: ../src/symbols.c:786
+#: ../src/symbols.c:790
 msgid "Anchors"
 msgstr ""
 
-#: ../src/symbols.c:787
+#: ../src/symbols.c:791
 msgid "H1 Headings"
 msgstr ""
 
-#: ../src/symbols.c:788
+#: ../src/symbols.c:792
 msgid "H2 Headings"
 msgstr ""
 
-#: ../src/symbols.c:789
+#: ../src/symbols.c:793
 msgid "H3 Headings"
 msgstr ""
 
-#: ../src/symbols.c:797
+#: ../src/symbols.c:801
 msgid "ID Selectors"
 msgstr ""
 
-#: ../src/symbols.c:798
+#: ../src/symbols.c:802
 msgid "Type Selectors"
 msgstr ""
 
-#: ../src/symbols.c:816 ../src/symbols.c:862
+#: ../src/symbols.c:820 ../src/symbols.c:866
 msgid "Modules"
 msgstr ""
 
-#: ../src/symbols.c:818
+#: ../src/symbols.c:822
 msgid "Singletons"
 msgstr ""
 
-#: ../src/symbols.c:819 ../src/symbols.c:828 ../src/symbols.c:837
-#: ../src/symbols.c:875 ../src/symbols.c:900
+#: ../src/symbols.c:823 ../src/symbols.c:832 ../src/symbols.c:841
+#: ../src/symbols.c:879 ../src/symbols.c:904
 msgid "Methods"
 msgstr ""
 
-#: ../src/symbols.c:826 ../src/symbols.c:971
+#: ../src/symbols.c:830 ../src/symbols.c:975
 msgid "Namespaces"
 msgstr ""
 
-#: ../src/symbols.c:829 ../src/symbols.c:954
+#: ../src/symbols.c:833 ../src/symbols.c:958
 msgid "Procedures"
 msgstr ""
 
-#: ../src/symbols.c:840
+#: ../src/symbols.c:844
 msgid "Imports"
 msgstr ""
 
-#: ../src/symbols.c:848
+#: ../src/symbols.c:852
 msgid "Entities"
 msgstr ""
 
-#: ../src/symbols.c:849
+#: ../src/symbols.c:853
 msgid "Architectures"
 msgstr ""
 
-#: ../src/symbols.c:851
+#: ../src/symbols.c:855
 msgid "Functions / Procedures"
 msgstr ""
 
-#: ../src/symbols.c:852
+#: ../src/symbols.c:856
 msgid "Variables / Signals"
 msgstr ""
 
-#: ../src/symbols.c:853
+#: ../src/symbols.c:857
 msgid "Processes / Components"
 msgstr ""
 
-#: ../src/symbols.c:861
+#: ../src/symbols.c:865
 msgid "Events"
 msgstr ""
 
-#: ../src/symbols.c:863
+#: ../src/symbols.c:867
 msgid "Functions / Tasks"
 msgstr ""
 
-#: ../src/symbols.c:876 ../src/symbols.c:977
+#: ../src/symbols.c:880 ../src/symbols.c:981
 msgid "Members"
 msgstr ""
 
-#: ../src/symbols.c:926
+#: ../src/symbols.c:930
 msgid "Subroutines"
 msgstr ""
 
-#: ../src/symbols.c:929
+#: ../src/symbols.c:933
 msgid "Blocks"
 msgstr ""
 
-#: ../src/symbols.c:938 ../src/symbols.c:947 ../src/symbols.c:985
+#: ../src/symbols.c:942 ../src/symbols.c:951 ../src/symbols.c:989
 msgid "Macros"
 msgstr ""
 
-#: ../src/symbols.c:939
+#: ../src/symbols.c:943
 msgid "Defines"
 msgstr ""
 
-#: ../src/symbols.c:946
+#: ../src/symbols.c:950
 msgid "Targets"
 msgstr ""
 
-#: ../src/symbols.c:955
+#: ../src/symbols.c:959
 msgid "Indexes"
 msgstr ""
 
-#: ../src/symbols.c:956
+#: ../src/symbols.c:960
 msgid "Tables"
 msgstr ""
 
-#: ../src/symbols.c:957
+#: ../src/symbols.c:961
 msgid "Triggers"
 msgstr ""
 
-#: ../src/symbols.c:958
+#: ../src/symbols.c:962
 msgid "Views"
 msgstr ""
 
-#: ../src/symbols.c:978
+#: ../src/symbols.c:982
 msgid "Structs"
 msgstr ""
 
-#: ../src/symbols.c:979
+#: ../src/symbols.c:983
 msgid "Typedefs / Enums"
 msgstr ""
 
-#: ../src/symbols.c:1724
+#: ../src/symbols.c:1728
 #, c-format
 msgid "Unknown filetype extension for \"%s\".\n"
 msgstr ""
 
-#: ../src/symbols.c:1747
+#: ../src/symbols.c:1751
 #, c-format
 msgid "Failed to create tags file, perhaps because no tags were found.\n"
 msgstr ""
 
-#: ../src/symbols.c:1754
+#: ../src/symbols.c:1758
 #, c-format
 msgid ""
 "Usage: %s -g <Tag File> <File list>\n"
 "\n"
 msgstr ""
 
-#: ../src/symbols.c:1755
+#: ../src/symbols.c:1759
 #, c-format
 msgid ""
 "Example:\n"
@@ -4457,40 +4458,40 @@ msgid ""
 "gtk/gtk.h\n"
 msgstr ""
 
-#: ../src/symbols.c:1769
+#: ../src/symbols.c:1773
 msgid "Load Tags"
 msgstr ""
 
-#: ../src/symbols.c:1776
-msgid "Geany tag files (*.tags)"
+#: ../src/symbols.c:1780
+msgid "Geany tag files (*.*.tags)"
 msgstr ""
 
 #. For translators: the first wildcard is the filetype, the second the filename
-#: ../src/symbols.c:1796
+#: ../src/symbols.c:1800
 #, c-format
 msgid "Loaded %s tags file '%s'."
 msgstr ""
 
-#: ../src/symbols.c:1799
+#: ../src/symbols.c:1803
 #, c-format
 msgid "Could not load tags file '%s'."
 msgstr ""
 
-#: ../src/symbols.c:1954
+#: ../src/symbols.c:1945
 #, c-format
 msgid "Forward declaration \"%s\" not found."
 msgstr ""
 
-#: ../src/symbols.c:1956
+#: ../src/symbols.c:1947
 #, c-format
 msgid "Definition of \"%s\" not found."
 msgstr ""
 
-#: ../src/symbols.c:2262
+#: ../src/symbols.c:2253
 msgid "Sort by _Name"
 msgstr ""
 
-#: ../src/symbols.c:2269
+#: ../src/symbols.c:2260
 msgid "Sort by _Appearance"
 msgstr ""
 
@@ -4587,7 +4588,7 @@ msgstr ""
 
 #: ../src/toolbar.c:78
 msgid "Quit Geany"
-msgstr ""
+msgstr "Ukončí Geany"
 
 #: ../src/toolbar.c:79
 msgid "Print document"
@@ -4647,79 +4648,79 @@ msgstr ""
 msgid "Displayed Items"
 msgstr ""
 
-#: ../src/tools.c:108 ../src/tools.c:113
+#: ../src/tools.c:109 ../src/tools.c:114
 #, c-format
 msgid "Invalid command: %s"
 msgstr ""
 
-#: ../src/tools.c:108
+#: ../src/tools.c:109
 msgid "Command not found"
 msgstr ""
 
-#: ../src/tools.c:254
+#: ../src/tools.c:260
 #, c-format
 msgid ""
 "The executed custom command returned an error. Your selection was not "
 "changed. Error message: %s"
 msgstr ""
 
-#: ../src/tools.c:320
+#: ../src/tools.c:326
 msgid "The executed custom command exited with an unsuccessful exit code."
 msgstr ""
 
-#: ../src/tools.c:348 ../src/tools.c:396
+#: ../src/tools.c:354 ../src/tools.c:402
 #, c-format
 msgid "Custom command failed: %s"
 msgstr ""
 
-#: ../src/tools.c:352
+#: ../src/tools.c:358
 #, c-format
 msgid "Passing data and executing custom command: %s"
 msgstr ""
 
-#: ../src/tools.c:498 ../src/tools.c:731
+#: ../src/tools.c:514 ../src/tools.c:774
 msgid "Set Custom Commands"
 msgstr ""
 
-#: ../src/tools.c:506
+#: ../src/tools.c:522
 msgid ""
 "You can send the current selection to any of these commands and the output "
 "of the command replaces the current selection."
 msgstr ""
 
-#: ../src/tools.c:520
+#: ../src/tools.c:536
 msgid "ID"
 msgstr ""
 
-#: ../src/tools.c:706
+#: ../src/tools.c:745
 msgid "No custom commands defined."
 msgstr ""
 
-#: ../src/tools.c:800
+#: ../src/tools.c:843
 msgid "Word Count"
 msgstr ""
 
-#: ../src/tools.c:810
+#: ../src/tools.c:853
 msgid "selection"
 msgstr ""
 
-#: ../src/tools.c:816
+#: ../src/tools.c:859
 msgid "whole document"
 msgstr ""
 
-#: ../src/tools.c:825
+#: ../src/tools.c:868
 msgid "Range:"
 msgstr ""
 
-#: ../src/tools.c:837
+#: ../src/tools.c:880
 msgid "Lines:"
 msgstr ""
 
-#: ../src/tools.c:851
+#: ../src/tools.c:894
 msgid "Words:"
 msgstr ""
 
-#: ../src/tools.c:865
+#: ../src/tools.c:908
 msgid "Characters:"
 msgstr ""
 
@@ -4748,94 +4749,100 @@ msgid "Show _Paths"
 msgstr ""
 
 #. Status bar statistics: col = column, sel = selection.
-#: ../src/ui_utils.c:184
+#: ../src/ui_utils.c:185
 msgid ""
 "line: %l / %L\t col: %c\t sel: %s\t %w      %t      %mmode: %M      "
 "encoding: %e      filetype: %f      scope: %S"
 msgstr ""
 
+#. L = lines
+#: ../src/ui_utils.c:219
+#, c-format
+msgid "%dL"
+msgstr ""
+
 #. RO = read-only
-#: ../src/ui_utils.c:214 ../src/ui_utils.c:221
+#: ../src/ui_utils.c:225 ../src/ui_utils.c:232
 msgid "RO "
 msgstr ""
 
 #. OVR = overwrite/overtype, INS = insert
-#: ../src/ui_utils.c:216
+#: ../src/ui_utils.c:227
 msgid "OVR"
 msgstr ""
 
-#: ../src/ui_utils.c:216
+#: ../src/ui_utils.c:227
 msgid "INS"
 msgstr ""
 
-#: ../src/ui_utils.c:230
+#: ../src/ui_utils.c:241
 msgid "TAB"
 msgstr ""
 
 #. SP = space
-#: ../src/ui_utils.c:233
+#: ../src/ui_utils.c:244
 msgid "SP"
 msgstr ""
 
 #. T/S = tabs and spaces
-#: ../src/ui_utils.c:236
+#: ../src/ui_utils.c:247
 msgid "T/S"
 msgstr ""
 
-#: ../src/ui_utils.c:244
+#: ../src/ui_utils.c:255
 msgid "MOD"
 msgstr ""
 
-#: ../src/ui_utils.c:371
+#: ../src/ui_utils.c:382
 msgid " (new instance)"
 msgstr ""
 
-#: ../src/ui_utils.c:401
+#: ../src/ui_utils.c:412
 #, c-format
 msgid "Font updated (%s)."
 msgstr ""
 
-#: ../src/ui_utils.c:597
+#: ../src/ui_utils.c:608
 msgid "C Standard Library"
 msgstr ""
 
-#: ../src/ui_utils.c:598
+#: ../src/ui_utils.c:609
 msgid "ISO C99"
 msgstr ""
 
-#: ../src/ui_utils.c:599
+#: ../src/ui_utils.c:610
 msgid "C++ (C Standard Library)"
 msgstr ""
 
-#: ../src/ui_utils.c:600
+#: ../src/ui_utils.c:611
 msgid "C++ Standard Library"
 msgstr ""
 
-#: ../src/ui_utils.c:601
+#: ../src/ui_utils.c:612
 msgid "C++ STL"
 msgstr ""
 
-#: ../src/ui_utils.c:663
+#: ../src/ui_utils.c:674
 msgid "_Set Custom Date Format"
 msgstr ""
 
-#: ../src/ui_utils.c:1808
+#: ../src/ui_utils.c:1819
 msgid "Select Folder"
 msgstr ""
 
-#: ../src/ui_utils.c:1808
+#: ../src/ui_utils.c:1819
 msgid "Select File"
 msgstr ""
 
-#: ../src/ui_utils.c:1967
+#: ../src/ui_utils.c:1978
 msgid "Save All"
 msgstr ""
 
-#: ../src/ui_utils.c:1968
+#: ../src/ui_utils.c:1979
 msgid "Close All"
 msgstr ""
 
-#: ../src/ui_utils.c:2219
+#: ../src/ui_utils.c:2230
 msgid "Geany cannot start!"
 msgstr ""
 
@@ -4881,7 +4888,7 @@ msgstr ""
 
 #: ../src/win32.c:159
 msgid "Geany project files"
-msgstr ""
+msgstr "Geany súbory projektu"
 
 #: ../src/win32.c:164
 msgid "Executables"
