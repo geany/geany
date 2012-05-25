@@ -600,7 +600,7 @@ gboolean tm_tags_merge(GPtrArray *tags_array, gsize orig_len,
 		tags_array->pdata[i] = (cmp >= 0) ? *a-- : *b--;
 		if (a < tags_array->pdata)
 		{
-			memcpy(tags_array->pdata, copy, b - copy);
+			memcpy(tags_array->pdata, copy, (b - copy) * sizeof(gpointer));
 			break;
 		}
 		if (b < copy)
