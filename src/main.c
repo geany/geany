@@ -1040,9 +1040,6 @@ gint main(gint argc, gchar **argv)
 	keybindings_init();
 	notebook_init();
 	filetypes_init();
-	/* depends on filetypes_array being not NULL so must be after
-	 * filetypes_init(). */
-	highlighting_init();
 	templates_init();
 	navqueue_init();
 	document_init_doclist();

@@ -41,8 +41,6 @@ typedef struct GeanyLexerStyle
 GeanyLexerStyle;
 
 
-void highlighting_init(void);
-
 void highlighting_init_styles(guint filetype_idx, GKeyFile *config, GKeyFile *configh);
 
 void highlighting_set_styles(ScintillaObject *sci, GeanyFiletype *ft);
@@ -54,6 +52,8 @@ void highlighting_free_styles(void);
 gboolean highlighting_is_string_style(gint lexer, gint style);
 gboolean highlighting_is_comment_style(gint lexer, gint style);
 gboolean highlighting_is_code_style(gint lexer, gint style);
+
+void highlighting_show_color_scheme_dialog(void);
 
 G_END_DECLS
 

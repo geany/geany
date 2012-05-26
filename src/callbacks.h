@@ -178,6 +178,10 @@ on_show_messages_window1_toggled	   (GtkCheckMenuItem *checkmenuitem,
 										gpointer		 user_data);
 
 G_MODULE_EXPORT void
+on_menu_color_schemes_activate		   (GtkImageMenuItem *imagemenuitem,
+										gpointer user_data);
+
+G_MODULE_EXPORT void
 on_construct_completion1_activate	  (GtkMenuItem	 *menuitem,
 										gpointer		 user_data);
 

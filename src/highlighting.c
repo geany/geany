@@ -1312,7 +1312,7 @@ static void on_color_scheme_dialog_response(GtkWidget *dialog,
 }
 
 
-static void show_color_scheme_dialog(void)
+void highlighting_show_color_scheme_dialog(void)
 {
 	static GtkWidget *dialog = NULL;
 	GtkListStore *store = gtk_list_store_new(SCHEME_COLUMNS,
@@ -1355,25 +1355,6 @@ static void show_color_scheme_dialog(void)
 	gtk_container_add(GTK_CONTAINER(vbox), swin);
 	g_signal_connect(dialog, "response", G_CALLBACK(on_color_scheme_dialog_response), &dialog);
 	gtk_widget_show_all(dialog);
-}
-
-
-static void create_color_scheme_menu(void)
-{
-	GtkWidget *item, *menu;
-
-	menu = ui_lookup_widget(main_widgets.window, "menu_view_editor1_menu");
-	item = ui_image_menu_item_new(GTK_STOCK_SELECT_COLOR, _("_Color Schemes"));
-	gtk_menu_shell_prepend(GTK_MENU_SHELL(menu), item);
-
-	g_signal_connect(item, "activate", G_CALLBACK(show_color_scheme_dialog), NULL);
-	gtk_widget_show(item);
-}
-
-
-void highlighting_init(void)
-{
-	create_color_scheme_menu();
 }
 
 
