@@ -1,15 +1,14 @@
 # Lithuanian of Geany
 # Copyright (C) 2012
 # This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # Algimantas Margevičius <margevicius.algimantas@gmail.com>, 2012.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: geany\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-03-06 19:57+0200\n"
-"PO-Revision-Date: 2012-03-14 16:35+0200\n"
+"POT-Creation-Date: 2012-05-26 08:36+0200\n"
+"PO-Revision-Date: 2012-05-26 08:11+0300\n"
 "Last-Translator: Algimantas Margevičius <margevicius.algimantas@gmail.com>\n"
 "Language-Team: Lietuvių <>\n"
 "Language: \n"
@@ -83,7 +82,7 @@ msgstr "nematomas"
 msgid "_Insert \"include <...>\""
 msgstr "Į_terpti \"include <...>\""
 
-#: ../data/geany.glade.h:14 ../src/keybindings.c:406
+#: ../data/geany.glade.h:14 ../src/keybindings.c:408
 msgid "_Insert Alternative White Space"
 msgstr "Įterpti _alternatyvų tarpą"
 
@@ -111,7 +110,7 @@ msgstr "Eiti į _žymės aprašymą"
 msgid "Conte_xt Action"
 msgstr "Kontekstinis _veiksmas"
 
-#: ../data/geany.glade.h:21 ../src/filetypes.c:102 ../src/filetypes.c:1778
+#: ../data/geany.glade.h:21 ../src/filetypes.c:102 ../src/filetypes.c:1775
 msgid "None"
 msgstr "Joks"
 
@@ -127,7 +126,7 @@ msgstr "Esami simboliai"
 msgid "Match braces"
 msgstr "Atitikti petnešas"
 
-#: ../data/geany.glade.h:25 ../src/keybindings.c:416
+#: ../data/geany.glade.h:25 ../src/keybindings.c:418
 msgid "Preferences"
 msgstr "Nuostatos"
 
@@ -357,7 +356,7 @@ msgstr "Kita"
 #. * corresponding chapter in the documentation, comparing translatable
 #. * strings is easy to break. Maybe attach an identifying string to the
 #. * tab label object.
-#: ../data/geany.glade.h:70 ../src/prefs.c:1549
+#: ../data/geany.glade.h:70 ../src/prefs.c:1575
 msgid "General"
 msgstr "Bendra"
 
@@ -433,7 +432,7 @@ msgstr "Rodyti būsenos juostą"
 msgid "Whether to show the status bar at the bottom of the main window"
 msgstr "Ar būsenos juosta turėtų būti matoma pagrindinio lango apačioje"
 
-#: ../data/geany.glade.h:89 ../src/prefs.c:1551
+#: ../data/geany.glade.h:89 ../src/prefs.c:1577
 msgid "Interface"
 msgstr "Sąsaja"
 
@@ -565,7 +564,7 @@ msgstr "<b>Piktogramų dydis</b>"
 msgid "<b>Toolbar</b>"
 msgstr "<b>Įrankių juosta</b>"
 
-#: ../data/geany.glade.h:120 ../src/prefs.c:1553
+#: ../data/geany.glade.h:120 ../src/prefs.c:1579
 msgid "Toolbar"
 msgstr "Įrankių juosta"
 
@@ -985,7 +984,7 @@ msgstr "Spalva:"
 msgid "Sets the color of the long line marker"
 msgstr "Nustato ilgos eilutės žymeklio spalvą"
 
-#: ../data/geany.glade.h:207 ../src/toolbar.c:70 ../src/tools.c:929
+#: ../data/geany.glade.h:207 ../src/toolbar.c:70 ../src/tools.c:972
 msgid "Color Chooser"
 msgstr "Spalvų parinkiklis"
 
@@ -1070,7 +1069,7 @@ msgstr "<b>Virtualūs tarpai</b>"
 msgid "Display"
 msgstr "Rodymas"
 
-#: ../data/geany.glade.h:223 ../src/keybindings.c:222 ../src/prefs.c:1555
+#: ../data/geany.glade.h:223 ../src/keybindings.c:224 ../src/prefs.c:1581
 msgid "Editor"
 msgstr "Redaktorius"
 
@@ -1153,7 +1152,7 @@ msgstr "Pašalinti pradžioje esančius tarpus ir tabuliavimo ženklus"
 msgid "Removes trailing spaces and tabs and the end of lines"
 msgstr "Eilutės pabaigoje pašalina tarpus ir tabuliavimo ženklus"
 
-#: ../data/geany.glade.h:241 ../src/keybindings.c:557
+#: ../data/geany.glade.h:241 ../src/keybindings.c:559
 msgid "Replace tabs by space"
 msgstr "Pakeisti tabuliavimo ženklus tarpu"
 
@@ -1185,7 +1184,7 @@ msgstr ""
 "Kaip dažnai tikrinti ar dokumento failai diske nepasikeitė, sekundėmis. "
 "Nulis išjungia tikrinimą."
 
-#: ../data/geany.glade.h:248 ../src/prefs.c:1557 ../src/symbols.c:683
+#: ../data/geany.glade.h:248 ../src/prefs.c:1583 ../src/symbols.c:687
 #: ../plugins/filebrowser.c:1120
 msgid "Files"
 msgstr "Failai"
@@ -1237,7 +1236,7 @@ msgstr ""
 msgid "<b>Commands</b>"
 msgstr "<b>Komandos</b>"
 
-#: ../data/geany.glade.h:259 ../src/keybindings.c:234 ../src/prefs.c:1559
+#: ../data/geany.glade.h:259 ../src/keybindings.c:236 ../src/prefs.c:1585
 msgid "Tools"
 msgstr "Įrankiai"
 
@@ -1321,7 +1320,7 @@ msgstr ""
 msgid "<b>Template data</b>"
 msgstr " <b>Šablono duomenys</b>"
 
-#: ../data/geany.glade.h:277 ../src/prefs.c:1561
+#: ../data/geany.glade.h:277 ../src/prefs.c:1587
 msgid "Templates"
 msgstr "Šablonai"
 
@@ -1333,7 +1332,7 @@ msgstr "_Keisti"
 msgid "<b>Keyboard shortcuts</b>"
 msgstr "<b>Klaviatūra ir spartieji klavišai</b>"
 
-#: ../data/geany.glade.h:280 ../src/prefs.c:1563
+#: ../data/geany.glade.h:280 ../src/prefs.c:1589
 msgid "Keybindings"
 msgstr "Klavišų susiejimai"
 
@@ -1411,7 +1410,7 @@ msgstr "Naudoti GTK spausdinimą"
 msgid "<b>Printing</b>"
 msgstr "<b>Spausdinimas</b>"
 
-#: ../data/geany.glade.h:297 ../src/prefs.c:1565
+#: ../data/geany.glade.h:297 ../src/prefs.c:1591
 msgid "Printing"
 msgstr "Spausdinimas"
 
@@ -1550,7 +1549,7 @@ msgstr ""
 msgid "<b>Terminal</b>"
 msgstr "<b>Terminalas</b>"
 
-#: ../data/geany.glade.h:326 ../src/prefs.c:1569 ../src/vte.c:281
+#: ../data/geany.glade.h:326 ../src/prefs.c:1595 ../src/vte.c:281
 msgid "Terminal"
 msgstr "Terminalas"
 
@@ -1562,7 +1561,7 @@ msgstr "<i>Įspėjimas: prieš keičiant šias parinktis, perskaitykite žinyną
 msgid "<b>Various preferences</b>"
 msgstr "<b>Įvairūs nustatymai</b>"
 
-#: ../data/geany.glade.h:329 ../src/prefs.c:1567
+#: ../data/geany.glade.h:329 ../src/prefs.c:1593
 msgid "Various"
 msgstr "Įvairūs"
 
@@ -1570,7 +1569,7 @@ msgstr "Įvairūs"
 msgid "Project Properties"
 msgstr "Projekto savybės"
 
-#: ../data/geany.glade.h:331 ../src/plugins.c:1456 ../src/project.c:150
+#: ../data/geany.glade.h:331 ../src/plugins.c:1457 ../src/project.c:150
 msgid "Filename:"
 msgstr "Failo vardas:"
 
@@ -1608,7 +1607,7 @@ msgstr ""
 "Visų projekto failų bazinis aplankas. Tai gali būti naujas kelias, ar esamas "
 "aplankų medis. Galite naudoti kelius reliatyvius projekto failo vardui."
 
-#: ../data/geany.glade.h:338 ../src/keybindings.c:232
+#: ../data/geany.glade.h:338 ../src/keybindings.c:234
 msgid "Project"
 msgstr "Projektas"
 
@@ -1656,7 +1655,7 @@ msgstr "Paskutinieji _failai"
 msgid "Save A_ll"
 msgstr "_Išsaugoti viską"
 
-#: ../data/geany.glade.h:351 ../src/callbacks.c:429 ../src/document.c:2836
+#: ../data/geany.glade.h:351 ../src/callbacks.c:429 ../src/document.c:2838
 #: ../src/sidebar.c:696
 msgid "_Reload"
 msgstr "Į_kelti iš naujo"
@@ -1681,43 +1680,43 @@ msgstr "_Užverti visus"
 msgid "_Commands"
 msgstr "_Komandos"
 
-#: ../data/geany.glade.h:357 ../src/keybindings.c:341
+#: ../data/geany.glade.h:357 ../src/keybindings.c:343
 msgid "_Cut Current Line(s)"
 msgstr "_Iškirpti esamą eilutę(-es)"
 
-#: ../data/geany.glade.h:358 ../src/keybindings.c:338
+#: ../data/geany.glade.h:358 ../src/keybindings.c:340
 msgid "_Copy Current Line(s)"
 msgstr "_Kopijuoti esamą eilutę(-es)"
 
-#: ../data/geany.glade.h:359 ../src/keybindings.c:293
+#: ../data/geany.glade.h:359 ../src/keybindings.c:295
 msgid "_Delete Current Line(s)"
 msgstr "_Ištrinti esamą eilutę(-es)"
 
-#: ../data/geany.glade.h:360 ../src/keybindings.c:290
+#: ../data/geany.glade.h:360 ../src/keybindings.c:292
 msgid "_Duplicate Line or Selection"
 msgstr "_Dublikuoti eilutę ar pasirinkimą"
 
-#: ../data/geany.glade.h:361 ../src/keybindings.c:351
+#: ../data/geany.glade.h:361 ../src/keybindings.c:353
 msgid "_Select Current Line(s)"
 msgstr "_Pasirinkti esamą eilutę(-es)"
 
-#: ../data/geany.glade.h:362 ../src/keybindings.c:354
+#: ../data/geany.glade.h:362 ../src/keybindings.c:356
 msgid "_Select Current Paragraph"
 msgstr "_Pasirinkti esamą paragrafą"
 
-#: ../data/geany.glade.h:363 ../src/keybindings.c:393
+#: ../data/geany.glade.h:363 ../src/keybindings.c:395
 msgid "_Send Selection to Terminal"
 msgstr "_Siųsti pasirinkimą į terminalą"
 
-#: ../data/geany.glade.h:364 ../src/keybindings.c:395
+#: ../data/geany.glade.h:364 ../src/keybindings.c:397
 msgid "_Reflow Lines/Block"
 msgstr "_Iš naujo perduoti eilutes/atkarpas"
 
-#: ../data/geany.glade.h:365 ../src/keybindings.c:365
+#: ../data/geany.glade.h:365 ../src/keybindings.c:367
 msgid "T_oggle Case of Selection"
 msgstr "_Perjungti pasirinkimo raidžių dydį"
 
-#: ../data/geany.glade.h:366 ../src/keybindings.c:300
+#: ../data/geany.glade.h:366 ../src/keybindings.c:302
 msgid "_Transpose Current Line"
 msgstr "_Perkelti esamą eilutę"
 
@@ -1741,7 +1740,7 @@ msgstr "_Didinti atitraukimą"
 msgid "_Decrease Indent"
 msgstr "_Sumažinti atitraukimą"
 
-#: ../data/geany.glade.h:372 ../src/keybindings.c:384
+#: ../data/geany.glade.h:372 ../src/keybindings.c:386
 msgid "_Smart Line Indent"
 msgstr "_Protingas eilučių atitraukimas"
 
@@ -1757,7 +1756,7 @@ msgstr "_Įterpti komentarus"
 msgid "Preference_s"
 msgstr "_Nustatymai"
 
-#: ../data/geany.glade.h:376 ../src/keybindings.c:419
+#: ../data/geany.glade.h:376 ../src/keybindings.c:421
 msgid "P_lugin Preferences"
 msgstr "_Įskiepio nustatymai"
 
@@ -1785,11 +1784,11 @@ msgstr "_Kitas pranešimas"
 msgid "Pr_evious Message"
 msgstr "Ankst_esnis pranešimas"
 
-#: ../data/geany.glade.h:383 ../src/keybindings.c:468
+#: ../data/geany.glade.h:383 ../src/keybindings.c:470
 msgid "_Go to Next Marker"
 msgstr "Eiti prie _kito žymeklio"
 
-#: ../data/geany.glade.h:384 ../src/keybindings.c:471
+#: ../data/geany.glade.h:384 ../src/keybindings.c:473
 msgid "_Go to Previous Marker"
 msgstr "Eiti prie _ankstesnio žymeklio"
 
@@ -1797,15 +1796,15 @@ msgstr "Eiti prie _ankstesnio žymeklio"
 msgid "_Go to Line"
 msgstr "Eiti į _eilutę"
 
-#: ../data/geany.glade.h:386 ../src/keybindings.c:431
+#: ../data/geany.glade.h:386 ../src/keybindings.c:433
 msgid "Find Next _Selection"
 msgstr "Rasti _sekantį pasirinkimą"
 
-#: ../data/geany.glade.h:387 ../src/keybindings.c:433
+#: ../data/geany.glade.h:387 ../src/keybindings.c:435
 msgid "Find Pre_vious Selection"
 msgstr "Rasti _ankstesnį pasirinkimą"
 
-#: ../data/geany.glade.h:388 ../src/keybindings.c:450
+#: ../data/geany.glade.h:388 ../src/keybindings.c:452
 msgid "_Mark All"
 msgstr "_Pažymėti visus"
 
@@ -2094,53 +2093,53 @@ msgstr "Pranešimai"
 msgid "Scribble"
 msgstr "Keverzonė"
 
-#: ../src/about.c:154
+#: ../src/about.c:157
 msgid "About Geany"
 msgstr "Apie Geany"
 
-#: ../src/about.c:204
+#: ../src/about.c:207
 msgid "A fast and lightweight IDE"
 msgstr "Greita ir supaprastinta IDE"
 
-#: ../src/about.c:225
+#: ../src/about.c:228
 #, c-format
 msgid "(built on or after %s)"
 msgstr "(sukurta %s arba vėliau)"
 
 #. gtk_container_add(GTK_CONTAINER(info_box), cop_label);
-#: ../src/about.c:256
+#: ../src/about.c:259
 msgid "Info"
 msgstr "Informacija"
 
-#: ../src/about.c:272
+#: ../src/about.c:275
 msgid "Developers"
 msgstr "Kūrėjai"
 
-#: ../src/about.c:279
+#: ../src/about.c:282
 msgid "maintainer"
 msgstr "prižiūrėtojas"
 
-#: ../src/about.c:287 ../src/about.c:295 ../src/about.c:303
+#: ../src/about.c:290 ../src/about.c:298 ../src/about.c:306
 msgid "developer"
 msgstr "kūrėjas"
 
-#: ../src/about.c:311
+#: ../src/about.c:314
 msgid "translation maintainer"
 msgstr "vertimų prižiūrėtojas"
 
-#: ../src/about.c:320
+#: ../src/about.c:323
 msgid "Translators"
 msgstr "Vertėjai"
 
-#: ../src/about.c:340
+#: ../src/about.c:343
 msgid "Previous Translators"
 msgstr "Ankstesni vertėjai"
 
-#: ../src/about.c:361
+#: ../src/about.c:364
 msgid "Contributors"
 msgstr "Pagalbininkai"
 
-#: ../src/about.c:371
+#: ../src/about.c:374
 #, c-format
 msgid ""
 "Some of the many contributors (for a more detailed list, see the file %s):"
@@ -2148,15 +2147,15 @@ msgstr ""
 "Kai kurie iš daugelio prisidėjusiųjų (detalesniam sąrašui peržiūrėkite failą "
 "%s):"
 
-#: ../src/about.c:397
+#: ../src/about.c:400
 msgid "Credits"
 msgstr "Padėkos"
 
-#: ../src/about.c:411
+#: ../src/about.c:414
 msgid "License"
 msgstr "Licencija"
 
-#: ../src/about.c:420
+#: ../src/about.c:423
 msgid ""
 "License text could not be found, please visit http://www.gnu.org/licenses/"
 "gpl-2.0.txt to view it online."
@@ -2179,7 +2178,7 @@ msgstr "Procesas nepavyko, nėra darbinio aplanko"
 msgid "%s (in directory: %s)"
 msgstr "%s (aplanke: %s)"
 
-#: ../src/build.c:831 ../src/build.c:1055 ../src/search.c:1627
+#: ../src/build.c:831 ../src/build.c:1055 ../src/search.c:1632
 #, c-format
 msgid "Process failed (%s)"
 msgstr "Procesas nepavyko (%s)"
@@ -2268,11 +2267,12 @@ msgstr "Daugiau kūrimo klaidų nėra."
 msgid "Set menu item label"
 msgstr "Nustatyti meniu įrašo etiketę"
 
-#: ../src/build.c:1967 ../src/symbols.c:738
+#: ../src/build.c:1967 ../src/symbols.c:742 ../src/tools.c:554
 msgid "Label"
 msgstr "Etiketė"
 
-#: ../src/build.c:1968 ../src/symbols.c:733 ../src/tools.c:524
+#. command column, holding status and command display
+#: ../src/build.c:1968 ../src/symbols.c:737 ../src/tools.c:539
 msgid "Command"
 msgstr "Komanda"
 
@@ -2375,7 +2375,7 @@ msgstr "Visi neišsaugoti pakeitimai bus prarasti."
 msgid "Are you sure you want to reload '%s'?"
 msgstr "Ar tikrai norite įkrauti iš naujo „%s“?"
 
-#: ../src/callbacks.c:1055 ../src/keybindings.c:459
+#: ../src/callbacks.c:1055 ../src/keybindings.c:461
 msgid "Go to Line"
 msgstr "Eiti į eilutę"
 
@@ -2389,31 +2389,31 @@ msgid ""
 msgstr ""
 "Prieš naudojantis šia funkcija, nustatykite dabartinio failo failo tipą."
 
-#: ../src/callbacks.c:1287 ../src/ui_utils.c:628
+#: ../src/callbacks.c:1287 ../src/ui_utils.c:639
 msgid "dd.mm.yyyy"
 msgstr "dd.mm.yyyy"
 
-#: ../src/callbacks.c:1289 ../src/ui_utils.c:629
+#: ../src/callbacks.c:1289 ../src/ui_utils.c:640
 msgid "mm.dd.yyyy"
 msgstr "mm.dd.yyyy"
 
-#: ../src/callbacks.c:1291 ../src/ui_utils.c:630
+#: ../src/callbacks.c:1291 ../src/ui_utils.c:641
 msgid "yyyy/mm/dd"
 msgstr "yyyy/mm/dd"
 
-#: ../src/callbacks.c:1293 ../src/ui_utils.c:639
+#: ../src/callbacks.c:1293 ../src/ui_utils.c:650
 msgid "dd.mm.yyyy hh:mm:ss"
 msgstr "dd.mm.yyyy hh:mm:ss"
 
-#: ../src/callbacks.c:1295 ../src/ui_utils.c:640
+#: ../src/callbacks.c:1295 ../src/ui_utils.c:651
 msgid "mm.dd.yyyy hh:mm:ss"
 msgstr "mm.dd.yyyy hh:mm:ss"
 
-#: ../src/callbacks.c:1297 ../src/ui_utils.c:641
+#: ../src/callbacks.c:1297 ../src/ui_utils.c:652
 msgid "yyyy/mm/dd hh:mm:ss"
 msgstr "yyyy/mm/dd hh:mm:ss"
 
-#: ../src/callbacks.c:1299 ../src/ui_utils.c:650
+#: ../src/callbacks.c:1299 ../src/ui_utils.c:661
 msgid "_Use Custom Date Format"
 msgstr "_Naudoti pasirinktinį datos formatą"
 
@@ -2606,12 +2606,12 @@ msgstr ""
 
 #: ../src/dialogs.c:1223 ../src/dialogs.c:1224 ../src/dialogs.c:1225
 #: ../src/dialogs.c:1231 ../src/dialogs.c:1232 ../src/dialogs.c:1233
-#: ../src/symbols.c:1996 ../src/symbols.c:2017 ../src/symbols.c:2069
-#: ../src/ui_utils.c:253
+#: ../src/symbols.c:2096 ../src/symbols.c:2117 ../src/symbols.c:2169
+#: ../src/ui_utils.c:264
 msgid "unknown"
 msgstr "nežinoma"
 
-#: ../src/dialogs.c:1238 ../src/symbols.c:888
+#: ../src/dialogs.c:1238 ../src/symbols.c:892
 msgid "Properties"
 msgstr "Savybės"
 
@@ -2639,7 +2639,7 @@ msgstr "(tik Geany viduje)"
 msgid "<b>Encoding:</b>"
 msgstr "<b>Koduotė:</b>"
 
-#: ../src/dialogs.c:1339 ../src/ui_utils.c:257
+#: ../src/dialogs.c:1339 ../src/ui_utils.c:268
 msgid "(with BOM)"
 msgstr "(su BOM)"
 
@@ -2847,7 +2847,7 @@ msgid "Wrap search and find again?"
 msgstr "Ieškoti nuo pradžios?"
 
 #: ../src/document.c:2034 ../src/search.c:1279 ../src/search.c:1323
-#: ../src/search.c:2082 ../src/search.c:2083
+#: ../src/search.c:2087 ../src/search.c:2088
 #, c-format
 msgid "No matches found for \"%s\"."
 msgstr "„%s“ atitikmenų nerasta."
@@ -2860,11 +2860,11 @@ msgstr[0] "%s: „%d“ pakeistas „%s“ %s kartą"
 msgstr[1] "%s: „%d“ pakeistas „%s“ %s kartus"
 msgstr[2] "%s: „%d“ pakeistas „%s“ %s kartų"
 
-#: ../src/document.c:2837
+#: ../src/document.c:2839
 msgid "Do you want to reload it?"
 msgstr "Ar norite įkelti iš naujo?"
 
-#: ../src/document.c:2838
+#: ../src/document.c:2840
 #, c-format
 msgid ""
 "The file '%s' on the disk is more recent than\n"
@@ -2873,28 +2873,28 @@ msgstr ""
 "Failas „%s“ diske yra naujesnis nei\n"
 "esantis atmintyje."
 
-#: ../src/document.c:2856
+#: ../src/document.c:2858
 msgid "Close _without saving"
 msgstr "Užverti _neišsaugant"
 
-#: ../src/document.c:2859
+#: ../src/document.c:2861
 msgid "Try to resave the file?"
 msgstr "Pabandyti dar kartą išsaugoti failą?"
 
-#: ../src/document.c:2860
+#: ../src/document.c:2862
 #, c-format
 msgid "File \"%s\" was not found on disk!"
 msgstr "Failas „%s“ diske nerastas!"
 
-#: ../src/editor.c:4300
+#: ../src/editor.c:4310
 msgid "Enter Tab Width"
 msgstr "Įvesti tabuliavimo ženklo plotį"
 
-#: ../src/editor.c:4301
+#: ../src/editor.c:4311
 msgid "Enter the amount of spaces which should be replaced by a tab character."
 msgstr "Įveskite skaičių, kiek tarpų turėtų būti pakeista tabuliavimo ženklu."
 
-#: ../src/editor.c:4459
+#: ../src/editor.c:4469
 #, c-format
 msgid "Warning: non-standard hard tab width: %d != 8!"
 msgstr "Įspėjimas: nestandartinis tabuliavimo ženklo plotis %d != 8!"
@@ -3078,162 +3078,166 @@ msgstr "_Išvaizdos kalbos"
 msgid "M_iscellaneous"
 msgstr "_Kita"
 
-#: ../src/filetypes.c:1462 ../src/win32.c:104
+#: ../src/filetypes.c:1459 ../src/win32.c:104
 msgid "All Source"
 msgstr "Visi pradiniai kodai"
 
 #. create meta file filter "All files"
-#: ../src/filetypes.c:1487 ../src/project.c:295 ../src/win32.c:94
+#: ../src/filetypes.c:1484 ../src/project.c:295 ../src/win32.c:94
 #: ../src/win32.c:139 ../src/win32.c:160 ../src/win32.c:165
 msgid "All files"
 msgstr "Visi failai"
 
-#: ../src/filetypes.c:1535
+#: ../src/filetypes.c:1532
 #, c-format
 msgid "Bad regex for filetype %s: %s"
 msgstr "Bloga reguliarioji išraiška failo tipui %s: %s"
 
-#: ../src/geany.h:53
+#: ../src/geany.h:55
 msgid "untitled"
 msgstr "be vardo"
 
-#: ../src/highlighting.c:1202 ../src/main.c:821 ../src/socket.c:166
+#: ../src/highlighting.c:1218 ../src/main.c:821 ../src/socket.c:166
 #: ../src/templates.c:224
 #, c-format
 msgid "Could not find file '%s'."
 msgstr "Nepavyko rasti failo „%s“."
 
-#: ../src/highlighting.c:1225
-msgid "_Default"
-msgstr "_Numatytasis"
+#: ../src/highlighting.c:1290
+msgid "Default"
+msgstr "Numatytasis"
 
-#: ../src/highlighting.c:1294
+#: ../src/highlighting.c:1341
+msgid "Color Schemes"
+msgstr "Spalvų deriniai"
+
+#: ../src/highlighting.c:1366
 msgid "_Color Schemes"
 msgstr "_Spalvų deriniai"
 
 #. visual group order
-#: ../src/keybindings.c:221 ../src/symbols.c:710
+#: ../src/keybindings.c:223 ../src/symbols.c:714
 msgid "File"
 msgstr "Failas"
 
-#: ../src/keybindings.c:223
+#: ../src/keybindings.c:225
 msgid "Clipboard"
 msgstr "Iškarpinė"
 
-#: ../src/keybindings.c:224
+#: ../src/keybindings.c:226
 msgid "Select"
 msgstr "Pasirinkti"
 
-#: ../src/keybindings.c:225
+#: ../src/keybindings.c:227
 msgid "Format"
 msgstr "Formatas"
 
-#: ../src/keybindings.c:226
+#: ../src/keybindings.c:228
 msgid "Insert"
 msgstr "Įterpti"
 
-#: ../src/keybindings.c:227
+#: ../src/keybindings.c:229
 msgid "Settings"
 msgstr "Nustatymai"
 
-#: ../src/keybindings.c:228
+#: ../src/keybindings.c:230
 msgid "Search"
 msgstr "Paieška"
 
-#: ../src/keybindings.c:229
+#: ../src/keybindings.c:231
 msgid "Go to"
 msgstr "Eiti į"
 
-#: ../src/keybindings.c:230
+#: ../src/keybindings.c:232
 msgid "View"
 msgstr "Rodymas"
 
-#: ../src/keybindings.c:231
+#: ../src/keybindings.c:233
 msgid "Document"
 msgstr "Dokumentas"
 
-#: ../src/keybindings.c:233 ../src/keybindings.c:580 ../src/project.c:444
-#: ../src/ui_utils.c:1969
+#: ../src/keybindings.c:235 ../src/keybindings.c:582 ../src/project.c:444
+#: ../src/ui_utils.c:1980
 msgid "Build"
 msgstr "Sukurti"
 
-#: ../src/keybindings.c:235 ../src/keybindings.c:605
+#: ../src/keybindings.c:237 ../src/keybindings.c:607
 msgid "Help"
 msgstr "Žinynas"
 
-#: ../src/keybindings.c:236
+#: ../src/keybindings.c:238
 msgid "Focus"
 msgstr "Fokusas"
 
-#: ../src/keybindings.c:237
+#: ../src/keybindings.c:239
 msgid "Notebook tab"
 msgstr "Užrašinės kortelė"
 
-#: ../src/keybindings.c:246 ../src/keybindings.c:274
+#: ../src/keybindings.c:248 ../src/keybindings.c:276
 msgid "New"
 msgstr "Naujas"
 
-#: ../src/keybindings.c:248 ../src/keybindings.c:276
+#: ../src/keybindings.c:250 ../src/keybindings.c:278
 msgid "Open"
 msgstr "Atverti"
 
-#: ../src/keybindings.c:251
+#: ../src/keybindings.c:253
 msgid "Open selected file"
 msgstr "Atverti pasirinktą failą"
 
-#: ../src/keybindings.c:253
+#: ../src/keybindings.c:255
 msgid "Save"
 msgstr "Išsaugoti"
 
-#: ../src/keybindings.c:255 ../src/toolbar.c:55
+#: ../src/keybindings.c:257 ../src/toolbar.c:55
 msgid "Save as"
 msgstr "Išsaugoti kaip"
 
-#: ../src/keybindings.c:257
+#: ../src/keybindings.c:259
 msgid "Save all"
 msgstr "Išsaugoti visus"
 
-#: ../src/keybindings.c:260
+#: ../src/keybindings.c:262
 msgid "Print"
 msgstr "Spausdinti"
 
-#: ../src/keybindings.c:262 ../src/keybindings.c:281
+#: ../src/keybindings.c:264 ../src/keybindings.c:283
 msgid "Close"
 msgstr "Užverti"
 
-#: ../src/keybindings.c:264
+#: ../src/keybindings.c:266
 msgid "Close all"
 msgstr "Užverti visus"
 
-#: ../src/keybindings.c:267
+#: ../src/keybindings.c:269
 msgid "Reload file"
 msgstr "Iš naujo įkelti failą"
 
-#: ../src/keybindings.c:269
+#: ../src/keybindings.c:271
 msgid "Re-open last closed tab"
 msgstr "Dar kartą atverti paskutinę užvertą kortelę"
 
-#: ../src/keybindings.c:286
+#: ../src/keybindings.c:288
 msgid "Undo"
 msgstr "Atšaukti"
 
-#: ../src/keybindings.c:288
+#: ../src/keybindings.c:290
 msgid "Redo"
 msgstr "Grąžinti"
 
-#: ../src/keybindings.c:297
+#: ../src/keybindings.c:299
 msgid "Delete to line end"
 msgstr "Ištrinti iki eilutės pabaigos"
 
-#: ../src/keybindings.c:303
+#: ../src/keybindings.c:305
 msgid "Scroll to current line"
 msgstr "Slinkti iki dabartinės eilutės"
 
-#: ../src/keybindings.c:305
+#: ../src/keybindings.c:307
 msgid "Scroll up the view by one line"
 msgstr "Slinkti aukštyn viena eilute"
 
-#: ../src/keybindings.c:307
+#: ../src/keybindings.c:309
 msgid "Scroll down the view by one line"
 msgstr "Slinkti žemyn viena eilute"
 
@@ -3242,395 +3246,395 @@ msgstr "Slinkti žemyn viena eilute"
 #
 # Keliai:
 # ../src/keybindings.c:309
-#: ../src/keybindings.c:309
+#: ../src/keybindings.c:311
 msgid "Complete snippet"
 msgstr "Pilnas fragmentas"
 
-#: ../src/keybindings.c:311
+#: ../src/keybindings.c:313
 msgid "Move cursor in snippet"
 msgstr "Perkelti žymeklį fragmente"
 
-#: ../src/keybindings.c:313
+#: ../src/keybindings.c:315
 msgid "Suppress snippet completion"
 msgstr "Neleisti užbaigti fragmento"
 
-#: ../src/keybindings.c:315
+#: ../src/keybindings.c:317
 msgid "Context Action"
 msgstr "Kontekstinis veiksmas"
 
-#: ../src/keybindings.c:317
+#: ../src/keybindings.c:319
 msgid "Complete word"
 msgstr "Užbaigti žodį"
 
-#: ../src/keybindings.c:319
+#: ../src/keybindings.c:321
 msgid "Show calltip"
 msgstr "Rodyti iškvietimo patarimą"
 
-#: ../src/keybindings.c:321
+#: ../src/keybindings.c:323
 msgid "Show macro list"
 msgstr "Rodyti makro sąrašą"
 
-#: ../src/keybindings.c:323
+#: ../src/keybindings.c:325
 msgid "Word part completion"
 msgstr "Žodžio dalies užbaigimas"
 
-#: ../src/keybindings.c:325
+#: ../src/keybindings.c:327
 msgid "Move line(s) up"
 msgstr "Perkelti eilutę(-es) aukštyn"
 
-#: ../src/keybindings.c:327
+#: ../src/keybindings.c:329
 msgid "Move line(s) down"
 msgstr "Perkelti eilutę(-es) žemyn"
 
-#: ../src/keybindings.c:332
+#: ../src/keybindings.c:334
 msgid "Cut"
 msgstr "Iškirpti"
 
-#: ../src/keybindings.c:334
+#: ../src/keybindings.c:336
 msgid "Copy"
 msgstr "Kopijuoti"
 
-#: ../src/keybindings.c:336
+#: ../src/keybindings.c:338
 msgid "Paste"
 msgstr "Įklijuoti"
 
-#: ../src/keybindings.c:347
+#: ../src/keybindings.c:349
 msgid "Select All"
 msgstr "Pasirinkti viską"
 
-#: ../src/keybindings.c:349
+#: ../src/keybindings.c:351
 msgid "Select current word"
 msgstr "Pasirinkti dabartinį žodį"
 
-#: ../src/keybindings.c:357
+#: ../src/keybindings.c:359
 msgid "Select to previous word part"
 msgstr "Pasirinkti ankstesnę žodžio dalį"
 
-#: ../src/keybindings.c:359
+#: ../src/keybindings.c:361
 msgid "Select to next word part"
 msgstr "Pasirinkti sekančią žodžio dalį"
 
-#: ../src/keybindings.c:367
+#: ../src/keybindings.c:369
 msgid "Toggle line commentation"
 msgstr "Perjungti eilučių komentavimą"
 
-#: ../src/keybindings.c:370
+#: ../src/keybindings.c:372
 msgid "Comment line(s)"
 msgstr "Komentuoti eilutę(-es)"
 
-#: ../src/keybindings.c:372
+#: ../src/keybindings.c:374
 msgid "Uncomment line(s)"
 msgstr "Pašalinti eilutės(-čių) komentarą"
 
-#: ../src/keybindings.c:374
+#: ../src/keybindings.c:376
 msgid "Increase indent"
 msgstr "Didinti atitraukimą"
 
-#: ../src/keybindings.c:377
+#: ../src/keybindings.c:379
 msgid "Decrease indent"
 msgstr "Sumažinti atitraukimą"
 
-#: ../src/keybindings.c:380
+#: ../src/keybindings.c:382
 msgid "Increase indent by one space"
 msgstr "Padidinti atitraukimą vienu tarpu"
 
-#: ../src/keybindings.c:382
+#: ../src/keybindings.c:384
 msgid "Decrease indent by one space"
 msgstr "Sumažinti atitraukimą vienu tarpu"
 
-#: ../src/keybindings.c:386
+#: ../src/keybindings.c:388
 msgid "Send to Custom Command 1"
 msgstr "Siųsti į pasirinktą komandą 1"
 
-#: ../src/keybindings.c:388
+#: ../src/keybindings.c:390
 msgid "Send to Custom Command 2"
 msgstr "Siųsti į pasirinktą komandą 2"
 
-#: ../src/keybindings.c:390
+#: ../src/keybindings.c:392
 msgid "Send to Custom Command 3"
 msgstr "Siųsti į pasirinktą komandą 3"
 
-#: ../src/keybindings.c:398
+#: ../src/keybindings.c:400
 msgid "Join lines"
 msgstr "Sujungti eilutes"
 
-#: ../src/keybindings.c:403
+#: ../src/keybindings.c:405
 msgid "Insert date"
 msgstr "Įterpti datą"
 
-#: ../src/keybindings.c:409
+#: ../src/keybindings.c:411
 msgid "Insert New Line Before Current"
 msgstr "Prieš dabartinę, įterpti naują eilutę"
 
-#: ../src/keybindings.c:411
+#: ../src/keybindings.c:413
 msgid "Insert New Line After Current"
 msgstr "Po dabartinės, įterpti naują eilutę"
 
-#: ../src/keybindings.c:424 ../src/search.c:463
+#: ../src/keybindings.c:426 ../src/search.c:463
 msgid "Find"
 msgstr "Ieškoti"
 
-#: ../src/keybindings.c:426
+#: ../src/keybindings.c:428
 msgid "Find Next"
 msgstr "Ieškoti kito"
 
-#: ../src/keybindings.c:428
+#: ../src/keybindings.c:430
 msgid "Find Previous"
 msgstr "Ieškoti ankstesnio"
 
-#: ../src/keybindings.c:435 ../src/search.c:619
+#: ../src/keybindings.c:437 ../src/search.c:619
 msgid "Replace"
 msgstr "Pakeisti"
 
-#: ../src/keybindings.c:437 ../src/search.c:871
+#: ../src/keybindings.c:439 ../src/search.c:871
 msgid "Find in Files"
 msgstr "Ieškoti failuose"
 
-#: ../src/keybindings.c:440
+#: ../src/keybindings.c:442
 msgid "Next Message"
 msgstr "Sekantis pranešimas"
 
-#: ../src/keybindings.c:442
+#: ../src/keybindings.c:444
 msgid "Previous Message"
 msgstr "Ankstesnis pranešimas"
 
-#: ../src/keybindings.c:445
+#: ../src/keybindings.c:447
 msgid "Find Usage"
 msgstr "Kiek kartų panaudotas"
 
-#: ../src/keybindings.c:448
+#: ../src/keybindings.c:450
 msgid "Find Document Usage"
 msgstr "Kiek kartų panaudotas dokumente"
 
-#: ../src/keybindings.c:455 ../src/toolbar.c:66
+#: ../src/keybindings.c:457 ../src/toolbar.c:66
 msgid "Navigate back a location"
 msgstr "Pereiti atgal"
 
-#: ../src/keybindings.c:457 ../src/toolbar.c:67
+#: ../src/keybindings.c:459 ../src/toolbar.c:67
 msgid "Navigate forward a location"
 msgstr "Pereiti pirmyn"
 
-#: ../src/keybindings.c:462
+#: ../src/keybindings.c:464
 msgid "Go to matching brace"
 msgstr "Eiti į atitinkamą riestinį skliaustą"
 
-#: ../src/keybindings.c:465
+#: ../src/keybindings.c:467
 msgid "Toggle marker"
 msgstr "Perjungti žymeklį"
 
-#: ../src/keybindings.c:474
+#: ../src/keybindings.c:476
 msgid "Go to Tag Definition"
 msgstr "Eiti į žymės aprašymą"
 
-#: ../src/keybindings.c:477
+#: ../src/keybindings.c:479
 msgid "Go to Tag Declaration"
 msgstr "Eiti į žymės deklaravimą"
 
-#: ../src/keybindings.c:479
+#: ../src/keybindings.c:481
 msgid "Go to Start of Line"
 msgstr "Eiti į eilutės pradžią"
 
-#: ../src/keybindings.c:481
+#: ../src/keybindings.c:483
 msgid "Go to End of Line"
 msgstr "Eiti į eilutės pabaigą"
 
-#: ../src/keybindings.c:483
+#: ../src/keybindings.c:485
 msgid "Go to End of Display Line"
 msgstr "Eiti į rodomos eilutės pabaigą"
 
-#: ../src/keybindings.c:485
+#: ../src/keybindings.c:487
 msgid "Go to Previous Word Part"
 msgstr "Eiti į ankstesnę žodžio dalį"
 
-#: ../src/keybindings.c:487
+#: ../src/keybindings.c:489
 msgid "Go to Next Word Part"
 msgstr "Eiti į sekančią žodžio dalį"
 
-#: ../src/keybindings.c:492
+#: ../src/keybindings.c:494
 msgid "Toggle All Additional Widgets"
 msgstr "Perjungti visus papildomus valdiklius"
 
-#: ../src/keybindings.c:495
+#: ../src/keybindings.c:497
 msgid "Fullscreen"
 msgstr "Visas ekranas"
 
-#: ../src/keybindings.c:497
+#: ../src/keybindings.c:499
 msgid "Toggle Messages Window"
 msgstr "Perjungti pranešimų langą"
 
-#: ../src/keybindings.c:500
+#: ../src/keybindings.c:502
 msgid "Toggle Sidebar"
 msgstr "Perjungti šoninę juostą"
 
-#: ../src/keybindings.c:502
+#: ../src/keybindings.c:504
 msgid "Zoom In"
 msgstr "Priartinti"
 
-#: ../src/keybindings.c:504
+#: ../src/keybindings.c:506
 msgid "Zoom Out"
 msgstr "Atitolinti"
 
-#: ../src/keybindings.c:506
+#: ../src/keybindings.c:508
 msgid "Zoom Reset"
 msgstr "Atstatyti mastelį"
 
-#: ../src/keybindings.c:511
+#: ../src/keybindings.c:513
 msgid "Switch to Editor"
 msgstr "Persijungti į redaktorių"
 
-#: ../src/keybindings.c:513
+#: ../src/keybindings.c:515
 msgid "Switch to Search Bar"
 msgstr "Persijungti į paieškos juostą"
 
-#: ../src/keybindings.c:515
+#: ../src/keybindings.c:517
 msgid "Switch to Message Window"
 msgstr "Persijungti į pranešimų langą"
 
-#: ../src/keybindings.c:517
+#: ../src/keybindings.c:519
 msgid "Switch to Compiler"
 msgstr "Persijungti į kompiliatorių"
 
-#: ../src/keybindings.c:519
+#: ../src/keybindings.c:521
 msgid "Switch to Messages"
 msgstr "Persijungti į pranešimus"
 
-#: ../src/keybindings.c:521
+#: ../src/keybindings.c:523
 msgid "Switch to Scribble"
 msgstr "Persijungti į keverzonę"
 
-#: ../src/keybindings.c:523
+#: ../src/keybindings.c:525
 msgid "Switch to VTE"
 msgstr "Persijungti į VTE"
 
-#: ../src/keybindings.c:525
+#: ../src/keybindings.c:527
 msgid "Switch to Sidebar"
 msgstr "Persijungti į šoninė juostą"
 
-#: ../src/keybindings.c:527
+#: ../src/keybindings.c:529
 msgid "Switch to Sidebar Symbol List"
 msgstr "Persijungti į šoninės juostos simbolių sąrašą"
 
-#: ../src/keybindings.c:529
+#: ../src/keybindings.c:531
 msgid "Switch to Sidebar Document List"
 msgstr "Persijungti į šoninės juostos dokumentų sąrašą"
 
-#: ../src/keybindings.c:534
+#: ../src/keybindings.c:536
 msgid "Switch to left document"
 msgstr "Persijungti į kairįjį dokumentą"
 
-#: ../src/keybindings.c:536
+#: ../src/keybindings.c:538
 msgid "Switch to right document"
 msgstr "Persijungti į dešinįjį dokumentą"
 
-#: ../src/keybindings.c:538
+#: ../src/keybindings.c:540
 msgid "Switch to last used document"
 msgstr "Persijungti į paskutinį naudotą dokumentą"
 
-#: ../src/keybindings.c:541
+#: ../src/keybindings.c:543
 msgid "Move document left"
 msgstr "Perkelti dokumentą kairėn"
 
-#: ../src/keybindings.c:544
+#: ../src/keybindings.c:546
 msgid "Move document right"
 msgstr "Perkelti dokumentą dešinėn"
 
-#: ../src/keybindings.c:546
+#: ../src/keybindings.c:548
 msgid "Move document first"
 msgstr "Perkelti dokumentą į pradžią"
 
-#: ../src/keybindings.c:548
+#: ../src/keybindings.c:550
 msgid "Move document last"
 msgstr "Perkelti dokumentą į pabaigą"
 
-#: ../src/keybindings.c:553
+#: ../src/keybindings.c:555
 msgid "Toggle Line wrapping"
 msgstr "Perjungti eilučių laužymą"
 
-#: ../src/keybindings.c:555
+#: ../src/keybindings.c:557
 msgid "Toggle Line breaking"
 msgstr "Perjungti eilučių laužymą"
 
-#: ../src/keybindings.c:559
+#: ../src/keybindings.c:561
 msgid "Replace spaces by tabs"
 msgstr "Pakeisti tarpus tabuliavimo ženklais"
 
-#: ../src/keybindings.c:561
+#: ../src/keybindings.c:563
 msgid "Toggle current fold"
 msgstr "Perjungti dabartinį suskleidimą"
 
-#: ../src/keybindings.c:563
+#: ../src/keybindings.c:565
 msgid "Fold all"
 msgstr "Suskleisti visus"
 
-#: ../src/keybindings.c:565
+#: ../src/keybindings.c:567
 msgid "Unfold all"
 msgstr "Išskleisti visus"
 
-#: ../src/keybindings.c:567
+#: ../src/keybindings.c:569
 msgid "Reload symbol list"
 msgstr "Iš naujo įkelti simbolių sąrašą"
 
-#: ../src/keybindings.c:569
+#: ../src/keybindings.c:571
 msgid "Remove Markers"
 msgstr "Pašalinti žymeklius"
 
-#: ../src/keybindings.c:571
+#: ../src/keybindings.c:573
 msgid "Remove Error Indicators"
 msgstr "Pašalinti klaidų indikatorius"
 
-#: ../src/keybindings.c:573
+#: ../src/keybindings.c:575
 msgid "Remove Markers and Error Indicators"
 msgstr "Pašalinti žymeklius ir klaidų indikatorius"
 
-#: ../src/keybindings.c:578 ../src/toolbar.c:68
+#: ../src/keybindings.c:580 ../src/toolbar.c:68
 msgid "Compile"
 msgstr "Kompiliuoti"
 
-#: ../src/keybindings.c:582
+#: ../src/keybindings.c:584
 msgid "Make all"
 msgstr "Padaryti visus"
 
-#: ../src/keybindings.c:585
+#: ../src/keybindings.c:587
 msgid "Make custom target"
 msgstr "Padaryti pasirinktą failą"
 
-#: ../src/keybindings.c:587
+#: ../src/keybindings.c:589
 msgid "Make object"
 msgstr "Padaryti objektą"
 
-#: ../src/keybindings.c:589
+#: ../src/keybindings.c:591
 msgid "Next error"
 msgstr "Sekanti klaida"
 
-#: ../src/keybindings.c:591
+#: ../src/keybindings.c:593
 msgid "Previous error"
 msgstr "Ankstesnė klaida"
 
-#: ../src/keybindings.c:593
+#: ../src/keybindings.c:595
 msgid "Run"
 msgstr "Vykdyti"
 
-#: ../src/keybindings.c:595
+#: ../src/keybindings.c:597
 msgid "Build options"
 msgstr "Darymo parinktys"
 
-#: ../src/keybindings.c:600
+#: ../src/keybindings.c:602
 msgid "Show Color Chooser"
 msgstr "Rodyti spalvų parinkiklį"
 
-#: ../src/keybindings.c:837
+#: ../src/keybindings.c:849
 msgid "Keyboard Shortcuts"
 msgstr "Spartieji klavišai"
 
-#: ../src/keybindings.c:849
+#: ../src/keybindings.c:861
 msgid "The following keyboard shortcuts are configurable:"
 msgstr "Šie klaviatūros susiejimai yra keičiami:"
 
-#: ../src/keyfile.c:920
+#: ../src/keyfile.c:950
 msgid "Type here what you want, use it as a notice/scratch board"
 msgstr "Įrašykite čia ką norite naudoti kaip pastabų žurnalą"
 
-#: ../src/keyfile.c:1119
+#: ../src/keyfile.c:1150
 msgid "Failed to load one or more session files."
 msgstr "Nepavyko įkelti vieno ar kelių sesijos failų."
 
@@ -3783,7 +3787,7 @@ msgstr "Tai yra Geany %s."
 msgid "Configuration directory could not be created (%s)."
 msgstr "Konfigūracijos aplanko sukurti nepavyko (%s)."
 
-#: ../src/main.c:1288
+#: ../src/main.c:1289
 msgid "Configuration files reloaded."
 msgstr "Konfigūracijos failai įkelti iš naujo."
 
@@ -3812,7 +3816,7 @@ msgstr "Rasti failo „%s“ nepavyko - bandomas dabartinis dokumento kelias."
 msgid "Switch to Document"
 msgstr "Persijungti į dokumentą"
 
-#: ../src/plugins.c:496
+#: ../src/plugins.c:497
 #, c-format
 msgid ""
 "The plugin \"%s\" is not binary compatible with this release of Geany - "
@@ -3820,49 +3824,49 @@ msgid ""
 msgstr ""
 "Įskiepis „%s“ nesuderinamas su šiuo Geany leidimu - perkompiliuokite jį."
 
-#: ../src/plugins.c:1040
+#: ../src/plugins.c:1041
 msgid "_Plugin Manager"
 msgstr "Į_skiepių tvarkyklė"
 
 #. Translators: <plugin name> <plugin version>
-#: ../src/plugins.c:1211
+#: ../src/plugins.c:1212
 #, c-format
 msgid "%s %s"
 msgstr "%s %s"
 
-#: ../src/plugins.c:1287
+#: ../src/plugins.c:1288
 msgid "Active"
 msgstr "Aktyvus"
 
-#: ../src/plugins.c:1293
+#: ../src/plugins.c:1294
 msgid "Plugin"
 msgstr "Įskiepis"
 
-#: ../src/plugins.c:1299
+#: ../src/plugins.c:1300
 msgid "Description"
 msgstr "Aprašymas"
 
-#: ../src/plugins.c:1317
+#: ../src/plugins.c:1318
 msgid "No plugins available."
 msgstr "Nėra prieinamų įskiepių."
 
-#: ../src/plugins.c:1413
+#: ../src/plugins.c:1414
 msgid "Plugins"
 msgstr "Įskiepiai"
 
-#: ../src/plugins.c:1433
+#: ../src/plugins.c:1434
 msgid "Choose which plugins should be loaded at startup:"
 msgstr "Pasirinkite kurie įskiepiai turėtų būti įkelti paleidžiant:"
 
-#: ../src/plugins.c:1445
+#: ../src/plugins.c:1446
 msgid "<b>Plugin details:</b>"
 msgstr "<b>Įskiepio detalės:</b>"
 
-#: ../src/plugins.c:1454
+#: ../src/plugins.c:1455
 msgid "Plugin:"
 msgstr "Įskiepis:"
 
-#: ../src/plugins.c:1455
+#: ../src/plugins.c:1456
 msgid "Author(s):"
 msgstr "Autorius(-iai):"
 
@@ -3870,57 +3874,57 @@ msgstr "Autorius(-iai):"
 msgid "Configure Plugins"
 msgstr "Konfigūruoti įskiepius"
 
-#: ../src/prefs.c:176
+#: ../src/prefs.c:179
 msgid "Grab Key"
 msgstr "Paimti klavišą"
 
-#: ../src/prefs.c:182
+#: ../src/prefs.c:185
 #, c-format
 msgid "Press the combination of the keys you want to use for \"%s\"."
 msgstr "Paspauskite klavišų kombinaciją kurią naudosite „%s“."
 
-#: ../src/prefs.c:223 ../src/symbols.c:2138 ../src/sidebar.c:730
+#: ../src/prefs.c:226 ../src/symbols.c:2238 ../src/sidebar.c:730
 msgid "_Expand All"
 msgstr "_Išskleisti viską"
 
-#: ../src/prefs.c:228 ../src/symbols.c:2143 ../src/sidebar.c:736
+#: ../src/prefs.c:231 ../src/symbols.c:2243 ../src/sidebar.c:736
 msgid "_Collapse All"
 msgstr "_Suskleisti viską"
 
-#: ../src/prefs.c:287
+#: ../src/prefs.c:291
 msgid "Action"
 msgstr "Veiksmas"
 
-#: ../src/prefs.c:291
+#: ../src/prefs.c:296
 msgid "Shortcut"
 msgstr "Spartusis klavišas"
 
-#: ../src/prefs.c:1430
+#: ../src/prefs.c:1456
 msgid "_Allow"
 msgstr "_Leisti"
 
-#: ../src/prefs.c:1432
+#: ../src/prefs.c:1458
 msgid "_Override"
 msgstr "_Perrašyti"
 
-#: ../src/prefs.c:1433
+#: ../src/prefs.c:1459
 msgid "Override that keybinding?"
 msgstr "Perrašyti tą susiejimą?"
 
-#: ../src/prefs.c:1434
+#: ../src/prefs.c:1460
 #, c-format
 msgid "The combination '%s' is already used for \"%s\"."
 msgstr "Susiejimą „%s“ jau naudoja „%s“."
 
 #. add manually GeanyWrapLabels because they can't be added with Glade
 #. page Tools
-#: ../src/prefs.c:1635
+#: ../src/prefs.c:1661
 msgid "Enter tool paths below. Tools you do not need can be left blank."
 msgstr ""
 "Žemiau įveskite įrankių kelius. Nereikalingų įrankių kelių galite neįvesti."
 
 #. page Templates
-#: ../src/prefs.c:1640
+#: ../src/prefs.c:1666
 msgid ""
 "Set the information to be used in templates. See the documentation for "
 "details."
@@ -3929,7 +3933,7 @@ msgstr ""
 "paskaityti dokumentacijoje."
 
 #. page Keybindings
-#: ../src/prefs.c:1645
+#: ../src/prefs.c:1671
 msgid ""
 "Here you can change keyboard shortcuts for various actions. Select one and "
 "press the Change button to enter a new shortcut, or double click on an "
@@ -3940,7 +3944,7 @@ msgstr ""
 "Taipogi galite dukart spustelėti ant veiksmo ir pakeisti eilutę."
 
 #. page Editor->Indentation
-#: ../src/prefs.c:1650
+#: ../src/prefs.c:1676
 msgid ""
 "<i>Warning: these settings are overridden by the current project. See "
 "<b>Project->Properties</b>.</i>"
@@ -4280,7 +4284,7 @@ msgstr "_Papildomos parinktys:"
 msgid "Other options to pass to Grep"
 msgstr "Kitos parinktys kurios perduodamos Grep"
 
-#: ../src/search.c:1282 ../src/search.c:2088 ../src/search.c:2091
+#: ../src/search.c:1282 ../src/search.c:2093 ../src/search.c:2096
 #, c-format
 msgid "Found %d match for \"%s\"."
 msgid_plural "Found %d matches for \"%s\"."
@@ -4306,25 +4310,30 @@ msgstr "Nėra ieškomo teksto."
 msgid "Cannot execute grep tool '%s'; check the path setting in Preferences."
 msgstr "Įvykdyti grep įrankio „%s“ nepavyko; patikrinkite kelią."
 
-#: ../src/search.c:1635
+#: ../src/search.c:1574
+#, c-format
+msgid "Cannot parse extra options: %s"
+msgstr "Papildomų parinkčių apdoroti nepavyko: %s"
+
+#: ../src/search.c:1640
 msgid "Searching..."
 msgstr "Ieškoma..."
 
-#: ../src/search.c:1646
+#: ../src/search.c:1651
 #, c-format
 msgid "%s %s -- %s (in directory: %s)"
 msgstr "%s %s -- %s (aplanke: %s)"
 
-#: ../src/search.c:1687
+#: ../src/search.c:1692
 #, c-format
 msgid "Could not open directory (%s)"
 msgstr "Nepavyko atverti aplanko (%s)"
 
-#: ../src/search.c:1789
+#: ../src/search.c:1794
 msgid "Search failed."
 msgstr "Paieška nepavyko."
 
-#: ../src/search.c:1809
+#: ../src/search.c:1814
 #, c-format
 msgid "Search completed with %d match."
 msgid_plural "Search completed with %d matches."
@@ -4332,11 +4341,11 @@ msgstr[0] "Paieška baigta su %d atitikmeniu."
 msgstr[1] "Paieška baigta su %d atitikmenimis."
 msgstr[2] "Paieška baigta su %d atitikmenų."
 
-#: ../src/search.c:1817
+#: ../src/search.c:1822
 msgid "No matches found."
 msgstr "Atitikmenų nerasta."
 
-#: ../src/search.c:1847
+#: ../src/search.c:1852
 #, c-format
 msgid "Bad regex: %s"
 msgstr "Blogas regex: %s"
@@ -4352,274 +4361,274 @@ msgstr ""
 "naudotojas.\n"
 "Tai yra kritinė klaida ir Geany dabar užsivers."
 
-#: ../src/stash.c:1075
+#: ../src/stash.c:1099
 msgid "Name"
 msgstr "Pavadinimas"
 
-#: ../src/stash.c:1082
+#: ../src/stash.c:1106
 msgid "Value"
 msgstr "Reikšmė"
 
-#: ../src/symbols.c:689 ../src/symbols.c:739 ../src/symbols.c:806
+#: ../src/symbols.c:693 ../src/symbols.c:743 ../src/symbols.c:810
 msgid "Chapter"
 msgstr "Skyrius"
 
-#: ../src/symbols.c:690 ../src/symbols.c:735 ../src/symbols.c:807
+#: ../src/symbols.c:694 ../src/symbols.c:739 ../src/symbols.c:811
 msgid "Section"
 msgstr "Sekcija"
 
-#: ../src/symbols.c:691
+#: ../src/symbols.c:695
 msgid "Sect1"
 msgstr "Sect1"
 
-#: ../src/symbols.c:692
+#: ../src/symbols.c:696
 msgid "Sect2"
 msgstr "Sect2"
 
-#: ../src/symbols.c:693
+#: ../src/symbols.c:697
 msgid "Sect3"
 msgstr "Sect3"
 
-#: ../src/symbols.c:694
+#: ../src/symbols.c:698
 msgid "Appendix"
 msgstr "Priedas"
 
-#: ../src/symbols.c:695 ../src/symbols.c:740 ../src/symbols.c:756
-#: ../src/symbols.c:767 ../src/symbols.c:854 ../src/symbols.c:865
-#: ../src/symbols.c:877 ../src/symbols.c:891 ../src/symbols.c:903
-#: ../src/symbols.c:915 ../src/symbols.c:930 ../src/symbols.c:959
-#: ../src/symbols.c:989
+#: ../src/symbols.c:699 ../src/symbols.c:744 ../src/symbols.c:760
+#: ../src/symbols.c:771 ../src/symbols.c:858 ../src/symbols.c:869
+#: ../src/symbols.c:881 ../src/symbols.c:895 ../src/symbols.c:907
+#: ../src/symbols.c:919 ../src/symbols.c:934 ../src/symbols.c:963
+#: ../src/symbols.c:993
 msgid "Other"
 msgstr "Kita"
 
-#: ../src/symbols.c:701 ../src/symbols.c:923 ../src/symbols.c:968
+#: ../src/symbols.c:705 ../src/symbols.c:927 ../src/symbols.c:972
 msgid "Module"
 msgstr "Modulis"
 
-#: ../src/symbols.c:702 ../src/symbols.c:850 ../src/symbols.c:901
-#: ../src/symbols.c:913 ../src/symbols.c:928 ../src/symbols.c:940
+#: ../src/symbols.c:706 ../src/symbols.c:854 ../src/symbols.c:905
+#: ../src/symbols.c:917 ../src/symbols.c:932 ../src/symbols.c:944
 msgid "Types"
 msgstr "Tipai"
 
-#: ../src/symbols.c:703
+#: ../src/symbols.c:707
 msgid "Type constructors"
 msgstr "Tipo konstruktoriai"
 
-#: ../src/symbols.c:704 ../src/symbols.c:726 ../src/symbols.c:747
-#: ../src/symbols.c:755 ../src/symbols.c:764 ../src/symbols.c:776
-#: ../src/symbols.c:785 ../src/symbols.c:838 ../src/symbols.c:887
-#: ../src/symbols.c:910 ../src/symbols.c:925 ../src/symbols.c:953
-#: ../src/symbols.c:976
+#: ../src/symbols.c:708 ../src/symbols.c:730 ../src/symbols.c:751
+#: ../src/symbols.c:759 ../src/symbols.c:768 ../src/symbols.c:780
+#: ../src/symbols.c:789 ../src/symbols.c:842 ../src/symbols.c:891
+#: ../src/symbols.c:914 ../src/symbols.c:929 ../src/symbols.c:957
+#: ../src/symbols.c:980
 msgid "Functions"
 msgstr "Funkcijos"
 
-#: ../src/symbols.c:709
+#: ../src/symbols.c:713
 msgid "Program"
 msgstr "Programa"
 
-#: ../src/symbols.c:711 ../src/symbols.c:719 ../src/symbols.c:725
+#: ../src/symbols.c:715 ../src/symbols.c:723 ../src/symbols.c:729
 msgid "Sections"
 msgstr "Sekcijos"
 
-#: ../src/symbols.c:712
+#: ../src/symbols.c:716
 msgid "Paragraph"
 msgstr "Paragrafas"
 
-#: ../src/symbols.c:713
+#: ../src/symbols.c:717
 msgid "Group"
 msgstr "Grupės"
 
-#: ../src/symbols.c:714
+#: ../src/symbols.c:718
 msgid "Data"
 msgstr "Duomenys"
 
-#: ../src/symbols.c:720
+#: ../src/symbols.c:724
 msgid "Keys"
 msgstr "Raktai"
 
-#: ../src/symbols.c:727 ../src/symbols.c:778 ../src/symbols.c:839
-#: ../src/symbols.c:864 ../src/symbols.c:889 ../src/symbols.c:902
-#: ../src/symbols.c:911 ../src/symbols.c:927 ../src/symbols.c:988
+#: ../src/symbols.c:731 ../src/symbols.c:782 ../src/symbols.c:843
+#: ../src/symbols.c:868 ../src/symbols.c:893 ../src/symbols.c:906
+#: ../src/symbols.c:915 ../src/symbols.c:931 ../src/symbols.c:992
 msgid "Variables"
 msgstr "Kintamieji"
 
-#: ../src/symbols.c:734
+#: ../src/symbols.c:738
 msgid "Environment"
 msgstr "Aplinka"
 
-#: ../src/symbols.c:736 ../src/symbols.c:808
+#: ../src/symbols.c:740 ../src/symbols.c:812
 msgid "Subsection"
 msgstr "Posekcijos"
 
-#: ../src/symbols.c:737 ../src/symbols.c:809
+#: ../src/symbols.c:741 ../src/symbols.c:813
 msgid "Subsubsection"
 msgstr "Poposekcijos"
 
-#: ../src/symbols.c:748
+#: ../src/symbols.c:752
 msgid "Structures"
 msgstr "Struktūros"
 
-#: ../src/symbols.c:763 ../src/symbols.c:847 ../src/symbols.c:872
-#: ../src/symbols.c:884
+#: ../src/symbols.c:767 ../src/symbols.c:851 ../src/symbols.c:876
+#: ../src/symbols.c:888
 msgid "Package"
 msgstr "Paketas"
 
-#: ../src/symbols.c:765 ../src/symbols.c:914 ../src/symbols.c:937
+#: ../src/symbols.c:769 ../src/symbols.c:918 ../src/symbols.c:941
 msgid "Labels"
 msgstr "Antraštės"
 
-#: ../src/symbols.c:766 ../src/symbols.c:777 ../src/symbols.c:890
-#: ../src/symbols.c:912
+#: ../src/symbols.c:770 ../src/symbols.c:781 ../src/symbols.c:894
+#: ../src/symbols.c:916
 msgid "Constants"
 msgstr "Konstantos"
 
-#: ../src/symbols.c:774 ../src/symbols.c:873 ../src/symbols.c:885
-#: ../src/symbols.c:898 ../src/symbols.c:924 ../src/symbols.c:975
+#: ../src/symbols.c:778 ../src/symbols.c:877 ../src/symbols.c:889
+#: ../src/symbols.c:902 ../src/symbols.c:928 ../src/symbols.c:979
 msgid "Interfaces"
 msgstr "Sąsajos"
 
-#: ../src/symbols.c:775 ../src/symbols.c:796 ../src/symbols.c:817
-#: ../src/symbols.c:827 ../src/symbols.c:836 ../src/symbols.c:874
-#: ../src/symbols.c:886 ../src/symbols.c:899 ../src/symbols.c:974
+#: ../src/symbols.c:779 ../src/symbols.c:800 ../src/symbols.c:821
+#: ../src/symbols.c:831 ../src/symbols.c:840 ../src/symbols.c:878
+#: ../src/symbols.c:890 ../src/symbols.c:903 ../src/symbols.c:978
 msgid "Classes"
 msgstr "Klasės"
 
-#: ../src/symbols.c:786
+#: ../src/symbols.c:790
 msgid "Anchors"
 msgstr "Anchors"
 
-#: ../src/symbols.c:787
+#: ../src/symbols.c:791
 msgid "H1 Headings"
 msgstr "H1 antraštės"
 
-#: ../src/symbols.c:788
+#: ../src/symbols.c:792
 msgid "H2 Headings"
 msgstr "H2 antraštės"
 
-#: ../src/symbols.c:789
+#: ../src/symbols.c:793
 msgid "H3 Headings"
 msgstr "H3 antraštės"
 
-#: ../src/symbols.c:797
+#: ../src/symbols.c:801
 msgid "ID Selectors"
 msgstr "ID pasirinkikliai"
 
-#: ../src/symbols.c:798
+#: ../src/symbols.c:802
 msgid "Type Selectors"
 msgstr "Tipų pasirinkikliai"
 
-#: ../src/symbols.c:816 ../src/symbols.c:862
+#: ../src/symbols.c:820 ../src/symbols.c:866
 msgid "Modules"
 msgstr "Moduliai"
 
-#: ../src/symbols.c:818
+#: ../src/symbols.c:822
 msgid "Singletons"
 msgstr "Singletons"
 
-#: ../src/symbols.c:819 ../src/symbols.c:828 ../src/symbols.c:837
-#: ../src/symbols.c:875 ../src/symbols.c:900
+#: ../src/symbols.c:823 ../src/symbols.c:832 ../src/symbols.c:841
+#: ../src/symbols.c:879 ../src/symbols.c:904
 msgid "Methods"
 msgstr "Metodai"
 
-#: ../src/symbols.c:826 ../src/symbols.c:971
+#: ../src/symbols.c:830 ../src/symbols.c:975
 msgid "Namespaces"
 msgstr "Vardų zonos"
 
-#: ../src/symbols.c:829 ../src/symbols.c:954
+#: ../src/symbols.c:833 ../src/symbols.c:958
 msgid "Procedures"
 msgstr "Procedūros"
 
-#: ../src/symbols.c:840
+#: ../src/symbols.c:844
 msgid "Imports"
 msgstr "Importavimai"
 
-#: ../src/symbols.c:848
+#: ../src/symbols.c:852
 msgid "Entities"
 msgstr "Subjektai"
 
-#: ../src/symbols.c:849
+#: ../src/symbols.c:853
 msgid "Architectures"
 msgstr "Architektūros"
 
-#: ../src/symbols.c:851
+#: ../src/symbols.c:855
 msgid "Functions / Procedures"
 msgstr "Funkcijos / Procedūros"
 
-#: ../src/symbols.c:852
+#: ../src/symbols.c:856
 msgid "Variables / Signals"
 msgstr "Kintamieji / Signalai"
 
-#: ../src/symbols.c:853
+#: ../src/symbols.c:857
 msgid "Processes / Components"
 msgstr "Procesai / Komponentai"
 
-#: ../src/symbols.c:861
+#: ../src/symbols.c:865
 msgid "Events"
 msgstr "Įvykiai"
 
-#: ../src/symbols.c:863
+#: ../src/symbols.c:867
 msgid "Functions / Tasks"
 msgstr "Funkcijos / Įvykiai"
 
-#: ../src/symbols.c:876 ../src/symbols.c:977
+#: ../src/symbols.c:880 ../src/symbols.c:981
 msgid "Members"
 msgstr "Nariai"
 
-#: ../src/symbols.c:926
+#: ../src/symbols.c:930
 msgid "Subroutines"
 msgstr "Paprogramės"
 
-#: ../src/symbols.c:929
+#: ../src/symbols.c:933
 msgid "Blocks"
 msgstr "Blokai"
 
-#: ../src/symbols.c:938 ../src/symbols.c:947 ../src/symbols.c:985
+#: ../src/symbols.c:942 ../src/symbols.c:951 ../src/symbols.c:989
 msgid "Macros"
 msgstr "Makrokomandos"
 
-#: ../src/symbols.c:939
+#: ../src/symbols.c:943
 msgid "Defines"
 msgstr "Apibrėžtys"
 
-#: ../src/symbols.c:946
+#: ../src/symbols.c:950
 msgid "Targets"
 msgstr "Paskirtys"
 
-#: ../src/symbols.c:955
+#: ../src/symbols.c:959
 msgid "Indexes"
 msgstr "Indeksai"
 
-#: ../src/symbols.c:956
+#: ../src/symbols.c:960
 msgid "Tables"
 msgstr "Lentelės"
 
-#: ../src/symbols.c:957
+#: ../src/symbols.c:961
 msgid "Triggers"
 msgstr "Iššaukėjai"
 
-#: ../src/symbols.c:958
+#: ../src/symbols.c:962
 msgid "Views"
 msgstr "Peržiūros"
 
-#: ../src/symbols.c:978
+#: ../src/symbols.c:982
 msgid "Structs"
 msgstr "Struktūros"
 
-#: ../src/symbols.c:979
+#: ../src/symbols.c:983
 msgid "Typedefs / Enums"
 msgstr "Typedefs / Enums"
 
-#: ../src/symbols.c:1615
+#: ../src/symbols.c:1728
 #, c-format
 msgid "Unknown filetype extension for \"%s\".\n"
 msgstr "Nežinomas failo tipo plėtinys „%s“.\n"
 
-#: ../src/symbols.c:1638
+#: ../src/symbols.c:1751
 #, c-format
 msgid "Failed to create tags file, perhaps because no tags were found.\n"
 msgstr "Nepavyko sukurti žymių failo, gali būti jog nerasta žymių.\n"
 
-#: ../src/symbols.c:1645
+#: ../src/symbols.c:1758
 #, c-format
 msgid ""
 "Usage: %s -g <Tag File> <File list>\n"
@@ -4628,7 +4637,7 @@ msgstr ""
 "Naudojimas: %s -g <Žymių failas> <Failų sąrašas>\n"
 "\n"
 
-#: ../src/symbols.c:1646
+#: ../src/symbols.c:1759
 #, c-format
 msgid ""
 "Example:\n"
@@ -4639,40 +4648,40 @@ msgstr ""
 "CFLAGS=`pkg-config gtk+-2.0 --cflags` %s -g gtk2.c.tags /usr/include/gtk-2.0/"
 "gtk/gtk.h\n"
 
-#: ../src/symbols.c:1660
+#: ../src/symbols.c:1773
 msgid "Load Tags"
 msgstr "Įkelti žymes"
 
-#: ../src/symbols.c:1667
-msgid "Geany tag files (*.tags)"
-msgstr "Geany žymių failai (*.tags)"
+#: ../src/symbols.c:1780
+msgid "Geany tag files (*.*.tags)"
+msgstr "Geany žymių failai (*.*.tags)"
 
 #. For translators: the first wildcard is the filetype, the second the filename
-#: ../src/symbols.c:1687
+#: ../src/symbols.c:1800
 #, c-format
 msgid "Loaded %s tags file '%s'."
 msgstr "Įkeltas %s žymių failas „%s“."
 
-#: ../src/symbols.c:1690
+#: ../src/symbols.c:1803
 #, c-format
 msgid "Could not load tags file '%s'."
 msgstr "Įkelti žymių failo nepavyko „%s“."
 
-#: ../src/symbols.c:1845
+#: ../src/symbols.c:1945
 #, c-format
 msgid "Forward declaration \"%s\" not found."
 msgstr "Pirminė deklaracija „%s“ nerasta."
 
-#: ../src/symbols.c:1847
+#: ../src/symbols.c:1947
 #, c-format
 msgid "Definition of \"%s\" not found."
 msgstr "„%s“ aprašymas nerastas."
 
-#: ../src/symbols.c:2153
+#: ../src/symbols.c:2253
 msgid "Sort by _Name"
 msgstr "Rikiuoti pagal _pavadinimą"
 
-#: ../src/symbols.c:2160
+#: ../src/symbols.c:2260
 msgid "Sort by _Appearance"
 msgstr "Rikiuoti pagal _išvaizdą"
 
@@ -4831,16 +4840,16 @@ msgstr "Prieinami elementai"
 msgid "Displayed Items"
 msgstr "Rodomi elementai"
 
-#: ../src/tools.c:108 ../src/tools.c:113
+#: ../src/tools.c:109 ../src/tools.c:114
 #, c-format
 msgid "Invalid command: %s"
 msgstr "Neteisinga komanda: %s"
 
-#: ../src/tools.c:108
+#: ../src/tools.c:109
 msgid "Command not found"
 msgstr "Komanda nerasta"
 
-#: ../src/tools.c:254
+#: ../src/tools.c:260
 #, c-format
 msgid ""
 "The executed custom command returned an error. Your selection was not "
@@ -4849,25 +4858,25 @@ msgstr ""
 "Įvykdyta pasirinktinė komanda grąžino klaidą. Jūsų pasirinkimas nepakeistas. "
 "Klaidos pranešimas: %s"
 
-#: ../src/tools.c:320
+#: ../src/tools.c:326
 msgid "The executed custom command exited with an unsuccessful exit code."
 msgstr "Įvykdyta pasirinktinė komanda išėjo su nesėkmingu išėjimo kodu."
 
-#: ../src/tools.c:348 ../src/tools.c:396
+#: ../src/tools.c:354 ../src/tools.c:402
 #, c-format
 msgid "Custom command failed: %s"
 msgstr "Pasirinktinė komanda nepavyko: %s"
 
-#: ../src/tools.c:352
+#: ../src/tools.c:358
 #, c-format
 msgid "Passing data and executing custom command: %s"
 msgstr "Perduodami duomenys ir vykdoma pasirinktinė komanda: %s"
 
-#: ../src/tools.c:498 ../src/tools.c:731
+#: ../src/tools.c:514 ../src/tools.c:774
 msgid "Set Custom Commands"
 msgstr "Nustatyti pasirinktines komandas"
 
-#: ../src/tools.c:506
+#: ../src/tools.c:522
 msgid ""
 "You can send the current selection to any of these commands and the output "
 "of the command replaces the current selection."
@@ -4875,39 +4884,39 @@ msgstr ""
 "Galite siųsti dabartinį pasirinkimą į bet kurią iš šių komandų ir komandos "
 "išvestis pakeis dabartinį pasirinkimą."
 
-#: ../src/tools.c:520
+#: ../src/tools.c:536
 msgid "ID"
 msgstr "ID"
 
-#: ../src/tools.c:706
+#: ../src/tools.c:745
 msgid "No custom commands defined."
 msgstr "Pasirinktinių komandų nėra."
 
-#: ../src/tools.c:800
+#: ../src/tools.c:843
 msgid "Word Count"
 msgstr "Žodžių skaičius"
 
-#: ../src/tools.c:810
+#: ../src/tools.c:853
 msgid "selection"
 msgstr "pasirinkimas"
 
-#: ../src/tools.c:816
+#: ../src/tools.c:859
 msgid "whole document"
 msgstr "visas dokumentas"
 
-#: ../src/tools.c:825
+#: ../src/tools.c:868
 msgid "Range:"
 msgstr "Sritis:"
 
-#: ../src/tools.c:837
+#: ../src/tools.c:880
 msgid "Lines:"
 msgstr "Eilutės:"
 
-#: ../src/tools.c:851
+#: ../src/tools.c:894
 msgid "Words:"
 msgstr "Žodžiai:"
 
-#: ../src/tools.c:865
+#: ../src/tools.c:908
 msgid "Characters:"
 msgstr "Simboliai:"
 
@@ -4936,7 +4945,7 @@ msgid "Show _Paths"
 msgstr "Rodyti _kelius"
 
 #. Status bar statistics: col = column, sel = selection.
-#: ../src/ui_utils.c:184
+#: ../src/ui_utils.c:185
 msgid ""
 "line: %l / %L\t col: %c\t sel: %s\t %w      %t      %mmode: %M      "
 "encoding: %e      filetype: %f      scope: %S"
@@ -4944,88 +4953,94 @@ msgstr ""
 "eilutė: %l / %L\t stulpelis: %c\t pasirinkimas: %s\t %w      %t      "
 "%mrežimas: %M      koduotė: %e      failo tipas: %f      akiratis: %S"
 
+#. L = lines
+#: ../src/ui_utils.c:219
+#, c-format
+msgid "%dL"
+msgstr "%dL"
+
 #. RO = read-only
-#: ../src/ui_utils.c:214 ../src/ui_utils.c:221
+#: ../src/ui_utils.c:225 ../src/ui_utils.c:232
 msgid "RO "
 msgstr "RO "
 
 #. OVR = overwrite/overtype, INS = insert
-#: ../src/ui_utils.c:216
+#: ../src/ui_utils.c:227
 msgid "OVR"
 msgstr "OVR"
 
-#: ../src/ui_utils.c:216
+#: ../src/ui_utils.c:227
 msgid "INS"
 msgstr "INS"
 
-#: ../src/ui_utils.c:230
+#: ../src/ui_utils.c:241
 msgid "TAB"
 msgstr "TAB"
 
 #. SP = space
-#: ../src/ui_utils.c:233
+#: ../src/ui_utils.c:244
 msgid "SP"
 msgstr "SP"
 
 #. T/S = tabs and spaces
-#: ../src/ui_utils.c:236
+#: ../src/ui_utils.c:247
 msgid "T/S"
 msgstr "T/S"
 
-#: ../src/ui_utils.c:244
+#: ../src/ui_utils.c:255
 msgid "MOD"
 msgstr "MOD"
 
-#: ../src/ui_utils.c:371
+#: ../src/ui_utils.c:382
 msgid " (new instance)"
 msgstr " (nauja kopija)"
 
-#: ../src/ui_utils.c:401
+#: ../src/ui_utils.c:412
 #, c-format
 msgid "Font updated (%s)."
 msgstr "Šriftas atnaujintas (%s)."
 
-#: ../src/ui_utils.c:597
+#: ../src/ui_utils.c:608
 msgid "C Standard Library"
 msgstr "C Standartinė biblioteka"
 
-#: ../src/ui_utils.c:598
+#: ../src/ui_utils.c:609
 msgid "ISO C99"
 msgstr "ISO C99"
 
-#: ../src/ui_utils.c:599
+#: ../src/ui_utils.c:610
 msgid "C++ (C Standard Library)"
 msgstr "C++ (C Standartinė biblioteka)"
 
-#: ../src/ui_utils.c:600
+#: ../src/ui_utils.c:611
 msgid "C++ Standard Library"
 msgstr "C++ Standartinė biblioteka"
 
-#: ../src/ui_utils.c:601
+#: ../src/ui_utils.c:612
 msgid "C++ STL"
 msgstr "C++ STL"
 
-#: ../src/ui_utils.c:663
+#: ../src/ui_utils.c:674
 msgid "_Set Custom Date Format"
 msgstr "_Nustatyti pasirinktinį datos formatą"
 
-#: ../src/ui_utils.c:1808
+#: ../src/ui_utils.c:1819
 msgid "Select Folder"
 msgstr "Pasirinkite aplanką"
 
-#: ../src/ui_utils.c:1808
+#: ../src/ui_utils.c:1819
 msgid "Select File"
 msgstr "Pasirinkite failą"
 
-#: ../src/ui_utils.c:1967
+#: ../src/ui_utils.c:1978
 msgid "Save All"
 msgstr "Išsaugoti viską"
 
-#: ../src/ui_utils.c:1968
+#: ../src/ui_utils.c:1979
 msgid "Close All"
 msgstr "Užverti viską"
 
-#: ../src/ui_utils.c:2216
+#: ../src/ui_utils.c:2230
 msgid "Geany cannot start!"
 msgstr "Geany paleisti nepavyko!"
 
