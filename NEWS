@@ -1,11 +1,66 @@
 Geany 1.22 (unreleased)
 
+    General
+    * Bump dependencies to GTK >= 2.16 and GLib >= 2.20.
+    * Switch to Glade 3 and dynamically loaded XML UI description.
+    * Rewrite theming support for better flexibility.
+    * Add support from opening files read-only from the command line.
+    * Always load the default session if configured to do so.
+
+    Bug fixes
+    * Fix escaping of session file paths (#3425969).
+    * Fix closing when minimized under Windows (#3421282).
+    * Properly handle remote URIs received through drag 'n drop
+      (#2966770, #3479567).
+    * Fix build with bleeding-edge GLib (#3483388).
+
+    Pref
+    * Split "always wrap search and hide find dialog" pref into
+      "always wrap search" and "hide find dialog" (Dimitar Zhekov).
+
+    Interface
+    * Add support for switching to the last used document after closing
+      a tab (Jiří Techet).
+    * Add support for user-defined labels for custom commands.
+    * Fix sidebar width when on the right (#3514436).
+
     Editor
     * Update Scintilla to version 2.29.
+    * Add a "join lines" command (Eugene Arshinov).
+    * Hide autocompletion when the only entry has been typed (#3516212).
 
     Search
+    * Add full PCRE regular expressions support.
     * Extra options passed to grep through Find in Files now follows a
       real shell-style syntax (#3516263).
+    * Search pattern length is no longer limited to 248 characters.
+
+    Filetypes
+    * Add support for regex-based filetype detection.
+    * C snippets no longer applies to all filetypes.
+    * Improve support for HTML embedded filetypes (#2863829, #3127598).
+    * Add filetype Objective-C (Elias Pschernig, P#3325139).
+    * Fix highlighting of ``...R"`` inside C and C++ (#3425107).
+    * Fix TCL keyword highlighting in some situations (#3432877).
+    * Parse PHP functions with multiline argument list (#3037797).
+    * Handle ``/bin/dash`` shebang (#3470986).
+
+    Plugins
+    * Split Window: show marker margin.
+    * Split Window: enable basic context menu.
+
+    API:
+    * Add ui_hookup_object() and ui_lookup_object().
+    * Add ui_lookup_stock_label().
+    * Add build_{activate,get_current,remove,set}_menu_item(),
+      build_get_group_count().
+    * Rename signal "project-dialog-create" to "project-dialog-open" and
+      add new "project-dialog-close" signal.
+    * Add stash_group_free_settings().
+
+    Internationalisation:
+    * Add translations: ar, id, lt, mn, nn, sk
+    * Update translations: de, hu, it, kk, pl, sl, sv, zh_TW
 
 
 Geany 0.21 (October 2, 2011)
