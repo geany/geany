@@ -3815,7 +3815,7 @@ msgstr "[Dateien...]"
 #: ../src/main.c:540
 #, c-format
 msgid "built on %s with "
-msgstr "kompiliert am %s mit"
+msgstr "kompiliert am %s mit "
 
 #: ../src/main.c:628
 msgid "Move it now?"
