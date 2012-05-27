@@ -1175,16 +1175,13 @@ enum
 	SCHEME_COLUMNS
 };
 
-static void
-on_color_scheme_changed(void)
+static void on_color_scheme_changed(GtkTreeSelection *treesel, gpointer dummy)
 {
-	GtkTreeSelection *treesel;
 	GtkTreeModel *model;
 	GtkTreeIter iter;
 	gchar *fname;
 	gchar *path;
 
-	treesel = gtk_tree_view_get_selection(GTK_TREE_VIEW(scheme_tree));
 	if (!gtk_tree_selection_get_selected(treesel, &model, &iter))
 		return;
 	gtk_tree_model_get(model, &iter, SCHEME_FILE, &fname, -1);
@@ -1319,13 +1316,13 @@ void highlighting_show_color_scheme_dialog(void)
 		G_TYPE_STRING, G_TYPE_STRING);
 	GtkCellRenderer *text_renderer;
 	GtkTreeViewColumn *column;
+	GtkTreeSelection *treesel;
 	GtkWidget *vbox, *swin, *tree;
 
 	scheme_tree = tree = gtk_tree_view_new_with_model(GTK_TREE_MODEL(store));
 	g_object_unref(store);
 	gtk_tree_view_set_rules_hint(GTK_TREE_VIEW(tree), TRUE);
 	gtk_tree_view_set_headers_visible(GTK_TREE_VIEW(tree), FALSE);
-	g_signal_connect(tree, "cursor-changed", on_color_scheme_changed, NULL);
 
 	text_renderer = gtk_cell_renderer_text_new();
 	g_object_set(text_renderer, "wrap-mode", PANGO_WRAP_WORD, NULL);
@@ -1334,6 +1331,9 @@ void highlighting_show_color_scheme_dialog(void)
 	gtk_tree_view_append_column(GTK_TREE_VIEW(tree), column);
 
 	add_color_scheme_items(store);
+
+	treesel = gtk_tree_view_get_selection(GTK_TREE_VIEW(tree));
+	g_signal_connect(treesel, "changed", G_CALLBACK(on_color_scheme_changed), NULL);
 
 	/* old dialog may still be showing */
 	if (dialog)
