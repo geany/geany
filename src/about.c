@@ -263,7 +263,7 @@ static GtkWidget *create_dialog(void)
 
 	/* create "Credits" tab */
 	credits_scrollwin = gtk_scrolled_window_new(NULL, NULL);
-	gtk_container_set_border_width(GTK_CONTAINER(credits_scrollwin), 10);
+	gtk_container_set_border_width(GTK_CONTAINER(credits_scrollwin), 6);
 	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(credits_scrollwin),
 		GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
 
