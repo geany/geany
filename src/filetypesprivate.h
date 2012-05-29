@@ -35,6 +35,7 @@ typedef struct GeanyFiletypePrivate
 	gint		symbol_list_sort_mode;
 	gboolean	xml_indent_tags; /* XML tag autoindentation, for HTML and XML filetypes */
 	GSList		*tag_files;
+	gboolean	warn_color_scheme;
 }
 GeanyFiletypePrivate;
 

@@ -41,6 +41,9 @@
 #include "main.h"
 #include "support.h"
 #include "sciwrappers.h"
+#include "document.h"
+#include "dialogs.h"
+#include "filetypesprivate.h"
 
 #include "highlightingmappings.h"
 
@@ -979,6 +982,7 @@ void highlighting_init_styles(guint filetype_idx, GKeyFile *config, GKeyFile *co
 {
 	GeanyFiletype *ft = filetypes[filetype_idx];
 	guint lexer_id = get_lexer_filetype(ft);
+	gchar *default_str;
 
 	if (!style_sets)
 		style_sets = g_new0(StyleSet, filetypes_array->len);
@@ -987,6 +991,12 @@ void highlighting_init_styles(guint filetype_idx, GKeyFile *config, GKeyFile *co
 	free_styleset(filetype_idx);
 
 	read_properties(ft, config, configh);
+	/* If a default style exists, check it uses a named style
+	 * Note: almost all filetypes have a "default" style, except HTML ones */
+	default_str = utils_get_setting(string, configh, config,
+		"styling", "default", "default");
+	ft->priv->warn_color_scheme = !g_ascii_isalpha(*default_str);
+	g_free(default_str);
 
 	/* None filetype handled specially */
 	if (filetype_idx == GEANY_FILETYPES_NONE)
@@ -1318,6 +1328,13 @@ void highlighting_show_color_scheme_dialog(void)
 	GtkTreeViewColumn *column;
 	GtkTreeSelection *treesel;
 	GtkWidget *vbox, *swin, *tree;
+	GeanyDocument *doc;
+
+	doc = document_get_current();
+	if (doc && doc->file_type->priv->warn_color_scheme)
+		dialogs_show_msgbox_with_secondary(GTK_MESSAGE_WARNING,
+			_("The current filetype overrides the default style."),
+			_("This may cause color schemes to display incorrectly."));
 
 	scheme_tree = tree = gtk_tree_view_new_with_model(GTK_TREE_MODEL(store));
 	g_object_unref(store);
