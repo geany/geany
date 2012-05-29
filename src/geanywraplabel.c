@@ -31,9 +31,6 @@
 
 
 
-#define GEANY_WRAP_LABEL_GET_PRIVATE(obj)	(GEANY_WRAP_LABEL(obj)->priv)
-
-
 struct _GeanyWrapLabelClass
 {
 	GtkLabelClass parent_class;
@@ -73,14 +70,11 @@ static void geany_wrap_label_class_init(GeanyWrapLabelClass *klass)
 
 static void geany_wrap_label_init(GeanyWrapLabel *self)
 {
-	GeanyWrapLabelPrivate *priv;
-
 	self->priv = G_TYPE_INSTANCE_GET_PRIVATE(self,
 		GEANY_WRAP_LABEL_TYPE, GeanyWrapLabelPrivate);
 
-	priv = self->priv;
-	priv->wrap_width = 0;
-	priv->wrap_height = 0;
+	self->priv->wrap_width = 0;
+	self->priv->wrap_height = 0;
 
 	g_signal_connect(self, "notify::label", G_CALLBACK(geany_wrap_label_label_notify), NULL);
 	pango_layout_set_wrap(gtk_label_get_layout(GTK_LABEL(self)), PANGO_WRAP_WORD_CHAR);
@@ -91,13 +85,12 @@ static void geany_wrap_label_init(GeanyWrapLabel *self)
 /* Sets the point at which the text should wrap. */
 static void geany_wrap_label_set_wrap_width(GtkWidget *widget, gint width)
 {
-	GeanyWrapLabelPrivate *priv;
+	GeanyWrapLabel *self = GEANY_WRAP_LABEL(widget);
 	PangoLayout *layout;
 
 	if (width <= 0)
 		return;
 
-	priv = GEANY_WRAP_LABEL_GET_PRIVATE(widget);
 	layout = gtk_label_get_layout(GTK_LABEL(widget));
 
 	/*
@@ -105,11 +98,11 @@ static void geany_wrap_label_set_wrap_width(GtkWidget *widget, gint width)
 	* or not we've changed the width.
 	*/
 	pango_layout_set_width(layout, width * PANGO_SCALE);
-	pango_layout_get_pixel_size(layout, NULL, &priv->wrap_height);
+	pango_layout_get_pixel_size(layout, NULL, &self->priv->wrap_height);
 
-	if (priv->wrap_width != width)
+	if (self->priv->wrap_width != width)
 	{
-		priv->wrap_width = width;
+		self->priv->wrap_width = width;
 		gtk_widget_queue_resize(widget);
 	}
 }
@@ -118,9 +111,9 @@ static void geany_wrap_label_set_wrap_width(GtkWidget *widget, gint width)
 /* updates the wrap width when the label text changes */
 static void geany_wrap_label_label_notify(GObject *object, GParamSpec *pspec, gpointer data)
 {
-	GeanyWrapLabelPrivate *priv = GEANY_WRAP_LABEL_GET_PRIVATE(object);
+	GeanyWrapLabel *self = GEANY_WRAP_LABEL(object);
 
-	geany_wrap_label_set_wrap_width(GTK_WIDGET(object), priv->wrap_width);
+	geany_wrap_label_set_wrap_width(GTK_WIDGET(object), self->priv->wrap_width);
 }
 
 
@@ -129,7 +122,7 @@ static void geany_wrap_label_label_notify(GObject *object, GParamSpec *pspec, gp
 static void geany_wrap_label_size_request(GtkWidget *widget, GtkRequisition *req)
 {
 	req->width = 0;
-	req->height = GEANY_WRAP_LABEL_GET_PRIVATE(widget)->wrap_height;
+	req->height = GEANY_WRAP_LABEL(widget)->priv->wrap_height;
 }
 
 
