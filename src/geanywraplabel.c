@@ -42,6 +42,7 @@ struct _GeanyWrapLabelClass
 typedef struct
 {
 	gint wrap_width;
+	gint wrap_height;
 } GeanyWrapLabelPrivate;
 
 struct _GeanyWrapLabel
@@ -79,6 +80,7 @@ static void geany_wrap_label_init(GeanyWrapLabel *self)
 
 	priv = self->priv;
 	priv->wrap_width = 0;
+	priv->wrap_height = 0;
 
 	g_signal_connect(self, "notify::label", G_CALLBACK(geany_wrap_label_label_notify), NULL);
 	pango_layout_set_wrap(gtk_label_get_layout(GTK_LABEL(self)), PANGO_WRAP_WORD_CHAR);
@@ -90,17 +92,21 @@ static void geany_wrap_label_init(GeanyWrapLabel *self)
 static void geany_wrap_label_set_wrap_width(GtkWidget *widget, gint width)
 {
 	GeanyWrapLabelPrivate *priv;
+	PangoLayout *layout;
 
 	if (width <= 0)
 		return;
+
+	priv = GEANY_WRAP_LABEL_GET_PRIVATE(widget);
+	layout = gtk_label_get_layout(GTK_LABEL(widget));
 
 	/*
 	* We may need to reset the wrap width, so do this regardless of whether
 	* or not we've changed the width.
 	*/
-	pango_layout_set_width(gtk_label_get_layout(GTK_LABEL(widget)), width * PANGO_SCALE);
+	pango_layout_set_width(layout, width * PANGO_SCALE);
+	pango_layout_get_pixel_size(layout, NULL, &priv->wrap_height);
 
-	priv = GEANY_WRAP_LABEL_GET_PRIVATE(widget);
 	if (priv->wrap_width != width)
 	{
 		priv->wrap_width = width;
@@ -122,12 +128,8 @@ static void geany_wrap_label_label_notify(GObject *object, GParamSpec *pspec, gp
  * width to be flexible. */
 static void geany_wrap_label_size_request(GtkWidget *widget, GtkRequisition *req)
 {
-	gint height;
-
-	pango_layout_get_pixel_size(gtk_label_get_layout(GTK_LABEL(widget)), NULL, &height);
-
-	req->width  = 0;
-	req->height = height;
+	req->width = 0;
+	req->height = GEANY_WRAP_LABEL_GET_PRIVATE(widget)->wrap_height;
 }
 
 
