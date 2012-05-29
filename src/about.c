@@ -406,7 +406,10 @@ static GtkWidget *create_dialog(void)
 	gtk_container_set_border_width(GTK_CONTAINER(license_scrollwin), 6);
 	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(license_scrollwin),
 		GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
+	gtk_scrolled_window_set_shadow_type(GTK_SCROLLED_WINDOW(license_scrollwin), GTK_SHADOW_IN);
 	license_textview = gtk_text_view_new();
+	gtk_text_view_set_left_margin(GTK_TEXT_VIEW(license_textview), 2);
+	gtk_text_view_set_right_margin(GTK_TEXT_VIEW(license_textview), 2);
 	gtk_text_view_set_editable(GTK_TEXT_VIEW(license_textview), FALSE);
 	gtk_text_view_set_cursor_visible(GTK_TEXT_VIEW(license_textview), FALSE);
 	gtk_widget_show(license_textview);
