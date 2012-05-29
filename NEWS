@@ -4,8 +4,9 @@ Geany 1.22 (unreleased)
     * Bump dependencies to GTK >= 2.16 and GLib >= 2.20.
     * Switch to Glade 3 and dynamically loaded XML UI description.
     * Rewrite theming support for better flexibility.
-    * Add support from opening files read-only from the command line.
+    * Add support for opening files read-only from the command line.
     * Always load the default session if configured to do so.
+    * Make all filetypes use named styles to simplify colour scheme authoring.
 
     Bug fixes
     * Fix escaping of session file paths (#3425969).
@@ -13,6 +14,7 @@ Geany 1.22 (unreleased)
     * Properly handle remote URIs received through drag 'n drop
       (#2966770, #3479567).
     * Fix build with bleeding-edge GLib (#3483388).
+    * Fix colour scheme selection in Ubuntu Unity (#3479674).
 
     Pref
     * Split "always wrap search and hide find dialog" pref into
@@ -23,6 +25,7 @@ Geany 1.22 (unreleased)
       a tab (Jiří Techet).
     * Add support for user-defined labels for custom commands.
     * Fix sidebar width when on the right (#3514436).
+    * Add colour scheme selection dialog.
 
     Editor
     * Update Scintilla to version 2.29.
@@ -57,6 +60,7 @@ Geany 1.22 (unreleased)
     * Rename signal "project-dialog-create" to "project-dialog-open" and
       add new "project-dialog-close" signal.
     * Add stash_group_free_settings().
+    * Add support for plugins written in C++.
 
     Internationalisation:
     * Add translations: ar, id, lt, mn, nn, sk
