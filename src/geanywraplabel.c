@@ -51,6 +51,7 @@ struct _GeanyWrapLabel
 
 static void geany_wrap_label_size_request	(GtkWidget *widget, GtkRequisition *req);
 static void geany_wrap_label_size_allocate	(GtkWidget *widget, GtkAllocation *alloc);
+static gboolean geany_wrap_label_expose		(GtkWidget *widget, GdkEventExpose *event);
 static void geany_wrap_label_set_wrap_width	(GtkWidget *widget, gint width);
 static void geany_wrap_label_label_notify	(GObject *object, GParamSpec *pspec, gpointer data);
 
@@ -63,6 +64,7 @@ static void geany_wrap_label_class_init(GeanyWrapLabelClass *klass)
 
 	widget_class->size_request = geany_wrap_label_size_request;
 	widget_class->size_allocate = geany_wrap_label_size_allocate;
+	widget_class->expose_event = geany_wrap_label_expose;
 
 	g_type_class_add_private(klass, sizeof (GeanyWrapLabelPrivate));
 }
@@ -77,7 +79,6 @@ static void geany_wrap_label_init(GeanyWrapLabel *self)
 	self->priv->wrap_height = 0;
 
 	g_signal_connect(self, "notify::label", G_CALLBACK(geany_wrap_label_label_notify), NULL);
-	pango_layout_set_wrap(gtk_label_get_layout(GTK_LABEL(self)), PANGO_WRAP_WORD_CHAR);
 	gtk_misc_set_alignment(GTK_MISC(self), 0.0, 0.0);
 }
 
@@ -98,6 +99,7 @@ static void geany_wrap_label_set_wrap_width(GtkWidget *widget, gint width)
 	* or not we've changed the width.
 	*/
 	pango_layout_set_width(layout, width * PANGO_SCALE);
+	pango_layout_set_wrap(layout, PANGO_WRAP_WORD_CHAR);
 	pango_layout_get_pixel_size(layout, NULL, &self->priv->wrap_height);
 
 	if (self->priv->wrap_width != width)
@@ -114,6 +116,19 @@ static void geany_wrap_label_label_notify(GObject *object, GParamSpec *pspec, gp
 	GeanyWrapLabel *self = GEANY_WRAP_LABEL(object);
 
 	geany_wrap_label_set_wrap_width(GTK_WIDGET(object), self->priv->wrap_width);
+}
+
+
+/* makes sure the layout is setup for rendering and chains to parent renderer */
+static gboolean geany_wrap_label_expose(GtkWidget *widget, GdkEventExpose *event)
+{
+	GeanyWrapLabel *self = GEANY_WRAP_LABEL(widget);
+	PangoLayout *layout = gtk_label_get_layout(GTK_LABEL(widget));
+
+	pango_layout_set_width(layout, self->priv->wrap_width * PANGO_SCALE);
+	pango_layout_set_wrap(layout, PANGO_WRAP_WORD_CHAR);
+
+	return (* GTK_WIDGET_CLASS(geany_wrap_label_parent_class)->expose_event)(widget, event);
 }
 
 
