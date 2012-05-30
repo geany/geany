@@ -6,7 +6,10 @@ Geany 1.22 (unreleased)
     * Rewrite theming support for better flexibility.
     * Add support for opening files read-only from the command line.
     * Always load the default session if configured to do so.
-    * Make all filetypes use named styles to simplify colour scheme authoring.
+    * Make all filetypes use named styles to simplify colour scheme
+      authoring.
+    * Make 'Replace Spaces by Tabs' only match leading spaces to
+      preserve alignment.
 
     Bug fixes
     * Fix escaping of session file paths (#3425969).
@@ -15,17 +18,27 @@ Geany 1.22 (unreleased)
       (#2966770, #3479567).
     * Fix build with bleeding-edge GLib (#3483388).
     * Fix colour scheme selection in Ubuntu Unity (#3479674).
+    * Fix very slow regex tag parsing on Windows (e.g. for HTML).
+    * Fix detecting a changed file on disk when opening from
+      the command-line (Windows).
+    * Add missing Windows mio makefile.
 
-    Pref
+    Prefs
     * Split "always wrap search and hide find dialog" pref into
       "always wrap search" and "hide find dialog" (Dimitar Zhekov).
+    * Add Project Properties overrides for 'Saving files' prefs.
 
     Interface
     * Add support for switching to the last used document after closing
       a tab (Jiří Techet).
-    * Add support for user-defined labels for custom commands.
+    * Add support for user-defined labels for 'Send Selection to'
+      custom commands.
     * Fix sidebar width when on the right (#3514436).
     * Add colour scheme selection dialog.
+    * Use case-insensitive document list path comparison on Windows.
+    * Replace Color Schemes menu with custom dialog.
+    * Show selected line count on status bar when whole lines are
+      selected.
 
     Editor
     * Update Scintilla to version 2.29.
@@ -37,28 +50,46 @@ Geany 1.22 (unreleased)
     * Extra options passed to grep through Find in Files now follows a
       real shell-style syntax (#3516263).
     * Search pattern length is no longer limited to 248 characters.
+    * Fix showing Find/Replace regex compile errors on the status bar.
+
+    Keybindings
+    * Add Project New/Open/Properties/Close keybindings.
+    * Show overridden keybindings in bold for prefs dialog tree.
+
+    Tags
+    * Speed up loading of multiple global tags files.
+    * Show global tags file preprocessing errors on stderr & add
+      current directory to include path.
+    * Add C/C++ ignore.tags wildcard format 'PREFIX*'.
 
     Filetypes
     * Add support for regex-based filetype detection.
-    * C snippets no longer applies to all filetypes.
+    * C snippets no longer apply to all filetypes.
     * Improve support for HTML embedded filetypes (#2863829, #3127598).
     * Add filetype Objective-C (Elias Pschernig, P#3325139).
     * Fix highlighting of ``...R"`` inside C and C++ (#3425107).
     * Fix TCL keyword highlighting in some situations (#3432877).
     * Parse PHP functions with multiline argument list (#3037797).
     * Handle ``/bin/dash`` shebang (#3470986).
+    * Update JavaScript parser from CTags.
+    * Parse D class, struct, interface template bodies and template
+      blocks; ignore 'static if' expressions.
+    * Fix broken tag/word autocompletion in HTML/PHP documents.
+    * Enable &entity; completion for all XML-based filetypes.
 
     Plugins
     * Split Window: show marker margin.
     * Split Window: enable basic context menu.
 
     API:
+    * document_save_file() now shows the Save As dialog when necessary.
+    * Rename signal "project-dialog-create" to "project-dialog-open" and
+      add new "project-dialog-close" signal.
+    * setptr is deprecated in favour of SETPTR.
     * Add ui_hookup_object() and ui_lookup_object().
     * Add ui_lookup_stock_label().
     * Add build_{activate,get_current,remove,set}_menu_item(),
       build_get_group_count().
-    * Rename signal "project-dialog-create" to "project-dialog-open" and
-      add new "project-dialog-close" signal.
     * Add stash_group_free_settings().
     * Add support for plugins written in C++.
 
