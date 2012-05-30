@@ -531,9 +531,11 @@ gint sci_get_lexer(ScintillaObject *sci)
 
 void sci_set_lexer(ScintillaObject *sci, guint lexer_id)
 {
+	gint old = sci_get_lexer(sci);
+
 	SSM(sci, SCI_SETLEXER, lexer_id, 0);
 
-	if (sci_get_lexer(sci) != (gint)lexer_id)
+	if (old != (gint)lexer_id)
 		SSM(sci, SCI_CLEARDOCUMENTSTYLE, 0, 0);
 }
 
