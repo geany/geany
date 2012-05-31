@@ -4985,7 +4985,7 @@ Contributing to this document
 This document (``geany.txt``) is written in `reStructuredText`__
 (or "reST"). The source file for it is located in Geany's ``doc``
 subdirectory.  If you intend on making changes, you should grab the
-source right from git to make sure you've got the newest version. After
+source right from Git to make sure you've got the newest version. After
 editing the file, to build the HTML document to see how your changes
 look, run "``make doc``" in the subdirectory ``doc`` of Geany's source
 directory. This regenerates the ``geany.html`` file. To generate a PDF

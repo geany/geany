@@ -96,7 +96,7 @@
  *  However, once you have done your fork of geany-plugins you can develop 
  *  your plugin until you think its the right time to publish it. At this point create a 
  *  pull request for adding your patch set into master branch of geany-plugins. 
- *  Of course, you don't need to use github - just any git is fine. But github 
+ *  Of course, you don't need to use github - just any Git is fine. But github 
  *  is making it way easier for review, merging and get in touch with you for 
  *  comments.
  *
