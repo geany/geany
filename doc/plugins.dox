@@ -106,6 +106,8 @@
  *  Just skip the part about forking geany-plugins and sending a pull request.
  *  In this case it is of course also a good idea to post some kind of announcement
  *  to geany-devel and maybe to the main geany mailing list -- it's up to you.
+ *  You can also ask for your plugin to be listed on the http://plugins.geany.org/
+ *  website as a third party plugin, helping Geany user to know about your plugin.
  *
  *  At time of writing, there are some plugins already available in the
  *  repositories. Feel free to use any of these plugins as a start for your own,
