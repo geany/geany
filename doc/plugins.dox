@@ -84,40 +84,36 @@
  *
  *  @subsection code Managing the source code
  *
- *  For authors of plugins for Geany, we created a dedicated @a geany-plugins project at
- *  Sourceforge to ease development of plugins and help new authors.
- *  Project website: http://sourceforge.net/projects/geany-plugins
+ *  For authors of plugins for Geany, we created a dedicated @a geany-plugins using 
+ *  project Sourceforge and github to ease development of plugins and help new authors.
+ *  All information about this project you can find at http://plugins.geany.org/
  *
- *  Each plugin author is welcome to use these services. To do so, you need an account at
- *  Sourceforge. You can easily register at (http://sourceforge.net/account/registration/).
- *  After you successfully created an account,
- *  tell your account name Enrico or Nick and you will write access to the SVN repository
- *  (http://geany-plugins.svn.sourceforge.net/viewvc/geany-plugins/).
- *  Then you can use the repository for your own plugin.
+ *  To add a new plugin to this project, get in contact with the people at 
+ *  geany-devel-mailing list and create a fork of the geany-plugins-project 
+ *  at https://github.com/geany/geany-plugins. 
+ *  Beside of adding a new plugin, geany-devel-mailinglist is 
+ *  also the place where to discuss development related questions. 
+ *  However, once you have done your fork of geany-plugins you can develop 
+ *  your plugin until you think its the right time to publish it. At this point create a 
+ *  pull request for adding your patch set into master branch of geany-plugins. 
+ *  Of course, you don't need to use github - just any git is fine. But github 
+ *  is making it way easier for review, merging and get in touch with you for 
+ *  comments.
  *
- *  Authors using this service should subscribe to the
- *  geany-plugins-commits at uvena.de and geany-plugins-tracker at uvena.de
- *  mailing lists(see my previous post) to stay up to date with changes.
- *  General plugin discussion can happen on the normal geany at uvena.de or
- *  geany-devel at uvena.de lists.
+ *  If you don't want to take part at the geany-plugins-project it is also fine. 
+ *  Just skip the part about forking geany-plugins and sending a pull request. 
+ *  In this case its of course also a good idea to post some kind of announcement 
+ *  also to geany-devel and maybe to the main geany mailinglist -- Up to you. 
  *
  *  At time of writing, there are some plugins already available in the
- *  repository. Feel free to use any of these plugins as a start for your own,
+ *  repositories. Feel free to use any of these plugins as a start for your own,
  *  maybe by copying the directory structure and the autotools files
  *  (Makefile.am, configure.in, ...). Most of the available plugins are also ready for
  *  i18n support, just for reference.
  *
- *  New plugins should be imported into a new directory inside the trunk/
- *  directory. There are also the common branches and tags directories, use
- *  them as needed, use always a subdirectory for your own plugin.
- *
  *  We encourage authors using this service to only commit changes to their
  *  own plugin and not to others' plugins. Instead just send patches to
  *  geany-devel at uvena.de or the plugin author directly.
- *
- *  (the full announcement of this service can be found at
- *  http://lists.uvena.de/geany/2008-April/003225.html)
- *
  *
  *  @section paths Installation paths
  *
