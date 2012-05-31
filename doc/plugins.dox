@@ -84,26 +84,28 @@
  *
  *  @subsection code Managing the source code
  *
- *  For authors of plugins for Geany, we created a dedicated @a geany-plugins using 
- *  project Sourceforge and GitHub to ease development of plugins and help new authors.
+ *  For authors of plugins for Geany, we created a dedicated @a geany-plugins project
+ *  on Sourceforge and GitHub to ease development of plugins and help new authors.
  *  All information about this project you can find at http://plugins.geany.org/
  *
- *  To add a new plugin to this project, get in contact with the people at 
- *  geany-devel-mailing list and create a fork of the geany-plugins-project 
- *  at https://github.com/geany/geany-plugins. 
- *  Beside of adding a new plugin, geany-devel-mailinglist is 
- *  also the place where to discuss development related questions. 
- *  However, once you have done your fork of geany-plugins you can develop 
- *  your plugin until you think its the right time to publish it. At this point create a 
- *  pull request for adding your patch set into master branch of geany-plugins. 
- *  Of course, you don't need to use GitHub - just any Git is fine. But GitHub 
+ *  To add a new plugin to this project, get in touch with the people on the
+ *  geany-devel-mailing list and create a fork of the geany-plugins project
+ *  at https://github.com/geany/geany-plugins.
+ *  Beside of adding a new plugin, geany-devel-mailing list is also the place where
+ *  to discuss development related questions.
+ *  However, once you have done your fork of geany-plugins you can develop
+ *  your plugin until you think its the right time to publish it. At this point,
+ *  create a pull request for adding your patch set into the master branch of the main
+ *  geany-plugins repository.
+ *
+ *  Of course, you don't need to use GitHub - any Git is fine. But GitHub
  *  is making it way easier for review, merging and get in touch with you for 
  *  comments.
  *
- *  If you don't want to take part at the geany-plugins-project it is also fine. 
- *  Just skip the part about forking geany-plugins and sending a pull request. 
- *  In this case its of course also a good idea to post some kind of announcement 
- *  also to geany-devel and maybe to the main geany mailinglist -- Up to you. 
+ *  If you don't want your plugin to be part of the geany-plugins project it is also fine.
+ *  Just skip the part about forking geany-plugins and sending a pull request.
+ *  In this case it is of course also a good idea to post some kind of announcement
+ *  to geany-devel and maybe to the main geany mailing list -- it's up to you.
  *
  *  At time of writing, there are some plugins already available in the
  *  repositories. Feel free to use any of these plugins as a start for your own,
