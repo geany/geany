@@ -34,7 +34,6 @@ Geany 1.22 (unreleased)
     * Add support for user-defined labels for 'Send Selection to'
       custom commands.
     * Fix sidebar width when on the right (#3514436).
-    * Add colour scheme selection dialog.
     * Use case-insensitive document list path comparison on Windows.
     * Replace Color Schemes menu with custom dialog.
     * Show selected line count on status bar when whole lines are
