@@ -1040,9 +1040,6 @@ gint main(gint argc, gchar **argv)
 	keybindings_init();
 	notebook_init();
 	filetypes_init();
-	/* depends on filetypes_array being not NULL so must be after
-	 * filetypes_init(). */
-	highlighting_init();
 	templates_init();
 	navqueue_init();
 	document_init_doclist();
@@ -1221,6 +1218,7 @@ void main_quit()
 	g_free(printing_prefs.external_print_cmd);
 	g_free(printing_prefs.page_header_datefmt);
 	g_strfreev(ui_prefs.custom_commands);
+	g_strfreev(ui_prefs.custom_commands_labels);
 
 	queue_free(ui_prefs.recent_queue);
 	queue_free(ui_prefs.recent_projects_queue);

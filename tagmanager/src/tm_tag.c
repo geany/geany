@@ -578,7 +578,7 @@ gboolean tm_tags_custom_dedup(GPtrArray *tags_array, TMTagCompareFunc compare_fu
 gboolean tm_tags_merge(GPtrArray *tags_array, gsize orig_len,
 	TMTagAttrType *sort_attributes, gboolean dedup)
 {
-	TMTag **copy, **a, **b;
+	gpointer *copy, *a, *b;
 	gsize copy_len, i;
 
 	if ((!tags_array) || (!tags_array->len) || orig_len >= tags_array->len)
@@ -600,7 +600,8 @@ gboolean tm_tags_merge(GPtrArray *tags_array, gsize orig_len,
 		tags_array->pdata[i] = (cmp >= 0) ? *a-- : *b--;
 		if (a < tags_array->pdata)
 		{
-			memcpy(tags_array->pdata, copy, b - copy);
+			/* include remainder of copy as well as current value of b */
+			memcpy(tags_array->pdata, copy, ((b + 1) - copy) * sizeof(gpointer));
 			break;
 		}
 		if (b < copy)

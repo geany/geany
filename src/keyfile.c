@@ -567,6 +567,8 @@ static void save_ui_prefs(GKeyFile *config)
 	{
 		g_key_file_set_string_list(config, PACKAGE, "custom_commands",
 				(const gchar**) ui_prefs.custom_commands, g_strv_length(ui_prefs.custom_commands));
+		g_key_file_set_string_list(config, PACKAGE, "custom_commands_labels",
+				(const gchar**) ui_prefs.custom_commands_labels, g_strv_length(ui_prefs.custom_commands_labels));
 	}
 }
 
@@ -915,6 +917,34 @@ static void load_ui_prefs(GKeyFile *config)
 	ui_prefs.fullscreen = utils_get_setting_boolean(config, PACKAGE, "fullscreen", FALSE);
 	ui_prefs.custom_date_format = utils_get_setting_string(config, PACKAGE, "custom_date_format", "");
 	ui_prefs.custom_commands = g_key_file_get_string_list(config, PACKAGE, "custom_commands", NULL, NULL);
+	ui_prefs.custom_commands_labels = g_key_file_get_string_list(config, PACKAGE, "custom_commands_labels", NULL, NULL);
+
+	/* sanitize custom commands labels */
+	if (ui_prefs.custom_commands || ui_prefs.custom_commands_labels)
+	{
+		guint i;
+		guint cc_len = ui_prefs.custom_commands ? g_strv_length(ui_prefs.custom_commands) : 0;
+		guint cc_labels_len = ui_prefs.custom_commands_labels ? g_strv_length(ui_prefs.custom_commands_labels) : 0;
+
+		/* not enough items, resize and fill */
+		if (cc_labels_len < cc_len)
+		{
+			ui_prefs.custom_commands_labels = g_realloc(ui_prefs.custom_commands_labels,
+					(cc_len + 1) * sizeof *ui_prefs.custom_commands_labels);
+			for (i = cc_labels_len; i < cc_len; i++)
+				ui_prefs.custom_commands_labels[i] = g_strdup("");
+			ui_prefs.custom_commands_labels[cc_len] = NULL;
+		}
+		/* too many items, cut off */
+		else if (cc_labels_len > cc_len)
+		{
+			for (i = cc_len; i < cc_labels_len; i++)
+			{
+				g_free(ui_prefs.custom_commands_labels[i]);
+				ui_prefs.custom_commands_labels[i] = NULL;
+			}
+		}
+	}
 
 	scribble_text = utils_get_setting_string(config, PACKAGE, "scribble_text",
 				_("Type here what you want, use it as a notice/scratch board"));

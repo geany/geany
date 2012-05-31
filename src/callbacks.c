@@ -63,6 +63,7 @@
 #include "plugins.h"
 #include "log.h"
 #include "toolbar.h"
+#include "highlighting.h"
 #include "pluginutils.h"
 
 
@@ -798,6 +799,12 @@ G_MODULE_EXPORT void on_show_messages_window1_toggled(GtkCheckMenuItem *checkmen
 
 	ui_prefs.msgwindow_visible = (ui_prefs.msgwindow_visible) ? FALSE : TRUE;
 	msgwin_show_hide(ui_prefs.msgwindow_visible);
+}
+
+
+G_MODULE_EXPORT void on_menu_color_schemes_activate(GtkImageMenuItem *imagemenuitem, gpointer user_data)
+{
+	highlighting_show_color_scheme_dialog();
 }
 
 

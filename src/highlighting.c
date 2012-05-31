@@ -41,6 +41,9 @@
 #include "main.h"
 #include "support.h"
 #include "sciwrappers.h"
+#include "document.h"
+#include "dialogs.h"
+#include "filetypesprivate.h"
 
 #include "highlightingmappings.h"
 
@@ -979,6 +982,7 @@ void highlighting_init_styles(guint filetype_idx, GKeyFile *config, GKeyFile *co
 {
 	GeanyFiletype *ft = filetypes[filetype_idx];
 	guint lexer_id = get_lexer_filetype(ft);
+	gchar *default_str;
 
 	if (!style_sets)
 		style_sets = g_new0(StyleSet, filetypes_array->len);
@@ -987,6 +991,12 @@ void highlighting_init_styles(guint filetype_idx, GKeyFile *config, GKeyFile *co
 	free_styleset(filetype_idx);
 
 	read_properties(ft, config, configh);
+	/* If a default style exists, check it uses a named style
+	 * Note: almost all filetypes have a "default" style, except HTML ones */
+	default_str = utils_get_setting(string, configh, config,
+		"styling", "default", "default");
+	ft->priv->warn_color_scheme = !g_ascii_isalpha(*default_str);
+	g_free(default_str);
 
 	/* None filetype handled specially */
 	if (filetype_idx == GEANY_FILETYPES_NONE)
@@ -1175,16 +1185,13 @@ enum
 	SCHEME_COLUMNS
 };
 
-static void
-on_color_scheme_changed(void)
+static void on_color_scheme_changed(GtkTreeSelection *treesel, gpointer dummy)
 {
-	GtkTreeSelection *treesel;
 	GtkTreeModel *model;
 	GtkTreeIter iter;
 	gchar *fname;
 	gchar *path;
 
-	treesel = gtk_tree_view_get_selection(GTK_TREE_VIEW(scheme_tree));
 	if (!gtk_tree_selection_get_selected(treesel, &model, &iter))
 		return;
 	gtk_tree_model_get(model, &iter, SCHEME_FILE, &fname, -1);
@@ -1312,20 +1319,27 @@ static void on_color_scheme_dialog_response(GtkWidget *dialog,
 }
 
 
-static void show_color_scheme_dialog(void)
+void highlighting_show_color_scheme_dialog(void)
 {
 	static GtkWidget *dialog = NULL;
 	GtkListStore *store = gtk_list_store_new(SCHEME_COLUMNS,
 		G_TYPE_STRING, G_TYPE_STRING);
 	GtkCellRenderer *text_renderer;
 	GtkTreeViewColumn *column;
+	GtkTreeSelection *treesel;
 	GtkWidget *vbox, *swin, *tree;
+	GeanyDocument *doc;
+
+	doc = document_get_current();
+	if (doc && doc->file_type->priv->warn_color_scheme)
+		dialogs_show_msgbox_with_secondary(GTK_MESSAGE_WARNING,
+			_("The current filetype overrides the default style."),
+			_("This may cause color schemes to display incorrectly."));
 
 	scheme_tree = tree = gtk_tree_view_new_with_model(GTK_TREE_MODEL(store));
 	g_object_unref(store);
 	gtk_tree_view_set_rules_hint(GTK_TREE_VIEW(tree), TRUE);
 	gtk_tree_view_set_headers_visible(GTK_TREE_VIEW(tree), FALSE);
-	g_signal_connect(tree, "cursor-changed", on_color_scheme_changed, NULL);
 
 	text_renderer = gtk_cell_renderer_text_new();
 	g_object_set(text_renderer, "wrap-mode", PANGO_WRAP_WORD, NULL);
@@ -1334,6 +1348,9 @@ static void show_color_scheme_dialog(void)
 	gtk_tree_view_append_column(GTK_TREE_VIEW(tree), column);
 
 	add_color_scheme_items(store);
+
+	treesel = gtk_tree_view_get_selection(GTK_TREE_VIEW(tree));
+	g_signal_connect(treesel, "changed", G_CALLBACK(on_color_scheme_changed), NULL);
 
 	/* old dialog may still be showing */
 	if (dialog)
@@ -1355,25 +1372,6 @@ static void show_color_scheme_dialog(void)
 	gtk_container_add(GTK_CONTAINER(vbox), swin);
 	g_signal_connect(dialog, "response", G_CALLBACK(on_color_scheme_dialog_response), &dialog);
 	gtk_widget_show_all(dialog);
-}
-
-
-static void create_color_scheme_menu(void)
-{
-	GtkWidget *item, *menu;
-
-	menu = ui_lookup_widget(main_widgets.window, "menu_view_editor1_menu");
-	item = ui_image_menu_item_new(GTK_STOCK_SELECT_COLOR, _("_Color Schemes"));
-	gtk_menu_shell_prepend(GTK_MENU_SHELL(menu), item);
-
-	g_signal_connect(item, "activate", G_CALLBACK(show_color_scheme_dialog), NULL);
-	gtk_widget_show(item);
-}
-
-
-void highlighting_init(void)
-{
-	create_color_scheme_menu();
 }
 
 
