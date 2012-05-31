@@ -85,7 +85,7 @@
  *  @subsection code Managing the source code
  *
  *  For authors of plugins for Geany, we created a dedicated @a geany-plugins using 
- *  project Sourceforge and github to ease development of plugins and help new authors.
+ *  project Sourceforge and GitHub to ease development of plugins and help new authors.
  *  All information about this project you can find at http://plugins.geany.org/
  *
  *  To add a new plugin to this project, get in contact with the people at 
@@ -96,7 +96,7 @@
  *  However, once you have done your fork of geany-plugins you can develop 
  *  your plugin until you think its the right time to publish it. At this point create a 
  *  pull request for adding your patch set into master branch of geany-plugins. 
- *  Of course, you don't need to use github - just any Git is fine. But github 
+ *  Of course, you don't need to use GitHub - just any Git is fine. But GitHub 
  *  is making it way easier for review, merging and get in touch with you for 
  *  comments.
  *
