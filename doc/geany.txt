@@ -4998,6 +4998,17 @@ After you are happy with your changes, create a patch e.g. by using::
 
     % git diff geany.txt > foo.patch
 
+or even better, by creating a Git-formatted patch which will keep authoring
+and description data, by first committing your changes (doing so in a fresh
+new branch is recommended for `matser` not to diverge from upstream) and then
+using git format-patch::
+
+    % git checkout -b my-documentation-changes # create a fresh branch
+    % git commit geany.txt
+    Write a good commit message...
+    % git format-patch HEAD^
+    % git checkout master # go back to master
+
 and then submit that file to the mailing list for review.
 
 Also you can clone the Geany repository at GitHub and send a pull request.
