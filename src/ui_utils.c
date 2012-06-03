@@ -2213,11 +2213,6 @@ void ui_init_builder(void)
 		return;
 
 	builder = gtk_builder_new();
-	if (! builder)
-	{
-		g_error("Failed to initialize the user-interface");
-		return;
-	}
 
 	gtk_builder_set_translation_domain(builder, GETTEXT_PACKAGE);
 
