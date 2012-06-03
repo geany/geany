@@ -116,7 +116,8 @@ static void handler_log(const gchar *domain, GLogLevelFlags level, const gchar *
 {
 	gchar *time_str;
 
-	if (G_LIKELY(app != NULL && app->debug_mode))
+	if (G_LIKELY(app != NULL && app->debug_mode) ||
+		! ((G_LOG_LEVEL_DEBUG | G_LOG_LEVEL_INFO | G_LOG_LEVEL_MESSAGE) & level))
 	{
 #ifdef G_OS_WIN32
 		/* On Windows g_log_default_handler() is not enough, we need to print it
