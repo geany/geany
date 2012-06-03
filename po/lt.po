@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.22\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-06-03 17:50+0200\n"
-"PO-Revision-Date: 2012-05-26 08:11+0300\n"
+"POT-Creation-Date: 2012-06-03 16:43+0300\n"
+"PO-Revision-Date: 2012-06-03 16:46+0300\n"
 "Last-Translator: Algimantas Margevičius <margevicius.algimantas@gmail.com>\n"
 "Language-Team: Lietuvių <>\n"
 "Language: \n"
@@ -80,7 +80,7 @@ msgstr "nematomas"
 
 #: ../data/geany.glade.h:13
 msgid "_Insert \"include <...>\""
-msgstr "Į_terpti \"include <...>\""
+msgstr "Į_terpti „include <...>“"
 
 #: ../data/geany.glade.h:14 ../src/keybindings.c:408
 msgid "_Insert Alternative White Space"
@@ -2107,6 +2107,13 @@ msgid ""
 "Frank Lanitz\n"
 "All rights reserved."
 msgstr ""
+"Autorinės teisės (c)  2005-2012\n"
+"Colomban Wendling\n"
+"Nick Treleaven\n"
+"Matthew Brush\n"
+"Enrico Tröger\n"
+"Frank Lanitz\n"
+"Visos teisės saugomos."
 
 #: ../src/about.c:157
 msgid "About Geany"
@@ -2193,7 +2200,7 @@ msgstr "Procesas nepavyko, nėra darbinio aplanko"
 msgid "%s (in directory: %s)"
 msgstr "%s (aplanke: %s)"
 
-#: ../src/build.c:831 ../src/build.c:1055 ../src/search.c:1632
+#: ../src/build.c:831 ../src/build.c:1055 ../src/search.c:1631
 #, c-format
 msgid "Process failed (%s)"
 msgstr "Procesas nepavyko (%s)"
@@ -2861,8 +2868,8 @@ msgstr "„%s“ nerastas."
 msgid "Wrap search and find again?"
 msgstr "Ieškoti nuo pradžios?"
 
-#: ../src/document.c:2034 ../src/search.c:1279 ../src/search.c:1323
-#: ../src/search.c:2087 ../src/search.c:2088
+#: ../src/document.c:2034 ../src/search.c:1279 ../src/search.c:1322
+#: ../src/search.c:2086 ../src/search.c:2087
 #, c-format
 msgid "No matches found for \"%s\"."
 msgstr "„%s“ atitikmenų nerasta."
@@ -3112,7 +3119,7 @@ msgstr "Bloga reguliarioji išraiška failo tipui %s: %s"
 msgid "untitled"
 msgstr "be vardo"
 
-#: ../src/highlighting.c:1225 ../src/main.c:828 ../src/socket.c:166
+#: ../src/highlighting.c:1225 ../src/main.c:821 ../src/socket.c:166
 #: ../src/templates.c:224
 #, c-format
 msgid "Could not find file '%s'."
@@ -3123,13 +3130,12 @@ msgid "Default"
 msgstr "Numatytasis"
 
 #: ../src/highlighting.c:1336
-#, fuzzy
 msgid "The current filetype overrides the default style."
-msgstr "Kurti dabartinį failą su Make ir numatytąja paskirtim"
+msgstr "Esamas failo tipas nustelbs numatytąjį stilių."
 
 #: ../src/highlighting.c:1337
 msgid "This may cause color schemes to display incorrectly."
-msgstr ""
+msgstr "Tai gali sukelti spalvų derinių iškraipymus."
 
 #: ../src/highlighting.c:1358
 msgid "Color Schemes"
@@ -3658,11 +3664,11 @@ msgstr "Įrašykite čia ką norite naudoti kaip pastabų žurnalą"
 msgid "Failed to load one or more session files."
 msgstr "Nepavyko įkelti vieno ar kelių sesijos failų."
 
-#: ../src/log.c:181
+#: ../src/log.c:180
 msgid "Debug Messages"
 msgstr "Derinimo pranešimai"
 
-#: ../src/log.c:183
+#: ../src/log.c:182
 msgid "Cl_ear"
 msgstr "Iš_valyti"
 
@@ -3755,20 +3761,20 @@ msgid "[FILES...]"
 msgstr "[FAILAI...]"
 
 #. note for translators: library versions are printed after this
-#: ../src/main.c:547
+#: ../src/main.c:540
 #, c-format
 msgid "built on %s with "
 msgstr "sukurta ant %s su"
 
-#: ../src/main.c:635
+#: ../src/main.c:628
 msgid "Move it now?"
 msgstr "Perkelti dabar?"
 
-#: ../src/main.c:637
+#: ../src/main.c:630
 msgid "Geany needs to move your old configuration directory before starting."
 msgstr "Prieš pradedant Geany turi perkelti jūsų seną konfigūracijos aplanką."
 
-#: ../src/main.c:646
+#: ../src/main.c:639
 #, c-format
 msgid ""
 "Your configuration directory has been successfully moved from \"%s\" to \"%s"
@@ -3777,7 +3783,7 @@ msgstr "Jūsų konfigūracijos aplankas sėkmingai perkeltas iš „%s“ į „
 
 #. for translators: the third %s in brackets is the error message which
 #. * describes why moving the dir didn't work
-#: ../src/main.c:656
+#: ../src/main.c:649
 #, c-format
 msgid ""
 "Your old configuration directory \"%s\" could not be moved to \"%s\" (%s). "
@@ -3786,7 +3792,7 @@ msgstr ""
 "Jūsų senas konfigūracijos aplankas „%s“ neperkeltas iš „%s“ (%s). Perkelkite "
 "jį rankiniu būdu."
 
-#: ../src/main.c:737
+#: ../src/main.c:730
 #, c-format
 msgid ""
 "Configuration directory could not be created (%s).\n"
@@ -3797,17 +3803,17 @@ msgstr ""
 "Naudojant Geany be konfigūracijos aplanko gali kilti bėdų.\n"
 "Vistiek paleisti Geany?"
 
-#: ../src/main.c:1074
+#: ../src/main.c:1067
 #, c-format
 msgid "This is Geany %s."
 msgstr "Tai yra Geany %s."
 
-#: ../src/main.c:1076
+#: ../src/main.c:1069
 #, c-format
 msgid "Configuration directory could not be created (%s)."
 msgstr "Konfigūracijos aplanko sukurti nepavyko (%s)."
 
-#: ../src/main.c:1293
+#: ../src/main.c:1286
 msgid "Configuration files reloaded."
 msgstr "Konfigūracijos failai įkelti iš naujo."
 
@@ -4304,7 +4310,7 @@ msgstr "_Papildomos parinktys:"
 msgid "Other options to pass to Grep"
 msgstr "Kitos parinktys kurios perduodamos Grep"
 
-#: ../src/search.c:1282 ../src/search.c:2093 ../src/search.c:2096
+#: ../src/search.c:1282 ../src/search.c:2092 ../src/search.c:2095
 #, c-format
 msgid "Found %d match for \"%s\"."
 msgid_plural "Found %d matches for \"%s\"."
@@ -4312,48 +4318,48 @@ msgstr[0] "Rastas %d atitikmuo, ieškota „%s“"
 msgstr[1] "Rasti %d atitikmenys, ieškota „%s“"
 msgstr[2] "Rasta %d atitikmenų, ieškota „%s“"
 
-#: ../src/search.c:1329
+#: ../src/search.c:1328
 #, c-format
 msgid "Replaced %u matches in %u documents."
 msgstr "Pakeista %u atitikmenys, %u dokumentuose."
 
-#: ../src/search.c:1519
+#: ../src/search.c:1518
 msgid "Invalid directory for find in files."
 msgstr "Failų paieškai aplankas netinkamas."
 
-#: ../src/search.c:1540
+#: ../src/search.c:1539
 msgid "No text to find."
 msgstr "Nėra ieškomo teksto."
 
-#: ../src/search.c:1567
+#: ../src/search.c:1566
 #, c-format
 msgid "Cannot execute grep tool '%s'; check the path setting in Preferences."
 msgstr "Įvykdyti grep įrankio „%s“ nepavyko; patikrinkite kelią."
 
-#: ../src/search.c:1574
+#: ../src/search.c:1573
 #, c-format
 msgid "Cannot parse extra options: %s"
 msgstr "Papildomų parinkčių apdoroti nepavyko: %s"
 
-#: ../src/search.c:1640
+#: ../src/search.c:1639
 msgid "Searching..."
 msgstr "Ieškoma..."
 
-#: ../src/search.c:1651
+#: ../src/search.c:1650
 #, c-format
 msgid "%s %s -- %s (in directory: %s)"
 msgstr "%s %s -- %s (aplanke: %s)"
 
-#: ../src/search.c:1692
+#: ../src/search.c:1691
 #, c-format
 msgid "Could not open directory (%s)"
 msgstr "Nepavyko atverti aplanko (%s)"
 
-#: ../src/search.c:1794
+#: ../src/search.c:1793
 msgid "Search failed."
 msgstr "Paieška nepavyko."
 
-#: ../src/search.c:1814
+#: ../src/search.c:1813
 #, c-format
 msgid "Search completed with %d match."
 msgid_plural "Search completed with %d matches."
@@ -4361,11 +4367,11 @@ msgstr[0] "Paieška baigta su %d atitikmeniu."
 msgstr[1] "Paieška baigta su %d atitikmenimis."
 msgstr[2] "Paieška baigta su %d atitikmenų."
 
-#: ../src/search.c:1822
+#: ../src/search.c:1821
 msgid "No matches found."
 msgstr "Atitikmenų nerasta."
 
-#: ../src/search.c:1852
+#: ../src/search.c:1851
 #, c-format
 msgid "Bad regex: %s"
 msgstr "Blogas regex: %s"
@@ -5014,12 +5020,12 @@ msgstr "MOD"
 #: ../src/ui_utils.c:328
 #, c-format
 msgid "pos: %d"
-msgstr ""
+msgstr "pozicija: %d"
 
 #: ../src/ui_utils.c:330
 #, c-format
 msgid "style: %d"
-msgstr ""
+msgstr "stilius: %d"
 
 #: ../src/ui_utils.c:382
 msgid " (new instance)"
@@ -5070,7 +5076,7 @@ msgstr "Išsaugoti viską"
 msgid "Close All"
 msgstr "Užverti viską"
 
-#: ../src/ui_utils.c:2225
+#: ../src/ui_utils.c:2230
 msgid "Geany cannot start!"
 msgstr "Geany paleisti nepavyko!"
 
