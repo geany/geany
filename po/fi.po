@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.22\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-06-03 10:14+0200\n"
+"POT-Creation-Date: 2012-06-03 17:50+0200\n"
 "PO-Revision-Date: 2011-09-27 14:14+0200\n"
 "Last-Translator: Harri Koskinen <reg2009@fastmonkey.fi>\n"
 "Language-Team: Finnish\n"
@@ -2119,6 +2119,17 @@ msgstr "Viestit"
 msgid "Scribble"
 msgstr "Muistilappu"
 
+#: ../src/about.c:41
+msgid ""
+"Copyright (c)  2005-2012\n"
+"Colomban Wendling\n"
+"Nick Treleaven\n"
+"Matthew Brush\n"
+"Enrico Tröger\n"
+"Frank Lanitz\n"
+"All rights reserved."
+msgstr ""
+
 #: ../src/about.c:157
 msgid "About Geany"
 msgstr "Tietoja Geanystä"
@@ -3127,7 +3138,7 @@ msgstr "Lauseke ei kelpaa tiedostotyypille %s: %s"
 msgid "untitled"
 msgstr "nimetön"
 
-#: ../src/highlighting.c:1225 ../src/main.c:821 ../src/socket.c:166
+#: ../src/highlighting.c:1225 ../src/main.c:828 ../src/socket.c:166
 #: ../src/templates.c:224
 #, c-format
 msgid "Could not find file '%s'."
@@ -3678,11 +3689,11 @@ msgstr "Tähän tilaan voit kirjoittaa vaikkapa muistiinpanoja"
 msgid "Failed to load one or more session files."
 msgstr "Yhden tai useamman istuntotiedoston lataus epäonnistui."
 
-#: ../src/log.c:180
+#: ../src/log.c:181
 msgid "Debug Messages"
 msgstr "Vianetsintäviestit"
 
-#: ../src/log.c:182
+#: ../src/log.c:183
 #, fuzzy
 msgid "Cl_ear"
 msgstr "_Etsi"
@@ -3773,20 +3784,20 @@ msgid "[FILES...]"
 msgstr "[TIEDOSTOT...]"
 
 #. note for translators: library versions are printed after this
-#: ../src/main.c:540
+#: ../src/main.c:547
 #, fuzzy, c-format
 msgid "built on %s with "
 msgstr "(käännetty %s tai sen jälkeen)"
 
-#: ../src/main.c:628
+#: ../src/main.c:635
 msgid "Move it now?"
 msgstr "Siirretäänkö se heti?"
 
-#: ../src/main.c:630
+#: ../src/main.c:637
 msgid "Geany needs to move your old configuration directory before starting."
 msgstr "Vanha asetuskansiosi täytyy siirtää ennen Geanyn käynnistystä"
 
-#: ../src/main.c:639
+#: ../src/main.c:646
 #, c-format
 msgid ""
 "Your configuration directory has been successfully moved from \"%s\" to \"%s"
@@ -3795,7 +3806,7 @@ msgstr "Asetuskansiosi siirrettiin kohteesta \"%s\" kohteeseen \"%s\""
 
 #. for translators: the third %s in brackets is the error message which
 #. * describes why moving the dir didn't work
-#: ../src/main.c:649
+#: ../src/main.c:656
 #, c-format
 msgid ""
 "Your old configuration directory \"%s\" could not be moved to \"%s\" (%s). "
@@ -3804,7 +3815,7 @@ msgstr ""
 "Asetuskansiosi siirto ei onnistunut kohteesta \"%s\" kohteeseen \"%s\" (%s). "
 "Ole hyvä ja siirrä kansio käsin uuteen sijaintiin."
 
-#: ../src/main.c:730
+#: ../src/main.c:737
 #, c-format
 msgid ""
 "Configuration directory could not be created (%s).\n"
@@ -3815,17 +3826,17 @@ msgstr ""
 "Geany ei välttämättä toimi oikein ilman asetuskansiota.\n"
 "Käynnistetäänkö Geany tästä huolimatta?"
 
-#: ../src/main.c:1067
+#: ../src/main.c:1074
 #, c-format
 msgid "This is Geany %s."
 msgstr "Tämä on Geany %s."
 
-#: ../src/main.c:1069
+#: ../src/main.c:1076
 #, c-format
 msgid "Configuration directory could not be created (%s)."
 msgstr "Asetuskansion luominen epäonnistui (%s)."
 
-#: ../src/main.c:1286
+#: ../src/main.c:1293
 msgid "Configuration files reloaded."
 msgstr "Asetustiedostot ladattiin uudelleen."
 
@@ -5029,6 +5040,16 @@ msgstr "S/V"
 msgid "MOD"
 msgstr "MOD"
 
+#: ../src/ui_utils.c:328
+#, c-format
+msgid "pos: %d"
+msgstr ""
+
+#: ../src/ui_utils.c:330
+#, fuzzy, c-format
+msgid "style: %d"
+msgstr "Kuvaketyyli:"
+
 #: ../src/ui_utils.c:382
 #, fuzzy
 msgid " (new instance)"
@@ -5079,7 +5100,7 @@ msgstr "Tallenna _kaikki"
 msgid "Close All"
 msgstr "Sulje kaikki"
 
-#: ../src/ui_utils.c:2230
+#: ../src/ui_utils.c:2225
 msgid "Geany cannot start!"
 msgstr ""
 
@@ -5844,9 +5865,6 @@ msgstr "Jaa pystysuunnassa"
 
 #~ msgid "_Customize Toolbar"
 #~ msgstr "_Muokkaa työkalupalkkia"
-
-#~ msgid "Icon style:"
-#~ msgstr "Kuvaketyyli:"
 
 #~ msgid "Icon size:"
 #~ msgstr "Kuvakekoko:"

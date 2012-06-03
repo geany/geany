@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.22\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-06-03 10:14+0200\n"
+"POT-Creation-Date: 2012-06-03 17:50+0200\n"
 "PO-Revision-Date: 2010-07-28 06:38+0400\n"
 "Last-Translator: Denis Koryavov <dkoryavov@yandex.ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
@@ -2154,6 +2154,17 @@ msgstr "Сообщения"
 msgid "Scribble"
 msgstr "Заметки"
 
+#: ../src/about.c:41
+msgid ""
+"Copyright (c)  2005-2012\n"
+"Colomban Wendling\n"
+"Nick Treleaven\n"
+"Matthew Brush\n"
+"Enrico Tröger\n"
+"Frank Lanitz\n"
+"All rights reserved."
+msgstr ""
+
 #: ../src/about.c:157
 msgid "About Geany"
 msgstr "О Geany"
@@ -3172,7 +3183,7 @@ msgstr "Плохое регулярное выражение для типа ф�
 msgid "untitled"
 msgstr "Без имени"
 
-#: ../src/highlighting.c:1225 ../src/main.c:821 ../src/socket.c:166
+#: ../src/highlighting.c:1225 ../src/main.c:828 ../src/socket.c:166
 #: ../src/templates.c:224
 #, c-format
 msgid "Could not find file '%s'."
@@ -3718,11 +3729,11 @@ msgstr ""
 msgid "Failed to load one or more session files."
 msgstr "Не удалось загрузить один или несколько файлов сессии."
 
-#: ../src/log.c:180
+#: ../src/log.c:181
 msgid "Debug Messages"
 msgstr "Сообщения отладки"
 
-#: ../src/log.c:182
+#: ../src/log.c:183
 msgid "Cl_ear"
 msgstr "О_чистить"
 
@@ -3815,21 +3826,21 @@ msgid "[FILES...]"
 msgstr "[ФАЙЛЫ...]"
 
 #. note for translators: library versions are printed after this
-#: ../src/main.c:540
+#: ../src/main.c:547
 #, fuzzy, c-format
 msgid "built on %s with "
 msgstr "(собрано %s или позднее)"
 
-#: ../src/main.c:628
+#: ../src/main.c:635
 msgid "Move it now?"
 msgstr "Переместить это?"
 
-#: ../src/main.c:630
+#: ../src/main.c:637
 msgid "Geany needs to move your old configuration directory before starting."
 msgstr ""
 "Перед запуском Geany необходимо переместить ваш старый каталог с настройками."
 
-#: ../src/main.c:639
+#: ../src/main.c:646
 #, c-format
 msgid ""
 "Your configuration directory has been successfully moved from \"%s\" to \"%s"
@@ -3838,7 +3849,7 @@ msgstr "Ваш каталог с настройками успешно пере�
 
 #. for translators: the third %s in brackets is the error message which
 #. * describes why moving the dir didn't work
-#: ../src/main.c:649
+#: ../src/main.c:656
 #, c-format
 msgid ""
 "Your old configuration directory \"%s\" could not be moved to \"%s\" (%s). "
@@ -3847,7 +3858,7 @@ msgstr ""
 "Ваш каталог с настройками \"%s\" не может быть перемещен в \"%s\" (%s). "
 "Пожалуйста, переместите каталог с настройками в  ручную."
 
-#: ../src/main.c:730
+#: ../src/main.c:737
 #, c-format
 msgid ""
 "Configuration directory could not be created (%s).\n"
@@ -3859,17 +3870,17 @@ msgstr ""
 "настроек.\n"
 "Запустить Geany в любом случае?"
 
-#: ../src/main.c:1067
+#: ../src/main.c:1074
 #, c-format
 msgid "This is Geany %s."
 msgstr "Это Geany %s"
 
-#: ../src/main.c:1069
+#: ../src/main.c:1076
 #, c-format
 msgid "Configuration directory could not be created (%s)."
 msgstr "Каталог настроек не может быть создан (%s)."
 
-#: ../src/main.c:1286
+#: ../src/main.c:1293
 msgid "Configuration files reloaded."
 msgstr "Файлы настроек обновлены."
 
@@ -5087,6 +5098,16 @@ msgstr "ТАБ/ПРБ"
 msgid "MOD"
 msgstr "МОД"
 
+#: ../src/ui_utils.c:328
+#, c-format
+msgid "pos: %d"
+msgstr ""
+
+#: ../src/ui_utils.c:330
+#, fuzzy, c-format
+msgid "style: %d"
+msgstr "Стиль иконок:"
+
 #: ../src/ui_utils.c:382
 #, fuzzy
 msgid " (new instance)"
@@ -5137,7 +5158,7 @@ msgstr "Сохранить _все"
 msgid "Close All"
 msgstr "_Закрыть все"
 
-#: ../src/ui_utils.c:2230
+#: ../src/ui_utils.c:2225
 msgid "Geany cannot start!"
 msgstr ""
 
@@ -5904,9 +5925,6 @@ msgstr "Разделить по вертикали"
 
 #~ msgid "Icon size:"
 #~ msgstr "Размер иконок:"
-
-#~ msgid "Icon style:"
-#~ msgstr "Стиль иконок:"
 
 #~ msgid "LaTeX -> _DVI"
 #~ msgstr "LaTeX -> _DVI"

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.22\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-06-03 10:14+0200\n"
+"POT-Creation-Date: 2012-06-03 17:50+0200\n"
 "PO-Revision-Date: 2011-09-17 09:54-0300\n"
 "Last-Translator: Adrovane Marques Kade <adrovane@gmail.com>\n"
 "Language-Team: Portuguese <geany-i18n@uvena.de>\n"
@@ -2140,6 +2140,17 @@ msgstr "Mensagens"
 msgid "Scribble"
 msgstr "Rascunho"
 
+#: ../src/about.c:41
+msgid ""
+"Copyright (c)  2005-2012\n"
+"Colomban Wendling\n"
+"Nick Treleaven\n"
+"Matthew Brush\n"
+"Enrico Tröger\n"
+"Frank Lanitz\n"
+"All rights reserved."
+msgstr ""
+
 #: ../src/about.c:157
 msgid "About Geany"
 msgstr "Sobre o Geany"
@@ -3155,7 +3166,7 @@ msgstr "Regex ruim para o tipo de arquivo %s: %s"
 msgid "untitled"
 msgstr "sem título"
 
-#: ../src/highlighting.c:1225 ../src/main.c:821 ../src/socket.c:166
+#: ../src/highlighting.c:1225 ../src/main.c:828 ../src/socket.c:166
 #: ../src/templates.c:224
 #, c-format
 msgid "Could not find file '%s'."
@@ -3699,11 +3710,11 @@ msgstr "Digite aqui o que você quiser; use como uma planilha de notas/rascunho"
 msgid "Failed to load one or more session files."
 msgstr "Falha ao carregar um ou mais arquivos de sessão."
 
-#: ../src/log.c:180
+#: ../src/log.c:181
 msgid "Debug Messages"
 msgstr "Mensagens de Depuração"
 
-#: ../src/log.c:182
+#: ../src/log.c:183
 msgid "Cl_ear"
 msgstr "L_impar"
 
@@ -3799,22 +3810,22 @@ msgid "[FILES...]"
 msgstr "[ARQUIVOS...]"
 
 #. note for translators: library versions are printed after this
-#: ../src/main.c:540
+#: ../src/main.c:547
 #, c-format
 msgid "built on %s with "
 msgstr "(construído em %s com )"
 
-#: ../src/main.c:628
+#: ../src/main.c:635
 msgid "Move it now?"
 msgstr "Mover agora?"
 
-#: ../src/main.c:630
+#: ../src/main.c:637
 msgid "Geany needs to move your old configuration directory before starting."
 msgstr ""
 "O Geany precisa mover o seu diretório de configurações antigo antes de "
 "iniciar."
 
-#: ../src/main.c:639
+#: ../src/main.c:646
 #, c-format
 msgid ""
 "Your configuration directory has been successfully moved from \"%s\" to \"%s"
@@ -3825,7 +3836,7 @@ msgstr ""
 
 #. for translators: the third %s in brackets is the error message which
 #. * describes why moving the dir didn't work
-#: ../src/main.c:649
+#: ../src/main.c:656
 #, c-format
 msgid ""
 "Your old configuration directory \"%s\" could not be moved to \"%s\" (%s). "
@@ -3834,7 +3845,7 @@ msgstr ""
 "O seu diretório de configurações antigo \"%s\" não pôde ser movido para \"%s"
 "\" (%s). Por favor, mova o diretório manualmente para o seu novo local."
 
-#: ../src/main.c:730
+#: ../src/main.c:737
 #, c-format
 msgid ""
 "Configuration directory could not be created (%s).\n"
@@ -3845,17 +3856,17 @@ msgstr ""
 "Podem ocorrer problemas no uso do Geany sem um diretório de configuração.\n"
 "Iniciar o Geany mesmo assim?"
 
-#: ../src/main.c:1067
+#: ../src/main.c:1074
 #, c-format
 msgid "This is Geany %s."
 msgstr "Esse é o Geany %s."
 
-#: ../src/main.c:1069
+#: ../src/main.c:1076
 #, c-format
 msgid "Configuration directory could not be created (%s)."
 msgstr "O diretório de configuração não pôde ser criado (%s)."
 
-#: ../src/main.c:1286
+#: ../src/main.c:1293
 msgid "Configuration files reloaded."
 msgstr "Arquivos de configuração recarregados."
 
@@ -5074,6 +5085,16 @@ msgstr "T/S"
 msgid "MOD"
 msgstr "MOD"
 
+#: ../src/ui_utils.c:328
+#, c-format
+msgid "pos: %d"
+msgstr ""
+
+#: ../src/ui_utils.c:330
+#, fuzzy, c-format
+msgid "style: %d"
+msgstr "Estilo dos ícones:"
+
 #: ../src/ui_utils.c:382
 msgid " (new instance)"
 msgstr "(nova instância)"
@@ -5123,7 +5144,7 @@ msgstr "Salvar Tudo"
 msgid "Close All"
 msgstr "Fechar Tudo"
 
-#: ../src/ui_utils.c:2230
+#: ../src/ui_utils.c:2225
 msgid "Geany cannot start!"
 msgstr ""
 
@@ -5898,9 +5919,6 @@ msgstr "Dividir Verticalmente"
 
 #~ msgid "_Customize Toolbar"
 #~ msgstr "_Personalizar Barra de Ferramentas"
-
-#~ msgid "Icon style:"
-#~ msgstr "Estilo dos ícones:"
 
 #~ msgid "Icon size:"
 #~ msgstr "Tamanho dos ícones:"

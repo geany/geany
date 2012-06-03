@@ -8,13 +8,13 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.22\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-06-03 10:14+0200\n"
+"POT-Creation-Date: 2012-06-03 17:50+0200\n"
 "PO-Revision-Date: 2008-10-14 19:27+0100\n"
 "Last-Translator: netkiss <dotkabi@gmail.com>\n"
 "Language-Team: Korean\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
@@ -2185,6 +2185,17 @@ msgstr "메시지"
 msgid "Scribble"
 msgstr "낙서"
 
+#: ../src/about.c:41
+msgid ""
+"Copyright (c)  2005-2012\n"
+"Colomban Wendling\n"
+"Nick Treleaven\n"
+"Matthew Brush\n"
+"Enrico Tröger\n"
+"Frank Lanitz\n"
+"All rights reserved."
+msgstr ""
+
 #: ../src/about.c:157
 msgid "About Geany"
 msgstr "지니 프로그램정보"
@@ -3204,7 +3215,7 @@ msgstr "%s 파일형식에 맞지 않는 정규표현식: %s"
 msgid "untitled"
 msgstr "무제"
 
-#: ../src/highlighting.c:1225 ../src/main.c:821 ../src/socket.c:166
+#: ../src/highlighting.c:1225 ../src/main.c:828 ../src/socket.c:166
 #: ../src/templates.c:224
 #, c-format
 msgid "Could not find file '%s'."
@@ -3762,11 +3773,11 @@ msgstr "메모 및 낙서로 사용할 문자열을 입력하십시오."
 msgid "Failed to load one or more session files."
 msgstr "하나 또는 그 이상의 세션 파일 불러오기 실패함."
 
-#: ../src/log.c:180
+#: ../src/log.c:181
 msgid "Debug Messages"
 msgstr "디버그 메시지"
 
-#: ../src/log.c:182
+#: ../src/log.c:183
 #, fuzzy
 msgid "Cl_ear"
 msgstr "찾기(_S)"
@@ -3855,20 +3866,20 @@ msgid "[FILES...]"
 msgstr "[파일들...]"
 
 #. note for translators: library versions are printed after this
-#: ../src/main.c:540
+#: ../src/main.c:547
 #, fuzzy, c-format
 msgid "built on %s with "
 msgstr "(제작일: %s)"
 
-#: ../src/main.c:628
+#: ../src/main.c:635
 msgid "Move it now?"
 msgstr ""
 
-#: ../src/main.c:630
+#: ../src/main.c:637
 msgid "Geany needs to move your old configuration directory before starting."
 msgstr ""
 
-#: ../src/main.c:639
+#: ../src/main.c:646
 #, c-format
 msgid ""
 "Your configuration directory has been successfully moved from \"%s\" to \"%s"
@@ -3877,14 +3888,14 @@ msgstr ""
 
 #. for translators: the third %s in brackets is the error message which
 #. * describes why moving the dir didn't work
-#: ../src/main.c:649
+#: ../src/main.c:656
 #, c-format
 msgid ""
 "Your old configuration directory \"%s\" could not be moved to \"%s\" (%s). "
 "Please move manually the directory to the new location."
 msgstr ""
 
-#: ../src/main.c:730
+#: ../src/main.c:737
 #, c-format
 msgid ""
 "Configuration directory could not be created (%s).\n"
@@ -3895,17 +3906,17 @@ msgstr ""
 "환경설정 폴더없이 지니를 실행하면 문제가 생길 수 있습니다.\n"
 "무시하고 지니를 시작할까요?"
 
-#: ../src/main.c:1067
+#: ../src/main.c:1074
 #, c-format
 msgid "This is Geany %s."
 msgstr "지니 %s 입니다."
 
-#: ../src/main.c:1069
+#: ../src/main.c:1076
 #, c-format
 msgid "Configuration directory could not be created (%s)."
 msgstr "환경설정 폴더를 만들 수 없습니다 (%s)."
 
-#: ../src/main.c:1286
+#: ../src/main.c:1293
 msgid "Configuration files reloaded."
 msgstr "환경설정 파일 다시 불러옴."
 
@@ -5141,6 +5152,16 @@ msgstr "탭/스페이스"
 msgid "MOD"
 msgstr "수정됨"
 
+#: ../src/ui_utils.c:328
+#, c-format
+msgid "pos: %d"
+msgstr ""
+
+#: ../src/ui_utils.c:330
+#, fuzzy, c-format
+msgid "style: %d"
+msgstr "아이콘 양식:"
+
 #: ../src/ui_utils.c:382
 #, fuzzy
 msgid " (new instance)"
@@ -5193,7 +5214,7 @@ msgstr "모두 저장(_l)"
 msgid "Close All"
 msgstr "모두 닫기(_l)"
 
-#: ../src/ui_utils.c:2230
+#: ../src/ui_utils.c:2225
 msgid "Geany cannot start!"
 msgstr ""
 
@@ -5957,9 +5978,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "_Customize Toolbar"
 #~ msgstr "도구모음 감추기(_H)"
-
-#~ msgid "Icon style:"
-#~ msgstr "아이콘 양식:"
 
 #~ msgid "Icon size:"
 #~ msgstr "아이콘 크기:"

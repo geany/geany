@@ -6,13 +6,13 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.22\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-06-03 10:14+0200\n"
+"POT-Creation-Date: 2012-06-03 17:50+0200\n"
 "PO-Revision-Date: 2008-02-04 12:44+0300\n"
 "Last-Translator: Boris Dibrov <dibrov.bor@gmail.com>\n"
 "Language-Team: \n"
 "Language: \n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Language: Ukrainian\n"
 "X-Poedit-Country: UKRAINE\n"
@@ -2231,6 +2231,17 @@ msgstr "Повідомлення"
 msgid "Scribble"
 msgstr "Друк"
 
+#: ../src/about.c:41
+msgid ""
+"Copyright (c)  2005-2012\n"
+"Colomban Wendling\n"
+"Nick Treleaven\n"
+"Matthew Brush\n"
+"Enrico Tröger\n"
+"Frank Lanitz\n"
+"All rights reserved."
+msgstr ""
+
 #: ../src/about.c:157
 msgid "About Geany"
 msgstr "Про Geany"
@@ -3267,7 +3278,7 @@ msgstr ""
 msgid "untitled"
 msgstr "безіменний"
 
-#: ../src/highlighting.c:1225 ../src/main.c:821 ../src/socket.c:166
+#: ../src/highlighting.c:1225 ../src/main.c:828 ../src/socket.c:166
 #: ../src/templates.c:224
 #, c-format
 msgid "Could not find file '%s'."
@@ -3853,12 +3864,12 @@ msgstr ""
 msgid "Failed to load one or more session files."
 msgstr "Помилка завантаження одного або більше файлів сесії."
 
-#: ../src/log.c:180
+#: ../src/log.c:181
 #, fuzzy
 msgid "Debug Messages"
 msgstr "Повідомлення"
 
-#: ../src/log.c:182
+#: ../src/log.c:183
 #, fuzzy
 msgid "Cl_ear"
 msgstr "_Пошук"
@@ -3949,20 +3960,20 @@ msgid "[FILES...]"
 msgstr "[Файли...]"
 
 #. note for translators: library versions are printed after this
-#: ../src/main.c:540
+#: ../src/main.c:547
 #, fuzzy, c-format
 msgid "built on %s with "
 msgstr "(побудова під час, або після %s)"
 
-#: ../src/main.c:628
+#: ../src/main.c:635
 msgid "Move it now?"
 msgstr ""
 
-#: ../src/main.c:630
+#: ../src/main.c:637
 msgid "Geany needs to move your old configuration directory before starting."
 msgstr ""
 
-#: ../src/main.c:639
+#: ../src/main.c:646
 #, c-format
 msgid ""
 "Your configuration directory has been successfully moved from \"%s\" to \"%s"
@@ -3971,14 +3982,14 @@ msgstr ""
 
 #. for translators: the third %s in brackets is the error message which
 #. * describes why moving the dir didn't work
-#: ../src/main.c:649
+#: ../src/main.c:656
 #, c-format
 msgid ""
 "Your old configuration directory \"%s\" could not be moved to \"%s\" (%s). "
 "Please move manually the directory to the new location."
 msgstr ""
 
-#: ../src/main.c:730
+#: ../src/main.c:737
 #, c-format
 msgid ""
 "Configuration directory could not be created (%s).\n"
@@ -3989,17 +4000,17 @@ msgstr ""
 "Можуть бути проблеми під час використання Geany без теки конфігурацій.\n"
 "Всеодно викликати Geany?"
 
-#: ../src/main.c:1067
+#: ../src/main.c:1074
 #, c-format
 msgid "This is Geany %s."
 msgstr "Це Geany %s."
 
-#: ../src/main.c:1069
+#: ../src/main.c:1076
 #, c-format
 msgid "Configuration directory could not be created (%s)."
 msgstr "Тека конфігурацій не може бути створена (%s)."
 
-#: ../src/main.c:1286
+#: ../src/main.c:1293
 #, fuzzy
 msgid "Configuration files reloaded."
 msgstr "Помилка під час компіляції."
@@ -5241,6 +5252,16 @@ msgstr ""
 msgid "MOD"
 msgstr "MOD"
 
+#: ../src/ui_utils.c:328
+#, c-format
+msgid "pos: %d"
+msgstr ""
+
+#: ../src/ui_utils.c:330
+#, fuzzy, c-format
+msgid "style: %d"
+msgstr "Стиль кнопки:"
+
 #: ../src/ui_utils.c:382
 #, fuzzy
 msgid " (new instance)"
@@ -5293,7 +5314,7 @@ msgstr "Зберегти _усі"
 msgid "Close All"
 msgstr "_Закрити усе"
 
-#: ../src/ui_utils.c:2230
+#: ../src/ui_utils.c:2225
 msgid "Geany cannot start!"
 msgstr ""
 
@@ -6077,9 +6098,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "_Customize Toolbar"
 #~ msgstr "Прибрати панель інструментів"
-
-#~ msgid "Icon style:"
-#~ msgstr "Стиль кнопки:"
 
 #~ msgid "Icon size:"
 #~ msgstr "Розмір кнопки:"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.22\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-06-03 10:14+0200\n"
+"POT-Creation-Date: 2012-06-03 17:50+0200\n"
 "PO-Revision-Date: 2010-03-05 17:14+0100\n"
 "Last-Translator: maacub <maacub@gmail.com>\n"
 "Language-Team: Asturian <alministradores@softastur.org>\n"
@@ -2164,6 +2164,17 @@ msgstr "Mensaxes"
 msgid "Scribble"
 msgstr "Borrador"
 
+#: ../src/about.c:41
+msgid ""
+"Copyright (c)  2005-2012\n"
+"Colomban Wendling\n"
+"Nick Treleaven\n"
+"Matthew Brush\n"
+"Enrico Tröger\n"
+"Frank Lanitz\n"
+"All rights reserved."
+msgstr ""
+
 #: ../src/about.c:157
 msgid "About Geany"
 msgstr "Tocante a Geany"
@@ -3186,7 +3197,7 @@ msgstr "Espresión regular incorreuta pa la triba de ficheru %s: %s"
 msgid "untitled"
 msgstr "ensin títulu"
 
-#: ../src/highlighting.c:1225 ../src/main.c:821 ../src/socket.c:166
+#: ../src/highlighting.c:1225 ../src/main.c:828 ../src/socket.c:166
 #: ../src/templates.c:224
 #, c-format
 msgid "Could not find file '%s'."
@@ -3734,11 +3745,11 @@ msgstr "Escribe equí lo que quies, úsalo como nota o borrador"
 msgid "Failed to load one or more session files."
 msgstr "Fallu al cargar un o más ficheros de la sesión."
 
-#: ../src/log.c:180
+#: ../src/log.c:181
 msgid "Debug Messages"
 msgstr "Mensaxes de Depuración"
 
-#: ../src/log.c:182
+#: ../src/log.c:183
 msgid "Cl_ear"
 msgstr "_Llimpiar"
 
@@ -3831,22 +3842,22 @@ msgid "[FILES...]"
 msgstr "[FICHEROS...]"
 
 #. note for translators: library versions are printed after this
-#: ../src/main.c:540
+#: ../src/main.c:547
 #, fuzzy, c-format
 msgid "built on %s with "
 msgstr "(construyíu en, o dempués del %s)"
 
-#: ../src/main.c:628
+#: ../src/main.c:635
 msgid "Move it now?"
 msgstr "¿Movelo agora?"
 
-#: ../src/main.c:630
+#: ../src/main.c:637
 msgid "Geany needs to move your old configuration directory before starting."
 msgstr ""
 "Geany necesita mover el to direutoriu vieyu de configuración anantes "
 "d'entamar."
 
-#: ../src/main.c:639
+#: ../src/main.c:646
 #, c-format
 msgid ""
 "Your configuration directory has been successfully moved from \"%s\" to \"%s"
@@ -3856,7 +3867,7 @@ msgstr ""
 
 #. for translators: the third %s in brackets is the error message which
 #. * describes why moving the dir didn't work
-#: ../src/main.c:649
+#: ../src/main.c:656
 #, c-format
 msgid ""
 "Your old configuration directory \"%s\" could not be moved to \"%s\" (%s). "
@@ -3865,7 +3876,7 @@ msgstr ""
 "El direutoriu vieyu de configuración \"%s\" nun pudó movese a \"%s\" (%s). "
 "Por favor, mueve a man el direutoriu a la nueva llocalización."
 
-#: ../src/main.c:730
+#: ../src/main.c:737
 #, c-format
 msgid ""
 "Configuration directory could not be created (%s).\n"
@@ -3876,17 +3887,17 @@ msgstr ""
 "Puede haber problemes usando Geany ensin un direutoriu de configuración.\n"
 "¿Entamar Geany de toes formes?"
 
-#: ../src/main.c:1067
+#: ../src/main.c:1074
 #, c-format
 msgid "This is Geany %s."
 msgstr "Esti ye Geany %s."
 
-#: ../src/main.c:1069
+#: ../src/main.c:1076
 #, c-format
 msgid "Configuration directory could not be created (%s)."
 msgstr "El direutoriu de configuración non pudo ser criáu (%s)."
 
-#: ../src/main.c:1286
+#: ../src/main.c:1293
 msgid "Configuration files reloaded."
 msgstr "Ficheros de configuración recargaos."
 
@@ -5105,6 +5116,16 @@ msgstr "T/S"
 msgid "MOD"
 msgstr "MOD"
 
+#: ../src/ui_utils.c:328
+#, c-format
+msgid "pos: %d"
+msgstr ""
+
+#: ../src/ui_utils.c:330
+#, fuzzy, c-format
+msgid "style: %d"
+msgstr "Estilu d'iconu:"
+
 #: ../src/ui_utils.c:382
 #, fuzzy
 msgid " (new instance)"
@@ -5155,7 +5176,7 @@ msgstr "Guardar Too"
 msgid "Close All"
 msgstr "Zarrar Too"
 
-#: ../src/ui_utils.c:2230
+#: ../src/ui_utils.c:2225
 msgid "Geany cannot start!"
 msgstr ""
 
@@ -5885,9 +5906,6 @@ msgstr "Xebrar Verticalmente"
 
 #~ msgid "_Customize Toolbar"
 #~ msgstr "_Personalizar la Barra de Ferramientes"
-
-#~ msgid "Icon style:"
-#~ msgstr "Estilu d'iconu:"
 
 #~ msgid "Icon size:"
 #~ msgstr "Tamañu d'iconu:"

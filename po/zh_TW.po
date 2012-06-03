@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.22\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-06-03 10:14+0200\n"
+"POT-Creation-Date: 2012-06-03 17:50+0200\n"
 "PO-Revision-Date: 2012-02-06 03:56+0800\n"
 "Last-Translator: BlueT - Matthew Lien - 練喆明 <BlueT@BlueT.org>\n"
 "Language-Team: Chinese (traditional) <zh-l10n@linux.org.tw>\n"
@@ -2051,6 +2051,17 @@ msgstr "訊息"
 msgid "Scribble"
 msgstr "草稿"
 
+#: ../src/about.c:41
+msgid ""
+"Copyright (c)  2005-2012\n"
+"Colomban Wendling\n"
+"Nick Treleaven\n"
+"Matthew Brush\n"
+"Enrico Tröger\n"
+"Frank Lanitz\n"
+"All rights reserved."
+msgstr ""
+
 #: ../src/about.c:157
 msgid "About Geany"
 msgstr "關於 Geany"
@@ -3032,7 +3043,7 @@ msgstr "不當的正規表示式用於檔案型態 %s：%s"
 msgid "untitled"
 msgstr "無標題"
 
-#: ../src/highlighting.c:1225 ../src/main.c:821 ../src/socket.c:166
+#: ../src/highlighting.c:1225 ../src/main.c:828 ../src/socket.c:166
 #: ../src/templates.c:224
 #, c-format
 msgid "Could not find file '%s'."
@@ -3576,11 +3587,11 @@ msgstr "在這裡鍵入您想要什麼，並用它做為記事/塗鴉板"
 msgid "Failed to load one or more session files."
 msgstr "載入一個或更多作業階段檔案時失敗。"
 
-#: ../src/log.c:180
+#: ../src/log.c:181
 msgid "Debug Messages"
 msgstr "除錯訊息"
 
-#: ../src/log.c:182
+#: ../src/log.c:183
 msgid "Cl_ear"
 msgstr "清空(_E)"
 
@@ -3668,20 +3679,20 @@ msgid "[FILES...]"
 msgstr "[檔案…]"
 
 #. note for translators: library versions are printed after this
-#: ../src/main.c:540
+#: ../src/main.c:547
 #, c-format
 msgid "built on %s with "
 msgstr "於 %s 建立附帶 "
 
-#: ../src/main.c:628
+#: ../src/main.c:635
 msgid "Move it now?"
 msgstr "現在移動它嗎？"
 
-#: ../src/main.c:630
+#: ../src/main.c:637
 msgid "Geany needs to move your old configuration directory before starting."
 msgstr "Geany 需要在啟動之前移動您舊的組態目錄。"
 
-#: ../src/main.c:639
+#: ../src/main.c:646
 #, c-format
 msgid ""
 "Your configuration directory has been successfully moved from \"%s\" to \"%s"
@@ -3690,7 +3701,7 @@ msgstr "您的組態目錄已經成功地從「%s」移動到\"%s\"。"
 
 #. for translators: the third %s in brackets is the error message which
 #. * describes why moving the dir didn't work
-#: ../src/main.c:649
+#: ../src/main.c:656
 #, c-format
 msgid ""
 "Your old configuration directory \"%s\" could not be moved to \"%s\" (%s). "
@@ -3698,7 +3709,7 @@ msgid ""
 msgstr ""
 "您舊的組態目錄「%s」無法被移動到「%s」(%s)。請手動將目錄移動到新的位置。"
 
-#: ../src/main.c:730
+#: ../src/main.c:737
 #, c-format
 msgid ""
 "Configuration directory could not be created (%s).\n"
@@ -3709,17 +3720,17 @@ msgstr ""
 "可能是使用 Geany 但缺少組態目錄所造成的問題。\n"
 "無論如何還是啟動 Geany？"
 
-#: ../src/main.c:1067
+#: ../src/main.c:1074
 #, c-format
 msgid "This is Geany %s."
 msgstr "這是 Geany %s。"
 
-#: ../src/main.c:1069
+#: ../src/main.c:1076
 #, c-format
 msgid "Configuration directory could not be created (%s)."
 msgstr "無法建立組態目錄 (%s)。"
 
-#: ../src/main.c:1286
+#: ../src/main.c:1293
 msgid "Configuration files reloaded."
 msgstr "重新載入組態檔案。"
 
@@ -4907,6 +4918,16 @@ msgstr "跳/空格"
 msgid "MOD"
 msgstr "MOD"
 
+#: ../src/ui_utils.c:328
+#, c-format
+msgid "pos: %d"
+msgstr ""
+
+#: ../src/ui_utils.c:330
+#, c-format
+msgid "style: %d"
+msgstr ""
+
 #: ../src/ui_utils.c:382
 msgid " (new instance)"
 msgstr " (新實體)"
@@ -4956,7 +4977,7 @@ msgstr "全部儲存"
 msgid "Close All"
 msgstr "全部關閉"
 
-#: ../src/ui_utils.c:2230
+#: ../src/ui_utils.c:2225
 msgid "Geany cannot start!"
 msgstr ""
 
