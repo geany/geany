@@ -790,6 +790,12 @@ static void styleset_common(ScintillaObject *sci, guint ft_id)
 	sci_set_property(sci, "fold.at.else", "1");
 
 	style = &common_style_set.styling[GCS_SELECTION];
+	if (!style->bold && !style->italic)
+	{
+		g_warning("selection style is set to invisible - ignoring!");
+		style->italic = TRUE;
+		style->background = 0xc0c0c0;
+	}
 	/* bold (3rd argument) is whether to override default foreground selection */
 	SSM(sci, SCI_SETSELFORE, style->bold, invert(style->foreground));
 	/* italic (4th argument) is whether to override default background selection */
