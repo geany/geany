@@ -325,9 +325,9 @@ void ui_update_statusbar(GeanyDocument *doc, gint pos)
 	{
 		const gchar sp[] = "      ";
 		g_string_append(stats_str, sp);
-		g_string_append_printf(stats_str, "pos: %d", pos);
+		g_string_append_printf(stats_str, _("pos: %d"), pos);
 		g_string_append(stats_str, sp);
-		g_string_append_printf(stats_str, "style: %d", sci_get_style_at(doc->editor->sci, pos));
+		g_string_append_printf(stats_str, _("style: %d"), sci_get_style_at(doc->editor->sci, pos));
 	}
 #endif
 		/* can be overridden by status messages */
