@@ -4985,7 +4985,7 @@ Contributing to this document
 This document (``geany.txt``) is written in `reStructuredText`__
 (or "reST"). The source file for it is located in Geany's ``doc``
 subdirectory.  If you intend on making changes, you should grab the
-source right from SVN to make sure you've got the newest version. After
+source right from Git to make sure you've got the newest version. After
 editing the file, to build the HTML document to see how your changes
 look, run "``make doc``" in the subdirectory ``doc`` of Geany's source
 directory. This regenerates the ``geany.html`` file. To generate a PDF
@@ -4994,11 +4994,24 @@ geany-|(version)|.pdf.
 
 __ http://docutils.sourceforge.net/rst.html
 
-After you are happy with your changes, create a patch::
+After you are happy with your changes, create a patch e.g. by using::
 
-    % svn diff geany.txt > foo.patch
+    % git diff geany.txt > foo.patch
+
+or even better, by creating a Git-formatted patch which will keep authoring
+and description data, by first committing your changes (doing so in a fresh
+new branch is recommended for `matser` not to diverge from upstream) and then
+using git format-patch::
+
+    % git checkout -b my-documentation-changes # create a fresh branch
+    % git commit geany.txt
+    Write a good commit message...
+    % git format-patch HEAD^
+    % git checkout master # go back to master
 
 and then submit that file to the mailing list for review.
+
+Also you can clone the Geany repository at GitHub and send a pull request.
 
 Note, you will need the Python docutils software package installed
 to build the docs. The package is named ``python-docutils`` on Debian
