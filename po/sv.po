@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.22\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-05-16 09:42+0200\n"
+"POT-Creation-Date: 2012-06-03 10:14+0200\n"
 "PO-Revision-Date: 2012-05-16 09:22+0100\n"
 "Last-Translator: Tony Mattsson <superxorn@gmail.com>\n"
 "Language-Team: Swedish <geany-i18n@uvena.de>\n"
@@ -20,684 +20,192 @@ msgstr ""
 "X-Poedit-Country: SWEDEN\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: ../geany.desktop.in.h:1
-msgid "A fast and lightweight IDE using GTK2"
-msgstr "Ett snabbt och lättviktigt IDE som använder GTK2"
-
-#: ../geany.desktop.in.h:2 ../data/geany.glade.h:153
+#: ../geany.desktop.in.h:1 ../data/geany.glade.h:346
 msgid "Geany"
 msgstr "Geany"
 
-#: ../geany.desktop.in.h:3
+#: ../geany.desktop.in.h:2
 msgid "Integrated Development Environment"
 msgstr "Integrerad utvecklingsmiljö"
 
+#: ../geany.desktop.in.h:3
+msgid "A fast and lightweight IDE using GTK2"
+msgstr "Ett snabbt och lättviktigt IDE som använder GTK2"
+
 #: ../data/geany.glade.h:1
-msgid "\"Smart\" home key"
-msgstr "Aktivera \"smart\" home-tangent"
+msgid "_Edit"
+msgstr "Redigera"
 
 #: ../data/geany.glade.h:2
-msgid "<b>Auto-close quotes and brackets</b>"
-msgstr "<b>Stäng citeringar och hakparanteser automatiskt</b>"
+msgid "_Format"
+msgstr "Format"
 
 #: ../data/geany.glade.h:3
-msgid "<b>Commands</b>"
-msgstr "<b>Kommandon</b>"
+msgid "I_nsert"
+msgstr "Infoga"
 
 #: ../data/geany.glade.h:4
-msgid "<b>Completions</b>"
-msgstr "<b>Komplettering</b>"
+msgid "Insert _ChangeLog Entry"
+msgstr "Infoga ChangeLog"
 
 #: ../data/geany.glade.h:5
-msgid "<b>Display</b>"
-msgstr "<b>Visa</b>"
+msgid "Insert _Function Description"
+msgstr "Infoga funktionsbeskrivning"
 
 #: ../data/geany.glade.h:6
-msgid "<b>Editor tabs</b>"
-msgstr "<b>Editorns flikar</b>"
+msgid "Insert _Multiline Comment"
+msgstr "Infoga flerradskommentar"
 
 #: ../data/geany.glade.h:7
-msgid "<b>Encodings</b>"
-msgstr "<b>Teckenkod</b>"
+msgid "_More"
+msgstr "_Mer"
 
 #: ../data/geany.glade.h:8
-msgid "<b>Features</b>"
-msgstr "<b>Inställningar</b>"
+msgid "Insert File _Header"
+msgstr "Infoga filhuvud"
 
 #: ../data/geany.glade.h:9
-msgid "<b>Fonts</b>"
-msgstr "<b>Teckensnitt</b>"
+msgid "Insert _GPL Notice"
+msgstr "Infoga en GPL-beskrivning"
 
 #: ../data/geany.glade.h:10
-msgid "<b>Icon size</b>"
-msgstr "<b>Ikonstorlek</b>"
+msgid "Insert _BSD License Notice"
+msgstr "Infoga en BSD-beskrivning"
 
 #: ../data/geany.glade.h:11
-msgid "<b>Icon style</b>"
-msgstr "<b>Ikonstil</b>"
+msgid "Insert Dat_e"
+msgstr "Infoga datum"
 
 #: ../data/geany.glade.h:12
-msgid "<b>Indentation</b>"
-msgstr "<b>Indrag</b>"
+msgid "invisible"
+msgstr "osynlig"
 
 #: ../data/geany.glade.h:13
-msgid "<b>Keyboard shortcuts</b>"
-msgstr "<b>Tangentbordsgenvägar</b>"
+msgid "_Insert \"include <...>\""
+msgstr "Infoga \"include <...>\""
 
-#: ../data/geany.glade.h:14
-msgid "<b>Long line marker</b>"
-msgstr "<b>Markör för lång rad</b>"
+#: ../data/geany.glade.h:14 ../src/keybindings.c:408
+msgid "_Insert Alternative White Space"
+msgstr "Infoga alternativt tomt tecken"
 
 #: ../data/geany.glade.h:15
-msgid "<b>Miscellaneous</b>"
-msgstr "<b>Övrigt</b>"
+msgid "_Search"
+msgstr "Sök"
 
 #: ../data/geany.glade.h:16
-msgid "<b>New files</b>"
-msgstr "<b>Nya filer</b>"
+msgid "Open Selected F_ile"
+msgstr "Öppna vald fil"
 
 #: ../data/geany.glade.h:17
-msgid "<b>Paths</b>"
-msgstr "<b>Sökvägar</b>"
-
-#: ../data/geany.glade.h:18
-msgid "<b>Printing</b>"
-msgstr "<b>Utskrift</b>"
-
-#: ../data/geany.glade.h:19
-msgid "<b>Projects</b>"
-msgstr "<b>Projekt</b>"
-
-#: ../data/geany.glade.h:20
-msgid "<b>Saving files</b>"
-msgstr "<b>Spara</b>"
-
-#: ../data/geany.glade.h:21
-msgid "<b>Search</b>"
-msgstr "<b>Sök</b>"
-
-#: ../data/geany.glade.h:22
-msgid "<b>Shutdown</b>"
-msgstr "<b>Vid avslut</b>"
-
-#: ../data/geany.glade.h:23
-msgid "<b>Sidebar</b>"
-msgstr "<b>Sidofält</b>"
-
-#: ../data/geany.glade.h:24
-msgid "<b>Startup</b>"
-msgstr "<b>Vid start</b>"
-
-#: ../data/geany.glade.h:25
-msgid "<b>Tab positions</b>"
-msgstr "<b>Tab positioner</b>"
-
-#: ../data/geany.glade.h:26
-msgid "<b>Template data</b>"
-msgstr "<b>Mall-data</b>"
-
-#: ../data/geany.glade.h:27
-msgid "<b>Terminal</b>"
-msgstr "<b>Terminal</b>"
-
-#: ../data/geany.glade.h:28
-msgid "<b>Tool paths</b>"
-msgstr "<b>Sökvägar till verktyg</b>"
-
-#: ../data/geany.glade.h:29
-msgid "<b>Toolbar</b>"
-msgstr "<b>Verktygsfält</b>"
-
-#: ../data/geany.glade.h:30
-msgid "<b>Various preferences</b>"
-msgstr "<b>Övriga inställningar</b>"
-
-#: ../data/geany.glade.h:31
-msgid "<b>Virtual spaces</b>"
-msgstr "<b>Virtuella ytor</b>"
-
-#: ../data/geany.glade.h:32
-msgid "<i>Warning: read the manual before changing these preferences.</i>"
-msgstr ""
-"<i>Varning: läs instruktionsboken innan du ändrar dessa inställningar.</i>"
-
-#: ../data/geany.glade.h:33
-msgid ""
-"A string which is added when toggling a line comment in a source file, it is "
-"used to mark the comment as toggled."
-msgstr ""
-"En sträng som läggs till när man justerar en kommentar i en källkodsfil. Den "
-"används för att markera den justerade kommentaren."
-
-#: ../data/geany.glade.h:34
-msgid ""
-"A terminal emulator like xterm, gnome-terminal or konsole (should accept the "
-"-e argument)"
-msgstr ""
-"En terminal som Xterm, Gnome-terminal eller Konsole (måste acceptera -e "
-"argumentet)"
-
-#: ../data/geany.glade.h:35 ../src/printing.c:388
-msgid ""
-"Add a little header to every page containing the page number, the filename "
-"and the current date (see below). It takes 3 lines of the page."
-msgstr ""
-"Lägger till tre rader i sidhuvudet som visar sidnummer, filnamn och datum. "
-"Detta upptar tre rader på sidan."
-
-#: ../data/geany.glade.h:36 ../src/printing.c:378
-msgid "Add line numbers to the printed page"
-msgstr "Lägg till radnummer vid utskrift"
-
-#: ../data/geany.glade.h:37 ../src/printing.c:383
-msgid ""
-"Add page numbers at the bottom of each page. It takes 2 lines of the page."
-msgstr "Lägg till sidnummer i sidfoten. Detta upptar två rader på sidan."
-
-#: ../data/geany.glade.h:38
-msgid ""
-"Allows the VTE to receive keyboard shortcuts (apart from focus commands)"
-msgstr "Tillåter VTE att motta tangentbordskommandon (förutom fokuskommandon)."
-
-#: ../data/geany.glade.h:39
-msgid "Always"
-msgstr "Alltid"
-
-#: ../data/geany.glade.h:40
-msgid "Always show virtual spaces beyond the end of lines"
-msgstr "Visa alltid virtuella mellanslag och tab-tecken i slutet av rader"
-
-#: ../data/geany.glade.h:41
-msgid "Always wrap search"
-msgstr "Sök alltid i hela dokumentet"
-
-#: ../data/geany.glade.h:42
-msgid "Always wrap search around the document"
-msgstr "Sök alltid i hela dokumentet"
-
-#: ../data/geany.glade.h:43
-msgid "Apply the default indentation settings to all documents"
-msgstr "Använd det förinställda indraget för alla dokument"
-
-#: ../data/geany.glade.h:44
-msgid "Auto-close curly bracket when typing an opening one"
-msgstr "Stäng automatiskt hakparantes när du skrivit in ett hakparantestecken"
-
-#: ../data/geany.glade.h:45
-msgid "Auto-close double quote when typing an opening one"
-msgstr ""
-"Stäng automatiskt dubbel citering när du skrivit in ett dubbelt "
-"citeringstecken"
-
-#: ../data/geany.glade.h:46
-msgid "Auto-close parenthesis when typing an opening one"
-msgstr "Stäng paranteser automatiskt"
-
-#: ../data/geany.glade.h:47
-msgid "Auto-close single quote when typing an opening one"
-msgstr ""
-"Stäng automatiskt enkel citering när du skrivit in ett enkelt citeringstecken"
-
-#: ../data/geany.glade.h:48
-msgid "Auto-close square-bracket when typing an opening one"
-msgstr ""
-"Stäng automatiskt fyrkantig parantes när du skrivit in ett fyrkantigt "
-"parantestecken"
-
-#: ../data/geany.glade.h:49
-msgid "Auto-focus widgets (focus follows mouse)"
-msgstr "Autofokusera gränssnittskomponenter (fokus följer musen)"
-
-#: ../data/geany.glade.h:50
-msgid "Auto-indent mode:"
-msgstr "Automatiskt indrag:"
-
-#: ../data/geany.glade.h:51
-msgid "Autocomplete all words in document"
-msgstr "Autokomplettera alla ord i dokumentet"
-
-#: ../data/geany.glade.h:52
-msgid "Autocomplete symbols"
-msgstr "Autokomplettera symboler"
-
-#: ../data/geany.glade.h:53
-msgid ""
-"Automatic completion of known symbols in open files (function names, global "
-"variables, ...)"
-msgstr ""
-"Autokomplettera kända symboler i öppna filer (funktionsnamn, globala "
-"variabler etc.)"
-
-#: ../data/geany.glade.h:54
-msgid "Automatic continuation of multi-line comments"
-msgstr "Automatisk fortsättning på multiradskommentarer."
-
-#: ../data/geany.glade.h:55
-msgid "Background"
-msgstr "Bakgrund"
-
-#: ../data/geany.glade.h:56
-msgid "Background color:"
-msgstr "Bakgrundsfärg"
-
-#: ../data/geany.glade.h:57 ../src/project.c:172
-msgid ""
-"Base directory of all files that make up the project. This can be a new "
-"path, or an existing directory tree. You can use paths relative to the "
-"project filename."
-msgstr ""
-"Grundläggande sökväg för alla filer i projektet. Detta kan vara en ny sökväg "
-"eller ett existerande mappträd."
-
-#: ../data/geany.glade.h:58 ../src/project.c:166
-msgid "Base path:"
-msgstr "Bassökväg:"
-
-#: ../data/geany.glade.h:59
-msgid "Basic"
-msgstr "Grundläggande"
-
-#: ../data/geany.glade.h:60
-msgid "Beep on errors or when compilation has finished"
-msgstr "Pip vid fel och när kompilering har avslutats"
-
-#: ../data/geany.glade.h:61
-msgid "Bottom"
-msgstr "Botten"
-
-#: ../data/geany.glade.h:62
-msgid "Browser:"
-msgstr "Webbläsare:"
-
-#: ../data/geany.glade.h:63
-msgid "C_hange"
-msgstr "Ändra"
-
-#: ../data/geany.glade.h:64 ../src/notebook.c:495
-msgid "C_lose All"
-msgstr "Stäng alla"
-
-#: ../data/geany.glade.h:65
-msgid "C_onfiguration Files"
-msgstr "Konfigurationsfiler"
-
-#: ../data/geany.glade.h:66
-msgid "Calls the View->Toggle All Additional Widgets command"
-msgstr "Kör Visa -> <b>Visa / göm verktygsfält</b>-kommandot"
-
-#: ../data/geany.glade.h:67
-msgid "Change _Font"
-msgstr "Byt teckensnitt"
-
-#: ../data/geany.glade.h:68
-msgid "Characters to type for autocompletion:"
-msgstr "Tecken att skriva för autokomplettering:"
-
-#: ../data/geany.glade.h:69
-msgid "Choose Terminal Font"
-msgstr "Välj teckensnitt i terminalen"
-
-#: ../data/geany.glade.h:70 ../src/notebook.c:489
-msgid "Close Ot_her Documents"
-msgstr "Stäng andra dokument"
-
-#: ../data/geany.glade.h:71
-msgid "Code folding"
-msgstr "Aktivera ihopvikning"
-
-#: ../data/geany.glade.h:72 ../src/toolbar.c:70 ../src/tools.c:972
-msgid "Color Chooser"
-msgstr "Färgväljare"
-
-#: ../data/geany.glade.h:73
-msgid "Color:"
-msgstr "Färg:"
-
-#: ../data/geany.glade.h:74
-msgid "Column:"
-msgstr "Kolumn:"
-
-#: ../data/geany.glade.h:75
-msgid "Command:"
-msgstr "Kommando:"
-
-#: ../data/geany.glade.h:76
-msgid "Comment toggle marker:"
-msgstr "Stäng av / sätt på kommentarmarkör:"
-
-#: ../data/geany.glade.h:77
-msgid "Company name"
-msgstr "Företagets namn"
-
-#: ../data/geany.glade.h:78
-msgid "Company:"
-msgstr "Företag:"
-
-#: ../data/geany.glade.h:79
-msgid "Compiler"
-msgstr "Kompilator"
-
-#: ../data/geany.glade.h:80
-msgid "Completion list height:"
-msgstr "Komplettering listhöjd:"
-
-#: ../data/geany.glade.h:81
-msgid "Completions"
-msgstr "Komplettering"
-
-#: ../data/geany.glade.h:82
-msgid "Confirm exit"
-msgstr "Bekräfta avslut"
-
-#: ../data/geany.glade.h:83
-msgid "Conte_xt Action"
-msgstr "Snabbmenyhändelse"
-
-#: ../data/geany.glade.h:85
-#, no-c-format
-msgid ""
-"Context action command. The currently selected word can be used with %s. It "
-"can appear anywhere in the given command and will be replaced before "
-"execution."
-msgstr ""
-"Snabbmenykommando. Det markerade ordet kan användas med %s. Det kan infogas "
-"var som helst i kommandot och kommer att ersättas innan exekvering."
-
-#: ../data/geany.glade.h:86
-msgid "Context action:"
-msgstr "Snabbmenyhändelse:"
-
-#: ../data/geany.glade.h:87
-msgid ""
-"Continue automatically multi-line comments in languages like C, C++ and Java "
-"when a new line is entered inside such a comment"
-msgstr ""
-"Automatiskt fortsätta multirads-kommentarer i språk som C, C++ och Java när "
-"en ny rad matas in i kommentaren."
-
-#: ../data/geany.glade.h:88
-msgid "Convert and Set to CR (_Mac)"
-msgstr "Konvertera till CR (Mac)"
-
-#: ../data/geany.glade.h:89
-msgid "Convert and Set to _CR/LF (Win)"
-msgstr "Konvertera till CR/LF (Win)"
-
-#: ../data/geany.glade.h:90
-msgid "Convert and Set to _LF (Unix)"
-msgstr "Konvertera till LF (Unix)"
-
-#: ../data/geany.glade.h:91
-msgid "Curly brackets { }"
-msgstr "Klammerparanteser { }"
-
-#: ../data/geany.glade.h:92
-msgid "Current chars"
-msgstr "Nuvarande tecken"
-
-#: ../data/geany.glade.h:93
-msgid "Cursor blinks"
-msgstr "Markör blinkar"
-
-#: ../data/geany.glade.h:94
-msgid "Custom"
-msgstr "Användardefinierad"
-
-#: ../data/geany.glade.h:95 ../src/toolbar.c:933
-msgid "Customize Toolbar"
-msgstr "Anpassa verktygsfält"
-
-#: ../data/geany.glade.h:96
-msgid "Date & time:"
-msgstr "Datum och tid:"
-
-#: ../data/geany.glade.h:97 ../src/printing.c:412
-msgid "Date format:"
-msgstr "Datumformat:"
-
-#: ../data/geany.glade.h:98
-msgid "Date:"
-msgstr "Datum:"
-
-#: ../data/geany.glade.h:99
-#, fuzzy
-msgid "Debug _Messages"
-msgstr "Debugmeddelanden"
-
-#: ../data/geany.glade.h:100
-msgid "Default encoding (existing non-Unicode files):"
-msgstr "Förvald teckenkodning (existerande icke-unicode filer):"
-
-#: ../data/geany.glade.h:101
-msgid "Default encoding (new files):"
-msgstr "Förvald kodning (nya filer):"
-
-#: ../data/geany.glade.h:102
-msgid "Default end of line characters:"
-msgstr "Förvalt radslutstecken:"
-
-#: ../data/geany.glade.h:103
-msgid ""
-"Defines whether to use the native Windows File Open/Save dialogs or whether "
-"to use the GTK default dialogs"
-msgstr ""
-"Specificerar om Windows eller GTK skall användas vid öppna / spara filer"
-
-#: ../data/geany.glade.h:104
-msgid "Description:"
-msgstr "Beskrivning:"
-
-#: ../data/geany.glade.h:105
-msgid "Detect type from file"
-msgstr "Upptäck filtyp automatiskt"
-
-#: ../data/geany.glade.h:106
-msgid "Detect width from file"
-msgstr "Upptäck bredd från fil"
-
-#: ../data/geany.glade.h:107
-msgid "Developer:"
-msgstr "Utvecklare:"
-
-#: ../data/geany.glade.h:108
-msgid "Disable Drag and Drop"
-msgstr "Avaktivera drag-och-släpp"
-
-#: ../data/geany.glade.h:109
-msgid ""
-"Disable drag and drop completely in the editor window so you can't drag and "
-"drop any selections within or outside of the editor window"
-msgstr "Avaktivera drag-och-släpp i editor-fönstret"
-
-#: ../data/geany.glade.h:110
-msgid "Disable menu shortcut key (F10 by default)"
-msgstr "Avaktivera genvägstangenten (F10-tangenten)"
-
-#: ../data/geany.glade.h:111
-msgid "Disabled"
-msgstr "Avaktiverad"
-
-#: ../data/geany.glade.h:112
-msgid "Disk check timeout:"
-msgstr "Intervall för ändringskontroll:"
-
-#: ../data/geany.glade.h:113
-msgid "Display"
-msgstr "Visa"
-
-#: ../data/geany.glade.h:114
-msgid "Display height in rows for the autocompletion list"
-msgstr "Visa höjd, i rader, för autokompletteringslistan"
-
-#: ../data/geany.glade.h:115
-msgid "Display:"
-msgstr "Visa:"
-
-#: ../data/geany.glade.h:116
-msgid "Do not show virtual spaces"
-msgstr "Visa inte virtuella ytor"
-
-#: ../data/geany.glade.h:117
-msgid "Documents"
-msgstr "Dokument"
-
-#: ../data/geany.glade.h:118
-msgid "Don't use run script"
-msgstr "Använd inte körbara skript"
-
-#: ../data/geany.glade.h:119
-msgid ""
-"Don't use the simple run script which is usually used to display the exit "
-"status of the executed program"
-msgstr ""
-"Använd inte det enkla körskriptet som vanligtvis används för att visa "
-"felmeddelanden för exekverat program."
-
-#: ../data/geany.glade.h:120
-msgid "Double quotes \" \""
-msgstr "Dubbla citationstecken \" \""
-
-#: ../data/geany.glade.h:121
-msgid "Double-clicking hides all additional widgets"
-msgstr "Dubbelklick gömmer alla övriga gränssnittskomponenter"
-
-#: ../data/geany.glade.h:122
-msgid "Drop rest of word on completion"
-msgstr "Ta bort resten av orden för komplettering"
-
-#: ../data/geany.glade.h:123 ../src/keybindings.c:224 ../src/prefs.c:1581
-msgid "Editor"
-msgstr "Editor"
-
-#: ../data/geany.glade.h:124
-msgid "Editor:"
-msgstr "Editor:"
-
-#: ../data/geany.glade.h:125
-msgid "Enable newline to strip the trailing spaces on the previous line"
-msgstr ""
-"Gör så att nyradstecken tar bort överflödiga mellanslag från föregående rad."
-
-#: ../data/geany.glade.h:126
-msgid "Enable plugin support"
-msgstr "Aktivera stöd för tillägg"
-
-#: ../data/geany.glade.h:127
-msgid "Enabled"
-msgstr "Aktiverad"
-
-#: ../data/geany.glade.h:128
-msgid "Ensure consistent line endings"
-msgstr "Skriv alltid nyradstecken"
-
-#: ../data/geany.glade.h:129
-msgid "Ensure new line at file end"
-msgstr "Skriv alltid nyradstecken i slutet av filen"
-
-#: ../data/geany.glade.h:130
-msgid "Ensures that at the end of the file is a new line"
-msgstr ""
-"Lägger till ett nyradstecken vid slutet av filen om det inte redan finns "
-"något"
-
-#: ../data/geany.glade.h:131
-msgid ""
-"Ensures that newline characters always get converted before saving, avoiding "
-"mixed line endings in the same file"
-msgstr ""
-"Nyradstecken konverteras alltid innan filen sparas, för att radslutstecken "
-"inte skall blandas om i samma fil"
-
-#: ../data/geany.glade.h:132
-msgid "Execute programs in the VTE"
-msgstr "Exekvera program i VTE"
-
-#: ../data/geany.glade.h:133
-msgid "Extra plugin path:"
-msgstr "Extra sökväg för insticksmoduler:"
-
-#: ../data/geany.glade.h:134
-msgid "Features"
-msgstr "Inställningar"
-
-#: ../data/geany.glade.h:135
-msgid "File patterns:"
-msgstr "Fil-mönster:"
-
-#: ../data/geany.glade.h:136
-msgid "File tabs will be placed on the left of the notebook"
-msgstr "Fil-tabbar kommer att placeras till vänster om anteckningsboken"
-
-#: ../data/geany.glade.h:137
-msgid "File tabs will be placed on the right of the notebook"
-msgstr "Fil-tabbar kommer att placeras till höger om anteckningsboken"
-
-#: ../data/geany.glade.h:138 ../src/plugins.c:1457 ../src/project.c:150
-msgid "Filename:"
-msgstr "Filnamn:"
-
-#: ../data/geany.glade.h:139 ../src/prefs.c:1583 ../src/symbols.c:687
-#: ../plugins/filebrowser.c:1120
-msgid "Files"
-msgstr "Filer"
-
-#: ../data/geany.glade.h:140 ../src/keybindings.c:433
-msgid "Find Next _Selection"
-msgstr "Sök nästa markering"
-
-#: ../data/geany.glade.h:141 ../src/keybindings.c:435
-msgid "Find Pre_vious Selection"
-msgstr "Sök föregående markering"
-
-#: ../data/geany.glade.h:142
-msgid "Find _Document Usage"
-msgstr "Visa dokumentets användning"
-
-#: ../data/geany.glade.h:143
-msgid "Find _Next"
-msgstr "Sök nästa"
-
-#: ../data/geany.glade.h:144
-msgid "Find _Previous"
-msgstr "Sök föregående"
-
-#: ../data/geany.glade.h:145
 msgid "Find _Usage"
 msgstr "Visa användning"
 
-#: ../data/geany.glade.h:146
-msgid "Find in F_iles"
-msgstr "Sök i filer"
+#: ../data/geany.glade.h:18
+msgid "Find _Document Usage"
+msgstr "Visa dokumentets användning"
 
-#: ../data/geany.glade.h:147
+#: ../data/geany.glade.h:19
+msgid "Go to _Tag Definition"
+msgstr "Gå till Tagg-definition"
+
+#: ../data/geany.glade.h:20
+msgid "Conte_xt Action"
+msgstr "Snabbmenyhändelse"
+
+#: ../data/geany.glade.h:21 ../src/filetypes.c:102 ../src/filetypes.c:1775
+msgid "None"
+msgstr "Inget"
+
+#: ../data/geany.glade.h:22
+msgid "Basic"
+msgstr "Grundläggande"
+
+#: ../data/geany.glade.h:23
+msgid "Current chars"
+msgstr "Nuvarande tecken"
+
+#: ../data/geany.glade.h:24
+msgid "Match braces"
+msgstr "Matcha klamrar"
+
+#: ../data/geany.glade.h:25 ../src/keybindings.c:418
+msgid "Preferences"
+msgstr "Inställningar"
+
+#: ../data/geany.glade.h:26
+msgid "Load files from the last session"
+msgstr "Ladda filerna från förra sessionen"
+
+#: ../data/geany.glade.h:27
+msgid "Opens at startup the files from the last session"
+msgstr "Öppnar filerna från förra sessionen vid start"
+
+#: ../data/geany.glade.h:28
+msgid "Load virtual terminal support"
+msgstr "Ladda stöd för virtuell terminal"
+
+#: ../data/geany.glade.h:29
 msgid ""
-"Fold or unfold all children of a fold point. By pressing the Shift key while "
-"clicking on a fold symbol the contrary behavior is used."
+"Whether the virtual terminal emulation (VTE) should be loaded at startup, "
+"disable it if you do not need it"
 msgstr ""
-"Vik eller vik upp allt vid vikningspunkten. Genom att hålla in shift-"
-"tangenten medan du klickar på vikningspunkten kan motsatt effekt uppnås."
+"Huruvida den virtuella terminalemuleringen (VTE) skall laddas vid start. "
+"Välj bort om du ej behöver den."
 
-#: ../data/geany.glade.h:148
-msgid "Fold/unfold all children of a fold point"
-msgstr "Vik upp alla vid uppvikningspunkten"
+#: ../data/geany.glade.h:30
+msgid "Enable plugin support"
+msgstr "Aktivera stöd för tillägg"
 
-#: ../data/geany.glade.h:149
-msgid "Follow path of the current file"
-msgstr "Följ den aktiva filens sökväg"
+#: ../data/geany.glade.h:31
+msgid "<b>Startup</b>"
+msgstr "<b>Vid start</b>"
 
-#: ../data/geany.glade.h:150
-msgid "Font:"
-msgstr "Typsnitt:"
+#: ../data/geany.glade.h:32
+msgid "Save window position and geometry"
+msgstr "Spara fönsterplacering och storlek"
 
-#: ../data/geany.glade.h:151
-msgid "Foreground color:"
-msgstr "Förgrundsfärg"
+#: ../data/geany.glade.h:33
+msgid "Saves the window position and geometry and restores it at the start"
+msgstr "Sparar fönstrets position och storlek, och återställer det vid start"
 
-#: ../data/geany.glade.h:152
-msgid "Full_screen"
-msgstr "Helskärm"
+#: ../data/geany.glade.h:34
+msgid "Confirm exit"
+msgstr "Bekräfta avslut"
 
-#: ../data/geany.glade.h:154
+#: ../data/geany.glade.h:35
+msgid "Shows a confirmation dialog on exit"
+msgstr "Begär bekräftelse vid avslut"
+
+#: ../data/geany.glade.h:36
+msgid "<b>Shutdown</b>"
+msgstr "<b>Vid avslut</b>"
+
+#: ../data/geany.glade.h:37
+msgid "Startup path:"
+msgstr "Sökväg vid start:"
+
+#: ../data/geany.glade.h:38
+msgid ""
+"Path to start in when opening or saving files. Must be an absolute path. "
+"Leave blank to use the current working directory."
+msgstr ""
+"Sökväg att starta i vid öppning eller sparning av filer. Detta måste vara en "
+"absolut sökväg. Lämna blankt för att automatiskt välja filens nuvarande "
+"sökväg."
+
+#: ../data/geany.glade.h:39
+msgid "Project files:"
+msgstr "Projektfiler:"
+
+#: ../data/geany.glade.h:40
+msgid "Path to start in when opening project files"
+msgstr "Sökväg att starta i när projektfiler öppnas"
+
+#: ../data/geany.glade.h:41
+msgid "Extra plugin path:"
+msgstr "Extra sökväg för insticksmoduler:"
+
+#: ../data/geany.glade.h:42
 msgid ""
 "Geany looks by default in the global installation path and in the "
 "configuration directory. The path entered here will be searched additionally "
@@ -708,754 +216,30 @@ msgstr ""
 "skall söka i ytterligare en sökväg, kan du specificera en här. Om du lämnar "
 "rutan tom, söker inte Geany i någon ytterligare sökväg."
 
-#. TODO Find a better way to map the current notebook page to the
-#. * corresponding chapter in the documentation, comparing translatable
-#. * strings is easy to break. Maybe attach an identifying string to the
-#. * tab label object.
-#: ../data/geany.glade.h:155 ../src/prefs.c:1575
-msgid "General"
-msgstr "Generellt"
-
-#: ../data/geany.glade.h:156
-msgid ""
-"Gives the focus automatically to widgets below the mouse cursor. Works for "
-"the main editor widget, the scribble, the toolbar search and goto line "
-"fields and the VTE."
-msgstr "Ger automatiskt fokus till gränssnittskomponenter under muspekaren."
-
-#: ../data/geany.glade.h:157
-msgid "Go to T_ag Declaration"
-msgstr "Gå till Tagg-deklaration"
-
-#: ../data/geany.glade.h:158
-msgid "Go to _Tag Definition"
-msgstr "Gå till Tagg-definition"
-
-#: ../data/geany.glade.h:159
-msgid "Grep:"
-msgstr "Grep:"
-
-#: ../data/geany.glade.h:160
-msgid "Hide the Find dialog"
-msgstr "Göm Sök-dialogrutan"
-
-#: ../data/geany.glade.h:161
-msgid "Hide the Find dialog after clicking Find Next/Previous"
-msgstr "Göm Sök-dialogrutan efter du klickat på Sök Nästa/Föregående"
-
-#: ../data/geany.glade.h:162
-msgid ""
-"How often to check for changes to document files on disk, in seconds. Zero "
-"disables checking."
-msgstr ""
-"Hur ofta kontroller utförs för att se om dokumentet ändrats, i antalet "
-"sekunder. Noll stänger av kontroller."
-
-#: ../data/geany.glade.h:163
-msgid "I_nsert"
-msgstr "Infoga"
-
-#: ../data/geany.glade.h:164
-msgid "I_nsert Comments"
-msgstr "Infoga kommentarer"
-
-#: ../data/geany.glade.h:165
-msgid "Images _and text"
-msgstr "Bilder och text"
-
-#: ../data/geany.glade.h:166
-msgid "In_dent Type"
-msgstr "Indragstyp"
-
-#: ../data/geany.glade.h:167
-msgid "Indent Widt_h"
-msgstr "Indrag bredd"
-
-#: ../data/geany.glade.h:168
-msgid "Indentation"
-msgstr "Indrag"
-
-#: ../data/geany.glade.h:169
-msgid "Initial version:"
-msgstr "Inledande version:"
-
-#: ../data/geany.glade.h:170
-msgid "Initials of the developer name"
-msgstr "Utvecklarens initialer"
-
-#: ../data/geany.glade.h:171
-msgid "Initials:"
-msgstr "Initialer:"
-
-#: ../data/geany.glade.h:172
-msgid "Insert Dat_e"
-msgstr "Infoga datum"
-
-#: ../data/geany.glade.h:173
-msgid "Insert File _Header"
-msgstr "Infoga filhuvud"
-
-#: ../data/geany.glade.h:174
-msgid "Insert _BSD License Notice"
-msgstr "Infoga en BSD-beskrivning"
-
-#: ../data/geany.glade.h:175
-msgid "Insert _ChangeLog Entry"
-msgstr "Infoga ChangeLog"
-
-#: ../data/geany.glade.h:176
-msgid "Insert _Function Description"
-msgstr "Infoga funktionsbeskrivning"
-
-#: ../data/geany.glade.h:177
-msgid "Insert _GPL Notice"
-msgstr "Infoga en GPL-beskrivning"
-
-#: ../data/geany.glade.h:178
-msgid "Insert _Multiline Comment"
-msgstr "Infoga flerradskommentar"
-
-#: ../data/geany.glade.h:179
-msgid "Insert matching closing tag for XML/HTML"
-msgstr "Infoga avslutande tag för XML/HTML"
-
-#: ../data/geany.glade.h:180 ../src/prefs.c:1577
-msgid "Interface"
-msgstr "Gränssnitt"
-
-#: ../data/geany.glade.h:181
-msgid "Invert all colors, by default using white text on a black background"
-msgstr "Intervera alla färger"
-
-#: ../data/geany.glade.h:182
-msgid "Invert syntax highlighting colors"
-msgstr "Invertera syntaxfärgningen"
-
-#: ../data/geany.glade.h:183 ../src/prefs.c:1589
-msgid "Keybindings"
-msgstr "Genvägar"
-
-#: ../data/geany.glade.h:184
-msgid "Left"
-msgstr "Vänster"
-
-#: ../data/geany.glade.h:185
-msgid "Line"
-msgstr "Rad"
-
-#: ../data/geany.glade.h:186
-msgid "Line _Breaking"
-msgstr "Radbrytning (unicode break)"
-
-#: ../data/geany.glade.h:187
-msgid "Line breaking column:"
-msgstr "Kolumn för radbrytning:"
-
-#: ../data/geany.glade.h:188
-msgid "Line wrapping"
-msgstr "Radbrytning"
-
-#: ../data/geany.glade.h:189
-msgid "Load Ta_gs"
-msgstr "Ladda taggar"
-
-#: ../data/geany.glade.h:190
-msgid "Load files from the last session"
-msgstr "Ladda filerna från förra sessionen"
-
-#: ../data/geany.glade.h:191
-msgid "Load virtual terminal support"
-msgstr "Ladda stöd för virtuell terminal"
-
-#: ../data/geany.glade.h:192
-msgid "Mail address:"
-msgstr "E-post:"
-
-#: ../data/geany.glade.h:193
-msgid "Marks spaces with dots and tabs with arrows"
-msgstr "Markera mellanslag med prickar och tabbar med pilar."
-
-#: ../data/geany.glade.h:194
-msgid "Match braces"
-msgstr "Matcha klamrar"
-
-#: ../data/geany.glade.h:195
-msgid "Max. symbol name suggestions:"
-msgstr "Max antal symbolnamnsförslag:"
-
-#: ../data/geany.glade.h:196
-msgid "Maximum number of entries to display in the autocompletion list"
-msgstr "Maximalt antal element att visa i autokompletteringslistan"
-
-#: ../data/geany.glade.h:197
-msgid "Message window:"
-msgstr "Meddelandefönster:"
-
-#: ../data/geany.glade.h:198
-msgid "Messages"
-msgstr "Meddelanden"
-
-#: ../data/geany.glade.h:199
-msgid ""
-"Minimal delay (in milliseconds) between two automatic updates of the symbol "
-"list. Note that a too short delay may have performance impact, especially "
-"with large files. A delay of 0 disables real-time updates."
-msgstr ""
-"Den minsta tidsskillnaden (i millisekunder) mellan två automatiska "
-"uppdateringar för symbollistan. Notera att en allt för liten tidsskillnad "
-"kan påverka prestandan negativt, speciellt vid stora filtyper. Ett värde på "
-"0 slår av realtidsuppdateringar."
-
-#: ../data/geany.glade.h:200
-msgid "Miscellaneous"
-msgstr "Övrigt"
-
-#: ../data/geany.glade.h:201 ../src/project.c:141
-#: ../plugins/classbuilder.c:470 ../plugins/classbuilder.c:480
-msgid "Name:"
-msgstr "Namn:"
-
-#: ../data/geany.glade.h:202
-msgid "New (with _Template)"
-msgstr "Ny (med mall)"
-
-#: ../data/geany.glade.h:203
-msgid "Newline strips trailing spaces"
-msgstr "Ta bort överflödiga mellanslag efter nyradstecken"
-
-#: ../data/geany.glade.h:204
-msgid "Next _Message"
-msgstr "Nästa meddelande"
-
-#: ../data/geany.glade.h:205
-msgid "Next to current"
-msgstr "Nästa till aktuell"
-
-#: ../data/geany.glade.h:206 ../src/filetypes.c:102 ../src/filetypes.c:1775
-msgid "None"
-msgstr "Inget"
-
-#: ../data/geany.glade.h:207
-msgid ""
-"Note: To apply these settings to all currently open documents, use "
-"<i>Project->Apply Default Indentation</i>."
-msgstr ""
-"Info: För att använda dessa inställningar för alla öppna dokument, använd "
-"<i>Projekt->Använd förinställt indrag</i>."
-
-#: ../data/geany.glade.h:208
-msgid "Notebook tabs"
-msgstr "Anteckningsblockets tabbar"
-
-#: ../data/geany.glade.h:209
-msgid "Only for rectangular selections"
-msgstr "Endast för rektangulära markeringar"
-
-#: ../data/geany.glade.h:210
-msgid ""
-"Only show virtual spaces beyond the end of lines when drawing a rectangular "
-"selection"
-msgstr "Visa endast virtuella ytor efter radslut vid rektangulär markering"
-
-#: ../data/geany.glade.h:211
-msgid "Open Selected F_ile"
-msgstr "Öppna vald fil"
-
-#: ../data/geany.glade.h:212
-msgid "Open new documents from the command-line"
-msgstr "Öppna nya dokument från kommandotolken"
-
-#: ../data/geany.glade.h:213
-msgid "Opens at startup the files from the last session"
-msgstr "Öppnar filerna från förra sessionen vid start"
-
-#: ../data/geany.glade.h:214
-msgid "Override Geany keybindings"
-msgstr "Vill du bryta Geanys tangentbindning?"
-
-#: ../data/geany.glade.h:215 ../src/keybindings.c:421
-msgid "P_lugin Preferences"
-msgstr "Inställningar för insticksmoduler"
-
-#: ../data/geany.glade.h:216
-msgid "Pack the toolbar to the main menu to save vertical space"
-msgstr ""
-"Lägg ihop verktygsfältet med huvudmenyn för att spara vertikalt utrymme"
-
-#: ../data/geany.glade.h:217
-msgid "Page Set_up"
-msgstr "Sidinställningar"
-
-#: ../data/geany.glade.h:218
-msgid "Parenthesis ( )"
-msgstr "Parantes ()"
-
-#: ../data/geany.glade.h:219
-msgid "Path (and possibly additional arguments) to your favorite browser"
-msgstr "Sökväg (och eventuella argument) till din favoritwebbläsare."
-
-#: ../data/geany.glade.h:220
-msgid ""
-"Path to start in when opening or saving files. Must be an absolute path. "
-"Leave blank to use the current working directory."
-msgstr ""
-"Sökväg att starta i vid öppning eller sparning av filer. Detta måste vara en "
-"absolut sökväg. Lämna blankt för att automatiskt välja filens nuvarande "
-"sökväg."
-
-#: ../data/geany.glade.h:221
-msgid "Path to start in when opening project files"
-msgstr "Sökväg att starta i när projektfiler öppnas"
-
-#: ../data/geany.glade.h:223
-#, no-c-format
-msgid "Path to the command for printing files (use %f for the filename)"
-msgstr ""
-"Sökvägen till kommandot för att skriva ut filer (%f ersätts med filnamnet)."
-
-#: ../data/geany.glade.h:224
-msgid "Placement of new file tabs:"
-msgstr "Placering av nya filflikar:"
-
-#: ../data/geany.glade.h:225
-msgid "Position:"
-msgstr "Position:"
-
-#: ../data/geany.glade.h:226
-msgid "Pr_evious Message"
-msgstr "Föregående meddelande"
-
-#: ../data/geany.glade.h:227
-msgid "Preference_s"
-msgstr "Inställningar"
-
-#: ../data/geany.glade.h:228 ../src/keybindings.c:418
-msgid "Preferences"
-msgstr "Inställningar"
-
-#: ../data/geany.glade.h:229
-msgid ""
-"Pressing tab/shift-tab indents/unindents instead of inserting a tab character"
-msgstr ""
-"Att trycka på tab / skift-tab, ökar / minskar indrag istället för att mata "
-"in ett tab-tecken"
-
-#: ../data/geany.glade.h:230 ../src/printing.c:376
-msgid "Print line numbers"
-msgstr "Visa radnummer"
-
-#: ../data/geany.glade.h:231
-msgid "Print only the basename (without the path) of the printed file"
-msgstr "Skriv bara ut filnamnet, ej sökvägen."
-
-#: ../data/geany.glade.h:232 ../src/printing.c:386
-msgid "Print page header"
-msgstr "Skriv ut filhuvud"
-
-#: ../data/geany.glade.h:233 ../src/printing.c:381
-msgid "Print page numbers"
-msgstr "Skriv ut sidnummer"
-
-#: ../data/geany.glade.h:234 ../src/prefs.c:1591
-msgid "Printing"
-msgstr "Utskrift"
-
-#: ../data/geany.glade.h:235
-msgid ""
-"Prints a vertical line in the editor window at the given cursor position "
-"(see below)"
-msgstr ""
-"Visar en vertikal linje i editor-fönstret vid en given position (se nedan)."
-
-#: ../data/geany.glade.h:236 ../src/keybindings.c:234
-msgid "Project"
-msgstr "Projekt"
-
-#: ../data/geany.glade.h:237
-msgid "Project Properties"
-msgstr "Projektegenskaper"
-
-#: ../data/geany.glade.h:238
-msgid "Project files:"
-msgstr "Projektfiler:"
-
-#: ../data/geany.glade.h:239
-msgid "R_eload As"
-msgstr "Ladda om som"
-
-#: ../data/geany.glade.h:240
-msgid "Read _Only"
-msgstr "Skrivskyddad"
-
-#: ../data/geany.glade.h:241
-msgid "Recent _Files"
-msgstr "Senaste filer"
-
-#: ../data/geany.glade.h:242
-msgid "Recent files list length:"
-msgstr "Längd på Senaste-filer listan:"
-
-#: ../data/geany.glade.h:243
-msgid "Remove Error _Indicators"
-msgstr "Ta bort felindikatorer"
-
-#: ../data/geany.glade.h:244
-msgid "Remove _Markers"
-msgstr "Ta bort markeringar"
-
-#: ../data/geany.glade.h:245
-msgid ""
-"Removes all messages from the status bar. The messages are still displayed "
-"in the status messages window."
-msgstr ""
-"Tar bort alla meddelanden från statusfältet. Meddelanden visas fortförande i "
-"fönstret för statusmeddelanden."
-
-#: ../data/geany.glade.h:246
-msgid "Removes trailing spaces and tabs and the end of lines"
-msgstr "Tar bort överflödiga mellanslag och tab-tecken i slutet av filen"
-
-#: ../data/geany.glade.h:247
-msgid "Replace Spaces b_y Tabs"
-msgstr "Ersätt mellanslag med tab"
-
-#: ../data/geany.glade.h:248 ../src/keybindings.c:559
-msgid "Replace tabs by space"
-msgstr "Ersätt tab-tecken med mellanslag"
-
-#: ../data/geany.glade.h:249
-msgid "Replaces all tabs in document by spaces"
-msgstr ""
-"Ersätter alla tab-tecken i dokumentet med mellanslag (indraget blir lika "
-"stort)."
-
-#: ../data/geany.glade.h:250
-msgid "Report a _Bug"
-msgstr ""
-
-#: ../data/geany.glade.h:251
-msgid "Right"
-msgstr "Höger"
-
-#: ../data/geany.glade.h:252
-msgid ""
-"Run programs in VTE instead of opening a terminal emulation window. Please "
-"note, programs executed in VTE cannot be stopped"
-msgstr ""
-"Kör ett program i VTE i stället för att öppna ett terminalemuleringsfönster. "
-"Var god att notera att program som exekveras i VTE inte kan stoppas."
-
-#: ../data/geany.glade.h:253
-msgid "S_ystem default"
-msgstr "Systeminställningar"
-
-#: ../data/geany.glade.h:254
-msgid "Save A_ll"
-msgstr "Spara alla"
-
-#: ../data/geany.glade.h:255
-msgid "Save window position and geometry"
-msgstr "Spara fönsterplacering och storlek"
-
-#: ../data/geany.glade.h:256
-msgid "Saves the window position and geometry and restores it at the start"
-msgstr "Sparar fönstrets position och storlek, och återställer det vid start"
-
-#: ../data/geany.glade.h:257
-msgid "Scribble"
-msgstr "Klotterplank"
-
-#: ../data/geany.glade.h:258
-msgid "Scroll on keystroke"
-msgstr "Rulla ner"
-
-#: ../data/geany.glade.h:259
-msgid "Scroll on output"
-msgstr "Rulla utmatning"
-
-#: ../data/geany.glade.h:260
-msgid "Scrollback lines:"
-msgstr "Radbuffer:"
-
-#: ../data/geany.glade.h:261
-msgid "Set File_type"
-msgstr "Ange filtyp"
-
-#: ../data/geany.glade.h:262
-msgid "Set Line E_ndings"
-msgstr "Ange radslut"
-
-#: ../data/geany.glade.h:263
-msgid "Set _Encoding"
-msgstr "Ange kodning"
-
-#: ../data/geany.glade.h:264
-msgid "Sets the backround color of the text in the terminal widget"
-msgstr "Justerar bakgrundsfärgen för texten i terminalen"
-
-#: ../data/geany.glade.h:265
-msgid "Sets the color of the long line marker"
-msgstr "Väljer färgen på markören för långa rader"
-
-#: ../data/geany.glade.h:266
-msgid "Sets the default encoding for newly created files"
-msgstr "Anger förvald kodning för nyskapade filer."
-
-#: ../data/geany.glade.h:267
-msgid "Sets the default encoding for opening existing non-Unicode files"
-msgstr "Anger förvald teckenkodning vid öppning av icke-Unicode filer"
-
-#: ../data/geany.glade.h:268
-msgid "Sets the editor font"
-msgstr "Anger texteditorns teckensnitt"
-
-#: ../data/geany.glade.h:269
-msgid "Sets the font for the message window"
-msgstr "Justerar teckensnittet för meddelandefönstret"
-
-#: ../data/geany.glade.h:270
-msgid "Sets the font for the symbol list"
-msgstr "Justerar teckensnittet för symbollistan"
-
-#: ../data/geany.glade.h:271
-msgid "Sets the font for the terminal widget"
-msgstr "Justerar teckensnittet för terminalen."
-
-#: ../data/geany.glade.h:272
-msgid "Sets the foreground color of the text in the terminal widget"
-msgstr "Justerar förgrundsfärgen för texten i terminalen."
-
-#: ../data/geany.glade.h:273
-msgid ""
-"Sets the path to the shell which should be started inside the terminal "
-"emulation"
-msgstr "Justerar sökvägen till skalet som skall startas i terminalemulatorn."
-
-#: ../data/geany.glade.h:274
-msgid "Shell:"
-msgstr "Skal:"
-
-#: ../data/geany.glade.h:275
-msgid "Show Line _Endings"
-msgstr "Visa radslut"
-
-#: ../data/geany.glade.h:276
-msgid "Show Message _Window"
-msgstr "Visa meddelandefönster"
-
-#: ../data/geany.glade.h:277
-msgid "Show Side_bar"
-msgstr "Visa sidofält"
-
-#: ../data/geany.glade.h:278
-msgid "Show _Indentation Guides"
-msgstr "Visa indragsmarkörer"
-
-#: ../data/geany.glade.h:279
-msgid "Show _Line Numbers"
-msgstr "Visa radnummer"
-
-#: ../data/geany.glade.h:280
-msgid "Show _Markers Margin"
-msgstr "Visa marginalmarkörer"
-
-#: ../data/geany.glade.h:281
-msgid "Show _Toolbar"
-msgstr "Visa verktygsfält"
-
-#: ../data/geany.glade.h:282
-msgid "Show _White Space"
-msgstr "Visa tomrum"
-
-#: ../data/geany.glade.h:283
-msgid "Show close buttons"
-msgstr "Visa knappar för stängning"
-
-#: ../data/geany.glade.h:284
-msgid "Show documents list"
-msgstr "Visa listan för öppna filer"
-
-#: ../data/geany.glade.h:285
-msgid "Show editor tabs"
-msgstr "Visa editorns flikar"
-
-#: ../data/geany.glade.h:286
-msgid "Show indentation guides"
-msgstr "Visa indragsmarkörer"
-
-#: ../data/geany.glade.h:287
-msgid "Show line endings"
-msgstr "Visa radslut"
-
-#: ../data/geany.glade.h:288
-msgid "Show line numbers"
-msgstr "Visa radnummer"
-
-#: ../data/geany.glade.h:289
-msgid "Show markers margin"
-msgstr "Visa marginalmarkörer"
-
-#: ../data/geany.glade.h:290
-msgid "Show sidebar"
-msgstr "Visa sidofält"
-
-#: ../data/geany.glade.h:291
-msgid "Show status bar"
-msgstr "Visa statusfält"
-
-#: ../data/geany.glade.h:292
-msgid "Show symbol list"
-msgstr "Visa symbollista"
-
-#: ../data/geany.glade.h:293
-msgid "Show t_oolbar"
-msgstr "Visa verktygsfält"
-
-#: ../data/geany.glade.h:294
-msgid "Show white space"
-msgstr "Visa tomrum"
-
-#: ../data/geany.glade.h:295
-msgid "Shows a confirmation dialog on exit"
-msgstr "Begär bekräftelse vid avslut"
-
-#: ../data/geany.glade.h:296
-msgid ""
-"Shows a small cross button in the file tabs to easily close files when "
-"clicking on it (requires restart of Geany)"
-msgstr ""
-"Visar ett litet kors i filflikarna, som kan användas att enkelt stänga filer "
-"om du klickar på det (kräver att du startar om Geany)."
-
-#: ../data/geany.glade.h:297
-msgid "Shows or hides the Line Number margin"
-msgstr "Visar eller gömmer radnummer-marginalen"
-
-#: ../data/geany.glade.h:298
-msgid ""
-"Shows or hides the small margin right of the line numbers, which is used to "
-"mark lines"
-msgstr ""
-"Visar eller gömmer den lilla marginalen till höger om radnummren som används "
-"för att markera rader."
-
-#: ../data/geany.glade.h:299
-msgid "Shows small dotted lines to help you to use the right indentation"
-msgstr "Visar små prickade linjer för att hjälpa dig se rätt indrag."
-
-#: ../data/geany.glade.h:300
-msgid "Shows the line ending character"
-msgstr "Visa radslutstecknet"
-
-#: ../data/geany.glade.h:301
-msgid "Sidebar:"
-msgstr "Sidofält:"
-
-#: ../data/geany.glade.h:302
-msgid "Single quotes ' '"
-msgstr "Enkla citeringstecken ' '"
-
-#: ../data/geany.glade.h:303
-msgid "Snippet completion"
-msgstr "Komplettera textfragment"
-
-#: ../data/geany.glade.h:304
-msgid ""
-"Space separated list of file patterns used for the find in files dialog (e."
-"g. *.c *.h)"
-msgstr ""
-"Mellanslagsseparerad lista med filmönster som används för att hitta filer "
-"(exempelvis *.c *.h)"
-
-#: ../data/geany.glade.h:305
-msgid ""
-"Specifies the history in lines, which you can scroll back in the terminal "
-"widget"
-msgstr "Anger hur många rader som du kan rulla tillbaka i terminalen"
-
-#: ../data/geany.glade.h:306
-msgid "Specifies the number of files which are stored in the Recent files list"
-msgstr "Anger antalet filer som lagras i Senaste-filer listan."
-
-#: ../data/geany.glade.h:307 ../src/printing.c:418
-msgid ""
-"Specify a format for the date and time stamp which is added to the page "
-"header on each page. You can use any conversion specifiers which can be used "
-"with the ANSI C strftime function."
-msgstr ""
-"Skriv in användardefinierat datum- och tidsformat, som kommer att visas i "
-"sidhuvudet. Du kan använda den syntax som specificeras av ANSI C:s strftime "
-"funktion."
-
-#: ../data/geany.glade.h:308
-msgid ""
-"Specify a format for the the {datetime} wildcard. You can use any conversion "
-"specifiers which can be used with the ANSI C strftime function."
-msgstr ""
-"Skriv in ett format för {datetime}. Du kan använda de "
-"konverteringskonventioner som används i ANSI C strftime-funktionen."
-
-#: ../data/geany.glade.h:309
-msgid ""
-"Specify a format for the the {date} wildcard. You can use any conversion "
-"specifiers which can be used with the ANSI C strftime function."
-msgstr ""
-"Skriv in ett format för att använda till fältet {date}. Du kan använda den "
-"syntax som specificeras av ANSI C:s strftime funktion."
-
-#: ../data/geany.glade.h:310
-msgid ""
-"Specify a format for the the {year} wildcard. You can use any conversion "
-"specifiers which can be used with the ANSI C strftime function."
-msgstr ""
-"Skriv in ett format för att använda för {year}. Du kan använda den syntax "
-"som specificeras av ANSI C:s strftime funktion."
-
-#: ../data/geany.glade.h:311
-msgid "Square brackets [ ]"
-msgstr "Fyrkantig parantes [ ]"
-
-#: ../data/geany.glade.h:312
-msgid "Start a new file for each command-line filename that doesn't exist"
-msgstr "Skapa en ny fil för varje filnamn som inte existerar."
-
-#: ../data/geany.glade.h:313
+#: ../data/geany.glade.h:43
+msgid "<b>Paths</b>"
+msgstr "<b>Sökvägar</b>"
+
+#: ../data/geany.glade.h:44
 msgid "Startup"
 msgstr "Programstart"
 
-#: ../data/geany.glade.h:314
-msgid "Startup path:"
-msgstr "Sökväg vid start:"
+#: ../data/geany.glade.h:45
+msgid "Beep on errors or when compilation has finished"
+msgstr "Pip vid fel och när kompilering har avslutats"
 
-#: ../data/geany.glade.h:315
-msgid "Status"
-msgstr "Status"
+#: ../data/geany.glade.h:46
+msgid ""
+"Whether to beep if an error occurred or when the compilation process has "
+"finished"
+msgstr ""
+"Om datorn skall avge en ljudsignal när när kompileringen har avslutats."
 
-#: ../data/geany.glade.h:316
-msgid "Stop scrolling at last line"
-msgstr "Sluta rulla vid sista raden"
-
-#: ../data/geany.glade.h:317
-msgid "Store project file inside the project base directory"
-msgstr "Lagra projektfiler i projektets basmapp"
-
-#: ../data/geany.glade.h:318
-msgid "Strip trailing spaces and tabs"
-msgstr "Ta bort överflödiga mellanslag och tab-tecken"
-
-#: ../data/geany.glade.h:319
-msgid "Suppress status messages in the status bar"
-msgstr "Ignorera statusmeddelanden i statusfältet"
-
-#: ../data/geany.glade.h:320
-msgid "Switch to last used document after closing a tab"
-msgstr "Byt till det sist använda dokumentet efter en flik stängts"
-
-#: ../data/geany.glade.h:321
+#: ../data/geany.glade.h:47
 msgid "Switch to status message list at new message"
 msgstr "Byt till statusmeddelandelistan när ett nytt meddelande visas"
 
-#: ../data/geany.glade.h:322
+#: ../data/geany.glade.h:48
 msgid ""
 "Switch to the status message tab (in the notebook window at the bottom) if a "
 "new status message arrives"
@@ -1463,151 +247,65 @@ msgstr ""
 "Huruvida Geany skall byta till statusmeddelandefönstret (vid botten) om ett "
 "nytt statusmeddelande kommer."
 
-#: ../data/geany.glade.h:323
-msgid "Symbol list update frequency:"
-msgstr "Frekvens för sybollistans uppdatering:"
+#: ../data/geany.glade.h:49
+msgid "Suppress status messages in the status bar"
+msgstr "Ignorera statusmeddelanden i statusfältet"
 
-#: ../data/geany.glade.h:324
-msgid "Symbol list:"
-msgstr "Symbollista:"
-
-#: ../data/geany.glade.h:325 ../src/sidebar.c:124
-msgid "Symbols"
-msgstr "Symboler"
-
-#: ../data/geany.glade.h:326
-msgid "System _default"
-msgstr "Grundinställningar"
-
-#: ../data/geany.glade.h:327
-msgid "T_abs and Spaces"
-msgstr "Tab och mellanslag"
-
-#: ../data/geany.glade.h:328
-msgid "T_abs and spaces"
-msgstr "Tab och mellanslag"
-
-#: ../data/geany.glade.h:329 ../src/keybindings.c:367
-msgid "T_oggle Case of Selection"
-msgstr "Växla mellan gemener och versaler"
-
-#: ../data/geany.glade.h:330
-msgid "Tab key indents"
-msgstr "Tab-tangentens indrag"
-
-#: ../data/geany.glade.h:331 ../src/prefs.c:1587
-msgid "Templates"
-msgstr "Mallar"
-
-#: ../data/geany.glade.h:332 ../src/prefs.c:1595 ../src/vte.c:281
-msgid "Terminal"
-msgstr "Terminal"
-
-#: ../data/geany.glade.h:333
-msgid "Terminal:"
-msgstr "Terminal:"
-
-#: ../data/geany.glade.h:334
+#: ../data/geany.glade.h:50
 msgid ""
-"The amount of characters which are necessary to show the symbol "
-"autocompletion list"
-msgstr "Mängden tecken som behövs för att visa symbolautokompletteringslistan"
-
-#: ../data/geany.glade.h:335
-msgid ""
-"The background color of characters after the given cursor position (see "
-"below) changed to the color set below, (this is recommended if you use "
-"proportional fonts)"
+"Removes all messages from the status bar. The messages are still displayed "
+"in the status messages window."
 msgstr ""
-"Bakgrundsfärgen ändras vid en given kolumn för att indikera var radbrytning "
-"bör ske. Detta är lämpligt for proportionella teckensnitt."
+"Tar bort alla meddelanden från statusfältet. Meddelanden visas fortförande i "
+"fönstret för statusmeddelanden."
 
-#: ../data/geany.glade.h:336
+#: ../data/geany.glade.h:51
+msgid "Auto-focus widgets (focus follows mouse)"
+msgstr "Autofokusera gränssnittskomponenter (fokus följer musen)"
+
+#: ../data/geany.glade.h:52
 msgid ""
-"The long line marker is a thin vertical line in the editor, it helps to mark "
-"long lines, or as a hint to break the line. Set this value to a value "
-"greater than 0 to specify the column where it should appear."
-msgstr ""
-"Markören för långa rader är en tunn vertikal linje som visas i editorn. Den "
-"hjälper till att visa var det är läge att bryta rader. Värdet anger i vilken "
-"kolumn markören visas."
+"Gives the focus automatically to widgets below the mouse cursor. Works for "
+"the main editor widget, the scribble, the toolbar search and goto line "
+"fields and the VTE."
+msgstr "Ger automatiskt fokus till gränssnittskomponenter under muspekaren."
 
-#: ../data/geany.glade.h:337
-msgid "The name of the developer"
-msgstr "Utvecklarens namn"
-
-#: ../data/geany.glade.h:338
-msgid "The width in chars of a single indent"
-msgstr "Bredd, i antal tecken, på ett indrag"
-
-#: ../data/geany.glade.h:339
-msgid ""
-"This option disables the automatic detection of the file encoding when "
-"opening non-Unicode files and opens the file with the specified encoding "
-"(usually not needed)"
-msgstr ""
-"Detta tillval väljer bort automatisk igenkänning av kodning när nya icke-"
-"unicode filer öppnas, och använder i stället en specificerad kodning (behövs "
-"vanligen inte)"
-
-#: ../data/geany.glade.h:340
-msgid ""
-"This option disables the keybinding to popup the menu bar (default is F10). "
-"Disabling it can be useful if you use, for example, Midnight Commander "
-"within the VTE."
-msgstr ""
-"Detta tillval gör så att menyn inte visas när du trycker på F10. Detta kan "
-"vara användbart, exempelvis om du kör Midnight Commander i VTE."
-
-#: ../data/geany.glade.h:341
-msgid "To_ggle All Additional Widgets"
-msgstr "Visa / göm verktygsfält"
-
-#: ../data/geany.glade.h:342
-msgid "Toggle the documents list on and off"
-msgstr "Stäng av / på listan med öppna filer"
-
-#: ../data/geany.glade.h:343
-msgid "Toggle the symbol list on and off"
-msgstr "Stäng av / på symbollistan"
-
-#: ../data/geany.glade.h:344 ../src/prefs.c:1579
-msgid "Toolbar"
-msgstr "Verktygsfält"
-
-#: ../data/geany.glade.h:345 ../src/keybindings.c:236 ../src/prefs.c:1585
-msgid "Tools"
-msgstr "Verktyg"
-
-#: ../data/geany.glade.h:346
-msgid "Top"
-msgstr "Topp"
-
-#: ../data/geany.glade.h:347
-msgid ""
-"Type a defined short character sequence and complete it to a more complex "
-"string using a single keypress"
-msgstr ""
-"Geany kan gissa vad du vill skriva, och visar förslag på fullständiga "
-"strängar som du kan välja mellan med ett enkelt tryck på returtangenten."
-
-#: ../data/geany.glade.h:348
-msgid "Type:"
-msgstr "Typ:"
-
-#: ../data/geany.glade.h:349
-msgid "U_ncomment Line(s)"
-msgstr "Avkommentera rader"
-
-#: ../data/geany.glade.h:350
+#: ../data/geany.glade.h:53
 msgid "Use Windows File Open/Save dialogs"
 msgstr "Använd Windows gränssnitt för att öppna / spara filer"
 
-#: ../data/geany.glade.h:351
-msgid "Use an external command for printing"
-msgstr "Använd ett externt kommando för att skriva ut"
+#: ../data/geany.glade.h:54
+msgid ""
+"Defines whether to use the native Windows File Open/Save dialogs or whether "
+"to use the GTK default dialogs"
+msgstr ""
+"Specificerar om Windows eller GTK skall användas vid öppna / spara filer"
 
-#: ../data/geany.glade.h:352
+#: ../data/geany.glade.h:55
+msgid "<b>Miscellaneous</b>"
+msgstr "<b>Övrigt</b>"
+
+#: ../data/geany.glade.h:56
+msgid "Always wrap search"
+msgstr "Sök alltid i hela dokumentet"
+
+#: ../data/geany.glade.h:57
+msgid "Always wrap search around the document"
+msgstr "Sök alltid i hela dokumentet"
+
+#: ../data/geany.glade.h:58
+msgid "Hide the Find dialog"
+msgstr "Göm Sök-dialogrutan"
+
+#: ../data/geany.glade.h:59
+msgid "Hide the Find dialog after clicking Find Next/Previous"
+msgstr "Göm Sök-dialogrutan efter du klickat på Sök Nästa/Föregående"
+
+#: ../data/geany.glade.h:60
+msgid "Use the current word under the cursor for Find dialogs"
+msgstr "Använd ordet under muspekaren vid Sök"
+
+#: ../data/geany.glade.h:61
 msgid ""
 "Use current word under the cursor when opening the Find, Find in Files or "
 "Replace dialog and there is no selection"
@@ -1615,62 +313,285 @@ msgstr ""
 "Använd ordet under muspekaren när Sök, Sök i filer eller Ersätt väljs och "
 "det inte finns något markerat tidigare"
 
-#: ../data/geany.glade.h:353
-msgid "Use fixed encoding when opening non-Unicode files"
-msgstr "Använd fast kodning när icke-unicode filer öppnas"
-
-#: ../data/geany.glade.h:354
-msgid "Use global settings"
-msgstr "Använd globala inställningar"
-
-#: ../data/geany.glade.h:355
-msgid "Use indicators to show compile errors"
-msgstr "Använd indikatorer för att visa kompileringsfel"
-
-#: ../data/geany.glade.h:356
-msgid "Use native GTK printing"
-msgstr "Använd GTKs utskriftshantering"
-
-#: ../data/geany.glade.h:357
-msgid "Use one tab per indent"
-msgstr "Använd en tab per indrag"
-
-#: ../data/geany.glade.h:358
-msgid "Use project-based session files"
-msgstr "Använd projektbaserade sessionsfiler"
-
-#: ../data/geany.glade.h:359
-msgid ""
-"Use spaces if the total indent is less than the tab width, otherwise use both"
-msgstr ""
-"Använd mellanslag om det totala indraget är mindre än tab-bredden -- i annat "
-"fall, använd båda"
-
-#: ../data/geany.glade.h:360
-msgid "Use spaces when inserting indentation"
-msgstr "Använd mellanslag vid infogande av indrag"
-
-#: ../data/geany.glade.h:361 ../src/printing.c:404
-msgid "Use the basename of the printed file"
-msgstr "Använd den utskrivna filens basnamn"
-
-#: ../data/geany.glade.h:362
+#: ../data/geany.glade.h:62
 msgid "Use the current file's directory for Find in Files"
 msgstr "Använd nuvarande fils sökväg för funktionen Sök i Filer"
 
-#: ../data/geany.glade.h:363
-msgid "Use the current word under the cursor for Find dialogs"
-msgstr "Använd ordet under muspekaren vid Sök"
+#: ../data/geany.glade.h:63
+msgid "<b>Search</b>"
+msgstr "<b>Sök</b>"
 
-#: ../data/geany.glade.h:364 ../src/prefs.c:1593
-msgid "Various"
-msgstr "Övriga"
+#: ../data/geany.glade.h:64
+msgid "Use project-based session files"
+msgstr "Använd projektbaserade sessionsfiler"
 
-#: ../data/geany.glade.h:365
-msgid "Version number, which a new file initially has"
-msgstr "Versionnummret som filen börjar med"
+#: ../data/geany.glade.h:65
+msgid ""
+"Whether to store a project's session files and open them when re-opening the "
+"project"
+msgstr ""
+"Huruvida projektets sessionsfiler skall sparas för att senare öppna den när "
+"projektet åter öppnas"
 
-#: ../data/geany.glade.h:366
+#: ../data/geany.glade.h:66
+msgid "Store project file inside the project base directory"
+msgstr "Lagra projektfiler i projektets basmapp"
+
+#: ../data/geany.glade.h:67
+msgid ""
+"When enabled, a project file is stored by default inside the project base "
+"directory when creating new projects instead of one directory above the base "
+"directory. You can still change the path of the project file in the New "
+"Project dialog."
+msgstr ""
+"När tillvalet är aktiverat, lagras projektfilen innuti bassökvägen för "
+"projektet istället för ett steg ovanför bassökvägen. Du kan fortförande "
+"ändra sölvägen till projektfilen i \"Nytt projekt\"-menyn."
+
+#: ../data/geany.glade.h:68
+msgid "<b>Projects</b>"
+msgstr "<b>Projekt</b>"
+
+#: ../data/geany.glade.h:69
+msgid "Miscellaneous"
+msgstr "Övrigt"
+
+#. TODO Find a better way to map the current notebook page to the
+#. * corresponding chapter in the documentation, comparing translatable
+#. * strings is easy to break. Maybe attach an identifying string to the
+#. * tab label object.
+#: ../data/geany.glade.h:70 ../src/prefs.c:1575
+msgid "General"
+msgstr "Generellt"
+
+#: ../data/geany.glade.h:71
+msgid "Show symbol list"
+msgstr "Visa symbollista"
+
+#: ../data/geany.glade.h:72
+msgid "Toggle the symbol list on and off"
+msgstr "Stäng av / på symbollistan"
+
+#: ../data/geany.glade.h:73
+msgid "Show documents list"
+msgstr "Visa listan för öppna filer"
+
+#: ../data/geany.glade.h:74
+msgid "Toggle the documents list on and off"
+msgstr "Stäng av / på listan med öppna filer"
+
+#: ../data/geany.glade.h:75
+msgid "Show sidebar"
+msgstr "Visa sidofält"
+
+#: ../data/geany.glade.h:76
+msgid "Position:"
+msgstr "Position:"
+
+#: ../data/geany.glade.h:77
+msgid "Left"
+msgstr "Vänster"
+
+#: ../data/geany.glade.h:78
+msgid "Right"
+msgstr "Höger"
+
+#: ../data/geany.glade.h:79
+msgid "<b>Sidebar</b>"
+msgstr "<b>Sidofält</b>"
+
+#: ../data/geany.glade.h:80
+msgid "Symbol list:"
+msgstr "Symbollista:"
+
+#: ../data/geany.glade.h:81
+msgid "Message window:"
+msgstr "Meddelandefönster:"
+
+#: ../data/geany.glade.h:82
+msgid "Editor:"
+msgstr "Editor:"
+
+#: ../data/geany.glade.h:83
+msgid "Sets the font for the message window"
+msgstr "Justerar teckensnittet för meddelandefönstret"
+
+#: ../data/geany.glade.h:84
+msgid "Sets the font for the symbol list"
+msgstr "Justerar teckensnittet för symbollistan"
+
+#: ../data/geany.glade.h:85
+msgid "Sets the editor font"
+msgstr "Anger texteditorns teckensnitt"
+
+#: ../data/geany.glade.h:86
+msgid "<b>Fonts</b>"
+msgstr "<b>Teckensnitt</b>"
+
+#: ../data/geany.glade.h:87
+msgid "Show status bar"
+msgstr "Visa statusfält"
+
+#: ../data/geany.glade.h:88
+msgid "Whether to show the status bar at the bottom of the main window"
+msgstr "Huruvida statusfältet skall visas längst ner i huvudfönstret."
+
+#: ../data/geany.glade.h:89 ../src/prefs.c:1577
+msgid "Interface"
+msgstr "Gränssnitt"
+
+#: ../data/geany.glade.h:90
+msgid "Show editor tabs"
+msgstr "Visa editorns flikar"
+
+#: ../data/geany.glade.h:91
+msgid "Show close buttons"
+msgstr "Visa knappar för stängning"
+
+#: ../data/geany.glade.h:92
+msgid ""
+"Shows a small cross button in the file tabs to easily close files when "
+"clicking on it (requires restart of Geany)"
+msgstr ""
+"Visar ett litet kors i filflikarna, som kan användas att enkelt stänga filer "
+"om du klickar på det (kräver att du startar om Geany)."
+
+#: ../data/geany.glade.h:93
+msgid "Placement of new file tabs:"
+msgstr "Placering av nya filflikar:"
+
+#: ../data/geany.glade.h:94
+msgid "File tabs will be placed on the left of the notebook"
+msgstr "Fil-tabbar kommer att placeras till vänster om anteckningsboken"
+
+#: ../data/geany.glade.h:95
+msgid "File tabs will be placed on the right of the notebook"
+msgstr "Fil-tabbar kommer att placeras till höger om anteckningsboken"
+
+#: ../data/geany.glade.h:96
+msgid "Next to current"
+msgstr "Nästa till aktuell"
+
+#: ../data/geany.glade.h:97
+msgid ""
+"Whether to place file tabs next to the current tab rather than at the edges "
+"of the notebook"
+msgstr ""
+"Huruvida nya fil-flikar skall placeras bredvid aktuell flik eller vid kanten "
+"av anteckningarna"
+
+#: ../data/geany.glade.h:98
+msgid "Double-clicking hides all additional widgets"
+msgstr "Dubbelklick gömmer alla övriga gränssnittskomponenter"
+
+#: ../data/geany.glade.h:99
+msgid "Calls the View->Toggle All Additional Widgets command"
+msgstr "Kör Visa -> <b>Visa / göm verktygsfält</b>-kommandot"
+
+#: ../data/geany.glade.h:100
+msgid "Switch to last used document after closing a tab"
+msgstr "Byt till det sist använda dokumentet efter en flik stängts"
+
+#: ../data/geany.glade.h:101
+msgid "<b>Editor tabs</b>"
+msgstr "<b>Editorns flikar</b>"
+
+#: ../data/geany.glade.h:102
+msgid "Sidebar:"
+msgstr "Sidofält:"
+
+#: ../data/geany.glade.h:103
+msgid "<b>Tab positions</b>"
+msgstr "<b>Tab positioner</b>"
+
+#: ../data/geany.glade.h:104
+msgid "Notebook tabs"
+msgstr "Anteckningsblockets tabbar"
+
+#: ../data/geany.glade.h:105
+msgid "Show t_oolbar"
+msgstr "Visa verktygsfält"
+
+#: ../data/geany.glade.h:106
+msgid "_Append toolbar to the menu"
+msgstr "Lägg till verktygsfältet till menyn"
+
+#: ../data/geany.glade.h:107
+msgid "Pack the toolbar to the main menu to save vertical space"
+msgstr ""
+"Lägg ihop verktygsfältet med huvudmenyn för att spara vertikalt utrymme"
+
+#: ../data/geany.glade.h:108 ../src/toolbar.c:933
+msgid "Customize Toolbar"
+msgstr "Anpassa verktygsfält"
+
+#: ../data/geany.glade.h:109
+msgid "System _default"
+msgstr "Grundinställningar"
+
+#: ../data/geany.glade.h:110
+msgid "Images _and text"
+msgstr "Bilder och text"
+
+#: ../data/geany.glade.h:111
+msgid "_Images only"
+msgstr "Endast bilder"
+
+#: ../data/geany.glade.h:112
+msgid "_Text only"
+msgstr "Endast text"
+
+#: ../data/geany.glade.h:113
+msgid "<b>Icon style</b>"
+msgstr "<b>Ikonstil</b>"
+
+#: ../data/geany.glade.h:114
+msgid "S_ystem default"
+msgstr "Systeminställningar"
+
+#: ../data/geany.glade.h:115
+msgid "_Small icons"
+msgstr "Små ikoner"
+
+#: ../data/geany.glade.h:116
+msgid "_Very small icons"
+msgstr "Mycket små ikoner"
+
+#: ../data/geany.glade.h:117
+msgid "_Large icons"
+msgstr "Stora ikoner"
+
+#: ../data/geany.glade.h:118
+msgid "<b>Icon size</b>"
+msgstr "<b>Ikonstorlek</b>"
+
+#: ../data/geany.glade.h:119
+msgid "<b>Toolbar</b>"
+msgstr "<b>Verktygsfält</b>"
+
+#: ../data/geany.glade.h:120 ../src/prefs.c:1579
+msgid "Toolbar"
+msgstr "Verktygsfält"
+
+#: ../data/geany.glade.h:121
+msgid "Line wrapping"
+msgstr "Radbrytning"
+
+#: ../data/geany.glade.h:122
+msgid ""
+"Wrap the line at the window border and continue it on the next line. Note: "
+"line wrapping has a high performance cost for large documents so should be "
+"disabled on slow machines."
+msgstr ""
+"Radbryt rader vid fönsterkant och fortsätt på nästa rad. Observera att "
+"radbrytning tar mycket systemresurser vid redigering av stora dokument, och "
+"bör därför vara avslagen på långsamma datorer."
+
+#: ../data/geany.glade.h:123
+msgid "\"Smart\" home key"
+msgstr "Aktivera \"smart\" home-tangent"
+
+#: ../data/geany.glade.h:124
 msgid ""
 "When \"smart\" home is enabled, the HOME key will move the caret to the "
 "first non-blank character of the line, unless it is already there, it moves "
@@ -1683,93 +604,37 @@ msgstr ""
 "redan är där. När denna funktion är avaktiverad kommer HOME tangenten alltid "
 "flytta teckenmarkören till början av raden, oavsett dess nuvarande position."
 
-#: ../data/geany.glade.h:367
+#: ../data/geany.glade.h:125
+msgid "Disable Drag and Drop"
+msgstr "Avaktivera drag-och-släpp"
+
+#: ../data/geany.glade.h:126
 msgid ""
-"When enabled, a project file is stored by default inside the project base "
-"directory when creating new projects instead of one directory above the base "
-"directory. You can still change the path of the project file in the New "
-"Project dialog."
-msgstr ""
-"När tillvalet är aktiverat, lagras projektfilen innuti bassökvägen för "
-"projektet istället för ett steg ovanför bassökvägen. Du kan fortförande "
-"ändra sölvägen till projektfilen i \"Nytt projekt\"-menyn."
+"Disable drag and drop completely in the editor window so you can't drag and "
+"drop any selections within or outside of the editor window"
+msgstr "Avaktivera drag-och-släpp i editor-fönstret"
 
-#: ../data/geany.glade.h:368
+#: ../data/geany.glade.h:127
+msgid "Code folding"
+msgstr "Aktivera ihopvikning"
+
+#: ../data/geany.glade.h:128
+msgid "Fold/unfold all children of a fold point"
+msgstr "Vik upp alla vid uppvikningspunkten"
+
+#: ../data/geany.glade.h:129
 msgid ""
-"Whether the virtual terminal emulation (VTE) should be loaded at startup, "
-"disable it if you do not need it"
+"Fold or unfold all children of a fold point. By pressing the Shift key while "
+"clicking on a fold symbol the contrary behavior is used."
 msgstr ""
-"Huruvida den virtuella terminalemuleringen (VTE) skall laddas vid start. "
-"Välj bort om du ej behöver den."
+"Vik eller vik upp allt vid vikningspunkten. Genom att hålla in shift-"
+"tangenten medan du klickar på vikningspunkten kan motsatt effekt uppnås."
 
-#: ../data/geany.glade.h:369
-msgid ""
-"Whether to beep if an error occurred or when the compilation process has "
-"finished"
-msgstr ""
-"Om datorn skall avge en ljudsignal när när kompileringen har avslutats."
+#: ../data/geany.glade.h:130
+msgid "Use indicators to show compile errors"
+msgstr "Använd indikatorer för att visa kompileringsfel"
 
-#: ../data/geany.glade.h:370
-msgid "Whether to blink the cursor"
-msgstr "Huruvida textmarkören skall blinka"
-
-#: ../data/geany.glade.h:371
-msgid ""
-"Whether to detect the indentation type from file contents when a file is "
-"opened"
-msgstr ""
-"Huruvida indragstyp skall hittas automatiskt via filens innehåll när den "
-"öppnats."
-
-#: ../data/geany.glade.h:372
-msgid ""
-"Whether to detect the indentation width from file contents when a file is "
-"opened"
-msgstr ""
-"Huruvida indragsbredd skall hittas automatiskt via filens innehåll när den "
-"öppnas"
-
-#: ../data/geany.glade.h:373
-msgid ""
-"Whether to execute \\\"cd $path\\\" when you switch between opened files"
-msgstr ""
-"Huruvida \\\"cd $path\\\" skall exekveras när du växlar mellan öppna filer"
-
-#: ../data/geany.glade.h:374
-msgid ""
-"Whether to place file tabs next to the current tab rather than at the edges "
-"of the notebook"
-msgstr ""
-"Huruvida nya fil-flikar skall placeras bredvid aktuell flik eller vid kanten "
-"av anteckningarna"
-
-#: ../data/geany.glade.h:375
-msgid "Whether to scroll to the bottom if a key was pressed"
-msgstr "Om texten rullas ner till botten om en tangent trycks ned"
-
-#: ../data/geany.glade.h:376
-msgid "Whether to scroll to the bottom when output is generated"
-msgstr "Huruvida texten i fönstret längst ner skall rullas när utmatning sker."
-
-#: ../data/geany.glade.h:377
-msgid "Whether to show the status bar at the bottom of the main window"
-msgstr "Huruvida statusfältet skall visas längst ner i huvudfönstret."
-
-#: ../data/geany.glade.h:378
-msgid "Whether to stop scrolling one page past the last line of a document"
-msgstr ""
-"Huruvida programmet skall sluta rulla en sida efter den sista raden i ett "
-"dokument."
-
-#: ../data/geany.glade.h:379
-msgid ""
-"Whether to store a project's session files and open them when re-opening the "
-"project"
-msgstr ""
-"Huruvida projektets sessionsfiler skall sparas för att senare öppna den när "
-"projektet åter öppnas"
-
-#: ../data/geany.glade.h:380
+#: ../data/geany.glade.h:131
 msgid ""
 "Whether to use indicators (a squiggly underline) to highlight the lines "
 "where the compiler found a warning or an error"
@@ -1777,330 +642,1469 @@ msgstr ""
 "Huruvida indikatorer skall användas (taggiga understrykningar) skall "
 "användas för att markera rader där kompilatorn hittat fel eller varningar."
 
-#: ../data/geany.glade.h:381
-msgid "Wi_ki"
-msgstr ""
+#: ../data/geany.glade.h:132
+msgid "Newline strips trailing spaces"
+msgstr "Ta bort överflödiga mellanslag efter nyradstecken"
 
-#: ../data/geany.glade.h:382
+#: ../data/geany.glade.h:133
+msgid "Enable newline to strip the trailing spaces on the previous line"
+msgstr ""
+"Gör så att nyradstecken tar bort överflödiga mellanslag från föregående rad."
+
+#: ../data/geany.glade.h:134
+msgid "Line breaking column:"
+msgstr "Kolumn för radbrytning:"
+
+#: ../data/geany.glade.h:135
+msgid "Comment toggle marker:"
+msgstr "Stäng av / sätt på kommentarmarkör:"
+
+#: ../data/geany.glade.h:136
+msgid ""
+"A string which is added when toggling a line comment in a source file, it is "
+"used to mark the comment as toggled."
+msgstr ""
+"En sträng som läggs till när man justerar en kommentar i en källkodsfil. Den "
+"används för att markera den justerade kommentaren."
+
+#: ../data/geany.glade.h:137
+msgid "<b>Features</b>"
+msgstr "<b>Inställningar</b>"
+
+#: ../data/geany.glade.h:138
+msgid "Features"
+msgstr "Inställningar"
+
+#: ../data/geany.glade.h:139
+msgid ""
+"Note: To apply these settings to all currently open documents, use "
+"<i>Project->Apply Default Indentation</i>."
+msgstr ""
+"Info: För att använda dessa inställningar för alla öppna dokument, använd "
+"<i>Projekt->Använd förinställt indrag</i>."
+
+#: ../data/geany.glade.h:140
 msgid "Width:"
 msgstr "Bredd:"
 
-#: ../data/geany.glade.h:383
-msgid ""
-"Wrap the line at the window border and continue it on the next line. Note: "
-"line wrapping has a high performance cost for large documents so should be "
-"disabled on slow machines."
-msgstr ""
-"Radbryt rader vid fönsterkant och fortsätt på nästa rad. Observera att "
-"radbrytning tar mycket systemresurser vid redigering av stora dokument, och "
-"bör därför vara avslagen på långsamma datorer."
+#: ../data/geany.glade.h:141
+msgid "The width in chars of a single indent"
+msgstr "Bredd, i antal tecken, på ett indrag"
 
-#: ../data/geany.glade.h:384
+#: ../data/geany.glade.h:142
+msgid "Auto-indent mode:"
+msgstr "Automatiskt indrag:"
+
+#: ../data/geany.glade.h:143
+msgid "Detect type from file"
+msgstr "Upptäck filtyp automatiskt"
+
+#: ../data/geany.glade.h:144
+msgid ""
+"Whether to detect the indentation type from file contents when a file is "
+"opened"
+msgstr ""
+"Huruvida indragstyp skall hittas automatiskt via filens innehåll när den "
+"öppnats."
+
+#: ../data/geany.glade.h:145
+msgid "T_abs and spaces"
+msgstr "Tab och mellanslag"
+
+#: ../data/geany.glade.h:146
+msgid ""
+"Use spaces if the total indent is less than the tab width, otherwise use both"
+msgstr ""
+"Använd mellanslag om det totala indraget är mindre än tab-bredden -- i annat "
+"fall, använd båda"
+
+#: ../data/geany.glade.h:147
+msgid "_Spaces"
+msgstr "Mellanslag"
+
+#: ../data/geany.glade.h:148
+msgid "Use spaces when inserting indentation"
+msgstr "Använd mellanslag vid infogande av indrag"
+
+#: ../data/geany.glade.h:149
+msgid "_Tabs"
+msgstr "Tabulatorer"
+
+#: ../data/geany.glade.h:150
+msgid "Use one tab per indent"
+msgstr "Använd en tab per indrag"
+
+#: ../data/geany.glade.h:151
+msgid "Detect width from file"
+msgstr "Upptäck bredd från fil"
+
+#: ../data/geany.glade.h:152
+msgid ""
+"Whether to detect the indentation width from file contents when a file is "
+"opened"
+msgstr ""
+"Huruvida indragsbredd skall hittas automatiskt via filens innehåll när den "
+"öppnas"
+
+#: ../data/geany.glade.h:153
+msgid "Type:"
+msgstr "Typ:"
+
+#: ../data/geany.glade.h:154
+msgid "Tab key indents"
+msgstr "Tab-tangentens indrag"
+
+#: ../data/geany.glade.h:155
+msgid ""
+"Pressing tab/shift-tab indents/unindents instead of inserting a tab character"
+msgstr ""
+"Att trycka på tab / skift-tab, ökar / minskar indrag istället för att mata "
+"in ett tab-tecken"
+
+#: ../data/geany.glade.h:156
+msgid "<b>Indentation</b>"
+msgstr "<b>Indrag</b>"
+
+#: ../data/geany.glade.h:157
+msgid "Indentation"
+msgstr "Indrag"
+
+#: ../data/geany.glade.h:158
+msgid "Snippet completion"
+msgstr "Komplettera textfragment"
+
+#: ../data/geany.glade.h:159
+msgid ""
+"Type a defined short character sequence and complete it to a more complex "
+"string using a single keypress"
+msgstr ""
+"Geany kan gissa vad du vill skriva, och visar förslag på fullständiga "
+"strängar som du kan välja mellan med ett enkelt tryck på returtangenten."
+
+#: ../data/geany.glade.h:160
 msgid "XML/HTML tag auto-closing"
 msgstr "Stäng XML/HTML-taggar automatiskt"
 
-#: ../data/geany.glade.h:385
+#: ../data/geany.glade.h:161
+msgid "Insert matching closing tag for XML/HTML"
+msgstr "Infoga avslutande tag för XML/HTML"
+
+#: ../data/geany.glade.h:162
+msgid "Automatic continuation of multi-line comments"
+msgstr "Automatisk fortsättning på multiradskommentarer."
+
+#: ../data/geany.glade.h:163
+msgid ""
+"Continue automatically multi-line comments in languages like C, C++ and Java "
+"when a new line is entered inside such a comment"
+msgstr ""
+"Automatiskt fortsätta multirads-kommentarer i språk som C, C++ och Java när "
+"en ny rad matas in i kommentaren."
+
+#: ../data/geany.glade.h:164
+msgid "Autocomplete symbols"
+msgstr "Autokomplettera symboler"
+
+#: ../data/geany.glade.h:165
+msgid ""
+"Automatic completion of known symbols in open files (function names, global "
+"variables, ...)"
+msgstr ""
+"Autokomplettera kända symboler i öppna filer (funktionsnamn, globala "
+"variabler etc.)"
+
+#: ../data/geany.glade.h:166
+msgid "Autocomplete all words in document"
+msgstr "Autokomplettera alla ord i dokumentet"
+
+#: ../data/geany.glade.h:167
+msgid "Drop rest of word on completion"
+msgstr "Ta bort resten av orden för komplettering"
+
+#: ../data/geany.glade.h:168
+msgid "Max. symbol name suggestions:"
+msgstr "Max antal symbolnamnsförslag:"
+
+#: ../data/geany.glade.h:169
+msgid "Completion list height:"
+msgstr "Komplettering listhöjd:"
+
+#: ../data/geany.glade.h:170
+msgid "Characters to type for autocompletion:"
+msgstr "Tecken att skriva för autokomplettering:"
+
+#: ../data/geany.glade.h:171
+msgid ""
+"The amount of characters which are necessary to show the symbol "
+"autocompletion list"
+msgstr "Mängden tecken som behövs för att visa symbolautokompletteringslistan"
+
+#: ../data/geany.glade.h:172
+msgid "Display height in rows for the autocompletion list"
+msgstr "Visa höjd, i rader, för autokompletteringslistan"
+
+#: ../data/geany.glade.h:173
+msgid "Maximum number of entries to display in the autocompletion list"
+msgstr "Maximalt antal element att visa i autokompletteringslistan"
+
+#: ../data/geany.glade.h:174
+msgid "Symbol list update frequency:"
+msgstr "Frekvens för sybollistans uppdatering:"
+
+#: ../data/geany.glade.h:175
+msgid ""
+"Minimal delay (in milliseconds) between two automatic updates of the symbol "
+"list. Note that a too short delay may have performance impact, especially "
+"with large files. A delay of 0 disables real-time updates."
+msgstr ""
+"Den minsta tidsskillnaden (i millisekunder) mellan två automatiska "
+"uppdateringar för symbollistan. Notera att en allt för liten tidsskillnad "
+"kan påverka prestandan negativt, speciellt vid stora filtyper. Ett värde på "
+"0 slår av realtidsuppdateringar."
+
+#: ../data/geany.glade.h:176
+msgid "<b>Completions</b>"
+msgstr "<b>Komplettering</b>"
+
+#: ../data/geany.glade.h:177
+msgid "Parenthesis ( )"
+msgstr "Parantes ()"
+
+#: ../data/geany.glade.h:178
+msgid "Auto-close parenthesis when typing an opening one"
+msgstr "Stäng paranteser automatiskt"
+
+#: ../data/geany.glade.h:179
+msgid "Single quotes ' '"
+msgstr "Enkla citeringstecken ' '"
+
+#: ../data/geany.glade.h:180
+msgid "Auto-close single quote when typing an opening one"
+msgstr ""
+"Stäng automatiskt enkel citering när du skrivit in ett enkelt citeringstecken"
+
+#: ../data/geany.glade.h:181
+msgid "Curly brackets { }"
+msgstr "Klammerparanteser { }"
+
+#: ../data/geany.glade.h:182
+msgid "Auto-close curly bracket when typing an opening one"
+msgstr "Stäng automatiskt hakparantes när du skrivit in ett hakparantestecken"
+
+#: ../data/geany.glade.h:183
+msgid "Square brackets [ ]"
+msgstr "Fyrkantig parantes [ ]"
+
+#: ../data/geany.glade.h:184
+msgid "Auto-close square-bracket when typing an opening one"
+msgstr ""
+"Stäng automatiskt fyrkantig parantes när du skrivit in ett fyrkantigt "
+"parantestecken"
+
+#: ../data/geany.glade.h:185
+msgid "Double quotes \" \""
+msgstr "Dubbla citationstecken \" \""
+
+#: ../data/geany.glade.h:186
+msgid "Auto-close double quote when typing an opening one"
+msgstr ""
+"Stäng automatiskt dubbel citering när du skrivit in ett dubbelt "
+"citeringstecken"
+
+#: ../data/geany.glade.h:187
+msgid "<b>Auto-close quotes and brackets</b>"
+msgstr "<b>Stäng citeringar och hakparanteser automatiskt</b>"
+
+#: ../data/geany.glade.h:188
+msgid "Completions"
+msgstr "Komplettering"
+
+#: ../data/geany.glade.h:189
+msgid "Invert syntax highlighting colors"
+msgstr "Invertera syntaxfärgningen"
+
+#: ../data/geany.glade.h:190
+msgid "Invert all colors, by default using white text on a black background"
+msgstr "Intervera alla färger"
+
+#: ../data/geany.glade.h:191
+msgid "Show indentation guides"
+msgstr "Visa indragsmarkörer"
+
+#: ../data/geany.glade.h:192
+msgid "Shows small dotted lines to help you to use the right indentation"
+msgstr "Visar små prickade linjer för att hjälpa dig se rätt indrag."
+
+#: ../data/geany.glade.h:193
+msgid "Show white space"
+msgstr "Visa tomrum"
+
+#: ../data/geany.glade.h:194
+msgid "Marks spaces with dots and tabs with arrows"
+msgstr "Markera mellanslag med prickar och tabbar med pilar."
+
+#: ../data/geany.glade.h:195
+msgid "Show line endings"
+msgstr "Visa radslut"
+
+#: ../data/geany.glade.h:196
+msgid "Shows the line ending character"
+msgstr "Visa radslutstecknet"
+
+#: ../data/geany.glade.h:197
+msgid "Show line numbers"
+msgstr "Visa radnummer"
+
+#: ../data/geany.glade.h:198
+msgid "Shows or hides the Line Number margin"
+msgstr "Visar eller gömmer radnummer-marginalen"
+
+#: ../data/geany.glade.h:199
+msgid "Show markers margin"
+msgstr "Visa marginalmarkörer"
+
+#: ../data/geany.glade.h:200
+msgid ""
+"Shows or hides the small margin right of the line numbers, which is used to "
+"mark lines"
+msgstr ""
+"Visar eller gömmer den lilla marginalen till höger om radnummren som används "
+"för att markera rader."
+
+#: ../data/geany.glade.h:201
+msgid "Stop scrolling at last line"
+msgstr "Sluta rulla vid sista raden"
+
+#: ../data/geany.glade.h:202
+msgid "Whether to stop scrolling one page past the last line of a document"
+msgstr ""
+"Huruvida programmet skall sluta rulla en sida efter den sista raden i ett "
+"dokument."
+
+#: ../data/geany.glade.h:203
+msgid "<b>Display</b>"
+msgstr "<b>Visa</b>"
+
+#: ../data/geany.glade.h:204
+msgid "Column:"
+msgstr "Kolumn:"
+
+#: ../data/geany.glade.h:205
+msgid "Color:"
+msgstr "Färg:"
+
+#: ../data/geany.glade.h:206
+msgid "Sets the color of the long line marker"
+msgstr "Väljer färgen på markören för långa rader"
+
+#: ../data/geany.glade.h:207 ../src/toolbar.c:70 ../src/tools.c:972
+msgid "Color Chooser"
+msgstr "Färgväljare"
+
+#: ../data/geany.glade.h:208
+msgid ""
+"The long line marker is a thin vertical line in the editor, it helps to mark "
+"long lines, or as a hint to break the line. Set this value to a value "
+"greater than 0 to specify the column where it should appear."
+msgstr ""
+"Markören för långa rader är en tunn vertikal linje som visas i editorn. Den "
+"hjälper till att visa var det är läge att bryta rader. Värdet anger i vilken "
+"kolumn markören visas."
+
+#: ../data/geany.glade.h:209
+msgid "Line"
+msgstr "Rad"
+
+#: ../data/geany.glade.h:210
+msgid ""
+"Prints a vertical line in the editor window at the given cursor position "
+"(see below)"
+msgstr ""
+"Visar en vertikal linje i editor-fönstret vid en given position (se nedan)."
+
+#: ../data/geany.glade.h:211
+msgid "Background"
+msgstr "Bakgrund"
+
+#: ../data/geany.glade.h:212
+msgid ""
+"The background color of characters after the given cursor position (see "
+"below) changed to the color set below, (this is recommended if you use "
+"proportional fonts)"
+msgstr ""
+"Bakgrundsfärgen ändras vid en given kolumn för att indikera var radbrytning "
+"bör ske. Detta är lämpligt for proportionella teckensnitt."
+
+#: ../data/geany.glade.h:213
+msgid "Enabled"
+msgstr "Aktiverad"
+
+#: ../data/geany.glade.h:214
+msgid "<b>Long line marker</b>"
+msgstr "<b>Markör för lång rad</b>"
+
+#: ../data/geany.glade.h:215
+msgid "Disabled"
+msgstr "Avaktiverad"
+
+#: ../data/geany.glade.h:216
+msgid "Do not show virtual spaces"
+msgstr "Visa inte virtuella ytor"
+
+#: ../data/geany.glade.h:217
+msgid "Only for rectangular selections"
+msgstr "Endast för rektangulära markeringar"
+
+#: ../data/geany.glade.h:218
+msgid ""
+"Only show virtual spaces beyond the end of lines when drawing a rectangular "
+"selection"
+msgstr "Visa endast virtuella ytor efter radslut vid rektangulär markering"
+
+#: ../data/geany.glade.h:219
+msgid "Always"
+msgstr "Alltid"
+
+#: ../data/geany.glade.h:220
+msgid "Always show virtual spaces beyond the end of lines"
+msgstr "Visa alltid virtuella mellanslag och tab-tecken i slutet av rader"
+
+#: ../data/geany.glade.h:221
+msgid "<b>Virtual spaces</b>"
+msgstr "<b>Virtuella ytor</b>"
+
+#: ../data/geany.glade.h:222
+msgid "Display"
+msgstr "Visa"
+
+#: ../data/geany.glade.h:223 ../src/keybindings.c:224 ../src/prefs.c:1581
+msgid "Editor"
+msgstr "Editor"
+
+#: ../data/geany.glade.h:224
+msgid "Open new documents from the command-line"
+msgstr "Öppna nya dokument från kommandotolken"
+
+#: ../data/geany.glade.h:225
+msgid "Start a new file for each command-line filename that doesn't exist"
+msgstr "Skapa en ny fil för varje filnamn som inte existerar."
+
+#: ../data/geany.glade.h:226
+msgid "Default end of line characters:"
+msgstr "Förvalt radslutstecken:"
+
+#: ../data/geany.glade.h:227
+msgid "<b>New files</b>"
+msgstr "<b>Nya filer</b>"
+
+#: ../data/geany.glade.h:228
+msgid "Default encoding (new files):"
+msgstr "Förvald kodning (nya filer):"
+
+#: ../data/geany.glade.h:229
+msgid "Sets the default encoding for newly created files"
+msgstr "Anger förvald kodning för nyskapade filer."
+
+#: ../data/geany.glade.h:230
+msgid "Use fixed encoding when opening non-Unicode files"
+msgstr "Använd fast kodning när icke-unicode filer öppnas"
+
+#: ../data/geany.glade.h:231
+msgid ""
+"This option disables the automatic detection of the file encoding when "
+"opening non-Unicode files and opens the file with the specified encoding "
+"(usually not needed)"
+msgstr ""
+"Detta tillval väljer bort automatisk igenkänning av kodning när nya icke-"
+"unicode filer öppnas, och använder i stället en specificerad kodning (behövs "
+"vanligen inte)"
+
+#: ../data/geany.glade.h:232
+msgid "Default encoding (existing non-Unicode files):"
+msgstr "Förvald teckenkodning (existerande icke-unicode filer):"
+
+#: ../data/geany.glade.h:233
+msgid "Sets the default encoding for opening existing non-Unicode files"
+msgstr "Anger förvald teckenkodning vid öppning av icke-Unicode filer"
+
+#: ../data/geany.glade.h:234
+msgid "<b>Encodings</b>"
+msgstr "<b>Teckenkod</b>"
+
+#: ../data/geany.glade.h:235
+msgid "Ensure new line at file end"
+msgstr "Skriv alltid nyradstecken i slutet av filen"
+
+#: ../data/geany.glade.h:236
+msgid "Ensures that at the end of the file is a new line"
+msgstr ""
+"Lägger till ett nyradstecken vid slutet av filen om det inte redan finns "
+"något"
+
+#: ../data/geany.glade.h:237
+msgid "Ensure consistent line endings"
+msgstr "Skriv alltid nyradstecken"
+
+#: ../data/geany.glade.h:238
+msgid ""
+"Ensures that newline characters always get converted before saving, avoiding "
+"mixed line endings in the same file"
+msgstr ""
+"Nyradstecken konverteras alltid innan filen sparas, för att radslutstecken "
+"inte skall blandas om i samma fil"
+
+#: ../data/geany.glade.h:239
+msgid "Strip trailing spaces and tabs"
+msgstr "Ta bort överflödiga mellanslag och tab-tecken"
+
+#: ../data/geany.glade.h:240
+msgid "Removes trailing spaces and tabs and the end of lines"
+msgstr "Tar bort överflödiga mellanslag och tab-tecken i slutet av filen"
+
+#: ../data/geany.glade.h:241 ../src/keybindings.c:559
+msgid "Replace tabs by space"
+msgstr "Ersätt tab-tecken med mellanslag"
+
+#: ../data/geany.glade.h:242
+msgid "Replaces all tabs in document by spaces"
+msgstr ""
+"Ersätter alla tab-tecken i dokumentet med mellanslag (indraget blir lika "
+"stort)."
+
+#: ../data/geany.glade.h:243
+msgid "<b>Saving files</b>"
+msgstr "<b>Spara</b>"
+
+#: ../data/geany.glade.h:244
+msgid "Recent files list length:"
+msgstr "Längd på Senaste-filer listan:"
+
+#: ../data/geany.glade.h:245
+msgid "Specifies the number of files which are stored in the Recent files list"
+msgstr "Anger antalet filer som lagras i Senaste-filer listan."
+
+#: ../data/geany.glade.h:246
+msgid "Disk check timeout:"
+msgstr "Intervall för ändringskontroll:"
+
+#: ../data/geany.glade.h:247
+msgid ""
+"How often to check for changes to document files on disk, in seconds. Zero "
+"disables checking."
+msgstr ""
+"Hur ofta kontroller utförs för att se om dokumentet ändrats, i antalet "
+"sekunder. Noll stänger av kontroller."
+
+#: ../data/geany.glade.h:248 ../src/prefs.c:1583 ../src/symbols.c:687
+#: ../plugins/filebrowser.c:1120
+msgid "Files"
+msgstr "Filer"
+
+#: ../data/geany.glade.h:249
+msgid "Terminal:"
+msgstr "Terminal:"
+
+#: ../data/geany.glade.h:250
+msgid "Browser:"
+msgstr "Webbläsare:"
+
+#: ../data/geany.glade.h:251
+msgid ""
+"A terminal emulator like xterm, gnome-terminal or konsole (should accept the "
+"-e argument)"
+msgstr ""
+"En terminal som Xterm, Gnome-terminal eller Konsole (måste acceptera -e "
+"argumentet)"
+
+#: ../data/geany.glade.h:252
+msgid "Path (and possibly additional arguments) to your favorite browser"
+msgstr "Sökväg (och eventuella argument) till din favoritwebbläsare."
+
+#: ../data/geany.glade.h:253
+msgid "Grep:"
+msgstr "Grep:"
+
+#: ../data/geany.glade.h:254
+msgid "<b>Tool paths</b>"
+msgstr "<b>Sökvägar till verktyg</b>"
+
+#: ../data/geany.glade.h:255
+msgid "Context action:"
+msgstr "Snabbmenyhändelse:"
+
+#: ../data/geany.glade.h:257
+#, no-c-format
+msgid ""
+"Context action command. The currently selected word can be used with %s. It "
+"can appear anywhere in the given command and will be replaced before "
+"execution."
+msgstr ""
+"Snabbmenykommando. Det markerade ordet kan användas med %s. Det kan infogas "
+"var som helst i kommandot och kommer att ersättas innan exekvering."
+
+#: ../data/geany.glade.h:258
+msgid "<b>Commands</b>"
+msgstr "<b>Kommandon</b>"
+
+#: ../data/geany.glade.h:259 ../src/keybindings.c:236 ../src/prefs.c:1585
+msgid "Tools"
+msgstr "Verktyg"
+
+#: ../data/geany.glade.h:260
+msgid "email address of the developer"
+msgstr "emailadressen till utvecklaren"
+
+#: ../data/geany.glade.h:261
+msgid "Initials of the developer name"
+msgstr "Utvecklarens initialer"
+
+#: ../data/geany.glade.h:262
+msgid "Initial version:"
+msgstr "Inledande version:"
+
+#: ../data/geany.glade.h:263
+msgid "Version number, which a new file initially has"
+msgstr "Versionnummret som filen börjar med"
+
+#: ../data/geany.glade.h:264
+msgid "Company name"
+msgstr "Företagets namn"
+
+#: ../data/geany.glade.h:265
+msgid "Developer:"
+msgstr "Utvecklare:"
+
+#: ../data/geany.glade.h:266
+msgid "Company:"
+msgstr "Företag:"
+
+#: ../data/geany.glade.h:267
+msgid "Mail address:"
+msgstr "E-post:"
+
+#: ../data/geany.glade.h:268
+msgid "Initials:"
+msgstr "Initialer:"
+
+#: ../data/geany.glade.h:269
+msgid "The name of the developer"
+msgstr "Utvecklarens namn"
+
+#: ../data/geany.glade.h:270
 msgid "Year:"
 msgstr "År:"
 
-#: ../data/geany.glade.h:386
-msgid "_1"
-msgstr "_1"
+#: ../data/geany.glade.h:271
+msgid "Date:"
+msgstr "Datum:"
 
-#: ../data/geany.glade.h:387
-msgid "_2"
-msgstr "_2"
+#: ../data/geany.glade.h:272
+msgid "Date & time:"
+msgstr "Datum och tid:"
 
-#: ../data/geany.glade.h:388
-msgid "_3"
-msgstr "_3"
+#: ../data/geany.glade.h:273
+msgid ""
+"Specify a format for the the {datetime} wildcard. You can use any conversion "
+"specifiers which can be used with the ANSI C strftime function."
+msgstr ""
+"Skriv in ett format för {datetime}. Du kan använda de "
+"konverteringskonventioner som används i ANSI C strftime-funktionen."
 
-#: ../data/geany.glade.h:389
-msgid "_4"
-msgstr "_4"
+#: ../data/geany.glade.h:274
+msgid ""
+"Specify a format for the the {year} wildcard. You can use any conversion "
+"specifiers which can be used with the ANSI C strftime function."
+msgstr ""
+"Skriv in ett format för att använda för {year}. Du kan använda den syntax "
+"som specificeras av ANSI C:s strftime funktion."
 
-#: ../data/geany.glade.h:390
-msgid "_5"
-msgstr "_5"
+#: ../data/geany.glade.h:275
+msgid ""
+"Specify a format for the the {date} wildcard. You can use any conversion "
+"specifiers which can be used with the ANSI C strftime function."
+msgstr ""
+"Skriv in ett format för att använda till fältet {date}. Du kan använda den "
+"syntax som specificeras av ANSI C:s strftime funktion."
 
-#: ../data/geany.glade.h:391
-msgid "_6"
-msgstr "_6"
+#: ../data/geany.glade.h:276
+msgid "<b>Template data</b>"
+msgstr "<b>Mall-data</b>"
 
-#: ../data/geany.glade.h:392
-msgid "_7"
-msgstr "_7"
+#: ../data/geany.glade.h:277 ../src/prefs.c:1587
+msgid "Templates"
+msgstr "Mallar"
 
-#: ../data/geany.glade.h:393
-msgid "_8"
-msgstr "_8"
+#: ../data/geany.glade.h:278
+msgid "C_hange"
+msgstr "Ändra"
 
-#: ../data/geany.glade.h:394
-msgid "_Append toolbar to the menu"
-msgstr "Lägg till verktygsfältet till menyn"
+#: ../data/geany.glade.h:279
+msgid "<b>Keyboard shortcuts</b>"
+msgstr "<b>Tangentbordsgenvägar</b>"
 
-#: ../data/geany.glade.h:395
-msgid "_Apply Default Indentation"
-msgstr "Använd förinställt indrag"
+#: ../data/geany.glade.h:280 ../src/prefs.c:1589
+msgid "Keybindings"
+msgstr "Genvägar"
 
-#: ../data/geany.glade.h:396
-msgid "_Auto-indentation"
-msgstr "Använd automatiskt indrag"
+#: ../data/geany.glade.h:281
+msgid "Command:"
+msgstr "Kommando:"
 
-#. build the code
-#: ../data/geany.glade.h:397 ../src/build.c:2568 ../src/build.c:2845
-msgid "_Build"
-msgstr "Bygg"
+#: ../data/geany.glade.h:283
+#, no-c-format
+msgid "Path to the command for printing files (use %f for the filename)"
+msgstr ""
+"Sökvägen till kommandot för att skriva ut filer (%f ersätts med filnamnet)."
 
-#: ../data/geany.glade.h:398
-msgid "_Close"
-msgstr "Stäng"
+#: ../data/geany.glade.h:284
+msgid "Use an external command for printing"
+msgstr "Använd ett externt kommando för att skriva ut"
 
-#: ../data/geany.glade.h:399
-msgid "_Color Chooser"
-msgstr "Färgväljare"
+#: ../data/geany.glade.h:285 ../src/printing.c:376
+msgid "Print line numbers"
+msgstr "Visa radnummer"
 
-#: ../data/geany.glade.h:400
-msgid "_Commands"
-msgstr "Kommandon"
+#: ../data/geany.glade.h:286 ../src/printing.c:378
+msgid "Add line numbers to the printed page"
+msgstr "Lägg till radnummer vid utskrift"
 
-#: ../data/geany.glade.h:401
-msgid "_Comment Line(s)"
-msgstr "Kommentera rader"
+#: ../data/geany.glade.h:287 ../src/printing.c:381
+msgid "Print page numbers"
+msgstr "Skriv ut sidnummer"
 
-#: ../data/geany.glade.h:402 ../src/keybindings.c:340
-msgid "_Copy Current Line(s)"
-msgstr "Kopiera rad(er)"
+#: ../data/geany.glade.h:288 ../src/printing.c:383
+msgid ""
+"Add page numbers at the bottom of each page. It takes 2 lines of the page."
+msgstr "Lägg till sidnummer i sidfoten. Detta upptar två rader på sidan."
 
-#: ../data/geany.glade.h:403 ../src/keybindings.c:343
-msgid "_Cut Current Line(s)"
-msgstr "Klipp ut rad(er)"
+#: ../data/geany.glade.h:289 ../src/printing.c:386
+msgid "Print page header"
+msgstr "Skriv ut filhuvud"
 
-#: ../data/geany.glade.h:404
-msgid "_Decrease Indent"
-msgstr "Minska indrag"
+#: ../data/geany.glade.h:290 ../src/printing.c:388
+msgid ""
+"Add a little header to every page containing the page number, the filename "
+"and the current date (see below). It takes 3 lines of the page."
+msgstr ""
+"Lägger till tre rader i sidhuvudet som visar sidnummer, filnamn och datum. "
+"Detta upptar tre rader på sidan."
 
-#: ../data/geany.glade.h:405 ../src/keybindings.c:295
-msgid "_Delete Current Line(s)"
-msgstr "Radera rad(er)"
+#: ../data/geany.glade.h:291 ../src/printing.c:404
+msgid "Use the basename of the printed file"
+msgstr "Använd den utskrivna filens basnamn"
 
-#: ../data/geany.glade.h:406
-msgid "_Detect from Content"
-msgstr "Upptäck automatiskt från innehållet"
+#: ../data/geany.glade.h:292
+msgid "Print only the basename (without the path) of the printed file"
+msgstr "Skriv bara ut filnamnet, ej sökvägen."
 
-#: ../data/geany.glade.h:407
-msgid "_Document"
-msgstr "Dokument"
+#: ../data/geany.glade.h:293 ../src/printing.c:412
+msgid "Date format:"
+msgstr "Datumformat:"
 
-#: ../data/geany.glade.h:408
-#, fuzzy
-msgid "_Donate"
-msgstr "Spara _inte"
+#: ../data/geany.glade.h:294 ../src/printing.c:418
+msgid ""
+"Specify a format for the date and time stamp which is added to the page "
+"header on each page. You can use any conversion specifiers which can be used "
+"with the ANSI C strftime function."
+msgstr ""
+"Skriv in användardefinierat datum- och tidsformat, som kommer att visas i "
+"sidhuvudet. Du kan använda den syntax som specificeras av ANSI C:s strftime "
+"funktion."
 
-#: ../data/geany.glade.h:409 ../src/keybindings.c:292
-msgid "_Duplicate Line or Selection"
-msgstr "Gör en kopia av raden eller markeringen"
+#: ../data/geany.glade.h:295
+msgid "Use native GTK printing"
+msgstr "Använd GTKs utskriftshantering"
 
-#: ../data/geany.glade.h:410
-msgid "_Edit"
-msgstr "Redigera"
+#: ../data/geany.glade.h:296
+msgid "<b>Printing</b>"
+msgstr "<b>Utskrift</b>"
 
-#: ../data/geany.glade.h:411
-msgid "_File"
-msgstr "Arkiv"
+#: ../data/geany.glade.h:297 ../src/prefs.c:1591
+msgid "Printing"
+msgstr "Utskrift"
 
-#: ../data/geany.glade.h:412
-msgid "_Fold All"
-msgstr "Vik ihop alla"
+#: ../data/geany.glade.h:298
+msgid "Font:"
+msgstr "Typsnitt:"
 
-#: ../data/geany.glade.h:413
-msgid "_Format"
-msgstr "Format"
+#: ../data/geany.glade.h:299
+msgid "Sets the font for the terminal widget"
+msgstr "Justerar teckensnittet för terminalen."
 
-#: ../data/geany.glade.h:414
-msgid "_Go to Line"
-msgstr "Gå till rad"
+#: ../data/geany.glade.h:300
+msgid "Choose Terminal Font"
+msgstr "Välj teckensnitt i terminalen"
 
-#: ../data/geany.glade.h:415 ../src/keybindings.c:470
-msgid "_Go to Next Marker"
-msgstr "Gå till nästa markör"
+#: ../data/geany.glade.h:301
+msgid "Foreground color:"
+msgstr "Förgrundsfärg"
 
-#: ../data/geany.glade.h:416 ../src/keybindings.c:473
-msgid "_Go to Previous Marker"
-msgstr "Gå till föregående markör"
+#: ../data/geany.glade.h:302
+msgid "Background color:"
+msgstr "Bakgrundsfärg"
 
-#: ../data/geany.glade.h:417
-msgid "_Help"
-msgstr "Hjälp"
+#: ../data/geany.glade.h:303
+msgid "Scrollback lines:"
+msgstr "Radbuffer:"
 
-#: ../data/geany.glade.h:418
+#: ../data/geany.glade.h:304
+msgid "Shell:"
+msgstr "Skal:"
+
+#: ../data/geany.glade.h:305
+msgid "Sets the foreground color of the text in the terminal widget"
+msgstr "Justerar förgrundsfärgen för texten i terminalen."
+
+#: ../data/geany.glade.h:306
+msgid "Sets the backround color of the text in the terminal widget"
+msgstr "Justerar bakgrundsfärgen för texten i terminalen"
+
+#: ../data/geany.glade.h:307
+msgid ""
+"Specifies the history in lines, which you can scroll back in the terminal "
+"widget"
+msgstr "Anger hur många rader som du kan rulla tillbaka i terminalen"
+
+#: ../data/geany.glade.h:308
+msgid ""
+"Sets the path to the shell which should be started inside the terminal "
+"emulation"
+msgstr "Justerar sökvägen till skalet som skall startas i terminalemulatorn."
+
+#: ../data/geany.glade.h:309
+msgid "Scroll on keystroke"
+msgstr "Rulla ner"
+
+#: ../data/geany.glade.h:310
+msgid "Whether to scroll to the bottom if a key was pressed"
+msgstr "Om texten rullas ner till botten om en tangent trycks ned"
+
+#: ../data/geany.glade.h:311
+msgid "Scroll on output"
+msgstr "Rulla utmatning"
+
+#: ../data/geany.glade.h:312
+msgid "Whether to scroll to the bottom when output is generated"
+msgstr "Huruvida texten i fönstret längst ner skall rullas när utmatning sker."
+
+#: ../data/geany.glade.h:313
+msgid "Cursor blinks"
+msgstr "Markör blinkar"
+
+#: ../data/geany.glade.h:314
+msgid "Whether to blink the cursor"
+msgstr "Huruvida textmarkören skall blinka"
+
+#: ../data/geany.glade.h:315
+msgid "Override Geany keybindings"
+msgstr "Vill du bryta Geanys tangentbindning?"
+
+#: ../data/geany.glade.h:316
+msgid ""
+"Allows the VTE to receive keyboard shortcuts (apart from focus commands)"
+msgstr "Tillåter VTE att motta tangentbordskommandon (förutom fokuskommandon)."
+
+#: ../data/geany.glade.h:317
+msgid "Disable menu shortcut key (F10 by default)"
+msgstr "Avaktivera genvägstangenten (F10-tangenten)"
+
+#: ../data/geany.glade.h:318
+msgid ""
+"This option disables the keybinding to popup the menu bar (default is F10). "
+"Disabling it can be useful if you use, for example, Midnight Commander "
+"within the VTE."
+msgstr ""
+"Detta tillval gör så att menyn inte visas när du trycker på F10. Detta kan "
+"vara användbart, exempelvis om du kör Midnight Commander i VTE."
+
+#: ../data/geany.glade.h:319
+msgid "Follow path of the current file"
+msgstr "Följ den aktiva filens sökväg"
+
+#: ../data/geany.glade.h:320
+msgid ""
+"Whether to execute \\\"cd $path\\\" when you switch between opened files"
+msgstr ""
+"Huruvida \\\"cd $path\\\" skall exekveras när du växlar mellan öppna filer"
+
+#: ../data/geany.glade.h:321
+msgid "Execute programs in the VTE"
+msgstr "Exekvera program i VTE"
+
+#: ../data/geany.glade.h:322
+msgid ""
+"Don't use the simple run script which is usually used to display the exit "
+"status of the executed program"
+msgstr ""
+"Använd inte det enkla körskriptet som vanligtvis används för att visa "
+"felmeddelanden för exekverat program."
+
+#: ../data/geany.glade.h:323
+msgid "Don't use run script"
+msgstr "Använd inte körbara skript"
+
+#: ../data/geany.glade.h:324
+msgid ""
+"Run programs in VTE instead of opening a terminal emulation window. Please "
+"note, programs executed in VTE cannot be stopped"
+msgstr ""
+"Kör ett program i VTE i stället för att öppna ett terminalemuleringsfönster. "
+"Var god att notera att program som exekveras i VTE inte kan stoppas."
+
+#: ../data/geany.glade.h:325
+msgid "<b>Terminal</b>"
+msgstr "<b>Terminal</b>"
+
+#: ../data/geany.glade.h:326 ../src/prefs.c:1595 ../src/vte.c:281
+msgid "Terminal"
+msgstr "Terminal"
+
+#: ../data/geany.glade.h:327
+msgid "<i>Warning: read the manual before changing these preferences.</i>"
+msgstr ""
+"<i>Varning: läs instruktionsboken innan du ändrar dessa inställningar.</i>"
+
+#: ../data/geany.glade.h:328
+msgid "<b>Various preferences</b>"
+msgstr "<b>Övriga inställningar</b>"
+
+#: ../data/geany.glade.h:329 ../src/prefs.c:1593
+msgid "Various"
+msgstr "Övriga"
+
+#: ../data/geany.glade.h:330
+msgid "Project Properties"
+msgstr "Projektegenskaper"
+
+#: ../data/geany.glade.h:331 ../src/plugins.c:1457 ../src/project.c:150
+msgid "Filename:"
+msgstr "Filnamn:"
+
+#: ../data/geany.glade.h:332 ../src/project.c:141
+#: ../plugins/classbuilder.c:470 ../plugins/classbuilder.c:480
+msgid "Name:"
+msgstr "Namn:"
+
+#: ../data/geany.glade.h:333
+msgid "Description:"
+msgstr "Beskrivning:"
+
+#: ../data/geany.glade.h:334 ../src/project.c:166
+msgid "Base path:"
+msgstr "Bassökväg:"
+
+#: ../data/geany.glade.h:335
+msgid "File patterns:"
+msgstr "Fil-mönster:"
+
+#: ../data/geany.glade.h:336
+msgid ""
+"Space separated list of file patterns used for the find in files dialog (e."
+"g. *.c *.h)"
+msgstr ""
+"Mellanslagsseparerad lista med filmönster som används för att hitta filer "
+"(exempelvis *.c *.h)"
+
+#: ../data/geany.glade.h:337 ../src/project.c:172
+msgid ""
+"Base directory of all files that make up the project. This can be a new "
+"path, or an existing directory tree. You can use paths relative to the "
+"project filename."
+msgstr ""
+"Grundläggande sökväg för alla filer i projektet. Detta kan vara en ny sökväg "
+"eller ett existerande mappträd."
+
+#: ../data/geany.glade.h:338 ../src/keybindings.c:234
+msgid "Project"
+msgstr "Projekt"
+
+#: ../data/geany.glade.h:339
+msgid "Display:"
+msgstr "Visa:"
+
+#: ../data/geany.glade.h:340
+msgid "Custom"
+msgstr "Användardefinierad"
+
+#: ../data/geany.glade.h:341
+msgid "Use global settings"
+msgstr "Använd globala inställningar"
+
+#: ../data/geany.glade.h:342
+msgid "Top"
+msgstr "Topp"
+
+#: ../data/geany.glade.h:343
+msgid "Bottom"
+msgstr "Botten"
+
+#: ../data/geany.glade.h:344
+msgid "_Toolbar Preferences"
+msgstr "Inställningar för verktygsfält"
+
+#: ../data/geany.glade.h:345
 msgid "_Hide Toolbar"
 msgstr "Göm verktygsfältet"
 
-#: ../data/geany.glade.h:419
-msgid "_Images only"
-msgstr "Endast bilder"
+#: ../data/geany.glade.h:347
+msgid "_File"
+msgstr "Arkiv"
 
-#: ../data/geany.glade.h:420
-msgid "_Increase Indent"
-msgstr "Öka indrag"
+#: ../data/geany.glade.h:348
+msgid "New (with _Template)"
+msgstr "Ny (med mall)"
 
-#: ../data/geany.glade.h:421
-msgid "_Insert \"include <...>\""
-msgstr "Infoga \"include <...>\""
+#: ../data/geany.glade.h:349
+msgid "Recent _Files"
+msgstr "Senaste filer"
 
-#: ../data/geany.glade.h:422 ../src/keybindings.c:408
-msgid "_Insert Alternative White Space"
-msgstr "Infoga alternativt tomt tecken"
+#: ../data/geany.glade.h:350
+msgid "Save A_ll"
+msgstr "Spara alla"
 
-#: ../data/geany.glade.h:423
-msgid "_Keyboard Shortcuts"
-msgstr "Tangentbordsgenvägar"
-
-#: ../data/geany.glade.h:424
-msgid "_Large icons"
-msgstr "Stora ikoner"
-
-#: ../data/geany.glade.h:425
-msgid "_Line Wrapping"
-msgstr "Radbrytning"
-
-#: ../data/geany.glade.h:426 ../src/keybindings.c:452
-msgid "_Mark All"
-msgstr "Markera allt"
-
-#: ../data/geany.glade.h:427
-msgid "_More"
-msgstr "_Mer"
-
-#: ../data/geany.glade.h:428
-msgid "_New"
-msgstr "Nytt"
-
-#: ../data/geany.glade.h:429
-msgid "_Open"
-msgstr "Öppna"
-
-#: ../data/geany.glade.h:430
-msgid "_Project"
-msgstr "Projekt"
-
-#: ../data/geany.glade.h:431
-msgid "_Recent Projects"
-msgstr "Senaste projekt"
-
-#: ../data/geany.glade.h:432 ../src/keybindings.c:397
-msgid "_Reflow Lines/Block"
-msgstr "Gör om flöde för rader/block"
-
-#: ../data/geany.glade.h:433 ../src/callbacks.c:429 ../src/document.c:2838
+#: ../data/geany.glade.h:351 ../src/callbacks.c:430 ../src/document.c:2838
 #: ../src/sidebar.c:696
 msgid "_Reload"
 msgstr "Ladda om"
 
-#: ../data/geany.glade.h:434
-msgid "_Reload Configuration"
-msgstr "Ladda om konfigurationen"
+#: ../data/geany.glade.h:352
+msgid "R_eload As"
+msgstr "Ladda om som"
 
-#: ../data/geany.glade.h:435 ../src/search.c:629
-msgid "_Replace"
-msgstr "Ersätt"
+#: ../data/geany.glade.h:353
+msgid "Page Set_up"
+msgstr "Sidinställningar"
 
-#: ../data/geany.glade.h:436
-msgid "_Replace Tabs by Spaces"
-msgstr "Ersätt tab med mellanslag"
+#: ../data/geany.glade.h:354 ../src/notebook.c:489
+msgid "Close Ot_her Documents"
+msgstr "Stäng andra dokument"
 
-#: ../data/geany.glade.h:437
-msgid "_Search"
-msgstr "Sök"
+#: ../data/geany.glade.h:355 ../src/notebook.c:495
+msgid "C_lose All"
+msgstr "Stäng alla"
 
-#: ../data/geany.glade.h:438 ../src/keybindings.c:353
+#: ../data/geany.glade.h:356
+msgid "_Commands"
+msgstr "Kommandon"
+
+#: ../data/geany.glade.h:357 ../src/keybindings.c:343
+msgid "_Cut Current Line(s)"
+msgstr "Klipp ut rad(er)"
+
+#: ../data/geany.glade.h:358 ../src/keybindings.c:340
+msgid "_Copy Current Line(s)"
+msgstr "Kopiera rad(er)"
+
+#: ../data/geany.glade.h:359 ../src/keybindings.c:295
+msgid "_Delete Current Line(s)"
+msgstr "Radera rad(er)"
+
+#: ../data/geany.glade.h:360 ../src/keybindings.c:292
+msgid "_Duplicate Line or Selection"
+msgstr "Gör en kopia av raden eller markeringen"
+
+#: ../data/geany.glade.h:361 ../src/keybindings.c:353
 msgid "_Select Current Line(s)"
 msgstr "Välj rad(er)"
 
-#: ../data/geany.glade.h:439 ../src/keybindings.c:356
+#: ../data/geany.glade.h:362 ../src/keybindings.c:356
 msgid "_Select Current Paragraph"
 msgstr "Välj paragraf"
 
-#: ../data/geany.glade.h:440
-msgid "_Send Selection to"
-msgstr "Skicka markering till"
-
-#: ../data/geany.glade.h:441 ../src/keybindings.c:395
+#: ../data/geany.glade.h:363 ../src/keybindings.c:395
 msgid "_Send Selection to Terminal"
 msgstr "Skicka markeringen till terminalen"
 
-#: ../data/geany.glade.h:442
-msgid "_Small icons"
-msgstr "Små ikoner"
+#: ../data/geany.glade.h:364 ../src/keybindings.c:397
+msgid "_Reflow Lines/Block"
+msgstr "Gör om flöde för rader/block"
 
-#: ../data/geany.glade.h:443 ../src/keybindings.c:386
-msgid "_Smart Line Indent"
-msgstr "Smart radindrag"
+#: ../data/geany.glade.h:365 ../src/keybindings.c:367
+msgid "T_oggle Case of Selection"
+msgstr "Växla mellan gemener och versaler"
 
-#: ../data/geany.glade.h:444
-msgid "_Spaces"
-msgstr "Mellanslag"
-
-#: ../data/geany.glade.h:445
-msgid "_Strip Trailing Spaces"
-msgstr "Ta bort _överflödiga mellanslag"
-
-#: ../data/geany.glade.h:446
-msgid "_Tabs"
-msgstr "Tabulatorer"
-
-#: ../data/geany.glade.h:447
-msgid "_Text only"
-msgstr "Endast text"
-
-#: ../data/geany.glade.h:448
-msgid "_Toggle Line Commentation"
-msgstr "Aktivera / avaktivera radkommentarer"
-
-#: ../data/geany.glade.h:449
-msgid "_Toolbar Preferences"
-msgstr "Inställningar för verktygsfält"
-
-#: ../data/geany.glade.h:450
-msgid "_Tools"
-msgstr "Verktyg"
-
-#: ../data/geany.glade.h:451 ../src/keybindings.c:302
+#: ../data/geany.glade.h:366 ../src/keybindings.c:302
 msgid "_Transpose Current Line"
 msgstr "Förflytta raden"
 
-#: ../data/geany.glade.h:452
-msgid "_Unfold All"
-msgstr "Vik upp alla"
+#: ../data/geany.glade.h:367
+msgid "_Comment Line(s)"
+msgstr "Kommentera rader"
 
-#: ../data/geany.glade.h:453
-msgid "_Very small icons"
-msgstr "Mycket små ikoner"
+#: ../data/geany.glade.h:368
+msgid "U_ncomment Line(s)"
+msgstr "Avkommentera rader"
 
-#: ../data/geany.glade.h:454 ../src/dialogs.c:365
+#: ../data/geany.glade.h:369
+msgid "_Toggle Line Commentation"
+msgstr "Aktivera / avaktivera radkommentarer"
+
+#: ../data/geany.glade.h:370
+msgid "_Increase Indent"
+msgstr "Öka indrag"
+
+#: ../data/geany.glade.h:371
+msgid "_Decrease Indent"
+msgstr "Minska indrag"
+
+#: ../data/geany.glade.h:372 ../src/keybindings.c:386
+msgid "_Smart Line Indent"
+msgstr "Smart radindrag"
+
+#: ../data/geany.glade.h:373
+msgid "_Send Selection to"
+msgstr "Skicka markering till"
+
+#: ../data/geany.glade.h:374
+msgid "I_nsert Comments"
+msgstr "Infoga kommentarer"
+
+#: ../data/geany.glade.h:375
+msgid "Preference_s"
+msgstr "Inställningar"
+
+#: ../data/geany.glade.h:376 ../src/keybindings.c:421
+msgid "P_lugin Preferences"
+msgstr "Inställningar för insticksmoduler"
+
+#: ../data/geany.glade.h:377
+msgid "Find _Next"
+msgstr "Sök nästa"
+
+#: ../data/geany.glade.h:378
+msgid "Find _Previous"
+msgstr "Sök föregående"
+
+#: ../data/geany.glade.h:379
+msgid "Find in F_iles"
+msgstr "Sök i filer"
+
+#: ../data/geany.glade.h:380 ../src/search.c:629
+msgid "_Replace"
+msgstr "Ersätt"
+
+#: ../data/geany.glade.h:381
+msgid "Next _Message"
+msgstr "Nästa meddelande"
+
+#: ../data/geany.glade.h:382
+msgid "Pr_evious Message"
+msgstr "Föregående meddelande"
+
+#: ../data/geany.glade.h:383 ../src/keybindings.c:470
+msgid "_Go to Next Marker"
+msgstr "Gå till nästa markör"
+
+#: ../data/geany.glade.h:384 ../src/keybindings.c:473
+msgid "_Go to Previous Marker"
+msgstr "Gå till föregående markör"
+
+#: ../data/geany.glade.h:385
+msgid "_Go to Line"
+msgstr "Gå till rad"
+
+#: ../data/geany.glade.h:386 ../src/keybindings.c:433
+msgid "Find Next _Selection"
+msgstr "Sök nästa markering"
+
+#: ../data/geany.glade.h:387 ../src/keybindings.c:435
+msgid "Find Pre_vious Selection"
+msgstr "Sök föregående markering"
+
+#: ../data/geany.glade.h:388 ../src/keybindings.c:452
+msgid "_Mark All"
+msgstr "Markera allt"
+
+#: ../data/geany.glade.h:389
+msgid "Go to T_ag Declaration"
+msgstr "Gå till Tagg-deklaration"
+
+#: ../data/geany.glade.h:390 ../src/dialogs.c:365
 msgid "_View"
 msgstr "Visa"
 
-#: ../data/geany.glade.h:455
-msgid "_Website"
-msgstr "Webbsida"
+#: ../data/geany.glade.h:391
+msgid "Change _Font"
+msgstr "Byt teckensnitt"
 
-#: ../data/geany.glade.h:456
-msgid "_Word Count"
-msgstr "Räkna ord"
+#: ../data/geany.glade.h:392
+msgid "To_ggle All Additional Widgets"
+msgstr "Visa / göm verktygsfält"
 
-#: ../data/geany.glade.h:457
+#: ../data/geany.glade.h:393
+msgid "Full_screen"
+msgstr "Helskärm"
+
+#: ../data/geany.glade.h:394
+msgid "Show Message _Window"
+msgstr "Visa meddelandefönster"
+
+#: ../data/geany.glade.h:395
+msgid "Show _Toolbar"
+msgstr "Visa verktygsfält"
+
+#: ../data/geany.glade.h:396
+msgid "Show Side_bar"
+msgstr "Visa sidofält"
+
+#: ../data/geany.glade.h:397
+msgid "_Color Schemes"
+msgstr "Färger"
+
+#: ../data/geany.glade.h:398
+msgid "Show _Markers Margin"
+msgstr "Visa marginalmarkörer"
+
+#: ../data/geany.glade.h:399
+msgid "Show _Line Numbers"
+msgstr "Visa radnummer"
+
+#: ../data/geany.glade.h:400
+msgid "Show _White Space"
+msgstr "Visa tomrum"
+
+#: ../data/geany.glade.h:401
+msgid "Show Line _Endings"
+msgstr "Visa radslut"
+
+#: ../data/geany.glade.h:402
+msgid "Show _Indentation Guides"
+msgstr "Visa indragsmarkörer"
+
+#: ../data/geany.glade.h:403
+msgid "_Document"
+msgstr "Dokument"
+
+#: ../data/geany.glade.h:404
+msgid "_Line Wrapping"
+msgstr "Radbrytning"
+
+#: ../data/geany.glade.h:405
+msgid "Line _Breaking"
+msgstr "Radbrytning (unicode break)"
+
+#: ../data/geany.glade.h:406
+msgid "_Auto-indentation"
+msgstr "Använd automatiskt indrag"
+
+#: ../data/geany.glade.h:407
+msgid "In_dent Type"
+msgstr "Indragstyp"
+
+#: ../data/geany.glade.h:408
+msgid "_Detect from Content"
+msgstr "Upptäck automatiskt från innehållet"
+
+#: ../data/geany.glade.h:409
+msgid "T_abs and Spaces"
+msgstr "Tab och mellanslag"
+
+#: ../data/geany.glade.h:410
+msgid "Indent Widt_h"
+msgstr "Indrag bredd"
+
+#: ../data/geany.glade.h:411
+msgid "_1"
+msgstr "_1"
+
+#: ../data/geany.glade.h:412
+msgid "_2"
+msgstr "_2"
+
+#: ../data/geany.glade.h:413
+msgid "_3"
+msgstr "_3"
+
+#: ../data/geany.glade.h:414
+msgid "_4"
+msgstr "_4"
+
+#: ../data/geany.glade.h:415
+msgid "_5"
+msgstr "_5"
+
+#: ../data/geany.glade.h:416
+msgid "_6"
+msgstr "_6"
+
+#: ../data/geany.glade.h:417
+msgid "_7"
+msgstr "_7"
+
+#: ../data/geany.glade.h:418
+msgid "_8"
+msgstr "_8"
+
+#: ../data/geany.glade.h:419
+msgid "Read _Only"
+msgstr "Skrivskyddad"
+
+#: ../data/geany.glade.h:420
 msgid "_Write Unicode BOM"
 msgstr "Skriv Unicode BOM"
 
+#: ../data/geany.glade.h:421
+msgid "Set File_type"
+msgstr "Ange filtyp"
+
+#: ../data/geany.glade.h:422
+msgid "Set _Encoding"
+msgstr "Ange kodning"
+
+#: ../data/geany.glade.h:423
+msgid "Set Line E_ndings"
+msgstr "Ange radslut"
+
+#: ../data/geany.glade.h:424
+msgid "Convert and Set to _CR/LF (Win)"
+msgstr "Konvertera till CR/LF (Win)"
+
+#: ../data/geany.glade.h:425
+msgid "Convert and Set to _LF (Unix)"
+msgstr "Konvertera till LF (Unix)"
+
+#: ../data/geany.glade.h:426
+msgid "Convert and Set to CR (_Mac)"
+msgstr "Konvertera till CR (Mac)"
+
+#: ../data/geany.glade.h:427
+msgid "_Strip Trailing Spaces"
+msgstr "Ta bort _överflödiga mellanslag"
+
+#: ../data/geany.glade.h:428
+msgid "_Replace Tabs by Spaces"
+msgstr "Ersätt tab med mellanslag"
+
+#: ../data/geany.glade.h:429
+msgid "Replace Spaces b_y Tabs"
+msgstr "Ersätt mellanslag med tab"
+
+#: ../data/geany.glade.h:430
+msgid "_Fold All"
+msgstr "Vik ihop alla"
+
+#: ../data/geany.glade.h:431
+msgid "_Unfold All"
+msgstr "Vik upp alla"
+
+#: ../data/geany.glade.h:432
+msgid "Remove _Markers"
+msgstr "Ta bort markeringar"
+
+#: ../data/geany.glade.h:433
+msgid "Remove Error _Indicators"
+msgstr "Ta bort felindikatorer"
+
+#: ../data/geany.glade.h:434
+msgid "_Project"
+msgstr "Projekt"
+
+#: ../data/geany.glade.h:435
+msgid "_New"
+msgstr "Nytt"
+
+#: ../data/geany.glade.h:436
+msgid "_Open"
+msgstr "Öppna"
+
+#: ../data/geany.glade.h:437
+msgid "_Recent Projects"
+msgstr "Senaste projekt"
+
+#: ../data/geany.glade.h:438
+msgid "_Close"
+msgstr "Stäng"
+
+#: ../data/geany.glade.h:439
+msgid "Apply the default indentation settings to all documents"
+msgstr "Använd det förinställda indraget för alla dokument"
+
+#: ../data/geany.glade.h:440
+msgid "_Apply Default Indentation"
+msgstr "Använd förinställt indrag"
+
+#. build the code
+#: ../data/geany.glade.h:441 ../src/build.c:2568 ../src/build.c:2845
+msgid "_Build"
+msgstr "Bygg"
+
+#: ../data/geany.glade.h:442
+msgid "_Tools"
+msgstr "Verktyg"
+
+#: ../data/geany.glade.h:443
+msgid "_Reload Configuration"
+msgstr "Ladda om konfigurationen"
+
+#: ../data/geany.glade.h:444
+msgid "C_onfiguration Files"
+msgstr "Konfigurationsfiler"
+
+#: ../data/geany.glade.h:445
+msgid "_Color Chooser"
+msgstr "Färgväljare"
+
+#: ../data/geany.glade.h:446
+msgid "_Word Count"
+msgstr "Räkna ord"
+
+#: ../data/geany.glade.h:447
+msgid "Load Ta_gs"
+msgstr "Ladda taggar"
+
+#: ../data/geany.glade.h:448
+msgid "_Help"
+msgstr "Hjälp"
+
+#: ../data/geany.glade.h:449
+msgid "_Keyboard Shortcuts"
+msgstr "Tangentbordsgenvägar"
+
+#: ../data/geany.glade.h:450
+#, fuzzy
+msgid "Debug _Messages"
+msgstr "Debugmeddelanden"
+
+#: ../data/geany.glade.h:451
+msgid "_Website"
+msgstr "Webbsida"
+
+#: ../data/geany.glade.h:452
+msgid "Wi_ki"
+msgstr ""
+
+#: ../data/geany.glade.h:453
+msgid "Report a _Bug"
+msgstr ""
+
+#: ../data/geany.glade.h:454
+#, fuzzy
+msgid "_Donate"
+msgstr "Spara _inte"
+
+#: ../data/geany.glade.h:455 ../src/sidebar.c:124
+msgid "Symbols"
+msgstr "Symboler"
+
+#: ../data/geany.glade.h:456
+msgid "Documents"
+msgstr "Dokument"
+
+#: ../data/geany.glade.h:457
+msgid "Status"
+msgstr "Status"
+
 #: ../data/geany.glade.h:458
-msgid "email address of the developer"
-msgstr "emailadressen till utvecklaren"
+msgid "Compiler"
+msgstr "Kompilator"
 
 #: ../data/geany.glade.h:459
-msgid "invisible"
-msgstr "osynlig"
+msgid "Messages"
+msgstr "Meddelanden"
+
+#: ../data/geany.glade.h:460
+msgid "Scribble"
+msgstr "Klotterplank"
 
 #: ../src/about.c:157
 msgid "About Geany"
@@ -2159,11 +2163,11 @@ msgstr ""
 msgid "Credits"
 msgstr "Tack till ..."
 
-#: ../src/about.c:414
+#: ../src/about.c:417
 msgid "License"
 msgstr "Licens"
 
-#: ../src/about.c:423
+#: ../src/about.c:426
 msgid ""
 "License text could not be found, please visit http://www.gnu.org/licenses/"
 "gpl-2.0.txt to view it online."
@@ -2362,73 +2366,73 @@ msgstr "_Make"
 msgid "_Make All"
 msgstr "Kör Make all"
 
-#: ../src/callbacks.c:147
+#: ../src/callbacks.c:148
 msgid "Do you really want to quit?"
 msgstr "Vill du verkligen avsluta?"
 
-#: ../src/callbacks.c:205
+#: ../src/callbacks.c:206
 #, c-format
 msgid "%d file saved."
 msgid_plural "%d files saved."
 msgstr[0] "%d fil sparad."
 msgstr[1] "%d filer sparade."
 
-#: ../src/callbacks.c:430
+#: ../src/callbacks.c:431
 msgid "Any unsaved changes will be lost."
 msgstr "Alla osparade ändringar kommer att förloras."
 
-#: ../src/callbacks.c:431
+#: ../src/callbacks.c:432
 #, c-format
 msgid "Are you sure you want to reload '%s'?"
 msgstr "Är du säker på att du vill ladda om '%s'?"
 
-#: ../src/callbacks.c:1055 ../src/keybindings.c:461
+#: ../src/callbacks.c:1062 ../src/keybindings.c:461
 msgid "Go to Line"
 msgstr "Gå till rad"
 
-#: ../src/callbacks.c:1056
+#: ../src/callbacks.c:1063
 msgid "Enter the line you want to go to:"
 msgstr "Skriv in radnumret till den rad du vill gå till"
 
-#: ../src/callbacks.c:1157 ../src/callbacks.c:1182
+#: ../src/callbacks.c:1164 ../src/callbacks.c:1189
 msgid ""
 "Please set the filetype for the current file before using this function."
 msgstr ""
 "Var god och ange filtyp för filen innan du använder den här funktionen."
 
-#: ../src/callbacks.c:1287 ../src/ui_utils.c:639
+#: ../src/callbacks.c:1294 ../src/ui_utils.c:639
 msgid "dd.mm.yyyy"
 msgstr "dd.mm.yyyy"
 
-#: ../src/callbacks.c:1289 ../src/ui_utils.c:640
+#: ../src/callbacks.c:1296 ../src/ui_utils.c:640
 msgid "mm.dd.yyyy"
 msgstr "mm.dd.yyyy"
 
-#: ../src/callbacks.c:1291 ../src/ui_utils.c:641
+#: ../src/callbacks.c:1298 ../src/ui_utils.c:641
 msgid "yyyy/mm/dd"
 msgstr "yyyy/mm/dd"
 
-#: ../src/callbacks.c:1293 ../src/ui_utils.c:650
+#: ../src/callbacks.c:1300 ../src/ui_utils.c:650
 msgid "dd.mm.yyyy hh:mm:ss"
 msgstr "dd.mm.yyyy hh:mm:ss"
 
-#: ../src/callbacks.c:1295 ../src/ui_utils.c:651
+#: ../src/callbacks.c:1302 ../src/ui_utils.c:651
 msgid "mm.dd.yyyy hh:mm:ss"
 msgstr "mm.dd.yyyy hh:mm:ss"
 
-#: ../src/callbacks.c:1297 ../src/ui_utils.c:652
+#: ../src/callbacks.c:1304 ../src/ui_utils.c:652
 msgid "yyyy/mm/dd hh:mm:ss"
 msgstr "yyyy/mm/dd hh:mm:ss"
 
-#: ../src/callbacks.c:1299 ../src/ui_utils.c:661
+#: ../src/callbacks.c:1306 ../src/ui_utils.c:661
 msgid "_Use Custom Date Format"
 msgstr "Använd användardefinierat datumformat"
 
-#: ../src/callbacks.c:1303
+#: ../src/callbacks.c:1310
 msgid "Custom Date Format"
 msgstr "Användardefinierat datumformat"
 
-#: ../src/callbacks.c:1304
+#: ../src/callbacks.c:1311
 msgid ""
 "Enter here a custom date and time format. You can use any conversion "
 "specifiers which can be used with the ANSI C strftime function."
@@ -2436,15 +2440,15 @@ msgstr ""
 "Skriv in användardefinierat datum- och tidsformat. Du kan använda den syntax "
 "som specificeras av ANSI C:s strftime funktion."
 
-#: ../src/callbacks.c:1327
+#: ../src/callbacks.c:1334
 msgid "Date format string could not be converted (possibly too long)."
 msgstr "Strängen för datumformat kunde inte konverteras (möjligtvis för lång)."
 
-#: ../src/callbacks.c:1520 ../src/callbacks.c:1528
+#: ../src/callbacks.c:1527 ../src/callbacks.c:1535
 msgid "No more message items."
 msgstr "Inga fler meddelanden."
 
-#: ../src/callbacks.c:1666
+#: ../src/callbacks.c:1673
 #, fuzzy, c-format
 msgid "Could not open file %s (File not found)"
 msgstr "Kunde inte öppna fil %s (%s)"
@@ -2612,7 +2616,7 @@ msgstr ""
 
 #: ../src/dialogs.c:1223 ../src/dialogs.c:1224 ../src/dialogs.c:1225
 #: ../src/dialogs.c:1231 ../src/dialogs.c:1232 ../src/dialogs.c:1233
-#: ../src/symbols.c:2096 ../src/symbols.c:2117 ../src/symbols.c:2169
+#: ../src/symbols.c:2094 ../src/symbols.c:2115 ../src/symbols.c:2167
 #: ../src/ui_utils.c:264
 msgid "unknown"
 msgstr "okänd"
@@ -3105,24 +3109,29 @@ msgstr "Felaktig rexex för filtypen %s: %s"
 msgid "untitled"
 msgstr "namnlös"
 
-#: ../src/highlighting.c:1218 ../src/main.c:821 ../src/socket.c:166
+#: ../src/highlighting.c:1225 ../src/main.c:821 ../src/socket.c:166
 #: ../src/templates.c:224
 #, c-format
 msgid "Could not find file '%s'."
 msgstr "Kunde inte hitta fil '%s'."
 
-#: ../src/highlighting.c:1290
+#: ../src/highlighting.c:1297
 #, fuzzy
 msgid "Default"
 msgstr "Förvald"
 
-#: ../src/highlighting.c:1341
+#: ../src/highlighting.c:1336
+#, fuzzy
+msgid "The current filetype overrides the default style."
+msgstr "Bygger filen med Make-verktyget och förinställt mål"
+
+#: ../src/highlighting.c:1337
+msgid "This may cause color schemes to display incorrectly."
+msgstr ""
+
+#: ../src/highlighting.c:1358
 #, fuzzy
 msgid "Color Schemes"
-msgstr "Färger"
-
-#: ../src/highlighting.c:1366
-msgid "_Color Schemes"
 msgstr "Färger"
 
 #. visual group order
@@ -3781,17 +3790,17 @@ msgstr ""
 "konfigureringsmapp.\n"
 "Starta Geany ändå?"
 
-#: ../src/main.c:1070
+#: ../src/main.c:1067
 #, c-format
 msgid "This is Geany %s."
 msgstr "Detta är Geany %s."
 
-#: ../src/main.c:1072
+#: ../src/main.c:1069
 #, c-format
 msgid "Configuration directory could not be created (%s)."
 msgstr "Konfigureringsmappen kunde inte skapas (%s)"
 
-#: ../src/main.c:1289
+#: ../src/main.c:1286
 msgid "Configuration files reloaded."
 msgstr "Konfigurationsfilerna laddades om."
 
@@ -3888,11 +3897,11 @@ msgstr "Läs av tangent"
 msgid "Press the combination of the keys you want to use for \"%s\"."
 msgstr "Skriv in den tangentbordskombination du vill använda för  \"%s\""
 
-#: ../src/prefs.c:226 ../src/symbols.c:2238 ../src/sidebar.c:730
+#: ../src/prefs.c:226 ../src/symbols.c:2236 ../src/sidebar.c:730
 msgid "_Expand All"
 msgstr "Expandera alla"
 
-#: ../src/prefs.c:231 ../src/symbols.c:2243 ../src/sidebar.c:736
+#: ../src/prefs.c:231 ../src/symbols.c:2241 ../src/sidebar.c:736
 msgid "_Collapse All"
 msgstr "Stäng alla"
 
@@ -4672,21 +4681,21 @@ msgstr "Laddade %s tagg-filen '%s'."
 msgid "Could not load tags file '%s'."
 msgstr "Kunde inte ladda tagg-filen '%s'."
 
-#: ../src/symbols.c:1945
+#: ../src/symbols.c:1943
 #, c-format
 msgid "Forward declaration \"%s\" not found."
 msgstr "Deklarationen \"%s\" kunde inte hittas."
 
-#: ../src/symbols.c:1947
+#: ../src/symbols.c:1945
 #, c-format
 msgid "Definition of \"%s\" not found."
 msgstr "Definitionen av  \"%s\" kan inte hittas."
 
-#: ../src/symbols.c:2253
+#: ../src/symbols.c:2251
 msgid "Sort by _Name"
 msgstr "Sortera efter namn"
 
-#: ../src/symbols.c:2260
+#: ../src/symbols.c:2258
 msgid "Sort by _Appearance"
 msgstr "Sortera efter egenskaper"
 

@@ -9,9 +9,9 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: geany 1.22\n"
+"Project-Id-Version: Geany 1.22\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-05-28 13:53+0200\n"
+"POT-Creation-Date: 2012-06-03 10:14+0200\n"
 "PO-Revision-Date: 2012-03-05 19:20+0100\n"
 "Last-Translator: Frank Lanitz <frank@frank.uvena.de>\n"
 "Language-Team: German <geany-i18n@uvena.de>\n"
@@ -2218,11 +2218,11 @@ msgstr ""
 msgid "Credits"
 msgstr "Credits"
 
-#: ../src/about.c:414
+#: ../src/about.c:417
 msgid "License"
 msgstr "Lizenz"
 
-#: ../src/about.c:423
+#: ../src/about.c:426
 msgid ""
 "License text could not be found, please visit http://www.gnu.org/licenses/"
 "gpl-2.0.txt to view it online."
@@ -2677,7 +2677,7 @@ msgstr ""
 
 #: ../src/dialogs.c:1223 ../src/dialogs.c:1224 ../src/dialogs.c:1225
 #: ../src/dialogs.c:1231 ../src/dialogs.c:1232 ../src/dialogs.c:1233
-#: ../src/symbols.c:2096 ../src/symbols.c:2117 ../src/symbols.c:2169
+#: ../src/symbols.c:2094 ../src/symbols.c:2115 ../src/symbols.c:2167
 #: ../src/ui_utils.c:264
 msgid "unknown"
 msgstr "unbekannt"
@@ -3176,17 +3176,26 @@ msgstr "Schlechter RegEx für Dateityp %s: %s"
 msgid "untitled"
 msgstr "unbenannt"
 
-#: ../src/highlighting.c:1215 ../src/main.c:821 ../src/socket.c:166
+#: ../src/highlighting.c:1225 ../src/main.c:821 ../src/socket.c:166
 #: ../src/templates.c:224
 #, c-format
 msgid "Could not find file '%s'."
 msgstr "Konnte die Datei »%s« nicht finden."
 
-#: ../src/highlighting.c:1287
+#: ../src/highlighting.c:1297
 msgid "Default"
 msgstr "Standard"
 
-#: ../src/highlighting.c:1341
+#: ../src/highlighting.c:1336
+#, fuzzy
+msgid "The current filetype overrides the default style."
+msgstr "Kompiliert die aktuelle Datei mit »make« und dem Standard-Target"
+
+#: ../src/highlighting.c:1337
+msgid "This may cause color schemes to display incorrectly."
+msgstr ""
+
+#: ../src/highlighting.c:1358
 msgid "Color Schemes"
 msgstr "Farbschemata"
 
@@ -3967,11 +3976,11 @@ msgstr "Tasten festlegen"
 msgid "Press the combination of the keys you want to use for \"%s\"."
 msgstr "Welche Tastenkombination soll für »%s« genutzt werden?"
 
-#: ../src/prefs.c:226 ../src/symbols.c:2238 ../src/sidebar.c:730
+#: ../src/prefs.c:226 ../src/symbols.c:2236 ../src/sidebar.c:730
 msgid "_Expand All"
 msgstr "Alle a_usklappen"
 
-#: ../src/prefs.c:231 ../src/symbols.c:2243 ../src/sidebar.c:736
+#: ../src/prefs.c:231 ../src/symbols.c:2241 ../src/sidebar.c:736
 msgid "_Collapse All"
 msgstr "Alle _einklappen"
 
@@ -4763,21 +4772,21 @@ msgstr "%s Tag-Datei »%s« geladen."
 msgid "Could not load tags file '%s'."
 msgstr "Konnte Tag-Datei »%s« nicht laden."
 
-#: ../src/symbols.c:1945
+#: ../src/symbols.c:1943
 #, c-format
 msgid "Forward declaration \"%s\" not found."
 msgstr "(Vorwärts-)Deklaration von »%s« nicht gefunden."
 
-#: ../src/symbols.c:1947
+#: ../src/symbols.c:1945
 #, c-format
 msgid "Definition of \"%s\" not found."
 msgstr "Definition von »%s« nicht gefunden."
 
-#: ../src/symbols.c:2253
+#: ../src/symbols.c:2251
 msgid "Sort by _Name"
 msgstr "Nach _Namen sortieren"
 
-#: ../src/symbols.c:2260
+#: ../src/symbols.c:2258
 msgid "Sort by _Appearance"
 msgstr "Nach _Auftreten sortieren"
 

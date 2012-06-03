@@ -5,9 +5,9 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: geany\n"
+"Project-Id-Version: Geany 1.22\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-05-26 08:36+0200\n"
+"POT-Creation-Date: 2012-06-03 10:14+0200\n"
 "PO-Revision-Date: 2012-05-26 08:11+0300\n"
 "Last-Translator: Algimantas Margevičius <margevicius.algimantas@gmail.com>\n"
 "Language-Team: Lietuvių <>\n"
@@ -1655,7 +1655,7 @@ msgstr "Paskutinieji _failai"
 msgid "Save A_ll"
 msgstr "_Išsaugoti viską"
 
-#: ../data/geany.glade.h:351 ../src/callbacks.c:429 ../src/document.c:2838
+#: ../data/geany.glade.h:351 ../src/callbacks.c:430 ../src/document.c:2838
 #: ../src/sidebar.c:696
 msgid "_Reload"
 msgstr "Į_kelti iš naujo"
@@ -1841,255 +1841,259 @@ msgid "Show Side_bar"
 msgstr "Rodyti šoninę _juostą"
 
 #: ../data/geany.glade.h:397
+msgid "_Color Schemes"
+msgstr "_Spalvų deriniai"
+
+#: ../data/geany.glade.h:398
 msgid "Show _Markers Margin"
 msgstr "Rodyti žymeklių _paraštę"
 
-#: ../data/geany.glade.h:398
+#: ../data/geany.glade.h:399
 msgid "Show _Line Numbers"
 msgstr "Rodyti eilučių _numerius"
 
-#: ../data/geany.glade.h:399
+#: ../data/geany.glade.h:400
 msgid "Show _White Space"
 msgstr "Rodyti _tuščią vietą"
 
-#: ../data/geany.glade.h:400
+#: ../data/geany.glade.h:401
 msgid "Show Line _Endings"
 msgstr "Rodyti _eilučių pabaigas"
 
-#: ../data/geany.glade.h:401
+#: ../data/geany.glade.h:402
 msgid "Show _Indentation Guides"
 msgstr "Rodyti _atitraukimų ženkliukus"
 
-#: ../data/geany.glade.h:402
+#: ../data/geany.glade.h:403
 msgid "_Document"
 msgstr "_Dokumentas"
 
-#: ../data/geany.glade.h:403
+#: ../data/geany.glade.h:404
 msgid "_Line Wrapping"
 msgstr "_Laužyti eilutes"
 
-#: ../data/geany.glade.h:404
+#: ../data/geany.glade.h:405
 msgid "Line _Breaking"
 msgstr "Eilučių _laužymas"
 
-#: ../data/geany.glade.h:405
+#: ../data/geany.glade.h:406
 msgid "_Auto-indentation"
 msgstr "_Automatinis atitraukimas"
 
-#: ../data/geany.glade.h:406
+#: ../data/geany.glade.h:407
 msgid "In_dent Type"
 msgstr "_Atitraukimo tipas"
 
-#: ../data/geany.glade.h:407
+#: ../data/geany.glade.h:408
 msgid "_Detect from Content"
 msgstr "_Aptikti iš turinio"
 
-#: ../data/geany.glade.h:408
+#: ../data/geany.glade.h:409
 msgid "T_abs and Spaces"
 msgstr "_Tabuliavimo ženklai ir tarpai"
 
-#: ../data/geany.glade.h:409
+#: ../data/geany.glade.h:410
 msgid "Indent Widt_h"
 msgstr "Atitraukimo _plotis"
 
-#: ../data/geany.glade.h:410
+#: ../data/geany.glade.h:411
 msgid "_1"
 msgstr "_1"
 
-#: ../data/geany.glade.h:411
+#: ../data/geany.glade.h:412
 msgid "_2"
 msgstr "_2"
 
-#: ../data/geany.glade.h:412
+#: ../data/geany.glade.h:413
 msgid "_3"
 msgstr "_3"
 
-#: ../data/geany.glade.h:413
+#: ../data/geany.glade.h:414
 msgid "_4"
 msgstr "_4"
 
-#: ../data/geany.glade.h:414
+#: ../data/geany.glade.h:415
 msgid "_5"
 msgstr "_5"
 
-#: ../data/geany.glade.h:415
+#: ../data/geany.glade.h:416
 msgid "_6"
 msgstr "_6"
 
-#: ../data/geany.glade.h:416
+#: ../data/geany.glade.h:417
 msgid "_7"
 msgstr "_7"
 
-#: ../data/geany.glade.h:417
+#: ../data/geany.glade.h:418
 msgid "_8"
 msgstr "_8"
 
-#: ../data/geany.glade.h:418
+#: ../data/geany.glade.h:419
 msgid "Read _Only"
 msgstr "_Tik skaityti"
 
-#: ../data/geany.glade.h:419
+#: ../data/geany.glade.h:420
 msgid "_Write Unicode BOM"
 msgstr "_Įrašyti unikodo BOM"
 
-#: ../data/geany.glade.h:420
+#: ../data/geany.glade.h:421
 msgid "Set File_type"
 msgstr "Nustatyti _failo tipą"
 
-#: ../data/geany.glade.h:421
+#: ../data/geany.glade.h:422
 msgid "Set _Encoding"
 msgstr "Nustatyti _koduotę"
 
-#: ../data/geany.glade.h:422
+#: ../data/geany.glade.h:423
 msgid "Set Line E_ndings"
 msgstr "Nustatyti eilučių _pabaigas"
 
-#: ../data/geany.glade.h:423
+#: ../data/geany.glade.h:424
 msgid "Convert and Set to _CR/LF (Win)"
 msgstr "Konvertuoti ir nustatyti į _CR/LF (Win)"
 
-#: ../data/geany.glade.h:424
+#: ../data/geany.glade.h:425
 msgid "Convert and Set to _LF (Unix)"
 msgstr "Konvertuoti ir nustatyti į _LF (Unix)"
 
-#: ../data/geany.glade.h:425
+#: ../data/geany.glade.h:426
 msgid "Convert and Set to CR (_Mac)"
 msgstr "Konvertuoti ir nustatyti į CR (_Mac)"
 
-#: ../data/geany.glade.h:426
+#: ../data/geany.glade.h:427
 msgid "_Strip Trailing Spaces"
 msgstr "_Pašalinti pradžios tarpus"
 
-#: ../data/geany.glade.h:427
+#: ../data/geany.glade.h:428
 msgid "_Replace Tabs by Spaces"
 msgstr "_Pakeisti tabuliavimo simbolius tarpais"
 
-#: ../data/geany.glade.h:428
+#: ../data/geany.glade.h:429
 msgid "Replace Spaces b_y Tabs"
 msgstr "Pakeisti _tarpus tabuliavimo simboliais"
 
-#: ../data/geany.glade.h:429
+#: ../data/geany.glade.h:430
 msgid "_Fold All"
 msgstr "_Suskleisti visus"
 
-#: ../data/geany.glade.h:430
+#: ../data/geany.glade.h:431
 msgid "_Unfold All"
 msgstr "_Išskleisti visus"
 
-#: ../data/geany.glade.h:431
+#: ../data/geany.glade.h:432
 msgid "Remove _Markers"
 msgstr "Paša_linti žymeklius"
 
-#: ../data/geany.glade.h:432
+#: ../data/geany.glade.h:433
 msgid "Remove Error _Indicators"
 msgstr "P_ašalinti klaidų indikatorius"
 
-#: ../data/geany.glade.h:433
+#: ../data/geany.glade.h:434
 msgid "_Project"
 msgstr "Pro_jektas"
 
-#: ../data/geany.glade.h:434
+#: ../data/geany.glade.h:435
 msgid "_New"
 msgstr "_Naujas"
 
-#: ../data/geany.glade.h:435
+#: ../data/geany.glade.h:436
 msgid "_Open"
 msgstr "At_verti"
 
-#: ../data/geany.glade.h:436
+#: ../data/geany.glade.h:437
 msgid "_Recent Projects"
 msgstr "_Paskutinieji projektai"
 
-#: ../data/geany.glade.h:437
+#: ../data/geany.glade.h:438
 msgid "_Close"
 msgstr "_Užverti"
 
-#: ../data/geany.glade.h:438
+#: ../data/geany.glade.h:439
 msgid "Apply the default indentation settings to all documents"
 msgstr "Pritaikyti numatytuosius atitraukimo nustatymus visiems dokumentams"
 
-#: ../data/geany.glade.h:439
+#: ../data/geany.glade.h:440
 msgid "_Apply Default Indentation"
 msgstr "P_ritaikyti numatytuosius atitraukimus"
 
 #. build the code
-#: ../data/geany.glade.h:440 ../src/build.c:2568 ../src/build.c:2845
+#: ../data/geany.glade.h:441 ../src/build.c:2568 ../src/build.c:2845
 msgid "_Build"
 msgstr "_Kompiliuoti"
 
-#: ../data/geany.glade.h:441
+#: ../data/geany.glade.h:442
 msgid "_Tools"
 msgstr "Į_rankiai"
 
-#: ../data/geany.glade.h:442
+#: ../data/geany.glade.h:443
 msgid "_Reload Configuration"
 msgstr "_Įkrauti konfigūraciją iš naujo"
 
-#: ../data/geany.glade.h:443
+#: ../data/geany.glade.h:444
 msgid "C_onfiguration Files"
 msgstr "_Konfigūracijos failai"
 
-#: ../data/geany.glade.h:444
+#: ../data/geany.glade.h:445
 msgid "_Color Chooser"
 msgstr "_Spalvų parinkiklis"
 
-#: ../data/geany.glade.h:445
+#: ../data/geany.glade.h:446
 msgid "_Word Count"
 msgstr "Žodžių _skaičius"
 
-#: ../data/geany.glade.h:446
+#: ../data/geany.glade.h:447
 msgid "Load Ta_gs"
 msgstr "Įkrauti ž_ymes"
 
-#: ../data/geany.glade.h:447
+#: ../data/geany.glade.h:448
 msgid "_Help"
 msgstr "_Žinynas"
 
-#: ../data/geany.glade.h:448
+#: ../data/geany.glade.h:449
 msgid "_Keyboard Shortcuts"
 msgstr "_Spartieji klavišai"
 
-#: ../data/geany.glade.h:449
+#: ../data/geany.glade.h:450
 msgid "Debug _Messages"
 msgstr "Derinimo pra_nešimai"
 
-#: ../data/geany.glade.h:450
+#: ../data/geany.glade.h:451
 msgid "_Website"
 msgstr "_Tinklalapis"
 
-#: ../data/geany.glade.h:451
+#: ../data/geany.glade.h:452
 msgid "Wi_ki"
 msgstr "Wi_ki"
 
-#: ../data/geany.glade.h:452
+#: ../data/geany.glade.h:453
 msgid "Report a _Bug"
 msgstr "_Pranešti apie klaidą"
 
-#: ../data/geany.glade.h:453
+#: ../data/geany.glade.h:454
 msgid "_Donate"
 msgstr "_Paaukoti"
 
-#: ../data/geany.glade.h:454 ../src/sidebar.c:124
+#: ../data/geany.glade.h:455 ../src/sidebar.c:124
 msgid "Symbols"
 msgstr "Simboliai"
 
-#: ../data/geany.glade.h:455
+#: ../data/geany.glade.h:456
 msgid "Documents"
 msgstr "Dokumentai"
 
-#: ../data/geany.glade.h:456
+#: ../data/geany.glade.h:457
 msgid "Status"
 msgstr "Būsena"
 
-#: ../data/geany.glade.h:457
+#: ../data/geany.glade.h:458
 msgid "Compiler"
 msgstr "Kompiliatorius"
 
-#: ../data/geany.glade.h:458
+#: ../data/geany.glade.h:459
 msgid "Messages"
 msgstr "Pranešimai"
 
-#: ../data/geany.glade.h:459
+#: ../data/geany.glade.h:460
 msgid "Scribble"
 msgstr "Keverzonė"
 
@@ -2151,11 +2155,11 @@ msgstr ""
 msgid "Credits"
 msgstr "Padėkos"
 
-#: ../src/about.c:414
+#: ../src/about.c:417
 msgid "License"
 msgstr "Licencija"
 
-#: ../src/about.c:423
+#: ../src/about.c:426
 msgid ""
 "License text could not be found, please visit http://www.gnu.org/licenses/"
 "gpl-2.0.txt to view it online."
@@ -2354,11 +2358,11 @@ msgstr "_Daryti"
 msgid "_Make All"
 msgstr "_Daryti visus"
 
-#: ../src/callbacks.c:147
+#: ../src/callbacks.c:148
 msgid "Do you really want to quit?"
 msgstr "Ar tikrai norite išeiti?"
 
-#: ../src/callbacks.c:205
+#: ../src/callbacks.c:206
 #, c-format
 msgid "%d file saved."
 msgid_plural "%d files saved."
@@ -2366,62 +2370,62 @@ msgstr[0] "%d failas išsaugotas."
 msgstr[1] "%d failai išsaugoti."
 msgstr[2] "%d failų išsaugota."
 
-#: ../src/callbacks.c:430
+#: ../src/callbacks.c:431
 msgid "Any unsaved changes will be lost."
 msgstr "Visi neišsaugoti pakeitimai bus prarasti."
 
-#: ../src/callbacks.c:431
+#: ../src/callbacks.c:432
 #, c-format
 msgid "Are you sure you want to reload '%s'?"
 msgstr "Ar tikrai norite įkrauti iš naujo „%s“?"
 
-#: ../src/callbacks.c:1055 ../src/keybindings.c:461
+#: ../src/callbacks.c:1062 ../src/keybindings.c:461
 msgid "Go to Line"
 msgstr "Eiti į eilutę"
 
-#: ../src/callbacks.c:1056
+#: ../src/callbacks.c:1063
 msgid "Enter the line you want to go to:"
 msgstr "Įveskite eilutę į kurią norite pereiti:"
 
-#: ../src/callbacks.c:1157 ../src/callbacks.c:1182
+#: ../src/callbacks.c:1164 ../src/callbacks.c:1189
 msgid ""
 "Please set the filetype for the current file before using this function."
 msgstr ""
 "Prieš naudojantis šia funkcija, nustatykite dabartinio failo failo tipą."
 
-#: ../src/callbacks.c:1287 ../src/ui_utils.c:639
+#: ../src/callbacks.c:1294 ../src/ui_utils.c:639
 msgid "dd.mm.yyyy"
 msgstr "dd.mm.yyyy"
 
-#: ../src/callbacks.c:1289 ../src/ui_utils.c:640
+#: ../src/callbacks.c:1296 ../src/ui_utils.c:640
 msgid "mm.dd.yyyy"
 msgstr "mm.dd.yyyy"
 
-#: ../src/callbacks.c:1291 ../src/ui_utils.c:641
+#: ../src/callbacks.c:1298 ../src/ui_utils.c:641
 msgid "yyyy/mm/dd"
 msgstr "yyyy/mm/dd"
 
-#: ../src/callbacks.c:1293 ../src/ui_utils.c:650
+#: ../src/callbacks.c:1300 ../src/ui_utils.c:650
 msgid "dd.mm.yyyy hh:mm:ss"
 msgstr "dd.mm.yyyy hh:mm:ss"
 
-#: ../src/callbacks.c:1295 ../src/ui_utils.c:651
+#: ../src/callbacks.c:1302 ../src/ui_utils.c:651
 msgid "mm.dd.yyyy hh:mm:ss"
 msgstr "mm.dd.yyyy hh:mm:ss"
 
-#: ../src/callbacks.c:1297 ../src/ui_utils.c:652
+#: ../src/callbacks.c:1304 ../src/ui_utils.c:652
 msgid "yyyy/mm/dd hh:mm:ss"
 msgstr "yyyy/mm/dd hh:mm:ss"
 
-#: ../src/callbacks.c:1299 ../src/ui_utils.c:661
+#: ../src/callbacks.c:1306 ../src/ui_utils.c:661
 msgid "_Use Custom Date Format"
 msgstr "_Naudoti pasirinktinį datos formatą"
 
-#: ../src/callbacks.c:1303
+#: ../src/callbacks.c:1310
 msgid "Custom Date Format"
 msgstr "Pasirinktinis datos formatas"
 
-#: ../src/callbacks.c:1304
+#: ../src/callbacks.c:1311
 msgid ""
 "Enter here a custom date and time format. You can use any conversion "
 "specifiers which can be used with the ANSI C strftime function."
@@ -2429,16 +2433,16 @@ msgstr ""
 "Įveskite pasirinktinį datos ir laiko formatą. Galite naudoti bet kokius "
 "kintamuosius kurie suderinami su ANSI C strftime funkcija."
 
-#: ../src/callbacks.c:1327
+#: ../src/callbacks.c:1334
 msgid "Date format string could not be converted (possibly too long)."
 msgstr ""
 "Konvertuoti datos formato eilutės nepavyko (gali būti jog ji per ilga)."
 
-#: ../src/callbacks.c:1520 ../src/callbacks.c:1528
+#: ../src/callbacks.c:1527 ../src/callbacks.c:1535
 msgid "No more message items."
 msgstr "Daugiau nėra pranešimų elementų."
 
-#: ../src/callbacks.c:1666
+#: ../src/callbacks.c:1673
 #, c-format
 msgid "Could not open file %s (File not found)"
 msgstr "Atverti %s nepavyko (failas nerastas)"
@@ -2606,7 +2610,7 @@ msgstr ""
 
 #: ../src/dialogs.c:1223 ../src/dialogs.c:1224 ../src/dialogs.c:1225
 #: ../src/dialogs.c:1231 ../src/dialogs.c:1232 ../src/dialogs.c:1233
-#: ../src/symbols.c:2096 ../src/symbols.c:2117 ../src/symbols.c:2169
+#: ../src/symbols.c:2094 ../src/symbols.c:2115 ../src/symbols.c:2167
 #: ../src/ui_utils.c:264
 msgid "unknown"
 msgstr "nežinoma"
@@ -3097,23 +3101,28 @@ msgstr "Bloga reguliarioji išraiška failo tipui %s: %s"
 msgid "untitled"
 msgstr "be vardo"
 
-#: ../src/highlighting.c:1218 ../src/main.c:821 ../src/socket.c:166
+#: ../src/highlighting.c:1225 ../src/main.c:821 ../src/socket.c:166
 #: ../src/templates.c:224
 #, c-format
 msgid "Could not find file '%s'."
 msgstr "Nepavyko rasti failo „%s“."
 
-#: ../src/highlighting.c:1290
+#: ../src/highlighting.c:1297
 msgid "Default"
 msgstr "Numatytasis"
 
-#: ../src/highlighting.c:1341
+#: ../src/highlighting.c:1336
+#, fuzzy
+msgid "The current filetype overrides the default style."
+msgstr "Kurti dabartinį failą su Make ir numatytąja paskirtim"
+
+#: ../src/highlighting.c:1337
+msgid "This may cause color schemes to display incorrectly."
+msgstr ""
+
+#: ../src/highlighting.c:1358
 msgid "Color Schemes"
 msgstr "Spalvų deriniai"
-
-#: ../src/highlighting.c:1366
-msgid "_Color Schemes"
-msgstr "_Spalvų deriniai"
 
 #. visual group order
 #: ../src/keybindings.c:223 ../src/symbols.c:714
@@ -3777,17 +3786,17 @@ msgstr ""
 "Naudojant Geany be konfigūracijos aplanko gali kilti bėdų.\n"
 "Vistiek paleisti Geany?"
 
-#: ../src/main.c:1070
+#: ../src/main.c:1067
 #, c-format
 msgid "This is Geany %s."
 msgstr "Tai yra Geany %s."
 
-#: ../src/main.c:1072
+#: ../src/main.c:1069
 #, c-format
 msgid "Configuration directory could not be created (%s)."
 msgstr "Konfigūracijos aplanko sukurti nepavyko (%s)."
 
-#: ../src/main.c:1289
+#: ../src/main.c:1286
 msgid "Configuration files reloaded."
 msgstr "Konfigūracijos failai įkelti iš naujo."
 
@@ -3883,11 +3892,11 @@ msgstr "Paimti klavišą"
 msgid "Press the combination of the keys you want to use for \"%s\"."
 msgstr "Paspauskite klavišų kombinaciją kurią naudosite „%s“."
 
-#: ../src/prefs.c:226 ../src/symbols.c:2238 ../src/sidebar.c:730
+#: ../src/prefs.c:226 ../src/symbols.c:2236 ../src/sidebar.c:730
 msgid "_Expand All"
 msgstr "_Išskleisti viską"
 
-#: ../src/prefs.c:231 ../src/symbols.c:2243 ../src/sidebar.c:736
+#: ../src/prefs.c:231 ../src/symbols.c:2241 ../src/sidebar.c:736
 msgid "_Collapse All"
 msgstr "_Suskleisti viską"
 
@@ -4667,21 +4676,21 @@ msgstr "Įkeltas %s žymių failas „%s“."
 msgid "Could not load tags file '%s'."
 msgstr "Įkelti žymių failo nepavyko „%s“."
 
-#: ../src/symbols.c:1945
+#: ../src/symbols.c:1943
 #, c-format
 msgid "Forward declaration \"%s\" not found."
 msgstr "Pirminė deklaracija „%s“ nerasta."
 
-#: ../src/symbols.c:1947
+#: ../src/symbols.c:1945
 #, c-format
 msgid "Definition of \"%s\" not found."
 msgstr "„%s“ aprašymas nerastas."
 
-#: ../src/symbols.c:2253
+#: ../src/symbols.c:2251
 msgid "Sort by _Name"
 msgstr "Rikiuoti pagal _pavadinimą"
 
-#: ../src/symbols.c:2260
+#: ../src/symbols.c:2258
 msgid "Sort by _Appearance"
 msgstr "Rikiuoti pagal _išvaizdą"
 
