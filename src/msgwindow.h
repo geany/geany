@@ -26,13 +26,26 @@ G_BEGIN_DECLS
 
 /**
  * Various colors for use in the compiler and messages treeviews when adding messages.
+ * Note: matches ANSI color order
  **/
 enum MsgColors
 {
-	COLOR_RED,		/**< Color red */
-	COLOR_DARK_RED,	/**< Color dark red */
-	COLOR_BLACK,	/**< Color black */
-	COLOR_BLUE		/**< Color blue */
+	COLOR_BLACK,		/**< Color black */
+	COLOR_DARK_RED,		/**< Color dark red */
+	COLOR_DARK_GREEN,	/**< Color dark green */
+	COLOR_DARK_YELLOW,	/**< Color dark yellow */
+	COLOR_DARK_BLUE,	/**< Color dark blue */
+	COLOR_DARK_MAGENTA,	/**< Color dark magenta */
+	COLOR_DARK_CYAN,	/**< Color dark cyan */
+	COLOR_LIGHT_GREY,	/**< Color light grey */
+	COLOR_GREY,			/**< Color grey */
+	COLOR_RED,			/**< Color red */
+	COLOR_GREEN,		/**< Color green */
+	COLOR_YELLOW,		/**< Color yellow */
+	COLOR_BLUE,			/**< Color blue */
+	COLOR_MAGENTA,		/**< Color magenta */
+	COLOR_CYAN,			/**< Color cyan */
+	COLOR_WHITE 		/**< Color white */
 };
 
 /** Indices of the notebooks in the messages window. */
