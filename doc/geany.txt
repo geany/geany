@@ -1763,7 +1763,6 @@ Paths
 Startup path
     Path to start in when opening or saving files.
     It must be an absolute path.
-    Leave it blank to use the current working directory.
 
 Project files
     Path to start in when opening project files.
