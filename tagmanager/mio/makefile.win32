@@ -23,7 +23,7 @@ GTK_INCLUDES= \
 
 INCLUDEDIRS=-I include $(GTK_INCLUDES)
 
-CBASEFLAGS=-Wall -pipe -mms-bitfields -DPACKAGE=\"geany\" -DG_OS_WIN32 -Wno-missing-braces -Wno-char-subscripts $(INCLUDEDIRS)
+CBASEFLAGS=-Wall -pipe -mms-bitfields -DPACKAGE=\"geany\" -Wno-missing-braces -Wno-char-subscripts $(INCLUDEDIRS)
 ifdef DEBUG
 CFLAGS= -O0 -g $(CBASEFLAGS)
 else
@@ -31,7 +31,7 @@ CFLAGS=-O2 $(CBASEFLAGS)
 endif
 
 .c.o:
-	$(CC) $(CFLAGS) -w -c $<
+	$(CC) $(CFLAGS) -c $<
 
 all: $(COMPLIB)
 

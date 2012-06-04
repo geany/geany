@@ -57,7 +57,7 @@ MARSHALLER=scintilla-marshal.o
 .cxx.o:
 	$(CC) $(CXXFLAGS) -c $<
 .c.o:
-	$(CCOMP) $(CXXFLAGS) -w -c $<
+	$(CCOMP) $(CXXFLAGS) -c $<
 
 LEXOBJS=\
 LexAda.o \
