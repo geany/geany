@@ -73,8 +73,9 @@ Geany 1.22 (unreleased)
     * Parse PHP functions with multiline argument list (#3037797).
     * Handle ``/bin/dash`` shebang (#3470986).
     * Update JavaScript parser from CTags.
-    * Parse D class, struct, interface template bodies and template
-      blocks; ignore 'static if' expressions.
+    * Parse D class/struct/interface template bodies and template
+      blocks; ignore 'static if' expressions; parse function
+      @attributes, pure/nothrow and immutable/inout/shared return types.
     * Fix broken tag/word autocompletion in HTML/PHP documents.
     * Enable &entity; completion for all XML-based filetypes.
 

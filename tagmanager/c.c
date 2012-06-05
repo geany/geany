@@ -436,7 +436,8 @@ static const keywordDesc KeywordTable [] = {
 	{ "import",         KEYWORD_IMPORT,         { 0, 0, 0, 1, 0, 0, 1 } },
 	{ "inline",         KEYWORD_INLINE,         { 0, 1, 0, 0, 0, 1, 0 } },
 	{ "in",             KEYWORD_IN,             { 0, 0, 0, 0, 0, 0, 1 } },
-	{ "inout",          KEYWORD_INOUT,          { 0, 0, 0, 0, 1, 0, 1 } },
+	{ "inout",          KEYWORD_INOUT,          { 0, 0, 0, 0, 1, 0, 0 } },
+	{ "inout",          KEYWORD_CONST,          { 0, 0, 0, 0, 0, 0, 1 } }, /* treat like const */
 	{ "input",          KEYWORD_INPUT,          { 0, 0, 0, 0, 1, 0, 0 } },
 	{ "int",            KEYWORD_INT,            { 1, 1, 1, 1, 0, 1, 1 } },
 	{ "integer",        KEYWORD_INTEGER,        { 0, 0, 0, 0, 1, 0, 0 } },
@@ -1675,6 +1676,10 @@ static void skipBraces (void)
 static keywordId analyzeKeyword (const char *const name)
 {
 	const keywordId id = (keywordId) lookupKeyword (name, getSourceLanguage ());
+
+	/* ignore D @attributes, but show them in function signatures */
+	if (isLanguage(Lang_d) && id == KEYWORD_NONE && name[0] == '@')
+		return KEYWORD_CONST;
 	return id;
 }
 
@@ -2116,6 +2121,29 @@ static void skipMacro (statementInfo *const st)
 	skipToMatch ("()");
 }
 
+static boolean isDPostArgumentToken(tokenInfo *const token)
+{
+	switch (token->keyword)
+	{
+		/* Note: some other keywords e.g. immutable are parsed as
+		 * KEYWORD_CONST - see initializeDParser */
+		case KEYWORD_CONST:
+		/* template constraint */
+		case KEYWORD_IF:
+		/* contracts */
+		case KEYWORD_IN:
+		case KEYWORD_OUT:
+		case KEYWORD_BODY:
+			return TRUE;
+		default:
+			break;
+	}
+	/* @attributes */
+	if (vStringValue(token->name)[0] == '@')
+		return TRUE;
+	return FALSE;
+}
+
 /*  Skips over characters following the parameter list. This will be either
  *  non-ANSI style function declarations or C++ stuff. Our choices:
  *
@@ -2177,21 +2205,9 @@ static boolean skipPostArgumentStuff (statementInfo *const st,
 				if (isident1 (c))
 				{
 					readIdentifier (token, c);
-					if (isLanguage(Lang_d))
-					{
-						switch (token->keyword)
-						{
-							/* template constraint */
-							case KEYWORD_IF:
-							/* contracts */
-							case KEYWORD_IN:
-							case KEYWORD_OUT:
-							case KEYWORD_BODY:
-								token->keyword = KEYWORD_CONST;
-							default:
-								break;
-						}
-					}
+					if (isLanguage(Lang_d) && isDPostArgumentToken(token))
+						token->keyword = KEYWORD_CONST;
+
 					switch (token->keyword)
 					{
 					case KEYWORD_ATTRIBUTE:	skipParens ();	break;
@@ -3100,8 +3116,18 @@ static void initializeJavaParser (const langType language)
 
 static void initializeDParser (const langType language)
 {
+	/* keyword aliases - some are for parsing like const(Type), some are just
+	 * function attributes */
+	char *const_aliases[] = {"immutable", "nothrow", "pure", "shared", NULL};
+	char **s;
+
 	Lang_d = language;
 	buildKeywordHash (language, 6);
+
+	for (s = const_aliases; *s != NULL; s++)
+	{
+		addKeyword (*s, language, KEYWORD_CONST);
+	}
 }
 
 static void initializeGLSLParser (const langType language)
