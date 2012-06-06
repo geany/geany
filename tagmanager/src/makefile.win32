@@ -23,7 +23,7 @@ GTK_INCLUDES= \
 	-I$(PREFIX)/include \
 	-I$(PREFIX)/include/gettext
 
-INCLUDEDIRS=-I ../ -I ../mio -I . $(GTK_INCLUDES)
+INCLUDEDIRS=-I ../ctags -I ../ -I . $(GTK_INCLUDES)
 
 CBASEFLAGS=-Wall -pipe -mms-bitfields -DPACKAGE=\"geany\" -DG_OS_WIN32 -Wno-missing-braces -Wno-char-subscripts $(INCLUDEDIRS)
 ifdef DEBUG

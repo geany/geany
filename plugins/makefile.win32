@@ -23,7 +23,7 @@ GTK_INCLUDES= \
 INCLUDEDIRS=  -I.. \
               -I../src \
               -I../scintilla/include \
-              -I../tagmanager/include \
+              -I../tagmanager/src \
               $(GTK_INCLUDES)
 
 ALL_GTK_LIBS= \
