@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.22\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-06-04 17:26+0200\n"
-"PO-Revision-Date: 2012-06-03 22:20+0100\n"
+"POT-Creation-Date: 2012-06-06 21:50+0200\n"
+"PO-Revision-Date: 2012-06-04 23:18+0100\n"
 "Last-Translator: Giuseppe Penone <giuspen@gmail.com>\n"
 "Language-Team:  <geany-i18n@uvena.de>\n"
 "Language: it\n"
@@ -188,9 +188,9 @@ msgid "Startup path:"
 msgstr "Percorso di avvio:"
 
 #: ../data/geany.glade.h:38
+#, fuzzy
 msgid ""
-"Path to start in when opening or saving files. Must be an absolute path. "
-"Leave blank to use the current working directory."
+"Path to start in when opening or saving files. Must be an absolute path."
 msgstr ""
 "Percorso iniziale per l'apertura o il salvataggio dei file. Dev'essere un "
 "percorso assoluto. Lasciare vuoto per usare la cartella di lavoro corrente."
@@ -2171,6 +2171,13 @@ msgid ""
 "Frank Lanitz\n"
 "All rights reserved."
 msgstr ""
+"Copyright (c)  2005-2012\n"
+"Colomban Wendling\n"
+"Nick Treleaven\n"
+"Matthew Brush\n"
+"Enrico Tröger\n"
+"Frank Lanitz\n"
+"Tutti i diritti riservati."
 
 #: ../src/about.c:157
 msgid "About Geany"
@@ -3278,7 +3285,7 @@ msgid "Document"
 msgstr "Documento"
 
 #: ../src/keybindings.c:238 ../src/keybindings.c:585 ../src/project.c:444
-#: ../src/ui_utils.c:1980
+#: ../src/ui_utils.c:1981
 msgid "Build"
 msgstr "Compila"
 
@@ -5151,12 +5158,12 @@ msgstr "MOD"
 #: ../src/ui_utils.c:328
 #, c-format
 msgid "pos: %d"
-msgstr ""
+msgstr "pos: %d"
 
 #: ../src/ui_utils.c:330
 #, c-format
 msgid "style: %d"
-msgstr ""
+msgstr "stile: %d"
 
 #: ../src/ui_utils.c:382
 msgid " (new instance)"
@@ -5191,23 +5198,23 @@ msgstr "C++ STL"
 msgid "_Set Custom Date Format"
 msgstr "_Imposta il formato di data personalizzato"
 
-#: ../src/ui_utils.c:1819
+#: ../src/ui_utils.c:1820
 msgid "Select Folder"
 msgstr "Seleziona cartella"
 
-#: ../src/ui_utils.c:1819
+#: ../src/ui_utils.c:1820
 msgid "Select File"
 msgstr "Seleziona file"
 
-#: ../src/ui_utils.c:1978
+#: ../src/ui_utils.c:1979
 msgid "Save All"
 msgstr "Salva _tutti"
 
-#: ../src/ui_utils.c:1979
+#: ../src/ui_utils.c:1980
 msgid "Close All"
 msgstr "C_hiudi tutto"
 
-#: ../src/ui_utils.c:2225
+#: ../src/ui_utils.c:2226
 msgid "Geany cannot start!"
 msgstr "Geany non può avviarsi!"
 
