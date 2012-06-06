@@ -265,7 +265,7 @@ typedef struct GeanyFunctions
 	struct MsgWinFuncs			*p_msgwindow;
 	struct EncodingFuncs		*p_encodings;		/**< See encodings.h */
 	struct KeybindingFuncs		*p_keybindings;		/**< See keybindings.h */
-	struct TagManagerFuncs		*p_tm;				/**< See tagmanager/include */
+	struct TagManagerFuncs		*p_tm;				/**< See tagmanager/src */
 	struct SearchFuncs			*p_search;			/**< See search.h */
 	struct HighlightingFuncs	*p_highlighting;	/**< See highlighting.h */
 	struct FiletypeFuncs		*p_filetypes;		/**< See filetypes.h */
