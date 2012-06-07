@@ -922,10 +922,10 @@ void dialogs_show_open_font()
 		g_signal_connect(GTK_FONT_SELECTION_DIALOG(ui_widgets.open_fontsel)->apply_button,
 					"clicked", G_CALLBACK(on_font_apply_button_clicked), NULL);
 
-		gtk_font_selection_dialog_set_font_name(
-			GTK_FONT_SELECTION_DIALOG(ui_widgets.open_fontsel), interface_prefs.editor_font);
 		gtk_window_set_transient_for(GTK_WINDOW(ui_widgets.open_fontsel), GTK_WINDOW(main_widgets.window));
 	}
+	gtk_font_selection_dialog_set_font_name(
+		GTK_FONT_SELECTION_DIALOG(ui_widgets.open_fontsel), interface_prefs.editor_font);
 	/* We make sure the dialog is visible. */
 	gtk_window_present(GTK_WINDOW(ui_widgets.open_fontsel));
 #endif

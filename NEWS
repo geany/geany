@@ -21,6 +21,7 @@ Geany 1.22 (unreleased)
     * Fix very slow regex tag parsing on Windows (e.g. for HTML).
     * Fix detecting a changed file on disk when opening from
       the command-line (Windows).
+    * Fix quick search entry behavior on Windows.
     * Add missing Windows mio makefile.
 
     Prefs
@@ -31,6 +32,7 @@ Geany 1.22 (unreleased)
     Interface
     * Add support for switching to the last used document after closing
       a tab (Jiří Techet).
+    * Improve the tab switching dialog for better usability (Jiří Techet).
     * Add support for user-defined labels for 'Send Selection to'
       custom commands.
     * Fix sidebar width when on the right (#3514436).

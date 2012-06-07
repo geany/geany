@@ -103,7 +103,7 @@ whitespace_chars=\s\t!\"#$%&'()*+,-./:;<=>?@[\\]^`{|}~
 default=0x000000;0xffffff;false;false
 error=0xff0000;0xBFBFBF;false;italic
 
-selection=0x000000;0xc0c0c0;false;false
+selection=0x000000;0xc0c0c0;false;true
 current_line=0x000000;0xf0f0f0;true;
 brace_good=0x0000ff;0xFFFFFF;true;false
 brace_bad=0xff0000;0xFFFFFF;true;false

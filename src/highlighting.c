@@ -630,6 +630,8 @@ static void styleset_common_init(GKeyFile *config, GKeyFile *config_home)
 
 static void styleset_common(ScintillaObject *sci, guint ft_id)
 {
+	GeanyLexerStyle *style;
+
 	SSM(sci, SCI_STYLECLEARALL, 0, 0);
 
 	SSM(sci, SCI_SETWORDCHARS, 0, (sptr_t) (ft_id == GEANY_FILETYPES_NONE ?
@@ -787,12 +789,17 @@ static void styleset_common(ScintillaObject *sci, guint ft_id)
 	sci_set_property(sci, "fold.preprocessor", "1");
 	sci_set_property(sci, "fold.at.else", "1");
 
+	style = &common_style_set.styling[GCS_SELECTION];
+	if (!style->bold && !style->italic)
+	{
+		g_warning("selection style is set to invisible - ignoring!");
+		style->italic = TRUE;
+		style->background = 0xc0c0c0;
+	}
 	/* bold (3rd argument) is whether to override default foreground selection */
-	if (common_style_set.styling[GCS_SELECTION].bold)
-		SSM(sci, SCI_SETSELFORE, 1, invert(common_style_set.styling[GCS_SELECTION].foreground));
+	SSM(sci, SCI_SETSELFORE, style->bold, invert(style->foreground));
 	/* italic (4th argument) is whether to override default background selection */
-	if (common_style_set.styling[GCS_SELECTION].italic)
-		SSM(sci, SCI_SETSELBACK, 1, invert(common_style_set.styling[GCS_SELECTION].background));
+	SSM(sci, SCI_SETSELBACK, style->italic, invert(style->background));
 
 	SSM(sci, SCI_SETSTYLEBITS, SSM(sci, SCI_GETSTYLEBITSNEEDED, 0, 0), 0);
 

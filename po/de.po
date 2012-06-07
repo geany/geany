@@ -9,15 +9,15 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: geany 1.22\n"
+"Project-Id-Version: Geany 1.22\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-05-28 13:53+0200\n"
+"POT-Creation-Date: 2012-06-03 17:50+0200\n"
 "PO-Revision-Date: 2012-03-05 19:20+0100\n"
 "Last-Translator: Frank Lanitz <frank@frank.uvena.de>\n"
 "Language-Team: German <geany-i18n@uvena.de>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-Country: GERMANY\n"
@@ -2160,6 +2160,17 @@ msgstr "Meldungen"
 msgid "Scribble"
 msgstr "Notizen"
 
+#: ../src/about.c:41
+msgid ""
+"Copyright (c)  2005-2012\n"
+"Colomban Wendling\n"
+"Nick Treleaven\n"
+"Matthew Brush\n"
+"Enrico Tröger\n"
+"Frank Lanitz\n"
+"All rights reserved."
+msgstr ""
+
 #: ../src/about.c:157
 msgid "About Geany"
 msgstr "Über Geany"
@@ -2218,11 +2229,11 @@ msgstr ""
 msgid "Credits"
 msgstr "Credits"
 
-#: ../src/about.c:414
+#: ../src/about.c:417
 msgid "License"
 msgstr "Lizenz"
 
-#: ../src/about.c:423
+#: ../src/about.c:426
 msgid ""
 "License text could not be found, please visit http://www.gnu.org/licenses/"
 "gpl-2.0.txt to view it online."
@@ -2677,7 +2688,7 @@ msgstr ""
 
 #: ../src/dialogs.c:1223 ../src/dialogs.c:1224 ../src/dialogs.c:1225
 #: ../src/dialogs.c:1231 ../src/dialogs.c:1232 ../src/dialogs.c:1233
-#: ../src/symbols.c:2096 ../src/symbols.c:2117 ../src/symbols.c:2169
+#: ../src/symbols.c:2094 ../src/symbols.c:2115 ../src/symbols.c:2167
 #: ../src/ui_utils.c:264
 msgid "unknown"
 msgstr "unbekannt"
@@ -3176,17 +3187,26 @@ msgstr "Schlechter RegEx für Dateityp %s: %s"
 msgid "untitled"
 msgstr "unbenannt"
 
-#: ../src/highlighting.c:1215 ../src/main.c:821 ../src/socket.c:166
+#: ../src/highlighting.c:1225 ../src/main.c:828 ../src/socket.c:166
 #: ../src/templates.c:224
 #, c-format
 msgid "Could not find file '%s'."
 msgstr "Konnte die Datei »%s« nicht finden."
 
-#: ../src/highlighting.c:1287
+#: ../src/highlighting.c:1297
 msgid "Default"
 msgstr "Standard"
 
-#: ../src/highlighting.c:1341
+#: ../src/highlighting.c:1336
+#, fuzzy
+msgid "The current filetype overrides the default style."
+msgstr "Kompiliert die aktuelle Datei mit »make« und dem Standard-Target"
+
+#: ../src/highlighting.c:1337
+msgid "This may cause color schemes to display incorrectly."
+msgstr ""
+
+#: ../src/highlighting.c:1358
 msgid "Color Schemes"
 msgstr "Farbschemata"
 
@@ -3711,11 +3731,11 @@ msgstr ""
 "Eine oder mehre Datei(en) aus der letzten Sitzung konnte(n) nicht geladen "
 "werden."
 
-#: ../src/log.c:180
+#: ../src/log.c:181
 msgid "Debug Messages"
 msgstr "Debug-Meldungen"
 
-#: ../src/log.c:182
+#: ../src/log.c:183
 msgid "Cl_ear"
 msgstr "_Leeren"
 
@@ -3813,22 +3833,22 @@ msgid "[FILES...]"
 msgstr "[Dateien...]"
 
 #. note for translators: library versions are printed after this
-#: ../src/main.c:540
+#: ../src/main.c:547
 #, c-format
 msgid "built on %s with "
 msgstr "kompiliert am %s mit "
 
-#: ../src/main.c:628
+#: ../src/main.c:635
 msgid "Move it now?"
 msgstr "Soll es jetzt verschoben werden?"
 
-#: ../src/main.c:630
+#: ../src/main.c:637
 msgid "Geany needs to move your old configuration directory before starting."
 msgstr ""
 "Geany muss Ihr aktuelles Konfigurationsverzeichnis an einen neuen Ort "
 "verschieben, bevor es gestartet wird."
 
-#: ../src/main.c:639
+#: ../src/main.c:646
 #, c-format
 msgid ""
 "Your configuration directory has been successfully moved from \"%s\" to \"%s"
@@ -3839,7 +3859,7 @@ msgstr ""
 
 #. for translators: the third %s in brackets is the error message which
 #. * describes why moving the dir didn't work
-#: ../src/main.c:649
+#: ../src/main.c:656
 #, c-format
 msgid ""
 "Your old configuration directory \"%s\" could not be moved to \"%s\" (%s). "
@@ -3848,7 +3868,7 @@ msgstr ""
 "Ihr altes Konfigurationsverzeichnis »%s« konnte nicht nach »%s« verschoben "
 "werden. Fehlermeldung: %s. Bitte führen Sie die Aktion manuell aus."
 
-#: ../src/main.c:730
+#: ../src/main.c:737
 #, c-format
 msgid ""
 "Configuration directory could not be created (%s).\n"
@@ -3859,17 +3879,17 @@ msgstr ""
 "Es könnte zu Problemen bei der Verwendung von Geany kommen.\n"
 "Geany trotzdem starten?"
 
-#: ../src/main.c:1067
+#: ../src/main.c:1074
 #, c-format
 msgid "This is Geany %s."
 msgstr "Willkommen zu Geany %s."
 
-#: ../src/main.c:1069
+#: ../src/main.c:1076
 #, c-format
 msgid "Configuration directory could not be created (%s)."
 msgstr "Konfigurationsverzeichnis konnte nicht erstellt werden (%s)."
 
-#: ../src/main.c:1286
+#: ../src/main.c:1293
 msgid "Configuration files reloaded."
 msgstr "Einstellungen erneut geladen."
 
@@ -3967,11 +3987,11 @@ msgstr "Tasten festlegen"
 msgid "Press the combination of the keys you want to use for \"%s\"."
 msgstr "Welche Tastenkombination soll für »%s« genutzt werden?"
 
-#: ../src/prefs.c:226 ../src/symbols.c:2238 ../src/sidebar.c:730
+#: ../src/prefs.c:226 ../src/symbols.c:2236 ../src/sidebar.c:730
 msgid "_Expand All"
 msgstr "Alle a_usklappen"
 
-#: ../src/prefs.c:231 ../src/symbols.c:2243 ../src/sidebar.c:736
+#: ../src/prefs.c:231 ../src/symbols.c:2241 ../src/sidebar.c:736
 msgid "_Collapse All"
 msgstr "Alle _einklappen"
 
@@ -4763,21 +4783,21 @@ msgstr "%s Tag-Datei »%s« geladen."
 msgid "Could not load tags file '%s'."
 msgstr "Konnte Tag-Datei »%s« nicht laden."
 
-#: ../src/symbols.c:1945
+#: ../src/symbols.c:1943
 #, c-format
 msgid "Forward declaration \"%s\" not found."
 msgstr "(Vorwärts-)Deklaration von »%s« nicht gefunden."
 
-#: ../src/symbols.c:1947
+#: ../src/symbols.c:1945
 #, c-format
 msgid "Definition of \"%s\" not found."
 msgstr "Definition von »%s« nicht gefunden."
 
-#: ../src/symbols.c:2253
+#: ../src/symbols.c:2251
 msgid "Sort by _Name"
 msgstr "Nach _Namen sortieren"
 
-#: ../src/symbols.c:2260
+#: ../src/symbols.c:2258
 msgid "Sort by _Appearance"
 msgstr "Nach _Auftreten sortieren"
 
@@ -5088,6 +5108,16 @@ msgstr "T/L"
 msgid "MOD"
 msgstr "MOD"
 
+#: ../src/ui_utils.c:328
+#, c-format
+msgid "pos: %d"
+msgstr ""
+
+#: ../src/ui_utils.c:330
+#, fuzzy, c-format
+msgid "style: %d"
+msgstr "Symbolstil:"
+
 #: ../src/ui_utils.c:382
 msgid " (new instance)"
 msgstr " (neue Instanz)"
@@ -5137,7 +5167,7 @@ msgstr "Alle speichern"
 msgid "Close All"
 msgstr "Alle schließen"
 
-#: ../src/ui_utils.c:2230
+#: ../src/ui_utils.c:2225
 msgid "Geany cannot start!"
 msgstr "Geany kann nicht starten!"
 
@@ -5863,9 +5893,6 @@ msgstr "Vertikal teilen"
 
 #~ msgid "_Customize Toolbar"
 #~ msgstr "_Werkzeugleiste anpassen"
-
-#~ msgid "Icon style:"
-#~ msgstr "Symbolstil:"
 
 #~ msgid "Icon size:"
 #~ msgstr "Symbolgröße:"

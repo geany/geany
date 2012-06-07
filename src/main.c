@@ -528,6 +528,13 @@ static void parse_command_line_options(gint *argc, gchar ***argv)
 	}
 
 	app->debug_mode = verbose_mode;
+	if (app->debug_mode)
+	{
+		/* Since GLib 2.32 messages logged with levels INFO and DEBUG aren't output by the
+		 * default log handler unless the G_MESSAGES_DEBUG environment variable contains the
+		 * domain of the message or is set to the special value "all" */
+		g_setenv("G_MESSAGES_DEBUG", "all", FALSE);
+	}
 
 #ifdef G_OS_WIN32
 	win32_init_debug_code();

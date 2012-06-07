@@ -325,9 +325,9 @@ void ui_update_statusbar(GeanyDocument *doc, gint pos)
 	{
 		const gchar sp[] = "      ";
 		g_string_append(stats_str, sp);
-		g_string_append_printf(stats_str, "pos: %d", pos);
+		g_string_append_printf(stats_str, _("pos: %d"), pos);
 		g_string_append(stats_str, sp);
-		g_string_append_printf(stats_str, "style: %d", sci_get_style_at(doc->editor->sci, pos));
+		g_string_append_printf(stats_str, _("style: %d"), sci_get_style_at(doc->editor->sci, pos));
 	}
 #endif
 		/* can be overridden by status messages */
@@ -1466,7 +1466,8 @@ static void entry_clear_icon_release_cb(GtkEntry *entry, gint icon_pos,
  */
 void ui_entry_add_clear_icon(GtkEntry *entry)
 {
-	g_object_set(entry, "secondary-icon-stock", GTK_STOCK_CLEAR, NULL);
+	g_object_set(entry, "secondary-icon-stock", GTK_STOCK_CLEAR,
+		"secondary-icon-activatable", TRUE, NULL);
 	g_signal_connect(entry, "icon-release", G_CALLBACK(entry_clear_icon_release_cb), NULL);
 }
 
@@ -2213,11 +2214,6 @@ void ui_init_builder(void)
 		return;
 
 	builder = gtk_builder_new();
-	if (! builder)
-	{
-		g_error("Failed to initialize the user-interface");
-		return;
-	}
 
 	gtk_builder_set_translation_domain(builder, GETTEXT_PACKAGE);
 
