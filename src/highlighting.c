@@ -792,7 +792,7 @@ static void styleset_common(ScintillaObject *sci, guint ft_id)
 	style = &common_style_set.styling[GCS_SELECTION];
 	if (!style->bold && !style->italic)
 	{
-		g_warning("selection style is set to invisible - ignoring!");
+		geany_debug("selection style is set to invisible - ignoring!");
 		style->italic = TRUE;
 		style->background = 0xc0c0c0;
 	}
