@@ -11,6 +11,13 @@ Geany 1.22 (unreleased)
     * Make 'Replace Spaces by Tabs' only match leading spaces to
       preserve alignment.
 
+    Possibly incompatible changes
+    * Theming and filetype style changes mean old filetypes and colour
+      schemes are not compatible with this version of Geany.
+    * There are some default keybinding changes but these will only
+      apply to newly created configurations.
+    * Changes to the "project-dialog*" signals may affect plugins.
+
     Bug fixes
     * Fix escaping of session file paths (#3425969).
     * Fix closing when minimized under Windows (#3421282).
