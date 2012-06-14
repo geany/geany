@@ -34,7 +34,7 @@ $filePhpTags = implode( DIRECTORY_SEPARATOR,
                         array(
                         dirname(dirname(__FILE__)),
                         'data',
-                        'tags.php'
+                        'php.tags'
                       ));
 // Iterate through each line of the file
 for($line = 0, $lineCount = count($file); $line < $lineCount; ++$line) {
