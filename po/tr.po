@@ -4972,7 +4972,6 @@ msgstr ""
 
 #. L = lines
 #: ../src/ui_utils.c:219
-#, fuzzy, c-format
 msgid "%dL"
 msgstr "%sS"
 
