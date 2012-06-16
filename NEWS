@@ -104,7 +104,8 @@ Geany 1.22 (unreleased)
 
     Internationalisation:
     * Add translations: ar, id, lt, mn, nn, sk
-    * Update translations: de, hu, it, kk, pl, sl, sv, zh_TW
+    * Update translations: de, es, fr, hu, it, ja, kk, lt, nl, pl, pt, 
+	  pt_BR, sk, sl, sv, tr, zh_CN, zh_TW
 
 
 Geany 0.21 (October 2, 2011)
