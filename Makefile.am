@@ -106,9 +106,6 @@ sign:
 	if test -f $(PACKAGE)-$(VERSION).tar.bz2; then \
 		gpg --detach-sign --digest-algo SHA512 $(PACKAGE)-$(VERSION).tar.bz2; fi
 
-deb:
-	dpkg-buildpackage -rfakeroot
-
 
 rpm: dist
 	rpmbuild -ta $(distdir).tar.gz
