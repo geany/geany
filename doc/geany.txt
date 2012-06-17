@@ -11,11 +11,12 @@
 :Authors: Enrico Tröger,
           Nick Treleaven,
           Frank Lanitz,
-          Colomban Wendling
+          Colomban Wendling,
+          Matthew Brush
 :Date: 2011-10-02
 :Version: |(version)|
 
-Copyright © 2005-2011
+Copyright © 2005-2012
 
 This document is distributed under the terms of the GNU General Public
 License as published by the Free Software Foundation; either version 2
