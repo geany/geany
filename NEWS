@@ -6,13 +6,13 @@ Geany 1.22 (unreleased)
     * Rewrite theming support for better flexibility.
     * Add support for opening files read-only from the command line.
     * Always load the default session if configured to do so.
-    * Make all filetypes use named styles to simplify colour scheme
+    * Make all filetypes use named styles to simplify color scheme
       authoring.
     * Make 'Replace Spaces by Tabs' only match leading spaces to
       preserve alignment.
 
     Possibly incompatible changes
-    * Theming and filetype style changes mean old filetypes and colour
+    * Theming and filetype style changes mean old filetypes and color
       schemes are not compatible with this version of Geany.
     * There are some default keybinding changes but these will only
       apply to newly created configurations.
@@ -24,7 +24,7 @@ Geany 1.22 (unreleased)
     * Properly handle remote URIs received through drag 'n drop
       (#2966770, #3479567).
     * Fix build with bleeding-edge GLib (#3483388).
-    * Fix colour scheme selection in Ubuntu Unity (#3479674).
+    * Fix color scheme selection in Ubuntu Unity (#3479674).
     * Fix very slow regex tag parsing on Windows (e.g. for HTML).
     * Fix detecting a changed file on disk when opening from
       the command-line (Windows).
@@ -106,10 +106,10 @@ Geany 1.22 (unreleased)
     * Add stash_group_free_settings().
     * Add support for plugins written in C++.
 
-    Internationalisation:
+    Internationalization:
     * Add translations: ar, id, lt, mn, nn, sk
     * Update translations: de, es, fr, hu, it, ja, kk, lt, nl, pl, pt, 
-	  pt_BR, sk, sl, sv, tr, zh_CN, zh_TW
+      pt_BR, sk, sl, sv, tr, zh_CN, zh_TW
 
 
 Geany 0.21 (October 2, 2011)
