@@ -128,11 +128,15 @@ Section "!Program Files" SEC01
 	SetOutPath "$INSTDIR\data"
 	File "${RESOURCEDIR}\data\GPL-2"
 	File "${RESOURCEDIR}\data\file*"
+	File "${RESOURCEDIR}\data\geany.glade"
 	File "${RESOURCEDIR}\data\snippets.conf"
 	File "${RESOURCEDIR}\data\ui_toolbar.xml"
 
 	SetOutPath "$INSTDIR\data\templates"
 	File /r "${RESOURCEDIR}\data\templates\*"
+
+	SetOutPath "$INSTDIR\data\colorschemes"
+	File /r "${RESOURCEDIR}\data\colorschemes\*"
 
 	SetOutPath "$INSTDIR\share\icons"
 	File /r "${RESOURCEDIR}\share\icons\*"
