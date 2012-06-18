@@ -13,7 +13,7 @@
           Frank Lanitz,
           Colomban Wendling,
           Matthew Brush
-:Date: 2011-10-02
+:Date: 2012-06-18
 :Version: |(version)|
 
 Copyright © 2005-2012
