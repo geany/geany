@@ -29,12 +29,16 @@ Geany 1.22 (unreleased)
     * Fix detecting a changed file on disk when opening from
       the command-line (Windows).
     * Fix quick search entry behavior on Windows.
+    * Fix keybindings conflicts check when swapping a binding.
+    * Fix comments insertion in some cases (#3449635, #3534320).
     * Add missing Windows mio makefile.
 
     Prefs
     * Split "always wrap search and hide find dialog" pref into
       "always wrap search" and "hide find dialog" (Dimitar Zhekov).
     * Add Project Properties overrides for 'Saving files' prefs.
+    * Add hidden VTE preference "send_cmd_prefix" to prefix commands sent
+      to the VTE. (See the manual for details).
 
     Interface
     * Add support for switching to the last used document after closing
