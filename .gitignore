@@ -12,6 +12,7 @@ deps.mak
 .libs/
 Makefile
 Makefile.in
+nbproject
 
 #-----------------------------------------------------------------------
 # / (root)

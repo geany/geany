@@ -100,6 +100,8 @@ static gboolean handle_xml(GeanyEditor *editor, gint pos, gchar ch);
 static void insert_indent_after_line(GeanyEditor *editor, gint line);
 static void auto_multiline(GeanyEditor *editor, gint pos);
 static void auto_close_chars(ScintillaObject *sci, gint pos, gchar c);
+static void close_char_ignore(ScintillaObject *sci, gint pos);
+static gint brace_match(ScintillaObject *sci, gint pos);
 static void close_block(GeanyEditor *editor, gint pos);
 static void editor_highlight_braces(GeanyEditor *editor, gint cur_pos);
 static void read_current_word(GeanyEditor *editor, gint pos, gchar *word, gsize wordlen,
@@ -780,20 +782,33 @@ static void on_char_added(GeanyEditor *editor, SCNotification *nt)
 			calltip.pos = 0;
 			calltip.sci = NULL;
 			calltip.set = FALSE;
+
+            if(editor_prefs.autoclose_chars && sci_get_char_at(sci, pos) == nt->ch)
+                close_char_ignore(sci, pos);
 			break;
 		}
+        case '}':
+		{	/* closing bracket handling */
+			if (editor->auto_indent)
+                close_block(editor, pos - 1);
+            if(editor_prefs.autoclose_chars && sci_get_char_at(sci, pos) == nt->ch)
+                close_char_ignore(sci, pos);
+            break;
+		}
+        case ']':
+        {
+            if(editor_prefs.autoclose_chars && sci_get_char_at(sci, pos) == nt->ch)
+                close_char_ignore(sci, pos);
+            break;
+        }
 		case '{':
 		case '[':
 		case '"':
 		case '\'':
 		{
+            if(editor_prefs.autoclose_chars && sci_get_char_at(sci, pos) == nt->ch)
+                close_char_ignore(sci, pos);
 			auto_close_chars(sci, pos, nt->ch);
-			break;
-		}
-		case '}':
-		{	/* closing bracket handling */
-			if (editor->auto_indent)
-				close_block(editor, pos - 1);
 			break;
 		}
 		/* scope autocompletion */
@@ -1448,35 +1463,34 @@ static void insert_indent_after_line(GeanyEditor *editor, gint line)
 static void auto_close_chars(ScintillaObject *sci, gint pos, gchar c)
 {
 	const gchar *closing_char = NULL;
-	gint end_pos = -1;
-
-	if (utils_isbrace(c, 0))
-		end_pos = sci_find_matching_brace(sci, pos - 1);
-
-	switch (c)
-	{
-		case '(':
-			if ((editor_prefs.autoclose_chars & GEANY_AC_PARENTHESIS) && end_pos == -1)
-				closing_char = ")";
-			break;
-		case '{':
-			if ((editor_prefs.autoclose_chars & GEANY_AC_CBRACKET) && end_pos == -1)
-				closing_char = "}";
-			break;
-		case '[':
-			if ((editor_prefs.autoclose_chars & GEANY_AC_SBRACKET) && end_pos == -1)
-				closing_char = "]";
-			break;
-		case '\'':
-			if (editor_prefs.autoclose_chars & GEANY_AC_SQUOTE)
-				closing_char = "'";
-			break;
-		case '"':
-			if (editor_prefs.autoclose_chars & GEANY_AC_DQUOTE)
-				closing_char = "\"";
-			break;
-	}
-
+    const gchar nextChar = sci_get_char_at(sci, pos);
+    if(c == utils_brace_opposite(nextChar) || nextChar == ' ' || nextChar == '\0' || nextChar == '\n') {
+        switch (c)
+        {
+            case '(':
+            {
+                if ((editor_prefs.autoclose_chars & GEANY_AC_PARENTHESIS))
+                    closing_char = ")";
+                break;
+            }
+            case '{':
+                if (editor_prefs.autoclose_chars & GEANY_AC_CBRACKET)
+                    closing_char = "}";
+                break;
+            case '[':
+                if (editor_prefs.autoclose_chars & GEANY_AC_SBRACKET)
+                    closing_char = "]";
+                break;
+            case '\'':
+                if ((editor_prefs.autoclose_chars & GEANY_AC_SQUOTE))
+                    closing_char = "'";
+                break;
+            case '"':
+                if (editor_prefs.autoclose_chars & GEANY_AC_DQUOTE)
+                    closing_char = "\"";
+                break;
+        }
+    }
 	if (closing_char != NULL)
 	{
 		sci_add_text(sci, closing_char);
@@ -1484,6 +1498,12 @@ static void auto_close_chars(ScintillaObject *sci, gint pos, gchar c)
 	}
 }
 
+static void close_char_ignore(ScintillaObject *sci, gint pos)
+{
+    sci_set_selection(sci, pos-1, pos);
+    sci_clear(sci);
+    sci_set_current_position(sci, pos, TRUE);
+}
 
 /* Finds a corresponding matching brace to the given pos
  * (this is taken from Scintilla Editor.cxx,
