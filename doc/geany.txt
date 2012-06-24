@@ -1977,6 +1977,8 @@ Features
 Line wrapping
     Show long lines wrapped around to new display lines.
 
+.. _smart_home_key:
+
 "Smart" home key
     Whether to move the cursor to the first non-whitespace character
     on the line when you hit the home key on your keyboard. Pressing it
@@ -3486,22 +3488,25 @@ Go to tag definition            Ctrl-T                    Jump to the definition
 Go to tag declaration           Ctrl-Shift-T              Jump to the declaration of the current word or
                                                           selection. See `Go to tag declaration`_.
 
-Go to Start of Line             Home                      Move the caret to the end of the line indentation
-                                                          unless it is already there, in which case it moves
-                                                          it to the start of the line.
+Go to Start of Line             Home                      Move the caret to the start of the line.
+                                                          Behaves differently if smart_home_key_ is set.
 
 Go to End of Line               End                       Move the caret to the end of the line.
 
-Go to End of Display Line       Alt-End                   Move the caret to the end of the display line.
+Go to Start of Display Line     Alt-Home                  Move the caret to the start of the display line.
                                                           This is useful when you use line wrapping and
-                                                          want to jump to the end of the wrapped, virtual
-                                                          line, not the real end of the whole line.
+                                                          want to jump to the start of the wrapped, virtual
+                                                          line, not the real start of the whole line.
                                                           If the line is not wrapped, it behaves like
-                                                          `Go to End of Line`, see above.
+                                                          `Go to Start of Line`.
+
+Go to End of Display Line       Alt-End                   Move the caret to the end of the display line.
+                                                          If the line is not wrapped, it behaves like
+                                                          `Go to End of Line`.
 
 Go to Previous Word Part        Ctrl-/                    Goto the previous part of the current word.
 
-Go to Next Word Part            Ctrl-\                    Goto the next part of the current word.
+Go to Next Word Part            Ctrl-\\                   Goto the next part of the current word.
 =============================== ========================= ==================================================
 
 View keybindings
