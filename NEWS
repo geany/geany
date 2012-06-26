@@ -1,5 +1,8 @@
 Geany 1.23 (unreleased)
 
+    Editor
+    * Update Scintilla to version 3.2.0.
+
 
 Geany 1.22 (June 18, 2012)
 
@@ -111,7 +114,7 @@ Geany 1.22 (June 18, 2012)
 
     Internationalization:
     * Add translations: ar, id, lt, mn, nn, sk
-    * Update translations: de, es, fr, hu, it, ja, kk, lt, nl, pl, pt, 
+    * Update translations: de, es, fr, hu, it, ja, kk, lt, nl, pl, pt,
       pt_BR, sk, sl, sv, tr, zh_CN, zh_TW
 
 
