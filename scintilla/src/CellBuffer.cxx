@@ -375,6 +375,14 @@ const char *CellBuffer::BufferPointer() {
 	return substance.BufferPointer();
 }
 
+const char *CellBuffer::RangePointer(int position, int rangeLength) {
+	return substance.RangePointer(position, rangeLength);
+}
+
+int CellBuffer::GapPosition() const {
+	return substance.GapPosition();
+}
+
 // The char* returned is to an allocation owned by the undo history
 const char *CellBuffer::InsertString(int position, const char *s, int insertLength, bool &startSequence) {
 	char *data = 0;

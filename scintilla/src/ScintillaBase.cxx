@@ -65,11 +65,6 @@ void ScintillaBase::Finalise() {
 	popup.Destroy();
 }
 
-void ScintillaBase::RefreshColourPalette(Palette &pal, bool want) {
-	Editor::RefreshColourPalette(pal, want);
-	ct.RefreshColourPalette(pal, want);
-}
-
 void ScintillaBase::AddCharUTF(char *s, unsigned int len, bool treatAsDBCS) {
 	bool isFillUp = ac.Active() && ac.IsFillUpChar(*s);
 	if (!isFillUp) {
@@ -139,10 +134,10 @@ int ScintillaBase::KeyCommand(unsigned int iMessage) {
 			AutoCompleteMove(-1);
 			return 0;
 		case SCI_PAGEDOWN:
-			AutoCompleteMove(5);
+			AutoCompleteMove(ac.lb->GetVisibleRows());
 			return 0;
 		case SCI_PAGEUP:
-			AutoCompleteMove(-5);
+			AutoCompleteMove(-ac.lb->GetVisibleRows());
 			return 0;
 		case SCI_VCHOME:
 			AutoCompleteMove(-5000);
@@ -222,7 +217,7 @@ void ScintillaBase::AutoCompleteStart(int lenEntered, const char *list) {
 		}
 	}
 	ac.Start(wMain, idAutoComplete, sel.MainCaret(), PointMainCaret(),
-				lenEntered, vs.lineHeight, IsUnicodeMode());
+				lenEntered, vs.lineHeight, IsUnicodeMode(), technology);
 
 	PRectangle rcClient = GetClientRectangle();
 	Point pt = LocationFromPosition(sel.MainCaret() - lenEntered);
@@ -405,7 +400,6 @@ int ScintillaBase::AutoCompleteGetCurrentText(char *buffer) {
 
 void ScintillaBase::CallTipShow(Point pt, const char *defn) {
 	ac.Cancel();
-	pt.y += vs.lineHeight;
 	// If container knows about STYLE_CALLTIP then use it in place of the
 	// STYLE_DEFAULT for the face name, size and character set. Also use it
 	// for the foreground and background colour.
@@ -414,17 +408,25 @@ void ScintillaBase::CallTipShow(Point pt, const char *defn) {
 		ct.SetForeBack(vs.styles[STYLE_CALLTIP].fore, vs.styles[STYLE_CALLTIP].back);
 	}
 	PRectangle rc = ct.CallTipStart(sel.MainCaret(), pt,
+		vs.lineHeight,
 		defn,
 		vs.styles[ctStyle].fontName,
 		vs.styles[ctStyle].sizeZoomed,
 		CodePage(),
 		vs.styles[ctStyle].characterSet,
+		vs.technology,
 		wMain);
 	// If the call-tip window would be out of the client
-	// space, adjust so it displays above the text.
+	// space
 	PRectangle rcClient = GetClientRectangle();
+	int offset = vs.lineHeight + rc.Height();
+	// adjust so it displays below the text.
+	if (rc.top < rcClient.top) {
+		rc.top += offset;
+		rc.bottom += offset;
+	}
+	// adjust so it displays above the text.
 	if (rc.bottom > rcClient.bottom) {
-		int offset = vs.lineHeight + rc.Height();
 		rc.top -= offset;
 		rc.bottom -= offset;
 	}
@@ -725,6 +727,13 @@ sptr_t ScintillaBase::WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lPara
 	case SCI_AUTOCGETIGNORECASE:
 		return ac.ignoreCase;
 
+	case SCI_AUTOCSETCASEINSENSITIVEBEHAVIOUR:
+		ac.ignoreCaseBehaviour = wParam;
+		break;
+
+	case SCI_AUTOCGETCASEINSENSITIVEBEHAVIOUR:
+		return ac.ignoreCaseBehaviour;
+
 	case SCI_USERLISTSHOW:
 		listType = wParam;
 		AutoCompleteStart(0, reinterpret_cast<const char *>(lParam));
@@ -815,6 +824,11 @@ sptr_t ScintillaBase::WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lPara
 
 	case SCI_CALLTIPUSESTYLE:
 		ct.SetTabSize((int)wParam);
+		InvalidateStyleRedraw();
+		break;
+
+	case SCI_CALLTIPSETPOSITION:
+		ct.SetPosition(wParam != 0);
 		InvalidateStyleRedraw();
 		break;
 
