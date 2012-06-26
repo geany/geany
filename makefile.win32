@@ -14,19 +14,17 @@
 WINDRES = windres.exe
 CC = gcc
 CXX = g++
-CP = copy
+CP = copy /Y
 RM = del
-MAKE = make
+MAKE = mingw32-make
 -include localwin32.mk
 
-# Note: && is needed after cd because each line is executed in a different
-# shell. (cd .. is just for clarity).
 all: config.h
-	cd tagmanager/mio && $(MAKE) -f makefile.win32 && cd ../..
-	cd tagmanager && $(MAKE) -f makefile.win32 && cd ..
-	cd scintilla && $(MAKE) -f makefile.win32 && cd ..
-	cd plugins && $(MAKE) -f makefile.win32 && cd ..
-	cd src && $(MAKE) -f makefile.win32 && cd ..
+	$(MAKE) -C tagmanager/mio -f makefile.win32
+	$(MAKE) -C tagmanager -f makefile.win32
+	$(MAKE) -C scintilla -f makefile.win32
+	$(MAKE) -C plugins -f makefile.win32
+	$(MAKE) -C src -f makefile.win32
 
 config.h: win32-config.h
 	$(CP) $< $@
@@ -39,11 +37,11 @@ clean-local:
 	-$(RM) geany_private.res geany.exe
 
 clean: deps
-	cd tagmanager/mio && $(MAKE) -f makefile.win32 clean && cd ../..
-	cd tagmanager && $(MAKE) -f makefile.win32 clean && cd ..
-	cd scintilla && $(MAKE) -f makefile.win32 clean && cd ..
-	cd plugins && $(MAKE) -f makefile.win32 clean && cd ..
-	cd src && $(MAKE) -f makefile.win32 clean && cd ..
+	$(MAKE) -C tagmanager/mio -f makefile.win32 clean
+	$(MAKE) -C tagmanager -f makefile.win32 clean
+	$(MAKE) -C scintilla -f makefile.win32 clean
+	$(MAKE) -C plugins -f makefile.win32 clean
+	$(MAKE) -C src -f makefile.win32 clean
 
 .PHONY: install
 DESTDIR='C:/Program Files/Geany'
