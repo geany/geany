@@ -1402,7 +1402,8 @@ gboolean highlighting_is_string_style(gint lexer, gint style)
 				style == SCE_C_STRINGEOL ||
 				style == SCE_C_STRINGRAW ||
 				style == SCE_C_VERBATIM ||
-				style == SCE_C_TRIPLEVERBATIM);
+				style == SCE_C_TRIPLEVERBATIM ||
+				style == SCE_C_HASHQUOTEDSTRING);
 
 		case SCLEX_PASCAL:
 			return (style == SCE_PAS_CHARACTER ||
