@@ -10,7 +10,7 @@
 # Use localwin32.mk instead of editing variables as it is included in sub
 # makefiles.
 # E.g. use localwin32.mk to set PREFIX=C:/libs instead of the default C:\libs
-# For MSYS use localwin32.mk to set CP, CP_R and RM.
+# For MSYS use localwin32.mk to set CP, CP_R, RM, DIRSEP.
 # By default this should work in a Windows command prompt (cmd.exe).
 
 WINDRES = windres.exe
@@ -20,6 +20,8 @@ CP = copy /Y
 CP_R = xcopy /S /Y
 RM = del
 MKDIR = mkdir
+# strip is used to prevent line wrap
+DIRSEP := $(strip \)
 DESTDIR = C:/Program Files/Geany
 -include localwin32.mk
 
@@ -51,12 +53,12 @@ clean: deps
 
 # likely requires admin privileges
 # mkdir output is ignored in case dir exists
-# all paths with a backslash must be quoted for MSYS compatibility
+# 'copy' seems to only accept / in the destination
 install:
 	-$(MKDIR) "$(DESTDIR)"
-	-$(MKDIR) "$(DESTDIR)\bin"
-	$(CP) geany.exe "$(DESTDIR)\bin"
-	-$(MKDIR) "$(DESTDIR)\lib"
-	$(CP) "plugins\*.dll" "$(DESTDIR)\lib"
-	-$(MKDIR) "$(DESTDIR)\data"
-	$(CP_R) data "$(DESTDIR)\data"
+	-$(MKDIR) "$(DESTDIR)/bin"
+	$(CP) geany.exe "$(DESTDIR)/bin"
+	-$(MKDIR) "$(DESTDIR)/lib"
+	$(CP) plugins$(DIRSEP)*.dll "$(DESTDIR)/lib"
+	-$(MKDIR) "$(DESTDIR)/data"
+	$(CP_R) data "$(DESTDIR)/data"
