@@ -23,7 +23,7 @@ if ! [ -f "$SCI_SRC"/version.txt ]; then
 	exit 1
 fi
 # check destination directory
-if ! [ -d .git ] || ! [ -f scintilla/version/txt ]; then
+if ! [ -d .git ] || ! [ -f scintilla/version.txt ]; then
 	echo "Please run this script from Geany's root source directory." >&2
 	exit 1
 fi
