@@ -10,7 +10,7 @@
 SCI_SRC=
 
 # parse arguments
-if [ $# -gt 0 ]; then
+if [ $# -eq 1 ]; then
 	SCI_SRC="$1"
 else
 	echo "USAGE: $0 SCINTILLA_SOURCE_DIRECTORY" >&2
