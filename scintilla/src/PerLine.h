@@ -54,6 +54,7 @@ public:
 	virtual void RemoveLine(int line);
 
 	int MarkValue(int line);
+	int MarkerNext(int lineStart, int mask) const;
 	int AddMark(int line, int marker, int lines);
 	void MergeMarkers(int pos);
 	bool DeleteMark(int line, int markerNum, bool all);

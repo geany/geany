@@ -194,6 +194,7 @@ static const HLStyle highlighting_styles_C[] =
 	/* triple verbatims use the same style */
 	{ SCE_C_TRIPLEVERBATIM,			"verbatim",					FALSE },
 	{ SCE_C_REGEX,					"regex",					FALSE },
+	{ SCE_C_HASHQUOTEDSTRING,		"hashquotedstring",			FALSE },
 	{ SCE_C_COMMENTLINEDOC,			"commentlinedoc",			FALSE },
 	{ SCE_C_COMMENTDOCKEYWORD,		"commentdockeyword",		FALSE },
 	{ SCE_C_COMMENTDOCKEYWORDERROR,	"commentdockeyworderror",	FALSE },
@@ -291,6 +292,7 @@ static const HLStyle highlighting_styles_CSS[] =
 	{ SCE_CSS_VALUE,					"value",					FALSE },
 	{ SCE_CSS_ID,						"id",						FALSE },
 	{ SCE_CSS_IDENTIFIER2,				"identifier2",				FALSE },
+	{ SCE_CSS_VARIABLE,					"variable",					FALSE },
 	{ SCE_CSS_IMPORTANT,				"important",				FALSE },
 	{ SCE_CSS_DIRECTIVE,				"directive",				FALSE },
 	{ SCE_CSS_IDENTIFIER3,				"identifier3",				FALSE },

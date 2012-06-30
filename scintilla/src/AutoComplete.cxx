@@ -14,6 +14,7 @@
 
 #include "CharacterSet.h"
 #include "AutoComplete.h"
+#include "Scintilla.h"
 
 #ifdef SCI_NAMESPACE
 using namespace Scintilla;
@@ -30,7 +31,8 @@ AutoComplete::AutoComplete() :
 	startLen(0),
 	cancelAtStartPos(true),
 	autoHide(true),
-	dropRestOfWord(false)	{
+	dropRestOfWord(false),
+	ignoreCaseBehaviour(SC_CASEINSENSITIVEBEHAVIOUR_RESPECTCASE) {
 	lb = ListBox::Allocate();
 	stopChars[0] = '\0';
 	fillUpChars[0] = '\0';
@@ -50,11 +52,11 @@ bool AutoComplete::Active() const {
 
 void AutoComplete::Start(Window &parent, int ctrlID,
 	int position, Point location, int startLen_,
-	int lineHeight, bool unicodeMode) {
+	int lineHeight, bool unicodeMode, int technology) {
 	if (active) {
 		Cancel();
 	}
-	lb->Create(parent, ctrlID, location, lineHeight, unicodeMode);
+	lb->Create(parent, ctrlID, location, lineHeight, unicodeMode, technology);
 	lb->Clear();
 	active = true;
 	startLen = startLen_;
@@ -153,7 +155,8 @@ void AutoComplete::Select(const char *word) {
 				--pivot;
 			}
 			location = pivot;
-			if (ignoreCase) {
+			if (ignoreCase
+				&& ignoreCaseBehaviour == SC_CASEINSENSITIVEBEHAVIOUR_RESPECTCASE) {
 				// Check for exact-case match
 				for (; pivot <= end; pivot++) {
 					lb->GetValue(pivot, item, maxItemLen);

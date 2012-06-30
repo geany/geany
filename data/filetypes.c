@@ -23,6 +23,7 @@ commentdockeyworderror=comment_doc_keyword_error
 globalclass=class
 # """verbatim"""
 tripleverbatim=string_2
+hashquotedstring=string_2
 
 [keywords]
 # all items must be in one line
