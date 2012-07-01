@@ -12,6 +12,7 @@
 #include "parse.h"
 #include "read.h"
 
+// TODO: either enhance for SCSS (and Less?) support, or write a separate parser
 
 typedef enum eCssKinds {
     K_NONE = -1, K_SELECTOR, K_ID, K_CLASS
@@ -26,6 +27,7 @@ static kindOption CssKinds [] = {
 typedef enum _CssParserState {	/* state of parsing */
 	P_STATE_NONE,  				/* default state */
 	P_STATE_IN_COMMENT,			/* into a comment, only multi line in CSS */
+	P_STATE_IN_COMMENTLINE,		/* into a single line comment, e.g. SCSS, Less */
 	P_STATE_IN_SINGLE_STRING,	/* into a single quoted string */
 	P_STATE_IN_DOUBLE_STRING,	/* into a double quoted string */
 	P_STATE_IN_DEFINITION,		/* on the body of the style definition, nothing for us */
@@ -146,6 +148,8 @@ static CssParserState parseCssLine( const unsigned char *line, CssParserState st
 				}
 				else if( *line == '*' && *(line-1) == '/' ) /* multi-line comment */
 					state = P_STATE_IN_COMMENT;
+				else if( *line == '/' && *(line-1) == '/' ) /* single-line comment */
+					state = P_STATE_IN_COMMENTLINE;
 				else if ( stack->length > 0 )
 					state = parseCssDeclaration( &line, K_SELECTOR, vStringValue(stack) );
 
@@ -153,6 +157,13 @@ static CssParserState parseCssLine( const unsigned char *line, CssParserState st
 			case P_STATE_IN_COMMENT:
 				if( *line == '/' && *(line-1) == '*')
 					state = P_STATE_NONE;
+			break;
+			case P_STATE_IN_COMMENTLINE:
+				/* skip to line end */
+				while( *line != '\0' )
+				{
+					++line;
+				}
 			break;
 			case  P_STATE_IN_SINGLE_STRING:
 				if( *line == '\'' && *(line-1) != '\\' )

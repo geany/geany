@@ -1,32 +1,5 @@
 # For complete documentation of this file, please see Geany's main documentation
-[styling]
-# Edit these in the colorscheme .conf file instead
-default=default
-comment=comment
-tag=tag
-class=class
-pseudoclass=class
-unknown_pseudoclass=class
-unknown_identifier=class
-operator=operator
-identifier=keyword_1
-doublestring=string_1
-singlestring=string_2
-attribute=attribute
-value=value
-id=number
-identifier2=keyword_2
-variable=identifier_1
-important=extra
-directive=preprocessor
-identifier3=keyword_3
-pseudoelement=element
-extended_identifier=keyword_4
-extended_pseudoclass=class
-extended_pseudoelement=element
-media=string_3
-# extended styles for languages such as SCSS, Less
-variable=keyword_4
+[styling=CSS]
 
 [keywords]
 # CSS 1 properties
@@ -40,16 +13,21 @@ browser_css_properties=
 browser_pseudo_classes=
 browser_pseudo_elements=
 
+[lexer_properties]
+lexer.css.scss.language=1
 
 [settings]
+lexer_filetype=CSS
+# for now, use CSS parser (even though it breaks right now)
+tag_parser=CSS
 # default extension used when saving files
-extension=css
+extension=scss
 
 # the following characters are these which a "word" can contains, see documentation
 #wordchars=_-abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
 
 # single comments, like # in this file
-#comment_single=
+comment_single=//
 # multiline comments
 comment_open=/*
 comment_close=*/
@@ -69,3 +47,10 @@ context_action_cmd=
 #width=4
 # 0 is spaces, 1 is tabs, 2 is tab & spaces
 #type=1
+
+[build_settings]
+# %f will be replaced by the complete filename
+# %e will be replaced by the filename without extension
+# (use only one of it at one time)
+compiler=sass -c "%f"
+linker=sass --style expanded "%f" "%e.dev.css"
