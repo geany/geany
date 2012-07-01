@@ -1,8 +1,8 @@
 /*
  *	  callbacks.h - this file is part of Geany, a fast and lightweight IDE
  *
- *	  Copyright 2005-2011 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *	  Copyright 2006-2011 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *	  Copyright 2005-2012 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *	  Copyright 2006-2012 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *	  This program is free software; you can redistribute it and/or modify
  *	  it under the terms of the GNU General Public License as published by
@@ -178,6 +178,10 @@ on_show_messages_window1_toggled	   (GtkCheckMenuItem *checkmenuitem,
 										gpointer		 user_data);
 
 G_MODULE_EXPORT void
+on_menu_color_schemes_activate		   (GtkImageMenuItem *imagemenuitem,
+										gpointer user_data);
+
+G_MODULE_EXPORT void
 on_construct_completion1_activate	  (GtkMenuItem	 *menuitem,
 										gpointer		 user_data);
 
@@ -268,7 +272,16 @@ on_website1_activate				   (GtkMenuItem	 *menuitem,
 										gpointer		 user_data);
 
 G_MODULE_EXPORT void
-on_line_wrapping1_toggled			  (GtkCheckMenuItem *checkmenuitem,
+on_help_menu_item_donate_activate(GtkMenuItem *item, gpointer user_data);
+
+G_MODULE_EXPORT void
+on_help_menu_item_wiki_activate(GtkMenuItem *item, gpointer user_data);
+
+G_MODULE_EXPORT void
+on_help_menu_item_bug_report_activate(GtkMenuItem *item, gpointer user_data);
+
+G_MODULE_EXPORT void
+on_line_wrapping1_toggled			   (GtkCheckMenuItem *checkmenuitem,
 										gpointer		 user_data);
 
 G_MODULE_EXPORT void

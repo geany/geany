@@ -569,6 +569,52 @@ gboolean tm_tags_custom_dedup(GPtrArray *tags_array, TMTagCompareFunc compare_fu
 	return TRUE;
 }
 
+/* Sorts newly-added tags and merges them in order with existing tags.
+ * This is much faster than resorting the whole array.
+ * Note: Having the caller append to the existing array should be faster
+ * than creating a new array which would likely get resized more than once.
+ * tags_array: array with new (perhaps unsorted) tags appended.
+ * orig_len: number of existing tags. */
+gboolean tm_tags_merge(GPtrArray *tags_array, gsize orig_len,
+	TMTagAttrType *sort_attributes, gboolean dedup)
+{
+	gpointer *copy, *a, *b;
+	gsize copy_len, i;
+
+	if ((!tags_array) || (!tags_array->len) || orig_len >= tags_array->len)
+		return TRUE;
+	if (!orig_len)
+		return tm_tags_sort(tags_array, sort_attributes, dedup);
+	copy_len = tags_array->len - orig_len;
+	copy = g_memdup(tags_array->pdata + orig_len, copy_len * sizeof(gpointer));
+	s_sort_attrs = sort_attributes;
+	s_partial = FALSE;
+	/* enforce copy sorted with same attributes for merge */
+	qsort(copy, copy_len, sizeof(gpointer), tm_tag_compare);
+	a = tags_array->pdata + orig_len - 1;
+	b = copy + copy_len - 1;
+	for (i = tags_array->len - 1;; i--)
+	{
+		gint cmp = tm_tag_compare(a, b);
+
+		tags_array->pdata[i] = (cmp >= 0) ? *a-- : *b--;
+		if (a < tags_array->pdata)
+		{
+			/* include remainder of copy as well as current value of b */
+			memcpy(tags_array->pdata, copy, ((b + 1) - copy) * sizeof(gpointer));
+			break;
+		}
+		if (b < copy)
+			break; /* remaining elements of 'a' are in place already */
+		g_assert(i != 0);
+	}
+	s_sort_attrs = NULL;
+	g_free(copy);
+	if (dedup)
+		tm_tags_dedup(tags_array, sort_attributes);
+	return TRUE;
+}
+
 gboolean tm_tags_sort(GPtrArray *tags_array, TMTagAttrType *sort_attributes, gboolean dedup)
 {
 	if ((!tags_array) || (!tags_array->len))

@@ -1,8 +1,8 @@
 /*
  *      project.h - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2007-2011 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2007-2011 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2007-2012 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2007-2012 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -22,6 +22,8 @@
 
 #ifndef GEANY_PROJECT_H
 #define GEANY_PROJECT_H 1
+
+G_BEGIN_DECLS
 
 #define GEANY_PROJECT_EXT				"geany"
 
@@ -84,6 +86,8 @@ gboolean project_load_file_with_session(const gchar *locale_file_name);
 gchar *project_get_base_path(void);
 
 
+const struct GeanyFilePrefs *project_get_file_prefs(void);
+
 void project_save_prefs(GKeyFile *config);
 
 void project_load_prefs(GKeyFile *config);
@@ -91,5 +95,7 @@ void project_load_prefs(GKeyFile *config);
 void project_setup_prefs(void);
 
 void project_apply_prefs(void);
+
+G_END_DECLS
 
 #endif

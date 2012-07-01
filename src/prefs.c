@@ -1,8 +1,8 @@
 /*
  *      prefs.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2005-2011 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2006-2011 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2005-2012 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2006-2012 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -80,6 +80,7 @@ static gboolean edited = FALSE;
 
 static GtkTreeView *various_treeview = NULL;
 
+static GeanyKeyBinding *kb_index(guint gidx, guint kid);
 static void kb_cell_edited_cb(GtkCellRendererText *cellrenderertext, gchar *path, gchar *new_text, gpointer user_data);
 static gboolean kb_grab_key_dialog_key_press_cb(GtkWidget *dialog, GdkEventKey *event, gpointer user_data);
 static void kb_grab_key_dialog_response_cb(GtkWidget *dialog, gint response, gpointer user_data);
@@ -140,7 +141,9 @@ enum
 	KB_TREE_ACTION,
 	KB_TREE_SHORTCUT,
 	KB_TREE_INDEX,
-	KB_TREE_EDITABLE
+	KB_TREE_EDITABLE,
+	KB_TREE_WEIGHT,
+	KB_TREE_COLUMNS
 };
 
 
@@ -279,17 +282,20 @@ static void kb_init_tree(void)
 
 	tree = GTK_TREE_VIEW(ui_lookup_widget(ui_widgets.prefs_dialog, "treeview7"));
 
-	store = gtk_tree_store_new(4, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_INT, G_TYPE_BOOLEAN);
+	store = gtk_tree_store_new(KB_TREE_COLUMNS,
+		G_TYPE_STRING, G_TYPE_STRING, G_TYPE_INT, G_TYPE_BOOLEAN, G_TYPE_INT);
 	gtk_tree_view_set_model(GTK_TREE_VIEW(tree), GTK_TREE_MODEL(store));
 	g_object_unref(store);
 
 	renderer = gtk_cell_renderer_text_new();
-	column = gtk_tree_view_column_new_with_attributes(_("Action"), renderer, "text", KB_TREE_ACTION, NULL);
+	column = gtk_tree_view_column_new_with_attributes(_("Action"), renderer,
+		"text", KB_TREE_ACTION, "weight", KB_TREE_WEIGHT, NULL);
 	gtk_tree_view_append_column(GTK_TREE_VIEW(tree), column);
 
 	renderer = gtk_cell_renderer_text_new();
 	column = gtk_tree_view_column_new_with_attributes(_("Shortcut"), renderer,
-		"text", KB_TREE_SHORTCUT, "editable", KB_TREE_EDITABLE, NULL);
+		"text", KB_TREE_SHORTCUT, "editable", KB_TREE_EDITABLE,
+		"weight", KB_TREE_WEIGHT, NULL);
 	gtk_tree_view_append_column(GTK_TREE_VIEW(tree), column);
 
 	/* set policy settings for the scrolled window around the treeview again, because glade
@@ -306,11 +312,33 @@ static void kb_init_tree(void)
 }
 
 
+static void kb_set_shortcut(GtkTreeStore *store, GtkTreeIter *iter,
+		guint key, GdkModifierType mods)
+{
+	gchar *key_string = gtk_accelerator_name(key, mods);
+	GtkTreeIter parent;
+	guint kid, gid;
+	GeanyKeyBinding *kb;
+	gboolean bold;
+
+	gtk_tree_store_set(store, iter, KB_TREE_SHORTCUT, key_string, -1);
+	g_free(key_string);
+
+	gtk_tree_model_get(GTK_TREE_MODEL(store), iter, KB_TREE_INDEX, &kid, -1);
+	gtk_tree_model_iter_parent(GTK_TREE_MODEL(store), &parent, iter);
+	gtk_tree_model_get(GTK_TREE_MODEL(store), &parent, KB_TREE_INDEX, &gid, -1);
+	kb = kb_index(gid, kid);
+	bold = key != kb->default_key || mods != kb->default_mods;
+	gtk_tree_store_set(store, iter, KB_TREE_WEIGHT,
+		bold ? PANGO_WEIGHT_BOLD : PANGO_WEIGHT_NORMAL, -1);
+}
+
+
 static void kb_init(void)
 {
 	GtkTreeIter parent, iter;
 	gsize g, i;
-	gchar *key_string, *label;
+	gchar *label;
 	GeanyKeyGroup *group;
 	GeanyKeyBinding *kb;
 
@@ -326,11 +354,10 @@ static void kb_init(void)
 		foreach_ptr_array(kb, i, group->key_items)
 		{
 			label = keybindings_get_label(kb);
-			key_string = gtk_accelerator_name(kb->key, kb->mods);
 			gtk_tree_store_append(store, &iter, &parent);
 			gtk_tree_store_set(store, &iter, KB_TREE_ACTION, label,
-				KB_TREE_SHORTCUT, key_string, KB_TREE_EDITABLE, TRUE, KB_TREE_INDEX, kb->id, -1);
-			g_free(key_string);
+				KB_TREE_EDITABLE, TRUE, KB_TREE_INDEX, kb->id, -1);
+			kb_set_shortcut(store, &iter, kb->key, kb->mods);
 			g_free(label);
 		}
 	}
@@ -991,7 +1018,7 @@ on_prefs_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 
 		/* Editor settings */
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "entry_toggle_mark");
-		setptr(editor_prefs.comment_toggle_mark,
+		SETPTR(editor_prefs.comment_toggle_mark,
 			gtk_editable_get_chars(GTK_EDITABLE(widget), 0, -1));
 
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "spin_long_line");
@@ -1262,7 +1289,7 @@ static void on_color_button_choose_cb(GtkColorButton *widget, gpointer user_data
 	GdkColor color;
 
 	gtk_color_button_get_color(widget, &color);
-	setptr(editor_prefs.long_line_color, utils_get_hex_from_color(&color));
+	SETPTR(editor_prefs.long_line_color, utils_get_hex_from_color(&color));
 }
 
 
@@ -1278,7 +1305,7 @@ static void on_prefs_font_choosed(GtkFontButton *widget, gpointer user_data)
 			if (strcmp(fontbtn, interface_prefs.tagbar_font) == 0)
 				break;
 
-			setptr(interface_prefs.tagbar_font, g_strdup(fontbtn));
+			SETPTR(interface_prefs.tagbar_font, g_strdup(fontbtn));
 			for (i = 0; i < documents_array->len; i++)
 			{
 				GeanyDocument *doc = documents[i];
@@ -1296,7 +1323,7 @@ static void on_prefs_font_choosed(GtkFontButton *widget, gpointer user_data)
 		{
 			if (strcmp(fontbtn, interface_prefs.msgwin_font) == 0)
 				break;
-			setptr(interface_prefs.msgwin_font, g_strdup(fontbtn));
+			SETPTR(interface_prefs.msgwin_font, g_strdup(fontbtn));
 			ui_widget_modify_font_from_string(msgwindow.tree_compiler, interface_prefs.msgwin_font);
 			ui_widget_modify_font_from_string(msgwindow.tree_msg, interface_prefs.msgwin_font);
 			ui_widget_modify_font_from_string(msgwindow.tree_status, interface_prefs.msgwin_font);
@@ -1324,7 +1351,7 @@ static void kb_change_iter_shortcut(GtkTreeIter *iter, const gchar *new_text)
 
 	/* set the values here, because of the above check, setting it in
 	 * gtk_accelerator_parse would return a wrong key combination if it is duplicate */
-	gtk_tree_store_set(store, iter, KB_TREE_SHORTCUT, new_text, -1);
+	kb_set_shortcut(store, iter, lkey, lmods);
 
 	edited = TRUE;
 }
@@ -1412,7 +1439,6 @@ static gboolean kb_find_duplicate(GtkWidget *parent, GtkTreeIter *old_iter,
 			continue;
 		do	/* foreach children */
 		{
-
 			gtk_tree_model_get(model, &iter, KB_TREE_SHORTCUT, &kb_str, -1);
 			if (! kb_str)
 				continue;
@@ -1438,7 +1464,7 @@ static gboolean kb_find_duplicate(GtkWidget *parent, GtkTreeIter *old_iter,
 
 				if (ret == GTK_RESPONSE_YES)
 				{
-					gtk_tree_store_set(store, &iter, KB_TREE_SHORTCUT, NULL, -1);	/* clear shortcut */
+					kb_set_shortcut(store, &iter, 0, 0);	/* clear shortcut */
 					/* carry on looking for other duplicates if overriding */
 					continue;
 				}
@@ -1589,11 +1615,20 @@ static gboolean prefs_dialog_key_press_response_cb(GtkWidget *dialog, GdkEventKe
 }
 
 
+static void list_store_append_text(GtkListStore *list, const gchar *text)
+{
+	GtkTreeIter iter;
+
+	gtk_list_store_append(list, &iter);
+	gtk_list_store_set(list, &iter, 0, text, -1);
+}
+
+
 void prefs_show_dialog(void)
 {
 	if (ui_widgets.prefs_dialog == NULL)
 	{
-		GtkWidget *combo_new, *combo_open, *combo_eol;
+		GtkListStore *encoding_list, *eol_list;
 		GtkWidget *label;
 		guint i;
 		gchar *encoding_string;
@@ -1606,24 +1641,20 @@ void prefs_show_dialog(void)
 		gtk_window_set_icon(GTK_WINDOW(ui_widgets.prefs_dialog), pb);
 		g_object_unref(pb);	/* free our reference */
 
-		/* init the default file encoding combo box */
-		combo_new = ui_lookup_widget(ui_widgets.prefs_dialog, "combo_new_encoding");
-		combo_open = ui_lookup_widget(ui_widgets.prefs_dialog, "combo_open_encoding");
-		gtk_combo_box_set_wrap_width(GTK_COMBO_BOX(combo_new), 3);
-		gtk_combo_box_set_wrap_width(GTK_COMBO_BOX(combo_open), 3);
+		/* init the file encoding combo boxes */
+		encoding_list = ui_builder_get_object("encoding_list");
 		for (i = 0; i < GEANY_ENCODINGS_MAX; i++)
 		{
 			encoding_string = encodings_to_string(&encodings[i]);
-			gtk_combo_box_append_text(GTK_COMBO_BOX(combo_new), encoding_string);
-			gtk_combo_box_append_text(GTK_COMBO_BOX(combo_open), encoding_string);
+			list_store_append_text(encoding_list, encoding_string);
 			g_free(encoding_string);
 		}
 
 		/* init the eol character combo box */
-		combo_eol = ui_lookup_widget(ui_widgets.prefs_dialog, "combo_eol");
-		gtk_combo_box_append_text(GTK_COMBO_BOX(combo_eol), utils_get_eol_name(SC_EOL_CRLF));
-		gtk_combo_box_append_text(GTK_COMBO_BOX(combo_eol), utils_get_eol_name(SC_EOL_CR));
-		gtk_combo_box_append_text(GTK_COMBO_BOX(combo_eol), utils_get_eol_name(SC_EOL_LF));
+		eol_list = ui_builder_get_object("eol_list");
+		list_store_append_text(eol_list, utils_get_eol_name(SC_EOL_CRLF));
+		list_store_append_text(eol_list, utils_get_eol_name(SC_EOL_CR));
+		list_store_append_text(eol_list, utils_get_eol_name(SC_EOL_LF));
 
 		/* add manually GeanyWrapLabels because they can't be added with Glade */
 		/* page Tools */

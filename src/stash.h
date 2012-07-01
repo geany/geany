@@ -1,8 +1,8 @@
 /*
  *	  stash.h - this file is part of Geany, a fast and lightweight IDE
  *
- *	  Copyright 2008-2011 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
- *	  Copyright 2008-2011 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *	  Copyright 2008-2012 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *	  Copyright 2008-2012 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
  *
  *	  This program is free software; you can redistribute it and/or modify
  *	  it under the terms of the GNU General Public License as published by
@@ -22,6 +22,8 @@
 
 #ifndef GEANY_STASH_H
 #define GEANY_STASH_H
+
+G_BEGIN_DECLS
 
 /** Opaque type for a group of settings. */
 typedef struct StashGroup StashGroup;
@@ -57,6 +59,8 @@ gboolean stash_group_load_from_file(StashGroup *group, const gchar *filename);
 
 gint stash_group_save_to_file(StashGroup *group, const gchar *filename,
 		GKeyFileFlags flags);
+
+void stash_group_free_settings(StashGroup *group);
 
 void stash_group_free(StashGroup *group);
 
@@ -95,5 +99,7 @@ void stash_tree_setup(GPtrArray *group_array, GtkTreeView *tree);
 void stash_tree_display(GtkTreeView *tree);
 
 void stash_tree_update(GtkTreeView *tree);
+
+G_END_DECLS
 
 #endif

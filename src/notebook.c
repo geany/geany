@@ -1,8 +1,8 @@
 /*
  *      notebook.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2006-2011 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2006-2011 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2006-2012 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2006-2012 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -169,6 +169,8 @@ static gboolean on_key_release_event(GtkWidget *widget, GdkEventKey *ev, gpointe
 	/* user may have rebound keybinding to a different modifier than Ctrl, so check all */
 	if (switch_in_progress && is_modifier_key(ev->keyval))
 	{
+		GeanyDocument *doc;
+
 		switch_in_progress = FALSE;
 
 		if (switch_dialog)
@@ -177,8 +179,10 @@ static gboolean on_key_release_event(GtkWidget *widget, GdkEventKey *ev, gpointe
 			switch_dialog = NULL;
 		}
 
-		update_mru_docs_head(document_get_current());
+		doc = document_get_current();
+		update_mru_docs_head(doc);
 		mru_pos = 0;
+		document_check_disk_status(doc, TRUE);
 	}
 	return FALSE;
 }
@@ -238,8 +242,8 @@ static void update_filename_label(void)
 		}
 		else
 		{
-			setptr(basename, g_markup_printf_escaped ("\n%s", basename));
-			setptr(msg, g_strconcat(msg, basename, NULL));
+			SETPTR(basename, g_markup_printf_escaped ("\n%s", basename));
+			SETPTR(msg, g_strconcat(msg, basename, NULL));
 		}
 		g_free(basename);
 	}
@@ -286,6 +290,12 @@ void notebook_switch_tablastused(void)
 		g_timeout_add(600, on_switch_timeout, NULL);
 	else
 		update_filename_label();
+}
+
+
+gboolean notebook_switch_in_progress(void)
+{
+	return switch_in_progress;
 }
 
 

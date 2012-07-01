@@ -142,6 +142,7 @@ static TMTagAttrType global_tags_sort_attrs[] =
 
 gboolean tm_workspace_load_global_tags(const char *tags_file, gint mode)
 {
+	gsize orig_len;
 	guchar buf[BUFSIZ];
 	FILE *fp;
 	TMTag *tag;
@@ -153,6 +154,7 @@ gboolean tm_workspace_load_global_tags(const char *tags_file, gint mode)
 		return FALSE;
 	if (NULL == theWorkspace->global_tags)
 		theWorkspace->global_tags = g_ptr_array_new();
+	orig_len = theWorkspace->global_tags->len;
 	if ((NULL == fgets((gchar*) buf, BUFSIZ, fp)) || ('\0' == *buf))
 	{
 		fclose(fp);
@@ -182,10 +184,8 @@ gboolean tm_workspace_load_global_tags(const char *tags_file, gint mode)
 		g_ptr_array_add(theWorkspace->global_tags, tag);
 	fclose(fp);
 
-	/* resort the whole array, because tm_tags_find expects a sorted array and it is not sorted
-	 * when c99.tags, php.tags and latex.tags are loaded at the same time */
-	tm_tags_sort(theWorkspace->global_tags, global_tags_sort_attrs, TRUE);
-
+	/* reorder the whole array, because tm_tags_find expects a sorted array */
+	tm_tags_merge(theWorkspace->global_tags, orig_len, global_tags_sort_attrs, TRUE);
 	return TRUE;
 }
 
@@ -376,23 +376,31 @@ gboolean tm_workspace_create_global_tags(const char *pre_process, const char **i
 	includes_files = NULL;
 	fclose(fp);
 
-	/* FIXME: The following grep command removes the lines
-	 * G_BEGIN_DECLS and G_END_DECLS from the header files. The reason is
-	 * that in tagmanager, the files are not correctly parsed and the typedefs
-	 * following these lines are incorrectly parsed. The real fix should,
-	 * of course be in tagmanager (c) parser. This is just a temporary fix.
-	 */
 	if (pre_process != NULL)
 	{
-		command = g_strdup_printf("%s %s | grep -v -E '^\\s*(G_BEGIN_DECLS|G_END_DECLS)\\s*$' > %s",
-							  pre_process, temp_file, temp_file2);
+		gint ret;
+		gchar *tmp_errfile = create_temp_file("tmp_XXXXXX");
+		gchar *errors = NULL;
+		command = g_strdup_printf("%s %s >%s 2>%s",
+								pre_process, temp_file, temp_file2, tmp_errfile);
 #ifdef TM_DEBUG
 		g_message("Executing: %s", command);
 #endif
-		system(command);
+		ret = system(command);
 		g_free(command);
 		g_unlink(temp_file);
 		g_free(temp_file);
+		g_file_get_contents(tmp_errfile, &errors, NULL, NULL);
+		if (errors && *errors)
+			g_printerr("%s", errors);
+		g_free(errors);
+		g_unlink(tmp_errfile);
+		g_free(tmp_errfile);
+		if (ret == -1)
+		{
+			g_unlink(temp_file2);
+			return FALSE;
+		}
 	}
 	else
 	{

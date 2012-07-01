@@ -1,8 +1,8 @@
 /*
  *      keybindings.h - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2006-2011 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2006-2011 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2006-2012 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2006-2012 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -22,6 +22,8 @@
 #ifndef GEANY_KEYBINDINGS_H
 #define GEANY_KEYBINDINGS_H 1
 
+G_BEGIN_DECLS
+
 /** Function pointer type used for keybinding callbacks. */
 typedef void (*GeanyKeyCallback) (guint key_id);
 
@@ -40,6 +42,8 @@ typedef struct GeanyKeyBinding
 	GeanyKeyCallback callback;
 	GtkWidget *menu_item;	/**< Optional widget to set an accelerator for, or @c NULL */
 	guint id;
+	guint default_key;
+	GdkModifierType default_mods;
 }
 GeanyKeyBinding;
 
@@ -240,6 +244,8 @@ enum GeanyKeyBindingID
 	GEANY_KEYS_PROJECT_OPEN,					/**< Keybinding. */
 	GEANY_KEYS_PROJECT_NEW,						/**< Keybinding. */
 	GEANY_KEYS_PROJECT_CLOSE,					/**< Keybinding. */
+	GEANY_KEYS_FORMAT_JOINLINES,				/**< Keybinding. */
+	GEANY_KEYS_GOTO_LINESTARTVISUAL,			/**< Keybinding. */
 	GEANY_KEYS_COUNT	/* must not be used by plugins */
 };
 
@@ -277,5 +283,7 @@ void keybindings_write_to_file(void);
 void keybindings_show_shortcuts(void);
 
 gboolean keybindings_check_event(GdkEventKey *ev, GeanyKeyBinding *kb);
+
+G_END_DECLS
 
 #endif

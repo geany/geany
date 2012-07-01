@@ -1,8 +1,8 @@
 /*
  *      encodings.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2005-2011 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2006-2011 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2005-2012 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2006-2012 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -346,7 +346,7 @@ static gchar *regex_match(GRegex *preg, const gchar *buffer, gsize size)
 		encoding = g_match_info_fetch(minfo, 1);
 		geany_debug("Detected encoding by regex search: %s", encoding);
 
-		setptr(encoding, g_utf8_strup(encoding, -1));
+		SETPTR(encoding, g_utf8_strup(encoding, -1));
 	}
 	g_match_info_free(minfo);
 	return encoding;
@@ -783,7 +783,7 @@ handle_forced_encoding(BufferData *buffer, const gchar *forced_enc)
 		}
 		else
 		{
-			setptr(buffer->data, converted_text);
+			SETPTR(buffer->data, converted_text);
 			buffer->len = strlen(converted_text);
 		}
 	}
@@ -821,13 +821,13 @@ handle_encoding(BufferData *buffer, GeanyEncodingIndex enc_idx)
 										buffer->data, buffer->size, buffer->enc, FALSE);
 				if (converted_text != NULL)
 				{
-					setptr(buffer->data, converted_text);
+					SETPTR(buffer->data, converted_text);
 					buffer->len = strlen(converted_text);
 				}
 				else
 				{
 					/* there was a problem converting data from BOM encoding type */
-					setptr(buffer->enc, NULL);
+					SETPTR(buffer->enc, NULL);
 					buffer->bom = FALSE;
 				}
 			}
@@ -855,7 +855,7 @@ handle_encoding(BufferData *buffer, GeanyEncodingIndex enc_idx)
 					g_free(regex_charset);
 					return FALSE;
 				}
-				setptr(buffer->data, converted_text);
+				SETPTR(buffer->data, converted_text);
 				buffer->len = strlen(converted_text);
 			}
 			g_free(regex_charset);

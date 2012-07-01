@@ -1,8 +1,8 @@
 /*
  *      keyfile.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2005-2011 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2006-2011 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2005-2012 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2006-2012 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -567,6 +567,8 @@ static void save_ui_prefs(GKeyFile *config)
 	{
 		g_key_file_set_string_list(config, PACKAGE, "custom_commands",
 				(const gchar**) ui_prefs.custom_commands, g_strv_length(ui_prefs.custom_commands));
+		g_key_file_set_string_list(config, PACKAGE, "custom_commands_labels",
+				(const gchar**) ui_prefs.custom_commands_labels, g_strv_length(ui_prefs.custom_commands_labels));
 	}
 }
 
@@ -915,6 +917,34 @@ static void load_ui_prefs(GKeyFile *config)
 	ui_prefs.fullscreen = utils_get_setting_boolean(config, PACKAGE, "fullscreen", FALSE);
 	ui_prefs.custom_date_format = utils_get_setting_string(config, PACKAGE, "custom_date_format", "");
 	ui_prefs.custom_commands = g_key_file_get_string_list(config, PACKAGE, "custom_commands", NULL, NULL);
+	ui_prefs.custom_commands_labels = g_key_file_get_string_list(config, PACKAGE, "custom_commands_labels", NULL, NULL);
+
+	/* sanitize custom commands labels */
+	if (ui_prefs.custom_commands || ui_prefs.custom_commands_labels)
+	{
+		guint i;
+		guint cc_len = ui_prefs.custom_commands ? g_strv_length(ui_prefs.custom_commands) : 0;
+		guint cc_labels_len = ui_prefs.custom_commands_labels ? g_strv_length(ui_prefs.custom_commands_labels) : 0;
+
+		/* not enough items, resize and fill */
+		if (cc_labels_len < cc_len)
+		{
+			ui_prefs.custom_commands_labels = g_realloc(ui_prefs.custom_commands_labels,
+					(cc_len + 1) * sizeof *ui_prefs.custom_commands_labels);
+			for (i = cc_labels_len; i < cc_len; i++)
+				ui_prefs.custom_commands_labels[i] = g_strdup("");
+			ui_prefs.custom_commands_labels[cc_len] = NULL;
+		}
+		/* too many items, cut off */
+		else if (cc_labels_len > cc_len)
+		{
+			for (i = cc_len; i < cc_labels_len; i++)
+			{
+				g_free(ui_prefs.custom_commands_labels[i]);
+				ui_prefs.custom_commands_labels[i] = NULL;
+			}
+		}
+	}
 
 	scribble_text = utils_get_setting_string(config, PACKAGE, "scribble_text",
 				_("Type here what you want, use it as a notice/scratch board"));
@@ -978,10 +1008,11 @@ void configuration_save_default_session(void)
  */
 void configuration_reload_default_session(void)
 {
-	const gchar *configfile = utils_build_path(app->configdir, "geany.conf", NULL);
+	gchar *configfile = g_build_filename(app->configdir, "geany.conf", NULL);
 	GKeyFile *config = g_key_file_new();
 
 	g_key_file_load_from_file(config, configfile, G_KEY_FILE_NONE, NULL);
+	g_free(configfile);
 
 	configuration_load_session_files(config, FALSE);
 
@@ -991,14 +1022,14 @@ void configuration_reload_default_session(void)
 
 gboolean configuration_load(void)
 {
-	gchar *configfile = utils_build_path(app->configdir, "geany.conf", NULL);
+	gchar *configfile = g_build_filename(app->configdir, "geany.conf", NULL);
 	GKeyFile *config = g_key_file_new();
 
 	if (! g_file_test(configfile, G_FILE_TEST_IS_REGULAR))
 	{	/* config file does not (yet) exist, so try to load a global config file which may be */
 		/* created by distributors */
 		geany_debug("No user config file found, trying to use global configuration.");
-		setptr(configfile, utils_build_path(app->datadir, "geany.conf", NULL));
+		SETPTR(configfile, g_build_filename(app->datadir, "geany.conf", NULL));
 	}
 	g_key_file_load_from_file(config, configfile, G_KEY_FILE_NONE, NULL);
 	g_free(configfile);

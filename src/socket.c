@@ -1,8 +1,8 @@
 /*
  *      socket.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2006-2011 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2006-2011 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2006-2012 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2006-2012 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *      Copyright 2006 Hiroyuki Yamamoto (author of Sylpheed)
  *
  *      This program is free software; you can redistribute it and/or modify
@@ -86,7 +86,7 @@
 #include "utils.h"
 #include "dialogs.h"
 #include "encodings.h"
-
+#include "project.h"
 
 
 #ifdef G_OS_WIN32
@@ -281,8 +281,12 @@ gint socket_init(gint argc, gchar **argv)
 	/* these lines are taken from dcopc.c in kdelibs */
 	if ((p = strrchr(display_name, '.')) > strrchr(display_name, ':') && p != NULL)
 		*p = '\0';
-	while ((p = strchr(display_name, ':')) != NULL)
-		*p = '_';
+	/* remove characters that may not be acceptable in a filename */
+	for (p = display_name; *p; p++)
+	{
+		if (*p == ':' || *p == '/')
+			*p = '_';
+	}
 
 	if (socket_info.file_name == NULL)
 		socket_info.file_name = g_strdup_printf("%s%cgeany_socket_%s_%s",
@@ -415,7 +419,7 @@ static gint socket_fd_open_unix(const gchar *path)
 	{	/* if real_path is not writable for us, fall back to ~/.config/geany/geany_socket_*_* */
 		/* instead of creating a symlink and print a warning */
 		g_warning("Socket %s could not be written, using %s as fallback.", real_path, path);
-		setptr(real_path, g_strdup(path));
+		SETPTR(real_path, g_strdup(path));
 	}
 	/* create a symlink in e.g. ~/.config/geany/geany_socket_hostname__0 to /tmp/geany_socket.499602d2 */
 	else if (symlink(real_path, path) != 0)
@@ -559,7 +563,10 @@ static void handle_input_filename(const gchar *buf)
 	if (locale_filename)
 	{
 		if (g_str_has_suffix(locale_filename, ".geany"))
-			main_load_project_from_command_line(locale_filename, TRUE);
+		{
+			if (project_ask_close())
+				main_load_project_from_command_line(locale_filename, TRUE);
+		}
 		else
 			main_handle_filename(locale_filename);
 	}

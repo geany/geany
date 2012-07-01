@@ -1,8 +1,8 @@
 /*
  *      filebrowser.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2007-2011 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2007-2011 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2007-2012 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2007-2012 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -241,7 +241,7 @@ static void add_top_level_entry(void)
 		return;	/* ignore 'C:\' or '/' */
 
 	utf8_dir = g_path_get_dirname(current_dir);
-	setptr(utf8_dir, utils_get_utf8_from_locale(utf8_dir));
+	SETPTR(utf8_dir, utils_get_utf8_from_locale(utf8_dir));
 
 	gtk_list_store_prepend(file_store, &iter);
 	last_dir_iter = gtk_tree_iter_copy(&iter);
@@ -305,7 +305,7 @@ static void refresh(void)
 
 static void on_go_home(void)
 {
-	setptr(current_dir, g_strdup(g_get_home_dir()));
+	SETPTR(current_dir, g_strdup(g_get_home_dir()));
 	refresh();
 }
 
@@ -336,7 +336,7 @@ static void on_current_path(void)
 
 	if (doc == NULL || doc->file_name == NULL || ! g_path_is_absolute(doc->file_name))
 	{
-		setptr(current_dir, get_default_dir());
+		SETPTR(current_dir, get_default_dir());
 		refresh();
 		return;
 	}
@@ -345,7 +345,7 @@ static void on_current_path(void)
 	dir = g_path_get_dirname(fname);
 	g_free(fname);
 
-	setptr(current_dir, dir);
+	SETPTR(current_dir, dir);
 	refresh();
 }
 
@@ -356,7 +356,7 @@ static void on_go_up(void)
 	if (current_dir[len-1] == G_DIR_SEPARATOR)
 		current_dir[len-1] = '\0';
 	/* remove the highest directory part (which becomes the basename of current_dir) */
-	setptr(current_dir, g_path_get_dirname(current_dir));
+	SETPTR(current_dir, g_path_get_dirname(current_dir));
 	refresh();
 }
 
@@ -512,7 +512,7 @@ static void open_folder(GtkTreePath *treepath)
 {
 	gchar *fname = get_tree_path_filename(treepath);
 
-	setptr(current_dir, fname);
+	SETPTR(current_dir, fname);
 	refresh();
 }
 
@@ -575,7 +575,7 @@ static void on_find_in_files(GtkMenuItem *menuitem, gpointer user_data)
 	g_list_foreach(list, (GFunc) gtk_tree_path_free, NULL);
 	g_list_free(list);
 
-	setptr(dir, utils_get_utf8_from_locale(dir));
+	SETPTR(dir, utils_get_utf8_from_locale(dir));
 	search_show_find_in_files_dialog(dir);
 	g_free(dir);
 }
@@ -782,7 +782,7 @@ static void on_path_entry_activate(GtkEntry *entry, gpointer user_data)
 	else
 		new_dir = g_strdup(g_get_home_dir());
 
-	setptr(current_dir, new_dir);
+	SETPTR(current_dir, new_dir);
 
 	on_clear_filter(NULL, NULL);
 }
@@ -1021,11 +1021,11 @@ static void project_change_cb(G_GNUC_UNUSED GObject *obj, G_GNUC_UNUSED GKeyFile
 		g_free(dir);
 	}
 	/* get it into locale encoding */
-	setptr(new_dir, utils_get_locale_from_utf8(new_dir));
+	SETPTR(new_dir, utils_get_locale_from_utf8(new_dir));
 
 	if (! utils_str_equal(current_dir, new_dir))
 	{
-		setptr(current_dir, new_dir);
+		SETPTR(current_dir, new_dir);
 		refresh();
 	}
 	else
@@ -1046,11 +1046,11 @@ static void document_activate_cb(G_GNUC_UNUSED GObject *obj, GeanyDocument *doc,
 		return;
 
 	new_dir = g_path_get_dirname(doc->file_name);
-	setptr(new_dir, utils_get_locale_from_utf8(new_dir));
+	SETPTR(new_dir, utils_get_locale_from_utf8(new_dir));
 
 	if (! utils_str_equal(current_dir, new_dir))
 	{
-		setptr(current_dir, new_dir);
+		SETPTR(current_dir, new_dir);
 		refresh();
 	}
 	else

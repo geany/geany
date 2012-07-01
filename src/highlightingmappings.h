@@ -1,9 +1,9 @@
 /*
  *      highlightingmappings.h - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2005-2011 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2006-2011 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
- *      Copyright 2011 Colomban Wendling <ban(at)herbesfolles(dot)org>
+ *      Copyright 2005-2012 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2006-2012 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2011-2012 Colomban Wendling <ban(at)herbesfolles(dot)org>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -194,6 +194,7 @@ static const HLStyle highlighting_styles_C[] =
 	/* triple verbatims use the same style */
 	{ SCE_C_TRIPLEVERBATIM,			"verbatim",					FALSE },
 	{ SCE_C_REGEX,					"regex",					FALSE },
+	{ SCE_C_HASHQUOTEDSTRING,		"hashquotedstring",			FALSE },
 	{ SCE_C_COMMENTLINEDOC,			"commentlinedoc",			FALSE },
 	{ SCE_C_COMMENTDOCKEYWORD,		"commentdockeyword",		FALSE },
 	{ SCE_C_COMMENTDOCKEYWORDERROR,	"commentdockeyworderror",	FALSE },
@@ -291,6 +292,7 @@ static const HLStyle highlighting_styles_CSS[] =
 	{ SCE_CSS_VALUE,					"value",					FALSE },
 	{ SCE_CSS_ID,						"id",						FALSE },
 	{ SCE_CSS_IDENTIFIER2,				"identifier2",				FALSE },
+	{ SCE_CSS_VARIABLE,					"variable",					FALSE },
 	{ SCE_CSS_IMPORTANT,				"important",				FALSE },
 	{ SCE_CSS_DIRECTIVE,				"directive",				FALSE },
 	{ SCE_CSS_IDENTIFIER3,				"identifier3",				FALSE },
@@ -1269,7 +1271,8 @@ static const HLStyle highlighting_styles_TCL[] =
 	{ SCE_TCL_WORD4,			"wordtkcmds",		FALSE },
 	{ SCE_TCL_WORD5,			"wordexpand",		FALSE },
 	{ SCE_TCL_COMMENT_BOX,		"commentbox",		FALSE },
-	{ SCE_TCL_BLOCK_COMMENT,	"blockcomment",		FALSE }
+	{ SCE_TCL_BLOCK_COMMENT,	"blockcomment",		FALSE },
+	{ SCE_TCL_SUB_BRACE,		"subbrace",			FALSE }
 	/* these are for user-defined keywords we don't set yet */
 	/*{ SCE_TCL_WORD6,			"user2",			FALSE },
 	{ SCE_TCL_WORD7,			"user3",			FALSE },

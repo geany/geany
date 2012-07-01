@@ -1,8 +1,8 @@
 /*
  *      pluginsignals.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2008-2011 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2008-2011 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2008-2012 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2008-2012 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -156,18 +156,18 @@ signal void (*project_save)(GObject *obj, GKeyFile *config, gpointer user_data);
  */
 signal void (*project_close)(GObject *obj, gpointer user_data);
 
-/** Sent after a project dialog is created but before it is displayed. Plugins
+/** Sent after a project dialog is opened but before it is displayed. Plugins
  *  can append their own project settings tabs by using this signal.
  *  @param obj a GeanyObject instance, should be ignored.
  *  @param notebook a GtkNotebook instance that can be used by plugins to append their
  *  settings tabs.
  *  @param user_data user data.
  */
-signal void (*project_dialog_create)(GObject *obj, GtkWidget *notebook, gpointer user_data);
+signal void (*project_dialog_open)(GObject *obj, GtkWidget *notebook, gpointer user_data);
 
 /** Sent when the settings dialog is confirmed by the user. Plugins can use
  *  this signal to read the settings widgets previously added by using the
- *  @c project-dialog-create signal.
+ *  @c project-dialog-open signal.
  *  @warning The dialog will still be running afterwards if the user chose 'Apply'.
  *  @param obj a GeanyObject instance, should be ignored.
  *  @param notebook a GtkNotebook instance that can be used by plugins to read their
@@ -175,6 +175,15 @@ signal void (*project_dialog_create)(GObject *obj, GtkWidget *notebook, gpointer
  *  @param user_data user data.
  */
 signal void (*project_dialog_confirmed)(GObject *obj, GtkWidget *notebook, gpointer user_data);
+
+/** Sent before project dialog is closed. By using this signal, plugins can remove 
+ *  tabs previously added in project-dialog-open signal handler.
+ *  @param obj a GeanyObject instance, should be ignored.
+ *  @param notebook a GtkNotebook instance that can be used by plugins to remove
+ *  settings tabs previously added in the project-dialog-open signal handler.
+ *  @param user_data user data.
+ */
+signal void (*project_dialog_close)(GObject *obj, GtkWidget *notebook, gpointer user_data);
 
 /** Sent once Geany has finished all initialization and startup tasks and the GUI has been
  *  realized. This signal is the very last step in the startup process and is sent once

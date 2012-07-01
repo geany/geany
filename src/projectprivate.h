@@ -1,8 +1,8 @@
 /*
  *      projectprivate.h - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2008-2011 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
- *      Copyright 2008-2011 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2008-2012 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2008-2012 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -28,6 +28,10 @@
 typedef struct GeanyProjectPrivate
 {
 	struct GeanyIndentPrefs *indentation;
+	gboolean	final_new_line;
+	gboolean	strip_trailing_spaces;
+	gboolean	replace_tabs;
+	gboolean	ensure_convert_new_lines;
 }
 GeanyProjectPrivate;
 

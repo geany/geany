@@ -1,8 +1,8 @@
 /*
  *      geanyobject.h - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2007-2011 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2007-2011 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2007-2012 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2007-2012 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -41,8 +41,9 @@ typedef enum
 	GCB_PROJECT_OPEN,
 	GCB_PROJECT_SAVE,
 	GCB_PROJECT_CLOSE,
-	GCB_PROJECT_DIALOG_CREATE,
+	GCB_PROJECT_DIALOG_OPEN,
 	GCB_PROJECT_DIALOG_CONFIRMED,
+	GCB_PROJECT_DIALOG_CLOSE,
 	GCB_UPDATE_EDITOR_MENU,
 	GCB_EDITOR_NOTIFY,
 	GCB_GEANY_STARTUP_COMPLETE,
@@ -90,8 +91,9 @@ struct _GeanyObjectClass
 	void (*project_open)(GKeyFile *keyfile);
 	void (*project_save)(GKeyFile *keyfile);
 	void (*project_close)(void);
-	void (*project_dialog_create)(GtkWidget *notebook);
+	void (*project_dialog_open)(GtkWidget *notebook);
 	void (*project_dialog_confirmed)(GtkWidget *notebook);
+	void (*project_dialog_close)(GtkWidget *notebook);
 	void (*update_editor_menu)(const gchar *word, gint click_pos, GeanyDocument *doc);
 	gboolean (*editor_notify)(GeanyEditor *editor, gpointer scnt);
 	void (*geany_startup_complete)(void);

@@ -30,7 +30,9 @@ Creates macros for each plugin API function pointer, e.g.:
 """
 
 
-import re, sys
+import re
+import sys
+
 
 def get_function_names():
     names = []
@@ -46,6 +48,7 @@ def get_function_names():
                 names.append(symbol)
     filep.close()
     return names
+
 
 def get_api_tuple(source):
     match = re.match("^([a-z]+)_([a-z][a-z0-9_]+)$", source)
@@ -70,6 +73,7 @@ r'''/* This file is generated automatically by genapi.py - do not edit. */
 
 #ifndef GEANY_FUNCTIONS_H
 #define GEANY_FUNCTIONS_H
+
 '''
 
 if __name__ == "__main__":
@@ -80,15 +84,15 @@ if __name__ == "__main__":
         sys.exit("No function names read!")
 
     f = open(outfile, 'w')
-    print >> f, header % (outfile)
+    f.write(header % (outfile))
 
     for fname in fnames:
         ptr, name = get_api_tuple(fname)
         # note: name no longer needed
-        print >> f, '#define %s \\\n\tgeany_functions->%s->%s' % (fname, ptr, fname)
+        f.write('#define %s \\\n\tgeany_functions->%s->%s\n' % (fname, ptr, fname))
 
-    print >> f, '\n#endif'
+    f.write('\n#endif\n')
     f.close()
 
     if not '-q' in sys.argv:
-        print 'Generated ' + outfile
+        sys.stdout.write('Generated %s\n' % outfile)

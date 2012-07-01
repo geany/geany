@@ -1,8 +1,8 @@
 /*
  *      plugins.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2007-2011 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2007-2011 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2007-2012 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2007-2012 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -46,7 +46,7 @@
 #include "msgwindow.h"
 #include "prefs.h"
 #include "geanywraplabel.h"
-#include "build.h"
+/* #include "build.h" included in plugindata.h so it can use enums */
 #include "encodings.h"
 #include "search.h"
 #include "highlighting.h"
@@ -346,11 +346,20 @@ static StashFuncs stash_funcs = {
 	&stash_group_add_entry,
 	&stash_group_add_widget_property,
 	&stash_group_display,
-	&stash_group_update
+	&stash_group_update,
+	&stash_group_free_settings
 };
 
 static SymbolsFuncs symbols_funcs = {
 	&symbols_get_context_separator
+};
+
+static BuildFuncs build_funcs = {
+	&build_activate_menu_item,
+	&build_get_current_menu_item,
+	&build_remove_menu_item,
+	&build_set_menu_item,
+	&build_get_group_count
 };
 
 static GeanyFunctions geany_functions = {
@@ -375,7 +384,8 @@ static GeanyFunctions geany_functions = {
 	&scintilla_funcs,
 	&msgwin_funcs,
 	&stash_funcs,
-	&symbols_funcs
+	&symbols_funcs,
+	&build_funcs
 };
 
 static GeanyData geany_data;

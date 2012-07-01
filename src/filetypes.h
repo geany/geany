@@ -1,8 +1,8 @@
 /*
  *      filetypes.h - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2005-2011 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2006-2011 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2005-2012 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2006-2012 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -22,6 +22,8 @@
 
 #ifndef GEANY_FILETYPES_H
 #define GEANY_FILETYPES_H 1
+
+G_BEGIN_DECLS
 
 #include "Scintilla.h"
 #include "ScintillaWidget.h"
@@ -212,5 +214,7 @@ gboolean filetypes_parse_error_message(GeanyFiletype *ft, const gchar *message,
 
 gboolean filetype_get_comment_open_close(const GeanyFiletype *ft, gboolean single_first,
 		const gchar **co, const gchar **cc);
+
+G_END_DECLS
 
 #endif

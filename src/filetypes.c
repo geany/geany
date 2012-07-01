@@ -1,8 +1,8 @@
 /*
  *      filetypes.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2005-2011 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2006-2011 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2005-2012 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2006-2012 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -651,7 +651,7 @@ void filetypes_init_types()
 		filetype_add(filetypes[ft_id]);
 	}
 	init_custom_filetypes(app->datadir);
-	f = utils_build_path(app->configdir, GEANY_FILEDEFS_SUBDIR, NULL);
+	f = g_build_filename(app->configdir, GEANY_FILEDEFS_SUBDIR, NULL);
 	init_custom_filetypes(f);
 	g_free(f);
 
@@ -669,12 +669,12 @@ static void on_document_save(G_GNUC_UNUSED GObject *object, GeanyDocument *doc)
 
 	g_return_if_fail(NZV(doc->real_path));
 
-	f = utils_build_path(app->configdir, "filetype_extensions.conf", NULL);
+	f = g_build_filename(app->configdir, "filetype_extensions.conf", NULL);
 	if (utils_str_equal(doc->real_path, f))
 		filetypes_reload_extensions();
 
 	g_free(f);
-	f = utils_build_path(app->configdir, GEANY_FILEDEFS_SUBDIR, "filetypes.common", NULL);
+	f = g_build_filename(app->configdir, GEANY_FILEDEFS_SUBDIR, "filetypes.common", NULL);
 	if (utils_str_equal(doc->real_path, f))
 	{
 		guint i;
@@ -694,9 +694,9 @@ static void setup_config_file_menus(void)
 {
 	gchar *f;
 
-	f = utils_build_path(app->configdir, "filetype_extensions.conf", NULL);
+	f = g_build_filename(app->configdir, "filetype_extensions.conf", NULL);
 	ui_add_config_file_menu_item(f, NULL, NULL);
-	setptr(f, utils_build_path(app->configdir, GEANY_FILEDEFS_SUBDIR, "filetypes.common", NULL));
+	SETPTR(f, g_build_filename(app->configdir, GEANY_FILEDEFS_SUBDIR, "filetypes.common", NULL));
 	ui_add_config_file_menu_item(f, NULL, NULL);
 	g_free(f);
 
@@ -813,13 +813,13 @@ static GeanyFiletype *check_builtin_filenames(const gchar *utf8_filename)
 #else
 	lfn = g_strdup(utf8_filename);
 #endif
-	setptr(lfn, utils_get_locale_from_utf8(lfn));
+	SETPTR(lfn, utils_get_locale_from_utf8(lfn));
 
-	path = utils_build_path(app->configdir, GEANY_FILEDEFS_SUBDIR, "filetypes.", NULL);
+	path = g_build_filename(app->configdir, GEANY_FILEDEFS_SUBDIR, "filetypes.", NULL);
 	if (g_str_has_prefix(lfn, path))
 		found = TRUE;
 
-	setptr(path, utils_build_path(app->datadir, "filetypes.", NULL));
+	SETPTR(path, g_build_filename(app->datadir, "filetypes.", NULL));
 	if (g_str_has_prefix(lfn, path))
 		found = TRUE;
 
@@ -844,7 +844,7 @@ GeanyFiletype *filetypes_detect_from_extension(const gchar *utf8_filename)
 	base_filename = g_path_get_basename(utf8_filename);
 #ifdef G_OS_WIN32
 	/* use lower case basename */
-	setptr(base_filename, g_utf8_strdown(base_filename, -1));
+	SETPTR(base_filename, g_utf8_strdown(base_filename, -1));
 #endif
 
 	ft = filetypes_find(match_basename, base_filename);
@@ -897,49 +897,44 @@ static GeanyFiletype *find_shebang(const gchar *utf8_filename, const gchar *line
 
 	if (strlen(line) > 2 && line[0] == '#' && line[1] == '!')
 	{
+		static const struct {
+			const gchar *name;
+			filetype_id filetype;
+		} intepreter_map[] = {
+			{ "sh",		GEANY_FILETYPES_SH },
+			{ "bash",	GEANY_FILETYPES_SH },
+			{ "dash",	GEANY_FILETYPES_SH },
+			{ "perl",	GEANY_FILETYPES_PERL },
+			{ "python",	GEANY_FILETYPES_PYTHON },
+			{ "php",	GEANY_FILETYPES_PHP },
+			{ "ruby",	GEANY_FILETYPES_RUBY },
+			{ "tcl",	GEANY_FILETYPES_TCL },
+			{ "make",	GEANY_FILETYPES_MAKE },
+			{ "zsh",	GEANY_FILETYPES_SH },
+			{ "ksh",	GEANY_FILETYPES_SH },
+			{ "csh",	GEANY_FILETYPES_SH },
+			{ "ash",	GEANY_FILETYPES_SH },
+			{ "dmd",	GEANY_FILETYPES_D },
+			{ "wish",	GEANY_FILETYPES_TCL }
+		};
 		gchar *tmp = g_path_get_basename(line + 2);
 		gchar *basename_interpreter = tmp;
+		guint i;
 
-		if (strncmp(tmp, "env ", 4) == 0 && strlen(tmp) > 4)
+		if (g_str_has_prefix(tmp, "env "))
 		{	/* skip "env" and read the following interpreter */
 			basename_interpreter += 4;
 		}
 
-		if (strncmp(basename_interpreter, "sh", 2) == 0)
-			ft = filetypes[GEANY_FILETYPES_SH];
-		else if (strncmp(basename_interpreter, "bash", 4) == 0)
-			ft = filetypes[GEANY_FILETYPES_SH];
-		else if (strncmp(basename_interpreter, "dash", 4) == 0)
-			ft = filetypes[GEANY_FILETYPES_SH];
-		else if (strncmp(basename_interpreter, "perl", 4) == 0)
-			ft = filetypes[GEANY_FILETYPES_PERL];
-		else if (strncmp(basename_interpreter, "python", 6) == 0)
-			ft = filetypes[GEANY_FILETYPES_PYTHON];
-		else if (strncmp(basename_interpreter, "php", 3) == 0)
-			ft = filetypes[GEANY_FILETYPES_PHP];
-		else if (strncmp(basename_interpreter, "ruby", 4) == 0)
-			ft = filetypes[GEANY_FILETYPES_RUBY];
-		else if (strncmp(basename_interpreter, "tcl", 3) == 0)
-			ft = filetypes[GEANY_FILETYPES_TCL];
-		else if (strncmp(basename_interpreter, "make", 4) == 0)
-			ft = filetypes[GEANY_FILETYPES_MAKE];
-		else if (strncmp(basename_interpreter, "zsh", 3) == 0)
-			ft = filetypes[GEANY_FILETYPES_SH];
-		else if (strncmp(basename_interpreter, "ksh", 3) == 0)
-			ft = filetypes[GEANY_FILETYPES_SH];
-		else if (strncmp(basename_interpreter, "csh", 3) == 0)
-			ft = filetypes[GEANY_FILETYPES_SH];
-		else if (strncmp(basename_interpreter, "ash", 3) == 0)
-			ft = filetypes[GEANY_FILETYPES_SH];
-		else if (strncmp(basename_interpreter, "dmd", 3) == 0)
-			ft = filetypes[GEANY_FILETYPES_D];
-		else if (strncmp(basename_interpreter, "wish", 4) == 0)
-			ft = filetypes[GEANY_FILETYPES_TCL];
-
+		for (i = 0; ! ft && i < G_N_ELEMENTS(intepreter_map); i++)
+		{
+			if (g_str_has_prefix(basename_interpreter, intepreter_map[i].name))
+				ft = filetypes[intepreter_map[i].filetype];
+		}
 		g_free(tmp);
 	}
 	/* detect HTML files */
-	if (strncmp(line, "<!DOCTYPE html", 14) == 0 || strncmp(line, "<html", 5) == 0)
+	if (g_str_has_prefix(line, "<!DOCTYPE html") || g_str_has_prefix(line, "<html"))
 	{
 		/* PHP, Perl and Python files might also start with <html, so detect them based on filename
 		 * extension and use the detected filetype, else assume HTML */
@@ -950,7 +945,7 @@ static GeanyFiletype *find_shebang(const gchar *utf8_filename, const gchar *line
 		}
 	}
 	/* detect XML files */
-	else if (utf8_filename && strncmp(line, "<?xml", 5) == 0)
+	else if (utf8_filename && g_str_has_prefix(line, "<?xml"))
 	{
 		/* HTML and DocBook files might also start with <?xml, so detect them based on filename
 		 * extension and use the detected filetype, else assume XML */
@@ -962,11 +957,10 @@ static GeanyFiletype *find_shebang(const gchar *utf8_filename, const gchar *line
 			ft = filetypes[GEANY_FILETYPES_XML];
 		}
 	}
-	else if (strncmp(line, "<?php", 5) == 0)
+	else if (g_str_has_prefix(line, "<?php"))
 	{
 		ft = filetypes[GEANY_FILETYPES_PHP];
 	}
-
 	return ft;
 }
 
@@ -1137,12 +1131,15 @@ static void filetype_free(gpointer data, G_GNUC_UNUSED gpointer user_data)
 	g_free(ft->ftdefcmds);
 	g_free(ft->execcmds);
 	g_free(ft->error_regex_string);
-	if (ft->priv->error_regex)
-		g_regex_unref(ft->priv->error_regex);
 	if (ft->icon)
 		g_object_unref(ft->icon);
-
 	g_strfreev(ft->pattern);
+
+	if (ft->priv->error_regex)
+		g_regex_unref(ft->priv->error_regex);
+	g_slist_foreach(ft->priv->tag_files, (GFunc) g_free, NULL);
+	g_slist_free(ft->priv->tag_files);
+
 	g_free(ft->priv);
 	g_free(ft);
 }
@@ -1190,31 +1187,31 @@ static void load_settings(guint ft_id, GKeyFile *config, GKeyFile *configh)
 	result = utils_get_setting(string, configh, config, "settings", "extension", NULL);
 	if (result != NULL)
 	{
-		setptr(filetypes[ft_id]->extension, result);
+		SETPTR(filetypes[ft_id]->extension, result);
 	}
 
 	/* read comment notes */
 	result = utils_get_setting(string, configh, config, "settings", "comment_open", NULL);
 	if (result != NULL)
 	{
-		setptr(filetypes[ft_id]->comment_open, result);
+		SETPTR(filetypes[ft_id]->comment_open, result);
 	}
 
 	result = utils_get_setting(string, configh, config, "settings", "comment_close", NULL);
 	if (result != NULL)
 	{
-		setptr(filetypes[ft_id]->comment_close, result);
+		SETPTR(filetypes[ft_id]->comment_close, result);
 	}
 
 	result = utils_get_setting(string, configh, config, "settings", "comment_single", NULL);
 	if (result != NULL)
 	{
-		setptr(filetypes[ft_id]->comment_single, result);
+		SETPTR(filetypes[ft_id]->comment_single, result);
 	}
 	/* import correctly filetypes that use old-style single comments */
 	else if (! NZV(filetypes[ft_id]->comment_close))
 	{
-		setptr(filetypes[ft_id]->comment_single, filetypes[ft_id]->comment_open);
+		SETPTR(filetypes[ft_id]->comment_single, filetypes[ft_id]->comment_open);
 		filetypes[ft_id]->comment_open = NULL;
 	}
 
@@ -1225,7 +1222,7 @@ static void load_settings(guint ft_id, GKeyFile *config, GKeyFile *configh)
 	result = utils_get_setting(string, configh, config, "settings", "context_action_cmd", NULL);
 	if (result != NULL)
 	{
-		setptr(filetypes[ft_id]->context_action_cmd, result);
+		SETPTR(filetypes[ft_id]->context_action_cmd, result);
 	}
 
 	result = utils_get_setting(string, configh, config, "settings", "tag_parser", NULL);
@@ -1283,10 +1280,10 @@ static gchar *filetypes_get_filename(GeanyFiletype *ft, gboolean user)
 	gchar *f;
 
 	if (user)
-		f = utils_make_filename(app->configdir,
+		f = g_strconcat(app->configdir, G_DIR_SEPARATOR_S
 			GEANY_FILEDEFS_SUBDIR G_DIR_SEPARATOR_S, "filetypes.", ext, NULL);
 	else
-		f = utils_make_filename(app->datadir, "filetypes.", ext, NULL);
+		f = g_strconcat(app->datadir, G_DIR_SEPARATOR_S "filetypes.", ext, NULL);
 
 	g_free(ext);
 	return f;
@@ -1400,7 +1397,7 @@ void filetypes_load_config(guint ft_id, gboolean reload)
 		f = filetypes_get_filename(ft, FALSE);
 		load_system_keyfile(config, f, G_KEY_FILE_KEEP_COMMENTS, ft);
 
-		setptr(f, filetypes_get_filename(ft, TRUE));
+		SETPTR(f, filetypes_get_filename(ft, TRUE));
 		g_key_file_load_from_file(config_home, f, G_KEY_FILE_KEEP_COMMENTS, NULL);
 		g_free(f);
 	}
@@ -1628,7 +1625,7 @@ static void convert_filetype_extensions_to_lower_case(gchar **patterns, gsize le
 	guint i;
 	for (i = 0; i < len; i++)
 	{
-		setptr(patterns[i], g_ascii_strdown(patterns[i], -1));
+		SETPTR(patterns[i], g_ascii_strdown(patterns[i], -1));
 	}
 }
 #endif
@@ -1675,7 +1672,7 @@ static void read_group(GKeyFile *config, const gchar *group_name, gint group_id)
 			if (ft->priv->custom &&
 				(group_id == GEANY_FILETYPE_GROUP_COMPILED || group_id == GEANY_FILETYPE_GROUP_SCRIPT))
 			{
-				setptr(ft->title, NULL);
+				SETPTR(ft->title, NULL);
 				filetype_make_title(ft, TITLE_SOURCE_FILE);
 			}
 		}

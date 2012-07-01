@@ -1,8 +1,8 @@
 /*
  *      sciwrappers.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2005-2011 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2006-2011 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2005-2012 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2006-2012 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -526,6 +526,17 @@ gint sci_get_length(ScintillaObject *sci)
 gint sci_get_lexer(ScintillaObject *sci)
 {
 	return (gint) SSM(sci, SCI_GETLEXER, 0, 0);
+}
+
+
+void sci_set_lexer(ScintillaObject *sci, guint lexer_id)
+{
+	gint old = sci_get_lexer(sci);
+
+	SSM(sci, SCI_SETLEXER, lexer_id, 0);
+
+	if (old != (gint)lexer_id)
+		SSM(sci, SCI_CLEARDOCUMENTSTYLE, 0, 0);
 }
 
 
@@ -1242,4 +1253,14 @@ void sci_lines_join(ScintillaObject *sci)
 gint sci_text_width(ScintillaObject *sci, gint styleNumber, const gchar *text)
 {
 	return (gint) SSM(sci, SCI_TEXTWIDTH, (uptr_t) styleNumber, (sptr_t) text);
+}
+
+void sci_move_selected_lines_down(ScintillaObject *sci)
+{
+	SSM(sci, SCI_MOVESELECTEDLINESDOWN, 0, 0);
+}
+
+void sci_move_selected_lines_up(ScintillaObject *sci)
+{
+	SSM(sci, SCI_MOVESELECTEDLINESUP, 0, 0);
 }

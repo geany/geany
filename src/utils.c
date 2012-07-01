@@ -1,8 +1,8 @@
 /*
  *      utils.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2005-2011 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2006-2011 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2005-2012 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2006-2012 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -92,7 +92,7 @@ void utils_open_browser(const gchar *uri)
 			if (new_cmd == NULL) /* user canceled */
 				again = FALSE;
 			else
-				setptr(tool_prefs.browser_cmd, new_cmd);
+				SETPTR(tool_prefs.browser_cmd, new_cmd);
 		}
 		g_free(cmdline);
 	}
@@ -454,7 +454,7 @@ static gchar *utf8_strdown(const gchar *str)
 	{
 		down = g_locale_to_utf8(str, -1, NULL, NULL, NULL);
 		if (down)
-			setptr(down, g_utf8_strdown(down, -1));
+			SETPTR(down, g_utf8_strdown(down, -1));
 	}
 
 	return down;
@@ -1440,8 +1440,6 @@ GSList *utils_get_file_list_full(const gchar *path, gboolean full_path, gboolean
 	/* sorting last is quicker than on insertion */
 	if (sort)
 		list = g_slist_sort(list, (GCompareFunc) utils_str_casecmp);
-	else
-		list = g_slist_reverse(list);
 	return list;
 }
 
@@ -1754,69 +1752,6 @@ gboolean utils_spawn_async(const gchar *dir, gchar **argv, gchar **env, GSpawnFl
 }
 
 
-static gboolean utils_string_vappend(GString *buffer, const gchar *sep, va_list args)
-{
-	const gchar *str = va_arg(args, const gchar *);
-
-	if (!str)
-		return FALSE;
-	do
-	{
-		g_string_append(buffer, str);
-		str = va_arg(args, const gchar *);
-		if (str && sep)
-			g_string_append(buffer, sep);
-	}
-	while (str);
-
-	return TRUE;
-}
-
-
-/* Like g_build_path() but without first argument. */
-gchar *utils_build_path(const gchar *first, ...)
-{
-	static GString *buffer = NULL;
-	va_list args;
-
-	if (! buffer)
-		buffer = g_string_new(first);
-	else
-		g_string_assign(buffer, first);
-
-	g_string_append_c(buffer, G_DIR_SEPARATOR);
-
-	va_start(args, first);
-	utils_string_vappend(buffer, G_DIR_SEPARATOR_S, args);
-	va_end(args);
-	return g_strdup(buffer->str);
-}
-
-
-/* Concatenates a path with other strings.
- * @param path A path, which will have a separator added before the other strings.
- * @param ... Strings to concatenate (no directory separators will be
- * 	inserted between them).
- * E.g. filename = utils_make_filename(app->datadir, "filetypes.", ext, NULL); */
-gchar *utils_make_filename(const gchar *path, ...)
-{
-	static GString *buffer = NULL;
-	va_list args;
-
-	if (! buffer)
-		buffer = g_string_new(path);
-	else
-		g_string_assign(buffer, path);
-
-	g_string_append_c(buffer, G_DIR_SEPARATOR);
-
-	va_start(args, path);
-	utils_string_vappend(buffer, NULL, args);
-	va_end(args);
-	return g_strdup(buffer->str);
-}
-
-
 /* Retrieves the path for the given URI.
  * It returns:
  * - the path which was determined by g_filename_from_uri() or GIO
@@ -1978,17 +1913,6 @@ gchar *utils_str_remove_chars(gchar *string, const gchar *chars)
 }
 
 
-static void utils_slist_remove_next(GSList *node)
-{
-	GSList *old = node->next;
-
-	g_return_if_fail(old);
-
-	node->next = old->next;
-	g_slist_free_1(old);
-}
-
-
 /* Gets list of sorted filenames with no path and no duplicates from user and system config */
 GSList *utils_get_config_files(const gchar *subdir)
 {
@@ -2000,7 +1924,7 @@ GSList *utils_get_config_files(const gchar *subdir)
 	{
 		utils_mkdir(path, FALSE);
 	}
-	setptr(path, g_build_path(G_DIR_SEPARATOR_S, app->datadir, subdir, NULL));
+	SETPTR(path, g_build_path(G_DIR_SEPARATOR_S, app->datadir, subdir, NULL));
 	syslist = utils_get_file_list_full(path, FALSE, FALSE, NULL);
 	/* merge lists */
 	list = g_slist_concat(list, syslist);
@@ -2011,8 +1935,11 @@ GSList *utils_get_config_files(const gchar *subdir)
 	{
 		if (node->next && utils_str_equal(node->next->data, node->data))
 		{
-			g_free(node->next->data);
-			utils_slist_remove_next(node);
+			GSList *old = node->next;
+
+			g_free(old->data);
+			node->next = old->next;
+			g_slist_free1(old);
 		}
 	}
 	g_free(path);
@@ -2044,7 +1971,7 @@ gchar *utils_get_help_url(const gchar *suffix)
 
 	if (suffix != NULL)
 	{
-		setptr(uri, g_strconcat(uri, suffix, NULL));
+		SETPTR(uri, g_strconcat(uri, suffix, NULL));
 	}
 
 	return uri;

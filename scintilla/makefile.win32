@@ -8,8 +8,8 @@
 # To force GTK+ 1 build, define GTK1 on the make command line.
 
 .SUFFIXES: .cxx .c .o .h .a
-CC = g++
-CCOMP = gcc
+CXX = g++
+CC = gcc
 AR = ar
 RANLIB = ranlib
 PREFIX = C:\libs
@@ -55,9 +55,9 @@ CONFIGFLAGS=$(GTK_INCLUDES)
 MARSHALLER=scintilla-marshal.o
 
 .cxx.o:
-	$(CC) $(CXXFLAGS) -c $<
+	$(CXX) $(CXXFLAGS) -c $<
 .c.o:
-	$(CCOMP) $(CXXFLAGS) -w -c $<
+	$(CC) $(CXXFLAGS) -c $<
 
 LEXOBJS=\
 LexAda.o \
@@ -139,7 +139,7 @@ $(COMPLIB): $(MARSHALLER) $(LEXOBJS) $(SRCOBJS)
 	$(RANLIB) $@
 
 deps.mak:
-	$(CC) -MM  $(CXXFLAGS) gtk/*.cxx lexers/*.cxx lexlib/*.cxx src/*.cxx >deps.mak
+	$(CXX) -MM  $(CXXFLAGS) gtk/*.cxx lexers/*.cxx lexlib/*.cxx src/*.cxx >deps.mak
 
 # Generate header dependencies with "make deps.mak"
 include deps.mak

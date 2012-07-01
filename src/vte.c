@@ -1,8 +1,8 @@
 /*
  *      vte.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2005-2011 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2006-2011 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2005-2012 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2006-2012 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -712,7 +712,7 @@ G_MODULE_EXPORT void on_term_font_set(GtkFontButton *widget, gpointer user_data)
 
 	if (! utils_str_equal(fontbtn, vc->font))
 	{
-		setptr(vc->font, g_strdup(gtk_font_button_get_font_name(widget)));
+		SETPTR(vc->font, g_strdup(gtk_font_button_get_font_name(widget)));
 		vte_apply_user_settings();
 	}
 }
@@ -803,7 +803,7 @@ void vte_send_selection_to_vte(void)
 		   this is disabled by default as it could cause all sorts of damage. */
 		if (text[len-1] != '\n' && text[len-1] != '\r')
 		{
-			setptr(text, g_strconcat(text, "\n", NULL));
+			SETPTR(text, g_strconcat(text, "\n", NULL));
 			len++;
 		}
 	}

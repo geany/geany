@@ -1,9 +1,9 @@
 /*
  *      ui_utils.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2006-2011 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2006-2011 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
- *      Copyright 2011 Matthew Brush <mbrush(at)codebrainz(dot)ca>
+ *      Copyright 2006-2012 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2006-2012 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2011-2012 Matthew Brush <mbrush(at)codebrainz(dot)ca>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -178,6 +178,7 @@ static void add_statusbar_statistics(GString *stats_str,
 	const gchar *fmt;
 	const gchar *expos;	/* % expansion position */
 	const gchar sp[] = "      ";
+	ScintillaObject *sci = doc->editor->sci;
 
 	fmt = NZV(statusbar_template) ? statusbar_template :
 		/* Status bar statistics: col = column, sel = selection. */
@@ -206,9 +207,19 @@ static void add_statusbar_statistics(GString *stats_str,
 				g_string_append_printf(stats_str, "%d", col + 1);
 				break;
 			case 's':
-				g_string_append_printf(stats_str, "%d",
-					sci_get_selected_text_length(doc->editor->sci) - 1);
+			{
+				gint len = sci_get_selected_text_length(sci) - 1;
+				/* check if whole lines are selected */
+				if (!len || sci_get_col_from_position(sci,
+						sci_get_selection_start(sci)) != 0 ||
+					sci_get_col_from_position(sci,
+						sci_get_selection_end(sci)) != 0)
+					g_string_append_printf(stats_str, "%d", len);
+				else /* L = lines */
+					g_string_append_printf(stats_str, _("%dL"),
+						sci_get_lines_selected(doc->editor->sci) - 1);
 				break;
+			}
 			case 'w':
 				/* RO = read-only */
 				g_string_append(stats_str, (doc->readonly) ? _("RO ") :
@@ -314,9 +325,9 @@ void ui_update_statusbar(GeanyDocument *doc, gint pos)
 	{
 		const gchar sp[] = "      ";
 		g_string_append(stats_str, sp);
-		g_string_append_printf(stats_str, "pos: %d", pos);
+		g_string_append_printf(stats_str, _("pos: %d"), pos);
 		g_string_append(stats_str, sp);
-		g_string_append_printf(stats_str, "style: %d", sci_get_style_at(doc->editor->sci, pos));
+		g_string_append_printf(stats_str, _("style: %d"), sci_get_style_at(doc->editor->sci, pos));
 	}
 #endif
 		/* can be overridden by status messages */
@@ -960,7 +971,7 @@ static gboolean have_tango_icon_theme(void)
 		gchar *theme_name;
 
 		g_object_get(G_OBJECT(gtk_settings_get_default()), "gtk-icon-theme-name", &theme_name, NULL);
-		setptr(theme_name, g_utf8_strdown(theme_name, -1));
+		SETPTR(theme_name, g_utf8_strdown(theme_name, -1));
 
 		result = (strstr(theme_name, "tango") != NULL);
 		checked = TRUE;
@@ -1455,7 +1466,8 @@ static void entry_clear_icon_release_cb(GtkEntry *entry, gint icon_pos,
  */
 void ui_entry_add_clear_icon(GtkEntry *entry)
 {
-	g_object_set(entry, "secondary-icon-stock", GTK_STOCK_CLEAR, NULL);
+	g_object_set(entry, "secondary-icon-stock", GTK_STOCK_CLEAR,
+		"secondary-icon-activatable", TRUE, NULL);
 	g_signal_connect(entry, "icon-release", G_CALLBACK(entry_clear_icon_release_cb), NULL);
 }
 
@@ -2000,13 +2012,16 @@ void ui_swap_sidebar_pos(void)
 	GtkWidget *pane = ui_lookup_widget(main_widgets.window, "hpaned1");
 	GtkWidget *left = gtk_paned_get_child1(GTK_PANED(pane));
 	GtkWidget *right = gtk_paned_get_child2(GTK_PANED(pane));
-	GtkWidget *box = ui_lookup_widget(main_widgets.window, "vbox1");
 
-	/* reparenting avoids scintilla problem with middle click paste */
-	gtk_widget_reparent(left, box);
-	gtk_widget_reparent(right, box);
-	gtk_widget_reparent(right, pane);
-	gtk_widget_reparent(left, pane);
+	g_object_ref(left);
+	g_object_ref(right);
+	gtk_container_remove (GTK_CONTAINER (pane), left);
+	gtk_container_remove (GTK_CONTAINER (pane), right);
+	/* only scintilla notebook should expand */
+	gtk_paned_pack1(GTK_PANED(pane), right, right == main_widgets.notebook, TRUE);
+	gtk_paned_pack2(GTK_PANED(pane), left, left == main_widgets.notebook, TRUE);
+	g_object_unref(left);
+	g_object_unref(right);
 
 	gtk_paned_set_position(GTK_PANED(pane), pane->allocation.width
 		- gtk_paned_get_position(GTK_PANED(pane)));
@@ -2199,11 +2214,6 @@ void ui_init_builder(void)
 		return;
 
 	builder = gtk_builder_new();
-	if (! builder)
-	{
-		g_error("Failed to initialize the user-interface");
-		return;
-	}
 
 	gtk_builder_set_translation_domain(builder, GETTEXT_PACKAGE);
 
@@ -2441,6 +2451,15 @@ GtkWidget *ui_lookup_widget(GtkWidget *widget, const gchar *widget_name)
 	if (G_UNLIKELY(found_widget == NULL))
 		g_warning("Widget not found: %s", widget_name);
 	return found_widget;
+}
+
+
+/* wraps gtk_builder_get_object()
+ * unlike ui_lookup_widget(), it does only support getting object created from the main
+ * UI file, but it can fetch any object, not only widgets */
+gpointer ui_builder_get_object (const gchar *name)
+{
+	return gtk_builder_get_object (builder, name);
 }
 
 
@@ -2775,9 +2794,9 @@ void ui_focus_current_document(void)
 }
 
 
-/** Finds the label text associated with @a stock_id.
- * @p stock_id e.g. @c GTK_STOCK_OPEN.
- * @return .
+/** Finds the label text associated with stock_id
+ * @param stock_id stock_id to lookup e.g. @c GTK_STOCK_OPEN.
+ * @return The label text for stock
  * @since Geany 1.22 */
 const gchar *ui_lookup_stock_label(const gchar *stock_id)
 {

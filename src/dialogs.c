@@ -1,8 +1,8 @@
 /*
  *      dialogs.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2005-2011 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2006-2011 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2005-2012 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2006-2012 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -459,7 +459,7 @@ void dialogs_show_open_file(void)
 	if (! initdir)
 		initdir = g_strdup(utils_get_default_dir_utf8());
 
-	setptr(initdir, utils_get_locale_from_utf8(initdir));
+	SETPTR(initdir, utils_get_locale_from_utf8(initdir));
 
 #ifdef G_OS_WIN32
 	if (interface_prefs.use_native_windows_dialogs)
@@ -922,10 +922,10 @@ void dialogs_show_open_font()
 		g_signal_connect(GTK_FONT_SELECTION_DIALOG(ui_widgets.open_fontsel)->apply_button,
 					"clicked", G_CALLBACK(on_font_apply_button_clicked), NULL);
 
-		gtk_font_selection_dialog_set_font_name(
-			GTK_FONT_SELECTION_DIALOG(ui_widgets.open_fontsel), interface_prefs.editor_font);
 		gtk_window_set_transient_for(GTK_WINDOW(ui_widgets.open_fontsel), GTK_WINDOW(main_widgets.window));
 	}
+	gtk_font_selection_dialog_set_font_name(
+		GTK_FONT_SELECTION_DIALOG(ui_widgets.open_fontsel), interface_prefs.editor_font);
 	/* We make sure the dialog is visible. */
 	gtk_window_present(GTK_WINDOW(ui_widgets.open_fontsel));
 #endif

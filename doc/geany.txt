@@ -1,4 +1,4 @@
-.. |(version)| replace:: 1.22
+.. |(version)| replace:: 1.23
 
 =======
  Geany
@@ -11,11 +11,12 @@
 :Authors: Enrico Tröger,
           Nick Treleaven,
           Frank Lanitz,
-          Colomban Wendling
-:Date: 2011-10-02
+          Colomban Wendling,
+          Matthew Brush
+:Date: 2012-06-18
 :Version: |(version)|
 
-Copyright © 2005-2011
+Copyright © 2005-2012
 
 This document is distributed under the terms of the GNU General Public
 License as published by the Free Software Foundation; either version 2
@@ -424,17 +425,17 @@ Startup
 
 At startup, Geany loads all files from the last time Geany was
 launched. You can disable this feature in the preferences dialog
-(see `General Startup preferences`_). If you specify some
-files on the command line, only these files will be opened, but you
-can find the files from the last session in the file menu under the
-"Recent files" item. By default this contains the last 10 recently
-opened files. You can change the number of recently opened files in
-the preferences dialog.
+(see `General Startup preferences`_).
 
 You can start several instances of Geany, but only the first will
-load files from the last session. To run a second instance of Geany,
-do not specify any filenames on the command-line, or disable opening
-files in a running instance using the appropriate command line option.
+load files from the last session. In the subsequent instances, you
+can find these files in the file menu under the "Recent files" item.
+By default this contains the last 10 recently opened files. You can
+change the number of recently opened files in the preferences dialog.
+
+To run a second instance of Geany, do not specify any filenames on
+the command-line, or disable opening files in a running instance
+using the appropriate command line option.
 
 
 Opening files from the command-line in a running instance
@@ -747,12 +748,13 @@ Column mode editing (rectangular selections)
 
 There is basic support for column mode editing. To use it, create a
 rectangular selection by holding down the Control and Shift keys
-(or Control and Alt if it doesn't work) while
-selecting some text. It is also possible to create a zero-column selection.
+(or Alt and Shift on Windows) while selecting some text.
 Once a rectangular selection exists you can start editing the text within
 this selection and the modifications will be done for every line in the
 selection.
 
+It is also possible to create a zero-column selection - this is
+useful to insert text on multiple lines.
 
 Drag and drop of text
 ^^^^^^^^^^^^^^^^^^^^^
@@ -1592,6 +1594,8 @@ Different tag attributes like the return value or the argument list
 are separated with different characters indicating the type of the
 following argument.
 
+Pipe-separated format
+*********************
 The Pipe-separated format is easier to read and write.
 There is one tag per line and different tag attributes are separated
 by the pipe character (``|``). A line looks like::
@@ -1636,12 +1640,15 @@ Example for the wxD library for the D programming language::
     geany -g wxd.d.tags /home/username/wxd/wx/*.d
 
 
-*Generating C/C++ tag files:*
+Generating C/C++ tag files
+**************************
+You may need to first setup the `C ignore.tags`_ file.
 
-For C/C++ tag files, gcc and grep are required, so that header files
-can be preprocessed to include any other headers they depend upon.
+For C/C++ tag files gcc is required by default, so that header files
+can be preprocessed to include any other headers they depend upon. If
+you do not want this, use the ``-P`` option described above.
 
-For C/C++ files, the environment variable CFLAGS should be set with
+For preprocessing, the environment variable CFLAGS should be set with
 appropriate ``-I/path`` include paths. The following example works with
 the bash shell, generating tags for the GnomeUI library::
 
@@ -1652,26 +1659,11 @@ You can adapt this command to use CFLAGS and header files appropriate
 for whichever libraries you want.
 
 
-*Replacing the default C/C++ tags file:*
-
-Geany currently uses a default global tags file c99.tags for
-C and C++, commonly installed in /usr/share/geany. This file can
-be replaced with one containing tags parsed from a different set
-of header files. When Geany is next started, your custom tags file
-will be loaded instead of the default c99.tags. You should keep a
-copy of the generated tags file because it will get overwritten when
-upgrading Geany.
-
-*Generating tag files on Windows:*
-
-This works basically the same as on other platforms but you need to make
-sure you have grep installed and Geany can find it, i.e. it must be
-in the PATH environment variable. To test this, open a console window
-and type ``grep`` and see whether it is executed.
-If it is, then you can create a tags file like the following::
+Generating tag files on Windows
+*******************************
+This works basically the same as on other platforms::
 
     "c:\program files\geany\bin\geany" -g c:\mytags.php.tags c:\code\somefile.php
-
 
 
 C ignore.tags
@@ -1712,6 +1704,11 @@ manual page:
 
 For even more detailed information please read the manual page of
 Exuberant Ctags.
+
+Geany extends Ctags with a '*' character suffix - this means use
+prefix matching, e.g. G_GNUC_* will match G_GNUC_NULL_TERMINATED, etc.
+Note that prefix match items should be put after other items to ensure
+that items like G_GNUC_PRINTF+ get parsed correctly.
 
 
 Preferences
@@ -1767,7 +1764,6 @@ Paths
 Startup path
     Path to start in when opening or saving files.
     It must be an absolute path.
-    Leave it blank to use the current working directory.
 
 Project files
     Path to start in when opening project files.
@@ -1980,6 +1976,8 @@ Features
 
 Line wrapping
     Show long lines wrapped around to new display lines.
+
+.. _smart_home_key:
 
 "Smart" home key
     Whether to move the cursor to the first non-whitespace character
@@ -3490,22 +3488,25 @@ Go to tag definition            Ctrl-T                    Jump to the definition
 Go to tag declaration           Ctrl-Shift-T              Jump to the declaration of the current word or
                                                           selection. See `Go to tag declaration`_.
 
-Go to Start of Line             Home                      Move the caret to the end of the line indentation
-                                                          unless it is already there, in which case it moves
-                                                          it to the start of the line.
+Go to Start of Line             Home                      Move the caret to the start of the line.
+                                                          Behaves differently if smart_home_key_ is set.
 
 Go to End of Line               End                       Move the caret to the end of the line.
 
-Go to End of Display Line       Alt-End                   Move the caret to the end of the display line.
+Go to Start of Display Line     Alt-Home                  Move the caret to the start of the display line.
                                                           This is useful when you use line wrapping and
-                                                          want to jump to the end of the wrapped, virtual
-                                                          line, not the real end of the whole line.
+                                                          want to jump to the start of the wrapped, virtual
+                                                          line, not the real start of the whole line.
                                                           If the line is not wrapped, it behaves like
-                                                          `Go to End of Line`, see above.
+                                                          `Go to Start of Line`.
+
+Go to End of Display Line       Alt-End                   Move the caret to the end of the display line.
+                                                          If the line is not wrapped, it behaves like
+                                                          `Go to End of Line`.
 
 Go to Previous Word Part        Ctrl-/                    Goto the previous part of the current word.
 
-Go to Next Word Part            Ctrl-\                    Goto the next part of the current word.
+Go to Next Word Part            Ctrl-\\                   Goto the next part of the current word.
 =============================== ========================= ==================================================
 
 View keybindings
@@ -4989,7 +4990,7 @@ Contributing to this document
 This document (``geany.txt``) is written in `reStructuredText`__
 (or "reST"). The source file for it is located in Geany's ``doc``
 subdirectory.  If you intend on making changes, you should grab the
-source right from SVN to make sure you've got the newest version. After
+source right from Git to make sure you've got the newest version. After
 editing the file, to build the HTML document to see how your changes
 look, run "``make doc``" in the subdirectory ``doc`` of Geany's source
 directory. This regenerates the ``geany.html`` file. To generate a PDF
@@ -4998,11 +4999,24 @@ geany-|(version)|.pdf.
 
 __ http://docutils.sourceforge.net/rst.html
 
-After you are happy with your changes, create a patch::
+After you are happy with your changes, create a patch e.g. by using::
 
-    % svn diff geany.txt > foo.patch
+    % git diff geany.txt > foo.patch
+
+or even better, by creating a Git-formatted patch which will keep authoring
+and description data, by first committing your changes (doing so in a fresh
+new branch is recommended for `matser` not to diverge from upstream) and then
+using git format-patch::
+
+    % git checkout -b my-documentation-changes # create a fresh branch
+    % git commit geany.txt
+    Write a good commit message...
+    % git format-patch HEAD^
+    % git checkout master # go back to master
 
 and then submit that file to the mailing list for review.
+
+Also you can clone the Geany repository at GitHub and send a pull request.
 
 Note, you will need the Python docutils software package installed
 to build the docs. The package is named ``python-docutils`` on Debian
@@ -5032,8 +5046,10 @@ Keyboard commands
 Keyboard commands for Scintilla mostly follow common Windows and GTK+
 conventions. All move keys (arrows, page up/down, home and end)
 allows to extend or reduce the stream selection when holding the
-Shift key, and the rectangular selection when holding the Shift and
-Ctrl keys. Some keys may not be available with some national keyboards
+Shift key, and the rectangular selection when holding the
+appropriate keys (see `Column mode editing (rectangular selections)`_).
+
+Some keys may not be available with some national keyboards
 or because they are taken by the system such as by a window manager
 or GTK. Keyboard equivalents of menu commands are listed in the
 menus. Some less common commands with no menu equivalent are:

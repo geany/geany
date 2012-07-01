@@ -1,8 +1,8 @@
 /*
  *      main.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2005-2011 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2006-2011 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2005-2012 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2006-2012 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -528,6 +528,13 @@ static void parse_command_line_options(gint *argc, gchar ***argv)
 	}
 
 	app->debug_mode = verbose_mode;
+	if (app->debug_mode)
+	{
+		/* Since GLib 2.32 messages logged with levels INFO and DEBUG aren't output by the
+		 * default log handler unless the G_MESSAGES_DEBUG environment variable contains the
+		 * domain of the message or is set to the special value "all" */
+		g_setenv("G_MESSAGES_DEBUG", "all", FALSE);
+	}
 
 #ifdef G_OS_WIN32
 	win32_init_debug_code();
@@ -721,7 +728,7 @@ static gint setup_config_dir(void)
 	gint mkdir_result = 0;
 
 	/* convert configdir to locale encoding to avoid troubles */
-	setptr(app->configdir, utils_get_locale_from_utf8(app->configdir));
+	SETPTR(app->configdir, utils_get_locale_from_utf8(app->configdir));
 
 	mkdir_result = create_config_dir();
 	if (mkdir_result != 0)
@@ -736,7 +743,7 @@ static gint setup_config_dir(void)
 	}
 	/* make configdir a real path */
 	if (g_file_test(app->configdir, G_FILE_TEST_EXISTS))
-		setptr(app->configdir, tm_get_real_path(app->configdir));
+		SETPTR(app->configdir, tm_get_real_path(app->configdir));
 
 	return mkdir_result;
 }
@@ -798,11 +805,9 @@ gboolean main_handle_filename(const gchar *locale_filename)
 
 
 /* open files from command line */
-static gboolean open_cl_files(gint argc, gchar **argv)
+static void open_cl_files(gint argc, gchar **argv)
 {
 	gint i;
-
-	if (argc <= 1) return FALSE;
 
 	for (i = 1; i < argc; i++)
 	{
@@ -816,7 +821,7 @@ static gboolean open_cl_files(gint argc, gchar **argv)
 
 #ifdef G_OS_WIN32
 		/* It seems argv elements are encoded in CP1252 on a German Windows */
-		setptr(filename, g_locale_to_utf8(filename, -1, NULL, NULL, NULL));
+		SETPTR(filename, g_locale_to_utf8(filename, -1, NULL, NULL, NULL));
 #endif
 		if (filename && ! main_handle_filename(filename))
 		{
@@ -828,7 +833,6 @@ static gboolean open_cl_files(gint argc, gchar **argv)
 		}
 		g_free(filename);
 	}
-	return TRUE;
 }
 
 
@@ -866,13 +870,9 @@ static void load_settings(void)
 
 void main_load_project_from_command_line(const gchar *locale_filename, gboolean use_session)
 {
-	gchar *pfile = NULL;
+	gchar *pfile;
 
-	if (utils_is_uri(locale_filename))
-		pfile = utils_get_path_from_uri(locale_filename);
-	else
-		pfile = g_strdup(locale_filename);
-
+	pfile = utils_get_path_from_uri(locale_filename);
 	if (pfile != NULL)
 	{
 		if (use_session)
@@ -886,39 +886,42 @@ void main_load_project_from_command_line(const gchar *locale_filename, gboolean 
 
 static void load_startup_files(gint argc, gchar **argv)
 {
-	gboolean load_project_from_cl = FALSE;
+	gboolean load_session = FALSE;
 
-	/* ATM when opening a project file any other filenames are ignored */
-	load_project_from_cl = (argc > 1) && g_str_has_suffix(argv[1], ".geany");
-	if (load_project_from_cl && argc > 2)
-		g_print("Ignoring extra filenames after %s", argv[1]);
-
-	if (load_project_from_cl || ! open_cl_files(argc, argv))
+	if (argc > 1 && g_str_has_suffix(argv[1], ".geany"))
 	{
-		if (prefs.load_session)
+		/* project file specified: load it, but decide the session later */
+		main_load_project_from_command_line(argv[1], FALSE);
+		argc--, argv++;
+		/* force session load if using project-based session files */
+		load_session = project_prefs.project_session;
+	}
+
+	/* Load the default session if:
+	 * 1. "Load files from the last session" is active.
+	 * 2. --no-session is not specified.
+	 * 3. We are a primary instance.
+	 * Has no effect if a CL project is loaded and using project-based session files. */
+	if (prefs.load_session && cl_options.load_session && !cl_options.new_instance)
+	{
+		if (app->project == NULL)
+			load_session_project_file();
+		load_session = TRUE;
+	}
+
+	if (load_session)
+	{
+		/* load session files into tabs, as they are found in the session_files variable */
+		configuration_open_files();
+
+		if (gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook)) == 0)
 		{
-			if (load_project_from_cl)
-			{
-				main_load_project_from_command_line(argv[1], FALSE);
-			}
-			else if (cl_options.load_session && !cl_options.new_instance)
-				load_session_project_file();
-
-			/* when we want a new instance, we still load project session files unless -s
-			 * was passed */
-			if (!cl_options.load_session || (!load_project_from_cl && cl_options.new_instance))
-				return;
-
-			/* load session files into tabs, as they are found in the session_files variable */
-			configuration_open_files();
-
-			if (gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook)) == 0)
-			{
-				ui_update_popup_copy_items(NULL);
-				ui_update_popup_reundo_items(NULL);
-			}
+			ui_update_popup_copy_items(NULL);
+			ui_update_popup_reundo_items(NULL);
 		}
 	}
+
+	open_cl_files(argc, argv);
 }
 
 
@@ -1037,7 +1040,6 @@ gint main(gint argc, gchar **argv)
 	sidebar_init();
 	load_settings();	/* load keyfile */
 
-	highlighting_init();
 	msgwin_init();
 	build_init();
 	ui_create_insert_menu_items();
@@ -1223,6 +1225,7 @@ void main_quit()
 	g_free(printing_prefs.external_print_cmd);
 	g_free(printing_prefs.page_header_datefmt);
 	g_strfreev(ui_prefs.custom_commands);
+	g_strfreev(ui_prefs.custom_commands_labels);
 
 	queue_free(ui_prefs.recent_queue);
 	queue_free(ui_prefs.recent_projects_queue);

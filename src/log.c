@@ -1,8 +1,8 @@
 /*
  *      log.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2008-2011 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2008-2011 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2008-2012 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2008-2012 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -116,7 +116,8 @@ static void handler_log(const gchar *domain, GLogLevelFlags level, const gchar *
 {
 	gchar *time_str;
 
-	if (G_LIKELY(app != NULL && app->debug_mode))
+	if (G_LIKELY(app != NULL && app->debug_mode) ||
+		! ((G_LOG_LEVEL_DEBUG | G_LOG_LEVEL_INFO | G_LOG_LEVEL_MESSAGE) & level))
 	{
 #ifdef G_OS_WIN32
 		/* On Windows g_log_default_handler() is not enough, we need to print it

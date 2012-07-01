@@ -1,8 +1,8 @@
 /*
  *      editor.h - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2005-2011 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2006-2011 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2005-2012 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2006-2012 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -22,6 +22,8 @@
 
 #ifndef GEANY_EDITOR_H
 #define GEANY_EDITOR_H 1
+
+G_BEGIN_DECLS
 
 #include "Scintilla.h"
 #include "ScintillaWidget.h"
@@ -316,5 +318,7 @@ void editor_toggle_fold(GeanyEditor *editor, gint line, gint modifiers);
 const gchar *editor_find_snippet(GeanyEditor *editor, const gchar *snippet_name);
 
 void editor_insert_snippet(GeanyEditor *editor, gint pos, const gchar *snippet);
+
+G_END_DECLS
 
 #endif

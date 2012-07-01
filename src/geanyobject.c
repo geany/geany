@@ -1,8 +1,8 @@
 /*
  *      geanyobject.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2007-2011 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2007-2011 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2007-2012 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2007-2012 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -269,11 +269,11 @@ static void create_signals(GObjectClass *g_object_class)
 		NULL, NULL,
 		g_cclosure_marshal_VOID__VOID,
 		G_TYPE_NONE, 0);
-	geany_object_signals[GCB_PROJECT_DIALOG_CREATE] = g_signal_new (
-		"project-dialog-create",
+	geany_object_signals[GCB_PROJECT_DIALOG_OPEN] = g_signal_new (
+		"project-dialog-open",
 		G_OBJECT_CLASS_TYPE (g_object_class),
 		G_SIGNAL_RUN_FIRST,
-		G_STRUCT_OFFSET (GeanyObjectClass, project_dialog_create),
+		G_STRUCT_OFFSET (GeanyObjectClass, project_dialog_open),
 		NULL, NULL,
 		g_cclosure_marshal_VOID__POINTER,
 		G_TYPE_NONE, 1,
@@ -283,6 +283,15 @@ static void create_signals(GObjectClass *g_object_class)
 		G_OBJECT_CLASS_TYPE (g_object_class),
 		G_SIGNAL_RUN_FIRST,
 		G_STRUCT_OFFSET (GeanyObjectClass, project_dialog_confirmed),
+		NULL, NULL,
+		g_cclosure_marshal_VOID__POINTER,
+		G_TYPE_NONE, 1,
+		G_TYPE_POINTER);
+	geany_object_signals[GCB_PROJECT_DIALOG_CLOSE] = g_signal_new (
+		"project-dialog-close",
+		G_OBJECT_CLASS_TYPE (g_object_class),
+		G_SIGNAL_RUN_FIRST,
+		G_STRUCT_OFFSET (GeanyObjectClass, project_dialog_close),
 		NULL, NULL,
 		g_cclosure_marshal_VOID__POINTER,
 		G_TYPE_NONE, 1,

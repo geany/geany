@@ -1,8 +1,8 @@
 /*
  *      search.h - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2006-2011 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2006-2011 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2006-2012 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2006-2012 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -27,6 +27,8 @@
 
 #ifndef GEANY_SEARCH_H
 #define GEANY_SEARCH_H 1
+
+G_BEGIN_DECLS
 
 /* the flags given in the search dialog for "find next", also used by the search bar */
 typedef struct GeanySearchData
@@ -97,5 +99,7 @@ gint search_replace_target(struct _ScintillaObject *sci, const gchar *replace_te
 
 guint search_replace_range(struct _ScintillaObject *sci, struct Sci_TextToFind *ttf,
 		gint flags, const gchar *replace_text);
+
+G_END_DECLS
 
 #endif

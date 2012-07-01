@@ -425,7 +425,6 @@ static void ColouriseBashDoc(unsigned int startPos, int length, int initStyle,
 				}
 				break;
 			case SCE_SH_STRING:	// delimited styles
-			case SCE_SH_CHARACTER:
 			case SCE_SH_BACKTICKS:
 			case SCE_SH_PARAM:
 				if (sc.ch == '\\' && Quote.Up != '\\') {
@@ -437,6 +436,14 @@ static void ColouriseBashDoc(unsigned int startPos, int length, int initStyle,
 					}
 				} else if (sc.ch == Quote.Up) {
 					Quote.Count++;
+				}
+				break;
+			case SCE_SH_CHARACTER: // singly-quoted strings
+				if (sc.ch == Quote.Down) {
+					Quote.Count--;
+					if (Quote.Count == 0) {
+						sc.ForwardSetState(SCE_SH_DEFAULT);
+					}
 				}
 				break;
 		}
@@ -507,7 +514,7 @@ static void ColouriseBashDoc(unsigned int startPos, int length, int initStyle,
 				if (sc.ch == '{') {
 					sc.ChangeState(SCE_SH_PARAM);
 				} else if (sc.ch == '\'') {
-					sc.ChangeState(SCE_SH_CHARACTER);
+					sc.ChangeState(SCE_SH_STRING);
 				} else if (sc.ch == '"') {
 					sc.ChangeState(SCE_SH_STRING);
 				} else if (sc.ch == '(' || sc.ch == '`') {

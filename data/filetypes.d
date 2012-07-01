@@ -28,6 +28,9 @@ secondary=
 docComment=Authors Bugs Copyright Date Deprecated Examples History License Macros Params Returns See_Also Standards Throws Version
 types=
 
+[lexer_properties]
+fold.d.comment.explicit=0
+
 [settings]
 # default extension used when saving files
 extension=d

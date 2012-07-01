@@ -2,8 +2,8 @@
 #
 # WAF build script - this file is part of Geany, a fast and lightweight IDE
 #
-# Copyright 2008-2011 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
-# Copyright 2008-2011 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+# Copyright 2008-2012 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+# Copyright 2008-2012 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -44,13 +44,15 @@ import os
 import tempfile
 from waflib import Logs, Options, Scripting, Utils
 from waflib.Configure import ConfigurationContext
-from waflib.Errors import ConfigurationError, WafError
+from waflib.Errors import WafError
 from waflib.TaskGen import feature
 
 
 APPNAME = 'geany'
-VERSION = '1.22'
+VERSION = '1.23'
 LINGUAS_FILE = 'po/LINGUAS'
+MINIMUM_GTK_VERSION = '2.16.0'
+MINIMUM_GLIB_VERSION = '2.20.0'
 
 top = '.'
 out = '_build_'
@@ -91,7 +93,6 @@ geany_sources = set([
     'src/ui_utils.c', 'src/utils.c'])
 
 
-
 def configure(conf):
 
     conf.check_waf_version(mini='1.6.1')
@@ -105,9 +106,9 @@ def configure(conf):
     conf.check_cc(header_name='sys/time.h', mandatory=False)
     conf.check_cc(header_name='sys/types.h', mandatory=False)
     conf.check_cc(header_name='sys/stat.h', mandatory=False)
-    conf.define('HAVE_STDLIB_H', 1) # are there systems without stdlib.h?
-    conf.define('STDC_HEADERS', 1) # an optimistic guess ;-)
-    _add_to_env_and_define(conf, 'HAVE_REGCOMP', 1) # needed for CTags
+    conf.define('HAVE_STDLIB_H', 1)  # are there systems without stdlib.h?
+    conf.define('STDC_HEADERS', 1)  # an optimistic guess ;-)
+    _add_to_env_and_define(conf, 'HAVE_REGCOMP', 1)  # needed for CTags
 
     conf.check_cc(function_name='fgetpos', header_name='stdio.h', mandatory=False)
     conf.check_cc(function_name='ftruncate', header_name='unistd.h', mandatory=False)
@@ -128,9 +129,11 @@ def configure(conf):
     _load_intltool_if_available(conf)
 
     # GTK / GIO version check
-    conf.check_cfg(package='gtk+-2.0', atleast_version='2.16.0', uselib_store='GTK',
+    conf.check_cfg(package='gtk+-2.0', atleast_version=MINIMUM_GTK_VERSION, uselib_store='GTK',
         mandatory=True, args='--cflags --libs')
-    conf.check_cfg(package='glib-2.0', atleast_version='2.20.0', uselib_store='GLIB',
+    conf.check_cfg(package='glib-2.0', atleast_version=MINIMUM_GLIB_VERSION, uselib_store='GLIB',
+        mandatory=True, args='--cflags --libs')
+    conf.check_cfg(package='gmodule-2.0', uselib_store='GMODULE',
         mandatory=True, args='--cflags --libs')
     conf.check_cfg(package='gio-2.0', uselib_store='GIO', args='--cflags --libs', mandatory=True)
     gtk_version = conf.check_cfg(modversion='gtk+-2.0', uselib_store='GTK') or 'Unknown'
@@ -255,9 +258,8 @@ def build(bld):
             includes                = ['.', 'src/', 'scintilla/include', 'tagmanager/include'],
             defines                 = 'G_LOG_DOMAIN="%s"' % plugin_name,
             target                  = plugin_name,
-            uselib                  = ['GTK', 'GLIB'],
+            uselib                  = ['GTK', 'GLIB', 'GMODULE'],
             install_path            = instpath)
-
 
     # Tagmanager
     bld.new_task_gen(
@@ -268,8 +270,7 @@ def build(bld):
         includes        = ['.', 'tagmanager', 'tagmanager/include'],
         defines         = 'G_LOG_DOMAIN="Tagmanager"',
         uselib          = ['GTK', 'GLIB'],
-        install_path    = None) # do not install this library
-
+        install_path    = None)  # do not install this library
 
     # MIO
     bld.new_task_gen(
@@ -280,8 +281,7 @@ def build(bld):
         includes        = ['.', 'tagmanager/mio/'],
         defines         = 'G_LOG_DOMAIN="MIO"',
         uselib          = ['GTK', 'GLIB'],
-        install_path    = None) # do not install this library
-
+        install_path    = None)  # do not install this library
 
     # Scintilla
     files = bld.srcnode.ant_glob('scintilla/**/*.cxx', src=True, dir=False)
@@ -292,9 +292,8 @@ def build(bld):
         target          = 'scintilla',
         source          = scintilla_sources,
         includes        = ['.', 'scintilla/include', 'scintilla/src', 'scintilla/lexlib'],
-        uselib          = 'GTK',
-        install_path    = None) # do not install this library
-
+        uselib          = ['GTK', 'GLIB', 'GMODULE'],
+        install_path    = None)  # do not install this library
 
     # Geany
     if bld.env['HAVE_VTE'] == 1:
@@ -310,8 +309,8 @@ def build(bld):
         source          = geany_sources,
         includes        = ['.', 'scintilla/include/', 'tagmanager/include/'],
         defines         = ['G_LOG_DOMAIN="Geany"', 'GEANY_PRIVATE'],
-        linkflags       = ['-Wl,--export-dynamic'],
-        uselib          = ['GTK', 'GLIB', 'GIO', 'GTHREAD', 'WIN32', 'SUNOS_SOCKET'],
+        linkflags       = [] if is_win32 else ['-Wl,--export-dynamic'],
+        uselib          = ['GTK', 'GLIB', 'GMODULE', 'GIO', 'GTHREAD', 'WIN32', 'SUNOS_SOCKET'],
         use             = ['scintilla', 'tagmanager', 'mio'])
 
     # geanyfunctions.h
@@ -320,7 +319,7 @@ def build(bld):
         name    = 'geanyfunctions.h',
         before  = ['c', 'cxx'],
         cwd     = '%s/plugins' % bld.path.abspath(),
-        rule    = 'python genapi.py -q')
+        rule    = '%s genapi.py -q' % sys.executable)
 
     # Plugins
     if bld.env['HAVE_PLUGINS'] == 1:
@@ -343,7 +342,9 @@ def build(bld):
     # geany.pc
     bld.new_task_gen(
         source          = 'geany.pc.in',
-        dct             = {'VERSION' : VERSION,
+        dct             = {'VERSION': VERSION,
+                           'DEPENDENCIES': 'gtk+-2.0 >= %s glib-2.0 >= %s' % \
+                                (MINIMUM_GTK_VERSION, MINIMUM_GLIB_VERSION),
                            'prefix': bld.env['PREFIX'],
                            'exec_prefix': '${prefix}',
                            'libdir': '${exec_prefix}/lib',
@@ -358,7 +359,7 @@ def build(bld):
             bld.new_task_gen(
                 features        = 'intltool_in',
                 source          = 'geany.desktop.in',
-                flags           = [ '-d', '-q', '-u', '-c' ],
+                flags           = ['-d', '-q', '-u', '-c'],
                 install_path    = '${DATADIR}/applications')
 
         # geany.1
@@ -366,7 +367,7 @@ def build(bld):
             features        = 'subst',
             source          = 'doc/geany.1.in',
             target          = 'geany.1',
-            dct             = {'VERSION' : VERSION,
+            dct             = {'VERSION': VERSION,
                                 'GEANY_DATA_DIR': bld.env['DATADIR'] + '/geany'},
             install_path    = '${MANDIR}/man1')
 
@@ -376,7 +377,7 @@ def build(bld):
             source          = 'geany.spec.in',
             target          = 'geany.spec',
             install_path    = None,
-            dct             = {'VERSION' : VERSION})
+            dct             = {'VERSION': VERSION})
 
         # Doxyfile
         bld.new_task_gen(
@@ -384,7 +385,7 @@ def build(bld):
             source          = 'doc/Doxyfile.in',
             target          = 'doc/Doxyfile',
             install_path    = None,
-            dct             = {'VERSION' : VERSION})
+            dct             = {'VERSION': VERSION})
 
     ###
     # Install files
@@ -395,7 +396,7 @@ def build(bld):
             src/document.h src/editor.h src/encodings.h src/filetypes.h src/geany.h
             src/highlighting.h src/keybindings.h src/msgwindow.h src/plugindata.h
             src/prefs.h src/project.h src/search.h src/stash.h src/support.h
-            src/templates.h src/toolbar.h src/ui_utils.h src/utils.h
+            src/templates.h src/toolbar.h src/ui_utils.h src/utils.h src/build.h
             plugins/geanyplugin.h plugins/geanyfunctions.h''')
         bld.install_files('${PREFIX}/include/geany/scintilla', '''
             scintilla/include/SciLexer.h scintilla/include/Scintilla.h
@@ -474,7 +475,7 @@ def write_linguas_file(self):
     if 'LINGUAS' in self.env:
         files = self.env['LINGUAS']
         for po_filename in files.split(' '):
-            if os.path.exists ('po/%s.po' % po_filename):
+            if os.path.exists('po/%s.po' % po_filename):
                 linguas += '%s ' % po_filename
     else:
         files = os.listdir('%s/po' % self.path.abspath())
@@ -646,5 +647,3 @@ def _uc_first(string, ctx):
     if _target_is_win32(ctx):
         return string.title()
     return string
-
-

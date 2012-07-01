@@ -25,21 +25,21 @@
 *   DATA DEFINITIONS
 */
 typedef enum {
-    K_CHAPTER,
-    K_SECTION,
-    K_SECT1,
-    K_SECT2,
-    K_SECT3,
-    K_APPENDIX
+	K_CHAPTER,
+	K_SECTION,
+	K_SECT1,
+	K_SECT2,
+	K_SECT3,
+	K_APPENDIX
 } docbookKind;
 
 static kindOption DocBookKinds [] = {
-    { TRUE,  'f', "function",   "chapters"},
-    { TRUE,  'c', "class",      "sections"},
-    { TRUE,  'm', "member",     "sect1"},
-    { TRUE,  'd', "macro",      "sect2"},
-    { TRUE,  'v', "variable",   "sect3"},
-    { TRUE,  's', "struct",     "appendix"}
+	{ TRUE,  'f', "function",   "chapters"},
+	{ TRUE,  'c', "class",      "sections"},
+	{ TRUE,  'm', "member",     "sect1"},
+	{ TRUE,  'd', "macro",      "sect2"},
+	{ TRUE,  'v', "variable",   "sect3"},
+	{ TRUE,  's', "struct",     "appendix"}
 };
 
 /*
@@ -48,14 +48,14 @@ static kindOption DocBookKinds [] = {
 
 static int getWord(const char *ref, const char **ptr)
 {
-     const char *p = *ptr;
+	const char *p = *ptr;
 
-     while ((*ref != '\0') && (*p != '\0') && (*ref == *p)) ref++, p++;
+	while ((*ref != '\0') && (*p != '\0') && (*ref == *p)) ref++, p++;
 
-     if (*ref) return FALSE;
+	if (*ref) return FALSE;
 
-     *ptr = p;
-     return TRUE;
+	*ptr = p;
+	return TRUE;
 }
 
 
@@ -83,10 +83,10 @@ static void createTag(docbookKind kind, const char *buf)
 
 static void findDocBookTags(void)
 {
-    const char *line;
+	const char *line;
 
-    while ((line = (const char*)fileReadLine()) != NULL)
-    {
+	while ((line = (const char*)fileReadLine()) != NULL)
+	{
 		const char *cp = line;
 
 		for (; *cp != '\0'; cp++)
@@ -135,17 +135,17 @@ static void findDocBookTags(void)
 				}
 			}
 		}
-    }
+	}
 }
 
 extern parserDefinition* DocBookParser (void)
 {
 	static const char *const extensions [] = { "sgml", "docbook", NULL };
-    parserDefinition* def = parserNew ("Docbook");
-    def->extensions = extensions;
-    def->kinds      = DocBookKinds;
-    def->kindCount  = KIND_COUNT (DocBookKinds);
-    def->parser     = findDocBookTags;
-    return def;
+	parserDefinition* def = parserNew ("Docbook");
+	def->extensions = extensions;
+	def->kinds      = DocBookKinds;
+	def->kindCount  = KIND_COUNT (DocBookKinds);
+	def->parser     = findDocBookTags;
+	return def;
 }
 

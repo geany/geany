@@ -1,8 +1,9 @@
 /*
  *      about.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2005-2011 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2006-2011 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2005-2012 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2006-2012 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2006-2012 Frank Lanitz <frank@frank.uvena.de>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -38,9 +39,10 @@
 #define INFO "<span size=\"larger\" weight=\"bold\">%s</span>"
 #define CODENAME "<span weight=\"bold\">\"" GEANY_CODENAME "\"</span>"
 #define BUILDDATE "<span size=\"smaller\">%s</span>"
-#define COPYRIGHT "Copyright (c)  2005-2011\nColomban Wendling\nNick Treleaven\nMatthew Brush\nEnrico Tröger\nFrank Lanitz\nAll rights reserved."
+#define COPYRIGHT _("Copyright (c)  2005-2012\nColomban Wendling\nNick Treleaven\nMatthew Brush\nEnrico Tröger\nFrank Lanitz\nAll rights reserved.")
 
 const gchar *translators[][2] = {
+	{ "ar", "Fayssal Chamekh &lt;chamfay@gmail.com&gt;"},
 	{ "ast", "Marcos Costales &lt;marcoscostales@gmail.com&gt;"},
 	{ "be_BY", "Yura Siamashka &lt;yurand2@gmail.com&gt;" },
 	{ "bg", "Dilyan Rusev &lt;dilyanrusev@gmail.com&gt;" },
@@ -59,6 +61,7 @@ const gchar *translators[][2] = {
 	{ "ja", "Tarot Osuji &lt;tarot@sdf.lonestar.org&gt;\nChikahiro Masami &lt;cmasa.z321@gmail.com&gt;" },
 	{ "ko", "Park Jang-heon &lt;dotkabi@gmail.com&gt;" },
 	{ "kk", "Baurzhan Muftakhidinov &lt;baurthefirst@gmail.com&gt;"},
+	{ "lt", "Algimantas Margevičius &lt;margevicius.algimantas@gmail.com&gt;"},
 	{ "lb", "Laurent Hoeltgen &lt;hoeltgman@gmail.com&gt;" },
 	{ "mn", "tsetsee &lt;tsetsee.yugi@gmail.com&gt;"},
 	{ "nl", "Peter Scholtens &lt;peter.scholtens@xs4all.nl&gt;\nAyke van Laethem &lt;aykevanlaethem@gmail.com&gt;" },
@@ -68,6 +71,7 @@ const gchar *translators[][2] = {
 			   "Rafael Peregrino da Silva &lt;rperegrino@linuxnewmedia.com.br&gt;"},
 	{ "ro", "Alex Eftimie &lt;alex@rosedu.org&gt;" },
 	{ "ru_RU", "brahmann_ &lt;brahmann@pisem.net&gt;,\nNikita E. Shalaev &lt;nshalaev@eu.spb.ru&gt;" },
+	{ "sk", "Tomáš Vadina &lt;kyberdev@gmail.com&gt;" },
 	{ "sl", "Jože Klepec &lt;joze.klepec@siol.net&gt;"},
 	{ "sv", "Tony Mattsson &lt;superxorn@gmail.com&gt;" },
 	{ "tr", "Gürkan Gür &lt;seqizz@gmail.com&gt;"},
@@ -260,7 +264,7 @@ static GtkWidget *create_dialog(void)
 
 	/* create "Credits" tab */
 	credits_scrollwin = gtk_scrolled_window_new(NULL, NULL);
-	gtk_container_set_border_width(GTK_CONTAINER(credits_scrollwin), 10);
+	gtk_container_set_border_width(GTK_CONTAINER(credits_scrollwin), 6);
 	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(credits_scrollwin),
 		GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
 
@@ -403,7 +407,10 @@ static GtkWidget *create_dialog(void)
 	gtk_container_set_border_width(GTK_CONTAINER(license_scrollwin), 6);
 	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(license_scrollwin),
 		GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
+	gtk_scrolled_window_set_shadow_type(GTK_SCROLLED_WINDOW(license_scrollwin), GTK_SHADOW_IN);
 	license_textview = gtk_text_view_new();
+	gtk_text_view_set_left_margin(GTK_TEXT_VIEW(license_textview), 2);
+	gtk_text_view_set_right_margin(GTK_TEXT_VIEW(license_textview), 2);
 	gtk_text_view_set_editable(GTK_TEXT_VIEW(license_textview), FALSE);
 	gtk_text_view_set_cursor_visible(GTK_TEXT_VIEW(license_textview), FALSE);
 	gtk_widget_show(license_textview);

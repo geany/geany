@@ -1,8 +1,8 @@
 /*
  *      stash.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2008-2011 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
- *      Copyright 2008-2011 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2008-2012 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2008-2012 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -94,7 +94,11 @@ struct StashPref
 	gpointer default_value;		/* Default value, e.g. (gpointer)1 */
 	GType widget_type;			/* e.g. GTK_TYPE_TOGGLE_BUTTON */
 	StashWidgetID widget_id;	/* (GtkWidget*) or (gchar*) */
-	gpointer fields;			/* extra fields */
+	union
+	{
+		struct EnumWidget *radio_buttons;
+		const gchar *property_name;
+	} extra;	/* extra fields depending on widget_type */
 };
 
 typedef struct StashPref StashPref;
@@ -335,6 +339,29 @@ StashGroup *stash_group_new(const gchar *name)
 }
 
 
+/** Frees the memory allocated for setting values in a group.
+ * Useful e.g. to avoid freeing strings individually.
+ * @note This is *not* called by stash_group_free().
+ * @param group . */
+void stash_group_free_settings(StashGroup *group)
+{
+	StashPref *entry;
+	guint i;
+
+	foreach_ptr_array(entry, i, group->entries)
+	{
+		if (entry->setting_type == G_TYPE_STRING)
+			g_free(*(gchararray *) entry->setting);
+		else if (entry->setting_type == G_TYPE_STRV)
+			g_strfreev(*(gchararray **) entry->setting);
+		else
+			continue;
+
+		*(gpointer**) entry->setting = NULL;
+	}
+}
+
+
 /** Frees a group.
  * @param group . */
 void stash_group_free(StashGroup *group)
@@ -346,11 +373,7 @@ void stash_group_free(StashGroup *group)
 	{
 		if (entry->widget_type == GTK_TYPE_RADIO_BUTTON)
 		{
-			g_free(entry->fields);
-		}
-		else if (entry->widget_type != G_TYPE_PARAM)
-		{
-			g_assert(entry->fields == NULL);	/* to prevent memory leaks, must handle fields above */
+			g_free(entry->extra.radio_buttons);
 		}
 		g_slice_free(StashPref, entry);
 	}
@@ -380,7 +403,7 @@ static StashPref *
 add_pref(StashGroup *group, GType type, gpointer setting,
 		const gchar *key_name, gpointer default_value)
 {
-	StashPref init = {type, setting, key_name, default_value, G_TYPE_NONE, NULL, NULL};
+	StashPref init = {type, setting, key_name, default_value, G_TYPE_NONE, NULL, {NULL}};
 	StashPref *entry = g_slice_new(StashPref);
 
 	*entry = init;
@@ -592,11 +615,10 @@ static void handle_radio_button(GtkWidget *widget, gint enum_id, gboolean *setti
 }
 
 
-static void handle_radio_buttons(GtkWidget *owner, EnumWidget *fields,
-		gboolean *setting,
+static void handle_radio_buttons(GtkWidget *owner, StashPref *entry,
 		PrefAction action)
 {
-	EnumWidget *field = fields;
+	EnumWidget *field = entry->extra.radio_buttons;
 	gsize count = 0;
 	GtkWidget *widget = NULL;
 
@@ -608,7 +630,7 @@ static void handle_radio_buttons(GtkWidget *owner, EnumWidget *fields,
 			continue;
 
 		count++;
-		handle_radio_button(widget, field->enum_id, setting, action);
+		handle_radio_button(widget, field->enum_id, entry->setting, action);
 		field++;
 		if (!field->widget_id)
 			break;
@@ -622,7 +644,7 @@ static void handle_widget_property(GtkWidget *widget, StashPref *entry,
 		PrefAction action)
 {
 	GObject *object = G_OBJECT(widget);
-	const gchar *name = entry->fields;
+	const gchar *name = entry->extra.property_name;
 
 	switch (action)
 	{
@@ -656,7 +678,7 @@ static void pref_action(PrefAction action, StashGroup *group, GtkWidget *owner)
 		/* radio buttons have several widgets */
 		if (entry->widget_type == GTK_TYPE_RADIO_BUTTON)
 		{
-			handle_radio_buttons(owner, entry->fields, entry->setting, action);
+			handle_radio_buttons(owner, entry, action);
 			continue;
 		}
 
@@ -778,7 +800,7 @@ void stash_group_add_radio_buttons(StashGroup *group, gint *setting,
 	va_end(args);
 
 	array = g_new0(EnumWidget, count + 1);
-	entry->fields = array;
+	entry->extra.radio_buttons = array;
 
 	va_start(args, enum_id);
 	foreach_c_array(item, array, count)
@@ -890,7 +912,7 @@ void stash_group_add_widget_property(StashGroup *group, gpointer setting,
 		type = object_get_property_type(G_OBJECT(widget_id), property_name);
 
 	add_widget_pref(group, type, setting, key_name, default_value,
-		G_TYPE_PARAM, widget_id)->fields = (gchar*)property_name;
+		G_TYPE_PARAM, widget_id)->extra.property_name = property_name;
 }
 
 
@@ -904,11 +926,13 @@ enum
 
 struct StashTreeValue
 {
-	GType setting_type;
-	gpointer setting;
-	const gchar *key_name;
 	const gchar *group_name;
 	StashPref *pref;
+	union
+	{
+		gchararray tree_string;
+		gint tree_int;
+	} data;
 };
 
 typedef struct StashTreeValue StashTreeValue;
@@ -919,29 +943,31 @@ static void stash_tree_renderer_set_data(GtkCellLayout *cell_layout, GtkCellRend
 {
 	GType cell_type = GPOINTER_TO_SIZE(user_data);
 	StashTreeValue *value;
+	StashPref *pref;
 	gboolean matches_type;
 
 	gtk_tree_model_get(model, iter, STASH_TREE_VALUE, &value, -1);
-	matches_type = value->setting_type == cell_type;
+	pref = value->pref;
+	matches_type = pref->setting_type == cell_type;
 	g_object_set(cell, "visible", matches_type, "sensitive", matches_type,
 		cell_type == G_TYPE_BOOLEAN ? "activatable" : "editable", matches_type, NULL);
 
 	if (matches_type)
 	{
-		switch (value->setting_type)
+		switch (pref->setting_type)
 		{
 			case G_TYPE_BOOLEAN:
-				g_object_set(cell, "active", GPOINTER_TO_INT(value->setting), NULL);
+				g_object_set(cell, "active", value->data.tree_int, NULL);
 				break;
 			case G_TYPE_INT:
 			{
-				gchar *text = g_strdup_printf("%d", GPOINTER_TO_INT(value->setting));
+				gchar *text = g_strdup_printf("%d", value->data.tree_int);
 				g_object_set(cell, "text", text, NULL);
 				g_free(text);
 				break;
 			}
 			case G_TYPE_STRING:
-				g_object_set(cell, "text", (gchararray) value->setting, NULL);
+				g_object_set(cell, "text", value->data.tree_string, NULL);
 				break;
 		}
 	}
@@ -953,22 +979,23 @@ static void stash_tree_renderer_edited(gchar *path_str, gchar *new_text, GtkTree
 	GtkTreePath *path;
 	GtkTreeIter iter;
 	StashTreeValue *value;
+	StashPref *pref;
 
 	path = gtk_tree_path_new_from_string(path_str);
 	gtk_tree_model_get_iter(model, &iter, path);
 	gtk_tree_model_get(model, &iter, STASH_TREE_VALUE, &value, -1);
+	pref = value->pref;
 
-	switch (value->setting_type)
+	switch (pref->setting_type)
 	{
 		case G_TYPE_BOOLEAN:
-			value->setting = GINT_TO_POINTER(!GPOINTER_TO_INT(value->setting));
+			value->data.tree_int = !value->data.tree_int;
 			break;
 		case G_TYPE_INT:
-			value->setting = GINT_TO_POINTER(atoi(new_text));
+			value->data.tree_int = atoi(new_text);
 			break;
 		case G_TYPE_STRING:
-			g_free(value->setting);
-			value->setting = g_strdup(new_text);
+			SETPTR(value->data.tree_string, g_strdup(new_text));
 			break;
 	}
 
@@ -997,8 +1024,8 @@ static gboolean stash_tree_discard_value(GtkTreeModel *model, GtkTreePath *path,
 	StashTreeValue *value;
 
 	gtk_tree_model_get(model, iter, STASH_TREE_VALUE, &value, -1);
-	if (value->setting_type == G_TYPE_STRING)
-		g_free(value->setting);
+	if (value->pref->setting_type == G_TYPE_STRING)
+		g_free(value->data.tree_string);
 	g_free(value);
 
 	return FALSE;
@@ -1018,16 +1045,13 @@ static void stash_tree_append_pref(StashGroup *group, StashPref *entry, GtkListS
 	GtkTreeIter iter;
 	StashTreeValue *value;
 
-	value = g_new(StashTreeValue, 1);
+	value = g_new0(StashTreeValue, 1);
 
-	value->setting_type = entry->setting_type;
-	value->setting = NULL;
-	value->key_name = entry->key_name;
 	value->group_name = group->name;
 	value->pref = entry;
 
 	gtk_list_store_append(store, &iter);
-	gtk_list_store_set(store, &iter, STASH_TREE_NAME, value->key_name,
+	gtk_list_store_set(store, &iter, STASH_TREE_NAME, entry->key_name,
 		STASH_TREE_VALUE, value, -1);
 }
 
@@ -1110,17 +1134,14 @@ static void stash_tree_display_pref(StashTreeValue *value, StashPref *entry)
 	switch (entry->setting_type)
 	{
 		case G_TYPE_BOOLEAN:
-			value->setting = GINT_TO_POINTER(*(gboolean *) entry->setting);
+			value->data.tree_int = *(gboolean *) entry->setting;
 			break;
 		case G_TYPE_INT:
-			value->setting = GINT_TO_POINTER(*(gint *) entry->setting);
+			value->data.tree_int = *(gint *) entry->setting;
 			break;
 		case G_TYPE_STRING:
-		{
-			g_free(value->setting);
-			value->setting = g_strdup(*(gchararray *) entry->setting);
+			SETPTR(value->data.tree_string, g_strdup(*(gchararray *) entry->setting));
 			break;
-		}
 		default:
 			g_warning("Unhandled type for %s::%s in %s()!", value->group_name,
 				entry->key_name, G_STRFUNC);
@@ -1130,26 +1151,23 @@ static void stash_tree_display_pref(StashTreeValue *value, StashPref *entry)
 
 static void stash_tree_update_pref(StashTreeValue *value, StashPref *entry)
 {
-	gpointer *setting = value->setting;
-
 	switch (entry->setting_type)
 	{
 		case G_TYPE_BOOLEAN:
-			*(gboolean *) entry->setting = GPOINTER_TO_INT(setting);
+			*(gboolean *) entry->setting = value->data.tree_int;
 			break;
 		case G_TYPE_INT:
-			*(gint *) entry->setting = GPOINTER_TO_INT(setting);
+			*(gint *) entry->setting = value->data.tree_int;
 			break;
 		case G_TYPE_STRING:
 		{
 			gchararray *text = entry->setting;
-			g_free(*text);
-			*text = g_strdup((gchararray) setting);
+			SETPTR(*text, g_strdup(value->data.tree_string));
 			break;
 		}
 		default:
 			g_warning("Unhandled type for %s::%s in %s()!", value->group_name,
-				value->key_name, G_STRFUNC);
+				entry->key_name, G_STRFUNC);
 	}
 }
 

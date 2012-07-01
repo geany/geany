@@ -1,8 +1,8 @@
 /*
  *      pluginsymbols.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2008-2011 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2008-2011 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2008-2012 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2008-2012 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -103,7 +103,7 @@ void plugin_init(GeanyData *data);
 void plugin_cleanup();
 
 /** Called whenever the plugin should show its documentation (if any). This may open a dialog,
- * a browser with a website or a local installed HTML help file(see utils_start_browser())
+ * a browser with a website or a local installed HTML help file(see utils_open_browser())
  * or something else.
  * Can be omitted when not needed. */
 void plugin_help();

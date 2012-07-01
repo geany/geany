@@ -1,8 +1,8 @@
 /*
  *      ui_utils.h - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2006-2011 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2006-2011 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2006-2012 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2006-2012 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -21,6 +21,8 @@
 
 #ifndef GEANY_UI_UTILS_H
 #define GEANY_UI_UTILS_H 1
+
+G_BEGIN_DECLS
 
 
 /** Sets a name to lookup @a widget from @a owner.
@@ -108,6 +110,7 @@ typedef struct UIPrefs
 	GQueue		*recent_projects_queue;
 	gchar		*custom_date_format;
 	gchar		**custom_commands;
+	gchar		**custom_commands_labels;
 }
 UIPrefs;
 
@@ -208,6 +211,8 @@ void ui_auto_separator_add_ref(GeanyAutoSeparator *autosep, GtkWidget *item);
 void ui_widget_set_tooltip_text(GtkWidget *widget, const gchar *text);
 
 GtkWidget *ui_lookup_widget(GtkWidget *widget, const gchar *widget_name);
+
+gpointer ui_builder_get_object (const gchar *name);
 
 /* Compatibility functions */
 GtkWidget *create_edit_menu1(void);
@@ -343,5 +348,6 @@ GdkPixbuf *ui_get_mime_icon(const gchar *mime_type, GtkIconSize size);
 
 void ui_focus_current_document(void);
 
+G_END_DECLS
 
 #endif

@@ -1,8 +1,9 @@
 /*
  *      symbols.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2006-2011 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2006-2011 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2006-2012 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2006-2012 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2011-2012 Colomban Wendling <ban(at)herbesfolles(dot)org>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -53,6 +54,7 @@
 #include "ui_utils.h"
 #include "editor.h"
 #include "sciwrappers.h"
+#include "filetypesprivate.h"
 
 
 const guint TM_GLOBAL_TYPE_MASK =
@@ -117,6 +119,9 @@ static void load_c_ignore_tags(void)
 
 	if (g_file_get_contents(path, &content, NULL, NULL))
 	{
+		/* historically we ignore the glib _DECLS for tag generation */
+		SETPTR(content, g_strconcat("G_BEGIN_DECLS G_END_DECLS\n", content, NULL));
+
 		g_strfreev(c_tags_ignore);
 		c_tags_ignore = g_strsplit_set(content, " \n\r", -1);
 		g_free(content);
@@ -1068,12 +1073,12 @@ static gchar *get_symbol_tooltip(GeanyDocument *doc, const TMTag *tag)
 		! utils_str_equal(doc->encoding, "UTF-8") &&
 		! utils_str_equal(doc->encoding, "None"))
 	{
-		setptr(utf8_name,
+		SETPTR(utf8_name,
 			encodings_convert_to_utf8_from_charset(utf8_name, -1, doc->encoding, TRUE));
 	}
 
 	if (utf8_name != NULL)
-		setptr(utf8_name, g_markup_escape_text(utf8_name, -1));
+		SETPTR(utf8_name, g_markup_escape_text(utf8_name, -1));
 
 	return utf8_name;
 }
@@ -1258,21 +1263,105 @@ static gboolean tree_store_remove_row(GtkTreeStore *store, GtkTreeIter *iter)
 }
 
 
-/* updates @table adding @tag->name:@iter if necessary */
+/* adds a new element in the parent table if it's key is known.
+ * duplicates are kept */
 static void update_parents_table(GHashTable *table, const TMTag *tag, const gchar *parent_name,
 		const GtkTreeIter *iter)
 {
-	if (g_hash_table_lookup_extended(table, tag->name, NULL, NULL) &&
+	GList **list;
+	if (g_hash_table_lookup_extended(table, tag->name, NULL, (gpointer *) &list) &&
 		! utils_str_equal(parent_name, tag->name) /* prevent Foo::Foo from making parent = child */)
 	{
-		g_hash_table_insert(table, tag->name, g_slice_dup(GtkTreeIter, iter));
+		if (! list)
+		{
+			list = g_slice_alloc(sizeof *list);
+			*list = NULL;
+			g_hash_table_insert(table, tag->name, list);
+		}
+		*list = g_list_prepend(*list, g_slice_dup(GtkTreeIter, iter));
 	}
 }
 
 
-static void free_iter_slice(gpointer iter)
+static void free_iter_slice_list(gpointer data)
 {
-	g_slice_free(GtkTreeIter, iter);
+	GList **list = data;
+
+	if (list)
+	{
+		GList *node;
+		foreach_list(node, *list)
+			g_slice_free(GtkTreeIter, node->data);
+		g_list_free(*list);
+		g_slice_free1(sizeof *list, list);
+	}
+}
+
+
+/* inserts a @data in @table on key @tag.
+ * previous data is not overwritten if the key is duplicated, but rather the
+ * two values are kept in a list
+ *
+ * table is: GHashTable<TMTag, GList<GList<TMTag>>> */
+static void tags_table_insert(GHashTable *table, TMTag *tag, GList *data)
+{
+	GList *list = g_hash_table_lookup(table, tag);
+	list = g_list_prepend(list, data);
+	g_hash_table_insert(table, tag, list);
+}
+
+
+/* looks up the entry in @table that better matches @tag.
+ * if there are more than one candidate, the one that has closest line position to @tag is chosen */
+static GList *tags_table_lookup(GHashTable *table, TMTag *tag)
+{
+	GList *data = NULL;
+	GList *node = g_hash_table_lookup(table, tag);
+	if (node)
+	{
+		glong delta;
+		data = node->data;
+
+#define TAG_DELTA(a, b) ABS((glong) TM_TAG(a)->atts.entry.line - (glong) TM_TAG(b)->atts.entry.line)
+
+		delta = TAG_DELTA(((GList *) node->data)->data, tag);
+		for (node = node->next; node; node = node->next)
+		{
+			glong d = TAG_DELTA(((GList *) node->data)->data, tag);
+
+			if (d < delta)
+			{
+				data = node->data;
+				delta = d;
+			}
+		}
+
+#undef TAG_DELTA
+
+	}
+	return data;
+}
+
+
+/* removes the element at @tag from @table.
+ * @tag must be the exact pointer used at insertion time */
+static void tags_table_remove(GHashTable *table, TMTag *tag)
+{
+	GList *list = g_hash_table_lookup(table, tag);
+	if (list)
+	{
+		GList *node;
+		foreach_list(node, list)
+		{
+			if (((GList *) node->data)->data == tag)
+				break;
+		}
+		list = g_list_delete_link(list, node);
+		if (list)
+			g_hash_table_insert(table, tag, list);
+		else
+			g_hash_table_remove(table, tag);
+	}
 }
 
 
@@ -1306,7 +1395,7 @@ static void update_tree_tags(GeanyDocument *doc, GList **tags)
 
 	/* Build hash tables holding tags and parents */
 	/* parent table holds "tag-name":GtkTreeIter */
-	parents_table = g_hash_table_new_full(g_str_hash, g_str_equal, NULL, free_iter_slice);
+	parents_table = g_hash_table_new_full(g_str_hash, g_str_equal, NULL, free_iter_slice_list);
 	/* tags table is another representation of the @tags list, TMTag:GList<TMTag> */
 	tags_table = g_hash_table_new_full(tag_hash, tag_equal, NULL, NULL);
 	foreach_list(item, *tags)
@@ -1314,7 +1403,7 @@ static void update_tree_tags(GeanyDocument *doc, GList **tags)
 		TMTag *tag = item->data;
 		const gchar *name;
 
-		g_hash_table_insert(tags_table, tag, item);
+		tags_table_insert(tags_table, tag, item);
 
 		name = get_parent_name(tag, doc->file_type->id);
 		if (name)
@@ -1337,7 +1426,7 @@ static void update_tree_tags(GeanyDocument *doc, GList **tags)
 		{
 			GList *found_item;
 
-			found_item = g_hash_table_lookup(tags_table, tag);
+			found_item = tags_table_lookup(tags_table, tag);
 			if (! found_item) /* tag doesn't exist, remove it */
 				cont = tree_store_remove_row(store, &iter);
 			else /* tag still exist, update it */
@@ -1362,7 +1451,7 @@ static void update_tree_tags(GeanyDocument *doc, GList **tags)
 				update_parents_table(parents_table, found, parent_name, &iter);
 
 				/* remove the updated tag from the table and list */
-				g_hash_table_remove(tags_table, found);
+				tags_table_remove(tags_table, found);
 				*tags = g_list_delete_link(*tags, found_item);
 
 				cont = next_iter(model, &iter, TRUE);
@@ -1393,9 +1482,34 @@ static void update_tree_tags(GeanyDocument *doc, GList **tags)
 			parent_name = get_parent_name(tag, doc->file_type->id);
 			if (parent_name)
 			{
-				GtkTreeIter *parent_search;
+				GList **candidates;
+				GtkTreeIter *parent_search = NULL;
 
-				parent_search = g_hash_table_lookup(parents_table, parent_name);
+				/* walk parent candidates to find the better one.
+				 * if there are more than one, take the one that has the closest line number
+				 * after the tag we're searching the parent for */
+				candidates = g_hash_table_lookup(parents_table, parent_name);
+				if (candidates)
+				{
+					GList *node;
+					glong delta = G_MAXLONG;
+					foreach_list(node, *candidates)
+					{
+						TMTag *parent_tag;
+						glong  d;
+
+						gtk_tree_model_get(GTK_TREE_MODEL(store), node->data,
+								SYMBOLS_COLUMN_TAG, &parent_tag, -1);
+
+						d = tag->atts.entry.line - parent_tag->atts.entry.line;
+						if (! parent_search || (d >= 0 && d < delta))
+						{
+							delta = d;
+							parent_search = node->data;
+						}
+					}
+				}
+
 				if (parent_search)
 					parent = parent_search;
 				else
@@ -1572,17 +1686,18 @@ gboolean symbols_recreate_tag_list(GeanyDocument *doc, gint sort_mode)
 static GeanyFiletype *detect_global_tags_filetype(const gchar *utf8_filename)
 {
 	gchar *tags_ext;
-	gchar *shortname = g_strdup(utf8_filename);
+	gchar *shortname = utils_strdupa(utf8_filename);
 	GeanyFiletype *ft = NULL;
 
-	tags_ext = strstr(shortname, ".tags");
+	tags_ext = g_strrstr(shortname, ".tags");
 	if (tags_ext)
 	{
 		*tags_ext = '\0';	/* remove .tags extension */
 		ft = filetypes_detect_from_extension(shortname);
+		if (ft->id != GEANY_FILETYPES_NONE)
+			return ft;
 	}
-	g_free(shortname);
-	return ft;
+	return NULL;
 }
 
 
@@ -1593,9 +1708,8 @@ static GeanyFiletype *detect_global_tags_filetype(const gchar *utf8_filename)
  * CFLAGS=-I/home/user/libname-1.x geany -g libname.d.tags libname.h */
 int symbols_generate_global_tags(int argc, char **argv, gboolean want_preprocess)
 {
-	/* -E pre-process, -dD output user macros, -p prof info (?),
-	 * -undef remove builtin macros (seems to be needed with FC5 gcc 4.1.1) */
-	const char pre_process[] = "gcc -E -dD -p -undef";
+	/* -E pre-process, -dD output user macros, -p prof info (?) */
+	const char pre_process[] = "gcc -E -dD -p -I.";
 
 	if (argc > 2)
 	{
@@ -1664,8 +1778,8 @@ void symbols_show_load_tags_dialog(void)
 		NULL);
 	gtk_widget_set_name(dialog, "GeanyDialog");
 	filter = gtk_file_filter_new();
-	gtk_file_filter_set_name(filter, _("Geany tag files (*.tags)"));
-	gtk_file_filter_add_pattern(filter, "*.tags");
+	gtk_file_filter_set_name(filter, _("Geany tag files (*.*.tags)"));
+	gtk_file_filter_add_pattern(filter, "*.*.tags");
 	gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(dialog), filter);
 
 	if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_OK)
@@ -1698,15 +1812,12 @@ void symbols_show_load_tags_dialog(void)
 }
 
 
-/* Fills a hash table with filetype keys that hold a linked list of filenames. */
-static GHashTable *get_tagfile_hash(const GSList *file_list)
+static void detect_tag_files(const GSList *file_list)
 {
 	const GSList *node;
-	GHashTable *hash = g_hash_table_new(NULL, NULL);
 
 	for (node = file_list; node != NULL; node = g_slist_next(node))
 	{
-		GList *fnames;
 		gchar *fname = node->data;
 		gchar *utf8_fname = utils_get_utf8_from_locale(fname);
 		GeanyFiletype *ft = detect_global_tags_filetype(utf8_fname);
@@ -1714,52 +1825,42 @@ static GHashTable *get_tagfile_hash(const GSList *file_list)
 		g_free(utf8_fname);
 
 		if (FILETYPE_ID(ft) != GEANY_FILETYPES_NONE)
-		{
-			fnames = g_hash_table_lookup(hash, ft);	/* may be NULL */
-			fnames = g_list_append(fnames, fname);
-			g_hash_table_insert(hash, ft, fnames);
-		}
+			ft->priv->tag_files = g_slist_prepend(ft->priv->tag_files, fname);
 		else
 			geany_debug("Unknown filetype for file '%s'.", fname);
 	}
-	return hash;
 }
 
 
-static GHashTable *init_user_tags(void)
+static void init_user_tags(void)
 {
 	GSList *file_list = NULL, *list = NULL;
-	GHashTable *lang_hash;
 	gchar *dir;
 
-	dir = utils_build_path(app->configdir, "tags", NULL);
+	dir = g_build_filename(app->configdir, "tags", NULL);
 	/* create the user tags dir for next time if it doesn't exist */
 	if (! g_file_test(dir, G_FILE_TEST_IS_DIR))
 	{
 		utils_mkdir(dir, FALSE);
 	}
-	file_list = utils_get_file_list_full(dir, TRUE, TRUE, NULL);
+	file_list = utils_get_file_list_full(dir, TRUE, FALSE, NULL);
 
-	setptr(dir, utils_build_path(app->datadir, "tags", NULL));
-	list = utils_get_file_list_full(dir, TRUE, TRUE, NULL);
+	SETPTR(dir, g_build_filename(app->datadir, "tags", NULL));
+	list = utils_get_file_list_full(dir, TRUE, FALSE, NULL);
 	g_free(dir);
 
 	file_list = g_slist_concat(file_list, list);
-
-	lang_hash = get_tagfile_hash(file_list);
-	/* don't need to delete list contents because they are now used for hash contents */
+	detect_tag_files(file_list);
+	/* don't need to delete list contents because they are stored in ft->priv->tag_files */
 	g_slist_free(file_list);
-
-	return lang_hash;
 }
 
 
 static void load_user_tags(filetype_id ft_id)
 {
 	static guchar *tags_loaded = NULL;
-	static GHashTable *lang_hash = NULL;
-	GList *fnames;
-	const GList *node;
+	static gboolean init_tags = FALSE;
+	const GSList *node;
 	GeanyFiletype *ft = filetypes[ft_id];
 
 	g_return_if_fail(ft_id > 0);
@@ -1770,20 +1871,18 @@ static void load_user_tags(filetype_id ft_id)
 		return;
 	tags_loaded[ft_id] = TRUE;	/* prevent reloading */
 
-	if (lang_hash == NULL)
-		lang_hash = init_user_tags();
+	if (!init_tags)
+	{
+		init_user_tags();
+		init_tags = TRUE;
+	}
 
-	fnames = g_hash_table_lookup(lang_hash, ft);
-
-	for (node = fnames; node != NULL; node = g_list_next(node))
+	for (node = ft->priv->tag_files; node != NULL; node = g_slist_next(node))
 	{
 		const gchar *fname = node->data;
 
 		symbols_load_global_tags(fname, ft);
 	}
-	g_list_foreach(fnames, (GFunc) g_free, NULL);
-	g_list_free(fnames);
-	g_hash_table_remove(lang_hash, (gpointer) ft);
 }
 
 
@@ -2171,7 +2270,7 @@ static void create_taglist_popup_menu(void)
 
 static void on_document_save(G_GNUC_UNUSED GObject *object, GeanyDocument *doc)
 {
-	gchar *f = utils_build_path(app->configdir, "ignore.tags", NULL);
+	gchar *f = g_build_filename(app->configdir, "ignore.tags", NULL);
 
 	g_return_if_fail(NZV(doc->real_path));
 
@@ -2188,7 +2287,7 @@ void symbols_init(void)
 
 	create_taglist_popup_menu();
 
-	f = utils_build_path(app->configdir, "ignore.tags", NULL);
+	f = g_build_filename(app->configdir, "ignore.tags", NULL);
 	ui_add_config_file_menu_item(f, NULL, NULL);
 	g_free(f);
 

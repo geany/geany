@@ -1,5 +1,36 @@
 # For complete documentation of this file, please see Geany's main documentation
-[styling=XML]
+[styling]
+# note: these key names don't have a html_ prefix unlike filetypes.html
+default=default
+tag=tag
+tagunknown=tag_unknown
+attribute=attribute
+attributeunknown=attribute_unknown
+number=number_1
+doublestring=string_1
+singlestring=string_1
+other=other
+comment=comment
+entity=entity
+tagend=tag_end
+xmlstart=tag
+xmlend=tag_end
+cdata=string_2
+question=number_2
+value=value
+xccomment=comment
+
+sgml_default=default
+sgml_comment=comment
+sgml_special=number_1
+sgml_command=number_2
+sgml_doublestring=string_1
+sgml_simplestring=string_1
+sgml_1st_param=attribute
+sgml_entity=entity
+sgml_block_default=default
+sgml_1st_param_comment=comment
+sgml_error=error
 
 [keywords]
 # all items must be in one line

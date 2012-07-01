@@ -1,8 +1,8 @@
 /*
  *      templates.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2005-2011 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2006-2011 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2005-2012 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2006-2012 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -94,7 +94,7 @@ static void read_template(const gchar *name, gint id)
 
 	/* try system if user template doesn't exist */
 	if (!g_file_test(fname, G_FILE_TEST_EXISTS))
-		setptr(fname, g_build_path(G_DIR_SEPARATOR_S, app->datadir,
+		SETPTR(fname, g_build_path(G_DIR_SEPARATOR_S, app->datadir,
 			GEANY_TEMPLATES_SUBDIR, name, NULL));
 
 	templates[id] = read_file(fname);
@@ -128,7 +128,7 @@ static void init_general_templates(void)
 }
 
 
-void templates_replace_common(GString *template, const gchar *fname,
+void templates_replace_common(GString *tmpl, const gchar *fname,
 							  GeanyFiletype *ft, const gchar *func_name)
 {
 	gchar *shortname;
@@ -143,18 +143,18 @@ void templates_replace_common(GString *template, const gchar *fname,
 	else
 		shortname = g_path_get_basename(fname);
 
-	templates_replace_valist(template,
+	templates_replace_valist(tmpl,
 		"{filename}", shortname,
 		"{project}", app->project ? app->project->name : "",
 		"{description}", app->project ? app->project->description : "",
 		NULL);
 	g_free(shortname);
 
-	templates_replace_default_dates(template);
-	templates_replace_command(template, fname, ft->name, func_name);
+	templates_replace_default_dates(tmpl);
+	templates_replace_command(tmpl, fname, ft->name, func_name);
 	/* Bug: command results could have {ob} {cb} strings in! */
 	/* replace braces last */
-	templates_replace_valist(template,
+	templates_replace_valist(tmpl,
 		"{ob}", "{",
 		"{cb}", "}",
 		NULL);
@@ -199,7 +199,7 @@ on_new_with_file_template(GtkMenuItem *menuitem, G_GNUC_UNUSED gpointer user_dat
 	gchar *path;
 
 	ft = filetypes_detect_from_extension(fname);
-	setptr(fname, utils_get_locale_from_utf8(fname));
+	SETPTR(fname, utils_get_locale_from_utf8(fname));
 
 	/* fname is just the basename from the menu item, so prepend the custom files path */
 	path = g_build_path(G_DIR_SEPARATOR_S, app->configdir, GEANY_TEMPLATES_SUBDIR,
@@ -220,7 +220,7 @@ on_new_with_file_template(GtkMenuItem *menuitem, G_GNUC_UNUSED gpointer user_dat
 	}
 	else
 	{
-		setptr(fname, utils_get_utf8_from_locale(fname));
+		SETPTR(fname, utils_get_utf8_from_locale(fname));
 		ui_set_statusbar(TRUE, _("Could not find file '%s'."), fname);
 	}
 	g_free(template);
@@ -298,7 +298,7 @@ static void on_file_menu_hide(GtkWidget *item)
 /* reload templates if any file in the templates path is saved */
 static void on_document_save(G_GNUC_UNUSED GObject *object, GeanyDocument *doc)
 {
-	gchar *path = utils_build_path(app->configdir, GEANY_TEMPLATES_SUBDIR, NULL);
+	gchar *path = g_build_filename(app->configdir, GEANY_TEMPLATES_SUBDIR, NULL);
 
 	g_return_if_fail(NZV(doc->real_path));
 
@@ -391,7 +391,7 @@ static void make_comment_block(GString *comment_text, gint filetype_idx, guint i
 	if (NZV(frame_start) && frame_start[1] == '*')
 	{
 		/* prefix the string with a space */
-		setptr(frame_end, g_strconcat(" ", frame_end, NULL));
+		SETPTR(frame_end, g_strconcat(" ", frame_end, NULL));
 		line_prefix = " *";
 	}
 

@@ -1,7 +1,7 @@
 dnl Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.60])
-AC_INIT([Geany], [1.22],
+AC_INIT([Geany], [1.23],
 		[https://sourceforge.net/tracker/?group_id=153444&atid=787791])
 AC_CONFIG_SRCDIR([src/geany.h])
 AC_CONFIG_AUX_DIR([build-aux])
@@ -57,8 +57,10 @@ GEANY_CHECK_REVISION([dnl force debug mode for a SVN working copy
 
 
 # GTK/GLib/GIO checks
-gtk_modules="gtk+-2.0 >= 2.16 glib-2.0 >= 2.20 gio-2.0 >= 2.20"
-PKG_CHECK_MODULES([GTK], [$gtk_modules])
+gtk_modules="gtk+-2.0 >= 2.16 glib-2.0 >= 2.20"
+gtk_modules_private="gio-2.0 >= 2.20 gmodule-2.0"
+PKG_CHECK_MODULES([GTK], [$gtk_modules $gtk_modules_private])
+AC_SUBST([DEPENDENCIES], [$gtk_modules])
 AC_SUBST([GTK_CFLAGS])
 AC_SUBST([GTK_LIBS])
 GTK_VERSION=`$PKG_CONFIG --modversion gtk+-2.0`

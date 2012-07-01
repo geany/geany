@@ -1,8 +1,8 @@
 /*
  *      sciwrappers.h - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2005-2011 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2006-2011 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2005-2012 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2006-2012 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -146,6 +146,7 @@ gint				sci_replace_target			(ScintillaObject *sci, const gchar *text, gboolean 
 
 void				sci_set_keywords			(ScintillaObject *sci, guint k, const gchar *text);
 gint				sci_get_lexer				(ScintillaObject *sci);
+void				sci_set_lexer				(ScintillaObject *sci, guint lexer_id);
 void				sci_set_readonly			(ScintillaObject *sci, gboolean readonly);
 gint				sci_get_zoom				(ScintillaObject *sci);
 void				sci_send_command			(ScintillaObject *sci, gint cmd);
@@ -182,5 +183,8 @@ gint				sci_get_position_after		(ScintillaObject *sci, gint start);
 void				sci_lines_split				(ScintillaObject *sci, gint pixelWidth);
 void				sci_lines_join				(ScintillaObject *sci);
 gint				sci_text_width				(ScintillaObject *sci, gint styleNumber, const gchar *text);
+
+void				sci_move_selected_lines_down    (ScintillaObject *sci);
+void				sci_move_selected_lines_up      (ScintillaObject *sci);
 
 #endif

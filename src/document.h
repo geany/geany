@@ -1,8 +1,8 @@
 /*
  *      document.h - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2005-2011 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2006-2011 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2005-2012 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2006-2012 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -28,6 +28,8 @@
 
 #ifndef GEANY_DOCUMENT_H
 #define GEANY_DOCUMENT_H 1
+
+G_BEGIN_DECLS
 
 #include "Scintilla.h"
 #include "ScintillaWidget.h"
@@ -278,5 +280,7 @@ gint document_compare_by_tab_order(gconstpointer a, gconstpointer b);
 gint document_compare_by_tab_order_reverse(gconstpointer a, gconstpointer b);
 
 void document_grab_focus(GeanyDocument *doc);
+
+G_END_DECLS
 
 #endif

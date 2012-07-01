@@ -1,8 +1,8 @@
 /*
  *      splitwindow.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2008-2011 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
- *      Copyright 2008-2011 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2008-2012 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2008-2012 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -178,6 +178,7 @@ static void set_editor(EditWindow *editwin, GeanyEditor *editor)
 
 	sync_to_current(editwin->sci, editor->sci);
 
+	scintilla_send_message(editwin->sci, SCI_USEPOPUP, 1, 0);
 	/* for margin events */
 	g_signal_connect(editwin->sci, "sci-notify",
 			G_CALLBACK(on_sci_notify), NULL);

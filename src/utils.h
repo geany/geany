@@ -1,8 +1,8 @@
 /*
  *      utils.h - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2005-2011 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2006-2011 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2005-2012 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2006-2012 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -27,6 +27,7 @@
 #ifndef GEANY_UTILS_H
 #define GEANY_UTILS_H 1
 
+G_BEGIN_DECLS
 
 #include <time.h>
 
@@ -264,10 +265,6 @@ gboolean utils_spawn_async(const gchar *dir, gchar **argv, gchar **env, GSpawnFl
 
 gint utils_str_casecmp(const gchar *s1, const gchar *s2);
 
-gchar *utils_build_path(const gchar *first, ...) G_GNUC_NULL_TERMINATED;
-
-gchar *utils_make_filename(const gchar *path, ...) G_GNUC_NULL_TERMINATED;
-
 gchar *utils_get_path_from_uri(const gchar *uri);
 
 gboolean utils_is_uri(const gchar *uri);
@@ -279,5 +276,7 @@ gchar *utils_str_middle_truncate(const gchar *string, guint truncate_length);
 gchar *utils_str_remove_chars(gchar *string, const gchar *chars);
 
 gchar **utils_copy_environment(const gchar **exclude_vars, const gchar *first_varname, ...) G_GNUC_NULL_TERMINATED;
+
+G_END_DECLS
 
 #endif

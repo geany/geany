@@ -1,8 +1,8 @@
 /*
  *      msgwindow.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2005-2011 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2006-2011 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2005-2012 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2006-2012 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -641,9 +641,9 @@ static gboolean goto_compiler_file_line(const gchar *filename, gint line, gboole
 		if (cur_dir)
 		{
 			/* we let the user know we couldn't find the parsed filename from the message window */
-			setptr(cur_dir, utils_get_locale_from_utf8(cur_dir));
+			SETPTR(cur_dir, utils_get_locale_from_utf8(cur_dir));
 			name = g_path_get_basename(filename);
-			setptr(name, g_build_path(G_DIR_SEPARATOR_S, cur_dir, name, NULL));
+			SETPTR(name, g_build_path(G_DIR_SEPARATOR_S, cur_dir, name, NULL));
 			g_free(cur_dir);
 
 			if (g_file_test(name, G_FILE_TEST_EXISTS))
@@ -744,7 +744,7 @@ static void make_absolute(gchar **filename, const gchar *dir)
 
 	/* add directory */
 	if (! utils_is_absolute_path(*filename))
-		setptr(*filename, g_strconcat(dir, G_DIR_SEPARATOR_S,
+		SETPTR(*filename, g_strconcat(dir, G_DIR_SEPARATOR_S,
 			*filename + skip_dot_slash, NULL));
 }
 
@@ -1049,7 +1049,7 @@ static void msgwin_parse_generic_line(const gchar *string, gchar **filename, gin
 		/* if we aren't sure we got a supposedly correct filename, check it */
 		if (incertain && ! g_file_test(*filename, G_FILE_TEST_EXISTS))
 		{
-			setptr(*filename, NULL);
+			SETPTR(*filename, NULL);
 			*line = -1;
 		}
 	}

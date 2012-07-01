@@ -1,8 +1,8 @@
 /*
  *      callbacks.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2005-2011 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2006-2011 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2005-2012 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2006-2012 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -63,6 +63,7 @@
 #include "plugins.h"
 #include "log.h"
 #include "toolbar.h"
+#include "highlighting.h"
 #include "pluginutils.h"
 
 
@@ -468,8 +469,8 @@ G_MODULE_EXPORT void on_toolbutton_save_clicked(GtkAction *action, gpointer user
 /* store text, clear search flags so we can use Search->Find Next/Previous */
 static void setup_find(const gchar *text, gboolean backwards)
 {
-	setptr(search_data.text, g_strdup(text));
-	setptr(search_data.original_text, g_strdup(text));
+	SETPTR(search_data.text, g_strdup(text));
+	SETPTR(search_data.original_text, g_strdup(text));
 	search_data.flags = 0;
 	search_data.backwards = backwards;
 	search_data.search_bar = TRUE;
@@ -801,6 +802,12 @@ G_MODULE_EXPORT void on_show_messages_window1_toggled(GtkCheckMenuItem *checkmen
 }
 
 
+G_MODULE_EXPORT void on_menu_color_schemes_activate(GtkImageMenuItem *imagemenuitem, gpointer user_data)
+{
+	highlighting_show_color_scheme_dialog();
+}
+
+
 G_MODULE_EXPORT void on_markers_margin1_toggled(GtkCheckMenuItem *checkmenuitem, gpointer user_data)
 {
 	if (ignore_callback)
@@ -1126,6 +1133,24 @@ G_MODULE_EXPORT void on_website1_activate(GtkMenuItem *menuitem, gpointer user_d
 }
 
 
+G_MODULE_EXPORT void on_help_menu_item_donate_activate(GtkMenuItem *item, gpointer user_data)
+{
+	utils_open_browser(GEANY_DONATE);
+}
+
+
+G_MODULE_EXPORT void on_help_menu_item_wiki_activate(GtkMenuItem *item, gpointer user_data)
+{
+	utils_open_browser(GEANY_WIKI);
+}
+
+
+G_MODULE_EXPORT void on_help_menu_item_bug_report_activate(GtkMenuItem *item, gpointer user_data)
+{
+	utils_open_browser(GEANY_BUG_REPORT);
+}
+
+
 G_MODULE_EXPORT void on_comments_function_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
 	GeanyDocument *doc = document_get_current();
@@ -1287,7 +1312,7 @@ G_MODULE_EXPORT void on_insert_date_activate(GtkMenuItem *menuitem, gpointer use
 				"You can use any conversion specifiers which can be used with the ANSI C strftime function."),
 				ui_prefs.custom_date_format);
 		if (str)
-			setptr(ui_prefs.custom_date_format, str);
+			SETPTR(ui_prefs.custom_date_format, str);
 		return;
 	}
 
@@ -1603,7 +1628,7 @@ G_MODULE_EXPORT void on_menu_open_selected_file1_activate(GtkMenuItem *menuitem,
 	g_return_if_fail(doc != NULL);
 
 	sel = editor_get_default_selection(doc->editor, TRUE, wc);
-	setptr(sel, utils_get_locale_from_utf8(sel));
+	SETPTR(sel, utils_get_locale_from_utf8(sel));
 
 	if (sel != NULL)
 	{
@@ -1616,7 +1641,7 @@ G_MODULE_EXPORT void on_menu_open_selected_file1_activate(GtkMenuItem *menuitem,
 			gchar *path;
 
 			path = utils_get_current_file_dir_utf8();
-			setptr(path, utils_get_locale_from_utf8(path));
+			SETPTR(path, utils_get_locale_from_utf8(path));
 			if (!path)
 				path = g_get_current_dir();
 
@@ -1626,17 +1651,17 @@ G_MODULE_EXPORT void on_menu_open_selected_file1_activate(GtkMenuItem *menuitem,
 				app->project != NULL && NZV(app->project->base_path))
 			{
 				/* try the project's base path */
-				setptr(path, project_get_base_path());
-				setptr(path, utils_get_locale_from_utf8(path));
-				setptr(filename, g_build_path(G_DIR_SEPARATOR_S, path, sel, NULL));
+				SETPTR(path, project_get_base_path());
+				SETPTR(path, utils_get_locale_from_utf8(path));
+				SETPTR(filename, g_build_path(G_DIR_SEPARATOR_S, path, sel, NULL));
 			}
 			g_free(path);
 #ifdef G_OS_UNIX
 			if (! g_file_test(filename, G_FILE_TEST_EXISTS))
-				setptr(filename, g_build_path(G_DIR_SEPARATOR_S, "/usr/local/include", sel, NULL));
+				SETPTR(filename, g_build_path(G_DIR_SEPARATOR_S, "/usr/local/include", sel, NULL));
 
 			if (! g_file_test(filename, G_FILE_TEST_EXISTS))
-				setptr(filename, g_build_path(G_DIR_SEPARATOR_S, "/usr/include", sel, NULL));
+				SETPTR(filename, g_build_path(G_DIR_SEPARATOR_S, "/usr/include", sel, NULL));
 #endif
 		}
 
@@ -1644,7 +1669,7 @@ G_MODULE_EXPORT void on_menu_open_selected_file1_activate(GtkMenuItem *menuitem,
 			document_open_file(filename, FALSE, NULL, NULL);
 		else
 		{
-			setptr(sel, utils_get_utf8_from_locale(sel));
+			SETPTR(sel, utils_get_utf8_from_locale(sel));
 			ui_set_statusbar(TRUE, _("Could not open file %s (File not found)"), sel);
 		}
 

@@ -1,8 +1,9 @@
 /*
  *      highlighting.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2005-2011 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2006-2011 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2005-2012 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2006-2012 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2011-2012 Colomban Wendling <ban(at)herbesfolles(dot)org>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -41,6 +42,9 @@
 #include "main.h"
 #include "support.h"
 #include "sciwrappers.h"
+#include "document.h"
+#include "dialogs.h"
+#include "filetypesprivate.h"
 
 #include "highlightingmappings.h"
 
@@ -627,6 +631,8 @@ static void styleset_common_init(GKeyFile *config, GKeyFile *config_home)
 
 static void styleset_common(ScintillaObject *sci, guint ft_id)
 {
+	GeanyLexerStyle *style;
+
 	SSM(sci, SCI_STYLECLEARALL, 0, 0);
 
 	SSM(sci, SCI_SETWORDCHARS, 0, (sptr_t) (ft_id == GEANY_FILETYPES_NONE ?
@@ -784,12 +790,17 @@ static void styleset_common(ScintillaObject *sci, guint ft_id)
 	sci_set_property(sci, "fold.preprocessor", "1");
 	sci_set_property(sci, "fold.at.else", "1");
 
+	style = &common_style_set.styling[GCS_SELECTION];
+	if (!style->bold && !style->italic)
+	{
+		geany_debug("selection style is set to invisible - ignoring!");
+		style->italic = TRUE;
+		style->background = 0xc0c0c0;
+	}
 	/* bold (3rd argument) is whether to override default foreground selection */
-	if (common_style_set.styling[GCS_SELECTION].bold)
-		SSM(sci, SCI_SETSELFORE, 1, invert(common_style_set.styling[GCS_SELECTION].foreground));
+	SSM(sci, SCI_SETSELFORE, style->bold, invert(style->foreground));
 	/* italic (4th argument) is whether to override default background selection */
-	if (common_style_set.styling[GCS_SELECTION].italic)
-		SSM(sci, SCI_SETSELBACK, 1, invert(common_style_set.styling[GCS_SELECTION].background));
+	SSM(sci, SCI_SETSELBACK, style->italic, invert(style->background));
 
 	SSM(sci, SCI_SETSTYLEBITS, SSM(sci, SCI_GETSTYLEBITSNEEDED, 0, 0), 0);
 
@@ -872,7 +883,7 @@ static void styleset_from_mapping(ScintillaObject *sci, guint ft_id, guint lexer
 	g_assert(ft_id != GEANY_FILETYPES_NONE);
 
 	/* lexer */
-	SSM(sci, SCI_SETLEXER, lexer, 0);
+	sci_set_lexer(sci, lexer);
 
 	/* styles */
 	styleset_common(sci, ft_id);
@@ -906,7 +917,7 @@ static void styleset_from_mapping(ScintillaObject *sci, guint ft_id, guint lexer
 
 static void styleset_default(ScintillaObject *sci, guint ft_id)
 {
-	SSM(sci, SCI_SETLEXER, SCLEX_NULL, 0);
+	sci_set_lexer(sci, SCLEX_NULL);
 
 	/* we need to set STYLE_DEFAULT before we call SCI_STYLECLEARALL in styleset_common() */
 	set_sci_style(sci, STYLE_DEFAULT, GEANY_FILETYPES_NONE, GCS_DEFAULT);
@@ -922,7 +933,7 @@ static void get_key_values(GKeyFile *config, const gchar *group, gchar **keys, g
 		gchar *str = g_key_file_get_string(config, group, *keys, NULL);
 
 		if (str)
-			setptr(*values, str);
+			SETPTR(*values, str);
 
 		keys++;
 		values++;
@@ -979,6 +990,7 @@ void highlighting_init_styles(guint filetype_idx, GKeyFile *config, GKeyFile *co
 {
 	GeanyFiletype *ft = filetypes[filetype_idx];
 	guint lexer_id = get_lexer_filetype(ft);
+	gchar *default_str;
 
 	if (!style_sets)
 		style_sets = g_new0(StyleSet, filetypes_array->len);
@@ -987,6 +999,12 @@ void highlighting_init_styles(guint filetype_idx, GKeyFile *config, GKeyFile *co
 	free_styleset(filetype_idx);
 
 	read_properties(ft, config, configh);
+	/* If a default style exists, check it uses a named style
+	 * Note: almost all filetypes have a "default" style, except HTML ones */
+	default_str = utils_get_setting(string, configh, config,
+		"styling", "default", "default");
+	ft->priv->warn_color_scheme = !g_ascii_isalpha(*default_str);
+	g_free(default_str);
 
 	/* None filetype handled specially */
 	if (filetype_idx == GEANY_FILETYPES_NONE)
@@ -1166,25 +1184,34 @@ const GeanyLexerStyle *highlighting_get_style(gint ft_id, gint style_id)
 }
 
 
-static void
-on_color_scheme_clicked(GtkMenuItem *menuitem, gpointer user_data)
+static GtkWidget *scheme_tree = NULL;
+
+enum
 {
+	SCHEME_MARKUP,
+	SCHEME_FILE,
+	SCHEME_COLUMNS
+};
+
+static void on_color_scheme_changed(GtkTreeSelection *treesel, gpointer dummy)
+{
+	GtkTreeModel *model;
+	GtkTreeIter iter;
 	gchar *fname;
 	gchar *path;
 
-	/* prevent callback on setting initial value */
-	if (!GTK_WIDGET_MAPPED(menuitem))
+	if (!gtk_tree_selection_get_selected(treesel, &model, &iter))
 		return;
+	gtk_tree_model_get(model, &iter, SCHEME_FILE, &fname, -1);
 
 	/* check if default item */
-	if (!user_data)
+	if (!fname)
 	{
-		setptr(editor_prefs.color_scheme, NULL);
+		SETPTR(editor_prefs.color_scheme, NULL);
 		filetypes_reload();
 		return;
 	}
-	fname = g_strdup(g_object_get_data(G_OBJECT(menuitem), "colorscheme_file"));
-	setptr(fname, utils_get_locale_from_utf8(fname));
+	SETPTR(fname, utils_get_locale_from_utf8(fname));
 
 	/* fname is just the basename from the menu item, so prepend the custom files path */
 	path = g_build_path(G_DIR_SEPARATOR_S, app->configdir, GEANY_COLORSCHEMES_SUBDIR, fname, NULL);
@@ -1196,13 +1223,13 @@ on_color_scheme_clicked(GtkMenuItem *menuitem, gpointer user_data)
 	}
 	if (g_file_test(path, G_FILE_TEST_EXISTS))
 	{
-		setptr(editor_prefs.color_scheme, fname);
+		SETPTR(editor_prefs.color_scheme, fname);
 		fname = NULL;
 		filetypes_reload();
 	}
 	else
 	{
-		setptr(fname, utils_get_utf8_from_locale(fname));
+		SETPTR(fname, utils_get_utf8_from_locale(fname));
 		ui_set_statusbar(TRUE, _("Could not find file '%s'."), fname);
 	}
 	g_free(path);
@@ -1219,60 +1246,63 @@ static gchar *utils_get_setting_locale_string(GKeyFile *keyfile,
 }
 
 
-static void add_color_scheme_item(GtkWidget *menu, const gchar *fname)
+static void add_color_scheme_item(GtkListStore *store,
+	gchar *name, gchar *desc, const gchar *fn)
 {
-	static GSList *group = NULL;
-	GtkWidget *item;
+	GtkTreeIter iter;
+	gchar *markup;
 
-	if (!fname)
+	/* reuse parameters */
+	name = g_markup_escape_text(name, -1);
+	desc = g_markup_escape_text(desc, -1);
+	markup = g_strdup_printf("<big><b>%s</b></big>\n%s", name, desc);
+	g_free(name);
+	g_free(desc);
+
+	gtk_list_store_append(store, &iter);
+	gtk_list_store_set(store, &iter, SCHEME_MARKUP, markup,
+		SCHEME_FILE, fn, -1);
+	g_free(markup);
+
+	if (utils_str_equal(fn, editor_prefs.color_scheme))
 	{
-		item = gtk_radio_menu_item_new_with_mnemonic(group, _("_Default"));
+		GtkTreeSelection *treesel =
+			gtk_tree_view_get_selection(GTK_TREE_VIEW(scheme_tree));
+
+		gtk_tree_selection_select_iter(treesel, &iter);
 	}
-	else
-	{
-		GKeyFile *hkeyfile, *skeyfile;
-		gchar *path, *theme_name, *tooltip;
-		gchar *theme_fn = utils_get_utf8_from_locale(fname);
-
-		path = utils_build_path(app->configdir, GEANY_COLORSCHEMES_SUBDIR, fname, NULL);
-		hkeyfile = utils_key_file_new(path);
-		setptr(path, utils_build_path(app->datadir, GEANY_COLORSCHEMES_SUBDIR, fname, NULL));
-		skeyfile = utils_key_file_new(path);
-
-		theme_name = utils_get_setting(locale_string, hkeyfile, skeyfile, "theme_info", "name", theme_fn);
-		item = gtk_radio_menu_item_new_with_label(group, theme_name);
-		g_object_set_data_full(G_OBJECT(item), "colorscheme_file", theme_fn, g_free);
-
-		tooltip = utils_get_setting(locale_string, hkeyfile, skeyfile, "theme_info", "description", NULL);
-		if (tooltip != NULL)
-		{
-			gtk_widget_set_tooltip_text(item, tooltip);
-			g_free(tooltip);
-		}
-		g_free(path);
-		g_free(theme_name);
-		g_key_file_free(hkeyfile);
-		g_key_file_free(skeyfile);
-	}
-
-	group = gtk_radio_menu_item_get_group(GTK_RADIO_MENU_ITEM(item));
-	if (utils_str_equal(editor_prefs.color_scheme, fname))
-		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(item), TRUE);
-
-	gtk_widget_show(item);
-	gtk_container_add(GTK_CONTAINER(menu), item);
-	g_signal_connect(item, "activate",
-		G_CALLBACK(on_color_scheme_clicked), GINT_TO_POINTER(fname != NULL));
 }
 
 
-static gboolean add_color_scheme_items(GtkWidget *menu)
+static void add_color_scheme_file(GtkListStore *store, const gchar *fname)
+{
+	GKeyFile *hkeyfile, *skeyfile;
+	gchar *path, *theme_name, *theme_desc;
+	gchar *theme_fn = utils_get_utf8_from_locale(fname);
+
+	path = g_build_filename(app->configdir, GEANY_COLORSCHEMES_SUBDIR, fname, NULL);
+	hkeyfile = utils_key_file_new(path);
+	SETPTR(path, g_build_filename(app->datadir, GEANY_COLORSCHEMES_SUBDIR, fname, NULL));
+	skeyfile = utils_key_file_new(path);
+
+	theme_name = utils_get_setting(locale_string, hkeyfile, skeyfile, "theme_info", "name", theme_fn);
+	theme_desc = utils_get_setting(locale_string, hkeyfile, skeyfile, "theme_info", "description", NULL);
+	add_color_scheme_item(store, theme_name, theme_desc, theme_fn);
+
+	g_free(path);
+	g_free(theme_fn);
+	g_free(theme_name);
+	g_free(theme_desc);
+	g_key_file_free(hkeyfile);
+	g_key_file_free(skeyfile);
+}
+
+
+static gboolean add_color_scheme_items(GtkListStore *store)
 {
 	GSList *list, *node;
 
-	g_return_val_if_fail(menu, FALSE);
-
-	add_color_scheme_item(menu, NULL);
+	add_color_scheme_item(store, _("Default"), _("Default"), NULL);
 	list = utils_get_config_files(GEANY_COLORSCHEMES_SUBDIR);
 
 	foreach_slist(node, list)
@@ -1280,7 +1310,7 @@ static gboolean add_color_scheme_items(GtkWidget *menu)
 		gchar *fname = node->data;
 
 		if (g_str_has_suffix(fname, ".conf"))
-			add_color_scheme_item(menu, fname);
+			add_color_scheme_file(store, fname);
 
 		g_free(fname);
 	}
@@ -1289,26 +1319,67 @@ static gboolean add_color_scheme_items(GtkWidget *menu)
 }
 
 
-static void create_color_scheme_menu(void)
+static void on_color_scheme_dialog_response(GtkWidget *dialog,
+	gint response, gpointer *dialog_ptr)
 {
-	GtkWidget *item, *menu, *root;
-
-	menu = ui_lookup_widget(main_widgets.window, "menu_view_editor1_menu");
-	item = ui_image_menu_item_new(GTK_STOCK_SELECT_COLOR, _("_Color Schemes"));
-	gtk_menu_shell_prepend(GTK_MENU_SHELL(menu), item);
-	root = item;
-
-	menu = gtk_menu_new();
-	gtk_menu_item_set_submenu(GTK_MENU_ITEM(item), menu);
-
-	add_color_scheme_items(menu);
-	gtk_widget_show_all(root);
+	*dialog_ptr = NULL;
+	gtk_widget_destroy(dialog);
 }
 
 
-void highlighting_init(void)
+void highlighting_show_color_scheme_dialog(void)
 {
-	create_color_scheme_menu();
+	static GtkWidget *dialog = NULL;
+	GtkListStore *store = gtk_list_store_new(SCHEME_COLUMNS,
+		G_TYPE_STRING, G_TYPE_STRING);
+	GtkCellRenderer *text_renderer;
+	GtkTreeViewColumn *column;
+	GtkTreeSelection *treesel;
+	GtkWidget *vbox, *swin, *tree;
+	GeanyDocument *doc;
+
+	doc = document_get_current();
+	if (doc && doc->file_type->priv->warn_color_scheme)
+		dialogs_show_msgbox_with_secondary(GTK_MESSAGE_WARNING,
+			_("The current filetype overrides the default style."),
+			_("This may cause color schemes to display incorrectly."));
+
+	scheme_tree = tree = gtk_tree_view_new_with_model(GTK_TREE_MODEL(store));
+	g_object_unref(store);
+	gtk_tree_view_set_rules_hint(GTK_TREE_VIEW(tree), TRUE);
+	gtk_tree_view_set_headers_visible(GTK_TREE_VIEW(tree), FALSE);
+
+	text_renderer = gtk_cell_renderer_text_new();
+	g_object_set(text_renderer, "wrap-mode", PANGO_WRAP_WORD, NULL);
+	column = gtk_tree_view_column_new_with_attributes(
+		NULL, text_renderer, "markup", SCHEME_MARKUP, NULL);
+	gtk_tree_view_append_column(GTK_TREE_VIEW(tree), column);
+
+	add_color_scheme_items(store);
+
+	treesel = gtk_tree_view_get_selection(GTK_TREE_VIEW(tree));
+	g_signal_connect(treesel, "changed", G_CALLBACK(on_color_scheme_changed), NULL);
+
+	/* old dialog may still be showing */
+	if (dialog)
+		gtk_widget_destroy(dialog);
+	dialog = gtk_dialog_new_with_buttons(_("Color Schemes"),
+		GTK_WINDOW(main_widgets.window), GTK_DIALOG_DESTROY_WITH_PARENT,
+		GTK_STOCK_CLOSE, GTK_RESPONSE_CLOSE, NULL);
+	vbox = ui_dialog_vbox_new(GTK_DIALOG(dialog));
+	gtk_box_set_spacing(GTK_BOX(vbox), 6);
+	gtk_widget_set_name(dialog, "GeanyDialog");
+	gtk_window_set_default_size(GTK_WINDOW(dialog),
+		GEANY_DEFAULT_DIALOG_HEIGHT * 7/4, GEANY_DEFAULT_DIALOG_HEIGHT);
+
+	swin = gtk_scrolled_window_new(NULL, NULL);
+	gtk_scrolled_window_set_shadow_type(GTK_SCROLLED_WINDOW(swin), GTK_SHADOW_ETCHED_IN);
+	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(swin),
+		GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
+	gtk_container_add(GTK_CONTAINER(swin), tree);
+	gtk_container_add(GTK_CONTAINER(vbox), swin);
+	g_signal_connect(dialog, "response", G_CALLBACK(on_color_scheme_dialog_response), &dialog);
+	gtk_widget_show_all(dialog);
 }
 
 
@@ -1331,7 +1402,8 @@ gboolean highlighting_is_string_style(gint lexer, gint style)
 				style == SCE_C_STRINGEOL ||
 				style == SCE_C_STRINGRAW ||
 				style == SCE_C_VERBATIM ||
-				style == SCE_C_TRIPLEVERBATIM);
+				style == SCE_C_TRIPLEVERBATIM ||
+				style == SCE_C_HASHQUOTEDSTRING);
 
 		case SCLEX_PASCAL:
 			return (style == SCE_PAS_CHARACTER ||
@@ -1414,6 +1486,7 @@ gboolean highlighting_is_string_style(gint lexer, gint style)
 			return (style == SCE_MATLAB_STRING ||
 				style == SCE_MATLAB_DOUBLEQUOTESTRING);
 
+		case SCLEX_XML:
 		case SCLEX_HTML:
 			return (
 				style == SCE_HBA_STRING ||
@@ -1566,6 +1639,7 @@ gboolean highlighting_is_comment_style(gint lexer, gint style)
 		case SCLEX_YAML:
 			return (style == SCE_YAML_COMMENT);
 
+		case SCLEX_XML:
 		case SCLEX_HTML:
 			return (
 				style == SCE_HBA_COMMENTLINE ||

@@ -1,8 +1,8 @@
 
 #include <windows.h> // include for version info constants
 
-#define VER_FILEVERSION             1,22,0,0
-#define VER_FILEVERSION_STR         "1.22"
+#define VER_FILEVERSION             1,23,0,0
+#define VER_FILEVERSION_STR         "1.23"
 
 A ICON MOVEABLE PURE LOADONCALL DISCARDABLE "../icons/geany.ico"
 
@@ -21,7 +21,7 @@ FILETYPE			VFT_APP
 			VALUE "FileVersion", VER_FILEVERSION_STR
 			VALUE "FileDescription", "Geany"
 			VALUE "InternalName", "Geany"
-			VALUE "LegalCopyright", "Copyright 2005-2011 by the Geany developers"
+			VALUE "LegalCopyright", "Copyright 2005-2012 by the Geany developers"
 			VALUE "LegalTrademarks", ""
 			VALUE "OriginalFilename", "Geany.exe"
 			VALUE "ProductName", "Geany"

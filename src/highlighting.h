@@ -1,8 +1,8 @@
 /*
  *      highlighting.h - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2005-2011 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2006-2011 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2005-2012 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2006-2012 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -23,6 +23,8 @@
 #ifndef GEANY_HIGHLIGHTING_H
 #define GEANY_HIGHLIGHTING_H 1
 
+G_BEGIN_DECLS
+
 #include "Scintilla.h"
 #include "ScintillaWidget.h"
 
@@ -39,8 +41,6 @@ typedef struct GeanyLexerStyle
 GeanyLexerStyle;
 
 
-void highlighting_init(void);
-
 void highlighting_init_styles(guint filetype_idx, GKeyFile *config, GKeyFile *configh);
 
 void highlighting_set_styles(ScintillaObject *sci, GeanyFiletype *ft);
@@ -52,5 +52,9 @@ void highlighting_free_styles(void);
 gboolean highlighting_is_string_style(gint lexer, gint style);
 gboolean highlighting_is_comment_style(gint lexer, gint style);
 gboolean highlighting_is_code_style(gint lexer, gint style);
+
+void highlighting_show_color_scheme_dialog(void);
+
+G_END_DECLS
 
 #endif

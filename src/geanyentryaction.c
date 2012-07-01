@@ -1,8 +1,8 @@
 /*
  *      geanyentryaction.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2008-2011 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2008-2011 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2008-2012 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2008-2012 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -40,6 +40,7 @@ struct _GeanyEntryActionPrivate
 {
 	GtkWidget	*entry;
 	gboolean	 numeric;
+	gboolean	 connected;
 };
 
 enum
@@ -108,13 +109,19 @@ static void geany_entry_action_connect_proxy(GtkAction *action, GtkWidget *widge
 {
 	GeanyEntryActionPrivate *priv = GEANY_ENTRY_ACTION_GET_PRIVATE(action);
 
-	if (priv->numeric)
-		g_signal_connect(priv->entry, "insert-text",
-			G_CALLBACK(ui_editable_insert_text_callback), NULL);
-	g_signal_connect(priv->entry, "changed", G_CALLBACK(delegate_entry_changed_cb), action);
-	g_signal_connect(priv->entry, "activate", G_CALLBACK(delegate_entry_activate_cb), action);
-	g_signal_connect(priv->entry, "activate-backward",
-		G_CALLBACK(delegate_entry_activate_backward_cb), action);
+	/* make sure not to connect handlers twice */
+	if (! priv->connected)
+	{
+		if (priv->numeric)
+			g_signal_connect(priv->entry, "insert-text",
+				G_CALLBACK(ui_editable_insert_text_callback), NULL);
+		g_signal_connect(priv->entry, "changed", G_CALLBACK(delegate_entry_changed_cb), action);
+		g_signal_connect(priv->entry, "activate", G_CALLBACK(delegate_entry_activate_cb), action);
+		g_signal_connect(priv->entry, "activate-backward",
+			G_CALLBACK(delegate_entry_activate_backward_cb), action);
+
+		priv->connected = TRUE;
+	}
 
 	GTK_ACTION_CLASS(geany_entry_action_parent_class)->connect_proxy(action, widget);
 }
@@ -167,6 +174,7 @@ static void geany_entry_action_init(GeanyEntryAction *action)
 	priv = action->priv;
 	priv->entry = NULL;
 	priv->numeric = FALSE;
+	priv->connected = FALSE;
 }
 
 

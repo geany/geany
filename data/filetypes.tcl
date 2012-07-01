@@ -9,6 +9,7 @@ blockcomment=comment
 number=number_1
 operator=operator
 identifier=identifier_1
+subbrace=identifier_2
 wordinquote=string_1
 inquote=string_1
 substitution=function

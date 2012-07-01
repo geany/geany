@@ -1,8 +1,8 @@
 /*
  *      project.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2007-2011 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2007-2011 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2007-2012 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2007-2012 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -54,13 +54,12 @@ ProjectPrefs project_prefs = { NULL, FALSE, FALSE };
 static GeanyProjectPrivate priv;
 static GeanyIndentPrefs indentation;
 
-static StashGroup *indent_group = NULL;
+static GSList *stash_groups = NULL;
 
 static struct
 {
 	gchar *project_file_path; /* in UTF-8 */
 } local_prefs = { NULL };
-
 
 static gboolean entries_modified;
 
@@ -87,6 +86,7 @@ static void on_name_entry_changed(GtkEditable *editable, PropertyDialogElements 
 static void on_entries_changed(GtkEditable *editable, PropertyDialogElements *e);
 static void on_radio_long_line_custom_toggled(GtkToggleButton *radio, GtkWidget *spin_long_line);
 static void apply_editor_prefs(void);
+static void init_stash_prefs(void);
 
 
 #define SHOW_ERR(args) dialogs_show_msgbox(GTK_MESSAGE_ERROR, args)
@@ -333,9 +333,9 @@ static void remove_foreach_project_filetype(gpointer data, gpointer user_data)
 	GeanyFiletype *ft = data;
 	if (ft != NULL)
 	{
-		setptr(ft->projfilecmds, NULL);
-		setptr(ft->projexeccmds, NULL);
-		setptr(ft->projerror_regex_string, NULL);
+		SETPTR(ft->projfilecmds, NULL);
+		SETPTR(ft->projexeccmds, NULL);
+		SETPTR(ft->projerror_regex_string, NULL);
 		ft->project_list_entry = -1;
 	}
 }
@@ -344,6 +344,8 @@ static void remove_foreach_project_filetype(gpointer data, gpointer user_data)
 /* open_default will make function reload default session files on close */
 void project_close(gboolean open_default)
 {
+	GSList *node;
+
 	g_return_if_fail(app->project != NULL);
 
 	ui_set_statusbar(TRUE, _("Project \"%s\" closed."), app->project->name);
@@ -370,6 +372,12 @@ void project_close(gboolean open_default)
 
 	g_free(app->project);
 	app->project = NULL;
+
+	foreach_slist(node, stash_groups)
+		stash_group_free(node->data);
+
+	g_slist_free(stash_groups);
+	stash_groups = NULL;
 
 	apply_editor_prefs(); /* ensure that global settings are restored */
 
@@ -424,15 +432,9 @@ on_project_properties_base_path_button_clicked(GtkWidget *button,
 
 static void insert_build_page(PropertyDialogElements *e)
 {
-	GtkWidget *build_table, *label, *editor_tab;
+	GtkWidget *build_table, *label;
 	GeanyDocument *doc = document_get_current();
 	GeanyFiletype *ft = NULL;
-	gint page_num;
-
-	/* lookup the "Editor" tab page so the "Build" tab can be inserted
-	 * right after it. */
-	editor_tab = ui_lookup_widget(e->dialog, "vbox_project_dialog_editor");
-	page_num = gtk_notebook_page_num(GTK_NOTEBOOK(e->notebook), editor_tab);
 
 	if (doc != NULL)
 		ft = doc->file_type;
@@ -440,8 +442,8 @@ static void insert_build_page(PropertyDialogElements *e)
 	build_table = build_commands_table(doc, GEANY_BCS_PROJ, &(e->build_properties), ft);
 	gtk_container_set_border_width(GTK_CONTAINER(build_table), 6);
 	label = gtk_label_new(_("Build"));
-	e->build_page_num = gtk_notebook_insert_page(GTK_NOTEBOOK(e->notebook),
-		build_table, label, ++page_num);
+	e->build_page_num = gtk_notebook_append_page(GTK_NOTEBOOK(e->notebook),
+		build_table, label);
 }
 
 
@@ -493,6 +495,7 @@ static void show_project_properties(gboolean show_build)
 	GtkWidget *widget = NULL;
 	GtkWidget *radio_long_line_custom;
 	static PropertyDialogElements e;
+	GSList *node;
 
 	g_return_if_fail(app->project != NULL);
 
@@ -503,7 +506,8 @@ static void show_project_properties(gboolean show_build)
 
 	insert_build_page(&e);
 
-	stash_group_display(indent_group, e.dialog);
+	foreach_slist(node, stash_groups)
+		stash_group_display(node->data, e.dialog);
 
 	/* fill the elements with the appropriate data */
 	gtk_entry_set_text(GTK_ENTRY(e.name), p->name);
@@ -538,7 +542,7 @@ static void show_project_properties(gboolean show_build)
 		g_free(str);
 	}
 
-	g_signal_emit_by_name(geany_object, "project-dialog-create", e.notebook);
+	g_signal_emit_by_name(geany_object, "project-dialog-open", e.notebook);
 	gtk_widget_show_all(e.dialog);
 
 	/* note: notebook page must be shown before setting current page */
@@ -563,6 +567,7 @@ static void show_project_properties(gboolean show_build)
 	}
 
 	build_free_fields(e.build_properties);
+	g_signal_emit_by_name(geany_object, "project-dialog-close", e.notebook);
 	gtk_notebook_remove_page(GTK_NOTEBOOK(e.notebook), e.build_page_num);
 	gtk_widget_hide(e.dialog);
 }
@@ -589,7 +594,7 @@ gboolean project_ask_close(void)
 	{
 		if (dialogs_show_question_full(NULL, GTK_STOCK_CLOSE, GTK_STOCK_CANCEL,
 			_("Do you want to close it before proceeding?"),
-			_("The '%s' project is already open."), app->project->name))
+			_("The '%s' project is open."), app->project->name))
 		{
 			project_close(FALSE);
 			return TRUE;
@@ -607,9 +612,10 @@ static GeanyProject *create_project(void)
 	GeanyProject *project = g_new0(GeanyProject, 1);
 
 	memset(&priv, 0, sizeof priv);
-	indentation = *editor_get_indent_prefs(NULL);
 	priv.indentation = &indentation;
 	project->priv = &priv;
+
+	init_stash_prefs();
 
 	project->file_patterns = NULL;
 
@@ -669,7 +675,7 @@ static gboolean update_config(const PropertyDialogElements *e, gboolean new_proj
 		if (! g_path_is_absolute(locale_path))
 		{	/* relative base path, so add base dir of project file name */
 			gchar *dir = g_path_get_dirname(locale_filename);
-			setptr(locale_path, g_strconcat(dir, G_DIR_SEPARATOR_S, locale_path, NULL));
+			SETPTR(locale_path, g_strconcat(dir, G_DIR_SEPARATOR_S, locale_path, NULL));
 			g_free(dir);
 		}
 
@@ -715,10 +721,10 @@ static gboolean update_config(const PropertyDialogElements *e, gboolean new_proj
 	}
 	p = app->project;
 
-	setptr(p->name, g_strdup(name));
-	setptr(p->file_name, g_strdup(file_name));
+	SETPTR(p->name, g_strdup(name));
+	SETPTR(p->file_name, g_strdup(file_name));
 	/* use "." if base_path is empty */
-	setptr(p->base_path, g_strdup(NZV(base_path) ? base_path : "./"));
+	SETPTR(p->base_path, g_strdup(NZV(base_path) ? base_path : "./"));
 
 	if (! new_project)	/* save properties specific fields */
 	{
@@ -730,14 +736,16 @@ static gboolean update_config(const PropertyDialogElements *e, gboolean new_proj
 		GtkWidget *widget;
 		gchar *tmp;
 		GString *str;
+		GSList *node;
 
 		/* get and set the project description */
 		buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(e->description));
 		gtk_text_buffer_get_start_iter(buffer, &start);
 		gtk_text_buffer_get_end_iter(buffer, &end);
-		setptr(p->description, g_strdup(gtk_text_buffer_get_text(buffer, &start, &end, FALSE)));
+		SETPTR(p->description, g_strdup(gtk_text_buffer_get_text(buffer, &start, &end, FALSE)));
 
-		stash_group_update(indent_group, e->dialog);
+		foreach_slist(node, stash_groups)
+			stash_group_update(node->data, e->dialog);
 
 		/* read the project build menu */
 		oldvalue = ft ? ft->projfilecmds : NULL;
@@ -954,6 +962,7 @@ static gboolean load_config(const gchar *filename)
 {
 	GKeyFile *config;
 	GeanyProject *p;
+	GSList *node;
 
 	/* there should not be an open project */
 	g_return_val_if_fail(app->project == NULL && filename != NULL, FALSE);
@@ -967,7 +976,8 @@ static gboolean load_config(const gchar *filename)
 
 	p = create_project();
 
-	stash_group_load_from_key_file(indent_group, config);
+	foreach_slist(node, stash_groups)
+		stash_group_load_from_key_file(node->data, config);
 
 	p->name = utils_get_setting_string(config, "project", "name", GEANY_STRING_UNTITLED);
 	p->description = utils_get_setting_string(config, "project", "description", "");
@@ -1021,6 +1031,7 @@ static gboolean write_config(gboolean emit_signal)
 	gchar *filename;
 	gchar *data;
 	gboolean ret = FALSE;
+	GSList *node;
 
 	g_return_val_if_fail(app->project != NULL, FALSE);
 
@@ -1031,7 +1042,8 @@ static gboolean write_config(gboolean emit_signal)
 	filename = utils_get_locale_from_utf8(p->file_name);
 	g_key_file_load_from_file(config, filename, G_KEY_FILE_NONE, NULL);
 
-	stash_group_save_to_key_file(indent_group, config);
+	foreach_slist(node, stash_groups)
+		stash_group_save_to_key_file(node->data, config);
 
 	g_key_file_set_string(config, "project", "name", p->name);
 	g_key_file_set_string(config, "project", "base_path", p->base_path);
@@ -1155,18 +1167,26 @@ void project_apply_prefs(void)
 	const gchar *str;
 
 	str = gtk_entry_get_text(GTK_ENTRY(path_entry));
-	setptr(local_prefs.project_file_path, g_strdup(str));
+	SETPTR(local_prefs.project_file_path, g_strdup(str));
 }
 
 
-void project_init(void)
+static void add_stash_group(StashGroup *group)
+{
+	stash_groups = g_slist_prepend(stash_groups, group);
+}
+
+
+static void init_stash_prefs(void)
 {
 	StashGroup *group;
+	GKeyFile *kf;
 
 	group = stash_group_new("indentation");
-	/* defaults are copied from editor indent prefs */
+	/* copy global defaults */
+	indentation = *editor_get_indent_prefs(NULL);
 	stash_group_set_use_defaults(group, FALSE);
-	indent_group = group;
+	add_stash_group(group);
 
 	stash_group_add_spin_button_integer(group, &indentation.width,
 		"indent_width", 4, "spin_indent_width_project");
@@ -1185,10 +1205,48 @@ void project_init(void)
 		"detect_indent_width", FALSE, "check_detect_indent_width_project");
 	stash_group_add_combo_box(group, (gint*)(gpointer)&indentation.auto_indent_mode,
 		"indent_mode", GEANY_AUTOINDENT_CURRENTCHARS, "combo_auto_indent_mode_project");
+
+	group = stash_group_new("file_prefs");
+	stash_group_add_toggle_button(group, &priv.final_new_line,
+		"final_new_line", file_prefs.final_new_line, "check_new_line1");
+	stash_group_add_toggle_button(group, &priv.ensure_convert_new_lines,
+		"ensure_convert_new_lines", file_prefs.ensure_convert_new_lines, "check_ensure_convert_new_lines1");
+	stash_group_add_toggle_button(group, &priv.strip_trailing_spaces,
+		"strip_trailing_spaces", file_prefs.strip_trailing_spaces, "check_trailing_spaces1");
+	stash_group_add_toggle_button(group, &priv.replace_tabs,
+		"replace_tabs", file_prefs.replace_tabs, "check_replace_tabs1");
+	add_stash_group(group);
+	/* apply defaults */
+	kf = g_key_file_new();
+	stash_group_load_from_key_file(group, kf);
+	g_key_file_free(kf);
+}
+
+
+#define COPY_PREF(dest, prefname)\
+	(dest.prefname = priv.prefname)
+
+const GeanyFilePrefs *project_get_file_prefs(void)
+{
+	static GeanyFilePrefs fp;
+
+	if (!app->project)
+		return &file_prefs;
+
+	fp = file_prefs;
+	COPY_PREF(fp, final_new_line);
+	COPY_PREF(fp, ensure_convert_new_lines);
+	COPY_PREF(fp, strip_trailing_spaces);
+	COPY_PREF(fp, replace_tabs);
+	return &fp;
+}
+
+
+void project_init(void)
+{
 }
 
 
 void project_finalize(void)
 {
-	stash_group_free(indent_group);
 }

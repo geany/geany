@@ -146,7 +146,7 @@ public:
 			} else {
 				if (chAttr != chWhile)
 					chFlags = 0;
-				chAttr |= chFlags;
+				chAttr = static_cast<char>(chAttr | chFlags);
 				for (unsigned int i = startSeg; i <= pos; i++) {
 					assert((startPosStyling + validLen) < Length());
 					styleBuf[validLen++] = static_cast<char>(chAttr);
