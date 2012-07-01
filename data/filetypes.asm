@@ -14,7 +14,7 @@ mathinstruction=keyword_2
 register=type
 directive=preprocessor
 directiveoperand=keyword_3
-character=string_1
+character=character
 stringeol=string_eol
 extinstruction=keyword_4
 
