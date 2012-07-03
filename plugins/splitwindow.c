@@ -426,7 +426,6 @@ static void set_editor(EditWindow *editwin, GeanyEditor *editor)
 
 	sync_to_current(editwin->sci, editor->sci);
 
-	scintilla_send_message(editwin->sci, SCI_USEPOPUP, 1, 0);
 	/* for margin events */
 	g_signal_connect(editwin->sci, "sci-notify",
 			G_CALLBACK(on_sci_notify), NULL);
