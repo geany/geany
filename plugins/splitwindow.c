@@ -46,6 +46,7 @@ enum
 	KB_SPLIT_HORIZONTAL,
 	KB_SPLIT_VERTICAL,
 	KB_SPLIT_UNSPLIT,
+	KB_SPLIT_SWITCH,
 	KB_COUNT
 };
 
@@ -537,6 +538,10 @@ static void kb_activate(guint key_id)
 			if (plugin_state != STATE_UNSPLIT)
 				on_unsplit(NULL, NULL);
 			break;
+		case KB_SPLIT_SWITCH:
+			if (plugin_state != STATE_UNSPLIT)
+				swap_panes();
+			break;
 	}
 }
 
@@ -593,6 +598,8 @@ void plugin_init(GeanyData *data)
 		0, 0, "split_vertical", _("Split Vertically"), menu_items.vertical);
 	keybindings_set_item(key_group, KB_SPLIT_UNSPLIT, kb_activate,
 		0, 0, "split_unsplit", _("_Unsplit"), menu_items.unsplit);
+	keybindings_set_item(key_group, KB_SPLIT_SWITCH, kb_activate,
+		0, 0, "split_switch", _("_Switch Panes Focus"), NULL);
 }
 
 
