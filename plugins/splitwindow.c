@@ -566,6 +566,9 @@ static void split_view(gboolean horizontal)
 	gtk_widget_unref(notebook);
 
 	edit_window.notebook = gtk_notebook_new();
+	gtk_notebook_set_tab_pos(GTK_NOTEBOOK(edit_window.notebook),
+		geany->interface_prefs->tab_pos_editor);
+
 	toolbar = create_toolbar();
 	gtk_widget_show_all(toolbar);
 	/* FIXME: notebook's action widgets is a 2.20 feature... */
