@@ -187,6 +187,8 @@ static void set_sci_scrolling(ScintillaObject *sci, gint column, gint line)
 	gint cur_line, cur_col;
 
 	get_sci_scrolling(sci, &cur_col, &cur_line);
+	line = (gint) scintilla_send_message(sci, SCI_VISIBLEFROMDOCLINE, line, 0);
+	cur_line = (gint) scintilla_send_message(sci, SCI_VISIBLEFROMDOCLINE, cur_line, 0);
 	scintilla_send_message(sci, SCI_LINESCROLL, (uptr_t) (column - cur_col), line - cur_line);
 }
 
