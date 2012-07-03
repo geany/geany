@@ -168,8 +168,14 @@ static void sync_to_current(ScintillaObject *sci, ScintillaObject *current)
 static void get_sci_scrolling(ScintillaObject *sci, gint *column, gint *line)
 {
 	gint pos;
+	gint x = 0, y = 0;
+	gint i;
 
-	pos = (gint) scintilla_send_message(sci, SCI_POSITIONFROMPOINT, 0, 0);
+	x += scintilla_send_message(sci, SCI_GETMARGINLEFT, 0, 0);
+	for (i = 0; i < 5 /* scintilla has 5 margins */; i++)
+		x += scintilla_send_message(sci, SCI_GETMARGINWIDTHN, i, 0);
+
+	pos = (gint) scintilla_send_message(sci, SCI_POSITIONFROMPOINT, x, y);
 	*line = sci_get_line_from_position(sci, pos);
 	*column = sci_get_col_from_position(sci, pos);
 }
@@ -222,7 +228,6 @@ static void swap_panes(void)
 			gint real_line, real_col;
 			gint view_line, view_col;
 
-			/* FIXME: the horizontal scrolling isn't correctly restored */
 			/* FIXME: swap folding and selection, too */
 
 			get_sci_scrolling(edit_window.sci, &view_col, &view_line);
