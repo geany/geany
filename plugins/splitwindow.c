@@ -508,6 +508,40 @@ static void on_doc_menu_show(GtkMenu *menu)
 }
 
 
+static gboolean on_notebook_button_press_event(GtkWidget *widget, GdkEventButton *event,
+	gpointer user_data)
+{
+	if (event->button == 3)
+	{
+		GtkWidget *item;
+		GtkWidget *menu = gtk_menu_new();
+
+		ui_menu_add_document_items(GTK_MENU(menu), edit_window.editor->document,
+			G_CALLBACK(on_doc_menu_item_clicked));
+
+		item = gtk_separator_menu_item_new();
+		gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
+
+		item = ui_image_menu_item_new(GTK_STOCK_JUMP_TO, _("Show the current document"));
+		g_signal_connect(item, "activate", G_CALLBACK(on_refresh), NULL);
+		gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
+
+		item = gtk_separator_menu_item_new();
+		gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
+
+		item = ui_image_menu_item_new(GTK_STOCK_CLOSE, _("_Unsplit"));
+		g_signal_connect(item, "activate", G_CALLBACK(on_unsplit), NULL);
+		gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
+
+		gtk_widget_show_all(menu);
+		gtk_menu_popup(GTK_MENU(menu), NULL, NULL, NULL, NULL, event->button, event->time);
+
+		return TRUE;
+	}
+	return FALSE;
+}
+
+
 static GtkWidget *create_toolbar(void)
 {
 	GtkWidget *toolbar, *item;
@@ -568,6 +602,8 @@ static void split_view(gboolean horizontal)
 	edit_window.notebook = gtk_notebook_new();
 	gtk_notebook_set_tab_pos(GTK_NOTEBOOK(edit_window.notebook),
 		geany->interface_prefs->tab_pos_editor);
+	g_signal_connect_after(edit_window.notebook, "button-press-event",
+		G_CALLBACK(on_notebook_button_press_event), NULL);
 
 	toolbar = create_toolbar();
 	gtk_widget_show_all(toolbar);
