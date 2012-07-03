@@ -165,31 +165,111 @@ static void sync_to_current(ScintillaObject *sci, ScintillaObject *current)
 }
 
 
+struct SciState
+{
+	struct
+	{
+		gint line, column;
+	} scrolling;
+	struct
+	{
+		GArray *points;
+	} folding;
+};
+
+
 static void get_sci_scrolling(ScintillaObject *sci, gint *column, gint *line)
 {
 	gint pos;
 	gint x = 0, y = 0;
 	gint i;
 
-	x += scintilla_send_message(sci, SCI_GETMARGINLEFT, 0, 0);
+	x += (gint) scintilla_send_message(sci, SCI_GETMARGINLEFT, 0, 0);
 	for (i = 0; i < 5 /* scintilla has 5 margins */; i++)
-		x += scintilla_send_message(sci, SCI_GETMARGINWIDTHN, i, 0);
+		x += (gint) scintilla_send_message(sci, SCI_GETMARGINWIDTHN, (uptr_t) i, 0);
 
-	pos = (gint) scintilla_send_message(sci, SCI_POSITIONFROMPOINT, x, y);
+	pos = (gint) scintilla_send_message(sci, SCI_POSITIONFROMPOINT, (uptr_t) x, y);
 	*line = sci_get_line_from_position(sci, pos);
 	*column = sci_get_col_from_position(sci, pos);
 }
 
 
-/* FIXME: oh shit, this doesn't work with folding... */
 static void set_sci_scrolling(ScintillaObject *sci, gint column, gint line)
 {
 	gint cur_line, cur_col;
 
 	get_sci_scrolling(sci, &cur_col, &cur_line);
-	line = (gint) scintilla_send_message(sci, SCI_VISIBLEFROMDOCLINE, line, 0);
-	cur_line = (gint) scintilla_send_message(sci, SCI_VISIBLEFROMDOCLINE, cur_line, 0);
+	line = (gint) scintilla_send_message(sci, SCI_VISIBLEFROMDOCLINE, (uptr_t) line, 0);
+	cur_line = (gint) scintilla_send_message(sci, SCI_VISIBLEFROMDOCLINE, (uptr_t) cur_line, 0);
 	scintilla_send_message(sci, SCI_LINESCROLL, (uptr_t) (column - cur_col), line - cur_line);
+}
+
+
+static GArray *get_sci_folding(ScintillaObject *sci)
+{
+	GArray *array;
+	gint n_lines, i;
+
+	n_lines = sci_get_line_count(sci);
+	array = g_array_sized_new(FALSE, FALSE, 1, (guint) n_lines);
+
+	for (i = 0; i < n_lines; i++)
+	{
+		gchar visible = (gchar) scintilla_send_message(sci, SCI_GETLINEVISIBLE, (uptr_t) i, 0);
+
+		g_array_append_val(array, visible);
+	}
+
+	return array;
+}
+
+
+static void set_sci_folding(ScintillaObject *sci, GArray *folding)
+{
+	guint i;
+
+	for (i = 0; i < folding->len; i++)
+	{
+		gchar visible = (gchar) scintilla_send_message(sci, SCI_GETLINEVISIBLE, i, 0);
+
+		if (visible != g_array_index(folding, gchar, i))
+			scintilla_send_message(sci, SCI_TOGGLEFOLD, i, 0);
+	}
+}
+
+
+static void sci_state_init(struct SciState *state)
+{
+	state->scrolling.line = 0;
+	state->scrolling.column = 0;
+	state->folding.points = NULL;
+}
+
+
+static void sci_state_unset(struct SciState *state)
+{
+	g_array_free(state->folding.points, TRUE);
+}
+
+
+/* FIXME: include selection? */
+static void save_sci_state(ScintillaObject *sci, struct SciState *state)
+{
+	/* scrolling */
+	get_sci_scrolling(sci, &state->scrolling.column, &state->scrolling.line);
+
+	/* folding */
+	state->folding.points = get_sci_folding(sci);
+}
+
+
+static void apply_sci_state(ScintillaObject *sci, struct SciState *state)
+{
+	/* folding */
+	set_sci_folding(sci, state->folding.points);
+
+	/* scrolling */
+	set_sci_scrolling(sci, state->scrolling.column, state->scrolling.line);
 }
 
 
@@ -227,19 +307,22 @@ static void swap_panes(void)
 
 		if (view_doc)
 		{
-			gint real_line, real_col;
-			gint view_line, view_col;
+			struct SciState real_state, view_state;
 
-			/* FIXME: swap folding and selection, too */
+			sci_state_init(&real_state);
+			sci_state_init(&view_state);
 
-			get_sci_scrolling(edit_window.sci, &view_col, &view_line);
-			get_sci_scrolling(real_doc->editor->sci, &real_col, &real_line);
+			save_sci_state(edit_window.sci, &view_state);
+			save_sci_state(real_doc->editor->sci, &real_state);
 
 			set_editor(&edit_window, real_doc->editor);
-			set_sci_scrolling(edit_window.sci, real_col, real_line);
+			apply_sci_state(edit_window.sci, &real_state);
 
 			document_show_tab(view_doc);
-			set_sci_scrolling(view_doc->editor->sci, view_col, view_line);
+			apply_sci_state(view_doc->editor->sci, &view_state);
+
+			sci_state_unset(&real_state);
+			sci_state_unset(&view_state);
 		}
 	}
 
