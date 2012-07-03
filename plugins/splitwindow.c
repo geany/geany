@@ -73,7 +73,7 @@ typedef struct EditWindow
 {
 	GeanyEditor		*editor;	/* original editor for split view */
 	ScintillaObject	*sci;		/* new editor widget */
-	GtkWidget		*vbox;
+	GtkWidget		*notebook;
 	GtkWidget		*name_label;
 }
 EditWindow;
@@ -82,6 +82,7 @@ static EditWindow edit_window = {NULL, NULL, NULL, NULL};
 
 
 static void on_unsplit(GtkMenuItem *menuitem, gpointer user_data);
+static void set_editor(EditWindow *editwin, GeanyEditor *editor);
 
 
 /* line numbers visibility */
@@ -163,8 +164,131 @@ static void sync_to_current(ScintillaObject *sci, ScintillaObject *current)
 }
 
 
+static void get_sci_scrolling(ScintillaObject *sci, gint *column, gint *line)
+{
+	gint pos;
+
+	pos = (gint) scintilla_send_message(sci, SCI_POSITIONFROMPOINT, 0, 0);
+	*line = sci_get_line_from_position(sci, pos);
+	*column = sci_get_col_from_position(sci, pos);
+}
+
+
+/* FIXME: oh shit, this doesn't work with folding... */
+static void set_sci_scrolling(ScintillaObject *sci, gint column, gint line)
+{
+	gint cur_line, cur_col;
+
+	get_sci_scrolling(sci, &cur_col, &cur_line);
+	scintilla_send_message(sci, SCI_LINESCROLL, (uptr_t) (column - cur_col), line - cur_line);
+}
+
+
+static void swap_panes(void)
+{
+	GtkWidget *pane = gtk_widget_get_parent(geany_data->main_widgets->notebook);
+	GtkWidget *child1, *child2;
+	GeanyDocument *real_doc = document_get_current();
+
+	g_return_if_fail(edit_window.editor);
+	g_return_if_fail(real_doc != NULL);
+
+	child1 = gtk_paned_get_child1(GTK_PANED(pane));
+	child2 = gtk_paned_get_child2(GTK_PANED(pane));
+
+	g_object_ref(child1);
+	g_object_ref(child2);
+	gtk_container_remove(GTK_CONTAINER(pane), child1);
+	gtk_container_remove(GTK_CONTAINER(pane), child2);
+
+	/* now, swap displayed documents */
+	if (real_doc)
+	{
+		GeanyDocument *view_doc = NULL;
+		guint i;
+
+		foreach_document(i)
+		{
+			if (documents[i]->editor == edit_window.editor)
+			{
+				view_doc = documents[i];
+				break;
+			}
+		}
+
+		if (view_doc)
+		{
+			gint real_line, real_col;
+			gint view_line, view_col;
+
+			/* FIXME: the horizontal scrolling isn't correctly restored */
+			/* FIXME: swap folding and selection, too */
+
+			get_sci_scrolling(edit_window.sci, &view_col, &view_line);
+			get_sci_scrolling(real_doc->editor->sci, &real_col, &real_line);
+
+			set_editor(&edit_window, real_doc->editor);
+			set_sci_scrolling(edit_window.sci, real_col, real_line);
+
+			document_show_tab(view_doc);
+			set_sci_scrolling(view_doc->editor->sci, view_col, view_line);
+		}
+	}
+
+	gtk_paned_add1(GTK_PANED(pane), child2);
+	gtk_paned_add2(GTK_PANED(pane), child1);
+	g_object_unref(child1);
+	g_object_unref(child2);
+
+	real_doc = document_get_current();
+	if (DOC_VALID(real_doc))
+		gtk_widget_grab_focus(GTK_WIDGET(real_doc->editor->sci));
+}
+
+
+static gboolean on_event(GtkWidget *widget, GdkEvent *event, gpointer user_data)
+{
+	switch (event->type)
+	{
+		case GDK_BUTTON_PRESS:
+		case GDK_2BUTTON_PRESS:
+		case GDK_3BUTTON_PRESS:
+		case GDK_BUTTON_RELEASE:
+		case GDK_KEY_PRESS:
+		case GDK_KEY_RELEASE:
+		{
+			GeanyDocument *doc;
+
+			swap_panes();
+
+			doc = document_get_current();
+			if (DOC_VALID(doc))
+			{
+				/* Swap the event's window with the other sci view */
+				GdkEventAny *any_event = (GdkEventAny*) event;
+
+				g_object_unref(any_event->window);
+				any_event->window = gtk_widget_get_window(GTK_WIDGET(doc->editor->sci));
+				g_object_ref(any_event->window);
+
+				gtk_main_do_event(event);
+			}
+
+			return TRUE;
+		}
+
+		default: break;
+	}
+
+	return FALSE;
+}
+
+
 static void set_editor(EditWindow *editwin, GeanyEditor *editor)
 {
+	GtkWidget *box;
+	gchar *display_name = document_get_basename_for_display(editor->document, -1);
+
 	editwin->editor = editor;
 
 	/* first destroy any widget, otherwise its signals will have an
@@ -174,7 +298,32 @@ static void set_editor(EditWindow *editwin, GeanyEditor *editor)
 
 	editwin->sci = editor_create_widget(editor);
 	gtk_widget_show(GTK_WIDGET(editwin->sci));
-	gtk_container_add(GTK_CONTAINER(editwin->vbox), GTK_WIDGET(editwin->sci));
+
+	box = gtk_hbox_new(FALSE, 2);
+	edit_window.name_label = gtk_label_new(display_name);
+	gtk_box_pack_start(GTK_BOX(box), edit_window.name_label, FALSE, FALSE, 0);
+
+	if (geany->file_prefs->show_tab_cross)
+	{
+		GtkWidget *image, *btn, *align;
+
+		btn = gtk_button_new();
+		gtk_button_set_relief(GTK_BUTTON(btn), GTK_RELIEF_NONE);
+		gtk_button_set_focus_on_click(GTK_BUTTON(btn), FALSE);
+		gtk_widget_set_name(btn, "geany-close-tab-button");
+
+		image = gtk_image_new_from_stock(GTK_STOCK_CLOSE, GTK_ICON_SIZE_MENU);
+		gtk_container_add(GTK_CONTAINER(btn), image);
+
+		align = gtk_alignment_new(1.0, 0.5, 0.0, 0.0);
+		gtk_container_add(GTK_CONTAINER(align), btn);
+		gtk_box_pack_start(GTK_BOX(box), align, TRUE, TRUE, 0);
+
+		g_signal_connect(btn, "clicked", G_CALLBACK(on_unsplit), NULL);
+	}
+
+	gtk_widget_show_all(box);
+	gtk_notebook_append_page(GTK_NOTEBOOK(editwin->notebook), GTK_WIDGET(editwin->sci), box);
 
 	sync_to_current(editwin->sci, editor->sci);
 
@@ -182,8 +331,10 @@ static void set_editor(EditWindow *editwin, GeanyEditor *editor)
 	/* for margin events */
 	g_signal_connect(editwin->sci, "sci-notify",
 			G_CALLBACK(on_sci_notify), NULL);
+	g_signal_connect(editwin->sci, "event",
+			G_CALLBACK(on_event), NULL);
 
-	gtk_label_set_text(GTK_LABEL(editwin->name_label), DOC_FILENAME(editor->document));
+	g_free(display_name);
 }
 
 
@@ -264,8 +415,10 @@ static GtkWidget *create_toolbar(void)
 	GtkToolItem *tool_item;
 
 	toolbar = gtk_toolbar_new();
+	gtk_widget_set_name(toolbar, "geany-splitwindow-toolbar");
 	gtk_toolbar_set_icon_size(GTK_TOOLBAR(toolbar), GTK_ICON_SIZE_MENU);
 	gtk_toolbar_set_style(GTK_TOOLBAR(toolbar), GTK_TOOLBAR_ICONS);
+	gtk_toolbar_set_show_arrow(GTK_TOOLBAR(toolbar), FALSE); /* not to shrink */
 
 	tool_item = gtk_menu_tool_button_new(NULL, NULL);
 	gtk_tool_button_set_stock_id(GTK_TOOL_BUTTON(tool_item), GTK_STOCK_JUMP_TO);
@@ -282,11 +435,6 @@ static GtkWidget *create_toolbar(void)
 	gtk_tool_item_set_expand(tool_item, TRUE);
 	gtk_container_add(GTK_CONTAINER(toolbar), GTK_WIDGET(tool_item));
 
-	item = gtk_label_new(NULL);
-	gtk_label_set_ellipsize(GTK_LABEL(item), PANGO_ELLIPSIZE_START);
-	gtk_container_add(GTK_CONTAINER(tool_item), item);
-	edit_window.name_label = item;
-
 	item = ui_tool_button_new(GTK_STOCK_CLOSE, _("_Unsplit"), NULL);
 	gtk_container_add(GTK_CONTAINER(toolbar), item);
 	g_signal_connect(item, "clicked", G_CALLBACK(on_unsplit), NULL);
@@ -299,7 +447,7 @@ static void split_view(gboolean horizontal)
 {
 	GtkWidget *notebook = geany_data->main_widgets->notebook;
 	GtkWidget *parent = gtk_widget_get_parent(notebook);
-	GtkWidget *pane, *toolbar, *box;
+	GtkWidget *pane, *toolbar;
 	GeanyDocument *doc = document_get_current();
 	gint width = notebook->allocation.width / 2;
 	gint height = notebook->allocation.height / 2;
@@ -318,11 +466,12 @@ static void split_view(gboolean horizontal)
 	gtk_container_add(GTK_CONTAINER(pane), notebook);
 	gtk_widget_unref(notebook);
 
-	box = gtk_vbox_new(FALSE, 0);
+	edit_window.notebook = gtk_notebook_new();
 	toolbar = create_toolbar();
-	gtk_box_pack_start(GTK_BOX(box), toolbar, FALSE, FALSE, 0);
-	gtk_container_add(GTK_CONTAINER(pane), box);
-	edit_window.vbox = box;
+	gtk_widget_show_all(toolbar);
+	/* FIXME: notebook's action widgets is a 2.20 feature... */
+	gtk_notebook_set_action_widget(GTK_NOTEBOOK(edit_window.notebook), toolbar, GTK_PACK_END);
+	gtk_container_add(GTK_CONTAINER(pane), edit_window.notebook);
 
 	set_editor(&edit_window, doc->editor);
 
@@ -397,6 +546,19 @@ void plugin_init(GeanyData *data)
 	GtkWidget *item, *menu;
 	GeanyKeyGroup *key_group;
 
+	/* Individual style for the toolbar */
+	gtk_rc_parse_string(
+		"style \"geany-splitwindow-toolbar-style\" {\n"
+		"	GtkWidget::focus-padding = 0\n"
+		"	GtkWidget::focus-line-width = 0\n"
+		"	xthickness = 0\n"
+		"	ythickness = 0\n"
+		"	GtkToolbar::internal-padding = 0\n"
+		"	GtkToolbar::shadow-type = none\n"
+		"}\n"
+		"widget \"*.geany-splitwindow-toolbar\" style \"geany-splitwindow-toolbar-style\""
+	);
+
 	menu_items.main = item = gtk_menu_item_new_with_mnemonic(_("_Split Window"));
 	gtk_menu_shell_append(GTK_MENU_SHELL(geany_data->main_widgets->tools_menu), item);
 	ui_add_document_sensitive(item);
@@ -466,7 +628,12 @@ static void on_document_save(GObject *obj, GeanyDocument *doc, gpointer user_dat
 {
 	/* update filename */
 	if (doc->editor == edit_window.editor)
-		gtk_label_set_text(GTK_LABEL(edit_window.name_label), DOC_FILENAME(doc));
+	{
+		gchar *filename = document_get_basename_for_display(doc, -1);
+
+		gtk_label_set_text(GTK_LABEL(edit_window.name_label), filename);
+		g_free(filename);
+	}
 }
 
 
