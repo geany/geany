@@ -375,6 +375,14 @@ static gboolean on_event(GtkWidget *widget, GdkEvent *event, gpointer user_data)
 }
 
 
+static void on_tab_close_button_clicked(GtkButton *button, GeanyDocument *doc)
+{
+	g_return_if_fail(doc && doc->is_valid);
+
+	document_close(doc);
+}
+
+
 static void set_editor(EditWindow *editwin, GeanyEditor *editor)
 {
 	GtkWidget *box;
@@ -410,7 +418,7 @@ static void set_editor(EditWindow *editwin, GeanyEditor *editor)
 		gtk_container_add(GTK_CONTAINER(align), btn);
 		gtk_box_pack_start(GTK_BOX(box), align, TRUE, TRUE, 0);
 
-		g_signal_connect(btn, "clicked", G_CALLBACK(on_unsplit), NULL);
+		g_signal_connect(btn, "clicked", G_CALLBACK(on_tab_close_button_clicked), editor->document);
 	}
 
 	gtk_widget_show_all(box);
