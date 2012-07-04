@@ -9,7 +9,7 @@
 # localwin32.mk is an optional file to override make variables.
 # Use localwin32.mk instead of editing variables as it is included in sub
 # makefiles.
-# For MSYS use localwin32.mk to set CP, CP_R, RM, DIRSEP.
+# For MSYS set MSYS=1.
 # By default this should work in a Windows command prompt (cmd.exe).
 
 WINDRES = windres.exe
@@ -19,10 +19,18 @@ CP = copy /Y
 CP_R = xcopy /S /Y
 RM = del
 MKDIR = mkdir
+# $/ is used as a portable directory separator
 # strip is used to prevent line wrap
-DIRSEP := $(strip \)
+/ := $(strip \)
 DESTDIR = C:/Program Files/Geany
 -include localwin32.mk
+
+ifdef MSYS
+CP = cp
+CP_R = cp -r
+RM = rm -f
+/ = /
+endif
 
 all: config.h
 	$(MAKE) -C tagmanager/ctags -f makefile.win32
@@ -60,6 +68,6 @@ install:
 	-$(MKDIR) "$(DESTDIR)/bin"
 	$(CP) geany.exe "$(DESTDIR)/bin"
 	-$(MKDIR) "$(DESTDIR)/lib"
-	$(CP) plugins$(DIRSEP)*.dll "$(DESTDIR)/lib"
+	$(CP) plugins$/*.dll "$(DESTDIR)/lib"
 	-$(MKDIR) "$(DESTDIR)/data"
 	$(CP_R) data "$(DESTDIR)/data"

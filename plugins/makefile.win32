@@ -6,6 +6,10 @@ PREFIX = C:/libs
 RM = del
 -include ../localwin32.mk
 
+ifdef MSYS
+RM = rm -f
+endif
+
 .SUFFIXES: .c .o .dll
 
 GTK_INCLUDES= \

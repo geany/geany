@@ -7,6 +7,10 @@ PREFIX = C:/libs
 RM = del
 -include ../../localwin32.mk
 
+ifdef MSYS
+RM = rm -f
+endif
+
 COMPLIB=tagmanager.a
 
 REGEX_DEFINES = -DHAVE_REGCOMP -DSTDC_HEADERS=1
