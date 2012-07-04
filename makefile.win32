@@ -26,8 +26,9 @@ DESTDIR = C:/Program Files/Geany
 -include localwin32.mk
 
 all: config.h
+	$(MAKE) -C tagmanager/ctags -f makefile.win32
 	$(MAKE) -C tagmanager/mio -f makefile.win32
-	$(MAKE) -C tagmanager -f makefile.win32
+	$(MAKE) -C tagmanager/src -f makefile.win32
 	$(MAKE) -C scintilla -f makefile.win32
 	$(MAKE) -C plugins -f makefile.win32
 	$(MAKE) -C src -f makefile.win32
@@ -36,15 +37,16 @@ config.h: win32-config.h
 	$(CP) $< $@
 
 deps:
-	-$(RM) tagmanager/mio/deps.mak tagmanager/deps.mak scintilla/deps.mak plugins/deps.mak src/deps.mak
+	-$(RM) tagmanager/ctags/deps.mak tagmanager/mio/deps.mak tagmanager/src/deps.mak scintilla/deps.mak plugins/deps.mak src/deps.mak
 
 # used by src/makefile.win32 to avoid del ../file which is an error
 clean-local:
 	-$(RM) geany_private.res geany.exe
 
 clean: deps
+	$(MAKE) -C tagmanager/ctags -f makefile.win32 clean
 	$(MAKE) -C tagmanager/mio -f makefile.win32 clean
-	$(MAKE) -C tagmanager -f makefile.win32 clean
+	$(MAKE) -C tagmanager/src -f makefile.win32 clean
 	$(MAKE) -C scintilla -f makefile.win32 clean
 	$(MAKE) -C plugins -f makefile.win32 clean
 	$(MAKE) -C src -f makefile.win32 clean
