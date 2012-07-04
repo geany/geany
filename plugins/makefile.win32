@@ -2,10 +2,10 @@
 
 CC = gcc
 CXX = g++
-PREFIX = C:\libs
+PREFIX = C:/libs
 RM = del
 -include ../localwin32.mk
-.SUFFIXES:
+
 .SUFFIXES: .c .o .dll
 
 GTK_INCLUDES= \

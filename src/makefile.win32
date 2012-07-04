@@ -12,10 +12,9 @@ DEFINES = -DHAVE_CONFIG_H \
 WINDRES = windres.exe
 CC = gcc
 CXX = g++
-RES  = ../geany_private.res
+RES = ../geany_private.res
 TARGET = ../geany.exe
-EXECDIR = c:\distrib
-PREFIX = C:\libs
+PREFIX = C:/libs
 RM = del
 -include ../localwin32.mk
 
@@ -68,7 +67,6 @@ OBJS =	about.o build.o callbacks.o dialogs.o document.o editor.o encodings.o fil
 .c.o:
 	$(CC) $(CFLAGS) -c $<
 
-# all: binclean $(TARGET) #exec
 all: $(TARGET)
 
 $(RES): ../geany_private.rc ../icons/geany.ico
@@ -78,12 +76,6 @@ $(RES): ../geany_private.rc ../icons/geany.ico
 clean:
 	-$(RM) deps.mak *.o
 	$(MAKE) -C .. -f makefile.win32 clean-local
-
-exec:
-	$(EXECDIR)\geany.exe
-
-binclean:
-	$(RM) $(TARGET)
 
 STLIBS = ../scintilla/scintilla.a ../tagmanager/ctags/ctags.a \
 	../tagmanager/mio/mio.a ../tagmanager/src/tagmanager.a

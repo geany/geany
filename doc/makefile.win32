@@ -7,7 +7,7 @@
 
 RST2HTML=python rst2html.py
 DOXYGEN=doxygen
-CP = copy
+CP = copy /y
 RM = del
 -include ../localwin32.mk
 

@@ -12,7 +12,7 @@ CXX = g++
 CC = gcc
 AR = ar
 RANLIB = ranlib
-PREFIX = C:\libs
+PREFIX = C:/libs
 RM = del
 -include ../localwin32.mk
 

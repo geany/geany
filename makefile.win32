@@ -9,7 +9,6 @@
 # localwin32.mk is an optional file to override make variables.
 # Use localwin32.mk instead of editing variables as it is included in sub
 # makefiles.
-# E.g. use localwin32.mk to set PREFIX=C:/libs instead of the default C:\libs
 # For MSYS use localwin32.mk to set CP, CP_R, RM, DIRSEP.
 # By default this should work in a Windows command prompt (cmd.exe).
 
@@ -51,7 +50,7 @@ clean: deps
 	$(MAKE) -C plugins -f makefile.win32 clean
 	$(MAKE) -C src -f makefile.win32 clean
 
-.PHONY: install
+.PHONY: all clean clean-local deps install
 
 # likely requires admin privileges
 # mkdir output is ignored in case dir exists
