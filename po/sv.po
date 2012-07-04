@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.22\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-06-03 17:50+0200\n"
-"PO-Revision-Date: 2012-05-16 09:22+0100\n"
+"POT-Creation-Date: 2012-06-20 17:07+0200\n"
+"PO-Revision-Date: 2012-06-20 13:49+0100\n"
 "Last-Translator: Tony Mattsson <superxorn@gmail.com>\n"
 "Language-Team: Swedish <geany-i18n@uvena.de>\n"
 "Language: sv\n"
@@ -84,7 +84,7 @@ msgstr "osynlig"
 msgid "_Insert \"include <...>\""
 msgstr "Infoga \"include <...>\""
 
-#: ../data/geany.glade.h:14 ../src/keybindings.c:408
+#: ../data/geany.glade.h:14 ../src/keybindings.c:411
 msgid "_Insert Alternative White Space"
 msgstr "Infoga alternativt tomt tecken"
 
@@ -128,7 +128,7 @@ msgstr "Nuvarande tecken"
 msgid "Match braces"
 msgstr "Matcha klamrar"
 
-#: ../data/geany.glade.h:25 ../src/keybindings.c:418
+#: ../data/geany.glade.h:25 ../src/keybindings.c:421
 msgid "Preferences"
 msgstr "Inställningar"
 
@@ -185,9 +185,9 @@ msgid "Startup path:"
 msgstr "Sökväg vid start:"
 
 #: ../data/geany.glade.h:38
+#, fuzzy
 msgid ""
-"Path to start in when opening or saving files. Must be an absolute path. "
-"Leave blank to use the current working directory."
+"Path to start in when opening or saving files. Must be an absolute path."
 msgstr ""
 "Sökväg att starta i vid öppning eller sparning av filer. Detta måste vara en "
 "absolut sökväg. Lämna blankt för att automatiskt välja filens nuvarande "
@@ -1077,7 +1077,7 @@ msgstr "<b>Virtuella ytor</b>"
 msgid "Display"
 msgstr "Visa"
 
-#: ../data/geany.glade.h:223 ../src/keybindings.c:224 ../src/prefs.c:1581
+#: ../data/geany.glade.h:223 ../src/keybindings.c:227 ../src/prefs.c:1581
 msgid "Editor"
 msgstr "Editor"
 
@@ -1161,7 +1161,7 @@ msgstr "Ta bort överflödiga mellanslag och tab-tecken"
 msgid "Removes trailing spaces and tabs and the end of lines"
 msgstr "Tar bort överflödiga mellanslag och tab-tecken i slutet av filen"
 
-#: ../data/geany.glade.h:241 ../src/keybindings.c:559
+#: ../data/geany.glade.h:241 ../src/keybindings.c:562
 msgid "Replace tabs by space"
 msgstr "Ersätt tab-tecken med mellanslag"
 
@@ -1195,7 +1195,7 @@ msgstr ""
 "Hur ofta kontroller utförs för att se om dokumentet ändrats, i antalet "
 "sekunder. Noll stänger av kontroller."
 
-#: ../data/geany.glade.h:248 ../src/prefs.c:1583 ../src/symbols.c:687
+#: ../data/geany.glade.h:248 ../src/prefs.c:1583 ../src/symbols.c:688
 #: ../plugins/filebrowser.c:1120
 msgid "Files"
 msgstr "Filer"
@@ -1246,7 +1246,7 @@ msgstr ""
 msgid "<b>Commands</b>"
 msgstr "<b>Kommandon</b>"
 
-#: ../data/geany.glade.h:259 ../src/keybindings.c:236 ../src/prefs.c:1585
+#: ../data/geany.glade.h:259 ../src/keybindings.c:239 ../src/prefs.c:1585
 msgid "Tools"
 msgstr "Verktyg"
 
@@ -1614,7 +1614,7 @@ msgstr ""
 "Grundläggande sökväg för alla filer i projektet. Detta kan vara en ny sökväg "
 "eller ett existerande mappträd."
 
-#: ../data/geany.glade.h:338 ../src/keybindings.c:234
+#: ../data/geany.glade.h:338 ../src/keybindings.c:237
 msgid "Project"
 msgstr "Projekt"
 
@@ -1687,43 +1687,43 @@ msgstr "Stäng alla"
 msgid "_Commands"
 msgstr "Kommandon"
 
-#: ../data/geany.glade.h:357 ../src/keybindings.c:343
+#: ../data/geany.glade.h:357 ../src/keybindings.c:346
 msgid "_Cut Current Line(s)"
 msgstr "Klipp ut rad(er)"
 
-#: ../data/geany.glade.h:358 ../src/keybindings.c:340
+#: ../data/geany.glade.h:358 ../src/keybindings.c:343
 msgid "_Copy Current Line(s)"
 msgstr "Kopiera rad(er)"
 
-#: ../data/geany.glade.h:359 ../src/keybindings.c:295
+#: ../data/geany.glade.h:359 ../src/keybindings.c:298
 msgid "_Delete Current Line(s)"
 msgstr "Radera rad(er)"
 
-#: ../data/geany.glade.h:360 ../src/keybindings.c:292
+#: ../data/geany.glade.h:360 ../src/keybindings.c:295
 msgid "_Duplicate Line or Selection"
 msgstr "Gör en kopia av raden eller markeringen"
 
-#: ../data/geany.glade.h:361 ../src/keybindings.c:353
+#: ../data/geany.glade.h:361 ../src/keybindings.c:356
 msgid "_Select Current Line(s)"
 msgstr "Välj rad(er)"
 
-#: ../data/geany.glade.h:362 ../src/keybindings.c:356
+#: ../data/geany.glade.h:362 ../src/keybindings.c:359
 msgid "_Select Current Paragraph"
 msgstr "Välj paragraf"
 
-#: ../data/geany.glade.h:363 ../src/keybindings.c:395
+#: ../data/geany.glade.h:363 ../src/keybindings.c:398
 msgid "_Send Selection to Terminal"
 msgstr "Skicka markeringen till terminalen"
 
-#: ../data/geany.glade.h:364 ../src/keybindings.c:397
+#: ../data/geany.glade.h:364 ../src/keybindings.c:400
 msgid "_Reflow Lines/Block"
 msgstr "Gör om flöde för rader/block"
 
-#: ../data/geany.glade.h:365 ../src/keybindings.c:367
+#: ../data/geany.glade.h:365 ../src/keybindings.c:370
 msgid "T_oggle Case of Selection"
 msgstr "Växla mellan gemener och versaler"
 
-#: ../data/geany.glade.h:366 ../src/keybindings.c:302
+#: ../data/geany.glade.h:366 ../src/keybindings.c:305
 msgid "_Transpose Current Line"
 msgstr "Förflytta raden"
 
@@ -1747,7 +1747,7 @@ msgstr "Öka indrag"
 msgid "_Decrease Indent"
 msgstr "Minska indrag"
 
-#: ../data/geany.glade.h:372 ../src/keybindings.c:386
+#: ../data/geany.glade.h:372 ../src/keybindings.c:389
 msgid "_Smart Line Indent"
 msgstr "Smart radindrag"
 
@@ -1763,7 +1763,7 @@ msgstr "Infoga kommentarer"
 msgid "Preference_s"
 msgstr "Inställningar"
 
-#: ../data/geany.glade.h:376 ../src/keybindings.c:421
+#: ../data/geany.glade.h:376 ../src/keybindings.c:424
 msgid "P_lugin Preferences"
 msgstr "Inställningar för insticksmoduler"
 
@@ -1791,11 +1791,11 @@ msgstr "Nästa meddelande"
 msgid "Pr_evious Message"
 msgstr "Föregående meddelande"
 
-#: ../data/geany.glade.h:383 ../src/keybindings.c:470
+#: ../data/geany.glade.h:383 ../src/keybindings.c:473
 msgid "_Go to Next Marker"
 msgstr "Gå till nästa markör"
 
-#: ../data/geany.glade.h:384 ../src/keybindings.c:473
+#: ../data/geany.glade.h:384 ../src/keybindings.c:476
 msgid "_Go to Previous Marker"
 msgstr "Gå till föregående markör"
 
@@ -1803,15 +1803,15 @@ msgstr "Gå till föregående markör"
 msgid "_Go to Line"
 msgstr "Gå till rad"
 
-#: ../data/geany.glade.h:386 ../src/keybindings.c:433
+#: ../data/geany.glade.h:386 ../src/keybindings.c:436
 msgid "Find Next _Selection"
 msgstr "Sök nästa markering"
 
-#: ../data/geany.glade.h:387 ../src/keybindings.c:435
+#: ../data/geany.glade.h:387 ../src/keybindings.c:438
 msgid "Find Pre_vious Selection"
 msgstr "Sök föregående markering"
 
-#: ../data/geany.glade.h:388 ../src/keybindings.c:452
+#: ../data/geany.glade.h:388 ../src/keybindings.c:455
 msgid "_Mark All"
 msgstr "Markera allt"
 
@@ -2061,7 +2061,6 @@ msgid "_Keyboard Shortcuts"
 msgstr "Tangentbordsgenvägar"
 
 #: ../data/geany.glade.h:450
-#, fuzzy
 msgid "Debug _Messages"
 msgstr "Debugmeddelanden"
 
@@ -2071,16 +2070,15 @@ msgstr "Webbsida"
 
 #: ../data/geany.glade.h:452
 msgid "Wi_ki"
-msgstr ""
+msgstr "Wiki"
 
 #: ../data/geany.glade.h:453
 msgid "Report a _Bug"
-msgstr ""
+msgstr "Rapportera fel"
 
 #: ../data/geany.glade.h:454
-#, fuzzy
 msgid "_Donate"
-msgstr "Spara _inte"
+msgstr "Donera"
 
 #: ../data/geany.glade.h:455 ../src/sidebar.c:124
 msgid "Symbols"
@@ -2106,7 +2104,7 @@ msgstr "Meddelanden"
 msgid "Scribble"
 msgstr "Klotterplank"
 
-#: ../src/about.c:41
+#: ../src/about.c:42
 msgid ""
 "Copyright (c)  2005-2012\n"
 "Colomban Wendling\n"
@@ -2116,69 +2114,76 @@ msgid ""
 "Frank Lanitz\n"
 "All rights reserved."
 msgstr ""
+"Copyright (c)  2005-2012\n"
+"Colomban Wendling\n"
+"Nick Treleaven\n"
+"Matthew Brush\n"
+"Enrico Tröger\n"
+"Frank Lanitz\n"
+"Med ensamrätt."
 
-#: ../src/about.c:157
+#: ../src/about.c:158
 msgid "About Geany"
 msgstr "Om Geany"
 
-#: ../src/about.c:207
+#: ../src/about.c:208
 msgid "A fast and lightweight IDE"
 msgstr "Ett snabbt och lättviktigt IDE"
 
-#: ../src/about.c:228
+#: ../src/about.c:229
 #, c-format
 msgid "(built on or after %s)"
 msgstr "(byggd på eller efter %s)"
 
 #. gtk_container_add(GTK_CONTAINER(info_box), cop_label);
-#: ../src/about.c:259
+#: ../src/about.c:260
 msgid "Info"
 msgstr "Info"
 
-#: ../src/about.c:275
+#: ../src/about.c:276
 msgid "Developers"
 msgstr "Utvecklare"
 
-#: ../src/about.c:282
+#: ../src/about.c:283
 msgid "maintainer"
 msgstr "ansvarig"
 
-#: ../src/about.c:290 ../src/about.c:298 ../src/about.c:306
+#: ../src/about.c:291 ../src/about.c:299 ../src/about.c:307
 msgid "developer"
 msgstr "utvecklare"
 
-#: ../src/about.c:314
+#: ../src/about.c:315
 msgid "translation maintainer"
 msgstr "ansvarig för översättningar"
 
-#: ../src/about.c:323
+#: ../src/about.c:324
 msgid "Translators"
 msgstr "Översättare"
 
-#: ../src/about.c:343
+#: ../src/about.c:344
 msgid "Previous Translators"
 msgstr "Tidigare översättare"
 
-#: ../src/about.c:364
+#: ../src/about.c:365
 msgid "Contributors"
 msgstr "Medarbetare "
 
-#: ../src/about.c:374
+#: ../src/about.c:375
 #, c-format
 msgid ""
 "Some of the many contributors (for a more detailed list, see the file %s):"
 msgstr ""
 "Några av de många bidragsgivarna (för en komplett lista, läs filen %s):"
 
-#: ../src/about.c:400
+#: ../src/about.c:401
 msgid "Credits"
 msgstr "Tack till ..."
 
-#: ../src/about.c:417
+#: ../src/about.c:418
 msgid "License"
 msgstr "Licens"
 
-#: ../src/about.c:426
+#: ../src/about.c:427
 msgid ""
 "License text could not be found, please visit http://www.gnu.org/licenses/"
 "gpl-2.0.txt to view it online."
@@ -2212,9 +2217,9 @@ msgid "Failed to change the working directory to \"%s\""
 msgstr "Misslyckades ändra arbetssökvägen till \"%s\""
 
 #: ../src/build.c:929
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to execute \"%s\" (start-script could not be created: %s)"
-msgstr "Misslyckades exekvera \"%s\" (start-skriptet kunde inte skapas)"
+msgstr "Misslyckades exekvera \"%s\" (start-skriptet kunde inte skapas: %s)"
 
 #: ../src/build.c:984
 msgid ""
@@ -2290,12 +2295,12 @@ msgstr "Inga fler byggfel."
 msgid "Set menu item label"
 msgstr "Ange rubrik för meny"
 
-#: ../src/build.c:1967 ../src/symbols.c:742 ../src/tools.c:554
+#: ../src/build.c:1967 ../src/symbols.c:743 ../src/tools.c:554
 msgid "Label"
 msgstr "Etikett"
 
 #. command column, holding status and command display
-#: ../src/build.c:1968 ../src/symbols.c:737 ../src/tools.c:539
+#: ../src/build.c:1968 ../src/symbols.c:738 ../src/tools.c:539
 msgid "Command"
 msgstr "Kommando"
 
@@ -2397,7 +2402,7 @@ msgstr "Alla osparade ändringar kommer att förloras."
 msgid "Are you sure you want to reload '%s'?"
 msgstr "Är du säker på att du vill ladda om '%s'?"
 
-#: ../src/callbacks.c:1062 ../src/keybindings.c:461
+#: ../src/callbacks.c:1062 ../src/keybindings.c:464
 msgid "Go to Line"
 msgstr "Gå till rad"
 
@@ -2460,9 +2465,9 @@ msgid "No more message items."
 msgstr "Inga fler meddelanden."
 
 #: ../src/callbacks.c:1673
-#, fuzzy, c-format
+#, c-format
 msgid "Could not open file %s (File not found)"
-msgstr "Kunde inte öppna fil %s (%s)"
+msgstr "Kunde inte öppna filen %s (filen kunde ej hittas)"
 
 #: ../src/dialogs.c:226
 msgid "Detect from file"
@@ -2627,12 +2632,12 @@ msgstr ""
 
 #: ../src/dialogs.c:1223 ../src/dialogs.c:1224 ../src/dialogs.c:1225
 #: ../src/dialogs.c:1231 ../src/dialogs.c:1232 ../src/dialogs.c:1233
-#: ../src/symbols.c:2094 ../src/symbols.c:2115 ../src/symbols.c:2167
+#: ../src/symbols.c:2095 ../src/symbols.c:2116 ../src/symbols.c:2168
 #: ../src/ui_utils.c:264
 msgid "unknown"
 msgstr "okänd"
 
-#: ../src/dialogs.c:1238 ../src/symbols.c:892
+#: ../src/dialogs.c:1238 ../src/symbols.c:893
 msgid "Properties"
 msgstr "Egenskaper"
 
@@ -3120,539 +3125,535 @@ msgstr "Felaktig rexex för filtypen %s: %s"
 msgid "untitled"
 msgstr "namnlös"
 
-#: ../src/highlighting.c:1225 ../src/main.c:828 ../src/socket.c:166
+#: ../src/highlighting.c:1233 ../src/main.c:828 ../src/socket.c:166
 #: ../src/templates.c:224
 #, c-format
 msgid "Could not find file '%s'."
 msgstr "Kunde inte hitta fil '%s'."
 
-#: ../src/highlighting.c:1297
-#, fuzzy
+#: ../src/highlighting.c:1305
 msgid "Default"
 msgstr "Förvald"
 
-#: ../src/highlighting.c:1336
-#, fuzzy
+#: ../src/highlighting.c:1344
 msgid "The current filetype overrides the default style."
-msgstr "Bygger filen med Make-verktyget och förinställt mål"
+msgstr "Vald filtyp gäller istället för standardfiltypen"
 
-#: ../src/highlighting.c:1337
+#: ../src/highlighting.c:1345
 msgid "This may cause color schemes to display incorrectly."
-msgstr ""
+msgstr "Detta kan göra så att färgscheman inte visas korrekt."
 
-#: ../src/highlighting.c:1358
-#, fuzzy
+#: ../src/highlighting.c:1366
 msgid "Color Schemes"
-msgstr "Färger"
+msgstr "Färgscheman"
 
 #. visual group order
-#: ../src/keybindings.c:223 ../src/symbols.c:714
+#: ../src/keybindings.c:226 ../src/symbols.c:715
 msgid "File"
 msgstr "Arkiv"
 
-#: ../src/keybindings.c:225
+#: ../src/keybindings.c:228
 msgid "Clipboard"
 msgstr "Klippbord"
 
-#: ../src/keybindings.c:226
+#: ../src/keybindings.c:229
 msgid "Select"
 msgstr "Markera"
 
-#: ../src/keybindings.c:227
+#: ../src/keybindings.c:230
 msgid "Format"
 msgstr "Format"
 
-#: ../src/keybindings.c:228
+#: ../src/keybindings.c:231
 msgid "Insert"
 msgstr "Infoga"
 
-#: ../src/keybindings.c:229
+#: ../src/keybindings.c:232
 msgid "Settings"
 msgstr "Inställningar"
 
-#: ../src/keybindings.c:230
+#: ../src/keybindings.c:233
 msgid "Search"
 msgstr "Sök"
 
-#: ../src/keybindings.c:231
+#: ../src/keybindings.c:234
 msgid "Go to"
 msgstr "Gå till rad"
 
-#: ../src/keybindings.c:232
+#: ../src/keybindings.c:235
 msgid "View"
 msgstr "Visa"
 
-#: ../src/keybindings.c:233
+#: ../src/keybindings.c:236
 msgid "Document"
 msgstr "Dokument"
 
-#: ../src/keybindings.c:235 ../src/keybindings.c:582 ../src/project.c:444
-#: ../src/ui_utils.c:1980
+#: ../src/keybindings.c:238 ../src/keybindings.c:585 ../src/project.c:444
+#: ../src/ui_utils.c:1981
 msgid "Build"
 msgstr "Bygg"
 
-#: ../src/keybindings.c:237 ../src/keybindings.c:607
+#: ../src/keybindings.c:240 ../src/keybindings.c:610
 msgid "Help"
 msgstr "Hjälp"
 
-#: ../src/keybindings.c:238
+#: ../src/keybindings.c:241
 msgid "Focus"
 msgstr "Fokusera"
 
-#: ../src/keybindings.c:239
+#: ../src/keybindings.c:242
 msgid "Notebook tab"
 msgstr "Anteckningsblockets tab-kommandon"
 
-#: ../src/keybindings.c:248 ../src/keybindings.c:276
+#: ../src/keybindings.c:251 ../src/keybindings.c:279
 msgid "New"
 msgstr "Ny"
 
-#: ../src/keybindings.c:250 ../src/keybindings.c:278
+#: ../src/keybindings.c:253 ../src/keybindings.c:281
 msgid "Open"
 msgstr "Öppna"
 
-#: ../src/keybindings.c:253
+#: ../src/keybindings.c:256
 msgid "Open selected file"
 msgstr "Öppna vald fil"
 
-#: ../src/keybindings.c:255
+#: ../src/keybindings.c:258
 msgid "Save"
 msgstr "Spara"
 
-#: ../src/keybindings.c:257 ../src/toolbar.c:55
+#: ../src/keybindings.c:260 ../src/toolbar.c:55
 msgid "Save as"
 msgstr "Spara som"
 
-#: ../src/keybindings.c:259
+#: ../src/keybindings.c:262
 msgid "Save all"
 msgstr "Spara allt"
 
-#: ../src/keybindings.c:262
+#: ../src/keybindings.c:265
 msgid "Print"
 msgstr "Skriv ut"
 
-#: ../src/keybindings.c:264 ../src/keybindings.c:283
+#: ../src/keybindings.c:267 ../src/keybindings.c:286
 msgid "Close"
 msgstr "Stäng"
 
-#: ../src/keybindings.c:266
+#: ../src/keybindings.c:269
 msgid "Close all"
 msgstr "Stäng allt"
 
-#: ../src/keybindings.c:269
+#: ../src/keybindings.c:272
 msgid "Reload file"
 msgstr "Ladda om fil"
 
-#: ../src/keybindings.c:271
+#: ../src/keybindings.c:274
 msgid "Re-open last closed tab"
 msgstr "Öppna senast stängta tab igen"
 
-#: ../src/keybindings.c:288
+#: ../src/keybindings.c:291
 msgid "Undo"
 msgstr "Ångra"
 
-#: ../src/keybindings.c:290
+#: ../src/keybindings.c:293
 msgid "Redo"
 msgstr "Gör om"
 
-#: ../src/keybindings.c:299
+#: ../src/keybindings.c:302
 msgid "Delete to line end"
 msgstr "Radera till radslut"
 
-#: ../src/keybindings.c:305
+#: ../src/keybindings.c:308
 msgid "Scroll to current line"
 msgstr "Flytta till vald rad"
 
-#: ../src/keybindings.c:307
+#: ../src/keybindings.c:310
 msgid "Scroll up the view by one line"
 msgstr "Flytta upp en rad"
 
-#: ../src/keybindings.c:309
+#: ../src/keybindings.c:312
 msgid "Scroll down the view by one line"
 msgstr "Flytta ned en rad"
 
-#: ../src/keybindings.c:311
+#: ../src/keybindings.c:314
 msgid "Complete snippet"
 msgstr "Färdigställ textfragment"
 
-#: ../src/keybindings.c:313
+#: ../src/keybindings.c:316
 msgid "Move cursor in snippet"
 msgstr "Flytta markör i textfragmentet"
 
-#: ../src/keybindings.c:315
+#: ../src/keybindings.c:318
 msgid "Suppress snippet completion"
 msgstr "Undertryck komplettering av textfragment"
 
-#: ../src/keybindings.c:317
+#: ../src/keybindings.c:320
 msgid "Context Action"
 msgstr "Snabbmenyhändelse"
 
-#: ../src/keybindings.c:319
+#: ../src/keybindings.c:322
 msgid "Complete word"
 msgstr "Komplettera ord"
 
-#: ../src/keybindings.c:321
+#: ../src/keybindings.c:324
 msgid "Show calltip"
 msgstr "Visa calltip"
 
-#: ../src/keybindings.c:323
+#: ../src/keybindings.c:326
 msgid "Show macro list"
 msgstr "Visa macrolistan"
 
-#: ../src/keybindings.c:325
+#: ../src/keybindings.c:328
 msgid "Word part completion"
 msgstr "Komplettera ordfragment"
 
-#: ../src/keybindings.c:327
+#: ../src/keybindings.c:330
 msgid "Move line(s) up"
 msgstr "Flytta rad(er) uppåt"
 
-#: ../src/keybindings.c:329
+#: ../src/keybindings.c:332
 msgid "Move line(s) down"
 msgstr "Flytta  rad(er) nedåt"
 
-#: ../src/keybindings.c:334
+#: ../src/keybindings.c:337
 msgid "Cut"
 msgstr "Klipp ut"
 
-#: ../src/keybindings.c:336
+#: ../src/keybindings.c:339
 msgid "Copy"
 msgstr "Kopiera"
 
-#: ../src/keybindings.c:338
+#: ../src/keybindings.c:341
 msgid "Paste"
 msgstr "Klistra in"
 
-#: ../src/keybindings.c:349
+#: ../src/keybindings.c:352
 msgid "Select All"
 msgstr "Markera allt"
 
-#: ../src/keybindings.c:351
+#: ../src/keybindings.c:354
 msgid "Select current word"
 msgstr "Välj ord"
 
-#: ../src/keybindings.c:359
+#: ../src/keybindings.c:362
 msgid "Select to previous word part"
 msgstr "Välj till föregående orddel"
 
-#: ../src/keybindings.c:361
+#: ../src/keybindings.c:364
 msgid "Select to next word part"
 msgstr "Välj till nästa orddel"
 
-#: ../src/keybindings.c:369
+#: ../src/keybindings.c:372
 msgid "Toggle line commentation"
 msgstr "Stäng av / på radkommentarer"
 
-#: ../src/keybindings.c:372
+#: ../src/keybindings.c:375
 msgid "Comment line(s)"
 msgstr "Kommentera rad(er)"
 
-#: ../src/keybindings.c:374
+#: ../src/keybindings.c:377
 msgid "Uncomment line(s)"
 msgstr "Ta bort kommentarer från rad(er)"
 
-#: ../src/keybindings.c:376
+#: ../src/keybindings.c:379
 msgid "Increase indent"
 msgstr "Öka indrag"
 
-#: ../src/keybindings.c:379
+#: ../src/keybindings.c:382
 msgid "Decrease indent"
 msgstr "Minska indrag"
 
-#: ../src/keybindings.c:382
+#: ../src/keybindings.c:385
 msgid "Increase indent by one space"
 msgstr "Öka indrag med ett blanksteg"
 
-#: ../src/keybindings.c:384
+#: ../src/keybindings.c:387
 msgid "Decrease indent by one space"
 msgstr "Minska indrag med ett blanksteg"
 
-#: ../src/keybindings.c:388
+#: ../src/keybindings.c:391
 msgid "Send to Custom Command 1"
 msgstr "Definiera användarkommando 1"
 
-#: ../src/keybindings.c:390
+#: ../src/keybindings.c:393
 msgid "Send to Custom Command 2"
 msgstr "Definiera användarkommando 2"
 
-#: ../src/keybindings.c:392
+#: ../src/keybindings.c:395
 msgid "Send to Custom Command 3"
 msgstr "Definiera användarkommando 3"
 
-#: ../src/keybindings.c:400
-#, fuzzy
+#: ../src/keybindings.c:403
 msgid "Join lines"
-msgstr "Kommentera rad(er)"
+msgstr "Sammanfoga rad(er)"
 
-#: ../src/keybindings.c:405
+#: ../src/keybindings.c:408
 msgid "Insert date"
 msgstr "Klistra in datum"
 
-#: ../src/keybindings.c:411
+#: ../src/keybindings.c:414
 msgid "Insert New Line Before Current"
 msgstr "Infoga ny rad före nuvarande"
 
-#: ../src/keybindings.c:413
+#: ../src/keybindings.c:416
 msgid "Insert New Line After Current"
 msgstr "Infoga ny rad efter nuvarande"
 
-#: ../src/keybindings.c:426 ../src/search.c:463
+#: ../src/keybindings.c:429 ../src/search.c:463
 msgid "Find"
 msgstr "Sök"
 
-#: ../src/keybindings.c:428
+#: ../src/keybindings.c:431
 msgid "Find Next"
 msgstr "Sök nästa"
 
-#: ../src/keybindings.c:430
+#: ../src/keybindings.c:433
 msgid "Find Previous"
 msgstr "Sök föregående"
 
-#: ../src/keybindings.c:437 ../src/search.c:619
+#: ../src/keybindings.c:440 ../src/search.c:619
 msgid "Replace"
 msgstr "Ersätt"
 
-#: ../src/keybindings.c:439 ../src/search.c:871
+#: ../src/keybindings.c:442 ../src/search.c:871
 msgid "Find in Files"
 msgstr "Sök i filer"
 
-#: ../src/keybindings.c:442
+#: ../src/keybindings.c:445
 msgid "Next Message"
 msgstr "Nästa meddelande"
 
-#: ../src/keybindings.c:444
+#: ../src/keybindings.c:447
 msgid "Previous Message"
 msgstr "Föregående meddelande"
 
-#: ../src/keybindings.c:447
+#: ../src/keybindings.c:450
 msgid "Find Usage"
 msgstr "Visa användning"
 
-#: ../src/keybindings.c:450
+#: ../src/keybindings.c:453
 msgid "Find Document Usage"
 msgstr "Visa användning"
 
-#: ../src/keybindings.c:457 ../src/toolbar.c:66
+#: ../src/keybindings.c:460 ../src/toolbar.c:66
 msgid "Navigate back a location"
 msgstr "Bläddra bakåt"
 
-#: ../src/keybindings.c:459 ../src/toolbar.c:67
+#: ../src/keybindings.c:462 ../src/toolbar.c:67
 msgid "Navigate forward a location"
 msgstr "Bläddra frammåt"
 
-#: ../src/keybindings.c:464
+#: ../src/keybindings.c:467
 msgid "Go to matching brace"
 msgstr "Gå till matchande klammer"
 
-#: ../src/keybindings.c:467
+#: ../src/keybindings.c:470
 msgid "Toggle marker"
 msgstr "Stäng av / på markör"
 
-#: ../src/keybindings.c:476
+#: ../src/keybindings.c:479
 msgid "Go to Tag Definition"
 msgstr "Gå till Tagg-definition"
 
-#: ../src/keybindings.c:479
+#: ../src/keybindings.c:482
 msgid "Go to Tag Declaration"
 msgstr "Gå till Tagg-deklaration"
 
-#: ../src/keybindings.c:481
+#: ../src/keybindings.c:484
 msgid "Go to Start of Line"
 msgstr "Gå till början av raden"
 
-#: ../src/keybindings.c:483
+#: ../src/keybindings.c:486
 msgid "Go to End of Line"
 msgstr "Gå till radslut"
 
-#: ../src/keybindings.c:485
+#: ../src/keybindings.c:488
 msgid "Go to End of Display Line"
 msgstr "Gå till radslut"
 
-#: ../src/keybindings.c:487
+#: ../src/keybindings.c:490
 msgid "Go to Previous Word Part"
 msgstr "Gå till föregående orddel"
 
-#: ../src/keybindings.c:489
+#: ../src/keybindings.c:492
 msgid "Go to Next Word Part"
 msgstr "Gå till nästa orddel"
 
-#: ../src/keybindings.c:494
+#: ../src/keybindings.c:497
 msgid "Toggle All Additional Widgets"
 msgstr "Visa / göm verktygsfält"
 
-#: ../src/keybindings.c:497
+#: ../src/keybindings.c:500
 msgid "Fullscreen"
 msgstr "Helskärm"
 
-#: ../src/keybindings.c:499
+#: ../src/keybindings.c:502
 msgid "Toggle Messages Window"
 msgstr "Stäng av / på meddelandefönstret"
 
-#: ../src/keybindings.c:502
+#: ../src/keybindings.c:505
 msgid "Toggle Sidebar"
 msgstr "Stäng av / på sidofältet"
 
-#: ../src/keybindings.c:504
+#: ../src/keybindings.c:507
 msgid "Zoom In"
 msgstr "Förstora"
 
-#: ../src/keybindings.c:506
+#: ../src/keybindings.c:509
 msgid "Zoom Out"
 msgstr "Förminska"
 
-#: ../src/keybindings.c:508
+#: ../src/keybindings.c:511
 msgid "Zoom Reset"
 msgstr "Återställ förstoring"
 
-#: ../src/keybindings.c:513
+#: ../src/keybindings.c:516
 msgid "Switch to Editor"
 msgstr "Byt till editor"
 
-#: ../src/keybindings.c:515
+#: ../src/keybindings.c:518
 msgid "Switch to Search Bar"
 msgstr "Växla till sökfältet"
 
-#: ../src/keybindings.c:517
+#: ../src/keybindings.c:520
 msgid "Switch to Message Window"
 msgstr "Växla till  meddelandefönster"
 
-#: ../src/keybindings.c:519
+#: ../src/keybindings.c:522
 msgid "Switch to Compiler"
 msgstr "Växla till kompilatorn"
 
-#: ../src/keybindings.c:521
+#: ../src/keybindings.c:524
 msgid "Switch to Messages"
 msgstr "Växla till Meddelanden"
 
-#: ../src/keybindings.c:523
+#: ../src/keybindings.c:526
 msgid "Switch to Scribble"
 msgstr "Byt till Scribble"
 
-#: ../src/keybindings.c:525
+#: ../src/keybindings.c:528
 msgid "Switch to VTE"
 msgstr "Byt till VTE"
 
-#: ../src/keybindings.c:527
+#: ../src/keybindings.c:530
 msgid "Switch to Sidebar"
 msgstr "Växla till sidofältet"
 
-#: ../src/keybindings.c:529
+#: ../src/keybindings.c:532
 msgid "Switch to Sidebar Symbol List"
 msgstr "Växla till symbollistan i sidofältet"
 
-#: ../src/keybindings.c:531
+#: ../src/keybindings.c:534
 msgid "Switch to Sidebar Document List"
 msgstr "Växla till dokumentlistan i sidofältet"
 
-#: ../src/keybindings.c:536
+#: ../src/keybindings.c:539
 msgid "Switch to left document"
 msgstr "Byt till det vänstra dokumentet"
 
-#: ../src/keybindings.c:538
+#: ../src/keybindings.c:541
 msgid "Switch to right document"
 msgstr "Byt till det högra dokumentet"
 
-#: ../src/keybindings.c:540
+#: ../src/keybindings.c:543
 msgid "Switch to last used document"
 msgstr "Byt till det sist använda dokumentet"
 
-#: ../src/keybindings.c:543
+#: ../src/keybindings.c:546
 msgid "Move document left"
 msgstr "Flytta dokumentet till vänster"
 
-#: ../src/keybindings.c:546
+#: ../src/keybindings.c:549
 msgid "Move document right"
 msgstr "Flytta dokumentet till höger"
 
-#: ../src/keybindings.c:548
+#: ../src/keybindings.c:551
 msgid "Move document first"
 msgstr "Flytta dokumentet först"
 
-#: ../src/keybindings.c:550
+#: ../src/keybindings.c:553
 msgid "Move document last"
 msgstr "Flytta dokumentet sist"
 
-#: ../src/keybindings.c:555
+#: ../src/keybindings.c:558
 msgid "Toggle Line wrapping"
 msgstr "Justera radbrytning (line-wrap)"
 
-#: ../src/keybindings.c:557
+#: ../src/keybindings.c:560
 msgid "Toggle Line breaking"
 msgstr "Justera radbrytning (line-break)"
 
-#: ../src/keybindings.c:561
+#: ../src/keybindings.c:564
 msgid "Replace spaces by tabs"
 msgstr "Ersätt mellanslag med tab-tecken"
 
-#: ../src/keybindings.c:563
+#: ../src/keybindings.c:566
 msgid "Toggle current fold"
 msgstr "Justera nuvarande mapp"
 
-#: ../src/keybindings.c:565
+#: ../src/keybindings.c:568
 msgid "Fold all"
 msgstr "Vik ihop alla"
 
-#: ../src/keybindings.c:567
+#: ../src/keybindings.c:570
 msgid "Unfold all"
 msgstr "Vik upp alla"
 
-#: ../src/keybindings.c:569
+#: ../src/keybindings.c:572
 msgid "Reload symbol list"
 msgstr "Ladda om symbollistan"
 
-#: ../src/keybindings.c:571
+#: ../src/keybindings.c:574
 msgid "Remove Markers"
 msgstr "Ta bort markeringar"
 
-#: ../src/keybindings.c:573
+#: ../src/keybindings.c:576
 msgid "Remove Error Indicators"
 msgstr "Ta bort felindikatorer"
 
-#: ../src/keybindings.c:575
+#: ../src/keybindings.c:578
 msgid "Remove Markers and Error Indicators"
 msgstr "Ta bort markeringar och felindikatorer"
 
-#: ../src/keybindings.c:580 ../src/toolbar.c:68
+#: ../src/keybindings.c:583 ../src/toolbar.c:68
 msgid "Compile"
 msgstr "Kompilera"
 
-#: ../src/keybindings.c:584
+#: ../src/keybindings.c:587
 msgid "Make all"
 msgstr "Kör Make all"
 
-#: ../src/keybindings.c:587
+#: ../src/keybindings.c:590
 msgid "Make custom target"
 msgstr "Kör Make på valbart mål"
 
-#: ../src/keybindings.c:589
+#: ../src/keybindings.c:592
 msgid "Make object"
 msgstr "Kör Make på objekt"
 
-#: ../src/keybindings.c:591
+#: ../src/keybindings.c:594
 msgid "Next error"
 msgstr "Nästa fel"
 
-#: ../src/keybindings.c:593
+#: ../src/keybindings.c:596
 msgid "Previous error"
 msgstr "Föregående fel"
 
-#: ../src/keybindings.c:595
+#: ../src/keybindings.c:598
 msgid "Run"
 msgstr "Kör"
 
-#: ../src/keybindings.c:597
+#: ../src/keybindings.c:600
 msgid "Build options"
 msgstr "Bygg-inställningar"
 
-#: ../src/keybindings.c:602
+#: ../src/keybindings.c:605
 msgid "Show Color Chooser"
 msgstr "Visa färgväljaren"
 
-#: ../src/keybindings.c:849
+#: ../src/keybindings.c:852
 msgid "Keyboard Shortcuts"
 msgstr "Tangentgenvägar"
 
-#: ../src/keybindings.c:861
+#: ../src/keybindings.c:864
 msgid "The following keyboard shortcuts are configurable:"
 msgstr "Följande tangentbordsgenvägar kan konfigureras:"
 
@@ -3908,11 +3909,11 @@ msgstr "Läs av tangent"
 msgid "Press the combination of the keys you want to use for \"%s\"."
 msgstr "Skriv in den tangentbordskombination du vill använda för  \"%s\""
 
-#: ../src/prefs.c:226 ../src/symbols.c:2236 ../src/sidebar.c:730
+#: ../src/prefs.c:226 ../src/symbols.c:2237 ../src/sidebar.c:730
 msgid "_Expand All"
 msgstr "Expandera alla"
 
-#: ../src/prefs.c:231 ../src/symbols.c:2241 ../src/sidebar.c:736
+#: ../src/prefs.c:231 ../src/symbols.c:2242 ../src/sidebar.c:736
 msgid "_Collapse All"
 msgstr "Stäng alla"
 
@@ -4099,9 +4100,9 @@ msgid "Do you want to close it before proceeding?"
 msgstr "Vill du stänga innan du fortsätter?"
 
 #: ../src/project.c:597
-#, fuzzy, c-format
+#, c-format
 msgid "The '%s' project is open."
-msgstr "Projektet '%s' är redan öppnat."
+msgstr "Projektet '%s' är öppnat."
 
 #: ../src/project.c:646
 msgid "The specified project name is too short."
@@ -4338,7 +4339,7 @@ msgstr ""
 #: ../src/search.c:1574
 #, c-format
 msgid "Cannot parse extra options: %s"
-msgstr ""
+msgstr "Kan inte tolka tillval: %s"
 
 #: ../src/search.c:1640
 msgid "Searching..."
@@ -4393,266 +4394,266 @@ msgstr "Namn"
 msgid "Value"
 msgstr "Värde"
 
-#: ../src/symbols.c:693 ../src/symbols.c:743 ../src/symbols.c:810
+#: ../src/symbols.c:694 ../src/symbols.c:744 ../src/symbols.c:811
 msgid "Chapter"
 msgstr "Kapitel"
 
-#: ../src/symbols.c:694 ../src/symbols.c:739 ../src/symbols.c:811
+#: ../src/symbols.c:695 ../src/symbols.c:740 ../src/symbols.c:812
 msgid "Section"
 msgstr "Sektion"
 
-#: ../src/symbols.c:695
+#: ../src/symbols.c:696
 msgid "Sect1"
 msgstr "Sekt1"
 
-#: ../src/symbols.c:696
+#: ../src/symbols.c:697
 msgid "Sect2"
 msgstr "Sekt2"
 
-#: ../src/symbols.c:697
+#: ../src/symbols.c:698
 msgid "Sect3"
 msgstr "Sekt3"
 
-#: ../src/symbols.c:698
+#: ../src/symbols.c:699
 msgid "Appendix"
 msgstr "Appendix"
 
-#: ../src/symbols.c:699 ../src/symbols.c:744 ../src/symbols.c:760
-#: ../src/symbols.c:771 ../src/symbols.c:858 ../src/symbols.c:869
-#: ../src/symbols.c:881 ../src/symbols.c:895 ../src/symbols.c:907
-#: ../src/symbols.c:919 ../src/symbols.c:934 ../src/symbols.c:963
-#: ../src/symbols.c:993
+#: ../src/symbols.c:700 ../src/symbols.c:745 ../src/symbols.c:761
+#: ../src/symbols.c:772 ../src/symbols.c:859 ../src/symbols.c:870
+#: ../src/symbols.c:882 ../src/symbols.c:896 ../src/symbols.c:908
+#: ../src/symbols.c:920 ../src/symbols.c:935 ../src/symbols.c:964
+#: ../src/symbols.c:994
 msgid "Other"
 msgstr "Annat"
 
-#: ../src/symbols.c:705 ../src/symbols.c:927 ../src/symbols.c:972
+#: ../src/symbols.c:706 ../src/symbols.c:928 ../src/symbols.c:973
 msgid "Module"
 msgstr "Modul"
 
-#: ../src/symbols.c:706 ../src/symbols.c:854 ../src/symbols.c:905
-#: ../src/symbols.c:917 ../src/symbols.c:932 ../src/symbols.c:944
+#: ../src/symbols.c:707 ../src/symbols.c:855 ../src/symbols.c:906
+#: ../src/symbols.c:918 ../src/symbols.c:933 ../src/symbols.c:945
 msgid "Types"
 msgstr "Typ"
 
-#: ../src/symbols.c:707
+#: ../src/symbols.c:708
 msgid "Type constructors"
 msgstr "Typ-konstruktörer"
 
-#: ../src/symbols.c:708 ../src/symbols.c:730 ../src/symbols.c:751
-#: ../src/symbols.c:759 ../src/symbols.c:768 ../src/symbols.c:780
-#: ../src/symbols.c:789 ../src/symbols.c:842 ../src/symbols.c:891
-#: ../src/symbols.c:914 ../src/symbols.c:929 ../src/symbols.c:957
-#: ../src/symbols.c:980
+#: ../src/symbols.c:709 ../src/symbols.c:731 ../src/symbols.c:752
+#: ../src/symbols.c:760 ../src/symbols.c:769 ../src/symbols.c:781
+#: ../src/symbols.c:790 ../src/symbols.c:843 ../src/symbols.c:892
+#: ../src/symbols.c:915 ../src/symbols.c:930 ../src/symbols.c:958
+#: ../src/symbols.c:981
 msgid "Functions"
 msgstr "Funktioner"
 
-#: ../src/symbols.c:713
+#: ../src/symbols.c:714
 msgid "Program"
 msgstr "Program"
 
-#: ../src/symbols.c:715 ../src/symbols.c:723 ../src/symbols.c:729
+#: ../src/symbols.c:716 ../src/symbols.c:724 ../src/symbols.c:730
 msgid "Sections"
 msgstr "Markeringar"
 
-#: ../src/symbols.c:716
+#: ../src/symbols.c:717
 msgid "Paragraph"
 msgstr "Paragraf"
 
-#: ../src/symbols.c:717
+#: ../src/symbols.c:718
 msgid "Group"
 msgstr "Grupp"
 
-#: ../src/symbols.c:718
+#: ../src/symbols.c:719
 msgid "Data"
 msgstr "Data"
 
-#: ../src/symbols.c:724
+#: ../src/symbols.c:725
 msgid "Keys"
 msgstr "Tangenter"
 
-#: ../src/symbols.c:731 ../src/symbols.c:782 ../src/symbols.c:843
-#: ../src/symbols.c:868 ../src/symbols.c:893 ../src/symbols.c:906
-#: ../src/symbols.c:915 ../src/symbols.c:931 ../src/symbols.c:992
+#: ../src/symbols.c:732 ../src/symbols.c:783 ../src/symbols.c:844
+#: ../src/symbols.c:869 ../src/symbols.c:894 ../src/symbols.c:907
+#: ../src/symbols.c:916 ../src/symbols.c:932 ../src/symbols.c:993
 msgid "Variables"
 msgstr "Variabler"
 
-#: ../src/symbols.c:738
+#: ../src/symbols.c:739
 msgid "Environment"
 msgstr "Miljö"
 
-#: ../src/symbols.c:740 ../src/symbols.c:812
+#: ../src/symbols.c:741 ../src/symbols.c:813
 msgid "Subsection"
 msgstr "Subsektion"
 
-#: ../src/symbols.c:741 ../src/symbols.c:813
+#: ../src/symbols.c:742 ../src/symbols.c:814
 msgid "Subsubsection"
 msgstr "Subsubsektion"
 
-#: ../src/symbols.c:752
+#: ../src/symbols.c:753
 msgid "Structures"
 msgstr "Strukturer"
 
-#: ../src/symbols.c:767 ../src/symbols.c:851 ../src/symbols.c:876
-#: ../src/symbols.c:888
+#: ../src/symbols.c:768 ../src/symbols.c:852 ../src/symbols.c:877
+#: ../src/symbols.c:889
 msgid "Package"
 msgstr "Paket"
 
-#: ../src/symbols.c:769 ../src/symbols.c:918 ../src/symbols.c:941
+#: ../src/symbols.c:770 ../src/symbols.c:919 ../src/symbols.c:942
 msgid "Labels"
 msgstr "Etiketter"
 
-#: ../src/symbols.c:770 ../src/symbols.c:781 ../src/symbols.c:894
-#: ../src/symbols.c:916
+#: ../src/symbols.c:771 ../src/symbols.c:782 ../src/symbols.c:895
+#: ../src/symbols.c:917
 msgid "Constants"
 msgstr "Konstanter"
 
-#: ../src/symbols.c:778 ../src/symbols.c:877 ../src/symbols.c:889
-#: ../src/symbols.c:902 ../src/symbols.c:928 ../src/symbols.c:979
+#: ../src/symbols.c:779 ../src/symbols.c:878 ../src/symbols.c:890
+#: ../src/symbols.c:903 ../src/symbols.c:929 ../src/symbols.c:980
 msgid "Interfaces"
 msgstr "Gränssnitt"
 
-#: ../src/symbols.c:779 ../src/symbols.c:800 ../src/symbols.c:821
-#: ../src/symbols.c:831 ../src/symbols.c:840 ../src/symbols.c:878
-#: ../src/symbols.c:890 ../src/symbols.c:903 ../src/symbols.c:978
+#: ../src/symbols.c:780 ../src/symbols.c:801 ../src/symbols.c:822
+#: ../src/symbols.c:832 ../src/symbols.c:841 ../src/symbols.c:879
+#: ../src/symbols.c:891 ../src/symbols.c:904 ../src/symbols.c:979
 msgid "Classes"
 msgstr "Klasser"
 
-#: ../src/symbols.c:790
+#: ../src/symbols.c:791
 msgid "Anchors"
 msgstr "Ankare"
 
-#: ../src/symbols.c:791
+#: ../src/symbols.c:792
 msgid "H1 Headings"
 msgstr "Rubrik (H1)"
 
-#: ../src/symbols.c:792
+#: ../src/symbols.c:793
 msgid "H2 Headings"
 msgstr "Rubrik (H1)"
 
-#: ../src/symbols.c:793
+#: ../src/symbols.c:794
 msgid "H3 Headings"
 msgstr "Rubrik (H1)"
 
-#: ../src/symbols.c:801
+#: ../src/symbols.c:802
 msgid "ID Selectors"
 msgstr "ID-markering"
 
-#: ../src/symbols.c:802
+#: ../src/symbols.c:803
 msgid "Type Selectors"
 msgstr "Typ-konstruktörer"
 
-#: ../src/symbols.c:820 ../src/symbols.c:866
+#: ../src/symbols.c:821 ../src/symbols.c:867
 msgid "Modules"
 msgstr "Moduler"
 
-#: ../src/symbols.c:822
+#: ../src/symbols.c:823
 msgid "Singletons"
 msgstr "Singletons"
 
-#: ../src/symbols.c:823 ../src/symbols.c:832 ../src/symbols.c:841
-#: ../src/symbols.c:879 ../src/symbols.c:904
+#: ../src/symbols.c:824 ../src/symbols.c:833 ../src/symbols.c:842
+#: ../src/symbols.c:880 ../src/symbols.c:905
 msgid "Methods"
 msgstr "Metoder"
 
-#: ../src/symbols.c:830 ../src/symbols.c:975
+#: ../src/symbols.c:831 ../src/symbols.c:976
 msgid "Namespaces"
 msgstr "Namespaces"
 
-#: ../src/symbols.c:833 ../src/symbols.c:958
+#: ../src/symbols.c:834 ../src/symbols.c:959
 msgid "Procedures"
 msgstr "Procedurer"
 
-#: ../src/symbols.c:844
+#: ../src/symbols.c:845
 msgid "Imports"
 msgstr "Inporterade"
 
-#: ../src/symbols.c:852
+#: ../src/symbols.c:853
 msgid "Entities"
 msgstr "Enhet"
 
-#: ../src/symbols.c:853
+#: ../src/symbols.c:854
 msgid "Architectures"
 msgstr "Arkitekturer"
 
-#: ../src/symbols.c:855
+#: ../src/symbols.c:856
 msgid "Functions / Procedures"
 msgstr "Funktioner / Procedurer"
 
-#: ../src/symbols.c:856
+#: ../src/symbols.c:857
 msgid "Variables / Signals"
 msgstr "Variabler / Signaler"
 
-#: ../src/symbols.c:857
+#: ../src/symbols.c:858
 msgid "Processes / Components"
 msgstr "Procedurer / Komponenter"
 
-#: ../src/symbols.c:865
+#: ../src/symbols.c:866
 msgid "Events"
 msgstr "Händelser"
 
-#: ../src/symbols.c:867
+#: ../src/symbols.c:868
 msgid "Functions / Tasks"
 msgstr "Funktioner / Uppgifter"
 
-#: ../src/symbols.c:880 ../src/symbols.c:981
+#: ../src/symbols.c:881 ../src/symbols.c:982
 msgid "Members"
 msgstr "Medlemmar"
 
-#: ../src/symbols.c:930
+#: ../src/symbols.c:931
 msgid "Subroutines"
 msgstr "Subrutiner"
 
-#: ../src/symbols.c:933
+#: ../src/symbols.c:934
 msgid "Blocks"
 msgstr "Block"
 
-#: ../src/symbols.c:942 ../src/symbols.c:951 ../src/symbols.c:989
+#: ../src/symbols.c:943 ../src/symbols.c:952 ../src/symbols.c:990
 msgid "Macros"
 msgstr "Makron"
 
-#: ../src/symbols.c:943
+#: ../src/symbols.c:944
 msgid "Defines"
 msgstr "Definitioner"
 
-#: ../src/symbols.c:950
+#: ../src/symbols.c:951
 msgid "Targets"
 msgstr "Mål"
 
-#: ../src/symbols.c:959
+#: ../src/symbols.c:960
 msgid "Indexes"
 msgstr "Index"
 
-#: ../src/symbols.c:960
+#: ../src/symbols.c:961
 msgid "Tables"
 msgstr "Tabeller"
 
-#: ../src/symbols.c:961
+#: ../src/symbols.c:962
 msgid "Triggers"
 msgstr "Utlösare"
 
-#: ../src/symbols.c:962
+#: ../src/symbols.c:963
 msgid "Views"
 msgstr "Visa"
 
-#: ../src/symbols.c:982
+#: ../src/symbols.c:983
 msgid "Structs"
 msgstr "Strukturer"
 
-#: ../src/symbols.c:983
+#: ../src/symbols.c:984
 msgid "Typedefs / Enums"
 msgstr "Typedefs / Enums"
 
-#: ../src/symbols.c:1728
+#: ../src/symbols.c:1729
 #, c-format
 msgid "Unknown filetype extension for \"%s\".\n"
 msgstr "Okänd filändelse för filen \"%s\".\n"
 
-#: ../src/symbols.c:1751
+#: ../src/symbols.c:1752
 #, c-format
 msgid "Failed to create tags file, perhaps because no tags were found.\n"
 msgstr "Misslyckades med att skapa tagg-fil.\n"
 
-#: ../src/symbols.c:1758
+#: ../src/symbols.c:1759
 #, c-format
 msgid ""
 "Usage: %s -g <Tag File> <File list>\n"
@@ -4661,7 +4662,7 @@ msgstr ""
 "Användning: %s -g <Tagg Fil> <Fillista>\n"
 "\n"
 
-#: ../src/symbols.c:1759
+#: ../src/symbols.c:1760
 #, c-format
 msgid ""
 "Example:\n"
@@ -4672,41 +4673,40 @@ msgstr ""
 "CFLAGS=`pkg-config gtk+-2.0 --cflags` %s -g gtk2.c.tags /usr/include/gtk-2.0/"
 "gtk/gtk.h\n"
 
-#: ../src/symbols.c:1773
+#: ../src/symbols.c:1774
 msgid "Load Tags"
 msgstr "Ladda taggar"
 
-#: ../src/symbols.c:1780
-#, fuzzy
+#: ../src/symbols.c:1781
 msgid "Geany tag files (*.*.tags)"
 msgstr "Geany tagg-filer (*.tags)"
 
 #. For translators: the first wildcard is the filetype, the second the filename
-#: ../src/symbols.c:1800
+#: ../src/symbols.c:1801
 #, c-format
 msgid "Loaded %s tags file '%s'."
 msgstr "Laddade %s tagg-filen '%s'."
 
-#: ../src/symbols.c:1803
+#: ../src/symbols.c:1804
 #, c-format
 msgid "Could not load tags file '%s'."
 msgstr "Kunde inte ladda tagg-filen '%s'."
 
-#: ../src/symbols.c:1943
+#: ../src/symbols.c:1944
 #, c-format
 msgid "Forward declaration \"%s\" not found."
 msgstr "Deklarationen \"%s\" kunde inte hittas."
 
-#: ../src/symbols.c:1945
+#: ../src/symbols.c:1946
 #, c-format
 msgid "Definition of \"%s\" not found."
 msgstr "Definitionen av  \"%s\" kan inte hittas."
 
-#: ../src/symbols.c:2251
+#: ../src/symbols.c:2252
 msgid "Sort by _Name"
 msgstr "Sortera efter namn"
 
-#: ../src/symbols.c:2258
+#: ../src/symbols.c:2259
 msgid "Sort by _Appearance"
 msgstr "Sortera efter egenskaper"
 
@@ -4980,7 +4980,7 @@ msgstr ""
 #: ../src/ui_utils.c:219
 #, c-format
 msgid "%dL"
-msgstr ""
+msgstr "%dL"
 
 #. RO = read-only
 #: ../src/ui_utils.c:225 ../src/ui_utils.c:232
@@ -5017,12 +5017,12 @@ msgstr "MOD"
 #: ../src/ui_utils.c:328
 #, c-format
 msgid "pos: %d"
-msgstr ""
+msgstr "pos: %d"
 
 #: ../src/ui_utils.c:330
-#, fuzzy, c-format
+#, c-format
 msgid "style: %d"
-msgstr "Ikonstil"
+msgstr "stil: %d"
 
 #: ../src/ui_utils.c:382
 msgid " (new instance)"
@@ -5057,23 +5057,23 @@ msgstr "C++ STL"
 msgid "_Set Custom Date Format"
 msgstr "Ställ in användardefinierat datumformat"
 
-#: ../src/ui_utils.c:1819
+#: ../src/ui_utils.c:1820
 msgid "Select Folder"
 msgstr "Välj mapp"
 
-#: ../src/ui_utils.c:1819
+#: ../src/ui_utils.c:1820
 msgid "Select File"
 msgstr "Välj fil"
 
-#: ../src/ui_utils.c:1978
+#: ../src/ui_utils.c:1979
 msgid "Save All"
 msgstr "Spara alla"
 
-#: ../src/ui_utils.c:1979
+#: ../src/ui_utils.c:1980
 msgid "Close All"
 msgstr "Stäng alla"
 
-#: ../src/ui_utils.c:2225
+#: ../src/ui_utils.c:2226
 msgid "Geany cannot start!"
 msgstr "Geany kan ej starta!"
 

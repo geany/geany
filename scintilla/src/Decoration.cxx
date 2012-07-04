@@ -28,7 +28,7 @@ Decoration::~Decoration() {
 }
 
 bool Decoration::Empty() {
-	return rs.Runs() == 1;
+	return (rs.Runs() == 1) && (rs.AllSameAs(0));
 }
 
 DecorationList::DecorationList() : currentIndicator(0), currentValue(1), current(0),
@@ -148,7 +148,7 @@ void DecorationList::DeleteRange(int position, int deleteLength) {
 void DecorationList::DeleteAnyEmpty() {
 	Decoration *deco = root;
 	while (deco) {
-		if (deco->Empty()) {
+		if ((lengthDocument == 0) || deco->Empty()) {
 			Delete(deco->indicator);
 			deco = root;
 		} else {

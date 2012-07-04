@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.22\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-06-06 21:50+0200\n"
-"PO-Revision-Date: 2012-06-04 23:18+0100\n"
+"POT-Creation-Date: 2012-06-09 08:57+0200\n"
+"PO-Revision-Date: 2012-06-07 18:58+0100\n"
 "Last-Translator: Giuseppe Penone <giuspen@gmail.com>\n"
 "Language-Team:  <geany-i18n@uvena.de>\n"
 "Language: it\n"
@@ -188,12 +188,11 @@ msgid "Startup path:"
 msgstr "Percorso di avvio:"
 
 #: ../data/geany.glade.h:38
-#, fuzzy
 msgid ""
 "Path to start in when opening or saving files. Must be an absolute path."
 msgstr ""
-"Percorso iniziale per l'apertura o il salvataggio dei file. Dev'essere un "
-"percorso assoluto. Lasciare vuoto per usare la cartella di lavoro corrente."
+"Percorso iniziale per l'apertura o il salvataggio dei file. Deve essere un "
+"percorso assoluto."
 
 #: ../data/geany.glade.h:39
 msgid "Project files:"

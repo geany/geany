@@ -94,7 +94,7 @@ splitwindow_la_CFLAGS   = -DG_LOG_DOMAIN=\""SplitWindow"\"
 demoplugin_la_LIBADD    = $(GTK_LIBS)
 classbuilder_la_LIBADD  = $(GTK_LIBS)
 htmlchars_la_LIBADD     = $(GTK_LIBS)
-export_la_LIBADD        = $(GTK_LIBS)
+export_la_LIBADD        = $(GTK_LIBS) -lm
 saveactions_la_LIBADD   = $(GTK_LIBS)
 filebrowser_la_LIBADD   = $(GTK_LIBS)
 splitwindow_la_LIBADD   = $(GTK_LIBS)

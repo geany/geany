@@ -2,8 +2,8 @@
 #
 # WAF build script - this file is part of Geany, a fast and lightweight IDE
 #
-# Copyright 2008-2011 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
-# Copyright 2008-2011 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+# Copyright 2008-2012 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+# Copyright 2008-2012 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -49,7 +49,7 @@ from waflib.TaskGen import feature
 
 
 APPNAME = 'geany'
-VERSION = '1.22'
+VERSION = '1.23'
 LINGUAS_FILE = 'po/LINGUAS'
 MINIMUM_GTK_VERSION = '2.16.0'
 MINIMUM_GLIB_VERSION = '2.20.0'

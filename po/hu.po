@@ -2,13 +2,13 @@
 # Copyright © 2007 - 2012
 # This file is distributed under the same license as the Geany package.
 #
-# kilo aka Gabor Kmetyko <kg.kilo@gmail.com>, 2007-2010.
+# kilo aka Gabor Kmetyko <kg.kilo@gmail.com>, 2007-2012.
 msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.22\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-06-03 17:50+0200\n"
-"PO-Revision-Date: 2012-03-14 14:37+0100\n"
+"PO-Revision-Date: 2012-06-08 12:14+0100\n"
 "Last-Translator: kilo aka Gabor Kmetyko <kg.kilo@gmail.com>\n"
 "Language-Team: Hungarian\n"
 "Language: Hungarian\n"
@@ -17,7 +17,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: ../geany.desktop.in.h:1 ../data/geany.glade.h:346
+#: ../geany.desktop.in.h:1
+#: ../data/geany.glade.h:346
 msgid "Geany"
 msgstr "Geany"
 
@@ -81,7 +82,8 @@ msgstr "láthatatlan"
 msgid "_Insert \"include <...>\""
 msgstr "\"include <...>\" be_szúrása"
 
-#: ../data/geany.glade.h:14 ../src/keybindings.c:408
+#: ../data/geany.glade.h:14
+#: ../src/keybindings.c:408
 msgid "_Insert Alternative White Space"
 msgstr "Másféle szóköz beszúrása"
 
@@ -109,7 +111,9 @@ msgstr "Ugrás a _címke definíciójához"
 msgid "Conte_xt Action"
 msgstr "_Tartalomfüggő művelet"
 
-#: ../data/geany.glade.h:21 ../src/filetypes.c:102 ../src/filetypes.c:1775
+#: ../data/geany.glade.h:21
+#: ../src/filetypes.c:102
+#: ../src/filetypes.c:1775
 msgid "None"
 msgstr "Semmi"
 
@@ -125,7 +129,8 @@ msgstr "Jelenlegi karakterek"
 msgid "Match braces"
 msgstr "Zárójelek illesztése"
 
-#: ../data/geany.glade.h:25 ../src/keybindings.c:418
+#: ../data/geany.glade.h:25
+#: ../src/keybindings.c:418
 msgid "Preferences"
 msgstr "Beállítások"
 
@@ -142,12 +147,8 @@ msgid "Load virtual terminal support"
 msgstr "Töltse be a virtuális terminál emulációt"
 
 #: ../data/geany.glade.h:29
-msgid ""
-"Whether the virtual terminal emulation (VTE) should be loaded at startup, "
-"disable it if you do not need it"
-msgstr ""
-"Betöltse-e a virtuális terminál emulációt (VTE) induláskor? Kapcsolja ki, ha "
-"nincs rá szüksége."
+msgid "Whether the virtual terminal emulation (VTE) should be loaded at startup, disable it if you do not need it"
+msgstr "Betöltse-e a virtuális terminál emulációt (VTE) induláskor? Kapcsolja ki, ha nincs rá szüksége."
 
 #: ../data/geany.glade.h:30
 msgid "Enable plugin support"
@@ -182,13 +183,8 @@ msgid "Startup path:"
 msgstr "Indítókönyvtár:"
 
 #: ../data/geany.glade.h:38
-msgid ""
-"Path to start in when opening or saving files. Must be an absolute path. "
-"Leave blank to use the current working directory."
-msgstr ""
-"A fájlok megnyitásánál vagy mentésénél használt kezdő könyvtár. Teljes "
-"elérési útnak kell lennie. Hagyja üresen az aktuális munkakönyvtár "
-"használatához."
+msgid "Path to start in when opening or saving files. Must be an absolute path. Leave blank to use the current working directory."
+msgstr "A fájlok megnyitásánál vagy mentésénél használt kezdő könyvtár. Teljes elérési útnak kell lennie. Hagyja üresen az aktuális munkakönyvtár használatához."
 
 #: ../data/geany.glade.h:39
 msgid "Project files:"
@@ -203,14 +199,8 @@ msgid "Extra plugin path:"
 msgstr "További bővítőmodulok útvonala:"
 
 #: ../data/geany.glade.h:42
-msgid ""
-"Geany looks by default in the global installation path and in the "
-"configuration directory. The path entered here will be searched additionally "
-"for plugins. Leave blank to disable."
-msgstr ""
-"A Geany alapértelmezés szerint a globális telepítési útvonalon és a "
-"konfigurációs könyvtárban keres. Az itt megadott útvonalon is keresni fog "
-"bővítményeket. Letiltáshoz hagyja üresen."
+msgid "Geany looks by default in the global installation path and in the configuration directory. The path entered here will be searched additionally for plugins. Leave blank to disable."
+msgstr "A Geany alapértelmezés szerint a globális telepítési útvonalon és a konfigurációs könyvtárban keres. Az itt megadott útvonalon is keresni fog bővítményeket. Letiltáshoz hagyja üresen."
 
 #: ../data/geany.glade.h:43
 msgid "<b>Paths</b>"
@@ -225,9 +215,7 @@ msgid "Beep on errors or when compilation has finished"
 msgstr "Sípoljon hibáknál vagy a fordítás végén"
 
 #: ../data/geany.glade.h:46
-msgid ""
-"Whether to beep if an error occurred or when the compilation process has "
-"finished"
+msgid "Whether to beep if an error occurred or when the compilation process has finished"
 msgstr "Sípoljon-e, ha hiba történt vagy befejeződött a fordítási folyamat?"
 
 #: ../data/geany.glade.h:47
@@ -235,50 +223,32 @@ msgid "Switch to status message list at new message"
 msgstr "Új üzenetnél váltás az állapot üzenetek listájára"
 
 #: ../data/geany.glade.h:48
-msgid ""
-"Switch to the status message tab (in the notebook window at the bottom) if a "
-"new status message arrives"
-msgstr ""
-"Átváltson-e az állapot üzenetek listájára (a lenti jegyzettömb ablakban), ha "
-"új állapot üzenet érkezik?"
+msgid "Switch to the status message tab (in the notebook window at the bottom) if a new status message arrives"
+msgstr "Átváltson-e az állapot üzenetek listájára (a lenti jegyzettömb ablakban), ha új állapot üzenet érkezik?"
 
 #: ../data/geany.glade.h:49
 msgid "Suppress status messages in the status bar"
 msgstr "Ne mutasson állapot üzeneteket az állapotsávon"
 
 #: ../data/geany.glade.h:50
-msgid ""
-"Removes all messages from the status bar. The messages are still displayed "
-"in the status messages window."
-msgstr ""
-"Eltávolít minden üzenetet az állapotsávról. Az üzenetek ezután is "
-"megjelennek, az állapot üzenetek ablakon."
+msgid "Removes all messages from the status bar. The messages are still displayed in the status messages window."
+msgstr "Eltávolít minden üzenetet az állapotsávról. Az üzenetek ezután is megjelennek, az állapot üzenetek ablakon."
 
 #: ../data/geany.glade.h:51
 msgid "Auto-focus widgets (focus follows mouse)"
 msgstr "Automatikus fókusz (a fókusz követi az egér mozgását)"
 
 #: ../data/geany.glade.h:52
-msgid ""
-"Gives the focus automatically to widgets below the mouse cursor. Works for "
-"the main editor widget, the scribble, the toolbar search and goto line "
-"fields and the VTE."
-msgstr ""
-"Automatikusan az egér kurzor alatti felületi elemre helyezi a fókuszt. "
-"Működik a fő szerkesztőablakban, a firkánál, az eszköztári keresésnél és "
-"sorra ugrásnál, valamint a VTE-ben."
+msgid "Gives the focus automatically to widgets below the mouse cursor. Works for the main editor widget, the scribble, the toolbar search and goto line fields and the VTE."
+msgstr "Automatikusan az egér kurzor alatti felületi elemre helyezi a fókuszt. Működik a fő szerkesztőablakban, a firkánál, az eszköztári keresésnél és sorra ugrásnál, valamint a VTE-ben."
 
 #: ../data/geany.glade.h:53
 msgid "Use Windows File Open/Save dialogs"
 msgstr "Windows Fájl megnyitás / Mentés dialógusablakok használata"
 
 #: ../data/geany.glade.h:54
-msgid ""
-"Defines whether to use the native Windows File Open/Save dialogs or whether "
-"to use the GTK default dialogs"
-msgstr ""
-"Meghatározza, hogy a natív Windows-os Fájl megnyitás / Mentés "
-"dialógusablakot vagy a GTK alapértelemezett dialógusait használja"
+msgid "Defines whether to use the native Windows File Open/Save dialogs or whether to use the GTK default dialogs"
+msgstr "Meghatározza, hogy a natív Windows-os Fájl megnyitás / Mentés dialógusablakot vagy a GTK alapértelemezett dialógusait használja"
 
 #: ../data/geany.glade.h:55
 msgid "<b>Miscellaneous</b>"
@@ -286,36 +256,27 @@ msgstr "<b>Egyéb</b>"
 
 #: ../data/geany.glade.h:56
 msgid "Always wrap search"
-msgstr ""
+msgstr "Mindig újbóli keresés"
 
 #: ../data/geany.glade.h:57
-#, fuzzy
 msgid "Always wrap search around the document"
-msgstr "Mindig újbóli keresés a fájl elejétől és a Keresés ablak elrejtése"
+msgstr "Mindig újbóli keresés a fájl elejétől"
 
 #: ../data/geany.glade.h:58
-#, fuzzy
 msgid "Hide the Find dialog"
-msgstr "Mindig újbóli keresés a fájl elejétől és a Keresés ablak elrejtése"
+msgstr "A Keresés ablak elrejtése"
 
 #: ../data/geany.glade.h:59
-#, fuzzy
 msgid "Hide the Find dialog after clicking Find Next/Previous"
-msgstr ""
-"Mindig újból keres a dokumentum elejétől, valamint elrejti a Keresés "
-"dialógusablakot a Következő/Előző keresés gomb lenyomása után."
+msgstr "Elrejti a Keresés dialógusablakot a Következő/Előző keresés gomb lenyomása után."
 
 #: ../data/geany.glade.h:60
 msgid "Use the current word under the cursor for Find dialogs"
 msgstr "Kurzor alatti szó használata a Keresés dialógushoz"
 
 #: ../data/geany.glade.h:61
-msgid ""
-"Use current word under the cursor when opening the Find, Find in Files or "
-"Replace dialog and there is no selection"
-msgstr ""
-"A kurzor alatti szót használja a Keresés, Keresés fájlokban vagy Csere "
-"dialógusablakok megnyitásakor, ha amúgy nincs kijelölés."
+msgid "Use current word under the cursor when opening the Find, Find in Files or Replace dialog and there is no selection"
+msgstr "A kurzor alatti szót használja a Keresés, Keresés fájlokban vagy Csere dialógusablakok megnyitásakor, ha amúgy nincs kijelölés."
 
 #: ../data/geany.glade.h:62
 msgid "Use the current file's directory for Find in Files"
@@ -330,28 +291,16 @@ msgid "Use project-based session files"
 msgstr "Projekt-alapú munkamenet fájlok használata"
 
 #: ../data/geany.glade.h:65
-msgid ""
-"Whether to store a project's session files and open them when re-opening the "
-"project"
-msgstr ""
-"Eltárolja-e a projekt munkamenet fájljait és megnyissa-e őket a projekt "
-"újbóli megnyitásakor?"
+msgid "Whether to store a project's session files and open them when re-opening the project"
+msgstr "Eltárolja-e a projekt munkamenet fájljait és megnyissa-e őket a projekt újbóli megnyitásakor?"
 
 #: ../data/geany.glade.h:66
 msgid "Store project file inside the project base directory"
 msgstr "A projekt alapkönyvtárába mentse a projekt fájlt"
 
 #: ../data/geany.glade.h:67
-msgid ""
-"When enabled, a project file is stored by default inside the project base "
-"directory when creating new projects instead of one directory above the base "
-"directory. You can still change the path of the project file in the New "
-"Project dialog."
-msgstr ""
-"Ha engedélyezve van, a projekt fájl a projekt saját könyvtárába kerül "
-"mentésre új projekt létrehozásakor, nem pedig az alapkönyvtár feletti "
-"könyvtárba. A projekt fájl útvonalát az Új projekt dialógusablakon belül "
-"továbbra is meg lehet változtatni."
+msgid "When enabled, a project file is stored by default inside the project base directory when creating new projects instead of one directory above the base directory. You can still change the path of the project file in the New Project dialog."
+msgstr "Ha engedélyezve van, a projekt fájl a projekt saját könyvtárába kerül mentésre új projekt létrehozásakor, nem pedig az alapkönyvtár feletti könyvtárba. A projekt fájl útvonalát az Új projekt dialógusablakon belül továbbra is meg lehet változtatni."
 
 #: ../data/geany.glade.h:68
 msgid "<b>Projects</b>"
@@ -365,7 +314,8 @@ msgstr "Egyéb"
 #. * corresponding chapter in the documentation, comparing translatable
 #. * strings is easy to break. Maybe attach an identifying string to the
 #. * tab label object.
-#: ../data/geany.glade.h:70 ../src/prefs.c:1575
+#: ../data/geany.glade.h:70
+#: ../src/prefs.c:1575
 msgid "General"
 msgstr "Általános"
 
@@ -441,7 +391,8 @@ msgstr "Állapotsor megjelenítése"
 msgid "Whether to show the status bar at the bottom of the main window"
 msgstr "Megjelenítse-e az állapotsort a fő ablak alján?"
 
-#: ../data/geany.glade.h:89 ../src/prefs.c:1577
+#: ../data/geany.glade.h:89
+#: ../src/prefs.c:1577
 msgid "Interface"
 msgstr "Felület"
 
@@ -454,12 +405,8 @@ msgid "Show close buttons"
 msgstr "Bezáró gombok megjelenítése"
 
 #: ../data/geany.glade.h:92
-msgid ""
-"Shows a small cross button in the file tabs to easily close files when "
-"clicking on it (requires restart of Geany)"
-msgstr ""
-"Megjelenít egy kis kereszt alakú gombot a fájl füleken, hogy arra kattintva "
-"könnyen be lehessen zárni a fájlokat (a Geany újraindítása szükséges)."
+msgid "Shows a small cross button in the file tabs to easily close files when clicking on it (requires restart of Geany)"
+msgstr "Megjelenít egy kis kereszt alakú gombot a fájl füleken, hogy arra kattintva könnyen be lehessen zárni a fájlokat (a Geany újraindítása szükséges)."
 
 #: ../data/geany.glade.h:93
 msgid "Placement of new file tabs:"
@@ -478,11 +425,8 @@ msgid "Next to current"
 msgstr "Aktuális mellett"
 
 #: ../data/geany.glade.h:97
-msgid ""
-"Whether to place file tabs next to the current tab rather than at the edges "
-"of the notebook"
-msgstr ""
-"A fájl füleket a jelenlegi mellé helyezze inkább, vagy a jegyzettömb szélére"
+msgid "Whether to place file tabs next to the current tab rather than at the edges of the notebook"
+msgstr "A fájl füleket a jelenlegi mellé helyezze inkább, vagy a jegyzettömb szélére"
 
 #: ../data/geany.glade.h:98
 msgid "Double-clicking hides all additional widgets"
@@ -493,9 +437,8 @@ msgid "Calls the View->Toggle All Additional Widgets command"
 msgstr "Meghívja a Nézet->Minden egyéb widget ki/bekapcsolása parancsot"
 
 #: ../data/geany.glade.h:100
-#, fuzzy
 msgid "Switch to last used document after closing a tab"
-msgstr "A legutóbb használt dokumentumra kapcsol"
+msgstr "A legutóbb használt dokumentumra kapcsol egy fül bezárása után"
 
 #: ../data/geany.glade.h:101
 msgid "<b>Editor tabs</b>"
@@ -523,11 +466,10 @@ msgstr "Eszköztár _illesztése a menühöz"
 
 #: ../data/geany.glade.h:107
 msgid "Pack the toolbar to the main menu to save vertical space"
-msgstr ""
-"Összeilleszti az eszköztárat a főmenüvel a jobb függőleges helykihasználás "
-"érdekében"
+msgstr "Összeilleszti az eszköztárat a főmenüvel a jobb függőleges helykihasználás érdekében"
 
-#: ../data/geany.glade.h:108 ../src/toolbar.c:933
+#: ../data/geany.glade.h:108
+#: ../src/toolbar.c:933
 msgid "Customize Toolbar"
 msgstr "Eszközsáv testreszabása"
 
@@ -575,7 +517,8 @@ msgstr "<b>Ikonméret</b>"
 msgid "<b>Toolbar</b>"
 msgstr "<b>Eszköztár</b>"
 
-#: ../data/geany.glade.h:120 ../src/prefs.c:1579
+#: ../data/geany.glade.h:120
+#: ../src/prefs.c:1579
 msgid "Toolbar"
 msgstr "Eszköztár"
 
@@ -584,44 +527,24 @@ msgid "Line wrapping"
 msgstr "Sortörés"
 
 #: ../data/geany.glade.h:122
-msgid ""
-"Wrap the line at the window border and continue it on the next line. Note: "
-"line wrapping has a high performance cost for large documents so should be "
-"disabled on slow machines."
-msgstr ""
-"Az ablak szélénél eltöri a sort és a következő sorban folytatja. Figyelem: a "
-"sortörés magas erőforrásigényű nagy dokumentumok esetén, tehát lassú gépeken "
-"ki kellene kapcsolni."
+msgid "Wrap the line at the window border and continue it on the next line. Note: line wrapping has a high performance cost for large documents so should be disabled on slow machines."
+msgstr "Az ablak szélénél eltöri a sort és a következő sorban folytatja. Figyelem: a sortörés magas erőforrásigényű nagy dokumentumok esetén, tehát lassú gépeken ki kellene kapcsolni."
 
 #: ../data/geany.glade.h:123
 msgid "\"Smart\" home key"
 msgstr "\"Okos\" Home billentyű engedélyezése"
 
 #: ../data/geany.glade.h:124
-msgid ""
-"When \"smart\" home is enabled, the HOME key will move the caret to the "
-"first non-blank character of the line, unless it is already there, it moves "
-"to the very beginning of the line. When this feature is disabled, the HOME "
-"key always moves the caret to the start of the current line, regardless of "
-"its current position."
-msgstr ""
-"Ha az \"okos\" Home billentyű engedélyezett, a HOME lenyomásakor a sor első, "
-"nem szóköz karakterére viszi a kurzort, de ha már ott volt, a sor legelső "
-"karakterére áll. Ha ez a funkció nincs engedélyezve, a HOME billentyű mindig "
-"a sor legelső karakterére viszi a kurzort, függetlenül attól, hogy mi az "
-"aktuális pozíciója."
+msgid "When \"smart\" home is enabled, the HOME key will move the caret to the first non-blank character of the line, unless it is already there, it moves to the very beginning of the line. When this feature is disabled, the HOME key always moves the caret to the start of the current line, regardless of its current position."
+msgstr "Ha az \"okos\" Home billentyű engedélyezett, a HOME lenyomásakor a sor első, nem szóköz karakterére viszi a kurzort, de ha már ott volt, a sor legelső karakterére áll. Ha ez a funkció nincs engedélyezve, a HOME billentyű mindig a sor legelső karakterére viszi a kurzort, függetlenül attól, hogy mi az aktuális pozíciója."
 
 #: ../data/geany.glade.h:125
 msgid "Disable Drag and Drop"
 msgstr "Húzd és ejtsd módszer letiltása"
 
 #: ../data/geany.glade.h:126
-msgid ""
-"Disable drag and drop completely in the editor window so you can't drag and "
-"drop any selections within or outside of the editor window"
-msgstr ""
-"Teljesen letiltja a húzd és ejtsd módszert a szerkesztőablakban, így nem "
-"lehet kijelölést a szerkesztőablak belsejében vagy azon kívül mozgatni."
+msgid "Disable drag and drop completely in the editor window so you can't drag and drop any selections within or outside of the editor window"
+msgstr "Teljesen letiltja a húzd és ejtsd módszert a szerkesztőablakban, így nem lehet kijelölést a szerkesztőablak belsejében vagy azon kívül mozgatni."
 
 #: ../data/geany.glade.h:127
 msgid "Code folding"
@@ -632,24 +555,16 @@ msgid "Fold/unfold all children of a fold point"
 msgstr "Kinyitja/bezárja egy blokk összes gyermekét"
 
 #: ../data/geany.glade.h:129
-msgid ""
-"Fold or unfold all children of a fold point. By pressing the Shift key while "
-"clicking on a fold symbol the contrary behavior is used."
-msgstr ""
-"Kinyitja vagy bezárja egy blokk összes gyermekét. A Shift billentyűt "
-"használva kattintás közben az ellentétes viselkedés történik."
+msgid "Fold or unfold all children of a fold point. By pressing the Shift key while clicking on a fold symbol the contrary behavior is used."
+msgstr "Kinyitja vagy bezárja egy blokk összes gyermekét. A Shift billentyűt használva kattintás közben az ellentétes viselkedés történik."
 
 #: ../data/geany.glade.h:130
 msgid "Use indicators to show compile errors"
 msgstr "Jelölés használata fordítási hibák kijelzéséhez"
 
 #: ../data/geany.glade.h:131
-msgid ""
-"Whether to use indicators (a squiggly underline) to highlight the lines "
-"where the compiler found a warning or an error"
-msgstr ""
-"Használjon-e jelöléseket (cikkcakkos aláhúzást) azon sorok kiemelésére, ahol "
-"a fordító figyelmeztetést vagy hibát talált?"
+msgid "Whether to use indicators (a squiggly underline) to highlight the lines where the compiler found a warning or an error"
+msgstr "Használjon-e jelöléseket (cikkcakkos aláhúzást) azon sorok kiemelésére, ahol a fordító figyelmeztetést vagy hibát talált?"
 
 #: ../data/geany.glade.h:132
 msgid "Newline strips trailing spaces"
@@ -657,8 +572,7 @@ msgstr "Soremelés levágja a sorvégi szóközöket"
 
 #: ../data/geany.glade.h:133
 msgid "Enable newline to strip the trailing spaces on the previous line"
-msgstr ""
-"Engedélyezi, hogy soremeléskor az előző sor végéről levágja a szóközöket."
+msgstr "Engedélyezi, hogy soremeléskor az előző sor végéről levágja a szóközöket."
 
 #: ../data/geany.glade.h:134
 msgid "Line breaking column:"
@@ -669,12 +583,8 @@ msgid "Comment toggle marker:"
 msgstr "Megjegyzés jelölő:"
 
 #: ../data/geany.glade.h:136
-msgid ""
-"A string which is added when toggling a line comment in a source file, it is "
-"used to mark the comment as toggled."
-msgstr ""
-"Olyan string, ami a forráskód sor megjegyzéssé kapcsolásakor kerül "
-"beszúrásra. Arra való, hogy jelölje a bekapcsolt megjegyzést."
+msgid "A string which is added when toggling a line comment in a source file, it is used to mark the comment as toggled."
+msgstr "Olyan string, ami a forráskód sor megjegyzéssé kapcsolásakor kerül beszúrásra. Arra való, hogy jelölje a bekapcsolt megjegyzést."
 
 #: ../data/geany.glade.h:137
 msgid "<b>Features</b>"
@@ -685,12 +595,8 @@ msgid "Features"
 msgstr "Sajátságok"
 
 #: ../data/geany.glade.h:139
-msgid ""
-"Note: To apply these settings to all currently open documents, use "
-"<i>Project->Apply Default Indentation</i>."
-msgstr ""
-"Megjegyzés: ezen beállítások érvényesítése az összes jelenleg megnyitott "
-"dokumentumra: <i>Projekt->Alapértelmezett behúzás alkalmazása</i>."
+msgid "Note: To apply these settings to all currently open documents, use <i>Project->Apply Default Indentation</i>."
+msgstr "Megjegyzés: ezen beállítások érvényesítése az összes jelenleg megnyitott dokumentumra: <i>Projekt->Alapértelmezett behúzás alkalmazása</i>."
 
 #: ../data/geany.glade.h:140
 msgid "Width:"
@@ -709,22 +615,16 @@ msgid "Detect type from file"
 msgstr "Fájlból megállapít"
 
 #: ../data/geany.glade.h:144
-msgid ""
-"Whether to detect the indentation type from file contents when a file is "
-"opened"
-msgstr ""
-"Fájl megnyitásakor megállapítsa-e a fájltartalom alapján a behúzások típusát?"
+msgid "Whether to detect the indentation type from file contents when a file is opened"
+msgstr "Fájl megnyitásakor megállapítsa-e a fájltartalom alapján a behúzások típusát?"
 
 #: ../data/geany.glade.h:145
 msgid "T_abs and spaces"
 msgstr "T_abulátorok és szóközök"
 
 #: ../data/geany.glade.h:146
-msgid ""
-"Use spaces if the total indent is less than the tab width, otherwise use both"
-msgstr ""
-"Ha a behúzás kisebb, mint a tabulátor mérete, használjon szóközöket; "
-"egyébként használja mindkettőt"
+msgid "Use spaces if the total indent is less than the tab width, otherwise use both"
+msgstr "Ha a behúzás kisebb, mint a tabulátor mérete, használjon szóközöket; egyébként használja mindkettőt"
 
 #: ../data/geany.glade.h:147
 msgid "_Spaces"
@@ -747,12 +647,8 @@ msgid "Detect width from file"
 msgstr "Szélességet fájlból megállapít"
 
 #: ../data/geany.glade.h:152
-msgid ""
-"Whether to detect the indentation width from file contents when a file is "
-"opened"
-msgstr ""
-"Fájl megnyitásakor megállapítsa-e a fájltartalom alapján a behúzások "
-"szélességét?"
+msgid "Whether to detect the indentation width from file contents when a file is opened"
+msgstr "Fájl megnyitásakor megállapítsa-e a fájltartalom alapján a behúzások szélességét?"
 
 #: ../data/geany.glade.h:153
 msgid "Type:"
@@ -763,11 +659,8 @@ msgid "Tab key indents"
 msgstr "A Tab billentyű sorbehúzást csinál"
 
 #: ../data/geany.glade.h:155
-msgid ""
-"Pressing tab/shift-tab indents/unindents instead of inserting a tab character"
-msgstr ""
-"A Tab/Shift-Tab megnyomása növeli/csökkenti a behúzást, nem pedig tabulátor "
-"karaktert szúr be."
+msgid "Pressing tab/shift-tab indents/unindents instead of inserting a tab character"
+msgstr "A Tab/Shift-Tab megnyomása növeli/csökkenti a behúzást, nem pedig tabulátor karaktert szúr be."
 
 #: ../data/geany.glade.h:156
 msgid "<b>Indentation</b>"
@@ -782,12 +675,8 @@ msgid "Snippet completion"
 msgstr "Részlet kiegészítése"
 
 #: ../data/geany.glade.h:159
-msgid ""
-"Type a defined short character sequence and complete it to a more complex "
-"string using a single keypress"
-msgstr ""
-"Gépeljen be egy meghatározott karaktersort és egészíttesse ki egy "
-"bonyolultabb szövegre egy gombnyomással."
+msgid "Type a defined short character sequence and complete it to a more complex string using a single keypress"
+msgstr "Gépeljen be egy meghatározott karaktersort és egészíttesse ki egy bonyolultabb szövegre egy gombnyomással."
 
 #: ../data/geany.glade.h:160
 msgid "XML/HTML tag auto-closing"
@@ -802,24 +691,16 @@ msgid "Automatic continuation of multi-line comments"
 msgstr "Többsoros megjegyzések automatikus folytatása"
 
 #: ../data/geany.glade.h:163
-msgid ""
-"Continue automatically multi-line comments in languages like C, C++ and Java "
-"when a new line is entered inside such a comment"
-msgstr ""
-"Automatikusan folytatja a megjegyzést olyan nyelveknél, mint a C, a C++ és a "
-"Java, ha a megjegyzésen belül új sor karakter kerül bevitelre."
+msgid "Continue automatically multi-line comments in languages like C, C++ and Java when a new line is entered inside such a comment"
+msgstr "Automatikusan folytatja a megjegyzést olyan nyelveknél, mint a C, a C++ és a Java, ha a megjegyzésen belül új sor karakter kerül bevitelre."
 
 #: ../data/geany.glade.h:164
 msgid "Autocomplete symbols"
 msgstr "Szimbólumok automatikus kiegészítése"
 
 #: ../data/geany.glade.h:165
-msgid ""
-"Automatic completion of known symbols in open files (function names, global "
-"variables, ...)"
-msgstr ""
-"A megnyitott fájlokban ismert szimbólumok (függvények neve, globális "
-"változók, stb.) automatikus kiegészítése"
+msgid "Automatic completion of known symbols in open files (function names, global variables, ...)"
+msgstr "A megnyitott fájlokban ismert szimbólumok (függvények neve, globális változók, stb.) automatikus kiegészítése"
 
 #: ../data/geany.glade.h:166
 msgid "Autocomplete all words in document"
@@ -842,12 +723,8 @@ msgid "Characters to type for autocompletion:"
 msgstr "Kiegészítéshez szükséges karakterek száma:"
 
 #: ../data/geany.glade.h:171
-msgid ""
-"The amount of characters which are necessary to show the symbol "
-"autocompletion list"
-msgstr ""
-"A szimbólumok automatikus kiegészítése listájának megjelenítéséhez szükséges "
-"karakterek száma."
+msgid "The amount of characters which are necessary to show the symbol autocompletion list"
+msgstr "A szimbólumok automatikus kiegészítése listájának megjelenítéséhez szükséges karakterek száma."
 
 #: ../data/geany.glade.h:172
 msgid "Display height in rows for the autocompletion list"
@@ -862,15 +739,8 @@ msgid "Symbol list update frequency:"
 msgstr "Szimbólumlista frissítési gyakorisága:"
 
 #: ../data/geany.glade.h:175
-msgid ""
-"Minimal delay (in milliseconds) between two automatic updates of the symbol "
-"list. Note that a too short delay may have performance impact, especially "
-"with large files. A delay of 0 disables real-time updates."
-msgstr ""
-"A szimbólumlista két automatikus frissítése közötti minimális időtartam "
-"(milliszekundumban). Figyelem: túl rövid időköz megadása befolyásolhatja a "
-"teljesítményt, különösen nagy fájlok esetében. 0 késleltetés letiltja a "
-"valós idejű frissítéseket."
+msgid "Minimal delay (in milliseconds) between two automatic updates of the symbol list. Note that a too short delay may have performance impact, especially with large files. A delay of 0 disables real-time updates."
+msgstr "A szimbólumlista két automatikus frissítése közötti minimális időtartam (milliszekundumban). Figyelem: túl rövid időköz megadása befolyásolhatja a teljesítményt, különösen nagy fájlok esetében. 0 késleltetés letiltja a valós idejű frissítéseket."
 
 #: ../data/geany.glade.h:176
 msgid "<b>Completions</b>"
@@ -930,9 +800,7 @@ msgstr "Szintaktis jelölő színek átfordítása"
 
 #: ../data/geany.glade.h:190
 msgid "Invert all colors, by default using white text on a black background"
-msgstr ""
-"Minden szín invertálása, alapértelmezés szerint fehér szöveget használ "
-"fekete háttéren"
+msgstr "Minden szín invertálása, alapértelmezés szerint fehér szöveget használ fekete háttéren"
 
 #: ../data/geany.glade.h:191
 msgid "Show indentation guides"
@@ -940,9 +808,7 @@ msgstr "Behúzás segédvonalak megjelenítése"
 
 #: ../data/geany.glade.h:192
 msgid "Shows small dotted lines to help you to use the right indentation"
-msgstr ""
-"Vékony pontvonalakat jelenít meg a helyes behúzás használatának "
-"megkönnyítésére."
+msgstr "Vékony pontvonalakat jelenít meg a helyes behúzás használatának megkönnyítésére."
 
 #: ../data/geany.glade.h:193
 msgid "Show white space"
@@ -973,12 +839,8 @@ msgid "Show markers margin"
 msgstr "Jelölő margó megjelenítése"
 
 #: ../data/geany.glade.h:200
-msgid ""
-"Shows or hides the small margin right of the line numbers, which is used to "
-"mark lines"
-msgstr ""
-"Ki/bekapcsolja a kis margót a sorszámoktól jobbra, ami a sorok megjelölésére "
-"szolgál."
+msgid "Shows or hides the small margin right of the line numbers, which is used to mark lines"
+msgstr "Ki/bekapcsolja a kis margót a sorszámoktól jobbra, ami a sorok megjelölésére szolgál."
 
 #: ../data/geany.glade.h:201
 msgid "Stop scrolling at last line"
@@ -1004,45 +866,31 @@ msgstr "Szín:"
 msgid "Sets the color of the long line marker"
 msgstr "Megadja a hosszú sor jelző színét"
 
-#: ../data/geany.glade.h:207 ../src/toolbar.c:70 ../src/tools.c:972
+#: ../data/geany.glade.h:207
+#: ../src/toolbar.c:70
+#: ../src/tools.c:972
 msgid "Color Chooser"
 msgstr "Színválasztó"
 
 #: ../data/geany.glade.h:208
-msgid ""
-"The long line marker is a thin vertical line in the editor, it helps to mark "
-"long lines, or as a hint to break the line. Set this value to a value "
-"greater than 0 to specify the column where it should appear."
-msgstr ""
-"A hosszú sor jelző egy vékony függőleges vonal a szerkesztő ablakban. Segít "
-"megjelölni a hosszú sorokat, vagy tippet ad a sortöréshez. Adjon meg egy 0-"
-"nál nagyobb értéket annak meghatározásához, hogy melyik oszlopban jelenjen "
-"meg a jelölés."
+msgid "The long line marker is a thin vertical line in the editor, it helps to mark long lines, or as a hint to break the line. Set this value to a value greater than 0 to specify the column where it should appear."
+msgstr "A hosszú sor jelző egy vékony függőleges vonal a szerkesztő ablakban. Segít megjelölni a hosszú sorokat, vagy tippet ad a sortöréshez. Adjon meg egy 0-nál nagyobb értéket annak meghatározásához, hogy melyik oszlopban jelenjen meg a jelölés."
 
 #: ../data/geany.glade.h:209
 msgid "Line"
 msgstr "Sor"
 
 #: ../data/geany.glade.h:210
-msgid ""
-"Prints a vertical line in the editor window at the given cursor position "
-"(see below)"
-msgstr ""
-"Függőleges vonalat húz a szerkesztő ablakban a megadott kurzorpozíciónál "
-"(ld. lejjebb)."
+msgid "Prints a vertical line in the editor window at the given cursor position (see below)"
+msgstr "Függőleges vonalat húz a szerkesztő ablakban a megadott kurzorpozíciónál (ld. lejjebb)."
 
 #: ../data/geany.glade.h:211
 msgid "Background"
 msgstr "Háttér"
 
 #: ../data/geany.glade.h:212
-msgid ""
-"The background color of characters after the given cursor position (see "
-"below) changed to the color set below, (this is recommended if you use "
-"proportional fonts)"
-msgstr ""
-"A megadott kurzorpozíción (ld. lejjebb) túli karakterek háttérszíne ez a "
-"szín lesz. (Ez akkor ajánlott, ha proporcionális betűtípust használ)"
+msgid "The background color of characters after the given cursor position (see below) changed to the color set below, (this is recommended if you use proportional fonts)"
+msgstr "A megadott kurzorpozíción (ld. lejjebb) túli karakterek háttérszíne ez a szín lesz. (Ez akkor ajánlott, ha proporcionális betűtípust használ)"
 
 #: ../data/geany.glade.h:213
 msgid "Enabled"
@@ -1065,12 +913,8 @@ msgid "Only for rectangular selections"
 msgstr "Csak négyzetes kijelöléshez"
 
 #: ../data/geany.glade.h:218
-msgid ""
-"Only show virtual spaces beyond the end of lines when drawing a rectangular "
-"selection"
-msgstr ""
-"A virtuális szóközöket csak a sorvégeken túl mutatja a négyzetes kijelölés "
-"megrajzolásakor"
+msgid "Only show virtual spaces beyond the end of lines when drawing a rectangular selection"
+msgstr "A virtuális szóközöket csak a sorvégeken túl mutatja a négyzetes kijelölés megrajzolásakor"
 
 #: ../data/geany.glade.h:219
 msgid "Always"
@@ -1088,7 +932,9 @@ msgstr "<b>Virtuális szóközök</b>"
 msgid "Display"
 msgstr "Megjelenítés"
 
-#: ../data/geany.glade.h:223 ../src/keybindings.c:224 ../src/prefs.c:1581
+#: ../data/geany.glade.h:223
+#: ../src/keybindings.c:224
+#: ../src/prefs.c:1581
 msgid "Editor"
 msgstr "Szerkesztő"
 
@@ -1098,8 +944,7 @@ msgstr "Új dokumentum megnyitása parancssorból"
 
 #: ../data/geany.glade.h:225
 msgid "Start a new file for each command-line filename that doesn't exist"
-msgstr ""
-"Új fájlt hoz létre minden olyan parancssori fájlnév alapján, ami nem létezik."
+msgstr "Új fájlt hoz létre minden olyan parancssori fájlnév alapján, ami nem létezik."
 
 #: ../data/geany.glade.h:226
 msgid "Default end of line characters:"
@@ -1115,22 +960,15 @@ msgstr "Alapértelmezett kódolás (új fájlok):"
 
 #: ../data/geany.glade.h:229
 msgid "Sets the default encoding for newly created files"
-msgstr ""
-"Beállítja az alapértelmezett kódolást az újonnan létrehozott fájlok esetén."
+msgstr "Beállítja az alapértelmezett kódolást az újonnan létrehozott fájlok esetén."
 
 #: ../data/geany.glade.h:230
 msgid "Use fixed encoding when opening non-Unicode files"
 msgstr "Meghatározott kódolás használata nem-Unicode fájlok megnyitásakor"
 
 #: ../data/geany.glade.h:231
-msgid ""
-"This option disables the automatic detection of the file encoding when "
-"opening non-Unicode files and opens the file with the specified encoding "
-"(usually not needed)"
-msgstr ""
-"Ez az opció letiltja a fájlok kódolásának automatikus megállapítását a nem-"
-"Unicode fájlok megnyitásakor, a fájlt a megadott kódolással nyitja meg "
-"(általában nem szükséges)."
+msgid "This option disables the automatic detection of the file encoding when opening non-Unicode files and opens the file with the specified encoding (usually not needed)"
+msgstr "Ez az opció letiltja a fájlok kódolásának automatikus megállapítását a nem-Unicode fájlok megnyitásakor, a fájlt a megadott kódolással nyitja meg (általában nem szükséges)."
 
 #: ../data/geany.glade.h:232
 msgid "Default encoding (existing non-Unicode files):"
@@ -1138,9 +976,7 @@ msgstr "Alapértelmezett kódolás (meglévő nem Unicode fájlokhoz):"
 
 #: ../data/geany.glade.h:233
 msgid "Sets the default encoding for opening existing non-Unicode files"
-msgstr ""
-"Beállítja az alapértelmezett kódolást meglévő, nem Unicode fájlok "
-"megnyitásakor"
+msgstr "Beállítja az alapértelmezett kódolást meglévő, nem Unicode fájlok megnyitásakor"
 
 #: ../data/geany.glade.h:234
 msgid "<b>Encodings</b>"
@@ -1159,12 +995,8 @@ msgid "Ensure consistent line endings"
 msgstr "Egységes sorvégekre figyeljen"
 
 #: ../data/geany.glade.h:238
-msgid ""
-"Ensures that newline characters always get converted before saving, avoiding "
-"mixed line endings in the same file"
-msgstr ""
-"Biztosítja az újsor karakterek átalakítását a mentés előtt, így elkerülhető "
-"az egy fájlon belüli eltérő sorvég karakterek használata"
+msgid "Ensures that newline characters always get converted before saving, avoiding mixed line endings in the same file"
+msgstr "Biztosítja az újsor karakterek átalakítását a mentés előtt, így elkerülhető az egy fájlon belüli eltérő sorvég karakterek használata"
 
 #: ../data/geany.glade.h:239
 msgid "Strip trailing spaces and tabs"
@@ -1174,7 +1006,8 @@ msgstr "Sorvégi szóközök és tabulátorok levágása"
 msgid "Removes trailing spaces and tabs and the end of lines"
 msgstr "Levágja a sorvégi szóköz és tabulátor karaktereket"
 
-#: ../data/geany.glade.h:241 ../src/keybindings.c:559
+#: ../data/geany.glade.h:241
+#: ../src/keybindings.c:559
 msgid "Replace tabs by space"
 msgstr "Tabulátorok cseréje szóközre"
 
@@ -1199,14 +1032,12 @@ msgid "Disk check timeout:"
 msgstr "Lemezellenőrzés gyakorisága:"
 
 #: ../data/geany.glade.h:247
-msgid ""
-"How often to check for changes to document files on disk, in seconds. Zero "
-"disables checking."
-msgstr ""
-"Milyen gyakran ellenőrizze a lemezen lévő fájlok változását, másopercben. A "
-"nulla letiltja az ellenőrzést."
+msgid "How often to check for changes to document files on disk, in seconds. Zero disables checking."
+msgstr "Milyen gyakran ellenőrizze a lemezen lévő fájlok változását, másopercben. A nulla letiltja az ellenőrzést."
 
-#: ../data/geany.glade.h:248 ../src/prefs.c:1583 ../src/symbols.c:687
+#: ../data/geany.glade.h:248
+#: ../src/prefs.c:1583
+#: ../src/symbols.c:687
 #: ../plugins/filebrowser.c:1120
 msgid "Files"
 msgstr "Fájlok"
@@ -1220,12 +1051,8 @@ msgid "Browser:"
 msgstr "Böngésző:"
 
 #: ../data/geany.glade.h:251
-msgid ""
-"A terminal emulator like xterm, gnome-terminal or konsole (should accept the "
-"-e argument)"
-msgstr ""
-"Egy terminál emulátor mint az xterm, a gnome-terminal vagy a konsole "
-"(kezelnie kell a -e argumentumot)"
+msgid "A terminal emulator like xterm, gnome-terminal or konsole (should accept the -e argument)"
+msgstr "Egy terminál emulátor mint az xterm, a gnome-terminal vagy a konsole (kezelnie kell a -e argumentumot)"
 
 #: ../data/geany.glade.h:252
 msgid "Path (and possibly additional arguments) to your favorite browser"
@@ -1245,20 +1072,16 @@ msgstr "Környezetfüggő parancs:"
 
 #: ../data/geany.glade.h:257
 #, no-c-format
-msgid ""
-"Context action command. The currently selected word can be used with %s. It "
-"can appear anywhere in the given command and will be replaced before "
-"execution."
-msgstr ""
-"Környezetfüggő parancs. A kijelölt szóra %s-ként lehet hivatkozni. Így "
-"szerepelhet bárhol a megadott parancson belül és behelyettesításre kerül a "
-"parancs végrehajtása előtt."
+msgid "Context action command. The currently selected word can be used with %s. It can appear anywhere in the given command and will be replaced before execution."
+msgstr "Környezetfüggő parancs. A kijelölt szóra %s-ként lehet hivatkozni. Így szerepelhet bárhol a megadott parancson belül és behelyettesításre kerül a parancs végrehajtása előtt."
 
 #: ../data/geany.glade.h:258
 msgid "<b>Commands</b>"
 msgstr "<b>Parancsok</b>"
 
-#: ../data/geany.glade.h:259 ../src/keybindings.c:236 ../src/prefs.c:1585
+#: ../data/geany.glade.h:259
+#: ../src/keybindings.c:236
+#: ../src/prefs.c:1585
 msgid "Tools"
 msgstr "Eszközök"
 
@@ -1315,37 +1138,23 @@ msgid "Date & time:"
 msgstr "Dátum & idő:"
 
 #: ../data/geany.glade.h:273
-msgid ""
-"Specify a format for the the {datetime} wildcard. You can use any conversion "
-"specifiers which can be used with the ANSI C strftime function."
-msgstr ""
-"Adja meg a {datetime} behelyettesítéshez használandó formátumot. Minden "
-"olyan konverziós jelölés használható, amit az ANSI C strftime függvénnyel "
-"használni lehet."
+msgid "Specify a format for the the {datetime} wildcard. You can use any conversion specifiers which can be used with the ANSI C strftime function."
+msgstr "Adja meg a {datetime} behelyettesítéshez használandó formátumot. Minden olyan konverziós jelölés használható, amit az ANSI C strftime függvénnyel használni lehet."
 
 #: ../data/geany.glade.h:274
-msgid ""
-"Specify a format for the the {year} wildcard. You can use any conversion "
-"specifiers which can be used with the ANSI C strftime function."
-msgstr ""
-"Adja meg a {year} behelyettesítéshez használandó formátumot. Minden olyan "
-"konverziós jelölés használható, amit az ANSI C strftime függvénnyel "
-"használni lehet."
+msgid "Specify a format for the the {year} wildcard. You can use any conversion specifiers which can be used with the ANSI C strftime function."
+msgstr "Adja meg a {year} behelyettesítéshez használandó formátumot. Minden olyan konverziós jelölés használható, amit az ANSI C strftime függvénnyel használni lehet."
 
 #: ../data/geany.glade.h:275
-msgid ""
-"Specify a format for the the {date} wildcard. You can use any conversion "
-"specifiers which can be used with the ANSI C strftime function."
-msgstr ""
-"Adja meg a {date} behelyettesítéshez használandó formátumot. Minden olyan "
-"konverziós jelölés használható, amit az ANSI C strftime függvénnyel "
-"használni lehet."
+msgid "Specify a format for the the {date} wildcard. You can use any conversion specifiers which can be used with the ANSI C strftime function."
+msgstr "Adja meg a {date} behelyettesítéshez használandó formátumot. Minden olyan konverziós jelölés használható, amit az ANSI C strftime függvénnyel használni lehet."
 
 #: ../data/geany.glade.h:276
 msgid "<b>Template data</b>"
 msgstr "<b>Sablon adatok</b>"
 
-#: ../data/geany.glade.h:277 ../src/prefs.c:1587
+#: ../data/geany.glade.h:277
+#: ../src/prefs.c:1587
 msgid "Templates"
 msgstr "Sablonok"
 
@@ -1357,7 +1166,8 @@ msgstr "_Változtatás"
 msgid "<b>Keyboard shortcuts</b>"
 msgstr "<b>Gyorsbillentyűk</b>"
 
-#: ../data/geany.glade.h:280 ../src/prefs.c:1589
+#: ../data/geany.glade.h:280
+#: ../src/prefs.c:1589
 msgid "Keybindings"
 msgstr "Billentyű hozzárendelések"
 
@@ -1368,44 +1178,44 @@ msgstr "Parancs:"
 #: ../data/geany.glade.h:283
 #, no-c-format
 msgid "Path to the command for printing files (use %f for the filename)"
-msgstr ""
-"Elérési út a fájl nyomtatási parancshoz (használjon %f-et a fájlnév helyén)."
+msgstr "Elérési út a fájl nyomtatási parancshoz (használjon %f-et a fájlnév helyén)."
 
 #: ../data/geany.glade.h:284
 msgid "Use an external command for printing"
 msgstr "Külső parancs használata nyomtatáshoz"
 
-#: ../data/geany.glade.h:285 ../src/printing.c:376
+#: ../data/geany.glade.h:285
+#: ../src/printing.c:376
 msgid "Print line numbers"
 msgstr "Sorszámok nyomtatása"
 
-#: ../data/geany.glade.h:286 ../src/printing.c:378
+#: ../data/geany.glade.h:286
+#: ../src/printing.c:378
 msgid "Add line numbers to the printed page"
 msgstr "Sorszámozás hozzáadása a nyomtatott oldalon."
 
-#: ../data/geany.glade.h:287 ../src/printing.c:381
+#: ../data/geany.glade.h:287
+#: ../src/printing.c:381
 msgid "Print page numbers"
 msgstr "Oldalszámozás nyomtatása"
 
-#: ../data/geany.glade.h:288 ../src/printing.c:383
-msgid ""
-"Add page numbers at the bottom of each page. It takes 2 lines of the page."
-msgstr ""
-"Oldalszám elhelyezése minden oldal alján. Ez 2 sort foglal el az oldalon."
+#: ../data/geany.glade.h:288
+#: ../src/printing.c:383
+msgid "Add page numbers at the bottom of each page. It takes 2 lines of the page."
+msgstr "Oldalszám elhelyezése minden oldal alján. Ez 2 sort foglal el az oldalon."
 
-#: ../data/geany.glade.h:289 ../src/printing.c:386
+#: ../data/geany.glade.h:289
+#: ../src/printing.c:386
 msgid "Print page header"
 msgstr "Oldal fejléc nyomtatása"
 
-#: ../data/geany.glade.h:290 ../src/printing.c:388
-msgid ""
-"Add a little header to every page containing the page number, the filename "
-"and the current date (see below). It takes 3 lines of the page."
-msgstr ""
-"Kisméretű fejlécet helyez minden oldalra az oldalszámmal, fájlnévvel és az "
-"aktuális dátummal (ld. lejjebb). Ez 3 sort foglal el az oldalon."
+#: ../data/geany.glade.h:290
+#: ../src/printing.c:388
+msgid "Add a little header to every page containing the page number, the filename and the current date (see below). It takes 3 lines of the page."
+msgstr "Kisméretű fejlécet helyez minden oldalra az oldalszámmal, fájlnévvel és az aktuális dátummal (ld. lejjebb). Ez 3 sort foglal el az oldalon."
 
-#: ../data/geany.glade.h:291 ../src/printing.c:404
+#: ../data/geany.glade.h:291
+#: ../src/printing.c:404
 msgid "Use the basename of the printed file"
 msgstr "A nyomtatott fájlt alap nevének használata"
 
@@ -1413,19 +1223,15 @@ msgstr "A nyomtatott fájlt alap nevének használata"
 msgid "Print only the basename (without the path) of the printed file"
 msgstr "Csak a nyomtatott fájl alap nevét (elérési út nélkül) írja ki"
 
-#: ../data/geany.glade.h:293 ../src/printing.c:412
+#: ../data/geany.glade.h:293
+#: ../src/printing.c:412
 msgid "Date format:"
 msgstr "Dátumformátum:"
 
-#: ../data/geany.glade.h:294 ../src/printing.c:418
-msgid ""
-"Specify a format for the date and time stamp which is added to the page "
-"header on each page. You can use any conversion specifiers which can be used "
-"with the ANSI C strftime function."
-msgstr ""
-"Adja meg itt az egyedi dátum- és időformátumot az oldalak fejlécébe kerülő "
-"időponthoz. Minden olyan konverziós jelölés használható, amit az ANSI C "
-"strftime függvénnyel használni lehet."
+#: ../data/geany.glade.h:294
+#: ../src/printing.c:418
+msgid "Specify a format for the date and time stamp which is added to the page header on each page. You can use any conversion specifiers which can be used with the ANSI C strftime function."
+msgstr "Adja meg itt az egyedi dátum- és időformátumot az oldalak fejlécébe kerülő időponthoz. Minden olyan konverziós jelölés használható, amit az ANSI C strftime függvénnyel használni lehet."
 
 #: ../data/geany.glade.h:295
 msgid "Use native GTK printing"
@@ -1435,7 +1241,8 @@ msgstr "Natív GTK nyomtatás használata"
 msgid "<b>Printing</b>"
 msgstr "<b>Nyomtatás</b>"
 
-#: ../data/geany.glade.h:297 ../src/prefs.c:1591
+#: ../data/geany.glade.h:297
+#: ../src/prefs.c:1591
 msgid "Printing"
 msgstr "Nyomtatás"
 
@@ -1448,9 +1255,8 @@ msgid "Sets the font for the terminal widget"
 msgstr "Megadja a terminál eszköz betűtípusát."
 
 #: ../data/geany.glade.h:300
-#, fuzzy
 msgid "Choose Terminal Font"
-msgstr "Terminál betűtípus:"
+msgstr "Terminál betűtípus kiválasztása"
 
 #: ../data/geany.glade.h:301
 msgid "Foreground color:"
@@ -1473,25 +1279,16 @@ msgid "Sets the foreground color of the text in the terminal widget"
 msgstr "Megadja a terminál eszközben használt betűk színét."
 
 #: ../data/geany.glade.h:306
-#, fuzzy
 msgid "Sets the backround color of the text in the terminal widget"
 msgstr "Megadja a terminál eszközben használt betűk háttérszínét."
 
 #: ../data/geany.glade.h:307
-msgid ""
-"Specifies the history in lines, which you can scroll back in the terminal "
-"widget"
-msgstr ""
-"Megadja a történeti sorok számát, amennyit vissza lehet görgetni a terminál "
-"eszközben."
+msgid "Specifies the history in lines, which you can scroll back in the terminal widget"
+msgstr "Megadja a történeti sorok számát, amennyit vissza lehet görgetni a terminál eszközben."
 
 #: ../data/geany.glade.h:308
-msgid ""
-"Sets the path to the shell which should be started inside the terminal "
-"emulation"
-msgstr ""
-"Megadja a parancsértelmező elérési útját, amelyet a terminál emulációban "
-"indítani szeretne."
+msgid "Sets the path to the shell which should be started inside the terminal emulation"
+msgstr "Megadja a parancsértelmező elérési útját, amelyet a terminál emulációban indítani szeretne."
 
 #: ../data/geany.glade.h:309
 msgid "Scroll on keystroke"
@@ -1522,84 +1319,61 @@ msgid "Override Geany keybindings"
 msgstr "Geany billentyű-hozzárendelések felülbírálata"
 
 #: ../data/geany.glade.h:316
-msgid ""
-"Allows the VTE to receive keyboard shortcuts (apart from focus commands)"
-msgstr ""
-"Engedélyezi, hogy a VTE billentyűparancsokat fogadjon (a fókusz parancsokon "
-"kívül)."
+msgid "Allows the VTE to receive keyboard shortcuts (apart from focus commands)"
+msgstr "Engedélyezi, hogy a VTE billentyűparancsokat fogadjon (a fókusz parancsokon kívül)."
 
 #: ../data/geany.glade.h:317
 msgid "Disable menu shortcut key (F10 by default)"
 msgstr "Letiltja a menü gyorsbillentyűt (alapértelmezetten F10)"
 
 #: ../data/geany.glade.h:318
-msgid ""
-"This option disables the keybinding to popup the menu bar (default is F10). "
-"Disabling it can be useful if you use, for example, Midnight Commander "
-"within the VTE."
-msgstr ""
-"Ez az opció letiltja a gyorsbillentyűt, amelyik a menüt jeleníti meg "
-"(alapértelmezetten az F10). Akkor lehet hasznos letiltani, ha pl. Midnight "
-"Commander-t használ a VTE-n belül."
+msgid "This option disables the keybinding to popup the menu bar (default is F10). Disabling it can be useful if you use, for example, Midnight Commander within the VTE."
+msgstr "Ez az opció letiltja a gyorsbillentyűt, amelyik a menüt jeleníti meg (alapértelmezetten az F10). Akkor lehet hasznos letiltani, ha pl. Midnight Commander-t használ a VTE-n belül."
 
 #: ../data/geany.glade.h:319
-#, fuzzy
 msgid "Follow path of the current file"
 msgstr "Az aktuális fájl elérési útjának követése"
 
 #: ../data/geany.glade.h:320
-#, fuzzy
-msgid ""
-"Whether to execute \\\"cd $path\\\" when you switch between opened files"
-msgstr ""
-"Végrehajtson-e \"cd $path\" parancsot, amikor átvált megnyitott fájlok "
-"között?"
+msgid "Whether to execute \\\"cd $path\\\" when you switch between opened files"
+msgstr "Végrehajtson-e \\\"cd $path\\\" parancsot, amikor átvált megnyitott fájlok között?"
 
 #: ../data/geany.glade.h:321
-#, fuzzy
 msgid "Execute programs in the VTE"
 msgstr "Programok futtatása a VTE-ben"
 
 #: ../data/geany.glade.h:322
-msgid ""
-"Don't use the simple run script which is usually used to display the exit "
-"status of the executed program"
-msgstr ""
-"Ne használa az egyszerű futtató parancsfájlt, amit általában használunk a "
-"végrehajtott program kilépési állapotának megjelenítésére."
+msgid "Don't use the simple run script which is usually used to display the exit status of the executed program"
+msgstr "Ne használa az egyszerű futtató parancsfájlt, amit általában használunk a végrehajtott program kilépési állapotának megjelenítésére."
 
 #: ../data/geany.glade.h:323
 msgid "Don't use run script"
 msgstr "Ne használjon futtató parancsfájlt"
 
 #: ../data/geany.glade.h:324
-msgid ""
-"Run programs in VTE instead of opening a terminal emulation window. Please "
-"note, programs executed in VTE cannot be stopped"
-msgstr ""
-"A programokat a VTE-ben futtatja, nem egy külön megnyitott terminál emulátor "
-"ablakban. Figyelem: a VTE-n belül futó programokat nem lehet félbeszakítani."
+msgid "Run programs in VTE instead of opening a terminal emulation window. Please note, programs executed in VTE cannot be stopped"
+msgstr "A programokat a VTE-ben futtatja, nem egy külön megnyitott terminál emulátor ablakban. Figyelem: a VTE-n belül futó programokat nem lehet félbeszakítani."
 
 #: ../data/geany.glade.h:325
-#, fuzzy
 msgid "<b>Terminal</b>"
-msgstr "<b>Engedélyek:</b>"
+msgstr "<b>Terminál</b>"
 
-#: ../data/geany.glade.h:326 ../src/prefs.c:1595 ../src/vte.c:281
+#: ../data/geany.glade.h:326
+#: ../src/prefs.c:1595
+#: ../src/vte.c:281
 msgid "Terminal"
 msgstr "Terminál"
 
 #: ../data/geany.glade.h:327
 msgid "<i>Warning: read the manual before changing these preferences.</i>"
-msgstr ""
-"<i>Figyelem: olvasd el a használati útmutatót, mielőtt változtatnál ezeken a "
-"beállításokon!</i>"
+msgstr "<i>Figyelem: olvasd el a használati útmutatót, mielőtt változtatnál ezeken a beállításokon!</i>"
 
 #: ../data/geany.glade.h:328
 msgid "<b>Various preferences</b>"
 msgstr "<b>Egyéb beállítások</b>"
 
-#: ../data/geany.glade.h:329 ../src/prefs.c:1593
+#: ../data/geany.glade.h:329
+#: ../src/prefs.c:1593
 msgid "Various"
 msgstr "Egyéb"
 
@@ -1607,12 +1381,16 @@ msgstr "Egyéb"
 msgid "Project Properties"
 msgstr "Projekt tulajdonságai"
 
-#: ../data/geany.glade.h:331 ../src/plugins.c:1457 ../src/project.c:150
+#: ../data/geany.glade.h:331
+#: ../src/plugins.c:1457
+#: ../src/project.c:150
 msgid "Filename:"
 msgstr "Fájlnév:"
 
-#: ../data/geany.glade.h:332 ../src/project.c:141
-#: ../plugins/classbuilder.c:470 ../plugins/classbuilder.c:480
+#: ../data/geany.glade.h:332
+#: ../src/project.c:141
+#: ../plugins/classbuilder.c:470
+#: ../plugins/classbuilder.c:480
 msgid "Name:"
 msgstr "Név:"
 
@@ -1620,7 +1398,8 @@ msgstr "Név:"
 msgid "Description:"
 msgstr "Leírás:"
 
-#: ../data/geany.glade.h:334 ../src/project.c:166
+#: ../data/geany.glade.h:334
+#: ../src/project.c:166
 msgid "Base path:"
 msgstr "Alapkönyvtár:"
 
@@ -1629,24 +1408,16 @@ msgid "File patterns:"
 msgstr "Fájl minták:"
 
 #: ../data/geany.glade.h:336
-msgid ""
-"Space separated list of file patterns used for the find in files dialog (e."
-"g. *.c *.h)"
-msgstr ""
-"Fájl minták szóközzel elválasztott listája, amit a keresés fájlokban ablak "
-"használ (pl: *.c *.h)"
+msgid "Space separated list of file patterns used for the find in files dialog (e.g. *.c *.h)"
+msgstr "Fájl minták szóközzel elválasztott listája, amit a keresés fájlokban ablak használ (pl: *.c *.h)"
 
-#: ../data/geany.glade.h:337 ../src/project.c:172
-msgid ""
-"Base directory of all files that make up the project. This can be a new "
-"path, or an existing directory tree. You can use paths relative to the "
-"project filename."
-msgstr ""
-"A projektet alkotó fájlok alapkönyvtára. Lehet új könyvtár, vagy egy már "
-"létező elérési út is. Lehet használni a projekt fájlnevéhez képest relatív "
-"elérési utakat is."
+#: ../data/geany.glade.h:337
+#: ../src/project.c:172
+msgid "Base directory of all files that make up the project. This can be a new path, or an existing directory tree. You can use paths relative to the project filename."
+msgstr "A projektet alkotó fájlok alapkönyvtára. Lehet új könyvtár, vagy egy már létező elérési út is. Lehet használni a projekt fájlnevéhez képest relatív elérési utakat is."
 
-#: ../data/geany.glade.h:338 ../src/keybindings.c:234
+#: ../data/geany.glade.h:338
+#: ../src/keybindings.c:234
 msgid "Project"
 msgstr "Projekt"
 
@@ -1694,7 +1465,9 @@ msgstr "Legutóbbi _fájlok"
 msgid "Save A_ll"
 msgstr "_Mindet menti"
 
-#: ../data/geany.glade.h:351 ../src/callbacks.c:430 ../src/document.c:2838
+#: ../data/geany.glade.h:351
+#: ../src/callbacks.c:430
+#: ../src/document.c:2838
 #: ../src/sidebar.c:696
 msgid "_Reload"
 msgstr "Ú_jraolvasás"
@@ -1707,11 +1480,13 @@ msgstr "Újr_aolvasás mint"
 msgid "Page Set_up"
 msgstr "Oldal b_eállítása"
 
-#: ../data/geany.glade.h:354 ../src/notebook.c:489
+#: ../data/geany.glade.h:354
+#: ../src/notebook.c:489
 msgid "Close Ot_her Documents"
 msgstr "_Többi dokumentum bezárása"
 
-#: ../data/geany.glade.h:355 ../src/notebook.c:495
+#: ../data/geany.glade.h:355
+#: ../src/notebook.c:495
 msgid "C_lose All"
 msgstr "Öss_zeset bezár"
 
@@ -1719,43 +1494,53 @@ msgstr "Öss_zeset bezár"
 msgid "_Commands"
 msgstr "Paran_csok"
 
-#: ../data/geany.glade.h:357 ../src/keybindings.c:343
+#: ../data/geany.glade.h:357
+#: ../src/keybindings.c:343
 msgid "_Cut Current Line(s)"
 msgstr "Aktuális sor(ok) kivágása"
 
-#: ../data/geany.glade.h:358 ../src/keybindings.c:340
+#: ../data/geany.glade.h:358
+#: ../src/keybindings.c:340
 msgid "_Copy Current Line(s)"
 msgstr "Aktuális sor(ok) másolása"
 
-#: ../data/geany.glade.h:359 ../src/keybindings.c:295
+#: ../data/geany.glade.h:359
+#: ../src/keybindings.c:295
 msgid "_Delete Current Line(s)"
 msgstr "Aktuális sor(ok) törlése"
 
-#: ../data/geany.glade.h:360 ../src/keybindings.c:292
+#: ../data/geany.glade.h:360
+#: ../src/keybindings.c:292
 msgid "_Duplicate Line or Selection"
 msgstr "Sor vagy kiválasztás duplikálása"
 
-#: ../data/geany.glade.h:361 ../src/keybindings.c:353
+#: ../data/geany.glade.h:361
+#: ../src/keybindings.c:353
 msgid "_Select Current Line(s)"
 msgstr "Aktuális sor(ok) kiválasztása"
 
-#: ../data/geany.glade.h:362 ../src/keybindings.c:356
+#: ../data/geany.glade.h:362
+#: ../src/keybindings.c:356
 msgid "_Select Current Paragraph"
 msgstr "Aktuális bekezdés kiválasztása"
 
-#: ../data/geany.glade.h:363 ../src/keybindings.c:395
+#: ../data/geany.glade.h:363
+#: ../src/keybindings.c:395
 msgid "_Send Selection to Terminal"
 msgstr "A kije_lölés küldése a terminálba"
 
-#: ../data/geany.glade.h:364 ../src/keybindings.c:397
+#: ../data/geany.glade.h:364
+#: ../src/keybindings.c:397
 msgid "_Reflow Lines/Block"
 msgstr "_Reflow Lines/Block"
 
-#: ../data/geany.glade.h:365 ../src/keybindings.c:367
+#: ../data/geany.glade.h:365
+#: ../src/keybindings.c:367
 msgid "T_oggle Case of Selection"
 msgstr "K_iválasztás kis/nagybetűssé tétele"
 
-#: ../data/geany.glade.h:366 ../src/keybindings.c:302
+#: ../data/geany.glade.h:366
+#: ../src/keybindings.c:302
 msgid "_Transpose Current Line"
 msgstr "Aktuális sor áthelyezése"
 
@@ -1779,7 +1564,8 @@ msgstr "Behúzás _növelése"
 msgid "_Decrease Indent"
 msgstr "Behúzás _csökkentése"
 
-#: ../data/geany.glade.h:372 ../src/keybindings.c:386
+#: ../data/geany.glade.h:372
+#: ../src/keybindings.c:386
 msgid "_Smart Line Indent"
 msgstr "Intelligens sorbehúzás"
 
@@ -1795,7 +1581,8 @@ msgstr "_Megjegyzések beszúrása"
 msgid "Preference_s"
 msgstr "Beállítá_sok"
 
-#: ../data/geany.glade.h:376 ../src/keybindings.c:421
+#: ../data/geany.glade.h:376
+#: ../src/keybindings.c:421
 msgid "P_lugin Preferences"
 msgstr "Kiegészítők beállításai"
 
@@ -1811,7 +1598,8 @@ msgstr "Elő_ző találat"
 msgid "Find in F_iles"
 msgstr "Keresés _fájlokban"
 
-#: ../data/geany.glade.h:380 ../src/search.c:629
+#: ../data/geany.glade.h:380
+#: ../src/search.c:629
 msgid "_Replace"
 msgstr "_Csere"
 
@@ -1823,11 +1611,13 @@ msgstr "_Következő üzenet"
 msgid "Pr_evious Message"
 msgstr "_Előző üzenet"
 
-#: ../data/geany.glade.h:383 ../src/keybindings.c:470
+#: ../data/geany.glade.h:383
+#: ../src/keybindings.c:470
 msgid "_Go to Next Marker"
 msgstr "Következő jelölőhöz ugrás"
 
-#: ../data/geany.glade.h:384 ../src/keybindings.c:473
+#: ../data/geany.glade.h:384
+#: ../src/keybindings.c:473
 msgid "_Go to Previous Marker"
 msgstr "Előző jelölőhöz ugrás"
 
@@ -1835,15 +1625,18 @@ msgstr "Előző jelölőhöz ugrás"
 msgid "_Go to Line"
 msgstr "Ugrá_s sorra"
 
-#: ../data/geany.glade.h:386 ../src/keybindings.c:433
+#: ../data/geany.glade.h:386
+#: ../src/keybindings.c:433
 msgid "Find Next _Selection"
 msgstr "Következő kijelölés keresése"
 
-#: ../data/geany.glade.h:387 ../src/keybindings.c:435
+#: ../data/geany.glade.h:387
+#: ../src/keybindings.c:435
 msgid "Find Pre_vious Selection"
 msgstr "Előző kijelölés keresése"
 
-#: ../data/geany.glade.h:388 ../src/keybindings.c:452
+#: ../data/geany.glade.h:388
+#: ../src/keybindings.c:452
 msgid "_Mark All"
 msgstr "Mindet kijelöl"
 
@@ -1851,7 +1644,8 @@ msgstr "Mindet kijelöl"
 msgid "Go to T_ag Declaration"
 msgstr "Ugrás a címke _deklarációjához"
 
-#: ../data/geany.glade.h:390 ../src/dialogs.c:365
+#: ../data/geany.glade.h:390
+#: ../src/dialogs.c:365
 msgid "_View"
 msgstr "_Nézet"
 
@@ -2056,7 +1850,9 @@ msgid "_Apply Default Indentation"
 msgstr "Alapértelmezett _behúzás alkalmazása"
 
 #. build the code
-#: ../data/geany.glade.h:441 ../src/build.c:2568 ../src/build.c:2845
+#: ../data/geany.glade.h:441
+#: ../src/build.c:2568
+#: ../src/build.c:2845
 msgid "_Build"
 msgstr "Ö_sszeállítás"
 
@@ -2093,7 +1889,6 @@ msgid "_Keyboard Shortcuts"
 msgstr "Gyorsbillentyű_k"
 
 #: ../data/geany.glade.h:450
-#, fuzzy
 msgid "Debug _Messages"
 msgstr "Hibaüzenetek"
 
@@ -2103,18 +1898,18 @@ msgstr "_Honlap"
 
 #: ../data/geany.glade.h:452
 msgid "Wi_ki"
-msgstr ""
+msgstr "Wi_ki"
 
 #: ../data/geany.glade.h:453
 msgid "Report a _Bug"
-msgstr ""
+msgstr "Hi_ba jelentése"
 
 #: ../data/geany.glade.h:454
-#, fuzzy
 msgid "_Donate"
-msgstr "_Ne mentse"
+msgstr "Hozzájárulás"
 
-#: ../data/geany.glade.h:455 ../src/sidebar.c:124
+#: ../data/geany.glade.h:455
+#: ../src/sidebar.c:124
 msgid "Symbols"
 msgstr "Szimbólumok"
 
@@ -2148,6 +1943,13 @@ msgid ""
 "Frank Lanitz\n"
 "All rights reserved."
 msgstr ""
+"Copyright (c)  2005-2012\n"
+"Colomban Wendling\n"
+"Nick Treleaven\n"
+"Matthew Brush\n"
+"Enrico Tröger\n"
+"Frank Lanitz\n"
+"Minden jog fenntartva."
 
 #: ../src/about.c:157
 msgid "About Geany"
@@ -2175,7 +1977,9 @@ msgstr "Fejlesztők"
 msgid "maintainer"
 msgstr "karbantartó"
 
-#: ../src/about.c:290 ../src/about.c:298 ../src/about.c:306
+#: ../src/about.c:290
+#: ../src/about.c:298
+#: ../src/about.c:306
 msgid "developer"
 msgstr "fejlesztő"
 
@@ -2197,10 +2001,8 @@ msgstr "Hozzájárultak még"
 
 #: ../src/about.c:374
 #, c-format
-msgid ""
-"Some of the many contributors (for a more detailed list, see the file %s):"
-msgstr ""
-"Néhányan a közreműködők közül (a teljes lista megtalálható a(z) %s fájlban):"
+msgid "Some of the many contributors (for a more detailed list, see the file %s):"
+msgstr "Néhányan a közreműködők közül (a teljes lista megtalálható a(z) %s fájlban):"
 
 #: ../src/about.c:400
 msgid "Credits"
@@ -2211,12 +2013,8 @@ msgid "License"
 msgstr "Licenc"
 
 #: ../src/about.c:426
-msgid ""
-"License text could not be found, please visit http://www.gnu.org/licenses/"
-"gpl-2.0.txt to view it online."
-msgstr ""
-"A licensz szövege nem található, tekintse meg a http://www.gnu.org/licenses/"
-"gpl-2.0.txt címen."
+msgid "License text could not be found, please visit http://www.gnu.org/licenses/gpl-2.0.txt to view it online."
+msgstr "A licensz szövege nem található, tekintse meg a http://www.gnu.org/licenses/gpl-2.0.txt címen."
 
 #. fall back to %d
 #: ../src/build.c:748
@@ -2233,7 +2031,9 @@ msgstr "A feladat végrehajtása sikertelen, nincs munkakönyvtár"
 msgid "%s (in directory: %s)"
 msgstr "%s (%s könyvtárban)"
 
-#: ../src/build.c:831 ../src/build.c:1055 ../src/search.c:1632
+#: ../src/build.c:831
+#: ../src/build.c:1055
+#: ../src/search.c:1632
 #, c-format
 msgid "Process failed (%s)"
 msgstr "Folyamat sikertelen (%s)"
@@ -2244,27 +2044,17 @@ msgid "Failed to change the working directory to \"%s\""
 msgstr "Nem sikerült a munkakönyvtárat átállítani erre: \"%s\""
 
 #: ../src/build.c:929
-#, fuzzy, c-format
 msgid "Failed to execute \"%s\" (start-script could not be created: %s)"
-msgstr ""
-"\"%s\" végrehajtása nem sikerült (az indító szkriptet nem lehetett "
-"létrehozni)"
+msgstr "\"%s\" végrehajtása nem sikerült (az indító szkriptet nem lehetett létrehozni)"
 
 #: ../src/build.c:984
-msgid ""
-"Could not execute the file in the VTE because it probably contains a command."
-msgstr ""
-"Nem sikerült a fájlt végrehajtani a VTE-n belül, mert feltehetően egy "
-"parancsot tartalmaz."
+msgid "Could not execute the file in the VTE because it probably contains a command."
+msgstr "Nem sikerült a fájlt végrehajtani a VTE-n belül, mert feltehetően egy parancsot tartalmaz."
 
 #: ../src/build.c:1022
 #, c-format
-msgid ""
-"Could not find terminal \"%s\" (check path for Terminal tool setting in "
-"Preferences)"
-msgstr ""
-"\"'%s\"' terminál nem található (ellenőrizze az elérési útvonalat a Terminál "
-"beállításoknál a Tulajdonságok között)"
+msgid "Could not find terminal \"%s\" (check path for Terminal tool setting in Preferences)"
+msgstr "\"'%s\"' terminál nem található (ellenőrizze az elérési útvonalat a Terminál beállításoknál a Tulajdonságok között)"
 
 #: ../src/build.c:1195
 msgid "Compilation failed."
@@ -2280,8 +2070,7 @@ msgstr "Egyedi szöveg"
 
 #: ../src/build.c:1396
 msgid "Enter custom text here, all entered text is appended to the command."
-msgstr ""
-"Adj meg itt egyedi szöveget, minden bevitt szöveg a parancshoz lesz csatolva."
+msgstr "Adj meg itt egyedi szöveget, minden bevitt szöveg a parancshoz lesz csatolva."
 
 #: ../src/build.c:1474
 msgid "_Next Error"
@@ -2292,24 +2081,23 @@ msgid "_Previous Error"
 msgstr "Elő_ző hiba"
 
 #. arguments
-#: ../src/build.c:1486 ../src/build.c:2885
+#: ../src/build.c:1486
+#: ../src/build.c:2885
 msgid "_Set Build Commands"
 msgstr "Build parancsok megadása"
 
-#: ../src/build.c:1770 ../src/toolbar.c:372
+#: ../src/build.c:1770
+#: ../src/toolbar.c:372
 msgid "Build the current file"
 msgstr "Jelenlegi fájl fordítása"
 
 #: ../src/build.c:1781
 msgid "Build the current file with Make and the default target"
-msgstr ""
-"Build-eli a jelenlegi fájlt a make eszközzel és az alapértelmezett "
-"célállománnyal"
+msgstr "Build-eli a jelenlegi fájlt a make eszközzel és az alapértelmezett célállománnyal"
 
 #: ../src/build.c:1783
 msgid "Build the current file with Make and the specified target"
-msgstr ""
-"Build-eli a jelenlegi fájlt a make eszközzel és a megadott célállománnyal"
+msgstr "Build-eli a jelenlegi fájlt a make eszközzel és a megadott célállománnyal"
 
 #: ../src/build.c:1785
 msgid "Compile the current file with Make"
@@ -2320,20 +2108,26 @@ msgstr "Lefordítja a jelenlegi fájlt a Make eszközzel"
 msgid "Process could not be stopped (%s)."
 msgstr "A folyamatot nem sikerült leállítani (%s)."
 
-#: ../src/build.c:1829 ../src/build.c:1841
+#: ../src/build.c:1829
+#: ../src/build.c:1841
 msgid "No more build errors."
 msgstr "Nincs több fordítási hiba."
 
-#: ../src/build.c:1940 ../src/build.c:1942
+#: ../src/build.c:1940
+#: ../src/build.c:1942
 msgid "Set menu item label"
 msgstr "A menüelem címkéjének megadása"
 
-#: ../src/build.c:1967 ../src/symbols.c:742 ../src/tools.c:554
+#: ../src/build.c:1967
+#: ../src/symbols.c:742
+#: ../src/tools.c:554
 msgid "Label"
 msgstr "Címke"
 
 #. command column, holding status and command display
-#: ../src/build.c:1968 ../src/symbols.c:737 ../src/tools.c:539
+#: ../src/build.c:1968
+#: ../src/symbols.c:737
+#: ../src/tools.c:539
 msgid "Command"
 msgstr "Parancs"
 
@@ -2349,7 +2143,8 @@ msgstr "Alapállapotra"
 msgid "Click to set menu item label"
 msgstr "Kattints a menü bejegyzés címkéjének megadásához"
 
-#: ../src/build.c:2099 ../src/build.c:2101
+#: ../src/build.c:2099
+#: ../src/build.c:2101
 #, c-format
 msgid "%s commands"
 msgstr "%s parancsok"
@@ -2358,7 +2153,8 @@ msgstr "%s parancsok"
 msgid "No filetype"
 msgstr "Nincs fájltípus"
 
-#: ../src/build.c:2110 ../src/build.c:2145
+#: ../src/build.c:2110
+#: ../src/build.c:2145
 msgid "Error regular expression:"
 msgstr "Hibás reguláris kifejezés:"
 
@@ -2368,9 +2164,7 @@ msgstr "Független parancsok"
 
 #: ../src/build.c:2170
 msgid "Note: Item 2 opens a dialog and appends the response to the command."
-msgstr ""
-"Megjegyzés: a 2. elem egy dialógust nyit meg és az abban megadott "
-"válaszértéket csatolja a parancshoz."
+msgstr "Megjegyzés: a 2. elem egy dialógust nyit meg és az abban megadott válaszértéket csatolja a parancshoz."
 
 #: ../src/build.c:2179
 msgid "Execute commands"
@@ -2378,12 +2172,8 @@ msgstr "Futtatási parancsok"
 
 #: ../src/build.c:2191
 #, c-format
-msgid ""
-"%d, %e, %f, %p are substituted in command and directory fields, see manual "
-"for details."
-msgstr ""
-"%d, %e, %f, %p behelyettesítésre kerülnek a parancs és könyvtár mezőkben, "
-"részletekért ld. a kézikönyvet."
+msgid "%d, %e, %f, %p are substituted in command and directory fields, see manual for details."
+msgstr "%d, %e, %f, %p behelyettesítésre kerülnek a parancs és könyvtár mezőkben, részletekért ld. a kézikönyvet."
 
 #: ../src/build.c:2349
 msgid "Set Build Commands"
@@ -2393,21 +2183,28 @@ msgstr "Build parancsok megadása"
 msgid "_Compile"
 msgstr "_Fordítás"
 
-#: ../src/build.c:2575 ../src/build.c:2605 ../src/build.c:2813
+#: ../src/build.c:2575
+#: ../src/build.c:2605
+#: ../src/build.c:2813
 msgid "_Execute"
 msgstr "Futtat"
 
 #. build the code with make custom
-#: ../src/build.c:2620 ../src/build.c:2811 ../src/build.c:2865
+#: ../src/build.c:2620
+#: ../src/build.c:2811
+#: ../src/build.c:2865
 msgid "Make Custom _Target"
 msgstr "Egyedi cél készí_tése"
 
 #. build the code with make object
-#: ../src/build.c:2622 ../src/build.c:2812 ../src/build.c:2873
+#: ../src/build.c:2622
+#: ../src/build.c:2812
+#: ../src/build.c:2873
 msgid "Make _Object"
 msgstr "Cél _készítése"
 
-#: ../src/build.c:2624 ../src/build.c:2810
+#: ../src/build.c:2624
+#: ../src/build.c:2810
 msgid "_Make"
 msgstr "_Make"
 
@@ -2435,7 +2232,8 @@ msgstr "Minden nem mentett változtatás el fog veszni."
 msgid "Are you sure you want to reload '%s'?"
 msgstr "Biztosan újra akarja olvasni '%s'-t?"
 
-#: ../src/callbacks.c:1062 ../src/keybindings.c:461
+#: ../src/callbacks.c:1062
+#: ../src/keybindings.c:461
 msgid "Go to Line"
 msgstr "Ugrás sorra"
 
@@ -2443,36 +2241,43 @@ msgstr "Ugrás sorra"
 msgid "Enter the line you want to go to:"
 msgstr "Adja meg a sor számát, ahová ugorni szeretne:"
 
-#: ../src/callbacks.c:1164 ../src/callbacks.c:1189
-msgid ""
-"Please set the filetype for the current file before using this function."
+#: ../src/callbacks.c:1164
+#: ../src/callbacks.c:1189
+msgid "Please set the filetype for the current file before using this function."
 msgstr "Mielőtt ezt a funkciót használná, adja meg a jelenlegi fájl típusát."
 
-#: ../src/callbacks.c:1294 ../src/ui_utils.c:639
+#: ../src/callbacks.c:1294
+#: ../src/ui_utils.c:639
 msgid "dd.mm.yyyy"
 msgstr "nn.hh.éééé"
 
-#: ../src/callbacks.c:1296 ../src/ui_utils.c:640
+#: ../src/callbacks.c:1296
+#: ../src/ui_utils.c:640
 msgid "mm.dd.yyyy"
 msgstr "hh.nn.éééé"
 
-#: ../src/callbacks.c:1298 ../src/ui_utils.c:641
+#: ../src/callbacks.c:1298
+#: ../src/ui_utils.c:641
 msgid "yyyy/mm/dd"
 msgstr "éééé/hh/nn"
 
-#: ../src/callbacks.c:1300 ../src/ui_utils.c:650
+#: ../src/callbacks.c:1300
+#: ../src/ui_utils.c:650
 msgid "dd.mm.yyyy hh:mm:ss"
 msgstr "nn.hh.éééé óó:pp:mm"
 
-#: ../src/callbacks.c:1302 ../src/ui_utils.c:651
+#: ../src/callbacks.c:1302
+#: ../src/ui_utils.c:651
 msgid "mm.dd.yyyy hh:mm:ss"
 msgstr "hh.nn.éééé óó:pp:mm"
 
-#: ../src/callbacks.c:1304 ../src/ui_utils.c:652
+#: ../src/callbacks.c:1304
+#: ../src/ui_utils.c:652
 msgid "yyyy/mm/dd hh:mm:ss"
 msgstr "éééé/hh/nn óó:pp:mm"
 
-#: ../src/callbacks.c:1306 ../src/ui_utils.c:661
+#: ../src/callbacks.c:1306
+#: ../src/ui_utils.c:661
 msgid "_Use Custom Date Format"
 msgstr "Egyedi dát_umformátum használata"
 
@@ -2481,26 +2286,22 @@ msgid "Custom Date Format"
 msgstr "Egyedi dátumformátum"
 
 #: ../src/callbacks.c:1311
-msgid ""
-"Enter here a custom date and time format. You can use any conversion "
-"specifiers which can be used with the ANSI C strftime function."
-msgstr ""
-"Adja meg itt az egyedi dátum és idő formátumot. Minden olyan konverziós "
-"jelölés használható, amit az ANSI C strftime függvénnyel használni lehet."
+msgid "Enter here a custom date and time format. You can use any conversion specifiers which can be used with the ANSI C strftime function."
+msgstr "Adja meg itt az egyedi dátum és idő formátumot. Minden olyan konverziós jelölés használható, amit az ANSI C strftime függvénnyel használni lehet."
 
 #: ../src/callbacks.c:1334
 msgid "Date format string could not be converted (possibly too long)."
-msgstr ""
-"A dátumformátum stringet nem lehetett átalakítani (feltehetően túl hosszú)."
+msgstr "A dátumformátum stringet nem lehetett átalakítani (feltehetően túl hosszú)."
 
-#: ../src/callbacks.c:1527 ../src/callbacks.c:1535
+#: ../src/callbacks.c:1527
+#: ../src/callbacks.c:1535
 msgid "No more message items."
 msgstr "Nincs több üzenet."
 
 #: ../src/callbacks.c:1673
-#, fuzzy, c-format
+#, c-format
 msgid "Could not open file %s (File not found)"
-msgstr "Nem lehetett megnyitni a(z) %s fájlt (%s)"
+msgstr "Nem sikerült megnyitni a(z) %s fájlt (fájl nem található)"
 
 #: ../src/dialogs.c:226
 msgid "Detect from file"
@@ -2526,9 +2327,15 @@ msgstr "DK- & DNy-ázsiai"
 msgid "Middle Eastern"
 msgstr "Közel-keleti"
 
-#: ../src/dialogs.c:239 ../src/encodings.c:112 ../src/encodings.c:113
-#: ../src/encodings.c:114 ../src/encodings.c:115 ../src/encodings.c:116
-#: ../src/encodings.c:117 ../src/encodings.c:118 ../src/encodings.c:119
+#: ../src/dialogs.c:239
+#: ../src/encodings.c:112
+#: ../src/encodings.c:113
+#: ../src/encodings.c:114
+#: ../src/encodings.c:115
+#: ../src/encodings.c:116
+#: ../src/encodings.c:117
+#: ../src/encodings.c:118
+#: ../src/encodings.c:119
 msgid "Unicode"
 msgstr "Unicode"
 
@@ -2547,17 +2354,11 @@ msgstr "Kódolás megadása:"
 
 #: ../src/dialogs.c:315
 msgid ""
-"Explicitly defines an encoding for the file, if it would not be detected. "
-"This is useful when you know that the encoding of a file cannot be detected "
-"correctly by Geany.\n"
-"Note if you choose multiple files, they will all be opened with the chosen "
-"encoding."
+"Explicitly defines an encoding for the file, if it would not be detected. This is useful when you know that the encoding of a file cannot be detected correctly by Geany.\n"
+"Note if you choose multiple files, they will all be opened with the chosen encoding."
 msgstr ""
-"Explicit módon megadja a fájl kódolását, ha azt nem lehet megállapítani. Ez "
-"akkor hasznos, ha tudja, hogy a fájl kódolását a Geany nem képes helyesen "
-"megállapítani.\n"
-"Figyelem: ha több fájlt választ ki, mindegyik a megadott kódolással kerül "
-"megnyitásra."
+"Explicit módon megadja a fájl kódolását, ha azt nem lehet megállapítani. Ez akkor hasznos, ha tudja, hogy a fájl kódolását a Geany nem képes helyesen megállapítani.\n"
+"Figyelem: ha több fájlt választ ki, mindegyik a megadott kódolással kerül megnyitásra."
 
 #. line 2 with filetype combo
 #: ../src/dialogs.c:322
@@ -2566,27 +2367,20 @@ msgstr "Fájltípus megadása:"
 
 #: ../src/dialogs.c:332
 msgid ""
-"Explicitly defines a filetype for the file, if it would not be detected by "
-"filename extension.\n"
-"Note if you choose multiple files, they will all be opened with the chosen "
-"filetype."
+"Explicitly defines a filetype for the file, if it would not be detected by filename extension.\n"
+"Note if you choose multiple files, they will all be opened with the chosen filetype."
 msgstr ""
-"Explicit módon megadja a fájltípust, ha azt nem lehet megállapítani a fájl "
-"kiterjesztése alapján.\n"
-"Figyelem: ha több fájlt választ ki, mindegyik a megadott fájltípusként kerül "
-"megnyitásra."
+"Explicit módon megadja a fájltípust, ha azt nem lehet megállapítani a fájl kiterjesztése alapján.\n"
+"Figyelem: ha több fájlt választ ki, mindegyik a megadott fájltípusként kerül megnyitásra."
 
-#: ../src/dialogs.c:361 ../src/dialogs.c:466
+#: ../src/dialogs.c:361
+#: ../src/dialogs.c:466
 msgid "Open File"
 msgstr "Fájl megnyitása"
 
 #: ../src/dialogs.c:367
-msgid ""
-"Opens the file in read-only mode. If you choose more than one file to open, "
-"all files will be opened read-only."
-msgstr ""
-"Csak olvasható módban nyitja meg a fájlt. Ha egynél több fájlt választ "
-"megnyitásra, mind csak olvashatóként nyílik meg."
+msgid "Opens the file in read-only mode. If you choose more than one file to open, all files will be opened read-only."
+msgstr "Csak olvasható módban nyitja meg a fájlt. Ha egynél több fájlt választ megnyitásra, mind csak olvashatóként nyílik meg."
 
 #: ../src/dialogs.c:387
 msgid "Detect by file extension"
@@ -2600,7 +2394,8 @@ msgstr "Felülírja?"
 msgid "Filename already exists!"
 msgstr "A fájlnév már létezik!"
 
-#: ../src/dialogs.c:581 ../src/dialogs.c:707
+#: ../src/dialogs.c:581
+#: ../src/dialogs.c:707
 msgid "Save File"
 msgstr "Fájl mentése"
 
@@ -2617,27 +2412,28 @@ msgid "_Open file in a new tab"
 msgstr "Ú_j ablakban nyitja meg a fájlt"
 
 #: ../src/dialogs.c:602
-msgid ""
-"Keep the current unsaved document open and open the newly saved file in a "
-"new tab"
-msgstr ""
-"Megnyitva hagyja az aktuális dokumentumot és új fülön jeleníti meg az "
-"újonnan elmentett fájlt"
+msgid "Keep the current unsaved document open and open the newly saved file in a new tab"
+msgstr "Megnyitva hagyja az aktuális dokumentumot és új fülön jeleníti meg az újonnan elmentett fájlt"
 
-#: ../src/dialogs.c:725 ../src/win32.c:677
+#: ../src/dialogs.c:725
+#: ../src/win32.c:677
 msgid "Error"
 msgstr "Hiba"
 
-#: ../src/dialogs.c:728 ../src/dialogs.c:811 ../src/dialogs.c:1592
+#: ../src/dialogs.c:728
+#: ../src/dialogs.c:811
+#: ../src/dialogs.c:1592
 #: ../src/win32.c:683
 msgid "Question"
 msgstr "Kérdés"
 
-#: ../src/dialogs.c:731 ../src/win32.c:689
+#: ../src/dialogs.c:731
+#: ../src/win32.c:689
 msgid "Warning"
 msgstr "Figyelmeztetés"
 
-#: ../src/dialogs.c:734 ../src/win32.c:695
+#: ../src/dialogs.c:734
+#: ../src/win32.c:695
 msgid "Information"
 msgstr "Információs"
 
@@ -2659,21 +2455,24 @@ msgid "Choose font"
 msgstr "Betűtípus választása"
 
 #: ../src/dialogs.c:1204
-msgid ""
-"An error occurred or file information could not be retrieved (e.g. from a "
-"new file)."
-msgstr ""
-"Hiba történt vagy nem lehetett a fájl információkat kinyerni (pl. új fájl "
-"esetén)."
+msgid "An error occurred or file information could not be retrieved (e.g. from a new file)."
+msgstr "Hiba történt vagy nem lehetett a fájl információkat kinyerni (pl. új fájl esetén)."
 
-#: ../src/dialogs.c:1223 ../src/dialogs.c:1224 ../src/dialogs.c:1225
-#: ../src/dialogs.c:1231 ../src/dialogs.c:1232 ../src/dialogs.c:1233
-#: ../src/symbols.c:2094 ../src/symbols.c:2115 ../src/symbols.c:2167
+#: ../src/dialogs.c:1223
+#: ../src/dialogs.c:1224
+#: ../src/dialogs.c:1225
+#: ../src/dialogs.c:1231
+#: ../src/dialogs.c:1232
+#: ../src/dialogs.c:1233
+#: ../src/symbols.c:2094
+#: ../src/symbols.c:2115
+#: ../src/symbols.c:2167
 #: ../src/ui_utils.c:264
 msgid "unknown"
 msgstr "ismeretlen"
 
-#: ../src/dialogs.c:1238 ../src/symbols.c:892
+#: ../src/dialogs.c:1238
+#: ../src/symbols.c:892
 msgid "Properties"
 msgstr "Tulajdonságok"
 
@@ -2701,7 +2500,8 @@ msgstr "(csak a Geany-n belül)"
 msgid "<b>Encoding:</b>"
 msgstr "<b>Kódolás:</b>"
 
-#: ../src/dialogs.c:1339 ../src/ui_utils.c:268
+#: ../src/dialogs.c:1339
+#: ../src/ui_utils.c:268
 msgid "(with BOM)"
 msgstr "(BOM-mal)"
 
@@ -2763,7 +2563,8 @@ msgstr "%s fájl bezárva."
 msgid "New file \"%s\" opened."
 msgstr "\"%s\" új fájl megnyitva."
 
-#: ../src/document.c:795 ../src/document.c:1319
+#: ../src/document.c:795
+#: ../src/document.c:1319
 #, c-format
 msgid "Could not open file %s (%s)"
 msgstr "Nem lehetett megnyitni a(z) %s fájlt (%s)"
@@ -2775,24 +2576,16 @@ msgstr "A(z) \"%s\" fájl nem érvényes %s."
 
 #: ../src/document.c:821
 #, c-format
-msgid ""
-"The file \"%s\" does not look like a text file or the file encoding is not "
-"supported."
-msgstr ""
-"A(z) \"%s\" fájl nem tűnik szöveges fájlnak, vagy a fájl kódolása nem "
-"támogatott."
+msgid "The file \"%s\" does not look like a text file or the file encoding is not supported."
+msgstr "A(z) \"%s\" fájl nem tűnik szöveges fájlnak, vagy a fájl kódolása nem támogatott."
 
 #: ../src/document.c:831
 #, c-format
 msgid ""
-"The file \"%s\" could not be opened properly and has been truncated. This "
-"can occur if the file contains a NULL byte. Be aware that saving it can "
-"cause data loss.\n"
+"The file \"%s\" could not be opened properly and has been truncated. This can occur if the file contains a NULL byte. Be aware that saving it can cause data loss.\n"
 "The file was set to read-only."
 msgstr ""
-"A(z) \"%s\" fájlt nem lehetett sikeresen megnyitni és csonkolva lett. Ez "
-"akkor fordulhat elő, ha a fájl NULL értékű byte-ot tartalmaz. Figyeljen "
-"arra, hogy ez adatvesztéshez vezethet.\n"
+"A(z) \"%s\" fájlt nem lehetett sikeresen megnyitni és csonkolva lett. Ez akkor fordulhat elő, ha a fájl NULL értékű byte-ot tartalmaz. Figyeljen arra, hogy ez adatvesztéshez vezethet.\n"
 "A fájlt csak olvashatóvá tettük."
 
 #: ../src/document.c:1033
@@ -2842,12 +2635,8 @@ msgstr "Hiba a fájl átnevezésekor."
 
 #: ../src/document.c:1500
 #, c-format
-msgid ""
-"An error occurred while converting the file from UTF-8 in \"%s\". The file "
-"remains unsaved."
-msgstr ""
-"Hiba történt a fájl UTF-8-ból konvertálásakor itt: \"%s\". A fájl nem került "
-"mentésre."
+msgid "An error occurred while converting the file from UTF-8 in \"%s\". The file remains unsaved."
+msgstr "Hiba történt a fájl UTF-8-ból konvertálásakor itt: \"%s\". A fájl nem került mentésre."
 
 #: ../src/document.c:1522
 #, c-format
@@ -2903,7 +2692,9 @@ msgstr "Hiba a fájl mentésekor."
 msgid "File %s saved."
 msgstr "%s fájl elmentve."
 
-#: ../src/document.c:1876 ../src/document.c:1940 ../src/document.c:1948
+#: ../src/document.c:1876
+#: ../src/document.c:1940
+#: ../src/document.c:1948
 #, c-format
 msgid "\"%s\" was not found."
 msgstr "\"%s\" nem található."
@@ -2912,8 +2703,11 @@ msgstr "\"%s\" nem található."
 msgid "Wrap search and find again?"
 msgstr "Újbóli keresés a fájl elejétől?"
 
-#: ../src/document.c:2034 ../src/search.c:1279 ../src/search.c:1323
-#: ../src/search.c:2087 ../src/search.c:2088
+#: ../src/document.c:2034
+#: ../src/search.c:1279
+#: ../src/search.c:1323
+#: ../src/search.c:2087
+#: ../src/search.c:2088
 #, c-format
 msgid "No matches found for \"%s\"."
 msgstr "Nincs találat erre: \"%s\"."
@@ -2967,7 +2761,8 @@ msgstr "Figyelem: nem szabványos kemény tabulátor szélesség: %d != 8!"
 msgid "Celtic"
 msgstr "Kelta"
 
-#: ../src/encodings.c:68 ../src/encodings.c:69
+#: ../src/encodings.c:68
+#: ../src/encodings.c:69
 msgid "Greek"
 msgstr "Görög"
 
@@ -2979,22 +2774,31 @@ msgstr "Északi"
 msgid "South European"
 msgstr "Dél-európai"
 
-#: ../src/encodings.c:72 ../src/encodings.c:73 ../src/encodings.c:74
+#: ../src/encodings.c:72
+#: ../src/encodings.c:73
+#: ../src/encodings.c:74
 #: ../src/encodings.c:75
 msgid "Western"
 msgstr "Nyugati"
 
-#: ../src/encodings.c:77 ../src/encodings.c:78 ../src/encodings.c:79
+#: ../src/encodings.c:77
+#: ../src/encodings.c:78
+#: ../src/encodings.c:79
 msgid "Baltic"
 msgstr "Balti"
 
-#: ../src/encodings.c:80 ../src/encodings.c:81 ../src/encodings.c:82
+#: ../src/encodings.c:80
+#: ../src/encodings.c:81
+#: ../src/encodings.c:82
 msgid "Central European"
 msgstr "Közép-európai"
 
 #. ISO-IR-111 not available on Windows
-#: ../src/encodings.c:83 ../src/encodings.c:84 ../src/encodings.c:86
-#: ../src/encodings.c:87 ../src/encodings.c:88
+#: ../src/encodings.c:83
+#: ../src/encodings.c:84
+#: ../src/encodings.c:86
+#: ../src/encodings.c:87
+#: ../src/encodings.c:88
 msgid "Cyrillic"
 msgstr "Cirill"
 
@@ -3010,12 +2814,16 @@ msgstr "Cirill/ukrán"
 msgid "Romanian"
 msgstr "Román"
 
-#: ../src/encodings.c:93 ../src/encodings.c:94 ../src/encodings.c:95
+#: ../src/encodings.c:93
+#: ../src/encodings.c:94
+#: ../src/encodings.c:95
 msgid "Arabic"
 msgstr "Arab"
 
 #. not available at all, ?
-#: ../src/encodings.c:96 ../src/encodings.c:98 ../src/encodings.c:99
+#: ../src/encodings.c:96
+#: ../src/encodings.c:98
+#: ../src/encodings.c:99
 msgid "Hebrew"
 msgstr "Héber"
 
@@ -3035,30 +2843,42 @@ msgstr "Grúz"
 msgid "Thai"
 msgstr "Thai"
 
-#: ../src/encodings.c:105 ../src/encodings.c:106 ../src/encodings.c:107
+#: ../src/encodings.c:105
+#: ../src/encodings.c:106
+#: ../src/encodings.c:107
 msgid "Turkish"
 msgstr "Török"
 
-#: ../src/encodings.c:108 ../src/encodings.c:109 ../src/encodings.c:110
+#: ../src/encodings.c:108
+#: ../src/encodings.c:109
+#: ../src/encodings.c:110
 msgid "Vietnamese"
 msgstr "Vietnami"
 
 #. maybe not available on Linux
-#: ../src/encodings.c:121 ../src/encodings.c:122 ../src/encodings.c:123
+#: ../src/encodings.c:121
+#: ../src/encodings.c:122
+#: ../src/encodings.c:123
 #: ../src/encodings.c:125
 msgid "Chinese Simplified"
 msgstr "Egyszerűsített kínai"
 
-#: ../src/encodings.c:126 ../src/encodings.c:127 ../src/encodings.c:128
+#: ../src/encodings.c:126
+#: ../src/encodings.c:127
+#: ../src/encodings.c:128
 msgid "Chinese Traditional"
 msgstr "Hagyományos kínai"
 
-#: ../src/encodings.c:129 ../src/encodings.c:130 ../src/encodings.c:131
+#: ../src/encodings.c:129
+#: ../src/encodings.c:130
+#: ../src/encodings.c:131
 #: ../src/encodings.c:132
 msgid "Japanese"
 msgstr "Japán"
 
-#: ../src/encodings.c:133 ../src/encodings.c:134 ../src/encodings.c:135
+#: ../src/encodings.c:133
+#: ../src/encodings.c:134
+#: ../src/encodings.c:135
 #: ../src/encodings.c:136
 msgid "Korean"
 msgstr "Koreai"
@@ -3091,8 +2911,11 @@ msgstr "Köz_el-keleti"
 msgid "_Unicode"
 msgstr "_Unicode"
 
-#: ../src/filetypes.c:83 ../src/filetypes.c:173 ../src/filetypes.c:187
-#: ../src/filetypes.c:195 ../src/filetypes.c:209
+#: ../src/filetypes.c:83
+#: ../src/filetypes.c:173
+#: ../src/filetypes.c:187
+#: ../src/filetypes.c:195
+#: ../src/filetypes.c:209
 #, c-format
 msgid "%s source file"
 msgstr "%s forráskód fájl"
@@ -3142,13 +2965,18 @@ msgstr "_Jelölő nyelvek"
 msgid "M_iscellaneous"
 msgstr "E_gyéb"
 
-#: ../src/filetypes.c:1459 ../src/win32.c:104
+#: ../src/filetypes.c:1459
+#: ../src/win32.c:104
 msgid "All Source"
 msgstr "Minden forrás"
 
 #. create meta file filter "All files"
-#: ../src/filetypes.c:1484 ../src/project.c:295 ../src/win32.c:94
-#: ../src/win32.c:139 ../src/win32.c:160 ../src/win32.c:165
+#: ../src/filetypes.c:1484
+#: ../src/project.c:295
+#: ../src/win32.c:94
+#: ../src/win32.c:139
+#: ../src/win32.c:160
+#: ../src/win32.c:165
 msgid "All files"
 msgstr "Minden fájl"
 
@@ -3161,35 +2989,33 @@ msgstr "Rossz reguláris kifejezés a(z) %s fájltípushoz: %s"
 msgid "untitled"
 msgstr "névtelen"
 
-#: ../src/highlighting.c:1225 ../src/main.c:828 ../src/socket.c:166
+#: ../src/highlighting.c:1225
+#: ../src/main.c:828
+#: ../src/socket.c:166
 #: ../src/templates.c:224
 #, c-format
 msgid "Could not find file '%s'."
 msgstr "'%s' fájl nem található."
 
 #: ../src/highlighting.c:1297
-#, fuzzy
 msgid "Default"
 msgstr "Alapértelmezett"
 
 #: ../src/highlighting.c:1336
-#, fuzzy
 msgid "The current filetype overrides the default style."
-msgstr ""
-"Build-eli a jelenlegi fájlt a make eszközzel és az alapértelmezett "
-"célállománnyal"
+msgstr "A jelenlegi fájltípus felülírja az alapértelmezett stílust."
 
 #: ../src/highlighting.c:1337
 msgid "This may cause color schemes to display incorrectly."
-msgstr ""
+msgstr "Ez a színsablonok helytelen megjelenítését okozhatja."
 
 #: ../src/highlighting.c:1358
-#, fuzzy
 msgid "Color Schemes"
 msgstr "Színsablonok"
 
 #. visual group order
-#: ../src/keybindings.c:223 ../src/symbols.c:714
+#: ../src/keybindings.c:223
+#: ../src/symbols.c:714
 msgid "File"
 msgstr "Fájl"
 
@@ -3229,12 +3055,15 @@ msgstr "Nézet"
 msgid "Document"
 msgstr "Dokumentum"
 
-#: ../src/keybindings.c:235 ../src/keybindings.c:582 ../src/project.c:444
+#: ../src/keybindings.c:235
+#: ../src/keybindings.c:582
+#: ../src/project.c:444
 #: ../src/ui_utils.c:1980
 msgid "Build"
 msgstr "Összeállítás"
 
-#: ../src/keybindings.c:237 ../src/keybindings.c:607
+#: ../src/keybindings.c:237
+#: ../src/keybindings.c:607
 msgid "Help"
 msgstr "Súgó"
 
@@ -3246,11 +3075,13 @@ msgstr "Fókusz"
 msgid "Notebook tab"
 msgstr "Jegyzettömb fül"
 
-#: ../src/keybindings.c:248 ../src/keybindings.c:276
+#: ../src/keybindings.c:248
+#: ../src/keybindings.c:276
 msgid "New"
 msgstr "Új"
 
-#: ../src/keybindings.c:250 ../src/keybindings.c:278
+#: ../src/keybindings.c:250
+#: ../src/keybindings.c:278
 msgid "Open"
 msgstr "Megnyit"
 
@@ -3262,7 +3093,8 @@ msgstr "Kijelölt fájl megnyitása"
 msgid "Save"
 msgstr "Ment"
 
-#: ../src/keybindings.c:257 ../src/toolbar.c:55
+#: ../src/keybindings.c:257
+#: ../src/toolbar.c:55
 msgid "Save as"
 msgstr "Mentés másként"
 
@@ -3274,7 +3106,8 @@ msgstr "Mindet menti"
 msgid "Print"
 msgstr "Nyomtat"
 
-#: ../src/keybindings.c:264 ../src/keybindings.c:283
+#: ../src/keybindings.c:264
+#: ../src/keybindings.c:283
 msgid "Close"
 msgstr "Bezár"
 
@@ -3423,9 +3256,8 @@ msgid "Send to Custom Command 3"
 msgstr "3. egyedi parancs"
 
 #: ../src/keybindings.c:400
-#, fuzzy
 msgid "Join lines"
-msgstr "Sor(ok) megjegyzésbe"
+msgstr "Sorok egyesítése"
 
 #: ../src/keybindings.c:405
 msgid "Insert date"
@@ -3439,7 +3271,8 @@ msgstr "Sor beszúrása a jelenlegi elé"
 msgid "Insert New Line After Current"
 msgstr "Sor beszúrása a jelenlegi mögé"
 
-#: ../src/keybindings.c:426 ../src/search.c:463
+#: ../src/keybindings.c:426
+#: ../src/search.c:463
 msgid "Find"
 msgstr "Keresés"
 
@@ -3451,11 +3284,13 @@ msgstr "Következő"
 msgid "Find Previous"
 msgstr "Előző"
 
-#: ../src/keybindings.c:437 ../src/search.c:619
+#: ../src/keybindings.c:437
+#: ../src/search.c:619
 msgid "Replace"
 msgstr "Csere"
 
-#: ../src/keybindings.c:439 ../src/search.c:871
+#: ../src/keybindings.c:439
+#: ../src/search.c:871
 msgid "Find in Files"
 msgstr "Keresés fájlokban"
 
@@ -3475,11 +3310,13 @@ msgstr "Használat keresése"
 msgid "Find Document Usage"
 msgstr "Dokumentum használat keresése"
 
-#: ../src/keybindings.c:457 ../src/toolbar.c:66
+#: ../src/keybindings.c:457
+#: ../src/toolbar.c:66
 msgid "Navigate back a location"
 msgstr "Visszatérés egy helyhez"
 
-#: ../src/keybindings.c:459 ../src/toolbar.c:67
+#: ../src/keybindings.c:459
+#: ../src/toolbar.c:67
 msgid "Navigate forward a location"
 msgstr "Továbbhaladás egy helyhez"
 
@@ -3655,7 +3492,8 @@ msgstr "Hibajelölések eltávolítása"
 msgid "Remove Markers and Error Indicators"
 msgstr "Jelölők és hibajelek eltávolítása"
 
-#: ../src/keybindings.c:580 ../src/toolbar.c:68
+#: ../src/keybindings.c:580
+#: ../src/toolbar.c:68
 msgid "Compile"
 msgstr "Fordítás"
 
@@ -3701,9 +3539,7 @@ msgstr "A következő gyorsbillentyűk állíthatók be:"
 
 #: ../src/keyfile.c:950
 msgid "Type here what you want, use it as a notice/scratch board"
-msgstr ""
-"Írjon ide tetszés szerint, használja ezt úgy, mint egy jegyzettömböt/"
-"firkalapot"
+msgstr "Írjon ide tetszés szerint, használja ezt úgy, mint egy jegyzettömböt/firkalapot"
 
 #: ../src/keyfile.c:1150
 msgid "Failed to load one or more session files."
@@ -3718,12 +3554,8 @@ msgid "Cl_ear"
 msgstr "Tör_lés"
 
 #: ../src/main.c:121
-msgid ""
-"Set initial column number for the first opened file (useful in conjunction "
-"with --line)"
-msgstr ""
-"Állítsa be az első megnyitott fájl kezdő oszlopszámát (a --line opcióval "
-"együtt hasznos)"
+msgid "Set initial column number for the first opened file (useful in conjunction with --line)"
+msgstr "Állítsa be az első megnyitott fájl kezdő oszlopszámát (a --line opcióval együtt hasznos)"
 
 #: ../src/main.c:122
 msgid "Use an alternate configuration directory"
@@ -3746,16 +3578,12 @@ msgid "Don't open files in a running instance, force opening a new instance"
 msgstr "Ne nyisson meg fájlokat egy már futó példányban, indítson új példányt"
 
 #: ../src/main.c:128
-msgid ""
-"Use this socket filename for communication with a running Geany instance"
-msgstr ""
-"Használd ezt a socket fájl nevet egy már futó Geany példánnyal történő "
-"kommunikációhoz"
+msgid "Use this socket filename for communication with a running Geany instance"
+msgstr "Használd ezt a socket fájl nevet egy már futó Geany példánnyal történő kommunikációhoz"
 
 #: ../src/main.c:129
 msgid "Return a list of open documents in a running Geany instance"
-msgstr ""
-"Visszaadja a már futó Geany példányban megnyitott dokumentumok listáját"
+msgstr "Visszaadja a már futó Geany példányban megnyitott dokumentumok listáját"
 
 #: ../src/main.c:131
 msgid "Set initial line number for the first opened file"
@@ -3779,7 +3607,7 @@ msgstr "A Geany telepítés prefix nyomtatása"
 
 #: ../src/main.c:138
 msgid "Open all FILES in read-only mode (see documention)"
-msgstr ""
+msgstr "Minden fájlt csak olvasásra nyit meg (ld. dokumentációt)"
 
 #: ../src/main.c:139
 msgid "Don't load the previous session's files"
@@ -3817,28 +3645,19 @@ msgstr "Áthelyezi most?"
 
 #: ../src/main.c:637
 msgid "Geany needs to move your old configuration directory before starting."
-msgstr ""
-"A régi konfigurációs könyvtárat a Geany-nek el kell mozgatni máshová "
-"indulása előtt."
+msgstr "A régi konfigurációs könyvtárat a Geany-nek el kell mozgatni máshová indulása előtt."
 
 #: ../src/main.c:646
 #, c-format
-msgid ""
-"Your configuration directory has been successfully moved from \"%s\" to \"%s"
-"\"."
-msgstr ""
-"A konfigurációs könyvtárat sikerült átmásolni innen: \"%s\" ide: \"%s\"."
+msgid "Your configuration directory has been successfully moved from \"%s\" to \"%s\"."
+msgstr "A konfigurációs könyvtárat sikerült átmásolni innen: \"%s\" ide: \"%s\"."
 
 #. for translators: the third %s in brackets is the error message which
 #. * describes why moving the dir didn't work
 #: ../src/main.c:656
 #, c-format
-msgid ""
-"Your old configuration directory \"%s\" could not be moved to \"%s\" (%s). "
-"Please move manually the directory to the new location."
-msgstr ""
-"A régi konfigurációs könyvtárat (\"%s\") nem lehetett áthelyezni ide: \"%s"
-"\" (%s). Helyezze át kézzel a könyvtárat az új helyre."
+msgid "Your old configuration directory \"%s\" could not be moved to \"%s\" (%s). Please move manually the directory to the new location."
+msgstr "A régi konfigurációs könyvtárat (\"%s\") nem lehetett áthelyezni ide: \"%s\" (%s). Helyezze át kézzel a könyvtárat az új helyre."
 
 #: ../src/main.c:737
 #, c-format
@@ -3848,8 +3667,7 @@ msgid ""
 "Start Geany anyway?"
 msgstr ""
 "A konfigurációs könyvtárat nem lehetett létrehozni (%s).\n"
-"Problémák léphetnek fel, ha a Geany-t konfigurációs könyvtár nélkül "
-"használja.\n"
+"Problémák léphetnek fel, ha a Geany-t konfigurációs könyvtár nélkül használja.\n"
 "Mindenképpen elindítja a Geany-t?"
 
 #: ../src/main.c:1074
@@ -3885,8 +3703,7 @@ msgstr "Üzenet ablak el_rejtése"
 #: ../src/msgwindow.c:651
 #, c-format
 msgid "Could not find file '%s' - trying the current document path."
-msgstr ""
-"'%s' fájl nem található - próbálom az aktuális dokumentum elérési útját."
+msgstr "'%s' fájl nem található - próbálom az aktuális dokumentum elérési útját."
 
 #: ../src/notebook.c:195
 msgid "Switch to Document"
@@ -3894,12 +3711,8 @@ msgstr "A dokumentumra kapcsol"
 
 #: ../src/plugins.c:497
 #, c-format
-msgid ""
-"The plugin \"%s\" is not binary compatible with this release of Geany - "
-"please recompile it."
-msgstr ""
-"A(z) \"%s\" bővítmény binárisan nem kompatibilis a Geany ezen kiadásával - "
-"fordítsa újra azt!"
+msgid "The plugin \"%s\" is not binary compatible with this release of Geany - please recompile it."
+msgstr "A(z) \"%s\" bővítmény binárisan nem kompatibilis a Geany ezen kiadásával - fordítsa újra azt!"
 
 #: ../src/plugins.c:1041
 msgid "_Plugin Manager"
@@ -3920,9 +3733,8 @@ msgid "Plugin"
 msgstr "Bővítmény"
 
 #: ../src/plugins.c:1300
-#, fuzzy
 msgid "Description"
-msgstr "Leírás:"
+msgstr "Leírás"
 
 #: ../src/plugins.c:1318
 msgid "No plugins available."
@@ -3959,15 +3771,17 @@ msgstr "Billentyű beolvasása"
 #: ../src/prefs.c:185
 #, c-format
 msgid "Press the combination of the keys you want to use for \"%s\"."
-msgstr ""
-"Üsse le a billentyű-kombinációt, amit a(z) \"%s\" parancshoz használni "
-"szeretne."
+msgstr "Üsse le a billentyű-kombinációt, amit a(z) \"%s\" parancshoz használni szeretne."
 
-#: ../src/prefs.c:226 ../src/symbols.c:2236 ../src/sidebar.c:730
+#: ../src/prefs.c:226
+#: ../src/symbols.c:2236
+#: ../src/sidebar.c:730
 msgid "_Expand All"
 msgstr "Mind_et kinyitja"
 
-#: ../src/prefs.c:231 ../src/symbols.c:2241 ../src/sidebar.c:736
+#: ../src/prefs.c:231
+#: ../src/symbols.c:2241
+#: ../src/sidebar.c:736
 msgid "_Collapse All"
 msgstr "Mindet be_zárja"
 
@@ -4000,39 +3814,22 @@ msgstr "A(z) '%s' kombináció már használatban van a(z) \"%s\" parancsnál."
 #. page Tools
 #: ../src/prefs.c:1661
 msgid "Enter tool paths below. Tools you do not need can be left blank."
-msgstr ""
-"Adja meg az eszközök elérési útját. Amelyik eszközre nincs szüksége, ott "
-"üresen lehet hagyni."
+msgstr "Adja meg az eszközök elérési útját. Amelyik eszközre nincs szüksége, ott üresen lehet hagyni."
 
 #. page Templates
 #: ../src/prefs.c:1666
-msgid ""
-"Set the information to be used in templates. See the documentation for "
-"details."
-msgstr ""
-"Adja meg a sablonokban használni kívánt információkat. A részletekhez "
-"tekintse meg a dokumentációt."
+msgid "Set the information to be used in templates. See the documentation for details."
+msgstr "Adja meg a sablonokban használni kívánt információkat. A részletekhez tekintse meg a dokumentációt."
 
 #. page Keybindings
 #: ../src/prefs.c:1671
-msgid ""
-"Here you can change keyboard shortcuts for various actions. Select one and "
-"press the Change button to enter a new shortcut, or double click on an "
-"action to edit the string representation of the shortcut directly."
-msgstr ""
-"Itt megváltoztathatja az egyes eseményekhez rendelt gyorsbillentyűket. "
-"Válasszon ki egy eseményt, majd nyomja meg a Változtat gombot az új "
-"gyorsbillentyű megadásához. Duplakattintással közvetlentül az eseményhez "
-"rendelt gyorsbillentyű stringet is szerkesztheti."
+msgid "Here you can change keyboard shortcuts for various actions. Select one and press the Change button to enter a new shortcut, or double click on an action to edit the string representation of the shortcut directly."
+msgstr "Itt megváltoztathatja az egyes eseményekhez rendelt gyorsbillentyűket. Válasszon ki egy eseményt, majd nyomja meg a Változtat gombot az új gyorsbillentyű megadásához. Duplakattintással közvetlentül az eseményhez rendelt gyorsbillentyű stringet is szerkesztheti."
 
 #. page Editor->Indentation
 #: ../src/prefs.c:1676
-msgid ""
-"<i>Warning: these settings are overridden by the current project. See "
-"<b>Project->Properties</b>.</i>"
-msgstr ""
-"<i>Figyelem: ezeket a beállításokat a kurrens projekt felülírja. Ld "
-"<b>Projekt->Tulajdonságok</b>.</i>"
+msgid "<i>Warning: these settings are overridden by the current project. See <b>Project->Properties</b>.</i>"
+msgstr "<i>Figyelem: ezeket a beállításokat a kurrens projekt felülírja. Ld <b>Projekt->Tulajdonságok</b>.</i>"
 
 #: ../src/printing.c:183
 msgid "The editor font is not a monospaced font!"
@@ -4077,9 +3874,7 @@ msgstr "%s nyomtatása sikertelen (%s)."
 
 #: ../src/printing.c:872
 msgid "Please set a print command in the preferences dialog first."
-msgstr ""
-"Először állítson be egy nyomtatási parancsot a tulajdonságok "
-"párbeszédablakban!"
+msgstr "Először állítson be egy nyomtatási parancsot a tulajdonságok párbeszédablakban!"
 
 #: ../src/printing.c:880
 #, c-format
@@ -4116,11 +3911,13 @@ msgstr "Új projekt"
 msgid "C_reate"
 msgstr "Lét_rehozás"
 
-#: ../src/project.c:175 ../src/project.c:417
+#: ../src/project.c:175
+#: ../src/project.c:417
 msgid "Choose Project Base Path"
 msgstr "Adja meg a projekt alapkönyvtárát"
 
-#: ../src/project.c:197 ../src/project.c:560
+#: ../src/project.c:197
+#: ../src/project.c:560
 msgid "Project file could not be written"
 msgstr "A projekt fájl nem írható"
 
@@ -4129,12 +3926,15 @@ msgstr "A projekt fájl nem írható"
 msgid "Project \"%s\" created."
 msgstr "\"%s\" projekt létrehozásra került."
 
-#: ../src/project.c:241 ../src/project.c:273 ../src/project.c:950
+#: ../src/project.c:241
+#: ../src/project.c:273
+#: ../src/project.c:950
 #, c-format
 msgid "Project file \"%s\" could not be loaded."
 msgstr "Nem sikerült betölteni a(z) \"%s\" projekt fájlt."
 
-#: ../src/project.c:267 ../src/project.c:279
+#: ../src/project.c:267
+#: ../src/project.c:279
 msgid "Open Project"
 msgstr "Projekt megnyitása"
 
@@ -4157,9 +3957,9 @@ msgid "Do you want to close it before proceeding?"
 msgstr "Szeretné bezárni, mielőtt folytatja?"
 
 #: ../src/project.c:597
-#, fuzzy, c-format
+#, c-format
 msgid "The '%s' project is open."
-msgstr "A(z) '%s' projekt már nyitva van."
+msgstr "'%s' projekt már nyitva van."
 
 #: ../src/project.c:646
 msgid "The specified project name is too short."
@@ -4194,7 +3994,8 @@ msgid "Project file could not be written (%s)."
 msgstr "A projekt fájl nem írható (%s)."
 
 #. initialise the dialog
-#: ../src/project.c:854 ../src/project.c:865
+#: ../src/project.c:854
+#: ../src/project.c:865
 msgid "Choose Project Filename"
 msgstr "Adja meg a projekt nevét"
 
@@ -4203,17 +4004,14 @@ msgstr "Adja meg a projekt nevét"
 msgid "Project \"%s\" opened."
 msgstr "\"%s\" projekt megnyitásra került."
 
-#: ../src/search.c:290 ../src/search.c:970
+#: ../src/search.c:290
+#: ../src/search.c:970
 msgid "_Use regular expressions"
 msgstr "Reg_uláris kifejezések használata"
 
 #: ../src/search.c:293
-msgid ""
-"Use POSIX-like regular expressions. For detailed information about using "
-"regular expressions, please read the documentation."
-msgstr ""
-"POSIX-szerű reguláris kifejezések használata. A reguláris kifejezések "
-"használatáról szóló részletes információkért olvassa el a dokumentációt."
+msgid "Use POSIX-like regular expressions. For detailed information about using regular expressions, please read the documentation."
+msgstr "POSIX-szerű reguláris kifejezések használata. A reguláris kifejezések használatáról szóló részletes információkért olvassa el a dokumentációt."
 
 #: ../src/search.c:300
 msgid "Search _backwards"
@@ -4225,17 +4023,19 @@ msgstr "_Escape szekvenciák használata"
 
 #: ../src/search.c:317
 msgid ""
-"Replace \\\\, \\t, \\n, \\r and \\uXXXX (Unicode chararacters) with the "
-"corresponding control characters"
+"Replace \\\\, \\t, \\n"
+", \\r and \\uXXXX (Unicode chararacters) with the corresponding control characters"
 msgstr ""
-"Helyettesítse a \\\\, \\t, \\n, \\r és \\uXXXX (Unicode karakterek) jeleket "
-"a megfelelő vezérlőkarakterekkel."
+"Helyettesítse a \\\\, \\t, \\n"
+", \\r és \\uXXXX (Unicode karakterek) jeleket a megfelelő vezérlőkarakterekkel."
 
-#: ../src/search.c:326 ../src/search.c:979
+#: ../src/search.c:326
+#: ../src/search.c:979
 msgid "C_ase sensitive"
 msgstr "_Kis/nagybetű számít"
 
-#: ../src/search.c:330 ../src/search.c:984
+#: ../src/search.c:330
+#: ../src/search.c:984
 msgid "Match only a _whole word"
 msgstr "Csak teljes s_zavak"
 
@@ -4251,7 +4051,9 @@ msgstr "Elő_ző"
 msgid "_Next"
 msgstr "Kö_vetkező"
 
-#: ../src/search.c:479 ../src/search.c:640 ../src/search.c:881
+#: ../src/search.c:479
+#: ../src/search.c:640
+#: ../src/search.c:881
 msgid "_Search for:"
 msgstr "_Keresés:"
 
@@ -4268,20 +4070,24 @@ msgstr "_Jelöl"
 msgid "Mark all matches in the current document"
 msgstr "Megjelöli az összes találatot a jelenlegi dokumentumban."
 
-#: ../src/search.c:522 ../src/search.c:697
+#: ../src/search.c:522
+#: ../src/search.c:697
 msgid "In Sessi_on"
 msgstr "M_unkamenetben"
 
-#: ../src/search.c:527 ../src/search.c:702
+#: ../src/search.c:527
+#: ../src/search.c:702
 msgid "_In Document"
 msgstr "_Dokumentumban"
 
 #. close window checkbox
-#: ../src/search.c:533 ../src/search.c:715
+#: ../src/search.c:533
+#: ../src/search.c:715
 msgid "Close _dialog"
 msgstr "Ablak _bezárása"
 
-#: ../src/search.c:537 ../src/search.c:719
+#: ../src/search.c:537
+#: ../src/search.c:719
 msgid "Disable this option to keep the dialog open"
 msgstr "Kapcsolja ki ezt az opciót, hogy a dialógusablak ne záruljon be."
 
@@ -4358,9 +4164,7 @@ msgstr "Ke_resési eredmények átfordítása"
 
 #: ../src/search.c:992
 msgid "Invert the sense of matching, to select non-matching lines"
-msgstr ""
-"Az egyezőség feltételének megfordítása, hogy a nem egyező sorok kerüljenek "
-"kiválasztásra."
+msgstr "Az egyezőség feltételének megfordítása, hogy a nem egyező sorok kerüljenek kiválasztásra."
 
 #: ../src/search.c:1009
 msgid "E_xtra options:"
@@ -4370,7 +4174,9 @@ msgstr "To_vábbi beállítások:"
 msgid "Other options to pass to Grep"
 msgstr "A Grep-nek átadni kívánt további beállítások"
 
-#: ../src/search.c:1282 ../src/search.c:2093 ../src/search.c:2096
+#: ../src/search.c:1282
+#: ../src/search.c:2093
+#: ../src/search.c:2096
 #, c-format
 msgid "Found %d match for \"%s\"."
 msgid_plural "Found %d matches for \"%s\"."
@@ -4392,14 +4198,12 @@ msgstr "Nincs keresendő szöveg."
 #: ../src/search.c:1567
 #, c-format
 msgid "Cannot execute grep tool '%s'; check the path setting in Preferences."
-msgstr ""
-"Nem sikerült elindítani a(z) '%s' grep eszközt; ellenőrizze az elérési utat "
-"a Beállítások között."
+msgstr "Nem sikerült elindítani a(z) '%s' grep eszközt; ellenőrizze az elérési utat a Beállítások között."
 
 #: ../src/search.c:1574
 #, c-format
 msgid "Cannot parse extra options: %s"
-msgstr ""
+msgstr "Nem sikerült beolvasni az extra opciókat: %s"
 
 #: ../src/search.c:1640
 msgid "Searching..."
@@ -4437,27 +4241,27 @@ msgstr "Rossz regex: %s"
 #. TODO maybe this message needs a rewording
 #: ../src/socket.c:228
 msgid ""
-"Geany tried to access the Unix Domain socket of another instance running as "
-"another user.\n"
+"Geany tried to access the Unix Domain socket of another instance running as another user.\n"
 "This is a fatal error and Geany will now quit."
-msgstr ""
-"A Geany megpróbálta egy másik futó példány Unix Domain socket-jét más "
-"felhasználónéven elérni.Ez egy végzetes hiba és a Geany most kilép."
+msgstr "A Geany megpróbálta egy másik futó példány Unix Domain socket-jét más felhasználónéven elérni.Ez egy végzetes hiba és a Geany most kilép."
 
 #: ../src/stash.c:1099
-#, fuzzy
 msgid "Name"
-msgstr "Név:"
+msgstr "Név"
 
 #: ../src/stash.c:1106
 msgid "Value"
-msgstr ""
+msgstr "Érték"
 
-#: ../src/symbols.c:693 ../src/symbols.c:743 ../src/symbols.c:810
+#: ../src/symbols.c:693
+#: ../src/symbols.c:743
+#: ../src/symbols.c:810
 msgid "Chapter"
 msgstr "Fejezet"
 
-#: ../src/symbols.c:694 ../src/symbols.c:739 ../src/symbols.c:811
+#: ../src/symbols.c:694
+#: ../src/symbols.c:739
+#: ../src/symbols.c:811
 msgid "Section"
 msgstr "Alfejezet"
 
@@ -4477,20 +4281,34 @@ msgstr "Sect3"
 msgid "Appendix"
 msgstr "Kiegészítések"
 
-#: ../src/symbols.c:699 ../src/symbols.c:744 ../src/symbols.c:760
-#: ../src/symbols.c:771 ../src/symbols.c:858 ../src/symbols.c:869
-#: ../src/symbols.c:881 ../src/symbols.c:895 ../src/symbols.c:907
-#: ../src/symbols.c:919 ../src/symbols.c:934 ../src/symbols.c:963
+#: ../src/symbols.c:699
+#: ../src/symbols.c:744
+#: ../src/symbols.c:760
+#: ../src/symbols.c:771
+#: ../src/symbols.c:858
+#: ../src/symbols.c:869
+#: ../src/symbols.c:881
+#: ../src/symbols.c:895
+#: ../src/symbols.c:907
+#: ../src/symbols.c:919
+#: ../src/symbols.c:934
+#: ../src/symbols.c:963
 #: ../src/symbols.c:993
 msgid "Other"
 msgstr "Egyéb"
 
-#: ../src/symbols.c:705 ../src/symbols.c:927 ../src/symbols.c:972
+#: ../src/symbols.c:705
+#: ../src/symbols.c:927
+#: ../src/symbols.c:972
 msgid "Module"
 msgstr "Modul"
 
-#: ../src/symbols.c:706 ../src/symbols.c:854 ../src/symbols.c:905
-#: ../src/symbols.c:917 ../src/symbols.c:932 ../src/symbols.c:944
+#: ../src/symbols.c:706
+#: ../src/symbols.c:854
+#: ../src/symbols.c:905
+#: ../src/symbols.c:917
+#: ../src/symbols.c:932
+#: ../src/symbols.c:944
 msgid "Types"
 msgstr "Típusok"
 
@@ -4498,10 +4316,18 @@ msgstr "Típusok"
 msgid "Type constructors"
 msgstr "Típus konstruktorok"
 
-#: ../src/symbols.c:708 ../src/symbols.c:730 ../src/symbols.c:751
-#: ../src/symbols.c:759 ../src/symbols.c:768 ../src/symbols.c:780
-#: ../src/symbols.c:789 ../src/symbols.c:842 ../src/symbols.c:891
-#: ../src/symbols.c:914 ../src/symbols.c:929 ../src/symbols.c:957
+#: ../src/symbols.c:708
+#: ../src/symbols.c:730
+#: ../src/symbols.c:751
+#: ../src/symbols.c:759
+#: ../src/symbols.c:768
+#: ../src/symbols.c:780
+#: ../src/symbols.c:789
+#: ../src/symbols.c:842
+#: ../src/symbols.c:891
+#: ../src/symbols.c:914
+#: ../src/symbols.c:929
+#: ../src/symbols.c:957
 #: ../src/symbols.c:980
 msgid "Functions"
 msgstr "Függvények"
@@ -4510,7 +4336,9 @@ msgstr "Függvények"
 msgid "Program"
 msgstr "Program"
 
-#: ../src/symbols.c:715 ../src/symbols.c:723 ../src/symbols.c:729
+#: ../src/symbols.c:715
+#: ../src/symbols.c:723
+#: ../src/symbols.c:729
 msgid "Sections"
 msgstr "Fejezetek"
 
@@ -4530,9 +4358,15 @@ msgstr "Adat"
 msgid "Keys"
 msgstr "Kulcsok"
 
-#: ../src/symbols.c:731 ../src/symbols.c:782 ../src/symbols.c:843
-#: ../src/symbols.c:868 ../src/symbols.c:893 ../src/symbols.c:906
-#: ../src/symbols.c:915 ../src/symbols.c:931 ../src/symbols.c:992
+#: ../src/symbols.c:731
+#: ../src/symbols.c:782
+#: ../src/symbols.c:843
+#: ../src/symbols.c:868
+#: ../src/symbols.c:893
+#: ../src/symbols.c:906
+#: ../src/symbols.c:915
+#: ../src/symbols.c:931
+#: ../src/symbols.c:992
 msgid "Variables"
 msgstr "Változók"
 
@@ -4540,11 +4374,13 @@ msgstr "Változók"
 msgid "Environment"
 msgstr "Környezet"
 
-#: ../src/symbols.c:740 ../src/symbols.c:812
+#: ../src/symbols.c:740
+#: ../src/symbols.c:812
 msgid "Subsection"
 msgstr "Alfejezet"
 
-#: ../src/symbols.c:741 ../src/symbols.c:813
+#: ../src/symbols.c:741
+#: ../src/symbols.c:813
 msgid "Subsubsection"
 msgstr "Al-alfejezet"
 
@@ -4552,28 +4388,44 @@ msgstr "Al-alfejezet"
 msgid "Structures"
 msgstr "Struktúrák"
 
-#: ../src/symbols.c:767 ../src/symbols.c:851 ../src/symbols.c:876
+#: ../src/symbols.c:767
+#: ../src/symbols.c:851
+#: ../src/symbols.c:876
 #: ../src/symbols.c:888
 msgid "Package"
 msgstr "Csomag"
 
-#: ../src/symbols.c:769 ../src/symbols.c:918 ../src/symbols.c:941
+#: ../src/symbols.c:769
+#: ../src/symbols.c:918
+#: ../src/symbols.c:941
 msgid "Labels"
 msgstr "Címkék"
 
-#: ../src/symbols.c:770 ../src/symbols.c:781 ../src/symbols.c:894
+#: ../src/symbols.c:770
+#: ../src/symbols.c:781
+#: ../src/symbols.c:894
 #: ../src/symbols.c:916
 msgid "Constants"
 msgstr "Konstansok"
 
-#: ../src/symbols.c:778 ../src/symbols.c:877 ../src/symbols.c:889
-#: ../src/symbols.c:902 ../src/symbols.c:928 ../src/symbols.c:979
+#: ../src/symbols.c:778
+#: ../src/symbols.c:877
+#: ../src/symbols.c:889
+#: ../src/symbols.c:902
+#: ../src/symbols.c:928
+#: ../src/symbols.c:979
 msgid "Interfaces"
 msgstr "Felületek"
 
-#: ../src/symbols.c:779 ../src/symbols.c:800 ../src/symbols.c:821
-#: ../src/symbols.c:831 ../src/symbols.c:840 ../src/symbols.c:878
-#: ../src/symbols.c:890 ../src/symbols.c:903 ../src/symbols.c:978
+#: ../src/symbols.c:779
+#: ../src/symbols.c:800
+#: ../src/symbols.c:821
+#: ../src/symbols.c:831
+#: ../src/symbols.c:840
+#: ../src/symbols.c:878
+#: ../src/symbols.c:890
+#: ../src/symbols.c:903
+#: ../src/symbols.c:978
 msgid "Classes"
 msgstr "Osztályok"
 
@@ -4601,7 +4453,8 @@ msgstr "ID kiválasztók"
 msgid "Type Selectors"
 msgstr "Típus kiválasztók"
 
-#: ../src/symbols.c:820 ../src/symbols.c:866
+#: ../src/symbols.c:820
+#: ../src/symbols.c:866
 msgid "Modules"
 msgstr "Modulok"
 
@@ -4609,16 +4462,21 @@ msgstr "Modulok"
 msgid "Singletons"
 msgstr "Singletonok"
 
-#: ../src/symbols.c:823 ../src/symbols.c:832 ../src/symbols.c:841
-#: ../src/symbols.c:879 ../src/symbols.c:904
+#: ../src/symbols.c:823
+#: ../src/symbols.c:832
+#: ../src/symbols.c:841
+#: ../src/symbols.c:879
+#: ../src/symbols.c:904
 msgid "Methods"
 msgstr "Eljárások"
 
-#: ../src/symbols.c:830 ../src/symbols.c:975
+#: ../src/symbols.c:830
+#: ../src/symbols.c:975
 msgid "Namespaces"
 msgstr "Névterek"
 
-#: ../src/symbols.c:833 ../src/symbols.c:958
+#: ../src/symbols.c:833
+#: ../src/symbols.c:958
 msgid "Procedures"
 msgstr "Eljárások"
 
@@ -4654,7 +4512,8 @@ msgstr "Események"
 msgid "Functions / Tasks"
 msgstr "Függvények / Feladatok"
 
-#: ../src/symbols.c:880 ../src/symbols.c:981
+#: ../src/symbols.c:880
+#: ../src/symbols.c:981
 msgid "Members"
 msgstr "Tagok"
 
@@ -4666,7 +4525,9 @@ msgstr "Eljárások"
 msgid "Blocks"
 msgstr "Blokkok"
 
-#: ../src/symbols.c:942 ../src/symbols.c:951 ../src/symbols.c:989
+#: ../src/symbols.c:942
+#: ../src/symbols.c:951
+#: ../src/symbols.c:989
 msgid "Macros"
 msgstr "makrók"
 
@@ -4710,9 +4571,7 @@ msgstr "Ismeretlen fájlkiterjesztés: \"%s\".\n"
 #: ../src/symbols.c:1751
 #, c-format
 msgid "Failed to create tags file, perhaps because no tags were found.\n"
-msgstr ""
-"Nem sikerült létrehozni a címkefájlt, feltehetően azért, mert nem sikerült "
-"címékéket találni.\n"
+msgstr "Nem sikerült létrehozni a címkefájlt, feltehetően azért, mert nem sikerült címékéket találni.\n"
 
 #: ../src/symbols.c:1758
 #, c-format
@@ -4727,21 +4586,18 @@ msgstr ""
 #, c-format
 msgid ""
 "Example:\n"
-"CFLAGS=`pkg-config gtk+-2.0 --cflags` %s -g gtk2.c.tags /usr/include/gtk-2.0/"
-"gtk/gtk.h\n"
+"CFLAGS=`pkg-config gtk+-2.0 --cflags` %s -g gtk2.c.tags /usr/include/gtk-2.0/gtk/gtk.h\n"
 msgstr ""
 "Példa:\n"
-"CFLAGS=`pkg-config gtk+-2.0 --cflags` %s -g gtk2.c.tags /usr/include/gtk-2.0/"
-"gtk/gtk.h\n"
+"CFLAGS=`pkg-config gtk+-2.0 --cflags` %s -g gtk2.c.tags /usr/include/gtk-2.0/gtk/gtk.h\n"
 
 #: ../src/symbols.c:1773
 msgid "Load Tags"
 msgstr "Betöltött címkék"
 
 #: ../src/symbols.c:1780
-#, fuzzy
 msgid "Geany tag files (*.*.tags)"
-msgstr "Geany címkefájlok (*.tags)"
+msgstr "Geany címkefájlok (*.*.tags)"
 
 #. For translators: the first wildcard is the filetype, the second the filename
 #: ../src/symbols.c:1800
@@ -4831,11 +4687,8 @@ msgid "Run or view the current file"
 msgstr "Futtatja vagy megjeleníti a jelenlegi fájlt"
 
 #: ../src/toolbar.c:70
-msgid ""
-"Open a color chooser dialog, to interactively pick colors from a palette"
-msgstr ""
-"Megnyit egy színválasztó dialógus ablakot, hogy interaktív módon lehessen "
-"egy palettáról színt választani."
+msgid "Open a color chooser dialog, to interactively pick colors from a palette"
+msgstr "Megnyit egy színválasztó dialógus ablakot, hogy interaktív módon lehessen egy palettáról színt választani."
 
 #: ../src/toolbar.c:71
 msgid "Zoom in the text"
@@ -4853,11 +4706,13 @@ msgstr "Behúzás csökkentése"
 msgid "Increase indentation"
 msgstr "Behúzás növelése"
 
-#: ../src/toolbar.c:75 ../src/toolbar.c:380
+#: ../src/toolbar.c:75
+#: ../src/toolbar.c:380
 msgid "Find the entered text in the current file"
 msgstr "A megadott szöveg keresése a jelenlegi fájlban"
 
-#: ../src/toolbar.c:76 ../src/toolbar.c:390
+#: ../src/toolbar.c:76
+#: ../src/toolbar.c:390
 msgid "Jump to the entered line number"
 msgstr "Ugrás a megadott sorra"
 
@@ -4898,13 +4753,12 @@ msgid "Choose more build actions"
 msgstr "További build műveletek kiválasztása"
 
 #: ../src/toolbar.c:380
-#, fuzzy
 msgid "Search Field"
-msgstr "Keresés sikertelen"
+msgstr "Keresés mező"
 
 #: ../src/toolbar.c:390
 msgid "Goto Field"
-msgstr ""
+msgstr "Sorhoz ugrás mező"
 
 #: ../src/toolbar.c:579
 msgid "Separator"
@@ -4915,12 +4769,8 @@ msgid "--- Separator ---"
 msgstr "--- Elválasztó ---"
 
 #: ../src/toolbar.c:949
-msgid ""
-"Select items to be displayed on the toolbar. Items can be reordered by drag "
-"and drop."
-msgstr ""
-"Válasz ki az eszköztáron megjelenítendő elemeket. Az elemek fogd és vidd "
-"módszerrel átrendezhetők."
+msgid "Select items to be displayed on the toolbar. Items can be reordered by drag and drop."
+msgstr "Válasz ki az eszköztáron megjelenítendő elemeket. Az elemek fogd és vidd módszerrel átrendezhetők."
 
 #: ../src/toolbar.c:965
 msgid "Available Items"
@@ -4930,7 +4780,8 @@ msgstr "Elérhető elemek"
 msgid "Displayed Items"
 msgstr "Megjelenített elemek"
 
-#: ../src/tools.c:109 ../src/tools.c:114
+#: ../src/tools.c:109
+#: ../src/tools.c:114
 #, c-format
 msgid "Invalid command: %s"
 msgstr "Érvénytelen parancs: %s"
@@ -4941,18 +4792,15 @@ msgstr "Parancs nem található"
 
 #: ../src/tools.c:260
 #, c-format
-msgid ""
-"The executed custom command returned an error. Your selection was not "
-"changed. Error message: %s"
-msgstr ""
-"A futtatott egyedi parancs hibát adott vissza. A kijelölt részlet nem került "
-"megváltoztatásra. Hibaüzenet: %s"
+msgid "The executed custom command returned an error. Your selection was not changed. Error message: %s"
+msgstr "A futtatott egyedi parancs hibát adott vissza. A kijelölt részlet nem került megváltoztatásra. Hibaüzenet: %s"
 
 #: ../src/tools.c:326
 msgid "The executed custom command exited with an unsuccessful exit code."
 msgstr "A futtatott egyedi parancs sikertelenséget jelző hibakóddal állt le."
 
-#: ../src/tools.c:354 ../src/tools.c:402
+#: ../src/tools.c:354
+#: ../src/tools.c:402
 #, c-format
 msgid "Custom command failed: %s"
 msgstr "Az egyedi parancs hibával tért vissza: %s"
@@ -4962,17 +4810,14 @@ msgstr "Az egyedi parancs hibával tért vissza: %s"
 msgid "Passing data and executing custom command: %s"
 msgstr "Adatátadás és egyedi parancs végrehajtása: %s"
 
-#: ../src/tools.c:514 ../src/tools.c:774
+#: ../src/tools.c:514
+#: ../src/tools.c:774
 msgid "Set Custom Commands"
 msgstr "Egyedi parancsok megadása"
 
 #: ../src/tools.c:522
-msgid ""
-"You can send the current selection to any of these commands and the output "
-"of the command replaces the current selection."
-msgstr ""
-"Az aktuális kijelölést ezen parancsok bármelyikének el lehet küldni, a "
-"parancs kimenete kerül az eredeti tartalom helyére."
+msgid "You can send the current selection to any of these commands and the output of the command replaces the current selection."
+msgstr "Az aktuális kijelölést ezen parancsok bármelyikének el lehet küldni, a parancs kimenete kerül az eredeti tartalom helyére."
 
 #: ../src/tools.c:536
 msgid "ID"
@@ -5022,11 +4867,13 @@ msgstr "S_zimbólum lista megjelenítése"
 msgid "Show _Document List"
 msgstr "Megnyitott fájlok listájának me_gjelenítése"
 
-#: ../src/sidebar.c:604 ../plugins/filebrowser.c:659
+#: ../src/sidebar.c:604
+#: ../plugins/filebrowser.c:659
 msgid "H_ide Sidebar"
 msgstr "Oldalsáv e_lrejtése"
 
-#: ../src/sidebar.c:709 ../plugins/filebrowser.c:630
+#: ../src/sidebar.c:709
+#: ../plugins/filebrowser.c:630
 msgid "_Find in Files"
 msgstr "Keresés _fájlokban"
 
@@ -5036,21 +4883,18 @@ msgstr "Ú_tvonalak kijelzése"
 
 #. Status bar statistics: col = column, sel = selection.
 #: ../src/ui_utils.c:185
-msgid ""
-"line: %l / %L\t col: %c\t sel: %s\t %w      %t      %mmode: %M      "
-"encoding: %e      filetype: %f      scope: %S"
-msgstr ""
-"sor: %l / %L\t oszl.: %c\t kij.: %s\t %w      %t      %mmód: %M      "
-"kódolás: %e      fájltípus: %f      tart.: %S"
+msgid "line: %l / %L\t col: %c\t sel: %s\t %w      %t      %mmode: %M      encoding: %e      filetype: %f      scope: %S"
+msgstr "sor: %l / %L\t oszl.: %c\t kij.: %s\t %w      %t      %mmód: %M      kódolás: %e      fájltípus: %f      tart.: %S"
 
 #. L = lines
 #: ../src/ui_utils.c:219
 #, c-format
 msgid "%dL"
-msgstr ""
+msgstr "%dS"
 
 #. RO = read-only
-#: ../src/ui_utils.c:225 ../src/ui_utils.c:232
+#: ../src/ui_utils.c:225
+#: ../src/ui_utils.c:232
 msgid "RO "
 msgstr "OLV"
 
@@ -5084,12 +4928,12 @@ msgstr "MÓDOSÍT"
 #: ../src/ui_utils.c:328
 #, c-format
 msgid "pos: %d"
-msgstr ""
+msgstr "poz: %d"
 
 #: ../src/ui_utils.c:330
-#, fuzzy, c-format
+#, c-format
 msgid "style: %d"
-msgstr "Ikon stílus:"
+msgstr "stílus: %d"
 
 #: ../src/ui_utils.c:382
 msgid " (new instance)"
@@ -5142,19 +4986,15 @@ msgstr "Összeset bezár"
 
 #: ../src/ui_utils.c:2225
 msgid "Geany cannot start!"
-msgstr ""
+msgstr "A Geany nem tud elindulni!"
 
 #: ../src/utils.c:87
 msgid "Select Browser"
 msgstr "Válassz böngészőt"
 
 #: ../src/utils.c:88
-msgid ""
-"Failed to spawn the configured browser command. Please correct it or enter "
-"another one."
-msgstr ""
-"A megadott böngészőparancs indítása sikertelen. Javítsd ki vagy adj meg "
-"másikat!"
+msgid "Failed to spawn the configured browser command. Please correct it or enter another one."
+msgstr "A megadott böngészőparancs indítása sikertelen. Javítsd ki vagy adj meg másikat!"
 
 #: ../src/utils.c:366
 msgid "Win (CRLF)"
@@ -5181,12 +5021,8 @@ msgid "_Input Methods"
 msgstr "Bev_iteli eljárások"
 
 #: ../src/vte.c:670
-msgid ""
-"Could not change the directory in the VTE because it probably contains a "
-"command."
-msgstr ""
-"Nem sikerült könyvtárat váltani a VTE-n belül, mert az feltehetően egy "
-"parancsot tartalmaz."
+msgid "Could not change the directory in the VTE because it probably contains a command."
+msgstr "Nem sikerült könyvtárat váltani a VTE-n belül, mert az feltehetően egy parancsot tartalmaz."
 
 #: ../src/win32.c:159
 msgid "Geany project files"
@@ -5224,7 +5060,8 @@ msgstr "PHP osztály létrehozása"
 msgid "Namespace"
 msgstr "Névtér"
 
-#: ../plugins/classbuilder.c:476 ../plugins/classbuilder.c:478
+#: ../plugins/classbuilder.c:476
+#: ../plugins/classbuilder.c:478
 msgid "Class"
 msgstr "Osztály"
 
@@ -5312,8 +5149,10 @@ msgstr "HTML karakterek"
 msgid "Inserts HTML character entities like '&amp;'."
 msgstr "HTML különleges karaktereket szúr be, pl. '&amp;'."
 
-#: ../plugins/htmlchars.c:42 ../plugins/export.c:40
-#: ../plugins/filebrowser.c:46 ../plugins/saveactions.c:42
+#: ../plugins/htmlchars.c:42
+#: ../plugins/export.c:40
+#: ../plugins/filebrowser.c:46
+#: ../plugins/saveactions.c:42
 #: ../plugins/splitwindow.c:35
 msgid "The Geany developer team"
 msgstr "A Geany fejlesztői csapat"
@@ -5350,7 +5189,8 @@ msgstr "Elválasztás karakterek"
 msgid "Miscellaneous characters"
 msgstr "Egyéb karakterek"
 
-#: ../plugins/htmlchars.c:370 ../plugins/filebrowser.c:1154
+#: ../plugins/htmlchars.c:370
+#: ../plugins/filebrowser.c:1154
 #: ../plugins/saveactions.c:475
 msgid "Plugin configuration directory could not be created."
 msgstr "A bővítmény konfigurációs könyvtárat nem lehetett létrehozni."
@@ -5364,13 +5204,8 @@ msgid "_Insert"
 msgstr "_Beszúrás"
 
 #: ../plugins/htmlchars.c:502
-msgid ""
-"Choose a special character from the list below and double click on it or use "
-"the button to insert it at the current cursor position."
-msgstr ""
-"Válasszon speciális karaktert az alábbi listából, majd duplakattintással "
-"használja azt, vagy a gomb segítségével szúrja be azt a jelenlegi kurzor "
-"pozícióban."
+msgid "Choose a special character from the list below and double click on it or use the button to insert it at the current cursor position."
+msgstr "Válasszon speciális karaktert az alábbi listából, majd duplakattintással használja azt, vagy a gomb segítségével szúrja be azt a jelenlegi kurzor pozícióban."
 
 #: ../plugins/htmlchars.c:516
 msgid "Character"
@@ -5434,11 +5269,8 @@ msgid "_Use current zoom level"
 msgstr "Jelenlegi _nagyítás használata"
 
 #: ../plugins/export.c:203
-msgid ""
-"Renders the font size of the document together with the current zoom level"
-msgstr ""
-"A dokumentum fontméretét a jelenlegi nagyítás mértékének megfelelően "
-"jeleníti meg."
+msgid "Renders the font size of the document together with the current zoom level"
+msgstr "A dokumentum fontméretét a jelenlegi nagyítás mértékének megfelelően jeleníti meg."
 
 #: ../plugins/export.c:281
 #, c-format
@@ -5515,12 +5347,8 @@ msgid "Filter:"
 msgstr "Szűrő:"
 
 #: ../plugins/filebrowser.c:909
-msgid ""
-"Filter your files with the usual wildcards. Separate multiple patterns with "
-"a space."
-msgstr ""
-"Szűrje a fájlokat a szokásos helyettesítő karakterekkel. A különféle "
-"mintákat szóközzel válaszd el."
+msgid "Filter your files with the usual wildcards. Separate multiple patterns with a space."
+msgstr "Szűrje a fájlokat a szokásos helyettesítő karakterekkel. A különféle mintákat szóközzel válaszd el."
 
 #: ../plugins/filebrowser.c:1124
 msgid "Focus File List"
@@ -5537,14 +5365,11 @@ msgstr "Külső megnyitás parancs:"
 #: ../plugins/filebrowser.c:1227
 #, c-format
 msgid ""
-"The command to execute when using \"Open with\". You can use %f and %d "
-"wildcards.\n"
+"The command to execute when using \"Open with\". You can use %f and %d wildcards.\n"
 "%f will be replaced with the filename including full path\n"
-"%d will be replaced with the path name of the selected file without the "
-"filename"
+"%d will be replaced with the path name of the selected file without the filename"
 msgstr ""
-"A parancs, amit a \"Megnyitás mint\" használ. Megadásakor a %f és %d "
-"helyettesítők is használhatók.\n"
+"A parancs, amit a \"Megnyitás mint\" használ. Megadásakor a %f és %d helyettesítők is használhatók.\n"
 "A %f helyére a fájlnév kerül, teljes elérési úttal.\n"
 "A %d helyére a kiválasztott fájl elérési útja kerül, a fájlnév nélkül."
 
@@ -5565,8 +5390,7 @@ msgid "Use the project's base directory"
 msgstr "Projekt alapkönyvtárának használata"
 
 #: ../plugins/filebrowser.c:1272
-msgid ""
-"Change the directory to the base directory of the currently opened project"
+msgid "Change the directory to the base directory of the currently opened project"
 msgstr "Az aktuálisan megnyitott projekt alapkönyvtárára vált"
 
 #: ../plugins/saveactions.c:41
@@ -5612,7 +5436,8 @@ msgstr "A mentés könyvtár nem létezik vagy nem írható."
 msgid "Auto Save"
 msgstr "Automatikus mentés"
 
-#: ../plugins/saveactions.c:550 ../plugins/saveactions.c:612
+#: ../plugins/saveactions.c:550
+#: ../plugins/saveactions.c:612
 #: ../plugins/saveactions.c:653
 msgid "_Enable"
 msgstr "_Engedélyezés"
@@ -5655,8 +5480,7 @@ msgstr "Másolato_k mentésének könyvtára:"
 
 #: ../plugins/saveactions.c:684
 msgid "Date/_Time format for backup files (\"man strftime\" for details):"
-msgstr ""
-"Dá_tum/idő formátum a mentés fájlokhoz (\"man strftime\" a részletekért):"
+msgstr "Dá_tum/idő formátum a mentés fájlokhoz (\"man strftime\" a részletekért):"
 
 #: ../plugins/saveactions.c:697
 msgid "Directory _levels to include in the backup destination:"
@@ -5674,7 +5498,8 @@ msgstr "A szerkesztés nézetet két ablakra osztja."
 msgid "Show the current document"
 msgstr "Aktuális dokumentum megjelenítése"
 
-#: ../plugins/splitwindow.c:290 ../plugins/splitwindow.c:418
+#: ../plugins/splitwindow.c:290
+#: ../plugins/splitwindow.c:418
 #: ../plugins/splitwindow.c:433
 msgid "_Unsplit"
 msgstr "Fel_osztás megszüntetése"
@@ -5701,40 +5526,28 @@ msgstr "Felosztás függőlegesen"
 
 #~ msgid "Invalid filename"
 #~ msgstr "Érvénytelen fájlnév"
-
 #~ msgid "_Debug Messages"
 #~ msgstr "Hi_baüzenetek"
-
 #~ msgid "Project properties"
 #~ msgstr "Projekt tulajdonságok"
-
 #~ msgid "Goto"
 #~ msgstr "Ugrás"
-
 #~ msgid "Clear the filter"
 #~ msgstr "Szűrő törlése"
-
 #~ msgid "Item"
 #~ msgstr "Elem"
-
 #~ msgid "Clear"
 #~ msgstr "Törlés"
-
 #~ msgid "_Set Build Menu Commands"
 #~ msgstr "Build menü parancsainak megadása"
-
 #~ msgid "SQL Dump file"
 #~ msgstr "SQL fájl"
-
 #~ msgid "%s script file"
 #~ msgstr "%s szkript fájl"
-
 #~ msgid "M_iscellaneous Languages"
 #~ msgstr "Egyéb _nyelvek"
-
 #~ msgid "_Custom Filetypes"
 #~ msgstr "Egyéni fájltípusok"
-
 #~ msgid ""
 #~ "Plugin: %s %s\n"
 #~ "Description: %s\n"
@@ -5743,7 +5556,6 @@ msgstr "Felosztás függőlegesen"
 #~ "Bővítmény: %s %s\n"
 #~ "Leírás: %s\n"
 #~ "Szerző(k): %s"
-
 #~ msgid ""
 #~ "<i>Notice: For all changes you make here to take effect, you need to "
 #~ "restart Geany or force the reload of the settings using Tools->Reload "
@@ -5752,7 +5564,6 @@ msgstr "Felosztás függőlegesen"
 #~ "<i>Figyelem: minden itt végzett változtatás életbe lépéséhez újra kell "
 #~ "indítani a Geany-t, vagy újraolvastatni a beállításokat az Eszközök-"
 #~ ">Beállítások újraolvasása menüpont segítségével.</i>"
-
 #~ msgid ""
 #~ "<i>Notice: Native GTK printing is only available if Geany was built "
 #~ "against GTK 2.10 (or above) <b>and</b> Geany is running with GTK 2.10 (or "
@@ -5761,206 +5572,150 @@ msgstr "Felosztás függőlegesen"
 #~ "<i>Figyelem: A natív GTK nyomtatás csak akkor elérhető, ha a Geany GTK "
 #~ "2.10-re (vagy későbbire) lett fordítva <b>és</b> a Geany GTK 2.10 (vagy "
 #~ "későbbi) verzión fut.</i>"
-
 #~ msgid "Old"
 #~ msgstr "Régi"
-
 #~ msgid "Namespace:"
 #~ msgstr "Névtér:"
-
 #~ msgid "Class name:"
 #~ msgstr "Osztály neve:"
-
 #~ msgid "Hide object files"
 #~ msgstr "Objektum fájlok elrejtése"
-
 #~ msgid ""
 #~ "Don't show generated object files in the file browser, this includes *.o, "
 #~ "*.obj. *.so, *.dll, *.a, *.lib"
 #~ msgstr ""
 #~ "Ne mutassa a fájl kiválasztó panelen a generált objektum fájlokat (*.o, *."
 #~ "obj, *.so, *.dll, *.a, *.lib)"
-
 #~ msgid "_Horizontally"
 #~ msgstr "_Vízszintesen"
-
 #~ msgid "_Vertically"
 #~ msgstr "Fü_ggőlegesen"
-
 #~ msgid "Find _Selected"
 #~ msgstr "Kijelölé_s keresése"
-
 #~ msgid "Find Pre_vious Selected"
 #~ msgstr "E_lőző kijelölés keresése"
-
 #~ msgid "Whether to enable folding the code"
 #~ msgstr "Engedélyezi-e a kód blokkokra osztását?"
-
 #~ msgid "Automatic completion and closing of XML tags (includes HTML tags)"
 #~ msgstr ""
 #~ "Az XML címkék (beleértve a HTML címkéket is) automatikus kiegészítése"
-
 #~ msgid "Toggle Case of Selection"
 #~ msgstr "Kijelölés kis/nagybetűssé tétele"
-
 #~ msgid "(built on %s with GTK %d.%d.%d, GLib %d.%d.%d)"
 #~ msgstr "(készült %s-on GTK %d.%d.%d, GLib %d.%d.%d verzióval)"
 
 #, fuzzy
 #~ msgid "Set"
 #~ msgstr "Sect1"
-
 #~ msgid "Fixed s_trings"
 #~ msgstr "_Fix stringek"
-
 #~ msgid "_Grep regular expressions"
 #~ msgstr "_Grep reguláris kifejezések"
-
 #~ msgid "_Extended regular expressions"
 #~ msgstr "_Kibővített reguláris kifejezések"
 
 #, fuzzy
 #~ msgid "line: %d / %d\t col: %d\t sel: %d\t "
 #~ msgstr "sor: %d\t osz.: %d\t kij.: %d\t "
-
 #~ msgid "mode: %s"
 #~ msgstr "Üzemmód: %s"
-
 #~ msgid "encoding: %s %s"
 #~ msgstr "Kódolás: %s %s"
-
 #~ msgid "filetype: %s"
 #~ msgstr "Fájltípus: %s"
-
 #~ msgid "scope: %s"
 #~ msgstr "Érv.kör: %s"
-
 #~ msgid "_HTMLToggle"
 #~ msgstr "_HTMLKapcsoló"
-
 #~ msgid "Bulk replacement of special chars"
 #~ msgstr "Speciális karakterek csoportos cseréje"
-
 #~ msgid "_Set Includes and Arguments"
 #~ msgstr "_Include állományok és argumentumok megadása"
-
 #~ msgid "LaTeX -> _DVI"
 #~ msgstr "LaTeX -> _DVI"
-
 #~ msgid "LaTeX -> _PDF"
 #~ msgstr "LaTeX -> _PDF"
-
 #~ msgid "_View DVI File"
 #~ msgstr "D_VI fájl megtekintése"
-
 #~ msgid "V_iew PDF File"
 #~ msgstr "PD_F fájl megtekintése"
-
 #~ msgid "_Set Arguments"
 #~ msgstr "_Argumentumok megadása"
-
 #~ msgid "Set Arguments"
 #~ msgstr "Argumentumok megadása"
-
 #~ msgid "Set programs and options for compiling and viewing (La)TeX files."
 #~ msgstr ""
 #~ "Adja meg a programokat és opciókat a (La)TeX fájlok fordításához és "
 #~ "megtekintéséhez."
-
 #~ msgid "DVI creation:"
 #~ msgstr "DVI létrehozása:"
-
 #~ msgid "PDF creation:"
 #~ msgstr "PDF létrehozása:"
-
 #~ msgid "DVI preview:"
 #~ msgstr "DVI előnézet:"
-
 #~ msgid "PDF preview:"
 #~ msgstr "PDF előnézet:"
-
 #~ msgid ""
 #~ "%f will be replaced by the current filename, e.g. test_file.c\n"
 #~ "%e will be replaced by the filename without extension, e.g. test_file"
 #~ msgstr ""
 #~ "%f helyére a jelenlegi fájlnév kerül, pl: test_file.c\n"
 #~ "%e helyére a fájlnév kerül, kiterjesztés nélkül, pl: test:file"
-
 #~ msgid "Set Includes and Arguments"
 #~ msgstr "Adja meg az include állományokat és az argumentumokat"
-
 #~ msgid "Set the commands for building and running programs."
 #~ msgstr ""
 #~ "Adja meg a programok építéséhez és futtatásához szükséges parancsokat."
-
 #~ msgid "Compile:"
 #~ msgstr "Fordítás:"
-
 #~ msgid "Build:"
 #~ msgstr "Összeállítás:"
-
 #~ msgid "Failed to execute the view program"
 #~ msgstr "Nem sikerült végrehajtani a megjelenítő programot"
-
 #~ msgid "dummy tooltip, don't translate this."
 #~ msgstr " "
 
 #, fuzzy
 #~ msgid "_Customize Toolbar"
 #~ msgstr "Eszköztár el_rejtése"
-
 #~ msgid "Icon size:"
 #~ msgstr "Ikon méret:"
-
 #~ msgid "<b>Appearance</b>"
 #~ msgstr "<b>Megjelenés</b>"
-
 #~ msgid "Hard tab width:"
 #~ msgstr "Kemény tabulátor szélessége:"
-
 #~ msgid "The width of a tab when Tabs & Spaces is set for a document"
 #~ msgstr ""
 #~ "A tabulátor karakter szélessége, ha a Tabulátorok & szóközök be van "
 #~ "állítva a dokumentumnál"
-
 #~ msgid ""
 #~ "Use white text on a black background and invert all colors, this option "
 #~ "requires a restart of Geany"
 #~ msgstr ""
 #~ "Fehér szöveget használ fekete háttéren, valamint a színek inverzét. Ez a "
 #~ "beállítás a Geany újraindítását igényli!"
-
 #~ msgid "Long line marker:"
 #~ msgstr "Hosszú sor jelölése:"
-
 #~ msgid "Long line marker color:"
 #~ msgstr "Hosszú sor jelölésének színe:"
-
 #~ msgid "Path and options for the make tool"
 #~ msgstr "Make eszköz elérési útja és opciói"
-
 #~ msgid "Duplicate line or selection"
 #~ msgstr "Sor vagy kiválasztás másolása"
-
 #~ msgid "Send Selection to Terminal"
 #~ msgstr "A kijelölés küldése a terminálba"
-
 #~ msgid "Run (alternative command)"
 #~ msgstr "Futtatás (másik paranccsal)"
-
 #~ msgid ""
 #~ "Below is a list of available plugins. Select the plugins which should be "
 #~ "loaded when Geany is started."
 #~ msgstr ""
 #~ "Lejjebb látható az elérhető bővítmények listája. Válassza ki azokat, "
 #~ "amelyeket a Geany indulásakor be kell tölteni."
-
 #~ msgid "Printing of file %s was cancelled."
 #~ msgstr "%s fájl nyomtatása megszakítva."
-
 #~ msgid "Make in base path"
 #~ msgstr "Make parancs az alapkönyvtárban"
-
 #~ msgid ""
 #~ "Command-line to run in the project base directory. Options can be "
 #~ "appended to the command. Leave blank to use the default run command."
@@ -5968,51 +5723,37 @@ msgstr "Felosztás függőlegesen"
 #~ "A projekt alapkönytárában futtatandó parancssor. A parancshoz opciókat is "
 #~ "lehet fűzni. Hagyja üresen az alapértelmezett futtatás parancs "
 #~ "használatához."
-
 #~ msgid "Choose Project Run Command"
 #~ msgstr "Adja meg a projekt futtatási parancsát"
-
 #~ msgid "Replaced text in %u file."
 #~ msgid_plural "Replaced text in %u files."
 #~ msgstr[0] "Szöveg cserélve %u fájlban."
-
 #~ msgid "Search failed (see Help->Debug Messages for details)."
 #~ msgstr "A keresés sikertelen (a részletekhez ld. Súgó->Hibaüzenetek)."
-
 #~ msgid "My"
 #~ msgstr "Saját"
-
 #~ msgid "Local"
 #~ msgstr "Helyi"
-
 #~ msgid "Our"
 #~ msgstr "Mienk"
-
 #~ msgid "Terminal plugin"
 #~ msgstr "Terminál bővítmény"
-
 #~ msgid ""
 #~ "These settings for the virtual terminal emulator widget (VTE) only apply "
 #~ "if the VTE library could be loaded."
 #~ msgstr ""
 #~ "A virtuális terminál emulátor eszköz (VTE) ezen beállításai csak akkor "
 #~ "lépnek életbe, ha a VTE könyvtárat be sikerült tölteni."
-
 #~ msgid "Unsplit"
 #~ msgstr "Felosztás megszüntetése"
-
 #~ msgid "Diff file"
 #~ msgstr "Diff fájl"
-
 #~ msgid "reStructuredText file"
 #~ msgstr "reStructuredText fájl"
-
 #~ msgid "Select _All"
 #~ msgstr "_Mindet kijelöli"
-
 #~ msgid "Automatic symbol completion"
 #~ msgstr "Szimbólumok automatikus kiegészítése"
-
 #~ msgid ""
 #~ "<i>Notice: To customize the toolbar elements, edit the file 'ui_toolbar."
 #~ "xml'. Please see the documentation for details.</i>"
@@ -6020,10 +5761,10 @@ msgstr "Felosztás függőlegesen"
 #~ "<i>Figyelem: Az eszköztár elemeinek testreszabása az 'ui_toolbar.xml' "
 #~ "fájl szerkesztésével lehetséges. A részleteket a dokumentációban találja."
 #~ "</i>"
-
 #~ msgid ""
 #~ "For all changes you make in this file to take effect, you need to restart "
 #~ "Geany."
 #~ msgstr ""
 #~ "Az ebben a fájlban történt valamennyi változtatás életbe lépéséhez a "
 #~ "Geany újraindítása szükséges."
+

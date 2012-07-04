@@ -4,44 +4,45 @@ For major releases:
 * Try to synchronize release date with geany-plugins.
 
 Update NEWS file - ideally each committer should review their changes 
-and summarise the interesting ones. Use scripts/changelist.pl to 
-format & filter commits by a particular developer name.
+and summarize the interesting ones.  Use `git log --author='name'`
+to filter commits by a particular developer name.
 
 Ensure version numbers are all updated in:
 	configure.ac geany.nsi geany_private.rc win32-config.h wscript
 	doc/geany.txt
 Ensure release date is updated in:
-	doc/geany.txt doc/geany.1.in
+	NEWS doc/geany.txt doc/geany.1.in
 Regenerate doc/geany.html.
 Check GEANY_CODENAME is set in src/geany.h.
-Update NEWS release date.
-Add changelog entry for new release.
 
 Export the code into a new directory (i.e. not usual working copy).
 Run 'make distcheck'.
 Delete the created archive and run 'make dist' and 'make dist-bzip2'.
+Sign the archives with 'make sign'.
 
-Put the resulting tarballs on uvena.de - upload to home directory
-and after the upload is finished move them into
-/home/www/files.uvena.de/geany/.
+Put the resulting tarballs and signature files on geany.org - upload
+to home directory and after the upload is finished move them into
+/srv/www/download.geany.org/.
 Rename LATEST-IS-... to the new version number in
-/home/www/files.uvena.de/geany/ and /home/www/www.geany.org/files.
-Add the GPG signatures - use 'make sign' and check the public key
+/srv/www/download.geany.org/ and /srv/www/www.geany.org/files.
+Make sure the public part of the GPG key used to sign the archives
 can be found on the download page.
+
 Windows builds (enrico?).
 
-Tag release in SVN, remove the branch if used.
+Create a signed tag for the release in Git with 'git tag -s <version>'.
 
 Website: update Releases, Documentation links and add a News item.
 Update the manual data and links in the filesystem in
-/home/www/www.geany.org/manual. Remember to update current/hacking.html
+/srv/www/www.geany.org/manual.  Remember to update current/hacking.html
 too.
 
 Announce on geany, devel, i18n mailing lists (check you're subscribed).
-Put a news item on Sourceforge, add a new release on Freshmeat.net
-and update the information on gnomefiles.org.
+Put a news item on SourceForge (https://sourceforge.net/news/?group_id=153444)
+and a new release on freecode.com (https://freecode.com/projects/geany).
 
-For non-trunk releases, merge NEWS into trunk and any branch-only
+For non-master releases, merge NEWS into master and any branch-only
 commits that need to merged.
 
-For trunk releases, bump version strings and merge unstable branch.
+For merge releases, bump version strings and codename and merge unstable
+branch if any.

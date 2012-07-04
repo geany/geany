@@ -128,9 +128,6 @@ static void ColouriseVHDLDoc(
       } else if (IsAWordStart(sc.ch)) {
         sc.SetState(SCE_VHDL_IDENTIFIER);
       } else if (sc.Match('-', '-')) {
-        sc.SetState(SCE_VHDL_COMMENT);
-        sc.Forward();
-      } else if (sc.Match('-', '-')) {
         if (sc.Match("--!"))  // Nice to have a different comment style
           sc.SetState(SCE_VHDL_COMMENTLINEBANG);
         else

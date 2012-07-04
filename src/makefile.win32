@@ -77,7 +77,7 @@ $(RES): ../geany_private.rc ../icons/geany.ico
 # this calls parent clean-local target because del ../file won't work
 clean:
 	-$(RM) deps.mak *.o
-	cd .. && $(MAKE) -f makefile.win32 clean-local && cd src
+	$(MAKE) -C .. -f makefile.win32 clean-local
 
 exec:
 	$(EXECDIR)\geany.exe
@@ -85,10 +85,11 @@ exec:
 binclean:
 	$(RM) $(TARGET)
 
-$(TARGET): $(OBJS) $(RES) ../scintilla/scintilla.a ../tagmanager/ctags/ctags.a ../tagmanager/mio/mio.a ../tagmanager/src/tagmanager.a
-	$(CXX) $(OBJS) $(RES) -o $(TARGET) \
-	../scintilla/scintilla.a ../tagmanager/ctags/ctags.a ../tagmanager/src/tagmanager.a ../tagmanager/mio/mio.a \
-	$(ALL_GTK_LIBS) $(WIN_LIBS)
+STLIBS = ../scintilla/scintilla.a ../tagmanager/ctags/ctags.a \
+	../tagmanager/mio/mio.a ../tagmanager/src/tagmanager.a
+
+$(TARGET): $(OBJS) $(RES) $(STLIBS)
+	$(CXX) $(OBJS) $(RES) -o $(TARGET) $(STLIBS) $(ALL_GTK_LIBS) $(WIN_LIBS)
 
 deps.mak:
 	$(CC) -MM  $(CFLAGS) *.c >deps.mak

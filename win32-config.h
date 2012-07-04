@@ -314,7 +314,7 @@
 /* #undef volatile */
 
 /* Version number of package */
-#define VERSION "1.22"
+#define VERSION "1.23"
 
 #define REVISION "-1"
 

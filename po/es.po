@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.22\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-06-04 17:26+0200\n"
-"PO-Revision-Date: 2012-06-04 09:21+0100\n"
+"POT-Creation-Date: 2012-06-13 18:44+0200\n"
+"PO-Revision-Date: 2012-06-12 12:24+0100\n"
 "Last-Translator: Lucas Vieites <lucas.vieites@gmail.com>\n"
 "Language-Team: Español <geany-i18n@uvena.de>\n"
 "Language: es\n"
@@ -187,11 +187,10 @@ msgstr "Ruta de inicio:"
 
 #: ../data/geany.glade.h:38
 msgid ""
-"Path to start in when opening or saving files. Must be an absolute path. "
-"Leave blank to use the current working directory."
+"Path to start in when opening or saving files. Must be an absolute path."
 msgstr ""
 "Ruta en la que iniciar cuando se abren o guardan archivos. Debe ser una ruta "
-"absoluta. Dejar en blanco para usar el directorio de trabajo actual."
+"absoluta."
 
 #: ../data/geany.glade.h:39
 msgid "Project files:"
@@ -3249,7 +3248,7 @@ msgid "Document"
 msgstr "Documento"
 
 #: ../src/keybindings.c:238 ../src/keybindings.c:585 ../src/project.c:444
-#: ../src/ui_utils.c:1980
+#: ../src/ui_utils.c:1981
 msgid "Build"
 msgstr "Construir"
 
@@ -5138,23 +5137,23 @@ msgstr "C++ STL"
 msgid "_Set Custom Date Format"
 msgstr "_Establecer formato de fecha personalizado"
 
-#: ../src/ui_utils.c:1819
+#: ../src/ui_utils.c:1820
 msgid "Select Folder"
 msgstr "Seleccionar carpeta"
 
-#: ../src/ui_utils.c:1819
+#: ../src/ui_utils.c:1820
 msgid "Select File"
 msgstr "Seleccionar archivo"
 
-#: ../src/ui_utils.c:1978
+#: ../src/ui_utils.c:1979
 msgid "Save All"
 msgstr "Guardar _todo"
 
-#: ../src/ui_utils.c:1979
+#: ../src/ui_utils.c:1980
 msgid "Close All"
 msgstr "C_errar todo"
 
-#: ../src/ui_utils.c:2225
+#: ../src/ui_utils.c:2226
 msgid "Geany cannot start!"
 msgstr "Geany no puede iniciarse."
 
