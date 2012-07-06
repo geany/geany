@@ -368,8 +368,9 @@ static gchar *get_doc_folder(const gchar *path)
 	{
 		gsize len = strlen(project_base_path);
 
+		/* remove trailing separator so we can match base path exactly */
 		if (project_base_path[len-1] == G_DIR_SEPARATOR)
-			project_base_path[len-1] = '\0';
+			project_base_path[--len] = '\0';
 
 		/* check whether the dir name matches or uses the project base path */
 		if (utils_filename_has_prefix(tmp_dirname, project_base_path))
