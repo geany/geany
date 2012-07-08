@@ -1093,10 +1093,15 @@ static gboolean CreateChildProcess(geany_win32_spawn *gw_spawn, TCHAR *szCmdline
 	else
 	{
 		gint i;
+		gsize ms = 30*1000;
 
-		for (i = 0; i < 2 && WaitForSingleObject(piProcInfo.hProcess, 30*1000) == WAIT_TIMEOUT; i++)
+		/* FIXME: this seems to timeout when there are many lines
+		 * to read - maybe because the child's pipe is full */
+		for (i = 0; i < 2 &&
+			WaitForSingleObject(piProcInfo.hProcess, ms) == WAIT_TIMEOUT; i++)
 		{
-			geany_debug("CreateChildProcess: CreateProcess failed");
+			ui_set_statusbar(FALSE, _("Process timed out after %.02f s!"), ms / 1000.0F);
+			geany_debug("CreateChildProcess: timed out");
 			TerminateProcess(piProcInfo.hProcess, WAIT_TIMEOUT); /* NOTE: This will not kill grandkids. */
 		}
 
