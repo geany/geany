@@ -2363,6 +2363,12 @@ static int parseParens (statementInfo *const st, parenInfo *const info)
 	{
 		int c = skipToNonWhite ();
 
+		if (isLanguage(Lang_d) && c == '!')
+		{	/* template instantiation */
+			info->isNameCandidate = FALSE;
+			info->isKnrParamList = FALSE;
+		}
+		else
 		switch (c)
 		{
 			case '&':
