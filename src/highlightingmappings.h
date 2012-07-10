@@ -1,9 +1,9 @@
 /*
  *      highlightingmappings.h - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2005-2011 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2006-2011 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
- *      Copyright 2011 Colomban Wendling <ban(at)herbesfolles(dot)org>
+ *      Copyright 2005-2012 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2006-2012 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2011-2012 Colomban Wendling <ban(at)herbesfolles(dot)org>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -194,6 +194,7 @@ static const HLStyle highlighting_styles_C[] =
 	/* triple verbatims use the same style */
 	{ SCE_C_TRIPLEVERBATIM,			"verbatim",					FALSE },
 	{ SCE_C_REGEX,					"regex",					FALSE },
+	{ SCE_C_HASHQUOTEDSTRING,		"hashquotedstring",			FALSE },
 	{ SCE_C_COMMENTLINEDOC,			"commentlinedoc",			FALSE },
 	{ SCE_C_COMMENTDOCKEYWORD,		"commentdockeyword",		FALSE },
 	{ SCE_C_COMMENTDOCKEYWORDERROR,	"commentdockeyworderror",	FALSE },
@@ -291,6 +292,7 @@ static const HLStyle highlighting_styles_CSS[] =
 	{ SCE_CSS_VALUE,					"value",					FALSE },
 	{ SCE_CSS_ID,						"id",						FALSE },
 	{ SCE_CSS_IDENTIFIER2,				"identifier2",				FALSE },
+	{ SCE_CSS_VARIABLE,					"variable",					FALSE },
 	{ SCE_CSS_IMPORTANT,				"important",				FALSE },
 	{ SCE_CSS_DIRECTIVE,				"directive",				FALSE },
 	{ SCE_CSS_IDENTIFIER3,				"identifier3",				FALSE },

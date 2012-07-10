@@ -14,16 +14,16 @@ namespace Scintilla {
 
 struct FontSpecification {
 	const char *fontName;
-	bool bold;
+	int weight;
 	bool italic;
 	int size;
 	int characterSet;
 	int extraFontFlag;
 	FontSpecification() :
 		fontName(0),
-		bold(false),
+		weight(SC_WEIGHT_NORMAL),
 		italic(false),
-		size(10),
+		size(10 * SC_FONT_SIZE_MULTIPLIER),
 		characterSet(0),
 		extraFontFlag(0) {
 	}
@@ -43,12 +43,10 @@ public:
 };
 
 struct FontMeasurements {
-	unsigned int lineHeight;
 	unsigned int ascent;
 	unsigned int descent;
-	unsigned int externalLeading;
-	unsigned int aveCharWidth;
-	unsigned int spaceWidth;
+	XYPOSITION aveCharWidth;
+	XYPOSITION spaceWidth;
 	int sizeZoomed;
 	FontMeasurements();
 	void Clear();
@@ -58,8 +56,8 @@ struct FontMeasurements {
  */
 class Style : public FontSpecification, public FontMeasurements {
 public:
-	ColourPair fore;
-	ColourPair back;
+	ColourDesired fore;
+	ColourDesired back;
 	bool eolFilled;
 	bool underline;
 	enum ecaseForced {caseMixed, caseUpper, caseLower};
@@ -77,7 +75,7 @@ public:
 	void Clear(ColourDesired fore_, ColourDesired back_,
 	           int size_,
 	           const char *fontName_, int characterSet_,
-	           bool bold_, bool italic_, bool eolFilled_,
+	           int weight_, bool italic_, bool eolFilled_,
 	           bool underline_, ecaseForced caseForce_,
 		   bool visible_, bool changeable_, bool hotspot_);
 	void ClearTo(const Style &source);

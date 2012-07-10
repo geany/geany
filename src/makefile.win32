@@ -12,12 +12,15 @@ DEFINES = -DHAVE_CONFIG_H \
 WINDRES = windres.exe
 CC = gcc
 CXX = g++
-RES  = ../geany_private.res
+RES = ../geany_private.res
 TARGET = ../geany.exe
-EXECDIR = c:\distrib
-PREFIX = C:\libs
+PREFIX = C:/libs
 RM = del
 -include ../localwin32.mk
+
+ifdef MSYS
+RM = rm -f
+endif
 
 GTK_INCLUDES= \
 	-I$(PREFIX)/include/gtk-2.0 \
@@ -34,7 +37,7 @@ GTK_INCLUDES= \
 INCLUDEDIRS=  -I.. \
               -I../scintilla/include \
               -I../tagmanager/mio \
-              -I../tagmanager/include \
+              -I../tagmanager/src \
               $(GTK_INCLUDES)
 
 ALL_GTK_LIBS= \
@@ -68,7 +71,6 @@ OBJS =	about.o build.o callbacks.o dialogs.o document.o editor.o encodings.o fil
 .c.o:
 	$(CC) $(CFLAGS) -c $<
 
-# all: binclean $(TARGET) #exec
 all: $(TARGET)
 
 $(RES): ../geany_private.rc ../icons/geany.ico
@@ -77,18 +79,13 @@ $(RES): ../geany_private.rc ../icons/geany.ico
 # this calls parent clean-local target because del ../file won't work
 clean:
 	-$(RM) deps.mak *.o
-	cd .. && $(MAKE) -f makefile.win32 clean-local && cd src
+	$(MAKE) -C .. -f makefile.win32 clean-local
 
-exec:
-	$(EXECDIR)\geany.exe
+STLIBS = ../scintilla/scintilla.a ../tagmanager/ctags/ctags.a \
+	../tagmanager/mio/mio.a ../tagmanager/src/tagmanager.a
 
-binclean:
-	$(RM) $(TARGET)
-
-$(TARGET): $(OBJS) $(RES) ../scintilla/scintilla.a ../tagmanager/mio/mio.a ../tagmanager/tagmanager.a
-	$(CXX) $(OBJS) $(RES) -o $(TARGET) \
-	../scintilla/scintilla.a ../tagmanager/tagmanager.a ../tagmanager/mio/mio.a \
-	$(ALL_GTK_LIBS) $(WIN_LIBS)
+$(TARGET): $(OBJS) $(RES) $(STLIBS)
+	$(CXX) $(OBJS) $(RES) -o $(TARGET) $(STLIBS) $(ALL_GTK_LIBS) $(WIN_LIBS)
 
 deps.mak:
 	$(CC) -MM  $(CFLAGS) *.c >deps.mak

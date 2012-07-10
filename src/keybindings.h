@@ -1,8 +1,8 @@
 /*
  *      keybindings.h - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2006-2011 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2006-2011 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2006-2012 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2006-2012 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -245,6 +245,7 @@ enum GeanyKeyBindingID
 	GEANY_KEYS_PROJECT_NEW,						/**< Keybinding. */
 	GEANY_KEYS_PROJECT_CLOSE,					/**< Keybinding. */
 	GEANY_KEYS_FORMAT_JOINLINES,				/**< Keybinding. */
+	GEANY_KEYS_GOTO_LINESTARTVISUAL,			/**< Keybinding. */
 	GEANY_KEYS_COUNT	/* must not be used by plugins */
 };
 

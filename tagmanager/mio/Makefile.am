@@ -1,5 +1,3 @@
-# $id$
-
 noinst_LIBRARIES = libmio.a
 
 AM_CPPFLAGS = -DG_LOG_DOMAIN=\"MIO\" #-DMIO_DEBUG

@@ -1,8 +1,8 @@
 /*
  *      geany.h - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2005-2011 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2006-2011 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2005-2012 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2006-2012 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -47,7 +47,7 @@ G_BEGIN_DECLS
  * listed in the documentation should not be changed */
 #define GEANY_FILEDEFS_SUBDIR			"filedefs"
 #define GEANY_TEMPLATES_SUBDIR			"templates"
-#define GEANY_CODENAME					"Tavira"
+#define GEANY_CODENAME					"Traeda"
 #define GEANY_HOMEPAGE					"http://www.geany.org/"
 #define GEANY_WIKI						"http://wiki.geany.org/"
 #define GEANY_BUG_REPORT				"http://www.geany.org/Support/Bugs"

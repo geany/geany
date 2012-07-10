@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.22\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-06-03 17:50+0200\n"
-"PO-Revision-Date: 2012-02-21 10:43+0600\n"
+"POT-Creation-Date: 2012-06-11 19:05+0200\n"
+"PO-Revision-Date: 2012-06-10 19:41+0600\n"
 "Last-Translator: Baurzhan Muftakhidinov <baurthefirst@gmail.com>\n"
 "Language-Team: Kazakh <kk_KZ@googlegroups.com>\n"
 "Language: kk\n"
@@ -29,7 +29,7 @@ msgstr "Интеграцияланған өндіру ортасы"
 
 #: ../geany.desktop.in.h:3
 msgid "A fast and lightweight IDE using GTK2"
-msgstr "GTK2 негізінде жылдам әрі жеңіл өндіру ортасы"
+msgstr "GTK2 негізіндегі жылдам әрі жеңіл өндіру ортасы"
 
 #: ../data/geany.glade.h:1
 msgid "_Edit"
@@ -83,7 +83,7 @@ msgstr "жасырын"
 msgid "_Insert \"include <...>\""
 msgstr "\"include <...>\" кірі_стіру"
 
-#: ../data/geany.glade.h:14 ../src/keybindings.c:408
+#: ../data/geany.glade.h:14 ../src/keybindings.c:411
 msgid "_Insert Alternative White Space"
 msgstr "_Альтернативті бос аралықты енгізу"
 
@@ -127,7 +127,7 @@ msgstr "Ағымдағы таңбалар"
 msgid "Match braces"
 msgstr ""
 
-#: ../data/geany.glade.h:25 ../src/keybindings.c:418
+#: ../data/geany.glade.h:25 ../src/keybindings.c:421
 msgid "Preferences"
 msgstr "Баптаулар"
 
@@ -157,7 +157,7 @@ msgstr "Плагиндерді қолдауды іске қосу"
 
 #: ../data/geany.glade.h:31
 msgid "<b>Startup</b>"
-msgstr "<b>Қосылу</b>"
+msgstr "<b>Іске қосылу</b>"
 
 #: ../data/geany.glade.h:32
 msgid "Save window position and geometry"
@@ -181,12 +181,12 @@ msgstr "<b>Сөндіру</b>"
 
 #: ../data/geany.glade.h:37
 msgid "Startup path:"
-msgstr "Қосылу жолы:"
+msgstr "Іске қосылу жолы:"
 
 #: ../data/geany.glade.h:38
+#, fuzzy
 msgid ""
-"Path to start in when opening or saving files. Must be an absolute path. "
-"Leave blank to use the current working directory."
+"Path to start in when opening or saving files. Must be an absolute path."
 msgstr ""
 "Файлдарды ашу не сақтау үшін бастау жолы. Абсолютті жол болуы тиіс. Ағымдағы "
 "жұмыс бумасын қолдану үшін осыны бос қалдырыңыз."
@@ -219,7 +219,7 @@ msgstr "<b>Жолдар</b>"
 
 #: ../data/geany.glade.h:44
 msgid "Startup"
-msgstr "Қосылу"
+msgstr "Іске қосылу"
 
 #: ../data/geany.glade.h:45
 msgid "Beep on errors or when compilation has finished"
@@ -280,11 +280,11 @@ msgstr "<b>Таңдамалы</b>"
 
 #: ../data/geany.glade.h:56
 msgid "Always wrap search"
-msgstr ""
+msgstr "Құжат соңына жеткенде, іздеуді құжат басынан қайта бастау"
 
 #: ../data/geany.glade.h:57
 msgid "Always wrap search around the document"
-msgstr ""
+msgstr "Іздеуді құжат аумағында әрқашан айналдыру"
 
 #: ../data/geany.glade.h:58
 msgid "Hide the Find dialog"
@@ -628,7 +628,7 @@ msgstr "Жолды үзу бағаны:"
 
 #: ../data/geany.glade.h:135
 msgid "Comment toggle marker:"
-msgstr ""
+msgstr "Комментарийді ауыстыру маркері:"
 
 #: ../data/geany.glade.h:136
 msgid ""
@@ -825,7 +825,7 @@ msgstr "Жақшалар ( )"
 
 #: ../data/geany.glade.h:178
 msgid "Auto-close parenthesis when typing an opening one"
-msgstr ""
+msgstr "Ашылу жақшасын терген кезде, жабылу жақшасын енгізу"
 
 #: ../data/geany.glade.h:179
 msgid "Single quotes ' '"
@@ -833,15 +833,15 @@ msgstr "Бірлік тырнақша ' '"
 
 #: ../data/geany.glade.h:180
 msgid "Auto-close single quote when typing an opening one"
-msgstr ""
+msgstr "Ашылу бірлік тырнақшасын терген кезде, жабылу тырнақшасын енгізу"
 
 #: ../data/geany.glade.h:181
 msgid "Curly brackets { }"
-msgstr ""
+msgstr "Пішінді жақша { }"
 
 #: ../data/geany.glade.h:182
 msgid "Auto-close curly bracket when typing an opening one"
-msgstr ""
+msgstr "Ашылу пішінді жақшасын терген кезде, жабылу жақшасын енгізу"
 
 #: ../data/geany.glade.h:183
 msgid "Square brackets [ ]"
@@ -849,7 +849,7 @@ msgstr "Тік жақша [ ]"
 
 #: ../data/geany.glade.h:184
 msgid "Auto-close square-bracket when typing an opening one"
-msgstr ""
+msgstr "Ашылу тік жақшасын терген кезде, жабылу жақшасын енгізу"
 
 #: ../data/geany.glade.h:185
 msgid "Double quotes \" \""
@@ -857,7 +857,7 @@ msgstr "Тырнақша \" \""
 
 #: ../data/geany.glade.h:186
 msgid "Auto-close double quote when typing an opening one"
-msgstr ""
+msgstr "Ашылу қос тырнақшасын терген кезде, жабылу тырнақшасын енгізу"
 
 #: ../data/geany.glade.h:187
 msgid "<b>Auto-close quotes and brackets</b>"
@@ -977,7 +977,7 @@ msgstr ""
 
 #: ../data/geany.glade.h:213
 msgid "Enabled"
-msgstr "Қосулы"
+msgstr "Іске қосулы"
 
 #: ../data/geany.glade.h:214
 msgid "<b>Long line marker</b>"
@@ -989,7 +989,7 @@ msgstr "Сөндірулі"
 
 #: ../data/geany.glade.h:216
 msgid "Do not show virtual spaces"
-msgstr ""
+msgstr "Виртуалды бос аралықтарды көрсетпеу"
 
 #: ../data/geany.glade.h:217
 msgid "Only for rectangular selections"
@@ -1007,17 +1007,17 @@ msgstr "Әрқашан"
 
 #: ../data/geany.glade.h:220
 msgid "Always show virtual spaces beyond the end of lines"
-msgstr ""
+msgstr "Жол соңынан кейінгі виртуалды бос аралықтарды әрқашан көрсету"
 
 #: ../data/geany.glade.h:221
 msgid "<b>Virtual spaces</b>"
-msgstr ""
+msgstr "<b>Виртуалды бос аралықтар</b>"
 
 #: ../data/geany.glade.h:222
 msgid "Display"
 msgstr "Көрсету"
 
-#: ../data/geany.glade.h:223 ../src/keybindings.c:224 ../src/prefs.c:1581
+#: ../data/geany.glade.h:223 ../src/keybindings.c:227 ../src/prefs.c:1581
 msgid "Editor"
 msgstr "Түзетуші"
 
@@ -1094,7 +1094,7 @@ msgstr ""
 msgid "Removes trailing spaces and tabs and the end of lines"
 msgstr ""
 
-#: ../data/geany.glade.h:241 ../src/keybindings.c:559
+#: ../data/geany.glade.h:241 ../src/keybindings.c:562
 msgid "Replace tabs by space"
 msgstr "Бос аралықтарды табуляциямен алмастыру"
 
@@ -1175,7 +1175,7 @@ msgstr ""
 msgid "<b>Commands</b>"
 msgstr "<b>Командалар</b>"
 
-#: ../data/geany.glade.h:259 ../src/keybindings.c:236 ../src/prefs.c:1585
+#: ../data/geany.glade.h:259 ../src/keybindings.c:239 ../src/prefs.c:1585
 msgid "Tools"
 msgstr "Саймандар"
 
@@ -1251,7 +1251,7 @@ msgstr ""
 
 #: ../data/geany.glade.h:276
 msgid "<b>Template data</b>"
-msgstr ""
+msgstr "<b>Үлгілер мәліметі</b>"
 
 #: ../data/geany.glade.h:277 ../src/prefs.c:1587
 msgid "Templates"
@@ -1419,12 +1419,11 @@ msgid "Override Geany keybindings"
 msgstr "Geany пернетақта жарлықтарын алмастыру"
 
 #: ../data/geany.glade.h:316
-#, fuzzy
 msgid ""
 "Allows the VTE to receive keyboard shortcuts (apart from focus commands)"
 msgstr ""
-"VTE үшін пернетақта жарлықтарын қабылдауға рұқсат ету (фокустағы "
-"командалардан басқа)"
+"VTE үшін пернетақта жарлықтарын қабылдауға рұқсат ету (фокус командаларынан "
+"басқа)"
 
 #: ../data/geany.glade.h:317
 msgid "Disable menu shortcut key (F10 by default)"
@@ -1524,14 +1523,13 @@ msgid ""
 "project filename."
 msgstr ""
 
-#: ../data/geany.glade.h:338 ../src/keybindings.c:234
+#: ../data/geany.glade.h:338 ../src/keybindings.c:237
 msgid "Project"
 msgstr "Жоба"
 
 #: ../data/geany.glade.h:339
-#, fuzzy
 msgid "Display:"
-msgstr "Көрсетілуі"
+msgstr "Көрсетілуі:"
 
 #: ../data/geany.glade.h:340
 msgid "Custom"
@@ -1598,45 +1596,45 @@ msgstr "Бар_лығын жабу"
 msgid "_Commands"
 msgstr "Кома_ндалар"
 
-#: ../data/geany.glade.h:357 ../src/keybindings.c:343
+#: ../data/geany.glade.h:357 ../src/keybindings.c:346
 msgid "_Cut Current Line(s)"
 msgstr "Ағы_мдағы жол(дар)ды қиып алу"
 
-#: ../data/geany.glade.h:358 ../src/keybindings.c:340
+#: ../data/geany.glade.h:358 ../src/keybindings.c:343
 msgid "_Copy Current Line(s)"
 msgstr "Ағ_ымдағы жол(дар)ды көшіру"
 
-#: ../data/geany.glade.h:359 ../src/keybindings.c:295
+#: ../data/geany.glade.h:359 ../src/keybindings.c:298
 msgid "_Delete Current Line(s)"
 msgstr "Ағымдағы жол(дар)ды ө_шіру"
 
-#: ../data/geany.glade.h:360 ../src/keybindings.c:292
+#: ../data/geany.glade.h:360 ../src/keybindings.c:295
 msgid "_Duplicate Line or Selection"
 msgstr "Жол не таңдауды қа_йталау"
 
-#: ../data/geany.glade.h:361 ../src/keybindings.c:353
+#: ../data/geany.glade.h:361 ../src/keybindings.c:356
 msgid "_Select Current Line(s)"
 msgstr "Ағымдағы ж_ол(дар)ды таңдау"
 
-#: ../data/geany.glade.h:362 ../src/keybindings.c:356
+#: ../data/geany.glade.h:362 ../src/keybindings.c:359
 msgid "_Select Current Paragraph"
 msgstr "Ағымдағы а_бзацты таңдау"
 
-#: ../data/geany.glade.h:363 ../src/keybindings.c:395
+#: ../data/geany.glade.h:363 ../src/keybindings.c:398
 msgid "_Send Selection to Terminal"
 msgstr "Таңдалғанды  _терминалға жіберу"
 
-#: ../data/geany.glade.h:364 ../src/keybindings.c:397
+#: ../data/geany.glade.h:364 ../src/keybindings.c:400
 msgid "_Reflow Lines/Block"
-msgstr ""
+msgstr "Жолдар/блокты қайта _пішімдеу"
 
-#: ../data/geany.glade.h:365 ../src/keybindings.c:367
+#: ../data/geany.glade.h:365 ../src/keybindings.c:370
 msgid "T_oggle Case of Selection"
-msgstr "Таңдауд_ын регистрін ауыстыру"
+msgstr "Таңдауд_ың регистрін ауыстыру"
 
-#: ../data/geany.glade.h:366 ../src/keybindings.c:302
+#: ../data/geany.glade.h:366 ../src/keybindings.c:305
 msgid "_Transpose Current Line"
-msgstr ""
+msgstr "Жолд_ы алмастыру"
 
 #: ../data/geany.glade.h:367
 msgid "_Comment Line(s)"
@@ -1658,9 +1656,9 @@ msgstr "Шегінуді үл_кейту"
 msgid "_Decrease Indent"
 msgstr "Шегінуді кі_шірейту"
 
-#: ../data/geany.glade.h:372 ../src/keybindings.c:386
+#: ../data/geany.glade.h:372 ../src/keybindings.c:389
 msgid "_Smart Line Indent"
-msgstr ""
+msgstr "\"Ақылды\" ш_егінуді қолдану"
 
 #: ../data/geany.glade.h:373
 msgid "_Send Selection to"
@@ -1674,7 +1672,7 @@ msgstr "К_омментарий енгізу"
 msgid "Preference_s"
 msgstr "Ба_птаулар"
 
-#: ../data/geany.glade.h:376 ../src/keybindings.c:421
+#: ../data/geany.glade.h:376 ../src/keybindings.c:424
 msgid "P_lugin Preferences"
 msgstr "Плаг_ин баптаулары"
 
@@ -1702,11 +1700,11 @@ msgstr "Келе_сі хабарлама"
 msgid "Pr_evious Message"
 msgstr "Алдыңғ_ы хабарлама"
 
-#: ../data/geany.glade.h:383 ../src/keybindings.c:470
+#: ../data/geany.glade.h:383 ../src/keybindings.c:473
 msgid "_Go to Next Marker"
 msgstr "Келесі маркерге ө_ту"
 
-#: ../data/geany.glade.h:384 ../src/keybindings.c:473
+#: ../data/geany.glade.h:384 ../src/keybindings.c:476
 msgid "_Go to Previous Marker"
 msgstr "Алдыңғы маркерге ө_ту"
 
@@ -1714,15 +1712,15 @@ msgstr "Алдыңғы маркерге ө_ту"
 msgid "_Go to Line"
 msgstr "Ж_олға өту"
 
-#: ../data/geany.glade.h:386 ../src/keybindings.c:433
+#: ../data/geany.glade.h:386 ../src/keybindings.c:436
 msgid "Find Next _Selection"
 msgstr "Кел_есі таңдауды табу"
 
-#: ../data/geany.glade.h:387 ../src/keybindings.c:435
+#: ../data/geany.glade.h:387 ../src/keybindings.c:438
 msgid "Find Pre_vious Selection"
 msgstr "А_лдыңғы таңдауды табу"
 
-#: ../data/geany.glade.h:388 ../src/keybindings.c:452
+#: ../data/geany.glade.h:388 ../src/keybindings.c:455
 msgid "_Mark All"
 msgstr "Барлығын _ерекшелеу"
 
@@ -1880,7 +1878,7 @@ msgstr "Түрл_ендіру және CR (Mac) етіп орнату"
 
 #: ../data/geany.glade.h:427
 msgid "_Strip Trailing Spaces"
-msgstr ""
+msgstr "Ар_тық бос аралықтарды өшіру"
 
 #: ../data/geany.glade.h:428
 msgid "_Replace Tabs by Spaces"
@@ -1972,9 +1970,8 @@ msgid "_Keyboard Shortcuts"
 msgstr "П_ернетақта жарлықтары"
 
 #: ../data/geany.glade.h:450
-#, fuzzy
 msgid "Debug _Messages"
-msgstr "Жөндеу хабарламалары"
+msgstr "Жөндеу ха_барламалары"
 
 #: ../data/geany.glade.h:451
 msgid "_Website"
@@ -1982,16 +1979,15 @@ msgstr "Веб са_йт"
 
 #: ../data/geany.glade.h:452
 msgid "Wi_ki"
-msgstr ""
+msgstr "Ви_ки"
 
 #: ../data/geany.glade.h:453
 msgid "Report a _Bug"
-msgstr ""
+msgstr "Ақ_аулық жөнінде хабарлау"
 
 #: ../data/geany.glade.h:454
-#, fuzzy
 msgid "_Donate"
-msgstr "Сақ_тамау"
+msgstr "Ақ_шалай көмектесу"
 
 #: ../data/geany.glade.h:455 ../src/sidebar.c:124
 msgid "Symbols"
@@ -2048,7 +2044,7 @@ msgstr "Ақпарат"
 
 #: ../src/about.c:275
 msgid "Developers"
-msgstr "Өндірушілер"
+msgstr "Жасағандар"
 
 #: ../src/about.c:282
 msgid "maintainer"
@@ -2123,9 +2119,9 @@ msgid "Failed to change the working directory to \"%s\""
 msgstr "Жұмыс бумасын \"%s\" етіп орнату сәтсіз"
 
 #: ../src/build.c:929
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to execute \"%s\" (start-script could not be created: %s)"
-msgstr " \"%s\" орындау сәтсіз (бастау скриптін жасау мүмкін емес)"
+msgstr " \"%s\" орындау сәтсіз (іске қосылу скриптін жасау мүмкін емес: %s)"
 
 #: ../src/build.c:984
 msgid ""
@@ -2302,7 +2298,7 @@ msgstr "Барлық сақталмаған өзгерістер жоғалад�
 msgid "Are you sure you want to reload '%s'?"
 msgstr "'%s' қайтадан жүктеуді шынымен қалайсыз ба?"
 
-#: ../src/callbacks.c:1062 ../src/keybindings.c:461
+#: ../src/callbacks.c:1062 ../src/keybindings.c:464
 msgid "Go to Line"
 msgstr "Жолға өту"
 
@@ -2417,7 +2413,7 @@ msgid ""
 "Note if you choose multiple files, they will all be opened with the chosen "
 "encoding."
 msgstr ""
-"Файл үшін кодталауын қолмен орнату, егер ол дұрыс анықталмаса. Бұл әрекет "
+"Файл үшін кодталуын қолмен орнату, егер ол дұрыс анықталмаса. Бұл әрекет "
 "файлдың кодталуын білсеңіз, бірақ Geany оны дұрыс анықтай алмаған кезде "
 "пайдалы.\n"
 "Бірнеше файл таңдалса, олардың барлығы осы кодталуда ашылатынын есте "
@@ -2668,12 +2664,12 @@ msgstr "Табуляция мен бос аралықтар"
 #: ../src/document.c:1044
 #, c-format
 msgid "Setting %s indentation mode for %s."
-msgstr ""
+msgstr "%s шегіну режимін орнату, %s үшін."
 
 #: ../src/document.c:1055
 #, c-format
 msgid "Setting indentation width to %d for %s."
-msgstr ""
+msgstr "Шегіну өлшемін %d етіп орнату, %s үшін."
 
 #: ../src/document.c:1207
 #, c-format
@@ -2811,7 +2807,7 @@ msgstr "Табуляция таңбасымен алмастырылатын б�
 #: ../src/editor.c:4469
 #, c-format
 msgid "Warning: non-standard hard tab width: %d != 8!"
-msgstr ""
+msgstr "Назарыңызға: стандартты емес табуляция ені: %d != 8!"
 
 #: ../src/encodings.c:67
 msgid "Celtic"
@@ -3011,539 +3007,536 @@ msgstr ""
 msgid "untitled"
 msgstr "атаусыз"
 
-#: ../src/highlighting.c:1225 ../src/main.c:828 ../src/socket.c:166
+#: ../src/highlighting.c:1232 ../src/main.c:828 ../src/socket.c:166
 #: ../src/templates.c:224
 #, c-format
 msgid "Could not find file '%s'."
 msgstr "'%s' файлын табу мүмкін емес."
 
-#: ../src/highlighting.c:1297
-#, fuzzy
+#: ../src/highlighting.c:1304
 msgid "Default"
-msgstr "Ба_стапқы"
+msgstr "Бастапқы"
 
-#: ../src/highlighting.c:1336
+#: ../src/highlighting.c:1343
 #, fuzzy
 msgid "The current filetype overrides the default style."
 msgstr "Ағымдағы файлды Make және үнсіз келісім бойынша мақсатпен құрастыру"
 
-#: ../src/highlighting.c:1337
+#: ../src/highlighting.c:1344
 msgid "This may cause color schemes to display incorrectly."
 msgstr ""
 
-#: ../src/highlighting.c:1358
-#, fuzzy
+#: ../src/highlighting.c:1365
 msgid "Color Schemes"
-msgstr "Тү_стер схемалары"
+msgstr "Түстер схемалары"
 
 #. visual group order
-#: ../src/keybindings.c:223 ../src/symbols.c:714
+#: ../src/keybindings.c:226 ../src/symbols.c:714
 msgid "File"
 msgstr "Файл"
 
-#: ../src/keybindings.c:225
+#: ../src/keybindings.c:228
 msgid "Clipboard"
 msgstr "Алмасу буфері"
 
-#: ../src/keybindings.c:226
+#: ../src/keybindings.c:229
 msgid "Select"
 msgstr "Таңдау"
 
-#: ../src/keybindings.c:227
+#: ../src/keybindings.c:230
 msgid "Format"
 msgstr "Пішімі"
 
-#: ../src/keybindings.c:228
+#: ../src/keybindings.c:231
 msgid "Insert"
 msgstr "Енгізу"
 
-#: ../src/keybindings.c:229
+#: ../src/keybindings.c:232
 msgid "Settings"
 msgstr "Баптаулар"
 
-#: ../src/keybindings.c:230
+#: ../src/keybindings.c:233
 msgid "Search"
 msgstr "Іздеу"
 
-#: ../src/keybindings.c:231
+#: ../src/keybindings.c:234
 msgid "Go to"
 msgstr "Өту"
 
-#: ../src/keybindings.c:232
+#: ../src/keybindings.c:235
 msgid "View"
 msgstr "Қарау"
 
-#: ../src/keybindings.c:233
+#: ../src/keybindings.c:236
 msgid "Document"
 msgstr "Құжат"
 
-#: ../src/keybindings.c:235 ../src/keybindings.c:582 ../src/project.c:444
-#: ../src/ui_utils.c:1980
+#: ../src/keybindings.c:238 ../src/keybindings.c:585 ../src/project.c:444
+#: ../src/ui_utils.c:1981
 msgid "Build"
 msgstr "Құрастыру"
 
-#: ../src/keybindings.c:237 ../src/keybindings.c:607
+#: ../src/keybindings.c:240 ../src/keybindings.c:610
 msgid "Help"
 msgstr "Көмек"
 
-#: ../src/keybindings.c:238
+#: ../src/keybindings.c:241
 msgid "Focus"
 msgstr "Фокус"
 
-#: ../src/keybindings.c:239
+#: ../src/keybindings.c:242
 msgid "Notebook tab"
 msgstr "Беттер"
 
-#: ../src/keybindings.c:248 ../src/keybindings.c:276
+#: ../src/keybindings.c:251 ../src/keybindings.c:279
 msgid "New"
 msgstr "Жаңа"
 
-#: ../src/keybindings.c:250 ../src/keybindings.c:278
+#: ../src/keybindings.c:253 ../src/keybindings.c:281
 msgid "Open"
 msgstr "Ашу"
 
-#: ../src/keybindings.c:253
+#: ../src/keybindings.c:256
 msgid "Open selected file"
 msgstr "Таңдалған файлды ашу"
 
-#: ../src/keybindings.c:255
+#: ../src/keybindings.c:258
 msgid "Save"
 msgstr "Сақтау"
 
-#: ../src/keybindings.c:257 ../src/toolbar.c:55
+#: ../src/keybindings.c:260 ../src/toolbar.c:55
 msgid "Save as"
 msgstr "Қалайша сақтау"
 
-#: ../src/keybindings.c:259
+#: ../src/keybindings.c:262
 msgid "Save all"
 msgstr "Барлығын сақтау"
 
-#: ../src/keybindings.c:262
+#: ../src/keybindings.c:265
 msgid "Print"
 msgstr "Баспаға шығару"
 
-#: ../src/keybindings.c:264 ../src/keybindings.c:283
+#: ../src/keybindings.c:267 ../src/keybindings.c:286
 msgid "Close"
 msgstr "Жабу"
 
-#: ../src/keybindings.c:266
+#: ../src/keybindings.c:269
 msgid "Close all"
 msgstr "Барлығын жабу"
 
-#: ../src/keybindings.c:269
+#: ../src/keybindings.c:272
 msgid "Reload file"
 msgstr "Файлды қайта жүктеу"
 
-#: ../src/keybindings.c:271
+#: ../src/keybindings.c:274
 msgid "Re-open last closed tab"
 msgstr "Соңғы жабылған бетті қайта ашу"
 
-#: ../src/keybindings.c:288
+#: ../src/keybindings.c:291
 msgid "Undo"
 msgstr "Болдырмау"
 
-#: ../src/keybindings.c:290
+#: ../src/keybindings.c:293
 msgid "Redo"
 msgstr "Қайталау"
 
-#: ../src/keybindings.c:299
+#: ../src/keybindings.c:302
 msgid "Delete to line end"
 msgstr "Жол соңына дейін өшіру"
 
-#: ../src/keybindings.c:305
+#: ../src/keybindings.c:308
 msgid "Scroll to current line"
 msgstr "Ағымдағы жолға дейін айналдыру"
 
-#: ../src/keybindings.c:307
+#: ../src/keybindings.c:310
 msgid "Scroll up the view by one line"
 msgstr "Көріністі бір жолға үстіне айналдыру"
 
-#: ../src/keybindings.c:309
+#: ../src/keybindings.c:312
 msgid "Scroll down the view by one line"
 msgstr "Көріністі бір жолға төменге айналдыру"
 
-#: ../src/keybindings.c:311
+#: ../src/keybindings.c:314
 msgid "Complete snippet"
 msgstr ""
 
-#: ../src/keybindings.c:313
+#: ../src/keybindings.c:316
 msgid "Move cursor in snippet"
 msgstr ""
 
-#: ../src/keybindings.c:315
+#: ../src/keybindings.c:318
 msgid "Suppress snippet completion"
 msgstr ""
 
-#: ../src/keybindings.c:317
+#: ../src/keybindings.c:320
 msgid "Context Action"
 msgstr "Контекст әрекеті"
 
-#: ../src/keybindings.c:319
+#: ../src/keybindings.c:322
 msgid "Complete word"
 msgstr "Сөзді толықтыру"
 
-#: ../src/keybindings.c:321
+#: ../src/keybindings.c:324
 msgid "Show calltip"
 msgstr ""
 
-#: ../src/keybindings.c:323
+#: ../src/keybindings.c:326
 msgid "Show macro list"
 msgstr "Макростар тізімін көрсету"
 
-#: ../src/keybindings.c:325
+#: ../src/keybindings.c:328
 msgid "Word part completion"
 msgstr "Сөз бөлігін толықтыру"
 
-#: ../src/keybindings.c:327
+#: ../src/keybindings.c:330
 msgid "Move line(s) up"
 msgstr "Жол(дар)ды жоғары жылжыту"
 
-#: ../src/keybindings.c:329
+#: ../src/keybindings.c:332
 msgid "Move line(s) down"
 msgstr "Жол(дар)ды төмен жылжыту"
 
-#: ../src/keybindings.c:334
+#: ../src/keybindings.c:337
 msgid "Cut"
 msgstr "Қиып алу"
 
-#: ../src/keybindings.c:336
+#: ../src/keybindings.c:339
 msgid "Copy"
 msgstr "Көшіру"
 
-#: ../src/keybindings.c:338
+#: ../src/keybindings.c:341
 msgid "Paste"
 msgstr "Кірістіру"
 
-#: ../src/keybindings.c:349
+#: ../src/keybindings.c:352
 msgid "Select All"
 msgstr "Барлығын таңдау"
 
-#: ../src/keybindings.c:351
+#: ../src/keybindings.c:354
 msgid "Select current word"
 msgstr "Ағымдағы сөзді таңдау"
 
-#: ../src/keybindings.c:359
+#: ../src/keybindings.c:362
 msgid "Select to previous word part"
 msgstr ""
 
-#: ../src/keybindings.c:361
+#: ../src/keybindings.c:364
 msgid "Select to next word part"
 msgstr ""
 
-#: ../src/keybindings.c:369
+#: ../src/keybindings.c:372
 msgid "Toggle line commentation"
 msgstr ""
 
-#: ../src/keybindings.c:372
+#: ../src/keybindings.c:375
 msgid "Comment line(s)"
 msgstr "Жол(дар)ды комментарий қылу"
 
-#: ../src/keybindings.c:374
+#: ../src/keybindings.c:377
 msgid "Uncomment line(s)"
 msgstr "Жол(дар)ды комментарий емес қылу"
 
-#: ../src/keybindings.c:376
+#: ../src/keybindings.c:379
 msgid "Increase indent"
 msgstr "Шегінуді үлкейту"
 
-#: ../src/keybindings.c:379
+#: ../src/keybindings.c:382
 msgid "Decrease indent"
 msgstr "Шегінуді кішірейту"
 
-#: ../src/keybindings.c:382
+#: ../src/keybindings.c:385
 msgid "Increase indent by one space"
 msgstr "Шегінуді бір бос аралыққа үлкейту"
 
-#: ../src/keybindings.c:384
+#: ../src/keybindings.c:387
 msgid "Decrease indent by one space"
 msgstr "Шегінуді бір бос аралыққа кішірейту"
 
-#: ../src/keybindings.c:388
+#: ../src/keybindings.c:391
 msgid "Send to Custom Command 1"
 msgstr "1-ші таңдауыңызша командасына жіберу"
 
-#: ../src/keybindings.c:390
+#: ../src/keybindings.c:393
 msgid "Send to Custom Command 2"
 msgstr "2-ші таңдауыңызша командасына жіберу"
 
-#: ../src/keybindings.c:392
+#: ../src/keybindings.c:395
 msgid "Send to Custom Command 3"
 msgstr "3-ші таңдауыңызша командасына жіберу"
 
-#: ../src/keybindings.c:400
-#, fuzzy
+#: ../src/keybindings.c:403
 msgid "Join lines"
-msgstr "Жол(дар)ды комментарий қылу"
+msgstr "Жолдарды біріктіру"
 
-#: ../src/keybindings.c:405
+#: ../src/keybindings.c:408
 msgid "Insert date"
 msgstr "Күн / Уақытты енгізу"
 
-#: ../src/keybindings.c:411
+#: ../src/keybindings.c:414
 msgid "Insert New Line Before Current"
 msgstr "Ағымдағы жолға дейін жаңа жолды енгізу"
 
-#: ../src/keybindings.c:413
+#: ../src/keybindings.c:416
 msgid "Insert New Line After Current"
 msgstr "Ағымдағы жолдан кейін жаңа жолды енгізу"
 
-#: ../src/keybindings.c:426 ../src/search.c:463
+#: ../src/keybindings.c:429 ../src/search.c:463
 msgid "Find"
 msgstr "Табу"
 
-#: ../src/keybindings.c:428
+#: ../src/keybindings.c:431
 msgid "Find Next"
 msgstr "Келесісін табу"
 
-#: ../src/keybindings.c:430
+#: ../src/keybindings.c:433
 msgid "Find Previous"
 msgstr "Алдыңғысын табу"
 
-#: ../src/keybindings.c:437 ../src/search.c:619
+#: ../src/keybindings.c:440 ../src/search.c:619
 msgid "Replace"
 msgstr "Алмастыру"
 
-#: ../src/keybindings.c:439 ../src/search.c:871
+#: ../src/keybindings.c:442 ../src/search.c:871
 msgid "Find in Files"
 msgstr "Файлдардан табу"
 
-#: ../src/keybindings.c:442
+#: ../src/keybindings.c:445
 msgid "Next Message"
 msgstr "Келесі хабарлама"
 
-#: ../src/keybindings.c:444
+#: ../src/keybindings.c:447
 msgid "Previous Message"
 msgstr "Алдыңғы хабарлама"
 
-#: ../src/keybindings.c:447
+#: ../src/keybindings.c:450
 msgid "Find Usage"
 msgstr "Қолданылуын табу"
 
-#: ../src/keybindings.c:450
+#: ../src/keybindings.c:453
 msgid "Find Document Usage"
 msgstr "Құжатта қолданылуын табу"
 
-#: ../src/keybindings.c:457 ../src/toolbar.c:66
+#: ../src/keybindings.c:460 ../src/toolbar.c:66
 msgid "Navigate back a location"
 msgstr "Алдыңғы қадамға өту"
 
-#: ../src/keybindings.c:459 ../src/toolbar.c:67
+#: ../src/keybindings.c:462 ../src/toolbar.c:67
 msgid "Navigate forward a location"
 msgstr "Келесі қадамға өту"
 
-#: ../src/keybindings.c:464
+#: ../src/keybindings.c:467
 msgid "Go to matching brace"
 msgstr "Сәйкес жақшаға өту"
 
-#: ../src/keybindings.c:467
+#: ../src/keybindings.c:470
 msgid "Toggle marker"
 msgstr "Маркерді қосу не сөндіру"
 
-#: ../src/keybindings.c:476
+#: ../src/keybindings.c:479
 msgid "Go to Tag Definition"
 msgstr "Тег анықтамасына өту"
 
-#: ../src/keybindings.c:479
+#: ../src/keybindings.c:482
 msgid "Go to Tag Declaration"
 msgstr "Тег жариялануына өту"
 
-#: ../src/keybindings.c:481
+#: ../src/keybindings.c:484
 msgid "Go to Start of Line"
 msgstr "Жол басына өту"
 
-#: ../src/keybindings.c:483
+#: ../src/keybindings.c:486
 msgid "Go to End of Line"
 msgstr "Жол аяғына өту"
 
-#: ../src/keybindings.c:485
+#: ../src/keybindings.c:488
 msgid "Go to End of Display Line"
 msgstr "Көрсетілетін жолдың соңына өту"
 
-#: ../src/keybindings.c:487
+#: ../src/keybindings.c:490
 msgid "Go to Previous Word Part"
 msgstr "Сөздің алдыңғы бөлігіне өту"
 
-#: ../src/keybindings.c:489
+#: ../src/keybindings.c:492
 msgid "Go to Next Word Part"
 msgstr "Сөздің келесі бөлігіне өту"
 
-#: ../src/keybindings.c:494
+#: ../src/keybindings.c:497
 msgid "Toggle All Additional Widgets"
 msgstr "Барлық қосымша виджеттерді іске қосу/сөндіру"
 
-#: ../src/keybindings.c:497
+#: ../src/keybindings.c:500
 msgid "Fullscreen"
 msgstr "Толық экранға"
 
-#: ../src/keybindings.c:499
+#: ../src/keybindings.c:502
 msgid "Toggle Messages Window"
 msgstr "Хабарламалар терезесін іске қосу/сөндіру"
 
-#: ../src/keybindings.c:502
+#: ../src/keybindings.c:505
 msgid "Toggle Sidebar"
 msgstr "Бүйір панелін өшіру не қосу"
 
-#: ../src/keybindings.c:504
+#: ../src/keybindings.c:507
 msgid "Zoom In"
 msgstr "Үлкейту"
 
-#: ../src/keybindings.c:506
+#: ../src/keybindings.c:509
 msgid "Zoom Out"
 msgstr "Кішірейту"
 
-#: ../src/keybindings.c:508
+#: ../src/keybindings.c:511
 msgid "Zoom Reset"
 msgstr "Масштабты тастау"
 
-#: ../src/keybindings.c:513
+#: ../src/keybindings.c:516
 msgid "Switch to Editor"
 msgstr "Түзеткішке ауысу"
 
-#: ../src/keybindings.c:515
+#: ../src/keybindings.c:518
 msgid "Switch to Search Bar"
 msgstr "Іздеу өрісіне ауысу"
 
-#: ../src/keybindings.c:517
+#: ../src/keybindings.c:520
 msgid "Switch to Message Window"
 msgstr "Хабарламалар терезесіне ауысу"
 
-#: ../src/keybindings.c:519
+#: ../src/keybindings.c:522
 msgid "Switch to Compiler"
 msgstr "Компиляторға ауысу"
 
-#: ../src/keybindings.c:521
+#: ../src/keybindings.c:524
 msgid "Switch to Messages"
 msgstr "Хабарламаларға ауысу"
 
-#: ../src/keybindings.c:523
+#: ../src/keybindings.c:526
 msgid "Switch to Scribble"
 msgstr "Жазбаларға ауысу"
 
-#: ../src/keybindings.c:525
+#: ../src/keybindings.c:528
 msgid "Switch to VTE"
 msgstr "VTE-ге ауысу"
 
-#: ../src/keybindings.c:527
+#: ../src/keybindings.c:530
 msgid "Switch to Sidebar"
 msgstr "Бүйір панеліне ауысу"
 
-#: ../src/keybindings.c:529
+#: ../src/keybindings.c:532
 msgid "Switch to Sidebar Symbol List"
 msgstr "Бүйір панелінің таңбалар тізіміне ауысу"
 
-#: ../src/keybindings.c:531
+#: ../src/keybindings.c:534
 msgid "Switch to Sidebar Document List"
 msgstr "Бүйір панелінің құжаттар тізіміне ауысу"
 
-#: ../src/keybindings.c:536
+#: ../src/keybindings.c:539
 msgid "Switch to left document"
 msgstr "Сол жақтағы құжатқа ауысу"
 
-#: ../src/keybindings.c:538
+#: ../src/keybindings.c:541
 msgid "Switch to right document"
 msgstr "Оң жақтағы құжатқа ауысу"
 
-#: ../src/keybindings.c:540
+#: ../src/keybindings.c:543
 msgid "Switch to last used document"
 msgstr "Соңғы қолданылған құжатқа ауысу"
 
-#: ../src/keybindings.c:543
+#: ../src/keybindings.c:546
 msgid "Move document left"
 msgstr "Құжатты солға жылжыту"
 
-#: ../src/keybindings.c:546
+#: ../src/keybindings.c:549
 msgid "Move document right"
 msgstr "Құжатты оңға жылжыту"
 
-#: ../src/keybindings.c:548
+#: ../src/keybindings.c:551
 msgid "Move document first"
 msgstr "Құжатты бірінші етіп жылжыту"
 
-#: ../src/keybindings.c:550
+#: ../src/keybindings.c:553
 msgid "Move document last"
 msgstr "Құжатты соңғы етіп жылжыту"
 
-#: ../src/keybindings.c:555
+#: ../src/keybindings.c:558
 msgid "Toggle Line wrapping"
 msgstr "Жол тасымалдауды іске косу не сөндіру"
 
-#: ../src/keybindings.c:557
+#: ../src/keybindings.c:560
 msgid "Toggle Line breaking"
 msgstr "Жол үзуді іске қосу не сөндіру"
 
-#: ../src/keybindings.c:561
+#: ../src/keybindings.c:564
 msgid "Replace spaces by tabs"
 msgstr "Бос аралықтарды табуляциямен алмастыру"
 
-#: ../src/keybindings.c:563
+#: ../src/keybindings.c:566
 msgid "Toggle current fold"
 msgstr "Жазық / жиналған күйді ауыстыру"
 
-#: ../src/keybindings.c:565
+#: ../src/keybindings.c:568
 msgid "Fold all"
 msgstr "Барлығын жазу"
 
-#: ../src/keybindings.c:567
+#: ../src/keybindings.c:570
 msgid "Unfold all"
 msgstr "Барлығын жинау"
 
-#: ../src/keybindings.c:569
+#: ../src/keybindings.c:572
 msgid "Reload symbol list"
 msgstr "Таңбалар тізімін қайта жүктеу"
 
-#: ../src/keybindings.c:571
+#: ../src/keybindings.c:574
 msgid "Remove Markers"
 msgstr "Маркерлерді өшіру"
 
-#: ../src/keybindings.c:573
+#: ../src/keybindings.c:576
 msgid "Remove Error Indicators"
 msgstr "Қателер индикаторларын өшіру"
 
-#: ../src/keybindings.c:575
+#: ../src/keybindings.c:578
 msgid "Remove Markers and Error Indicators"
 msgstr "Маркерлер мен қателер индикаторларын өшіру"
 
-#: ../src/keybindings.c:580 ../src/toolbar.c:68
+#: ../src/keybindings.c:583 ../src/toolbar.c:68
 msgid "Compile"
 msgstr "Компиляциялау"
 
-#: ../src/keybindings.c:584
+#: ../src/keybindings.c:587
 msgid "Make all"
 msgstr "Барлығын жасау"
 
-#: ../src/keybindings.c:587
+#: ../src/keybindings.c:590
 msgid "Make custom target"
 msgstr "Таңдауыңызша мақсатты жасау"
 
-#: ../src/keybindings.c:589
+#: ../src/keybindings.c:592
 msgid "Make object"
 msgstr "Объектті жасау"
 
-#: ../src/keybindings.c:591
+#: ../src/keybindings.c:594
 msgid "Next error"
 msgstr "Келесі қате"
 
-#: ../src/keybindings.c:593
+#: ../src/keybindings.c:596
 msgid "Previous error"
 msgstr "Алдыңғы қате"
 
-#: ../src/keybindings.c:595
+#: ../src/keybindings.c:598
 msgid "Run"
 msgstr "Орындау"
 
-#: ../src/keybindings.c:597
+#: ../src/keybindings.c:600
 msgid "Build options"
 msgstr "Құрастыру опциялары"
 
-#: ../src/keybindings.c:602
+#: ../src/keybindings.c:605
 msgid "Show Color Chooser"
 msgstr "Түстер таңдаушысын көрсету"
 
-#: ../src/keybindings.c:849
+#: ../src/keybindings.c:852
 msgid "Keyboard Shortcuts"
 msgstr "Пернетақта жарлықтары"
 
-#: ../src/keybindings.c:861
+#: ../src/keybindings.c:864
 msgid "The following keyboard shortcuts are configurable:"
 msgstr "Келесі пернетақта жарлықтары баптауға келеді:"
 
@@ -3979,9 +3972,9 @@ msgid "Do you want to close it before proceeding?"
 msgstr "Жалғастыру алдында оны жабуды қалайсыз ба?"
 
 #: ../src/project.c:597
-#, fuzzy, c-format
+#, c-format
 msgid "The '%s' project is open."
-msgstr "'%s' жобасы ашық боп тұр."
+msgstr "'%s' жобасы ашық."
 
 #: ../src/project.c:646
 msgid "The specified project name is too short."
@@ -4554,9 +4547,8 @@ msgid "Load Tags"
 msgstr "Тегтерді жүктеу"
 
 #: ../src/symbols.c:1780
-#, fuzzy
 msgid "Geany tag files (*.*.tags)"
-msgstr "Geany тег файлдары (*.tags)"
+msgstr "Geany тег файлдары (*.*.tags)"
 
 #. For translators: the first wildcard is the filetype, the second the filename
 #: ../src/symbols.c:1800
@@ -4860,7 +4852,7 @@ msgstr ""
 #: ../src/ui_utils.c:219
 #, c-format
 msgid "%dL"
-msgstr ""
+msgstr "%dж"
 
 #. RO = read-only
 #: ../src/ui_utils.c:225 ../src/ui_utils.c:232
@@ -4937,23 +4929,23 @@ msgstr "C++ STL"
 msgid "_Set Custom Date Format"
 msgstr "Таңдау_ыңызша күн пішімін орнату"
 
-#: ../src/ui_utils.c:1819
+#: ../src/ui_utils.c:1820
 msgid "Select Folder"
 msgstr "Буманы таңдау"
 
-#: ../src/ui_utils.c:1819
+#: ../src/ui_utils.c:1820
 msgid "Select File"
 msgstr "Файлды таңдау"
 
-#: ../src/ui_utils.c:1978
+#: ../src/ui_utils.c:1979
 msgid "Save All"
 msgstr "Барлығын сақтау"
 
-#: ../src/ui_utils.c:1979
+#: ../src/ui_utils.c:1980
 msgid "Close All"
 msgstr "Барлығын жабу"
 
-#: ../src/ui_utils.c:2225
+#: ../src/ui_utils.c:2226
 msgid "Geany cannot start!"
 msgstr "Geany іске қосылу сәтсіз!"
 
@@ -5347,6 +5339,11 @@ msgid ""
 "%d will be replaced with the path name of the selected file without the "
 "filename"
 msgstr ""
+"\"Көмегімен ашу\" кезінде қолданылатын команда. Сіз %f және %d үлгілерін "
+"қолдана аласыз.\n"
+"%f файл атымен, толық орналасу жолымен қоса, алмастырылады\n"
+"%d таңдалған файлдың толық орналасу жолымен, сол файлдың атауына дейін, "
+"алмастырылады"
 
 #: ../plugins/filebrowser.c:1235
 msgid "Show hidden files"
@@ -5365,7 +5362,6 @@ msgid "Use the project's base directory"
 msgstr "Жобаның басты бумасын қолдану"
 
 #: ../plugins/filebrowser.c:1272
-#, fuzzy
 msgid ""
 "Change the directory to the base directory of the currently opened project"
 msgstr "Буманы ағымдағы ашық жобасының басты бумасына ауыстыру"
@@ -5381,18 +5377,18 @@ msgstr "Бұл плагин файлдарды сақтауға байланыс
 #: ../plugins/saveactions.c:171
 #, c-format
 msgid "Backup Copy: Directory could not be created (%s)."
-msgstr ""
+msgstr "Қор көшірме: Буманы жасау мүмкін емес (%s)."
 
 #. it's unlikely that this happens
 #: ../plugins/saveactions.c:203
 #, c-format
 msgid "Backup Copy: File could not be read (%s)."
-msgstr ""
+msgstr "Қор көшірме: Файлды оқу мүмкін емес (%s)."
 
 #: ../plugins/saveactions.c:221
 #, c-format
 msgid "Backup Copy: File could not be saved (%s)."
-msgstr ""
+msgstr "Қор көшірме: Файлды сақтау мүмкін емес (%s)."
 
 #: ../plugins/saveactions.c:313
 #, c-format
@@ -5407,7 +5403,7 @@ msgstr "Буманы таңдау"
 
 #: ../plugins/saveactions.c:467
 msgid "Backup directory does not exist or is not writable."
-msgstr ""
+msgstr "Қор көшірме бумасы жоқ болып тұр не оған жазуға құқық жоқ."
 
 #: ../plugins/saveactions.c:548
 msgid "Auto Save"
@@ -5457,10 +5453,12 @@ msgstr "К_ор көшірмелер файлдарын сақтау бумас�
 #: ../plugins/saveactions.c:684
 msgid "Date/_Time format for backup files (\"man strftime\" for details):"
 msgstr ""
+"Қор көшірме файлдары үшін күн/уақы_т пішімі (Көбірек ақпарап үшін \"man "
+"strftime\"):"
 
 #: ../plugins/saveactions.c:697
 msgid "Directory _levels to include in the backup destination:"
-msgstr ""
+msgstr "Қор көшірмеге кіретін бума_лар тереңдігі:"
 
 #: ../plugins/splitwindow.c:34
 msgid "Split Window"

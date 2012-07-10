@@ -1,13 +1,13 @@
 # Turkish translations for geany package.
 # Copyright (C) 2006-2009 THE geany'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the geany package.
-# Gürkan Gür <seqizz@gmail.com> 2008 - 2011
+# Gürkan Gür <seqizz@gmail.com> 2008 - 2012
 msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.22\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-06-03 17:50+0200\n"
-"PO-Revision-Date: 2011-09-23 12:06+0200\n"
+"POT-Creation-Date: 2012-06-13 18:46+0200\n"
+"PO-Revision-Date: 2012-06-12 12:36+0200\n"
 "Last-Translator: Gürkan Gür <seqizz@gmail.com>\n"
 "Language-Team: \n"
 "Language: \n"
@@ -80,7 +80,7 @@ msgstr "geçersiz"
 msgid "_Insert \"include <...>\""
 msgstr "\"include <...>\" _Ekle"
 
-#: ../data/geany.glade.h:14 ../src/keybindings.c:408
+#: ../data/geany.glade.h:14 ../src/keybindings.c:411
 msgid "_Insert Alternative White Space"
 msgstr "Alternat_if Beyaz Alan Ekle"
 
@@ -124,7 +124,7 @@ msgstr "Geçerli karakterler"
 msgid "Match braces"
 msgstr "Eşleme ayraçları"
 
-#: ../data/geany.glade.h:25 ../src/keybindings.c:418
+#: ../data/geany.glade.h:25 ../src/keybindings.c:421
 msgid "Preferences"
 msgstr "Seçenekler"
 
@@ -183,11 +183,10 @@ msgstr "Başlangıç yolu:"
 
 #: ../data/geany.glade.h:38
 msgid ""
-"Path to start in when opening or saving files. Must be an absolute path. "
-"Leave blank to use the current working directory."
+"Path to start in when opening or saving files. Must be an absolute path."
 msgstr ""
-"Bir dosya açılırken veya kaydedilirken öntanımlı yol. Çalışma dizininde "
-"kalması için boş bırakın."
+"Bir dosya açılırken veya kaydedilirken öntanımlı yol. Tam bir dizin yolu "
+"olmalıdır."
 
 #: ../data/geany.glade.h:39
 msgid "Project files:"
@@ -284,24 +283,19 @@ msgstr "<b>Çeşitli</b>"
 
 #: ../data/geany.glade.h:56
 msgid "Always wrap search"
-msgstr ""
+msgstr "Aramaya devam et"
 
 #: ../data/geany.glade.h:57
-#, fuzzy
 msgid "Always wrap search around the document"
-msgstr "Arama diyaloğu penceresini her zaman gizle"
+msgstr "Arama işlemi sona geldiğinde her zaman baştan devam et"
 
 #: ../data/geany.glade.h:58
-#, fuzzy
 msgid "Hide the Find dialog"
-msgstr "Arama diyaloğu penceresini her zaman gizle"
+msgstr "Arama diyaloğu penceresini gizle"
 
 #: ../data/geany.glade.h:59
-#, fuzzy
 msgid "Hide the Find dialog after clicking Find Next/Previous"
-msgstr ""
-"Sonraki veya önceki sonuç için tıklama yapıldığında her zaman ilk sonuca "
-"ulaşıp arama diyaloğunu kapat"
+msgstr "Sonraki veya önceki sonuç için tıklandığında arama diyaloğunu kapat"
 
 #: ../data/geany.glade.h:60
 msgid "Use the current word under the cursor for Find dialogs"
@@ -489,9 +483,8 @@ msgid "Calls the View->Toggle All Additional Widgets command"
 msgstr "Görünüm->Tüm Bölümleri Göster/Gizle komutunu çağırır"
 
 #: ../data/geany.glade.h:100
-#, fuzzy
 msgid "Switch to last used document after closing a tab"
-msgstr "Son kullanılan dökümana geç"
+msgstr "Bir sekme kapandıktan sonra son kullanılan dökümana geç"
 
 #: ../data/geany.glade.h:101
 msgid "<b>Editor tabs</b>"
@@ -784,7 +777,7 @@ msgstr "XML/HTML için otomatik tamamlama"
 
 #: ../data/geany.glade.h:161
 msgid "Insert matching closing tag for XML/HTML"
-msgstr ""
+msgstr "XML/HTML için eşleşen kapatma etiketini girin"
 
 #: ../data/geany.glade.h:162
 msgid "Automatic continuation of multi-line comments"
@@ -1074,7 +1067,7 @@ msgstr "<b>Sanal boşluklar</b>"
 msgid "Display"
 msgstr "Gösterim"
 
-#: ../data/geany.glade.h:223 ../src/keybindings.c:224 ../src/prefs.c:1581
+#: ../data/geany.glade.h:223 ../src/keybindings.c:227 ../src/prefs.c:1581
 msgid "Editor"
 msgstr "Düzenleyici"
 
@@ -1159,7 +1152,7 @@ msgstr ""
 "Dosyaların sonundaki boşluk, sekme ve diğer satır sonu karakterlerini "
 "temizler"
 
-#: ../data/geany.glade.h:241 ../src/keybindings.c:559
+#: ../data/geany.glade.h:241 ../src/keybindings.c:562
 msgid "Replace tabs by space"
 msgstr "Sekmeleri boşluklara dönüştür"
 
@@ -1243,7 +1236,7 @@ msgstr ""
 msgid "<b>Commands</b>"
 msgstr "<b>Komutlar</b>"
 
-#: ../data/geany.glade.h:259 ../src/keybindings.c:236 ../src/prefs.c:1585
+#: ../data/geany.glade.h:259 ../src/keybindings.c:239 ../src/prefs.c:1585
 msgid "Tools"
 msgstr "Araçlar"
 
@@ -1429,9 +1422,8 @@ msgid "Sets the font for the terminal widget"
 msgstr "Terminal bölgesi için yazıtipini ayarlar"
 
 #: ../data/geany.glade.h:300
-#, fuzzy
 msgid "Choose Terminal Font"
-msgstr "Terminal yazıtipi:"
+msgstr "Terminal Yazı Tipini Seçin"
 
 #: ../data/geany.glade.h:301
 msgid "Foreground color:"
@@ -1454,9 +1446,8 @@ msgid "Sets the foreground color of the text in the terminal widget"
 msgstr "Terminal bölgesinde yazının rengini ayarlar"
 
 #: ../data/geany.glade.h:306
-#, fuzzy
 msgid "Sets the backround color of the text in the terminal widget"
-msgstr "Terminal bölgesinde arkaplan rengini ayarlar"
+msgstr "Terminal bölgesindeki yazının arkaplan rengini ayarlar"
 
 #: ../data/geany.glade.h:307
 msgid ""
@@ -1520,20 +1511,17 @@ msgstr ""
 "kullanışlı olabilir."
 
 #: ../data/geany.glade.h:319
-#, fuzzy
 msgid "Follow path of the current file"
 msgstr "Geçerli dosyanın yolunu izle"
 
 #: ../data/geany.glade.h:320
-#, fuzzy
 msgid ""
 "Whether to execute \\\"cd $path\\\" when you switch between opened files"
-msgstr "Açık dosyalarda gezerken \"cd $path\" komutunu çalıştır"
+msgstr "Açık dosyalarda gezerken \\\"cd $path\\\" komutunu çalıştır"
 
 #: ../data/geany.glade.h:321
-#, fuzzy
 msgid "Execute programs in the VTE"
-msgstr "Terminal emülatöründe programları çalıştır"
+msgstr "Proglamları terminal emülatöründe çalıştır"
 
 #: ../data/geany.glade.h:322
 msgid ""
@@ -1556,9 +1544,8 @@ msgstr ""
 "Unutmayın, terminal içerisinde çalıştırılan uygulamalar sonlandırılamaz"
 
 #: ../data/geany.glade.h:325
-#, fuzzy
 msgid "<b>Terminal</b>"
-msgstr "<b>İzinler:</b>"
+msgstr "<b>Terminal</b>"
 
 #: ../data/geany.glade.h:326 ../src/prefs.c:1595 ../src/vte.c:281
 msgid "Terminal"
@@ -1619,7 +1606,7 @@ msgstr ""
 "Projenin oluşturulacağı ana dizin. Yeni bir tane oluşturabilir veya olan "
 "dizinlerden kullanabilirsiniz."
 
-#: ../data/geany.glade.h:338 ../src/keybindings.c:234
+#: ../data/geany.glade.h:338 ../src/keybindings.c:237
 msgid "Project"
 msgstr "Proje"
 
@@ -1692,43 +1679,43 @@ msgstr "Tüm_ünü Kapat"
 msgid "_Commands"
 msgstr "_Komutlar"
 
-#: ../data/geany.glade.h:357 ../src/keybindings.c:343
+#: ../data/geany.glade.h:357 ../src/keybindings.c:346
 msgid "_Cut Current Line(s)"
 msgstr "Ge_çerli satır(lar)ı kes"
 
-#: ../data/geany.glade.h:358 ../src/keybindings.c:340
+#: ../data/geany.glade.h:358 ../src/keybindings.c:343
 msgid "_Copy Current Line(s)"
 msgstr "Geçerli Satır(lar)ı _Kopyala"
 
-#: ../data/geany.glade.h:359 ../src/keybindings.c:295
+#: ../data/geany.glade.h:359 ../src/keybindings.c:298
 msgid "_Delete Current Line(s)"
 msgstr "_Geçerli Satır(lar)ı Sil"
 
-#: ../data/geany.glade.h:360 ../src/keybindings.c:292
+#: ../data/geany.glade.h:360 ../src/keybindings.c:295
 msgid "_Duplicate Line or Selection"
 msgstr "_Seçimi veya Satır(lar)ı Çoğalt"
 
-#: ../data/geany.glade.h:361 ../src/keybindings.c:353
+#: ../data/geany.glade.h:361 ../src/keybindings.c:356
 msgid "_Select Current Line(s)"
 msgstr "G_eçerli Satır(lar)ı Seç"
 
-#: ../data/geany.glade.h:362 ../src/keybindings.c:356
+#: ../data/geany.glade.h:362 ../src/keybindings.c:359
 msgid "_Select Current Paragraph"
 msgstr "Geçe_rli Paragrafı Seç"
 
-#: ../data/geany.glade.h:363 ../src/keybindings.c:395
+#: ../data/geany.glade.h:363 ../src/keybindings.c:398
 msgid "_Send Selection to Terminal"
 msgstr "_Seçimi Terminale Gönder"
 
-#: ../data/geany.glade.h:364 ../src/keybindings.c:397
+#: ../data/geany.glade.h:364 ../src/keybindings.c:400
 msgid "_Reflow Lines/Block"
 msgstr ""
 
-#: ../data/geany.glade.h:365 ../src/keybindings.c:367
+#: ../data/geany.glade.h:365 ../src/keybindings.c:370
 msgid "T_oggle Case of Selection"
 msgstr "Seçimi Büyült/Kü_çült"
 
-#: ../data/geany.glade.h:366 ../src/keybindings.c:302
+#: ../data/geany.glade.h:366 ../src/keybindings.c:305
 msgid "_Transpose Current Line"
 msgstr "Geçerli Sa_tırın Yerini Değiştir"
 
@@ -1752,7 +1739,7 @@ msgstr "Girintiyi _Artır"
 msgid "_Decrease Indent"
 msgstr "Girintiyi A_zalt"
 
-#: ../data/geany.glade.h:372 ../src/keybindings.c:386
+#: ../data/geany.glade.h:372 ../src/keybindings.c:389
 msgid "_Smart Line Indent"
 msgstr "Akıllı Satır _Girintilendirme"
 
@@ -1768,7 +1755,7 @@ msgstr "Yoru_m Ekle"
 msgid "Preference_s"
 msgstr "_Seçenekler"
 
-#: ../data/geany.glade.h:376 ../src/keybindings.c:421
+#: ../data/geany.glade.h:376 ../src/keybindings.c:424
 msgid "P_lugin Preferences"
 msgstr "Ek_lenti Seçenekleri"
 
@@ -1796,11 +1783,11 @@ msgstr "Sonraki _Mesaj"
 msgid "Pr_evious Message"
 msgstr "Önc_eki Mesaj"
 
-#: ../data/geany.glade.h:383 ../src/keybindings.c:470
+#: ../data/geany.glade.h:383 ../src/keybindings.c:473
 msgid "_Go to Next Marker"
 msgstr "_Sonraki İşaretçiye Git"
 
-#: ../data/geany.glade.h:384 ../src/keybindings.c:473
+#: ../data/geany.glade.h:384 ../src/keybindings.c:476
 msgid "_Go to Previous Marker"
 msgstr "_Önceki İşaretçiye Git"
 
@@ -1808,15 +1795,15 @@ msgstr "_Önceki İşaretçiye Git"
 msgid "_Go to Line"
 msgstr "Satıra _Git"
 
-#: ../data/geany.glade.h:386 ../src/keybindings.c:433
+#: ../data/geany.glade.h:386 ../src/keybindings.c:436
 msgid "Find Next _Selection"
 msgstr "_Sonraki Seçimi Bul"
 
-#: ../data/geany.glade.h:387 ../src/keybindings.c:435
+#: ../data/geany.glade.h:387 ../src/keybindings.c:438
 msgid "Find Pre_vious Selection"
 msgstr "_Önceki Seçimi Bul"
 
-#: ../data/geany.glade.h:388 ../src/keybindings.c:452
+#: ../data/geany.glade.h:388 ../src/keybindings.c:455
 msgid "_Mark All"
 msgstr "T_ümünü İşaretle"
 
@@ -2066,9 +2053,8 @@ msgid "_Keyboard Shortcuts"
 msgstr "_Klavye Kısayolları"
 
 #: ../data/geany.glade.h:450
-#, fuzzy
 msgid "Debug _Messages"
-msgstr "Hata Ayıklama Mesajları"
+msgstr "Hata Ayıklama _Mesajları"
 
 #: ../data/geany.glade.h:451
 msgid "_Website"
@@ -2076,16 +2062,15 @@ msgstr "_Web Sitesi"
 
 #: ../data/geany.glade.h:452
 msgid "Wi_ki"
-msgstr ""
+msgstr "Wi_ki"
 
 #: ../data/geany.glade.h:453
 msgid "Report a _Bug"
-msgstr ""
+msgstr "Hata _Bildir"
 
 #: ../data/geany.glade.h:454
-#, fuzzy
 msgid "_Donate"
-msgstr "Kay_detme"
+msgstr "_Bağış Yap"
 
 #: ../data/geany.glade.h:455 ../src/sidebar.c:124
 msgid "Symbols"
@@ -2121,6 +2106,13 @@ msgid ""
 "Frank Lanitz\n"
 "All rights reserved."
 msgstr ""
+"Copyright (c)  2005-2012\n"
+"Colomban Wendling\n"
+"Nick Treleaven\n"
+"Matthew Brush\n"
+"Enrico Tröger\n"
+"Frank Lanitz\n"
+"Tüm hakları saklıdır."
 
 #: ../src/about.c:157
 msgid "About Geany"
@@ -2216,9 +2208,9 @@ msgid "Failed to change the working directory to \"%s\""
 msgstr "\"%s\" çalışma dizinine geçilemedi."
 
 #: ../src/build.c:929
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to execute \"%s\" (start-script could not be created: %s)"
-msgstr "\"%s\" çalıştırılamadı (başlangıç-betiği oluşturulamadı)"
+msgstr "\"%s\" çalıştırılamadı (başlangıç betiği oluşturulamadı: %s)"
 
 #: ../src/build.c:984
 msgid ""
@@ -2399,7 +2391,7 @@ msgstr "Kaydedilmemiş bütün içerik kaybolacak."
 msgid "Are you sure you want to reload '%s'?"
 msgstr "Yeniden yüklemek istediğinize emin misiniz '%s'?"
 
-#: ../src/callbacks.c:1062 ../src/keybindings.c:461
+#: ../src/callbacks.c:1062 ../src/keybindings.c:464
 msgid "Go to Line"
 msgstr "Satıra Git"
 
@@ -2463,9 +2455,9 @@ msgid "No more message items."
 msgstr "Başka mesaj yok."
 
 #: ../src/callbacks.c:1673
-#, fuzzy, c-format
+#, c-format
 msgid "Could not open file %s (File not found)"
-msgstr "%s dosyası açılamadı (%s)"
+msgstr "%s dosyası açılamadı (Dosya bulunamadı)"
 
 #: ../src/dialogs.c:226
 msgid "Detect from file"
@@ -3124,539 +3116,535 @@ msgstr "%s dosya türü için geçersiz düzenli ifade: %s"
 msgid "untitled"
 msgstr "isimsiz"
 
-#: ../src/highlighting.c:1225 ../src/main.c:828 ../src/socket.c:166
+#: ../src/highlighting.c:1232 ../src/main.c:828 ../src/socket.c:166
 #: ../src/templates.c:224
 #, c-format
 msgid "Could not find file '%s'."
 msgstr "'%s' dosyası bulunamadı."
 
-#: ../src/highlighting.c:1297
-#, fuzzy
+#: ../src/highlighting.c:1304
 msgid "Default"
-msgstr "_Öntanımlı"
+msgstr "Öntanımlı"
 
-#: ../src/highlighting.c:1336
-#, fuzzy
+#: ../src/highlighting.c:1343
 msgid "The current filetype overrides the default style."
-msgstr "Geçerli dosyayı make aracı ile ve öntanımlı dizinde inşa et"
+msgstr "Geçerli dosya öntanımlı stili görmezden geliyor."
 
-#: ../src/highlighting.c:1337
+#: ../src/highlighting.c:1344
 msgid "This may cause color schemes to display incorrectly."
-msgstr ""
+msgstr "Bu işlem renk şemalarının hatalı görüntülenmesine sebep olabilir."
 
-#: ../src/highlighting.c:1358
-#, fuzzy
+#: ../src/highlighting.c:1365
 msgid "Color Schemes"
-msgstr "_Renk Şemaları"
+msgstr "Renk Şemaları"
 
 #. visual group order
-#: ../src/keybindings.c:223 ../src/symbols.c:714
+#: ../src/keybindings.c:226 ../src/symbols.c:714
 msgid "File"
 msgstr "Dosya"
 
-#: ../src/keybindings.c:225
+#: ../src/keybindings.c:228
 msgid "Clipboard"
 msgstr "Pano"
 
-#: ../src/keybindings.c:226
+#: ../src/keybindings.c:229
 msgid "Select"
 msgstr "Seç"
 
-#: ../src/keybindings.c:227
+#: ../src/keybindings.c:230
 msgid "Format"
 msgstr "Biçim"
 
-#: ../src/keybindings.c:228
+#: ../src/keybindings.c:231
 msgid "Insert"
 msgstr "Araya ekle"
 
-#: ../src/keybindings.c:229
+#: ../src/keybindings.c:232
 msgid "Settings"
 msgstr "Ayarlar"
 
-#: ../src/keybindings.c:230
+#: ../src/keybindings.c:233
 msgid "Search"
 msgstr "Ara"
 
-#: ../src/keybindings.c:231
+#: ../src/keybindings.c:234
 msgid "Go to"
 msgstr "Git"
 
-#: ../src/keybindings.c:232
+#: ../src/keybindings.c:235
 msgid "View"
 msgstr "Bak"
 
-#: ../src/keybindings.c:233
+#: ../src/keybindings.c:236
 msgid "Document"
 msgstr "Döküman"
 
-#: ../src/keybindings.c:235 ../src/keybindings.c:582 ../src/project.c:444
-#: ../src/ui_utils.c:1980
+#: ../src/keybindings.c:238 ../src/keybindings.c:585 ../src/project.c:444
+#: ../src/ui_utils.c:1981
 msgid "Build"
 msgstr "İnşa et"
 
-#: ../src/keybindings.c:237 ../src/keybindings.c:607
+#: ../src/keybindings.c:240 ../src/keybindings.c:610
 msgid "Help"
 msgstr "Yardım"
 
-#: ../src/keybindings.c:238
+#: ../src/keybindings.c:241
 msgid "Focus"
 msgstr "Odakla"
 
-#: ../src/keybindings.c:239
+#: ../src/keybindings.c:242
 msgid "Notebook tab"
 msgstr "Not defteri sekmesi"
 
-#: ../src/keybindings.c:248 ../src/keybindings.c:276
+#: ../src/keybindings.c:251 ../src/keybindings.c:279
 msgid "New"
 msgstr "Yeni"
 
-#: ../src/keybindings.c:250 ../src/keybindings.c:278
+#: ../src/keybindings.c:253 ../src/keybindings.c:281
 msgid "Open"
 msgstr "Aç"
 
-#: ../src/keybindings.c:253
+#: ../src/keybindings.c:256
 msgid "Open selected file"
 msgstr "Seçilen dosyayı aç"
 
-#: ../src/keybindings.c:255
+#: ../src/keybindings.c:258
 msgid "Save"
 msgstr "Kaydet"
 
-#: ../src/keybindings.c:257 ../src/toolbar.c:55
+#: ../src/keybindings.c:260 ../src/toolbar.c:55
 msgid "Save as"
 msgstr "Farklı kaydet"
 
-#: ../src/keybindings.c:259
+#: ../src/keybindings.c:262
 msgid "Save all"
 msgstr "Tümünü kaydet"
 
-#: ../src/keybindings.c:262
+#: ../src/keybindings.c:265
 msgid "Print"
 msgstr "Yazdır"
 
-#: ../src/keybindings.c:264 ../src/keybindings.c:283
+#: ../src/keybindings.c:267 ../src/keybindings.c:286
 msgid "Close"
 msgstr "Kapat"
 
-#: ../src/keybindings.c:266
+#: ../src/keybindings.c:269
 msgid "Close all"
 msgstr "Hepsini kapat"
 
-#: ../src/keybindings.c:269
+#: ../src/keybindings.c:272
 msgid "Reload file"
 msgstr "Yeniden yükle"
 
-#: ../src/keybindings.c:271
+#: ../src/keybindings.c:274
 msgid "Re-open last closed tab"
 msgstr "Kapatılan son sekmeyi geri aç"
 
-#: ../src/keybindings.c:288
+#: ../src/keybindings.c:291
 msgid "Undo"
 msgstr "Geri al"
 
-#: ../src/keybindings.c:290
+#: ../src/keybindings.c:293
 msgid "Redo"
 msgstr "Tekrarla"
 
-#: ../src/keybindings.c:299
+#: ../src/keybindings.c:302
 msgid "Delete to line end"
 msgstr "Satırın sonuna kadar sil"
 
-#: ../src/keybindings.c:305
+#: ../src/keybindings.c:308
 msgid "Scroll to current line"
 msgstr "Geçerli satıra git"
 
-#: ../src/keybindings.c:307
+#: ../src/keybindings.c:310
 msgid "Scroll up the view by one line"
 msgstr "Görünümü bir satır yukarı kaydır"
 
-#: ../src/keybindings.c:309
+#: ../src/keybindings.c:312
 msgid "Scroll down the view by one line"
 msgstr "Görünümü bir satır aşağı kaydır"
 
-#: ../src/keybindings.c:311
+#: ../src/keybindings.c:314
 msgid "Complete snippet"
 msgstr "Parçayı tamamla"
 
-#: ../src/keybindings.c:313
+#: ../src/keybindings.c:316
 msgid "Move cursor in snippet"
 msgstr "İşaretçiyi parça içinde hareket ettir"
 
-#: ../src/keybindings.c:315
+#: ../src/keybindings.c:318
 msgid "Suppress snippet completion"
 msgstr "Parça tamamlamayı engelle"
 
-#: ../src/keybindings.c:317
+#: ../src/keybindings.c:320
 msgid "Context Action"
 msgstr "Bağlam eylemi"
 
-#: ../src/keybindings.c:319
+#: ../src/keybindings.c:322
 msgid "Complete word"
 msgstr "Kelimeyi tamamla"
 
-#: ../src/keybindings.c:321
+#: ../src/keybindings.c:324
 msgid "Show calltip"
 msgstr "İpucunu göster"
 
-#: ../src/keybindings.c:323
+#: ../src/keybindings.c:326
 msgid "Show macro list"
 msgstr "Makro listesini göster"
 
-#: ../src/keybindings.c:325
+#: ../src/keybindings.c:328
 msgid "Word part completion"
 msgstr "Kelime parçası tamamlama"
 
-#: ../src/keybindings.c:327
+#: ../src/keybindings.c:330
 msgid "Move line(s) up"
 msgstr "Satır(lar)ı yukarı taşı"
 
-#: ../src/keybindings.c:329
+#: ../src/keybindings.c:332
 msgid "Move line(s) down"
 msgstr "Satır(lar)ı aşağı taşı"
 
-#: ../src/keybindings.c:334
+#: ../src/keybindings.c:337
 msgid "Cut"
 msgstr "Kes"
 
-#: ../src/keybindings.c:336
+#: ../src/keybindings.c:339
 msgid "Copy"
 msgstr "Kopyala"
 
-#: ../src/keybindings.c:338
+#: ../src/keybindings.c:341
 msgid "Paste"
 msgstr "Yapıştır"
 
-#: ../src/keybindings.c:349
+#: ../src/keybindings.c:352
 msgid "Select All"
 msgstr "Tümünü Seç"
 
-#: ../src/keybindings.c:351
+#: ../src/keybindings.c:354
 msgid "Select current word"
 msgstr "Geçerli kelimeyi seç"
 
-#: ../src/keybindings.c:359
+#: ../src/keybindings.c:362
 msgid "Select to previous word part"
 msgstr "Önceki yazı parçasına git"
 
-#: ../src/keybindings.c:361
+#: ../src/keybindings.c:364
 msgid "Select to next word part"
 msgstr "Sonraki yazı parçasına git"
 
-#: ../src/keybindings.c:369
+#: ../src/keybindings.c:372
 msgid "Toggle line commentation"
 msgstr "Seçimi Yorum yap/yapma"
 
-#: ../src/keybindings.c:372
+#: ../src/keybindings.c:375
 msgid "Comment line(s)"
 msgstr "Satır(lar)ı yoruma çevir"
 
-#: ../src/keybindings.c:374
+#: ../src/keybindings.c:377
 msgid "Uncomment line(s)"
 msgstr "Yorumdan satır(lar)a çevir"
 
-#: ../src/keybindings.c:376
+#: ../src/keybindings.c:379
 msgid "Increase indent"
 msgstr "Girdiyi artır"
 
-#: ../src/keybindings.c:379
+#: ../src/keybindings.c:382
 msgid "Decrease indent"
 msgstr "Girdiyi azalt"
 
-#: ../src/keybindings.c:382
+#: ../src/keybindings.c:385
 msgid "Increase indent by one space"
 msgstr "Tek boşluk ile girdiyi artır"
 
-#: ../src/keybindings.c:384
+#: ../src/keybindings.c:387
 msgid "Decrease indent by one space"
 msgstr "Tek boşluk ile girdiyi azalt"
 
-#: ../src/keybindings.c:388
+#: ../src/keybindings.c:391
 msgid "Send to Custom Command 1"
 msgstr "Özel Komut 1'e gönder"
 
-#: ../src/keybindings.c:390
+#: ../src/keybindings.c:393
 msgid "Send to Custom Command 2"
 msgstr "Özel Komut 2'ye gönder"
 
-#: ../src/keybindings.c:392
+#: ../src/keybindings.c:395
 msgid "Send to Custom Command 3"
 msgstr "Özel Komut 3'e gönder"
 
-#: ../src/keybindings.c:400
-#, fuzzy
+#: ../src/keybindings.c:403
 msgid "Join lines"
-msgstr "Satır(lar)ı yoruma çevir"
+msgstr "Satırları birleştir"
 
-#: ../src/keybindings.c:405
+#: ../src/keybindings.c:408
 msgid "Insert date"
 msgstr "Araya tarih ekle"
 
-#: ../src/keybindings.c:411
+#: ../src/keybindings.c:414
 msgid "Insert New Line Before Current"
 msgstr "Geçerli Satırdan Önce Yeni Satır Aç"
 
-#: ../src/keybindings.c:413
+#: ../src/keybindings.c:416
 msgid "Insert New Line After Current"
 msgstr "Geçerli Satırın Ardına Yeni Satır Aç"
 
-#: ../src/keybindings.c:426 ../src/search.c:463
+#: ../src/keybindings.c:429 ../src/search.c:463
 msgid "Find"
 msgstr "Bul"
 
-#: ../src/keybindings.c:428
+#: ../src/keybindings.c:431
 msgid "Find Next"
 msgstr "Sonrakini Bul"
 
-#: ../src/keybindings.c:430
+#: ../src/keybindings.c:433
 msgid "Find Previous"
 msgstr "Öncekini Bul"
 
-#: ../src/keybindings.c:437 ../src/search.c:619
+#: ../src/keybindings.c:440 ../src/search.c:619
 msgid "Replace"
 msgstr "Değiştir"
 
-#: ../src/keybindings.c:439 ../src/search.c:871
+#: ../src/keybindings.c:442 ../src/search.c:871
 msgid "Find in Files"
 msgstr "Dosyalarda Bul"
 
-#: ../src/keybindings.c:442
+#: ../src/keybindings.c:445
 msgid "Next Message"
 msgstr "Sonraki Mesaj"
 
-#: ../src/keybindings.c:444
+#: ../src/keybindings.c:447
 msgid "Previous Message"
 msgstr "Önceki Mesaj"
 
-#: ../src/keybindings.c:447
+#: ../src/keybindings.c:450
 msgid "Find Usage"
 msgstr "Kullanım Bul"
 
-#: ../src/keybindings.c:450
+#: ../src/keybindings.c:453
 msgid "Find Document Usage"
 msgstr "Döküman Kullanımı Bul"
 
-#: ../src/keybindings.c:457 ../src/toolbar.c:66
+#: ../src/keybindings.c:460 ../src/toolbar.c:66
 msgid "Navigate back a location"
 msgstr "Bir bölüm geri yolculuk yap"
 
-#: ../src/keybindings.c:459 ../src/toolbar.c:67
+#: ../src/keybindings.c:462 ../src/toolbar.c:67
 msgid "Navigate forward a location"
 msgstr "Bir bölüm ileri yolculuk yap"
 
-#: ../src/keybindings.c:464
+#: ../src/keybindings.c:467
 msgid "Go to matching brace"
 msgstr "Eşleşen ayraca git"
 
-#: ../src/keybindings.c:467
+#: ../src/keybindings.c:470
 msgid "Toggle marker"
 msgstr "İşaretçi ayarla"
 
-#: ../src/keybindings.c:476
+#: ../src/keybindings.c:479
 msgid "Go to Tag Definition"
 msgstr "Etiket Tanımına Git"
 
-#: ../src/keybindings.c:479
+#: ../src/keybindings.c:482
 msgid "Go to Tag Declaration"
 msgstr "Etiket İlanına Git"
 
-#: ../src/keybindings.c:481
+#: ../src/keybindings.c:484
 msgid "Go to Start of Line"
 msgstr "Satırın Başına Git"
 
-#: ../src/keybindings.c:483
+#: ../src/keybindings.c:486
 msgid "Go to End of Line"
 msgstr "Satırın Sonuna Git"
 
-#: ../src/keybindings.c:485
+#: ../src/keybindings.c:488
 msgid "Go to End of Display Line"
 msgstr "Görüntülenen Satırın Sonuna Git"
 
-#: ../src/keybindings.c:487
+#: ../src/keybindings.c:490
 msgid "Go to Previous Word Part"
 msgstr "Önceki Yazı Parçasına Git"
 
-#: ../src/keybindings.c:489
+#: ../src/keybindings.c:492
 msgid "Go to Next Word Part"
 msgstr "Sonraki Yazı Parçasına Git"
 
-#: ../src/keybindings.c:494
+#: ../src/keybindings.c:497
 msgid "Toggle All Additional Widgets"
 msgstr "Bütün bölümleri Aç/Kapa"
 
-#: ../src/keybindings.c:497
+#: ../src/keybindings.c:500
 msgid "Fullscreen"
 msgstr "Tam ekran"
 
-#: ../src/keybindings.c:499
+#: ../src/keybindings.c:502
 msgid "Toggle Messages Window"
 msgstr "Mesaj Penceresini Aç/Kapa"
 
-#: ../src/keybindings.c:502
+#: ../src/keybindings.c:505
 msgid "Toggle Sidebar"
 msgstr "Araç çubuğunu Aç/Kapa"
 
-#: ../src/keybindings.c:504
+#: ../src/keybindings.c:507
 msgid "Zoom In"
 msgstr "Yakınlaştır"
 
-#: ../src/keybindings.c:506
+#: ../src/keybindings.c:509
 msgid "Zoom Out"
 msgstr "Uzaklaştır"
 
-#: ../src/keybindings.c:508
+#: ../src/keybindings.c:511
 msgid "Zoom Reset"
 msgstr "Yakınlaştırmayı Sıfırla"
 
-#: ../src/keybindings.c:513
+#: ../src/keybindings.c:516
 msgid "Switch to Editor"
 msgstr "Düzenleyiciye geç"
 
-#: ../src/keybindings.c:515
+#: ../src/keybindings.c:518
 msgid "Switch to Search Bar"
 msgstr "Arama çubuğuna geç"
 
-#: ../src/keybindings.c:517
+#: ../src/keybindings.c:520
 msgid "Switch to Message Window"
 msgstr "Mesaj Penceresine Geç"
 
-#: ../src/keybindings.c:519
+#: ../src/keybindings.c:522
 msgid "Switch to Compiler"
 msgstr "Derleyiciye geç"
 
-#: ../src/keybindings.c:521
+#: ../src/keybindings.c:524
 msgid "Switch to Messages"
 msgstr "Mesajlara Geç"
 
-#: ../src/keybindings.c:523
+#: ../src/keybindings.c:526
 msgid "Switch to Scribble"
 msgstr "Karalama defterine geç"
 
-#: ../src/keybindings.c:525
+#: ../src/keybindings.c:528
 msgid "Switch to VTE"
 msgstr "Terminale geç"
 
-#: ../src/keybindings.c:527
+#: ../src/keybindings.c:530
 msgid "Switch to Sidebar"
 msgstr "Araç çubuğuna geç"
 
-#: ../src/keybindings.c:529
+#: ../src/keybindings.c:532
 msgid "Switch to Sidebar Symbol List"
 msgstr "Yan Panel Sembol Listesine Geç"
 
-#: ../src/keybindings.c:531
+#: ../src/keybindings.c:534
 msgid "Switch to Sidebar Document List"
 msgstr "Yan Panel Döküman Listesine Geç"
 
-#: ../src/keybindings.c:536
+#: ../src/keybindings.c:539
 msgid "Switch to left document"
 msgstr "Soldaki dökümana geç"
 
-#: ../src/keybindings.c:538
+#: ../src/keybindings.c:541
 msgid "Switch to right document"
 msgstr "Sağdaki dökümana geç"
 
-#: ../src/keybindings.c:540
+#: ../src/keybindings.c:543
 msgid "Switch to last used document"
 msgstr "Son kullanılan dökümana geç"
 
-#: ../src/keybindings.c:543
+#: ../src/keybindings.c:546
 msgid "Move document left"
 msgstr "Dükümanı sola taşı"
 
-#: ../src/keybindings.c:546
+#: ../src/keybindings.c:549
 msgid "Move document right"
 msgstr "Dükümanı sağa taşı"
 
-#: ../src/keybindings.c:548
+#: ../src/keybindings.c:551
 msgid "Move document first"
 msgstr "Dükümanı başa taşı"
 
-#: ../src/keybindings.c:550
+#: ../src/keybindings.c:553
 msgid "Move document last"
 msgstr "Dükümanı sona taşı"
 
-#: ../src/keybindings.c:555
+#: ../src/keybindings.c:558
 msgid "Toggle Line wrapping"
 msgstr "Satır Kaydırmayı aç/kapat"
 
-#: ../src/keybindings.c:557
+#: ../src/keybindings.c:560
 msgid "Toggle Line breaking"
 msgstr "Satır kesmeyi aç/kapat"
 
-#: ../src/keybindings.c:561
+#: ../src/keybindings.c:564
 msgid "Replace spaces by tabs"
 msgstr "Boşlukları sekmeye çevir"
 
-#: ../src/keybindings.c:563
+#: ../src/keybindings.c:566
 msgid "Toggle current fold"
 msgstr "Geçerli katlamayı aç/kapa"
 
-#: ../src/keybindings.c:565
+#: ../src/keybindings.c:568
 msgid "Fold all"
 msgstr "Tümünü katla"
 
-#: ../src/keybindings.c:567
+#: ../src/keybindings.c:570
 msgid "Unfold all"
 msgstr "Tmünü aç"
 
-#: ../src/keybindings.c:569
+#: ../src/keybindings.c:572
 msgid "Reload symbol list"
 msgstr "Simge listesini tekrar yükle"
 
-#: ../src/keybindings.c:571
+#: ../src/keybindings.c:574
 msgid "Remove Markers"
 msgstr "İşaretçileri Kaldır"
 
-#: ../src/keybindings.c:573
+#: ../src/keybindings.c:576
 msgid "Remove Error Indicators"
 msgstr "Hata Belirteçlerini Kaldır"
 
-#: ../src/keybindings.c:575
+#: ../src/keybindings.c:578
 msgid "Remove Markers and Error Indicators"
 msgstr "Hata Belirteçlerini ve İşaretçileri Kaldır"
 
-#: ../src/keybindings.c:580 ../src/toolbar.c:68
+#: ../src/keybindings.c:583 ../src/toolbar.c:68
 msgid "Compile"
 msgstr "Derle"
 
-#: ../src/keybindings.c:584
+#: ../src/keybindings.c:587
 msgid "Make all"
 msgstr "hepsini derle"
 
-#: ../src/keybindings.c:587
+#: ../src/keybindings.c:590
 msgid "Make custom target"
 msgstr "Özel hedef yap"
 
-#: ../src/keybindings.c:589
+#: ../src/keybindings.c:592
 msgid "Make object"
 msgstr "Nesneyi derle"
 
-#: ../src/keybindings.c:591
+#: ../src/keybindings.c:594
 msgid "Next error"
 msgstr "Sonraki hata"
 
-#: ../src/keybindings.c:593
+#: ../src/keybindings.c:596
 msgid "Previous error"
 msgstr "Önceki hata"
 
-#: ../src/keybindings.c:595
+#: ../src/keybindings.c:598
 msgid "Run"
 msgstr "Çalıştır"
 
-#: ../src/keybindings.c:597
+#: ../src/keybindings.c:600
 msgid "Build options"
 msgstr "İnşa seçenekleri"
 
-#: ../src/keybindings.c:602
+#: ../src/keybindings.c:605
 msgid "Show Color Chooser"
 msgstr "Renk Seçiciyi Göster"
 
-#: ../src/keybindings.c:849
+#: ../src/keybindings.c:852
 msgid "Keyboard Shortcuts"
 msgstr "Klavye Kısayolları"
 
-#: ../src/keybindings.c:861
+#: ../src/keybindings.c:864
 msgid "The following keyboard shortcuts are configurable:"
 msgstr "Şu kısayollar düzenlenebilir:"
 
@@ -3737,7 +3725,7 @@ msgstr "Geany'nin kurulduğu dizinleri göster"
 
 #: ../src/main.c:138
 msgid "Open all FILES in read-only mode (see documention)"
-msgstr ""
+msgstr "Tüm DOSYALARI okuma modunda aç (yardım sayfalarına bkz)"
 
 #: ../src/main.c:139
 msgid "Don't load the previous session's files"
@@ -3873,9 +3861,8 @@ msgid "Plugin"
 msgstr "Eklenti"
 
 #: ../src/plugins.c:1300
-#, fuzzy
 msgid "Description"
-msgstr "Tanım:"
+msgstr "Tanım"
 
 #: ../src/plugins.c:1318
 msgid "No plugins available."
@@ -4104,9 +4091,9 @@ msgid "Do you want to close it before proceeding?"
 msgstr "Onaylamadan kapatmak istiyor musunuz?"
 
 #: ../src/project.c:597
-#, fuzzy, c-format
+#, c-format
 msgid "The '%s' project is open."
-msgstr "'%s' projesi zaten açık."
+msgstr "'%s' projesi açık."
 
 #: ../src/project.c:646
 msgid "The specified project name is too short."
@@ -4344,7 +4331,7 @@ msgstr ""
 #: ../src/search.c:1574
 #, c-format
 msgid "Cannot parse extra options: %s"
-msgstr ""
+msgstr "Bazı seçenekler ayrıştırılamadı: %s"
 
 #: ../src/search.c:1640
 msgid "Searching..."
@@ -4391,13 +4378,12 @@ msgstr ""
 "Bu ölümcül bir hata ve Geany şimdi sonlanacak."
 
 #: ../src/stash.c:1099
-#, fuzzy
 msgid "Name"
-msgstr "Adı:"
+msgstr "İsim"
 
 #: ../src/stash.c:1106
 msgid "Value"
-msgstr ""
+msgstr "Değer"
 
 #: ../src/symbols.c:693 ../src/symbols.c:743 ../src/symbols.c:810
 msgid "Chapter"
@@ -4684,7 +4670,6 @@ msgid "Load Tags"
 msgstr "Etiketleri Yükle"
 
 #: ../src/symbols.c:1780
-#, fuzzy
 msgid "Geany tag files (*.*.tags)"
 msgstr "Geany etiket dosyaları (*.tags)"
 
@@ -4841,13 +4826,12 @@ msgid "Choose more build actions"
 msgstr "Daha fazla inşa seçeneği seç"
 
 #: ../src/toolbar.c:380
-#, fuzzy
 msgid "Search Field"
-msgstr "Arama hatalı."
+msgstr "Arama Bölümü"
 
 #: ../src/toolbar.c:390
 msgid "Goto Field"
-msgstr ""
+msgstr "Alana Git"
 
 #: ../src/toolbar.c:579
 msgid "Separator"
@@ -4988,9 +4972,8 @@ msgstr ""
 
 #. L = lines
 #: ../src/ui_utils.c:219
-#, c-format
 msgid "%dL"
-msgstr ""
+msgstr "%sS"
 
 #. RO = read-only
 #: ../src/ui_utils.c:225 ../src/ui_utils.c:232
@@ -5027,12 +5010,12 @@ msgstr "MOD"
 #: ../src/ui_utils.c:328
 #, c-format
 msgid "pos: %d"
-msgstr ""
+msgstr "pos: %d"
 
 #: ../src/ui_utils.c:330
-#, fuzzy, c-format
+#, c-format
 msgid "style: %d"
-msgstr "Simge tüyü:"
+msgstr "stil: %d"
 
 #: ../src/ui_utils.c:382
 msgid " (new instance)"
@@ -5067,25 +5050,25 @@ msgstr "C++ STL"
 msgid "_Set Custom Date Format"
 msgstr "Özel Tari_h Biçimi Ayarla"
 
-#: ../src/ui_utils.c:1819
+#: ../src/ui_utils.c:1820
 msgid "Select Folder"
 msgstr "Dizin Seç"
 
-#: ../src/ui_utils.c:1819
+#: ../src/ui_utils.c:1820
 msgid "Select File"
 msgstr "Dosya Seç"
 
-#: ../src/ui_utils.c:1978
+#: ../src/ui_utils.c:1979
 msgid "Save All"
 msgstr "Tümünü kaydet"
 
-#: ../src/ui_utils.c:1979
+#: ../src/ui_utils.c:1980
 msgid "Close All"
 msgstr "Tümünü Kapat"
 
-#: ../src/ui_utils.c:2225
+#: ../src/ui_utils.c:2226
 msgid "Geany cannot start!"
-msgstr ""
+msgstr "Geany başlayamadı!"
 
 #: ../src/utils.c:87
 msgid "Select Browser"

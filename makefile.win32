@@ -1,55 +1,73 @@
+# See http://www.geany.org/Support/BuildingOnWin32
 # Running make creates config.h then calls the sub makefiles.
 #
 # Other targets are:
 #	deps: delete the dependencies so they are regenerated on next make
 #	clean: clean all generated files
+#	install: install to DESTDIR
 #
 # localwin32.mk is an optional file to override make variables.
 # Use localwin32.mk instead of editing variables as it is included in sub
 # makefiles.
-# localwin32.mk to set PREFIX instead of the default C:\libs
-# For MSYS use localwin32.mk to set CP and RM.
-# By default this will work in a Windows command prompt.
+# For MSYS set MSYS=1.
+# By default this should work in a Windows command prompt (cmd.exe).
 
 WINDRES = windres.exe
 CC = gcc
 CXX = g++
-CP = copy
+CP = copy /Y
+CP_R = xcopy /S /Y
 RM = del
-MAKE = make
+MKDIR = mkdir
+# $/ is used as a portable directory separator
+# strip is used to prevent line wrap
+/ := $(strip \)
+DESTDIR = C:/Program Files/Geany
 -include localwin32.mk
 
-# Note: && is needed after cd because each line is executed in a different
-# shell. (cd .. is just for clarity).
+ifdef MSYS
+CP = cp
+CP_R = cp -r
+RM = rm -f
+/ = /
+endif
+
 all: config.h
-	cd tagmanager/mio && $(MAKE) -f makefile.win32 && cd ../..
-	cd tagmanager && $(MAKE) -f makefile.win32 && cd ..
-	cd scintilla && $(MAKE) -f makefile.win32 && cd ..
-	cd plugins && $(MAKE) -f makefile.win32 && cd ..
-	cd src && $(MAKE) -f makefile.win32 && cd ..
+	$(MAKE) -C tagmanager/ctags -f makefile.win32
+	$(MAKE) -C tagmanager/mio -f makefile.win32
+	$(MAKE) -C tagmanager/src -f makefile.win32
+	$(MAKE) -C scintilla -f makefile.win32
+	$(MAKE) -C plugins -f makefile.win32
+	$(MAKE) -C src -f makefile.win32
 
 config.h: win32-config.h
 	$(CP) $< $@
 
 deps:
-	-$(RM) tagmanager/mio/deps.mak tagmanager/deps.mak scintilla/deps.mak plugins/deps.mak src/deps.mak
+	-$(RM) tagmanager/ctags/deps.mak tagmanager/mio/deps.mak tagmanager/src/deps.mak scintilla/deps.mak plugins/deps.mak src/deps.mak
 
 # used by src/makefile.win32 to avoid del ../file which is an error
 clean-local:
 	-$(RM) geany_private.res geany.exe
 
 clean: deps
-	cd tagmanager/mio && $(MAKE) -f makefile.win32 clean && cd ../..
-	cd tagmanager && $(MAKE) -f makefile.win32 clean && cd ..
-	cd scintilla && $(MAKE) -f makefile.win32 clean && cd ..
-	cd plugins && $(MAKE) -f makefile.win32 clean && cd ..
-	cd src && $(MAKE) -f makefile.win32 clean && cd ..
+	$(MAKE) -C tagmanager/ctags -f makefile.win32 clean
+	$(MAKE) -C tagmanager/mio -f makefile.win32 clean
+	$(MAKE) -C tagmanager/src -f makefile.win32 clean
+	$(MAKE) -C scintilla -f makefile.win32 clean
+	$(MAKE) -C plugins -f makefile.win32 clean
+	$(MAKE) -C src -f makefile.win32 clean
 
-.PHONY: install
-DESTDIR='C:/Program Files/Geany'
+.PHONY: all clean clean-local deps install
 
-# requires admin privileges and MSYS
+# likely requires admin privileges
+# mkdir output is ignored in case dir exists
+# 'copy' seems to only accept / in the destination
 install:
-	cp -r data $(DESTDIR)
-	cp plugins/*.dll $(DESTDIR)/lib
-	cp geany.exe $(DESTDIR)/bin
+	-$(MKDIR) "$(DESTDIR)"
+	-$(MKDIR) "$(DESTDIR)/bin"
+	$(CP) geany.exe "$(DESTDIR)/bin"
+	-$(MKDIR) "$(DESTDIR)/lib"
+	$(CP) plugins$/*.dll "$(DESTDIR)/lib"
+	-$(MKDIR) "$(DESTDIR)/data"
+	$(CP_R) data "$(DESTDIR)/data"

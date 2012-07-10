@@ -1,8 +1,8 @@
 /*
  *      keybindings.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2006-2011 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2006-2011 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2006-2012 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2006-2012 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -132,7 +132,7 @@ GeanyKeyBinding *keybindings_get_item(GeanyKeyGroup *group, gsize key_id)
  * Menu accels are set in apply_kb_accel(). */
 /** Fills a GeanyKeyBinding struct item.
  * @note Always set @a key and @a mod to 0, otherwise you will likely
- * cause conflicts with the user's custom, other plugin's keybindings or 
+ * cause conflicts with the user's custom, other plugin's keybindings or
  * future default keybindings.
  * @param group Group.
  * @param key_id Keybinding index for the group.
@@ -484,6 +484,8 @@ static void init_default_kb(void)
 		GDK_Home, 0, "edit_gotolinestart", _("Go to Start of Line"), NULL);
 	add_kb(group, GEANY_KEYS_GOTO_LINEEND, NULL,
 		GDK_End, 0, "edit_gotolineend", _("Go to End of Line"), NULL);
+	add_kb(group, GEANY_KEYS_GOTO_LINESTARTVISUAL, NULL,
+		GDK_Home, GDK_MOD1_MASK, "edit_gotolinestartvisual", _("Go to Start of Display Line"), NULL);
 	add_kb(group, GEANY_KEYS_GOTO_LINEENDVISUAL, NULL,
 		GDK_End, GDK_MOD1_MASK, "edit_gotolineendvisual", _("Go to End of Display Line"), NULL);
 	add_kb(group, GEANY_KEYS_GOTO_PREVWORDPART, NULL,
@@ -1897,6 +1899,9 @@ static gboolean cb_func_goto_action(guint key_id)
 			break;
 		case GEANY_KEYS_GOTO_LINEEND:
 			sci_send_command(doc->editor->sci, SCI_LINEEND);
+			break;
+		case GEANY_KEYS_GOTO_LINESTARTVISUAL:
+			sci_send_command(doc->editor->sci, SCI_HOMEDISPLAY);
 			break;
 		case GEANY_KEYS_GOTO_LINEENDVISUAL:
 			sci_send_command(doc->editor->sci, SCI_LINEENDDISPLAY);

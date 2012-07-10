@@ -25,15 +25,17 @@
 #include "UniConversion.h"
 #include "XPM.h"
 
+#if defined(__clang__)
+// Clang 3.0 incorrectly displays  sentinel warnings. Fixed by clang 3.1.
+#pragma GCC diagnostic ignored "-Wsentinel"
+#endif
+
 /* GLIB must be compiled with thread support, otherwise we
    will bail on trying to use locks, and that could lead to
    problems for someone.  `glib-config --libs gthread` needs
    to be used to get the glib libraries for linking, otherwise
    g_thread_init will fail */
 #define USE_LOCK defined(G_THREADS_ENABLED) && !defined(G_THREADS_IMPL_NONE)
-/* Use fast way of getting char data on win32 to work around problems
-   with gdk_string_extents. */
-#define FAST_WAY
 
 #include "Converter.h"
 
@@ -43,9 +45,16 @@
 #define IS_WIDGET_FOCUSSED(w) (GTK_WIDGET_HAS_FOCUS(w))
 #endif
 
-#define USE_CAIRO 1
+// The Pango version guard for pango_units_from_double and pango_units_to_double 
+// is more complex than simply implementing these here.
 
-#ifdef USE_CAIRO
+static int pangoUnitsFromDouble(double d) {
+	return static_cast<int>(d * PANGO_SCALE + 0.5);
+}
+
+static double doubleFromPangoUnits(int pu) {
+	return static_cast<double>(pu) / PANGO_SCALE;
+}
 
 static cairo_surface_t *CreateSimilarSurface(GdkWindow *window, cairo_content_t content, int width, int height) {
 #if GTK_CHECK_VERSION(2,22,0)
@@ -65,8 +74,6 @@ static cairo_surface_t *CreateSimilarSurface(GdkWindow *window, cairo_content_t 
 #endif
 }
 
-#endif
-
 static GdkWindow *WindowFromWidget(GtkWidget *w) {
 #if GTK_CHECK_VERSION(3,0,0)
 	return gtk_widget_get_window(w);
@@ -74,10 +81,6 @@ static GdkWindow *WindowFromWidget(GtkWidget *w) {
 	return w->window;
 #endif
 }
-
-#ifdef USE_CAIRO
-#define DISABLE_GDK_FONT 1
-#endif
 
 #ifdef _MSC_VER
 // Ignore unreferenced local functions in GTK+ headers
@@ -92,7 +95,7 @@ enum encodingType { singleByte, UTF8, dbcs};
 
 struct LOGFONT {
 	int size;
-	bool bold;
+	int weight;
 	bool italic;
 	int characterSet;
 	char faceName[300];
@@ -143,45 +146,23 @@ static void FontMutexUnlock() {
 // On GTK+ 1.x holds a GdkFont* but on GTK+ 2.x can hold a GdkFont* or a
 // PangoFontDescription*.
 class FontHandle {
-	int width[128];
+	XYPOSITION width[128];
 	encodingType et;
 public:
 	int ascent;
-#ifndef DISABLE_GDK_FONT
-	GdkFont *pfont;
-#endif
 	PangoFontDescription *pfd;
 	int characterSet;
-#ifdef DISABLE_GDK_FONT
 	FontHandle() : et(singleByte), ascent(0), pfd(0), characterSet(-1) {
 		ResetWidths(et);
 	}
-#else
-	FontHandle(GdkFont *pfont_=0) {
-		et = singleByte;
-		ascent = 0;
-		pfont = pfont_;
-		pfd = 0;
-		characterSet = -1;
-		ResetWidths(et);
-	}
-#endif
 	FontHandle(PangoFontDescription *pfd_, int characterSet_) {
 		et = singleByte;
 		ascent = 0;
-#ifndef DISABLE_GDK_FONT
-		pfont = 0;
-#endif
 		pfd = pfd_;
 		characterSet = characterSet_;
 		ResetWidths(et);
 	}
 	~FontHandle() {
-#ifndef DISABLE_GDK_FONT
-		if (pfont)
-			gdk_font_unref(pfont);
-		pfont = 0;
-#endif
 		if (pfd)
 			pango_font_description_free(pfd);
 		pfd = 0;
@@ -192,8 +173,8 @@ public:
 			width[i] = 0;
 		}
 	}
-	int CharWidth(unsigned char ch, encodingType et_) {
-		int w = 0;
+	XYPOSITION CharWidth(unsigned char ch, encodingType et_) {
+		XYPOSITION w = 0;
 		FontMutexLock();
 		if ((ch <= 127) && (et == et_)) {
 			w = width[ch];
@@ -201,7 +182,7 @@ public:
 		FontMutexUnlock();
 		return w;
 	}
-	void SetCharWidth(unsigned char ch, int w, encodingType et_) {
+	void SetCharWidth(unsigned char ch, XYPOSITION w, encodingType et_) {
 		if (ch <= 127) {
 			FontMutexLock();
 			if (et != et_) {
@@ -224,229 +205,16 @@ static GtkWidget *PWidget(WindowID wid) {
 	return reinterpret_cast<GtkWidget *>(wid);
 }
 
-#if !GTK_CHECK_VERSION(3,0,0)
-static GtkWidget *PWidget(Window &w) {
-	return PWidget(w.GetID());
-}
-#endif
-
 Point Point::FromLong(long lpoint) {
 	return Point(
 	           Platform::LowShortFromLong(lpoint),
 	           Platform::HighShortFromLong(lpoint));
 }
 
-Palette::Palette() {
-	used = 0;
-	allowRealization = false;
-	allocatedPalette = 0;
-	allocatedLen = 0;
-	size = 100;
-	entries = new ColourPair[size];
-}
-
-Palette::~Palette() {
-	Release();
-	delete []entries;
-	entries = 0;
-}
-
-void Palette::Release() {
-	used = 0;
-	delete [](reinterpret_cast<GdkColor *>(allocatedPalette));
-	allocatedPalette = 0;
-	allocatedLen = 0;
-	delete []entries;
-	size = 100;
-	entries = new ColourPair[size];
-}
-
-// This method either adds a colour to the list of wanted colours (want==true)
-// or retrieves the allocated colour back to the ColourPair.
-// This is one method to make it easier to keep the code for wanting and retrieving in sync.
-void Palette::WantFind(ColourPair &cp, bool want) {
-	if (want) {
-		for (int i=0; i < used; i++) {
-			if (entries[i].desired == cp.desired)
-				return;
-		}
-
-		if (used >= size) {
-			int sizeNew = size * 2;
-			ColourPair *entriesNew = new ColourPair[sizeNew];
-			for (int j=0; j<size; j++) {
-				entriesNew[j] = entries[j];
-			}
-			delete []entries;
-			entries = entriesNew;
-			size = sizeNew;
-		}
-
-		entries[used].desired = cp.desired;
-		entries[used].allocated.Set(cp.desired.AsLong());
-		used++;
-	} else {
-		for (int i=0; i < used; i++) {
-			if (entries[i].desired == cp.desired) {
-				cp.allocated = entries[i].allocated;
-				return;
-			}
-		}
-		cp.allocated.Set(cp.desired.AsLong());
-	}
-}
-
-void Palette::Allocate(Window &w) {
-#if !GTK_CHECK_VERSION(3,0,0)
-	// Disable palette on GTK+ 3.
-	if (allocatedPalette) {
-		gdk_colormap_free_colors(gtk_widget_get_colormap(PWidget(w)),
-		                         reinterpret_cast<GdkColor *>(allocatedPalette),
-		                         allocatedLen);
-		delete [](reinterpret_cast<GdkColor *>(allocatedPalette));
-		allocatedPalette = 0;
-		allocatedLen = 0;
-	}
-	GdkColor *paletteNew = new GdkColor[used];
-	allocatedPalette = paletteNew;
-	gboolean *successPalette = new gboolean[used];
-	if (paletteNew) {
-		allocatedLen = used;
-		int iPal = 0;
-		for (iPal = 0; iPal < used; iPal++) {
-			paletteNew[iPal].red = entries[iPal].desired.GetRed() * (65535 / 255);
-			paletteNew[iPal].green = entries[iPal].desired.GetGreen() * (65535 / 255);
-			paletteNew[iPal].blue = entries[iPal].desired.GetBlue() * (65535 / 255);
-			paletteNew[iPal].pixel = entries[iPal].desired.AsLong();
-		}
-#ifndef USE_CAIRO
-		gdk_colormap_alloc_colors(gtk_widget_get_colormap(PWidget(w)),
-		                          paletteNew, allocatedLen, FALSE, TRUE,
-		                          successPalette);
-#endif
-		for (iPal = 0; iPal < used; iPal++) {
-			entries[iPal].allocated.Set(paletteNew[iPal].pixel);
-		}
-	}
-	delete []successPalette;
-#endif
-}
-
-#ifndef DISABLE_GDK_FONT
-
-static const char *CharacterSetName(int characterSet) {
-	switch (characterSet) {
-	case SC_CHARSET_ANSI:
-		return "iso8859-*";
-	case SC_CHARSET_DEFAULT:
-		return "iso8859-*";
-	case SC_CHARSET_BALTIC:
-		return "iso8859-13";
-	case SC_CHARSET_CHINESEBIG5:
-		return "*-*";
-	case SC_CHARSET_EASTEUROPE:
-		return "*-2";
-	case SC_CHARSET_GB2312:
-		return "gb2312.1980-*";
-	case SC_CHARSET_GREEK:
-		return "*-7";
-	case SC_CHARSET_HANGUL:
-		return "ksc5601.1987-*";
-	case SC_CHARSET_MAC:
-		return "*-*";
-	case SC_CHARSET_OEM:
-		return "*-*";
-	case SC_CHARSET_RUSSIAN:
-		return "*-r";
-	case SC_CHARSET_CYRILLIC:
-		return "*-cp1251";
-	case SC_CHARSET_SHIFTJIS:
-		return "jisx0208.1983-*";
-	case SC_CHARSET_SYMBOL:
-		return "*-*";
-	case SC_CHARSET_TURKISH:
-		return "*-9";
-	case SC_CHARSET_JOHAB:
-		return "*-*";
-	case SC_CHARSET_HEBREW:
-		return "*-8";
-	case SC_CHARSET_ARABIC:
-		return "*-6";
-	case SC_CHARSET_VIETNAMESE:
-		return "*-*";
-	case SC_CHARSET_THAI:
-		return "iso8859-11";
-	case SC_CHARSET_8859_15:
-		return "iso8859-15";
-	default:
-		return "*-*";
-	}
-}
-
-static bool IsDBCSCharacterSet(int characterSet) {
-	switch (characterSet) {
-	case SC_CHARSET_GB2312:
-	case SC_CHARSET_HANGUL:
-	case SC_CHARSET_SHIFTJIS:
-	case SC_CHARSET_CHINESEBIG5:
-		return true;
-	default:
-		return false;
-	}
-}
-
-static void GenerateFontSpecStrings(const char *fontName, int characterSet,
-                                    char *foundary, int foundary_len,
-                                    char *faceName, int faceName_len,
-                                    char *charset, int charset_len) {
-	// supported font strings include:
-	// foundary-fontface-isoxxx-x
-	// fontface-isoxxx-x
-	// foundary-fontface
-	// fontface
-	if (strchr(fontName, '-')) {
-		char tmp[300];
-		char *d1 = NULL, *d2 = NULL, *d3 = NULL;
-		strncpy(tmp, fontName, sizeof(tmp) - 1);
-		tmp[sizeof(tmp) - 1] = '\0';
-		d1 = strchr(tmp, '-');
-		// we know the first dash exists
-		d2 = strchr(d1 + 1, '-');
-		if (d2)
-			d3 = strchr(d2 + 1, '-');
-		if (d3 && d2) {
-			// foundary-fontface-isoxxx-x
-			*d2 = '\0';
-			foundary[0] = '-';
-			foundary[1] = '\0';
-			strncpy(faceName, tmp, foundary_len - 1);
-			strncpy(charset, d2 + 1, charset_len - 1);
-		} else if (d2) {
-			// fontface-isoxxx-x
-			*d1 = '\0';
-			strcpy(foundary, "-*-");
-			strncpy(faceName, tmp, faceName_len - 1);
-			strncpy(charset, d1 + 1, charset_len - 1);
-		} else {
-			// foundary-fontface
-			foundary[0] = '-';
-			foundary[1] = '\0';
-			strncpy(faceName, tmp, faceName_len - 1);
-			strncpy(charset, CharacterSetName(characterSet), charset_len - 1);
-		}
-	} else {
-		strncpy(foundary, "-*-", foundary_len);
-		strncpy(faceName, fontName, faceName_len - 1);
-		strncpy(charset, CharacterSetName(characterSet), charset_len - 1);
-	}
-}
-
-#endif
-
-static void SetLogFont(LOGFONT &lf, const char *faceName, int characterSet, int size, bool bold, bool italic) {
+static void SetLogFont(LOGFONT &lf, const char *faceName, int characterSet, float size, int weight, bool italic) {
 	memset(&lf, 0, sizeof(lf));
 	lf.size = size;
-	lf.bold = bold;
+	lf.weight = weight;
 	lf.italic = italic;
 	lf.characterSet = characterSet;
 	strncpy(lf.faceName, faceName, sizeof(lf.faceName) - 1);
@@ -457,13 +225,13 @@ static void SetLogFont(LOGFONT &lf, const char *faceName, int characterSet, int 
  * If one font is the same as another, its hash will be the same, but if the hash is the
  * same then they may still be different.
  */
-static int HashFont(const char *faceName, int characterSet, int size, bool bold, bool italic) {
+static int HashFont(const FontParameters &fp) {
 	return
-	    size ^
-	    (characterSet << 10) ^
-	    (bold ? 0x10000000 : 0) ^
-	    (italic ? 0x20000000 : 0) ^
-	    faceName[0];
+	    static_cast<int>(fp.size+0.5) ^
+	    (fp.characterSet << 10) ^
+	    ((fp.weight / 100) << 12) ^
+	    (fp.italic ? 0x20000000 : 0) ^
+	    fp.faceName[0];
 }
 
 class FontCached : Font {
@@ -471,35 +239,34 @@ class FontCached : Font {
 	int usage;
 	LOGFONT lf;
 	int hash;
-	FontCached(const char *faceName_, int characterSet_, int size_, bool bold_, bool italic_);
+	FontCached(const FontParameters &fp);
 	~FontCached() {}
-	bool SameAs(const char *faceName_, int characterSet_, int size_, bool bold_, bool italic_);
+	bool SameAs(const FontParameters &fp);
 	virtual void Release();
-	static FontID CreateNewFont(const char *fontName, int characterSet,
-	                            int size, bool bold, bool italic);
+	static FontID CreateNewFont(const FontParameters &fp);
 	static FontCached *first;
 public:
-	static FontID FindOrCreate(const char *faceName_, int characterSet_, int size_, bool bold_, bool italic_);
+	static FontID FindOrCreate(const FontParameters &fp);
 	static void ReleaseId(FontID fid_);
 };
 
 FontCached *FontCached::first = 0;
 
-FontCached::FontCached(const char *faceName_, int characterSet_, int size_, bool bold_, bool italic_) :
+FontCached::FontCached(const FontParameters &fp) :
 next(0), usage(0), hash(0) {
-	::SetLogFont(lf, faceName_, characterSet_, size_, bold_, italic_);
-	hash = HashFont(faceName_, characterSet_, size_, bold_, italic_);
-	fid = CreateNewFont(faceName_, characterSet_, size_, bold_, italic_);
+	::SetLogFont(lf, fp.faceName, fp.characterSet, fp.size, fp.weight, fp.italic);
+	hash = HashFont(fp);
+	fid = CreateNewFont(fp);
 	usage = 1;
 }
 
-bool FontCached::SameAs(const char *faceName_, int characterSet_, int size_, bool bold_, bool italic_) {
+bool FontCached::SameAs(const FontParameters &fp) {
 	return
-	    lf.size == size_ &&
-	    lf.bold == bold_ &&
-	    lf.italic == italic_ &&
-	    lf.characterSet == characterSet_ &&
-	    0 == strcmp(lf.faceName, faceName_);
+	    lf.size == fp.size &&
+	    lf.weight == fp.weight &&
+	    lf.italic == fp.italic &&
+	    lf.characterSet == fp.characterSet &&
+	    0 == strcmp(lf.faceName, fp.faceName);
 }
 
 void FontCached::Release() {
@@ -508,19 +275,19 @@ void FontCached::Release() {
 	fid = 0;
 }
 
-FontID FontCached::FindOrCreate(const char *faceName_, int characterSet_, int size_, bool bold_, bool italic_) {
+FontID FontCached::FindOrCreate(const FontParameters &fp) {
 	FontID ret = 0;
 	FontMutexLock();
-	int hashFind = HashFont(faceName_, characterSet_, size_, bold_, italic_);
+	int hashFind = HashFont(fp);
 	for (FontCached *cur = first; cur; cur = cur->next) {
 		if ((cur->hash == hashFind) &&
-		        cur->SameAs(faceName_, characterSet_, size_, bold_, italic_)) {
+		        cur->SameAs(fp)) {
 			cur->usage++;
 			ret = cur->fid;
 		}
 	}
 	if (ret == 0) {
-		FontCached *fc = new FontCached(faceName_, characterSet_, size_, bold_, italic_);
+		FontCached *fc = new FontCached(fp);
 		if (fc) {
 			fc->next = first;
 			first = fc;
@@ -550,187 +317,27 @@ void FontCached::ReleaseId(FontID fid_) {
 	FontMutexUnlock();
 }
 
-#ifndef DISABLE_GDK_FONT
-static GdkFont *LoadFontOrSet(const char *fontspec, int characterSet) {
-	if (IsDBCSCharacterSet(characterSet)) {
-		return gdk_fontset_load(fontspec);
-	} else {
-		return gdk_font_load(fontspec);
-	}
-}
-#endif
-
-FontID FontCached::CreateNewFont(const char *fontName, int characterSet,
-                                 int size, bool bold, bool italic) {
-	if (fontName[0] == '!') {
-		PangoFontDescription *pfd = pango_font_description_new();
-		if (pfd) {
-			pango_font_description_set_family(pfd, fontName+1);
-			pango_font_description_set_size(pfd, size * PANGO_SCALE);
-			pango_font_description_set_weight(pfd, bold ? PANGO_WEIGHT_BOLD : PANGO_WEIGHT_NORMAL);
-			pango_font_description_set_style(pfd, italic ? PANGO_STYLE_ITALIC : PANGO_STYLE_NORMAL);
-			return new FontHandle(pfd, characterSet);
-		}
+FontID FontCached::CreateNewFont(const FontParameters &fp) {
+	PangoFontDescription *pfd = pango_font_description_new();
+	if (pfd) {
+		pango_font_description_set_family(pfd, 
+			(fp.faceName[0] == '!') ? fp.faceName+1 : fp.faceName);
+		pango_font_description_set_size(pfd, pangoUnitsFromDouble(fp.size));
+		pango_font_description_set_weight(pfd, static_cast<PangoWeight>(fp.weight));
+		pango_font_description_set_style(pfd, fp.italic ? PANGO_STYLE_ITALIC : PANGO_STYLE_NORMAL);
+		return new FontHandle(pfd, fp.characterSet);
 	}
 
-#ifndef DISABLE_GDK_FONT
-	char fontset[1024];
-	char fontspec[300];
-	char foundary[50];
-	char faceName[100];
-	char charset[50];
-	fontset[0] = '\0';
-	fontspec[0] = '\0';
-	foundary[0] = '\0';
-	faceName[0] = '\0';
-	charset[0] = '\0';
-
-	GdkFont *newid = 0;
-	// If name of the font begins with a '-', assume, that it is
-	// a full fontspec.
-	if (fontName[0] == '-') {
-		if (strchr(fontName, ',') || IsDBCSCharacterSet(characterSet)) {
-			newid = gdk_fontset_load(fontName);
-		} else {
-			newid = gdk_font_load(fontName);
-		}
-		if (!newid) {
-			// Font not available so substitute a reasonable code font
-			// iso8859 appears to only allow western characters.
-			newid = LoadFontOrSet("-*-*-*-*-*-*-*-*-*-*-*-*-iso8859-*",
-				characterSet);
-		}
-		return new FontHandle(newid);
-	}
-
-	// it's not a full fontspec, build one.
-
-	// This supports creating a FONT_SET
-	// in a method that allows us to also set size, slant and
-	// weight for the fontset.  The expected input is multiple
-	// partial fontspecs seperated by comma
-	// eg. adobe-courier-iso10646-1,*-courier-iso10646-1,*-*-*-*
-	if (strchr(fontName, ',')) {
-		// build a fontspec and use gdk_fontset_load
-		int remaining = sizeof(fontset);
-		char fontNameCopy[1024];
-		strncpy(fontNameCopy, fontName, sizeof(fontNameCopy) - 1);
-		char *fn = fontNameCopy;
-		char *fp = strchr(fn, ',');
-		for (;;) {
-			const char *spec = "%s%s%s%s-*-*-*-%0d-*-*-*-*-%s";
-			if (fontset[0] != '\0') {
-				// if this is not the first font in the list,
-				// append a comma seperator
-				spec = ",%s%s%s%s-*-*-*-%0d-*-*-*-*-%s";
-			}
-
-			if (fp)
-				*fp = '\0'; // nullify the comma
-			GenerateFontSpecStrings(fn, characterSet,
-			                        foundary, sizeof(foundary),
-			                        faceName, sizeof(faceName),
-			                        charset, sizeof(charset));
-
-			g_snprintf(fontspec,
-			         sizeof(fontspec) - 1,
-			         spec,
-			         foundary, faceName,
-			         bold ? "-bold" : "-medium",
-			         italic ? "-i" : "-r",
-			         size * 10,
-			         charset);
-
-			// if this is the first font in the list, and
-			// we are doing italic, add an oblique font
-			// to the list
-			if (italic && fontset[0] == '\0') {
-				strncat(fontset, fontspec, remaining - 1);
-				remaining -= strlen(fontset);
-
-				g_snprintf(fontspec,
-				         sizeof(fontspec) - 1,
-				         ",%s%s%s-o-*-*-*-%0d-*-*-*-*-%s",
-				         foundary, faceName,
-				         bold ? "-bold" : "-medium",
-				         size * 10,
-				         charset);
-			}
-
-			strncat(fontset, fontspec, remaining - 1);
-			remaining -= strlen(fontset);
-
-			if (!fp)
-				break;
-
-			fn = fp + 1;
-			fp = strchr(fn, ',');
-		}
-
-		newid = gdk_fontset_load(fontset);
-		if (newid)
-			return new FontHandle(newid);
-		// if fontset load failed, fall through, we'll use
-		// the last font entry and continue to try and
-		// get something that matches
-	}
-
-	// single fontspec support
-
-	GenerateFontSpecStrings(fontName, characterSet,
-	                        foundary, sizeof(foundary),
-	                        faceName, sizeof(faceName),
-	                        charset, sizeof(charset));
-
-	g_snprintf(fontspec,
-	         sizeof(fontspec) - 1,
-	         "%s%s%s%s-*-*-*-%0d-*-*-*-*-%s",
-	         foundary, faceName,
-	         bold ? "-bold" : "-medium",
-	         italic ? "-i" : "-r",
-	         size * 10,
-	         charset);
-	newid = LoadFontOrSet(fontspec, characterSet);
-	if (!newid) {
-		// some fonts have oblique, not italic
-		g_snprintf(fontspec,
-		         sizeof(fontspec) - 1,
-		         "%s%s%s%s-*-*-*-%0d-*-*-*-*-%s",
-		         foundary, faceName,
-		         bold ? "-bold" : "-medium",
-		         italic ? "-o" : "-r",
-		         size * 10,
-		         charset);
-		newid = LoadFontOrSet(fontspec, characterSet);
-	}
-	if (!newid) {
-		g_snprintf(fontspec,
-		         sizeof(fontspec) - 1,
-		         "-*-*-*-*-*-*-*-%0d-*-*-*-*-%s",
-		         size * 10,
-		         charset);
-		newid = gdk_font_load(fontspec);
-	}
-	if (!newid) {
-		// Font not available so substitute a reasonable code font
-		// iso8859 appears to only allow western characters.
-		newid = LoadFontOrSet("-*-*-*-*-*-*-*-*-*-*-*-*-iso8859-*",
-			characterSet);
-	}
-	return new FontHandle(newid);
-#else
 	return new FontHandle();
-#endif
 }
 
 Font::Font() : fid(0) {}
 
 Font::~Font() {}
 
-void Font::Create(const char *faceName, int characterSet, int size,
-	bool bold, bool italic, int) {
+void Font::Create(const FontParameters &fp) {
 	Release();
-	fid = FontCached::FindOrCreate(faceName, characterSet, size, bold, italic);
+	fid = FontCached::FindOrCreate(fp);
 }
 
 void Font::Release() {
@@ -744,17 +351,11 @@ void Font::Release() {
 namespace Scintilla {
 #endif
 
-// On GTK+ 2.x, SurfaceID is a GdkDrawable* and on GTK+ 3.x, it is a cairo_t*
+// SurfaceID is a cairo_t*
 class SurfaceImpl : public Surface {
 	encodingType et;
-#ifdef USE_CAIRO
 	cairo_t *context;
 	cairo_surface_t *psurf;
-#else
-	GdkDrawable *drawable;
-	GdkGC *gc;
-	GdkPixmap *ppixmap;
-#endif
 	int x;
 	int y;
 	bool inited;
@@ -774,37 +375,36 @@ public:
 
 	void Release();
 	bool Initialised();
-	void PenColour(ColourAllocated fore);
+	void PenColour(ColourDesired fore);
 	int LogPixelsY();
 	int DeviceHeightFont(int points);
 	void MoveTo(int x_, int y_);
 	void LineTo(int x_, int y_);
-	void Polygon(Point *pts, int npts, ColourAllocated fore, ColourAllocated back);
-	void RectangleDraw(PRectangle rc, ColourAllocated fore, ColourAllocated back);
-	void FillRectangle(PRectangle rc, ColourAllocated back);
+	void Polygon(Point *pts, int npts, ColourDesired fore, ColourDesired back);
+	void RectangleDraw(PRectangle rc, ColourDesired fore, ColourDesired back);
+	void FillRectangle(PRectangle rc, ColourDesired back);
 	void FillRectangle(PRectangle rc, Surface &surfacePattern);
-	void RoundedRectangle(PRectangle rc, ColourAllocated fore, ColourAllocated back);
-	void AlphaRectangle(PRectangle rc, int cornerSize, ColourAllocated fill, int alphaFill,
-		ColourAllocated outline, int alphaOutline, int flags);
+	void RoundedRectangle(PRectangle rc, ColourDesired fore, ColourDesired back);
+	void AlphaRectangle(PRectangle rc, int cornerSize, ColourDesired fill, int alphaFill,
+		ColourDesired outline, int alphaOutline, int flags);
 	void DrawRGBAImage(PRectangle rc, int width, int height, const unsigned char *pixelsImage);
-	void Ellipse(PRectangle rc, ColourAllocated fore, ColourAllocated back);
+	void Ellipse(PRectangle rc, ColourDesired fore, ColourDesired back);
 	void Copy(PRectangle rc, Point from, Surface &surfaceSource);
 
-	void DrawTextBase(PRectangle rc, Font &font_, int ybase, const char *s, int len, ColourAllocated fore);
-	void DrawTextNoClip(PRectangle rc, Font &font_, int ybase, const char *s, int len, ColourAllocated fore, ColourAllocated back);
-	void DrawTextClipped(PRectangle rc, Font &font_, int ybase, const char *s, int len, ColourAllocated fore, ColourAllocated back);
-	void DrawTextTransparent(PRectangle rc, Font &font_, int ybase, const char *s, int len, ColourAllocated fore);
-	void MeasureWidths(Font &font_, const char *s, int len, int *positions);
-	int WidthText(Font &font_, const char *s, int len);
-	int WidthChar(Font &font_, char ch);
-	int Ascent(Font &font_);
-	int Descent(Font &font_);
-	int InternalLeading(Font &font_);
-	int ExternalLeading(Font &font_);
-	int Height(Font &font_);
-	int AverageCharWidth(Font &font_);
+	void DrawTextBase(PRectangle rc, Font &font_, XYPOSITION ybase, const char *s, int len, ColourDesired fore);
+	void DrawTextNoClip(PRectangle rc, Font &font_, XYPOSITION ybase, const char *s, int len, ColourDesired fore, ColourDesired back);
+	void DrawTextClipped(PRectangle rc, Font &font_, XYPOSITION ybase, const char *s, int len, ColourDesired fore, ColourDesired back);
+	void DrawTextTransparent(PRectangle rc, Font &font_, XYPOSITION ybase, const char *s, int len, ColourDesired fore);
+	void MeasureWidths(Font &font_, const char *s, int len, XYPOSITION *positions);
+	XYPOSITION WidthText(Font &font_, const char *s, int len);
+	XYPOSITION WidthChar(Font &font_, char ch);
+	XYPOSITION Ascent(Font &font_);
+	XYPOSITION Descent(Font &font_);
+	XYPOSITION InternalLeading(Font &font_);
+	XYPOSITION ExternalLeading(Font &font_);
+	XYPOSITION Height(Font &font_);
+	XYPOSITION AverageCharWidth(Font &font_);
 
-	int SetPalette(Palette *pal, bool inBackGround);
 	void SetClip(PRectangle rc);
 	void FlushCachedState();
 
@@ -872,14 +472,8 @@ void SurfaceImpl::SetConverter(int characterSet_) {
 }
 
 SurfaceImpl::SurfaceImpl() : et(singleByte),
-#ifdef USE_CAIRO
 context(0),
 psurf(0),
-#else
-drawable(0),
-gc(0),
-ppixmap(0),
-#endif
 x(0), y(0), inited(false), createdGC(false)
 , pcontext(0), layout(0), characterSet(-1) {
 }
@@ -890,28 +484,14 @@ SurfaceImpl::~SurfaceImpl() {
 
 void SurfaceImpl::Release() {
 	et = singleByte;
-#ifndef USE_CAIRO
-	drawable = 0;
-#endif
 	if (createdGC) {
 		createdGC = false;
-#ifdef USE_CAIRO
 		cairo_destroy(context);
-#else
-		g_object_unref(gc);
-#endif
 	}
-#ifdef USE_CAIRO
 	context = 0;
 	if (psurf)
 		cairo_surface_destroy(psurf);
 	psurf = 0;
-#else
-	gc = 0;
-	if (ppixmap)
-		g_object_unref(ppixmap);
-	ppixmap = 0;
-#endif
 	if (layout)
 		g_object_unref(layout);
 	layout = 0;
@@ -933,7 +513,6 @@ bool SurfaceImpl::Initialised() {
 void SurfaceImpl::Init(WindowID wid) {
 	Release();
 	PLATFORM_ASSERT(wid);
-#ifdef USE_CAIRO
 #if GTK_CHECK_VERSION(3,0,0)
 	GdkWindow *drawable_ = gtk_widget_get_window(PWidget(wid));
 #else
@@ -949,7 +528,6 @@ void SurfaceImpl::Init(WindowID wid) {
 		context = cairo_create(psurf);
 	}
 	createdGC = true;
-#endif
 	pcontext = gtk_widget_create_pango_context(PWidget(wid));
 	PLATFORM_ASSERT(pcontext);
 	layout = pango_layout_new(pcontext);
@@ -961,24 +539,10 @@ void SurfaceImpl::Init(SurfaceID sid, WindowID wid) {
 	PLATFORM_ASSERT(sid);
 	Release();
 	PLATFORM_ASSERT(wid);
-#ifdef USE_CAIRO
-#if GTK_CHECK_VERSION(3,0,0)
 	context = cairo_reference(reinterpret_cast<cairo_t *>(sid));
-#else
-	context = gdk_cairo_create(reinterpret_cast<GdkDrawable *>(sid));
-#endif
-#else
-	drawable = reinterpret_cast<GdkDrawable *>(sid);
-	gc = gdk_gc_new(drawable);
-#endif
 	pcontext = gtk_widget_create_pango_context(PWidget(wid));
 	layout = pango_layout_new(pcontext);
-#ifdef USE_CAIRO
 	cairo_set_line_width(context, 1);
-#else
-	// Ask for lines that do not paint the last pixel so is like Win32
-	gdk_gc_set_line_attributes(gc, 0, GDK_LINE_SOLID, GDK_CAP_NOT_LAST, GDK_JOIN_MITER);
-#endif
 	createdGC = true;
 	inited = true;
 }
@@ -988,27 +552,15 @@ void SurfaceImpl::InitPixMap(int width, int height, Surface *surface_, WindowID 
 	Release();
 	SurfaceImpl *surfImpl = static_cast<SurfaceImpl *>(surface_);
 	PLATFORM_ASSERT(wid);
-#ifdef USE_CAIRO
 	context = cairo_reference(surfImpl->context);
-#else
-	PLATFORM_ASSERT(surfImpl->drawable);
-	gc = gdk_gc_new(surfImpl->drawable);
-#endif
 	pcontext = gtk_widget_create_pango_context(PWidget(wid));
 	PLATFORM_ASSERT(pcontext);
 	layout = pango_layout_new(pcontext);
 	PLATFORM_ASSERT(layout);
-#ifdef USE_CAIRO
 	if (height > 0 && width > 0)
 		psurf = CreateSimilarSurface(
 			WindowFromWidget(PWidget(wid)),
 			CAIRO_CONTENT_COLOR_ALPHA, width, height);
-#else
-	if (height > 0 && width > 0)
-		ppixmap = gdk_pixmap_new(surfImpl->drawable, width, height, -1);
-	drawable = ppixmap;
-#endif
-#ifdef USE_CAIRO
 	cairo_destroy(context);
 	context = cairo_create(psurf);
 	cairo_rectangle(context, 0, 0, width, height);
@@ -1016,19 +568,12 @@ void SurfaceImpl::InitPixMap(int width, int height, Surface *surface_, WindowID 
 	cairo_fill(context);
 	// This produces sharp drawing more similar to GDK:
 	//cairo_set_antialias(context, CAIRO_ANTIALIAS_NONE);
-#endif
-#ifdef USE_CAIRO
 	cairo_set_line_width(context, 1);
-#else
-	// Ask for lines that do not paint the last pixel so is like Win32
-	gdk_gc_set_line_attributes(gc, 0, GDK_LINE_SOLID, GDK_CAP_NOT_LAST, GDK_JOIN_MITER);
-#endif
 	createdGC = true;
 	inited = true;
 }
 
-void SurfaceImpl::PenColour(ColourAllocated fore) {
-#ifdef USE_CAIRO
+void SurfaceImpl::PenColour(ColourDesired fore) {
 	if (context) {
 		ColourDesired cdFore(fore.AsLong());
 		cairo_set_source_rgb(context,
@@ -1036,13 +581,6 @@ void SurfaceImpl::PenColour(ColourAllocated fore) {
 			cdFore.GetGreen() / 255.0,
 			cdFore.GetBlue() / 255.0);
 	}
-#else
-	if (gc) {
-		GdkColor co;
-		co.pixel = fore.AsLong();
-		gdk_gc_set_foreground(gc, &co);
-	}
-#endif
 }
 
 int SurfaceImpl::LogPixelsY() {
@@ -1059,7 +597,6 @@ void SurfaceImpl::MoveTo(int x_, int y_) {
 	y = y_;
 }
 
-#ifdef USE_CAIRO
 static int Delta(int difference) {
 	if (difference < 0)
 		return -1;
@@ -1068,10 +605,8 @@ static int Delta(int difference) {
 	else
 		return 0;
 }
-#endif
 
 void SurfaceImpl::LineTo(int x_, int y_) {
-#ifdef USE_CAIRO
 	// cairo_line_to draws the end position, unlike Win32 or GDK with GDK_CAP_NOT_LAST.
 	// For simple cases, move back one pixel from end.
 	if (context) {
@@ -1100,20 +635,12 @@ void SurfaceImpl::LineTo(int x_, int y_) {
 		}
 		cairo_stroke(context);
 	}
-#else
-	if (drawable && gc) {
-		gdk_draw_line(drawable, gc,
-		              x, y,
-		              x_, y_);
-	}
-#endif
 	x = x_;
 	y = y_;
 }
 
-void SurfaceImpl::Polygon(Point *pts, int npts, ColourAllocated fore,
-                          ColourAllocated back) {
-#ifdef USE_CAIRO
+void SurfaceImpl::Polygon(Point *pts, int npts, ColourDesired fore,
+                          ColourDesired back) {
 	PenColour(back);
 	cairo_move_to(context, pts[0].x + 0.5, pts[0].y + 0.5);
 	for (int i = 1;i < npts;i++) {
@@ -1123,73 +650,33 @@ void SurfaceImpl::Polygon(Point *pts, int npts, ColourAllocated fore,
 	cairo_fill_preserve(context);
 	PenColour(fore);
 	cairo_stroke(context);
-#else
-	GdkPoint gpts[20];
-	if (npts < static_cast<int>((sizeof(gpts) / sizeof(gpts[0])))) {
-		for (int i = 0;i < npts;i++) {
-			gpts[i].x = pts[i].x;
-			gpts[i].y = pts[i].y;
-		}
-		PenColour(back);
-		gdk_draw_polygon(drawable, gc, 1, gpts, npts);
-		PenColour(fore);
-		gdk_draw_polygon(drawable, gc, 0, gpts, npts);
-	}
-#endif
 }
 
-void SurfaceImpl::RectangleDraw(PRectangle rc, ColourAllocated fore, ColourAllocated back) {
-#ifdef USE_CAIRO
+void SurfaceImpl::RectangleDraw(PRectangle rc, ColourDesired fore, ColourDesired back) {
 	if (context) {
-#else
-	if (gc && drawable) {
-#endif
-#ifdef USE_CAIRO
 		cairo_rectangle(context, rc.left + 0.5, rc.top + 0.5,
 	                     rc.right - rc.left - 1, rc.bottom - rc.top - 1);
 		PenColour(back);
 		cairo_fill_preserve(context);
 		PenColour(fore);
 		cairo_stroke(context);
-#else
-		PenColour(back);
-		gdk_draw_rectangle(drawable, gc, 1,
-		                   rc.left + 1, rc.top + 1,
-		                   rc.right - rc.left - 2, rc.bottom - rc.top - 2);
-		PenColour(fore);
-		// The subtraction of 1 off the width and height here shouldn't be needed but
-		// otherwise a different rectangle is drawn than would be done if the fill parameter == 1
-		gdk_draw_rectangle(drawable, gc, 0,
-		                   rc.left, rc.top,
-		                   rc.right - rc.left - 1, rc.bottom - rc.top - 1);
-#endif
 	}
 }
 
-void SurfaceImpl::FillRectangle(PRectangle rc, ColourAllocated back) {
+void SurfaceImpl::FillRectangle(PRectangle rc, ColourDesired back) {
 	PenColour(back);
-#ifdef USE_CAIRO
 	if (context && (rc.left < maxCoordinate)) {	// Protect against out of range
+		rc.left = lround(rc.left);
+		rc.right = lround(rc.right);
 		cairo_rectangle(context, rc.left, rc.top,
 	                     rc.right - rc.left, rc.bottom - rc.top);
 		cairo_fill(context);
 	}
-#else
-	if (drawable && (rc.left < maxCoordinate)) {	// Protect against out of range
-		gdk_draw_rectangle(drawable, gc, 1,
-		                   rc.left, rc.top,
-		                   rc.right - rc.left, rc.bottom - rc.top);
-	}
-#endif
 }
 
 void SurfaceImpl::FillRectangle(PRectangle rc, Surface &surfacePattern) {
 	SurfaceImpl &surfi = static_cast<SurfaceImpl &>(surfacePattern);
-#ifdef USE_CAIRO
 	bool canDraw = surfi.psurf;
-#else
-	bool canDraw = surfi.drawable;
-#endif
 	if (canDraw) {
 		// Tile pattern over rectangle
 		// Currently assumes 8x8 pattern
@@ -1199,28 +686,19 @@ void SurfaceImpl::FillRectangle(PRectangle rc, Surface &surfacePattern) {
 			int widthx = (xTile + widthPat > rc.right) ? rc.right - xTile : widthPat;
 			for (int yTile = rc.top; yTile < rc.bottom; yTile += heightPat) {
 				int heighty = (yTile + heightPat > rc.bottom) ? rc.bottom - yTile : heightPat;
-#ifdef USE_CAIRO
 				cairo_set_source_surface(context, surfi.psurf, xTile, yTile);
 				cairo_rectangle(context, xTile, yTile, widthx, heighty);
 				cairo_fill(context);
-#else
-				gdk_draw_drawable(drawable,
-				                gc,
-				                static_cast<SurfaceImpl &>(surfacePattern).drawable,
-				                0, 0,
-				                xTile, yTile,
-				                widthx, heighty);
-#endif
 			}
 		}
 	} else {
 		// Something is wrong so try to show anyway
 		// Shows up black because colour not allocated
-		FillRectangle(rc, ColourAllocated(0));
+		FillRectangle(rc, ColourDesired(0));
 	}
 }
 
-void SurfaceImpl::RoundedRectangle(PRectangle rc, ColourAllocated fore, ColourAllocated back) {
+void SurfaceImpl::RoundedRectangle(PRectangle rc, ColourDesired fore, ColourDesired back) {
 	if (((rc.right - rc.left) > 4) && ((rc.bottom - rc.top) > 4)) {
 		// Approximate a round rect with some cut off corners
 		Point pts[] = {
@@ -1239,8 +717,6 @@ void SurfaceImpl::RoundedRectangle(PRectangle rc, ColourAllocated fore, ColourAl
 	}
 }
 
-#ifdef USE_CAIRO
-
 static void PathRoundRectangle(cairo_t *context, double left, double top, double width, double height, int radius) {
 	double degrees = M_PI / 180.0;
 
@@ -1257,45 +733,8 @@ static void PathRoundRectangle(cairo_t *context, double left, double top, double
 	cairo_close_path(context);
 }
 
-#else
-
-// Plot a point into a guint32 buffer symetrically to all 4 qudrants
-static void AllFour(guint32 *pixels, int stride, int width, int height, int x, int y, guint32 val) {
-	pixels[y*stride+x] = val;
-	pixels[y*stride+width-1-x] = val;
-	pixels[(height-1-y)*stride+x] = val;
-	pixels[(height-1-y)*stride+width-1-x] = val;
-}
-
-static guint32 u32FromRGBA(guint8 r, guint8 g, guint8 b, guint8 a) {
-	union {
-		guint8 pixVal[4];
-		guint32 val;
-	} converter;
-	converter.pixVal[0] = r;
-	converter.pixVal[1] = g;
-	converter.pixVal[2] = b;
-	converter.pixVal[3] = a;
-	return converter.val;
-}
-
-static unsigned int GetRValue(unsigned int co) {
-	return (co >> 16) & 0xff;
-}
-
-static unsigned int GetGValue(unsigned int co) {
-	return (co >> 8) & 0xff;
-}
-
-static unsigned int GetBValue(unsigned int co) {
-	return co & 0xff;
-}
-
-#endif
-
-void SurfaceImpl::AlphaRectangle(PRectangle rc, int cornerSize, ColourAllocated fill, int alphaFill,
-		ColourAllocated outline, int alphaOutline, int flags) {
-#ifdef USE_CAIRO
+void SurfaceImpl::AlphaRectangle(PRectangle rc, int cornerSize, ColourDesired fill, int alphaFill,
+		ColourDesired outline, int alphaOutline, int flags) {
 	if (context && rc.Width() > 0) {
 		ColourDesired cdFill(fill.AsLong());
 		cairo_set_source_rgba(context,
@@ -1321,47 +760,6 @@ void SurfaceImpl::AlphaRectangle(PRectangle rc, int cornerSize, ColourAllocated 
 			cairo_rectangle(context, rc.left + 0.5, rc.top + 0.5, rc.right - rc.left - 1, rc.bottom - rc.top - 1);
 		cairo_stroke(context);
 	}
-#else
-	if (gc && drawable && rc.Width() > 0) {
-		int width = rc.Width();
-		int height = rc.Height();
-		// Ensure not distorted too much by corners when small
-		cornerSize = Platform::Minimum(cornerSize, (Platform::Minimum(width, height) / 2) - 2);
-		// Make a 32 bit deep pixbuf with alpha
-		GdkPixbuf *pixalpha = gdk_pixbuf_new(GDK_COLORSPACE_RGB, TRUE, 8, width, height);
-
-		guint32 valEmpty = u32FromRGBA(0,0,0,0);
-		guint32 valFill = u32FromRGBA(GetRValue(fill.AsLong()),
-			GetGValue(fill.AsLong()), GetBValue(fill.AsLong()), alphaFill);
-		guint32 valOutline = u32FromRGBA(GetRValue(outline.AsLong()),
-			GetGValue(outline.AsLong()), GetBValue(outline.AsLong()), alphaOutline);
-		guint32 *pixels = reinterpret_cast<guint32 *>(gdk_pixbuf_get_pixels(pixalpha));
-		int stride = gdk_pixbuf_get_rowstride(pixalpha) / 4;
-		for (int yr=0; yr<height; yr++) {
-			for (int xr=0; xr<width; xr++) {
-				if ((xr==0) || (xr==width-1) || (yr == 0) || (yr == height-1)) {
-					pixels[yr*stride+xr] = valOutline;
-				} else {
-					pixels[yr*stride+xr] = valFill;
-				}
-			}
-		}
-		for (int c=0;c<cornerSize; c++) {
-			for (int xr=0;xr<c+1; xr++) {
-				AllFour(pixels, stride, width, height, xr, c-xr, valEmpty);
-			}
-		}
-		for (int xr=1;xr<cornerSize; xr++) {
-			AllFour(pixels, stride, width, height, xr, cornerSize-xr, valOutline);
-		}
-
-		// Draw with alpha
-		gdk_draw_pixbuf(drawable, gc, pixalpha,
-			0,0, rc.left,rc.top, width,height, GDK_RGB_DITHER_NORMAL, 0, 0);
-
-		g_object_unref(pixalpha);
-	}
-#endif
 }
 
 void SurfaceImpl::DrawRGBAImage(PRectangle rc, int width, int height, const unsigned char *pixelsImage) {
@@ -1372,8 +770,11 @@ void SurfaceImpl::DrawRGBAImage(PRectangle rc, int width, int height, const unsi
 		rc.top += (rc.Height() - height) / 2;
 	rc.bottom = rc.top + height;
 
-#ifdef USE_CAIRO
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1,6,0)
 	int stride = cairo_format_stride_for_width(CAIRO_FORMAT_ARGB32, width);
+#else
+	int stride = width * 4;
+#endif
 	int ucs = stride * height;
 	std::vector<unsigned char> image(ucs);
 	for (int y=0; y<height; y++) {
@@ -1393,80 +794,27 @@ void SurfaceImpl::DrawRGBAImage(PRectangle rc, int width, int height, const unsi
 	cairo_fill(context);
 
 	cairo_surface_destroy(psurf);
-#else
-	GdkPixbuf *pixbuf = gdk_pixbuf_new_from_data(pixelsImage,
-                                                         GDK_COLORSPACE_RGB,
-                                                         TRUE,
-                                                         8,
-                                                         width,
-                                                         height,
-                                                         width * 4,
-                                                         NULL,
-                                                         NULL);
-	gdk_draw_pixbuf(drawable, gc, pixbuf,
-		0,0, rc.left,rc.top, width,height, GDK_RGB_DITHER_NORMAL, 0, 0);
-	g_object_unref(pixbuf);
-#endif
 }
 
-void SurfaceImpl::Ellipse(PRectangle rc, ColourAllocated fore, ColourAllocated back) {
+void SurfaceImpl::Ellipse(PRectangle rc, ColourDesired fore, ColourDesired back) {
 	PenColour(back);
-#ifdef USE_CAIRO
 	cairo_arc(context, (rc.left + rc.right) / 2 + 0.5, (rc.top + rc.bottom) / 2 + 0.5,
 		Platform::Minimum(rc.Width(), rc.Height()) / 2, 0, 2*M_PI);
 	cairo_fill_preserve(context);
 	PenColour(fore);
 	cairo_stroke(context);
-#else
-	gdk_draw_arc(drawable, gc, 1,
-	             rc.left + 1, rc.top + 1,
-	             rc.right - rc.left - 2, rc.bottom - rc.top - 2,
-	             0, 32767);
-
-	// The subtraction of 1 here is similar to the case for RectangleDraw
-	PenColour(fore);
-	gdk_draw_arc(drawable, gc, 0,
-	             rc.left, rc.top,
-	             rc.right - rc.left - 1, rc.bottom - rc.top - 1,
-	             0, 32767);
-#endif
 }
 
 void SurfaceImpl::Copy(PRectangle rc, Point from, Surface &surfaceSource) {
 	SurfaceImpl &surfi = static_cast<SurfaceImpl &>(surfaceSource);
-#ifdef USE_CAIRO
 	bool canDraw = surfi.psurf;
-#else
-	bool canDraw = surfi.drawable;
-#endif
 	if (canDraw) {
-#ifdef USE_CAIRO
 		cairo_set_source_surface(context, surfi.psurf,
 			rc.left - from.x, rc.top - from.y);
 		cairo_rectangle(context, rc.left, rc.top, rc.right-rc.left, rc.bottom-rc.top);
 		cairo_fill(context);
-#else
-		gdk_draw_drawable(drawable,
-		                gc,
-		                static_cast<SurfaceImpl &>(surfaceSource).drawable,
-		                from.x, from.y,
-		                rc.left, rc.top,
-		                rc.right - rc.left, rc.bottom - rc.top);
-#endif
 	}
 }
-
-#ifndef DISABLE_GDK_FONT
-static size_t UTF8Len(char ch) {
-	unsigned char uch = static_cast<unsigned char>(ch);
-	if (uch < 0x80)
-		return 1;
-	else if (uch < (0x80 + 0x40 + 0x20))
-		return 2;
-	else
-		return 3;
-}
-#endif
 
 char *UTF8FromLatin1(const char *s, int &len) {
 	char *utfForm = new char[len*2+1];
@@ -1520,49 +868,6 @@ static size_t MultiByteLenFromIconv(const Converter &conv, const char *s, size_t
 	return 1;
 }
 
-#ifndef DISABLE_GDK_FONT
-static char *UTF8FromGdkWChar(GdkWChar *wctext, int wclen) {
-	char *utfForm = new char[wclen*3+1];	// Maximum of 3 UTF-8 bytes per character
-	size_t lenU = 0;
-	for (int i = 0; i < wclen && wctext[i]; i++) {
-		unsigned int uch = wctext[i];
-		if (uch < 0x80) {
-			utfForm[lenU++] = static_cast<char>(uch);
-		} else if (uch < 0x800) {
-			utfForm[lenU++] = static_cast<char>(0xC0 | (uch >> 6));
-			utfForm[lenU++] = static_cast<char>(0x80 | (uch & 0x3f));
-		} else {
-			utfForm[lenU++] = static_cast<char>(0xE0 | (uch >> 12));
-			utfForm[lenU++] = static_cast<char>(0x80 | ((uch >> 6) & 0x3f));
-			utfForm[lenU++] = static_cast<char>(0x80 | (uch & 0x3f));
-		}
-	}
-	utfForm[lenU] = '\0';
-	return utfForm;
-}
-#endif
-
-static char *UTF8FromDBCS(const char *s, int &len) {
-#ifndef DISABLE_GDK_FONT
-	GdkWChar *wctext = new GdkWChar[len + 1];
-	GdkWChar *wcp = wctext;
-	int wclen = gdk_mbstowcs(wcp, s, len);
-	if (wclen < 1) {
-		// In the annoying case when non-locale chars in the line.
-		// e.g. latin1 chars in Japanese locale.
-		delete []wctext;
-		return 0;
-	}
-
-	char *utfForm = UTF8FromGdkWChar(wctext, wclen);
-	delete []wctext;
-	len = strlen(utfForm);
-	return utfForm;
-#else
-	return 0;
-#endif
-}
-
 static size_t UTF8CharLength(const char *s) {
 	const unsigned char *us = reinterpret_cast<const unsigned char *>(s);
 	unsigned char ch = *us;
@@ -1575,19 +880,11 @@ static size_t UTF8CharLength(const char *s) {
 	}
 }
 
-// On GTK+, wchar_t is 4 bytes
-
-const int maxLengthTextRun = 10000;
-
-void SurfaceImpl::DrawTextBase(PRectangle rc, Font &font_, int ybase, const char *s, int len,
-                                 ColourAllocated fore) {
+void SurfaceImpl::DrawTextBase(PRectangle rc, Font &font_, XYPOSITION ybase, const char *s, int len,
+                                 ColourDesired fore) {
 	PenColour(fore);
-#ifdef USE_CAIRO
 	if (context) {
-#else
-	if (gc && drawable) {
-#endif
-		int xText = rc.left;
+		XYPOSITION xText = rc.left;
 		if (PFont(font_)->pfd) {
 			char *utfForm = 0;
 			if (et == UTF8) {
@@ -1597,102 +894,40 @@ void SurfaceImpl::DrawTextBase(PRectangle rc, Font &font_, int ybase, const char
 					SetConverter(PFont(font_)->characterSet);
 					utfForm = UTF8FromIconv(conv, s, len);
 				}
-				if (!utfForm) {	// iconv failed so try DBCS if DBCS mode
-					if (et == dbcs) {
-						// Convert to utf8
-						utfForm = UTF8FromDBCS(s, len);
-					}
-				}
-				if (!utfForm) {	// iconv and DBCS failed so treat as Latin1
+				if (!utfForm) {	// iconv failed so treat as Latin1
 					utfForm = UTF8FromLatin1(s, len);
 				}
 				pango_layout_set_text(layout, utfForm, len);
 			}
 			pango_layout_set_font_description(layout, PFont(font_)->pfd);
-#ifdef USE_CAIRO
 			pango_cairo_update_layout(context, layout);
-#endif
 #ifdef PANGO_VERSION
 			PangoLayoutLine *pll = pango_layout_get_line_readonly(layout,0);
 #else
 			PangoLayoutLine *pll = pango_layout_get_line(layout,0);
 #endif
-#ifdef USE_CAIRO
 			cairo_move_to(context, xText, ybase);
 			pango_cairo_show_layout_line(context, pll);
-#else
-			gdk_draw_layout_line(drawable, gc, xText, ybase, pll);
-#endif
 			delete []utfForm;
-			return;
 		}
-#ifndef DISABLE_GDK_FONT
-		// Draw text as a series of segments to avoid limitations in X servers
-		const int segmentLength = 1000;
-		bool draw8bit = true;
-		if (et != singleByte) {
-			GdkWChar wctext[maxLengthTextRun];
-			if (len >= maxLengthTextRun)
-				len = maxLengthTextRun-1;
-			int wclen;
-			if (et == UTF8) {
-				wclen = UTF16FromUTF8(s, len,
-					static_cast<wchar_t *>(static_cast<void *>(wctext)), maxLengthTextRun - 1);
-			} else {	// dbcs, so convert using current locale
-				char sMeasure[maxLengthTextRun];
-				memcpy(sMeasure, s, len);
-				sMeasure[len] = '\0';
-				wclen = gdk_mbstowcs(
-					wctext, sMeasure, maxLengthTextRun - 1);
-			}
-			if (wclen > 0) {
-				draw8bit = false;
-				wctext[wclen] = L'\0';
-				GdkWChar *wcp = wctext;
-				while ((wclen > 0) && (xText < maxCoordinate)) {
-					int lenDraw = Platform::Minimum(wclen, segmentLength);
-					gdk_draw_text_wc(drawable, PFont(font_)->pfont, gc,
-							 xText, ybase, wcp, lenDraw);
-					wclen -= lenDraw;
-					if (wclen > 0) {	// Avoid next calculation if possible as may be expensive
-						xText += gdk_text_width_wc(PFont(font_)->pfont,
-								       wcp, lenDraw);
-					}
-					wcp += lenDraw;
-				}
-			}
-		}
-		if (draw8bit) {
-			while ((len > 0) && (xText < maxCoordinate)) {
-				int lenDraw = Platform::Minimum(len, segmentLength);
-				gdk_draw_text(drawable, PFont(font_)->pfont, gc,
-				              xText, ybase, s, lenDraw);
-				len -= lenDraw;
-				if (len > 0) {	// Avoid next calculation if possible as may be expensive
-					xText += gdk_text_width(PFont(font_)->pfont, s, lenDraw);
-				}
-				s += lenDraw;
-			}
-		}
-#endif
 	}
 }
 
-void SurfaceImpl::DrawTextNoClip(PRectangle rc, Font &font_, int ybase, const char *s, int len,
-                                 ColourAllocated fore, ColourAllocated back) {
+void SurfaceImpl::DrawTextNoClip(PRectangle rc, Font &font_, XYPOSITION ybase, const char *s, int len,
+                                 ColourDesired fore, ColourDesired back) {
 	FillRectangle(rc, back);
 	DrawTextBase(rc, font_, ybase, s, len, fore);
 }
 
 // On GTK+, exactly same as DrawTextNoClip
-void SurfaceImpl::DrawTextClipped(PRectangle rc, Font &font_, int ybase, const char *s, int len,
-                                  ColourAllocated fore, ColourAllocated back) {
+void SurfaceImpl::DrawTextClipped(PRectangle rc, Font &font_, XYPOSITION ybase, const char *s, int len,
+                                  ColourDesired fore, ColourDesired back) {
 	FillRectangle(rc, back);
 	DrawTextBase(rc, font_, ybase, s, len, fore);
 }
 
-void SurfaceImpl::DrawTextTransparent(PRectangle rc, Font &font_, int ybase, const char *s, int len,
-                                  ColourAllocated fore) {
+void SurfaceImpl::DrawTextTransparent(PRectangle rc, Font &font_, XYPOSITION ybase, const char *s, int len,
+                                  ColourDesired fore) {
 	// Avoid drawing spaces in transparent mode
 	for (int i=0;i<len;i++) {
 		if (s[i] != ' ') {
@@ -1708,9 +943,9 @@ class ClusterIterator {
 	int lenPositions;
 public:
 	bool finished;
-	int positionStart;
-	int position;
-	int distance;
+	XYPOSITION positionStart;
+	XYPOSITION position;
+	XYPOSITION distance;
 	int curIndex;
 	ClusterIterator(PangoLayout *layout, int len) : lenPositions(len), finished(false),
 		positionStart(0), position(0), distance(0), curIndex(0) {
@@ -1725,18 +960,18 @@ public:
 		positionStart = position;
 		if (pango_layout_iter_next_cluster(iter)) {
 			pango_layout_iter_get_cluster_extents(iter, NULL, &pos);
-			position = PANGO_PIXELS(pos.x);
+			position = doubleFromPangoUnits(pos.x);
 			curIndex = pango_layout_iter_get_index(iter);
 		} else {
 			finished = true;
-			position = PANGO_PIXELS(pos.x + pos.width);
+			position = doubleFromPangoUnits(pos.x + pos.width);
 			curIndex = lenPositions;
 		}
 		distance = position - positionStart;
 	}
 };
 
-void SurfaceImpl::MeasureWidths(Font &font_, const char *s, int len, int *positions) {
+void SurfaceImpl::MeasureWidths(Font &font_, const char *s, int len, XYPOSITION *positions) {
 	if (font_.GetID()) {
 		const int lenPositions = len;
 		if (PFont(font_)->pfd) {
@@ -1831,59 +1066,6 @@ void SurfaceImpl::MeasureWidths(Font &font_, const char *s, int len, int *positi
 			}
 			return;
 		}
-#ifndef DISABLE_GDK_FONT
-		int totalWidth = 0;
-		GdkFont *gf = PFont(font_)->pfont;
-		bool measure8bit = true;
-		if (et != singleByte) {
-			GdkWChar wctext[maxLengthTextRun];
-			if (len >= maxLengthTextRun)
-				len = maxLengthTextRun-1;
-			int wclen;
-			if (et == UTF8) {
-				wclen = UTF16FromUTF8(s, len,
-					static_cast<wchar_t *>(static_cast<void *>(wctext)), maxLengthTextRun - 1);
-			} else {	// dbcsMode, so convert using current locale
-				char sDraw[maxLengthTextRun];
-				memcpy(sDraw, s, len);
-				sDraw[len] = '\0';
-				wclen = gdk_mbstowcs(
-					wctext, sDraw, maxLengthTextRun - 1);
-			}
-			if (wclen > 0) {
-				measure8bit = false;
-				wctext[wclen] = L'\0';
-				// Map widths back to utf-8 or DBCS input string
-				int i = 0;
-				for (int iU = 0; iU < wclen; iU++) {
-					int width = gdk_char_width_wc(gf, wctext[iU]);
-					totalWidth += width;
-					int lenChar;
-					if (et == UTF8) {
-						lenChar = UTF8Len(s[i]);
-					} else {
-						lenChar = mblen(s+i, MB_CUR_MAX);
-						if (lenChar < 0)
-							lenChar = 1;
-					}
-					while (lenChar--) {
-						positions[i++] = totalWidth;
-					}
-				}
-				while (i < len) {	// In case of problems with lengths
-					positions[i++] = totalWidth;
-				}
-			}
-		}
-		if (measure8bit) {
-			// Either Latin1 or conversion failed so treat as Latin1.
-			for (int i = 0; i < len; i++) {
-				int width = gdk_char_width(gf, s[i]);
-				totalWidth += width;
-				positions[i] = totalWidth;
-			}
-		}
-#endif
 	} else {
 		// No font so return an ascending range of values
 		for (int i = 0; i < len; i++) {
@@ -1892,7 +1074,7 @@ void SurfaceImpl::MeasureWidths(Font &font_, const char *s, int len, int *positi
 	}
 }
 
-int SurfaceImpl::WidthText(Font &font_, const char *s, int len) {
+XYPOSITION SurfaceImpl::WidthText(Font &font_, const char *s, int len) {
 	if (font_.GetID()) {
 		if (PFont(font_)->pfd) {
 			char *utfForm = 0;
@@ -1901,15 +1083,11 @@ int SurfaceImpl::WidthText(Font &font_, const char *s, int len) {
 			if (et == UTF8) {
 				pango_layout_set_text(layout, s, len);
 			} else {
-				if (et == dbcs) {
-					// Convert to utf8
-					utfForm = UTF8FromDBCS(s, len);
-				}
-				if (!utfForm) {	// DBCS failed so treat as iconv
+				if (!utfForm) {	// use iconv
 					SetConverter(PFont(font_)->characterSet);
 					utfForm = UTF8FromIconv(conv, s, len);
 				}
-				if (!utfForm) {	// g_locale_to_utf8 failed so treat as Latin1
+				if (!utfForm) {	// iconv failed so treat as Latin1
 					utfForm = UTF8FromLatin1(s, len);
 				}
 				pango_layout_set_text(layout, utfForm, len);
@@ -1921,157 +1099,79 @@ int SurfaceImpl::WidthText(Font &font_, const char *s, int len) {
 #endif
 			pango_layout_line_get_extents(pangoLine, NULL, &pos);
 			delete []utfForm;
-			return PANGO_PIXELS(pos.width);
+			return doubleFromPangoUnits(pos.width);
 		}
-#ifndef DISABLE_GDK_FONT
-		if (et == UTF8) {
-			GdkWChar wctext[maxLengthTextRun];
-			size_t wclen = UTF16FromUTF8(s, len, static_cast<wchar_t *>(static_cast<void *>(wctext)),
-				sizeof(wctext) / sizeof(GdkWChar) - 1);
-			wctext[wclen] = L'\0';
-			return gdk_text_width_wc(PFont(font_)->pfont, wctext, wclen);
-		} else {
-			return gdk_text_width(PFont(font_)->pfont, s, len);
-		}
-#else
 		return 1;
-#endif
 	} else {
 		return 1;
 	}
 }
 
-int SurfaceImpl::WidthChar(Font &font_, char ch) {
+XYPOSITION SurfaceImpl::WidthChar(Font &font_, char ch) {
 	if (font_.GetID()) {
 		if (PFont(font_)->pfd) {
 			return WidthText(font_, &ch, 1);
 		}
-#ifndef DISABLE_GDK_FONT
-		return gdk_char_width(PFont(font_)->pfont, ch);
-#else
 		return 1;
-#endif
 	} else {
 		return 1;
 	}
 }
 
-// Three possible strategies for determining ascent and descent of font:
-// 1) Call gdk_string_extents with string containing all letters, numbers and punctuation.
-// 2) Use the ascent and descent fields of GdkFont.
-// 3) Call gdk_string_extents with string as 1 but also including accented capitals.
-// Smallest values given by 1 and largest by 3 with 2 in between.
-// Techniques 1 and 2 sometimes chop off extreme portions of ascenders and
-// descenders but are mostly OK except for accented characters like Å which are
-// rarely used in code.
+// Ascent and descent determined by Pango font metrics.
 
-// This string contains a good range of characters to test for size.
-//const char largeSizeString[] = "ÂÃÅÄ `~!@#$%^&*()-_=+\\|[]{};:\"\'<,>.?/1234567890"
-//                               "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-#ifndef FAST_WAY
-const char sizeString[] = "`~!@#$%^&*()-_=+\\|[]{};:\"\'<,>.?/1234567890"
-                          "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-#endif
-
-int SurfaceImpl::Ascent(Font &font_) {
+XYPOSITION SurfaceImpl::Ascent(Font &font_) {
 	if (!(font_.GetID()))
 		return 1;
-#ifdef FAST_WAY
 	FontMutexLock();
 	int ascent = PFont(font_)->ascent;
 	if ((ascent == 0) && (PFont(font_)->pfd)) {
 		PangoFontMetrics *metrics = pango_context_get_metrics(pcontext,
 			PFont(font_)->pfd, pango_context_get_language(pcontext));
 		PFont(font_)->ascent =
-			PANGO_PIXELS(pango_font_metrics_get_ascent(metrics));
+			doubleFromPangoUnits(pango_font_metrics_get_ascent(metrics));
 		pango_font_metrics_unref(metrics);
 		ascent = PFont(font_)->ascent;
 	}
-#ifndef DISABLE_GDK_FONT
-	if ((ascent == 0) && (PFont(font_)->pfont)) {
-		ascent = PFont(font_)->pfont->ascent;
-	}
-#endif
 	if (ascent == 0) {
 		ascent = 1;
 	}
 	FontMutexUnlock();
 	return ascent;
-#else
-
-	gint lbearing;
-	gint rbearing;
-	gint width;
-	gint ascent;
-	gint descent;
-
-	gdk_string_extents(PFont(font_)->pfont, sizeString,
-					   &lbearing, &rbearing, &width, &ascent, &descent);
-	return ascent;
-#endif
 }
 
-int SurfaceImpl::Descent(Font &font_) {
+XYPOSITION SurfaceImpl::Descent(Font &font_) {
 	if (!(font_.GetID()))
 		return 1;
-#ifdef FAST_WAY
-
 	if (PFont(font_)->pfd) {
 		PangoFontMetrics *metrics = pango_context_get_metrics(pcontext,
 			PFont(font_)->pfd, pango_context_get_language(pcontext));
-		int descent = PANGO_PIXELS(pango_font_metrics_get_descent(metrics));
+		int descent = doubleFromPangoUnits(pango_font_metrics_get_descent(metrics));
 		pango_font_metrics_unref(metrics);
 		return descent;
 	}
-#ifndef DISABLE_GDK_FONT
-	return PFont(font_)->pfont->descent;
-#else
-	return 0;
-#endif
-#else
-
-	gint lbearing;
-	gint rbearing;
-	gint width;
-	gint ascent;
-	gint descent;
-
-	gdk_string_extents(PFont(font_)->pfont, sizeString,
-					   &lbearing, &rbearing, &width, &ascent, &descent);
-	return descent;
-#endif
-}
-
-int SurfaceImpl::InternalLeading(Font &) {
 	return 0;
 }
 
-int SurfaceImpl::ExternalLeading(Font &) {
+XYPOSITION SurfaceImpl::InternalLeading(Font &) {
 	return 0;
 }
 
-int SurfaceImpl::Height(Font &font_) {
+XYPOSITION SurfaceImpl::ExternalLeading(Font &) {
+	return 0;
+}
+
+XYPOSITION SurfaceImpl::Height(Font &font_) {
 	return Ascent(font_) + Descent(font_);
 }
 
-int SurfaceImpl::AverageCharWidth(Font &font_) {
+XYPOSITION SurfaceImpl::AverageCharWidth(Font &font_) {
 	return WidthChar(font_, 'n');
 }
 
-int SurfaceImpl::SetPalette(Palette *, bool) {
-	// Handled in palette allocation for GTK so this does nothing
-	return 0;
-}
-
 void SurfaceImpl::SetClip(PRectangle rc) {
-#ifdef USE_CAIRO
 	cairo_rectangle(context, rc.left, rc.top, rc.right, rc.bottom);
 	cairo_clip(context);
-#else
-	GdkRectangle area = {rc.left, rc.top,
-	                     rc.right - rc.left, rc.bottom - rc.top};
-	gdk_gc_set_clip_rectangle(gc, &area);
-#endif
 }
 
 void SurfaceImpl::FlushCachedState() {}
@@ -2086,8 +1186,8 @@ void SurfaceImpl::SetDBCSMode(int codePage) {
 		et = dbcs;
 }
 
-Surface *Surface::Allocate() {
-	return new SurfaceImpl;
+Surface *Surface::Allocate(int) {
+	return new SurfaceImpl();
 }
 
 Window::~Window() {}
@@ -2240,25 +1340,16 @@ PRectangle Window::GetMonitorRect(Point pt) {
 
 	gdk_window_get_origin(WindowFromWidget(PWidget(wid)), &x_offset, &y_offset);
 
-#if GTK_CHECK_VERSION(2,2,0)
-	// GTK+ 2.2+
-	{
-		GdkScreen* screen;
-		gint monitor_num;
-		GdkRectangle rect;
+	GdkScreen* screen;
+	gint monitor_num;
+	GdkRectangle rect;
 
-		screen = gtk_widget_get_screen(PWidget(wid));
-		monitor_num = gdk_screen_get_monitor_at_point(screen, pt.x + x_offset, pt.y + y_offset);
-		gdk_screen_get_monitor_geometry(screen, monitor_num, &rect);
-		rect.x -= x_offset;
-		rect.y -= y_offset;
-		return PRectangle(rect.x, rect.y, rect.x + rect.width, rect.y + rect.height);
-	}
-#else
-	pt = pt;
-	return PRectangle(-x_offset, -y_offset, (-x_offset) + gdk_screen_width(),
-	                  (-y_offset) + gdk_screen_height());
-#endif
+	screen = gtk_widget_get_screen(PWidget(wid));
+	monitor_num = gdk_screen_get_monitor_at_point(screen, pt.x + x_offset, pt.y + y_offset);
+	gdk_screen_get_monitor_geometry(screen, monitor_num, &rect);
+	rect.x -= x_offset;
+	rect.y -= y_offset;
+	return PRectangle(rect.x, rect.y, rect.x + rect.width, rect.y + rect.height);
 }
 
 typedef std::map<int, RGBAImage*> ImageMap;
@@ -2269,7 +1360,7 @@ struct ListImage {
 };
 
 static void list_image_free(gpointer, gpointer value, gpointer) {
-	ListImage *list_image = (ListImage *) value;
+	ListImage *list_image = static_cast<ListImage *>(value);
 	if (list_image->pixbuf)
 		g_object_unref(list_image->pixbuf);
 	g_free(list_image);
@@ -2311,7 +1402,7 @@ public:
 		}
 	}
 	virtual void SetFont(Font &font);
-	virtual void Create(Window &parent, int ctrlID, Point location_, int lineHeight_, bool unicodeMode_);
+	virtual void Create(Window &parent, int ctrlID, Point location_, int lineHeight_, bool unicodeMode_, int technology_);
 	virtual void SetAverageCharWidth(int width);
 	virtual void SetVisibleRows(int rows);
 	virtual int GetVisibleRows() const;
@@ -2400,7 +1491,7 @@ static void StyleSet(GtkWidget *w, GtkStyle*, void*) {
 #endif
 }
 
-void ListBoxX::Create(Window &, int, Point, int, bool) {
+void ListBoxX::Create(Window &, int, Point, int, bool, int) {
 	wid = gtk_window_new(GTK_WINDOW_POPUP);
 
 	GtkWidget *frame = gtk_frame_new(NULL);
@@ -2491,6 +1582,11 @@ PRectangle ListBoxX::GetDesiredRect() {
 			rows = desiredVisibleRows;
 
 		GtkRequisition req;
+#if GTK_CHECK_VERSION(3,0,0)
+		// This, apparently unnecessary call, ensures gtk_tree_view_column_cell_get_size
+		// returns reasonable values. 
+		gtk_widget_get_preferred_size(GTK_WIDGET(scroller), NULL, &req);
+#endif
 		int height;
 
 		// First calculate height of the clist for our desired visible
@@ -2524,7 +1620,7 @@ PRectangle ListBoxX::GetDesiredRect() {
 		gtk_widget_size_request(GTK_WIDGET(scroller), &req);
 #endif
 		rc.right = req.width;
-		rc.bottom = req.height;
+		rc.bottom = Platform::Maximum(height, req.height);
 
 		gtk_widget_set_size_request(GTK_WIDGET(list), -1, -1);
 		int width = maxItemCharacters;
@@ -2573,8 +1669,8 @@ static void init_pixmap(ListImage *list_image) {
 void ListBoxX::Append(char *s, int type) {
 	ListImage *list_image = NULL;
 	if ((type >= 0) && pixhash) {
-		list_image = (ListImage *) g_hash_table_lookup((GHashTable *) pixhash
-		             , (gconstpointer) GINT_TO_POINTER(type));
+		list_image = static_cast<ListImage *>(g_hash_table_lookup((GHashTable *) pixhash
+		             , (gconstpointer) GINT_TO_POINTER(type)));
 	}
 	GtkTreeIter iter;
 	GtkListStore *store =
@@ -2739,8 +1835,8 @@ void ListBoxX::RegisterRGBA(int type, RGBAImage *image) {
 	if (!pixhash) {
 		pixhash = g_hash_table_new(g_direct_hash, g_direct_equal);
 	}
-	ListImage *list_image = (ListImage *) g_hash_table_lookup((GHashTable *) pixhash,
-		(gconstpointer) GINT_TO_POINTER(type));
+	ListImage *list_image = static_cast<ListImage *>(g_hash_table_lookup((GHashTable *) pixhash,
+		(gconstpointer) GINT_TO_POINTER(type)));
 	if (list_image) {
 		// Drop icon already registered
 		if (list_image->pixbuf)
@@ -2842,7 +1938,7 @@ void Menu::Show(Point pt, Window &) {
 		pt.y = screenHeight - requisition.height;
 	}
 	gtk_menu_popup(widget, NULL, NULL, MenuPositionFunc,
-		reinterpret_cast<void *>((pt.y << 16) | pt.x), 0,
+		reinterpret_cast<void *>((static_cast<int>(pt.y) << 16) | static_cast<int>(pt.x)), 0,
 		gtk_get_current_event_time());
 }
 
