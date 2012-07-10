@@ -644,8 +644,10 @@ gboolean document_remove_page(guint page_num)
 
 	if (done && ui_prefs.new_document_after_close)
 		document_new_file_if_non_open();
-		
-	configuration_save();
+	
+	if (!main_status.quitting){
+		configuration_save();
+	}
 
 	return done;
 }
