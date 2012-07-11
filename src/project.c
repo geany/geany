@@ -80,7 +80,7 @@ typedef struct _PropertyDialogElements
 
 static gboolean update_config(const PropertyDialogElements *e, gboolean new_project);
 static void on_file_save_button_clicked(GtkButton *button, PropertyDialogElements *e);
-static gboolean load_config(const gchar *filename);
+static gboolean load_config(const gchar *filename, gboolean load_session);
 static gboolean write_config(gboolean emit_signal);
 static void on_name_entry_changed(GtkEditable *editable, PropertyDialogElements *e);
 static void on_entries_changed(GtkEditable *editable, PropertyDialogElements *e);
@@ -211,7 +211,7 @@ void project_new(void)
 
 gboolean project_load_file_with_session(const gchar *locale_file_name)
 {
-	if (project_load_file(locale_file_name))
+	if (project_load_file(locale_file_name, TRUE))
 	{
 		if (project_prefs.project_session)
 		{
@@ -929,11 +929,11 @@ static void on_radio_long_line_custom_toggled(GtkToggleButton *radio, GtkWidget 
 }
 
 
-gboolean project_load_file(const gchar *locale_file_name)
+gboolean project_load_file(const gchar *locale_file_name, gboolean load_session)
 {
 	g_return_val_if_fail(locale_file_name != NULL, FALSE);
 
-	if (load_config(locale_file_name))
+	if (load_config(locale_file_name, load_session))
 	{
 		gchar *utf8_filename = utils_get_utf8_from_locale(locale_file_name);
 
@@ -957,8 +957,9 @@ gboolean project_load_file(const gchar *locale_file_name)
 /* Reads the given filename and creates a new project with the data found in the file.
  * At this point there should not be an already opened project in Geany otherwise it will just
  * return.
- * The filename is expected in the locale encoding. */
-static gboolean load_config(const gchar *filename)
+ * The filename is expected in the locale encoding. Both project_session preference and
+ * load_session must be TRUE for the project session files to be loaded. */
+static gboolean load_config(const gchar *filename, gboolean load_session)
 {
 	GKeyFile *config;
 	GeanyProject *p;
@@ -992,7 +993,7 @@ static gboolean load_config(const gchar *filename)
 	apply_editor_prefs();
 
 	build_load_menu(config, GEANY_BCS_PROJ, (gpointer)p);
-	if (project_prefs.project_session)
+	if (project_prefs.project_session && load_session)
 	{
 		/* save current (non-project) session (it could has been changed since program startup) */
 		configuration_save_default_session();

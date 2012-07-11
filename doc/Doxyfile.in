@@ -229,7 +229,7 @@ SEARCH_INCLUDES        = NO
 INCLUDE_PATH           =
 INCLUDE_FILE_PATTERNS  =
 # make G_GNUC_PRINTF a no-op unless doxygen would ignore functions with varargs
-PREDEFINED             = "G_GNUC_PRINTF(x,y)=" HAVE_PLUGINS GEANY_FUNCTIONS_H
+PREDEFINED             = "G_GNUC_PRINTF(x,y)=" HAVE_PLUGINS GEANY_FUNCTIONS_H HAVE_LIBSM
 EXPAND_AS_DEFINED      =
 SKIP_FUNCTION_MACROS   = NO
 #---------------------------------------------------------------------------

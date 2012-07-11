@@ -37,6 +37,7 @@ SRCS = \
 	project.c project.h \
 	sciwrappers.c sciwrappers.h \
 	search.c search.h \
+	sm.c sm.h \
 	socket.c socket.h \
 	stash.c stash.h \
 	support.h \
@@ -131,6 +132,7 @@ geany_LDADD = \
 	$(top_builddir)/tagmanager/src/libtagmanager.a \
 	@GTK_LIBS@ \
 	@GTHREAD_LIBS@ \
+	@SM_LIBS@ \
 	$(INTLLIBS)
 
 AM_CFLAGS = -DGEANY_DATADIR=\""$(datadir)"\" \

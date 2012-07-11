@@ -129,7 +129,7 @@ geany_sources = set([
     'src/highlighting.c', 'src/keybindings.c',
     'src/keyfile.c', 'src/log.c', 'src/main.c', 'src/msgwindow.c', 'src/navqueue.c', 'src/notebook.c',
     'src/plugins.c', 'src/pluginutils.c', 'src/prefix.c', 'src/prefs.c', 'src/printing.c', 'src/project.c',
-    'src/sciwrappers.c', 'src/search.c', 'src/socket.c', 'src/stash.c',
+    'src/sciwrappers.c', 'src/search.c', 'src/sm.c', 'src/socket.c', 'src/stash.c',
     'src/symbols.c',
     'src/templates.c', 'src/toolbar.c', 'src/tools.c', 'src/sidebar.c',
     'src/ui_utils.c', 'src/utils.c'])
@@ -180,6 +180,12 @@ def configure(conf):
     conf.check_cfg(package='gio-2.0', uselib_store='GIO', args='--cflags --libs', mandatory=True)
     gtk_version = conf.check_cfg(modversion='gtk+-2.0', uselib_store='GTK') or 'Unknown'
     conf.check_cfg(package='gthread-2.0', uselib_store='GTHREAD', args='--cflags --libs')
+
+    # Find libSM
+    if not Options.options.no_libsm:
+        sm_version = conf.check_cfg(package='sm', uselib_store='SM', args='--cflags --libs', mandatory=False)
+        if sm_version is None:
+            Options.options.no_libsm = True
 
     # Windows specials
     if is_win32:
@@ -232,6 +238,7 @@ def configure(conf):
     _define_from_opt(conf, 'HAVE_PLUGINS', not conf.options.no_plugins, None)
     _define_from_opt(conf, 'HAVE_SOCKET', not conf.options.no_socket, None)
     _define_from_opt(conf, 'HAVE_VTE', not conf.options.no_vte, None)
+    _define_from_opt(conf, 'HAVE_LIBSM', not Options.options.no_libsm, None)
 
     conf.write_config_header('config.h', remove=False)
 
@@ -250,6 +257,7 @@ def configure(conf):
     conf.msg('Using GTK version', gtk_version)
     conf.msg('Build with plugin support', conf.options.no_plugins and 'no' or 'yes')
     conf.msg('Use virtual terminal support', conf.options.no_vte and 'no' or 'yes')
+    conf.msg('Build with X session management support', conf.options.no_libsm and 'no' or 'yes')
     if revision is not None:
         conf.msg('Compiling Git revision', revision)
 
@@ -268,6 +276,9 @@ def options(opt):
     opt.add_option('--disable-vte', action='store_true', default=False,
         help='compile without support for an embedded virtual terminal [[default: No]',
         dest='no_vte')
+    opt.add_option('--disable-libsm', action='store_true', default=target_is_win32(os.environ),
+        help='compile without X session management support [[default: No]',
+        dest='no_libsm')
     # Paths
     opt.add_option('--mandir', type='string', default='',
         help='man documentation', dest='mandir')
@@ -363,7 +374,7 @@ def build(bld):
         includes        = ['.', 'scintilla/include', 'tagmanager/src'],
         defines         = ['G_LOG_DOMAIN="Geany"', 'GEANY_PRIVATE'],
         linkflags       = [] if is_win32 else ['-Wl,--export-dynamic'],
-        uselib          = ['GTK', 'GLIB', 'GMODULE', 'GIO', 'GTHREAD', 'WIN32', 'SUNOS_SOCKET'],
+        uselib          = ['GTK', 'GLIB', 'GMODULE', 'GIO', 'GTHREAD', 'WIN32', 'SUNOS_SOCKET', 'SM'],
         use             = ['scintilla', 'ctags', 'tagmanager', 'mio'])
 
     # geanyfunctions.h

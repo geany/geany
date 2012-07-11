@@ -2765,12 +2765,23 @@ GeanyDocument *document_clone(GeanyDocument *old_doc, const gchar *utf8_filename
 }
 
 
-/* @note If successful, this should always be followed up with a call to
- * document_close_all().
- * @return TRUE if all files were saved or had their changes discarded. */
-gboolean document_account_for_unsaved(void)
+/* @return TRUE if there are some unsaved documents */
+gboolean document_any_unsaved(void)
 {
-	guint i, p, page_count;
+	guint i;
+
+	foreach_document(i)
+		if (documents[i]->changed)
+			return TRUE;
+	return FALSE;
+}
+
+
+/* @return TRUE if all files were saved or had their changes discarded.
+ * The files with discarded changes remain marked as modified. */
+gboolean document_prompt_for_unsaved(void)
+{
+	guint p, page_count;
 
 	page_count = gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook));
 	/* iterate over documents in tabs order */
@@ -2784,6 +2795,19 @@ gboolean document_account_for_unsaved(void)
 				return FALSE;
 		}
 	}
+	return TRUE;
+}
+
+
+/* @note If successful, this should always be followed up with a call to
+ * document_close_all().
+ * @return TRUE if all files were saved or had their changes discarded. */
+gboolean document_account_for_unsaved(void)
+{
+	guint i;
+
+	if (!document_prompt_for_unsaved())
+		return FALSE;
 	/* all documents should now be accounted for, so ignore any changes */
 	foreach_document (i)
 	{
@@ -2899,6 +2923,10 @@ gboolean document_check_disk_status(GeanyDocument *doc, gboolean force)
 	/* ignore remote files and documents that have never been saved to disk */
 	if (notebook_switch_in_progress() || file_prefs.disk_check_timeout == 0
 			|| doc->real_path == NULL || doc->priv->is_remote)
+		return FALSE;
+
+	/* ignore changes while exiting session */
+	if (main_status.prevent_interaction)
 		return FALSE;
 
 	use_gio_filemon = (doc->priv->monitor != NULL);

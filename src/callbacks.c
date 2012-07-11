@@ -65,6 +65,7 @@
 #include "toolbar.h"
 #include "highlighting.h"
 #include "pluginutils.h"
+#include "sm.h"
 
 
 #ifdef HAVE_VTE
@@ -86,21 +87,6 @@ static gboolean insert_callback_from_menu = FALSE;
 /*static gboolean switch_tv_notebook_page = FALSE; */
 
 
-static gboolean check_no_unsaved(void)
-{
-	guint i;
-
-	for (i = 0; i < documents_array->len; i++)
-	{
-		if (documents[i]->is_valid && documents[i]->changed)
-		{
-			return FALSE;
-		}
-	}
-	return TRUE;	/* no unsaved edits */
-}
-
-
 /* set editor_info.click_pos to the current cursor position if insert_callback_from_menu is TRUE
  * to prevent invalid cursor positions which can cause segfaults */
 static void verify_click_pos(GeanyDocument *doc)
@@ -116,7 +102,7 @@ static void verify_click_pos(GeanyDocument *doc)
 /* should only be called from on_exit_clicked */
 static void quit_app(void)
 {
-	configuration_save();
+	configuration_save(NULL);
 
 	if (app->project != NULL)
 		project_close(FALSE);	/* save project session files */
@@ -125,6 +111,7 @@ static void quit_app(void)
 
 	main_status.quitting = TRUE;
 
+	sm_discard();
 	main_quit();
 }
 
@@ -132,9 +119,12 @@ static void quit_app(void)
 /* wrapper function to abort exit process if cancel button is pressed */
 G_MODULE_EXPORT gboolean on_exit_clicked(GtkWidget *widget, gpointer gdata)
 {
+	if (main_status.prevent_interaction)
+		return FALSE;
+
 	main_status.quitting = TRUE;
 
-	if (! check_no_unsaved())
+	if (document_any_unsaved())
 	{
 		if (document_account_for_unsaved())
 		{

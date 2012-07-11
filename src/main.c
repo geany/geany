@@ -71,6 +71,7 @@
 #include "printing.h"
 #include "toolbar.h"
 #include "geanyobject.h"
+#include "sm.h"
 
 #ifdef HAVE_SOCKET
 # include "socket.h"
@@ -114,9 +115,17 @@ static gboolean print_prefix = FALSE;
 static gboolean no_plugins = FALSE;
 #endif
 static gboolean dummy = FALSE;
+static gchar *libsm_client_id = NULL;
 
+/* WARNING: Do not change values of variables where values of command-line options are stored!
+ * This is, they should remain unchanged after `g_option_context_parse' returns.
+ * Otherwise, "restart command" for X session management may be filled improperly.
+ *
+ * NOTE: Currently optentries of type G_OPTION_ARG_CALLBACK are not supported by
+ * X session management support implementation.
+ */
 /* in alphabetical order of short options */
-static GOptionEntry entries[] =
+GOptionEntry optentries[] =
 {
 	{ "column", 0, 0, G_OPTION_ARG_INT, &cl_options.goto_column, N_("Set initial column number for the first opened file (useful in conjunction with --line)"), NULL },
 	{ "config", 'c', 0, G_OPTION_ARG_FILENAME, &alternate_config, N_("Use an alternate configuration directory"), NULL },
@@ -144,7 +153,39 @@ static GOptionEntry entries[] =
 	{ "verbose", 'v', 0, G_OPTION_ARG_NONE, &verbose_mode, N_("Be verbose"), NULL },
 	{ "version", 'V', 0, G_OPTION_ARG_NONE, &show_version, N_("Show version and exit"), NULL },
 	{ "dummy", 0, G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_NONE, &dummy, NULL, NULL }, /* for +NNN line number arguments */
+	{ "libsm-client-id", 0, G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_STRING, &libsm_client_id, NULL, NULL },
+	/* add new options here and in `optentries_aux' below */
 	{ NULL, 0, 0, 0, NULL, NULL, NULL }
+};
+
+GeanyOptionEntryAux optentries_aux[] = {
+	{FALSE}, /* "column" */
+	{TRUE},  /* "config" */
+	{FALSE}, /* "ft-names */
+	{FALSE}, /* "generate-tags" */
+	{FALSE}, /* "no-preprocessing" */
+#ifdef HAVE_SOCKET
+	{TRUE},  /* "new-instance" */
+	{TRUE},  /* "socket-file" */
+	{FALSE}, /* "list-documents" */
+#endif
+	{FALSE}, /* "line" */
+	{TRUE},  /* "no-msgwin" */
+	{TRUE},  /* "no-ctags" */
+#ifdef HAVE_PLUGINS
+	{TRUE},  /* "no-plugins" */
+#endif
+	{FALSE}, /* "print-prefix" */
+	{FALSE}, /* "read-only" */
+	{FALSE}, /* "no-session" */
+#ifdef HAVE_VTE
+	{TRUE},  /* "no-terminal" */
+	{TRUE},  /* "vte-lib" */
+#endif
+	{TRUE},  /* "verbose" */
+	{FALSE}, /* "version" */
+	{FALSE}, /* "dummy" */
+	{FALSE}, /* "libsm-client-id" option is handled separately */
 };
 
 
@@ -514,7 +555,7 @@ static void parse_command_line_options(gint *argc, gchar ***argv)
 	}
 
 	context = g_option_context_new(_("[FILES...]"));
-	g_option_context_add_main_entries(context, entries, GETTEXT_PACKAGE);
+	g_option_context_add_main_entries(context, optentries, GETTEXT_PACKAGE);
 	g_option_group_set_translation_domain(g_option_context_get_main_group(context), GETTEXT_PACKAGE);
 	g_option_context_add_group(context, gtk_get_option_group(FALSE));
 	g_option_context_parse(context, argc, argv, &error);
@@ -566,7 +607,7 @@ static void parse_command_line_options(gint *argc, gchar ***argv)
 	if (alternate_config)
 	{
 		geany_debug("alternate config: %s", alternate_config);
-		app->configdir = alternate_config;
+		app->configdir = g_strdup(alternate_config);
 	}
 	else
 	{
@@ -845,7 +886,7 @@ static void load_session_project_file(void)
 	locale_filename = utils_get_locale_from_utf8(project_prefs.session_file);
 
 	if (G_LIKELY(NZV(locale_filename)))
-		project_load_file(locale_filename);
+		project_load_file(locale_filename, libsm_client_id == NULL);
 
 	g_free(locale_filename);
 	g_free(project_prefs.session_file);	/* no longer needed */
@@ -854,7 +895,7 @@ static void load_session_project_file(void)
 
 static void load_settings(void)
 {
-	configuration_load();
+	configuration_load(libsm_client_id);
 	/* let cmdline options overwrite configuration settings */
 #ifdef HAVE_VTE
 	vte_info.have_vte = (no_vte) ? FALSE : vte_info.load_vte;
@@ -878,7 +919,7 @@ void main_load_project_from_command_line(const gchar *locale_filename, gboolean 
 		if (use_session)
 			project_load_file_with_session(pfile);
 		else
-			project_load_file(pfile);
+			project_load_file(pfile, TRUE);
 	}
 	g_free(pfile);
 }
@@ -901,8 +942,10 @@ static void load_startup_files(gint argc, gchar **argv)
 	 * 1. "Load files from the last session" is active.
 	 * 2. --no-session is not specified.
 	 * 3. We are a primary instance.
-	 * Has no effect if a CL project is loaded and using project-based session files. */
-	if (prefs.load_session && cl_options.load_session && !cl_options.new_instance)
+	 * Has no effect if a CL project is loaded and using project-based session files.
+	 * Alternative XSMP case: load the xsmp session files, there is no CL project. */
+	if ((prefs.load_session && cl_options.load_session && !cl_options.new_instance) ||
+		libsm_client_id)
 	{
 		if (app->project == NULL)
 			load_session_project_file();
@@ -1024,6 +1067,7 @@ gint main(gint argc, gchar **argv)
 	geany_object = geany_object_new();
 
 	/* inits */
+	sm_init(argv[0], libsm_client_id);
 	main_init();
 
 	encodings_init();
@@ -1170,6 +1214,8 @@ static void queue_free(GQueue *queue)
 void main_quit()
 {
 	geany_debug("Quitting...");
+
+	sm_finalize();
 
 #ifdef HAVE_SOCKET
 	socket_finalize();

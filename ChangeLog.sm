@@ -1,0 +1,255 @@
+2012-03-06:
+
+ * src/sm.c:
+   On normal (non-sm) exit, only delete the session file if
+   running under Gnome, to preserve permanent sessions.
+ * src/main.c:
+   Updated for the new load_startup_files().
+
+2012-01-06  Dimitar Zhekov  <dimitar(dot)zhekov(at)gmail(dot)com>
+
+ * src/sm.c:
+   Don't interact if running under xfce sm - until they fix it.
+   Don't save yourself if main window is not realized, that's some
+   startup message loop and the configuration is not initialized.
+
+2011-07-10  Dimitar Zhekov  <dimitar(dot)zhekov(at)gmail(dot)com>
+
+ * src/callbacks.c:
+   Include sm.h for sm_discard().
+ * src/sm.c:
+   Include glib/gstdio.h for g_unlink().
+   Don't disable the main window while exiting. Nobody does, and if
+   anything, the Window Manager should do it.
+
+2011-04-24  Dimitar Zhekov  <dimitar(dot)zhekov(at)gmail(dot)com>
+
+ * src/keyfile.c, src/keyfile.h, src/sm.c:
+   Updated to free the string returned from utils_build_path().
+
+2011-04-09  Dimitar Zhekov  <dimitar(dot)zhekov(at)gmail(dot)com>
+
+ * src/keyfile.c, src/keyfile.h, src/sm.c:
+   Updated to use utils_build_path().
+ * src/sm.c:
+   Use g_path_is_absolute() instead of checking for G_DIR_SEPARATOR.
+ * src/document.c:
+   Don't check for external document changes while exiting a session
+   to prevent reload file prompts.
+
+2010-10-16  Dimitar Zhekov  <dimitar(dot)zhekov(at)gmail(dot)com>
+
+ * src/main.c:
+   Replaced new_session with load_default_session. May also be used
+   for "Open at the same workspace", to inhibit loading the default
+   session if another primary instance is already running.
+
+2010-10-09  Dimitar Zhekov  <dimitar(dot)zhekov(at)gmail(dot)com>
+
+ * src/main.c, src/main.h:
+   Reverted cl_options.socket_filename, since "Open files in Geany at
+   the same workspace" was reverted.
+
+ * src/sm.c:
+   Some refactoring and documentation fixes.
+
+2010-10-08  Dimitar Zhekov  <dimitar(dot)zhekov(at)gmail(dot)com>
+
+ * src/sm.c:
+   On shutdown cancelled: don't call save done if already done, signal
+   save yourself failed.
+   If interaction is required but refused, at least save configuration
+   and signal success.
+
+2010-09-26  Dimitar Zhekov  <dimitar(dot)zhekov(at)gmail(dot)com>
+
+ * src/stash.c:
+   Reverted 5121's always write the default value for [missing]
+   hidden preference. Not significant enough for a workaround.
+
+2010-09-25  Dimitar Zhekov  <dimitar(dot)zhekov(at)gmail(dot)com>
+
+ * src/main.c, src/main.h
+   Replaced cl_options.socket_filename with socket_info.file_name to
+   support "Open files in Geany at the same workspace".
+
+2010-07-05  Dimitar Zhekov  <dimitar(dot)zhekov(at)gmail(dot)com>
+
+ * src/sm.c:
+   Try to expand relative executable name. For GSM.
+
+ * src/sm.c, src/callbacks.c:
+   Remove the session file on normal (non-sm) quit. For GSM.
+
+ * src/keyfile.c:
+   Don't check the session file with G_FILE_TEST_IS_SYMLINK.
+
+ * src/sm.c, src/sm.h, src/main.c, src/utils.c, src/utils.h:
+   Replaced type * identifier with type *identifier.
+
+2010-06-20  Dimitar Zhekov  <dimitar(dot)zhekov(at)gmail(dot)com>
+
+ * src/main.c:
+   Simply g_strdup(alternate_config) to preserve it, as suggested by
+   Eugene Arshinov.
+
+ * src/utils.c, src/sm.c:
+   Store the filenames directly instead of using tm_get_real_path().
+
+ * src/utils.c:
+   Don't store zero integer arguments.
+
+2010-05-20  Dimitar Zhekov  <hamster(at)mbox(dot)contact(dot)bg>
+
+ * src/sm.c:
+   Don't save configuration on interactive SmSaveGlobal.
+   Don't ask to cancel shutdown if not a shutdown.
+   Don't set the userid property if the user name can't be determined.
+
+2010-05-19  Dimitar Zhekov  <hamster(at)mbox(dot)contact(dot)bg>
+
+ * src/main.c:
+   Altered setup_config_dir() to avoid discarding alternate_config.
+
+ * src/document.c, src/keyfile.c:
+   Fixed a few bugs.
+
+ * src/sm.c:
+   Moved the interactive configuration_save() after SmcInteractDone(),
+   so that any Untitled files are remembered with their new names.
+
+2010-05-18  Dimitar Zhekov  <hamster(at)mbox(dot)contact(dot)bg>
+
+ * src/sm.c, src/main.h, src/callbacks.c:
+   Prevent user interaction with Geany between save yourself done and
+   save complete / die / cancel shutdown. See sm_prevent_interaction().
+
+ * src/keyfile.c, src/keyfile.h
+   configuration_load(): renamed suffix to libsm_client_id, fallback to
+   geany.conf if session file not found.
+   configuration_load(): renamed suffix to libsm_client_id, save file
+   list if libsm_client_id != NULL.
+
+2010-05-17  Dimitar Zhekov  <hamster(at)mbox(dot)contact(dot)bg>
+
+ * src/sm.c, src/sm.h:
+   Modified all sm_ callbacks to handle the sm1 shutdown.
+
+ * src/document.c, src/document.h:
+   Extracted the prompt-and-save part of document_account_for_unsaved()
+   in a new document_prompt_for_unsaved() function to preserve the
+   "modified" file flags in the case of a cancelled shutdown.
+
+ * src/callbacks.c:
+   Reverted the changes not required for sm1.
+
+2010-05-16  Dimitar Zhekov  <hamster(at)mbox(dot)contact(dot)bg>
+
+ * src/utils.c, src/utils.h:
+   Altered utils_option_entry_reverse_parse() to support only the types
+   used by optentries[] and to expand relative filenames to absolute.
+
+ * src/keyfile.c, src/keyfile.h:
+   Added configuration_name(suffix), added support for suffix in
+   configuration_load() and configuration_save(). Altered some other
+   functions to use configuration_name().
+
+2010-05-15  Dimitar Zhekov  <hamster(at)mbox(dot)contact(dot)bg>
+
+ * src/main.c:
+   Changes to load_session_project_file(), load_settings() and
+   load_startup_files() to handle the x11 session startup variant.
+
+ * src/project.c, src/project.h:
+   Added load_session parameter project_load_file() and load_config().
+   X11 session startup passes FALSE to avoid loading project files.
+
+ * src/sm.c:
+   Combined sm_*_props() into sm_set_props(), invoked from sm_init().
+
+2010-05-14  Dimitar Zhekov  <hamster(at)mbox(dot)contact(dot)bg>
+
+ * geany.glade, src/interface.c, src/keyfile.c, src/prefs.c,
+   src/prefs.h, src/project.c, src/project.h, srs/utils.c, src/utils.h,
+   src/main.c, src/main.h:
+   Removed the changes that will not be required for sm1: "load session
+   even if any files opened", "--new-instance implies --no-session",
+   "--project". Reverted load_startup_files().
+
+ * src/main.c:
+   Marked "--no-session" as non-persistent. The open files should be
+   restored as they were when Geany was stopped, not started.
+
+ * src/main.c:
+   Moved sm_init() before main_init() so that the session main window
+   attributes can be applied. Replaced gtk_set_client_id() with
+   gdk_set_sm_client_id().
+
+2010-02-23  Eugene Arshinov  <earshinov(at)gmail(dot)com>
+
+ * src/main.c:
+   Change the behaviour of the setting controlled by "Preferences >
+   General > Misc > Use project-based session files" check button. Now
+   if you open a project via command-line, files from the default
+   session are not automatically appended to it.
+
+
+2010-02-22  Eugene Arshinov  <earshinov(at)gmail(dot)com>
+
+ * src/main.c, src/main.h, src/socket.c:
+   Use a separate command-line option to specify a project to be opened.
+ * src/sm.c:
+   Remember opened project across restarts.
+ * src/socket.c:
+   Fix opening project in already running instance (via socket).
+
+
+2010-02-15  Eugene Arshinov  <earshinov(at)gmail(dot)com>
+
+ * src/project.c, src/sm.c, src/utils.c, src/utils.h:
+   Use absolute paths to project files. Particularly, paths to recent
+   projects' files are now stored as absolute.
+ * src/main.c:
+   Load files from command line even if a project is being opened.
+ * geany.glade, src/interface.c, src/keyfile.c, src/main.c,
+   src/prefs.c, src/prefs.h:
+   Add a GUI preference to control whether the default session is
+   loaded if any files are opened via command-line (fix #2838686).
+   Location of the preference: General > Startup tab > Startup frame.
+
+
+2010-02-07  Eugene Arshinov  <earshinov(at)gmail(dot)com>
+
+ * src/main.c:
+   Rewrite load_startup_files() function. Fix the bug with opening a
+   project while specifying -s command line option. E.g.,
+   `geany -s project.geany' now correctly loads the project instead of
+   showing a blank document and clearing the project silently.
+
+
+2010-01-24  Eugene Arshinov  <earshinov(at)gmail(dot)com>
+
+ * doc/Doxyfile.in, src/Makefile.am, src/main.c, src/makefile.win32,
+   src/sm.c, src/sm.h, wscript:
+   Extract libSM-related code into separate sm.{c,h} files, make some
+   refactoring, and write code comments for Doxygen.
+ * src/keyfile.c, src/main.c:
+   Make --new-instance command line option imply --no-session.
+ * src/sm.c:
+   Handle --no-session command line option properly.
+ * src/main.c, src/main.h, src/sm.c, src/utils.c, src/utils.h:
+   Add "reverse parser" of GOptionEntry. Handle all command-line options.
+
+
+2009-12-08  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/Makefile.am, configure.in, wscript:
+   Detect libSM X session management library (patch by Eugene Arshinov,
+   thanks).
+ * src/project.c, src/project.h, src/callbacks.c, src/document.c,
+   src/document.h, src/main.c, src/main.h:
+   Refactor quitting code into main_save() and main_finalize() (patch by
+   Eugene Arshinov, thanks).
+ * src/main.c:
+   Restart Geany and restore some state when logging in (patch by
+   Eugene Arshinov, thanks).

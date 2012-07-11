@@ -2068,6 +2068,52 @@ gchar **utils_copy_environment(const gchar **exclude_vars, const gchar *first_va
 }
 
 
+/*
+ * "Reverse parse" @c GOptionEntry
+ *
+ * @param optentry    Object to parse.
+ * @return            Newly-allocated option string or NULL.
+ *
+ * Function takes the information about the option entry stored in @c optentry
+ * and the option's value by the address stored in @c optentry. It returns a newly
+ * allocated option string, or NULL if none required (or if the option type is not
+ * supported). Any relative file names are converted to absolute.
+ *
+ * The resulting string must be freed with @c g_free().
+ */
+gchar *utils_option_entry_reverse_parse(const GOptionEntry *optentry)
+{
+	gchar *s = NULL;
+
+	switch (optentry->arg)
+	{
+		case G_OPTION_ARG_NONE:
+			{
+				gboolean val = *(gboolean *)optentry->arg_data;
+				gboolean reverse = (optentry->flags & G_OPTION_FLAG_REVERSE);
+				if ((val && !reverse) || (!val && reverse)) /* logical XOR */
+					s = g_strdup_printf("--%s", optentry->long_name);
+			}
+			break;
+
+		case G_OPTION_ARG_INT:
+			if (*(gint *)optentry->arg_data)
+				s = g_strdup_printf("--%s=%d", optentry->long_name, *(gint *)optentry->arg_data);
+			break;
+
+		case G_OPTION_ARG_STRING:
+		case G_OPTION_ARG_FILENAME:
+			if (*(gchar **)optentry->arg_data)
+				s = g_strdup_printf("--%s=%s", optentry->long_name, *(gchar **)optentry->arg_data);
+			break;
+
+		default:
+			g_warning("%s: %s: %d\n", G_STRFUNC, "Unsupported option entry type", optentry->arg);
+	}
+	return s;
+}
+
+
 /* Joins @a first and @a second into a new string vector, freeing the originals.
  * The original contents are reused. */
 gchar **utils_strv_join(gchar **first, gchar **second)

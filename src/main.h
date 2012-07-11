@@ -23,6 +23,20 @@
 #ifndef GEANY_MAIN_H
 #define GEANY_MAIN_H
 
+/** Information about command line entries that can not be stored in GOptionEntry. */
+typedef struct
+{
+	/**
+	 * Indicates whether the value of a command-line option should go to "restart command".
+	 * See X session management support implementation in sm.{c,h}.
+	 */
+	gboolean persist_upon_restart;
+}
+GeanyOptionEntryAux;
+
+extern GOptionEntry optentries[];
+extern GeanyOptionEntryAux optentries_aux[];
+
 typedef struct
 {
 	gboolean	new_instance;
@@ -46,6 +60,7 @@ typedef struct GeanyStatus
 							  * (used to prevent notebook switch page signals) */
 	gboolean	quitting;	/* state when Geany is quitting completely */
 	gboolean	main_window_realized;
+	gboolean	prevent_interaction;	/* state while saving SM session; the main window is locked */
 }
 GeanyStatus;
 

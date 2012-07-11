@@ -573,10 +573,10 @@ static void save_ui_prefs(GKeyFile *config)
 }
 
 
-void configuration_save(void)
+void configuration_save(const gchar *libsm_client_id)
 {
 	GKeyFile *config = g_key_file_new();
-	gchar *configfile = g_strconcat(app->configdir, G_DIR_SEPARATOR_S, "geany.conf", NULL);
+	gchar *configfile = configuration_name(libsm_client_id);
 	gchar *data;
 
 	g_key_file_load_from_file(config, configfile, G_KEY_FILE_NONE, NULL);
@@ -590,7 +590,7 @@ void configuration_save(void)
 	save_recent_files(config, ui_prefs.recent_queue, "recent_files");
 	save_recent_files(config, ui_prefs.recent_projects_queue, "recent_projects");
 
-	if (cl_options.load_session)
+	if (cl_options.load_session || libsm_client_id)
 		configuration_save_session_files(config);
 #ifdef HAVE_VTE
 	else if (vte_info.have_vte)
@@ -984,7 +984,7 @@ static void load_ui_prefs(GKeyFile *config)
  */
 void configuration_save_default_session(void)
 {
-	gchar *configfile = g_strconcat(app->configdir, G_DIR_SEPARATOR_S, "geany.conf", NULL);
+	gchar *configfile = configuration_name(NULL);
 	gchar *data;
 	GKeyFile *config = g_key_file_new();
 
@@ -1008,7 +1008,7 @@ void configuration_save_default_session(void)
  */
 void configuration_reload_default_session(void)
 {
-	gchar *configfile = g_build_filename(app->configdir, "geany.conf", NULL);
+	gchar *configfile = configuration_name(NULL);
 	GKeyFile *config = g_key_file_new();
 
 	g_key_file_load_from_file(config, configfile, G_KEY_FILE_NONE, NULL);
@@ -1020,10 +1020,17 @@ void configuration_reload_default_session(void)
 }
 
 
-gboolean configuration_load(void)
+gboolean configuration_load(const gchar *libsm_client_id)
 {
-	gchar *configfile = g_build_filename(app->configdir, "geany.conf", NULL);
+	gchar *configfile = configuration_name(libsm_client_id);
 	GKeyFile *config = g_key_file_new();
+
+	if (libsm_client_id && ! g_file_test(configfile, G_FILE_TEST_IS_REGULAR))
+	{	/* session config file does not exist, so try falling back to geany.conf */
+		geany_debug("No session config file found, trying to use default configuration.");
+		g_free(configfile);
+		configfile = configuration_name(NULL);
+	}
 
 	if (! g_file_test(configfile, G_FILE_TEST_IS_REGULAR))
 	{	/* config file does not (yet) exist, so try to load a global config file which may be */
@@ -1215,4 +1222,21 @@ void configuration_finalize(void)
 
 	g_ptr_array_free(keyfile_groups, TRUE);
 	g_ptr_array_free(pref_groups, TRUE);
+}
+
+
+gchar *configuration_name(const gchar *suffix)
+{
+	gchar *configfile;
+
+	if (suffix)
+	{
+		gchar *configbase = g_strconcat("geany-", suffix, ".conf", NULL);
+		configfile = g_build_filename(app->configdir, configbase, NULL);
+		g_free(configbase);
+	}
+	else
+		configfile = g_build_filename(app->configdir, "geany.conf", NULL);
+
+	return configfile;
 }

@@ -94,6 +94,26 @@ GEANY_CHECK_THE_FORCE dnl hehe
 # i18n
 GEANY_I18N
 
+# libSM for X session management
+SM_LIBS=""
+AC_ARG_ENABLE(libsm,
+	[  --enable-libsm          enable X session management support [[]]],
+	[enable_libsm=$enableval], [enable_libsm=yes])
+AC_MSG_CHECKING([whether to use LibSM])
+if test x"$enable_libsm" = xyes; then
+	AC_MSG_RESULT(yes)
+	AC_CHECK_HEADERS(X11/SM/SMlib.h, [SM_LIBS="-lSM -lICE"], enable_libsm=no)
+	if test x"$enable_libsm" = xyes; then
+		AC_DEFINE(HAVE_LIBSM, 1, [Define to 1 if you have libSM installed])
+	else
+		AC_MSG_WARN([X session management will not be supported])
+	fi
+else
+	AC_MSG_RESULT(no)
+fi
+AC_SUBST(SM_LIBS)
+
+
 GEANY_DATA_DIR=`eval echo ${datarootdir}/geany`
 AC_SUBST([GEANY_DATA_DIR])
 

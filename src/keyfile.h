@@ -37,9 +37,12 @@ void configuration_add_pref_group(struct StashGroup *group, gboolean for_prefs_d
 
 void configuration_add_various_pref_group(struct StashGroup *group);
 
-void configuration_save(void);
+/* return newly allocated "app->configdir/geany[-suffix].conf" name */
+gchar *configuration_name(const gchar *suffix);
 
-gboolean configuration_load(void);
+void configuration_save(const gchar *libsm_client_id);
+
+gboolean configuration_load(const gchar *libsm_client_id);
 
 void configuration_open_files(void);
 
