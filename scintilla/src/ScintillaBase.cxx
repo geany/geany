@@ -213,6 +213,7 @@ void ScintillaBase::AutoCompleteStart(int lenEntered, const char *list) {
 				pdoc->InsertString(sel.MainCaret(), list + lenEntered, lenInsert - lenEntered);
 				SetEmptySelection(sel.MainCaret() + lenInsert - lenEntered);
 			}
+			ac.Cancel();
 			return;
 		}
 	}
@@ -293,13 +294,8 @@ void ScintillaBase::AutoCompleteMove(int delta) {
 }
 
 void ScintillaBase::AutoCompleteMoveToCurrentWord() {
-	char wordCurrent[1000];
-	int i;
-	int startWord = ac.posStart - ac.startLen;
-	for (i = startWord; i < sel.MainCaret() && i - startWord < 1000; i++)
-		wordCurrent[i - startWord] = pdoc->CharAt(i);
-	wordCurrent[Platform::Minimum(i - startWord, 999)] = '\0';
-	ac.Select(wordCurrent);
+	std::string wordCurrent = RangeText(ac.posStart - ac.startLen, sel.MainCaret());
+	ac.Select(wordCurrent.c_str());
 }
 
 void ScintillaBase::AutoCompleteCharacterAdded(char ch) {
@@ -328,15 +324,12 @@ void ScintillaBase::AutoCompleteCharacterDeleted() {
 }
 
 void ScintillaBase::AutoCompleteCompleted() {
-	int item = ac.lb->GetSelection();
-	char selected[1000];
-	selected[0] = '\0';
-	if (item != -1) {
-		ac.lb->GetValue(item, selected, sizeof(selected));
-	} else {
+	int item = ac.GetSelection();
+	if (item == -1) {
 		AutoCompleteCancel();
 		return;
 	}
+	const std::string selected = ac.GetValue(item);
 
 	ac.Show(false);
 
@@ -348,7 +341,7 @@ void ScintillaBase::AutoCompleteCompleted() {
 	Position firstPos = ac.posStart - ac.startLen;
 	scn.position = firstPos;
 	scn.lParam = firstPos;
-	scn.text = selected;
+	scn.text = selected.c_str();
 	NotifyParent(scn);
 
 	if (!ac.Active())
@@ -369,8 +362,8 @@ void ScintillaBase::AutoCompleteCompleted() {
 	}
 	SetEmptySelection(ac.posStart);
 	if (item != -1) {
-		pdoc->InsertCString(firstPos, selected);
-		SetEmptySelection(firstPos + static_cast<int>(strlen(selected)));
+		pdoc->InsertCString(firstPos, selected.c_str());
+		SetEmptySelection(firstPos + static_cast<int>(selected.length()));
 	}
 	SetLastXChosen();
 }
@@ -378,19 +371,17 @@ void ScintillaBase::AutoCompleteCompleted() {
 int ScintillaBase::AutoCompleteGetCurrent() {
 	if (!ac.Active())
 		return -1;
-	return ac.lb->GetSelection();
+	return ac.GetSelection();
 }
 
 int ScintillaBase::AutoCompleteGetCurrentText(char *buffer) {
 	if (ac.Active()) {
-		int item = ac.lb->GetSelection();
-		char selected[1000];
-		selected[0] = '\0';
+		int item = ac.GetSelection();
 		if (item != -1) {
-			ac.lb->GetValue(item, selected, sizeof(selected));
+			const std::string selected = ac.GetValue(item);
 			if (buffer != NULL)
-				strcpy(buffer, selected);
-			return static_cast<int>(strlen(selected));
+				strcpy(buffer, selected.c_str());
+			return static_cast<int>(selected.length());
 		}
 	}
 	if (buffer != NULL)
