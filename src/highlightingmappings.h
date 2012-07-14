@@ -180,6 +180,7 @@ static const HLStyle highlighting_styles_C[] =
 	{ SCE_C_COMMENT,				"comment",					FALSE },
 	{ SCE_C_COMMENTLINE,			"commentline",				FALSE },
 	{ SCE_C_COMMENTDOC,				"commentdoc",				FALSE },
+	{ SCE_C_PREPROCESSORCOMMENT,	"preprocessorcomment",		FALSE },
 	{ SCE_C_NUMBER,					"number",					FALSE },
 	{ SCE_C_WORD,					"word",						FALSE },
 	{ SCE_C_WORD2,					"word2",					FALSE },

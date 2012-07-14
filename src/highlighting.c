@@ -1554,6 +1554,7 @@ gboolean highlighting_is_comment_style(gint lexer, gint style)
 			return (style == SCE_C_COMMENT ||
 				style == SCE_C_COMMENTLINE ||
 				style == SCE_C_COMMENTDOC ||
+				style == SCE_C_PREPROCESSORCOMMENT ||
 				style == SCE_C_COMMENTLINEDOC ||
 				style == SCE_C_COMMENTDOCKEYWORD ||
 				style == SCE_C_COMMENTDOCKEYWORDERROR);
