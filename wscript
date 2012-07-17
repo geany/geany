@@ -362,7 +362,6 @@ def build(bld):
         source          = geany_sources,
         includes        = ['.', 'scintilla/include', 'tagmanager/src'],
         defines         = ['G_LOG_DOMAIN="Geany"', 'GEANY_PRIVATE'],
-        linkflags       = [] if is_win32 else ['-Wl,--export-dynamic'],
         uselib          = ['GTK', 'GLIB', 'GMODULE', 'GIO', 'GTHREAD', 'WIN32', 'SUNOS_SOCKET'],
         use             = ['scintilla', 'ctags', 'tagmanager', 'mio'])
 
