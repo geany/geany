@@ -25,7 +25,7 @@
 
 /*
  * Session file format:
- * filename_xx=pos;filetype UID;read only;encoding;use_tabs;auto_indent;line_wrapping;filename
+ * filename_xx=pos;filetype UID;read only;Eencoding;use_tabs;auto_indent;line_wrapping;filename
  */
 
 #include <stdlib.h>
@@ -303,7 +303,7 @@ static gchar *get_session_file_string(GeanyDocument *doc)
 	locale_filename = utils_get_locale_from_utf8(doc->file_name);
 	escaped_filename = g_uri_escape_string(locale_filename, NULL, TRUE);
 
-	fname = g_strdup_printf("%d;%s;%d;%s;%d;%d;%d;%s;%d;%d",
+	fname = g_strdup_printf("%d;%s;%d;E%s;%d;%d;%d;%s;%d;%d",
 		sci_get_current_position(doc->editor->sci),
 		ft->name,
 		doc->readonly,
@@ -1070,7 +1070,7 @@ static gboolean open_session_file(gchar **tmp, guint len)
 	}
 	else
 	{
-		encoding = tmp[3];
+		encoding = &(tmp[3][1]);
 	}
 	indent_type = atoi(tmp[4]);
 	auto_indent = atoi(tmp[5]);
