@@ -141,29 +141,6 @@ static GtkWidget *ui_minimal_dialog_new(GtkWindow *parent, const gchar *title)
 }
 
 
-static gboolean is_modifier_key(guint keyval)
-{
-	switch (keyval)
-	{
-		case GDK_Shift_L:
-		case GDK_Shift_R:
-		case GDK_Control_L:
-		case GDK_Control_R:
-		case GDK_Meta_L:
-		case GDK_Meta_R:
-		case GDK_Alt_L:
-		case GDK_Alt_R:
-		case GDK_Super_L:
-		case GDK_Super_R:
-		case GDK_Hyper_L:
-		case GDK_Hyper_R:
-			return TRUE;
-		default:
-			return FALSE;
-	}
-}
-
-
 static gboolean on_key_release_event(GtkWidget *widget, GdkEventKey *ev, gpointer user_data)
 {
 	/* user may have rebound keybinding to a different modifier than Ctrl, so check all */

@@ -250,6 +250,8 @@ enum GeanyKeyBindingID
 };
 
 
+gboolean is_modifier_key(guint keyval);
+
 void keybindings_init(void);
 
 void keybindings_load_keyfile(void);

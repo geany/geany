@@ -214,6 +214,29 @@ static void add_kb(GeanyKeyGroup *group, gsize key_id,
 }
 
 
+gboolean is_modifier_key(guint keyval)
+{
+	switch (keyval)
+	{
+		case GDK_Shift_L:
+		case GDK_Shift_R:
+		case GDK_Control_L:
+		case GDK_Control_R:
+		case GDK_Meta_L:
+		case GDK_Meta_R:
+		case GDK_Alt_L:
+		case GDK_Alt_R:
+		case GDK_Super_L:
+		case GDK_Super_R:
+		case GDK_Hyper_L:
+		case GDK_Hyper_R:
+			return TRUE;
+		default:
+			return FALSE;
+	}
+}
+
+
 #define ADD_KB_GROUP(group_id, label, callback) \
 	add_kb_group(keybindings_get_core_group(group_id),\
 		keybindings_keyfile_group_name, label, callback, FALSE)
