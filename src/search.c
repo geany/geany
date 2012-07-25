@@ -1894,7 +1894,7 @@ static gint find_regex(ScintillaObject *sci, guint pos, GRegex *regex)
 	GMatchInfo *minfo;
 	gint ret = -1;
 
-	g_return_val_if_fail(pos <= (guint)sci_get_length(sci), FALSE);
+	g_return_val_if_fail(pos <= (guint)sci_get_length(sci), -1);
 
 	/* clear old match */
 	SETPTR(regex_match_text, NULL);
@@ -2035,7 +2035,7 @@ static gint find_document_usage(GeanyDocument *doc, const gchar *search_text, gi
 	ttf.lpstrText = (gchar *)search_text;
 	while (1)
 	{
-		gint pos, line, start, find_len;
+		gint pos, line, find_len;
 
 		pos = search_find_text(doc->editor->sci, flags, &ttf);
 		if (pos == -1)
@@ -2055,8 +2055,7 @@ static gint find_document_usage(GeanyDocument *doc, const gchar *search_text, gi
 			prev_line = line;
 		}
 
-		start = ttf.chrgText.cpMax + 1;
-		ttf.chrg.cpMin = start;
+		ttf.chrg.cpMin = ttf.chrgText.cpMax;
 	}
 	g_free(short_file_name);
 	return count;
