@@ -413,7 +413,10 @@ G_MODULE_EXPORT void on_reload_as_activate(GtkMenuItem *menuitem, gpointer user_
 	const gchar *charset = NULL;
 
 	g_return_if_fail(doc != NULL);
-	g_return_if_fail(doc->file_name != NULL);
+
+	/* No need to reload "untitled" (non-file-backed) documents */
+	if (doc->file_name == NULL)
+		return;
 
 	if (i >= 0)
 	{
