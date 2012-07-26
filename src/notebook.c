@@ -159,7 +159,7 @@ static gboolean on_key_release_event(GtkWidget *widget, GdkEventKey *ev, gpointe
 		doc = document_get_current();
 		update_mru_docs_head(doc);
 		mru_pos = 0;
-		document_check_disk_status(doc, TRUE);
+		document_ensure_uptodate(doc, TRUE, FALSE);
 	}
 	return FALSE;
 }

@@ -595,7 +595,7 @@ G_MODULE_EXPORT void on_toolbutton_preferences_clicked(GtkAction *action, gpoint
 
 static gboolean delayed_check_disk_status(gpointer data)
 {
-	document_check_disk_status(data, FALSE);
+	document_ensure_uptodate(data, FALSE, FALSE);
 	return FALSE;
 }
 

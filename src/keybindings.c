@@ -1212,7 +1212,7 @@ static gboolean on_key_press_event(GtkWidget *widget, GdkEventKey *ev, gpointer 
 
 	doc = document_get_current();
 	if (doc)
-		document_check_disk_status(doc, FALSE);
+		document_ensure_uptodate(doc, FALSE, FALSE);
 
 	keyval = ev->keyval;
 	state = ev->state & gtk_accelerator_get_default_mod_mask();

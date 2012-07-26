@@ -1115,7 +1115,7 @@ GeanyDocument *document_open_file_full(GeanyDocument *doc, const gchar *filename
 			ui_add_recent_document(doc);	/* either add or reorder recent item */
 			/* show the doc before reload dialog */
 			document_show_tab(doc);
-			document_check_disk_status(doc, TRUE);	/* force a file changed check */
+			document_ensure_uptodate(doc, TRUE, FALSE);	/* force a file changed check */
 		}
 	}
 	if (reload || doc == NULL)
@@ -2881,49 +2881,82 @@ static gboolean monitor_resave_missing_file(GeanyDocument *doc)
 	return want_reload;
 }
 
+/* return @c TRUE if the document has changed. */
+gboolean document_ensure_uptodate(GeanyDocument *doc, gboolean force_check, gboolean ignore_changes)
+{
+	FileDiskStatus old_status;
+	switch(document_check_disk_status(doc, force_check))
+	{
+		case GEANY_FILE_DELETED:
+			if (ignore_changes)
+			{
+				doc->changed = FALSE;
+				document_close(doc);
+			}
+			else
+				monitor_resave_missing_file(doc);
+			break;
+		case GEANY_FILE_CHANGED:
+			if (ignore_changes)
+				document_reload_file(doc, doc->encoding);
+			else
+				monitor_reload_file(doc);
+			break;
+		case GEANY_FILE_UNCHANGED:
+			if (doc->changed && ignore_changes)
+				return document_reload_file(doc, doc->encoding);
+			else
+				return FALSE;
+		default:
+			return FALSE;
+	}
+	if (DOC_VALID(doc))
+	{	/* doc can get invalid when a document was closed */
+		old_status = doc->priv->file_disk_status;
+		doc->priv->file_disk_status = FILE_OK;
+		if (old_status != doc->priv->file_disk_status)
+			ui_update_tab_status(doc);
+	}
+	return TRUE;
+}
 
 /* Set force to force a disk check, otherwise it is ignored if there was a check
  * in the last file_prefs.disk_check_timeout seconds.
- * @return @c TRUE if the file has changed. */
-gboolean document_check_disk_status(GeanyDocument *doc, gboolean force)
+ * @return @c GEANY_FILE_CHANGED, @c GEANY_FILE_DELETED, @c GEANY_FILE_UNCHANGED in the expected situations. */
+GEANY_FILE_STATE document_check_disk_status(GeanyDocument *doc, gboolean force)
 {
-	gboolean ret = FALSE;
+	GEANY_FILE_STATE ret = GEANY_FILE_UNCHANGED;
 	gboolean use_gio_filemon;
 	time_t cur_time = 0;
 	struct stat st;
 	gchar *locale_filename;
-	FileDiskStatus old_status;
 
 	g_return_val_if_fail(doc != NULL, FALSE);
 
 	/* ignore remote files and documents that have never been saved to disk */
 	if (notebook_switch_in_progress() || file_prefs.disk_check_timeout == 0
 			|| doc->real_path == NULL || doc->priv->is_remote)
-		return FALSE;
+		return GEANY_FILE_UNCHANGED;
 
 	use_gio_filemon = (doc->priv->monitor != NULL);
 
 	if (use_gio_filemon)
 	{
 		if (doc->priv->file_disk_status != FILE_CHANGED && ! force)
-			return FALSE;
+			return GEANY_FILE_UNCHANGED;
 	}
 	else
 	{
 		cur_time = time(NULL);
 		if (! force && doc->priv->last_check > (cur_time - file_prefs.disk_check_timeout))
-			return FALSE;
+			return GEANY_FILE_UNCHANGED;
 
 		doc->priv->last_check = cur_time;
 	}
 
 	locale_filename = utils_get_locale_from_utf8(doc->file_name);
 	if (g_stat(locale_filename, &st) != 0)
-	{
-		monitor_resave_missing_file(doc);
-		/* doc may be closed now */
-		ret = TRUE;
-	}
+		ret = GEANY_FILE_DELETED;
 	else if (! use_gio_filemon && /* ignore check when using GIO */
 		doc->priv->mtime > cur_time)
 	{
@@ -2933,19 +2966,10 @@ gboolean document_check_disk_status(GeanyDocument *doc, gboolean force)
 	else if (doc->priv->mtime < st.st_mtime)
 	{
 		doc->priv->mtime = st.st_mtime;
-		monitor_reload_file(doc);
-		/* doc may be closed now */
-		ret = TRUE;
+		ret = GEANY_FILE_CHANGED;
 	}
 	g_free(locale_filename);
 
-	if (DOC_VALID(doc))
-	{	/* doc can get invalid when a document was closed */
-		old_status = doc->priv->file_disk_status;
-		doc->priv->file_disk_status = FILE_OK;
-		if (old_status != doc->priv->file_disk_status)
-			ui_update_tab_status(doc);
-	}
 	return ret;
 }
 
