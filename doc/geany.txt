@@ -1277,6 +1277,9 @@ utility. GNU Grep is recommended (see note below).
 
 .. image:: ./images/find_in_files_dialog.png
 
+The *Search* field is initially set to the current word in the editor
+(depending on `Search`_ preferences).
+
 The *Files* setting allows to choose which files are included in the
 search, depending on the mode:
 
@@ -1292,6 +1295,11 @@ pattern separated by a space. To search all ``.c`` and ``.h`` files,
 use: ``*.c *.h``.
 Note that an empty pattern list searches in all files rather
 than none.
+
+The *Directory* field is initially set to the current document's directory,
+unless this field has already been edited and the current document has
+not changed. Otherwise, the current document's directory is prepended to
+the drop-down history. This can be disabled - see `Search`_ preferences.
 
 The *Encoding* field can be used to define the encoding of the files
 to be searched. The entered search text is converted to the chosen encoding
@@ -1829,9 +1837,9 @@ Use the current word under the cursor for Find dialogs
     appropriate Find dialog is used.
 
 Use the current file's directory for Find in Files
-    When opening the `Find in Files`_ dialog, set the directory to search to the directory of the current
+    When opening the Find in Files dialog, set the directory to search to the directory of the current
     active file. When this option is disabled, the directory of the last use of the Find in Files
-    dialog is used.
+    dialog is used. See `Find in Files`_ for details.
 
 Projects
 ````````

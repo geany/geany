@@ -1073,12 +1073,27 @@ void search_show_find_in_files_dialog(const gchar *dir)
 		cur_dir = g_strdup(dir);	/* custom directory argument passed */
 	else
 	{
-		gboolean entry_empty = ! NZV(gtk_entry_get_text(GTK_ENTRY(entry)));
-
-		if (search_prefs.use_current_file_dir || entry_empty)
+		if (search_prefs.use_current_file_dir)
 		{
-			cur_dir = utils_get_current_file_dir_utf8();
+			static gchar *last_cur_dir = NULL;
+			static GeanyDocument *last_doc = NULL;
 
+			/* Only set the directory entry once for the current document */
+			cur_dir = utils_get_current_file_dir_utf8();
+			if (doc == last_doc && cur_dir && utils_str_equal(cur_dir, last_cur_dir))
+			{
+				/* in case the user now wants the current directory, add it to history */
+				ui_combo_box_add_to_history(
+					GTK_COMBO_BOX_ENTRY(fif_dlg.dir_combo), cur_dir, 0);
+				SETPTR(cur_dir, NULL);
+			}
+			else
+				SETPTR(last_cur_dir, g_strdup(cur_dir));
+
+			last_doc = doc;
+		}
+		if (!cur_dir && ! NZV(gtk_entry_get_text(GTK_ENTRY(entry))))
+		{
 			/* use default_open_path if no directory could be determined
 			 * (e.g. when no files are open) */
 			if (!cur_dir)
