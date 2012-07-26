@@ -15,8 +15,7 @@
 WINDRES = windres.exe
 CC = gcc
 CXX = g++
-CP = copy /Y
-CP_R = xcopy /S /Y
+CP = copy /y
 RM = del
 MKDIR = mkdir
 # $/ is used as a portable directory separator
@@ -27,7 +26,6 @@ DESTDIR = C:/Program Files/Geany
 
 ifdef MSYS
 CP = cp
-CP_R = cp -r
 RM = rm -f
 / = /
 endif
@@ -70,4 +68,8 @@ install:
 	-$(MKDIR) "$(DESTDIR)/lib"
 	$(CP) plugins$/*.dll "$(DESTDIR)/lib"
 	-$(MKDIR) "$(DESTDIR)/data"
-	$(CP_R) data "$(DESTDIR)/data"
+ifdef MSYS
+	cp -r data "$(DESTDIR)"
+else
+	xcopy /s /y data "$(DESTDIR)/data"
+endif
