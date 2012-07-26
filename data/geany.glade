@@ -686,6 +686,12 @@
     <property name="stock">gtk-revert-to-saved</property>
     <property name="icon-size">1</property>
   </object>
+  <object class="GtkImage" id="image4084">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="stock">gtk-revert-to-saved</property>
+    <property name="icon-size">1</property>
+  </object>
   <object class="GtkListStore" id="indent_mode_list">
     <columns>
       <!-- column-name item -->
@@ -7314,6 +7320,18 @@
                                 </child>
                               </object>
                             </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkImageMenuItem" id="menu_reload_all1">
+                            <property name="label" translatable="yes">Reloa_d All</property>
+                            <property name="use_action_appearance">False</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="use_underline">True</property>
+                            <property name="image">image4084</property>
+                            <property name="use_stock">False</property>
+                            <signal name="activate" handler="on_reload_all" swapped="no"/>
                           </object>
                         </child>
                         <child>

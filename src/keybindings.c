@@ -293,6 +293,8 @@ static void init_default_kb(void)
 		"menu_close_all1");
 	add_kb(group, GEANY_KEYS_FILE_RELOAD, NULL,
 		GDK_r, GDK_CONTROL_MASK, "menu_reloadfile", _("Reload file"), "menu_reload1");
+	add_kb(group, GEANY_KEYS_FILE_RELOAD_ALL, NULL,
+		0, 0, "menu_reload_all", _("Reload all"), "menu_reload_all1");
 	add_kb(group, GEANY_KEYS_FILE_OPENLASTTAB, NULL,
 		0, 0, "file_openlasttab", _("Re-open last closed tab"), NULL);
 
@@ -1210,10 +1212,6 @@ static gboolean on_key_press_event(GtkWidget *widget, GdkEventKey *ev, gpointer 
 	if (ev->keyval == 0)
 		return FALSE;
 
-	doc = document_get_current();
-	if (doc)
-		document_ensure_uptodate(doc, FALSE, FALSE);
-
 	keyval = ev->keyval;
 	state = ev->state & gtk_accelerator_get_default_mod_mask();
 	/* hack to get around that CTRL+Shift+r results in GDK_R not GDK_r */
@@ -1227,6 +1225,22 @@ static gboolean on_key_press_event(GtkWidget *widget, GdkEventKey *ev, gpointer 
 	/*geany_debug("%d (%d) %d (%d)", keyval, ev->keyval, state, ev->state);*/
 
 	/* special cases */
+	/* first check for reload all and handle that before doing document_ensure_uptodate() */
+	kb = keybindings_lookup_item(GEANY_KEY_GROUP_FILE, GEANY_KEYS_FILE_RELOAD_ALL);
+	if (kb != NULL && keyval == kb->key && state == kb->mods)
+	{
+		on_reload_all(NULL, NULL);
+		return TRUE;
+	}
+
+	/* ignore modifier-only keypresses */
+	if (!is_modifier_key(keyval))
+	{
+		doc = document_get_current();
+		if(doc)
+			document_ensure_uptodate(doc, FALSE, FALSE);
+	}
+
 #ifdef HAVE_VTE
 	if (vte_info.have_vte && check_vte(state, keyval))
 		return FALSE;
@@ -1345,6 +1359,9 @@ static gboolean cb_func_file_action(guint key_id)
 			break;
 		case GEANY_KEYS_FILE_RELOAD:
 			on_toolbutton_reload_clicked(NULL, NULL);
+			break;
+		case GEANY_KEYS_FILE_RELOAD_ALL:
+			on_reload_all(NULL, NULL);
 			break;
 		case GEANY_KEYS_FILE_PRINT:
 			on_print1_activate(NULL, NULL);
