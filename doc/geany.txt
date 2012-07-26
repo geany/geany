@@ -293,7 +293,7 @@ The workspace has the following parts:
 
   * Status - A list of status messages.
   * Compiler - The output of compiling or building programs.
-  * Messages - Results of 'Find Usage', 'Find Usage' 'Find in Files' and other actions
+  * Messages - Results of 'Find Usage', 'Find in Files' and other actions
   * Scribble - A text scratchpad for any use.
   * Terminal - An optional terminal window.
 
@@ -1153,6 +1153,8 @@ and the editor window's popup menu:
 * Go to tag declaration
 * Go to line
 
+See also `Search`_ preferences.
+
 Toolbar entries
 ^^^^^^^^^^^^^^^
 There are also two toolbar entries:
@@ -1815,9 +1817,11 @@ Auto-focus widgets (focus follows mouse)
 Search
 ``````
 
-Always wrap search and hide the Find dialog
-    Always wrap search around the document and hide the Find dialog after clicking
-    Find Next/Previous.
+Always wrap search
+    Always wrap search around the document when finding a match.
+
+Hide the Find dialog
+    Hide the `Find`_ dialog after clicking Find Next/Previous.
 
 Use the current word under the cursor for Find dialogs
     Use current word under the cursor when opening the Find, Find in Files or Replace dialog and
@@ -1825,7 +1829,7 @@ Use the current word under the cursor for Find dialogs
     appropriate Find dialog is used.
 
 Use the current file's directory for Find in Files
-    When opening the Find in Files dialog, set the directory to search to the directory of the current
+    When opening the `Find in Files`_ dialog, set the directory to search to the directory of the current
     active file. When this option is disabled, the directory of the last use of the Find in Files
     dialog is used.
 
