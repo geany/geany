@@ -1940,6 +1940,9 @@ gint search_find_next(ScintillaObject *sci, const gchar *str, gint flags)
 
 	pos = sci_get_current_position(sci);
 	ret = find_regex(sci, pos, regex);
+	/* avoid re-matching the same position in case of empty matches */
+	if (ret == pos && regex_matches[0].start == regex_matches[0].end)
+		ret = find_regex(sci, pos + 1, regex);
 	if (ret >= 0)
 		sci_set_selection(sci, ret, regex_matches[0].end);
 
@@ -2025,6 +2028,7 @@ static gint find_document_usage(GeanyDocument *doc, const gchar *search_text, gi
 	struct Sci_TextToFind ttf;
 	gint count = 0;
 	gint prev_line = -1;
+	gint prev_end = -1;
 
 	g_return_val_if_fail(doc != NULL, 0);
 
@@ -2035,27 +2039,34 @@ static gint find_document_usage(GeanyDocument *doc, const gchar *search_text, gi
 	ttf.lpstrText = (gchar *)search_text;
 	while (1)
 	{
-		gint pos, line, find_len;
+		gint pos, line;
 
 		pos = search_find_text(doc->editor->sci, flags, &ttf);
 		if (pos == -1)
 			break;	/* no more matches */
-		find_len = ttf.chrgText.cpMax - ttf.chrgText.cpMin;
-		if (find_len == 0)
-			break;	/* Ignore regex ^ or $ */
 
-		count++;
-		line = sci_get_line_from_position(doc->editor->sci, pos);
-		if (line != prev_line)
+		/* avoid rematching with empty matches like "(?=[a-z])" or "^$".
+		 * note we cannot assume a match will always be empty or not, like with "a?(?=b)"*/
+		if (ttf.chrgText.cpMax != prev_end)
 		{
-			buffer = sci_get_line(doc->editor->sci, line);
-			msgwin_msg_add(COLOR_BLACK, line + 1, doc,
-				"%s:%d: %s", short_file_name, line + 1, g_strstrip(buffer));
-			g_free(buffer);
-			prev_line = line;
+			count++;
+			line = sci_get_line_from_position(doc->editor->sci, pos);
+			if (line != prev_line)
+			{
+				buffer = sci_get_line(doc->editor->sci, line);
+				msgwin_msg_add(COLOR_BLACK, line + 1, doc,
+					"%s:%d: %s", short_file_name, line + 1, g_strstrip(buffer));
+				g_free(buffer);
+				prev_line = line;
+			}
 		}
 
-		ttf.chrg.cpMin = ttf.chrgText.cpMax;
+		prev_end = ttf.chrgText.cpMax;
+
+		if (ttf.chrg.cpMin < ttf.chrgText.cpMax)
+			ttf.chrg.cpMin = ttf.chrgText.cpMax;
+		else
+			ttf.chrg.cpMin ++;
 	}
 	g_free(short_file_name);
 	return count;
@@ -2125,6 +2136,7 @@ guint search_replace_range(ScintillaObject *sci, struct Sci_TextToFind *ttf,
 	const gchar *find_text = ttf->lpstrText;
 	gint start = ttf->chrg.cpMin;
 	gint end = ttf->chrg.cpMax;
+	gint prev_find_end = -1;
 
 	g_return_val_if_fail(sci != NULL && find_text != NULL && replace_text != NULL, 0);
 	if (! *find_text)
@@ -2139,8 +2151,6 @@ guint search_replace_range(ScintillaObject *sci, struct Sci_TextToFind *ttf,
 		find_len = ttf->chrgText.cpMax - ttf->chrgText.cpMin;
 		if (search_pos == -1)
 			break;	/* no more matches */
-		if (find_len == 0 && ! NZV(replace_text))
-			break;	/* nothing to do */
 
 		if (search_pos + find_len > end)
 			break;	/* found text is partly out of range */
@@ -2158,9 +2168,14 @@ guint search_replace_range(ScintillaObject *sci, struct Sci_TextToFind *ttf,
 				if (chNext == '\r' || chNext == '\n')
 					movepastEOL = 1;
 			}
-			replace_len = search_replace_target(sci, replace_text,
-				flags & SCFIND_REGEXP);
-			count++;
+			/* make sure we don't replace the same position twice, in case of pattern
+			 * like "a?(?=b)" (would match "a"b and then ""b -- empty match the 2nd time) */
+			if (prev_find_end != ttf->chrgText.cpMax)
+			{
+				replace_len = search_replace_target(sci, replace_text,
+					flags & SCFIND_REGEXP);
+				count++;
+			}
 			if (search_pos == end)
 				break;	/* Prevent hang when replacing regex $ */
 
@@ -2171,7 +2186,11 @@ guint search_replace_range(ScintillaObject *sci, struct Sci_TextToFind *ttf,
 			ttf->chrg.cpMin = start;
 			end += replace_len - find_len;	/* update end of range now text has changed */
 			ttf->chrg.cpMax = end;
+
+			/* match end + replacement offset */
+			prev_find_end = ttf->chrgText.cpMax + replace_len - find_len;
 		}
+
 	}
 	return count;
 }
