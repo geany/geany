@@ -523,6 +523,10 @@ gint sci_get_length(ScintillaObject *sci)
 }
 
 
+/** Gets the currently used lexer
+ * @param sci Scintilla widget.
+ * @returns The lexer ID
+ */
 gint sci_get_lexer(ScintillaObject *sci)
 {
 	return (gint) SSM(sci, SCI_GETLEXER, 0, 0);
