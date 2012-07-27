@@ -138,6 +138,7 @@ enum GeanyKeyBindingID
 	GEANY_KEYS_FILE_CLOSE,						/**< Keybinding. */
 	GEANY_KEYS_DOCUMENT_REPLACETABS,			/**< Keybinding. */
 	GEANY_KEYS_FILE_RELOAD,						/**< Keybinding. */
+	GEANY_KEYS_FILE_RELOAD_ALL,					/**< Keybinding. */
 	GEANY_KEYS_SEARCH_FINDNEXTSEL,				/**< Keybinding. */
 	GEANY_KEYS_FOCUS_MESSAGES,					/**< Keybinding. */
 	GEANY_KEYS_BUILD_RUN,						/**< Keybinding. */
@@ -249,6 +250,8 @@ enum GeanyKeyBindingID
 	GEANY_KEYS_COUNT	/* must not be used by plugins */
 };
 
+
+gboolean is_modifier_key(guint keyval);
 
 void keybindings_init(void);
 
