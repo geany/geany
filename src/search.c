@@ -2028,7 +2028,6 @@ static gint find_document_usage(GeanyDocument *doc, const gchar *search_text, gi
 	struct Sci_TextToFind ttf;
 	gint count = 0;
 	gint prev_line = -1;
-	gint prev_end = -1;
 
 	g_return_val_if_fail(doc != NULL, 0);
 
@@ -2045,27 +2044,22 @@ static gint find_document_usage(GeanyDocument *doc, const gchar *search_text, gi
 		if (pos == -1)
 			break;	/* no more matches */
 
-		/* avoid rematching with empty matches like "(?=[a-z])" or "^$".
-		 * note we cannot assume a match will always be empty or not, like with "a?(?=b)"*/
-		if (ttf.chrgText.cpMax != prev_end)
+		count++;
+		line = sci_get_line_from_position(doc->editor->sci, pos);
+		if (line != prev_line)
 		{
-			count++;
-			line = sci_get_line_from_position(doc->editor->sci, pos);
-			if (line != prev_line)
-			{
-				buffer = sci_get_line(doc->editor->sci, line);
-				msgwin_msg_add(COLOR_BLACK, line + 1, doc,
-					"%s:%d: %s", short_file_name, line + 1, g_strstrip(buffer));
-				g_free(buffer);
-				prev_line = line;
-			}
+			buffer = sci_get_line(doc->editor->sci, line);
+			msgwin_msg_add(COLOR_BLACK, line + 1, doc,
+				"%s:%d: %s", short_file_name, line + 1, g_strstrip(buffer));
+			g_free(buffer);
+			prev_line = line;
 		}
 
-		prev_end = ttf.chrgText.cpMax;
-
-		if (ttf.chrg.cpMin < ttf.chrgText.cpMax)
-			ttf.chrg.cpMin = ttf.chrgText.cpMax;
-		else
+		ttf.chrg.cpMin = ttf.chrgText.cpMax;
+		/* avoid rematching with empty matches like "(?=[a-z])" or "^$".
+		 * note we cannot assume a match will always be empty or not and then break out, since
+		 * matches like "a?(?=b)" will me sometimes empty and sometimes not */
+		if ((ttf.chrgText.cpMax - ttf.chrgText.cpMin) == 0)
 			ttf.chrg.cpMin ++;
 	}
 	g_free(short_file_name);
@@ -2136,7 +2130,6 @@ guint search_replace_range(ScintillaObject *sci, struct Sci_TextToFind *ttf,
 	const gchar *find_text = ttf->lpstrText;
 	gint start = ttf->chrg.cpMin;
 	gint end = ttf->chrg.cpMax;
-	gint prev_find_end = -1;
 
 	g_return_val_if_fail(sci != NULL && find_text != NULL && replace_text != NULL, 0);
 	if (! *find_text)
@@ -2168,14 +2161,9 @@ guint search_replace_range(ScintillaObject *sci, struct Sci_TextToFind *ttf,
 				if (chNext == '\r' || chNext == '\n')
 					movepastEOL = 1;
 			}
-			/* make sure we don't replace the same position twice, in case of pattern
-			 * like "a?(?=b)" (would match "a"b and then ""b -- empty match the 2nd time) */
-			if (prev_find_end != ttf->chrgText.cpMax)
-			{
-				replace_len = search_replace_target(sci, replace_text,
-					flags & SCFIND_REGEXP);
-				count++;
-			}
+			replace_len = search_replace_target(sci, replace_text,
+				flags & SCFIND_REGEXP);
+			count++;
 			if (search_pos == end)
 				break;	/* Prevent hang when replacing regex $ */
 
@@ -2186,9 +2174,6 @@ guint search_replace_range(ScintillaObject *sci, struct Sci_TextToFind *ttf,
 			ttf->chrg.cpMin = start;
 			end += replace_len - find_len;	/* update end of range now text has changed */
 			ttf->chrg.cpMax = end;
-
-			/* match end + replacement offset */
-			prev_find_end = ttf->chrgText.cpMax + replace_len - find_len;
 		}
 
 	}
