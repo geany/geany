@@ -787,16 +787,15 @@ static void printing_print_gtk(GeanyDocument *doc)
 	GtkPrintOperation *op;
 	GtkPrintOperationResult res = GTK_PRINT_OPERATION_RESULT_ERROR;
 	GError *error = NULL;
-	DocInfo *dinfo;
+	DocInfo dinfo = { 0 };
 	PrintWidgets *widgets;
 
 	/** TODO check for monospace font, detect the widest character in the font and
 	  * use it at font_width */
 
 	widgets = g_new0(PrintWidgets, 1);
-	dinfo = g_new0(DocInfo, 1);
 	/* all other fields are initialised in begin_print() */
-	dinfo->doc = doc;
+	dinfo.doc = doc;
 
 	op = gtk_print_operation_new();
 
@@ -806,9 +805,9 @@ static void printing_print_gtk(GeanyDocument *doc)
 	gtk_print_operation_set_embed_page_setup(op, TRUE);
 #endif
 
-	g_signal_connect(op, "begin-print", G_CALLBACK(begin_print), dinfo);
-	g_signal_connect(op, "end-print", G_CALLBACK(end_print), dinfo);
-	g_signal_connect(op, "draw-page", G_CALLBACK(draw_page), dinfo);
+	g_signal_connect(op, "begin-print", G_CALLBACK(begin_print), &dinfo);
+	g_signal_connect(op, "end-print", G_CALLBACK(end_print), &dinfo);
+	g_signal_connect(op, "draw-page", G_CALLBACK(draw_page), &dinfo);
 	g_signal_connect(op, "status-changed", G_CALLBACK(status_changed), doc->file_name);
 	g_signal_connect(op, "create-custom-widget", G_CALLBACK(create_custom_widget), widgets);
 	g_signal_connect(op, "custom-widget-apply", G_CALLBACK(custom_widget_apply), widgets);
@@ -836,7 +835,6 @@ static void printing_print_gtk(GeanyDocument *doc)
 	}
 
 	g_object_unref(op);
-	g_free(dinfo);
 	g_free(widgets);
 }
 
