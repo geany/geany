@@ -189,7 +189,7 @@ static int inside_datatype(vString *name)
 	else if (st == Get_Extr)
 	{
 	    do {
-		c = fileGetc();
+		c = get_next_char();
 	    } while (isspace(c));
 	    if (c == EOF)
 		return c;
