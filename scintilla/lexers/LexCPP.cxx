@@ -379,6 +379,12 @@ public:
 
 int SCI_METHOD LexerCPP::PropertySet(const char *key, const char *val) {
 	if (osCPP.PropertySet(&options, key, val)) {
+		if (strcmp(key, "lexer.cpp.allow.dollars") == 0) {
+			setWord = CharacterSet(CharacterSet::setAlphaNum, "._", 0x80, true);
+			if (options.identifiersAllowDollars) {
+				setWord.Add('$');
+			}
+		}
 		return 0;
 	}
 	return -1;
@@ -453,7 +459,6 @@ void SCI_METHOD LexerCPP::Lex(unsigned int startPos, int length, int initStyle, 
 
 	if (options.identifiersAllowDollars) {
 		setWordStart.Add('$');
-		setWord.Add('$');
 	}
 
 	int chPrevNonWhite = ' ';
@@ -517,7 +522,7 @@ void SCI_METHOD LexerCPP::Lex(unsigned int startPos, int length, int initStyle, 
 
 	int activitySet = preproc.IsInactive() ? activeFlag : 0;
 
-	for (; sc.More(); sc.Forward()) {
+	for (; sc.More();) {
 
 		if (sc.atLineStart) {
 			// Using MaskActive() is not needed in the following statement.
@@ -526,6 +531,9 @@ void SCI_METHOD LexerCPP::Lex(unsigned int startPos, int length, int initStyle, 
 				// Prevent SCE_C_STRINGEOL from leaking back to previous line which
 				// ends with a line continuation by locking in the state upto this position.
 				sc.SetState(sc.state);
+			}
+			if ((MaskActive(sc.state) == SCE_C_PREPROCESSOR) && (!continuationLine)) {
+				sc.SetState(SCE_C_DEFAULT|activitySet);
 			}
 			// Reset states to begining of colourise so no surprises
 			// if different sets of lines lexed.
@@ -556,6 +564,7 @@ void SCI_METHOD LexerCPP::Lex(unsigned int startPos, int length, int initStyle, 
 					sc.Forward();
 				}
 				continuationLine = true;
+				sc.Forward();
 				continue;
 			}
 		}
@@ -610,16 +619,24 @@ void SCI_METHOD LexerCPP::Lex(unsigned int startPos, int length, int initStyle, 
 				}
 				break;
 			case SCE_C_PREPROCESSOR:
-				if (sc.atLineStart && !continuationLine) {
-					sc.SetState(SCE_C_DEFAULT|activitySet);
-				} else if (options.stylingWithinPreprocessor) {
+				if (options.stylingWithinPreprocessor) {
 					if (IsASpace(sc.ch)) {
 						sc.SetState(SCE_C_DEFAULT|activitySet);
 					}
 				} else {
-					if (sc.Match('/', '*') || sc.Match('/', '/')) {
+					if (sc.Match('/', '*')) {
+						sc.SetState(SCE_C_PREPROCESSORCOMMENT|activitySet);
+						sc.Forward();	// Eat the *
+					} else if (sc.Match('/', '/')) {
 						sc.SetState(SCE_C_DEFAULT|activitySet);
 					}
+				}
+				break;
+			case SCE_C_PREPROCESSORCOMMENT:
+				if (sc.Match('*', '/')) {
+					sc.Forward();
+					sc.ForwardSetState(SCE_C_PREPROCESSOR|activitySet);
+					continue;	// Without advancing in case of '\'.
 				}
 				break;
 			case SCE_C_COMMENT:
@@ -918,11 +935,12 @@ void SCI_METHOD LexerCPP::Lex(unsigned int startPos, int length, int initStyle, 
 			}
 		}
 
-		if (!IsASpace(sc.ch) && !IsSpaceEquiv(sc.state)) {
+		if (!IsASpace(sc.ch) && !IsSpaceEquiv(MaskActive(sc.state))) {
 			chPrevNonWhite = sc.ch;
 			visibleChars++;
 		}
 		continuationLine = false;
+		sc.Forward();
 	}
 	const bool rawStringsChanged = rawStringTerminators.Merge(rawSTNew, lineCurrent);
 	if (definitionsChanged || rawStringsChanged)

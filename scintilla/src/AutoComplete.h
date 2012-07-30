@@ -20,8 +20,10 @@ class AutoComplete {
 	char fillUpChars[256];
 	char separator;
 	char typesep; // Type seperator
+	enum { maxItemLen=1000 };
 
 public:
+
 	bool ignoreCase;
 	bool chooseSingle;
 	ListBox *lb;
@@ -61,6 +63,12 @@ public:
 
 	/// The list string contains a sequence of words separated by the separator character
 	void SetList(const char *list);
+	
+	/// Return the position of the currently selected list item
+	int GetSelection() const;
+
+	/// Return the value of an item in the list
+	std::string GetValue(int item) const;
 
 	void Show(bool show);
 	void Cancel();

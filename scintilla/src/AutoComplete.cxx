@@ -10,6 +10,8 @@
 #include <stdio.h>
 #include <assert.h>
 
+#include <string>
+
 #include "Platform.h"
 
 #include "CharacterSet.h"
@@ -101,6 +103,16 @@ void AutoComplete::SetList(const char *list) {
 	lb->SetList(list, separator, typesep);
 }
 
+int AutoComplete::GetSelection() const {
+	return lb->GetSelection();
+}
+
+std::string AutoComplete::GetValue(int item) const {
+	char value[maxItemLen];
+	lb->GetValue(item, value, sizeof(value));
+	return std::string(value);
+}
+
 void AutoComplete::Show(bool show) {
 	lb->Show(show);
 	if (show)
@@ -130,7 +142,6 @@ void AutoComplete::Move(int delta) {
 void AutoComplete::Select(const char *word) {
 	size_t lenWord = strlen(word);
 	int location = -1;
-	const int maxItemLen=1000;
 	int start = 0; // lower bound of the api array block to search
 	int end = lb->Length() - 1; // upper bound of the api array block to search
 	while ((start <= end) && (location == -1)) { // Binary searching loop

@@ -31,13 +31,13 @@
 #undef PLAT_WX
 #define PLAT_WX  1
 
-#elif defined(GTK)
-#undef PLAT_GTK
-#define PLAT_GTK 1
-
 #elif defined(SCINTILLA_QT)
 #undef PLAT_QT
 #define PLAT_QT 1
+
+#elif defined(GTK)
+#undef PLAT_GTK
+#define PLAT_GTK 1
 
 #if defined(__WIN32__) || defined(_MSC_VER)
 #undef PLAT_GTK_WIN32
