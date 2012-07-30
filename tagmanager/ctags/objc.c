@@ -431,16 +431,16 @@ typedef void (*parseNext) (vString * const ident, objcToken what);
 /********** Helpers */
 /* This variable hold the 'parser' which is going to
  * handle the next token */
-parseNext toDoNext;
+static parseNext toDoNext;
 
 /* Special variable used by parser eater to
  * determine which action to put after their
  * job is finished. */
-parseNext comeAfter;
+static parseNext comeAfter;
 
 /* Used by some parsers detecting certain token
  * to revert to previous parser. */
-parseNext fallback;
+static parseNext fallback;
 
 
 /********** Grammar */
@@ -466,13 +466,13 @@ static void prepareTag (tagEntryInfo * tag, vString const *name, objcKind kind)
 	}
 }
 
-void pushEnclosingContext (const vString * parent, objcKind type)
+static void pushEnclosingContext (const vString * parent, objcKind type)
 {
 	vStringCopy (parentName, parent);
 	parentType = type;
 }
 
-void popEnclosingContext (void)
+static void popEnclosingContext (void)
 {
 	vStringClear (parentName);
 }
@@ -486,7 +486,7 @@ static void addTag (vString * const ident, int kind)
 	makeTagEntry (&toCreate);
 }
 
-objcToken waitedToken, fallBackToken;
+static objcToken waitedToken, fallBackToken;
 
 /* Ignore everything till waitedToken and jump to comeAfter.
  * If the "end" keyword is encountered break, doesn't remember
@@ -795,7 +795,8 @@ static void parseStructMembers (vString * const ident, objcToken what)
 		break;
 
 		/* some types are complex, the only one
-		 * we will loose is the function type. */
+		 * we will loose is the function type.
+		 */
 	case Tok_CurlL:	/* '{' */
 	case Tok_PARL:	/* '(' */
 	case Tok_SQUAREL:	/* '[' */
