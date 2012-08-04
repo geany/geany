@@ -2363,13 +2363,6 @@ static int parseParens (statementInfo *const st, parenInfo *const info)
 	{
 		int c = skipToNonWhite ();
 
-		if (isLanguage(Lang_d) && c == '!')
-		{	/* template instantiation */
-			info->isNameCandidate = FALSE;
-			info->isKnrParamList = FALSE;
-		}
-		else
-		{
 			switch (c)
 			{
 				case '&':
@@ -2481,6 +2474,11 @@ static int parseParens (statementInfo *const st, parenInfo *const info)
 							info->isNameCandidate = FALSE;
 						}
 					}
+					else if (isLanguage(Lang_d) && c == '!')
+					{ /* D template instantiation */
+						info->isNameCandidate = FALSE;
+						info->isKnrParamList = FALSE;
+					}
 					else
 					{
 						info->isParamList     = FALSE;
@@ -2491,7 +2489,6 @@ static int parseParens (statementInfo *const st, parenInfo *const info)
 					break;
 				}
 			}
-		}
 		firstChar = FALSE;
 	} while (! info->nestedArgs  &&  depth > 0  &&
 			 (info->isKnrParamList  ||  info->isNameCandidate));
