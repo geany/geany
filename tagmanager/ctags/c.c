@@ -2363,132 +2363,132 @@ static int parseParens (statementInfo *const st, parenInfo *const info)
 	{
 		int c = skipToNonWhite ();
 
-			switch (c)
+		switch (c)
+		{
+			case '&':
+			case '*':
 			{
-				case '&':
-				case '*':
-				{
-					/* DEBUG_PRINT("parseParens, po++\n"); */
-					info->isKnrParamList = FALSE;
-					if (identifierCount == 0)
-						info->isParamList = FALSE;
-					initToken (token);
-					break;
-				}
-				case ':':
-				{
-					info->isKnrParamList = FALSE;
-					break;
-				}
-				case '.':
-				{
-					info->isNameCandidate = FALSE;
-					info->isKnrParamList = FALSE;
-					break;
-				}
-				case ',':
-				{
-					info->isNameCandidate = FALSE;
-					if (info->isKnrParamList)
-					{
-						++info->parameterCount;
-						identifierCount = 0;
-					}
-					break;
-				}
-				case '=':
-				{
-					info->isKnrParamList = FALSE;
-					info->isNameCandidate = FALSE;
-					if (firstChar)
-					{
-						info->isParamList = FALSE;
-						skipMacro (st);
-						depth = 0;
-					}
-					break;
-				}
-				case '[':
-				{
-					info->isKnrParamList = FALSE;
-					skipToMatch ("[]");
-					break;
-				}
-				case '<':
-				{
-					info->isKnrParamList = FALSE;
-					skipToMatch ("<>");
-					break;
-				}
-				case ')':
-				{
-					if (firstChar)
-						info->parameterCount = 0;
-					--depth;
-					break;
-				}
-				case '(':
-				{
-					info->isKnrParamList = FALSE;
-					if (firstChar)
-					{
-						info->isNameCandidate = FALSE;
-						cppUngetc (c);
-						skipMacro (st);
-						depth = 0;
-					}
-					else if (isType (token, TOKEN_PAREN_NAME))
-					{
-						c = skipToNonWhite ();
-						if (c == '*')	/* check for function pointer */
-						{
-							skipToMatch ("()");
-							c = skipToNonWhite ();
-							if (c == '(')
-								skipToMatch ("()");
-						}
-						else
-						{
-							cppUngetc (c);
-							cppUngetc ('(');
-							info->nestedArgs = TRUE;
-						}
-					}
-					else
-						++depth;
-					break;
-				}
-
-				default:
-				{
-					if (isident1 (c))
-					{
-						if (++identifierCount > 1)
-							info->isKnrParamList = FALSE;
-						readIdentifier (token, c);
-						if (isType (token, TOKEN_NAME)  &&  info->isNameCandidate)
-							token->type = TOKEN_PAREN_NAME;
-						else if (isType (token, TOKEN_KEYWORD))
-						{
-							info->isKnrParamList = FALSE;
-							info->isNameCandidate = FALSE;
-						}
-					}
-					else if (isLanguage(Lang_d) && c == '!')
-					{ /* D template instantiation */
-						info->isNameCandidate = FALSE;
-						info->isKnrParamList = FALSE;
-					}
-					else
-					{
-						info->isParamList     = FALSE;
-						info->isKnrParamList  = FALSE;
-						info->isNameCandidate = FALSE;
-						info->invalidContents = TRUE;
-					}
-					break;
-				}
+				/* DEBUG_PRINT("parseParens, po++\n"); */
+				info->isKnrParamList = FALSE;
+				if (identifierCount == 0)
+					info->isParamList = FALSE;
+				initToken (token);
+				break;
 			}
+			case ':':
+			{
+				info->isKnrParamList = FALSE;
+				break;
+			}
+			case '.':
+			{
+				info->isNameCandidate = FALSE;
+				info->isKnrParamList = FALSE;
+				break;
+			}
+			case ',':
+			{
+				info->isNameCandidate = FALSE;
+				if (info->isKnrParamList)
+				{
+					++info->parameterCount;
+					identifierCount = 0;
+				}
+				break;
+			}
+			case '=':
+			{
+				info->isKnrParamList = FALSE;
+				info->isNameCandidate = FALSE;
+				if (firstChar)
+				{
+					info->isParamList = FALSE;
+					skipMacro (st);
+					depth = 0;
+				}
+				break;
+			}
+			case '[':
+			{
+				info->isKnrParamList = FALSE;
+				skipToMatch ("[]");
+				break;
+			}
+			case '<':
+			{
+				info->isKnrParamList = FALSE;
+				skipToMatch ("<>");
+				break;
+			}
+			case ')':
+			{
+				if (firstChar)
+					info->parameterCount = 0;
+				--depth;
+				break;
+			}
+			case '(':
+			{
+				info->isKnrParamList = FALSE;
+				if (firstChar)
+				{
+					info->isNameCandidate = FALSE;
+					cppUngetc (c);
+					skipMacro (st);
+					depth = 0;
+				}
+				else if (isType (token, TOKEN_PAREN_NAME))
+				{
+					c = skipToNonWhite ();
+					if (c == '*')	/* check for function pointer */
+					{
+						skipToMatch ("()");
+						c = skipToNonWhite ();
+						if (c == '(')
+							skipToMatch ("()");
+					}
+					else
+					{
+						cppUngetc (c);
+						cppUngetc ('(');
+						info->nestedArgs = TRUE;
+					}
+				}
+				else
+					++depth;
+				break;
+			}
+
+			default:
+			{
+				if (isident1 (c))
+				{
+					if (++identifierCount > 1)
+						info->isKnrParamList = FALSE;
+					readIdentifier (token, c);
+					if (isType (token, TOKEN_NAME)  &&  info->isNameCandidate)
+						token->type = TOKEN_PAREN_NAME;
+					else if (isType (token, TOKEN_KEYWORD))
+					{
+						info->isKnrParamList = FALSE;
+						info->isNameCandidate = FALSE;
+					}
+				}
+				else if (isLanguage(Lang_d) && c == '!')
+				{ /* D template instantiation */
+					info->isNameCandidate = FALSE;
+					info->isKnrParamList = FALSE;
+				}
+				else
+				{
+					info->isParamList     = FALSE;
+					info->isKnrParamList  = FALSE;
+					info->isNameCandidate = FALSE;
+					info->invalidContents = TRUE;
+				}
+				break;
+			}
+		}
 		firstChar = FALSE;
 	} while (! info->nestedArgs  &&  depth > 0  &&
 			 (info->isKnrParamList  ||  info->isNameCandidate));
