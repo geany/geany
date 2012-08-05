@@ -67,6 +67,7 @@ LexAda.o \
 LexAsm.o \
 LexBash.o \
 LexCOBOL.o \
+LexCoffeeScript.o \
 LexCSS.o \
 LexCPP.o \
 LexHTML.o \

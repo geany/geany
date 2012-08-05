@@ -1024,6 +1024,7 @@ void highlighting_init_styles(guint filetype_idx, GKeyFile *config, GKeyFile *co
 		init_styleset_case(CAML);
 		init_styleset_case(CMAKE);
 		init_styleset_case(COBOL);
+		init_styleset_case(COFFEESCRIPT);
 		init_styleset_case(CONF);
 		init_styleset_case(CSS);
 		init_styleset_case(D);
@@ -1103,6 +1104,7 @@ void highlighting_set_styles(ScintillaObject *sci, GeanyFiletype *ft)
 		styleset_case(CAML);
 		styleset_case(CMAKE);
 		styleset_case(COBOL);
+		styleset_case(COFFEESCRIPT);
 		styleset_case(CONF);
 		styleset_case(CSS);
 		styleset_case(D);
