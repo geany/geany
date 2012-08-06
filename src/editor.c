@@ -1330,11 +1330,23 @@ static gint get_brace_indent(ScintillaObject *sci, gint line)
 
 static gint get_python_indent(ScintillaObject *sci, gint line)
 {
-	gint last_char = sci_get_line_end_position(sci, line) - 1;
+	gint pos;
+	gint current_pos = sci_get_line_end_position(sci, line) - 1;
+	gint start = sci_get_position_from_line(sci, sci_get_line_from_position(sci, current_pos));
+	gint lexer = sci_get_lexer(sci);
+
+	/* move from EOL towards the first character on the line and use the lexer
+	 * to find the last code charcter on the line */
+	for (pos = current_pos; pos > start; pos--) {
+	  gint style = sci_get_style_at(sci, pos);
+	  if(! highlighting_is_comment_style(lexer, style) &&
+	     ! (style ==  SCE_P_DEFAULT && isspace (sci_get_char_at(sci, pos))))
+	    break;
+	}
 
 	/* add extra indentation for Python after colon */
-	if (sci_get_char_at(sci, last_char) == ':' &&
-		sci_get_style_at(sci, last_char) == SCE_P_OPERATOR)
+	if (sci_get_char_at(sci, pos) == ':' &&
+		sci_get_style_at(sci, pos) == SCE_P_OPERATOR)
 	{
 		return 1;
 	}
