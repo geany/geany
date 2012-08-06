@@ -2616,7 +2616,7 @@ void ui_menu_add_document_items(GtkMenu *menu, GeanyDocument *active, GCallback 
  * @a compare_func might be NULL to not sort the documents in the menu. In this case,
  * the order of the document tabs is used.
  *
- * See document_sort_by_display_name() for an example sort function.
+ * See document_compare_by_display_name() for an example sort function.
  *
  * @param menu Menu.
  * @param active Which document to highlight, or @c NULL.
