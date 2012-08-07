@@ -1292,45 +1292,52 @@ static void read_indent(GeanyEditor *editor, gint pos)
 
 static gint get_brace_indent(ScintillaObject *sci, gint line)
 {
-	guint i, len;
-	gint ret = 0;
-	gchar *linebuf;
+	gint start = sci_get_position_from_line(sci, line);
+	gint end = sci_get_line_end_position(sci, line) - 1;
+	gint lexer = sci_get_lexer(sci);
+	gint count = 0;
+	gint pos;
 
-	len = sci_get_line_length(sci, line);
-	linebuf = sci_get_line(sci, line);
-
-	for (i = 0; i < len; i++)
+	for (pos = end; pos >= start && count < 1; pos--)
 	{
-		/* i == (len - 1) prevents wrong indentation after lines like
-		 * "	{ return bless({}, shift); }" (Perl) */
-		if (linebuf[i] == '{' && i == (len - 1))
+		if (highlighting_is_code_style(lexer, sci_get_style_at(sci, pos)))
 		{
-			ret++;
-			break;
-		}
-		else
-		{
-			gint k = len - 1;
+			gchar c = sci_get_char_at(sci, pos);
 
-			while (k > 0 && isspace(linebuf[k])) k--;
-
-			/* if last non-whitespace character is a { increase indentation by a tab
-			 * e.g. for (...) { */
-			if (linebuf[k] == '{')
-			{
-				ret++;
-			}
-			break;
+			if (c == '{')
+				count ++;
+			else if (c == '}')
+				count --;
 		}
 	}
-	g_free(linebuf);
-	return ret;
+
+	return count > 0 ? 1 : 0;
+}
+
+
+/* gets the last code position on a line
+ * warning: if there is no code position on the line, returns the start position */
+static gint get_sci_line_code_end_position(ScintillaObject *sci, gint line)
+{
+	gint start = sci_get_position_from_line(sci, line);
+	gint lexer = sci_get_lexer(sci);
+	gint pos;
+
+	for (pos = sci_get_line_end_position(sci, line) - 1; pos > start; pos--)
+	{
+		gint style = sci_get_style_at(sci, pos);
+
+		if (highlighting_is_code_style(lexer, style) && ! isspace(sci_get_char_at(sci, pos)))
+			break;
+	}
+
+	return pos;
 }
 
 
 static gint get_python_indent(ScintillaObject *sci, gint line)
 {
-	gint last_char = sci_get_line_end_position(sci, line) - 1;
+	gint last_char = get_sci_line_code_end_position(sci, line);
 
 	/* add extra indentation for Python after colon */
 	if (sci_get_char_at(sci, last_char) == ':' &&
@@ -1345,7 +1352,7 @@ static gint get_python_indent(ScintillaObject *sci, gint line)
 static gint get_xml_indent(ScintillaObject *sci, gint line)
 {
 	gboolean need_close = FALSE;
-	gint end = sci_get_line_end_position(sci, line) - 1;
+	gint end = get_sci_line_code_end_position(sci, line);
 	gint pos;
 
 	/* don't indent if there's a closing tag to the right of the cursor */
