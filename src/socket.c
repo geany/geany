@@ -611,7 +611,13 @@ gboolean socket_lock_input_cb(GIOChannel *source, GIOCondition condition, gpoint
 			cl_options.readonly = strncmp(buf+4, "ro", 2) == 0; /* open in readonly? */
 			while (socket_fd_gets(sock, buf, sizeof(buf)) != -1 && *buf != '.')
 			{
-				handle_input_filename(g_strstrip(buf));
+				gsize buf_len = strlen(buf);
+
+				/* remove trailing newline */
+				if (buf_len > 0 && buf[buf_len - 1] == '\n')
+					buf[buf_len - 1] = '\0';
+
+				handle_input_filename(buf);
 			}
 			popup = TRUE;
 		}
