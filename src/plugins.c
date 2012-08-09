@@ -1375,6 +1375,8 @@ free_non_active_plugin(gpointer data, gpointer user_data)
 }
 
 
+/* Callback when plugin manager dialog closes, only ever has response of
+ * GTK_RESPONSE_OK or GTK_RESPONSE_DELETE_EVENT and both are treated the same. */
 static void pm_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 {
 	if (plugin_list != NULL)
@@ -1413,7 +1415,7 @@ static void pm_show_dialog(GtkMenuItem *menuitem, gpointer user_data)
 
 	pm_widgets.dialog = gtk_dialog_new_with_buttons(_("Plugins"), GTK_WINDOW(main_widgets.window),
 						GTK_DIALOG_DESTROY_WITH_PARENT,
-						GTK_STOCK_OK, GTK_RESPONSE_CANCEL, NULL);
+						GTK_STOCK_OK, GTK_RESPONSE_OK, NULL);
 	vbox = ui_dialog_vbox_new(GTK_DIALOG(pm_widgets.dialog));
 	gtk_widget_set_name(pm_widgets.dialog, "GeanyDialog");
 	gtk_box_set_spacing(GTK_BOX(vbox), 6);
