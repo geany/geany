@@ -1393,6 +1393,8 @@ static void pm_dialog_response(GtkDialog *dialog, gint response, gpointer user_d
 		plugin_list = NULL;
 	}
 	gtk_widget_destroy(GTK_WIDGET(dialog));
+
+	configuration_save();
 }
 
 
