@@ -1051,11 +1051,19 @@ void plugins_load_active(void)
 }
 
 
+/* Update the global active plugins list so it's up-to-date when configuration
+ * is saved. Called in response to GeanyObject's "save-settings" signal. */
 static void update_active_plugins_pref(void)
 {
 	gint i = 0;
 	GList *list;
-	gsize count = g_list_length(active_plugin_list) + g_list_length(failed_plugins_list);
+	gsize count;
+
+	/* if plugins are disabled, don't clear list of active plugins */
+	if (!want_plugins)
+		return;
+
+	count = g_list_length(active_plugin_list) + g_list_length(failed_plugins_list);
 
 	g_strfreev(active_plugins_pref);
 
@@ -1085,14 +1093,6 @@ static void update_active_plugins_pref(void)
 }
 
 
-static void on_save_settings(GKeyFile *config)
-{
-	/* if plugins are disabled, don't clear list of active plugins */
-	if (want_plugins)
-		update_active_plugins_pref();
-}
-
-
 /* called even if plugin support is disabled */
 void plugins_init(void)
 {
@@ -1111,7 +1111,7 @@ void plugins_init(void)
 	stash_group_add_entry(group, &prefs.custom_plugin_path,
 		"custom_plugin_path", "", "extra_plugin_path_entry");
 
-	g_signal_connect(geany_object, "save-settings", G_CALLBACK(on_save_settings), NULL);
+	g_signal_connect(geany_object, "save-settings", G_CALLBACK(update_active_plugins_pref), NULL);
 	stash_group_add_string_vector(group, &active_plugins_pref, "active_plugins", NULL);
 }
 
