@@ -959,13 +959,7 @@ load_plugins_from_path(const gchar *path)
 static gchar *get_plugin_path(void)
 {
 #ifdef G_OS_WIN32
-	gchar *path;
-	gchar *install_dir = win32_get_installation_dir();
-
-	path = g_build_filename(install_dir, "lib", NULL);
-	g_free(install_dir);
-
-	return path;
+	return g_build_filename(win32_get_installation_dir(), "lib", NULL);
 #else
 	return g_build_filename(GEANY_LIBDIR, "geany", NULL);
 #endif

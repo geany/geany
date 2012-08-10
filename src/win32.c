@@ -1295,9 +1295,14 @@ void win32_set_working_directory(const gchar *dir)
 }
 
 
-gchar *win32_get_installation_dir(void)
+const gchar *win32_get_installation_dir(void)
 {
-	return g_win32_get_package_installation_directory_of_module(NULL);
+	static gchar *install_dir = NULL; /* pointer is leaked */
+
+	if (install_dir == NULL)
+		install_dir = g_win32_get_package_installation_directory_of_module(NULL);
+
+	return (const gchar *) install_dir;
 }
 
 
