@@ -576,7 +576,7 @@ static void save_ui_prefs(GKeyFile *config)
 void configuration_save(void)
 {
 	GKeyFile *config = g_key_file_new();
-	gchar *configfile = g_build_filename(app->configdir, "geany.conf", NULL);
+	const gchar *configfile = utils_config_filename(CONFIG_MAIN, TRUE);
 	gchar *data;
 
 	g_key_file_load_from_file(config, configfile, G_KEY_FILE_NONE, NULL);
@@ -606,7 +606,6 @@ void configuration_save(void)
 	g_free(data);
 
 	g_key_file_free(config);
-	g_free(configfile);
 }
 
 
@@ -984,7 +983,7 @@ static void load_ui_prefs(GKeyFile *config)
  */
 void configuration_save_default_session(void)
 {
-	gchar *configfile = g_build_filename(app->configdir, "geany.conf", NULL);
+	const gchar *configfile = utils_config_filename(CONFIG_MAIN, TRUE);
 	gchar *data;
 	GKeyFile *config = g_key_file_new();
 
@@ -999,7 +998,6 @@ void configuration_save_default_session(void)
 	g_free(data);
 
 	g_key_file_free(config);
-	g_free(configfile);
 }
 
 
@@ -1008,11 +1006,10 @@ void configuration_save_default_session(void)
  */
 void configuration_reload_default_session(void)
 {
-	gchar *configfile = g_build_filename(app->configdir, "geany.conf", NULL);
 	GKeyFile *config = g_key_file_new();
 
-	g_key_file_load_from_file(config, configfile, G_KEY_FILE_NONE, NULL);
-	g_free(configfile);
+	g_key_file_load_from_file(config, utils_config_filename(CONFIG_MAIN, TRUE),
+		G_KEY_FILE_NONE, NULL);
 
 	configuration_load_session_files(config, FALSE);
 
@@ -1022,17 +1019,16 @@ void configuration_reload_default_session(void)
 
 gboolean configuration_load(void)
 {
-	gchar *configfile = g_build_filename(app->configdir, "geany.conf", NULL);
+	const gchar *configfile = utils_config_filename(CONFIG_MAIN, TRUE);
 	GKeyFile *config = g_key_file_new();
 
 	if (! g_file_test(configfile, G_FILE_TEST_IS_REGULAR))
 	{	/* config file does not (yet) exist, so try to load a global config file which may be */
 		/* created by distributors */
 		geany_debug("No user config file found, trying to use global configuration.");
-		SETPTR(configfile, g_build_filename(app->datadir, "geany.conf", NULL));
+		configfile = utils_config_filename(CONFIG_MAIN, FALSE);
 	}
 	g_key_file_load_from_file(config, configfile, G_KEY_FILE_NONE, NULL);
-	g_free(configfile);
 
 	load_dialog_prefs(config);
 	load_ui_prefs(config);

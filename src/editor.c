@@ -260,22 +260,16 @@ static void load_kb(GKeyFile *sysconfig, GKeyFile *userconfig)
 
 void editor_snippets_init(void)
 {
-	gchar *sysconfigfile, *userconfigfile;
 	GKeyFile *sysconfig = g_key_file_new();
 	GKeyFile *userconfig = g_key_file_new();
 
 	snippet_offsets = g_queue_new();
 
-	sysconfigfile = g_build_filename(app->datadir, "snippets.conf", NULL);
-	userconfigfile = g_build_filename(app->configdir, "snippets.conf", NULL);
-
-	/* check for old autocomplete.conf files (backwards compatibility) */
-	if (! g_file_test(userconfigfile, G_FILE_TEST_IS_REGULAR))
-		SETPTR(userconfigfile, g_build_filename(app->configdir, "autocomplete.conf", NULL));
-
 	/* load the actual config files */
-	g_key_file_load_from_file(sysconfig, sysconfigfile, G_KEY_FILE_NONE, NULL);
-	g_key_file_load_from_file(userconfig, userconfigfile, G_KEY_FILE_NONE, NULL);
+	g_key_file_load_from_file(sysconfig, utils_config_filename(CONFIG_SNIPPETS, FALSE),
+		G_KEY_FILE_NONE, NULL);
+	g_key_file_load_from_file(userconfig, utils_config_filename(CONFIG_SNIPPETS, TRUE),
+		G_KEY_FILE_NONE, NULL);
 
 	snippets_load(sysconfig, userconfig);
 
@@ -284,8 +278,6 @@ void editor_snippets_init(void)
 	gtk_window_add_accel_group(GTK_WINDOW(main_widgets.window), snippet_accel_group);
 	load_kb(sysconfig, userconfig);
 
-	g_free(sysconfigfile);
-	g_free(userconfigfile);
 	g_key_file_free(sysconfig);
 	g_key_file_free(userconfig);
 }
