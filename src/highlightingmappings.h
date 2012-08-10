@@ -1417,4 +1417,28 @@ static const HLKeyword highlighting_keywords_YAML[] =
 #define highlighting_properties_YAML	EMPTY_PROPERTIES
 
 
+/* CoffeeScript */
+#define highlighting_lexer_COFFEESCRIPT		SCLEX_COFFEESCRIPT
+#define highlighting_styles_COFFEESCRIPT	highlighting_styles_C
+static const HLKeyword highlighting_keywords_COFFEESCRIPT[] =
+{
+	{ 0, "keywords",	FALSE }
+};
+#define highlighting_properties_COFFEESCRIPT	EMPTY_PROPERTIES
+
+/* 
+#define SCE_COFFEESCRIPT_STRINGRAW 20
+	not used in LexCoffeeScript.cxx. Probably copied from SCE_C_STRINGRAW
+
+There are definitions differing from SCE_C_*, but they are rewritten in LexCoffeeScript.cxx:411
+#define SCE_COFFEESCRIPT_COMMENTBLOCK 22 
+	-> SCE_C_COMMENT 
+#define SCE_COFFEESCRIPT_VERBOSE_REGEX 23 
+	-> SCE_C_REGEX
+#define SCE_COFFEESCRIPT_VERBOSE_REGEX_COMMENT 24 
+	-> SCE_C_COMMENTLINE
+*/
+
+
+
 #endif /* guard */

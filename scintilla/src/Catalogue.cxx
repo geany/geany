@@ -87,6 +87,7 @@ int Scintilla_LinkLexers() {
 	LINK_LEXER(lmCaml);
 	LINK_LEXER(lmCmake);
 	LINK_LEXER(lmCOBOL);
+	LINK_LEXER(lmCoffeeScript);
 	LINK_LEXER(lmCPP);
 	LINK_LEXER(lmCss);
 	LINK_LEXER(lmD);
