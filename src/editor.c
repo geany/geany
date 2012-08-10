@@ -1401,10 +1401,16 @@ static gint get_indent_size_after_line(GeanyEditor *editor, gint line)
 		gint additional_indent = 0;
 
 		if (lexer_has_braces(sci))
+		{
 			additional_indent = iprefs->width * get_brace_indent(sci, line);
+		}
 		else
-		if (editor->document->file_type->id == GEANY_FILETYPES_PYTHON)
-			additional_indent = iprefs->width * get_python_indent(sci, line);
+		{
+			/* Instead of testing the filetype directly, test for the lexer being
+			* used. Otherwise Cython indentation will break. */
+			if (sci_get_lexer(sci) == SCLEX_PYTHON)
+				additional_indent = iprefs->width * get_python_indent(sci, line);
+		}
 
 		/* HTML lexer "has braces" because of PHP and JavaScript.  If get_brace_indent() did not
 		 * recommend us to insert additional indent, we are probably not in PHP/JavaScript chunk and
