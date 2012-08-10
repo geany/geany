@@ -266,13 +266,12 @@ void editor_snippets_init(void)
 
 	snippet_offsets = g_queue_new();
 
-	sysconfigfile = g_strconcat(app->datadir, G_DIR_SEPARATOR_S, "snippets.conf", NULL);
-	userconfigfile = g_strconcat(app->configdir, G_DIR_SEPARATOR_S, "snippets.conf", NULL);
+	sysconfigfile = g_build_filename(app->datadir, "snippets.conf", NULL);
+	userconfigfile = g_build_filename(app->configdir, "snippets.conf", NULL);
 
 	/* check for old autocomplete.conf files (backwards compatibility) */
 	if (! g_file_test(userconfigfile, G_FILE_TEST_IS_REGULAR))
-		SETPTR(userconfigfile,
-			g_strconcat(app->configdir, G_DIR_SEPARATOR_S, "autocomplete.conf", NULL));
+		SETPTR(userconfigfile, g_build_filename(app->configdir, "autocomplete.conf", NULL));
 
 	/* load the actual config files */
 	g_key_file_load_from_file(sysconfig, sysconfigfile, G_KEY_FILE_NONE, NULL);

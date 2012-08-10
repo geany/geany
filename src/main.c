@@ -375,13 +375,13 @@ static void setup_paths(void)
 	 * documentation and data files */
 	gchar *install_dir = win32_get_installation_dir();
 
-	data_dir = g_strconcat(install_dir, "\\data", NULL); /* e.g. C:\Program Files\geany\data */
-	doc_dir = g_strconcat(install_dir, "\\doc", NULL);
+	data_dir = g_build_filename(install_dir, "data", NULL); /* e.g. C:\Program Files\geany\data */
+	doc_dir = g_build_filename(install_dir, "doc", NULL);
 
 	g_free(install_dir);
 #else
-	data_dir = g_strconcat(GEANY_DATADIR, "/geany", NULL); /* e.g. /usr/share/geany */
-	doc_dir = g_strconcat(GEANY_DOCDIR, "/html", NULL);
+	data_dir = g_build_filename(GEANY_DATADIR, "geany", NULL); /* e.g. /usr/share/geany */
+	doc_dir = g_build_filename(GEANY_DOCDIR, "html", NULL);
 #endif
 
 	/* convert path names to locale encoding */
@@ -449,7 +449,7 @@ void main_locale_init(const gchar *locale_dir, const gchar *package)
 	{
 		gchar *install_dir = win32_get_installation_dir();
 		/* e.g. C:\Program Files\geany\lib\locale */
-		l_locale_dir = g_strconcat(install_dir, "\\share\\locale", NULL);
+		l_locale_dir = g_build_filename(install_dir, "share", "locale", NULL);
 		g_free(install_dir);
 	}
 #else

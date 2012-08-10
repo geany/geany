@@ -883,7 +883,7 @@ static gboolean check_plugin_path(const gchar *fname)
 	gchar *plugin_path_custom;
 	gboolean ret = FALSE;
 
-	plugin_path_config = g_strconcat(app->configdir, G_DIR_SEPARATOR_S, "plugins", NULL);
+	plugin_path_config = g_build_filename(app->configdir, "plugins", NULL);
 	if (g_str_has_prefix(fname, plugin_path_config))
 		ret = TRUE;
 
@@ -942,7 +942,7 @@ load_plugins_from_path(const gchar *path)
 		if (tmp == NULL || utils_str_casecmp(tmp, "." G_MODULE_SUFFIX) != 0)
 			continue;
 
-		fname = g_strconcat(path, G_DIR_SEPARATOR_S, item->data, NULL);
+		fname = g_build_filename(path, item->data, NULL);
 		if (plugin_new(fname, FALSE, TRUE))
 			count++;
 		g_free(fname);
@@ -962,12 +962,12 @@ static gchar *get_plugin_path(void)
 	gchar *path;
 	gchar *install_dir = win32_get_installation_dir();
 
-	path = g_strconcat(install_dir, "\\lib", NULL);
+	path = g_build_filename(install_dir, "lib", NULL);
 	g_free(install_dir);
 
 	return path;
 #else
-	return g_strconcat(GEANY_LIBDIR, G_DIR_SEPARATOR_S "geany", NULL);
+	return g_build_filename(GEANY_LIBDIR, "geany", NULL);
 #endif
 }
 
@@ -979,7 +979,7 @@ static void load_all_plugins(void)
 	gchar *plugin_path_system;
 	gchar *plugin_path_custom;
 
-	plugin_path_config = g_strconcat(app->configdir, G_DIR_SEPARATOR_S, "plugins", NULL);
+	plugin_path_config = g_build_filename(app->configdir, "plugins", NULL);
 	plugin_path_system = get_plugin_path();
 
 	/* first load plugins in ~/.config/geany/plugins/ */

@@ -576,7 +576,7 @@ static void save_ui_prefs(GKeyFile *config)
 void configuration_save(void)
 {
 	GKeyFile *config = g_key_file_new();
-	gchar *configfile = g_strconcat(app->configdir, G_DIR_SEPARATOR_S, "geany.conf", NULL);
+	gchar *configfile = g_build_filename(app->configdir, "geany.conf", NULL);
 	gchar *data;
 
 	g_key_file_load_from_file(config, configfile, G_KEY_FILE_NONE, NULL);
@@ -984,7 +984,7 @@ static void load_ui_prefs(GKeyFile *config)
  */
 void configuration_save_default_session(void)
 {
-	gchar *configfile = g_strconcat(app->configdir, G_DIR_SEPARATOR_S, "geany.conf", NULL);
+	gchar *configfile = g_build_filename(app->configdir, "geany.conf", NULL);
 	gchar *data;
 	GKeyFile *config = g_key_file_new();
 

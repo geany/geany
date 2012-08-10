@@ -744,8 +744,7 @@ static void make_absolute(gchar **filename, const gchar *dir)
 
 	/* add directory */
 	if (! utils_is_absolute_path(*filename))
-		SETPTR(*filename, g_strconcat(dir, G_DIR_SEPARATOR_S,
-			*filename + skip_dot_slash, NULL));
+		SETPTR(*filename, g_build_filename(dir, *filename + skip_dot_slash, NULL));
 }
 
 
