@@ -237,7 +237,7 @@ static void apply_settings(void)
 			ui_lookup_widget(main_widgets.window, "send_selection_to_vte1"), FALSE);
 	}
 
-	if (interface_prefs.sidebar_pos != GTK_POS_LEFT)
+	if (interface_prefs.sidebar_pos != (gtk_widget_get_default_direction() == GTK_TEXT_DIR_RTL ? GTK_POS_RIGHT : GTK_POS_LEFT))
 		ui_swap_sidebar_pos();
 }
 
