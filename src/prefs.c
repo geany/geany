@@ -1246,9 +1246,29 @@ on_prefs_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 		ui_sidebar_show_hide();
 		gtk_notebook_set_show_tabs(GTK_NOTEBOOK(main_widgets.notebook), interface_prefs.show_notebook_tabs);
 
-		gtk_notebook_set_tab_pos(GTK_NOTEBOOK(main_widgets.notebook), interface_prefs.tab_pos_editor);
-		gtk_notebook_set_tab_pos(GTK_NOTEBOOK(msgwindow.notebook), interface_prefs.tab_pos_msgwin);
-		gtk_notebook_set_tab_pos(GTK_NOTEBOOK(main_widgets.sidebar_notebook), interface_prefs.tab_pos_sidebar);
+		if (gtk_widget_get_default_direction() == GTK_TEXT_DIR_RTL)
+		{
+			if (interface_prefs.tab_pos_editor == GTK_POS_RIGHT || interface_prefs.tab_pos_editor == GTK_POS_LEFT)
+				gtk_notebook_set_tab_pos(GTK_NOTEBOOK(main_widgets.notebook), GTK_POS_RIGHT-interface_prefs.tab_pos_editor);
+			else /* interface_prefs.tab_pos_editor == GTK_POS_BOTTOM || GTK_POS_TOP */
+				gtk_notebook_set_tab_pos(GTK_NOTEBOOK(main_widgets.notebook), interface_prefs.tab_pos_editor);
+
+			if (interface_prefs.tab_pos_msgwin == GTK_POS_RIGHT || interface_prefs.tab_pos_msgwin == GTK_POS_LEFT)
+				gtk_notebook_set_tab_pos(GTK_NOTEBOOK(msgwindow.notebook), GTK_POS_RIGHT-interface_prefs.tab_pos_msgwin);
+			else /* interface_prefs.tab_pos_msgwin == GTK_POS_BOTTOM || GTK_POS_TOP */
+				gtk_notebook_set_tab_pos(GTK_NOTEBOOK(msgwindow.notebook), interface_prefs.tab_pos_msgwin);
+
+			if (interface_prefs.tab_pos_sidebar == GTK_POS_RIGHT || interface_prefs.tab_pos_sidebar == GTK_POS_LEFT)
+				gtk_notebook_set_tab_pos(GTK_NOTEBOOK(main_widgets.sidebar_notebook), GTK_POS_RIGHT-interface_prefs.tab_pos_sidebar);
+			else /* interface_prefs.tab_pos_sidebar == GTK_POS_BOTTOM || GTK_POS_TOP */
+				gtk_notebook_set_tab_pos(GTK_NOTEBOOK(main_widgets.sidebar_notebook), interface_prefs.tab_pos_sidebar);
+		}
+		else
+		{
+			gtk_notebook_set_tab_pos(GTK_NOTEBOOK(main_widgets.notebook), interface_prefs.tab_pos_editor);
+			gtk_notebook_set_tab_pos(GTK_NOTEBOOK(msgwindow.notebook), interface_prefs.tab_pos_msgwin);
+			gtk_notebook_set_tab_pos(GTK_NOTEBOOK(main_widgets.sidebar_notebook), interface_prefs.tab_pos_sidebar);
+		}
 
 		/* re-colourise all open documents, if tab width or long line settings have changed */
 		for (i = 0; i < documents_array->len; i++)

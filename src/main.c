@@ -202,9 +202,29 @@ static void apply_settings(void)
 	}
 
 	/* set the tab placements of the notebooks */
-	gtk_notebook_set_tab_pos(GTK_NOTEBOOK(main_widgets.notebook), interface_prefs.tab_pos_editor);
-	gtk_notebook_set_tab_pos(GTK_NOTEBOOK(msgwindow.notebook), interface_prefs.tab_pos_msgwin);
-	gtk_notebook_set_tab_pos(GTK_NOTEBOOK(main_widgets.sidebar_notebook), interface_prefs.tab_pos_sidebar);
+	if (gtk_widget_get_default_direction() == GTK_TEXT_DIR_RTL)
+	{
+		if (interface_prefs.tab_pos_editor == GTK_POS_RIGHT || interface_prefs.tab_pos_editor == GTK_POS_LEFT)
+			gtk_notebook_set_tab_pos(GTK_NOTEBOOK(main_widgets.notebook), GTK_POS_RIGHT-interface_prefs.tab_pos_editor);
+		else /* interface_prefs.tab_pos_editor == GTK_POS_BOTTOM || GTK_POS_TOP */
+			gtk_notebook_set_tab_pos(GTK_NOTEBOOK(main_widgets.notebook), interface_prefs.tab_pos_editor);
+
+		if (interface_prefs.tab_pos_msgwin == GTK_POS_RIGHT || interface_prefs.tab_pos_msgwin == GTK_POS_LEFT)
+			gtk_notebook_set_tab_pos(GTK_NOTEBOOK(msgwindow.notebook), GTK_POS_RIGHT-interface_prefs.tab_pos_msgwin);
+		else /* interface_prefs.tab_pos_msgwin == GTK_POS_BOTTOM || GTK_POS_TOP */
+			gtk_notebook_set_tab_pos(GTK_NOTEBOOK(msgwindow.notebook), interface_prefs.tab_pos_msgwin);
+
+		if (interface_prefs.tab_pos_sidebar == GTK_POS_RIGHT || interface_prefs.tab_pos_sidebar == GTK_POS_LEFT)
+			gtk_notebook_set_tab_pos(GTK_NOTEBOOK(main_widgets.sidebar_notebook), GTK_POS_RIGHT-interface_prefs.tab_pos_sidebar);
+		else /* interface_prefs.tab_pos_sidebar == GTK_POS_BOTTOM || GTK_POS_TOP */
+			gtk_notebook_set_tab_pos(GTK_NOTEBOOK(main_widgets.sidebar_notebook), interface_prefs.tab_pos_sidebar);
+	}
+	else /* gtk_widget_get_default_direction() == GTK_TEXT_DIR_LTR */
+	{
+		gtk_notebook_set_tab_pos(GTK_NOTEBOOK(main_widgets.notebook), interface_prefs.tab_pos_editor);
+		gtk_notebook_set_tab_pos(GTK_NOTEBOOK(msgwindow.notebook), interface_prefs.tab_pos_msgwin);
+		gtk_notebook_set_tab_pos(GTK_NOTEBOOK(main_widgets.sidebar_notebook), interface_prefs.tab_pos_sidebar);
+	}
 
 	/* whether to show notebook tabs or not */
 	gtk_notebook_set_show_tabs(GTK_NOTEBOOK(main_widgets.notebook), interface_prefs.show_notebook_tabs);
@@ -217,7 +237,7 @@ static void apply_settings(void)
 			ui_lookup_widget(main_widgets.window, "send_selection_to_vte1"), FALSE);
 	}
 
-	if (interface_prefs.sidebar_pos != GTK_POS_LEFT)
+	if (interface_prefs.sidebar_pos != (gtk_widget_get_default_direction() == GTK_TEXT_DIR_RTL ? GTK_POS_RIGHT : GTK_POS_LEFT))
 		ui_swap_sidebar_pos();
 }
 
