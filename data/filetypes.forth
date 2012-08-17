@@ -16,8 +16,12 @@ locale=other
 
 [keywords]
 # all items must be in one line
-primary=ABORT EXIT DO LOOP UNLOOP BEGIN UNTIL WHILE REPEAT EXIT IF ELSE THEN CASE ENDCASE OF ENDOF
-
+primary=abort exit do loop unloop begin until while repeat exit if else then case endcase of endof again leave
+keyword=require included decimal hex also only previous
+defword=create does> variable value 2variable constant , 2, c,
+string=." " s" c" abort"
+preword1=dup drop swap over pick roll 2dup 2drop 2swas 2over
+preword2=! c! @ c@ 2! 2@ and or xor invert negate / /mod mod rshift lshift
 
 [settings]
 # default extension used when saving files

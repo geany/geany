@@ -546,7 +546,12 @@ static const HLStyle highlighting_styles_FORTH[] =
 };
 static const HLKeyword highlighting_keywords_FORTH[] =
 {
-	{ 0, "primary",	FALSE }
+	{ 0, "primary",		FALSE },
+	{ 1, "keyword",		FALSE },
+	{ 2, "defword",		FALSE },
+	{ 3, "preword1",	FALSE },
+	{ 4, "preword2",	FALSE },
+	{ 5, "string",		FALSE }
 };
 #define highlighting_properties_FORTH	EMPTY_PROPERTIES
 
