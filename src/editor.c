@@ -4656,7 +4656,9 @@ static ScintillaObject *create_new_sci(GeanyEditor *editor)
 
 	sci = SCINTILLA(scintilla_new());
 
-	// Code is usually in English, keep text direction LTR
+	/* Scintilla doesn't support RTL languages properly and is primarily
+	 * intended to be used with LTR source code, so override the
+	 * GTK+ default text direction for the Scintilla widget. */
 	gtk_widget_set_direction(GTK_WIDGET(sci), GTK_TEXT_DIR_LTR);
 
 	gtk_widget_show(GTK_WIDGET(sci));
