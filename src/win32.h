@@ -61,7 +61,7 @@ gboolean win32_spawn(const gchar *dir, gchar **argv, gchar **env, GSpawnFlags fl
 
 gchar *win32_get_shortcut_target(const gchar *file_name);
 
-gchar *win32_get_installation_dir(void);
+const gchar *win32_get_installation_dir(void);
 
 gchar *win32_expand_environment_variables(const gchar *str);
 
