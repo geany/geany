@@ -662,13 +662,12 @@ static void load_kb(GeanyKeyGroup *group, GeanyKeyBinding *kb, gpointer user_dat
 
 static void load_user_kb(void)
 {
-	gchar *configfile = g_build_filename(app->configdir, "keybindings.conf", NULL);
+	const gchar *configfile = utils_config_filename(CONFIG_KEYBINDINGS, TRUE);
 	GKeyFile *config = g_key_file_new();
 
 	/* backwards compatibility with Geany 0.21 defaults */
 	if (!g_file_test(configfile, G_FILE_TEST_EXISTS))
 	{
-		gchar *geanyconf = g_build_filename(app->configdir, "geany.conf", NULL);
 		const gchar data[] = "[Bindings]\n"
 			"popup_gototagdefinition=\n"
 			"edit_transposeline=<Control>t\n"
@@ -677,17 +676,16 @@ static void load_user_kb(void)
 			"move_tableft=<Alt>Page_Up\n"
 			"move_tabright=<Alt>Page_Down\n";
 
-		utils_write_file(configfile, g_file_test(geanyconf, G_FILE_TEST_EXISTS) ?
-			data : "");
-		g_free(geanyconf);
+		if (g_file_test(utils_config_filename(CONFIG_MAIN, TRUE), G_FILE_TEST_EXISTS))
+			utils_write_file(configfile, data);
+		else
+			utils_write_file(configfile, "");
 	}
 
 	/* now load user defined keys */
 	if (g_key_file_load_from_file(config, configfile, G_KEY_FILE_KEEP_COMMENTS, NULL))
-	{
 		keybindings_foreach(load_kb, config);
-	}
-	g_free(configfile);
+
 	g_key_file_free(config);
 }
 
@@ -771,7 +769,7 @@ static void set_keyfile_kb(GeanyKeyGroup *group, GeanyKeyBinding *kb, gpointer u
 /* just write the content of the keys array to the config file */
 void keybindings_write_to_file(void)
 {
-	gchar *configfile = g_build_filename(app->configdir, "keybindings.conf", NULL);
+	const gchar *configfile = utils_config_filename(CONFIG_KEYBINDINGS, TRUE);
 	gchar *data;
 	GKeyFile *config = g_key_file_new();
 
@@ -783,7 +781,6 @@ void keybindings_write_to_file(void)
 	utils_write_file(configfile, data);
 
 	g_free(data);
-	g_free(configfile);
 	g_key_file_free(config);
 }
 

@@ -373,12 +373,9 @@ static void setup_paths(void)
 #ifdef G_OS_WIN32
 	/* use the installation directory(the one where geany.exe is located) as the base for the
 	 * documentation and data files */
-	gchar *install_dir = win32_get_installation_dir();
-
+	const gchar *install_dir = win32_get_installation_dir();
 	data_dir = g_build_filename(install_dir, "data", NULL); /* e.g. C:\Program Files\geany\data */
 	doc_dir = g_build_filename(install_dir, "doc", NULL);
-
-	g_free(install_dir);
 #else
 	data_dir = g_build_filename(GEANY_DATADIR, "geany", NULL); /* e.g. /usr/share/geany */
 	doc_dir = g_build_filename(GEANY_DOCDIR, "html", NULL);
@@ -446,12 +443,8 @@ void main_locale_init(const gchar *locale_dir, const gchar *package)
 #endif
 
 #ifdef G_OS_WIN32
-	{
-		gchar *install_dir = win32_get_installation_dir();
-		/* e.g. C:\Program Files\geany\lib\locale */
-		l_locale_dir = g_build_filename(install_dir, "share", "locale", NULL);
-		g_free(install_dir);
-	}
+	/* e.g. C:\Program Files\geany\lib\locale */
+	l_locale_dir = g_build_filename(win32_get_installation_dir(), "share", "locale", NULL);
 #else
 	l_locale_dir = g_strdup(locale_dir);
 #endif
@@ -615,7 +608,6 @@ static void parse_command_line_options(gint *argc, gchar ***argv)
 static gint create_config_dir(void)
 {
 	gint saved_errno = 0;
-	gchar *conf_file = g_build_filename(app->configdir, "geany.conf", NULL);
 	gchar *filedefs_dir = g_build_filename(app->configdir, GEANY_FILEDEFS_SUBDIR, NULL);
 
 	gchar *templates_dir = g_build_filename(app->configdir, GEANY_TEMPLATES_SUBDIR, NULL);
@@ -665,7 +657,7 @@ static gint create_config_dir(void)
 		saved_errno = utils_mkdir(app->configdir, TRUE);
 	}
 
-	if (saved_errno == 0 && ! g_file_test(conf_file, G_FILE_TEST_EXISTS))
+	if (saved_errno == 0 && ! g_file_test(utils_config_filename(CONFIG_MAIN, TRUE), G_FILE_TEST_EXISTS))
 	{	/* check whether geany.conf can be written */
 		saved_errno = utils_is_file_writable(app->configdir);
 	}
@@ -716,7 +708,6 @@ For more information read the documentation (in ", app->docdir, G_DIR_SEPARATOR_
 
 	g_free(filedefs_dir);
 	g_free(templates_dir);
-	g_free(conf_file);
 
 	return saved_errno;
 }
@@ -1138,14 +1129,9 @@ gint main(gint argc, gchar **argv)
 #endif
 
 #ifdef G_OS_WIN32
-	{
-		gchar *dir;
-		/* On Windows, change the working directory to the Geany installation path to not lock
-		 * the directory of a file passed as command line argument (see bug #2626124). */
-		dir = win32_get_installation_dir();
-		win32_set_working_directory(dir);
-		g_free(dir);
-	}
+	/* On Windows, change the working directory to the Geany installation path to not lock
+	 * the directory of a file passed as command line argument (see bug #2626124). */
+	win32_set_working_directory(win32_get_installation_dir());
 #endif
 
 	/* when we are really done with setting everything up and the main event loop is running,

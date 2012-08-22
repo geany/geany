@@ -138,6 +138,17 @@ G_BEGIN_DECLS
 #define foreach_range(i, size) \
 	for (i = 0; i < size; i++)
 
+typedef enum
+{
+	CONFIG_MAIN=0, /* geany.conf */
+	CONFIG_KEYBINDINGS,
+	CONFIG_SNIPPETS,
+	CONFIG_FT_EXTENSIONS,
+	CONFIG_TYPE_MAX
+}
+UtilsConfigType;
+
+const gchar *utils_config_filename(UtilsConfigType conf_type, gboolean user);
 
 void utils_open_browser(const gchar *uri);
 

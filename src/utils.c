@@ -40,6 +40,10 @@
 # include <sys/types.h>
 #endif
 
+#ifdef G_OS_UNIX
+# include <sys/param.h> /* For MAXPATHLEN */
+#endif
+
 #include <glib/gstdio.h>
 
 #include <gio/gio.h>
@@ -54,6 +58,52 @@
 #include "ui_utils.h"
 
 #include "utils.h"
+
+
+/*
+ * Get one of the main configuration filenames.
+ * 
+ * @param conf_type The type of configuration file to get filename of.
+ * @param user @c TRUE to get the user-specific filename or @c FALSE to get
+ * the system-wide filename.
+ * @return Pointer to the configuration filename. The returned filename should
+ * NOT be modified or freed.
+ */
+const gchar *utils_config_filename(UtilsConfigType conf_type, gboolean user)
+{
+	static gchar *conf_files[CONFIG_TYPE_MAX] = {NULL}; /* pointers are "leaked" */
+	const gchar *base_dir = (const gchar *) (user ? app->configdir : app->datadir);
+
+	/* Make sure CONFIG_TYPE_MAX was not passed */
+	g_return_val_if_fail(conf_type < CONFIG_TYPE_MAX, NULL);
+
+	if (conf_files[conf_type] != NULL)
+		return (const gchar *) conf_files[conf_type];
+
+	switch (conf_type)
+	{
+		case CONFIG_MAIN:
+			conf_files[conf_type] = g_build_filename(base_dir, "geany.conf", NULL);
+			break;
+		case CONFIG_KEYBINDINGS:
+			conf_files[conf_type] = g_build_filename(base_dir, "keybindings.conf", NULL);
+			break;
+		case CONFIG_SNIPPETS:
+			/* To remain backwards compatible, autocomplete.conf is checked first */
+			conf_files[conf_type] = g_build_filename(base_dir, "autocomplete.conf", NULL);
+			if (!g_file_test(conf_files[conf_type], G_FILE_TEST_IS_REGULAR))
+				SETPTR(conf_files[conf_type], g_build_filename(base_dir, "snippets.conf", NULL));
+			break;
+		case CONFIG_FT_EXTENSIONS:
+			conf_files[conf_type] = g_build_filename(base_dir, "filetype_extensions.conf", NULL);
+			break;
+		default: /* unknown config file type */
+			g_warn_if_reached();
+			break;
+	}
+
+	return (const gchar *) conf_files[conf_type];
+}
 
 
 /**

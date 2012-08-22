@@ -662,11 +662,10 @@ static void on_document_save(G_GNUC_UNUSED GObject *object, GeanyDocument *doc)
 
 	g_return_if_fail(NZV(doc->real_path));
 
-	f = g_build_filename(app->configdir, "filetype_extensions.conf", NULL);
-	if (utils_str_equal(doc->real_path, f))
+	/* If the filetype_extensions.conf file is being saved, reload it to keep in sync. */
+	if (utils_str_equal(doc->real_path,utils_config_filename(CONFIG_FT_EXTENSIONS, TRUE)))
 		filetypes_reload_extensions();
 
-	g_free(f);
 	f = g_build_filename(app->configdir, GEANY_FILEDEFS_SUBDIR, "filetypes.common", NULL);
 	if (utils_str_equal(doc->real_path, f))
 	{
@@ -687,9 +686,9 @@ static void setup_config_file_menus(void)
 {
 	gchar *f;
 
-	f = g_build_filename(app->configdir, "filetype_extensions.conf", NULL);
-	ui_add_config_file_menu_item(f, NULL, NULL);
-	SETPTR(f, g_build_filename(app->configdir, GEANY_FILEDEFS_SUBDIR, "filetypes.common", NULL));
+	ui_add_config_file_menu_item(utils_config_filename(CONFIG_FT_EXTENSIONS, TRUE), NULL, NULL);
+
+	f = g_build_filename(app->configdir, GEANY_FILEDEFS_SUBDIR, "filetypes.common", NULL);
 	ui_add_config_file_menu_item(f, NULL, NULL);
 	g_free(f);
 
@@ -1690,20 +1689,18 @@ static void read_groups(GKeyFile *config)
 
 static void read_filetype_config(void)
 {
-	gchar *sysconfigfile = g_build_filename(app->datadir, "filetype_extensions.conf", NULL);
-	gchar *userconfigfile = g_build_filename(app->configdir, "filetype_extensions.conf", NULL);
 	GKeyFile *sysconfig = g_key_file_new();
 	GKeyFile *userconfig = g_key_file_new();
 
-	g_key_file_load_from_file(sysconfig, sysconfigfile, G_KEY_FILE_NONE, NULL);
-	g_key_file_load_from_file(userconfig, userconfigfile, G_KEY_FILE_NONE, NULL);
+	g_key_file_load_from_file(sysconfig, utils_config_filename(CONFIG_FT_EXTENSIONS, FALSE),
+		G_KEY_FILE_NONE, NULL);
+	g_key_file_load_from_file(userconfig, utils_config_filename(CONFIG_FT_EXTENSIONS, TRUE),
+		G_KEY_FILE_NONE, NULL);
 
 	read_extensions(sysconfig, userconfig);
 	read_groups(sysconfig);
 	read_groups(userconfig);
 
-	g_free(sysconfigfile);
-	g_free(userconfigfile);
 	g_key_file_free(sysconfig);
 	g_key_file_free(userconfig);
 }
