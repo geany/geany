@@ -479,7 +479,7 @@ static GeanyBuildCommand *get_build_group(const GeanyBuildSource src, const Gean
 	GeanyBuildCommand **g = get_build_group_pointer(src, grp);
 	if (g == NULL) return NULL;
 	return *g;
-};
+}
 
 
 /** Remove the specified Build menu item.
@@ -587,7 +587,7 @@ const gchar *build_get_current_menu_item(const GeanyBuildGroup grp, const guint 
 			break;
 	}
 	return str;
-};
+}
 
 /** Set the string for the menu item field.
  *
@@ -635,7 +635,7 @@ void build_set_menu_item(const GeanyBuildSource src, const GeanyBuildGroup grp,
 			break;
 	}
 	build_menu_update(NULL);
-};
+}
 
 /** Set the string for the menu item field.
  *
@@ -649,7 +649,7 @@ void build_set_menu_item(const GeanyBuildSource src, const GeanyBuildGroup grp,
 void build_activate_menu_item(const GeanyBuildGroup grp, const guint cmd)
 {
 	on_build_menu_item(NULL, GRP_CMD_TO_POINTER(grp, cmd));
-};
+}
 
 
 /* Clear all error indicators in all documents. */
