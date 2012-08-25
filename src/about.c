@@ -56,6 +56,7 @@ const gchar *translators[][2] = {
 	{ "fi", "Harri Koskinen &lt;harri@fastmonkey.org&gt;\nJari Rahkonen &lt;jari.rahkonen@pp1.inet.fi&gt;" },
 	{ "fr", "Jean-Philippe Moal &lt;skateinmars@skateinmars.net&gt;" },
 	{ "gl", "José Manuel Castroagudín Silva &lt;chavescesures@gmail.com&gt;"},
+	{ "he", "Yosef Or Botschko &lt;yosefor3@walla.com&gt;"},
 	{ "hu", "Gabor Kmetyko &lt;kg_kilo@freemail.hu&gt;" },
 	{ "it", "Max Baldinelli &lt;m.baldinelli@agora.it&gt;,\nDario Santomarco &lt;dariello@yahoo.it&gt;" },
 	{ "ja", "Tarot Osuji &lt;tarot@sdf.lonestar.org&gt;\nChikahiro Masami &lt;cmasa.z321@gmail.com&gt;" },
