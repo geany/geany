@@ -52,6 +52,7 @@ typedef struct
 {
 	GeanyDocument *doc;
 	ScintillaObject *sci;
+	gdouble margin_width;
 	gdouble line_height;
 	/* set in begin_print() to hold the time when printing was started to ensure all printed
 	 * pages have the same date and time (in case of slow machines and many pages where rendering
@@ -95,20 +96,33 @@ static PangoLayout *setup_pango_layout(GtkPrintContext *context, PangoFontDescri
 }
 
 
-static gdouble get_line_height(PangoLayout *layout)
+static void get_text_dimensions(PangoLayout *layout, const gchar *text, gdouble *width, gdouble *height)
 {
-	gint layout_h;
+	gint layout_w, layout_h;
 
-	pango_layout_set_text(layout, "|XMfjgq_", -1); /* reasonably representative character set */
-	pango_layout_get_size(layout, NULL, &layout_h);
+	pango_layout_set_text(layout, text, -1);
+	pango_layout_get_size(layout, &layout_w, &layout_h);
+	if (layout_w <= 0)
+	{
+		gint default_w = 50 * strlen(text) * PANGO_SCALE;
+
+		geany_debug("Invalid layout_w (%d). Falling back to default width (%d)",
+			layout_w, default_w);
+		layout_w = default_w;
+	}
 	if (layout_h <= 0)
 	{
+		gint default_h = 100 * PANGO_SCALE;
+
 		geany_debug("Invalid layout_h (%d). Falling back to default height (%d)",
-			layout_h, 100 * PANGO_SCALE);
-		layout_h = 100 * PANGO_SCALE;
+			layout_h, default_h);
+		layout_h = default_h;
 	}
 
-	return (gdouble)layout_h / PANGO_SCALE;
+	if (width)
+		*width = (gdouble)layout_w / PANGO_SCALE;
+	if (height)
+		*height = (gdouble)layout_h / PANGO_SCALE;
 }
 
 
@@ -347,7 +361,10 @@ static void begin_print(GtkPrintOperation *operation, GtkPrintContext *context, 
 	desc = pango_font_description_from_string(interface_prefs.editor_font);
 	dinfo->layout = setup_pango_layout(context, desc);
 	pango_font_description_free(desc);
-	dinfo->line_height = get_line_height(dinfo->layout);
+	get_text_dimensions(dinfo->layout, "|XMfjgq_" /* reasonably representative character set */,
+		NULL, &dinfo->line_height);
+	get_text_dimensions(dinfo->layout, "99999 " /* Scintilla resets the margin to the width of "99999" when printing */,
+		&dinfo->margin_width, NULL);
 	/* setup dinfo->fr */
 	setup_range(dinfo, context);
 }
@@ -413,7 +430,6 @@ static void draw_page(GtkPrintOperation *operation, GtkPrintContext *context,
 
 	if (printing_prefs.print_line_numbers)
 	{	/* print a thin line between the line number margin and the data */
-		gint x = scintilla_send_message(dinfo->sci, SCI_GETMARGINWIDTHN, 0, 0) + 1;
 		gint y1 = 0, y2 = height;
 
 		if (printing_prefs.print_page_header)
@@ -424,8 +440,8 @@ static void draw_page(GtkPrintOperation *operation, GtkPrintContext *context,
 			y2 -= (dinfo->line_height * 2) - 2;
 
 		cairo_set_line_width(cr, 0.3);
-		cairo_move_to(cr, x, y1);
-		cairo_line_to(cr, x, y2);
+		cairo_move_to(cr, dinfo->margin_width, y1);
+		cairo_line_to(cr, dinfo->margin_width, y2);
 		cairo_stroke(cr);
 	}
 
