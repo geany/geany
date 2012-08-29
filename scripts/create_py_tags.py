@@ -21,9 +21,14 @@ import sys
 import types
 
 PYTHON_LIB_DIRECTORY = os.path.dirname(os.__file__)
-PYTHON_LIB_IGNORE_PACKAGES = (u'test', u'dist-packages', u'site-packages')
-# multiprocessing.util registers an atexit function which breaks this script on exit
-PYTHON_LIB_IGNORE_MODULES = (u'multiprocessing/util.py',)
+PYTHON_LIB_IGNORE_PACKAGES = (u'test', u'dist-packages', u'site-packages', 'Tools')
+# some modules execute funky code when they are imported which we really don't want here
+# (though if you feel funny, try: 'import antigravity')
+PYTHON_LIB_IGNORE_MODULES = (u'antigravity.py', u'idlelib/idle.py', u'multiprocessing/util.py')
+PYTHON_KEYWORDS = ('and', 'as', 'assert', 'break', 'class', 'continue', 'def', 'del', 'elif',
+                   'else', 'except', 'exec', 'finally', 'for', 'from', 'global', 'if', 'import',
+                   'in', 'is', 'lambda', 'not', 'or', 'pass', 'print', 'raise', 'return', 'try',
+                   'while', 'with', 'yield', 'False', 'None', 'True')
 
 # (from tagmanager/tm_tag.c:32)
 TA_NAME = '%c' % 200,
@@ -123,6 +128,12 @@ class Parser:
             # skip short tags
             return
         tag = '%s%s%s%s%s%s\n' % (tagname, TA_TYPE, tag_type, TA_ARGLIST, args, scope)
+        for keyword in PYTHON_KEYWORDS:
+            # ignore tags which start with a keyword to avoid
+            # annoying completions of 'pass_' and similar ones
+            if tagname.startswith(keyword):
+                return
+
         if not tagname in self.tags:
             self.tags[tagname] = tag
 
