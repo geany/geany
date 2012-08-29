@@ -2,10 +2,14 @@
 
 CC = gcc
 CXX = g++
-PREFIX = C:\libs
+PREFIX = C:/libs
 RM = del
 -include ../localwin32.mk
-.SUFFIXES:
+
+ifdef MSYS
+RM = rm -f
+endif
+
 .SUFFIXES: .c .o .dll
 
 GTK_INCLUDES= \
@@ -23,7 +27,7 @@ GTK_INCLUDES= \
 INCLUDEDIRS=  -I.. \
               -I../src \
               -I../scintilla/include \
-              -I../tagmanager/include \
+              -I../tagmanager/src \
               $(GTK_INCLUDES)
 
 ALL_GTK_LIBS= \

@@ -1,0 +1,56 @@
+
+.SUFFIXES: .cxx .c .o .h .a
+CC = gcc
+AR = ar
+RANLIB = ranlib
+PREFIX = C:/libs
+RM = del
+-include ../../localwin32.mk
+
+ifdef MSYS
+RM = rm -f
+endif
+
+COMPLIB=tagmanager.a
+
+REGEX_DEFINES = -DHAVE_REGCOMP -DSTDC_HEADERS=1
+
+GTK_INCLUDES= \
+	-I$(PREFIX)/include/gtk-2.0 \
+	-I$(PREFIX)/lib/gtk-2.0/include \
+	-I$(PREFIX)/include/atk-1.0 \
+	-I$(PREFIX)/include/cairo \
+	-I$(PREFIX)/include/gdk-pixbuf-2.0 \
+	-I$(PREFIX)/include/pango-1.0 \
+	-I$(PREFIX)/include/glib-2.0 \
+	-I$(PREFIX)/lib/glib-2.0/include \
+	-I$(PREFIX)/include \
+	-I$(PREFIX)/include/gettext
+
+INCLUDEDIRS=-I ../ctags -I ../ -I . $(GTK_INCLUDES)
+
+CBASEFLAGS=-Wall -pipe -mms-bitfields -DPACKAGE=\"geany\" -Wno-missing-braces -Wno-char-subscripts $(INCLUDEDIRS)
+ifdef DEBUG
+CFLAGS= -O0 -g $(CBASEFLAGS)
+else
+CFLAGS=-O2 $(CBASEFLAGS)
+endif
+
+.c.o:
+	$(CC) $(REGEX_DEFINES) $(CFLAGS) -c $<
+
+all: $(COMPLIB)
+
+clean:
+	-$(RM) deps.mak *.o $(COMPLIB)
+
+$(COMPLIB): tm_workspace.o tm_work_object.o tm_source_file.o tm_project.o tm_tag.o \
+tm_symbol.o tm_file_entry.o tm_tagmanager.o
+	$(AR) rc $@ $^
+	$(RANLIB) $@
+
+deps.mak:
+	$(CC) -MM  $(CFLAGS) *.c >deps.mak
+
+# Generate header dependencies with "make deps.mak"
+include deps.mak

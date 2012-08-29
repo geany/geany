@@ -1,8 +1,9 @@
 /*
  *      symbols.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2006-2011 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2006-2011 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2006-2012 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2006-2012 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2011-2012 Colomban Wendling <ban(at)herbesfolles(dot)org>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -14,9 +15,9 @@
  *      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *      GNU General Public License for more details.
  *
- *      You should have received a copy of the GNU General Public License
- *      along with this program; if not, write to the Free Software
- *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *      You should have received a copy of the GNU General Public License along
+ *      with this program; if not, write to the Free Software Foundation, Inc.,
+ *      51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
 /**
@@ -113,7 +114,7 @@ extern gchar **c_tags_ignore;
  * Also works for reloading. */
 static void load_c_ignore_tags(void)
 {
-	gchar *path = g_strconcat(app->configdir, G_DIR_SEPARATOR_S "ignore.tags", NULL);
+	gchar *path = g_build_filename(app->configdir, "ignore.tags", NULL);
 	gchar *content;
 
 	if (g_file_get_contents(path, &content, NULL, NULL))
@@ -208,7 +209,7 @@ void symbols_global_tags_loaded(guint file_type_idx)
 
 	if (! tfi->tags_loaded)
 	{
-		gchar *fname = g_strconcat(app->datadir, G_DIR_SEPARATOR_S, tfi->tag_file, NULL);
+		gchar *fname = g_build_filename(app->datadir, tfi->tag_file, NULL);
 
 		symbols_load_global_tags(fname, filetypes[file_type_idx]);
 		tfi->tags_loaded = TRUE;
@@ -228,7 +229,7 @@ static void html_tags_loaded(void)
 	tfi = &tag_file_info[GTF_HTML_ENTITIES];
 	if (! tfi->tags_loaded)
 	{
-		gchar *file = g_strconcat(app->datadir, G_DIR_SEPARATOR_S, tfi->tag_file, NULL);
+		gchar *file = g_build_filename(app->datadir, tfi->tag_file, NULL);
 
 		html_entities = utils_read_file_in_array(file);
 		tfi->tags_loaded = TRUE;
@@ -547,7 +548,7 @@ static GdkPixbuf *get_tag_icon(const gchar *icon_name)
 	if (G_UNLIKELY(icon_theme == NULL))
 	{
 #ifndef G_OS_WIN32
-		gchar *path = g_strconcat(GEANY_DATADIR, "/icons", NULL);
+		gchar *path = g_build_filename(GEANY_DATADIR, "icons", NULL);
 #endif
 		gtk_icon_size_lookup(GTK_ICON_SIZE_MENU, &x, &y);
 		icon_theme = gtk_icon_theme_get_default();

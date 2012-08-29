@@ -1,8 +1,8 @@
 /*
  *      main.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2005-2011 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2006-2011 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2005-2012 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2006-2012 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -14,9 +14,9 @@
  *      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *      GNU General Public License for more details.
  *
- *      You should have received a copy of the GNU General Public License
- *      along with this program; if not, write to the Free Software
- *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *      You should have received a copy of the GNU General Public License along
+ *      with this program; if not, write to the Free Software Foundation, Inc.,
+ *      51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
 /**
@@ -375,13 +375,13 @@ static void setup_paths(void)
 	 * documentation and data files */
 	gchar *install_dir = win32_get_installation_dir();
 
-	data_dir = g_strconcat(install_dir, "\\data", NULL); /* e.g. C:\Program Files\geany\data */
-	doc_dir = g_strconcat(install_dir, "\\doc", NULL);
+	data_dir = g_build_filename(install_dir, "data", NULL); /* e.g. C:\Program Files\geany\data */
+	doc_dir = g_build_filename(install_dir, "doc", NULL);
 
 	g_free(install_dir);
 #else
-	data_dir = g_strconcat(GEANY_DATADIR, "/geany", NULL); /* e.g. /usr/share/geany */
-	doc_dir = g_strconcat(GEANY_DOCDIR, "/html", NULL);
+	data_dir = g_build_filename(GEANY_DATADIR, "geany", NULL); /* e.g. /usr/share/geany */
+	doc_dir = g_build_filename(GEANY_DOCDIR, "html", NULL);
 #endif
 
 	/* convert path names to locale encoding */
@@ -449,7 +449,7 @@ void main_locale_init(const gchar *locale_dir, const gchar *package)
 	{
 		gchar *install_dir = win32_get_installation_dir();
 		/* e.g. C:\Program Files\geany\lib\locale */
-		l_locale_dir = g_strconcat(install_dir, "\\share\\locale", NULL);
+		l_locale_dir = g_build_filename(install_dir, "share", "locale", NULL);
 		g_free(install_dir);
 	}
 #else

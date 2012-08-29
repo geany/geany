@@ -277,7 +277,6 @@ extern boolean fileOpen (const char *const fileName, const langType language)
 	mio_getpos (File.mio, &StartOfLine);
 	mio_getpos (File.mio, &File.filePosition);
 	File.currentLine  = NULL;
-	File.language     = language;
 	File.lineNumber   = 0L;
 	File.eof          = FALSE;
 	File.newLine      = TRUE;
@@ -324,7 +323,6 @@ extern boolean bufferOpen (unsigned char *buffer, int buffer_size,
     mio_getpos (File.mio, &StartOfLine);
     mio_getpos (File.mio, &File.filePosition);
     File.currentLine  = NULL;
-    File.language     = language;
     File.lineNumber   = 0L;
     File.eof          = FALSE;
     File.newLine      = TRUE;

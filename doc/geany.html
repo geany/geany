@@ -5,8 +5,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="Docutils 0.8.1: http://docutils.sourceforge.net/" />
 <title>Geany</title>
-<meta name="authors" content="Enrico Tröger  Nick Treleaven  Frank Lanitz  Colomban Wendling" />
-<meta name="date" content="2011-10-02" />
+<meta name="authors" content="Enrico Tröger  Nick Treleaven  Frank Lanitz  Colomban Wendling  Matthew Brush" />
+<meta name="date" content="2012-06-18" />
 <style type="text/css">
 
 /*
@@ -138,14 +138,15 @@ Stylesheet for Geany's documentation based on a version of John Gabriele.
 <td>Enrico Tröger
 <br />Nick Treleaven
 <br />Frank Lanitz
-<br />Colomban Wendling</td></tr>
+<br />Colomban Wendling
+<br />Matthew Brush</td></tr>
 <tr><th class="docinfo-name">Date:</th>
-<td>2011-10-02</td></tr>
+<td>2012-06-18</td></tr>
 <tr><th class="docinfo-name">Version:</th>
-<td>1.22</td></tr>
+<td>1.23</td></tr>
 </tbody>
 </table>
-<p>Copyright © 2005-2011</p>
+<p>Copyright © 2005-2012</p>
 <p>This document is distributed under the terms of the GNU General Public
 License as published by the Free Software Foundation; either version 2
 of the License, or (at your option) any later version. A copy of this
@@ -755,7 +756,7 @@ Return:</p>
 <li>An optional message window which can show the following tabs:<ul>
 <li>Status - A list of status messages.</li>
 <li>Compiler - The output of compiling or building programs.</li>
-<li>Messages - Results of 'Find Usage', 'Find Usage' 'Find in Files' and other actions</li>
+<li>Messages - Results of 'Find Usage', 'Find in Files' and other actions</li>
 <li>Scribble - A text scratchpad for any use.</li>
 <li>Terminal - An optional terminal window.</li>
 </ul>
@@ -1584,6 +1585,7 @@ and the editor window's popup menu:</p>
 <li>Go to tag declaration</li>
 <li>Go to line</li>
 </ul>
+<p>See also <a class="reference internal" href="#search">Search</a> preferences.</p>
 <div class="section" id="toolbar-entries">
 <h3><a class="toc-backref" href="#id59">Toolbar entries</a></h3>
 <p>There are also two toolbar entries:</p>
@@ -1702,6 +1704,8 @@ all files in a certain directory using the Grep tool. The Grep tool
 must be correctly set in Preferences to the path of the system's Grep
 utility. GNU Grep is recommended (see note below).</p>
 <img alt="./images/find_in_files_dialog.png" src="./images/find_in_files_dialog.png" />
+<p>The <em>Search</em> field is initially set to the current word in the editor
+(depending on <a class="reference internal" href="#search">Search</a> preferences).</p>
 <p>The <em>Files</em> setting allows to choose which files are included in the
 search, depending on the mode:</p>
 <dl class="docutils">
@@ -1717,6 +1721,10 @@ pattern separated by a space. To search all <tt class="docutils literal">.c</tt>
 use: <tt class="docutils literal">*.c *.h</tt>.
 Note that an empty pattern list searches in all files rather
 than none.</p>
+<p>The <em>Directory</em> field is initially set to the current document's directory,
+unless this field has already been edited and the current document has
+not changed. Otherwise, the current document's directory is prepended to
+the drop-down history. This can be disabled - see <a class="reference internal" href="#search">Search</a> preferences.</p>
 <p>The <em>Encoding</em> field can be used to define the encoding of the files
 to be searched. The entered search text is converted to the chosen encoding
 and the search results are converted back to UTF-8.</p>
@@ -2207,9 +2215,10 @@ goto line fields and the VTE.</dd>
 <div class="section" id="search">
 <h4><a class="toc-backref" href="#id94">Search</a></h4>
 <dl class="docutils">
-<dt>Always wrap search and hide the Find dialog</dt>
-<dd>Always wrap search around the document and hide the Find dialog after clicking
-Find Next/Previous.</dd>
+<dt>Always wrap search</dt>
+<dd>Always wrap search around the document when finding a match.</dd>
+<dt>Hide the Find dialog</dt>
+<dd>Hide the <a class="reference internal" href="#find">Find</a> dialog after clicking Find Next/Previous.</dd>
 <dt>Use the current word under the cursor for Find dialogs</dt>
 <dd>Use current word under the cursor when opening the Find, Find in Files or Replace dialog and
 there is no selection. When this option is disabled, the search term last used in the
@@ -2217,7 +2226,7 @@ appropriate Find dialog is used.</dd>
 <dt>Use the current file's directory for Find in Files</dt>
 <dd>When opening the Find in Files dialog, set the directory to search to the directory of the current
 active file. When this option is disabled, the directory of the last use of the Find in Files
-dialog is used.</dd>
+dialog is used. See <a class="reference internal" href="#find-in-files">Find in Files</a> for details.</dd>
 </dl>
 </div>
 <div class="section" id="projects">
@@ -2352,6 +2361,8 @@ The choice System default uses whatever icon size is set by GTK.</dd>
 <dl class="docutils">
 <dt>Line wrapping</dt>
 <dd>Show long lines wrapped around to new display lines.</dd>
+</dl>
+<dl class="docutils" id="smart-home-key">
 <dt>&quot;Smart&quot; home key</dt>
 <dd>Whether to move the cursor to the first non-whitespace character
 on the line when you hit the home key on your keyboard. Pressing it
@@ -4195,29 +4206,34 @@ selection. See <a class="reference internal" href="#go-to-tag-declaration">Go to
 </tr>
 <tr><td>Go to Start of Line</td>
 <td>Home</td>
-<td>Move the caret to the end of the line indentation
-unless it is already there, in which case it moves
-it to the start of the line.</td>
+<td>Move the caret to the start of the line.
+Behaves differently if <a class="reference internal" href="#smart-home-key">smart_home_key</a> is set.</td>
 </tr>
 <tr><td>Go to End of Line</td>
 <td>End</td>
 <td>Move the caret to the end of the line.</td>
 </tr>
+<tr><td>Go to Start of Display Line</td>
+<td>Alt-Home</td>
+<td>Move the caret to the start of the display line.
+This is useful when you use line wrapping and
+want to jump to the start of the wrapped, virtual
+line, not the real start of the whole line.
+If the line is not wrapped, it behaves like
+<cite>Go to Start of Line</cite>.</td>
+</tr>
 <tr><td>Go to End of Display Line</td>
 <td>Alt-End</td>
 <td>Move the caret to the end of the display line.
-This is useful when you use line wrapping and
-want to jump to the end of the wrapped, virtual
-line, not the real end of the whole line.
 If the line is not wrapped, it behaves like
-<cite>Go to End of Line</cite>, see above.</td>
+<cite>Go to End of Line</cite>.</td>
 </tr>
 <tr><td>Go to Previous Word Part</td>
 <td>Ctrl-/</td>
 <td>Goto the previous part of the current word.</td>
 </tr>
 <tr><td>Go to Next Word Part</td>
-<td>Ctrl-</td>
+<td>Ctrl-\</td>
 <td>Goto the next part of the current word.</td>
 </tr>
 </tbody>
@@ -5654,7 +5670,7 @@ bsd, gpl, snippets.</td>
 </tr>
 <tr><td>geanyversion</td>
 <td>The actual Geany version, e.g.
-&quot;Geany 1.22&quot;.</td>
+&quot;Geany 1.23&quot;.</td>
 <td>file templates, file header,
 function description, ChangeLog entry,
 bsd, gpl, snippets.</td>
@@ -5986,7 +6002,7 @@ editing the file, to build the HTML document to see how your changes
 look, run &quot;<tt class="docutils literal">make doc</tt>&quot; in the subdirectory <tt class="docutils literal">doc</tt> of Geany's source
 directory. This regenerates the <tt class="docutils literal">geany.html</tt> file. To generate a PDF
 file, use the command &quot;<tt class="docutils literal">make pdf</tt>&quot; which should generate a file called
-geany-1.22.pdf.</p>
+geany-1.23.pdf.</p>
 <p>After you are happy with your changes, create a patch e.g. by using:</p>
 <pre class="literal-block">
 % git diff geany.txt &gt; foo.patch
@@ -6428,7 +6444,7 @@ overriding the compile setting.</td>
                Version 2, June 1991
 
  Copyright (C) 1989, 1991 Free Software Foundation, Inc.
-    51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  Everyone is permitted to copy and distribute verbatim copies
  of this license document, but changing it is not allowed.
 
@@ -6729,9 +6745,9 @@ the &quot;copyright&quot; line and a pointer to where the full notice is found.
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
+    You should have received a copy of the GNU General Public License along
+    with this program; if not, write to the Free Software Foundation, Inc.,
+    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 
 Also add information on how to contact you by electronic and paper mail.
@@ -6787,7 +6803,7 @@ USE OR PERFORMANCE OF THIS SOFTWARE.</p>
 <div class="footer">
 <hr class="footer" />
 <a class="reference external" href="geany.txt">View document source</a>.
-Generated on: 2012-06-04 21:07 UTC.
+Generated on: 2012-08-24 17:21 UTC.
 Generated by <a class="reference external" href="http://docutils.sourceforge.net/">Docutils</a> from <a class="reference external" href="http://docutils.sourceforge.net/rst.html">reStructuredText</a> source.
 
 </div>

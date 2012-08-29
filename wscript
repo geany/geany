@@ -2,8 +2,8 @@
 #
 # WAF build script - this file is part of Geany, a fast and lightweight IDE
 #
-# Copyright 2008-2011 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
-# Copyright 2008-2011 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+# Copyright 2008-2012 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+# Copyright 2008-2012 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -49,7 +49,7 @@ from waflib.TaskGen import feature
 
 
 APPNAME = 'geany'
-VERSION = '1.22'
+VERSION = '1.23'
 LINGUAS_FILE = 'po/LINGUAS'
 MINIMUM_GTK_VERSION = '2.16.0'
 MINIMUM_GLIB_VERSION = '2.20.0'
@@ -60,23 +60,65 @@ out = '_build_'
 
 mio_sources = set(['tagmanager/mio/mio.c'])
 
+ctags_sources = set([
+    'tagmanager/ctags/args.c',
+    'tagmanager/ctags/abc.c',
+    'tagmanager/ctags/actionscript.c',
+    'tagmanager/ctags/asm.c',
+    'tagmanager/ctags/basic.c',
+    'tagmanager/ctags/c.c',
+    'tagmanager/ctags/cobol.c',
+    'tagmanager/ctags/conf.c',
+    'tagmanager/ctags/css.c',
+    'tagmanager/ctags/ctags.c',
+    'tagmanager/ctags/diff.c',
+    'tagmanager/ctags/docbook.c',
+    'tagmanager/ctags/entry.c',
+    'tagmanager/ctags/fortran.c',
+    'tagmanager/ctags/get.c',
+    'tagmanager/ctags/haskell.c',
+    'tagmanager/ctags/haxe.c',
+    'tagmanager/ctags/html.c',
+    'tagmanager/ctags/js.c',
+    'tagmanager/ctags/keyword.c',
+    'tagmanager/ctags/latex.c',
+    'tagmanager/ctags/lregex.c',
+    'tagmanager/ctags/lua.c',
+    'tagmanager/ctags/make.c',
+    'tagmanager/ctags/markdown.c',
+    'tagmanager/ctags/matlab.c',
+    'tagmanager/ctags/nsis.c',
+    'tagmanager/ctags/nestlevel.c',
+    'tagmanager/ctags/objc.c',
+    'tagmanager/ctags/options.c',
+    'tagmanager/ctags/parse.c',
+    'tagmanager/ctags/pascal.c',
+    'tagmanager/ctags/r.c',
+    'tagmanager/ctags/perl.c',
+    'tagmanager/ctags/php.c',
+    'tagmanager/ctags/python.c',
+    'tagmanager/ctags/read.c',
+    'tagmanager/ctags/rest.c',
+    'tagmanager/ctags/ruby.c',
+    'tagmanager/ctags/sh.c',
+    'tagmanager/ctags/sort.c',
+    'tagmanager/ctags/sql.c',
+    'tagmanager/ctags/strlist.c',
+    'tagmanager/ctags/txt2tags.c',
+    'tagmanager/ctags/tcl.c',
+    'tagmanager/ctags/vhdl.c',
+    'tagmanager/ctags/verilog.c',
+    'tagmanager/ctags/vstring.c'])
+
 tagmanager_sources = set([
-    'tagmanager/args.c', 'tagmanager/abc.c', 'tagmanager/actionscript.c', 'tagmanager/asm.c',
-    'tagmanager/basic.c', 'tagmanager/c.c', 'tagmanager/cobol.c',
-    'tagmanager/conf.c', 'tagmanager/css.c', 'tagmanager/ctags.c', 'tagmanager/diff.c',
-    'tagmanager/docbook.c', 'tagmanager/entry.c', 'tagmanager/fortran.c', 'tagmanager/get.c',
-    'tagmanager/haskell.c', 'tagmanager/haxe.c', 'tagmanager/html.c', 'tagmanager/js.c',
-    'tagmanager/keyword.c', 'tagmanager/latex.c', 'tagmanager/lregex.c', 'tagmanager/lua.c',
-    'tagmanager/make.c', 'tagmanager/markdown.c', 'tagmanager/matlab.c', 'tagmanager/nsis.c',
-    'tagmanager/nestlevel.c', 'tagmanager/objc.c', 'tagmanager/options.c',
-    'tagmanager/parse.c', 'tagmanager/pascal.c', 'tagmanager/r.c',
-    'tagmanager/perl.c', 'tagmanager/php.c', 'tagmanager/python.c', 'tagmanager/read.c',
-    'tagmanager/rest.c', 'tagmanager/ruby.c', 'tagmanager/sh.c', 'tagmanager/sort.c',
-    'tagmanager/sql.c', 'tagmanager/strlist.c', 'tagmanager/txt2tags.c', 'tagmanager/tcl.c',
-    'tagmanager/tm_file_entry.c',
-    'tagmanager/tm_project.c', 'tagmanager/tm_source_file.c', 'tagmanager/tm_symbol.c',
-    'tagmanager/tm_tag.c', 'tagmanager/tm_tagmanager.c', 'tagmanager/tm_work_object.c',
-    'tagmanager/tm_workspace.c', 'tagmanager/vhdl.c', 'tagmanager/verilog.c', 'tagmanager/vstring.c'])
+    'tagmanager/src/tm_file_entry.c',
+    'tagmanager/src/tm_project.c',
+    'tagmanager/src/tm_source_file.c',
+    'tagmanager/src/tm_symbol.c',
+    'tagmanager/src/tm_tag.c',
+    'tagmanager/src/tm_tagmanager.c',
+    'tagmanager/src/tm_work_object.c',
+    'tagmanager/src/tm_workspace.c'])
 
 scintilla_sources = set(['scintilla/gtk/scintilla-marshal.c'])
 
@@ -255,11 +297,22 @@ def build(bld):
         bld.new_task_gen(
             features                = ['c', 'cshlib'],
             source                  = 'plugins/%s.c' % plugin_name,
-            includes                = ['.', 'src/', 'scintilla/include', 'tagmanager/include'],
+            includes                = ['.', 'src/', 'scintilla/include', 'tagmanager/src'],
             defines                 = 'G_LOG_DOMAIN="%s"' % plugin_name,
             target                  = plugin_name,
             uselib                  = ['GTK', 'GLIB', 'GMODULE'],
             install_path            = instpath)
+
+    # CTags
+    bld.new_task_gen(
+        features        = ['c', 'cstlib'],
+        source          = ctags_sources,
+        name            = 'ctags',
+        target          = 'ctags',
+        includes        = ['.', 'tagmanager', 'tagmanager/ctags'],
+        defines         = 'G_LOG_DOMAIN="CTags"',
+        uselib          = ['GLIB'],
+        install_path    = None)  # do not install this library
 
     # Tagmanager
     bld.new_task_gen(
@@ -267,7 +320,7 @@ def build(bld):
         source          = tagmanager_sources,
         name            = 'tagmanager',
         target          = 'tagmanager',
-        includes        = ['.', 'tagmanager', 'tagmanager/include'],
+        includes        = ['.', 'tagmanager', 'tagmanager/ctags'],
         defines         = 'G_LOG_DOMAIN="Tagmanager"',
         uselib          = ['GTK', 'GLIB'],
         install_path    = None)  # do not install this library
@@ -307,11 +360,10 @@ def build(bld):
         name            = 'geany',
         target          = 'geany',
         source          = geany_sources,
-        includes        = ['.', 'scintilla/include/', 'tagmanager/include/'],
+        includes        = ['.', 'scintilla/include', 'tagmanager/src'],
         defines         = ['G_LOG_DOMAIN="Geany"', 'GEANY_PRIVATE'],
-        linkflags       = [] if is_win32 else ['-Wl,--export-dynamic'],
         uselib          = ['GTK', 'GLIB', 'GMODULE', 'GIO', 'GTHREAD', 'WIN32', 'SUNOS_SOCKET'],
-        use             = ['scintilla', 'tagmanager', 'mio'])
+        use             = ['scintilla', 'ctags', 'tagmanager', 'mio'])
 
     # geanyfunctions.h
     bld.new_task_gen(
@@ -402,11 +454,11 @@ def build(bld):
             scintilla/include/SciLexer.h scintilla/include/Scintilla.h
             scintilla/include/Scintilla.iface scintilla/include/ScintillaWidget.h ''')
         bld.install_files('${PREFIX}/include/geany/tagmanager', '''
-            tagmanager/include/tm_file_entry.h tagmanager/include/tm_project.h
-            tagmanager/include/tm_source_file.h
-            tagmanager/include/tm_symbol.h tagmanager/include/tm_tag.h
-            tagmanager/include/tm_tagmanager.h tagmanager/include/tm_work_object.h
-            tagmanager/include/tm_workspace.h ''')
+            tagmanager/src/tm_file_entry.h tagmanager/src/tm_project.h
+            tagmanager/src/tm_source_file.h
+            tagmanager/src/tm_symbol.h tagmanager/src/tm_tag.h
+            tagmanager/src/tm_tagmanager.h tagmanager/src/tm_work_object.h
+            tagmanager/src/tm_workspace.h ''')
     # Docs
     base_dir = '${PREFIX}' if is_win32 else '${DOCDIR}'
     ext = '.txt' if is_win32 else ''

@@ -1,9 +1,9 @@
 /*
  *      highlightingmappings.h - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2005-2011 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2006-2011 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
- *      Copyright 2011 Colomban Wendling <ban(at)herbesfolles(dot)org>
+ *      Copyright 2005-2012 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2006-2012 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2011-2012 Colomban Wendling <ban(at)herbesfolles(dot)org>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -15,9 +15,9 @@
  *      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *      GNU General Public License for more details.
  *
- *      You should have received a copy of the GNU General Public License
- *      along with this program; if not, write to the Free Software
- *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *      You should have received a copy of the GNU General Public License along
+ *      with this program; if not, write to the Free Software Foundation, Inc.,
+ *      51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
 
@@ -180,6 +180,7 @@ static const HLStyle highlighting_styles_C[] =
 	{ SCE_C_COMMENT,				"comment",					FALSE },
 	{ SCE_C_COMMENTLINE,			"commentline",				FALSE },
 	{ SCE_C_COMMENTDOC,				"commentdoc",				FALSE },
+	{ SCE_C_PREPROCESSORCOMMENT,	"preprocessorcomment",		FALSE },
 	{ SCE_C_NUMBER,					"number",					FALSE },
 	{ SCE_C_WORD,					"word",						FALSE },
 	{ SCE_C_WORD2,					"word2",					FALSE },
@@ -194,6 +195,7 @@ static const HLStyle highlighting_styles_C[] =
 	/* triple verbatims use the same style */
 	{ SCE_C_TRIPLEVERBATIM,			"verbatim",					FALSE },
 	{ SCE_C_REGEX,					"regex",					FALSE },
+	{ SCE_C_HASHQUOTEDSTRING,		"hashquotedstring",			FALSE },
 	{ SCE_C_COMMENTLINEDOC,			"commentlinedoc",			FALSE },
 	{ SCE_C_COMMENTDOCKEYWORD,		"commentdockeyword",		FALSE },
 	{ SCE_C_COMMENTDOCKEYWORDERROR,	"commentdockeyworderror",	FALSE },
@@ -291,6 +293,7 @@ static const HLStyle highlighting_styles_CSS[] =
 	{ SCE_CSS_VALUE,					"value",					FALSE },
 	{ SCE_CSS_ID,						"id",						FALSE },
 	{ SCE_CSS_IDENTIFIER2,				"identifier2",				FALSE },
+	{ SCE_CSS_VARIABLE,					"variable",					FALSE },
 	{ SCE_CSS_IMPORTANT,				"important",				FALSE },
 	{ SCE_CSS_DIRECTIVE,				"directive",				FALSE },
 	{ SCE_CSS_IDENTIFIER3,				"identifier3",				FALSE },
@@ -543,7 +546,12 @@ static const HLStyle highlighting_styles_FORTH[] =
 };
 static const HLKeyword highlighting_keywords_FORTH[] =
 {
-	{ 0, "primary",	FALSE }
+	{ 0, "primary",		FALSE },
+	{ 1, "keyword",		FALSE },
+	{ 2, "defword",		FALSE },
+	{ 3, "preword1",	FALSE },
+	{ 4, "preword2",	FALSE },
+	{ 5, "string",		FALSE }
 };
 #define highlighting_properties_FORTH	EMPTY_PROPERTIES
 

@@ -1,9 +1,9 @@
 /*
  *      ui_utils.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2006-2011 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2006-2011 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
- *      Copyright 2011 Matthew Brush <mbrush(at)codebrainz(dot)ca>
+ *      Copyright 2006-2012 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2006-2012 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2011-2012 Matthew Brush <mbrush(at)codebrainz(dot)ca>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -15,9 +15,9 @@
  *      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *      GNU General Public License for more details.
  *
- *      You should have received a copy of the GNU General Public License
- *      along with this program; if not, write to the Free Software
- *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *      You should have received a copy of the GNU General Public License along
+ *      with this program; if not, write to the Free Software Foundation, Inc.,
+ *      51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
 /** @file ui_utils.h
@@ -2616,7 +2616,7 @@ void ui_menu_add_document_items(GtkMenu *menu, GeanyDocument *active, GCallback 
  * @a compare_func might be NULL to not sort the documents in the menu. In this case,
  * the order of the document tabs is used.
  *
- * See document_sort_by_display_name() for an example sort function.
+ * See document_compare_by_display_name() for an example sort function.
  *
  * @param menu Menu.
  * @param active Which document to highlight, or @c NULL.

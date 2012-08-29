@@ -1,4 +1,4 @@
-.. |(version)| replace:: 1.22
+.. |(version)| replace:: 1.23
 
 =======
  Geany
@@ -11,11 +11,12 @@
 :Authors: Enrico Tröger,
           Nick Treleaven,
           Frank Lanitz,
-          Colomban Wendling
-:Date: 2011-10-02
+          Colomban Wendling,
+          Matthew Brush
+:Date: 2012-06-18
 :Version: |(version)|
 
-Copyright © 2005-2011
+Copyright © 2005-2012
 
 This document is distributed under the terms of the GNU General Public
 License as published by the Free Software Foundation; either version 2
@@ -292,7 +293,7 @@ The workspace has the following parts:
 
   * Status - A list of status messages.
   * Compiler - The output of compiling or building programs.
-  * Messages - Results of 'Find Usage', 'Find Usage' 'Find in Files' and other actions
+  * Messages - Results of 'Find Usage', 'Find in Files' and other actions
   * Scribble - A text scratchpad for any use.
   * Terminal - An optional terminal window.
 
@@ -1152,6 +1153,8 @@ and the editor window's popup menu:
 * Go to tag declaration
 * Go to line
 
+See also `Search`_ preferences.
+
 Toolbar entries
 ^^^^^^^^^^^^^^^
 There are also two toolbar entries:
@@ -1274,6 +1277,9 @@ utility. GNU Grep is recommended (see note below).
 
 .. image:: ./images/find_in_files_dialog.png
 
+The *Search* field is initially set to the current word in the editor
+(depending on `Search`_ preferences).
+
 The *Files* setting allows to choose which files are included in the
 search, depending on the mode:
 
@@ -1289,6 +1295,11 @@ pattern separated by a space. To search all ``.c`` and ``.h`` files,
 use: ``*.c *.h``.
 Note that an empty pattern list searches in all files rather
 than none.
+
+The *Directory* field is initially set to the current document's directory,
+unless this field has already been edited and the current document has
+not changed. Otherwise, the current document's directory is prepended to
+the drop-down history. This can be disabled - see `Search`_ preferences.
 
 The *Encoding* field can be used to define the encoding of the files
 to be searched. The entered search text is converted to the chosen encoding
@@ -1814,9 +1825,11 @@ Auto-focus widgets (focus follows mouse)
 Search
 ``````
 
-Always wrap search and hide the Find dialog
-    Always wrap search around the document and hide the Find dialog after clicking
-    Find Next/Previous.
+Always wrap search
+    Always wrap search around the document when finding a match.
+
+Hide the Find dialog
+    Hide the `Find`_ dialog after clicking Find Next/Previous.
 
 Use the current word under the cursor for Find dialogs
     Use current word under the cursor when opening the Find, Find in Files or Replace dialog and
@@ -1826,7 +1839,7 @@ Use the current word under the cursor for Find dialogs
 Use the current file's directory for Find in Files
     When opening the Find in Files dialog, set the directory to search to the directory of the current
     active file. When this option is disabled, the directory of the last use of the Find in Files
-    dialog is used.
+    dialog is used. See `Find in Files`_ for details.
 
 Projects
 ````````
@@ -1975,6 +1988,8 @@ Features
 
 Line wrapping
     Show long lines wrapped around to new display lines.
+
+.. _smart_home_key:
 
 "Smart" home key
     Whether to move the cursor to the first non-whitespace character
@@ -3485,22 +3500,25 @@ Go to tag definition            Ctrl-T                    Jump to the definition
 Go to tag declaration           Ctrl-Shift-T              Jump to the declaration of the current word or
                                                           selection. See `Go to tag declaration`_.
 
-Go to Start of Line             Home                      Move the caret to the end of the line indentation
-                                                          unless it is already there, in which case it moves
-                                                          it to the start of the line.
+Go to Start of Line             Home                      Move the caret to the start of the line.
+                                                          Behaves differently if smart_home_key_ is set.
 
 Go to End of Line               End                       Move the caret to the end of the line.
 
-Go to End of Display Line       Alt-End                   Move the caret to the end of the display line.
+Go to Start of Display Line     Alt-Home                  Move the caret to the start of the display line.
                                                           This is useful when you use line wrapping and
-                                                          want to jump to the end of the wrapped, virtual
-                                                          line, not the real end of the whole line.
+                                                          want to jump to the start of the wrapped, virtual
+                                                          line, not the real start of the whole line.
                                                           If the line is not wrapped, it behaves like
-                                                          `Go to End of Line`, see above.
+                                                          `Go to Start of Line`.
+
+Go to End of Display Line       Alt-End                   Move the caret to the end of the display line.
+                                                          If the line is not wrapped, it behaves like
+                                                          `Go to End of Line`.
 
 Go to Previous Word Part        Ctrl-/                    Goto the previous part of the current word.
 
-Go to Next Word Part            Ctrl-\                    Goto the next part of the current word.
+Go to Next Word Part            Ctrl-\\                   Goto the next part of the current word.
 =============================== ========================= ==================================================
 
 View keybindings
@@ -5267,7 +5285,7 @@ GNU General Public License
                    Version 2, June 1991
 
      Copyright (C) 1989, 1991 Free Software Foundation, Inc.
-        51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+        51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
      Everyone is permitted to copy and distribute verbatim copies
      of this license document, but changing it is not allowed.
 
@@ -5568,9 +5586,9 @@ GNU General Public License
         MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
         GNU General Public License for more details.
 
-        You should have received a copy of the GNU General Public License
-        along with this program; if not, write to the Free Software
-        Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
+        You should have received a copy of the GNU General Public License along
+        with this program; if not, write to the Free Software Foundation, Inc.,
+        51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 
     Also add information on how to contact you by electronic and paper mail.

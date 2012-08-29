@@ -38,7 +38,7 @@ MINGW_CFLAGS = \
 			-DGTK \
 			-I$(top_srcdir) \
 			-I$(top_srcdir)/src \
-			-I$(top_srcdir)/tagmanager/include \
+			-I$(top_srcdir)/tagmanager/src \
 			-I$(top_srcdir)/scintilla/include \
 			$(GTK_CFLAGS) \
 			$(PLUGIN_CFLAGS)
@@ -94,7 +94,7 @@ splitwindow_la_CFLAGS   = -DG_LOG_DOMAIN=\""SplitWindow"\"
 demoplugin_la_LIBADD    = $(GTK_LIBS)
 classbuilder_la_LIBADD  = $(GTK_LIBS)
 htmlchars_la_LIBADD     = $(GTK_LIBS)
-export_la_LIBADD        = $(GTK_LIBS)
+export_la_LIBADD        = $(GTK_LIBS) -lm
 saveactions_la_LIBADD   = $(GTK_LIBS)
 filebrowser_la_LIBADD   = $(GTK_LIBS)
 splitwindow_la_LIBADD   = $(GTK_LIBS)
@@ -106,7 +106,7 @@ AM_CPPFLAGS = \
 	-DDATADIR=\"$(datadir)\" \
 	-DGTK \
 	-I$(top_srcdir)/src \
-	-I$(top_srcdir)/tagmanager/include \
+	-I$(top_srcdir)/tagmanager/src \
 	-I$(top_srcdir)/scintilla/include \
 	$(GTK_CFLAGS) \
 	$(PLUGIN_CFLAGS)

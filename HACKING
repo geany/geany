@@ -424,7 +424,7 @@ When adding a lexer, update:
 * scintilla/Makefile.am
 * scintilla/makefile.win32
 * wscript
-* scintilla/KeyWords.cxx - add a LINK_LEXER command *manually*
+* scintilla/src/Catalogue.cxx - add a LINK_LEXER command *manually*
 
 For syntax highlighting, you will need to edit highlighting.c and
 highlightingmappings.h and add the following things:

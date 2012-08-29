@@ -1,4 +1,10 @@
-Geany 1.22 (unreleased)
+Geany 1.23 (unreleased)
+
+    Editor
+    * Update Scintilla to version 3.2.1 (#3540469).
+
+
+Geany 1.22 (June 18, 2012)
 
     General
     * Bump dependencies to GTK >= 2.16 and GLib >= 2.20.
@@ -6,10 +12,17 @@ Geany 1.22 (unreleased)
     * Rewrite theming support for better flexibility.
     * Add support for opening files read-only from the command line.
     * Always load the default session if configured to do so.
-    * Make all filetypes use named styles to simplify colour scheme
+    * Make all filetypes use named styles to simplify color scheme
       authoring.
     * Make 'Replace Spaces by Tabs' only match leading spaces to
       preserve alignment.
+
+    Possibly incompatible changes
+    * Theming and filetype style changes mean old filetypes and color
+      schemes are not compatible with this version of Geany.
+    * There are some default keybinding changes but these will only
+      apply to newly created configurations.
+    * Changes to the "project-dialog*" signals may affect plugins.
 
     Bug fixes
     * Fix escaping of session file paths (#3425969).
@@ -17,17 +30,21 @@ Geany 1.22 (unreleased)
     * Properly handle remote URIs received through drag 'n drop
       (#2966770, #3479567).
     * Fix build with bleeding-edge GLib (#3483388).
-    * Fix colour scheme selection in Ubuntu Unity (#3479674).
+    * Fix color scheme selection in Ubuntu Unity (#3479674).
     * Fix very slow regex tag parsing on Windows (e.g. for HTML).
     * Fix detecting a changed file on disk when opening from
       the command-line (Windows).
     * Fix quick search entry behavior on Windows.
+    * Fix keybindings conflicts check when swapping a binding.
+    * Fix comments insertion in some cases (#3449635, #3534320).
     * Add missing Windows mio makefile.
 
     Prefs
     * Split "always wrap search and hide find dialog" pref into
       "always wrap search" and "hide find dialog" (Dimitar Zhekov).
     * Add Project Properties overrides for 'Saving files' prefs.
+    * Add hidden VTE preference "send_cmd_prefix" to prefix commands sent
+      to the VTE. (See the manual for details).
 
     Interface
     * Add support for switching to the last used document after closing
@@ -73,8 +90,9 @@ Geany 1.22 (unreleased)
     * Parse PHP functions with multiline argument list (#3037797).
     * Handle ``/bin/dash`` shebang (#3470986).
     * Update JavaScript parser from CTags.
-    * Parse D class, struct, interface template bodies and template
-      blocks; ignore 'static if' expressions.
+    * Parse D class/struct/interface template bodies and template
+      blocks; ignore 'static if' expressions; parse function
+      @attributes, pure/nothrow and immutable/inout/shared return types.
     * Fix broken tag/word autocompletion in HTML/PHP documents.
     * Enable &entity; completion for all XML-based filetypes.
 
@@ -94,9 +112,10 @@ Geany 1.22 (unreleased)
     * Add stash_group_free_settings().
     * Add support for plugins written in C++.
 
-    Internationalisation:
+    Internationalization:
     * Add translations: ar, id, lt, mn, nn, sk
-    * Update translations: de, hu, it, kk, pl, sl, sv, zh_TW
+    * Update translations: de, es, fr, hu, it, ja, kk, lt, nl, pl, pt,
+      pt_BR, sk, sl, sv, tr, zh_CN, zh_TW
 
 
 Geany 0.21 (October 2, 2011)

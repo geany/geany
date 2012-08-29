@@ -157,6 +157,8 @@ public:
 	char StyleAt(int position) const;
 	void GetStyleRange(unsigned char *buffer, int position, int lengthRetrieve) const;
 	const char *BufferPointer();
+	const char *RangePointer(int position, int rangeLength);
+	int GapPosition() const;
 
 	int Length() const;
 	void Allocate(int newSize);

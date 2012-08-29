@@ -1,8 +1,8 @@
 /*
  *      build.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2005-2011 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2006-2011 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2005-2012 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2006-2012 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *      Copyright 2009 Lex Trotman <elextr(at)gmail(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
@@ -15,9 +15,9 @@
  *      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *      GNU General Public License for more details.
  *
- *      You should have received a copy of the GNU General Public License
- *      along with this program; if not, write to the Free Software
- *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *      You should have received a copy of the GNU General Public License along
+ *      with this program; if not, write to the Free Software Foundation, Inc.,
+ *      51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
 /*
@@ -479,7 +479,7 @@ static GeanyBuildCommand *get_build_group(const GeanyBuildSource src, const Gean
 	GeanyBuildCommand **g = get_build_group_pointer(src, grp);
 	if (g == NULL) return NULL;
 	return *g;
-};
+}
 
 
 /** Remove the specified Build menu item.
@@ -587,7 +587,7 @@ const gchar *build_get_current_menu_item(const GeanyBuildGroup grp, const guint 
 			break;
 	}
 	return str;
-};
+}
 
 /** Set the string for the menu item field.
  *
@@ -635,7 +635,7 @@ void build_set_menu_item(const GeanyBuildSource src, const GeanyBuildGroup grp,
 			break;
 	}
 	build_menu_update(NULL);
-};
+}
 
 /** Set the string for the menu item field.
  *
@@ -649,7 +649,7 @@ void build_set_menu_item(const GeanyBuildSource src, const GeanyBuildGroup grp,
 void build_activate_menu_item(const GeanyBuildGroup grp, const guint cmd)
 {
 	on_build_menu_item(NULL, GRP_CMD_TO_POINTER(grp, cmd));
-};
+}
 
 
 /* Clear all error indicators in all documents. */

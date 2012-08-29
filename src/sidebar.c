@@ -1,8 +1,8 @@
 /*
  *      sidebar.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2005-2011 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2006-2011 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2005-2012 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2006-2012 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -14,9 +14,9 @@
  *      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *      GNU General Public License for more details.
  *
- *      You should have received a copy of the GNU General Public License
- *      along with this program; if not, write to the Free Software
- *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *      You should have received a copy of the GNU General Public License along
+ *      with this program; if not, write to the Free Software Foundation, Inc.,
+ *      51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
 /*
@@ -368,8 +368,9 @@ static gchar *get_doc_folder(const gchar *path)
 	{
 		gsize len = strlen(project_base_path);
 
+		/* remove trailing separator so we can match base path exactly */
 		if (project_base_path[len-1] == G_DIR_SEPARATOR)
-			project_base_path[len-1] = '\0';
+			project_base_path[--len] = '\0';
 
 		/* check whether the dir name matches or uses the project base path */
 		if (utils_filename_has_prefix(tmp_dirname, project_base_path))

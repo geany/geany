@@ -1,8 +1,9 @@
 /*
  *      about.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2005-2011 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2006-2011 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2005-2012 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2006-2012 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2006-2012 Frank Lanitz <frank@frank.uvena.de>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -14,9 +15,9 @@
  *      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *      GNU General Public License for more details.
  *
- *      You should have received a copy of the GNU General Public License
- *      along with this program; if not, write to the Free Software
- *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *      You should have received a copy of the GNU General Public License along
+ *      with this program; if not, write to the Free Software Foundation, Inc.,
+ *      51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
 /*
@@ -55,6 +56,7 @@ const gchar *translators[][2] = {
 	{ "fi", "Harri Koskinen &lt;harri@fastmonkey.org&gt;\nJari Rahkonen &lt;jari.rahkonen@pp1.inet.fi&gt;" },
 	{ "fr", "Jean-Philippe Moal &lt;skateinmars@skateinmars.net&gt;" },
 	{ "gl", "José Manuel Castroagudín Silva &lt;chavescesures@gmail.com&gt;"},
+	{ "he", "Yosef Or Botschko &lt;yosefor3@walla.com&gt;"},
 	{ "hu", "Gabor Kmetyko &lt;kg_kilo@freemail.hu&gt;" },
 	{ "it", "Max Baldinelli &lt;m.baldinelli@agora.it&gt;,\nDario Santomarco &lt;dariello@yahoo.it&gt;" },
 	{ "ja", "Tarot Osuji &lt;tarot@sdf.lonestar.org&gt;\nChikahiro Masami &lt;cmasa.z321@gmail.com&gt;" },

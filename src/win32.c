@@ -1,8 +1,8 @@
 /*
  *      win32.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2005-2011 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2006-2011 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2005-2012 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2006-2012 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -14,9 +14,9 @@
  *      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *      GNU General Public License for more details.
  *
- *      You should have received a copy of the GNU General Public License
- *      along with this program; if not, write to the Free Software
- *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *      You should have received a copy of the GNU General Public License along
+ *      with this program; if not, write to the Free Software Foundation, Inc.,
+ *      51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
 /*
@@ -1093,10 +1093,15 @@ static gboolean CreateChildProcess(geany_win32_spawn *gw_spawn, TCHAR *szCmdline
 	else
 	{
 		gint i;
+		gsize ms = 30*1000;
 
-		for (i = 0; i < 2 && WaitForSingleObject(piProcInfo.hProcess, 30*1000) == WAIT_TIMEOUT; i++)
+		/* FIXME: this seems to timeout when there are many lines
+		 * to read - maybe because the child's pipe is full */
+		for (i = 0; i < 2 &&
+			WaitForSingleObject(piProcInfo.hProcess, ms) == WAIT_TIMEOUT; i++)
 		{
-			geany_debug("CreateChildProcess: CreateProcess failed");
+			ui_set_statusbar(FALSE, _("Process timed out after %.02f s!"), ms / 1000.0F);
+			geany_debug("CreateChildProcess: timed out");
 			TerminateProcess(piProcInfo.hProcess, WAIT_TIMEOUT); /* NOTE: This will not kill grandkids. */
 		}
 

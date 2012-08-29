@@ -12,8 +12,8 @@
 #include <stdio.h>
 
 #ifdef _MSC_VER
-// Visual C++ doesn't like unreachable code or long decorated names in its own headers.
-#pragma warning(disable: 4018 4100 4245 4511 4512 4663 4702 4786)
+// Visual C++ doesn't like unreachable code in its own headers.
+#pragma warning(disable: 4018 4100 4245 4511 4512 4663 4702)
 #endif
 
 #include <string>
