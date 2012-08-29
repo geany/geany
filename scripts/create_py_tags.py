@@ -11,6 +11,17 @@
 # Parses all files given on command line for Python classes or functions and write
 # them into data/python.tags (internal tagmanager format).
 # If called without command line arguments, a preset of common Python libs is used.
+#
+# WARNING
+# Be aware that running this script will actually *import* modules in the specified directory
+# or in the standard library path of your Python installation. Dependent on what Python modules
+# you have installed, this might not be want you want and can have weird side effects.
+# You have been warned.
+#
+# It should be however relatively safe to execute this script from a fresh Python installation
+# installed into a dedicated prefix. Then nothing else is necessary as to change the interpreter
+# with which you start this script.
+#
 
 import datetime
 import imp
