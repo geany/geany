@@ -133,7 +133,10 @@ class Parser:
                 args = '(%s)' % parent
             else:
                 scope = '%s%s' % (TA_SCOPE, parent)
-        tagname = obj.__name__
+        if isinstance(obj, basestring):
+            tagname = obj
+        else:
+            tagname = obj.__name__
         # check for duplicates
         if len(tagname) < 4:
             # skip short tags
@@ -208,6 +211,22 @@ class Parser:
             filep.close()
 
     #----------------------------------------------------------------------
+    def add_builtins(self):
+        """
+        Add the contents of __builtins__ as simple tags
+        """
+        for tag_name in dir(__builtins__):
+            # check if the tag name starts with upper case, then we assume it is a class
+            # note that this is a very very simple heuristic to determine the type and will give
+            # false positives
+            if tag_name[0].isupper():
+                tag_type = TYPE_CLASS
+            else:
+                tag_type = TYPE_FUNCTION
+
+            self._add_tag(tag_name, tag_type)
+
+    #----------------------------------------------------------------------
     def write_to_file(self, filename):
         """
         Sort the found tags and write them into the file specified by filename
@@ -266,6 +285,7 @@ def main():
         args = get_module_filenames(PYTHON_LIB_DIRECTORY)
 
     parser = Parser()
+    parser.add_builtins()
 
     for filename in args:
         parser.process_file(filename)
