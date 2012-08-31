@@ -2328,7 +2328,7 @@ msgstr "האם אתה בטוח שברצונך לצאת ?"
 #, c-format
 msgid "%d file saved."
 msgid_plural "%d files saved."
-msgstr[0] "האם אתה בטוח שברצונך לצאת ?"
+msgstr[0] "קובץ אחד נשמר."
 msgstr[1] "%d קבצים נשמרו."
 
 #: ../src/callbacks.c:434
@@ -3617,7 +3617,7 @@ msgstr "השתמש בתיקיית תצורה חלופית"
 
 #: ../src/main.c:123
 msgid "Print internal filetype names"
-msgstr "הדפס את כל סוגי הקבצים הנתמfים על ידי ‫Geany"
+msgstr "הדפס את כל סוגי הקבצים הנתמכים על ידי ‫Geany"
 
 #: ../src/main.c:124
 msgid "Generate global tags file (see documentation)"
@@ -4233,7 +4233,7 @@ msgstr "אפשרויות נוספות שיועברו ל-grep"
 #, c-format
 msgid "Found %d match for \"%s\"."
 msgid_plural "Found %d matches for \"%s\"."
-msgstr[0] "אפשרויות נוספות שיועברו ל-grep"
+msgstr[0] "נמצאו %d התאמות ל-\"%s\"."
 msgstr[1] "נמצאו %d התאמות ל-%s"
 
 #: ../src/search.c:1344
@@ -4281,7 +4281,7 @@ msgstr "החיפוש נכשל."
 #, c-format
 msgid "Search completed with %d match."
 msgid_plural "Search completed with %d matches."
-msgstr[0] "החיפוש נכשל."
+msgstr[0] "נמצאה התאמה אחת."
 msgstr[1] "נמצאו %d התאמות."
 
 #: ../src/search.c:1837
@@ -4468,7 +4468,7 @@ msgstr "אותות"
 #: ../src/symbols.c:824 ../src/symbols.c:833 ../src/symbols.c:842
 #: ../src/symbols.c:880 ../src/symbols.c:905
 msgid "Methods"
-msgstr "שגרה"
+msgstr "שגרות"
 
 #: ../src/symbols.c:831 ../src/symbols.c:976
 msgid "Namespaces"
@@ -4950,7 +4950,7 @@ msgstr "עדכון גופן (%s)"
 
 #: ../src/ui_utils.c:608
 msgid "C Standard Library"
-msgstr "התיקייה התקנית C"
+msgstr "הספרייה התקנית C"
 
 #: ../src/ui_utils.c:609
 msgid "ISO C99"
@@ -4962,7 +4962,7 @@ msgstr "C++ ‫(התיקייה התקנית C)"
 
 #: ../src/ui_utils.c:611
 msgid "C++ Standard Library"
-msgstr "התיקייה התקנית ‪C++"
+msgstr "הספרייה התקנית ‪C++"
 
 #: ../src/ui_utils.c:612
 msgid "C++ STL"
@@ -5440,7 +5440,7 @@ msgstr "גיבוי: לא היה ניתן לשמור את הקובץ (%s)."
 #, c-format
 msgid "Autosave: Saved %d file automatically."
 msgid_plural "Autosave: Saved %d files automatically."
-msgstr[0] "גיבוי: לא היה ניתן לשמור את הקובץ (%s)."
+msgstr[0] "שמירה אוטומטית: קובץ אחד נשמר אוטומטית."
 msgstr[1] "שמירה אוטומטית: %d קבצים נשמרו אוטומטית."
 
 #. initialize the dialog
