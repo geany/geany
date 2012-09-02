@@ -1256,9 +1256,10 @@ on_find_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 		if (search_data.flags & SCFIND_REGEXP)
 		{
 			GRegex *regex = compile_regex(search_data.text, search_data.flags);
-			g_regex_unref(regex);
 			if (!regex)
 				goto fail;
+			else
+				g_regex_unref(regex);
 		}
 		else if (settings.find_escape_sequences)
 		{
@@ -1389,7 +1390,8 @@ on_replace_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 	if (search_flags_re & SCFIND_REGEXP)
 	{
 		GRegex *regex = compile_regex(find, search_flags_re);
-		g_regex_unref(regex);
+		if (regex)
+			g_regex_unref(regex);
 		/* find escapes will be handled by GRegex */
 		if (!regex || !utils_str_replace_escape(replace, TRUE))
 			goto fail;
