@@ -190,7 +190,6 @@ static void tagNameList (const vhdlKind kind, int c)
 	{
 		readIdentifier (TagName, c);
 		makeSimpleTag (TagName, VhdlKinds, kind);
-		vUngetc (c);
 	}
 }
 
