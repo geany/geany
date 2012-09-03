@@ -22,6 +22,7 @@
 #define PLAT_WX  0
 #define PLAT_QT 0
 #define PLAT_FOX 0
+#define PLAT_NCURSES 0
 
 #if defined(FOX)
 #undef PLAT_FOX
@@ -30,6 +31,10 @@
 #elif defined(__WX__)
 #undef PLAT_WX
 #define PLAT_WX  1
+
+#elif defined(NCURSES)
+#undef PLAT_NCURSES
+#define PLAT_NCURSES 1
 
 #elif defined(SCINTILLA_QT)
 #undef PLAT_QT

@@ -578,6 +578,7 @@ val INDIC_DASH=9
 val INDIC_DOTS=10
 val INDIC_SQUIGGLELOW=11
 val INDIC_DOTBOX=12
+val INDIC_SQUIGGLEPIXMAP=13
 val INDIC_MAX=31
 val INDIC_CONTAINER=8
 val INDIC0_MASK=0x20
@@ -2100,6 +2101,9 @@ get bool GetAdditionalCaretsVisible=2609(,)
 # How many selections are there?
 get int GetSelections=2570(,)
 
+# Is every selected range empty?
+get bool GetSelectionEmpty=2650(,)
+
 # Clear selections to a single empty stream selection
 fun void ClearSelections=2571(,)
 
@@ -2218,6 +2222,9 @@ set void RGBAImageSetWidth=2624(int width,)
 # Set the height for future RGBA image data.
 set void RGBAImageSetHeight=2625(int height,)
 
+# Set the scale factor in percent for future RGBA image data.
+set void RGBAImageSetScale=2651(int scalePercent,)
+
 # Define a marker from RGBA data.
 # It has the width and height from RGBAImageSetWidth/Height
 fun void MarkerDefineRGBAImage=2626(int markerNumber, string pixels)
@@ -2252,6 +2259,13 @@ fun void FindIndicatorFlash=2641(position start, position end)
 
 # On OS X, hide the find indicator.
 fun void FindIndicatorHide=2642(,)
+
+# Move caret to before first visible character on display line.
+# If already there move to first character on display line.
+fun void VCHomeDisplay=2652(,)
+
+# Like VCHomeDisplay but extending selection to new caret position.
+fun void VCHomeDisplayExtend=2653(,)
 
 # Start notifying the container of all key presses and commands.
 fun void StartRecord=3001(,)
