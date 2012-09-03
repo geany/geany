@@ -25,11 +25,12 @@
 
 /*
  * Session file format:
- * filename_xx=pos;filetype UID;read only;encoding idx;use_tabs;auto_indent;line_wrapping;filename
+ * filename_xx=pos;filetype UID;read only;Eencoding;use_tabs;auto_indent;line_wrapping;filename
  */
 
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 
 #include "geany.h"
 
@@ -302,11 +303,11 @@ static gchar *get_session_file_string(GeanyDocument *doc)
 	locale_filename = utils_get_locale_from_utf8(doc->file_name);
 	escaped_filename = g_uri_escape_string(locale_filename, NULL, TRUE);
 
-	fname = g_strdup_printf("%d;%s;%d;%d;%d;%d;%d;%s;%d;%d",
+	fname = g_strdup_printf("%d;%s;%d;E%s;%d;%d;%d;%s;%d;%d",
 		sci_get_current_position(doc->editor->sci),
 		ft->name,
 		doc->readonly,
-		encodings_get_idx_from_charset(doc->encoding),
+		doc->encoding,
 		doc->editor->indent_type,
 		doc->editor->auto_indent,
 		doc->editor->line_wrapping,
@@ -1053,7 +1054,8 @@ static gboolean open_session_file(gchar **tmp, guint len)
 	const gchar *ft_name;
 	gchar *locale_filename;
 	gchar *unescaped_filename;
-	gint enc_idx, indent_type;
+	const gchar *encoding;
+	gint  indent_type;
 	gboolean ro, auto_indent, line_wrapping;
 	/** TODO when we have a global pref for line breaking, use its value */
 	gboolean line_breaking = FALSE;
@@ -1062,7 +1064,14 @@ static gboolean open_session_file(gchar **tmp, guint len)
 	pos = atoi(tmp[0]);
 	ft_name = tmp[1];
 	ro = atoi(tmp[2]);
-	enc_idx = atoi(tmp[3]);
+	if (isdigit(tmp[3][0]))
+	{
+		encoding = encodings_get_charset_from_index(atoi(tmp[3]));
+	}
+	else
+	{
+		encoding = &(tmp[3][1]);
+	}
 	indent_type = atoi(tmp[4]);
 	auto_indent = atoi(tmp[5]);
 	line_wrapping = atoi(tmp[6]);
@@ -1077,9 +1086,7 @@ static gboolean open_session_file(gchar **tmp, guint len)
 	{
 		GeanyFiletype *ft = filetypes_lookup_by_name(ft_name);
 		GeanyDocument *doc = document_open_file_full(
-			NULL, locale_filename, pos, ro, ft,
-			(enc_idx >= 0 && enc_idx < GEANY_ENCODINGS_MAX) ?
-				encodings[enc_idx].charset : NULL);
+			NULL, locale_filename, pos, ro, ft, encoding);
 
 		if (doc)
 		{
