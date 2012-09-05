@@ -444,7 +444,20 @@ void editor_toggle_fold(GeanyEditor *editor, gint line, gint modifiers)
 	g_return_if_fail(editor != NULL);
 
 	sci = editor->sci;
+	/* When collapsing a fold range whose starting line is offscreen,
+	 * scroll the starting line to display at the top of the view.
+	 * Otherwise it can be confusing when the document scrolls down to hide
+	 * the folded lines. */
+	if ((sci_get_fold_level(sci, line) & SC_FOLDLEVELNUMBERMASK) > SC_FOLDLEVELBASE &&
+		!(sci_get_fold_level(sci, line) & SC_FOLDLEVELHEADERFLAG))
+	{
+		gint parent = sci_get_fold_parent(sci, line);
+		gint first = sci_get_first_visible_line(sci);
 
+		parent = SSM(sci, SCI_VISIBLEFROMDOCLINE, parent, 0);
+		if (first > parent)
+			SSM(sci, SCI_SETFIRSTVISIBLELINE, parent, 0);
+	}
 	sci_toggle_fold(sci, line);
 
 	/* extra toggling of child fold points

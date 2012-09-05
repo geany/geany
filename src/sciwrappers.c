@@ -682,7 +682,7 @@ gint sci_get_fold_parent(ScintillaObject *sci, gint start_line)
 
 void sci_toggle_fold(ScintillaObject *sci, gint line)
 {
-	SSM(sci, SCI_TOGGLEFOLD, (uptr_t) line, 1);
+	SSM(sci, SCI_TOGGLEFOLD, (uptr_t) line, 0);
 }
 
 
