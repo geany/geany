@@ -818,7 +818,7 @@ static void add_top_level_items(GeanyDocument *doc)
 		case GEANY_FILETYPES_RUBY:
 		{
 			tag_list_add_groups(tag_store,
-				&(tv_iters.tag_namespace), _("Modules"), NULL,
+				&(tv_iters.tag_namespace), _("Modules"), "classviewer-namespace",
 				&(tv_iters.tag_class), _("Classes"), "classviewer-class",
 				&(tv_iters.tag_member), _("Singletons"), "classviewer-struct",
 				&(tv_iters.tag_function), _("Methods"), "classviewer-method",
