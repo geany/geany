@@ -308,14 +308,14 @@ static void split_view(gboolean horizontal)
 
 	set_state(horizontal ? STATE_SPLIT_HORIZONTAL : STATE_SPLIT_VERTICAL);
 
-	gtk_widget_ref(notebook);
+	g_object_ref(notebook);
 	gtk_container_remove(GTK_CONTAINER(parent), notebook);
 
 	pane = horizontal ? gtk_hpaned_new() : gtk_vpaned_new();
 	gtk_container_add(GTK_CONTAINER(parent), pane);
 
 	gtk_container_add(GTK_CONTAINER(pane), notebook);
-	gtk_widget_unref(notebook);
+	g_object_unref(notebook);
 
 	box = gtk_vbox_new(FALSE, 0);
 	toolbar = create_toolbar();
@@ -359,7 +359,7 @@ static void on_unsplit(GtkMenuItem *menuitem, gpointer user_data)
 
 	g_return_if_fail(edit_window.editor);
 
-	gtk_widget_ref(notebook);
+	g_object_ref(notebook);
 	gtk_container_remove(GTK_CONTAINER(pane), notebook);
 
 	gtk_widget_destroy(pane);
@@ -367,7 +367,7 @@ static void on_unsplit(GtkMenuItem *menuitem, gpointer user_data)
 	edit_window.sci = NULL;
 
 	gtk_container_add(GTK_CONTAINER(parent), notebook);
-	gtk_widget_unref(notebook);
+	g_object_unref(notebook);
 }
 
 
