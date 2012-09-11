@@ -183,7 +183,7 @@ static GtkWidget *create_dialog(void)
 	header_label_style_set(header_label);
 	g_signal_connect_after(header_eventbox, "style-set", G_CALLBACK(header_eventbox_style_set), NULL);
 	g_signal_connect_after(header_label, "style-set", G_CALLBACK(header_label_style_set), NULL);
-	gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->vbox), header_eventbox, FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))), header_eventbox, FALSE, FALSE, 0);
 
 	/* set image */
 	icon = ui_new_pixbuf_from_inline(GEANY_IMAGE_LOGO);
@@ -195,7 +195,7 @@ static GtkWidget *create_dialog(void)
 	notebook = gtk_notebook_new();
 	gtk_widget_show(notebook);
 	gtk_container_set_border_width(GTK_CONTAINER(notebook), 2);
-	gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->vbox), notebook, TRUE, TRUE, 0);
+	gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))), notebook, TRUE, TRUE, 0);
 
 	/* create "Info" tab */
 	info_box = gtk_vbox_new(FALSE, 0);

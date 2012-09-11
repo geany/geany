@@ -1403,7 +1403,7 @@ GtkWidget *ui_dialog_vbox_new(GtkDialog *dialog)
 	GtkWidget *vbox = gtk_vbox_new(FALSE, 12);	/* need child vbox to set a separate border. */
 
 	gtk_container_set_border_width(GTK_CONTAINER(vbox), 6);
-	gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), vbox);
+	gtk_container_add(GTK_CONTAINER(gtk_dialog_get_content_area(GTK_DIALOG(dialog))), vbox);
 	return vbox;
 }
 

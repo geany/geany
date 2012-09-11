@@ -539,7 +539,7 @@ static void create_find_dialog(void)
 	gtk_button_box_set_child_secondary(GTK_BUTTON_BOX(bbox), check_close, TRUE);
 
 	ui_hbutton_box_copy_layout(
-		GTK_BUTTON_BOX(GTK_DIALOG(find_dlg.dialog)->action_area),
+		GTK_BUTTON_BOX(gtk_dialog_get_action_area(GTK_DIALOG(find_dlg.dialog))),
 		GTK_BUTTON_BOX(bbox));
 	gtk_container_add(GTK_CONTAINER(exp), bbox);
 	gtk_container_add(GTK_CONTAINER(vbox), exp);
@@ -721,7 +721,7 @@ static void create_replace_dialog(void)
 	gtk_button_box_set_child_secondary(GTK_BUTTON_BOX(bbox), check_close, TRUE);
 
 	ui_hbutton_box_copy_layout(
-		GTK_BUTTON_BOX(GTK_DIALOG(replace_dlg.dialog)->action_area),
+		GTK_BUTTON_BOX(gtk_dialog_get_action_area(GTK_DIALOG(replace_dlg.dialog))),
 		GTK_BUTTON_BOX(bbox));
 	gtk_container_add(GTK_CONTAINER(exp), bbox);
 	gtk_container_add(GTK_CONTAINER(vbox), exp);
