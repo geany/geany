@@ -121,7 +121,7 @@ static void vte_restart(GtkWidget *widget);
 static gboolean vte_button_pressed(GtkWidget *widget, GdkEventButton *event, gpointer user_data);
 static gboolean vte_keyrelease_cb(GtkWidget *widget, GdkEventKey *event, gpointer data);
 static gboolean vte_keypress_cb(GtkWidget *widget, GdkEventKey *event, gpointer data);
-static void vte_register_symbols(GModule *module);
+static gboolean vte_register_symbols(GModule *module);
 static void vte_popup_menu_clicked(GtkMenuItem *menuitem, gpointer user_data);
 static GtkWidget *vte_create_popup_menu(void);
 static void vte_commit_cb(VteTerminal *vte, gchar *arg1, guint arg2, gpointer user_data);
@@ -216,9 +216,18 @@ void vte_init(void)
 	}
 	else
 	{
-		vte_info.have_vte = TRUE;
 		vf = g_new0(struct VteFunctions, 1);
-		vte_register_symbols(module);
+		if (vte_register_symbols(module))
+			vte_info.have_vte = TRUE;
+		else
+		{
+			vte_info.have_vte = FALSE;
+			g_free(vf);
+			/* FIXME: is closing the module safe? see vte_close() and test on FreeBSD */
+			/*g_module_close(module);*/
+			module = NULL;
+			return;
+		}
 	}
 
 	create_vte();
@@ -406,35 +415,51 @@ static void vte_set_cursor_blink_mode(void)
 }
 
 
-static void vte_register_symbols(GModule *mod)
+static gboolean vte_register_symbols(GModule *mod)
 {
-	g_module_symbol(mod, "vte_terminal_new", (void*)&vf->vte_terminal_new);
-	g_module_symbol(mod, "vte_terminal_set_size", (void*)&vf->vte_terminal_set_size);
-	g_module_symbol(mod, "vte_terminal_fork_command", (void*)&vf->vte_terminal_fork_command);
-	g_module_symbol(mod, "vte_terminal_set_word_chars", (void*)&vf->vte_terminal_set_word_chars);
-	g_module_symbol(mod, "vte_terminal_set_mouse_autohide", (void*)&vf->vte_terminal_set_mouse_autohide);
-	g_module_symbol(mod, "vte_terminal_reset", (void*)&vf->vte_terminal_reset);
-	g_module_symbol(mod, "vte_terminal_get_type", (void*)&vf->vte_terminal_get_type);
-	g_module_symbol(mod, "vte_terminal_set_scroll_on_output", (void*)&vf->vte_terminal_set_scroll_on_output);
-	g_module_symbol(mod, "vte_terminal_set_scroll_on_keystroke", (void*)&vf->vte_terminal_set_scroll_on_keystroke);
-	g_module_symbol(mod, "vte_terminal_set_font_from_string", (void*)&vf->vte_terminal_set_font_from_string);
-	g_module_symbol(mod, "vte_terminal_set_scrollback_lines", (void*)&vf->vte_terminal_set_scrollback_lines);
-	g_module_symbol(mod, "vte_terminal_get_has_selection", (void*)&vf->vte_terminal_get_has_selection);
-	g_module_symbol(mod, "vte_terminal_copy_clipboard", (void*)&vf->vte_terminal_copy_clipboard);
-	g_module_symbol(mod, "vte_terminal_paste_clipboard", (void*)&vf->vte_terminal_paste_clipboard);
-	g_module_symbol(mod, "vte_terminal_set_emulation", (void*)&vf->vte_terminal_set_emulation);
-	g_module_symbol(mod, "vte_terminal_set_color_foreground", (void*)&vf->vte_terminal_set_color_foreground);
-	g_module_symbol(mod, "vte_terminal_set_color_bold", (void*)&vf->vte_terminal_set_color_bold);
-	g_module_symbol(mod, "vte_terminal_set_color_background", (void*)&vf->vte_terminal_set_color_background);
-	g_module_symbol(mod, "vte_terminal_feed_child", (void*)&vf->vte_terminal_feed_child);
-	g_module_symbol(mod, "vte_terminal_im_append_menuitems", (void*)&vf->vte_terminal_im_append_menuitems);
-	g_module_symbol(mod, "vte_terminal_set_cursor_blink_mode", (void*)&vf->vte_terminal_set_cursor_blink_mode);
-	if (vf->vte_terminal_set_cursor_blink_mode == NULL)
+	#define BIND_SYMBOL(field) \
+		g_module_symbol(mod, #field, (void*)&vf->field)
+	#define BIND_REQUIRED_SYMBOL(field) \
+		G_STMT_START { \
+			if (! BIND_SYMBOL(field)) \
+			{ \
+				g_critical(_("invalid VTE library \"%s\": missing symbol \"%s\""), \
+						g_module_name(mod), #field); \
+				return FALSE; \
+			} \
+		} G_STMT_END
+
+	BIND_REQUIRED_SYMBOL(vte_terminal_new);
+	BIND_REQUIRED_SYMBOL(vte_terminal_set_size);
+	BIND_REQUIRED_SYMBOL(vte_terminal_fork_command);
+	BIND_REQUIRED_SYMBOL(vte_terminal_set_word_chars);
+	BIND_REQUIRED_SYMBOL(vte_terminal_set_mouse_autohide);
+	BIND_REQUIRED_SYMBOL(vte_terminal_reset);
+	BIND_REQUIRED_SYMBOL(vte_terminal_get_type);
+	BIND_REQUIRED_SYMBOL(vte_terminal_set_scroll_on_output);
+	BIND_REQUIRED_SYMBOL(vte_terminal_set_scroll_on_keystroke);
+	BIND_REQUIRED_SYMBOL(vte_terminal_set_font_from_string);
+	BIND_REQUIRED_SYMBOL(vte_terminal_set_scrollback_lines);
+	BIND_REQUIRED_SYMBOL(vte_terminal_get_has_selection);
+	BIND_REQUIRED_SYMBOL(vte_terminal_copy_clipboard);
+	BIND_REQUIRED_SYMBOL(vte_terminal_paste_clipboard);
+	BIND_REQUIRED_SYMBOL(vte_terminal_set_emulation);
+	BIND_REQUIRED_SYMBOL(vte_terminal_set_color_foreground);
+	BIND_REQUIRED_SYMBOL(vte_terminal_set_color_bold);
+	BIND_REQUIRED_SYMBOL(vte_terminal_set_color_background);
+	BIND_REQUIRED_SYMBOL(vte_terminal_feed_child);
+	BIND_REQUIRED_SYMBOL(vte_terminal_im_append_menuitems);
+	if (! BIND_SYMBOL(vte_terminal_set_cursor_blink_mode))
 		/* vte_terminal_set_cursor_blink_mode() is only available since 0.17.1, so if we don't find
 		 * this symbol, we are probably on an older version and use the old API instead */
-		g_module_symbol(mod, "vte_terminal_set_cursor_blinks", (void*)&vf->vte_terminal_set_cursor_blinks);
-	g_module_symbol(mod, "vte_terminal_select_all", (void*)&vf->vte_terminal_select_all);
-	g_module_symbol(mod, "vte_terminal_set_audible_bell", (void*)&vf->vte_terminal_set_audible_bell);
+		BIND_REQUIRED_SYMBOL(vte_terminal_set_cursor_blinks);
+	BIND_REQUIRED_SYMBOL(vte_terminal_select_all);
+	BIND_REQUIRED_SYMBOL(vte_terminal_set_audible_bell);
+
+	#undef BIND_REQUIRED_SYMBOL
+	#undef BIND_SYMBOL
+
+	return TRUE;
 }
 
 
