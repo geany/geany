@@ -1614,7 +1614,7 @@ void build_menu_update(GeanyDocument *doc)
 					vis = FALSE;
 				}
 				else
-					gtk_widget_hide_all(menu_items.menu_item[GBG_FIXED][bs->build_cmd]);
+					gtk_widget_hide(menu_items.menu_item[GBG_FIXED][bs->build_cmd]);
 				break;
 			case MENU_NEXT_ERROR:
 			case MENU_PREV_ERROR:
@@ -1658,7 +1658,7 @@ void build_menu_update(GeanyDocument *doc)
 							vis |= TRUE;
 						}
 						else
-							gtk_widget_hide_all(menu_item);
+							gtk_widget_hide(menu_item);
 					}
 					else
 					{
@@ -1686,7 +1686,7 @@ void build_menu_update(GeanyDocument *doc)
 							vis |= TRUE;
 						}
 						else
-							gtk_widget_hide_all(menu_item);
+							gtk_widget_hide(menu_item);
 					}
 				}
 		}
