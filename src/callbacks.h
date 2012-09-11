@@ -327,7 +327,7 @@ on_set_file_readonly1_toggled		  (GtkCheckMenuItem *checkmenuitem,
 
 G_MODULE_EXPORT void
 on_tv_notebook_switch_page			 (GtkNotebook	 *notebook,
-										GtkNotebookPage *page,
+										gpointer	 page,
 										guint			page_num,
 										gpointer		 user_data);
 
@@ -371,7 +371,7 @@ on_toolbutton_run_clicked			  (GtkAction	   *action,
 
 G_MODULE_EXPORT void
 on_notebook1_switch_page_after		 (GtkNotebook	 *notebook,
-										GtkNotebookPage *page,
+										gpointer	 page,
 										guint			page_num,
 										gpointer		 user_data);
 
@@ -508,7 +508,7 @@ on_motion_event						(GtkWidget	   *widget,
 
 G_MODULE_EXPORT void
 on_tv_notebook_switch_page_after	   (GtkNotebook	 *notebook,
-										GtkNotebookPage *page,
+										gpointer	 page,
 										guint			page_num,
 										gpointer		 user_data);
 

@@ -602,7 +602,7 @@ static gboolean delayed_check_disk_status(gpointer data)
 
 /* Changes window-title after switching tabs and lots of other things.
  * note: using 'after' makes Scintilla redraw before the UI, appearing more responsive */
-G_MODULE_EXPORT void on_notebook1_switch_page_after(GtkNotebook *notebook, GtkNotebookPage *page,
+G_MODULE_EXPORT void on_notebook1_switch_page_after(GtkNotebook *notebook, gpointer page,
 		guint page_num, gpointer user_data)
 {
 	GeanyDocument *doc;
@@ -641,7 +641,7 @@ G_MODULE_EXPORT void on_notebook1_switch_page_after(GtkNotebook *notebook, GtkNo
 }
 
 
-G_MODULE_EXPORT void on_tv_notebook_switch_page(GtkNotebook *notebook, GtkNotebookPage *page,
+G_MODULE_EXPORT void on_tv_notebook_switch_page(GtkNotebook *notebook, gpointer page,
 		guint page_num, gpointer user_data)
 {
 	/* suppress selection changed signal when switching to the open files list */
@@ -649,7 +649,7 @@ G_MODULE_EXPORT void on_tv_notebook_switch_page(GtkNotebook *notebook, GtkNotebo
 }
 
 
-G_MODULE_EXPORT void on_tv_notebook_switch_page_after(GtkNotebook *notebook, GtkNotebookPage *page,
+G_MODULE_EXPORT void on_tv_notebook_switch_page_after(GtkNotebook *notebook, gpointer page,
 		guint page_num, gpointer user_data)
 {
 	ignore_callback = FALSE;

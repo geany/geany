@@ -92,7 +92,7 @@ static void update_mru_docs_head(GeanyDocument *doc)
 
 /* before the tab changes, add the current document to the MRU list */
 static void on_notebook_switch_page(GtkNotebook *notebook,
-	GtkNotebookPage *page, guint page_num, gpointer user_data)
+	gpointer page, guint page_num, gpointer user_data)
 {
 	GeanyDocument *new;
 
