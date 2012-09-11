@@ -158,7 +158,7 @@ void project_new(void)
 	image = gtk_image_new_from_stock(GTK_STOCK_OPEN, GTK_ICON_SIZE_BUTTON);
 	gtk_container_add(GTK_CONTAINER(button), image);
 	bbox = gtk_hbox_new(FALSE, 6);
-	gtk_box_pack_start_defaults(GTK_BOX(bbox), e->file_name);
+	gtk_box_pack_start(GTK_BOX(bbox), e->file_name, TRUE, TRUE, 0);
 	gtk_box_pack_start(GTK_BOX(bbox), button, FALSE, FALSE, 0);
 
 	ui_table_add_row(GTK_TABLE(table), 1, label, bbox, NULL);
