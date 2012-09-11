@@ -1082,7 +1082,7 @@ void stash_tree_setup(GPtrArray *group_array, GtkTreeView *tree)
 	GtkTreeModel *model;
 	GtkCellRenderer *cell;
 	GtkTreeViewColumn *column;
-	GtkObject *adjustment;
+	GtkAdjustment *adjustment;
 
 	store = gtk_list_store_new(STASH_TREE_COUNT, G_TYPE_STRING, G_TYPE_POINTER);
 	stash_tree_append_prefs(group_array, store, PREF_DISPLAY);
