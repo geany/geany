@@ -684,9 +684,10 @@ static void vte_drag_data_received(GtkWidget *widget, GdkDragContext *drag_conte
 {
 	if (info == TARGET_TEXT_PLAIN)
 	{
-		if (data->format == 8 && data->length > 0)
+		if (gtk_selection_data_get_format(data) == 8 && gtk_selection_data_get_length(data) > 0)
 			vf->vte_terminal_feed_child(VTE_TERMINAL(widget),
-				(const gchar*) data->data, data->length);
+				(const gchar*) gtk_selection_data_get_data(data),
+				gtk_selection_data_get_length(data));
 	}
 	else
 	{

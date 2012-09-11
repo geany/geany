@@ -776,15 +776,16 @@ on_window_drag_data_received(GtkWidget *widget, GdkDragContext *drag_context,
 		guint event_time, gpointer user_data)
 {
 	gboolean success = FALSE;
+	gint length = gtk_selection_data_get_length(data);
 
-	if (data->length > 0 && data->format == 8)
+	if (length > 0 && gtk_selection_data_get_format(data) == 8)
 	{
 		if (drag_context->action == GDK_ACTION_ASK)
 		{
 			drag_context->action = GDK_ACTION_COPY;
 		}
 
-		document_open_file_list((const gchar *)data->data, data->length);
+		document_open_file_list((const gchar *)gtk_selection_data_get_data(data), length);
 
 		success = TRUE;
 	}

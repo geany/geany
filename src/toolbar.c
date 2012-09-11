@@ -809,12 +809,12 @@ static void tb_editor_drag_data_rcvd_cb(GtkWidget *widget, GdkDragContext *conte
 	GtkTreeView *tree = GTK_TREE_VIEW(widget);
 	gboolean del = FALSE;
 
-	if (data->length >= 0 && data->format == 8)
+	if (gtk_selection_data_get_length(data) >= 0 && gtk_selection_data_get_format(data) == 8)
 	{
 		gboolean is_sep;
 		gchar *text = NULL;
 
-		text = (gchar*) data->data;
+		text = (gchar*) gtk_selection_data_get_data(data);
 		is_sep = utils_str_equal(text, TB_EDITOR_SEPARATOR);
 		/* If the source of the action is equal to the target, we do just re-order and so need
 		 * to delete the separator to get it moved, not just copied. */
