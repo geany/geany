@@ -72,7 +72,7 @@ struct _VteTerminal
 	GtkAdjustment *adjustment;
 };
 
-#define VTE_TERMINAL(obj) (GTK_CHECK_CAST((obj), VTE_TYPE_TERMINAL, VteTerminal))
+#define VTE_TERMINAL(obj) (G_TYPE_CHECK_INSTANCE_CAST((obj), VTE_TYPE_TERMINAL, VteTerminal))
 #define VTE_TYPE_TERMINAL (vf->vte_terminal_get_type())
 
 typedef enum {
@@ -93,7 +93,7 @@ struct VteFunctions
 	void (*vte_terminal_set_word_chars) (VteTerminal *terminal, const char *spec);
 	void (*vte_terminal_set_mouse_autohide) (VteTerminal *terminal, gboolean setting);
 	void (*vte_terminal_reset) (VteTerminal *terminal, gboolean full, gboolean clear_history);
-	GtkType (*vte_terminal_get_type) (void);
+	GType (*vte_terminal_get_type) (void);
 	void (*vte_terminal_set_scroll_on_output) (VteTerminal *terminal, gboolean scroll);
 	void (*vte_terminal_set_scroll_on_keystroke) (VteTerminal *terminal, gboolean scroll);
 	void (*vte_terminal_set_font_from_string) (VteTerminal *terminal, const char *name);
