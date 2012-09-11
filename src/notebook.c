@@ -312,7 +312,7 @@ static gboolean focus_sci(GtkWidget *widget, GdkEventButton *event, gpointer use
 
 static gboolean gtk_notebook_show_arrows(GtkNotebook *notebook)
 {
-	return notebook->scrollable;
+	return gtk_notebook_get_scrollable(notebook);
 #if 0
 	/* To get this working we would need to define at least the first two fields of
 	 * GtkNotebookPage since it is a private field. The better way would be to
