@@ -142,13 +142,8 @@ class Parser:
             # skip short tags
             return
         tag = '%s%s%s%s%s%s\n' % (tagname, TA_TYPE, tag_type, TA_ARGLIST, args, scope)
-        for keyword in PYTHON_KEYWORDS:
-            # ignore tags which start with a keyword to avoid
-            # annoying completions of 'pass_' and similar ones
-            if tagname.startswith(keyword):
-                return
 
-        if not tagname in self.tags:
+        if not tagname in self.tags and not tagname_is_like_keyword(tagname):
             self.tags[tagname] = tag
 
     #----------------------------------------------------------------------
@@ -206,7 +201,7 @@ class Parser:
                         tag_type = TYPE_FUNCTION
                     args = args.strip()
                     tag = '%s%s%s%s%s\n' % (tagname, TA_TYPE, tag_type, TA_ARGLIST, args)
-                    if not tagname in self.tags:
+                    if not tagname in self.tags and not tagname_is_like_keyword(tagname):
                         self.tags[tagname] = tag
             filep.close()
 
@@ -245,6 +240,16 @@ class Parser:
             if not symbol == '\n': # skip empty lines
                 target_file.write(symbol)
         target_file.close()
+
+
+#----------------------------------------------------------------------
+def tagname_is_like_keyword(tagname):
+    """ignore tags which start with a keyword to avoid annoying completions of 'pass_' and similar ones"""
+    # this is not really efficient but in this script speed doesn't really matter
+    for keyword in PYTHON_KEYWORDS:
+        if tagname.startswith(keyword):
+            return True
+    return False
 
 
 #----------------------------------------------------------------------
