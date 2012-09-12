@@ -1,4 +1,4 @@
-# format=tagmanager - Automatically generated file - do not edit (created on Wed Aug 29 23:01:33 2012)
+# format=tagmanager - Automatically generated file - do not edit (created on Wed Sep 12 19:28:34 2012)
 <lambda>Ì128Í
 ABCMetaÌ1Í(type)
 ARRAYÌ128Ítyp, len
@@ -348,7 +348,7 @@ DocCGIXMLRPCRequestHandlerÌ1Í(CGIXMLRPCRequestHandler)
 DocDescriptorÌ1Í(object)
 DocFileCaseÌ1Í(DocTestCase)
 DocFileSuiteÌ128Í*paths, **kw
-DocFileTestÌ128Ípath, module_relative=True, package=None, globs=None, parser=<tags_file_module.DocTestParser instance at 0x1f42d40>, encoding=None, **options
+DocFileTestÌ128Ípath, module_relative=True, package=None, globs=None, parser=<tags_file_module.DocTestParser instance at 0x1b44c20>, encoding=None, **options
 DocTestCaseÌ1Í(TestCase)
 DocTestFailureÌ1Í(Exception)
 DocTestFinderÌ1Í
@@ -1752,8 +1752,6 @@ arith_exprÌ128Íself, nodelistÎTransformer
 arrayÌ1Í(object)
 artcmdÌ128Íself, line, file=NoneÎNNTP
 articleÌ128Íself, idÎNNTP
-associateÌ128Í(self, secondaryDB, callback, flags=0)
-assure_pickle_consistencyÌ128Í(verbose=False)
 atofÌ128Ís
 atoiÌ128Í*args
 atolÌ128Í*args
@@ -1975,7 +1973,6 @@ choose_boundaryÌ128Í
 chownÌ128Íself, tarinfo, targetpathÎTarFile
 cipherÌ128ÍselfÎSSLSocket
 circleÌ128Íself, radius, extent=None, steps=NoneÎTurtle
-classifyÌ128Í(self, type, value, context)
 cleandocÌ128Ídoc
 cleanup_headersÌ128ÍselfÎServerHandler
 cleanup_tracebackÌ128Ítb, exclude
@@ -2200,7 +2197,7 @@ createTextNodeÌ128Íself, dataÎDocument
 create_arcÌ128Íself, *args, **kwÎCanvas
 create_bitmapÌ128Íself, *args, **kwÎCanvas
 create_command_buttonsÌ128ÍselfÎReplaceDialog
-create_connectionÌ128Íaddress, timeout=<object object at 0x7f3698d580d0>, source_address=None
+create_connectionÌ128Íaddress, timeout=<object object at 0x7fb3c1f220d0>, source_address=None
 create_decimal_from_floatÌ128Íself, fÎContext
 create_decimalÌ128Íself, num='0'ÎContext
 create_entriesÌ128ÍselfÎReplaceDialog
@@ -2279,9 +2276,7 @@ dedent_region_eventÌ128Íself, eventÎEditorWindow
 dedentÌ128Ítext
 deepcopyÌ128Íx, memo=None, _nil=[]
 deepvaluesÌ128Í(mapping)
-default_loaderÌ128Í(href, parse, encoding=None)
 degreesÌ128Íself, fullcircle=360.0ÎTurtle
-deleteÌ128Í(self, *args, **kwargs)
 demo_appÌ128Íenviron, start_response
 demoÌ128Í
 deprecated_funcÌ128Í*args, **kwargsÎDocFileCase
@@ -2813,7 +2808,6 @@ focus_lastforÌ128ÍselfÎBaseWidget
 focus_setÌ128ÍselfÎBaseWidget
 focusÌ128Íself, *argsÎCanvas
 font_timer_eventÌ128ÍselfÎCodeContext
-format_date_timeÌ128Í(timestamp)
 found_terminatorÌ128ÍselfÎSMTPChannel
 fpdefÌ128Íself, nodelistÎTransformer
 fplistÌ128Íself, nodelistÎTransformer
@@ -2827,7 +2821,6 @@ framework_infoÌ128Ífilename
 frameÌ1Í(object)
 freeze_supportÌ128Í
 freeÌ128Íself, blockÎHeap
-fromstringlistÌ128Í(sequence, parser=None)
 frozensetÌ128Í
 ftp_openÌ128Íself, reqÎCacheFTPHandler
 ftpcpÌ128Ísource, sourcename, target, targetname='', type='I'
@@ -3609,28 +3602,6 @@ image_typesÌ128ÍselfÎBaseWidget
 imap_unorderedÌ128Í(self, func, iterable, chunksize=1)
 imapÌ1Í(object)
 immutableÌ128ÍselfÎMutableString
-in_special_contextÌ128Í(node)
-includeÌ128Í(elem, loader=None)
-init_valueÌ128Í(self, *args, **kwargs)
-initialize_optionsÌ128Í(self)
-initializeÌ128Í(self, plat_name=None)
-insertÌ128Í(self, index, element)
-isOpenÌ128Í(self)
-is_HDNÌ128Í(text)
-is_assign_targetÌ128Í(node)
-is_blockedÌ128Í(self, domain)
-is_docstringÌ128Í(stmt)
-is_expiredÌ128Í(self, now=None)
-is_import_stmtÌ128Í(node)
-is_importÌ128Í(node)
-is_listÌ128Í(node)
-is_not_allowedÌ128Í(self, domain)
-is_probably_builtinÌ128Í(node)
-is_subtreeÌ128Í(root, node)
-is_third_partyÌ128Í(request)
-is_tupleÌ128Í(node)
-iselementÌ128Í(element)
-iso2timeÌ128Í(text)
 item_cgetÌ128Íself, entry, col, optÎHList
 item_configureÌ128Íself, entry, col, cnf={}, **kwÎHList
 item_createÌ128Íself, entry, col, cnf={}, **kwÎHList
@@ -4071,7 +4042,6 @@ normalizeÌ128ÍselfÎIntSet
 normalvariateÌ128Íself, mu, sigmaÎRandom
 normcaseÌ128Ípath
 normpathÌ128Ís
-notationDeclÌ128Í(self, name, publicId, systemId)
 nr_of_itemsÌ128ÍselfÎTbuffer
 nsmallestÌ128Ín, iterable, key=None
 ntohlÌ128Íx
@@ -4337,10 +4307,6 @@ pressÌ128Íself, eventÎIcon
 prev_nodupÌ128Í(self, flags=0)
 previousÌ128ÍselfÎBsdDbShelf
 prevÌ128Í(self, flags=0)
-print_acÌ128Í(self)
-print_nodeÌ128Í(node)
-print_outputÌ128Í(self, old, new, filename, equal)
-printtokenÌ128Í(type, token, start, end, line)
 prmonthÌ128Íself, theyear, themonth, w=0, l=0ÎLocaleTextCalendar
 probably_a_local_importÌ128Í(self, imp_name)
 process_messageÌ128Íself, peer, mailfrom, rcpttos, dataÎDebuggingServer
@@ -4425,7 +4391,6 @@ r_reloadÌ128Íself, mÎRExec
 r_unloadÌ128Íself, mÎRExec
 radiansÌ128ÍselfÎTurtle
 radixÌ128ÍselfÎDecimal
-raise_errorÌ128Í(self, msg, *args)
 randintÌ128Íself, a, bÎRandom
 randombytesÌ128Ín
 randomÌ128ÍselfÎSystemRandom
@@ -4680,13 +4645,6 @@ retry_https_basic_authÌ128Íself, url, realm, data=NoneÎFancyURLopener
 retry_proxy_http_basic_authÌ128Íself, url, realm, data=NoneÎFancyURLopener
 retry_proxy_https_basic_authÌ128Íself, url, realm, data=NoneÎFancyURLopener
 retrÌ128Íself, whichÎPOP3
-return_ok_domainÌ128Í(self, cookie, request)
-return_ok_expiresÌ128Í(self, cookie, request)
-return_ok_portÌ128Í(self, cookie, request)
-return_ok_secureÌ128Í(self, cookie, request)
-return_ok_verifiabilityÌ128Í(self, cookie, request)
-return_ok_versionÌ128Í(self, cookie, request)
-return_okÌ128Í(self, cookie, request)
 reverse_orderÌ128ÍselfÎStats
 reversedÌ128Í
 reverseÌ128ÍselfÎMutableSequence
@@ -5441,7 +5399,7 @@ test_wavÌ128Íh, f
 test_xbmÌ128Íh, f
 testallÌ128Ílist, recursive, toplevel
 testandsetÌ128ÍselfÎmutex
-testfileÌ128Ífilename, module_relative=True, name=None, package=None, globs=None, verbose=None, report=True, optionflags=0, extraglobs=None, raise_on_error=False, parser=<tags_file_module.DocTestParser instance at 0x1f42b48>, encoding=None
+testfileÌ128Ífilename, module_relative=True, name=None, package=None, globs=None, verbose=None, report=True, optionflags=0, extraglobs=None, raise_on_error=False, parser=<tags_file_module.DocTestParser instance at 0x1b44a70>, encoding=None
 testlist_compÌ128Íself, nodelistÎTransformer
 testlistÌ128Íself, nodelistÎTransformer
 testmodÌ128Ím=None, name=None, globs=None, verbose=None, report=True, optionflags=0, extraglobs=None, raise_on_error=False, exclude_empty=False
@@ -5684,7 +5642,7 @@ urlcleanupÌ128Í
 urldefragÌ128Íurl
 urlencodeÌ128Íquery, doseq=0
 urljoinÌ128Íbase, url, allow_fragments=True
-urlopenÌ128Íurl, data=None, timeout=<object object at 0x7f3698d580c0>
+urlopenÌ128Íurl, data=None, timeout=<object object at 0x7fb3c1f220c0>
 urlparseÌ128Íurl, scheme='', allow_fragments=True
 urlretrieveÌ128Íurl, filename=None, reporthook=None, data=None
 urlsafe_b64decodeÌ128Ís
