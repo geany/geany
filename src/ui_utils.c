@@ -1544,7 +1544,7 @@ static gboolean tree_model_find_text(GtkTreeModel *model,
  * @param combo_entry .
  * @param text Text to add, or @c NULL for current entry text.
  * @param history_len Max number of items, or @c 0 for default. */
-void ui_combo_box_add_to_history(GtkComboBoxEntry *combo_entry,
+void ui_combo_box_add_to_history(GtkComboBoxText *combo_entry,
 		const gchar *text, gint history_len)
 {
 	GtkComboBox *combo = GTK_COMBO_BOX(combo_entry);
@@ -1563,7 +1563,7 @@ void ui_combo_box_add_to_history(GtkComboBoxEntry *combo_entry,
 	{
 		gtk_list_store_remove(GTK_LIST_STORE(model), &iter);
 	}
-	gtk_combo_box_prepend_text(combo, text);
+	gtk_combo_box_text_prepend_text(combo_entry, text);
 
 	/* limit history */
 	path = gtk_tree_path_new_from_indices(history_len, -1);
@@ -1575,18 +1575,18 @@ void ui_combo_box_add_to_history(GtkComboBoxEntry *combo_entry,
 }
 
 
-/* Same as gtk_combo_box_prepend_text(), except that text is only prepended if it not already
+/* Same as gtk_combo_box_text_prepend_text(), except that text is only prepended if it not already
  * exists in the combo's model. */
-void ui_combo_box_prepend_text_once(GtkComboBox *combo, const gchar *text)
+void ui_combo_box_prepend_text_once(GtkComboBoxText *combo, const gchar *text)
 {
 	GtkTreeModel *model;
 	GtkTreeIter iter;
 
-	model = gtk_combo_box_get_model(combo);
+	model = gtk_combo_box_get_model(GTK_COMBO_BOX(combo));
 	if (tree_model_find_text(model, &iter, 0, text))
 		return;	/* don't prepend duplicate */
 
-	gtk_combo_box_prepend_text(combo, text);
+	gtk_combo_box_text_prepend_text(combo, text);
 }
 
 

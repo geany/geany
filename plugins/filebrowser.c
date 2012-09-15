@@ -26,6 +26,7 @@
 #endif
 
 #include "geanyplugin.h"
+#include "gtkcompat.h"
 #include <string.h>
 
 #include <gdk/gdkkeysyms.h>
@@ -280,7 +281,7 @@ static void refresh(void)
 	utf8_dir = utils_get_utf8_from_locale(current_dir);
 	gtk_entry_set_text(GTK_ENTRY(path_entry), utf8_dir);
 	gtk_widget_set_tooltip_text(path_entry, utf8_dir);
-	ui_combo_box_add_to_history(GTK_COMBO_BOX_ENTRY(path_combo), utf8_dir, 0);
+	ui_combo_box_add_to_history(GTK_COMBO_BOX_TEXT(path_combo), utf8_dir, 0);
 	g_free(utf8_dir);
 
 	add_top_level_entry();	/* ".." item */
@@ -804,7 +805,7 @@ static void on_filter_activate(GtkEntry *entry, gpointer user_data)
 	{
 		clear_filter();
 	}
-	ui_combo_box_add_to_history(GTK_COMBO_BOX_ENTRY(filter_combo), NULL, 0);
+	ui_combo_box_add_to_history(GTK_COMBO_BOX_TEXT(filter_combo), NULL, 0);
 	refresh();
 }
 
@@ -898,7 +899,7 @@ static GtkWidget *make_filterbar(void)
 
 	label = gtk_label_new(_("Filter:"));
 
-	filter_combo = gtk_combo_box_entry_new_text();
+	filter_combo = gtk_combo_box_text_new_with_entry();
 	filter_entry = gtk_bin_get_child(GTK_BIN(filter_combo));
 
 	ui_entry_add_clear_icon(GTK_ENTRY(filter_entry));
@@ -1092,7 +1093,7 @@ void plugin_init(GeanyData *data)
 	filterbar = make_filterbar();
 	gtk_box_pack_start(GTK_BOX(file_view_vbox), filterbar, FALSE, FALSE, 0);
 
-	path_combo = gtk_combo_box_entry_new_text();
+	path_combo = gtk_combo_box_text_new_with_entry();
 	gtk_box_pack_start(GTK_BOX(file_view_vbox), path_combo, FALSE, FALSE, 2);
 	g_signal_connect(path_combo, "changed", G_CALLBACK(ui_combo_box_changed), NULL);
 	path_entry = gtk_bin_get_child(GTK_BIN(path_combo));

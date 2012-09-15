@@ -41,6 +41,7 @@ G_BEGIN_DECLS
 
 #include "editor.h"	/* GeanyIndentType */
 #include "build.h"  /* GeanyBuildGroup, GeanyBuildSource, GeanyBuildCmdEntries enums */
+#include "gtkcompat.h"
 
 
 /** The Application Programming Interface (API) version, incremented
@@ -476,7 +477,7 @@ typedef struct UIUtilsFuncs
 	void		(*ui_widget_modify_font_from_string) (GtkWidget *widget, const gchar *str);
 	gboolean	(*ui_is_keyval_enter_or_return) (guint keyval);
 	gint		(*ui_get_gtk_settings_integer) (const gchar *property_name, gint default_value);
-	void		(*ui_combo_box_add_to_history) (GtkComboBoxEntry *combo_entry,
+	void		(*ui_combo_box_add_to_history) (GtkComboBoxText *combo_entry,
 				const gchar *text, gint history_len);
 	void		(*ui_menu_add_document_items_sorted) (GtkMenu *menu, struct GeanyDocument *active,
 				GCallback callback, GCompareFunc compare_func);
