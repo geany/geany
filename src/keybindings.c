@@ -1068,6 +1068,14 @@ static gboolean on_menu_expose_event(GtkWidget *widget, GdkEventExpose *event,
 }
 
 
+#if GTK_CHECK_VERSION(3, 0, 0)
+static gboolean on_menu_draw(GtkWidget *widget, cairo_t *cr, gpointer user_data)
+{
+	return on_menu_expose_event(widget, NULL, user_data);
+}
+#endif
+
+
 static gboolean set_sensitive(gpointer widget)
 {
 	gtk_widget_set_sensitive(GTK_WIDGET(widget), TRUE);
@@ -1112,7 +1120,11 @@ static gboolean check_vte(GdkModifierType state, guint keyval)
 		/* make the menubar sensitive before it is redrawn */
 		static gboolean connected = FALSE;
 		if (!connected)
+#if GTK_CHECK_VERSION(3, 0, 0)
+			g_signal_connect(widget, "draw", G_CALLBACK(on_menu_draw), NULL);
+#else
 			g_signal_connect(widget, "expose-event", G_CALLBACK(on_menu_expose_event), NULL);
+#endif
 	}
 
 	widget = main_widgets.editor_menu;
