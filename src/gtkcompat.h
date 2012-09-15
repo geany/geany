@@ -31,6 +31,37 @@
 G_BEGIN_DECLS
 
 
+/* GtkComboBoxText */
+/* This is actually available in GTK 2.24, but we expose GtkComboBoxText in the
+ * API so we don't want the type to change for no good reason (although this
+ * should probably be harmless since it's only a derivated type).  However, since
+ * a plugin needs to be rebuilt and tuned to work with GTK3 we don't mind that
+ * a type changes between the GTK2 and GTK3 version */
+#if ! GTK_CHECK_VERSION(3, 0, 0)
+/* undef those not to get warnings about redefinitions under GTK 2.24 */
+#	undef GTK_COMBO_BOX_TEXT
+#	undef GTK_COMBO_BOX_TEXT_CLASS
+#	undef GTK_COMBO_BOX_TEXT_GET_CLASS
+#	undef GTK_IS_COMBO_BOX_TEXT
+#	undef GTK_IS_COMBO_BOX_TEXT_CLASS
+#	undef GTK_TYPE_COMBO_BOX_TEXT
+
+#	define GTK_COMBO_BOX_TEXT					GTK_COMBO_BOX
+#	define GTK_COMBO_BOX_TEXT_CLASS				GTK_COMBO_BOX_CLASS
+#	define GTK_COMBO_BOX_TEXT_GET_CLASS			GTK_COMBO_BOX_GET_CLASS
+#	define GTK_IS_COMBO_BOX_TEXT				GTK_IS_COMBO_BOX
+#	define GTK_IS_COMBO_BOX_TEXT_CLASS			GTK_IS_COMBO_BOX_CLASS
+#	define GTK_TYPE_COMBO_BOX_TEXT				GTK_TYPE_COMBO_BOX
+#	define GtkComboBoxText						GtkComboBox
+#	define gtk_combo_box_text_new				gtk_combo_box_new_text
+#	define gtk_combo_box_text_new_with_entry	gtk_combo_box_entry_new_text
+#	define gtk_combo_box_text_append_text		gtk_combo_box_append_text
+#	define gtk_combo_box_text_insert_text		gtk_combo_box_insert_text
+#	define gtk_combo_box_text_prepend_text		gtk_combo_box_prepend_text
+#	define gtk_combo_box_text_remove			gtk_combo_box_remove_text
+#	define gtk_combo_box_text_get_active_text	gtk_combo_box_get_active_text
+#endif
+
 /* GtkDialog */
 /* GTK 2.22 deprecated dialog separators and 3.0 removed them
  * We keep those however in case 2.16 has separators by default */

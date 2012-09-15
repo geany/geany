@@ -60,6 +60,7 @@ geany_include_HEADERS = \
 	encodings.h \
 	filetypes.h \
 	geany.h \
+	gtkcompat.h \
 	highlighting.h \
 	keybindings.h \
 	msgwindow.h \

@@ -22,6 +22,8 @@
 #ifndef GEANY_UI_UTILS_H
 #define GEANY_UI_UTILS_H 1
 
+#include "gtkcompat.h"
+
 G_BEGIN_DECLS
 
 
@@ -194,10 +196,10 @@ GtkWidget *ui_image_menu_item_new(const gchar *stock_id, const gchar *label);
 
 void ui_hbutton_box_copy_layout(GtkButtonBox *master, GtkButtonBox *copy);
 
-void ui_combo_box_add_to_history(GtkComboBoxEntry *combo_entry,
+void ui_combo_box_add_to_history(GtkComboBoxText *combo_entry,
 		const gchar *text, gint history_len);
 
-void ui_combo_box_prepend_text_once(GtkComboBox *combo, const gchar *text);
+void ui_combo_box_prepend_text_once(GtkComboBoxText *combo, const gchar *text);
 
 GtkWidget *ui_path_box_new(const gchar *title, GtkFileChooserAction action, GtkEntry *entry);
 

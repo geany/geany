@@ -85,6 +85,26 @@
 #include "stash.h"
 
 
+/* GTK3 removed ComboBoxEntry, but we need a value to differentiate combo box with and
+ * without entries, and it must not collide with other GTypes */
+#ifdef GTK_TYPE_COMBO_BOX_ENTRY
+#	define TYPE_COMBO_BOX_ENTRY GTK_TYPE_COMBO_BOX_ENTRY
+#else /* !GTK_TYPE_COMBO_BOX_ENTRY */
+#	define TYPE_COMBO_BOX_ENTRY get_combo_box_entry_type()
+static GType get_combo_box_entry_type(void)
+{
+	static volatile gsize type = 0;
+	if (g_once_init_enter(&type))
+	{
+		GType g_type = g_type_register_static_simple(GTK_TYPE_COMBO_BOX, "dummy-combo-box-entry",
+				sizeof(GtkComboBoxClass), NULL, sizeof(GtkComboBox), NULL, G_TYPE_FLAG_ABSTRACT);
+		g_once_init_leave(&type, g_type);
+	}
+	return type;
+}
+#endif /* !GTK_TYPE_COMBO_BOX_ENTRY */
+
+
 struct StashPref
 {
 	GType setting_type;			/* e.g. G_TYPE_INT */
@@ -696,7 +716,7 @@ static void pref_action(PrefAction action, StashGroup *group, GtkWidget *owner)
 			handle_spin_button(widget, entry, action);
 		else if (entry->widget_type == GTK_TYPE_COMBO_BOX)
 			handle_combo_box(widget, entry, action);
-		else if (entry->widget_type == GTK_TYPE_COMBO_BOX_ENTRY)
+		else if (entry->widget_type == TYPE_COMBO_BOX_ENTRY)
 			handle_combo_box_entry(widget, entry, action);
 		else if (entry->widget_type == GTK_TYPE_ENTRY)
 			handle_entry(widget, entry, action);
@@ -861,7 +881,7 @@ void stash_group_add_combo_box_entry(StashGroup *group, gchar **setting,
 		const gchar *key_name, const gchar *default_value, StashWidgetID widget_id)
 {
 	add_widget_pref(group, G_TYPE_STRING, setting, key_name, (gpointer)default_value,
-		GTK_TYPE_COMBO_BOX_ENTRY, widget_id);
+		TYPE_COMBO_BOX_ENTRY, widget_id);
 }
 
 
