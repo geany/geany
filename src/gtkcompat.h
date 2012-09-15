@@ -31,6 +31,14 @@
 G_BEGIN_DECLS
 
 
+/* GtkDialog */
+/* GTK 2.22 deprecated dialog separators and 3.0 removed them
+ * We keep those however in case 2.16 has separators by default */
+#if GTK_CHECK_VERSION(3, 0, 0)
+#	define gtk_dialog_set_has_separator(dialog, setting)	/* nothing */
+#	define GTK_DIALOG_NO_SEPARATOR							0
+#endif
+
 /* GtkWidget */
 #if ! GTK_CHECK_VERSION(2, 18, 0)
 #	define compat_widget_set_flag(widget, flag, enable) \
