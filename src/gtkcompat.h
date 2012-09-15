@@ -94,6 +94,35 @@ G_BEGIN_DECLS
 #endif
 
 
+/* Mappings below only prevent some deprecation warnings on GTK3 for things
+ * that didn't exist on GTK2.  That's not future-proof. */
+#if GTK_CHECK_VERSION(3, 0, 0)
+/* Gtk[VH]Box */
+#	define compat_gtk_box_new(orientation, homogeneous, spacing) \
+		g_object_new(GTK_TYPE_BOX, \
+					 "orientation", (orientation), \
+					 "homogeneous", (homogeneous), \
+					 "spacing", (spacing), \
+					 NULL)
+#	define gtk_vbox_new(homogeneous, spacing) \
+		compat_gtk_box_new(GTK_ORIENTATION_VERTICAL, (homogeneous), (spacing))
+#	define gtk_hbox_new(homogeneous, spacing) \
+		compat_gtk_box_new(GTK_ORIENTATION_HORIZONTAL, (homogeneous), (spacing))
+/* Gtk[VH]ButtonBox */
+#	define gtk_vbutton_box_new()	gtk_button_box_new(GTK_ORIENTATION_VERTICAL)
+#	define gtk_hbutton_box_new()	gtk_button_box_new(GTK_ORIENTATION_HORIZONTAL)
+/* Gtk[VH]Separator */
+#	define gtk_vseparator_new()	gtk_separator_new(GTK_ORIENTATION_VERTICAL)
+#	define gtk_hseparator_new()	gtk_separator_new(GTK_ORIENTATION_HORIZONTAL)
+/* Gtk[VH]Paned */
+#	define gtk_vpaned_new()	gtk_paned_new(GTK_ORIENTATION_VERTICAL)
+#	define gtk_hpaned_new()	gtk_paned_new(GTK_ORIENTATION_HORIZONTAL)
+/* Gtk[VH]Scrollbar */
+#	define gtk_vscrollbar_new(adj)	gtk_scrollbar_new(GTK_ORIENTATION_VERTICAL, (adj))
+#	define gtk_hscrollbar_new(adj)	gtk_scrollbar_new(GTK_ORIENTATION_HORIZONTAL, (adj))
+#endif
+
+
 G_END_DECLS
 
 #endif /* GTK_COMPAT_H */
