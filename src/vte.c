@@ -49,6 +49,7 @@
 #include "geanywraplabel.h"
 #include "editor.h"
 #include "sciwrappers.h"
+#include "gtkcompat.h"
 
 
 VteInfo vte_info;
@@ -252,7 +253,7 @@ static void create_vte(void)
 
 	vc->vte = vte = vf->vte_terminal_new();
 	scrollbar = gtk_vscrollbar_new(GTK_ADJUSTMENT(VTE_TERMINAL(vte)->adjustment));
-	GTK_WIDGET_UNSET_FLAGS(scrollbar, GTK_CAN_FOCUS);
+	gtk_widget_set_can_focus(scrollbar, FALSE);
 
 	/* create menu now so copy/paste shortcuts work */
 	vc->menu = vte_create_popup_menu();

@@ -25,6 +25,7 @@
 #endif
 
 #include "geanyplugin.h"
+#include "gtkcompat.h"
 
 #include <unistd.h>
 #include <errno.h>
@@ -529,7 +530,7 @@ GtkWidget *plugin_configure(GtkDialog *dialog)
 	vbox = gtk_vbox_new(FALSE, 6);
 
 	notebook = gtk_notebook_new();
-	GTK_WIDGET_UNSET_FLAGS(notebook, GTK_CAN_FOCUS);
+	gtk_widget_set_can_focus(notebook, FALSE);
 	gtk_container_set_border_width(GTK_CONTAINER(notebook), 5);
 	gtk_box_pack_start(GTK_BOX(vbox), notebook, FALSE, TRUE, 0);
 

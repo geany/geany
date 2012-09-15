@@ -41,6 +41,7 @@
 #include "keyfile.h"
 #include "stash.h"
 #include "toolbar.h"
+#include "gtkcompat.h"
 
 #include <unistd.h>
 #include <string.h>
@@ -575,7 +576,7 @@ void search_show_find_dialog(void)
 	else
 	{
 		/* only set selection if the dialog is not already visible */
-		if (! GTK_WIDGET_VISIBLE(find_dlg.dialog) && sel)
+		if (! gtk_widget_get_visible(find_dlg.dialog) && sel)
 			gtk_entry_set_text(GTK_ENTRY(find_dlg.entry), sel);
 		gtk_widget_grab_focus(find_dlg.entry);
 		set_dialog_position(find_dlg.dialog, find_dlg.position);
@@ -751,7 +752,7 @@ void search_show_replace_dialog(void)
 	else
 	{
 		/* only set selection if the dialog is not already visible */
-		if (! GTK_WIDGET_VISIBLE(replace_dlg.dialog) && sel)
+		if (! gtk_widget_get_visible(replace_dlg.dialog) && sel)
 			gtk_entry_set_text(GTK_ENTRY(replace_dlg.find_entry), sel);
 		if (sel != NULL) /* when we have a selection, reset the entry widget's background colour */
 			ui_set_search_entry_background(replace_dlg.find_entry, TRUE);
@@ -1052,7 +1053,7 @@ void search_show_find_in_files_dialog(const gchar *dir)
 	stash_group_display(fif_prefs, fif_dlg.dialog);
 
 	/* only set selection if the dialog is not already visible, or has just been created */
-	if (doc && ! sel && ! GTK_WIDGET_VISIBLE(fif_dlg.dialog))
+	if (doc && ! sel && ! gtk_widget_get_visible(fif_dlg.dialog))
 		sel = editor_get_default_selection(doc->editor, search_prefs.use_current_word, NULL);
 
 	entry = gtk_bin_get_child(GTK_BIN(fif_dlg.search_combo));
