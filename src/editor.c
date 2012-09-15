@@ -60,6 +60,7 @@
 #include "projectprivate.h"
 #include "main.h"
 #include "highlighting.h"
+#include "gtkcompat.h"
 
 
 /* Note: use sciwrappers.h instead where possible.
@@ -191,7 +192,7 @@ static void on_snippet_keybinding_activate(gchar *key)
 	const gchar *s;
 	GHashTable *specials;
 
-	if (!doc || !GTK_WIDGET_HAS_FOCUS(doc->editor->sci))
+	if (!doc || !gtk_widget_has_focus(GTK_WIDGET(doc->editor->sci)))
 		return;
 
 	s = snippets_find_completion_by_name(doc->file_type->name, key);
