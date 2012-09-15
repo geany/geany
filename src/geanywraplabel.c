@@ -29,6 +29,7 @@
 #include "utils.h"
 #include "geanywraplabel.h"
 
+#if ! GTK_CHECK_VERSION(3, 0, 0)
 
 
 struct _GeanyWrapLabelClass
@@ -154,3 +155,5 @@ GtkWidget *geany_wrap_label_new(const gchar *text)
 {
 	return g_object_new(GEANY_WRAP_LABEL_TYPE, "label", text, NULL);
 }
+
+#endif
