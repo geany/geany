@@ -506,12 +506,17 @@ static gboolean notebook_tab_bar_click_cb(GtkWidget *widget, GdkEventButton *eve
 {
 	if (event->type == GDK_2BUTTON_PRESS)
 	{
-		/* accessing ::event_window is a little hacky but we need to make sure the click
-		 * was in the tab bar and not inside the child */
-		if (event->window != GTK_NOTEBOOK(main_widgets.notebook)->event_window)
+		GtkNotebook *notebook = GTK_NOTEBOOK(widget);
+		GtkWidget *event_widget = gtk_get_event_widget((GdkEvent *) event);
+		GtkWidget *child = gtk_notebook_get_nth_page(notebook, gtk_notebook_get_current_page(notebook));
+
+		/* ignore events from the content of the page (impl. stolen from GTK2 tab scrolling)
+		 * TODO: we should also ignore notebook's action widgets, but that's more work and
+		 * we don't have any of them yet anyway -- and GTK 2.16 don't have those actions. */
+		if (event_widget == NULL || event_widget == child || gtk_widget_is_ancestor(event_widget, child))
 			return FALSE;
 
-		if (is_position_on_tab_bar(GTK_NOTEBOOK(widget), event))
+		if (is_position_on_tab_bar(notebook, event))
 		{
 			document_new_file(NULL, NULL, NULL);
 			return TRUE;
