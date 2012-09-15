@@ -24,6 +24,9 @@
 #define GTK_COMPAT_H
 
 #include <gtk/gtk.h>
+#if GTK_CHECK_VERSION(3, 0, 0)
+#	include <gdk/gdkkeysyms-compat.h>
+#endif
 
 G_BEGIN_DECLS
 
