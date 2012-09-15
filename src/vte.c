@@ -200,8 +200,14 @@ void vte_init(void)
 	if (module == NULL)
 	{
 		gint i;
-		const gchar *sonames[] = {  "libvte.so", "libvte.so.4",
-									"libvte.so.8", "libvte.so.9", NULL };
+		const gchar *sonames[] = {
+#if GTK_CHECK_VERSION(3, 0, 0)
+			"libvte2_90.so", "libvte2_90.so.9",
+#else
+			"libvte.so", "libvte.so.4", "libvte.so.8", "libvte.so.9",
+#endif
+			NULL
+		};
 
 		for (i = 0; sonames[i] != NULL && module == NULL; i++)
 		{
