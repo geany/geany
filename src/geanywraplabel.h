@@ -25,8 +25,6 @@
 G_BEGIN_DECLS
 
 
-#if ! GTK_CHECK_VERSION(3, 0, 0)
-
 #define GEANY_WRAP_LABEL_TYPE				(geany_wrap_label_get_type())
 #define GEANY_WRAP_LABEL(obj)				(G_TYPE_CHECK_INSTANCE_CAST((obj), \
 	GEANY_WRAP_LABEL_TYPE, GeanyWrapLabel))
@@ -43,29 +41,6 @@ typedef struct _GeanyWrapLabelClass  GeanyWrapLabelClass;
 
 GType			geany_wrap_label_get_type			(void);
 GtkWidget*		geany_wrap_label_new				(const gchar *text);
-
-#else /* GTK 3.0 */
-
-#define GEANY_WRAP_LABEL_TYPE		GTK_TYPE_LABEL
-#define GEANY_WRAP_LABEL			GTK_LABEL
-#define GEANY_WRAP_LABEL_CLASS		GTK_LABEL_CLASS
-#define IS_GEANY_WRAP_LABEL			GTK_IS_LABEL
-#define IS_GEANY_WRAP_LABEL_CLASS	GTK_IS_LABEL_CLASS
-
-#define GeanyWrapLabel		GtkLabel
-#define GeanyWrapLabelClass	GtkLabelClass
-
-#define geany_wrap_label_get_type	gtk_label_get_type
-#define geany_wrap_label_new(text) \
-	g_object_new(GTK_TYPE_LABEL, \
-				 "label", (text), \
-				 "wrap", TRUE, \
-				 "wrap-mode", PANGO_WRAP_WORD_CHAR, \
-				 "xalign", 0.0, \
-				 "yalign", 0.0, \
-				 NULL)
-
-#endif
 
 
 G_END_DECLS
