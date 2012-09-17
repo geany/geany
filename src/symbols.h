@@ -61,4 +61,6 @@ gboolean symbols_goto_tag(const gchar *name, gboolean definition);
 
 gint symbols_get_current_function(GeanyDocument *doc, const gchar **tagname);
 
+gint symbols_get_current_scope(GeanyDocument *doc, const gchar **tagname);
+
 #endif

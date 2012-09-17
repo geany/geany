@@ -1171,7 +1171,7 @@ G_MODULE_EXPORT void on_comments_function_activate(GtkMenuItem *menuitem, gpoint
 	/* symbols_get_current_function returns -1 on failure, so sci_get_position_from_line
 	 * returns the current position, so it should be safe */
 	line = symbols_get_current_function(doc, &cur_tag);
-	pos = sci_get_position_from_line(doc->editor->sci, line - 1);
+	pos = sci_get_position_from_line(doc->editor->sci, line);
 
 	text = templates_get_template_function(doc, cur_tag);
 
