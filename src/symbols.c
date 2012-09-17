@@ -2120,8 +2120,9 @@ gint symbols_get_current_function(GeanyDocument *doc, const gchar **tagname)
 	}
 	tm_file = doc->tm_file;
 
-	/* if the document has no changes, get the previous function name from TM */
-	if (! doc->changed && tm_file != NULL && tm_file->tags_array != NULL)
+	/* if the tags are up-to-date, get the previous function name from TM */
+	if (tm_file != NULL && tm_file->tags_array != NULL &&
+		(! doc->changed || editor_prefs.autocompletion_update_freq > 0))
 	{
 		const TMTag *tag = (const TMTag*) tm_get_current_function(tm_file->tags_array, line);
 
