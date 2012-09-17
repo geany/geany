@@ -25,13 +25,13 @@
 *   DATA DEFINITIONS
 */
 typedef enum {
-	K_CLASS, K_FUNCTION, K_MEMBER, K_VARIABLE, K_IMPORT
+	K_CLASS, K_FUNCTION, K_METHOD, K_VARIABLE, K_IMPORT
 } pythonKind;
 
 static kindOption PythonKinds[] = {
 	{TRUE, 'c', "class",    "classes"},
 	{TRUE, 'f', "function", "functions"},
-	{TRUE, 'm', "member",   "class members"},
+	{TRUE, 'm', "method",   "class methods"},
     {TRUE, 'v', "variable", "variables"},
     {TRUE, 'i', "namespace", "imports"}
 };
@@ -103,7 +103,7 @@ static void makeFunctionTag (vString *const function,
 	{
 		if (is_class_parent)
 		{
-			tag.kindName = "member";
+			tag.kindName = "method";
 			tag.kind = 'm';
 			tag.extensionFields.scope [0] = "class";
 			tag.extensionFields.scope [1] = vStringValue (parent);
