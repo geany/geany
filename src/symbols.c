@@ -2204,6 +2204,20 @@ gint symbols_get_current_function(GeanyDocument *doc, const gchar **tagname)
 }
 
 
+/* same as symbols_get_current_function() but finds class, namespaces and more */
+gint symbols_get_current_scope(GeanyDocument *doc, const gchar **tagname)
+{
+	guint tag_types = (tm_tag_function_t | tm_tag_method_t | tm_tag_class_t |
+			tm_tag_struct_t | tm_tag_enum_t | tm_tag_union_t);
+
+	/* Python parser reports imports as namespaces which confuses the scope detection */
+	if (doc && doc->file_type->lang != filetypes[GEANY_FILETYPES_PYTHON]->lang)
+		tag_types |= tm_tag_namespace_t;
+
+	return get_current_tag_name_cached(doc, tagname, tag_types);
+}
+
+
 static void on_symbol_tree_sort_clicked(GtkMenuItem *menuitem, gpointer user_data)
 {
 	gint sort_mode = GPOINTER_TO_INT(user_data);
