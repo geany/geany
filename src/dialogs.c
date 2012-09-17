@@ -866,6 +866,20 @@ gboolean dialogs_show_unsaved_file(GeanyDocument *doc)
 
 
 #ifndef G_OS_WIN32
+/* Use GtkFontChooserDialog on GTK3.2 for consistency, and because
+ * GtkFontSelectionDialog is somewhat broken on 3.4 */
+#if GTK_CHECK_VERSION(3, 0, 0)
+#	undef GTK_FONT_SELECTION_DIALOG
+#	define GTK_FONT_SELECTION_DIALOG				GTK_FONT_CHOOSER_DIALOG
+
+#	define gtk_font_selection_dialog_new(title) \
+		gtk_font_chooser_dialog_new((title), NULL)
+#	define gtk_font_selection_dialog_get_font_name(dlg) \
+		gtk_font_chooser_get_font(GTK_FONT_CHOOSER(dlg))
+#	define gtk_font_selection_dialog_set_font_name(dlg, font) \
+		gtk_font_chooser_set_font(GTK_FONT_CHOOSER(dlg), (font))
+#endif
+
 static void
 on_font_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 {
