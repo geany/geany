@@ -1979,15 +1979,8 @@ static gboolean current_function_changed(GeanyDocument *doc, gint cur_line, gint
 		/* if the line has only changed by 1 */
 		if (abs(cur_line - old_line) == 1)
 		{
-			const gint fn_fold =
-				get_function_fold_number(doc);
-			/* It's the same function if the fold number hasn't changed, or both the new
-			 * and old fold numbers are above the function fold number. */
-			gboolean same =
-				fold_num == old_fold_num ||
-				(old_fold_num > fn_fold && fold_num > fn_fold);
-
-			ret = ! same;
+			/* It's the same function if the fold number hasn't changed */
+			ret = (fold_num != old_fold_num);
 		}
 		else ret = TRUE;
 	}
