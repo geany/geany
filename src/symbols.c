@@ -2117,7 +2117,7 @@ gint symbols_get_current_function(GeanyDocument *doc, const gchar **tagname)
 	if (tm_file != NULL && tm_file->tags_array != NULL &&
 		(! doc->changed || editor_prefs.autocompletion_update_freq > 0))
 	{
-		const TMTag *tag = (const TMTag*) tm_get_current_function(tm_file->tags_array, line);
+		const TMTag *tag = (const TMTag*) tm_get_current_function(tm_file->tags_array, line + 1);
 
 		if (tag != NULL)
 		{
@@ -2125,7 +2125,7 @@ gint symbols_get_current_function(GeanyDocument *doc, const gchar **tagname)
 			tmp = tag->atts.entry.scope;
 			cur_tag = tmp ? g_strconcat(tmp, "::", tag->name, NULL) : g_strdup(tag->name);
 			*tagname = cur_tag;
-			tag_line = tag->atts.entry.line;
+			tag_line = tag->atts.entry.line - 1;
 			return tag_line;
 		}
 	}
