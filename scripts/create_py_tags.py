@@ -11,6 +11,17 @@
 # Parses all files given on command line for Python classes or functions and write
 # them into data/python.tags (internal tagmanager format).
 # If called without command line arguments, a preset of common Python libs is used.
+#
+# WARNING
+# Be aware that running this script will actually *import* modules in the specified directory
+# or in the standard library path of your Python installation. Dependent on what Python modules
+# you have installed, this might not be want you want and can have weird side effects.
+# You have been warned.
+#
+# It should be however relatively safe to execute this script from a fresh Python installation
+# installed into a dedicated prefix. Then nothing else is necessary as to change the interpreter
+# with which you start this script.
+#
 
 import datetime
 import imp
@@ -21,9 +32,14 @@ import sys
 import types
 
 PYTHON_LIB_DIRECTORY = os.path.dirname(os.__file__)
-PYTHON_LIB_IGNORE_PACKAGES = (u'test', u'dist-packages', u'site-packages')
-# multiprocessing.util registers an atexit function which breaks this script on exit
-PYTHON_LIB_IGNORE_MODULES = (u'multiprocessing/util.py',)
+PYTHON_LIB_IGNORE_PACKAGES = (u'test', u'dist-packages', u'site-packages', 'Tools')
+# some modules execute funky code when they are imported which we really don't want here
+# (though if you feel funny, try: 'import antigravity')
+PYTHON_LIB_IGNORE_MODULES = (u'antigravity.py', u'idlelib/idle.py', u'multiprocessing/util.py')
+PYTHON_KEYWORDS = ('and', 'as', 'assert', 'break', 'class', 'continue', 'def', 'del', 'elif',
+                   'else', 'except', 'exec', 'finally', 'for', 'from', 'global', 'if', 'import',
+                   'in', 'is', 'lambda', 'not', 'or', 'pass', 'print', 'raise', 'return', 'try',
+                   'while', 'with', 'yield', 'False', 'None', 'True')
 
 # (from tagmanager/tm_tag.c:32)
 TA_NAME = '%c' % 200,
@@ -117,13 +133,17 @@ class Parser:
                 args = '(%s)' % parent
             else:
                 scope = '%s%s' % (TA_SCOPE, parent)
-        tagname = obj.__name__
+        if isinstance(obj, basestring):
+            tagname = obj
+        else:
+            tagname = obj.__name__
         # check for duplicates
         if len(tagname) < 4:
             # skip short tags
             return
         tag = '%s%s%s%s%s%s\n' % (tagname, TA_TYPE, tag_type, TA_ARGLIST, args, scope)
-        if not tagname in self.tags:
+
+        if not tagname in self.tags and not tagname_is_like_keyword(tagname):
             self.tags[tagname] = tag
 
     #----------------------------------------------------------------------
@@ -181,9 +201,25 @@ class Parser:
                         tag_type = TYPE_FUNCTION
                     args = args.strip()
                     tag = '%s%s%s%s%s\n' % (tagname, TA_TYPE, tag_type, TA_ARGLIST, args)
-                    if not tagname in self.tags:
+                    if not tagname in self.tags and not tagname_is_like_keyword(tagname):
                         self.tags[tagname] = tag
             filep.close()
+
+    #----------------------------------------------------------------------
+    def add_builtins(self):
+        """
+        Add the contents of __builtins__ as simple tags
+        """
+        for tag_name in dir(__builtins__):
+            # check if the tag name starts with upper case, then we assume it is a class
+            # note that this is a very very simple heuristic to determine the type and will give
+            # false positives
+            if tag_name[0].isupper():
+                tag_type = TYPE_CLASS
+            else:
+                tag_type = TYPE_FUNCTION
+
+            self._add_tag(tag_name, tag_type)
 
     #----------------------------------------------------------------------
     def write_to_file(self, filename):
@@ -204,6 +240,16 @@ class Parser:
             if not symbol == '\n': # skip empty lines
                 target_file.write(symbol)
         target_file.close()
+
+
+#----------------------------------------------------------------------
+def tagname_is_like_keyword(tagname):
+    """ignore tags which start with a keyword to avoid annoying completions of 'pass_' and similar ones"""
+    # this is not really efficient but in this script speed doesn't really matter
+    for keyword in PYTHON_KEYWORDS:
+        if tagname.startswith(keyword):
+            return True
+    return False
 
 
 #----------------------------------------------------------------------
@@ -244,6 +290,7 @@ def main():
         args = get_module_filenames(PYTHON_LIB_DIRECTORY)
 
     parser = Parser()
+    parser.add_builtins()
 
     for filename in args:
         parser.process_file(filename)

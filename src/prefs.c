@@ -14,9 +14,9 @@
  *      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *      GNU General Public License for more details.
  *
- *      You should have received a copy of the GNU General Public License
- *      along with this program; if not, write to the Free Software
- *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *      You should have received a copy of the GNU General Public License along
+ *      with this program; if not, write to the Free Software Foundation, Inc.,
+ *      51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
 /*
@@ -185,11 +185,11 @@ static void kb_tree_view_change_button_clicked_cb(GtkWidget *button, gpointer da
 					_("Press the combination of the keys you want to use for \"%s\"."), name);
 			label = gtk_label_new(str);
 			gtk_misc_set_padding(GTK_MISC(label), 5, 10);
-			gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), label);
+			gtk_container_add(GTK_CONTAINER(gtk_dialog_get_content_area(GTK_DIALOG(dialog))), label);
 
 			dialog_label = gtk_label_new("");
 			gtk_misc_set_padding(GTK_MISC(dialog_label), 5, 10);
-			gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), dialog_label);
+			gtk_container_add(GTK_CONTAINER(gtk_dialog_get_content_area(GTK_DIALOG(dialog))), dialog_label);
 
 			g_signal_connect(dialog, "key-press-event",
 								G_CALLBACK(kb_grab_key_dialog_key_press_cb), NULL);

@@ -2,7 +2,6 @@
 # Running make creates config.h then calls the sub makefiles.
 #
 # Other targets are:
-#	deps: delete the dependencies so they are regenerated on next make
 #	clean: clean all generated files
 #	install: install to DESTDIR
 #
@@ -15,8 +14,7 @@
 WINDRES = windres.exe
 CC = gcc
 CXX = g++
-CP = copy /Y
-CP_R = xcopy /S /Y
+CP = copy /y
 RM = del
 MKDIR = mkdir
 # $/ is used as a portable directory separator
@@ -27,7 +25,6 @@ DESTDIR = C:/Program Files/Geany
 
 ifdef MSYS
 CP = cp
-CP_R = cp -r
 RM = rm -f
 / = /
 endif
@@ -43,14 +40,11 @@ all: config.h
 config.h: win32-config.h
 	$(CP) $< $@
 
-deps:
-	-$(RM) tagmanager/ctags/deps.mak tagmanager/mio/deps.mak tagmanager/src/deps.mak scintilla/deps.mak plugins/deps.mak src/deps.mak
-
 # used by src/makefile.win32 to avoid del ../file which is an error
 clean-local:
 	-$(RM) geany_private.res geany.exe
 
-clean: deps
+clean:
 	$(MAKE) -C tagmanager/ctags -f makefile.win32 clean
 	$(MAKE) -C tagmanager/mio -f makefile.win32 clean
 	$(MAKE) -C tagmanager/src -f makefile.win32 clean
@@ -58,7 +52,7 @@ clean: deps
 	$(MAKE) -C plugins -f makefile.win32 clean
 	$(MAKE) -C src -f makefile.win32 clean
 
-.PHONY: all clean clean-local deps install
+.PHONY: all clean clean-local install
 
 # likely requires admin privileges
 # mkdir output is ignored in case dir exists
@@ -70,4 +64,8 @@ install:
 	-$(MKDIR) "$(DESTDIR)/lib"
 	$(CP) plugins$/*.dll "$(DESTDIR)/lib"
 	-$(MKDIR) "$(DESTDIR)/data"
-	$(CP_R) data "$(DESTDIR)/data"
+ifdef MSYS
+	cp -r data "$(DESTDIR)"
+else
+	xcopy /s /y data "$(DESTDIR)/data"
+endif

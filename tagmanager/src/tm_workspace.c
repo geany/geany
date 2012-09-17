@@ -735,17 +735,17 @@ tm_workspace_find_scoped (const char *name, const char *scope, gint type,
 const TMTag *
 tm_get_current_function (GPtrArray * file_tags, const gulong line)
 {
-	GPtrArray *const local = tm_tags_extract (file_tags, tm_tag_function_t);
+	GPtrArray *const local = tm_tags_extract (file_tags, tm_tag_function_t | tm_tag_method_t);
+	TMTag *function_tag = NULL;
 	if (local && local->len)
 	{
 		guint i;
-		TMTag *tag, *function_tag = NULL;
 		gulong function_line = 0;
 		glong delta;
 
 		for (i = 0; (i < local->len); ++i)
 		{
-			tag = TM_TAG (local->pdata[i]);
+			TMTag *tag = TM_TAG (local->pdata[i]);
 			delta = line - tag->atts.entry.line;
 			if (delta >= 0 && (gulong)delta < line - function_line)
 			{
@@ -753,10 +753,10 @@ tm_get_current_function (GPtrArray * file_tags, const gulong line)
 				function_line = tag->atts.entry.line;
 			}
 		}
-		g_ptr_array_free (local, TRUE);
-		return function_tag;
 	}
-	return NULL;
+	if (local)
+		g_ptr_array_free (local, TRUE);
+	return function_tag;
 }
 
 

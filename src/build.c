@@ -15,9 +15,9 @@
  *      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *      GNU General Public License for more details.
  *
- *      You should have received a copy of the GNU General Public License
- *      along with this program; if not, write to the Free Software
- *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *      You should have received a copy of the GNU General Public License along
+ *      with this program; if not, write to the Free Software Foundation, Inc.,
+ *      51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
 /*
@@ -479,7 +479,7 @@ static GeanyBuildCommand *get_build_group(const GeanyBuildSource src, const Gean
 	GeanyBuildCommand **g = get_build_group_pointer(src, grp);
 	if (g == NULL) return NULL;
 	return *g;
-};
+}
 
 
 /** Remove the specified Build menu item.
@@ -587,7 +587,7 @@ const gchar *build_get_current_menu_item(const GeanyBuildGroup grp, const guint 
 			break;
 	}
 	return str;
-};
+}
 
 /** Set the string for the menu item field.
  *
@@ -635,7 +635,7 @@ void build_set_menu_item(const GeanyBuildSource src, const GeanyBuildGroup grp,
 			break;
 	}
 	build_menu_update(NULL);
-};
+}
 
 /** Set the string for the menu item field.
  *
@@ -649,7 +649,7 @@ void build_set_menu_item(const GeanyBuildSource src, const GeanyBuildGroup grp,
 void build_activate_menu_item(const GeanyBuildGroup grp, const guint cmd)
 {
 	on_build_menu_item(NULL, GRP_CMD_TO_POINTER(grp, cmd));
-};
+}
 
 
 /* Clear all error indicators in all documents. */
@@ -1614,7 +1614,7 @@ void build_menu_update(GeanyDocument *doc)
 					vis = FALSE;
 				}
 				else
-					gtk_widget_hide_all(menu_items.menu_item[GBG_FIXED][bs->build_cmd]);
+					gtk_widget_hide(menu_items.menu_item[GBG_FIXED][bs->build_cmd]);
 				break;
 			case MENU_NEXT_ERROR:
 			case MENU_PREV_ERROR:
@@ -1658,7 +1658,7 @@ void build_menu_update(GeanyDocument *doc)
 							vis |= TRUE;
 						}
 						else
-							gtk_widget_hide_all(menu_item);
+							gtk_widget_hide(menu_item);
 					}
 					else
 					{
@@ -1686,7 +1686,7 @@ void build_menu_update(GeanyDocument *doc)
 							vis |= TRUE;
 						}
 						else
-							gtk_widget_hide_all(menu_item);
+							gtk_widget_hide(menu_item);
 					}
 				}
 		}

@@ -14,9 +14,9 @@
  *      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *      GNU General Public License for more details.
  *
- *      You should have received a copy of the GNU General Public License
- *      along with this program; if not, write to the Free Software
- *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *      You should have received a copy of the GNU General Public License along
+ *      with this program; if not, write to the Free Software Foundation, Inc.,
+ *      51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
 /*
@@ -866,30 +866,29 @@ gboolean dialogs_show_unsaved_file(GeanyDocument *doc)
 
 #ifndef G_OS_WIN32
 static void
-on_font_apply_button_clicked(GtkButton *button, gpointer user_data)
+on_font_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 {
-	gchar *fontname;
+	gboolean close = TRUE;
 
-	fontname = gtk_font_selection_dialog_get_font_name(
-		GTK_FONT_SELECTION_DIALOG(ui_widgets.open_fontsel));
-	ui_set_editor_font(fontname);
-	g_free(fontname);
-}
+	switch (response)
+	{
+		case GTK_RESPONSE_APPLY:
+		case GTK_RESPONSE_OK:
+		{
+			gchar *fontname;
 
+			fontname = gtk_font_selection_dialog_get_font_name(
+				GTK_FONT_SELECTION_DIALOG(ui_widgets.open_fontsel));
+			ui_set_editor_font(fontname);
+			g_free(fontname);
 
-static void
-on_font_ok_button_clicked(GtkButton *button, gpointer user_data)
-{
-	/* We do the same thing as apply, but we close the dialog after. */
-	on_font_apply_button_clicked(button, NULL);
-	gtk_widget_hide(ui_widgets.open_fontsel);
-}
+			close = (response == GTK_RESPONSE_OK);
+			break;
+		}
+	}
 
-
-static void
-on_font_cancel_button_clicked(GtkButton *button, gpointer user_data)
-{
-	gtk_widget_hide(ui_widgets.open_fontsel);
+	if (close)
+		gtk_widget_hide(ui_widgets.open_fontsel);
 }
 #endif
 
@@ -903,6 +902,8 @@ void dialogs_show_open_font()
 
 	if (ui_widgets.open_fontsel == NULL)
 	{
+		GtkWidget *apply_button;
+
 		ui_widgets.open_fontsel = gtk_font_selection_dialog_new(_("Choose font"));;
 		gtk_container_set_border_width(GTK_CONTAINER(ui_widgets.open_fontsel), 4);
 		gtk_window_set_modal(GTK_WINDOW(ui_widgets.open_fontsel), TRUE);
@@ -911,16 +912,19 @@ void dialogs_show_open_font()
 		gtk_window_set_type_hint(GTK_WINDOW(ui_widgets.open_fontsel), GDK_WINDOW_TYPE_HINT_DIALOG);
 		gtk_widget_set_name(ui_widgets.open_fontsel, "GeanyDialog");
 
-		gtk_widget_show(GTK_FONT_SELECTION_DIALOG(ui_widgets.open_fontsel)->apply_button);
+#if GTK_CHECK_VERSION(2, 20, 0)
+		/* apply button doesn't have a getter and is hidden by default, but we'd like to show it */
+		apply_button = gtk_dialog_get_widget_for_response(GTK_DIALOG(ui_widgets.open_fontsel), GTK_RESPONSE_APPLY);
+#else
+		apply_button = GTK_FONT_SELECTION_DIALOG(ui_widgets.open_fontsel)->apply_button;
+#endif
+		if (apply_button)
+			gtk_widget_show(apply_button);
 
 		g_signal_connect(ui_widgets.open_fontsel,
 					"delete-event", G_CALLBACK(gtk_widget_hide_on_delete), NULL);
-		g_signal_connect(GTK_FONT_SELECTION_DIALOG(ui_widgets.open_fontsel)->ok_button,
-					"clicked", G_CALLBACK(on_font_ok_button_clicked), NULL);
-		g_signal_connect(GTK_FONT_SELECTION_DIALOG(ui_widgets.open_fontsel)->cancel_button,
-					"clicked", G_CALLBACK(on_font_cancel_button_clicked), NULL);
-		g_signal_connect(GTK_FONT_SELECTION_DIALOG(ui_widgets.open_fontsel)->apply_button,
-					"clicked", G_CALLBACK(on_font_apply_button_clicked), NULL);
+		g_signal_connect(ui_widgets.open_fontsel,
+					"response", G_CALLBACK(on_font_dialog_response), NULL);
 
 		gtk_window_set_transient_for(GTK_WINDOW(ui_widgets.open_fontsel), GTK_WINDOW(main_widgets.window));
 	}

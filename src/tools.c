@@ -14,9 +14,9 @@
  *      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *      GNU General Public License for more details.
  *
- *      You should have received a copy of the GNU General Public License
- *      along with this program; if not, write to the Free Software
- *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *      You should have received a copy of the GNU General Public License along
+ *      with this program; if not, write to the Free Software Foundation, Inc.,
+ *      51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
 /*
@@ -932,29 +932,32 @@ void tools_word_count(void)
  * color dialog callbacks
  */
 #ifndef G_OS_WIN32
-static void
-on_color_cancel_button_clicked(GtkButton *button, gpointer user_data)
+static void on_color_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 {
-	gtk_widget_hide(ui_widgets.open_colorsel);
-}
+	switch (response)
+	{
+		case GTK_RESPONSE_OK:
+		{
+			GdkColor color;
+			GeanyDocument *doc = document_get_current();
+			gchar *hex;
+			GtkWidget *colorsel;
 
+			gtk_widget_hide(ui_widgets.open_colorsel);
+			g_return_if_fail(doc != NULL);
 
-static void
-on_color_ok_button_clicked(GtkButton *button, gpointer user_data)
-{
-	GdkColor color;
-	GeanyDocument *doc = document_get_current();
-	gchar *hex;
+			colorsel = gtk_color_selection_dialog_get_color_selection(GTK_COLOR_SELECTION_DIALOG(ui_widgets.open_colorsel));
+			gtk_color_selection_get_current_color(GTK_COLOR_SELECTION(colorsel), &color);
 
-	gtk_widget_hide(ui_widgets.open_colorsel);
-	g_return_if_fail(doc != NULL);
+			hex = utils_get_hex_from_color(&color);
+			editor_insert_color(doc->editor, hex);
+			g_free(hex);
+			break;
+		}
 
-	gtk_color_selection_get_current_color(
-			GTK_COLOR_SELECTION(GTK_COLOR_SELECTION_DIALOG(ui_widgets.open_colorsel)->colorsel), &color);
-
-	hex = utils_get_hex_from_color(&color);
-	editor_insert_color(doc->editor, hex);
-	g_free(hex);
+		default:
+			gtk_widget_hide(ui_widgets.open_colorsel);
+	}
 }
 #endif
 
@@ -966,22 +969,23 @@ void tools_color_chooser(const gchar *color)
 	win32_show_color_dialog(color);
 #else
 	gchar *c = (gchar*) color;
+	GtkWidget *colorsel;
 
 	if (ui_widgets.open_colorsel == NULL)
 	{
 		ui_widgets.open_colorsel = gtk_color_selection_dialog_new(_("Color Chooser"));
 		gtk_widget_set_name(ui_widgets.open_colorsel, "GeanyDialog");
 		gtk_window_set_transient_for(GTK_WINDOW(ui_widgets.open_colorsel), GTK_WINDOW(main_widgets.window));
-		gtk_color_selection_set_has_palette(
-			GTK_COLOR_SELECTION(GTK_COLOR_SELECTION_DIALOG(ui_widgets.open_colorsel)->colorsel), TRUE);
+		colorsel = gtk_color_selection_dialog_get_color_selection(GTK_COLOR_SELECTION_DIALOG(ui_widgets.open_colorsel));
+		gtk_color_selection_set_has_palette(GTK_COLOR_SELECTION(colorsel), TRUE);
 
-		g_signal_connect(GTK_COLOR_SELECTION_DIALOG(ui_widgets.open_colorsel)->cancel_button, "clicked",
-						G_CALLBACK(on_color_cancel_button_clicked), NULL);
-		g_signal_connect(GTK_COLOR_SELECTION_DIALOG(ui_widgets.open_colorsel)->ok_button, "clicked",
-						G_CALLBACK(on_color_ok_button_clicked), NULL);
+		g_signal_connect(ui_widgets.open_colorsel, "response",
+						G_CALLBACK(on_color_dialog_response), NULL);
 		g_signal_connect(ui_widgets.open_colorsel, "delete-event",
 						G_CALLBACK(gtk_widget_hide_on_delete), NULL);
 	}
+	else
+		colorsel = gtk_color_selection_dialog_get_color_selection(GTK_COLOR_SELECTION_DIALOG(ui_widgets.open_colorsel));
 	/* if color is non-NULL set it in the dialog as preselected color */
 	if (c != NULL && (c[0] == '0' || c[0] == '#'))
 	{
@@ -993,10 +997,8 @@ void tools_color_chooser(const gchar *color)
 			c++;
 		}
 		gdk_color_parse(c, &gc);
-		gtk_color_selection_set_current_color(GTK_COLOR_SELECTION(
-							GTK_COLOR_SELECTION_DIALOG(ui_widgets.open_colorsel)->colorsel), &gc);
-		gtk_color_selection_set_previous_color(GTK_COLOR_SELECTION(
-							GTK_COLOR_SELECTION_DIALOG(ui_widgets.open_colorsel)->colorsel), &gc);
+		gtk_color_selection_set_current_color(GTK_COLOR_SELECTION(colorsel), &gc);
+		gtk_color_selection_set_previous_color(GTK_COLOR_SELECTION(colorsel), &gc);
 	}
 
 	/* We make sure the dialog is visible. */

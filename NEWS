@@ -1,7 +1,10 @@
 Geany 1.23 (unreleased)
 
     Editor
-    * Update Scintilla to version 3.2.0.
+    * Update Scintilla to version 3.2.2 (#3540469).
+
+    Search
+    * 'Mark All' now also uses the fully-featured PCRE engine (#3564132).
 
 
 Geany 1.22 (June 18, 2012)

@@ -50,6 +50,11 @@ public:
 	int codePage;
 	int clickPlace;
 
+	int insetX; // text inset in x from calltip border
+	int widthArrow;
+	int borderHeight;
+	int verticalOffset; // pixel offset up or down of the calltip with respect to the line
+
 	CallTip();
 	~CallTip();
 

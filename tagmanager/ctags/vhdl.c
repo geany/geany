@@ -44,6 +44,7 @@ typedef enum {
     K_ENTITY,
     K_ARCHITECTURE,
     K_PORT,
+    K_BLOCK,
     K_ALIAS
 } vhdlKind;
 
@@ -77,6 +78,7 @@ static kindOption VhdlKinds [] = {
  { TRUE, 'n', "class",        "entity" },
  { TRUE, 'o', "struct",       "architecture" },
  { TRUE, 'u', "port",         "ports" },
+ { TRUE, 'b', "member",       "blocks" },
  { TRUE, 'v', "typedef",      "alias" }
  };
 
@@ -96,6 +98,7 @@ static keywordAssoc VhdlKeywordTable [] = {
     { "inout",        K_PORT },
     { "in",           K_PORT },
     { "out",          K_PORT },
+    { "block",        K_BLOCK },
     { "alias",        K_ALIAS }
 };
 
@@ -187,7 +190,6 @@ static void tagNameList (const vhdlKind kind, int c)
 	{
 		readIdentifier (TagName, c);
 		makeSimpleTag (TagName, VhdlKinds, kind);
-		vUngetc (c);
 	}
 }
 
@@ -210,7 +212,7 @@ static void findTag (vString *const name)
 					vStringCopyToLower (Keyword, name);
 					lookupKeyword (vStringValue (Keyword), Lang_vhdl);
 					kind = (vhdlKind)lookupKeyword (vStringValue (Keyword), Lang_vhdl);
-					if (kind == K_PROCESS || kind == K_PORT)
+					if (kind == K_PROCESS || kind == K_BLOCK || kind == K_PORT)
 					{
 						makeSimpleTag (Lastname, VhdlKinds, kind);
 					}
@@ -233,7 +235,7 @@ static void findTag (vString *const name)
 				c = vGetc ();
 			}
 		}
-		else if (kind == K_PROCESS) {
+		else if (kind == K_PROCESS || kind == K_BLOCK) {
 			vStringCopyS(TagName,"unnamed");
 			makeSimpleTag (TagName, VhdlKinds, kind);
 		} else {

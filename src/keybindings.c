@@ -14,9 +14,9 @@
  *      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *      GNU General Public License for more details.
  *
- *      You should have received a copy of the GNU General Public License
- *      along with this program; if not, write to the Free Software
- *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *      You should have received a copy of the GNU General Public License along
+ *      with this program; if not, write to the Free Software Foundation, Inc.,
+ *      51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
 /**
@@ -662,13 +662,13 @@ static void load_kb(GeanyKeyGroup *group, GeanyKeyBinding *kb, gpointer user_dat
 
 static void load_user_kb(void)
 {
-	gchar *configfile = g_strconcat(app->configdir, G_DIR_SEPARATOR_S, "keybindings.conf", NULL);
+	gchar *configfile = g_build_filename(app->configdir, "keybindings.conf", NULL);
 	GKeyFile *config = g_key_file_new();
 
 	/* backwards compatibility with Geany 0.21 defaults */
 	if (!g_file_test(configfile, G_FILE_TEST_EXISTS))
 	{
-		gchar *geanyconf = g_strconcat(app->configdir, G_DIR_SEPARATOR_S, "geany.conf", NULL);
+		gchar *geanyconf = g_build_filename(app->configdir, "geany.conf", NULL);
 		const gchar data[] = "[Bindings]\n"
 			"popup_gototagdefinition=\n"
 			"edit_transposeline=<Control>t\n"
@@ -771,7 +771,7 @@ static void set_keyfile_kb(GeanyKeyGroup *group, GeanyKeyBinding *kb, gpointer u
 /* just write the content of the keys array to the config file */
 void keybindings_write_to_file(void)
 {
-	gchar *configfile = g_strconcat(app->configdir, G_DIR_SEPARATOR_S, "keybindings.conf", NULL);
+	gchar *configfile = g_build_filename(app->configdir, "keybindings.conf", NULL);
 	gchar *data;
 	GKeyFile *config = g_key_file_new();
 

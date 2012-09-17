@@ -15,10 +15,9 @@
  *      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *      GNU General Public License for more details.
  *
- *      You should have received a copy of the GNU General Public License
- *      along with this program; if not, write to the Free Software
- *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
- *      MA 02110-1301, USA.
+ *      You should have received a copy of the GNU General Public License along
+ *      with this program; if not, write to the Free Software Foundation, Inc.,
+ *      51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
 /* Class Builder - creates source files containing a new class interface and definition. */
@@ -127,8 +126,8 @@ static const gchar templates_cpp_class_source[] = "{fileheader}\n\n\
 ";
 
 static const gchar templates_gtk_class_header[] = "{fileheader}\n\n\
-#ifndef __{header_guard}__\n\
-#define __{header_guard}__\n\
+#ifndef {header_guard}_\n\
+#define {header_guard}_ 1\n\
 {base_include}\n\
 G_BEGIN_DECLS\n\
 \n\n\
@@ -139,18 +138,18 @@ G_BEGIN_DECLS\n\
 #define {namespace_up}IS_{class_name_up}_CLASS(klass)  (G_TYPE_CHECK_CLASS_TYPE ((klass), {namespace_up}TYPE_{class_name_up}))\n\
 #define {namespace_up}{class_name_up}_GET_CLASS(obj)   (G_TYPE_INSTANCE_GET_CLASS ((obj), {namespace_up}TYPE_{class_name_up}, {namespace}{class_name}Class))\n\
 \n\
-typedef struct _{namespace}{class_name}         {namespace}{class_name};\n\
-typedef struct _{namespace}{class_name}Class    {namespace}{class_name}Class;\n\
-typedef struct _{namespace}{class_name}Private  {namespace}{class_name}Private;\n\
+typedef struct {namespace}{class_name}_         {namespace}{class_name};\n\
+typedef struct {namespace}{class_name}Class_    {namespace}{class_name}Class;\n\
+typedef struct {namespace}{class_name}Private_  {namespace}{class_name}Private;\n\
 \n\
-struct _{namespace}{class_name}\n\
+struct {namespace}{class_name}_\n\
 {\n\
   {base_name} parent;\n\
   /* add your public declarations here */\n\
   {namespace}{class_name}Private *priv;\n\
 };\n\
 \n\
-struct _{namespace}{class_name}Class\n\
+struct {namespace}{class_name}Class_\n\
 {\n\
   {base_name}Class parent_class;\n\
 };\n\
@@ -160,13 +159,13 @@ GType {namespace_low}{class_name_low}_get_type (void);\n\n\
 \n\n\
 G_END_DECLS\n\
 \n\
-#endif /* __{header_guard}__ */\n\
+#endif /* {header_guard}_ */\n\
 ";
 
 static const gchar templates_gtk_class_source[] = "{fileheader}\n\
 #include \"{header}\"\n\
 \n\
-struct _{namespace}{class_name}Private\n\
+struct {namespace}{class_name}Private_\n\
 {\n\
   /* add your private declarations here */\n\
   gpointer delete_me;\n\

@@ -37,7 +37,7 @@ public:
 	bool Contains(int handle) const;
 	bool InsertHandle(int handle, int markerNum);
 	void RemoveHandle(int handle);
-	bool RemoveNumber(int markerNum);
+	bool RemoveNumber(int markerNum, bool all);
 	void CombineWith(MarkerHandleSet *other);
 };
 

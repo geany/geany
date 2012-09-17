@@ -560,7 +560,7 @@ static void ColouriseDiffLine(char *lineBuffer, int endLine, Accessor &styler) {
 }
 
 static void ColouriseDiffDoc(unsigned int startPos, int length, int, WordList *[], Accessor &styler) {
-	char lineBuffer[DIFF_BUFFER_START_SIZE];
+	char lineBuffer[DIFF_BUFFER_START_SIZE] = "";
 	styler.StartAt(startPos);
 	styler.StartSegment(startPos);
 	unsigned int linePos = 0;
@@ -857,17 +857,19 @@ static void ColouriseMakeLine(
 	while ((i < lengthLine) && isspacechar(lineBuffer[i])) {
 		i++;
 	}
-	if (lineBuffer[i] == '#') {	// Comment
-		styler.ColourTo(endPos, SCE_MAKE_COMMENT);
-		return;
-	}
-	if (lineBuffer[i] == '!') {	// Special directive
-		styler.ColourTo(endPos, SCE_MAKE_PREPROCESSOR);
-		return;
+	if (i < lengthLine) {
+		if (lineBuffer[i] == '#') {	// Comment
+			styler.ColourTo(endPos, SCE_MAKE_COMMENT);
+			return;
+		}
+		if (lineBuffer[i] == '!') {	// Special directive
+			styler.ColourTo(endPos, SCE_MAKE_PREPROCESSOR);
+			return;
+		}
 	}
 	int varCount = 0;
 	while (i < lengthLine) {
-		if (lineBuffer[i] == '$' && lineBuffer[i + 1] == '(') {
+		if (((i + 1) < lengthLine) && (lineBuffer[i] == '$' && lineBuffer[i + 1] == '(')) {
 			styler.ColourTo(startLine + i - 1, state);
 			state = SCE_MAKE_IDENTIFIER;
 			varCount++;

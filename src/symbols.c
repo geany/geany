@@ -15,9 +15,9 @@
  *      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *      GNU General Public License for more details.
  *
- *      You should have received a copy of the GNU General Public License
- *      along with this program; if not, write to the Free Software
- *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *      You should have received a copy of the GNU General Public License along
+ *      with this program; if not, write to the Free Software Foundation, Inc.,
+ *      51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
 /**
@@ -114,7 +114,7 @@ extern gchar **c_tags_ignore;
  * Also works for reloading. */
 static void load_c_ignore_tags(void)
 {
-	gchar *path = g_strconcat(app->configdir, G_DIR_SEPARATOR_S "ignore.tags", NULL);
+	gchar *path = g_build_filename(app->configdir, "ignore.tags", NULL);
 	gchar *content;
 
 	if (g_file_get_contents(path, &content, NULL, NULL))
@@ -209,7 +209,7 @@ void symbols_global_tags_loaded(guint file_type_idx)
 
 	if (! tfi->tags_loaded)
 	{
-		gchar *fname = g_strconcat(app->datadir, G_DIR_SEPARATOR_S, tfi->tag_file, NULL);
+		gchar *fname = g_build_filename(app->datadir, tfi->tag_file, NULL);
 
 		symbols_load_global_tags(fname, filetypes[file_type_idx]);
 		tfi->tags_loaded = TRUE;
@@ -229,7 +229,7 @@ static void html_tags_loaded(void)
 	tfi = &tag_file_info[GTF_HTML_ENTITIES];
 	if (! tfi->tags_loaded)
 	{
-		gchar *file = g_strconcat(app->datadir, G_DIR_SEPARATOR_S, tfi->tag_file, NULL);
+		gchar *file = g_build_filename(app->datadir, tfi->tag_file, NULL);
 
 		html_entities = utils_read_file_in_array(file);
 		tfi->tags_loaded = TRUE;
@@ -548,7 +548,7 @@ static GdkPixbuf *get_tag_icon(const gchar *icon_name)
 	if (G_UNLIKELY(icon_theme == NULL))
 	{
 #ifndef G_OS_WIN32
-		gchar *path = g_strconcat(GEANY_DATADIR, "/icons", NULL);
+		gchar *path = g_build_filename(GEANY_DATADIR, "icons", NULL);
 #endif
 		gtk_icon_size_lookup(GTK_ICON_SIZE_MENU, &x, &y);
 		icon_theme = gtk_icon_theme_get_default();
@@ -818,7 +818,7 @@ static void add_top_level_items(GeanyDocument *doc)
 		case GEANY_FILETYPES_RUBY:
 		{
 			tag_list_add_groups(tag_store,
-				&(tv_iters.tag_namespace), _("Modules"), NULL,
+				&(tv_iters.tag_namespace), _("Modules"), "classviewer-namespace",
 				&(tv_iters.tag_class), _("Classes"), "classviewer-class",
 				&(tv_iters.tag_member), _("Singletons"), "classviewer-struct",
 				&(tv_iters.tag_function), _("Methods"), "classviewer-method",
@@ -855,7 +855,7 @@ static void add_top_level_items(GeanyDocument *doc)
 				&(tv_iters.tag_type), _("Types"), "classviewer-other",
 				&(tv_iters.tag_function), _("Functions / Procedures"), "classviewer-method",
 				&(tv_iters.tag_variable), _("Variables / Signals"), "classviewer-var",
-				&(tv_iters.tag_member), _("Processes / Components"), "classviewer-member",
+				&(tv_iters.tag_member), _("Processes / Blocks / Components"), "classviewer-member",
 				&(tv_iters.tag_other), _("Other"), "classviewer-other",
 				NULL);
 			break;
@@ -1979,15 +1979,8 @@ static gboolean current_function_changed(GeanyDocument *doc, gint cur_line, gint
 		/* if the line has only changed by 1 */
 		if (abs(cur_line - old_line) == 1)
 		{
-			const gint fn_fold =
-				get_function_fold_number(doc);
-			/* It's the same function if the fold number hasn't changed, or both the new
-			 * and old fold numbers are above the function fold number. */
-			gboolean same =
-				fold_num == old_fold_num ||
-				(old_fold_num > fn_fold && fold_num > fn_fold);
-
-			ret = ! same;
+			/* It's the same function if the fold number hasn't changed */
+			ret = (fold_num != old_fold_num);
 		}
 		else ret = TRUE;
 	}
@@ -2120,8 +2113,9 @@ gint symbols_get_current_function(GeanyDocument *doc, const gchar **tagname)
 	}
 	tm_file = doc->tm_file;
 
-	/* if the document has no changes, get the previous function name from TM */
-	if (! doc->changed && tm_file != NULL && tm_file->tags_array != NULL)
+	/* if the tags are up-to-date, get the previous function name from TM */
+	if (tm_file != NULL && tm_file->tags_array != NULL &&
+		(! doc->changed || editor_prefs.autocompletion_update_freq > 0))
 	{
 		const TMTag *tag = (const TMTag*) tm_get_current_function(tm_file->tags_array, line);
 

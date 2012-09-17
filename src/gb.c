@@ -14,9 +14,9 @@
  *      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *      GNU General Public License for more details.
  *
- *      You should have received a copy of the GNU General Public License
- *      along with this program; if not, write to the Free Software
- *      Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *      You should have received a copy of the GNU General Public License along
+ *      with this program; if not, write to the Free Software Foundation, Inc.,
+ *      51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
 /*
@@ -159,7 +159,7 @@ static GtkWidget *create_help_dialog(GtkWindow *parent)
 	gtk_window_set_modal(GTK_WINDOW(help_dialog), TRUE);
 	gtk_window_set_transient_for(GTK_WINDOW(help_dialog), parent);
 
-	dialog_vbox1 = GTK_DIALOG(help_dialog)->vbox;
+	dialog_vbox1 = gtk_dialog_get_content_area(GTK_DIALOG(help_dialog));
 	gtk_widget_show(dialog_vbox1);
 
 	scrolledwindow1 = gtk_scrolled_window_new(NULL, NULL);
@@ -184,7 +184,7 @@ static GtkWidget *create_help_dialog(GtkWindow *parent)
 	gtk_text_view_set_left_margin(GTK_TEXT_VIEW(textview1), 1);
 	gtk_text_view_set_right_margin(GTK_TEXT_VIEW(textview1), 1);
 
-	dialog_action_area1 = GTK_DIALOG(help_dialog)->action_area;
+	dialog_action_area1 = gtk_dialog_get_action_area(GTK_DIALOG(help_dialog));
 	gtk_widget_show(dialog_action_area1);
 	gtk_button_box_set_layout(GTK_BUTTON_BOX(dialog_action_area1), GTK_BUTTONBOX_END);
 

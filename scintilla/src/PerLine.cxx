@@ -99,7 +99,7 @@ void MarkerHandleSet::RemoveHandle(int handle) {
 	}
 }
 
-bool MarkerHandleSet::RemoveNumber(int markerNum) {
+bool MarkerHandleSet::RemoveNumber(int markerNum, bool all) {
 	bool performedDeletion = false;
 	MarkerHandleNumber **pmhn = &root;
 	while (*pmhn) {
@@ -108,6 +108,8 @@ bool MarkerHandleSet::RemoveNumber(int markerNum) {
 			*pmhn = mhn->next;
 			delete mhn;
 			performedDeletion = true;
+			if (!all)
+				break; 
 		} else {
 			pmhn = &((*pmhn)->next);
 		}
@@ -223,12 +225,7 @@ bool LineMarkers::DeleteMark(int line, int markerNum, bool all) {
 			delete markers[line];
 			markers[line] = NULL;
 		} else {
-			bool performedDeletion = markers[line]->RemoveNumber(markerNum);
-			someChanges = someChanges || performedDeletion;
-			while (all && performedDeletion) {
-				performedDeletion = markers[line]->RemoveNumber(markerNum);
-				someChanges = someChanges || performedDeletion;
-			}
+			someChanges = markers[line]->RemoveNumber(markerNum, all);
 			if (markers[line]->Length() == 0) {
 				delete markers[line];
 				markers[line] = NULL;

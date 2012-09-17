@@ -722,10 +722,12 @@ extern char *getArglistFromFilePos(MIOPos startPosition, const char *tokenName)
 
 	if (pos2 > pos1)
 	{
-		result = (char *) g_malloc(sizeof(char ) * (pos2 - pos1 + 2));
-		if (result != NULL && mio_read(File.mio, result, sizeof(char), pos2 - pos1 + 1) > 0)
+		size_t len = pos2 - pos1;
+
+		result = (char *) g_malloc(len + 1);
+		if (result != NULL && (len = mio_read(File.mio, result, 1, len)) > 0)
 		{
-			result[pos2-pos1+1] = '\0';
+			result[len] = '\0';
 			arglist = getArglistFromStr(result, tokenName);
 		}
 		g_free(result);

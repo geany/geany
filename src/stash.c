@@ -14,10 +14,9 @@
  *      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *      GNU General Public License for more details.
  *
- *      You should have received a copy of the GNU General Public License
- *      along with this program; if not, write to the Free Software
- *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
- *      MA 02110-1301, USA.
+ *      You should have received a copy of the GNU General Public License along
+ *      with this program; if not, write to the Free Software Foundation, Inc.,
+ *      51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
 /**
@@ -564,7 +563,7 @@ lookup_widget(GtkWidget *widget, const gchar *widget_name)
 		if (GTK_IS_MENU(widget))
 			parent = gtk_menu_get_attach_widget(GTK_MENU(widget));
 		else
-			parent = widget->parent;
+			parent = gtk_widget_get_parent(widget);
 		if (parent == NULL)
 			parent = (GtkWidget*) g_object_get_data(G_OBJECT(widget), "GladeParentKey");
 		if (parent == NULL)
@@ -1083,7 +1082,7 @@ void stash_tree_setup(GPtrArray *group_array, GtkTreeView *tree)
 	GtkTreeModel *model;
 	GtkCellRenderer *cell;
 	GtkTreeViewColumn *column;
-	GtkObject *adjustment;
+	GtkAdjustment *adjustment;
 
 	store = gtk_list_store_new(STASH_TREE_COUNT, G_TYPE_STRING, G_TYPE_POINTER);
 	stash_tree_append_prefs(group_array, store, PREF_DISPLAY);

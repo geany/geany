@@ -14,10 +14,9 @@
  *      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *      GNU General Public License for more details.
  *
- *      You should have received a copy of the GNU General Public License
- *      along with this program; if not, write to the Free Software
- *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
- *      MA 02110-1301, USA.
+ *      You should have received a copy of the GNU General Public License along
+ *      with this program; if not, write to the Free Software Foundation, Inc.,
+ *      51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
 
@@ -675,7 +674,7 @@ GtkWidget *plugin_configure(GtkDialog *dialog)
 		gtk_container_add(GTK_CONTAINER(button), image);
 
 		hbox = gtk_hbox_new(FALSE, 6);
-		gtk_box_pack_start_defaults(GTK_BOX(hbox), entry_dir);
+		gtk_box_pack_start(GTK_BOX(hbox), entry_dir, TRUE, TRUE, 0);
 		gtk_box_pack_start(GTK_BOX(hbox), button, FALSE, FALSE, 0);
 
 		gtk_box_pack_start(GTK_BOX(inner_vbox), hbox, FALSE, FALSE, 0);

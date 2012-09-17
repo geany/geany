@@ -15,9 +15,9 @@
  *      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *      GNU General Public License for more details.
  *
- *      You should have received a copy of the GNU General Public License
- *      along with this program; if not, write to the Free Software
- *      Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *      You should have received a copy of the GNU General Public License along
+ *      with this program; if not, write to the Free Software Foundation, Inc.,
+ *      51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
 /**
@@ -266,13 +266,12 @@ void editor_snippets_init(void)
 
 	snippet_offsets = g_queue_new();
 
-	sysconfigfile = g_strconcat(app->datadir, G_DIR_SEPARATOR_S, "snippets.conf", NULL);
-	userconfigfile = g_strconcat(app->configdir, G_DIR_SEPARATOR_S, "snippets.conf", NULL);
+	sysconfigfile = g_build_filename(app->datadir, "snippets.conf", NULL);
+	userconfigfile = g_build_filename(app->configdir, "snippets.conf", NULL);
 
 	/* check for old autocomplete.conf files (backwards compatibility) */
 	if (! g_file_test(userconfigfile, G_FILE_TEST_IS_REGULAR))
-		SETPTR(userconfigfile,
-			g_strconcat(app->configdir, G_DIR_SEPARATOR_S, "autocomplete.conf", NULL));
+		SETPTR(userconfigfile, g_build_filename(app->configdir, "autocomplete.conf", NULL));
 
 	/* load the actual config files */
 	g_key_file_load_from_file(sysconfig, sysconfigfile, G_KEY_FILE_NONE, NULL);
@@ -445,7 +444,20 @@ void editor_toggle_fold(GeanyEditor *editor, gint line, gint modifiers)
 	g_return_if_fail(editor != NULL);
 
 	sci = editor->sci;
+	/* When collapsing a fold range whose starting line is offscreen,
+	 * scroll the starting line to display at the top of the view.
+	 * Otherwise it can be confusing when the document scrolls down to hide
+	 * the folded lines. */
+	if ((sci_get_fold_level(sci, line) & SC_FOLDLEVELNUMBERMASK) > SC_FOLDLEVELBASE &&
+		!(sci_get_fold_level(sci, line) & SC_FOLDLEVELHEADERFLAG))
+	{
+		gint parent = sci_get_fold_parent(sci, line);
+		gint first = sci_get_first_visible_line(sci);
 
+		parent = SSM(sci, SCI_VISIBLEFROMDOCLINE, parent, 0);
+		if (first > parent)
+			SSM(sci, SCI_SETFIRSTVISIBLELINE, parent, 0);
+	}
 	sci_toggle_fold(sci, line);
 
 	/* extra toggling of child fold points
@@ -1292,45 +1304,52 @@ static void read_indent(GeanyEditor *editor, gint pos)
 
 static gint get_brace_indent(ScintillaObject *sci, gint line)
 {
-	guint i, len;
-	gint ret = 0;
-	gchar *linebuf;
+	gint start = sci_get_position_from_line(sci, line);
+	gint end = sci_get_line_end_position(sci, line) - 1;
+	gint lexer = sci_get_lexer(sci);
+	gint count = 0;
+	gint pos;
 
-	len = sci_get_line_length(sci, line);
-	linebuf = sci_get_line(sci, line);
-
-	for (i = 0; i < len; i++)
+	for (pos = end; pos >= start && count < 1; pos--)
 	{
-		/* i == (len - 1) prevents wrong indentation after lines like
-		 * "	{ return bless({}, shift); }" (Perl) */
-		if (linebuf[i] == '{' && i == (len - 1))
+		if (highlighting_is_code_style(lexer, sci_get_style_at(sci, pos)))
 		{
-			ret++;
-			break;
-		}
-		else
-		{
-			gint k = len - 1;
+			gchar c = sci_get_char_at(sci, pos);
 
-			while (k > 0 && isspace(linebuf[k])) k--;
-
-			/* if last non-whitespace character is a { increase indentation by a tab
-			 * e.g. for (...) { */
-			if (linebuf[k] == '{')
-			{
-				ret++;
-			}
-			break;
+			if (c == '{')
+				count ++;
+			else if (c == '}')
+				count --;
 		}
 	}
-	g_free(linebuf);
-	return ret;
+
+	return count > 0 ? 1 : 0;
+}
+
+
+/* gets the last code position on a line
+ * warning: if there is no code position on the line, returns the start position */
+static gint get_sci_line_code_end_position(ScintillaObject *sci, gint line)
+{
+	gint start = sci_get_position_from_line(sci, line);
+	gint lexer = sci_get_lexer(sci);
+	gint pos;
+
+	for (pos = sci_get_line_end_position(sci, line) - 1; pos > start; pos--)
+	{
+		gint style = sci_get_style_at(sci, pos);
+
+		if (highlighting_is_code_style(lexer, style) && ! isspace(sci_get_char_at(sci, pos)))
+			break;
+	}
+
+	return pos;
 }
 
 
 static gint get_python_indent(ScintillaObject *sci, gint line)
 {
-	gint last_char = sci_get_line_end_position(sci, line) - 1;
+	gint last_char = get_sci_line_code_end_position(sci, line);
 
 	/* add extra indentation for Python after colon */
 	if (sci_get_char_at(sci, last_char) == ':' &&
@@ -1345,7 +1364,7 @@ static gint get_python_indent(ScintillaObject *sci, gint line)
 static gint get_xml_indent(ScintillaObject *sci, gint line)
 {
 	gboolean need_close = FALSE;
-	gint end = sci_get_line_end_position(sci, line) - 1;
+	gint end = get_sci_line_code_end_position(sci, line);
 	gint pos;
 
 	/* don't indent if there's a closing tag to the right of the cursor */
@@ -1396,8 +1415,7 @@ static gint get_indent_size_after_line(GeanyEditor *editor, gint line)
 
 		if (lexer_has_braces(sci))
 			additional_indent = iprefs->width * get_brace_indent(sci, line);
-		else
-		if (editor->document->file_type->id == GEANY_FILETYPES_PYTHON)
+		else if (sci_get_lexer(sci) == SCLEX_PYTHON) /* Python/Cython */
 			additional_indent = iprefs->width * get_python_indent(sci, line);
 
 		/* HTML lexer "has braces" because of PHP and JavaScript.  If get_brace_indent() did not
@@ -4650,6 +4668,11 @@ static ScintillaObject *create_new_sci(GeanyEditor *editor)
 	ScintillaObject	*sci;
 
 	sci = SCINTILLA(scintilla_new());
+
+	/* Scintilla doesn't support RTL languages properly and is primarily
+	 * intended to be used with LTR source code, so override the
+	 * GTK+ default text direction for the Scintilla widget. */
+	gtk_widget_set_direction(GTK_WIDGET(sci), GTK_TEXT_DIR_LTR);
 
 	gtk_widget_show(GTK_WIDGET(sci));
 

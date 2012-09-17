@@ -15,9 +15,9 @@
  *      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *      GNU General Public License for more details.
  *
- *      You should have received a copy of the GNU General Public License
- *      along with this program; if not, write to the Free Software
- *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *      You should have received a copy of the GNU General Public License along
+ *      with this program; if not, write to the Free Software Foundation, Inc.,
+ *      51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
 /*
@@ -52,10 +52,12 @@ const gchar *translators[][2] = {
 	{ "el", "Stavros Temertzidis &lt;bullgr@gmail.com&gt;" },
 	{ "en_GB", "Jeff Bailes &lt;thepizzaking@gmail.com&gt;" },
 	{ "es", "Antonio Jiménez González &lt;tonificante@hotmail.com&gt;\nLucas Vieites &lt;lucasvieites@gmail.com&gt;" },
+	{ "eu", "Asier Iturralde Sarasola &lt;asier.iturralde@gmail.com&gt;"},
 	{ "fa", "Moein Owhadi Kareshk &lt;moein.owhadi@gmail.com&gt;"},
 	{ "fi", "Harri Koskinen &lt;harri@fastmonkey.org&gt;\nJari Rahkonen &lt;jari.rahkonen@pp1.inet.fi&gt;" },
 	{ "fr", "Jean-Philippe Moal &lt;skateinmars@skateinmars.net&gt;" },
 	{ "gl", "José Manuel Castroagudín Silva &lt;chavescesures@gmail.com&gt;"},
+	{ "he", "Yosef Or Botschko &lt;yosefor3@walla.com&gt;"},
 	{ "hu", "Gabor Kmetyko &lt;kg_kilo@freemail.hu&gt;" },
 	{ "it", "Max Baldinelli &lt;m.baldinelli@agora.it&gt;,\nDario Santomarco &lt;dariello@yahoo.it&gt;" },
 	{ "ja", "Tarot Osuji &lt;tarot@sdf.lonestar.org&gt;\nChikahiro Masami &lt;cmasa.z321@gmail.com&gt;" },
@@ -182,7 +184,7 @@ static GtkWidget *create_dialog(void)
 	header_label_style_set(header_label);
 	g_signal_connect_after(header_eventbox, "style-set", G_CALLBACK(header_eventbox_style_set), NULL);
 	g_signal_connect_after(header_label, "style-set", G_CALLBACK(header_label_style_set), NULL);
-	gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->vbox), header_eventbox, FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))), header_eventbox, FALSE, FALSE, 0);
 
 	/* set image */
 	icon = ui_new_pixbuf_from_inline(GEANY_IMAGE_LOGO);
@@ -194,7 +196,7 @@ static GtkWidget *create_dialog(void)
 	notebook = gtk_notebook_new();
 	gtk_widget_show(notebook);
 	gtk_container_set_border_width(GTK_CONTAINER(notebook), 2);
-	gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->vbox), notebook, TRUE, TRUE, 0);
+	gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))), notebook, TRUE, TRUE, 0);
 
 	/* create "Info" tab */
 	info_box = gtk_vbox_new(FALSE, 0);
