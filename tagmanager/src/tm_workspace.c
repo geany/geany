@@ -735,7 +735,7 @@ tm_workspace_find_scoped (const char *name, const char *scope, gint type,
 const TMTag *
 tm_get_current_function (GPtrArray * file_tags, const gulong line)
 {
-	GPtrArray *const local = tm_tags_extract (file_tags, tm_tag_function_t);
+	GPtrArray *const local = tm_tags_extract (file_tags, tm_tag_function_t | tm_tag_method_t);
 	TMTag *function_tag = NULL;
 	if (local && local->len)
 	{
