@@ -65,6 +65,7 @@
 #include "toolbar.h"
 #include "highlighting.h"
 #include "pluginutils.h"
+#include "gtkcompat.h"
 
 
 #ifdef HAVE_VTE
@@ -1811,7 +1812,7 @@ G_MODULE_EXPORT void on_back_activate(GtkMenuItem *menuitem, gpointer user_data)
 
 G_MODULE_EXPORT gboolean on_motion_event(GtkWidget *widget, GdkEventMotion *event, gpointer user_data)
 {
-	if (prefs.auto_focus && ! GTK_WIDGET_HAS_FOCUS(widget))
+	if (prefs.auto_focus && ! gtk_widget_has_focus(widget))
 		gtk_widget_grab_focus(widget);
 
 	return FALSE;

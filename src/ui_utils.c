@@ -56,6 +56,7 @@
 #include "main.h"
 #include "stash.h"
 #include "keyfile.h"
+#include "gtkcompat.h"
 
 
 GeanyInterfacePrefs	interface_prefs;
@@ -1403,7 +1404,7 @@ GtkWidget *ui_dialog_vbox_new(GtkDialog *dialog)
 	GtkWidget *vbox = gtk_vbox_new(FALSE, 12);	/* need child vbox to set a separate border. */
 
 	gtk_container_set_border_width(GTK_CONTAINER(vbox), 6);
-	gtk_container_add(GTK_CONTAINER(gtk_dialog_get_content_area(GTK_DIALOG(dialog))), vbox);
+	gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))), vbox, TRUE, TRUE, 0);
 	return vbox;
 }
 
@@ -1556,7 +1557,7 @@ static gboolean tree_model_find_text(GtkTreeModel *model,
  * @param combo_entry .
  * @param text Text to add, or @c NULL for current entry text.
  * @param history_len Max number of items, or @c 0 for default. */
-void ui_combo_box_add_to_history(GtkComboBoxEntry *combo_entry,
+void ui_combo_box_add_to_history(GtkComboBoxText *combo_entry,
 		const gchar *text, gint history_len)
 {
 	GtkComboBox *combo = GTK_COMBO_BOX(combo_entry);
@@ -1575,7 +1576,7 @@ void ui_combo_box_add_to_history(GtkComboBoxEntry *combo_entry,
 	{
 		gtk_list_store_remove(GTK_LIST_STORE(model), &iter);
 	}
-	gtk_combo_box_prepend_text(combo, text);
+	gtk_combo_box_text_prepend_text(combo_entry, text);
 
 	/* limit history */
 	path = gtk_tree_path_new_from_indices(history_len, -1);
@@ -1587,18 +1588,18 @@ void ui_combo_box_add_to_history(GtkComboBoxEntry *combo_entry,
 }
 
 
-/* Same as gtk_combo_box_prepend_text(), except that text is only prepended if it not already
+/* Same as gtk_combo_box_text_prepend_text(), except that text is only prepended if it not already
  * exists in the combo's model. */
-void ui_combo_box_prepend_text_once(GtkComboBox *combo, const gchar *text)
+void ui_combo_box_prepend_text_once(GtkComboBoxText *combo, const gchar *text)
 {
 	GtkTreeModel *model;
 	GtkTreeIter iter;
 
-	model = gtk_combo_box_get_model(combo);
+	model = gtk_combo_box_get_model(GTK_COMBO_BOX(combo));
 	if (tree_model_find_text(model, &iter, 0, text))
 		return;	/* don't prepend duplicate */
 
-	gtk_combo_box_prepend_text(combo, text);
+	gtk_combo_box_text_prepend_text(combo, text);
 }
 
 
@@ -2023,7 +2024,7 @@ void ui_swap_sidebar_pos(void)
 	g_object_unref(left);
 	g_object_unref(right);
 
-	gtk_paned_set_position(GTK_PANED(pane), pane->allocation.width
+	gtk_paned_set_position(GTK_PANED(pane), gtk_widget_get_allocated_width(pane)
 		- gtk_paned_get_position(GTK_PANED(pane)));
 }
 
@@ -2359,7 +2360,7 @@ static void on_auto_separator_item_show_hide(GtkWidget *widget, gpointer user_da
 {
 	GeanyAutoSeparator *autosep = user_data;
 
-	if (GTK_WIDGET_VISIBLE(widget))
+	if (gtk_widget_get_visible(widget))
 		autosep->ref_count++;
 	else
 		autosep->ref_count--;
@@ -2371,7 +2372,7 @@ static void on_auto_separator_item_destroy(GtkWidget *widget, gpointer user_data
 {
 	GeanyAutoSeparator *autosep = user_data;
 
-	/* GTK_WIDGET_VISIBLE won't work now the widget is being destroyed,
+	/* gtk_widget_get_visible() won't work now the widget is being destroyed,
 	 * so assume widget was visible */
 	autosep->ref_count--;
 	autosep->ref_count = MAX(autosep->ref_count, 0);
@@ -2390,7 +2391,7 @@ void ui_auto_separator_add_ref(GeanyAutoSeparator *autosep, GtkWidget *item)
 		g_signal_connect(autosep->widget, "destroy",
 			G_CALLBACK(gtk_widget_destroyed), &autosep->widget);
 
-	if (GTK_WIDGET_VISIBLE(item))
+	if (gtk_widget_get_visible(item))
 	{
 		autosep->ref_count++;
 		auto_separator_update(autosep);

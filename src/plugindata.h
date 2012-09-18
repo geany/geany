@@ -41,6 +41,7 @@ G_BEGIN_DECLS
 
 #include "editor.h"	/* GeanyIndentType */
 #include "build.h"  /* GeanyBuildGroup, GeanyBuildSource, GeanyBuildCmdEntries enums */
+#include "gtkcompat.h"
 
 
 /** The Application Programming Interface (API) version, incremented
@@ -56,12 +57,19 @@ G_BEGIN_DECLS
  */
 #define GEANY_API_VERSION 216
 
+/* hack to have a different ABI when built with GTK3 because loading GTK2-linked plugins
+ * with GTK3-linked Geany leads to crash */
+#if GTK_CHECK_VERSION(3, 0, 0)
+#	define GEANY_ABI_SHIFT 8
+#else
+#	define GEANY_ABI_SHIFT 0
+#endif
 /** The Application Binary Interface (ABI) version, incremented whenever
  * existing fields in the plugin data types have to be changed or reordered.
  * Changing this forces all plugins to be recompiled before Geany can load them. */
 /* This should usually stay the same if fields are only appended, assuming only pointers to
  * structs and not structs themselves are declared by plugins. */
-#define GEANY_ABI_VERSION 69
+#define GEANY_ABI_VERSION (69 << GEANY_ABI_SHIFT)
 
 
 /** Defines a function to check the plugin is safe to load.
@@ -476,7 +484,7 @@ typedef struct UIUtilsFuncs
 	void		(*ui_widget_modify_font_from_string) (GtkWidget *widget, const gchar *str);
 	gboolean	(*ui_is_keyval_enter_or_return) (guint keyval);
 	gint		(*ui_get_gtk_settings_integer) (const gchar *property_name, gint default_value);
-	void		(*ui_combo_box_add_to_history) (GtkComboBoxEntry *combo_entry,
+	void		(*ui_combo_box_add_to_history) (GtkComboBoxText *combo_entry,
 				const gchar *text, gint history_len);
 	void		(*ui_menu_add_document_items_sorted) (GtkMenu *menu, struct GeanyDocument *active,
 				GCallback callback, GCompareFunc compare_func);

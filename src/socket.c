@@ -653,8 +653,8 @@ gboolean socket_lock_input_cb(GIOChannel *source, GIOCondition condition, gpoint
 #ifdef G_OS_WIN32
 		else if (strncmp(buf, "window", 6) == 0)
 		{
-			HWND hwnd = (HWND) gdk_win32_drawable_get_handle(
-				GDK_DRAWABLE(gtk_widget_get_window(window)));
+			HWND hwnd = (HWND) gdk_win32_window_get_handle(
+				GDK_WINDOW(gtk_widget_get_window(window)));
 			socket_fd_write(sock, (gchar *)&hwnd, sizeof(hwnd));
 		}
 #endif
@@ -663,12 +663,18 @@ gboolean socket_lock_input_cb(GIOChannel *source, GIOCondition condition, gpoint
 	if (popup)
 	{
 #ifdef GDK_WINDOWING_X11
+		GdkWindow *x11_window = gtk_widget_get_window(window);
+
 		/* Set the proper interaction time on the window. This seems necessary to make
 		 * gtk_window_present() really bring the main window into the foreground on some
 		 * window managers like Gnome's metacity.
 		 * Code taken from Gedit. */
-		gdk_x11_window_set_user_time(gtk_widget_get_window(window),
-			gdk_x11_get_server_time(gtk_widget_get_window(window)));
+#	if GTK_CHECK_VERSION(3, 0, 0)
+		if (GDK_IS_X11_WINDOW(x11_window))
+#	endif
+		{
+			gdk_x11_window_set_user_time(x11_window, gdk_x11_get_server_time(x11_window));
+		}
 #endif
 		gtk_window_present(GTK_WINDOW(window));
 #ifdef G_OS_WIN32
