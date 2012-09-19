@@ -653,9 +653,15 @@ gboolean socket_lock_input_cb(GIOChannel *source, GIOCondition condition, gpoint
 #ifdef G_OS_WIN32
 		else if (strncmp(buf, "window", 6) == 0)
 		{
+#	if GTK_CHECK_VERSION(3, 0, 0)
+			HWND hwnd = (HWND) gdk_win32_window_get_handle(
+				GDK_WINDOW(gtk_widget_get_window(window)));
+			socket_fd_write(sock, (gchar *)&hwnd, sizeof(hwnd));
+#	else
 			HWND hwnd = (HWND) gdk_win32_drawable_get_handle(
 				GDK_DRAWABLE(gtk_widget_get_window(window)));
 			socket_fd_write(sock, (gchar *)&hwnd, sizeof(hwnd));
+#	endif
 		}
 #endif
 	}
