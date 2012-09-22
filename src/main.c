@@ -748,7 +748,8 @@ static gint setup_config_dir(void)
 	return mkdir_result;
 }
 
-
+/* Signal handling removed since on_exit_clicked() uses functions that are
+ * illegal in signal handlers
 static void signal_cb(gint sig)
 {
 	if (sig == SIGTERM)
@@ -756,7 +757,7 @@ static void signal_cb(gint sig)
 		on_exit_clicked(NULL, NULL);
 	}
 }
-
+ */
 
 /* Used for command-line arguments at startup or from socket.
  * this will strip any :line:col filename suffix from locale_filename */
@@ -972,8 +973,8 @@ gint main(gint argc, gchar **argv)
 	 * dependencies (e.g. WebKit, Soup, ...) */
 	if (!g_thread_supported())
 		g_thread_init(NULL);
-
-	signal(SIGTERM, signal_cb);
+    /* removed as signal handling was wrong, see signal_cb()
+	signal(SIGTERM, signal_cb); */
 #ifdef G_OS_UNIX
 	/* SIGQUIT is used to kill spawned children and we get also this signal, so ignore */
 	signal(SIGQUIT, SIG_IGN);
