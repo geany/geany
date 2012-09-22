@@ -1119,7 +1119,7 @@ void stash_tree_setup(GPtrArray *group_array, GtkTreeView *tree)
 		stash_tree_renderer_set_data, GSIZE_TO_POINTER(G_TYPE_STRING), NULL);
 	/* integer renderer */
 	cell = gtk_cell_renderer_spin_new();
-	adjustment = gtk_adjustment_new(0, G_MININT, G_MAXINT, 1, 10, 0);
+	adjustment = GTK_ADJUSTMENT(gtk_adjustment_new(0, G_MININT, G_MAXINT, 1, 10, 0));
 	g_object_set(cell, "adjustment", adjustment, NULL);
 	g_signal_connect(cell, "edited", G_CALLBACK(stash_tree_string_edited), model);
 	gtk_cell_layout_pack_start(GTK_CELL_LAYOUT(column), cell, FALSE);
