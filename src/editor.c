@@ -3425,7 +3425,7 @@ static void auto_multiline(GeanyEditor *editor, gint cur_line)
 
 	/* Check whether the comment block continues on this line */
 	indent_pos = sci_get_line_indent_position(sci, cur_line);
-	if (sci_get_style_at(sci, indent_pos) == style)
+	if (sci_get_style_at(sci, indent_pos) == style || indent_pos >= sci_get_length(sci))
 	{
 		gchar *previous_line = sci_get_line(sci, cur_line - 1);
 		/* the type of comment, '*' (C/C++/Java), '+' and the others (D) */
