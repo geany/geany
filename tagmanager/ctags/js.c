@@ -18,6 +18,7 @@
  */
 #include "general.h"	/* must always come first */
 #include <ctype.h>	/* to define isalpha () */
+#include <string.h>
 #include <setjmp.h>
 #include <mio/mio.h>
 #ifdef DEBUG
@@ -216,8 +217,19 @@ static void makeJsTag (tokenInfo *const token, const jsKind kind)
 {
 	if (JsKinds [kind].enabled && ! token->ignoreTag )
 	{
-		const char *const name = vStringValue (token->string);
+		const char *name = vStringValue (token->string);
+		vString *fullscope = vStringNewCopy (token->scope);
+		const char *p;
 		tagEntryInfo e;
+
+		if ((p = strrchr (name, '.')) != NULL)
+		{
+			if (vStringLength (fullscope) > 0)
+				vStringPut (fullscope, '.');
+			vStringNCatS (fullscope, name, p - name);
+			name = p + 1;
+		}
+
 		initTagEntry (&e, name);
 
 		e.lineNumber   = token->lineNumber;
@@ -225,7 +237,7 @@ static void makeJsTag (tokenInfo *const token, const jsKind kind)
 		e.kindName	   = JsKinds [kind].name;
 		e.kind		   = JsKinds [kind].letter;
 
-		if ( vStringLength(token->scope) > 0 )
+		if ( vStringLength(fullscope) > 0 )
 		{
 			jsKind parent_kind = JSTAG_CLASS;
 
@@ -235,10 +247,12 @@ static void makeJsTag (tokenInfo *const token, const jsKind kind)
 				parent_kind = JSTAG_FUNCTION;
 
 			e.extensionFields.scope[0] = JsKinds [parent_kind].name;
-			e.extensionFields.scope[1] = vStringValue (token->scope);
+			e.extensionFields.scope[1] = vStringValue (fullscope);
 		}
 
 		makeTagEntry (&e);
+
+		vStringDelete (fullscope);
 	}
 }
 
