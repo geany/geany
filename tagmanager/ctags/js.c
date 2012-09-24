@@ -1569,18 +1569,10 @@ static void parseJsFile (tokenInfo *const token)
 	{
 		readToken (token);
 
-		if (isType(token, TOKEN_KEYWORD))
-		{
-			switch (token->keyword)
-			{
-				case KEYWORD_function:	parseFunction (token); break;
-				default:				parseLine (token, FALSE); break;
-			}
-		}
+		if (isType (token, TOKEN_KEYWORD) && token->keyword == KEYWORD_function)
+			parseFunction (token);
 		else
-		{
 			parseLine (token, FALSE);
-		}
 	} while (TRUE);
 }
 
