@@ -805,36 +805,9 @@ static boolean parseIf (tokenInfo *const token)
 	{
 		findCmdTerm (token);
 
-		/*
-		 * The IF could be followed by an ELSE statement.
-		 * This too could have two formats, a curly braced
-		 * multiline section, or another single line.
-		 */
-
-		if (isType (token, TOKEN_CLOSE_CURLY))
-		{
-			/*
-			 * This statement did not have a line terminator.
-			 */
-			read_next_token = FALSE;
-		}
-		else
-		{
-			readToken (token);
-
-			if (isType (token, TOKEN_CLOSE_CURLY))
-			{
-				/*
-				* This statement did not have a line terminator.
-				*/
-				read_next_token = FALSE;
-			}
-			else
-			{
-				if (isKeyword (token, KEYWORD_else))
-					read_next_token = parseIf (token);
-			}
-		}
+		/* The next token should only be read if this statement had its own
+		 * terminator */
+		read_next_token = isType (token, TOKEN_SEMICOLON);
 	}
 	return read_next_token;
 }
