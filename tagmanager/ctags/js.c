@@ -1347,6 +1347,8 @@ static boolean parseStatement (tokenInfo *const token, boolean is_inside_class)
 				makeJsTag (name, JSTAG_METHOD);
 				parseBlock (token, name);
 			}
+			else if (isType (token, TOKEN_CLOSE_CURLY))
+				is_terminated = FALSE;
 		}
 		else if (isType (token, TOKEN_OPEN_CURLY))
 		{
@@ -1441,6 +1443,8 @@ static boolean parseStatement (tokenInfo *const token, boolean is_inside_class)
 						}
 					}
 				}
+				else if (isType (token, TOKEN_CLOSE_CURLY))
+					is_terminated = FALSE;
 			}
 		}
 		else if (isKeyword (token, KEYWORD_NONE))
@@ -1486,23 +1490,29 @@ static boolean parseStatement (tokenInfo *const token, boolean is_inside_class)
 			}
 		}
 	}
-	findCmdTerm (token);
 
-	/*
-	 * Statements can be optionally terminated in the case of
-	 * statement prior to a close curly brace as in the
-	 * document.write line below:
-	 *
-	 * function checkForUpdate() {
-	 *	   if( 1==1 ) {
-	 *		   document.write("hello from checkForUpdate<br>")
-	 *	   }
-	 *	   return 1;
-	 * }
-	 */
-	if ( ! is_terminated && isType (token, TOKEN_CLOSE_CURLY)) 
-		is_terminated = FALSE;
+	/* if we aren't already at the cmd end, advance to it and check whether
+	 * the statement was terminated */
+	if (! isType (token, TOKEN_CLOSE_CURLY) &&
+	    ! isType (token, TOKEN_SEMICOLON))
+	{
+		findCmdTerm (token);
 
+		/*
+		 * Statements can be optionally terminated in the case of
+		 * statement prior to a close curly brace as in the
+		 * document.write line below:
+		 *
+		 * function checkForUpdate() {
+		 *	   if( 1==1 ) {
+		 *		   document.write("hello from checkForUpdate<br>")
+		 *	   }
+		 *	   return 1;
+		 * }
+		 */
+		if (isType (token, TOKEN_CLOSE_CURLY))
+			is_terminated = FALSE;
+	}
 
 cleanUp:
 	vStringCopy(token->scope, saveScope);
