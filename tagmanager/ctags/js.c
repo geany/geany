@@ -854,17 +854,14 @@ static void parseFunction (tokenInfo *const token)
 	addToScope(name, token->scope);
 
 	readToken (token);
-	if (isType (token, TOKEN_PERIOD))
+	while (isType (token, TOKEN_PERIOD))
 	{
-		do
+		readToken (token);
+		if ( isKeyword(token, KEYWORD_NONE) )
 		{
+			addContext (name, token);
 			readToken (token);
-			if ( isKeyword(token, KEYWORD_NONE) )
-			{
-				addContext (name, token);
-				readToken (token);
-			}
-		} while (isType (token, TOKEN_PERIOD));
+		}
 	}
 
 	if ( isType (token, TOKEN_OPEN_PAREN) )
@@ -1064,6 +1061,7 @@ static boolean parseStatement (tokenInfo *const token, boolean is_inside_class)
 {
 	tokenInfo *const name = newToken ();
 	tokenInfo *const secondary_name = newToken ();
+	tokenInfo *const method_body_token = newToken ();
 	vString * saveScope = vStringNew ();
 	boolean is_class = FALSE;
 	boolean is_terminated = TRUE;
@@ -1166,7 +1164,7 @@ static boolean parseStatement (tokenInfo *const token, boolean is_inside_class)
 					 * CASE 1
 					 * Specified function name: "build"
 					 *     BindAgent.prototype.build = function( mode ) {
-					 *     	  ignore everything within this function
+					 *     	  maybe parse nested functions
 					 *     }
 					 *
 					 * CASE 2
@@ -1194,20 +1192,23 @@ static boolean parseStatement (tokenInfo *const token, boolean is_inside_class)
 						{
 							vStringCopy(saveScope, token->scope);
 							addToScope(token, name->string);
-
 							makeJsTag (token, JSTAG_METHOD);
-							/*
-							 * We can read until the end of the block / statement.
-							 * We need to correctly parse any nested blocks, but
-							 * we do NOT want to create any tags based on what is
-							 * within the blocks.
-							 */
-							token->ignoreTag = TRUE;
-							/*
-							 * Find to the end of the statement
-							 */
-							findCmdTerm (token);
-							token->ignoreTag = FALSE;
+
+							readToken (method_body_token);
+
+							while (! ( isType (method_body_token, TOKEN_SEMICOLON) ||
+							           isType (method_body_token, TOKEN_CLOSE_CURLY) ||
+							           isType (method_body_token, TOKEN_OPEN_CURLY)) )
+							{
+								if ( isType (method_body_token, TOKEN_OPEN_PAREN) )
+									skipArgumentList(method_body_token);
+								else
+									readToken (method_body_token);
+							}
+
+							if ( isType (method_body_token, TOKEN_OPEN_CURLY))
+								parseBlock (method_body_token, token);
+
 							is_terminated = TRUE;
 							goto cleanUp;
 						}
@@ -1533,6 +1534,7 @@ cleanUp:
 	vStringCopy(token->scope, saveScope);
 	deleteToken (name);
 	deleteToken (secondary_name);
+	deleteToken (method_body_token);
 	vStringDelete(saveScope);
 
 	return is_terminated;
