@@ -590,6 +590,7 @@ static void findCmdTerm (tokenInfo *const token)
 		if ( isType (token, TOKEN_OPEN_CURLY))
 		{
 			parseBlock (token, token);
+			readToken (token);
 		}
 		else if ( isType (token, TOKEN_OPEN_PAREN) )
 		{
