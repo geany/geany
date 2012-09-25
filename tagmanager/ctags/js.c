@@ -1387,7 +1387,9 @@ static boolean parseStatement (tokenInfo *const token, boolean is_inside_class)
 			 *     var z = {};
 			 */
 			has_methods = parseMethods(token, name);
-			if ( ! has_methods )
+			if (has_methods)
+				makeJsTag (name, JSTAG_CLASS);
+			else
 			{
 				/*
 				 * Only create variables for global scope
