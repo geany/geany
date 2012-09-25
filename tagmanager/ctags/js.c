@@ -55,7 +55,6 @@ typedef enum eKeywordId {
 	KEYWORD_NONE = -1,
 	KEYWORD_function,
 	KEYWORD_capital_function,
-	KEYWORD_object,
 	KEYWORD_capital_object,
 	KEYWORD_prototype,
 	KEYWORD_var,
@@ -141,7 +140,6 @@ static const keywordDesc JsKeywordTable [] = {
 	/* keyword		keyword ID */
 	{ "function",	KEYWORD_function			},
 	{ "Function",	KEYWORD_capital_function	},
-	{ "object",		KEYWORD_object				},
 	{ "Object",		KEYWORD_capital_object		},
 	{ "prototype",	KEYWORD_prototype			},
 	{ "var",		KEYWORD_var					},
@@ -1420,11 +1418,9 @@ static boolean parseStatement (tokenInfo *const token, boolean is_inside_class)
 			readToken (token);
 			if ( isKeyword (token, KEYWORD_function) ||
 					isKeyword (token, KEYWORD_capital_function) ||
-					isKeyword (token, KEYWORD_object) ||
 					isKeyword (token, KEYWORD_capital_object) )
 			{
-				if ( isKeyword (token, KEYWORD_object) ||
-						isKeyword (token, KEYWORD_capital_object) )
+				if ( isKeyword (token, KEYWORD_capital_object) )
 					is_class = TRUE;
 
 				readToken (token);
