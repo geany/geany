@@ -1007,15 +1007,42 @@ static boolean parseMethods (tokenInfo *const token, tokenInfo *const class)
 				}
 				else
 				{
+						vString * saveScope = vStringNew ();
+						boolean has_child_methods = FALSE;
+
+						/* skip whatever is the value */
+						while (! isType (token, TOKEN_COMMA) &&
+						       ! isType (token, TOKEN_CLOSE_CURLY))
+						{
+							if (isType (token, TOKEN_OPEN_CURLY))
+							{
+								vStringCopy (saveScope, token->scope);
+								addToScope (token, class->string);
+								has_child_methods = parseMethods (token, name);
+								vStringCopy (token->scope, saveScope);
+								readToken (token);
+							}
+							else if (isType (token, TOKEN_OPEN_PAREN))
+							{
+								skipArgumentList (token);
+							}
+							else if (isType (token, TOKEN_OPEN_SQUARE))
+							{
+								skipArrayList (token);
+							}
+							else
+							{
+								readToken (token);
+							}
+						}
+						vStringDelete (saveScope);
+
 						has_methods = TRUE;
 						addToScope (name, class->string);
-						makeJsTag (name, JSTAG_PROPERTY);
-
-						/*
-						 * Read the next token, if a comma
-						 * we must loop again
-						 */
-						readToken (token);
+						if (has_child_methods)
+							makeJsTag (name, JSTAG_CLASS);
+						else
+							makeJsTag (name, JSTAG_PROPERTY);
 				}
 			}
 		}
