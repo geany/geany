@@ -219,6 +219,9 @@ static void apply_settings(void)
 
 	if (interface_prefs.sidebar_pos != GTK_POS_LEFT)
 		ui_swap_sidebar_pos();
+
+	gtk_orientable_set_orientation(GTK_ORIENTABLE(ui_lookup_widget(main_widgets.window, "vpaned1")),
+		interface_prefs.msgwin_orientation);
 }
 
 

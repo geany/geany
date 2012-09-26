@@ -148,6 +148,11 @@ static void init_pref_groups(void)
 		"radio_sidebar_left", GTK_POS_LEFT,
 		"radio_sidebar_right", GTK_POS_RIGHT,
 		NULL);
+	stash_group_add_radio_buttons(group, &interface_prefs.msgwin_orientation,
+		"msgwin_orientation", GTK_ORIENTATION_VERTICAL,
+		"radio_msgwin_vertical", GTK_ORIENTATION_VERTICAL,
+		"radio_msgwin_horizontal", GTK_ORIENTATION_HORIZONTAL,
+		NULL);
 
 	/* editor display */
 	stash_group_add_toggle_button(group, &interface_prefs.highlighting_invert_all,

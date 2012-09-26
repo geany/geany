@@ -857,6 +857,9 @@ on_prefs_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 		if (interface_prefs.sidebar_pos != old_sidebar_pos)
 			ui_swap_sidebar_pos();
 
+		widget = ui_lookup_widget(main_widgets.window, "vpaned1");
+		gtk_orientable_set_orientation(GTK_ORIENTABLE(widget), interface_prefs.msgwin_orientation);
+
 		/* General settings */
 		/* startup */
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_load_session");
