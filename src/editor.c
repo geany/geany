@@ -4983,42 +4983,54 @@ static void editor_change_line_indent(GeanyEditor *editor, gint line, gboolean i
 void editor_indent(GeanyEditor *editor, gboolean increase)
 {
 	ScintillaObject *sci = editor->sci;
-	gint start, end;
-	gint line, lstart, lend;
+	/* 0 is caret, 1 is anchor */
+	gint orig_pos[2], orig_line[2], orig_offset[2], orig_indent_pos[2], orig_line_len[2];
+
+	/* backup information needed to restore caret and anchor */
+	orig_pos[0] = sci_get_current_position(sci);
+	orig_pos[1] = SSM(sci, SCI_GETANCHOR, 0, 0);
+	orig_line[0] = sci_get_line_from_position(sci, orig_pos[0]);
+	orig_line[1] = sci_get_line_from_position(sci, orig_pos[1]);
+	orig_offset[0] = orig_pos[0] - sci_get_position_from_line(sci, orig_line[0]);
+	orig_offset[1] = orig_pos[1] - sci_get_position_from_line(sci, orig_line[1]);
+	orig_indent_pos[0] = sci_get_line_indent_position(sci, orig_line[0]);
+	orig_indent_pos[1] = sci_get_line_indent_position(sci, orig_line[1]);
+	orig_line_len[0] = sci_get_line_length(sci, orig_line[0]);
+	orig_line_len[1] = sci_get_line_length(sci, orig_line[1]);
 
 	if (sci_get_lines_selected(sci) <= 1)
 	{
-		line = sci_get_current_line(sci);
-		editor_change_line_indent(editor, line, increase);
-		return;
-	}
-	editor_select_lines(editor, FALSE);
-	start = sci_get_selection_start(sci);
-	end = sci_get_selection_end(sci);
-	lstart = sci_get_line_from_position(sci, start);
-	lend = sci_get_line_from_position(sci, end);
-	if (end == sci_get_length(sci))
-		lend++;	/* for last line with text on it */
-
-	sci_start_undo_action(sci);
-	for (line = lstart; line < lend; line++)
-	{
-		editor_change_line_indent(editor, line, increase);
-	}
-	sci_end_undo_action(sci);
-
-	/* set cursor/selection */
-	if (lend > lstart)
-	{
-		sci_set_selection_start(sci, start);
-		end = sci_get_position_from_line(sci, lend);
-		sci_set_selection_end(sci, end);
-		editor_select_lines(editor, FALSE);
+		editor_change_line_indent(editor, sci_get_current_line(sci), increase);
 	}
 	else
 	{
-		sci_set_current_line(sci, lstart);
+		gint start, end;
+		gint line, lstart, lend;
+
+		editor_select_lines(editor, FALSE);
+		start = sci_get_selection_start(sci);
+		end = sci_get_selection_end(sci);
+		lstart = sci_get_line_from_position(sci, start);
+		lend = sci_get_line_from_position(sci, end);
+		if (end == sci_get_length(sci))
+			lend++;	/* for last line with text on it */
+
+		sci_start_undo_action(sci);
+		for (line = lstart; line < lend; line++)
+		{
+			editor_change_line_indent(editor, line, increase);
+		}
+		sci_end_undo_action(sci);
 	}
+
+	/* restore caret and anchor position */
+	if (orig_pos[0] >= orig_indent_pos[0])
+		orig_offset[0] += (sci_get_line_length(sci, orig_line[0]) - orig_line_len[0]);
+	if (orig_pos[1] >= orig_indent_pos[1])
+		orig_offset[1] += (sci_get_line_length(sci, orig_line[1]) - orig_line_len[1]);
+
+	SSM(sci, SCI_SETCURRENTPOS, sci_get_position_from_line(sci, orig_line[0]) + orig_offset[0], 0);
+	SSM(sci, SCI_SETANCHOR, sci_get_position_from_line(sci, orig_line[1]) + orig_offset[1], 0);
 }
 
 
