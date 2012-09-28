@@ -177,7 +177,7 @@ void project_new(void)
 
 	ui_table_add_row(GTK_TABLE(table), 2, label, bbox, NULL);
 
-	gtk_container_add(GTK_CONTAINER(vbox), table);
+	gtk_box_pack_start(GTK_BOX(vbox), table, TRUE, TRUE, 0);
 
 	/* signals */
 	g_signal_connect(e->name, "changed", G_CALLBACK(on_name_entry_changed), e);

@@ -1262,9 +1262,9 @@ void dialogs_show_file_properties(GeanyDocument *doc)
 	gtk_misc_set_alignment(GTK_MISC(image), 1.0, 0.5);
 	hbox = gtk_hbox_new(FALSE, 6);
 	gtk_label_set_use_markup(GTK_LABEL(label), TRUE);
-	gtk_container_add(GTK_CONTAINER(hbox), image);
-	gtk_container_add(GTK_CONTAINER(hbox), label);
-	gtk_container_add(GTK_CONTAINER(vbox), hbox);
+	gtk_box_pack_start(GTK_BOX(hbox), image, TRUE, TRUE, 0);
+	gtk_box_pack_start(GTK_BOX(hbox), label, TRUE, TRUE, 0);
+	gtk_box_pack_start(GTK_BOX(vbox), hbox, TRUE, TRUE, 0);
 
 	table = gtk_table_new(8, 2, FALSE);
 	gtk_table_set_row_spacings(GTK_TABLE(table), 10);
@@ -1394,7 +1394,7 @@ void dialogs_show_file_properties(GeanyDocument *doc)
 	gtk_misc_set_alignment(GTK_MISC(label), 0, 0);
 
 	/* add table */
-	gtk_container_add(GTK_CONTAINER(vbox), table);
+	gtk_box_pack_start(GTK_BOX(vbox), table, TRUE, TRUE, 0);
 
 	/* create table with the permissions */
 	perm_table = gtk_table_new(5, 4, TRUE);
@@ -1537,7 +1537,7 @@ void dialogs_show_file_properties(GeanyDocument *doc)
 					(GtkAttachOptions) (0), 0, 0);
 	gtk_button_set_alignment(GTK_BUTTON(check), 0.5, 0);
 
-	gtk_container_add(GTK_CONTAINER(vbox), perm_table);
+	gtk_box_pack_start(GTK_BOX(vbox), perm_table ,TRUE, TRUE, 0);
 
 	g_free(base_name);
 	g_free(time_changed);

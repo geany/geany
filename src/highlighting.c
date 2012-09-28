@@ -1377,7 +1377,7 @@ void highlighting_show_color_scheme_dialog(void)
 	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(swin),
 		GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
 	gtk_container_add(GTK_CONTAINER(swin), tree);
-	gtk_container_add(GTK_CONTAINER(vbox), swin);
+	gtk_box_pack_start(GTK_BOX(vbox), swin, TRUE, TRUE, 0);
 	g_signal_connect(dialog, "response", G_CALLBACK(on_color_scheme_dialog_response), &dialog);
 	gtk_widget_show_all(dialog);
 }
