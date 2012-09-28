@@ -2260,10 +2260,30 @@ void ui_init_builder(void)
 
 static void init_custom_style(void)
 {
+#if GTK_CHECK_VERSION(3, 0, 0)
+	gchar *css_file = g_build_filename(app->datadir, "geany.css", NULL);
+	GtkCssProvider *css = gtk_css_provider_new();
+	GError *error = NULL;
+
+	if (! gtk_css_provider_load_from_path(css, css_file, &error))
+	{
+		g_warning("Failed to load custom CSS: %s", error->message);
+		g_error_free(error);
+	}
+	else
+	{
+		gtk_style_context_add_provider_for_screen(gdk_screen_get_default(),
+			GTK_STYLE_PROVIDER(css), GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+	}
+
+	g_object_unref(css);
+	g_free(css_file);
+#else
 	gchar *gtkrc_file = g_build_filename(app->datadir, "geany.gtkrc", NULL);
 
 	gtk_rc_parse(gtkrc_file);
 	g_free(gtkrc_file);
+#endif
 }
 
 
