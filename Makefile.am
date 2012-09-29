@@ -24,7 +24,8 @@ SYS_DATA_FILES = \
 	$(srcdir)/data/templates/* \
 	$(srcdir)/data/templates/files/* \
 	$(srcdir)/data/colorschemes/* \
-	$(top_srcdir)/data/geany.glade
+	$(top_srcdir)/data/geany.glade \
+	$(top_srcdir)/data/geany.gtkrc
 
 EXTRA_DIST = \
 	autogen.sh \

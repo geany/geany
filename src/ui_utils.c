@@ -944,20 +944,7 @@ void ui_document_show_hide(GeanyDocument *doc)
 
 void ui_set_search_entry_background(GtkWidget *widget, gboolean success)
 {
-	static const GdkColor red   = {0, 0xffff, 0x6666, 0x6666};
-	static const GdkColor white = {0, 0xffff, 0xffff, 0xffff};
-	static gboolean old_value = TRUE;
-
-	g_return_if_fail(widget != NULL);
-
-	/* update only if really needed */
-	if (old_value != success)
-	{
-		gtk_widget_modify_base(widget, GTK_STATE_NORMAL, success ? NULL : &red);
-		gtk_widget_modify_text(widget, GTK_STATE_NORMAL, success ? NULL : &white);
-
-		old_value = success;
-	}
+	gtk_widget_set_name(widget, success ? NULL : "geany-search-entry-no-match");
 }
 
 
@@ -2270,8 +2257,19 @@ void ui_init_builder(void)
 }
 
 
+static void init_custom_style(void)
+{
+	gchar *gtkrc_file = g_build_filename(app->datadir, "geany.gtkrc", NULL);
+
+	gtk_rc_parse(gtkrc_file);
+	g_free(gtkrc_file);
+}
+
+
 void ui_init(void)
 {
+	init_custom_style();
+
 	init_recent_files();
 
 	ui_widgets.statusbar = ui_lookup_widget(main_widgets.window, "statusbar");

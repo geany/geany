@@ -535,17 +535,6 @@ static gboolean notebook_tab_bar_click_cb(GtkWidget *widget, GdkEventButton *eve
 
 void notebook_init()
 {
-	/* Individual style for the tab close buttons */
-	gtk_rc_parse_string(
-		"style \"geany-close-tab-button-style\" {\n"
-		"	GtkWidget::focus-padding = 0\n"
-		"	GtkWidget::focus-line-width = 0\n"
-		"	xthickness = 0\n"
-		"	ythickness = 0\n"
-		"}\n"
-		"widget \"*.geany-close-tab-button\" style \"geany-close-tab-button-style\""
-	);
-
 	g_signal_connect_after(main_widgets.notebook, "button-press-event",
 		G_CALLBACK(notebook_tab_bar_click_cb), NULL);
 
