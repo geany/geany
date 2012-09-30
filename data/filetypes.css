@@ -5,26 +5,26 @@ default=default
 comment=comment
 tag=tag
 class=class
-pseudoclass=class
-unknown_pseudoclass=class
-unknown_identifier=class
+pseudoclass=string_1
+unknown_pseudoclass=default
+unknown_identifier=default
 operator=operator
-identifier=keyword_1
+identifier=keyword_2
 doublestring=string_1
 singlestring=string_2
 attribute=attribute
 value=value
-id=number
+id=class
 identifier2=keyword_2
 variable=identifier_1
-important=extra
+important=error
 directive=preprocessor
-identifier3=keyword_3
+identifier3=keyword_1
 pseudoelement=element
-extended_identifier=keyword_4
-extended_pseudoclass=class
-extended_pseudoelement=element
-media=string_3
+extended_identifier=keyword_1
+extended_pseudoclass=pseudoclass
+extended_pseudoelement=pseudoelement
+media=parameter
 
 [keywords]
 # CSS 1 properties
