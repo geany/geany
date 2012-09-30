@@ -3,10 +3,14 @@
 
 [keywords]
 # all items must be in one line
-primary=break case catch const continue default delete do each else false finally for function get if in Infinity instanceof let NaN new null return set switch this throw true try typeof undefined var void while with yield prototype
-secondary=Array Boolean Date Function Math Number Object String RegExp EvalError Error RangeError ReferenceError SyntaxError TypeError URIError prototype decodeURI decodeURIComponent encodeURI encodeURIComponent eval isFinite isNaN parseFloat parseInt
+primary=break case catch const class continue debugger default delete do else enum export extends finally for if implements import in instanceof interface let new package private protected public return static super switch throw try typeof while with yield false NaN null true undefined void
+secondary=function var prototype
+classes=Array Boolean Date Function Math Number Object String RegExp EvalError Error RangeError ReferenceError SyntaxError TypeError URIError decodeURI decodeURIComponent encodeURI encodeURIComponent eval isFinite isNaN parseFloat parseInt console document navigator window this constructor
 
 [settings]
+# experimenting ActionScript lexer for Javascript, better syntax highlighting
+lexer_filetype=ActionScript
+
 # default extension used when saving files
 extension=js
 
