@@ -85,7 +85,7 @@ static boolean canMatch (const unsigned char** s, const char* literal)
 	    return FALSE;
 	}
 	/* Additionally check that we're at the end of a token. */
-	if ( ! (next_char == 0 || isspace (next_char) || next_char == '('))
+	if ( ! (next_char == 0 || isspace (next_char) || next_char == '(' || next_char == ';'))
 	{
 	    return FALSE;
 	}
