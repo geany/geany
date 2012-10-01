@@ -14,9 +14,9 @@
  *      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *      GNU General Public License for more details.
  *
- *      You should have received a copy of the GNU General Public License
- *      along with this program; if not, write to the Free Software
- *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *      You should have received a copy of the GNU General Public License along
+ *      with this program; if not, write to the Free Software Foundation, Inc.,
+ *      51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
 /**
@@ -219,6 +219,9 @@ static void apply_settings(void)
 
 	if (interface_prefs.sidebar_pos != GTK_POS_LEFT)
 		ui_swap_sidebar_pos();
+
+	gtk_orientable_set_orientation(GTK_ORIENTABLE(ui_lookup_widget(main_widgets.window, "vpaned1")),
+		interface_prefs.msgwin_orientation);
 }
 
 
@@ -375,13 +378,13 @@ static void setup_paths(void)
 	 * documentation and data files */
 	gchar *install_dir = win32_get_installation_dir();
 
-	data_dir = g_strconcat(install_dir, "\\data", NULL); /* e.g. C:\Program Files\geany\data */
-	doc_dir = g_strconcat(install_dir, "\\doc", NULL);
+	data_dir = g_build_filename(install_dir, "data", NULL); /* e.g. C:\Program Files\geany\data */
+	doc_dir = g_build_filename(install_dir, "doc", NULL);
 
 	g_free(install_dir);
 #else
-	data_dir = g_strconcat(GEANY_DATADIR, "/geany", NULL); /* e.g. /usr/share/geany */
-	doc_dir = g_strconcat(GEANY_DOCDIR, "/html", NULL);
+	data_dir = g_build_filename(GEANY_DATADIR, "geany", NULL); /* e.g. /usr/share/geany */
+	doc_dir = g_build_filename(GEANY_DOCDIR, "html", NULL);
 #endif
 
 	/* convert path names to locale encoding */
@@ -449,7 +452,7 @@ void main_locale_init(const gchar *locale_dir, const gchar *package)
 	{
 		gchar *install_dir = win32_get_installation_dir();
 		/* e.g. C:\Program Files\geany\lib\locale */
-		l_locale_dir = g_strconcat(install_dir, "\\share\\locale", NULL);
+		l_locale_dir = g_build_filename(install_dir, "share", "locale", NULL);
 		g_free(install_dir);
 	}
 #else
@@ -748,7 +751,8 @@ static gint setup_config_dir(void)
 	return mkdir_result;
 }
 
-
+/* Signal handling removed since on_exit_clicked() uses functions that are
+ * illegal in signal handlers
 static void signal_cb(gint sig)
 {
 	if (sig == SIGTERM)
@@ -756,7 +760,7 @@ static void signal_cb(gint sig)
 		on_exit_clicked(NULL, NULL);
 	}
 }
-
+ */
 
 /* Used for command-line arguments at startup or from socket.
  * this will strip any :line:col filename suffix from locale_filename */
@@ -972,8 +976,8 @@ gint main(gint argc, gchar **argv)
 	 * dependencies (e.g. WebKit, Soup, ...) */
 	if (!g_thread_supported())
 		g_thread_init(NULL);
-
-	signal(SIGTERM, signal_cb);
+    /* removed as signal handling was wrong, see signal_cb()
+	signal(SIGTERM, signal_cb); */
 #ifdef G_OS_UNIX
 	/* SIGQUIT is used to kill spawned children and we get also this signal, so ignore */
 	signal(SIGQUIT, SIG_IGN);

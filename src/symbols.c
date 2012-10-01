@@ -15,9 +15,9 @@
  *      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *      GNU General Public License for more details.
  *
- *      You should have received a copy of the GNU General Public License
- *      along with this program; if not, write to the Free Software
- *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *      You should have received a copy of the GNU General Public License along
+ *      with this program; if not, write to the Free Software Foundation, Inc.,
+ *      51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
 /**
@@ -114,7 +114,7 @@ extern gchar **c_tags_ignore;
  * Also works for reloading. */
 static void load_c_ignore_tags(void)
 {
-	gchar *path = g_strconcat(app->configdir, G_DIR_SEPARATOR_S "ignore.tags", NULL);
+	gchar *path = g_build_filename(app->configdir, "ignore.tags", NULL);
 	gchar *content;
 
 	if (g_file_get_contents(path, &content, NULL, NULL))
@@ -209,7 +209,7 @@ void symbols_global_tags_loaded(guint file_type_idx)
 
 	if (! tfi->tags_loaded)
 	{
-		gchar *fname = g_strconcat(app->datadir, G_DIR_SEPARATOR_S, tfi->tag_file, NULL);
+		gchar *fname = g_build_filename(app->datadir, tfi->tag_file, NULL);
 
 		symbols_load_global_tags(fname, filetypes[file_type_idx]);
 		tfi->tags_loaded = TRUE;
@@ -229,7 +229,7 @@ static void html_tags_loaded(void)
 	tfi = &tag_file_info[GTF_HTML_ENTITIES];
 	if (! tfi->tags_loaded)
 	{
-		gchar *file = g_strconcat(app->datadir, G_DIR_SEPARATOR_S, tfi->tag_file, NULL);
+		gchar *file = g_build_filename(app->datadir, tfi->tag_file, NULL);
 
 		html_entities = utils_read_file_in_array(file);
 		tfi->tags_loaded = TRUE;
@@ -548,7 +548,7 @@ static GdkPixbuf *get_tag_icon(const gchar *icon_name)
 	if (G_UNLIKELY(icon_theme == NULL))
 	{
 #ifndef G_OS_WIN32
-		gchar *path = g_strconcat(GEANY_DATADIR, "/icons", NULL);
+		gchar *path = g_build_filename(GEANY_DATADIR, "icons", NULL);
 #endif
 		gtk_icon_size_lookup(GTK_ICON_SIZE_MENU, &x, &y);
 		icon_theme = gtk_icon_theme_get_default();
@@ -818,7 +818,7 @@ static void add_top_level_items(GeanyDocument *doc)
 		case GEANY_FILETYPES_RUBY:
 		{
 			tag_list_add_groups(tag_store,
-				&(tv_iters.tag_namespace), _("Modules"), NULL,
+				&(tv_iters.tag_namespace), _("Modules"), "classviewer-namespace",
 				&(tv_iters.tag_class), _("Classes"), "classviewer-class",
 				&(tv_iters.tag_member), _("Singletons"), "classviewer-struct",
 				&(tv_iters.tag_function), _("Methods"), "classviewer-method",
@@ -855,7 +855,7 @@ static void add_top_level_items(GeanyDocument *doc)
 				&(tv_iters.tag_type), _("Types"), "classviewer-other",
 				&(tv_iters.tag_function), _("Functions / Procedures"), "classviewer-method",
 				&(tv_iters.tag_variable), _("Variables / Signals"), "classviewer-var",
-				&(tv_iters.tag_member), _("Processes / Components"), "classviewer-member",
+				&(tv_iters.tag_member), _("Processes / Blocks / Components"), "classviewer-member",
 				&(tv_iters.tag_other), _("Other"), "classviewer-other",
 				NULL);
 			break;
@@ -1959,35 +1959,30 @@ static gint get_function_fold_number(GeanyDocument *doc)
 }
 
 
-/* Should be used only with symbols_get_current_function. */
-static gboolean current_function_changed(GeanyDocument *doc, gint cur_line, gint fold_level)
+/* Should be used only with get_current_tag_cached.
+ * tag_types caching might trigger recomputation too often but this isn't used differently often
+ * enough to be an issue for now */
+static gboolean current_tag_changed(GeanyDocument *doc, gint cur_line, gint fold_level, guint tag_types)
 {
 	static gint old_line = -2;
 	static GeanyDocument *old_doc = NULL;
 	static gint old_fold_num = -1;
+	static guint old_tag_types = 0;
 	const gint fold_num = fold_level & SC_FOLDLEVELNUMBERMASK;
 	gboolean ret;
 
 	/* check if the cached line and file index have changed since last time: */
-	if (doc == NULL || doc != old_doc)
+	if (doc == NULL || doc != old_doc || old_tag_types != tag_types)
 		ret = TRUE;
-	else
-	if (cur_line == old_line)
+	else if (cur_line == old_line)
 		ret = FALSE;
 	else
 	{
 		/* if the line has only changed by 1 */
 		if (abs(cur_line - old_line) == 1)
 		{
-			const gint fn_fold =
-				get_function_fold_number(doc);
-			/* It's the same function if the fold number hasn't changed, or both the new
-			 * and old fold numbers are above the function fold number. */
-			gboolean same =
-				fold_num == old_fold_num ||
-				(old_fold_num > fn_fold && fold_num > fn_fold);
-
-			ret = ! same;
+			/* It's the same function if the fold number hasn't changed */
+			ret = (fold_num != old_fold_num);
 		}
 		else ret = TRUE;
 	}
@@ -1996,6 +1991,7 @@ static gboolean current_function_changed(GeanyDocument *doc, gint cur_line, gint
 	old_line = cur_line;
 	old_doc = doc;
 	old_fold_num = fold_num;
+	old_tag_types = tag_types;
 	return ret;
 }
 
@@ -2076,82 +2072,79 @@ static gchar *parse_cpp_function_at_line(ScintillaObject *sci, gint tag_line)
 }
 
 
-/* Sets *tagname to point at the current function or tag name.
- * If doc is NULL, reset the cached current tag data to ensure it will be reparsed on the next
- * call to this function.
- * Returns: line number of the current tag, or -1 if unknown. */
-gint symbols_get_current_function(GeanyDocument *doc, const gchar **tagname)
+static gint get_fold_header_after(ScintillaObject *sci, gint line)
 {
-	static gint tag_line = -1;
-	static gchar *cur_tag = NULL;
-	gint line;
-	gint fold_level;
-	TMWorkObject *tm_file;
+	gint line_count = sci_get_line_count(sci);
 
-	if (doc == NULL)	/* reset current function */
+	for (; line < line_count; line++)
 	{
-		current_function_changed(NULL, -1, -1);
-		g_free(cur_tag);
-		cur_tag = g_strdup(_("unknown"));
-		if (tagname != NULL)
-			*tagname = cur_tag;
-		tag_line = -1;
-		return tag_line;
+		if (sci_get_fold_level(sci, line) & SC_FOLDLEVELHEADERFLAG)
+			return line;
 	}
+
+	return -1;
+}
+
+
+static gint get_current_tag_name(GeanyDocument *doc, gchar **tagname, guint tag_types)
+{
+	gint line;
+	gint parent;
 
 	line = sci_get_current_line(doc->editor->sci);
-	fold_level = sci_get_fold_level(doc->editor->sci, line);
-	/* check if the cached line and file index have changed since last time: */
-	if (! current_function_changed(doc, line, fold_level))
+	parent = sci_get_fold_parent(doc->editor->sci, line);
+	/* if we're inside a fold level and we have up-to-date tags, get the function from TM */
+	if (parent >= 0 && doc->tm_file != NULL && doc->tm_file->tags_array != NULL &&
+		(! doc->changed || editor_prefs.autocompletion_update_freq > 0))
 	{
-		/* we can assume same current function as before */
-		*tagname = cur_tag;
-		return tag_line;
-	}
-	g_free(cur_tag); /* free the old tag, it will be replaced. */
+		const TMTag *tag = tm_get_current_tag(doc->tm_file->tags_array, parent + 1, tag_types);
 
-	/* if line is at base fold level, we're not in a function */
-	if ((fold_level & SC_FOLDLEVELNUMBERMASK) == SC_FOLDLEVELBASE)
-	{
-		cur_tag = g_strdup(_("unknown"));
-		*tagname = cur_tag;
-		tag_line = -1;
-		return tag_line;
-	}
-	tm_file = doc->tm_file;
-
-	/* if the document has no changes, get the previous function name from TM */
-	if (! doc->changed && tm_file != NULL && tm_file->tags_array != NULL)
-	{
-		const TMTag *tag = (const TMTag*) tm_get_current_function(tm_file->tags_array, line);
-
-		if (tag != NULL)
+		if (tag)
 		{
-			gchar *tmp;
-			tmp = tag->atts.entry.scope;
-			cur_tag = tmp ? g_strconcat(tmp, "::", tag->name, NULL) : g_strdup(tag->name);
-			*tagname = cur_tag;
-			tag_line = tag->atts.entry.line;
-			return tag_line;
+			gint tag_line = tag->atts.entry.line - 1;
+			gint last_child = line + 1;
+
+			/* if it may be a false positive because we're inside a fold level not inside anything
+			 * we match, e.g. a #if in C or C++, we check we're inside the fold level that start
+			 * right after the tag we got from TM */
+			if (abs(tag_line - parent) > 1)
+			{
+				gint tag_fold = get_fold_header_after(doc->editor->sci, tag_line);
+				if (tag_fold >= 0)
+					last_child = scintilla_send_message(doc->editor->sci, SCI_GETLASTCHILD, tag_fold, -1);
+			}
+
+			if (line <= last_child)
+			{
+				if (tag->atts.entry.scope)
+					*tagname = g_strconcat(tag->atts.entry.scope,
+							symbols_get_context_separator(doc->file_type->id), tag->name, NULL);
+				else
+					*tagname = g_strdup(tag->name);
+
+				return tag_line;
+			}
 		}
 	}
-
-	/* parse the current function name here because TM line numbers may have changed,
-	 * and it would take too long to reparse the whole file. */
-	if (doc->file_type != NULL && doc->file_type->id != GEANY_FILETYPES_NONE)
+	/* for the poor guy with a modified document and without real time tag parsing, we fallback
+	 * to dirty and inaccurate hand-parsing */
+	else if (parent >= 0 && doc->file_type != NULL && doc->file_type->id != GEANY_FILETYPES_NONE)
 	{
 		const gint fn_fold = get_function_fold_number(doc);
+		gint tag_line = parent;
+		gint fold_level = sci_get_fold_level(doc->editor->sci, tag_line);
 
-		tag_line = line;
-		do	/* find the top level fold point */
+		/* find the top level fold point */
+		while (tag_line >= 0 && (fold_level & SC_FOLDLEVELNUMBERMASK) != fn_fold)
 		{
 			tag_line = sci_get_fold_parent(doc->editor->sci, tag_line);
 			fold_level = sci_get_fold_level(doc->editor->sci, tag_line);
-		} while (tag_line >= 0 &&
-			(fold_level & SC_FOLDLEVELNUMBERMASK) != fn_fold);
+		}
 
 		if (tag_line >= 0)
 		{
+			gchar *cur_tag;
+
 			if (sci_get_lexer(doc->editor->sci) == SCLEX_CPP)
 				cur_tag = parse_cpp_function_at_line(doc->editor->sci, tag_line);
 			else
@@ -2165,10 +2158,63 @@ gint symbols_get_current_function(GeanyDocument *doc, const gchar **tagname)
 		}
 	}
 
-	cur_tag = g_strdup(_("unknown"));
-	*tagname = cur_tag;
-	tag_line = -1;
+	*tagname = g_strdup(_("unknown"));
+	return -1;
+}
+
+
+static gint get_current_tag_name_cached(GeanyDocument *doc, const gchar **tagname, guint tag_types)
+{
+	static gint tag_line = -1;
+	static gchar *cur_tag = NULL;
+
+	if (doc == NULL)	/* reset current function */
+	{
+		current_tag_changed(NULL, -1, -1, 0);
+		g_free(cur_tag);
+		cur_tag = g_strdup(_("unknown"));
+		if (tagname != NULL)
+			*tagname = cur_tag;
+		tag_line = -1;
+	}
+	else
+	{
+		gint line = sci_get_current_line(doc->editor->sci);
+		gint fold_level = sci_get_fold_level(doc->editor->sci, line);
+
+		if (current_tag_changed(doc, line, fold_level, tag_types))
+		{
+			g_free(cur_tag);
+			tag_line = get_current_tag_name(doc, &cur_tag, tag_types);
+		}
+		*tagname = cur_tag;
+	}
+
 	return tag_line;
+}
+
+
+/* Sets *tagname to point at the current function or tag name.
+ * If doc is NULL, reset the cached current tag data to ensure it will be reparsed on the next
+ * call to this function.
+ * Returns: line number of the current tag, or -1 if unknown. */
+gint symbols_get_current_function(GeanyDocument *doc, const gchar **tagname)
+{
+	return get_current_tag_name_cached(doc, tagname, tm_tag_function_t | tm_tag_method_t);
+}
+
+
+/* same as symbols_get_current_function() but finds class, namespaces and more */
+gint symbols_get_current_scope(GeanyDocument *doc, const gchar **tagname)
+{
+	guint tag_types = (tm_tag_function_t | tm_tag_method_t | tm_tag_class_t |
+			tm_tag_struct_t | tm_tag_enum_t | tm_tag_union_t);
+
+	/* Python parser reports imports as namespaces which confuses the scope detection */
+	if (doc && doc->file_type->lang != filetypes[GEANY_FILETYPES_PYTHON]->lang)
+		tag_types |= tm_tag_namespace_t;
+
+	return get_current_tag_name_cached(doc, tagname, tag_types);
 }
 
 

@@ -152,7 +152,14 @@ const GPtrArray *
 tm_workspace_find_namespace_members (const GPtrArray * file_tags, const char *name,
                                      gboolean search_global);
 
-/* Returns TMTag to function which "own" given line
+/* Returns TMTag which "own" given line
+ \param line Current line in edited file.
+ \param file_tags A GPtrArray of edited file TMTag pointers.
+ \param tag_types the tag types to include in the match
+ \return TMTag pointers to owner tag. */
+const TMTag *tm_get_current_tag(GPtrArray *file_tags, const gulong line, const guint tag_types);
+
+/* Returns TMTag to function or method which "own" given line
  \param line Current line in edited file.
  \param file_tags A GPtrArray of edited file TMTag pointers.
  \return TMTag pointers to owner function. */

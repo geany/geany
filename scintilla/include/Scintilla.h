@@ -246,6 +246,7 @@ typedef sptr_t (*SciFnDirect)(sptr_t ptr, unsigned int iMessage, uptr_t wParam, 
 #define SCI_GETCARETPERIOD 2075
 #define SCI_SETCARETPERIOD 2076
 #define SCI_SETWORDCHARS 2077
+#define SCI_GETWORDCHARS 2646
 #define SCI_BEGINUNDOACTION 2078
 #define SCI_ENDUNDOACTION 2079
 #define INDIC_PLAIN 0
@@ -261,6 +262,7 @@ typedef sptr_t (*SciFnDirect)(sptr_t ptr, unsigned int iMessage, uptr_t wParam, 
 #define INDIC_DOTS 10
 #define INDIC_SQUIGGLELOW 11
 #define INDIC_DOTBOX 12
+#define INDIC_SQUIGGLEPIXMAP 13
 #define INDIC_MAX 31
 #define INDIC_CONTAINER 8
 #define INDIC0_MASK 0x20
@@ -684,6 +686,9 @@ typedef sptr_t (*SciFnDirect)(sptr_t ptr, unsigned int iMessage, uptr_t wParam, 
 #define SCI_WORDRIGHTEND 2441
 #define SCI_WORDRIGHTENDEXTEND 2442
 #define SCI_SETWHITESPACECHARS 2443
+#define SCI_GETWHITESPACECHARS 2647
+#define SCI_SETPUNCTUATIONCHARS 2648
+#define SCI_GETPUNCTUATIONCHARS 2649
 #define SCI_SETCHARSDEFAULT 2444
 #define SCI_AUTOCGETCURRENT 2445
 #define SCI_AUTOCGETCURRENTTEXT 2610
@@ -783,6 +788,7 @@ typedef sptr_t (*SciFnDirect)(sptr_t ptr, unsigned int iMessage, uptr_t wParam, 
 #define SCI_SETADDITIONALCARETSVISIBLE 2608
 #define SCI_GETADDITIONALCARETSVISIBLE 2609
 #define SCI_GETSELECTIONS 2570
+#define SCI_GETSELECTIONEMPTY 2650
 #define SCI_CLEARSELECTIONS 2571
 #define SCI_SETSELECTION 2572
 #define SCI_ADDSELECTION 2573
@@ -832,6 +838,7 @@ typedef sptr_t (*SciFnDirect)(sptr_t ptr, unsigned int iMessage, uptr_t wParam, 
 #define SCI_GETIDENTIFIER 2623
 #define SCI_RGBAIMAGESETWIDTH 2624
 #define SCI_RGBAIMAGESETHEIGHT 2625
+#define SCI_RGBAIMAGESETSCALE 2651
 #define SCI_MARKERDEFINERGBAIMAGE 2626
 #define SCI_REGISTERRGBAIMAGE 2627
 #define SCI_SCROLLTOSTART 2628
@@ -844,6 +851,8 @@ typedef sptr_t (*SciFnDirect)(sptr_t ptr, unsigned int iMessage, uptr_t wParam, 
 #define SCI_FINDINDICATORSHOW 2640
 #define SCI_FINDINDICATORFLASH 2641
 #define SCI_FINDINDICATORHIDE 2642
+#define SCI_VCHOMEDISPLAY 2652
+#define SCI_VCHOMEDISPLAYEXTEND 2653
 #define SCI_STARTRECORD 3001
 #define SCI_STOPRECORD 3002
 #define SCI_SETLEXER 4001

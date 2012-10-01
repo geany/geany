@@ -85,7 +85,7 @@ static boolean canMatch (const unsigned char** s, const char* literal)
 	    return FALSE;
 	}
 	/* Additionally check that we're at the end of a token. */
-	if ( ! (next_char == 0 || isspace (next_char) || next_char == '('))
+	if ( ! (next_char == 0 || isspace (next_char) || next_char == '(' || next_char == ';'))
 	{
 	    return FALSE;
 	}
@@ -287,6 +287,9 @@ static void findRubyTags (void)
 	while ((line = fileReadLine ()) != NULL)
 	{
 		const unsigned char *cp = line;
+		/* if we expect a separator after a while, for, or until statement
+		 * separators are "do", ";" or newline */
+		boolean expect_separator = FALSE;
 
 		if (canMatch (&cp, "=begin"))
 		{
@@ -318,9 +321,14 @@ static void findRubyTags (void)
 		*   puts("hello") \
 		*       unless <exp>
 		*/
-		if (canMatch (&cp, "case") || canMatch (&cp, "for") ||
-			canMatch (&cp, "if") || canMatch (&cp, "unless") ||
+		if (canMatch (&cp, "for") || canMatch (&cp, "until") ||
 			canMatch (&cp, "while"))
+		{
+			expect_separator = TRUE;
+			enterUnnamedScope ();
+		}
+		else if (canMatch (&cp, "case") || canMatch (&cp, "if") ||
+				 canMatch (&cp, "unless"))
 		{
 			enterUnnamedScope ();
 		}
@@ -362,9 +370,16 @@ static void findRubyTags (void)
 				*/
 				break;
 			}
-			else if (canMatch (&cp, "begin") || canMatch (&cp, "do"))
+			else if (canMatch (&cp, "begin"))
 			{
 				enterUnnamedScope ();
+			}
+			else if (canMatch (&cp, "do"))
+			{
+				if (! expect_separator)
+					enterUnnamedScope ();
+				else
+					expect_separator = FALSE;
 			}
 			else if (canMatch (&cp, "end") && stringListCount (nesting) > 0)
 			{
@@ -382,6 +397,11 @@ static void findRubyTags (void)
 				} while (*cp != 0 && *cp != '"');
 				if (*cp == '"')
 				    cp++; /* skip the last found '"' */
+			}
+			else if (*cp == ';')
+			{
+				++cp;
+				expect_separator = FALSE;
 			}
 			else if (*cp != '\0')
 			{

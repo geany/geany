@@ -133,6 +133,7 @@ protected:	// ScintillaBase subclass needs access to much of Editor
 	ViewStyle vs;
 	int technology;
 	Point sizeRGBAImage;
+	float scaleRGBAImage;
 
 	int printMagnification;
 	int printColourMode;
@@ -267,6 +268,9 @@ protected:	// ScintillaBase subclass needs access to much of Editor
 	int wrapIndentMode; // SC_WRAPINDENT_FIXED, _SAME, _INDENT
 
 	bool convertPastes;
+
+	int marginNumberPadding; // the right-side padding of the number margin
+	int ctrlCharPadding; // the padding around control character text blobs
 
 	Document *pdoc;
 
@@ -480,6 +484,7 @@ protected:	// ScintillaBase subclass needs access to much of Editor
 
 	virtual void CopyToClipboard(const SelectionText &selectedText) = 0;
 	char *CopyRange(int start, int end);
+	std::string RangeText(int start, int end) const;
 	void CopySelectionRange(SelectionText *ss, bool allowLineCopy=false);
 	void CopyRangeToClipboard(int start, int end);
 	void CopyText(int length, const char *text);

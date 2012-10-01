@@ -15,9 +15,9 @@
  *      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *      GNU General Public License for more details.
  *
- *      You should have received a copy of the GNU General Public License
- *      along with this program; if not, write to the Free Software
- *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *      You should have received a copy of the GNU General Public License along
+ *      with this program; if not, write to the Free Software Foundation, Inc.,
+ *      51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
 
@@ -180,6 +180,7 @@ static const HLStyle highlighting_styles_C[] =
 	{ SCE_C_COMMENT,				"comment",					FALSE },
 	{ SCE_C_COMMENTLINE,			"commentline",				FALSE },
 	{ SCE_C_COMMENTDOC,				"commentdoc",				FALSE },
+	{ SCE_C_PREPROCESSORCOMMENT,	"preprocessorcomment",		FALSE },
 	{ SCE_C_NUMBER,					"number",					FALSE },
 	{ SCE_C_WORD,					"word",						FALSE },
 	{ SCE_C_WORD2,					"word2",					FALSE },
@@ -545,7 +546,12 @@ static const HLStyle highlighting_styles_FORTH[] =
 };
 static const HLKeyword highlighting_keywords_FORTH[] =
 {
-	{ 0, "primary",	FALSE }
+	{ 0, "primary",		FALSE },
+	{ 1, "keyword",		FALSE },
+	{ 2, "defword",		FALSE },
+	{ 3, "preword1",	FALSE },
+	{ 4, "preword2",	FALSE },
+	{ 5, "string",		FALSE }
 };
 #define highlighting_properties_FORTH	EMPTY_PROPERTIES
 

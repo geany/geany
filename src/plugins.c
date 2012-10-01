@@ -14,10 +14,9 @@
  *      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *      GNU General Public License for more details.
  *
- *      You should have received a copy of the GNU General Public License
- *      along with this program; if not, write to the Free Software
- *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
- *      MA 02110-1301, USA.
+ *      You should have received a copy of the GNU General Public License along
+ *      with this program; if not, write to the Free Software Foundation, Inc.,
+ *      51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
 /* Code to manage, load and unload plugins. */
@@ -883,7 +882,7 @@ static gboolean check_plugin_path(const gchar *fname)
 	gchar *plugin_path_custom;
 	gboolean ret = FALSE;
 
-	plugin_path_config = g_strconcat(app->configdir, G_DIR_SEPARATOR_S, "plugins", NULL);
+	plugin_path_config = g_build_filename(app->configdir, "plugins", NULL);
 	if (g_str_has_prefix(fname, plugin_path_config))
 		ret = TRUE;
 
@@ -942,7 +941,7 @@ load_plugins_from_path(const gchar *path)
 		if (tmp == NULL || utils_str_casecmp(tmp, "." G_MODULE_SUFFIX) != 0)
 			continue;
 
-		fname = g_strconcat(path, G_DIR_SEPARATOR_S, item->data, NULL);
+		fname = g_build_filename(path, item->data, NULL);
 		if (plugin_new(fname, FALSE, TRUE))
 			count++;
 		g_free(fname);
@@ -962,12 +961,12 @@ static gchar *get_plugin_path(void)
 	gchar *path;
 	gchar *install_dir = win32_get_installation_dir();
 
-	path = g_strconcat(install_dir, "\\lib", NULL);
+	path = g_build_filename(install_dir, "lib", NULL);
 	g_free(install_dir);
 
 	return path;
 #else
-	return g_strconcat(GEANY_LIBDIR, G_DIR_SEPARATOR_S "geany", NULL);
+	return g_build_filename(GEANY_LIBDIR, "geany", NULL);
 #endif
 }
 
@@ -979,7 +978,7 @@ static void load_all_plugins(void)
 	gchar *plugin_path_system;
 	gchar *plugin_path_custom;
 
-	plugin_path_config = g_strconcat(app->configdir, G_DIR_SEPARATOR_S, "plugins", NULL);
+	plugin_path_config = g_build_filename(app->configdir, "plugins", NULL);
 	plugin_path_system = get_plugin_path();
 
 	/* first load plugins in ~/.config/geany/plugins/ */
@@ -1051,11 +1050,19 @@ void plugins_load_active(void)
 }
 
 
+/* Update the global active plugins list so it's up-to-date when configuration
+ * is saved. Called in response to GeanyObject's "save-settings" signal. */
 static void update_active_plugins_pref(void)
 {
 	gint i = 0;
 	GList *list;
-	gsize count = g_list_length(active_plugin_list) + g_list_length(failed_plugins_list);
+	gsize count;
+
+	/* if plugins are disabled, don't clear list of active plugins */
+	if (!want_plugins)
+		return;
+
+	count = g_list_length(active_plugin_list) + g_list_length(failed_plugins_list);
 
 	g_strfreev(active_plugins_pref);
 
@@ -1085,14 +1092,6 @@ static void update_active_plugins_pref(void)
 }
 
 
-static void on_save_settings(GKeyFile *config)
-{
-	/* if plugins are disabled, don't clear list of active plugins */
-	if (want_plugins)
-		update_active_plugins_pref();
-}
-
-
 /* called even if plugin support is disabled */
 void plugins_init(void)
 {
@@ -1111,7 +1110,7 @@ void plugins_init(void)
 	stash_group_add_entry(group, &prefs.custom_plugin_path,
 		"custom_plugin_path", "", "extra_plugin_path_entry");
 
-	g_signal_connect(geany_object, "save-settings", G_CALLBACK(on_save_settings), NULL);
+	g_signal_connect(geany_object, "save-settings", G_CALLBACK(update_active_plugins_pref), NULL);
 	stash_group_add_string_vector(group, &active_plugins_pref, "active_plugins", NULL);
 }
 
@@ -1375,6 +1374,8 @@ free_non_active_plugin(gpointer data, gpointer user_data)
 }
 
 
+/* Callback when plugin manager dialog closes, only ever has response of
+ * GTK_RESPONSE_OK or GTK_RESPONSE_DELETE_EVENT and both are treated the same. */
 static void pm_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 {
 	if (plugin_list != NULL)
@@ -1413,7 +1414,7 @@ static void pm_show_dialog(GtkMenuItem *menuitem, gpointer user_data)
 
 	pm_widgets.dialog = gtk_dialog_new_with_buttons(_("Plugins"), GTK_WINDOW(main_widgets.window),
 						GTK_DIALOG_DESTROY_WITH_PARENT,
-						GTK_STOCK_OK, GTK_RESPONSE_CANCEL, NULL);
+						GTK_STOCK_OK, GTK_RESPONSE_OK, NULL);
 	vbox = ui_dialog_vbox_new(GTK_DIALOG(pm_widgets.dialog));
 	gtk_widget_set_name(pm_widgets.dialog, "GeanyDialog");
 	gtk_box_set_spacing(GTK_BOX(vbox), 6);
@@ -1483,7 +1484,7 @@ static void pm_show_dialog(GtkMenuItem *menuitem, gpointer user_data)
 
 	g_signal_connect(pm_widgets.dialog, "response", G_CALLBACK(pm_dialog_response), NULL);
 
-	gtk_container_add(GTK_CONTAINER(vbox), vbox2);
+	gtk_box_pack_start(GTK_BOX(vbox), vbox2, TRUE, TRUE, 0);
 	gtk_widget_show_all(pm_widgets.dialog);
 }
 

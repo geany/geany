@@ -15,9 +15,9 @@
  *      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *      GNU General Public License for more details.
  *
- *      You should have received a copy of the GNU General Public License
- *      along with this program; if not, write to the Free Software
- *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *      You should have received a copy of the GNU General Public License along
+ *      with this program; if not, write to the Free Software Foundation, Inc.,
+ *      51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
 /*
@@ -611,7 +611,13 @@ gboolean socket_lock_input_cb(GIOChannel *source, GIOCondition condition, gpoint
 			cl_options.readonly = strncmp(buf+4, "ro", 2) == 0; /* open in readonly? */
 			while (socket_fd_gets(sock, buf, sizeof(buf)) != -1 && *buf != '.')
 			{
-				handle_input_filename(g_strstrip(buf));
+				gsize buf_len = strlen(buf);
+
+				/* remove trailing newline */
+				if (buf_len > 0 && buf[buf_len - 1] == '\n')
+					buf[buf_len - 1] = '\0';
+
+				handle_input_filename(buf);
 			}
 			popup = TRUE;
 		}

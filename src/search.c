@@ -14,9 +14,9 @@
  *      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *      GNU General Public License for more details.
  *
- *      You should have received a copy of the GNU General Public License
- *      along with this program; if not, write to the Free Software
- *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *      You should have received a copy of the GNU General Public License along
+ *      with this program; if not, write to the Free Software Foundation, Inc.,
+ *      51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
 /*
@@ -539,7 +539,7 @@ static void create_find_dialog(void)
 	gtk_button_box_set_child_secondary(GTK_BUTTON_BOX(bbox), check_close, TRUE);
 
 	ui_hbutton_box_copy_layout(
-		GTK_BUTTON_BOX(GTK_DIALOG(find_dlg.dialog)->action_area),
+		GTK_BUTTON_BOX(gtk_dialog_get_action_area(GTK_DIALOG(find_dlg.dialog))),
 		GTK_BUTTON_BOX(bbox));
 	gtk_container_add(GTK_CONTAINER(exp), bbox);
 	gtk_container_add(GTK_CONTAINER(vbox), exp);
@@ -721,7 +721,7 @@ static void create_replace_dialog(void)
 	gtk_button_box_set_child_secondary(GTK_BUTTON_BOX(bbox), check_close, TRUE);
 
 	ui_hbutton_box_copy_layout(
-		GTK_BUTTON_BOX(GTK_DIALOG(replace_dlg.dialog)->action_area),
+		GTK_BUTTON_BOX(gtk_dialog_get_action_area(GTK_DIALOG(replace_dlg.dialog))),
 		GTK_BUTTON_BOX(bbox));
 	gtk_container_add(GTK_CONTAINER(exp), bbox);
 	gtk_container_add(GTK_CONTAINER(vbox), exp);
@@ -1073,12 +1073,27 @@ void search_show_find_in_files_dialog(const gchar *dir)
 		cur_dir = g_strdup(dir);	/* custom directory argument passed */
 	else
 	{
-		gboolean entry_empty = ! NZV(gtk_entry_get_text(GTK_ENTRY(entry)));
-
-		if (search_prefs.use_current_file_dir || entry_empty)
+		if (search_prefs.use_current_file_dir)
 		{
-			cur_dir = utils_get_current_file_dir_utf8();
+			static gchar *last_cur_dir = NULL;
+			static GeanyDocument *last_doc = NULL;
 
+			/* Only set the directory entry once for the current document */
+			cur_dir = utils_get_current_file_dir_utf8();
+			if (doc == last_doc && cur_dir && utils_str_equal(cur_dir, last_cur_dir))
+			{
+				/* in case the user now wants the current directory, add it to history */
+				ui_combo_box_add_to_history(
+					GTK_COMBO_BOX_ENTRY(fif_dlg.dir_combo), cur_dir, 0);
+				SETPTR(cur_dir, NULL);
+			}
+			else
+				SETPTR(last_cur_dir, g_strdup(cur_dir));
+
+			last_doc = doc;
+		}
+		if (!cur_dir && ! NZV(gtk_entry_get_text(GTK_ENTRY(entry))))
+		{
 			/* use default_open_path if no directory could be determined
 			 * (e.g. when no files are open) */
 			if (!cur_dir)
@@ -1162,7 +1177,7 @@ gint search_mark_all(GeanyDocument *doc, const gchar *search_text, gint flags)
 	ttf.lpstrText = (gchar *)search_text;
 	while (TRUE)
 	{
-		pos = sci_find_text(doc->editor->sci, flags, &ttf);
+		pos = search_find_text(doc->editor->sci, flags, &ttf);
 		if (pos == -1) break;
 
 		len = ttf.chrgText.cpMax - ttf.chrgText.cpMin;
@@ -1170,6 +1185,9 @@ gint search_mark_all(GeanyDocument *doc, const gchar *search_text, gint flags)
 			editor_indicator_set_on_range(doc->editor, GEANY_INDICATOR_SEARCH, pos, pos + len);
 
 		ttf.chrg.cpMin = ttf.chrgText.cpMax;
+		/* make sure to advance even with empty matches (see find_document_usage()) */
+		if (len == 0)
+			ttf.chrg.cpMin ++;
 		count++;
 	}
 	return count;
@@ -1241,9 +1259,10 @@ on_find_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 		if (search_data.flags & SCFIND_REGEXP)
 		{
 			GRegex *regex = compile_regex(search_data.text, search_data.flags);
-			g_regex_unref(regex);
 			if (!regex)
 				goto fail;
+			else
+				g_regex_unref(regex);
 		}
 		else if (settings.find_escape_sequences)
 		{
@@ -1374,7 +1393,8 @@ on_replace_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 	if (search_flags_re & SCFIND_REGEXP)
 	{
 		GRegex *regex = compile_regex(find, search_flags_re);
-		g_regex_unref(regex);
+		if (regex)
+			g_regex_unref(regex);
 		/* find escapes will be handled by GRegex */
 		if (!regex || !utils_str_replace_escape(replace, TRUE))
 			goto fail;
@@ -1879,7 +1899,7 @@ static gint find_regex(ScintillaObject *sci, guint pos, GRegex *regex)
 	GMatchInfo *minfo;
 	gint ret = -1;
 
-	g_return_val_if_fail(pos <= (guint)sci_get_length(sci), FALSE);
+	g_return_val_if_fail(pos <= (guint)sci_get_length(sci), -1);
 
 	/* clear old match */
 	SETPTR(regex_match_text, NULL);
@@ -1925,6 +1945,9 @@ gint search_find_next(ScintillaObject *sci, const gchar *str, gint flags)
 
 	pos = sci_get_current_position(sci);
 	ret = find_regex(sci, pos, regex);
+	/* avoid re-matching the same position in case of empty matches */
+	if (ret == pos && regex_matches[0].start == regex_matches[0].end)
+		ret = find_regex(sci, pos + 1, regex);
 	if (ret >= 0)
 		sci_set_selection(sci, ret, regex_matches[0].end);
 
@@ -2020,14 +2043,11 @@ static gint find_document_usage(GeanyDocument *doc, const gchar *search_text, gi
 	ttf.lpstrText = (gchar *)search_text;
 	while (1)
 	{
-		gint pos, line, start, find_len;
+		gint pos, line;
 
 		pos = search_find_text(doc->editor->sci, flags, &ttf);
 		if (pos == -1)
 			break;	/* no more matches */
-		find_len = ttf.chrgText.cpMax - ttf.chrgText.cpMin;
-		if (find_len == 0)
-			break;	/* Ignore regex ^ or $ */
 
 		count++;
 		line = sci_get_line_from_position(doc->editor->sci, pos);
@@ -2040,8 +2060,12 @@ static gint find_document_usage(GeanyDocument *doc, const gchar *search_text, gi
 			prev_line = line;
 		}
 
-		start = ttf.chrgText.cpMax + 1;
-		ttf.chrg.cpMin = start;
+		ttf.chrg.cpMin = ttf.chrgText.cpMax;
+		/* avoid rematching with empty matches like "(?=[a-z])" or "^$".
+		 * note we cannot assume a match will always be empty or not and then break out, since
+		 * matches like "a?(?=b)" will me sometimes empty and sometimes not */
+		if ((ttf.chrgText.cpMax - ttf.chrgText.cpMin) == 0)
+			ttf.chrg.cpMin ++;
 	}
 	g_free(short_file_name);
 	return count;
@@ -2125,8 +2149,6 @@ guint search_replace_range(ScintillaObject *sci, struct Sci_TextToFind *ttf,
 		find_len = ttf->chrgText.cpMax - ttf->chrgText.cpMin;
 		if (search_pos == -1)
 			break;	/* no more matches */
-		if (find_len == 0 && ! NZV(replace_text))
-			break;	/* nothing to do */
 
 		if (search_pos + find_len > end)
 			break;	/* found text is partly out of range */
@@ -2158,6 +2180,7 @@ guint search_replace_range(ScintillaObject *sci, struct Sci_TextToFind *ttf,
 			end += replace_len - find_len;	/* update end of range now text has changed */
 			ttf->chrg.cpMax = end;
 		}
+
 	}
 	return count;
 }

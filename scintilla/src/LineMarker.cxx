@@ -32,9 +32,9 @@ void LineMarker::SetXPM(const char *const *linesForm) {
 	markType = SC_MARK_PIXMAP;
 }
 
-void LineMarker::SetRGBAImage(Point sizeRGBAImage, const unsigned char *pixelsRGBAImage) {
+void LineMarker::SetRGBAImage(Point sizeRGBAImage, float scale, const unsigned char *pixelsRGBAImage) {
 	delete image;
-	image = new RGBAImage(sizeRGBAImage.x, sizeRGBAImage.y, pixelsRGBAImage);
+	image = new RGBAImage(sizeRGBAImage.x, sizeRGBAImage.y, scale, pixelsRGBAImage);
 	markType = SC_MARK_RGBAIMAGE;
 }
 
@@ -99,10 +99,10 @@ void LineMarker::Draw(Surface *surface, PRectangle &rcWhole, Font &fontForCharac
 	if ((markType == SC_MARK_RGBAIMAGE) && (image)) {
 		// Make rectangle just large enough to fit image centred on centre of rcWhole
 		PRectangle rcImage;
-		rcImage.top = static_cast<int>(((rcWhole.top + rcWhole.bottom) - image->GetHeight()) / 2);
-		rcImage.bottom = rcImage.top + image->GetHeight();
-		rcImage.left = static_cast<int>(((rcWhole.left + rcWhole.right) - image->GetWidth()) / 2);
-		rcImage.right = rcImage.left + image->GetWidth();
+		rcImage.top = static_cast<int>(((rcWhole.top + rcWhole.bottom) - image->GetScaledHeight()) / 2);
+		rcImage.bottom = rcImage.top + image->GetScaledHeight();
+		rcImage.left = static_cast<int>(((rcWhole.left + rcWhole.right) - image->GetScaledWidth()) / 2);
+		rcImage.right = rcImage.left + image->GetScaledWidth();
 		surface->DrawRGBAImage(rcImage, image->GetWidth(), image->GetHeight(), image->Pixels());
 		return;
 	}

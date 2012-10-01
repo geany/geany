@@ -14,9 +14,9 @@
  *      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *      GNU General Public License for more details.
  *
- *      You should have received a copy of the GNU General Public License
- *      along with this program; if not, write to the Free Software
- *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *      You should have received a copy of the GNU General Public License along
+ *      with this program; if not, write to the Free Software Foundation, Inc.,
+ *      51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
 /** @file sciwrappers.h
@@ -523,6 +523,10 @@ gint sci_get_length(ScintillaObject *sci)
 }
 
 
+/** Gets the currently used lexer
+ * @param sci Scintilla widget.
+ * @returns The lexer ID
+ */
 gint sci_get_lexer(ScintillaObject *sci)
 {
 	return (gint) SSM(sci, SCI_GETLEXER, 0, 0);
@@ -678,7 +682,7 @@ gint sci_get_fold_parent(ScintillaObject *sci, gint start_line)
 
 void sci_toggle_fold(ScintillaObject *sci, gint line)
 {
-	SSM(sci, SCI_TOGGLEFOLD, (uptr_t) line, 1);
+	SSM(sci, SCI_TOGGLEFOLD, (uptr_t) line, 0);
 }
 
 

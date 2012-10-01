@@ -1,7 +1,16 @@
 Geany 1.23 (unreleased)
 
+    General
+    * Scope detection now finds classes and namespaces (#1996778).
+
+    Bug fixes
+    * Fix too aggressive scope caching (#2142789, #2667917, #2868850).
+
     Editor
-    * Update Scintilla to version 3.2.0.
+    * Update Scintilla to version 3.2.2 (#2808638, #3540469).
+
+    Search
+    * 'Mark All' now also uses the fully-featured PCRE engine (#3564132).
 
 
 Geany 1.22 (June 18, 2012)

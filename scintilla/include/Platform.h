@@ -22,6 +22,7 @@
 #define PLAT_WX  0
 #define PLAT_QT 0
 #define PLAT_FOX 0
+#define PLAT_NCURSES 0
 
 #if defined(FOX)
 #undef PLAT_FOX
@@ -31,13 +32,17 @@
 #undef PLAT_WX
 #define PLAT_WX  1
 
-#elif defined(GTK)
-#undef PLAT_GTK
-#define PLAT_GTK 1
+#elif defined(NCURSES)
+#undef PLAT_NCURSES
+#define PLAT_NCURSES 1
 
 #elif defined(SCINTILLA_QT)
 #undef PLAT_QT
 #define PLAT_QT 1
+
+#elif defined(GTK)
+#undef PLAT_GTK
+#define PLAT_GTK 1
 
 #if defined(__WIN32__) || defined(_MSC_VER)
 #undef PLAT_GTK_WIN32

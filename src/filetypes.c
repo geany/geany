@@ -14,9 +14,9 @@
  *      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *      GNU General Public License for more details.
  *
- *      You should have received a copy of the GNU General Public License
- *      along with this program; if not, write to the Free Software
- *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *      You should have received a copy of the GNU General Public License along
+ *      with this program; if not, write to the Free Software Foundation, Inc.,
+ *      51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
 /**
@@ -1270,16 +1270,18 @@ static void add_keys(GKeyFile *dest, const gchar *group, GKeyFile *src)
 static gchar *filetypes_get_filename(GeanyFiletype *ft, gboolean user)
 {
 	gchar *ext = filetypes_get_conf_extension(ft);
-	gchar *f;
+	gchar *base_name = g_strconcat("filetypes.", ext, NULL);
+	gchar *file_name;
 
 	if (user)
-		f = g_strconcat(app->configdir, G_DIR_SEPARATOR_S
-			GEANY_FILEDEFS_SUBDIR G_DIR_SEPARATOR_S, "filetypes.", ext, NULL);
+		file_name = g_build_filename(app->configdir, GEANY_FILEDEFS_SUBDIR, base_name, NULL);
 	else
-		f = g_strconcat(app->datadir, G_DIR_SEPARATOR_S "filetypes.", ext, NULL);
+		file_name = g_build_filename(app->datadir, base_name, NULL);
 
 	g_free(ext);
-	return f;
+	g_free(base_name);
+
+	return file_name;
 }
 
 
@@ -1688,10 +1690,8 @@ static void read_groups(GKeyFile *config)
 
 static void read_filetype_config(void)
 {
-	gchar *sysconfigfile = g_strconcat(app->datadir, G_DIR_SEPARATOR_S,
-		"filetype_extensions.conf", NULL);
-	gchar *userconfigfile = g_strconcat(app->configdir, G_DIR_SEPARATOR_S,
-		"filetype_extensions.conf", NULL);
+	gchar *sysconfigfile = g_build_filename(app->datadir, "filetype_extensions.conf", NULL);
+	gchar *userconfigfile = g_build_filename(app->configdir, "filetype_extensions.conf", NULL);
 	GKeyFile *sysconfig = g_key_file_new();
 	GKeyFile *userconfig = g_key_file_new();
 

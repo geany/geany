@@ -14,10 +14,9 @@
  *      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *      GNU General Public License for more details.
  *
- *      You should have received a copy of the GNU General Public License
- *      along with this program; if not, write to the Free Software
- *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
- *      MA 02110-1301, USA.
+ *      You should have received a copy of the GNU General Public License along
+ *      with this program; if not, write to the Free Software Foundation, Inc.,
+ *      51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
 /* Split Window plugin. */
@@ -589,14 +588,14 @@ static void split_view(gboolean horizontal)
 
 	set_state(horizontal ? STATE_SPLIT_HORIZONTAL : STATE_SPLIT_VERTICAL);
 
-	gtk_widget_ref(notebook);
+	g_object_ref(notebook);
 	gtk_container_remove(GTK_CONTAINER(parent), notebook);
 
 	pane = horizontal ? gtk_hpaned_new() : gtk_vpaned_new();
 	gtk_container_add(GTK_CONTAINER(parent), pane);
 
 	gtk_container_add(GTK_CONTAINER(pane), notebook);
-	gtk_widget_unref(notebook);
+	g_object_unref(notebook);
 
 	edit_window.notebook = gtk_notebook_new();
 	gtk_notebook_set_tab_pos(GTK_NOTEBOOK(edit_window.notebook),
@@ -646,7 +645,7 @@ static void on_unsplit(GtkMenuItem *menuitem, gpointer user_data)
 
 	g_return_if_fail(edit_window.editor);
 
-	gtk_widget_ref(notebook);
+	g_object_ref(notebook);
 	gtk_container_remove(GTK_CONTAINER(pane), notebook);
 
 	gtk_widget_destroy(pane);
@@ -654,7 +653,7 @@ static void on_unsplit(GtkMenuItem *menuitem, gpointer user_data)
 	edit_window.sci = NULL;
 
 	gtk_container_add(GTK_CONTAINER(parent), notebook);
-	gtk_widget_unref(notebook);
+	g_object_unref(notebook);
 }
 
 

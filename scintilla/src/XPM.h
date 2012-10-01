@@ -80,13 +80,17 @@ class RGBAImage {
 	RGBAImage &operator=(const RGBAImage &);
 	int height;
 	int width;
+	float scale;
 	std::vector<unsigned char> pixelBytes;
 public:
-	RGBAImage(int width_, int height_, const unsigned char *pixels_);
+	RGBAImage(int width_, int height_, float scale_, const unsigned char *pixels_);
 	RGBAImage(const XPM &xpm);
 	virtual ~RGBAImage();
 	int GetHeight() const { return height; }
 	int GetWidth() const { return width; }
+	float GetScale() const { return scale; }
+	float GetScaledHeight() const { return height / scale; }
+	float GetScaledWidth() const { return width / scale; }
 	int CountBytes() const;
 	const unsigned char *Pixels() const;
 	void SetPixel(int x, int y, ColourDesired colour, int alpha=0xff); 

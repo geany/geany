@@ -2474,6 +2474,11 @@ static int parseParens (statementInfo *const st, parenInfo *const info)
 						info->isNameCandidate = FALSE;
 					}
 				}
+				else if (isLanguage(Lang_d) && c == '!')
+				{ /* D template instantiation */
+					info->isNameCandidate = FALSE;
+					info->isKnrParamList = FALSE;
+				}
 				else
 				{
 					info->isParamList     = FALSE;

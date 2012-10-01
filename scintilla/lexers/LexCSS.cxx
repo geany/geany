@@ -98,18 +98,29 @@ static void ColouriseCssDoc(unsigned int startPos, int length, int initStyle, Wo
 	//	Set to 1 for Sassy CSS (.scss)
 	bool isScssDocument = styler.GetPropertyInt("lexer.css.scss.language") != 0;
 
-	// TODO: implement Less support
-	bool isLessDocument = false;
+	// property lexer.css.less.language
+	// Set to 1 for Less CSS (.less)
+	bool isLessDocument = styler.GetPropertyInt("lexer.css.less.language") != 0;
 
-	// SCSS and Less both support single-line comments
+	// property lexer.css.hss.language
+	// Set to 1 for HSS (.hss)
+	bool isHssDocument = styler.GetPropertyInt("lexer.css.hss.language") != 0;
+
+	// SCSS/LESS/HSS have the concept of variable
+	bool hasVariables = isScssDocument || isLessDocument || isHssDocument;
+	char varPrefix = 0;
+	if (hasVariables)
+		varPrefix = isLessDocument ? '@' : '$';
+
+	// SCSS/LESS/HSS support single-line comments
 	typedef enum _CommentModes { eCommentBlock = 0, eCommentLine = 1} CommentMode;
 	CommentMode comment_mode = eCommentBlock;
-	bool hasSingleLineComments = isScssDocument || isLessDocument;
+	bool hasSingleLineComments = isScssDocument || isLessDocument || isHssDocument;
 
-	// must keep track of nesting level in document types that support it (SCSS, Less)
+	// must keep track of nesting level in document types that support it (SCSS/LESS/HSS)
 	bool hasNesting = false;
 	int nestingLevel = 0;
-	if (isScssDocument || isLessDocument) {
+	if (isScssDocument || isLessDocument || isHssDocument) {
 		hasNesting = true;
 		nestingLevel = NestingLevelLookBehind(startPos, styler);
 	}
@@ -329,11 +340,13 @@ static void ColouriseCssDoc(unsigned int startPos, int length, int initStyle, Wo
 			insideParentheses = false;
 
 		// SCSS special modes
-		if (isScssDocument) {
+		if (hasVariables) {
 			// variable name
-			if (sc.ch == '$') {
+			if (sc.ch == varPrefix) {
 				switch (sc.state) {
 				case SCE_CSS_DEFAULT:
+					if (isLessDocument) // give priority to pseudo elements
+						break;
 				case SCE_CSS_VALUE:
 					lastStateVar = sc.state;
 					sc.SetState(SCE_CSS_VARIABLE);

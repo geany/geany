@@ -15,9 +15,9 @@
  *      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *      GNU General Public License for more details.
  *
- *      You should have received a copy of the GNU General Public License
- *      along with this program; if not, write to the Free Software
- *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *      You should have received a copy of the GNU General Public License along
+ *      with this program; if not, write to the Free Software Foundation, Inc.,
+ *      51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
 /** @file ui_utils.h
@@ -272,7 +272,7 @@ static void add_statusbar_statistics(GString *stats_str,
 				g_string_append(stats_str, filetypes_get_display_name(doc->file_type));
 				break;
 			case 'S':
-				symbols_get_current_function(doc, &cur_tag);
+				symbols_get_current_scope(doc, &cur_tag);
 				g_string_append(stats_str, cur_tag);
 				break;
 			default:
@@ -1403,7 +1403,7 @@ GtkWidget *ui_dialog_vbox_new(GtkDialog *dialog)
 	GtkWidget *vbox = gtk_vbox_new(FALSE, 12);	/* need child vbox to set a separate border. */
 
 	gtk_container_set_border_width(GTK_CONTAINER(vbox), 6);
-	gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), vbox);
+	gtk_container_add(GTK_CONTAINER(gtk_dialog_get_content_area(GTK_DIALOG(dialog))), vbox);
 	return vbox;
 }
 
@@ -2439,7 +2439,7 @@ GtkWidget *ui_lookup_widget(GtkWidget *widget, const gchar *widget_name)
 		if (GTK_IS_MENU(widget))
 			parent = gtk_menu_get_attach_widget(GTK_MENU(widget));
 		else
-			parent = widget->parent;
+			parent = gtk_widget_get_parent(widget);
 		if (parent == NULL)
 			parent = (GtkWidget*) g_object_get_data(G_OBJECT(widget), "GladeParentKey");
 		if (parent == NULL)
@@ -2616,7 +2616,7 @@ void ui_menu_add_document_items(GtkMenu *menu, GeanyDocument *active, GCallback 
  * @a compare_func might be NULL to not sort the documents in the menu. In this case,
  * the order of the document tabs is used.
  *
- * See document_sort_by_display_name() for an example sort function.
+ * See document_compare_by_display_name() for an example sort function.
  *
  * @param menu Menu.
  * @param active Which document to highlight, or @c NULL.

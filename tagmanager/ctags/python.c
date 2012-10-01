@@ -25,13 +25,13 @@
 *   DATA DEFINITIONS
 */
 typedef enum {
-	K_CLASS, K_FUNCTION, K_MEMBER, K_VARIABLE, K_IMPORT
+	K_CLASS, K_FUNCTION, K_METHOD, K_VARIABLE, K_IMPORT
 } pythonKind;
 
 static kindOption PythonKinds[] = {
 	{TRUE, 'c', "class",    "classes"},
 	{TRUE, 'f', "function", "functions"},
-	{TRUE, 'm', "member",   "class members"},
+	{TRUE, 'm', "method",   "class methods"},
     {TRUE, 'v', "variable", "variables"},
     {TRUE, 'i', "namespace", "imports"}
 };
@@ -88,8 +88,8 @@ static void makeFunctionTag (vString *const function,
 	tagEntryInfo tag;
 	initTagEntry (&tag, vStringValue (function));
 
-	tag.kindName = "function";
-	tag.kind = 'f';
+	tag.kindName = PythonKinds[K_FUNCTION].name;
+	tag.kind = PythonKinds[K_FUNCTION].letter;
 	tag.extensionFields.arglist = arglist;
 	/* add argument list of __init__() methods to the class tag */
 	if (strcmp (vStringValue (function), "__init__") == 0 && parent != NULL)
@@ -103,8 +103,8 @@ static void makeFunctionTag (vString *const function,
 	{
 		if (is_class_parent)
 		{
-			tag.kindName = "member";
-			tag.kind = 'm';
+			tag.kindName = PythonKinds[K_METHOD].name;
+			tag.kind = PythonKinds[K_METHOD].letter;
 			tag.extensionFields.scope [0] = "class";
 			tag.extensionFields.scope [1] = vStringValue (parent);
 		}
@@ -140,8 +140,8 @@ static void makeClassTag (vString *const class, vString *const inheritance,
 {
 	tagEntryInfo tag;
 	initTagEntry (&tag, vStringValue (class));
-	tag.kindName = "class";
-	tag.kind = 'c';
+	tag.kindName = PythonKinds[K_CLASS].name;
+	tag.kind = PythonKinds[K_CLASS].letter;
 	if (vStringLength (parent) > 0)
 	{
 		if (is_class_parent)
@@ -163,8 +163,8 @@ static void makeVariableTag (vString *const var, vString *const parent)
 {
 	tagEntryInfo tag;
 	initTagEntry (&tag, vStringValue (var));
-	tag.kindName = "variable";
-	tag.kind = 'v';
+	tag.kindName = PythonKinds[K_VARIABLE].name;
+	tag.kind = PythonKinds[K_VARIABLE].letter;
 	if (vStringLength (parent) > 0)
 	{
 		tag.extensionFields.scope [0] = "class";

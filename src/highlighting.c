@@ -15,9 +15,9 @@
  *      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *      GNU General Public License for more details.
  *
- *      You should have received a copy of the GNU General Public License
- *      along with this program; if not, write to the Free Software
- *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *      You should have received a copy of the GNU General Public License along
+ *      with this program; if not, write to the Free Software Foundation, Inc.,
+ *      51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
 /**
@@ -670,7 +670,7 @@ static void styleset_common(ScintillaObject *sci, guint ft_id)
 	SSM(sci, SCI_SETWRAPINDENTMODE, common_style_set.styling[GCS_LINE_WRAP_INDENT].background, 0);
 
 	/* Error indicator */
-	SSM(sci, SCI_INDICSETSTYLE, GEANY_INDICATOR_ERROR, INDIC_SQUIGGLE);
+	SSM(sci, SCI_INDICSETSTYLE, GEANY_INDICATOR_ERROR, INDIC_SQUIGGLEPIXMAP);
 	SSM(sci, SCI_INDICSETFORE, GEANY_INDICATOR_ERROR, invert(rotate_rgb(0xff0000)));
 
 	/* Search indicator, used for 'Mark' matches */
@@ -1377,7 +1377,7 @@ void highlighting_show_color_scheme_dialog(void)
 	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(swin),
 		GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
 	gtk_container_add(GTK_CONTAINER(swin), tree);
-	gtk_container_add(GTK_CONTAINER(vbox), swin);
+	gtk_box_pack_start(GTK_BOX(vbox), swin, TRUE, TRUE, 0);
 	g_signal_connect(dialog, "response", G_CALLBACK(on_color_scheme_dialog_response), &dialog);
 	gtk_widget_show_all(dialog);
 }
@@ -1554,6 +1554,7 @@ gboolean highlighting_is_comment_style(gint lexer, gint style)
 			return (style == SCE_C_COMMENT ||
 				style == SCE_C_COMMENTLINE ||
 				style == SCE_C_COMMENTDOC ||
+				style == SCE_C_PREPROCESSORCOMMENT ||
 				style == SCE_C_COMMENTLINEDOC ||
 				style == SCE_C_COMMENTDOCKEYWORD ||
 				style == SCE_C_COMMENTDOCKEYWORDERROR);
