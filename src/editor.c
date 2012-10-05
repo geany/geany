@@ -2210,6 +2210,8 @@ gboolean editor_start_auto_complete(GeanyEditor *editor, gint pos, gboolean forc
 
 	if (ft->id == GEANY_FILETYPES_LATEX)
 		wordchars = GEANY_WORDCHARS"\\"; /* add \ to word chars if we are in a LaTeX file */
+	else if (ft->id == GEANY_FILETYPES_CSS)
+		wordchars = GEANY_WORDCHARS"-"; /* add - because they are part of property names */
 	else
 		wordchars = GEANY_WORDCHARS;
 
