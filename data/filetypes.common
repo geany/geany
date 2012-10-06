@@ -148,7 +148,7 @@ identifier_4=identifier_1
 
 string=0xff8000
 string_1=string
-string_2=string_1
+string_2=0x008000
 string_eol=0x000000;0xe0c0e0;false;false
 character=string_1
 backticks=string_2
