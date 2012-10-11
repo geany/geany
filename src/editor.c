@@ -3133,46 +3133,40 @@ void editor_do_comment_toggle(GeanyEditor *editor)
 
 	co_len += tm_len;
 
-	/* restore selection if there is one */
-	if (sel_start < sel_end)
+	/* restore selection or caret position */
+	if (single_line)
 	{
-		if (single_line)
+		gint a = (first_line_was_comment) ? - co_len : co_len;
+
+		/* don't modify sel_start when the selection starts within indentation */
+		read_indent(editor, sel_start);
+		if ((sel_start - first_line_start) <= (gint) strlen(indent))
+			a = 0;
+
+		if (sel_start < sel_end)
 		{
-			gint a = (first_line_was_comment) ? - co_len : co_len;
-
-			/* don't modify sel_start when the selection starts within indentation */
-			read_indent(editor, sel_start);
-			if ((sel_start - first_line_start) <= (gint) strlen(indent))
-				a = 0;
-
 			sci_set_selection_start(editor->sci, sel_start + a);
 			sci_set_selection_end(editor->sci, sel_end +
 								(count_commented * co_len) - (count_uncommented * co_len));
 		}
 		else
+			sci_set_current_position(editor->sci, sel_start + a, TRUE);
+	}
+	else
+	{
+		gint eol_len = editor_get_eol_char_len(editor);
+		if (count_uncommented > 0)
 		{
-			gint eol_len = editor_get_eol_char_len(editor);
-			if (count_uncommented > 0)
-			{
-				sci_set_selection_start(editor->sci, sel_start - co_len + eol_len);
-				sci_set_selection_end(editor->sci, sel_end - co_len + eol_len);
-			}
-			else if (count_commented > 0)
-			{
-				sci_set_selection_start(editor->sci, sel_start + co_len - eol_len);
-				sci_set_selection_end(editor->sci, sel_end + co_len - eol_len);
-			}
+			sci_set_selection_start(editor->sci, sel_start - co_len + eol_len);
+			sci_set_selection_end(editor->sci, sel_end - co_len + eol_len);
 		}
-	}
-	else if (count_uncommented > 0)
-	{
-		gint eol_len = single_line ? 0: editor_get_eol_char_len(editor);
-		sci_set_current_position(editor->sci, sel_start - co_len + eol_len, TRUE);
-	}
-	else if (count_commented > 0)
-	{
-		gint eol_len = single_line ? 0: editor_get_eol_char_len(editor);
-		sci_set_current_position(editor->sci, sel_start + co_len - eol_len, TRUE);
+		else if (count_commented > 0)
+		{
+			sci_set_selection_start(editor->sci, sel_start + co_len - eol_len);
+			sci_set_selection_end(editor->sci, sel_end + co_len - eol_len);
+		}
+		if (sel_start >= sel_end)
+			sci_scroll_caret(editor->sci);
 	}
 }
 
