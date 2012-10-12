@@ -696,8 +696,10 @@ static void request_reshowing_calltip(SCNotification *nt)
 	if (calltip.set)
 	{
 		/* delay the reshow of the calltip window to make sure it is actually displayed,
-		 * without it might be not visible on SCN_AUTOCCANCEL */
-		g_idle_add(reshow_calltip, NULL);
+		 * without it might be not visible on SCN_AUTOCCANCEL. the priority is set to
+		 * low to hopefully make Scintilla's events happen before reshowing since they
+		 * seem to re-cancel the calltip on autoc menu hiding too */
+		g_idle_add_full(G_PRIORITY_LOW, reshow_calltip, NULL, NULL);
 	}
 }
 
