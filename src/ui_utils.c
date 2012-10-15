@@ -979,9 +979,6 @@ GdkPixbuf *ui_new_pixbuf_from_inline(gint img)
 {
 	switch (img)
 	{
-		case GEANY_IMAGE_LOGO:
-			return gdk_pixbuf_new_from_inline(-1, aladin_inline, FALSE, NULL);
-			break;
 		case GEANY_IMAGE_SAVE_ALL:
 		{
 			/* check whether the icon theme looks like a Gnome icon theme, if so use the
