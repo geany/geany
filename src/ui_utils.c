@@ -44,7 +44,6 @@
 #include "utils.h"
 #include "callbacks.h"
 #include "encodings.h"
-#include "images.c"
 #include "sidebar.h"
 #include "win32.h"
 #include "project.h"
@@ -949,84 +948,6 @@ void ui_document_show_hide(GeanyDocument *doc)
 void ui_set_search_entry_background(GtkWidget *widget, gboolean success)
 {
 	gtk_widget_set_name(widget, success ? NULL : "geany-search-entry-no-match");
-}
-
-
-static gboolean have_tango_icon_theme(void)
-{
-	static gboolean result = FALSE;
-	static gboolean checked = FALSE;
-
-	if (! checked)
-	{
-		gchar *theme_name;
-
-		g_object_get(G_OBJECT(gtk_settings_get_default()), "gtk-icon-theme-name", &theme_name, NULL);
-		SETPTR(theme_name, g_utf8_strdown(theme_name, -1));
-
-		result = (strstr(theme_name, "tango") != NULL);
-		checked = TRUE;
-
-		g_free(theme_name);
-	}
-
-	return result;
-}
-
-
-/* Note: remember to unref the pixbuf once an image or window has added a reference. */
-GdkPixbuf *ui_new_pixbuf_from_inline(gint img)
-{
-	switch (img)
-	{
-		case GEANY_IMAGE_SAVE_ALL:
-		{
-			/* check whether the icon theme looks like a Gnome icon theme, if so use the
-			 * old Gnome based Save All icon, otherwise assume a Tango-like icon theme */
-			if (have_tango_icon_theme())
-				return gdk_pixbuf_new_from_inline(-1, save_all_tango_inline, FALSE, NULL);
-			else
-				return gdk_pixbuf_new_from_inline(-1, save_all_gnome_inline, FALSE, NULL);
-			break;
-		}
-		case GEANY_IMAGE_CLOSE_ALL:
-		{
-			return gdk_pixbuf_new_from_inline(-1, close_all_inline, FALSE, NULL);
-			break;
-		}
-		case GEANY_IMAGE_BUILD:
-		{
-			return gdk_pixbuf_new_from_inline(-1, build_inline, FALSE, NULL);
-			break;
-		}
-		default:
-			return NULL;
-	}
-}
-
-
-static GdkPixbuf *ui_new_pixbuf_from_stock(const gchar *stock_id)
-{
-	if (utils_str_equal(stock_id, GEANY_STOCK_CLOSE_ALL))
-		return ui_new_pixbuf_from_inline(GEANY_IMAGE_CLOSE_ALL);
-	else if (utils_str_equal(stock_id, GEANY_STOCK_BUILD))
-		return ui_new_pixbuf_from_inline(GEANY_IMAGE_BUILD);
-	else if (utils_str_equal(stock_id, GEANY_STOCK_SAVE_ALL))
-		return ui_new_pixbuf_from_inline(GEANY_IMAGE_SAVE_ALL);
-
-	return NULL;
-}
-
-
-GtkWidget *ui_new_image_from_inline(gint img)
-{
-	GtkWidget *wid;
-	GdkPixbuf *pb;
-
-	pb = ui_new_pixbuf_from_inline(img);
-	wid = gtk_image_new_from_pixbuf(pb);
-	g_object_unref(pb);	/* the image doesn't adopt our reference, so remove our ref. */
-	return wid;
 }
 
 
@@ -1958,10 +1879,6 @@ static void create_config_files_menu(void)
 
 void ui_init_stock_items(void)
 {
-	GtkIconSet *icon_set;
-	GtkIconFactory *factory = gtk_icon_factory_new();
-	GdkPixbuf *pb;
-	guint i, len;
 	GtkStockItem items[] =
 	{
 		{ GEANY_STOCK_SAVE_ALL, N_("Save All"), 0, 0, GETTEXT_PACKAGE },
@@ -1969,20 +1886,7 @@ void ui_init_stock_items(void)
 		{ GEANY_STOCK_BUILD, N_("Build"), 0, 0, GETTEXT_PACKAGE }
 	};
 
-	len = G_N_ELEMENTS(items);
-	for (i = 0; i < len; i++)
-	{
-		pb = ui_new_pixbuf_from_stock(items[i].stock_id);
-		icon_set = gtk_icon_set_new_from_pixbuf(pb);
-
-		gtk_icon_factory_add(factory, items[i].stock_id, icon_set);
-
-		gtk_icon_set_unref(icon_set);
-		g_object_unref(pb);
-	}
-	gtk_stock_add((GtkStockItem *) items, len);
-	gtk_icon_factory_add_default(factory);
-	g_object_unref(factory);
+	gtk_stock_add((GtkStockItem *) items, G_N_ELEMENTS(items));
 }
 
 

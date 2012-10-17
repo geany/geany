@@ -237,6 +237,8 @@ static void main_init(void)
 #endif
 
 	/* inits */
+	ui_init_stock_items();
+
 	ui_init_builder();
 
 	main_widgets.window				= NULL;
@@ -253,8 +255,6 @@ static void main_init(void)
 	ui_prefs.recent_queue				= g_queue_new();
 	ui_prefs.recent_projects_queue		= g_queue_new();
 	main_status.opening_session_files	= FALSE;
-
-	ui_init_stock_items();
 
 	main_widgets.window = create_window1();
 
