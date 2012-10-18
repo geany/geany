@@ -17,7 +17,3 @@ dist_icons_actions_DATA =						\
 	geany-build.png								\
 	geany-close-all.png							\
 	geany-save-all.png
-
-dist_noinst_DATA = \
-	classviewer-var.xpm \
-	classviewer-method.xpm
