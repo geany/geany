@@ -123,6 +123,35 @@ static int get_kind(char c)
 }
 
 
+/* computes the length of an UTF-8 string
+ * if the string doesn't look like UTF-8, return -1 */
+static int utf8_strlen(const char *buf, int buf_len)
+{
+	int len = 0;
+	const char *end = buf + buf_len;
+
+	for (len = 0; buf < end; len ++)
+	{
+		/* perform quick and naive validation (no sub-byte checking) */
+		if (! (*buf & 0x80))
+			buf ++;
+		else if ((*buf & 0xe0) == 0xc0)
+			buf += 2;
+		else if ((*buf & 0xf0) == 0xe0)
+			buf += 3;
+		else if ((*buf & 0xf8) == 0xf0)
+			buf += 4;
+		else /* not a valid leading UTF-8 byte, abort */
+			return -1;
+
+		if (buf > end) /* incomplete last byte */
+			return -1;
+	}
+
+	return len;
+}
+
+
 /* TODO: parse overlining & underlining as distinct sections. */
 static void findRestTags (void)
 {
@@ -135,7 +164,12 @@ static void findRestTags (void)
 	while ((line = fileReadLine ()) != NULL)
 	{
 		int line_len = strlen((const char*) line);
-		int name_len = vStringLength(name);
+		int name_len_bytes = vStringLength(name);
+		int name_len = utf8_strlen(vStringValue(name), name_len_bytes);
+
+		/* if the name doesn't look like UTF-8, assume one-byte charset */
+		if (name_len < 0)
+			name_len = name_len_bytes;
 
 		/* underlines must be the same length or more */
 		if (line_len >= name_len && name_len > 0 &&
