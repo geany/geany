@@ -36,7 +36,7 @@
 #include "tm_tag.h"
 #include "tm_workspace.h"
 #include "tm_project.h"
-
+#include "../../src/encodings.h"
 
 static TMWorkspace *theWorkspace = NULL;
 guint workspace_class_id = 0;
@@ -409,6 +409,41 @@ gboolean tm_workspace_create_global_tags(const char *pre_process, const char **i
 		g_free(temp_file2);
 		temp_file2 = temp_file;
 		temp_file = NULL;
+	}
+	/* apply Geany conversion of encoding to UTF-8 to temp_file2 */
+	{
+		gchar *contents = NULL;
+		gsize contents_size;
+		GError *err = NULL;
+		if (g_file_get_contents(temp_file2, &contents, &contents_size, &err))
+		{
+			if (encodings_convert_to_utf8_auto(&contents, &contents_size, NULL, NULL, NULL, NULL))
+			{
+				temp_file = create_temp_file("tmp_XXXXXX");
+				if (g_file_set_contents(temp_file, contents, contents_size, &err))
+				{
+					g_unlink(temp_file2);
+					g_free(temp_file2);
+					temp_file2 = temp_file;
+					temp_file = NULL;
+				}
+				else
+				{
+					fprintf(stderr,
+						"Unable to write file with new encoding, using original encoding: %s\n",
+						err->message);
+					g_error_free(err);
+					g_unlink(temp_file);
+					g_free(temp_file);
+				}
+			}
+		}
+		else
+		{
+			fprintf(stderr, "Unable to read file for encoding check: %s\n", err->message);
+			g_error_free(err);
+		}
+		g_free(contents);
 	}
 	source_file = tm_source_file_new(temp_file2, TRUE, tm_source_file_get_lang_name(lang));
 	if (NULL == source_file)
@@ -1064,7 +1099,7 @@ tm_workspace_find_namespace_members (const GPtrArray * file_tags, const char *na
 									 new_name, filename);
 /*/
 			DEBUG_PRINT ("returning these");
-  		    gint i;
+			gint i;
 			for (i=0; i < tags->len; i++) {
 				TMTag *cur_tag;
 
