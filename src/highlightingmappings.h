@@ -185,6 +185,7 @@ static const HLStyle highlighting_styles_C[] =
 	{ SCE_C_WORD,					"word",						FALSE },
 	{ SCE_C_WORD2,					"word2",					FALSE },
 	{ SCE_C_STRING,					"string",					FALSE },
+	{ SCE_C_STRINGRAW,				"stringraw",				FALSE },
 	{ SCE_C_CHARACTER,				"character",				FALSE },
 	{ SCE_C_UUID,					"uuid",						FALSE },
 	{ SCE_C_PREPROCESSOR,			"preprocessor",				FALSE },
