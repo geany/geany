@@ -542,24 +542,32 @@ static void init_tag_iters(void)
 
 static GdkPixbuf *get_tag_icon(const gchar *icon_name)
 {
-	static GtkIconTheme *icon_theme = NULL;
-	static gint x, y;
+	GtkIconTheme *icon_theme = gtk_icon_theme_get_default();
+	static gint icon_size = -1;
 
-	if (G_UNLIKELY(icon_theme == NULL))
+	/* Only append the icon theme search path once, and while we're at it,
+	 * only get the icon_size once, even if it's fairly cheap (plus its value
+	 * is conveniently used as a "run once"/"first run" flag). */
+	if (icon_size == -1)
 	{
-#ifndef G_OS_WIN32
-		gchar *path = g_build_filename(GEANY_DATADIR, "icons", NULL);
-#endif
-		gtk_icon_size_lookup(GTK_ICON_SIZE_MENU, &x, &y);
-		icon_theme = gtk_icon_theme_get_default();
+		gchar *path;
+		gint y_unused;
+
 #ifdef G_OS_WIN32
-		gtk_icon_theme_append_search_path(icon_theme, "share\\icons");
+		gchar *install_dir = win32_get_installation_dir();
+		path = g_build_filename(install_dir, "share", "icons", NULL);
+		g_free(install_dir);
 #else
+		path = g_build_filename(GEANY_DATADIR, "icons", NULL);
+#endif
 		gtk_icon_theme_append_search_path(icon_theme, path);
 		g_free(path);
-#endif
+
+		/* Could pass NULL instead of y_unused pointer, but it's not documented */
+		gtk_icon_size_lookup(GTK_ICON_SIZE_MENU, &icon_size, &y_unused);
 	}
-	return gtk_icon_theme_load_icon(icon_theme, icon_name, x, 0, NULL);
+
+	return gtk_icon_theme_load_icon(icon_theme, icon_name, icon_size, 0, NULL);
 }
 
 
