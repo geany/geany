@@ -2,6 +2,7 @@ AM_CPPFLAGS = \
 	-I$(srcdir) \
 	-I$(srcdir)/.. \
 	-I$(srcdir)/../ctags \
+	-I$(top_srcdir) \
 	-DG_LOG_DOMAIN=\"Tagmanager\"
 AM_CFLAGS = \
 	$(GTK_CFLAGS)

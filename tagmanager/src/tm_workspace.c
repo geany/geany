@@ -36,7 +36,7 @@
 #include "tm_tag.h"
 #include "tm_workspace.h"
 #include "tm_project.h"
-#include "../../src/encodings.h"
+#include "src/encodings.h"
 
 static TMWorkspace *theWorkspace = NULL;
 guint workspace_class_id = 0;
@@ -289,6 +289,9 @@ gboolean tm_workspace_create_global_tags(const char *pre_process, const char **i
 	GList *includes_files = NULL;
 	gchar *temp_file = create_temp_file("tmp_XXXXXX.cpp");
 	gchar *temp_file2 = create_temp_file("tmp_XXXXXX.cpp");
+	gchar *utf8_contents = NULL;
+	gsize utf8_contents_size;
+	GError *err = NULL;
 
 	if (NULL == temp_file || NULL == temp_file2 ||
 		NULL == theWorkspace || NULL == (fp = g_fopen(temp_file, "w")))
@@ -411,48 +414,46 @@ gboolean tm_workspace_create_global_tags(const char *pre_process, const char **i
 		temp_file = NULL;
 	}
 	/* apply Geany conversion of encoding to UTF-8 to temp_file2 */
+	if (g_file_get_contents(temp_file2, &utf8_contents, &utf8_contents_size, &err))
 	{
-		gchar *contents = NULL;
-		gsize contents_size;
-		GError *err = NULL;
-		if (g_file_get_contents(temp_file2, &contents, &contents_size, &err))
+		if (encodings_convert_to_utf8_auto(&utf8_contents, &utf8_contents_size, NULL, NULL, NULL, NULL))
 		{
-			if (encodings_convert_to_utf8_auto(&contents, &contents_size, NULL, NULL, NULL, NULL))
+			temp_file = create_temp_file("tmp_XXXXXX");
+			if (g_file_set_contents(temp_file, utf8_contents, utf8_contents_size, &err))
 			{
-				temp_file = create_temp_file("tmp_XXXXXX");
-				if (g_file_set_contents(temp_file, contents, contents_size, &err))
-				{
-					g_unlink(temp_file2);
-					g_free(temp_file2);
-					temp_file2 = temp_file;
-					temp_file = NULL;
-				}
-				else
-				{
-					fprintf(stderr,
-						"Unable to write file with new encoding, using original encoding: %s\n",
-						err->message);
-					g_error_free(err);
-					g_unlink(temp_file);
-					g_free(temp_file);
-				}
+				g_unlink(temp_file2);
+				g_free(temp_file2);
+				temp_file2 = temp_file;
+				temp_file = NULL;
+			}
+			else
+			{
+				fprintf(stderr,
+					"Unable to write file with new encoding, using original encoding: %s\n",
+					err->message);
+				g_error_free(err);
+				g_unlink(temp_file);
+				g_free(temp_file);
 			}
 		}
-		else
-		{
-			fprintf(stderr, "Unable to read file for encoding check: %s\n", err->message);
-			g_error_free(err);
-		}
-		g_free(contents);
 	}
-	source_file = tm_source_file_new(temp_file2, TRUE, tm_source_file_get_lang_name(lang));
+	else
+	{
+		fprintf(stderr, "Unable to read file: %s\n", err->message);
+		g_error_free(err);
+		return FALSE;
+	}
+	source_file = tm_source_file_new(temp_file2, FALSE, tm_source_file_get_lang_name(lang));
 	if (NULL == source_file)
 	{
 		g_unlink(temp_file2);
+		g_free(utf8_contents);
 		return FALSE;
 	}
 	g_unlink(temp_file2);
 	g_free(temp_file2);
+	tm_source_file_buffer_update(source_file, (guchar *)utf8_contents, utf8_contents_size, FALSE);
+	g_free(utf8_contents);
 	if ((NULL == source_file->tags_array) || (0 == source_file->tags_array->len))
 	{
 		tm_source_file_free(source_file);
