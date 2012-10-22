@@ -1484,7 +1484,7 @@ static void pm_show_dialog(GtkMenuItem *menuitem, gpointer user_data)
 
 	g_signal_connect(pm_widgets.dialog, "response", G_CALLBACK(pm_dialog_response), NULL);
 
-	gtk_container_add(GTK_CONTAINER(vbox), vbox2);
+	gtk_box_pack_start(GTK_BOX(vbox), vbox2, TRUE, TRUE, 0);
 	gtk_widget_show_all(pm_widgets.dialog);
 }
 

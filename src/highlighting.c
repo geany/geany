@@ -629,16 +629,38 @@ static void styleset_common_init(GKeyFile *config, GKeyFile *config_home)
 }
 
 
+static void set_character_classes(ScintillaObject *sci, guint ft_id)
+{
+	const gchar *word = (ft_id == GEANY_FILETYPES_NONE ?
+		common_style_set.wordchars : style_sets[ft_id].wordchars);
+	gchar *whitespace;
+	guint i, j;
+
+	SSM(sci, SCI_SETWORDCHARS, 0, (sptr_t) word);
+
+	/* setting wordchars resets character classes, so we have to set whitespaces after
+	 * wordchars, but we want wordchars to have precenence over whitepace chars */
+	whitespace = g_malloc0(strlen(whitespace_chars) + 1);
+	for (i = 0, j = 0; whitespace_chars[i] != 0; i++)
+	{
+		if (! strchr(word, whitespace_chars[i]))
+			whitespace[j++] = whitespace_chars[i];
+	}
+	whitespace[j] = 0;
+
+	SSM(sci, SCI_SETWHITESPACECHARS, 0, (sptr_t) whitespace);
+
+	g_free(whitespace);
+}
+
+
 static void styleset_common(ScintillaObject *sci, guint ft_id)
 {
 	GeanyLexerStyle *style;
 
 	SSM(sci, SCI_STYLECLEARALL, 0, 0);
 
-	SSM(sci, SCI_SETWORDCHARS, 0, (sptr_t) (ft_id == GEANY_FILETYPES_NONE ?
-		common_style_set.wordchars : style_sets[ft_id].wordchars));
-	/* have to set whitespace after setting wordchars */
-	SSM(sci, SCI_SETWHITESPACECHARS, 0, (sptr_t) whitespace_chars);
+	set_character_classes(sci, ft_id);
 
 	/* caret colour, style and width */
 	SSM(sci, SCI_SETCARETFORE, invert(common_style_set.styling[GCS_CARET].foreground), 0);
@@ -670,7 +692,7 @@ static void styleset_common(ScintillaObject *sci, guint ft_id)
 	SSM(sci, SCI_SETWRAPINDENTMODE, common_style_set.styling[GCS_LINE_WRAP_INDENT].background, 0);
 
 	/* Error indicator */
-	SSM(sci, SCI_INDICSETSTYLE, GEANY_INDICATOR_ERROR, INDIC_SQUIGGLE);
+	SSM(sci, SCI_INDICSETSTYLE, GEANY_INDICATOR_ERROR, INDIC_SQUIGGLEPIXMAP);
 	SSM(sci, SCI_INDICSETFORE, GEANY_INDICATOR_ERROR, invert(rotate_rgb(0xff0000)));
 
 	/* Search indicator, used for 'Mark' matches */
@@ -1377,7 +1399,7 @@ void highlighting_show_color_scheme_dialog(void)
 	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(swin),
 		GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
 	gtk_container_add(GTK_CONTAINER(swin), tree);
-	gtk_container_add(GTK_CONTAINER(vbox), swin);
+	gtk_box_pack_start(GTK_BOX(vbox), swin, TRUE, TRUE, 0);
 	g_signal_connect(dialog, "response", G_CALLBACK(on_color_scheme_dialog_response), &dialog);
 	gtk_widget_show_all(dialog);
 }

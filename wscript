@@ -485,6 +485,7 @@ def build(bld):
     bld.install_files('${DATADIR}/%s' % data_dir, start_dir.ant_glob('filetype*'), cwd=start_dir)
     bld.install_files('${DATADIR}/%s' % data_dir, start_dir.ant_glob('*.tags'), cwd=start_dir)
     bld.install_files('${DATADIR}/%s' % data_dir, 'data/geany.glade')
+    bld.install_files('${DATADIR}/%s' % data_dir, 'data/geany.gtkrc')
     bld.install_files('${DATADIR}/%s' % data_dir, 'data/snippets.conf')
     bld.install_files('${DATADIR}/%s' % data_dir, 'data/ui_toolbar.xml')
     start_dir = bld.path.find_dir('data/colorschemes')

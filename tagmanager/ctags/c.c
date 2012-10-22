@@ -423,7 +423,7 @@ static const keywordDesc KeywordTable [] = {
 	{ "extends",        KEYWORD_EXTENDS,        { 0, 0, 0, 1, 1, 0, 0 } },
 	{ "extern",         KEYWORD_EXTERN,         { 1, 1, 1, 0, 1, 1, 0 } },
 	{ "extern",         KEYWORD_NAMESPACE,      { 0, 0, 0, 0, 0, 0, 1 } },	/* parse block */
-	{ "final",          KEYWORD_FINAL,          { 0, 0, 0, 1, 0, 0, 1 } },
+	{ "final",          KEYWORD_FINAL,          { 0, 1, 0, 1, 0, 0, 1 } },
 	{ "finally",        KEYWORD_FINALLY,        { 0, 0, 0, 0, 0, 1, 1 } },
 	{ "float",          KEYWORD_FLOAT,          { 1, 1, 1, 1, 0, 1, 1 } },
 	{ "for",            KEYWORD_FOR,            { 1, 1, 1, 1, 0, 1, 1 } },
@@ -1968,6 +1968,12 @@ static void readParents (statementInfo *const st, const int qualifier)
 	deleteToken (token);
 }
 
+static void checkIsClassEnum (statementInfo *const st, const declType decl)
+{
+	if (! isLanguage (Lang_cpp) || st->declaration != DECL_ENUM)
+		st->declaration = decl;
+}
+
 static void processToken (tokenInfo *const token, statementInfo *const st)
 {
 	switch (token->keyword)		/* is it a reserved word? */
@@ -1979,7 +1985,7 @@ static void processToken (tokenInfo *const token, statementInfo *const st)
 		case KEYWORD_ATTRIBUTE:	skipParens (); initToken (token);	break;
 		case KEYWORD_CATCH:		skipParens (); skipBraces ();		break;
 		case KEYWORD_CHAR:		st->declaration = DECL_BASE;		break;
-		case KEYWORD_CLASS:		st->declaration = DECL_CLASS;		break;
+		case KEYWORD_CLASS:		checkIsClassEnum (st, DECL_CLASS);	break;
 		case KEYWORD_CONST:		st->declaration = DECL_BASE;		break;
 		case KEYWORD_DOUBLE:	st->declaration = DECL_BASE;		break;
 		case KEYWORD_ENUM:		st->declaration = DECL_ENUM;		break;
@@ -2003,7 +2009,7 @@ static void processToken (tokenInfo *const token, statementInfo *const st)
 		case KEYWORD_PUBLIC:	setAccess (st, ACCESS_PUBLIC);		break;
 		case KEYWORD_SHORT:		st->declaration = DECL_BASE;		break;
 		case KEYWORD_SIGNED:	st->declaration = DECL_BASE;		break;
-		case KEYWORD_STRUCT:	st->declaration = DECL_STRUCT;		break;
+		case KEYWORD_STRUCT:	checkIsClassEnum (st, DECL_STRUCT);	break;
 		case KEYWORD_THROWS:	discardTypeList (token);			break;
 		case KEYWORD_TYPEDEF:	st->scope	= SCOPE_TYPEDEF;		break;
 		case KEYWORD_UNION:		st->declaration = DECL_UNION;		break;
@@ -2625,6 +2631,15 @@ static void processColon (statementInfo *const st)
 			else if (c == ';')
 				setToken (st, TOKEN_SEMICOLON);
 		}
+		else if (isLanguage (Lang_cpp) && st->declaration == DECL_ENUM)
+		{
+			/* skip enum's base type */
+			c = skipToOneOf ("{;");
+			if (c == '{')
+				setToken (st, TOKEN_BRACE_OPEN);
+			else if (c == ';')
+				setToken (st, TOKEN_SEMICOLON);
+		}
 		else
 		{
 			const tokenInfo *const prev  = prevToken (st, 1);
@@ -2955,6 +2970,13 @@ static void tagCheck (statementInfo *const st)
 						}
 					}
 				}
+				/* C++ 11 allows class <name> final { ... } */
+				else if (isLanguage (Lang_cpp) && isType (prev, TOKEN_KEYWORD) &&
+						 prev->keyword == KEYWORD_FINAL && isType(prev2, TOKEN_NAME))
+				{
+					name_token = (tokenInfo *)prev2;
+					copyToken (st->blockName, name_token);
+				}
 				else if (isLanguage (Lang_csharp))
 					makeTag (prev, st, FALSE, TAG_PROPERTY);
 				else
@@ -3123,8 +3145,8 @@ static void initializeDParser (const langType language)
 {
 	/* keyword aliases - some are for parsing like const(Type), some are just
 	 * function attributes */
-	char *const_aliases[] = {"immutable", "nothrow", "pure", "shared", NULL};
-	char **s;
+	const char *const_aliases[] = {"immutable", "nothrow", "pure", "shared", NULL};
+	const char **s;
 
 	Lang_d = language;
 	buildKeywordHash (language, 6);

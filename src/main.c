@@ -90,6 +90,7 @@ gboolean	ignore_callback;	/* hack workaround for GTK+ toggle button callback pro
 
 GeanyStatus	 main_status;
 CommandLineOptions cl_options;	/* fields initialised in parse_command_line_options */
+gboolean main_use_geany_icon;
 
 
 static const gchar geany_lib_versions[] = "GTK %u.%u.%u, GLib %u.%u.%u";
@@ -219,6 +220,9 @@ static void apply_settings(void)
 
 	if (interface_prefs.sidebar_pos != GTK_POS_LEFT)
 		ui_swap_sidebar_pos();
+
+	gtk_orientable_set_orientation(GTK_ORIENTABLE(ui_lookup_widget(main_widgets.window, "vpaned1")),
+		interface_prefs.msgwin_orientation);
 }
 
 
@@ -748,7 +752,8 @@ static gint setup_config_dir(void)
 	return mkdir_result;
 }
 
-
+/* Signal handling removed since on_exit_clicked() uses functions that are
+ * illegal in signal handlers
 static void signal_cb(gint sig)
 {
 	if (sig == SIGTERM)
@@ -756,7 +761,7 @@ static void signal_cb(gint sig)
 		on_exit_clicked(NULL, NULL);
 	}
 }
-
+ */
 
 /* Used for command-line arguments at startup or from socket.
  * this will strip any :line:col filename suffix from locale_filename */
@@ -972,8 +977,8 @@ gint main(gint argc, gchar **argv)
 	 * dependencies (e.g. WebKit, Soup, ...) */
 	if (!g_thread_supported())
 		g_thread_init(NULL);
-
-	signal(SIGTERM, signal_cb);
+    /* removed as signal handling was wrong, see signal_cb()
+	signal(SIGTERM, signal_cb); */
 #ifdef G_OS_UNIX
 	/* SIGQUIT is used to kill spawned children and we get also this signal, so ignore */
 	signal(SIGQUIT, SIG_IGN);
@@ -1055,7 +1060,20 @@ gint main(gint argc, gchar **argv)
 
 	/* set window icon */
 	{
-		GdkPixbuf *pb = ui_new_pixbuf_from_inline(GEANY_IMAGE_LOGO);
+		GdkPixbuf *pb;
+        if (main_use_geany_icon)
+        {
+            pb = ui_new_pixbuf_from_inline(GEANY_IMAGE_LOGO);
+        }
+        else
+        {
+            pb = gtk_icon_theme_load_icon(gtk_icon_theme_get_default(), "geany", 48, 0, NULL);
+            if (pb == NULL)
+            {
+                g_warning("Unable to find Geany icon in theme, using embedded icon");
+                pb = ui_new_pixbuf_from_inline(GEANY_IMAGE_LOGO);
+            }
+        }
 		gtk_window_set_icon(GTK_WINDOW(main_widgets.window), pb);
 		g_object_unref(pb);	/* free our reference */
 	}

@@ -173,7 +173,7 @@ static void set_editor(EditWindow *editwin, GeanyEditor *editor)
 
 	editwin->sci = editor_create_widget(editor);
 	gtk_widget_show(GTK_WIDGET(editwin->sci));
-	gtk_container_add(GTK_CONTAINER(editwin->vbox), GTK_WIDGET(editwin->sci));
+	gtk_box_pack_start(GTK_BOX(editwin->vbox), GTK_WIDGET(editwin->sci), TRUE, TRUE, 0);
 
 	sync_to_current(editwin->sci, editor->sci);
 

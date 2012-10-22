@@ -154,7 +154,8 @@ gboolean tm_tag_init(TMTag *tag, TMSourceFile *file, const tagEntryInfo *tag_ent
 			tag->atts.entry.arglist = g_strdup(tag_entry->extensionFields.arglist);
 		if ((NULL != tag_entry->extensionFields.scope[1]) &&
 			(isalpha(tag_entry->extensionFields.scope[1][0]) ||
-			 tag_entry->extensionFields.scope[1][0] == '_'))
+			 tag_entry->extensionFields.scope[1][0] == '_' ||
+			 tag_entry->extensionFields.scope[1][0] == '$'))
 			tag->atts.entry.scope = g_strdup(tag_entry->extensionFields.scope[1]);
 		if (tag_entry->extensionFields.inheritance != NULL)
 			tag->atts.entry.inheritance = g_strdup(tag_entry->extensionFields.inheritance);

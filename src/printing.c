@@ -399,7 +399,7 @@ static void draw_page(GtkPrintOperation *operation, GtkPrintContext *context,
 	gdouble width, height;
 
 	g_return_if_fail(dinfo != NULL);
-	g_return_if_fail(page_nr < dinfo->pages->len);
+	g_return_if_fail((guint)page_nr < dinfo->pages->len);
 
 	if (dinfo->pages->len > 0)
 	{
@@ -418,7 +418,7 @@ static void draw_page(GtkPrintOperation *operation, GtkPrintContext *context,
 		add_page_header(dinfo, cr, width, page_nr);
 
 	dinfo->fr.chrg.cpMin = g_array_index(dinfo->pages, gint, page_nr);
-	if (page_nr + 1 < dinfo->pages->len)
+	if ((guint)page_nr + 1 < dinfo->pages->len)
 		dinfo->fr.chrg.cpMax = g_array_index(dinfo->pages, gint, page_nr + 1) - 1;
 	else /* it's the last page, print 'til the end */
 		dinfo->fr.chrg.cpMax = sci_get_length(dinfo->sci);

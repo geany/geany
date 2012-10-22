@@ -338,7 +338,7 @@ static void configure_plugins(Plugin *current_plugin)
 	vbox = ui_dialog_vbox_new(GTK_DIALOG(dialog));
 	nb = gtk_notebook_new();
 	gtk_notebook_set_scrollable(GTK_NOTEBOOK(nb), TRUE);
-	gtk_container_add(GTK_CONTAINER(vbox), nb);
+	gtk_box_pack_start(GTK_BOX(vbox), nb, TRUE, TRUE, 0);
 
 	foreach_list(node, active_plugin_list)
 	{

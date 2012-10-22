@@ -148,6 +148,11 @@ static void init_pref_groups(void)
 		"radio_sidebar_left", GTK_POS_LEFT,
 		"radio_sidebar_right", GTK_POS_RIGHT,
 		NULL);
+	stash_group_add_radio_buttons(group, &interface_prefs.msgwin_orientation,
+		"msgwin_orientation", GTK_ORIENTATION_VERTICAL,
+		"radio_msgwin_vertical", GTK_ORIENTATION_VERTICAL,
+		"radio_msgwin_horizontal", GTK_ORIENTATION_HORIZONTAL,
+		NULL);
 
 	/* editor display */
 	stash_group_add_toggle_button(group, &interface_prefs.highlighting_invert_all,
@@ -235,6 +240,10 @@ static void init_pref_groups(void)
 		"number_non_ft_menu_items", 0);
 	stash_group_add_integer(group, &build_menu_prefs.number_exec_menu_items,
 		"number_exec_menu_items", 0);
+    
+    /* use the Geany icon instead of the theme */
+    stash_group_add_boolean(group, &main_use_geany_icon,
+        "use_geany_icon", FALSE);
 }
 
 

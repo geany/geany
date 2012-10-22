@@ -10,6 +10,7 @@ number=number_1
 word=keyword_1
 word2=keyword_2
 string=string_1
+stringraw=string_2
 character=character
 uuid=other
 preprocessor=preprocessor
