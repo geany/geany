@@ -3145,8 +3145,8 @@ static void initializeDParser (const langType language)
 {
 	/* keyword aliases - some are for parsing like const(Type), some are just
 	 * function attributes */
-	char *const_aliases[] = {"immutable", "nothrow", "pure", "shared", NULL};
-	char **s;
+	const char *const_aliases[] = {"immutable", "nothrow", "pure", "shared", NULL};
+	const char **s;
 
 	Lang_d = language;
 	buildKeywordHash (language, 6);
