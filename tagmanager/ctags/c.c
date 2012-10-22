@@ -1968,6 +1968,12 @@ static void readParents (statementInfo *const st, const int qualifier)
 	deleteToken (token);
 }
 
+static void checkIsClassEnum (statementInfo *const st, const declType decl)
+{
+	if (! isLanguage (Lang_cpp) || st->declaration != DECL_ENUM)
+		st->declaration = decl;
+}
+
 static void processToken (tokenInfo *const token, statementInfo *const st)
 {
 	switch (token->keyword)		/* is it a reserved word? */
@@ -1979,7 +1985,7 @@ static void processToken (tokenInfo *const token, statementInfo *const st)
 		case KEYWORD_ATTRIBUTE:	skipParens (); initToken (token);	break;
 		case KEYWORD_CATCH:		skipParens (); skipBraces ();		break;
 		case KEYWORD_CHAR:		st->declaration = DECL_BASE;		break;
-		case KEYWORD_CLASS:		st->declaration = DECL_CLASS;		break;
+		case KEYWORD_CLASS:		checkIsClassEnum (st, DECL_CLASS);	break;
 		case KEYWORD_CONST:		st->declaration = DECL_BASE;		break;
 		case KEYWORD_DOUBLE:	st->declaration = DECL_BASE;		break;
 		case KEYWORD_ENUM:		st->declaration = DECL_ENUM;		break;
@@ -2003,7 +2009,7 @@ static void processToken (tokenInfo *const token, statementInfo *const st)
 		case KEYWORD_PUBLIC:	setAccess (st, ACCESS_PUBLIC);		break;
 		case KEYWORD_SHORT:		st->declaration = DECL_BASE;		break;
 		case KEYWORD_SIGNED:	st->declaration = DECL_BASE;		break;
-		case KEYWORD_STRUCT:	st->declaration = DECL_STRUCT;		break;
+		case KEYWORD_STRUCT:	checkIsClassEnum (st, DECL_STRUCT);	break;
 		case KEYWORD_THROWS:	discardTypeList (token);			break;
 		case KEYWORD_TYPEDEF:	st->scope	= SCOPE_TYPEDEF;		break;
 		case KEYWORD_UNION:		st->declaration = DECL_UNION;		break;
