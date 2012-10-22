@@ -2625,6 +2625,15 @@ static void processColon (statementInfo *const st)
 			else if (c == ';')
 				setToken (st, TOKEN_SEMICOLON);
 		}
+		else if (isLanguage (Lang_cpp) && st->declaration == DECL_ENUM)
+		{
+			/* skip enum's base type */
+			c = skipToOneOf ("{;");
+			if (c == '{')
+				setToken (st, TOKEN_BRACE_OPEN);
+			else if (c == ';')
+				setToken (st, TOKEN_SEMICOLON);
+		}
 		else
 		{
 			const tokenInfo *const prev  = prevToken (st, 1);
