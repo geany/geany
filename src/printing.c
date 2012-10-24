@@ -472,7 +472,8 @@ static void printing_print_gtk(GeanyDocument *doc)
 	GtkPrintOperation *op;
 	GtkPrintOperationResult res = GTK_PRINT_OPERATION_RESULT_ERROR;
 	GError *error = NULL;
-	DocInfo dinfo = { 0 };
+	static const DocInfo dinfo0;
+	DocInfo dinfo = dinfo0;
 	PrintWidgets *widgets;
 
 	/** TODO check for monospace font, detect the widest character in the font and
