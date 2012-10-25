@@ -3464,7 +3464,8 @@ Find Document Usage             Ctrl-Shift-D              Finds all occurrences 
 Mark All                        Ctrl-Shift-M              Highlight all matches of the current
                                                           word/selection in the current document
                                                           with a colored box. If there's nothing to
-                                                          find, highlighted matches will be cleared.
+                                                          find, or the cursor is next to an existing match,
+                                                          the highlighted matches will be cleared.
 =============================== ========================= ==================================================
 
 

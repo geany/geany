@@ -1413,14 +1413,20 @@ static gboolean cb_func_search_action(guint key_id)
 		case GEANY_KEYS_SEARCH_MARKALL:
 		{
 			gchar *text = get_current_word_or_sel(doc, TRUE);
+			gint pos = sci_get_current_position(sci);
+
+			/* clear existing search indicators instead if next to cursor */
+			if (scintilla_send_message(sci, SCI_INDICATORVALUEAT,
+					GEANY_INDICATOR_SEARCH, pos) ||
+				scintilla_send_message(sci, SCI_INDICATORVALUEAT,
+					GEANY_INDICATOR_SEARCH, MAX(pos - 1, 0)))
+				text = NULL;
 
 			if (sci_has_selection(sci))
 				search_mark_all(doc, text, SCFIND_MATCHCASE);
 			else
-			{
-				/* clears markers if text is null */
 				search_mark_all(doc, text, SCFIND_MATCHCASE | SCFIND_WHOLEWORD);
-			}
+
 			g_free(text);
 			break;
 		}
