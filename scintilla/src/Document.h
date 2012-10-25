@@ -212,6 +212,7 @@ private:
 	int refCount;
 	CellBuffer cb;
 	CharClassify charClass;
+	CaseFolder *pcf;
 	char stylingMask;
 	int endStyled;
 	int styleClock;
@@ -255,6 +256,7 @@ public:
 	int SCI_METHOD Release();
 
 	virtual void Init();
+	bool SetDBCSCodePage(int dbcsCodePage_);
 	virtual void InsertLine(int line);
 	virtual void RemoveLine(int line);
 
@@ -355,8 +357,10 @@ public:
 	int SCI_METHOD Length() const { return cb.Length(); }
 	void Allocate(int newSize) { cb.Allocate(newSize); }
 	bool MatchesWordOptions(bool word, bool wordStart, int pos, int length);
+	bool HasCaseFolder(void) const;
+	void SetCaseFolder(CaseFolder *pcf_);
 	long FindText(int minPos, int maxPos, const char *search, bool caseSensitive, bool word,
-		bool wordStart, bool regExp, int flags, int *length, CaseFolder *pcf);
+		bool wordStart, bool regExp, int flags, int *length);
 	const char *SubstituteByPosition(const char *text, int *length);
 	int LinesTotal() const;
 

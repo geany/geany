@@ -1469,6 +1469,14 @@ gboolean highlighting_is_string_style(gint lexer, gint style)
 				style == SCE_PL_XLAT
 				/* we don't include any STRING_*_VAR for autocompletion */);
 
+		case SCLEX_PO:
+			return (style == SCE_PO_MSGCTXT_TEXT ||
+				style == SCE_PO_MSGCTXT_TEXT_EOL ||
+				style == SCE_PO_MSGID_TEXT ||
+				style == SCE_PO_MSGID_TEXT_EOL ||
+				style == SCE_PO_MSGSTR_TEXT ||
+				style == SCE_PO_MSGSTR_TEXT_EOL);
+
 		case SCLEX_R:
 			return (style == SCE_R_STRING);
 
@@ -1610,7 +1618,8 @@ gboolean highlighting_is_comment_style(gint lexer, gint style)
 			return (style == SCE_PROPS_COMMENT);
 
 		case SCLEX_PO:
-			return (style == SCE_PO_COMMENT);
+			return (style == SCE_PO_COMMENT ||
+				style == SCE_PO_PROGRAMMER_COMMENT);
 
 		case SCLEX_LATEX:
 			return (style == SCE_L_COMMENT ||
