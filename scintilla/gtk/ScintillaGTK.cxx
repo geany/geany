@@ -1213,6 +1213,10 @@ bool ScintillaGTK::ModifyScrollBars(int nMax, int nPage) {
 		modified = true;
 	}
 #endif
+	if (modified && (paintState == painting)) {
+		paintState = paintAbandoned;
+	}
+
 	return modified;
 }
 
