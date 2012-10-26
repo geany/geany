@@ -97,7 +97,8 @@ typedef enum eTokenType {
 	TOKEN_EQUAL_SIGN,
 	TOKEN_FORWARD_SLASH,
 	TOKEN_OPEN_SQUARE,
-	TOKEN_CLOSE_SQUARE
+	TOKEN_CLOSE_SQUARE,
+	TOKEN_REGEXP
 } tokenType;
 
 typedef struct sTokenInfo {
@@ -114,6 +115,8 @@ typedef struct sTokenInfo {
 /*
  *	DATA DEFINITIONS
  */
+
+static tokenType LastTokenType;
 
 static langType Lang_js;
 
@@ -343,6 +346,32 @@ static void parseString (vString *const string, const int delimiter)
 	vStringTerminate (string);
 }
 
+static void parseRegExp (void)
+{
+	int c;
+	boolean in_range = FALSE;
+
+	do
+	{
+		c = fileGetc ();
+		if (! in_range && c == '/')
+		{
+			do /* skip flags */
+			{
+				c = fileGetc ();
+			} while (isalpha (c));
+			fileUngetc (c);
+			break;
+		}
+		else if (c == '\\')
+			c = fileGetc (); /* skip next character */
+		else if (c == '[')
+			in_range = TRUE;
+		else if (c == ']')
+			in_range = FALSE;
+	} while (c != EOF);
+}
+
 /*	Read a C identifier beginning with "firstChar" and places it into
  *	"name".
  */
@@ -426,8 +455,26 @@ getNextChar:
 					  if ( (d != '*') &&		/* is this the start of a comment? */
 							  (d != '/') )		/* is a one line comment? */
 					  {
-						  token->type = TOKEN_FORWARD_SLASH;
 						  fileUngetc (d);
+						  switch (LastTokenType)
+						  {
+							  case TOKEN_CHARACTER:
+							  case TOKEN_KEYWORD:
+							  case TOKEN_IDENTIFIER:
+							  case TOKEN_STRING:
+							  case TOKEN_CLOSE_CURLY:
+							  case TOKEN_CLOSE_PAREN:
+							  case TOKEN_CLOSE_SQUARE:
+								  token->type = TOKEN_FORWARD_SLASH;
+								  break;
+
+							  default:
+								  token->type = TOKEN_REGEXP;
+								  parseRegExp ();
+								  token->lineNumber = getSourceLineNumber ();
+								  token->filePosition = getInputFilePosition ();
+								  break;
+						  }
 					  }
 					  else
 					  {
@@ -469,6 +516,8 @@ getNextChar:
 				  }
 				  break;
 	}
+
+	LastTokenType = token->type;
 }
 
 static void copyToken (tokenInfo *const dest, tokenInfo *const src)
@@ -1626,6 +1675,7 @@ static void findJsTags (void)
 
 	ClassNames = stringListNew ();
 	FunctionNames = stringListNew ();
+	LastTokenType = TOKEN_UNDEFINED;
 
 	exception = (exception_t) (setjmp (Exception));
 	while (exception == ExceptionNone)
