@@ -204,7 +204,7 @@ gboolean editor_show_calltip(GeanyEditor *editor, gint pos);
 
 void editor_do_comment_toggle(GeanyEditor *editor);
 
-void editor_do_comment(GeanyEditor *editor, gint line, gboolean allow_empty_lines, gboolean toggle,
+gint editor_do_comment(GeanyEditor *editor, gint line, gboolean allow_empty_lines, gboolean toggle,
 		gboolean single_comment);
 
 gint editor_do_uncomment(GeanyEditor *editor, gint line, gboolean toggle);

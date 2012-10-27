@@ -3110,8 +3110,7 @@ void editor_do_comment_toggle(GeanyEditor *editor)
 			}
 
 			/* we are still here, so the above lines were not already comments, so comment it */
-			editor_do_comment(editor, i, TRUE, TRUE, TRUE);
-			count_commented++;
+			count_commented += editor_do_comment(editor, i, FALSE, TRUE, TRUE);
 		}
 		/* use multi line comment */
 		else
@@ -3202,12 +3201,13 @@ void editor_do_comment_toggle(GeanyEditor *editor)
 
 
 /* set toggle to TRUE if the caller is the toggle function, FALSE otherwise */
-void editor_do_comment(GeanyEditor *editor, gint line, gboolean allow_empty_lines, gboolean toggle,
+gint editor_do_comment(GeanyEditor *editor, gint line, gboolean allow_empty_lines, gboolean toggle,
 		gboolean single_comment)
 {
 	gint first_line, last_line;
 	gint x, i, line_start, line_len;
 	gint sel_start, sel_end, co_len;
+	gint count = 0;
 	gchar sel[256];
 	const gchar *co, *cc;
 	gboolean break_loop = FALSE, single_line = FALSE;
@@ -3235,11 +3235,11 @@ void editor_do_comment(GeanyEditor *editor, gint line, gboolean allow_empty_line
 	ft = editor_get_filetype_at_line(editor, first_line);
 
 	if (! filetype_get_comment_open_close(ft, single_comment, &co, &cc))
-		return;
+		return 0;
 
 	co_len = strlen(co);
 	if (co_len == 0)
-		return;
+		return 0;
 
 	sci_start_undo_action(editor->sci);
 
@@ -3279,6 +3279,7 @@ void editor_do_comment(GeanyEditor *editor, gint line, gboolean allow_empty_line
 				}
 				else
 					sci_insert_text(editor->sci, start, co);
+				count++;
 			}
 			/* use multi line comment */
 			else
@@ -3291,6 +3292,7 @@ void editor_do_comment(GeanyEditor *editor, gint line, gboolean allow_empty_line
 					continue;
 
 				real_comment_multiline(editor, line_start, last_line);
+				count = 1;
 
 				/* break because we are already on the last line */
 				break_loop = TRUE;
@@ -3307,7 +3309,7 @@ void editor_do_comment(GeanyEditor *editor, gint line, gboolean allow_empty_line
 		if (single_line)
 		{
 			sci_set_selection_start(editor->sci, sel_start + co_len);
-			sci_set_selection_end(editor->sci, sel_end + ((i - first_line) * co_len));
+			sci_set_selection_end(editor->sci, sel_end + (count * co_len));
 		}
 		else
 		{
@@ -3316,6 +3318,7 @@ void editor_do_comment(GeanyEditor *editor, gint line, gboolean allow_empty_line
 			sci_set_selection_end(editor->sci, sel_end + co_len + eol_len);
 		}
 	}
+	return count;
 }
 
 
