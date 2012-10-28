@@ -1243,6 +1243,7 @@ static boolean parseStatement (tokenInfo *const token, boolean is_inside_class)
 							makeJsTag (token, JSTAG_METHOD);
 
 							readToken (method_body_token);
+							vStringCopy (method_body_token->scope, token->scope);
 
 							while (! ( isType (method_body_token, TOKEN_SEMICOLON) ||
 							           isType (method_body_token, TOKEN_CLOSE_CURLY) ||
