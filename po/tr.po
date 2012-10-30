@@ -4973,7 +4973,7 @@ msgstr ""
 #. L = lines
 #: ../src/ui_utils.c:219
 msgid "%dL"
-msgstr "%sS"
+msgstr "%dS"
 
 #. RO = read-only
 #: ../src/ui_utils.c:225 ../src/ui_utils.c:232
