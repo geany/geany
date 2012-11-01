@@ -807,6 +807,17 @@ static void add_top_level_items(GeanyDocument *doc)
 				NULL);
 			break;
 		}
+		case GEANY_FILETYPES_ASCIIDOC:
+		{
+			tag_list_add_groups(tag_store,
+				&(tv_iters.tag_namespace), _("Chapter"), NULL,
+				&(tv_iters.tag_member), _("Section"), NULL,
+				&(tv_iters.tag_macro), _("Level2section"), NULL,
+				&(tv_iters.tag_variable), _("Level3section"), NULL,
+				&(tv_iters.tag_struct), _("Level4section"), NULL,
+				NULL);
+			break;
+		}
 		case GEANY_FILETYPES_RUBY:
 		{
 			tag_list_add_groups(tag_store,

@@ -64,6 +64,7 @@ ctags_sources = set([
     'tagmanager/ctags/args.c',
     'tagmanager/ctags/abc.c',
     'tagmanager/ctags/actionscript.c',
+    'tagmanager/ctags/asciidoc.c',
     'tagmanager/ctags/asm.c',
     'tagmanager/ctags/basic.c',
     'tagmanager/ctags/c.c',

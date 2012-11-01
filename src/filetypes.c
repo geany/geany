@@ -496,6 +496,14 @@ static void init_builtin_filetypes(void)
 	ft->name = g_strdup("Forth");
 	filetype_make_title(ft, TITLE_SOURCE_FILE);
 	ft->group = GEANY_FILETYPE_GROUP_SCRIPT;
+
+#define ASCIIDOC
+	ft = filetypes[GEANY_FILETYPES_ASCIIDOC];
+	ft->lang = 43;
+	ft->name = g_strdup("Asciidoc");
+	filetype_make_title(ft, TITLE_SOURCE_FILE);
+	ft->group = GEANY_FILETYPE_GROUP_MARKUP;
+
 }
 
 
