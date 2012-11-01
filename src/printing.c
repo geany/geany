@@ -59,6 +59,7 @@ typedef struct
 	 * takes more than a second) */
 	time_t print_time;
 	PangoLayout *layout; /* commonly used layout object */
+	gdouble sci_scale;
 
 	struct Sci_RangeToFormat fr;
 	GArray *pages;
@@ -325,6 +326,15 @@ static void setup_range(DocInfo *dinfo, GtkPrintContext *ctx)
 	if (printing_prefs.print_page_numbers)
 		dinfo->fr.rc.bottom -= dinfo->line_height * 1; /* footer height */
 
+	dinfo->fr.rcPage.left   /= dinfo->sci_scale;
+	dinfo->fr.rcPage.top    /= dinfo->sci_scale;
+	dinfo->fr.rcPage.right  /= dinfo->sci_scale;
+	dinfo->fr.rcPage.bottom /= dinfo->sci_scale;
+	dinfo->fr.rc.left   /= dinfo->sci_scale;
+	dinfo->fr.rc.top    /= dinfo->sci_scale;
+	dinfo->fr.rc.right  /= dinfo->sci_scale;
+	dinfo->fr.rc.bottom /= dinfo->sci_scale;
+
 	dinfo->fr.chrg.cpMin = 0;
 	dinfo->fr.chrg.cpMax = sci_get_length(dinfo->sci);
 }
@@ -333,6 +343,7 @@ static void setup_range(DocInfo *dinfo, GtkPrintContext *ctx)
 static void begin_print(GtkPrintOperation *operation, GtkPrintContext *context, gpointer user_data)
 {
 	DocInfo *dinfo = user_data;
+	PangoContext *pango_ctx, *widget_pango_ctx;
 	PangoFontDescription *desc;
 
 	if (dinfo == NULL)
@@ -351,8 +362,16 @@ static void begin_print(GtkPrintOperation *operation, GtkPrintContext *context, 
 	scintilla_send_message(dinfo->sci, SCI_SETVIEWWS, SCWS_INVISIBLE, 0);
 	scintilla_send_message(dinfo->sci, SCI_SETVIEWEOL, FALSE, 0);
 	scintilla_send_message(dinfo->sci, SCI_SETEDGEMODE, EDGE_NONE, 0);
-	scintilla_send_message(dinfo->sci, SCI_SETPRINTMAGNIFICATION, (uptr_t) -2, 0); /* WTF? */
 	scintilla_send_message(dinfo->sci, SCI_SETPRINTCOLOURMODE, SC_PRINT_COLOURONWHITE, 0);
+
+	/* Scintilla doesn't respect the context resolution, so we'll scale ourselves.
+	 * Actually Scintilla simply doesn't know about the resolution since it creates its own
+	 * Pango context out of the Cairo target, and the resolution is in the GtkPrintOperation's
+	 * Pango context */
+	pango_ctx = gtk_print_context_create_pango_context(context);
+	widget_pango_ctx = gtk_widget_get_pango_context(GTK_WIDGET(dinfo->sci));
+	dinfo->sci_scale = pango_cairo_context_get_resolution(pango_ctx) / pango_cairo_context_get_resolution(widget_pango_ctx);
+	g_object_unref(pango_ctx);
 
 	dinfo->pages = g_array_new(FALSE, FALSE, sizeof(gint));
 
@@ -370,6 +389,19 @@ static void begin_print(GtkPrintOperation *operation, GtkPrintContext *context, 
 }
 
 
+static gint format_range(DocInfo *dinfo, gboolean draw)
+{
+	gint pos;
+
+	cairo_save(dinfo->fr.hdc);
+	cairo_scale(dinfo->fr.hdc, dinfo->sci_scale, dinfo->sci_scale);
+	pos = (gint) scintilla_send_message(dinfo->sci, SCI_FORMATRANGE, draw, (sptr_t) &dinfo->fr);
+	cairo_restore(dinfo->fr.hdc);
+
+	return pos;
+}
+
+
 static gboolean paginate(GtkPrintOperation *operation, GtkPrintContext *context, gpointer user_data)
 {
 	DocInfo *dinfo = user_data;
@@ -383,7 +415,7 @@ static gboolean paginate(GtkPrintOperation *operation, GtkPrintContext *context,
 	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(main_widgets.progressbar), _("Paginating"));
 
 	g_array_append_val(dinfo->pages, dinfo->fr.chrg.cpMin);
-	dinfo->fr.chrg.cpMin = (gint) scintilla_send_message(dinfo->sci, SCI_FORMATRANGE, FALSE, (sptr_t) &dinfo->fr);
+	dinfo->fr.chrg.cpMin = format_range(dinfo, FALSE);
 
 	gtk_print_operation_set_n_pages(operation, dinfo->pages->len);
 
@@ -423,7 +455,7 @@ static void draw_page(GtkPrintOperation *operation, GtkPrintContext *context,
 	else /* it's the last page, print 'til the end */
 		dinfo->fr.chrg.cpMax = sci_get_length(dinfo->sci);
 
-	scintilla_send_message(dinfo->sci, SCI_FORMATRANGE, TRUE, (sptr_t) &dinfo->fr);
+	format_range(dinfo, TRUE);
 
 	/* reset color */
 	cairo_set_source_rgb(cr, 0, 0, 0);
