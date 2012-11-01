@@ -462,18 +462,17 @@ static void draw_page(GtkPrintOperation *operation, GtkPrintContext *context,
 
 	if (printing_prefs.print_line_numbers)
 	{	/* print a thin line between the line number margin and the data */
-		gint y1 = 0, y2 = height;
+		gdouble y1 = dinfo->fr.rc.top * dinfo->sci_scale;
+		gdouble y2 = dinfo->fr.rc.bottom * dinfo->sci_scale;
+		gdouble x = dinfo->fr.rc.left * dinfo->sci_scale + dinfo->margin_width;
 
 		if (printing_prefs.print_page_header)
-			y1 += (dinfo->line_height * 3) - 2;	/* "- 2": to connect the line number line to
-												 * the page header frame */
-
-		if (printing_prefs.print_page_numbers)
-			y2 -= (dinfo->line_height * 2) - 2;
+			y1 -= 2 - 0.3;	/* to connect the line number line to the page header frame,
+							 * 2 is the border, and 0.3 the line width */
 
 		cairo_set_line_width(cr, 0.3);
-		cairo_move_to(cr, dinfo->margin_width, y1);
-		cairo_line_to(cr, dinfo->margin_width, y2);
+		cairo_move_to(cr, x, y1);
+		cairo_line_to(cr, x, y2);
 		cairo_stroke(cr);
 	}
 
