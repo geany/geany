@@ -309,18 +309,7 @@ static void setup_range(DocInfo *dinfo, GtkPrintContext *ctx)
 	dinfo->fr.rc.top    = dinfo->fr.rcPage.top;
 	dinfo->fr.rc.right  = dinfo->fr.rcPage.right;
 	dinfo->fr.rc.bottom = dinfo->fr.rcPage.bottom;
-#if GTK_CHECK_VERSION(2, 20, 0)
-	{
-		gdouble m_top, m_left, m_right, m_bottom;
-		if (gtk_print_context_get_hard_margins(ctx, &m_top, &m_bottom, &m_left, &m_right))
-		{
-			dinfo->fr.rc.left   += m_left;
-			dinfo->fr.rc.top    += m_top;
-			dinfo->fr.rc.right  -= m_right;
-			dinfo->fr.rc.bottom -= m_bottom;
-		}
-	}
-#endif
+
 	if (printing_prefs.print_page_header)
 		dinfo->fr.rc.top += dinfo->line_height * 3; /* header height */
 	if (printing_prefs.print_page_numbers)
