@@ -3154,6 +3154,8 @@ static void initializeDParser (const langType language)
 	{
 		addKeyword (*s, language, KEYWORD_CONST);
 	}
+	/* skip 'static assert' like 'static if' */
+	addKeyword ("assert", language, KEYWORD_IF);
 }
 
 static void initializeGLSLParser (const langType language)
