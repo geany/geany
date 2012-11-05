@@ -1191,6 +1191,10 @@ static void addOtherFields (tagEntryInfo* const tag, const tagType type,
 	{
 		default: break;
 
+		case TAG_NAMESPACE:
+			/* D nested template block */
+			if (!isLanguage(Lang_d))
+				break;
 		case TAG_CLASS:
 		case TAG_ENUM:
 		case TAG_ENUMERATOR:
