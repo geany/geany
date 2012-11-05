@@ -13,6 +13,7 @@ noinst_LIBRARIES = libctags.a
 parsers = \
 	abc.c \
 	actionscript.c \
+	asciidoc.c \
 	asm.c \
 	basic.c \
 	c.c \
