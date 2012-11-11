@@ -292,37 +292,23 @@ static void swap_panes(void)
 	/* now, swap displayed documents */
 	if (real_doc)
 	{
-		GeanyDocument *view_doc = NULL;
-		guint i;
+		GeanyDocument *view_doc = edit_window.editor->document;
+		struct SciState real_state, view_state;
 
-		foreach_document(i)
-		{
-			if (documents[i]->editor == edit_window.editor)
-			{
-				view_doc = documents[i];
-				break;
-			}
-		}
+		sci_state_init(&real_state);
+		sci_state_init(&view_state);
 
-		if (view_doc)
-		{
-			struct SciState real_state, view_state;
+		save_sci_state(edit_window.sci, &view_state);
+		save_sci_state(real_doc->editor->sci, &real_state);
 
-			sci_state_init(&real_state);
-			sci_state_init(&view_state);
+		set_editor(&edit_window, real_doc->editor);
+		apply_sci_state(edit_window.sci, &real_state);
 
-			save_sci_state(edit_window.sci, &view_state);
-			save_sci_state(real_doc->editor->sci, &real_state);
+		document_show_tab(view_doc);
+		apply_sci_state(view_doc->editor->sci, &view_state);
 
-			set_editor(&edit_window, real_doc->editor);
-			apply_sci_state(edit_window.sci, &real_state);
-
-			document_show_tab(view_doc);
-			apply_sci_state(view_doc->editor->sci, &view_state);
-
-			sci_state_unset(&real_state);
-			sci_state_unset(&view_state);
-		}
+		sci_state_unset(&real_state);
+		sci_state_unset(&view_state);
 	}
 
 	gtk_paned_add1(GTK_PANED(pane), child2);
