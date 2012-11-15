@@ -2011,9 +2011,9 @@ Use indicators to show compile errors
     Underline lines with compile errors using red squiggles to indicate
     them in the editor area.
 
-Newline strip trailing spaces
-    Remove any white space at the end of the line when you hit the
-    Enter/Return key.
+Newline strips trailing spaces
+    Remove any whitespace at the end of the line when you hit the
+    Enter/Return key. See also `Strip trailing spaces`_.
 
 Line breaking column
     The editor column number to insert a newline at when Line Breaking
@@ -2297,8 +2297,13 @@ Ensure consistent line endings
     Ensures that newline characters always get converted before
     saving, avoiding mixed line endings in the same file.
 
+.. _Strip trailing spaces:
+
 Strip trailing spaces
-    Remove the trailing spaces on each line of the document.
+    Remove any whitespace at the end of each document line.
+
+    .. note::
+        This does not apply to Diff documents, e.g. patch files.
 
 Replace tabs by space
     Replace all tabs in the document with the equivalent number of spaces.
