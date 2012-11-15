@@ -210,8 +210,6 @@ gboolean document_account_for_unsaved(void);
 
 gboolean document_close_all(void);
 
-GeanyDocument *document_clone(GeanyDocument *old_doc, const gchar *utf8_filename);
-
 GeanyDocument *document_open_file_full(GeanyDocument *doc, const gchar *filename, gint pos,
 		gboolean readonly, GeanyFiletype *ft, const gchar *forced_enc);
 
