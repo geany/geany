@@ -565,6 +565,13 @@ order. It is not alphabetical as shown in the documents list
 See the `Notebook tab keybindings`_ section for useful
 shortcuts including for Most-Recently-Used document switching.
 
+Cloning documents
+^^^^^^^^^^^^^^^^^
+The `Document->Clone` menu item copies the current document's text,
+cursor position and properties into a new untitled document. This
+can be useful when making temporary copies of text or for creating
+documents with similar or identical contents.
+
 
 Character sets and Unicode Byte-Order-Mark (BOM)
 ------------------------------------------------
