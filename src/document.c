@@ -2756,6 +2756,10 @@ G_MODULE_EXPORT void on_clone1_activate(GtkMenuItem *menuitem, gpointer user_dat
 
 	/* copy file properties */
 	doc->editor->line_wrapping = old_doc->editor->line_wrapping;
+	doc->editor->line_breaking = old_doc->editor->line_breaking;
+	doc->editor->auto_indent = old_doc->editor->auto_indent;
+	editor_set_indent(doc->editor, old_doc->editor->indent_type,
+		old_doc->editor->indent_width);
 	doc->readonly = old_doc->readonly;
 	doc->has_bom = old_doc->has_bom;
 	document_set_encoding(doc, old_doc->encoding);
