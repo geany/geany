@@ -2752,6 +2752,7 @@ G_MODULE_EXPORT void on_clone1_activate(GtkMenuItem *menuitem, gpointer user_dat
 	sci_get_text(old_doc->editor->sci, len, text);
 	doc = document_new_file(NULL, old_doc->file_type, text);
 	g_free(text);
+	document_set_text_changed(doc, TRUE);
 
 	/* copy file properties */
 	doc->editor->line_wrapping = old_doc->editor->line_wrapping;
