@@ -546,7 +546,7 @@ static gboolean save_as_dialog_handle_response(GtkWidget *dialog, gint response)
 }
 
 
-static GtkWidget *create_save_file_dialog(void)
+static GtkWidget *create_save_file_dialog(GeanyDocument *doc)
 {
 	GtkWidget *dialog, *rename_btn;
 	const gchar *initdir;
@@ -562,6 +562,8 @@ static GtkWidget *create_save_file_dialog(void)
 
 	rename_btn = gtk_dialog_add_button(GTK_DIALOG(dialog), _("R_ename"), GEANY_RESPONSE_RENAME);
 	gtk_widget_set_tooltip_text(rename_btn, _("Save the file and rename it"));
+	/* disable rename unless file exists on disk */
+	gtk_widget_set_sensitive(rename_btn, doc->real_path != NULL);
 
 	gtk_dialog_add_buttons(GTK_DIALOG(dialog),
 		GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
@@ -590,7 +592,7 @@ static gboolean show_save_as_gtk(GeanyDocument *doc)
 
 	g_return_val_if_fail(doc != NULL, FALSE);
 
-	dialog = create_save_file_dialog();
+	dialog = create_save_file_dialog(doc);
 
 	if (doc->file_name != NULL)
 	{
