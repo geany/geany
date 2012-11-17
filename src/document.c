@@ -2739,17 +2739,20 @@ GeanyDocument *document_index(gint idx)
 /* create a new file and copy file content and properties */
 G_MODULE_EXPORT void on_clone1_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
-	gint len;
 	gchar *text;
 	GeanyDocument *doc;
 	GeanyDocument *old_doc = document_get_current();
+	ScintillaObject *old_sci;
 
 	if (!old_doc)
 		return;
 
-	len = sci_get_length(old_doc->editor->sci) + 1;
-	text = (gchar*) g_malloc(len);
-	sci_get_text(old_doc->editor->sci, len, text);
+	old_sci = old_doc->editor->sci;
+	if (sci_has_selection(old_sci))
+		text = sci_get_selection_contents(old_sci);
+	else
+		text = sci_get_contents(old_sci, sci_get_length(old_sci) + 1);
+
 	doc = document_new_file(NULL, old_doc->file_type, text);
 	g_free(text);
 	document_set_text_changed(doc, TRUE);
