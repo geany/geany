@@ -568,8 +568,9 @@ shortcuts including for Most-Recently-Used document switching.
 Cloning documents
 ^^^^^^^^^^^^^^^^^
 The `Document->Clone` menu item copies the current document's text,
-cursor position and properties into a new untitled document. This
-can be useful when making temporary copies of text or for creating
+cursor position and properties into a new untitled document. If
+there is a selection, only the selected text is copied. This can be
+useful when making temporary copies of text or for creating
 documents with similar or identical contents.
 
 
