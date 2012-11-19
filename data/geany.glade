@@ -5931,7 +5931,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
-                                <property name="tooltip_text" translatable="yes">Sets the backround color of the text in the terminal widget</property>
+                                <property name="tooltip_text" translatable="yes">Sets the background color of the text in the terminal widget</property>
                                 <property name="title" translatable="yes">Color Chooser</property>
                                 <property name="color">#000000000000</property>
                               </object>
