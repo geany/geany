@@ -848,14 +848,12 @@ void tools_word_count(void)
 
 	if (sci_has_selection(doc->editor->sci))
 	{
-		text = g_malloc0(sci_get_selected_text_length(doc->editor->sci) + 1);
-		sci_get_selected_text(doc->editor->sci, text);
+		text = sci_get_selection_contents(doc->editor->sci);
 		range = _("selection");
 	}
 	else
 	{
-		text = g_malloc(sci_get_length(doc->editor->sci) + 1);
-		sci_get_text(doc->editor->sci, sci_get_length(doc->editor->sci) + 1 , text);
+		text = sci_get_contents(doc->editor->sci, -1);
 		range = _("whole document");
 	}
 	word_count(text, &chars, &lines, &words);
