@@ -7700,6 +7700,32 @@
                                   </object>
                                 </child>
                                 <child>
+                                  <object class="GtkSeparatorMenuItem" id="separator63">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkMenuItem" id="move_lines_up1">
+                                    <property name="use_action_appearance">False</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="label" translatable="yes">_Move Line(s) Up</property>
+                                    <property name="use_underline">True</property>
+                                    <signal name="activate" handler="on_move_lines_up1_activate" swapped="no"/>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkMenuItem" id="move_lines_down1">
+                                    <property name="use_action_appearance">False</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="label" translatable="yes">_Move Line(s) Down</property>
+                                    <property name="use_underline">True</property>
+                                    <signal name="activate" handler="on_move_lines_down1_activate" swapped="no"/>
+                                  </object>
+                                </child>
+                                <child>
                                   <object class="GtkSeparatorMenuItem" id="separator52">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
@@ -7747,16 +7773,6 @@
                                     <property name="label" translatable="yes">T_oggle Case of Selection</property>
                                     <property name="use_underline">True</property>
                                     <signal name="activate" handler="on_toggle_case1_activate" swapped="no"/>
-                                  </object>
-                                </child>
-                                <child>
-                                  <object class="GtkMenuItem" id="transpose_current_line1">
-                                    <property name="use_action_appearance">False</property>
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">False</property>
-                                    <property name="label" translatable="yes">_Transpose Current Line</property>
-                                    <property name="use_underline">True</property>
-                                    <signal name="activate" handler="on_transpose_current_line1_activate" swapped="no"/>
                                   </object>
                                 </child>
                                 <child>

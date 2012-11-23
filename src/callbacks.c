@@ -2086,9 +2086,15 @@ G_MODULE_EXPORT void on_reflow_lines_block1_activate(GtkMenuItem *menuitem, gpoi
 }
 
 
-G_MODULE_EXPORT void on_transpose_current_line1_activate(GtkMenuItem *menuitem, gpointer user_data)
+G_MODULE_EXPORT void on_move_lines_up1_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
-	keybindings_send_command(GEANY_KEY_GROUP_EDITOR, GEANY_KEYS_EDITOR_TRANSPOSELINE);
+	keybindings_send_command(GEANY_KEY_GROUP_EDITOR, GEANY_KEYS_EDITOR_MOVELINEUP);
+}
+
+
+G_MODULE_EXPORT void on_move_lines_down1_activate(GtkMenuItem *menuitem, gpointer user_data)
+{
+	keybindings_send_command(GEANY_KEY_GROUP_EDITOR, GEANY_KEYS_EDITOR_MOVELINEDOWN);
 }
 
 

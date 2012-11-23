@@ -643,10 +643,6 @@ on_reflow_lines_block1_activate		(GtkMenuItem	 *menuitem,
 										gpointer		 user_data);
 
 G_MODULE_EXPORT void
-on_transpose_current_line1_activate	(GtkMenuItem	 *menuitem,
-										gpointer		 user_data);
-
-G_MODULE_EXPORT void
 on_smart_line_indent1_activate		 (GtkMenuItem	 *menuitem,
 										gpointer		 user_data);
 

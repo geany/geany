@@ -300,10 +300,9 @@ static void init_default_kb(void)
 	add_kb(group, GEANY_KEYS_EDITOR_DELETELINETOEND, NULL,
 		GDK_Delete, GDK_SHIFT_MASK | GDK_CONTROL_MASK, "edit_deletelinetoend",
 		_("Delete to line end"), NULL);
-	/* transpose may fit better in format group */
+	/* Note: transpose may fit better in format group, but that would break the API */
 	add_kb(group, GEANY_KEYS_EDITOR_TRANSPOSELINE, NULL,
-		0, 0, "edit_transposeline", _("_Transpose Current Line"),
-		"transpose_current_line1");
+		0, 0, "edit_transposeline", _("_Transpose Current Line"), NULL);
 	add_kb(group, GEANY_KEYS_EDITOR_SCROLLTOLINE, NULL,
 		GDK_l, GDK_SHIFT_MASK | GDK_CONTROL_MASK, "edit_scrolltoline", _("Scroll to current line"), NULL);
 	add_kb(group, GEANY_KEYS_EDITOR_SCROLLLINEUP, NULL,
@@ -327,9 +326,11 @@ static void init_default_kb(void)
 	add_kb(group, GEANY_KEYS_EDITOR_WORDPARTCOMPLETION, NULL,
 		GDK_Tab, 0, "edit_wordpartcompletion", _("Word part completion"), NULL);
 	add_kb(group, GEANY_KEYS_EDITOR_MOVELINEUP, NULL,
-		GDK_Page_Up, GDK_MOD1_MASK, "edit_movelineup", _("Move line(s) up"), NULL);
+		GDK_Page_Up, GDK_MOD1_MASK, "edit_movelineup",
+		_("Move line(s) up"), "move_lines_up1");
 	add_kb(group, GEANY_KEYS_EDITOR_MOVELINEDOWN, NULL,
-		GDK_Page_Down, GDK_MOD1_MASK, "edit_movelinedown", _("Move line(s) down"), NULL);
+		GDK_Page_Down, GDK_MOD1_MASK, "edit_movelinedown",
+		_("Move line(s) down"), "move_lines_down1");
 
 	group = keybindings_get_core_group(GEANY_KEY_GROUP_CLIPBOARD);
 
