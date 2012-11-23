@@ -74,10 +74,6 @@ static struct FileSelState
 		gboolean show_hidden;
 		gboolean more_options_visible;
 	} open;
-	struct
-	{
-		gboolean open_in_new_tab;
-	} save;
 }
 filesel_state = {
 	{
@@ -85,9 +81,6 @@ filesel_state = {
 		GEANY_ENCODINGS_MAX, /* default encoding is detect from file */
 		0,
 		FALSE,
-		FALSE
-	},
-	{
 		FALSE
 	}
 };
@@ -487,40 +480,26 @@ void dialogs_show_open_file(void)
 }
 
 
-static void on_save_as_new_tab_toggled(GtkToggleButton *togglebutton, gpointer user_data)
-{
-	gtk_widget_set_sensitive(GTK_WIDGET(user_data), ! gtk_toggle_button_get_active(togglebutton));
-}
-
-
-static gboolean handle_save_as(const gchar *utf8_filename, gboolean open_new_tab, gboolean rename_file)
+static gboolean handle_save_as(const gchar *utf8_filename, gboolean rename_file)
 {
 	GeanyDocument *doc = document_get_current();
 	gboolean success = FALSE;
 
 	g_return_val_if_fail(NZV(utf8_filename), FALSE);
 
-	if (open_new_tab)
-	{	/* "open" the saved file in a new tab and switch to it */
-		doc = document_clone(doc, utf8_filename);
-		success = document_save_file_as(doc, NULL);
-	}
-	else
+	if (doc->file_name != NULL)
 	{
-		if (doc->file_name != NULL)
+		if (rename_file)
 		{
-			if (rename_file)
-			{
-				document_rename_file(doc, utf8_filename);
-			}
-			/* create a new tm_source_file object otherwise tagmanager won't work correctly */
-			tm_workspace_remove_object(doc->tm_file, TRUE, TRUE);
-			doc->tm_file = NULL;
+			document_rename_file(doc, utf8_filename);
 		}
-		success = document_save_file_as(doc, utf8_filename);
-
-		build_menu_update(doc);
+		/* create a new tm_source_file object otherwise tagmanager won't work correctly */
+		tm_workspace_remove_object(doc->tm_file, TRUE, TRUE);
+		doc->tm_file = NULL;
 	}
+	success = document_save_file_as(doc, utf8_filename);
+
+	build_menu_update(doc);
 	return success;
 }
 
@@ -549,16 +528,10 @@ static gboolean save_as_dialog_handle_response(GtkWidget *dialog, gint response)
 			/* fall through */
 		case GTK_RESPONSE_ACCEPT:
 		{
-			gboolean open_new_tab = gtk_toggle_button_get_active(
-					GTK_TOGGLE_BUTTON(ui_lookup_widget(dialog, "check_open_new_tab")));
 			gchar *utf8_filename;
 
 			utf8_filename = utils_get_utf8_from_locale(new_filename);
-			success = handle_save_as(utf8_filename, open_new_tab, rename_file);
-
-			if (success)
-				filesel_state.save.open_in_new_tab = open_new_tab;
-
+			success = handle_save_as(utf8_filename, rename_file);
 			g_free(utf8_filename);
 			break;
 		}
@@ -573,9 +546,9 @@ static gboolean save_as_dialog_handle_response(GtkWidget *dialog, gint response)
 }
 
 
-static GtkWidget *create_save_file_dialog(void)
+static GtkWidget *create_save_file_dialog(GeanyDocument *doc)
 {
-	GtkWidget *dialog, *vbox, *check_open_new_tab, *rename_btn;
+	GtkWidget *dialog, *rename_btn;
 	const gchar *initdir;
 
 	dialog = gtk_file_chooser_dialog_new(_("Save File"), GTK_WINDOW(main_widgets.window),
@@ -589,21 +562,14 @@ static GtkWidget *create_save_file_dialog(void)
 
 	rename_btn = gtk_dialog_add_button(GTK_DIALOG(dialog), _("R_ename"), GEANY_RESPONSE_RENAME);
 	gtk_widget_set_tooltip_text(rename_btn, _("Save the file and rename it"));
+	/* disable rename unless file exists on disk */
+	gtk_widget_set_sensitive(rename_btn, doc->real_path != NULL);
 
 	gtk_dialog_add_buttons(GTK_DIALOG(dialog),
 		GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 		GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT, NULL);
 	gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_ACCEPT);
 
-	vbox = gtk_vbox_new(FALSE, 0);
-	check_open_new_tab = gtk_check_button_new_with_mnemonic(_("_Open file in a new tab"));
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_open_new_tab), filesel_state.save.open_in_new_tab);
-	gtk_widget_set_tooltip_text(check_open_new_tab,
-		_("Keep the current unsaved document open"
-		" and open the newly saved file in a new tab"));
-	gtk_box_pack_start(GTK_BOX(vbox), check_open_new_tab, FALSE, FALSE, 0);
-	gtk_widget_show_all(vbox);
-	gtk_file_chooser_set_extra_widget(GTK_FILE_CHOOSER(dialog), vbox);
 	gtk_file_chooser_set_do_overwrite_confirmation(GTK_FILE_CHOOSER(dialog), TRUE);
 	gtk_file_chooser_set_local_only(GTK_FILE_CHOOSER(dialog), FALSE);
 
@@ -615,12 +581,6 @@ static GtkWidget *create_save_file_dialog(void)
 		gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog), linitdir);
 		g_free(linitdir);
 	}
-
-	g_signal_connect(check_open_new_tab, "toggled",
-				G_CALLBACK(on_save_as_new_tab_toggled), rename_btn);
-
-	ui_hookup_widget(dialog, check_open_new_tab, "check_open_new_tab");
-
 	return dialog;
 }
 
@@ -632,7 +592,7 @@ static gboolean show_save_as_gtk(GeanyDocument *doc)
 
 	g_return_val_if_fail(doc != NULL, FALSE);
 
-	dialog = create_save_file_dialog();
+	dialog = create_save_file_dialog(doc);
 
 	if (doc->file_name != NULL)
 	{
@@ -706,7 +666,7 @@ gboolean dialogs_show_save_as()
 		gchar *utf8_name = win32_show_document_save_as_dialog(GTK_WINDOW(main_widgets.window),
 						_("Save File"), DOC_FILENAME(doc));
 		if (utf8_name != NULL)
-			result = handle_save_as(utf8_name, FALSE, FALSE);
+			result = handle_save_as(utf8_name, FALSE);
 	}
 	else
 #endif
