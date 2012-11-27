@@ -1620,6 +1620,8 @@ static void skipToMatch (const char *const pair)
 	const unsigned long inputLineNumber = getInputLineNumber ();
 	int matchLevel = 1;
 	int c = '\0';
+	if (isLanguage(Lang_d) && pair[0] == '<')
+		return; /* ignore e.g. Foo!(x < 2) */
 	while (matchLevel > 0  &&  (c = cppGetc ()) != EOF)
 	{
 		if (c == begin)
