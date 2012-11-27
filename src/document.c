@@ -2506,6 +2506,7 @@ void document_undo_clear(GeanyDocument *doc)
 }
 
 
+/* note: this is called on SCN_MODIFIED notifications */
 void document_undo_add(GeanyDocument *doc, guint type, gpointer data)
 {
 	undo_action *action;
@@ -2518,7 +2519,10 @@ void document_undo_add(GeanyDocument *doc, guint type, gpointer data)
 
 	g_trash_stack_push(&doc->priv->undo_actions, action);
 
-	document_set_text_changed(doc, TRUE);
+	/* avoid unnecessary redraws */
+	if (type != UNDO_SCINTILLA || !doc->changed)
+		document_set_text_changed(doc, TRUE);
+
 	ui_update_popup_reundo_items(doc);
 }
 
@@ -2682,7 +2686,9 @@ static void document_redo_add(GeanyDocument *doc, guint type, gpointer data)
 
 	g_trash_stack_push(&doc->priv->redo_actions, action);
 
-	document_set_text_changed(doc, TRUE);
+	if (type != UNDO_SCINTILLA || !doc->changed)
+		document_set_text_changed(doc, TRUE);
+
 	ui_update_popup_reundo_items(doc);
 }
 
