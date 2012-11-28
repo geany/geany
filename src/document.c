@@ -2847,9 +2847,10 @@ static void monitor_reload_file(GeanyDocument *doc)
 	gchar *base_name = g_path_get_basename(doc->file_name);
 	gint ret;
 
+	/* we use No instead of Cancel to avoid mnemonic clash */
 	ret = dialogs_show_prompt(NULL,
 		GTK_STOCK_CLOSE, GTK_RESPONSE_CLOSE,
-		GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+		GTK_STOCK_NO, GTK_RESPONSE_CANCEL,
 		_("_Reload"), GTK_RESPONSE_ACCEPT,
 		_("Do you want to reload it?"),
 		_("The file '%s' on the disk is more recent than\nthe current buffer."),
