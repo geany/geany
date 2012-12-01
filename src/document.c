@@ -1701,7 +1701,7 @@ gboolean document_save_file(GeanyDocument *doc, gboolean force)
 	}
 
 	/* the "changed" flag should exclude the "readonly" flag, but check it anyway for safety */
-	if (! force && ! ui_prefs.allow_always_save && (! doc->changed || doc->readonly))
+	if (! force && (! doc->changed || doc->readonly))
 		return FALSE;
 
 	fp = project_get_file_prefs();

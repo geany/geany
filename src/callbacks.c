@@ -173,7 +173,7 @@ G_MODULE_EXPORT void on_save1_activate(GtkMenuItem *menuitem, gpointer user_data
 
 	if (doc != NULL && cur_page >= 0)
 	{
-		document_save_file(doc, FALSE);
+		document_save_file(doc, ui_prefs.allow_always_save);
 	}
 }
 
