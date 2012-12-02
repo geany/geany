@@ -2489,10 +2489,11 @@ indent_hard_tab_width             The size of a tab character. Don't change  8  
 **Interface related**
 show_symbol_list_expanders        Whether to show or hide the small          true        to new
                                   expander icons on the symbol list                      documents
-allow_always_save                 treeview. Whether files can be saved       false       immediately
-                                  always, even if they don't have any
-                                  changes. By default, the Save button and
-                                  menu item are disabled when a file is
+                                  treeview.
+allow_always_save                 Whether files can be saved always, even    false       immediately
+                                  if they don't have any changes.
+                                  By default, the Save button and menu
+                                  item are disabled when a file is
                                   unchanged. When setting this option to
                                   true, the Save button and menu item are
                                   always active and files can be saved.
