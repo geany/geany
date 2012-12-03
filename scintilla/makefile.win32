@@ -63,6 +63,7 @@ MARSHALLER=scintilla-marshal.o
 	$(CC) $(CXXFLAGS) -c $<
 
 LEXOBJS=\
+LexAbaqus.o \
 LexAda.o \
 LexAsm.o \
 LexBash.o \

@@ -61,6 +61,7 @@ out = '_build_'
 mio_sources = set(['tagmanager/mio/mio.c'])
 
 ctags_sources = set([
+    'tagmanager/ctags/abaqus.c',
     'tagmanager/ctags/args.c',
     'tagmanager/ctags/abc.c',
     'tagmanager/ctags/actionscript.c',

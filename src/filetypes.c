@@ -496,6 +496,14 @@ static void init_builtin_filetypes(void)
 	ft->name = g_strdup("Forth");
 	filetype_make_title(ft, TITLE_SOURCE_FILE);
 	ft->group = GEANY_FILETYPE_GROUP_SCRIPT;
+
+#define ABAQUS
+	ft = filetypes[GEANY_FILETYPES_ABAQUS];
+	ft->lang = 43;
+	ft->name = g_strdup("Abaqus");
+	filetype_make_title(ft, TITLE_SOURCE_FILE);
+	ft->mime_type = g_strdup("text/x-abaqus");
+	ft->group = GEANY_FILETYPE_GROUP_SCRIPT;
 }
 
 

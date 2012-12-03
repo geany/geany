@@ -69,6 +69,31 @@ typedef struct
 #define HL_N_ENTRIES(array) ((array != NULL) ? G_N_ELEMENTS(array) : 0)
 
 
+/* Abaqus */
+#define highlighting_lexer_ABAQUS			SCLEX_ABAQUS
+static const HLStyle highlighting_styles_ABAQUS[] =
+{
+	{ SCE_ABAQUS_DEFAULT,		"default",		FALSE },
+	{ SCE_ABAQUS_COMMENT,		"comment",		FALSE },
+	{ SCE_ABAQUS_COMMENTBLOCK,	"commentblock",		FALSE },
+	{ SCE_ABAQUS_NUMBER,		"number",		FALSE },
+	{ SCE_ABAQUS_STRING,		"string",		FALSE },
+	{ SCE_ABAQUS_OPERATOR,		"operator",		FALSE },
+	{ SCE_ABAQUS_WORD,		"word",			FALSE },
+	{ SCE_ABAQUS_PROCESSOR,		"preprocessor",		FALSE },
+	{ SCE_ABAQUS_COMMAND,		"command",		FALSE },
+	{ SCE_ABAQUS_SLASHCOMMAND,	"command",		FALSE },
+	{ SCE_ABAQUS_STARCOMMAND,	"command",		FALSE },
+	{ SCE_ABAQUS_ARGUMENT,		"word2",		FALSE },
+	{ SCE_ABAQUS_FUNCTION,		"function",		FALSE }
+};
+static const HLKeyword highlighting_keywords_ABAQUS[] =
+{
+	{ 0, "primary",	FALSE }
+};
+#define highlighting_properties_ABAQUS		EMPTY_PROPERTIES
+
+
 /* Ada */
 #define highlighting_lexer_ADA			SCLEX_ADA
 static const HLStyle highlighting_styles_ADA[] =
