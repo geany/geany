@@ -1989,7 +1989,9 @@ gint search_find_text(ScintillaObject *sci, gint flags, struct Sci_TextToFind *t
 	pos = ttf->chrg.cpMin;
 	ret = find_regex(sci, pos, regex);
 
-	if (ret >= 0 && ret < ttf->chrg.cpMax)
+	if (ret >= ttf->chrg.cpMax)
+		ret = -1;
+	else if (ret >= 0)
 	{
 		ttf->chrgText.cpMin = regex_matches[0].start;
 		ttf->chrgText.cpMax = regex_matches[0].end;
