@@ -561,6 +561,8 @@ static void init_default_kb(void)
 		0, 0, "menu_linewrap", _("Toggle Line wrapping"), "menu_line_wrapping1");
 	add_kb(group, GEANY_KEYS_DOCUMENT_LINEBREAK, NULL,
 		0, 0, "menu_linebreak", _("Toggle Line breaking"), "line_breaking1");
+	add_kb(group, GEANY_KEYS_DOCUMENT_CLONE, NULL,
+		0, 0, "menu_clone", _("_Clone"), "clone1");
 	add_kb(group, GEANY_KEYS_DOCUMENT_REPLACETABS, NULL,
 		0, 0, "menu_replacetabs", _("Replace tabs by space"), "menu_replace_tabs");
 	add_kb(group, GEANY_KEYS_DOCUMENT_REPLACESPACES, NULL,
@@ -2347,6 +2349,9 @@ static gboolean cb_func_document_action(guint key_id)
 		case GEANY_KEYS_DOCUMENT_LINEWRAP:
 			on_line_wrapping1_toggled(NULL, NULL);
 			ui_document_show_hide(doc);
+			break;
+		case GEANY_KEYS_DOCUMENT_CLONE:
+			document_clone(doc);
 			break;
 		case GEANY_KEYS_DOCUMENT_RELOADTAGLIST:
 			document_update_tags(doc);

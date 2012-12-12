@@ -279,6 +279,8 @@ gint document_compare_by_tab_order_reverse(gconstpointer a, gconstpointer b);
 
 void document_grab_focus(GeanyDocument *doc);
 
+GeanyDocument *document_clone(GeanyDocument *old_doc);
+
 G_END_DECLS
 
 #endif

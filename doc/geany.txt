@@ -3627,6 +3627,8 @@ Document keybindings
 ==================================== ==================== ==================================================
 Action                               Default shortcut     Description
 ==================================== ==================== ==================================================
+Clone                                                     See `Cloning documents`_.
+
 Replace tabs by space                                     Replaces all tabs with the right amount of spaces.
 
 Replace spaces by tabs                                    Replaces leading spaces with tab characters.
