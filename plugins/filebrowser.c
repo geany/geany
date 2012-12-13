@@ -715,9 +715,8 @@ static gboolean on_key_press(GtkWidget *widget, GdkEventKey *event, gpointer dat
 		return TRUE;
 	}
 
-	if ((event->keyval == GDK_Up ||
-		event->keyval == GDK_KP_Up) &&
-		(event->state & GDK_MOD1_MASK))	/* FIXME: Alt-Up doesn't seem to work! */
+	if (( (event->keyval == GDK_Up || event->keyval == GDK_KP_Up) && (event->state & GDK_MOD1_MASK)) || /* FIXME: Alt-Up doesn't seem to work! */
+		(event->keyval == GDK_KEY_BackSpace) )
 	{
 		on_go_up();
 		return TRUE;
