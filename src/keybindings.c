@@ -1096,6 +1096,8 @@ static gboolean check_vte(GdkModifierType state, guint keyval)
 		return FALSE;
 	if (state == 0 && (keyval < GDK_F1 || keyval > GDK_F35))	/* e.g. backspace */
 		return FALSE;
+	if (state == GDK_CONTROL_MASK && (keyval == GDK_Page_Up || keyval == GDK_Page_Down))
+		return FALSE;
 
 	/* make focus commands override any bash commands */
 	group = keybindings_get_core_group(GEANY_KEY_GROUP_FOCUS);
