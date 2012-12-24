@@ -2115,62 +2115,56 @@ void search_find_usage(const gchar *search_text, const gchar *original_search_te
 /* ttf is updated to include the last match position (ttf->chrg.cpMin) and
  * the new search range end (ttf->chrg.cpMax).
  * Note: Normally you would call sci_start/end_undo_action() around this call. */
-/* Warning: Scintilla recommends caching replacements to do all at once to avoid
- * performance issues with SCI_GETCHARACTERPOINTER. */
 guint search_replace_range(ScintillaObject *sci, struct Sci_TextToFind *ttf,
 		gint flags, const gchar *replace_text)
 {
 	gint count = 0;
-	const gchar *find_text = ttf->lpstrText;
-	gint start = ttf->chrg.cpMin;
-	gint end = ttf->chrg.cpMax;
+	gint offset = 0; /* difference between sear pos and replace pos */
+	GList *match, *matches = NULL;
 
-	g_return_val_if_fail(sci != NULL && find_text != NULL && replace_text != NULL, 0);
-	if (! *find_text)
+	g_return_val_if_fail(sci != NULL && ttf->lpstrText != NULL && replace_text != NULL, 0);
+	if (! *ttf->lpstrText)
 		return 0;
 
-	while (TRUE)
+	/* first, search for all matches */
+	while (search_find_text(sci, flags, ttf) != -1)
 	{
-		gint search_pos;
-		gint find_len = 0, replace_len = 0;
+		if (ttf->chrgText.cpMax > ttf->chrg.cpMax)
+			break; /* found text is partially out of range */
 
-		search_pos = search_find_text(sci, flags, ttf);
-		find_len = ttf->chrgText.cpMax - ttf->chrgText.cpMin;
-		if (search_pos == -1)
-			break;	/* no more matches */
+		matches = g_list_prepend(matches, g_memdup(ttf, sizeof *ttf));
+		ttf->chrg.cpMin = ttf->chrgText.cpMax;
 
-		if (search_pos + find_len > end)
-			break;	/* found text is partly out of range */
-		else
+		/* forward after empty matches, see find_document_usage() */
+		if (ttf->chrgText.cpMax == ttf->chrgText.cpMin)
+			ttf->chrg.cpMin ++;
+	}
+	matches = g_list_reverse(matches);
+
+	/* then replace them all */
+	foreach_list (match, matches)
+	{
+		struct Sci_TextToFind *m = match->data;
+		gint replace_len;
+
+		sci_set_target_start(sci, offset + m->chrgText.cpMin);
+		sci_set_target_end(sci, offset + m->chrgText.cpMax);
+
+		replace_len = search_replace_target(sci, replace_text, flags & SCFIND_REGEXP);
+		offset += replace_len - (m->chrgText.cpMax - m->chrgText.cpMin);
+		count ++;
+
+		/* on last match, update the last match/new range end */
+		if (! match->next)
 		{
-			gint movepastEOL = 0;
-
-			sci_set_target_start(sci, search_pos);
-			sci_set_target_end(sci, search_pos + find_len);
-
-			if (find_len <= 0)
-			{
-				gchar chNext = sci_get_char_at(sci, sci_get_target_end(sci));
-
-				if (chNext == '\r' || chNext == '\n')
-					movepastEOL = 1;
-			}
-			replace_len = search_replace_target(sci, replace_text,
-				flags & SCFIND_REGEXP);
-			count++;
-			if (search_pos == end)
-				break;	/* Prevent hang when replacing regex $ */
-
-			/* make the next search start after the replaced text */
-			start = search_pos + replace_len + movepastEOL;
-			if (find_len == 0)
-				start = sci_get_position_after(sci, start);	/* prevent '[ ]*' regex rematching part of replaced text */
-			ttf->chrg.cpMin = start;
-			end += replace_len - find_len;	/* update end of range now text has changed */
-			ttf->chrg.cpMax = end;
+			ttf->chrg.cpMin = m->chrgText.cpMin;
+			ttf->chrg.cpMax += offset;
 		}
 
+		g_free(m);
 	}
+	g_list_free(matches);
+
 	return count;
 }
 
