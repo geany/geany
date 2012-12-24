@@ -1952,14 +1952,45 @@ static gint find_regex(ScintillaObject *sci, guint pos, GRegex *regex, GeanyMatc
 	const gchar *text;
 	GMatchInfo *minfo;
 	gint ret = -1;
+	gint offset = 0;
 
 	g_return_val_if_fail(pos <= (guint)sci_get_length(sci), -1);
 
-	/* Warning: any SCI calls will invalidate 'text' after calling SCI_GETCHARACTERPOINTER */
-	text = (void*)scintilla_send_message(sci, SCI_GETCHARACTERPOINTER, 0, 0);
+	if (g_regex_get_compile_flags(regex) & G_REGEX_MULTILINE)
+	{
+		/* Warning: any SCI calls will invalidate 'text' after calling SCI_GETCHARACTERPOINTER */
+		text = (void*)scintilla_send_message(sci, SCI_GETCHARACTERPOINTER, 0, 0);
+		g_regex_match_full(regex, text, -1, pos, 0, &minfo, NULL);
+	}
+	else /* single-line mode, manually match against each line */
+	{
+		gint line = sci_get_line_from_position(sci, pos);
+
+		for (;;)
+		{
+			gint start = sci_get_position_from_line(sci, line);
+			gint end = sci_get_line_end_position(sci, line);
+
+			text = (void*)scintilla_send_message(sci, SCI_GETRANGEPOINTER, start, end - start);
+			if (g_regex_match_full(regex, text, end - start, pos - start, 0, &minfo, NULL))
+			{
+				offset = start;
+				break;
+			}
+			else /* not found, try next line */
+			{
+				line ++;
+				if (line >= sci_get_line_count(sci))
+					break;
+				pos = sci_get_position_from_line(sci, line);
+				/* don't free last info, it's freed below */
+				g_match_info_free(minfo);
+			}
+		}
+	}
 
 	/* Warning: minfo will become invalid when 'text' does! */
-	if (g_regex_match_full(regex, text, -1, pos, 0, &minfo, NULL))
+	if (g_match_info_matches(minfo))
 	{
 		guint i;
 
@@ -1971,8 +2002,8 @@ static gint find_regex(ScintillaObject *sci, guint pos, GRegex *regex, GeanyMatc
 			gint start = -1, end = -1;
 
 			g_match_info_fetch_pos(minfo, (gint)i, &start, &end);
-			match->matches[i].start = start;
-			match->matches[i].end = end;
+			match->matches[i].start = offset + start;
+			match->matches[i].end = offset + end;
 		}
 		match->start = match->matches[0].start;
 		match->end = match->matches[0].end;
