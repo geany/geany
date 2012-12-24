@@ -888,81 +888,90 @@ gboolean _broken_win32_spawn(const gchar *dir, gchar **argv, gchar **env, GSpawn
 		/*MessageBox(NULL, cmdline, cmdline, MB_OK);*/
 	}
 
-	if (std_err != NULL)
+	if (std_out != NULL || std_err != NULL)
 	{
-		hStderrTempFile = GetTempFileHandle(error);
-		if (hStderrTempFile == INVALID_HANDLE_VALUE)
+		if (std_err != NULL)
+		{
+			hStderrTempFile = GetTempFileHandle(error);
+			if (hStderrTempFile == INVALID_HANDLE_VALUE)
+			{
+				gchar *msg = g_win32_error_message(GetLastError());
+				geany_debug("win32_spawn: Second CreateFile failed (%d)", (gint) GetLastError());
+				g_set_error(error, G_SPAWN_ERROR, G_FILE_ERROR, "%s", msg);
+				g_free(msg);
+				return FALSE;
+			}
+		}
+
+		if (std_out != NULL)
+		{
+			hStdoutTempFile = GetTempFileHandle(error);
+			if (hStdoutTempFile == INVALID_HANDLE_VALUE)
+			{
+				gchar *msg = g_win32_error_message(GetLastError());
+				geany_debug("win32_spawn: Second CreateFile failed (%d)", (gint) GetLastError());
+				g_set_error(error, G_SPAWN_ERROR, G_FILE_ERROR, "%s", msg);
+				g_free(msg);
+				return FALSE;
+			}
+		}
+
+		/* Set the bInheritHandle flag so pipe handles are inherited. */
+		saAttr.nLength = sizeof(SECURITY_ATTRIBUTES);
+		saAttr.bInheritHandle = TRUE;
+		saAttr.lpSecurityDescriptor = NULL;
+
+		/* Get the handle to the current STDOUT and STDERR. */
+		gw_spawn.hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
+		gw_spawn.hStderr = GetStdHandle(STD_ERROR_HANDLE);
+		gw_spawn.dwExitCode = 0;
+
+		/* Create a pipe for the child process's STDOUT. */
+		if (! CreatePipe(&(gw_spawn.hChildStdoutRd), &(gw_spawn.hChildStdoutWr), &saAttr, 0))
 		{
 			gchar *msg = g_win32_error_message(GetLastError());
-			geany_debug("win32_spawn: Second CreateFile failed (%d)", (gint) GetLastError());
-			g_set_error(error, G_SPAWN_ERROR, G_FILE_ERROR, "%s", msg);
+			geany_debug("win32_spawn: Stdout pipe creation failed (%d)", (gint) GetLastError());
+			g_set_error(error, G_SPAWN_ERROR, G_FILE_ERROR_PIPE, "%s", msg);
 			g_free(msg);
 			return FALSE;
 		}
-	}
 
-	if (std_out != NULL)
-	{
-		hStdoutTempFile = GetTempFileHandle(error);
-		if (hStdoutTempFile == INVALID_HANDLE_VALUE)
+		/* Ensure that the read handle to the child process's pipe for STDOUT is not inherited.*/
+		SetHandleInformation(gw_spawn.hChildStdoutRd, HANDLE_FLAG_INHERIT, 0);
+
+		/* Create a pipe for the child process's STDERR. */
+		if (! CreatePipe(&(gw_spawn.hChildStderrRd), &(gw_spawn.hChildStderrWr), &saAttr, 0))
 		{
 			gchar *msg = g_win32_error_message(GetLastError());
-			geany_debug("win32_spawn: Second CreateFile failed (%d)", (gint) GetLastError());
-			g_set_error(error, G_SPAWN_ERROR, G_FILE_ERROR, "%s", msg);
+			geany_debug("win32_spawn: Stderr pipe creation failed");
+			g_set_error(error, G_SPAWN_ERROR, G_FILE_ERROR_PIPE, "%s", msg);
 			g_free(msg);
 			return FALSE;
 		}
+
+		/* Ensure that the read handle to the child process's pipe for STDOUT is not inherited.*/
+		SetHandleInformation(gw_spawn.hChildStderrRd, HANDLE_FLAG_INHERIT, 0);
+
+		/* Create a pipe for the child process's STDIN.  */
+		if (! CreatePipe(&(gw_spawn.hChildStdinRd), &(gw_spawn.hChildStdinWr), &saAttr, 0))
+		{
+			gchar *msg = g_win32_error_message(GetLastError());
+			geany_debug("win32_spawn: Stdin pipe creation failed");
+			g_set_error(error, G_SPAWN_ERROR, G_FILE_ERROR_PIPE, "%s", msg);
+			g_free(msg);
+			return FALSE;
+		}
+
+		/* Ensure that the write handle to the child process's pipe for STDIN is not inherited. */
+		SetHandleInformation(gw_spawn.hChildStdinWr, HANDLE_FLAG_INHERIT, 0);
 	}
-
-	/* Set the bInheritHandle flag so pipe handles are inherited. */
-	saAttr.nLength = sizeof(SECURITY_ATTRIBUTES);
-	saAttr.bInheritHandle = TRUE;
-	saAttr.lpSecurityDescriptor = NULL;
-
-	/* Get the handle to the current STDOUT and STDERR. */
-	gw_spawn.hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
-	gw_spawn.hStderr = GetStdHandle(STD_ERROR_HANDLE);
-	gw_spawn.dwExitCode = 0;
-
-	/* Create a pipe for the child process's STDOUT. */
-	if (! CreatePipe(&(gw_spawn.hChildStdoutRd), &(gw_spawn.hChildStdoutWr), &saAttr, 0))
-	{
-		gchar *msg = g_win32_error_message(GetLastError());
-		geany_debug("win32_spawn: Stdout pipe creation failed (%d)", (gint) GetLastError());
-		g_set_error(error, G_SPAWN_ERROR, G_FILE_ERROR_PIPE, "%s", msg);
-		g_free(msg);
-		return FALSE;
+    else
+    {
+		gw_spawn.hChildStderrWr = NULL;
+		gw_spawn.hChildStdoutWr = NULL;
+		gw_spawn.hChildStdinRd = NULL;
 	}
-
-	/* Ensure that the read handle to the child process's pipe for STDOUT is not inherited.*/
-	SetHandleInformation(gw_spawn.hChildStdoutRd, HANDLE_FLAG_INHERIT, 0);
-
-	/* Create a pipe for the child process's STDERR. */
-	if (! CreatePipe(&(gw_spawn.hChildStderrRd), &(gw_spawn.hChildStderrWr), &saAttr, 0))
-	{
-		gchar *msg = g_win32_error_message(GetLastError());
-		geany_debug("win32_spawn: Stderr pipe creation failed");
-		g_set_error(error, G_SPAWN_ERROR, G_FILE_ERROR_PIPE, "%s", msg);
-		g_free(msg);
-		return FALSE;
-	}
-
-	/* Ensure that the read handle to the child process's pipe for STDOUT is not inherited.*/
-	SetHandleInformation(gw_spawn.hChildStderrRd, HANDLE_FLAG_INHERIT, 0);
-
-	/* Create a pipe for the child process's STDIN.  */
-	if (! CreatePipe(&(gw_spawn.hChildStdinRd), &(gw_spawn.hChildStdinWr), &saAttr, 0))
-	{
-		gchar *msg = g_win32_error_message(GetLastError());
-		geany_debug("win32_spawn: Stdin pipe creation failed");
-		g_set_error(error, G_SPAWN_ERROR, G_FILE_ERROR_PIPE, "%s", msg);
-		g_free(msg);
-		return FALSE;
-	}
-
-	/* Ensure that the write handle to the child process's pipe for STDIN is not inherited. */
-	SetHandleInformation(gw_spawn.hChildStdinWr, HANDLE_FLAG_INHERIT, 0);
-
+	
 	/* Now create the child process. */
 	fSuccess = CreateChildProcess(&gw_spawn, cmdline, dir, error);
 	if (exit_status)
@@ -1007,6 +1016,10 @@ gboolean _broken_win32_spawn(const gchar *dir, gchar **argv, gchar **env, GSpawn
 gboolean win32_spawn(const gchar *dir, gchar **argv, gchar **env, GSpawnFlags flags,
 					 gchar **std_out, gchar **std_err, gint *exit_status, GError **error)
 {
+	return _broken_win32_spawn(dir, argv, env, flags, std_out, std_err,
+		exit_status, error);
+
+#if 0	
 	gint ret;
 	gboolean fail;
 	gchar *tmp_file = create_temp_file();
@@ -1047,6 +1060,7 @@ gboolean win32_spawn(const gchar *dir, gchar **argv, gchar **env, GSpawnFlags fl
 		*exit_status = ret;
 
 	return !fail;
+#endif
 }
 
 
@@ -1119,7 +1133,10 @@ static gboolean CreateChildProcess(geany_win32_spawn *gw_spawn, TCHAR *szCmdline
 	gchar *expandedCmdline;
 	wchar_t w_commandline[CMDSIZE];
 	wchar_t w_dir[MAX_PATH];
-
+	
+	DWORD dwCreationFlags = 0;
+	BOOL bInheritHandles = FALSE;
+	
 	/* Set up members of the PROCESS_INFORMATION structure. */
 	ZeroMemory(&piProcInfo, sizeof(PROCESS_INFORMATION));
 
@@ -1130,8 +1147,18 @@ static gboolean CreateChildProcess(geany_win32_spawn *gw_spawn, TCHAR *szCmdline
 	siStartInfo.hStdError  = gw_spawn->hChildStderrWr;
 	siStartInfo.hStdOutput = gw_spawn->hChildStdoutWr;
 	siStartInfo.hStdInput  = gw_spawn->hChildStdinRd;
-	siStartInfo.dwFlags   |= STARTF_USESTDHANDLES;
-
+	
+	if (gw_spawn->hChildStderrWr || gw_spawn->hChildStdinRd || gw_spawn->hChildStderrWr)
+	{
+		siStartInfo.dwFlags   |= STARTF_USESTDHANDLES;
+		bInheritHandles = TRUE;
+	}
+	
+	if (siStartInfo.hStdOutput != NULL)
+	{
+		dwCreationFlags = CREATE_NO_WINDOW;
+	}
+	
 	/* Expand environment variables like %blah%. */
 	expandedCmdline = win32_expand_environment_variables(szCmdline);
 
@@ -1143,8 +1170,8 @@ static gboolean CreateChildProcess(geany_win32_spawn *gw_spawn, TCHAR *szCmdline
 		w_commandline,             /* command line */
 		NULL,          /* process security attributes */
 		NULL,          /* primary thread security attributes */
-		TRUE,          /* handles are inherited */
-		CREATE_NO_WINDOW,             /* creation flags */
+		bInheritHandles,          /* handles are inherited */
+		dwCreationFlags,             /* creation flags */
 		NULL,          /* use parent's environment */
 		w_dir,           /* use parent's current directory */
 		&siStartInfo,  /* STARTUPINFO pointer */

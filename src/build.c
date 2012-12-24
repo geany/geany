@@ -1048,10 +1048,10 @@ static GPid build_run_cmd(GeanyDocument *doc, guint cmdindex)
 #endif
 		argv[term_argv_len + 2] = NULL;
 
-		if (! g_spawn_async(working_dir, argv, NULL, G_SPAWN_DO_NOT_REAP_CHILD,
+		if (! utils_spawn_async(working_dir, argv, NULL, G_SPAWN_SEARCH_PATH,
 							NULL, NULL, &(run_info[cmdindex].pid), &error))
 		{
-			geany_debug("g_spawn_async() failed: %s", error->message);
+			geany_debug("utils_spawn_async() failed: %s", error->message);
 			ui_set_statusbar(TRUE, _("Process failed (%s)"), error->message);
 			g_unlink(RUN_SCRIPT_CMD);
 			g_error_free(error);
