@@ -14,6 +14,7 @@
 WINDRES = windres.exe
 CC = gcc
 CXX = g++
+PREFIX = C:/libs
 CP = copy /y
 RM = del
 MKDIR = mkdir
@@ -64,6 +65,11 @@ install:
 	-$(MKDIR) "$(DESTDIR)/lib"
 	$(CP) plugins$/*.dll "$(DESTDIR)/lib"
 	-$(MKDIR) "$(DESTDIR)/data"
+
+ifdef PREFIX
+	$(CP) $(PREFIX)/bin/*.dll "$(DESTDIR)/bin"
+endif
+
 ifdef MSYS
 	cp -r data "$(DESTDIR)"
 else
