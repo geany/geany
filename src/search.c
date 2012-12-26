@@ -1140,13 +1140,45 @@ on_find_replace_checkbutton_toggled(GtkToggleButton *togglebutton, gpointer user
 }
 
 
+/* find all in the given range.
+ * Returns a list of allocated Sci_TextToFind, should be freed using:
+ *
+ * 	g_slist_foreach(matches, g_free);
+ * 	g_slist_free(matches); */
+static GSList *find_range(ScintillaObject *sci, gint flags, struct Sci_TextToFind *ttf)
+{
+	GSList *matches = NULL;
+
+	g_return_val_if_fail(sci != NULL && ttf->lpstrText != NULL, NULL);
+	if (! *ttf->lpstrText)
+		return NULL;
+
+	while (search_find_text(sci, flags, ttf) != -1)
+	{
+		if (ttf->chrgText.cpMax > ttf->chrg.cpMax)
+			break; /* found text is partially out of range */
+
+		matches = g_slist_prepend(matches, g_memdup(ttf, sizeof *ttf));
+		ttf->chrg.cpMin = ttf->chrgText.cpMax;
+
+		/* avoid rematching with empty matches like "(?=[a-z])" or "^$".
+		 * note we cannot assume a match will always be empty or not and then break out, since
+		 * matches like "a?(?=b)" will sometimes be empty and sometimes not */
+		if (ttf->chrgText.cpMax == ttf->chrgText.cpMin)
+			ttf->chrg.cpMin ++;
+	}
+
+	return g_slist_reverse(matches);
+}
+
+
 /* Clears markers if text is null/empty.
  * @return Number of matches marked. */
 gint search_mark_all(GeanyDocument *doc, const gchar *search_text, gint flags)
 {
-	gint pos, count = 0;
-	gsize len;
+	gint count = 0;
 	struct Sci_TextToFind ttf;
+	GSList *match, *matches;
 
 	g_return_val_if_fail(doc != NULL, 0);
 
@@ -1159,21 +1191,23 @@ gint search_mark_all(GeanyDocument *doc, const gchar *search_text, gint flags)
 	ttf.chrg.cpMin = 0;
 	ttf.chrg.cpMax = sci_get_length(doc->editor->sci);
 	ttf.lpstrText = (gchar *)search_text;
-	while (TRUE)
+
+	matches = find_range(doc->editor->sci, flags, &ttf);
+	foreach_slist (match, matches)
 	{
-		pos = search_find_text(doc->editor->sci, flags, &ttf);
-		if (pos == -1) break;
+		struct Sci_TextToFind *m = match->data;
 
-		len = ttf.chrgText.cpMax - ttf.chrgText.cpMin;
-		if (len)
-			editor_indicator_set_on_range(doc->editor, GEANY_INDICATOR_SEARCH, pos, pos + len);
-
-		ttf.chrg.cpMin = ttf.chrgText.cpMax;
-		/* make sure to advance even with empty matches (see find_document_usage()) */
-		if (len == 0)
-			ttf.chrg.cpMin ++;
+		if (m->chrgText.cpMax != m->chrgText.cpMin)
+		{
+			editor_indicator_set_on_range(doc->editor, GEANY_INDICATOR_SEARCH,
+					m->chrgText.cpMin, m->chrgText.cpMax);
+		}
 		count++;
+
+		g_free(m);
 	}
+	g_slist_free(matches);
+
 	return count;
 }
 
@@ -2022,6 +2056,7 @@ static gint find_document_usage(GeanyDocument *doc, const gchar *search_text, gi
 	struct Sci_TextToFind ttf;
 	gint count = 0;
 	gint prev_line = -1;
+	GSList *match, *matches;
 
 	g_return_val_if_fail(doc != NULL, 0);
 
@@ -2030,16 +2065,13 @@ static gint find_document_usage(GeanyDocument *doc, const gchar *search_text, gi
 	ttf.chrg.cpMin = 0;
 	ttf.chrg.cpMax = sci_get_length(doc->editor->sci);
 	ttf.lpstrText = (gchar *)search_text;
-	while (1)
+
+	matches = find_range(doc->editor->sci, flags, &ttf);
+	foreach_slist (match, matches)
 	{
-		gint pos, line;
+		struct Sci_TextToFind *m = match->data;
+		gint line = sci_get_line_from_position(doc->editor->sci, m->chrgText.cpMin);
 
-		pos = search_find_text(doc->editor->sci, flags, &ttf);
-		if (pos == -1)
-			break;	/* no more matches */
-
-		count++;
-		line = sci_get_line_from_position(doc->editor->sci, pos);
 		if (line != prev_line)
 		{
 			buffer = sci_get_line(doc->editor->sci, line);
@@ -2048,14 +2080,11 @@ static gint find_document_usage(GeanyDocument *doc, const gchar *search_text, gi
 			g_free(buffer);
 			prev_line = line;
 		}
+		count++;
 
-		ttf.chrg.cpMin = ttf.chrgText.cpMax;
-		/* avoid rematching with empty matches like "(?=[a-z])" or "^$".
-		 * note we cannot assume a match will always be empty or not and then break out, since
-		 * matches like "a?(?=b)" will me sometimes empty and sometimes not */
-		if ((ttf.chrgText.cpMax - ttf.chrgText.cpMin) == 0)
-			ttf.chrg.cpMin ++;
+		g_free(m);
 	}
+	g_slist_free(matches);
 	g_free(short_file_name);
 	return count;
 }
@@ -2119,30 +2148,15 @@ guint search_replace_range(ScintillaObject *sci, struct Sci_TextToFind *ttf,
 		gint flags, const gchar *replace_text)
 {
 	gint count = 0;
-	gint offset = 0; /* difference between sear pos and replace pos */
-	GList *match, *matches = NULL;
+	gint offset = 0; /* difference between search pos and replace pos */
+	GSList *match, *matches;
 
 	g_return_val_if_fail(sci != NULL && ttf->lpstrText != NULL && replace_text != NULL, 0);
 	if (! *ttf->lpstrText)
 		return 0;
 
-	/* first, search for all matches */
-	while (search_find_text(sci, flags, ttf) != -1)
-	{
-		if (ttf->chrgText.cpMax > ttf->chrg.cpMax)
-			break; /* found text is partially out of range */
-
-		matches = g_list_prepend(matches, g_memdup(ttf, sizeof *ttf));
-		ttf->chrg.cpMin = ttf->chrgText.cpMax;
-
-		/* forward after empty matches, see find_document_usage() */
-		if (ttf->chrgText.cpMax == ttf->chrgText.cpMin)
-			ttf->chrg.cpMin ++;
-	}
-	matches = g_list_reverse(matches);
-
-	/* then replace them all */
-	foreach_list (match, matches)
+	matches = find_range(sci, flags, ttf);
+	foreach_slist (match, matches)
 	{
 		struct Sci_TextToFind *m = match->data;
 		gint replace_len;
@@ -2163,7 +2177,7 @@ guint search_replace_range(ScintillaObject *sci, struct Sci_TextToFind *ttf,
 
 		g_free(m);
 	}
-	g_list_free(matches);
+	g_slist_free(matches);
 
 	return count;
 }
