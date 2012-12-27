@@ -540,11 +540,7 @@ msgstr ""
 
 #: ../data/geany.glade.h:125
 msgid "\"Smart\" home key"
-<<<<<<< HEAD
 msgstr "\"Tark\" Home-klahv"
-=======
-msgstr "\"Tark\" <i>home</i>-klahv"
->>>>>>> 4e950a39db1bb046572b0d1c7ba1be922f3969e6
 
 #: ../data/geany.glade.h:126
 msgid "When \"smart\" home is enabled, the HOME key will move the caret to the first non-blank character of the line, unless it is already there, it moves to the very beginning of the line. When this feature is disabled, the HOME key always moves the caret to the start of the current line, regardless of its current position."
