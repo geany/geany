@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: geany 1.22\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-12-26 18:25+0200\n"
-"PO-Revision-Date: 2012-12-27 13:25+0300\n"
+"PO-Revision-Date: 2012-12-27 16:38+0300\n"
 "Last-Translator: Andreas Ots <andreasots@gmail.com>\n"
 "Language-Team: Estonian\n"
 "Language: et\n"
@@ -886,7 +886,7 @@ msgstr ""
 
 #: ../data/geany.glade.h:211
 msgid "Line"
-msgstr ""
+msgstr "Joon"
 
 #: ../data/geany.glade.h:212
 msgid "Prints a vertical line in the editor window at the given cursor position (see below)"
@@ -1358,7 +1358,7 @@ msgstr ""
 
 #: ../data/geany.glade.h:325
 msgid "Don't use run script"
-msgstr ""
+msgstr "Ära kasuta käivitusskripti"
 
 #: ../data/geany.glade.h:326
 msgid "Run programs in VTE instead of opening a terminal emulation window. Please note, programs executed in VTE cannot be stopped"
@@ -1532,16 +1532,16 @@ msgstr "_Vali aktiivne lõik"
 
 #: ../data/geany.glade.h:364
 msgid "_Move Line(s) Up"
-msgstr ""
+msgstr "_Liiguta rida/read üles"
 
 #: ../data/geany.glade.h:365
 msgid "_Move Line(s) Down"
-msgstr ""
+msgstr "_Liiguta rida/read alla"
 
 #: ../data/geany.glade.h:366
 #: ../src/keybindings.c:399
 msgid "_Send Selection to Terminal"
-msgstr ""
+msgstr "_Saada valik terminali"
 
 #: ../data/geany.glade.h:367
 #: ../src/keybindings.c:401
@@ -1637,12 +1637,12 @@ msgstr "_Mine reale"
 #: ../data/geany.glade.h:388
 #: ../src/keybindings.c:437
 msgid "Find Next _Selection"
-msgstr ""
+msgstr "Otsi _järgmine valik"
 
 #: ../data/geany.glade.h:389
 #: ../src/keybindings.c:439
 msgid "Find Pre_vious Selection"
-msgstr ""
+msgstr "Otsi _eelmine valik"
 
 #: ../data/geany.glade.h:390
 #: ../src/keybindings.c:456
@@ -1651,7 +1651,7 @@ msgstr "_Märgi kõik"
 
 #: ../data/geany.glade.h:391
 msgid "Go to T_ag Declaration"
-msgstr ""
+msgstr "Mine _sildi deklaratsiooni juurde"
 
 #: ../data/geany.glade.h:392
 #: ../src/dialogs.c:358
@@ -1805,7 +1805,7 @@ msgstr ""
 #: ../data/geany.glade.h:429
 #: ../src/keybindings.c:565
 msgid "_Clone"
-msgstr ""
+msgstr "_Klooni"
 
 #: ../data/geany.glade.h:430
 msgid "_Strip Trailing Spaces"
@@ -2126,7 +2126,7 @@ msgstr ""
 #: ../src/build.c:1829
 #: ../src/build.c:1841
 msgid "No more build errors."
-msgstr ""
+msgstr "Ehitamisel rohkem vigu ei olnud."
 
 #: ../src/build.c:1940
 #: ../src/build.c:1942
@@ -2166,7 +2166,7 @@ msgstr ""
 
 #: ../src/build.c:2101
 msgid "No filetype"
-msgstr ""
+msgstr "Failitüüp puudub"
 
 #: ../src/build.c:2110
 #: ../src/build.c:2145
@@ -2581,7 +2581,7 @@ msgstr "Fail \"%s\" ei ole korrektne %s."
 #: ../src/document.c:821
 #, c-format
 msgid "The file \"%s\" does not look like a text file or the file encoding is not supported."
-msgstr ""
+msgstr "Fali \"%s\" ei ole tekstifail või faili kodeering ei ole toetatud."
 
 #: ../src/document.c:831
 #, c-format
@@ -2996,11 +2996,11 @@ msgstr "nimetu"
 #: ../src/templates.c:224
 #, c-format
 msgid "Could not find file '%s'."
-msgstr ""
+msgstr "Faili '%s' ei leitud."
 
 #: ../src/highlighting.c:1327
 msgid "Default"
-msgstr ""
+msgstr "Vaikimisi"
 
 #: ../src/highlighting.c:1366
 msgid "The current filetype overrides the default style."
@@ -3012,7 +3012,7 @@ msgstr ""
 
 #: ../src/highlighting.c:1388
 msgid "Color Schemes"
-msgstr ""
+msgstr "Värviskeemid"
 
 #. visual group order
 #: ../src/keybindings.c:226
@@ -3030,38 +3030,38 @@ msgstr "Vali"
 
 #: ../src/keybindings.c:230
 msgid "Format"
-msgstr ""
+msgstr "Vorming"
 
 #: ../src/keybindings.c:231
 msgid "Insert"
-msgstr ""
+msgstr "Lisamine"
 
 #: ../src/keybindings.c:232
 msgid "Settings"
-msgstr ""
+msgstr "Seadistused"
 
 #: ../src/keybindings.c:233
 msgid "Search"
-msgstr ""
+msgstr "Otsimine"
 
 #: ../src/keybindings.c:234
 msgid "Go to"
-msgstr ""
+msgstr "Navigeerimine"
 
 #: ../src/keybindings.c:235
 msgid "View"
-msgstr ""
+msgstr "Vaade"
 
 #: ../src/keybindings.c:236
 msgid "Document"
-msgstr ""
+msgstr "Dokument"
 
 #: ../src/keybindings.c:238
 #: ../src/keybindings.c:590
 #: ../src/project.c:447
 #: ../src/ui_utils.c:1972
 msgid "Build"
-msgstr ""
+msgstr "Ehitamine"
 
 #: ../src/keybindings.c:240
 #: ../src/keybindings.c:615
@@ -3070,11 +3070,11 @@ msgstr "Abi"
 
 #: ../src/keybindings.c:241
 msgid "Focus"
-msgstr ""
+msgstr "Fookus"
 
 #: ../src/keybindings.c:242
 msgid "Notebook tab"
-msgstr ""
+msgstr "Märkmiku kaardid"
 
 #: ../src/keybindings.c:251
 #: ../src/keybindings.c:279
@@ -3134,7 +3134,7 @@ msgstr "Tee uuesti"
 
 #: ../src/keybindings.c:302
 msgid "Delete to line end"
-msgstr ""
+msgstr "Kustuta siit rea lõpuni"
 
 #: ../src/keybindings.c:305
 msgid "_Transpose Current Line"
@@ -3142,19 +3142,19 @@ msgstr ""
 
 #: ../src/keybindings.c:307
 msgid "Scroll to current line"
-msgstr ""
+msgstr "Keri aktiivse reani"
 
 #: ../src/keybindings.c:309
 msgid "Scroll up the view by one line"
-msgstr ""
+msgstr "Keri üles ühe rea võrra"
 
 #: ../src/keybindings.c:311
 msgid "Scroll down the view by one line"
-msgstr ""
+msgstr "Keri alla ühe rea võrra"
 
 #: ../src/keybindings.c:313
 msgid "Complete snippet"
-msgstr ""
+msgstr "Lõpeta tekstijupp"
 
 #: ../src/keybindings.c:315
 msgid "Move cursor in snippet"
@@ -3162,7 +3162,7 @@ msgstr ""
 
 #: ../src/keybindings.c:317
 msgid "Suppress snippet completion"
-msgstr ""
+msgstr "Ära lõpeta tekstijuppi"
 
 #: ../src/keybindings.c:319
 msgid "Context Action"
@@ -3178,7 +3178,7 @@ msgstr ""
 
 #: ../src/keybindings.c:325
 msgid "Show macro list"
-msgstr ""
+msgstr "Näita makrode nimekirja"
 
 #: ../src/keybindings.c:327
 msgid "Word part completion"
@@ -3186,11 +3186,11 @@ msgstr ""
 
 #: ../src/keybindings.c:330
 msgid "Move line(s) up"
-msgstr ""
+msgstr "Liiguta rida/ridu üles"
 
 #: ../src/keybindings.c:333
 msgid "Move line(s) down"
-msgstr ""
+msgstr "Liiguta rida/ridu alla"
 
 #: ../src/keybindings.c:338
 msgid "Cut"
@@ -3210,7 +3210,7 @@ msgstr "Vali kõik"
 
 #: ../src/keybindings.c:355
 msgid "Select current word"
-msgstr ""
+msgstr "Vali aktiivne sõna"
 
 #: ../src/keybindings.c:363
 msgid "Select to previous word part"
@@ -3234,19 +3234,19 @@ msgstr ""
 
 #: ../src/keybindings.c:380
 msgid "Increase indent"
-msgstr ""
+msgstr "Suurenda taanet"
 
 #: ../src/keybindings.c:383
 msgid "Decrease indent"
-msgstr ""
+msgstr "Vähenda taanet"
 
 #: ../src/keybindings.c:386
 msgid "Increase indent by one space"
-msgstr ""
+msgstr "Suurenda taanet ühe tühiku võrra"
 
 #: ../src/keybindings.c:388
 msgid "Decrease indent by one space"
-msgstr ""
+msgstr "Vähenda taanet ühe tühiku võrra"
 
 #: ../src/keybindings.c:392
 msgid "Send to Custom Command 1"
@@ -3262,19 +3262,19 @@ msgstr ""
 
 #: ../src/keybindings.c:404
 msgid "Join lines"
-msgstr ""
+msgstr "Ühenda read"
 
 #: ../src/keybindings.c:409
 msgid "Insert date"
-msgstr ""
+msgstr "Sisesta kuupäev"
 
 #: ../src/keybindings.c:415
 msgid "Insert New Line Before Current"
-msgstr ""
+msgstr "Sisesta uus rida aktiivse rea ette"
 
 #: ../src/keybindings.c:417
 msgid "Insert New Line After Current"
-msgstr ""
+msgstr "Sisesta uus rida peale aktiivset rida"
 
 #: ../src/keybindings.c:430
 #: ../src/search.c:439
@@ -3297,7 +3297,7 @@ msgstr "Asenda"
 #: ../src/keybindings.c:443
 #: ../src/search.c:843
 msgid "Find in Files"
-msgstr ""
+msgstr "Otsi failidest"
 
 #: ../src/keybindings.c:446
 msgid "Next Message"
@@ -3309,7 +3309,7 @@ msgstr "Eelmine teade"
 
 #: ../src/keybindings.c:451
 msgid "Find Usage"
-msgstr ""
+msgstr "Otsi kasutamist"
 
 #: ../src/keybindings.c:454
 msgid "Find Document Usage"
@@ -3331,15 +3331,15 @@ msgstr ""
 
 #: ../src/keybindings.c:471
 msgid "Toggle marker"
-msgstr ""
+msgstr "Lülita tähist"
 
 #: ../src/keybindings.c:480
 msgid "Go to Tag Definition"
-msgstr ""
+msgstr "Mine sildi definitsiooni juurde"
 
 #: ../src/keybindings.c:483
 msgid "Go to Tag Declaration"
-msgstr ""
+msgstr "Mine sildi deklaratsiooni juurde"
 
 #: ../src/keybindings.c:485
 msgid "Go to Start of Line"
@@ -3375,11 +3375,11 @@ msgstr "Täisekraan"
 
 #: ../src/keybindings.c:505
 msgid "Toggle Messages Window"
-msgstr ""
+msgstr "Lülita teadeteakent"
 
 #: ../src/keybindings.c:508
 msgid "Toggle Sidebar"
-msgstr ""
+msgstr "Lülita külgriba"
 
 #: ../src/keybindings.c:510
 msgid "Zoom In"
@@ -3427,11 +3427,11 @@ msgstr "Lülitu külgribale"
 
 #: ../src/keybindings.c:535
 msgid "Switch to Sidebar Symbol List"
-msgstr ""
+msgstr "Mine külgribal sümbolite nimekirja"
 
 #: ../src/keybindings.c:537
 msgid "Switch to Sidebar Document List"
-msgstr ""
+msgstr "Mine külgribal dokumentide nimekirja"
 
 #: ../src/keybindings.c:542
 msgid "Switch to left document"
@@ -3475,7 +3475,7 @@ msgstr "Asenda tühikud tabeldusmärkidega"
 
 #: ../src/keybindings.c:571
 msgid "Toggle current fold"
-msgstr ""
+msgstr "Lülita aktiivset volti"
 
 #: ../src/keybindings.c:573
 msgid "Fold all"
@@ -3483,11 +3483,11 @@ msgstr "Voldi kõik"
 
 #: ../src/keybindings.c:575
 msgid "Unfold all"
-msgstr ""
+msgstr "Voldi kõik lahti"
 
 #: ../src/keybindings.c:577
 msgid "Reload symbol list"
-msgstr ""
+msgstr "Lae sümbolite nimekiri uuesti"
 
 #: ../src/keybindings.c:579
 msgid "Remove Markers"
@@ -3536,7 +3536,7 @@ msgstr ""
 
 #: ../src/keybindings.c:610
 msgid "Show Color Chooser"
-msgstr ""
+msgstr "Näita värvivalijat"
 
 #: ../src/keybindings.c:857
 msgid "Keyboard Shortcuts"
@@ -3552,7 +3552,7 @@ msgstr ""
 
 #: ../src/keyfile.c:1166
 msgid "Failed to load one or more session files."
-msgstr ""
+msgstr "Ühe või rohkema sessioonifaili laadimine ebaõnnestus."
 
 #: ../src/log.c:181
 msgid "Debug Messages"
@@ -3576,7 +3576,7 @@ msgstr ""
 
 #: ../src/main.c:125
 msgid "Generate global tags file (see documentation)"
-msgstr ""
+msgstr "Genereeri globaalne siltide fail (vaata dokumentatsiooni)"
 
 #: ../src/main.c:126
 msgid "Don't preprocess C/C++ files when generating tags"
@@ -3584,7 +3584,7 @@ msgstr ""
 
 #: ../src/main.c:128
 msgid "Don't open files in a running instance, force opening a new instance"
-msgstr ""
+msgstr "Ära ava faile olemasolevas isendis, ava uus isend"
 
 #: ../src/main.c:129
 msgid "Use this socket filename for communication with a running Geany instance"
@@ -3592,7 +3592,7 @@ msgstr ""
 
 #: ../src/main.c:130
 msgid "Return a list of open documents in a running Geany instance"
-msgstr ""
+msgstr "Tagasta avatud dokumentide nimekiri jooksvas Geany isendis"
 
 #: ../src/main.c:132
 msgid "Set initial line number for the first opened file"
@@ -3600,11 +3600,11 @@ msgstr ""
 
 #: ../src/main.c:133
 msgid "Don't show message window at startup"
-msgstr ""
+msgstr "Ära näita käivitamisel teadeteakent"
 
 #: ../src/main.c:134
 msgid "Don't load auto completion data (see documentation)"
-msgstr ""
+msgstr "Ära lae automaatlõpetuse andmeid (vaata dokumentatsiooni)"
 
 #: ../src/main.c:136
 msgid "Don't load plugins"
@@ -3612,19 +3612,19 @@ msgstr "Ära lae pluginaid"
 
 #: ../src/main.c:138
 msgid "Print Geany's installation prefix"
-msgstr ""
+msgstr "Väljasta Geany paigaldamise prefix"
 
 #: ../src/main.c:139
 msgid "Open all FILES in read-only mode (see documention)"
-msgstr ""
+msgstr "Ava kõik FAILID kirjutuskaitsult (vaata dokumentatsiooni)"
 
 #: ../src/main.c:140
 msgid "Don't load the previous session's files"
-msgstr ""
+msgstr "Ära lae eelmise sessiooni faile"
 
 #: ../src/main.c:142
 msgid "Don't load terminal support"
-msgstr ""
+msgstr "Ära lae terminali tuge"
 
 #: ../src/main.c:143
 msgid "Filename of libvte.so"
@@ -3688,7 +3688,7 @@ msgstr "Seadistuste kataloogi loomine ebaõnnestus (%s)."
 
 #: ../src/main.c:1311
 msgid "Configuration files reloaded."
-msgstr ""
+msgstr "Konfiguratsioonifailid laaditi uuesti."
 
 #: ../src/msgwindow.c:158
 msgid "Status messages"
@@ -3809,7 +3809,7 @@ msgstr "_Kirjuta üle"
 
 #: ../src/prefs.c:1462
 msgid "Override that keybinding?"
-msgstr ""
+msgstr "Tühista see kiirklahv?"
 
 #: ../src/prefs.c:1463
 #, c-format
@@ -3835,12 +3835,12 @@ msgstr ""
 #. page Editor->Indentation
 #: ../src/prefs.c:1679
 msgid "<i>Warning: these settings are overridden by the current project. See <b>Project->Properties</b>.</i>"
-msgstr ""
+msgstr "<i>Hoiatus: aktiivse projekti seadistused tühistavad siinsed. Vaata <b>Projekt->Omadused</b>.</i>"
 
 #: ../src/printing.c:158
 #, c-format
 msgid "<b>Page %d of %d</b>"
-msgstr ""
+msgstr "<b>Lehekülg %d %d-st</b>"
 
 #: ../src/printing.c:228
 msgid "Document Setup"
@@ -3848,7 +3848,7 @@ msgstr ""
 
 #: ../src/printing.c:263
 msgid "Print only the basename(without the path) of the printed file"
-msgstr ""
+msgstr "Trüki ainult trükitava faili nimi ilma teekonnata"
 
 #: ../src/printing.c:383
 msgid "Paginating"
@@ -3872,7 +3872,7 @@ msgstr ""
 #: ../src/printing.c:519
 #, c-format
 msgid "Printing of %s failed (%s)."
-msgstr ""
+msgstr "Faili %s trükkimine ebaõnnestus (%s)."
 
 #: ../src/printing.c:557
 msgid "Please set a print command in the preferences dialog first."
@@ -3885,16 +3885,19 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
+"Fail \"%s\" trükitakse järgmise käsuga:\n"
+"\n"
+"%s"
 
 #: ../src/printing.c:581
 #, c-format
 msgid "Printing of \"%s\" failed (return code: %s)."
-msgstr ""
+msgstr "Faili \"%s\" trükkimine ebaõnnestus (veakood: %s)."
 
 #: ../src/printing.c:587
 #, c-format
 msgid "File %s printed."
-msgstr ""
+msgstr "Fail %s trükitud."
 
 #. "projects" is part of the default project base path so be careful when translating
 #. * please avoid special characters and spaces, look at the source for details or ask Frank
@@ -3913,24 +3916,24 @@ msgstr "_Loo"
 #: ../src/project.c:175
 #: ../src/project.c:420
 msgid "Choose Project Base Path"
-msgstr ""
+msgstr "Määra projekti aluskataloog"
 
 #: ../src/project.c:197
 #: ../src/project.c:563
 msgid "Project file could not be written"
-msgstr ""
+msgstr "Projektifaili kirjutamine ebaõnnestus"
 
 #: ../src/project.c:200
 #, c-format
 msgid "Project \"%s\" created."
-msgstr ""
+msgstr "Loodi projekt \"%s\" ."
 
 #: ../src/project.c:241
 #: ../src/project.c:273
 #: ../src/project.c:953
 #, c-format
 msgid "Project file \"%s\" could not be loaded."
-msgstr ""
+msgstr "Projektifaili \"%s\" laadimine ebaõnnestus."
 
 #: ../src/project.c:267
 #: ../src/project.c:279
@@ -3944,12 +3947,12 @@ msgstr "Projektifaild"
 #: ../src/project.c:361
 #, c-format
 msgid "Project \"%s\" closed."
-msgstr ""
+msgstr "Projekt \"%s\" suleti."
 
 #: ../src/project.c:566
 #, c-format
 msgid "Project \"%s\" saved."
-msgstr ""
+msgstr "Projekt \"%s\" salvestati."
 
 #: ../src/project.c:599
 msgid "Do you want to close it before proceeding?"
@@ -3958,7 +3961,7 @@ msgstr ""
 #: ../src/project.c:600
 #, c-format
 msgid "The '%s' project is open."
-msgstr ""
+msgstr "Projekt '%s' on avatud."
 
 #: ../src/project.c:649
 msgid "The specified project name is too short."
@@ -3980,23 +3983,23 @@ msgstr ""
 #: ../src/project.c:691
 #, c-format
 msgid "The path \"%s\" does not exist."
-msgstr ""
+msgstr "Asukohta \"%s\" ei leitud."
 
 #: ../src/project.c:700
 #, c-format
 msgid "Project base directory could not be created (%s)."
-msgstr ""
+msgstr "Projekti aluskataloogi loomine ebaõnnestus (%s)."
 
 #: ../src/project.c:713
 #, c-format
 msgid "Project file could not be written (%s)."
-msgstr ""
+msgstr "Projektifaili kirjutamine ebaõnnestus (%s)."
 
 #. initialise the dialog
 #: ../src/project.c:857
 #: ../src/project.c:868
 msgid "Choose Project Filename"
-msgstr ""
+msgstr "Vali projekti failinimi"
 
 #: ../src/project.c:943
 #, c-format
@@ -4155,7 +4158,7 @@ msgstr ""
 
 #: ../src/search.c:947
 msgid "_Recurse in subfolders"
-msgstr ""
+msgstr "_Lasku alamkataloogidesse"
 
 #: ../src/search.c:960
 msgid "_Invert search results"
@@ -4167,11 +4170,11 @@ msgstr ""
 
 #: ../src/search.c:981
 msgid "E_xtra options:"
-msgstr ""
+msgstr "_Lisavalikud:"
 
 #: ../src/search.c:988
 msgid "Other options to pass to Grep"
-msgstr ""
+msgstr "Muud Grepi võtmed"
 
 #: ../src/search.c:1273
 #: ../src/search.c:2091
@@ -4185,7 +4188,7 @@ msgstr[1] ""
 #: ../src/search.c:1320
 #, c-format
 msgid "Replaced %u matches in %u documents."
-msgstr ""
+msgstr "Asendati %u vastet %u dokumendis."
 
 #: ../src/search.c:1511
 msgid "Invalid directory for find in files."
@@ -4609,7 +4612,7 @@ msgstr ""
 #: ../src/symbols.c:1807
 #, c-format
 msgid "Could not load tags file '%s'."
-msgstr ""
+msgstr "Sildifaili '%s' laadimine ebaõnnestus."
 
 #: ../src/symbols.c:1947
 #, c-format
@@ -4822,7 +4825,7 @@ msgstr ""
 
 #: ../src/tools.c:536
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #: ../src/tools.c:745
 msgid "No custom commands defined."
@@ -4834,31 +4837,31 @@ msgstr "Sõnade arv"
 
 #: ../src/tools.c:852
 msgid "selection"
-msgstr ""
+msgstr "valik"
 
 #: ../src/tools.c:857
 msgid "whole document"
-msgstr ""
+msgstr "kogu dokument"
 
 #: ../src/tools.c:866
 msgid "Range:"
-msgstr ""
+msgstr "Piirkond:"
 
 #: ../src/tools.c:878
 msgid "Lines:"
-msgstr ""
+msgstr "Ridu:"
 
 #: ../src/tools.c:892
 msgid "Words:"
-msgstr ""
+msgstr "Sõnu:"
 
 #: ../src/tools.c:906
 msgid "Characters:"
-msgstr ""
+msgstr "Märke:"
 
 #: ../src/sidebar.c:175
 msgid "No tags found"
-msgstr ""
+msgstr "Silte ei leitud"
 
 #: ../src/sidebar.c:589
 msgid "Show S_ymbol List"
@@ -4924,26 +4927,26 @@ msgstr "TAB/TÜH"
 
 #: ../src/ui_utils.c:259
 msgid "MOD"
-msgstr ""
+msgstr "MOD"
 
 #: ../src/ui_utils.c:332
 #, c-format
 msgid "pos: %d"
-msgstr ""
+msgstr "asukoht: %d"
 
 #: ../src/ui_utils.c:334
 #, c-format
 msgid "style: %d"
-msgstr ""
+msgstr "stiil: %d"
 
 #: ../src/ui_utils.c:386
 msgid " (new instance)"
-msgstr ""
+msgstr "(uus isend)"
 
 #: ../src/ui_utils.c:416
 #, c-format
 msgid "Font updated (%s)."
-msgstr ""
+msgstr "Font uuendatud (%s)."
 
 #: ../src/ui_utils.c:612
 msgid "C Standard Library"
@@ -4967,7 +4970,7 @@ msgstr "C++ STL"
 
 #: ../src/ui_utils.c:678
 msgid "_Set Custom Date Format"
-msgstr ""
+msgstr "_Kohandatud kuupäeva vorming"
 
 #: ../src/ui_utils.c:1811
 msgid "Select Folder"
@@ -4991,7 +4994,7 @@ msgstr ""
 
 #: ../src/utils.c:87
 msgid "Select Browser"
-msgstr ""
+msgstr "Vali lehitseja"
 
 #: ../src/utils.c:88
 msgid "Failed to spawn the configured browser command. Please correct it or enter another one."
@@ -5036,7 +5039,7 @@ msgstr "Geany projektifailid"
 
 #: ../src/win32.c:165
 msgid "Executables"
-msgstr ""
+msgstr "Käivitatavad failid"
 
 #: ../src/win32.c:1173
 #, c-format
@@ -5228,16 +5231,17 @@ msgstr "HTML (nimi)"
 
 #: ../plugins/htmlchars.c:739
 msgid "_Insert Special HTML Characters"
-msgstr ""
+msgstr "_Sisesta HTML erimärke"
 
 #. Add menuitem for html replacement functions
 #: ../plugins/htmlchars.c:754
+#, fuzzy
 msgid "_HTML Replacement"
-msgstr ""
+msgstr "_HTML asendus"
 
 #: ../plugins/htmlchars.c:761
 msgid "_Auto-replace Special Characters"
-msgstr ""
+msgstr "_Asenda erimärgid automaatselt"
 
 #: ../plugins/htmlchars.c:770
 msgid "_Replace Characters in Selection"
@@ -5245,7 +5249,7 @@ msgstr ""
 
 #: ../plugins/htmlchars.c:785
 msgid "Insert Special HTML Characters"
-msgstr ""
+msgstr "Sisesta HTML erimärke"
 
 #: ../plugins/htmlchars.c:788
 msgid "Replace special characters"
@@ -5253,7 +5257,7 @@ msgstr ""
 
 #: ../plugins/htmlchars.c:791
 msgid "Toggle plugin status"
-msgstr ""
+msgstr "Lülita plugina olekut"
 
 #: ../plugins/export.c:38
 msgid "Export"
@@ -5412,25 +5416,25 @@ msgstr ""
 #: ../plugins/saveactions.c:170
 #, c-format
 msgid "Backup Copy: Directory could not be created (%s)."
-msgstr ""
+msgstr "Varukoopia: Kataloogi loomine ebaõnnestus (%s)."
 
 #. it's unlikely that this happens
 #: ../plugins/saveactions.c:202
 #, c-format
 msgid "Backup Copy: File could not be read (%s)."
-msgstr ""
+msgstr "Varukoopia: Faili lugemine ebaõnnestus (%s)."
 
 #: ../plugins/saveactions.c:220
 #, c-format
 msgid "Backup Copy: File could not be saved (%s)."
-msgstr ""
+msgstr "Varukoopia: Faili salvestamine ebaõnnestus (%s)."
 
 #: ../plugins/saveactions.c:312
 #, c-format
 msgid "Autosave: Saved %d file automatically."
 msgid_plural "Autosave: Saved %d files automatically."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Automaatsalvestus: %d fail salvestatud."
+msgstr[1] "Automaatsalvestus: %d faili salvestatud."
 
 #. initialize the dialog
 #: ../plugins/saveactions.c:381
@@ -5439,7 +5443,7 @@ msgstr "Vali kaust"
 
 #: ../plugins/saveactions.c:466
 msgid "Backup directory does not exist or is not writable."
-msgstr ""
+msgstr "Varukoopiate kataloogi ei ole olemas või pole kirjutatav."
 
 #: ../plugins/saveactions.c:547
 msgid "Auto Save"
@@ -5461,7 +5465,7 @@ msgstr "sekundit"
 
 #: ../plugins/saveactions.c:574
 msgid "_Print status message if files have been automatically saved"
-msgstr ""
+msgstr "_Väljasta olekuteade kui failid on automaatselt salvestatud"
 
 #: ../plugins/saveactions.c:582
 msgid "Save only current open _file"
