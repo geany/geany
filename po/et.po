@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: geany 1.22\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-12-26 18:25+0200\n"
-"PO-Revision-Date: 2012-12-27 12:24+0300\n"
+"PO-Revision-Date: 2012-12-27 13:23+0300\n"
 "Last-Translator: Andreas Ots <andreasots@gmail.com>\n"
 "Language-Team: Estonian\n"
 "Language: et\n"
@@ -109,7 +109,7 @@ msgstr "Mine _sildi definitsiooni juurde"
 
 #: ../data/geany.glade.h:20
 msgid "Conte_xt Action"
-msgstr ""
+msgstr "_Kontekstipõhine toiming"
 
 #: ../data/geany.glade.h:21
 #: ../src/filetypes.c:102
@@ -144,15 +144,15 @@ msgstr "Ava käivitumisel eelmises seansist avatud failid"
 
 #: ../data/geany.glade.h:28
 msgid "Load virtual terminal support"
-msgstr ""
+msgstr "Lae virtuaalterminalide tugi"
 
 #: ../data/geany.glade.h:29
 msgid "Whether the virtual terminal emulation (VTE) should be loaded at startup, disable it if you do not need it"
-msgstr ""
+msgstr "Kas käivitamisel laadida virtuaalterminalid, keela kui sa seda ei vaja"
 
 #: ../data/geany.glade.h:30
 msgid "Enable plugin support"
-msgstr ""
+msgstr "Luba pluginate tugi"
 
 #: ../data/geany.glade.h:31
 msgid "<b>Startup</b>"
@@ -188,7 +188,7 @@ msgstr ""
 
 #: ../data/geany.glade.h:39
 msgid "Project files:"
-msgstr ""
+msgstr "Projektifailid:"
 
 #: ../data/geany.glade.h:40
 msgid "Path to start in when opening project files"
@@ -204,31 +204,31 @@ msgstr ""
 
 #: ../data/geany.glade.h:43
 msgid "<b>Paths</b>"
-msgstr ""
+msgstr "<b>Asukohad</b>"
 
 #: ../data/geany.glade.h:44
 msgid "Startup"
-msgstr ""
+msgstr "Käivitus"
 
 #: ../data/geany.glade.h:45
 msgid "Beep on errors or when compilation has finished"
-msgstr ""
+msgstr "Piiks vigade korral või kui kompileerimine on lõpetatud"
 
 #: ../data/geany.glade.h:46
 msgid "Whether to beep if an error occurred or when the compilation process has finished"
-msgstr ""
+msgstr "Kas teha piiks vea korral või kui kompileerimine on lõpetatud"
 
 #: ../data/geany.glade.h:47
 msgid "Switch to status message list at new message"
-msgstr ""
+msgstr "Uue teate korral lülitu teadeteaknale"
 
 #: ../data/geany.glade.h:48
 msgid "Switch to the status message tab (in the notebook window at the bottom) if a new status message arrives"
-msgstr ""
+msgstr "Uue olekuteate saabumisel lülitu teadeteaknale (all märkmikuaknas)"
 
 #: ../data/geany.glade.h:49
 msgid "Suppress status messages in the status bar"
-msgstr ""
+msgstr "Ära näita olekuteateid olekuribal"
 
 #: ../data/geany.glade.h:50
 msgid "Removes all messages from the status bar. The messages are still displayed in the status messages window."
@@ -244,11 +244,11 @@ msgstr ""
 
 #: ../data/geany.glade.h:53
 msgid "Use Windows File Open/Save dialogs"
-msgstr ""
+msgstr "Kasuta Windowsi failiavamis- ja salvestusdialooge"
 
 #: ../data/geany.glade.h:54
 msgid "Defines whether to use the native Windows File Open/Save dialogs or whether to use the GTK default dialogs"
-msgstr ""
+msgstr "Kas kasutada Windowsile omaseid failiavamis- ja salvestusdialooge või kasutada GTK vaikimisi dialooge"
 
 #: ../data/geany.glade.h:55
 msgid "<b>Miscellaneous</b>"
@@ -272,7 +272,7 @@ msgstr ""
 
 #: ../data/geany.glade.h:60
 msgid "Use the current word under the cursor for Find dialogs"
-msgstr ""
+msgstr "Kasuta kursori all olevat sõna otsimisdialoogides"
 
 #: ../data/geany.glade.h:61
 msgid "Use current word under the cursor when opening the Find, Find in Files or Replace dialog and there is no selection"
@@ -288,7 +288,7 @@ msgstr "<b>Otsimine</b>"
 
 #: ../data/geany.glade.h:64
 msgid "Use project-based session files"
-msgstr ""
+msgstr "Kasuta projektipõhiseid sessioonifaile"
 
 #: ../data/geany.glade.h:65
 msgid "Whether to store a project's session files and open them when re-opening the project"
@@ -296,7 +296,7 @@ msgstr ""
 
 #: ../data/geany.glade.h:66
 msgid "Store project file inside the project base directory"
-msgstr ""
+msgstr "Hoia projektifaili projektide aluskataloogis"
 
 #: ../data/geany.glade.h:67
 msgid "When enabled, a project file is stored by default inside the project base directory when creating new projects instead of one directory above the base directory. You can still change the path of the project file in the New Project dialog."
@@ -397,7 +397,7 @@ msgstr "Näita olekuriba"
 
 #: ../data/geany.glade.h:90
 msgid "Whether to show the status bar at the bottom of the main window"
-msgstr ""
+msgstr "Kas näidata olekuriba akna alumises servas"
 
 #: ../data/geany.glade.h:91
 #: ../src/prefs.c:1580
@@ -418,23 +418,23 @@ msgstr ""
 
 #: ../data/geany.glade.h:95
 msgid "Placement of new file tabs:"
-msgstr ""
+msgstr "Uute failikaartide asukoht:"
 
 #: ../data/geany.glade.h:96
 msgid "File tabs will be placed on the left of the notebook"
-msgstr ""
+msgstr "Failikaardid asetatakse märkmikus vasakule"
 
 #: ../data/geany.glade.h:97
 msgid "File tabs will be placed on the right of the notebook"
-msgstr ""
+msgstr "Failikaardid asetatakse märkmikus paremale"
 
 #: ../data/geany.glade.h:98
 msgid "Next to current"
-msgstr ""
+msgstr "Aktiivse kõrvale"
 
 #: ../data/geany.glade.h:99
 msgid "Whether to place file tabs next to the current tab rather than at the edges of the notebook"
-msgstr ""
+msgstr "Kas asetada uued failikaardid aktiivse kaardi kõrvale, mitte märkmiku servadesse"
 
 #: ../data/geany.glade.h:100
 msgid "Double-clicking hides all additional widgets"
@@ -446,7 +446,7 @@ msgstr ""
 
 #: ../data/geany.glade.h:102
 msgid "Switch to last used document after closing a tab"
-msgstr ""
+msgstr "Lülitu kaardi sulgemisel viimati avatud dokumendile"
 
 #: ../data/geany.glade.h:103
 msgid "<b>Editor tabs</b>"
@@ -458,11 +458,11 @@ msgstr "Külgriba:"
 
 #: ../data/geany.glade.h:105
 msgid "<b>Tab positions</b>"
-msgstr ""
+msgstr "<b>Kaartide asukohad</b>"
 
 #: ../data/geany.glade.h:106
 msgid "Notebook tabs"
-msgstr ""
+msgstr "Märkmiku kaardid"
 
 #: ../data/geany.glade.h:107
 msgid "Show t_oolbar"
@@ -540,7 +540,7 @@ msgstr ""
 
 #: ../data/geany.glade.h:125
 msgid "\"Smart\" home key"
-msgstr ""
+msgstr "\"Tark\" <i>home</i>-klahv"
 
 #: ../data/geany.glade.h:126
 msgid "When \"smart\" home is enabled, the HOME key will move the caret to the first non-blank character of the line, unless it is already there, it moves to the very beginning of the line. When this feature is disabled, the HOME key always moves the caret to the start of the current line, regardless of its current position."
@@ -3397,7 +3397,7 @@ msgstr "Lülitu otsinguribale"
 
 #: ../src/keybindings.c:523
 msgid "Switch to Message Window"
-msgstr "Lülitu teadete aknale"
+msgstr "Lülitu teadeteaknale"
 
 #: ../src/keybindings.c:525
 msgid "Switch to Compiler"
