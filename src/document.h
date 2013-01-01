@@ -210,8 +210,6 @@ gboolean document_account_for_unsaved(void);
 
 gboolean document_close_all(void);
 
-GeanyDocument *document_clone(GeanyDocument *old_doc, const gchar *utf8_filename);
-
 GeanyDocument *document_open_file_full(GeanyDocument *doc, const gchar *filename, gint pos,
 		gboolean readonly, GeanyFiletype *ft, const gchar *forced_enc);
 
@@ -280,6 +278,8 @@ gint document_compare_by_tab_order(gconstpointer a, gconstpointer b);
 gint document_compare_by_tab_order_reverse(gconstpointer a, gconstpointer b);
 
 void document_grab_focus(GeanyDocument *doc);
+
+GeanyDocument *document_clone(GeanyDocument *old_doc);
 
 G_END_DECLS
 

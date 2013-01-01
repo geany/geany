@@ -348,11 +348,17 @@ void project_close(gboolean open_default)
 
 	g_return_if_fail(app->project != NULL);
 
-	ui_set_statusbar(TRUE, _("Project \"%s\" closed."), app->project->name);
-
-	/* use write_config() to save project session files */
+	/* save project session files, etc */
 	if (!write_config(FALSE))
 		g_warning("Project file \"%s\" could not be written", app->project->file_name);
+
+	if (project_prefs.project_session)
+	{
+		/* close all existing tabs first */
+		if (!document_close_all())
+			return;
+	}
+	ui_set_statusbar(TRUE, _("Project \"%s\" closed."), app->project->name);
 
 	/* remove project filetypes build entries */
 	if (app->project->build_filetypes_list != NULL)
@@ -383,9 +389,6 @@ void project_close(gboolean open_default)
 
 	if (project_prefs.project_session)
 	{
-		/* close all existing tabs first */
-		document_close_all();
-
 		/* after closing all tabs let's open the tabs found in the default config */
 		if (open_default && cl_options.load_session)
 		{

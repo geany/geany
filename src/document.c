@@ -1701,7 +1701,7 @@ gboolean document_save_file(GeanyDocument *doc, gboolean force)
 	}
 
 	/* the "changed" flag should exclude the "readonly" flag, but check it anyway for safety */
-	if (! force && ! ui_prefs.allow_always_save && (! doc->changed || doc->readonly))
+	if (! force && (! doc->changed || doc->readonly))
 		return FALSE;
 
 	fp = project_get_file_prefs();
@@ -2506,6 +2506,7 @@ void document_undo_clear(GeanyDocument *doc)
 }
 
 
+/* note: this is called on SCN_MODIFIED notifications */
 void document_undo_add(GeanyDocument *doc, guint type, gpointer data)
 {
 	undo_action *action;
@@ -2518,7 +2519,10 @@ void document_undo_add(GeanyDocument *doc, guint type, gpointer data)
 
 	g_trash_stack_push(&doc->priv->undo_actions, action);
 
-	document_set_text_changed(doc, TRUE);
+	/* avoid unnecessary redraws */
+	if (type != UNDO_SCINTILLA || !doc->changed)
+		document_set_text_changed(doc, TRUE);
+
 	ui_update_popup_reundo_items(doc);
 }
 
@@ -2682,7 +2686,9 @@ static void document_redo_add(GeanyDocument *doc, guint type, gpointer data)
 
 	g_trash_stack_push(&doc->priv->redo_actions, action);
 
-	document_set_text_changed(doc, TRUE);
+	if (type != UNDO_SCINTILLA || !doc->changed)
+		document_set_text_changed(doc, TRUE);
+
 	ui_update_popup_reundo_items(doc);
 }
 
@@ -2737,29 +2743,45 @@ GeanyDocument *document_index(gint idx)
 
 
 /* create a new file and copy file content and properties */
-GeanyDocument *document_clone(GeanyDocument *old_doc, const gchar *utf8_filename)
+G_MODULE_EXPORT void on_clone1_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
-	gint len;
+	GeanyDocument *old_doc = document_get_current();
+
+	if (old_doc)
+		document_clone(old_doc);
+}
+
+
+GeanyDocument *document_clone(GeanyDocument *old_doc)
+{
 	gchar *text;
 	GeanyDocument *doc;
+	ScintillaObject *old_sci;
 
-	g_return_val_if_fail(old_doc != NULL, NULL);
+	g_return_val_if_fail(old_doc, NULL);
+	old_sci = old_doc->editor->sci;
+	if (sci_has_selection(old_sci))
+		text = sci_get_selection_contents(old_sci);
+	else
+		text = sci_get_contents(old_sci, -1);
 
-	len = sci_get_length(old_doc->editor->sci) + 1;
-	text = (gchar*) g_malloc(len);
-	sci_get_text(old_doc->editor->sci, len, text);
-	/* use old file type (or maybe NULL for auto detect would be better?) */
-	doc = document_new_file(utf8_filename, old_doc->file_type, text);
+	doc = document_new_file(NULL, old_doc->file_type, text);
 	g_free(text);
+	document_set_text_changed(doc, TRUE);
 
 	/* copy file properties */
 	doc->editor->line_wrapping = old_doc->editor->line_wrapping;
+	doc->editor->line_breaking = old_doc->editor->line_breaking;
+	doc->editor->auto_indent = old_doc->editor->auto_indent;
+	editor_set_indent(doc->editor, old_doc->editor->indent_type,
+		old_doc->editor->indent_width);
 	doc->readonly = old_doc->readonly;
 	doc->has_bom = old_doc->has_bom;
 	document_set_encoding(doc, old_doc->encoding);
 	sci_set_lines_wrapped(doc->editor->sci, doc->editor->line_wrapping);
 	sci_set_readonly(doc->editor->sci, doc->readonly);
 
+	/* update ui */
 	ui_document_show_hide(doc);
 	return doc;
 }
@@ -2832,9 +2854,10 @@ static void monitor_reload_file(GeanyDocument *doc)
 	gchar *base_name = g_path_get_basename(doc->file_name);
 	gint ret;
 
+	/* we use No instead of Cancel to avoid mnemonic clash */
 	ret = dialogs_show_prompt(NULL,
 		GTK_STOCK_CLOSE, GTK_RESPONSE_CLOSE,
-		GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+		GTK_STOCK_NO, GTK_RESPONSE_CANCEL,
 		_("_Reload"), GTK_RESPONSE_ACCEPT,
 		_("Do you want to reload it?"),
 		_("The file '%s' on the disk is more recent than\nthe current buffer."),

@@ -788,7 +788,7 @@ int RESearch::Execute(CharacterIndexer &ci, int lp, int endp) {
 		}
 	case CHR:			/* ordinary char: locate it fast */
 		c = *(ap+1);
-		while ((lp < endp) && (ci.CharAt(lp) != c))
+		while ((lp < endp) && (static_cast<unsigned char>(ci.CharAt(lp)) != c))
 			lp++;
 		if (lp >= endp)	/* if EOS, fail, else fall thru. */
 			return 0;

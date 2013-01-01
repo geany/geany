@@ -84,7 +84,7 @@ void				sci_set_selection			(ScintillaObject *sci, gint anchorPos, gint currentP
 
 gint				sci_get_length				(ScintillaObject *sci);
 void				sci_get_text				(ScintillaObject *sci, gint len, gchar *text);
-gchar*				sci_get_contents			(ScintillaObject *sci, gint len);
+gchar*				sci_get_contents			(ScintillaObject *sci, gint buffer_len);
 void				sci_get_selected_text		(ScintillaObject *sci, gchar *text);
 gint				sci_get_selected_text_length(ScintillaObject *sci);
 gchar*				sci_get_selection_contents	(ScintillaObject *sci);

@@ -122,6 +122,7 @@ void ui_widget_set_sensitive(GtkWidget *widget, gboolean set)
  * that didn't use allow_override and has not timed out. */
 static void set_statusbar(const gchar *text, gboolean allow_override)
 {
+	static guint id = 0;
 	static glong last_time = 0;
 	GTimeVal timeval;
 	const gint GEANY_STATUS_TIMEOUT = 1;
@@ -129,19 +130,22 @@ static void set_statusbar(const gchar *text, gboolean allow_override)
 	if (! interface_prefs.statusbar_visible)
 		return; /* just do nothing if statusbar is not visible */
 
+	if (id == 0)
+		id = gtk_statusbar_get_context_id(GTK_STATUSBAR(ui_widgets.statusbar), "geany-main");
+
 	g_get_current_time(&timeval);
 
 	if (! allow_override)
 	{
-		gtk_statusbar_pop(GTK_STATUSBAR(ui_widgets.statusbar), 1);
-		gtk_statusbar_push(GTK_STATUSBAR(ui_widgets.statusbar), 1, text);
+		gtk_statusbar_pop(GTK_STATUSBAR(ui_widgets.statusbar), id);
+		gtk_statusbar_push(GTK_STATUSBAR(ui_widgets.statusbar), id, text);
 		last_time = timeval.tv_sec;
 	}
 	else
 	if (timeval.tv_sec > last_time + GEANY_STATUS_TIMEOUT)
 	{
-		gtk_statusbar_pop(GTK_STATUSBAR(ui_widgets.statusbar), 1);
-		gtk_statusbar_push(GTK_STATUSBAR(ui_widgets.statusbar), 1, text);
+		gtk_statusbar_pop(GTK_STATUSBAR(ui_widgets.statusbar), id);
+		gtk_statusbar_push(GTK_STATUSBAR(ui_widgets.statusbar), id, text);
 	}
 }
 
@@ -944,20 +948,7 @@ void ui_document_show_hide(GeanyDocument *doc)
 
 void ui_set_search_entry_background(GtkWidget *widget, gboolean success)
 {
-	static const GdkColor red   = {0, 0xffff, 0x6666, 0x6666};
-	static const GdkColor white = {0, 0xffff, 0xffff, 0xffff};
-	static gboolean old_value = TRUE;
-
-	g_return_if_fail(widget != NULL);
-
-	/* update only if really needed */
-	if (old_value != success)
-	{
-		gtk_widget_modify_base(widget, GTK_STATE_NORMAL, success ? NULL : &red);
-		gtk_widget_modify_text(widget, GTK_STATE_NORMAL, success ? NULL : &white);
-
-		old_value = success;
-	}
+	gtk_widget_set_name(widget, success ? NULL : "geany-search-entry-no-match");
 }
 
 
@@ -2270,8 +2261,19 @@ void ui_init_builder(void)
 }
 
 
+static void init_custom_style(void)
+{
+	gchar *gtkrc_file = g_build_filename(app->datadir, "geany.gtkrc", NULL);
+
+	gtk_rc_parse(gtkrc_file);
+	g_free(gtkrc_file);
+}
+
+
 void ui_init(void)
 {
+	init_custom_style();
+
 	init_recent_files();
 
 	ui_widgets.statusbar = ui_lookup_widget(main_widgets.window, "statusbar");

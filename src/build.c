@@ -498,7 +498,7 @@ static GeanyBuildCommand *get_build_group(const GeanyBuildSource src, const Gean
  * If any parameter is out of range does nothing.
  *
  * Updates the menu.
- * 
+ *
  **/
 void build_remove_menu_item(const GeanyBuildSource src, const GeanyBuildGroup grp, const gint cmd)
 {
@@ -560,12 +560,12 @@ GeanyBuildCommand *build_get_menu_item(GeanyBuildSource src, GeanyBuildGroup grp
  *         This is a pointer to an internal structure and must not be freed.
  *
  **/
-const gchar *build_get_current_menu_item(const GeanyBuildGroup grp, const guint cmd, 
+const gchar *build_get_current_menu_item(const GeanyBuildGroup grp, const guint cmd,
                                          const GeanyBuildCmdEntries fld)
 {
 	GeanyBuildCommand *c;
 	gchar *str = NULL;
-	
+
 	g_return_val_if_fail(grp < GEANY_GBG_COUNT, NULL);
 	g_return_val_if_fail(fld < GEANY_BC_CMDENTRIES_COUNT, NULL);
 	g_return_val_if_fail(cmd < build_groups_count[grp], NULL);
@@ -593,19 +593,19 @@ const gchar *build_get_current_menu_item(const GeanyBuildGroup grp, const guint 
  *
  * Set the specified field of the command specified by @a src, @a grp and @a cmd.
  *
- * @param src the source of the menu item 
+ * @param src the source of the menu item
  * @param grp the group of the specified menu item.
  * @param cmd the index of the menu item within the group.
  * @param fld the field in the menu item command to set
  * @param val the value to set the field to, is copied
  *
  **/
- 
-void build_set_menu_item(const GeanyBuildSource src, const GeanyBuildGroup grp, 
+
+void build_set_menu_item(const GeanyBuildSource src, const GeanyBuildGroup grp,
                          const guint cmd, const GeanyBuildCmdEntries fld, const gchar *val)
 {
 	GeanyBuildCommand **g;
-	
+
 	g_return_if_fail(src < GEANY_BCS_COUNT);
 	g_return_if_fail(grp < GEANY_GBG_COUNT);
 	g_return_if_fail(fld < GEANY_BC_CMDENTRIES_COUNT);
@@ -827,7 +827,7 @@ static GPid build_spawn_cmd(GeanyDocument *doc, const gchar *cmd, const gchar *d
 			&(build_info.pid), NULL, &stdout_fd, &stderr_fd, &error))
 #endif
 	{
-		geany_debug("g_spawn_async_with_pipes() failed: %s", error->message);
+		geany_debug("build command spawning failed: %s", error->message);
 		ui_set_statusbar(TRUE, _("Process failed (%s)"), error->message);
 		g_strfreev(argv);
 		g_error_free(error);

@@ -90,6 +90,7 @@ gboolean	ignore_callback;	/* hack workaround for GTK+ toggle button callback pro
 
 GeanyStatus	 main_status;
 CommandLineOptions cl_options;	/* fields initialised in parse_command_line_options */
+gboolean main_use_geany_icon;
 
 
 static const gchar geany_lib_versions[] = "GTK %u.%u.%u, GLib %u.%u.%u";
@@ -1059,7 +1060,20 @@ gint main(gint argc, gchar **argv)
 
 	/* set window icon */
 	{
-		GdkPixbuf *pb = ui_new_pixbuf_from_inline(GEANY_IMAGE_LOGO);
+		GdkPixbuf *pb;
+        if (main_use_geany_icon)
+        {
+            pb = ui_new_pixbuf_from_inline(GEANY_IMAGE_LOGO);
+        }
+        else
+        {
+            pb = gtk_icon_theme_load_icon(gtk_icon_theme_get_default(), "geany", 48, 0, NULL);
+            if (pb == NULL)
+            {
+                g_warning("Unable to find Geany icon in theme, using embedded icon");
+                pb = ui_new_pixbuf_from_inline(GEANY_IMAGE_LOGO);
+            }
+        }
 		gtk_window_set_icon(GTK_WINDOW(main_widgets.window), pb);
 		g_object_unref(pb);	/* free our reference */
 	}

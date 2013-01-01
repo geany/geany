@@ -73,6 +73,7 @@ LexHTML.o \
 LexOthers.o \
 LexPascal.o \
 LexPerl.o \
+LexPO.o \
 LexPython.o \
 LexSQL.o \
 LexCaml.o \

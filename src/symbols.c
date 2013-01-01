@@ -1028,6 +1028,9 @@ static const gchar *get_symbol_name(GeanyDocument *doc, const TMTag *tag, gboole
 	if (utils_str_equal(doc->encoding, "UTF-8") ||
 		utils_str_equal(doc->encoding, "None"))
 		doc_is_utf8 = TRUE;
+	else /* normally the tags will always be in UTF-8 since we parse from our buffer, but a
+		  * plugin might have called tm_source_file_update(), so check to be sure */
+		doc_is_utf8 = g_utf8_validate(tag->name, -1, NULL);
 
 	if (! doc_is_utf8)
 		utf8_name = encodings_convert_to_utf8_from_charset(tag->name,

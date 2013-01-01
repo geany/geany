@@ -30,6 +30,7 @@ lexers/LexOthers.cxx \
 lexers/LexPascal.cxx \
 lexers/LexPerl.cxx \
 lexers/LexPython.cxx \
+lexers/LexPO.cxx \
 lexers/LexR.cxx \
 lexers/LexRuby.cxx \
 lexers/LexSQL.cxx \

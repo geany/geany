@@ -1,11 +1,12 @@
 /*
 *
-*   Copyright (c) 2007-2011, Nick Treleaven
+* 	Copyright (c) 2012, Lex Trotman
+*   Based on Rest code by Nick Treleaven, see rest.c
 *
 *   This source code is released for free distribution under the terms of the
 *   GNU General Public License.
 *
-*   This module contains functions for generating tags for reStructuredText (reST) files.
+*   This module contains functions for generating tags for asciidoc files.
 */
 
 /*
@@ -29,17 +30,19 @@ typedef enum {
 	K_SECTION,
 	K_SUBSECTION,
 	K_SUBSUBSECTION,
+	K_LEVEL5SECTION,
 	SECTION_COUNT
-} restKind;
+} asciidocKind;
 
-static kindOption RestKinds[] = {
+static kindOption AsciidocKinds[] = {
 	{ TRUE, 'n', "namespace",     "chapters"},
 	{ TRUE, 'm', "member",        "sections" },
-	{ TRUE, 'd', "macro",         "subsections" },
-	{ TRUE, 'v', "variable",      "subsubsections" }
+	{ TRUE, 'd', "macro",         "level2sections" },
+	{ TRUE, 'v', "variable",      "level3sections" },
+	{ TRUE, 's', "struct",        "level4sections" }
 };
 
-static char kindchars[SECTION_COUNT];
+static char kindchars[SECTION_COUNT]={ '=', '-', '~', '^', '+' };
 
 static NestingLevels *nestingLevels = NULL;
 
@@ -62,7 +65,7 @@ static NestingLevel *getNestingLevel(const int kind)
 	return nl;
 }
 
-static void makeRestTag (const vString* const name, const int kind)
+static void makeAsciidocTag (const vString* const name, const int kind)
 {
 	const NestingLevel *const nl = getNestingLevel(kind);
 
@@ -72,12 +75,12 @@ static void makeRestTag (const vString* const name, const int kind)
 		initTagEntry (&e, vStringValue (name));
 
 		e.lineNumber--;	/* we want the line before the '---' underline chars */
-		e.kindName = RestKinds [kind].name;
-		e.kind = RestKinds [kind].letter;
+		e.kindName = AsciidocKinds [kind].name;
+		e.kind = AsciidocKinds [kind].letter;
 
 		if (nl && nl->type < kind)
 		{
-			e.extensionFields.scope [0] = RestKinds [nl->type].name;
+			e.extensionFields.scope [0] = AsciidocKinds [nl->type].name;
 			e.extensionFields.scope [1] = vStringValue (nl->name);
 		}
 		makeTagEntry (&e);
@@ -86,7 +89,9 @@ static void makeRestTag (const vString* const name, const int kind)
 }
 
 
-/* checks if str is all the same character */
+/* checks if str is all the same character 
+ * FIXME needs to consider single line titles as well as underlines
+ * and rename me istitle() */
 static boolean issame(const char *str)
 {
 	char first = *str;
@@ -112,19 +117,14 @@ static int get_kind(char c)
 	{
 		if (kindchars[i] == c)
 			return i;
-
-		if (kindchars[i] == 0)
-		{
-			kindchars[i] = c;
-			return i;
-		}
 	}
 	return -1;
 }
 
 
 /* computes the length of an UTF-8 string
- * if the string doesn't look like UTF-8, return -1 */
+ * if the string doesn't look like UTF-8, return -1 
+ * FIXME asciidoc also takes the asian character width into consideration */
 static int utf8_strlen(const char *buf, int buf_len)
 {
 	int len = 0;
@@ -152,13 +152,11 @@ static int utf8_strlen(const char *buf, int buf_len)
 }
 
 
-/* TODO: parse overlining & underlining as distinct sections. */
-static void findRestTags (void)
+static void findAsciidocTags (void)
 {
 	vString *name = vStringNew ();
 	const unsigned char *line;
 
-	memset(kindchars, 0, sizeof kindchars);
 	nestingLevels = nestingLevelsNew();
 
 	while ((line = fileReadLine ()) != NULL)
@@ -171,8 +169,8 @@ static void findRestTags (void)
 		if (name_len < 0)
 			name_len = name_len_bytes;
 
-		/* underlines must be the same length or more */
-		if (line_len >= name_len && name_len > 0 &&
+		/* underlines must be +-2 chars */
+		if (line_len >= name_len - 2 && line_len <= name_len + 2 && name_len > 0 &&
 			ispunct(line[0]) && issame((const char*) line))
 		{
 			char c = line[0];
@@ -180,7 +178,7 @@ static void findRestTags (void)
 
 			if (kind >= 0)
 			{
-				makeRestTag(name, kind);
+				makeAsciidocTag(name, kind);
 				continue;
 			}
 		}
@@ -193,17 +191,17 @@ static void findRestTags (void)
 	nestingLevelsFree(nestingLevels);
 }
 
-extern parserDefinition* RestParser (void)
+extern parserDefinition* AsciidocParser (void)
 {
-	static const char *const patterns [] = { "*.rest", "*.reST", NULL };
-	static const char *const extensions [] = { "rest", NULL };
-	parserDefinition* const def = parserNew ("reStructuredText");
+	static const char *const patterns [] = { "*.asciidoc", NULL };
+	static const char *const extensions [] = { "asciidoc", NULL };
+	parserDefinition* const def = parserNew ("Asciidoc");
 
-	def->kinds = RestKinds;
-	def->kindCount = KIND_COUNT (RestKinds);
+	def->kinds = AsciidocKinds;
+	def->kindCount = KIND_COUNT (AsciidocKinds);
 	def->patterns = patterns;
 	def->extensions = extensions;
-	def->parser = findRestTags;
+	def->parser = findAsciidocTags;
 	return def;
 }
 

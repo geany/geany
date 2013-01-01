@@ -40,6 +40,7 @@
 #include <math.h>
 #include <stdlib.h>
 
+#include <glib/gstdio.h>
 #include <gdk/gdkwin32.h>
 
 #include "win32.h"
@@ -820,9 +821,28 @@ gchar *win32_get_hostname(void)
 }
 
 
+static gchar *create_temp_file(void)
+{
+	gchar *name;
+	gint fd;
+
+	fd = g_file_open_tmp("tmp_XXXXXX", &name, NULL);
+	if (fd == -1)
+		name = NULL;
+	else
+		close(fd);
+
+	return name;
+}
+
+
+/* Sometimes this blocks for 30s before aborting when there are several
+ * pages of (error) output and sometimes hangs - see the FIXME.
+ * Also gw_spawn.dwExitCode seems to be not set properly. */
 /* Process spawning implementation for Windows, by Pierre Joye.
  * Don't call this function directly, use utils_spawn_[a]sync() instead. */
-gboolean win32_spawn(const gchar *dir, gchar **argv, gchar **env, GSpawnFlags flags,
+static
+gboolean _broken_win32_spawn(const gchar *dir, gchar **argv, gchar **env, GSpawnFlags flags,
 					 gchar **std_out, gchar **std_err, gint *exit_status, GError **error)
 {
 	TCHAR  buffer[CMDSIZE]=TEXT("");
@@ -977,6 +997,56 @@ gboolean win32_spawn(const gchar *dir, gchar **argv, gchar **env, GSpawnFlags fl
 		*std_err = stderr_content;
 	}
 	return TRUE;
+}
+
+
+/* Simple replacement for _broken_win32_spawn().
+ * flags is ignored, G_SPAWN_SEARCH_PATH is implied.
+ * Don't call this function directly, use utils_spawn_[a]sync() instead.
+ * Adapted from tm_workspace_create_global_tags(). */
+gboolean win32_spawn(const gchar *dir, gchar **argv, gchar **env, GSpawnFlags flags,
+					 gchar **std_out, gchar **std_err, gint *exit_status, GError **error)
+{
+	gint ret;
+	gboolean fail;
+	gchar *tmp_file = create_temp_file();
+	gchar *tmp_errfile = create_temp_file();
+	gchar *command;
+
+	if (env != NULL)
+	{
+		return _broken_win32_spawn(dir, argv, env, flags, std_out, std_err,
+			exit_status, error);
+	}
+	if (!tmp_file || !tmp_errfile)
+	{
+		g_warning("%s: Could not create temporary files!", G_STRFUNC);
+		return FALSE;
+	}
+	command = g_strjoinv(" ", argv);
+	SETPTR(command, g_strdup_printf("%s >%s 2>%s",
+		command, tmp_file, tmp_errfile));
+	g_chdir(dir);
+	ret = system(command);
+	/* the command can return -1 as an exit code, so check errno also */
+	fail = ret == -1 && errno;
+	if (!fail)
+	{
+		g_file_get_contents(tmp_file, std_out, NULL, NULL);
+		g_file_get_contents(tmp_errfile, std_err, NULL, NULL);
+	}
+	else if (error)
+		g_set_error_literal(error, G_SPAWN_ERROR, errno, g_strerror(errno));
+
+	g_free(command);
+	g_unlink(tmp_file);
+	g_free(tmp_file);
+	g_unlink(tmp_errfile);
+	g_free(tmp_errfile);
+	if (exit_status)
+		*exit_status = ret;
+
+	return !fail;
 }
 
 

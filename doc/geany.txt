@@ -565,6 +565,14 @@ order. It is not alphabetical as shown in the documents list
 See the `Notebook tab keybindings`_ section for useful
 shortcuts including for Most-Recently-Used document switching.
 
+Cloning documents
+^^^^^^^^^^^^^^^^^
+The `Document->Clone` menu item copies the current document's text,
+cursor position and properties into a new untitled document. If
+there is a selection, only the selected text is copied. This can be
+useful when making temporary copies of text or for creating
+documents with similar or identical contents.
+
 
 Character sets and Unicode Byte-Order-Mark (BOM)
 ------------------------------------------------
@@ -2011,9 +2019,9 @@ Use indicators to show compile errors
     Underline lines with compile errors using red squiggles to indicate
     them in the editor area.
 
-Newline strip trailing spaces
-    Remove any white space at the end of the line when you hit the
-    Enter/Return key.
+Newline strips trailing spaces
+    Remove any whitespace at the end of the line when you hit the
+    Enter/Return key. See also `Strip trailing spaces`_.
 
 Line breaking column
     The editor column number to insert a newline at when Line Breaking
@@ -2297,8 +2305,13 @@ Ensure consistent line endings
     Ensures that newline characters always get converted before
     saving, avoiding mixed line endings in the same file.
 
+.. _Strip trailing spaces:
+
 Strip trailing spaces
-    Remove the trailing spaces on each line of the document.
+    Remove any whitespace at the end of each document line.
+
+    .. note::
+        This does not apply to Diff documents, e.g. patch files.
 
 Replace tabs by space
     Replace all tabs in the document with the equivalent number of spaces.
@@ -2476,10 +2489,11 @@ indent_hard_tab_width             The size of a tab character. Don't change  8  
 **Interface related**
 show_symbol_list_expanders        Whether to show or hide the small          true        to new
                                   expander icons on the symbol list                      documents
-allow_always_save                 treeview. Whether files can be saved       false       immediately
-                                  always, even if they don't have any
-                                  changes. By default, the Save button and
-                                  menu item are disabled when a file is
+                                  treeview.
+allow_always_save                 Whether files can be saved always, even    false       immediately
+                                  if they don't have any changes.
+                                  By default, the Save button and menu
+                                  item are disabled when a file is
                                   unchanged. When setting this option to
                                   true, the Save button and menu item are
                                   always active and files can be saved.
@@ -2498,6 +2512,8 @@ msgwin_messages_visible           Whether to show the Messages tab in the    tru
                                   Messages Window
 msgwin_scribble_visible           Whether to show the Scribble tab in the    true        immediately
                                   Messages Window
+use_geany_icon                    Whether to use the Geany icon on the       false       on restart
+                                  window instead of the theme's icon
 ================================  =========================================  ==========  ===========
 
 By default, statusbar_template is empty. This tells Geany to use its
@@ -3462,7 +3478,8 @@ Find Document Usage             Ctrl-Shift-D              Finds all occurrences 
 Mark All                        Ctrl-Shift-M              Highlight all matches of the current
                                                           word/selection in the current document
                                                           with a colored box. If there's nothing to
-                                                          find, highlighted matches will be cleared.
+                                                          find, or the cursor is next to an existing match,
+                                                          the highlighted matches will be cleared.
 =============================== ========================= ==================================================
 
 
@@ -3610,6 +3627,8 @@ Document keybindings
 ==================================== ==================== ==================================================
 Action                               Default shortcut     Description
 ==================================== ==================== ==================================================
+Clone                                                     See `Cloning documents`_.
+
 Replace tabs by space                                     Replaces all tabs with the right amount of spaces.
 
 Replace spaces by tabs                                    Replaces leading spaces with tab characters.
@@ -4003,8 +4022,7 @@ wordchars
     *Example:* (look at system filetypes.\* files)
 
     .. note::
-        This can be overridden by the *whitespace_chars*
-        filetypes.common setting.
+        This overrides the *whitespace_chars* filetypes.common setting.
 
 comment_single
     A character or string which is used to comment code. If you want to use

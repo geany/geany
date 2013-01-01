@@ -271,6 +271,7 @@ protected:	// ScintillaBase subclass needs access to much of Editor
 
 	int marginNumberPadding; // the right-side padding of the number margin
 	int ctrlCharPadding; // the padding around control character text blobs
+	int lastSegItalicsOffset; // the offset so as not to clip italic characters at EOLs
 
 	Document *pdoc;
 

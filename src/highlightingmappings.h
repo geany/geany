@@ -185,6 +185,7 @@ static const HLStyle highlighting_styles_C[] =
 	{ SCE_C_WORD,					"word",						FALSE },
 	{ SCE_C_WORD2,					"word2",					FALSE },
 	{ SCE_C_STRING,					"string",					FALSE },
+	{ SCE_C_STRINGRAW,				"stringraw",				FALSE },
 	{ SCE_C_CHARACTER,				"character",				FALSE },
 	{ SCE_C_UUID,					"uuid",						FALSE },
 	{ SCE_C_PREPROCESSOR,			"preprocessor",				FALSE },
@@ -1079,15 +1080,22 @@ static const HLKeyword highlighting_keywords_PERL[] =
 #define highlighting_lexer_PO		SCLEX_PO
 static const HLStyle highlighting_styles_PO[] =
 {
-	{ SCE_PO_DEFAULT,		"default",			FALSE },
-	{ SCE_PO_COMMENT,		"comment",			FALSE },
-	{ SCE_PO_MSGID,			"msgid",			FALSE },
-	{ SCE_PO_MSGID_TEXT,	"msgid_text",		FALSE },
-	{ SCE_PO_MSGSTR,		"msgstr",			FALSE },
-	{ SCE_PO_MSGSTR_TEXT,	"msgstr_text",		FALSE },
-	{ SCE_PO_MSGCTXT,		"msgctxt",			FALSE },
-	{ SCE_PO_MSGCTXT_TEXT,	"msgctxt_text",		FALSE },
-	{ SCE_PO_FUZZY,			"fuzzy",			FALSE }
+	{ SCE_PO_DEFAULT,				"default",				FALSE },
+	{ SCE_PO_COMMENT,				"comment",				FALSE },
+	{ SCE_PO_PROGRAMMER_COMMENT,	"programmer_comment",	FALSE },
+	{ SCE_PO_REFERENCE,				"reference",			FALSE },
+	{ SCE_PO_FLAGS,					"flags",				FALSE },
+	{ SCE_PO_FUZZY,					"fuzzy",				FALSE },
+	{ SCE_PO_MSGID,					"msgid",				FALSE },
+	{ SCE_PO_MSGID_TEXT,			"msgid_text",			FALSE },
+	{ SCE_PO_MSGID_TEXT_EOL,		"msgid_text_eol",		FALSE },
+	{ SCE_PO_MSGSTR,				"msgstr",				FALSE },
+	{ SCE_PO_MSGSTR_TEXT,			"msgstr_text",			FALSE },
+	{ SCE_PO_MSGSTR_TEXT_EOL,		"msgstr_text_eol",		FALSE },
+	{ SCE_PO_MSGCTXT,				"msgctxt",				FALSE },
+	{ SCE_PO_MSGCTXT_TEXT,			"msgctxt_text",			FALSE },
+	{ SCE_PO_MSGCTXT_TEXT_EOL,		"msgctxt_text_eol",		FALSE },
+	{ SCE_PO_ERROR,					"error",				FALSE }
 };
 #define highlighting_keywords_PO	EMPTY_KEYWORDS
 #define highlighting_properties_PO	EMPTY_PROPERTIES
