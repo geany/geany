@@ -243,7 +243,7 @@ static void init_pref_groups(void)
     
     /* use the Geany icon instead of the theme */
     stash_group_add_boolean(group, &main_use_geany_icon,
-        "use_geany_icon", FALSE);
+        "use_geany_icon", TRUE);
 }
 
 
