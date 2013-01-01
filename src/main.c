@@ -90,7 +90,6 @@ gboolean	ignore_callback;	/* hack workaround for GTK+ toggle button callback pro
 
 GeanyStatus	 main_status;
 CommandLineOptions cl_options;	/* fields initialised in parse_command_line_options */
-gboolean main_use_geany_icon;
 
 
 static const gchar geany_lib_versions[] = "GTK %u.%u.%u, GLib %u.%u.%u";
@@ -228,7 +227,18 @@ static void apply_settings(void)
 
 static void main_init(void)
 {
+	/* add our icon path in case we aren't installed in the system prefix */
+#ifndef G_OS_WIN32
+	gchar *path = g_build_filename(GEANY_DATADIR, "icons", NULL);
+	gtk_icon_theme_append_search_path(gtk_icon_theme_get_default(), path);
+	g_free(path);
+#else
+	gtk_icon_theme_append_search_path(gtk_icon_theme_get_default(), "share\\icons");
+#endif
+
 	/* inits */
+	ui_init_stock_items();
+
 	ui_init_builder();
 
 	main_widgets.window				= NULL;
@@ -245,8 +255,6 @@ static void main_init(void)
 	ui_prefs.recent_queue				= g_queue_new();
 	ui_prefs.recent_projects_queue		= g_queue_new();
 	main_status.opening_session_files	= FALSE;
-
-	ui_init_stock_items();
 
 	main_widgets.window = create_window1();
 
@@ -1057,26 +1065,6 @@ gint main(gint argc, gchar **argv)
 	document_init_doclist();
 	symbols_init();
 	editor_snippets_init();
-
-	/* set window icon */
-	{
-		GdkPixbuf *pb;
-        if (main_use_geany_icon)
-        {
-            pb = ui_new_pixbuf_from_inline(GEANY_IMAGE_LOGO);
-        }
-        else
-        {
-            pb = gtk_icon_theme_load_icon(gtk_icon_theme_get_default(), "geany", 48, 0, NULL);
-            if (pb == NULL)
-            {
-                g_warning("Unable to find Geany icon in theme, using embedded icon");
-                pb = ui_new_pixbuf_from_inline(GEANY_IMAGE_LOGO);
-            }
-        }
-		gtk_window_set_icon(GTK_WINDOW(main_widgets.window), pb);
-		g_object_unref(pb);	/* free our reference */
-	}
 
 	/* registering some basic events */
 	g_signal_connect(main_widgets.window, "delete-event", G_CALLBACK(on_exit_clicked), NULL);
