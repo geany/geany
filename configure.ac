@@ -102,8 +102,16 @@ AC_CONFIG_FILES([
 		Makefile
 		icons/Makefile
 		icons/16x16/Makefile
+		icons/24x24/Makefile
+		icons/32x32/Makefile
 		icons/48x48/Makefile
 		icons/scalable/Makefile
+		icons/tango/Makefile
+		icons/tango/16x16/Makefile
+		icons/tango/24x24/Makefile
+		icons/tango/32x32/Makefile
+		icons/tango/48x48/Makefile
+		icons/tango/scalable/Makefile
 		tagmanager/Makefile
 		tagmanager/ctags/Makefile
 		tagmanager/mio/Makefile

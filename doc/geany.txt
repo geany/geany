@@ -2512,8 +2512,6 @@ msgwin_messages_visible           Whether to show the Messages tab in the    tru
                                   Messages Window
 msgwin_scribble_visible           Whether to show the Scribble tab in the    true        immediately
                                   Messages Window
-use_geany_icon                    Whether to use the Geany icon on the       false       on restart
-                                  window instead of the theme's icon
 ================================  =========================================  ==========  ===========
 
 By default, statusbar_template is empty. This tells Geany to use its

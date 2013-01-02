@@ -543,21 +543,13 @@ static void init_tag_iters(void)
 static GdkPixbuf *get_tag_icon(const gchar *icon_name)
 {
 	static GtkIconTheme *icon_theme = NULL;
-	static gint x, y;
+	static gint x = -1;
 
-	if (G_UNLIKELY(icon_theme == NULL))
+	if (G_UNLIKELY(x < 0))
 	{
-#ifndef G_OS_WIN32
-		gchar *path = g_build_filename(GEANY_DATADIR, "icons", NULL);
-#endif
-		gtk_icon_size_lookup(GTK_ICON_SIZE_MENU, &x, &y);
+		gint dummy;
 		icon_theme = gtk_icon_theme_get_default();
-#ifdef G_OS_WIN32
-		gtk_icon_theme_append_search_path(icon_theme, "share\\icons");
-#else
-		gtk_icon_theme_append_search_path(icon_theme, path);
-		g_free(path);
-#endif
+		gtk_icon_size_lookup(GTK_ICON_SIZE_MENU, &x, &dummy);
 	}
 	return gtk_icon_theme_load_icon(icon_theme, icon_name, x, 0, NULL);
 }

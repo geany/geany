@@ -4682,8 +4682,46 @@ static void setup_sci_keys(ScintillaObject *sci)
 }
 
 
-#include "icons/16x16/classviewer-var.xpm"
-#include "icons/16x16/classviewer-method.xpm"
+/* registers a Scintilla image from a named icon from the theme */
+static gboolean register_named_icon(ScintillaObject *sci, guint id, const gchar *name)
+{
+	GError *error = NULL;
+	GdkPixbuf *pixbuf;
+	gint n_channels, rowstride, width, height;
+	gint size;
+
+	gtk_icon_size_lookup(GTK_ICON_SIZE_MENU, &size, NULL);
+	pixbuf = gtk_icon_theme_load_icon(gtk_icon_theme_get_default(), name, size, 0, &error);
+	if (! pixbuf)
+	{
+		g_warning("failed to load icon '%s': %s", name, error->message);
+		g_error_free(error);
+		return FALSE;
+	}
+
+	n_channels = gdk_pixbuf_get_n_channels(pixbuf);
+	rowstride = gdk_pixbuf_get_rowstride(pixbuf);
+	width = gdk_pixbuf_get_width(pixbuf);
+	height = gdk_pixbuf_get_height(pixbuf);
+
+	if (gdk_pixbuf_get_bits_per_sample(pixbuf) != 8 ||
+		! gdk_pixbuf_get_has_alpha(pixbuf) ||
+		n_channels != 4 ||
+		rowstride != width * n_channels)
+	{
+		g_warning("incompatible image data for icon '%s'", name);
+		g_object_unref(pixbuf);
+		return FALSE;
+	}
+
+	SSM(sci, SCI_RGBAIMAGESETWIDTH, width, 0);
+	SSM(sci, SCI_RGBAIMAGESETHEIGHT, height, 0);
+	SSM(sci, SCI_REGISTERRGBAIMAGE, id, (sptr_t)gdk_pixbuf_get_pixels(pixbuf));
+
+	g_object_unref(pixbuf);
+	return TRUE;
+}
+
 
 /* Create new editor widget (scintilla).
  * @note The @c "sci-notify" signal is connected separately. */
@@ -4715,8 +4753,8 @@ static ScintillaObject *create_new_sci(GeanyEditor *editor)
 	SSM(sci, SCI_SETSCROLLWIDTHTRACKING, 1, 0);
 
 	/* tag autocompletion images */
-	SSM(sci, SCI_REGISTERIMAGE, 1, (sptr_t)classviewer_var);
-	SSM(sci, SCI_REGISTERIMAGE, 2, (sptr_t)classviewer_method);
+	register_named_icon(sci, 1, "classviewer-var");
+	register_named_icon(sci, 2, "classviewer-method");
 
 	/* necessary for column mode editing, implemented in Scintilla since 2.0 */
 	SSM(sci, SCI_SETADDITIONALSELECTIONTYPING, 1, 0);
