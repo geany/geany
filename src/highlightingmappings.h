@@ -80,16 +80,21 @@ static const HLStyle highlighting_styles_ABAQUS[] =
 	{ SCE_ABAQUS_STRING,		"string",		FALSE },
 	{ SCE_ABAQUS_OPERATOR,		"operator",		FALSE },
 	{ SCE_ABAQUS_WORD,		"word",			FALSE },
-	{ SCE_ABAQUS_PROCESSOR,		"preprocessor",		FALSE },
-	{ SCE_ABAQUS_COMMAND,		"command",		FALSE },
-	{ SCE_ABAQUS_SLASHCOMMAND,	"command",		FALSE },
-	{ SCE_ABAQUS_STARCOMMAND,	"command",		FALSE },
-	{ SCE_ABAQUS_ARGUMENT,		"word2",		FALSE },
-	{ SCE_ABAQUS_FUNCTION,		"function",		FALSE }
+	{ SCE_ABAQUS_PROCESSOR,		"processors",		FALSE },
+	{ SCE_ABAQUS_COMMAND,		"commands",		FALSE },
+	{ SCE_ABAQUS_SLASHCOMMAND,	"slashcommands",		FALSE },
+	{ SCE_ABAQUS_STARCOMMAND,	"starcommands",		FALSE },
+	{ SCE_ABAQUS_ARGUMENT,		"arguments",		FALSE },
+	{ SCE_ABAQUS_FUNCTION,		"functions",		FALSE }
 };
 static const HLKeyword highlighting_keywords_ABAQUS[] =
 {
-	{ 0, "primary",	FALSE }
+	{ 0, "processors", FALSE },
+	{ 1, "commands", FALSE },
+	{ 2, "slashommands", FALSE },
+	{ 3, "starcommands", FALSE },
+	{ 4, "arguments", FALSE },
+	{ 5, "functions", FALSE }
 };
 #define highlighting_properties_ABAQUS		EMPTY_PROPERTIES
 
