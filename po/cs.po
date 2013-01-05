@@ -4,14 +4,15 @@
 # Petr Messner <messa@messa.cz>, 2006-2007.
 # Anna Talianova <anickat1@gmail.com>, 2008.
 # Karel Kolman <kolmis@gmail.com>, 2009-2011.
+# Miro Hrončok <miro@hroncok.cz>, 2013.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.22\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-06-03 17:50+0200\n"
-"PO-Revision-Date: 2010-12-05 15:55+0100\n"
-"Last-Translator: Karel Kolman <kolmis@gmail.com>\n"
+"PO-Revision-Date: 2013-01-05 19:00+0100\n"
+"Last-Translator: Miro Hrončok <miro@hroncok.cz>\n"
 "Language-Team: Czech <geany-i18n@uvena.de>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
@@ -304,21 +305,16 @@ msgid "Always wrap search"
 msgstr ""
 
 #: ../data/geany.glade.h:57
-#, fuzzy
 msgid "Always wrap search around the document"
-msgstr "Vždy hledat v celém dokumentu a skrýt dialogové okno Najít"
+msgstr "Vždy hledat v celém dokumentu"
 
 #: ../data/geany.glade.h:58
-#, fuzzy
 msgid "Hide the Find dialog"
-msgstr "Vždy hledat v celém dokumentu a skrýt dialogové okno Najít"
+msgstr "Skrýt dialogové okno Najít"
 
 #: ../data/geany.glade.h:59
-#, fuzzy
 msgid "Hide the Find dialog after clicking Find Next/Previous"
-msgstr ""
-"Hledání bude vždy rozšířeno na celý dokument a dialogové okno Najít bude "
-"skryto po kliknutí na Najít další/předchozí"
+msgstr "Skrýt sialogové okno Najít po kliknutí na Najít další/předchozí"
 
 #: ../data/geany.glade.h:60
 msgid "Use the current word under the cursor for Find dialogs"
@@ -509,9 +505,8 @@ msgid "Calls the View->Toggle All Additional Widgets command"
 msgstr "Volá funkci menu Zobrazit->Skrýt/zobrazit všechny ostatní panely"
 
 #: ../data/geany.glade.h:100
-#, fuzzy
 msgid "Switch to last used document after closing a tab"
-msgstr "Přejít do předchozího dokumentu"
+msgstr "Přejít na naposledy používaný dokumentu po zvaření záložky"
 
 #: ../data/geany.glade.h:101
 msgid "<b>Editor tabs</b>"
@@ -1448,9 +1443,8 @@ msgid "Sets the font for the terminal widget"
 msgstr "Nastaví písmo terminálu."
 
 #: ../data/geany.glade.h:300
-#, fuzzy
 msgid "Choose Terminal Font"
-msgstr "Písmo terminálu:"
+msgstr "Vyberte písmo terminálu:"
 
 #: ../data/geany.glade.h:301
 msgid "Foreground color:"
@@ -1473,9 +1467,8 @@ msgid "Sets the foreground color of the text in the terminal widget"
 msgstr "Nastaví barvu textu v okně terminálu."
 
 #: ../data/geany.glade.h:306
-#, fuzzy
 msgid "Sets the backround color of the text in the terminal widget"
-msgstr "Nastaví barvu pozadí v okně terminálu."
+msgstr "Nastaví barvu pozadí textu v okně terminálu"
 
 #: ../data/geany.glade.h:307
 msgid ""
@@ -1539,19 +1532,16 @@ msgstr ""
 "Midnight Commanderu uvnitř VTE."
 
 #: ../data/geany.glade.h:319
-#, fuzzy
 msgid "Follow path of the current file"
 msgstr "Následovat cestu aktuálního otevřeného souboru"
 
 #: ../data/geany.glade.h:320
-#, fuzzy
 msgid ""
 "Whether to execute \\\"cd $path\\\" when you switch between opened files"
 msgstr ""
-"Zda provádět příkaz \"cd $cesta\" při přepínání mezi otevřenými soubory."
+"Zda provádět příkaz \\\"cd $cesta\\\" při přepínání mezi otevřenými soubory."
 
 #: ../data/geany.glade.h:321
-#, fuzzy
 msgid "Execute programs in the VTE"
 msgstr "Spouštět programy v emulátoru terminálu"
 
@@ -1576,9 +1566,8 @@ msgstr ""
 "terminálu. Pozor, programy spuštěné v terminálu nemohou být zastaveny."
 
 #: ../data/geany.glade.h:325
-#, fuzzy
 msgid "<b>Terminal</b>"
-msgstr "<b>Oprávnění:</b>"
+msgstr "<b>Terminál:</b>"
 
 #: ../data/geany.glade.h:326 ../src/prefs.c:1595 ../src/vte.c:281
 msgid "Terminal"
@@ -2087,9 +2076,8 @@ msgid "_Keyboard Shortcuts"
 msgstr "_Klávesové zkratky"
 
 #: ../data/geany.glade.h:450
-#, fuzzy
 msgid "Debug _Messages"
-msgstr "Debug zprávy"
+msgstr "Debug _zprávy"
 
 #: ../data/geany.glade.h:451
 msgid "_Website"
@@ -2097,16 +2085,15 @@ msgstr "_Webové stránky"
 
 #: ../data/geany.glade.h:452
 msgid "Wi_ki"
-msgstr ""
+msgstr "Wi_ki"
 
 #: ../data/geany.glade.h:453
 msgid "Report a _Bug"
-msgstr ""
+msgstr "_Nahlásit chybu"
 
 #: ../data/geany.glade.h:454
-#, fuzzy
 msgid "_Donate"
-msgstr "_Neukládat"
+msgstr "_Přispět"
 
 #: ../data/geany.glade.h:455 ../src/sidebar.c:124
 msgid "Symbols"
@@ -2114,7 +2101,7 @@ msgstr "Symboly"
 
 #: ../data/geany.glade.h:456
 msgid "Documents"
-msgstr "_Dokumenty"
+msgstr "Dokumenty"
 
 #: ../data/geany.glade.h:457
 msgid "Status"
@@ -2142,6 +2129,13 @@ msgid ""
 "Frank Lanitz\n"
 "All rights reserved."
 msgstr ""
+"Copyright (c)  2005-2012\n"
+"Colomban Wendling\n"
+"Nick Treleaven\n"
+"Matthew Brush\n"
+"Enrico Tröger\n"
+"Frank Lanitz\n"
+"Všechna práva vyhrazena."
 
 #: ../src/about.c:157
 msgid "About Geany"
@@ -2237,9 +2231,9 @@ msgid "Failed to change the working directory to \"%s\""
 msgstr "Selhala změna pracovního adresáře na \"%s\""
 
 #: ../src/build.c:929
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to execute \"%s\" (start-script could not be created: %s)"
-msgstr "Selhalo spuštění \"%s\" (startovací skript nemohl být vytvořen)"
+msgstr "Selhalo spuštění \"%s\" (startovací skript nemohl být vytvořen: %s)"
 
 #: ../src/build.c:984
 msgid ""
@@ -2482,9 +2476,9 @@ msgid "No more message items."
 msgstr "Žádné další zprávy."
 
 #: ../src/callbacks.c:1673
-#, fuzzy, c-format
+#, c-format
 msgid "Could not open file %s (File not found)"
-msgstr "Soubor %s nemohl být otevřen (%s)"
+msgstr "Soubor %s nemohl být otevřen (Soubor nenalezen)"
 
 #: ../src/dialogs.c:226
 msgid "Detect from file"
@@ -3154,23 +3148,21 @@ msgid "Could not find file '%s'."
 msgstr "Soubor \"%s\" nebyl nalezen."
 
 #: ../src/highlighting.c:1297
-#, fuzzy
 msgid "Default"
-msgstr "_Výchozí"
+msgstr "Výchozí"
 
 #: ../src/highlighting.c:1336
 #, fuzzy
 msgid "The current filetype overrides the default style."
-msgstr "Sestavit aktuální soubor nástrojem Make s výchozím cílem"
+msgstr "Současný typ souboru přepisuje výchozí styl."
 
 #: ../src/highlighting.c:1337
 msgid "This may cause color schemes to display incorrectly."
-msgstr ""
+msgstr "Toto může způspbit nesprávné zobrazení barevných schémat."
 
 #: ../src/highlighting.c:1358
-#, fuzzy
 msgid "Color Schemes"
-msgstr "_Schémata barev"
+msgstr "Schémata barev"
 
 #. visual group order
 #: ../src/keybindings.c:223 ../src/symbols.c:714
@@ -3410,9 +3402,8 @@ msgid "Send to Custom Command 3"
 msgstr "Použít Vlastní příkaz 3"
 
 #: ../src/keybindings.c:400
-#, fuzzy
 msgid "Join lines"
-msgstr "Zakomentovat řádek"
+msgstr "Spojit řádky"
 
 #: ../src/keybindings.c:405
 msgid "Insert date"
@@ -3763,7 +3754,7 @@ msgstr "Vypsat prefix Geany instalace"
 
 #: ../src/main.c:138
 msgid "Open all FILES in read-only mode (see documention)"
-msgstr ""
+msgstr "Otevřít všechny SOUBORY v režimu pouze pro čtení (viz dokumentace)"
 
 #: ../src/main.c:139
 msgid "Don't load the previous session's files"
@@ -3899,9 +3890,8 @@ msgid "Plugin"
 msgstr "Plugin"
 
 #: ../src/plugins.c:1300
-#, fuzzy
 msgid "Description"
-msgstr "Popis:"
+msgstr "Popis"
 
 #: ../src/plugins.c:1318
 msgid "No plugins available."
@@ -4133,9 +4123,9 @@ msgid "Do you want to close it before proceeding?"
 msgstr "Chcete ho před pokračováním zavřít?"
 
 #: ../src/project.c:597
-#, fuzzy, c-format
+#, c-format
 msgid "The '%s' project is open."
-msgstr "Projekt '%s' je již otevřen."
+msgstr "Projekt '%s' je otevřen."
 
 #: ../src/project.c:646
 msgid "The specified project name is too short."
@@ -4374,7 +4364,7 @@ msgstr ""
 #: ../src/search.c:1574
 #, c-format
 msgid "Cannot parse extra options: %s"
-msgstr ""
+msgstr "Nemohu zpracovat extra hodnoty: %s"
 
 #: ../src/search.c:1640
 msgid "Searching..."
@@ -4423,13 +4413,12 @@ msgstr ""
 "Jde o závažnou chybu a aplikace bude nyní ukončena."
 
 #: ../src/stash.c:1099
-#, fuzzy
 msgid "Name"
-msgstr "Název:"
+msgstr "Název"
 
 #: ../src/stash.c:1106
 msgid "Value"
-msgstr ""
+msgstr "Hodnota"
 
 #: ../src/symbols.c:693 ../src/symbols.c:743 ../src/symbols.c:810
 msgid "Chapter"
@@ -4558,7 +4547,7 @@ msgstr "Třídy"
 
 #: ../src/symbols.c:790
 msgid "Anchors"
-msgstr ""
+msgstr "Kotvy"
 
 #: ../src/symbols.c:791
 msgid "H1 Headings"
@@ -4638,7 +4627,7 @@ msgstr "Funkce / Úkoly"
 # Java atd.
 #: ../src/symbols.c:880 ../src/symbols.c:981
 msgid "Members"
-msgstr ""
+msgstr "Členy"
 
 # Fortran
 #: ../src/symbols.c:930
@@ -4656,7 +4645,7 @@ msgstr "Makra"
 # ASM
 #: ../src/symbols.c:943
 msgid "Defines"
-msgstr ""
+msgstr "Definice"
 
 # Makefiles
 #: ../src/symbols.c:950
@@ -4677,7 +4666,7 @@ msgstr "Triggery"
 
 #: ../src/symbols.c:962
 msgid "Views"
-msgstr ""
+msgstr "Pohledy"
 
 #: ../src/symbols.c:982
 msgid "Structs"
@@ -4685,7 +4674,7 @@ msgstr "Struktury"
 
 #: ../src/symbols.c:983
 msgid "Typedefs / Enums"
-msgstr ""
+msgstr "Definice typů"
 
 #: ../src/symbols.c:1728
 #, c-format
@@ -4723,9 +4712,8 @@ msgid "Load Tags"
 msgstr "Načíst tagy"
 
 #: ../src/symbols.c:1780
-#, fuzzy
 msgid "Geany tag files (*.*.tags)"
-msgstr "Geany soubor tagů (*.tags)"
+msgstr "Geany soubor tagů (*.*.tags)"
 
 #. For translators: the first wildcard is the filetype, the second the filename
 #: ../src/symbols.c:1800
@@ -4880,13 +4868,12 @@ msgid "Choose more build actions"
 msgstr "Další akce sestavení"
 
 #: ../src/toolbar.c:380
-#, fuzzy
 msgid "Search Field"
-msgstr "Hledání selhalo."
+msgstr "Hledání selhalo"
 
 #: ../src/toolbar.c:390
 msgid "Goto Field"
-msgstr ""
+msgstr "Políčko přechodu na řádek"
 
 #: ../src/toolbar.c:579
 msgid "Separator"
@@ -5071,9 +5058,9 @@ msgid "pos: %d"
 msgstr ""
 
 #: ../src/ui_utils.c:330
-#, fuzzy, c-format
+#, c-format
 msgid "style: %d"
-msgstr "Styl ikon:"
+msgstr "styl: %d"
 
 #: ../src/ui_utils.c:382
 msgid " (new instance)"
@@ -5126,7 +5113,7 @@ msgstr "Zavřít vše"
 
 #: ../src/ui_utils.c:2225
 msgid "Geany cannot start!"
-msgstr ""
+msgstr "Geany se nemůže spustit!"
 
 #: ../src/utils.c:87
 msgid "Select Browser"
