@@ -12,9 +12,8 @@ processors=preprocessor
 commands=keyword
 slashcommands=keyword
 starcommands=keyword
-arguments=function
-functions=operator
-
+arguments=parameter
+functions=function
 
 [keywords]
 # all items must be in one line
