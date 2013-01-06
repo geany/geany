@@ -75,17 +75,12 @@ static const HLStyle highlighting_styles_ABAQUS[] =
 {
 	{ SCE_ABAQUS_DEFAULT,		"default",		FALSE },
 	{ SCE_ABAQUS_COMMENT,		"comment",		FALSE },
-	{ SCE_ABAQUS_COMMENTBLOCK,	"commentblock",		FALSE },
 	{ SCE_ABAQUS_NUMBER,		"number",		FALSE },
 	{ SCE_ABAQUS_STRING,		"string",		FALSE },
 	{ SCE_ABAQUS_OPERATOR,		"operator",		FALSE },
-	{ SCE_ABAQUS_WORD,		"word",			FALSE },
-	{ SCE_ABAQUS_PROCESSOR,		"processors",		FALSE },
-	{ SCE_ABAQUS_COMMAND,		"commands",		FALSE },
-	{ SCE_ABAQUS_SLASHCOMMAND,	"slashcommands",		FALSE },
-	{ SCE_ABAQUS_STARCOMMAND,	"starcommands",		FALSE },
-	{ SCE_ABAQUS_ARGUMENT,		"arguments",		FALSE },
-	{ SCE_ABAQUS_FUNCTION,		"functions",		FALSE }
+	{ SCE_ABAQUS_PROCESSOR,		"processor",		FALSE },
+	{ SCE_ABAQUS_STARCOMMAND,	"starcommand",		FALSE },
+	{ SCE_ABAQUS_ARGUMENT,		"argument",		FALSE }
 };
 static const HLKeyword highlighting_keywords_ABAQUS[] =
 {
