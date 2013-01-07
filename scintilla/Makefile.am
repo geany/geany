@@ -6,6 +6,7 @@ noinst_LIBRARIES=libscintilla.a
 AM_CXXFLAGS = -DNDEBUG -DGTK -DSCI_LEXER -DG_THREADS_IMPL_NONE
 
 LEXER_SRCS= \
+lexers/LexAbaqus.cxx \
 lexers/LexAda.cxx \
 lexers/LexAsm.cxx \
 lexers/LexBash.cxx \

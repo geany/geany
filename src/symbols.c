@@ -746,6 +746,17 @@ static void add_top_level_items(GeanyDocument *doc)
 				NULL);
 			break;
 		}
+
+		case GEANY_FILETYPES_ABAQUS:
+		{
+			tag_list_add_groups(tag_store,
+				&(tv_iters.tag_class), _("Parts"), NULL,
+				&(tv_iters.tag_member), _("Assembly"), NULL,
+				&(tv_iters.tag_namespace), _("Steps"), NULL,
+				NULL);
+			break;
+		}
+		
 		case GEANY_FILETYPES_R:
 		{
 			tag_list_add_groups(tag_store,
