@@ -530,9 +530,6 @@ def build(bld):
     bld.install_files(template_dest, start_dir.ant_glob('**/*'), cwd=start_dir, relative_trick=True)
     # Icons
     for dest in geany_icons:
-        if is_win32 and dest != 'hicolor/16x16/apps':
-            continue
-
         dest_dir = '${PREFIX}/share/icons' if is_win32 else os.path.join('${DATADIR}/icons/', dest)
         bld.install_files(dest_dir, geany_icons[dest], cwd=bld.path.find_dir('icons'))
 
