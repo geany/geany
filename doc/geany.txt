@@ -2604,6 +2604,9 @@ Foreground color
 Background color
     Select the background color of the terminal.
 
+Background image
+    Select the background image to show behind the terminal's text.
+
 Scrollback lines
     The number of lines buffered so that you can scroll though the history.
 

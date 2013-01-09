@@ -112,6 +112,7 @@ struct VteFunctions
 	void (*vte_terminal_set_cursor_blinks) (VteTerminal *terminal, gboolean blink);
 	void (*vte_terminal_select_all) (VteTerminal *terminal);
 	void (*vte_terminal_set_audible_bell) (VteTerminal *terminal, gboolean is_audible);
+	void (*vte_terminal_set_background_image_file) (VteTerminal *terminal, const char *path);
 };
 
 
@@ -303,6 +304,7 @@ void vte_close(void)
 	g_object_unref(vc->menu);
 	g_free(vc->emulation);
 	g_free(vc->shell);
+	g_free(vc->image);
 	g_free(vc->font);
 	g_free(vc->colour_back);
 	g_free(vc->colour_fore);
@@ -451,6 +453,7 @@ static gboolean vte_register_symbols(GModule *mod)
 	BIND_REQUIRED_SYMBOL(vte_terminal_set_color_foreground);
 	BIND_REQUIRED_SYMBOL(vte_terminal_set_color_bold);
 	BIND_REQUIRED_SYMBOL(vte_terminal_set_color_background);
+	BIND_REQUIRED_SYMBOL(vte_terminal_set_background_image_file);
 	BIND_REQUIRED_SYMBOL(vte_terminal_feed_child);
 	BIND_REQUIRED_SYMBOL(vte_terminal_im_append_menuitems);
 	if (! BIND_SYMBOL(vte_terminal_set_cursor_blink_mode))
@@ -480,6 +483,7 @@ void vte_apply_user_settings(void)
 	vf->vte_terminal_set_color_foreground(VTE_TERMINAL(vc->vte), vc->colour_fore);
 	vf->vte_terminal_set_color_bold(VTE_TERMINAL(vc->vte), vc->colour_fore);
 	vf->vte_terminal_set_color_background(VTE_TERMINAL(vc->vte), vc->colour_back);
+	vf->vte_terminal_set_background_image_file(VTE_TERMINAL(vc->vte), vc->image);
 	vf->vte_terminal_set_audible_bell(VTE_TERMINAL(vc->vte), prefs.beep_on_errors);
 	vte_set_cursor_blink_mode();
 
@@ -771,11 +775,17 @@ void vte_append_preferences_tab(void)
 		GtkWidget *frame_term, *button_shell, *entry_shell;
 		GtkWidget *check_run_in_vte, *check_skip_script;
 		GtkWidget *font_button, *fg_color_button, *bg_color_button;
+		GtkWidget *entry_image, *button_image;
 
 		button_shell = GTK_WIDGET(ui_lookup_widget(ui_widgets.prefs_dialog, "button_term_shell"));
 		entry_shell = GTK_WIDGET(ui_lookup_widget(ui_widgets.prefs_dialog, "entry_shell"));
 		ui_setup_open_button_callback(button_shell, NULL,
 			GTK_FILE_CHOOSER_ACTION_OPEN, GTK_ENTRY(entry_shell));
+
+		button_image = GTK_WIDGET(ui_lookup_widget(ui_widgets.prefs_dialog, "button_term_image"));
+		entry_image = GTK_WIDGET(ui_lookup_widget(ui_widgets.prefs_dialog, "entry_image"));
+		ui_setup_open_button_callback(button_image, NULL,
+			GTK_FILE_CHOOSER_ACTION_OPEN, GTK_ENTRY(entry_image));
 
 		check_skip_script = GTK_WIDGET(ui_lookup_widget(ui_widgets.prefs_dialog, "check_skip_script"));
 		gtk_widget_set_sensitive(check_skip_script, vc->run_in_vte);
