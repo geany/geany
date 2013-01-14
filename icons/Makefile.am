@@ -1,6 +1,9 @@
 SUBDIRS =  16x16 24x24 32x32 48x48 scalable tango
 
-EXTRA_DIST = geany.ico
+iconsdir = $(datadir)/icons/hicolor
+
+dist_icons_DATA = index.theme
+dist_noinst_DATA = geany.ico
 
 gtk_update_icon_cache = gtk-update-icon-cache -f -t
 
