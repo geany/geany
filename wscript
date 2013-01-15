@@ -135,7 +135,6 @@ geany_sources = set([
     'src/ui_utils.c', 'src/utils.c'])
 
 geany_icons = {
-    'hicolor':                  ['index.theme'],
     'hicolor/16x16/apps':       ['16x16/classviewer-class.png',
                                  '16x16/classviewer-macro.png',
                                  '16x16/classviewer-member.png',
@@ -162,12 +161,15 @@ geany_icons = {
     'hicolor/scalable/actions': ['scalable/geany-build.svg',
                                  'scalable/geany-close-all.svg',
                                  'scalable/geany-save-all.svg'],
-    'Tango':                    ['tango/index.theme'],
     'Tango/16x16/actions':      ['tango/16x16/geany-save-all.png'],
     'Tango/24x24/actions':      ['tango/24x24/geany-save-all.png'],
     'Tango/32x32/actions':      ['tango/32x32/geany-save-all.png'],
     'Tango/48x48/actions':      ['tango/48x48/geany-save-all.png'],
     'Tango/scalable/actions':   ['tango/scalable/geany-save-all.svg']
+}
+geany_icons_indexes = {
+    'hicolor':  ['index.theme'],
+    'Tango':    ['tango/index.theme']
 }
 
 
@@ -531,9 +533,13 @@ def build(bld):
     template_dest = '${DATADIR}/%s/templates' % data_dir
     bld.install_files(template_dest, start_dir.ant_glob('**/*'), cwd=start_dir, relative_trick=True)
     # Icons
-    for dest in geany_icons:
+    for dest, srcs in geany_icons.items():
         dest_dir = os.path.join('${PREFIX}/share/icons' if is_win32 else '${DATADIR}/icons', dest)
-        bld.install_files(dest_dir, geany_icons[dest], cwd=bld.path.find_dir('icons'))
+        bld.install_files(dest_dir, srcs, cwd=bld.path.find_dir('icons'))
+    # install theme indexes on Windows
+    if is_win32:
+        for dest, srcs in geany_icons_indexes.items():
+            bld.install_files(os.path.join('${PREFIX}/share/icons', dest), srcs, cwd=bld.path.find_dir('icons'))
 
 
 def distclean(ctx):
