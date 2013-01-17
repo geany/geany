@@ -64,6 +64,7 @@ ctags_sources = set([
     'tagmanager/ctags/args.c',
     'tagmanager/ctags/abc.c',
     'tagmanager/ctags/actionscript.c',
+    'tagmanager/ctags/asciidoc.c',
     'tagmanager/ctags/asm.c',
     'tagmanager/ctags/basic.c',
     'tagmanager/ctags/c.c',
@@ -166,6 +167,10 @@ geany_icons = {
     'Tango/32x32/actions':      ['tango/32x32/geany-save-all.png'],
     'Tango/48x48/actions':      ['tango/48x48/geany-save-all.png'],
     'Tango/scalable/actions':   ['tango/scalable/geany-save-all.svg']
+}
+geany_icons_indexes = {
+    'hicolor':  ['index.theme'],
+    'Tango':    ['tango/index.theme']
 }
 
 
@@ -529,12 +534,13 @@ def build(bld):
     template_dest = '${DATADIR}/%s/templates' % data_dir
     bld.install_files(template_dest, start_dir.ant_glob('**/*'), cwd=start_dir, relative_trick=True)
     # Icons
-    for dest in geany_icons:
-        if is_win32 and dest != 'hicolor/16x16/apps':
-            continue
-
-        dest_dir = '${PREFIX}/share/icons' if is_win32 else os.path.join('${DATADIR}/icons/', dest)
-        bld.install_files(dest_dir, geany_icons[dest], cwd=bld.path.find_dir('icons'))
+    for dest, srcs in geany_icons.items():
+        dest_dir = os.path.join('${PREFIX}/share/icons' if is_win32 else '${DATADIR}/icons', dest)
+        bld.install_files(dest_dir, srcs, cwd=bld.path.find_dir('icons'))
+    # install theme indexes on Windows
+    if is_win32:
+        for dest, srcs in geany_icons_indexes.items():
+            bld.install_files(os.path.join('${PREFIX}/share/icons', dest), srcs, cwd=bld.path.find_dir('icons'))
 
 
 def distclean(ctx):
