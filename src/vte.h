@@ -54,6 +54,7 @@ typedef struct
 	gint scrollback_lines;
 	gchar *emulation;
 	gchar *shell;
+	gchar *image;
 	gchar *font;
 	gchar *send_cmd_prefix;
 	GdkColor *colour_fore;

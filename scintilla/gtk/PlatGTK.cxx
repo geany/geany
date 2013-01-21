@@ -541,6 +541,8 @@ void SurfaceImpl::Init(SurfaceID sid, WindowID wid) {
 	PLATFORM_ASSERT(wid);
 	context = cairo_reference(reinterpret_cast<cairo_t *>(sid));
 	pcontext = gtk_widget_create_pango_context(PWidget(wid));
+	// update the Pango context in case sid isn't the widget's surface
+	pango_cairo_update_context(context, pcontext);
 	layout = pango_layout_new(pcontext);
 	cairo_set_line_width(context, 1);
 	createdGC = true;
@@ -554,6 +556,8 @@ void SurfaceImpl::InitPixMap(int width, int height, Surface *surface_, WindowID 
 	PLATFORM_ASSERT(wid);
 	context = cairo_reference(surfImpl->context);
 	pcontext = gtk_widget_create_pango_context(PWidget(wid));
+	// update the Pango context in case surface_ isn't the widget's surface
+	pango_cairo_update_context(context, pcontext);
 	PLATFORM_ASSERT(pcontext);
 	layout = pango_layout_new(pcontext);
 	PLATFORM_ASSERT(layout);

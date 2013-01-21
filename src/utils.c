@@ -341,12 +341,20 @@ gboolean utils_is_short_html_tag(const gchar *tag_name)
 		"base",
 		"basefont",	/* < or not < */
 		"br",
+		"col",
+		"command",
+		"embed",
 		"frame",
 		"hr",
 		"img",
 		"input",
+		"keygen",
 		"link",
-		"meta"
+		"meta",
+		"param",
+		"source",
+		"track",
+		"wbr"
 	};
 
 	if (tag_name)

@@ -1,6 +1,8 @@
-iconsdir = $(datadir)/icons/hicolor/16x16/apps
+iconsdir = $(datadir)/icons/hicolor/16x16
+icons_appsdir = $(iconsdir)/apps
+icons_actionsdir = $(iconsdir)/actions
 
-icons_DATA =									\
+dist_icons_apps_DATA =							\
 	classviewer-class.png						\
 	classviewer-macro.png						\
 	classviewer-member.png						\
@@ -11,6 +13,7 @@ icons_DATA =									\
 	classviewer-var.png							\
 	geany.png
 
-EXTRA_DIST = $(icons_DATA) \
-	classviewer-var.xpm \
-	classviewer-method.xpm
+dist_icons_actions_DATA =						\
+	geany-build.png								\
+	geany-close-all.png							\
+	geany-save-all.png

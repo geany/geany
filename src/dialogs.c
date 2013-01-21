@@ -695,12 +695,7 @@ static void show_msgbox_dialog(GtkWidget *dialog, GtkMessageType type, GtkWindow
 			break;
 	}
 	gtk_window_set_title(GTK_WINDOW(dialog), title);
-	if (parent == NULL || GTK_IS_DIALOG(parent))
-	{
-		GdkPixbuf *pb = ui_new_pixbuf_from_inline(GEANY_IMAGE_LOGO);
-		gtk_window_set_icon(GTK_WINDOW(dialog), pb);
-		g_object_unref(pb);
-	}
+	gtk_window_set_icon_name(GTK_WINDOW(dialog), "geany");
 	gtk_widget_set_name(dialog, "GeanyDialog");
 
 	gtk_dialog_run(GTK_DIALOG(dialog));
@@ -1554,12 +1549,7 @@ static gint show_prompt(GtkWidget *parent,
 		GTK_BUTTONS_NONE, "%s", question_text);
 	gtk_widget_set_name(dialog, "GeanyDialog");
 	gtk_window_set_title(GTK_WINDOW(dialog), _("Question"));
-	if (parent == NULL || GTK_IS_DIALOG(parent))
-	{
-		GdkPixbuf *pb = ui_new_pixbuf_from_inline(GEANY_IMAGE_LOGO);
-		gtk_window_set_icon(GTK_WINDOW(dialog), pb);
-		g_object_unref(pb);
-	}
+	gtk_window_set_icon_name(GTK_WINDOW(dialog), "geany");
 
 	/* question_text will be in bold if optional extra_text used */
 	if (extra_text != NULL)

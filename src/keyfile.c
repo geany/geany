@@ -240,10 +240,6 @@ static void init_pref_groups(void)
 		"number_non_ft_menu_items", 0);
 	stash_group_add_integer(group, &build_menu_prefs.number_exec_menu_items,
 		"number_exec_menu_items", 0);
-    
-    /* use the Geany icon instead of the theme */
-    stash_group_add_boolean(group, &main_use_geany_icon,
-        "use_geany_icon", FALSE);
 }
 
 
@@ -519,6 +515,7 @@ static void save_dialog_prefs(GKeyFile *config)
 		g_key_file_set_boolean(config, "VTE", "cursor_blinks", vc->cursor_blinks);
 		g_key_file_set_integer(config, "VTE", "scrollback_lines", vc->scrollback_lines);
 		g_key_file_set_string(config, "VTE", "font", vc->font);
+		g_key_file_set_string(config, "VTE", "image", vc->image);
 		g_key_file_set_string(config, "VTE", "shell", vc->shell);
 		tmp_string = utils_get_hex_from_color(vc->colour_fore);
 		g_key_file_set_string(config, "VTE", "colour_fore", tmp_string);
@@ -843,6 +840,7 @@ static void load_dialog_prefs(GKeyFile *config)
 		vc->emulation = utils_get_setting_string(config, "VTE", "emulation", "xterm");
 		vc->send_selection_unsafe = utils_get_setting_boolean(config, "VTE",
 			"send_selection_unsafe", FALSE);
+		vc->image = utils_get_setting_string(config, "VTE", "image", "");
 		vc->shell = utils_get_setting_string(config, "VTE", "shell", shell);
 		vc->font = utils_get_setting_string(config, "VTE", "font", "Monospace 10");
 		vc->scroll_on_key = utils_get_setting_boolean(config, "VTE", "scroll_on_key", TRUE);
