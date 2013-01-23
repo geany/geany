@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.23\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-01-08 04:40+0000\n"
-"PO-Revision-Date: 2013-01-08 20:48+0200\n"
+"POT-Creation-Date: 2013-01-20 04:40+0000\n"
+"PO-Revision-Date: 2013-01-20 22:03+0200\n"
 "Last-Translator: Yosef Or Botschko <yosefor3@walla.com>\n"
 "Language-Team: Hebrew <>\n"
 "Language: he\n"
@@ -920,7 +920,7 @@ msgstr "ה_ודעה הבאה"
 msgid "Next to current"
 msgstr "לצד הכרטיסייה הנוכחית"
 
-#: ../data/geany.glade.h:208 ../src/filetypes.c:102 ../src/filetypes.c:1775
+#: ../data/geany.glade.h:208 ../src/filetypes.c:102 ../src/filetypes.c:1783
 msgid "None"
 msgstr "ללא"
 
@@ -2576,11 +2576,11 @@ msgstr "ארעה שגיאה או שפרטי הקובץ אינם ניתנים ל�
 
 #: ../src/dialogs.c:1182 ../src/dialogs.c:1183 ../src/dialogs.c:1184
 #: ../src/dialogs.c:1190 ../src/dialogs.c:1191 ../src/dialogs.c:1192
-#: ../src/symbols.c:2156 ../src/symbols.c:2170 ../src/ui_utils.c:267
+#: ../src/symbols.c:2167 ../src/symbols.c:2181 ../src/ui_utils.c:267
 msgid "unknown"
 msgstr "לא ידוע"
 
-#: ../src/dialogs.c:1197 ../src/symbols.c:885
+#: ../src/dialogs.c:1197 ../src/symbols.c:896
 msgid "Properties"
 msgstr "מאפיינים"
 
@@ -3028,33 +3028,33 @@ msgstr "קובץ תצורה"
 msgid "Gettext translation file"
 msgstr "קובץ תרגום Gettext"
 
-#: ../src/filetypes.c:720
+#: ../src/filetypes.c:728
 msgid "_Programming Languages"
 msgstr "שפות ת_כנות"
 
-#: ../src/filetypes.c:721
+#: ../src/filetypes.c:729
 msgid "_Scripting Languages"
 msgstr "שפות _תסריט"
 
-#: ../src/filetypes.c:722
+#: ../src/filetypes.c:730
 msgid "_Markup Languages"
 msgstr "שפות _סימון"
 
-#: ../src/filetypes.c:723
+#: ../src/filetypes.c:731
 msgid "M_iscellaneous"
 msgstr "_שונות"
 
-#: ../src/filetypes.c:1461 ../src/win32.c:105
+#: ../src/filetypes.c:1469 ../src/win32.c:105
 msgid "All Source"
 msgstr "כל מקור"
 
 #. create meta file filter "All files"
-#: ../src/filetypes.c:1486 ../src/project.c:295 ../src/win32.c:95
+#: ../src/filetypes.c:1494 ../src/project.c:295 ../src/win32.c:95
 #: ../src/win32.c:140 ../src/win32.c:161 ../src/win32.c:166
 msgid "All files"
 msgstr "כל הקבצים"
 
-#: ../src/filetypes.c:1534
+#: ../src/filetypes.c:1542
 #, c-format
 msgid "Bad regex for filetype %s: %s"
 msgstr "ביטוי רגולרי לא תקין בסוג הקובץ %s: %s"
@@ -3122,7 +3122,7 @@ msgstr "קפיצה אל"
 msgid "View"
 msgstr "תצוגה"
 
-#: ../src/keybindings.c:236
+#: ../src/keybindings.c:236 ../src/symbols.c:813
 msgid "Document"
 msgstr "מסמך"
 
@@ -3848,11 +3848,11 @@ msgstr "בחירת צירוף-מקשים"
 msgid "Press the combination of the keys you want to use for \"%s\"."
 msgstr "לחץ על צירוף המקשים שברצונך להשתמש עבור \"%s\"."
 
-#: ../src/prefs.c:226 ../src/symbols.c:2278 ../src/sidebar.c:731
+#: ../src/prefs.c:226 ../src/symbols.c:2289 ../src/sidebar.c:731
 msgid "_Expand All"
 msgstr "הר_חב הכל"
 
-#: ../src/prefs.c:231 ../src/symbols.c:2283 ../src/sidebar.c:737
+#: ../src/prefs.c:231 ../src/symbols.c:2294 ../src/sidebar.c:737
 msgid "_Collapse All"
 msgstr "_כווץ הכל"
 
@@ -4344,19 +4344,19 @@ msgid "Appendix"
 msgstr "נספח"
 
 #: ../src/symbols.c:692 ../src/symbols.c:737 ../src/symbols.c:753
-#: ../src/symbols.c:764 ../src/symbols.c:851 ../src/symbols.c:862
-#: ../src/symbols.c:874 ../src/symbols.c:888 ../src/symbols.c:900
-#: ../src/symbols.c:912 ../src/symbols.c:927 ../src/symbols.c:956
-#: ../src/symbols.c:986
+#: ../src/symbols.c:764 ../src/symbols.c:862 ../src/symbols.c:873
+#: ../src/symbols.c:885 ../src/symbols.c:899 ../src/symbols.c:911
+#: ../src/symbols.c:923 ../src/symbols.c:938 ../src/symbols.c:967
+#: ../src/symbols.c:997
 msgid "Other"
 msgstr "אחר"
 
-#: ../src/symbols.c:698 ../src/symbols.c:920 ../src/symbols.c:965
+#: ../src/symbols.c:698 ../src/symbols.c:931 ../src/symbols.c:976
 msgid "Module"
 msgstr "מודול"
 
-#: ../src/symbols.c:699 ../src/symbols.c:847 ../src/symbols.c:898
-#: ../src/symbols.c:910 ../src/symbols.c:925 ../src/symbols.c:937
+#: ../src/symbols.c:699 ../src/symbols.c:858 ../src/symbols.c:909
+#: ../src/symbols.c:921 ../src/symbols.c:936 ../src/symbols.c:948
 msgid "Types"
 msgstr "סוג"
 
@@ -4366,9 +4366,9 @@ msgstr "סוג בנאי"
 
 #: ../src/symbols.c:701 ../src/symbols.c:723 ../src/symbols.c:744
 #: ../src/symbols.c:752 ../src/symbols.c:761 ../src/symbols.c:773
-#: ../src/symbols.c:782 ../src/symbols.c:835 ../src/symbols.c:884
-#: ../src/symbols.c:907 ../src/symbols.c:922 ../src/symbols.c:950
-#: ../src/symbols.c:973
+#: ../src/symbols.c:782 ../src/symbols.c:846 ../src/symbols.c:895
+#: ../src/symbols.c:918 ../src/symbols.c:933 ../src/symbols.c:961
+#: ../src/symbols.c:984
 msgid "Functions"
 msgstr "פונקציות"
 
@@ -4396,9 +4396,9 @@ msgstr "תאריך"
 msgid "Keys"
 msgstr "מקשים"
 
-#: ../src/symbols.c:724 ../src/symbols.c:775 ../src/symbols.c:836
-#: ../src/symbols.c:861 ../src/symbols.c:886 ../src/symbols.c:899
-#: ../src/symbols.c:908 ../src/symbols.c:924 ../src/symbols.c:985
+#: ../src/symbols.c:724 ../src/symbols.c:775 ../src/symbols.c:847
+#: ../src/symbols.c:872 ../src/symbols.c:897 ../src/symbols.c:910
+#: ../src/symbols.c:919 ../src/symbols.c:935 ../src/symbols.c:996
 msgid "Variables"
 msgstr "משתנים"
 
@@ -4418,28 +4418,28 @@ msgstr "תת-תת סעיף"
 msgid "Structures"
 msgstr "מבנים"
 
-#: ../src/symbols.c:760 ../src/symbols.c:844 ../src/symbols.c:869
-#: ../src/symbols.c:881
+#: ../src/symbols.c:760 ../src/symbols.c:855 ../src/symbols.c:880
+#: ../src/symbols.c:892
 msgid "Package"
 msgstr "חבילה"
 
-#: ../src/symbols.c:762 ../src/symbols.c:911 ../src/symbols.c:934
+#: ../src/symbols.c:762 ../src/symbols.c:922 ../src/symbols.c:945
 msgid "Labels"
 msgstr "תוויות"
 
-#: ../src/symbols.c:763 ../src/symbols.c:774 ../src/symbols.c:887
-#: ../src/symbols.c:909
+#: ../src/symbols.c:763 ../src/symbols.c:774 ../src/symbols.c:898
+#: ../src/symbols.c:920
 msgid "Constants"
 msgstr "קבועים"
 
-#: ../src/symbols.c:771 ../src/symbols.c:870 ../src/symbols.c:882
-#: ../src/symbols.c:895 ../src/symbols.c:921 ../src/symbols.c:972
+#: ../src/symbols.c:771 ../src/symbols.c:881 ../src/symbols.c:893
+#: ../src/symbols.c:906 ../src/symbols.c:932 ../src/symbols.c:983
 msgid "Interfaces"
 msgstr "ממשקים"
 
-#: ../src/symbols.c:772 ../src/symbols.c:793 ../src/symbols.c:814
-#: ../src/symbols.c:824 ../src/symbols.c:833 ../src/symbols.c:871
-#: ../src/symbols.c:883 ../src/symbols.c:896 ../src/symbols.c:971
+#: ../src/symbols.c:772 ../src/symbols.c:793 ../src/symbols.c:825
+#: ../src/symbols.c:835 ../src/symbols.c:844 ../src/symbols.c:882
+#: ../src/symbols.c:894 ../src/symbols.c:907 ../src/symbols.c:982
 msgid "Classes"
 msgstr "מחלקות"
 
@@ -4467,118 +4467,134 @@ msgstr "ID Selectors"
 msgid "Type Selectors"
 msgstr "Type Selectors"
 
-#: ../src/symbols.c:813 ../src/symbols.c:859
+#: ../src/symbols.c:814
+msgid "Section Level 1"
+msgstr "בחירה רמה 1"
+
+#: ../src/symbols.c:815
+msgid "Section Level 2"
+msgstr "בחירה רמה 2"
+
+#: ../src/symbols.c:816
+msgid "Section Level 3"
+msgstr "בחירה רמה 3"
+
+#: ../src/symbols.c:817
+msgid "Section Level 4"
+msgstr "בחירה רמה 4"
+
+#: ../src/symbols.c:824 ../src/symbols.c:870
 msgid "Modules"
 msgstr "מודולים"
 
-#: ../src/symbols.c:815
+#: ../src/symbols.c:826
 msgid "Singletons"
 msgstr "אותות"
 
-#: ../src/symbols.c:816 ../src/symbols.c:825 ../src/symbols.c:834
-#: ../src/symbols.c:872 ../src/symbols.c:897
+#: ../src/symbols.c:827 ../src/symbols.c:836 ../src/symbols.c:845
+#: ../src/symbols.c:883 ../src/symbols.c:908
 msgid "Methods"
 msgstr "שגרות"
 
-#: ../src/symbols.c:823 ../src/symbols.c:968
+#: ../src/symbols.c:834 ../src/symbols.c:979
 msgid "Namespaces"
 msgstr "מרחבי שם"
 
-#: ../src/symbols.c:826 ../src/symbols.c:951
+#: ../src/symbols.c:837 ../src/symbols.c:962
 msgid "Procedures"
 msgstr "פרוצדורה"
 
-#: ../src/symbols.c:837
+#: ../src/symbols.c:848
 msgid "Imports"
 msgstr "יִבּוא"
 
-#: ../src/symbols.c:845
+#: ../src/symbols.c:856
 msgid "Entities"
 msgstr "ישויות"
 
-#: ../src/symbols.c:846
+#: ../src/symbols.c:857
 msgid "Architectures"
 msgstr "ארכיטקטורות"
 
-#: ../src/symbols.c:848
+#: ../src/symbols.c:859
 msgid "Functions / Procedures"
 msgstr "פונקציות/שגרות"
 
-#: ../src/symbols.c:849
+#: ../src/symbols.c:860
 msgid "Variables / Signals"
 msgstr "משתנים/אותות"
 
-#: ../src/symbols.c:850
+#: ../src/symbols.c:861
 msgid "Processes / Blocks / Components"
 msgstr "תהליכים / בלוקים / רכיבים"
 
-#: ../src/symbols.c:858
+#: ../src/symbols.c:869
 msgid "Events"
 msgstr "אירועים"
 
-#: ../src/symbols.c:860
+#: ../src/symbols.c:871
 msgid "Functions / Tasks"
 msgstr "פונקציות/משימות"
 
-#: ../src/symbols.c:873 ../src/symbols.c:974
+#: ../src/symbols.c:884 ../src/symbols.c:985
 msgid "Members"
 msgstr "משתמשים"
 
-#: ../src/symbols.c:923
+#: ../src/symbols.c:934
 msgid "Subroutines"
 msgstr "שגרות"
 
-#: ../src/symbols.c:926
+#: ../src/symbols.c:937
 msgid "Blocks"
 msgstr "בלוקים"
 
-#: ../src/symbols.c:935 ../src/symbols.c:944 ../src/symbols.c:982
+#: ../src/symbols.c:946 ../src/symbols.c:955 ../src/symbols.c:993
 msgid "Macros"
 msgstr "הגדרות מאקרו"
 
-#: ../src/symbols.c:936
+#: ../src/symbols.c:947
 msgid "Defines"
 msgstr "הגדרות Define"
 
-#: ../src/symbols.c:943
+#: ../src/symbols.c:954
 msgid "Targets"
 msgstr "מטרות"
 
-#: ../src/symbols.c:952
+#: ../src/symbols.c:963
 msgid "Indexes"
 msgstr "אינדקסים"
 
-#: ../src/symbols.c:953
+#: ../src/symbols.c:964
 msgid "Tables"
 msgstr "לוחות"
 
-#: ../src/symbols.c:954
+#: ../src/symbols.c:965
 msgid "Triggers"
 msgstr "Triggers"
 
-#: ../src/symbols.c:955
+#: ../src/symbols.c:966
 msgid "Views"
 msgstr "תצוגות"
 
-#: ../src/symbols.c:975
+#: ../src/symbols.c:986
 msgid "Structs"
 msgstr "מבנים"
 
-#: ../src/symbols.c:976
+#: ../src/symbols.c:987
 msgid "Typedefs / Enums"
 msgstr "Typedefs / Enums"
 
-#: ../src/symbols.c:1724
+#: ../src/symbols.c:1735
 #, c-format
 msgid "Unknown filetype extension for \"%s\".\n"
 msgstr "סיומת הקובץ \"%s\" לא מוכרת.\n"
 
-#: ../src/symbols.c:1747
+#: ../src/symbols.c:1758
 #, c-format
 msgid "Failed to create tags file, perhaps because no tags were found.\n"
 msgstr "נכשל ניסיון יצירת תגיות לקובץ, אולי לא נמצאו תגיות.\n"
 
-#: ../src/symbols.c:1754
+#: ../src/symbols.c:1765
 #, c-format
 msgid ""
 "Usage: %s -g <Tag File> <File list>\n"
@@ -4587,7 +4603,7 @@ msgstr ""
 "השתמש: %s -g <קובץ תג> <רשימת קבצים>\n"
 "\n"
 
-#: ../src/symbols.c:1755
+#: ../src/symbols.c:1766
 #, c-format
 msgid ""
 "Example:\n"
@@ -4598,40 +4614,40 @@ msgstr ""
 "CFLAGS=`pkg-config gtk+-2.0 --cflags` %s -g gtk2.c.tags /usr/include/gtk-2.0/"
 "gtk/gtk.h\n"
 
-#: ../src/symbols.c:1769
+#: ../src/symbols.c:1780
 msgid "Load Tags"
 msgstr "טעינת תגיות"
 
-#: ../src/symbols.c:1776
+#: ../src/symbols.c:1787
 msgid "Geany tag files (*.*.tags)"
 msgstr "‏Geany קָבְצי תג (‎*.*.tags)"
 
 #. For translators: the first wildcard is the filetype, the second the filename
-#: ../src/symbols.c:1796
+#: ../src/symbols.c:1807
 #, c-format
 msgid "Loaded %s tags file '%s'."
 msgstr "טעינת %s קובץ תג '%s'."
 
-#: ../src/symbols.c:1799
+#: ../src/symbols.c:1810
 #, c-format
 msgid "Could not load tags file '%s'."
 msgstr "לא ניתן לטעון את קובץ התגיות '%s'."
 
-#: ../src/symbols.c:1939
+#: ../src/symbols.c:1950
 #, c-format
 msgid "Forward declaration \"%s\" not found."
 msgstr "לא נמצאה הצהרה קודמת של \"%s\"."
 
-#: ../src/symbols.c:1941
+#: ../src/symbols.c:1952
 #, c-format
 msgid "Definition of \"%s\" not found."
 msgstr "לא נמצאה הגדרה קודמת של \"%s\"."
 
-#: ../src/symbols.c:2293
+#: ../src/symbols.c:2304
 msgid "Sort by _Name"
 msgstr "מיין ל_פי שם"
 
-#: ../src/symbols.c:2300
+#: ../src/symbols.c:2311
 msgid "Sort by _Appearance"
 msgstr "מיין ל_פי סדר הופעה"
 
@@ -5012,15 +5028,15 @@ msgid ""
 "another one."
 msgstr "נכשלה הפקודה המוגדרת בדפדפן. אנא תקן תקלה זו."
 
-#: ../src/utils.c:366
+#: ../src/utils.c:374
 msgid "Win (CRLF)"
 msgstr "Win (CRLF)"
 
-#: ../src/utils.c:367
+#: ../src/utils.c:375
 msgid "Mac (CR)"
 msgstr "Mac (CR)"
 
-#: ../src/utils.c:368
+#: ../src/utils.c:376
 msgid "Unix (LF)"
 msgstr "Unix (LF)"
 
