@@ -998,25 +998,30 @@ static GPid build_run_cmd(GeanyDocument *doc, guint cmdindex)
 #endif
 	{
 		gchar *locale_term_cmd = NULL;
-		gchar **term_argv = NULL;
-		guint term_argv_len, i;
+		gint argv_len, i;
 		gchar **argv = NULL;
 
 		/* get the terminal path */
 		locale_term_cmd = utils_get_locale_from_utf8(tool_prefs.term_cmd);
 		/* split the term_cmd, so arguments will work too */
-		term_argv = g_strsplit(locale_term_cmd, " ", -1);
-		term_argv_len = g_strv_length(term_argv);
+		if (!g_shell_parse_argv(locale_term_cmd, &argv_len, &argv, NULL))
+		{
+			ui_set_statusbar(TRUE,
+				_("Could not parse terminal command \"%s\" "
+					"(check Terminal tool setting in Preferences)"), tool_prefs.term_cmd);
+			run_info[cmdindex].pid = (GPid) 1;
+			goto free_strings;
+		}
 
 		/* check that terminal exists (to prevent misleading error messages) */
-		if (term_argv[0] != NULL)
+		if (argv[0] != NULL)
 		{
-			gchar *tmp = term_argv[0];
+			gchar *tmp = argv[0];
 			/* g_find_program_in_path checks whether tmp exists and is executable */
-			term_argv[0] = g_find_program_in_path(tmp);
+			argv[0] = g_find_program_in_path(tmp);
 			g_free(tmp);
 		}
-		if (term_argv[0] == NULL)
+		if (argv[0] == NULL)
 		{
 			ui_set_statusbar(TRUE,
 				_("Could not find terminal \"%s\" "
@@ -1025,28 +1030,10 @@ static GPid build_run_cmd(GeanyDocument *doc, guint cmdindex)
 			goto free_strings;
 		}
 
-		argv = g_new0(gchar *, term_argv_len + 3);
-		for (i = 0; i < term_argv_len; i++)
+		for (i = 0; i < argv_len; i++)
 		{
-			argv[i] = g_strdup(term_argv[i]);
+			utils_str_replace_all(&(argv[i]), "%c", RUN_SCRIPT_CMD);
 		}
-#ifdef G_OS_WIN32
-		/* command line arguments only for cmd.exe */
-		if (strstr(argv[0], "cmd.exe") != NULL)
-		{
-			argv[term_argv_len] = g_strdup("/Q /C");
-			argv[term_argv_len + 1] = g_strdup(RUN_SCRIPT_CMD);
-		}
-		else
-		{
-			argv[term_argv_len] = g_strdup(RUN_SCRIPT_CMD);
-			argv[term_argv_len + 1] = NULL;
-		}
-#else
-		argv[term_argv_len   ]  = g_strdup("-e");
-		argv[term_argv_len + 1] = g_strconcat("/bin/sh ", RUN_SCRIPT_CMD, NULL);
-#endif
-		argv[term_argv_len + 2] = NULL;
 
 		if (! g_spawn_async(working_dir, argv, NULL, G_SPAWN_DO_NOT_REAP_CHILD,
 							NULL, NULL, &(run_info[cmdindex].pid), &error))
@@ -1067,7 +1054,6 @@ static GPid build_run_cmd(GeanyDocument *doc, guint cmdindex)
 		}
 		free_strings:
 		g_strfreev(argv);
-		g_strfreev(term_argv);
 		g_free(locale_term_cmd);
 	}
 
