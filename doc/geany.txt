@@ -2346,7 +2346,8 @@ Tool paths
 ``````````
 
 Terminal
-    The location of your terminal executable.
+    The command to execute a script in a terminal.  If %c exists in the
+    command it is substituted by the run script name.
 
 Browser
     The location of your web browser executable.
