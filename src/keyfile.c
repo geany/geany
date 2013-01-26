@@ -891,7 +891,7 @@ static void load_dialog_prefs(GKeyFile *config)
 		{
 			tmp_string = cmd;
 #ifdef G_OS_WIN32
-			if (g_strstr(cmd, "cmd.exe")
+			if (strstr(cmd, "cmd.exe"))
 				cmd = g_strconcat(cmd, " /Q /C %c", NULL)
 			else
 				cmd = g_strconcat(cmd, " %c", NULL);
