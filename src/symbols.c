@@ -543,21 +543,13 @@ static void init_tag_iters(void)
 static GdkPixbuf *get_tag_icon(const gchar *icon_name)
 {
 	static GtkIconTheme *icon_theme = NULL;
-	static gint x, y;
+	static gint x = -1;
 
-	if (G_UNLIKELY(icon_theme == NULL))
+	if (G_UNLIKELY(x < 0))
 	{
-#ifndef G_OS_WIN32
-		gchar *path = g_build_filename(GEANY_DATADIR, "icons", NULL);
-#endif
-		gtk_icon_size_lookup(GTK_ICON_SIZE_MENU, &x, &y);
+		gint dummy;
 		icon_theme = gtk_icon_theme_get_default();
-#ifdef G_OS_WIN32
-		gtk_icon_theme_append_search_path(icon_theme, "share\\icons");
-#else
-		gtk_icon_theme_append_search_path(icon_theme, path);
-		g_free(path);
-#endif
+		gtk_icon_size_lookup(GTK_ICON_SIZE_MENU, &x, &dummy);
 	}
 	return gtk_icon_theme_load_icon(icon_theme, icon_name, x, 0, NULL);
 }
@@ -815,6 +807,17 @@ static void add_top_level_items(GeanyDocument *doc)
 				NULL);
 			break;
 		}
+		case GEANY_FILETYPES_ASCIIDOC:
+		{
+			tag_list_add_groups(tag_store,
+				&(tv_iters.tag_namespace), _("Document"), NULL,
+				&(tv_iters.tag_member), _("Section Level 1"), NULL,
+				&(tv_iters.tag_macro), _("Section Level 2"), NULL,
+				&(tv_iters.tag_variable), _("Section Level 3"), NULL,
+				&(tv_iters.tag_struct), _("Section Level 4"), NULL,
+				NULL);
+			break;
+		}
 		case GEANY_FILETYPES_RUBY:
 		{
 			tag_list_add_groups(tag_store,
@@ -1028,6 +1031,9 @@ static const gchar *get_symbol_name(GeanyDocument *doc, const TMTag *tag, gboole
 	if (utils_str_equal(doc->encoding, "UTF-8") ||
 		utils_str_equal(doc->encoding, "None"))
 		doc_is_utf8 = TRUE;
+	else /* normally the tags will always be in UTF-8 since we parse from our buffer, but a
+		  * plugin might have called tm_source_file_update(), so check to be sure */
+		doc_is_utf8 = g_utf8_validate(tag->name, -1, NULL);
 
 	if (! doc_is_utf8)
 		utf8_name = encodings_convert_to_utf8_from_charset(tag->name,

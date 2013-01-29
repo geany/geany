@@ -170,14 +170,6 @@ GeanyUIEditorFeatures;
 #define GEANY_STOCK_CLOSE_ALL "geany-close-all"
 #define GEANY_STOCK_BUILD "geany-build"
 
-enum
-{
-	GEANY_IMAGE_LOGO,
-	GEANY_IMAGE_SAVE_ALL,
-	GEANY_IMAGE_CLOSE_ALL,
-	GEANY_IMAGE_BUILD
-};
-
 
 void ui_widget_show_hide(GtkWidget *widget, gboolean show);
 
@@ -305,11 +297,6 @@ void ui_sidebar_show_hide(void);
 void ui_document_show_hide(GeanyDocument *doc);
 
 void ui_set_search_entry_background(GtkWidget *widget, gboolean success);
-
-
-GdkPixbuf *ui_new_pixbuf_from_inline(gint img);
-
-GtkWidget *ui_new_image_from_inline(gint img);
 
 
 void ui_create_recent_menus(void);

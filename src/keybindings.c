@@ -301,10 +301,9 @@ static void init_default_kb(void)
 	add_kb(group, GEANY_KEYS_EDITOR_DELETELINETOEND, NULL,
 		GDK_Delete, GDK_SHIFT_MASK | GDK_CONTROL_MASK, "edit_deletelinetoend",
 		_("Delete to line end"), NULL);
-	/* transpose may fit better in format group */
+	/* Note: transpose may fit better in format group, but that would break the API */
 	add_kb(group, GEANY_KEYS_EDITOR_TRANSPOSELINE, NULL,
-		0, 0, "edit_transposeline", _("_Transpose Current Line"),
-		"transpose_current_line1");
+		0, 0, "edit_transposeline", _("_Transpose Current Line"), NULL);
 	add_kb(group, GEANY_KEYS_EDITOR_SCROLLTOLINE, NULL,
 		GDK_l, GDK_SHIFT_MASK | GDK_CONTROL_MASK, "edit_scrolltoline", _("Scroll to current line"), NULL);
 	add_kb(group, GEANY_KEYS_EDITOR_SCROLLLINEUP, NULL,
@@ -328,9 +327,11 @@ static void init_default_kb(void)
 	add_kb(group, GEANY_KEYS_EDITOR_WORDPARTCOMPLETION, NULL,
 		GDK_Tab, 0, "edit_wordpartcompletion", _("Word part completion"), NULL);
 	add_kb(group, GEANY_KEYS_EDITOR_MOVELINEUP, NULL,
-		GDK_Page_Up, GDK_MOD1_MASK, "edit_movelineup", _("Move line(s) up"), NULL);
+		GDK_Page_Up, GDK_MOD1_MASK, "edit_movelineup",
+		_("Move line(s) up"), "move_lines_up1");
 	add_kb(group, GEANY_KEYS_EDITOR_MOVELINEDOWN, NULL,
-		GDK_Page_Down, GDK_MOD1_MASK, "edit_movelinedown", _("Move line(s) down"), NULL);
+		GDK_Page_Down, GDK_MOD1_MASK, "edit_movelinedown",
+		_("Move line(s) down"), "move_lines_down1");
 
 	group = keybindings_get_core_group(GEANY_KEY_GROUP_CLIPBOARD);
 
@@ -561,6 +562,8 @@ static void init_default_kb(void)
 		0, 0, "menu_linewrap", _("Toggle Line wrapping"), "menu_line_wrapping1");
 	add_kb(group, GEANY_KEYS_DOCUMENT_LINEBREAK, NULL,
 		0, 0, "menu_linebreak", _("Toggle Line breaking"), "line_breaking1");
+	add_kb(group, GEANY_KEYS_DOCUMENT_CLONE, NULL,
+		0, 0, "menu_clone", _("_Clone"), "clone1");
 	add_kb(group, GEANY_KEYS_DOCUMENT_REPLACETABS, NULL,
 		0, 0, "menu_replacetabs", _("Replace tabs by space"), "menu_replace_tabs");
 	add_kb(group, GEANY_KEYS_DOCUMENT_REPLACESPACES, NULL,
@@ -1426,14 +1429,20 @@ static gboolean cb_func_search_action(guint key_id)
 		case GEANY_KEYS_SEARCH_MARKALL:
 		{
 			gchar *text = get_current_word_or_sel(doc, TRUE);
+			gint pos = sci_get_current_position(sci);
+
+			/* clear existing search indicators instead if next to cursor */
+			if (scintilla_send_message(sci, SCI_INDICATORVALUEAT,
+					GEANY_INDICATOR_SEARCH, pos) ||
+				scintilla_send_message(sci, SCI_INDICATORVALUEAT,
+					GEANY_INDICATOR_SEARCH, MAX(pos - 1, 0)))
+				text = NULL;
 
 			if (sci_has_selection(sci))
 				search_mark_all(doc, text, SCFIND_MATCHCASE);
 			else
-			{
-				/* clears markers if text is null */
 				search_mark_all(doc, text, SCFIND_MATCHCASE | SCFIND_WHOLEWORD);
-			}
+
 			g_free(text);
 			break;
 		}
@@ -2353,6 +2362,9 @@ static gboolean cb_func_document_action(guint key_id)
 		case GEANY_KEYS_DOCUMENT_LINEWRAP:
 			on_line_wrapping1_toggled(NULL, NULL);
 			ui_document_show_hide(doc);
+			break;
+		case GEANY_KEYS_DOCUMENT_CLONE:
+			document_clone(doc);
 			break;
 		case GEANY_KEYS_DOCUMENT_RELOADTAGLIST:
 			document_update_tags(doc);

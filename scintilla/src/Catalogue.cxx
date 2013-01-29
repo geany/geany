@@ -109,7 +109,7 @@ int Scintilla_LinkLexers() {
 	LINK_LEXER(lmOctave);
 	LINK_LEXER(lmPascal);
 	LINK_LEXER(lmPerl);
-	LINK_LEXER(lmPo);
+	LINK_LEXER(lmPO);
 	LINK_LEXER(lmProps);
 	LINK_LEXER(lmPython);
 	LINK_LEXER(lmR);

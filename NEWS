@@ -7,7 +7,8 @@ Geany 1.23 (unreleased)
     * Fix too aggressive scope caching (#2142789, #2667917, #2868850).
 
     Editor
-    * Update Scintilla to version 3.2.2 (#2808638, #3540469).
+    * Update Scintilla to version 3.2.3 (#2808638, #2909124, #3094431,
+      #3233160, #3540469).
 
     Search
     * 'Mark All' now also uses the fully-featured PCRE engine (#3564132).

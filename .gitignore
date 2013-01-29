@@ -46,7 +46,9 @@ Makefile.in
 /localwin32.mk
 /.lock-wscript
 /ltmain.sh
-/m4/
+/m4/lt*.m4
+/m4/intltool.m4
+/m4/libtool.m4
 /make_deb.sh
 /missing
 /mkinstalldirs

@@ -14,7 +14,6 @@ src/geany.h
 src/geanymenubuttonaction.c
 src/geanyentryaction.c
 src/highlighting.c
-src/images.c
 src/keybindings.c
 src/keyfile.c
 src/log.c

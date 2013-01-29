@@ -64,6 +64,7 @@ ctags_sources = set([
     'tagmanager/ctags/args.c',
     'tagmanager/ctags/abc.c',
     'tagmanager/ctags/actionscript.c',
+    'tagmanager/ctags/asciidoc.c',
     'tagmanager/ctags/asm.c',
     'tagmanager/ctags/basic.c',
     'tagmanager/ctags/c.c',
@@ -133,6 +134,44 @@ geany_sources = set([
     'src/symbols.c',
     'src/templates.c', 'src/toolbar.c', 'src/tools.c', 'src/sidebar.c',
     'src/ui_utils.c', 'src/utils.c'])
+
+geany_icons = {
+    'hicolor/16x16/apps':       ['16x16/classviewer-class.png',
+                                 '16x16/classviewer-macro.png',
+                                 '16x16/classviewer-member.png',
+                                 '16x16/classviewer-method.png',
+                                 '16x16/classviewer-namespace.png',
+                                 '16x16/classviewer-other.png',
+                                 '16x16/classviewer-struct.png',
+                                 '16x16/classviewer-var.png',
+                                 '16x16/geany.png'],
+    'hicolor/16x16/actions':    ['16x16/geany-build.png',
+                                 '16x16/geany-close-all.png',
+                                 '16x16/geany-save-all.png'],
+    'hicolor/24x24/actions':    ['24x24/geany-build.png',
+                                 '24x24/geany-close-all.png',
+                                 '24x24/geany-save-all.png'],
+    'hicolor/32x32/actions':    ['32x32/geany-build.png',
+                                 '32x32/geany-close-all.png',
+                                 '32x32/geany-save-all.png'],
+    'hicolor/48x48/actions':    ['48x48/geany-build.png',
+                                 '48x48/geany-close-all.png',
+                                 '48x48/geany-save-all.png'],
+    'hicolor/48x48/apps':       ['48x48/geany.png'],
+    'hicolor/scalable/apps':    ['scalable/geany.svg'],
+    'hicolor/scalable/actions': ['scalable/geany-build.svg',
+                                 'scalable/geany-close-all.svg',
+                                 'scalable/geany-save-all.svg'],
+    'Tango/16x16/actions':      ['tango/16x16/geany-save-all.png'],
+    'Tango/24x24/actions':      ['tango/24x24/geany-save-all.png'],
+    'Tango/32x32/actions':      ['tango/32x32/geany-save-all.png'],
+    'Tango/48x48/actions':      ['tango/48x48/geany-save-all.png'],
+    'Tango/scalable/actions':   ['tango/scalable/geany-save-all.svg']
+}
+geany_icons_indexes = {
+    'hicolor':  ['index.theme'],
+    'Tango':    ['tango/index.theme']
+}
 
 
 def configure(conf):
@@ -495,16 +534,13 @@ def build(bld):
     template_dest = '${DATADIR}/%s/templates' % data_dir
     bld.install_files(template_dest, start_dir.ant_glob('**/*'), cwd=start_dir, relative_trick=True)
     # Icons
-    icon_dest = '${PREFIX}/share/icons' if is_win32 else '${DATADIR}/icons/hicolor/16x16/apps'
-    start_dir = bld.path.find_dir('icons/16x16')
-    bld.install_files(icon_dest, start_dir.ant_glob('*.png'), cwd=start_dir)
-    if not is_win32:
-        start_dir = bld.path.find_dir('icons/48x48')
-        icon_dest = '${DATADIR}/icons/hicolor/48x48/apps'
-        bld.install_files(icon_dest, start_dir.ant_glob('*.png'), cwd=start_dir)
-        start_dir = bld.path.find_dir('icons/scalable')
-        scalable_dest = '${DATADIR}/icons/hicolor/scalable/apps'
-        bld.install_files(scalable_dest, start_dir.ant_glob('*.svg'), cwd=start_dir)
+    for dest, srcs in geany_icons.items():
+        dest_dir = os.path.join('${PREFIX}/share/icons' if is_win32 else '${DATADIR}/icons', dest)
+        bld.install_files(dest_dir, srcs, cwd=bld.path.find_dir('icons'))
+    # install theme indexes on Windows
+    if is_win32:
+        for dest, srcs in geany_icons_indexes.items():
+            bld.install_files(os.path.join('${PREFIX}/share/icons', dest), srcs, cwd=bld.path.find_dir('icons'))
 
 
 def distclean(ctx):
@@ -545,15 +581,16 @@ def _post_install(ctx):
     is_win32 = _target_is_win32(ctx)
     if is_win32:
         return
-    theme_dir = Utils.subst_vars('${DATADIR}/icons/hicolor', ctx.env)
-    icon_cache_updated = False
-    if not ctx.options.destdir:
-        ctx.exec_command('gtk-update-icon-cache -q -f -t %s' % theme_dir)
-        Logs.pprint('GREEN', 'GTK icon cache updated.')
-        icon_cache_updated = True
-    if not icon_cache_updated:
-        Logs.pprint('YELLOW', 'Icon cache not updated. After install, run this:')
-        Logs.pprint('YELLOW', 'gtk-update-icon-cache -q -f -t %s' % theme_dir)
+    for d in 'hicolor', 'Tango':
+        theme_dir = Utils.subst_vars('${DATADIR}/icons/' + d, ctx.env)
+        icon_cache_updated = False
+        if not ctx.options.destdir:
+            ctx.exec_command('gtk-update-icon-cache -q -f -t %s' % theme_dir)
+            Logs.pprint('GREEN', 'GTK icon cache updated.')
+            icon_cache_updated = True
+        if not icon_cache_updated:
+            Logs.pprint('YELLOW', 'Icon cache not updated. After install, run this:')
+            Logs.pprint('YELLOW', 'gtk-update-icon-cache -q -f -t %s' % theme_dir)
 
 
 def updatepo(ctx):

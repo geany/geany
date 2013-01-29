@@ -1781,9 +1781,8 @@ static gboolean search_read_io_stderr(GIOChannel *source, GIOCondition condition
 
 static void search_close_pid(GPid child_pid, gint status, gpointer user_data)
 {
-	/* TODO: port this also to Windows API */
-#ifdef G_OS_UNIX
 	const gchar *msg = _("Search failed.");
+#ifdef G_OS_UNIX
 	gint exit_status = 1;
 
 	if (WIFEXITED(status))
@@ -1795,6 +1794,9 @@ static void search_close_pid(GPid child_pid, gint status, gpointer user_data)
 		exit_status = -1;
 		g_warning("Find in Files: The command failed unexpectedly (signal received).");
 	}
+#else
+	gint exit_status = status;
+#endif
 
 	switch (exit_status)
 	{
@@ -1817,8 +1819,6 @@ static void search_close_pid(GPid child_pid, gint status, gpointer user_data)
 			ui_set_statusbar(FALSE, "%s", msg);
 			break;
 	}
-#endif
-
 	utils_beep();
 	g_spawn_close_pid(child_pid);
 	ui_progress_bar_stop();
@@ -1989,7 +1989,9 @@ gint search_find_text(ScintillaObject *sci, gint flags, struct Sci_TextToFind *t
 	pos = ttf->chrg.cpMin;
 	ret = find_regex(sci, pos, regex);
 
-	if (ret >= 0 && ret < ttf->chrg.cpMax)
+	if (ret >= ttf->chrg.cpMax)
+		ret = -1;
+	else if (ret >= 0)
 	{
 		ttf->chrgText.cpMin = regex_matches[0].start;
 		ttf->chrgText.cpMax = regex_matches[0].end;
