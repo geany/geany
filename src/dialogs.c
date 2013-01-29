@@ -823,7 +823,7 @@ gboolean dialogs_show_unsaved_file(GeanyDocument *doc)
 #ifndef G_OS_WIN32
 /* Use GtkFontChooserDialog on GTK3.2 for consistency, and because
  * GtkFontSelectionDialog is somewhat broken on 3.4 */
-#if GTK_CHECK_VERSION(3, 0, 0)
+#if GTK_CHECK_VERSION(3, 2, 0)
 #	undef GTK_FONT_SELECTION_DIALOG
 #	define GTK_FONT_SELECTION_DIALOG				GTK_FONT_CHOOSER_DIALOG
 
