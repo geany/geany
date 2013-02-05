@@ -6,7 +6,7 @@
 *   GNU General Public License.
 *
 *   This module contains functions for generating tags for Matlab scripts.
-*   The tags 'function' and 'struct' are parsed.
+*   The tags 'classdef', 'function' and 'struct' are parsed.
 *	Author Roland Baudin <roland65@free.fr>
 */
 
@@ -25,12 +25,14 @@
 *   DATA DEFINITIONS
 */
 typedef enum {
-    K_FUNCTION,
+	K_CLASS,
+	K_FUNCTION,
 	K_STRUCT
 } MatlabKind;
 
 static kindOption MatlabKinds [] = {
-    { TRUE, 'f', "function", "Functions" },
+	{ TRUE, 'c', "class", "Classes"},
+	{ TRUE, 'f', "function", "Functions" },
 	{ TRUE, 's', "struct", "Structures" },
 };
 
@@ -55,11 +57,34 @@ static void findMatlabTags (void)
 		for (ic = 0  ;  line [ic] != '\0'  &&  line [ic]!='%'  ;  ++ic)
 			;
 
-		/* function tag */
-
 		/* read first word */
 		for (i = 0  ;  line [i] != '\0'  &&  ! isspace (line [i])  ;  ++i)
 			;
+
+		/* class tag */
+
+		if (strncmp ((const char *) line, "classdef", (size_t) 8) == 0)
+		{
+			const unsigned char *cp = line + i;
+			const unsigned char *ptr = cp;
+
+			while (isspace ((int) *cp))
+				++cp;
+
+			/* identifier is the right most part of the line after
+			 * 'classdef' and before '%' */
+			while (*cp != '\0' && *cp != '%')
+			{
+				vStringPut (name, (int) *cp);
+				++cp;
+			}
+
+			vStringTerminate (name);
+			makeSimpleTag (name, MatlabKinds, K_CLASS);
+			vStringClear (name);
+		}
+
+		/* function tag */
 
 		if (strncmp ((const char *) line, "function", (size_t) 8) == 0)
 		{
