@@ -77,6 +77,7 @@ const gchar *translators[][2] = {
 	{ "sk", "Tomáš Vadina &lt;kyberdev@gmail.com&gt;" },
 	{ "sl", "Jože Klepec &lt;joze.klepec@siol.net&gt;"},
 	{ "sv", "Tony Mattsson &lt;superxorn@gmail.com&gt;" },
+	{ "sr", "Nikola Radovanovic &lt;cobisimo@gmail.com&gt;"},
 	{ "tr", "Gürkan Gür &lt;seqizz@gmail.com&gt;"},
 	{ "uk", "Boris Dibrov &lt;dibrov.bor@gmail.com&gt;" },
 	{ "vi_VN", "Clytie Siddall &lt;clytie@riverland.net.au&gt;" },
