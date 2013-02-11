@@ -1516,11 +1516,7 @@ void ui_combo_box_prepend_text_once(GtkComboBoxText *combo, const gchar *text)
  * document status. */
 void ui_update_tab_status(GeanyDocument *doc)
 {
-	const GdkColor *color = document_get_status_color(doc);
-
-	/* NULL color will reset to default */
-	gtk_widget_modify_fg(doc->priv->tab_label, GTK_STATE_NORMAL, color);
-	gtk_widget_modify_fg(doc->priv->tab_label, GTK_STATE_ACTIVE, color);
+	gtk_widget_set_name(doc->priv->tab_label, document_get_status_widget_class(doc));
 
 	sidebar_openfiles_update(doc);
 }
@@ -2553,7 +2549,6 @@ void ui_menu_add_document_items_sorted(GtkMenu *menu, GeanyDocument *active,
 	GCallback callback, GCompareFunc compare_func)
 {
 	GtkWidget *menu_item, *menu_item_label, *image;
-	const GdkColor *color;
 	GeanyDocument *doc;
 	guint i, len;
 	gchar *base_name, *label;
@@ -2586,10 +2581,8 @@ void ui_menu_add_document_items_sorted(GtkMenu *menu, GeanyDocument *active,
 		gtk_container_add(GTK_CONTAINER(menu), menu_item);
 		g_signal_connect(menu_item, "activate", callback, doc);
 
-		color = document_get_status_color(doc);
 		menu_item_label = gtk_bin_get_child(GTK_BIN(menu_item));
-		gtk_widget_modify_fg(menu_item_label, GTK_STATE_NORMAL, color);
-		gtk_widget_modify_fg(menu_item_label, GTK_STATE_ACTIVE, color);
+		gtk_widget_set_name(menu_item_label, document_get_status_widget_class(doc));
 
 		if (doc == active)
 		{
