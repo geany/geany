@@ -26,6 +26,7 @@
 #endif
 
 #include "geanyplugin.h"
+#include "gtkcompat.h"
 #include <string.h>
 
 
@@ -300,8 +301,8 @@ static void split_view(gboolean horizontal)
 	GtkWidget *parent = gtk_widget_get_parent(notebook);
 	GtkWidget *pane, *toolbar, *box;
 	GeanyDocument *doc = document_get_current();
-	gint width = notebook->allocation.width / 2;
-	gint height = notebook->allocation.height / 2;
+	gint width = gtk_widget_get_allocated_width(notebook) / 2;
+	gint height = gtk_widget_get_allocated_height(notebook) / 2;
 
 	g_return_if_fail(doc);
 	g_return_if_fail(edit_window.editor == NULL);

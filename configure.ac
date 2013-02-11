@@ -56,14 +56,26 @@ GEANY_CHECK_REVISION([dnl force debug mode for a SVN working copy
 					  CFLAGS="-g -DGEANY_DEBUG $CFLAGS"])
 
 
+AC_ARG_ENABLE([gtk3],
+		[AS_HELP_STRING([--enable-gtk3],
+						[compile with GTK3 support (experimental) [default=no]])],
+		[enable_gtk3=$enableval],
+		[enable_gtk3=no])
+
+AS_IF([test "x$enable_gtk3" = xyes],
+	  [gtk_package=gtk+-3.0
+	   gtk_min_version=3.0],
+	  [gtk_package=gtk+-2.0
+	   gtk_min_version=2.16])
+
 # GTK/GLib/GIO checks
-gtk_modules="gtk+-2.0 >= 2.16 glib-2.0 >= 2.20"
+gtk_modules="$gtk_package >= $gtk_min_version glib-2.0 >= 2.20"
 gtk_modules_private="gio-2.0 >= 2.20 gmodule-2.0"
 PKG_CHECK_MODULES([GTK], [$gtk_modules $gtk_modules_private])
 AC_SUBST([DEPENDENCIES], [$gtk_modules])
 AC_SUBST([GTK_CFLAGS])
 AC_SUBST([GTK_LIBS])
-GTK_VERSION=`$PKG_CONFIG --modversion gtk+-2.0`
+GTK_VERSION=`$PKG_CONFIG --modversion $gtk_package`
 GEANY_STATUS_ADD([Using GTK version], [${GTK_VERSION}])
 # GTHREAD checks
 gthread_modules="gthread-2.0"

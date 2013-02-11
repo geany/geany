@@ -55,6 +55,7 @@
 #include "build.h"
 #include "main.h"
 #include "project.h"
+#include "gtkcompat.h"
 
 
 enum
@@ -319,7 +320,7 @@ static GtkWidget *add_file_open_extra_widget(GtkWidget *dialog)
 					(GtkAttachOptions) (0), 4, 5);
 	/* the ebox is for the tooltip, because gtk_combo_box can't show tooltips */
 	filetype_ebox = gtk_event_box_new();
-	filetype_combo = gtk_combo_box_new_text();
+	filetype_combo = gtk_combo_box_text_new();
 	gtk_combo_box_set_wrap_width(GTK_COMBO_BOX(filetype_combo), 2);
 	gtk_widget_set_tooltip_text(filetype_ebox,
 		_("Explicitly defines a filetype for the file, if it would not be detected by filename extension.\nNote if you choose multiple files, they will all be opened with the chosen filetype."));
@@ -377,7 +378,7 @@ static GtkWidget *create_open_file_dialog(void)
 	gtk_file_chooser_set_extra_widget(GTK_FILE_CHOOSER(dialog), add_file_open_extra_widget(dialog));
 	filetype_combo = ui_lookup_widget(dialog, "filetype_combo");
 
-	gtk_combo_box_append_text(GTK_COMBO_BOX(filetype_combo), _("Detect by file extension"));
+	gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(filetype_combo), _("Detect by file extension"));
 	/* add FileFilters(start with "All Files") */
 	gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(dialog),
 				filetypes_create_file_filter(filetypes[GEANY_FILETYPES_NONE]));
@@ -390,7 +391,7 @@ static GtkWidget *create_open_file_dialog(void)
 
 		if (G_UNLIKELY(ft->id == GEANY_FILETYPES_NONE))
 			continue;
-		gtk_combo_box_append_text(GTK_COMBO_BOX(filetype_combo), ft->title);
+		gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(filetype_combo), ft->title);
 		gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(dialog), filetypes_create_file_filter(ft));
 	}
 	gtk_combo_box_set_active(GTK_COMBO_BOX(filetype_combo), 0);
@@ -820,6 +821,20 @@ gboolean dialogs_show_unsaved_file(GeanyDocument *doc)
 
 
 #ifndef G_OS_WIN32
+/* Use GtkFontChooserDialog on GTK3.2 for consistency, and because
+ * GtkFontSelectionDialog is somewhat broken on 3.4 */
+#if GTK_CHECK_VERSION(3, 0, 0)
+#	undef GTK_FONT_SELECTION_DIALOG
+#	define GTK_FONT_SELECTION_DIALOG				GTK_FONT_CHOOSER_DIALOG
+
+#	define gtk_font_selection_dialog_new(title) \
+		gtk_font_chooser_dialog_new((title), NULL)
+#	define gtk_font_selection_dialog_get_font_name(dlg) \
+		gtk_font_chooser_get_font(GTK_FONT_CHOOSER(dlg))
+#	define gtk_font_selection_dialog_set_font_name(dlg, font) \
+		gtk_font_chooser_set_font(GTK_FONT_CHOOSER(dlg), (font))
+#endif
+
 static void
 on_font_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 {
@@ -926,7 +941,7 @@ on_input_dialog_response(GtkDialog *dialog, gint response, GtkWidget *entry)
 		if (persistent)
 		{
 			GtkWidget *combo = (GtkWidget *) g_object_get_data(G_OBJECT(dialog), "combo");
-			ui_combo_box_add_to_history(GTK_COMBO_BOX_ENTRY(combo), str, 0);
+			ui_combo_box_add_to_history(GTK_COMBO_BOX_TEXT(combo), str, 0);
 		}
 		input_cb(str);
 	}
@@ -950,7 +965,7 @@ static void add_input_widgets(GtkWidget *dialog, GtkWidget *vbox,
 
 	if (persistent)	/* remember previous entry text in a combo box */
 	{
-		GtkWidget *combo = gtk_combo_box_entry_new_text();
+		GtkWidget *combo = gtk_combo_box_text_new_with_entry();
 
 		entry = gtk_bin_get_child(GTK_BIN(combo));
 		ui_entry_add_clear_icon(GTK_ENTRY(entry));
