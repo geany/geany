@@ -23,3 +23,14 @@
 #geany-search-entry-no-match:selected {
 	background-color: #771111;
 }
+
+/* document status colors */
+#geany-document-status-changed {
+	color: #ff0000;
+}
+#geany-document-status-disk-changed {
+	color: #ff7f00;
+}
+#geany-document-status-readonly {
+	color: #007f00;
+}
