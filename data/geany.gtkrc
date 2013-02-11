@@ -14,6 +14,7 @@ style "geany-monospace" {
 	font_name = "Monospace"
 }
 widget "GeanyDialogSearch.*.GtkEntry" style "geany-monospace"
+widget "GeanyDialogSearch.*.geany-search-entry-no-match" style "geany-monospace"
 
 # set red background for GtkEntries showing unmatched searches
 style "geany-search-entry-no-match-style" {
