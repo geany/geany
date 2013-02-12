@@ -355,7 +355,7 @@ extern void freeParserResources (void)
 */
 
 extern void processLanguageDefineOption (const char *const option,
-					 const char *const __unused__ parameter)
+					 const char *const UNUSED parameter)
 {
 #ifdef HAVE_REGEX
     if (parameter [0] == '\0')
