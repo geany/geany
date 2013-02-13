@@ -48,7 +48,7 @@ static void findMatlabTags (void)
 
     while ((line = fileReadLine ()) != NULL)
     {
-		int i, ic;
+		int wordlen, ic;
 
 		if (line [0] == '\0'  ||  line [0] == '%')
 			continue;
@@ -58,14 +58,14 @@ static void findMatlabTags (void)
 			;
 
 		/* read first word */
-		for (i = 0  ;  line [i] != '\0'  &&  ! isspace (line [i])  ;  ++i)
+		for (wordlen = 0  ;  line [wordlen] != '\0'  &&  ! isspace (line [wordlen])  ;  ++wordlen)
 			;
 
 		/* class tag */
 
-		if ((i == 8) && (strncmp ((const char *) line, "classdef", (size_t) 8) == 0))
+		if ((wordlen == 8) && (strncmp ((const char *) line, "classdef", (size_t) 8) == 0))
 		{
-			const unsigned char *cp = line + i;
+			const unsigned char *cp = line + wordlen;
 
 			while (isspace ((int) *cp))
 				++cp;
@@ -85,9 +85,9 @@ static void findMatlabTags (void)
 
 		/* function tag */
 
-		if ((i == 8) && (strncmp ((const char *) line, "function", (size_t) 8) == 0))
+		if ((wordlen == 8) && (strncmp ((const char *) line, "function", (size_t) 8) == 0))
 		{
-			const unsigned char *cp = line + i;
+			const unsigned char *cp = line + wordlen;
 			const unsigned char *ptr = cp;
 			boolean eq=FALSE;
 
