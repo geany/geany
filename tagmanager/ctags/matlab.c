@@ -72,7 +72,7 @@ static void findMatlabTags (void)
 
 			/* identifier is the right most part of the line after
 			 * 'classdef' and before '%' or ';' */
-			while (*cp != '\0' && *cp != '%' && *cp != ';')
+			while (*cp != '\0' && *cp != '%' && *cp != ';' && *cp != ',')
 			{
 				vStringPut (name, (int) *cp);
 				++cp;
@@ -123,7 +123,7 @@ static void findMatlabTags (void)
 			 * 'function' and before '%' */
 			else
 			{
-				while (*cp != '\0' && *cp != '%' && *cp != ';')
+				while (*cp != '\0' && *cp != '%' && *cp != ';' && *cp != ',')
 				{
 					vStringPut (name, (int) *cp);
 					++cp;
