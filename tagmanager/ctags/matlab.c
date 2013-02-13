@@ -66,7 +66,6 @@ static void findMatlabTags (void)
 		if ((i == 8) && (strncmp ((const char *) line, "classdef", (size_t) 8) == 0))
 		{
 			const unsigned char *cp = line + i;
-			const unsigned char *ptr = cp;
 
 			while (isspace ((int) *cp))
 				++cp;
