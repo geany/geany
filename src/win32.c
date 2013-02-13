@@ -757,11 +757,54 @@ gboolean win32_get_exit_status(GPid child_pid)
 }
 
 
+static FILE *open_std_handle(DWORD handle, const char *mode)
+{
+	HANDLE lStdHandle;
+	int hConHandle;
+	FILE *fp;
+
+	lStdHandle = GetStdHandle(handle);
+	if (lStdHandle == INVALID_HANDLE_VALUE)
+	{
+		gchar *err = g_win32_error_message(GetLastError());
+		g_warning("GetStdHandle(%ld) failed: %s", (long)handle, err);
+		g_free(err);
+		return NULL;
+	}
+	hConHandle = _open_osfhandle((long)lStdHandle, _O_TEXT);
+	if (hConHandle == -1)
+	{
+		gchar *err = g_win32_error_message(GetLastError());
+		g_warning("_open_osfhandle(%ld, _O_TEXT) failed: %s", (long)lStdHandle, err);
+		g_free(err);
+		return NULL;
+	}
+	fp = _fdopen(hConHandle, mode);
+	if (! fp)
+	{
+		gchar *err = g_win32_error_message(GetLastError());
+		g_warning("_fdopen(%d, \"%s\") failed: %s", hConHandle, mode, err);
+		g_free(err);
+		return NULL;
+	}
+	if (setvbuf(fp, NULL, _IONBF, 0) != 0)
+	{
+		gchar *err = g_win32_error_message(GetLastError());
+		g_warning("setvbuf(%p, NULL, _IONBF, 0) failed: %s", fp, err);
+		g_free(err);
+		fclose(fp);
+		return NULL;
+	}
+
+	return fp;
+}
+
+
 static void debug_setup_console()
 {
 	static const WORD MAX_CONSOLE_LINES = 500;
-	gint	 hConHandle;
-	glong	 lStdHandle;
+	int	 hConHandle;
+	long	 lStdHandle;
 	CONSOLE_SCREEN_BUFFER_INFO coninfo;
 	FILE	*fp;
 
@@ -774,25 +817,19 @@ static void debug_setup_console()
 	SetConsoleScreenBufferSize(GetStdHandle(STD_OUTPUT_HANDLE), coninfo.dwSize);
 
 	/* redirect unbuffered STDOUT to the console */
-	lStdHandle = (long)GetStdHandle(STD_OUTPUT_HANDLE);
-	hConHandle = _open_osfhandle(lStdHandle, _O_TEXT);
-	fp = _fdopen(hConHandle, "w");
-	*stdout = *fp;
-	setvbuf(stdout, NULL, _IONBF, 0);
+	fp = open_std_handle(STD_OUTPUT_HANDLE, "w");
+	if (fp)
+		*stdout = *fp;
 
 	/* redirect unbuffered STDERR to the console */
-	lStdHandle = (long)GetStdHandle(STD_ERROR_HANDLE);
-	hConHandle = _open_osfhandle(lStdHandle, _O_TEXT);
-	fp = _fdopen(hConHandle, "w");
-	*stderr = *fp;
-	setvbuf(stderr, NULL, _IONBF, 0);
+	fp = open_std_handle(STD_ERROR_HANDLE, "w");
+	if (fp)
+		*stderr = *fp;
 
 	/* redirect unbuffered STDIN to the console */
-	lStdHandle = (long)GetStdHandle(STD_INPUT_HANDLE);
-	hConHandle = _open_osfhandle(lStdHandle, _O_TEXT);
-	fp = _fdopen( hConHandle, "r" );
-	*stdin = *fp;
-	setvbuf(stdin, NULL, _IONBF, 0);
+	fp = open_std_handle(STD_INPUT_HANDLE, "r");
+	if (fp)
+		*stdin = *fp;
 }
 
 
