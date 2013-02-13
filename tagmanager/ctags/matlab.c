@@ -123,7 +123,7 @@ static void findMatlabTags (void)
 			 * 'function' and before '%' */
 			else
 			{
-				while (*cp != '\0' && *cp != '%')
+				while (*cp != '\0' && *cp != '%' && *cp != ';')
 				{
 					vStringPut (name, (int) *cp);
 					++cp;
