@@ -517,7 +517,7 @@ void tm_workspace_recreate_tags_array(void)
 }
 
 gboolean tm_workspace_update(TMWorkObject *workspace, gboolean force
-  , gboolean recurse, gboolean __unused__ update_parent)
+  , gboolean recurse, gboolean UNUSED update_parent)
 {
 	guint i;
 	gboolean update_tags = force;

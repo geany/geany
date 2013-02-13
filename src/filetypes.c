@@ -504,6 +504,12 @@ static void init_builtin_filetypes(void)
 	filetype_make_title(ft, TITLE_SOURCE_FILE);
 	ft->group = GEANY_FILETYPE_GROUP_MARKUP;
 
+#define ABAQUS
+	ft = filetypes[GEANY_FILETYPES_ABAQUS];
+	ft->lang = 44;
+	ft->name = g_strdup("Abaqus");
+	filetype_make_title(ft, TITLE_SOURCE_FILE);
+	ft->group = GEANY_FILETYPE_GROUP_SCRIPT;
 }
 
 

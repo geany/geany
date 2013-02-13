@@ -2693,6 +2693,60 @@ static void document_redo_add(GeanyDocument *doc, guint type, gpointer data)
 }
 
 
+enum
+{
+	STATUS_CHANGED,
+#ifdef USE_GIO_FILEMON
+	STATUS_DISK_CHANGED,
+#endif
+	STATUS_READONLY
+};
+static struct
+{
+	const gchar *name;
+	GdkColor color;
+	gboolean loaded;
+} document_status_styles[] = {
+	{ "geany-document-status-changed",      {0}, FALSE },
+#ifdef USE_GIO_FILEMON
+	{ "geany-document-status-disk-changed", {0}, FALSE },
+#endif
+	{ "geany-document-status-readonly",     {0}, FALSE }
+};
+
+
+static gint document_get_status_id(GeanyDocument *doc)
+{
+	if (doc->changed)
+		return STATUS_CHANGED;
+#ifdef USE_GIO_FILEMON
+	else if (doc->priv->file_disk_status == FILE_CHANGED)
+		return STATUS_DISK_CHANGED;
+#endif
+	else if (doc->readonly)
+		return STATUS_READONLY;
+
+	return -1;
+}
+
+
+/* returns an identifier that is to be set as a widget name or class to get it styled
+ * depending on the document status (changed, readonly, etc.)
+ * a NULL return value means default (unchanged) style */
+const gchar *document_get_status_widget_class(GeanyDocument *doc)
+{
+	gint status;
+
+	g_return_val_if_fail(doc != NULL, NULL);
+
+	status = document_get_status_id(doc);
+	if (status < 0)
+		return NULL;
+	else
+		return document_status_styles[status].name;
+}
+
+
 /**
  *  Gets the status color of the document, or @c NULL if default widget coloring should be used.
  *  Returned colors are red if the document has changes, green if the document is read-only
@@ -2707,25 +2761,25 @@ static void document_redo_add(GeanyDocument *doc, guint type, gpointer data)
  */
 const GdkColor *document_get_status_color(GeanyDocument *doc)
 {
-	static GdkColor red = {0, 0xFFFF, 0, 0};
-	static GdkColor green = {0, 0, 0x7FFF, 0};
-#ifdef USE_GIO_FILEMON
-	static GdkColor orange = {0, 0xFFFF, 0x7FFF, 0};
-#endif
-	GdkColor *color = NULL;
+	gint status;
 
 	g_return_val_if_fail(doc != NULL, NULL);
 
-	if (doc->changed)
-		color = &red;
-#ifdef USE_GIO_FILEMON
-	else if (doc->priv->file_disk_status == FILE_CHANGED)
-		color = &orange;
-#endif
-	else if (doc->readonly)
-		color = &green;
+	status = document_get_status_id(doc);
+	if (status < 0)
+		return NULL;
+	if (! document_status_styles[status].loaded)
+	{
+		GtkSettings *settings = gtk_widget_get_settings(GTK_WIDGET(doc->editor->sci));
+		gchar *path = g_strconcat("GeanyMainWindow.GtkHBox.GtkNotebook.",
+				document_status_styles[status].name, NULL);
+		GtkStyle *style = gtk_rc_get_style_by_paths(settings, path, NULL, GTK_TYPE_LABEL);
 
-	return color;	/* return pointer to static GdkColor. */
+		document_status_styles[status].color = style->fg[GTK_STATE_NORMAL];
+		document_status_styles[status].loaded = TRUE;
+		g_free(path);
+	}
+	return &document_status_styles[status].color;
 }
 
 

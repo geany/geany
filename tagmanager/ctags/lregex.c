@@ -538,11 +538,11 @@ extern void findRegexTags (void)
 #endif  /* HAVE_REGEX */
 
 extern void addTagRegex (
-		const langType language __unused__,
-		const char* const regex __unused__,
-		const char* const name __unused__,
-		const char* const kinds __unused__,
-		const char* const flags __unused__)
+		const langType language UNUSED,
+		const char* const regex UNUSED,
+		const char* const name UNUSED,
+		const char* const kinds UNUSED,
+		const char* const flags UNUSED)
 {
 #ifdef HAVE_REGEX
 	Assert (regex != NULL);
@@ -564,10 +564,10 @@ extern void addTagRegex (
 }
 
 extern void addCallbackRegex (
-		const langType language __unused__,
-		const char* const regex __unused__,
-		const char* const flags __unused__,
-		const regexCallback callback __unused__)
+		const langType language UNUSED,
+		const char* const regex UNUSED,
+		const char* const flags UNUSED,
+		const regexCallback callback UNUSED)
 {
 #ifdef HAVE_REGEX
 	Assert (regex != NULL);
@@ -581,7 +581,7 @@ extern void addCallbackRegex (
 }
 
 extern void addLanguageRegex (
-		const langType language __unused__, const char* const regex __unused__)
+		const langType language UNUSED, const char* const regex UNUSED)
 {
 #ifdef HAVE_REGEX
 	if (! regexBroken)
@@ -602,7 +602,7 @@ extern void addLanguageRegex (
 */
 
 extern boolean processRegexOption (const char *const option,
-								   const char *const parameter __unused__)
+								   const char *const parameter UNUSED)
 {
 	boolean handled = FALSE;
 	const char* const dash = strchr (option, '-');
@@ -624,7 +624,7 @@ extern boolean processRegexOption (const char *const option,
 	return handled;
 }
 
-extern void disableRegexKinds (const langType language __unused__)
+extern void disableRegexKinds (const langType language UNUSED)
 {
 #ifdef HAVE_REGEX
 	if (language <= SetUpper  &&  Sets [language].count > 0)
@@ -639,8 +639,8 @@ extern void disableRegexKinds (const langType language __unused__)
 }
 
 extern boolean enableRegexKind (
-		const langType language __unused__,
-		const int kind __unused__, const boolean mode __unused__)
+		const langType language UNUSED,
+		const int kind UNUSED, const boolean mode UNUSED)
 {
 	boolean result = FALSE;
 #ifdef HAVE_REGEX
@@ -660,7 +660,7 @@ extern boolean enableRegexKind (
 	return result;
 }
 
-extern void printRegexKinds (const langType language __unused__, boolean indent __unused__)
+extern void printRegexKinds (const langType language UNUSED, boolean indent UNUSED)
 {
 #ifdef HAVE_REGEX
 	if (language <= SetUpper  &&  Sets [language].count > 0)
