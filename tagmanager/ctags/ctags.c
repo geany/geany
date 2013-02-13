@@ -892,7 +892,7 @@ extern vString *combinePathAndFile (const char *const path,
  *	Create tags
  */
 
-extern void processExcludeOption (const char *const __unused__ option,
+extern void processExcludeOption (const char *const UNUSED option,
 				  const char *const parameter)
 {
     if (parameter [0] == '\0')
@@ -1328,7 +1328,7 @@ static void setExecutableName (const char *const path)
 #endif
 }
 
-extern int ctags_main (int __unused__ argc, char **argv)
+extern int ctags_main (int UNUSED argc, char **argv)
 {
     cookedArgs *args;
 #ifdef VMS

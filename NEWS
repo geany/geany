@@ -108,8 +108,8 @@ Geany 1.23 (unreleased)
     * Show Find in Files status summary.
 
     Internationalization
-    * Add translations: et, eu, he
-    * Update translations: cs, it, nl, ru, sv, tr
+    * Add translations: et, eu, he, hi, sr
+    * Update translations: cs, de, fi, it, nl, ru, sv, tr
     * Fix a crash when using the Turkish translation.
 
 
