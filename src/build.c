@@ -1004,7 +1004,14 @@ static GPid build_run_cmd(GeanyDocument *doc, guint cmdindex)
 		/* get the terminal path */
 		locale_term_cmd = utils_get_locale_from_utf8(tool_prefs.term_cmd);
 		/* split the term_cmd, so arguments will work too */
-		g_shell_parse_argv(locale_term_cmd, &argv_len, &argv, NULL);
+		if (!g_shell_parse_argv(locale_term_cmd, &argv_len, &argv, NULL))
+		{
+			ui_set_statusbar(TRUE,
+				_("Could not parse terminal command \"%s\" "
+					"(check Terminal tool setting in Preferences)"), tool_prefs.term_cmd);
+			run_info[cmdindex].pid = (GPid) 1;
+			goto free_strings;
+		}
 
 		/* check that terminal exists (to prevent misleading error messages) */
 		if (argv[0] != NULL)
