@@ -40,6 +40,24 @@ static kindOption MatlabKinds [] = {
 *   FUNCTION DEFINITIONS
 */
 
+static int isDelimiter(char c)
+{
+	static char delimiters[14] = {',', ';', '%', ':', '!', '<', '>', '+', '=', '-', '{', '}', '(', ')'};
+	int i;
+
+	if(isspace(c)) {
+			return 1;
+	}
+
+	for(i = 0; i< 14; i++ ) {
+		if(c == delimiters[i]) {
+			return 1;
+		}
+	}
+
+	return 0;
+}
+
 static void findMatlabTags (void)
 {
     vString *name = vStringNew ();
@@ -72,7 +90,7 @@ static void findMatlabTags (void)
 
 			/* identifier is the right most part of the line after
 			 * 'classdef' and before '%' or ';' */
-			while (*cp != '\0' && *cp != '%' && *cp != ';' && *cp != ',')
+			while (*cp != '\0' && !isDelimiter(*cp))
 			{
 				vStringPut (name, (int) *cp);
 				++cp;
@@ -123,7 +141,7 @@ static void findMatlabTags (void)
 			 * 'function' and before '%' */
 			else
 			{
-				while (*cp != '\0' && *cp != '%' && *cp != ';' && *cp != ',')
+				while (*cp != '\0' && !isDelimiter(*cp))
 				{
 					vStringPut (name, (int) *cp);
 					++cp;
