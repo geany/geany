@@ -473,7 +473,7 @@ gboolean tm_project_save(TMProject *project)
 }
 
 static void tm_project_add_file_recursive(TMFileEntry *entry
-  , gpointer user_data, guint __unused__ level)
+  , gpointer user_data, guint UNUSED level)
 {
 	TMProject *project;
 	if (!user_data || !entry || (tm_file_dir_t == entry->type))

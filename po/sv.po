@@ -2,13 +2,13 @@
 # Copyright (C) 2007 - 2011 THE geany'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the geany package.
 #
-# Tony Mattsson <superxorn@gmail.com>, 2007 - 2011
+# Tony Mattsson <superxorn@gmail.com>, 2007 - 2013
 msgid ""
 msgstr ""
-"Project-Id-Version: Geany 1.22\n"
+"Project-Id-Version: Geany 1.23\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-06-20 17:07+0200\n"
-"PO-Revision-Date: 2012-06-20 13:49+0100\n"
+"PO-Revision-Date: 2013-02-06 09:20+0100\n"
 "Last-Translator: Tony Mattsson <superxorn@gmail.com>\n"
 "Language-Team: Swedish <geany-i18n@uvena.de>\n"
 "Language: sv\n"
@@ -16,9 +16,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Poedit-Language: Swedish\n"
-"X-Poedit-Country: SWEDEN\n"
 "X-Poedit-SourceCharset: utf-8\n"
+"X-Generator: Poedit 1.5.5\n"
 
 #: ../geany.desktop.in.h:1 ../data/geany.glade.h:346
 msgid "Geany"
@@ -185,13 +184,11 @@ msgid "Startup path:"
 msgstr "Sökväg vid start:"
 
 #: ../data/geany.glade.h:38
-#, fuzzy
 msgid ""
 "Path to start in when opening or saving files. Must be an absolute path."
 msgstr ""
 "Sökväg att starta i vid öppning eller sparning av filer. Detta måste vara en "
-"absolut sökväg. Lämna blankt för att automatiskt välja filens nuvarande "
-"sökväg."
+"absolut sökväg."
 
 #: ../data/geany.glade.h:39
 msgid "Project files:"

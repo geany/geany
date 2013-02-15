@@ -41,7 +41,7 @@ extern void *malloc (size_t);
 extern void *realloc (void *ptr, size_t);
 #endif
 
-extern void error (const errorSelection selection, const char *const format, ...) __printf__ (2, 3);
+extern void error (const errorSelection selection, const char *const format, ...) PRINTF (2, 3);
 extern FILE *tempFile (const char *const mode, char **const pName);
 extern char* eStrdup (const char* str);
 extern void *eMalloc (const size_t size);

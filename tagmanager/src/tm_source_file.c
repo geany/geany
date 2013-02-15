@@ -265,7 +265,7 @@ int tm_source_file_tags(const tagEntryInfo *tag)
 }
 
 gboolean tm_source_file_update(TMWorkObject *source_file, gboolean force
-  , gboolean __unused__ recurse, gboolean update_parent)
+  , gboolean UNUSED recurse, gboolean update_parent)
 {
 	if (force)
 	{

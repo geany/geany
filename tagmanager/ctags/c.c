@@ -735,7 +735,7 @@ static const char *keywordString (const keywordId keyword)
 	return name;
 }
 
-static void __unused__ pt (tokenInfo *const token)
+static void UNUSED pt (tokenInfo *const token)
 {
 	if (isType (token, TOKEN_NAME))
 		printf("type: %-12s: %-13s   line: %lu\n",
@@ -750,7 +750,7 @@ static void __unused__ pt (tokenInfo *const token)
 			   tokenString (token->type), token->lineNumber);
 }
 
-static void __unused__ ps (statementInfo *const st)
+static void UNUSED ps (statementInfo *const st)
 {
 	unsigned int i;
 	printf("scope: %s   decl: %s   gotName: %s   gotParenName: %s\n",

@@ -259,6 +259,8 @@ void document_undo_add(GeanyDocument *doc, guint type, gpointer data);
 
 void document_update_tab_label(GeanyDocument *doc);
 
+const gchar *document_get_status_widget_class(GeanyDocument *doc);
+
 const GdkColor *document_get_status_color(GeanyDocument *doc);
 
 gchar *document_get_basename_for_display(GeanyDocument *doc, gint length);
