@@ -3,6 +3,7 @@
 
 #define VER_FILEVERSION             1,23,0,0
 #define VER_FILEVERSION_STR         "1.23"
+#define APP_MANIFEST                1
 
 A ICON MOVEABLE PURE LOADONCALL DISCARDABLE "../icons/geany.ico"
 
@@ -30,3 +31,4 @@ FILETYPE			VFT_APP
 	}
 }
 
+APP_MANIFEST RT_MANIFEST "geany.exe.manifest"
