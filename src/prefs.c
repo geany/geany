@@ -1266,6 +1266,8 @@ on_prefs_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 			if (documents[i]->is_valid)
 			{
 				editor_apply_update_prefs(documents[i]->editor);
+				gint width = interface_prefs.tab_fixed_width_editor ? interface_prefs.tab_width_editor : -1;
+				gtk_widget_set_size_request(GTK_WIDGET(documents[i]->priv->tab_label), width, -1);
 				if (! editor_prefs.folding)
 					editor_unfold_all(documents[i]->editor);
 			}
