@@ -124,7 +124,6 @@ Section "!Program Files" SEC01
 
 	SetOutPath "$INSTDIR\bin"
 	File "${RESOURCEDIR}\bin\Geany.exe"
-	File "${RESOURCEDIR}\bin\Geany.exe.manifest"
 
 	SetOutPath "$INSTDIR\data"
 	File "${RESOURCEDIR}\data\GPL-2"
