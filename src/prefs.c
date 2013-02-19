@@ -468,6 +468,12 @@ static void prefs_init_dialog(void)
 	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "combo_tab_editor");
 	gtk_combo_box_set_active(GTK_COMBO_BOX(widget), interface_prefs.tab_pos_editor);
 
+	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_tab_fixed_width_editor");
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), interface_prefs.tab_fixed_width_editor);
+	
+	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "spin_tab_fixed_width_editor");
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget), interface_prefs.tab_width_editor);
+
 	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "combo_tab_msgwin");
 	gtk_combo_box_set_active(GTK_COMBO_BOX(widget), interface_prefs.tab_pos_msgwin);
 
@@ -935,6 +941,12 @@ on_prefs_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "combo_tab_editor");
 		interface_prefs.tab_pos_editor = gtk_combo_box_get_active(GTK_COMBO_BOX(widget));
+
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_tab_fixed_width_editor");
+		interface_prefs.tab_fixed_width_editor = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "spin_tab_fixed_width_editor");
+		interface_prefs.tab_width_editor = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));
 
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "combo_tab_msgwin");
 		interface_prefs.tab_pos_msgwin = gtk_combo_box_get_active(GTK_COMBO_BOX(widget));
