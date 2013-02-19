@@ -676,6 +676,11 @@ gint notebook_new_tab(GeanyDocument *this)
 	gtk_box_pack_start(GTK_BOX(hbox), this->priv->tab_label, FALSE, FALSE, 0);
 	gtk_container_add(GTK_CONTAINER(ebox), hbox);
 
+	if (interface_prefs.tab_fixed_width_editor)
+	{
+		gtk_widget_set_size_request(GTK_WIDGET(this->priv->tab_label), interface_prefs.tab_width_editor, -1);
+	}
+	gtk_misc_set_alignment(GTK_MISC(this->priv->tab_label), 0, 0);
 	if (file_prefs.show_tab_cross)
 	{
 		GtkWidget *image, *btn, *align;
