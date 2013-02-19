@@ -48,6 +48,8 @@ typedef struct GeanyInterfacePrefs
 	gchar			*msgwin_font;				/**< message window font */
 	gboolean		show_notebook_tabs;			/**< whether editor tabs are visible */
 	gint			tab_pos_editor;				/**< positions of editor's tabs */
+	gboolean		tab_fixed_width_editor;		/**< whether the editor's tabs have a fixed width */
+	gint			tab_width_editor;				/**< tab width if they have a fixed width */
 	gint			tab_pos_msgwin;				/**< positions of message window's tabs */
 	gint			tab_pos_sidebar;			/**< positions of sidebar's tabs */
 	gboolean		statusbar_visible;			/**< whether the status bar is visible */

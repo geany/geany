@@ -409,6 +409,8 @@ static void save_dialog_prefs(GKeyFile *config)
 	g_key_file_set_boolean(config, PACKAGE, "tab_order_ltr", file_prefs.tab_order_ltr);
 	g_key_file_set_boolean(config, PACKAGE, "tab_order_beside", file_prefs.tab_order_beside);
 	g_key_file_set_integer(config, PACKAGE, "tab_pos_editor", interface_prefs.tab_pos_editor);
+	g_key_file_set_boolean(config, PACKAGE, "tab_fixed_width_editor", interface_prefs.tab_fixed_width_editor);
+	g_key_file_set_integer(config, PACKAGE, "tab_width_editor", interface_prefs.tab_width_editor);
 	g_key_file_set_integer(config, PACKAGE, "tab_pos_msgwin", interface_prefs.tab_pos_msgwin);
 	g_key_file_set_boolean(config, PACKAGE, "use_native_windows_dialogs", interface_prefs.use_native_windows_dialogs);
 
@@ -729,6 +731,8 @@ static void load_dialog_prefs(GKeyFile *config)
 
 	/* interface */
 	interface_prefs.tab_pos_editor = utils_get_setting_integer(config, PACKAGE, "tab_pos_editor", GTK_POS_TOP);
+	interface_prefs.tab_fixed_width_editor = utils_get_setting_boolean(config, PACKAGE, "tab_fixed_width_editor", TRUE);
+	interface_prefs.tab_width_editor = utils_get_setting_integer(config, PACKAGE, "tab_width_editor", GTK_POS_TOP);
 	interface_prefs.tab_pos_msgwin = utils_get_setting_integer(config, PACKAGE, "tab_pos_msgwin",GTK_POS_LEFT);
 	interface_prefs.sidebar_symbol_visible = utils_get_setting_boolean(config, PACKAGE, "sidebar_symbol_visible", TRUE);
 	interface_prefs.sidebar_openfiles_visible = utils_get_setting_boolean(config, PACKAGE, "sidebar_openfiles_visible", TRUE);
