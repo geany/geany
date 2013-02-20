@@ -99,7 +99,6 @@
         <property name="can_focus">False</property>
         <property name="use_underline">True</property>
         <property name="use_stock">True</property>
-        <property name="accel_group">accelgroup1</property>
         <signal name="activate" handler="on_undo1_activate" swapped="no"/>
       </object>
     </child>
@@ -111,7 +110,6 @@
         <property name="can_focus">False</property>
         <property name="use_underline">True</property>
         <property name="use_stock">True</property>
-        <property name="accel_group">accelgroup1</property>
         <signal name="activate" handler="on_redo1_activate" swapped="no"/>
       </object>
     </child>
@@ -129,7 +127,6 @@
         <property name="can_focus">False</property>
         <property name="use_underline">True</property>
         <property name="use_stock">True</property>
-        <property name="accel_group">accelgroup1</property>
         <signal name="activate" handler="on_cut1_activate" swapped="no"/>
       </object>
     </child>
@@ -141,7 +138,6 @@
         <property name="can_focus">False</property>
         <property name="use_underline">True</property>
         <property name="use_stock">True</property>
-        <property name="accel_group">accelgroup1</property>
         <signal name="activate" handler="on_copy1_activate" swapped="no"/>
       </object>
     </child>
@@ -153,7 +149,6 @@
         <property name="can_focus">False</property>
         <property name="use_underline">True</property>
         <property name="use_stock">True</property>
-        <property name="accel_group">accelgroup1</property>
         <signal name="activate" handler="on_paste1_activate" swapped="no"/>
       </object>
     </child>
@@ -165,7 +160,6 @@
         <property name="can_focus">False</property>
         <property name="use_underline">True</property>
         <property name="use_stock">True</property>
-        <property name="accel_group">accelgroup1</property>
         <signal name="activate" handler="on_delete1_activate" swapped="no"/>
       </object>
     </child>
@@ -183,7 +177,6 @@
         <property name="can_focus">False</property>
         <property name="use_underline">True</property>
         <property name="use_stock">True</property>
-        <property name="accel_group">accelgroup1</property>
         <signal name="activate" handler="on_menu_select_all1_activate" swapped="no"/>
       </object>
     </child>
@@ -7333,7 +7326,6 @@
                             <property name="can_focus">False</property>
                             <property name="use_underline">True</property>
                             <property name="use_stock">True</property>
-                            <property name="accel_group">accelgroup1</property>
                             <signal name="activate" handler="on_new1_activate" swapped="no"/>
                           </object>
                         </child>
@@ -7362,7 +7354,6 @@
                             <property name="can_focus">False</property>
                             <property name="use_underline">True</property>
                             <property name="use_stock">True</property>
-                            <property name="accel_group">accelgroup1</property>
                             <signal name="activate" handler="on_open1_activate" swapped="no"/>
                           </object>
                         </child>
@@ -7399,7 +7390,6 @@
                             <property name="can_focus">False</property>
                             <property name="use_underline">True</property>
                             <property name="use_stock">True</property>
-                            <property name="accel_group">accelgroup1</property>
                             <signal name="activate" handler="on_save1_activate" swapped="no"/>
                           </object>
                         </child>
@@ -7411,7 +7401,6 @@
                             <property name="can_focus">False</property>
                             <property name="use_underline">True</property>
                             <property name="use_stock">True</property>
-                            <property name="accel_group">accelgroup1</property>
                             <signal name="activate" handler="on_save_as1_activate" swapped="no"/>
                           </object>
                         </child>
@@ -7477,7 +7466,6 @@
                             <property name="can_focus">False</property>
                             <property name="use_underline">True</property>
                             <property name="use_stock">True</property>
-                            <property name="accel_group">accelgroup1</property>
                             <signal name="activate" handler="on_file_properties_activate" swapped="no"/>
                           </object>
                         </child>
@@ -7505,7 +7493,6 @@
                             <property name="can_focus">False</property>
                             <property name="use_underline">True</property>
                             <property name="use_stock">True</property>
-                            <property name="accel_group">accelgroup1</property>
                             <signal name="activate" handler="on_print1_activate" swapped="no"/>
                           </object>
                         </child>
@@ -7523,7 +7510,6 @@
                             <property name="can_focus">False</property>
                             <property name="use_underline">True</property>
                             <property name="use_stock">True</property>
-                            <property name="accel_group">accelgroup1</property>
                             <signal name="activate" handler="on_close1_activate" swapped="no"/>
                           </object>
                         </child>
@@ -7592,7 +7578,6 @@
                             <property name="can_focus">False</property>
                             <property name="use_underline">True</property>
                             <property name="use_stock">True</property>
-                            <property name="accel_group">accelgroup1</property>
                             <signal name="activate" handler="on_undo1_activate" swapped="no"/>
                           </object>
                         </child>
@@ -7604,7 +7589,6 @@
                             <property name="can_focus">False</property>
                             <property name="use_underline">True</property>
                             <property name="use_stock">True</property>
-                            <property name="accel_group">accelgroup1</property>
                             <signal name="activate" handler="on_redo1_activate" swapped="no"/>
                           </object>
                         </child>
@@ -7622,7 +7606,6 @@
                             <property name="can_focus">False</property>
                             <property name="use_underline">True</property>
                             <property name="use_stock">True</property>
-                            <property name="accel_group">accelgroup1</property>
                             <signal name="activate" handler="on_cut1_activate" swapped="no"/>
                           </object>
                         </child>
@@ -7634,7 +7617,6 @@
                             <property name="can_focus">False</property>
                             <property name="use_underline">True</property>
                             <property name="use_stock">True</property>
-                            <property name="accel_group">accelgroup1</property>
                             <signal name="activate" handler="on_copy1_activate" swapped="no"/>
                           </object>
                         </child>
@@ -7646,7 +7628,6 @@
                             <property name="can_focus">False</property>
                             <property name="use_underline">True</property>
                             <property name="use_stock">True</property>
-                            <property name="accel_group">accelgroup1</property>
                             <signal name="activate" handler="on_paste1_activate" swapped="no"/>
                           </object>
                         </child>
@@ -7658,7 +7639,6 @@
                             <property name="can_focus">False</property>
                             <property name="use_underline">True</property>
                             <property name="use_stock">True</property>
-                            <property name="accel_group">accelgroup1</property>
                             <signal name="activate" handler="on_delete1_activate" swapped="no"/>
                           </object>
                         </child>
@@ -7676,7 +7656,6 @@
                             <property name="can_focus">False</property>
                             <property name="use_underline">True</property>
                             <property name="use_stock">True</property>
-                            <property name="accel_group">accelgroup1</property>
                             <signal name="activate" handler="on_menu_select_all1_activate" swapped="no"/>
                           </object>
                         </child>
@@ -8149,7 +8128,6 @@
                             <property name="can_focus">False</property>
                             <property name="use_underline">True</property>
                             <property name="use_stock">True</property>
-                            <property name="accel_group">accelgroup1</property>
                             <signal name="activate" handler="on_find1_activate" swapped="no"/>
                           </object>
                         </child>
@@ -8563,7 +8541,6 @@
                             <property name="can_focus">False</property>
                             <property name="use_underline">True</property>
                             <property name="use_stock">True</property>
-                            <property name="accel_group">accelgroup1</property>
                             <signal name="activate" handler="on_zoom_in1_activate" swapped="no"/>
                           </object>
                         </child>
@@ -8575,7 +8552,6 @@
                             <property name="can_focus">False</property>
                             <property name="use_underline">True</property>
                             <property name="use_stock">True</property>
-                            <property name="accel_group">accelgroup1</property>
                             <signal name="activate" handler="on_zoom_out1_activate" swapped="no"/>
                           </object>
                         </child>
@@ -8587,7 +8563,6 @@
                             <property name="can_focus">False</property>
                             <property name="use_underline">True</property>
                             <property name="use_stock">True</property>
-                            <property name="accel_group">accelgroup1</property>
                             <signal name="activate" handler="on_normal_size1_activate" swapped="no"/>
                           </object>
                         </child>
@@ -9130,7 +9105,6 @@
                             <property name="can_focus">False</property>
                             <property name="use_underline">True</property>
                             <property name="use_stock">True</property>
-                            <property name="accel_group">accelgroup1</property>
                             <signal name="activate" handler="on_project_properties1_activate" swapped="no"/>
                           </object>
                         </child>
@@ -9325,7 +9299,6 @@
                             <property name="can_focus">False</property>
                             <property name="use_underline">True</property>
                             <property name="use_stock">True</property>
-                            <property name="accel_group">accelgroup1</property>
                             <signal name="activate" handler="on_info1_activate" swapped="no"/>
                           </object>
                         </child>
