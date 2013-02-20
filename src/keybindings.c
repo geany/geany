@@ -1691,14 +1691,14 @@ static void switch_notebook_page(gint direction)
 	if (direction == GTK_DIR_LEFT)
 	{
 		if (cur_page > 0)
-			gtk_notebook_set_current_page(notebook, cur_page - 1);
+			gtk_notebook_prev_page(notebook);
 		else
-			gtk_notebook_set_current_page(notebook, page_count - 1);
+			gtk_notebook_set_current_page(notebook, -1);
 	}
 	else if (direction == GTK_DIR_RIGHT)
 	{
 		if (cur_page < page_count - 1)
-			gtk_notebook_set_current_page(notebook, cur_page + 1);
+			gtk_notebook_next_page(notebook);
 		else
 			gtk_notebook_set_current_page(notebook, 0);
 	}
