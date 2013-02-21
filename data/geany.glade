@@ -4783,7 +4783,7 @@
                                   <object class="GtkEntry" id="entry_com_term">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
-                                    <property name="tooltip_text" translatable="yes">A terminal emulator like xterm, gnome-terminal or konsole (should accept the -e argument)</property>
+                                    <property name="tooltip_text" translatable="yes">A terminal emulator command (%c is substituted with the Geany run script filename)</property>
                                     <property name="primary_icon_activatable">False</property>
                                     <property name="secondary_icon_activatable">False</property>
                                     <property name="primary_icon_sensitive">True</property>
