@@ -71,7 +71,7 @@
 #ifdef G_OS_WIN32
 #define GEANY_DEFAULT_TOOLS_TERMINAL	"cmd.exe /Q /C %c"
 #else
-#define GEANY_DEFAULT_TOOLS_TERMINAL	"xterm -e \"bin/sh %c\""
+#define GEANY_DEFAULT_TOOLS_TERMINAL	"xterm -e \"/bin/sh %c\""
 #endif
 #define GEANY_DEFAULT_TOOLS_BROWSER		"firefox"
 #define GEANY_DEFAULT_TOOLS_PRINTCMD	"lpr"
