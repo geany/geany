@@ -109,6 +109,7 @@ Geany 1.23 (unreleased)
     * Update default D template to use a more standard prototype for
       main().
     * Fix improperly translated string in Pascal template (#3602314).
+    * Add Go language filetype (tomboy64)
 
     Plugins
     * Export: Fix missing linking on libm (Chow Loong Jin)
