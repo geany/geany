@@ -248,14 +248,14 @@ static void init_default_kb(void)
 	group = keybindings_get_core_group(GEANY_KEY_GROUP_FILE);
 
 	add_kb(group, GEANY_KEYS_FILE_NEW, NULL,
-		GDK_n, GDK_CONTROL_MASK, "menu_new", _("New"), NULL);
+		GDK_n, GDK_CONTROL_MASK, "menu_new", _("New"), "menu_new1");
 	add_kb(group, GEANY_KEYS_FILE_OPEN, NULL,
-		GDK_o, GDK_CONTROL_MASK, "menu_open", _("Open"), NULL);
+		GDK_o, GDK_CONTROL_MASK, "menu_open", _("Open"), "menu_open1");
 	add_kb(group, GEANY_KEYS_FILE_OPENSELECTED, NULL,
 		GDK_o, GDK_SHIFT_MASK | GDK_CONTROL_MASK, "menu_open_selected",
 		_("Open selected file"), "menu_open_selected_file1");
 	add_kb(group, GEANY_KEYS_FILE_SAVE, NULL,
-		GDK_s, GDK_CONTROL_MASK, "menu_save", _("Save"), NULL);
+		GDK_s, GDK_CONTROL_MASK, "menu_save", _("Save"), "menu_save1");
 	add_kb(group, GEANY_KEYS_FILE_SAVEAS, NULL,
 		0, 0, "menu_saveas", _("Save as"), "menu_save_as1");
 	add_kb(group, GEANY_KEYS_FILE_SAVEALL, NULL,
@@ -272,6 +272,8 @@ static void init_default_kb(void)
 		GDK_r, GDK_CONTROL_MASK, "menu_reloadfile", _("Reload file"), "menu_reload1");
 	add_kb(group, GEANY_KEYS_FILE_OPENLASTTAB, NULL,
 		0, 0, "file_openlasttab", _("Re-open last closed tab"), NULL);
+	add_kb(group, GEANY_KEYS_FILE_QUIT, NULL,
+		GDK_q, GDK_CONTROL_MASK, "menu_quit", _("Quit"), "menu_quit1");
 
 	group = keybindings_get_core_group(GEANY_KEY_GROUP_PROJECT);
 
@@ -335,11 +337,11 @@ static void init_default_kb(void)
 	group = keybindings_get_core_group(GEANY_KEY_GROUP_CLIPBOARD);
 
 	add_kb(group, GEANY_KEYS_CLIPBOARD_CUT, NULL,
-		GDK_x, GDK_CONTROL_MASK, "menu_cut", _("Cut"), NULL);
+		GDK_x, GDK_CONTROL_MASK, "menu_cut", _("Cut"), "menu_cut1");
 	add_kb(group, GEANY_KEYS_CLIPBOARD_COPY, NULL,
-		GDK_c, GDK_CONTROL_MASK, "menu_copy", _("Copy"), NULL);
+		GDK_c, GDK_CONTROL_MASK, "menu_copy", _("Copy"), "menu_copy1");
 	add_kb(group, GEANY_KEYS_CLIPBOARD_PASTE, NULL,
-		GDK_v, GDK_CONTROL_MASK, "menu_paste", _("Paste"), NULL);
+		GDK_v, GDK_CONTROL_MASK, "menu_paste", _("Paste"), "menu_paste1");
 	add_kb(group, GEANY_KEYS_CLIPBOARD_COPYLINE, NULL,
 		GDK_c, GDK_CONTROL_MASK | GDK_SHIFT_MASK, "edit_copyline", _("_Copy Current Line(s)"),
 		"copy_current_lines1");
@@ -729,6 +731,7 @@ static void add_menu_accel(GeanyKeyGroup *group, guint kb_id, GtkWidget *menuite
 	add_menu_accel(group, kb_id, ui_lookup_widget(main_widgets.editor_menu, G_STRINGIFY(wid)))
 
 /* set the menu item accelerator shortcuts (just for visibility, they are handled anyway) */
+/* FIXME: update those during runtime */
 static void add_popup_menu_accels(void)
 {
 	GeanyKeyGroup *group;
@@ -737,6 +740,11 @@ static void add_popup_menu_accels(void)
 	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_EDITOR_UNDO, undo1);
 	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_EDITOR_REDO, redo1);
 	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_EDITOR_CONTEXTACTION, context_action1);
+
+	group = keybindings_get_core_group(GEANY_KEY_GROUP_CLIPBOARD);
+	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_CLIPBOARD_CUT, cut1);
+	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_CLIPBOARD_COPY, copy1);
+	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_CLIPBOARD_PASTE, paste1);
 
 	group = keybindings_get_core_group(GEANY_KEY_GROUP_SELECT);
 	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_SELECT_ALL, menu_select_all2);
@@ -1328,6 +1336,9 @@ static gboolean cb_func_file_action(guint key_id)
 			break;
 		case GEANY_KEYS_FILE_PRINT:
 			on_print1_activate(NULL, NULL);
+			break;
+		case GEANY_KEYS_FILE_QUIT:
+			on_quit1_activate(NULL, NULL);
 			break;
 	}
 	return TRUE;
