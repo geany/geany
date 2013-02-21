@@ -148,7 +148,8 @@ extern UIWidgets ui_widgets;
 typedef struct GeanyAutoSeparator
 {
 	GtkWidget	*widget;	/* e.g. GtkSeparatorToolItem, GtkSeparatorMenuItem */
-	gint		ref_count;	/* set to zero initially */
+	gint		show_count;	/* visible items, set to zero initially */
+	gint		item_count;	/* total items, set to zero initially */
 }
 GeanyAutoSeparator;
 

@@ -2247,10 +2247,15 @@ void ui_finalize(void)
 
 static void auto_separator_update(GeanyAutoSeparator *autosep)
 {
-	g_return_if_fail(autosep->ref_count >= 0);
+	g_return_if_fail(autosep->item_count >= 0);
 
 	if (autosep->widget)
-		ui_widget_show_hide(autosep->widget, autosep->ref_count > 0);
+	{
+		if (autosep->item_count > 0)
+			ui_widget_show_hide(autosep->widget, autosep->show_count > 0);
+		else
+			gtk_widget_destroy(autosep->widget);
+	}
 }
 
 
@@ -2259,9 +2264,9 @@ static void on_auto_separator_item_show_hide(GtkWidget *widget, gpointer user_da
 	GeanyAutoSeparator *autosep = user_data;
 
 	if (GTK_WIDGET_VISIBLE(widget))
-		autosep->ref_count++;
+		autosep->show_count++;
 	else
-		autosep->ref_count--;
+		autosep->show_count--;
 	auto_separator_update(autosep);
 }
 
@@ -2270,10 +2275,12 @@ static void on_auto_separator_item_destroy(GtkWidget *widget, gpointer user_data
 {
 	GeanyAutoSeparator *autosep = user_data;
 
+	autosep->item_count--;
+	autosep->item_count = MAX(autosep->item_count, 0);
 	/* GTK_WIDGET_VISIBLE won't work now the widget is being destroyed,
 	 * so assume widget was visible */
-	autosep->ref_count--;
-	autosep->ref_count = MAX(autosep->ref_count, 0);
+	autosep->show_count--;
+	autosep->show_count = MAX(autosep->item_count, 0);
 	auto_separator_update(autosep);
 }
 
@@ -2285,15 +2292,16 @@ static void on_auto_separator_item_destroy(GtkWidget *widget, gpointer user_data
 void ui_auto_separator_add_ref(GeanyAutoSeparator *autosep, GtkWidget *item)
 {
 	/* set widget ptr NULL when widget destroyed */
-	if (autosep->ref_count == 0)
+	if (autosep->item_count == 0)
 		g_signal_connect(autosep->widget, "destroy",
 			G_CALLBACK(gtk_widget_destroyed), &autosep->widget);
 
 	if (GTK_WIDGET_VISIBLE(item))
-	{
-		autosep->ref_count++;
-		auto_separator_update(autosep);
-	}
+		autosep->show_count++;
+
+	autosep->item_count++;
+	auto_separator_update(autosep);
+
 	g_signal_connect(item, "show", G_CALLBACK(on_auto_separator_item_show_hide), autosep);
 	g_signal_connect(item, "hide", G_CALLBACK(on_auto_separator_item_show_hide), autosep);
 	g_signal_connect(item, "destroy", G_CALLBACK(on_auto_separator_item_destroy), autosep);
