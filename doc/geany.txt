@@ -3235,6 +3235,8 @@ Reload file                     Ctrl-R  (C)               Reloads the current fi
                                                           will be lost.
 
 Print                           Ctrl-P  (C)               Prints the current file.
+
+Quit                            Ctrl-Q  (C)               Quits Geany.
 =============================== ========================= ==================================================
 
 

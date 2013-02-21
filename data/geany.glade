@@ -7551,7 +7551,6 @@
                             <property name="can_focus">False</property>
                             <property name="use_underline">True</property>
                             <property name="use_stock">True</property>
-                            <property name="accel_group">accelgroup1</property>
                             <signal name="activate" handler="on_quit1_activate" swapped="no"/>
                           </object>
                         </child>

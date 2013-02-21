@@ -272,6 +272,8 @@ static void init_default_kb(void)
 		GDK_r, GDK_CONTROL_MASK, "menu_reloadfile", _("Reload file"), "menu_reload1");
 	add_kb(group, GEANY_KEYS_FILE_OPENLASTTAB, NULL,
 		0, 0, "file_openlasttab", _("Re-open last closed tab"), NULL);
+	add_kb(group, GEANY_KEYS_FILE_QUIT, NULL,
+		GDK_q, GDK_CONTROL_MASK, "menu_quit", _("Quit"), "menu_quit1");
 
 	group = keybindings_get_core_group(GEANY_KEY_GROUP_PROJECT);
 
@@ -1334,6 +1336,9 @@ static gboolean cb_func_file_action(guint key_id)
 			break;
 		case GEANY_KEYS_FILE_PRINT:
 			on_print1_activate(NULL, NULL);
+			break;
+		case GEANY_KEYS_FILE_QUIT:
+			on_quit1_activate(NULL, NULL);
 			break;
 	}
 	return TRUE;
