@@ -2,7 +2,7 @@
 
 import std.stdio;
 
-int main(char[][] args)
+int main(string[] args)
 {
 	
 	return 0;
