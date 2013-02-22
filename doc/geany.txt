@@ -2346,7 +2346,8 @@ Tool paths
 ``````````
 
 Terminal
-    The location of your terminal executable.
+    The command to execute a script in a terminal.  Occurrences of %c
+    in the command are substituted with the run script name.
 
 Browser
     The location of your web browser executable.
@@ -3203,14 +3204,6 @@ want to assign to the action and it will be saved when you press OK.
 You can define only one key combination for each action and each key
 combination can only be defined for one action.
 
-Some of the default key combinations are common across many
-applications, for example *Ctrl-N* for New and *Ctrl-O* for Open.
-Because they are so common it is not advisable to change these, but
-you can add other key combinations for these actions. For example
-*Ctrl-O* is set to execute menu_open by default, but you can also
-define *Alt-O*, so that the file open dialog is shown by pressing
-either *Ctrl-O* or *Alt-O*.
-
 The following tables list all customizable keyboard shortcuts, those
 which are common to many applications are marked with (C) after the
 shortcut.
@@ -3242,6 +3235,8 @@ Reload file                     Ctrl-R  (C)               Reloads the current fi
                                                           will be lost.
 
 Print                           Ctrl-P  (C)               Prints the current file.
+
+Quit                            Ctrl-Q  (C)               Quits Geany.
 =============================== ========================= ==================================================
 
 

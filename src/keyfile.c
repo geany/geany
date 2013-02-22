@@ -69,9 +69,9 @@
 #define GEANY_DISK_CHECK_TIMEOUT		30
 #define GEANY_DEFAULT_TOOLS_MAKE		"make"
 #ifdef G_OS_WIN32
-#define GEANY_DEFAULT_TOOLS_TERMINAL	"cmd.exe"
+#define GEANY_DEFAULT_TOOLS_TERMINAL	"cmd.exe /Q /C %c"
 #else
-#define GEANY_DEFAULT_TOOLS_TERMINAL	"xterm"
+#define GEANY_DEFAULT_TOOLS_TERMINAL	"xterm -e \"/bin/sh %c\""
 #endif
 #define GEANY_DEFAULT_TOOLS_BROWSER		"firefox"
 #define GEANY_DEFAULT_TOOLS_PRINTCMD	"lpr"
@@ -473,7 +473,7 @@ static void save_dialog_prefs(GKeyFile *config)
 	g_key_file_set_string(config, PACKAGE, "pref_template_datetime", template_prefs.datetime_format);
 
 	/* tools settings */
-	g_key_file_set_string(config, "tools", "term_cmd", tool_prefs.term_cmd ? tool_prefs.term_cmd : "");
+	g_key_file_set_string(config, "tools", "terminal_cmd", tool_prefs.term_cmd ? tool_prefs.term_cmd : "");
 	g_key_file_set_string(config, "tools", "browser_cmd", tool_prefs.browser_cmd ? tool_prefs.browser_cmd : "");
 	g_key_file_set_string(config, "tools", "grep_cmd", tool_prefs.grep_cmd ? tool_prefs.grep_cmd : "");
 	g_key_file_set_string(config, PACKAGE, "context_action_cmd", tool_prefs.context_action_cmd);
@@ -693,6 +693,7 @@ static void load_dialog_prefs(GKeyFile *config)
 {
 	gchar *tmp_string, *tmp_string2;
 	const gchar *default_charset = NULL;
+	gchar *cmd;
 
 	/* compatibility with Geany 0.20 */
 	if (!g_key_file_has_key(config, PACKAGE, atomic_file_saving_key, NULL))
@@ -882,7 +883,27 @@ static void load_dialog_prefs(GKeyFile *config)
 	template_prefs.datetime_format = utils_get_setting_string(config, PACKAGE, "pref_template_datetime", "%d.%m.%Y %H:%M:%S %Z");
 
 	/* tools */
-	tool_prefs.term_cmd = utils_get_setting_string(config, "tools", "term_cmd", GEANY_DEFAULT_TOOLS_TERMINAL);
+	cmd = utils_get_setting_string(config, "tools", "terminal_cmd", "");
+	if (!NZV(cmd))
+	{
+		cmd = utils_get_setting_string(config, "tools", "term_cmd", "");
+		if (NZV(cmd))
+		{
+			tmp_string = cmd;
+#ifdef G_OS_WIN32
+			if (strstr(cmd, "cmd.exe"))
+				cmd = g_strconcat(cmd, " /Q /C %c", NULL);
+			else
+				cmd = g_strconcat(cmd, " %c", NULL);
+#else
+			cmd = g_strconcat(cmd, " -e \"/bin/sh %c\"", NULL);
+#endif
+			g_free(tmp_string);
+		}
+		else
+			cmd = g_strdup(GEANY_DEFAULT_TOOLS_TERMINAL);
+	}
+	tool_prefs.term_cmd = cmd;
 	tool_prefs.browser_cmd = utils_get_setting_string(config, "tools", "browser_cmd", GEANY_DEFAULT_TOOLS_BROWSER);
 	tool_prefs.grep_cmd = utils_get_setting_string(config, "tools", "grep_cmd", GEANY_DEFAULT_TOOLS_GREP);
 
