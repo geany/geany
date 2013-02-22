@@ -21,6 +21,9 @@ Geany 1.23 (unreleased)
       dialog.
     * Only use "allow_always_save" setting for direct user interaction
       (Quentin Glidic).
+    * Fix some keybinding not getting properly displayed in the menus
+      after being updated (#1912683, #3599251).
+    * Make Terminal tool setting more flexible to support any terminal.
 
     Interface
     * Control-click on the symbols sidebar don't focus the editor.
@@ -59,13 +62,13 @@ Geany 1.23 (unreleased)
     * 'Mark All' now also uses the fully-featured PCRE engine
       (#3564132).
     * Only set Find in Files directory once per-document.
-    * Fix a crash when a matching the very last character of the
-      document.
+    * Fix a crash when matching the very last character of the document.
     * Fix search and replacement of empty matches.
     * Fix a possible crash when searching on a range.
 
     Keybindings
-    * Add keybinding for 'Go to Start of Display Line' (#3182425)
+    * Add keybinding for 'Go to Start of Display Line' (#3182425).
+    * Allow to change the keybinding for 'Quit'.
 
     Filetypes
     * Parse '!' char in D parameter lists.
@@ -98,10 +101,15 @@ Geany 1.23 (unreleased)
     * Add Asciidoc filetype.
     * Fix parsing of Python keywords followed by a tab (\t).
     * Add more HTML5 self-closing tags (Duncan de Wet).
+    * Update default D template to use a more standard prototype for
+      main().
 
     Plugins
     * Export: Fix missing linking on libm (Chow Loong Jin)
     * File Browser: Backspace now moves to parent directory.
+
+    API:
+    * Fix plugin_add_toolbar_item() insertion order (Dimitar Zhekov).
 
     Windows
     * Fix spawning synchronous commands on Windows.
