@@ -186,12 +186,10 @@ msgid "Startup path:"
 msgstr "起動時のパス:"
 
 #: ../data/geany.glade.h:38
-#, fuzzy
 msgid ""
 "Path to start in when opening or saving files. Must be an absolute path."
 msgstr ""
-"ファイルを開いたり保存するのに使用するパスです。必ず絶対パスで指定します。空"
-"白にすると、現在のディレクトリを使用します。"
+"ファイルを開いたり保存するのに使用するパスです。必ず絶対パスで指定します。"
 
 #: ../data/geany.glade.h:39
 msgid "Project files:"
@@ -407,9 +405,8 @@ msgid "Bottom"
 msgstr "下"
 
 #: ../data/geany.glade.h:81
-#, fuzzy
 msgid "<b>Message window</b>"
-msgstr "メッセージウィンドウ:"
+msgstr "<b>メッセージウィンドウ</b>"
 
 #: ../data/geany.glade.h:82
 msgid "Symbol list:"
@@ -487,15 +484,15 @@ msgstr "現在のタブの次"
 msgid ""
 "Whether to place file tabs next to the current tab rather than at the edges "
 "of the notebook"
-msgstr "ファイルタブを現在のタブの次に開くか最後のタブの次に開くかを指定"
+msgstr "ファイルタブを現在のタブの次に置くかメモの端にするかを指定"
 
 #: ../data/geany.glade.h:100
 msgid "Double-clicking hides all additional widgets"
-msgstr "ダブルクリックによって、全ての追加ウィジェットを非表示にします"
+msgstr "ダブルクリックによって、全ての追加ウィジェットを非表示にする"
 
 #: ../data/geany.glade.h:101
 msgid "Calls the View->Toggle All Additional Widgets command"
-msgstr "ファイルタブをダブルクリックすると、エディタ領域を最大にします"
+msgstr "表示->全ての追加ウィジェットを表示/非表示を実行する"
 
 #: ../data/geany.glade.h:102
 msgid "Switch to last used document after closing a tab"
@@ -1208,6 +1205,7 @@ msgid ""
 "A terminal emulator command (%c is substituted with the Geany run script "
 "filename)"
 msgstr ""
+"端末エミュレータコマンド (%c は Geany スクリプトファイル名に置き換えられます)"
 
 #: ../data/geany.glade.h:255
 msgid "Path (and possibly additional arguments) to your favorite browser"
@@ -1435,9 +1433,8 @@ msgid "Background color:"
 msgstr "背景色:"
 
 #: ../data/geany.glade.h:306
-#, fuzzy
 msgid "Background image:"
-msgstr "背景色"
+msgstr "背景画像:"
 
 #: ../data/geany.glade.h:307
 msgid "Scrollback lines:"
@@ -1452,14 +1449,12 @@ msgid "Sets the foreground color of the text in the terminal widget"
 msgstr "端末ウィジェットのテキストの文字色を設定します"
 
 #: ../data/geany.glade.h:310
-#, fuzzy
 msgid "Sets the background color of the text in the terminal widget"
 msgstr "端末ウィジェットのテキストの背景色を設定します"
 
 #: ../data/geany.glade.h:311
-#, fuzzy
 msgid "Sets the path to the background image in the terminal widget"
-msgstr "端末ウィジェットのテキストの背景色を設定します"
+msgstr "端末ウィジェットのテキストの背景画像を設定します"
 
 #: ../data/geany.glade.h:312
 msgid ""
@@ -1712,14 +1707,12 @@ msgid "_Select Current Paragraph"
 msgstr "現在の段落を選択(_S)"
 
 #: ../data/geany.glade.h:367
-#, fuzzy
 msgid "_Move Line(s) Up"
-msgstr "行を上に移動"
+msgstr "行を上に移動(_M)"
 
 #: ../data/geany.glade.h:368
-#, fuzzy
 msgid "_Move Line(s) Down"
-msgstr "行を下に移動"
+msgstr "行を下に移動(_M)"
 
 #: ../data/geany.glade.h:369 ../src/keybindings.c:401
 msgid "_Send Selection to Terminal"
@@ -1974,9 +1967,8 @@ msgid "Convert and Set to CR (_Mac)"
 msgstr "CR (_Mac)に変換"
 
 #: ../data/geany.glade.h:432 ../src/keybindings.c:567
-#, fuzzy
 msgid "_Clone"
-msgstr "閉じる(_C)"
+msgstr "複製(_C)"
 
 #: ../data/geany.glade.h:433
 msgid "_Strip Trailing Spaces"
@@ -2237,12 +2229,12 @@ msgid ""
 msgstr "コマンドが含まれているため、仮想端末でファイルが実行できません"
 
 #: ../src/build.c:1010
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Could not parse terminal command \"%s\" (check Terminal tool setting in "
 "Preferences)"
 msgstr ""
-"端末 \"%s\" が見つかりません（「設定」にある端末ツールのパス設定を確認してく"
+"端末コマンド \"%s\" を実行できません（「設定」にある端末ツールの設定を確認してく"
 "ださい）"
 
 #: ../src/build.c:1027
@@ -2671,11 +2663,11 @@ msgstr "<b>エンコーディング:</b>"
 
 #: ../src/dialogs.c:1298 ../src/ui_utils.c:271
 msgid "(with BOM)"
-msgstr "（BOM あり）"
+msgstr "(BOM あり)"
 
 #: ../src/dialogs.c:1298
 msgid "(without BOM)"
-msgstr "（BOM なし）"
+msgstr "(BOM なし)"
 
 #: ../src/dialogs.c:1309
 msgid "<b>Modified:</b>"
@@ -3255,7 +3247,7 @@ msgstr "最後に閉じたタブを再び開く"
 
 #: ../src/keybindings.c:276
 msgid "Quit"
-msgstr ""
+msgstr "終了"
 
 #: ../src/keybindings.c:293
 msgid "Undo"
@@ -3478,9 +3470,8 @@ msgid "Go to End of Line"
 msgstr "行末に移動"
 
 #: ../src/keybindings.c:491
-#, fuzzy
 msgid "Go to Start of Display Line"
-msgstr "表示行の末端に移動"
+msgstr "表示行の先頭に移動"
 
 #: ../src/keybindings.c:493
 msgid "Go to End of Display Line"
@@ -4009,9 +4000,8 @@ msgid "Print only the basename(without the path) of the printed file"
 msgstr "印刷ファイルのベース名（パスを除いたもの）のみを印刷します"
 
 #: ../src/printing.c:404
-#, fuzzy
 msgid "Paginating"
-msgstr "印刷"
+msgstr "ページ数"
 
 #: ../src/printing.c:428
 #, c-format
@@ -4506,15 +4496,15 @@ msgstr "構造体"
 
 #: ../src/symbols.c:752
 msgid "Parts"
-msgstr ""
+msgstr "パーツ"
 
 #: ../src/symbols.c:753
 msgid "Assembly"
-msgstr ""
+msgstr "アセンブリ"
 
 #: ../src/symbols.c:754
 msgid "Steps"
-msgstr ""
+msgstr "ステップ"
 
 #: ../src/symbols.c:769 ../src/symbols.c:864 ../src/symbols.c:889
 #: ../src/symbols.c:901
@@ -4566,24 +4556,20 @@ msgid "Type Selectors"
 msgstr "Type 選択"
 
 #: ../src/symbols.c:823
-#, fuzzy
 msgid "Section Level 1"
-msgstr "節"
+msgstr "節 1"
 
 #: ../src/symbols.c:824
-#, fuzzy
 msgid "Section Level 2"
-msgstr "節"
+msgstr "節 2"
 
 #: ../src/symbols.c:825
-#, fuzzy
 msgid "Section Level 3"
-msgstr "節"
+msgstr "節 3"
 
 #: ../src/symbols.c:826
-#, fuzzy
 msgid "Section Level 4"
-msgstr "節"
+msgstr "節 4"
 
 #: ../src/symbols.c:833 ../src/symbols.c:879
 msgid "Modules"
@@ -4627,9 +4613,8 @@ msgid "Variables / Signals"
 msgstr "変数/シグナル"
 
 #: ../src/symbols.c:870
-#, fuzzy
 msgid "Processes / Blocks / Components"
-msgstr "プロセス/コンポーネント"
+msgstr "プロセス/ブロック/コンポーネント"
 
 #: ../src/symbols.c:878
 msgid "Events"
@@ -5150,7 +5135,7 @@ msgstr "Unix (LF)"
 #: ../src/vte.c:432
 #, c-format
 msgid "invalid VTE library \"%s\": missing symbol \"%s\""
-msgstr ""
+msgstr "無効な VTE ライブラリ \"%s\": シンボル \"%s\" がありません"
 
 #: ../src/vte.c:581
 msgid "_Set Path From Document"
@@ -5181,7 +5166,7 @@ msgstr "実行ファイル"
 #: ../src/win32.c:1210
 #, c-format
 msgid "Process timed out after %.02f s!"
-msgstr ""
+msgstr "プロセスが %.02f 秒後にタイムアウト!"
 
 #: ../plugins/classbuilder.c:37
 msgid "Class Builder"
