@@ -1,14 +1,14 @@
 # Lithuanian of Geany
-# Copyright (C) 2012
+# Copyright (C) 2013
 # This file is distributed under the same license as the PACKAGE package.
-# Algimantas Margevičius <margevicius.algimantas@gmail.com>, 2012.
+# Algimantas Margevičius <margevicius.algimantas@gmail.com>, 2012 - 2013.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.23\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-02-23 14:24+0100\n"
-"PO-Revision-Date: 2012-06-06 12:29+0300\n"
+"PO-Revision-Date: 2013-02-24 09:09+0200\n"
 "Last-Translator: Algimantas Margevičius <margevicius.algimantas@gmail.com>\n"
 "Language-Team: Lietuvių <>\n"
 "Language: \n"
@@ -17,6 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && (n"
 "%100<10 || n%100>=20) ? 1 : 2)\n"
+"X-Generator: Gtranslator 2.91.5\n"
 
 #: ../geany.desktop.in.h:1 ../data/geany.glade.h:350
 msgid "Geany"
@@ -398,9 +399,8 @@ msgid "Bottom"
 msgstr "Apačia"
 
 #: ../data/geany.glade.h:81
-#, fuzzy
 msgid "<b>Message window</b>"
-msgstr "Pranešimo langas:"
+msgstr "<b>Pranešimo langas</b>"
 
 #: ../data/geany.glade.h:82
 msgid "Symbol list:"
@@ -455,8 +455,8 @@ msgid ""
 "Shows a small cross button in the file tabs to easily close files when "
 "clicking on it (requires restart of Geany)"
 msgstr ""
-"Ant failų kortelių rodo mažus mygtukus, su kryžiuku, greitam užvėrimui"
-"(reikės paleisti Geany iš naujo)"
+"Ant failų kortelių rodo mažus mygtukus, su kryžiuku, greitam "
+"užvėrimui(reikės paleisti Geany iš naujo)"
 
 #: ../data/geany.glade.h:95
 msgid "Placement of new file tabs:"
@@ -1209,6 +1209,8 @@ msgid ""
 "A terminal emulator command (%c is substituted with the Geany run script "
 "filename)"
 msgstr ""
+"Terminalo emuliatoriaus komanda (%c pakeičiama Geany vykdomo sceanrijaus "
+"vardu)"
 
 #: ../data/geany.glade.h:255
 msgid "Path (and possibly additional arguments) to your favorite browser"
@@ -1440,9 +1442,8 @@ msgid "Background color:"
 msgstr "Fono spalva:"
 
 #: ../data/geany.glade.h:306
-#, fuzzy
 msgid "Background image:"
-msgstr "Fonas"
+msgstr "Fono paveikslėlis:"
 
 #: ../data/geany.glade.h:307
 msgid "Scrollback lines:"
@@ -1457,14 +1458,12 @@ msgid "Sets the foreground color of the text in the terminal widget"
 msgstr "Nustato terminalo valdiklio priekinio plano teksto spalvą"
 
 #: ../data/geany.glade.h:310
-#, fuzzy
 msgid "Sets the background color of the text in the terminal widget"
 msgstr "Nustato terminalo valdiklio fono teksto spalvą"
 
 #: ../data/geany.glade.h:311
-#, fuzzy
 msgid "Sets the path to the background image in the terminal widget"
-msgstr "Nustato terminalo valdiklio fono teksto spalvą"
+msgstr "Nustato terminalo valdiklio fono paveikslėlio kelią"
 
 #: ../data/geany.glade.h:312
 msgid ""
@@ -1717,14 +1716,12 @@ msgid "_Select Current Paragraph"
 msgstr "_Pasirinkti esamą paragrafą"
 
 #: ../data/geany.glade.h:367
-#, fuzzy
 msgid "_Move Line(s) Up"
-msgstr "Perkelti eilutę(-es) aukštyn"
+msgstr "Perkelti eilutę(-es) _aukštyn"
 
 #: ../data/geany.glade.h:368
-#, fuzzy
 msgid "_Move Line(s) Down"
-msgstr "Perkelti eilutę(-es) žemyn"
+msgstr "_Perkelti eilutę(-es) žemyn"
 
 #: ../data/geany.glade.h:369 ../src/keybindings.c:401
 msgid "_Send Selection to Terminal"
@@ -1979,9 +1976,8 @@ msgid "Convert and Set to CR (_Mac)"
 msgstr "Konvertuoti ir nustatyti į CR (_Mac)"
 
 #: ../data/geany.glade.h:432 ../src/keybindings.c:567
-#, fuzzy
 msgid "_Clone"
-msgstr "_Užverti"
+msgstr "_Klonavimas"
 
 #: ../data/geany.glade.h:433
 msgid "_Strip Trailing Spaces"
@@ -2244,13 +2240,13 @@ msgid ""
 msgstr "VTE nepavyko įvykdyti failo, greičiausiai jame yra komanda."
 
 #: ../src/build.c:1010
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Could not parse terminal command \"%s\" (check Terminal tool setting in "
 "Preferences)"
 msgstr ""
-"Terminalo „%s“ rasti nepavyko (nustatymuose patikrinkite terminalo įrankio "
-"nustatymo kelią)"
+"Apdoroti terminalo komandos „%s“ nepavyko (nustatymuose patikrinkite "
+"terminalo įrankio nustatymo kelią)"
 
 #: ../src/build.c:1027
 #, c-format
@@ -3264,7 +3260,7 @@ msgstr "Dar kartą atverti paskutinę užvertą kortelę"
 
 #: ../src/keybindings.c:276
 msgid "Quit"
-msgstr ""
+msgstr "Baigti"
 
 #: ../src/keybindings.c:293
 msgid "Undo"
@@ -3492,9 +3488,8 @@ msgid "Go to End of Line"
 msgstr "Eiti į eilutės pabaigą"
 
 #: ../src/keybindings.c:491
-#, fuzzy
 msgid "Go to Start of Display Line"
-msgstr "Eiti į rodomos eilutės pabaigą"
+msgstr "Eiti į rodomos eilutės pradžią"
 
 #: ../src/keybindings.c:493
 msgid "Go to End of Display Line"
@@ -4024,9 +4019,8 @@ msgid "Print only the basename(without the path) of the printed file"
 msgstr "Spausdinamo failo rodyti tik bazinį pavadinimą(be kelio)"
 
 #: ../src/printing.c:404
-#, fuzzy
 msgid "Paginating"
-msgstr "Spausdinimas"
+msgstr "Puslapiavimas"
 
 #: ../src/printing.c:428
 #, c-format
@@ -4525,15 +4519,15 @@ msgstr "Struktūros"
 
 #: ../src/symbols.c:752
 msgid "Parts"
-msgstr ""
+msgstr "Išrinkti"
 
 #: ../src/symbols.c:753
 msgid "Assembly"
-msgstr ""
+msgstr "Surinkti"
 
 #: ../src/symbols.c:754
 msgid "Steps"
-msgstr ""
+msgstr "Žingsniai"
 
 #: ../src/symbols.c:769 ../src/symbols.c:864 ../src/symbols.c:889
 #: ../src/symbols.c:901
@@ -4585,24 +4579,20 @@ msgid "Type Selectors"
 msgstr "Tipų pasirinkikliai"
 
 #: ../src/symbols.c:823
-#, fuzzy
 msgid "Section Level 1"
-msgstr "Sekcija"
+msgstr "Skyriaus lygmuo 1"
 
 #: ../src/symbols.c:824
-#, fuzzy
 msgid "Section Level 2"
-msgstr "Sekcija"
+msgstr "Skyriaus lygmuo 2"
 
 #: ../src/symbols.c:825
-#, fuzzy
 msgid "Section Level 3"
-msgstr "Sekcija"
+msgstr "Skyriaus lygmuo 3"
 
 #: ../src/symbols.c:826
-#, fuzzy
 msgid "Section Level 4"
-msgstr "Sekcija"
+msgstr "Skyriaus lygmuo 4"
 
 #: ../src/symbols.c:833 ../src/symbols.c:879
 msgid "Modules"
@@ -4646,9 +4636,8 @@ msgid "Variables / Signals"
 msgstr "Kintamieji / Signalai"
 
 #: ../src/symbols.c:870
-#, fuzzy
 msgid "Processes / Blocks / Components"
-msgstr "Procesai / Komponentai"
+msgstr "Procesai / Blokai / Komponentai"
 
 #: ../src/symbols.c:878
 msgid "Events"
@@ -5169,7 +5158,7 @@ msgstr "Unix (LF)"
 #: ../src/vte.c:432
 #, c-format
 msgid "invalid VTE library \"%s\": missing symbol \"%s\""
-msgstr ""
+msgstr "netinkama VTE biblioteka „%s“: trūksta simbolio „%s“"
 
 #: ../src/vte.c:581
 msgid "_Set Path From Document"
@@ -5200,7 +5189,7 @@ msgstr "Vykdomieji failai"
 #: ../src/win32.c:1210
 #, c-format
 msgid "Process timed out after %.02f s!"
-msgstr ""
+msgstr "Procesas nutrūko po %.02f s!"
 
 #: ../plugins/classbuilder.c:37
 msgid "Class Builder"
@@ -5704,26 +5693,3 @@ msgstr "Skaidyti horizontaliai"
 #: ../plugins/splitwindow.c:430
 msgid "Split Vertically"
 msgstr "Skaidyti vertikaliai"
-
-#~ msgid ""
-#~ "A terminal emulator like xterm, gnome-terminal or konsole (should accept "
-#~ "the -e argument)"
-#~ msgstr ""
-#~ "Terminalo emuliatorius, toks kaip xterm, gnome-terminal ar konsole (turi "
-#~ "priimti „-e“ argumentą)"
-
-#~ msgid "_Open file in a new tab"
-#~ msgstr "_Failą atverti naujoje kortelėje"
-
-#~ msgid ""
-#~ "Keep the current unsaved document open and open the newly saved file in a "
-#~ "new tab"
-#~ msgstr ""
-#~ "Palikti dabartinį neišsaugotą failą atvertą ir atverti naujai išsaugotą "
-#~ "failą, naujoje kortelėje"
-
-#~ msgid "The editor font is not a monospaced font!"
-#~ msgstr "Redaktoriaus šriftas yra lygiaplotis šriftas!"
-
-#~ msgid "Text will be wrongly spaced."
-#~ msgstr "Tekstas bus iškraipytas."
