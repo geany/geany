@@ -1,7 +1,7 @@
 dnl Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.60])
-AC_INIT([Geany], [1.22],
+AC_INIT([Geany], [1.23],
 		[https://sourceforge.net/tracker/?group_id=153444&atid=787791])
 AC_CONFIG_SRCDIR([src/geany.h])
 AC_CONFIG_AUX_DIR([build-aux])
@@ -102,11 +102,20 @@ AC_CONFIG_FILES([
 		Makefile
 		icons/Makefile
 		icons/16x16/Makefile
+		icons/24x24/Makefile
+		icons/32x32/Makefile
 		icons/48x48/Makefile
 		icons/scalable/Makefile
+		icons/tango/Makefile
+		icons/tango/16x16/Makefile
+		icons/tango/24x24/Makefile
+		icons/tango/32x32/Makefile
+		icons/tango/48x48/Makefile
+		icons/tango/scalable/Makefile
 		tagmanager/Makefile
-		tagmanager/include/Makefile
+		tagmanager/ctags/Makefile
 		tagmanager/mio/Makefile
+		tagmanager/src/Makefile
 		scintilla/Makefile
 		scintilla/include/Makefile
 		src/Makefile

@@ -1,8 +1,8 @@
 /*
  *      toolbar.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2009-2011 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2009-2011 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2009-2012 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2009-2012 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -14,9 +14,9 @@
  *      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *      GNU General Public License for more details.
  *
- *      You should have received a copy of the GNU General Public License
- *      along with this program; if not, write to the Free Software
- *      Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *      You should have received a copy of the GNU General Public License along
+ *      with this program; if not, write to the Free Software Foundation, Inc.,
+ *      51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
 /**
@@ -809,12 +809,12 @@ static void tb_editor_drag_data_rcvd_cb(GtkWidget *widget, GdkDragContext *conte
 	GtkTreeView *tree = GTK_TREE_VIEW(widget);
 	gboolean del = FALSE;
 
-	if (data->length >= 0 && data->format == 8)
+	if (gtk_selection_data_get_length(data) >= 0 && gtk_selection_data_get_format(data) == 8)
 	{
 		gboolean is_sep;
 		gchar *text = NULL;
 
-		text = (gchar*) data->data;
+		text = (gchar*) gtk_selection_data_get_data(data);
 		is_sep = utils_str_equal(text, TB_EDITOR_SEPARATOR);
 		/* If the source of the action is equal to the target, we do just re-order and so need
 		 * to delete the separator to get it moved, not just copied. */

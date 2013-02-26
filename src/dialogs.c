@@ -1,8 +1,8 @@
 /*
  *      dialogs.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2005-2011 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2006-2011 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2005-2012 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2006-2012 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -14,9 +14,9 @@
  *      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *      GNU General Public License for more details.
  *
- *      You should have received a copy of the GNU General Public License
- *      along with this program; if not, write to the Free Software
- *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *      You should have received a copy of the GNU General Public License along
+ *      with this program; if not, write to the Free Software Foundation, Inc.,
+ *      51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
 /*
@@ -74,10 +74,6 @@ static struct FileSelState
 		gboolean show_hidden;
 		gboolean more_options_visible;
 	} open;
-	struct
-	{
-		gboolean open_in_new_tab;
-	} save;
 }
 filesel_state = {
 	{
@@ -85,9 +81,6 @@ filesel_state = {
 		GEANY_ENCODINGS_MAX, /* default encoding is detect from file */
 		0,
 		FALSE,
-		FALSE
-	},
-	{
 		FALSE
 	}
 };
@@ -487,40 +480,26 @@ void dialogs_show_open_file(void)
 }
 
 
-static void on_save_as_new_tab_toggled(GtkToggleButton *togglebutton, gpointer user_data)
-{
-	gtk_widget_set_sensitive(GTK_WIDGET(user_data), ! gtk_toggle_button_get_active(togglebutton));
-}
-
-
-static gboolean handle_save_as(const gchar *utf8_filename, gboolean open_new_tab, gboolean rename_file)
+static gboolean handle_save_as(const gchar *utf8_filename, gboolean rename_file)
 {
 	GeanyDocument *doc = document_get_current();
 	gboolean success = FALSE;
 
 	g_return_val_if_fail(NZV(utf8_filename), FALSE);
 
-	if (open_new_tab)
-	{	/* "open" the saved file in a new tab and switch to it */
-		doc = document_clone(doc, utf8_filename);
-		success = document_save_file_as(doc, NULL);
-	}
-	else
+	if (doc->file_name != NULL)
 	{
-		if (doc->file_name != NULL)
+		if (rename_file)
 		{
-			if (rename_file)
-			{
-				document_rename_file(doc, utf8_filename);
-			}
-			/* create a new tm_source_file object otherwise tagmanager won't work correctly */
-			tm_workspace_remove_object(doc->tm_file, TRUE, TRUE);
-			doc->tm_file = NULL;
+			document_rename_file(doc, utf8_filename);
 		}
-		success = document_save_file_as(doc, utf8_filename);
-
-		build_menu_update(doc);
+		/* create a new tm_source_file object otherwise tagmanager won't work correctly */
+		tm_workspace_remove_object(doc->tm_file, TRUE, TRUE);
+		doc->tm_file = NULL;
 	}
+	success = document_save_file_as(doc, utf8_filename);
+
+	build_menu_update(doc);
 	return success;
 }
 
@@ -549,16 +528,10 @@ static gboolean save_as_dialog_handle_response(GtkWidget *dialog, gint response)
 			/* fall through */
 		case GTK_RESPONSE_ACCEPT:
 		{
-			gboolean open_new_tab = gtk_toggle_button_get_active(
-					GTK_TOGGLE_BUTTON(ui_lookup_widget(dialog, "check_open_new_tab")));
 			gchar *utf8_filename;
 
 			utf8_filename = utils_get_utf8_from_locale(new_filename);
-			success = handle_save_as(utf8_filename, open_new_tab, rename_file);
-
-			if (success)
-				filesel_state.save.open_in_new_tab = open_new_tab;
-
+			success = handle_save_as(utf8_filename, rename_file);
 			g_free(utf8_filename);
 			break;
 		}
@@ -573,9 +546,9 @@ static gboolean save_as_dialog_handle_response(GtkWidget *dialog, gint response)
 }
 
 
-static GtkWidget *create_save_file_dialog(void)
+static GtkWidget *create_save_file_dialog(GeanyDocument *doc)
 {
-	GtkWidget *dialog, *vbox, *check_open_new_tab, *rename_btn;
+	GtkWidget *dialog, *rename_btn;
 	const gchar *initdir;
 
 	dialog = gtk_file_chooser_dialog_new(_("Save File"), GTK_WINDOW(main_widgets.window),
@@ -589,21 +562,14 @@ static GtkWidget *create_save_file_dialog(void)
 
 	rename_btn = gtk_dialog_add_button(GTK_DIALOG(dialog), _("R_ename"), GEANY_RESPONSE_RENAME);
 	gtk_widget_set_tooltip_text(rename_btn, _("Save the file and rename it"));
+	/* disable rename unless file exists on disk */
+	gtk_widget_set_sensitive(rename_btn, doc->real_path != NULL);
 
 	gtk_dialog_add_buttons(GTK_DIALOG(dialog),
 		GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 		GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT, NULL);
 	gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_ACCEPT);
 
-	vbox = gtk_vbox_new(FALSE, 0);
-	check_open_new_tab = gtk_check_button_new_with_mnemonic(_("_Open file in a new tab"));
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_open_new_tab), filesel_state.save.open_in_new_tab);
-	gtk_widget_set_tooltip_text(check_open_new_tab,
-		_("Keep the current unsaved document open"
-		" and open the newly saved file in a new tab"));
-	gtk_box_pack_start(GTK_BOX(vbox), check_open_new_tab, FALSE, FALSE, 0);
-	gtk_widget_show_all(vbox);
-	gtk_file_chooser_set_extra_widget(GTK_FILE_CHOOSER(dialog), vbox);
 	gtk_file_chooser_set_do_overwrite_confirmation(GTK_FILE_CHOOSER(dialog), TRUE);
 	gtk_file_chooser_set_local_only(GTK_FILE_CHOOSER(dialog), FALSE);
 
@@ -615,12 +581,6 @@ static GtkWidget *create_save_file_dialog(void)
 		gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog), linitdir);
 		g_free(linitdir);
 	}
-
-	g_signal_connect(check_open_new_tab, "toggled",
-				G_CALLBACK(on_save_as_new_tab_toggled), rename_btn);
-
-	ui_hookup_widget(dialog, check_open_new_tab, "check_open_new_tab");
-
 	return dialog;
 }
 
@@ -632,7 +592,7 @@ static gboolean show_save_as_gtk(GeanyDocument *doc)
 
 	g_return_val_if_fail(doc != NULL, FALSE);
 
-	dialog = create_save_file_dialog();
+	dialog = create_save_file_dialog(doc);
 
 	if (doc->file_name != NULL)
 	{
@@ -706,7 +666,7 @@ gboolean dialogs_show_save_as()
 		gchar *utf8_name = win32_show_document_save_as_dialog(GTK_WINDOW(main_widgets.window),
 						_("Save File"), DOC_FILENAME(doc));
 		if (utf8_name != NULL)
-			result = handle_save_as(utf8_name, FALSE, FALSE);
+			result = handle_save_as(utf8_name, FALSE);
 	}
 	else
 #endif
@@ -735,12 +695,7 @@ static void show_msgbox_dialog(GtkWidget *dialog, GtkMessageType type, GtkWindow
 			break;
 	}
 	gtk_window_set_title(GTK_WINDOW(dialog), title);
-	if (parent == NULL || GTK_IS_DIALOG(parent))
-	{
-		GdkPixbuf *pb = ui_new_pixbuf_from_inline(GEANY_IMAGE_LOGO);
-		gtk_window_set_icon(GTK_WINDOW(dialog), pb);
-		g_object_unref(pb);
-	}
+	gtk_window_set_icon_name(GTK_WINDOW(dialog), "geany");
 	gtk_widget_set_name(dialog, "GeanyDialog");
 
 	gtk_dialog_run(GTK_DIALOG(dialog));
@@ -866,30 +821,29 @@ gboolean dialogs_show_unsaved_file(GeanyDocument *doc)
 
 #ifndef G_OS_WIN32
 static void
-on_font_apply_button_clicked(GtkButton *button, gpointer user_data)
+on_font_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 {
-	gchar *fontname;
+	gboolean close = TRUE;
 
-	fontname = gtk_font_selection_dialog_get_font_name(
-		GTK_FONT_SELECTION_DIALOG(ui_widgets.open_fontsel));
-	ui_set_editor_font(fontname);
-	g_free(fontname);
-}
+	switch (response)
+	{
+		case GTK_RESPONSE_APPLY:
+		case GTK_RESPONSE_OK:
+		{
+			gchar *fontname;
 
+			fontname = gtk_font_selection_dialog_get_font_name(
+				GTK_FONT_SELECTION_DIALOG(ui_widgets.open_fontsel));
+			ui_set_editor_font(fontname);
+			g_free(fontname);
 
-static void
-on_font_ok_button_clicked(GtkButton *button, gpointer user_data)
-{
-	/* We do the same thing as apply, but we close the dialog after. */
-	on_font_apply_button_clicked(button, NULL);
-	gtk_widget_hide(ui_widgets.open_fontsel);
-}
+			close = (response == GTK_RESPONSE_OK);
+			break;
+		}
+	}
 
-
-static void
-on_font_cancel_button_clicked(GtkButton *button, gpointer user_data)
-{
-	gtk_widget_hide(ui_widgets.open_fontsel);
+	if (close)
+		gtk_widget_hide(ui_widgets.open_fontsel);
 }
 #endif
 
@@ -903,6 +857,8 @@ void dialogs_show_open_font()
 
 	if (ui_widgets.open_fontsel == NULL)
 	{
+		GtkWidget *apply_button;
+
 		ui_widgets.open_fontsel = gtk_font_selection_dialog_new(_("Choose font"));;
 		gtk_container_set_border_width(GTK_CONTAINER(ui_widgets.open_fontsel), 4);
 		gtk_window_set_modal(GTK_WINDOW(ui_widgets.open_fontsel), TRUE);
@@ -911,16 +867,19 @@ void dialogs_show_open_font()
 		gtk_window_set_type_hint(GTK_WINDOW(ui_widgets.open_fontsel), GDK_WINDOW_TYPE_HINT_DIALOG);
 		gtk_widget_set_name(ui_widgets.open_fontsel, "GeanyDialog");
 
-		gtk_widget_show(GTK_FONT_SELECTION_DIALOG(ui_widgets.open_fontsel)->apply_button);
+#if GTK_CHECK_VERSION(2, 20, 0)
+		/* apply button doesn't have a getter and is hidden by default, but we'd like to show it */
+		apply_button = gtk_dialog_get_widget_for_response(GTK_DIALOG(ui_widgets.open_fontsel), GTK_RESPONSE_APPLY);
+#else
+		apply_button = GTK_FONT_SELECTION_DIALOG(ui_widgets.open_fontsel)->apply_button;
+#endif
+		if (apply_button)
+			gtk_widget_show(apply_button);
 
 		g_signal_connect(ui_widgets.open_fontsel,
 					"delete-event", G_CALLBACK(gtk_widget_hide_on_delete), NULL);
-		g_signal_connect(GTK_FONT_SELECTION_DIALOG(ui_widgets.open_fontsel)->ok_button,
-					"clicked", G_CALLBACK(on_font_ok_button_clicked), NULL);
-		g_signal_connect(GTK_FONT_SELECTION_DIALOG(ui_widgets.open_fontsel)->cancel_button,
-					"clicked", G_CALLBACK(on_font_cancel_button_clicked), NULL);
-		g_signal_connect(GTK_FONT_SELECTION_DIALOG(ui_widgets.open_fontsel)->apply_button,
-					"clicked", G_CALLBACK(on_font_apply_button_clicked), NULL);
+		g_signal_connect(ui_widgets.open_fontsel,
+					"response", G_CALLBACK(on_font_dialog_response), NULL);
 
 		gtk_window_set_transient_for(GTK_WINDOW(ui_widgets.open_fontsel), GTK_WINDOW(main_widgets.window));
 	}
@@ -1258,9 +1217,9 @@ void dialogs_show_file_properties(GeanyDocument *doc)
 	gtk_misc_set_alignment(GTK_MISC(image), 1.0, 0.5);
 	hbox = gtk_hbox_new(FALSE, 6);
 	gtk_label_set_use_markup(GTK_LABEL(label), TRUE);
-	gtk_container_add(GTK_CONTAINER(hbox), image);
-	gtk_container_add(GTK_CONTAINER(hbox), label);
-	gtk_container_add(GTK_CONTAINER(vbox), hbox);
+	gtk_box_pack_start(GTK_BOX(hbox), image, TRUE, TRUE, 0);
+	gtk_box_pack_start(GTK_BOX(hbox), label, TRUE, TRUE, 0);
+	gtk_box_pack_start(GTK_BOX(vbox), hbox, TRUE, TRUE, 0);
 
 	table = gtk_table_new(8, 2, FALSE);
 	gtk_table_set_row_spacings(GTK_TABLE(table), 10);
@@ -1390,7 +1349,7 @@ void dialogs_show_file_properties(GeanyDocument *doc)
 	gtk_misc_set_alignment(GTK_MISC(label), 0, 0);
 
 	/* add table */
-	gtk_container_add(GTK_CONTAINER(vbox), table);
+	gtk_box_pack_start(GTK_BOX(vbox), table, TRUE, TRUE, 0);
 
 	/* create table with the permissions */
 	perm_table = gtk_table_new(5, 4, TRUE);
@@ -1533,7 +1492,7 @@ void dialogs_show_file_properties(GeanyDocument *doc)
 					(GtkAttachOptions) (0), 0, 0);
 	gtk_button_set_alignment(GTK_BUTTON(check), 0.5, 0);
 
-	gtk_container_add(GTK_CONTAINER(vbox), perm_table);
+	gtk_box_pack_start(GTK_BOX(vbox), perm_table ,TRUE, TRUE, 0);
 
 	g_free(base_name);
 	g_free(time_changed);
@@ -1590,12 +1549,7 @@ static gint show_prompt(GtkWidget *parent,
 		GTK_BUTTONS_NONE, "%s", question_text);
 	gtk_widget_set_name(dialog, "GeanyDialog");
 	gtk_window_set_title(GTK_WINDOW(dialog), _("Question"));
-	if (parent == NULL || GTK_IS_DIALOG(parent))
-	{
-		GdkPixbuf *pb = ui_new_pixbuf_from_inline(GEANY_IMAGE_LOGO);
-		gtk_window_set_icon(GTK_WINDOW(dialog), pb);
-		g_object_unref(pb);
-	}
+	gtk_window_set_icon_name(GTK_WINDOW(dialog), "geany");
 
 	/* question_text will be in bold if optional extra_text used */
 	if (extra_text != NULL)

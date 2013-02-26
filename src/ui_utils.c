@@ -1,9 +1,9 @@
 /*
  *      ui_utils.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2006-2011 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2006-2011 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
- *      Copyright 2011 Matthew Brush <mbrush(at)codebrainz(dot)ca>
+ *      Copyright 2006-2012 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2006-2012 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2011-2012 Matthew Brush <mbrush(at)codebrainz(dot)ca>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -15,9 +15,9 @@
  *      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *      GNU General Public License for more details.
  *
- *      You should have received a copy of the GNU General Public License
- *      along with this program; if not, write to the Free Software
- *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *      You should have received a copy of the GNU General Public License along
+ *      with this program; if not, write to the Free Software Foundation, Inc.,
+ *      51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
 /** @file ui_utils.h
@@ -44,7 +44,6 @@
 #include "utils.h"
 #include "callbacks.h"
 #include "encodings.h"
-#include "images.c"
 #include "sidebar.h"
 #include "win32.h"
 #include "project.h"
@@ -122,6 +121,7 @@ void ui_widget_set_sensitive(GtkWidget *widget, gboolean set)
  * that didn't use allow_override and has not timed out. */
 static void set_statusbar(const gchar *text, gboolean allow_override)
 {
+	static guint id = 0;
 	static glong last_time = 0;
 	GTimeVal timeval;
 	const gint GEANY_STATUS_TIMEOUT = 1;
@@ -129,19 +129,22 @@ static void set_statusbar(const gchar *text, gboolean allow_override)
 	if (! interface_prefs.statusbar_visible)
 		return; /* just do nothing if statusbar is not visible */
 
+	if (id == 0)
+		id = gtk_statusbar_get_context_id(GTK_STATUSBAR(ui_widgets.statusbar), "geany-main");
+
 	g_get_current_time(&timeval);
 
 	if (! allow_override)
 	{
-		gtk_statusbar_pop(GTK_STATUSBAR(ui_widgets.statusbar), 1);
-		gtk_statusbar_push(GTK_STATUSBAR(ui_widgets.statusbar), 1, text);
+		gtk_statusbar_pop(GTK_STATUSBAR(ui_widgets.statusbar), id);
+		gtk_statusbar_push(GTK_STATUSBAR(ui_widgets.statusbar), id, text);
 		last_time = timeval.tv_sec;
 	}
 	else
 	if (timeval.tv_sec > last_time + GEANY_STATUS_TIMEOUT)
 	{
-		gtk_statusbar_pop(GTK_STATUSBAR(ui_widgets.statusbar), 1);
-		gtk_statusbar_push(GTK_STATUSBAR(ui_widgets.statusbar), 1, text);
+		gtk_statusbar_pop(GTK_STATUSBAR(ui_widgets.statusbar), id);
+		gtk_statusbar_push(GTK_STATUSBAR(ui_widgets.statusbar), id, text);
 	}
 }
 
@@ -272,7 +275,7 @@ static void add_statusbar_statistics(GString *stats_str,
 				g_string_append(stats_str, filetypes_get_display_name(doc->file_type));
 				break;
 			case 'S':
-				symbols_get_current_function(doc, &cur_tag);
+				symbols_get_current_scope(doc, &cur_tag);
 				g_string_append(stats_str, cur_tag);
 				break;
 			default:
@@ -944,101 +947,7 @@ void ui_document_show_hide(GeanyDocument *doc)
 
 void ui_set_search_entry_background(GtkWidget *widget, gboolean success)
 {
-	static const GdkColor red   = {0, 0xffff, 0x6666, 0x6666};
-	static const GdkColor white = {0, 0xffff, 0xffff, 0xffff};
-	static gboolean old_value = TRUE;
-
-	g_return_if_fail(widget != NULL);
-
-	/* update only if really needed */
-	if (old_value != success)
-	{
-		gtk_widget_modify_base(widget, GTK_STATE_NORMAL, success ? NULL : &red);
-		gtk_widget_modify_text(widget, GTK_STATE_NORMAL, success ? NULL : &white);
-
-		old_value = success;
-	}
-}
-
-
-static gboolean have_tango_icon_theme(void)
-{
-	static gboolean result = FALSE;
-	static gboolean checked = FALSE;
-
-	if (! checked)
-	{
-		gchar *theme_name;
-
-		g_object_get(G_OBJECT(gtk_settings_get_default()), "gtk-icon-theme-name", &theme_name, NULL);
-		SETPTR(theme_name, g_utf8_strdown(theme_name, -1));
-
-		result = (strstr(theme_name, "tango") != NULL);
-		checked = TRUE;
-
-		g_free(theme_name);
-	}
-
-	return result;
-}
-
-
-/* Note: remember to unref the pixbuf once an image or window has added a reference. */
-GdkPixbuf *ui_new_pixbuf_from_inline(gint img)
-{
-	switch (img)
-	{
-		case GEANY_IMAGE_LOGO:
-			return gdk_pixbuf_new_from_inline(-1, aladin_inline, FALSE, NULL);
-			break;
-		case GEANY_IMAGE_SAVE_ALL:
-		{
-			/* check whether the icon theme looks like a Gnome icon theme, if so use the
-			 * old Gnome based Save All icon, otherwise assume a Tango-like icon theme */
-			if (have_tango_icon_theme())
-				return gdk_pixbuf_new_from_inline(-1, save_all_tango_inline, FALSE, NULL);
-			else
-				return gdk_pixbuf_new_from_inline(-1, save_all_gnome_inline, FALSE, NULL);
-			break;
-		}
-		case GEANY_IMAGE_CLOSE_ALL:
-		{
-			return gdk_pixbuf_new_from_inline(-1, close_all_inline, FALSE, NULL);
-			break;
-		}
-		case GEANY_IMAGE_BUILD:
-		{
-			return gdk_pixbuf_new_from_inline(-1, build_inline, FALSE, NULL);
-			break;
-		}
-		default:
-			return NULL;
-	}
-}
-
-
-static GdkPixbuf *ui_new_pixbuf_from_stock(const gchar *stock_id)
-{
-	if (utils_str_equal(stock_id, GEANY_STOCK_CLOSE_ALL))
-		return ui_new_pixbuf_from_inline(GEANY_IMAGE_CLOSE_ALL);
-	else if (utils_str_equal(stock_id, GEANY_STOCK_BUILD))
-		return ui_new_pixbuf_from_inline(GEANY_IMAGE_BUILD);
-	else if (utils_str_equal(stock_id, GEANY_STOCK_SAVE_ALL))
-		return ui_new_pixbuf_from_inline(GEANY_IMAGE_SAVE_ALL);
-
-	return NULL;
-}
-
-
-GtkWidget *ui_new_image_from_inline(gint img)
-{
-	GtkWidget *wid;
-	GdkPixbuf *pb;
-
-	pb = ui_new_pixbuf_from_inline(img);
-	wid = gtk_image_new_from_pixbuf(pb);
-	g_object_unref(pb);	/* the image doesn't adopt our reference, so remove our ref. */
-	return wid;
+	gtk_widget_set_name(widget, success ? NULL : "geany-search-entry-no-match");
 }
 
 
@@ -1403,7 +1312,7 @@ GtkWidget *ui_dialog_vbox_new(GtkDialog *dialog)
 	GtkWidget *vbox = gtk_vbox_new(FALSE, 12);	/* need child vbox to set a separate border. */
 
 	gtk_container_set_border_width(GTK_CONTAINER(vbox), 6);
-	gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), vbox);
+	gtk_container_add(GTK_CONTAINER(gtk_dialog_get_content_area(GTK_DIALOG(dialog))), vbox);
 	return vbox;
 }
 
@@ -1606,11 +1515,7 @@ void ui_combo_box_prepend_text_once(GtkComboBox *combo, const gchar *text)
  * document status. */
 void ui_update_tab_status(GeanyDocument *doc)
 {
-	const GdkColor *color = document_get_status_color(doc);
-
-	/* NULL color will reset to default */
-	gtk_widget_modify_fg(doc->priv->tab_label, GTK_STATE_NORMAL, color);
-	gtk_widget_modify_fg(doc->priv->tab_label, GTK_STATE_ACTIVE, color);
+	gtk_widget_set_name(doc->priv->tab_label, document_get_status_widget_class(doc));
 
 	sidebar_openfiles_update(doc);
 }
@@ -1970,10 +1875,6 @@ static void create_config_files_menu(void)
 
 void ui_init_stock_items(void)
 {
-	GtkIconSet *icon_set;
-	GtkIconFactory *factory = gtk_icon_factory_new();
-	GdkPixbuf *pb;
-	guint i, len;
 	GtkStockItem items[] =
 	{
 		{ GEANY_STOCK_SAVE_ALL, N_("Save All"), 0, 0, GETTEXT_PACKAGE },
@@ -1981,20 +1882,7 @@ void ui_init_stock_items(void)
 		{ GEANY_STOCK_BUILD, N_("Build"), 0, 0, GETTEXT_PACKAGE }
 	};
 
-	len = G_N_ELEMENTS(items);
-	for (i = 0; i < len; i++)
-	{
-		pb = ui_new_pixbuf_from_stock(items[i].stock_id);
-		icon_set = gtk_icon_set_new_from_pixbuf(pb);
-
-		gtk_icon_factory_add(factory, items[i].stock_id, icon_set);
-
-		gtk_icon_set_unref(icon_set);
-		g_object_unref(pb);
-	}
-	gtk_stock_add((GtkStockItem *) items, len);
-	gtk_icon_factory_add_default(factory);
-	g_object_unref(factory);
+	gtk_stock_add((GtkStockItem *) items, G_N_ELEMENTS(items));
 }
 
 
@@ -2270,8 +2158,19 @@ void ui_init_builder(void)
 }
 
 
+static void init_custom_style(void)
+{
+	gchar *gtkrc_file = g_build_filename(app->datadir, "geany.gtkrc", NULL);
+
+	gtk_rc_parse(gtkrc_file);
+	g_free(gtkrc_file);
+}
+
+
 void ui_init(void)
 {
+	init_custom_style();
+
 	init_recent_files();
 
 	ui_widgets.statusbar = ui_lookup_widget(main_widgets.window, "statusbar");
@@ -2348,10 +2247,15 @@ void ui_finalize(void)
 
 static void auto_separator_update(GeanyAutoSeparator *autosep)
 {
-	g_return_if_fail(autosep->ref_count >= 0);
+	g_return_if_fail(autosep->item_count >= 0);
 
 	if (autosep->widget)
-		ui_widget_show_hide(autosep->widget, autosep->ref_count > 0);
+	{
+		if (autosep->item_count > 0)
+			ui_widget_show_hide(autosep->widget, autosep->show_count > 0);
+		else
+			gtk_widget_destroy(autosep->widget);
+	}
 }
 
 
@@ -2360,9 +2264,9 @@ static void on_auto_separator_item_show_hide(GtkWidget *widget, gpointer user_da
 	GeanyAutoSeparator *autosep = user_data;
 
 	if (GTK_WIDGET_VISIBLE(widget))
-		autosep->ref_count++;
+		autosep->show_count++;
 	else
-		autosep->ref_count--;
+		autosep->show_count--;
 	auto_separator_update(autosep);
 }
 
@@ -2371,10 +2275,12 @@ static void on_auto_separator_item_destroy(GtkWidget *widget, gpointer user_data
 {
 	GeanyAutoSeparator *autosep = user_data;
 
+	autosep->item_count--;
+	autosep->item_count = MAX(autosep->item_count, 0);
 	/* GTK_WIDGET_VISIBLE won't work now the widget is being destroyed,
 	 * so assume widget was visible */
-	autosep->ref_count--;
-	autosep->ref_count = MAX(autosep->ref_count, 0);
+	autosep->show_count--;
+	autosep->show_count = MAX(autosep->item_count, 0);
 	auto_separator_update(autosep);
 }
 
@@ -2386,15 +2292,16 @@ static void on_auto_separator_item_destroy(GtkWidget *widget, gpointer user_data
 void ui_auto_separator_add_ref(GeanyAutoSeparator *autosep, GtkWidget *item)
 {
 	/* set widget ptr NULL when widget destroyed */
-	if (autosep->ref_count == 0)
+	if (autosep->item_count == 0)
 		g_signal_connect(autosep->widget, "destroy",
 			G_CALLBACK(gtk_widget_destroyed), &autosep->widget);
 
 	if (GTK_WIDGET_VISIBLE(item))
-	{
-		autosep->ref_count++;
-		auto_separator_update(autosep);
-	}
+		autosep->show_count++;
+
+	autosep->item_count++;
+	auto_separator_update(autosep);
+
 	g_signal_connect(item, "show", G_CALLBACK(on_auto_separator_item_show_hide), autosep);
 	g_signal_connect(item, "hide", G_CALLBACK(on_auto_separator_item_show_hide), autosep);
 	g_signal_connect(item, "destroy", G_CALLBACK(on_auto_separator_item_destroy), autosep);
@@ -2439,7 +2346,7 @@ GtkWidget *ui_lookup_widget(GtkWidget *widget, const gchar *widget_name)
 		if (GTK_IS_MENU(widget))
 			parent = gtk_menu_get_attach_widget(GTK_MENU(widget));
 		else
-			parent = widget->parent;
+			parent = gtk_widget_get_parent(widget);
 		if (parent == NULL)
 			parent = (GtkWidget*) g_object_get_data(G_OBJECT(widget), "GladeParentKey");
 		if (parent == NULL)
@@ -2616,7 +2523,7 @@ void ui_menu_add_document_items(GtkMenu *menu, GeanyDocument *active, GCallback 
  * @a compare_func might be NULL to not sort the documents in the menu. In this case,
  * the order of the document tabs is used.
  *
- * See document_sort_by_display_name() for an example sort function.
+ * See document_compare_by_display_name() for an example sort function.
  *
  * @param menu Menu.
  * @param active Which document to highlight, or @c NULL.
@@ -2629,7 +2536,6 @@ void ui_menu_add_document_items_sorted(GtkMenu *menu, GeanyDocument *active,
 	GCallback callback, GCompareFunc compare_func)
 {
 	GtkWidget *menu_item, *menu_item_label, *image;
-	const GdkColor *color;
 	GeanyDocument *doc;
 	guint i, len;
 	gchar *base_name, *label;
@@ -2662,10 +2568,8 @@ void ui_menu_add_document_items_sorted(GtkMenu *menu, GeanyDocument *active,
 		gtk_container_add(GTK_CONTAINER(menu), menu_item);
 		g_signal_connect(menu_item, "activate", callback, doc);
 
-		color = document_get_status_color(doc);
 		menu_item_label = gtk_bin_get_child(GTK_BIN(menu_item));
-		gtk_widget_modify_fg(menu_item_label, GTK_STATE_NORMAL, color);
-		gtk_widget_modify_fg(menu_item_label, GTK_STATE_ACTIVE, color);
+		gtk_widget_set_name(menu_item_label, document_get_status_widget_class(doc));
 
 		if (doc == active)
 		{

@@ -1,9 +1,9 @@
 /*
  *      editor.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2005-2011 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2006-2011 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
- *      Copyright 2009-2011 Frank Lanitz <frank(at)frank(dot)uvena(dot)de>
+ *      Copyright 2005-2012 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2006-2012 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2009-2012 Frank Lanitz <frank(at)frank(dot)uvena(dot)de>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -15,9 +15,9 @@
  *      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *      GNU General Public License for more details.
  *
- *      You should have received a copy of the GNU General Public License
- *      along with this program; if not, write to the Free Software
- *      Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *      You should have received a copy of the GNU General Public License along
+ *      with this program; if not, write to the Free Software Foundation, Inc.,
+ *      51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
 /**
@@ -109,6 +109,7 @@ static const gchar *snippets_find_completion_by_name(const gchar *type, const gc
 static void snippets_make_replacements(GeanyEditor *editor, GString *pattern);
 static gssize replace_cursor_markers(GeanyEditor *editor, GString *pattern);
 static GeanyFiletype *editor_get_filetype_at_current_pos(GeanyEditor *editor);
+static gboolean sci_is_blank_line(ScintillaObject *sci, gint line);
 
 
 void editor_snippets_free(void)
@@ -266,13 +267,12 @@ void editor_snippets_init(void)
 
 	snippet_offsets = g_queue_new();
 
-	sysconfigfile = g_strconcat(app->datadir, G_DIR_SEPARATOR_S, "snippets.conf", NULL);
-	userconfigfile = g_strconcat(app->configdir, G_DIR_SEPARATOR_S, "snippets.conf", NULL);
+	sysconfigfile = g_build_filename(app->datadir, "snippets.conf", NULL);
+	userconfigfile = g_build_filename(app->configdir, "snippets.conf", NULL);
 
 	/* check for old autocomplete.conf files (backwards compatibility) */
 	if (! g_file_test(userconfigfile, G_FILE_TEST_IS_REGULAR))
-		SETPTR(userconfigfile,
-			g_strconcat(app->configdir, G_DIR_SEPARATOR_S, "autocomplete.conf", NULL));
+		SETPTR(userconfigfile, g_build_filename(app->configdir, "autocomplete.conf", NULL));
 
 	/* load the actual config files */
 	g_key_file_load_from_file(sysconfig, sysconfigfile, G_KEY_FILE_NONE, NULL);
@@ -445,7 +445,20 @@ void editor_toggle_fold(GeanyEditor *editor, gint line, gint modifiers)
 	g_return_if_fail(editor != NULL);
 
 	sci = editor->sci;
+	/* When collapsing a fold range whose starting line is offscreen,
+	 * scroll the starting line to display at the top of the view.
+	 * Otherwise it can be confusing when the document scrolls down to hide
+	 * the folded lines. */
+	if ((sci_get_fold_level(sci, line) & SC_FOLDLEVELNUMBERMASK) > SC_FOLDLEVELBASE &&
+		!(sci_get_fold_level(sci, line) & SC_FOLDLEVELHEADERFLAG))
+	{
+		gint parent = sci_get_fold_parent(sci, line);
+		gint first = sci_get_first_visible_line(sci);
 
+		parent = SSM(sci, SCI_VISIBLEFROMDOCLINE, parent, 0);
+		if (first > parent)
+			SSM(sci, SCI_SETFIRSTVISIBLELINE, parent, 0);
+	}
 	sci_toggle_fold(sci, line);
 
 	/* extra toggling of child fold points
@@ -587,7 +600,7 @@ static void check_line_breaking(GeanyEditor *editor, gint pos, gchar c)
 			/* last column - distance is the desired column, then retrieve its document position */
 			pos = SSM(sci, SCI_FINDCOLUMN, line, last_col - diff);
 			sci_set_current_position(sci, pos, FALSE);
-
+			sci_scroll_caret(sci);
 			return;
 		}
 	}
@@ -684,8 +697,10 @@ static void request_reshowing_calltip(SCNotification *nt)
 	if (calltip.set)
 	{
 		/* delay the reshow of the calltip window to make sure it is actually displayed,
-		 * without it might be not visible on SCN_AUTOCCANCEL */
-		g_idle_add(reshow_calltip, NULL);
+		 * without it might be not visible on SCN_AUTOCCANCEL. the priority is set to
+		 * low to hopefully make Scintilla's events happen before reshowing since they
+		 * seem to re-cancel the calltip on autoc menu hiding too */
+		g_idle_add_full(G_PRIORITY_LOW, reshow_calltip, NULL, NULL);
 	}
 }
 
@@ -1292,45 +1307,52 @@ static void read_indent(GeanyEditor *editor, gint pos)
 
 static gint get_brace_indent(ScintillaObject *sci, gint line)
 {
-	guint i, len;
-	gint ret = 0;
-	gchar *linebuf;
+	gint start = sci_get_position_from_line(sci, line);
+	gint end = sci_get_line_end_position(sci, line) - 1;
+	gint lexer = sci_get_lexer(sci);
+	gint count = 0;
+	gint pos;
 
-	len = sci_get_line_length(sci, line);
-	linebuf = sci_get_line(sci, line);
-
-	for (i = 0; i < len; i++)
+	for (pos = end; pos >= start && count < 1; pos--)
 	{
-		/* i == (len - 1) prevents wrong indentation after lines like
-		 * "	{ return bless({}, shift); }" (Perl) */
-		if (linebuf[i] == '{' && i == (len - 1))
+		if (highlighting_is_code_style(lexer, sci_get_style_at(sci, pos)))
 		{
-			ret++;
-			break;
-		}
-		else
-		{
-			gint k = len - 1;
+			gchar c = sci_get_char_at(sci, pos);
 
-			while (k > 0 && isspace(linebuf[k])) k--;
-
-			/* if last non-whitespace character is a { increase indentation by a tab
-			 * e.g. for (...) { */
-			if (linebuf[k] == '{')
-			{
-				ret++;
-			}
-			break;
+			if (c == '{')
+				count ++;
+			else if (c == '}')
+				count --;
 		}
 	}
-	g_free(linebuf);
-	return ret;
+
+	return count > 0 ? 1 : 0;
+}
+
+
+/* gets the last code position on a line
+ * warning: if there is no code position on the line, returns the start position */
+static gint get_sci_line_code_end_position(ScintillaObject *sci, gint line)
+{
+	gint start = sci_get_position_from_line(sci, line);
+	gint lexer = sci_get_lexer(sci);
+	gint pos;
+
+	for (pos = sci_get_line_end_position(sci, line) - 1; pos > start; pos--)
+	{
+		gint style = sci_get_style_at(sci, pos);
+
+		if (highlighting_is_code_style(lexer, style) && ! isspace(sci_get_char_at(sci, pos)))
+			break;
+	}
+
+	return pos;
 }
 
 
 static gint get_python_indent(ScintillaObject *sci, gint line)
 {
-	gint last_char = sci_get_line_end_position(sci, line) - 1;
+	gint last_char = get_sci_line_code_end_position(sci, line);
 
 	/* add extra indentation for Python after colon */
 	if (sci_get_char_at(sci, last_char) == ':' &&
@@ -1345,7 +1367,7 @@ static gint get_python_indent(ScintillaObject *sci, gint line)
 static gint get_xml_indent(ScintillaObject *sci, gint line)
 {
 	gboolean need_close = FALSE;
-	gint end = sci_get_line_end_position(sci, line) - 1;
+	gint end = get_sci_line_code_end_position(sci, line);
 	gint pos;
 
 	/* don't indent if there's a closing tag to the right of the cursor */
@@ -1396,8 +1418,7 @@ static gint get_indent_size_after_line(GeanyEditor *editor, gint line)
 
 		if (lexer_has_braces(sci))
 			additional_indent = iprefs->width * get_brace_indent(sci, line);
-		else
-		if (editor->document->file_type->id == GEANY_FILETYPES_PYTHON)
+		else if (sci_get_lexer(sci) == SCLEX_PYTHON) /* Python/Cython */
 			additional_indent = iprefs->width * get_python_indent(sci, line);
 
 		/* HTML lexer "has braces" because of PHP and JavaScript.  If get_brace_indent() did not
@@ -2192,6 +2213,8 @@ gboolean editor_start_auto_complete(GeanyEditor *editor, gint pos, gboolean forc
 
 	if (ft->id == GEANY_FILETYPES_LATEX)
 		wordchars = GEANY_WORDCHARS"\\"; /* add \ to word chars if we are in a LaTeX file */
+	else if (ft->id == GEANY_FILETYPES_CSS)
+		wordchars = GEANY_WORDCHARS"-"; /* add - because they are part of property names */
 	else
 		wordchars = GEANY_WORDCHARS;
 
@@ -2798,47 +2821,68 @@ static void real_comment_multiline(GeanyEditor *editor, gint line_start, gint la
 }
 
 
-static void real_uncomment_multiline(GeanyEditor *editor)
+/* find @p text inside the range of the current style */
+static gint find_in_current_style(ScintillaObject *sci, const gchar *text, gboolean backwards)
+{
+	gint start = sci_get_current_position(sci);
+	gint end = start;
+	gint len = sci_get_length(sci);
+	gint current_style = sci_get_style_at(sci, start);
+	struct Sci_TextToFind ttf;
+
+	while (start > 0 && sci_get_style_at(sci, start - 1) == current_style)
+		start -= 1;
+	while (end < len && sci_get_style_at(sci, end + 1) == current_style)
+		end += 1;
+
+	ttf.lpstrText = (gchar*) text;
+	ttf.chrg.cpMin = backwards ? end + 1 : start;
+	ttf.chrg.cpMax = backwards ? start : end + 1;
+	return sci_find_text(sci, 0, &ttf);
+}
+
+
+static void sci_delete_line(ScintillaObject *sci, gint line)
+{
+	gint start = sci_get_position_from_line(sci, line);
+	gint len = sci_get_line_length(sci, line);
+	SSM(sci, SCI_DELETERANGE, start, len);
+}
+
+
+static gboolean real_uncomment_multiline(GeanyEditor *editor)
 {
 	/* find the beginning of the multi line comment */
-	gint pos, line, len, x;
-	gchar *linebuf;
-	GeanyDocument *doc;
+	gint start, end, start_line, end_line;
 	GeanyFiletype *ft;
 	const gchar *co, *cc;
 
-	g_return_if_fail(editor != NULL && editor->document->file_type != NULL);
-	doc = editor->document;
+	g_return_val_if_fail(editor != NULL && editor->document->file_type != NULL, FALSE);
 
 	ft = editor_get_filetype_at_current_pos(editor);
 	if (! filetype_get_comment_open_close(ft, FALSE, &co, &cc))
-		g_return_if_reached();
+		g_return_val_if_reached(FALSE);
 
-	/* remove comment open chars */
-	pos = document_find_text(doc, co, NULL, 0, TRUE, FALSE, NULL);
-	SSM(editor->sci, SCI_DELETEBACK, 0, 0);
+	start = find_in_current_style(editor->sci, co, TRUE);
+	end = find_in_current_style(editor->sci, cc, FALSE);
 
-	/* check whether the line is empty and can be deleted */
-	line = sci_get_line_from_position(editor->sci, pos);
-	len = sci_get_line_length(editor->sci, line);
-	linebuf = sci_get_line(editor->sci, line);
-	x = 0;
-	while (linebuf[x] != '\0' && isspace(linebuf[x])) x++;
-	if (x == len) SSM(editor->sci, SCI_LINEDELETE, 0, 0);
-	g_free(linebuf);
+	if (start < 0 || end < 0 || start > end /* who knows */)
+		return FALSE;
+
+	start_line = sci_get_line_from_position(editor->sci, start);
+	end_line = sci_get_line_from_position(editor->sci, end);
 
 	/* remove comment close chars */
-	pos = document_find_text(doc, cc, NULL, 0, FALSE, FALSE, NULL);
-	SSM(editor->sci, SCI_DELETEBACK, 0, 0);
+	SSM(editor->sci, SCI_DELETERANGE, end, strlen(cc));
+	if (sci_is_blank_line(editor->sci, end_line))
+		sci_delete_line(editor->sci, end_line);
 
-	/* check whether the line is empty and can be deleted */
-	line = sci_get_line_from_position(editor->sci, pos);
-	len = sci_get_line_length(editor->sci, line);
-	linebuf = sci_get_line(editor->sci, line);
-	x = 0;
-	while (linebuf[x] != '\0' && isspace(linebuf[x])) x++;
-	if (x == len) SSM(editor->sci, SCI_LINEDELETE, 0, 0);
-	g_free(linebuf);
+	/* remove comment open chars (do it last since it would move the end position) */
+	SSM(editor->sci, SCI_DELETERANGE, start, strlen(co));
+	if (sci_is_blank_line(editor->sci, start_line))
+		sci_delete_line(editor->sci, start_line);
+
+	return TRUE;
 }
 
 
@@ -2971,8 +3015,8 @@ gint editor_do_uncomment(GeanyEditor *editor, gint line, gboolean toggle)
 				style_comment = get_multiline_comment_style(editor, line_start);
 				if (sci_get_style_at(editor->sci, line_start + x) == style_comment)
 				{
-					real_uncomment_multiline(editor);
-					count = 1;
+					if (real_uncomment_multiline(editor))
+						count = 1;
 				}
 
 				/* break because we are already on the last line */
@@ -3094,8 +3138,8 @@ void editor_do_comment_toggle(GeanyEditor *editor)
 			style_comment = get_multiline_comment_style(editor, line_start);
 			if (sci_get_style_at(editor->sci, line_start + x) == style_comment)
 			{
-				real_uncomment_multiline(editor);
-				count_uncommented++;
+				if (real_uncomment_multiline(editor))
+					count_uncommented++;
 			}
 			else
 			{
@@ -3113,46 +3157,40 @@ void editor_do_comment_toggle(GeanyEditor *editor)
 
 	co_len += tm_len;
 
-	/* restore selection if there is one */
-	if (sel_start < sel_end)
+	/* restore selection or caret position */
+	if (single_line)
 	{
-		if (single_line)
+		gint a = (first_line_was_comment) ? - co_len : co_len;
+
+		/* don't modify sel_start when the selection starts within indentation */
+		read_indent(editor, sel_start);
+		if ((sel_start - first_line_start) <= (gint) strlen(indent))
+			a = 0;
+
+		if (sel_start < sel_end)
 		{
-			gint a = (first_line_was_comment) ? - co_len : co_len;
-
-			/* don't modify sel_start when the selection starts within indentation */
-			read_indent(editor, sel_start);
-			if ((sel_start - first_line_start) <= (gint) strlen(indent))
-				a = 0;
-
 			sci_set_selection_start(editor->sci, sel_start + a);
 			sci_set_selection_end(editor->sci, sel_end +
 								(count_commented * co_len) - (count_uncommented * co_len));
 		}
 		else
+			sci_set_current_position(editor->sci, sel_start + a, TRUE);
+	}
+	else
+	{
+		gint eol_len = editor_get_eol_char_len(editor);
+		if (count_uncommented > 0)
 		{
-			gint eol_len = editor_get_eol_char_len(editor);
-			if (count_uncommented > 0)
-			{
-				sci_set_selection_start(editor->sci, sel_start - co_len + eol_len);
-				sci_set_selection_end(editor->sci, sel_end - co_len + eol_len);
-			}
-			else if (count_commented > 0)
-			{
-				sci_set_selection_start(editor->sci, sel_start + co_len - eol_len);
-				sci_set_selection_end(editor->sci, sel_end + co_len - eol_len);
-			}
+			sci_set_selection_start(editor->sci, sel_start - co_len + eol_len);
+			sci_set_selection_end(editor->sci, sel_end - co_len + eol_len);
 		}
-	}
-	else if (count_uncommented > 0)
-	{
-		gint eol_len = single_line ? 0: editor_get_eol_char_len(editor);
-		sci_set_current_position(editor->sci, sel_start - co_len + eol_len, TRUE);
-	}
-	else if (count_commented > 0)
-	{
-		gint eol_len = single_line ? 0: editor_get_eol_char_len(editor);
-		sci_set_current_position(editor->sci, sel_start + co_len - eol_len, TRUE);
+		else if (count_commented > 0)
+		{
+			sci_set_selection_start(editor->sci, sel_start + co_len - eol_len);
+			sci_set_selection_end(editor->sci, sel_end + co_len - eol_len);
+		}
+		if (sel_start >= sel_end)
+			sci_scroll_caret(editor->sci);
 	}
 }
 
@@ -3407,7 +3445,7 @@ static void auto_multiline(GeanyEditor *editor, gint cur_line)
 
 	/* Check whether the comment block continues on this line */
 	indent_pos = sci_get_line_indent_position(sci, cur_line);
-	if (sci_get_style_at(sci, indent_pos) == style)
+	if (sci_get_style_at(sci, indent_pos) == style || indent_pos >= sci_get_length(sci))
 	{
 		gchar *previous_line = sci_get_line(sci, cur_line - 1);
 		/* the type of comment, '*' (C/C++/Java), '+' and the others (D) */
@@ -4351,6 +4389,10 @@ void editor_strip_line_trailing_spaces(GeanyEditor *editor, gint line)
 	gint i = line_end - 1;
 	gchar ch = sci_get_char_at(editor->sci, i);
 
+	/* Diff hunks should keep trailing spaces */
+	if (sci_get_lexer(editor->sci) == SCLEX_DIFF)
+		return;
+
 	while ((i >= line_start) && ((ch == ' ') || (ch == '\t')))
 	{
 		i--;
@@ -4640,8 +4682,46 @@ static void setup_sci_keys(ScintillaObject *sci)
 }
 
 
-#include "icons/16x16/classviewer-var.xpm"
-#include "icons/16x16/classviewer-method.xpm"
+/* registers a Scintilla image from a named icon from the theme */
+static gboolean register_named_icon(ScintillaObject *sci, guint id, const gchar *name)
+{
+	GError *error = NULL;
+	GdkPixbuf *pixbuf;
+	gint n_channels, rowstride, width, height;
+	gint size;
+
+	gtk_icon_size_lookup(GTK_ICON_SIZE_MENU, &size, NULL);
+	pixbuf = gtk_icon_theme_load_icon(gtk_icon_theme_get_default(), name, size, 0, &error);
+	if (! pixbuf)
+	{
+		g_warning("failed to load icon '%s': %s", name, error->message);
+		g_error_free(error);
+		return FALSE;
+	}
+
+	n_channels = gdk_pixbuf_get_n_channels(pixbuf);
+	rowstride = gdk_pixbuf_get_rowstride(pixbuf);
+	width = gdk_pixbuf_get_width(pixbuf);
+	height = gdk_pixbuf_get_height(pixbuf);
+
+	if (gdk_pixbuf_get_bits_per_sample(pixbuf) != 8 ||
+		! gdk_pixbuf_get_has_alpha(pixbuf) ||
+		n_channels != 4 ||
+		rowstride != width * n_channels)
+	{
+		g_warning("incompatible image data for icon '%s'", name);
+		g_object_unref(pixbuf);
+		return FALSE;
+	}
+
+	SSM(sci, SCI_RGBAIMAGESETWIDTH, width, 0);
+	SSM(sci, SCI_RGBAIMAGESETHEIGHT, height, 0);
+	SSM(sci, SCI_REGISTERRGBAIMAGE, id, (sptr_t)gdk_pixbuf_get_pixels(pixbuf));
+
+	g_object_unref(pixbuf);
+	return TRUE;
+}
+
 
 /* Create new editor widget (scintilla).
  * @note The @c "sci-notify" signal is connected separately. */
@@ -4650,6 +4730,11 @@ static ScintillaObject *create_new_sci(GeanyEditor *editor)
 	ScintillaObject	*sci;
 
 	sci = SCINTILLA(scintilla_new());
+
+	/* Scintilla doesn't support RTL languages properly and is primarily
+	 * intended to be used with LTR source code, so override the
+	 * GTK+ default text direction for the Scintilla widget. */
+	gtk_widget_set_direction(GTK_WIDGET(sci), GTK_TEXT_DIR_LTR);
 
 	gtk_widget_show(GTK_WIDGET(sci));
 
@@ -4668,8 +4753,8 @@ static ScintillaObject *create_new_sci(GeanyEditor *editor)
 	SSM(sci, SCI_SETSCROLLWIDTHTRACKING, 1, 0);
 
 	/* tag autocompletion images */
-	SSM(sci, SCI_REGISTERIMAGE, 1, (sptr_t)classviewer_var);
-	SSM(sci, SCI_REGISTERIMAGE, 2, (sptr_t)classviewer_method);
+	register_named_icon(sci, 1, "classviewer-var");
+	register_named_icon(sci, 2, "classviewer-method");
 
 	/* necessary for column mode editing, implemented in Scintilla since 2.0 */
 	SSM(sci, SCI_SETADDITIONALSELECTIONTYPING, 1, 0);
@@ -4960,42 +5045,54 @@ static void editor_change_line_indent(GeanyEditor *editor, gint line, gboolean i
 void editor_indent(GeanyEditor *editor, gboolean increase)
 {
 	ScintillaObject *sci = editor->sci;
-	gint start, end;
-	gint line, lstart, lend;
+	gint caret_pos, caret_line, caret_offset, caret_indent_pos, caret_line_len;
+	gint anchor_pos, anchor_line, anchor_offset, anchor_indent_pos, anchor_line_len;
+
+	/* backup information needed to restore caret and anchor */
+	caret_pos = sci_get_current_position(sci);
+	anchor_pos = SSM(sci, SCI_GETANCHOR, 0, 0);
+	caret_line = sci_get_line_from_position(sci, caret_pos);
+	anchor_line = sci_get_line_from_position(sci, anchor_pos);
+	caret_offset = caret_pos - sci_get_position_from_line(sci, caret_line);
+	anchor_offset = anchor_pos - sci_get_position_from_line(sci, anchor_line);
+	caret_indent_pos = sci_get_line_indent_position(sci, caret_line);
+	anchor_indent_pos = sci_get_line_indent_position(sci, anchor_line);
+	caret_line_len = sci_get_line_length(sci, caret_line);
+	anchor_line_len = sci_get_line_length(sci, anchor_line);
 
 	if (sci_get_lines_selected(sci) <= 1)
 	{
-		line = sci_get_current_line(sci);
-		editor_change_line_indent(editor, line, increase);
-		return;
-	}
-	editor_select_lines(editor, FALSE);
-	start = sci_get_selection_start(sci);
-	end = sci_get_selection_end(sci);
-	lstart = sci_get_line_from_position(sci, start);
-	lend = sci_get_line_from_position(sci, end);
-	if (end == sci_get_length(sci))
-		lend++;	/* for last line with text on it */
-
-	sci_start_undo_action(sci);
-	for (line = lstart; line < lend; line++)
-	{
-		editor_change_line_indent(editor, line, increase);
-	}
-	sci_end_undo_action(sci);
-
-	/* set cursor/selection */
-	if (lend > lstart)
-	{
-		sci_set_selection_start(sci, start);
-		end = sci_get_position_from_line(sci, lend);
-		sci_set_selection_end(sci, end);
-		editor_select_lines(editor, FALSE);
+		editor_change_line_indent(editor, sci_get_current_line(sci), increase);
 	}
 	else
 	{
-		sci_set_current_line(sci, lstart);
+		gint start, end;
+		gint line, lstart, lend;
+
+		editor_select_lines(editor, FALSE);
+		start = sci_get_selection_start(sci);
+		end = sci_get_selection_end(sci);
+		lstart = sci_get_line_from_position(sci, start);
+		lend = sci_get_line_from_position(sci, end);
+		if (end == sci_get_length(sci))
+			lend++;	/* for last line with text on it */
+
+		sci_start_undo_action(sci);
+		for (line = lstart; line < lend; line++)
+		{
+			editor_change_line_indent(editor, line, increase);
+		}
+		sci_end_undo_action(sci);
 	}
+
+	/* restore caret and anchor position */
+	if (caret_pos >= caret_indent_pos)
+		caret_offset += sci_get_line_length(sci, caret_line) - caret_line_len;
+	if (anchor_pos >= anchor_indent_pos)
+		anchor_offset += sci_get_line_length(sci, anchor_line) - anchor_line_len;
+
+	SSM(sci, SCI_SETCURRENTPOS, sci_get_position_from_line(sci, caret_line) + caret_offset, 0);
+	SSM(sci, SCI_SETANCHOR, sci_get_position_from_line(sci, anchor_line) + anchor_offset, 0);
 }
 
 

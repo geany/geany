@@ -14,10 +14,6 @@
 #include <assert.h>
 #include <ctype.h>
 
-#ifdef _MSC_VER
-#pragma warning(disable: 4786)
-#endif
-
 #include <string>
 #include <map>
 
@@ -370,7 +366,7 @@ public:
 		setSpecialVar(CharacterSet::setNone, "\"$;<>&`'+,./\\%:=~!?@[]"),
 		setControlVar(CharacterSet::setNone, "ACDEFHILMNOPRSTVWX") {
 	}
-	~LexerPerl() {
+	virtual ~LexerPerl() {
 	}
 	void SCI_METHOD Release() {
 		delete this;
@@ -949,8 +945,7 @@ void SCI_METHOD LexerPerl::Lex(unsigned int startPos, int length, int initStyle,
 							sc.SetState(SCE_PL_POD);
 						} else
 							fw = fw2;
-					} else
-						pod = SCE_PL_POD;
+					}
 				} else {
 					if (pod == SCE_PL_POD_VERB	// still part of current paragraph
 					        && (styler.GetLineState(ln - 1) == SCE_PL_POD)) {

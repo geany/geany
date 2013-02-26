@@ -1,8 +1,8 @@
 /*
  *      ui_utils.h - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2006-2011 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2006-2011 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2006-2012 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2006-2012 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -64,6 +64,7 @@ typedef struct GeanyInterfacePrefs
 	gboolean		use_native_windows_dialogs;
 	/** whether compiler messages window is automatically scrolled to show new messages */
 	gboolean		compiler_tab_autoscroll;
+	gint			msgwin_orientation;			/**< orientation of the message window */
 }
 GeanyInterfacePrefs;
 
@@ -147,7 +148,8 @@ extern UIWidgets ui_widgets;
 typedef struct GeanyAutoSeparator
 {
 	GtkWidget	*widget;	/* e.g. GtkSeparatorToolItem, GtkSeparatorMenuItem */
-	gint		ref_count;	/* set to zero initially */
+	gint		show_count;	/* visible items, set to zero initially */
+	gint		item_count;	/* total items, set to zero initially */
 }
 GeanyAutoSeparator;
 
@@ -166,14 +168,6 @@ GeanyUIEditorFeatures;
 #define GEANY_STOCK_SAVE_ALL "geany-save-all"
 #define GEANY_STOCK_CLOSE_ALL "geany-close-all"
 #define GEANY_STOCK_BUILD "geany-build"
-
-enum
-{
-	GEANY_IMAGE_LOGO,
-	GEANY_IMAGE_SAVE_ALL,
-	GEANY_IMAGE_CLOSE_ALL,
-	GEANY_IMAGE_BUILD
-};
 
 
 void ui_widget_show_hide(GtkWidget *widget, gboolean show);
@@ -302,11 +296,6 @@ void ui_sidebar_show_hide(void);
 void ui_document_show_hide(GeanyDocument *doc);
 
 void ui_set_search_entry_background(GtkWidget *widget, gboolean success);
-
-
-GdkPixbuf *ui_new_pixbuf_from_inline(gint img);
-
-GtkWidget *ui_new_image_from_inline(gint img);
 
 
 void ui_create_recent_menus(void);

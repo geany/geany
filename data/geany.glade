@@ -3,6 +3,13 @@
   <requires lib="gtk+" version="2.16"/>
   <!-- interface-naming-policy project-wide -->
   <object class="GtkAccelGroup" id="accelgroup1"/>
+  <object class="GtkIconFactory" id="iconfactory1">
+    <sources>
+      <source stock-id="geany-build" icon-name="geany-build"/>
+      <source stock-id="geany-close-all" icon-name="geany-close-all"/>
+      <source stock-id="geany-save-all" icon-name="geany-save-all"/>
+    </sources>
+  </object>
   <object class="GtkAdjustment" id="adjustment1">
     <property name="lower">3</property>
     <property name="upper">1000</property>
@@ -92,7 +99,6 @@
         <property name="can_focus">False</property>
         <property name="use_underline">True</property>
         <property name="use_stock">True</property>
-        <property name="accel_group">accelgroup1</property>
         <signal name="activate" handler="on_undo1_activate" swapped="no"/>
       </object>
     </child>
@@ -104,7 +110,6 @@
         <property name="can_focus">False</property>
         <property name="use_underline">True</property>
         <property name="use_stock">True</property>
-        <property name="accel_group">accelgroup1</property>
         <signal name="activate" handler="on_redo1_activate" swapped="no"/>
       </object>
     </child>
@@ -122,7 +127,6 @@
         <property name="can_focus">False</property>
         <property name="use_underline">True</property>
         <property name="use_stock">True</property>
-        <property name="accel_group">accelgroup1</property>
         <signal name="activate" handler="on_cut1_activate" swapped="no"/>
       </object>
     </child>
@@ -134,7 +138,6 @@
         <property name="can_focus">False</property>
         <property name="use_underline">True</property>
         <property name="use_stock">True</property>
-        <property name="accel_group">accelgroup1</property>
         <signal name="activate" handler="on_copy1_activate" swapped="no"/>
       </object>
     </child>
@@ -146,7 +149,6 @@
         <property name="can_focus">False</property>
         <property name="use_underline">True</property>
         <property name="use_stock">True</property>
-        <property name="accel_group">accelgroup1</property>
         <signal name="activate" handler="on_paste1_activate" swapped="no"/>
       </object>
     </child>
@@ -158,7 +160,6 @@
         <property name="can_focus">False</property>
         <property name="use_underline">True</property>
         <property name="use_stock">True</property>
-        <property name="accel_group">accelgroup1</property>
         <signal name="activate" handler="on_delete1_activate" swapped="no"/>
       </object>
     </child>
@@ -176,7 +177,6 @@
         <property name="can_focus">False</property>
         <property name="use_underline">True</property>
         <property name="use_stock">True</property>
-        <property name="accel_group">accelgroup1</property>
         <signal name="activate" handler="on_menu_select_all1_activate" swapped="no"/>
       </object>
     </child>
@@ -467,7 +467,7 @@
   <object class="GtkImage" id="image4061">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="stock">gtk-close</property>
+    <property name="stock">geany-close-all</property>
     <property name="icon-size">1</property>
   </object>
   <object class="GtkImage" id="image4062">
@@ -671,7 +671,7 @@
   <object class="GtkImage" id="image4057">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="stock">gtk-save</property>
+    <property name="stock">geany-save-all</property>
     <property name="icon-size">1</property>
   </object>
   <object class="GtkImage" id="image4058">
@@ -713,6 +713,7 @@
     <property name="type_hint">dialog</property>
     <property name="skip_pager_hint">True</property>
     <property name="has_separator">True</property>
+    <property name="icon_name">geany</property>
     <child internal-child="vbox">
       <object class="GtkVBox" id="dialog-vbox3">
         <property name="visible">True</property>
@@ -1670,6 +1671,86 @@
                       </packing>
                     </child>
                     <child>
+                      <object class="GtkFrame" id="frame1">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label_xalign">0</property>
+                        <property name="shadow_type">none</property>
+                        <child>
+                          <object class="GtkAlignment" id="alignment2">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="left_padding">12</property>
+                            <child>
+                              <object class="GtkHBox" id="hbox2">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="spacing">12</property>
+                                <child>
+                                  <object class="GtkLabel" id="label5">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="label" translatable="yes">Position:</property>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="fill">False</property>
+                                    <property name="position">0</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkRadioButton" id="radio_msgwin_vertical">
+                                    <property name="label" translatable="yes">Bottom</property>
+                                    <property name="use_action_appearance">False</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="receives_default">False</property>
+                                    <property name="active">True</property>
+                                    <property name="draw_indicator">True</property>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="fill">True</property>
+                                    <property name="position">1</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkRadioButton" id="radio_msgwin_horizontal">
+                                    <property name="label" translatable="yes">Right</property>
+                                    <property name="use_action_appearance">False</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="receives_default">False</property>
+                                    <property name="active">True</property>
+                                    <property name="draw_indicator">True</property>
+                                    <property name="group">radio_msgwin_vertical</property>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="fill">False</property>
+                                    <property name="position">2</property>
+                                  </packing>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child type="label">
+                          <object class="GtkLabel" id="label4">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="label" translatable="yes">&lt;b&gt;Message window&lt;/b&gt;</property>
+                            <property name="use_markup">True</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">False</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                    <child>
                       <object class="GtkFrame" id="frame4">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
@@ -1795,7 +1876,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">1</property>
+                        <property name="position">2</property>
                       </packing>
                     </child>
                     <child>
@@ -1846,7 +1927,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">2</property>
+                        <property name="position">3</property>
                       </packing>
                     </child>
                   </object>
@@ -4695,7 +4776,7 @@
                                   <object class="GtkEntry" id="entry_com_term">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
-                                    <property name="tooltip_text" translatable="yes">A terminal emulator like xterm, gnome-terminal or konsole (should accept the -e argument)</property>
+                                    <property name="tooltip_text" translatable="yes">A terminal emulator command (%c is substituted with the Geany run script filename)</property>
                                     <property name="primary_icon_activatable">False</property>
                                     <property name="secondary_icon_activatable">False</property>
                                     <property name="primary_icon_sensitive">True</property>
@@ -5800,6 +5881,20 @@
                               </packing>
                             </child>
                             <child>
+                              <object class="GtkLabel" id="bg_image">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="xalign">0</property>
+                                <property name="label" translatable="yes">Background image:</property>
+                              </object>
+                              <packing>
+                                <property name="top_attach">3</property>
+                                <property name="bottom_attach">4</property>
+                                <property name="x_options">GTK_FILL</property>
+                                <property name="y_options">GTK_FILL</property>
+                              </packing>
+                            </child>
+                            <child>
                               <object class="GtkLabel" id="terminal_scrollback_lines_label">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
@@ -5807,8 +5902,8 @@
                                 <property name="label" translatable="yes">Scrollback lines:</property>
                               </object>
                               <packing>
-                                <property name="top_attach">3</property>
-                                <property name="bottom_attach">4</property>
+                                <property name="top_attach">4</property>
+                                <property name="bottom_attach">5</property>
                                 <property name="x_options">GTK_FILL</property>
                                 <property name="y_options">GTK_FILL</property>
                               </packing>
@@ -5821,8 +5916,8 @@
                                 <property name="label" translatable="yes">Shell:</property>
                               </object>
                               <packing>
-                                <property name="top_attach">4</property>
-                                <property name="bottom_attach">5</property>
+                                <property name="top_attach">5</property>
+                                <property name="bottom_attach">6</property>
                                 <property name="x_options">GTK_FILL</property>
                                 <property name="y_options">GTK_FILL</property>
                               </packing>
@@ -5851,7 +5946,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
-                                <property name="tooltip_text" translatable="yes">Sets the backround color of the text in the terminal widget</property>
+                                <property name="tooltip_text" translatable="yes">Sets the background color of the text in the terminal widget</property>
                                 <property name="title" translatable="yes">Color Chooser</property>
                                 <property name="color">#000000000000</property>
                               </object>
@@ -5860,6 +5955,49 @@
                                 <property name="right_attach">3</property>
                                 <property name="top_attach">2</property>
                                 <property name="bottom_attach">3</property>
+                                <property name="y_options">GTK_FILL</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkEntry" id="entry_image">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="tooltip_text" translatable="yes">Sets the path to the background image in the terminal widget</property>
+                                <property name="invisible_char">•</property>
+                                <property name="primary_icon_activatable">False</property>
+                                <property name="secondary_icon_activatable">False</property>
+                                <property name="primary_icon_sensitive">True</property>
+                                <property name="secondary_icon_sensitive">True</property>
+                              </object>
+                              <packing>
+                                <property name="left_attach">1</property>
+                                <property name="right_attach">2</property>
+                                <property name="top_attach">3</property>
+                                <property name="bottom_attach">4</property>
+                                <property name="y_options">GTK_FILL</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkButton" id="button_term_image">
+                                <property name="use_action_appearance">False</property>
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="receives_default">True</property>
+                                <child>
+                                  <object class="GtkImage" id="image1337">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="stock">gtk-open</property>
+                                    <property name="icon-size">1</property>
+                                  </object>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="left_attach">2</property>
+                                <property name="right_attach">3</property>
+                                <property name="top_attach">3</property>
+                                <property name="bottom_attach">4</property>
+                                <property name="x_options">GTK_FILL</property>
                                 <property name="y_options">GTK_FILL</property>
                               </packing>
                             </child>
@@ -5880,8 +6018,8 @@
                               <packing>
                                 <property name="left_attach">1</property>
                                 <property name="right_attach">3</property>
-                                <property name="top_attach">3</property>
-                                <property name="bottom_attach">4</property>
+                                <property name="top_attach">4</property>
+                                <property name="bottom_attach">5</property>
                                 <property name="y_options">GTK_FILL</property>
                               </packing>
                             </child>
@@ -5899,8 +6037,8 @@
                               <packing>
                                 <property name="left_attach">1</property>
                                 <property name="right_attach">2</property>
-                                <property name="top_attach">4</property>
-                                <property name="bottom_attach">5</property>
+                                <property name="top_attach">5</property>
+                                <property name="bottom_attach">6</property>
                                 <property name="y_options">GTK_FILL</property>
                               </packing>
                             </child>
@@ -5922,8 +6060,8 @@
                               <packing>
                                 <property name="left_attach">2</property>
                                 <property name="right_attach">3</property>
-                                <property name="top_attach">4</property>
-                                <property name="bottom_attach">5</property>
+                                <property name="top_attach">5</property>
+                                <property name="bottom_attach">6</property>
                                 <property name="x_options">GTK_FILL</property>
                                 <property name="y_options">GTK_FILL</property>
                               </packing>
@@ -6286,6 +6424,7 @@
     <property name="type_hint">dialog</property>
     <property name="transient_for">window1</property>
     <property name="has_separator">True</property>
+    <property name="icon_name">geany</property>
     <child internal-child="vbox">
       <object class="GtkVBox" id="project_dialog_vbox">
         <property name="visible">True</property>
@@ -7147,6 +7286,7 @@
   <object class="GtkWindow" id="window1">
     <property name="can_focus">False</property>
     <property name="title" translatable="yes">Geany</property>
+    <property name="icon_name">geany</property>
     <child internal-child="accessible">
       <object class="AtkObject" id="window1-atkobject">
         <property name="AtkObject::accessible-name" translatable="yes">Geany</property>
@@ -7186,7 +7326,6 @@
                             <property name="can_focus">False</property>
                             <property name="use_underline">True</property>
                             <property name="use_stock">True</property>
-                            <property name="accel_group">accelgroup1</property>
                             <signal name="activate" handler="on_new1_activate" swapped="no"/>
                           </object>
                         </child>
@@ -7215,7 +7354,6 @@
                             <property name="can_focus">False</property>
                             <property name="use_underline">True</property>
                             <property name="use_stock">True</property>
-                            <property name="accel_group">accelgroup1</property>
                             <signal name="activate" handler="on_open1_activate" swapped="no"/>
                           </object>
                         </child>
@@ -7252,7 +7390,6 @@
                             <property name="can_focus">False</property>
                             <property name="use_underline">True</property>
                             <property name="use_stock">True</property>
-                            <property name="accel_group">accelgroup1</property>
                             <signal name="activate" handler="on_save1_activate" swapped="no"/>
                           </object>
                         </child>
@@ -7264,7 +7401,6 @@
                             <property name="can_focus">False</property>
                             <property name="use_underline">True</property>
                             <property name="use_stock">True</property>
-                            <property name="accel_group">accelgroup1</property>
                             <signal name="activate" handler="on_save_as1_activate" swapped="no"/>
                           </object>
                         </child>
@@ -7330,7 +7466,6 @@
                             <property name="can_focus">False</property>
                             <property name="use_underline">True</property>
                             <property name="use_stock">True</property>
-                            <property name="accel_group">accelgroup1</property>
                             <signal name="activate" handler="on_file_properties_activate" swapped="no"/>
                           </object>
                         </child>
@@ -7358,7 +7493,6 @@
                             <property name="can_focus">False</property>
                             <property name="use_underline">True</property>
                             <property name="use_stock">True</property>
-                            <property name="accel_group">accelgroup1</property>
                             <signal name="activate" handler="on_print1_activate" swapped="no"/>
                           </object>
                         </child>
@@ -7376,7 +7510,6 @@
                             <property name="can_focus">False</property>
                             <property name="use_underline">True</property>
                             <property name="use_stock">True</property>
-                            <property name="accel_group">accelgroup1</property>
                             <signal name="activate" handler="on_close1_activate" swapped="no"/>
                           </object>
                         </child>
@@ -7418,7 +7551,6 @@
                             <property name="can_focus">False</property>
                             <property name="use_underline">True</property>
                             <property name="use_stock">True</property>
-                            <property name="accel_group">accelgroup1</property>
                             <signal name="activate" handler="on_quit1_activate" swapped="no"/>
                           </object>
                         </child>
@@ -7445,7 +7577,6 @@
                             <property name="can_focus">False</property>
                             <property name="use_underline">True</property>
                             <property name="use_stock">True</property>
-                            <property name="accel_group">accelgroup1</property>
                             <signal name="activate" handler="on_undo1_activate" swapped="no"/>
                           </object>
                         </child>
@@ -7457,7 +7588,6 @@
                             <property name="can_focus">False</property>
                             <property name="use_underline">True</property>
                             <property name="use_stock">True</property>
-                            <property name="accel_group">accelgroup1</property>
                             <signal name="activate" handler="on_redo1_activate" swapped="no"/>
                           </object>
                         </child>
@@ -7475,7 +7605,6 @@
                             <property name="can_focus">False</property>
                             <property name="use_underline">True</property>
                             <property name="use_stock">True</property>
-                            <property name="accel_group">accelgroup1</property>
                             <signal name="activate" handler="on_cut1_activate" swapped="no"/>
                           </object>
                         </child>
@@ -7487,7 +7616,6 @@
                             <property name="can_focus">False</property>
                             <property name="use_underline">True</property>
                             <property name="use_stock">True</property>
-                            <property name="accel_group">accelgroup1</property>
                             <signal name="activate" handler="on_copy1_activate" swapped="no"/>
                           </object>
                         </child>
@@ -7499,7 +7627,6 @@
                             <property name="can_focus">False</property>
                             <property name="use_underline">True</property>
                             <property name="use_stock">True</property>
-                            <property name="accel_group">accelgroup1</property>
                             <signal name="activate" handler="on_paste1_activate" swapped="no"/>
                           </object>
                         </child>
@@ -7511,7 +7638,6 @@
                             <property name="can_focus">False</property>
                             <property name="use_underline">True</property>
                             <property name="use_stock">True</property>
-                            <property name="accel_group">accelgroup1</property>
                             <signal name="activate" handler="on_delete1_activate" swapped="no"/>
                           </object>
                         </child>
@@ -7529,7 +7655,6 @@
                             <property name="can_focus">False</property>
                             <property name="use_underline">True</property>
                             <property name="use_stock">True</property>
-                            <property name="accel_group">accelgroup1</property>
                             <signal name="activate" handler="on_menu_select_all1_activate" swapped="no"/>
                           </object>
                         </child>
@@ -7620,6 +7745,32 @@
                                   </object>
                                 </child>
                                 <child>
+                                  <object class="GtkSeparatorMenuItem" id="separator63">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkMenuItem" id="move_lines_up1">
+                                    <property name="use_action_appearance">False</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="label" translatable="yes">_Move Line(s) Up</property>
+                                    <property name="use_underline">True</property>
+                                    <signal name="activate" handler="on_move_lines_up1_activate" swapped="no"/>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkMenuItem" id="move_lines_down1">
+                                    <property name="use_action_appearance">False</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="label" translatable="yes">_Move Line(s) Down</property>
+                                    <property name="use_underline">True</property>
+                                    <signal name="activate" handler="on_move_lines_down1_activate" swapped="no"/>
+                                  </object>
+                                </child>
+                                <child>
                                   <object class="GtkSeparatorMenuItem" id="separator52">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
@@ -7667,16 +7818,6 @@
                                     <property name="label" translatable="yes">T_oggle Case of Selection</property>
                                     <property name="use_underline">True</property>
                                     <signal name="activate" handler="on_toggle_case1_activate" swapped="no"/>
-                                  </object>
-                                </child>
-                                <child>
-                                  <object class="GtkMenuItem" id="transpose_current_line1">
-                                    <property name="use_action_appearance">False</property>
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">False</property>
-                                    <property name="label" translatable="yes">_Transpose Current Line</property>
-                                    <property name="use_underline">True</property>
-                                    <signal name="activate" handler="on_transpose_current_line1_activate" swapped="no"/>
                                   </object>
                                 </child>
                                 <child>
@@ -7986,7 +8127,6 @@
                             <property name="can_focus">False</property>
                             <property name="use_underline">True</property>
                             <property name="use_stock">True</property>
-                            <property name="accel_group">accelgroup1</property>
                             <signal name="activate" handler="on_find1_activate" swapped="no"/>
                           </object>
                         </child>
@@ -8400,7 +8540,6 @@
                             <property name="can_focus">False</property>
                             <property name="use_underline">True</property>
                             <property name="use_stock">True</property>
-                            <property name="accel_group">accelgroup1</property>
                             <signal name="activate" handler="on_zoom_in1_activate" swapped="no"/>
                           </object>
                         </child>
@@ -8412,7 +8551,6 @@
                             <property name="can_focus">False</property>
                             <property name="use_underline">True</property>
                             <property name="use_stock">True</property>
-                            <property name="accel_group">accelgroup1</property>
                             <signal name="activate" handler="on_zoom_out1_activate" swapped="no"/>
                           </object>
                         </child>
@@ -8424,7 +8562,6 @@
                             <property name="can_focus">False</property>
                             <property name="use_underline">True</property>
                             <property name="use_stock">True</property>
-                            <property name="accel_group">accelgroup1</property>
                             <signal name="activate" handler="on_normal_size1_activate" swapped="no"/>
                           </object>
                         </child>
@@ -8785,6 +8922,16 @@
                           </object>
                         </child>
                         <child>
+                          <object class="GtkMenuItem" id="clone1">
+                            <property name="use_action_appearance">False</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="label" translatable="yes">_Clone</property>
+                            <property name="use_underline">True</property>
+                            <signal name="activate" handler="on_clone1_activate" swapped="no"/>
+                          </object>
+                        </child>
+                        <child>
                           <object class="GtkMenuItem" id="strip_trailing_spaces1">
                             <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
@@ -8957,7 +9104,6 @@
                             <property name="can_focus">False</property>
                             <property name="use_underline">True</property>
                             <property name="use_stock">True</property>
-                            <property name="accel_group">accelgroup1</property>
                             <signal name="activate" handler="on_project_properties1_activate" swapped="no"/>
                           </object>
                         </child>
@@ -9152,7 +9298,6 @@
                             <property name="can_focus">False</property>
                             <property name="use_underline">True</property>
                             <property name="use_stock">True</property>
-                            <property name="accel_group">accelgroup1</property>
                             <signal name="activate" handler="on_info1_activate" swapped="no"/>
                           </object>
                         </child>

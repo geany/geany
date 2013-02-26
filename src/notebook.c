@@ -1,8 +1,8 @@
 /*
  *      notebook.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2006-2011 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2006-2011 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2006-2012 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2006-2012 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -14,9 +14,9 @@
  *      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *      GNU General Public License for more details.
  *
- *      You should have received a copy of the GNU General Public License
- *      along with this program; if not, write to the Free Software
- *      Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *      You should have received a copy of the GNU General Public License along
+ *      with this program; if not, write to the Free Software Foundation, Inc.,
+ *      51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
 /*
@@ -92,7 +92,7 @@ static void update_mru_docs_head(GeanyDocument *doc)
 
 /* before the tab changes, add the current document to the MRU list */
 static void on_notebook_switch_page(GtkNotebook *notebook,
-	GtkNotebookPage *page, guint page_num, gpointer user_data)
+	gpointer page, guint page_num, gpointer user_data)
 {
 	GeanyDocument *new;
 
@@ -312,7 +312,7 @@ static gboolean focus_sci(GtkWidget *widget, GdkEventButton *event, gpointer use
 
 static gboolean gtk_notebook_show_arrows(GtkNotebook *notebook)
 {
-	return notebook->scrollable;
+	return gtk_notebook_get_scrollable(notebook);
 #if 0
 	/* To get this working we would need to define at least the first two fields of
 	 * GtkNotebookPage since it is a private field. The better way would be to
@@ -506,12 +506,17 @@ static gboolean notebook_tab_bar_click_cb(GtkWidget *widget, GdkEventButton *eve
 {
 	if (event->type == GDK_2BUTTON_PRESS)
 	{
-		/* accessing ::event_window is a little hacky but we need to make sure the click
-		 * was in the tab bar and not inside the child */
-		if (event->window != GTK_NOTEBOOK(main_widgets.notebook)->event_window)
+		GtkNotebook *notebook = GTK_NOTEBOOK(widget);
+		GtkWidget *event_widget = gtk_get_event_widget((GdkEvent *) event);
+		GtkWidget *child = gtk_notebook_get_nth_page(notebook, gtk_notebook_get_current_page(notebook));
+
+		/* ignore events from the content of the page (impl. stolen from GTK2 tab scrolling)
+		 * TODO: we should also ignore notebook's action widgets, but that's more work and
+		 * we don't have any of them yet anyway -- and GTK 2.16 don't have those actions. */
+		if (event_widget == NULL || event_widget == child || gtk_widget_is_ancestor(event_widget, child))
 			return FALSE;
 
-		if (is_position_on_tab_bar(GTK_NOTEBOOK(widget), event))
+		if (is_position_on_tab_bar(notebook, event))
 		{
 			document_new_file(NULL, NULL, NULL);
 			return TRUE;
@@ -530,17 +535,6 @@ static gboolean notebook_tab_bar_click_cb(GtkWidget *widget, GdkEventButton *eve
 
 void notebook_init()
 {
-	/* Individual style for the tab close buttons */
-	gtk_rc_parse_string(
-		"style \"geany-close-tab-button-style\" {\n"
-		"	GtkWidget::focus-padding = 0\n"
-		"	GtkWidget::focus-line-width = 0\n"
-		"	xthickness = 0\n"
-		"	ythickness = 0\n"
-		"}\n"
-		"widget \"*.geany-close-tab-button\" style \"geany-close-tab-button-style\""
-	);
-
 	g_signal_connect_after(main_widgets.notebook, "button-press-event",
 		G_CALLBACK(notebook_tab_bar_click_cb), NULL);
 
@@ -776,15 +770,11 @@ on_window_drag_data_received(GtkWidget *widget, GdkDragContext *drag_context,
 		guint event_time, gpointer user_data)
 {
 	gboolean success = FALSE;
+	gint length = gtk_selection_data_get_length(data);
 
-	if (data->length > 0 && data->format == 8)
+	if (length > 0 && gtk_selection_data_get_format(data) == 8)
 	{
-		if (drag_context->action == GDK_ACTION_ASK)
-		{
-			drag_context->action = GDK_ACTION_COPY;
-		}
-
-		document_open_file_list((const gchar *)data->data, data->length);
+		document_open_file_list((const gchar *)gtk_selection_data_get_data(data), length);
 
 		success = TRUE;
 	}

@@ -67,7 +67,7 @@ static gboolean test_plugin(const gchar *filename)
 	module = g_module_open(filename, G_MODULE_BIND_LOCAL);
 	if (! module)
 	{
-		g_warning("Can't load plugin: %s", g_module_error());
+		g_warning("Can't load plugin: \"%s\": %s", filename, g_module_error());
 		return FALSE;
 	}
 
@@ -121,4 +121,3 @@ gint main(gint argc, gchar **argv)
 
 	return result;
 }
-

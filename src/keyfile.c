@@ -1,8 +1,8 @@
 /*
  *      keyfile.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2005-2011 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2006-2011 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2005-2012 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2006-2012 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -14,9 +14,9 @@
  *      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *      GNU General Public License for more details.
  *
- *      You should have received a copy of the GNU General Public License
- *      along with this program; if not, write to the Free Software
- *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *      You should have received a copy of the GNU General Public License along
+ *      with this program; if not, write to the Free Software Foundation, Inc.,
+ *      51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
 /*
@@ -25,11 +25,12 @@
 
 /*
  * Session file format:
- * filename_xx=pos;filetype UID;read only;encoding idx;use_tabs;auto_indent;line_wrapping;filename
+ * filename_xx=pos;filetype UID;read only;Eencoding;use_tabs;auto_indent;line_wrapping;filename
  */
 
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 
 #include "geany.h"
 
@@ -68,9 +69,9 @@
 #define GEANY_DISK_CHECK_TIMEOUT		30
 #define GEANY_DEFAULT_TOOLS_MAKE		"make"
 #ifdef G_OS_WIN32
-#define GEANY_DEFAULT_TOOLS_TERMINAL	"cmd.exe"
+#define GEANY_DEFAULT_TOOLS_TERMINAL	"cmd.exe /Q /C %c"
 #else
-#define GEANY_DEFAULT_TOOLS_TERMINAL	"xterm"
+#define GEANY_DEFAULT_TOOLS_TERMINAL	"xterm -e \"/bin/sh %c\""
 #endif
 #define GEANY_DEFAULT_TOOLS_BROWSER		"firefox"
 #define GEANY_DEFAULT_TOOLS_PRINTCMD	"lpr"
@@ -146,6 +147,11 @@ static void init_pref_groups(void)
 		"sidebar_pos", GTK_POS_LEFT,
 		"radio_sidebar_left", GTK_POS_LEFT,
 		"radio_sidebar_right", GTK_POS_RIGHT,
+		NULL);
+	stash_group_add_radio_buttons(group, &interface_prefs.msgwin_orientation,
+		"msgwin_orientation", GTK_ORIENTATION_VERTICAL,
+		"radio_msgwin_vertical", GTK_ORIENTATION_VERTICAL,
+		"radio_msgwin_horizontal", GTK_ORIENTATION_HORIZONTAL,
 		NULL);
 
 	/* editor display */
@@ -302,11 +308,11 @@ static gchar *get_session_file_string(GeanyDocument *doc)
 	locale_filename = utils_get_locale_from_utf8(doc->file_name);
 	escaped_filename = g_uri_escape_string(locale_filename, NULL, TRUE);
 
-	fname = g_strdup_printf("%d;%s;%d;%d;%d;%d;%d;%s;%d;%d",
+	fname = g_strdup_printf("%d;%s;%d;E%s;%d;%d;%d;%s;%d;%d",
 		sci_get_current_position(doc->editor->sci),
 		ft->name,
 		doc->readonly,
-		encodings_get_idx_from_charset(doc->encoding),
+		doc->encoding,
 		doc->editor->indent_type,
 		doc->editor->auto_indent,
 		doc->editor->line_wrapping,
@@ -467,7 +473,7 @@ static void save_dialog_prefs(GKeyFile *config)
 	g_key_file_set_string(config, PACKAGE, "pref_template_datetime", template_prefs.datetime_format);
 
 	/* tools settings */
-	g_key_file_set_string(config, "tools", "term_cmd", tool_prefs.term_cmd ? tool_prefs.term_cmd : "");
+	g_key_file_set_string(config, "tools", "terminal_cmd", tool_prefs.term_cmd ? tool_prefs.term_cmd : "");
 	g_key_file_set_string(config, "tools", "browser_cmd", tool_prefs.browser_cmd ? tool_prefs.browser_cmd : "");
 	g_key_file_set_string(config, "tools", "grep_cmd", tool_prefs.grep_cmd ? tool_prefs.grep_cmd : "");
 	g_key_file_set_string(config, PACKAGE, "context_action_cmd", tool_prefs.context_action_cmd);
@@ -509,6 +515,7 @@ static void save_dialog_prefs(GKeyFile *config)
 		g_key_file_set_boolean(config, "VTE", "cursor_blinks", vc->cursor_blinks);
 		g_key_file_set_integer(config, "VTE", "scrollback_lines", vc->scrollback_lines);
 		g_key_file_set_string(config, "VTE", "font", vc->font);
+		g_key_file_set_string(config, "VTE", "image", vc->image);
 		g_key_file_set_string(config, "VTE", "shell", vc->shell);
 		tmp_string = utils_get_hex_from_color(vc->colour_fore);
 		g_key_file_set_string(config, "VTE", "colour_fore", tmp_string);
@@ -576,7 +583,7 @@ static void save_ui_prefs(GKeyFile *config)
 void configuration_save(void)
 {
 	GKeyFile *config = g_key_file_new();
-	gchar *configfile = g_strconcat(app->configdir, G_DIR_SEPARATOR_S, "geany.conf", NULL);
+	gchar *configfile = g_build_filename(app->configdir, "geany.conf", NULL);
 	gchar *data;
 
 	g_key_file_load_from_file(config, configfile, G_KEY_FILE_NONE, NULL);
@@ -686,6 +693,7 @@ static void load_dialog_prefs(GKeyFile *config)
 {
 	gchar *tmp_string, *tmp_string2;
 	const gchar *default_charset = NULL;
+	gchar *cmd;
 
 	/* compatibility with Geany 0.20 */
 	if (!g_key_file_has_key(config, PACKAGE, atomic_file_saving_key, NULL))
@@ -833,6 +841,7 @@ static void load_dialog_prefs(GKeyFile *config)
 		vc->emulation = utils_get_setting_string(config, "VTE", "emulation", "xterm");
 		vc->send_selection_unsafe = utils_get_setting_boolean(config, "VTE",
 			"send_selection_unsafe", FALSE);
+		vc->image = utils_get_setting_string(config, "VTE", "image", "");
 		vc->shell = utils_get_setting_string(config, "VTE", "shell", shell);
 		vc->font = utils_get_setting_string(config, "VTE", "font", "Monospace 10");
 		vc->scroll_on_key = utils_get_setting_boolean(config, "VTE", "scroll_on_key", TRUE);
@@ -874,7 +883,27 @@ static void load_dialog_prefs(GKeyFile *config)
 	template_prefs.datetime_format = utils_get_setting_string(config, PACKAGE, "pref_template_datetime", "%d.%m.%Y %H:%M:%S %Z");
 
 	/* tools */
-	tool_prefs.term_cmd = utils_get_setting_string(config, "tools", "term_cmd", GEANY_DEFAULT_TOOLS_TERMINAL);
+	cmd = utils_get_setting_string(config, "tools", "terminal_cmd", "");
+	if (!NZV(cmd))
+	{
+		cmd = utils_get_setting_string(config, "tools", "term_cmd", "");
+		if (NZV(cmd))
+		{
+			tmp_string = cmd;
+#ifdef G_OS_WIN32
+			if (strstr(cmd, "cmd.exe"))
+				cmd = g_strconcat(cmd, " /Q /C %c", NULL);
+			else
+				cmd = g_strconcat(cmd, " %c", NULL);
+#else
+			cmd = g_strconcat(cmd, " -e \"/bin/sh %c\"", NULL);
+#endif
+			g_free(tmp_string);
+		}
+		else
+			cmd = g_strdup(GEANY_DEFAULT_TOOLS_TERMINAL);
+	}
+	tool_prefs.term_cmd = cmd;
 	tool_prefs.browser_cmd = utils_get_setting_string(config, "tools", "browser_cmd", GEANY_DEFAULT_TOOLS_BROWSER);
 	tool_prefs.grep_cmd = utils_get_setting_string(config, "tools", "grep_cmd", GEANY_DEFAULT_TOOLS_GREP);
 
@@ -984,7 +1013,7 @@ static void load_ui_prefs(GKeyFile *config)
  */
 void configuration_save_default_session(void)
 {
-	gchar *configfile = g_strconcat(app->configdir, G_DIR_SEPARATOR_S, "geany.conf", NULL);
+	gchar *configfile = g_build_filename(app->configdir, "geany.conf", NULL);
 	gchar *data;
 	GKeyFile *config = g_key_file_new();
 
@@ -1053,7 +1082,8 @@ static gboolean open_session_file(gchar **tmp, guint len)
 	const gchar *ft_name;
 	gchar *locale_filename;
 	gchar *unescaped_filename;
-	gint enc_idx, indent_type;
+	const gchar *encoding;
+	gint  indent_type;
 	gboolean ro, auto_indent, line_wrapping;
 	/** TODO when we have a global pref for line breaking, use its value */
 	gboolean line_breaking = FALSE;
@@ -1062,7 +1092,14 @@ static gboolean open_session_file(gchar **tmp, guint len)
 	pos = atoi(tmp[0]);
 	ft_name = tmp[1];
 	ro = atoi(tmp[2]);
-	enc_idx = atoi(tmp[3]);
+	if (isdigit(tmp[3][0]))
+	{
+		encoding = encodings_get_charset_from_index(atoi(tmp[3]));
+	}
+	else
+	{
+		encoding = &(tmp[3][1]);
+	}
 	indent_type = atoi(tmp[4]);
 	auto_indent = atoi(tmp[5]);
 	line_wrapping = atoi(tmp[6]);
@@ -1077,9 +1114,7 @@ static gboolean open_session_file(gchar **tmp, guint len)
 	{
 		GeanyFiletype *ft = filetypes_lookup_by_name(ft_name);
 		GeanyDocument *doc = document_open_file_full(
-			NULL, locale_filename, pos, ro, ft,
-			(enc_idx >= 0 && enc_idx < GEANY_ENCODINGS_MAX) ?
-				encodings[enc_idx].charset : NULL);
+			NULL, locale_filename, pos, ro, ft, encoding);
 
 		if (doc)
 		{

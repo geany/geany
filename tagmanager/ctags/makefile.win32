@@ -1,0 +1,60 @@
+
+.SUFFIXES: .cxx .c .o .h .a
+CC = gcc
+AR = ar
+RANLIB = ranlib
+PREFIX = C:/libs
+RM = del
+-include ../../localwin32.mk
+
+ifdef MSYS
+RM = rm -f
+endif
+
+COMPLIB=ctags.a
+
+REGEX_DEFINES = -DHAVE_REGCOMP -DSTDC_HEADERS=1
+
+GTK_INCLUDES= \
+	-I$(PREFIX)/include/gtk-2.0 \
+	-I$(PREFIX)/lib/gtk-2.0/include \
+	-I$(PREFIX)/include/atk-1.0 \
+	-I$(PREFIX)/include/cairo \
+	-I$(PREFIX)/include/gdk-pixbuf-2.0 \
+	-I$(PREFIX)/include/pango-1.0 \
+	-I$(PREFIX)/include/glib-2.0 \
+	-I$(PREFIX)/lib/glib-2.0/include \
+	-I$(PREFIX)/include \
+	-I$(PREFIX)/include/gettext
+
+INCLUDEDIRS=-I ../ -I . $(GTK_INCLUDES)
+
+CBASEFLAGS=-Wall -pipe -mms-bitfields -DPACKAGE=\"geany\" -Wno-missing-braces -Wno-char-subscripts $(INCLUDEDIRS)
+ifdef DEBUG
+CFLAGS= -O0 -g $(CBASEFLAGS)
+else
+CFLAGS=-O2 $(CBASEFLAGS)
+endif
+
+.c.o:
+	$(CC) $(REGEX_DEFINES) $(CFLAGS) -c $<
+
+all: $(COMPLIB)
+
+clean:
+	-$(RM) deps.mak *.o $(COMPLIB)
+
+$(COMPLIB): abaqus.o abc.o args.o c.o cobol.o fortran.o make.o conf.o pascal.o perl.o php.o diff.o vhdl.o verilog.o lua.o js.o \
+actionscript.o nsis.o objc.o \
+haskell.o haxe.o html.o python.o lregex.o asciidoc.o rest.o sh.o ctags.o entry.o get.o keyword.o nestlevel.o \
+options.o \
+parse.o basic.o read.o sort.o strlist.o latex.o markdown.o matlab.o docbook.o tcl.o ruby.o asm.o sql.o txt2tags.o css.o \
+vstring.o r.o
+	$(AR) rc $@ $^
+	$(RANLIB) $@
+
+deps.mak:
+	$(CC) -MM  $(CFLAGS) *.c >deps.mak
+
+# Generate header dependencies with "make deps.mak"
+include deps.mak

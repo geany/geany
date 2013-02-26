@@ -12,10 +12,13 @@ CXX = g++
 CC = gcc
 AR = ar
 RANLIB = ranlib
-PREFIX = C:\libs
+PREFIX = C:/libs
 RM = del
 -include ../localwin32.mk
 
+ifdef MSYS
+RM = rm -f
+endif
 
 COMPLIB=scintilla.a
 
@@ -60,6 +63,7 @@ MARSHALLER=scintilla-marshal.o
 	$(CC) $(CXXFLAGS) -c $<
 
 LEXOBJS=\
+LexAbaqus.o \
 LexAda.o \
 LexAsm.o \
 LexBash.o \
@@ -70,6 +74,7 @@ LexHTML.o \
 LexOthers.o \
 LexPascal.o \
 LexPerl.o \
+LexPO.o \
 LexPython.o \
 LexSQL.o \
 LexCaml.o \

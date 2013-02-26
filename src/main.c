@@ -1,8 +1,8 @@
 /*
  *      main.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2005-2011 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2006-2011 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2005-2012 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2006-2012 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -14,9 +14,9 @@
  *      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *      GNU General Public License for more details.
  *
- *      You should have received a copy of the GNU General Public License
- *      along with this program; if not, write to the Free Software
- *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *      You should have received a copy of the GNU General Public License along
+ *      with this program; if not, write to the Free Software Foundation, Inc.,
+ *      51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
 /**
@@ -219,12 +219,26 @@ static void apply_settings(void)
 
 	if (interface_prefs.sidebar_pos != GTK_POS_LEFT)
 		ui_swap_sidebar_pos();
+
+	gtk_orientable_set_orientation(GTK_ORIENTABLE(ui_lookup_widget(main_widgets.window, "vpaned1")),
+		interface_prefs.msgwin_orientation);
 }
 
 
 static void main_init(void)
 {
+	/* add our icon path in case we aren't installed in the system prefix */
+#ifndef G_OS_WIN32
+	gchar *path = g_build_filename(GEANY_DATADIR, "icons", NULL);
+	gtk_icon_theme_append_search_path(gtk_icon_theme_get_default(), path);
+	g_free(path);
+#else
+	gtk_icon_theme_append_search_path(gtk_icon_theme_get_default(), "share\\icons");
+#endif
+
 	/* inits */
+	ui_init_stock_items();
+
 	ui_init_builder();
 
 	main_widgets.window				= NULL;
@@ -241,8 +255,6 @@ static void main_init(void)
 	ui_prefs.recent_queue				= g_queue_new();
 	ui_prefs.recent_projects_queue		= g_queue_new();
 	main_status.opening_session_files	= FALSE;
-
-	ui_init_stock_items();
 
 	main_widgets.window = create_window1();
 
@@ -375,13 +387,13 @@ static void setup_paths(void)
 	 * documentation and data files */
 	gchar *install_dir = win32_get_installation_dir();
 
-	data_dir = g_strconcat(install_dir, "\\data", NULL); /* e.g. C:\Program Files\geany\data */
-	doc_dir = g_strconcat(install_dir, "\\doc", NULL);
+	data_dir = g_build_filename(install_dir, "data", NULL); /* e.g. C:\Program Files\geany\data */
+	doc_dir = g_build_filename(install_dir, "doc", NULL);
 
 	g_free(install_dir);
 #else
-	data_dir = g_strconcat(GEANY_DATADIR, "/geany", NULL); /* e.g. /usr/share/geany */
-	doc_dir = g_strconcat(GEANY_DOCDIR, "/html", NULL);
+	data_dir = g_build_filename(GEANY_DATADIR, "geany", NULL); /* e.g. /usr/share/geany */
+	doc_dir = g_build_filename(GEANY_DOCDIR, "html", NULL);
 #endif
 
 	/* convert path names to locale encoding */
@@ -449,7 +461,7 @@ void main_locale_init(const gchar *locale_dir, const gchar *package)
 	{
 		gchar *install_dir = win32_get_installation_dir();
 		/* e.g. C:\Program Files\geany\lib\locale */
-		l_locale_dir = g_strconcat(install_dir, "\\share\\locale", NULL);
+		l_locale_dir = g_build_filename(install_dir, "share", "locale", NULL);
 		g_free(install_dir);
 	}
 #else
@@ -748,7 +760,8 @@ static gint setup_config_dir(void)
 	return mkdir_result;
 }
 
-
+/* Signal handling removed since on_exit_clicked() uses functions that are
+ * illegal in signal handlers
 static void signal_cb(gint sig)
 {
 	if (sig == SIGTERM)
@@ -756,7 +769,7 @@ static void signal_cb(gint sig)
 		on_exit_clicked(NULL, NULL);
 	}
 }
-
+ */
 
 /* Used for command-line arguments at startup or from socket.
  * this will strip any :line:col filename suffix from locale_filename */
@@ -972,8 +985,8 @@ gint main(gint argc, gchar **argv)
 	 * dependencies (e.g. WebKit, Soup, ...) */
 	if (!g_thread_supported())
 		g_thread_init(NULL);
-
-	signal(SIGTERM, signal_cb);
+    /* removed as signal handling was wrong, see signal_cb()
+	signal(SIGTERM, signal_cb); */
 #ifdef G_OS_UNIX
 	/* SIGQUIT is used to kill spawned children and we get also this signal, so ignore */
 	signal(SIGQUIT, SIG_IGN);
@@ -1052,13 +1065,6 @@ gint main(gint argc, gchar **argv)
 	document_init_doclist();
 	symbols_init();
 	editor_snippets_init();
-
-	/* set window icon */
-	{
-		GdkPixbuf *pb = ui_new_pixbuf_from_inline(GEANY_IMAGE_LOGO);
-		gtk_window_set_icon(GTK_WINDOW(main_widgets.window), pb);
-		g_object_unref(pb);	/* free our reference */
-	}
 
 	/* registering some basic events */
 	g_signal_connect(main_widgets.window, "delete-event", G_CALLBACK(on_exit_clicked), NULL);

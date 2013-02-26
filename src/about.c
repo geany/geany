@@ -1,8 +1,9 @@
 /*
  *      about.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2005-2011 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2006-2011 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2005-2012 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2006-2012 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2006-2012 Frank Lanitz <frank@frank.uvena.de>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -14,9 +15,9 @@
  *      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *      GNU General Public License for more details.
  *
- *      You should have received a copy of the GNU General Public License
- *      along with this program; if not, write to the Free Software
- *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *      You should have received a copy of the GNU General Public License along
+ *      with this program; if not, write to the Free Software Foundation, Inc.,
+ *      51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
 /*
@@ -51,10 +52,13 @@ const gchar *translators[][2] = {
 	{ "el", "Stavros Temertzidis &lt;bullgr@gmail.com&gt;" },
 	{ "en_GB", "Jeff Bailes &lt;thepizzaking@gmail.com&gt;" },
 	{ "es", "Antonio Jiménez González &lt;tonificante@hotmail.com&gt;\nLucas Vieites &lt;lucasvieites@gmail.com&gt;" },
+	{ "eu", "Asier Iturralde Sarasola &lt;asier.iturralde@gmail.com&gt;"},
 	{ "fa", "Moein Owhadi Kareshk &lt;moein.owhadi@gmail.com&gt;"},
 	{ "fi", "Harri Koskinen &lt;harri@fastmonkey.org&gt;\nJari Rahkonen &lt;jari.rahkonen@pp1.inet.fi&gt;" },
 	{ "fr", "Jean-Philippe Moal &lt;skateinmars@skateinmars.net&gt;" },
 	{ "gl", "José Manuel Castroagudín Silva &lt;chavescesures@gmail.com&gt;"},
+	{ "hi", "Asheesh Ranjan &lt;asheeshranjan1@gmail.com&gt;"},
+	{ "he", "Yosef Or Botschko &lt;yosefor3@walla.com&gt;"},
 	{ "hu", "Gabor Kmetyko &lt;kg_kilo@freemail.hu&gt;" },
 	{ "it", "Max Baldinelli &lt;m.baldinelli@agora.it&gt;,\nDario Santomarco &lt;dariello@yahoo.it&gt;" },
 	{ "ja", "Tarot Osuji &lt;tarot@sdf.lonestar.org&gt;\nChikahiro Masami &lt;cmasa.z321@gmail.com&gt;" },
@@ -69,10 +73,11 @@ const gchar *translators[][2] = {
 			   "Adrovane Marques Kade &lt;adrovane@gmail.com&gt;\n"
 			   "Rafael Peregrino da Silva &lt;rperegrino@linuxnewmedia.com.br&gt;"},
 	{ "ro", "Alex Eftimie &lt;alex@rosedu.org&gt;" },
-	{ "ru_RU", "brahmann_ &lt;brahmann@pisem.net&gt;,\nNikita E. Shalaev &lt;nshalaev@eu.spb.ru&gt;" },
+	{ "ru", "brahmann_ &lt;brahmann@pisem.net&gt;,\nNikita E. Shalaev &lt;nshalaev@eu.spb.ru&gt;" },
 	{ "sk", "Tomáš Vadina &lt;kyberdev@gmail.com&gt;" },
 	{ "sl", "Jože Klepec &lt;joze.klepec@siol.net&gt;"},
 	{ "sv", "Tony Mattsson &lt;superxorn@gmail.com&gt;" },
+	{ "sr", "Nikola Radovanovic &lt;cobisimo@gmail.com&gt;"},
 	{ "tr", "Gürkan Gür &lt;seqizz@gmail.com&gt;"},
 	{ "uk", "Boris Dibrov &lt;dibrov.bor@gmail.com&gt;" },
 	{ "vi_VN", "Clytie Siddall &lt;clytie@riverland.net.au&gt;" },
@@ -142,7 +147,6 @@ static GtkWidget *create_dialog(void)
 	GtkWidget *info_box;
 	GtkWidget *header_hbox;
 	GtkWidget *header_eventbox;
-	GdkPixbuf *icon;
 	GtkTextBuffer* tb;
 	gchar *license_text = NULL;
 	gchar buffer[512];
@@ -155,6 +159,7 @@ static GtkWidget *create_dialog(void)
 	gtk_window_set_transient_for(GTK_WINDOW(dialog), GTK_WINDOW(main_widgets.window));
 	gtk_window_set_position(GTK_WINDOW(dialog), GTK_WIN_POS_CENTER_ON_PARENT);
 	gtk_window_set_title(GTK_WINDOW(dialog), _("About Geany"));
+	gtk_window_set_icon_name(GTK_WINDOW(dialog), "geany");
 	gtk_widget_set_name(dialog, "GeanyDialog");
 	gtk_dialog_add_button(GTK_DIALOG(dialog), GTK_STOCK_CLOSE, GTK_RESPONSE_CLOSE);
 	gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_CLOSE);
@@ -168,7 +173,7 @@ static GtkWidget *create_dialog(void)
 	gtk_container_set_border_width(GTK_CONTAINER(header_hbox), 4);
 	gtk_widget_show(header_hbox);
 	gtk_container_add(GTK_CONTAINER(header_eventbox), header_hbox);
-	header_image = gtk_image_new();
+	header_image = gtk_image_new_from_icon_name("geany", GTK_ICON_SIZE_DIALOG);
 	gtk_box_pack_start(GTK_BOX(header_hbox), header_image, FALSE, FALSE, 0);
 	header_label = gtk_label_new(NULL);
 	gtk_label_set_use_markup(GTK_LABEL(header_label), TRUE);
@@ -181,19 +186,13 @@ static GtkWidget *create_dialog(void)
 	header_label_style_set(header_label);
 	g_signal_connect_after(header_eventbox, "style-set", G_CALLBACK(header_eventbox_style_set), NULL);
 	g_signal_connect_after(header_label, "style-set", G_CALLBACK(header_label_style_set), NULL);
-	gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->vbox), header_eventbox, FALSE, FALSE, 0);
-
-	/* set image */
-	icon = ui_new_pixbuf_from_inline(GEANY_IMAGE_LOGO);
-	gtk_image_set_from_pixbuf(GTK_IMAGE(header_image), icon);
-	gtk_window_set_icon(GTK_WINDOW(dialog), icon);
-	g_object_unref(icon);	/* free our reference */
+	gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))), header_eventbox, FALSE, FALSE, 0);
 
 	/* create notebook */
 	notebook = gtk_notebook_new();
 	gtk_widget_show(notebook);
 	gtk_container_set_border_width(GTK_CONTAINER(notebook), 2);
-	gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->vbox), notebook, TRUE, TRUE, 0);
+	gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))), notebook, TRUE, TRUE, 0);
 
 	/* create "Info" tab */
 	info_box = gtk_vbox_new(FALSE, 0);

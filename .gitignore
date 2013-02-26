@@ -45,8 +45,11 @@ Makefile.in
 /libtool
 /localwin32.mk
 /.lock-wscript
+/.lock-wafbuild
 /ltmain.sh
-/m4/
+/m4/lt*.m4
+/m4/intltool.m4
+/m4/libtool.m4
 /make_deb.sh
 /missing
 /mkinstalldirs
@@ -78,6 +81,7 @@ Makefile.in
 /po/*.sed
 /po/*.sin
 /po/stamp-it
+/po/.intlcache
 
 #-----------------------------------------------------------------------
 # /src/

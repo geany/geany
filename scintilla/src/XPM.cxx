@@ -8,10 +8,6 @@
 #include <string.h>
 #include <stdlib.h>
 
-#ifdef _MSC_VER
-#pragma warning(disable: 4786)
-#endif
-
 #include <vector>
 #include <map>
 
@@ -46,19 +42,11 @@ static size_t MeasureLength(const char *s) {
 }
 
 ColourDesired XPM::ColourDesiredFromCode(int ch) const {
-	return colourCodeTable[ch]->desired;
+	return *colourCodeTable[ch];
 }
 
-ColourAllocated XPM::ColourFromCode(int ch) const {
-	return colourCodeTable[ch]->allocated;
-#ifdef SLOW
-	for (int i=0; i<nColours; i++) {
-		if (codes[i] == ch) {
-			return colours[i].allocated;
-		}
-	}
-	return colours[0].allocated;
-#endif
+ColourDesired XPM::ColourFromCode(int ch) const {
+	return *colourCodeTable[ch];
 }
 
 void XPM::FillRun(Surface *surface, int code, int startX, int y, int x) {
@@ -124,7 +112,7 @@ void XPM::Init(const char *const *linesForm) {
 		return;
 	}
 	codes = new char[nColours];
-	colours = new ColourPair[nColours];
+	colours = new ColourDesired[nColours];
 
 	int strings = 1+height+nColours;
 	lines = new char *[strings];
@@ -151,9 +139,9 @@ void XPM::Init(const char *const *linesForm) {
 		codes[c] = colourDef[0];
 		colourDef += 4;
 		if (*colourDef == '#') {
-			colours[c].desired.Set(colourDef);
+			colours[c].Set(colourDef);
 		} else {
-			colours[c].desired = ColourDesired(0xff, 0xff, 0xff);
+			colours[c] = ColourDesired(0xff, 0xff, 0xff);
 			codeTransparent = codes[c];
 		}
 		colourCodeTable[static_cast<unsigned char>(codes[c])] = &(colours[c]);
@@ -169,24 +157,6 @@ void XPM::Clear() {
 	colours = 0;
 	delete []lines;
 	lines = 0;
-}
-
-void XPM::RefreshColourPalette(Palette &pal, bool want) {
-	if (!data || !codes || !colours || !lines) {
-		return;
-	}
-	for (int i=0; i<nColours; i++) {
-		pal.WantFind(colours[i], want);
-	}
-}
-
-void XPM::CopyDesiredColours() {
-	if (!data || !codes || !colours || !lines) {
-		return;
-	}
-	for (int i=0; i<nColours; i++) {
-		colours[i].Copy();
-	}
 }
 
 void XPM::Draw(Surface *surface, PRectangle &rc) {
@@ -296,7 +266,6 @@ void XPMSet::Add(int ident, const char *textForm) {
 	for (int i = 0; i < len; i++) {
 		if (set[i]->GetId() == ident) {
 			set[i]->Init(textForm);
-			set[i]->CopyDesiredColours();
 			return;
 		}
 	}
@@ -305,7 +274,6 @@ void XPMSet::Add(int ident, const char *textForm) {
 	XPM *pxpm = new XPM(textForm);
 	if (pxpm) {
 		pxpm->SetId(ident);
-		pxpm->CopyDesiredColours();
 		if (len == maximum) {
 			maximum += 64;
 			XPM **setNew = new XPM *[maximum];
@@ -351,8 +319,8 @@ int XPMSet::GetWidth() {
 	return (width > 0) ? width : 0;
 }
 
-RGBAImage::RGBAImage(int width_, int height_, const unsigned char *pixels_) :
-	height(height_), width(width_) {
+RGBAImage::RGBAImage(int width_, int height_, float scale_, const unsigned char *pixels_) :
+	height(height_), width(width_), scale(scale_) {
 	if (pixels_) {
 		pixelBytes.assign(pixels_, pixels_ + CountBytes());
 	} else {
@@ -363,6 +331,7 @@ RGBAImage::RGBAImage(int width_, int height_, const unsigned char *pixels_) :
 RGBAImage::RGBAImage(const XPM &xpm) {
 	height = xpm.GetHeight();
 	width = xpm.GetWidth();
+	scale = 1;
 	pixelBytes.resize(CountBytes());
 	for (int y=0; y<height; y++) {
 		for (int x=0; x<width; x++) {
@@ -388,10 +357,10 @@ const unsigned char *RGBAImage::Pixels() const {
 void RGBAImage::SetPixel(int x, int y, ColourDesired colour, int alpha) {
 	unsigned char *pixel = &pixelBytes[0] + (y*width+x) * 4;
 	// RGBA
-	pixel[0] = colour.GetRed();
-	pixel[1] = colour.GetGreen();
-	pixel[2] = colour.GetBlue();
-	pixel[3] = alpha;
+	pixel[0] = static_cast<unsigned char>(colour.GetRed());
+	pixel[1] = static_cast<unsigned char>(colour.GetGreen());
+	pixel[2] = static_cast<unsigned char>(colour.GetBlue());
+	pixel[3] = static_cast<unsigned char>(alpha);
 }
 
 RGBAImageSet::RGBAImageSet() : height(-1), width(-1){

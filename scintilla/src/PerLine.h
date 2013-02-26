@@ -37,7 +37,7 @@ public:
 	bool Contains(int handle) const;
 	bool InsertHandle(int handle, int markerNum);
 	void RemoveHandle(int handle);
-	bool RemoveNumber(int markerNum);
+	bool RemoveNumber(int markerNum, bool all);
 	void CombineWith(MarkerHandleSet *other);
 };
 
@@ -54,6 +54,7 @@ public:
 	virtual void RemoveLine(int line);
 
 	int MarkValue(int line);
+	int MarkerNext(int lineStart, int mask) const;
 	int AddMark(int line, int marker, int lines);
 	void MergeMarkers(int pos);
 	bool DeleteMark(int line, int markerNum, bool all);

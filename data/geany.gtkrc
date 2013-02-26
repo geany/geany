@@ -1,0 +1,41 @@
+# custom GTK2 style for Geany
+
+# make close button on the editor's tabs smaller
+style "geany-close-tab-button-style" {
+	GtkWidget::focus-padding = 0
+	GtkWidget::focus-line-width = 0
+	xthickness = 0
+	ythickness = 0
+}
+widget "*.geany-close-tab-button" style:theme "geany-close-tab-button-style"
+
+# use monospaced font in search entries for easier reading of regexp (#1907117)
+style "geany-monospace" {
+	font_name = "Monospace"
+}
+widget "GeanyDialogSearch.*.GtkEntry" style:theme "geany-monospace"
+widget "GeanyDialogSearch.*.geany-search-entry-no-match" style:theme "geany-monospace"
+
+# set red background for GtkEntries showing unmatched searches
+style "geany-search-entry-no-match-style" {
+	base[NORMAL] = "#ffff66666666"
+	text[NORMAL] = "#ffffffffffff"
+}
+widget "*.geany-search-entry-no-match" style:theme "geany-search-entry-no-match-style"
+
+# document status colors
+style "geany-document-status-changed-style" {
+	fg[NORMAL] = "#ffff00000000"
+	fg[ACTIVE] = "#ffff00000000"
+}
+style "geany-document-status-disk-changed-style" {
+	fg[NORMAL] = "#ffff7fff0000"
+	fg[ACTIVE] = "#ffff7fff0000"
+}
+style "geany-document-status-readonly-style" {
+	fg[NORMAL] = "#00007fff0000"
+	fg[ACTIVE] = "#00007fff0000"
+}
+widget "*.geany-document-status-changed" style:theme "geany-document-status-changed-style"
+widget "*.geany-document-status-disk-changed" style:theme "geany-document-status-disk-changed-style"
+widget "*.geany-document-status-readonly" style:theme "geany-document-status-readonly-style"

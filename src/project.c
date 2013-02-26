@@ -1,8 +1,8 @@
 /*
  *      project.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2007-2011 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2007-2011 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2007-2012 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2007-2012 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -14,9 +14,9 @@
  *      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *      GNU General Public License for more details.
  *
- *      You should have received a copy of the GNU General Public License
- *      along with this program; if not, write to the Free Software
- *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *      You should have received a copy of the GNU General Public License along
+ *      with this program; if not, write to the Free Software Foundation, Inc.,
+ *      51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
 /** @file project.h
@@ -158,7 +158,7 @@ void project_new(void)
 	image = gtk_image_new_from_stock(GTK_STOCK_OPEN, GTK_ICON_SIZE_BUTTON);
 	gtk_container_add(GTK_CONTAINER(button), image);
 	bbox = gtk_hbox_new(FALSE, 6);
-	gtk_box_pack_start_defaults(GTK_BOX(bbox), e->file_name);
+	gtk_box_pack_start(GTK_BOX(bbox), e->file_name, TRUE, TRUE, 0);
 	gtk_box_pack_start(GTK_BOX(bbox), button, FALSE, FALSE, 0);
 
 	ui_table_add_row(GTK_TABLE(table), 1, label, bbox, NULL);
@@ -177,7 +177,7 @@ void project_new(void)
 
 	ui_table_add_row(GTK_TABLE(table), 2, label, bbox, NULL);
 
-	gtk_container_add(GTK_CONTAINER(vbox), table);
+	gtk_box_pack_start(GTK_BOX(vbox), table, TRUE, TRUE, 0);
 
 	/* signals */
 	g_signal_connect(e->name, "changed", G_CALLBACK(on_name_entry_changed), e);
@@ -348,11 +348,17 @@ void project_close(gboolean open_default)
 
 	g_return_if_fail(app->project != NULL);
 
-	ui_set_statusbar(TRUE, _("Project \"%s\" closed."), app->project->name);
-
-	/* use write_config() to save project session files */
+	/* save project session files, etc */
 	if (!write_config(FALSE))
 		g_warning("Project file \"%s\" could not be written", app->project->file_name);
+
+	if (project_prefs.project_session)
+	{
+		/* close all existing tabs first */
+		if (!document_close_all())
+			return;
+	}
+	ui_set_statusbar(TRUE, _("Project \"%s\" closed."), app->project->name);
 
 	/* remove project filetypes build entries */
 	if (app->project->build_filetypes_list != NULL)
@@ -383,9 +389,6 @@ void project_close(gboolean open_default)
 
 	if (project_prefs.project_session)
 	{
-		/* close all existing tabs first */
-		document_close_all();
-
 		/* after closing all tabs let's open the tabs found in the default config */
 		if (open_default && cl_options.load_session)
 		{
@@ -675,7 +678,7 @@ static gboolean update_config(const PropertyDialogElements *e, gboolean new_proj
 		if (! g_path_is_absolute(locale_path))
 		{	/* relative base path, so add base dir of project file name */
 			gchar *dir = g_path_get_dirname(locale_filename);
-			SETPTR(locale_path, g_strconcat(dir, G_DIR_SEPARATOR_S, locale_path, NULL));
+			SETPTR(locale_path, g_strconcat(dir, locale_path, NULL));
 			g_free(dir);
 		}
 
@@ -1097,8 +1100,8 @@ gchar *project_get_base_path(void)
 
 			if (utils_str_equal(project->base_path, "./"))
 				return dir;
-			else
-				path = g_strconcat(dir, G_DIR_SEPARATOR_S, project->base_path, NULL);
+
+			path = g_build_filename(dir, project->base_path, NULL);
 			g_free(dir);
 			return path;
 		}
@@ -1135,8 +1138,7 @@ void project_load_prefs(GKeyFile *config)
 		"project_file_path", NULL);
 	if (local_prefs.project_file_path == NULL)
 	{
-		local_prefs.project_file_path = g_strconcat(g_get_home_dir(),
-			G_DIR_SEPARATOR_S, PROJECT_DIR, NULL);
+		local_prefs.project_file_path = g_build_filename(g_get_home_dir(), PROJECT_DIR, NULL);
 	}
 }
 

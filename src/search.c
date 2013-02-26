@@ -1,8 +1,8 @@
 /*
  *      search.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2006-2011 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2006-2011 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2006-2012 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2006-2012 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -14,9 +14,9 @@
  *      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *      GNU General Public License for more details.
  *
- *      You should have received a copy of the GNU General Public License
- *      along with this program; if not, write to the Free Software
- *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *      You should have received a copy of the GNU General Public License along
+ *      with this program; if not, write to the Free Software Foundation, Inc.,
+ *      51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
 /*
@@ -423,28 +423,6 @@ void search_find_selection(GeanyDocument *doc, gboolean search_backwards)
 }
 
 
-/* this will load a GTK rc style to set a monospace font for text fields(GtkEntry) in all
- * search dialogs. This needs to be done only once.
- * The monospace font should increase readibility of regular expressions containing spaces, points,
- * commas and similar (#1907117). */
-static void load_monospace_style(void)
-{
-	static const gchar *rcstyle =
-		"style \"geany-monospace\"\n" \
-		"{\n" \
-		"    font_name=\"Monospace\"\n" \
-		"}\n" \
-		"widget \"GeanyDialogSearch.*.GtkEntry\" style \"geany-monospace\"";
-	static gboolean load = TRUE;
-
-	if (load)
-	{
-		gtk_rc_parse_string(rcstyle);
-		load = FALSE;
-	}
-}
-
-
 static void on_expander_activated(GtkExpander *exp, gpointer data)
 {
 	gboolean *setting = data;
@@ -457,8 +435,6 @@ static void create_find_dialog(void)
 {
 	GtkWidget *label, *entry, *sbox, *vbox;
 	GtkWidget *exp, *bbox, *button, *check_close;
-
-	load_monospace_style();
 
 	find_dlg.dialog = gtk_dialog_new_with_buttons(_("Find"),
 		GTK_WINDOW(main_widgets.window), GTK_DIALOG_DESTROY_WITH_PARENT,
@@ -539,7 +515,7 @@ static void create_find_dialog(void)
 	gtk_button_box_set_child_secondary(GTK_BUTTON_BOX(bbox), check_close, TRUE);
 
 	ui_hbutton_box_copy_layout(
-		GTK_BUTTON_BOX(GTK_DIALOG(find_dlg.dialog)->action_area),
+		GTK_BUTTON_BOX(gtk_dialog_get_action_area(GTK_DIALOG(find_dlg.dialog))),
 		GTK_BUTTON_BOX(bbox));
 	gtk_container_add(GTK_CONTAINER(exp), bbox);
 	gtk_container_add(GTK_CONTAINER(vbox), exp);
@@ -613,8 +589,6 @@ static void create_replace_dialog(void)
 	GtkWidget *label_find, *label_replace, *entry_find, *entry_replace,
 		*check_close, *button, *rbox, *fbox, *vbox, *exp, *bbox;
 	GtkSizeGroup *label_size;
-
-	load_monospace_style();
 
 	replace_dlg.dialog = gtk_dialog_new_with_buttons(_("Replace"),
 		GTK_WINDOW(main_widgets.window), GTK_DIALOG_DESTROY_WITH_PARENT,
@@ -721,7 +695,7 @@ static void create_replace_dialog(void)
 	gtk_button_box_set_child_secondary(GTK_BUTTON_BOX(bbox), check_close, TRUE);
 
 	ui_hbutton_box_copy_layout(
-		GTK_BUTTON_BOX(GTK_DIALOG(replace_dlg.dialog)->action_area),
+		GTK_BUTTON_BOX(gtk_dialog_get_action_area(GTK_DIALOG(replace_dlg.dialog))),
 		GTK_BUTTON_BOX(bbox));
 	gtk_container_add(GTK_CONTAINER(exp), bbox);
 	gtk_container_add(GTK_CONTAINER(vbox), exp);
@@ -864,8 +838,6 @@ static void create_fif_dialog(void)
 	GtkSizeGroup *size_group;
 	gchar *encoding_string;
 	guint i;
-
-	load_monospace_style();
 
 	fif_dlg.dialog = gtk_dialog_new_with_buttons(
 		_("Find in Files"), GTK_WINDOW(main_widgets.window), GTK_DIALOG_DESTROY_WITH_PARENT,
@@ -1073,12 +1045,27 @@ void search_show_find_in_files_dialog(const gchar *dir)
 		cur_dir = g_strdup(dir);	/* custom directory argument passed */
 	else
 	{
-		gboolean entry_empty = ! NZV(gtk_entry_get_text(GTK_ENTRY(entry)));
-
-		if (search_prefs.use_current_file_dir || entry_empty)
+		if (search_prefs.use_current_file_dir)
 		{
-			cur_dir = utils_get_current_file_dir_utf8();
+			static gchar *last_cur_dir = NULL;
+			static GeanyDocument *last_doc = NULL;
 
+			/* Only set the directory entry once for the current document */
+			cur_dir = utils_get_current_file_dir_utf8();
+			if (doc == last_doc && cur_dir && utils_str_equal(cur_dir, last_cur_dir))
+			{
+				/* in case the user now wants the current directory, add it to history */
+				ui_combo_box_add_to_history(
+					GTK_COMBO_BOX_ENTRY(fif_dlg.dir_combo), cur_dir, 0);
+				SETPTR(cur_dir, NULL);
+			}
+			else
+				SETPTR(last_cur_dir, g_strdup(cur_dir));
+
+			last_doc = doc;
+		}
+		if (!cur_dir && ! NZV(gtk_entry_get_text(GTK_ENTRY(entry))))
+		{
 			/* use default_open_path if no directory could be determined
 			 * (e.g. when no files are open) */
 			if (!cur_dir)
@@ -1162,7 +1149,7 @@ gint search_mark_all(GeanyDocument *doc, const gchar *search_text, gint flags)
 	ttf.lpstrText = (gchar *)search_text;
 	while (TRUE)
 	{
-		pos = sci_find_text(doc->editor->sci, flags, &ttf);
+		pos = search_find_text(doc->editor->sci, flags, &ttf);
 		if (pos == -1) break;
 
 		len = ttf.chrgText.cpMax - ttf.chrgText.cpMin;
@@ -1170,6 +1157,9 @@ gint search_mark_all(GeanyDocument *doc, const gchar *search_text, gint flags)
 			editor_indicator_set_on_range(doc->editor, GEANY_INDICATOR_SEARCH, pos, pos + len);
 
 		ttf.chrg.cpMin = ttf.chrgText.cpMax;
+		/* make sure to advance even with empty matches (see find_document_usage()) */
+		if (len == 0)
+			ttf.chrg.cpMin ++;
 		count++;
 	}
 	return count;
@@ -1241,9 +1231,10 @@ on_find_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 		if (search_data.flags & SCFIND_REGEXP)
 		{
 			GRegex *regex = compile_regex(search_data.text, search_data.flags);
-			g_regex_unref(regex);
 			if (!regex)
 				goto fail;
+			else
+				g_regex_unref(regex);
 		}
 		else if (settings.find_escape_sequences)
 		{
@@ -1374,7 +1365,8 @@ on_replace_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 	if (search_flags_re & SCFIND_REGEXP)
 	{
 		GRegex *regex = compile_regex(find, search_flags_re);
-		g_regex_unref(regex);
+		if (regex)
+			g_regex_unref(regex);
 		/* find escapes will be handled by GRegex */
 		if (!regex || !utils_str_replace_escape(replace, TRUE))
 			goto fail;
@@ -1789,9 +1781,8 @@ static gboolean search_read_io_stderr(GIOChannel *source, GIOCondition condition
 
 static void search_close_pid(GPid child_pid, gint status, gpointer user_data)
 {
-	/* TODO: port this also to Windows API */
-#ifdef G_OS_UNIX
 	const gchar *msg = _("Search failed.");
+#ifdef G_OS_UNIX
 	gint exit_status = 1;
 
 	if (WIFEXITED(status))
@@ -1803,6 +1794,9 @@ static void search_close_pid(GPid child_pid, gint status, gpointer user_data)
 		exit_status = -1;
 		g_warning("Find in Files: The command failed unexpectedly (signal received).");
 	}
+#else
+	gint exit_status = status;
+#endif
 
 	switch (exit_status)
 	{
@@ -1825,8 +1819,6 @@ static void search_close_pid(GPid child_pid, gint status, gpointer user_data)
 			ui_set_statusbar(FALSE, "%s", msg);
 			break;
 	}
-#endif
-
 	utils_beep();
 	g_spawn_close_pid(child_pid);
 	ui_progress_bar_stop();
@@ -1879,7 +1871,7 @@ static gint find_regex(ScintillaObject *sci, guint pos, GRegex *regex)
 	GMatchInfo *minfo;
 	gint ret = -1;
 
-	g_return_val_if_fail(pos <= (guint)sci_get_length(sci), FALSE);
+	g_return_val_if_fail(pos <= (guint)sci_get_length(sci), -1);
 
 	/* clear old match */
 	SETPTR(regex_match_text, NULL);
@@ -1925,6 +1917,9 @@ gint search_find_next(ScintillaObject *sci, const gchar *str, gint flags)
 
 	pos = sci_get_current_position(sci);
 	ret = find_regex(sci, pos, regex);
+	/* avoid re-matching the same position in case of empty matches */
+	if (ret == pos && regex_matches[0].start == regex_matches[0].end)
+		ret = find_regex(sci, pos + 1, regex);
 	if (ret >= 0)
 		sci_set_selection(sci, ret, regex_matches[0].end);
 
@@ -1994,7 +1989,9 @@ gint search_find_text(ScintillaObject *sci, gint flags, struct Sci_TextToFind *t
 	pos = ttf->chrg.cpMin;
 	ret = find_regex(sci, pos, regex);
 
-	if (ret >= 0 && ret < ttf->chrg.cpMax)
+	if (ret >= ttf->chrg.cpMax)
+		ret = -1;
+	else if (ret >= 0)
 	{
 		ttf->chrgText.cpMin = regex_matches[0].start;
 		ttf->chrgText.cpMax = regex_matches[0].end;
@@ -2020,14 +2017,11 @@ static gint find_document_usage(GeanyDocument *doc, const gchar *search_text, gi
 	ttf.lpstrText = (gchar *)search_text;
 	while (1)
 	{
-		gint pos, line, start, find_len;
+		gint pos, line;
 
 		pos = search_find_text(doc->editor->sci, flags, &ttf);
 		if (pos == -1)
 			break;	/* no more matches */
-		find_len = ttf.chrgText.cpMax - ttf.chrgText.cpMin;
-		if (find_len == 0)
-			break;	/* Ignore regex ^ or $ */
 
 		count++;
 		line = sci_get_line_from_position(doc->editor->sci, pos);
@@ -2040,8 +2034,12 @@ static gint find_document_usage(GeanyDocument *doc, const gchar *search_text, gi
 			prev_line = line;
 		}
 
-		start = ttf.chrgText.cpMax + 1;
-		ttf.chrg.cpMin = start;
+		ttf.chrg.cpMin = ttf.chrgText.cpMax;
+		/* avoid rematching with empty matches like "(?=[a-z])" or "^$".
+		 * note we cannot assume a match will always be empty or not and then break out, since
+		 * matches like "a?(?=b)" will me sometimes empty and sometimes not */
+		if ((ttf.chrgText.cpMax - ttf.chrgText.cpMin) == 0)
+			ttf.chrg.cpMin ++;
 	}
 	g_free(short_file_name);
 	return count;
@@ -2125,8 +2123,6 @@ guint search_replace_range(ScintillaObject *sci, struct Sci_TextToFind *ttf,
 		find_len = ttf->chrgText.cpMax - ttf->chrgText.cpMin;
 		if (search_pos == -1)
 			break;	/* no more matches */
-		if (find_len == 0 && ! NZV(replace_text))
-			break;	/* nothing to do */
 
 		if (search_pos + find_len > end)
 			break;	/* found text is partly out of range */
@@ -2158,6 +2154,7 @@ guint search_replace_range(ScintillaObject *sci, struct Sci_TextToFind *ttf,
 			end += replace_len - find_len;	/* update end of range now text has changed */
 			ttf->chrg.cpMax = end;
 		}
+
 	}
 	return count;
 }
