@@ -108,7 +108,7 @@ static gsize count_indent_size(GeanyEditor *editor, const gchar *base_indent);
 static const gchar *snippets_find_completion_by_name(const gchar *type, const gchar *name);
 static void snippets_make_replacements(GeanyEditor *editor, GString *pattern);
 static gssize replace_cursor_markers(GeanyEditor *editor, GString *pattern);
-static GeanyFiletype *editor_get_filetype_at_current_pos(GeanyEditor *editor);
+static GeanyFiletype *editor_get_filetype_at_line(GeanyEditor *editor, gint line);
 static gboolean sci_is_blank_line(ScintillaObject *sci, gint line);
 
 
@@ -2741,7 +2741,7 @@ static gsize count_indent_size(GeanyEditor *editor, const gchar *base_indent)
 
 /* Handles special cases where HTML is embedded in another language or
  * another language is embedded in HTML */
-static GeanyFiletype *editor_get_filetype_at_current_pos(GeanyEditor *editor)
+static GeanyFiletype *editor_get_filetype_at_line(GeanyEditor *editor, gint line)
 {
 	gint style, line_start;
 	GeanyFiletype *current_ft;
@@ -2750,7 +2750,7 @@ static GeanyFiletype *editor_get_filetype_at_current_pos(GeanyEditor *editor)
 	g_return_val_if_fail(editor->document->file_type != NULL, NULL);
 
 	current_ft = editor->document->file_type;
-	line_start = sci_get_position_from_line(editor->sci, sci_get_current_line(editor->sci));
+	line_start = sci_get_position_from_line(editor->sci, line);
 	style = sci_get_style_at(editor->sci, line_start);
 
 	/* Handle PHP filetype with embedded HTML */
@@ -2803,7 +2803,7 @@ static void real_comment_multiline(GeanyEditor *editor, gint line_start, gint la
 
 	g_return_if_fail(editor != NULL && editor->document->file_type != NULL);
 
-	ft = editor_get_filetype_at_current_pos(editor);
+	ft = editor_get_filetype_at_line(editor, line_start);
 
 	eol = editor_get_eol_char(editor);
 	if (! filetype_get_comment_open_close(ft, FALSE, &co, &cc))
@@ -2859,7 +2859,7 @@ static gboolean real_uncomment_multiline(GeanyEditor *editor)
 
 	g_return_val_if_fail(editor != NULL && editor->document->file_type != NULL, FALSE);
 
-	ft = editor_get_filetype_at_current_pos(editor);
+	ft = editor_get_filetype_at_line(editor, sci_get_current_line(editor->sci));
 	if (! filetype_get_comment_open_close(ft, FALSE, &co, &cc))
 		g_return_val_if_reached(FALSE);
 
@@ -2951,7 +2951,7 @@ gint editor_do_uncomment(GeanyEditor *editor, gint line, gboolean toggle)
 		sel_start = sel_end = sci_get_position_from_line(editor->sci, line);
 	}
 
-	ft = editor_get_filetype_at_current_pos(editor);
+	ft = editor_get_filetype_at_line(editor, first_line);
 	eol_char_len = editor_get_eol_char_len(editor);
 
 	if (! filetype_get_comment_open_close(ft, TRUE, &co, &cc))
@@ -3068,16 +3068,15 @@ void editor_do_comment_toggle(GeanyEditor *editor)
 
 	eol_char_len = editor_get_eol_char_len(editor);
 
-	first_line = sci_get_line_from_position(editor->sci,
-		sci_get_selection_start(editor->sci));
+	first_line = sci_get_line_from_position(editor->sci, sel_start);
 	/* Find the last line with chars selected (not EOL char) */
 	last_line = sci_get_line_from_position(editor->sci,
-		sci_get_selection_end(editor->sci) - editor_get_eol_char_len(editor));
+		sel_end - editor_get_eol_char_len(editor));
 	last_line = MAX(first_line, last_line);
 
 	first_line_start = sci_get_position_from_line(editor->sci, first_line);
 
-	ft = editor_get_filetype_at_current_pos(editor);
+	ft = editor_get_filetype_at_line(editor, first_line);
 
 	if (! filetype_get_comment_open_close(ft, TRUE, &co, &cc))
 		return;
@@ -3228,7 +3227,7 @@ void editor_do_comment(GeanyEditor *editor, gint line, gboolean allow_empty_line
 
 	eol_char_len = editor_get_eol_char_len(editor);
 
-	ft = editor_get_filetype_at_current_pos(editor);
+	ft = editor_get_filetype_at_line(editor, first_line);
 
 	if (! filetype_get_comment_open_close(ft, single_comment, &co, &cc))
 		return;
