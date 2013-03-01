@@ -637,9 +637,9 @@ void build_set_menu_item(const GeanyBuildSource src, const GeanyBuildGroup grp,
 	build_menu_update(NULL);
 }
 
-/** Set the string for the menu item field.
+/** Activate the menu item.
  *
- * Set the specified field of the command specified by @a src, @a grp and @a cmd.
+ * Activate the menu item specified by @a grp and @a cmd.
  *
  * @param grp the group of the specified menu item.
  * @param cmd the index of the command within the group.
