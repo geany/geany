@@ -129,6 +129,7 @@ Section "!Program Files" SEC01
 	File "${RESOURCEDIR}\data\GPL-2"
 	File "${RESOURCEDIR}\data\file*"
 	File "${RESOURCEDIR}\data\geany.glade"
+	File "${RESOURCEDIR}\data\geany.gtkrc"
 	File "${RESOURCEDIR}\data\snippets.conf"
 	File "${RESOURCEDIR}\data\ui_toolbar.xml"
 
