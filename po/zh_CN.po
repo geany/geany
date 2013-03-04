@@ -4,21 +4,20 @@
 # This file is distributed under the same license as the geany package.
 #
 # Dormouse Young <dormouse.young@gmail.com>, 2006-2009.
-# Xhacker Liu <liu.dongyuan@gmail.com>, 2009-2011, 2012.
+# Xhacker Liu <liu.dongyuan@gmail.com>, 2009-2013.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.23\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-02-23 14:24+0100\n"
-"PO-Revision-Date: 2012-06-08 09:36+0800\n"
+"PO-Revision-Date: 2013-03-04 23:28+0800\n"
 "Last-Translator: Xhacker Liu <liu.dongyuan@gmail.com>\n"
 "Language-Team: Chinese (simplified) <i18n-zh@googlegroups.com>\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Gtranslator 1.9.6\n"
+"X-Generator: Poedit 1.5.5\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #: ../geany.desktop.in.h:1 ../data/geany.glade.h:350
@@ -390,9 +389,8 @@ msgid "Bottom"
 msgstr "底端"
 
 #: ../data/geany.glade.h:81
-#, fuzzy
 msgid "<b>Message window</b>"
-msgstr "信息窗口："
+msgstr "<b>信息窗口</b>"
 
 #: ../data/geany.glade.h:82
 msgid "Symbol list:"
@@ -1156,7 +1154,7 @@ msgstr "浏览器："
 msgid ""
 "A terminal emulator command (%c is substituted with the Geany run script "
 "filename)"
-msgstr ""
+msgstr "虚拟终端命令 (%c 会替换为 Geany 运行脚本文件名)"
 
 #: ../data/geany.glade.h:255
 msgid "Path (and possibly additional arguments) to your favorite browser"
@@ -1379,9 +1377,8 @@ msgid "Background color:"
 msgstr "背景颜色："
 
 #: ../data/geany.glade.h:306
-#, fuzzy
 msgid "Background image:"
-msgstr "背景型"
+msgstr "背景图片："
 
 #: ../data/geany.glade.h:307
 msgid "Scrollback lines:"
@@ -1393,29 +1390,27 @@ msgstr "Shell："
 
 #: ../data/geany.glade.h:309
 msgid "Sets the foreground color of the text in the terminal widget"
-msgstr "设置虚拟终端前景色"
+msgstr "设置终端文本前景色"
 
 #: ../data/geany.glade.h:310
-#, fuzzy
 msgid "Sets the background color of the text in the terminal widget"
-msgstr "设置虚拟终端背景色"
+msgstr "设置终端文本背景色"
 
 #: ../data/geany.glade.h:311
-#, fuzzy
 msgid "Sets the path to the background image in the terminal widget"
-msgstr "设置虚拟终端背景色"
+msgstr "设置终端背景图片"
 
 #: ../data/geany.glade.h:312
 msgid ""
 "Specifies the history in lines, which you can scroll back in the terminal "
 "widget"
-msgstr "定义历史条数，以便于回滚。"
+msgstr "设置终端历史条数，以便于回滚"
 
 #: ../data/geany.glade.h:313
 msgid ""
 "Sets the path to the shell which should be started inside the terminal "
 "emulation"
-msgstr "设置在虚拟终端中启动的Shell的路径"
+msgstr "设置在终端中启动的 shell 路径"
 
 #: ../data/geany.glade.h:314
 msgid "Scroll on keystroke"
@@ -1646,14 +1641,12 @@ msgid "_Select Current Paragraph"
 msgstr "选择当前段落(_S)"
 
 #: ../data/geany.glade.h:367
-#, fuzzy
 msgid "_Move Line(s) Up"
-msgstr "上移行"
+msgstr "上移行(_M)"
 
 #: ../data/geany.glade.h:368
-#, fuzzy
 msgid "_Move Line(s) Down"
-msgstr "下移行"
+msgstr "下移行(_M)"
 
 #: ../data/geany.glade.h:369 ../src/keybindings.c:401
 msgid "_Send Selection to Terminal"
@@ -1908,9 +1901,8 @@ msgid "Convert and Set to CR (_Mac)"
 msgstr "转换并设置为 CR (_Mac)"
 
 #: ../data/geany.glade.h:432 ../src/keybindings.c:567
-#, fuzzy
 msgid "_Clone"
-msgstr "关闭(_C)"
+msgstr "克隆(_C)"
 
 #: ../data/geany.glade.h:433
 msgid "_Strip Trailing Spaces"
@@ -2170,18 +2162,18 @@ msgid ""
 msgstr "因为文件中可能含有命令所以无法在虚拟终端中执行这个文件"
 
 #: ../src/build.c:1010
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Could not parse terminal command \"%s\" (check Terminal tool setting in "
 "Preferences)"
-msgstr "无法找到虚拟终端“%s” (请检查在首选项中的路径设置)"
+msgstr "无法解析终端命令“%s”(请检查在首选项中的终端设置)"
 
 #: ../src/build.c:1027
 #, c-format
 msgid ""
 "Could not find terminal \"%s\" (check path for Terminal tool setting in "
 "Preferences)"
-msgstr "无法找到虚拟终端“%s” (请检查在首选项中的路径设置)"
+msgstr "无法找到终端“%s” (请检查首选项中的终端设置)"
 
 #: ../src/build.c:1181
 msgid "Compilation failed."
@@ -2337,7 +2329,7 @@ msgstr[0] "%d个文件已保存。"
 
 #: ../src/callbacks.c:434
 msgid "Any unsaved changes will be lost."
-msgstr "未保存的东西会丢失。"
+msgstr "未保存的修改将会丢失。"
 
 #: ../src/callbacks.c:435
 #, c-format
@@ -3168,7 +3160,7 @@ msgstr "重新载入刚刚关闭的标签"
 
 #: ../src/keybindings.c:276
 msgid "Quit"
-msgstr ""
+msgstr "退出"
 
 #: ../src/keybindings.c:293
 msgid "Undo"
@@ -3391,9 +3383,8 @@ msgid "Go to End of Line"
 msgstr "跳转到行尾"
 
 #: ../src/keybindings.c:491
-#, fuzzy
 msgid "Go to Start of Display Line"
-msgstr "跳转到显示的行尾"
+msgstr "跳转到显示的行首"
 
 #: ../src/keybindings.c:493
 msgid "Go to End of Display Line"
@@ -3909,9 +3900,8 @@ msgid "Print only the basename(without the path) of the printed file"
 msgstr "打印文件的基本文件名，不包括路径。"
 
 #: ../src/printing.c:404
-#, fuzzy
 msgid "Paginating"
-msgstr "打印"
+msgstr "页码"
 
 #: ../src/printing.c:428
 #, c-format
@@ -4401,15 +4391,15 @@ msgstr "结构"
 
 #: ../src/symbols.c:752
 msgid "Parts"
-msgstr ""
+msgstr "部分"
 
 #: ../src/symbols.c:753
 msgid "Assembly"
-msgstr ""
+msgstr "汇编"
 
 #: ../src/symbols.c:754
 msgid "Steps"
-msgstr ""
+msgstr "步骤"
 
 #: ../src/symbols.c:769 ../src/symbols.c:864 ../src/symbols.c:889
 #: ../src/symbols.c:901
@@ -4458,27 +4448,23 @@ msgstr "ID 选择"
 
 #: ../src/symbols.c:804
 msgid "Type Selectors"
-msgstr "类型选择"
+msgstr "类型选择器"
 
 #: ../src/symbols.c:823
-#, fuzzy
 msgid "Section Level 1"
-msgstr "节"
+msgstr "章节一"
 
 #: ../src/symbols.c:824
-#, fuzzy
 msgid "Section Level 2"
-msgstr "节"
+msgstr "章节二"
 
 #: ../src/symbols.c:825
-#, fuzzy
 msgid "Section Level 3"
-msgstr "节"
+msgstr "章节三"
 
 #: ../src/symbols.c:826
-#, fuzzy
 msgid "Section Level 4"
-msgstr "节"
+msgstr "章节四"
 
 #: ../src/symbols.c:833 ../src/symbols.c:879
 msgid "Modules"
@@ -4522,9 +4508,8 @@ msgid "Variables / Signals"
 msgstr "变量 / 信号"
 
 #: ../src/symbols.c:870
-#, fuzzy
 msgid "Processes / Blocks / Components"
-msgstr "进程 / 组件"
+msgstr "进程 / 块 / 元件"
 
 #: ../src/symbols.c:878
 msgid "Events"
@@ -5037,7 +5022,7 @@ msgstr "Unix (LF)"
 #: ../src/vte.c:432
 #, c-format
 msgid "invalid VTE library \"%s\": missing symbol \"%s\""
-msgstr ""
+msgstr "无效的 VTE 库 \"%s\"：缺少符号 \"%s\""
 
 #: ../src/vte.c:581
 msgid "_Set Path From Document"
@@ -5068,7 +5053,7 @@ msgstr "可执行"
 #: ../src/win32.c:1210
 #, c-format
 msgid "Process timed out after %.02f s!"
-msgstr ""
+msgstr "进程超时（%.02f 秒后）！"
 
 #: ../plugins/classbuilder.c:37
 msgid "Class Builder"
