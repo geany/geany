@@ -1362,10 +1362,11 @@ static void replace_header_filename(GeanyDocument *doc)
 	g_return_if_fail(doc != NULL);
 	g_return_if_fail(doc->file_type != NULL);
 
+	filebase = g_regex_escape_string(GEANY_STRING_UNTITLED, -1);
 	if (doc->file_type->extension)
-		filebase = g_strconcat("\\<", GEANY_STRING_UNTITLED, "\\.\\w+", NULL);
+		SETPTR(filebase, g_strconcat("\\b", filebase, "\\.\\w+", NULL));
 	else
-		filebase = g_strdup(GEANY_STRING_UNTITLED);
+		SETPTR(filebase, g_strconcat("\\b", filebase, "\\b", NULL));
 
 	filename = g_path_get_basename(doc->file_name);
 
