@@ -4782,7 +4782,7 @@ geanyversion   The actual Geany version, e.g.                file templates, fil
 
 filename       The filename of the current file.             file header, snippets, file
                For new files, it's only replaced when        templates.
-               first saving if found on the first 3 lines
+               first saving if found on the first 4 lines
                of the file.
 
 project        The current project's name, if any.           file header, snippets, file templates.

@@ -1372,7 +1372,7 @@ static void replace_header_filename(GeanyDocument *doc)
 
 	/* only search the first 3 lines */
 	ttf.chrg.cpMin = 0;
-	ttf.chrg.cpMax = sci_get_position_from_line(doc->editor->sci, 3);
+	ttf.chrg.cpMax = sci_get_position_from_line(doc->editor->sci, 4);
 	ttf.lpstrText = filebase;
 
 	if (search_find_text(doc->editor->sci, SCFIND_MATCHCASE | SCFIND_REGEXP, &ttf) != -1)
