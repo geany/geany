@@ -1,14 +1,14 @@
 # Kazakh translation for geany.
-# Copyright (C) 2010-2012 The Geany team
+# Copyright (C) 2010-2013 The Geany team
 # This file is distributed under the same license as the Geany package.
-# Baurzhan Muftakhidinov <baurthefirst@gmail.com>, 2010-2012.
+# Baurzhan Muftakhidinov <baurthefirst@gmail.com>, 2010-2013.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.23\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-02-23 14:24+0100\n"
-"PO-Revision-Date: 2012-06-10 19:41+0600\n"
+"PO-Revision-Date: 2013-03-04 21:12+0600\n"
 "Last-Translator: Baurzhan Muftakhidinov <baurthefirst@gmail.com>\n"
 "Language-Team: Kazakh <kk_KZ@googlegroups.com>\n"
 "Language: kk\n"
@@ -16,8 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Poedit-Language: Kazakh\n"
-"X-Poedit-Country: KAZAKHSTAN\n"
+"X-Generator: Poedit 1.5.4\n"
 
 #: ../geany.desktop.in.h:1 ../data/geany.glade.h:350
 msgid "Geany"
@@ -184,12 +183,9 @@ msgid "Startup path:"
 msgstr "Іске қосылу жолы:"
 
 #: ../data/geany.glade.h:38
-#, fuzzy
 msgid ""
 "Path to start in when opening or saving files. Must be an absolute path."
-msgstr ""
-"Файлдарды ашу не сақтау үшін бастау жолы. Абсолютті жол болуы тиіс. Ағымдағы "
-"жұмыс бумасын қолдану үшін осыны бос қалдырыңыз."
+msgstr "Файлдарды ашу не сақтау үшін бастау жолы. Абсолютті жол болуы тиіс."
 
 #: ../data/geany.glade.h:39
 msgid "Project files:"
@@ -391,9 +387,8 @@ msgid "Bottom"
 msgstr "Төмен"
 
 #: ../data/geany.glade.h:81
-#, fuzzy
 msgid "<b>Message window</b>"
-msgstr "Хабарламалар терезесі:"
+msgstr "<b>Хабарламалар терезесі</b>"
 
 #: ../data/geany.glade.h:82
 msgid "Symbol list:"
@@ -430,6 +425,7 @@ msgstr "Қалып-күй жолағын көрсету"
 #: ../data/geany.glade.h:90
 msgid "Whether to show the status bar at the bottom of the main window"
 msgstr ""
+"Басты терезенің төменде қалып-күй жолағын көрсету керек пе, соны анықтайды"
 
 #: ../data/geany.glade.h:91 ../src/prefs.c:1587
 msgid "Interface"
@@ -893,6 +889,8 @@ msgstr "Шегіну нұсқаулықтарын көрсету"
 #: ../data/geany.glade.h:194
 msgid "Shows small dotted lines to help you to use the right indentation"
 msgstr ""
+"Дұрыс шегінуді қолдануға көмектесетін кішкентай, нүкте-нүктелі сызықтарды "
+"көрсетеді"
 
 #: ../data/geany.glade.h:195
 msgid "Show white space"
@@ -908,7 +906,7 @@ msgstr "Жол аяқтауларын көрсету"
 
 #: ../data/geany.glade.h:198
 msgid "Shows the line ending character"
-msgstr ""
+msgstr "Жол аяғының таңбасын көрсету"
 
 #: ../data/geany.glade.h:199
 msgid "Show line numbers"
@@ -916,7 +914,7 @@ msgstr "Жол нөмірлерін көрсету"
 
 #: ../data/geany.glade.h:200
 msgid "Shows or hides the Line Number margin"
-msgstr ""
+msgstr "Жол нөмірін көрсететін шет өрісін көрсетеді не жасырады"
 
 #: ../data/geany.glade.h:201
 msgid "Show markers margin"
@@ -950,7 +948,7 @@ msgstr "Түс:"
 
 #: ../data/geany.glade.h:208
 msgid "Sets the color of the long line marker"
-msgstr ""
+msgstr "Ұзын жол маркерінің түсін орнатады"
 
 #: ../data/geany.glade.h:209 ../src/toolbar.c:70 ../src/tools.c:974
 msgid "Color Chooser"
@@ -1052,7 +1050,7 @@ msgstr "Үнсіз келісім бойынша кодтауы (жаңа фай
 
 #: ../data/geany.glade.h:231
 msgid "Sets the default encoding for newly created files"
-msgstr ""
+msgstr "Жаңадан жасалынатын файлдар үшін бастапқы кодтауды орнатады"
 
 #: ../data/geany.glade.h:232
 msgid "Use fixed encoding when opening non-Unicode files"
@@ -1193,7 +1191,7 @@ msgstr "өндірушінің эл. пошта адресі"
 
 #: ../data/geany.glade.h:264
 msgid "Initials of the developer name"
-msgstr ""
+msgstr "Өндірушінің инициалдары"
 
 #: ../data/geany.glade.h:265
 msgid "Initial version:"
@@ -1221,7 +1219,7 @@ msgstr "Пошта адресі:"
 
 #: ../data/geany.glade.h:271
 msgid "Initials:"
-msgstr ""
+msgstr "Инициалдар:"
 
 #: ../data/geany.glade.h:272
 msgid "The name of the developer"
@@ -1371,9 +1369,8 @@ msgid "Background color:"
 msgstr "Фон түсі:"
 
 #: ../data/geany.glade.h:306
-#, fuzzy
 msgid "Background image:"
-msgstr "Фон"
+msgstr "Фон суреті:"
 
 #: ../data/geany.glade.h:307
 msgid "Scrollback lines:"
@@ -1388,14 +1385,12 @@ msgid "Sets the foreground color of the text in the terminal widget"
 msgstr ""
 
 #: ../data/geany.glade.h:310
-#, fuzzy
 msgid "Sets the background color of the text in the terminal widget"
-msgstr "Терминал виджеті үшін қаріпті орнатады"
+msgstr "Терминал виджетінде қаріптің фон түсін орнатады"
 
 #: ../data/geany.glade.h:311
-#, fuzzy
 msgid "Sets the path to the background image in the terminal widget"
-msgstr "Терминал виджеті үшін қаріпті орнатады"
+msgstr "Терминал виджетінің фон суретіне дейінгі жолды орнатады"
 
 #: ../data/geany.glade.h:312
 msgid ""
@@ -1636,14 +1631,12 @@ msgid "_Select Current Paragraph"
 msgstr "Ағымдағы а_бзацты таңдау"
 
 #: ../data/geany.glade.h:367
-#, fuzzy
 msgid "_Move Line(s) Up"
-msgstr "Жол(дар)ды жоғары жылжыту"
+msgstr "Жол(дар)ды жоғары жы_лжыту"
 
 #: ../data/geany.glade.h:368
-#, fuzzy
 msgid "_Move Line(s) Down"
-msgstr "Жол(дар)ды төмен жылжыту"
+msgstr "Жол(дар)ды төмен жы_лжыту"
 
 #: ../data/geany.glade.h:369 ../src/keybindings.c:401
 msgid "_Send Selection to Terminal"
@@ -1898,9 +1891,8 @@ msgid "Convert and Set to CR (_Mac)"
 msgstr "Түрл_ендіру және CR (Mac) етіп орнату"
 
 #: ../data/geany.glade.h:432 ../src/keybindings.c:567
-#, fuzzy
 msgid "_Clone"
-msgstr "_Жабу"
+msgstr "_Клондау"
 
 #: ../data/geany.glade.h:433
 msgid "_Strip Trailing Spaces"
@@ -2155,13 +2147,13 @@ msgid ""
 msgstr ""
 
 #: ../src/build.c:1010
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Could not parse terminal command \"%s\" (check Terminal tool setting in "
 "Preferences)"
 msgstr ""
-"\"%s\" терминалын табу мүмкін емес (Баптаулар ішіндегі терминал сайманының "
-"жолың тексеріңіз)"
+"\"%s\" терминал командасын талдау мүмкін емес (Баптаулар ішіндегі терминал "
+"сайманының жолын тексеріңіз)"
 
 #: ../src/build.c:1027
 #, c-format
@@ -2727,6 +2719,8 @@ msgid ""
 "Error message: %s\n"
 "The error occurred at \"%s\" (line: %d, column: %d)."
 msgstr ""
+"Қате туралы хабарлама: %s\n"
+"Қате \"%s\" жерінде орын алды (жол: %d, баған: %d)."
 
 #: ../src/document.c:1527
 #, c-format
@@ -3040,9 +3034,8 @@ msgid "Default"
 msgstr "Бастапқы"
 
 #: ../src/highlighting.c:1368
-#, fuzzy
 msgid "The current filetype overrides the default style."
-msgstr "Ағымдағы файлды Make және үнсіз келісім бойынша мақсатпен құрастыру"
+msgstr ""
 
 #: ../src/highlighting.c:1369
 msgid "This may cause color schemes to display incorrectly."
@@ -3156,7 +3149,7 @@ msgstr "Соңғы жабылған бетті қайта ашу"
 
 #: ../src/keybindings.c:276
 msgid "Quit"
-msgstr ""
+msgstr "Шығу"
 
 #: ../src/keybindings.c:293
 msgid "Undo"
@@ -3379,9 +3372,8 @@ msgid "Go to End of Line"
 msgstr "Жол аяғына өту"
 
 #: ../src/keybindings.c:491
-#, fuzzy
 msgid "Go to Start of Display Line"
-msgstr "Көрсетілетін жолдың соңына өту"
+msgstr "Көрсетілетін жолдың басына өту"
 
 #: ../src/keybindings.c:493
 msgid "Go to End of Display Line"
@@ -3900,9 +3892,8 @@ msgid "Print only the basename(without the path) of the printed file"
 msgstr "Басып шығарылатын файлдың тек өз атын (орналасу жолсыз) шығару"
 
 #: ../src/printing.c:404
-#, fuzzy
 msgid "Paginating"
-msgstr "Баспаға шығару"
+msgstr ""
 
 #: ../src/printing.c:428
 #, c-format
@@ -4242,7 +4233,7 @@ msgstr ""
 #: ../src/search.c:1566
 #, c-format
 msgid "Cannot parse extra options: %s"
-msgstr ""
+msgstr "Қосымша опцияларды талдау мүмкін емес: %s"
 
 #: ../src/search.c:1632
 msgid "Searching..."
@@ -4332,11 +4323,11 @@ msgstr "Модуль"
 #: ../src/symbols.c:699 ../src/symbols.c:867 ../src/symbols.c:918
 #: ../src/symbols.c:930 ../src/symbols.c:945 ../src/symbols.c:957
 msgid "Types"
-msgstr ""
+msgstr "Түрлер"
 
 #: ../src/symbols.c:700
 msgid "Type constructors"
-msgstr ""
+msgstr "Түр құрастырушылары"
 
 #: ../src/symbols.c:701 ../src/symbols.c:723 ../src/symbols.c:744
 #: ../src/symbols.c:761 ../src/symbols.c:770 ../src/symbols.c:782
@@ -4367,7 +4358,6 @@ msgid "Data"
 msgstr "Мәлімет"
 
 #: ../src/symbols.c:717
-#, fuzzy
 msgid "Keys"
 msgstr "Кілттер"
 
@@ -4455,24 +4445,20 @@ msgid "Type Selectors"
 msgstr ""
 
 #: ../src/symbols.c:823
-#, fuzzy
 msgid "Section Level 1"
-msgstr "Санат"
+msgstr ""
 
 #: ../src/symbols.c:824
-#, fuzzy
 msgid "Section Level 2"
-msgstr "Санат"
+msgstr ""
 
 #: ../src/symbols.c:825
-#, fuzzy
 msgid "Section Level 3"
-msgstr "Санат"
+msgstr ""
 
 #: ../src/symbols.c:826
-#, fuzzy
 msgid "Section Level 4"
-msgstr "Санат"
+msgstr ""
 
 #: ../src/symbols.c:833 ../src/symbols.c:879
 msgid "Modules"
@@ -4564,9 +4550,8 @@ msgid "Triggers"
 msgstr "Триггерлер"
 
 #: ../src/symbols.c:975
-#, fuzzy
 msgid "Views"
-msgstr "Қарау"
+msgstr ""
 
 #: ../src/symbols.c:995
 msgid "Structs"
@@ -5040,7 +5025,7 @@ msgstr "Unix (LF)"
 #: ../src/vte.c:432
 #, c-format
 msgid "invalid VTE library \"%s\": missing symbol \"%s\""
-msgstr ""
+msgstr "VTE библиотекасы қате \"%s\": \"%s\" таңбасы жоқ"
 
 #: ../src/vte.c:581
 msgid "_Set Path From Document"
@@ -5107,7 +5092,7 @@ msgstr "Класс"
 
 #: ../plugins/classbuilder.c:484
 msgid "Header file:"
-msgstr ""
+msgstr "Тақырыптама файлы:"
 
 #: ../plugins/classbuilder.c:486
 msgid "Source file:"
