@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: Geany 1.23\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-02-23 14:24+0100\n"
-"PO-Revision-Date: 2013-02-27 00:09+0100\n"
+"PO-Revision-Date: 2013-03-04 11:25+0100\n"
 "Last-Translator: Jože Klepec <joze.klepec@siol.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -584,7 +584,7 @@ msgstr "Uporabi pokazatelje, da prikažeš napake prevajanja"
 # squiggly=twisty!-->wavy
 #: ../data/geany.glade.h:133
 msgid "Whether to use indicators (a squiggly underline) to highlight the lines where the compiler found a warning or an error"
-msgstr "Ali naj bodo v uporabi pokazatelji (valovito podčrtavanje), ki poudarijo vrstice kjer je prevajalnik našel opozorilo ali napako"
+msgstr "Ali naj bodo v uporabi pokazatelji (valovito podčrtavanje), ki poudarijo vrstice, kjer je prevajalnik našel opozorilo ali napako"
 
 #: ../data/geany.glade.h:134
 msgid "Newline strips trailing spaces"
@@ -967,7 +967,7 @@ msgstr "Ustvari nove dokumente iz ukazne vrstice"
 # "Open"!="Create"; "Ustvari"=="Create"; "Start"=="Začni"; "Začni"==nonsense_translation;
 #: ../data/geany.glade.h:227
 msgid "Start a new file for each command-line filename that doesn't exist"
-msgstr "Odpre novo datoteko za vsako datoteko iz ukazne vrstice, ki ne obstaja"
+msgstr "Odpre novo datoteko za vsako ime datoteke iz ukazne vrstice, ki ne obstaja"
 
 #: ../data/geany.glade.h:228
 msgid "Default end of line characters:"
@@ -1075,9 +1075,9 @@ msgid "Browser:"
 msgstr "Brskalnik:"
 
 #: ../data/geany.glade.h:254
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "A terminal emulator command (%c is substituted with the Geany run script filename)"
-msgstr "Ukaz terminalskega emultorja (%c se zamenja z datoteko Geany zagonske )"
+msgstr "Ukaz terminalskega posnemovalnika (%c se zamenja z imenom datoteke Geany zagonske skripte)"
 
 #: ../data/geany.glade.h:255
 msgid "Path (and possibly additional arguments) to your favorite browser"
@@ -2070,7 +2070,7 @@ msgstr "spodletela zamenjava %%p, ni aktivnega projekta"
 
 #: ../src/build.c:786
 msgid "Process failed, no working directory"
-msgstr "Spodletela proces, ni delovne mape."
+msgstr "Spodletel proces, ni delovne mape."
 
 #: ../src/build.c:811
 #, c-format
@@ -2862,7 +2862,7 @@ msgstr "Baltsko"
 msgid "Central European"
 msgstr "Srednjeevropsko"
 
-# ISO-IR-111 ni na voljo pod Windows
+# ISO-IR-111 ni na voljo pod Windows (this comment could be wrong, see Hebrew)
 #. ISO-IR-111 not available on Windows
 #: ../src/encodings.c:83
 #: ../src/encodings.c:84
@@ -2890,7 +2890,7 @@ msgstr "Romunsko"
 msgid "Arabic"
 msgstr "Arabsko"
 
-# sploh ni na voljo, ? (je samo, potrebuješ nameščeno potrebno kodno stran)
+# sploh ni na voljo, ? (je samo, potrebuješ nameščeno potrebno kodno stran / it is, you need installed codepage) 
 #. not available at all, ?
 #: ../src/encodings.c:96
 #: ../src/encodings.c:98
@@ -4014,7 +4014,7 @@ msgstr "Projektne datoteke datoteke ni bilo možno zapisati"
 msgid "Project \"%s\" created."
 msgstr "Projekt \"%s\" ustvarjen."
 
-# V izvirniku - could not be loaded, ne: opened!
+# V izvirniku - could not be loaded, ne: opened! Vendar: "nalaganje" velja za internet in je neprimeren izraz.
 #: ../src/project.c:241
 #: ../src/project.c:273
 #: ../src/project.c:953
@@ -4340,9 +4340,6 @@ msgstr "Iskanje ni bilo uspešno."
 msgid "Bad regex: %s"
 msgstr "Slab regularni izraz:: %s"
 
-# Probably correct wording of first sentence: Program Geany tried to access to the UNIX domain socket of another socket logged in as another user.
-# And probably proper wording of last sentence: This is a fatal error and Geany will now have to quit.
-# need reword - approved by Jože Klepec
 #. TODO maybe this message needs a rewording
 #: ../src/socket.c:228
 msgid ""
@@ -4502,11 +4499,11 @@ msgstr "Zapisi"
 
 #: ../src/symbols.c:752
 msgid "Parts"
-msgstr ""
+msgstr "Delci"
 
 #: ../src/symbols.c:753
 msgid "Assembly"
-msgstr ""
+msgstr "Zbirnik"
 
 #: ../src/symbols.c:754
 msgid "Steps"
@@ -5075,7 +5072,7 @@ msgstr "R/P"
 msgid "MOD"
 msgstr "MOD"
 
-# assuming pos=position
+# pos=position >> poz(izicija)
 #: ../src/ui_utils.c:331
 #, c-format
 msgid "pos: %d"
