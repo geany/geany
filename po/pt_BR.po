@@ -1,4 +1,4 @@
-# Brailian Portuguese translations for PACKAGE package.
+# Brazilian Portuguese translations for PACKAGE package.
 # Copyright (C) 2006-2013 GEANY'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # Alexandre Moreira <alexandream@gmail.com>, 2006
@@ -620,7 +620,7 @@ msgstr "Localizar Próxima _Seleção"
 #: ../data/geany.glade.h:144
 #: ../src/keybindings.c:441
 msgid "Find Pre_vious Selection"
-msgstr "Localizar Seleção Anterior"
+msgstr "Localizar Seleção Pré_via"
 
 #: ../data/geany.glade.h:145
 msgid "Find _Document Usage"
@@ -632,7 +632,7 @@ msgstr "Localizar _Próximo"
 
 #: ../data/geany.glade.h:147
 msgid "Find _Previous"
-msgstr "Localizar _Anterior"
+msgstr "Localizar _Prévio"
 
 #: ../data/geany.glade.h:148
 msgid "Find _Usage"
@@ -709,7 +709,7 @@ msgstr "Frequência de verificação de mudanças em arquivos de documentos no d
 
 #: ../data/geany.glade.h:166
 msgid "I_nsert"
-msgstr "Inserir"
+msgstr "I_nserir"
 
 #: ../data/geany.glade.h:167
 msgid "I_nsert Comments"
@@ -721,7 +721,7 @@ msgstr "Im_agens e texto"
 
 #: ../data/geany.glade.h:169
 msgid "In_dent Type"
-msgstr "T_ipo de endentação"
+msgstr "Tipo de en_dentação"
 
 #: ../data/geany.glade.h:170
 msgid "Indent Widt_h"
@@ -1808,7 +1808,7 @@ msgstr "_Quebrar Linhas"
 #: ../data/geany.glade.h:432
 #: ../src/keybindings.c:458
 msgid "_Mark All"
-msgstr "Marcar Tudo"
+msgstr "_Marcar Tudo"
 
 #: ../data/geany.glade.h:433
 msgid "_More"
@@ -2339,15 +2339,15 @@ msgstr "Detectar a partir do arquivo"
 
 #: ../src/dialogs.c:222
 msgid "West European"
-msgstr "Europeu _Ocidental"
+msgstr "Europeu Ocidental"
 
 #: ../src/dialogs.c:224
 msgid "East European"
-msgstr "Europeu O_riental"
+msgstr "Europeu Oriental"
 
 #: ../src/dialogs.c:226
 msgid "East Asian"
-msgstr "Asiático Or_iental"
+msgstr "Asiático Oriental"
 
 #: ../src/dialogs.c:228
 msgid "SE & SW Asian"
@@ -2355,7 +2355,7 @@ msgstr "Sudeste e Sodoeste Asiático"
 
 #: ../src/dialogs.c:230
 msgid "Middle Eastern"
-msgstr "Oriente _Médio"
+msgstr "Oriente Médio"
 
 #: ../src/dialogs.c:232
 #: ../src/encodings.c:112
@@ -5295,7 +5295,7 @@ msgstr "_Inserir Caracteres Especiais de HTML"
 #. Add menuitem for html replacement functions
 #: ../plugins/htmlchars.c:754
 msgid "_HTML Replacement"
-msgstr "Substituição HTML"
+msgstr "Substituição _HTML"
 
 #: ../plugins/htmlchars.c:761
 msgid "_Auto-replace Special Characters"
