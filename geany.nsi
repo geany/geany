@@ -217,6 +217,7 @@ SectionEnd
 Section "Context Menus" SEC07
 	SectionIn 1
 	WriteRegStr HKCR "*\shell\OpenWithGeany" "" "Open with Geany"
+	WriteRegStr HKCR "*\shell\OpenWithGeany" "Icon" "$INSTDIR\bin\geany.exe"
 	WriteRegStr HKCR "*\shell\OpenWithGeany\command" "" '"$INSTDIR\bin\geany.exe" "%1"'
 SectionEnd
 
