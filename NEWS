@@ -117,7 +117,7 @@ Geany 1.23 (unreleased)
 
     Internationalization
     * Add translations: et, eu, he, hi, sr
-    * Update translations: cs, de, es, fi, gl, it, kk, lt, nl, 
+    * Update translations: ca, cs, de, es, fi, gl, it, kk, lt, nl, 
                            pt_BR, ru, sv, sl, tr
     * Fix a crash when using the Turkish translation.
 
