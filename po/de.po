@@ -1464,7 +1464,7 @@ msgstr "Oben"
 
 #: ../data/geany.glade.h:348
 msgid "_Toolbar Preferences"
-msgstr "Werkzeugleisteneinstellungen"
+msgstr "_Werkzeugleisteneinstellungen"
 
 #: ../data/geany.glade.h:349
 msgid "_Hide Toolbar"
@@ -1743,7 +1743,7 @@ msgstr "Art der _Einrückung"
 
 #: ../data/geany.glade.h:413
 msgid "_Detect from Content"
-msgstr "Aus Inhalt lesen"
+msgstr "Aus _Inhalt lesen"
 
 #: ../data/geany.glade.h:414
 msgid "T_abs and Spaces"
@@ -1751,7 +1751,7 @@ msgstr "Tabulatoren _und Leerzeichen"
 
 #: ../data/geany.glade.h:415
 msgid "Indent Widt_h"
-msgstr "Einzugsbreite"
+msgstr "Einzugs_breite"
 
 #: ../data/geany.glade.h:416
 msgid "_1"
@@ -2124,15 +2124,15 @@ msgstr "_Kommandos zum Erstellen konfigurieren"
 #: ../src/build.c:1756
 #: ../src/toolbar.c:372
 msgid "Build the current file"
-msgstr "Kompiliert die aktuelle Datei"
+msgstr "Erstellt die aktuelle Datei"
 
 #: ../src/build.c:1767
 msgid "Build the current file with Make and the default target"
-msgstr "Kompiliert die aktuelle Datei mit »make« und dem Standard-Target"
+msgstr "Erstellt die aktuelle Datei mit »make« und dem Standard-Target"
 
 #: ../src/build.c:1769
 msgid "Build the current file with Make and the specified target"
-msgstr "Kompiliert die aktuelle Datei mit »make« und dem angegebenem Target"
+msgstr "Erstellt die aktuelle Datei mit »make« und dem angegebenem Target"
 
 #: ../src/build.c:1771
 msgid "Compile the current file with Make"
@@ -5591,7 +5591,7 @@ msgstr "Fenster _teilen"
 
 #: ../plugins/splitwindow.c:407
 msgid "_Side by Side"
-msgstr "Seite an Seite"
+msgstr "_Seite an Seite"
 
 #: ../plugins/splitwindow.c:412
 msgid "_Top and Bottom"
