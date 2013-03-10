@@ -6,7 +6,7 @@
 <meta name="generator" content="Docutils 0.8.1: http://docutils.sourceforge.net/" />
 <title>Geany</title>
 <meta name="authors" content="Enrico Tröger  Nick Treleaven  Frank Lanitz  Colomban Wendling  Matthew Brush" />
-<meta name="date" content="2012-06-18" />
+<meta name="date" content="2013-03-10" />
 <style type="text/css">
 
 /*
@@ -141,7 +141,7 @@ Stylesheet for Geany's documentation based on a version of John Gabriele.
 <br />Colomban Wendling
 <br />Matthew Brush</td></tr>
 <tr><th class="docinfo-name">Date:</th>
-<td>2012-06-18</td></tr>
+<td>2013-03-10</td></tr>
 <tr><th class="docinfo-name">Version:</th>
 <td>1.23</td></tr>
 </tbody>
@@ -2682,7 +2682,9 @@ not checked for changes due to performance issues
 <h4><a class="toc-backref" href="#id123">Tool paths</a></h4>
 <dl class="docutils">
 <dt>Terminal</dt>
-<dd>The location of your terminal executable.</dd>
+<dd>The command to execute a script in a terminal.  Occurrences of %c
+in the command are substituted with the run script name, see
+<a class="reference internal" href="#terminal-emulators">Terminal emulators</a>.</dd>
 <dt>Browser</dt>
 <dd>The location of your web browser executable.</dd>
 <dt>Grep</dt>
@@ -3258,14 +3260,13 @@ for building just the current file without building the whole project.</p>
 <div class="section" id="execute">
 <h4><a class="toc-backref" href="#id147">Execute</a></h4>
 <p>Execute will run the corresponding executable file, shell script or
-interpreted script in a terminal window. Note that the Terminal tool
-path must be correctly set in the Tools tab of the Preferences dialog -
-you can use any terminal program that runs a Bourne compatible shell
-and accept the &quot;-e&quot; command line argument to start a command or can be
-selected to use the built-in VTE if it is available - see
-<a class="reference internal" href="#virtual-terminal-emulator-widget-vte">Virtual terminal emulator widget (VTE)</a>.</p>
-<p>After your program or script has finished executing, you will be
-prompted to press the return key. This allows you to review any text
+interpreted script in a terminal window. The command set in the
+&quot;Set Build Commands&quot; dialog is run in a script to ensure the terminal
+stays open after execution completes.  Note: see <a class="reference internal" href="#terminal-emulators">Terminal emulators</a>
+below for the command format.  Alternatively the built-in VTE can be used
+if it is available - see <a class="reference internal" href="#virtual-terminal-emulator-widget-vte">Virtual terminal emulator widget (VTE)</a>.</p>
+<p>After your program or script has finished executing, the run script will
+prompt you to press the return key. This allows you to review any text
 output from the program before the terminal window is closed.</p>
 <div class="note">
 <p class="first admonition-title">Note</p>
@@ -3283,11 +3284,16 @@ cannot be stopped. For example this can happen when the process creates
 more than one child process.</p>
 <div class="section" id="terminal-emulators">
 <h5><a class="toc-backref" href="#id149">Terminal emulators</a></h5>
-<p>Xterm is known to work properly. If you are using &quot;Terminal&quot;
-(the terminal program of Xfce), you should add the command line
-option <tt class="docutils literal"><span class="pre">--disable-server</span></tt> otherwise the started process cannot be
-stopped. Just add this option in the preferences dialog on the Tools
-tab in the terminal field.</p>
+<p>The Terminal field of the tools preferences tab requires a command to
+execute the terminal program and to pass it the name of the Geany run
+script that it should execute in a Bourne compatible shell (eg /bin/sh).
+The marker &quot;%c&quot; is substituted with the name of the Geany run script,
+which is created in the working directory set in the Build commands
+dialog, see <a class="reference internal" href="#build-menu-commands-dialog">Build menu commands dialog</a> for details.</p>
+<p>As an example the default (Linux) command is:</p>
+<pre class="literal-block">
+xterm -e &quot;/bin/sh %c&quot;
+</pre>
 </div>
 </div>
 <div class="section" id="set-build-commands">
@@ -3318,7 +3324,7 @@ filetype of the current document; they also capture output in the
 compiler tab and parse it for errors.</li>
 <li>Execute commands - are configurable and intended for executing your
 program or other long running programs.  The output is not parsed for errors
-and is directed to the terminal selected in preferences.</li>
+and is directed to the terminal command selected in preferences.</li>
 <li>Fixed commands - these perform built-in actions:<ul>
 <li>Go to the next error.</li>
 <li>Go to the previous error.</li>
@@ -3653,13 +3659,6 @@ change. In the resulting dialog you can press the key combination you
 want to assign to the action and it will be saved when you press OK.
 You can define only one key combination for each action and each key
 combination can only be defined for one action.</p>
-<p>Some of the default key combinations are common across many
-applications, for example <em>Ctrl-N</em> for New and <em>Ctrl-O</em> for Open.
-Because they are so common it is not advisable to change these, but
-you can add other key combinations for these actions. For example
-<em>Ctrl-O</em> is set to execute menu_open by default, but you can also
-define <em>Alt-O</em>, so that the file open dialog is shown by pressing
-either <em>Ctrl-O</em> or <em>Alt-O</em>.</p>
 <p>The following tables list all customizable keyboard shortcuts, those
 which are common to many applications are marked with (C) after the
 shortcut.</p>
@@ -3722,6 +3721,10 @@ will be lost.</td>
 <tr><td>Print</td>
 <td>Ctrl-P  (C)</td>
 <td>Prints the current file.</td>
+</tr>
+<tr><td>Quit</td>
+<td>Ctrl-Q  (C)</td>
+<td>Quits Geany.</td>
 </tr>
 </tbody>
 </table>
@@ -5701,7 +5704,7 @@ bsd, gpl, snippets.</td>
 <tr><td>filename</td>
 <td>The filename of the current file.
 For new files, it's only replaced when
-first saving if found on the first 3 lines
+first saving if found on the first 4 lines
 of the file.</td>
 <td>file header, snippets, file
 templates.</td>
@@ -6359,10 +6362,9 @@ external changes.</td>
 <td>&quot;make&quot;</td>
 </tr>
 <tr><td>GEANY_DEFAULT_TOOLS_TERMINAL</td>
-<td>A terminal emulator. It has to accept the
-command line option &quot;-e&quot;. This can also
-include a path.</td>
-<td>&quot;xterm&quot;</td>
+<td>A terminal emulator command, see
+<a class="reference internal" href="#terminal-emulators">Terminal emulators</a>.</td>
+<td>See below.</td>
 </tr>
 <tr><td>GEANY_DEFAULT_TOOLS_BROWSER</td>
 <td>A web browser. This can also include a path.</td>
@@ -6414,6 +6416,14 @@ files.</td>
 </tbody>
 </table>
 <p>The GEANY_DEFAULT_FILETYPE_REGEX default value is  -\*-\s*([^\s]+)\s*-\*- which finds Emacs filetypes.</p>
+<p>The GEANY_DEFAULT_TOOLS_TERMINAL default value on Windows is:</p>
+<pre class="literal-block">
+cmd.exe /Q /C %c
+</pre>
+<p>and on any non-Windows system is:</p>
+<pre class="literal-block">
+xterm -e &quot;/bin/sh %c&quot;
+</pre>
 </div>
 <div class="section" id="build-c">
 <h2><a class="toc-backref" href="#id244">build.c</a></h2>
@@ -6826,7 +6836,7 @@ USE OR PERFORMANCE OF THIS SOFTWARE.</p>
 <div class="footer">
 <hr class="footer" />
 <a class="reference external" href="geany.txt">View document source</a>.
-Generated on: 2013-01-07 03:14 UTC.
+Generated on: 2013-03-10 12:45 UTC.
 Generated by <a class="reference external" href="http://docutils.sourceforge.net/">Docutils</a> from <a class="reference external" href="http://docutils.sourceforge.net/rst.html">reStructuredText</a> source.
 
 </div>
