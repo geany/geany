@@ -26,6 +26,8 @@ Geany 1.23 (unreleased)
       after being updated (#1912683, #3599251).
     * Make Terminal tool setting more flexible to support any terminal.
     * Fix replacing file name in files header upon save.
+    * Fix UAC Virtualization issue on newer Windows versions when trying
+      so save files to read-only locations (#3566329, #3515490).
 
     Interface
     * Control-click on the symbols sidebar don't focus the editor.
@@ -126,7 +128,7 @@ Geany 1.23 (unreleased)
 
     Internationalization
     * Add translations: et, eu, he, hi, sr
-    * Update translations: ca, cs, de, es, fi, gl, it, kk, lt, nl, 
+    * Update translations: ca, cs, de, es, fi, gl, it, kk, lt, nl,
                            pt_BR, ru, sv, sl, tr
     * Fix a crash when using the Turkish translation (#3560181).
 
