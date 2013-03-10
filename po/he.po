@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Geany 1.23\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-03-09 04:39+0000\n"
-"PO-Revision-Date: 2013-03-09 20:27+0200\n"
+"PO-Revision-Date: 2013-03-09 23:01+0200\n"
 "Last-Translator: Yosef Or Botschko <yosefor3@walla.com>\n"
 "Language-Team: Hebrew <>\n"
 "Language: he\n"
@@ -80,7 +80,7 @@ msgstr "<b>הזחה</b>"
 
 #: ../data/geany.glade.h:13
 msgid "<b>Keyboard shortcuts</b>"
-msgstr "<b>צירופי מקשים</b>"
+msgstr "<b>צירופי־מקשים</b>"
 
 #: ../data/geany.glade.h:14
 msgid "<b>Long line marker</b>"
@@ -197,7 +197,7 @@ msgstr "מספור העמודים בתחתית כל עמוד. זה לוקח שת
 #: ../data/geany.glade.h:40
 msgid ""
 "Allows the VTE to receive keyboard shortcuts (apart from focus commands)"
-msgstr "מאפשר קבלת קיצורי מקשים למדמה המסוף (VTE), למעט פקודות מיקוד"
+msgstr "מאפשר קבלת צירופי־מקשים למדמה המסוף (VTE), למעט פקודות מיקוד"
 
 #: ../data/geany.glade.h:41
 msgid "Always"
@@ -512,7 +512,7 @@ msgstr "משבית אפשרות גרירה ושחרור של לשוניות הע
 
 #: ../data/geany.glade.h:113
 msgid "Disable menu shortcut key (F10 by default)"
-msgstr "השבתת קיצור-מקש המציג את התפריט (F10 כברירת מחדל)"
+msgstr "השבתת צירוף־מקש המציג את התפריט (F10 כברירת מחדל)"
 
 #: ../data/geany.glade.h:114
 msgid "Disabled"
@@ -825,7 +825,7 @@ msgstr "היפוך צבעים בהדגשת תחביר"
 
 #: ../data/geany.glade.h:186 ../src/prefs.c:1599
 msgid "Keybindings"
-msgstr "קיצורי מקשים"
+msgstr "צירופי־מקשים"
 
 #: ../data/geany.glade.h:187
 msgid "Left"
@@ -962,7 +962,7 @@ msgstr "פתיחת הקבצים מההפעלה האחרונה בעת הפעלה 
 
 #: ../data/geany.glade.h:217
 msgid "Override Geany keybindings"
-msgstr "קיצורי מקשים עוקפי Geany למדמה המסוף"
+msgstr "צירופי־מקשים עוקפי Geany למדמה המסוף"
 
 #: ../data/geany.glade.h:218 ../src/keybindings.c:427
 msgid "P_lugin Preferences"
@@ -1922,7 +1922,7 @@ msgstr "ה_כנסת רווחים"
 
 #: ../data/geany.glade.h:429
 msgid "_Keyboard Shortcuts"
-msgstr "קיצורי _מקשים"
+msgstr "צירופי־_מקשים"
 
 #: ../data/geany.glade.h:430
 msgid "_Large icons"
@@ -3611,11 +3611,11 @@ msgstr "הצגת בוחר הצבעים"
 
 #: ../src/keybindings.c:865
 msgid "Keyboard Shortcuts"
-msgstr "קיצורי מקשים"
+msgstr "צירופי־מקשים"
 
 #: ../src/keybindings.c:877
 msgid "The following keyboard shortcuts are configurable:"
-msgstr "ניתן לקבוע קיצורי מקשים לפעולות הבאות:"
+msgstr "ניתן לקבוע צירופי־מקשים לפעולות הבאות:"
 
 #: ../src/keyfile.c:979
 msgid "Type here what you want, use it as a notice/scratch board"
