@@ -49,7 +49,7 @@ from waflib.TaskGen import feature
 
 
 APPNAME = 'geany'
-VERSION = '1.23'
+VERSION = '1.24'
 LINGUAS_FILE = 'po/LINGUAS'
 MINIMUM_GTK_VERSION = '2.16.0'
 MINIMUM_GLIB_VERSION = '2.20.0'
