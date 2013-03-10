@@ -52,6 +52,7 @@ APPNAME = 'geany'
 VERSION = '1.24'
 LINGUAS_FILE = 'po/LINGUAS'
 MINIMUM_GTK_VERSION = '2.16.0'
+MINIMUM_GTK3_VERSION = '3.0.0'
 MINIMUM_GLIB_VERSION = '2.20.0'
 
 top = '.'
@@ -211,15 +212,20 @@ def configure(conf):
     _load_intltool_if_available(conf)
 
     # GTK / GIO version check
-    conf.check_cfg(package='gtk+-2.0', atleast_version=MINIMUM_GTK_VERSION, uselib_store='GTK',
+    gtk_package_name = 'gtk+-3.0' if conf.options.gtk3 else 'gtk+-2.0'
+    minimum_gtk_version = MINIMUM_GTK3_VERSION if conf.options.gtk3 else MINIMUM_GTK_VERSION
+    conf.check_cfg(package=gtk_package_name, atleast_version=minimum_gtk_version, uselib_store='GTK',
         mandatory=True, args='--cflags --libs')
     conf.check_cfg(package='glib-2.0', atleast_version=MINIMUM_GLIB_VERSION, uselib_store='GLIB',
         mandatory=True, args='--cflags --libs')
     conf.check_cfg(package='gmodule-2.0', uselib_store='GMODULE',
         mandatory=True, args='--cflags --libs')
     conf.check_cfg(package='gio-2.0', uselib_store='GIO', args='--cflags --libs', mandatory=True)
-    gtk_version = conf.check_cfg(modversion='gtk+-2.0', uselib_store='GTK') or 'Unknown'
+    gtk_version = conf.check_cfg(modversion=gtk_package_name, uselib_store='GTK') or 'Unknown'
     conf.check_cfg(package='gthread-2.0', uselib_store='GTHREAD', args='--cflags --libs')
+    # remember GTK version for the build step
+    conf.env['gtk_package_name'] = gtk_package_name
+    conf.env['minimum_gtk_version'] = minimum_gtk_version
 
     # Windows specials
     if is_win32:
@@ -308,6 +314,9 @@ def options(opt):
     opt.add_option('--disable-vte', action='store_true', default=False,
         help='compile without support for an embedded virtual terminal [[default: No]',
         dest='no_vte')
+    opt.add_option('--enable-gtk3', action='store_true', default=False,
+        help='compile with GTK3 support (experimental) [[default: No]',
+        dest='gtk3')
     # Paths
     opt.add_option('--mandir', type='string', default='',
         help='man documentation', dest='mandir')
@@ -435,8 +444,10 @@ def build(bld):
     bld.new_task_gen(
         source          = 'geany.pc.in',
         dct             = {'VERSION': VERSION,
-                           'DEPENDENCIES': 'gtk+-2.0 >= %s glib-2.0 >= %s' % \
-                                (MINIMUM_GTK_VERSION, MINIMUM_GLIB_VERSION),
+                           'DEPENDENCIES': '%s >= %s glib-2.0 >= %s' % \
+                                (bld.env['gtk_package_name'],
+                                 bld.env['minimum_gtk_version'],
+                                 MINIMUM_GLIB_VERSION),
                            'prefix': bld.env['PREFIX'],
                            'exec_prefix': '${prefix}',
                            'libdir': '${exec_prefix}/lib',
