@@ -60,6 +60,7 @@
 #include "projectprivate.h"
 #include "main.h"
 #include "highlighting.h"
+#include "gtkcompat.h"
 
 
 /* Note: use sciwrappers.h instead where possible.
@@ -192,7 +193,7 @@ static void on_snippet_keybinding_activate(gchar *key)
 	const gchar *s;
 	GHashTable *specials;
 
-	if (!doc || !GTK_WIDGET_HAS_FOCUS(doc->editor->sci))
+	if (!doc || !gtk_widget_has_focus(GTK_WIDGET(doc->editor->sci)))
 		return;
 
 	s = snippets_find_completion_by_name(doc->file_type->name, key);
@@ -4645,6 +4646,14 @@ static gboolean on_editor_expose_event(GtkWidget *widget, GdkEventExpose *event,
 }
 
 
+#if GTK_CHECK_VERSION(3, 0, 0)
+static gboolean on_editor_draw(GtkWidget *widget, cairo_t *cr, gpointer user_data)
+{
+	return on_editor_expose_event(widget, NULL, user_data);
+}
+#endif
+
+
 static void setup_sci_keys(ScintillaObject *sci)
 {
 	/* disable some Scintilla keybindings to be able to redefine them cleanly */
@@ -4768,7 +4777,11 @@ static ScintillaObject *create_new_sci(GeanyEditor *editor)
 		g_signal_connect(sci, "scroll-event", G_CALLBACK(on_editor_scroll_event), editor);
 		g_signal_connect(sci, "motion-notify-event", G_CALLBACK(on_motion_event), NULL);
 		g_signal_connect(sci, "focus-in-event", G_CALLBACK(on_editor_focus_in), editor);
+#if GTK_CHECK_VERSION(3, 0, 0)
+		g_signal_connect(sci, "draw", G_CALLBACK(on_editor_draw), editor);
+#else
 		g_signal_connect(sci, "expose-event", G_CALLBACK(on_editor_expose_event), editor);
+#endif
 	}
 	return sci;
 }

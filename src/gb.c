@@ -29,6 +29,7 @@
 #include <signal.h>
 #include <unistd.h>
 #include <gdk-pixbuf/gdk-pixdata.h>
+#include "gtkcompat.h"
 
 #define MAX_PICS 10
 #define LOOP_DELAY 200000	/* micro seconds */
@@ -191,7 +192,7 @@ static GtkWidget *create_help_dialog(GtkWindow *parent)
 	okbutton1 = gtk_button_new_from_stock(GTK_STOCK_OK);
 	gtk_widget_show(okbutton1);
 	gtk_dialog_add_action_widget(GTK_DIALOG(help_dialog), okbutton1, GTK_RESPONSE_OK);
-	GTK_WIDGET_SET_FLAGS(okbutton1, GTK_CAN_DEFAULT);
+	gtk_widget_set_can_default(okbutton1, TRUE);
 
 	return help_dialog;
 }

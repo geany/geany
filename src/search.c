@@ -41,6 +41,7 @@
 #include "keyfile.h"
 #include "stash.h"
 #include "toolbar.h"
+#include "gtkcompat.h"
 
 #include <unistd.h>
 #include <string.h>
@@ -455,7 +456,7 @@ static void create_find_dialog(void)
 	label = gtk_label_new_with_mnemonic(_("_Search for:"));
 	gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
 
-	entry = gtk_combo_box_entry_new_text();
+	entry = gtk_combo_box_text_new_with_entry();
 	ui_entry_add_clear_icon(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(entry))));
 	gtk_label_set_mnemonic_widget(GTK_LABEL(label), entry);
 	gtk_entry_set_width_chars(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(entry))), 50);
@@ -551,7 +552,7 @@ void search_show_find_dialog(void)
 	else
 	{
 		/* only set selection if the dialog is not already visible */
-		if (! GTK_WIDGET_VISIBLE(find_dlg.dialog) && sel)
+		if (! gtk_widget_get_visible(find_dlg.dialog) && sel)
 			gtk_entry_set_text(GTK_ENTRY(find_dlg.entry), sel);
 		gtk_widget_grab_focus(find_dlg.entry);
 		set_dialog_position(find_dlg.dialog, find_dlg.position);
@@ -617,14 +618,14 @@ static void create_replace_dialog(void)
 	label_replace = gtk_label_new_with_mnemonic(_("Replace wit_h:"));
 	gtk_misc_set_alignment(GTK_MISC(label_replace), 0, 0.5);
 
-	entry_find = gtk_combo_box_entry_new_text();
+	entry_find = gtk_combo_box_text_new_with_entry();
 	ui_entry_add_clear_icon(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(entry_find))));
 	gtk_label_set_mnemonic_widget(GTK_LABEL(label_find), entry_find);
 	gtk_entry_set_width_chars(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(entry_find))), 50);
 	ui_hookup_widget(replace_dlg.dialog, entry_find, "entry_find");
 	replace_dlg.find_entry = gtk_bin_get_child(GTK_BIN(entry_find));
 
-	entry_replace = gtk_combo_box_entry_new_text();
+	entry_replace = gtk_combo_box_text_new_with_entry();
 	ui_entry_add_clear_icon(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(entry_replace))));
 	gtk_label_set_mnemonic_widget(GTK_LABEL(label_replace), entry_replace);
 	gtk_entry_set_width_chars(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(entry_replace))), 50);
@@ -725,7 +726,7 @@ void search_show_replace_dialog(void)
 	else
 	{
 		/* only set selection if the dialog is not already visible */
-		if (! GTK_WIDGET_VISIBLE(replace_dlg.dialog) && sel)
+		if (! gtk_widget_get_visible(replace_dlg.dialog) && sel)
 			gtk_entry_set_text(GTK_ENTRY(replace_dlg.find_entry), sel);
 		if (sel != NULL) /* when we have a selection, reset the entry widget's background colour */
 			ui_set_search_entry_background(replace_dlg.find_entry, TRUE);
@@ -853,7 +854,7 @@ static void create_fif_dialog(void)
 	label = gtk_label_new_with_mnemonic(_("_Search for:"));
 	gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
 
-	combo = gtk_combo_box_entry_new_text();
+	combo = gtk_combo_box_text_new_with_entry();
 	entry = gtk_bin_get_child(GTK_BIN(combo));
 	ui_entry_add_clear_icon(GTK_ENTRY(entry));
 	gtk_label_set_mnemonic_widget(GTK_LABEL(label), entry);
@@ -877,7 +878,7 @@ static void create_fif_dialog(void)
 	ui_hookup_widget(fif_dlg.dialog, combo_files_mode, "combo_files_mode");
 	fif_dlg.files_mode_combo = combo_files_mode;
 
-	fcombo = gtk_combo_box_entry_new_text();
+	fcombo = gtk_combo_box_text_new_with_entry();
 	entry = gtk_bin_get_child(GTK_BIN(fcombo));
 	ui_entry_add_clear_icon(GTK_ENTRY(entry));
 	gtk_entry_set_activates_default(GTK_ENTRY(entry), TRUE);
@@ -896,7 +897,7 @@ static void create_fif_dialog(void)
 	label1 = gtk_label_new_with_mnemonic(_("_Directory:"));
 	gtk_misc_set_alignment(GTK_MISC(label1), 0, 0.5);
 
-	dir_combo = gtk_combo_box_entry_new_text();
+	dir_combo = gtk_combo_box_text_new_with_entry();
 	entry = gtk_bin_get_child(GTK_BIN(dir_combo));
 	ui_entry_add_clear_icon(GTK_ENTRY(entry));
 	gtk_label_set_mnemonic_widget(GTK_LABEL(label1), entry);
@@ -914,11 +915,11 @@ static void create_fif_dialog(void)
 	label2 = gtk_label_new_with_mnemonic(_("E_ncoding:"));
 	gtk_misc_set_alignment(GTK_MISC(label2), 0, 0.5);
 
-	e_combo = gtk_combo_box_new_text();
+	e_combo = gtk_combo_box_text_new();
 	for (i = 0; i < GEANY_ENCODINGS_MAX; i++)
 	{
 		encoding_string = encodings_to_string(&encodings[i]);
-		gtk_combo_box_append_text(GTK_COMBO_BOX(e_combo), encoding_string);
+		gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(e_combo), encoding_string);
 		g_free(encoding_string);
 	}
 	gtk_combo_box_set_wrap_width(GTK_COMBO_BOX(e_combo), 3);
@@ -1024,7 +1025,7 @@ void search_show_find_in_files_dialog(const gchar *dir)
 	stash_group_display(fif_prefs, fif_dlg.dialog);
 
 	/* only set selection if the dialog is not already visible, or has just been created */
-	if (doc && ! sel && ! GTK_WIDGET_VISIBLE(fif_dlg.dialog))
+	if (doc && ! sel && ! gtk_widget_get_visible(fif_dlg.dialog))
 		sel = editor_get_default_selection(doc->editor, search_prefs.use_current_word, NULL);
 
 	entry = gtk_bin_get_child(GTK_BIN(fif_dlg.search_combo));
@@ -1036,7 +1037,7 @@ void search_show_find_in_files_dialog(const gchar *dir)
 	 * (in create_fif_dialog() it would fail if a project is opened after dialog creation) */
 	if (app->project != NULL && NZV(app->project->base_path))
 	{
-		ui_combo_box_prepend_text_once(GTK_COMBO_BOX(fif_dlg.dir_combo),
+		ui_combo_box_prepend_text_once(GTK_COMBO_BOX_TEXT(fif_dlg.dir_combo),
 			app->project->base_path);
 	}
 
@@ -1055,8 +1056,7 @@ void search_show_find_in_files_dialog(const gchar *dir)
 			if (doc == last_doc && cur_dir && utils_str_equal(cur_dir, last_cur_dir))
 			{
 				/* in case the user now wants the current directory, add it to history */
-				ui_combo_box_add_to_history(
-					GTK_COMBO_BOX_ENTRY(fif_dlg.dir_combo), cur_dir, 0);
+				ui_combo_box_add_to_history(GTK_COMBO_BOX_TEXT(fif_dlg.dir_combo), cur_dir, 0);
 				SETPTR(cur_dir, NULL);
 			}
 			else
@@ -1241,7 +1241,7 @@ on_find_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 			if (! utils_str_replace_escape(search_data.text, FALSE))
 				goto fail;
 		}
-		ui_combo_box_add_to_history(GTK_COMBO_BOX_ENTRY(user_data), search_data.original_text, 0);
+		ui_combo_box_add_to_history(GTK_COMBO_BOX_TEXT(user_data), search_data.original_text, 0);
 
 		switch (response)
 		{
@@ -1378,9 +1378,9 @@ on_replace_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 			goto fail;
 	}
 
-	ui_combo_box_add_to_history(GTK_COMBO_BOX_ENTRY(
+	ui_combo_box_add_to_history(GTK_COMBO_BOX_TEXT(
 		gtk_widget_get_parent(replace_dlg.find_entry)), original_find, 0);
-	ui_combo_box_add_to_history(GTK_COMBO_BOX_ENTRY(
+	ui_combo_box_add_to_history(GTK_COMBO_BOX_TEXT(
 		gtk_widget_get_parent(replace_dlg.replace_entry)), original_replace, 0);
 
 	switch (response)
@@ -1520,9 +1520,9 @@ on_find_in_files_dialog_response(GtkDialog *dialog, gint response,
 
 			if (search_find_in_files(search_text, locale_dir, opts->str, enc))
 			{
-				ui_combo_box_add_to_history(GTK_COMBO_BOX_ENTRY(search_combo), search_text, 0);
-				ui_combo_box_add_to_history(GTK_COMBO_BOX_ENTRY(fif_dlg.files_combo), NULL, 0);
-				ui_combo_box_add_to_history(GTK_COMBO_BOX_ENTRY(dir_combo), utf8_dir, 0);
+				ui_combo_box_add_to_history(GTK_COMBO_BOX_TEXT(search_combo), search_text, 0);
+				ui_combo_box_add_to_history(GTK_COMBO_BOX_TEXT(fif_dlg.files_combo), NULL, 0);
+				ui_combo_box_add_to_history(GTK_COMBO_BOX_TEXT(dir_combo), utf8_dir, 0);
 				gtk_widget_hide(fif_dlg.dialog);
 			}
 			g_free(locale_dir);
