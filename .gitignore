@@ -45,6 +45,7 @@ Makefile.in
 /libtool
 /localwin32.mk
 /.lock-wscript
+/.lock-wafbuild
 /ltmain.sh
 /m4/lt*.m4
 /m4/intltool.m4
@@ -80,6 +81,7 @@ Makefile.in
 /po/*.sed
 /po/*.sin
 /po/stamp-it
+/po/.intlcache
 
 #-----------------------------------------------------------------------
 # /src/

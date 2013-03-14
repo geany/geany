@@ -496,6 +496,20 @@ static void init_builtin_filetypes(void)
 	ft->name = g_strdup("Forth");
 	filetype_make_title(ft, TITLE_SOURCE_FILE);
 	ft->group = GEANY_FILETYPE_GROUP_SCRIPT;
+
+#define ASCIIDOC
+	ft = filetypes[GEANY_FILETYPES_ASCIIDOC];
+	ft->lang = 43;
+	ft->name = g_strdup("Asciidoc");
+	filetype_make_title(ft, TITLE_SOURCE_FILE);
+	ft->group = GEANY_FILETYPE_GROUP_MARKUP;
+
+#define ABAQUS
+	ft = filetypes[GEANY_FILETYPES_ABAQUS];
+	ft->lang = 44;
+	ft->name = g_strdup("Abaqus");
+	filetype_make_title(ft, TITLE_SOURCE_FILE);
+	ft->group = GEANY_FILETYPE_GROUP_SCRIPT;
 }
 
 

@@ -1,4 +1,4 @@
-.. |(version)| replace:: 1.23
+.. |(version)| replace:: 1.24
 
 =======
  Geany
@@ -13,7 +13,7 @@
           Frank Lanitz,
           Colomban Wendling,
           Matthew Brush
-:Date: 2012-06-18
+:Date: 2013-03-10
 :Version: |(version)|
 
 Copyright © 2005-2012
@@ -564,6 +564,14 @@ order. It is not alphabetical as shown in the documents list
 
 See the `Notebook tab keybindings`_ section for useful
 shortcuts including for Most-Recently-Used document switching.
+
+Cloning documents
+^^^^^^^^^^^^^^^^^
+The `Document->Clone` menu item copies the current document's text,
+cursor position and properties into a new untitled document. If
+there is a selection, only the selected text is copied. This can be
+useful when making temporary copies of text or for creating
+documents with similar or identical contents.
 
 
 Character sets and Unicode Byte-Order-Mark (BOM)
@@ -2011,9 +2019,9 @@ Use indicators to show compile errors
     Underline lines with compile errors using red squiggles to indicate
     them in the editor area.
 
-Newline strip trailing spaces
-    Remove any white space at the end of the line when you hit the
-    Enter/Return key.
+Newline strips trailing spaces
+    Remove any whitespace at the end of the line when you hit the
+    Enter/Return key. See also `Strip trailing spaces`_.
 
 Line breaking column
     The editor column number to insert a newline at when Line Breaking
@@ -2297,8 +2305,13 @@ Ensure consistent line endings
     Ensures that newline characters always get converted before
     saving, avoiding mixed line endings in the same file.
 
+.. _Strip trailing spaces:
+
 Strip trailing spaces
-    Remove the trailing spaces on each line of the document.
+    Remove any whitespace at the end of each document line.
+
+    .. note::
+        This does not apply to Diff documents, e.g. patch files.
 
 Replace tabs by space
     Replace all tabs in the document with the equivalent number of spaces.
@@ -2333,7 +2346,9 @@ Tool paths
 ``````````
 
 Terminal
-    The location of your terminal executable.
+    The command to execute a script in a terminal.  Occurrences of %c
+    in the command are substituted with the run script name, see
+    `Terminal emulators`_.
 
 Browser
     The location of your web browser executable.
@@ -2476,10 +2491,11 @@ indent_hard_tab_width             The size of a tab character. Don't change  8  
 **Interface related**
 show_symbol_list_expanders        Whether to show or hide the small          true        to new
                                   expander icons on the symbol list                      documents
-allow_always_save                 treeview. Whether files can be saved       false       immediately
-                                  always, even if they don't have any
-                                  changes. By default, the Save button and
-                                  menu item are disabled when a file is
+                                  treeview.
+allow_always_save                 Whether files can be saved always, even    false       immediately
+                                  if they don't have any changes.
+                                  By default, the Save button and menu
+                                  item are disabled when a file is
                                   unchanged. When setting this option to
                                   true, the Save button and menu item are
                                   always active and files can be saved.
@@ -2498,8 +2514,6 @@ msgwin_messages_visible           Whether to show the Messages tab in the    tru
                                   Messages Window
 msgwin_scribble_visible           Whether to show the Scribble tab in the    true        immediately
                                   Messages Window
-use_geany_icon                    Whether to use the Geany icon on the       false       on restart
-                                  window instead of the theme's icon
 ================================  =========================================  ==========  ===========
 
 By default, statusbar_template is empty. This tells Geany to use its
@@ -2591,6 +2605,9 @@ Foreground color
 
 Background color
     Select the background color of the terminal.
+
+Background image
+    Select the background image to show behind the terminal's text.
 
 Scrollback lines
     The number of lines buffered so that you can scroll though the history.
@@ -2825,15 +2842,14 @@ Execute
 ```````
 
 Execute will run the corresponding executable file, shell script or
-interpreted script in a terminal window. Note that the Terminal tool
-path must be correctly set in the Tools tab of the Preferences dialog -
-you can use any terminal program that runs a Bourne compatible shell
-and accept the "-e" command line argument to start a command or can be
-selected to use the built-in VTE if it is available - see
-`Virtual terminal emulator widget (VTE)`_.
+interpreted script in a terminal window. The command set in the
+"Set Build Commands" dialog is run in a script to ensure the terminal
+stays open after execution completes.  Note: see `Terminal emulators`_
+below for the command format.  Alternatively the built-in VTE can be used
+if it is available - see `Virtual terminal emulator widget (VTE)`_.
 
-After your program or script has finished executing, you will be
-prompted to press the return key. This allows you to review any text
+After your program or script has finished executing, the run script will
+prompt you to press the return key. This allows you to review any text
 output from the program before the terminal window is closed.
 
 .. note::
@@ -2856,11 +2872,16 @@ more than one child process.
 Terminal emulators
 ******************
 
-Xterm is known to work properly. If you are using "Terminal"
-(the terminal program of Xfce), you should add the command line
-option ``--disable-server`` otherwise the started process cannot be
-stopped. Just add this option in the preferences dialog on the Tools
-tab in the terminal field.
+The Terminal field of the tools preferences tab requires a command to
+execute the terminal program and to pass it the name of the Geany run
+script that it should execute in a Bourne compatible shell (eg /bin/sh).
+The marker "%c" is substituted with the name of the Geany run script,
+which is created in the working directory set in the Build commands
+dialog, see `Build menu commands dialog`_ for details.
+
+As an example the default (Linux) command is::
+
+    xterm -e "/bin/sh %c"
 
 
 Set build commands
@@ -2896,7 +2917,7 @@ behaviors:
   compiler tab and parse it for errors.
 * Execute commands - are configurable and intended for executing your
   program or other long running programs.  The output is not parsed for errors
-  and is directed to the terminal selected in preferences.
+  and is directed to the terminal command selected in preferences.
 * Fixed commands - these perform built-in actions:
 
   * Go to the next error.
@@ -3188,14 +3209,6 @@ want to assign to the action and it will be saved when you press OK.
 You can define only one key combination for each action and each key
 combination can only be defined for one action.
 
-Some of the default key combinations are common across many
-applications, for example *Ctrl-N* for New and *Ctrl-O* for Open.
-Because they are so common it is not advisable to change these, but
-you can add other key combinations for these actions. For example
-*Ctrl-O* is set to execute menu_open by default, but you can also
-define *Alt-O*, so that the file open dialog is shown by pressing
-either *Ctrl-O* or *Alt-O*.
-
 The following tables list all customizable keyboard shortcuts, those
 which are common to many applications are marked with (C) after the
 shortcut.
@@ -3227,6 +3240,8 @@ Reload file                     Ctrl-R  (C)               Reloads the current fi
                                                           will be lost.
 
 Print                           Ctrl-P  (C)               Prints the current file.
+
+Quit                            Ctrl-Q  (C)               Quits Geany.
 =============================== ========================= ==================================================
 
 
@@ -3464,7 +3479,8 @@ Find Document Usage             Ctrl-Shift-D              Finds all occurrences 
 Mark All                        Ctrl-Shift-M              Highlight all matches of the current
                                                           word/selection in the current document
                                                           with a colored box. If there's nothing to
-                                                          find, highlighted matches will be cleared.
+                                                          find, or the cursor is next to an existing match,
+                                                          the highlighted matches will be cleared.
 =============================== ========================= ==================================================
 
 
@@ -3612,6 +3628,8 @@ Document keybindings
 ==================================== ==================== ==================================================
 Action                               Default shortcut     Description
 ==================================== ==================== ==================================================
+Clone                                                     See `Cloning documents`_.
+
 Replace tabs by space                                     Replaces all tabs with the right amount of spaces.
 
 Replace spaces by tabs                                    Replaces leading spaces with tab characters.
@@ -4764,7 +4782,7 @@ geanyversion   The actual Geany version, e.g.                file templates, fil
 
 filename       The filename of the current file.             file header, snippets, file
                For new files, it's only replaced when        templates.
-               first saving if found on the first 3 lines
+               first saving if found on the first 4 lines
                of the file.
 
 project        The current project's name, if any.           file header, snippets, file templates.
@@ -5223,9 +5241,8 @@ GEANY_MIN_SYMBOLLIST_CHARS      How many characters you need to type to       4
 GEANY_DISK_CHECK_TIMEOUT        Time in seconds between checking a file for   30
                                 external changes.
 GEANY_DEFAULT_TOOLS_MAKE        The make tool. This can also include a path.  "make"
-GEANY_DEFAULT_TOOLS_TERMINAL    A terminal emulator. It has to accept the     "xterm"
-                                command line option "-e". This can also
-                                include a path.
+GEANY_DEFAULT_TOOLS_TERMINAL    A terminal emulator command, see              See below.
+                                `Terminal emulators`_.
 GEANY_DEFAULT_TOOLS_BROWSER     A web browser. This can also include a path.  "firefox"
 GEANY_DEFAULT_TOOLS_PRINTCMD    A printing tool. It should be able to accept  "lpr"
                                 and process plain text files. This can also
@@ -5246,6 +5263,15 @@ GEANY_DEFAULT_FILETYPE_REGEX    The default regex to extract filetypes from   Se
 ==============================  ============================================  ==================
 
 The GEANY_DEFAULT_FILETYPE_REGEX default value is  -\\*-\\s*([^\\s]+)\\s*-\\*- which finds Emacs filetypes.
+
+The GEANY_DEFAULT_TOOLS_TERMINAL default value on Windows is::
+
+    cmd.exe /Q /C %c
+
+and on any non-Windows system is::
+
+    xterm -e "/bin/sh %c"
+
 
 build.c
 -------

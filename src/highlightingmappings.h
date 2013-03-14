@@ -69,6 +69,31 @@ typedef struct
 #define HL_N_ENTRIES(array) ((array != NULL) ? G_N_ELEMENTS(array) : 0)
 
 
+/* Abaqus */
+#define highlighting_lexer_ABAQUS			SCLEX_ABAQUS
+static const HLStyle highlighting_styles_ABAQUS[] =
+{
+	{ SCE_ABAQUS_DEFAULT,		"default",		FALSE },
+	{ SCE_ABAQUS_COMMENT,		"comment",		FALSE },
+	{ SCE_ABAQUS_NUMBER,		"number",		FALSE },
+	{ SCE_ABAQUS_STRING,		"string",		FALSE },
+	{ SCE_ABAQUS_OPERATOR,		"operator",		FALSE },
+	{ SCE_ABAQUS_PROCESSOR,		"processor",		FALSE },
+	{ SCE_ABAQUS_STARCOMMAND,	"starcommand",		FALSE },
+	{ SCE_ABAQUS_ARGUMENT,		"argument",		FALSE }
+};
+static const HLKeyword highlighting_keywords_ABAQUS[] =
+{
+	{ 0, "processors", FALSE },
+	{ 1, "commands", FALSE },
+	{ 2, "slashommands", FALSE },
+	{ 3, "starcommands", FALSE },
+	{ 4, "arguments", FALSE },
+	{ 5, "functions", FALSE }
+};
+#define highlighting_properties_ABAQUS		EMPTY_PROPERTIES
+
+
 /* Ada */
 #define highlighting_lexer_ADA			SCLEX_ADA
 static const HLStyle highlighting_styles_ADA[] =
@@ -1080,15 +1105,22 @@ static const HLKeyword highlighting_keywords_PERL[] =
 #define highlighting_lexer_PO		SCLEX_PO
 static const HLStyle highlighting_styles_PO[] =
 {
-	{ SCE_PO_DEFAULT,		"default",			FALSE },
-	{ SCE_PO_COMMENT,		"comment",			FALSE },
-	{ SCE_PO_MSGID,			"msgid",			FALSE },
-	{ SCE_PO_MSGID_TEXT,	"msgid_text",		FALSE },
-	{ SCE_PO_MSGSTR,		"msgstr",			FALSE },
-	{ SCE_PO_MSGSTR_TEXT,	"msgstr_text",		FALSE },
-	{ SCE_PO_MSGCTXT,		"msgctxt",			FALSE },
-	{ SCE_PO_MSGCTXT_TEXT,	"msgctxt_text",		FALSE },
-	{ SCE_PO_FUZZY,			"fuzzy",			FALSE }
+	{ SCE_PO_DEFAULT,				"default",				FALSE },
+	{ SCE_PO_COMMENT,				"comment",				FALSE },
+	{ SCE_PO_PROGRAMMER_COMMENT,	"programmer_comment",	FALSE },
+	{ SCE_PO_REFERENCE,				"reference",			FALSE },
+	{ SCE_PO_FLAGS,					"flags",				FALSE },
+	{ SCE_PO_FUZZY,					"fuzzy",				FALSE },
+	{ SCE_PO_MSGID,					"msgid",				FALSE },
+	{ SCE_PO_MSGID_TEXT,			"msgid_text",			FALSE },
+	{ SCE_PO_MSGID_TEXT_EOL,		"msgid_text_eol",		FALSE },
+	{ SCE_PO_MSGSTR,				"msgstr",				FALSE },
+	{ SCE_PO_MSGSTR_TEXT,			"msgstr_text",			FALSE },
+	{ SCE_PO_MSGSTR_TEXT_EOL,		"msgstr_text_eol",		FALSE },
+	{ SCE_PO_MSGCTXT,				"msgctxt",				FALSE },
+	{ SCE_PO_MSGCTXT_TEXT,			"msgctxt_text",			FALSE },
+	{ SCE_PO_MSGCTXT_TEXT_EOL,		"msgctxt_text_eol",		FALSE },
+	{ SCE_PO_ERROR,					"error",				FALSE }
 };
 #define highlighting_keywords_PO	EMPTY_KEYWORDS
 #define highlighting_properties_PO	EMPTY_PROPERTIES

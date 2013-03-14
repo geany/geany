@@ -59,6 +59,7 @@ typedef struct
 	 * takes more than a second) */
 	time_t print_time;
 	PangoLayout *layout; /* commonly used layout object */
+	gdouble sci_scale;
 
 	struct Sci_RangeToFormat fr;
 	GArray *pages;
@@ -308,22 +309,20 @@ static void setup_range(DocInfo *dinfo, GtkPrintContext *ctx)
 	dinfo->fr.rc.top    = dinfo->fr.rcPage.top;
 	dinfo->fr.rc.right  = dinfo->fr.rcPage.right;
 	dinfo->fr.rc.bottom = dinfo->fr.rcPage.bottom;
-#if GTK_CHECK_VERSION(2, 20, 0)
-	{
-		gdouble m_top, m_left, m_right, m_bottom;
-		if (gtk_print_context_get_hard_margins(ctx, &m_top, &m_bottom, &m_left, &m_right))
-		{
-			dinfo->fr.rc.left   += m_left;
-			dinfo->fr.rc.top    += m_top;
-			dinfo->fr.rc.right  -= m_right;
-			dinfo->fr.rc.bottom -= m_bottom;
-		}
-	}
-#endif
+
 	if (printing_prefs.print_page_header)
 		dinfo->fr.rc.top += dinfo->line_height * 3; /* header height */
 	if (printing_prefs.print_page_numbers)
 		dinfo->fr.rc.bottom -= dinfo->line_height * 1; /* footer height */
+
+	dinfo->fr.rcPage.left   /= dinfo->sci_scale;
+	dinfo->fr.rcPage.top    /= dinfo->sci_scale;
+	dinfo->fr.rcPage.right  /= dinfo->sci_scale;
+	dinfo->fr.rcPage.bottom /= dinfo->sci_scale;
+	dinfo->fr.rc.left   /= dinfo->sci_scale;
+	dinfo->fr.rc.top    /= dinfo->sci_scale;
+	dinfo->fr.rc.right  /= dinfo->sci_scale;
+	dinfo->fr.rc.bottom /= dinfo->sci_scale;
 
 	dinfo->fr.chrg.cpMin = 0;
 	dinfo->fr.chrg.cpMax = sci_get_length(dinfo->sci);
@@ -333,6 +332,7 @@ static void setup_range(DocInfo *dinfo, GtkPrintContext *ctx)
 static void begin_print(GtkPrintOperation *operation, GtkPrintContext *context, gpointer user_data)
 {
 	DocInfo *dinfo = user_data;
+	PangoContext *pango_ctx, *widget_pango_ctx;
 	PangoFontDescription *desc;
 
 	if (dinfo == NULL)
@@ -351,8 +351,16 @@ static void begin_print(GtkPrintOperation *operation, GtkPrintContext *context, 
 	scintilla_send_message(dinfo->sci, SCI_SETVIEWWS, SCWS_INVISIBLE, 0);
 	scintilla_send_message(dinfo->sci, SCI_SETVIEWEOL, FALSE, 0);
 	scintilla_send_message(dinfo->sci, SCI_SETEDGEMODE, EDGE_NONE, 0);
-	scintilla_send_message(dinfo->sci, SCI_SETPRINTMAGNIFICATION, (uptr_t) -2, 0); /* WTF? */
 	scintilla_send_message(dinfo->sci, SCI_SETPRINTCOLOURMODE, SC_PRINT_COLOURONWHITE, 0);
+
+	/* Scintilla doesn't respect the context resolution, so we'll scale ourselves.
+	 * Actually Scintilla simply doesn't know about the resolution since it creates its own
+	 * Pango context out of the Cairo target, and the resolution is in the GtkPrintOperation's
+	 * Pango context */
+	pango_ctx = gtk_print_context_create_pango_context(context);
+	widget_pango_ctx = gtk_widget_get_pango_context(GTK_WIDGET(dinfo->sci));
+	dinfo->sci_scale = pango_cairo_context_get_resolution(pango_ctx) / pango_cairo_context_get_resolution(widget_pango_ctx);
+	g_object_unref(pango_ctx);
 
 	dinfo->pages = g_array_new(FALSE, FALSE, sizeof(gint));
 
@@ -370,6 +378,19 @@ static void begin_print(GtkPrintOperation *operation, GtkPrintContext *context, 
 }
 
 
+static gint format_range(DocInfo *dinfo, gboolean draw)
+{
+	gint pos;
+
+	cairo_save(dinfo->fr.hdc);
+	cairo_scale(dinfo->fr.hdc, dinfo->sci_scale, dinfo->sci_scale);
+	pos = (gint) scintilla_send_message(dinfo->sci, SCI_FORMATRANGE, draw, (sptr_t) &dinfo->fr);
+	cairo_restore(dinfo->fr.hdc);
+
+	return pos;
+}
+
+
 static gboolean paginate(GtkPrintOperation *operation, GtkPrintContext *context, gpointer user_data)
 {
 	DocInfo *dinfo = user_data;
@@ -383,7 +404,7 @@ static gboolean paginate(GtkPrintOperation *operation, GtkPrintContext *context,
 	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(main_widgets.progressbar), _("Paginating"));
 
 	g_array_append_val(dinfo->pages, dinfo->fr.chrg.cpMin);
-	dinfo->fr.chrg.cpMin = (gint) scintilla_send_message(dinfo->sci, SCI_FORMATRANGE, FALSE, (sptr_t) &dinfo->fr);
+	dinfo->fr.chrg.cpMin = format_range(dinfo, FALSE);
 
 	gtk_print_operation_set_n_pages(operation, dinfo->pages->len);
 
@@ -423,25 +444,24 @@ static void draw_page(GtkPrintOperation *operation, GtkPrintContext *context,
 	else /* it's the last page, print 'til the end */
 		dinfo->fr.chrg.cpMax = sci_get_length(dinfo->sci);
 
-	scintilla_send_message(dinfo->sci, SCI_FORMATRANGE, TRUE, (sptr_t) &dinfo->fr);
+	format_range(dinfo, TRUE);
 
 	/* reset color */
 	cairo_set_source_rgb(cr, 0, 0, 0);
 
 	if (printing_prefs.print_line_numbers)
 	{	/* print a thin line between the line number margin and the data */
-		gint y1 = 0, y2 = height;
+		gdouble y1 = dinfo->fr.rc.top * dinfo->sci_scale;
+		gdouble y2 = dinfo->fr.rc.bottom * dinfo->sci_scale;
+		gdouble x = dinfo->fr.rc.left * dinfo->sci_scale + dinfo->margin_width;
 
 		if (printing_prefs.print_page_header)
-			y1 += (dinfo->line_height * 3) - 2;	/* "- 2": to connect the line number line to
-												 * the page header frame */
-
-		if (printing_prefs.print_page_numbers)
-			y2 -= (dinfo->line_height * 2) - 2;
+			y1 -= 2 - 0.3;	/* to connect the line number line to the page header frame,
+							 * 2 is the border, and 0.3 the line width */
 
 		cairo_set_line_width(cr, 0.3);
-		cairo_move_to(cr, dinfo->margin_width, y1);
-		cairo_line_to(cr, dinfo->margin_width, y2);
+		cairo_move_to(cr, x, y1);
+		cairo_line_to(cr, x, y2);
 		cairo_stroke(cr);
 	}
 
@@ -472,7 +492,8 @@ static void printing_print_gtk(GeanyDocument *doc)
 	GtkPrintOperation *op;
 	GtkPrintOperationResult res = GTK_PRINT_OPERATION_RESULT_ERROR;
 	GError *error = NULL;
-	DocInfo dinfo = { 0 };
+	static const DocInfo dinfo0;
+	DocInfo dinfo = dinfo0;
 	PrintWidgets *widgets;
 
 	/** TODO check for monospace font, detect the widest character in the font and

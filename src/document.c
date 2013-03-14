@@ -1362,16 +1362,17 @@ static void replace_header_filename(GeanyDocument *doc)
 	g_return_if_fail(doc != NULL);
 	g_return_if_fail(doc->file_type != NULL);
 
+	filebase = g_regex_escape_string(GEANY_STRING_UNTITLED, -1);
 	if (doc->file_type->extension)
-		filebase = g_strconcat("\\<", GEANY_STRING_UNTITLED, "\\.\\w+", NULL);
+		SETPTR(filebase, g_strconcat("\\b", filebase, "\\.\\w+", NULL));
 	else
-		filebase = g_strdup(GEANY_STRING_UNTITLED);
+		SETPTR(filebase, g_strconcat("\\b", filebase, "\\b", NULL));
 
 	filename = g_path_get_basename(doc->file_name);
 
 	/* only search the first 3 lines */
 	ttf.chrg.cpMin = 0;
-	ttf.chrg.cpMax = sci_get_position_from_line(doc->editor->sci, 3);
+	ttf.chrg.cpMax = sci_get_position_from_line(doc->editor->sci, 4);
 	ttf.lpstrText = filebase;
 
 	if (search_find_text(doc->editor->sci, SCFIND_MATCHCASE | SCFIND_REGEXP, &ttf) != -1)
@@ -1701,7 +1702,7 @@ gboolean document_save_file(GeanyDocument *doc, gboolean force)
 	}
 
 	/* the "changed" flag should exclude the "readonly" flag, but check it anyway for safety */
-	if (! force && ! ui_prefs.allow_always_save && (! doc->changed || doc->readonly))
+	if (! force && (! doc->changed || doc->readonly))
 		return FALSE;
 
 	fp = project_get_file_prefs();
@@ -2506,6 +2507,7 @@ void document_undo_clear(GeanyDocument *doc)
 }
 
 
+/* note: this is called on SCN_MODIFIED notifications */
 void document_undo_add(GeanyDocument *doc, guint type, gpointer data)
 {
 	undo_action *action;
@@ -2518,7 +2520,10 @@ void document_undo_add(GeanyDocument *doc, guint type, gpointer data)
 
 	g_trash_stack_push(&doc->priv->undo_actions, action);
 
-	document_set_text_changed(doc, TRUE);
+	/* avoid unnecessary redraws */
+	if (type != UNDO_SCINTILLA || !doc->changed)
+		document_set_text_changed(doc, TRUE);
+
 	ui_update_popup_reundo_items(doc);
 }
 
@@ -2682,8 +2687,64 @@ static void document_redo_add(GeanyDocument *doc, guint type, gpointer data)
 
 	g_trash_stack_push(&doc->priv->redo_actions, action);
 
-	document_set_text_changed(doc, TRUE);
+	if (type != UNDO_SCINTILLA || !doc->changed)
+		document_set_text_changed(doc, TRUE);
+
 	ui_update_popup_reundo_items(doc);
+}
+
+
+enum
+{
+	STATUS_CHANGED,
+#ifdef USE_GIO_FILEMON
+	STATUS_DISK_CHANGED,
+#endif
+	STATUS_READONLY
+};
+static struct
+{
+	const gchar *name;
+	GdkColor color;
+	gboolean loaded;
+} document_status_styles[] = {
+	{ "geany-document-status-changed",      {0}, FALSE },
+#ifdef USE_GIO_FILEMON
+	{ "geany-document-status-disk-changed", {0}, FALSE },
+#endif
+	{ "geany-document-status-readonly",     {0}, FALSE }
+};
+
+
+static gint document_get_status_id(GeanyDocument *doc)
+{
+	if (doc->changed)
+		return STATUS_CHANGED;
+#ifdef USE_GIO_FILEMON
+	else if (doc->priv->file_disk_status == FILE_CHANGED)
+		return STATUS_DISK_CHANGED;
+#endif
+	else if (doc->readonly)
+		return STATUS_READONLY;
+
+	return -1;
+}
+
+
+/* returns an identifier that is to be set as a widget name or class to get it styled
+ * depending on the document status (changed, readonly, etc.)
+ * a NULL return value means default (unchanged) style */
+const gchar *document_get_status_widget_class(GeanyDocument *doc)
+{
+	gint status;
+
+	g_return_val_if_fail(doc != NULL, NULL);
+
+	status = document_get_status_id(doc);
+	if (status < 0)
+		return NULL;
+	else
+		return document_status_styles[status].name;
 }
 
 
@@ -2701,25 +2762,45 @@ static void document_redo_add(GeanyDocument *doc, guint type, gpointer data)
  */
 const GdkColor *document_get_status_color(GeanyDocument *doc)
 {
-	static GdkColor red = {0, 0xFFFF, 0, 0};
-	static GdkColor green = {0, 0, 0x7FFF, 0};
-#ifdef USE_GIO_FILEMON
-	static GdkColor orange = {0, 0xFFFF, 0x7FFF, 0};
-#endif
-	GdkColor *color = NULL;
+	gint status;
 
 	g_return_val_if_fail(doc != NULL, NULL);
 
-	if (doc->changed)
-		color = &red;
-#ifdef USE_GIO_FILEMON
-	else if (doc->priv->file_disk_status == FILE_CHANGED)
-		color = &orange;
-#endif
-	else if (doc->readonly)
-		color = &green;
+	status = document_get_status_id(doc);
+	if (status < 0)
+		return NULL;
+	if (! document_status_styles[status].loaded)
+	{
+#if GTK_CHECK_VERSION(3, 0, 0)
+		GdkRGBA color;
+		GtkWidgetPath *path = gtk_widget_path_new();
+		GtkStyleContext *ctx = gtk_style_context_new();
+		gtk_widget_path_append_type(path, GTK_TYPE_WINDOW);
+		gtk_widget_path_append_type(path, GTK_TYPE_BOX);
+		gtk_widget_path_append_type(path, GTK_TYPE_NOTEBOOK);
+		gtk_widget_path_append_type(path, GTK_TYPE_LABEL);
+		gtk_widget_path_iter_set_name(path, -1, document_status_styles[status].name);
+		gtk_style_context_set_screen(ctx, gtk_widget_get_screen(GTK_WIDGET(doc->editor->sci)));
+		gtk_style_context_set_path(ctx, path);
+		gtk_style_context_get_color(ctx, GTK_STATE_NORMAL, &color);
+		document_status_styles[status].color.red   = 0xffff * color.red;
+		document_status_styles[status].color.green = 0xffff * color.green;
+		document_status_styles[status].color.blue  = 0xffff * color.blue;
+		document_status_styles[status].loaded = TRUE;
+		gtk_widget_path_unref(path);
+		g_object_unref(ctx);
+#else
+		GtkSettings *settings = gtk_widget_get_settings(GTK_WIDGET(doc->editor->sci));
+		gchar *path = g_strconcat("GeanyMainWindow.GtkHBox.GtkNotebook.",
+				document_status_styles[status].name, NULL);
+		GtkStyle *style = gtk_rc_get_style_by_paths(settings, path, NULL, GTK_TYPE_LABEL);
 
-	return color;	/* return pointer to static GdkColor. */
+		document_status_styles[status].color = style->fg[GTK_STATE_NORMAL];
+		document_status_styles[status].loaded = TRUE;
+		g_free(path);
+#endif
+	}
+	return &document_status_styles[status].color;
 }
 
 
@@ -2737,29 +2818,45 @@ GeanyDocument *document_index(gint idx)
 
 
 /* create a new file and copy file content and properties */
-GeanyDocument *document_clone(GeanyDocument *old_doc, const gchar *utf8_filename)
+G_MODULE_EXPORT void on_clone1_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
-	gint len;
+	GeanyDocument *old_doc = document_get_current();
+
+	if (old_doc)
+		document_clone(old_doc);
+}
+
+
+GeanyDocument *document_clone(GeanyDocument *old_doc)
+{
 	gchar *text;
 	GeanyDocument *doc;
+	ScintillaObject *old_sci;
 
-	g_return_val_if_fail(old_doc != NULL, NULL);
+	g_return_val_if_fail(old_doc, NULL);
+	old_sci = old_doc->editor->sci;
+	if (sci_has_selection(old_sci))
+		text = sci_get_selection_contents(old_sci);
+	else
+		text = sci_get_contents(old_sci, -1);
 
-	len = sci_get_length(old_doc->editor->sci) + 1;
-	text = (gchar*) g_malloc(len);
-	sci_get_text(old_doc->editor->sci, len, text);
-	/* use old file type (or maybe NULL for auto detect would be better?) */
-	doc = document_new_file(utf8_filename, old_doc->file_type, text);
+	doc = document_new_file(NULL, old_doc->file_type, text);
 	g_free(text);
+	document_set_text_changed(doc, TRUE);
 
 	/* copy file properties */
 	doc->editor->line_wrapping = old_doc->editor->line_wrapping;
+	doc->editor->line_breaking = old_doc->editor->line_breaking;
+	doc->editor->auto_indent = old_doc->editor->auto_indent;
+	editor_set_indent(doc->editor, old_doc->editor->indent_type,
+		old_doc->editor->indent_width);
 	doc->readonly = old_doc->readonly;
 	doc->has_bom = old_doc->has_bom;
 	document_set_encoding(doc, old_doc->encoding);
 	sci_set_lines_wrapped(doc->editor->sci, doc->editor->line_wrapping);
 	sci_set_readonly(doc->editor->sci, doc->readonly);
 
+	/* update ui */
 	ui_document_show_hide(doc);
 	return doc;
 }
@@ -2832,9 +2929,10 @@ static void monitor_reload_file(GeanyDocument *doc)
 	gchar *base_name = g_path_get_basename(doc->file_name);
 	gint ret;
 
+	/* we use No instead of Cancel to avoid mnemonic clash */
 	ret = dialogs_show_prompt(NULL,
 		GTK_STOCK_CLOSE, GTK_RESPONSE_CLOSE,
-		GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+		GTK_STOCK_NO, GTK_RESPONSE_CANCEL,
 		_("_Reload"), GTK_RESPONSE_ACCEPT,
 		_("Do you want to reload it?"),
 		_("The file '%s' on the disk is more recent than\nthe current buffer."),

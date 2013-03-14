@@ -61,6 +61,7 @@
 #include "win32.h"
 #include "toolbar.h"
 #include "geanymenubuttonaction.h"
+#include "gtkcompat.h"
 
 /* g_spawn_async_with_pipes doesn't work on Windows */
 #ifdef G_OS_WIN32
@@ -498,7 +499,7 @@ static GeanyBuildCommand *get_build_group(const GeanyBuildSource src, const Gean
  * If any parameter is out of range does nothing.
  *
  * Updates the menu.
- * 
+ *
  **/
 void build_remove_menu_item(const GeanyBuildSource src, const GeanyBuildGroup grp, const gint cmd)
 {
@@ -560,12 +561,12 @@ GeanyBuildCommand *build_get_menu_item(GeanyBuildSource src, GeanyBuildGroup grp
  *         This is a pointer to an internal structure and must not be freed.
  *
  **/
-const gchar *build_get_current_menu_item(const GeanyBuildGroup grp, const guint cmd, 
+const gchar *build_get_current_menu_item(const GeanyBuildGroup grp, const guint cmd,
                                          const GeanyBuildCmdEntries fld)
 {
 	GeanyBuildCommand *c;
 	gchar *str = NULL;
-	
+
 	g_return_val_if_fail(grp < GEANY_GBG_COUNT, NULL);
 	g_return_val_if_fail(fld < GEANY_BC_CMDENTRIES_COUNT, NULL);
 	g_return_val_if_fail(cmd < build_groups_count[grp], NULL);
@@ -593,19 +594,19 @@ const gchar *build_get_current_menu_item(const GeanyBuildGroup grp, const guint 
  *
  * Set the specified field of the command specified by @a src, @a grp and @a cmd.
  *
- * @param src the source of the menu item 
+ * @param src the source of the menu item
  * @param grp the group of the specified menu item.
  * @param cmd the index of the menu item within the group.
  * @param fld the field in the menu item command to set
  * @param val the value to set the field to, is copied
  *
  **/
- 
-void build_set_menu_item(const GeanyBuildSource src, const GeanyBuildGroup grp, 
+
+void build_set_menu_item(const GeanyBuildSource src, const GeanyBuildGroup grp,
                          const guint cmd, const GeanyBuildCmdEntries fld, const gchar *val)
 {
 	GeanyBuildCommand **g;
-	
+
 	g_return_if_fail(src < GEANY_BCS_COUNT);
 	g_return_if_fail(grp < GEANY_GBG_COUNT);
 	g_return_if_fail(fld < GEANY_BC_CMDENTRIES_COUNT);
@@ -637,9 +638,9 @@ void build_set_menu_item(const GeanyBuildSource src, const GeanyBuildGroup grp,
 	build_menu_update(NULL);
 }
 
-/** Set the string for the menu item field.
+/** Activate the menu item.
  *
- * Set the specified field of the command specified by @a src, @a grp and @a cmd.
+ * Activate the menu item specified by @a grp and @a cmd.
  *
  * @param grp the group of the specified menu item.
  * @param cmd the index of the command within the group.
@@ -827,7 +828,7 @@ static GPid build_spawn_cmd(GeanyDocument *doc, const gchar *cmd, const gchar *d
 			&(build_info.pid), NULL, &stdout_fd, &stderr_fd, &error))
 #endif
 	{
-		geany_debug("g_spawn_async_with_pipes() failed: %s", error->message);
+		geany_debug("build command spawning failed: %s", error->message);
 		ui_set_statusbar(TRUE, _("Process failed (%s)"), error->message);
 		g_strfreev(argv);
 		g_error_free(error);
@@ -998,25 +999,30 @@ static GPid build_run_cmd(GeanyDocument *doc, guint cmdindex)
 #endif
 	{
 		gchar *locale_term_cmd = NULL;
-		gchar **term_argv = NULL;
-		guint term_argv_len, i;
+		gint argv_len, i;
 		gchar **argv = NULL;
 
 		/* get the terminal path */
 		locale_term_cmd = utils_get_locale_from_utf8(tool_prefs.term_cmd);
 		/* split the term_cmd, so arguments will work too */
-		term_argv = g_strsplit(locale_term_cmd, " ", -1);
-		term_argv_len = g_strv_length(term_argv);
+		if (!g_shell_parse_argv(locale_term_cmd, &argv_len, &argv, NULL))
+		{
+			ui_set_statusbar(TRUE,
+				_("Could not parse terminal command \"%s\" "
+					"(check Terminal tool setting in Preferences)"), tool_prefs.term_cmd);
+			run_info[cmdindex].pid = (GPid) 1;
+			goto free_strings;
+		}
 
 		/* check that terminal exists (to prevent misleading error messages) */
-		if (term_argv[0] != NULL)
+		if (argv[0] != NULL)
 		{
-			gchar *tmp = term_argv[0];
+			gchar *tmp = argv[0];
 			/* g_find_program_in_path checks whether tmp exists and is executable */
-			term_argv[0] = g_find_program_in_path(tmp);
+			argv[0] = g_find_program_in_path(tmp);
 			g_free(tmp);
 		}
-		if (term_argv[0] == NULL)
+		if (argv[0] == NULL)
 		{
 			ui_set_statusbar(TRUE,
 				_("Could not find terminal \"%s\" "
@@ -1025,28 +1031,10 @@ static GPid build_run_cmd(GeanyDocument *doc, guint cmdindex)
 			goto free_strings;
 		}
 
-		argv = g_new0(gchar *, term_argv_len + 3);
-		for (i = 0; i < term_argv_len; i++)
+		for (i = 0; i < argv_len; i++)
 		{
-			argv[i] = g_strdup(term_argv[i]);
+			utils_str_replace_all(&(argv[i]), "%c", RUN_SCRIPT_CMD);
 		}
-#ifdef G_OS_WIN32
-		/* command line arguments only for cmd.exe */
-		if (strstr(argv[0], "cmd.exe") != NULL)
-		{
-			argv[term_argv_len] = g_strdup("/Q /C");
-			argv[term_argv_len + 1] = g_strdup(RUN_SCRIPT_CMD);
-		}
-		else
-		{
-			argv[term_argv_len] = g_strdup(RUN_SCRIPT_CMD);
-			argv[term_argv_len + 1] = NULL;
-		}
-#else
-		argv[term_argv_len   ]  = g_strdup("-e");
-		argv[term_argv_len + 1] = g_strconcat("/bin/sh ", RUN_SCRIPT_CMD, NULL);
-#endif
-		argv[term_argv_len + 2] = NULL;
 
 		if (! g_spawn_async(working_dir, argv, NULL, G_SPAWN_DO_NOT_REAP_CHILD,
 							NULL, NULL, &(run_info[cmdindex].pid), &error))
@@ -1067,7 +1055,6 @@ static GPid build_run_cmd(GeanyDocument *doc, guint cmdindex)
 		}
 		free_strings:
 		g_strfreev(argv);
-		g_strfreev(term_argv);
 		g_free(locale_term_cmd);
 	}
 
@@ -1936,7 +1923,7 @@ static void on_label_button_clicked(GtkWidget *wid, gpointer user_data)
 	const gchar *old = gtk_button_get_label(GTK_BUTTON(wid));
 	gchar *str;
 
-	if (GTK_WIDGET_TOPLEVEL(top_level) && GTK_IS_WINDOW(top_level))
+	if (gtk_widget_is_toplevel(top_level) && GTK_IS_WINDOW(top_level))
 		str = dialogs_show_input(_("Set menu item label"), GTK_WINDOW(top_level), NULL, old);
 	else
 		str = dialogs_show_input(_("Set menu item label"), NULL, NULL, old);

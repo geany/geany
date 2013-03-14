@@ -65,6 +65,7 @@
 #include "toolbar.h"
 #include "highlighting.h"
 #include "pluginutils.h"
+#include "gtkcompat.h"
 
 
 #ifdef HAVE_VTE
@@ -173,7 +174,7 @@ G_MODULE_EXPORT void on_save1_activate(GtkMenuItem *menuitem, gpointer user_data
 
 	if (doc != NULL && cur_page >= 0)
 	{
-		document_save_file(doc, FALSE);
+		document_save_file(doc, ui_prefs.allow_always_save);
 	}
 }
 
@@ -1811,7 +1812,7 @@ G_MODULE_EXPORT void on_back_activate(GtkMenuItem *menuitem, gpointer user_data)
 
 G_MODULE_EXPORT gboolean on_motion_event(GtkWidget *widget, GdkEventMotion *event, gpointer user_data)
 {
-	if (prefs.auto_focus && ! GTK_WIDGET_HAS_FOCUS(widget))
+	if (prefs.auto_focus && ! gtk_widget_has_focus(widget))
 		gtk_widget_grab_focus(widget);
 
 	return FALSE;
@@ -2086,9 +2087,15 @@ G_MODULE_EXPORT void on_reflow_lines_block1_activate(GtkMenuItem *menuitem, gpoi
 }
 
 
-G_MODULE_EXPORT void on_transpose_current_line1_activate(GtkMenuItem *menuitem, gpointer user_data)
+G_MODULE_EXPORT void on_move_lines_up1_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
-	keybindings_send_command(GEANY_KEY_GROUP_EDITOR, GEANY_KEYS_EDITOR_TRANSPOSELINE);
+	keybindings_send_command(GEANY_KEY_GROUP_EDITOR, GEANY_KEYS_EDITOR_MOVELINEUP);
+}
+
+
+G_MODULE_EXPORT void on_move_lines_down1_activate(GtkMenuItem *menuitem, gpointer user_data)
+{
+	keybindings_send_command(GEANY_KEY_GROUP_EDITOR, GEANY_KEYS_EDITOR_MOVELINEDOWN);
 }
 
 

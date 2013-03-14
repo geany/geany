@@ -60,6 +60,7 @@
 #include "projectprivate.h"
 #include "main.h"
 #include "highlighting.h"
+#include "gtkcompat.h"
 
 
 /* Note: use sciwrappers.h instead where possible.
@@ -108,7 +109,7 @@ static gsize count_indent_size(GeanyEditor *editor, const gchar *base_indent);
 static const gchar *snippets_find_completion_by_name(const gchar *type, const gchar *name);
 static void snippets_make_replacements(GeanyEditor *editor, GString *pattern);
 static gssize replace_cursor_markers(GeanyEditor *editor, GString *pattern);
-static GeanyFiletype *editor_get_filetype_at_current_pos(GeanyEditor *editor);
+static GeanyFiletype *editor_get_filetype_at_line(GeanyEditor *editor, gint line);
 static gboolean sci_is_blank_line(ScintillaObject *sci, gint line);
 
 
@@ -192,7 +193,7 @@ static void on_snippet_keybinding_activate(gchar *key)
 	const gchar *s;
 	GHashTable *specials;
 
-	if (!doc || !GTK_WIDGET_HAS_FOCUS(doc->editor->sci))
+	if (!doc || !gtk_widget_has_focus(GTK_WIDGET(doc->editor->sci)))
 		return;
 
 	s = snippets_find_completion_by_name(doc->file_type->name, key);
@@ -600,7 +601,7 @@ static void check_line_breaking(GeanyEditor *editor, gint pos, gchar c)
 			/* last column - distance is the desired column, then retrieve its document position */
 			pos = SSM(sci, SCI_FINDCOLUMN, line, last_col - diff);
 			sci_set_current_position(sci, pos, FALSE);
-
+			sci_scroll_caret(sci);
 			return;
 		}
 	}
@@ -2741,7 +2742,7 @@ static gsize count_indent_size(GeanyEditor *editor, const gchar *base_indent)
 
 /* Handles special cases where HTML is embedded in another language or
  * another language is embedded in HTML */
-static GeanyFiletype *editor_get_filetype_at_current_pos(GeanyEditor *editor)
+static GeanyFiletype *editor_get_filetype_at_line(GeanyEditor *editor, gint line)
 {
 	gint style, line_start;
 	GeanyFiletype *current_ft;
@@ -2750,7 +2751,7 @@ static GeanyFiletype *editor_get_filetype_at_current_pos(GeanyEditor *editor)
 	g_return_val_if_fail(editor->document->file_type != NULL, NULL);
 
 	current_ft = editor->document->file_type;
-	line_start = sci_get_position_from_line(editor->sci, sci_get_current_line(editor->sci));
+	line_start = sci_get_position_from_line(editor->sci, line);
 	style = sci_get_style_at(editor->sci, line_start);
 
 	/* Handle PHP filetype with embedded HTML */
@@ -2803,7 +2804,7 @@ static void real_comment_multiline(GeanyEditor *editor, gint line_start, gint la
 
 	g_return_if_fail(editor != NULL && editor->document->file_type != NULL);
 
-	ft = editor_get_filetype_at_current_pos(editor);
+	ft = editor_get_filetype_at_line(editor, line_start);
 
 	eol = editor_get_eol_char(editor);
 	if (! filetype_get_comment_open_close(ft, FALSE, &co, &cc))
@@ -2859,7 +2860,7 @@ static gboolean real_uncomment_multiline(GeanyEditor *editor)
 
 	g_return_val_if_fail(editor != NULL && editor->document->file_type != NULL, FALSE);
 
-	ft = editor_get_filetype_at_current_pos(editor);
+	ft = editor_get_filetype_at_line(editor, sci_get_current_line(editor->sci));
 	if (! filetype_get_comment_open_close(ft, FALSE, &co, &cc))
 		g_return_val_if_reached(FALSE);
 
@@ -2951,7 +2952,7 @@ gint editor_do_uncomment(GeanyEditor *editor, gint line, gboolean toggle)
 		sel_start = sel_end = sci_get_position_from_line(editor->sci, line);
 	}
 
-	ft = editor_get_filetype_at_current_pos(editor);
+	ft = editor_get_filetype_at_line(editor, first_line);
 	eol_char_len = editor_get_eol_char_len(editor);
 
 	if (! filetype_get_comment_open_close(ft, TRUE, &co, &cc))
@@ -3068,16 +3069,15 @@ void editor_do_comment_toggle(GeanyEditor *editor)
 
 	eol_char_len = editor_get_eol_char_len(editor);
 
-	first_line = sci_get_line_from_position(editor->sci,
-		sci_get_selection_start(editor->sci));
+	first_line = sci_get_line_from_position(editor->sci, sel_start);
 	/* Find the last line with chars selected (not EOL char) */
 	last_line = sci_get_line_from_position(editor->sci,
-		sci_get_selection_end(editor->sci) - editor_get_eol_char_len(editor));
+		sel_end - editor_get_eol_char_len(editor));
 	last_line = MAX(first_line, last_line);
 
 	first_line_start = sci_get_position_from_line(editor->sci, first_line);
 
-	ft = editor_get_filetype_at_current_pos(editor);
+	ft = editor_get_filetype_at_line(editor, first_line);
 
 	if (! filetype_get_comment_open_close(ft, TRUE, &co, &cc))
 		return;
@@ -3228,7 +3228,7 @@ void editor_do_comment(GeanyEditor *editor, gint line, gboolean allow_empty_line
 
 	eol_char_len = editor_get_eol_char_len(editor);
 
-	ft = editor_get_filetype_at_current_pos(editor);
+	ft = editor_get_filetype_at_line(editor, first_line);
 
 	if (! filetype_get_comment_open_close(ft, single_comment, &co, &cc))
 		return;
@@ -4389,6 +4389,10 @@ void editor_strip_line_trailing_spaces(GeanyEditor *editor, gint line)
 	gint i = line_end - 1;
 	gchar ch = sci_get_char_at(editor->sci, i);
 
+	/* Diff hunks should keep trailing spaces */
+	if (sci_get_lexer(editor->sci) == SCLEX_DIFF)
+		return;
+
 	while ((i >= line_start) && ((ch == ' ') || (ch == '\t')))
 	{
 		i--;
@@ -4642,6 +4646,14 @@ static gboolean on_editor_expose_event(GtkWidget *widget, GdkEventExpose *event,
 }
 
 
+#if GTK_CHECK_VERSION(3, 0, 0)
+static gboolean on_editor_draw(GtkWidget *widget, cairo_t *cr, gpointer user_data)
+{
+	return on_editor_expose_event(widget, NULL, user_data);
+}
+#endif
+
+
 static void setup_sci_keys(ScintillaObject *sci)
 {
 	/* disable some Scintilla keybindings to be able to redefine them cleanly */
@@ -4678,8 +4690,46 @@ static void setup_sci_keys(ScintillaObject *sci)
 }
 
 
-#include "icons/16x16/classviewer-var.xpm"
-#include "icons/16x16/classviewer-method.xpm"
+/* registers a Scintilla image from a named icon from the theme */
+static gboolean register_named_icon(ScintillaObject *sci, guint id, const gchar *name)
+{
+	GError *error = NULL;
+	GdkPixbuf *pixbuf;
+	gint n_channels, rowstride, width, height;
+	gint size;
+
+	gtk_icon_size_lookup(GTK_ICON_SIZE_MENU, &size, NULL);
+	pixbuf = gtk_icon_theme_load_icon(gtk_icon_theme_get_default(), name, size, 0, &error);
+	if (! pixbuf)
+	{
+		g_warning("failed to load icon '%s': %s", name, error->message);
+		g_error_free(error);
+		return FALSE;
+	}
+
+	n_channels = gdk_pixbuf_get_n_channels(pixbuf);
+	rowstride = gdk_pixbuf_get_rowstride(pixbuf);
+	width = gdk_pixbuf_get_width(pixbuf);
+	height = gdk_pixbuf_get_height(pixbuf);
+
+	if (gdk_pixbuf_get_bits_per_sample(pixbuf) != 8 ||
+		! gdk_pixbuf_get_has_alpha(pixbuf) ||
+		n_channels != 4 ||
+		rowstride != width * n_channels)
+	{
+		g_warning("incompatible image data for icon '%s'", name);
+		g_object_unref(pixbuf);
+		return FALSE;
+	}
+
+	SSM(sci, SCI_RGBAIMAGESETWIDTH, width, 0);
+	SSM(sci, SCI_RGBAIMAGESETHEIGHT, height, 0);
+	SSM(sci, SCI_REGISTERRGBAIMAGE, id, (sptr_t)gdk_pixbuf_get_pixels(pixbuf));
+
+	g_object_unref(pixbuf);
+	return TRUE;
+}
+
 
 /* Create new editor widget (scintilla).
  * @note The @c "sci-notify" signal is connected separately. */
@@ -4711,8 +4761,8 @@ static ScintillaObject *create_new_sci(GeanyEditor *editor)
 	SSM(sci, SCI_SETSCROLLWIDTHTRACKING, 1, 0);
 
 	/* tag autocompletion images */
-	SSM(sci, SCI_REGISTERIMAGE, 1, (sptr_t)classviewer_var);
-	SSM(sci, SCI_REGISTERIMAGE, 2, (sptr_t)classviewer_method);
+	register_named_icon(sci, 1, "classviewer-var");
+	register_named_icon(sci, 2, "classviewer-method");
 
 	/* necessary for column mode editing, implemented in Scintilla since 2.0 */
 	SSM(sci, SCI_SETADDITIONALSELECTIONTYPING, 1, 0);
@@ -4727,7 +4777,11 @@ static ScintillaObject *create_new_sci(GeanyEditor *editor)
 		g_signal_connect(sci, "scroll-event", G_CALLBACK(on_editor_scroll_event), editor);
 		g_signal_connect(sci, "motion-notify-event", G_CALLBACK(on_motion_event), NULL);
 		g_signal_connect(sci, "focus-in-event", G_CALLBACK(on_editor_focus_in), editor);
+#if GTK_CHECK_VERSION(3, 0, 0)
+		g_signal_connect(sci, "draw", G_CALLBACK(on_editor_draw), editor);
+#else
 		g_signal_connect(sci, "expose-event", G_CALLBACK(on_editor_expose_event), editor);
+#endif
 	}
 	return sci;
 }

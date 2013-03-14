@@ -590,18 +590,24 @@ void sci_get_text(ScintillaObject *sci, gint len, gchar *text)
 }
 
 
-/** Gets all text inside a given text length.
+/** Allocates and fills a buffer with text from the start of the document.
  * @param sci Scintilla widget.
- * @param len Length of the text to retrieve from the start of the document,
- *            usually sci_get_length() + 1.
+ * @param buffer_len Buffer length to allocate, including the terminating
+ * null char, e.g. sci_get_length() + 1. Alternatively use @c -1 to get all
+ * text (since Geany 1.23).
  * @return A copy of the text. Should be freed when no longer needed.
  *
- * @since 0.17
+ * @since 1.23 (0.17)
  */
-gchar *sci_get_contents(ScintillaObject *sci, gint len)
+gchar *sci_get_contents(ScintillaObject *sci, gint buffer_len)
 {
-	gchar *text = g_malloc(len);
-	SSM(sci, SCI_GETTEXT, (uptr_t) len, (sptr_t) text);
+	gchar *text;
+
+	if (buffer_len < 0)
+		buffer_len = sci_get_length(sci) + 1;
+
+	text = g_malloc(buffer_len);
+	SSM(sci, SCI_GETTEXT, (uptr_t) buffer_len, (sptr_t) text);
 	return text;
 }
 
@@ -927,10 +933,9 @@ void sci_get_text_range(ScintillaObject *sci, gint start, gint end, gchar *text)
 
 
 /** Gets text between @a start and @a end.
- *
  * @param sci Scintilla widget.
- * @param start Start.
- * @param end End.
+ * @param start Start position.
+ * @param end End position.
  * @return The text inside the given range. Should be freed when no longer needed.
  *
  * @since 0.17

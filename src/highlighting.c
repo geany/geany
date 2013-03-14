@@ -1039,6 +1039,7 @@ void highlighting_init_styles(guint filetype_idx, GKeyFile *config, GKeyFile *co
 
 	switch (lexer_id)
 	{
+		init_styleset_case(ABAQUS);
 		init_styleset_case(ADA);
 		init_styleset_case(ASM);
 		init_styleset_case(BASIC);
@@ -1118,6 +1119,7 @@ void highlighting_set_styles(ScintillaObject *sci, GeanyFiletype *ft)
 
 	switch (lexer_id)
 	{
+		styleset_case(ABAQUS);
 		styleset_case(ADA);
 		styleset_case(ASM);
 		styleset_case(BASIC);
@@ -1469,6 +1471,14 @@ gboolean highlighting_is_string_style(gint lexer, gint style)
 				style == SCE_PL_XLAT
 				/* we don't include any STRING_*_VAR for autocompletion */);
 
+		case SCLEX_PO:
+			return (style == SCE_PO_MSGCTXT_TEXT ||
+				style == SCE_PO_MSGCTXT_TEXT_EOL ||
+				style == SCE_PO_MSGID_TEXT ||
+				style == SCE_PO_MSGID_TEXT_EOL ||
+				style == SCE_PO_MSGSTR_TEXT ||
+				style == SCE_PO_MSGSTR_TEXT_EOL);
+
 		case SCLEX_R:
 			return (style == SCE_R_STRING);
 
@@ -1555,6 +1565,9 @@ gboolean highlighting_is_string_style(gint lexer, gint style)
 				style == SCE_ADA_STRING ||
 				style == SCE_ADA_CHARACTEREOL ||
 				style == SCE_ADA_STRINGEOL);
+
+		case SCLEX_ABAQUS:
+			return (style == SCE_ABAQUS_STRING);
 	}
 	return FALSE;
 }
@@ -1610,7 +1623,8 @@ gboolean highlighting_is_comment_style(gint lexer, gint style)
 			return (style == SCE_PROPS_COMMENT);
 
 		case SCLEX_PO:
-			return (style == SCE_PO_COMMENT);
+			return (style == SCE_PO_COMMENT ||
+				style == SCE_PO_PROGRAMMER_COMMENT);
 
 		case SCLEX_LATEX:
 			return (style == SCE_L_COMMENT ||
@@ -1690,6 +1704,10 @@ gboolean highlighting_is_comment_style(gint lexer, gint style)
 		case SCLEX_ADA:
 			return (style == SCE_ADA_COMMENTLINE ||
 				style == SCE_NSIS_COMMENTBOX);
+
+		case SCLEX_ABAQUS:
+			return (style == SCE_ABAQUS_COMMENT ||
+				 style == SCE_ABAQUS_COMMENTBLOCK);
 
 		case SCLEX_ASM:
 			return (style == SCE_ASM_COMMENT ||

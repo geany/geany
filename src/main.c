@@ -90,7 +90,6 @@ gboolean	ignore_callback;	/* hack workaround for GTK+ toggle button callback pro
 
 GeanyStatus	 main_status;
 CommandLineOptions cl_options;	/* fields initialised in parse_command_line_options */
-gboolean main_use_geany_icon;
 
 
 static const gchar geany_lib_versions[] = "GTK %u.%u.%u, GLib %u.%u.%u";
@@ -228,7 +227,18 @@ static void apply_settings(void)
 
 static void main_init(void)
 {
+	/* add our icon path in case we aren't installed in the system prefix */
+#ifndef G_OS_WIN32
+	gchar *path = g_build_filename(GEANY_DATADIR, "icons", NULL);
+	gtk_icon_theme_append_search_path(gtk_icon_theme_get_default(), path);
+	g_free(path);
+#else
+	gtk_icon_theme_append_search_path(gtk_icon_theme_get_default(), "share\\icons");
+#endif
+
 	/* inits */
+	ui_init_stock_items();
+
 	ui_init_builder();
 
 	main_widgets.window				= NULL;
@@ -245,8 +255,6 @@ static void main_init(void)
 	ui_prefs.recent_queue				= g_queue_new();
 	ui_prefs.recent_projects_queue		= g_queue_new();
 	main_status.opening_session_files	= FALSE;
-
-	ui_init_stock_items();
 
 	main_widgets.window = create_window1();
 
@@ -368,6 +376,18 @@ static void get_line_and_column_from_filename(gchar *filename, gint *line, gint 
 }
 
 
+#ifdef G_OS_WIN32
+static void change_working_directory_on_windows(const gchar *install_dir)
+{
+	/* On Windows, change the working directory to the Geany installation path to not lock
+	 * the directory of a file passed as command line argument (see bug #2626124).
+	 * This also helps if plugins or other code uses relative paths to load
+	 * any additional resources (e.g. share/geany-plugins/...). */
+	win32_set_working_directory(install_dir);
+}
+#endif
+
+
 static void setup_paths(void)
 {
 	gchar *data_dir;
@@ -381,6 +401,8 @@ static void setup_paths(void)
 
 	data_dir = g_build_filename(install_dir, "data", NULL); /* e.g. C:\Program Files\geany\data */
 	doc_dir = g_build_filename(install_dir, "doc", NULL);
+
+	change_working_directory_on_windows(install_dir);
 
 	g_free(install_dir);
 #else
@@ -1058,26 +1080,6 @@ gint main(gint argc, gchar **argv)
 	symbols_init();
 	editor_snippets_init();
 
-	/* set window icon */
-	{
-		GdkPixbuf *pb;
-        if (main_use_geany_icon)
-        {
-            pb = ui_new_pixbuf_from_inline(GEANY_IMAGE_LOGO);
-        }
-        else
-        {
-            pb = gtk_icon_theme_load_icon(gtk_icon_theme_get_default(), "geany", 48, 0, NULL);
-            if (pb == NULL)
-            {
-                g_warning("Unable to find Geany icon in theme, using embedded icon");
-                pb = ui_new_pixbuf_from_inline(GEANY_IMAGE_LOGO);
-            }
-        }
-		gtk_window_set_icon(GTK_WINDOW(main_widgets.window), pb);
-		g_object_unref(pb);	/* free our reference */
-	}
-
 	/* registering some basic events */
 	g_signal_connect(main_widgets.window, "delete-event", G_CALLBACK(on_exit_clicked), NULL);
 	g_signal_connect(main_widgets.window, "window-state-event", G_CALLBACK(on_window_state_event), NULL);
@@ -1152,17 +1154,6 @@ gint main(gint argc, gchar **argv)
 		socket_info.read_ioc = g_io_channel_unix_new(socket_info.lock_socket);
 		socket_info.lock_socket_tag = g_io_add_watch(socket_info.read_ioc,
 						G_IO_IN | G_IO_PRI | G_IO_ERR, socket_lock_input_cb, main_widgets.window);
-	}
-#endif
-
-#ifdef G_OS_WIN32
-	{
-		gchar *dir;
-		/* On Windows, change the working directory to the Geany installation path to not lock
-		 * the directory of a file passed as command line argument (see bug #2626124). */
-		dir = win32_get_installation_dir();
-		win32_set_working_directory(dir);
-		g_free(dir);
 	}
 #endif
 

@@ -3,13 +3,20 @@
 # Edit these in the colorscheme .conf file instead
 default=default
 comment=comment
+programmer_comment=comment_doc
+reference=comment
+flags=comment
+fuzzy=comment_doc_keyword
 msgid=keyword_1
 msgid_text=string_1
+msgid_text_eol=string_eol
 msgstr=keyword_2
 msgstr_text=string_1
+msgstr_text_eol=string_eol
 msgctxt=keyword_3
 msgctxt_text=string_1
-fuzzy=comment_doc_keyword
+msgctxt_text_eol=string_eol
+error=error
 
 [settings]
 # default extension used when saving files

@@ -11,8 +11,10 @@ EXTRA_DIST = \
 noinst_LIBRARIES = libctags.a
 
 parsers = \
+	abaqus.c \
 	abc.c \
 	actionscript.c \
+	asciidoc.c \
 	asm.c \
 	basic.c \
 	c.c \

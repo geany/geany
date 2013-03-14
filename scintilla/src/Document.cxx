@@ -69,6 +69,7 @@ void LexInterface::Colourise(int start, int end) {
 
 Document::Document() {
 	refCount = 0;
+	pcf = NULL;
 #ifdef _WIN32
 	eolMode = SC_EOL_CRLF;
 #else
@@ -123,12 +124,24 @@ Document::~Document() {
 	regex = 0;
 	delete pli;
 	pli = 0;
+	delete pcf;
+	pcf = 0;
 }
 
 void Document::Init() {
 	for (int j=0; j<ldSize; j++) {
 		if (perLineData[j])
 			perLineData[j]->Init();
+	}
+}
+
+bool Document::SetDBCSCodePage(int dbcsCodePage_) {
+	if (dbcsCodePage != dbcsCodePage_) {
+		dbcsCodePage = dbcsCodePage_;
+		SetCaseFolder(NULL);
+		return true;
+	} else {
+		return false;
 	}
 }
 
@@ -1419,6 +1432,15 @@ bool Document::MatchesWordOptions(bool word, bool wordStart, int pos, int length
 			(wordStart && IsWordStartAt(pos));
 }
 
+bool Document::HasCaseFolder(void) const {
+	return pcf != 0;
+}
+
+void Document::SetCaseFolder(CaseFolder *pcf_) {
+	delete pcf;
+	pcf = pcf_;
+}
+
 /**
  * Find text in document, supporting both forward and backward
  * searches (just pass minPos > maxPos to do a backward search)
@@ -1426,7 +1448,7 @@ bool Document::MatchesWordOptions(bool word, bool wordStart, int pos, int length
  */
 long Document::FindText(int minPos, int maxPos, const char *search,
                         bool caseSensitive, bool word, bool wordStart, bool regExp, int flags,
-                        int *length, CaseFolder *pcf) {
+                        int *length) {
 	if (*length <= 0)
 		return minPos;
 	if (regExp) {
