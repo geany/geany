@@ -122,7 +122,7 @@ $(LEXER_SRCS)
 
 libscintilla_a_SOURCES = $(SRCS)
 
-INCLUDES=-I$(top_srcdir) -I$(srcdir)/include -I$(srcdir)/src -I$(srcdir)/lexlib @GTK_CFLAGS@
+AM_CPPFLAGS = -I$(top_srcdir) -I$(srcdir)/include -I$(srcdir)/src -I$(srcdir)/lexlib @GTK_CFLAGS@
 
 marshallers: gtk/scintilla-marshal.list
 	glib-genmarshal --prefix scintilla_marshal gtk/scintilla-marshal.list --header > gtk/scintilla-marshal.h

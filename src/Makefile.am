@@ -76,7 +76,7 @@ geany_include_HEADERS = \
 	utils.h
 
 
-INCLUDES = \
+AM_CPPFLAGS = \
 	-I$(top_srcdir) \
 	-I$(top_srcdir)/scintilla/include \
 	-I$(top_srcdir)/tagmanager/src \
