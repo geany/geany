@@ -1186,11 +1186,14 @@ on_find_entry_activate_backward(GtkEntry *entry, gpointer user_data)
 }
 
 
-#define int_search_flags(match_case, whole_word, regexp, word_start) \
-	((match_case ? SCFIND_MATCHCASE : 0) | \
-	(whole_word ? SCFIND_WHOLEWORD : 0) | \
-	(regexp ? SCFIND_REGEXP | SCFIND_POSIX : 0) | \
-	(word_start ? SCFIND_WORDSTART : 0))
+static gboolean int_search_flags(gint match_case, gint whole_word, gint regexp, gint word_start)
+{
+	return (match_case ? SCFIND_MATCHCASE : 0) |
+		(regexp ? SCFIND_REGEXP | SCFIND_POSIX : 0) |
+		(whole_word ? SCFIND_WHOLEWORD : 0) |
+		/* SCFIND_WORDSTART overrides SCFIND_WHOLEWORD, but we want the opposite */
+		(word_start && !whole_word ? SCFIND_WORDSTART : 0);
+}
 
 
 static void
