@@ -2180,10 +2180,7 @@ static void init_custom_style(void)
 	g_object_unref(css);
 	g_free(css_file);
 #else
-	gchar *gtkrc_file = g_build_filename(app->datadir, "geany.gtkrc", NULL);
-
-	gtk_rc_parse(gtkrc_file);
-	g_free(gtkrc_file);
+	/* see setup_gtk2_styles() in main.c */
 #endif
 }
 

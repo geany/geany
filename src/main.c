@@ -969,6 +969,52 @@ static const gchar *get_locale(void)
 }
 
 
+#if ! GTK_CHECK_VERSION(3, 0, 0)
+/* This prepends our own gtkrc file to the list of RC files to be loaded by GTK at startup.
+ * This function *has* to be called before gtk_init().
+ *
+ * We have a custom RC file defining various styles we need, and we want the user to be
+ * able to override them (e.g. if they want -- or need -- other colors).  Fair enough, one
+ * would simply call gtk_rc_parse() with the appropriate filename.  However, the styling
+ * rules applies in the order they are loaded, then if we load our styles after GTK has
+ * loaded the user's ones we'd override them.
+ *
+ * There are 2 solutions to fix this:
+ * 1) set our styles' priority to something with lower than "user" (actually "theme"
+ *    priority because rules precedence are first calculated depending on the priority
+ *    no matter of how precise the rules is, so we need to override the theme).
+ * 2) prepend our custom style to GTK's list while keeping priority to user (which is the
+ *    default), so it gets loaded before real user's ones and so gets overridden by them.
+ *
+ * One would normally go for 1 because it's ways simpler and requires less code: you just
+ * have to add the priorities to your styles, which is a matter of adding a few ":theme" in
+ * the RC file.  However, KDE being a bitch it doesn't set the gtk-theme-name but rather
+ * directly includes the style to use in a user gtkrc file, which makes the theme have
+ * "user" priority, hence overriding our styles.  So, we cannot set priorities in the RC
+ * file if we want to support running under KDE, which pretty much leave us with no choice
+ * but to go with solution 2, which unfortunately requires writing ugly code since GTK
+ * don't have a gtk_rc_prepend_default_file() function.  Thank you very much KDE.
+ *
+ * Though, as a side benefit it also makes the code work with people using gtk-chtheme,
+ * which also found it funny to include the theme in the user RC file. */
+static void setup_gtk2_styles(void)
+{
+	gchar **gtk_files = gtk_rc_get_default_files();
+	gchar **new_files = g_malloc(sizeof *new_files * (g_strv_length(gtk_files) + 2));
+	guint i = 0;
+
+	new_files[i++] = g_build_filename(app->datadir, "geany.gtkrc", NULL);
+	for (; *gtk_files; gtk_files++)
+		new_files[i++] = g_strdup(*gtk_files);
+	new_files[i] = NULL;
+
+	gtk_rc_set_default_files(new_files);
+
+	g_strfreev(new_files);
+}
+#endif
+
+
 gint main(gint argc, gchar **argv)
 {
 	GeanyDocument *doc;
@@ -990,6 +1036,9 @@ gint main(gint argc, gchar **argv)
 	memset(&ui_widgets, 0, sizeof(UIWidgets));
 
 	setup_paths();
+#if ! GTK_CHECK_VERSION(3, 0, 0)
+	setup_gtk2_styles();
+#endif
 #ifdef ENABLE_NLS
 	main_locale_init(GEANY_LOCALEDIR, GETTEXT_PACKAGE);
 #endif
