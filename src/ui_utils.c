@@ -2158,18 +2158,9 @@ void ui_init_builder(void)
 }
 
 
-static void init_custom_style(void)
-{
-	gchar *gtkrc_file = g_build_filename(app->datadir, "geany.gtkrc", NULL);
-
-	gtk_rc_parse(gtkrc_file);
-	g_free(gtkrc_file);
-}
-
-
 void ui_init(void)
 {
-	init_custom_style();
+	/* custom styles are initialized in setup_gtk2_styles() in main.c */
 
 	init_recent_files();
 
