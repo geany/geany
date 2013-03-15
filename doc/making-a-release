@@ -32,10 +32,10 @@ Windows builds (enrico?).
 
 Create a signed tag for the release in Git with 'git tag -s <version>'.
 
-Website: update Releases, Documentation links and add a News item.
-Update the manual data and links in the filesystem in
-/srv/www/www.geany.org/manual.  Remember to update current/hacking.html
-too.
+Website: update Releases, Documentation links, Release Notes, ChangeLog
+and add a News item.  Update the manual data and links in the filesystem
+in /srv/www/www.geany.org/manual.  Remember to update
+current/hacking.html too.
 
 Announce on geany, devel, i18n mailing lists (check you're subscribed).
 Put a news item on SourceForge (https://sourceforge.net/news/?group_id=153444)
