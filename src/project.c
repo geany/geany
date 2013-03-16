@@ -1244,6 +1244,7 @@ const GeanyFilePrefs *project_get_file_prefs(void)
 	COPY_PREF(fp, final_new_line);
 	COPY_PREF(fp, ensure_convert_new_lines);
 	COPY_PREF(fp, strip_trailing_spaces);
+	COPY_PREF(fp, strip_preserve_empty);
 	COPY_PREF(fp, replace_tabs);
 	return &fp;
 }
