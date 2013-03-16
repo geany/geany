@@ -228,13 +228,16 @@ static void apply_settings(void)
 static void main_init(void)
 {
 	/* add our icon path in case we aren't installed in the system prefix */
-#ifndef G_OS_WIN32
-	gchar *path = g_build_filename(GEANY_DATADIR, "icons", NULL);
+	gchar *path;
+#ifdef G_OS_WIN32
+	gchar *install_dir = win32_get_installation_dir();
+	path = g_build_filename(install_dir, "share", "icons", NULL);
+	g_free(install_dir);
+#else
+	path = g_build_filename(GEANY_DATADIR, "icons", NULL);
+#endif
 	gtk_icon_theme_append_search_path(gtk_icon_theme_get_default(), path);
 	g_free(path);
-#else
-	gtk_icon_theme_append_search_path(gtk_icon_theme_get_default(), "share\\icons");
-#endif
 
 	/* inits */
 	ui_init_stock_items();
