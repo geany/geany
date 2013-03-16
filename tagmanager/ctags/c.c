@@ -1678,9 +1678,12 @@ static keywordId analyzeKeyword (const char *const name)
 {
 	const keywordId id = (keywordId) lookupKeyword (name, getSourceLanguage ());
 
-	/* ignore D @attributes, but show them in function signatures */
-	if (isLanguage(Lang_d) && id == KEYWORD_NONE && name[0] == '@')
+	/* ignore D @attributes and Java @annotations(...), but show them in function signatures */
+	if ((isLanguage(Lang_d) || isLanguage(Lang_java)) && id == KEYWORD_NONE && name[0] == '@')
+	{
+		skipParens(); /* if annotation has parameters, skip them */
 		return KEYWORD_CONST;
+	}
 	return id;
 }
 
