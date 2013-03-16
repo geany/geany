@@ -4417,11 +4417,11 @@ void editor_strip_line_trailing_spaces(GeanyEditor *editor, gint line)
 		i--;
 		ch = sci_get_char_at(editor->sci, i);
 	}
-	
+
 	/* Don't modify empty lines if pref is set */
 	if (fp->strip_preserve_empty && i < line_start)
 		return;
-	
+
 	if (i < (line_end - 1))
 	{
 		sci_set_target_start(editor->sci, i + 1);

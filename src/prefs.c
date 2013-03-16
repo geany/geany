@@ -576,6 +576,9 @@ static void prefs_init_dialog(void)
 	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_trailing_spaces");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), file_prefs.strip_trailing_spaces);
 
+	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_preserve_empty");
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), file_prefs.strip_preserve_empty);
+
 	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_new_line");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), file_prefs.final_new_line);
 
@@ -1038,6 +1041,9 @@ on_prefs_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_trailing_spaces");
 		file_prefs.strip_trailing_spaces = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_preserve_empty");
+		file_prefs.strip_preserve_empty = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_new_line");
 		file_prefs.final_new_line = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));

@@ -4552,6 +4552,23 @@
                               </packing>
                             </child>
                             <child>
+                              <object class="GtkCheckButton" id="check_preserve_empty">
+                                <property name="label" translatable="yes">Preserve whitespace in empty lines</property>
+                                <property name="use_action_appearance">False</property>
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="receives_default">False</property>
+                                <property name="tooltip_text" translatable="yes">Prevents whitespace-only lines from being stripped.</property>
+                                <property name="use_underline">True</property>
+                                <property name="draw_indicator">True</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">False</property>
+                                <property name="position">3</property>
+                              </packing>
+                            </child>
+                            <child>
                               <object class="GtkCheckButton" id="check_replace_tabs">
                                 <property name="label" translatable="yes">Replace tabs by space</property>
                                 <property name="use_action_appearance">False</property>
@@ -4565,7 +4582,7 @@
                               <packing>
                                 <property name="expand">False</property>
                                 <property name="fill">False</property>
-                                <property name="position">3</property>
+                                <property name="position">4</property>
                               </packing>
                             </child>
                           </object>
@@ -7184,6 +7201,22 @@
                               </packing>
                             </child>
                             <child>
+                              <object class="GtkCheckButton" id="check_preserve_empty1">
+                                <property name="label" translatable="yes">Preserve whitespace in empty lines.</property>
+                                <property name="use_action_appearance">False</property>
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="receives_default">False</property>
+                                <property name="use_underline">True</property>
+                                <property name="draw_indicator">True</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">False</property>
+                                <property name="position">3</property>
+                              </packing>
+                            </child>
+                            <child>
                               <object class="GtkCheckButton" id="check_replace_tabs1">
                                 <property name="label" translatable="yes">Replace tabs by space</property>
                                 <property name="use_action_appearance">False</property>
@@ -7196,7 +7229,7 @@
                               <packing>
                                 <property name="expand">False</property>
                                 <property name="fill">False</property>
-                                <property name="position">3</property>
+                                <property name="position">4</property>
                               </packing>
                             </child>
                           </object>
@@ -9556,6 +9589,15 @@
                             <property name="label" translatable="yes">_Strip Trailing Spaces</property>
                             <property name="use_underline">True</property>
                             <signal name="activate" handler="on_strip_trailing_spaces1_activate" swapped="no"/>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkMenuItem" id="strip_preserve_empty1">
+                            <property name="use_action_appearance">False</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="label" translatable="yes">_Preserve Empty Lines</property>
+                            <property name="use_underline">True</property>
                           </object>
                         </child>
                         <child>

@@ -1220,9 +1220,12 @@ static void init_stash_prefs(void)
 		"ensure_convert_new_lines", file_prefs.ensure_convert_new_lines, "check_ensure_convert_new_lines1");
 	stash_group_add_toggle_button(group, &priv.strip_trailing_spaces,
 		"strip_trailing_spaces", file_prefs.strip_trailing_spaces, "check_trailing_spaces1");
+	stash_group_add_toggle_button(group, &priv.strip_preserve_empty,
+		"strip_preserve_empty", file_prefs.strip_preserve_empty, "check_preserve_empty1");
 	stash_group_add_toggle_button(group, &priv.replace_tabs,
 		"replace_tabs", file_prefs.replace_tabs, "check_replace_tabs1");
 	add_stash_group(group);
+
 	/* apply defaults */
 	kf = g_key_file_new();
 	stash_group_load_from_key_file(group, kf);
