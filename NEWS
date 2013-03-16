@@ -1,5 +1,11 @@
 Geany 1.24 (unreleased)
 
+    General
+    * Add experimental support for GTK3.
+
+    Interface
+    * Fix custom GTK styles under KDE (#3607935).
+
 
 Geany 1.23 (March 10, 2013)
 
