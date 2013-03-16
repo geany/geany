@@ -283,6 +283,14 @@ void search_finalize(void)
 }
 
 
+static void on_widget_toggled_set_insensitive(
+	GtkToggleButton *togglebutton, gpointer user_data)
+{
+	gtk_widget_set_sensitive(GTK_WIDGET(user_data),
+		!gtk_toggle_button_get_active(togglebutton));
+}
+
+
 static GtkWidget *add_find_checkboxes(GtkDialog *dialog)
 {
 	GtkWidget *checkbox1, *checkbox2, *check_regexp, *check_back, *checkbox5,
@@ -335,6 +343,10 @@ static GtkWidget *add_find_checkboxes(GtkDialog *dialog)
 	checkbox5 = gtk_check_button_new_with_mnemonic(_("Match from s_tart of word"));
 	ui_hookup_widget(dialog, checkbox5, "check_wordstart");
 	gtk_button_set_focus_on_click(GTK_BUTTON(checkbox5), FALSE);
+
+	/* disable wordstart when wholeword is checked */
+	g_signal_connect(checkbox2, "toggled",
+		G_CALLBACK(on_widget_toggled_set_insensitive), checkbox5);
 
 	/* Matching options */
 	mbox = gtk_vbox_new(FALSE, 0);
