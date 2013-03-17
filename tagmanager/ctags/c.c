@@ -1681,7 +1681,7 @@ static keywordId analyzeKeyword (const char *const name)
 	/* ignore D @attributes and Java @annotations(...), but show them in function signatures */
 	if ((isLanguage(Lang_d) || isLanguage(Lang_java)) && id == KEYWORD_NONE && name[0] == '@')
 	{
-		skipParens(); //If annotation has parameters, skip them
+		skipParens(); /*If annotation has parameters, skip them*/
 		return KEYWORD_CONST;
 	}
 	return id;
