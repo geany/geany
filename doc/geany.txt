@@ -1269,8 +1269,8 @@ Value   *find_selection_type* behaviour
 Find usage
 ^^^^^^^^^^
 
-Find usage searches all open files. It is similar to the Find All In
-Session option in the Find dialog.
+*Find Usage* searches all open files. It is similar to the *Find All In
+Session* option in the Find dialog.
 
 If there is a selection, then it is used as the search text; otherwise
 the current word is used. The current word is either taken from the
@@ -1278,11 +1278,15 @@ word nearest the edit cursor, or the word underneath the popup menu
 click position when the popup menu is used. The search results are
 shown in the Messages tab of the Message Window.
 
+.. note::
+    You can also use Find Usage for symbol list items from the popup
+    menu.
+
 
 Find in files
 ^^^^^^^^^^^^^
 
-Find in files is a more powerful version of Find usage that searches
+*Find in Files* is a more powerful version of *Find Usage* that searches
 all files in a certain directory using the Grep tool. The Grep tool
 must be correctly set in Preferences to the path of the system's Grep
 utility. GNU Grep is recommended (see note below).
