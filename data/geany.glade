@@ -712,7 +712,6 @@
     <property name="modal">True</property>
     <property name="type_hint">dialog</property>
     <property name="skip_pager_hint">True</property>
-    <property name="has_separator">True</property>
     <property name="icon_name">geany</property>
     <child internal-child="vbox">
       <object class="GtkVBox" id="dialog-vbox3">
@@ -6423,7 +6422,6 @@
     <property name="destroy_with_parent">True</property>
     <property name="type_hint">dialog</property>
     <property name="transient_for">window1</property>
-    <property name="has_separator">True</property>
     <property name="icon_name">geany</property>
     <child internal-child="vbox">
       <object class="GtkVBox" id="project_dialog_vbox">
