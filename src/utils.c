@@ -2126,8 +2126,11 @@ gchar *utils_parse_and_format_build_date(const gchar *input)
 	GDate *date = utils_parse_date(input);
 
 	if (date != NULL)
+	{
 		g_date_strftime(date_buf, sizeof(date_buf), GEANY_TEMPLATES_FORMAT_DATE, date);
+		g_date_free(date);
 		return g_strdup(date_buf);
+	}
 
 	return g_strdup(input);
 }
