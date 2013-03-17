@@ -23,6 +23,61 @@
 #define TAG_FREE(T)	g_slice_free(TMTag, (T))
 
 
+#ifdef DEBUG_TAG_REFS
+
+static GHashTable *alive_tags = NULL;
+
+static void foreach_tags_log(gpointer key, gpointer value, gpointer data)
+{
+	gsize *ref_count = data;
+	const TMTag *tag = value;
+
+	*ref_count += (gsize) tag->refcount;
+	g_debug("Leaked TMTag (%d refs): %s", tag->refcount, tag->name);
+}
+
+static void log_refs_at_exit(void)
+{
+	gsize ref_count = 0;
+
+	g_hash_table_foreach(alive_tags, foreach_tags_log, &ref_count);
+	g_debug("TMTag references left at exit: %lu", ref_count);
+}
+
+static TMTag *log_tag_new(void)
+{
+	TMTag *tag;
+
+	if (! alive_tags)
+	{
+		alive_tags = g_hash_table_new(g_direct_hash, g_direct_equal);
+		atexit(log_refs_at_exit);
+	}
+	TAG_NEW(tag);
+	g_hash_table_insert(alive_tags, tag, tag);
+
+	return tag;
+}
+
+static void log_tag_free(TMTag *tag)
+{
+	g_return_if_fail(alive_tags != NULL);
+
+	if (! g_hash_table_remove(alive_tags, tag)) {
+		g_critical("Freeing invalid TMTag pointer %p", (void *) tag);
+	} else {
+		TAG_FREE(tag);
+	}
+}
+
+#undef TAG_NEW
+#undef TAG_FREE
+#define TAG_NEW(T)	((T) = log_tag_new())
+#define TAG_FREE(T)	log_tag_free(T)
+
+#endif /* DEBUG_TAG_REFS */
+
+
 /* Note: To preserve binary compatibility, it is very important
 	that you only *append* to this list ! */
 enum
