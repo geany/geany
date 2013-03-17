@@ -52,6 +52,7 @@
 #include "win32.h"
 #include "project.h"
 #include "ui_utils.h"
+#include "templates.h"
 
 #include "utils.h"
 
@@ -2099,4 +2100,34 @@ gchar **utils_strv_join(gchar **first, gchar **second)
 	g_free(first);
 	g_free(second);
 	return strv;
+}
+
+
+/* Try to parse a date using g_date_set_parse(). It doesn't take any format hint,
+ * obviously g_date_set_parse() uses some magic.
+ * The returned GDate object must be freed. */
+GDate *utils_parse_date(const gchar *input)
+{
+	GDate *date = g_date_new();
+
+	g_date_set_parse(date, input);
+
+	if (g_date_valid(date))
+		return date;
+
+	g_date_free(date);
+	return NULL;
+}
+
+
+gchar *utils_parse_and_format_build_date(const gchar *input)
+{
+	gchar date_buf[255];
+	GDate *date = utils_parse_date(input);
+
+	if (date != NULL)
+		g_date_strftime(date_buf, sizeof(date_buf), GEANY_TEMPLATES_FORMAT_DATE, date);
+		return g_strdup(date_buf);
+
+	return g_strdup(input);
 }
