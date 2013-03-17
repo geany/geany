@@ -1525,6 +1525,7 @@ static void update_tree_tags(GeanyDocument *doc, GList **tags)
 							delta = d;
 							parent_search = node->data;
 						}
+						tm_tag_unref(parent_tag);
 					}
 				}
 
@@ -2300,7 +2301,7 @@ static void on_find_usage(GtkWidget *widget, gboolean in_session)
 	GtkTreeSelection *selection;
 	GtkTreeModel *model;
 	GeanyDocument *doc;
-	const TMTag *tag = NULL;
+	TMTag *tag = NULL;
 
 	doc = document_get_current();
 	if (!doc)
@@ -2310,7 +2311,10 @@ static void on_find_usage(GtkWidget *widget, gboolean in_session)
 	if (gtk_tree_selection_get_selected(selection, &model, &iter))
 		gtk_tree_model_get(model, &iter, SYMBOLS_COLUMN_TAG, &tag, -1);
 	if (tag)
+	{
 		search_find_usage(tag->name, tag->name, SCFIND_WHOLEWORD | SCFIND_MATCHCASE, in_session);
+		tm_tag_unref(tag);
+	}
 }
 
 

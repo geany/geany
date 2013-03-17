@@ -605,6 +605,9 @@ static gboolean remove_page(guint page_num)
 	g_free(doc->real_path);
 	tm_workspace_remove_object(doc->tm_file, TRUE, TRUE);
 
+	if (doc->priv->tag_tree)
+		gtk_widget_destroy(doc->priv->tag_tree);
+
 	editor_destroy(doc->editor);
 	doc->editor = NULL; /* needs to be NULL for document_undo_clear() call below */
 
