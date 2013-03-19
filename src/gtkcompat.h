@@ -72,14 +72,22 @@ G_BEGIN_DECLS
 
 /* GtkWidget */
 #if ! GTK_CHECK_VERSION(2, 18, 0)
-#	define compat_widget_set_flag(widget, flag, enable) \
-		((enable) ? GTK_WIDGET_SET_FLAGS((widget), (flag)) : GTK_WIDGET_UNSET_FLAGS((widget), (flag)))
+#  define compat_widget_set_flag(widget, flag, enable) \
+    do { \
+        GtkWidget *set_flag__widget = (widget); \
+        GtkWidgetFlags set_flag__flag = (flag); \
+        if (enable) \
+            GTK_WIDGET_SET_FLAGS(set_flag__widget, set_flag__flag); \
+        else \
+            GTK_WIDGET_UNSET_FLAGS(set_flag__widget, set_flag__flag); \
+    } while (0)
 #	define gtk_widget_set_can_default(widget, can_default) \
 		compat_widget_set_flag((widget), GTK_CAN_DEFAULT, (can_default))
 #	define gtk_widget_is_toplevel(widget)		GTK_WIDGET_TOPLEVEL(widget)
 #	define gtk_widget_is_sensitive(widget)		GTK_WIDGET_IS_SENSITIVE(widget)
 #	define gtk_widget_has_focus(widget)			GTK_WIDGET_HAS_FOCUS(widget)
 #	define gtk_widget_get_sensitive(widget)		GTK_WIDGET_SENSITIVE(widget)
+#	define gtk_widget_get_visible(widget)		GTK_WIDGET_VISIBLE(widget)
 #	define gtk_widget_set_has_window(widget, has_window) \
 		compat_widget_set_flag((widget), GTK_NO_WINDOW, !(has_window))
 #	define gtk_widget_set_can_focus(widget, can_focus) \
