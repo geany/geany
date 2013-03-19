@@ -72,11 +72,15 @@ G_BEGIN_DECLS
 
 /* GtkWidget */
 #if ! GTK_CHECK_VERSION(2, 18, 0)
-#	define compat_widget_set_flag(widget, flag, enable) \
-		if ((enable)) \
-			GTK_WIDGET_SET_FLAGS((widget), (flag)); \
-		else \
-			GTK_WIDGET_UNSET_FLAGS((widget), (flag));
+#  define compat_widget_set_flag(widget, flag, enable) \
+    do { \
+        GtkWidget *set_flag__widget = (widget); \
+        GtkWidgetFlags set_flag__flag = (flag); \
+        if (enable) \
+            GTK_WIDGET_SET_FLAGS(set_flag__widget, set_flag__flag); \
+        else \
+            GTK_WIDGET_UNSET_FLAGS(set_flag__widget, set_flag__flag); \
+    } while (0)
 #	define gtk_widget_set_can_default(widget, can_default) \
 		compat_widget_set_flag((widget), GTK_CAN_DEFAULT, (can_default))
 #	define gtk_widget_is_toplevel(widget)		GTK_WIDGET_TOPLEVEL(widget)
