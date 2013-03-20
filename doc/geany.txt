@@ -143,6 +143,10 @@ Then as root::
 
     % make install
 
+Or via sudo::
+
+    % sudo make install
+
 Waf based build system
 ^^^^^^^^^^^^^^^^^^^^^^
 
