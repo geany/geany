@@ -3199,7 +3199,7 @@ void editor_do_comment_toggle(GeanyEditor *editor)
 void editor_do_comment(GeanyEditor *editor, gint line, gboolean allow_empty_lines, gboolean toggle,
 		gboolean single_comment)
 {
-	gint first_line, last_line, eol_char_len;
+	gint first_line, last_line, eol_char_len, lines_in_file;
 	gint x, i, line_start, line_len;
 	gint sel_start, sel_end, co_len;
 	gchar sel[256];
@@ -3227,6 +3227,7 @@ void editor_do_comment(GeanyEditor *editor, gint line, gboolean allow_empty_line
 	}
 
 	eol_char_len = editor_get_eol_char_len(editor);
+	lines_in_file = sci_get_line_count(editor->sci);
 
 	ft = editor_get_filetype_at_line(editor, first_line);
 
@@ -3247,7 +3248,7 @@ void editor_do_comment(GeanyEditor *editor, gint line, gboolean allow_empty_line
 		line_len = sci_get_line_length(editor->sci, i);
 		x = 0;
 
-		buf_len = MIN((gint)sizeof(sel) - 1, line_len - eol_char_len);
+		buf_len = MIN((gint)sizeof(sel) - 1, line_len - ( i < lines_in_file - 1 ? eol_char_len : 0));
 		if (buf_len < 0)
 			continue;
 		sci_get_text_range(editor->sci, line_start, line_start + buf_len, sel);
