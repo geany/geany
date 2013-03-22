@@ -1,0 +1,36 @@
+/* custom GTK3 CSS for Geany */
+
+/* make close button on the editor's tabs smaller */
+#geany-close-tab-button {
+	-GtkWidget-focus-padding: 0;
+	-GtkWidget-focus-line-width: 0;
+	-GtkButton-default-border: 0;
+	-GtkButton-default-outside-border: 0;
+	-GtkButton-inner-border: 0;
+	padding: 0;
+}
+
+/* use monospaced font in search entries for easier reading of regexp (#1907117) */
+#GeanyDialogSearch GtkEntry {
+	font-family: monospace;
+}
+
+/* set red background for GtkEntries showing unmatched searches */
+#geany-search-entry-no-match {
+	color: #fff;
+	background: #ff6666;
+}
+#geany-search-entry-no-match:selected {
+	background-color: #771111;
+}
+
+/* document status colors */
+#geany-document-status-changed {
+	color: #ff0000;
+}
+#geany-document-status-disk-changed {
+	color: #ff7f00;
+}
+#geany-document-status-readonly {
+	color: #007f00;
+}

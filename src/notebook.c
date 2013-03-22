@@ -38,6 +38,7 @@
 #include "utils.h"
 #include "keybindings.h"
 #include "main.h"
+#include "gtkcompat.h"
 
 #define GEANY_DND_NOTEBOOK_TAB_TYPE	"geany_dnd_notebook_tab"
 
@@ -376,11 +377,11 @@ static gboolean is_position_on_tab_bar(GtkNotebook *notebook, GdkEventButton *ev
 		case GTK_POS_TOP:
 		case GTK_POS_BOTTOM:
 		{
-			if (event->y >= 0 && event->y <= tab->allocation.height)
+			if (event->y >= 0 && event->y <= gtk_widget_get_allocated_height(tab))
 			{
 				if (! gtk_notebook_show_arrows(notebook) || (
 					x > scroll_arrow_hlength &&
-					x < nb->allocation.width - scroll_arrow_hlength))
+					x < gtk_widget_get_allocated_width(nb) - scroll_arrow_hlength))
 					return TRUE;
 			}
 			break;
@@ -388,11 +389,11 @@ static gboolean is_position_on_tab_bar(GtkNotebook *notebook, GdkEventButton *ev
 		case GTK_POS_LEFT:
 		case GTK_POS_RIGHT:
 		{
-			if (event->x >= 0 && event->x <= tab->allocation.width)
+			if (event->x >= 0 && event->x <= gtk_widget_get_allocated_width(tab))
 			{
 				if (! gtk_notebook_show_arrows(notebook) || (
 					y > scroll_arrow_vlength &&
-					y < nb->allocation.height - scroll_arrow_vlength))
+					y < gtk_widget_get_allocated_height(nb) - scroll_arrow_vlength))
 					return TRUE;
 			}
 		}
@@ -666,7 +667,7 @@ gint notebook_new_tab(GeanyDocument *this)
 	/* get button press events for the tab label and the space between it and
 	 * the close button, if any */
 	ebox = gtk_event_box_new();
-	GTK_WIDGET_SET_FLAGS(ebox, GTK_NO_WINDOW);
+	gtk_widget_set_has_window(ebox, FALSE);
 	g_signal_connect(ebox, "button-press-event", G_CALLBACK(notebook_tab_click), page);
 	/* focus the current document after clicking on a tab */
 	g_signal_connect_after(ebox, "button-release-event",

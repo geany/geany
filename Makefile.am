@@ -24,8 +24,13 @@ SYS_DATA_FILES = \
 	$(srcdir)/data/templates/* \
 	$(srcdir)/data/templates/files/* \
 	$(srcdir)/data/colorschemes/* \
-	$(top_srcdir)/data/geany.glade \
+	$(top_srcdir)/data/geany.glade
+
+if GTK3
+	$(top_srcdir)/data/geany.css
+else
 	$(top_srcdir)/data/geany.gtkrc
+endif
 
 EXTRA_DIST = \
 	autogen.sh \

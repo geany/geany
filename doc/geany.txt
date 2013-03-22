@@ -1,4 +1,4 @@
-.. |(version)| replace:: 1.23
+.. |(version)| replace:: 1.24
 
 =======
  Geany
@@ -13,7 +13,7 @@
           Frank Lanitz,
           Colomban Wendling,
           Matthew Brush
-:Date: 2012-06-18
+:Date: 2013-03-10
 :Version: |(version)|
 
 Copyright © 2005-2012
@@ -142,6 +142,10 @@ Then run the following commands::
 Then as root::
 
     % make install
+
+Or via sudo::
+
+    % sudo make install
 
 Waf based build system
 ^^^^^^^^^^^^^^^^^^^^^^
@@ -2347,7 +2351,8 @@ Tool paths
 
 Terminal
     The command to execute a script in a terminal.  Occurrences of %c
-    in the command are substituted with the run script name.
+    in the command are substituted with the run script name, see
+    `Terminal emulators`_.
 
 Browser
     The location of your web browser executable.
@@ -2841,15 +2846,14 @@ Execute
 ```````
 
 Execute will run the corresponding executable file, shell script or
-interpreted script in a terminal window. Note that the Terminal tool
-path must be correctly set in the Tools tab of the Preferences dialog -
-you can use any terminal program that runs a Bourne compatible shell
-and accept the "-e" command line argument to start a command or can be
-selected to use the built-in VTE if it is available - see
-`Virtual terminal emulator widget (VTE)`_.
+interpreted script in a terminal window. The command set in the
+"Set Build Commands" dialog is run in a script to ensure the terminal
+stays open after execution completes.  Note: see `Terminal emulators`_
+below for the command format.  Alternatively the built-in VTE can be used
+if it is available - see `Virtual terminal emulator widget (VTE)`_.
 
-After your program or script has finished executing, you will be
-prompted to press the return key. This allows you to review any text
+After your program or script has finished executing, the run script will
+prompt you to press the return key. This allows you to review any text
 output from the program before the terminal window is closed.
 
 .. note::
@@ -2872,11 +2876,16 @@ more than one child process.
 Terminal emulators
 ******************
 
-Xterm is known to work properly. If you are using "Terminal"
-(the terminal program of Xfce), you should add the command line
-option ``--disable-server`` otherwise the started process cannot be
-stopped. Just add this option in the preferences dialog on the Tools
-tab in the terminal field.
+The Terminal field of the tools preferences tab requires a command to
+execute the terminal program and to pass it the name of the Geany run
+script that it should execute in a Bourne compatible shell (eg /bin/sh).
+The marker "%c" is substituted with the name of the Geany run script,
+which is created in the working directory set in the Build commands
+dialog, see `Build menu commands dialog`_ for details.
+
+As an example the default (Linux) command is::
+
+    xterm -e "/bin/sh %c"
 
 
 Set build commands
@@ -2912,7 +2921,7 @@ behaviors:
   compiler tab and parse it for errors.
 * Execute commands - are configurable and intended for executing your
   program or other long running programs.  The output is not parsed for errors
-  and is directed to the terminal selected in preferences.
+  and is directed to the terminal command selected in preferences.
 * Fixed commands - these perform built-in actions:
 
   * Go to the next error.
@@ -4777,7 +4786,7 @@ geanyversion   The actual Geany version, e.g.                file templates, fil
 
 filename       The filename of the current file.             file header, snippets, file
                For new files, it's only replaced when        templates.
-               first saving if found on the first 3 lines
+               first saving if found on the first 4 lines
                of the file.
 
 project        The current project's name, if any.           file header, snippets, file templates.
@@ -5236,9 +5245,8 @@ GEANY_MIN_SYMBOLLIST_CHARS      How many characters you need to type to       4
 GEANY_DISK_CHECK_TIMEOUT        Time in seconds between checking a file for   30
                                 external changes.
 GEANY_DEFAULT_TOOLS_MAKE        The make tool. This can also include a path.  "make"
-GEANY_DEFAULT_TOOLS_TERMINAL    A terminal emulator. It has to accept the     "xterm"
-                                command line option "-e". This can also
-                                include a path.
+GEANY_DEFAULT_TOOLS_TERMINAL    A terminal emulator command, see              See below.
+                                `Terminal emulators`_.
 GEANY_DEFAULT_TOOLS_BROWSER     A web browser. This can also include a path.  "firefox"
 GEANY_DEFAULT_TOOLS_PRINTCMD    A printing tool. It should be able to accept  "lpr"
                                 and process plain text files. This can also
@@ -5259,6 +5267,15 @@ GEANY_DEFAULT_FILETYPE_REGEX    The default regex to extract filetypes from   Se
 ==============================  ============================================  ==================
 
 The GEANY_DEFAULT_FILETYPE_REGEX default value is  -\\*-\\s*([^\\s]+)\\s*-\\*- which finds Emacs filetypes.
+
+The GEANY_DEFAULT_TOOLS_TERMINAL default value on Windows is::
+
+    cmd.exe /Q /C %c
+
+and on any non-Windows system is::
+
+    xterm -e "/bin/sh %c"
+
 
 build.c
 -------
