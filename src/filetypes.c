@@ -919,7 +919,7 @@ static GeanyFiletype *find_shebang(const gchar *utf8_filename, const gchar *line
 			{ "make",	GEANY_FILETYPES_MAKE },
 			{ "zsh",	GEANY_FILETYPES_SH },
 			{ "ksh",	GEANY_FILETYPES_SH },
-			{ "mksh",       GEANY_FILETYPES_SH },
+			{ "mksh",	GEANY_FILETYPES_SH },
 			{ "csh",	GEANY_FILETYPES_SH },
 			{ "tcsh",	GEANY_FILETYPES_SH },
 			{ "ash",	GEANY_FILETYPES_SH },
