@@ -2025,7 +2025,10 @@ Use indicators to show compile errors
 
 Newline strips trailing spaces
     Remove any whitespace at the end of the line when you hit the
-    Enter/Return key. See also `Strip trailing spaces`_.
+    Enter/Return key. See also `Strip trailing spaces`_.  Note
+    auto indentation is calculated before stripping, so although this
+    setting will clear a blank line, it will not set the next line
+    indentation back to zero.
 
 Line breaking column
     The editor column number to insert a newline at when Line Breaking
