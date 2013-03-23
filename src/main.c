@@ -1057,8 +1057,6 @@ gint main(gint argc, gchar **argv)
     /* removed as signal handling was wrong, see signal_cb()
 	signal(SIGTERM, signal_cb); */
 #ifdef G_OS_UNIX
-	/* SIGQUIT is used to kill spawned children and we get also this signal, so ignore */
-	signal(SIGQUIT, SIG_IGN);
 	/* ignore SIGPIPE signal for preventing sudden death of program */
 	signal(SIGPIPE, SIG_IGN);
 #endif
