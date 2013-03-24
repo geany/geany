@@ -1143,7 +1143,8 @@ on_find_replace_checkbutton_toggled(GtkToggleButton *togglebutton, gpointer user
 /* find all in the given range.
  * Returns a list of allocated Sci_TextToFind, should be freed using:
  *
- * 	g_slist_foreach(matches, g_free);
+ * 	foreach_slist(node, matches)
+ * 		g_slice_free(struct Sci_TextToFind, node->data);
  * 	g_slist_free(matches); */
 static GSList *find_range(ScintillaObject *sci, gint flags, struct Sci_TextToFind *ttf)
 {
@@ -1158,7 +1159,7 @@ static GSList *find_range(ScintillaObject *sci, gint flags, struct Sci_TextToFin
 		if (ttf->chrgText.cpMax > ttf->chrg.cpMax)
 			break; /* found text is partially out of range */
 
-		matches = g_slist_prepend(matches, g_memdup(ttf, sizeof *ttf));
+		matches = g_slist_prepend(matches, g_slice_copy(sizeof *ttf, ttf));
 		ttf->chrg.cpMin = ttf->chrgText.cpMax;
 
 		/* avoid rematching with empty matches like "(?=[a-z])" or "^$".
@@ -1204,7 +1205,7 @@ gint search_mark_all(GeanyDocument *doc, const gchar *search_text, gint flags)
 		}
 		count++;
 
-		g_free(m);
+		g_slice_free1(sizeof *m, m);
 	}
 	g_slist_free(matches);
 
@@ -2082,7 +2083,7 @@ static gint find_document_usage(GeanyDocument *doc, const gchar *search_text, gi
 		}
 		count++;
 
-		g_free(m);
+		g_slice_free1(sizeof *m, m);
 	}
 	g_slist_free(matches);
 	g_free(short_file_name);
@@ -2175,7 +2176,7 @@ guint search_replace_range(ScintillaObject *sci, struct Sci_TextToFind *ttf,
 			ttf->chrg.cpMax += offset;
 		}
 
-		g_free(m);
+		g_slice_free1(sizeof *m, m);
 	}
 	g_slist_free(matches);
 
