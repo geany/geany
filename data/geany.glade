@@ -6185,7 +6185,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
-                                <property name="tooltip_text" translatable="yes">Don't use the simple run script which is usually used to display the exit status of the executed program</property>
+                                <property name="tooltip_text" translatable="yes">Run programs in VTE instead of opening a terminal emulation window. Please note, programs executed in VTE cannot be stopped</property>
                                 <property name="draw_indicator">True</property>
                               </object>
                               <packing>
@@ -6203,7 +6203,7 @@
                                 <property name="sensitive">False</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
-                                <property name="tooltip_text" translatable="yes">Run programs in VTE instead of opening a terminal emulation window. Please note, programs executed in VTE cannot be stopped</property>
+                                <property name="tooltip_text" translatable="yes">Don't use the simple run script which is usually used to display the exit status of the executed program</property>
                                 <property name="draw_indicator">True</property>
                               </object>
                               <packing>
