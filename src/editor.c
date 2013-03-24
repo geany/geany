@@ -3047,13 +3047,14 @@ gint editor_do_uncomment(GeanyEditor *editor, gint line, gboolean toggle)
 void editor_do_comment_toggle(GeanyEditor *editor)
 {
 	gint first_line, last_line;
-	gint x, i, line_start, line_len, first_line_start;
+	gint x, i, line_start, line_len, first_line_start, last_line_start;
 	gint sel_start, sel_end;
 	gint count_commented = 0, count_uncommented = 0;
 	gchar sel[256];
 	const gchar *co, *cc;
 	gboolean break_loop = FALSE, single_line = FALSE;
 	gboolean first_line_was_comment = FALSE;
+	gboolean last_line_was_comment = FALSE;
 	gsize co_len;
 	gsize tm_len = strlen(editor_prefs.comment_toggle_mark);
 	GeanyFiletype *ft;
@@ -3070,6 +3071,7 @@ void editor_do_comment_toggle(GeanyEditor *editor)
 	last_line = MAX(first_line, last_line);
 
 	first_line_start = sci_get_position_from_line(editor->sci, first_line);
+	last_line_start = sci_get_position_from_line(editor->sci, last_line);
 
 	ft = editor_get_filetype_at_line(editor, first_line);
 
@@ -3112,6 +3114,7 @@ void editor_do_comment_toggle(GeanyEditor *editor)
 
 			if (do_continue && i == first_line)
 				first_line_was_comment = TRUE;
+			last_line_was_comment = do_continue;
 
 			if (do_continue)
 			{
@@ -3154,18 +3157,40 @@ void editor_do_comment_toggle(GeanyEditor *editor)
 	/* restore selection or caret position */
 	if (single_line)
 	{
-		gint a = (first_line_was_comment) ? - co_len : co_len;
+		gint a = (first_line_was_comment) ? - (gint) co_len : (gint) co_len;
+		gint indent_len;
 
 		/* don't modify sel_start when the selection starts within indentation */
 		read_indent(editor, sel_start);
-		if ((sel_start - first_line_start) <= (gint) strlen(indent))
+		indent_len = (gint) strlen(indent);
+		if ((sel_start - first_line_start) <= indent_len)
 			a = 0;
+		/* if the selection start was inside the comment mark, adjust the position */
+		else if (first_line_was_comment &&
+				 sel_start >= (first_line_start + indent_len) &&
+				 sel_start <= (first_line_start + indent_len + (gint) co_len))
+		{
+			a = (first_line_start + indent_len) - sel_start;
+		}
 
 		if (sel_start < sel_end)
 		{
+			gint b = (count_commented * (gint) co_len) - (count_uncommented * (gint) co_len);
+
+			/* same for selection end, but here we add an offset on the offset above */
+			read_indent(editor, sel_end + b);
+			indent_len = (gint) strlen(indent);
+			if ((sel_end - last_line_start) < indent_len)
+				b += last_line_was_comment ? (gint) co_len : -(gint) co_len;
+			else if (last_line_was_comment &&
+					 sel_end >= (last_line_start + indent_len) &&
+					 sel_end <= (last_line_start + indent_len + (gint) co_len))
+			{
+				b += (gint) co_len - (sel_end - (last_line_start + indent_len));
+			}
+
 			sci_set_selection_start(editor->sci, sel_start + a);
-			sci_set_selection_end(editor->sci, sel_end +
-								(count_commented * co_len) - (count_uncommented * co_len));
+			sci_set_selection_end(editor->sci, sel_end + b);
 		}
 		else
 			sci_set_current_position(editor->sci, sel_start + a, TRUE);
@@ -3175,13 +3200,13 @@ void editor_do_comment_toggle(GeanyEditor *editor)
 		gint eol_len = editor_get_eol_char_len(editor);
 		if (count_uncommented > 0)
 		{
-			sci_set_selection_start(editor->sci, sel_start - co_len + eol_len);
-			sci_set_selection_end(editor->sci, sel_end - co_len + eol_len);
+			sci_set_selection_start(editor->sci, sel_start - (gint) co_len + eol_len);
+			sci_set_selection_end(editor->sci, sel_end - (gint) co_len + eol_len);
 		}
 		else if (count_commented > 0)
 		{
-			sci_set_selection_start(editor->sci, sel_start + co_len - eol_len);
-			sci_set_selection_end(editor->sci, sel_end + co_len - eol_len);
+			sci_set_selection_start(editor->sci, sel_start + (gint) co_len - eol_len);
+			sci_set_selection_end(editor->sci, sel_end + (gint) co_len - eol_len);
 		}
 		if (sel_start >= sel_end)
 			sci_scroll_caret(editor->sci);
