@@ -103,6 +103,7 @@ static struct
 	GtkWidget *sort_by_appearance;
 	GtkWidget *find_usage;
 	GtkWidget *find_doc_usage;
+	GtkWidget *find_in_files;
 }
 symbol_menu;
 
@@ -2312,7 +2313,11 @@ static void on_find_usage(GtkWidget *widget, gboolean in_session)
 		gtk_tree_model_get(model, &iter, SYMBOLS_COLUMN_TAG, &tag, -1);
 	if (tag)
 	{
-		search_find_usage(tag->name, tag->name, SCFIND_WHOLEWORD | SCFIND_MATCHCASE, in_session);
+		if (widget == symbol_menu.find_in_files)
+			search_show_find_in_files_dialog_full(tag->name, NULL);
+		else
+			search_find_usage(tag->name, tag->name, SCFIND_WHOLEWORD | SCFIND_MATCHCASE, in_session);
+
 		tm_tag_unref(tag);
 	}
 }
@@ -2365,6 +2370,11 @@ static void create_taglist_popup_menu(void)
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	g_signal_connect(item, "activate", G_CALLBACK(on_find_usage), GINT_TO_POINTER(FALSE));
+
+	symbol_menu.find_in_files = item = ui_image_menu_item_new(GTK_STOCK_FIND, _("Find in F_iles"));
+	gtk_widget_show(item);
+	gtk_container_add(GTK_CONTAINER(menu), item);
+	g_signal_connect(item, "activate", G_CALLBACK(on_find_usage), NULL);
 
 	g_signal_connect(menu, "show", G_CALLBACK(on_symbol_tree_menu_show), NULL);
 

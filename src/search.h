@@ -78,6 +78,8 @@ void search_show_replace_dialog(void);
 
 void search_show_find_in_files_dialog(const gchar *dir);
 
+void search_show_find_in_files_dialog_full(const gchar *text, const gchar *dir);
+
 
 struct _ScintillaObject;
 struct Sci_TextToFind;

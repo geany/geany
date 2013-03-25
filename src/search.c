@@ -1021,6 +1021,12 @@ static void create_fif_dialog(void)
  * by using the current file's path */
 void search_show_find_in_files_dialog(const gchar *dir)
 {
+	search_show_find_in_files_dialog_full(NULL, dir);
+}
+
+
+void search_show_find_in_files_dialog_full(const gchar *text, const gchar *dir)
+{
 	GtkWidget *entry; /* for child GtkEntry of a GtkComboBoxEntry */
 	GeanyDocument *doc = document_get_current();
 	gchar *sel = NULL;
@@ -1031,18 +1037,22 @@ void search_show_find_in_files_dialog(const gchar *dir)
 	{
 		create_fif_dialog();
 		gtk_widget_show_all(fif_dlg.dialog);
-		if (doc)
+		if (doc && !text)
 			sel = editor_get_default_selection(doc->editor, search_prefs.use_current_word, NULL);
 	}
 	stash_group_display(fif_prefs, fif_dlg.dialog);
 
-	/* only set selection if the dialog is not already visible, or has just been created */
-	if (doc && ! sel && ! gtk_widget_get_visible(fif_dlg.dialog))
-		sel = editor_get_default_selection(doc->editor, search_prefs.use_current_word, NULL);
+	if (!text)
+	{
+		/* only set selection if the dialog is not already visible, or has just been created */
+		if (doc && ! sel && ! gtk_widget_get_visible(fif_dlg.dialog))
+			sel = editor_get_default_selection(doc->editor, search_prefs.use_current_word, NULL);
 
+		text = sel;
+	}
 	entry = gtk_bin_get_child(GTK_BIN(fif_dlg.search_combo));
-	if (sel)
-		gtk_entry_set_text(GTK_ENTRY(entry), sel);
+	if (text)
+		gtk_entry_set_text(GTK_ENTRY(entry), text);
 	g_free(sel);
 
 	/* add project's base path directory to the dir list, we do this here once
