@@ -6,7 +6,7 @@
 *   GNU General Public License.
 *
 *   This module contains functions for generating tags for Matlab scripts.
-*   The tags 'function' and 'struct' are parsed.
+*   The tags 'classdef', 'function' and 'struct' are parsed.
 *	Author Roland Baudin <roland65@free.fr>
 */
 
@@ -25,18 +25,38 @@
 *   DATA DEFINITIONS
 */
 typedef enum {
-    K_FUNCTION,
+	K_CLASS,
+	K_FUNCTION,
 	K_STRUCT
 } MatlabKind;
 
 static kindOption MatlabKinds [] = {
-    { TRUE, 'f', "function", "Functions" },
+	{ TRUE, 'c', "class", "Classes"},
+	{ TRUE, 'f', "function", "Functions" },
 	{ TRUE, 's', "struct", "Structures" },
 };
 
 /*
 *   FUNCTION DEFINITIONS
 */
+
+static int isDelimiter(char c)
+{
+	static char delimiters[14] = {',', ';', '%', ':', '!', '<', '>', '+', '=', '-', '{', '}', '(', ')'};
+	int i;
+
+	if(isspace(c)) {
+			return 1;
+	}
+
+	for(i = 0; i< 14; i++ ) {
+		if(c == delimiters[i]) {
+			return 1;
+		}
+	}
+
+	return 0;
+}
 
 static void findMatlabTags (void)
 {
@@ -46,7 +66,7 @@ static void findMatlabTags (void)
 
     while ((line = fileReadLine ()) != NULL)
     {
-		int i, ic;
+		int wordlen, ic;
 
 		if (line [0] == '\0'  ||  line [0] == '%')
 			continue;
@@ -55,15 +75,37 @@ static void findMatlabTags (void)
 		for (ic = 0  ;  line [ic] != '\0'  &&  line [ic]!='%'  ;  ++ic)
 			;
 
-		/* function tag */
-
 		/* read first word */
-		for (i = 0  ;  line [i] != '\0'  &&  ! isspace (line [i])  ;  ++i)
+		for (wordlen = 0  ;  line [wordlen] != '\0'  &&  ! isspace (line [wordlen])  ;  ++wordlen)
 			;
 
-		if (strncmp ((const char *) line, "function", (size_t) 8) == 0)
+		/* class tag */
+
+		if ((wordlen == 8) && (strncmp ((const char *) line, "classdef", (size_t) 8) == 0))
 		{
-			const unsigned char *cp = line + i;
+			const unsigned char *cp = line + wordlen;
+
+			while (isspace ((int) *cp))
+				++cp;
+
+			/* identifier is the right most part of the line after
+			 * 'classdef' and before '%' or ';' */
+			while (*cp != '\0' && !isDelimiter(*cp))
+			{
+				vStringPut (name, (int) *cp);
+				++cp;
+			}
+
+			vStringTerminate (name);
+			makeSimpleTag (name, MatlabKinds, K_CLASS);
+			vStringClear (name);
+		}
+
+		/* function tag */
+
+		if ((wordlen == 8) && (strncmp ((const char *) line, "function", (size_t) 8) == 0))
+		{
+			const unsigned char *cp = line + wordlen;
 			const unsigned char *ptr = cp;
 			boolean eq=FALSE;
 
@@ -99,7 +141,7 @@ static void findMatlabTags (void)
 			 * 'function' and before '%' */
 			else
 			{
-				while (*cp != '\0' && *cp != '%')
+				while (*cp != '\0' && !isDelimiter(*cp))
 				{
 					vStringPut (name, (int) *cp);
 					++cp;
