@@ -2296,7 +2296,7 @@ static void on_expand_collapse(GtkWidget *widget, gpointer user_data)
 }
 
 
-static void on_find_usage(GtkWidget *widget, gboolean in_session)
+static void on_find_usage(GtkWidget *widget, G_GNUC_UNUSED gpointer unused)
 {
 	GtkTreeIter iter;
 	GtkTreeSelection *selection;
@@ -2316,7 +2316,8 @@ static void on_find_usage(GtkWidget *widget, gboolean in_session)
 		if (widget == symbol_menu.find_in_files)
 			search_show_find_in_files_dialog_full(tag->name, NULL);
 		else
-			search_find_usage(tag->name, tag->name, SCFIND_WHOLEWORD | SCFIND_MATCHCASE, in_session);
+			search_find_usage(tag->name, tag->name, SCFIND_WHOLEWORD | SCFIND_MATCHCASE,
+				widget == symbol_menu.find_usage);
 
 		tm_tag_unref(tag);
 	}
@@ -2364,12 +2365,12 @@ static void create_taglist_popup_menu(void)
 	symbol_menu.find_usage = item = ui_image_menu_item_new(GTK_STOCK_FIND, _("Find _Usage"));
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
-	g_signal_connect(item, "activate", G_CALLBACK(on_find_usage), GINT_TO_POINTER(TRUE));
+	g_signal_connect(item, "activate", G_CALLBACK(on_find_usage), symbol_menu.find_usage);
 
 	symbol_menu.find_doc_usage = item = ui_image_menu_item_new(GTK_STOCK_FIND, _("Find _Document Usage"));
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
-	g_signal_connect(item, "activate", G_CALLBACK(on_find_usage), GINT_TO_POINTER(FALSE));
+	g_signal_connect(item, "activate", G_CALLBACK(on_find_usage), symbol_menu.find_doc_usage);
 
 	symbol_menu.find_in_files = item = ui_image_menu_item_new(GTK_STOCK_FIND, _("Find in F_iles"));
 	gtk_widget_show(item);
