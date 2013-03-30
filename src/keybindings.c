@@ -2103,7 +2103,7 @@ static void join_lines(GeanyEditor *editor)
 	/* remove spaces surrounding the lines so that these spaces
 	 * won't appear within text after joining */
 	for (i = start; i < end; i++)
-		editor_strip_line_trailing_spaces(editor, i);
+		editor_strip_line_trailing_spaces(editor, i, FALSE);
 	for (i = start + 1; i <= end; i++)
 		sci_set_line_indentation(editor->sci, i, 0);
 
@@ -2229,7 +2229,7 @@ static void reflow_lines(GeanyEditor *editor, gint column)
 	if (editor_prefs.newline_strip || file_prefs.strip_trailing_spaces)
 	{
 		for (i = start; i <= start + linescount; i++)
-			editor_strip_line_trailing_spaces(editor, i);
+			editor_strip_line_trailing_spaces(editor, i, FALSE);
 	}
 }
 

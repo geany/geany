@@ -1255,7 +1255,10 @@ static void on_new_line_added(GeanyEditor *editor)
 
 	if (editor_prefs.newline_strip)
 	{	/* strip the trailing spaces on the previous line */
-		editor_strip_line_trailing_spaces(editor, line - 1);
+
+		const GeanyFilePrefs *fp = project_get_file_prefs();
+
+		editor_strip_line_trailing_spaces(editor, line - 1, FALSE);
 	}
 }
 
@@ -4400,13 +4403,12 @@ void editor_replace_spaces(GeanyEditor *editor)
 }
 
 
-void editor_strip_line_trailing_spaces(GeanyEditor *editor, gint line)
+void editor_strip_line_trailing_spaces(GeanyEditor *editor, gint line, gboolean preserve_empty)
 {
 	gint line_start = sci_get_position_from_line(editor->sci, line);
 	gint line_end = sci_get_line_end_position(editor->sci, line);
 	gint i = line_end - 1;
 	gchar ch = sci_get_char_at(editor->sci, i);
-	const GeanyFilePrefs *fp = project_get_file_prefs();
 
 	/* Diff hunks should keep trailing spaces */
 	if (sci_get_lexer(editor->sci) == SCLEX_DIFF)
@@ -4419,7 +4421,7 @@ void editor_strip_line_trailing_spaces(GeanyEditor *editor, gint line)
 	}
 
 	/* Don't modify empty lines if pref is set */
-	if (fp->strip_preserve_empty && i < line_start)
+	if (preserve_empty && i < line_start)
 		return;
 
 	if (i < (line_end - 1))
@@ -4431,7 +4433,7 @@ void editor_strip_line_trailing_spaces(GeanyEditor *editor, gint line)
 }
 
 
-void editor_strip_trailing_spaces(GeanyEditor *editor)
+void editor_strip_trailing_spaces(GeanyEditor *editor, gboolean preserve_empty)
 {
 	gint max_lines = sci_get_line_count(editor->sci);
 	gint line;
@@ -4440,7 +4442,7 @@ void editor_strip_trailing_spaces(GeanyEditor *editor)
 
 	for (line = 0; line < max_lines; line++)
 	{
-		editor_strip_line_trailing_spaces(editor, line);
+		editor_strip_line_trailing_spaces(editor, line, preserve_empty);
 	}
 	sci_end_undo_action(editor->sci);
 }
