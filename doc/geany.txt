@@ -1601,16 +1601,17 @@ corresponding filetype is first used. Currently these are for:
 Global tags file format
 ```````````````````````
 
-Global tags files can have two different formats:
+Global tags files can have three different formats:
 
 * Tagmanager format
 * Pipe-separated format
+* CTags format
 
 The first line of global tags files should be a comment, introduced
-by ``#`` followed by a space and a string like ``format=pipe``
-or ``format=tagmanager`` respectively, these are case-sensitive.
-This helps Geany to read the file properly. If this line
-is missing, Geany tries to auto-detect the used format but this
+by ``#`` followed by a space and a string like ``format=pipe``,
+``format=ctags`` or ``format=tagmanager`` respectively, these are
+case-sensitive.  This helps Geany to read the file properly. If this
+line is missing, Geany tries to auto-detect the used format but this
 might fail.
 
 
@@ -1618,7 +1619,8 @@ The Tagmanager format is a bit more complex and is used for files
 created by the ``geany -g`` command. There is one tag per line.
 Different tag attributes like the return value or the argument list
 are separated with different characters indicating the type of the
-following argument.
+following argument.  This is the more complete and recommended tag
+format.
 
 Pipe-separated format
 *********************
@@ -1641,6 +1643,15 @@ You can easily write your own global tag files using this format.
 Just save them in your tags directory, as described earlier in the
 section `Global tags`_.
 
+CTags format
+************
+This is the format that ctags generates, and that is used by Vim.
+This format is compatible with the format historically used by Vi.
+
+The format is described at http://ctags.sourceforge.net/FORMAT, but
+for the full list of existing extensions please refer to ctags.
+However, note that Geany may actually only honor a subset of the
+existing extensions.
 
 Generating a global tags file
 `````````````````````````````

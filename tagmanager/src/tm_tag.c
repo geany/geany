@@ -177,6 +177,37 @@ static int get_tag_type(const char *tag_name)
 	return tm_tag_undef_t;
 }
 
+static char get_tag_impl(const char *impl)
+{
+	if ((0 == strcmp("virtual", impl))
+	 || (0 == strcmp("pure virtual", impl)))
+		return TAG_IMPL_VIRTUAL;
+
+#ifdef TM_DEBUG
+		g_warning("Unknown implementation %s", impl);
+#endif
+	return TAG_IMPL_UNKNOWN;
+}
+
+static char get_tag_access(const char *access)
+{
+	if (0 == strcmp("public", access))
+		return TAG_ACCESS_PUBLIC;
+	else if (0 == strcmp("protected", access))
+		return TAG_ACCESS_PROTECTED;
+	else if (0 == strcmp("private", access))
+		return TAG_ACCESS_PRIVATE;
+	else if (0 == strcmp("friend", access))
+		return TAG_ACCESS_FRIEND;
+	else if (0 == strcmp("default", access))
+		return TAG_ACCESS_DEFAULT;
+
+#ifdef TM_DEBUG
+	g_warning("Unknown access type %s", access);
+#endif
+	return TAG_ACCESS_UNKNOWN;
+}
+
 gboolean tm_tag_init(TMTag *tag, TMSourceFile *file, const tagEntryInfo *tag_entry)
 {
 	tag->refcount = 1;
@@ -217,38 +248,9 @@ gboolean tm_tag_init(TMTag *tag, TMSourceFile *file, const tagEntryInfo *tag_ent
 		if (tag_entry->extensionFields.varType != NULL)
 			tag->atts.entry.var_type = g_strdup(tag_entry->extensionFields.varType);
 		if (tag_entry->extensionFields.access != NULL)
-		{
-			if (0 == strcmp("public", tag_entry->extensionFields.access))
-				tag->atts.entry.access = TAG_ACCESS_PUBLIC;
-			else if (0 == strcmp("protected", tag_entry->extensionFields.access))
-				tag->atts.entry.access = TAG_ACCESS_PROTECTED;
-			else if (0 == strcmp("private", tag_entry->extensionFields.access))
-				tag->atts.entry.access = TAG_ACCESS_PRIVATE;
-			else if (0 == strcmp("friend", tag_entry->extensionFields.access))
-				tag->atts.entry.access = TAG_ACCESS_FRIEND;
-			else if (0 == strcmp("default", tag_entry->extensionFields.access))
-				tag->atts.entry.access = TAG_ACCESS_DEFAULT;
-			else
-			{
-#ifdef TM_DEBUG
-				g_warning("Unknown access type %s", tag_entry->extensionFields.access);
-#endif
-				tag->atts.entry.access = TAG_ACCESS_UNKNOWN;
-			}
-		}
+			tag->atts.entry.access = get_tag_access(tag_entry->extensionFields.access);
 		if (tag_entry->extensionFields.implementation != NULL)
-		{
-			if ((0 == strcmp("virtual", tag_entry->extensionFields.implementation))
-			  || (0 == strcmp("pure virtual", tag_entry->extensionFields.implementation)))
-				tag->atts.entry.impl = TAG_IMPL_VIRTUAL;
-			else
-			{
-#ifdef TM_DEBUG
-				g_warning("Unknown implementation %s", tag_entry->extensionFields.implementation);
-#endif
-				tag->atts.entry.impl = TAG_IMPL_UNKNOWN;
-			}
-		}
+			tag->atts.entry.impl = get_tag_impl(tag_entry->extensionFields.implementation);
 		if ((tm_tag_macro_t == tag->type) && (NULL != tag->atts.entry.arglist))
 			tag->type = tm_tag_macro_with_arg_t;
 		tag->atts.entry.file = file;
@@ -416,17 +418,167 @@ gboolean tm_tag_init_from_file_alt(TMTag *tag, TMSourceFile *file, FILE *fp)
 	return TRUE;
 }
 
-TMTag *tm_tag_new_from_file(TMSourceFile *file, FILE *fp, gint mode, gboolean format_pipe)
+/* Reads ctags format (http://ctags.sourceforge.net/FORMAT) */
+gboolean tm_tag_init_from_file_ctags(TMTag *tag, TMSourceFile *file, FILE *fp)
+{
+	gchar buf[BUFSIZ];
+	gchar *p, *tab;
+
+	tag->refcount = 1;
+	tag->type = tm_tag_function_t; /* default type is function if no kind is specified */
+	do
+	{
+		if ((NULL == fgets(buf, BUFSIZ, fp)) || ('\0' == *buf))
+			return FALSE;
+	}
+	while (strncmp(buf, "!_TAG_", 6) == 0); /* skip !_TAG_ lines */
+
+	p = buf;
+
+	/* tag name */
+	if (! (tab = strchr(p, '\t')) || p == tab)
+		return FALSE;
+	tag->name = g_strndup(p, (gsize)(tab - p));
+	p = tab + 1;
+
+	/* tagfile, unused */
+	if (! (tab = strchr(p, '\t')))
+	{
+		g_free(tag->name);
+		tag->name = NULL;
+		return FALSE;
+	}
+	p = tab + 1;
+	/* Ex command, unused */
+	if (*p == '/' || *p == '?')
+	{
+		gchar c = *p;
+		for (++p; *p && *p != c; p++)
+		{
+			if (*p == '\\' && p[1])
+				p++;
+		}
+	}
+	else /* assume a line */
+		tag->atts.entry.line = atol(p);
+	tab = strstr(p, ";\"");
+	/* read extension fields */
+	if (tab)
+	{
+		p = tab + 2;
+		while (*p && *p != '\n' && *p != '\r')
+		{
+			gchar *end;
+			const gchar *key, *value = NULL;
+
+			/* skip leading tabulations */
+			while (*p && *p == '\t') p++;
+			/* find the separator (:) and end (\t) */
+			key = end = p;
+			while (*end && *end != '\t' && *end != '\n' && *end != '\r')
+			{
+				if (*end == ':' && ! value)
+				{
+					*end = 0; /* terminate the key */
+					value = end + 1;
+				}
+				end++;
+			}
+			/* move p paste the so we won't stop parsing by setting *end=0 below */
+			p = *end ? end + 1 : end;
+			*end = 0; /* terminate the value (or key if no value) */
+
+			if (! value || 0 == strcmp(key, "kind")) /* tag kind */
+			{
+				const gchar *kind = value ? value : key;
+
+				if (kind[0] && kind[1])
+					tag->type = get_tag_type(kind);
+				else
+				{
+					switch (*kind)
+					{
+						case 'c': tag->type = tm_tag_class_t; break;
+						case 'd': tag->type = tm_tag_macro_t; break;
+						case 'e': tag->type = tm_tag_enumerator_t; break;
+						case 'F': tag->type = tm_tag_file_t; break;
+						case 'f': tag->type = tm_tag_function_t; break;
+						case 'g': tag->type = tm_tag_enum_t; break;
+						case 'I': tag->type = tm_tag_class_t; break;
+						case 'i': tag->type = tm_tag_interface_t; break;
+						case 'l': tag->type = tm_tag_variable_t; break;
+						case 'M': tag->type = tm_tag_macro_t; break;
+						case 'm': tag->type = tm_tag_member_t; break;
+						case 'n': tag->type = tm_tag_namespace_t; break;
+						case 'P': tag->type = tm_tag_package_t; break;
+						case 'p': tag->type = tm_tag_prototype_t; break;
+						case 's': tag->type = tm_tag_struct_t; break;
+						case 't': tag->type = tm_tag_typedef_t; break;
+						case 'u': tag->type = tm_tag_union_t; break;
+						case 'v': tag->type = tm_tag_variable_t; break;
+						case 'x': tag->type = tm_tag_externvar_t; break;
+						default:
+#ifdef TM_DEBUG
+							g_warning("Unknown tag kind %c", *kind);
+#endif
+							tag->type = tm_tag_other_t; break;
+					}
+				}
+			}
+			else if (0 == strcmp(key, "inherits")) /* comma-separated list of classes this class inherits from */
+			{
+				g_free(tag->atts.entry.inheritance);
+				tag->atts.entry.inheritance = g_strdup(value);
+			}
+			else if (0 == strcmp(key, "implementation")) /* implementation limit */
+				tag->atts.entry.impl = get_tag_impl(value);
+			else if (0 == strcmp(key, "line")) /* line */
+				tag->atts.entry.line = atol(value);
+			else if (0 == strcmp(key, "access")) /* access */
+				tag->atts.entry.access = get_tag_access(value);
+			else if (0 == strcmp(key, "class") ||
+					 0 == strcmp(key, "enum") ||
+					 0 == strcmp(key, "function") ||
+					 0 == strcmp(key, "struct") ||
+					 0 == strcmp(key, "union")) /* Name of the class/enum/function/struct/union in which this tag is a member */
+			{
+				g_free(tag->atts.entry.scope);
+				tag->atts.entry.scope = g_strdup(value);
+			}
+			else if (0 == strcmp(key, "file")) /* static (local) tag */
+				tag->atts.entry.local = TRUE;
+			else if (0 == strcmp(key, "signature")) /* arglist */
+			{
+				g_free(tag->atts.entry.arglist);
+				tag->atts.entry.arglist = g_strdup(value);
+			}
+		}
+	}
+
+	if (tm_tag_file_t != tag->type)
+		tag->atts.entry.file = file;
+	return TRUE;
+}
+
+TMTag *tm_tag_new_from_file(TMSourceFile *file, FILE *fp, gint mode, TMFileFormat format)
 {
 	TMTag *tag;
-	gboolean result;
+	gboolean result = FALSE;
 
 	TAG_NEW(tag);
 
-	if (format_pipe)
-		result = tm_tag_init_from_file_alt(tag, file, fp);
-	else
-		result = tm_tag_init_from_file(tag, file, fp);
+	switch (format)
+	{
+		case TM_FILE_FORMAT_TAGMANAGER:
+			result = tm_tag_init_from_file(tag, file, fp);
+			break;
+		case TM_FILE_FORMAT_PIPE:
+			result = tm_tag_init_from_file_alt(tag, file, fp);
+			break;
+		case TM_FILE_FORMAT_CTAGS:
+			result = tm_tag_init_from_file_ctags(tag, file, fp);
+			break;
+	}
 
 	if (! result)
 	{
