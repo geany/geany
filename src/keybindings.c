@@ -2229,7 +2229,7 @@ static void reflow_lines(GeanyEditor *editor, gint column)
 	if (editor_prefs.newline_strip || file_prefs.strip_trailing_spaces)
 	{
 		for (i = start; i <= start + linescount; i++)
-			editor_strip_line_trailing_spaces(editor, i, FALSE);
+			editor_strip_line_trailing_spaces(editor, i, file_prefs.strip_preserve_empty);
 	}
 }
 
