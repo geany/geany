@@ -537,18 +537,16 @@ static void on_update_ui(GeanyEditor *editor, G_GNUC_UNUSED SCNotification *nt)
 }
 
 
-static void check_line_breaking(GeanyEditor *editor, gint pos, gchar c)
+static void check_line_breaking(GeanyEditor *editor, gint pos)
 {
 	ScintillaObject *sci = editor->sci;
 	gint line, lstart, col;
+	gchar c;
 
 	if (!editor->line_breaking)
 		return;
 
 	col = sci_get_col_from_position(sci, pos);
-
-	if (c == GDK_space)
-		pos--;	/* Look for previous space, not the new one */
 
 	line = sci_get_current_line(sci);
 
@@ -801,7 +799,7 @@ static void on_char_added(GeanyEditor *editor, SCNotification *nt)
 			editor_start_auto_complete(editor, pos, FALSE);
 #endif
 	}
-	check_line_breaking(editor, pos, nt->ch);
+	check_line_breaking(editor, pos);
 }
 
 
