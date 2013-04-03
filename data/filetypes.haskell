@@ -21,7 +21,8 @@ data=number_2
 
 [keywords]
 # all items must be in one line
-keywords=as case class data deriving do else if import in infixl infixr instance let module of primitive qualified then type where
+keywords=case class data default deriving do else foreign if import in infix infixl infixr instance let module newtype of then type where
+ffi=capi ccall export import prim safe stdcall unsafe
 
 
 [settings]
