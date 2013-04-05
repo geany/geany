@@ -1,281 +1,863 @@
 /*
-*   Copyright (c) 2000, Jesus Castagnetto <jmcastagnetto@zkey.com>
+*   Copyright (c) 2013, Colomban Wendling <ban@herbesfolles.org>
 *
 *   This source code is released for free distribution under the terms of the
 *   GNU General Public License.
 *
-*   This module contains functions for generating tags for the PHP web page
-*   scripting language. Only recognizes functions and classes, not methods or
-*   variables.
-*
-*   Parsing PHP defines by Pavel Hlousek <pavel.hlousek@seznam.cz>, Apr 2003.
+*   This module contains code for generating tags for the PHP scripting
+*   language.
 */
 
 /*
 *   INCLUDE FILES
 */
 #include "general.h"  /* must always come first */
-
-#include <string.h>
 #include "main.h"
 #include "parse.h"
 #include "read.h"
 #include "vstring.h"
+#include "keyword.h"
+#include "entry.h"
 
-/*
-*   DATA DEFINITIONS
-*/
+
 typedef enum {
-	K_CLASS, K_DEFINE, K_FUNCTION, K_VARIABLE
+	KEYWORD_NONE = -1,
+	KEYWORD_abstract,
+	KEYWORD_and,
+	KEYWORD_as,
+	KEYWORD_break,
+	KEYWORD_callable,
+	KEYWORD_case,
+	KEYWORD_catch,
+	KEYWORD_class,
+	KEYWORD_clone,
+	KEYWORD_const,
+	KEYWORD_continue,
+	KEYWORD_declare,
+	KEYWORD_define,
+	KEYWORD_default,
+	KEYWORD_do,
+	KEYWORD_echo,
+	KEYWORD_else,
+	KEYWORD_elif,
+	KEYWORD_enddeclare,
+	KEYWORD_endfor,
+	KEYWORD_endforeach,
+	KEYWORD_endif,
+	KEYWORD_endswitch,
+	KEYWORD_endwhile,
+	KEYWORD_extends,
+	KEYWORD_final,
+	KEYWORD_for,
+	KEYWORD_foreach,
+	KEYWORD_function,
+	KEYWORD_global,
+	KEYWORD_goto,
+	KEYWORD_if,
+	KEYWORD_implements,
+	KEYWORD_include,
+	KEYWORD_include_once,
+	KEYWORD_instanceof,
+	KEYWORD_insteadof,
+	KEYWORD_interface,
+	KEYWORD_namespace,
+	KEYWORD_new,
+	KEYWORD_or,
+	KEYWORD_print,
+	KEYWORD_private,
+	KEYWORD_protected,
+	KEYWORD_public,
+	KEYWORD_require,
+	KEYWORD_require_once,
+	KEYWORD_return,
+	KEYWORD_static,
+	KEYWORD_switch,
+	KEYWORD_throw,
+	KEYWORD_trait,
+	KEYWORD_try,
+	KEYWORD_use,
+	KEYWORD_var,
+	KEYWORD_while,
+	KEYWORD_xor
+} keywordId;
+
+
+typedef enum {
+	K_CLASS,
+	K_DEFINE,
+	K_FUNCTION,
+	K_VARIABLE,
+	COUNT_KIND
 } phpKind;
 
-#if 0
-static kindOption PhpKinds [] = {
+static kindOption PhpKinds[COUNT_KIND] = {
 	{ TRUE, 'c', "class",    "classes" },
-	{ TRUE, 'd', "define",   "constant definitions" },
+	{ TRUE, 'm', "macro",    "constant definitions" },
 	{ TRUE, 'f', "function", "functions" },
 	{ TRUE, 'v', "variable", "variables" }
 };
-#endif
 
-/*
-*   FUNCTION DEFINITIONS
-*/
+typedef struct {
+	const char *name;
+	keywordId id;
+} keywordDesc;
 
-/* JavaScript patterns are duplicated in jscript.c */
+static const keywordDesc PhpKeywordTable[] = {
+	/* keyword			keyword ID */
+	{ "abstract",		KEYWORD_abstract		},
+	{ "and",			KEYWORD_and				},
+	{ "as",				KEYWORD_as				},
+	{ "break",			KEYWORD_break			},
+	{ "callable",		KEYWORD_callable		},
+	{ "case",			KEYWORD_case			},
+	{ "catch",			KEYWORD_catch			},
+	{ "cfunction",		KEYWORD_function		}, /* nobody knows what the hell this is, but it seems to behave much like "function" so bind it to it */
+	{ "class",			KEYWORD_class			},
+	{ "clone",			KEYWORD_clone			},
+	{ "const",			KEYWORD_const			},
+	{ "continue",		KEYWORD_continue		},
+	{ "declare",		KEYWORD_declare			},
+	{ "define",			KEYWORD_define			}, /* this isn't really a keyword but we handle it so it's easier this way */
+	{ "default",		KEYWORD_default			},
+	{ "do",				KEYWORD_do				},
+	{ "echo",			KEYWORD_echo			},
+	{ "else",			KEYWORD_else			},
+	{ "elseif",			KEYWORD_elif			},
+	{ "enddeclare",		KEYWORD_enddeclare		},
+	{ "endfor",			KEYWORD_endfor			},
+	{ "endforeach",		KEYWORD_endforeach		},
+	{ "endif",			KEYWORD_endif			},
+	{ "endswitch",		KEYWORD_endswitch		},
+	{ "endwhile",		KEYWORD_endwhile		},
+	{ "extends",		KEYWORD_extends			},
+	{ "final",			KEYWORD_final			},
+	{ "for",			KEYWORD_for				},
+	{ "foreach",		KEYWORD_foreach			},
+	{ "function",		KEYWORD_function		},
+	{ "global",			KEYWORD_global			},
+	{ "goto",			KEYWORD_goto			},
+	{ "if",				KEYWORD_if				},
+	{ "implements",		KEYWORD_implements		},
+	{ "include",		KEYWORD_include			},
+	{ "include_once",	KEYWORD_include_once	},
+	{ "instanceof",		KEYWORD_instanceof		},
+	{ "insteadof",		KEYWORD_insteadof		},
+	{ "interface",		KEYWORD_interface		},
+	{ "namespace",		KEYWORD_namespace		},
+	{ "new",			KEYWORD_new				},
+	{ "or",				KEYWORD_or				},
+	{ "print",			KEYWORD_print			},
+	{ "private",		KEYWORD_private			},
+	{ "protected",		KEYWORD_protected		},
+	{ "public",			KEYWORD_public			},
+	{ "require",		KEYWORD_require			},
+	{ "require_once",	KEYWORD_require_once	},
+	{ "return",			KEYWORD_return			},
+	{ "static",			KEYWORD_static			},
+	{ "switch",			KEYWORD_switch			},
+	{ "throw",			KEYWORD_throw			},
+	{ "trait",			KEYWORD_trait			},
+	{ "try",			KEYWORD_try				},
+	{ "use",			KEYWORD_use				},
+	{ "var",			KEYWORD_var				},
+	{ "while",			KEYWORD_while			},
+	{ "xor",			KEYWORD_xor				}
+};
 
-/*
- * Cygwin doesn't support non-ASCII characters in character classes.
- * This isn't a good solution to the underlying problem, because we're still
- * making assumptions about the character encoding.
- * Really, these regular expressions need to concentrate on what marks the
- * end of an identifier, and we need something like iconv to take into
- * account the user's locale (or an override on the command-line.)
- */
-/*
-#ifdef __CYGWIN__
-#define ALPHA "[:alpha:]"
-#define ALNUM "[:alnum:]"
-#else
-#define ALPHA "A-Za-z\x7f-\xff"
-#define ALNUM "0-9A-Za-z\x7f-\xff"
-#endif
-*/
-/* "A-Za-z\x7f-\xff" fails on other locales than "C" and so skip it */
-#define ALPHA "[:alpha:]"
-#define ALNUM "[:alnum:]"
 
-static void function_cb(const char *line, const regexMatch *matches, unsigned int count);
+typedef enum eTokenType {
+	TOKEN_UNDEFINED,
+	TOKEN_EOF,
+	TOKEN_CHARACTER,
+	TOKEN_CLOSE_PAREN,
+	TOKEN_SEMICOLON,
+	TOKEN_COLON,
+	TOKEN_COMMA,
+	TOKEN_KEYWORD,
+	TOKEN_OPEN_PAREN,
+	TOKEN_OPERATOR,
+	TOKEN_IDENTIFIER,
+	TOKEN_STRING,
+	TOKEN_PERIOD,
+	TOKEN_OPEN_CURLY,
+	TOKEN_CLOSE_CURLY,
+	TOKEN_EQUAL_SIGN,
+	TOKEN_OPEN_SQUARE,
+	TOKEN_CLOSE_SQUARE,
+	TOKEN_VARIABLE
+} tokenType;
 
-static void installPHPRegex (const langType language)
+typedef struct {
+	tokenType		type;
+	keywordId		keyword;
+	vString *		string;
+	vString *		scope;
+	unsigned long 	lineNumber;
+	MIOPos			filePosition;
+	int 			parentKind; /* -1 if none */
+} tokenInfo;
+
+static langType Lang_php;
+
+static boolean InPhp = FALSE; /* whether we are between <? ?> */
+
+
+static void buildPhpKeywordHash (void)
 {
-	addTagRegex(language, "^[ \t]*((final|abstract)[ \t]+)*class[ \t]+([" ALPHA "_][" ALNUM "_]*)",
-		"\\3", "c,class,classes", NULL);
-	addTagRegex(language, "^[ \t]*interface[ \t]+([" ALPHA "_][" ALNUM "_]*)",
-		"\\1", "i,interface,interfaces", NULL);
-	addTagRegex(language, "^[ \t]*define[ \t]*\\([ \t]*['\"]?([" ALPHA "_][" ALNUM "_]*)",
-		"\\1", "m,macro,macros", NULL);
-	addTagRegex(language, "^[ \t]*const[ \t]*([" ALPHA "_][" ALNUM "_]*)[ \t]*[=;]",
-		"\\1", "m,macro,macros", NULL);
-	addCallbackRegex(language,
-		"^[ \t]*((public|protected|private|static|final)[ \t]+)*function[ \t]+&?[ \t]*([" ALPHA "_][" ALNUM "_]*)[[:space:]]*(\\(.*\\)|\\(.*)",
-		NULL, function_cb);
-	addTagRegex(language, "^[ \t]*(\\$|::\\$|\\$this->)([" ALPHA "_][" ALNUM "_]*)[ \t]*=",
-		"\\2", "v,variable,variables", NULL);
-	addTagRegex(language, "^[ \t]*((var|public|protected|private|static)[ \t]+)+\\$([" ALPHA "_][" ALNUM "_]*)[ \t]*[=;]",
-		"\\3", "v,variable,variables", NULL);
-
-	/* function regex is covered by PHP regex */
-	addTagRegex (language, "(^|[ \t])([A-Za-z0-9_]+)[ \t]*[=:][ \t]*function[ \t]*\\(",
-		"\\2", "j,jsfunction,javascript functions", NULL);
-	addTagRegex (language, "(^|[ \t])([A-Za-z0-9_.]+)\\.([A-Za-z0-9_]+)[ \t]*=[ \t]*function[ \t]*\\(",
-		"\\2.\\3", "j,jsfunction,javascript functions", NULL);
-	addTagRegex (language, "(^|[ \t])([A-Za-z0-9_.]+)\\.([A-Za-z0-9_]+)[ \t]*=[ \t]*function[ \t]*\\(",
-		"\\3", "j,jsfunction,javascript functions", NULL);
+	const size_t count = sizeof (PhpKeywordTable) / sizeof (PhpKeywordTable[0]);
+	size_t i;
+	for (i = 0; i < count ; i++)
+	{
+		const keywordDesc* const p = &PhpKeywordTable[i];
+		addKeyword (p->name, Lang_php, (int) p->id);
+	}
 }
 
-
-static void function_cb(const char *line, const regexMatch *matches, unsigned int count)
+static void initPhpEntry (tagEntryInfo *e, const tokenInfo *const token, phpKind kind)
 {
-	char *name, *arglist;
-	char kind = 'f';
-	static const char *kindName = "function";
-	tagEntryInfo e;
-	const regexMatch *match_funcname = NULL;
-	const regexMatch *match_arglist = NULL;
+	initTagEntry (e, vStringValue (token->string));
 
-	if (count > 2)
+	e->lineNumber	= token->lineNumber;
+	e->filePosition	= token->filePosition;
+	e->kindName		= PhpKinds[kind].name;
+	e->kind			= (char) PhpKinds[kind].letter;
+
+	if (vStringLength(token->scope) > 0)
 	{
-		match_funcname = &matches[count - 2];
-		match_arglist = &matches[count - 1];
+		Assert (token->parentKind >= 0);
+
+		e->extensionFields.scope[0] = PhpKinds[token->parentKind].name;
+		e->extensionFields.scope[1] = vStringValue (token->scope);
 	}
+}
 
-	if (match_funcname != NULL)
+static void makeSimplePhpTag (tokenInfo *const token, phpKind kind)
+{
+	if (PhpKinds[kind].enabled)
 	{
-		name = xMalloc(match_funcname->length + 1, char);
-		strncpy(name, line + match_funcname->start, match_funcname->length);
-		*(name+match_funcname->length) = '\x0';
-		arglist = xMalloc(match_arglist->length + 1, char);
-		strncpy(arglist, line + match_arglist->start, match_arglist->length);
-		*(arglist+match_arglist->length) = '\x0';
+		tagEntryInfo e;
 
-		initTagEntry (&e, name);
-		e.kind = kind;
-		e.kindName = kindName;
-		e.extensionFields.arglist = arglist;
+		initPhpEntry (&e, token, kind);
 		makeTagEntry (&e);
-
-		eFree(name);
-		eFree(arglist);
 	}
 }
 
-/* Create parser definition structure */
-extern parserDefinition* PhpParser (void)
+static void makeFunctionTag (tokenInfo *const token, vString *const arglist)
+{ 
+	if (PhpKinds[K_FUNCTION].enabled)
+	{
+		tagEntryInfo e;
+
+		initPhpEntry (&e, token, K_FUNCTION);
+
+		if (arglist)
+			e.extensionFields.arglist = vStringValue (arglist);
+
+		makeTagEntry (&e);
+	}
+}
+
+static tokenInfo *newToken (void)
 {
-	static const char *const extensions [] = { "php", "php3", "phtml", NULL };
-	parserDefinition* def = parserNew ("PHP");
-	def->extensions = extensions;
-	def->initialize = installPHPRegex;
-	def->regex      = TRUE;
-	return def;
+	tokenInfo *const token = xMalloc (1, tokenInfo);
+
+	token->type			= TOKEN_UNDEFINED;
+	token->keyword		= KEYWORD_NONE;
+	token->string		= vStringNew ();
+	token->scope		= vStringNew ();
+	token->lineNumber   = getSourceLineNumber ();
+	token->filePosition = getInputFilePosition ();
+	token->parentKind	= -1;
+
+	return token;
+}
+
+static void deleteToken (tokenInfo *const token)
+{
+	vStringDelete (token->string);
+	vStringDelete (token->scope);
+	eFree (token);
+}
+
+static void copyToken (tokenInfo *const dest, tokenInfo *const src, boolean scope)
+{
+	dest->lineNumber = src->lineNumber;
+	dest->filePosition = src->filePosition;
+	dest->type = src->type;
+	dest->keyword = src->keyword;
+	vStringCopy(dest->string, src->string);
+	dest->parentKind = src->parentKind;
+	if (scope)
+		vStringCopy(dest->scope, src->scope);
 }
 
 #if 0
+#include <stdio.h>
 
-static boolean isLetter(const int c)
+static const char *tokenTypeName (const tokenType type)
 {
-	return (boolean)(isalpha(c) || (c >= 127  &&  c <= 255));
+	switch (type)
+	{
+		case TOKEN_UNDEFINED:		return "undefined";
+		case TOKEN_EOF:				return "EOF";
+		case TOKEN_CHARACTER:		return "character";
+		case TOKEN_CLOSE_PAREN:		return "')'";
+		case TOKEN_SEMICOLON:		return "';'";
+		case TOKEN_COLON:			return "':'";
+		case TOKEN_COMMA:			return "','";
+		case TOKEN_OPEN_PAREN:		return "'('";
+		case TOKEN_OPERATOR:		return "operator";
+		case TOKEN_IDENTIFIER:		return "identifier";
+		case TOKEN_KEYWORD:			return "keyword";
+		case TOKEN_STRING:			return "string";
+		case TOKEN_PERIOD:			return "'.'";
+		case TOKEN_OPEN_CURLY:		return "'{'";
+		case TOKEN_CLOSE_CURLY:		return "'}'";
+		case TOKEN_EQUAL_SIGN:		return "'='";
+		case TOKEN_OPEN_SQUARE:		return "'['";
+		case TOKEN_CLOSE_SQUARE:	return "']'";
+		case TOKEN_VARIABLE:		return "variable";
+	}
+	return NULL;
 }
 
-static boolean isVarChar1(const int c)
+static void printToken (const tokenInfo *const token)
 {
-	return (boolean)(isLetter (c)  ||  c == '_');
+	fprintf (stderr, "%p:\n\ttype:\t%s\n\tline:\t%lu\n\tscope:\t%s\n", (void *) token,
+			 tokenTypeName (token->type),
+			 token->lineNumber,
+			 vStringValue (token->scope));
+	switch (token->type)
+	{
+		case TOKEN_IDENTIFIER:
+		case TOKEN_STRING:
+		case TOKEN_VARIABLE:
+			fprintf (stderr, "\tcontent:\t%s\n", vStringValue (token->string));
+			break;
+
+		case TOKEN_KEYWORD:
+		{
+			size_t n = sizeof PhpKeywordTable / sizeof PhpKeywordTable[0];
+			size_t i;
+
+			fprintf (stderr, "\tkeyword:\t");
+			for (i = 0; i < n; i++)
+			{
+				if (PhpKeywordTable[i].id == token->keyword)
+				{
+					fprintf (stderr, "%s\n", PhpKeywordTable[i].name);
+					break;
+				}
+			}
+			if (i >= n)
+				fprintf (stderr, "(unknown)\n");
+		}
+
+		default: break;
+	}
+}
+#endif
+
+static void addToScope (tokenInfo* const token, vString* const extra)
+{
+	if (vStringLength (token->scope) > 0)
+		vStringCatS (token->scope, "." /* "::" */);
+	vStringCatS (token->scope, vStringValue (extra));
+	vStringTerminate(token->scope);
 }
 
-static boolean isVarChar(const int c)
+static boolean isIdentChar (const int c)
 {
-	return (boolean)(isVarChar1 (c) || isdigit (c));
+	return (isalnum (c) || c == '_');
+}
+
+static int skipToCharacter (const int c)
+{
+	int d;
+	do
+	{
+		d = fileGetc ();
+	} while (d != EOF  &&  d != c);
+	return d;
+}
+
+static int skipToEndOfLine (void)
+{
+	int c;
+	do
+	{
+		c = fileGetc ();
+		if (c == '\r')
+		{
+			int next = fileGetc ();
+			if (next != '\n')
+				fileUngetc (next);
+			else
+				c = next;
+		}
+	} while (c != EOF && c != '\n' && c != '\r');
+	return c;
+}
+
+static void parseString (vString *const string, const int delimiter)
+{
+	while (TRUE)
+	{
+		int c = fileGetc ();
+
+		if (c == '\\' && (c = fileGetc ()) != EOF)
+			vStringPut (string, (char) c);
+		else if (c == EOF || c == delimiter)
+			break;
+		else
+			vStringPut (string, (char) c);
+	}
+	vStringTerminate (string);
+}
+
+static void parseIdentifier (vString *const string, const int firstChar)
+{
+	int c = firstChar;
+	do
+	{
+		vStringPut (string, (char) c);
+		c = fileGetc ();
+	} while (isIdentChar (c));
+	fileUngetc (c);
+	vStringTerminate (string);
+}
+
+static keywordId analyzeToken (vString *const name, langType language)
+{
+	vString *keyword = vStringNew ();
+	keywordId result;
+	vStringCopyToLower (keyword, name);
+	result = lookupKeyword (vStringValue (keyword), language);
+	vStringDelete (keyword);
+	return result;
+}
+
+static int findPhpStart (void)
+{
+	int c;
+	do
+	{
+		if ((c = fileGetc ()) == '<' &&
+			(c = fileGetc ()) == '?' &&
+			/* don't enter PHP mode on "<?xml", yet still support short open tags (<?) */
+			(tolower ((c = fileGetc ())) != 'x' ||
+			 tolower ((c = fileGetc ())) != 'm' ||
+			 tolower ((c = fileGetc ())) != 'l'))
+		{
+			break;
+		}
+	}
+	while (c != EOF);
+
+	return c;
+}
+
+static void readToken (tokenInfo *const token)
+{
+	int c;
+
+	token->type		= TOKEN_UNDEFINED;
+	token->keyword	= KEYWORD_NONE;
+	vStringClear (token->string);
+
+getNextChar:
+
+	if (! InPhp)
+	{
+		c = findPhpStart ();
+		if (c != EOF)
+			InPhp = TRUE;
+	}
+	else
+		c = fileGetc ();
+
+	while (c == '\t' || c == ' ' || c == '\n' || c == '\r')
+	{
+		c = fileGetc ();
+	}
+
+	token->lineNumber   = getSourceLineNumber ();
+	token->filePosition = getInputFilePosition ();
+
+	switch (c)
+	{
+		case EOF: token->type = TOKEN_EOF;					break;
+		case '(': token->type = TOKEN_OPEN_PAREN;			break;
+		case ')': token->type = TOKEN_CLOSE_PAREN;			break;
+		case ';': token->type = TOKEN_SEMICOLON;			break;
+		case ',': token->type = TOKEN_COMMA;				break;
+		case '.': token->type = TOKEN_PERIOD;				break;
+		case ':': token->type = TOKEN_COLON;				break;
+		case '{': token->type = TOKEN_OPEN_CURLY;			break;
+		case '}': token->type = TOKEN_CLOSE_CURLY;			break;
+		case '[': token->type = TOKEN_OPEN_SQUARE;			break;
+		case ']': token->type = TOKEN_CLOSE_SQUARE;			break;
+
+		case '=':
+		{
+			int d = fileGetc ();
+			if (d == '=' || d == '>')
+				token->type = TOKEN_OPERATOR;
+			else
+			{
+				fileUngetc (d);
+				token->type = TOKEN_EQUAL_SIGN;
+			}
+			break;
+		}
+
+		case '\'':
+		case '"':
+			token->type = TOKEN_STRING;
+			parseString (token->string, c);
+			token->lineNumber = getSourceLineNumber ();
+			token->filePosition = getInputFilePosition ();
+			break;
+
+		case '#': /* comment */
+			skipToEndOfLine ();
+			goto getNextChar;
+			break;
+
+		case '+':
+		case '-':
+		case '*':
+		case '%':
+		{
+			int d = fileGetc ();
+			if (d != '=')
+				fileUngetc (d);
+			token->type = TOKEN_OPERATOR;
+			break;
+		}
+
+		case '/': /* division or comment start */
+		{
+			int d = fileGetc ();
+			if (d == '/') /* single-line comment */
+			{
+				skipToEndOfLine ();
+				goto getNextChar;
+			}
+			else if (d == '*')
+			{
+				do
+				{
+					c = skipToCharacter ('*');
+					if (c != EOF)
+					{
+						c = fileGetc ();
+						if (c == '/')
+							break;
+						else
+							fileUngetc (c);
+					}
+				} while (c != EOF && c != '\0');
+				goto getNextChar;
+			}
+			else
+			{
+				if (d != '=')
+					fileUngetc (d);
+				token->type = TOKEN_OPERATOR;
+			}
+			break;
+		}
+
+		case '$': /* variable start */
+			parseIdentifier (token->string, c);
+			token->type = TOKEN_VARIABLE;
+			break;
+
+		case '?': /* maybe the end of the PHP chunk */
+		{
+			int d = fileGetc ();
+			if (d == '>')
+			{
+				InPhp = FALSE;
+				goto getNextChar;
+			}
+			else
+			{
+				fileUngetc (d);
+				token->type = TOKEN_UNDEFINED;
+			}
+			break;
+		}
+
+		default:
+			if (! isIdentChar (c))
+				token->type = TOKEN_UNDEFINED;
+			else
+			{
+				parseIdentifier (token->string, c);
+				token->keyword = analyzeToken (token->string, Lang_php);
+				if (token->keyword == KEYWORD_NONE)
+					token->type = TOKEN_IDENTIFIER;
+				else
+					token->type = TOKEN_KEYWORD;
+			}
+			break;
+	}
+}
+
+static void enterScope (tokenInfo *const token, vString *const scope, int parentKind);
+
+static boolean parseClass (tokenInfo *const token)
+{
+	boolean readNext = TRUE;
+	tokenInfo *name;
+
+	readToken (token);
+	if (token->type != TOKEN_IDENTIFIER)
+		return FALSE;
+
+	name = newToken ();
+	copyToken (name, token, TRUE);
+	makeSimplePhpTag (name, K_CLASS);
+
+	/* skip over possible "extends FOO, BAR" */
+	do
+	{
+		readToken (token);
+	}
+	while (token->type != TOKEN_EOF &&
+		   token->type != TOKEN_OPEN_CURLY);
+
+	if (token->type == TOKEN_OPEN_CURLY)
+		enterScope (token, name->string, K_CLASS);
+	else
+		readNext = FALSE;
+
+	deleteToken (name);
+
+	return readNext;
+}
+
+static boolean parseFunction (tokenInfo *const token)
+{
+	boolean readNext = TRUE;
+	tokenInfo *name;
+
+	readToken (token);
+	if (token->type != TOKEN_IDENTIFIER)
+		return FALSE;
+
+	name = newToken ();
+	copyToken (name, token, TRUE);
+
+	readToken (token);
+	if (token->type == TOKEN_OPEN_PAREN)
+	{
+		vString *arglist = vStringNew ();
+		int depth = 1;
+		int c;
+
+		vStringPut (arglist, '(');
+		do
+		{
+			c = fileGetc ();
+			if (c != EOF)
+			{
+				vStringPut (arglist, (char) c);
+				if (c == '(')
+					depth++;
+				else if (c == ')')
+					depth--;
+			}
+		}
+		while (depth > 0 && c != EOF);
+		vStringTerminate (arglist);
+
+		makeFunctionTag (name, arglist);
+		vStringDelete (arglist);
+
+		readToken (token); /* normally it's an open brace */
+	}
+	if (token->type == TOKEN_OPEN_CURLY)
+		enterScope (token, name->string, K_FUNCTION);
+	else
+		readNext = FALSE;
+
+	deleteToken (name);
+
+	return readNext;
+}
+
+/* parses declarations of the form
+ * 	const NAME = VALUE */
+static boolean parseConstant (tokenInfo *const token)
+{
+	tokenInfo *name;
+
+	readToken (token); /* skip const keyword */
+	if (token->type != TOKEN_IDENTIFIER)
+		return FALSE;
+
+	name = newToken ();
+	copyToken (name, token, TRUE);
+
+	readToken (token);
+	if (token->type == TOKEN_EQUAL_SIGN)
+		makeSimplePhpTag (name, K_DEFINE);
+
+	deleteToken (name);
+
+	return token->type == TOKEN_EQUAL_SIGN;
+}
+
+/* parses declarations of the form
+ * 	define('NAME', 'VALUE')
+ * 	define(NAME, 'VALUE) */
+static boolean parseDefine (tokenInfo *const token)
+{
+	int depth = 1;
+
+	readToken (token); /* skip "define" identifier */
+	if (token->type != TOKEN_OPEN_PAREN)
+		return FALSE;
+
+	readToken (token);
+	if (token->type == TOKEN_STRING ||
+		token->type == TOKEN_IDENTIFIER)
+	{
+		makeSimplePhpTag (token, K_DEFINE);
+		readToken (token);
+	}
+
+	/* skip until the close parenthesis.
+	 * no need to handle nested blocks since they would be invalid
+	 * in this context anyway (the VALUE may only be a scalar, like
+	 * 	42
+	 * 	(42)
+	 * and alike) */
+	while (token->type != TOKEN_EOF && depth > 0)
+	{
+		switch (token->type)
+		{
+			case TOKEN_OPEN_PAREN:	depth++; break;
+			case TOKEN_CLOSE_PAREN:	depth--; break;
+			default: break;
+		}
+		readToken (token);
+	}
+
+	return FALSE;
+}
+
+/* parses declarations of the form
+ * 	$var = VALUE
+ * 	$var; */
+static boolean parseVariable (tokenInfo *const token)
+{
+	boolean readNext = TRUE;
+	tokenInfo *name;
+
+	/* don't generate variable tags inside functions */
+	if (token->parentKind == K_FUNCTION)
+		return TRUE;
+
+	name = newToken ();
+	copyToken (name, token, TRUE);
+
+	readToken (token);
+	if (token->type == TOKEN_EQUAL_SIGN || token->type == TOKEN_SEMICOLON)
+		makeSimplePhpTag (name, K_VARIABLE);
+	else
+		readNext = FALSE;
+
+	deleteToken (name);
+
+	return readNext;
+}
+
+static void enterScope (tokenInfo *const parentToken, vString *const extraScope, int parentKind)
+{
+	tokenInfo *token = newToken ();
+	int origParentKind = parentToken->parentKind;
+
+	copyToken (token, parentToken, TRUE);
+
+	if (extraScope)
+	{
+		addToScope (token, extraScope);
+		token->parentKind = parentKind;
+	}
+
+	readToken (token);
+	while (token->type != TOKEN_EOF &&
+		   token->type != TOKEN_CLOSE_CURLY)
+	{
+		boolean readNext = TRUE;
+
+		switch (token->type)
+		{
+			case TOKEN_OPEN_CURLY:
+				enterScope (token, NULL, -1);
+				break;
+
+			case TOKEN_KEYWORD:
+				switch (token->keyword)
+				{
+					case KEYWORD_class:		readNext = parseClass (token);		break;
+					case KEYWORD_function:	readNext = parseFunction (token);	break;
+					case KEYWORD_const:		readNext = parseConstant (token);	break;
+					case KEYWORD_define:	readNext = parseDefine (token);		break;
+					default: break;
+				}
+				break;
+
+			case TOKEN_VARIABLE:
+				readNext = parseVariable (token);
+				break;
+
+			default: break;
+		}
+
+		if (readNext)
+			readToken (token);
+	}
+
+	copyToken (parentToken, token, FALSE);
+	parentToken->parentKind = origParentKind;
+	deleteToken (token);
 }
 
 static void findPhpTags (void)
 {
-	vString *name = vStringNew ();
-	const unsigned char *line;
+	tokenInfo *const token = newToken ();
 
-	while ((line = fileReadLine ()) != NULL)
+	InPhp = FALSE;
+	do
 	{
-		const unsigned char *cp = line;
-		const char* f;
-
-		while (isspace (*cp))
-			cp++;
-
-		if (*(const char*)cp == '$'  &&  isVarChar1 (*(const char*)(cp+1)))
-		{
-			cp += 1;
-			vStringClear (name);
-			while (isVarChar ((int) *cp))
-			{
-				vStringPut (name, (int) *cp);
-				++cp;
-			}
-			while (isspace ((int) *cp))
-				++cp;
-			if (*(const char*) cp == '=')
-			{
-				vStringTerminate (name);
-				makeSimpleTag (name, PhpKinds, K_VARIABLE);
-				vStringClear (name);
-			}
-		}
-		else if ((f = strstr ((const char*) cp, "function")) != NULL &&
-			(f == (const char*) cp || isspace ((int) f [-1])) &&
-			isspace ((int) f [8]))
-		{
-			cp = ((const unsigned char *) f) + 8;
-
-			while (isspace ((int) *cp))
-				++cp;
-
-			if (*cp == '&')	/* skip reference character and following whitespace */
-			{
-				cp++;
-
-				while (isspace ((int) *cp))
-					++cp;
-			}
-
-			vStringClear (name);
-			while (isalnum ((int) *cp)  ||  *cp == '_')
-			{
-				vStringPut (name, (int) *cp);
-				++cp;
-			}
-			vStringTerminate (name);
-			makeSimpleTag (name, PhpKinds, K_FUNCTION);
-			vStringClear (name);
-		}
-		else if (strncmp ((const char*) cp, "class", (size_t) 5) == 0 &&
-				 isspace ((int) cp [5]))
-		{
-			cp += 5;
-
-			while (isspace ((int) *cp))
-				++cp;
-			vStringClear (name);
-			while (isalnum ((int) *cp)  ||  *cp == '_')
-			{
-				vStringPut (name, (int) *cp);
-				++cp;
-			}
-			vStringTerminate (name);
-			makeSimpleTag (name, PhpKinds, K_CLASS);
-			vStringClear (name);
-		}
-		else if (strncmp ((const char*) cp, "define", (size_t) 6) == 0 &&
-				 ! isalnum ((int) cp [6]))
-		{
-			cp += 6;
-
-			while (isspace ((int) *cp))
-				++cp;
-			if (*cp != '(')
-				continue;
-			++cp;
-
-			while (isspace ((int) *cp))
-				++cp;
-			if ((*cp == '\'') || (*cp == '"'))
-				++cp;
-			else if (! ((*cp == '_')  || isalnum ((int) *cp)))
-				continue;
-
-			vStringClear (name);
-			while (isalnum ((int) *cp)  ||  *cp == '_')
-			{
-				vStringPut (name, (int) *cp);
-				++cp;
-			}
-			vStringTerminate (name);
-			makeSimpleTag (name, PhpKinds, K_DEFINE);
-			vStringClear (name);
-		}
+		enterScope (token, NULL, -1);
 	}
-	vStringDelete (name);
+	while (token->type != TOKEN_EOF); /* keep going even with unmatched braces */
+
+	deleteToken (token);
+}
+
+static void initialize (const langType language)
+{
+	Lang_php = language;
+	buildPhpKeywordHash ();
 }
 
 extern parserDefinition* PhpParser (void)
 {
-	static const char *const extensions [] = { "php", "php3", "phtml", NULL };
+	static const char *const extensions [] = { "php", "php3", "php4", "php5", "phtml", NULL };
 	parserDefinition* def = parserNew ("PHP");
 	def->kinds      = PhpKinds;
 	def->kindCount  = KIND_COUNT (PhpKinds);
 	def->extensions = extensions;
 	def->parser     = findPhpTags;
+	def->initialize = initialize;
 	return def;
 }
-
-#endif
 
 /* vi:set tabstop=4 shiftwidth=4: */
