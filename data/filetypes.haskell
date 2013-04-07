@@ -28,6 +28,8 @@ ffi=capi ccall export import prim safe stdcall unsafe
 
 [lexer_properties]
 lexer.haskell.allow.hash=1
+lexer.haskell.allow.quotes=1
+lexer.haskell.import.safe=1
 styling.within.preprocessor=1
 
 [settings]
