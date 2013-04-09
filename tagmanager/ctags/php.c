@@ -99,15 +99,17 @@ typedef enum {
 	K_CLASS,
 	K_DEFINE,
 	K_FUNCTION,
+	K_INTERFACE,
 	K_VARIABLE,
 	COUNT_KIND
 } phpKind;
 
 static kindOption PhpKinds[COUNT_KIND] = {
-	{ TRUE, 'c', "class",    "classes" },
-	{ TRUE, 'm', "macro",    "constant definitions" },
-	{ TRUE, 'f', "function", "functions" },
-	{ TRUE, 'v', "variable", "variables" }
+	{ TRUE, 'c', "class",		"classes" },
+	{ TRUE, 'm', "macro",		"constant definitions" },
+	{ TRUE, 'f', "function",	"functions" },
+	{ TRUE, 'i', "interface",	"interfaces" },
+	{ TRUE, 'v', "variable",	"variables" }
 };
 
 typedef struct {
@@ -289,13 +291,14 @@ static void makeSimplePhpTag (tokenInfo *const token, phpKind kind, accessType a
 	}
 }
 
-static void makeClassTag (tokenInfo *const token, vString *const inheritance, implType impl)
+static void makeClassOrIfaceTag (phpKind kind, tokenInfo *const token,
+								 vString *const inheritance, implType impl)
 {
-	if (PhpKinds[K_CLASS].enabled)
+	if (PhpKinds[kind].enabled)
 	{
 		tagEntryInfo e;
 
-		initPhpEntry (&e, token, K_CLASS, ACCESS_UNDEFINED);
+		initPhpEntry (&e, token, kind, ACCESS_UNDEFINED);
 
 		if (impl != IMPL_UNDEFINED)
 			e.extensionFields.implementation = implToString (impl);
@@ -687,7 +690,13 @@ getNextChar:
 
 static void enterScope (tokenInfo *const token, vString *const scope, int parentKind);
 
-static boolean parseClass (tokenInfo *const token)
+/* parses a class or an interface:
+ * 	class Foo {}
+ * 	class Foo extends Bar {}
+ * 	class Foo extends Bar implements iFoo, iBar {}
+ * 	interface iFoo {}
+ * 	interface iBar extends iFoo {} */
+static boolean parseClassOrIface (tokenInfo *const token, phpKind kind)
 {
 	boolean readNext = TRUE;
 	implType impl = CurrentStatement.impl;
@@ -718,7 +727,7 @@ static boolean parseClass (tokenInfo *const token)
 	while (token->type != TOKEN_EOF &&
 		   token->type != TOKEN_OPEN_CURLY);
 
-	makeClassTag (name, inheritance, impl);
+	makeClassOrIfaceTag (kind, name, inheritance, impl);
 
 	if (token->type == TOKEN_OPEN_CURLY)
 		enterScope (token, name->string, K_CLASS);
@@ -899,10 +908,11 @@ static void enterScope (tokenInfo *const parentToken, vString *const extraScope,
 			case TOKEN_KEYWORD:
 				switch (token->keyword)
 				{
-					case KEYWORD_class:		readNext = parseClass (token);		break;
-					case KEYWORD_function:	readNext = parseFunction (token);	break;
-					case KEYWORD_const:		readNext = parseConstant (token);	break;
-					case KEYWORD_define:	readNext = parseDefine (token);		break;
+					case KEYWORD_class:		readNext = parseClassOrIface (token, K_CLASS);		break;
+					case KEYWORD_interface:	readNext = parseClassOrIface (token, K_INTERFACE);	break;
+					case KEYWORD_function:	readNext = parseFunction (token);					break;
+					case KEYWORD_const:		readNext = parseConstant (token);					break;
+					case KEYWORD_define:	readNext = parseDefine (token);						break;
 
 					case KEYWORD_private:	CurrentStatement.access = ACCESS_PRIVATE;	break;
 					case KEYWORD_protected:	CurrentStatement.access = ACCESS_PROTECTED;	break;
