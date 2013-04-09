@@ -749,24 +749,32 @@ static boolean parseClassOrIface (tokenInfo *const token, const phpKind kind)
 }
 
 /* parse a function
+ *
+ * if @name is NULL, parses a normal function
  * 	function myfunc($foo, $bar) {}
- * 	function &myfunc($foo, $bar) {} */
-static boolean parseFunction (tokenInfo *const token)
+ * 	function &myfunc($foo, $bar) {}
+ *
+ * if @name is not NULL, parses an anonymous function with name @name
+ * 	$foo = function($foo, $bar) {} */
+static boolean parseFunction (tokenInfo *const token, const tokenInfo *name)
 {
 	boolean readNext = TRUE;
 	accessType access = CurrentStatement.access;
 	implType impl = CurrentStatement.impl;
-	tokenInfo *name;
+	tokenInfo *nameFree = NULL;
 
-	readToken (token);
-	/* skip a possible leading ampersand (return by reference) */
-	if (token->type == TOKEN_AMPERSAND)
+	if (! name)
+	{
 		readToken (token);
-	if (token->type != TOKEN_IDENTIFIER)
-		return FALSE;
+		/* skip a possible leading ampersand (return by reference) */
+		if (token->type == TOKEN_AMPERSAND)
+			readToken (token);
+		if (token->type != TOKEN_IDENTIFIER)
+			return FALSE;
 
-	name = newToken ();
-	copyToken (name, token, TRUE);
+		name = nameFree = newToken ();
+		copyToken (nameFree, token, TRUE);
+	}
 
 	readToken (token);
 	if (token->type == TOKEN_OPEN_PAREN)
@@ -801,7 +809,8 @@ static boolean parseFunction (tokenInfo *const token)
 	else
 		readNext = FALSE;
 
-	deleteToken (name);
+	if (nameFree)
+		deleteToken (nameFree);
 
 	return readNext;
 }
@@ -884,7 +893,22 @@ static boolean parseVariable (tokenInfo *const token)
 	copyToken (name, token, TRUE);
 
 	readToken (token);
-	if (token->type == TOKEN_EQUAL_SIGN || token->type == TOKEN_SEMICOLON)
+	if (token->type == TOKEN_EQUAL_SIGN)
+	{
+		readToken (token);
+		if (token->type == TOKEN_KEYWORD && token->keyword == KEYWORD_function)
+		{
+			if (parseFunction (token, name))
+				readToken (token);
+			readNext = (boolean) (token->type == TOKEN_SEMICOLON);
+		}
+		else
+		{
+			makeSimplePhpTag (name, K_VARIABLE, access);
+			readNext = FALSE;
+		}
+	}
+	else if (token->type == TOKEN_SEMICOLON)
 		makeSimplePhpTag (name, K_VARIABLE, access);
 	else
 		readNext = FALSE;
@@ -926,7 +950,7 @@ static void enterScope (tokenInfo *const parentToken,
 				{
 					case KEYWORD_class:		readNext = parseClassOrIface (token, K_CLASS);		break;
 					case KEYWORD_interface:	readNext = parseClassOrIface (token, K_INTERFACE);	break;
-					case KEYWORD_function:	readNext = parseFunction (token);					break;
+					case KEYWORD_function:	readNext = parseFunction (token, NULL);				break;
 					case KEYWORD_const:		readNext = parseConstant (token);					break;
 					case KEYWORD_define:	readNext = parseDefine (token);						break;
 
