@@ -261,7 +261,8 @@ static const char *implToString (const implType impl)
 	return names[impl];
 }
 
-static void initPhpEntry (tagEntryInfo *e, const tokenInfo *const token, phpKind kind, accessType access)
+static void initPhpEntry (tagEntryInfo *const e, const tokenInfo *const token,
+						  const phpKind kind, const accessType access)
 {
 	initTagEntry (e, vStringValue (token->string));
 
@@ -281,7 +282,8 @@ static void initPhpEntry (tagEntryInfo *e, const tokenInfo *const token, phpKind
 	}
 }
 
-static void makeSimplePhpTag (tokenInfo *const token, phpKind kind, accessType access)
+static void makeSimplePhpTag (const tokenInfo *const token, const phpKind kind,
+							  const accessType access)
 {
 	if (PhpKinds[kind].enabled)
 	{
@@ -292,8 +294,8 @@ static void makeSimplePhpTag (tokenInfo *const token, phpKind kind, accessType a
 	}
 }
 
-static void makeClassOrIfaceTag (phpKind kind, tokenInfo *const token,
-								 vString *const inheritance, implType impl)
+static void makeClassOrIfaceTag (const phpKind kind, const tokenInfo *const token,
+								 vString *const inheritance, const implType impl)
 {
 	if (PhpKinds[kind].enabled)
 	{
@@ -310,8 +312,9 @@ static void makeClassOrIfaceTag (phpKind kind, tokenInfo *const token,
 	}
 }
 
-static void makeFunctionTag (tokenInfo *const token, vString *const arglist,
-							 accessType access, implType impl)
+static void makeFunctionTag (const tokenInfo *const token,
+							 const vString *const arglist,
+							 const accessType access, const implType impl)
 { 
 	if (PhpKinds[K_FUNCTION].enabled)
 	{
@@ -350,7 +353,8 @@ static void deleteToken (tokenInfo *const token)
 	eFree (token);
 }
 
-static void copyToken (tokenInfo *const dest, tokenInfo *const src, boolean scope)
+static void copyToken (tokenInfo *const dest, const tokenInfo *const src,
+					   boolean scope)
 {
 	dest->lineNumber = src->lineNumber;
 	dest->filePosition = src->filePosition;
@@ -429,7 +433,7 @@ static void printToken (const tokenInfo *const token)
 }
 #endif
 
-static void addToScope (tokenInfo* const token, vString* const extra)
+static void addToScope (tokenInfo *const token, const vString *const extra)
 {
 	if (vStringLength (token->scope) > 0)
 		vStringCatS (token->scope, "." /* "::" */);
@@ -690,7 +694,9 @@ getNextChar:
 	}
 }
 
-static void enterScope (tokenInfo *const token, vString *const scope, int parentKind);
+static void enterScope (tokenInfo *const parentToken,
+						const vString *const extraScope,
+						const int parentKind);
 
 /* parses a class or an interface:
  * 	class Foo {}
@@ -698,7 +704,7 @@ static void enterScope (tokenInfo *const token, vString *const scope, int parent
  * 	class Foo extends Bar implements iFoo, iBar {}
  * 	interface iFoo {}
  * 	interface iBar extends iFoo {} */
-static boolean parseClassOrIface (tokenInfo *const token, phpKind kind)
+static boolean parseClassOrIface (tokenInfo *const token, const phpKind kind)
 {
 	boolean readNext = TRUE;
 	implType impl = CurrentStatement.impl;
@@ -888,7 +894,9 @@ static boolean parseVariable (tokenInfo *const token)
 	return readNext;
 }
 
-static void enterScope (tokenInfo *const parentToken, vString *const extraScope, int parentKind)
+static void enterScope (tokenInfo *const parentToken,
+						const vString *const extraScope,
+						const int parentKind)
 {
 	tokenInfo *token = newToken ();
 	int origParentKind = parentToken->parentKind;
