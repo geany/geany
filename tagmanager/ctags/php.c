@@ -289,7 +289,7 @@ static void makeSimplePhpTag (tokenInfo *const token, phpKind kind, accessType a
 	}
 }
 
-static void makeClassTag (tokenInfo *const token, implType impl)
+static void makeClassTag (tokenInfo *const token, vString *const inheritance, implType impl)
 {
 	if (PhpKinds[K_CLASS].enabled)
 	{
@@ -299,6 +299,8 @@ static void makeClassTag (tokenInfo *const token, implType impl)
 
 		if (impl != IMPL_UNDEFINED)
 			e.extensionFields.implementation = implToString (impl);
+		if (vStringLength (inheritance) > 0)
+			e.extensionFields.inheritance = vStringValue (inheritance);
 
 		makeTagEntry (&e);
 	}
@@ -690,6 +692,7 @@ static boolean parseClass (tokenInfo *const token)
 	boolean readNext = TRUE;
 	implType impl = CurrentStatement.impl;
 	tokenInfo *name;
+	vString *inheritance = NULL;
 
 	readToken (token);
 	if (token->type != TOKEN_IDENTIFIER)
@@ -697,15 +700,25 @@ static boolean parseClass (tokenInfo *const token)
 
 	name = newToken ();
 	copyToken (name, token, TRUE);
-	makeClassTag (name, impl);
 
-	/* skip over possible "extends FOO, BAR" */
+	inheritance = vStringNew ();
+	/* skip until the open bracket and assume every identifier (not keyword)
+	 * is an inheritance (like in "class Foo extends Bar implements iA, iB") */
 	do
 	{
 		readToken (token);
+
+		if (token->type == TOKEN_IDENTIFIER)
+		{
+			if (vStringLength (inheritance) > 0)
+				vStringPut (inheritance, ',');
+			vStringCat (inheritance, token->string);
+		}
 	}
 	while (token->type != TOKEN_EOF &&
 		   token->type != TOKEN_OPEN_CURLY);
+
+	makeClassTag (name, inheritance, impl);
 
 	if (token->type == TOKEN_OPEN_CURLY)
 		enterScope (token, name->string, K_CLASS);
@@ -713,6 +726,7 @@ static boolean parseClass (tokenInfo *const token)
 		readNext = FALSE;
 
 	deleteToken (name);
+	vStringDelete (inheritance);
 
 	return readNext;
 }
