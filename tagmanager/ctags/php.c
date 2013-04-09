@@ -909,7 +909,15 @@ static boolean parseVariable (tokenInfo *const token)
 		}
 	}
 	else if (token->type == TOKEN_SEMICOLON)
-		makeSimplePhpTag (name, K_VARIABLE, access);
+	{
+		/* generate tags for variable declarations in classes
+		 * 	class Foo {
+		 * 		protected $foo;
+		 * 	}
+		 * but don't get fooled by stuff like $foo = $bar; */
+		if (token->parentKind == K_CLASS || token->parentKind == K_INTERFACE)
+			makeSimplePhpTag (name, K_VARIABLE, access);
+	}
 	else
 		readNext = FALSE;
 
