@@ -199,7 +199,8 @@ typedef enum eTokenType {
 	TOKEN_EQUAL_SIGN,
 	TOKEN_OPEN_SQUARE,
 	TOKEN_CLOSE_SQUARE,
-	TOKEN_VARIABLE
+	TOKEN_VARIABLE,
+	TOKEN_AMPERSAND
 } tokenType;
 
 typedef struct {
@@ -567,6 +568,7 @@ getNextChar:
 		case '}': token->type = TOKEN_CLOSE_CURLY;			break;
 		case '[': token->type = TOKEN_OPEN_SQUARE;			break;
 		case ']': token->type = TOKEN_CLOSE_SQUARE;			break;
+		case '&': token->type = TOKEN_AMPERSAND;			break;
 
 		case '=':
 		{
@@ -740,6 +742,9 @@ static boolean parseClassOrIface (tokenInfo *const token, phpKind kind)
 	return readNext;
 }
 
+/* parse a function
+ * 	function myfunc($foo, $bar) {}
+ * 	function &myfunc($foo, $bar) {} */
 static boolean parseFunction (tokenInfo *const token)
 {
 	boolean readNext = TRUE;
@@ -748,6 +753,9 @@ static boolean parseFunction (tokenInfo *const token)
 	tokenInfo *name;
 
 	readToken (token);
+	/* skip a possible leading ampersand (return by reference) */
+	if (token->type == TOKEN_AMPERSAND)
+		readToken (token);
 	if (token->type != TOKEN_IDENTIFIER)
 		return FALSE;
 
