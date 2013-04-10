@@ -1126,6 +1126,36 @@ static const HLStyle highlighting_styles_PO[] =
 #define highlighting_properties_PO	EMPTY_PROPERTIES
 
 
+/* PowerShell */
+#define highlighting_lexer_POWERSHELL		SCLEX_POWERSHELL
+static const HLStyle highlighting_styles_POWERSHELL[] =
+{
+	{ SCE_POWERSHELL_DEFAULT,			"default",			FALSE },
+	{ SCE_POWERSHELL_COMMENT,			"comment",			FALSE },
+	{ SCE_POWERSHELL_STRING,			"string",			FALSE },
+	{ SCE_POWERSHELL_CHARACTER,			"character",		FALSE },
+	{ SCE_POWERSHELL_NUMBER,			"number",			FALSE },
+	{ SCE_POWERSHELL_VARIABLE,			"variable",			FALSE },
+	{ SCE_POWERSHELL_OPERATOR,			"operator",			FALSE },
+	{ SCE_POWERSHELL_IDENTIFIER,		"identifier",		FALSE },
+	{ SCE_POWERSHELL_KEYWORD,			"keyword",			FALSE },
+	{ SCE_POWERSHELL_CMDLET,			"cmdlet",			FALSE },
+	{ SCE_POWERSHELL_ALIAS,				"alias",			FALSE },
+	{ SCE_POWERSHELL_FUNCTION,			"function",			FALSE },
+	{ SCE_POWERSHELL_USER1,				"user1",			FALSE },
+	{ SCE_POWERSHELL_COMMENTSTREAM,		"commentstream",	FALSE },
+};
+static const HLKeyword highlighting_keywords_POWERSHELL[] =
+{
+	{ 0, "keywords",	FALSE },
+	{ 1, "cmdlets",		FALSE },
+	{ 2, "aliases",		FALSE },
+	{ 3, "functions",	FALSE },
+	{ 4, "user1",		FALSE },
+};
+#define highlighting_properties_POWERSHELL	EMPTY_PROPERTIES
+
+
 /* Python */
 #define highlighting_lexer_PYTHON		SCLEX_PYTHON
 static const HLStyle highlighting_styles_PYTHON[] =

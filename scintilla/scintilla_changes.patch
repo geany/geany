@@ -110,7 +110,7 @@ index 2f75247..a34f834 100644
  	LINK_LEXER(lmPO);
 -	LINK_LEXER(lmPOV);
 -	LINK_LEXER(lmPowerPro);
--	LINK_LEXER(lmPowerShell);
+ 	LINK_LEXER(lmPowerShell);
 -	LINK_LEXER(lmProgress);
  	LINK_LEXER(lmProps);
 -	LINK_LEXER(lmPS);

@@ -30,6 +30,7 @@ lexers/LexNsis.cxx \
 lexers/LexOthers.cxx \
 lexers/LexPascal.cxx \
 lexers/LexPerl.cxx \
+lexers/LexPowerShell.cxx \
 lexers/LexPython.cxx \
 lexers/LexPO.cxx \
 lexers/LexR.cxx \
