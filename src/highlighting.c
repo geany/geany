@@ -1078,6 +1078,7 @@ void highlighting_init_styles(guint filetype_idx, GKeyFile *config, GKeyFile *co
 		init_styleset_case(PERL);
 		init_styleset_case(PHP);
 		init_styleset_case(PO);
+		init_styleset_case(POWERSHELL);
 		init_styleset_case(PYTHON);
 		init_styleset_case(R);
 		init_styleset_case(RUBY);
@@ -1159,6 +1160,7 @@ void highlighting_set_styles(ScintillaObject *sci, GeanyFiletype *ft)
 		styleset_case(PERL);
 		styleset_case(PHP);
 		styleset_case(PO);
+		styleset_case(POWERSHELL);
 		styleset_case(PYTHON);
 		styleset_case(R);
 		styleset_case(RUBY);

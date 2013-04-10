@@ -112,6 +112,7 @@ int Scintilla_LinkLexers() {
 	LINK_LEXER(lmPascal);
 	LINK_LEXER(lmPerl);
 	LINK_LEXER(lmPO);
+	LINK_LEXER(lmPowerShell);
 	LINK_LEXER(lmProps);
 	LINK_LEXER(lmPython);
 	LINK_LEXER(lmR);
