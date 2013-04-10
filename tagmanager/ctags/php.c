@@ -492,6 +492,129 @@ static void parseString (vString *const string, const int delimiter)
 	vStringTerminate (string);
 }
 
+/* reads an HereDoc or a NowDoc (the part after the <<<).
+ * 	<<<[ \t]*(ID|'ID'|"ID")
+ * 	...
+ * 	ID;?
+ *
+ * note that:
+ *  1) starting ID must be immediately followed by a newline;
+ *  2) closing ID is the same as opening one;
+ *  3) closing ID must be immediately followed by a newline or a semicolon
+ *     then a newline.
+ *
+ * Example of a *single* valid heredoc:
+ * 	<<< FOO
+ * 	something
+ * 	something else
+ * 	FOO this is not an end
+ * 	FOO; this isn't either
+ * 	FOO; # neither this is
+ * 	FOO;
+ * 	# previous line was the end, but the semicolon wasn't required
+ */
+static void parseHeredoc (vString *const string)
+{
+	int c;
+	unsigned int len;
+	char delimiter[64]; /* arbitrary limit, but more is crazy anyway */
+	int quote = 0;
+
+	do
+	{
+		c = fileGetc ();
+	}
+	while (c == ' ' || c == '\t');
+
+	if (c == '\'' || c == '"')
+	{
+		quote = c;
+		c = fileGetc ();
+	}
+	for (len = 0; len < (sizeof delimiter / sizeof delimiter[0]) - 1; len++)
+	{
+		if (! isIdentChar (c))
+			break;
+		delimiter[len] = (char) c;
+		c = fileGetc ();
+	}
+	delimiter[len] = 0;
+
+	if (len == 0) /* no delimiter, give up */
+		goto error;
+	if (quote)
+	{
+		if (c != quote) /* no closing quote for quoted identifier, give up */
+			goto error;
+		c = fileGetc ();
+	}
+	if (c != '\r' && c != '\n') /* missing newline, give up */
+		goto error;
+
+	do
+	{
+		c = fileGetc ();
+
+		if (c != '\r' && c != '\n')
+			vStringPut (string, (char) c);
+		else
+		{
+			/* new line, check for a delimiter right after */
+			int nl = c;
+			int extra = EOF;
+
+			c = fileGetc ();
+			for (len = 0; c != 0 && (c - delimiter[len]) == 0; len++)
+				c = fileGetc ();
+
+			if (delimiter[len] != 0)
+				fileUngetc (c);
+			else
+			{
+				/* line start matched the delimiter, now check whether there
+				 * is anything after it */
+				if (c == '\r' || c == '\n')
+				{
+					fileUngetc (c);
+					break;
+				}
+				else if (c == ';')
+				{
+					int d = fileGetc ();
+					if (d == '\r' || d == '\n')
+					{
+						/* put back the semicolon since it's not part of the
+						 * string.  we can't put back the newline, but it's a
+						 * whitespace character nobody cares about it anyway */
+						fileUngetc (';');
+						break;
+					}
+					else
+					{
+						/* put semicolon in the string and continue */
+						extra = ';';
+						fileUngetc (d);
+					}
+				}
+			}
+			/* if we are here it wasn't a delimiter, so put everything in the
+			 * string */
+			vStringPut (string, (char) nl);
+			vStringNCatS (string, delimiter, len);
+			if (extra != EOF)
+				vStringPut (string, (char) extra);
+		}
+	}
+	while (c != EOF);
+
+	vStringTerminate (string);
+
+	return;
+
+error:
+	fileUngetc (c);
+}
+
 static void parseIdentifier (vString *const string, const int firstChar)
 {
 	int c = firstChar;
@@ -596,6 +719,23 @@ getNextChar:
 			token->lineNumber = getSourceLineNumber ();
 			token->filePosition = getInputFilePosition ();
 			break;
+
+		case '<':
+		{
+			int d;
+			if ((d = fileGetc ()) != '<' ||
+				(d = fileGetc ()) != '<')
+			{
+				fileUngetc (d);
+				token->type = TOKEN_UNDEFINED;
+			}
+			else
+			{
+				token->type = TOKEN_STRING;
+				parseHeredoc (token->string);
+			}
+			break;
+		}
 
 		case '#': /* comment */
 			skipToEndOfLine ();
