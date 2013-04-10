@@ -970,28 +970,69 @@ static boolean parseFunction (tokenInfo *const token, const tokenInfo *name)
 	{
 		vString *arglist = vStringNew ();
 		int depth = 1;
-		int c;
 
 		vStringPut (arglist, '(');
 		do
 		{
-			c = fileGetc ();
-			if (c != EOF)
+			readToken (token);
+
+			switch (token->type)
 			{
-				vStringPut (arglist, (char) c);
-				if (c == '(')
-					depth++;
-				else if (c == ')')
-					depth--;
+				case TOKEN_OPEN_PAREN:  depth++; break;
+				case TOKEN_CLOSE_PAREN: depth--; break;
+				default: break;
+			}
+			/* display part */
+			switch (token->type)
+			{
+				case TOKEN_AMPERSAND:		vStringPut (arglist, '&');		break;
+				case TOKEN_CLOSE_CURLY:		vStringPut (arglist, '}');		break;
+				case TOKEN_CLOSE_PAREN:		vStringPut (arglist, ')');		break;
+				case TOKEN_CLOSE_SQUARE:	vStringPut (arglist, ']');		break;
+				case TOKEN_COLON:			vStringPut (arglist, ':');		break;
+				case TOKEN_COMMA:			vStringCatS (arglist, ", ");	break;
+				case TOKEN_EQUAL_SIGN:		vStringCatS (arglist, " = ");	break;
+				case TOKEN_OPEN_CURLY:		vStringPut (arglist, '{');		break;
+				case TOKEN_OPEN_PAREN:		vStringPut (arglist, '(');		break;
+				case TOKEN_OPEN_SQUARE:		vStringPut (arglist, '[');		break;
+				case TOKEN_PERIOD:			vStringPut (arglist, '.');		break;
+				case TOKEN_SEMICOLON:		vStringPut (arglist, ';');		break;
+				case TOKEN_STRING:			vStringCatS (arglist, "'...'");	break;
+
+				case TOKEN_IDENTIFIER:
+				case TOKEN_KEYWORD:
+				case TOKEN_VARIABLE:
+				{
+					switch (vStringLast (arglist))
+					{
+						case 0:
+						case ' ':
+						case '{':
+						case '(':
+						case '[':
+						case '.':
+							/* no need for a space between those and the identifier */
+							break;
+
+						default:
+							vStringPut (arglist, ' ');
+							break;
+					}
+					vStringCat (arglist, token->string);
+					break;
+				}
+
+				default: break;
 			}
 		}
-		while (depth > 0 && c != EOF);
+		while (token->type != TOKEN_EOF && depth > 0);
+
 		vStringTerminate (arglist);
 
 		makeFunctionTag (name, arglist, access, impl);
 		vStringDelete (arglist);
 
-		readToken (token); /* normally it's an open brace */
+		readToken (token); /* normally it's an open brace or a semicolon */
 	}
 	if (token->type == TOKEN_OPEN_CURLY)
 		enterScope (token, name->string, K_FUNCTION);
