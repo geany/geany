@@ -20,6 +20,9 @@
 #include "entry.h"
 
 
+#define SCOPE_SEPARATOR "." /* "::" */
+
+
 typedef enum {
 	KEYWORD_NONE = -1,
 	KEYWORD_abstract,
@@ -101,6 +104,7 @@ typedef enum {
 	K_FUNCTION,
 	K_INTERFACE,
 	K_LOCAL_VARIABLE,
+	K_NAMESPACE,
 	K_VARIABLE,
 	COUNT_KIND
 } phpKind;
@@ -111,6 +115,7 @@ static kindOption PhpKinds[COUNT_KIND] = {
 	{ TRUE, 'f', "function",	"functions" },
 	{ TRUE, 'i', "interface",	"interfaces" },
 	{ FALSE, 'l', "local",		"local variables" },
+	{ TRUE, 'n', "namespace",	"namespaces" },
 	{ TRUE, 'v', "variable",	"variables" }
 };
 
@@ -225,6 +230,9 @@ struct {
 	implType impl;
 } CurrentStatement;
 
+/* Current namespace */
+vString *CurrentNamesapce;
+
 
 static void buildPhpKeywordHash (void)
 {
@@ -266,6 +274,20 @@ static const char *implToString (const implType impl)
 static void initPhpEntry (tagEntryInfo *const e, const tokenInfo *const token,
 						  const phpKind kind, const accessType access)
 {
+	static vString *fullScope = NULL;
+	int parentKind = -1;
+
+	if (fullScope == NULL)
+		fullScope = vStringNew ();
+	else
+		vStringClear (fullScope);
+
+	if (vStringLength (CurrentNamesapce) > 0)
+	{
+		vStringCopy (fullScope, CurrentNamesapce);
+		parentKind = K_NAMESPACE;
+	}
+
 	initTagEntry (e, vStringValue (token->string));
 
 	e->lineNumber	= token->lineNumber;
@@ -275,12 +297,20 @@ static void initPhpEntry (tagEntryInfo *const e, const tokenInfo *const token,
 
 	if (access != ACCESS_UNDEFINED)
 		e->extensionFields.access = accessToString (access);
-	if (vStringLength(token->scope) > 0)
+	if (vStringLength (token->scope) > 0)
 	{
-		Assert (token->parentKind >= 0);
+		parentKind = token->parentKind;
+		if (vStringLength (fullScope) > 0)
+			vStringCatS (fullScope, SCOPE_SEPARATOR);
+		vStringCat (fullScope, token->scope);
+	}
+	if (vStringLength (fullScope) > 0)
+	{
+		Assert (parentKind >= 0);
 
-		e->extensionFields.scope[0] = PhpKinds[token->parentKind].name;
-		e->extensionFields.scope[1] = vStringValue (token->scope);
+		vStringTerminate (fullScope);
+		e->extensionFields.scope[0] = PhpKinds[parentKind].name;
+		e->extensionFields.scope[1] = vStringValue (fullScope);
 	}
 }
 
@@ -292,6 +322,23 @@ static void makeSimplePhpTag (const tokenInfo *const token, const phpKind kind,
 		tagEntryInfo e;
 
 		initPhpEntry (&e, token, kind, access);
+		makeTagEntry (&e);
+	}
+}
+
+static void makeNamespacePhpTag (const tokenInfo *const token, const vString *const name)
+{
+	if (PhpKinds[K_NAMESPACE].enabled)
+	{
+		tagEntryInfo e;
+
+		initTagEntry (&e, vStringValue (name));
+
+		e.lineNumber	= token->lineNumber;
+		e.filePosition	= token->filePosition;
+		e.kindName		= PhpKinds[K_NAMESPACE].name;
+		e.kind			= (char) PhpKinds[K_NAMESPACE].letter;
+
 		makeTagEntry (&e);
 	}
 }
@@ -438,7 +485,7 @@ static void printToken (const tokenInfo *const token)
 static void addToScope (tokenInfo *const token, const vString *const extra)
 {
 	if (vStringLength (token->scope) > 0)
-		vStringCatS (token->scope, "." /* "::" */);
+		vStringCatS (token->scope, SCOPE_SEPARATOR);
 	vStringCatS (token->scope, vStringValue (extra));
 	vStringTerminate(token->scope);
 }
@@ -1071,6 +1118,46 @@ static boolean parseVariable (tokenInfo *const token)
 	return readNext;
 }
 
+/* parses namespace declarations
+ * 	namespace Foo {}
+ * 	namespace Foo\Bar {}
+ * 	namespace Foo;
+ * 	namespace Foo\Bar;
+ * 	namespace;
+ * 	napespace {} */
+static boolean parseNamespace (tokenInfo *const token)
+{
+	tokenInfo *nsToken = newToken ();
+
+	vStringClear (CurrentNamesapce);
+	copyToken (nsToken, token, FALSE);
+
+	do
+	{
+		readToken (token);
+		if (token->type == TOKEN_IDENTIFIER)
+		{
+			if (vStringLength (CurrentNamesapce) > 0)
+				vStringPut (CurrentNamesapce, '\\');
+			vStringCat (CurrentNamesapce, token->string);
+		}
+	}
+	while (token->type != TOKEN_EOF &&
+		   token->type != TOKEN_SEMICOLON &&
+		   token->type != TOKEN_OPEN_CURLY);
+
+	vStringTerminate (CurrentNamesapce);
+	if (vStringLength (CurrentNamesapce) > 0)
+		makeNamespacePhpTag (nsToken, CurrentNamesapce);
+
+	if (token->type == TOKEN_OPEN_CURLY)
+		enterScope (token, NULL, -1);
+
+	deleteToken (nsToken);
+
+	return TRUE;
+}
+
 static void enterScope (tokenInfo *const parentToken,
 						const vString *const extraScope,
 						const int parentKind)
@@ -1107,6 +1194,8 @@ static void enterScope (tokenInfo *const parentToken,
 					case KEYWORD_const:		readNext = parseConstant (token);					break;
 					case KEYWORD_define:	readNext = parseDefine (token);						break;
 
+					case KEYWORD_namespace:	readNext = parseNamespace (token);	break;
+
 					case KEYWORD_private:	CurrentStatement.access = ACCESS_PRIVATE;	break;
 					case KEYWORD_protected:	CurrentStatement.access = ACCESS_PROTECTED;	break;
 					case KEYWORD_public:	CurrentStatement.access = ACCESS_PUBLIC;	break;
@@ -1141,6 +1230,7 @@ static void findPhpTags (void)
 	InPhp = FALSE;
 	CurrentStatement.access = ACCESS_UNDEFINED;
 	CurrentStatement.impl = IMPL_UNDEFINED;
+	CurrentNamesapce = vStringNew ();
 
 	do
 	{
@@ -1148,6 +1238,7 @@ static void findPhpTags (void)
 	}
 	while (token->type != TOKEN_EOF); /* keep going even with unmatched braces */
 
+	vStringDelete (CurrentNamesapce);
 	deleteToken (token);
 }
 
