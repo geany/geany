@@ -492,7 +492,7 @@ static void addToScope (tokenInfo *const token, const vString *const extra)
 
 static boolean isIdentChar (const int c)
 {
-	return (isalnum (c) || c == '_');
+	return (isalnum (c) || c == '_' || c & 0x80);
 }
 
 static int skipToCharacter (const int c)
