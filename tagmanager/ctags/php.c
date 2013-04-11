@@ -505,24 +505,6 @@ static int skipToCharacter (const int c)
 	return d;
 }
 
-static int skipToEndOfLine (void)
-{
-	int c;
-	do
-	{
-		c = fileGetc ();
-		if (c == '\r')
-		{
-			int next = fileGetc ();
-			if (next != '\n')
-				fileUngetc (next);
-			else
-				c = next;
-		}
-	} while (c != EOF && c != '\n' && c != '\r');
-	return c;
-}
-
 static void parseString (vString *const string, const int delimiter)
 {
 	while (TRUE)
@@ -704,6 +686,33 @@ static int findPhpStart (void)
 	return c;
 }
 
+static int skipSingleComment (void)
+{
+	int c;
+	do
+	{
+		c = fileGetc ();
+		if (c == '\r')
+		{
+			int next = fileGetc ();
+			if (next != '\n')
+				fileUngetc (next);
+			else
+				c = next;
+		}
+		/* ?> in single-line comments leaves PHP mode */
+		else if (c == '?')
+		{
+			int next = fileGetc ();
+			if (next == '>')
+				InPhp = FALSE;
+			else
+				fileUngetc (next);
+		}
+	} while (InPhp && c != EOF && c != '\n' && c != '\r');
+	return c;
+}
+
 static void readToken (tokenInfo *const token)
 {
 	int c;
@@ -785,7 +794,7 @@ getNextChar:
 		}
 
 		case '#': /* comment */
-			skipToEndOfLine ();
+			skipSingleComment ();
 			goto getNextChar;
 			break;
 
@@ -806,7 +815,7 @@ getNextChar:
 			int d = fileGetc ();
 			if (d == '/') /* single-line comment */
 			{
-				skipToEndOfLine ();
+				skipSingleComment ();
 				goto getNextChar;
 			}
 			else if (d == '*')
