@@ -105,6 +105,7 @@ typedef enum {
 	K_INTERFACE,
 	K_LOCAL_VARIABLE,
 	K_NAMESPACE,
+	K_TRAIT,
 	K_VARIABLE,
 	COUNT_KIND
 } phpKind;
@@ -116,6 +117,7 @@ static kindOption PhpKinds[COUNT_KIND] = {
 	{ TRUE, 'i', "interface",	"interfaces" },
 	{ FALSE, 'l', "local",		"local variables" },
 	{ TRUE, 'n', "namespace",	"namespaces" },
+	{ TRUE, 't', "trait",		"traits" },
 	{ TRUE, 'v', "variable",	"variables" }
 };
 
@@ -957,6 +959,33 @@ static boolean parseClassOrIface (tokenInfo *const token, const phpKind kind)
 	return readNext;
 }
 
+/* parses a trait:
+ * 	trait Foo {} */
+static boolean parseTrait (tokenInfo *const token)
+{
+	boolean readNext = TRUE;
+	tokenInfo *name;
+
+	readToken (token);
+	if (token->type != TOKEN_IDENTIFIER)
+		return FALSE;
+
+	name = newToken ();
+	copyToken (name, token, TRUE);
+
+	makeSimplePhpTag (name, K_TRAIT, ACCESS_UNDEFINED);
+
+	readToken (token);
+	if (token->type == TOKEN_OPEN_CURLY)
+		enterScope (token, name->string, K_TRAIT);
+	else
+		readNext = FALSE;
+
+	deleteToken (name);
+
+	return readNext;
+}
+
 /* parse a function
  *
  * if @name is NULL, parses a normal function
@@ -1253,6 +1282,7 @@ static void enterScope (tokenInfo *const parentToken,
 				{
 					case KEYWORD_class:		readNext = parseClassOrIface (token, K_CLASS);		break;
 					case KEYWORD_interface:	readNext = parseClassOrIface (token, K_INTERFACE);	break;
+					case KEYWORD_trait:		readNext = parseTrait (token);						break;
 					case KEYWORD_function:	readNext = parseFunction (token, NULL);				break;
 					case KEYWORD_const:		readNext = parseConstant (token);					break;
 					case KEYWORD_define:	readNext = parseDefine (token);						break;
