@@ -143,7 +143,7 @@ Stylesheet for Geany's documentation based on a version of John Gabriele.
 <tr><th class="docinfo-name">Date:</th>
 <td>2013-03-10</td></tr>
 <tr><th class="docinfo-name">Version:</th>
-<td>1.23</td></tr>
+<td>1.24</td></tr>
 </tbody>
 </table>
 <p>Copyright © 2005-2012</p>
@@ -268,265 +268,269 @@ of this program, and also in the chapter <a class="reference internal" href="#gn
 <li><a class="reference internal" href="#default-global-tags-files" id="id81">Default global tags files</a></li>
 <li><a class="reference internal" href="#global-tags-file-format" id="id82">Global tags file format</a><ul>
 <li><a class="reference internal" href="#pipe-separated-format" id="id83">Pipe-separated format</a></li>
+<li><a class="reference internal" href="#ctags-format" id="id84">CTags format</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#generating-a-global-tags-file" id="id84">Generating a global tags file</a><ul>
-<li><a class="reference internal" href="#generating-c-c-tag-files" id="id85">Generating C/C++ tag files</a></li>
-<li><a class="reference internal" href="#generating-tag-files-on-windows" id="id86">Generating tag files on Windows</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><a class="reference internal" href="#c-ignore-tags" id="id87">C ignore.tags</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#preferences" id="id88">Preferences</a><ul>
-<li><a class="reference internal" href="#general-startup-preferences" id="id89">General Startup preferences</a><ul>
-<li><a class="reference internal" href="#id1" id="id90">Startup</a></li>
-<li><a class="reference internal" href="#shutdown" id="id91">Shutdown</a></li>
-<li><a class="reference internal" href="#paths" id="id92">Paths</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#general-miscellaneous-preferences" id="id93">General Miscellaneous preferences</a><ul>
-<li><a class="reference internal" href="#miscellaneous" id="id94">Miscellaneous</a></li>
-<li><a class="reference internal" href="#search" id="id95">Search</a></li>
-<li><a class="reference internal" href="#projects" id="id96">Projects</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#interface-preferences" id="id97">Interface preferences</a><ul>
-<li><a class="reference internal" href="#sidebar" id="id98">Sidebar</a></li>
-<li><a class="reference internal" href="#fonts" id="id99">Fonts</a></li>
-<li><a class="reference internal" href="#id2" id="id100">Miscellaneous</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#interface-notebook-tab-preferences" id="id101">Interface Notebook tab preferences</a><ul>
-<li><a class="reference internal" href="#editor-tabs" id="id102">Editor tabs</a></li>
-<li><a class="reference internal" href="#tab-positions" id="id103">Tab positions</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#interface-toolbar-preferences" id="id104">Interface Toolbar preferences</a><ul>
-<li><a class="reference internal" href="#toolbar" id="id105">Toolbar</a></li>
-<li><a class="reference internal" href="#appearance" id="id106">Appearance</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#editor-features-preferences" id="id107">Editor Features preferences</a><ul>
-<li><a class="reference internal" href="#features" id="id108">Features</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#editor-indentation-preferences" id="id109">Editor Indentation preferences</a><ul>
-<li><a class="reference internal" href="#indentation-group" id="id110">Indentation group</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#editor-completions-preferences" id="id111">Editor Completions preferences</a><ul>
-<li><a class="reference internal" href="#completions" id="id112">Completions</a></li>
-<li><a class="reference internal" href="#auto-close-quotes-and-brackets" id="id113">Auto-close quotes and brackets</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#editor-display-preferences" id="id114">Editor Display preferences</a><ul>
-<li><a class="reference internal" href="#display" id="id115">Display</a></li>
-<li><a class="reference internal" href="#long-line-marker" id="id116">Long line marker</a></li>
-<li><a class="reference internal" href="#virtual-spaces" id="id117">Virtual spaces</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#files-preferences" id="id118">Files preferences</a><ul>
-<li><a class="reference internal" href="#new-files" id="id119">New files</a></li>
-<li><a class="reference internal" href="#saving-files" id="id120">Saving files</a></li>
-<li><a class="reference internal" href="#id3" id="id121">Miscellaneous</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#tools-preferences" id="id122">Tools preferences</a><ul>
-<li><a class="reference internal" href="#tool-paths" id="id123">Tool paths</a></li>
-<li><a class="reference internal" href="#commands" id="id124">Commands</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#template-preferences" id="id125">Template preferences</a><ul>
-<li><a class="reference internal" href="#template-data" id="id126">Template data</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#keybinding-preferences" id="id127">Keybinding preferences</a></li>
-<li><a class="reference internal" href="#printing-preferences" id="id128">Printing preferences</a></li>
-<li><a class="reference internal" href="#various-preferences" id="id129">Various preferences</a></li>
-<li><a class="reference internal" href="#terminal-vte-preferences" id="id130">Terminal (VTE) preferences</a><ul>
-<li><a class="reference internal" href="#terminal-widget" id="id131">Terminal widget</a></li>
+<li><a class="reference internal" href="#generating-a-global-tags-file" id="id85">Generating a global tags file</a><ul>
+<li><a class="reference internal" href="#generating-c-c-tag-files" id="id86">Generating C/C++ tag files</a></li>
+<li><a class="reference internal" href="#generating-tag-files-on-windows" id="id87">Generating tag files on Windows</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a class="reference internal" href="#project-management" id="id132">Project management</a><ul>
-<li><a class="reference internal" href="#new-project" id="id133">New project</a></li>
-<li><a class="reference internal" href="#project-properties" id="id134">Project properties</a></li>
-<li><a class="reference internal" href="#open-project" id="id135">Open project</a></li>
-<li><a class="reference internal" href="#close-project" id="id136">Close project</a></li>
+<li><a class="reference internal" href="#c-ignore-tags" id="id88">C ignore.tags</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#build-menu" id="id137">Build menu</a><ul>
-<li><a class="reference internal" href="#indicators" id="id138">Indicators</a></li>
-<li><a class="reference internal" href="#default-build-menu-items" id="id139">Default build menu items</a><ul>
-<li><a class="reference internal" href="#compile" id="id140">Compile</a></li>
-<li><a class="reference internal" href="#build" id="id141">Build</a></li>
-<li><a class="reference internal" href="#make" id="id142">Make</a></li>
-<li><a class="reference internal" href="#make-custom-target" id="id143">Make custom target</a></li>
-<li><a class="reference internal" href="#make-object" id="id144">Make object</a></li>
-<li><a class="reference internal" href="#next-error" id="id145">Next error</a></li>
-<li><a class="reference internal" href="#previous-error" id="id146">Previous error</a></li>
-<li><a class="reference internal" href="#execute" id="id147">Execute</a></li>
-<li><a class="reference internal" href="#stopping-running-processes" id="id148">Stopping running processes</a><ul>
-<li><a class="reference internal" href="#terminal-emulators" id="id149">Terminal emulators</a></li>
+<li><a class="reference internal" href="#preferences" id="id89">Preferences</a><ul>
+<li><a class="reference internal" href="#general-startup-preferences" id="id90">General Startup preferences</a><ul>
+<li><a class="reference internal" href="#id1" id="id91">Startup</a></li>
+<li><a class="reference internal" href="#shutdown" id="id92">Shutdown</a></li>
+<li><a class="reference internal" href="#paths" id="id93">Paths</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#set-build-commands" id="id150">Set build commands</a></li>
+<li><a class="reference internal" href="#general-miscellaneous-preferences" id="id94">General Miscellaneous preferences</a><ul>
+<li><a class="reference internal" href="#miscellaneous" id="id95">Miscellaneous</a></li>
+<li><a class="reference internal" href="#search" id="id96">Search</a></li>
+<li><a class="reference internal" href="#projects" id="id97">Projects</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#build-menu-configuration" id="id151">Build menu configuration</a></li>
-<li><a class="reference internal" href="#build-menu-commands-dialog" id="id152">Build menu commands dialog</a><ul>
-<li><a class="reference internal" href="#substitutions-in-commands-and-working-directories" id="id153">Substitutions in commands and working directories</a></li>
-<li><a class="reference internal" href="#build-menu-keyboard-shortcuts" id="id154">Build menu keyboard shortcuts</a></li>
-<li><a class="reference internal" href="#old-settings" id="id155">Old settings</a></li>
+<li><a class="reference internal" href="#interface-preferences" id="id98">Interface preferences</a><ul>
+<li><a class="reference internal" href="#sidebar" id="id99">Sidebar</a></li>
+<li><a class="reference internal" href="#fonts" id="id100">Fonts</a></li>
+<li><a class="reference internal" href="#id2" id="id101">Miscellaneous</a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#interface-notebook-tab-preferences" id="id102">Interface Notebook tab preferences</a><ul>
+<li><a class="reference internal" href="#editor-tabs" id="id103">Editor tabs</a></li>
+<li><a class="reference internal" href="#tab-positions" id="id104">Tab positions</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#printing-support" id="id156">Printing support</a></li>
-<li><a class="reference internal" href="#plugins" id="id157">Plugins</a><ul>
-<li><a class="reference internal" href="#plugin-manager" id="id158">Plugin manager</a></li>
+<li><a class="reference internal" href="#interface-toolbar-preferences" id="id105">Interface Toolbar preferences</a><ul>
+<li><a class="reference internal" href="#toolbar" id="id106">Toolbar</a></li>
+<li><a class="reference internal" href="#appearance" id="id107">Appearance</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#keybindings" id="id159">Keybindings</a><ul>
-<li><a class="reference internal" href="#switching-documents" id="id160">Switching documents</a></li>
-<li><a class="reference internal" href="#configurable-keybindings" id="id161">Configurable keybindings</a><ul>
-<li><a class="reference internal" href="#file-keybindings" id="id162">File keybindings</a></li>
-<li><a class="reference internal" href="#editor-keybindings" id="id163">Editor keybindings</a></li>
-<li><a class="reference internal" href="#clipboard-keybindings" id="id164">Clipboard keybindings</a></li>
-<li><a class="reference internal" href="#select-keybindings" id="id165">Select keybindings</a></li>
-<li><a class="reference internal" href="#insert-keybindings" id="id166">Insert keybindings</a></li>
-<li><a class="reference internal" href="#format-keybindings" id="id167">Format keybindings</a></li>
-<li><a class="reference internal" href="#settings-keybindings" id="id168">Settings keybindings</a></li>
-<li><a class="reference internal" href="#search-keybindings" id="id169">Search keybindings</a></li>
-<li><a class="reference internal" href="#go-to-keybindings" id="id170">Go to keybindings</a></li>
-<li><a class="reference internal" href="#view-keybindings" id="id171">View keybindings</a></li>
-<li><a class="reference internal" href="#focus-keybindings" id="id172">Focus keybindings</a></li>
-<li><a class="reference internal" href="#notebook-tab-keybindings" id="id173">Notebook tab keybindings</a></li>
-<li><a class="reference internal" href="#document-keybindings" id="id174">Document keybindings</a></li>
-<li><a class="reference internal" href="#project-keybindings" id="id175">Project keybindings</a></li>
-<li><a class="reference internal" href="#build-keybindings" id="id176">Build keybindings</a></li>
-<li><a class="reference internal" href="#tools-keybindings" id="id177">Tools keybindings</a></li>
-<li><a class="reference internal" href="#help-keybindings" id="id178">Help keybindings</a></li>
+<li><a class="reference internal" href="#editor-features-preferences" id="id108">Editor Features preferences</a><ul>
+<li><a class="reference internal" href="#features" id="id109">Features</a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#editor-indentation-preferences" id="id110">Editor Indentation preferences</a><ul>
+<li><a class="reference internal" href="#indentation-group" id="id111">Indentation group</a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#editor-completions-preferences" id="id112">Editor Completions preferences</a><ul>
+<li><a class="reference internal" href="#completions" id="id113">Completions</a></li>
+<li><a class="reference internal" href="#auto-close-quotes-and-brackets" id="id114">Auto-close quotes and brackets</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#configuration-files" id="id179">Configuration files</a><ul>
-<li><a class="reference internal" href="#configuration-file-paths" id="id180">Configuration file paths</a><ul>
-<li><a class="reference internal" href="#paths-on-unix-like-systems" id="id181">Paths on Unix-like systems</a></li>
-<li><a class="reference internal" href="#paths-on-windows" id="id182">Paths on Windows</a></li>
+<li><a class="reference internal" href="#editor-display-preferences" id="id115">Editor Display preferences</a><ul>
+<li><a class="reference internal" href="#display" id="id116">Display</a></li>
+<li><a class="reference internal" href="#long-line-marker" id="id117">Long line marker</a></li>
+<li><a class="reference internal" href="#virtual-spaces" id="id118">Virtual spaces</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#tools-menu-items" id="id183">Tools menu items</a></li>
-<li><a class="reference internal" href="#global-configuration-file" id="id184">Global configuration file</a></li>
-<li><a class="reference internal" href="#filetype-definition-files" id="id185">Filetype definition files</a><ul>
-<li><a class="reference internal" href="#filenames" id="id186">Filenames</a></li>
-<li><a class="reference internal" href="#system-files" id="id187">System files</a></li>
-<li><a class="reference internal" href="#user-files" id="id188">User files</a></li>
-<li><a class="reference internal" href="#custom-filetypes" id="id189">Custom filetypes</a><ul>
-<li><a class="reference internal" href="#creating-a-custom-filetype-from-an-existing-filetype" id="id190">Creating a custom filetype from an existing filetype</a></li>
+<li><a class="reference internal" href="#files-preferences" id="id119">Files preferences</a><ul>
+<li><a class="reference internal" href="#new-files" id="id120">New files</a></li>
+<li><a class="reference internal" href="#saving-files" id="id121">Saving files</a></li>
+<li><a class="reference internal" href="#id3" id="id122">Miscellaneous</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#filetype-configuration" id="id191">Filetype configuration</a><ul>
-<li><a class="reference internal" href="#styling-section" id="id192">[styling] section</a><ul>
-<li><a class="reference internal" href="#using-a-named-style" id="id193">Using a named style</a></li>
-<li><a class="reference internal" href="#reading-styles-from-another-filetype" id="id194">Reading styles from another filetype</a></li>
+<li><a class="reference internal" href="#tools-preferences" id="id123">Tools preferences</a><ul>
+<li><a class="reference internal" href="#tool-paths" id="id124">Tool paths</a></li>
+<li><a class="reference internal" href="#commands" id="id125">Commands</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#keywords-section" id="id195">[keywords] section</a></li>
-<li><a class="reference internal" href="#lexer-properties-section" id="id196">[lexer_properties] section</a></li>
-<li><a class="reference internal" href="#settings-section" id="id197">[settings] section</a></li>
-<li><a class="reference internal" href="#indentation-section" id="id198">[indentation] section</a></li>
-<li><a class="reference internal" href="#build-settings-section" id="id199">[build_settings] section</a></li>
+<li><a class="reference internal" href="#template-preferences" id="id126">Template preferences</a><ul>
+<li><a class="reference internal" href="#template-data" id="id127">Template data</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#special-file-filetypes-common" id="id200">Special file filetypes.common</a><ul>
-<li><a class="reference internal" href="#named-styles-section" id="id201">[named_styles] section</a></li>
-<li><a class="reference internal" href="#named-colors-section" id="id202">[named_colors] section</a></li>
-<li><a class="reference internal" href="#id4" id="id203">[styling] section</a></li>
-<li><a class="reference internal" href="#id5" id="id204">[settings] section</a></li>
+<li><a class="reference internal" href="#keybinding-preferences" id="id128">Keybinding preferences</a></li>
+<li><a class="reference internal" href="#printing-preferences" id="id129">Printing preferences</a></li>
+<li><a class="reference internal" href="#various-preferences" id="id130">Various preferences</a><ul>
+<li><a class="reference internal" href="#statusbar-templates" id="id131">Statusbar Templates</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#terminal-vte-preferences" id="id132">Terminal (VTE) preferences</a><ul>
+<li><a class="reference internal" href="#terminal-widget" id="id133">Terminal widget</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a class="reference internal" href="#filetype-extensions" id="id205">Filetype extensions</a></li>
-<li><a class="reference internal" href="#filetype-group-membership" id="id206">Filetype group membership</a></li>
-<li><a class="reference internal" href="#preferences-file-format" id="id207">Preferences file format</a><ul>
-<li><a class="reference internal" href="#build-menu-section" id="id208">[build-menu] section</a></li>
+<li><a class="reference internal" href="#project-management" id="id134">Project management</a><ul>
+<li><a class="reference internal" href="#new-project" id="id135">New project</a></li>
+<li><a class="reference internal" href="#project-properties" id="id136">Project properties</a></li>
+<li><a class="reference internal" href="#open-project" id="id137">Open project</a></li>
+<li><a class="reference internal" href="#close-project" id="id138">Close project</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#project-file-format" id="id209">Project file format</a><ul>
-<li><a class="reference internal" href="#build-menu-additions" id="id210">[build-menu] additions</a></li>
+<li><a class="reference internal" href="#build-menu" id="id139">Build menu</a><ul>
+<li><a class="reference internal" href="#indicators" id="id140">Indicators</a></li>
+<li><a class="reference internal" href="#default-build-menu-items" id="id141">Default build menu items</a><ul>
+<li><a class="reference internal" href="#compile" id="id142">Compile</a></li>
+<li><a class="reference internal" href="#build" id="id143">Build</a></li>
+<li><a class="reference internal" href="#make" id="id144">Make</a></li>
+<li><a class="reference internal" href="#make-custom-target" id="id145">Make custom target</a></li>
+<li><a class="reference internal" href="#make-object" id="id146">Make object</a></li>
+<li><a class="reference internal" href="#next-error" id="id147">Next error</a></li>
+<li><a class="reference internal" href="#previous-error" id="id148">Previous error</a></li>
+<li><a class="reference internal" href="#execute" id="id149">Execute</a></li>
+<li><a class="reference internal" href="#stopping-running-processes" id="id150">Stopping running processes</a><ul>
+<li><a class="reference internal" href="#terminal-emulators" id="id151">Terminal emulators</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#templates" id="id211">Templates</a><ul>
-<li><a class="reference internal" href="#template-meta-data" id="id212">Template meta data</a></li>
-<li><a class="reference internal" href="#file-templates" id="id213">File templates</a><ul>
-<li><a class="reference internal" href="#adding-file-templates" id="id214">Adding file templates</a></li>
+<li><a class="reference internal" href="#set-build-commands" id="id152">Set build commands</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#customizing-templates" id="id215">Customizing templates</a><ul>
-<li><a class="reference internal" href="#template-wildcards" id="id216">Template wildcards</a><ul>
-<li><a class="reference internal" href="#special-command-wildcard" id="id217">Special {command:} wildcard</a></li>
+<li><a class="reference internal" href="#build-menu-configuration" id="id153">Build menu configuration</a></li>
+<li><a class="reference internal" href="#build-menu-commands-dialog" id="id154">Build menu commands dialog</a><ul>
+<li><a class="reference internal" href="#substitutions-in-commands-and-working-directories" id="id155">Substitutions in commands and working directories</a></li>
+<li><a class="reference internal" href="#build-menu-keyboard-shortcuts" id="id156">Build menu keyboard shortcuts</a></li>
+<li><a class="reference internal" href="#old-settings" id="id157">Old settings</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#printing-support" id="id158">Printing support</a></li>
+<li><a class="reference internal" href="#plugins" id="id159">Plugins</a><ul>
+<li><a class="reference internal" href="#plugin-manager" id="id160">Plugin manager</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#keybindings" id="id161">Keybindings</a><ul>
+<li><a class="reference internal" href="#switching-documents" id="id162">Switching documents</a></li>
+<li><a class="reference internal" href="#configurable-keybindings" id="id163">Configurable keybindings</a><ul>
+<li><a class="reference internal" href="#file-keybindings" id="id164">File keybindings</a></li>
+<li><a class="reference internal" href="#editor-keybindings" id="id165">Editor keybindings</a></li>
+<li><a class="reference internal" href="#clipboard-keybindings" id="id166">Clipboard keybindings</a></li>
+<li><a class="reference internal" href="#select-keybindings" id="id167">Select keybindings</a></li>
+<li><a class="reference internal" href="#insert-keybindings" id="id168">Insert keybindings</a></li>
+<li><a class="reference internal" href="#format-keybindings" id="id169">Format keybindings</a></li>
+<li><a class="reference internal" href="#settings-keybindings" id="id170">Settings keybindings</a></li>
+<li><a class="reference internal" href="#search-keybindings" id="id171">Search keybindings</a></li>
+<li><a class="reference internal" href="#go-to-keybindings" id="id172">Go to keybindings</a></li>
+<li><a class="reference internal" href="#view-keybindings" id="id173">View keybindings</a></li>
+<li><a class="reference internal" href="#focus-keybindings" id="id174">Focus keybindings</a></li>
+<li><a class="reference internal" href="#notebook-tab-keybindings" id="id175">Notebook tab keybindings</a></li>
+<li><a class="reference internal" href="#document-keybindings" id="id176">Document keybindings</a></li>
+<li><a class="reference internal" href="#project-keybindings" id="id177">Project keybindings</a></li>
+<li><a class="reference internal" href="#build-keybindings" id="id178">Build keybindings</a></li>
+<li><a class="reference internal" href="#tools-keybindings" id="id179">Tools keybindings</a></li>
+<li><a class="reference internal" href="#help-keybindings" id="id180">Help keybindings</a></li>
 </ul>
 </li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a class="reference internal" href="#customizing-the-toolbar" id="id218">Customizing the toolbar</a><ul>
-<li><a class="reference internal" href="#manually-editing-the-toolbar-layout" id="id219">Manually editing the toolbar layout</a></li>
-<li><a class="reference internal" href="#available-toolbar-elements" id="id220">Available toolbar elements</a></li>
+<li><a class="reference internal" href="#configuration-files" id="id181">Configuration files</a><ul>
+<li><a class="reference internal" href="#configuration-file-paths" id="id182">Configuration file paths</a><ul>
+<li><a class="reference internal" href="#paths-on-unix-like-systems" id="id183">Paths on Unix-like systems</a></li>
+<li><a class="reference internal" href="#paths-on-windows" id="id184">Paths on Windows</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#tools-menu-items" id="id185">Tools menu items</a></li>
+<li><a class="reference internal" href="#global-configuration-file" id="id186">Global configuration file</a></li>
+<li><a class="reference internal" href="#filetype-definition-files" id="id187">Filetype definition files</a><ul>
+<li><a class="reference internal" href="#filenames" id="id188">Filenames</a></li>
+<li><a class="reference internal" href="#system-files" id="id189">System files</a></li>
+<li><a class="reference internal" href="#user-files" id="id190">User files</a></li>
+<li><a class="reference internal" href="#custom-filetypes" id="id191">Custom filetypes</a><ul>
+<li><a class="reference internal" href="#creating-a-custom-filetype-from-an-existing-filetype" id="id192">Creating a custom filetype from an existing filetype</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#filetype-configuration" id="id193">Filetype configuration</a><ul>
+<li><a class="reference internal" href="#styling-section" id="id194">[styling] section</a><ul>
+<li><a class="reference internal" href="#using-a-named-style" id="id195">Using a named style</a></li>
+<li><a class="reference internal" href="#reading-styles-from-another-filetype" id="id196">Reading styles from another filetype</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#keywords-section" id="id197">[keywords] section</a></li>
+<li><a class="reference internal" href="#lexer-properties-section" id="id198">[lexer_properties] section</a></li>
+<li><a class="reference internal" href="#settings-section" id="id199">[settings] section</a></li>
+<li><a class="reference internal" href="#indentation-section" id="id200">[indentation] section</a></li>
+<li><a class="reference internal" href="#build-settings-section" id="id201">[build_settings] section</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#special-file-filetypes-common" id="id202">Special file filetypes.common</a><ul>
+<li><a class="reference internal" href="#named-styles-section" id="id203">[named_styles] section</a></li>
+<li><a class="reference internal" href="#named-colors-section" id="id204">[named_colors] section</a></li>
+<li><a class="reference internal" href="#id4" id="id205">[styling] section</a></li>
+<li><a class="reference internal" href="#id5" id="id206">[settings] section</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a class="reference internal" href="#plugin-documentation" id="id221">Plugin documentation</a><ul>
-<li><a class="reference internal" href="#html-characters" id="id222">HTML Characters</a><ul>
-<li><a class="reference internal" href="#insert-entity-dialog" id="id223">Insert entity dialog</a></li>
-<li><a class="reference internal" href="#replace-special-chars-by-its-entity" id="id224">Replace special chars by its entity</a><ul>
-<li><a class="reference internal" href="#at-typing-time" id="id225">At typing time</a></li>
-<li><a class="reference internal" href="#bulk-replacement" id="id226">Bulk replacement</a></li>
+<li><a class="reference internal" href="#filetype-extensions" id="id207">Filetype extensions</a></li>
+<li><a class="reference internal" href="#filetype-group-membership" id="id208">Filetype group membership</a></li>
+<li><a class="reference internal" href="#preferences-file-format" id="id209">Preferences file format</a><ul>
+<li><a class="reference internal" href="#build-menu-section" id="id210">[build-menu] section</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#project-file-format" id="id211">Project file format</a><ul>
+<li><a class="reference internal" href="#build-menu-additions" id="id212">[build-menu] additions</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#templates" id="id213">Templates</a><ul>
+<li><a class="reference internal" href="#template-meta-data" id="id214">Template meta data</a></li>
+<li><a class="reference internal" href="#file-templates" id="id215">File templates</a><ul>
+<li><a class="reference internal" href="#adding-file-templates" id="id216">Adding file templates</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#customizing-templates" id="id217">Customizing templates</a><ul>
+<li><a class="reference internal" href="#template-wildcards" id="id218">Template wildcards</a><ul>
+<li><a class="reference internal" href="#special-command-wildcard" id="id219">Special {command:} wildcard</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a class="reference internal" href="#save-actions" id="id227">Save Actions</a><ul>
-<li><a class="reference internal" href="#instant-save" id="id228">Instant Save</a></li>
-<li><a class="reference internal" href="#backup-copy" id="id229">Backup Copy</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#customizing-the-toolbar" id="id220">Customizing the toolbar</a><ul>
+<li><a class="reference internal" href="#manually-editing-the-toolbar-layout" id="id221">Manually editing the toolbar layout</a></li>
+<li><a class="reference internal" href="#available-toolbar-elements" id="id222">Available toolbar elements</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a class="reference internal" href="#contributing-to-this-document" id="id230">Contributing to this document</a></li>
-<li><a class="reference internal" href="#scintilla-keyboard-commands" id="id231">Scintilla keyboard commands</a><ul>
-<li><a class="reference internal" href="#keyboard-commands" id="id232">Keyboard commands</a></li>
+<li><a class="reference internal" href="#plugin-documentation" id="id223">Plugin documentation</a><ul>
+<li><a class="reference internal" href="#html-characters" id="id224">HTML Characters</a><ul>
+<li><a class="reference internal" href="#insert-entity-dialog" id="id225">Insert entity dialog</a></li>
+<li><a class="reference internal" href="#replace-special-chars-by-its-entity" id="id226">Replace special chars by its entity</a><ul>
+<li><a class="reference internal" href="#at-typing-time" id="id227">At typing time</a></li>
+<li><a class="reference internal" href="#bulk-replacement" id="id228">Bulk replacement</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#tips-and-tricks" id="id233">Tips and tricks</a><ul>
-<li><a class="reference internal" href="#document-notebook" id="id234">Document notebook</a></li>
-<li><a class="reference internal" href="#editor" id="id235">Editor</a></li>
-<li><a class="reference internal" href="#interface" id="id236">Interface</a></li>
-<li><a class="reference internal" href="#gtk-related" id="id237">GTK-related</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#compile-time-options" id="id238">Compile-time options</a><ul>
-<li><a class="reference internal" href="#src-geany-h" id="id239">src/geany.h</a></li>
-<li><a class="reference internal" href="#project-h" id="id240">project.h</a></li>
-<li><a class="reference internal" href="#filetypes-c" id="id241">filetypes.c</a></li>
-<li><a class="reference internal" href="#editor-h" id="id242">editor.h</a></li>
-<li><a class="reference internal" href="#keyfile-c" id="id243">keyfile.c</a></li>
-<li><a class="reference internal" href="#build-c" id="id244">build.c</a></li>
+<li><a class="reference internal" href="#save-actions" id="id229">Save Actions</a><ul>
+<li><a class="reference internal" href="#instant-save" id="id230">Instant Save</a></li>
+<li><a class="reference internal" href="#backup-copy" id="id231">Backup Copy</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#gnu-general-public-license" id="id245">GNU General Public License</a></li>
-<li><a class="reference internal" href="#license-for-scintilla-and-scite" id="id246">License for Scintilla and SciTE</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#contributing-to-this-document" id="id232">Contributing to this document</a></li>
+<li><a class="reference internal" href="#scintilla-keyboard-commands" id="id233">Scintilla keyboard commands</a><ul>
+<li><a class="reference internal" href="#keyboard-commands" id="id234">Keyboard commands</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#tips-and-tricks" id="id235">Tips and tricks</a><ul>
+<li><a class="reference internal" href="#document-notebook" id="id236">Document notebook</a></li>
+<li><a class="reference internal" href="#editor" id="id237">Editor</a></li>
+<li><a class="reference internal" href="#interface" id="id238">Interface</a></li>
+<li><a class="reference internal" href="#gtk-related" id="id239">GTK-related</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#compile-time-options" id="id240">Compile-time options</a><ul>
+<li><a class="reference internal" href="#src-geany-h" id="id241">src/geany.h</a></li>
+<li><a class="reference internal" href="#project-h" id="id242">project.h</a></li>
+<li><a class="reference internal" href="#filetypes-c" id="id243">filetypes.c</a></li>
+<li><a class="reference internal" href="#editor-h" id="id244">editor.h</a></li>
+<li><a class="reference internal" href="#keyfile-c" id="id245">keyfile.c</a></li>
+<li><a class="reference internal" href="#build-c" id="id246">build.c</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#gnu-general-public-license" id="id247">GNU General Public License</a></li>
+<li><a class="reference internal" href="#license-for-scintilla-and-scite" id="id248">License for Scintilla and SciTE</a></li>
 </ul>
 </div>
 <div class="section" id="introduction">
@@ -615,6 +619,10 @@ $ make
 <p>Then as root:</p>
 <pre class="literal-block">
 % make install
+</pre>
+<p>Or via sudo:</p>
+<pre class="literal-block">
+% sudo make install
 </pre>
 </div>
 <div class="section" id="waf-based-build-system">
@@ -1698,17 +1706,22 @@ word is used instead. This can be customized by the
 </div>
 <div class="section" id="find-usage">
 <h3><a class="toc-backref" href="#id67">Find usage</a></h3>
-<p>Find usage searches all open files. It is similar to the Find All In
-Session option in the Find dialog.</p>
+<p><em>Find Usage</em> searches all open files. It is similar to the <em>Find All In
+Session</em> option in the Find dialog.</p>
 <p>If there is a selection, then it is used as the search text; otherwise
 the current word is used. The current word is either taken from the
 word nearest the edit cursor, or the word underneath the popup menu
 click position when the popup menu is used. The search results are
 shown in the Messages tab of the Message Window.</p>
+<div class="note">
+<p class="first admonition-title">Note</p>
+<p class="last">You can also use Find Usage for symbol list items from the popup
+menu.</p>
+</div>
 </div>
 <div class="section" id="find-in-files">
 <h3><a class="toc-backref" href="#id68">Find in files</a></h3>
-<p>Find in files is a more powerful version of Find usage that searches
+<p><em>Find in Files</em> is a more powerful version of <em>Find Usage</em> that searches
 all files in a certain directory using the Grep tool. The Grep tool
 must be correctly set in Preferences to the path of the system's Grep
 utility. GNU Grep is recommended (see note below).</p>
@@ -2005,22 +2018,24 @@ corresponding filetype is first used. Currently these are for:</p>
 </div>
 <div class="section" id="global-tags-file-format">
 <h4><a class="toc-backref" href="#id82">Global tags file format</a></h4>
-<p>Global tags files can have two different formats:</p>
+<p>Global tags files can have three different formats:</p>
 <ul class="simple">
 <li>Tagmanager format</li>
 <li>Pipe-separated format</li>
+<li>CTags format</li>
 </ul>
 <p>The first line of global tags files should be a comment, introduced
-by <tt class="docutils literal">#</tt> followed by a space and a string like <tt class="docutils literal">format=pipe</tt>
-or <tt class="docutils literal">format=tagmanager</tt> respectively, these are case-sensitive.
-This helps Geany to read the file properly. If this line
-is missing, Geany tries to auto-detect the used format but this
+by <tt class="docutils literal">#</tt> followed by a space and a string like <tt class="docutils literal">format=pipe</tt>,
+<tt class="docutils literal">format=ctags</tt> or <tt class="docutils literal">format=tagmanager</tt> respectively, these are
+case-sensitive.  This helps Geany to read the file properly. If this
+line is missing, Geany tries to auto-detect the used format but this
 might fail.</p>
 <p>The Tagmanager format is a bit more complex and is used for files
 created by the <tt class="docutils literal">geany <span class="pre">-g</span></tt> command. There is one tag per line.
 Different tag attributes like the return value or the argument list
 are separated with different characters indicating the type of the
-following argument.</p>
+following argument.  This is the more complete and recommended tag
+format.</p>
 <div class="section" id="pipe-separated-format">
 <h5><a class="toc-backref" href="#id83">Pipe-separated format</a></h5>
 <p>The Pipe-separated format is easier to read and write.
@@ -2042,9 +2057,18 @@ empty but the pipe separator must appear for them.</p>
 Just save them in your tags directory, as described earlier in the
 section <a class="reference internal" href="#global-tags">Global tags</a>.</p>
 </div>
+<div class="section" id="ctags-format">
+<h5><a class="toc-backref" href="#id84">CTags format</a></h5>
+<p>This is the format that ctags generates, and that is used by Vim.
+This format is compatible with the format historically used by Vi.</p>
+<p>The format is described at <a class="reference external" href="http://ctags.sourceforge.net/FORMAT">http://ctags.sourceforge.net/FORMAT</a>, but
+for the full list of existing extensions please refer to ctags.
+However, note that Geany may actually only honor a subset of the
+existing extensions.</p>
+</div>
 </div>
 <div class="section" id="generating-a-global-tags-file">
-<h4><a class="toc-backref" href="#id84">Generating a global tags file</a></h4>
+<h4><a class="toc-backref" href="#id85">Generating a global tags file</a></h4>
 <p>You can generate your own global tags files by parsing a list of
 source files. The command is:</p>
 <pre class="literal-block">
@@ -2067,7 +2091,7 @@ don't want to specify the CFLAGS environment variable.</li>
 geany -g wxd.d.tags /home/username/wxd/wx/*.d
 </pre>
 <div class="section" id="generating-c-c-tag-files">
-<h5><a class="toc-backref" href="#id85">Generating C/C++ tag files</a></h5>
+<h5><a class="toc-backref" href="#id86">Generating C/C++ tag files</a></h5>
 <p>You may need to first setup the <a class="reference internal" href="#c-ignore-tags">C ignore.tags</a> file.</p>
 <p>For C/C++ tag files gcc is required by default, so that header files
 can be preprocessed to include any other headers they depend upon. If
@@ -2083,7 +2107,7 @@ CFLAGS=`pkg-config --cflags libgnomeui-2.0` geany -g gnomeui.c.tags \
 for whichever libraries you want.</p>
 </div>
 <div class="section" id="generating-tag-files-on-windows">
-<h5><a class="toc-backref" href="#id86">Generating tag files on Windows</a></h5>
+<h5><a class="toc-backref" href="#id87">Generating tag files on Windows</a></h5>
 <p>This works basically the same as on other platforms:</p>
 <pre class="literal-block">
 &quot;c:\program files\geany\bin\geany&quot; -g c:\mytags.php.tags c:\code\somefile.php
@@ -2092,7 +2116,7 @@ for whichever libraries you want.</p>
 </div>
 </div>
 <div class="section" id="c-ignore-tags">
-<h3><a class="toc-backref" href="#id87">C ignore.tags</a></h3>
+<h3><a class="toc-backref" href="#id88">C ignore.tags</a></h3>
 <p>You can ignore certain tags for C-based languages if they would lead
 to wrong parsing of the code. Use the <em>Tools-&gt;Configuration
 Files-&gt;ignore.tags</em> menu item to open the user <tt class="docutils literal">ignore.tags</tt> file.
@@ -2130,7 +2154,7 @@ that items like G_GNUC_PRINTF+ get parsed correctly.</p>
 </div>
 </div>
 <div class="section" id="preferences">
-<h2><a class="toc-backref" href="#id88">Preferences</a></h2>
+<h2><a class="toc-backref" href="#id89">Preferences</a></h2>
 <p>You may adjust Geany's settings using the Edit --&gt; Preferences
 dialog. Any changes you make there can be applied by hitting either
 the Apply or the OK button. These settings will persist between Geany
@@ -2147,10 +2171,10 @@ when restarting Geany.</p>
 comes after the screenshot of that tab.</p>
 </div>
 <div class="section" id="general-startup-preferences">
-<h3><a class="toc-backref" href="#id89">General Startup preferences</a></h3>
+<h3><a class="toc-backref" href="#id90">General Startup preferences</a></h3>
 <img alt="./images/pref_dialog_gen_startup.png" src="./images/pref_dialog_gen_startup.png" />
 <div class="section" id="id1">
-<h4><a class="toc-backref" href="#id90">Startup</a></h4>
+<h4><a class="toc-backref" href="#id91">Startup</a></h4>
 <dl class="docutils">
 <dt>Load files from the last session</dt>
 <dd>On startup, load the same files you had open the last time you
@@ -2162,7 +2186,7 @@ used Geany.</dd>
 </dl>
 </div>
 <div class="section" id="shutdown">
-<h4><a class="toc-backref" href="#id91">Shutdown</a></h4>
+<h4><a class="toc-backref" href="#id92">Shutdown</a></h4>
 <dl class="docutils">
 <dt>Save window position and geometry</dt>
 <dd>Save the current position and size of the main window so next time
@@ -2172,7 +2196,7 @@ you open Geany it's in the same location.</dd>
 </dl>
 </div>
 <div class="section" id="paths">
-<h4><a class="toc-backref" href="#id92">Paths</a></h4>
+<h4><a class="toc-backref" href="#id93">Paths</a></h4>
 <dl class="docutils">
 <dt>Startup path</dt>
 <dd>Path to start in when opening or saving files.
@@ -2191,10 +2215,10 @@ Leave blank to not set an additional lookup path.</dd>
 </div>
 </div>
 <div class="section" id="general-miscellaneous-preferences">
-<h3><a class="toc-backref" href="#id93">General Miscellaneous preferences</a></h3>
+<h3><a class="toc-backref" href="#id94">General Miscellaneous preferences</a></h3>
 <img alt="./images/pref_dialog_gen_misc.png" src="./images/pref_dialog_gen_misc.png" />
 <div class="section" id="miscellaneous">
-<h4><a class="toc-backref" href="#id94">Miscellaneous</a></h4>
+<h4><a class="toc-backref" href="#id95">Miscellaneous</a></h4>
 <dl class="docutils">
 <dt>Beep on errors when compilation has finished</dt>
 <dd>Have the computer make a beeping sound when compilation of your program
@@ -2222,7 +2246,7 @@ goto line fields and the VTE.</dd>
 </dl>
 </div>
 <div class="section" id="search">
-<h4><a class="toc-backref" href="#id95">Search</a></h4>
+<h4><a class="toc-backref" href="#id96">Search</a></h4>
 <dl class="docutils">
 <dt>Always wrap search</dt>
 <dd>Always wrap search around the document when finding a match.</dd>
@@ -2239,7 +2263,7 @@ dialog is used. See <a class="reference internal" href="#find-in-files">Find in 
 </dl>
 </div>
 <div class="section" id="projects">
-<h4><a class="toc-backref" href="#id96">Projects</a></h4>
+<h4><a class="toc-backref" href="#id97">Projects</a></h4>
 <dl class="docutils">
 <dt>Use project-based session files</dt>
 <dd>Save your current session when closing projects. You will be able to
@@ -2256,10 +2280,10 @@ defaults automatically for convenience.</dd>
 </div>
 </div>
 <div class="section" id="interface-preferences">
-<h3><a class="toc-backref" href="#id97">Interface preferences</a></h3>
+<h3><a class="toc-backref" href="#id98">Interface preferences</a></h3>
 <img alt="./images/pref_dialog_interface_interface.png" src="./images/pref_dialog_interface_interface.png" />
 <div class="section" id="sidebar">
-<h4><a class="toc-backref" href="#id98">Sidebar</a></h4>
+<h4><a class="toc-backref" href="#id99">Sidebar</a></h4>
 <dl class="docutils">
 <dt>Show sidebar</dt>
 <dd>Whether to show the sidebar at all.</dd>
@@ -2275,7 +2299,7 @@ to perform some common operations such as saving, closing and reloading.</dd>
 </dl>
 </div>
 <div class="section" id="fonts">
-<h4><a class="toc-backref" href="#id99">Fonts</a></h4>
+<h4><a class="toc-backref" href="#id100">Fonts</a></h4>
 <dl class="docutils">
 <dt>Editor</dt>
 <dd>Change the font used to display documents.</dd>
@@ -2286,7 +2310,7 @@ to perform some common operations such as saving, closing and reloading.</dd>
 </dl>
 </div>
 <div class="section" id="id2">
-<h4><a class="toc-backref" href="#id100">Miscellaneous</a></h4>
+<h4><a class="toc-backref" href="#id101">Miscellaneous</a></h4>
 <dl class="docutils">
 <dt>Show status bar</dt>
 <dd>Show the status bar at the bottom of the main window. It gives information about
@@ -2296,10 +2320,10 @@ modifications were done, the file encoding, the filetype and other information.<
 </div>
 </div>
 <div class="section" id="interface-notebook-tab-preferences">
-<h3><a class="toc-backref" href="#id101">Interface Notebook tab preferences</a></h3>
+<h3><a class="toc-backref" href="#id102">Interface Notebook tab preferences</a></h3>
 <img alt="./images/pref_dialog_interface_notebook.png" src="./images/pref_dialog_interface_notebook.png" />
 <div class="section" id="editor-tabs">
-<h4><a class="toc-backref" href="#id102">Editor tabs</a></h4>
+<h4><a class="toc-backref" href="#id103">Editor tabs</a></h4>
 <dl class="docutils">
 <dt>Show editor tabs</dt>
 <dd>Show a notebook tab for all documents so you can switch between them
@@ -2319,7 +2343,7 @@ when double-clicking on a notebook tab.</dd>
 </dl>
 </div>
 <div class="section" id="tab-positions">
-<h4><a class="toc-backref" href="#id103">Tab positions</a></h4>
+<h4><a class="toc-backref" href="#id104">Tab positions</a></h4>
 <dl class="docutils">
 <dt>Editor</dt>
 <dd>Set the positioning of the editor's notebook tabs to the right,
@@ -2334,11 +2358,11 @@ right, left, top, or bottom of the message window.</dd>
 </div>
 </div>
 <div class="section" id="interface-toolbar-preferences">
-<h3><a class="toc-backref" href="#id104">Interface Toolbar preferences</a></h3>
+<h3><a class="toc-backref" href="#id105">Interface Toolbar preferences</a></h3>
 <p>Affects the main toolbar underneath the menu bar.</p>
 <img alt="./images/pref_dialog_interface_toolbar.png" src="./images/pref_dialog_interface_toolbar.png" />
 <div class="section" id="toolbar">
-<h4><a class="toc-backref" href="#id105">Toolbar</a></h4>
+<h4><a class="toc-backref" href="#id106">Toolbar</a></h4>
 <dl class="docutils">
 <dt>Show Toolbar</dt>
 <dd>Whether to show the toolbar.</dd>
@@ -2350,7 +2374,7 @@ This is useful to save vertical space.</dd>
 </dl>
 </div>
 <div class="section" id="appearance">
-<h4><a class="toc-backref" href="#id106">Appearance</a></h4>
+<h4><a class="toc-backref" href="#id107">Appearance</a></h4>
 <dl class="docutils">
 <dt>Icon Style</dt>
 <dd>Select the toolbar icon style to use - either icons and text, just
@@ -2363,10 +2387,10 @@ The choice System default uses whatever icon size is set by GTK.</dd>
 </div>
 </div>
 <div class="section" id="editor-features-preferences">
-<h3><a class="toc-backref" href="#id107">Editor Features preferences</a></h3>
+<h3><a class="toc-backref" href="#id108">Editor Features preferences</a></h3>
 <img alt="./images/pref_dialog_edit_features.png" src="./images/pref_dialog_edit_features.png" />
 <div class="section" id="features">
-<h4><a class="toc-backref" href="#id108">Features</a></h4>
+<h4><a class="toc-backref" href="#id109">Features</a></h4>
 <dl class="docutils">
 <dt>Line wrapping</dt>
 <dd>Show long lines wrapped around to new display lines.</dd>
@@ -2389,7 +2413,10 @@ is folded.</dd>
 them in the editor area.</dd>
 <dt>Newline strips trailing spaces</dt>
 <dd>Remove any whitespace at the end of the line when you hit the
-Enter/Return key. See also <a class="reference internal" href="#strip-trailing-spaces">Strip trailing spaces</a>.</dd>
+Enter/Return key. See also <a class="reference internal" href="#strip-trailing-spaces">Strip trailing spaces</a>.  Note
+auto indentation is calculated before stripping, so although this
+setting will clear a blank line, it will not set the next line
+indentation back to zero.</dd>
 <dt>Line breaking column</dt>
 <dd>The editor column number to insert a newline at when Line Breaking
 is enabled for the current document.</dd>
@@ -2400,10 +2427,10 @@ It is used to mark the comment as toggled.</dd>
 </div>
 </div>
 <div class="section" id="editor-indentation-preferences">
-<h3><a class="toc-backref" href="#id109">Editor Indentation preferences</a></h3>
+<h3><a class="toc-backref" href="#id110">Editor Indentation preferences</a></h3>
 <img alt="./images/pref_dialog_edit_indentation.png" src="./images/pref_dialog_edit_indentation.png" />
 <div class="section" id="indentation-group">
-<h4><a class="toc-backref" href="#id110">Indentation group</a></h4>
+<h4><a class="toc-backref" href="#id111">Indentation group</a></h4>
 <p>See <a class="reference internal" href="#indentation">Indentation</a> for more information.</p>
 <dl class="docutils">
 <dt>Width</dt>
@@ -2455,10 +2482,10 @@ meanings in different contexts - e.g. for snippet completion.</p>
 </div>
 </div>
 <div class="section" id="editor-completions-preferences">
-<h3><a class="toc-backref" href="#id111">Editor Completions preferences</a></h3>
+<h3><a class="toc-backref" href="#id112">Editor Completions preferences</a></h3>
 <img alt="./images/pref_dialog_edit_completions.png" src="./images/pref_dialog_edit_completions.png" />
 <div class="section" id="completions">
-<h4><a class="toc-backref" href="#id112">Completions</a></h4>
+<h4><a class="toc-backref" href="#id113">Completions</a></h4>
 <dl class="docutils">
 <dt>Snippet Completion</dt>
 <dd>Whether to replace special keywords after typing Tab into a
@@ -2515,7 +2542,7 @@ updated upon document saving.</p>
 </dl>
 </div>
 <div class="section" id="auto-close-quotes-and-brackets">
-<h4><a class="toc-backref" href="#id113">Auto-close quotes and brackets</a></h4>
+<h4><a class="toc-backref" href="#id114">Auto-close quotes and brackets</a></h4>
 <p>Geany can automatically insert a closing bracket and quote characters when
 you open them. For instance, you type a <tt class="docutils literal">(</tt> and Geany will automatically
 insert <tt class="docutils literal">)</tt>. With the following options, you can define for which
@@ -2535,11 +2562,11 @@ characters this should work.</p>
 </div>
 </div>
 <div class="section" id="editor-display-preferences">
-<h3><a class="toc-backref" href="#id114">Editor Display preferences</a></h3>
+<h3><a class="toc-backref" href="#id115">Editor Display preferences</a></h3>
 <p>This is for visual elements displayed in the editor window.</p>
 <img alt="./images/pref_dialog_edit_display.png" src="./images/pref_dialog_edit_display.png" />
 <div class="section" id="display">
-<h4><a class="toc-backref" href="#id115">Display</a></h4>
+<h4><a class="toc-backref" href="#id116">Display</a></h4>
 <dl class="docutils">
 <dt>Invert syntax highlighting colors</dt>
 <dd>Invert all colors, by default this makes white text on a black
@@ -2564,7 +2591,7 @@ Otherwise you can scroll one more page even if there are no real lines.</dd>
 </dl>
 </div>
 <div class="section" id="long-line-marker">
-<h4><a class="toc-backref" href="#id116">Long line marker</a></h4>
+<h4><a class="toc-backref" href="#id117">Long line marker</a></h4>
 <p>The long line marker helps to indicate overly-long lines, or as a hint
 to the user for when to break the line.</p>
 <dl class="docutils">
@@ -2589,7 +2616,7 @@ where it should appear.</dd>
 </dl>
 </div>
 <div class="section" id="virtual-spaces">
-<h4><a class="toc-backref" href="#id117">Virtual spaces</a></h4>
+<h4><a class="toc-backref" href="#id118">Virtual spaces</a></h4>
 <p>Virtual space is space beyond the end of each line.
 The cursor may be moved into virtual space but no real space will be
 added to the document until there is some text typed or some other
@@ -2605,10 +2632,10 @@ text insertion command is used.</p>
 </div>
 </div>
 <div class="section" id="files-preferences">
-<h3><a class="toc-backref" href="#id118">Files preferences</a></h3>
+<h3><a class="toc-backref" href="#id119">Files preferences</a></h3>
 <img alt="./images/pref_dialog_files.png" src="./images/pref_dialog_files.png" />
 <div class="section" id="new-files">
-<h4><a class="toc-backref" href="#id119">New files</a></h4>
+<h4><a class="toc-backref" href="#id120">New files</a></h4>
 <dl class="docutils">
 <dt>Open new documents from the command-line</dt>
 <dd>Whether to create new documents when passing filenames that don't
@@ -2628,7 +2655,7 @@ On Unix-like systems, LF is default and CR is used on MAC systems.</dd>
 </dl>
 </div>
 <div class="section" id="saving-files">
-<h4><a class="toc-backref" href="#id120">Saving files</a></h4>
+<h4><a class="toc-backref" href="#id121">Saving files</a></h4>
 <p>Perform formatting operations when a document is saved. These
 can each be undone with the Undo command.</p>
 <dl class="docutils">
@@ -2657,7 +2684,7 @@ saving, avoiding mixed line endings in the same file.</dd>
 </dl>
 </div>
 <div class="section" id="id3">
-<h4><a class="toc-backref" href="#id121">Miscellaneous</a></h4>
+<h4><a class="toc-backref" href="#id122">Miscellaneous</a></h4>
 <dl class="docutils">
 <dt>Recent files list length</dt>
 <dd>The number of files to remember in the recently used files list.</dd>
@@ -2676,10 +2703,10 @@ not checked for changes due to performance issues
 </div>
 </div>
 <div class="section" id="tools-preferences">
-<h3><a class="toc-backref" href="#id122">Tools preferences</a></h3>
+<h3><a class="toc-backref" href="#id123">Tools preferences</a></h3>
 <img alt="./images/pref_dialog_tools.png" src="./images/pref_dialog_tools.png" />
 <div class="section" id="tool-paths">
-<h4><a class="toc-backref" href="#id123">Tool paths</a></h4>
+<h4><a class="toc-backref" href="#id124">Tool paths</a></h4>
 <dl class="docutils">
 <dt>Terminal</dt>
 <dd>The command to execute a script in a terminal.  Occurrences of %c
@@ -2699,7 +2726,7 @@ Mingw project for instance might not work with Geany at the moment.</p>
 </div>
 </div>
 <div class="section" id="commands">
-<h4><a class="toc-backref" href="#id124">Commands</a></h4>
+<h4><a class="toc-backref" href="#id125">Commands</a></h4>
 <dl class="docutils">
 <dt>Context action</dt>
 <dd>Set this to a command to execute on the current word.
@@ -2709,13 +2736,13 @@ to the specified command.</dd>
 </div>
 </div>
 <div class="section" id="template-preferences">
-<h3><a class="toc-backref" href="#id125">Template preferences</a></h3>
+<h3><a class="toc-backref" href="#id126">Template preferences</a></h3>
 <p>This data is used as meta data for various template text to insert into
 a document, such as the file header. You only need to set fields that
 you want to use in your template files.</p>
 <img alt="./images/pref_dialog_templ.png" src="./images/pref_dialog_templ.png" />
 <div class="section" id="template-data">
-<h4><a class="toc-backref" href="#id126">Template data</a></h4>
+<h4><a class="toc-backref" href="#id127">Template data</a></h4>
 <dl class="docutils">
 <dt>Developer</dt>
 <dd>The name of the developer who will be creating files.</dd>
@@ -2748,7 +2775,7 @@ which can be used with the ANSI C strftime function.  For details please see
 </div>
 </div>
 <div class="section" id="keybinding-preferences">
-<h3><a class="toc-backref" href="#id127">Keybinding preferences</a></h3>
+<h3><a class="toc-backref" href="#id128">Keybinding preferences</a></h3>
 <img alt="./images/pref_dialog_keys.png" src="./images/pref_dialog_keys.png" />
 <p>There are some commands listed in the keybinding dialog that are not, by default,
 bound to a key combination, and may not be available as a menu item.</p>
@@ -2758,7 +2785,7 @@ bound to a key combination, and may not be available as a menu item.</p>
 </div>
 </div>
 <div class="section" id="printing-preferences">
-<h3><a class="toc-backref" href="#id128">Printing preferences</a></h3>
+<h3><a class="toc-backref" href="#id129">Printing preferences</a></h3>
 <img alt="./images/pref_dialog_printing.png" src="./images/pref_dialog_printing.png" />
 <dl class="docutils">
 <dt>Use external command for printing</dt>
@@ -2780,17 +2807,17 @@ see <a class="reference external" href="http://man.cx/strftime">http://man.cx/st
 </dl>
 </div>
 <div class="section" id="various-preferences">
-<h3><a class="toc-backref" href="#id129">Various preferences</a></h3>
+<h3><a class="toc-backref" href="#id130">Various preferences</a></h3>
 <img alt="./images/pref_dialog_various.png" src="./images/pref_dialog_various.png" />
 <p>Rarely used preferences, explained in the table below. A few of them require
 restart to take effect, and a few other will only affect newly opened or created
 documents before restart.</p>
 <table border="1" class="docutils">
 <colgroup>
-<col width="34%" />
-<col width="44%" />
+<col width="33%" />
+<col width="45%" />
+<col width="10%" />
 <col width="11%" />
-<col width="12%" />
 </colgroup>
 <thead valign="bottom">
 <tr><th class="head">Key</th>
@@ -2876,7 +2903,7 @@ tab.</td>
 </tr>
 <tr><td>statusbar_template</td>
 <td>The status bar statistics line format.
-(Search in src/ui_utils.c for details).</td>
+(See <a class="reference internal" href="#statusbar-templates">Statusbar Templates</a> for details).</td>
 <td>See below.</td>
 <td>immediately</td>
 </tr>
@@ -2910,27 +2937,6 @@ Messages Window</td>
 <td>true</td>
 <td>immediately</td>
 </tr>
-</tbody>
-</table>
-<p>By default, statusbar_template is empty. This tells Geany to use its
-internal default, which is currently:</p>
-<p><tt class="docutils literal">line: %l / %L\t col: %c\t sel: %s\t %w&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; %t&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; %mmode: %M&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; encoding: %e&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; filetype: %f&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; scope: %S</tt></p>
-<p>Note that <tt class="docutils literal">\t</tt> = tab.</p>
-<table border="1" class="docutils">
-<colgroup>
-<col width="33%" />
-<col width="45%" />
-<col width="10%" />
-<col width="11%" />
-</colgroup>
-<thead valign="bottom">
-<tr><th class="head">Key</th>
-<th class="head">Description</th>
-<th class="head">Default</th>
-<th class="head">Applies</th>
-</tr>
-</thead>
-<tbody valign="top">
 <tr><td><strong>VTE related</strong></td>
 <td>&nbsp;</td>
 <td>&nbsp;</td>
@@ -3055,13 +3061,84 @@ execute section of the Build menu.</td>
 </tbody>
 </table>
 <p>The extract_filetype_regex has the default value GEANY_DEFAULT_FILETYPE_REGEX.</p>
+<div class="section" id="statusbar-templates">
+<h4><a class="toc-backref" href="#id131">Statusbar Templates</a></h4>
+<p>The default statusbar template is (note <tt class="docutils literal">\t</tt> = tab):</p>
+<p><tt class="docutils literal">line: %l / %L\t col: %c\t sel: %s\t %w&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; %t&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; %mmode: %M&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; encoding: %e&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; filetype: %f&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; scope: %S</tt></p>
+<p>Settings the preference to an empty string will also cause Geany to use this
+internal default.</p>
+<p>The following format characters are available for the statusbar template:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="17%" />
+<col width="83%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Placeholder</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td><tt class="docutils literal">%l</tt></td>
+<td>The current line number starting at 1</td>
+</tr>
+<tr><td><tt class="docutils literal">%L</tt></td>
+<td>The total number of lines</td>
+</tr>
+<tr><td><tt class="docutils literal">%c</tt></td>
+<td>The current column number starting at 0</td>
+</tr>
+<tr><td><tt class="docutils literal">%C</tt></td>
+<td>The current column number starting at 1</td>
+</tr>
+<tr><td><tt class="docutils literal">%s</tt></td>
+<td>The number of selected characters or if only whole lines
+selected, the number of selected lines.</td>
+</tr>
+<tr><td><tt class="docutils literal">%w</tt></td>
+<td>Shows <tt class="docutils literal">RO</tt> when the document is in read-only mode,
+otherwise shows whether the editor is in overtype (OVR)
+or insert (INS) mode.</td>
+</tr>
+<tr><td><tt class="docutils literal">%t</tt></td>
+<td>Shows the indentation mode, either tabs (TAB),
+spaces (SP) or both (T/S).</td>
+</tr>
+<tr><td><tt class="docutils literal">%m</tt></td>
+<td>Shows whether the document is modified (MOD) or nothing.</td>
+</tr>
+<tr><td><tt class="docutils literal">%M</tt></td>
+<td>The name of the document's line-endings (ex. <tt class="docutils literal">Unix (LF)</tt>)</td>
+</tr>
+<tr><td><tt class="docutils literal">%e</tt></td>
+<td>The name of the document's encoding (ex. UTF-8).</td>
+</tr>
+<tr><td><tt class="docutils literal">%f</tt></td>
+<td>The filetype of the document (ex. None, Python, C, etc).</td>
+</tr>
+<tr><td><tt class="docutils literal">%S</tt></td>
+<td>The name of the scope where the caret is located.</td>
+</tr>
+<tr><td><tt class="docutils literal">%p</tt></td>
+<td>The caret position in the entire document starting at 0.</td>
+</tr>
+<tr><td><tt class="docutils literal">%r</tt></td>
+<td>Shows whether the document is read-only (RO) or nothing.</td>
+</tr>
+<tr><td><tt class="docutils literal">%Y</tt></td>
+<td>The Scintilla style number at the caret position. This is
+useful if you're debugging color schemes or related code.</td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 <div class="section" id="terminal-vte-preferences">
-<h3><a class="toc-backref" href="#id130">Terminal (VTE) preferences</a></h3>
+<h3><a class="toc-backref" href="#id132">Terminal (VTE) preferences</a></h3>
 <p>See also: <a class="reference internal" href="#virtual-terminal-emulator-widget-vte">Virtual terminal emulator widget (VTE)</a>.</p>
 <img alt="./images/pref_dialog_vte.png" src="./images/pref_dialog_vte.png" />
 <div class="section" id="terminal-widget">
-<h4><a class="toc-backref" href="#id131">Terminal widget</a></h4>
+<h4><a class="toc-backref" href="#id133">Terminal widget</a></h4>
 <dl class="docutils">
 <dt>Terminal font</dt>
 <dd>Select the font that will be used in the terminal emulation control.</dd>
@@ -3102,7 +3179,7 @@ like a Python console (e.g. ipython). Use this with care.</dd>
 </div>
 </div>
 <div class="section" id="project-management">
-<h2><a class="toc-backref" href="#id132">Project management</a></h2>
+<h2><a class="toc-backref" href="#id134">Project management</a></h2>
 <p>Project management is optional in Geany. Currently it can be used for:</p>
 <ul class="simple">
 <li>Storing and opening session files on a project basis.</li>
@@ -3120,7 +3197,7 @@ Geany is shutdown. When restarting Geany, the previously opened project
 file that was in use at the end of the last session will be reopened.</p>
 <p>The project menu items are detailed below.</p>
 <div class="section" id="new-project">
-<h3><a class="toc-backref" href="#id133">New project</a></h3>
+<h3><a class="toc-backref" href="#id135">New project</a></h3>
 <p>To create a new project, fill in the <em>Name</em> field. By default this
 will setup a new project file <tt class="docutils literal">~/projects/name.geany</tt>. Usually it's
 best to store all your project files in the same directory (they are
@@ -3130,7 +3207,7 @@ can safely be set to any existing path -- it will not touch the file
 structure contained in it.</p>
 </div>
 <div class="section" id="project-properties">
-<h3><a class="toc-backref" href="#id134">Project properties</a></h3>
+<h3><a class="toc-backref" href="#id136">Project properties</a></h3>
 <p>You can set an optional description for the project. Currently it's
 only used for a template wildcard - see <a class="reference internal" href="#template-wildcards">Template wildcards</a>.</p>
 <p>The <em>Base path</em> field is used as the directory to run the Build menu commands.
@@ -3142,7 +3219,7 @@ project, which can be used in the <a class="reference internal" href="#find-in-f
 <a class="reference internal" href="#indentation">Indentation</a> settings.</p>
 </div>
 <div class="section" id="open-project">
-<h3><a class="toc-backref" href="#id135">Open project</a></h3>
+<h3><a class="toc-backref" href="#id137">Open project</a></h3>
 <p>The Open command displays a standard file chooser, starting in
 <tt class="docutils literal">~/projects</tt>. Choose a project file named with the <tt class="docutils literal">.geany</tt>
 extension.</p>
@@ -3150,14 +3227,14 @@ extension.</p>
 open files and open the session files associated with the project.</p>
 </div>
 <div class="section" id="close-project">
-<h3><a class="toc-backref" href="#id136">Close project</a></h3>
+<h3><a class="toc-backref" href="#id138">Close project</a></h3>
 <p>Project file settings are saved when the project is closed.</p>
 <p>When project session support is enabled, Geany will close the project
 session files and open any previously closed default session files.</p>
 </div>
 </div>
 <div class="section" id="build-menu">
-<h2><a class="toc-backref" href="#id137">Build menu</a></h2>
+<h2><a class="toc-backref" href="#id139">Build menu</a></h2>
 <p>After editing code with Geany, the next step is to compile, link, build,
 interpret, run etc.  As Geany supports many languages each with a different
 approach to such operations, and as there are also many language independent
@@ -3184,7 +3261,7 @@ the tool you're using, you can set a custom regex in the Build Commands
 Dialog, see <a class="reference internal" href="#build-menu-configuration">Build Menu Configuration</a>.</p>
 </div>
 <div class="section" id="indicators">
-<h3><a class="toc-backref" href="#id138">Indicators</a></h3>
+<h3><a class="toc-backref" href="#id140">Indicators</a></h3>
 <p>Indicators are red squiggly underlines which are used to highlight
 errors which occurred while compiling the current file. So you can
 easily see where your code failed to compile. You can remove them by
@@ -3193,7 +3270,7 @@ selecting <em>Remove Error Indicators</em> in the Document menu.</p>
 preferences</a>.</p>
 </div>
 <div class="section" id="default-build-menu-items">
-<h3><a class="toc-backref" href="#id139">Default build menu items</a></h3>
+<h3><a class="toc-backref" href="#id141">Default build menu items</a></h3>
 <p>Depending on the current file's filetype, the default Build menu will contain
 the following items:</p>
 <ul class="simple">
@@ -3208,7 +3285,7 @@ the following items:</p>
 <li>Set Build Menu Commands</li>
 </ul>
 <div class="section" id="compile">
-<h4><a class="toc-backref" href="#id140">Compile</a></h4>
+<h4><a class="toc-backref" href="#id142">Compile</a></h4>
 <p>The Compile command has different uses for different kinds of files.</p>
 <p>For compilable languages such as C and C++, the Compile command is
 set up to compile the current source file into a binary object file.</p>
@@ -3218,7 +3295,7 @@ bytecode if the language supports it, or will run a syntax check,
 or if that is not available will run the file in its language interpreter.</p>
 </div>
 <div class="section" id="build">
-<h4><a class="toc-backref" href="#id141">Build</a></h4>
+<h4><a class="toc-backref" href="#id143">Build</a></h4>
 <p>For compilable languages such as C and C++, the Build command will link
 the current source file's equivalent object file into an executable. If
 the object file does not exist, the source will be compiled and linked
@@ -3233,32 +3310,32 @@ build your software.</p>
 </div>
 </div>
 <div class="section" id="make">
-<h4><a class="toc-backref" href="#id142">Make</a></h4>
+<h4><a class="toc-backref" href="#id144">Make</a></h4>
 <p>This runs &quot;make&quot; in the same directory as the
 current file.</p>
 </div>
 <div class="section" id="make-custom-target">
-<h4><a class="toc-backref" href="#id143">Make custom target</a></h4>
+<h4><a class="toc-backref" href="#id145">Make custom target</a></h4>
 <p>This is similar to running 'Make' but you will be prompted for
 the make target name to be passed to the Make tool. For example,
 typing 'clean' in the dialog prompt will run &quot;make clean&quot;.</p>
 </div>
 <div class="section" id="make-object">
-<h4><a class="toc-backref" href="#id144">Make object</a></h4>
+<h4><a class="toc-backref" href="#id146">Make object</a></h4>
 <p>Make object will run &quot;make current_file.o&quot; in the same directory as
 the current file, using the filename for 'current_file'. It is useful
 for building just the current file without building the whole project.</p>
 </div>
 <div class="section" id="next-error">
-<h4><a class="toc-backref" href="#id145">Next error</a></h4>
+<h4><a class="toc-backref" href="#id147">Next error</a></h4>
 <p>The next error item will move to the next detected error in the file.</p>
 </div>
 <div class="section" id="previous-error">
-<h4><a class="toc-backref" href="#id146">Previous error</a></h4>
+<h4><a class="toc-backref" href="#id148">Previous error</a></h4>
 <p>The previous error item will move to the previous detected error in the file.</p>
 </div>
 <div class="section" id="execute">
-<h4><a class="toc-backref" href="#id147">Execute</a></h4>
+<h4><a class="toc-backref" href="#id149">Execute</a></h4>
 <p>Execute will run the corresponding executable file, shell script or
 interpreted script in a terminal window. The command set in the
 &quot;Set Build Commands&quot; dialog is run in a script to ensure the terminal
@@ -3274,7 +3351,7 @@ output from the program before the terminal window is closed.</p>
 </div>
 </div>
 <div class="section" id="stopping-running-processes">
-<h4><a class="toc-backref" href="#id148">Stopping running processes</a></h4>
+<h4><a class="toc-backref" href="#id150">Stopping running processes</a></h4>
 <p>When there is a running program, the Execute menu item in the menu and
 the Run button in the toolbar
 each become a stop button so you can stop the current running program (and
@@ -3283,7 +3360,7 @@ any child processes). This works by sending the SIGQUIT signal to the process.</
 cannot be stopped. For example this can happen when the process creates
 more than one child process.</p>
 <div class="section" id="terminal-emulators">
-<h5><a class="toc-backref" href="#id149">Terminal emulators</a></h5>
+<h5><a class="toc-backref" href="#id151">Terminal emulators</a></h5>
 <p>The Terminal field of the tools preferences tab requires a command to
 execute the terminal program and to pass it the name of the Geany run
 script that it should execute in a Bourne compatible shell (eg /bin/sh).
@@ -3297,7 +3374,7 @@ xterm -e &quot;/bin/sh %c&quot;
 </div>
 </div>
 <div class="section" id="set-build-commands">
-<h4><a class="toc-backref" href="#id150">Set build commands</a></h4>
+<h4><a class="toc-backref" href="#id152">Set build commands</a></h4>
 <p>By default Compile, Build and Execute are fairly basic commands. You
 may wish to customise them using <em>Set Build Commands</em>.</p>
 <p>E.g. for C you can add any include paths and compile flags for the
@@ -3306,7 +3383,7 @@ arguments you want to use when running Execute.</p>
 </div>
 </div>
 <div class="section" id="build-menu-configuration">
-<h3><a class="toc-backref" href="#id151">Build menu configuration</a></h3>
+<h3><a class="toc-backref" href="#id153">Build menu configuration</a></h3>
 <p>The build menu has considerable flexibility and configurability, allowing
 both menu labels the commands they execute and the directory they execute
 in to be configured.</p>
@@ -3465,7 +3542,7 @@ format</a>.</li>
 </ul>
 </div>
 <div class="section" id="build-menu-commands-dialog">
-<h3><a class="toc-backref" href="#id152">Build menu commands dialog</a></h3>
+<h3><a class="toc-backref" href="#id154">Build menu commands dialog</a></h3>
 <p>Most of the configuration of the build menu is done through the Build Menu
 Commands Dialog.  You edit the configuration sourced from preferences in the
 dialog opened from the Build-&gt;Build Menu Commands item and you edit the
@@ -3497,7 +3574,7 @@ When you do this the command from the next lower priority source will be shown.
 To hide lower priority menu items without having anything show in the menu
 configure with a nothing in the label but at least one character in the command.</p>
 <div class="section" id="substitutions-in-commands-and-working-directories">
-<h4><a class="toc-backref" href="#id153">Substitutions in commands and working directories</a></h4>
+<h4><a class="toc-backref" href="#id155">Substitutions in commands and working directories</a></h4>
 <p>The first occurence of each of the following character sequences in each of the
 command and working directory fields is substituted by the items specified below
 before the command is run.</p>
@@ -3518,7 +3595,7 @@ build menu.</p>
 </div>
 </div>
 <div class="section" id="build-menu-keyboard-shortcuts">
-<h4><a class="toc-backref" href="#id154">Build menu keyboard shortcuts</a></h4>
+<h4><a class="toc-backref" href="#id156">Build menu keyboard shortcuts</a></h4>
 <p>Keyboard shortcuts can be defined for the first two filetype menu items, the first three
 independent menu items, the first two execute menu items and the fixed menu items.
 In the keybindings configuration dialog (see <a class="reference internal" href="#keybinding-preferences">Keybinding preferences</a>)
@@ -3527,7 +3604,7 @@ these items are identified by the default labels shown in the <a class="referenc
 <p>You can also use underlines in the labels to set mnemonic characters.</p>
 </div>
 <div class="section" id="old-settings">
-<h4><a class="toc-backref" href="#id155">Old settings</a></h4>
+<h4><a class="toc-backref" href="#id157">Old settings</a></h4>
 <p>The configurable Build Menu capability was introduced in Geany 0.19 and
 required a new section to be added to the configuration files (See
 <a class="reference internal" href="#preferences-file-format">Preferences file format</a>).  Geany will still load older format project,
@@ -3543,7 +3620,7 @@ older format configuration files.</p>
 </div>
 </div>
 <div class="section" id="printing-support">
-<h2><a class="toc-backref" href="#id156">Printing support</a></h2>
+<h2><a class="toc-backref" href="#id158">Printing support</a></h2>
 <p>Since Geany 0.13 there has been printing support using GTK's printing API.
 The printed page(s) will look nearly the same as on your screen in Geany.
 Additionally, there are some options to modify the printed page(s).</p>
@@ -3594,7 +3671,7 @@ command line).</p>
 gtklp or similar programs can be used.</p>
 </div>
 <div class="section" id="plugins">
-<h2><a class="toc-backref" href="#id157">Plugins</a></h2>
+<h2><a class="toc-backref" href="#id159">Plugins</a></h2>
 <p>Plugins are loaded at startup, if the <em>Enable plugin support</em>
 general preference is set. There is also a command-line option,
 <tt class="docutils literal"><span class="pre">-p</span></tt>, which prevents plugins being loaded. Plugins are scanned in
@@ -3610,7 +3687,7 @@ the following directories:</p>
 <p>See also <a class="reference internal" href="#plugin-documentation">Plugin documentation</a> for information about single plugins
 which are included in Geany.</p>
 <div class="section" id="plugin-manager">
-<h3><a class="toc-backref" href="#id158">Plugin manager</a></h3>
+<h3><a class="toc-backref" href="#id160">Plugin manager</a></h3>
 <p>The Plugin Manager dialog lets you choose which plugins
 should be loaded at startup. You can also load and unload plugins on the
 fly using this dialog. Once you click the checkbox for a specific plugin
@@ -3621,13 +3698,13 @@ provides any.</p>
 </div>
 </div>
 <div class="section" id="keybindings">
-<h2><a class="toc-backref" href="#id159">Keybindings</a></h2>
+<h2><a class="toc-backref" href="#id161">Keybindings</a></h2>
 <p>Geany supports the default keyboard shortcuts for the Scintilla
 editing widget. For a list of these commands, see <a class="reference internal" href="#scintilla-keyboard-commands">Scintilla
 keyboard commands</a>. The Scintilla keyboard shortcuts will be overridden
 by any custom keybindings with the same keyboard shortcut.</p>
 <div class="section" id="switching-documents">
-<h3><a class="toc-backref" href="#id160">Switching documents</a></h3>
+<h3><a class="toc-backref" href="#id162">Switching documents</a></h3>
 <p>There are some non-configurable bindings to switch between documents,
 listed below. These can also be overridden by custom keybindings.</p>
 <table border="1" class="docutils">
@@ -3652,7 +3729,7 @@ listed below. These can also be overridden by custom keybindings.</p>
 <p>See also <a class="reference internal" href="#notebook-tab-keybindings">Notebook tab keybindings</a>.</p>
 </div>
 <div class="section" id="configurable-keybindings">
-<h3><a class="toc-backref" href="#id161">Configurable keybindings</a></h3>
+<h3><a class="toc-backref" href="#id163">Configurable keybindings</a></h3>
 <p>For all actions listed below you can define your own keybindings. Open
 the Preferences dialog, select the desired action and click on
 change. In the resulting dialog you can press the key combination you
@@ -3663,7 +3740,7 @@ combination can only be defined for one action.</p>
 which are common to many applications are marked with (C) after the
 shortcut.</p>
 <div class="section" id="file-keybindings">
-<h4><a class="toc-backref" href="#id162">File keybindings</a></h4>
+<h4><a class="toc-backref" href="#id164">File keybindings</a></h4>
 <table border="1" class="docutils">
 <colgroup>
 <col width="29%" />
@@ -3730,7 +3807,7 @@ will be lost.</td>
 </table>
 </div>
 <div class="section" id="editor-keybindings">
-<h4><a class="toc-backref" href="#id163">Editor keybindings</a></h4>
+<h4><a class="toc-backref" href="#id165">Editor keybindings</a></h4>
 <table border="1" class="docutils">
 <colgroup>
 <col width="29%" />
@@ -3852,7 +3929,7 @@ one line.</td>
 </table>
 </div>
 <div class="section" id="clipboard-keybindings">
-<h4><a class="toc-backref" href="#id164">Clipboard keybindings</a></h4>
+<h4><a class="toc-backref" href="#id166">Clipboard keybindings</a></h4>
 <table border="1" class="docutils">
 <colgroup>
 <col width="29%" />
@@ -3892,7 +3969,7 @@ selection) to the clipboard.</td>
 </table>
 </div>
 <div class="section" id="select-keybindings">
-<h4><a class="toc-backref" href="#id165">Select keybindings</a></h4>
+<h4><a class="toc-backref" href="#id167">Select keybindings</a></h4>
 <table border="1" class="docutils">
 <colgroup>
 <col width="29%" />
@@ -3937,7 +4014,7 @@ partially selected lines).</td>
 </table>
 </div>
 <div class="section" id="insert-keybindings">
-<h4><a class="toc-backref" href="#id166">Insert keybindings</a></h4>
+<h4><a class="toc-backref" href="#id168">Insert keybindings</a></h4>
 <table border="1" class="docutils">
 <colgroup>
 <col width="29%" />
@@ -3974,7 +4051,7 @@ tabs should be used for indentation.</td>
 </table>
 </div>
 <div class="section" id="format-keybindings">
-<h4><a class="toc-backref" href="#id167">Format keybindings</a></h4>
+<h4><a class="toc-backref" href="#id169">Format keybindings</a></h4>
 <table border="1" class="docutils">
 <colgroup>
 <col width="29%" />
@@ -4062,7 +4139,7 @@ enabled for the current document.</td>
 </table>
 </div>
 <div class="section" id="settings-keybindings">
-<h4><a class="toc-backref" href="#id168">Settings keybindings</a></h4>
+<h4><a class="toc-backref" href="#id170">Settings keybindings</a></h4>
 <table border="1" class="docutils">
 <colgroup>
 <col width="29%" />
@@ -4088,7 +4165,7 @@ enabled for the current document.</td>
 </table>
 </div>
 <div class="section" id="search-keybindings">
-<h4><a class="toc-backref" href="#id169">Search keybindings</a></h4>
+<h4><a class="toc-backref" href="#id171">Search keybindings</a></h4>
 <table border="1" class="docutils">
 <colgroup>
 <col width="29%" />
@@ -4166,7 +4243,7 @@ the highlighted matches will be cleared.</td>
 </table>
 </div>
 <div class="section" id="go-to-keybindings">
-<h4><a class="toc-backref" href="#id170">Go to keybindings</a></h4>
+<h4><a class="toc-backref" href="#id172">Go to keybindings</a></h4>
 <table border="1" class="docutils">
 <colgroup>
 <col width="29%" />
@@ -4263,7 +4340,7 @@ If the line is not wrapped, it behaves like
 </table>
 </div>
 <div class="section" id="view-keybindings">
-<h4><a class="toc-backref" href="#id171">View keybindings</a></h4>
+<h4><a class="toc-backref" href="#id173">View keybindings</a></h4>
 <table border="1" class="docutils">
 <colgroup>
 <col width="29%" />
@@ -4312,7 +4389,7 @@ and the status bar.</td>
 </table>
 </div>
 <div class="section" id="focus-keybindings">
-<h4><a class="toc-backref" href="#id172">Focus keybindings</a></h4>
+<h4><a class="toc-backref" href="#id174">Focus keybindings</a></h4>
 <table border="1" class="docutils">
 <colgroup>
 <col width="30%" />
@@ -4375,7 +4452,7 @@ visible).</td>
 </table>
 </div>
 <div class="section" id="notebook-tab-keybindings">
-<h4><a class="toc-backref" href="#id173">Notebook tab keybindings</a></h4>
+<h4><a class="toc-backref" href="#id175">Notebook tab keybindings</a></h4>
 <table border="1" class="docutils">
 <colgroup>
 <col width="28%" />
@@ -4429,7 +4506,7 @@ one.</td>
 </table>
 </div>
 <div class="section" id="document-keybindings">
-<h4><a class="toc-backref" href="#id174">Document keybindings</a></h4>
+<h4><a class="toc-backref" href="#id176">Document keybindings</a></h4>
 <table border="1" class="docutils">
 <colgroup>
 <col width="33%" />
@@ -4500,7 +4577,7 @@ current document.</td>
 </table>
 </div>
 <div class="section" id="project-keybindings">
-<h4><a class="toc-backref" href="#id175">Project keybindings</a></h4>
+<h4><a class="toc-backref" href="#id177">Project keybindings</a></h4>
 <table border="1" class="docutils">
 <colgroup>
 <col width="29%" />
@@ -4534,7 +4611,7 @@ current document.</td>
 </table>
 </div>
 <div class="section" id="build-keybindings">
-<h4><a class="toc-backref" href="#id176">Build keybindings</a></h4>
+<h4><a class="toc-backref" href="#id178">Build keybindings</a></h4>
 <table border="1" class="docutils">
 <colgroup>
 <col width="29%" />
@@ -4592,7 +4669,7 @@ the last build process.</td>
 </table>
 </div>
 <div class="section" id="tools-keybindings">
-<h4><a class="toc-backref" href="#id177">Tools keybindings</a></h4>
+<h4><a class="toc-backref" href="#id179">Tools keybindings</a></h4>
 <table border="1" class="docutils">
 <colgroup>
 <col width="29%" />
@@ -4614,7 +4691,7 @@ the last build process.</td>
 </table>
 </div>
 <div class="section" id="help-keybindings">
-<h4><a class="toc-backref" href="#id178">Help keybindings</a></h4>
+<h4><a class="toc-backref" href="#id180">Help keybindings</a></h4>
 <table border="1" class="docutils">
 <colgroup>
 <col width="29%" />
@@ -4639,13 +4716,13 @@ the last build process.</td>
 </div>
 </div>
 <div class="section" id="configuration-files">
-<h1><a class="toc-backref" href="#id179">Configuration files</a></h1>
+<h1><a class="toc-backref" href="#id181">Configuration files</a></h1>
 <div class="warning">
 <p class="first admonition-title">Warning</p>
 <p class="last">You must use UTF-8 encoding <em>without BOM</em> for configuration files.</p>
 </div>
 <div class="section" id="configuration-file-paths">
-<h2><a class="toc-backref" href="#id180">Configuration file paths</a></h2>
+<h2><a class="toc-backref" href="#id182">Configuration file paths</a></h2>
 <p>Geany has default configuration files installed for the system and
 also per-user configuration files.</p>
 <p>The system files should not normally be edited because they will be
@@ -4664,14 +4741,14 @@ Geany-INFO: System data dir: /usr/share/geany
 Geany-INFO: User config dir: /home/username/.config/geany
 </pre>
 <div class="section" id="paths-on-unix-like-systems">
-<h3><a class="toc-backref" href="#id181">Paths on Unix-like systems</a></h3>
+<h3><a class="toc-backref" href="#id183">Paths on Unix-like systems</a></h3>
 <p>The system path is <tt class="docutils literal">$prefix/share/geany</tt>, where <tt class="docutils literal">$prefix</tt> is the
 path where Geany is installed (see <a class="reference internal" href="#installation-prefix">Installation prefix</a>).</p>
 <p>The user configuration directory is normally:
 <tt class="docutils literal"><span class="pre">/home/username/.config/geany</span></tt></p>
 </div>
 <div class="section" id="paths-on-windows">
-<h3><a class="toc-backref" href="#id182">Paths on Windows</a></h3>
+<h3><a class="toc-backref" href="#id184">Paths on Windows</a></h3>
 <p>The system path is the <tt class="docutils literal">data</tt> subfolder of the installation path
 on Windows.</p>
 <p>The user configuration directory might vary, but on Windows XP it's:
@@ -4679,7 +4756,7 @@ on Windows.</p>
 </div>
 </div>
 <div class="section" id="tools-menu-items">
-<h2><a class="toc-backref" href="#id183">Tools menu items</a></h2>
+<h2><a class="toc-backref" href="#id185">Tools menu items</a></h2>
 <p>There's a <em>Configuration files</em> submenu in the <em>Tools</em> menu that
 contains items for some of the available user configuration files.
 Clicking on one opens it in the editor for you to update. Geany will
@@ -4702,7 +4779,7 @@ amount of time.</p>
 </div>
 </div>
 <div class="section" id="global-configuration-file">
-<h2><a class="toc-backref" href="#id184">Global configuration file</a></h2>
+<h2><a class="toc-backref" href="#id186">Global configuration file</a></h2>
 <p>System administrators can add a global configuration file for Geany
 which will be used when starting Geany and a user configuration file
 does not exist.</p>
@@ -4719,14 +4796,14 @@ need to do that.</p>
 </div>
 </div>
 <div class="section" id="filetype-definition-files">
-<h2><a class="toc-backref" href="#id185">Filetype definition files</a></h2>
+<h2><a class="toc-backref" href="#id187">Filetype definition files</a></h2>
 <p>All color definitions and other filetype specific settings are
 stored in the filetype definition files. Those settings are colors
 for syntax highlighting, general settings like comment characters or
 word delimiter characters as well as compiler and linker settings.</p>
 <p>See also <a class="reference internal" href="#configuration-file-paths">Configuration file paths</a>.</p>
 <div class="section" id="filenames">
-<h3><a class="toc-backref" href="#id186">Filenames</a></h3>
+<h3><a class="toc-backref" href="#id188">Filenames</a></h3>
 <p>Each filetype has a corresponding filetype definition file. The format
 for built-in filetype <cite>Foo</cite> is:</p>
 <pre class="literal-block">
@@ -4767,7 +4844,7 @@ filetypes.Foo.conf
 <p>See the link for details.</p>
 </div>
 <div class="section" id="system-files">
-<h3><a class="toc-backref" href="#id187">System files</a></h3>
+<h3><a class="toc-backref" href="#id189">System files</a></h3>
 <p>The system-wide filetype configuration files can be found in the
 system configuration path and are called <tt class="docutils literal"><span class="pre">filetypes.$ext</span></tt>,
 where $ext is the name of the filetype. For every
@@ -4781,7 +4858,7 @@ because they will be overridden when Geany is updated.</p>
 </div>
 </div>
 <div class="section" id="user-files">
-<h3><a class="toc-backref" href="#id188">User files</a></h3>
+<h3><a class="toc-backref" href="#id190">User files</a></h3>
 <p>To change the settings, copy a file from the system configuration
 path to the subdirectory <tt class="docutils literal">filedefs</tt> in your user configuration
 directory. Then you can edit the file and the changes will still be
@@ -4791,7 +4868,7 @@ settings you want to change. All missing settings will be read from
 the corresponding system configuration file.</p>
 </div>
 <div class="section" id="custom-filetypes">
-<h3><a class="toc-backref" href="#id189">Custom filetypes</a></h3>
+<h3><a class="toc-backref" href="#id191">Custom filetypes</a></h3>
 <p>At startup Geany looks for <tt class="docutils literal"><span class="pre">filetypes.*.conf</span></tt> files in the system and
 user filetype paths, adding any filetypes found with the name matching
 the '<tt class="docutils literal">*</tt>' wildcard - e.g. <tt class="docutils literal">filetypes.Bar.conf</tt>.</p>
@@ -4817,7 +4894,7 @@ support for the following has been implemented:</p>
 </ul>
 <p>See <a class="reference internal" href="#filetype-configuration">Filetype configuration</a> for details on each setting.</p>
 <div class="section" id="creating-a-custom-filetype-from-an-existing-filetype">
-<h4><a class="toc-backref" href="#id190">Creating a custom filetype from an existing filetype</a></h4>
+<h4><a class="toc-backref" href="#id192">Creating a custom filetype from an existing filetype</a></h4>
 <p>Because most filetype settings will relate to the syntax
 highlighting (e.g. styling, keywords, <tt class="docutils literal">lexer_properties</tt>
 sections), it is best to copy an existing filetype file that uses
@@ -4838,11 +4915,11 @@ list, or none.</p>
 </div>
 </div>
 <div class="section" id="filetype-configuration">
-<h3><a class="toc-backref" href="#id191">Filetype configuration</a></h3>
+<h3><a class="toc-backref" href="#id193">Filetype configuration</a></h3>
 <p>As well as the sections listed below, each filetype file can contain
 a [build-menu] section as described in <a class="reference internal" href="#build-menu-section">[build-menu] section</a>.</p>
 <div class="section" id="styling-section">
-<h4><a class="toc-backref" href="#id192">[styling] section</a></h4>
+<h4><a class="toc-backref" href="#id194">[styling] section</a></h4>
 <p>In this section the colors for syntax highlighting are defined. The
 manual format is:</p>
 <ul class="simple">
@@ -4862,7 +4939,7 @@ value is something other than &quot;true&quot; or &quot;false&quot;, &quot;false
 <p>This makes the key style have red foreground text, default background
 color text and bold emphasis.</p>
 <div class="section" id="using-a-named-style">
-<h5><a class="toc-backref" href="#id193">Using a named style</a></h5>
+<h5><a class="toc-backref" href="#id195">Using a named style</a></h5>
 <p>The second format uses a <em>named style</em> name to reference a style
 defined in filetypes.common.</p>
 <ul class="simple">
@@ -4880,7 +4957,7 @@ italic emphasis.</p>
 Section</a>.</p>
 </div>
 <div class="section" id="reading-styles-from-another-filetype">
-<h5><a class="toc-backref" href="#id194">Reading styles from another filetype</a></h5>
+<h5><a class="toc-backref" href="#id196">Reading styles from another filetype</a></h5>
 <p>You can automatically copy all of the styles from another filetype
 definition file by using the following syntax for the <tt class="docutils literal">[styling]</tt>
 group:</p>
@@ -4899,7 +4976,7 @@ styling the same as the C styling, you would put the following in
 </div>
 </div>
 <div class="section" id="keywords-section">
-<h4><a class="toc-backref" href="#id195">[keywords] section</a></h4>
+<h4><a class="toc-backref" href="#id197">[keywords] section</a></h4>
 <p>This section contains keys for different keyword lists specific to
 the filetype. Some filetypes do not support keywords, so adding a
 new key will not work. You can only add or remove keywords to/from
@@ -4910,7 +4987,7 @@ an existing list.</p>
 </div>
 </div>
 <div class="section" id="lexer-properties-section">
-<h4><a class="toc-backref" href="#id196">[lexer_properties] section</a></h4>
+<h4><a class="toc-backref" href="#id198">[lexer_properties] section</a></h4>
 <p>Here any special properties for the Scintilla lexer can be set in the
 format <tt class="docutils literal">key.name.field=some.value</tt>.</p>
 <p>Properties Geany uses are listed in the system filetype files. To find
@@ -4920,7 +4997,7 @@ egrep -o 'GetProperty\w*\(&quot;([^&quot;]+)&quot;[^)]+\)' scintilla/Lex*.cxx
 </pre>
 </div>
 <div class="section" id="settings-section">
-<h4><a class="toc-backref" href="#id197">[settings] section</a></h4>
+<h4><a class="toc-backref" href="#id199">[settings] section</a></h4>
 <dl class="docutils">
 <dt>extension</dt>
 <dd><p class="first">This is the default file extension used when saving files, not
@@ -5042,7 +5119,7 @@ this setting in their system configuration files.</dd>
 </dl>
 </div>
 <div class="section" id="indentation-section">
-<h4><a class="toc-backref" href="#id198">[indentation] section</a></h4>
+<h4><a class="toc-backref" href="#id200">[indentation] section</a></h4>
 <p>This section allows definition of default indentation settings specific to
 the file type, overriding the ones configured in the preferences.  This can
 be useful for file types requiring specific indentation settings (e.g. tabs
@@ -5078,7 +5155,7 @@ only for Makefile).  These settings don't override auto-detection if activated.<
 </dl>
 </div>
 <div class="section" id="build-settings-section">
-<h4><a class="toc-backref" href="#id199">[build_settings] section</a></h4>
+<h4><a class="toc-backref" href="#id201">[build_settings] section</a></h4>
 <p>As of Geany 0.19 this section is supplemented by the <a class="reference internal" href="#build-menu-section">[build-menu] section</a>.
 Values that are set in the [build-menu] section will override those in this section.</p>
 <dl class="docutils">
@@ -5131,7 +5208,7 @@ complete filename, e.g. for shell scripts.</p>
 </div>
 </div>
 <div class="section" id="special-file-filetypes-common">
-<h3><a class="toc-backref" href="#id200">Special file filetypes.common</a></h3>
+<h3><a class="toc-backref" href="#id202">Special file filetypes.common</a></h3>
 <p>There is a special filetype definition file called
 filetypes.common. This file defines some general non-filetype-specific
 settings.</p>
@@ -5146,7 +5223,7 @@ the system file.</p>
 <p class="last">See the <a class="reference internal" href="#filetype-configuration">Filetype configuration</a> section for how to define styles.</p>
 </div>
 <div class="section" id="named-styles-section">
-<h4><a class="toc-backref" href="#id201">[named_styles] section</a></h4>
+<h4><a class="toc-backref" href="#id203">[named_styles] section</a></h4>
 <p>Named styles declared here can be used in the [styling] section of any
 filetypes.* file.</p>
 <p>For example:</p>
@@ -5171,7 +5248,7 @@ original style.</p>
 </div>
 </div>
 <div class="section" id="named-colors-section">
-<h4><a class="toc-backref" href="#id202">[named_colors] section</a></h4>
+<h4><a class="toc-backref" href="#id204">[named_colors] section</a></h4>
 <p>Named colors declared here can be used in the <tt class="docutils literal">[styling]</tt> or
 <tt class="docutils literal">[named_styles]</tt> section of any filetypes.* file or color scheme.</p>
 <p>For example:</p>
@@ -5187,7 +5264,7 @@ foo=my_red_color;my_blue_color;false;true
 scheme-wide only involves changing the hex value in a single location.</p>
 </div>
 <div class="section" id="id4">
-<h4><a class="toc-backref" href="#id203">[styling] section</a></h4>
+<h4><a class="toc-backref" href="#id205">[styling] section</a></h4>
 <dl class="docutils">
 <dt>default</dt>
 <dd><p class="first">This is the default style. It is used for styling files without a
@@ -5371,7 +5448,7 @@ arguments set whether to use the defined colors.</p>
 </dl>
 </div>
 <div class="section" id="id5">
-<h4><a class="toc-backref" href="#id204">[settings] section</a></h4>
+<h4><a class="toc-backref" href="#id206">[settings] section</a></h4>
 <dl class="docutils">
 <dt>whitespace_chars</dt>
 <dd><p class="first">Characters to treat as whitespace. These characters are ignored
@@ -5385,7 +5462,7 @@ when moving, selecting and deleting across word boundaries
 </div>
 </div>
 <div class="section" id="filetype-extensions">
-<h2><a class="toc-backref" href="#id205">Filetype extensions</a></h2>
+<h2><a class="toc-backref" href="#id207">Filetype extensions</a></h2>
 <p>To change the default filetype extension used when saving a new file,
 see <a class="reference internal" href="#filetype-definition-files">Filetype definition files</a>.</p>
 <p>You can override the list of file extensions that Geany uses to detect
@@ -5405,7 +5482,7 @@ Make=Makefile*;*.mk;Buildfile;
 </pre>
 </div>
 <div class="section" id="filetype-group-membership">
-<h2><a class="toc-backref" href="#id206">Filetype group membership</a></h2>
+<h2><a class="toc-backref" href="#id208">Filetype group membership</a></h2>
 <p>Group membership is also stored in <tt class="docutils literal">filetype_extensions.conf</tt>. This
 file is used to store information Geany needs at startup, whereas the
 separate filetype definition files hold information only needed when
@@ -5426,13 +5503,13 @@ None=None;
 </div>
 </div>
 <div class="section" id="preferences-file-format">
-<h2><a class="toc-backref" href="#id207">Preferences file format</a></h2>
+<h2><a class="toc-backref" href="#id209">Preferences file format</a></h2>
 <p>The user preferences file <tt class="docutils literal">geany.conf</tt> holds settings for all the items configured
 in the preferences dialog. This file should not be edited while Geany is running
 as the file will be overwritten when the preferences in Geany are changed or Geany
 is quit.</p>
 <div class="section" id="build-menu-section">
-<h3><a class="toc-backref" href="#id208">[build-menu] section</a></h3>
+<h3><a class="toc-backref" href="#id210">[build-menu] section</a></h3>
 <p>The [build-menu] section contains the configuration of the build menu.
 This section can occur in filetype, preferences and project files and
 always has the format described here.  Different menu items are loaded
@@ -5464,11 +5541,11 @@ starting at 00</li>
 </div>
 </div>
 <div class="section" id="project-file-format">
-<h2><a class="toc-backref" href="#id209">Project file format</a></h2>
+<h2><a class="toc-backref" href="#id211">Project file format</a></h2>
 <p>The project file contains project related settings and possibly a
 record of the current session files.</p>
 <div class="section" id="build-menu-additions">
-<h3><a class="toc-backref" href="#id210">[build-menu] additions</a></h3>
+<h3><a class="toc-backref" href="#id212">[build-menu] additions</a></h3>
 <p>The project file also can have extra fields in the [build-menu] section
 in addition to those listed in <a class="reference internal" href="#build-menu-section">[build-menu] section</a> above.</p>
 <p>When filetype menu items are configured for the project they are stored
@@ -5484,7 +5561,7 @@ filetype menu item 0 for the C filetype would be</p>
 </div>
 </div>
 <div class="section" id="templates">
-<h2><a class="toc-backref" href="#id211">Templates</a></h2>
+<h2><a class="toc-backref" href="#id213">Templates</a></h2>
 <p>Geany supports the following templates:</p>
 <ul class="simple">
 <li>ChangeLog entry</li>
@@ -5513,7 +5590,7 @@ save a file in the user's template configuration directory. You can
 also force this by selecting <em>Tools-&gt;Reload Configuration</em>.</p>
 </div>
 <div class="section" id="template-meta-data">
-<h3><a class="toc-backref" href="#id212">Template meta data</a></h3>
+<h3><a class="toc-backref" href="#id214">Template meta data</a></h3>
 <p>Meta data can be used with all templates, but by default user set
 meta data is only used for the ChangeLog and File header templates.</p>
 <p>In the configuration dialog you can find a tab &quot;Templates&quot; (see
@@ -5521,7 +5598,7 @@ meta data is only used for the ChangeLog and File header templates.</p>
 which will be inserted in the templates.</p>
 </div>
 <div class="section" id="file-templates">
-<h3><a class="toc-backref" href="#id213">File templates</a></h3>
+<h3><a class="toc-backref" href="#id215">File templates</a></h3>
 <p>File templates are templates used as the basis of a new file. To
 use them, choose the <em>New (with Template)</em> menu item from the <em>File</em>
 menu.</p>
@@ -5533,7 +5610,7 @@ optional template wildcards like <tt class="docutils literal">{fileheader}</tt>.
 wildcard can be placed anywhere, but it's usually put on the first
 line of the file, followed by a blank line.</p>
 <div class="section" id="adding-file-templates">
-<h4><a class="toc-backref" href="#id214">Adding file templates</a></h4>
+<h4><a class="toc-backref" href="#id216">Adding file templates</a></h4>
 <p>File templates are read from <tt class="docutils literal">templates/files</tt> under the
 <a class="reference internal" href="#configuration-file-paths">Configuration file paths</a>.</p>
 <p>The filetype to use is detected from the template file's extension, if
@@ -5544,7 +5621,7 @@ clicked.</p>
 </div>
 </div>
 <div class="section" id="customizing-templates">
-<h3><a class="toc-backref" href="#id215">Customizing templates</a></h3>
+<h3><a class="toc-backref" href="#id217">Customizing templates</a></h3>
 <p>Each template can be customized to your needs. The templates are
 stored in the <tt class="docutils literal"><span class="pre">~/.config/geany/templates/</span></tt> directory (see the section called
 <a class="reference internal" href="#command-line-options">Command line options</a> for further information about the configuration
@@ -5552,7 +5629,7 @@ directory). Just open the desired template with an editor (ideally,
 Geany ;-) ) and edit the template to your needs. There are some
 wildcards which will be automatically replaced by Geany at startup.</p>
 <div class="section" id="template-wildcards">
-<h4><a class="toc-backref" href="#id216">Template wildcards</a></h4>
+<h4><a class="toc-backref" href="#id218">Template wildcards</a></h4>
 <p>All wildcards must be enclosed by &quot;{&quot; and &quot;}&quot;, e.g. {date}.</p>
 <p><strong>Wildcards for character escaping</strong></p>
 <table border="1" class="docutils">
@@ -5696,7 +5773,7 @@ bsd, gpl, snippets.</td>
 </tr>
 <tr><td>geanyversion</td>
 <td>The actual Geany version, e.g.
-&quot;Geany 1.23&quot;.</td>
+&quot;Geany 1.24&quot;.</td>
 <td>file templates, file header,
 function description, ChangeLog entry,
 bsd, gpl, snippets.</td>
@@ -5765,7 +5842,7 @@ will only be replaced in file templates.</td>
 </tbody>
 </table>
 <div class="section" id="special-command-wildcard">
-<h5><a class="toc-backref" href="#id217">Special {command:} wildcard</a></h5>
+<h5><a class="toc-backref" href="#id219">Special {command:} wildcard</a></h5>
 <p>The {command:} wildcard is a special one because it can execute
 a specified command and put the command's output (stdout) into
 the template.</p>
@@ -5800,14 +5877,14 @@ standard error and in the Help-&gt;Debug Messages dialog.</p>
 </div>
 </div>
 <div class="section" id="customizing-the-toolbar">
-<h2><a class="toc-backref" href="#id218">Customizing the toolbar</a></h2>
+<h2><a class="toc-backref" href="#id220">Customizing the toolbar</a></h2>
 <p>You can add, remove and reorder the elements in the toolbar by using
 the toolbar editor, or by manually editing the configuration file
 <tt class="docutils literal">ui_toolbar.xml</tt>.</p>
 <p>The toolbar editor can be opened from the preferences editor on the Toolbar tab or
 by right-clicking on the toolbar itself and choosing it from the menu.</p>
 <div class="section" id="manually-editing-the-toolbar-layout">
-<h3><a class="toc-backref" href="#id219">Manually editing the toolbar layout</a></h3>
+<h3><a class="toc-backref" href="#id221">Manually editing the toolbar layout</a></h3>
 <p>To override the system-wide configuration file, copy it to your user
 configuration directory (see <a class="reference internal" href="#configuration-file-paths">Configuration file paths</a>).</p>
 <p>For example:</p>
@@ -5829,7 +5906,7 @@ will be used instead.</p>
 </div>
 </div>
 <div class="section" id="available-toolbar-elements">
-<h3><a class="toc-backref" href="#id220">Available toolbar elements</a></h3>
+<h3><a class="toc-backref" href="#id222">Available toolbar elements</a></h3>
 <table border="1" class="docutils">
 <colgroup>
 <col width="19%" />
@@ -5943,13 +6020,13 @@ use 'SearchEntry')</td>
 </div>
 </div>
 <div class="section" id="plugin-documentation">
-<h1><a class="toc-backref" href="#id221">Plugin documentation</a></h1>
+<h1><a class="toc-backref" href="#id223">Plugin documentation</a></h1>
 <div class="section" id="html-characters">
-<h2><a class="toc-backref" href="#id222">HTML Characters</a></h2>
+<h2><a class="toc-backref" href="#id224">HTML Characters</a></h2>
 <p>The HTML Characters plugin helps when working with special
 characters in XML/HTML, e.g. German Umlauts ü and ä.</p>
 <div class="section" id="insert-entity-dialog">
-<h3><a class="toc-backref" href="#id223">Insert entity dialog</a></h3>
+<h3><a class="toc-backref" href="#id225">Insert entity dialog</a></h3>
 <p>When the plugin is enabled, you can insert special character
 entities using <em>Tools-&gt;Insert Special HTML Characters</em>.</p>
 <p>This opens up a dialog where you can find a huge amount of special
@@ -5961,7 +6038,7 @@ the entity for the character at the current cursor position. You
 might also like to double click the chosen entity instead.</p>
 </div>
 <div class="section" id="replace-special-chars-by-its-entity">
-<h3><a class="toc-backref" href="#id224">Replace special chars by its entity</a></h3>
+<h3><a class="toc-backref" href="#id226">Replace special chars by its entity</a></h3>
 <p>To help make a XML/HTML document valid the plugin supports
 replacement of special chars known by the plugin. Both bulk
 replacement and immediate replacement during typing are supported.</p>
@@ -5977,7 +6054,7 @@ replacement and immediate replacement during typing are supported.</p>
 </dd>
 </dl>
 <div class="section" id="at-typing-time">
-<h4><a class="toc-backref" href="#id225">At typing time</a></h4>
+<h4><a class="toc-backref" href="#id227">At typing time</a></h4>
 <p>You can activate/deactivate this feature using the <em>Tools-&gt;HTML
 Replacement-&gt;Auto-replace Special Characters</em> menu item. If it's
 activated, all special characters (beside the given exceptions from
@@ -5986,7 +6063,7 @@ above) known by the plugin will be replaced by their entities.</p>
 of this feature.</p>
 </div>
 <div class="section" id="bulk-replacement">
-<h4><a class="toc-backref" href="#id226">Bulk replacement</a></h4>
+<h4><a class="toc-backref" href="#id228">Bulk replacement</a></h4>
 <p>After inserting a huge amount of text, e.g. by using copy &amp; paste, the
 plugin allows bulk replacement of all known characters (beside the
 mentioned exceptions). You can find the function under the same
@@ -5996,9 +6073,9 @@ configure a keybinding for the plugin.</p>
 </div>
 </div>
 <div class="section" id="save-actions">
-<h2><a class="toc-backref" href="#id227">Save Actions</a></h2>
+<h2><a class="toc-backref" href="#id229">Save Actions</a></h2>
 <div class="section" id="instant-save">
-<h3><a class="toc-backref" href="#id228">Instant Save</a></h3>
+<h3><a class="toc-backref" href="#id230">Instant Save</a></h3>
 <p>This plugin sets on every new file (<em>File-&gt;New</em> or <em>File-&gt;New (with template)</em>)
 a randomly chosen filename and set its filetype appropriate to the used template
 or when no template was used, to a configurable default filetype.
@@ -6008,7 +6085,7 @@ useful when you often create new files just for testing some code or something
 similar.</p>
 </div>
 <div class="section" id="backup-copy">
-<h3><a class="toc-backref" href="#id229">Backup Copy</a></h3>
+<h3><a class="toc-backref" href="#id231">Backup Copy</a></h3>
 <p>This plugin creates a backup copy of the current file in Geany when it is
 saved. You can specify the directory where the backup copy is saved and
 you can configure the automatically added extension in the configure dialog
@@ -6019,7 +6096,7 @@ copied into the configured backup directory when the file is saved in Geany.</p>
 </div>
 </div>
 <div class="section" id="contributing-to-this-document">
-<h1><a class="toc-backref" href="#id230">Contributing to this document</a></h1>
+<h1><a class="toc-backref" href="#id232">Contributing to this document</a></h1>
 <p>This document (<tt class="docutils literal">geany.txt</tt>) is written in <a class="reference external" href="http://docutils.sourceforge.net/rst.html">reStructuredText</a>
 (or &quot;reST&quot;). The source file for it is located in Geany's <tt class="docutils literal">doc</tt>
 subdirectory.  If you intend on making changes, you should grab the
@@ -6028,7 +6105,7 @@ editing the file, to build the HTML document to see how your changes
 look, run &quot;<tt class="docutils literal">make doc</tt>&quot; in the subdirectory <tt class="docutils literal">doc</tt> of Geany's source
 directory. This regenerates the <tt class="docutils literal">geany.html</tt> file. To generate a PDF
 file, use the command &quot;<tt class="docutils literal">make pdf</tt>&quot; which should generate a file called
-geany-1.23.pdf.</p>
+geany-1.24.pdf.</p>
 <p>After you are happy with your changes, create a patch e.g. by using:</p>
 <pre class="literal-block">
 % git diff geany.txt &gt; foo.patch
@@ -6051,7 +6128,7 @@ to build the docs. The package is named <tt class="docutils literal"><span class
 and Fedora systems.</p>
 </div>
 <div class="section" id="scintilla-keyboard-commands">
-<h1><a class="toc-backref" href="#id231">Scintilla keyboard commands</a></h1>
+<h1><a class="toc-backref" href="#id233">Scintilla keyboard commands</a></h1>
 <p>Copyright © 1998, 2006 Neil Hodgson &lt;neilh(at)scintilla(dot)org&gt;</p>
 <p>This appendix is distributed under the terms of the License for
 Scintilla and SciTE. A copy of this license can be found in the file
@@ -6060,7 +6137,7 @@ program and in the appendix of this document. See <a class="reference internal" 
 Scintilla and SciTE</a>.</p>
 <p>20 June 2006</p>
 <div class="section" id="keyboard-commands">
-<h2><a class="toc-backref" href="#id232">Keyboard commands</a></h2>
+<h2><a class="toc-backref" href="#id234">Keyboard commands</a></h2>
 <p>Keyboard commands for Scintilla mostly follow common Windows and GTK+
 conventions. All move keys (arrows, page up/down, home and end)
 allows to extend or reduce the stream selection when holding the
@@ -6143,9 +6220,9 @@ menus. Some less common commands with no menu equivalent are:</p>
 </div>
 </div>
 <div class="section" id="tips-and-tricks">
-<h1><a class="toc-backref" href="#id233">Tips and tricks</a></h1>
+<h1><a class="toc-backref" href="#id235">Tips and tricks</a></h1>
 <div class="section" id="document-notebook">
-<h2><a class="toc-backref" href="#id234">Document notebook</a></h2>
+<h2><a class="toc-backref" href="#id236">Document notebook</a></h2>
 <ul class="simple">
 <li>Double-click on empty space in the notebook tab bar to open a
 new document.</li>
@@ -6158,7 +6235,7 @@ shortcut). The interface pref must be enabled for this to work.</li>
 </ul>
 </div>
 <div class="section" id="editor">
-<h2><a class="toc-backref" href="#id235">Editor</a></h2>
+<h2><a class="toc-backref" href="#id237">Editor</a></h2>
 <ul class="simple">
 <li>Alt-scroll wheel moves up/down a page.</li>
 <li>Ctrl-scroll wheel zooms in/out.</li>
@@ -6168,13 +6245,13 @@ shortcut). The interface pref must be enabled for this to work.</li>
 </ul>
 </div>
 <div class="section" id="interface">
-<h2><a class="toc-backref" href="#id236">Interface</a></h2>
+<h2><a class="toc-backref" href="#id238">Interface</a></h2>
 <ul class="simple">
 <li>Double-click on a symbol-list group to expand or compact it.</li>
 </ul>
 </div>
 <div class="section" id="gtk-related">
-<h2><a class="toc-backref" href="#id237">GTK-related</a></h2>
+<h2><a class="toc-backref" href="#id239">GTK-related</a></h2>
 <ul class="simple">
 <li>Scrolling the mouse wheel over a notebook tab bar will switch
 notebook pages.</li>
@@ -6189,7 +6266,7 @@ position without having to drag it.</li>
 </div>
 </div>
 <div class="section" id="compile-time-options">
-<h1><a class="toc-backref" href="#id238">Compile-time options</a></h1>
+<h1><a class="toc-backref" href="#id240">Compile-time options</a></h1>
 <p>There are some options which can only be changed at compile time,
 and some options which are used as the default for configurable
 options. To change these options, edit the appropriate source file
@@ -6201,7 +6278,7 @@ not be changed.</p>
 <p class="last">Most users should not need to change these options.</p>
 </div>
 <div class="section" id="src-geany-h">
-<h2><a class="toc-backref" href="#id239">src/geany.h</a></h2>
+<h2><a class="toc-backref" href="#id241">src/geany.h</a></h2>
 <table border="1" class="docutils">
 <colgroup>
 <col width="33%" />
@@ -6258,7 +6335,7 @@ when building on a non-Win32 system.</em></td>
 </table>
 </div>
 <div class="section" id="project-h">
-<h2><a class="toc-backref" href="#id240">project.h</a></h2>
+<h2><a class="toc-backref" href="#id242">project.h</a></h2>
 <table border="1" class="docutils">
 <colgroup>
 <col width="33%" />
@@ -6283,7 +6360,7 @@ open dialog.</td>
 </table>
 </div>
 <div class="section" id="filetypes-c">
-<h2><a class="toc-backref" href="#id241">filetypes.c</a></h2>
+<h2><a class="toc-backref" href="#id243">filetypes.c</a></h2>
 <table border="1" class="docutils">
 <colgroup>
 <col width="33%" />
@@ -6306,7 +6383,7 @@ filetype with the extract filetype regex.</td>
 </table>
 </div>
 <div class="section" id="editor-h">
-<h2><a class="toc-backref" href="#id242">editor.h</a></h2>
+<h2><a class="toc-backref" href="#id244">editor.h</a></h2>
 <table border="1" class="docutils">
 <colgroup>
 <col width="33%" />
@@ -6332,7 +6409,7 @@ underscore.</td>
 </table>
 </div>
 <div class="section" id="keyfile-c">
-<h2><a class="toc-backref" href="#id243">keyfile.c</a></h2>
+<h2><a class="toc-backref" href="#id245">keyfile.c</a></h2>
 <p>These are default settings that can be overridden in the <a class="reference internal" href="#preferences">Preferences</a> dialog.</p>
 <table border="1" class="docutils">
 <colgroup>
@@ -6426,7 +6503,7 @@ xterm -e &quot;/bin/sh %c&quot;
 </pre>
 </div>
 <div class="section" id="build-c">
-<h2><a class="toc-backref" href="#id244">build.c</a></h2>
+<h2><a class="toc-backref" href="#id246">build.c</a></h2>
 <table border="1" class="docutils">
 <colgroup>
 <col width="33%" />
@@ -6471,7 +6548,7 @@ overriding the compile setting.</td>
 </div>
 </div>
 <div class="section" id="gnu-general-public-license">
-<h1><a class="toc-backref" href="#id245">GNU General Public License</a></h1>
+<h1><a class="toc-backref" href="#id247">GNU General Public License</a></h1>
 <pre class="literal-block">
             GNU GENERAL PUBLIC LICENSE
                Version 2, June 1991
@@ -6816,7 +6893,7 @@ Public License instead of this License.
 </pre>
 </div>
 <div class="section" id="license-for-scintilla-and-scite">
-<h1><a class="toc-backref" href="#id246">License for Scintilla and SciTE</a></h1>
+<h1><a class="toc-backref" href="#id248">License for Scintilla and SciTE</a></h1>
 <p>Copyright 1998-2003 by Neil Hodgson &lt;neilh(at)scintilla(dot)org&gt;</p>
 <p>All Rights Reserved</p>
 <p>Permission to use, copy, modify, and distribute this software and
@@ -6836,7 +6913,7 @@ USE OR PERFORMANCE OF THIS SOFTWARE.</p>
 <div class="footer">
 <hr class="footer" />
 <a class="reference external" href="geany.txt">View document source</a>.
-Generated on: 2013-03-10 12:45 UTC.
+Generated on: 2013-04-15 01:56 UTC.
 Generated by <a class="reference external" href="http://docutils.sourceforge.net/">Docutils</a> from <a class="reference external" href="http://docutils.sourceforge.net/rst.html">reStructuredText</a> source.
 
 </div>

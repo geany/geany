@@ -2489,65 +2489,53 @@ Rarely used preferences, explained in the table below. A few of them require
 restart to take effect, and a few other will only affect newly opened or created
 documents before restart.
 
-================================  =========================================  ==========  ===========
-Key                               Description                                Default     Applies
-================================  =========================================  ==========  ===========
+================================  ===========================================  ==========  ===========
+Key                               Description                                  Default     Applies
+================================  ===========================================  ==========  ===========
 **Editor related**
-use_gtk_word_boundaries           Whether to look for the end of a word      true        to new
-                                  when using word-boundary related                       documents
+use_gtk_word_boundaries           Whether to look for the end of a word        true        to new
+                                  when using word-boundary related                         documents
                                   Scintilla commands (see `Scintilla
                                   keyboard commands`_).
-brace_match_ltgt                  Whether to highlight <, > angle brackets.  false       immediately
-complete_snippets_whilst_editing  Whether to allow completion of snippets    false       immediately
+brace_match_ltgt                  Whether to highlight <, > angle brackets.    false       immediately
+complete_snippets_whilst_editing  Whether to allow completion of snippets      false       immediately
                                   when editing an existing line (i.e. there
                                   is some text after the current cursor
                                   position on the line). Only used when the
                                   keybinding `Complete snippet` is set to
                                   ``Space``.
-show_editor_scrollbars            Whether to display scrollbars. If set to   true        immediately
+show_editor_scrollbars            Whether to display scrollbars. If set to     true        immediately
                                   false, the horizontal and vertical
                                   scrollbars are hidden completely.
-indent_hard_tab_width             The size of a tab character. Don't change  8           immediately
+indent_hard_tab_width             The size of a tab character. Don't change    8           immediately
                                   it unless you really need to; use the
                                   indentation settings instead.
 **Interface related**
-show_symbol_list_expanders        Whether to show or hide the small          true        to new
-                                  expander icons on the symbol list                      documents
+show_symbol_list_expanders        Whether to show or hide the small            true        to new
+                                  expander icons on the symbol list                        documents
                                   treeview.
-allow_always_save                 Whether files can be saved always, even    false       immediately
+allow_always_save                 Whether files can be saved always, even      false       immediately
                                   if they don't have any changes.
                                   By default, the Save button and menu
                                   item are disabled when a file is
                                   unchanged. When setting this option to
                                   true, the Save button and menu item are
                                   always active and files can be saved.
-compiler_tab_autoscroll           Whether to automatically scroll to the     true        immediately
+compiler_tab_autoscroll           Whether to automatically scroll to the       true        immediately
                                   last line of the output in the Compiler
                                   tab.
-statusbar_template                The status bar statistics line format.     See below.  immediately
-                                  (Search in src/ui_utils.c for details).
-new_document_after_close          Whether to open a new document after all   false       immediately
+statusbar_template                The status bar statistics line format.       See below.  immediately
+                                  (See `Statusbar Templates`_ for details).
+new_document_after_close          Whether to open a new document after all     false       immediately
                                   documents have been closed.
-msgwin_status_visible             Whether to show the Status tab in the      true        immediately
+msgwin_status_visible             Whether to show the Status tab in the        true        immediately
                                   Messages Window
-msgwin_compiler_visible           Whether to show the Compiler tab in the    true        immediately
+msgwin_compiler_visible           Whether to show the Compiler tab in the      true        immediately
                                   Messages Window
-msgwin_messages_visible           Whether to show the Messages tab in the    true        immediately
+msgwin_messages_visible           Whether to show the Messages tab in the      true        immediately
                                   Messages Window
-msgwin_scribble_visible           Whether to show the Scribble tab in the    true        immediately
+msgwin_scribble_visible           Whether to show the Scribble tab in the      true        immediately
                                   Messages Window
-================================  =========================================  ==========  ===========
-
-By default, statusbar_template is empty. This tells Geany to use its
-internal default, which is currently:
-
-``line: %l / %L\t col: %c\t sel: %s\t %w      %t      %mmode: %M      encoding: %e      filetype: %f      scope: %S``
-
-Note that ``\t`` = tab.
-
-================================  ===========================================  ==========  ===========
-Key                               Description                                  Default     Applies
-================================  ===========================================  ==========  ===========
 **VTE related**
 emulation                         Terminal emulation mode. Only change this    xterm       immediately
                                   if you have VTE termcap files other than
@@ -2608,6 +2596,43 @@ number_exec_menu_items            The maximum number of menu items in the      2
 ================================  ===========================================  ==========  ===========
 
 The extract_filetype_regex has the default value GEANY_DEFAULT_FILETYPE_REGEX.
+
+Statusbar Templates
+```````````````````
+
+The default statusbar template is (note ``\t`` = tab):
+
+``line: %l / %L\t col: %c\t sel: %s\t %w      %t      %mmode: %M      encoding: %e      filetype: %f      scope: %S``
+
+Settings the preference to an empty string will also cause Geany to use this
+internal default.
+
+The following format characters are available for the statusbar template:
+
+============  ===========================================================
+Placeholder   Description
+============  ===========================================================
+  ``%l``      The current line number starting at 1
+  ``%L``      The total number of lines
+  ``%c``      The current column number starting at 0
+  ``%C``      The current column number starting at 1
+  ``%s``      The number of selected characters or if only whole lines
+              selected, the number of selected lines.
+  ``%w``      Shows ``RO`` when the document is in read-only mode,
+              otherwise shows whether the editor is in overtype (OVR)
+              or insert (INS) mode.
+  ``%t``      Shows the indentation mode, either tabs (TAB),
+              spaces (SP) or both (T/S).
+  ``%m``      Shows whether the document is modified (MOD) or nothing.
+  ``%M``      The name of the document's line-endings (ex. ``Unix (LF)``)
+  ``%e``      The name of the document's encoding (ex. UTF-8).
+  ``%f``      The filetype of the document (ex. None, Python, C, etc).
+  ``%S``      The name of the scope where the caret is located.
+  ``%p``      The caret position in the entire document starting at 0.
+  ``%r``      Shows whether the document is read-only (RO) or nothing.
+  ``%Y``      The Scintilla style number at the caret position. This is
+              useful if you're debugging color schemes or related code.
+============  ===========================================================
 
 Terminal (VTE) preferences
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
