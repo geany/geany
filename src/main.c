@@ -1259,7 +1259,6 @@ void main_quit()
 	sidebar_finalize();
 	configuration_finalize();
 	filetypes_free_types();
-	ui_finalize();
 	log_finalize();
 
 	tm_workspace_free(TM_WORK_OBJECT(app->tm_workspace));

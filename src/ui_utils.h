@@ -106,6 +106,7 @@ typedef struct UIPrefs
 	gint		sidebar_page;
 	gboolean	msgwindow_visible;
 	gboolean	allow_always_save; /* if set, files can always be saved, even if unchanged */
+	gchar		*statusbar_template;
 	gboolean	new_document_after_close;
 
 	/* Menu-item related data */
@@ -241,8 +242,6 @@ void ui_init(void);
 void ui_init_prefs(void);
 
 void ui_finalize_builder(void);
-
-void ui_finalize(void);
 
 void ui_init_toolbar_widgets(void);
 

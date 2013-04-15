@@ -58,6 +58,16 @@
 #include "gtkcompat.h"
 
 
+#define DEFAULT_STATUSBAR_TEMPLATE N_(\
+	"line: %l / %L\t "   \
+	"col: %c\t "         \
+	"sel: %s\t "         \
+	"%w      %t      %m" \
+	"mode: %M      "     \
+	"encoding: %e      " \
+	"filetype: %f      " \
+	"scope: %S")
+
 GeanyInterfacePrefs	interface_prefs;
 GeanyMainWidgets	main_widgets;
 
@@ -172,24 +182,24 @@ void ui_set_statusbar(gboolean log, const gchar *format, ...)
 }
 
 
-static gchar *statusbar_template = NULL;
-
 /* note: some comments below are for translators */
-static void add_statusbar_statistics(GString *stats_str,
-		GeanyDocument *doc, guint line, guint col)
+static gchar *create_statusbar_statistics(GeanyDocument *doc,
+	guint line, guint col, guint pos)
 {
 	const gchar *cur_tag;
 	const gchar *fmt;
 	const gchar *expos;	/* % expansion position */
 	const gchar sp[] = "      ";
+	GString *stats_str;
 	ScintillaObject *sci = doc->editor->sci;
 
-	fmt = NZV(statusbar_template) ? statusbar_template :
-		/* Status bar statistics: col = column, sel = selection. */
-		_("line: %l / %L\t col: %c\t sel: %s\t %w      %t      %m"
-		"mode: %M      encoding: %e      filetype: %f      scope: %S");
+	if (NZV(ui_prefs.statusbar_template))
+		fmt = ui_prefs.statusbar_template;
+	else
+		fmt = _(DEFAULT_STATUSBAR_TEMPLATE);
 
-	g_string_assign(stats_str, "");
+	stats_str = g_string_sized_new(120);
+
 	while ((expos = strchr(fmt, '%')) != NULL)
 	{
 		/* append leading text before % char */
@@ -209,6 +219,9 @@ static void add_statusbar_statistics(GString *stats_str,
 				break;
 			case 'C':
 				g_string_append_printf(stats_str, "%d", col + 1);
+				break;
+			case 'p':
+				g_string_append_printf(stats_str, "%u", pos);
 				break;
 			case 's':
 			{
@@ -279,6 +292,11 @@ static void add_statusbar_statistics(GString *stats_str,
 				symbols_get_current_scope(doc, &cur_tag);
 				g_string_append(stats_str, cur_tag);
 				break;
+			case 'Y':
+				g_string_append_c(stats_str, ' ');
+				g_string_append_printf(stats_str, "%d",
+					sci_get_style_at(doc->editor->sci, pos));
+				break;
 			default:
 				g_string_append_len(stats_str, expos, 1);
 		}
@@ -291,6 +309,8 @@ static void add_statusbar_statistics(GString *stats_str,
 	}
 	/* add any remaining text */
 	g_string_append(stats_str, fmt);
+
+	return g_string_free(stats_str, FALSE);
 }
 
 
@@ -305,11 +325,8 @@ void ui_update_statusbar(GeanyDocument *doc, gint pos)
 
 	if (doc != NULL)
 	{
-		static GString *stats_str = NULL;
 		guint line, col;
-
-		if (G_UNLIKELY(stats_str == NULL))
-			stats_str = g_string_sized_new(120);
+		gchar *stats_str;
 
 		if (pos == -1)
 			pos = sci_get_current_position(doc->editor->sci);
@@ -323,19 +340,11 @@ void ui_update_statusbar(GeanyDocument *doc, gint pos)
 		else
 			col = 0;
 
-		add_statusbar_statistics(stats_str, doc, line, col);
+		stats_str = create_statusbar_statistics(doc, line, col, pos);
 
-#ifdef GEANY_DEBUG
-	{
-		const gchar sp[] = "      ";
-		g_string_append(stats_str, sp);
-		g_string_append_printf(stats_str, _("pos: %d"), pos);
-		g_string_append(stats_str, sp);
-		g_string_append_printf(stats_str, _("style: %d"), sci_get_style_at(doc->editor->sci, pos));
-	}
-#endif
 		/* can be overridden by status messages */
-		set_statusbar(stats_str->str, TRUE);
+		set_statusbar(stats_str, TRUE);
+		g_free(stats_str);
 	}
 	else	/* no documents */
 	{
@@ -2000,8 +2009,8 @@ void ui_init_prefs(void)
 		"compiler_tab_autoscroll", TRUE);
 	stash_group_add_boolean(group, &ui_prefs.allow_always_save,
 		"allow_always_save", FALSE);
-	stash_group_add_string(group, &statusbar_template,
-		"statusbar_template", "");
+	stash_group_add_string(group, &ui_prefs.statusbar_template,
+		"statusbar_template", _(DEFAULT_STATUSBAR_TEMPLATE));
 	stash_group_add_boolean(group, &ui_prefs.new_document_after_close,
 		"new_document_after_close", FALSE);
 	stash_group_add_boolean(group, &interface_prefs.msgwin_status_visible,
@@ -2254,12 +2263,6 @@ void ui_finalize_builder(void)
 		gtk_widget_destroy(toolbar_popup_menu1);
 	if (GTK_IS_WIDGET(window1))
 		gtk_widget_destroy(window1);
-}
-
-
-void ui_finalize(void)
-{
-	g_free(statusbar_template);
 }
 
 
