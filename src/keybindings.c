@@ -1113,8 +1113,6 @@ static gboolean check_vte(GdkModifierType state, guint keyval)
 		return FALSE;
 	if (state == 0 && (keyval < GDK_F1 || keyval > GDK_F35))	/* e.g. backspace */
 		return FALSE;
-	if (state == GDK_CONTROL_MASK && (keyval == GDK_Page_Up || keyval == GDK_Page_Down))
-		return FALSE;
 
 	/* make focus commands override any bash commands */
 	group = keybindings_get_core_group(GEANY_KEY_GROUP_FOCUS);
@@ -1125,11 +1123,11 @@ static gboolean check_vte(GdkModifierType state, guint keyval)
 	}
 
 	kb = keybindings_lookup_item(GEANY_KEY_GROUP_NOTEBOOK, GEANY_KEYS_NOTEBOOK_SWITCHTABLEFT);
-	if(kb != NULL && state == kb->mods && keyval == kb->key) {
+	if(kb && state == kb->mods && keyval == kb->key) {
 		return FALSE;
 	}
 	kb = keybindings_lookup_item(GEANY_KEY_GROUP_NOTEBOOK, GEANY_KEYS_NOTEBOOK_SWITCHTABRIGHT);
-	if(kb != NULL && state == kb->mods && keyval == kb->key) {
+	if(kb && state == kb->mods && keyval == kb->key) {
 		return FALSE;
 	}
 
