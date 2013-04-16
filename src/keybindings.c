@@ -1637,8 +1637,7 @@ static void focus_msgwindow(void)
 	{
 		gint page_num = gtk_notebook_get_current_page(GTK_NOTEBOOK(msgwindow.notebook));
 		GtkWidget *page = gtk_notebook_get_nth_page(GTK_NOTEBOOK(msgwindow.notebook), page_num);
-
-		gtk_widget_grab_focus(gtk_bin_get_child(GTK_BIN(page)));
+		msgwin_switch_tab(page_num, TRUE);
 	}
 }
 
