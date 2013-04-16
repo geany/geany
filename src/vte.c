@@ -49,6 +49,7 @@
 #include "geanywraplabel.h"
 #include "editor.h"
 #include "sciwrappers.h"
+#include "gtkcompat.h"
 
 
 VteInfo vte_info;
@@ -200,8 +201,14 @@ void vte_init(void)
 	if (module == NULL)
 	{
 		gint i;
-		const gchar *sonames[] = {  "libvte.so", "libvte.so.4",
-									"libvte.so.8", "libvte.so.9", NULL };
+		const gchar *sonames[] = {
+#if GTK_CHECK_VERSION(3, 0, 0)
+			"libvte2_90.so", "libvte2_90.so.9",
+#else
+			"libvte.so", "libvte.so.4", "libvte.so.8", "libvte.so.9",
+#endif
+			NULL
+		};
 
 		for (i = 0; sonames[i] != NULL && module == NULL; i++)
 		{
@@ -253,7 +260,7 @@ static void create_vte(void)
 
 	vc->vte = vte = vf->vte_terminal_new();
 	scrollbar = gtk_vscrollbar_new(GTK_ADJUSTMENT(VTE_TERMINAL(vte)->adjustment));
-	GTK_WIDGET_UNSET_FLAGS(scrollbar, GTK_CAN_FOCUS);
+	gtk_widget_set_can_focus(scrollbar, FALSE);
 
 	/* create menu now so copy/paste shortcuts work */
 	vc->menu = vte_create_popup_menu();

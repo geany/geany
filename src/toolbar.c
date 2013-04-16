@@ -395,6 +395,9 @@ GtkWidget *toolbar_init(void)
 	gtk_ui_manager_insert_action_group(uim, group, 0);
 
 	toolbar = toolbar_reload(NULL);
+#if GTK_CHECK_VERSION(3, 0, 0)
+	gtk_style_context_add_class(gtk_widget_get_style_context(toolbar), "primary-toolbar");
+#endif
 
 	gtk_settings = gtk_widget_get_settings(GTK_WIDGET(toolbar));
 	if (gtk_settings != NULL)

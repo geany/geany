@@ -1,6 +1,6 @@
 {fileheader}
 
-program {untitled};
+program untitled;
 
 uses crt;
 var i : byte;

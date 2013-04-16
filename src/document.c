@@ -605,6 +605,9 @@ static gboolean remove_page(guint page_num)
 	g_free(doc->real_path);
 	tm_workspace_remove_object(doc->tm_file, TRUE, TRUE);
 
+	if (doc->priv->tag_tree)
+		gtk_widget_destroy(doc->priv->tag_tree);
+
 	editor_destroy(doc->editor);
 	doc->editor = NULL; /* needs to be NULL for document_undo_clear() call below */
 
@@ -1362,16 +1365,17 @@ static void replace_header_filename(GeanyDocument *doc)
 	g_return_if_fail(doc != NULL);
 	g_return_if_fail(doc->file_type != NULL);
 
+	filebase = g_regex_escape_string(GEANY_STRING_UNTITLED, -1);
 	if (doc->file_type->extension)
-		filebase = g_strconcat("\\<", GEANY_STRING_UNTITLED, "\\.\\w+", NULL);
+		SETPTR(filebase, g_strconcat("\\b", filebase, "\\.\\w+", NULL));
 	else
-		filebase = g_strdup(GEANY_STRING_UNTITLED);
+		SETPTR(filebase, g_strconcat("\\b", filebase, "\\b", NULL));
 
 	filename = g_path_get_basename(doc->file_name);
 
 	/* only search the first 3 lines */
 	ttf.chrg.cpMin = 0;
-	ttf.chrg.cpMax = sci_get_position_from_line(doc->editor->sci, 3);
+	ttf.chrg.cpMax = sci_get_position_from_line(doc->editor->sci, 4);
 	ttf.lpstrText = filebase;
 
 	if (search_find_text(doc->editor->sci, SCFIND_MATCHCASE | SCFIND_REGEXP, &ttf) != -1)
@@ -2770,6 +2774,25 @@ const GdkColor *document_get_status_color(GeanyDocument *doc)
 		return NULL;
 	if (! document_status_styles[status].loaded)
 	{
+#if GTK_CHECK_VERSION(3, 0, 0)
+		GdkRGBA color;
+		GtkWidgetPath *path = gtk_widget_path_new();
+		GtkStyleContext *ctx = gtk_style_context_new();
+		gtk_widget_path_append_type(path, GTK_TYPE_WINDOW);
+		gtk_widget_path_append_type(path, GTK_TYPE_BOX);
+		gtk_widget_path_append_type(path, GTK_TYPE_NOTEBOOK);
+		gtk_widget_path_append_type(path, GTK_TYPE_LABEL);
+		gtk_widget_path_iter_set_name(path, -1, document_status_styles[status].name);
+		gtk_style_context_set_screen(ctx, gtk_widget_get_screen(GTK_WIDGET(doc->editor->sci)));
+		gtk_style_context_set_path(ctx, path);
+		gtk_style_context_get_color(ctx, GTK_STATE_NORMAL, &color);
+		document_status_styles[status].color.red   = 0xffff * color.red;
+		document_status_styles[status].color.green = 0xffff * color.green;
+		document_status_styles[status].color.blue  = 0xffff * color.blue;
+		document_status_styles[status].loaded = TRUE;
+		gtk_widget_path_unref(path);
+		g_object_unref(ctx);
+#else
 		GtkSettings *settings = gtk_widget_get_settings(GTK_WIDGET(doc->editor->sci));
 		gchar *path = g_strconcat("GeanyMainWindow.GtkHBox.GtkNotebook.",
 				document_status_styles[status].name, NULL);
@@ -2778,6 +2801,7 @@ const GdkColor *document_get_status_color(GeanyDocument *doc)
 		document_status_styles[status].color = style->fg[GTK_STATE_NORMAL];
 		document_status_styles[status].loaded = TRUE;
 		g_free(path);
+#endif
 	}
 	return &document_status_styles[status].color;
 }

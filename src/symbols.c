@@ -55,6 +55,7 @@
 #include "editor.h"
 #include "sciwrappers.h"
 #include "filetypesprivate.h"
+#include "search.h"
 
 
 const guint TM_GLOBAL_TYPE_MASK =
@@ -100,8 +101,10 @@ static struct
 	GtkWidget *collapse_all;
 	GtkWidget *sort_by_name;
 	GtkWidget *sort_by_appearance;
+	GtkWidget *find_usage;
+	GtkWidget *find_doc_usage;
 }
-symbol_menu = {NULL, NULL, NULL, NULL};
+symbol_menu;
 
 
 static void html_tags_loaded(void);
@@ -1522,6 +1525,7 @@ static void update_tree_tags(GeanyDocument *doc, GList **tags)
 							delta = d;
 							parent_search = node->data;
 						}
+						tm_tag_unref(parent_tag);
 					}
 				}
 
@@ -2257,6 +2261,8 @@ static void on_symbol_tree_menu_show(GtkWidget *widget,
 	gtk_widget_set_sensitive(symbol_menu.sort_by_appearance, enable);
 	gtk_widget_set_sensitive(symbol_menu.expand_all, enable);
 	gtk_widget_set_sensitive(symbol_menu.collapse_all, enable);
+	gtk_widget_set_sensitive(symbol_menu.find_usage, enable);
+	gtk_widget_set_sensitive(symbol_menu.find_doc_usage, enable);
 
 	if (! doc)
 		return;
@@ -2286,6 +2292,29 @@ static void on_expand_collapse(GtkWidget *widget, gpointer user_data)
 		gtk_tree_view_expand_all(GTK_TREE_VIEW(doc->priv->tag_tree));
 	else
 		gtk_tree_view_collapse_all(GTK_TREE_VIEW(doc->priv->tag_tree));
+}
+
+
+static void on_find_usage(GtkWidget *widget, gboolean in_session)
+{
+	GtkTreeIter iter;
+	GtkTreeSelection *selection;
+	GtkTreeModel *model;
+	GeanyDocument *doc;
+	TMTag *tag = NULL;
+
+	doc = document_get_current();
+	if (!doc)
+		return;
+
+	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(doc->priv->tag_tree));
+	if (gtk_tree_selection_get_selected(selection, &model, &iter))
+		gtk_tree_model_get(model, &iter, SYMBOLS_COLUMN_TAG, &tag, -1);
+	if (tag)
+	{
+		search_find_usage(tag->name, tag->name, SCFIND_WHOLEWORD | SCFIND_MATCHCASE, in_session);
+		tm_tag_unref(tag);
+	}
 }
 
 
@@ -2322,6 +2351,20 @@ static void create_taglist_popup_menu(void)
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	g_signal_connect(item, "activate", G_CALLBACK(on_symbol_tree_sort_clicked),
 			GINT_TO_POINTER(SYMBOLS_SORT_BY_APPEARANCE));
+
+	item = gtk_separator_menu_item_new();
+	gtk_widget_show(item);
+	gtk_container_add(GTK_CONTAINER(menu), item);
+
+	symbol_menu.find_usage = item = ui_image_menu_item_new(GTK_STOCK_FIND, _("Find _Usage"));
+	gtk_widget_show(item);
+	gtk_container_add(GTK_CONTAINER(menu), item);
+	g_signal_connect(item, "activate", G_CALLBACK(on_find_usage), GINT_TO_POINTER(TRUE));
+
+	symbol_menu.find_doc_usage = item = ui_image_menu_item_new(GTK_STOCK_FIND, _("Find _Document Usage"));
+	gtk_widget_show(item);
+	gtk_container_add(GTK_CONTAINER(menu), item);
+	g_signal_connect(item, "activate", G_CALLBACK(on_find_usage), GINT_TO_POINTER(FALSE));
 
 	g_signal_connect(menu, "show", G_CALLBACK(on_symbol_tree_menu_show), NULL);
 

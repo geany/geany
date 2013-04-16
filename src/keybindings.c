@@ -56,6 +56,7 @@
 #include "geanywraplabel.h"
 #include "main.h"
 #include "search.h"
+#include "gtkcompat.h"
 #ifdef HAVE_VTE
 # include "vte.h"
 #endif
@@ -248,14 +249,14 @@ static void init_default_kb(void)
 	group = keybindings_get_core_group(GEANY_KEY_GROUP_FILE);
 
 	add_kb(group, GEANY_KEYS_FILE_NEW, NULL,
-		GDK_n, GDK_CONTROL_MASK, "menu_new", _("New"), NULL);
+		GDK_n, GDK_CONTROL_MASK, "menu_new", _("New"), "menu_new1");
 	add_kb(group, GEANY_KEYS_FILE_OPEN, NULL,
-		GDK_o, GDK_CONTROL_MASK, "menu_open", _("Open"), NULL);
+		GDK_o, GDK_CONTROL_MASK, "menu_open", _("Open"), "menu_open1");
 	add_kb(group, GEANY_KEYS_FILE_OPENSELECTED, NULL,
 		GDK_o, GDK_SHIFT_MASK | GDK_CONTROL_MASK, "menu_open_selected",
 		_("Open selected file"), "menu_open_selected_file1");
 	add_kb(group, GEANY_KEYS_FILE_SAVE, NULL,
-		GDK_s, GDK_CONTROL_MASK, "menu_save", _("Save"), NULL);
+		GDK_s, GDK_CONTROL_MASK, "menu_save", _("Save"), "menu_save1");
 	add_kb(group, GEANY_KEYS_FILE_SAVEAS, NULL,
 		0, 0, "menu_saveas", _("Save as"), "menu_save_as1");
 	add_kb(group, GEANY_KEYS_FILE_SAVEALL, NULL,
@@ -272,6 +273,8 @@ static void init_default_kb(void)
 		GDK_r, GDK_CONTROL_MASK, "menu_reloadfile", _("Reload file"), "menu_reload1");
 	add_kb(group, GEANY_KEYS_FILE_OPENLASTTAB, NULL,
 		0, 0, "file_openlasttab", _("Re-open last closed tab"), NULL);
+	add_kb(group, GEANY_KEYS_FILE_QUIT, NULL,
+		GDK_q, GDK_CONTROL_MASK, "menu_quit", _("Quit"), "menu_quit1");
 
 	group = keybindings_get_core_group(GEANY_KEY_GROUP_PROJECT);
 
@@ -335,11 +338,11 @@ static void init_default_kb(void)
 	group = keybindings_get_core_group(GEANY_KEY_GROUP_CLIPBOARD);
 
 	add_kb(group, GEANY_KEYS_CLIPBOARD_CUT, NULL,
-		GDK_x, GDK_CONTROL_MASK, "menu_cut", _("Cut"), NULL);
+		GDK_x, GDK_CONTROL_MASK, "menu_cut", _("Cut"), "menu_cut1");
 	add_kb(group, GEANY_KEYS_CLIPBOARD_COPY, NULL,
-		GDK_c, GDK_CONTROL_MASK, "menu_copy", _("Copy"), NULL);
+		GDK_c, GDK_CONTROL_MASK, "menu_copy", _("Copy"), "menu_copy1");
 	add_kb(group, GEANY_KEYS_CLIPBOARD_PASTE, NULL,
-		GDK_v, GDK_CONTROL_MASK, "menu_paste", _("Paste"), NULL);
+		GDK_v, GDK_CONTROL_MASK, "menu_paste", _("Paste"), "menu_paste1");
 	add_kb(group, GEANY_KEYS_CLIPBOARD_COPYLINE, NULL,
 		GDK_c, GDK_CONTROL_MASK | GDK_SHIFT_MASK, "edit_copyline", _("_Copy Current Line(s)"),
 		"copy_current_lines1");
@@ -729,6 +732,7 @@ static void add_menu_accel(GeanyKeyGroup *group, guint kb_id, GtkWidget *menuite
 	add_menu_accel(group, kb_id, ui_lookup_widget(main_widgets.editor_menu, G_STRINGIFY(wid)))
 
 /* set the menu item accelerator shortcuts (just for visibility, they are handled anyway) */
+/* FIXME: update those during runtime */
 static void add_popup_menu_accels(void)
 {
 	GeanyKeyGroup *group;
@@ -737,6 +741,11 @@ static void add_popup_menu_accels(void)
 	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_EDITOR_UNDO, undo1);
 	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_EDITOR_REDO, redo1);
 	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_EDITOR_CONTEXTACTION, context_action1);
+
+	group = keybindings_get_core_group(GEANY_KEY_GROUP_CLIPBOARD);
+	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_CLIPBOARD_CUT, cut1);
+	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_CLIPBOARD_COPY, copy1);
+	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_CLIPBOARD_PASTE, paste1);
 
 	group = keybindings_get_core_group(GEANY_KEY_GROUP_SELECT);
 	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_SELECT_ALL, menu_select_all2);
@@ -1064,10 +1073,18 @@ static gboolean check_menu_key(GeanyDocument *doc, guint keyval, guint state, gu
 static gboolean on_menu_expose_event(GtkWidget *widget, GdkEventExpose *event,
 		gpointer user_data)
 {
-	if (!GTK_WIDGET_SENSITIVE(widget))
+	if (!gtk_widget_get_sensitive(widget))
 		gtk_widget_set_sensitive(GTK_WIDGET(widget), TRUE);
 	return FALSE;
 }
+
+
+#if GTK_CHECK_VERSION(3, 0, 0)
+static gboolean on_menu_draw(GtkWidget *widget, cairo_t *cr, gpointer user_data)
+{
+	return on_menu_expose_event(widget, NULL, user_data);
+}
+#endif
 
 
 static gboolean set_sensitive(gpointer widget)
@@ -1107,6 +1124,15 @@ static gboolean check_vte(GdkModifierType state, guint keyval)
 			return FALSE;
 	}
 
+	kb = keybindings_lookup_item(GEANY_KEY_GROUP_NOTEBOOK, GEANY_KEYS_NOTEBOOK_SWITCHTABLEFT);
+	if(kb != NULL && state == kb->mods && keyval == kb->key) {
+		return FALSE;
+	}
+	kb = keybindings_lookup_item(GEANY_KEY_GROUP_NOTEBOOK, GEANY_KEYS_NOTEBOOK_SWITCHTABRIGHT);
+	if(kb != NULL && state == kb->mods && keyval == kb->key) {
+		return FALSE;
+	}
+
 	/* Temporarily disable the menus to prevent conflicting menu accelerators
 	 * from overriding the VTE bash shortcuts.
 	 * Note: maybe there's a better way of doing this ;-) */
@@ -1116,7 +1142,11 @@ static gboolean check_vte(GdkModifierType state, guint keyval)
 		/* make the menubar sensitive before it is redrawn */
 		static gboolean connected = FALSE;
 		if (!connected)
+#if GTK_CHECK_VERSION(3, 0, 0)
+			g_signal_connect(widget, "draw", G_CALLBACK(on_menu_draw), NULL);
+#else
 			g_signal_connect(widget, "expose-event", G_CALLBACK(on_menu_expose_event), NULL);
+#endif
 	}
 
 	widget = main_widgets.editor_menu;
@@ -1331,6 +1361,9 @@ static gboolean cb_func_file_action(guint key_id)
 		case GEANY_KEYS_FILE_PRINT:
 			on_print1_activate(NULL, NULL);
 			break;
+		case GEANY_KEYS_FILE_QUIT:
+			on_quit1_activate(NULL, NULL);
+			break;
 	}
 	return TRUE;
 }
@@ -1499,7 +1532,7 @@ static gboolean cb_func_build_action(guint key_id)
 	if (doc == NULL)
 		return TRUE;
 
-	if (!GTK_WIDGET_IS_SENSITIVE(ui_lookup_widget(main_widgets.window, "menu_build1")))
+	if (!gtk_widget_is_sensitive(ui_lookup_widget(main_widgets.window, "menu_build1")))
 		return TRUE;
 
 	menu_items = build_get_menu_items(doc->file_type->id);
@@ -1539,7 +1572,7 @@ static gboolean cb_func_build_action(guint key_id)
 	/* Note: For Build menu items it's OK (at the moment) to assume they are in the correct
 	 * sensitive state, but some other menus don't update the sensitive status until
 	 * they are redrawn. */
-	if (item && GTK_WIDGET_IS_SENSITIVE(item))
+	if (item && gtk_widget_is_sensitive(item))
 		gtk_menu_item_activate(GTK_MENU_ITEM(item));
 	return TRUE;
 }
@@ -1622,7 +1655,7 @@ static gboolean cb_func_switch_action(guint key_id)
 			if (doc != NULL)
 			{
 				GtkWidget *sci = GTK_WIDGET(doc->editor->sci);
-				if (GTK_WIDGET_HAS_FOCUS(sci))
+				if (gtk_widget_has_focus(sci))
 					ui_update_statusbar(doc, -1);
 				else
 					gtk_widget_grab_focus(sci);
@@ -1852,7 +1885,7 @@ static gboolean cb_func_goto_action(guint key_id)
 				GtkWidget *wid = toolbar_get_widget_child_by_name("GotoEntry");
 
 				/* use toolbar item if shown & not in the drop down overflow menu */
-				if (wid && GTK_WIDGET_MAPPED(wid))
+				if (wid && gtk_widget_get_mapped(wid))
 				{
 					gtk_widget_grab_focus(wid);
 					return TRUE;

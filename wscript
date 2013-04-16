@@ -49,9 +49,10 @@ from waflib.TaskGen import feature
 
 
 APPNAME = 'geany'
-VERSION = '1.23'
+VERSION = '1.24'
 LINGUAS_FILE = 'po/LINGUAS'
 MINIMUM_GTK_VERSION = '2.16.0'
+MINIMUM_GTK3_VERSION = '3.0.0'
 MINIMUM_GLIB_VERSION = '2.20.0'
 
 top = '.'
@@ -211,15 +212,21 @@ def configure(conf):
     _load_intltool_if_available(conf)
 
     # GTK / GIO version check
-    conf.check_cfg(package='gtk+-2.0', atleast_version=MINIMUM_GTK_VERSION, uselib_store='GTK',
+    gtk_package_name = 'gtk+-3.0' if conf.options.use_gtk3 else 'gtk+-2.0'
+    minimum_gtk_version = MINIMUM_GTK3_VERSION if conf.options.use_gtk3 else MINIMUM_GTK_VERSION
+    conf.check_cfg(package=gtk_package_name, atleast_version=minimum_gtk_version, uselib_store='GTK',
         mandatory=True, args='--cflags --libs')
     conf.check_cfg(package='glib-2.0', atleast_version=MINIMUM_GLIB_VERSION, uselib_store='GLIB',
         mandatory=True, args='--cflags --libs')
     conf.check_cfg(package='gmodule-2.0', uselib_store='GMODULE',
         mandatory=True, args='--cflags --libs')
     conf.check_cfg(package='gio-2.0', uselib_store='GIO', args='--cflags --libs', mandatory=True)
-    gtk_version = conf.check_cfg(modversion='gtk+-2.0', uselib_store='GTK') or 'Unknown'
+    gtk_version = conf.check_cfg(modversion=gtk_package_name, uselib_store='GTK') or 'Unknown'
     conf.check_cfg(package='gthread-2.0', uselib_store='GTHREAD', args='--cflags --libs')
+    # remember GTK version for the build step
+    conf.env['gtk_package_name'] = gtk_package_name
+    conf.env['minimum_gtk_version'] = minimum_gtk_version
+    conf.env['use_gtk3'] = conf.options.use_gtk3
 
     # Windows specials
     if is_win32:
@@ -308,6 +315,9 @@ def options(opt):
     opt.add_option('--disable-vte', action='store_true', default=False,
         help='compile without support for an embedded virtual terminal [[default: No]',
         dest='no_vte')
+    opt.add_option('--enable-gtk3', action='store_true', default=False,
+        help='compile with GTK3 support (experimental) [[default: No]',
+        dest='use_gtk3')
     # Paths
     opt.add_option('--mandir', type='string', default='',
         help='man documentation', dest='mandir')
@@ -435,8 +445,10 @@ def build(bld):
     bld.new_task_gen(
         source          = 'geany.pc.in',
         dct             = {'VERSION': VERSION,
-                           'DEPENDENCIES': 'gtk+-2.0 >= %s glib-2.0 >= %s' % \
-                                (MINIMUM_GTK_VERSION, MINIMUM_GLIB_VERSION),
+                           'DEPENDENCIES': '%s >= %s glib-2.0 >= %s' % \
+                                (bld.env['gtk_package_name'],
+                                 bld.env['minimum_gtk_version'],
+                                 MINIMUM_GLIB_VERSION),
                            'prefix': bld.env['PREFIX'],
                            'exec_prefix': '${prefix}',
                            'libdir': '${exec_prefix}/lib',
@@ -488,7 +500,7 @@ def build(bld):
             src/document.h src/editor.h src/encodings.h src/filetypes.h src/geany.h
             src/highlighting.h src/keybindings.h src/msgwindow.h src/plugindata.h
             src/prefs.h src/project.h src/search.h src/stash.h src/support.h
-            src/templates.h src/toolbar.h src/ui_utils.h src/utils.h src/build.h
+            src/templates.h src/toolbar.h src/ui_utils.h src/utils.h src/build.h src/gtkcompat.h
             plugins/geanyplugin.h plugins/geanyfunctions.h''')
         bld.install_files('${PREFIX}/include/geany/scintilla', '''
             scintilla/include/SciLexer.h scintilla/include/Scintilla.h
@@ -525,9 +537,13 @@ def build(bld):
     bld.install_files('${DATADIR}/%s' % data_dir, start_dir.ant_glob('filetype*'), cwd=start_dir)
     bld.install_files('${DATADIR}/%s' % data_dir, start_dir.ant_glob('*.tags'), cwd=start_dir)
     bld.install_files('${DATADIR}/%s' % data_dir, 'data/geany.glade')
-    bld.install_files('${DATADIR}/%s' % data_dir, 'data/geany.gtkrc')
     bld.install_files('${DATADIR}/%s' % data_dir, 'data/snippets.conf')
     bld.install_files('${DATADIR}/%s' % data_dir, 'data/ui_toolbar.xml')
+    if bld.env['use_gtk3']:
+        bld.install_files('${DATADIR}/%s' % data_dir, 'data/geany.css')
+    else:
+        bld.install_files('${DATADIR}/%s' % data_dir, 'data/geany.gtkrc')
+
     start_dir = bld.path.find_dir('data/colorschemes')
     template_dest = '${DATADIR}/%s/colorschemes' % data_dir
     bld.install_files(template_dest, start_dir.ant_glob('*'), cwd=start_dir)

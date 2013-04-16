@@ -32,8 +32,8 @@ RequestExecutionLevel highest ; set execution level for Windows Vista
 ; helper defines  ;
 ;;;;;;;;;;;;;;;;;;;
 !define PRODUCT_NAME "Geany"
-!define PRODUCT_VERSION "1.23"
-!define PRODUCT_VERSION_ID "1.23.0.0"
+!define PRODUCT_VERSION "1.24"
+!define PRODUCT_VERSION_ID "1.24.0.0"
 !define PRODUCT_PUBLISHER "The Geany developer team"
 !define PRODUCT_WEB_SITE "http://www.geany.org/"
 !define PRODUCT_DIR_REGKEY "Software\Geany"
@@ -129,6 +129,7 @@ Section "!Program Files" SEC01
 	File "${RESOURCEDIR}\data\GPL-2"
 	File "${RESOURCEDIR}\data\file*"
 	File "${RESOURCEDIR}\data\geany.glade"
+	File "${RESOURCEDIR}\data\geany.gtkrc"
 	File "${RESOURCEDIR}\data\snippets.conf"
 	File "${RESOURCEDIR}\data\ui_toolbar.xml"
 
@@ -216,6 +217,7 @@ SectionEnd
 Section "Context Menus" SEC07
 	SectionIn 1
 	WriteRegStr HKCR "*\shell\OpenWithGeany" "" "Open with Geany"
+	WriteRegStr HKCR "*\shell\OpenWithGeany" "Icon" "$INSTDIR\bin\geany.exe"
 	WriteRegStr HKCR "*\shell\OpenWithGeany\command" "" '"$INSTDIR\bin\geany.exe" "%1"'
 SectionEnd
 

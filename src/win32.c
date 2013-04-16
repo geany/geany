@@ -803,8 +803,6 @@ static FILE *open_std_handle(DWORD handle, const char *mode)
 static void debug_setup_console()
 {
 	static const WORD MAX_CONSOLE_LINES = 500;
-	int	 hConHandle;
-	long	 lStdHandle;
 	CONSOLE_SCREEN_BUFFER_INFO coninfo;
 	FILE	*fp;
 

@@ -61,6 +61,7 @@
 #include "win32.h"
 #include "toolbar.h"
 #include "geanymenubuttonaction.h"
+#include "gtkcompat.h"
 
 /* g_spawn_async_with_pipes doesn't work on Windows */
 #ifdef G_OS_WIN32
@@ -637,9 +638,9 @@ void build_set_menu_item(const GeanyBuildSource src, const GeanyBuildGroup grp,
 	build_menu_update(NULL);
 }
 
-/** Set the string for the menu item field.
+/** Activate the menu item.
  *
- * Set the specified field of the command specified by @a src, @a grp and @a cmd.
+ * Activate the menu item specified by @a grp and @a cmd.
  *
  * @param grp the group of the specified menu item.
  * @param cmd the index of the command within the group.
@@ -1922,7 +1923,7 @@ static void on_label_button_clicked(GtkWidget *wid, gpointer user_data)
 	const gchar *old = gtk_button_get_label(GTK_BUTTON(wid));
 	gchar *str;
 
-	if (GTK_WIDGET_TOPLEVEL(top_level) && GTK_IS_WINDOW(top_level))
+	if (gtk_widget_is_toplevel(top_level) && GTK_IS_WINDOW(top_level))
 		str = dialogs_show_input(_("Set menu item label"), GTK_WINDOW(top_level), NULL, old);
 	else
 		str = dialogs_show_input(_("Set menu item label"), NULL, NULL, old);
