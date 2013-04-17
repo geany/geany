@@ -178,12 +178,12 @@ using the environment variable ``WAFCACHE``.
 A possible location of the cache directory could be ``~/.cache/waf``. In order to make use of
 this, you first need to create this directory::
 
-	$ mkdir -p ~/.cache/waf
+    $ mkdir -p ~/.cache/waf
 
 then add the environment variable to your shell configuration (the following example is for
 Bash and should be adjusted to your used shell)::
 
-	export WAFCACHE=/home/username/.cache/waf
+    export WAFCACHE=/home/username/.cache/waf
 
 Remember to replace ``username`` with your actual username.
 
@@ -214,7 +214,7 @@ list, type::
     $ ./configure --help
 
 or::
-	$ ./waf --help
+    $ ./waf --help
 
 (depending on which build system you use).
 
