@@ -117,7 +117,7 @@ static kindOption PhpKinds[COUNT_KIND] = {
 	{ TRUE, 'i', "interface",	"interfaces" },
 	{ FALSE, 'l', "local",		"local variables" },
 	{ TRUE, 'n', "namespace",	"namespaces" },
-	{ TRUE, 't', "trait",		"traits" },
+	{ TRUE, 's', "struct",		"traits" },
 	{ TRUE, 'v', "variable",	"variables" }
 };
 
