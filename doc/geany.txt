@@ -269,6 +269,9 @@ You can start Geany in the following ways:
   Choose in your application menu of your used Desktop Environment:
   Development --> Geany.
 
+  At Windows-systems you will find Geany after installation inside
+  the application menu within its special folder.
+
 * From the command line:
 
   To start Geany from a command line, type the following and press
