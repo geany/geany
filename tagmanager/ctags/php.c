@@ -20,7 +20,7 @@
 #include "entry.h"
 
 
-#define SCOPE_SEPARATOR "." /* "::" */
+#define SCOPE_SEPARATOR "::"
 
 
 typedef enum {
