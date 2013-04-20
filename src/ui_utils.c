@@ -2701,9 +2701,15 @@ GdkPixbuf *ui_get_mime_icon(const gchar *mime_type, GtkIconSize size)
 		icon_set = gtk_icon_factory_lookup_default(stock_id);
 		if (icon_set)
 		{
+#if GTK_CHECK_VERSION(3, 0, 0)
+			GtkStyleContext *ctx = gtk_style_context_new();
+			icon = gtk_icon_set_render_icon_pixbuf(icon_set, ctx, size);
+			g_object_unref(ctx);
+#else
 			icon = gtk_icon_set_render_icon(icon_set, gtk_widget_get_default_style(),
 				gtk_widget_get_default_direction(),
 				GTK_STATE_NORMAL, size, NULL, NULL);
+#endif
 		}
 	}
 	return icon;
