@@ -1384,6 +1384,21 @@ static void tags_table_remove(GHashTable *table, TMTag *tag)
 }
 
 
+static void tags_table_destroy(GHashTable *table)
+{
+	/* free any leftover elements.  note that we can't register a value_free_func when
+	 * creating the hash table because we only want to free it when destroying the table,
+	 * not when inserting a duplicate (we handle this manually) */
+	GHashTableIter iter;
+	gpointer value;
+
+	g_hash_table_iter_init(&iter, table);
+	while (g_hash_table_iter_next(&iter, NULL, &value))
+		g_list_free(value);
+	g_hash_table_destroy(table);
+}
+
+
 /*
  * Updates the tag tree for a document with the tags in *list.
  * @param doc a document
@@ -1562,7 +1577,7 @@ static void update_tree_tags(GeanyDocument *doc, GList **tags)
 	}
 
 	g_hash_table_destroy(parents_table);
-	g_hash_table_destroy(tags_table);
+	tags_table_destroy(tags_table);
 }
 
 
