@@ -10,6 +10,7 @@
 deps.mak
 .deps/
 .libs/
+.lock-waf_*
 Makefile
 Makefile.in
 
