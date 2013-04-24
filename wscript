@@ -46,6 +46,7 @@ from waflib import Logs, Options, Scripting, Utils
 from waflib.Configure import ConfigurationContext
 from waflib.Errors import WafError
 from waflib.TaskGen import feature, before_method
+from waflib.Tools.compiler_c import c_compiler
 
 
 APPNAME = 'geany'
@@ -302,6 +303,10 @@ def configure(conf):
 
 
 def options(opt):
+    # Disable MSVC detetion on win32: building Geany with MSVC is currently not supported
+    # If anyone wants to add support for building with MSVC, this hack should be removed.
+    c_compiler['win32'] = ['gcc']
+
     opt.load('compiler_cc')
     opt.load('compiler_cxx')
     opt.load('intltool')
