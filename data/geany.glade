@@ -8381,19 +8381,80 @@
                           </object>
                         </child>
                         <child>
-                          <object class="GtkSeparatorMenuItem" id="menu_separator4">
+                          <object class="GtkImageMenuItem" id="menu_color_schemes">
+                            <property name="label" translatable="yes">Change _Color Scheme</property>
+                            <property name="use_action_appearance">False</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="use_underline">True</property>
+                            <property name="image">image2</property>
+                            <property name="use_stock">False</property>
+                            <signal name="activate" handler="on_menu_color_schemes_activate" swapped="no"/>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkSeparatorMenuItem" id="separatormenuitem1">
+                            <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                           </object>
                         </child>
                         <child>
-                          <object class="GtkMenuItem" id="menu_toggle_all_additional_widgets1">
+                          <object class="GtkCheckMenuItem" id="menu_markers_margin1">
                             <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">To_ggle All Additional Widgets</property>
+                            <property name="label" translatable="yes">Show _Markers Margin</property>
                             <property name="use_underline">True</property>
-                            <signal name="activate" handler="on_menu_toggle_all_additional_widgets1_activate" swapped="no"/>
+                            <property name="active">True</property>
+                            <signal name="toggled" handler="on_markers_margin1_toggled" swapped="no"/>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkCheckMenuItem" id="menu_linenumber_margin1">
+                            <property name="use_action_appearance">False</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="label" translatable="yes">Show _Line Numbers</property>
+                            <property name="use_underline">True</property>
+                            <property name="active">True</property>
+                            <signal name="toggled" handler="on_show_line_numbers1_toggled" swapped="no"/>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkCheckMenuItem" id="menu_show_white_space1">
+                            <property name="use_action_appearance">False</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="label" translatable="yes">Show _White Space</property>
+                            <property name="use_underline">True</property>
+                            <signal name="toggled" handler="on_menu_show_white_space1_toggled" swapped="no"/>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkCheckMenuItem" id="menu_show_line_endings1">
+                            <property name="use_action_appearance">False</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="label" translatable="yes">Show Line _Endings</property>
+                            <property name="use_underline">True</property>
+                            <signal name="toggled" handler="on_menu_show_line_endings1_toggled" swapped="no"/>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkCheckMenuItem" id="menu_show_indentation_guides1">
+                            <property name="use_action_appearance">False</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="label" translatable="yes">Show _Indentation Guides</property>
+                            <property name="use_underline">True</property>
+                            <signal name="toggled" handler="on_menu_show_indentation_guides1_toggled" swapped="no"/>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkSeparatorMenuItem" id="menu_separator4">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
                           </object>
                         </child>
                         <child>
@@ -8404,6 +8465,16 @@
                             <property name="label" translatable="yes">Full_screen</property>
                             <property name="use_underline">True</property>
                             <signal name="toggled" handler="on_fullscreen1_toggled" swapped="no"/>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkMenuItem" id="menu_toggle_all_additional_widgets1">
+                            <property name="use_action_appearance">False</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="label" translatable="yes">To_ggle All Additional Widgets</property>
+                            <property name="use_underline">True</property>
+                            <signal name="activate" handler="on_menu_toggle_all_additional_widgets1_activate" swapped="no"/>
                           </object>
                         </child>
                         <child>
@@ -8437,91 +8508,6 @@
                             <property name="use_underline">True</property>
                             <property name="active">True</property>
                             <signal name="toggled" handler="on_menu_show_sidebar1_toggled" swapped="no"/>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkMenuItem" id="menu_view_editor1">
-                            <property name="use_action_appearance">False</property>
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">Editor</property>
-                            <property name="use_underline">True</property>
-                            <child type="submenu">
-                              <object class="GtkMenu" id="menu_view_editor1_menu">
-                                <property name="can_focus">False</property>
-                                <child>
-                                  <object class="GtkImageMenuItem" id="menu_color_schemes">
-                                    <property name="label" translatable="yes">_Color Schemes</property>
-                                    <property name="use_action_appearance">False</property>
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">False</property>
-                                    <property name="use_underline">True</property>
-                                    <property name="image">image2</property>
-                                    <property name="use_stock">False</property>
-                                    <signal name="activate" handler="on_menu_color_schemes_activate" swapped="no"/>
-                                  </object>
-                                </child>
-                                <child>
-                                  <object class="GtkSeparatorMenuItem" id="separatormenuitem1">
-                                    <property name="use_action_appearance">False</property>
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">False</property>
-                                  </object>
-                                </child>
-                                <child>
-                                  <object class="GtkCheckMenuItem" id="menu_markers_margin1">
-                                    <property name="use_action_appearance">False</property>
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">False</property>
-                                    <property name="label" translatable="yes">Show _Markers Margin</property>
-                                    <property name="use_underline">True</property>
-                                    <property name="active">True</property>
-                                    <signal name="toggled" handler="on_markers_margin1_toggled" swapped="no"/>
-                                  </object>
-                                </child>
-                                <child>
-                                  <object class="GtkCheckMenuItem" id="menu_linenumber_margin1">
-                                    <property name="use_action_appearance">False</property>
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">False</property>
-                                    <property name="label" translatable="yes">Show _Line Numbers</property>
-                                    <property name="use_underline">True</property>
-                                    <property name="active">True</property>
-                                    <signal name="toggled" handler="on_show_line_numbers1_toggled" swapped="no"/>
-                                  </object>
-                                </child>
-                                <child>
-                                  <object class="GtkCheckMenuItem" id="menu_show_white_space1">
-                                    <property name="use_action_appearance">False</property>
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">False</property>
-                                    <property name="label" translatable="yes">Show _White Space</property>
-                                    <property name="use_underline">True</property>
-                                    <signal name="toggled" handler="on_menu_show_white_space1_toggled" swapped="no"/>
-                                  </object>
-                                </child>
-                                <child>
-                                  <object class="GtkCheckMenuItem" id="menu_show_line_endings1">
-                                    <property name="use_action_appearance">False</property>
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">False</property>
-                                    <property name="label" translatable="yes">Show Line _Endings</property>
-                                    <property name="use_underline">True</property>
-                                    <signal name="toggled" handler="on_menu_show_line_endings1_toggled" swapped="no"/>
-                                  </object>
-                                </child>
-                                <child>
-                                  <object class="GtkCheckMenuItem" id="menu_show_indentation_guides1">
-                                    <property name="use_action_appearance">False</property>
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">False</property>
-                                    <property name="label" translatable="yes">Show _Indentation Guides</property>
-                                    <property name="use_underline">True</property>
-                                    <signal name="toggled" handler="on_menu_show_indentation_guides1_toggled" swapped="no"/>
-                                  </object>
-                                </child>
-                              </object>
-                            </child>
                           </object>
                         </child>
                         <child>
