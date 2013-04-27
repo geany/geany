@@ -67,6 +67,17 @@ void LexInterface::Colourise(int start, int end) {
 	}
 }
 
+int LexInterface::LineEndTypesSupported() {
+	if (instance) {
+		int interfaceVersion = instance->Version();
+		if (interfaceVersion >= lvSubStyles) {
+			ILexerWithSubStyles *ssinstance = static_cast<ILexerWithSubStyles *>(instance);
+			return ssinstance->LineEndTypesSupported();
+		}
+	}
+	return 0;
+}
+
 Document::Document() {
 	refCount = 0;
 	pcf = NULL;
@@ -76,6 +87,7 @@ Document::Document() {
 	eolMode = SC_EOL_LF;
 #endif
 	dbcsCodePage = 0;
+	lineEndBitSet = SC_LINE_END_TYPE_DEFAULT;
 	stylingBits = 5;
 	stylingBitsMask = 0x1F;
 	stylingMask = 0;
@@ -135,11 +147,35 @@ void Document::Init() {
 	}
 }
 
+int Document::LineEndTypesSupported() const {
+	if ((SC_CP_UTF8 == dbcsCodePage) && pli)
+		return pli->LineEndTypesSupported();
+	else
+		return 0;
+}
+
 bool Document::SetDBCSCodePage(int dbcsCodePage_) {
 	if (dbcsCodePage != dbcsCodePage_) {
 		dbcsCodePage = dbcsCodePage_;
 		SetCaseFolder(NULL);
+		cb.SetLineEndTypes(lineEndBitSet & LineEndTypesSupported());
 		return true;
+	} else {
+		return false;
+	}
+}
+
+bool Document::SetLineEndTypesAllowed(int lineEndBitSet_) {
+	if (lineEndBitSet != lineEndBitSet_) {
+		lineEndBitSet = lineEndBitSet_;
+		int lineEndBitSetActive = lineEndBitSet & LineEndTypesSupported();
+		if (lineEndBitSetActive != cb.GetLineEndTypes()) {
+			ModifiedAt(0);
+			cb.SetLineEndTypes(lineEndBitSetActive);
+			return true;
+		} else {
+			return false;
+		}
 	} else {
 		return false;
 	}
@@ -245,11 +281,25 @@ int SCI_METHOD Document::LineStart(int line) const {
 	return cb.LineStart(line);
 }
 
-int Document::LineEnd(int line) const {
+int SCI_METHOD Document::LineEnd(int line) const {
 	if (line == LinesTotal() - 1) {
 		return LineStart(line + 1);
 	} else {
-		int position = LineStart(line + 1) - 1;
+		int position = LineStart(line + 1);
+		if (SC_CP_UTF8 == dbcsCodePage) {
+			unsigned char bytes[] = {
+				static_cast<unsigned char>(cb.CharAt(position-3)),
+				static_cast<unsigned char>(cb.CharAt(position-2)),
+				static_cast<unsigned char>(cb.CharAt(position-1)),
+			};
+			if (UTF8IsSeparator(bytes)) {
+				return position - UTF8SeparatorLength;
+			}
+			if (UTF8IsNEL(bytes+1)) {
+				return position - UTF8NELLength;
+			}
+		}
+		position--; // Back over CR or LF
 		// When line terminator is CR+LF, may need to go back one more
 		if ((position > LineStart(line)) && (cb.CharAt(position - 1) == '\r')) {
 			position--;
@@ -275,6 +325,10 @@ int Document::LineEndPosition(int position) const {
 
 bool Document::IsLineEndPosition(int position) const {
 	return LineEnd(LineFromPosition(position)) == position;
+}
+
+bool Document::IsPositionInLineEnd(int position) const {
+	return position >= LineEnd(LineFromPosition(position));
 }
 
 int Document::VCHomePosition(int position) const {

@@ -22,6 +22,7 @@ lexers/LexForth.cxx \
 lexers/LexFortran.cxx \
 lexers/LexHTML.cxx \
 lexers/LexHaskell.cxx \
+lexers/LexLaTeX.cxx \
 lexers/LexLisp.cxx \
 lexers/LexLua.cxx \
 lexers/LexMarkdown.cxx \

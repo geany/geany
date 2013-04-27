@@ -66,7 +66,7 @@ int ContractionState::LinesDisplayed() const {
 
 int ContractionState::DisplayFromDoc(int lineDoc) const {
 	if (OneToOne()) {
-		return lineDoc;
+		return (lineDoc <= linesInDocument) ? lineDoc : linesInDocument;
 	} else {
 		if (lineDoc > displayLines->Partitions())
 			lineDoc = displayLines->Partitions();
