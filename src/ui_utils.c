@@ -744,6 +744,12 @@ static void init_document_widgets(void)
 	add_doc_widget("menu_reload1");
 	add_doc_widget("menu_document1");
 	add_doc_widget("menu_choose_color1");
+	add_doc_widget("menu_color_schemes");
+	add_doc_widget("menu_markers_margin1");
+	add_doc_widget("menu_linenumber_margin1");
+	add_doc_widget("menu_show_white_space1");
+	add_doc_widget("menu_show_line_endings1");
+	add_doc_widget("menu_show_indentation_guides1");
 	add_doc_widget("menu_zoom_in1");
 	add_doc_widget("menu_zoom_out1");
 	add_doc_widget("normal_size1");
