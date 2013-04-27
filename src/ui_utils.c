@@ -746,7 +746,6 @@ static void init_document_widgets(void)
 	add_doc_widget("menu_choose_color1");
 	add_doc_widget("menu_zoom_in1");
 	add_doc_widget("menu_zoom_out1");
-	add_doc_widget("menu_view_editor1");
 	add_doc_widget("normal_size1");
 	add_doc_widget("treeview6");
 	add_doc_widget("print1");
