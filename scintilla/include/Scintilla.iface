@@ -326,6 +326,8 @@ fun void MarkerAddSet=2466(int line, int set)
 # Set the alpha used for a marker that is drawn in the text area, not the margin.
 set void MarkerSetAlpha=2476(int markerNumber, int alpha)
 
+val SC_MAX_MARGIN=4
+
 enu MarginType=SC_MARGIN_
 val SC_MARGIN_SYMBOL=0
 val SC_MARGIN_NUMBER=1
@@ -921,6 +923,11 @@ fun void LineScroll=2168(int columns, int lines)
 
 # Ensure the caret is visible.
 fun void ScrollCaret=2169(,)
+
+# Scroll the argument positions and the range between them into view giving
+# priority to the primary position then the secondary position.
+# This may be used to make a search match visible.
+fun void ScrollRange=2569(position secondary, position primary)
 
 # Replace the selected text with the argument text.
 fun void ReplaceSel=2170(, string text)
@@ -1835,6 +1842,17 @@ set void AutoCSetCaseInsensitiveBehaviour=2634(int behaviour,)
 # Get auto-completion case insensitive behaviour.
 get int AutoCGetCaseInsensitiveBehaviour=2635(,)
 
+enu Ordering=SC_ORDER_
+val SC_ORDER_PRESORTED=0
+val SC_ORDER_PERFORMSORT=1
+val SC_ORDER_CUSTOM=2
+
+# Set the way autocompletion lists are ordered.
+set void AutoCSetOrder=2660(int order,)
+
+# Get the way autocompletion lists are ordered.
+get int AutoCGetOrder=2661(,)
+
 # Enlarge the document to a particular size of text bytes.
 fun void Allocate=2446(int bytes,)
 
@@ -2062,6 +2080,12 @@ set void AnnotationSetStyleOffset=2550(int style,)
 # Get the start of the range of style numbers used for annotations
 get int AnnotationGetStyleOffset=2551(,)
 
+# Release all extended (>255) style numbers
+fun void ReleaseAllExtendedStyles=2552(,)
+
+# Allocate some extended (>255) style numbers and return the start of the range
+fun int AllocateExtendedStyles=2553(int numberStyles,)
+
 val UNDO_MAY_COALESCE=1
 
 # Add a container action to the undo stack
@@ -2266,6 +2290,12 @@ fun void VCHomeDisplay=2652(,)
 
 # Like VCHomeDisplay but extending selection to new caret position.
 fun void VCHomeDisplayExtend=2653(,)
+
+# Is the caret line always visible?
+get bool GetCaretLineVisibleAlways=2654(,)
+
+# Sets the caret line to always visible.
+set void SetCaretLineVisibleAlways=2655(bool alwaysVisible,)
 
 # Start notifying the container of all key presses and commands.
 fun void StartRecord=3001(,)
@@ -2922,6 +2952,7 @@ val SCE_ERR_ABSF=18
 val SCE_ERR_TIDY=19
 val SCE_ERR_JAVA_STACK=20
 val SCE_ERR_VALUE=21
+val SCE_ERR_GCC_INCLUDED_FROM=22
 # Lexical states for SCLEX_BATCH
 lex Batch=SCLEX_BATCH SCE_BAT_
 val SCE_BAT_DEFAULT=0
@@ -3405,6 +3436,7 @@ val SCE_KIX_FUNCTIONS=8
 val SCE_KIX_OPERATOR=9
 val SCE_KIX_IDENTIFIER=31
 # Lexical states for SCLEX_GUI4CLI
+lex Gui4Cli=SCLEX_GUI4CLI SCE_GC_
 val SCE_GC_DEFAULT=0
 val SCE_GC_COMMENTLINE=1
 val SCE_GC_COMMENTBLOCK=2
@@ -3549,6 +3581,8 @@ val SCE_HA_COMMENTLINE=13
 val SCE_HA_COMMENTBLOCK=14
 val SCE_HA_COMMENTBLOCK2=15
 val SCE_HA_COMMENTBLOCK3=16
+val SCE_HA_PRAGMA=17
+val SCE_HA_PREPROCESSOR=18
 # Lexical states of SCLEX_TADS3
 lex TADS3=SCLEX_TADS3 SCE_T3_
 val SCE_T3_DEFAULT=0
@@ -3913,6 +3947,7 @@ val SCE_MYSQL_USER1=18
 val SCE_MYSQL_USER2=19
 val SCE_MYSQL_USER3=20
 val SCE_MYSQL_HIDDENCOMMAND=21
+val SCE_MYSQL_PLACEHOLDER=22
 # Lexical state for SCLEX_PO
 lex Po=SCLEX_PO SCE_PO_
 val SCE_PO_DEFAULT=0
@@ -4241,6 +4276,50 @@ evt void IndicatorRelease=2024(int modifiers, int position)
 evt void AutoCCancelled=2025(void)
 evt void AutoCCharDeleted=2026(void)
 evt void HotSpotReleaseClick=2027(int modifiers, int position)
+
+cat Provisional
+
+# Line end types which may be used in addition to LF, CR, and CRLF
+# SC_LINE_END_TYPE_UNICODE includes U+2028 Line Separator,
+# U+2029 Paragraph Separator, and U+0085 Next Line
+enu LineEndType=SC_LINE_END_TYPE_
+val SC_LINE_END_TYPE_DEFAULT=0
+val SC_LINE_END_TYPE_UNICODE=1
+
+# Set the line end types that the application wants to use. May not be used if incompatible with lexer or encoding.
+set void SetLineEndTypesAllowed=2656(int lineEndBitSet,)
+
+# Get the line end types currently allowed.
+get int GetLineEndTypesAllowed=2657(,)
+
+# Get the line end types currently recognised. May be a subset of the allowed types due to lexer limitation.
+get int GetLineEndTypesActive=2658(,)
+
+# Bit set of LineEndType enumertion for which line ends beyond the standard
+# LF, CR, and CRLF are supported by the lexer.
+get int GetLineEndTypesSupported=4018(,)
+
+# Allocate a set of sub styles for a particular base style, returning start of range
+fun int AllocateSubStyles=4020(int styleBase, int numberStyles)
+
+# The starting style number for the sub styles associated with a base style
+get int GetSubStylesStart=4021(int styleBase,)
+
+# The number of sub styles associated with a base style
+get int GetSubStylesLength=4022(int styleBase,)
+
+# Free allocated sub styles
+fun void FreeSubStyles=4023(,)
+
+# Set the identifiers that are shown in a particular style
+set void SetIdentifiers=4024(int style, string identifiers)
+
+# Where styles are duplicated by a feature such as active/inactive code
+# return the distance between the two types.
+get int DistanceToSecondaryStyles=4025(,)
+
+# Get the set of base styles that can be extended with sub styles
+get int GetSubStyleBases=4026(, stringresult styles)
 
 cat Deprecated
 

@@ -12,6 +12,8 @@
 namespace Scintilla {
 #endif
 
+enum EncodingType { enc8bit, encUnicode, encDBCS };
+
 class LexAccessor {
 private:
 	IDocument *pAccess;
@@ -25,6 +27,7 @@ private:
 	int startPos;
 	int endPos;
 	int codePage;
+	enum EncodingType encodingType;
 	int lenDoc;
 	int mask;
 	char styleBuf[bufferSize];
@@ -33,6 +36,7 @@ private:
 	char chWhile;
 	unsigned int startSeg;
 	int startPosStyling;
+	int documentVersion;
 
 	void Fill(int position) {
 		startPos = position - slopSize;
@@ -51,9 +55,23 @@ private:
 public:
 	LexAccessor(IDocument *pAccess_) :
 		pAccess(pAccess_), startPos(extremePosition), endPos(0),
-		codePage(pAccess->CodePage()), lenDoc(pAccess->Length()),
+		codePage(pAccess->CodePage()), 
+		encodingType(enc8bit),
+		lenDoc(pAccess->Length()),
 		mask(127), validLen(0), chFlags(0), chWhile(0),
-		startSeg(0), startPosStyling(0) {
+		startSeg(0), startPosStyling(0), 
+		documentVersion(pAccess->Version()) {
+		switch (codePage) {
+		case 65001:
+			encodingType = encUnicode;
+			break;
+		case 932:
+		case 936:
+		case 949:
+		case 950:
+		case 1361:
+			encodingType = encDBCS;
+		}
 	}
 	char operator[](int position) {
 		if (position < startPos || position >= endPos) {
@@ -75,7 +93,9 @@ public:
 	bool IsLeadByte(char ch) {
 		return pAccess->IsDBCSLeadByte(ch);
 	}
-
+	EncodingType Encoding() const {
+		return encodingType;
+	}
 	bool Match(int pos, const char *s) {
 		for (int i=0; *s; i++) {
 			if (*s != SafeGetCharAt(pos+i))
@@ -92,6 +112,19 @@ public:
 	}
 	int LineStart(int line) {
 		return pAccess->LineStart(line);
+	}
+	int LineEnd(int line) {
+		if (documentVersion >= dvLineEnd) {
+			return (static_cast<IDocumentWithLineEnd *>(pAccess))->LineEnd(line);
+		} else {
+			// Old interface means only '\r', '\n' and '\r\n' line ends.
+			int startNext = pAccess->LineStart(line+1);
+			char chLineEnd = SafeGetCharAt(startNext-1);
+			if (chLineEnd == '\n' && (SafeGetCharAt(startNext-2)  == '\r'))
+				return startNext - 2;
+			else
+				return startNext - 1;
+		}
 	}
 	int LevelAt(int line) {
 		return pAccess->GetLevel(line);

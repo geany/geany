@@ -610,7 +610,9 @@ static const HLStyle highlighting_styles_HASKELL[] =
 	{ SCE_HA_INSTANCE,		"instance",			FALSE },
 	{ SCE_HA_CAPITAL,		"capital",			FALSE },
 	{ SCE_HA_MODULE,		"module",			FALSE },
-	{ SCE_HA_DATA,			"data",				FALSE }
+	{ SCE_HA_DATA,			"data",				FALSE },
+	{ SCE_HA_PRAGMA,		"pragma",			FALSE },
+	{ SCE_HA_PREPROCESSOR,	"preprocessor",		FALSE }
 };
 static const HLKeyword highlighting_keywords_HASKELL[] =
 {
