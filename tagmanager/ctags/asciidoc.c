@@ -168,8 +168,8 @@ static void findAsciidocTags (void)
 			name_len = name_len_bytes;
 
 		/* underlines must be +-2 chars FIXME detect single line titles */
-		if (line_len >= name_len - 2 && line_len <= name_len + 2 && name_len > 0 &&
-			ispunct(line[0]) && issame((const char*) line))
+		if (line_len > 2 && line_len >= name_len - 2 && line_len <= name_len + 2 &&
+			name_len > 0 && ispunct(line[0]) && issame((const char*) line))
 		{
 			char c = line[0];
 			int kind = get_kind(c);
