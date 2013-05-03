@@ -8,16 +8,15 @@ msgstr ""
 "Project-Id-Version: Geany 1.23\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-02-23 14:24+0100\n"
-"PO-Revision-Date: 2013-02-24 09:09+0200\n"
+"PO-Revision-Date: 2013-04-05 18:55+0200\n"
 "Last-Translator: Algimantas Margevičius <margevicius.algimantas@gmail.com>\n"
 "Language-Team: Lietuvių <>\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && (n"
-"%100<10 || n%100>=20) ? 1 : 2)\n"
-"X-Generator: Gtranslator 2.91.5\n"
+"%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: Poedit 1.5.5\n"
 
 #: ../geany.desktop.in.h:1 ../data/geany.glade.h:350
 msgid "Geany"
@@ -576,7 +575,7 @@ msgstr "Įrankių juosta"
 
 #: ../data/geany.glade.h:123
 msgid "Line wrapping"
-msgstr "Eilučių laužymas"
+msgstr "Skaidyti eilutes"
 
 #: ../data/geany.glade.h:124
 msgid ""
@@ -584,7 +583,7 @@ msgid ""
 "line wrapping has a high performance cost for large documents so should be "
 "disabled on slow machines."
 msgstr ""
-"Laužyti eilutę lango krašte ir pratęsti ją sekančioje eilutėje. Pastaba: "
+"Skaidyti eilutę lango krašte ir pratęsti ją sekančioje eilutėje. Pastaba: "
 "eilučių laužymas smarkiai įtakoja greitaveiką, dideliuose dokumentuose tai "
 "turėtų būti išjungta."
 
@@ -655,7 +654,7 @@ msgstr "Įjungus, nauja eilutė pašalins tarpus ankstesnės eilutės pabaigoj"
 
 #: ../data/geany.glade.h:136
 msgid "Line breaking column:"
-msgstr "Eilutės laužymo stulpelis:"
+msgstr "Įvedamo teksto laužymo eilutėmis  stulpelis:"
 
 #: ../data/geany.glade.h:137
 msgid "Comment toggle marker:"
@@ -1885,11 +1884,11 @@ msgstr "_Dokumentas"
 
 #: ../data/geany.glade.h:409
 msgid "_Line Wrapping"
-msgstr "_Laužyti eilutes"
+msgstr "_Skaidyti eilutes"
 
 #: ../data/geany.glade.h:410
 msgid "Line _Breaking"
-msgstr "Eilučių _laužymas"
+msgstr "_Laužyti įvedamą tekstą eilutėmis"
 
 #: ../data/geany.glade.h:411
 msgid "_Auto-indentation"

@@ -445,11 +445,6 @@ static int StateForScript(script_type scriptLanguage) {
 	return Result;
 }
 
-static inline bool ishtmlwordchar(int ch) {
-	return !isascii(ch) ||
-		(isalnum(ch) || ch == '.' || ch == '-' || ch == '_' || ch == ':' || ch == '!' || ch == '#');
-}
-
 static inline bool issgmlwordchar(int ch) {
 	return !isascii(ch) ||
 		(isalnum(ch) || ch == '.' || ch == '_' || ch == ':' || ch == '!' || ch == '#' || ch == '[');
@@ -482,10 +477,6 @@ static bool IsScriptCommentState(const int state) {
 
 static bool isLineEnd(int ch) {
 	return ch == '\r' || ch == '\n';
-}
-
-static bool isOKBeforeRE(int ch) {
-	return (ch == '(') || (ch == '=') || (ch == ',');
 }
 
 static bool isMakoBlockEnd(const int ch, const int chNext, const char *blockType) {
@@ -691,6 +682,8 @@ static void ColouriseHyperTextDoc(unsigned int startPos, int length, int initSty
 	const CharacterSet setHTMLWord(CharacterSet::setAlphaNum, ".-_:!#", 0x80, true);
 	const CharacterSet setTagContinue(CharacterSet::setAlphaNum, ".-_:!#[", 0x80, true);
 	const CharacterSet setAttributeContinue(CharacterSet::setAlphaNum, ".-_:!#/", 0x80, true);
+	// TODO: also handle + and - (except if they're part of ++ or --) and return keywords
+	const CharacterSet setOKBeforeJSRE(CharacterSet::setNone, "([{=,:;!%^&*|?~");
 
 	int levelPrev = styler.LevelAt(lineCurrent) & SC_FOLDLEVELNUMBERMASK;
 	int levelCurrent = levelPrev;
@@ -905,7 +898,7 @@ static void ColouriseHyperTextDoc(unsigned int startPos, int length, int initSty
 				 !IsScriptCommentState(state)) {
  			beforeLanguage = scriptLanguage;
 			scriptLanguage = segIsScriptingIndicator(styler, i + 2, i + 6, isXml ? eScriptXML : eScriptPHP);
-			if (scriptLanguage != eScriptPHP && isStringState(state)) continue;
+			if ((scriptLanguage != eScriptPHP) && (isStringState(state) || (state==SCE_H_COMMENT))) continue;
 			styler.ColourTo(i - 1, StateToPrint);
 			beforePreProc = state;
 			i++;
@@ -1592,7 +1585,7 @@ static void ColouriseHyperTextDoc(unsigned int startPos, int length, int initSty
 			} else if (ch == '/' && chNext == '/') {
 				styler.ColourTo(i - 1, StateToPrint);
 				state = SCE_HJ_COMMENTLINE;
-			} else if (ch == '/' && isOKBeforeRE(chPrevNonWhite)) {
+			} else if (ch == '/' && setOKBeforeJSRE.Contains(chPrevNonWhite)) {
 				styler.ColourTo(i - 1, StateToPrint);
 				state = SCE_HJ_REGEX;
 			} else if (ch == '\"') {

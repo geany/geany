@@ -130,6 +130,8 @@ class BreakFinder {
 	int subBreak;
 	Document *pdoc;
 	void Insert(int val);
+	// Private so BreakFinder objects can not be copied
+	BreakFinder(const BreakFinder &);
 public:
 	// If a whole run is longer than lengthStartSubdivision then subdivide
 	// into smaller runs at spaces or punctuation.
@@ -148,6 +150,8 @@ class PositionCache {
 	size_t size;
 	unsigned int clock;
 	bool allClear;
+	// Private so PositionCache objects can not be copied
+	PositionCache(const PositionCache &);
 public:
 	PositionCache();
 	~PositionCache();

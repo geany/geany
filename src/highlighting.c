@@ -30,6 +30,8 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <string.h>
+#include <glib.h>
+#include <glib/gprintf.h>
 
 #include "SciLexer.h"
 #include "highlighting.h"
@@ -243,11 +245,11 @@ static void parse_color(GKeyFile *kf, const gchar *str, gint *clr)
 
 	if (strlen(start) == 3)
 	{
-		snprintf(hex_clr, 9, "0x%c%c%c%c%c%c", start[0], start[0],
+		g_snprintf(hex_clr, 9, "0x%c%c%c%c%c%c", start[0], start[0],
 			start[1], start[1], start[2], start[2]);
 	}
 	else
-		snprintf(hex_clr, 9, "0x%s", start);
+		g_snprintf(hex_clr, 9, "0x%s", start);
 
 	g_free(named_color);
 
@@ -1731,6 +1733,11 @@ gboolean highlighting_is_code_style(gint lexer, gint style)
 	{
 		case SCLEX_CPP:
 			if (style == SCE_C_PREPROCESSOR)
+				return FALSE;
+			break;
+
+		case SCLEX_HASKELL:
+			if (style == SCE_HA_PREPROCESSOR)
 				return FALSE;
 			break;
 	}

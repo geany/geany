@@ -34,6 +34,7 @@ G_BEGIN_DECLS
 #include "Scintilla.h"
 #include "ScintillaWidget.h"
 #include "editor.h"
+#include "search.h"
 
 #if defined(G_OS_WIN32)
 # define GEANY_DEFAULT_EOL_CHARACTER SC_EOL_CRLF
@@ -222,7 +223,8 @@ gboolean document_search_bar_find(GeanyDocument *doc, const gchar *text, gint fl
 		gboolean backwards);
 
 gint document_find_text(GeanyDocument *doc, const gchar *text, const gchar *original_text,
-		gint flags, gboolean search_backwards, gboolean scroll, GtkWidget *parent);
+		gint flags, gboolean search_backwards, GeanyMatchInfo **match_,
+		gboolean scroll, GtkWidget *parent);
 
 gint document_replace_text(GeanyDocument *doc, const gchar *find_text, const gchar *original_find_text,
 		const gchar *replace_text, gint flags, gboolean search_backwards);

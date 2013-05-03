@@ -2099,6 +2099,64 @@ static gint get_reflow_column(GeanyEditor *editor)
 }
 
 
+/* Split the line where the cursor is positioned, on `column`,
+   possibly many times if the line is long.
+   Return the number of lines added because of the splitting. */
+static gint split_line(GeanyEditor *editor, gint column)
+{
+	ScintillaObject *sci = editor->sci;
+	gint start_line = sci_get_current_line(sci);
+	gint line = start_line;
+
+	while (TRUE)
+	{
+		gint lstart = sci_get_position_from_line(sci, line);
+		gint lend = sci_get_line_end_position(sci, line);
+		gint edge = sci_get_position_from_col(sci, line, column);
+		gboolean found;
+		gint pos;
+
+		/* don't split on a trailing space of a line */
+		if (sci_get_char_at(sci, lend - 1) == GDK_space)
+			lend--;
+
+		/* detect when the line is short enough and no more splitting is needed */
+		if (sci_get_col_from_position(sci, lend) < column)
+			break;
+
+		/* lookup split position */
+		found = FALSE;
+		for (pos = edge - 1; pos > lstart; pos--)
+		{
+			if (sci_get_char_at(sci, pos) == GDK_space)
+			{
+				found = TRUE;
+				break;
+			}
+		}
+		if (!found)
+		{
+			for (pos = edge; pos < lend; pos++)
+			{
+				if (sci_get_char_at(sci, pos) == GDK_space)
+				{
+					found = TRUE;
+					break;
+				}
+			}
+		}
+		if (!found)
+			break;
+
+		sci_set_current_position(sci, pos + 1, FALSE);
+		sci_cancel(sci); /* don't select from completion list */
+		sci_send_command(sci, SCI_NEWLINE);
+		line++;
+	}
+	return line - start_line;
+}
+
+
 static void reflow_lines(GeanyEditor *editor, gint column)
 {
 	gint start, indent, linescount, i;
@@ -2133,12 +2191,7 @@ static void reflow_lines(GeanyEditor *editor, gint column)
 	indent = sci_get_line_indentation(editor->sci, start);
 	sci_set_line_indentation(editor->sci, start, 0);
 
-	sci_target_from_selection(editor->sci);
-	linescount = sci_get_line_count(editor->sci);
-	sci_lines_split(editor->sci,
-		(column - indent) *	sci_text_width(editor->sci, STYLE_DEFAULT, " "));
-	/* use lines count to determine how many lines appeared after splitting */
-	linescount = sci_get_line_count(editor->sci) - linescount;
+	linescount = split_line(editor, column - indent);
 
 	/* Fix indentation. */
 	for (i = start; i <= start + linescount; i++)

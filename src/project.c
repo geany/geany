@@ -123,6 +123,8 @@ void project_new(void)
 	gtk_widget_set_name(e->dialog, "GeanyDialogProject");
 	bbox = gtk_hbox_new(FALSE, 0);
 	button = gtk_button_new();
+	gtk_widget_set_can_default(button, TRUE);
+	gtk_window_set_default(GTK_WINDOW(e->dialog), button);
 	image = gtk_image_new_from_stock(GTK_STOCK_NEW, GTK_ICON_SIZE_BUTTON);
 	label = gtk_label_new_with_mnemonic(_("C_reate"));
 	gtk_box_pack_start(GTK_BOX(bbox), image, FALSE, FALSE, 3);
@@ -142,6 +144,7 @@ void project_new(void)
 	gtk_misc_set_alignment(GTK_MISC(label), 1, 0);
 
 	e->name = gtk_entry_new();
+	gtk_entry_set_activates_default(GTK_ENTRY(e->name), TRUE);
 	ui_entry_add_clear_icon(GTK_ENTRY(e->name));
 	gtk_entry_set_max_length(GTK_ENTRY(e->name), MAX_NAME_LEN);
 
@@ -151,6 +154,7 @@ void project_new(void)
 	gtk_misc_set_alignment(GTK_MISC(label), 1, 0);
 
 	e->file_name = gtk_entry_new();
+	gtk_entry_set_activates_default(GTK_ENTRY(e->file_name), TRUE);
 	ui_entry_add_clear_icon(GTK_ENTRY(e->file_name));
 	gtk_entry_set_width_chars(GTK_ENTRY(e->file_name), 30);
 	button = gtk_button_new();
@@ -167,6 +171,7 @@ void project_new(void)
 	gtk_misc_set_alignment(GTK_MISC(label), 1, 0);
 
 	e->base_path = gtk_entry_new();
+	gtk_entry_set_activates_default(GTK_ENTRY(e->base_path), TRUE);
 	ui_entry_add_clear_icon(GTK_ENTRY(e->base_path));
 	gtk_widget_set_tooltip_text(e->base_path,
 		_("Base directory of all files that make up the project. "

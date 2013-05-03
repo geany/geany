@@ -47,21 +47,30 @@ public:
 
 /**
  * When platform has a way to generate an event before painting,
- * accumulate needed styling range in StyleNeeded to avoid unnecessary work.
+ * accumulate needed styling range and other work items in 
+ * WorkNeeded to avoid unnecessary work inside paint handler
  */
-class StyleNeeded {
+class WorkNeeded {
 public:
+	enum workItems {
+		workNone=0,
+		workStyle=1,
+		workUpdateUI=2
+	};
 	bool active;
+	enum workItems items;
 	Position upTo;
 
-	StyleNeeded() : active(false), upTo(0) {}
+	WorkNeeded() : active(false), items(workNone), upTo(0) {}
 	void Reset() {
 		active = false;
+		items = workNone;
 		upTo = 0;
 	}
-	void NeedUpTo(Position pos) {
-		if (upTo < pos)
+	void Need(workItems items_, Position pos) {
+		if ((items_ & workStyle) && (upTo < pos))
 			upTo = pos;
+		items = static_cast<workItems>(items | items_);
 	}
 };
 
@@ -95,6 +104,7 @@ public:
 		characterSet = characterSet_;
 		rectangular = rectangular_;
 		lineCopy = lineCopy_;
+		FixSelectionForClipboard();
 	}
 	void Copy(const char *s_, int len_, int codePage_, int characterSet_, bool rectangular_, bool lineCopy_) {
 		delete []s;
@@ -108,9 +118,21 @@ public:
 		characterSet = characterSet_;
 		rectangular = rectangular_;
 		lineCopy = lineCopy_;
+		FixSelectionForClipboard();
 	}
 	void Copy(const SelectionText &other) {
 		Copy(other.s, other.len, other.codePage, other.characterSet, other.rectangular, other.lineCopy);
+	}
+	
+private:
+	void FixSelectionForClipboard() {
+		// Replace null characters by spaces.
+		// To avoid that the content of the clipboard is truncated in the paste operation 
+		// when the clipboard contains null characters.
+		for (int i = 0; i < len - 1; ++i) {
+			if (s[i] == '\0')
+				s[i] = ' ';
+		}
 	}
 };
 
@@ -126,6 +148,7 @@ protected:	// ScintillaBase subclass needs access to much of Editor
 	/** On GTK+, Scintilla is a container widget holding two scroll bars
 	 * whereas on Windows there is just one window with both scroll bars turned on. */
 	Window wMain;	///< The Scintilla parent window
+	Window wMargin;	///< May be separate when using a scroll view for wMain
 
 	/** Style resources may be expensive to allocate so are cached between uses.
 	 * When a style attribute is changed, this cache is flushed. */
@@ -177,6 +200,7 @@ protected:	// ScintillaBase subclass needs access to much of Editor
 	Surface *pixmapLine;
 	Surface *pixmapSelMargin;
 	Surface *pixmapSelPattern;
+	Surface *pixmapSelPatternOffset1;
 	Surface *pixmapIndentGuide;
 	Surface *pixmapIndentGuideHighlight;
 
@@ -228,7 +252,7 @@ protected:	// ScintillaBase subclass needs access to much of Editor
 	PRectangle rcPaint;
 	bool paintingAllText;
 	bool willRedrawAll;
-	StyleNeeded styleNeeded;
+	WorkNeeded workNeeded;
 
 	int modEventMask;
 
@@ -286,6 +310,11 @@ protected:	// ScintillaBase subclass needs access to much of Editor
 	void DropGraphics(bool freeObjects);
 	void AllocateGraphics();
 
+	// The top left visible point in main window coordinates. Will be 0,0 except for
+	// scroll views where it will be equivalent to the current scroll position.
+	virtual Point GetVisibleOriginInMain();
+	Point DocumentPointFromView(Point ptView);  // Convert a point from view space to document
+	int TopLineOfMain();   // Return the line at Main's y coordinate 0
 	virtual PRectangle GetClientRectangle();
 	PRectangle GetTextRectangle();
 
@@ -352,10 +381,19 @@ protected:	// ScintillaBase subclass needs access to much of Editor
 		int xOffset;
 		int topLine;
 		XYScrollPosition(int xOffset_, int topLine_) : xOffset(xOffset_), topLine(topLine_) {}
+		bool operator==(const XYScrollPosition &other) const {
+			return (xOffset == other.xOffset) && (topLine == other.topLine);
+		}
 	};
-	XYScrollPosition XYScrollToMakeVisible(const bool useMargin, const bool vert, const bool horiz);
+	enum XYScrollOptions {
+		xysUseMargin=0x1,
+		xysVertical=0x2,
+		xysHorizontal=0x4,
+		xysDefault=xysUseMargin|xysVertical|xysHorizontal};
+	XYScrollPosition XYScrollToMakeVisible(const SelectionRange range, const XYScrollOptions options);
 	void SetXYScroll(XYScrollPosition newXY);
 	void EnsureCaretVisible(bool useMargin=true, bool vert=true, bool horiz=true);
+	void ScrollRange(SelectionRange range);
 	void ShowCaretAtCurrentPosition();
 	void DropCaret();
 	void InvalidateCaret();
@@ -439,7 +477,7 @@ protected:	// ScintillaBase subclass needs access to much of Editor
 	void NotifyHotSpotClicked(int position, bool shift, bool ctrl, bool alt);
 	void NotifyHotSpotDoubleClicked(int position, bool shift, bool ctrl, bool alt);
 	void NotifyHotSpotReleaseClick(int position, bool shift, bool ctrl, bool alt);
-	void NotifyUpdateUI();
+	bool NotifyUpdateUI();
 	void NotifyPainted();
 	void NotifyIndicatorClick(bool click, int position, bool shift, bool ctrl, bool alt);
 	bool NotifyMarginClick(Point pt, bool shift, bool ctrl, bool alt);
@@ -518,8 +556,8 @@ protected:	// ScintillaBase subclass needs access to much of Editor
 
 	int PositionAfterArea(PRectangle rcArea);
 	void StyleToPositionInView(Position pos);
-	void IdleStyling();
-	virtual void QueueStyling(int upTo);
+	virtual void IdleWork();
+	virtual void QueueIdleWork(WorkNeeded::workItems items, int upTo=0);
 
 	virtual bool PaintContains(PRectangle rc);
 	bool PaintContainsMargin();

@@ -803,8 +803,6 @@ static FILE *open_std_handle(DWORD handle, const char *mode)
 static void debug_setup_console()
 {
 	static const WORD MAX_CONSOLE_LINES = 500;
-	int	 hConHandle;
-	long	 lStdHandle;
 	CONSOLE_SCREEN_BUFFER_INFO coninfo;
 	FILE	*fp;
 
@@ -1069,8 +1067,10 @@ gboolean win32_spawn(const gchar *dir, gchar **argv, gchar **env, GSpawnFlags fl
 	fail = ret == -1 && errno;
 	if (!fail)
 	{
-		g_file_get_contents(tmp_file, std_out, NULL, NULL);
-		g_file_get_contents(tmp_errfile, std_err, NULL, NULL);
+		if (std_out != NULL)
+			g_file_get_contents(tmp_file, std_out, NULL, NULL);
+		if (std_err != NULL)
+			g_file_get_contents(tmp_errfile, std_err, NULL, NULL);
 	}
 	else if (error)
 		g_set_error_literal(error, G_SPAWN_ERROR, errno, g_strerror(errno));

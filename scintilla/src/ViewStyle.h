@@ -32,6 +32,8 @@ private:
 	int size;
 	int max;
 
+	// Private so FontNames objects can not be copied
+	FontNames(const FontNames &);
 public:
 	FontNames();
 	~FontNames();
@@ -65,6 +67,7 @@ public:
 	FontRealised *frFirst;
 	size_t stylesSize;
 	Style *styles;
+	size_t nextExtendedStyle;
 	LineMarker markers[MARKER_MAX + 1];
 	int largestMarkerHeight;
 	Indicator indicators[INDIC_MAX + 1];
@@ -101,12 +104,13 @@ public:
 	bool hotspotUnderline;
 	bool hotspotSingleLine;
 	/// Margins are ordered: Line Numbers, Selection Margin, Spacing Margin
-	enum { margins=5 };
 	int leftMarginWidth;	///< Spacing margin on left of text
 	int rightMarginWidth;	///< Spacing margin on right of text
 	int maskInLine;	///< Mask for markers to be put into text because there is nowhere for them to go in margin
-	MarginStyle ms[margins];
-	int fixedColumnWidth;
+	MarginStyle ms[SC_MAX_MARGIN+1];
+	int fixedColumnWidth;	///< Total width of margins
+	bool marginInside;	///< true: margin included in text view, false: separate views
+	int textStart;	///< Starting x position of text within the view
 	int zoomLevel;
 	WhiteSpaceVisibility viewWhitespace;
 	int whitespaceSize;
@@ -115,6 +119,7 @@ public:
 	ColourDesired caretcolour;
 	ColourDesired additionalCaretColour;
 	bool showCaretLineBackground;
+	bool alwaysShowCaretLineBackground;
 	ColourDesired caretLineBackground;
 	int caretLineAlpha;
 	ColourDesired edgecolour;
@@ -141,6 +146,8 @@ public:
 	void CreateFont(const FontSpecification &fs);
 	void Refresh(Surface &surface);
 	void AllocStyles(size_t sizeNew);
+	void ReleaseAllExtendedStyles();
+	int AllocateExtendedStyles(int numberStyles);
 	void EnsureStyle(size_t index);
 	void ResetDefaultStyle();
 	void ClearStyles();

@@ -31,6 +31,7 @@
 #include "support.h"
 #include "geanywraplabel.h"
 #include "main.h"
+#include "templates.h"
 
 #include "gb.c"
 
@@ -152,6 +153,7 @@ static GtkWidget *create_dialog(void)
 	gchar buffer[512];
 	gchar buffer2[128];
 	guint i, row = 0;
+	gchar *build_date;
 
 	dialog = gtk_dialog_new();
 
@@ -224,7 +226,9 @@ static GtkWidget *create_dialog(void)
 	gtk_label_set_justify(GTK_LABEL(builddate_label), GTK_JUSTIFY_CENTER);
 	gtk_label_set_selectable(GTK_LABEL(builddate_label), TRUE);
 	gtk_label_set_use_markup(GTK_LABEL(builddate_label), TRUE);
-	g_snprintf(buffer2, sizeof(buffer2), _("(built on or after %s)"), __DATE__);
+	build_date = utils_parse_and_format_build_date(__DATE__);
+	g_snprintf(buffer2, sizeof(buffer2), _("(built on or after %s)"), build_date);
+	g_free(build_date);
 	g_snprintf(buffer, sizeof(buffer), BUILDDATE, buffer2);
 	gtk_label_set_markup(GTK_LABEL(builddate_label), buffer);
 	gtk_misc_set_padding(GTK_MISC(builddate_label), 2, 2);

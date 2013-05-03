@@ -878,9 +878,9 @@ static void load_dialog_prefs(GKeyFile *config)
 	template_prefs.mail = utils_get_setting_string(config, PACKAGE, "pref_template_mail", tmp_string);
 	g_free(tmp_string);
 	g_free(tmp_string2);
-	template_prefs.year_format = utils_get_setting_string(config, PACKAGE, "pref_template_year", "%Y");
-	template_prefs.date_format = utils_get_setting_string(config, PACKAGE, "pref_template_date", "%Y-%m-%d");
-	template_prefs.datetime_format = utils_get_setting_string(config, PACKAGE, "pref_template_datetime", "%d.%m.%Y %H:%M:%S %Z");
+	template_prefs.year_format = utils_get_setting_string(config, PACKAGE, "pref_template_year", GEANY_TEMPLATES_FORMAT_YEAR);
+	template_prefs.date_format = utils_get_setting_string(config, PACKAGE, "pref_template_date", GEANY_TEMPLATES_FORMAT_DATE);
+	template_prefs.datetime_format = utils_get_setting_string(config, PACKAGE, "pref_template_datetime", GEANY_TEMPLATES_FORMAT_DATETIME);
 
 	/* tools */
 	cmd = utils_get_setting_string(config, "tools", "terminal_cmd", "");

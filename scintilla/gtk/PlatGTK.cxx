@@ -105,9 +105,11 @@ struct LOGFONT {
 static GMutex *fontMutex = NULL;
 
 static void InitializeGLIBThreads() {
+#if !GLIB_CHECK_VERSION(2,31,0)
 	if (!g_thread_supported()) {
 		g_thread_init(NULL);
 	}
+#endif
 }
 #endif
 
@@ -115,7 +117,12 @@ static void FontMutexAllocate() {
 #if USE_LOCK
 	if (!fontMutex) {
 		InitializeGLIBThreads();
+#if GLIB_CHECK_VERSION(2,31,0)
+		fontMutex = g_new(GMutex, 1);
+		g_mutex_init(fontMutex);
+#else
 		fontMutex = g_mutex_new();
+#endif
 	}
 #endif
 }
@@ -123,7 +130,12 @@ static void FontMutexAllocate() {
 static void FontMutexFree() {
 #if USE_LOCK
 	if (fontMutex) {
+#if GLIB_CHECK_VERSION(2,31,0)
+		g_mutex_clear(fontMutex);
+		g_free(fontMutex);
+#else
 		g_mutex_free(fontMutex);
+#endif
 		fontMutex = NULL;
 	}
 #endif
@@ -143,8 +155,7 @@ static void FontMutexUnlock() {
 #endif
 }
 
-// On GTK+ 1.x holds a GdkFont* but on GTK+ 2.x can hold a GdkFont* or a
-// PangoFontDescription*.
+// Holds a PangoFontDescription*.
 class FontHandle {
 	XYPOSITION width[128];
 	encodingType et;

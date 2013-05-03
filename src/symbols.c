@@ -55,6 +55,7 @@
 #include "editor.h"
 #include "sciwrappers.h"
 #include "filetypesprivate.h"
+#include "search.h"
 
 
 const guint TM_GLOBAL_TYPE_MASK =
@@ -100,8 +101,11 @@ static struct
 	GtkWidget *collapse_all;
 	GtkWidget *sort_by_name;
 	GtkWidget *sort_by_appearance;
+	GtkWidget *find_usage;
+	GtkWidget *find_doc_usage;
+	GtkWidget *find_in_files;
 }
-symbol_menu = {NULL, NULL, NULL, NULL};
+symbol_menu;
 
 
 static void html_tags_loaded(void);
@@ -1380,6 +1384,21 @@ static void tags_table_remove(GHashTable *table, TMTag *tag)
 }
 
 
+static void tags_table_destroy(GHashTable *table)
+{
+	/* free any leftover elements.  note that we can't register a value_free_func when
+	 * creating the hash table because we only want to free it when destroying the table,
+	 * not when inserting a duplicate (we handle this manually) */
+	GHashTableIter iter;
+	gpointer value;
+
+	g_hash_table_iter_init(&iter, table);
+	while (g_hash_table_iter_next(&iter, NULL, &value))
+		g_list_free(value);
+	g_hash_table_destroy(table);
+}
+
+
 /*
  * Updates the tag tree for a document with the tags in *list.
  * @param doc a document
@@ -1522,6 +1541,7 @@ static void update_tree_tags(GeanyDocument *doc, GList **tags)
 							delta = d;
 							parent_search = node->data;
 						}
+						tm_tag_unref(parent_tag);
 					}
 				}
 
@@ -1557,7 +1577,7 @@ static void update_tree_tags(GeanyDocument *doc, GList **tags)
 	}
 
 	g_hash_table_destroy(parents_table);
-	g_hash_table_destroy(tags_table);
+	tags_table_destroy(tags_table);
 }
 
 
@@ -2257,6 +2277,8 @@ static void on_symbol_tree_menu_show(GtkWidget *widget,
 	gtk_widget_set_sensitive(symbol_menu.sort_by_appearance, enable);
 	gtk_widget_set_sensitive(symbol_menu.expand_all, enable);
 	gtk_widget_set_sensitive(symbol_menu.collapse_all, enable);
+	gtk_widget_set_sensitive(symbol_menu.find_usage, enable);
+	gtk_widget_set_sensitive(symbol_menu.find_doc_usage, enable);
 
 	if (! doc)
 		return;
@@ -2286,6 +2308,34 @@ static void on_expand_collapse(GtkWidget *widget, gpointer user_data)
 		gtk_tree_view_expand_all(GTK_TREE_VIEW(doc->priv->tag_tree));
 	else
 		gtk_tree_view_collapse_all(GTK_TREE_VIEW(doc->priv->tag_tree));
+}
+
+
+static void on_find_usage(GtkWidget *widget, G_GNUC_UNUSED gpointer unused)
+{
+	GtkTreeIter iter;
+	GtkTreeSelection *selection;
+	GtkTreeModel *model;
+	GeanyDocument *doc;
+	TMTag *tag = NULL;
+
+	doc = document_get_current();
+	if (!doc)
+		return;
+
+	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(doc->priv->tag_tree));
+	if (gtk_tree_selection_get_selected(selection, &model, &iter))
+		gtk_tree_model_get(model, &iter, SYMBOLS_COLUMN_TAG, &tag, -1);
+	if (tag)
+	{
+		if (widget == symbol_menu.find_in_files)
+			search_show_find_in_files_dialog_full(tag->name, NULL);
+		else
+			search_find_usage(tag->name, tag->name, SCFIND_WHOLEWORD | SCFIND_MATCHCASE,
+				widget == symbol_menu.find_usage);
+
+		tm_tag_unref(tag);
+	}
 }
 
 
@@ -2322,6 +2372,25 @@ static void create_taglist_popup_menu(void)
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	g_signal_connect(item, "activate", G_CALLBACK(on_symbol_tree_sort_clicked),
 			GINT_TO_POINTER(SYMBOLS_SORT_BY_APPEARANCE));
+
+	item = gtk_separator_menu_item_new();
+	gtk_widget_show(item);
+	gtk_container_add(GTK_CONTAINER(menu), item);
+
+	symbol_menu.find_usage = item = ui_image_menu_item_new(GTK_STOCK_FIND, _("Find _Usage"));
+	gtk_widget_show(item);
+	gtk_container_add(GTK_CONTAINER(menu), item);
+	g_signal_connect(item, "activate", G_CALLBACK(on_find_usage), symbol_menu.find_usage);
+
+	symbol_menu.find_doc_usage = item = ui_image_menu_item_new(GTK_STOCK_FIND, _("Find _Document Usage"));
+	gtk_widget_show(item);
+	gtk_container_add(GTK_CONTAINER(menu), item);
+	g_signal_connect(item, "activate", G_CALLBACK(on_find_usage), symbol_menu.find_doc_usage);
+
+	symbol_menu.find_in_files = item = ui_image_menu_item_new(GTK_STOCK_FIND, _("Find in F_iles"));
+	gtk_widget_show(item);
+	gtk_container_add(GTK_CONTAINER(menu), item);
+	g_signal_connect(item, "activate", G_CALLBACK(on_find_usage), NULL);
 
 	g_signal_connect(menu, "show", G_CALLBACK(on_symbol_tree_menu_show), NULL);
 

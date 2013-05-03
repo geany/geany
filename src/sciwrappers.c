@@ -375,6 +375,12 @@ gint sci_get_col_from_position(ScintillaObject *sci, gint position)
 }
 
 
+gint sci_get_position_from_col(ScintillaObject *sci, gint line, gint col)
+{
+	return (gint) SSM(sci, SCI_FINDCOLUMN, line, col);
+}
+
+
 /** Gets the position for the start of @a line.
  * @param sci Scintilla widget.
  * @param line Line.
@@ -1244,12 +1250,6 @@ gint sci_get_target_end(ScintillaObject *sci)
 gint sci_get_position_after(ScintillaObject *sci, gint start)
 {
 	return (gint) SSM(sci, SCI_POSITIONAFTER, (uptr_t) start, 0);
-}
-
-
-void sci_lines_split(ScintillaObject *sci, gint pixelWidth)
-{
-	SSM(sci, SCI_LINESSPLIT, (uptr_t) pixelWidth, 0);
 }
 
 

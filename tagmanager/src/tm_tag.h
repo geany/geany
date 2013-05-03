@@ -151,6 +151,12 @@ typedef struct _TMTag
 	gint refcount; /*!< the reference count of the tag */
 } TMTag;
 
+typedef enum {
+	TM_FILE_FORMAT_TAGMANAGER,
+	TM_FILE_FORMAT_PIPE,
+	TM_FILE_FORMAT_CTAGS
+} TMFileFormat;
+
 /*!
  Prototype for user-defined tag comparison function. This is the type
  of argument that needs to be passed to tm_tags_sort_custom() and
@@ -195,6 +201,11 @@ gboolean tm_tag_init_from_file(TMTag *tag, TMSourceFile *file, FILE *fp);
 gboolean tm_tag_init_from_file_alt(TMTag *tag, TMSourceFile *file, FILE *fp);
 
 /*!
+ Same as tm_tag_init_from_file(), but parsing CTags tag file format
+*/
+gboolean tm_tag_init_from_file_ctags(TMTag *tag, TMSourceFile *file, FILE *fp);
+
+/*!
  Creates a new tag structure from a tagEntryInfo pointer and a TMSOurceFile pointer
  and returns a pointer to it.
  \param file - Pointer to the TMSourceFile structure containing the tag
@@ -207,7 +218,7 @@ TMTag *tm_tag_new(TMSourceFile *file, const tagEntryInfo *tag_entry);
  Same as tm_tag_new() except that the tag attributes are read from file.
  \param mode langType to use for the tag.
 */
-TMTag *tm_tag_new_from_file(TMSourceFile *file, FILE *fp, gint mode, gboolean format_pipe);
+TMTag *tm_tag_new_from_file(TMSourceFile *file, FILE *fp, gint mode, TMFileFormat format);
 
 /*!
  Writes tag information to the given FILE *.

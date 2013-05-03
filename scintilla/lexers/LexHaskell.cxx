@@ -9,6 +9,8 @@
  *
  *    Several bug fixes by Krasimir Angelov - kr.angelov at gmail.com
  *
+ *    Improvements by kudah - kudahkukarek at gmail.com
+ *
  *    TODO:
  *    * Implement a folder :)
  *    * Nice Character-lexing (stuff inside '\''), LexPython has
@@ -57,22 +59,24 @@ using namespace Scintilla;
 #define HA_MODE_FFI         5
 #define HA_MODE_TYPE        6
 
-static inline bool IsNewline(const int ch) {
-   return (ch == '\n' || ch == '\r');
-}
-
-static inline bool IsWhitespace(const int ch) {
-   return (  ch == ' '
-          || ch == '\t'
-          || IsNewline(ch) );
-}
-
 static inline bool IsAWordStart(const int ch) {
-   return (ch < 0x80) && (isalnum(ch) || ch == '_');
+   return (IsLowerCase(ch) || IsUpperCase(ch) || ch == '_');
 }
 
-static inline bool IsAWordChar(const int ch) {
-   return (ch < 0x80) && (isalnum(ch) || ch == '.' || ch == '_' || ch == '\'');
+static inline bool IsAWordChar(const int ch, const bool magicHash) {
+   return (  IsAlphaNumeric(ch)
+          || ch == '_'
+          || ch == '\''
+          || (magicHash && ch == '#'));
+}
+
+static inline bool IsAnOperatorChar(const int ch) {
+   return
+      (  ch == '!' || ch == '#' || ch == '$' || ch == '%'
+      || ch == '&' || ch == '*' || ch == '+' || ch == '-'
+      || ch == '.' || ch == '/' || ch == ':' || ch == '<'
+      || ch == '=' || ch == '>' || ch == '?' || ch == '@'
+      || ch == '\\' || ch == '^' || ch == '|' || ch == '~');
 }
 
 static void ColorizeHaskellDoc(unsigned int startPos, int length, int initStyle,
@@ -81,230 +85,293 @@ static void ColorizeHaskellDoc(unsigned int startPos, int length, int initStyle,
    WordList &keywords = *keywordlists[0];
    WordList &ffi      = *keywordlists[1];
 
+   // property lexer.haskell.allow.hash
+   //  Set to 1 to allow the # character in identifiers with the haskell lexer.
+   //  (GHC -XMagicHash extension)
+   const bool magicHash = styler.GetPropertyInt("lexer.haskell.allow.hash") != 0;
+   const bool stylingWithinPreprocessor = styler.GetPropertyInt("styling.within.preprocessor") != 0;
+
    StyleContext sc(startPos, length, initStyle, styler);
 
    int lineCurrent = styler.GetLine(startPos);
    int state = lineCurrent ? styler.GetLineState(lineCurrent-1)
                            : HA_MODE_DEFAULT;
    int mode  = state & 0xF;
-   int xmode = state >> 4;
+   int xmode = state >> 4; // obscure parameter. Means different things in different modes.
 
    while (sc.More()) {
       // Check for state end
 
          // Operator
       if (sc.state == SCE_HA_OPERATOR) {
-         if (isascii(sc.ch) && isoperator(static_cast<char>(sc.ch))) {
-            sc.Forward();
-         } else {
-            styler.ColourTo(sc.currentPos - 1, sc.state);
-            sc.ChangeState(SCE_HA_DEFAULT);
+         int style = SCE_HA_OPERATOR;
+
+         if (sc.ch == ':' &&
+            // except "::"
+            !(sc.chNext == ':' && !IsAnOperatorChar(sc.GetRelative(2)))) {
+            style = SCE_HA_CAPITAL;
          }
+
+         while(IsAnOperatorChar(sc.ch))
+               sc.Forward();
+
+         styler.ColourTo(sc.currentPos - 1, style);
+         sc.ChangeState(SCE_HA_DEFAULT);
       }
          // String
       else if (sc.state == SCE_HA_STRING) {
          if (sc.ch == '\"') {
-			sc.Forward();
-            styler.ColourTo(sc.currentPos-1, sc.state);
-            sc.ChangeState(SCE_HA_DEFAULT);
+            sc.Forward();
+            sc.SetState(SCE_HA_DEFAULT);
          } else if (sc.ch == '\\') {
             sc.Forward(2);
          } else if (sc.atLineEnd) {
-			styler.ColourTo(sc.currentPos-1, sc.state);
-			sc.ChangeState(SCE_HA_DEFAULT);
-		 } else {
-			sc.Forward();
-		 }
+            sc.SetState(SCE_HA_DEFAULT);
+         } else {
+            sc.Forward();
+         }
       }
          // Char
       else if (sc.state == SCE_HA_CHARACTER) {
          if (sc.ch == '\'') {
-			sc.Forward();
-            styler.ColourTo(sc.currentPos-1, sc.state);
-            sc.ChangeState(SCE_HA_DEFAULT);
+            sc.Forward();
+            sc.SetState(SCE_HA_DEFAULT);
          } else if (sc.ch == '\\') {
             sc.Forward(2);
          } else if (sc.atLineEnd) {
-			styler.ColourTo(sc.currentPos-1, sc.state);
-			sc.ChangeState(SCE_HA_DEFAULT);
-		 } else {
-			sc.Forward();
-		 }
+            sc.SetState(SCE_HA_DEFAULT);
+         } else {
+            sc.Forward();
+         }
       }
          // Number
       else if (sc.state == SCE_HA_NUMBER) {
-         if (IsADigit(sc.ch, xmode)) {
+         if (IsADigit(sc.ch, xmode) ||
+            (sc.ch=='.' && IsADigit(sc.chNext, xmode))) {
             sc.Forward();
          } else if ((xmode == 10) &&
                     (sc.ch == 'e' || sc.ch == 'E') &&
                     (IsADigit(sc.chNext) || sc.chNext == '+' || sc.chNext == '-')) {
-			sc.Forward();
-			if (sc.ch == '+' || sc.ch == '-')
-				sc.Forward();
+            sc.Forward();
+            if (sc.ch == '+' || sc.ch == '-')
+                sc.Forward();
          } else {
-            styler.ColourTo(sc.currentPos - 1, sc.state);
-            sc.ChangeState(SCE_HA_DEFAULT);
+            sc.SetState(SCE_HA_DEFAULT);
          }
       }
-         // Identifier
+         // Keyword or Identifier
       else if (sc.state == SCE_HA_IDENTIFIER) {
-         if (IsAWordChar(sc.ch)) {
-            sc.Forward();
-         } else {
-            char s[100];
-            sc.GetCurrent(s, sizeof(s));
-            int style = sc.state;
-            int new_mode = 0;
-            if (keywords.InList(s)) {
-               style = SCE_HA_KEYWORD;
-            } else if (isupper(s[0])) {
-               if (mode >= HA_MODE_IMPORT1 && mode <= HA_MODE_IMPORT3) {
-                  style    = SCE_HA_MODULE;
-                  new_mode = HA_MODE_IMPORT2;
-               } else if (mode == HA_MODE_MODULE)
-                  style = SCE_HA_MODULE;
-               else
-                  style = SCE_HA_CAPITAL;
-            } else if (mode == HA_MODE_IMPORT1 &&
-                       strcmp(s,"qualified") == 0) {
-                style    = SCE_HA_KEYWORD;
-                new_mode = HA_MODE_IMPORT1;
-            } else if (mode == HA_MODE_IMPORT2) {
-                if (strcmp(s,"as") == 0) {
-                   style    = SCE_HA_KEYWORD;
-                   new_mode = HA_MODE_IMPORT3;
-               } else if (strcmp(s,"hiding") == 0) {
-                   style     = SCE_HA_KEYWORD;
+         while (sc.More()) {
+            if (IsAWordChar(sc.ch, magicHash)) {
+               sc.Forward();
+            } else if (xmode == SCE_HA_CAPITAL && sc.ch=='.') {
+               if (isupper(sc.chNext)) {
+                  xmode = SCE_HA_CAPITAL;
+                  sc.Forward();
+               } else if (IsAWordStart(sc.chNext)) {
+                  xmode = SCE_HA_IDENTIFIER;
+                  sc.Forward();
+               } else if (IsAnOperatorChar(sc.chNext)) {
+                  xmode = SCE_HA_OPERATOR;
+                  sc.Forward();
+               } else {
+                  break;
                }
-            } else if (mode == HA_MODE_FFI) {
-			   if (ffi.InList(s)) {
-                  style = SCE_HA_KEYWORD;
-                  new_mode = HA_MODE_FFI;
-               }
+            } else if (xmode == SCE_HA_OPERATOR && IsAnOperatorChar(sc.ch)) {
+               sc.Forward();
+            } else {
+               break;
             }
-            else if (mode == HA_MODE_TYPE) {
-               if (strcmp(s,"family") == 0)
-                  style    = SCE_HA_KEYWORD;
-			}
-            styler.ColourTo(sc.currentPos - 1, style);
-            if (strcmp(s,"import") == 0 && mode != HA_MODE_FFI)
-               new_mode = HA_MODE_IMPORT1;
-            else if (strcmp(s,"module") == 0)
-               new_mode = HA_MODE_MODULE;
-            else if (strcmp(s,"foreign") == 0)
-               new_mode = HA_MODE_FFI;
-            else if (strcmp(s,"type") == 0)
-               new_mode = HA_MODE_TYPE;
-            sc.ChangeState(SCE_HA_DEFAULT);
-            mode = new_mode;
          }
+
+         char s[100];
+         sc.GetCurrent(s, sizeof(s));
+
+         int style = xmode;
+
+         int new_mode = HA_MODE_DEFAULT;
+
+         if (keywords.InList(s)) {
+            style = SCE_HA_KEYWORD;
+         } else if (isupper(s[0])) {
+            if (mode >= HA_MODE_IMPORT1 && mode <= HA_MODE_IMPORT3) {
+               style    = SCE_HA_MODULE;
+               new_mode = HA_MODE_IMPORT2;
+            } else if (mode == HA_MODE_MODULE) {
+               style = SCE_HA_MODULE;
+            }
+         } else if (mode == HA_MODE_IMPORT1 &&
+                    strcmp(s,"qualified") == 0) {
+             style    = SCE_HA_KEYWORD;
+             new_mode = HA_MODE_IMPORT1;
+         } else if (mode == HA_MODE_IMPORT2) {
+             if (strcmp(s,"as") == 0) {
+                style    = SCE_HA_KEYWORD;
+                new_mode = HA_MODE_IMPORT3;
+            } else if (strcmp(s,"hiding") == 0) {
+                style     = SCE_HA_KEYWORD;
+            }
+         } else if (mode == HA_MODE_TYPE) {
+            if (strcmp(s,"family") == 0)
+               style    = SCE_HA_KEYWORD;
+         }
+
+         if (mode == HA_MODE_FFI) {
+            if (ffi.InList(s)) {
+               style = SCE_HA_KEYWORD;
+               new_mode = HA_MODE_FFI;
+            }
+         }
+
+         styler.ColourTo(sc.currentPos - 1, style);
+
+         if (strcmp(s,"import") == 0 && mode != HA_MODE_FFI)
+            new_mode = HA_MODE_IMPORT1;
+         else if (strcmp(s,"module") == 0)
+            new_mode = HA_MODE_MODULE;
+         else if (strcmp(s,"foreign") == 0)
+            new_mode = HA_MODE_FFI;
+         else if (strcmp(s,"type") == 0
+               || strcmp(s,"data") == 0)
+            new_mode = HA_MODE_TYPE;
+
+         xmode = 0;
+         sc.ChangeState(SCE_HA_DEFAULT);
+         mode = new_mode;
       }
 
          // Comments
             // Oneliner
       else if (sc.state == SCE_HA_COMMENTLINE) {
-         if (sc.atLineEnd) {
-            styler.ColourTo(sc.currentPos - 1, sc.state);
-            sc.ChangeState(SCE_HA_DEFAULT);
+         if (xmode == 1 && sc.ch != '-') {
+            xmode = 0;
+            if (IsAnOperatorChar(sc.ch))
+               sc.ChangeState(SCE_HA_OPERATOR);
+         } else if (sc.atLineEnd) {
+            sc.SetState(SCE_HA_DEFAULT);
          } else {
             sc.Forward();
          }
       }
             // Nested
       else if (sc.state == SCE_HA_COMMENTBLOCK) {
-         if (sc.Match("{-")) {
+         if (sc.Match('{','-')) {
             sc.Forward(2);
             xmode++;
          }
-         else if (sc.Match("-}")) {
+         else if (sc.Match('-','}')) {
             sc.Forward(2);
             xmode--;
             if (xmode == 0) {
-               styler.ColourTo(sc.currentPos - 1, sc.state);
-               sc.ChangeState(SCE_HA_DEFAULT);
+               sc.SetState(SCE_HA_DEFAULT);
             }
          } else {
             if (sc.atLineEnd) {
-				// Remember the line state for future incremental lexing
-				styler.SetLineState(lineCurrent, (xmode << 4) | mode);
-				lineCurrent++;
-			}
+                // Remember the line state for future incremental lexing
+                styler.SetLineState(lineCurrent, (xmode << 4) | mode);
+                lineCurrent++;
+            }
+            sc.Forward();
+         }
+      }
+            // Pragma
+      else if (sc.state == SCE_HA_PRAGMA) {
+         if (sc.Match("#-}")) {
+            sc.Forward(3);
+            sc.SetState(SCE_HA_DEFAULT);
+         } else {
+            sc.Forward();
+         }
+      }
+            // Preprocessor
+      else if (sc.state == SCE_HA_PREPROCESSOR) {
+         if (stylingWithinPreprocessor && !IsAWordStart(sc.ch)) {
+            sc.SetState(SCE_HA_DEFAULT);
+         } else if (sc.ch == '\\' && !stylingWithinPreprocessor) {
+            sc.Forward(2);
+         } else if (sc.atLineEnd) {
+            sc.SetState(SCE_HA_DEFAULT);
+         } else {
             sc.Forward();
          }
       }
       // New state?
       if (sc.state == SCE_HA_DEFAULT) {
          // Digit
-         if (IsADigit(sc.ch) ||
-             (sc.ch == '.' && IsADigit(sc.chNext)) ||
-             (sc.ch == '-' && IsADigit(sc.chNext))) {
-            styler.ColourTo(sc.currentPos - 1, sc.state);
-            sc.ChangeState(SCE_HA_NUMBER);
+         if (IsADigit(sc.ch)) {
+            sc.SetState(SCE_HA_NUMBER);
             if (sc.ch == '0' && (sc.chNext == 'X' || sc.chNext == 'x')) {
-				// Match anything starting with "0x" or "0X", too
-				sc.Forward(2);
-				xmode = 16;
+                // Match anything starting with "0x" or "0X", too
+                sc.Forward(2);
+                xmode = 16;
             } else if (sc.ch == '0' && (sc.chNext == 'O' || sc.chNext == 'o')) {
-				// Match anything starting with "0x" or "0X", too
-				sc.Forward(2);
-				xmode = 8;
+                // Match anything starting with "0x" or "0X", too
+                sc.Forward(2);
+                xmode = 8;
             } else {
-				sc.Forward();
-				xmode = 10;
-			}
+                sc.Forward();
+                xmode = 10;
+            }
             mode = HA_MODE_DEFAULT;
          }
-         // Comment line
-         else if (sc.Match("--")) {
-            styler.ColourTo(sc.currentPos - 1, sc.state);
-            sc.Forward(2);
-            sc.ChangeState(SCE_HA_COMMENTLINE);
-         // Comment block
+         // Pragma
+         else if (sc.Match("{-#")) {
+            sc.SetState(SCE_HA_PRAGMA);
+            sc.Forward(3);
          }
-         else if (sc.Match("{-")) {
-            styler.ColourTo(sc.currentPos - 1, sc.state);
+         // Comment line
+         else if (sc.Match('-','-')) {
+            sc.SetState(SCE_HA_COMMENTLINE);
             sc.Forward(2);
-            sc.ChangeState(SCE_HA_COMMENTBLOCK);
+            xmode = 1;
+         }
+         // Comment block
+         else if (sc.Match('{','-')) {
+            sc.SetState(SCE_HA_COMMENTBLOCK);
+            sc.Forward(2);
             xmode = 1;
          }
          // String
          else if (sc.Match('\"')) {
-            styler.ColourTo(sc.currentPos - 1, sc.state);
+            sc.SetState(SCE_HA_STRING);
             sc.Forward();
-            sc.ChangeState(SCE_HA_STRING);
          }
          // Character
          else if (sc.Match('\'')) {
-            styler.ColourTo(sc.currentPos - 1, sc.state);
+            sc.SetState(SCE_HA_CHARACTER);
             sc.Forward();
-            sc.ChangeState(SCE_HA_CHARACTER);
          }
-         else if (sc.ch == '(' || sc.ch == ')' ||
-                  sc.ch == '{' || sc.ch == '}' ||
-                  sc.ch == '[' || sc.ch == ']') {
-			styler.ColourTo(sc.currentPos - 1, sc.state);
-			sc.Forward();
-			styler.ColourTo(sc.currentPos - 1, SCE_HA_OPERATOR);
-			mode = HA_MODE_DEFAULT;
-		 }
-         // Operator
-         else if (isascii(sc.ch) && isoperator(static_cast<char>(sc.ch))) {
-            styler.ColourTo(sc.currentPos - 1, sc.state);
-            sc.Forward();
-            sc.ChangeState(SCE_HA_OPERATOR);
+         // Preprocessor
+         else if (sc.atLineStart && sc.ch == '#') {
             mode = HA_MODE_DEFAULT;
-         }
-         // Keyword
-         else if (IsAWordStart(sc.ch)) {
-            styler.ColourTo(sc.currentPos - 1, sc.state);
+            sc.SetState(SCE_HA_PREPROCESSOR);
             sc.Forward();
-            sc.ChangeState(SCE_HA_IDENTIFIER);
+         }
+         // Operator
+         else if (IsAnOperatorChar(sc.ch)) {
+            mode = HA_MODE_DEFAULT;
+            sc.SetState(SCE_HA_OPERATOR);
+         }
+         // Braces and punctuation
+         else if (sc.ch == ',' || sc.ch == ';'
+               || sc.ch == '(' || sc.ch == ')'
+               || sc.ch == '[' || sc.ch == ']'
+               || sc.ch == '{' || sc.ch == '}') {
+            sc.SetState(SCE_HA_OPERATOR);
+            sc.Forward();
+            sc.SetState(SCE_HA_DEFAULT);
+         }
+         // Keyword or Identifier
+         else if (IsAWordStart(sc.ch)) {
+            xmode = isupper(sc.ch) ? SCE_HA_CAPITAL : SCE_HA_IDENTIFIER;
+            sc.SetState(SCE_HA_IDENTIFIER);
+            sc.Forward();
          } else {
             if (sc.atLineEnd) {
-				// Remember the line state for future incremental lexing
-				styler.SetLineState(lineCurrent, (xmode << 4) | mode);
-				lineCurrent++;
-			}
+                // Remember the line state for future incremental lexing
+                styler.SetLineState(lineCurrent, (xmode << 4) | mode);
+                lineCurrent++;
+            }
             sc.Forward();
          }
       }
