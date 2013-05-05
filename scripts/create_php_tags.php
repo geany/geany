@@ -5,11 +5,11 @@
 // License:	GPL V2 or later
 
 // Script to generate a new php.tags file from a downloaded PHP function summary list from
-// http://cvs.php.net/viewvc.cgi/phpdoc/funcsummary.txt?view=co
+// http://svn.php.net/viewvc/phpdoc/doc-base/trunk/funcsummary.txt?view=co
 // The script expects a file funcsummary.txt in /tmp and will write the parsed tags into
 // data/php.tags.
 //
-// wget -O funcsummary.txt "http://cvs.php.net/viewvc.cgi/phpdoc/funcsummary.txt?view=co"
+// wget -O funcsummary.txt "http://svn.php.net/viewvc/phpdoc/doc-base/trunk/funcsummary.txt?view=co"
 //
 // (the script should be run in the top source directory)
 
