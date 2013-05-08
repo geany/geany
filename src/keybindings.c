@@ -1130,6 +1130,14 @@ static gboolean check_vte(GdkModifierType state, guint keyval)
 	if(kb != NULL && state == kb->mods && keyval == kb->key) {
 		return FALSE;
 	}
+	kb = keybindings_lookup_item(GEANY_KEY_GROUP_NOTEBOOK, GEANY_KEYS_NOTEBOOK_SWITCHTABLASTUSED);
+	if(kb != NULL && state == kb->mods && keyval == kb->key) {
+		return FALSE;
+	}
+	kb = keybindings_lookup_item(GEANY_KEY_GROUP_VIEW, GEANY_KEYS_VIEW_MESSAGEWINDOW);
+	if(kb != NULL && state == kb->mods && keyval == kb->key) {
+		return FALSE;
+	}
 
 	/* Temporarily disable the menus to prevent conflicting menu accelerators
 	 * from overriding the VTE bash shortcuts.
