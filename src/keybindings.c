@@ -1121,21 +1121,15 @@ static gboolean check_vte(GdkModifierType state, guint keyval)
 		if (state == kb->mods && keyval == kb->key)
 			return FALSE;
 	}
-
-	kb = keybindings_lookup_item(GEANY_KEY_GROUP_NOTEBOOK, GEANY_KEYS_NOTEBOOK_SWITCHTABLEFT);
-	if(kb != NULL && state == kb->mods && keyval == kb->key) {
-		return FALSE;
-	}
-	kb = keybindings_lookup_item(GEANY_KEY_GROUP_NOTEBOOK, GEANY_KEYS_NOTEBOOK_SWITCHTABRIGHT);
-	if(kb != NULL && state == kb->mods && keyval == kb->key) {
-		return FALSE;
-	}
-	kb = keybindings_lookup_item(GEANY_KEY_GROUP_NOTEBOOK, GEANY_KEYS_NOTEBOOK_SWITCHTABLASTUSED);
-	if(kb != NULL && state == kb->mods && keyval == kb->key) {
-		return FALSE;
+	group = keybindings_get_core_group(GEANY_KEY_GROUP_NOTEBOOK);
+	foreach_ptr_array(kb, i, group->key_items)
+	{
+		if (state == kb->mods && keyval == kb->key)
+			return FALSE;
 	}
 	kb = keybindings_lookup_item(GEANY_KEY_GROUP_VIEW, GEANY_KEYS_VIEW_MESSAGEWINDOW);
-	if(kb != NULL && state == kb->mods && keyval == kb->key) {
+	if (kb != NULL && state == kb->mods && keyval == kb->key)
+	{
 		return FALSE;
 	}
 
