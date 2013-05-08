@@ -470,11 +470,13 @@ static void prefs_init_dialog(void)
 
 	widget_secondary = ui_lookup_widget(ui_widgets.prefs_dialog, "check_tab_fixed_width_editor");
 	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "spin_tab_fixed_width_editor");
-	if(interface_prefs.tab_width_editor == -1) {
+	if (interface_prefs.tab_width_editor == -1)
+	{
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget_secondary), FALSE);
 		gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget), 120);
 	}
-	else {
+	else
+	{
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget_secondary), TRUE);
 		gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget), interface_prefs.tab_width_editor);
 	}
@@ -948,11 +950,13 @@ on_prefs_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 		interface_prefs.tab_pos_editor = gtk_combo_box_get_active(GTK_COMBO_BOX(widget));
 
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_tab_fixed_width_editor");
-		if(gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget))) {
+		if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)))
+		{
 		  widget = ui_lookup_widget(ui_widgets.prefs_dialog, "spin_tab_fixed_width_editor");
 		  interface_prefs.tab_width_editor = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));
 		}
-		else {
+		else
+		{
 		  interface_prefs.tab_width_editor = -1;
 		}
 
