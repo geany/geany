@@ -32,6 +32,7 @@
 # include <sys/time.h>
 #endif
 #include <time.h>
+#include <errno.h>
 
 #ifdef HAVE_SYS_TYPES_H
 # include <sys/types.h>
@@ -1663,5 +1664,174 @@ gint dialogs_show_prompt(GtkWidget *parent,
 	result = show_prompt(parent, btn_1, response_1, btn_2, response_2, btn_3, response_3,
 				string, extra_text);
 	g_free(string);
+	return result;
+}
+
+
+static void on_rename_entry_grab_focus(GtkEntry *ent, gpointer user_data)
+{
+	gchar *dot, *utf8_fn;
+	utf8_fn = g_strdup(gtk_entry_get_text(ent));
+	dot = g_utf8_strrchr(utf8_fn, -1, '.');
+	if (dot)
+	{
+		*dot = '\0';
+		gtk_editable_set_position(GTK_EDITABLE(ent), 0);
+		gtk_editable_select_region(GTK_EDITABLE(ent), 0,
+			g_utf8_strlen(utf8_fn, -1));
+	}
+	g_free(utf8_fn);
+}
+
+
+static void rename_delete_error(const gchar *utf8_filename)
+{
+	GtkWidget *dialog;
+
+	dialog = gtk_message_dialog_new_with_markup(
+		GTK_WINDOW(main_widgets.window),
+		GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+		GTK_MESSAGE_ERROR,
+		GTK_BUTTONS_CLOSE,
+		_("<big>Error occurred removing file '%s' after rename.</big>\n"
+		  "The new file was already saved but you may need to manually"
+		  "remove the original file.\n"
+		  "Error Details:\n"
+		  "<span font=\"Italic\">%s</span>\n"),
+		utf8_filename,
+		g_strerror(errno));
+	gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_CLOSE);
+	gtk_window_set_title(GTK_WINDOW(dialog), _("Rename"));
+
+	gtk_dialog_run(GTK_DIALOG(dialog));
+	gtk_widget_destroy(dialog);
+}
+
+
+static gboolean rename_delete_file(const gchar *utf8_filename)
+{
+	gint rc;
+	gchar *locale_filename;
+
+	g_return_val_if_fail(utf8_filename, FALSE);
+	locale_filename = utils_get_locale_from_utf8(utf8_filename);
+	rc = g_remove(locale_filename);
+	g_free(locale_filename);
+	if (rc != 0)
+	{
+		rename_delete_error(utf8_filename);
+		return FALSE;
+	}
+
+	return TRUE;
+}
+
+
+static gboolean rename_saveas_prompt(GeanyDocument *doc)
+{
+	gint response;
+	GtkWidget *dialog;
+
+	dialog = gtk_message_dialog_new_with_markup(
+		GTK_WINDOW(main_widgets.window),
+		GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+		GTK_MESSAGE_QUESTION,
+		GTK_BUTTONS_YES_NO,
+		"<big>%s</big>\n%s",
+		_("Cannot rename an unsaved document."),
+		_("Do you want to Save As instead?"));
+	gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_YES);
+	gtk_window_set_title(GTK_WINDOW(dialog), _("Save As Instead?"));
+
+	response = gtk_dialog_run(GTK_DIALOG(dialog));
+	gtk_widget_destroy(dialog);
+
+	if (response == GTK_RESPONSE_YES)
+		return dialogs_show_save_as();
+
+	return FALSE;
+}
+
+
+gboolean dialogs_show_rename_document(GeanyDocument *doc)
+{
+	gboolean result = FALSE;
+	gchar *dir = NULL;
+	gchar *disp_from = NULL, *disp_to = NULL;
+	gchar *locale_from = NULL, *locale_to = NULL;
+	GtkWidget *dialog, *content_area, *box, *label, *entry;
+
+	g_return_val_if_fail(doc != NULL, FALSE);
+
+	/* If not saved, offer to Save As instead. */
+	if (!doc->real_path)
+		return rename_saveas_prompt(doc);
+
+	dir = g_path_get_dirname(doc->real_path);
+	disp_from = g_path_get_basename(doc->real_path);
+	SETPTR(disp_from, utils_get_utf8_from_locale(disp_from));
+	locale_from = g_strdup(doc->real_path);
+
+	dialog = gtk_dialog_new_with_buttons(_("Rename File"),
+		GTK_WINDOW(main_widgets.window),
+		GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+		GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+		GTK_STOCK_OK, GTK_RESPONSE_OK,
+		NULL);
+
+	gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_OK);
+	content_area = gtk_dialog_get_content_area(GTK_DIALOG(dialog));
+	box = gtk_vbox_new(FALSE, 0);
+	gtk_container_set_border_width(GTK_CONTAINER(box), 6);
+	gtk_box_set_spacing(GTK_BOX(box), 6);
+	gtk_container_add(GTK_CONTAINER(content_area), box);
+	label = gtk_label_new(_("New name:"));
+	gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
+	gtk_box_pack_start(GTK_BOX(box), label, FALSE, TRUE, 0);
+	entry = gtk_entry_new();
+	ui_entry_add_clear_icon(GTK_ENTRY(entry));
+	g_signal_connect_after(entry, "grab-focus",
+		G_CALLBACK(on_rename_entry_grab_focus), NULL);
+	gtk_widget_set_can_default(GTK_WIDGET(entry), TRUE);
+	gtk_entry_set_activates_default(GTK_ENTRY(entry), TRUE);
+	gtk_box_pack_start(GTK_BOX(box), entry, TRUE, TRUE, 0);
+	gtk_widget_show_all(GTK_WIDGET(box));
+
+	gtk_entry_set_text(GTK_ENTRY(entry), disp_from);
+
+	if (gtk_dialog_run(GTK_DIALOG(dialog)) != GTK_RESPONSE_OK)
+	{	
+		g_free(dir);
+		g_free(disp_from);
+		g_free(locale_from);
+		gtk_widget_destroy(dialog);
+		return FALSE;
+	}
+
+	disp_to = g_strdup(gtk_entry_get_text(GTK_ENTRY(entry)));
+	gtk_widget_destroy(dialog);
+
+	locale_to = utils_get_locale_from_utf8(disp_to);
+	SETPTR(locale_to, g_build_filename(dir, locale_to, NULL));
+
+	/* If the filename didn't change, just save the document (if needed). */
+	if (g_utf8_collate(disp_from, disp_to) == 0)
+		result = document_save_file(doc, FALSE);
+	/* Otherwise save doc with new name and delete old doc */
+	else
+	{
+		gchar *utf8_fn = utils_get_utf8_from_locale(locale_to);
+		result = document_save_file_as(doc, utf8_fn);
+		g_free(utf8_fn);
+		if (result && rename_delete_file(locale_from))
+			ui_set_statusbar(TRUE, _("File renamed from '%s' to '%s'."), disp_from, disp_to);
+	}
+
+	g_free(dir);
+	g_free(disp_from);
+	g_free(disp_to);
+	g_free(locale_from);
+	g_free(locale_to);
+
 	return result;
 }

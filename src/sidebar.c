@@ -55,6 +55,7 @@ static struct
 	GtkWidget *close;
 	GtkWidget *save;
 	GtkWidget *reload;
+	GtkWidget *rename;
 	GtkWidget *show_paths;
 	GtkWidget *find_in_files;
 	GtkWidget *expand_all;
@@ -72,7 +73,8 @@ enum
 {
 	OPENFILES_ACTION_REMOVE = 0,
 	OPENFILES_ACTION_SAVE,
-	OPENFILES_ACTION_RELOAD
+	OPENFILES_ACTION_RELOAD,
+	OPENFILES_ACTION_RENAME
 };
 
 /* documents tree model columns */
@@ -711,6 +713,13 @@ static void create_openfiles_popup_menu(void)
 			G_CALLBACK(on_openfiles_document_action), GINT_TO_POINTER(OPENFILES_ACTION_RELOAD));
 	doc_items.reload = item;
 
+	item = gtk_menu_item_new_with_label(_("Rename"));
+	gtk_widget_show(item);
+	gtk_container_add(GTK_CONTAINER(openfiles_popup_menu), item);
+	g_signal_connect(item, "activate",
+			G_CALLBACK(on_openfiles_document_action), GINT_TO_POINTER(OPENFILES_ACTION_RENAME));
+	doc_items.rename = item;
+
 	item = gtk_separator_menu_item_new();
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(openfiles_popup_menu), item);
@@ -816,6 +825,11 @@ static void document_action(GeanyDocument *doc, gint action)
 		case OPENFILES_ACTION_RELOAD:
 		{
 			on_toolbutton_reload_clicked(NULL, NULL);
+			break;
+		}
+		case OPENFILES_ACTION_RENAME:
+		{
+			dialogs_show_rename_document(doc);
 			break;
 		}
 	}

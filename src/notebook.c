@@ -477,6 +477,14 @@ static void show_tab_bar_popup_menu(GdkEventButton *event, GtkWidget *page)
 	if (doc == NULL || !doc->real_path)
 		gtk_widget_set_sensitive(menu_item, FALSE);
 
+	menu_item = gtk_menu_item_new_with_label(_("Rename"));
+	gtk_widget_show(menu_item);
+	gtk_container_add(GTK_CONTAINER(menu), menu_item);
+	g_signal_connect(menu_item, "activate", G_CALLBACK(on_doc_rename_activate), NULL);
+	/* disable if not on disk */
+	if (doc == NULL || !doc->real_path)
+		gtk_widget_set_sensitive(menu_item, FALSE);
+
 	menu_item = gtk_separator_menu_item_new();
 	gtk_widget_show(menu_item);
 	gtk_container_add(GTK_CONTAINER(menu), menu_item);

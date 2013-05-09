@@ -72,4 +72,6 @@ void dialogs_show_msgbox(GtkMessageType type, const gchar *text, ...) G_GNUC_PRI
 
 void dialogs_show_msgbox_with_secondary(GtkMessageType type, const gchar *text, const gchar *secondary);
 
+gboolean dialogs_show_rename_document(GeanyDocument *doc);
+
 #endif

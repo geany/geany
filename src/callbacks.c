@@ -1866,6 +1866,12 @@ G_MODULE_EXPORT void on_strip_trailing_spaces1_activate(GtkMenuItem *menuitem, g
 }
 
 
+G_MODULE_EXPORT void on_doc_rename_activate(GtkMenuItem *menuitem, gpointer user_data)
+{
+	dialogs_show_rename_document(document_get_current());
+}
+
+
 G_MODULE_EXPORT void on_page_setup1_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
 	printing_page_setup_gtk();

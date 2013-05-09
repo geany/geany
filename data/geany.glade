@@ -8916,6 +8916,16 @@
                           </object>
                         </child>
                         <child>
+                          <object class="GtkMenuItem" id="doc_menu_rename">
+                            <property name="use_action_appearance">False</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="label" translatable="yes">Rename</property>
+                            <property name="use_underline">False</property>
+                            <signal name="activate" handler="on_doc_rename_activate" swapped="no"/>
+                          </object>
+                        </child>
+                        <child>
                           <object class="GtkMenuItem" id="strip_trailing_spaces1">
                             <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
