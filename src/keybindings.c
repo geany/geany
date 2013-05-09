@@ -1690,7 +1690,7 @@ static gboolean cb_func_switch_action(guint key_id)
 
 static void switch_notebook_page(gint direction)
 {
-	gint page_count, cur_page;
+	gint page_count, cur_page, pass;
 	gboolean parent_is_notebook = FALSE;
 	GtkNotebook *notebook;
 	GtkWidget *focusw = gtk_window_get_focus(GTK_WINDOW(main_widgets.window));
@@ -1712,19 +1712,33 @@ static void switch_notebook_page(gint direction)
 	page_count = gtk_notebook_get_n_pages(notebook);
 	cur_page = gtk_notebook_get_current_page(notebook);
 
-	if (direction == GTK_DIR_LEFT)
+	/* find the next visible page in the wanted direction, but don't loop
+	 * indefinitely if no pages are visible */
+	for (pass = 0; pass < page_count; pass++)
 	{
-		if (cur_page > 0)
-			gtk_notebook_set_current_page(notebook, cur_page - 1);
-		else
-			gtk_notebook_set_current_page(notebook, page_count - 1);
-	}
-	else if (direction == GTK_DIR_RIGHT)
-	{
-		if (cur_page < page_count - 1)
-			gtk_notebook_set_current_page(notebook, cur_page + 1);
-		else
-			gtk_notebook_set_current_page(notebook, 0);
+		GtkWidget *child;
+
+		if (direction == GTK_DIR_LEFT)
+		{
+			if (cur_page > 0)
+				cur_page--;
+			else
+				cur_page = page_count - 1;
+		}
+		else if (direction == GTK_DIR_RIGHT)
+		{
+			if (cur_page < page_count - 1)
+				cur_page++;
+			else
+				cur_page = 0;
+		}
+
+		child = gtk_notebook_get_nth_page (notebook, cur_page);
+		if (gtk_widget_get_visible (child))
+		{
+			gtk_notebook_set_current_page(notebook, cur_page);
+			break;
+		}
 	}
 }
 
