@@ -549,10 +549,9 @@ static gboolean save_as_dialog_handle_response(GtkWidget *dialog, gint response)
 
 
 /* HACK to override the GtkFileChooserDialog's default response button
- * when the dialog is shown (which is just some arbitrary event that
- * happens after GtkFileChooserDialog sets its default response I guess.
- * GtkFileChooserDialog is hardcoded to only allow stock responses as
- * GtkDialog's default response. */
+ * when the dialog is shown. GtkFileChooserDialog is hardcoded to only
+ * allow a few "positive" stock responses as GtkDialog's default
+ * response. */
 static gboolean dialogs_save_mapped(GtkWidget *widget, GdkEvent *event,
 	gpointer user_data)
 {
@@ -601,7 +600,7 @@ static GtkWidget *create_save_file_dialog(GeanyDocument *doc, gboolean def_renam
 
 	/* HACK to set the default response for the GtkFileChooserDialog to
 	 * the GEANY_RESPONSE_RENAME button later once the dialog is shown. */
-	if (def_rename)
+	if (def_rename && doc->real_path)
 		g_signal_connect_after(dialog, "map-event", G_CALLBACK(dialogs_save_mapped), NULL);
 
 	return dialog;
