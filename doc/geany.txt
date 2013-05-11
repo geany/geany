@@ -1,4 +1,5 @@
 .. |(version)| replace:: 1.24
+.. -*- reStructuredText -*-
 
 =======
  Geany
