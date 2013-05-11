@@ -442,6 +442,12 @@ static void on_open_in_new_window_activate(GtkMenuItem *menuitem, gpointer user_
 }
 
 
+static void on_rename_document_activate(GtkMenuItem *item, GeanyDocument *doc)
+{
+	dialogs_show_save_document_as(doc, TRUE);
+}
+
+
 static void show_tab_bar_popup_menu(GdkEventButton *event, GtkWidget *page)
 {
 	GtkWidget *menu_item;
@@ -480,7 +486,7 @@ static void show_tab_bar_popup_menu(GdkEventButton *event, GtkWidget *page)
 	menu_item = gtk_menu_item_new_with_label(_("Rename"));
 	gtk_widget_show(menu_item);
 	gtk_container_add(GTK_CONTAINER(menu), menu_item);
-	g_signal_connect(menu_item, "activate", G_CALLBACK(on_doc_rename_activate), NULL);
+	g_signal_connect(menu_item, "activate", G_CALLBACK(on_rename_document_activate), doc);
 	/* disable if not on disk */
 	if (doc == NULL || !doc->real_path)
 		gtk_widget_set_sensitive(menu_item, FALSE);

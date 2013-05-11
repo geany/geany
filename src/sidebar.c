@@ -829,7 +829,7 @@ static void document_action(GeanyDocument *doc, gint action)
 		}
 		case OPENFILES_ACTION_RENAME:
 		{
-			dialogs_show_rename_document(doc);
+			dialogs_show_save_document_as(doc, TRUE);
 			break;
 		}
 	}

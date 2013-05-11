@@ -548,7 +548,20 @@ static gboolean save_as_dialog_handle_response(GtkWidget *dialog, gint response)
 }
 
 
-static GtkWidget *create_save_file_dialog(GeanyDocument *doc)
+/* HACK to override the GtkFileChooserDialog's default response button
+ * when the dialog is shown (which is just some arbitrary event that
+ * happens after GtkFileChooserDialog sets its default response I guess.
+ * GtkFileChooserDialog is hardcoded to only allow stock responses as
+ * GtkDialog's default response. */
+static gboolean dialogs_save_mapped(GtkWidget *widget, GdkEvent *event,
+	gpointer user_data)
+{
+	gtk_dialog_set_default_response(GTK_DIALOG(widget), GEANY_RESPONSE_RENAME);
+	return FALSE;
+}
+
+
+static GtkWidget *create_save_file_dialog(GeanyDocument *doc, gboolean def_rename)
 {
 	GtkWidget *dialog, *rename_btn;
 	const gchar *initdir;
@@ -570,7 +583,9 @@ static GtkWidget *create_save_file_dialog(GeanyDocument *doc)
 	gtk_dialog_add_buttons(GTK_DIALOG(dialog),
 		GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 		GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT, NULL);
-	gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_ACCEPT);
+
+	gtk_dialog_set_default_response(GTK_DIALOG(dialog),
+		def_rename ? GEANY_RESPONSE_RENAME : GTK_RESPONSE_ACCEPT);
 
 	gtk_file_chooser_set_do_overwrite_confirmation(GTK_FILE_CHOOSER(dialog), TRUE);
 	gtk_file_chooser_set_local_only(GTK_FILE_CHOOSER(dialog), FALSE);
@@ -583,18 +598,24 @@ static GtkWidget *create_save_file_dialog(GeanyDocument *doc)
 		gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog), linitdir);
 		g_free(linitdir);
 	}
+
+	/* HACK to set the default response for the GtkFileChooserDialog to
+	 * the GEANY_RESPONSE_RENAME button later once the dialog is shown. */
+	if (def_rename)
+		g_signal_connect_after(dialog, "map-event", G_CALLBACK(dialogs_save_mapped), NULL);
+
 	return dialog;
 }
 
 
-static gboolean show_save_as_gtk(GeanyDocument *doc)
+static gboolean show_save_as_gtk(GeanyDocument *doc, gboolean def_rename)
 {
 	GtkWidget *dialog;
 	gint resp;
 
 	g_return_val_if_fail(doc != NULL, FALSE);
 
-	dialog = create_save_file_dialog(doc);
+	dialog = create_save_file_dialog(doc, def_rename);
 
 	if (doc->file_name != NULL)
 	{
@@ -657,8 +678,17 @@ static gboolean show_save_as_gtk(GeanyDocument *doc)
  **/
 gboolean dialogs_show_save_as()
 {
-	GeanyDocument *doc = document_get_current();
+	/* To avoid breaking the API and ABI, just forward the call */
+	return dialogs_show_save_document_as(NULL, FALSE);
+}
+
+
+gboolean dialogs_show_save_document_as(GeanyDocument *doc, gboolean def_rename)
+{
 	gboolean result = FALSE;
+
+	if (doc == NULL)
+		doc = document_get_current();
 
 	g_return_val_if_fail(doc, FALSE);
 
@@ -669,10 +699,12 @@ gboolean dialogs_show_save_as()
 						_("Save File"), DOC_FILENAME(doc));
 		if (utf8_name != NULL)
 			result = handle_save_as(utf8_name, FALSE);
+		g_free(utf8_name);
 	}
 	else
 #endif
-	result = show_save_as_gtk(doc);
+	result = show_save_as_gtk(doc, def_rename);
+
 	return result;
 }
 
@@ -1664,174 +1696,5 @@ gint dialogs_show_prompt(GtkWidget *parent,
 	result = show_prompt(parent, btn_1, response_1, btn_2, response_2, btn_3, response_3,
 				string, extra_text);
 	g_free(string);
-	return result;
-}
-
-
-static void on_rename_entry_grab_focus(GtkEntry *ent, gpointer user_data)
-{
-	gchar *dot, *utf8_fn;
-	utf8_fn = g_strdup(gtk_entry_get_text(ent));
-	dot = g_utf8_strrchr(utf8_fn, -1, '.');
-	if (dot)
-	{
-		*dot = '\0';
-		gtk_editable_set_position(GTK_EDITABLE(ent), 0);
-		gtk_editable_select_region(GTK_EDITABLE(ent), 0,
-			g_utf8_strlen(utf8_fn, -1));
-	}
-	g_free(utf8_fn);
-}
-
-
-static void rename_delete_error(const gchar *utf8_filename)
-{
-	GtkWidget *dialog;
-
-	dialog = gtk_message_dialog_new_with_markup(
-		GTK_WINDOW(main_widgets.window),
-		GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
-		GTK_MESSAGE_ERROR,
-		GTK_BUTTONS_CLOSE,
-		_("<big>Error occurred removing file '%s' after rename.</big>\n"
-		  "The new file was already saved but you may need to manually"
-		  "remove the original file.\n"
-		  "Error Details:\n"
-		  "<span font=\"Italic\">%s</span>\n"),
-		utf8_filename,
-		g_strerror(errno));
-	gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_CLOSE);
-	gtk_window_set_title(GTK_WINDOW(dialog), _("Rename"));
-
-	gtk_dialog_run(GTK_DIALOG(dialog));
-	gtk_widget_destroy(dialog);
-}
-
-
-static gboolean rename_delete_file(const gchar *utf8_filename)
-{
-	gint rc;
-	gchar *locale_filename;
-
-	g_return_val_if_fail(utf8_filename, FALSE);
-	locale_filename = utils_get_locale_from_utf8(utf8_filename);
-	rc = g_remove(locale_filename);
-	g_free(locale_filename);
-	if (rc != 0)
-	{
-		rename_delete_error(utf8_filename);
-		return FALSE;
-	}
-
-	return TRUE;
-}
-
-
-static gboolean rename_saveas_prompt(GeanyDocument *doc)
-{
-	gint response;
-	GtkWidget *dialog;
-
-	dialog = gtk_message_dialog_new_with_markup(
-		GTK_WINDOW(main_widgets.window),
-		GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
-		GTK_MESSAGE_QUESTION,
-		GTK_BUTTONS_YES_NO,
-		"<big>%s</big>\n%s",
-		_("Cannot rename an unsaved document."),
-		_("Do you want to Save As instead?"));
-	gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_YES);
-	gtk_window_set_title(GTK_WINDOW(dialog), _("Save As Instead?"));
-
-	response = gtk_dialog_run(GTK_DIALOG(dialog));
-	gtk_widget_destroy(dialog);
-
-	if (response == GTK_RESPONSE_YES)
-		return dialogs_show_save_as();
-
-	return FALSE;
-}
-
-
-gboolean dialogs_show_rename_document(GeanyDocument *doc)
-{
-	gboolean result = FALSE;
-	gchar *dir = NULL;
-	gchar *disp_from = NULL, *disp_to = NULL;
-	gchar *locale_from = NULL, *locale_to = NULL;
-	GtkWidget *dialog, *content_area, *box, *label, *entry;
-
-	g_return_val_if_fail(doc != NULL, FALSE);
-
-	/* If not saved, offer to Save As instead. */
-	if (!doc->real_path)
-		return rename_saveas_prompt(doc);
-
-	dir = g_path_get_dirname(doc->real_path);
-	disp_from = g_path_get_basename(doc->real_path);
-	SETPTR(disp_from, utils_get_utf8_from_locale(disp_from));
-	locale_from = g_strdup(doc->real_path);
-
-	dialog = gtk_dialog_new_with_buttons(_("Rename File"),
-		GTK_WINDOW(main_widgets.window),
-		GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
-		GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-		GTK_STOCK_OK, GTK_RESPONSE_OK,
-		NULL);
-
-	gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_OK);
-	content_area = gtk_dialog_get_content_area(GTK_DIALOG(dialog));
-	box = gtk_vbox_new(FALSE, 0);
-	gtk_container_set_border_width(GTK_CONTAINER(box), 6);
-	gtk_box_set_spacing(GTK_BOX(box), 6);
-	gtk_container_add(GTK_CONTAINER(content_area), box);
-	label = gtk_label_new(_("New name:"));
-	gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
-	gtk_box_pack_start(GTK_BOX(box), label, FALSE, TRUE, 0);
-	entry = gtk_entry_new();
-	ui_entry_add_clear_icon(GTK_ENTRY(entry));
-	g_signal_connect_after(entry, "grab-focus",
-		G_CALLBACK(on_rename_entry_grab_focus), NULL);
-	gtk_widget_set_can_default(GTK_WIDGET(entry), TRUE);
-	gtk_entry_set_activates_default(GTK_ENTRY(entry), TRUE);
-	gtk_box_pack_start(GTK_BOX(box), entry, TRUE, TRUE, 0);
-	gtk_widget_show_all(GTK_WIDGET(box));
-
-	gtk_entry_set_text(GTK_ENTRY(entry), disp_from);
-
-	if (gtk_dialog_run(GTK_DIALOG(dialog)) != GTK_RESPONSE_OK)
-	{	
-		g_free(dir);
-		g_free(disp_from);
-		g_free(locale_from);
-		gtk_widget_destroy(dialog);
-		return FALSE;
-	}
-
-	disp_to = g_strdup(gtk_entry_get_text(GTK_ENTRY(entry)));
-	gtk_widget_destroy(dialog);
-
-	locale_to = utils_get_locale_from_utf8(disp_to);
-	SETPTR(locale_to, g_build_filename(dir, locale_to, NULL));
-
-	/* If the filename didn't change, just save the document (if needed). */
-	if (g_utf8_collate(disp_from, disp_to) == 0)
-		result = document_save_file(doc, FALSE);
-	/* Otherwise save doc with new name and delete old doc */
-	else
-	{
-		gchar *utf8_fn = utils_get_utf8_from_locale(locale_to);
-		result = document_save_file_as(doc, utf8_fn);
-		g_free(utf8_fn);
-		if (result && rename_delete_file(locale_from))
-			ui_set_statusbar(TRUE, _("File renamed from '%s' to '%s'."), disp_from, disp_to);
-	}
-
-	g_free(dir);
-	g_free(disp_from);
-	g_free(disp_to);
-	g_free(locale_from);
-	g_free(locale_to);
-
 	return result;
 }
