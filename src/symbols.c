@@ -285,6 +285,9 @@ GString *symbols_find_tags_as_string(GPtrArray *tags_array, guint tag_types, gin
  * type.
  * @param ft_id File type identifier.
  * @return The context separator string.
+ * 
+ * Returns non-printing sequence "\x03" ie ETX (end of text) for filetypes
+ * without a context separator.
  *
  * @since 0.19
  */
@@ -302,6 +305,10 @@ const gchar *symbols_get_context_separator(gint ft_id)
 		case GEANY_FILETYPES_CONF:
 		case GEANY_FILETYPES_REST:
 			return ":::";
+
+		/* no context separator */
+		case GEANY_FILETYPES_ASCIIDOC:
+			return "\x03";
 
 		default:
 			return ".";
