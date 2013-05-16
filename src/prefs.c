@@ -952,12 +952,12 @@ on_prefs_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_tab_fixed_width_editor");
 		if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)))
 		{
-		  widget = ui_lookup_widget(ui_widgets.prefs_dialog, "spin_tab_fixed_width_editor");
-		  interface_prefs.tab_width_editor = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));
+			widget = ui_lookup_widget(ui_widgets.prefs_dialog, "spin_tab_fixed_width_editor");
+			interface_prefs.tab_width_editor = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));
 		}
 		else
 		{
-		  interface_prefs.tab_width_editor = -1;
+			interface_prefs.tab_width_editor = -1;
 		}
 
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "combo_tab_msgwin");

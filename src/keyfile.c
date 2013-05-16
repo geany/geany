@@ -730,7 +730,7 @@ static void load_dialog_prefs(GKeyFile *config)
 
 	/* interface */
 	interface_prefs.tab_pos_editor = utils_get_setting_integer(config, PACKAGE, "tab_pos_editor", GTK_POS_TOP);
-	interface_prefs.tab_width_editor = utils_get_setting_integer(config, PACKAGE, "tab_width_editor", GTK_POS_TOP);
+	interface_prefs.tab_width_editor = utils_get_setting_integer(config, PACKAGE, "tab_width_editor", -1);
 	interface_prefs.tab_pos_msgwin = utils_get_setting_integer(config, PACKAGE, "tab_pos_msgwin",GTK_POS_LEFT);
 	interface_prefs.sidebar_symbol_visible = utils_get_setting_boolean(config, PACKAGE, "sidebar_symbol_visible", TRUE);
 	interface_prefs.sidebar_openfiles_visible = utils_get_setting_boolean(config, PACKAGE, "sidebar_openfiles_visible", TRUE);
