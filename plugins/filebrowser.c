@@ -612,7 +612,7 @@ static GtkWidget *create_popup_menu(void)
 	g_signal_connect(item, "activate", G_CALLBACK(on_open_clicked), NULL);
 	popup_items.open = item;
 
-	item = ui_image_menu_item_new(GTK_STOCK_OPEN, _("Open _externally"));
+	item = ui_image_menu_item_new(GTK_STOCK_OPEN, _("Open _Externally"));
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	g_signal_connect(item, "activate", G_CALLBACK(on_external_open), NULL);
