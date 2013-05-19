@@ -1209,7 +1209,7 @@ void dialogs_show_file_properties(GeanyDocument *doc)
 
 	base_name = g_path_get_basename(doc->file_name);
 	short_name = utils_str_middle_truncate(base_name, 30);
-	title = g_strconcat(short_name, " ", _("Properties"), NULL);
+	title = g_strdup_printf(_("%s Properties"), short_name);
 	dialog = gtk_dialog_new_with_buttons(title, GTK_WINDOW(main_widgets.window),
 										 GTK_DIALOG_DESTROY_WITH_PARENT,
 										 GTK_STOCK_CLOSE, GTK_RESPONSE_CANCEL, NULL);
