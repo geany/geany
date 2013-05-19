@@ -2601,7 +2601,7 @@ void build_load_menu(GKeyFile *config, GeanyBuildSource src, gpointer p)
 			{
 				if (non_ft_pref == NULL)
 					non_ft_pref = g_new0(GeanyBuildCommand, build_groups_count[GEANY_GBG_NON_FT]);
-				ASSIGNIF(non_ft_pref, GEANY_GBO_CUSTOM, _("Make Custom _Target"),
+				ASSIGNIF(non_ft_pref, GEANY_GBO_CUSTOM, _("Make Custom _Target..."),
 						g_strdup_printf("%s ", value));
 				ASSIGNIF(non_ft_pref, GEANY_GBO_MAKE_OBJECT, _("Make _Object"),
 						g_strdup_printf("%s %%e.o",value));
@@ -2792,7 +2792,7 @@ static struct
 	gint index;
 } default_cmds[] = {
 	{ N_("_Make"), "make", NULL, &non_ft_def, GBO_TO_CMD(GEANY_GBO_MAKE_ALL)},
-	{ N_("Make Custom _Target"), "make ", NULL, &non_ft_def, GBO_TO_CMD(GEANY_GBO_CUSTOM)},
+	{ N_("Make Custom _Target..."), "make ", NULL, &non_ft_def, GBO_TO_CMD(GEANY_GBO_CUSTOM)},
 	{ N_("Make _Object"), "make %e.o", NULL, &non_ft_def, GBO_TO_CMD(GEANY_GBO_MAKE_OBJECT)},
 	{ N_("_Execute"), "./%e", NULL, &exec_def, GBO_TO_CMD(GEANY_GBO_EXEC)},
 	{ NULL, NULL, NULL, NULL, 0 }
@@ -2846,7 +2846,7 @@ void build_init(void)
 	widgets.toolitem_make_all = item;
 
 	/* build the code with make custom */
-	item = gtk_image_menu_item_new_with_mnemonic(_("Make Custom _Target"));
+	item = gtk_image_menu_item_new_with_mnemonic(_("Make Custom _Target..."));
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(toolmenu), item);
 	g_signal_connect(item, "activate", G_CALLBACK(on_toolbutton_make_activate),

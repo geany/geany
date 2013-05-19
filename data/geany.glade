@@ -458,6 +458,30 @@
     <property name="stock">gtk-select-color</property>
     <property name="icon-size">1</property>
   </object>
+  <object class="GtkImage" id="image3">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="stock">gtk-open</property>
+    <property name="icon-size">1</property>
+  </object>
+  <object class="GtkImage" id="image4">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="stock">gtk-save-as</property>
+    <property name="icon-size">1</property>
+  </object>
+  <object class="GtkImage" id="image5">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="stock">gtk-print</property>
+    <property name="icon-size">1</property>
+  </object>
+  <object class="GtkImage" id="image6">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="stock">gtk-find</property>
+    <property name="icon-size">1</property>
+  </object>
   <object class="GtkImage" id="image4060">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -7346,12 +7370,13 @@
                         </child>
                         <child>
                           <object class="GtkImageMenuItem" id="menu_open1">
-                            <property name="label">gtk-open</property>
+                            <property name="label" translatable="yes">_Open...</property>
                             <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="use_underline">True</property>
-                            <property name="use_stock">True</property>
+                            <property name="image">image3</property>
+                            <property name="use_stock">False</property>
                             <signal name="activate" handler="on_open1_activate" swapped="no"/>
                           </object>
                         </child>
@@ -7393,12 +7418,13 @@
                         </child>
                         <child>
                           <object class="GtkImageMenuItem" id="menu_save_as1">
-                            <property name="label">gtk-save-as</property>
+                            <property name="label" translatable="yes">Save _As...</property>
                             <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="use_underline">True</property>
-                            <property name="use_stock">True</property>
+                            <property name="image">image4</property>
+                            <property name="use_stock">False</property>
                             <signal name="activate" handler="on_save_as1_activate" swapped="no"/>
                           </object>
                         </child>
@@ -7485,12 +7511,13 @@
                         </child>
                         <child>
                           <object class="GtkImageMenuItem" id="print1">
-                            <property name="label">gtk-print</property>
+                            <property name="label" translatable="yes">_Print...</property>
                             <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="use_underline">True</property>
-                            <property name="use_stock">True</property>
+                            <property name="image">image5</property>
+                            <property name="use_stock">False</property>
                             <signal name="activate" handler="on_print1_activate" swapped="no"/>
                           </object>
                         </child>
@@ -8119,12 +8146,13 @@
                         <property name="can_focus">False</property>
                         <child>
                           <object class="GtkImageMenuItem" id="find1">
-                            <property name="label">gtk-find</property>
+                            <property name="label" translatable="yes">_Find...</property>
                             <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="use_underline">True</property>
-                            <property name="use_stock">True</property>
+                            <property name="image">image6</property>
+                            <property name="use_stock">False</property>
                             <signal name="activate" handler="on_find1_activate" swapped="no"/>
                           </object>
                         </child>
@@ -8156,7 +8184,7 @@
                         </child>
                         <child>
                           <object class="GtkImageMenuItem" id="find_in_files1">
-                            <property name="label" translatable="yes">Find in F_iles</property>
+                            <property name="label" translatable="yes">Find in F_iles...</property>
                             <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
@@ -8168,7 +8196,7 @@
                         </child>
                         <child>
                           <object class="GtkImageMenuItem" id="replace1">
-                            <property name="label" translatable="yes">_Replace</property>
+                            <property name="label" translatable="yes">_Replace...</property>
                             <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
@@ -8242,7 +8270,7 @@
                         </child>
                         <child>
                           <object class="GtkImageMenuItem" id="go_to_line1">
-                            <property name="label" translatable="yes">_Go to Line</property>
+                            <property name="label" translatable="yes">_Go to Line...</property>
                             <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
@@ -8370,7 +8398,7 @@
                         <property name="can_focus">False</property>
                         <child>
                           <object class="GtkImageMenuItem" id="menu_change_font1">
-                            <property name="label" translatable="yes">Change _Font</property>
+                            <property name="label" translatable="yes">Change _Font...</property>
                             <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
@@ -8382,7 +8410,7 @@
                         </child>
                         <child>
                           <object class="GtkImageMenuItem" id="menu_color_schemes">
-                            <property name="label" translatable="yes">Change _Color Scheme</property>
+                            <property name="label" translatable="yes">Change _Color Scheme...</property>
                             <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
@@ -8940,7 +8968,7 @@
                             <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">Replace Spaces b_y Tabs</property>
+                            <property name="label" translatable="yes">Replace Spaces b_y Tabs...</property>
                             <property name="use_underline">True</property>
                             <signal name="activate" handler="on_replace_spaces_activate" swapped="no"/>
                           </object>
@@ -9014,7 +9042,7 @@
                         <property name="can_focus">False</property>
                         <child>
                           <object class="GtkImageMenuItem" id="project_new1">
-                            <property name="label" translatable="yes">_New</property>
+                            <property name="label" translatable="yes">_New...</property>
                             <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
@@ -9026,7 +9054,7 @@
                         </child>
                         <child>
                           <object class="GtkImageMenuItem" id="project_open1">
-                            <property name="label" translatable="yes">_Open</property>
+                            <property name="label" translatable="yes">_Open...</property>
                             <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
@@ -9170,7 +9198,7 @@
                             <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">Load Ta_gs</property>
+                            <property name="label" translatable="yes">Load Ta_gs...</property>
                             <property name="use_underline">True</property>
                             <signal name="activate" handler="on_load_tags1_activate" swapped="no"/>
                           </object>
@@ -9253,7 +9281,7 @@
                             <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">Report a _Bug</property>
+                            <property name="label" translatable="yes">Report a _Bug...</property>
                             <property name="use_underline">True</property>
                             <signal name="activate" handler="on_help_menu_item_bug_report_activate" swapped="no"/>
                           </object>
@@ -9263,7 +9291,7 @@
                             <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">_Donate</property>
+                            <property name="label" translatable="yes">_Donate...</property>
                             <property name="use_underline">True</property>
                             <signal name="activate" handler="on_help_menu_item_donate_activate" swapped="no"/>
                           </object>

@@ -2394,7 +2394,7 @@ static void create_taglist_popup_menu(void)
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	g_signal_connect(item, "activate", G_CALLBACK(on_find_usage), symbol_menu.find_doc_usage);
 
-	symbol_menu.find_in_files = item = ui_image_menu_item_new(GTK_STOCK_FIND, _("Find in F_iles"));
+	symbol_menu.find_in_files = item = ui_image_menu_item_new(GTK_STOCK_FIND, _("Find in F_iles..."));
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	g_signal_connect(item, "activate", G_CALLBACK(on_find_usage), NULL);

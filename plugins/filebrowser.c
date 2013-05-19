@@ -627,7 +627,7 @@ static GtkWidget *create_popup_menu(void)
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	g_signal_connect(item, "activate", G_CALLBACK(refresh), NULL);
 
-	item = ui_image_menu_item_new(GTK_STOCK_FIND, _("_Find in Files"));
+	item = ui_image_menu_item_new(GTK_STOCK_FIND, _("_Find in Files..."));
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	g_signal_connect(item, "activate", G_CALLBACK(on_find_in_files), NULL);

@@ -736,7 +736,7 @@ static void init_configuration(void)
 void plugin_init(GeanyData *data)
 {
 	GtkWidget *menu_item;
-	const gchar *menu_text = _("_Insert Special HTML Characters");
+	const gchar *menu_text = _("_Insert Special HTML Characters...");
 
 	/* First we catch the configuration and initialize them */
 	init_configuration();
