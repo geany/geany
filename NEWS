@@ -1,3 +1,11 @@
+Geany 1.23.1 (May 19, 2013)
+
+    Bug fixes
+    * Fix custom styles under KDE and for people using gtk-chtheme
+      (corrects tab coloring, #3607935).
+    * Fix broken opening files from command line on Windows (#3613096).
+
+
 Geany 1.23 (March 10, 2013)
 
     General
