@@ -1,4 +1,4 @@
-.. |(version)| replace:: 1.23
+.. |(version)| replace:: 1.23.1
 
 =======
  Geany
@@ -13,7 +13,7 @@
           Frank Lanitz,
           Colomban Wendling,
           Matthew Brush
-:Date: 2013-03-10
+:Date: 2013-05-19
 :Version: |(version)|
 
 Copyright © 2005-2012
