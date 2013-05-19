@@ -334,6 +334,29 @@ static void kb_set_shortcut(GtkTreeStore *store, GtkTreeIter *iter,
 }
 
 
+void prefs_kb_search_name(const gchar *search)
+{
+	GtkTreeIter   iter;
+	gboolean      valid;
+	GtkTreeModel *model;
+	gchar        *name;
+	model = gtk_tree_view_get_model(tree);
+	valid = gtk_tree_model_get_iter_first(model, &iter);
+	while (valid)
+	{
+		gtk_tree_model_get(model, &iter, KB_TREE_ACTION, &name, -1);
+		if(g_strcmp0(name, search) == 0)
+		{
+			GtkTreePath *path = gtk_tree_model_get_path(model, &iter);
+			gtk_tree_view_scroll_to_cell(tree, path, NULL, FALSE, .0f, .0f);
+			gtk_tree_path_free(path);
+			break;
+		}
+		valid = gtk_tree_model_iter_next(model, &iter);
+	}
+}
+
+
 static void kb_init(void)
 {
 	GtkTreeIter parent, iter;

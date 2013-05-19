@@ -286,6 +286,8 @@ void keybindings_show_shortcuts(void);
 
 gboolean keybindings_check_event(GdkEventKey *ev, GeanyKeyBinding *kb);
 
+void keybindings_dialog_show_prefs_scroll(const gchar *name);
+
 G_END_DECLS
 
 #endif

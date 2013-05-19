@@ -907,6 +907,31 @@ static GtkWidget *create_dialog(void)
 }
 
 
+static void key_dialog_show_prefs()
+{
+	GtkWidget *wid;
+
+	prefs_show_dialog();
+	/* select the KB page */
+	wid = ui_lookup_widget(ui_widgets.prefs_dialog, "frame22");
+	if (wid != NULL)
+	{
+		GtkNotebook *nb = GTK_NOTEBOOK(ui_lookup_widget(ui_widgets.prefs_dialog, "notebook2"));
+		if (nb != NULL)
+		{
+			gtk_notebook_set_current_page(nb, gtk_notebook_page_num(nb, wid));
+		}
+	}
+}
+
+
+void keybindings_dialog_show_prefs_scroll(const gchar *name)
+{
+	key_dialog_show_prefs();
+	prefs_kb_search_name(name);
+}
+
+
 /* non-modal keyboard shortcuts dialog, so user can edit whilst seeing the shortcuts */
 static GtkWidget *key_dialog = NULL;
 
@@ -914,18 +939,7 @@ static void on_dialog_response(GtkWidget *dialog, gint response, gpointer user_d
 {
 	if (response == GTK_RESPONSE_APPLY)
 	{
-		GtkWidget *wid;
-
-		prefs_show_dialog();
-		/* select the KB page */
-		wid = ui_lookup_widget(ui_widgets.prefs_dialog, "frame22");
-		if (wid != NULL)
-		{
-			GtkNotebook *nb = GTK_NOTEBOOK(ui_lookup_widget(ui_widgets.prefs_dialog, "notebook2"));
-
-			if (nb != NULL)
-				gtk_notebook_set_current_page(nb, gtk_notebook_page_num(nb, wid));
-		}
+		key_dialog_show_prefs();
 	}
 	gtk_widget_destroy(dialog);
 	key_dialog = NULL;
