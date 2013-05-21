@@ -1967,6 +1967,8 @@ Editor
     Set the positioning of the editor's notebook tabs to the right,
     left, top, or bottom of the editing window.
 
+    Specify a fixed width for the editor's tabs (in pixels).
+
 Sidebar
     Set the positioning of the sidebar's notebook tabs to the right,
     left, top, or bottom of the sidebar window.

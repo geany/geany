@@ -368,7 +368,7 @@ static void kb_init(void)
 /* note: new 'simple' prefs should use Stash code in keyfile.c */
 static void prefs_init_dialog(void)
 {
-	GtkWidget *widget;
+	GtkWidget *widget, *widget_secondary;
 	GdkColor *color;
 
 	/* Synchronize with Stash settings */
@@ -467,6 +467,19 @@ static void prefs_init_dialog(void)
 
 	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "combo_tab_editor");
 	gtk_combo_box_set_active(GTK_COMBO_BOX(widget), interface_prefs.tab_pos_editor);
+
+	widget_secondary = ui_lookup_widget(ui_widgets.prefs_dialog, "check_tab_fixed_width_editor");
+	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "spin_tab_fixed_width_editor");
+	if (interface_prefs.tab_width_editor == -1)
+	{
+		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget_secondary), FALSE);
+		gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget), 120);
+	}
+	else
+	{
+		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget_secondary), TRUE);
+		gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget), interface_prefs.tab_width_editor);
+	}
 
 	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "combo_tab_msgwin");
 	gtk_combo_box_set_active(GTK_COMBO_BOX(widget), interface_prefs.tab_pos_msgwin);
@@ -936,6 +949,17 @@ on_prefs_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "combo_tab_editor");
 		interface_prefs.tab_pos_editor = gtk_combo_box_get_active(GTK_COMBO_BOX(widget));
 
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_tab_fixed_width_editor");
+		if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)))
+		{
+			widget = ui_lookup_widget(ui_widgets.prefs_dialog, "spin_tab_fixed_width_editor");
+			interface_prefs.tab_width_editor = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));
+		}
+		else
+		{
+			interface_prefs.tab_width_editor = -1;
+		}
+
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "combo_tab_msgwin");
 		interface_prefs.tab_pos_msgwin = gtk_combo_box_get_active(GTK_COMBO_BOX(widget));
 
@@ -1266,6 +1290,7 @@ on_prefs_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 			if (documents[i]->is_valid)
 			{
 				editor_apply_update_prefs(documents[i]->editor);
+				gtk_widget_set_size_request(GTK_WIDGET(documents[i]->priv->tab_label), interface_prefs.tab_width_editor, -1);
 				if (! editor_prefs.folding)
 					editor_unfold_all(documents[i]->editor);
 			}
