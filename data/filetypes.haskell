@@ -6,29 +6,39 @@ commentline=comment_line
 commentblock=comment
 commentblock2=comment
 commentblock3=comment
+literate_comment=comment
+literate_codedelim=preprocessor
 number=number_1
 keyword=keyword_1
 import=preprocessor
 string=string_1
 character=character
-class=class
+class=type
 operator=operator
 identifier=identifier_1
 instance=type
-capital=string_2
-module=function
-data=number_2
+capital=type
+module=type
+data=type
 pragma=preprocessor
 preprocessor=preprocessor
 stringeol=string_eol
-reserved_operator=operator
-literate_comment=comment
-literate_codedelim=other
+reserved_operator=keyword
 
 [keywords]
 # all items must be in one line
-keywords=as case class data deriving do else if import in infixl infixr instance let module of primitive qualified then type where
+keywords=case class data default deriving do else forall foreign if import in infix infixl infixr instance let module newtype of then type where
+ffi=capi ccall export import interruptible prim safe stdcall unsafe
+reserved_operators=-> .. :: <- = => @ \\ | ~
 
+[lexer_properties]
+lexer.haskell.allow.hash=1
+lexer.haskell.allow.quotes=1
+lexer.haskell.allow.questionmark=0
+lexer.haskell.import.safe=1
+lexer.haskell.cpp=1
+styling.within.preprocessor=1
+fold.haskell.imports=0
 
 [settings]
 # default extension used when saving files

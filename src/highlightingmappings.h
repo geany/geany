@@ -621,7 +621,9 @@ static const HLStyle highlighting_styles_HASKELL[] =
 };
 static const HLKeyword highlighting_keywords_HASKELL[] =
 {
-	{ 0, "keywords",	FALSE }
+	{ 0, "keywords",		   FALSE },
+	{ 1, "ffi",				   FALSE },
+	{ 2, "reserved_operators", FALSE }
 };
 #define highlighting_properties_HASKELL		EMPTY_PROPERTIES
 
