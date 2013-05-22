@@ -6,6 +6,12 @@ Geany 1.24 (unreleased)
     Interface
     * Fix custom GTK styles under KDE (#3607935).
 
+    Filetypes
+    * Extend list of recognized keywords for SQL
+
+    Internationalization
+    * Update translations: he
+
 
 Geany 1.23.1 (May 19, 2013)
 
