@@ -20,6 +20,10 @@ module=function
 data=number_2
 pragma=preprocessor
 preprocessor=preprocessor
+stringeol=string_eol
+reserved_operator=operator
+literate_comment=comment
+literate_codedelim=other
 
 [keywords]
 # all items must be in one line
