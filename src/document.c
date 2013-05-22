@@ -1507,13 +1507,12 @@ _("An error occurred while converting the file from UTF-8 in \"%s\". The file re
 
 		if (conv_error->code == G_CONVERT_ERROR_ILLEGAL_SEQUENCE)
 		{
-			gchar *context = NULL;
 			gint line, column;
 			gint context_len;
 			gunichar unic;
 			/* don't read over the doc length */
 			gint max_len = MIN((gint)bytes_read + 6, (gint)*len - 1);
-			context = g_malloc(7); /* read 6 bytes from Sci + '\0' */
+			gchar context[7]; /* read 6 bytes from Sci + '\0' */
 			sci_get_text_range(doc->editor->sci, bytes_read, max_len, context);
 
 			/* take only one valid Unicode character from the context and discard the leftover */
@@ -1525,7 +1524,6 @@ _("An error occurred while converting the file from UTF-8 in \"%s\". The file re
 			error_text = g_strdup_printf(
 				_("Error message: %s\nThe error occurred at \"%s\" (line: %d, column: %d)."),
 				conv_error->message, context, line + 1, column);
-			g_free(context);
 		}
 		else
 			error_text = g_strdup_printf(_("Error message: %s."), conv_error->message);

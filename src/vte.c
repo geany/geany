@@ -834,8 +834,7 @@ void vte_send_selection_to_vte(void)
 
 	if (sci_has_selection(doc->editor->sci))
 	{
-		text = g_malloc0(sci_get_selected_text_length(doc->editor->sci) + 1);
-		sci_get_selected_text(doc->editor->sci, text);
+		text = sci_get_selection_contents(doc->editor->sci);
 	}
 	else
 	{	/* Get the current line */

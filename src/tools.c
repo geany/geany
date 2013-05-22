@@ -373,7 +373,7 @@ void tools_execute_custom_command(GeanyDocument *doc, const gchar *command)
 						NULL, NULL, &pid, &stdin_fd, &stdout_fd, &stderr_fd, &error))
 	{
 		gchar *sel;
-		gint len, remaining, wrote;
+		gint remaining, wrote;
 		struct cc_data *data = g_slice_alloc(sizeof *data);
 
 		data->error = FALSE;
@@ -392,12 +392,10 @@ void tools_execute_custom_command(GeanyDocument *doc, const gchar *command)
 				FALSE, cc_iofunc_err, data);
 
 		/* get selection */
-		len = sci_get_selected_text_length(doc->editor->sci);
-		sel = g_malloc0(len + 1);
-		sci_get_selected_text(doc->editor->sci, sel);
+		sel = sci_get_selection_contents(doc->editor->sci);
 
 		/* write data to the command */
-		remaining = len - 1;
+		remaining = strlen(sel);
 		do
 		{
 			wrote = write(stdin_fd, sel, remaining);

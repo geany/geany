@@ -2044,7 +2044,6 @@ static gboolean current_tag_changed(GeanyDocument *doc, gint cur_line, gint fold
 static gchar *parse_function_at_line(ScintillaObject *sci, gint tag_line)
 {
 	gint start, end, max_pos;
-	gchar *cur_tag;
 	gint fn_style;
 
 	switch (sci_get_lexer(sci))
@@ -2064,9 +2063,7 @@ static gchar *parse_function_at_line(ScintillaObject *sci, gint tag_line)
 
 	if (start == end)
 		return NULL;
-	cur_tag = g_malloc(end - start + 1);
-	sci_get_text_range(sci, start, end, cur_tag);
-	return cur_tag;
+	return sci_get_contents_range(sci, start, end);
 }
 
 
@@ -2076,7 +2073,6 @@ static gchar *parse_cpp_function_at_line(ScintillaObject *sci, gint tag_line)
 	gint start, end, first_pos, max_pos;
 	gint tmp;
 	gchar c;
-	gchar *cur_tag;
 
 	first_pos = end = sci_get_position_from_line(sci, tag_line);
 	max_pos = sci_get_position_from_line(sci, tag_line + 1);
@@ -2108,9 +2104,7 @@ static gchar *parse_cpp_function_at_line(ScintillaObject *sci, gint tag_line)
 	if (start != 0 && start < end) start++;	/* correct for last non-matching char */
 
 	if (start == end) return NULL;
-	cur_tag = g_malloc(end - start + 2);
-	sci_get_text_range(sci, start, end + 1, cur_tag);
-	return cur_tag;
+	return sci_get_contents_range(sci, start, end + 1);
 }
 
 
