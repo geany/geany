@@ -32,7 +32,6 @@ public:
 	MarkerHandleSet();
 	~MarkerHandleSet();
 	int Length() const;
-	int NumberFromHandle(int handle) const;
 	int MarkValue() const;	///< Bit set of marker numbers.
 	bool Contains(int handle) const;
 	bool InsertHandle(int handle, int markerNum);
@@ -101,7 +100,6 @@ public:
 	virtual void InsertLine(int line);
 	virtual void RemoveLine(int line);
 
-	bool AnySet() const;
 	bool MultipleStyles(int line) const;
 	int Style(int line);
 	const char *Text(int line) const;

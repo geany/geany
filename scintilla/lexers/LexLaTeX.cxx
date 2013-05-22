@@ -224,7 +224,7 @@ void SCI_METHOD LexerLaTeX::Lex(unsigned int startPos, int length, int initStyle
 					chNext = styler.SafeGetCharAt(i + 1);
 				} else if (chNext == '\r' || chNext == '\n') {
 					styler.ColourTo(i, SCE_L_ERROR);
-				} else {
+				} else if (isascii(chNext)) {
 					styler.ColourTo(i + 1, SCE_L_SHORTCMD);
 					if (chNext == '(') {
 						mode = 1;
@@ -340,7 +340,7 @@ void SCI_METHOD LexerLaTeX::Lex(unsigned int startPos, int length, int initStyle
 					chNext = styler.SafeGetCharAt(i + 1);
 				} else if (chNext == '\r' || chNext == '\n') {
 					styler.ColourTo(i, SCE_L_ERROR);
-				} else {
+				} else if (isascii(chNext)) {
 					if (chNext == ')') {
 						mode = 0;
 						state = SCE_L_DEFAULT;
@@ -382,7 +382,7 @@ void SCI_METHOD LexerLaTeX::Lex(unsigned int startPos, int length, int initStyle
 					chNext = styler.SafeGetCharAt(i + 1);
 				} else if (chNext == '\r' || chNext == '\n') {
 					styler.ColourTo(i, SCE_L_ERROR);
-				} else {
+				} else if (isascii(chNext)) {
 					if (chNext == ']') {
 						mode = 0;
 						state = SCE_L_DEFAULT;

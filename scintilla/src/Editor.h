@@ -91,20 +91,13 @@ public:
 		Free();
 	}
 	void Free() {
-		Set(0, 0, 0, 0, false, false);
-	}
-	void Set(char *s_, int len_, int codePage_, int characterSet_, bool rectangular_, bool lineCopy_) {
 		delete []s;
-		s = s_;
-		if (s)
-			len = len_;
-		else
-			len = 0;
-		codePage = codePage_;
-		characterSet = characterSet_;
-		rectangular = rectangular_;
-		lineCopy = lineCopy_;
-		FixSelectionForClipboard();
+		s = 0;
+		len = 0;
+		rectangular = false;
+		lineCopy = false;
+		codePage = 0;
+		characterSet = 0;
 	}
 	void Copy(const char *s_, int len_, int codePage_, int characterSet_, bool rectangular_, bool lineCopy_) {
 		delete []s;
@@ -274,6 +267,7 @@ protected:	// ScintillaBase subclass needs access to much of Editor
 	bool recordingMacro;
 
 	int foldFlags;
+	int foldAutomatic;
 	ContractionState cs;
 
 	// Hotspot support
@@ -522,7 +516,6 @@ protected:	// ScintillaBase subclass needs access to much of Editor
 	void GoToLine(int lineNo);
 
 	virtual void CopyToClipboard(const SelectionText &selectedText) = 0;
-	char *CopyRange(int start, int end);
 	std::string RangeText(int start, int end) const;
 	void CopySelectionRange(SelectionText *ss, bool allowLineCopy=false);
 	void CopyRangeToClipboard(int start, int end);
@@ -565,14 +558,20 @@ protected:	// ScintillaBase subclass needs access to much of Editor
 	void SetBraceHighlight(Position pos0, Position pos1, int matchStyle);
 
 	void SetAnnotationHeights(int start, int end);
-	void SetDocPointer(Document *document);
+	virtual void SetDocPointer(Document *document);
 
 	void SetAnnotationVisible(int visible);
 
-	void Expand(int &line, bool doExpand);
-	void ToggleContraction(int line);
+	int ExpandLine(int line);
+	void SetFoldExpanded(int lineDoc, bool expanded);
+	void FoldLine(int line, int action);
+	void FoldExpand(int line, int action, int level);
 	int ContractedFoldNext(int lineStart);
 	void EnsureLineVisible(int lineDoc, bool enforcePolicy);
+	void FoldChanged(int line, int levelNow, int levelPrev);
+	void NeedShown(int pos, int len);
+	void FoldAll(int action);
+
 	int GetTag(char *tagValue, int tagNumber);
 	int ReplaceTarget(bool replacePatterns, const char *text, int length=-1);
 

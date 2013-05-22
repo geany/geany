@@ -73,13 +73,11 @@ public:
  */
 class LineLayoutCache {
 	int level;
-	int length;
-	int size;
-	LineLayout **cache;
+	std::vector<LineLayout *>cache;
 	bool allInvalidated;
 	int styleClock;
 	int useCount;
-	void Allocate(int length_);
+	void Allocate(size_t length_);
 	void AllocateForLevel(int linesOnScreen, int linesInDoc);
 public:
 	LineLayoutCache();
@@ -122,9 +120,7 @@ class BreakFinder {
 	int lineEnd;
 	int posLineStart;
 	int nextBreak;
-	int *selAndEdge;
-	unsigned int saeSize;
-	unsigned int saeLen;
+	std::vector<int> selAndEdge;
 	unsigned int saeCurrentPos;
 	int saeNext;
 	int subBreak;
@@ -146,8 +142,7 @@ public:
 };
 
 class PositionCache {
-	PositionCacheEntry *pces;
-	size_t size;
+	std::vector<PositionCacheEntry> pces;
 	unsigned int clock;
 	bool allClear;
 	// Private so PositionCache objects can not be copied
@@ -157,7 +152,7 @@ public:
 	~PositionCache();
 	void Clear();
 	void SetSize(size_t size_);
-	size_t GetSize() const { return size; }
+	size_t GetSize() const { return pces.size(); }
 	void MeasureWidths(Surface *surface, ViewStyle &vstyle, unsigned int styleNumber,
 		const char *s, unsigned int len, XYPOSITION *positions, Document *pdoc);
 };

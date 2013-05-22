@@ -1510,6 +1510,7 @@ gboolean highlighting_is_string_style(gint lexer, gint style)
 
 		case SCLEX_HASKELL:
 			return (style == SCE_HA_CHARACTER ||
+				style == SCE_HA_STRINGEOL ||
 				style == SCE_HA_STRING);
 
 		case SCLEX_FREEBASIC:
@@ -1592,6 +1593,7 @@ gboolean highlighting_is_comment_style(gint lexer, gint style)
 				style == SCE_C_COMMENTLINE ||
 				style == SCE_C_COMMENTDOC ||
 				style == SCE_C_PREPROCESSORCOMMENT ||
+				style == SCE_C_PREPROCESSORCOMMENTDOC ||
 				style == SCE_C_COMMENTLINEDOC ||
 				style == SCE_C_COMMENTDOCKEYWORD ||
 				style == SCE_C_COMMENTDOCKEYWORDERROR);
@@ -1670,7 +1672,8 @@ gboolean highlighting_is_comment_style(gint lexer, gint style)
 			return (style == SCE_HA_COMMENTLINE ||
 				style == SCE_HA_COMMENTBLOCK ||
 				style == SCE_HA_COMMENTBLOCK2 ||
-				style == SCE_HA_COMMENTBLOCK3);
+				style == SCE_HA_COMMENTBLOCK3 ||
+				style == SCE_HA_LITERATE_COMMENT);
 
 		case SCLEX_FREEBASIC:
 			return (style == SCE_B_COMMENT);

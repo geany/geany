@@ -17,7 +17,7 @@ namespace Scintilla {
 class CallTip {
 	int startHighlight;    // character offset to start and...
 	int endHighlight;      // ...end of highlighted text
-	char *val;
+	std::string val;
 	Font font;
 	PRectangle rectUp;      // rectangle of last up angle in the tip
 	PRectangle rectDown;    // rectangle of last down arrow in the tip

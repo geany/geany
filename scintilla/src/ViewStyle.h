@@ -28,9 +28,7 @@ public:
  */
 class FontNames {
 private:
-	char **names;
-	int size;
-	int max;
+	std::vector<char *> names;
 
 	// Private so FontNames objects can not be copied
 	FontNames(const FontNames &);
@@ -41,32 +39,30 @@ public:
 	const char *Save(const char *name);
 };
 
-class FontRealised : public FontSpecification, public FontMeasurements {
+class FontRealised : public FontMeasurements {
 	// Private so FontRealised objects can not be copied
 	FontRealised(const FontRealised &);
 	FontRealised &operator=(const FontRealised &);
 public:
 	Font font;
-	FontRealised *frNext;
-	FontRealised(const FontSpecification &fs);
+	FontRealised();
 	virtual ~FontRealised();
-	void Realise(Surface &surface, int zoomLevel, int technology);
-	FontRealised *Find(const FontSpecification &fs);
-	void FindMaxAscentDescent(unsigned int &maxAscent, unsigned int &maxDescent);
+	void Realise(Surface &surface, int zoomLevel, int technology, const FontSpecification &fs);
 };
 
 enum IndentView {ivNone, ivReal, ivLookForward, ivLookBoth};
 
 enum WhiteSpaceVisibility {wsInvisible=0, wsVisibleAlways=1, wsVisibleAfterIndent=2};
 
+typedef std::map<FontSpecification, FontRealised *> FontMap;
+
 /**
  */
 class ViewStyle {
-public:
 	FontNames fontNames;
-	FontRealised *frFirst;
-	size_t stylesSize;
-	Style *styles;
+	FontMap fonts;
+public:
+	std::vector<Style> styles;
 	size_t nextExtendedStyle;
 	LineMarker markers[MARKER_MAX + 1];
 	int largestMarkerHeight;
@@ -143,9 +139,7 @@ public:
 	ViewStyle(const ViewStyle &source);
 	~ViewStyle();
 	void Init(size_t stylesSize_=64);
-	void CreateFont(const FontSpecification &fs);
 	void Refresh(Surface &surface);
-	void AllocStyles(size_t sizeNew);
 	void ReleaseAllExtendedStyles();
 	int AllocateExtendedStyles(int numberStyles);
 	void EnsureStyle(size_t index);
@@ -155,6 +149,13 @@ public:
 	bool ProtectionActive() const;
 	bool ValidStyle(size_t styleIndex) const;
 	void CalcLargestMarkerHeight();
+private:
+	void AllocStyles(size_t sizeNew);
+	void CreateFont(const FontSpecification &fs);
+	FontRealised *Find(const FontSpecification &fs);
+	void FindMaxAscentDescent(unsigned int &maxAscent, unsigned int &maxDescent);
+	// Private so can only be copied through copy constructor which ensures font names initialised correctly
+	ViewStyle &operator=(const ViewStyle &);
 };
 
 #ifdef SCI_NAMESPACE

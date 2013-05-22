@@ -1047,10 +1047,10 @@ static int RecogniseErrorListLine(const char *lineBuffer, unsigned int lengthLin
 				}
 			} else if (state == stCtagsStart) {
 				if ((lineBuffer[i - 1] == '\t') &&
-				        ((ch == '/' && lineBuffer[i + 1] == '^') || Is0To9(ch))) {
+				        ((ch == '/' && chNext == '^') || Is0To9(ch))) {
 					state = stCtags;
 					break;
-				} else if ((ch == '/') && (lineBuffer[i + 1] == '^')) {
+				} else if ((ch == '/') && (chNext == '^')) {
 					state = stCtagsStartString;
 				}
 			} else if ((state == stCtagsStartString) && ((lineBuffer[i] == '$') && (lineBuffer[i + 1] == '/'))) {
