@@ -1061,6 +1061,7 @@ void highlighting_init_styles(guint filetype_idx, GKeyFile *config, GKeyFile *co
 		init_styleset_case(FORTH);
 		init_styleset_case(FORTRAN);
 		init_styleset_case(HASKELL);
+		init_styleset_case(LITERATEHASKELL);
 		init_styleset_case(HAXE);
 		init_styleset_case(AS);
 		init_styleset_case(HTML);
@@ -1141,6 +1142,7 @@ void highlighting_set_styles(ScintillaObject *sci, GeanyFiletype *ft)
 		styleset_case(FORTH);
 		styleset_case(FORTRAN);
 		styleset_case(HASKELL);
+		styleset_case(LITERATEHASKELL);
 		styleset_case(HAXE);
 		styleset_case(AS);
 		styleset_case(HTML);
@@ -1509,6 +1511,7 @@ gboolean highlighting_is_string_style(gint lexer, gint style)
 				style == SCE_LUA_STRING);
 
 		case SCLEX_HASKELL:
+		case SCLEX_LITERATEHASKELL:
 			return (style == SCE_HA_CHARACTER ||
 				style == SCE_HA_STRINGEOL ||
 				style == SCE_HA_STRING);
@@ -1669,11 +1672,13 @@ gboolean highlighting_is_comment_style(gint lexer, gint style)
 				style == SCE_LUA_COMMENTDOC);
 
 		case SCLEX_HASKELL:
+		case SCLEX_LITERATEHASKELL:
 			return (style == SCE_HA_COMMENTLINE ||
 				style == SCE_HA_COMMENTBLOCK ||
 				style == SCE_HA_COMMENTBLOCK2 ||
 				style == SCE_HA_COMMENTBLOCK3 ||
-				style == SCE_HA_LITERATE_COMMENT);
+				style == SCE_HA_LITERATE_COMMENT ||
+				style == SCE_HA_LITERATE_CODEDELIM);
 
 		case SCLEX_FREEBASIC:
 			return (style == SCE_B_COMMENT);
@@ -1735,14 +1740,18 @@ gboolean highlighting_is_code_style(gint lexer, gint style)
 	switch (lexer)
 	{
 		case SCLEX_CPP:
+		{
 			if (style == SCE_C_PREPROCESSOR)
 				return FALSE;
 			break;
-
+		}
 		case SCLEX_HASKELL:
+		case SCLEX_LITERATEHASKELL:
+		{
 			if (style == SCE_HA_PREPROCESSOR)
 				return FALSE;
 			break;
+		}
 	}
 	return !(highlighting_is_comment_style(lexer, style) ||
 		highlighting_is_string_style(lexer, style));

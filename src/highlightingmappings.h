@@ -627,6 +627,12 @@ static const HLKeyword highlighting_keywords_HASKELL[] =
 };
 #define highlighting_properties_HASKELL		EMPTY_PROPERTIES
 
+/* Literate Haskell */
+#define highlighting_lexer_LITERATEHASKELL			SCLEX_LITERATEHASKELL
+#define highlighting_styles_LITERATEHASKELL			highlighting_styles_HASKELL
+#define highlighting_keywords_LITERATEHASKELL		highlighting_keywords_HASKELL
+#define highlighting_properties_LITERATEHASKELL		highlighting_properties_HASKELL
+
 
 /* HAXE */
 #define highlighting_lexer_HAXE			SCLEX_CPP
