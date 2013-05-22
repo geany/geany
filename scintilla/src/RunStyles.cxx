@@ -9,6 +9,8 @@
 #include <stdlib.h>
 #include <stdarg.h>
 
+#include <stdexcept>
+
 #include "Platform.h"
 
 #include "Scintilla.h"
@@ -113,7 +115,13 @@ int RunStyles::EndRun(int position) {
 }
 
 bool RunStyles::FillRange(int &position, int value, int &fillLength) {
+	if (fillLength <= 0) {
+		return false;
+	}
 	int end = position + fillLength;
+	if (end > Length()) {
+		return false;
+	}
 	int runEnd = RunFromPosition(end);
 	if (styles->ValueAt(runEnd) == value) {
 		// End already has value so trim range.
@@ -248,4 +256,32 @@ int RunStyles::Find(int value, int start) const {
 		}
 	}
 	return -1;
+}
+
+void RunStyles::Check() {
+	if (Length() < 0) {
+		throw std::runtime_error("RunStyles: Length can not be negative.");
+	}
+	if (starts->Partitions() < 1) {
+		throw std::runtime_error("RunStyles: Must always have 1 or more partitions.");
+	}
+	if (starts->Partitions() != styles->Length()-1) {
+		throw std::runtime_error("RunStyles: Partitions and styles different lengths.");
+	}
+	int start=0;
+	while (start < Length()) {
+		int end = EndRun(start);
+		if (start >= end) {
+			throw std::runtime_error("RunStyles: Partition is 0 length.");
+		}
+		start = end;
+	}
+	if (styles->ValueAt(styles->Length()-1) != 0) {
+		throw std::runtime_error("RunStyles: Unused style at end changed.");
+	}
+	for (int j=1; j<styles->Length()-1; j++) {
+		if (styles->ValueAt(j) == styles->ValueAt(j-1)) {
+			throw std::runtime_error("RunStyles: Style of a partition same as previous.");
+		}
+	}
 }

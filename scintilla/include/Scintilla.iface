@@ -581,6 +581,7 @@ val INDIC_DOTS=10
 val INDIC_SQUIGGLELOW=11
 val INDIC_DOTBOX=12
 val INDIC_SQUIGGLEPIXMAP=13
+val INDIC_COMPOSITIONTHICK=14
 val INDIC_MAX=31
 val INDIC_CONTAINER=8
 val INDIC0_MASK=0x20
@@ -1109,8 +1110,36 @@ get bool GetFoldExpanded=2230(int line,)
 # Switch a header line between expanded and contracted.
 fun void ToggleFold=2231(int line,)
 
+enu FoldAction=SC_FOLDACTION
+val SC_FOLDACTION_CONTRACT=0
+val SC_FOLDACTION_EXPAND=1
+val SC_FOLDACTION_TOGGLE=2
+
+# Expand or contract a fold header.
+fun void FoldLine=2237(int line, int action)
+
+# Expand or contract a fold header and its children.
+fun void FoldChildren=2238(int line, int action)
+
+# Expand a fold header and all children. Use the level argument instead of the line's current level.
+fun void ExpandChildren=2239(int line, int level)
+
+# Expand or contract all fold headers.
+fun void FoldAll=2662(int action,)
+
 # Ensure a particular line is visible by expanding any header line hiding it.
 fun void EnsureVisible=2232(int line,)
+
+enu AutomaticFold=SC_AUTOMATICFOLD_
+val SC_AUTOMATICFOLD_SHOW=0x0001
+val SC_AUTOMATICFOLD_CLICK=0x0002
+val SC_AUTOMATICFOLD_CHANGE=0x0004
+
+# Set automatic folding behaviours.
+set void SetAutomaticFold=2663(int automaticFold,)
+
+# Get automatic folding behaviours.
+get int GetAutomaticFold=2664(,)
 
 enu FoldFlag=SC_FOLDFLAG_
 val SC_FOLDFLAG_LINEBEFORE_EXPANDED=0x0002
@@ -2549,6 +2578,7 @@ val SCLEX_AVS=104
 val SCLEX_ECL=105
 val SCLEX_OSCRIPT=106
 val SCLEX_VISUALPROLOG=107
+val SCLEX_LITERATEHASKELL=108
 
 # When a lexer specifies its language as SCLEX_AUTOMATIC it receives a
 # value assigned in sequence from SCLEX_AUTOMATIC+1.
@@ -2599,6 +2629,7 @@ val SCE_C_STRINGRAW=20
 val SCE_C_TRIPLEVERBATIM=21
 val SCE_C_HASHQUOTEDSTRING=22
 val SCE_C_PREPROCESSORCOMMENT=23
+val SCE_C_PREPROCESSORCOMMENTDOC=24
 # Lexical states for SCLEX_D
 lex D=SCLEX_D SCE_D_
 val SCE_D_DEFAULT=0
@@ -3583,6 +3614,10 @@ val SCE_HA_COMMENTBLOCK2=15
 val SCE_HA_COMMENTBLOCK3=16
 val SCE_HA_PRAGMA=17
 val SCE_HA_PREPROCESSOR=18
+val SCE_HA_STRINGEOL=19
+val SCE_HA_RESERVED_OPERATOR=20
+val SCE_HA_LITERATE_COMMENT=21
+val SCE_HA_LITERATE_CODEDELIM=22
 # Lexical states of SCLEX_TADS3
 lex TADS3=SCLEX_TADS3 SCE_T3_
 val SCE_T3_DEFAULT=0
@@ -3923,6 +3958,9 @@ val SCE_POWERSHELL_ALIAS=10
 val SCE_POWERSHELL_FUNCTION=11
 val SCE_POWERSHELL_USER1=12
 val SCE_POWERSHELL_COMMENTSTREAM=13
+val SCE_POWERSHELL_HERE_STRING=14
+val SCE_POWERSHELL_HERE_CHARACTER=15
+val SCE_POWERSHELL_COMMENTDOCKEYWORD=16
 # Lexical state for SCLEX_MYSQL
 lex MySQL=SCLEX_MYSQL SCE_MYSQL_
 val SCE_MYSQL_DEFAULT=0

@@ -9,6 +9,7 @@
 #include <stddef.h>
 #include <math.h>
 
+#include <string>
 #include <vector>
 #include <map>
 
@@ -259,6 +260,7 @@ class FontCached : Font {
 public:
 	static FontID FindOrCreate(const FontParameters &fp);
 	static void ReleaseId(FontID fid_);
+	static void ReleaseAll();
 };
 
 FontCached *FontCached::first = 0;
@@ -299,11 +301,9 @@ FontID FontCached::FindOrCreate(const FontParameters &fp) {
 	}
 	if (ret == 0) {
 		FontCached *fc = new FontCached(fp);
-		if (fc) {
-			fc->next = first;
-			first = fc;
-			ret = fc->fid;
-		}
+		fc->next = first;
+		first = fc;
+		ret = fc->fid;
 	}
 	FontMutexUnlock();
 	return ret;
@@ -326,6 +326,12 @@ void FontCached::ReleaseId(FontID fid_) {
 		pcur = &cur->next;
 	}
 	FontMutexUnlock();
+}
+
+void FontCached::ReleaseAll() {
+	while (first) {
+		ReleaseId(first->GetID());
+	}
 }
 
 FontID FontCached::CreateNewFont(const FontParameters &fp) {
@@ -831,8 +837,8 @@ void SurfaceImpl::Copy(PRectangle rc, Point from, Surface &surfaceSource) {
 	}
 }
 
-char *UTF8FromLatin1(const char *s, int &len) {
-	char *utfForm = new char[len*2+1];
+std::string UTF8FromLatin1(const char *s, int len) {
+	std::string utfForm(len*2 + 1, '\0');
 	size_t lenU = 0;
 	for (int i=0;i<len;i++) {
 		unsigned int uch = static_cast<unsigned char>(s[i]);
@@ -843,27 +849,26 @@ char *UTF8FromLatin1(const char *s, int &len) {
 			utfForm[lenU++] = static_cast<char>(0x80 | (uch & 0x3f));
 		}
 	}
-	utfForm[lenU] = '\0';
-	len = lenU;
+	utfForm.resize(lenU);
 	return utfForm;
 }
 
-static char *UTF8FromIconv(const Converter &conv, const char *s, int &len) {
+static std::string UTF8FromIconv(const Converter &conv, const char *s, int len) {
 	if (conv) {
-		char *utfForm = new char[len*3+1];
+		std::string utfForm(len*3+1, '\0');
 		char *pin = const_cast<char *>(s);
 		size_t inLeft = len;
-		char *pout = utfForm;
+		char *putf = &utfForm[0];
+		char *pout = putf;
 		size_t outLeft = len*3+1;
 		size_t conversions = conv.Convert(&pin, &inLeft, &pout, &outLeft);
 		if (conversions != ((size_t)(-1))) {
 			*pout = '\0';
-			len = pout - utfForm;
+			utfForm.resize(pout - putf);
 			return utfForm;
 		}
-		delete []utfForm;
 	}
-	return 0;
+	return std::string();
 }
 
 // Work out how many bytes are in a character by trying to convert using iconv,
@@ -901,18 +906,16 @@ void SurfaceImpl::DrawTextBase(PRectangle rc, Font &font_, XYPOSITION ybase, con
 	if (context) {
 		XYPOSITION xText = rc.left;
 		if (PFont(font_)->pfd) {
-			char *utfForm = 0;
+			std::string utfForm;
 			if (et == UTF8) {
 				pango_layout_set_text(layout, s, len);
 			} else {
-				if (!utfForm) {
-					SetConverter(PFont(font_)->characterSet);
-					utfForm = UTF8FromIconv(conv, s, len);
-				}
-				if (!utfForm) {	// iconv failed so treat as Latin1
+				SetConverter(PFont(font_)->characterSet);
+				utfForm = UTF8FromIconv(conv, s, len);
+				if (utfForm.empty()) {	// iconv failed so treat as Latin1
 					utfForm = UTF8FromLatin1(s, len);
 				}
-				pango_layout_set_text(layout, utfForm, len);
+				pango_layout_set_text(layout, utfForm.c_str(), utfForm.length());
 			}
 			pango_layout_set_font_description(layout, PFont(font_)->pfd);
 			pango_cairo_update_layout(context, layout);
@@ -923,7 +926,6 @@ void SurfaceImpl::DrawTextBase(PRectangle rc, Font &font_, XYPOSITION ybase, con
 #endif
 			cairo_move_to(context, xText, ybase);
 			pango_cairo_show_layout_line(context, pll);
-			delete []utfForm;
 		}
 	}
 }
@@ -1020,20 +1022,20 @@ void SurfaceImpl::MeasureWidths(Font &font_, const char *s, int len, XYPOSITION 
 				int positionsCalculated = 0;
 				if (et == dbcs) {
 					SetConverter(PFont(font_)->characterSet);
-					char *utfForm = UTF8FromIconv(conv, s, len);
-					if (utfForm) {
+					std::string utfForm = UTF8FromIconv(conv, s, len);
+					if (!utfForm.empty()) {
 						// Convert to UTF-8 so can ask Pango for widths, then
 						// Loop through UTF-8 and DBCS forms, taking account of different
 						// character byte lengths.
 						Converter convMeasure("UCS-2", CharacterSetID(characterSet), false);
-						pango_layout_set_text(layout, utfForm, strlen(utfForm));
+						pango_layout_set_text(layout, utfForm.c_str(), strlen(utfForm.c_str()));
 						int i = 0;
 						int clusterStart = 0;
-						ClusterIterator iti(layout, strlen(utfForm));
+						ClusterIterator iti(layout, strlen(utfForm.c_str()));
 						while (!iti.finished) {
 							iti.Next();
 							int clusterEnd = iti.curIndex;
-							int places = g_utf8_strlen(utfForm + clusterStart, clusterEnd - clusterStart);
+							int places = g_utf8_strlen(utfForm.c_str() + clusterStart, clusterEnd - clusterStart);
 							int place = 1;
 							while (clusterStart < clusterEnd) {
 								size_t lenChar = MultiByteLenFromIconv(convMeasure, s+i, len-i);
@@ -1041,38 +1043,36 @@ void SurfaceImpl::MeasureWidths(Font &font_, const char *s, int len, XYPOSITION 
 									positions[i++] = iti.position - (places - place) * iti.distance / places;
 									positionsCalculated++;
 								}
-								clusterStart += UTF8CharLength(utfForm+clusterStart);
+								clusterStart += UTF8CharLength(utfForm.c_str()+clusterStart);
 								place++;
 							}
 						}
-						delete []utfForm;
 						PLATFORM_ASSERT(i == lenPositions);
 					}
 				}
 				if (positionsCalculated < 1 ) {
 					// Either Latin1 or DBCS conversion failed so treat as Latin1.
 					SetConverter(PFont(font_)->characterSet);
-					char *utfForm = UTF8FromIconv(conv, s, len);
-					if (!utfForm) {
+					std::string utfForm = UTF8FromIconv(conv, s, len);
+					if (utfForm.empty()) {
 						utfForm = UTF8FromLatin1(s, len);
 					}
-					pango_layout_set_text(layout, utfForm, len);
+					pango_layout_set_text(layout, utfForm.c_str(), utfForm.length());
 					int i = 0;
 					int clusterStart = 0;
 					// Each Latin1 input character may take 1 or 2 bytes in UTF-8
 					// and groups of up to 3 may be represented as ligatures.
-					ClusterIterator iti(layout, strlen(utfForm));
+					ClusterIterator iti(layout, utfForm.length());
 					while (!iti.finished) {
 						iti.Next();
 						int clusterEnd = iti.curIndex;
-						int ligatureLength = g_utf8_strlen(utfForm + clusterStart, clusterEnd - clusterStart);
+						int ligatureLength = g_utf8_strlen(utfForm.c_str() + clusterStart, clusterEnd - clusterStart);
 						PLATFORM_ASSERT(ligatureLength > 0 && ligatureLength <= 3);
 						for (int charInLig=0; charInLig<ligatureLength; charInLig++) {
 							positions[i++] = iti.position - (ligatureLength - 1 - charInLig) * iti.distance / ligatureLength;
 						}
 						clusterStart = clusterEnd;
 					}
-					delete []utfForm;
 					PLATFORM_ASSERT(i == lenPositions);
 				}
 			}
@@ -1092,20 +1092,18 @@ void SurfaceImpl::MeasureWidths(Font &font_, const char *s, int len, XYPOSITION 
 XYPOSITION SurfaceImpl::WidthText(Font &font_, const char *s, int len) {
 	if (font_.GetID()) {
 		if (PFont(font_)->pfd) {
-			char *utfForm = 0;
+			std::string utfForm;
 			pango_layout_set_font_description(layout, PFont(font_)->pfd);
 			PangoRectangle pos;
 			if (et == UTF8) {
 				pango_layout_set_text(layout, s, len);
 			} else {
-				if (!utfForm) {	// use iconv
-					SetConverter(PFont(font_)->characterSet);
-					utfForm = UTF8FromIconv(conv, s, len);
-				}
-				if (!utfForm) {	// iconv failed so treat as Latin1
+				SetConverter(PFont(font_)->characterSet);
+				utfForm = UTF8FromIconv(conv, s, len);
+				if (utfForm.empty()) {	// iconv failed so treat as Latin1
 					utfForm = UTF8FromLatin1(s, len);
 				}
-				pango_layout_set_text(layout, utfForm, len);
+				pango_layout_set_text(layout, utfForm.c_str(), utfForm.length());
 			}
 #ifdef PANGO_VERSION
 			PangoLayoutLine *pangoLine = pango_layout_get_line_readonly(layout,0);
@@ -1113,7 +1111,6 @@ XYPOSITION SurfaceImpl::WidthText(Font &font_, const char *s, int len) {
 			PangoLayoutLine *pangoLine = pango_layout_get_line(layout,0);
 #endif
 			pango_layout_line_get_extents(pangoLine, NULL, &pos);
-			delete []utfForm;
 			return doubleFromPangoUnits(pos.width);
 		}
 		return 1;
@@ -1883,30 +1880,26 @@ void ListBoxX::ClearRegisteredImages() {
 void ListBoxX::SetList(const char *listText, char separator, char typesep) {
 	Clear();
 	int count = strlen(listText) + 1;
-	char *words = new char[count];
-	if (words) {
-		memcpy(words, listText, count);
-		char *startword = words;
-		char *numword = NULL;
-		int i = 0;
-		for (; words[i]; i++) {
-			if (words[i] == separator) {
-				words[i] = '\0';
-				if (numword)
-					*numword = '\0';
-				Append(startword, numword?atoi(numword + 1):-1);
-				startword = words + i + 1;
-				numword = NULL;
-			} else if (words[i] == typesep) {
-				numword = words + i;
-			}
-		}
-		if (startword) {
+	std::vector<char> words(listText, listText+count);
+	char *startword = words.data();
+	char *numword = NULL;
+	int i = 0;
+	for (; words[i]; i++) {
+		if (words[i] == separator) {
+			words[i] = '\0';
 			if (numword)
 				*numword = '\0';
 			Append(startword, numword?atoi(numword + 1):-1);
+			startword = words.data() + i + 1;
+			numword = NULL;
+		} else if (words[i] == typesep) {
+			numword = words.data() + i;
 		}
-		delete []words;
+	}
+	if (startword) {
+		if (numword)
+			*numword = '\0';
+		Append(startword, numword?atoi(numword + 1):-1);
 	}
 }
 
@@ -2165,5 +2158,6 @@ void Platform_Initialise() {
 }
 
 void Platform_Finalise() {
+	FontCached::ReleaseAll();
 	FontMutexFree();
 }

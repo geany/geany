@@ -43,6 +43,8 @@ public:
 	bool AllSame() const;
 	bool AllSameAs(int value) const;
 	int Find(int value, int start) const;
+
+	void Check();
 };
 
 #ifdef SCI_NAMESPACE

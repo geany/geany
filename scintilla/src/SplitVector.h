@@ -174,8 +174,7 @@ public:
 			}
 			RoomFor(insertLength);
 			GapTo(position);
-			for (int i = 0; i < insertLength; i++)
-				body[part1Length + i] = v;
+			std::fill(&body[part1Length], &body[part1Length + insertLength], v);
 			lengthBody += insertLength;
 			part1Length += insertLength;
 			gapLength -= insertLength;

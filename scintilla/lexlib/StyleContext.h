@@ -76,7 +76,7 @@ class StyleContext {
 		// End of line?
 		// Trigger on CR only (Mac style) or either on LF from CR+LF (Dos/Win)
 		// or on LF alone (Unix). Avoid triggering two times on Dos/Win.
-		if (lineStartNext < styler.Length())
+		if (currentLine < lineDocEnd)
 			atLineEnd = static_cast<int>(pos) >= (lineStartNext-1);
 		else // Last line
 			atLineEnd = static_cast<int>(pos) >= lineStartNext;
@@ -85,6 +85,7 @@ class StyleContext {
 public:
 	unsigned int currentPos;
 	int currentLine;
+	int lineDocEnd;
 	int lineStartNext;
 	bool atLineStart;
 	bool atLineEnd;
@@ -112,6 +113,7 @@ public:
 		lengthDocument = static_cast<unsigned int>(styler.Length());
 		if (endPos == lengthDocument)
 			endPos++;
+		lineDocEnd = styler.GetLine(lengthDocument);
 		atLineStart = static_cast<unsigned int>(styler.LineStart(currentLine)) == startPos;
 		unsigned int pos = currentPos;
 		ch = static_cast<unsigned char>(styler.SafeGetCharAt(pos, 0));
