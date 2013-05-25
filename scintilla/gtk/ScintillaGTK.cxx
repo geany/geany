@@ -1492,15 +1492,15 @@ void ScintillaGTK::GetGtkSelectionText(GtkSelectionData *selectionData, Selectio
 	if (selectionTypeData == GDK_TARGET_STRING) {
 		if (IsUnicodeMode()) {
 			// Unknown encoding so assume in Latin1
-			dest = UTF8FromLatin1(dest.c_str(), len);
-			selText.Copy(dest.c_str(), dest.length(), SC_CP_UTF8, 0, selText.rectangular, false);
+			dest = UTF8FromLatin1(dest.c_str(), dest.length());
+			selText.Copy(dest.c_str(), dest.length()+1, SC_CP_UTF8, 0, selText.rectangular, false);
 		} else {
 			// Assume buffer is in same encoding as selection
-			selText.Copy(dest.c_str(), dest.length(), pdoc->dbcsCodePage,
+			selText.Copy(dest.c_str(), dest.length()+1, pdoc->dbcsCodePage,
 				vs.styles[STYLE_DEFAULT].characterSet, isRectangular, false);
 		}
 	} else {	// UTF-8
-		selText.Copy(dest.c_str(), dest.length(), SC_CP_UTF8, 0, isRectangular, false);
+		selText.Copy(dest.c_str(), dest.length()+1, SC_CP_UTF8, 0, isRectangular, false);
 		const char *charSetBuffer = CharacterSetID();
 		if (!IsUnicodeMode() && *charSetBuffer) {
 			// Convert to locale
@@ -1533,9 +1533,9 @@ void ScintillaGTK::ReceivedSelection(GtkSelectionData *selection_data) {
 					sel.Range(sel.Main()).Start();
 
 				if (selText.rectangular) {
-					PasteRectangular(selStart, selText.s, selText.len);
+					PasteRectangular(selStart, selText.s, selText.len-1);
 				} else {
-					InsertPaste(selStart, selText.s, selText.len);
+					InsertPaste(selStart, selText.s, selText.len-1);
 				}
 				EnsureCaretVisible();
 			}
@@ -1578,7 +1578,7 @@ void ScintillaGTK::GetSelection(GtkSelectionData *selection_data, guint info, Se
 	{
 		std::string tmpstr = Document::TransformLineEnds(text->s, text->len, SC_EOL_LF);
 		newline_normalized = new SelectionText();
-		newline_normalized->Copy(tmpstr.c_str(), tmpstr.length(), SC_CP_UTF8, 0, text->rectangular, false);
+		newline_normalized->Copy(tmpstr.c_str(), tmpstr.length()+1, SC_CP_UTF8, 0, text->rectangular, false);
 		text = newline_normalized;
 	}
 #endif
