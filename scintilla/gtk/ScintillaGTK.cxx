@@ -122,7 +122,7 @@ class ScintillaGTK : public ScintillaBase {
 
 	SelectionText primary;
 
-	GdkEventButton evbtn;
+	GdkEventButton *evbtn;
 	bool capturedMouse;
 	bool dragWasDropped;
 	int lastKey;
@@ -354,7 +354,7 @@ static ScintillaGTK *ScintillaFromWidget(GtkWidget *widget) {
 ScintillaGTK::ScintillaGTK(_ScintillaObject *sci_) :
 		adjustmentv(0), adjustmenth(0),
 		scrollBarWidth(30), scrollBarHeight(30),
-		capturedMouse(false), dragWasDropped(false),
+		evbtn(0), capturedMouse(false), dragWasDropped(false),
 		lastKey(0), rectangularSelectionModifier(SCMOD_CTRL), parentClass(0),
 		im_context(NULL),
 		lastWheelMouseDirection(0),
@@ -392,6 +392,10 @@ ScintillaGTK::ScintillaGTK(_ScintillaObject *sci_) :
 
 ScintillaGTK::~ScintillaGTK() {
 	g_idle_remove_by_data(this);
+	if (evbtn) {
+		gdk_event_free(reinterpret_cast<GdkEvent *>(evbtn));
+		evbtn = 0;
+	}
 }
 
 static void UnRefCursor(GdkCursor *cursor) {
@@ -824,14 +828,15 @@ bool ScintillaGTK::DragThreshold(Point ptStart, Point ptNow) {
 }
 
 void ScintillaGTK::StartDrag() {
+	PLATFORM_ASSERT(evbtn != 0);
 	dragWasDropped = false;
 	inDragDrop = ddDragging;
 	GtkTargetList *tl = gtk_target_list_new(clipboardCopyTargets, nClipboardCopyTargets);
 	gtk_drag_begin(GTK_WIDGET(PWidget(wMain)),
 	               tl,
 	               static_cast<GdkDragAction>(GDK_ACTION_COPY | GDK_ACTION_MOVE),
-	               evbtn.button,
-	               reinterpret_cast<GdkEvent *>(&evbtn));
+	               evbtn->button,
+	               reinterpret_cast<GdkEvent *>(evbtn));
 }
 
 static std::string ConvertText(char *s, size_t len, const char *charSetDest,
@@ -1761,7 +1766,11 @@ gint ScintillaGTK::PressThis(GdkEventButton *event) {
 		if (event->type != GDK_BUTTON_PRESS)
 			return FALSE;
 
-		evbtn = *event;
+		if (evbtn) {
+			gdk_event_free(reinterpret_cast<GdkEvent *>(evbtn));
+			evbtn = 0;
+		}
+		evbtn = reinterpret_cast<GdkEventButton *>(gdk_event_copy(reinterpret_cast<GdkEvent *>(event)));
 		Point pt;
 		pt.x = int(event->x);
 		pt.y = int(event->y);
