@@ -1477,9 +1477,10 @@ static void pm_show_dialog(GtkMenuItem *menuitem, gpointer user_data)
 	gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(desc_win), table);
 
 	hbox = gtk_hbox_new(FALSE, 0);
+	gtk_box_set_spacing(GTK_BOX(hbox), 6);
 	gtk_box_pack_start(GTK_BOX(hbox), label2, TRUE, TRUE, 0);
-	gtk_box_pack_start(GTK_BOX(hbox), pm_widgets.help_button, FALSE, FALSE, 4);
-	gtk_box_pack_start(GTK_BOX(hbox), pm_widgets.configure_button, FALSE, FALSE, 4);
+	gtk_box_pack_start(GTK_BOX(hbox), pm_widgets.help_button, FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(hbox), pm_widgets.configure_button, FALSE, FALSE, 0);
 	gtk_box_pack_start(GTK_BOX(hbox), pm_widgets.keybindings_button, FALSE, FALSE, 0);
 
 	label_vbox = gtk_vbox_new(FALSE, 3);
