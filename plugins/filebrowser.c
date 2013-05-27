@@ -538,8 +538,10 @@ static void on_open_clicked(GtkMenuItem *menuitem, gpointer user_data)
 			open_folder(treepath);
 		}
 	}
-	else
+	else {
 		open_selected_files(list, GPOINTER_TO_INT(user_data));
+		ui_add_recent_widget(file_view);
+	}
 
 	g_list_foreach(list, (GFunc) gtk_tree_path_free, NULL);
 	g_list_free(list);
