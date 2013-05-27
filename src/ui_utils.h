@@ -115,6 +115,8 @@ typedef struct UIPrefs
 	gchar		*custom_date_format;
 	gchar		**custom_commands;
 	gchar		**custom_commands_labels;
+	
+	GtkWidget	*recent_widget;
 }
 UIPrefs;
 
@@ -304,6 +306,8 @@ void ui_create_recent_menus(void);
 void ui_add_recent_document(GeanyDocument *doc);
 
 void ui_add_recent_project_file(const gchar *utf8_filename);
+
+void ui_add_recent_widget(GtkWidget *widget);
 
 
 void ui_update_tab_status(GeanyDocument *doc);

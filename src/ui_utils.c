@@ -1118,6 +1118,19 @@ void ui_add_recent_project_file(const gchar *utf8_filename)
 }
 
 
+static void recent_widget_destroyed(GtkWidget *widget, gpointer data)
+{
+	if (ui_prefs.recent_widget == widget)
+		ui_prefs.recent_widget = NULL;
+}
+
+void ui_add_recent_widget(GtkWidget *widget)
+{
+	g_signal_connect(widget, "destroy", G_CALLBACK(recent_widget_destroyed), NULL);
+	ui_prefs.recent_widget = widget;
+}
+
+
 /* Returns: newly allocated string with the UTF-8 menu text. */
 gchar *ui_menu_item_get_text(GtkMenuItem *menu_item)
 {
