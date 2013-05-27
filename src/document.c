@@ -645,8 +645,15 @@ gboolean document_remove_page(guint page_num)
 {
 	gboolean done = remove_page(page_num);
 
-	if (done && ui_prefs.new_document_after_close)
-		document_new_file_if_non_open();
+	if (done) {
+		if (ui_prefs.new_document_after_close)
+			document_new_file_if_non_open();
+
+		if (gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook)) == 0) {
+			if (ui_prefs.recent_widget)
+				gtk_widget_grab_focus(ui_prefs.recent_widget);
+		}
+	}
 
 	return done;
 }
