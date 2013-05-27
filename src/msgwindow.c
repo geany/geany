@@ -1095,6 +1095,7 @@ gboolean msgwin_goto_messages_file_line(gboolean focus_editor)
 					if (ret && focus_editor)
 						gtk_widget_grab_focus(GTK_WIDGET(doc->editor->sci));
 				}
+				ui_add_recent_widget(msgwindow.tree_msg);
 			}
 			g_free(filename);
 		}
