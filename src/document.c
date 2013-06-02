@@ -976,6 +976,16 @@ static gboolean detect_indent_width(GeanyEditor *editor, GeanyIndentType type, g
 	line_count = sci_get_line_count(sci);
 	for (line = 0; line < line_count; line++)
 	{
+		gint pos = sci_get_line_indent_position(sci, line);
+
+		/* We probably don't have style info yet, because we're generally called just after
+		 * the document got created, so we can't use highlighting_is_code_style().
+		 * That's not good, but the assumption below that concerning lines start with an
+		 * asterisk (common continuation character for C/C++/Java/...) should do the trick
+		 * without removing too much legitimate lines. */
+		if (sci_get_char_at(sci, pos) == '*')
+			continue;
+
 		width = sci_get_line_indentation(sci, line);
 		/* most code will have indent total <= 24, otherwise it's more likely to be
 		 * alignment than indentation */
