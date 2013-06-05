@@ -67,6 +67,7 @@ lexlib/PropSetSimple.h \
 lexlib/SparseState.h \
 lexlib/StyleContext.cxx \
 lexlib/StyleContext.h \
+lexlib/SubStyles.h \
 lexlib/WordList.cxx \
 lexlib/WordList.h \
 src/AutoComplete.cxx \
