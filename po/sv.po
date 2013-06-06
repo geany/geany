@@ -5,10 +5,10 @@
 # Tony Mattsson <superxorn@gmail.com>, 2007 - 2013
 msgid ""
 msgstr ""
-"Project-Id-Version: Geany 1.23\n"
+"Project-Id-Version: Geany 1.24\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-02-23 14:24+0100\n"
-"PO-Revision-Date: 2013-02-06 09:20+0100\n"
+"PO-Revision-Date: 2013-06-05 11:06+0100\n"
 "Last-Translator: Tony Mattsson <superxorn@gmail.com>\n"
 "Language-Team: Swedish <geany-i18n@uvena.de>\n"
 "Language: sv\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-Generator: Poedit 1.5.5\n"
+"X-Generator: Poedit 1.5.4\n"
 
 #: ../geany.desktop.in.h:1 ../data/geany.glade.h:350
 msgid "Geany"
@@ -402,7 +402,6 @@ msgid "Bottom"
 msgstr "Botten"
 
 #: ../data/geany.glade.h:81
-#, fuzzy
 msgid "<b>Message window</b>"
 msgstr "Meddelandefönster:"
 
@@ -1219,7 +1218,7 @@ msgstr "Webbläsare:"
 msgid ""
 "A terminal emulator command (%c is substituted with the Geany run script "
 "filename)"
-msgstr ""
+msgstr "Ett terminalkommando (%c ersätts med Geanys skripts filnamn)"
 
 #: ../data/geany.glade.h:255
 msgid "Path (and possibly additional arguments) to your favorite browser"
@@ -1449,9 +1448,8 @@ msgid "Background color:"
 msgstr "Bakgrundsfärg"
 
 #: ../data/geany.glade.h:306
-#, fuzzy
 msgid "Background image:"
-msgstr "Bakgrund"
+msgstr "Bakgrundsbild:"
 
 #: ../data/geany.glade.h:307
 msgid "Scrollback lines:"
@@ -1466,14 +1464,12 @@ msgid "Sets the foreground color of the text in the terminal widget"
 msgstr "Justerar förgrundsfärgen för texten i terminalen."
 
 #: ../data/geany.glade.h:310
-#, fuzzy
 msgid "Sets the background color of the text in the terminal widget"
 msgstr "Justerar bakgrundsfärgen för texten i terminalen"
 
 #: ../data/geany.glade.h:311
-#, fuzzy
 msgid "Sets the path to the background image in the terminal widget"
-msgstr "Justerar bakgrundsfärgen för texten i terminalen"
+msgstr "Ställer in sökvägen för bakgrundsbilden bakom texten i terminalen"
 
 #: ../data/geany.glade.h:312
 msgid ""
@@ -1724,12 +1720,10 @@ msgid "_Select Current Paragraph"
 msgstr "Välj paragraf"
 
 #: ../data/geany.glade.h:367
-#, fuzzy
 msgid "_Move Line(s) Up"
 msgstr "Flytta rad(er) uppåt"
 
 #: ../data/geany.glade.h:368
-#, fuzzy
 msgid "_Move Line(s) Down"
 msgstr "Flytta  rad(er) nedåt"
 
@@ -1986,9 +1980,8 @@ msgid "Convert and Set to CR (_Mac)"
 msgstr "Konvertera till CR (Mac)"
 
 #: ../data/geany.glade.h:432 ../src/keybindings.c:567
-#, fuzzy
 msgid "_Clone"
-msgstr "Stäng"
+msgstr "Klona"
 
 #: ../data/geany.glade.h:433
 msgid "_Strip Trailing Spaces"
@@ -2252,7 +2245,7 @@ msgstr ""
 "kommando."
 
 #: ../src/build.c:1010
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Could not parse terminal command \"%s\" (check Terminal tool setting in "
 "Preferences)"
@@ -3271,7 +3264,7 @@ msgstr "Öppna senast stängta tab igen"
 
 #: ../src/keybindings.c:276
 msgid "Quit"
-msgstr ""
+msgstr "Avsluta"
 
 #: ../src/keybindings.c:293
 msgid "Undo"
@@ -3494,9 +3487,8 @@ msgid "Go to End of Line"
 msgstr "Gå till radslut"
 
 #: ../src/keybindings.c:491
-#, fuzzy
 msgid "Go to Start of Display Line"
-msgstr "Gå till radslut"
+msgstr "Gå till början av raden"
 
 #: ../src/keybindings.c:493
 msgid "Go to End of Display Line"
@@ -4026,9 +4018,8 @@ msgid "Print only the basename(without the path) of the printed file"
 msgstr "Skriv bara ut filnamnet, ej sökvägen."
 
 #: ../src/printing.c:404
-#, fuzzy
 msgid "Paginating"
-msgstr "Utskrift"
+msgstr "Paginerar"
 
 #: ../src/printing.c:428
 #, c-format
@@ -4525,15 +4516,15 @@ msgstr "Strukturer"
 
 #: ../src/symbols.c:752
 msgid "Parts"
-msgstr ""
+msgstr "Delar"
 
 #: ../src/symbols.c:753
 msgid "Assembly"
-msgstr ""
+msgstr "Bygg"
 
 #: ../src/symbols.c:754
 msgid "Steps"
-msgstr ""
+msgstr "Steg"
 
 #: ../src/symbols.c:769 ../src/symbols.c:864 ../src/symbols.c:889
 #: ../src/symbols.c:901
@@ -4585,24 +4576,20 @@ msgid "Type Selectors"
 msgstr "Typ-konstruktörer"
 
 #: ../src/symbols.c:823
-#, fuzzy
 msgid "Section Level 1"
-msgstr "Sektion"
+msgstr "Sektionsnivå 1"
 
 #: ../src/symbols.c:824
-#, fuzzy
 msgid "Section Level 2"
-msgstr "Sektion"
+msgstr "Sektionsnivå 2"
 
 #: ../src/symbols.c:825
-#, fuzzy
 msgid "Section Level 3"
-msgstr "Sektion"
+msgstr "Sektionsnivå 3"
 
 #: ../src/symbols.c:826
-#, fuzzy
 msgid "Section Level 4"
-msgstr "Sektion"
+msgstr "Sektionsnivå 4"
 
 #: ../src/symbols.c:833 ../src/symbols.c:879
 msgid "Modules"
@@ -4646,9 +4633,8 @@ msgid "Variables / Signals"
 msgstr "Variabler / Signaler"
 
 #: ../src/symbols.c:870
-#, fuzzy
 msgid "Processes / Blocks / Components"
-msgstr "Procedurer / Komponenter"
+msgstr "Processer / Block / Komponenter"
 
 #: ../src/symbols.c:878
 msgid "Events"
@@ -5167,7 +5153,7 @@ msgstr "Unix (LF)"
 #: ../src/vte.c:432
 #, c-format
 msgid "invalid VTE library \"%s\": missing symbol \"%s\""
-msgstr ""
+msgstr "ogiltigt VTE bibliotek \"%s\": symbol saknas \"%s\""
 
 #: ../src/vte.c:581
 msgid "_Set Path From Document"
@@ -5199,7 +5185,7 @@ msgstr "Exekverbara filer"
 #: ../src/win32.c:1210
 #, c-format
 msgid "Process timed out after %.02f s!"
-msgstr ""
+msgstr "Processen avslutades efter %.02f s!"
 
 #: ../plugins/classbuilder.c:37
 msgid "Class Builder"
