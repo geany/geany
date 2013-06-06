@@ -29,7 +29,7 @@ Decoration::Decoration(int indicator_) : next(0), indicator(indicator_) {
 Decoration::~Decoration() {
 }
 
-bool Decoration::Empty() {
+bool Decoration::Empty() const {
 	return (rs.Runs() == 1) && (rs.AllSameAs(0));
 }
 
@@ -159,7 +159,7 @@ void DecorationList::DeleteAnyEmpty() {
 	}
 }
 
-int DecorationList::AllOnFor(int position) {
+int DecorationList::AllOnFor(int position) const {
 	int mask = 0;
 	for (Decoration *deco=root; deco; deco = deco->next) {
 		if (deco->rs.ValueAt(position)) {

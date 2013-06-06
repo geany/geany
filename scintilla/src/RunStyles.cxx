@@ -87,7 +87,7 @@ int RunStyles::ValueAt(int position) const {
 	return styles->ValueAt(starts->PartitionFromPosition(position));
 }
 
-int RunStyles::FindNextChange(int position, int end) {
+int RunStyles::FindNextChange(int position, int end) const {
 	int run = starts->PartitionFromPosition(position);
 	if (run < starts->Partitions()) {
 		int runChange = starts->PositionFromPartition(run);
@@ -106,11 +106,11 @@ int RunStyles::FindNextChange(int position, int end) {
 	}
 }
 
-int RunStyles::StartRun(int position) {
+int RunStyles::StartRun(int position) const {
 	return starts->PositionFromPartition(starts->PartitionFromPosition(position));
 }
 
-int RunStyles::EndRun(int position) {
+int RunStyles::EndRun(int position) const {
 	return starts->PositionFromPartition(starts->PartitionFromPosition(position) + 1);
 }
 
@@ -258,7 +258,7 @@ int RunStyles::Find(int value, int start) const {
 	return -1;
 }
 
-void RunStyles::Check() {
+void RunStyles::Check() const {
 	if (Length() < 0) {
 		throw std::runtime_error("RunStyles: Length can not be negative.");
 	}

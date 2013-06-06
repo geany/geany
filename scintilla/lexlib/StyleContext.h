@@ -188,7 +188,7 @@ public:
 		styler.ColourTo(currentPos - ((currentPos > lengthDocument) ? 2 : 1), state);
 		state = state_;
 	}
-	int LengthCurrent() {
+	int LengthCurrent() const {
 		return currentPos - styler.GetStartSegment();
 	}
 	int GetRelative(int n) {

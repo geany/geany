@@ -28,7 +28,7 @@ using namespace Scintilla;
 Accessor::Accessor(IDocument *pAccess_, PropSetSimple *pprops_) : LexAccessor(pAccess_), pprops(pprops_) {
 }
 
-int Accessor::GetPropertyInt(const char *key, int defaultValue) {
+int Accessor::GetPropertyInt(const char *key, int defaultValue) const {
 	return pprops->GetInt(key, defaultValue);
 }
 

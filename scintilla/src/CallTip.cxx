@@ -69,7 +69,7 @@ bool CallTip::IsTabCharacter(char ch) const {
 	return (tabSize > 0) && (ch == '\t');
 }
 
-int CallTip::NextTabPos(int x) {
+int CallTip::NextTabPos(int x) const {
 	if (tabSize > 0) {              // paranoia... not called unless this is true
 		x -= insetX;                // position relative to text
 		x = (x + tabSize) / tabSize;  // tab "number"

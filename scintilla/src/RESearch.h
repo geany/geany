@@ -61,7 +61,7 @@ private:
 	unsigned char bittab[BITBLK]; /* bit table for CCL pre-set bits */
 	int failure;
 	CharClassify *charClass;
-	bool iswordc(unsigned char x) {
+	bool iswordc(unsigned char x) const {
 		return charClass->IsWord(x);
 	}
 };

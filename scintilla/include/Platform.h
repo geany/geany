@@ -119,19 +119,19 @@ public:
 
 	// Other automatically defined methods (assignment, copy constructor, destructor) are fine
 
-	bool operator==(PRectangle &rc) {
+	bool operator==(PRectangle &rc) const {
 		return (rc.left == left) && (rc.right == right) &&
 			(rc.top == top) && (rc.bottom == bottom);
 	}
-	bool Contains(Point pt) {
+	bool Contains(Point pt) const {
 		return (pt.x >= left) && (pt.x <= right) &&
 			(pt.y >= top) && (pt.y <= bottom);
 	}
-	bool Contains(PRectangle rc) {
+	bool Contains(PRectangle rc) const {
 		return (rc.left >= left) && (rc.right <= right) &&
 			(rc.top >= top) && (rc.bottom <= bottom);
 	}
-	bool Intersects(PRectangle other) {
+	bool Intersects(PRectangle other) const {
 		return (right > other.left) && (left < other.right) &&
 			(bottom > other.top) && (top < other.bottom);
 	}
@@ -141,9 +141,9 @@ public:
 		right += xDelta;
 		bottom += yDelta;
 	}
-	XYPOSITION Width() { return right - left; }
-	XYPOSITION Height() { return bottom - top; }
-	bool Empty() {
+	XYPOSITION Width() const { return right - left; }
+	XYPOSITION Height() const { return bottom - top; }
+	bool Empty() const {
 		return (Height() <= 0) || (Width() <= 0);
 	}
 };
@@ -199,15 +199,15 @@ public:
 		return co;
 	}
 
-	unsigned int GetRed() {
+	unsigned int GetRed() const {
 		return co & 0xff;
 	}
 
-	unsigned int GetGreen() {
+	unsigned int GetGreen() const {
 		return (co >> 8) & 0xff;
 	}
 
-	unsigned int GetBlue() {
+	unsigned int GetBlue() const {
 		return (co >> 16) & 0xff;
 	}
 };

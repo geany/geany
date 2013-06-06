@@ -153,7 +153,7 @@ public:
 	bool IsInactive() const {
 		return state != 0;
 	}
-	bool CurrentIfTaken() {
+	bool CurrentIfTaken() const {
 		return (ifTaken & maskLevel()) != 0;
 	}
 	void StartSection(bool on) {
@@ -188,7 +188,7 @@ public:
 class PPStates {
 	std::vector<LinePPState> vlls;
 public:
-	LinePPState ForLine(int line) {
+	LinePPState ForLine(int line) const {
 		if ((line > 0) && (vlls.size() > static_cast<size_t>(line))) {
 			return vlls[line];
 		} else {

@@ -1881,7 +1881,7 @@ void ListBoxX::SetList(const char *listText, char separator, char typesep) {
 	Clear();
 	int count = strlen(listText) + 1;
 	std::vector<char> words(listText, listText+count);
-	char *startword = words.data();
+	char *startword = &words[0];
 	char *numword = NULL;
 	int i = 0;
 	for (; words[i]; i++) {
@@ -1890,10 +1890,10 @@ void ListBoxX::SetList(const char *listText, char separator, char typesep) {
 			if (numword)
 				*numword = '\0';
 			Append(startword, numword?atoi(numword + 1):-1);
-			startword = words.data() + i + 1;
+			startword = &words[0] + i + 1;
 			numword = NULL;
 		} else if (words[i] == typesep) {
-			numword = words.data() + i;
+			numword = &words[0] + i;
 		}
 	}
 	if (startword) {

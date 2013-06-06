@@ -14,6 +14,7 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <algorithm>
 
 #include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
@@ -172,7 +173,7 @@ private:
 	virtual bool DragThreshold(Point ptStart, Point ptNow);
 	virtual void StartDrag();
 	int TargetAsUTF8(char *text);
-	int EncodedFromUTF8(char *utf8, char *encoded);
+	int EncodedFromUTF8(char *utf8, char *encoded) const;
 	virtual bool ValidCodePage(int codePage) const;
 public: 	// Public for scintilla_send_message
 	virtual sptr_t WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lParam);
@@ -839,7 +840,7 @@ void ScintillaGTK::StartDrag() {
 	               reinterpret_cast<GdkEvent *>(evbtn));
 }
 
-static std::string ConvertText(char *s, size_t len, const char *charSetDest,
+static std::string ConvertText(const char *s, size_t len, const char *charSetDest,
 	const char *charSetSource, bool transliterations, bool silent=false) {
 	// s is not const because of different versions of iconv disagreeing about const
 	std::string destForm;
@@ -847,7 +848,8 @@ static std::string ConvertText(char *s, size_t len, const char *charSetDest,
 	if (conv) {
 		size_t outLeft = len*3+1;
 		destForm = std::string(outLeft, '\0');
-		char *pin = s;
+		// g_iconv does not actually write to its input argument so safe to cast away const
+		char *pin = const_cast<char *>(s);
 		size_t inLeft = len;
 		char *putf = &destForm[0];
 		char *pout = putf;
@@ -856,10 +858,10 @@ static std::string ConvertText(char *s, size_t len, const char *charSetDest,
 			if (!silent) {
 				if (len == 1)
 					fprintf(stderr, "iconv %s->%s failed for %0x '%s'\n",
-						charSetSource, charSetDest, (unsigned char)(*s), static_cast<char *>(s));
+						charSetSource, charSetDest, (unsigned char)(*s), s);
 				else
 					fprintf(stderr, "iconv %s->%s failed for %s\n",
-						charSetSource, charSetDest, static_cast<char *>(s));
+						charSetSource, charSetDest, s);
 			}
 			destForm = std::string();
 		} else {
@@ -900,7 +902,7 @@ int ScintillaGTK::TargetAsUTF8(char *text) {
 
 // Translates a nul terminated UTF8 string into the document encoding.
 // Return the length of the result in bytes.
-int ScintillaGTK::EncodedFromUTF8(char *utf8, char *encoded) {
+int ScintillaGTK::EncodedFromUTF8(char *utf8, char *encoded) const {
 	int inputLength = (lengthForEncode >= 0) ? lengthForEncode : strlen(utf8);
 	if (IsUnicodeMode()) {
 		if (encoded) {
@@ -1264,7 +1266,7 @@ public:
 			folded[0] = mapping[static_cast<unsigned char>(mixed[0])];
 			return 1;
 		} else if (*charSet) {
-			std::string sUTF8 = ConvertText(const_cast<char *>(mixed), lenMixed,
+			std::string sUTF8 = ConvertText(mixed, lenMixed,
 				"UTF-8", charSet, false);
 			if (!sUTF8.empty()) {
 				gchar *mapped = g_utf8_casefold(sUTF8.c_str(), sUTF8.length());
@@ -1354,7 +1356,7 @@ std::string ScintillaGTK::CaseMapString(const std::string &s, int caseMapping) {
 		return std::string(mapper.mapped, strlen(mapper.mapped));
 	} else {
 		// Change text to UTF-8
-		std::string sUTF8 = ConvertText(const_cast<char *>(s.c_str()), s.length(),
+		std::string sUTF8 = ConvertText(s.c_str(), s.length(),
 			"UTF-8", charSetBuffer, false);
 		CaseMapper mapper(sUTF8, caseMapping == cmUpper);
 		return ConvertText(mapper.mapped, strlen(mapper.mapped), charSetBuffer, "UTF-8", false);
@@ -1448,14 +1450,14 @@ void ScintillaGTK::ClaimSelection() {
 		primarySelection = true;
 		gtk_selection_owner_set(GTK_WIDGET(PWidget(wMain)),
 		                        GDK_SELECTION_PRIMARY, GDK_CURRENT_TIME);
-		primary.Free();
+		primary.Clear();
 	} else if (OwnPrimarySelection()) {
 		primarySelection = true;
-		if (primary.s == NULL)
+		if (primary.Empty())
 			gtk_selection_owner_set(NULL, GDK_SELECTION_PRIMARY, GDK_CURRENT_TIME);
 	} else {
 		primarySelection = false;
-		primary.Free();
+		primary.Clear();
 	}
 }
 
@@ -1479,7 +1481,7 @@ void ScintillaGTK::GetGtkSelectionText(GtkSelectionData *selectionData, Selectio
 
 	// Return empty string if selection is not a string
 	if ((selectionTypeData != GDK_TARGET_STRING) && (selectionTypeData != atomUTF8)) {
-		selText.Copy("", 0, SC_CP_UTF8, 0, false, false);
+		selText.Clear();
 		return;
 	}
 
@@ -1498,20 +1500,21 @@ void ScintillaGTK::GetGtkSelectionText(GtkSelectionData *selectionData, Selectio
 		if (IsUnicodeMode()) {
 			// Unknown encoding so assume in Latin1
 			dest = UTF8FromLatin1(dest.c_str(), dest.length());
-			selText.Copy(dest.c_str(), dest.length()+1, SC_CP_UTF8, 0, selText.rectangular, false);
+			selText.Copy(dest, SC_CP_UTF8, 0, isRectangular, false);
 		} else {
 			// Assume buffer is in same encoding as selection
-			selText.Copy(dest.c_str(), dest.length()+1, pdoc->dbcsCodePage,
+			selText.Copy(dest, pdoc->dbcsCodePage,
 				vs.styles[STYLE_DEFAULT].characterSet, isRectangular, false);
 		}
 	} else {	// UTF-8
-		selText.Copy(dest.c_str(), dest.length()+1, SC_CP_UTF8, 0, isRectangular, false);
 		const char *charSetBuffer = CharacterSetID();
 		if (!IsUnicodeMode() && *charSetBuffer) {
 			// Convert to locale
-			dest = ConvertText(selText.s, selText.len, charSetBuffer, "UTF-8", true);
-			selText.Copy(dest.c_str(), dest.length(), pdoc->dbcsCodePage,
-				vs.styles[STYLE_DEFAULT].characterSet, selText.rectangular, false);
+			dest = ConvertText(dest.c_str(), dest.length(), charSetBuffer, "UTF-8", true);
+			selText.Copy(dest, pdoc->dbcsCodePage,
+				vs.styles[STYLE_DEFAULT].characterSet, isRectangular, false);
+		} else {
+			selText.Copy(dest, SC_CP_UTF8, 0, isRectangular, false);
 		}
 	}
 }
@@ -1538,9 +1541,9 @@ void ScintillaGTK::ReceivedSelection(GtkSelectionData *selection_data) {
 					sel.Range(sel.Main()).Start();
 
 				if (selText.rectangular) {
-					PasteRectangular(selStart, selText.s, selText.len-1);
+					PasteRectangular(selStart, selText.Data(), selText.Length());
 				} else {
-					InsertPaste(selStart, selText.s, selText.len-1);
+					InsertPaste(selStart, selText.Data(), selText.Length());
 				}
 				EnsureCaretVisible();
 			}
@@ -1559,12 +1562,12 @@ void ScintillaGTK::ReceivedDrop(GtkSelectionData *selection_data) {
 		const char *data = reinterpret_cast<const char *>(DataOfGSD(selection_data));
 		std::vector<char> drop(data, data + LengthOfGSD(selection_data));
 		drop.push_back('\0');
-		NotifyURIDropped(drop.data());
+		NotifyURIDropped(&drop[0]);
 	} else if ((TypeOfGSD(selection_data) == GDK_TARGET_STRING) || (TypeOfGSD(selection_data) == atomUTF8)) {
 		if (TypeOfGSD(selection_data) > 0) {
 			SelectionText selText;
 			GetGtkSelectionText(selection_data, selText);
-			DropAt(posDrop, selText.s, false, selText.rectangular);
+			DropAt(posDrop, selText.Data(), selText.Length(), false, selText.rectangular);
 		}
 	} else if (LengthOfGSD(selection_data) > 0) {
 		//~ fprintf(stderr, "ReceivedDrop other %p\n", static_cast<void *>(selection_data->type));
@@ -1581,9 +1584,9 @@ void ScintillaGTK::GetSelection(GtkSelectionData *selection_data, guint info, Se
 	// from code below
 	SelectionText *newline_normalized = NULL;
 	{
-		std::string tmpstr = Document::TransformLineEnds(text->s, text->len, SC_EOL_LF);
+		std::string tmpstr = Document::TransformLineEnds(text->Data(), text->Length(), SC_EOL_LF);
 		newline_normalized = new SelectionText();
-		newline_normalized->Copy(tmpstr.c_str(), tmpstr.length()+1, SC_CP_UTF8, 0, text->rectangular, false);
+		newline_normalized->Copy(tmpstr, SC_CP_UTF8, 0, text->rectangular, false);
 		text = newline_normalized;
 	}
 #endif
@@ -1593,9 +1596,9 @@ void ScintillaGTK::GetSelection(GtkSelectionData *selection_data, guint info, Se
 	if ((text->codePage != SC_CP_UTF8) && (info == TARGET_UTF8_STRING)) {
 		const char *charSet = ::CharacterSetID(text->characterSet);
 		if (*charSet) {
-			std::string tmputf = ConvertText(text->s, text->len, "UTF-8", charSet, false);
+			std::string tmputf = ConvertText(text->Data(), text->Length(), "UTF-8", charSet, false);
 			converted = new SelectionText();
-			converted->Copy(tmputf.c_str(), tmputf.length(), SC_CP_UTF8, 0, text->rectangular, false);
+			converted->Copy(tmputf, SC_CP_UTF8, 0, text->rectangular, false);
 			text = converted;
 		}
 	}
@@ -1607,8 +1610,8 @@ void ScintillaGTK::GetSelection(GtkSelectionData *selection_data, guint info, Se
 	// All other tested aplications behave benignly by ignoring the \0.
 	// The #if is here because on Windows cfColumnSelect clip entry is used
 	// instead as standard indicator of rectangularness (so no need to kludge)
-	const char *textData = text->s ? text->s : "";
-	int len = strlen(textData);
+	const char *textData = text->Data();
+	int len = text->Length();
 #if PLAT_GTK_WIN32 == 0
 	if (text->rectangular)
 		len++;
@@ -1655,7 +1658,7 @@ void ScintillaGTK::UnclaimSelection(GdkEventSelection *selection_event) {
 		if (selection_event->selection == GDK_SELECTION_PRIMARY) {
 			//Platform::DebugPrintf("UnclaimPrimarySelection\n");
 			if (!OwnPrimarySelection()) {
-				primary.Free();
+				primary.Clear();
 				primarySelection = false;
 				FullPaint();
 			}
@@ -1796,7 +1799,7 @@ gint ScintillaGTK::PressThis(GdkEventButton *event) {
 		} else if (event->button == 2) {
 			// Grab the primary selection if it exists
 			SelectionPosition pos = SPositionFromLocation(pt, false, false, UserVirtualSpace());
-			if (OwnPrimarySelection() && primary.s == NULL)
+			if (OwnPrimarySelection() && primary.Empty())
 				CopySelectionRange(&primary);
 
 			sel.Clear();
@@ -2542,7 +2545,7 @@ void ScintillaGTK::SelectionGet(GtkWidget *widget,
 	try {
 		//Platform::DebugPrintf("Selection get\n");
 		if (SelectionOfGSD(selection_data) == GDK_SELECTION_PRIMARY) {
-			if (sciThis->primary.s == NULL) {
+			if (sciThis->primary.Empty()) {
 				sciThis->CopySelectionRange(&sciThis->primary);
 			}
 			sciThis->GetSelection(selection_data, info, &sciThis->primary);
@@ -2939,7 +2942,10 @@ static void scintilla_init(ScintillaObject *sci) {
 }
 
 GtkWidget* scintilla_new() {
-	return GTK_WIDGET(g_object_new(scintilla_get_type(), NULL));
+	GtkWidget *widget = GTK_WIDGET(g_object_new(scintilla_get_type(), NULL));
+	gtk_widget_set_direction(widget, GTK_TEXT_DIR_LTR);
+
+	return widget;
 }
 
 void scintilla_set_id(ScintillaObject *sci, uptr_t id) {

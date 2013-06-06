@@ -191,7 +191,7 @@ public:
 	/// The save point is a marker in the undo stack where the container has stated that
 	/// the buffer was saved. Undo and redo can move over the save point.
 	void SetSavePoint();
-	bool IsSavePoint();
+	bool IsSavePoint() const;
 
 	bool SetUndoCollection(bool collectUndo);
 	bool IsCollectingUndo() const;
@@ -202,11 +202,11 @@ public:
 
 	/// To perform an undo, StartUndo is called to retrieve the number of steps, then UndoStep is
 	/// called that many times. Similarly for redo.
-	bool CanUndo();
+	bool CanUndo() const;
 	int StartUndo();
 	const Action &GetUndoStep() const;
 	void PerformUndoStep();
-	bool CanRedo();
+	bool CanRedo() const;
 	int StartRedo();
 	const Action &GetRedoStep() const;
 	void PerformRedoStep();

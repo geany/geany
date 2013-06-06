@@ -282,7 +282,7 @@ int LineLevels::SetLevel(int line, int level, int lines) {
 	return prev;
 }
 
-int LineLevels::GetLevel(int line) {
+int LineLevels::GetLevel(int line) const {
 	if (levels.Length() && (line >= 0) && (line < levels.Length())) {
 		return levels[line];
 	} else {
@@ -325,7 +325,7 @@ int LineState::GetLineState(int line) {
 	return lineStates[line];
 }
 
-int LineState::GetMaxLineState() {
+int LineState::GetMaxLineState() const {
 	return lineStates.Length();
 }
 
@@ -383,7 +383,7 @@ bool LineAnnotation::MultipleStyles(int line) const {
 		return 0;
 }
 
-int LineAnnotation::Style(int line) {
+int LineAnnotation::Style(int line) const {
 	if (annotations.Length() && (line >= 0) && (line < annotations.Length()) && annotations[line])
 		return reinterpret_cast<AnnotationHeader *>(annotations[line])->style;
 	else

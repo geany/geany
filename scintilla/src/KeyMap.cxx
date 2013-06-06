@@ -49,7 +49,7 @@ void KeyMap::AssignCmdKey(int key, int modifiers, unsigned int msg) {
 	kmap.push_back(ktc);
 }
 
-unsigned int KeyMap::Find(int key, int modifiers) {
+unsigned int KeyMap::Find(int key, int modifiers) const {
 	for (size_t i = 0; i < kmap.size(); i++) {
 		if ((key == kmap[i].key) && (modifiers == kmap[i].modifiers)) {
 			return kmap[i].msg;

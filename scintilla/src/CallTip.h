@@ -35,7 +35,7 @@ class CallTip {
 		bool highlight, bool draw);
 	int PaintContents(Surface *surfaceWindow, bool draw);
 	bool IsTabCharacter(char c) const;
-	int NextTabPos(int x);
+	int NextTabPos(int x) const;
 
 public:
 	Window wCallTip;
