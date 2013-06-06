@@ -67,6 +67,8 @@ if git status -unormal -s scintilla | grep '^??'; then
 
 Untracked files above have been introduced by the new Scintilla version and
 should be added to version control if appropriate, or removed.
+
+Don't forget to add new files to the build system.
 EOF
 fi
 
