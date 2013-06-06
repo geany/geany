@@ -303,9 +303,10 @@ def configure(conf):
 
 
 def options(opt):
-    # Disable MSVC detetion on win32: building Geany with MSVC is currently not supported
+    # Disable MSVC detection on win32: building Geany with MSVC is currently not supported
     # If anyone wants to add support for building with MSVC, this hack should be removed.
     c_compiler['win32'] = ['gcc']
+    cxx_compiler['win32'] = ['g++']
 
     opt.load('compiler_cc')
     opt.load('compiler_cxx')
