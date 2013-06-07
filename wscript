@@ -47,6 +47,7 @@ from waflib.Configure import ConfigurationContext
 from waflib.Errors import WafError
 from waflib.TaskGen import feature, before_method
 from waflib.Tools.compiler_c import c_compiler
+from waflib.Tools.compiler_cxx import cxx_compiler
 
 
 APPNAME = 'geany'
