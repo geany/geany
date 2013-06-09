@@ -53,5 +53,8 @@ struct GeanyKeyGroup *plugin_set_key_group(struct GeanyPlugin *plugin,
 
 void plugin_show_configure(struct GeanyPlugin *plugin);
 
+void plugin_builder_connect_signals(struct GeanyPlugin *plugin,
+	GtkBuilder *builder, gpointer user_data);
+
 #endif /* HAVE_PLUGINS */
 #endif /* GEANY_PLUGINUTILS_H */

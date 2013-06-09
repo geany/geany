@@ -55,7 +55,7 @@ G_BEGIN_DECLS
  * @warning You should not test for values below 200 as previously
  * @c GEANY_API_VERSION was defined as an enum value, not a macro.
  */
-#define GEANY_API_VERSION 216
+#define GEANY_API_VERSION 217
 
 /* hack to have a different ABI when built with GTK3 because loading GTK2-linked plugins
  * with GTK3-linked Geany leads to crash */
@@ -666,6 +666,7 @@ typedef struct PluginFuncs
 	guint	(*plugin_timeout_add_seconds) (GeanyPlugin *plugin, guint interval,
 		GSourceFunc function, gpointer data);
 	guint	(*plugin_idle_add) (GeanyPlugin *plugin, GSourceFunc function, gpointer data);
+	void	(*plugin_builder_connect_signals) (GeanyPlugin *plugin, GtkBuilder *builder, gpointer user_data);
 }
 PluginFuncs;
 

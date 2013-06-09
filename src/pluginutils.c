@@ -395,4 +395,86 @@ void plugin_show_configure(GeanyPlugin *plugin)
 }
 
 
+struct BuilderConnectData
+{
+	gpointer user_data;
+	GeanyPlugin *plugin;
+};
+
+
+static void connect_plugin_signals(GtkBuilder *builder, GObject *object,
+	const gchar *signal_name, const gchar *handler_name,
+	GObject *connect_object, GConnectFlags flags, gpointer user_data)
+{
+	gpointer symbol = NULL;
+	struct BuilderConnectData *data = user_data;
+
+	if (!g_module_symbol(data->plugin->priv->module, handler_name, &symbol))
+	{
+		g_warning("Failed to locate signal handler for '%s': %s",
+			signal_name, g_module_error());
+		return;
+	}
+
+	plugin_signal_connect(data->plugin, object, signal_name, FALSE,
+		G_CALLBACK(symbol) /*ub?*/, data->user_data);
+}
+
+
+/**
+ * Allows auto-connecting Glade/GtkBuilder signals in plugins.
+ *
+ * When a plugin uses GtkBuilder to load some UI from file/string,
+ * the gtk_builder_connect_signals() function is unable to automatically
+ * connect to the plugin's signal handlers. A plugin could itself use
+ * the gtk_builder_connect_signals_full() function to automatically
+ * connect to the signal handler functions by loading it's GModule
+ * and retrieving pointers to the handler functions, but rather than
+ * each plugin having to do that, this function handles it automatically.
+ *
+ * @code
+ * ...
+ * GeanyPlugin *geany_plugin;
+ *
+ * G_MODULE_EXPORT void
+ * myplugin_button_clicked(GtkButton *button, gpointer user_data)
+ * {
+ *   g_print("Button pressed\n");
+ * }
+ *
+ * void plugin_init(GeanyData *data)
+ * {
+ *   GtkBuilder *builder = gtk_builder_new();
+ *   gtk_builder_add_from_file(builder, "gui.glade", NULL);
+ *   plugin_builder_connect_signals(geany_plugin, builder, NULL);
+ *   ...
+ * }
+ * @endcode
+ *
+ * @note It's important that you prefix your callback handlers with
+ * a plugin-specific prefix to avoid clashing with other plugins since
+ * the function symbols will be exported process-wide.
+ *
+ * @param plugin Must be @ref geany_plugin.
+ * @param builder The GtkBuilder to connect signals with.
+ * @param user_data User data to pass to the connected signal handlers.
+ *
+ * @since 1.24, plugin API 217.
+ */
+void plugin_builder_connect_signals(GeanyPlugin *plugin,
+	GtkBuilder *builder, gpointer user_data)
+{
+	struct BuilderConnectData data = { NULL };
+
+	g_return_if_fail(plugin != NULL && plugin->priv != NULL);
+	g_return_if_fail(plugin->priv->module != NULL);
+	g_return_if_fail(GTK_IS_BUILDER(builder));
+
+	data.user_data = user_data;
+	data.plugin = plugin;
+
+	gtk_builder_connect_signals_full(builder, connect_plugin_signals, &data);
+}
+
+
 #endif
