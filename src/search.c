@@ -1017,8 +1017,14 @@ static void create_fif_dialog(void)
 }
 
 
-/* dir is the directory to search in (UTF-8 encoding), may be NULL to determine it the usual way
- * by using the current file's path */
+/**
+ * Shows the Find in Files dialog.
+ *
+ * @param dir The directory to search in (UTF-8 encoding). May be @c NULL
+ * to determine it the usual way by using the current document's path.
+ *
+ * @since 0.14, plugin API 53
+ */
 void search_show_find_in_files_dialog(const gchar *dir)
 {
 	search_show_find_in_files_dialog_full(NULL, dir);
