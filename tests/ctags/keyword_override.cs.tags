@@ -1,0 +1,10 @@
+# format=tagmanager
+AreaÌ128Í()ÎTestClass.CubeÖ0Ïpublic override double
+AreaÌ128Í()ÎTestClass.SquareÖ0Ïpublic virtual double
+CubeÌ1ÎTestClassÖ0
+CubeÌ128Í(double x)ÎTestClass.CubeÖ0
+MainÌ128Í()ÎTestClassÖ0Ïpublic void
+SquareÌ1ÎTestClassÖ0
+SquareÌ128Í(double x)ÎTestClass.SquareÖ0
+TestClassÌ1Ö0
+xÌ8ÎTestClass.SquareÖ0Ïdouble

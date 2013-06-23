@@ -1,0 +1,6 @@
+# format=tagmanager
+anon_struct_0Ì2048Ö0
+mainÌ16Í(void)Ö0Ïvoid
+my_structÌ4096Ö0Ïanon_struct_0
+xÌ64Îanon_struct_0Ö0Ïint
+yÌ64Îanon_struct_0Ö0Ïfloat

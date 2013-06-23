@@ -1,0 +1,25 @@
+# format=tagmanager
+DatabaseÌ1Ö0
+ValidClassOneÌ1Îtestlib.extrasÖ0
+ValidClassTwoÌ1Ö0
+calculateÌ16ÎgetHalfOfÖ0
+executeQueryStringÌ128ÎDatabaseÖ0
+getHalfOfÌ16Ö0
+getTodaysDateÌ128ÎDatabaseÖ0
+innerThreeÌ16ÎvalidFunctionThreeÖ0
+invalidInnerFunctionÌ16Ö0
+my_global_var1Ì16384Ö0
+my_global_var2Ì16384Ö0
+my_global_var3Ì16384Ö0
+my_global_var4Ì16Ö0
+my_global_var4Ì16384Ö0
+validFunctionFiveÌ16ÎtestlibÖ0
+validFunctionFourÌ16ÎextraÖ0
+validFunctionOneÌ16Ö0
+validFunctionSixÌ16Îtestlib.coreÖ0
+validFunctionThreeÌ16Ö0
+validFunctionTwoÌ16Ö0
+validMethodFourÌ128ÎValidClassTwoÖ0
+validMethodOneÌ128Îtestlib.extras.ValidClassOneÖ0
+validMethodThreeÌ128ÎValidClassTwoÖ0
+validMethodTwoÌ128Îtestlib.extras.ValidClassOneÖ0
