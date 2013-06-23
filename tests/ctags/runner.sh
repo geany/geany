@@ -22,4 +22,4 @@ source="${result%.*}"
 tagfile="$TMPDIR/test.${source##*.}.tags"
 
 "$GEANY" -c "$CONFDIR" -P -g "$tagfile" "$source" || exit 1
-diff "$tagfile" "$result" || exit 2
+diff -u "$result" "$tagfile" || exit 2
