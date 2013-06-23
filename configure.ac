@@ -139,6 +139,8 @@ AC_CONFIG_FILES([
 		geany.spec
 		geany.pc
 		doc/Doxyfile
+		tests/Makefile
+		tests/ctags/Makefile
 ])
 AC_OUTPUT
 
