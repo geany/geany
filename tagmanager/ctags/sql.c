@@ -169,6 +169,7 @@ typedef struct sTokenInfoSQL {
 	keywordId	keyword;
 	vString *	string;
 	vString *	scope;
+	int         scopeKind;
 	int         begin_end_nest_lvl;
 	unsigned long lineNumber;
 	MIOPos filePosition;
@@ -424,6 +425,7 @@ static tokenInfo *newToken (void)
 	token->keyword            = KEYWORD_NONE;
 	token->string             = vStringNew ();
 	token->scope              = vStringNew ();
+	token->scopeKind          = SQLTAG_COUNT;
 	token->begin_end_nest_lvl = 0;
 	token->lineNumber         = getSourceLineNumber ();
 	token->filePosition       = getInputFilePosition ();
@@ -452,7 +454,7 @@ static int analyzeToken (vString *const name, langType language)
  *	 Tag generation functions
  */
 
-static void makeConstTag (tokenInfo *const token, const sqlKind kind)
+static void makeSqlTag (tokenInfo *const token, const sqlKind kind)
 {
 	if (SqlKinds [kind].enabled)
 	{
@@ -465,31 +467,14 @@ static void makeConstTag (tokenInfo *const token, const sqlKind kind)
 		e.kindName	   = SqlKinds [kind].name;
 		e.kind		   = SqlKinds [kind].letter;
 
-		makeTagEntry (&e);
-	}
-}
-
-static void makeSqlTag (tokenInfo *const token, const sqlKind kind)
-{
-	vString *	fulltag;
-
-	if (SqlKinds [kind].enabled)
-	{
-		/*
-		 * If a scope has been added to the token, change the token
-		 * string to include the scope when making the tag.
-		 */
-		if ( vStringLength(token->scope) > 0 )
+		if (vStringLength (token->scope) > 0)
 		{
-			fulltag = vStringNew ();
-			vStringCopy(fulltag, token->scope);
-			vStringCatS (fulltag, ".");
-			vStringCatS (fulltag, vStringValue(token->string));
-			vStringTerminate(fulltag);
-			vStringCopy(token->string, fulltag);
-			vStringDelete (fulltag);
+			Assert (token->scopeKind < SQLTAG_COUNT);
+			e.extensionFields.scope[0] = SqlKinds [token->scopeKind].name;
+			e.extensionFields.scope[1] = vStringValue (token->scope);
 		}
-		makeConstTag (token, kind);
+
+		makeTagEntry (&e);
 	}
 }
 
@@ -723,7 +708,7 @@ static void readIdentifier (tokenInfo *const token)
  * }
  */
 
-static void addToScope (tokenInfo* const token, vString* const extra)
+static void addToScope (tokenInfo* const token, vString* const extra, sqlKind kind)
 {
 	if (vStringLength (token->scope) > 0)
 	{
@@ -731,6 +716,7 @@ static void addToScope (tokenInfo* const token, vString* const extra)
 	}
 	vStringCatS (token->scope, vStringValue(extra));
 	vStringTerminate(token->scope);
+	token->scopeKind = kind;
 }
 
 /*
@@ -820,6 +806,7 @@ static void copyToken (tokenInfo *const dest, tokenInfo *const src)
 	dest->keyword = src->keyword;
 	vStringCopy(dest->string, src->string);
 	vStringCopy(dest->scope, src->scope);
+	dest->scopeKind = src->scopeKind;
 }
 
 static void skipArgumentList (tokenInfo *const token)
@@ -841,6 +828,7 @@ static void parseSubProgram (tokenInfo *const token)
 {
 	tokenInfo *const name  = newToken ();
 	vString * saveScope = vStringNew ();
+	sqlKind saveScopeKind;
 
 	/*
 	 * This must handle both prototypes and the body of
@@ -898,6 +886,7 @@ static void parseSubProgram (tokenInfo *const token)
 			isKeyword (token, KEYWORD_procedure));
 
 	vStringCopy(saveScope, token->scope);
+	saveScopeKind = token->scopeKind;
 	readToken (token);
 	copyToken (name, token);
 	readToken (token);
@@ -914,7 +903,7 @@ static void parseSubProgram (tokenInfo *const token)
 		 */
 		if ( vStringLength(saveScope) > 0 )
 		{
-			addToScope(token, name->string);
+			addToScope(token, name->string, kind);
 		}
 		readToken (token);
 		copyToken (name, token);
@@ -979,7 +968,7 @@ static void parseSubProgram (tokenInfo *const token)
 				isKeyword (token, KEYWORD_internal) ||
 				isKeyword (token, KEYWORD_external) )
 		{
-			addToScope(token, name->string);
+			addToScope(token, name->string, kind);
 			if (isType (name, TOKEN_IDENTIFIER) ||
 					isType (name, TOKEN_STRING) ||
 					!isKeyword (token, KEYWORD_NONE)
@@ -987,6 +976,7 @@ static void parseSubProgram (tokenInfo *const token)
 				makeSqlTag (name, kind);
 
 			vStringClear (token->scope);
+			token->scopeKind = SQLTAG_COUNT;
 		} 
 		if ( isType (token, TOKEN_EQUAL) )
 			readToken (token);
@@ -997,7 +987,7 @@ static void parseSubProgram (tokenInfo *const token)
 		if (isKeyword (token, KEYWORD_is) || 
 				isKeyword (token, KEYWORD_begin) )
 		{
-			addToScope(token, name->string);
+			addToScope(token, name->string, kind);
 			if (isType (name, TOKEN_IDENTIFIER) ||
 					isType (name, TOKEN_STRING) ||
 					!isKeyword (token, KEYWORD_NONE)
@@ -1006,9 +996,11 @@ static void parseSubProgram (tokenInfo *const token)
 
 			parseBlock (token, TRUE);
 			vStringClear (token->scope);
+			token->scopeKind = SQLTAG_COUNT;
 		} 
 	}
 	vStringCopy(token->scope, saveScope);
+	token->scopeKind = saveScopeKind;
 	deleteToken (name);
 	vStringDelete(saveScope);
 }
@@ -1086,10 +1078,12 @@ static void parseType (tokenInfo *const token)
 {
 	tokenInfo *const name = newToken ();
 	vString * saveScope = vStringNew ();
+	sqlKind saveScopeKind;
 
 	vStringCopy(saveScope, token->scope);
 	/* If a scope has been set, add it to the name */
-	addToScope (name, token->scope);
+	addToScope (name, token->scope, token->scopeKind);
+	saveScopeKind = token->scopeKind;
 	readToken (name);
 	if (isType (name, TOKEN_IDENTIFIER))
 	{
@@ -1097,12 +1091,12 @@ static void parseType (tokenInfo *const token)
 		if (isKeyword (token, KEYWORD_is))
 		{
 			readToken (token);
-			addToScope (token, name->string);
 			switch (token->keyword)
 			{
 				case KEYWORD_record:
 				case KEYWORD_object:
 					makeSqlTag (name, SQLTAG_RECORD);
+					addToScope (token, name->string, SQLTAG_RECORD);
 					parseRecord (token);
 					break;
 
@@ -1119,9 +1113,11 @@ static void parseType (tokenInfo *const token)
 				default: break;
 			}
 			vStringClear (token->scope);
+			token->scopeKind = SQLTAG_COUNT;
 		}
 	}
 	vStringCopy(token->scope, saveScope);
+	token->scopeKind = saveScopeKind;
 	deleteToken (name);
 	vStringDelete(saveScope);
 }
@@ -1659,9 +1655,10 @@ static void parsePackage (tokenInfo *const token)
 		if (isType (name, TOKEN_IDENTIFIER) ||
 				isType (name, TOKEN_STRING))
 			makeSqlTag (name, SQLTAG_PACKAGE);
-		addToScope (token, name->string);
+		addToScope (token, name->string, SQLTAG_PACKAGE);
 		parseBlock (token, FALSE);
 		vStringClear (token->scope);
+		token->scopeKind = SQLTAG_COUNT;
 	}
 	findCmdTerm (token, FALSE);
 	deleteToken (name);
@@ -1724,8 +1721,10 @@ static void parseTable (tokenInfo *const token)
 		{
 			makeSqlTag (name, SQLTAG_TABLE);
 			vStringCopy(token->scope, name->string);
+			token->scopeKind = SQLTAG_TABLE;
 			parseRecord (token);
 			vStringClear (token->scope);
+			token->scopeKind = SQLTAG_COUNT;
 		}
 	} 
 	else if (isKeyword (token, KEYWORD_at))
@@ -1770,7 +1769,7 @@ static void parseIndex (tokenInfo *const token)
 			readIdentifier (owner);
 			readToken (token);
 		}
-		addToScope(name, owner->string);
+		addToScope(name, owner->string, SQLTAG_TABLE /* FIXME? */);
 		makeSqlTag (name, SQLTAG_INDEX);
 	}
 	findCmdTerm (token, FALSE);
@@ -1867,9 +1866,10 @@ static void parseTrigger (tokenInfo *const token)
 		{
 			if ( isKeyword (token, KEYWORD_declare) )
 			{
-				addToScope(token, name->string);
+				addToScope(token, name->string, SQLTAG_TRIGGER);
 				parseDeclare(token, TRUE);
 				vStringClear(token->scope);
+				token->scopeKind = SQLTAG_COUNT;
 			}
 			else
 				readToken (token);
@@ -1878,14 +1878,15 @@ static void parseTrigger (tokenInfo *const token)
 		if ( isKeyword (token, KEYWORD_begin) || 
 				isKeyword (token, KEYWORD_call)   )
 		{
-			addToScope(name, table->string);
+			addToScope(name, table->string, SQLTAG_TABLE);
 			makeSqlTag (name, SQLTAG_TRIGGER);
-			addToScope(token, table->string);
+			addToScope(token, table->string, SQLTAG_TABLE);
 			if ( isKeyword (token, KEYWORD_begin) )
 			{
 				parseBlock (token, TRUE);
 			}
 			vStringClear(token->scope);
+			token->scopeKind = SQLTAG_COUNT;
 		}
 	}
 
@@ -2128,8 +2129,8 @@ static void parseMLTable (tokenInfo *const token)
 						isType (table, TOKEN_STRING) && 
 						isType (event, TOKEN_STRING) )
 				{
-					addToScope(version, table->string);
-					addToScope(version, event->string);
+					addToScope(version, table->string, SQLTAG_TABLE);
+					addToScope(version, event->string, SQLTAG_EVENT);
 					makeSqlTag (version, SQLTAG_MLTABLE);
 				}
 			} 
@@ -2176,7 +2177,7 @@ static void parseMLConn (tokenInfo *const token)
 			if (isType (version, TOKEN_STRING) && 
 					isType (event, TOKEN_STRING) )
 			{
-				addToScope(version, event->string);
+				addToScope(version, event->string, SQLTAG_EVENT);
 				makeSqlTag (version, SQLTAG_MLCONN);
 			}
 		} 
@@ -2238,8 +2239,8 @@ static void parseMLProp (tokenInfo *const token)
 						isType (prop_set_name, TOKEN_STRING) && 
 						isType (prop_name, TOKEN_STRING) )
 				{
-					addToScope(component, prop_set_name->string);
-					addToScope(component, prop_name->string);
+					addToScope(component, prop_set_name->string, SQLTAG_MLPROP /* FIXME */);
+					addToScope(component, prop_name->string, SQLTAG_MLPROP /* FIXME */);
 					makeSqlTag (component, SQLTAG_MLPROP);
 				}
 			} 
