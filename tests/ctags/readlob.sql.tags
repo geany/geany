@@ -1,0 +1,10 @@
+# format=tagmanager
+charbufÌ16384Ö0
+clob_locatorÌ16384Ö0
+lob_tableÌ1Ö0
+lob_table.b_fileÌ8Ö0
+lob_table.b_lobÌ8Ö0
+lob_table.c_lobÌ8Ö0
+lob_table.idÌ8Ö0
+read_amountÌ16384Ö0
+read_offsetÌ16384Ö0

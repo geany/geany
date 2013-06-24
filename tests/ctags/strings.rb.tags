@@ -1,0 +1,14 @@
+# format=tagmanager
+AÌ1Ö0
+aÌ128ÎAÖ0
+bÌ128ÎAÖ0
+cÌ128ÎA.bÖ0
+dÌ128ÎA.b.cÖ0
+eÌ128ÎA.b.c.dÖ0
+fÌ128ÎA.b.c.d.eÖ0
+not_me1Ì128ÎA.b.c.d.eÖ0
+not_me2Ì128ÎA.b.c.d.eÖ0
+not_me3Ì128ÎA.b.c.d.eÖ0
+not_me4Ì128ÎA.b.c.d.eÖ0
+not_me5Ì128ÎA.b.c.d.eÖ0
+sentinelÌ128ÎA.b.c.d.e.fÖ0

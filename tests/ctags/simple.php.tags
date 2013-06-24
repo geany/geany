@@ -1,0 +1,11 @@
+# format=tagmanager
+CONSTANTÌ65536Ö0
+CartÌ1Ö0
+VarÌ16384Ö0
+_4siteÌ16384Ö0
+add_itemÌ16Í($artnr, $num)Ö0
+fooÌ16Í($arg_1, $arg_2, ..., $arg_n)Ö0
+itemsÌ16384Ö0
+remove_itemÌ16Í($artnr, $num)Ö0
+täyteÌ16384Ö0
+varÌ16384Ö0
