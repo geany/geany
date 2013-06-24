@@ -185,6 +185,7 @@ test_sources = \
 	objectivec_property.mm			\
 	objectivec_protocol.mm			\
 	Package.pm						\
+	procedure_pointer_module.f90	\
 	property.cs						\
 	prototype.h						\
 	pure_elem.f95					\
