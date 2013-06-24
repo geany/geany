@@ -120,6 +120,7 @@ test_sources = \
 	enum.java						\
 	events.cs						\
 	extern_variable.h				\
+	forall_module.f90				\
 	format.pl						\
 	func_typedef.h					\
 	general.cs						\
@@ -184,6 +185,7 @@ test_sources = \
 	objectivec_property.mm			\
 	objectivec_protocol.mm			\
 	Package.pm						\
+	procedure_pointer_module.f90	\
 	property.cs						\
 	prototype.h						\
 	pure_elem.f95					\

@@ -84,6 +84,7 @@ typedef enum eKeywordId {
 	KEYWORD_equivalence,
 	KEYWORD_extends,
 	KEYWORD_external,
+	KEYWORD_forall,
 	KEYWORD_format,
 	KEYWORD_function,
 	KEYWORD_if,
@@ -107,6 +108,7 @@ typedef enum eKeywordId {
 	KEYWORD_pointer,
 	KEYWORD_precision,
 	KEYWORD_private,
+	KEYWORD_procedure,
 	KEYWORD_program,
 	KEYWORD_public,
 	KEYWORD_pure,
@@ -249,6 +251,7 @@ static const keywordDesc FortranKeywordTable [] = {
 	{ "equivalence",    KEYWORD_equivalence  },
 	{ "extends",        KEYWORD_extends      },
 	{ "external",       KEYWORD_external     },
+	{ "forall",         KEYWORD_forall       },
 	{ "format",         KEYWORD_format       },
 	{ "function",       KEYWORD_function     },
 	{ "if",             KEYWORD_if           },
@@ -272,6 +275,7 @@ static const keywordDesc FortranKeywordTable [] = {
 	{ "pointer",        KEYWORD_pointer      },
 	{ "precision",      KEYWORD_precision    },
 	{ "private",        KEYWORD_private      },
+	{ "procedure",      KEYWORD_procedure    },
 	{ "program",        KEYWORD_program      },
 	{ "public",         KEYWORD_public       },
 	{ "pure",           KEYWORD_pure         },
@@ -1123,6 +1127,7 @@ static boolean isTypeSpec (tokenInfo *const token)
 		case KEYWORD_logical:
 		case KEYWORD_record:
 		case KEYWORD_type:
+		case KEYWORD_procedure:
 			result = TRUE;
 			break;
 		default:
@@ -1185,6 +1190,7 @@ static void parseTypeSpec (tokenInfo *const token)
 		case KEYWORD_integer:
 		case KEYWORD_logical:
 		case KEYWORD_real:
+		case KEYWORD_procedure:
 			readToken (token);
 			if (isType (token, TOKEN_PAREN_OPEN))
 				skipOverParens (token);  /* skip kind-selector */
@@ -2045,7 +2051,8 @@ static boolean parseExecutionPart (tokenInfo *const token)
 				if (isSecondaryKeyword (token, KEYWORD_do) ||
 					isSecondaryKeyword (token, KEYWORD_if) ||
 					isSecondaryKeyword (token, KEYWORD_select) ||
-					isSecondaryKeyword (token, KEYWORD_where))
+					isSecondaryKeyword (token, KEYWORD_where) ||
+					isSecondaryKeyword (token, KEYWORD_forall))
 				{
 					skipToNextStatement (token);
 					result = TRUE;
