@@ -120,6 +120,7 @@ test_sources = \
 	enum.java						\
 	events.cs						\
 	extern_variable.h				\
+	forall_module.f90				\
 	format.pl						\
 	func_typedef.h					\
 	general.cs						\
