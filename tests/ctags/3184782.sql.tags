@@ -1,7 +1,6 @@
 # format=tagmanager
-do_this_stuffÌ256Ö0
-elsifÌ16384Ö0
-myfn1Ì256Ö0
-myfn2Ì256Ö0
 p_testÌ512Ö0
-process_thisÌ256Ö0
+p_test.do_this_stuffÌ256Ö0
+p_test.myfn1Ì256Ö0
+p_test.myfn2Ì256Ö0
+p_test.process_thisÌ256Ö0

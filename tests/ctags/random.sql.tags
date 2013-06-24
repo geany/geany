@@ -1,12 +1,12 @@
 # format=tagmanager
-SeedÌ16384Ö0
-get_randÌ256Ö0
-get_rand_maxÌ256Ö0
-incrementÌ16384Ö0
-multiplierÌ16384Ö0
-randÌ16Ö0
-rand_maxÌ16Ö0
-rand_stringÌ16Ö0
 randomÌ512Ö0
-smallerÌ16Ö0
-srandÌ256Ö0
+random.SeedÌ16384Ö0
+random.get_randÌ256Ö0
+random.get_rand_maxÌ256Ö0
+random.incrementÌ16384Ö0
+random.multiplierÌ16384Ö0
+random.randÌ16Ö0
+random.rand_maxÌ16Ö0
+random.rand_stringÌ16Ö0
+random.smallerÌ16Ö0
+random.srandÌ256Ö0
