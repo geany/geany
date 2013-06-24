@@ -156,6 +156,9 @@ static void open_file_dialog_handle_response(GtkWidget *dialog, gint response)
 		}
 		g_slist_free(filelist);
 	}
+	
+	configuration_save();
+	
 	if (app->project && NZV(app->project->base_path))
 		gtk_file_chooser_remove_shortcut_folder(GTK_FILE_CHOOSER(dialog),
 			app->project->base_path, NULL);
