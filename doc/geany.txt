@@ -786,9 +786,22 @@ Indentation
 ^^^^^^^^^^^
 
 Geany allows each document to indent either with a tab character,
-multiple spaces or a combination of both. The default indent
-settings are set in `Editor Indentation preferences`_ (see the link
-for more information).
+multiple spaces or a combination of both. 
+
+The *Tabs* setting indents with one tab character per indent level, and 
+displays tabs as the indent width.
+
+The *Spaces* setting indents with the number of spaces set in the indent 
+width for each level.
+
+The *Tabs and Spaces* setting indents with spaces as above, then converts 
+as many spaces as it can to tab characters at the rate of one tab for 
+each multiple of the `Various preference` setting 
+*indent_hard_tab_width* (default 8) and displays tabs as the 
+*indent_hard_tab_width* value.
+
+The default indent settings are set in `Editor Indentation 
+preferences`_ (see the link for more information).
 
 The default settings can be overridden per-document using the
 Document menu. They can also be overridden by projects - see
@@ -830,7 +843,10 @@ Geany has four types of auto-indentation:
 None
     Disables auto-indentation completely.
 Basic
-    Adds the same amount of whitespace on a new line as on the last line.
+    Adds the same amount of whitespace on a new line as on the previous line.
+    For the *Tabs* and the *Spaces* indent types the indentation will use the
+    same combination of characters as the previous line.  The
+    *Tabs and Spaces* indentation type converts as explained above.
 Current chars
     Does the same as *Basic* but also indents a new line after an opening
     brace '{', and de-indents when typing a closing brace '}'. For Python,
@@ -838,7 +854,10 @@ Current chars
     previous line.
 Match braces
     Similar to *Current chars* but the closing brace will be aligned to
-    match the indentation of the line with the opening brace.
+    match the indentation of the line with the opening brace.  This 
+    requires the filetype to be one where Geany knows that the Scintilla 
+    lexer understands matching braces (C, C++, D, HTML, Pascal, Bash, 
+    Perl, TCL).
 
 There is also XML-tag auto-indentation. This is enabled when the
 mode is more than just Basic, and is also controlled by a filetype
