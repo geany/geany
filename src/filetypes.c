@@ -928,7 +928,8 @@ static GeanyFiletype *find_shebang(const gchar *utf8_filename, const gchar *line
 			{ "csh",	GEANY_FILETYPES_SH },
 			{ "ash",	GEANY_FILETYPES_SH },
 			{ "dmd",	GEANY_FILETYPES_D },
-			{ "wish",	GEANY_FILETYPES_TCL }
+			{ "wish",	GEANY_FILETYPES_TCL },
+			{ "node",	GEANY_FILETYPES_JS }
 		};
 		gchar *tmp = g_path_get_basename(line + 2);
 		gchar *basename_interpreter = tmp;
