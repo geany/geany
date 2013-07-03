@@ -105,6 +105,7 @@ test_sources = \
 	bug960316.v						\
 	bug961001.v						\
 	byte.f							\
+	case_sensitivity.php			\
 	char-selector.f90				\
 	classes.php						\
 	common.f						\
@@ -185,6 +186,7 @@ test_sources = \
 	objectivec_property.mm			\
 	objectivec_protocol.mm			\
 	Package.pm						\
+	php5_5_class_kw.php				\
 	procedure_pointer_module.f90	\
 	property.cs						\
 	prototype.h						\

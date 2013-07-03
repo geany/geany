@@ -299,6 +299,7 @@ const gchar *symbols_get_context_separator(gint ft_id)
 		case GEANY_FILETYPES_CPP:
 		case GEANY_FILETYPES_GLSL:	/* for structs */
 		/*case GEANY_FILETYPES_RUBY:*/ /* not sure what to use atm*/
+		case GEANY_FILETYPES_PHP:
 			return "::";
 
 		/* avoid confusion with other possible separators in group/section name */
@@ -788,11 +789,13 @@ static void add_top_level_items(GeanyDocument *doc)
 		case GEANY_FILETYPES_PHP:
 		{
 			tag_list_add_groups(tag_store,
+				&(tv_iters.tag_namespace), _("Namespaces"), "classviewer-namespace",
 				&(tv_iters.tag_interface), _("Interfaces"), "classviewer-struct",
 				&(tv_iters.tag_class), _("Classes"), "classviewer-class",
 				&(tv_iters.tag_function), _("Functions"), "classviewer-method",
 				&(tv_iters.tag_macro), _("Constants"), "classviewer-macro",
 				&(tv_iters.tag_variable), _("Variables"), "classviewer-var",
+				&(tv_iters.tag_struct), _("Traits"), "classviewer-struct",
 				NULL);
 			break;
 		}

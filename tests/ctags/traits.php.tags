@@ -1,7 +1,9 @@
 # format=tagmanager
 AÌ1Ö0
 BÌ1Ö0
-__constructÌ16Í()Ö0
-__constructÌ16Í($p)Ö0
-stuffÌ16Í()Ö0
-stuffÌ16Í($arg1, $arg2)Ö0
+__constructÌ16Í()ÎAÖ0
+__constructÌ16Í($p)ÎBÖ0
+stuffÌ16Í($arg1, $arg2)ÎtBarÖ0
+stuffÌ16Í()ÎtFooÖ0
+tBarÌ2048Ö0
+tFooÌ2048Ö0

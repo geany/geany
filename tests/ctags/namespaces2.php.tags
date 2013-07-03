@@ -1,8 +1,12 @@
 # format=tagmanager
-BÌ1Ö0
-CÌ1Ö0
-__constructÌ16Í()Ö0
-aÌ16Í()Ö0
-bÌ16Í()Ö0
-cÌ16Í()Ö0
-dÌ16Í()Ö0
+BÌ1ÎBar\BazÖ0
+Bar\BazÌ256Ö0
+CÌ1ÎFooÖ0
+FooÌ256Ö0
+__constructÌ16Í()ÎBar\Baz::BÖ0
+__constructÌ16Í()ÎFoo::CÖ0
+aÌ16Í()ÎBar\BazÖ0
+aÌ16Í()ÎFooÖ0
+bÌ16Í()ÎFooÖ0
+cÌ16Í()ÎBar\Baz::BÖ0
+dÌ16Í()ÎFoo::CÖ0
