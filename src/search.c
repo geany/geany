@@ -420,7 +420,7 @@ void search_find_selection(GeanyDocument *doc, gboolean search_backwards)
 	{
 		setup_find_next(s);	/* allow find next/prev */
 
-		if (document_find_text(doc, s, NULL, 0, search_backwards, FALSE, NULL) > -1)
+		if (document_find_text(doc, s, NULL, 0, search_backwards, NULL, FALSE, NULL) > -1)
 			editor_display_current_line(doc->editor, 0.3F);
 		g_free(s);
 	}
@@ -1017,8 +1017,14 @@ static void create_fif_dialog(void)
 }
 
 
-/* dir is the directory to search in (UTF-8 encoding), may be NULL to determine it the usual way
- * by using the current file's path */
+/**
+ * Shows the Find in Files dialog.
+ *
+ * @param dir The directory to search in (UTF-8 encoding). May be @c NULL
+ * to determine it the usual way by using the current document's path.
+ *
+ * @since 0.14, plugin API 53
+ */
 void search_show_find_in_files_dialog(const gchar *dir)
 {
 	search_show_find_in_files_dialog_full(NULL, dir);
@@ -1150,26 +1156,50 @@ on_find_replace_checkbutton_toggled(GtkToggleButton *togglebutton, gpointer user
 }
 
 
+static GeanyMatchInfo *match_info_new(gint flags, gint start, gint end)
+{
+	GeanyMatchInfo *info = g_slice_alloc(sizeof *info);
+
+	info->flags = flags;
+	info->start = start;
+	info->end = end;
+	info->match_text = NULL;
+
+	return info;
+}
+
+void geany_match_info_free(GeanyMatchInfo *info)
+{
+	g_free(info->match_text);
+	g_slice_free1(sizeof *info, info);
+}
+
+
 /* find all in the given range.
- * Returns a list of allocated Sci_TextToFind, should be freed using:
+ * Returns a list of allocated GeanyMatchInfo, should be freed using:
  *
  * 	foreach_slist(node, matches)
- * 		g_slice_free(struct Sci_TextToFind, node->data);
+ * 		geany_match_info_free(node->data);
  * 	g_slist_free(matches); */
 static GSList *find_range(ScintillaObject *sci, gint flags, struct Sci_TextToFind *ttf)
 {
 	GSList *matches = NULL;
+	GeanyMatchInfo *info;
 
 	g_return_val_if_fail(sci != NULL && ttf->lpstrText != NULL, NULL);
 	if (! *ttf->lpstrText)
 		return NULL;
 
-	while (search_find_text(sci, flags, ttf) != -1)
+	while (search_find_text(sci, flags, ttf, &info) != -1)
 	{
 		if (ttf->chrgText.cpMax > ttf->chrg.cpMax)
-			break; /* found text is partially out of range */
+		{
+			/* found text is partially out of range */
+			geany_match_info_free(info);
+			break;
+		}
 
-		matches = g_slist_prepend(matches, g_slice_copy(sizeof *ttf, ttf));
+		matches = g_slist_prepend(matches, info);
 		ttf->chrg.cpMin = ttf->chrgText.cpMax;
 
 		/* avoid rematching with empty matches like "(?=[a-z])" or "^$".
@@ -1206,16 +1236,13 @@ gint search_mark_all(GeanyDocument *doc, const gchar *search_text, gint flags)
 	matches = find_range(doc->editor->sci, flags, &ttf);
 	foreach_slist (match, matches)
 	{
-		struct Sci_TextToFind *m = match->data;
+		GeanyMatchInfo *info = match->data;
 
-		if (m->chrgText.cpMax != m->chrgText.cpMin)
-		{
-			editor_indicator_set_on_range(doc->editor, GEANY_INDICATOR_SEARCH,
-					m->chrgText.cpMin, m->chrgText.cpMax);
-		}
+		if (info->end != info->start)
+			editor_indicator_set_on_range(doc->editor, GEANY_INDICATOR_SEARCH, info->start, info->end);
 		count++;
 
-		g_slice_free1(sizeof *m, m);
+		geany_match_info_free(info);
 	}
 	g_slist_free(matches);
 
@@ -1309,7 +1336,7 @@ on_find_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 			case GEANY_RESPONSE_FIND_PREVIOUS:
 			{
 				gint result = document_find_text(doc, search_data.text, search_data.original_text, search_data.flags,
-					(response == GEANY_RESPONSE_FIND_PREVIOUS), TRUE, GTK_WIDGET(find_dlg.dialog));
+					(response == GEANY_RESPONSE_FIND_PREVIOUS), NULL, TRUE, GTK_WIDGET(find_dlg.dialog));
 				ui_set_search_entry_background(find_dlg.entry, (result > -1));
 				check_close = search_prefs.hide_find_dialog;
 				break;
@@ -1451,7 +1478,7 @@ on_replace_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 				search_backwards_re);
 			if (rep != -1)
 				document_find_text(doc, find, original_find, search_flags_re, search_backwards_re,
-					TRUE, NULL);
+					NULL, TRUE, NULL);
 			break;
 		}
 		case GEANY_RESPONSE_REPLACE:
@@ -1462,7 +1489,7 @@ on_replace_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 		case GEANY_RESPONSE_FIND:
 		{
 			gint result = document_find_text(doc, find, original_find, search_flags_re,
-								search_backwards_re, TRUE, GTK_WIDGET(dialog));
+								search_backwards_re, NULL, TRUE, GTK_WIDGET(dialog));
 			ui_set_search_entry_background(replace_dlg.find_entry, (result > -1));
 			break;
 		}
@@ -1908,33 +1935,22 @@ static GRegex *compile_regex(const gchar *str, gint sflags)
 }
 
 
-typedef struct CharOffsets
-{
-	gint start, end;
-} CharOffsets;
-
-static CharOffsets regex_matches[10];
-
 /* groups that don't exist are handled OK as len = end - start = (-1) - (-1) = 0 */
-static gchar *get_regex_match_string(const gchar *text, CharOffsets *match)
+static gchar *get_regex_match_string(const gchar *text, const GeanyMatchInfo *match, guint nth)
 {
-	return g_strndup(&text[match->start], match->end - match->start);
+	const gint start = match->matches[nth].start;
+	const gint end = match->matches[nth].end;
+	return g_strndup(&text[start], end - start);
 }
 
 
-/* All matching text from regex_matches[0].start to regex_matches[0].end */
-static gchar *regex_match_text = NULL;
-
-static gint find_regex(ScintillaObject *sci, guint pos, GRegex *regex)
+static gint find_regex(ScintillaObject *sci, guint pos, GRegex *regex, GeanyMatchInfo *match)
 {
 	const gchar *text;
 	GMatchInfo *minfo;
 	gint ret = -1;
 
 	g_return_val_if_fail(pos <= (guint)sci_get_length(sci), -1);
-
-	/* clear old match */
-	SETPTR(regex_match_text, NULL);
 
 	/* Warning: any SCI calls will invalidate 'text' after calling SCI_GETCHARACTERPOINTER */
 	text = (void*)scintilla_send_message(sci, SCI_GETCHARACTERPOINTER, 0, 0);
@@ -1945,57 +1961,87 @@ static gint find_regex(ScintillaObject *sci, guint pos, GRegex *regex)
 		guint i;
 
 		/* copy whole match text and offsets before they become invalid */
-		regex_match_text = g_match_info_fetch(minfo, 0);
+		SETPTR(match->match_text, g_match_info_fetch(minfo, 0));
 
-		foreach_range(i, G_N_ELEMENTS(regex_matches))
+		foreach_range(i, G_N_ELEMENTS(match->matches))
 		{
 			gint start = -1, end = -1;
 
 			g_match_info_fetch_pos(minfo, (gint)i, &start, &end);
-			regex_matches[i].start = start;
-			regex_matches[i].end = end;
+			match->matches[i].start = start;
+			match->matches[i].end = end;
 		}
-		ret = regex_matches[0].start;
+		match->start = match->matches[0].start;
+		match->end = match->matches[0].end;
+		ret = match->start;
 	}
 	g_match_info_free(minfo);
 	return ret;
 }
 
 
-gint search_find_next(ScintillaObject *sci, const gchar *str, gint flags)
+gint search_find_prev(ScintillaObject *sci, const gchar *str, gint flags, GeanyMatchInfo **match_)
 {
+	gint ret;
+
+	g_return_val_if_fail(! (flags & SCFIND_REGEXP), -1);
+
+	ret = sci_search_prev(sci, flags, str);
+	if (ret != -1 && match_)
+		*match_ = match_info_new(flags, ret, ret + strlen(str));
+	return ret;
+}
+
+
+gint search_find_next(ScintillaObject *sci, const gchar *str, gint flags, GeanyMatchInfo **match_)
+{
+	GeanyMatchInfo *match;
 	GRegex *regex;
 	gint ret = -1;
 	gint pos;
 
 	if (~flags & SCFIND_REGEXP)
-		return sci_search_next(sci, flags, str);
+	{
+		ret = sci_search_next(sci, flags, str);
+		if (ret != -1 && match_)
+			*match_ = match_info_new(flags, ret, ret + strlen(str));
+		return ret;
+	}
 
 	regex = compile_regex(str, flags);
 	if (!regex)
 		return -1;
 
+	match = match_info_new(flags, 0, 0);
+
 	pos = sci_get_current_position(sci);
-	ret = find_regex(sci, pos, regex);
+	ret = find_regex(sci, pos, regex, match);
 	/* avoid re-matching the same position in case of empty matches */
-	if (ret == pos && regex_matches[0].start == regex_matches[0].end)
-		ret = find_regex(sci, pos + 1, regex);
+	if (ret == pos && match->matches[0].start == match->matches[0].end)
+		ret = find_regex(sci, pos + 1, regex, match);
 	if (ret >= 0)
-		sci_set_selection(sci, ret, regex_matches[0].end);
+		sci_set_selection(sci, match->start, match->end);
+
+	if (ret != -1 && match_)
+		*match_ = match;
+	else
+		geany_match_info_free(match);
 
 	g_regex_unref(regex);
 	return ret;
 }
 
 
-gint search_replace_target(ScintillaObject *sci, const gchar *replace_text,
-	gboolean regex)
+gint search_replace_match(ScintillaObject *sci, const GeanyMatchInfo *match, const gchar *replace_text)
 {
 	GString *str;
 	gint ret = 0;
 	gint i = 0;
 
-	if (!regex)
+	sci_set_target_start(sci, match->start);
+	sci_set_target_end(sci, match->end);
+
+	if (! (match->flags & SCFIND_REGEXP))
 		return sci_replace_target(sci, replace_text, FALSE);
 
 	str = g_string_new(replace_text);
@@ -2021,8 +2067,7 @@ gint search_replace_target(ScintillaObject *sci, const gchar *replace_text,
 		/* digit escape */
 		g_string_erase(str, i, 2);
 		/* fix match offsets by subtracting index of whole match start from the string */
-		grp = get_regex_match_string(regex_match_text - regex_matches[0].start,
-			&regex_matches[c - '0']);
+		grp = get_regex_match_string(match->match_text - match->matches[0].start, match, c - '0');
 		g_string_insert(str, i, grp);
 		i += strlen(grp);
 		g_free(grp);
@@ -2033,29 +2078,40 @@ gint search_replace_target(ScintillaObject *sci, const gchar *replace_text,
 }
 
 
-gint search_find_text(ScintillaObject *sci, gint flags, struct Sci_TextToFind *ttf)
+gint search_find_text(ScintillaObject *sci, gint flags, struct Sci_TextToFind *ttf, GeanyMatchInfo **match_)
 {
+	GeanyMatchInfo *match = NULL;
 	GRegex *regex;
-	gint pos;
 	gint ret;
 
 	if (~flags & SCFIND_REGEXP)
-		return sci_find_text(sci, flags, ttf);
+	{
+		ret = sci_find_text(sci, flags, ttf);
+		if (ret != -1 && match_)
+			*match_ = match_info_new(flags, ttf->chrgText.cpMin, ttf->chrgText.cpMax);
+		return ret;
+	}
 
 	regex = compile_regex(ttf->lpstrText, flags);
 	if (!regex)
 		return -1;
 
-	pos = ttf->chrg.cpMin;
-	ret = find_regex(sci, pos, regex);
+	match = match_info_new(flags, 0, 0);
 
+	ret = find_regex(sci, ttf->chrg.cpMin, regex, match);
 	if (ret >= ttf->chrg.cpMax)
 		ret = -1;
 	else if (ret >= 0)
 	{
-		ttf->chrgText.cpMin = regex_matches[0].start;
-		ttf->chrgText.cpMax = regex_matches[0].end;
+		ttf->chrgText.cpMin = match->start;
+		ttf->chrgText.cpMax = match->end;
 	}
+
+	if (ret != -1 && match_)
+		*match_ = match;
+	else
+		geany_match_info_free(match);
+
 	g_regex_unref(regex);
 	return ret;
 }
@@ -2080,8 +2136,8 @@ static gint find_document_usage(GeanyDocument *doc, const gchar *search_text, gi
 	matches = find_range(doc->editor->sci, flags, &ttf);
 	foreach_slist (match, matches)
 	{
-		struct Sci_TextToFind *m = match->data;
-		gint line = sci_get_line_from_position(doc->editor->sci, m->chrgText.cpMin);
+		GeanyMatchInfo *info = match->data;
+		gint line = sci_get_line_from_position(doc->editor->sci, info->start);
 
 		if (line != prev_line)
 		{
@@ -2093,7 +2149,7 @@ static gint find_document_usage(GeanyDocument *doc, const gchar *search_text, gi
 		}
 		count++;
 
-		g_slice_free1(sizeof *m, m);
+		geany_match_info_free(info);
 	}
 	g_slist_free(matches);
 	g_free(short_file_name);
@@ -2169,24 +2225,24 @@ guint search_replace_range(ScintillaObject *sci, struct Sci_TextToFind *ttf,
 	matches = find_range(sci, flags, ttf);
 	foreach_slist (match, matches)
 	{
-		struct Sci_TextToFind *m = match->data;
+		GeanyMatchInfo *info = match->data;
 		gint replace_len;
 
-		sci_set_target_start(sci, offset + m->chrgText.cpMin);
-		sci_set_target_end(sci, offset + m->chrgText.cpMax);
+		info->start += offset;
+		info->end += offset;
 
-		replace_len = search_replace_target(sci, replace_text, flags & SCFIND_REGEXP);
-		offset += replace_len - (m->chrgText.cpMax - m->chrgText.cpMin);
+		replace_len = search_replace_match(sci, info, replace_text);
+		offset += replace_len - (info->end - info->start);
 		count ++;
 
 		/* on last match, update the last match/new range end */
 		if (! match->next)
 		{
-			ttf->chrg.cpMin = m->chrgText.cpMin;
+			ttf->chrg.cpMin = info->start;
 			ttf->chrg.cpMax += offset;
 		}
 
-		g_slice_free1(sizeof *m, m);
+		geany_match_info_free(info);
 	}
 	g_slist_free(matches);
 
@@ -2204,7 +2260,7 @@ void search_find_again(gboolean change_direction)
 	{
 		gboolean forward = ! search_data.backwards;
 		gint result = document_find_text(doc, search_data.text, search_data.original_text, search_data.flags,
-			change_direction ? forward : !forward, FALSE, NULL);
+			change_direction ? forward : !forward, NULL, FALSE, NULL);
 
 		if (result > -1)
 			editor_display_current_line(doc->editor, 0.3F);

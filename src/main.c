@@ -1050,12 +1050,16 @@ gint main(gint argc, gchar **argv)
 #endif
 	parse_command_line_options(&argc, &argv);
 
+#if ! GLIB_CHECK_VERSION(2, 32, 0)
 	/* Initialize GLib's thread system in case any plugins want to use it or their
-	 * dependencies (e.g. WebKit, Soup, ...) */
+	 * dependencies (e.g. WebKit, Soup, ...). Deprecated since GLIB 2.32. */
 	if (!g_thread_supported())
 		g_thread_init(NULL);
-    /* removed as signal handling was wrong, see signal_cb()
+#endif
+
+	/* removed as signal handling was wrong, see signal_cb()
 	signal(SIGTERM, signal_cb); */
+
 #ifdef G_OS_UNIX
 	/* ignore SIGPIPE signal for preventing sudden death of program */
 	signal(SIGPIPE, SIG_IGN);
@@ -1259,7 +1263,6 @@ void main_quit()
 	sidebar_finalize();
 	configuration_finalize();
 	filetypes_free_types();
-	ui_finalize();
 	log_finalize();
 
 	tm_workspace_free(TM_WORK_OBJECT(app->tm_workspace));

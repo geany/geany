@@ -1,0 +1,22 @@
+# format=tagmanager
+ExplicitEventsSampleÌ1Ö0
+FireAwayÌ128Í()ÎIÖ0Ïvoid
+FireAwayÌ128Í()ÎMyClassÖ0Ïpublic void
+FireEventsÌ128Í()ÎExplicitEventsSampleÖ0Ïprivate void
+IÌ32Ö0
+I1Ì32Ö0
+I2Ì32Ö0
+MainÌ128Í()ÎMainClassÖ0Ïpublic void
+MainÌ128Í()ÎMyClassÖ0Ïpublic void
+MainClassÌ1Ö0
+MyClassÌ1Ö0
+MyDelegateÌ128Í()Ö0Ïpublic delegate void
+MyDelegate1Ì128Í(int i)Ö0Ïpublic delegate void
+MyDelegate1Ì128Í()Ö0Ïpublic delegate void
+MyDelegate2Ì128Í(string s)Ö0Ïpublic delegate int
+MyDelegate3Ì128Í(int i, object o)Ö0Ïpublic delegate void
+MyDelegate4Ì128Í()Ö0Ïpublic delegate void
+MyEvent2StorageÌ8ÎExplicitEventsSampleÖ0ÏMyDelegate2
+PropertyEventsSampleÌ1Ö0
+eventTableÌ8ÎPropertyEventsSampleÖ0ÏHashtable
+fÌ128Í()ÎMainClassÖ0Ïprivate void

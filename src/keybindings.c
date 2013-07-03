@@ -907,6 +907,31 @@ static GtkWidget *create_dialog(void)
 }
 
 
+static void key_dialog_show_prefs()
+{
+	GtkWidget *wid;
+
+	prefs_show_dialog();
+	/* select the KB page */
+	wid = ui_lookup_widget(ui_widgets.prefs_dialog, "frame22");
+	if (wid != NULL)
+	{
+		GtkNotebook *nb = GTK_NOTEBOOK(ui_lookup_widget(ui_widgets.prefs_dialog, "notebook2"));
+		if (nb != NULL)
+		{
+			gtk_notebook_set_current_page(nb, gtk_notebook_page_num(nb, wid));
+		}
+	}
+}
+
+
+void keybindings_dialog_show_prefs_scroll(const gchar *name)
+{
+	key_dialog_show_prefs();
+	prefs_kb_search_name(name);
+}
+
+
 /* non-modal keyboard shortcuts dialog, so user can edit whilst seeing the shortcuts */
 static GtkWidget *key_dialog = NULL;
 
@@ -914,18 +939,7 @@ static void on_dialog_response(GtkWidget *dialog, gint response, gpointer user_d
 {
 	if (response == GTK_RESPONSE_APPLY)
 	{
-		GtkWidget *wid;
-
-		prefs_show_dialog();
-		/* select the KB page */
-		wid = ui_lookup_widget(ui_widgets.prefs_dialog, "frame22");
-		if (wid != NULL)
-		{
-			GtkNotebook *nb = GTK_NOTEBOOK(ui_lookup_widget(ui_widgets.prefs_dialog, "notebook2"));
-
-			if (nb != NULL)
-				gtk_notebook_set_current_page(nb, gtk_notebook_page_num(nb, wid));
-		}
+		key_dialog_show_prefs();
 	}
 	gtk_widget_destroy(dialog);
 	key_dialog = NULL;
@@ -1690,7 +1704,7 @@ static gboolean cb_func_switch_action(guint key_id)
 
 static void switch_notebook_page(gint direction)
 {
-	gint page_count, cur_page;
+	gint page_count, cur_page, pass;
 	gboolean parent_is_notebook = FALSE;
 	GtkNotebook *notebook;
 	GtkWidget *focusw = gtk_window_get_focus(GTK_WINDOW(main_widgets.window));
@@ -1712,19 +1726,33 @@ static void switch_notebook_page(gint direction)
 	page_count = gtk_notebook_get_n_pages(notebook);
 	cur_page = gtk_notebook_get_current_page(notebook);
 
-	if (direction == GTK_DIR_LEFT)
+	/* find the next visible page in the wanted direction, but don't loop
+	 * indefinitely if no pages are visible */
+	for (pass = 0; pass < page_count; pass++)
 	{
-		if (cur_page > 0)
-			gtk_notebook_set_current_page(notebook, cur_page - 1);
-		else
-			gtk_notebook_set_current_page(notebook, page_count - 1);
-	}
-	else if (direction == GTK_DIR_RIGHT)
-	{
-		if (cur_page < page_count - 1)
-			gtk_notebook_set_current_page(notebook, cur_page + 1);
-		else
-			gtk_notebook_set_current_page(notebook, 0);
+		GtkWidget *child;
+
+		if (direction == GTK_DIR_LEFT)
+		{
+			if (cur_page > 0)
+				cur_page--;
+			else
+				cur_page = page_count - 1;
+		}
+		else if (direction == GTK_DIR_RIGHT)
+		{
+			if (cur_page < page_count - 1)
+				cur_page++;
+			else
+				cur_page = 0;
+		}
+
+		child = gtk_notebook_get_nth_page (notebook, cur_page);
+		if (gtk_widget_get_visible (child))
+		{
+			gtk_notebook_set_current_page(notebook, cur_page);
+			break;
+		}
 	}
 }
 
@@ -2099,6 +2127,64 @@ static gint get_reflow_column(GeanyEditor *editor)
 }
 
 
+/* Split the line where the cursor is positioned, on `column`,
+   possibly many times if the line is long.
+   Return the number of lines added because of the splitting. */
+static gint split_line(GeanyEditor *editor, gint column)
+{
+	ScintillaObject *sci = editor->sci;
+	gint start_line = sci_get_current_line(sci);
+	gint line = start_line;
+
+	while (TRUE)
+	{
+		gint lstart = sci_get_position_from_line(sci, line);
+		gint lend = sci_get_line_end_position(sci, line);
+		gint edge = sci_get_position_from_col(sci, line, column);
+		gboolean found;
+		gint pos;
+
+		/* don't split on a trailing space of a line */
+		if (sci_get_char_at(sci, lend - 1) == GDK_space)
+			lend--;
+
+		/* detect when the line is short enough and no more splitting is needed */
+		if (sci_get_col_from_position(sci, lend) < column)
+			break;
+
+		/* lookup split position */
+		found = FALSE;
+		for (pos = edge - 1; pos > lstart; pos--)
+		{
+			if (sci_get_char_at(sci, pos) == GDK_space)
+			{
+				found = TRUE;
+				break;
+			}
+		}
+		if (!found)
+		{
+			for (pos = edge; pos < lend; pos++)
+			{
+				if (sci_get_char_at(sci, pos) == GDK_space)
+				{
+					found = TRUE;
+					break;
+				}
+			}
+		}
+		if (!found)
+			break;
+
+		sci_set_current_position(sci, pos + 1, FALSE);
+		sci_cancel(sci); /* don't select from completion list */
+		sci_send_command(sci, SCI_NEWLINE);
+		line++;
+	}
+	return line - start_line;
+}
+
+
 static void reflow_lines(GeanyEditor *editor, gint column)
 {
 	gint start, indent, linescount, i;
@@ -2133,12 +2219,7 @@ static void reflow_lines(GeanyEditor *editor, gint column)
 	indent = sci_get_line_indentation(editor->sci, start);
 	sci_set_line_indentation(editor->sci, start, 0);
 
-	sci_target_from_selection(editor->sci);
-	linescount = sci_get_line_count(editor->sci);
-	sci_lines_split(editor->sci,
-		(column - indent) *	sci_text_width(editor->sci, STYLE_DEFAULT, " "));
-	/* use lines count to determine how many lines appeared after splitting */
-	linescount = sci_get_line_count(editor->sci) - linescount;
+	linescount = split_line(editor, column - indent);
 
 	/* Fix indentation. */
 	for (i = start; i <= start + linescount; i++)

@@ -45,7 +45,9 @@ import tempfile
 from waflib import Logs, Options, Scripting, Utils
 from waflib.Configure import ConfigurationContext
 from waflib.Errors import WafError
-from waflib.TaskGen import feature
+from waflib.TaskGen import feature, before_method
+from waflib.Tools.compiler_c import c_compiler
+from waflib.Tools.compiler_cxx import cxx_compiler
 
 
 APPNAME = 'geany'
@@ -302,9 +304,14 @@ def configure(conf):
 
 
 def options(opt):
-    opt.tool_options('compiler_cc')
-    opt.tool_options('compiler_cxx')
-    opt.tool_options('intltool')
+    # Disable MSVC detection on win32: building Geany with MSVC is currently not supported
+    # If anyone wants to add support for building with MSVC, this hack should be removed.
+    c_compiler['win32'] = ['gcc']
+    cxx_compiler['win32'] = ['g++']
+
+    opt.load('compiler_cc')
+    opt.load('compiler_cxx')
+    opt.load('intltool')
 
     # Features
     opt.add_option('--disable-plugins', action='store_true', default=False,
@@ -344,7 +351,7 @@ def build(bld):
         else:
             instpath = None
 
-        bld.new_task_gen(
+        bld(
             features                = ['c', 'cshlib'],
             source                  = 'plugins/%s.c' % plugin_name,
             includes                = ['.', 'src/', 'scintilla/include', 'tagmanager/src'],
@@ -354,7 +361,7 @@ def build(bld):
             install_path            = instpath)
 
     # CTags
-    bld.new_task_gen(
+    bld(
         features        = ['c', 'cstlib'],
         source          = ctags_sources,
         name            = 'ctags',
@@ -365,7 +372,7 @@ def build(bld):
         install_path    = None)  # do not install this library
 
     # Tagmanager
-    bld.new_task_gen(
+    bld(
         features        = ['c', 'cstlib'],
         source          = tagmanager_sources,
         name            = 'tagmanager',
@@ -376,7 +383,7 @@ def build(bld):
         install_path    = None)  # do not install this library
 
     # MIO
-    bld.new_task_gen(
+    bld(
         features        = ['c', 'cstlib'],
         source          = mio_sources,
         name            = 'mio',
@@ -389,7 +396,7 @@ def build(bld):
     # Scintilla
     files = bld.srcnode.ant_glob('scintilla/**/*.cxx', src=True, dir=False)
     scintilla_sources.update(files)
-    bld.new_task_gen(
+    bld(
         features        = ['c', 'cxx', 'cxxstlib'],
         name            = 'scintilla',
         target          = 'scintilla',
@@ -405,7 +412,7 @@ def build(bld):
         geany_sources.add('src/win32.c')
         geany_sources.add('geany_private.rc')
 
-    bld.new_task_gen(
+    bld(
         features        = ['c', 'cxx', 'cprogram'],
         name            = 'geany',
         target          = 'geany',
@@ -416,7 +423,7 @@ def build(bld):
         use             = ['scintilla', 'ctags', 'tagmanager', 'mio'])
 
     # geanyfunctions.h
-    bld.new_task_gen(
+    bld(
         source  = ['plugins/genapi.py', 'src/plugins.c'],
         name    = 'geanyfunctions.h',
         before  = ['c', 'cxx'],
@@ -435,14 +442,14 @@ def build(bld):
 
     # Translations
     if bld.env['INTLTOOL']:
-        bld.new_task_gen(
+        bld(
             features        = ['linguas', 'intltool_po'],
             podir           = 'po',
             install_path    = '${LOCALEDIR}',
             appname         = 'geany')
 
     # geany.pc
-    bld.new_task_gen(
+    bld(
         source          = 'geany.pc.in',
         dct             = {'VERSION': VERSION,
                            'DEPENDENCIES': '%s >= %s glib-2.0 >= %s' % \
@@ -460,14 +467,14 @@ def build(bld):
     if not is_win32:
         # geany.desktop
         if bld.env['INTLTOOL']:
-            bld.new_task_gen(
+            bld(
                 features        = 'intltool_in',
                 source          = 'geany.desktop.in',
                 flags           = ['-d', '-q', '-u', '-c'],
                 install_path    = '${DATADIR}/applications')
 
         # geany.1
-        bld.new_task_gen(
+        bld(
             features        = 'subst',
             source          = 'doc/geany.1.in',
             target          = 'geany.1',
@@ -476,7 +483,7 @@ def build(bld):
             install_path    = '${MANDIR}/man1')
 
         # geany.spec
-        bld.new_task_gen(
+        bld(
             features        = 'subst',
             source          = 'geany.spec.in',
             target          = 'geany.spec',
@@ -484,7 +491,7 @@ def build(bld):
             dct             = {'VERSION': VERSION})
 
         # Doxyfile
-        bld.new_task_gen(
+        bld(
             features        = 'subst',
             source          = 'doc/Doxyfile.in',
             target          = 'doc/Doxyfile',
@@ -574,6 +581,7 @@ def _remove_linguas_file():
 
 
 @feature('linguas')
+@before_method('apply_intltool_po')
 def write_linguas_file(self):
     if os.path.exists(LINGUAS_FILE):
         return
@@ -721,7 +729,7 @@ def _get_git_rev(conf):
 
 def _load_intltool_if_available(conf):
     try:
-        conf.check_tool('intltool')
+        conf.load('intltool')
         if 'LINGUAS' in os.environ:
             conf.env['LINGUAS'] = os.environ['LINGUAS']
     except WafError:

@@ -75,9 +75,15 @@ struct cc_dialog
 	GtkWidget *button_down;
 };
 
-static gboolean cc_error_occurred = FALSE;
-static gboolean cc_reading_finished = FALSE;
-static GString *cc_buffer;
+/* data required by the custom command callbacks */
+struct cc_data
+{
+	const gchar *command;	/* command launched */
+	GeanyDocument *doc;		/* document in which replace the selection */
+	GString *buffer;		/* buffer holding stdout content, or NULL */
+	gboolean error;			/* whether and error occurred */
+	gboolean finished;		/* whether the command has finished */
+};
 
 
 static gboolean cc_exists_command(const gchar *command)
@@ -200,22 +206,25 @@ static void cc_on_dialog_move_down_clicked(GtkButton *button, struct cc_dialog *
 }
 
 
-static gboolean cc_iofunc(GIOChannel *ioc, GIOCondition cond, gpointer data)
+static gboolean cc_iofunc(GIOChannel *ioc, GIOCondition cond, gpointer user_data)
 {
+	struct cc_data *data = user_data;
+
 	if (cond & (G_IO_IN | G_IO_PRI))
 	{
 		gchar *msg = NULL;
 		GIOStatus rv;
 		GError *err = NULL;
 
-		cc_buffer = g_string_sized_new(256);
+		if (! data->buffer)
+			data->buffer = g_string_sized_new(256);
 
 		do
 		{
 			rv = g_io_channel_read_line(ioc, &msg, NULL, NULL, &err);
 			if (msg != NULL)
 			{
-				g_string_append(cc_buffer, msg);
+				g_string_append(data->buffer, msg);
 				g_free(msg);
 			}
 			if (G_UNLIKELY(err != NULL))
@@ -235,8 +244,10 @@ static gboolean cc_iofunc(GIOChannel *ioc, GIOCondition cond, gpointer data)
 }
 
 
-static gboolean cc_iofunc_err(GIOChannel *ioc, GIOCondition cond, gpointer data)
+static gboolean cc_iofunc_err(GIOChannel *ioc, GIOCondition cond, gpointer user_data)
 {
+	struct cc_data *data = user_data;
+
 	if (cond & (G_IO_IN | G_IO_PRI))
 	{
 		gchar *msg = NULL;
@@ -255,39 +266,38 @@ static gboolean cc_iofunc_err(GIOChannel *ioc, GIOCondition cond, gpointer data)
 
 		if (NZV(str->str))
 		{
-			g_warning("%s: %s\n", (const gchar *) data, str->str);
+			g_warning("%s: %s\n", data->command, str->str);
 			ui_set_statusbar(TRUE,
 				_("The executed custom command returned an error. "
 				"Your selection was not changed. Error message: %s"),
 				str->str);
-			cc_error_occurred = TRUE;
+			data->error = TRUE;
 
 		}
 		g_string_free(str, TRUE);
 	}
-	cc_reading_finished = TRUE;
+	data->finished = TRUE;
 	return FALSE;
 }
 
 
 static gboolean cc_replace_sel_cb(gpointer user_data)
 {
-	GeanyDocument *doc = user_data;
+	struct cc_data *data = user_data;
 
-	if (! cc_reading_finished)
+	if (! data->finished)
 	{	/* keep this function in the main loop until cc_iofunc_err() has finished */
 		return TRUE;
 	}
 
-	if (! cc_error_occurred && cc_buffer != NULL)
+	if (! data->error && data->buffer != NULL)
 	{	/* Command completed successfully */
-		sci_replace_sel(doc->editor->sci, cc_buffer->str);
-		g_string_free(cc_buffer, TRUE);
-		cc_buffer = NULL;
+		sci_replace_sel(data->doc->editor->sci, data->buffer->str);
 	}
 
-	cc_error_occurred = FALSE;
-	cc_reading_finished = FALSE;
+	if (data->buffer)
+		g_string_free(data->buffer, TRUE);
+	g_slice_free1(sizeof *data, data);
 
 	return FALSE;
 }
@@ -297,29 +307,31 @@ static gboolean cc_replace_sel_cb(gpointer user_data)
  * If it returned with a sucessful exit code, replace the selection. */
 static void cc_exit_cb(GPid child_pid, gint status, gpointer user_data)
 {
+	struct cc_data *data = user_data;
+
 	/* if there was already an error, skip further checks */
-	if (! cc_error_occurred)
+	if (! data->error)
 	{
 #ifdef G_OS_UNIX
 		if (WIFEXITED(status))
 		{
 			if (WEXITSTATUS(status) != EXIT_SUCCESS)
-				cc_error_occurred = TRUE;
+				data->error = TRUE;
 		}
 		else if (WIFSIGNALED(status))
 		{	/* the terminating signal: WTERMSIG (status)); */
-			cc_error_occurred = TRUE;
+			data->error = TRUE;
 		}
 		else
 		{	/* any other failure occured */
-			cc_error_occurred = TRUE;
+			data->error = TRUE;
 		}
 #else
-		cc_error_occurred = ! win32_get_exit_status(child_pid);
+		data->error = ! win32_get_exit_status(child_pid);
 #endif
 
-		if (cc_error_occurred)
-		{	/* here we are sure cc_error_occurred was set due to an unsuccessful exit code
+		if (data->error)
+		{	/* here we are sure data->error was set due to an unsuccessful exit code
 			 * and so we add an error message */
 			/* TODO maybe include the exit code in the error message */
 			ui_set_statusbar(TRUE,
@@ -327,7 +339,7 @@ static void cc_exit_cb(GPid child_pid, gint status, gpointer user_data)
 		}
 	}
 
-	g_idle_add(cc_replace_sel_cb, user_data);
+	g_idle_add(cc_replace_sel_cb, data);
 	g_spawn_close_pid(child_pid);
 }
 
@@ -357,31 +369,33 @@ void tools_execute_custom_command(GeanyDocument *doc, const gchar *command)
 	}
 	ui_set_statusbar(TRUE, _("Passing data and executing custom command: %s"), command);
 
-	cc_error_occurred = FALSE;
-
 	if (g_spawn_async_with_pipes(NULL, argv, NULL, G_SPAWN_SEARCH_PATH | G_SPAWN_DO_NOT_REAP_CHILD,
 						NULL, NULL, &pid, &stdin_fd, &stdout_fd, &stderr_fd, &error))
 	{
 		gchar *sel;
-		gint len, remaining, wrote;
+		gint remaining, wrote;
+		struct cc_data *data = g_slice_alloc(sizeof *data);
 
-		if (pid != 0)
-			g_child_watch_add(pid, (GChildWatchFunc) cc_exit_cb, doc);
+		data->error = FALSE;
+		data->finished = FALSE;
+		data->buffer = NULL;
+		data->doc = doc;
+		data->command = command;
+
+		g_child_watch_add(pid, cc_exit_cb, data);
 
 		/* use GIOChannel to monitor stdout */
 		utils_set_up_io_channel(stdout_fd, G_IO_IN | G_IO_PRI | G_IO_ERR | G_IO_HUP | G_IO_NVAL,
-				FALSE, cc_iofunc, NULL);
+				FALSE, cc_iofunc, data);
 		/* copy program's stderr to Geany's stdout to help error tracking */
 		utils_set_up_io_channel(stderr_fd, G_IO_IN | G_IO_PRI | G_IO_ERR | G_IO_HUP | G_IO_NVAL,
-				FALSE, cc_iofunc_err, (gpointer)command);
+				FALSE, cc_iofunc_err, data);
 
 		/* get selection */
-		len = sci_get_selected_text_length(doc->editor->sci);
-		sel = g_malloc0(len + 1);
-		sci_get_selected_text(doc->editor->sci, sel);
+		sel = sci_get_selection_contents(doc->editor->sci);
 
 		/* write data to the command */
-		remaining = len - 1;
+		remaining = strlen(sel);
 		do
 		{
 			wrote = write(stdin_fd, sel, remaining);

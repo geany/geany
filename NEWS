@@ -6,6 +6,23 @@ Geany 1.24 (unreleased)
     Interface
     * Fix custom GTK styles under KDE (#3607935).
 
+    Editor
+    * Update Scintilla to version 3.3.3.
+
+    Filetypes
+    * Extend list of recognized keywords for SQL
+
+    Internationalization
+    * Update translations: de, he
+
+
+Geany 1.23.1 (May 19, 2013)
+
+    Bug fixes
+    * Fix custom styles under KDE and for people using gtk-chtheme
+      (corrects tab coloring, #3607935).
+    * Fix broken opening files from command line on Windows (#3613096).
+
 
 Geany 1.23 (March 10, 2013)
 

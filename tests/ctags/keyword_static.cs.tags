@@ -1,0 +1,10 @@
+# format=tagmanager
+AddEmployeeÌ128Í()ÎEmployeeÖ0Ïpublic int
+EmployeeÌ1Ö0
+EmployeeÌ128Í()ÎEmployeeÖ0
+EmployeeÌ128Í(string name, string id)ÎEmployeeÖ0
+MainÌ128Í()ÎMainClassÖ0Ïpublic void
+MainClassÌ1Ö0
+employeeCounterÌ8ÎEmployeeÖ0Ïint
+idÌ8ÎEmployeeÖ0
+nameÌ8ÎEmployeeÖ0

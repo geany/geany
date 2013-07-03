@@ -30,6 +30,8 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <string.h>
+#include <glib.h>
+#include <glib/gprintf.h>
 
 #include "SciLexer.h"
 #include "highlighting.h"
@@ -243,11 +245,11 @@ static void parse_color(GKeyFile *kf, const gchar *str, gint *clr)
 
 	if (strlen(start) == 3)
 	{
-		snprintf(hex_clr, 9, "0x%c%c%c%c%c%c", start[0], start[0],
+		g_snprintf(hex_clr, 9, "0x%c%c%c%c%c%c", start[0], start[0],
 			start[1], start[1], start[2], start[2]);
 	}
 	else
-		snprintf(hex_clr, 9, "0x%s", start);
+		g_snprintf(hex_clr, 9, "0x%s", start);
 
 	g_free(named_color);
 
@@ -1508,6 +1510,7 @@ gboolean highlighting_is_string_style(gint lexer, gint style)
 
 		case SCLEX_HASKELL:
 			return (style == SCE_HA_CHARACTER ||
+				style == SCE_HA_STRINGEOL ||
 				style == SCE_HA_STRING);
 
 		case SCLEX_FREEBASIC:
@@ -1590,6 +1593,7 @@ gboolean highlighting_is_comment_style(gint lexer, gint style)
 				style == SCE_C_COMMENTLINE ||
 				style == SCE_C_COMMENTDOC ||
 				style == SCE_C_PREPROCESSORCOMMENT ||
+				style == SCE_C_PREPROCESSORCOMMENTDOC ||
 				style == SCE_C_COMMENTLINEDOC ||
 				style == SCE_C_COMMENTDOCKEYWORD ||
 				style == SCE_C_COMMENTDOCKEYWORDERROR);
@@ -1668,7 +1672,8 @@ gboolean highlighting_is_comment_style(gint lexer, gint style)
 			return (style == SCE_HA_COMMENTLINE ||
 				style == SCE_HA_COMMENTBLOCK ||
 				style == SCE_HA_COMMENTBLOCK2 ||
-				style == SCE_HA_COMMENTBLOCK3);
+				style == SCE_HA_COMMENTBLOCK3 ||
+				style == SCE_HA_LITERATE_COMMENT);
 
 		case SCLEX_FREEBASIC:
 			return (style == SCE_B_COMMENT);
@@ -1731,6 +1736,11 @@ gboolean highlighting_is_code_style(gint lexer, gint style)
 	{
 		case SCLEX_CPP:
 			if (style == SCE_C_PREPROCESSOR)
+				return FALSE;
+			break;
+
+		case SCLEX_HASKELL:
+			if (style == SCE_HA_PREPROCESSOR)
 				return FALSE;
 			break;
 	}

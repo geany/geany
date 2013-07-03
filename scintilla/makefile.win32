@@ -89,6 +89,7 @@ LexVerilog.o \
 LexMarkdown.o \
 LexMatlab.o \
 LexD.o \
+LexLaTeX.o \
 LexLisp.o \
 LexLua.o \
 LexHaskell.o \

@@ -191,6 +191,7 @@ static void backupcopy_document_save_cb(GObject *obj, GeanyDocument *doc, gpoint
 	gchar *basename_src;
 	gchar *dir_parts_src;
 	gchar *stamp;
+	gchar buf[512];
 
 	if (! enable_backupcopy)
 		return;
@@ -227,9 +228,9 @@ static void backupcopy_document_save_cb(GObject *obj, GeanyDocument *doc, gpoint
 		return;
 	}
 
-	while (fgets(stamp, sizeof(stamp), src) != NULL)
+	while (fgets(buf, sizeof(buf), src) != NULL)
 	{
-		fputs(stamp, dst);
+		fputs(buf, dst);
 	}
 
 	fclose(src);

@@ -1,0 +1,6 @@
+# format=tagmanager
+FillArrayÌ128Í(out int[] myArray)ÎTestOutÖ0Ïpublic void
+MainÌ128Í()ÎTestOutÖ0Ïpublic void
+MyMethodÌ128Í(out int[] arr)Ö0Ïpublic void
+MyMethodÌ128Í(ref int[] arr)Ö0Ïpublic void
+TestOutÌ1Ö0

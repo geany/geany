@@ -6,6 +6,7 @@ comment=comment
 commentline=comment_line
 commentdoc=comment_doc
 preprocessorcomment=comment
+preprocessorcommentdoc=comment_doc
 number=number_1
 word=keyword_1
 word2=keyword_2

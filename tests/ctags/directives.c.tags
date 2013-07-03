@@ -1,0 +1,20 @@
+# format=tagmanager
+FUNCTION_LIKEÌ131072Í(a,b)Ö0
+MACRO_TO_SEE1Ì65536Ö0
+MACRO_TO_SEE2Ì65536Ö0
+MACRO_TO_SEE3Ì65536Ö0
+MACRO_TO_SEE4Ì65536Ö0
+PATH1Ì65536Ö0
+PATH1bÌ65536Ö0
+SEE_THIS_MACROÌ65536Ö0
+VARIABLE_LIKEÌ65536Ö0
+WeakSymbolÌ65536Ö0
+aÌ16384Ö0Ïint
+bÌ16384Ö0Ïint
+bar1Ì16Í(void)Ö0Ïint
+cÌ16384Ö0Ïint
+dÌ16384Ö0Ïint
+foo1Ì16Í(void)Ö0Ïint
+gÌ16384Ö0Ïint
+p1Ì16384Ö0Ïint
+with_long_commentÌ65536Ö0

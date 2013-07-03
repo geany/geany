@@ -68,6 +68,22 @@ GeanySearchPrefs;
 extern GeanySearchPrefs search_prefs;
 
 
+typedef struct GeanyMatchInfo
+{
+	gint flags;
+	/* range */
+	gint start, end;
+	/* only valid if (flags & SCFIND_REGEX) */
+	gchar *match_text; /* text actually matched */
+	struct
+	{
+		gint start, end;
+	}
+	matches[10]; /* sub-patterns */
+}
+GeanyMatchInfo;
+
+
 void search_init(void);
 
 void search_finalize(void);
@@ -84,9 +100,13 @@ void search_show_find_in_files_dialog_full(const gchar *text, const gchar *dir);
 struct _ScintillaObject;
 struct Sci_TextToFind;
 
-gint search_find_next(struct _ScintillaObject *sci, const gchar *str, gint flags);
+void geany_match_info_free(GeanyMatchInfo *info);
 
-gint search_find_text(struct _ScintillaObject *sci, gint flags, struct Sci_TextToFind *ttf);
+gint search_find_prev(struct _ScintillaObject *sci, const gchar *str, gint flags, GeanyMatchInfo **match_);
+
+gint search_find_next(struct _ScintillaObject *sci, const gchar *str, gint flags, GeanyMatchInfo **match_);
+
+gint search_find_text(struct _ScintillaObject *sci, gint flags, struct Sci_TextToFind *ttf, GeanyMatchInfo **match_);
 
 void search_find_again(gboolean change_direction);
 
@@ -96,8 +116,7 @@ void search_find_selection(GeanyDocument *doc, gboolean search_backwards);
 
 gint search_mark_all(GeanyDocument *doc, const gchar *search_text, gint flags);
 
-gint search_replace_target(struct _ScintillaObject *sci, const gchar *replace_text,
-	gboolean regex);
+gint search_replace_match(struct _ScintillaObject *sci, const GeanyMatchInfo *match, const gchar *replace_text);
 
 guint search_replace_range(struct _ScintillaObject *sci, struct Sci_TextToFind *ttf,
 		gint flags, const gchar *replace_text);

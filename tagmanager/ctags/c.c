@@ -82,7 +82,8 @@ typedef enum eKeywordId
 	KEYWORD_PROGRAM, KEYWORD_PROTECTED, KEYWORD_PUBLIC,
 	KEYWORD_REF, KEYWORD_REGISTER, KEYWORD_RETURN,
 	KEYWORD_SHADOW, KEYWORD_STATE,
-	KEYWORD_SET, KEYWORD_SHORT, KEYWORD_SIGNAL, KEYWORD_SIGNED, KEYWORD_SIZE_T, KEYWORD_STATIC, KEYWORD_STRING,
+	KEYWORD_SET, KEYWORD_SHORT, KEYWORD_SIGNAL, KEYWORD_SIGNED, KEYWORD_SIZE_T, KEYWORD_STATIC,
+	KEYWORD_STATIC_ASSERT, KEYWORD_STRING,
 	KEYWORD_STRUCT, KEYWORD_SWITCH, KEYWORD_SYNCHRONIZED,
 	KEYWORD_TASK, KEYWORD_TEMPLATE, KEYWORD_THIS, KEYWORD_THROW,
 	KEYWORD_THROWS, KEYWORD_TRANSIENT, KEYWORD_TRANS, KEYWORD_TRANSITION,
@@ -476,6 +477,7 @@ static const keywordDesc KeywordTable [] = {
 	{ "size_t",         KEYWORD_SIZE_T,         { 1, 1, 0, 0, 0, 1, 1 } },
 	{ "state",          KEYWORD_STATE,          { 0, 0, 0, 0, 1, 0, 0 } },
 	{ "static",         KEYWORD_STATIC,         { 1, 1, 1, 1, 1, 1, 1 } },
+	{ "static_assert",  KEYWORD_STATIC_ASSERT,  { 0, 1, 0, 0, 0, 0, 0 } },
 	{ "string",         KEYWORD_STRING,         { 0, 0, 1, 0, 1, 1, 0 } },
 	{ "struct",         KEYWORD_STRUCT,         { 1, 1, 1, 0, 0, 1, 1 } },
 	{ "switch",         KEYWORD_SWITCH,         { 1, 1, 1, 1, 0, 1, 1 } },
@@ -1678,9 +1680,12 @@ static keywordId analyzeKeyword (const char *const name)
 {
 	const keywordId id = (keywordId) lookupKeyword (name, getSourceLanguage ());
 
-	/* ignore D @attributes, but show them in function signatures */
-	if (isLanguage(Lang_d) && id == KEYWORD_NONE && name[0] == '@')
+	/* ignore D @attributes and Java @annotations(...), but show them in function signatures */
+	if ((isLanguage(Lang_d) || isLanguage(Lang_java)) && id == KEYWORD_NONE && name[0] == '@')
+	{
+		skipParens(); /* if annotation has parameters, skip them */
 		return KEYWORD_CONST;
+	}
 	return id;
 }
 
@@ -2011,6 +2016,7 @@ static void processToken (tokenInfo *const token, statementInfo *const st)
 		case KEYWORD_SHORT:		st->declaration = DECL_BASE;		break;
 		case KEYWORD_SIGNED:	st->declaration = DECL_BASE;		break;
 		case KEYWORD_STRUCT:	checkIsClassEnum (st, DECL_STRUCT);	break;
+		case KEYWORD_STATIC_ASSERT: skipParens ();                  break;
 		case KEYWORD_THROWS:	discardTypeList (token);			break;
 		case KEYWORD_TYPEDEF:	st->scope	= SCOPE_TYPEDEF;		break;
 		case KEYWORD_UNION:		st->declaration = DECL_UNION;		break;

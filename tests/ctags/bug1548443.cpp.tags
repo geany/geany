@@ -1,0 +1,5 @@
+# format=tagmanager
+TestStructÌ2048Ö0
+TestUnionÌ8192Ö0
+_numberÌ64ÎTestStructÖ0Ïint
+_numberÌ64ÎTestUnionÖ0Ïint

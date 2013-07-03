@@ -10,6 +10,7 @@
 deps.mak
 .deps/
 .libs/
+.lock-waf_*
 Makefile
 Makefile.in
 
@@ -96,3 +97,9 @@ Makefile.in
 /doc/hacking.html
 /doc/*.pdf
 /doc/reference
+
+#-----------------------------------------------------------------------
+# /tests/
+#-----------------------------------------------------------------------
+/tests/**/*.trs
+/tests/**/*.log

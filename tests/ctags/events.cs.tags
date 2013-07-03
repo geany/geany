@@ -1,0 +1,15 @@
+# format=tagmanager
+AddÌ128Í(object value)ÎMyCollections.ListWithChangedEventÖ0Ïpublic override int
+ChangedEventHandlerÌ128Í(object sender, EventArgs e)ÎMyCollectionsÖ0Ïpublic delegate void
+ClearÌ128Í()ÎMyCollections.ListWithChangedEventÖ0Ïpublic override void
+DetachÌ128Í()ÎTestEvents.EventListenerÖ0Ïpublic void
+EventListenerÌ1ÎTestEventsÖ0
+EventListenerÌ128Í(ListWithChangedEvent list)ÎTestEvents.EventListenerÖ0
+ListÌ8ÎTestEvents.EventListenerÖ0ÏListWithChangedEvent
+ListChangedÌ128Í(object sender, EventArgs e)ÎTestEvents.EventListenerÖ0Ïprivate void
+ListWithChangedEventÌ1ÎMyCollectionsÖ0
+MainÌ128Í()ÎTestEvents.TestÖ0Ïpublic void
+MyCollectionsÌ256Ö0
+OnChangedÌ128Í(EventArgs e)ÎMyCollections.ListWithChangedEventÖ0Ïprotected virtual void
+TestÌ1ÎTestEventsÖ0
+TestEventsÌ256Ö0

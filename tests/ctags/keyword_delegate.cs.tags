@@ -1,0 +1,12 @@
+# format=tagmanager
+DelegateFunctionÌ128Í(int i)ÎProgramÖ0Ïpublic void
+InstanceMethodÌ128Í()ÎMyClassÖ0Ïpublic void
+MainÌ128Í()ÎMainClassÖ0Ïpublic void
+MainÌ128Í()ÎProgramÖ0Ïpublic void
+MainClassÌ1Ö0
+MyClassÌ1Ö0
+MyDelegateÌ128Í(int i)Ö0Ïdelegate void
+MyDelegateÌ128Í()Ö0Ïdelegate void
+ProgramÌ1Ö0
+StaticMethodÌ128Í()ÎMyClassÖ0Ïpublic void
+TakesADelegateÌ128Í(MyDelegate SomeFunction)ÎProgramÖ0Ïpublic void

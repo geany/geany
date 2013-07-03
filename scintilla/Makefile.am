@@ -22,6 +22,7 @@ lexers/LexForth.cxx \
 lexers/LexFortran.cxx \
 lexers/LexHTML.cxx \
 lexers/LexHaskell.cxx \
+lexers/LexLaTeX.cxx \
 lexers/LexLisp.cxx \
 lexers/LexLua.cxx \
 lexers/LexMarkdown.cxx \
@@ -66,6 +67,7 @@ lexlib/PropSetSimple.h \
 lexlib/SparseState.h \
 lexlib/StyleContext.cxx \
 lexlib/StyleContext.h \
+lexlib/SubStyles.h \
 lexlib/WordList.cxx \
 lexlib/WordList.h \
 src/AutoComplete.cxx \

@@ -738,11 +738,9 @@ G_MODULE_EXPORT void on_toggle_case1_activate(GtkMenuItem *menuitem, gpointer us
 	{
 		gchar *result = NULL;
 		gint cmd = SCI_LOWERCASE;
-		gint text_len = sci_get_selected_text_length(sci);
 		gboolean rectsel = (gboolean) scintilla_send_message(sci, SCI_SELECTIONISRECTANGLE, 0, 0);
 
-		text = g_malloc(text_len + 1);
-		sci_get_selected_text(sci, text);
+		text = sci_get_selection_contents(sci);
 
 		if (utils_str_has_upper(text))
 		{
@@ -750,7 +748,6 @@ G_MODULE_EXPORT void on_toggle_case1_activate(GtkMenuItem *menuitem, gpointer us
 				cmd = SCI_LOWERCASE;
 			else
 				result = g_utf8_strdown(text, -1);
-
 		}
 		else
 		{
@@ -758,7 +755,6 @@ G_MODULE_EXPORT void on_toggle_case1_activate(GtkMenuItem *menuitem, gpointer us
 				cmd = SCI_UPPERCASE;
 			else
 				result = g_utf8_strup(text, -1);
-
 		}
 
 		if (result != NULL)
@@ -766,7 +762,7 @@ G_MODULE_EXPORT void on_toggle_case1_activate(GtkMenuItem *menuitem, gpointer us
 			sci_replace_sel(sci, result);
 			g_free(result);
 			if (keep_sel)
-				sci_set_selection_start(sci, sci_get_current_position(sci) - text_len + 1);
+				sci_set_selection_start(sci, sci_get_current_position(sci) - strlen(text));
 		}
 		else
 			sci_send_command(sci, cmd);
@@ -911,8 +907,7 @@ static void find_usage(gboolean in_session)
 
 	if (sci_has_selection(doc->editor->sci))
 	{	/* take selected text if there is a selection */
-		search_text = g_malloc(sci_get_selected_text_length(doc->editor->sci) + 1);
-		sci_get_selected_text(doc->editor->sci, search_text);
+		search_text = sci_get_selection_contents(doc->editor->sci);
 		flags = SCFIND_MATCHCASE;
 	}
 	else
@@ -1710,8 +1705,7 @@ G_MODULE_EXPORT void on_context_action1_activate(GtkMenuItem *menuitem, gpointer
 
 	if (sci_has_selection(doc->editor->sci))
 	{	/* take selected text if there is a selection */
-		word = g_malloc(sci_get_selected_text_length(doc->editor->sci) + 1);
-		sci_get_selected_text(doc->editor->sci, word);
+		word = sci_get_selection_contents(doc->editor->sci);
 	}
 	else
 	{
