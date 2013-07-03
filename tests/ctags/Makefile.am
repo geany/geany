@@ -105,6 +105,7 @@ test_sources = \
 	bug960316.v						\
 	bug961001.v						\
 	byte.f							\
+	case_sensitivity.php			\
 	char-selector.f90				\
 	classes.php						\
 	common.f						\
