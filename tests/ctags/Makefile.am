@@ -185,6 +185,7 @@ test_sources = \
 	objectivec_property.mm			\
 	objectivec_protocol.mm			\
 	Package.pm						\
+	php5_5_class_kw.php				\
 	procedure_pointer_module.f90	\
 	property.cs						\
 	prototype.h						\
