@@ -1,7 +1,7 @@
 # Hebrew translations for PACKAGE package.
 # Copyright (C) 2012 THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# Yosef Or Botschko <yosefor3@walla.com>, 2012, 2013.
+# Yosef Or Boczko <yoseforb@gmail.com>, 2012, 2013.
 #
 msgid ""
 msgstr ""
@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-22 02:36+0000\n"
 "PO-Revision-Date: 2013-05-22 09:44+0300\n"
-"Last-Translator: Yosef Or Botschko <yosefor3@walla.com>\n"
+"Last-Translator: Yosef Or Boczko <yoseforb@gmail.com>\n"
 "Language-Team: Hebrew <>\n"
 "Language: he\n"
 "MIME-Version: 1.0\n"
