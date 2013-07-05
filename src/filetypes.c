@@ -510,6 +510,23 @@ static void init_builtin_filetypes(void)
 	ft->name = g_strdup("Abaqus");
 	filetype_make_title(ft, TITLE_SOURCE_FILE);
 	ft->group = GEANY_FILETYPE_GROUP_SCRIPT;
+
+#define C_HEADER
+	ft = filetypes[GEANY_FILETYPES_C_HEADER];
+	ft->lang = 45;
+	ft->name = g_strdup("C Header");
+	filetype_make_title(ft, TITLE_FILE);
+	ft->mime_type = g_strdup("text/x-csrc");
+	ft->group = GEANY_FILETYPE_GROUP_COMPILED;
+
+#define CPP_HEADER
+	ft = filetypes[GEANY_FILETYPES_CPP_HEADER];
+	ft->lang = 46;
+	ft->name = g_strdup("C++ Header");
+	filetype_make_title(ft, TITLE_FILE);
+	ft->mime_type = g_strdup("text/x-c++src");
+	ft->group = GEANY_FILETYPE_GROUP_COMPILED;
+
 }
 
 
@@ -1440,6 +1457,8 @@ static gchar *filetypes_get_conf_extension(const GeanyFiletype *ft)
 		case GEANY_FILETYPES_MATLAB: result = g_strdup("matlab"); break;
 		/* name is Objective-C, and we don't want the hyphen */
 		case GEANY_FILETYPES_OBJECTIVEC: result = g_strdup("objectivec"); break;
+		case GEANY_FILETYPES_C_HEADER: result = g_strdup("c_header"); break;
+		case GEANY_FILETYPES_CPP_HEADER: result = g_strdup("cpp_header"); break;
 		default:
 			result = g_ascii_strdown(ft->name, -1);
 			break;
