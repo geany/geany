@@ -92,6 +92,8 @@ typedef enum
 	GEANY_FILETYPES_OBJECTIVEC,
 	GEANY_FILETYPES_ASCIIDOC,
 	GEANY_FILETYPES_ABAQUS,
+	GEANY_FILETYPES_C_HEADER,
+	GEANY_FILETYPES_CPP_HEADER,
 	/* ^ append items here */
 	GEANY_MAX_BUILT_IN_FILETYPES	/* Don't use this, use filetypes_array->len instead */
 }
