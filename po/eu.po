@@ -1,14 +1,14 @@
 # Basque translations for geany package.
 # Copyright (C) 2012 THE geany's COPYRIGHT HOLDER
 # This file is distributed under the same license as the geany package.
-# Asier Iturralde Sarasola <asier.iturralde@gmail.com>, 2012.
+# Asier Iturralde Sarasola <asier.iturralde@gmail.com>, 2012, 2013.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: geany1.23\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-02-23 14:24+0100\n"
-"PO-Revision-Date: 2012-09-25 22:14+0200\n"
+"PO-Revision-Date: 2013-07-06 15:07+0200\n"
 "Last-Translator: Asier Iturralde Sarasola <asier.iturralde@gmail.com>\n"
 "Language-Team: Euskara <librezale@librezale.org>\n"
 "Language: eu\n"
@@ -139,13 +139,15 @@ msgstr "Abioan aurreko saioko fitxategiak irekitzen ditu"
 
 #: ../data/geany.glade.h:28
 msgid "Load virtual terminal support"
-msgstr ""
+msgstr "Kargatu terminal birtualaren euskarria"
 
 #: ../data/geany.glade.h:29
 msgid ""
 "Whether the virtual terminal emulation (VTE) should be loaded at startup, "
 "disable it if you do not need it"
 msgstr ""
+"Terminal birtualaren emulazioa (VTE) abioan kargatu behar den ala ez. "
+"Desgaitu ez baduzu behar"
 
 #: ../data/geany.glade.h:30
 msgid "Enable plugin support"
@@ -186,7 +188,7 @@ msgstr ""
 
 #: ../data/geany.glade.h:39
 msgid "Project files:"
-msgstr "Proiektuaren fitxategiak:"
+msgstr "Proiektu-fitxategiak:"
 
 #: ../data/geany.glade.h:40
 msgid "Path to start in when opening project files"
@@ -297,7 +299,7 @@ msgstr ""
 
 #: ../data/geany.glade.h:62
 msgid "Use the current file's directory for Find in Files"
-msgstr ""
+msgstr "Erabili uneko fitxategiaren direktorioa fitxategietan bilatzeko"
 
 #: ../data/geany.glade.h:63
 msgid "<b>Search</b>"
@@ -315,7 +317,7 @@ msgstr ""
 
 #: ../data/geany.glade.h:66
 msgid "Store project file inside the project base directory"
-msgstr ""
+msgstr "Gorde proiektu-fitxategia proiektuaren oinarrizko direktorioan"
 
 #: ../data/geany.glade.h:67
 msgid ""
@@ -420,7 +422,7 @@ msgstr "Erakutsi egoera-barra"
 
 #: ../data/geany.glade.h:90
 msgid "Whether to show the status bar at the bottom of the main window"
-msgstr ""
+msgstr "Leiho nagusiaren behealdean egoera-barra erakutsi behar den ala ez"
 
 #: ../data/geany.glade.h:91 ../src/prefs.c:1587
 msgid "Interface"
@@ -428,7 +430,7 @@ msgstr "Interfazea"
 
 #: ../data/geany.glade.h:92
 msgid "Show editor tabs"
-msgstr ""
+msgstr "Erakutsi editore-fitxak"
 
 #: ../data/geany.glade.h:93
 msgid "Show close buttons"
@@ -439,6 +441,8 @@ msgid ""
 "Shows a small cross button in the file tabs to easily close files when "
 "clicking on it (requires restart of Geany)"
 msgstr ""
+"Gurutze itxurako botoi bat erakusten du fitxategien fitxetan fitxategiak "
+"modu errazean ixteko (Geany berrabiaraztea eskatzen du)"
 
 #: ../data/geany.glade.h:95
 msgid "Placement of new file tabs:"
@@ -476,7 +480,7 @@ msgstr "Aldatu erabilitako azken dokumentura fitxa bat ixtean"
 
 #: ../data/geany.glade.h:103
 msgid "<b>Editor tabs</b>"
-msgstr ""
+msgstr "<b>Editore-fitxak</b>"
 
 #: ../data/geany.glade.h:104
 msgid "Sidebar:"
@@ -697,7 +701,7 @@ msgstr "_Tabulazioak"
 
 #: ../data/geany.glade.h:152
 msgid "Use one tab per indent"
-msgstr ""
+msgstr "Erabili tabulazio bat koska bakoitzeko"
 
 #: ../data/geany.glade.h:153
 msgid "Detect width from file"
@@ -825,7 +829,7 @@ msgstr "Parentesiak ( )"
 
 #: ../data/geany.glade.h:180
 msgid "Auto-close parenthesis when typing an opening one"
-msgstr ""
+msgstr "Itxi parentesiak automatikoki hasierakoa idaztean"
 
 #: ../data/geany.glade.h:181
 msgid "Single quotes ' '"
@@ -833,7 +837,7 @@ msgstr "Komatxo bakunak ' '"
 
 #: ../data/geany.glade.h:182
 msgid "Auto-close single quote when typing an opening one"
-msgstr ""
+msgstr "Itxi komatxo bakunak automatikoki hasierakoa idaztean"
 
 #: ../data/geany.glade.h:183
 msgid "Curly brackets { }"
@@ -853,11 +857,11 @@ msgstr ""
 
 #: ../data/geany.glade.h:187
 msgid "Double quotes \" \""
-msgstr ""
+msgstr "Komatxo bikoitzak"
 
 #: ../data/geany.glade.h:188
 msgid "Auto-close double quote when typing an opening one"
-msgstr ""
+msgstr "Itxi komatxo bikoitzak automatikoki hasierakoa idaztean"
 
 #: ../data/geany.glade.h:189
 msgid "<b>Auto-close quotes and brackets</b>"
@@ -885,7 +889,7 @@ msgstr ""
 
 #: ../data/geany.glade.h:195
 msgid "Show white space"
-msgstr ""
+msgstr "Erakutsi zuriuneak"
 
 #: ../data/geany.glade.h:196
 msgid "Marks spaces with dots and tabs with arrows"
@@ -939,7 +943,7 @@ msgstr "Kolorea:"
 
 #: ../data/geany.glade.h:208
 msgid "Sets the color of the long line marker"
-msgstr ""
+msgstr "Markatzaile lerro luzearen kolorea ezartzen du"
 
 #: ../data/geany.glade.h:209 ../src/toolbar.c:70 ../src/tools.c:974
 msgid "Color Chooser"
@@ -1625,14 +1629,12 @@ msgid "_Select Current Paragraph"
 msgstr "_Hautatu uneko paragrafoa"
 
 #: ../data/geany.glade.h:367
-#, fuzzy
 msgid "_Move Line(s) Up"
-msgstr "Mugitu lerroa(k) gora"
+msgstr "_Mugitu lerroa(k) gora"
 
 #: ../data/geany.glade.h:368
-#, fuzzy
 msgid "_Move Line(s) Down"
-msgstr "Mugitu lerroa(k) behera"
+msgstr "_Mugitu lerroa(k) behera"
 
 #: ../data/geany.glade.h:369 ../src/keybindings.c:401
 msgid "_Send Selection to Terminal"
@@ -1780,7 +1782,7 @@ msgstr "Erakutsi _lerro-zenbakiak"
 
 #: ../data/geany.glade.h:405
 msgid "Show _White Space"
-msgstr ""
+msgstr "Erakutsi zuriuneak"
 
 #: ../data/geany.glade.h:406
 msgid "Show Line _Endings"
@@ -1970,7 +1972,7 @@ msgstr "_Kolore hautatzailea"
 
 #: ../data/geany.glade.h:452
 msgid "_Word Count"
-msgstr ""
+msgstr "_Hitz kopurua"
 
 #: ../data/geany.glade.h:453
 msgid "Load Ta_gs"
@@ -2200,11 +2202,11 @@ msgstr "Eraiki uneko fitxategia"
 
 #: ../src/build.c:1767
 msgid "Build the current file with Make and the default target"
-msgstr ""
+msgstr "Eraiki uneko fitxategia Make eta helburu lehenetsiarekin"
 
 #: ../src/build.c:1769
 msgid "Build the current file with Make and the specified target"
-msgstr ""
+msgstr "Eraiki uneko fitxategia Make eta zehazturiko helburuarekin"
 
 #: ../src/build.c:1771
 msgid "Compile the current file with Make"
@@ -2957,7 +2959,7 @@ msgstr "%s fitxategi"
 
 #: ../src/filetypes.c:311
 msgid "Shell script"
-msgstr ""
+msgstr "Shell scripta"
 
 #: ../src/filetypes.c:319
 msgid "Makefile"
@@ -2985,11 +2987,11 @@ msgstr "_Programazio-lengoaiak"
 
 #: ../src/filetypes.c:735
 msgid "_Scripting Languages"
-msgstr ""
+msgstr "_Script-lengoaiak"
 
 #: ../src/filetypes.c:736
 msgid "_Markup Languages"
-msgstr ""
+msgstr "_Markatzeko lengoaia"
 
 #: ../src/filetypes.c:737
 msgid "M_iscellaneous"
@@ -3008,7 +3010,7 @@ msgstr "Fitxategi guztiak"
 #: ../src/filetypes.c:1548
 #, c-format
 msgid "Bad regex for filetype %s: %s"
-msgstr ""
+msgstr "Adierazpen erregular okerra %s fitxategi-motarentzat: %s"
 
 #: ../src/geany.h:55
 msgid "untitled"
@@ -3026,7 +3028,7 @@ msgstr "Lehenetsia"
 
 #: ../src/highlighting.c:1368
 msgid "The current filetype overrides the default style."
-msgstr ""
+msgstr "Uneko fitxategi-motak estilo lehenetsia gainidazten du."
 
 #: ../src/highlighting.c:1369
 msgid "This may cause color schemes to display incorrectly."
@@ -3140,7 +3142,7 @@ msgstr "Berrireki azkena itxitako fitxa"
 
 #: ../src/keybindings.c:276
 msgid "Quit"
-msgstr ""
+msgstr "Irten"
 
 #: ../src/keybindings.c:293
 msgid "Undo"
@@ -3196,7 +3198,7 @@ msgstr ""
 
 #: ../src/keybindings.c:327
 msgid "Show macro list"
-msgstr ""
+msgstr "Erakutsi makro zerrenda"
 
 #: ../src/keybindings.c:329
 msgid "Word part completion"
@@ -3432,7 +3434,7 @@ msgstr ""
 
 #: ../src/keybindings.c:533
 msgid "Switch to VTE"
-msgstr ""
+msgstr "Aldatu VTEra"
 
 #: ../src/keybindings.c:535
 msgid "Switch to Sidebar"
@@ -3468,11 +3470,11 @@ msgstr "Mugitu dokumentua eskuinetara"
 
 #: ../src/keybindings.c:556
 msgid "Move document first"
-msgstr ""
+msgstr "Mugitu dokumentua hasierara"
 
 #: ../src/keybindings.c:558
 msgid "Move document last"
-msgstr ""
+msgstr "Mugitu dokumentua amaierara"
 
 #: ../src/keybindings.c:563
 msgid "Toggle Line wrapping"
@@ -3564,7 +3566,7 @@ msgstr ""
 
 #: ../src/keyfile.c:1185
 msgid "Failed to load one or more session files."
-msgstr ""
+msgstr "Huts egin du saio-fitxategi bat edo gehiago kargatzean."
 
 #: ../src/log.c:181
 msgid "Debug Messages"
@@ -3640,7 +3642,7 @@ msgstr "Ez kargatu aurreko saioko fitxategiak"
 
 #: ../src/main.c:141
 msgid "Don't load terminal support"
-msgstr ""
+msgstr "Ez kargatu terminalaren euskarria"
 
 #: ../src/main.c:142
 msgid "Filename of libvte.so"
@@ -3662,7 +3664,7 @@ msgstr "[FITXATEGIAK...]"
 #: ../src/main.c:559
 #, c-format
 msgid "built on %s with "
-msgstr ""
+msgstr "%s(e)an eraikia honekin:"
 
 #: ../src/main.c:647
 msgid "Move it now?"
@@ -3733,6 +3735,7 @@ msgstr "_Ezkutatu mezu-leihoa"
 #, c-format
 msgid "Could not find file '%s' - trying the current document path."
 msgstr ""
+"Ezin izan da '%s' fitxategia aurkitu - uneko dokumentuaren bidean saiatzen."
 
 #: ../src/notebook.c:195
 msgid "Switch to Document"
@@ -3806,11 +3809,11 @@ msgstr ""
 
 #: ../src/prefs.c:226 ../src/symbols.c:2298 ../src/sidebar.c:731
 msgid "_Expand All"
-msgstr ""
+msgstr "_Zabaldu dena"
 
 #: ../src/prefs.c:231 ../src/symbols.c:2303 ../src/sidebar.c:737
 msgid "_Collapse All"
-msgstr ""
+msgstr "_Tolestu dena"
 
 #: ../src/prefs.c:291
 msgid "Action"
@@ -3890,12 +3893,12 @@ msgstr "Orria: %d/%d"
 #: ../src/printing.c:484
 #, c-format
 msgid "Did not send document %s to the printing subsystem."
-msgstr ""
+msgstr "Ez bidali %s dokumentua inprimaketa azpisistemara."
 
 #: ../src/printing.c:486
 #, c-format
 msgid "Document %s was sent to the printing subsystem."
-msgstr ""
+msgstr "%s dokumentua inprimaketa azpisistemara bidali da."
 
 #: ../src/printing.c:539
 #, c-format
@@ -3905,6 +3908,7 @@ msgstr "%s inprimatzeak huts egin du (%s)."
 #: ../src/printing.c:577
 msgid "Please set a print command in the preferences dialog first."
 msgstr ""
+"Mesedez, lehenik zehaztu inprimatzeko komando bat hobespenak elkarrizketan."
 
 #: ../src/printing.c:585
 #, c-format
@@ -3913,11 +3917,14 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
+"\"%s\" fitxategia ondorengo komandoarekin inprimatuko da:\n"
+"\n"
+"%s"
 
 #: ../src/printing.c:601
 #, c-format
 msgid "Printing of \"%s\" failed (return code: %s)."
-msgstr ""
+msgstr "\"%s\" inprimatzeak huts egin du (itzulitako kodea: %s)."
 
 #: ../src/printing.c:607
 #, c-format
@@ -3940,7 +3947,7 @@ msgstr "_Sortu"
 
 #: ../src/project.c:175 ../src/project.c:420
 msgid "Choose Project Base Path"
-msgstr ""
+msgstr "Aukeratu proiektuaren oinarrizko bidea"
 
 #: ../src/project.c:197 ../src/project.c:563
 msgid "Project file could not be written"
@@ -3998,7 +4005,7 @@ msgstr "Proiektuaren fitxategi-izen baliogabea zehaztu duzu."
 
 #: ../src/project.c:690
 msgid "Create the project's base path directory?"
-msgstr ""
+msgstr "Proiektuaren oinarrizko bidearen direktorioa sortu?"
 
 #: ../src/project.c:691
 #, c-format
@@ -4008,7 +4015,7 @@ msgstr "\"%s\" bidea ez da existitzen."
 #: ../src/project.c:700
 #, c-format
 msgid "Project base directory could not be created (%s)."
-msgstr ""
+msgstr "Ezin izan da proiektuaren oinarrizko direktorioa sortu (%s)."
 
 #: ../src/project.c:713
 #, c-format
@@ -4034,6 +4041,8 @@ msgid ""
 "Use POSIX-like regular expressions. For detailed information about using "
 "regular expressions, please read the documentation."
 msgstr ""
+"Erabili POSIX motako adierazpen erregularrak. Adierazpen erregularrei "
+"buruzko informazioa nahi izanez gero irakurri dokumentazioa."
 
 #: ../src/search.c:300
 msgid "Search _backwards"
@@ -4041,13 +4050,15 @@ msgstr "Bilatu _atzerantz"
 
 #: ../src/search.c:313
 msgid "Use _escape sequences"
-msgstr ""
+msgstr "Erabili _ihes-sekuentziak"
 
 #: ../src/search.c:317
 msgid ""
 "Replace \\\\, \\t, \\n, \\r and \\uXXXX (Unicode chararacters) with the "
 "corresponding control characters"
 msgstr ""
+"Ordezkatu \\\\, \\t, \\n, \\r eta \\uXXXX (Unicode kararaktereak) dagozkien "
+"kontrol-karaktereekin"
 
 #: ../src/search.c:326 ../src/search.c:951
 msgid "C_ase sensitive"
@@ -4071,7 +4082,7 @@ msgstr "_Hurrengoa"
 
 #: ../src/search.c:455 ../src/search.c:614 ../src/search.c:853
 msgid "_Search for:"
-msgstr ""
+msgstr "_Bilatu hau:"
 
 #. Now add the multiple match options
 #: ../src/search.c:484
@@ -4097,11 +4108,11 @@ msgstr "_Dokumentuan"
 #. close window checkbox
 #: ../src/search.c:509 ../src/search.c:689
 msgid "Close _dialog"
-msgstr ""
+msgstr "Itxi _elkarrizketa"
 
 #: ../src/search.c:513 ../src/search.c:693
 msgid "Disable this option to keep the dialog open"
-msgstr ""
+msgstr "Desgaitu aukera hau elkarrizketa irekita mantentzeko"
 
 #: ../src/search.c:608
 msgid "Replace & Fi_nd"
@@ -4126,7 +4137,7 @@ msgstr ""
 
 #: ../src/search.c:800
 msgid "all"
-msgstr ""
+msgstr "guztiak"
 
 #: ../src/search.c:802
 msgid "project"
@@ -4229,7 +4240,7 @@ msgstr "Ezin izan da direktorioa ireki (%s)"
 
 #: ../src/search.c:1784
 msgid "Search failed."
-msgstr "Bilaketa huts egin du."
+msgstr "Bilaketak huts egin du."
 
 #: ../src/search.c:1808
 #, c-format
@@ -4245,7 +4256,7 @@ msgstr ""
 #: ../src/search.c:1844
 #, c-format
 msgid "Bad regex: %s"
-msgstr ""
+msgstr "Adierazpen erregular okerra: %s"
 
 #. TODO maybe this message needs a rewording
 #: ../src/socket.c:228
@@ -4265,27 +4276,27 @@ msgstr "Balioa"
 
 #: ../src/symbols.c:686 ../src/symbols.c:736 ../src/symbols.c:812
 msgid "Chapter"
-msgstr ""
+msgstr "Kapitulua"
 
 #: ../src/symbols.c:687 ../src/symbols.c:732 ../src/symbols.c:813
 msgid "Section"
-msgstr ""
+msgstr "Atala"
 
 #: ../src/symbols.c:688
 msgid "Sect1"
-msgstr ""
+msgstr "Atal1"
 
 #: ../src/symbols.c:689
 msgid "Sect2"
-msgstr ""
+msgstr "Atal2"
 
 #: ../src/symbols.c:690
 msgid "Sect3"
-msgstr ""
+msgstr "Atal3"
 
 #: ../src/symbols.c:691
 msgid "Appendix"
-msgstr ""
+msgstr "Eranskina"
 
 #: ../src/symbols.c:692 ../src/symbols.c:737 ../src/symbols.c:762
 #: ../src/symbols.c:773 ../src/symbols.c:871 ../src/symbols.c:882
@@ -4293,7 +4304,7 @@ msgstr ""
 #: ../src/symbols.c:932 ../src/symbols.c:947 ../src/symbols.c:976
 #: ../src/symbols.c:1006
 msgid "Other"
-msgstr ""
+msgstr "Bestelakoa"
 
 #: ../src/symbols.c:698 ../src/symbols.c:940 ../src/symbols.c:985
 msgid "Module"
@@ -4306,7 +4317,7 @@ msgstr "Motak"
 
 #: ../src/symbols.c:700
 msgid "Type constructors"
-msgstr ""
+msgstr "Mota eraikitzaileak"
 
 #: ../src/symbols.c:701 ../src/symbols.c:723 ../src/symbols.c:744
 #: ../src/symbols.c:761 ../src/symbols.c:770 ../src/symbols.c:782
@@ -4322,7 +4333,7 @@ msgstr "Programa"
 
 #: ../src/symbols.c:708 ../src/symbols.c:716 ../src/symbols.c:722
 msgid "Sections"
-msgstr ""
+msgstr "Atalak"
 
 #: ../src/symbols.c:709
 msgid "Paragraph"
@@ -4352,19 +4363,19 @@ msgstr "Ingurunea"
 
 #: ../src/symbols.c:733 ../src/symbols.c:814
 msgid "Subsection"
-msgstr ""
+msgstr "Azpiatala"
 
 #: ../src/symbols.c:734 ../src/symbols.c:815
 msgid "Subsubsection"
-msgstr ""
+msgstr "Azpiazpiatala"
 
 #: ../src/symbols.c:745
 msgid "Structures"
-msgstr ""
+msgstr "Egiturak"
 
 #: ../src/symbols.c:752
 msgid "Parts"
-msgstr ""
+msgstr "Zatiak"
 
 #: ../src/symbols.c:753
 msgid "Assembly"
@@ -4372,7 +4383,7 @@ msgstr ""
 
 #: ../src/symbols.c:754
 msgid "Steps"
-msgstr ""
+msgstr "Pausoak"
 
 #: ../src/symbols.c:769 ../src/symbols.c:864 ../src/symbols.c:889
 #: ../src/symbols.c:901
@@ -4401,7 +4412,7 @@ msgstr "Klaseak"
 
 #: ../src/symbols.c:792
 msgid "Anchors"
-msgstr ""
+msgstr "Aingurak"
 
 #: ../src/symbols.c:793
 msgid "H1 Headings"
@@ -4417,27 +4428,27 @@ msgstr "H3 goiburuak"
 
 #: ../src/symbols.c:803
 msgid "ID Selectors"
-msgstr ""
+msgstr "ID hautatzaileak"
 
 #: ../src/symbols.c:804
 msgid "Type Selectors"
-msgstr ""
+msgstr "Mota hautatzaileak"
 
 #: ../src/symbols.c:823
 msgid "Section Level 1"
-msgstr ""
+msgstr "Atal maila 1"
 
 #: ../src/symbols.c:824
 msgid "Section Level 2"
-msgstr ""
+msgstr "Atal maila 2"
 
 #: ../src/symbols.c:825
 msgid "Section Level 3"
-msgstr ""
+msgstr "Atal maila 3"
 
 #: ../src/symbols.c:826
 msgid "Section Level 4"
-msgstr ""
+msgstr "Atal maila 4"
 
 #: ../src/symbols.c:833 ../src/symbols.c:879
 msgid "Modules"
@@ -4462,7 +4473,7 @@ msgstr "Prozedurak"
 
 #: ../src/symbols.c:857
 msgid "Imports"
-msgstr ""
+msgstr "Inportazioak"
 
 #: ../src/symbols.c:865
 msgid "Entities"
@@ -4482,7 +4493,7 @@ msgstr "Aldagaiak / Seinaleak"
 
 #: ../src/symbols.c:870
 msgid "Processes / Blocks / Components"
-msgstr ""
+msgstr "Prozesuak / Blokeak / Osagaiak"
 
 #: ../src/symbols.c:878
 msgid "Events"
@@ -4494,19 +4505,19 @@ msgstr "Funtzioak / Atazak"
 
 #: ../src/symbols.c:893 ../src/symbols.c:994
 msgid "Members"
-msgstr ""
+msgstr "Kideak"
 
 #: ../src/symbols.c:943
 msgid "Subroutines"
-msgstr ""
+msgstr "Azpirrutinak"
 
 #: ../src/symbols.c:946
 msgid "Blocks"
-msgstr ""
+msgstr "Blokeak"
 
 #: ../src/symbols.c:955 ../src/symbols.c:964 ../src/symbols.c:1002
 msgid "Macros"
-msgstr ""
+msgstr "Makroak"
 
 #: ../src/symbols.c:956
 msgid "Defines"
@@ -4514,11 +4525,11 @@ msgstr ""
 
 #: ../src/symbols.c:963
 msgid "Targets"
-msgstr ""
+msgstr "Helburuak"
 
 #: ../src/symbols.c:972
 msgid "Indexes"
-msgstr ""
+msgstr "Indizeak"
 
 #: ../src/symbols.c:973
 msgid "Tables"
@@ -4526,11 +4537,11 @@ msgstr "Taulak"
 
 #: ../src/symbols.c:974
 msgid "Triggers"
-msgstr ""
+msgstr "Disparadoreak"
 
 #: ../src/symbols.c:975
 msgid "Views"
-msgstr ""
+msgstr "Ikuspegiak"
 
 #: ../src/symbols.c:995
 msgid "Structs"
@@ -4587,7 +4598,7 @@ msgstr ""
 #: ../src/symbols.c:1819
 #, c-format
 msgid "Could not load tags file '%s'."
-msgstr ""
+msgstr "Ezin izan da '%s' etiketa-fitxategia kargatu."
 
 #: ../src/symbols.c:1959
 #, c-format
@@ -4597,7 +4608,7 @@ msgstr ""
 #: ../src/symbols.c:1961
 #, c-format
 msgid "Definition of \"%s\" not found."
-msgstr ""
+msgstr "Ez da \"%s\"(r)en definiziorik aurkitu."
 
 #: ../src/symbols.c:2313
 msgid "Sort by _Name"
@@ -4610,7 +4621,7 @@ msgstr "Antolatu _itxuraren arabera"
 #: ../src/templates.c:75
 #, c-format
 msgid "Failed to convert template file \"%s\" to UTF-8"
-msgstr ""
+msgstr "Huts egin du \"%s\" txantiloi-fitxategia UTF-8ra bihurtzean"
 
 #. custom actions defined in toolbar_init(): "New", "Open", "SearchEntry", "GotoEntry", "Build"
 #: ../src/toolbar.c:54
@@ -4690,7 +4701,7 @@ msgstr "Handitu koska"
 
 #: ../src/toolbar.c:75 ../src/toolbar.c:380
 msgid "Find the entered text in the current file"
-msgstr ""
+msgstr "Bilatu sartutako testua uneko fitxategian"
 
 #: ../src/toolbar.c:76 ../src/toolbar.c:390
 msgid "Jump to the entered line number"
@@ -4779,6 +4790,8 @@ msgid ""
 "The executed custom command returned an error. Your selection was not "
 "changed. Error message: %s"
 msgstr ""
+"Exekutatutako komando pertsonalizatuak errore bat itzuli du. Zure hautapena "
+"ez da aldatu. Errore-mezua: %s"
 
 #: ../src/tools.c:326
 msgid "The executed custom command exited with an unsuccessful exit code."
@@ -4792,7 +4805,7 @@ msgstr "Komando pertsonalizatuak huts egin du: %s"
 #: ../src/tools.c:358
 #, c-format
 msgid "Passing data and executing custom command: %s"
-msgstr ""
+msgstr "Datuak pasa eta komando pertsonalizatua exekutatzen: %s"
 
 #: ../src/tools.c:514 ../src/tools.c:774
 msgid "Set Custom Commands"
@@ -4810,11 +4823,11 @@ msgstr "IDa"
 
 #: ../src/tools.c:745
 msgid "No custom commands defined."
-msgstr ""
+msgstr "Ez da komando pertsonalizaturik definitu."
 
 #: ../src/tools.c:843
 msgid "Word Count"
-msgstr ""
+msgstr "Hitz kopurua"
 
 #: ../src/tools.c:852
 msgid "selection"
@@ -4826,7 +4839,7 @@ msgstr "dokumentu osoa"
 
 #: ../src/tools.c:866
 msgid "Range:"
-msgstr ""
+msgstr "Bitartea:"
 
 #: ../src/tools.c:878
 msgid "Lines:"
@@ -4997,7 +5010,7 @@ msgstr "Unix (LF)"
 #: ../src/vte.c:432
 #, c-format
 msgid "invalid VTE library \"%s\": missing symbol \"%s\""
-msgstr ""
+msgstr "VTE liburutegi baliogabea \"%s\": \"%s\" sinboloa falta da"
 
 #: ../src/vte.c:581
 msgid "_Set Path From Document"
@@ -5072,7 +5085,7 @@ msgstr "Iturburu-fitxategia:"
 
 #: ../plugins/classbuilder.c:488
 msgid "Inheritance"
-msgstr ""
+msgstr "Herentzia"
 
 #: ../plugins/classbuilder.c:490
 msgid "Base class:"
@@ -5088,7 +5101,7 @@ msgstr ""
 
 #: ../plugins/classbuilder.c:511
 msgid "Global"
-msgstr ""
+msgstr "Globala"
 
 #: ../plugins/classbuilder.c:530
 msgid "Base GType:"
@@ -5104,15 +5117,15 @@ msgstr "Aukerak"
 
 #: ../plugins/classbuilder.c:554
 msgid "Create constructor"
-msgstr ""
+msgstr "Sortu eraikitzailea"
 
 #: ../plugins/classbuilder.c:559
 msgid "Create destructor"
-msgstr ""
+msgstr "Sortu suntsitzailea"
 
 #: ../plugins/classbuilder.c:566
 msgid "Is abstract"
-msgstr ""
+msgstr "Abstraktua da"
 
 #: ../plugins/classbuilder.c:569
 msgid "Is singleton"
@@ -5120,7 +5133,7 @@ msgstr ""
 
 #: ../plugins/classbuilder.c:579
 msgid "Constructor type:"
-msgstr ""
+msgstr "Eraikitzaile mota:"
 
 #: ../plugins/classbuilder.c:1091
 msgid "Create Cla_ss"
@@ -5220,7 +5233,7 @@ msgstr "_Txertatu HTML karaktere bereziak"
 #. Add menuitem for html replacement functions
 #: ../plugins/htmlchars.c:754
 msgid "_HTML Replacement"
-msgstr ""
+msgstr "_HTML ordezkapena"
 
 #: ../plugins/htmlchars.c:761
 msgid "_Auto-replace Special Characters"
@@ -5316,11 +5329,11 @@ msgstr "Elementu gehiegi hautaturik!"
 #: ../plugins/filebrowser.c:444
 #, c-format
 msgid "Could not execute configured external command '%s' (%s)."
-msgstr ""
+msgstr "Ezin izan da exekutatu konfiguratutako kanpoko komandoa '%s' (%s)."
 
 #: ../plugins/filebrowser.c:614
 msgid "Open _externally"
-msgstr ""
+msgstr "Ireki _kanpoan"
 
 #: ../plugins/filebrowser.c:639
 msgid "Show _Hidden Files"
@@ -5362,7 +5375,7 @@ msgstr ""
 
 #: ../plugins/filebrowser.c:1217
 msgid "External open command:"
-msgstr ""
+msgstr "Kanpoko ireki komandoa:"
 
 #: ../plugins/filebrowser.c:1225
 #, c-format
@@ -5373,6 +5386,11 @@ msgid ""
 "%d will be replaced with the path name of the selected file without the "
 "filename"
 msgstr ""
+"\"Ireki honekin\" erabiltzean exekutatu beharreko komandoa. %f eta %d "
+"komodinak erabil ditzakezu.\n"
+"%f fitxategi-izenarekin, bide osoa barne, ordezkatuko da\n"
+"%d hautatutako fitxategiaren bide-izenarekin, fitxategi-izenik gabe, "
+"ordezkatuko da"
 
 #: ../plugins/filebrowser.c:1233
 msgid "Show hidden files"
@@ -5388,12 +5406,13 @@ msgstr "Jarraitu uneko fitxategiaren bidea"
 
 #: ../plugins/filebrowser.c:1266
 msgid "Use the project's base directory"
-msgstr ""
+msgstr "Erabili proiektuaren oinarrizko direktorioa"
 
 #: ../plugins/filebrowser.c:1270
 msgid ""
 "Change the directory to the base directory of the currently opened project"
 msgstr ""
+"Aldatu direktorioa unean irekitako proiektuaren oinarrizko direktoriora"
 
 #: ../plugins/saveactions.c:40
 msgid "Save Actions"
