@@ -1324,7 +1324,7 @@ static gint show_prompt(GtkWidget *parent,
 		parent = main_widgets.window;
 
 	dialog = gtk_message_dialog_new(GTK_WINDOW(parent),
-		GTK_DIALOG_DESTROY_WITH_PARENT, GTK_MESSAGE_QUESTION,
+		GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT, GTK_MESSAGE_QUESTION,
 		GTK_BUTTONS_NONE, "%s", question_text);
 	gtk_widget_set_name(dialog, "GeanyDialog");
 	gtk_window_set_title(GTK_WINDOW(dialog), _("Question"));
