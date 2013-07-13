@@ -1657,23 +1657,6 @@ const gchar *utils_get_default_dir_utf8(void)
 }
 
 
-static gboolean check_error(GError **error)
-{
-	if (error != NULL && *error != NULL)
-	{
-		/* imitate the GLib warning */
-		g_warning(
-			"GError set over the top of a previous GError or uninitialized memory.\n"
-			"This indicates a bug in someone's code. You must ensure an error is NULL "
-			"before it's set.");
-		/* after returning the code may segfault, but we don't care because we should
-		 * make sure *error is NULL */
-		return FALSE;
-	}
-	return TRUE;
-}
-
-
 /**
  *  Wraps g_spawn_sync() and internally calls this function on Unix-like
  *  systems. On Win32 platforms, it uses the Windows API.
@@ -1697,12 +1680,9 @@ gboolean utils_spawn_sync(const gchar *dir, gchar **argv, gchar **env, GSpawnFla
 {
 	gboolean result;
 
-	if (! check_error(error))
-		return FALSE;
-
 	if (argv == NULL)
 	{
-		*error = g_error_new(G_SPAWN_ERROR, G_SPAWN_ERROR_FAILED, "argv must not be NULL");
+		g_set_error(error, G_SPAWN_ERROR, G_SPAWN_ERROR_FAILED, "argv must not be NULL");
 		return FALSE;
 	}
 
@@ -1743,12 +1723,9 @@ gboolean utils_spawn_async(const gchar *dir, gchar **argv, gchar **env, GSpawnFl
 {
 	gboolean result;
 
-	if (! check_error(error))
-		return FALSE;
-
 	if (argv == NULL)
 	{
-		*error = g_error_new(G_SPAWN_ERROR, G_SPAWN_ERROR_FAILED, "argv must not be NULL");
+		g_set_error(error, G_SPAWN_ERROR, G_SPAWN_ERROR_FAILED, "argv must not be NULL");
 		return FALSE;
 	}
 
