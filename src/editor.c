@@ -1754,13 +1754,11 @@ editor_read_word_stem(GeanyEditor *editor, gint pos, const gchar *wordchars)
 
 static gint find_previous_brace(ScintillaObject *sci, gint pos)
 {
-	gchar c;
 	gint orig_pos = pos;
 
-	c = sci_get_char_at(sci, pos);
 	while (pos >= 0 && pos > orig_pos - 300)
 	{
-		c = sci_get_char_at(sci, pos);
+		gchar c = sci_get_char_at(sci, pos);
 		if (utils_is_opening_brace(c, editor_prefs.brace_match_ltgt))
 			return pos;
 		pos--;

@@ -2098,7 +2098,6 @@ static gchar *parse_cpp_function_at_line(ScintillaObject *sci, gint tag_line)
 	while (end > 0 && isspace(sci_get_char_at(sci, end))) end--;
 
 	start = end;
-	c = 0;
 	/* Use tmp to find SCE_C_IDENTIFIER or SCE_C_GLOBALCLASS chars */
 	while (start >= 0 && ((tmp = sci_get_style_at(sci, start)) == SCE_C_IDENTIFIER
 		 ||  tmp == SCE_C_GLOBALCLASS
