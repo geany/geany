@@ -2629,14 +2629,6 @@ static void processColon (statementInfo *const st)
 		{
 			readParents (st, ':');
 		}
-		else if (parentDecl (st) == DECL_STRUCT || parentDecl (st) == DECL_CLASS)
-		{
-			c = skipToOneOf (",;");
-			if (c == ',')
-				setToken (st, TOKEN_COMMA);
-			else if (c == ';')
-				setToken (st, TOKEN_SEMICOLON);
-		}
 		else if ((isLanguage (Lang_cpp) || isLanguage (Lang_csharp)) &&
 				 st->declaration == DECL_ENUM)
 		{
@@ -2644,6 +2636,14 @@ static void processColon (statementInfo *const st)
 			c = skipToOneOf ("{;");
 			if (c == '{')
 				setToken (st, TOKEN_BRACE_OPEN);
+			else if (c == ';')
+				setToken (st, TOKEN_SEMICOLON);
+		}
+		else if (parentDecl (st) == DECL_STRUCT || parentDecl (st) == DECL_CLASS)
+		{
+			c = skipToOneOf (",;");
+			if (c == ',')
+				setToken (st, TOKEN_COMMA);
 			else if (c == ';')
 				setToken (st, TOKEN_SEMICOLON);
 		}
