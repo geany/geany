@@ -2637,7 +2637,8 @@ static void processColon (statementInfo *const st)
 			else if (c == ';')
 				setToken (st, TOKEN_SEMICOLON);
 		}
-		else if (isLanguage (Lang_cpp) && st->declaration == DECL_ENUM)
+		else if ((isLanguage (Lang_cpp) || isLanguage (Lang_csharp)) &&
+				 st->declaration == DECL_ENUM)
 		{
 			/* skip enum's base type */
 			c = skipToOneOf ("{;");
