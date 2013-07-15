@@ -204,6 +204,7 @@ typedef struct sStatementInfo
 	boolean			haveQualifyingName;	/* do we have a name we are considering? */
 	boolean			gotParenName;		/* was a name inside parentheses parsed yet? */
 	boolean			gotArgs;			/* was a list of parameters parsed yet? */
+	unsigned int	nSemicolons;			/* how many semicolons did we see in that statement */
 	impType			implementation;		/* abstract or concrete implementation? */
 	unsigned int	tokenIndex;			/* currently active token */
 	tokenInfo*		token [((int) NumTokens)];
@@ -327,7 +328,7 @@ typedef enum
 {
 	JK_UNDEFINED = -1,
 	JK_CLASS, JK_FIELD, JK_INTERFACE, JK_METHOD,
-	JK_PACKAGE
+	JK_PACKAGE, JK_ENUMERATOR, JK_ENUMERATION
 } javaKind;
 
 static kindOption JavaKinds [] = {
@@ -336,6 +337,8 @@ static kindOption JavaKinds [] = {
 	{ TRUE,  'i', "interface", "interfaces"},
 	{ TRUE,  'm', "method", "methods"},
 	{ TRUE,  'p', "package", "packages"},
+	{ TRUE,  'e', "enumerator", "enumerators (values inside an enumeration)"},
+	{ TRUE,  'g', "enum",       "enumeration names"},
 };
 
 typedef enum
@@ -940,6 +943,7 @@ static void reinitStatement (statementInfo *const st, const boolean partial)
 	st->implementation		= IMP_DEFAULT;
 	st->gotArgs				= FALSE;
 	st->gotName				= FALSE;
+	st->nSemicolons			= 0;
 	st->haveQualifyingName	= FALSE;
 	st->argEndPosition		= 0;
 
@@ -1089,11 +1093,13 @@ static javaKind javaTagKind (const tagType type)
 	javaKind result = JK_UNDEFINED;
 	switch (type)
 	{
-		case TAG_CLASS:     result = JK_CLASS;     break;
-		case TAG_FIELD:     result = JK_FIELD;     break;
-		case TAG_INTERFACE: result = JK_INTERFACE; break;
-		case TAG_METHOD:    result = JK_METHOD;    break;
-		case TAG_PACKAGE:   result = JK_PACKAGE;   break;
+		case TAG_CLASS:      result = JK_CLASS;         break;
+		case TAG_FIELD:      result = JK_FIELD;         break;
+		case TAG_INTERFACE:  result = JK_INTERFACE;     break;
+		case TAG_METHOD:     result = JK_METHOD;        break;
+		case TAG_PACKAGE:    result = JK_PACKAGE;       break;
+		case TAG_ENUM:       result = JK_ENUMERATION;   break;
+		case TAG_ENUMERATOR: result = JK_ENUMERATOR;    break;
 
 		default: Assert ("Bad Java tag type" == NULL); break;
 	}
@@ -2786,6 +2792,9 @@ static void nextToken (statementInfo *const st)
 		}
 	} while (isType (token, TOKEN_NONE));
 
+	if (isType (token, TOKEN_SEMICOLON) && st->parent)
+		st->parent->nSemicolons ++;
+
 	/* We want to know about non-keyword variable types */
 	if (TOKEN_NONE == st->firstToken->type)
 	{
@@ -2913,7 +2922,9 @@ static void tagCheck (statementInfo *const st)
 	{
 		case TOKEN_NAME:
 		{
-			if (insideEnumBody (st))
+			if (insideEnumBody (st) &&
+				/* Java enumerations can contain members after a semicolon */
+				(! isLanguage(Lang_java) || st->parent->nSemicolons < 1))
 				qualifyEnumeratorTag (st, token);
 			break;
 		}
@@ -3022,7 +3033,9 @@ static void tagCheck (statementInfo *const st)
 		case TOKEN_SEMICOLON:
 		case TOKEN_COMMA:
 		{
-			if (insideEnumBody (st))
+			if (insideEnumBody (st) &&
+				/* Java enumerations can contain members after a semicolon */
+				(! isLanguage (Lang_java) || st->parent->nSemicolons < 2))
 				;
 			else if (isType (prev, TOKEN_NAME))
 			{

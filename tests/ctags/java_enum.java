@@ -12,4 +12,9 @@ public class C {
 		void m() {
 		}
 	}
+	public enum FancyEnum2 {
+		X, Y;
+		void m2() {
+		}
+	}
 }
