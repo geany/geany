@@ -113,6 +113,7 @@ test_sources = \
 	countall.sql					\
 	cpp_destructor.cpp				\
 	cython_sample.pyx				\
+	cython_sample2.pyx				\
 	cxx11enum.cpp					\
 	db-trig.sql						\
 	debian_432872.f90				\
