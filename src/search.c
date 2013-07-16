@@ -46,6 +46,7 @@
 #include <unistd.h>
 #include <string.h>
 #include <ctype.h>
+#include <stdlib.h>
 
 #ifdef G_OS_UNIX
 # include <sys/types.h>
@@ -75,6 +76,28 @@ enum
 	FILES_MODE_CUSTOM
 };
 
+typedef struct MatchCounter {
+	gint count;
+	gint refcount;
+} MatchCounter;
+
+typedef struct IOChannelData {
+	gboolean is_out;
+	gchar buf[4000];
+	gsize buf_read;
+	gsize buf_count;
+	gchar *line;
+	gsize line_length; /* length of the line so far */
+	const gchar *enc;
+	gboolean eof;
+
+	/* only used if is_out == TRUE */
+	gchar *current_filename;
+	gchar *utf8_search_text;
+	gint utf8_search_text_len;
+	gchar *escaped_search_text;
+	MatchCounter *counter;
+} IOChannelData;
 
 GeanySearchData search_data;
 GeanySearchPrefs search_prefs;
@@ -144,9 +167,6 @@ static struct
 fif_dlg = {NULL, NULL, NULL, NULL, NULL, NULL, {0, 0}};
 
 
-static gboolean search_read_io(GIOChannel *source, GIOCondition condition, gpointer data);
-static gboolean search_read_io_stderr(GIOChannel *source, GIOCondition condition, gpointer data);
-
 static void search_close_pid(GPid child_pid, gint status, gpointer user_data);
 
 static gchar **search_get_argv(const gchar **argv_prefix, const gchar *dir);
@@ -179,6 +199,7 @@ static gboolean
 search_find_in_files(const gchar *utf8_search_text, const gchar *dir, const gchar *opts,
 	const gchar *enc);
 
+static gboolean read_fif_io(GIOChannel *source, GIOCondition condition, gpointer data);
 
 static void init_prefs(void)
 {
@@ -1532,7 +1553,8 @@ fail:
 
 static GString *get_grep_options(void)
 {
-	GString *gstr = g_string_new("-nHI");	/* line numbers, filenames, ignore binaries */
+	GString *gstr = g_string_new("-nHZI");	/* line numbers, filenames, add a '\0' after filename,
+											   ignore binaries */
 
 	if (settings.fif_invert_results)
 		g_string_append_c(gstr, 'v');
@@ -1621,7 +1643,6 @@ on_find_in_files_dialog_response(GtkDialog *dialog, gint response,
 	else
 		gtk_widget_hide(fif_dlg.dialog);
 }
-
 
 static gboolean
 search_find_in_files(const gchar *utf8_search_text, const gchar *dir, const gchar *opts,
@@ -1715,6 +1736,17 @@ search_find_in_files(const gchar *utf8_search_text, const gchar *dir, const gcha
 	else
 	{
 		gchar *str, *utf8_str;
+		IOChannelData *iod_out = g_new0(IOChannelData, 1);
+		IOChannelData *iod_err = g_new0(IOChannelData, 1);
+		iod_out->is_out = TRUE;
+		iod_out->enc = enc;
+		iod_out->utf8_search_text_len = strlen(utf8_search_text);
+		iod_out->utf8_search_text = g_strdup(utf8_search_text);
+		iod_out->escaped_search_text = g_markup_escape_text(utf8_search_text, iod_out->utf8_search_text_len);
+		iod_out->counter = g_new0(MatchCounter, 1);
+		iod_out->counter->refcount = 2; /* 1 for the io watch, 1 for the child_watch */
+
+		iod_err->enc = enc;
 
 		ui_progress_bar_start(_("Searching..."));
 
@@ -1722,10 +1754,10 @@ search_find_in_files(const gchar *utf8_search_text, const gchar *dir, const gcha
 		/* we can pass 'enc' without strdup'ing it here because it's a global const string and
 		 * always exits longer than the lifetime of this function */
 		utils_set_up_io_channel(stdout_fd, G_IO_IN | G_IO_PRI | G_IO_ERR | G_IO_HUP | G_IO_NVAL,
-			TRUE, search_read_io, (gpointer) enc);
+			TRUE, read_fif_io, iod_out);
 		utils_set_up_io_channel(stderr_fd, G_IO_IN | G_IO_PRI | G_IO_ERR | G_IO_HUP | G_IO_NVAL,
-			TRUE, search_read_io_stderr, (gpointer) enc);
-		g_child_watch_add(child_pid, search_close_pid, NULL);
+			TRUE, read_fif_io, iod_err);
+		g_child_watch_add(child_pid, search_close_pid, iod_out->counter);
 
 		str = g_strdup_printf(_("%s %s -- %s (in directory: %s)"),
 			tool_prefs.grep_cmd, opts, utf8_search_text, dir);
@@ -1815,60 +1847,313 @@ static gchar **search_get_argv(const gchar **argv_prefix, const gchar *dir)
 	return argv;
 }
 
-
-static gboolean read_fif_io(GIOChannel *source, GIOCondition condition, gchar *enc, gint msg_color)
+/*
+ * Reads a GIOChannel until the next '\n'.
+ * We cannot use g_io_channel_read_line() as grep uses the -Z option.
+ * This function is blocking. It should not return FALSE unless we really
+ * are end of file.
+ *
+ * @param line returned line. The caller must free it.
+ * @param size the number of gchars inside line
+ *
+ * @return a status
+ * G_IO_STATUS_NORMAL: everything went well, line is set
+ * G_IO_STATUS_ERROR: error, stop calling read_line
+ * G_IO_STATUS_EOF: end of file stop calling read_line
+ * G_IO_STATUS_AGAIN: we do not have enough data to make a line, come back later
+ */
+static GIOStatus read_line(GIOChannel *source, IOChannelData *iod, gchar **line, gsize *size)
 {
-	if (condition & (G_IO_IN | G_IO_PRI))
+	gsize i;
+	gboolean found = FALSE;
+	gsize add;
+
+again:
+	if (iod->buf_read == iod->buf_count && !iod->eof)
 	{
-		gchar *msg, *utf8_msg;
-
-		while (g_io_channel_read_line(source, &msg, NULL, NULL, NULL) && msg)
-		{
-			utf8_msg = NULL;
-
-			g_strstrip(msg);
-			/* enc is NULL when encoding is set to UTF-8, so we can skip any conversion */
-			if (enc != NULL)
-			{
-				if (! g_utf8_validate(msg, -1, NULL))
-				{
-					utf8_msg = g_convert(msg, -1, "UTF-8", enc, NULL, NULL, NULL);
-				}
-				if (utf8_msg == NULL)
-					utf8_msg = msg;
-			}
-			else
-				utf8_msg = msg;
-
-			msgwin_msg_add_string(msg_color, -1, NULL, utf8_msg);
-
-			if (utf8_msg != msg)
-				g_free(utf8_msg);
-			g_free(msg);
+		gsize got;
+		GIOStatus s;
+		s = g_io_channel_read_chars(source, iod->buf, sizeof(iod->buf), &got, NULL);
+		switch (s) {
+			case G_IO_STATUS_AGAIN:
+				return s;
+			case G_IO_STATUS_ERROR:
+				/* XXX: could we terminate the GIOChannel here ? */
+				return s;
+			case G_IO_STATUS_EOF:
+				/* XXX: is it possible to have EOF and got != 0 ? */
+				return s;
+			case G_IO_STATUS_NORMAL:
+				iod->buf_read = 0;
+				iod->buf_count = got;
+				break;
 		}
 	}
+	
+	if (iod->buf_read == iod->buf_count)
+	{
+		/* can happen if g_io_channel_read_chars() set got=0 */
+		return G_IO_STATUS_AGAIN;
+	}
+
+	i = iod->buf_read;
+	while (i < iod->buf_count)
+	{
+		if (iod->buf[i] == '\n')
+		{
+			found = TRUE;
+			break;
+		}
+		
+		i++;
+	}
+	
+	add = i - iod->buf_read;
+	iod->line = g_realloc(iod->line, iod->line_length + add + 1);
+
+	/*
+	 * cannot use gstrings as there may be null char inside the line
+	 */
+	memcpy(iod->line + iod->line_length, iod->buf + iod->buf_read, add);
+	iod->line_length += add;
+
+	if (found)
+	{
+		iod->line[iod->line_length] = '\0';
+		/* skip '\n' */
+		iod->buf_read = i + 1;
+		*line = iod->line;
+		*size = iod->line_length + 1;
+		iod->line = NULL;
+		iod->line_length = 0;
+		return G_IO_STATUS_NORMAL;
+	}
+	else
+	{
+		iod->buf_read = iod->buf_count;
+		goto again;
+	}
+}
+
+static gchar *get_next_string(gchar **src, gsize *size, const gchar *enc, gboolean *needs_free)
+{
+	gchar *str;
+	gsize len;
+
+	if (*size == 0)
+	{
+		return NULL;
+	}
+	
+	str = *src;
+
+	len = strlen(str);
+	*src = str + len + 1;
+	*size -= len + 1;
+	
+	g_strstrip(str);
+
+	if (!g_utf8_validate(str, -1, NULL))
+	{
+		*needs_free = TRUE;
+		return utils_utf8_make_valid(str, enc);
+	}
+	else
+	{
+		*needs_free = FALSE;
+		return str;
+	}
+}
+
+static gchar *filename_to_markup(const gchar *filename)
+{
+	GString *gs;
+	gchar *tmp;
+	
+	tmp = g_markup_escape_text(filename, -1);
+	gs = g_string_new("");
+	g_string_append(gs, "<b>");
+	g_string_append(gs, tmp);
+	g_string_append(gs, ":</b>");
+
+	g_free(tmp);
+	return g_string_free(gs, FALSE);
+}
+
+static gchar *result_to_markup(gchar *result, IOChannelData *iod, gint *lineno)
+{
+	GString *gs;
+	gchar *match;
+	gchar *end;
+	gchar *tmp;
+	gchar *text;
+	
+	gs = g_string_new("  ");
+
+	*lineno = strtol(result, &end, 10);
+	if (end == result)
+	{
+		*lineno = -1;
+	}
+	else if (*end == ':' || g_ascii_isspace(*end))
+	{
+		end++;
+	}
+
+	g_string_append_printf(gs, "<span foreground=\"gray\">%d:</span>", *lineno);
+	
+	tmp = end;
+	while ((match = strstr(tmp, iod->utf8_search_text)))
+	{
+		/* XXX: do we need to validate utf8 here again ? */
+		text = g_markup_escape_text(tmp, match - tmp);
+		g_string_append(gs, text);
+		g_string_append_printf(gs, "<span background=\"#FFFF00\">%s</span>", iod->escaped_search_text);
+		tmp = match + iod->utf8_search_text_len;
+		g_free(text);
+	}
+	
+	text = g_markup_escape_text(tmp, -1);
+	g_string_append(gs, text);
+	g_free(text);
+
+	return g_string_free(gs, FALSE);
+}
+
+static gboolean read_fif_io(GIOChannel *source, GIOCondition condition, gpointer data)
+{
+	IOChannelData *iod = (IOChannelData*)data;
+	const gchar *enc = iod->enc;
+	gboolean needs_free = FALSE;
+	gboolean last = FALSE;
+	gint line_count = 0;
+	
 	if (condition & (G_IO_ERR | G_IO_HUP | G_IO_NVAL))
+		last = TRUE;
+
+	if (condition & (G_IO_IN | G_IO_PRI))
+	{
+		gchar *line, *tmp, *utf8, *markup;
+		gsize got;
+#ifdef PROFILE_READ_FIF_IO
+		gint64 start = g_get_monotonic_time();
+#endif
+		while (1)
+		{
+			GIOStatus s = read_line(source, iod, &line, &got);
+			
+			switch (s) {
+				case G_IO_STATUS_AGAIN:
+					goto end;
+				case G_IO_STATUS_ERROR:
+				case G_IO_STATUS_EOF:
+					/* XXX: could I rely on this to return FALSE ? */
+					goto end;
+				case G_IO_STATUS_NORMAL:
+					break;
+			}
+			tmp = line;
+
+			if (iod->is_out)
+			{
+				utf8 = get_next_string(&tmp, &got, enc, &needs_free);
+				/*
+				 * utf8 should be the filename, in any case, it cannot be NULL
+				 */
+
+				if (g_strcmp0(iod->current_filename, utf8) != 0)
+				{
+					g_free(iod->current_filename);
+					iod->current_filename = g_strdup(utf8);
+					markup = filename_to_markup(utf8);
+					msgwin_msg_add_markup_no_validate(-1, NULL, iod->current_filename, markup);
+					g_free(markup);
+				}
+
+				if (needs_free)
+				{
+					g_free(utf8);
+				}
+			}
+
+			utf8 = get_next_string(&tmp, &got, enc, &needs_free);
+			if (utf8)
+			{
+				gint lineno;
+				if (iod->is_out)
+				{
+					markup = result_to_markup(utf8, iod, &lineno);
+					msgwin_msg_add_markup_no_validate(lineno, NULL, iod->current_filename, markup);
+					g_free(markup);
+					iod->counter->count++;
+				}
+				else
+				{
+					msgwin_msg_add_string(COLOR_DARK_RED, -1, NULL, utf8);
+				}
+
+				if (needs_free)
+					g_free(utf8);
+			}
+			g_free(line);
+			line_count++;
+			if (line_count > 5000 && !last)
+			{
+				/* do not process too many lines at once, it makes the UI unresponsive */
+				break;
+			}
+		}
+
+#ifdef PROFILE_READ_FIF_IO
+		gint64 end = g_get_monotonic_time();
+		if (end - start > 500000)
+		{
+			fprintf(stderr, "%d lines => %'lldms\n", line_count, end - start);
+		}
+#endif
+	}
+
+end:
+	if (last)
+	{
+		/*
+		 * the GSource will be removed from the mainloop, it is time
+		 * to free our resources
+		 */
+		if (iod->counter)
+		{
+			iod->counter->refcount--;
+			if (iod->counter->refcount == 0)
+			{
+				g_free(iod->counter);
+			}
+		}
+
+		if (iod->line)
+		{
+			g_free(iod->line);
+		}
+		if (iod->utf8_search_text)
+		{
+			g_free(iod->utf8_search_text);
+		}
+		if (iod->escaped_search_text)
+		{
+			g_free(iod->escaped_search_text);
+		}
+		g_free(iod);
 		return FALSE;
+	}
 
 	return TRUE;
-}
-
-
-static gboolean search_read_io(GIOChannel *source, GIOCondition condition, gpointer data)
-{
-	return read_fif_io(source, condition, data, COLOR_BLACK);
-}
-
-
-static gboolean search_read_io_stderr(GIOChannel *source, GIOCondition condition, gpointer data)
-{
-	return read_fif_io(source, condition, data, COLOR_DARK_RED);
 }
 
 
 static void search_close_pid(GPid child_pid, gint status, gpointer user_data)
 {
 	const gchar *msg = _("Search failed.");
+	MatchCounter *counter = (MatchCounter*)user_data;
+
 #ifdef G_OS_UNIX
 	gint exit_status = 1;
 
@@ -1889,14 +2174,12 @@ static void search_close_pid(GPid child_pid, gint status, gpointer user_data)
 	{
 		case 0:
 		{
-			gint count = gtk_tree_model_iter_n_children(
-				GTK_TREE_MODEL(msgwindow.store_msg), NULL) - 1;
 			gchar *text = ngettext(
 						"Search completed with %d match.",
-						"Search completed with %d matches.", count);
+						"Search completed with %d matches.", counter->count);
 
-			msgwin_msg_add(COLOR_BLUE, -1, NULL, text, count);
-			ui_set_statusbar(FALSE, text, count);
+			msgwin_msg_add(COLOR_BLUE, -1, NULL, text, counter->count);
+			ui_set_statusbar(FALSE, text, counter->count);
 			break;
 		}
 		case 1:
@@ -1909,6 +2192,12 @@ static void search_close_pid(GPid child_pid, gint status, gpointer user_data)
 	utils_beep();
 	g_spawn_close_pid(child_pid);
 	ui_progress_bar_stop();
+
+	counter->refcount--;
+	if (counter->refcount == 0)
+	{
+		g_free(counter);
+	}
 }
 
 

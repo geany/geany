@@ -281,6 +281,8 @@ GDate *utils_parse_date(const gchar *input);
 
 gchar *utils_parse_and_format_build_date(const gchar *input);
 
+gchar *utils_utf8_make_valid(const gchar * text, const char *from_codeset);
+
 G_END_DECLS
 
 #endif

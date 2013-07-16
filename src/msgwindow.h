@@ -82,6 +82,11 @@ void msgwin_msg_add(gint msg_color, gint line, GeanyDocument *doc, const gchar *
 
 void msgwin_msg_add_string(gint msg_color, gint line, GeanyDocument *doc, const gchar *string);
 
+void msgwin_msg_add_markup(gint line, GeanyDocument *doc, const gchar *markup);
+
+void msgwin_msg_add_markup_no_validate(gint line, GeanyDocument *doc, const gchar *doc_filename,
+												const gchar *markup);
+
 void msgwin_compiler_add(gint msg_color, const gchar *format, ...) G_GNUC_PRINTF (2, 3);
 
 void msgwin_compiler_add_string(gint msg_color, const gchar *msg);
