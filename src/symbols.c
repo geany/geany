@@ -2059,12 +2059,12 @@ static gchar *parse_function_at_line(ScintillaObject *sci, gint tag_line)
 	}
 	start = sci_get_position_from_line(sci, tag_line - 2);
 	max_pos = sci_get_position_from_line(sci, tag_line + 1);
-	while (sci_get_style_at(sci, start) != fn_style
-		&& start < max_pos) start++;
+	while (start < max_pos && sci_get_style_at(sci, start) != fn_style)
+		start++;
 
 	end = start;
-	while (sci_get_style_at(sci, end) == fn_style
-		&& end < max_pos) end++;
+	while (end < max_pos && sci_get_style_at(sci, end) == fn_style)
+		end++;
 
 	if (start == end)
 		return NULL;
