@@ -105,7 +105,7 @@ public:
 	UndoHistory();
 	~UndoHistory();
 
-	void AppendAction(actionType at, int position, const char *data, int length, bool &startSequence, bool mayCoalesce=true);
+	const char *AppendAction(actionType at, int position, const char *data, int length, bool &startSequence, bool mayCoalesce=true);
 
 	void BeginUndoAction();
 	void EndUndoAction();

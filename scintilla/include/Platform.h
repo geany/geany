@@ -13,6 +13,7 @@
 // PLAT_GTK_WIN32 is defined additionally when running PLAT_GTK under Win32
 // PLAT_WIN = Win32 API on Win32 OS
 // PLAT_WX is wxWindows on any supported platform
+// PLAT_TK = Tcl/TK on Linux or Win32
 
 #define PLAT_GTK 0
 #define PLAT_GTK_WIN32 0
@@ -23,6 +24,7 @@
 #define PLAT_QT 0
 #define PLAT_FOX 0
 #define PLAT_CURSES 0
+#define PLAT_TK 0
 
 #if defined(FOX)
 #undef PLAT_FOX
@@ -39,6 +41,10 @@
 #elif defined(SCINTILLA_QT)
 #undef PLAT_QT
 #define PLAT_QT 1
+
+#elif defined(TK)
+#undef PLAT_TK
+#define PLAT_TK 1
 
 #elif defined(GTK)
 #undef PLAT_GTK

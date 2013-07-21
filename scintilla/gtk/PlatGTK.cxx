@@ -185,7 +185,7 @@ public:
 			width[i] = 0;
 		}
 	}
-	XYPOSITION CharWidth(unsigned char ch, encodingType et_) {
+	XYPOSITION CharWidth(unsigned char ch, encodingType et_) const {
 		XYPOSITION w = 0;
 		FontMutexLock();
 		if ((ch <= 127) && (et == et_)) {

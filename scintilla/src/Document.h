@@ -155,24 +155,6 @@ public:
 	bool isEnabled;
 };
 
-class CaseFolder {
-public:
-	virtual ~CaseFolder() {
-	}
-	virtual size_t Fold(char *folded, size_t sizeFolded, const char *mixed, size_t lenMixed) = 0;
-};
-
-class CaseFolderTable : public CaseFolder {
-protected:
-	char mapping[256];
-public:
-	CaseFolderTable();
-	virtual ~CaseFolderTable();
-	virtual size_t Fold(char *folded, size_t sizeFolded, const char *mixed, size_t lenMixed);
-	void SetTranslation(char ch, char chTranslation);
-	void StandardASCII();
-};
-
 class Document;
 
 class LexInterface {
@@ -279,6 +261,8 @@ public:
 	int MovePositionOutsideChar(int pos, int moveDir, bool checkLineEnd=true);
 	int NextPosition(int pos, int moveDir) const;
 	bool NextCharacter(int &pos, int moveDir) const;	// Returns true if pos changed
+	int SCI_METHOD GetRelativePosition(int positionStart, int characterOffset) const;
+	int SCI_METHOD GetCharacterAndWidth(int position, int *pWidth) const;
 	int SCI_METHOD CodePage() const;
 	bool SCI_METHOD IsDBCSLeadByte(char ch) const;
 	int SafeSegment(const char *text, int length, int lengthSegment) const;

@@ -79,6 +79,12 @@ public:
 		}
 		return buf[position - startPos];
 	}
+	IDocumentWithLineEnd *MultiByteAccess() const {
+		if (documentVersion >= dvLineEnd) {
+			return static_cast<IDocumentWithLineEnd *>(pAccess);
+		}
+		return 0;
+	}
 	/** Safe version of operator[], returning a defined value for invalid position. */
 	char SafeGetCharAt(int position, char chDefault=' ') {
 		if (position < startPos || position >= endPos) {

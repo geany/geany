@@ -254,7 +254,7 @@ class QuoteCls {
     char Up;
     char Down;
     QuoteCls() {
-        this->New();
+        New();
     }
     void New() {
         Count = 0;

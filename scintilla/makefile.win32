@@ -108,6 +108,9 @@ SRCOBJS=\
 	PlatGTK.o \
 	ScintillaGTK.o \
 	Accessor.o \
+	CharacterCategory.o \
+	CaseConvert.o \
+	CaseFolder.o \
 	CharacterSet.o \
 	LexerBase.o \
 	LexerModule.o \

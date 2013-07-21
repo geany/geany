@@ -32,6 +32,7 @@
 #include "CharClassify.h"
 #include "Decoration.h"
 #include "ILexer.h"
+#include "CaseFolder.h"
 #include "Document.h"
 #include "Selection.h"
 #include "PositionCache.h"

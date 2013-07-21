@@ -36,6 +36,7 @@
 #include "ViewStyle.h"
 #include "CharClassify.h"
 #include "Decoration.h"
+#include "CaseFolder.h"
 #include "Document.h"
 #include "UniConversion.h"
 #include "Selection.h"
@@ -116,6 +117,7 @@ Editor::Editor() {
 	hasFocus = false;
 	hideSelection = false;
 	inOverstrike = false;
+	drawOverstrikeCaret = true;
 	errorStatus = 0;
 	mouseDownCaptures = true;
 
@@ -212,8 +214,6 @@ Editor::Editor() {
 
 	wrapState = eWrapNone;
 	wrapWidth = LineLayout::wrapWidthInfinite;
-	wrapStart = wrapLineLarge;
-	wrapEnd = wrapLineLarge;
 	wrapVisualFlags = 0;
 	wrapVisualFlagsLocation = 0;
 	wrapVisualStartIndent = 0;
@@ -961,8 +961,8 @@ int Editor::MovePositionTo(SelectionPosition newPos, Selection::selTypes selt, b
 	int currentLine = pdoc->LineFromPosition(newPos.Position());
 	if (ensureVisible) {
 		// In case in need of wrapping to ensure DisplayFromDoc works.
-		if (currentLine >= wrapStart)
-			WrapLines(true, -1);
+		if (currentLine >= wrapPending.start)
+			WrapLines(wsAll);
 		XYScrollPosition newXY = XYScrollToMakeVisible(
 			SelectionRange(posDrag.IsValid() ? posDrag : sel.RangeMain().caret), xysDefault);
 		if (simpleCaret && (newXY.xOffset == xOffset)) {
@@ -1541,17 +1541,12 @@ void Editor::UpdateSystemCaret() {
 }
 
 void Editor::NeedWrapping(int docLineStart, int docLineEnd) {
-	docLineStart = Platform::Clamp(docLineStart, 0, pdoc->LinesTotal());
-	if (wrapStart > docLineStart) {
-		wrapStart = docLineStart;
+//Platform::DebugPrintf("\nNeedWrapping: %0d..%0d\n", docLineStart, docLineEnd);
+	if (wrapPending.AddRange(docLineStart, docLineEnd)) {
 		llc.Invalidate(LineLayout::llPositions);
 	}
-	if (wrapEnd < docLineEnd) {
-		wrapEnd = docLineEnd;
-	}
-	wrapEnd = Platform::Clamp(wrapEnd, 0, pdoc->LinesTotal());
 	// Wrap lines during idle.
-	if ((wrapState != eWrapNone) && (wrapEnd != wrapStart)) {
+	if ((wrapState != eWrapNone) && wrapPending.NeedsWrap()) {
 		SetIdle(true);
 	}
 }
@@ -1567,117 +1562,97 @@ bool Editor::WrapOneLine(Surface *surface, int lineToWrap) {
 		(vs.annotationVisible ? pdoc->AnnotationLines(lineToWrap) : 0));
 }
 
-// Check if wrapping needed and perform any needed wrapping.
-// fullwrap: if true, all lines which need wrapping will be done,
-//           in this single call.
-// priorityWrapLineStart: If greater than or equal to zero, all lines starting from
-//           here to 1 page + 100 lines past will be wrapped (even if there are
-//           more lines under wrapping process in idle).
-// If it is neither fullwrap, nor priorityWrap, then 1 page + 100 lines will be
-// wrapped, if there are any wrapping going on in idle. (Generally this
-// condition is called only from idler).
+// Perform  wrapping for a subset of the lines needing wrapping.
+// wsAll: wrap all lines which need wrapping in this single call
+// wsVisible: wrap currently visible lines
+// wsIdle: wrap one page + 100 lines
 // Return true if wrapping occurred.
-bool Editor::WrapLines(bool fullWrap, int priorityWrapLineStart) {
-	// If there are any pending wraps, do them during idle if possible.
-	int linesInOneCall = LinesOnScreen() + 100;
-	if (priorityWrapLineStart >= 0) {
-		// Using DocFromDisplay() here may result in chicken and egg problem in certain corner cases,
-		// which will hopefully be handled by added 100 lines. If some lines are still missed, idle wrapping will catch on.
-		int docLinesInOneCall = cs.DocFromDisplay(topLine + LinesOnScreen() + 100) - cs.DocFromDisplay(topLine);
-		linesInOneCall = Platform::Maximum(linesInOneCall, docLinesInOneCall);
-	}
-	if (wrapState != eWrapNone) {
-		if (wrapStart < wrapEnd) {
-			if (!SetIdle(true)) {
-				// Idle processing not supported so full wrap required.
-				fullWrap = true;
-			}
-		}
-		if (!fullWrap && priorityWrapLineStart >= 0 &&
-		        // .. and if the paint window is outside pending wraps
-		        (((priorityWrapLineStart + linesInOneCall) < wrapStart) ||
-		         (priorityWrapLineStart > wrapEnd))) {
-			// No priority wrap pending
-			return false;
-		}
-	}
+bool Editor::WrapLines(enum wrapScope ws) {
 	int goodTopLine = topLine;
 	bool wrapOccurred = false;
-	if (wrapStart <= pdoc->LinesTotal()) {
-		if (wrapState == eWrapNone) {
-			if (wrapWidth != LineLayout::wrapWidthInfinite) {
-				wrapWidth = LineLayout::wrapWidthInfinite;
-				for (int lineDoc = 0; lineDoc < pdoc->LinesTotal(); lineDoc++) {
-					cs.SetHeight(lineDoc, 1 +
-						(vs.annotationVisible ? pdoc->AnnotationLines(lineDoc) : 0));
-				}
-				wrapOccurred = true;
+	if (wrapState == eWrapNone) {
+		if (wrapWidth != LineLayout::wrapWidthInfinite) {
+			wrapWidth = LineLayout::wrapWidthInfinite;
+			for (int lineDoc = 0; lineDoc < pdoc->LinesTotal(); lineDoc++) {
+				cs.SetHeight(lineDoc, 1 +
+					(vs.annotationVisible ? pdoc->AnnotationLines(lineDoc) : 0));
 			}
-			wrapStart = wrapLineLarge;
-			wrapEnd = wrapLineLarge;
-		} else {
-			if (wrapEnd >= pdoc->LinesTotal())
-				wrapEnd = pdoc->LinesTotal();
-			//ElapsedTime et;
-			int lineDocTop = cs.DocFromDisplay(topLine);
-			int subLineTop = topLine - cs.DisplayFromDoc(lineDocTop);
+			wrapOccurred = true;
+		}
+		wrapPending.Reset();
+
+	} else if (wrapPending.NeedsWrap()) {
+		wrapPending.start = std::min(wrapPending.start, pdoc->LinesTotal());
+		if (!SetIdle(true)) {
+			// Idle processing not supported so full wrap required.
+			ws = wsAll;
+		}
+		// Decide where to start wrapping
+		int lineToWrap = wrapPending.start;
+		int lineToWrapEnd = std::min(wrapPending.end, pdoc->LinesTotal());
+		const int lineDocTop = cs.DocFromDisplay(topLine);
+		const int subLineTop = topLine - cs.DisplayFromDoc(lineDocTop);
+		if (ws == wsVisible) {
+			lineToWrap = Platform::Clamp(lineDocTop-5, wrapPending.start, pdoc->LinesTotal());
+			// Priority wrap to just after visible area.
+			// Since wrapping could reduce display lines, treat each
+			// as taking only one display line.
+			lineToWrapEnd = lineDocTop;
+			int lines = LinesOnScreen() + 1;
+			while ((lineToWrapEnd < cs.LinesInDoc()) && (lines>0)) {
+				if (cs.GetVisible(lineToWrapEnd))
+					lines--;
+				lineToWrapEnd++;
+			}
+			// .. and if the paint window is outside pending wraps
+			if ((lineToWrap > wrapPending.end) || (lineToWrapEnd < wrapPending.start)) {
+				// Currently visible text does not need wrapping
+				return false;
+			}
+		} else if (ws == wsIdle) {
+			lineToWrapEnd = lineToWrap + LinesOnScreen() + 100;
+		}
+		const int lineEndNeedWrap = std::min(wrapPending.end, pdoc->LinesTotal());
+		lineToWrapEnd = std::min(lineToWrapEnd, lineEndNeedWrap);
+
+		// Ensure all lines being wrapped are styled.
+		pdoc->EnsureStyledTo(pdoc->LineStart(lineToWrapEnd));
+
+		if (lineToWrap < lineToWrapEnd) {
+
 			PRectangle rcTextArea = GetClientRectangle();
 			rcTextArea.left = vs.textStart;
-			rcTextArea.right -= vs.textStart;
+			rcTextArea.right -= vs.rightMarginWidth;
 			wrapWidth = rcTextArea.Width();
 			RefreshStyleData();
 			AutoSurface surface(this);
 			if (surface) {
-				bool priorityWrap = false;
-				int lastLineToWrap = wrapEnd;
-				int lineToWrap = wrapStart;
-				if (!fullWrap) {
-					if (priorityWrapLineStart >= 0) {
-						// This is a priority wrap.
-						lineToWrap = priorityWrapLineStart;
-						lastLineToWrap = priorityWrapLineStart + linesInOneCall;
-						priorityWrap = true;
-					} else {
-						// This is idle wrap.
-						lastLineToWrap = wrapStart + linesInOneCall;
-					}
-					if (lastLineToWrap >= wrapEnd)
-						lastLineToWrap = wrapEnd;
-				} // else do a fullWrap.
+//Platform::DebugPrintf("Wraplines: scope=%0d need=%0d..%0d perform=%0d..%0d\n", ws, wrapPending.start, wrapPending.end, lineToWrap, lineToWrapEnd);
 
-				// Ensure all lines being wrapped are styled.
-				pdoc->EnsureStyledTo(pdoc->LineEnd(lastLineToWrap));
-
-				// Platform::DebugPrintf("Wraplines: full = %d, priorityStart = %d (wrapping: %d to %d)\n", fullWrap, priorityWrapLineStart, lineToWrap, lastLineToWrap);
-				// Platform::DebugPrintf("Pending wraps: %d to %d\n", wrapStart, wrapEnd);
-				while (lineToWrap < lastLineToWrap) {
+				while (lineToWrap < lineToWrapEnd) {
 					if (WrapOneLine(surface, lineToWrap)) {
 						wrapOccurred = true;
 					}
+					wrapPending.Wrapped(lineToWrap);
 					lineToWrap++;
 				}
-				if (!priorityWrap)
-					wrapStart = lineToWrap;
-				// If wrapping is done, bring it to resting position
-				if (wrapStart >= wrapEnd) {
-					wrapStart = wrapLineLarge;
-					wrapEnd = wrapLineLarge;
-				}
+
+				goodTopLine = cs.DisplayFromDoc(lineDocTop) + std::min(subLineTop, cs.GetHeight(lineDocTop)-1);
 			}
-			goodTopLine = cs.DisplayFromDoc(lineDocTop);
-			if (subLineTop < cs.GetHeight(lineDocTop))
-				goodTopLine += subLineTop;
-			else
-				goodTopLine += cs.GetHeight(lineDocTop);
-			//double durWrap = et.Duration(true);
-			//Platform::DebugPrintf("Wrap:%9.6g \n", durWrap);
+		}
+
+		// If wrapping is done, bring it to resting position
+		if (wrapPending.start >= lineEndNeedWrap) {
+			wrapPending.Reset();
 		}
 	}
+
 	if (wrapOccurred) {
 		SetScrollBars();
 		SetTopLine(Platform::Clamp(goodTopLine, 0, MaxScrollPos()));
 		SetVerticalScrollPos();
 	}
+
 	return wrapOccurred;
 }
 
@@ -1833,6 +1808,8 @@ void Editor::PaintSelMargin(Surface *surfWindow, PRectangle &rc) {
 	if (vs.fixedColumnWidth == 0)
 		return;
 
+	AllocateGraphics();
+	RefreshStyleData();
 	RefreshPixMaps(surfWindow);
 
 	PRectangle rcMargin = GetClientRectangle();
@@ -3501,7 +3478,7 @@ void Editor::DrawCarets(Surface *surface, ViewStyle &vsDraw, int lineDoc, int xS
 					/* Dragging text, use a line caret */
 					rcCaret.left = xposCaret - caretWidthOffset;
 					rcCaret.right = rcCaret.left + vsDraw.caretWidth;
-				} else if (inOverstrike) {
+				} else if (inOverstrike && drawOverstrikeCaret) {
 					/* Overstrike (insert mode), use a modified bar caret */
 					rcCaret.top = rcCaret.bottom - 2;
 					rcCaret.left = xposCaret + 1;
@@ -3543,6 +3520,8 @@ void Editor::Paint(Surface *surfaceWindow, PRectangle rcArea) {
 		return;	// Scroll bars may have changed so need redraw
 	RefreshPixMaps(surfaceWindow);
 
+	paintAbandonedByStyling = false;
+
 	StyleToPositionInView(PositionAfterArea(rcArea));
 
 	PRectangle rcClient = GetClientRectangle();
@@ -3558,19 +3537,13 @@ void Editor::Paint(Surface *surfaceWindow, PRectangle rcArea) {
 		ypos += screenLinePaintFirst * vs.lineHeight;
 	int yposScreen = screenLinePaintFirst * vs.lineHeight;
 
-	bool paintAbandonedByStyling = paintState == paintAbandoned;
 	if (NotifyUpdateUI()) {
 		RefreshStyleData();
 		RefreshPixMaps(surfaceWindow);
 	}
 
-	// Call priority lines wrap on a window of lines which are likely
-	// to rendered with the following paint (that is wrap the visible
-	// 	lines first).
-	int startLineToWrap = cs.DocFromDisplay(topLine) - 5;
-	if (startLineToWrap < 0)
-		startLineToWrap = 0;
-	if (WrapLines(false, startLineToWrap)) {
+	// Wrap the visible lines if needed.
+	if (WrapLines(wsVisible)) {
 		// The wrapping process has changed the height of some lines so
 		// abandon this paint for a complete repaint.
 		if (AbandonPaint()) {
@@ -4742,6 +4715,8 @@ void Editor::NotifyModified(Document *, DocModification mh, void *) {
 			// Update contraction state for inserted and removed lines
 			// lineOfPos should be calculated in context of state before modification, shouldn't it
 			int lineOfPos = pdoc->LineFromPosition(mh.position);
+			if (mh.position > pdoc->LineStart(lineOfPos))
+				lineOfPos++;	// Affecting subsequent lines
 			if (mh.linesAdded > 0) {
 				cs.InsertLines(lineOfPos, mh.linesAdded);
 			} else {
@@ -5027,18 +5002,28 @@ void Editor::ChangeCaseOfSelection(int caseMapping) {
 				size_t firstDifference = 0;
 				while (sMapped[firstDifference] == sText[firstDifference])
 					firstDifference++;
-				size_t lastDifference = sMapped.size() - 1;
-				while (sMapped[lastDifference] == sText[lastDifference])
-					lastDifference--;
-				size_t endSame = sMapped.size() - 1 - lastDifference;
+				size_t lastDifferenceText = sText.size() - 1;
+				size_t lastDifferenceMapped = sMapped.size() - 1;
+				while (sMapped[lastDifferenceMapped] == sText[lastDifferenceText]) {
+					lastDifferenceText--;
+					lastDifferenceMapped--;
+				}
+				size_t endDifferenceText = sText.size() - 1 - lastDifferenceText;
 				pdoc->DeleteChars(
 					static_cast<int>(currentNoVS.Start().Position() + firstDifference),
-					static_cast<int>(rangeBytes - firstDifference - endSame));
+					static_cast<int>(rangeBytes - firstDifference - endDifferenceText));
 				pdoc->InsertString(
 					static_cast<int>(currentNoVS.Start().Position() + firstDifference),
 					sMapped.c_str() + firstDifference,
-					static_cast<int>(lastDifference - firstDifference + 1));
+					static_cast<int>(lastDifferenceMapped - firstDifference + 1));
 				// Automatic movement changes selection so reset to exactly the same as it was.
+				int diffSizes = static_cast<int>(sMapped.size() - sText.size());
+				if (diffSizes != 0) {
+					if (current.anchor > current.caret)
+						current.anchor.Add(diffSizes);
+					else
+						current.caret.Add(diffSizes);
+				}
 				sel.Range(r) = current;
 			}
 		}
@@ -6747,9 +6732,9 @@ bool Editor::Idle() {
 
 	if (!wrappingDone) {
 		// Wrap lines during idle.
-		WrapLines(false, -1);
+		WrapLines(wsIdle);
 		// No more wrapping
-		if (wrapStart == wrapEnd)
+		if (!wrapPending.NeedsWrap())
 			wrappingDone = true;
 	}
 
@@ -6850,6 +6835,7 @@ void Editor::CheckForChangeOutsidePaint(Range r) {
 
 		if (!PaintContains(rcRange)) {
 			AbandonPaint();
+			paintAbandonedByStyling = true;
 		}
 	}
 }
@@ -7052,8 +7038,8 @@ int Editor::ContractedFoldNext(int lineStart) const {
 void Editor::EnsureLineVisible(int lineDoc, bool enforcePolicy) {
 
 	// In case in need of wrapping to ensure DisplayFromDoc works.
-	if (lineDoc >= wrapStart)
-		WrapLines(true, -1);
+	if (lineDoc >= wrapPending.start)
+		WrapLines(wsAll);
 
 	if (!cs.GetVisible(lineDoc)) {
 		// Back up to find a non-blank line

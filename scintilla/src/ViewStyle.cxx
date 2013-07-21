@@ -40,6 +40,9 @@ FontNames::~FontNames() {
 }
 
 void FontNames::Clear() {
+	for (std::vector<char *>::const_iterator it=names.begin(); it != names.end(); ++it) {
+		delete []*it;
+	}
 	names.clear();
 }
 
@@ -395,11 +398,11 @@ void ViewStyle::CalcLargestMarkerHeight() {
 	for (int m = 0; m <= MARKER_MAX; ++m) {
 		switch (markers[m].markType) {
 		case SC_MARK_PIXMAP:
-			if (markers[m].pxpm->GetHeight() > largestMarkerHeight)
+			if (markers[m].pxpm && markers[m].pxpm->GetHeight() > largestMarkerHeight)
 				largestMarkerHeight = markers[m].pxpm->GetHeight();
 			break;
 		case SC_MARK_RGBAIMAGE:
-			if (markers[m].image->GetHeight() > largestMarkerHeight)
+			if (markers[m].image && markers[m].image->GetHeight() > largestMarkerHeight)
 				largestMarkerHeight = markers[m].image->GetHeight();
 			break;
 		}

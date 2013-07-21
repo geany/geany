@@ -125,6 +125,41 @@ private:
 	}
 };
 
+struct WrapPending {
+	// The range of lines that need to be wrapped
+	enum { lineLarge = 0x7ffffff };
+	int start;	// When there are wraps pending, will be in document range
+	int end;	// May be lineLarge to indicate all of document after start
+	WrapPending() {
+		start = lineLarge;
+		end = lineLarge;
+	}
+	void Reset() {
+		start = lineLarge;
+		end = lineLarge;
+	}
+	void Wrapped(int line) {
+		if (start == line)
+			start++;
+	}
+	bool NeedsWrap() const {
+		return start < end;
+	}
+	bool AddRange(int lineStart, int lineEnd) {
+		const bool neededWrap = NeedsWrap();
+		bool changed = false;
+		if (start > lineStart) {
+			start = lineStart;
+			changed = true;
+		}
+		if ((end < lineEnd) || !neededWrap) {
+			end = lineEnd;
+			changed = true;
+		}
+		return changed;
+	}
+};
+
 /**
  */
 class Editor : public DocWatcher {
@@ -159,6 +194,7 @@ protected:	// ScintillaBase subclass needs access to much of Editor
 	bool hasFocus;
 	bool hideSelection;
 	bool inOverstrike;
+	bool drawOverstrikeCaret;
 	bool mouseDownCaptures;
 
 	/** In bufferedDraw mode, graphics operations are drawn to a pixmap and then copied to
@@ -238,6 +274,7 @@ protected:	// ScintillaBase subclass needs access to much of Editor
 	int theEdge;
 
 	enum { notPainting, painting, paintAbandoned } paintState;
+	bool paintAbandonedByStyling;
 	PRectangle rcPaint;
 	bool paintingAllText;
 	bool willRedrawAll;
@@ -272,10 +309,8 @@ protected:	// ScintillaBase subclass needs access to much of Editor
 
 	// Wrapping support
 	enum { eWrapNone, eWrapWord, eWrapChar } wrapState;
-	enum { wrapLineLarge = 0x7ffffff };
 	int wrapWidth;
-	int wrapStart;
-	int wrapEnd;
+	WrapPending wrapPending;
 	int wrapVisualFlags;
 	int wrapVisualFlagsLocation;
 	int wrapVisualStartIndent;
@@ -389,9 +424,10 @@ protected:	// ScintillaBase subclass needs access to much of Editor
 	void InvalidateCaret();
 	virtual void UpdateSystemCaret();
 
-	void NeedWrapping(int docLineStart = 0, int docLineEnd = wrapLineLarge);
+	void NeedWrapping(int docLineStart=0, int docLineEnd=WrapPending::lineLarge);
 	bool WrapOneLine(Surface *surface, int lineToWrap);
-	bool WrapLines(bool fullWrap, int priorityWrapLineStart);
+	enum wrapScope {wsAll, wsVisible, wsIdle};
+	bool WrapLines(enum wrapScope ws);
 	void LinesJoin();
 	void LinesSplit(int pixelWidth);
 

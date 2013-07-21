@@ -50,6 +50,8 @@ gtk/scintilla-marshal.c \
 gtk/scintilla-marshal.h \
 lexlib/Accessor.cxx \
 lexlib/Accessor.h \
+lexlib/CharacterCategory.cxx \
+lexlib/CharacterCategory.h \
 lexlib/CharacterSet.cxx \
 lexlib/CharacterSet.h \
 lexlib/LexAccessor.h \
@@ -74,6 +76,10 @@ src/AutoComplete.cxx \
 src/AutoComplete.h \
 src/CallTip.cxx \
 src/CallTip.h \
+src/CaseConvert.cxx \
+src/CaseConvert.h \
+src/CaseFolder.cxx \
+src/CaseFolder.h \
 src/Catalogue.cxx \
 src/Catalogue.h \
 src/CellBuffer.cxx \
@@ -116,6 +122,7 @@ src/Style.cxx \
 src/Style.h \
 src/UniConversion.cxx \
 src/UniConversion.h \
+src/UnicodeFromUTF8.h \
 src/ViewStyle.cxx \
 src/ViewStyle.h \
 src/XPM.cxx \

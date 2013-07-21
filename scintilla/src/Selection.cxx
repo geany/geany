@@ -8,6 +8,7 @@
 #include <stdlib.h>
 
 #include <vector>
+#include <algorithm>
 
 #include "Platform.h"
 

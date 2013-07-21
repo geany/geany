@@ -28,6 +28,7 @@
 #include "CharClassify.h"
 #include "CharacterSet.h"
 #include "Decoration.h"
+#include "CaseFolder.h"
 #include "Document.h"
 #include "RESearch.h"
 #include "UniConversion.h"
@@ -697,6 +698,79 @@ bool Document::NextCharacter(int &pos, int moveDir) const {
 		pos = posNext;
 		return true;
 	}
+}
+
+static inline int UnicodeFromBytes(const unsigned char *us) {
+	if (us[0] < 0xC2) {
+		return us[0];
+	} else if (us[0] < 0xE0) {
+		return ((us[0] & 0x1F) << 6) + (us[1] & 0x3F);
+	} else if (us[0] < 0xF0) {
+		return ((us[0] & 0xF) << 12) + ((us[1] & 0x3F) << 6) + (us[2] & 0x3F);
+	} else if (us[0] < 0xF5) {
+		return ((us[0] & 0x7) << 18) + ((us[1] & 0x3F) << 12) + ((us[2] & 0x3F) << 6) + (us[3] & 0x3F);
+	}
+	return us[0];
+}
+
+// Return -1  on out-of-bounds
+int SCI_METHOD Document::GetRelativePosition(int positionStart, int characterOffset) const {
+	int pos = positionStart;
+	if (dbcsCodePage) {
+		const int increment = (characterOffset > 0) ? 1 : -1;
+		while (characterOffset != 0) {
+			const int posNext = NextPosition(pos, increment);
+			if (posNext == pos)
+				return INVALID_POSITION;
+			pos = posNext;
+			characterOffset -= increment;
+		}
+	} else {
+		pos = positionStart + characterOffset;
+		if ((pos < 0) || (pos > Length()))
+			return INVALID_POSITION;
+	}
+	return pos;
+}
+
+int SCI_METHOD Document::GetCharacterAndWidth(int position, int *pWidth) const {
+	int character;
+	int bytesInCharacter = 1;
+	if (dbcsCodePage) {
+		const unsigned char leadByte = static_cast<unsigned char>(cb.CharAt(position));
+		if (SC_CP_UTF8 == dbcsCodePage) {
+			if (UTF8IsAscii(leadByte)) {
+				// Single byte character or invalid
+				character =  leadByte;
+			} else {
+				const int widthCharBytes = UTF8BytesOfLead[leadByte];
+				unsigned char charBytes[UTF8MaxBytes] = {leadByte,0,0,0};
+				for (int b=1; b<widthCharBytes; b++)
+					charBytes[b] = static_cast<unsigned char>(cb.CharAt(position+b));
+				int utf8status = UTF8Classify(charBytes, widthCharBytes);
+				if (utf8status & UTF8MaskInvalid) {
+					// Report as singleton surrogate values which are invalid Unicode
+					character =  0xDC80 + leadByte;
+				} else {
+					bytesInCharacter = utf8status & UTF8MaskWidth;
+					character = UnicodeFromBytes(charBytes);
+				}
+			}
+		} else {
+			if (IsDBCSLeadByte(leadByte)) {
+				bytesInCharacter = 2;
+				character = (leadByte << 8) | static_cast<unsigned char>(cb.CharAt(position+1));
+			} else {
+				character = leadByte;
+			}
+		}
+	} else {
+		character = cb.CharAt(position);
+	}
+	if (pWidth) {
+		*pWidth = bytesInCharacter;
+	}
+	return character;
 }
 
 int SCI_METHOD Document::CodePage() const {
@@ -1421,47 +1495,6 @@ bool Document::IsWordEndAt(int pos) const {
  */
 bool Document::IsWordAt(int start, int end) const {
 	return IsWordStartAt(start) && IsWordEndAt(end);
-}
-
-static inline char MakeLowerCase(char ch) {
-	if (ch < 'A' || ch > 'Z')
-		return ch;
-	else
-		return static_cast<char>(ch - 'A' + 'a');
-}
-
-CaseFolderTable::CaseFolderTable() {
-	for (size_t iChar=0; iChar<sizeof(mapping); iChar++) {
-		mapping[iChar] = static_cast<char>(iChar);
-	}
-}
-
-CaseFolderTable::~CaseFolderTable() {
-}
-
-size_t CaseFolderTable::Fold(char *folded, size_t sizeFolded, const char *mixed, size_t lenMixed) {
-	if (lenMixed > sizeFolded) {
-		return 0;
-	} else {
-		for (size_t i=0; i<lenMixed; i++) {
-			folded[i] = mapping[static_cast<unsigned char>(mixed[i])];
-		}
-		return lenMixed;
-	}
-}
-
-void CaseFolderTable::SetTranslation(char ch, char chTranslation) {
-	mapping[static_cast<unsigned char>(ch)] = chTranslation;
-}
-
-void CaseFolderTable::StandardASCII() {
-	for (size_t iChar=0; iChar<sizeof(mapping); iChar++) {
-		if (iChar >= 'A' && iChar <= 'Z') {
-			mapping[iChar] = static_cast<char>(iChar - 'A' + 'a');
-		} else {
-			mapping[iChar] = static_cast<char>(iChar);
-		}
-	}
 }
 
 bool Document::MatchesWordOptions(bool word, bool wordStart, int pos, int length) const {
