@@ -706,6 +706,7 @@ static void add_top_level_items(GeanyDocument *doc)
 			break;
 		}
 		case GEANY_FILETYPES_HASKELL:
+		case GEANY_FILETYPES_LITERATEHASKELL:
 			tag_list_add_groups(tag_store,
 				&tv_iters.tag_namespace, _("Module"), NULL,
 				&tv_iters.tag_type, _("Types"), NULL,

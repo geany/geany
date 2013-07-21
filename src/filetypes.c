@@ -281,6 +281,14 @@ static void init_builtin_filetypes(void)
 	ft->mime_type = g_strdup("text/x-haskell");
 	ft->group = GEANY_FILETYPE_GROUP_COMPILED;
 
+#define LITERATEHASKELL
+	ft = filetypes[GEANY_FILETYPES_LITERATEHASKELL];
+	ft->lang = 24;
+	ft->name = g_strdup("Literate Haskell");
+	filetype_make_title(ft, TITLE_SOURCE_FILE);
+	ft->mime_type = g_strdup("text/x-literate-haskell");
+	ft->group = GEANY_FILETYPE_GROUP_COMPILED;
+
 #define MARKDOWN
 	ft = filetypes[GEANY_FILETYPES_MARKDOWN];
 	ft->lang = 36;
@@ -1440,6 +1448,7 @@ static gchar *filetypes_get_conf_extension(const GeanyFiletype *ft)
 		case GEANY_FILETYPES_MATLAB: result = g_strdup("matlab"); break;
 		/* name is Objective-C, and we don't want the hyphen */
 		case GEANY_FILETYPES_OBJECTIVEC: result = g_strdup("objectivec"); break;
+		case GEANY_FILETYPES_LITERATEHASKELL: result = g_strdup("haskell"); break;
 		default:
 			result = g_ascii_strdown(ft->name, -1);
 			break;

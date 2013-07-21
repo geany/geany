@@ -101,6 +101,7 @@ int Scintilla_LinkLexers() {
 	LINK_LEXER(lmHTML);
 	LINK_LEXER(lmLatex);
 	LINK_LEXER(lmLISP);
+	LINK_LEXER(lmLiterateHaskell);
 	LINK_LEXER(lmLua);
 	LINK_LEXER(lmMake);
 	LINK_LEXER(lmMarkdown);
