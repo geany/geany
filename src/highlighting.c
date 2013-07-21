@@ -1509,6 +1509,7 @@ gboolean highlighting_is_string_style(gint lexer, gint style)
 				style == SCE_LUA_STRING);
 
 		case SCLEX_HASKELL:
+		case SCLEX_LITERATEHASKELL:
 			return (style == SCE_HA_CHARACTER ||
 				style == SCE_HA_STRINGEOL ||
 				style == SCE_HA_STRING);
@@ -1669,11 +1670,13 @@ gboolean highlighting_is_comment_style(gint lexer, gint style)
 				style == SCE_LUA_COMMENTDOC);
 
 		case SCLEX_HASKELL:
+		case SCLEX_LITERATEHASKELL:
 			return (style == SCE_HA_COMMENTLINE ||
 				style == SCE_HA_COMMENTBLOCK ||
 				style == SCE_HA_COMMENTBLOCK2 ||
 				style == SCE_HA_COMMENTBLOCK3 ||
-				style == SCE_HA_LITERATE_COMMENT);
+				style == SCE_HA_LITERATE_COMMENT ||
+				style == SCE_HA_LITERATE_CODEDELIM);
 
 		case SCLEX_FREEBASIC:
 			return (style == SCE_B_COMMENT);
@@ -1735,14 +1738,18 @@ gboolean highlighting_is_code_style(gint lexer, gint style)
 	switch (lexer)
 	{
 		case SCLEX_CPP:
+		{
 			if (style == SCE_C_PREPROCESSOR)
 				return FALSE;
 			break;
-
+		}
 		case SCLEX_HASKELL:
+		case SCLEX_LITERATEHASKELL:
+		{
 			if (style == SCE_HA_PREPROCESSOR)
 				return FALSE;
 			break;
+		}
 	}
 	return !(highlighting_is_comment_style(lexer, style) ||
 		highlighting_is_string_style(lexer, style));
