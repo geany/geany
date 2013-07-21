@@ -63,7 +63,7 @@ git apply -p0 scintilla/scintilla_changes.patch || {
 
 #check whether there are new files
 if git status -unormal -s scintilla | grep '^??'; then
-	echo <<EOF
+	cat <<EOF
 
 Untracked files above have been introduced by the new Scintilla version and
 should be added to version control if appropriate, or removed.
