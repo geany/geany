@@ -1,6 +1,5 @@
--module({filename}).
+-module().
 -export([]).
 
 -author("{developer}").
 -date("{date}").
-
