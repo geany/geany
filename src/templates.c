@@ -127,6 +127,7 @@ static void init_general_templates(void)
 	read_template("changelog", GEANY_TEMPLATE_CHANGELOG);
 }
 
+
 void templates_replace_common(GString *tmpl, const gchar *fname,
 							  GeanyFiletype *ft, const gchar *func_name)
 {
