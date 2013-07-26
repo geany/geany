@@ -133,6 +133,7 @@ void templates_replace_common(GString *tmpl, const gchar *fname,
 {
 	gchar *shortname;
 	
+	
 	if (fname == NULL)
 	{
 		if (!ft->extension)
@@ -143,6 +144,7 @@ void templates_replace_common(GString *tmpl, const gchar *fname,
 	else
 	{
 		shortname = g_path_get_basename(fname);
+		
 	}
 	
 	templates_replace_valist(tmpl,

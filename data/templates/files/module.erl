@@ -1,5 +1,10 @@
+%% ----------------------------------
+%% @author {developer} <{mail}>
+%% @copyright {year}
+%% @doc
+%% @end
+%% ----------------------------------
+
 -module().
 -export([]).
 
--author("{developer}").
--date("{date}").
