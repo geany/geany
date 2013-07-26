@@ -132,7 +132,6 @@ void templates_replace_common(GString *tmpl, const gchar *fname,
 							  GeanyFiletype *ft, const gchar *func_name)
 {
 	gchar *shortname;
-	
 
 	if (fname == NULL)
 	{
@@ -142,11 +141,8 @@ void templates_replace_common(GString *tmpl, const gchar *fname,
 			shortname = g_strconcat(GEANY_STRING_UNTITLED, ".", ft->extension, NULL);
 	}
 	else
-	{
 		shortname = g_path_get_basename(fname);
 
-	}
-	
 	templates_replace_valist(tmpl,
 		"{filename}", shortname,
 		"{project}", app->project ? app->project->name : "",
