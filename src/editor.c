@@ -665,7 +665,7 @@ static gboolean match_last_chars(ScintillaObject *sci, gint pos, const gchar *st
 	gchar *buf;
 
 	g_return_val_if_fail(len < 100, FALSE);
-	g_return_val_if_fail(len <= pos, FALSE);
+	g_return_val_if_fail((gint)len <= pos, FALSE);
 
 	buf = g_alloca(len + 1);
 	sci_get_text_range(sci, pos - len, pos, buf);
