@@ -231,6 +231,7 @@ test_sources = \
 	traits.php						\
 	union.f							\
 	value.f							\
+	whitespaces.php					\
 	$(NULL)
 test_results = $(test_sources:=.tags)
 
