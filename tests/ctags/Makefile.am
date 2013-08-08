@@ -13,6 +13,7 @@ test_sources = \
 	3526726.tex						\
 	68hc11.asm						\
 	angle_bracket.cpp				\
+	anonymous_functions.php			\
 	array_ref_and_out.cs			\
 	array_spec.f90					\
 	array-spec.f90					\
