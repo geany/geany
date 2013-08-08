@@ -221,6 +221,7 @@ test_sources = \
 	state_machine.v					\
 	static_array.c					\
 	stdcall.f						\
+	strings.php						\
 	strings.rb						\
 	structure.f						\
 	tabindent.py					\
