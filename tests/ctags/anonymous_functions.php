@@ -22,3 +22,10 @@ $e = function&() {
   global $_g;
   return $_g;
 };
+
+$f = function&() use (&$_g) {
+  
+  function f_sub() {}
+  
+  return $_g;
+};
