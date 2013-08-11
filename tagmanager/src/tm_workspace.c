@@ -207,7 +207,7 @@ static guint tm_file_inode_hash(gconstpointer key)
 #ifdef TM_DEBUG
 		g_message ("Hash for '%s' is '%d'\n", filename, file_stat.st_ino);
 #endif
-		return g_direct_hash (GUINT_TO_POINTER (file_stat.st_ino));
+		return g_direct_hash (GUINT_TO_POINTER ((guint)file_stat.st_ino));
 	} else {
 		return 0;
 	}
