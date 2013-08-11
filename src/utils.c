@@ -255,7 +255,7 @@ gint utils_write_file(const gchar *filename, const gchar *text)
 		{
 			geany_debug("utils_write_file(): could not write to file %s (%s)",
 				filename, g_strerror(errno));
-			return NVL(errno, EIO);
+			return FALLBACK(errno, EIO);
 		}
 	}
 	return 0;

@@ -20,7 +20,7 @@ extern "C"
 #endif
 
 /* Evaluates to X is X is defined, else evaluates to Y */
-#define NVL(X,Y) (X)?(X):(Y)
+#define FALLBACK(X,Y) (X)?(X):(Y)
 
 /* Macro to cast a pointer to (TMWorkObject *) */
 #define TM_WORK_OBJECT(work_object) ((TMWorkObject *) work_object)

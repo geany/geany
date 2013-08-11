@@ -1127,7 +1127,7 @@ void project_save_prefs(GKeyFile *config)
 		g_key_file_set_string(config, "project", "session_file", utf8_filename);
 	}
 	g_key_file_set_string(config, "project", "project_file_path",
-		NVL(local_prefs.project_file_path, ""));
+		FALLBACK(local_prefs.project_file_path, ""));
 }
 
 

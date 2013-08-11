@@ -641,7 +641,7 @@ plugin_init(Plugin *plugin)
 	active_plugin_list = g_list_insert_sorted(active_plugin_list, plugin, cmp_plugin_names);
 
 	geany_debug("Loaded:   %s (%s)", plugin->filename,
-		NVL(plugin->info.name, "<Unknown>"));
+		FALLBACK(plugin->info.name, "<Unknown>"));
 }
 
 

@@ -995,7 +995,7 @@ static void read_properties(GeanyFiletype *ft, GKeyFile *config, GKeyFile *confi
 
 static guint get_lexer_filetype(GeanyFiletype *ft)
 {
-	ft = NVL(ft->lexer_filetype, ft);
+	ft = FALLBACK(ft->lexer_filetype, ft);
 	return ft->id;
 }
 
@@ -1268,7 +1268,7 @@ static gchar *utils_get_setting_locale_string(GKeyFile *keyfile,
 {
 	gchar *result = g_key_file_get_locale_string(keyfile, group, key, NULL, NULL);
 
-	return NVL(result, g_strdup(default_value));
+	return FALLBACK(result, g_strdup(default_value));
 }
 
 

@@ -1784,7 +1784,7 @@ int symbols_generate_global_tags(int argc, char **argv, gboolean want_preprocess
 			load_c_ignore_tags();
 
 		if (want_preprocess && (ft->id == GEANY_FILETYPES_C || ft->id == GEANY_FILETYPES_CPP))
-			command = g_strdup_printf("%s %s", pre_process, NVL(getenv("CFLAGS"), ""));
+			command = g_strdup_printf("%s %s", pre_process, FALLBACK(getenv("CFLAGS"), ""));
 		else
 			command = NULL;	/* don't preprocess */
 
