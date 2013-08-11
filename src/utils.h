@@ -32,9 +32,14 @@ G_BEGIN_DECLS
 #include <time.h>
 
 
-/** Returns TRUE if @a ptr points to a non-zero value. */
-#define NZV(ptr) \
-	((ptr) && (ptr)[0])
+/** Returns @c TRUE if @a ptr is @c NULL or @c *ptr is @c FALSE. */
+#define EMPTY(ptr) \
+	(!(ptr) || !*(ptr))
+
+/** @deprecated 2013/08 - use @c !EMPTY() instead. */
+#ifndef GEANY_DISABLE_DEPRECATED
+#define NZV(ptr) (!EMPTY(ptr))
+#endif
 
 /** Assigns @a result to @a ptr, then frees the old value.
  * @a result can be an expression using the 'old' value of @a ptr.

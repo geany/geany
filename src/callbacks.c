@@ -1646,7 +1646,7 @@ G_MODULE_EXPORT void on_menu_open_selected_file1_activate(GtkMenuItem *menuitem,
 			filename = g_build_path(G_DIR_SEPARATOR_S, path, sel, NULL);
 
 			if (! g_file_test(filename, G_FILE_TEST_EXISTS) &&
-				app->project != NULL && NZV(app->project->base_path))
+				app->project != NULL && !EMPTY(app->project->base_path))
 			{
 				/* try the project's base path */
 				SETPTR(path, project_get_base_path());
@@ -1713,7 +1713,7 @@ G_MODULE_EXPORT void on_context_action1_activate(GtkMenuItem *menuitem, gpointer
 
 	/* use the filetype specific command if available, fallback to global command otherwise */
 	if (doc->file_type != NULL &&
-		NZV(doc->file_type->context_action_cmd))
+		!EMPTY(doc->file_type->context_action_cmd))
 	{
 		command = g_strdup(doc->file_type->context_action_cmd);
 	}
@@ -1723,7 +1723,7 @@ G_MODULE_EXPORT void on_context_action1_activate(GtkMenuItem *menuitem, gpointer
 	}
 
 	/* substitute the wildcard %s and run the command if it is non empty */
-	if (G_LIKELY(NZV(command)))
+	if (G_LIKELY(!EMPTY(command)))
 	{
 		utils_str_replace_all(&command, "%s", word);
 

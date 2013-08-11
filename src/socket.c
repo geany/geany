@@ -624,7 +624,7 @@ gboolean socket_lock_input_cb(GIOChannel *source, GIOCondition condition, gpoint
 		else if (strncmp(buf, "doclist", 7) == 0)
 		{
 			gchar *doc_list = build_document_list();
-			if (NZV(doc_list))
+			if (!EMPTY(doc_list))
 				socket_fd_write_all(sock, doc_list, strlen(doc_list));
 			else
 				/* send ETX (end-of-text) in case we have no open files, we must send anything

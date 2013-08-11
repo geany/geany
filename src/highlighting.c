@@ -225,7 +225,7 @@ static void parse_color(GKeyFile *kf, const gchar *str, gint *clr)
 
 	g_return_if_fail(clr != NULL);
 
-	if (G_UNLIKELY(! NZV(str)))
+	if (G_UNLIKELY(EMPTY(str)))
 		return;
 
 	named_color = g_key_file_get_string(kf, "named_colors", str, NULL);
@@ -554,7 +554,7 @@ static void load_named_styles(GKeyFile *config, GKeyFile *config_home)
 
 	named_style_hash = g_hash_table_new_full(g_str_hash, g_str_equal, g_free, g_free);
 
-	if (NZV(scheme))
+	if (!EMPTY(scheme))
 	{
 		gchar *path, *path_home;
 
@@ -995,7 +995,7 @@ static void read_properties(GeanyFiletype *ft, GKeyFile *config, GKeyFile *confi
 
 static guint get_lexer_filetype(GeanyFiletype *ft)
 {
-	ft = NVL(ft->lexer_filetype, ft);
+	ft = FALLBACK(ft->lexer_filetype, ft);
 	return ft->id;
 }
 
@@ -1268,7 +1268,7 @@ static gchar *utils_get_setting_locale_string(GKeyFile *keyfile,
 {
 	gchar *result = g_key_file_get_locale_string(keyfile, group, key, NULL, NULL);
 
-	return NVL(result, g_strdup(default_value));
+	return FALLBACK(result, g_strdup(default_value));
 }
 
 

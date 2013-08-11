@@ -93,7 +93,7 @@ static gboolean backupcopy_set_backup_dir(const gchar *utf8_dir)
 {
 	gchar *tmp;
 
-	if (G_UNLIKELY(! NZV(utf8_dir)))
+	if (G_UNLIKELY(EMPTY(utf8_dir)))
 		return FALSE;
 
 	tmp = utils_get_locale_from_utf8(utf8_dir);
@@ -386,7 +386,7 @@ static void backupcopy_dir_button_clicked_cb(GtkButton *button, gpointer item)
 					GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT, NULL);
 
 	text = utils_get_locale_from_utf8(gtk_entry_get_text(GTK_ENTRY(item)));
-	if (NZV(text))
+	if (!EMPTY(text))
 		gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog), text);
 
 	/* run it */
@@ -458,7 +458,7 @@ static void configure_response_cb(GtkDialog *dialog, gint response, G_GNUC_UNUSE
 		SETPTR(backupcopy_time_fmt, g_strdup(text_time));
 		if (enable_backupcopy)
 		{
-			if (NZV(text_dir) && backupcopy_set_backup_dir(text_dir))
+			if (!EMPTY(text_dir) && backupcopy_set_backup_dir(text_dir))
 			{
 				g_key_file_set_string(config, "backupcopy", "backup_dir", text_dir);
 			}
@@ -665,7 +665,7 @@ GtkWidget *plugin_configure(GtkDialog *dialog)
 
 		pref_widgets.backupcopy_entry_dir = entry_dir = gtk_entry_new();
 		gtk_label_set_mnemonic_widget(GTK_LABEL(label), entry_dir);
-		if (NZV(backupcopy_backup_dir))
+		if (!EMPTY(backupcopy_backup_dir))
 			gtk_entry_set_text(GTK_ENTRY(entry_dir), backupcopy_backup_dir);
 
 		button = gtk_button_new();
@@ -688,7 +688,7 @@ GtkWidget *plugin_configure(GtkDialog *dialog)
 
 		pref_widgets.backupcopy_entry_time = entry_time = gtk_entry_new();
 		gtk_label_set_mnemonic_widget(GTK_LABEL(label), entry_time);
-		if (NZV(backupcopy_time_fmt))
+		if (!EMPTY(backupcopy_time_fmt))
 			gtk_entry_set_text(GTK_ENTRY(entry_time), backupcopy_time_fmt);
 		gtk_box_pack_start(GTK_BOX(inner_vbox), entry_time, FALSE, FALSE, 0);
 

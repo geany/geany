@@ -388,7 +388,7 @@ static gchar *get_doc_folder(const gchar *path)
 		dirname = tmp_dirname;
 
 		/* If matches home dir, replace with tilde */
-		if (NZV(home_dir) && utils_filename_has_prefix(dirname, home_dir))
+		if (!EMPTY(home_dir) && utils_filename_has_prefix(dirname, home_dir))
 		{
 			rest = dirname + strlen(home_dir);
 			if (*rest == G_DIR_SEPARATOR || *rest == '\0')
@@ -1032,7 +1032,7 @@ static void documents_menu_update(GtkTreeSelection *selection)
 		gtk_tree_model_get(model, &iter, DOCUMENTS_DOCUMENT, &doc,
 			DOCUMENTS_SHORTNAME, &shortname, -1);
 	}
-	path = NZV(shortname) &&
+	path = !EMPTY(shortname) &&
 		(g_path_is_absolute(shortname) ||
 		(app->project && g_str_has_prefix(shortname, app->project->name)));
 
