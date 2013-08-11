@@ -762,7 +762,11 @@ static gint socket_fd_check_io(gint fd, GIOCondition cond)
 #endif
 
 	FD_ZERO(&fds);
+#ifdef G_OS_WIN32
+	FD_SET((SOCKET)fd, &fds);
+#else
 	FD_SET(fd, &fds);
+#endif
 
 	if (cond == G_IO_IN)
 	{
