@@ -515,7 +515,7 @@ static gboolean save_as_dialog_handle_response(GtkWidget *dialog, gint response)
 	{
 		case GEANY_RESPONSE_RENAME:
 			/* rename doesn't check for empty filename or overwriting */
-			if (G_UNLIKELY(! NZV(new_filename)))
+			if (G_UNLIKELY(EMPTY(new_filename)))
 			{
 				utils_beep();
 				break;

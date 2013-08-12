@@ -420,7 +420,7 @@ gboolean utils_atob(const gchar *str)
 /* NULL-safe version of g_path_is_absolute(). */
 gboolean utils_is_absolute_path(const gchar *path)
 {
-	if (G_UNLIKELY(! NZV(path)))
+	if (G_UNLIKELY(EMPTY(path)))
 		return FALSE;
 
 	return g_path_is_absolute(path);
@@ -1485,7 +1485,7 @@ gboolean utils_str_has_upper(const gchar *str)
 {
 	gunichar c;
 
-	if (! NZV(str) || ! g_utf8_validate(str, -1, NULL))
+	if (EMPTY(str) || ! g_utf8_validate(str, -1, NULL))
 		return FALSE;
 
 	while (*str != '\0')
@@ -1886,7 +1886,7 @@ gchar *utils_str_remove_chars(gchar *string, const gchar *chars)
 	gchar *w = string;
 
 	g_return_val_if_fail(string, NULL);
-	if (G_UNLIKELY(! NZV(chars)))
+	if (G_UNLIKELY(EMPTY(chars)))
 		return string;
 
 	foreach_str(r, string)

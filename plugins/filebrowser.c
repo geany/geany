@@ -186,7 +186,7 @@ static void add_item(const gchar *name)
 	const gchar *sep;
 	gboolean dir;
 
-	if (G_UNLIKELY(! NZV(name)))
+	if (G_UNLIKELY(EMPTY(name)))
 		return;
 
 	/* root directory doesn't need separator */
@@ -237,7 +237,7 @@ static void add_top_level_entry(void)
 	GtkTreeIter iter;
 	gchar *utf8_dir;
 
-	if (! NZV(g_path_skip_root(current_dir)))
+	if (EMPTY(g_path_skip_root(current_dir)))
 		return;	/* ignore 'C:\' or '/' */
 
 	utf8_dir = g_path_get_dirname(current_dir);
@@ -1006,7 +1006,7 @@ static void project_change_cb(G_GNUC_UNUSED GObject *obj, G_GNUC_UNUSED GKeyFile
 	gchar *new_dir;
 	GeanyProject *project = geany->app->project;
 
-	if (! fb_set_project_base_path || project == NULL || ! NZV(project->base_path))
+	if (! fb_set_project_base_path || project == NULL || EMPTY(project->base_path))
 		return;
 
 	/* TODO this is a copy of project_get_base_path(), add it to the plugin API */

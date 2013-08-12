@@ -225,7 +225,7 @@ static void parse_color(GKeyFile *kf, const gchar *str, gint *clr)
 
 	g_return_if_fail(clr != NULL);
 
-	if (G_UNLIKELY(! NZV(str)))
+	if (G_UNLIKELY(EMPTY(str)))
 		return;
 
 	named_color = g_key_file_get_string(kf, "named_colors", str, NULL);

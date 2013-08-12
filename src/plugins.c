@@ -730,7 +730,7 @@ plugin_new(const gchar *fname, gboolean init_plugin, gboolean add_to_list)
 
 	/* read plugin name, etc. */
 	plugin_set_info(&plugin->info);
-	if (G_UNLIKELY(! NZV(plugin->info.name)))
+	if (G_UNLIKELY(EMPTY(plugin->info.name)))
 	{
 		geany_debug("No plugin name set in plugin_set_info() for \"%s\" - ignoring plugin!",
 			fname);
@@ -856,7 +856,7 @@ static gchar *get_custom_plugin_path(const gchar *plugin_path_config,
 {
 	gchar *plugin_path_custom;
 
-	if (!NZV(prefs.custom_plugin_path))
+	if (EMPTY(prefs.custom_plugin_path))
 		return NULL;
 
 	plugin_path_custom = utils_get_locale_from_utf8(prefs.custom_plugin_path);

@@ -335,7 +335,7 @@ static void get_line_and_column_from_filename(gchar *filename, gint *line, gint 
 
 	g_assert(*line == -1 && *column == -1);
 
-	if (G_UNLIKELY(! NZV(filename)))
+	if (G_UNLIKELY(EMPTY(filename)))
 		return;
 
 	/* allow to open files like "test:0" */

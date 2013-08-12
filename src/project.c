@@ -667,7 +667,7 @@ static gboolean update_config(const PropertyDialogElements *e, gboolean new_proj
 	else
 		file_name = gtk_label_get_text(GTK_LABEL(e->file_name));
 
-	if (G_UNLIKELY(! NZV(file_name)))
+	if (G_UNLIKELY(EMPTY(file_name)))
 	{
 		SHOW_ERR(_("You have specified an invalid project filename."));
 		gtk_widget_grab_focus(e->file_name);

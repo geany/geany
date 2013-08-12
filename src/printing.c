@@ -571,7 +571,7 @@ static void print_external(GeanyDocument *doc)
 	if (doc->file_name == NULL)
 		return;
 
-	if (! NZV(printing_prefs.external_print_cmd))
+	if (EMPTY(printing_prefs.external_print_cmd))
 	{
 		dialogs_show_msgbox(GTK_MESSAGE_ERROR,
 			_("Please set a print command in the preferences dialog first."));

@@ -105,7 +105,7 @@ static void cc_dialog_update_row_status(GtkListStore *store, GtkTreeIter *iter, 
 	gint argc;
 	gchar **argv;
 
-	if (! NZV(cmd))
+	if (EMPTY(cmd))
 		stock_id = GTK_STOCK_YES;
 	else if (g_shell_parse_argv(cmd, &argc, &argv, &err))
 	{
@@ -583,7 +583,7 @@ static void cc_show_dialog_custom_commands(void)
 
 		for (i = 0; i < len; i++)
 		{
-			if (! NZV(ui_prefs.custom_commands[i]))
+			if (EMPTY(ui_prefs.custom_commands[i]))
 				continue; /* skip empty fields */
 
 			cc_dialog_add_command(&cc, i, FALSE);
@@ -770,7 +770,7 @@ void tools_create_insert_custom_command_menu_items(void)
 		{
 			const gchar *label = ui_prefs.custom_commands_labels[i];
 
-			if (! NZV(label))
+			if (EMPTY(label))
 				label = ui_prefs.custom_commands[i];
 			if (NZV(label)) /* skip empty items */
 			{

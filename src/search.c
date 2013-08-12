@@ -1092,7 +1092,7 @@ void search_show_find_in_files_dialog_full(const gchar *text, const gchar *dir)
 
 			last_doc = doc;
 		}
-		if (!cur_dir && ! NZV(gtk_entry_get_text(GTK_ENTRY(entry))))
+		if (!cur_dir && EMPTY(gtk_entry_get_text(GTK_ENTRY(entry))))
 		{
 			/* use default_open_path if no directory could be determined
 			 * (e.g. when no files are open) */
@@ -1226,7 +1226,7 @@ gint search_mark_all(GeanyDocument *doc, const gchar *search_text, gint flags)
 	/* clear previous search indicators */
 	editor_indicator_clear(doc->editor, GEANY_INDICATOR_SEARCH);
 
-	if (G_UNLIKELY(! NZV(search_text)))
+	if (G_UNLIKELY(EMPTY(search_text)))
 		return 0;
 
 	ttf.chrg.cpMin = 0;
@@ -1308,7 +1308,7 @@ on_find_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 		search_data.flags = int_search_flags(settings.find_case_sensitive,
 			settings.find_match_whole_word, settings.find_regexp, settings.find_match_word_start);
 
-		if (! NZV(search_data.text))
+		if (EMPTY(search_data.text))
 		{
 			fail:
 			utils_beep();
@@ -1594,7 +1594,7 @@ on_find_in_files_dialog_response(GtkDialog *dialog, gint response,
 		GeanyEncodingIndex enc_idx = gtk_combo_box_get_active(
 			GTK_COMBO_BOX(fif_dlg.encoding_combo));
 
-		if (G_UNLIKELY(! NZV(utf8_dir)))
+		if (G_UNLIKELY(EMPTY(utf8_dir)))
 			ui_set_statusbar(FALSE, _("Invalid directory for find in files."));
 		else if (NZV(search_text))
 		{
@@ -1638,7 +1638,7 @@ search_find_in_files(const gchar *utf8_search_text, const gchar *dir, const gcha
 	gboolean ret = FALSE;
 	gssize utf8_text_len;
 
-	if (! NZV(utf8_search_text) || ! dir) return TRUE;
+	if (EMPTY(utf8_search_text) || ! dir) return TRUE;
 
 	command_grep = g_find_program_in_path(tool_prefs.grep_cmd);
 	if (command_grep == NULL)
@@ -2166,7 +2166,7 @@ void search_find_usage(const gchar *search_text, const gchar *original_search_te
 	doc = document_get_current();
 	g_return_if_fail(doc != NULL);
 
-	if (G_UNLIKELY(! NZV(search_text)))
+	if (G_UNLIKELY(EMPTY(search_text)))
 	{
 		utils_beep();
 		return;

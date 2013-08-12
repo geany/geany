@@ -2979,7 +2979,7 @@ gint editor_do_uncomment(GeanyEditor *editor, gint line, gboolean toggle)
 		if (x < line_len && sel[x] != '\0')
 		{
 			/* use single line comment */
-			if (! NZV(cc))
+			if (EMPTY(cc))
 			{
 				single_line = TRUE;
 
@@ -3100,7 +3100,7 @@ void editor_do_comment_toggle(GeanyEditor *editor)
 		while (isspace(sel[x])) x++;
 
 		/* use single line comment */
-		if (! NZV(cc))
+		if (EMPTY(cc))
 		{
 			gboolean do_continue = FALSE;
 			single_line = TRUE;
@@ -3275,7 +3275,7 @@ void editor_do_comment(GeanyEditor *editor, gint line, gboolean allow_empty_line
 		if (allow_empty_lines || (x < line_len && sel[x] != '\0'))
 		{
 			/* use single line comment */
-			if (! NZV(cc))
+			if (EMPTY(cc))
 			{
 				gint start = line_start;
 				single_line = TRUE;

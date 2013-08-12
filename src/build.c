@@ -888,14 +888,14 @@ static gchar *prepare_run_script(GeanyDocument *doc, gchar **vte_cmd_nonscript, 
 
 	cmd_string = build_replace_placeholder(doc, cmd->command);
 	cmd_working_dir =  cmd->working_dir;
-	if (! NZV(cmd_working_dir))
+	if (EMPTY(cmd_working_dir))
 		cmd_working_dir = "%d";
 	working_dir = build_replace_placeholder(doc, cmd_working_dir); /* in utf-8 */
 
 	/* only test whether working dir exists, don't change it or else Windows support will break
 	 * (gspawn-win32-helper.exe is used by GLib and must be in $PATH which means current working
 	 *  dir where geany.exe was started from, so we can't change it) */
-	if (!NZV(working_dir) || ! g_file_test(working_dir, G_FILE_TEST_EXISTS) ||
+	if (EMPTY(working_dir) || ! g_file_test(working_dir, G_FILE_TEST_EXISTS) ||
 		! g_file_test(working_dir, G_FILE_TEST_IS_DIR))
 	{
 		ui_set_statusbar(TRUE, _("Failed to change the working directory to \"%s\""),
@@ -1073,7 +1073,7 @@ static void process_build_output_line(const gchar *str, gint color)
 
 	g_strchomp(msg);
 
-	if (! NZV(msg))
+	if (EMPTY(msg))
 	{
 		g_free(msg);
 		return;

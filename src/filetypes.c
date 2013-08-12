@@ -1216,7 +1216,7 @@ static void load_settings(guint ft_id, GKeyFile *config, GKeyFile *configh)
 		SETPTR(filetypes[ft_id]->comment_single, result);
 	}
 	/* import correctly filetypes that use old-style single comments */
-	else if (! NZV(filetypes[ft_id]->comment_close))
+	else if (EMPTY(filetypes[ft_id]->comment_close))
 	{
 		SETPTR(filetypes[ft_id]->comment_single, filetypes[ft_id]->comment_open);
 		filetypes[ft_id]->comment_open = NULL;
@@ -1577,7 +1577,7 @@ gboolean filetypes_parse_error_message(GeanyFiletype *ft, const gchar *message,
 	*filename = NULL;
 	*line = -1;
 
-	if (G_UNLIKELY(! NZV(regstr)))
+	if (G_UNLIKELY(EMPTY(regstr)))
 		return FALSE;
 
 	if (!ft->priv->error_regex || regstr != ft->priv->last_error_pattern)
