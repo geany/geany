@@ -1045,6 +1045,7 @@ void highlighting_init_styles(guint filetype_idx, GKeyFile *config, GKeyFile *co
 		init_styleset_case(ADA);
 		init_styleset_case(ASM);
 		init_styleset_case(BASIC);
+		init_styleset_case(BATCH);
 		init_styleset_case(C);
 		init_styleset_case(CAML);
 		init_styleset_case(CMAKE);
@@ -1125,6 +1126,7 @@ void highlighting_set_styles(ScintillaObject *sci, GeanyFiletype *ft)
 		styleset_case(ADA);
 		styleset_case(ASM);
 		styleset_case(BASIC);
+		styleset_case(BATCH);
 		styleset_case(C);
 		styleset_case(CAML);
 		styleset_case(CMAKE);

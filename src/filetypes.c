@@ -510,6 +510,12 @@ static void init_builtin_filetypes(void)
 	ft->name = g_strdup("Abaqus");
 	filetype_make_title(ft, TITLE_SOURCE_FILE);
 	ft->group = GEANY_FILETYPE_GROUP_SCRIPT;
+
+#define BATCH
+	ft = filetypes[GEANY_FILETYPES_BATCH];
+	ft->name = g_strdup("Batch");
+	filetype_make_title(ft, TITLE_FILE);
+	ft->group = GEANY_FILETYPE_GROUP_SCRIPT;
 }
 
 

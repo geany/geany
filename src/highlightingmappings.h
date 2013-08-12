@@ -196,6 +196,27 @@ static const HLKeyword highlighting_keywords_BASIC[] =
 #define highlighting_properties_BASIC	EMPTY_PROPERTIES
 
 
+/* BATCH */
+#define highlighting_lexer_BATCH		SCLEX_BATCH
+static const HLStyle highlighting_styles_BATCH[] =
+{
+	{ SCE_BAT_DEFAULT,		"default",		FALSE },
+	{ SCE_BAT_COMMENT,		"comment",		FALSE },
+	{ SCE_BAT_LABEL,		"label",		FALSE },
+	{ SCE_BAT_WORD,			"word",			FALSE },
+	{ SCE_BAT_HIDE,			"hide",			FALSE },
+	{ SCE_BAT_COMMAND,		"command",		FALSE },
+	{ SCE_BAT_IDENTIFIER,	"identifier",	FALSE },
+	{ SCE_BAT_OPERATOR,		"operator",		FALSE }
+};
+static const HLKeyword highlighting_keywords_BATCH[] =
+{
+	{ 0, "keywords",			FALSE },
+	{ 1, "keywords_optional",	FALSE }
+};
+#define highlighting_properties_BATCH	EMPTY_PROPERTIES
+
+
 /* C */
 /* Also used by some other SCLEX_CPP-based filetypes */
 #define highlighting_lexer_C		SCLEX_CPP
