@@ -32,9 +32,9 @@ G_BEGIN_DECLS
 #include <time.h>
 
 
-/** Returns @c TRUE if @a ptr is non-null and @c *ptr is non-zero. */
+/** Returns @c TRUE if @a ptr is @c NULL or @c *ptr is @c FALSE. */
 #define EMPTY(ptr) \
-	(!((ptr) && (ptr)[0]))
+	(!(ptr) || !*(ptr))
 
 /** @deprecated 2013/08 - use @c !EMPTY() instead. */
 #ifndef GEANY_DISABLE_DEPRECATED
