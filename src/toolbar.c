@@ -869,7 +869,7 @@ static gboolean tb_editor_foreach_used(GtkTreeModel *model, GtkTreePath *path,
 
 	if (utils_str_equal(action_name, TB_EDITOR_SEPARATOR))
 		g_string_append_printf(data, "\t\t<separator/>\n");
-	else if (G_LIKELY(NZV(action_name)))
+	else if (G_LIKELY(!EMPTY(action_name)))
 		g_string_append_printf(data, "\t\t<toolitem action='%s' />\n", action_name);
 
 	g_free(action_name);

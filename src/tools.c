@@ -264,7 +264,7 @@ static gboolean cc_iofunc_err(GIOChannel *ioc, GIOCondition cond, gpointer user_
 			}
 		} while (rv == G_IO_STATUS_NORMAL || rv == G_IO_STATUS_AGAIN);
 
-		if (NZV(str->str))
+		if (!EMPTY(str->str))
 		{
 			g_warning("%s: %s\n", data->command, str->str);
 			ui_set_statusbar(TRUE,
@@ -642,7 +642,7 @@ static void cc_show_dialog_custom_commands(void)
 				gchar *lbl;
 
 				gtk_tree_model_get(GTK_TREE_MODEL(cc.store), &iter, CC_COLUMN_CMD, &cmd, CC_COLUMN_LABEL, &lbl, -1);
-				if (NZV(cmd))
+				if (!EMPTY(cmd))
 				{
 					cmd_list = g_slist_prepend(cmd_list, cmd);
 					lbl_list = g_slist_prepend(lbl_list, lbl);
@@ -772,7 +772,7 @@ void tools_create_insert_custom_command_menu_items(void)
 
 			if (EMPTY(label))
 				label = ui_prefs.custom_commands[i];
-			if (NZV(label)) /* skip empty items */
+			if (!EMPTY(label)) /* skip empty items */
 			{
 				cc_insert_custom_command_items(menu_edit, label, ui_prefs.custom_commands[i], idx);
 				idx++;

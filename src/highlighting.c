@@ -554,7 +554,7 @@ static void load_named_styles(GKeyFile *config, GKeyFile *config_home)
 
 	named_style_hash = g_hash_table_new_full(g_str_hash, g_str_equal, g_free, g_free);
 
-	if (NZV(scheme))
+	if (!EMPTY(scheme))
 	{
 		gchar *path, *path_home;
 

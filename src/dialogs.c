@@ -156,7 +156,7 @@ static void open_file_dialog_handle_response(GtkWidget *dialog, gint response)
 		}
 		g_slist_free(filelist);
 	}
-	if (app->project && NZV(app->project->base_path))
+	if (app->project && !EMPTY(app->project->base_path))
 		gtk_file_chooser_remove_shortcut_folder(GTK_FILE_CHOOSER(dialog),
 			app->project->base_path, NULL);
 }
@@ -469,7 +469,7 @@ void dialogs_show_open_file(void)
 		if (initdir != NULL && g_path_is_absolute(initdir))
 				gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog), initdir);
 
-		if (app->project && NZV(app->project->base_path))
+		if (app->project && !EMPTY(app->project->base_path))
 			gtk_file_chooser_add_shortcut_folder(GTK_FILE_CHOOSER(dialog),
 					app->project->base_path, NULL);
 
@@ -486,7 +486,7 @@ static gboolean handle_save_as(const gchar *utf8_filename, gboolean rename_file)
 	GeanyDocument *doc = document_get_current();
 	gboolean success = FALSE;
 
-	g_return_val_if_fail(NZV(utf8_filename), FALSE);
+	g_return_val_if_fail(!EMPTY(utf8_filename), FALSE);
 
 	if (doc->file_name != NULL)
 	{
@@ -628,7 +628,7 @@ static gboolean show_save_as_gtk(GeanyDocument *doc)
 		g_free(fname);
 	}
 
-	if (app->project && NZV(app->project->base_path))
+	if (app->project && !EMPTY(app->project->base_path))
 		gtk_file_chooser_add_shortcut_folder(GTK_FILE_CHOOSER(dialog),
 			app->project->base_path, NULL);
 
@@ -639,7 +639,7 @@ static gboolean show_save_as_gtk(GeanyDocument *doc)
 	}
 	while (! save_as_dialog_handle_response(dialog, resp));
 
-	if (app->project && NZV(app->project->base_path))
+	if (app->project && !EMPTY(app->project->base_path))
 		gtk_file_chooser_remove_shortcut_folder(GTK_FILE_CHOOSER(dialog),
 			app->project->base_path, NULL);
 

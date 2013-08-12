@@ -877,7 +877,7 @@ static void load_session_project_file(void)
 
 	locale_filename = utils_get_locale_from_utf8(project_prefs.session_file);
 
-	if (G_LIKELY(NZV(locale_filename)))
+	if (G_LIKELY(!EMPTY(locale_filename)))
 		project_load_file(locale_filename);
 
 	g_free(locale_filename);

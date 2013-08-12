@@ -781,7 +781,7 @@ static void update_file_patterns(GtkWidget *mode_combo, GtkWidget *fcombo)
 	}
 	else if (selection == FILES_MODE_PROJECT)
 	{
-		if (app->project && NZV(app->project->file_patterns))
+		if (app->project && !EMPTY(app->project->file_patterns))
 		{
 			gchar *patterns;
 
@@ -1063,14 +1063,14 @@ void search_show_find_in_files_dialog_full(const gchar *text, const gchar *dir)
 
 	/* add project's base path directory to the dir list, we do this here once
 	 * (in create_fif_dialog() it would fail if a project is opened after dialog creation) */
-	if (app->project != NULL && NZV(app->project->base_path))
+	if (app->project != NULL && !EMPTY(app->project->base_path))
 	{
 		ui_combo_box_prepend_text_once(GTK_COMBO_BOX_TEXT(fif_dlg.dir_combo),
 			app->project->base_path);
 	}
 
 	entry = gtk_bin_get_child(GTK_BIN(fif_dlg.dir_combo));
-	if (NZV(dir))
+	if (!EMPTY(dir))
 		cur_dir = g_strdup(dir);	/* custom directory argument passed */
 	else
 	{
@@ -1596,7 +1596,7 @@ on_find_in_files_dialog_response(GtkDialog *dialog, gint response,
 
 		if (G_UNLIKELY(EMPTY(utf8_dir)))
 			ui_set_statusbar(FALSE, _("Invalid directory for find in files."));
-		else if (NZV(search_text))
+		else if (!EMPTY(search_text))
 		{
 			gchar *locale_dir;
 			GString *opts = get_grep_options();

@@ -1515,7 +1515,7 @@ gint utils_string_find(GString *haystack, gint start, gint end, const gchar *nee
 	if (start >= (gint)haystack->len)
 		return -1;
 
-	g_return_val_if_fail(NZV(needle), -1);
+	g_return_val_if_fail(!EMPTY(needle), -1);
 
 	if (end < 0)
 		end = haystack->len;
@@ -1644,12 +1644,12 @@ guint utils_string_regex_replace_all(GString *haystack, GRegex *regex,
 /* Get project or default startup directory (if set), or NULL. */
 const gchar *utils_get_default_dir_utf8(void)
 {
-	if (app->project && NZV(app->project->base_path))
+	if (app->project && !EMPTY(app->project->base_path))
 	{
 		return app->project->base_path;
 	}
 
-	if (NZV(prefs.default_open_path))
+	if (!EMPTY(prefs.default_open_path))
 	{
 		return prefs.default_open_path;
 	}

@@ -676,7 +676,7 @@ static gboolean update_config(const PropertyDialogElements *e, gboolean new_proj
 
 	locale_filename = utils_get_locale_from_utf8(file_name);
 	base_path = gtk_entry_get_text(GTK_ENTRY(e->base_path));
-	if (NZV(base_path))
+	if (!EMPTY(base_path))
 	{	/* check whether the given directory actually exists */
 		gchar *locale_path = utils_get_locale_from_utf8(base_path);
 
@@ -732,7 +732,7 @@ static gboolean update_config(const PropertyDialogElements *e, gboolean new_proj
 	SETPTR(p->name, g_strdup(name));
 	SETPTR(p->file_name, g_strdup(file_name));
 	/* use "." if base_path is empty */
-	SETPTR(p->base_path, g_strdup(NZV(base_path) ? base_path : "./"));
+	SETPTR(p->base_path, g_strdup(!EMPTY(base_path) ? base_path : "./"));
 
 	if (! new_project)	/* save properties specific fields */
 	{
@@ -897,7 +897,7 @@ static void on_name_entry_changed(GtkEditable *editable, PropertyDialogElements 
 		return;
 
 	name = gtk_editable_get_chars(editable, 0, -1);
-	if (NZV(name))
+	if (!EMPTY(name))
 	{
 		base_path = g_strconcat(project_dir, G_DIR_SEPARATOR_S,
 			name, G_DIR_SEPARATOR_S, NULL);
@@ -1094,7 +1094,7 @@ gchar *project_get_base_path(void)
 {
 	GeanyProject *project = app->project;
 
-	if (project && NZV(project->base_path))
+	if (project && !EMPTY(project->base_path))
 	{
 		if (g_path_is_absolute(project->base_path))
 			return g_strdup(project->base_path);

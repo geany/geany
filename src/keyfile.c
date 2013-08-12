@@ -887,7 +887,7 @@ static void load_dialog_prefs(GKeyFile *config)
 	if (EMPTY(cmd))
 	{
 		cmd = utils_get_setting_string(config, "tools", "term_cmd", "");
-		if (NZV(cmd))
+		if (!EMPTY(cmd))
 		{
 			tmp_string = cmd;
 #ifdef G_OS_WIN32

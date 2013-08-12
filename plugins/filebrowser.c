@@ -321,7 +321,7 @@ static gchar *get_default_dir(void)
 	else
 		dir = geany->prefs->default_open_path;
 
-	if (NZV(dir))
+	if (!EMPTY(dir))
 		return utils_get_locale_from_utf8(dir);
 
 	return g_get_current_dir();
@@ -762,7 +762,7 @@ static void on_path_entry_activate(GtkEntry *entry, gpointer user_data)
 {
 	gchar *new_dir = (gchar*) gtk_entry_get_text(entry);
 
-	if (NZV(new_dir))
+	if (!EMPTY(new_dir))
 	{
 		if (g_str_has_suffix(new_dir, ".."))
 		{

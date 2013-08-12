@@ -1138,7 +1138,7 @@ static const gchar *get_parent_name(const TMTag *tag, filetype_id ft_id)
 			break;
 	}
 
-	return NZV(str) ? str : NULL;
+	return !EMPTY(str) ? str : NULL;
 }
 
 
@@ -1621,7 +1621,7 @@ static gboolean tag_has_missing_parent(const TMTag *tag, GtkTreeStore *store,
 		GtkTreeIter *iter)
 {
 	/* if the tag has a parent tag, it should be at depth >= 2 */
-	return NZV(tag->atts.entry.scope) &&
+	return !EMPTY(tag->atts.entry.scope) &&
 		gtk_tree_store_iter_depth(store, iter) == 1;
 }
 
@@ -2407,7 +2407,7 @@ static void on_document_save(G_GNUC_UNUSED GObject *object, GeanyDocument *doc)
 {
 	gchar *f = g_build_filename(app->configdir, "ignore.tags", NULL);
 
-	g_return_if_fail(NZV(doc->real_path));
+	g_return_if_fail(!EMPTY(doc->real_path));
 
 	if (utils_str_equal(doc->real_path, f))
 		load_c_ignore_tags();

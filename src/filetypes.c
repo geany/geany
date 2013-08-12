@@ -674,7 +674,7 @@ static void on_document_save(G_GNUC_UNUSED GObject *object, GeanyDocument *doc)
 {
 	gchar *f;
 
-	g_return_if_fail(NZV(doc->real_path));
+	g_return_if_fail(!EMPTY(doc->real_path));
 
 	f = g_build_filename(app->configdir, "filetype_extensions.conf", NULL);
 	if (utils_str_equal(doc->real_path, f))
@@ -1529,7 +1529,7 @@ GeanyFiletype *filetypes_lookup_by_name(const gchar *name)
 {
 	GeanyFiletype *ft;
 
-	g_return_val_if_fail(NZV(name), NULL);
+	g_return_val_if_fail(!EMPTY(name), NULL);
 
 	ft = g_hash_table_lookup(filetypes_hash, name);
 	if (G_UNLIKELY(ft == NULL))
@@ -1803,7 +1803,7 @@ gboolean filetype_get_comment_open_close(const GeanyFiletype *ft, gboolean singl
 	if (single_first)
 	{
 		*co = ft->comment_single;
-		if (NZV(*co))
+		if (!EMPTY(*co))
 			*cc = NULL;
 		else
 		{
@@ -1814,7 +1814,7 @@ gboolean filetype_get_comment_open_close(const GeanyFiletype *ft, gboolean singl
 	else
 	{
 		*co = ft->comment_open;
-		if (NZV(*co))
+		if (!EMPTY(*co))
 			*cc = ft->comment_close;
 		else
 		{
@@ -1823,5 +1823,5 @@ gboolean filetype_get_comment_open_close(const GeanyFiletype *ft, gboolean singl
 		}
 	}
 
-	return NZV(*co);
+	return !EMPTY(*co);
 }
