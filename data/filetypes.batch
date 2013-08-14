@@ -5,10 +5,10 @@ default=default
 comment=comment_line
 label=label
 word=keyword_1
-hide=number_1
+hide=other
 command=function
-operator=other
-identifier=identifier
+operator=operator
+identifier=identifier_1
 
 [keywords]
 # all items must be in one line
