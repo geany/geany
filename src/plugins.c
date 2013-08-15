@@ -641,7 +641,7 @@ plugin_init(Plugin *plugin)
 	active_plugin_list = g_list_insert_sorted(active_plugin_list, plugin, cmp_plugin_names);
 
 	geany_debug("Loaded:   %s (%s)", plugin->filename,
-		NVL(plugin->info.name, "<Unknown>"));
+		FALLBACK(plugin->info.name, "<Unknown>"));
 }
 
 
@@ -730,7 +730,7 @@ plugin_new(const gchar *fname, gboolean init_plugin, gboolean add_to_list)
 
 	/* read plugin name, etc. */
 	plugin_set_info(&plugin->info);
-	if (G_UNLIKELY(! NZV(plugin->info.name)))
+	if (G_UNLIKELY(EMPTY(plugin->info.name)))
 	{
 		geany_debug("No plugin name set in plugin_set_info() for \"%s\" - ignoring plugin!",
 			fname);
@@ -856,7 +856,7 @@ static gchar *get_custom_plugin_path(const gchar *plugin_path_config,
 {
 	gchar *plugin_path_custom;
 
-	if (!NZV(prefs.custom_plugin_path))
+	if (EMPTY(prefs.custom_plugin_path))
 		return NULL;
 
 	plugin_path_custom = utils_get_locale_from_utf8(prefs.custom_plugin_path);
@@ -918,7 +918,7 @@ load_active_plugins(void)
 	{
 		const gchar *fname = active_plugins_pref[i];
 
-		if (NZV(fname) && g_file_test(fname, G_FILE_TEST_EXISTS))
+		if (!EMPTY(fname) && g_file_test(fname, G_FILE_TEST_EXISTS))
 		{
 			if (!check_plugin_path(fname) || plugin_new(fname, TRUE, FALSE) == NULL)
 				failed_plugins_list = g_list_prepend(failed_plugins_list, g_strdup(fname));

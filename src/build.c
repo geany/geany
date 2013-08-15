@@ -389,7 +389,7 @@ static GeanyBuildCommand *get_build_cmd(GeanyDocument *doc, guint grp, guint cmd
 
 
 #define return_nonblank_regex(src, ptr)\
-	if (NZV(ptr)) \
+	if (!EMPTY(ptr)) \
 		{ *fr = (src); return &(ptr); }
 
 
@@ -673,14 +673,14 @@ static void parse_build_output(const gchar **output, gint status)
 
 	for (x = 0; x < 2; x++)
 	{
-		if (NZV(output[x]))
+		if (!EMPTY(output[x]))
 		{
 			lines = g_strsplit_set(output[x], "\r\n", -1);
 			len = g_strv_length(lines);
 
 			for (i = 0; i < len; i++)
 			{
-				if (NZV(lines[i]))
+				if (!EMPTY(lines[i]))
 				{
 					line = lines[i];
 					while (*line != '\0')
@@ -781,7 +781,7 @@ static GPid build_spawn_cmd(GeanyDocument *doc, const gchar *cmd, const gchar *d
 	gint stderr_fd;
 #endif
 
-	if (!((doc != NULL && NZV(doc->file_name)) || NZV(dir)))
+	if (!((doc != NULL && !EMPTY(doc->file_name)) || !EMPTY(dir)))
 	{
 		geany_debug("Failed to run command with no working directory");
 		ui_set_statusbar(TRUE, _("Process failed, no working directory"));
@@ -804,7 +804,7 @@ static GPid build_spawn_cmd(GeanyDocument *doc, const gchar *cmd, const gchar *d
 #endif
 
 	utf8_cmd_string = utils_get_utf8_from_locale(cmd_string);
-	utf8_working_dir = NZV(dir) ? g_strdup(dir) : g_path_get_dirname(doc->file_name);
+	utf8_working_dir = !EMPTY(dir) ? g_strdup(dir) : g_path_get_dirname(doc->file_name);
 	working_dir = utils_get_locale_from_utf8(utf8_working_dir);
 
 	gtk_list_store_clear(msgwindow.store_compiler);
@@ -888,18 +888,18 @@ static gchar *prepare_run_script(GeanyDocument *doc, gchar **vte_cmd_nonscript, 
 
 	cmd_string = build_replace_placeholder(doc, cmd->command);
 	cmd_working_dir =  cmd->working_dir;
-	if (! NZV(cmd_working_dir))
+	if (EMPTY(cmd_working_dir))
 		cmd_working_dir = "%d";
 	working_dir = build_replace_placeholder(doc, cmd_working_dir); /* in utf-8 */
 
 	/* only test whether working dir exists, don't change it or else Windows support will break
 	 * (gspawn-win32-helper.exe is used by GLib and must be in $PATH which means current working
 	 *  dir where geany.exe was started from, so we can't change it) */
-	if (!NZV(working_dir) || ! g_file_test(working_dir, G_FILE_TEST_EXISTS) ||
+	if (EMPTY(working_dir) || ! g_file_test(working_dir, G_FILE_TEST_EXISTS) ||
 		! g_file_test(working_dir, G_FILE_TEST_IS_DIR))
 	{
 		ui_set_statusbar(TRUE, _("Failed to change the working directory to \"%s\""),
-				NZV(working_dir) ? working_dir : "<NULL>" );
+				!EMPTY(working_dir) ? working_dir : "<NULL>" );
 		utils_free_pointers(2, cmd_string, working_dir, NULL);
 		return NULL;
 	}
@@ -928,7 +928,7 @@ static gchar *prepare_run_script(GeanyDocument *doc, gchar **vte_cmd_nonscript, 
 	if (! result)
 	{
 		ui_set_statusbar(TRUE, _("Failed to execute \"%s\" (start-script could not be created: %s)"),
-			NZV(cmd_string) ? cmd_string : NULL, error->message);
+			!EMPTY(cmd_string) ? cmd_string : NULL, error->message);
 		g_error_free(error);
 	}
 
@@ -1073,7 +1073,7 @@ static void process_build_output_line(const gchar *str, gint color)
 
 	g_strchomp(msg);
 
-	if (! NZV(msg))
+	if (EMPTY(msg))
 	{
 		g_free(msg);
 		return;
@@ -1638,7 +1638,7 @@ void build_menu_update(GeanyDocument *doc)
 							(grp == GEANY_GBG_FT && bc != NULL && have_path && ! build_running) ||
 							(grp == GEANY_GBG_NON_FT && bc != NULL && ! build_running);
 						gtk_widget_set_sensitive(menu_item, cmd_sensitivity);
-						if (bc != NULL && NZV(label))
+						if (bc != NULL && !EMPTY(label))
 						{
 							geany_menu_item_set_label(menu_item, label);
 							gtk_widget_show_all(menu_item);
@@ -1666,7 +1666,7 @@ void build_menu_update(GeanyDocument *doc)
 						if (cmd == GBO_TO_CMD(GEANY_GBO_EXEC))
 							run_running = exec_running;
 						gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(menu_item), image);
-						if (bc != NULL && NZV(label))
+						if (bc != NULL && !EMPTY(label))
 						{
 							geany_menu_item_set_label(menu_item, label);
 							gtk_widget_show_all(menu_item);
@@ -2268,7 +2268,7 @@ static gboolean read_regex(GtkWidget *regexentry, gchar **src, gchar **dst)
 
 	if (((src == NULL			/* originally there was no regex */
 		|| *src == NULL)		/* or it was NULL*/
-		&& NZV(reg))			/* and something was typed */
+		&& !EMPTY(reg))			/* and something was typed */
 		|| (src != NULL			/* originally there was a regex*/
 		&& (*src == NULL 		/* and either it was NULL */
 		|| strcmp(*src, reg) != 0)))	/* or it has been changed */
@@ -2524,7 +2524,7 @@ void build_load_menu(GKeyFile *config, GeanyBuildSource src, gpointer p)
 	/* set GeanyBuildCommand if it doesn't already exist and there is a command */
 /* TODO: rewrite as function */
 #define ASSIGNIF(type, id, string, value) \
-	if (NZV(value) && ! type[GBO_TO_CMD(id)].exists) { \
+	if (!EMPTY(value) && ! type[GBO_TO_CMD(id)].exists) { \
 		type[GBO_TO_CMD(id)].exists = TRUE; \
 		SETPTR(type[GBO_TO_CMD(id)].label, g_strdup(string)); \
 		SETPTR(type[GBO_TO_CMD(id)].command, (value)); \
@@ -2579,7 +2579,7 @@ void build_load_menu(GKeyFile *config, GeanyBuildSource src, gpointer p)
 			if (non_ft_pref[GBO_TO_CMD(GEANY_GBO_MAKE_OBJECT)].old)
 				SETPTR(non_ft_pref[GBO_TO_CMD(GEANY_GBO_MAKE_OBJECT)].working_dir, g_strdup("%d"));
 			value = g_key_file_get_string(config, "project", "run_cmd", NULL);
-			if (NZV(value))
+			if (!EMPTY(value))
 			{
 				if (exec_proj == NULL)
 					exec_proj = g_new0(GeanyBuildCommand, build_groups_count[GEANY_GBG_EXEC]);
@@ -2676,7 +2676,7 @@ static void foreach_project_filetype(gpointer data, gpointer user_data)
 
 	i += build_save_menu_grp(d->config, ft->projfilecmds, GEANY_GBG_FT, ft->name);
 	i += build_save_menu_grp(d->config, ft->projexeccmds, GEANY_GBG_EXEC, ft->name);
-	if (NZV(ft->projerror_regex_string))
+	if (!EMPTY(ft->projerror_regex_string))
 	{
 		g_key_file_set_string(d->config, build_grp_name, regkey, ft->projerror_regex_string);
 		i++;
@@ -2704,7 +2704,7 @@ void build_save_menu(GKeyFile *config, gpointer ptr, GeanyBuildSource src)
 				return;
 			build_save_menu_grp(config, ft->homefilecmds, GEANY_GBG_FT, NULL);
 			build_save_menu_grp(config, ft->homeexeccmds, GEANY_GBG_EXEC, NULL);
-			if (NZV(ft->homeerror_regex_string))
+			if (!EMPTY(ft->homeerror_regex_string))
 				g_key_file_set_string(config, build_grp_name, "error_regex", ft->homeerror_regex_string);
 			else
 				g_key_file_remove_key(config, build_grp_name, "error_regex", NULL);
@@ -2712,7 +2712,7 @@ void build_save_menu(GKeyFile *config, gpointer ptr, GeanyBuildSource src)
 		case GEANY_BCS_PREF:
 			build_save_menu_grp(config, non_ft_pref, GEANY_GBG_NON_FT, NULL);
 			build_save_menu_grp(config, exec_pref, GEANY_GBG_EXEC, NULL);
-			if (NZV(regex_pref))
+			if (!EMPTY(regex_pref))
 				g_key_file_set_string(config, build_grp_name, "error_regex", regex_pref);
 			else
 				g_key_file_remove_key(config, build_grp_name, "error_regex", NULL);
@@ -2721,7 +2721,7 @@ void build_save_menu(GKeyFile *config, gpointer ptr, GeanyBuildSource src)
 			pj = (GeanyProject*)ptr;
 			build_save_menu_grp(config, non_ft_proj, GEANY_GBG_NON_FT, NULL);
 			build_save_menu_grp(config, exec_proj, GEANY_GBG_EXEC, NULL);
-			if (NZV(regex_proj))
+			if (!EMPTY(regex_proj))
 				g_key_file_set_string(config, build_grp_name, "error_regex", regex_proj);
 			else
 				g_key_file_remove_key(config, build_grp_name, "error_regex", NULL);

@@ -187,7 +187,7 @@ void vte_init(void)
 		return;
 	}
 
-	if (NZV(vte_info.lib_vte))
+	if (!EMPTY(vte_info.lib_vte))
 	{
 		module = g_module_open(vte_info.lib_vte, G_MODULE_BIND_LAZY);
 	}
@@ -732,7 +732,7 @@ static void vte_drag_data_received(GtkWidget *widget, GdkDragContext *drag_conte
 	else
 	{
 		gchar *text = (gchar*) gtk_selection_data_get_text(data);
-		if (NZV(text))
+		if (!EMPTY(text))
 			vf->vte_terminal_feed_child(VTE_TERMINAL(widget), text, strlen(text));
 		g_free(text);
 	}

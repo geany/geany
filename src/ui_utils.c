@@ -193,7 +193,7 @@ static gchar *create_statusbar_statistics(GeanyDocument *doc,
 	GString *stats_str;
 	ScintillaObject *sci = doc->editor->sci;
 
-	if (NZV(ui_prefs.statusbar_template))
+	if (!EMPTY(ui_prefs.statusbar_template))
 		fmt = ui_prefs.statusbar_template;
 	else
 		fmt = _(DEFAULT_STATUSBAR_TEMPLATE);

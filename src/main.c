@@ -335,7 +335,7 @@ static void get_line_and_column_from_filename(gchar *filename, gint *line, gint 
 
 	g_assert(*line == -1 && *column == -1);
 
-	if (G_UNLIKELY(! NZV(filename)))
+	if (G_UNLIKELY(EMPTY(filename)))
 		return;
 
 	/* allow to open files like "test:0" */
@@ -877,7 +877,7 @@ static void load_session_project_file(void)
 
 	locale_filename = utils_get_locale_from_utf8(project_prefs.session_file);
 
-	if (G_LIKELY(NZV(locale_filename)))
+	if (G_LIKELY(!EMPTY(locale_filename)))
 		project_load_file(locale_filename);
 
 	g_free(locale_filename);

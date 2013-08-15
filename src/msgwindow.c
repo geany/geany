@@ -470,7 +470,7 @@ on_compiler_treeview_copy_activate(GtkMenuItem *menuitem, gpointer user_data)
 		gchar *string;
 
 		gtk_tree_model_get(model, &iter, str_idx, &string, -1);
-		if (NZV(string))
+		if (!EMPTY(string))
 		{
 			gtk_clipboard_set_text(gtk_clipboard_get(gdk_atom_intern("CLIPBOARD", FALSE)),
 				string, -1);
@@ -512,7 +512,7 @@ static void on_compiler_treeview_copy_all_activate(GtkMenuItem *menuitem, gpoint
 		gchar *line;
 
 		gtk_tree_model_get(GTK_TREE_MODEL(store), &iter, str_idx, &line, -1);
-		if (NZV(line))
+		if (!EMPTY(line))
 		{
 			g_string_append(str, line);
 			g_string_append_c(str, '\n');

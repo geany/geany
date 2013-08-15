@@ -848,7 +848,7 @@ static gboolean create_class(CreateClassDialog *cc_dlg)
 		case GEANY_CLASS_TYPE_GTK:
 		{
 			class_info->namespace = g_strdup(gtk_entry_get_text(GTK_ENTRY(cc_dlg->class_namespace_entry)));
-			if (!NZV(class_info->namespace))
+			if (EMPTY(class_info->namespace))
 			{
 				class_info->namespace_up = g_strdup("");
 				class_info->namespace_low = g_strdup("");

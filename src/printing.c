@@ -164,7 +164,7 @@ static void add_page_header(DocInfo *dinfo, cairo_t *cr, gint width, gint page_n
 	g_free(data);
 
 	datetime = utils_get_date_time(printing_prefs.page_header_datefmt, &(dinfo->print_time));
-	if (G_LIKELY(NZV(datetime)))
+	if (G_LIKELY(!EMPTY(datetime)))
 	{
 		data = g_strdup_printf("<b>%s</b>", datetime);
 		pango_layout_set_markup(layout, data, -1);
@@ -571,7 +571,7 @@ static void print_external(GeanyDocument *doc)
 	if (doc->file_name == NULL)
 		return;
 
-	if (! NZV(printing_prefs.external_print_cmd))
+	if (EMPTY(printing_prefs.external_print_cmd))
 	{
 		dialogs_show_msgbox(GTK_MESSAGE_ERROR,
 			_("Please set a print command in the preferences dialog first."));

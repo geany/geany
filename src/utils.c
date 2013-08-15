@@ -255,7 +255,7 @@ gint utils_write_file(const gchar *filename, const gchar *text)
 		{
 			geany_debug("utils_write_file(): could not write to file %s (%s)",
 				filename, g_strerror(errno));
-			return NVL(errno, EIO);
+			return FALLBACK(errno, EIO);
 		}
 	}
 	return 0;
@@ -420,7 +420,7 @@ gboolean utils_atob(const gchar *str)
 /* NULL-safe version of g_path_is_absolute(). */
 gboolean utils_is_absolute_path(const gchar *path)
 {
-	if (G_UNLIKELY(! NZV(path)))
+	if (G_UNLIKELY(EMPTY(path)))
 		return FALSE;
 
 	return g_path_is_absolute(path);
@@ -1485,7 +1485,7 @@ gboolean utils_str_has_upper(const gchar *str)
 {
 	gunichar c;
 
-	if (! NZV(str) || ! g_utf8_validate(str, -1, NULL))
+	if (EMPTY(str) || ! g_utf8_validate(str, -1, NULL))
 		return FALSE;
 
 	while (*str != '\0')
@@ -1515,7 +1515,7 @@ gint utils_string_find(GString *haystack, gint start, gint end, const gchar *nee
 	if (start >= (gint)haystack->len)
 		return -1;
 
-	g_return_val_if_fail(NZV(needle), -1);
+	g_return_val_if_fail(!EMPTY(needle), -1);
 
 	if (end < 0)
 		end = haystack->len;
@@ -1644,12 +1644,12 @@ guint utils_string_regex_replace_all(GString *haystack, GRegex *regex,
 /* Get project or default startup directory (if set), or NULL. */
 const gchar *utils_get_default_dir_utf8(void)
 {
-	if (app->project && NZV(app->project->base_path))
+	if (app->project && !EMPTY(app->project->base_path))
 	{
 		return app->project->base_path;
 	}
 
-	if (NZV(prefs.default_open_path))
+	if (!EMPTY(prefs.default_open_path))
 	{
 		return prefs.default_open_path;
 	}
@@ -1886,7 +1886,7 @@ gchar *utils_str_remove_chars(gchar *string, const gchar *chars)
 	gchar *w = string;
 
 	g_return_val_if_fail(string, NULL);
-	if (G_UNLIKELY(! NZV(chars)))
+	if (G_UNLIKELY(EMPTY(chars)))
 		return string;
 
 	foreach_str(r, string)

@@ -76,8 +76,8 @@ int tm_symbol_compare(const void *p1, const void *p2)
  */
 int tm_arglist_compare(const TMTag* t1, const TMTag* t2)
 {
-	return strcmp(NVL(t1->atts.entry.arglist, ""),
-			NVL(t2->atts.entry.arglist, ""));
+	return strcmp(FALLBACK(t1->atts.entry.arglist, ""),
+			FALLBACK(t2->atts.entry.arglist, ""));
 }
 
 /* Need this custom compare function to generate a symbol tree
@@ -119,8 +119,8 @@ int tm_symbol_tag_compare(const TMTag **t1, const TMTag **t2)
 		return (s1);
 
 	/* Compare scope alphabetically */
-	s1 = strcmp(NVL((*t1)->atts.entry.scope, ""),
-	  NVL((*t2)->atts.entry.scope, ""));
+	s1 = strcmp(FALLBACK((*t1)->atts.entry.scope, ""),
+	  FALLBACK((*t2)->atts.entry.scope, ""));
 	if (s1 != 0)
 		return s1;
 
@@ -208,8 +208,8 @@ TMSymbol *tm_symbol_tree_new(GPtrArray *tags_array)
 			{
 				if (sym && (tm_tag_function_t == sym->tag->type) &&
 				  (!sym->info.equiv) &&
-				  (0 == strcmp(NVL(tag->atts.entry.scope, "")
-							 , NVL(sym->tag->atts.entry.scope, ""))))
+				  (0 == strcmp(FALLBACK(tag->atts.entry.scope, "")
+							 , FALLBACK(sym->tag->atts.entry.scope, ""))))
 				{
 					sym->info.equiv = tag;
 					continue;

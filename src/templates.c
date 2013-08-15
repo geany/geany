@@ -300,7 +300,7 @@ static void on_document_save(G_GNUC_UNUSED GObject *object, GeanyDocument *doc)
 {
 	gchar *path = g_build_filename(app->configdir, GEANY_TEMPLATES_SUBDIR, NULL);
 
-	g_return_if_fail(NZV(doc->real_path));
+	g_return_if_fail(!EMPTY(doc->real_path));
 
 	if (strncmp(doc->real_path, path, strlen(path)) == 0)
 	{
@@ -365,9 +365,9 @@ static void make_comment_block(GString *comment_text, gint filetype_idx, guint i
 	template_eol_char = utils_get_eol_char(template_eol_mode);
 
 	filetype_get_comment_open_close(ft, FALSE, &co, &cc);
-	if (NZV(co))
+	if (!EMPTY(co))
 	{
-		if (NZV(cc))
+		if (!EMPTY(cc))
 		{
 			frame_start = g_strconcat(co, template_eol_char, NULL);
 			frame_end = g_strconcat(cc, template_eol_char, NULL);
@@ -388,7 +388,7 @@ static void make_comment_block(GString *comment_text, gint filetype_idx, guint i
 	}
 
 	/* do some magic to nicely format C-like multi-line comments */
-	if (NZV(frame_start) && frame_start[1] == '*')
+	if (!EMPTY(frame_start) && frame_start[1] == '*')
 	{
 		/* prefix the string with a space */
 		SETPTR(frame_end, g_strconcat(" ", frame_end, NULL));

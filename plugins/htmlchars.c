@@ -587,7 +587,7 @@ static gboolean sc_insert(GtkTreeModel *model, GtkTreeIter *iter)
 		gint pos = sci_get_current_position(doc->editor->sci);
 
 		gtk_tree_model_get(model, iter, COLUMN_HTML_NAME, &str, -1);
-		if (NZV(str))
+		if (!EMPTY(str))
 		{
 			sci_insert_text(doc->editor->sci, pos, str);
 			g_free(str);

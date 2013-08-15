@@ -681,9 +681,9 @@ int tm_tag_compare(const void *ptr1, const void *ptr2)
 	if (NULL == s_sort_attrs)
 	{
 		if (s_partial)
-			return strncmp(NVL(t1->name, ""), NVL(t2->name, ""), strlen(NVL(t1->name, "")));
+			return strncmp(FALLBACK(t1->name, ""), FALLBACK(t2->name, ""), strlen(FALLBACK(t1->name, "")));
 		else
-			return strcmp(NVL(t1->name, ""), NVL(t2->name, ""));
+			return strcmp(FALLBACK(t1->name, ""), FALLBACK(t2->name, ""));
 	}
 
 	for (sort_attr = s_sort_attrs; *sort_attr != tm_tag_attr_none_t; ++ sort_attr)
@@ -692,9 +692,9 @@ int tm_tag_compare(const void *ptr1, const void *ptr2)
 		{
 			case tm_tag_attr_name_t:
 				if (s_partial)
-					returnval = strncmp(NVL(t1->name, ""), NVL(t2->name, ""), strlen(NVL(t1->name, "")));
+					returnval = strncmp(FALLBACK(t1->name, ""), FALLBACK(t2->name, ""), strlen(FALLBACK(t1->name, "")));
 				else
-					returnval = strcmp(NVL(t1->name, ""), NVL(t2->name, ""));
+					returnval = strcmp(FALLBACK(t1->name, ""), FALLBACK(t2->name, ""));
 				if (0 != returnval)
 					return returnval;
 				break;
@@ -707,11 +707,11 @@ int tm_tag_compare(const void *ptr1, const void *ptr2)
 					return returnval;
 				break;
 			case tm_tag_attr_scope_t:
-				if (0 != (returnval = strcmp(NVL(t1->atts.entry.scope, ""), NVL(t2->atts.entry.scope, ""))))
+				if (0 != (returnval = strcmp(FALLBACK(t1->atts.entry.scope, ""), FALLBACK(t2->atts.entry.scope, ""))))
 					return returnval;
 				break;
 			case tm_tag_attr_arglist_t:
-				if (0 != (returnval = strcmp(NVL(t1->atts.entry.arglist, ""), NVL(t2->atts.entry.arglist, ""))))
+				if (0 != (returnval = strcmp(FALLBACK(t1->atts.entry.arglist, ""), FALLBACK(t2->atts.entry.arglist, ""))))
 				{
 					int line_diff = (t1->atts.entry.line - t2->atts.entry.line);
 
@@ -719,7 +719,7 @@ int tm_tag_compare(const void *ptr1, const void *ptr2)
 				}
 				break;
 			case tm_tag_attr_vartype_t:
-				if (0 != (returnval = strcmp(NVL(t1->atts.entry.var_type, ""), NVL(t2->atts.entry.var_type, ""))))
+				if (0 != (returnval = strcmp(FALLBACK(t1->atts.entry.var_type, ""), FALLBACK(t2->atts.entry.var_type, ""))))
 					return returnval;
 				break;
 			case tm_tag_attr_line_t:
