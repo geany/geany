@@ -243,18 +243,46 @@ static void prepare_compiler_tree_view(void)
 }
 
 
-static const GdkColor color_error = {0, 65535, 0, 0};
+static const GdkColor color_error = {0, 0xffff, 0x0000, 0x0000};
 
 static const GdkColor *get_color(gint msg_color)
 {
-	static const GdkColor dark_red = {0, 65535 / 2, 0, 0};
-	static const GdkColor blue = {0, 0, 0, 0xD000};	/* not too bright ;-) */
+	static const GdkColor black 		= {0, 0x0000, 0x0000, 0x0000};
+	static const GdkColor dark_red 		= {0, 0xaaaa, 0x0000, 0x0000};
+	static const GdkColor dark_green 	= {0, 0x0000, 0xaaaa, 0x0000};
+	static const GdkColor dark_yellow 	= {0, 0xaaaa, 0x5555, 0x0000};
+	static const GdkColor dark_blue 	= {0, 0x0000, 0x0000, 0xaaaa};
+	static const GdkColor dark_magenta 	= {0, 0xaaaa, 0x0000, 0xaaaa};
+	static const GdkColor dark_cyan 	= {0, 0x0000, 0xaaaa, 0xaaaa};
+	static const GdkColor light_grey 	= {0, 0xaaaa, 0xaaaa, 0xaaaa};
+	static const GdkColor grey 			= {0, 0x5555, 0x5555, 0x5555};
+	static const GdkColor red 			= {0, 0xffff, 0x5555, 0x5555};
+	static const GdkColor green 		= {0, 0x5555, 0xffff, 0x5555};
+	static const GdkColor yellow 		= {0, 0xffff, 0xffff, 0x5555};
+	static const GdkColor blue 			= {0, 0x5555, 0x5555, 0xffff};
+	static const GdkColor magenta 		= {0, 0xffff, 0x5555, 0xffff};
+	static const GdkColor cyan 			= {0, 0x5555, 0xffff, 0xffff};
+	static const GdkColor white 		= {0, 0xffff, 0xffff, 0xffff};
 
 	switch (msg_color)
 	{
-		case COLOR_RED: return &color_error;
+		case COLOR_BLACK: return &black;
 		case COLOR_DARK_RED: return &dark_red;
+		case COLOR_DARK_GREEN: return &dark_green;
+		case COLOR_DARK_YELLOW: return &dark_yellow;
+		case COLOR_DARK_BLUE: return &dark_blue;
+		case COLOR_DARK_MAGENTA: return &dark_magenta;
+		case COLOR_DARK_CYAN: return &dark_cyan;
+		case COLOR_LIGHT_GREY: return &light_grey;
+		case COLOR_GREY: return &grey;
+		//case COLOR_RED: return &red;
+		case COLOR_RED: return &color_error;
+		case COLOR_GREEN: return &green;
+		case COLOR_YELLOW: return &yellow;
 		case COLOR_BLUE: return &blue;
+		case COLOR_MAGENTA: return &magenta;
+		case COLOR_CYAN: return &cyan;
+		case COLOR_WHITE: return &white;
 		default: return NULL;
 	}
 }
@@ -279,13 +307,77 @@ void msgwin_compiler_add(gint msg_color, const gchar *format, ...)
 	g_free(string);
 }
 
+static const gchar *msgwin_parse_ansi_color( const gchar *p, gint *color )
+{
+	if ((p[0] == '\x1b') && (p[1] == '['))
+	{
+		gint new_color = *color;
+
+		p += 2;
+		while (isdigit(*p))
+		{
+			int n = *p++ - '0';
+			while (isdigit(*p))
+				n = n * 10 + (*p++ - '0');
+
+			switch (n)
+			{
+			case 0:
+				new_color = *color;
+				break;
+			case 1:
+				new_color |= 8;
+				break;
+			case 30: case 31: case 32: case 33:
+			case 34: case 35: case 36: case 37:
+				new_color = n - 30;
+				break;
+			}
+
+			if (*p == ';') ++p;
+		}
+
+		if (*p)
+		{
+			if (*p++ == 'm') *color = new_color;
+		}
+	}
+
+	return p;
+}
 
 void msgwin_compiler_add_string(gint msg_color, const gchar *msg)
 {
 	GtkTreeIter iter;
 	GtkTreePath *path;
-	const GdkColor *color = get_color(msg_color);
 	gchar *utf8_msg;
+	gchar msgbuff[1024];
+
+	// HACK HACK HACK only handles lines which start with ANSII escape sequences
+	// HACK HACK HACK only accepts text until next sequence
+	if ((msg[0] == '\x1b') && (msg[1] == '['))
+	{
+		const gchar *s = msgwin_parse_ansi_color( msg, &msg_color );
+		gchar *d = msgbuff;
+
+		while (*s)
+		{
+			if ((s[0] == '\x1b') && (s[1] == '['))
+			{
+				int c = msg_color;
+				// HACK HACK HACK ignore other colors for now
+				s = msgwin_parse_ansi_color( s, &c );
+				(void)c;
+			}
+			else
+			{
+				if (d >= &msgbuff[sizeof(msgbuff)]) break;
+				*d++ = *s++;
+			}
+		}
+		*d = '\0';
+		msg = msgbuff;
+	}
 
 	if (! g_utf8_validate(msg, -1, NULL))
 		utf8_msg = utils_get_utf8_from_locale(msg);
@@ -293,7 +385,7 @@ void msgwin_compiler_add_string(gint msg_color, const gchar *msg)
 		utf8_msg = (gchar *) msg;
 
 	gtk_list_store_append(msgwindow.store_compiler, &iter);
-	gtk_list_store_set(msgwindow.store_compiler, &iter, 0, color, 1, utf8_msg, -1);
+	gtk_list_store_set(msgwindow.store_compiler, &iter, 0, get_color(msg_color), 1, utf8_msg, -1);
 
 	if (ui_prefs.msgwindow_visible && interface_prefs.compiler_tab_autoscroll)
 	{
