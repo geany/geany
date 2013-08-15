@@ -2900,7 +2900,9 @@ static gint get_multiline_comment_style(GeanyEditor *editor, gint line_start)
 				style_comment = SCE_H_COMMENT;
 			break;
 		}
-		case SCLEX_HASKELL: style_comment = SCE_HA_COMMENTBLOCK; break;
+		case SCLEX_HASKELL:
+		case SCLEX_LITERATEHASKELL:
+			style_comment = SCE_HA_COMMENTBLOCK; break;
 		case SCLEX_LUA: style_comment = SCE_LUA_COMMENT; break;
 		case SCLEX_CSS: style_comment = SCE_CSS_COMMENT; break;
 		case SCLEX_SQL: style_comment = SCE_SQL_COMMENT; break;
