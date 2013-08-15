@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: Geany 1.24\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-22 09:35+0200\n"
-"PO-Revision-Date: 2013-05-22 09:41+0200\n"
+"PO-Revision-Date: 2013-08-15 14:42+0200\n"
 "Last-Translator: Frank Lanitz <frank@frank.uvena.de>\n"
 "Language-Team: German <geany-i18n@uvena.de>\n"
 "Language: de\n"
@@ -1830,7 +1830,7 @@ msgstr "A_lle speichern"
 #: ../data/geany.glade.h:380 ../src/callbacks.c:434 ../src/document.c:2941
 #: ../src/sidebar.c:705
 msgid "_Reload"
-msgstr "_Neu laden"
+msgstr "Neu _laden"
 
 #: ../data/geany.glade.h:381
 msgid "R_eload As"
