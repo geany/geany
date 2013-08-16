@@ -1052,7 +1052,8 @@ void plugins_load_active(void)
 
 
 /* Update the global active plugins list so it's up-to-date when configuration
- * is saved. Called in response to GeanyObject's "save-settings" signal. */
+ * is saved. Called in response to GeanyObject's "save-settings" signal. Also
+ * called directly in response to plugin manager dialog being closed. */
 static void update_active_plugins_pref(void)
 {
 	gint i = 0;
@@ -1393,6 +1394,10 @@ static void pm_dialog_response(GtkDialog *dialog, gint response, gpointer user_d
 		plugin_list = NULL;
 	}
 	gtk_widget_destroy(GTK_WIDGET(dialog));
+
+	/* Update global active plugins list before saving configuration */
+	update_active_plugins_pref();
+	configuration_save();
 }
 
 
