@@ -281,6 +281,14 @@ static void init_builtin_filetypes(void)
 	ft->mime_type = g_strdup("text/x-haskell");
 	ft->group = GEANY_FILETYPE_GROUP_COMPILED;
 
+#define LITERATEHASKELL
+	ft = filetypes[GEANY_FILETYPES_LITERATEHASKELL];
+	ft->lang = 24;
+	ft->name = g_strdup("LiterateHaskell");
+	filetype_make_title(ft, TITLE_SOURCE_FILE);
+	ft->mime_type = g_strdup("text/x-literate-haskell");
+	ft->group = GEANY_FILETYPE_GROUP_COMPILED;
+
 #define MARKDOWN
 	ft = filetypes[GEANY_FILETYPES_MARKDOWN];
 	ft->lang = 36;
