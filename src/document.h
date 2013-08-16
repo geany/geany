@@ -45,6 +45,14 @@ G_BEGIN_DECLS
 #endif
 
 
+typedef enum
+{
+	GEANY_FILE_UNCHANGED,
+	GEANY_FILE_CHANGED,
+	GEANY_FILE_DELETED
+} GEANY_FILE_STATE;
+
+
 /** File Prefs. */
 typedef struct GeanyFilePrefs
 {
@@ -243,7 +251,9 @@ void document_highlight_tags(GeanyDocument *doc);
 
 void document_set_encoding(GeanyDocument *doc, const gchar *new_encoding);
 
-gboolean document_check_disk_status(GeanyDocument *doc, gboolean force);
+gboolean document_ensure_uptodate(GeanyDocument *doc, gboolean force_check, gboolean ignore_changes);
+
+GEANY_FILE_STATE document_check_disk_status(GeanyDocument *doc, gboolean force);
 
 /* own Undo / Redo implementation to be able to undo / redo changes
  * to the encoding or the Unicode BOM (which are Scintilla independent).

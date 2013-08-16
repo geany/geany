@@ -91,7 +91,7 @@ static gboolean check_no_unsaved(void)
 {
 	guint i;
 
-	for (i = 0; i < documents_array->len; i++)
+	foreach_document (i)
 	{
 		if (documents[i]->is_valid && documents[i]->changed)
 		{
@@ -403,6 +403,46 @@ G_MODULE_EXPORT void on_toolbutton_reload_clicked(GtkAction *action, gpointer us
 	on_reload_as_activate(NULL, GINT_TO_POINTER(-1));
 }
 
+/* reload all files */
+G_MODULE_EXPORT void on_reload_all(GtkAction *action, gpointer user_data)
+{
+	guint i;
+	GeanyDocument *doc;
+	gboolean reloaded_anything = FALSE;
+	/* reloading/closing changes the active tab. Make sure that this
+	 * is undone at the end by remembering the current doc. */
+	GeanyDocument *cur_doc = document_get_current();
+
+	foreach_document (i)
+	{
+		doc = documents[i];
+		/* don't prompt if file hasn't been edited at all */
+		if (DOC_VALID(doc) && (doc->changed || document_can_undo(doc) || document_can_redo(doc)))
+		{
+			if (dialogs_show_question_full(NULL, _("_Reload All"), GTK_STOCK_CANCEL,
+				_("Any unsaved changes will be lost."),
+				_("Are you sure you want to reload ALL open files?")))
+				break;
+			else
+				return;
+		}
+	}
+
+	foreach_document (i)
+	{
+		doc = documents[i];
+		if (DOC_VALID(doc))
+			reloaded_anything = document_ensure_uptodate(doc, TRUE, TRUE) || reloaded_anything;
+	}
+	
+	if (reloaded_anything)
+	{
+		ui_set_statusbar(TRUE, _("All files reloaded."));
+		if (DOC_VALID(cur_doc))
+			document_show_tab(cur_doc);
+	}
+}
+
 
 /* also used for reloading when user_data is -1 */
 G_MODULE_EXPORT void on_reload_as_activate(GtkMenuItem *menuitem, gpointer user_data)
@@ -595,7 +635,7 @@ G_MODULE_EXPORT void on_toolbutton_preferences_clicked(GtkAction *action, gpoint
 
 static gboolean delayed_check_disk_status(gpointer data)
 {
-	document_check_disk_status(data, FALSE);
+	document_ensure_uptodate(data, FALSE, FALSE);
 	return FALSE;
 }
 
@@ -1935,7 +1975,7 @@ G_MODULE_EXPORT void on_close_other_documents1_activate(GtkMenuItem *menuitem, g
 		cur_doc = document_get_current();
 
 
-	for (i = 0; i < documents_array->len; i++)
+	foreach_document (i)
 	{
 		doc = documents[i];
 

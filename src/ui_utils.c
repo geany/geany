@@ -742,6 +742,7 @@ static void init_document_widgets(void)
 	add_doc_widget("menu_undo2");
 	add_doc_widget("preferences2");
 	add_doc_widget("menu_reload1");
+	add_doc_widget("menu_reload_all1");
 	add_doc_widget("menu_document1");
 	add_doc_widget("menu_choose_color1");
 	add_doc_widget("menu_color_schemes");

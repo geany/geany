@@ -329,7 +329,8 @@ static gboolean on_editor_button_press_event(GtkWidget *widget, GdkEventButton *
 				keybindings_send_command(GEANY_KEY_GROUP_GOTO, GEANY_KEYS_GOTO_MATCHINGBRACE);
 			return TRUE;
 		}
-		return document_check_disk_status(doc, FALSE);
+		document_ensure_uptodate(doc, FALSE, FALSE);
+		return FALSE;
 	}
 
 	/* calls the edit popup menu in the editor */
