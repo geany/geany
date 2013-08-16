@@ -1255,10 +1255,8 @@ static void on_new_line_added(GeanyEditor *editor)
 
 	if (editor_prefs.newline_strip)
 	{	/* strip the trailing spaces on the previous line */
-
 		const GeanyFilePrefs *fp = project_get_file_prefs();
-
-		editor_strip_line_trailing_spaces(editor, line - 1, FALSE);
+		editor_strip_line_trailing_spaces(editor, line - 1, fp->strip_preserve_empty);
 	}
 }
 
