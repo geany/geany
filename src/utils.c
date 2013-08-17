@@ -637,19 +637,6 @@ gchar utils_brace_opposite(gchar ch)
 }
 
 
-gchar *utils_get_hostname(void)
-{
-#ifdef G_OS_WIN32
-	return win32_get_hostname();
-#elif defined(HAVE_GETHOSTNAME)
-	gchar hostname[100];
-	if (gethostname(hostname, sizeof(hostname)) == 0)
-		return g_strdup(hostname);
-#endif
-	return g_strdup("localhost");
-}
-
-
 /* Checks whether the given file can be written. locale_filename is expected in locale encoding.
  * Returns 0 if it can be written, otherwise it returns errno */
 gint utils_is_file_writable(const gchar *locale_filename)

@@ -182,8 +182,6 @@ gchar *utils_remove_ext_from_filename(const gchar *filename);
 
 gchar utils_brace_opposite(gchar ch);
 
-gchar *utils_get_hostname(void);
-
 gint utils_string_find(GString *haystack, gint start, gint end, const gchar *needle);
 
 gint utils_string_replace(GString *str, gint pos, gint len, const gchar *replace);

@@ -272,7 +272,7 @@ gint socket_init(gint argc, gchar **argv)
 		return -1;
 #else
 	gchar *display_name = gdk_get_display();
-	gchar *hostname = utils_get_hostname();
+	const gchar *hostname = g_get_host_name();
 	gchar *p;
 
 	if (display_name == NULL)
@@ -293,7 +293,6 @@ gint socket_init(gint argc, gchar **argv)
 			app->configdir, G_DIR_SEPARATOR, hostname, display_name);
 
 	g_free(display_name);
-	g_free(hostname);
 
 	/* check whether the real user id is the same as this of the socket file */
 	check_socket_permissions();

@@ -844,18 +844,6 @@ void win32_init_debug_code(void)
 }
 
 
-gchar *win32_get_hostname(void)
-{
-	gchar hostname[100];
-	DWORD size = sizeof(hostname);
-
-	if (GetComputerName(hostname, &size))
-		return g_strdup(hostname);
-	else
-		return g_strdup("localhost");
-}
-
-
 static gchar *create_temp_file(void)
 {
 	gchar *name;

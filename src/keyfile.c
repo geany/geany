@@ -873,11 +873,9 @@ static void load_dialog_prefs(GKeyFile *config)
 
 	template_prefs.version = utils_get_setting_string(config, PACKAGE, "pref_template_version", "1.0");
 
-	tmp_string2 = utils_get_hostname();
-	tmp_string = g_strdup_printf("%s@%s", g_get_user_name(), tmp_string2);
+	tmp_string = g_strdup_printf("%s@%s", g_get_user_name(), g_get_host_name());
 	template_prefs.mail = utils_get_setting_string(config, PACKAGE, "pref_template_mail", tmp_string);
 	g_free(tmp_string);
-	g_free(tmp_string2);
 	template_prefs.year_format = utils_get_setting_string(config, PACKAGE, "pref_template_year", GEANY_TEMPLATES_FORMAT_YEAR);
 	template_prefs.date_format = utils_get_setting_string(config, PACKAGE, "pref_template_date", GEANY_TEMPLATES_FORMAT_DATE);
 	template_prefs.datetime_format = utils_get_setting_string(config, PACKAGE, "pref_template_datetime", GEANY_TEMPLATES_FORMAT_DATETIME);

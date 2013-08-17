@@ -197,7 +197,6 @@ def configure(conf):
 
     conf.check_cc(function_name='fgetpos', header_name='stdio.h', mandatory=False)
     conf.check_cc(function_name='ftruncate', header_name='unistd.h', mandatory=False)
-    conf.check_cc(function_name='gethostname', header_name='unistd.h', mandatory=False)
     conf.check_cc(function_name='mkstemp', header_name='stdlib.h', mandatory=False)
     conf.check_cc(function_name='strstr', header_name='string.h')
 
