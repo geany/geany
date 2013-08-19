@@ -332,8 +332,9 @@ static void setup_range(DocInfo *dinfo, GtkPrintContext *ctx)
 static void begin_print(GtkPrintOperation *operation, GtkPrintContext *context, gpointer user_data)
 {
 	DocInfo *dinfo = user_data;
-	PangoContext *pango_ctx, *widget_pango_ctx;
+	PangoContext *pango_ctx;
 	PangoFontDescription *desc;
+	gdouble pango_res, widget_res;
 
 	if (dinfo == NULL)
 		return;
@@ -358,9 +359,20 @@ static void begin_print(GtkPrintOperation *operation, GtkPrintContext *context, 
 	 * Pango context out of the Cairo target, and the resolution is in the GtkPrintOperation's
 	 * Pango context */
 	pango_ctx = gtk_print_context_create_pango_context(context);
-	widget_pango_ctx = gtk_widget_get_pango_context(GTK_WIDGET(dinfo->sci));
-	dinfo->sci_scale = pango_cairo_context_get_resolution(pango_ctx) / pango_cairo_context_get_resolution(widget_pango_ctx);
+	pango_res = pango_cairo_context_get_resolution(pango_ctx);
 	g_object_unref(pango_ctx);
+#ifndef G_OS_WIN32
+	widget_res = pango_cairo_context_get_resolution(
+		gtk_widget_get_pango_context(GTK_WIDGET(dinfo->sci)));
+#else
+	/* On Windows, the resolution of the Scintilla's pango cairo context
+	 * always returns negative (even if the resolution is set with -1), so
+	 * instead, use the default font map to calculate the scaling
+	 * (is this equivalent?). */
+	widget_res = pango_cairo_font_map_get_resolution(
+		(PangoCairoFontMap*) pango_cairo_font_map_get_default());
+#endif
+	dinfo->sci_scale = pango_res / widget_res;
 
 	dinfo->pages = g_array_new(FALSE, FALSE, sizeof(gint));
 
