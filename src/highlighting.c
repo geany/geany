@@ -369,7 +369,8 @@ static void get_keyfile_int(GKeyFile *config, GKeyFile *configh, const gchar *se
 {
 	gchar **list;
 	gsize len;
-	GeanyLexerStyle def = {fdefault_val, sdefault_val, FALSE, FALSE};
+
+	*style = (GeanyLexerStyle) {fdefault_val, sdefault_val, FALSE, FALSE};
 
 	g_return_if_fail(config);
 	g_return_if_fail(configh);
@@ -380,7 +381,6 @@ static void get_keyfile_int(GKeyFile *config, GKeyFile *configh, const gchar *se
 	if (list == NULL)
 		list = g_key_file_get_string_list(config, section, key, &len, NULL);
 
-	*style = def;
 	if (!list)
 		return;
 
