@@ -201,13 +201,14 @@ int fnmatch(const char *pattern, const char *string, int flags);
 # define HAVE_REGEX 1
 #endif
 
-
 /* fake debug statement macro */
 #define DebugStatement(x)      ;
 #define PrintStatus(x)	       ;
-/* wrap g_warning so we don't include glib.h for all parsers, to keep compat with CTags */
-void utils_warn(const char *msg);
-#define Assert(x) if (!(x)) utils_warn("Assert(" #x ") failed!")
+
+/* Use GLib assert macro, can be disabled with G_DISABLE_ASSERT */
+#include <glib.h>
+#define Assert(expr) g_assert(expr)
+
 /*
 *   DATA DECLARATIONS
 */
