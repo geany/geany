@@ -85,14 +85,17 @@ static const char *get_class_name_from_parent (const char *parent)
 static void makeFunctionTag (vString *const function,
 	vString *const parent, int is_class_parent, const char *arglist)
 {
+	Assert(parent);
+
 	tagEntryInfo tag;
 	initTagEntry (&tag, vStringValue (function));
 
 	tag.kindName = PythonKinds[K_FUNCTION].name;
 	tag.kind = PythonKinds[K_FUNCTION].letter;
 	tag.extensionFields.arglist = arglist;
+
 	/* add argument list of __init__() methods to the class tag */
-	if (strcmp (vStringValue (function), "__init__") == 0 && parent != NULL)
+	if (strcmp (vStringValue (function), "__init__") == 0)
 	{
 		const char *parent_tag_name = get_class_name_from_parent (vStringValue (parent));
 		if (parent_tag_name != NULL)
@@ -461,6 +464,7 @@ static void addNestingLevel(NestingLevels *nls, int indentation,
 	else
 	{	/* reuse existing slot */
 		nls->n = i + 1;
+		Assert(nl != NULL);
 		vStringCopy(nl->name, name);
 	}
 	nl->indentation = indentation;
