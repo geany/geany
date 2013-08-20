@@ -1179,6 +1179,7 @@ get_whitespace(const GeanyIndentPrefs *iprefs, gint width)
 	else
 	{	/* first fill text with tabs and fill the rest with spaces */
 		const gint tab_width = get_tab_width(iprefs);
+		g_return_val_if_fail(tab_width != 0, NULL);
 		gint tabs = width / tab_width;
 		gint spaces = width % tab_width;
 		gint len = tabs + spaces;
