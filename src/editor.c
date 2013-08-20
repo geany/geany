@@ -3146,7 +3146,6 @@ void editor_do_comment_toggle(GeanyEditor *editor)
 			}
 
 			/* break because we are already on the last line */
-			break_loop = TRUE;
 			break;
 		}
 	}
@@ -3307,7 +3306,6 @@ void editor_do_comment(GeanyEditor *editor, gint line, gboolean allow_empty_line
 				real_comment_multiline(editor, line_start, last_line);
 
 				/* break because we are already on the last line */
-				break_loop = TRUE;
 				break;
 			}
 		}
@@ -3879,9 +3877,6 @@ void editor_smart_line_indentation(GeanyEditor *editor, gint pos)
 	/* Find the last line with chars selected (not EOL char) */
 	last_line = sci_get_line_from_position(sci, first_sel_end - editor_get_eol_char_len(editor));
 	last_line = MAX(first_line, last_line);
-
-	if (pos == -1)
-		pos = first_sel_start;
 
 	sci_start_undo_action(sci);
 
