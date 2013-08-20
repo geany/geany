@@ -1148,7 +1148,7 @@ tm_workspace_find_scope_members (const GPtrArray * file_tags, const char *name,
 			{
 				char *tmp_name;
 				tmp_name = tag->atts.entry.var_type;
-				if (strcmp(tmp_name, new_name) == 0) {
+				if (new_name != NULL && strcmp(tmp_name, new_name) == 0) {
 					new_name = NULL;
 				}
 				else {
