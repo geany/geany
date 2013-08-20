@@ -362,7 +362,7 @@ static void begin_print(GtkPrintOperation *operation, GtkPrintContext *context, 
 	pango_res = pango_cairo_context_get_resolution(pango_ctx);
 	g_object_unref(pango_ctx);
 	widget_pango_ctx = gtk_widget_get_pango_context(GTK_WIDGET(dinfo->sci));
-	widget_res = pango_cairo_context_get_resolution(widget_ctx);
+	widget_res = pango_cairo_context_get_resolution(widget_pango_ctx);
 	/* On Windows, for some reason the widget's resolution is -1, so follow
 	 * Pango docs and peek the font map's one. */
 	if (widget_res < 0)
