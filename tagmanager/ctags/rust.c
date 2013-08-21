@@ -1,6 +1,5 @@
 
 /*
-*   Copyright (c) 2010, Vincent Berthoux
 *
 *   This source code is released for free distribution under the terms of the
 *   GNU General Public License.
@@ -34,6 +33,8 @@
 # define UNUSED(x) x
 #endif
 
+#define dbprintf //
+
 
 typedef enum {
 	K_NONE,
@@ -51,28 +52,31 @@ typedef enum {
 	K_METHOD
 } RustKind;
 
+#define PARSE_EXIT_SHIFT 16
+#define PARSE_EXIT_MASK (0xff<<(PARSE_EXIT_SHIFT))
 typedef enum  {
 	PARSE_NEXT,
 	PARSE_RECURSE,
 	PARSE_IGNORE_BALANCED,
 	PARSE_IGNORE_TYPE_PARAMS,
-	PARSE_EXIT=0x8000,
+	PARSE_EXIT=0x10000,
+	PARSE_EXIT2=0x20000,
 }
 RustParserAction;
 
 static kindOption RustKinds[] = {
 	{TRUE, 'm', "namespace", "module"},
-	{TRUE, 'm', "namespace", "module"},
+	{TRUE, 'n', "namespace", "module"},
 	{TRUE, 's', "struct", "structural type"},
-	{TRUE, 't', "interface", "trait interface"},
-	{TRUE, 'i', "implementation", "implementation"},
+	{TRUE, 'i', "interface", "trait interface"},
+	{TRUE, 'c', "implementation", "implementation"},
 	{TRUE, 'f', "function", "Function"},
-	{TRUE, 'e', "union", "Enum "},
+	{TRUE, 'e', "union", "Enum "}, // TODO tagged 'u' union, or enum ('e')? 
 	{TRUE, 't', "typedef", "Type Alias"},
-	{TRUE, 'g', "variable", "Global variable"},
+	{TRUE, 'v', "variable", "Global variable"},
 	{TRUE, 'M', "macro", "Macro Definition"},
-	{TRUE, 'f', "field", "A struct field"},
-	{TRUE, 'v', "enum", "An enum variant"},
+	{TRUE, 'm', "field", "A struct field"},
+	{TRUE, 'g', "enum", "An enum variant"},
 	{TRUE, 'F', "method", "A method"},
 };
 
@@ -97,7 +101,7 @@ typedef enum {
 	RustEXTERN,
 	RustUSE,
 
-	Tok_COMA,	/* ',' */
+	Tok_COMMA,	/* ',' */
 	Tok_PLUS,	/* '+' */
 	Tok_MINUS,	/* '-' */
 	Tok_PARL,	/* '(' */
@@ -108,8 +112,8 @@ typedef enum {
 	Tok_CurlR,	/* '}' */
 	Tok_SQUAREL,	/* '[' */
 	Tok_SQUARER,	/* ']' */
-	Tok_semi,	/* ';' */
-	Tok_dpoint,	/* ':' */
+	Tok_SEMI,	/* ';' */
+	Tok_COLON,	/* ':' */
 	Tok_Sharp,	/* '#' */
 	Tok_Backslash,	/* '\\' */
 	Tok_EOL,	/* '\r''\n' */
@@ -406,13 +410,13 @@ static RustKeyword lex(LexingState * st)
 			return Tok_SQUARER;
 		case ',':
 			st->cp++;
-			return Tok_COMA;
+			return Tok_COMMA;
 		case ';':
 			st->cp++;
-			return Tok_semi;
+			return Tok_SEMI;
 		case ':':
 			st->cp++;
-			return Tok_dpoint;
+			return Tok_COLON;
 		case '"':
 			eatString (st);
 			return Tok_any;
@@ -480,7 +484,7 @@ static void prepareTag (tagEntryInfo * tag, vString const *name, RustKind kind)
 
 /* Used to centralise tag creation, and be able to add
  * more information to it in the future */
-static void addTag (vString * const ident, int kind, const RustParserContext* ctx)
+static void addTag (vString * const ident, int kind, const RustParserContext* ctx, const RustParserContext* parent)
 {
 	tagEntryInfo tag;
 	initTagEntry (&tag, vStringValue (ident));
@@ -493,7 +497,7 @@ static void addTag (vString * const ident, int kind, const RustParserContext* ct
 	tag.kindName=RustKinds[kind].name;
 	tag.kind = RustKinds[kind].letter;
 
-	if (ctx->parent) {
+//	if (ctx->parent) {
 		// TODO - we currently nest 2 levels, can we avoid that. eg
 		//  trait
 		//    trait header...
@@ -501,13 +505,13 @@ static void addTag (vString * const ident, int kind, const RustParserContext* ct
 		//			trait function1
 		//			trait function2
 		//			..
-		if (ctx->parent->parent) {
-			RustParserContext* parent=ctx->parent->parent;
-			printf("%x nested in  %x %d %s %s\n",ctx,parent, parent->kind, RustKinds[parent->kind].name,vStringValue(parent->name));
-			tag.extensionFields.scope[0]=RustKinds[parent->kind].name;
-			tag.extensionFields.scope[1]=vStringValue(parent->name);
-		}
-	} else printf("not nested\n");
+	if (parent) {
+		dbprintf("%x nested in  %x %d %s %s\n",ctx,parent, parent->kind, RustKinds[parent->kind].name,vStringValue(parent->name));
+		tag.extensionFields.scope[0]=RustKinds[parent->kind].name;
+		tag.extensionFields.scope[1]=vStringValue(parent->name);
+	}
+//	} 
+	//else printf("not nested\n");
 	// TODO arglist would be filled in here 
 	//	: tag.extentionFields.arglist
 	makeTagEntry (&tag);
@@ -536,7 +540,7 @@ static void ignoreBalanced (struct LexingState* st)
 
 static void ignoreTypeParams (struct LexingState* st)
 {
-	printf("ignore type params\n");
+	dbprintf("ignore type params\n");
 	int ignoreBalanced_count = 1;
 	while (ignoreBalanced_count>0) {
 		RustKind tok=lex(st);
@@ -551,24 +555,66 @@ static void ignoreTypeParams (struct LexingState* st)
 	}
 }
 
-static RustParserAction parseStruct ( RustToken what,vString*  ident,  RustParserContext* ctx)
+
+static RustParserAction skip_type_decl(RustToken what, vString* ident, RustParserContext* ctx)
 {
-	printf("parse struct: %s\n",vStringValue(ident));
+	switch (what) {
+	case Tok_SEMI:
+	case Tok_COMMA:
+		return PARSE_EXIT;
+	case Tok_CurlR:	// TODO: THIS MUST PUSH IT BACK ON THE STEAM /can't consume
+		return PARSE_EXIT2;	 // exit2 means parent gets a } yuk this is a horrible way to do this. 
+	case Tok_PARL:
+		return PARSE_IGNORE_BALANCED;
+	case Tok_LT:
+		return PARSE_IGNORE_TYPE_PARAMS;
+	}
+	return PARSE_NEXT;
+}
+
+static RustParserAction parseStructFields(RustToken what, vString* ident, RustParserContext* ctx)
+{
+	dbprintf("parse struct fields\n");
+	switch (what) {
+	case RustIDENTIFIER:	//only want the rirst .. until ?!
+		addTag(ident, K_FIELD, ctx,ctx->parent);
+	break;
+	case Tok_COLON:
+		ctx->parser = skip_type_decl;
+		return PARSE_RECURSE;
+	break;
+	case Tok_CurlR:
+		return PARSE_EXIT;
+	}
+	return PARSE_NEXT;
+}
+
+
+static RustParserAction parseStructDecl ( RustToken what,vString*  ident,  RustParserContext* ctx)
+{
+	dbprintf("parse struct: %s\n",vStringValue(ident));
 	switch (what)
 	{
+	// todo: typeparams.
 	case RustIDENTIFIER:
 		addTag_MainIdent (ident, K_STRUCT,ctx);
 		return PARSE_NEXT;
-	case Tok_PARL:	
-	case Tok_CurlL:	
+	case Tok_PARL: // todo - parse 'argument block' here
 		return PARSE_IGNORE_BALANCED|PARSE_EXIT;
+	case Tok_CurlL:	
+		ctx->parser = parseStructFields;
+		return PARSE_RECURSE|PARSE_EXIT;
 		break;
+	case Tok_SEMI:
+		return PARSE_EXIT;
 	}
 	return PARSE_EXIT;
 }
+
+
 static RustParserAction parseEnum ( RustToken what,vString*  ident,  RustParserContext* ctx)
 {
-	printf("parse enum: %s\n",vStringValue(ident));
+	dbprintf("parse enum: %s\n",vStringValue(ident));
 	switch (what)
 	{
 	case RustIDENTIFIER:
@@ -587,7 +633,7 @@ static RustParserAction parseEnum ( RustToken what,vString*  ident,  RustParserC
 
 static RustParserAction parseFn ( RustToken what,vString*  ident, RustParserContext* ctx)
 {
-	printf("%x parse fn: %s\n",ctx, vStringValue(ident));
+	dbprintf("%x parse fn: %s\n",ctx, vStringValue(ident));
 	switch (what)
 	{
 	case RustIDENTIFIER:
@@ -600,7 +646,7 @@ static RustParserAction parseFn ( RustToken what,vString*  ident, RustParserCont
 	case Tok_CurlL:	// fn body, then quit.
 		return PARSE_IGNORE_BALANCED|PARSE_EXIT;
 		break;
-	case Tok_semi:	// fn body, then quit.
+	case Tok_SEMI:	// fn body, then quit.
 		return PARSE_EXIT;
 	}
 	return PARSE_NEXT;
@@ -620,7 +666,7 @@ static RustParserAction parseMethods ( RustToken what,vString*  ident, RustParse
 
 static RustParserAction parseTrait ( RustToken what,vString*  ident, RustParserContext* ctx)
 {
-	printf("%x parse trait: %s\n",ctx, vStringValue(ident));
+	dbprintf("%x parse trait: %s\n",ctx, vStringValue(ident));
 	switch (what)
 	{
 	case RustIDENTIFIER:
@@ -639,23 +685,29 @@ static RustParserAction parseTrait ( RustToken what,vString*  ident, RustParserC
 	return PARSE_EXIT;
 }
 
+RustParserContext* ctxParentParent(RustParserContext* ctx) {
+	if (ctx->parent)
+		return ctx->parent->parent;
+	else return NULL;
+}
 void addTag_MainIdent(vString* ident, RustKind kind, RustParserContext* ctx) {
 	if (!ctx->main_ident_set) {
 		ctx->main_ident_set++;
-		printf("%d\n",ctx->main_ident_set);
-		addTag(ident,kind,ctx);
+		dbprintf("%d\n",ctx->main_ident_set);
+		
+		addTag(ident,kind,ctx, ctxParentParent(ctx));
 		ctx->kind=kind;
 		if (ctx->name) {
 			vStringDelete(ctx->name);
 		}
 		ctx->name=vStringNewCopy(ident);
-		printf("set main ident %x %d %s\n",ctx, ctx->kind, vStringValue(ctx->name));
+		dbprintf("set main ident %x %d %s\n",ctx, ctx->kind, vStringValue(ctx->name));
 	}
 }
 
 static RustParserAction parseImpl ( RustToken what,vString*  ident,  RustParserContext* ctx)
 {
-	printf("parse impl: %s\n",vStringValue(ident));
+	dbprintf("parse impl: %s\n",vStringValue(ident));
 	switch (what)
 	{
 	case RustIDENTIFIER:
@@ -680,24 +732,24 @@ static RustParserAction parseImpl ( RustToken what,vString*  ident,  RustParserC
 static RustParserAction parseModBody (RustToken what,vString*  ident,   RustParserContext* ctx);
 
 static RustParserAction parseModDecl (RustToken what,vString*  ident,  RustParserContext* ctx) {
-	printf("PARSE MOD HAEADER\n");
+	dbprintf("PARSE MOD HAEADER\n");
 	switch (what) {
 	case RustIDENTIFIER:
-		printf("adding mod tag %s\n",vStringValue(ident));
+		dbprintf("adding mod tag %s\n",vStringValue(ident));
 		addTag_MainIdent (ident, K_MOD, ctx);
 		return PARSE_NEXT;
 
 	case Tok_CurlL:
 		ctx->parser=parseModBody;
 		return PARSE_RECURSE|PARSE_EXIT;
-	case Tok_semi:
+	case Tok_SEMI:
 		return PARSE_EXIT;
 	}
 	return PARSE_NEXT;
 }
 static RustParserAction parseModBody (RustToken what,vString*  ident,   RustParserContext* ctx)
 {
-	printf("(parse mod body: %d)",what);
+	dbprintf("(parse mod body: %d)",what);
 	switch (what)
 	{
 
@@ -706,12 +758,12 @@ static RustParserAction parseModBody (RustToken what,vString*  ident,   RustPars
 		return PARSE_RECURSE;
 
 	case RustMOD:		//same as global scope?!
-		printf("*********8MOD*******8\n");
+		dbprintf("*********8MOD*******8\n");
 		ctx->parser=parseModDecl;
 		return PARSE_RECURSE;
 
 	case RustSTRUCT:
-		ctx->parser=parseStruct;
+		ctx->parser=parseStructDecl;
 		return PARSE_RECURSE;
 
 	case RustTRAIT:
@@ -785,7 +837,7 @@ static RustParserAction parseModBody (RustToken what,vString*  ident,   RustPars
 }
 
 /// Parser Main Loop
-void parseRecursive(LexingState* st,  RustParserContext* parentContext) {
+int parseRecursive(LexingState* st,  RustParserContext* parentContext) {
 	RustParserContext ctx;
 	ctx.name=vStringNew();
 	ctx.kind=K_NONE;
@@ -793,33 +845,44 @@ void parseRecursive(LexingState* st,  RustParserContext* parentContext) {
 	ctx.main_ident_set=0;
 	ctx.parent=parentContext;
 	if (parentContext)
-		printf("%x %d:%s . this=%x\n",parentContext,parentContext->kind,vStringValue(parentContext->name),&ctx);
+		dbprintf("%x %d:%s . this=%x\n",parentContext,parentContext->kind,vStringValue(parentContext->name),&ctx);
+	int ret=0;
 
 	while (1){
 		RustToken tok=lex(st);
-		printf("(%d %s)\n",tok,vStringValue(st->name));
+		dbprintf("(%d %s)\n",tok,vStringValue(st->name));
 		if (tok==Tok_EOF)
 			break;
 		if (!parentContext->parser) {
-			printf("%d %x?! no callback\n");
+			dbprintf("%d %x?! no callback\n");
 		}
 		int action=parentContext->parser(tok,st->name,  &ctx);
-		int sub_action = action & (~PARSE_EXIT);
+		int sub_action = action & (~PARSE_EXIT_MASK);
 		//printf("action:\n",action);
 		if (sub_action==PARSE_RECURSE) {
-			printf("recurse: %x\n",ctx.parser);
-			parseRecursive(st, &ctx);
+			dbprintf("recurse: %x\n",ctx.parser);
+			int ret_level=parseRecursive(st, &ctx);
+			if (ret_level>0) {
+				ret=ret_level-1;
+				goto return_early;
+			}
 		} else if (sub_action==PARSE_IGNORE_BALANCED) {
-			printf("ignore balanced\n");
+			dbprintf("ignore balanced\n");
 			ignoreBalanced(st);
 		} else if (sub_action==PARSE_IGNORE_TYPE_PARAMS) {
-			printf("ignore TypeParams\n");
+			dbprintf("ignore TypeParams\n");
 			ignoreTypeParams(st);
 		}
-		if (action & PARSE_EXIT)
+		if (action & PARSE_EXIT_MASK) {
+			//number of levels to exit.
+			ret=((action)>>16)-1;
+			
 			break;
+		}
 	}
+return_early:
 	vStringDelete(ctx.name);
+	return ret;
 }
 
 
@@ -851,7 +914,7 @@ static void rustInitialize (const langType language)
 
 extern parserDefinition *RustParser (void)
 {
-	printf("rust parser\n");
+	dbprintf("rust parser\n");
 	static const char *const extensions[] = { "rs", NULL };
 	parserDefinition *def = parserNew ("Rust");
 	def->kinds = RustKinds;
