@@ -71,7 +71,7 @@ static kindOption RustKinds[] = {
 	{TRUE, 'i', "interface", "trait interface"},
 	{TRUE, 'c', "implementation", "implementation"},
 	{TRUE, 'f', "function", "Function"},
-	{TRUE, 'e', "union", "Enum "}, // TODO tagged 'u' union, or enum ('e')? 
+	{TRUE, 'e', "enumeration", "Enum "}, // TODO tagged 'u' union, or enum ('e')? 
 	{TRUE, 't', "typedef", "Type Alias"},
 	{TRUE, 'v', "variable", "Global variable"},
 	{TRUE, 'M', "macro", "Macro Definition"},
@@ -100,6 +100,7 @@ typedef enum {
 	RustUNSAFE,
 	RustEXTERN,
 	RustUSE,
+	RustFOR,
 
 	Tok_COMMA,	/* ',' */
 	Tok_PLUS,	/* '+' */
@@ -143,8 +144,9 @@ static const RustKeywordDesc RustKeywordTable[] = {
 	{"priv", RustPRIV},
 	{"unsafe", RustUNSAFE},
 	{"extern", RustEXTERN},
-	{"use", RustUSE},
 	{"mod", RustMOD},
+	{"use", RustUSE},
+	{"for", RustFOR},
 };
 
 static langType Lang_Rust;
@@ -517,7 +519,7 @@ static void addTag (vString * const ident, int kind, const RustParserContext* ct
 	makeTagEntry (&tag);
 }
 
-static void ignoreBalanced (struct LexingState* st)
+static void ignoreBalanced (struct _LexingState* st)
 {
 	int ignoreBalanced_count = 1;
 	while (ignoreBalanced_count>0) {
@@ -538,7 +540,7 @@ static void ignoreBalanced (struct LexingState* st)
 	}
 }
 
-static void ignoreTypeParams (struct LexingState* st)
+static void ignoreTypeParams (struct _LexingState* st)
 {
 	dbprintf("ignore type params\n");
 	int ignoreBalanced_count = 1;
@@ -556,7 +558,7 @@ static void ignoreTypeParams (struct LexingState* st)
 }
 
 
-static RustParserAction skip_type_decl(RustToken what, vString* ident, RustParserContext* ctx)
+static RustParserAction parseSkipTypeDecl(RustToken what, vString* ident, RustParserContext* ctx)
 {
 	switch (what) {
 	case Tok_SEMI:
@@ -580,7 +582,7 @@ static RustParserAction parseStructFields(RustToken what, vString* ident, RustPa
 		addTag(ident, K_FIELD, ctx,ctx->parent);
 	break;
 	case Tok_COLON:
-		ctx->parser = skip_type_decl;
+		ctx->parser = parseSkipTypeDecl;
 		return PARSE_RECURSE;
 	break;
 	case Tok_CurlR:
@@ -611,10 +613,33 @@ static RustParserAction parseStructDecl ( RustToken what,vString*  ident,  RustP
 	return PARSE_EXIT;
 }
 
-
-static RustParserAction parseEnum ( RustToken what,vString*  ident,  RustParserContext* ctx)
+static RustParserAction parseEnumVariants(RustToken what, vString* ident, RustParserContext* ctx)
 {
-	dbprintf("parse enum: %s\n",vStringValue(ident));
+	dbprintf("parse enum variant: %s\n",vStringValue(ident));
+	switch (what) {
+
+	// TODO: should really be parsing a collection of structs here
+	// then we'd get members of structural types too.
+	// un-named ones are more common in rust code though 
+
+	case RustIDENTIFIER:
+		addTag(ident,K_VARIANT,ctx,ctx->parent);
+	break;
+	case Tok_LT:
+		return PARSE_IGNORE_TYPE_PARAMS;
+	case Tok_PARL:
+	case Tok_CurlL:
+		return PARSE_IGNORE_BALANCED;
+	case Tok_CurlR:
+		return PARSE_EXIT;
+	break;
+	}
+	return PARSE_NEXT;
+}
+
+static RustParserAction parseEnumDecl ( RustToken what,vString*  ident,  RustParserContext* ctx)
+{
+	dbprintf("parse enumdecl: %s\n",vStringValue(ident));
 	switch (what)
 	{
 	case RustIDENTIFIER:
@@ -622,11 +647,11 @@ static RustParserAction parseEnum ( RustToken what,vString*  ident,  RustParserC
 		return PARSE_NEXT;
 	case Tok_LT:	
 		return PARSE_IGNORE_TYPE_PARAMS;
-
-	case Tok_PARL:	
 	case Tok_CurlL:	
+		ctx->parser=parseEnumVariants;
+		return	PARSE_RECURSE|PARSE_EXIT;
+	case Tok_PARL:		
 		return PARSE_IGNORE_BALANCED|PARSE_EXIT;
-		break;
 	}
 	return PARSE_EXIT;
 }
@@ -710,6 +735,10 @@ static RustParserAction parseImpl ( RustToken what,vString*  ident,  RustParserC
 	dbprintf("parse impl: %s\n",vStringValue(ident));
 	switch (what)
 	{
+	case RustFOR:	// clearn the main ident so the next overwrites it. 
+					// this allows gathering member functions on the struct.
+		ctx->main_ident_set=0;
+		return PARSE_NEXT;
 	case RustIDENTIFIER:
 		addTag_MainIdent (ident, K_IMPL,ctx);
 		return PARSE_NEXT;
@@ -775,7 +804,7 @@ static RustParserAction parseModBody (RustToken what,vString*  ident,   RustPars
 		return PARSE_RECURSE;
 
 	case RustENUM:
-		ctx->parser=parseEnum;
+		ctx->parser=parseEnumDecl;
 		return PARSE_RECURSE;
 	case Tok_CurlR:
 		/* we don't care */
