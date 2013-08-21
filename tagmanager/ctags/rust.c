@@ -55,6 +55,7 @@ typedef enum  {
 	PARSE_NEXT,
 	PARSE_RECURSE,
 	PARSE_IGNORE_BALANCED,
+	PARSE_IGNORE_TYPE_PARAMS,
 	PARSE_IGNORE_BALANCED_EXIT
 }
 RustParserAction;
@@ -138,6 +139,7 @@ static const RustKeywordDesc RustKeywordTable[] = {
 	{"unsafe", RustUNSAFE},
 	{"extern", RustEXTERN},
 	{"use", RustUSE},
+	{"mod", RustMOD},
 };
 
 static langType Lang_Rust;
@@ -515,13 +517,30 @@ static void ignoreBalanced (struct LexingState* st)
 	}
 }
 
+static void ignoreTypeParams (struct LexingState* st)
+{
+	printf("ignore type params\n");
+	int ignoreBalanced_count = 1;
+	while (ignoreBalanced_count>0) {
+		RustKind tok=lex(st);
+		switch (tok) {
+		case Tok_LT:
+			ignoreBalanced_count++;
+			continue;
+		case Tok_GT:
+			ignoreBalanced_count--;
+			continue;
+		}
+	}
+}
+
 static RustParserAction parseStruct ( RustToken what,vString*  ident, const RustParserContext* parentCtx, RustParserContext* ctx)
 {
-	printf("parse struct: %s",ident);
+	printf("parse struct: %s",vStringValue(ident));
 	switch (what)
 	{
 	case RustIDENTIFIER:
-		addTag (ident, K_STRUCT);
+		addTag_FirstIdent (ident, K_STRUCT,ctx);
 		return PARSE_NEXT;
 	case Tok_PARL:	
 	case Tok_CurlL:	
@@ -536,8 +555,11 @@ static RustParserAction parseEnum ( RustToken what,vString*  ident, const RustPa
 	switch (what)
 	{
 	case RustIDENTIFIER:
-		addTag (ident, K_STRUCT);
+		addTag_FirstIdent (ident, K_STRUCT,ctx);
 		return PARSE_NEXT;
+	case Tok_LT:	
+		return PARSE_IGNORE_TYPE_PARAMS;
+
 	case Tok_PARL:	
 	case Tok_CurlL:	
 		return PARSE_IGNORE_BALANCED_EXIT;
@@ -552,14 +574,19 @@ static RustParserAction parseFn ( RustToken what,vString*  ident, const RustPars
 	switch (what)
 	{
 	case RustIDENTIFIER:
-		addTag (ident, K_FN);
+		addTag_FirstIdent (ident, K_FN,ctx);
 		return PARSE_NEXT;
-	case Tok_PARL:	
-	case Tok_CurlL:	
+	case Tok_LT:	
+		return PARSE_IGNORE_TYPE_PARAMS;
+	case Tok_PARL:	// param block
 		return PARSE_IGNORE_BALANCED;
+	case Tok_CurlL:	// fn body, then quit.
+		return PARSE_IGNORE_BALANCED_EXIT;
 		break;
+	case Tok_semi:	// fn body, then quit.
+		return PARSE_EXIT;
 	}
-	return PARSE_EXIT;
+	return PARSE_NEXT;
 }
 
 static RustParserAction parseMethods ( RustToken what,vString*  ident, const RustParserContext* parentCtx, RustParserContext* ctx)
@@ -568,7 +595,7 @@ static RustParserAction parseMethods ( RustToken what,vString*  ident, const Rus
 	case RustFN:
 		ctx->parser=parseFn;
 		return PARSE_RECURSE;
-	case PARR
+	case Tok_CurlR:
 		return PARSE_EXIT;
 	}
 	return PARSE_NEXT;
@@ -580,28 +607,43 @@ static RustParserAction parseTrait ( RustToken what,vString*  ident, const RustP
 	switch (what)
 	{
 	case RustIDENTIFIER:
-		addTag (ident, K_TRAIT);
+		addTag_FirstIdent (ident, K_TRAIT,ctx);
 		return PARSE_NEXT;
-	case Tok_PARL:	
 	case Tok_CurlL:	
+		ctx->parser=parseMethods;
+		return PARSE_RECURSE;
+		break;
+	case Tok_PARL:	
 		return PARSE_IGNORE_BALANCED_EXIT;
 		break;
+	case Tok_LT:	
+		return PARSE_IGNORE_TYPE_PARAMS;
 	}
 	return PARSE_EXIT;
 }
+
+void addTag_FirstIdent(vString* ident, RustKind kind, RustParserContext* ctx) {
+	if (!ctx->main_ident_set) {
+		printf("%d\n",ctx->main_ident_set);
+		addTag(ident,kind);
+		ctx->main_ident_set++;
+	}
+}
+
 static RustParserAction parseImpl ( RustToken what,vString*  ident, const RustParserContext* parentCtx, RustParserContext* ctx)
 {
 	printf("parse impl: %s",vStringValue(ident));
 	switch (what)
 	{
 	case RustIDENTIFIER:
-		//if (!ctx->main_ident_set) {
-			addTag (ident, K_IMPL);
-			//ctx->main_ident_set=1;
-		//}
+		addTag_FirstIdent (ident, K_IMPL,ctx);
 		return PARSE_NEXT;
-	case Tok_PARL:	
 	case Tok_CurlL:	
+		ctx->parser=parseMethods;
+		return PARSE_RECURSE;
+	case Tok_LT:	
+		return PARSE_IGNORE_TYPE_PARAMS;		
+	case Tok_PARL:	
 		return PARSE_IGNORE_BALANCED_EXIT;
 		break;
 	}
@@ -612,22 +654,35 @@ static RustParserAction parseImpl ( RustToken what,vString*  ident, const RustPa
 
 /* Handle the "strong" top levels, all 'big' declarations
  * happen here */
-static RustParserAction parseMod (RustToken what,vString*  ident,  const RustParserContext* parentCtx, RustParserContext* ctx)
+static RustParserAction parseModBody (RustToken what,vString*  ident,  const RustParserContext* parentCtx, RustParserContext* ctx);
+
+static RustParserAction parseModHeader (RustToken what,vString*  ident,  const RustParserContext* parentCtx, RustParserContext* ctx) {
+	printf("PARSE MDODE HAEADER");
+	switch (what) {
+	case RustIDENTIFIER:
+		printf("adding mod tag %s\n",vStringValue(ident));
+		addTag_FirstIdent (ident, K_MOD, ctx);
+		return PARSE_NEXT;
+
+	case Tok_CurlL:
+		ctx->parser=parseModBody;
+		return PARSE_RECURSE;
+	}
+	return PARSE_NEXT;
+}
+static RustParserAction parseModBody (RustToken what,vString*  ident,  const RustParserContext* parentCtx, RustParserContext* ctx)
 {
-	printf("(parse mod: %d)",what);
+	printf("(parse mod body: %d)",what);
 	switch (what)
 	{
-	case RustIDENTIFIER:
-		
-		addTag (ident, K_MOD);
-		return PARSE_NEXT;
 
 	case RustFN:
 		ctx->parser=parseFn;
 		return PARSE_RECURSE;
 
 	case RustMOD:		//same as global scope?!
-		ctx->parser=parseMod;
+		printf("*********8MOD*******8\n");
+		ctx->parser=parseModHeader;
 		return PARSE_RECURSE;
 
 	case RustSTRUCT:
@@ -694,7 +749,7 @@ static RustParserAction parseMod (RustToken what,vString*  ident,  const RustPar
 	case Tok_PARL:	
 	case Tok_CurlL:	
 		return PARSE_IGNORE_BALANCED;
-
+	
 	default:
 		/* we don't care */
 		return PARSE_NEXT;
@@ -724,6 +779,9 @@ void parseRecursive(LexingState* st, const RustParserContext* parentContext) {
 		} else if (action==PARSE_IGNORE_BALANCED) {
 			printf("ignore balanced\n");
 			ignoreBalanced(st);
+		} else if (action==PARSE_IGNORE_TYPE_PARAMS) {
+			printf("ignore TypeParams\n");
+			ignoreTypeParams(st);
 		}
 		 else if (action==PARSE_IGNORE_BALANCED_EXIT) {
 			printf("ignore balanced\n");
@@ -744,7 +802,8 @@ static void findRustTags (void)
 	RustParserContext ctx;
 	ctx.name=vStringNew();
 	ctx.kind=K_MOD;	// root is a module.
-	ctx.parser= parseMod;
+	ctx.parser= parseModBody;
+	ctx.main_ident_set=0;
 
 	parseRecursive(&st, &ctx);
 	vStringDelete(ctx.name);
