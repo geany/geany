@@ -561,6 +561,19 @@ static RustParserAction parseFn ( RustToken what,vString*  ident, const RustPars
 	}
 	return PARSE_EXIT;
 }
+
+static RustParserAction parseMethods ( RustToken what,vString*  ident, const RustParserContext* parentCtx, RustParserContext* ctx)
+{
+	switch (what) {
+	case RustFN:
+		ctx->parser=parseFn;
+		return PARSE_RECURSE;
+	case PARR
+		return PARSE_EXIT;
+	}
+	return PARSE_NEXT;
+} 
+
 static RustParserAction parseTrait ( RustToken what,vString*  ident, const RustParserContext* parentCtx, RustParserContext* ctx)
 {
 	printf("parse trait: %s",vStringValue(ident));
