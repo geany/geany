@@ -63,16 +63,16 @@ static bool IsStringSuffix(int ch) {
 }
 
 static bool IsStreamCommentStyle(int style) {
-	return style == SCE_D_COMMENT ||
-		style == SCE_D_COMMENTDOC ||
-		style == SCE_D_COMMENTDOCKEYWORD ||
-		style == SCE_D_COMMENTDOCKEYWORDERROR;
+	return style == SCE_RUST_COMMENT ||
+		style == SCE_RUST_COMMENTDOC ||
+		style == SCE_RUST_COMMENTDOCKEYWORD ||
+		style == SCE_RUST_COMMENTDOCKEYWORDERROR;
 }
 
 // An individual named option for use in an OptionSet
 
 // Options used for LexerD
-struct OptionsD {
+struct OptionsRust {
 	bool fold;
 	bool foldSyntaxBased;
 	bool foldComment;
@@ -84,7 +84,7 @@ struct OptionsD {
 	bool foldCompact;
 	int  foldAtElseInt;
 	bool foldAtElse;
-	OptionsD() {
+	OptionsRust() {
 		fold = false;
 		foldSyntaxBased = true;
 		foldComment = false;
@@ -99,7 +99,7 @@ struct OptionsD {
 	}
 };
 
-static const char * const dWordLists[] = {
+static const char * const rustWordLists[] = {
 			"Primary keywords and identifiers",
 			"Secondary keywords and identifiers",
 			"Documentation comment keywords",
@@ -110,42 +110,42 @@ static const char * const dWordLists[] = {
 			0,
 		};
 
-struct OptionSetD : public OptionSet<OptionsD> {
-	OptionSetD() {
-		DefineProperty("fold", &OptionsD::fold);
+struct OptionSetRust : public OptionSet<OptionsRust> {
+	OptionSetRust() {
+		DefineProperty("fold", &OptionsRust::fold);
 
-		DefineProperty("fold.d.syntax.based", &OptionsD::foldSyntaxBased,
+		DefineProperty("fold.rust.syntax.based", &OptionsRust::foldSyntaxBased,
 			"Set this property to 0 to disable syntax based folding.");
 
-		DefineProperty("fold.comment", &OptionsD::foldComment);
+		DefineProperty("fold.comment", &OptionsRust::foldComment);
 
-		DefineProperty("fold.d.comment.multiline", &OptionsD::foldCommentMultiline,
+		DefineProperty("fold.rust.comment.multiline", &OptionsRust::foldCommentMultiline,
 			"Set this property to 0 to disable folding multi-line comments when fold.comment=1.");
 
-		DefineProperty("fold.d.comment.explicit", &OptionsD::foldCommentExplicit,
+		DefineProperty("fold.rust.comment.explicit", &OptionsRust::foldCommentExplicit,
 			"Set this property to 0 to disable folding explicit fold points when fold.comment=1.");
 
-		DefineProperty("fold.d.explicit.start", &OptionsD::foldExplicitStart,
+		DefineProperty("fold.rust.explicit.start", &OptionsRust::foldExplicitStart,
 			"The string to use for explicit fold start points, replacing the standard //{.");
 
-		DefineProperty("fold.d.explicit.end", &OptionsD::foldExplicitEnd,
+		DefineProperty("fold.rust.explicit.end", &OptionsRust::foldExplicitEnd,
 			"The string to use for explicit fold end points, replacing the standard //}.");
 
-		DefineProperty("fold.d.explicit.anywhere", &OptionsD::foldExplicitAnywhere,
+		DefineProperty("fold.rust.explicit.anywhere", &OptionsRust::foldExplicitAnywhere,
 			"Set this property to 1 to enable explicit fold points anywhere, not just in line comments.");
 
-		DefineProperty("fold.compact", &OptionsD::foldCompact);
+		DefineProperty("fold.compact", &OptionsRust::foldCompact);
 
-		DefineProperty("lexer.d.fold.at.else", &OptionsD::foldAtElseInt,
-			"This option enables D folding on a \"} else {\" line of an if statement.");
+		DefineProperty("lexer.rust.fold.at.else", &OptionsRust::foldAtElseInt,
+			"This option enables Rust folding on a \"} else {\" line of an if statement.");
 
-		DefineProperty("fold.at.else", &OptionsD::foldAtElse);
+		DefineProperty("fold.at.else", &OptionsRust::foldAtElse);
 
-		DefineWordListSets(dWordLists);
+		DefineWordListSets(rustWordLists);
 	}
 };
 
-class LexerD : public ILexer {
+class LexerRust : public ILexer {
 	bool caseSensitive;
 	WordList keywords;
 	WordList keywords2;
@@ -154,13 +154,14 @@ class LexerD : public ILexer {
 	WordList keywords5;
 	WordList keywords6;
 	WordList keywords7;
-	OptionsD options;
-	OptionSetD osD;
+	OptionsRust options;
+	OptionSetRust osRust;
 public:
-	LexerD(bool caseSensitive_) :
+	LexerRust(bool caseSensitive_) :
 		caseSensitive(caseSensitive_) {
+		printf("LEXER RUST\n");
 	}
-	virtual ~LexerD() {
+	virtual ~LexerRust() {
 	}
 	void SCI_METHOD Release() {
 		delete this;
@@ -169,17 +170,17 @@ public:
 		return lvOriginal;
 	}
 	const char * SCI_METHOD PropertyNames() {
-		return osD.PropertyNames();
+		return osRust.PropertyNames();
 	}
 	int SCI_METHOD PropertyType(const char *name) {
-		return osD.PropertyType(name);
+		return osRust.PropertyType(name);
 	}
 	const char * SCI_METHOD DescribeProperty(const char *name) {
-		return osD.DescribeProperty(name);
+		return osRust.DescribeProperty(name);
 	}
 	int SCI_METHOD PropertySet(const char *key, const char *val);
 	const char * SCI_METHOD DescribeWordListSets() {
-		return osD.DescribeWordListSets();
+		return osRust.DescribeWordListSets();
 	}
 	int SCI_METHOD WordListSet(int n, const char *wl);
 	void SCI_METHOD Lex(unsigned int startPos, int length, int initStyle, IDocument *pAccess);
@@ -189,22 +190,22 @@ public:
 		return 0;
 	}
 
-	static ILexer *LexerFactoryD() {
-		return new LexerD(true);
+	static ILexer *LexerFactoryRust() {
+		return new LexerRust(true);
 	}
 	static ILexer *LexerFactoryDInsensitive() {
-		return new LexerD(false);
+		return new LexerRust(false);
 	}
 };
 
-int SCI_METHOD LexerD::PropertySet(const char *key, const char *val) {
-	if (osD.PropertySet(&options, key, val)) {
+int SCI_METHOD LexerRust::PropertySet(const char *key, const char *val) {
+	if (osRust.PropertySet(&options, key, val)) {
 		return 0;
 	}
 	return -1;
 }
 
-int SCI_METHOD LexerD::WordListSet(int n, const char *wl) {
+int SCI_METHOD LexerRust::WordListSet(int n, const char *wl) {
 	WordList *wordListN = 0;
 	switch (n) {
 	case 0:
@@ -241,10 +242,10 @@ int SCI_METHOD LexerD::WordListSet(int n, const char *wl) {
 	return firstModification;
 }
 
-void SCI_METHOD LexerD::Lex(unsigned int startPos, int length, int initStyle, IDocument *pAccess) {
+void SCI_METHOD LexerRust::Lex(unsigned int startPos, int length, int initStyle, IDocument *pAccess) {
 	LexAccessor styler(pAccess);
 
-	int styleBeforeDCKeyword = SCE_D_DEFAULT;
+	int styleBeforeDCKeyword = SCE_RUST_DEFAULT;
 
 	StyleContext sc(startPos, length, initStyle, styler);
 
@@ -262,10 +263,10 @@ void SCI_METHOD LexerD::Lex(unsigned int startPos, int length, int initStyle, ID
 
 		// Determine if the current state should terminate.
 		switch (sc.state) {
-			case SCE_D_OPERATOR:
-				sc.SetState(SCE_D_DEFAULT);
+			case SCE_RUST_OPERATOR:
+				sc.SetState(SCE_RUST_DEFAULT);
 				break;
-			case SCE_D_NUMBER:
+			case SCE_RUST_NUMBER:
 				// We accept almost anything because of hex. and number suffixes
 				if (isascii(sc.ch) && (isalnum(sc.ch) || sc.ch == '_')) {
 					continue;
@@ -279,10 +280,10 @@ void SCI_METHOD LexerD::Lex(unsigned int startPos, int length, int initStyle, ID
 					// Parse exponent sign in float literals: 2e+10 0x2e+10
 					continue;
 				} else {
-					sc.SetState(SCE_D_DEFAULT);
+					sc.SetState(SCE_RUST_DEFAULT);
 				}
 				break;
-			case SCE_D_IDENTIFIER:
+			case SCE_RUST_IDENTIFIER:
 				if (!IsWord(sc.ch)) {
 					char s[1000];
 					if (caseSensitive) {
@@ -291,60 +292,61 @@ void SCI_METHOD LexerD::Lex(unsigned int startPos, int length, int initStyle, ID
 						sc.GetCurrentLowered(s, sizeof(s));
 					}
 					if (keywords.InList(s)) {
-						sc.ChangeState(SCE_D_WORD);
+						sc.ChangeState(SCE_RUST_WORD);
 					} else if (keywords2.InList(s)) {
-						sc.ChangeState(SCE_D_WORD2);
+						sc.ChangeState(SCE_RUST_WORD2);
 					} else if (keywords4.InList(s)) {
-						sc.ChangeState(SCE_D_TYPEDEF);
-					} else if (keywords5.InList(s)) {
-						sc.ChangeState(SCE_D_WORD5);
-					} else if (keywords6.InList(s)) {
-						sc.ChangeState(SCE_D_WORD6);
-					} else if (keywords7.InList(s)) {
-						sc.ChangeState(SCE_D_WORD7);
-					}
-					sc.SetState(SCE_D_DEFAULT);
+						sc.ChangeState(SCE_RUST_TYPEDEF);
+					} 
+//						else if (keywords5.InList(s)) {
+//						sc.ChangeState(SCE_RUST_WORD5);
+//					} else if (keywords6.InList(s)) {
+//						sc.ChangeState(SCE_RUST_WORD6);
+//					} else if (keywords7.InList(s)) {
+//						sc.ChangeState(SCE_RUST_WORD7);
+//					}
+					sc.SetState(SCE_RUST_DEFAULT);
 				}
 				break;
-			case SCE_D_COMMENT:
+			case SCE_RUST_COMMENT:
 				if (sc.Match('*', '/')) {
 					sc.Forward();
-					sc.ForwardSetState(SCE_D_DEFAULT);
+					sc.ForwardSetState(SCE_RUST_DEFAULT);
 				}
 				break;
-			case SCE_D_COMMENTDOC:
+			case SCE_RUST_COMMENTDOC:
 				if (sc.Match('*', '/')) {
 					sc.Forward();
-					sc.ForwardSetState(SCE_D_DEFAULT);
+					sc.ForwardSetState(SCE_RUST_DEFAULT);
 				} else if (sc.ch == '@' || sc.ch == '\\') { // JavaDoc and Doxygen support
 					// Verify that we have the conditions to mark a comment-doc-keyword
 					if ((IsASpace(sc.chPrev) || sc.chPrev == '*') && (!IsASpace(sc.chNext))) {
-						styleBeforeDCKeyword = SCE_D_COMMENTDOC;
-						sc.SetState(SCE_D_COMMENTDOCKEYWORD);
+						styleBeforeDCKeyword = SCE_RUST_COMMENTDOC;
+						sc.SetState(SCE_RUST_COMMENTDOCKEYWORD);
 					}
 				}
 				break;
-			case SCE_D_COMMENTLINE:
+			case SCE_RUST_COMMENTLINE:
 				if (sc.atLineStart) {
-					sc.SetState(SCE_D_DEFAULT);
+					sc.SetState(SCE_RUST_DEFAULT);
 				}
 				break;
-			case SCE_D_COMMENTLINEDOC:
+			case SCE_RUST_COMMENTLINEDOC:
 				if (sc.atLineStart) {
-					sc.SetState(SCE_D_DEFAULT);
+					sc.SetState(SCE_RUST_DEFAULT);
 				} else if (sc.ch == '@' || sc.ch == '\\') { // JavaDoc and Doxygen support
 					// Verify that we have the conditions to mark a comment-doc-keyword
 					if ((IsASpace(sc.chPrev) || sc.chPrev == '/' || sc.chPrev == '!') && (!IsASpace(sc.chNext))) {
-						styleBeforeDCKeyword = SCE_D_COMMENTLINEDOC;
-						sc.SetState(SCE_D_COMMENTDOCKEYWORD);
+						styleBeforeDCKeyword = SCE_RUST_COMMENTLINEDOC;
+						sc.SetState(SCE_RUST_COMMENTDOCKEYWORD);
 					}
 				}
 				break;
-			case SCE_D_COMMENTDOCKEYWORD:
-				if ((styleBeforeDCKeyword == SCE_D_COMMENTDOC) && sc.Match('*', '/')) {
-					sc.ChangeState(SCE_D_COMMENTDOCKEYWORDERROR);
+			case SCE_RUST_COMMENTDOCKEYWORD:
+				if ((styleBeforeDCKeyword == SCE_RUST_COMMENTDOC) && sc.Match('*', '/')) {
+					sc.ChangeState(SCE_RUST_COMMENTDOCKEYWORDERROR);
 					sc.Forward();
-					sc.ForwardSetState(SCE_D_DEFAULT);
+					sc.ForwardSetState(SCE_RUST_DEFAULT);
 				} else if (!IsDoxygen(sc.ch)) {
 					char s[100];
 					if (caseSensitive) {
@@ -353,12 +355,12 @@ void SCI_METHOD LexerD::Lex(unsigned int startPos, int length, int initStyle, ID
 						sc.GetCurrentLowered(s, sizeof(s));
 					}
 					if (!IsASpace(sc.ch) || !keywords3.InList(s + 1)) {
-						sc.ChangeState(SCE_D_COMMENTDOCKEYWORDERROR);
+						sc.ChangeState(SCE_RUST_COMMENTDOCKEYWORDERROR);
 					}
 					sc.SetState(styleBeforeDCKeyword);
 				}
 				break;
-			case SCE_D_COMMENTNESTED:
+			case SCE_RUST_COMMENTNESTED:
 				if (sc.Match('+', '/')) {
 					if (curNcLevel > 0)
 						curNcLevel -= 1;
@@ -366,7 +368,7 @@ void SCI_METHOD LexerD::Lex(unsigned int startPos, int length, int initStyle, ID
 					styler.SetLineState(curLine, curNcLevel);
 					sc.Forward();
 					if (curNcLevel == 0) {
-						sc.ForwardSetState(SCE_D_DEFAULT);
+						sc.ForwardSetState(SCE_RUST_DEFAULT);
 					}
 				} else if (sc.Match('/','+')) {
 					curNcLevel += 1;
@@ -375,7 +377,7 @@ void SCI_METHOD LexerD::Lex(unsigned int startPos, int length, int initStyle, ID
 					sc.Forward();
 				}
 				break;
-			case SCE_D_STRING:
+			case SCE_RUST_STRING:
 				if (sc.ch == '\\') {
 					if (sc.chNext == '"' || sc.chNext == '\\') {
 						sc.Forward();
@@ -383,83 +385,83 @@ void SCI_METHOD LexerD::Lex(unsigned int startPos, int length, int initStyle, ID
 				} else if (sc.ch == '"') {
 					if(IsStringSuffix(sc.chNext))
 						sc.Forward();
-					sc.ForwardSetState(SCE_D_DEFAULT);
+					sc.ForwardSetState(SCE_RUST_DEFAULT);
 				}
 				break;
-			case SCE_D_CHARACTER:
+			case SCE_RUST_CHARACTER:
 				if (sc.atLineEnd) {
-					sc.ChangeState(SCE_D_STRINGEOL);
+					sc.ChangeState(SCE_RUST_STRINGEOL);
 				} else if (sc.ch == '\\') {
 					if (sc.chNext == '\'' || sc.chNext == '\\') {
 						sc.Forward();
 					}
 				} else if (sc.ch == '\'') {
 					// Char has no suffixes
-					sc.ForwardSetState(SCE_D_DEFAULT);
+					sc.ForwardSetState(SCE_RUST_DEFAULT);
 				}
 				break;
-			case SCE_D_STRINGEOL:
+			case SCE_RUST_STRINGEOL:
 				if (sc.atLineStart) {
-					sc.SetState(SCE_D_DEFAULT);
+					sc.SetState(SCE_RUST_DEFAULT);
 				}
 				break;
-			case SCE_D_STRINGB:
+			case SCE_RUST_STRINGB:
 				if (sc.ch == '`') {
 					if(IsStringSuffix(sc.chNext))
 						sc.Forward();
-					sc.ForwardSetState(SCE_D_DEFAULT);
+					sc.ForwardSetState(SCE_RUST_DEFAULT);
 				}
 				break;
-			case SCE_D_STRINGR:
+			case SCE_RUST_STRINGR:
 				if (sc.ch == '"') {
 					if(IsStringSuffix(sc.chNext))
 						sc.Forward();
-					sc.ForwardSetState(SCE_D_DEFAULT);
+					sc.ForwardSetState(SCE_RUST_DEFAULT);
 				}
 				break;
 		}
 
 		// Determine if a new state should be entered.
-		if (sc.state == SCE_D_DEFAULT) {
+		if (sc.state == SCE_RUST_DEFAULT) {
 			if (IsADigit(sc.ch) || (sc.ch == '.' && IsADigit(sc.chNext))) {
-				sc.SetState(SCE_D_NUMBER);
+				sc.SetState(SCE_RUST_NUMBER);
 				numFloat = sc.ch == '.';
 				// Remember hex literal
 				numHex = sc.ch == '0' && ( sc.chNext == 'x' || sc.chNext == 'X' );
 			} else if ( (sc.ch == 'r' || sc.ch == 'x' || sc.ch == 'q')
 				&& sc.chNext == '"' ) {
 				// Limited support for hex and delimited strings: parse as r""
-				sc.SetState(SCE_D_STRINGR);
+				sc.SetState(SCE_RUST_STRINGR);
 				sc.Forward();
 			} else if (IsWordStart(sc.ch) || sc.ch == '$') {
-				sc.SetState(SCE_D_IDENTIFIER);
+				sc.SetState(SCE_RUST_IDENTIFIER);
 			} else if (sc.Match('/','+')) {
 				curNcLevel += 1;
 				curLine = styler.GetLine(sc.currentPos);
 				styler.SetLineState(curLine, curNcLevel);
-				sc.SetState(SCE_D_COMMENTNESTED);
+				sc.SetState(SCE_RUST_COMMENTNESTED);
 				sc.Forward();
 			} else if (sc.Match('/', '*')) {
 				if (sc.Match("/**") || sc.Match("/*!")) {   // Support of Qt/Doxygen doc. style
-					sc.SetState(SCE_D_COMMENTDOC);
+					sc.SetState(SCE_RUST_COMMENTDOC);
 				} else {
-					sc.SetState(SCE_D_COMMENT);
+					sc.SetState(SCE_RUST_COMMENT);
 				}
 				sc.Forward();   // Eat the * so it isn't used for the end of the comment
 			} else if (sc.Match('/', '/')) {
 				if ((sc.Match("///") && !sc.Match("////")) || sc.Match("//!"))
 					// Support of Qt/Doxygen doc. style
-					sc.SetState(SCE_D_COMMENTLINEDOC);
+					sc.SetState(SCE_RUST_COMMENTLINEDOC);
 				else
-					sc.SetState(SCE_D_COMMENTLINE);
+					sc.SetState(SCE_RUST_COMMENTLINE);
 			} else if (sc.ch == '"') {
-				sc.SetState(SCE_D_STRING);
+				sc.SetState(SCE_RUST_STRING);
 			} else if (sc.ch == '\'') {
-				sc.SetState(SCE_D_CHARACTER);
+				sc.SetState(SCE_RUST_CHARACTER);
 			} else if (sc.ch == '`') {
-				sc.SetState(SCE_D_STRINGB);
+				sc.SetState(SCE_RUST_STRINGB);
 			} else if (isoperator(static_cast<char>(sc.ch))) {
-				sc.SetState(SCE_D_OPERATOR);
+				sc.SetState(SCE_RUST_OPERATOR);
 				if (sc.ch == '.' && sc.chNext == '.') sc.Forward(); // Range operator
 			}
 		}
@@ -471,7 +473,7 @@ void SCI_METHOD LexerD::Lex(unsigned int startPos, int length, int initStyle, ID
 // level store to make it easy to pick up with each increment
 // and to make it possible to fiddle the current level for "} else {".
 
-void SCI_METHOD LexerD::Fold(unsigned int startPos, int length, int initStyle, IDocument *pAccess) {
+void SCI_METHOD LexerRust::Fold(unsigned int startPos, int length, int initStyle, IDocument *pAccess) {
 
 	if (!options.fold)
 		return;
@@ -506,7 +508,7 @@ void SCI_METHOD LexerD::Fold(unsigned int startPos, int length, int initStyle, I
 				levelNext--;
 			}
 		}
-		if (options.foldComment && options.foldCommentExplicit && ((style == SCE_D_COMMENTLINE) || options.foldExplicitAnywhere)) {
+		if (options.foldComment && options.foldCommentExplicit && ((style == SCE_RUST_COMMENTLINE) || options.foldExplicitAnywhere)) {
 			if (userDefinedFoldMarkers) {
 				if (styler.Match(i, options.foldExplicitStart.c_str())) {
  					levelNext++;
@@ -524,7 +526,7 @@ void SCI_METHOD LexerD::Fold(unsigned int startPos, int length, int initStyle, I
 				}
  			}
  		}
-		if (options.foldSyntaxBased && (style == SCE_D_OPERATOR)) {
+		if (options.foldSyntaxBased && (style == SCE_RUST_OPERATOR)) {
 			if (ch == '{') {
 				// Measure the minimum before a '{' to allow
 				// folding on "} else {"
@@ -565,4 +567,4 @@ void SCI_METHOD LexerD::Fold(unsigned int startPos, int length, int initStyle, I
 	}
 }
 
-LexerModule lmD(SCLEX_D, LexerD::LexerFactoryD, "d", dWordLists);
+LexerModule lmRust(SCLEX_RUST, LexerRust::LexerFactoryRust, "Rust", rustWordLists);

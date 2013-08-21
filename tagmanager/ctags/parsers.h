@@ -1,3 +1,4 @@
+
 /*
 *
 *   Copyright (c) 2000-2001, Darren Hiebert
@@ -59,7 +60,8 @@
     CobolParser, \
     ObjcParser, \
     AsciidocParser, \
-    AbaqusParser
+    AbaqusParser, \
+    RustParser
 /*
 langType of each parser
  0	CParser
@@ -107,6 +109,7 @@ langType of each parser
 42	ObjcParser
 43  AsciidocParser
 44	AbaqusParser
+45  Rust
 */
 #endif	/* _PARSERS_H */
 

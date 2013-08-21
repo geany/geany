@@ -47,6 +47,28 @@ context_action_cmd=
 # 0 is spaces, 1 is tabs, 2 is tab & spaces
 #type=1
 
+[named_styles]
+# Additional chromacoding contexts for rust, beyond those avaiable in default styles
+# TODO move to filetypes.common when others have used it?
+keyword=0x202020;0xffffff;true;false
+operator=0x004020;0xffffff;false;false
+delimiter=0x200040;0xffffff;false;false
+special_delimiter=0x402000;0xffffff;false;false
+struct=0x203040;0xffffff;true;false
+trait=0x302040;0xffffff;true;false
+impl=0x204030;0xffffff;true;false
+enum=0x403020;0xffffff;true;false
+type_decl=0x404020;0xffffff;true;false
+fn=0x202040;0xc0c0c0;true;false
+type_param=0x006040;0xffffff;false;false
+type=0x002060;0xffffff;false;false
+rcomment=0x909090
+rcomment_doc=0x707070
+rcomment_line=0x808080
+rcomment_line_doc=comment_doc
+rcomment_doc_keyword=comment_doc,bold
+rcomment_doc_keyword_error=comment_doc,italic
+
 [build_settings]
 # %f will be replaced by the complete filename
 # %e will be replaced by the filename without extension
