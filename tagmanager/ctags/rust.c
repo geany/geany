@@ -12,10 +12,12 @@
 *   INCLUDE FILES
 */
 #include "general.h"	/* must always come first */
+#include "main.h"
 
 #include <string.h>
 
 #include "keyword.h"
+#include "parse.h"
 #include "entry.h"
 #include "options.h"
 #include "read.h"
@@ -46,20 +48,29 @@ typedef enum {
 	K_FIELD,
 	K_VARIANT,
 	K_METHOD
-} rustKind;
+} RustKind;
+
+typedef enum  {
+	PARSE_EXIT,
+	PARSE_NEXT,
+	PARSE_RECURSE,
+	PARSE_IGNORE_BALANCED,
+	PARSE_IGNORE_BALANCED_EXIT
+}
+RustParserAction;
 
 static kindOption RustKinds[] = {
-	{TRUE, 'm', "mod", "module"},
+	{TRUE, 'm', "namespace", "module"},
 	{TRUE, 's', "struct", "structural type"},
-	{TRUE, 't', "trait", "trait interface"},
-	{TRUE, 'i', "impl", "implementation"},
-	{TRUE, 'f', "fn", "Function"},
-	{TRUE, 'e', "enum", "Enum "},
-	{TRUE, 't', "type", "Type Alias"},
-	{TRUE, 'g', "static", "Global variable"},
+	{TRUE, 't', "interface", "trait interface"},
+	{TRUE, 'i', "implementation", "implementation"},
+	{TRUE, 'f', "function", "Function"},
+	{TRUE, 'e', "union", "Enum "},
+	{TRUE, 't', "typedef", "Type Alias"},
+	{TRUE, 'g', "variable", "Global variable"},
 	{TRUE, 'M', "macro", "Macro Definition"},
 	{TRUE, 'f', "field", "A struct field"},
-	{TRUE, 'v', "variant", "An enum variant"},
+	{TRUE, 'v', "enum", "An enum variant"},
 	{TRUE, 'F', "method", "A method"},
 };
 
@@ -78,12 +89,19 @@ typedef enum {
 	RustMETHOD,
 	RustIDENTIFIER,
 	RustTYPEPARAM,
+	RustPUB,
+	RustPRIV,
+	RustUNSAFE,
+	RustEXTERN,
+	RustUSE,
 
 	Tok_COMA,	/* ',' */
 	Tok_PLUS,	/* '+' */
 	Tok_MINUS,	/* '-' */
 	Tok_PARL,	/* '(' */
 	Tok_PARR,	/* ')' */
+	Tok_LT,	/* '<' */
+	Tok_GT,	/* '>' */
 	Tok_CurlL,	/* '{' */
 	Tok_CurlR,	/* '}' */
 	Tok_SQUAREL,	/* '[' */
@@ -96,17 +114,17 @@ typedef enum {
 	Tok_any,
 
 	Tok_EOF	/* END of file */
-} rustKeyword;
+} RustKeyword;
 
-typedef rustKeyword rustToken;
+typedef RustKeyword RustToken;
 
 typedef struct sRustKeywordDesc {
 	const char *name;
-	rustKeyword id;
-} rustKeywordDesc;
+	RustKeyword id;
+} RustKeywordDesc;
 
 
-static const rustKeywordDesc rustKeywordTable[] = {
+static const RustKeywordDesc RustKeywordTable[] = {
 	{"type", RustTYPEDECL},
 	{"struct", RustSTRUCT},
 	{"trait", RustTRAIT},
@@ -115,26 +133,32 @@ static const rustKeywordDesc rustKeywordTable[] = {
 	{"fn", RustFN},
 	{"static", RustSTATIC},
 	{"macro_rules!", RustMACRO},
+	{"pub", RustPUB},
+	{"priv", RustPRIV},
+	{"unsafe", RustUNSAFE},
+	{"extern", RustEXTERN},
+	{"use", RustUSE},
 };
 
 static langType Lang_Rust;
 
 /*//////////////////////////////////////////////////////////////////
 //// lexingInit             */
-typedef struct _lexingState {
+typedef struct _LexingState {
 	vString *name;	/* current parsed identifier/operator */
 	const unsigned char *cp;	/* position in stream */
-} lexingState;
+} LexingState;
 
 static void initKeywordHash (void)
 {
-	const size_t count = sizeof (rustKeywordTable) / sizeof (rustKeywordDesc);
+	const size_t count = sizeof (RustKeywordTable) / sizeof (RustKeywordDesc);
 	size_t i;
 
 	for (i = 0; i < count; ++i)
 	{
-		addKeyword (rustKeywordTable[i].name, Lang_Rust,
-			(int) rustKeywordTable[i].id);
+		printf("added keyword %s\n", RustKeywordTable[i]);
+		addKeyword (RustKeywordTable[i].name, Lang_Rust,
+			(int) RustKeywordTable[i].id);
 	}
 }
 
@@ -171,7 +195,7 @@ static boolean isSpace (char c)
 }
 
 /* return true if it end with an end of line */
-static void eatWhiteSpace (lexingState * st)
+static void eatWhiteSpace (LexingState * st)
 {
 	const unsigned char *cp = st->cp;
 	while (isSpace (*cp))
@@ -180,7 +204,7 @@ static void eatWhiteSpace (lexingState * st)
 	st->cp = cp;
 }
 
-static void eatString (lexingState * st)
+static void eatString (LexingState * st)
 {
 	boolean lastIsBackSlash = FALSE;
 	boolean unfinished = TRUE;
@@ -203,7 +227,7 @@ static void eatString (lexingState * st)
 	st->cp = c;
 }
 
-static void eatComment (lexingState * st)
+static void eatComment (LexingState * st)
 {
 	boolean unfinished = TRUE;
 	boolean lastIsStar = FALSE;
@@ -236,7 +260,7 @@ static void eatComment (lexingState * st)
 	st->cp = c;
 }
 
-static void readIdentifier (lexingState * st)
+static void readIdentifier (LexingState * st)
 {
 	const unsigned char *p;
 	vStringClear (st->name);
@@ -255,7 +279,7 @@ static void readIdentifier (lexingState * st)
 }
 
 /* read the @something directives */
-static void readIdentifierRustDirective (lexingState * st)
+static void readIdentifierRustDirective (LexingState * st)
 {
 	const unsigned char *p;
 	vStringClear (st->name);
@@ -272,11 +296,18 @@ static void readIdentifierRustDirective (lexingState * st)
 
 	vStringTerminate (st->name);
 }
+/*
+static PARSER_ACTION parsePreproc (vString * const ident, RustToken what, const RustParseContext* parent, RustParseContext* ctx) {
+	switch (what) {
+		
+	}
+}
+*/
 
 /* The lexer is in charge of reading the file.
  * Some of sub-lexer (like eatComment) also read file.
  * lexing is finished when the lexer return Tok_EOF */
-static rustKeyword lex (lexingState * st)
+static RustKeyword lex(LexingState * st)
 {
 	int retType;
 
@@ -389,6 +420,12 @@ static rustKeyword lex (lexingState * st)
 		case '-':
 			st->cp++;
 			return Tok_MINUS;
+		case '<':
+			st->cp++;
+			return Tok_LT;
+		case '>':
+			st->cp++;
+			return Tok_GT;
 
 		default:
 			st->cp++;
@@ -401,611 +438,232 @@ static rustKeyword lex (lexingState * st)
 	return Tok_any;
 }
 
-/*//////////////////////////////////////////////////////////////////////
-//// Parsing                                    */
-typedef void (*parseNext) (vString * const ident, rustToken what);
-
-/********** Helpers */
-/* This variable hold the 'parser' which is going to
- * handle the next token */
-static parseNext toDoNext;
-
-/* Special variable used by parser eater to
- * determine which action to put after their
- * job is finished. */
-static parseNext comeAfter;
-
-/* Used by some parsers detecting certain token
- * to revert to previous parser. */
-static parseNext fallback;
-
 
 /********** Grammar */
-static void parseMod (vString * const ident, rustToken what);
-static void parseImplMethods (vString * const ident, rustToken what);
-static void parseImplMethods (vString * const ident, rustToken what);
-static vString *tempName = NULL;
-static vString *parentName = NULL;
-static rustKind parentType = K_MOD;
+
+struct RustParserContext;
+
+typedef RustParserAction (*fParse)( RustToken what,vString* ident,const struct RustParserContext* parent, struct RustParserContext* nextContext);
+
+typedef struct RustParserContext {
+	vString*	name;
+	RustKind	kind;
+	fParse		parser;
+	int	main_ident_set;
+} RustParserContext;
+
+
+
+static void printTagEntry(const tagEntryInfo *tag)
+{
+	fprintf(stderr, "Tag: %s (%s) [ impl: %s, scope: %s, type: %s\n", tag->name,
+	tag->kindName, tag->extensionFields.implementation, tag->extensionFields.scope[1],
+	tag->extensionFields.varType);
+}
 
 /* used to prepare tag for OCaml, just in case their is a need to
  * add additional information to the tag. */
-static void prepareTag (tagEntryInfo * tag, vString const *name, rustKind kind)
+static void prepareTag (tagEntryInfo * tag, vString const *name, RustKind kind)
 {
-	initTagEntry (tag, vStringValue (name));
-	tag->kindName = RustKinds[kind].name;
-	tag->kind = RustKinds[kind].letter;
 
-	if (parentName != NULL)
-	{
-		tag->extensionFields.scope[0] = RustKinds[parentType].name;
-		tag->extensionFields.scope[1] = vStringValue (parentName);
-	}
-}
 
-static void pushEnclosingContext (const vString * parent, rustKind type)
-{
-	vStringCopy (parentName, parent);
-	parentType = type;
-}
 
-static void popEnclosingContext (void)
-{
-	vStringClear (parentName);
+//	if (parentName != NULL)
+//	{
+//		tag->extensionFields.scope[0] = RustKinds[parentType].name;
+//		tag->extensionFields.scope[1] = vStringValue (parentName);
+//	}
 }
 
 /* Used to centralise tag creation, and be able to add
  * more information to it in the future */
 static void addTag (vString * const ident, int kind)
 {
-	tagEntryInfo toCreate;
-	prepareTag (&toCreate, ident, kind);
-	makeTagEntry (&toCreate);
+	tagEntryInfo tag;
+	initTagEntry (&tag, vStringValue (ident));
+
+
+	tag.lineNumber=getSourceLineNumber();
+	tag.filePosition	= getInputFilePosition();
+	tag.sourceFileName=getSourceFileName();
+
+	tag.kindName=RustKinds[kind].name;
+	tag.kind = RustKinds[kind].letter;
+
+	//printTagEntry(&tag);
+	makeTagEntry (&tag);
 }
 
-static rustToken waitedToken, fallBackToken;
-
-/* Ignore everything till waitedToken and jump to comeAfter.
- * If the "end" keyword is encountered break, doesn't remember
- * why though. */
-static void tillToken (vString * const UNUSED (ident), rustToken what)
+static void ignoreBalanced (struct LexingState* st)
 {
-	if (what == waitedToken)
-		toDoNext = comeAfter;
-}
-
-static void tillTokenOrFallBack (vString * const UNUSED (ident), rustToken what)
-{
-	if (what == waitedToken)
-		toDoNext = comeAfter;
-	else if (what == fallBackToken)
-	{
-		toDoNext = fallback;
-	}
-}
-
-static int ignoreBalanced_count = 0;
-static void ignoreBalanced (vString * const UNUSED (ident), rustToken what)
-{
-
-	switch (what)
-	{
-	case Tok_PARL:
-	case Tok_CurlL:
-	case Tok_SQUAREL:
-		ignoreBalanced_count++;
-		break;
-
-	case Tok_PARR:
-	case Tok_CurlR:
-	case Tok_SQUARER:
-		ignoreBalanced_count--;
-		break;
-
-	default:
-		/* don't care */
-		break;
-	}
-
-	if (ignoreBalanced_count == 0)
-		toDoNext = comeAfter;
-}
-
-static void parseFields (vString * const ident, rustToken what)
-{
-	switch (what)
-	{
-	case Tok_CurlR:
-		toDoNext = &parseImplMethods;
-		break;
-
-	case Tok_SQUAREL:
-	case Tok_PARL:
-		toDoNext = &ignoreBalanced;
-		comeAfter = &parseFields;
-		break;
-
-		/* we got an identifier, keep track of it */
-	case RustIDENTIFIER:
-		vStringCopy (tempName, ident);
-		break;
-
-		/* our last kept identifier must be our variable name =) */
-	case Tok_semi:
-		addTag (tempName, K_FIELD);
-		vStringClear (tempName);
-		break;
-
-	default:
-		/* NOTHING */
-		break;
-	}
-}
-
-rustKind methodKind;
-
-
-static vString *fullMethodName;
-static vString *prevIdent;
-
-static void parseMethodsName (vString * const ident, rustToken what)
-{
-	switch (what)
-	{
-	case Tok_PARL:
-		toDoNext = &tillToken;
-		comeAfter = &parseMethodsName;
-		waitedToken = Tok_PARR;
-		break;
-
-	case Tok_dpoint:
-		vStringCat (fullMethodName, prevIdent);
-		vStringCatS (fullMethodName, ":");
-		vStringClear (prevIdent);
-		break;
-
-	case RustIDENTIFIER:
-		vStringCopy (prevIdent, ident);
-		break;
-
-	case Tok_CurlL:
-	case Tok_semi:
-		/* method name is not simple */
-		if (vStringLength (fullMethodName) != '\0')
-		{
-			addTag (fullMethodName, methodKind);
-			vStringClear (fullMethodName);
+	int ignoreBalanced_count = 1;
+	while (ignoreBalanced_count>0) {
+		RustKind tok=lex(st);
+		switch (tok) {
+		case Tok_PARL:
+		case Tok_CurlL:
+		case Tok_SQUAREL:
+			ignoreBalanced_count++;
+			continue;
+		case Tok_EOF:
+		case Tok_PARR:
+		case Tok_CurlR:
+		case Tok_SQUARER:
+			ignoreBalanced_count--;
+			continue;
 		}
-		else
-			addTag (prevIdent, methodKind);
-
-		toDoNext = &parseImplMethods;
-		parseImplMethods (ident, what);
-		vStringClear (prevIdent);
-		break;
-
-	default:
-		break;
 	}
 }
 
-static void parseImplMethodsName (vString * const ident, rustToken what)
+static RustParserAction parseStruct ( RustToken what,vString*  ident, const RustParserContext* parentCtx, RustParserContext* ctx)
 {
-	switch (what)
-	{
-	case Tok_PARL:
-		toDoNext = &tillToken;
-		comeAfter = &parseImplMethodsName;
-		waitedToken = Tok_PARR;
-		break;
-
-	case Tok_dpoint:
-		vStringCat (fullMethodName, prevIdent);
-		vStringCatS (fullMethodName, ":");
-		vStringClear (prevIdent);
-		break;
-
-	case RustIDENTIFIER:
-		vStringCopy (prevIdent, ident);
-		break;
-
-	case Tok_CurlL:
-	case Tok_semi:
-		/* method name is not simple */
-		if (vStringLength (fullMethodName) != '\0')
-		{
-			addTag (fullMethodName, methodKind);
-			vStringClear (fullMethodName);
-		}
-		else
-			addTag (prevIdent, methodKind);
-
-		toDoNext = &parseImplMethods;
-		parseImplMethods (ident, what);
-		vStringClear (prevIdent);
-		break;
-
-	default:
-		break;
-	}
-}
-
-static void parseImpl (vString * const ident, rustToken what)
-{
-	switch (what)
-	{
-	case RustFN:	/* + */
-		toDoNext = &parseImplMethodsName;
-		methodKind = K_METHOD;
-		break;
-
-
-	case Tok_CurlL:	/* { */
-		toDoNext = &ignoreBalanced;
-		ignoreBalanced (ident, what);
-		comeAfter = &parseImplMethodsName;
-		break;
-
-	default:
-		break;
-	}
-}
-
-static void parseBlock (vString * const ident, rustToken what)
-{
-}
-
-static void parseFunction (vString * const ident, rustToken what)
-{
- 	addTag (ident, K_FN);
-	switch (what)
-	{
-	case RustFN:	// + 
-		toDoNext = &parseImplMethodsName;
-		methodKind = K_METHOD;
-		break;
-
-
-	case Tok_CurlL:	/* { */
-		toDoNext = &ignoreBalanced;
-		ignoreBalanced (ident, what);
-		comeAfter = &parseImplMethods;
-		break;
-
-	default:
-		break;
-	}
-}
-
-
-static void parseImplMethods (vString * const UNUSED (ident), rustToken what)
-{
-	switch (what)
-	{
-	case RustFN:	/* + */
-		toDoNext = &parseImplMethodsName;
-		methodKind = K_METHOD;
-		break;
-
-
-	case Tok_CurlL:	/* { */
-		toDoNext = &parseFields;
-		break;
-
-	default:
-		break;
-	}
-}
-
-
-
-
-// trait and impl bodies are the same.
-static void parseTrait (vString * const ident, rustToken what)
-{
- 	addTag (ident, K_TRAIT);
-
-	switch (what) { 
-	case RustFN:	/* + */
-		toDoNext = &parseImplMethodsName;
-		methodKind = K_METHOD;
-		break;
-
-	case RustIDENTIFIER:
-		addTag (ident, K_METHOD);
-		pushEnclosingContext (ident, K_METHOD);
-	break;
-	}
-
-	toDoNext = &parseImplMethods;
-}
-
-static void parseStructMembers (vString * const ident, rustToken what)
-{
-	static parseNext prev = NULL;
-
-	if (prev != NULL)
-	{
-		comeAfter = prev;
-		prev = NULL;
-	}
-
+	printf("parse struct: %s",ident);
 	switch (what)
 	{
 	case RustIDENTIFIER:
-		vStringCopy (tempName, ident);//expect :type next,?
-		addTag (tempName, K_FIELD);
-		break;
-
-	case Tok_COMA:	/* ',' */
-	case Tok_semi:	/* ';' */
-//		addTag (tempName, K_FIELD);
-// type of 
-		vStringClear (tempName);
-		break;
-
-		/* some types are complex, the only one
-		 * we will loose is the function type.
-		 */
-	case Tok_CurlL:	/* '{' */
-	case Tok_PARL:	/* '(' */
-	case Tok_SQUAREL:	/* '[' */
-		toDoNext = &ignoreBalanced;
-		prev = comeAfter;
-		comeAfter = &parseStructMembers;
-		ignoreBalanced (ident, what);
-		break;
-
-	case Tok_CurlR:
-		toDoNext = comeAfter;
-		break;
-
-	default:
-		/* don't care */
+		addTag (ident, K_STRUCT);
+		return PARSE_NEXT;
+	case Tok_PARL:	
+	case Tok_CurlL:	
+		return PARSE_IGNORE_BALANCED_EXIT;
 		break;
 	}
+	return PARSE_EXIT;
 }
-
-/* Called just after the struct keyword */
-static boolean parseStruct_gotName = FALSE;
-static void parseStruct (vString * const ident, rustToken what)
+static RustParserAction parseEnum ( RustToken what,vString*  ident, const RustParserContext* parentCtx, RustParserContext* ctx)
 {
+	printf("parse struct: %s",ident);
 	switch (what)
 	{
 	case RustIDENTIFIER:
-		if (!parseStruct_gotName)
-		{
-			addTag (ident, K_STRUCT);
-			pushEnclosingContext (ident, K_STRUCT);
-			parseStruct_gotName = TRUE;
-		}
-		else
-		{
-			parseStruct_gotName = FALSE;
-			popEnclosingContext ();
-			toDoNext = comeAfter;
-			comeAfter (ident, what);
-		}
-		break;
-
-	case Tok_CurlL:
-		toDoNext = &parseStructMembers;
-		break;
-
-		/* maybe it was just a forward declaration
-		 * in which case, we pop the context */
-	case Tok_semi:
-		if (parseStruct_gotName)
-			popEnclosingContext ();
-
-		toDoNext = comeAfter;
-		comeAfter (ident, what);
-		break;
-
-	default:
-		/* we don't care */
+		addTag (ident, K_STRUCT);
+		return PARSE_NEXT;
+	case Tok_PARL:	
+	case Tok_CurlL:	
+		return PARSE_IGNORE_BALANCED_EXIT;
 		break;
 	}
+	return PARSE_EXIT;
 }
 
-/* Parse enumeration members, ignoring potential initialization */
-static parseNext parseEnumVariants_prev = NULL;
-static void parseEnumVariants (vString * const ident, rustToken what)
+static RustParserAction parseFn ( RustToken what,vString*  ident, const RustParserContext* parentCtx, RustParserContext* ctx)
 {
-	if (parseEnumVariants_prev != NULL)
-	{
-		comeAfter = parseEnumVariants_prev;
-		parseEnumVariants_prev = NULL;
-	}
-
+	printf("parse fn: %s",vStringValue(ident));
 	switch (what)
 	{
 	case RustIDENTIFIER:
-		addTag (ident, K_ENUM);
-		parseEnumVariants_prev = comeAfter;
-		waitedToken = Tok_COMA;
-		/* last item might not have a coma */
-		fallBackToken = Tok_CurlR;
-		fallback = comeAfter;
-		comeAfter = parseEnumVariants;
-		toDoNext = &tillTokenOrFallBack;
-		break;
-
-	case Tok_CurlR:
-		toDoNext = comeAfter;
-		popEnclosingContext ();
-		break;
-
-	default:
-		/* don't care */
+		addTag (ident, K_FN);
+		return PARSE_NEXT;
+	case Tok_PARL:	
+	case Tok_CurlL:	
+		return PARSE_IGNORE_BALANCED;
 		break;
 	}
+	return PARSE_EXIT;
 }
-
-/* parse enum ... { ... */
-static boolean parseEnum_named = FALSE;
-static void parseEnum (vString * const ident, rustToken what)
+static RustParserAction parseTrait ( RustToken what,vString*  ident, const RustParserContext* parentCtx, RustParserContext* ctx)
 {
+	printf("parse trait: %s",vStringValue(ident));
 	switch (what)
 	{
 	case RustIDENTIFIER:
-		if (!parseEnum_named)
-		{
-			addTag (ident, K_ENUM);
-			pushEnclosingContext (ident, K_ENUM);
-			parseEnum_named = TRUE;
-		}
-		else
-		{
-			parseEnum_named = FALSE;
-			popEnclosingContext ();
-			toDoNext = comeAfter;
-			comeAfter (ident, what);
-		}
-		break;
-
-	case Tok_CurlL:	/* '{' */
-		toDoNext = &parseEnumVariants;
-		parseEnum_named = FALSE;
-		break;
-
-	case Tok_semi:	/* ';' */
-		if (parseEnum_named)
-			popEnclosingContext ();
-		toDoNext = comeAfter;
-		comeAfter (ident, what);
-		break;
-
-	default:
-		/* don't care */
+		addTag (ident, K_TRAIT);
+		return PARSE_NEXT;
+	case Tok_PARL:	
+	case Tok_CurlL:	
+		return PARSE_IGNORE_BALANCED_EXIT;
 		break;
 	}
+	return PARSE_EXIT;
 }
-
-/* Parse something like
- * type ident =;
- * ignoring the defined type but in the case of struct,
- * in which case struct are parsed.
- */
-static void parseTypedecl (vString * const ident, rustToken what)
+static RustParserAction parseImpl ( RustToken what,vString*  ident, const RustParserContext* parentCtx, RustParserContext* ctx)
 {
+	printf("parse impl: %s",vStringValue(ident));
 	switch (what)
 	{
-	case RustSTRUCT:
-		toDoNext = &parseStruct;
-		comeAfter = &parseTypedecl;
-		break;
-
-	case RustENUM:
-		toDoNext = &parseEnum;
-		comeAfter = &parseTypedecl;
-		break;
-
 	case RustIDENTIFIER:
-		vStringCopy (tempName, ident);
-		break;
-
-	case Tok_semi:	/* ';' */
-		addTag (tempName, K_TYPE);
-		vStringClear (tempName);
-		toDoNext = &parseMod;
-		break;
-
-	default:
-		/* we don't care */
+		//if (!ctx->main_ident_set) {
+			addTag (ident, K_IMPL);
+			//ctx->main_ident_set=1;
+		//}
+		return PARSE_NEXT;
+	case Tok_PARL:	
+	case Tok_CurlL:	
+		return PARSE_IGNORE_BALANCED_EXIT;
 		break;
 	}
+	return PARSE_EXIT;
 }
 
-static boolean ignorePreprocStuff_escaped = FALSE;
-static void ignorePreprocStuff (vString * const UNUSED (ident), rustToken what)
-{
-	switch (what)
-	{
-	case Tok_Backslash:
-		ignorePreprocStuff_escaped = TRUE;
-		break;
 
-	case Tok_EOL:
-		if (ignorePreprocStuff_escaped)
-		{
-			ignorePreprocStuff_escaped = FALSE;
-		}
-		else
-		{
-			toDoNext = &parseMod;
-		}
-		break;
-
-	default:
-		ignorePreprocStuff_escaped = FALSE;
-		break;
-	}
-}
-
-static void parseMacroRules (vString * const ident, rustToken what)
-{
-//	if (what == ObjcIDENTIFIER)
-//		addTag (ident, K_MACRO);
-
-	toDoNext = &ignorePreprocStuff;
-}
-
-static void parsePreproc (vString * const ident, rustToken what)
-{
-	switch (what)
-	{
-/*	case RustIDENTIFIER:
-		if (strcmp (vStringValue (ident), "define") == 0)
-			toDoNext = &parseMacroRules;
-		else
-			toDoNext = &ignorePreprocStuff;
-		break;
-*/
-	default:
-		toDoNext = &ignorePreprocStuff;
-		break;
-	}
-}
 
 /* Handle the "strong" top levels, all 'big' declarations
  * happen here */
-static void parseMod (vString * const ident, rustToken what)
+static RustParserAction parseMod (RustToken what,vString*  ident,  const RustParserContext* parentCtx, RustParserContext* ctx)
 {
+	printf("(parse mod: %d)",what);
 	switch (what)
 	{
-	case Tok_Sharp:
-		toDoNext = &parsePreproc;
-		break;
+	case RustIDENTIFIER:
+		
+		addTag (ident, K_MOD);
+		return PARSE_NEXT;
 
-	case RustSTRUCT:
-		toDoNext = &parseStruct;
-		comeAfter = &parseMod;
-		break;
+	case RustFN:
+		ctx->parser=parseFn;
+		return PARSE_RECURSE;
 
 	case RustMOD:		//same as global scope?!
-		toDoNext = &parseMod;
-		comeAfter = &parseMod;
-		break;
+		ctx->parser=parseMod;
+		return PARSE_RECURSE;
 
+	case RustSTRUCT:
+		ctx->parser=parseStruct;
+		return PARSE_RECURSE;
+
+	case RustTRAIT:
+		ctx->parser=parseTrait;
+		return PARSE_RECURSE;
+
+	case RustIMPL:
+		ctx->parser=parseImpl;
+		return PARSE_RECURSE;
+
+	case RustENUM:
+		ctx->parser=parseEnum;
+		return PARSE_RECURSE;
+
+/*
+	// rust module decls are always (fn|struct|trait|impl|mod) <ident> ...;
 	case RustIDENTIFIER:
-		/* we keep track of the identifier if we
-		 * come across a function. */
+		// we keep track of the identifier if we
+		// come across a function. 
 		vStringCopy (tempName, ident);
 		break;
+*/
 
+/*
 	case Tok_PARL:
-		/* if we find an opening parenthesis it means we
-		 * found a function (or a macro...) */
-		addTag (tempName, K_FN);
+		// if we find an opening parenthesis it means we
+		// found a function (or a macro...) 
+//		addTag (tempName, K_FN);
 		vStringClear (tempName);
 		comeAfter = &parseMod;
 		toDoNext = &ignoreBalanced;
 		ignoreBalanced (ident, what);
 		break;
 
+	case RustFN:
+		toDoNext = &parseFunction;
+		comeAfter = &parseMod;
+		break;
+
+
 	case RustTRAIT:
 		toDoNext = &parseTrait;
+		break;
+	case RustENUM:
+		toDoNext = &parseEnum;
 		break;
 
 	case RustIMPL:
@@ -1019,64 +677,65 @@ static void parseMod (vString * const ident, rustToken what)
 		toDoNext = parseTypedecl;
 		comeAfter = &parseMod;
 		break;
-
-	case Tok_CurlL:
-		comeAfter = &parseMod;
-		toDoNext = &ignoreBalanced;
-		ignoreBalanced (ident, what);
-		break;
-
+*/
+	case Tok_PARL:	
+	case Tok_CurlL:	
+		return PARSE_IGNORE_BALANCED;
 
 	default:
 		/* we don't care */
-		break;
+		return PARSE_NEXT;
 	}
 }
 
-/*////////////////////////////////////////////////////////////////
-//// Deal with the system                                       */
+/// Parser Main Loop
+void parseRecursive(LexingState* st, const RustParserContext* parentContext) {
+	RustParserContext ctx;
+	ctx.name=vStringNew();
+	ctx.kind=parentContext->kind;
+	ctx.parser=NULL;
+	ctx.main_ident_set=0;
+
+	while (1){
+		RustToken tok=lex(st);
+		printf("(%d %s)\n",tok,vStringValue(st->name));
+		if (tok==Tok_EOF)
+			break;
+		
+		int action=parentContext->parser(tok,st->name, parentContext, &ctx);
+		//printf("action:\n",action);
+		if (action==PARSE_RECURSE) {
+			parseRecursive(st, &ctx);
+		} else if (action==PARSE_EXIT) {
+			break;
+		} else if (action==PARSE_IGNORE_BALANCED) {
+			printf("ignore balanced\n");
+			ignoreBalanced(st);
+		}
+		 else if (action==PARSE_IGNORE_BALANCED_EXIT) {
+			printf("ignore balanced\n");
+			ignoreBalanced(st);
+			break;
+		}
+	}
+	vStringDelete(ctx.name);
+}
+
+
 
 static void findRustTags (void)
 {
-	vString *name = vStringNew ();
-	lexingState st;
-	rustToken tok;
+	LexingState st;
+	st.name = vStringNew();
+	RustToken tok;
+	RustParserContext ctx;
+	ctx.name=vStringNew();
+	ctx.kind=K_MOD;	// root is a module.
+	ctx.parser= parseMod;
 
-	parentName = vStringNew ();
-	tempName = vStringNew ();
-	fullMethodName = vStringNew ();
-	prevIdent = vStringNew ();
-
-	/* (Re-)initialize state variables, this might be a second file */
-	comeAfter = NULL;
-	fallback = NULL;
-	parentType = K_TRAIT;
-	ignoreBalanced_count = 0;
-	methodKind = 0;
-	parseStruct_gotName = FALSE;
-	parseEnumVariants_prev = NULL;
-	parseEnum_named = FALSE;
-	ignorePreprocStuff_escaped = FALSE;
-
-	st.name = vStringNew ();
-	st.cp = fileReadLine ();
-	toDoNext = &parseMod;
-	tok = lex (&st);
-	while (tok != Tok_EOF)
-	{
-		(*toDoNext) (st.name, tok);
-		tok = lex (&st);
-	}
-
-	vStringDelete (name);
-	vStringDelete (parentName);
-	vStringDelete (tempName);
-	vStringDelete (fullMethodName);
-	vStringDelete (prevIdent);
-	parentName = NULL;
-	tempName = NULL;
-	prevIdent = NULL;
-	fullMethodName = NULL;
+	parseRecursive(&st, &ctx);
+	vStringDelete(ctx.name);
+	vStringDelete(st.name);
 }
 
 static void rustInitialize (const langType language)
@@ -1085,6 +744,7 @@ static void rustInitialize (const langType language)
 
 	initKeywordHash ();
 }
+
 
 extern parserDefinition *RustParser (void)
 {

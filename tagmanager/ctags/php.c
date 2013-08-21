@@ -394,8 +394,8 @@ static tokenInfo *newToken (void)
 	token->keyword		= KEYWORD_NONE;
 	token->string		= vStringNew ();
 	token->scope		= vStringNew ();
-	token->lineNumber   = getSourceLineNumber ();
-	token->filePosition = getInputFilePosition ();
+	token->lineNumber   = getSourceLineNumber();
+	token->filePosition = getInputFilePosition();
 	token->parentKind	= -1;
 
 	return token;
