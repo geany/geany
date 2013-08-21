@@ -445,13 +445,14 @@ static RustKeyword lex(LexingState * st)
 
 struct RustParserContext;
 
-typedef RustParserAction (*fParse)( RustToken what,vString* ident,const struct RustParserContext* parent, struct RustParserContext* nextContext);
+typedef RustParserAction (*fParse)( RustToken what,vString* ident, struct RustParserContext* ctx);
 
 typedef struct RustParserContext {
 	vString*	name;
 	RustKind	kind;
 	fParse		parser;
 	int	main_ident_set;
+	struct RustParserContext* parent;
 } RustParserContext;
 
 
@@ -479,7 +480,7 @@ static void prepareTag (tagEntryInfo * tag, vString const *name, RustKind kind)
 
 /* Used to centralise tag creation, and be able to add
  * more information to it in the future */
-static void addTag (vString * const ident, int kind)
+static void addTag (vString * const ident, int kind, const RustParserContext* ctx)
 {
 	tagEntryInfo tag;
 	initTagEntry (&tag, vStringValue (ident));
@@ -534,7 +535,7 @@ static void ignoreTypeParams (struct LexingState* st)
 	}
 }
 
-static RustParserAction parseStruct ( RustToken what,vString*  ident, const RustParserContext* parentCtx, RustParserContext* ctx)
+static RustParserAction parseStruct ( RustToken what,vString*  ident,  RustParserContext* ctx)
 {
 	printf("parse struct: %s",vStringValue(ident));
 	switch (what)
@@ -549,7 +550,7 @@ static RustParserAction parseStruct ( RustToken what,vString*  ident, const Rust
 	}
 	return PARSE_EXIT;
 }
-static RustParserAction parseEnum ( RustToken what,vString*  ident, const RustParserContext* parentCtx, RustParserContext* ctx)
+static RustParserAction parseEnum ( RustToken what,vString*  ident,  RustParserContext* ctx)
 {
 	printf("parse struct: %s",ident);
 	switch (what)
@@ -568,7 +569,7 @@ static RustParserAction parseEnum ( RustToken what,vString*  ident, const RustPa
 	return PARSE_EXIT;
 }
 
-static RustParserAction parseFn ( RustToken what,vString*  ident, const RustParserContext* parentCtx, RustParserContext* ctx)
+static RustParserAction parseFn ( RustToken what,vString*  ident, RustParserContext* ctx)
 {
 	printf("parse fn: %s",vStringValue(ident));
 	switch (what)
@@ -589,7 +590,7 @@ static RustParserAction parseFn ( RustToken what,vString*  ident, const RustPars
 	return PARSE_NEXT;
 }
 
-static RustParserAction parseMethods ( RustToken what,vString*  ident, const RustParserContext* parentCtx, RustParserContext* ctx)
+static RustParserAction parseMethods ( RustToken what,vString*  ident, RustParserContext* ctx)
 {
 	switch (what) {
 	case RustFN:
@@ -601,7 +602,7 @@ static RustParserAction parseMethods ( RustToken what,vString*  ident, const Rus
 	return PARSE_NEXT;
 } 
 
-static RustParserAction parseTrait ( RustToken what,vString*  ident, const RustParserContext* parentCtx, RustParserContext* ctx)
+static RustParserAction parseTrait ( RustToken what,vString*  ident, RustParserContext* ctx)
 {
 	printf("parse trait: %s",vStringValue(ident));
 	switch (what)
@@ -625,12 +626,12 @@ static RustParserAction parseTrait ( RustToken what,vString*  ident, const RustP
 void addTag_FirstIdent(vString* ident, RustKind kind, RustParserContext* ctx) {
 	if (!ctx->main_ident_set) {
 		printf("%d\n",ctx->main_ident_set);
-		addTag(ident,kind);
+		addTag(ident,kind,ctx);
 		ctx->main_ident_set++;
 	}
 }
 
-static RustParserAction parseImpl ( RustToken what,vString*  ident, const RustParserContext* parentCtx, RustParserContext* ctx)
+static RustParserAction parseImpl ( RustToken what,vString*  ident,  RustParserContext* ctx)
 {
 	printf("parse impl: %s",vStringValue(ident));
 	switch (what)
@@ -654,9 +655,9 @@ static RustParserAction parseImpl ( RustToken what,vString*  ident, const RustPa
 
 /* Handle the "strong" top levels, all 'big' declarations
  * happen here */
-static RustParserAction parseModBody (RustToken what,vString*  ident,  const RustParserContext* parentCtx, RustParserContext* ctx);
+static RustParserAction parseModBody (RustToken what,vString*  ident,   RustParserContext* ctx);
 
-static RustParserAction parseModHeader (RustToken what,vString*  ident,  const RustParserContext* parentCtx, RustParserContext* ctx) {
+static RustParserAction parseModHeader (RustToken what,vString*  ident,  RustParserContext* ctx) {
 	printf("PARSE MDODE HAEADER");
 	switch (what) {
 	case RustIDENTIFIER:
@@ -670,7 +671,7 @@ static RustParserAction parseModHeader (RustToken what,vString*  ident,  const R
 	}
 	return PARSE_NEXT;
 }
-static RustParserAction parseModBody (RustToken what,vString*  ident,  const RustParserContext* parentCtx, RustParserContext* ctx)
+static RustParserAction parseModBody (RustToken what,vString*  ident,   RustParserContext* ctx)
 {
 	printf("(parse mod body: %d)",what);
 	switch (what)
@@ -763,6 +764,7 @@ void parseRecursive(LexingState* st, const RustParserContext* parentContext) {
 	ctx.kind=parentContext->kind;
 	ctx.parser=NULL;
 	ctx.main_ident_set=0;
+	ctx.parent=parentContext;
 
 	while (1){
 		RustToken tok=lex(st);
@@ -770,7 +772,7 @@ void parseRecursive(LexingState* st, const RustParserContext* parentContext) {
 		if (tok==Tok_EOF)
 			break;
 		
-		int action=parentContext->parser(tok,st->name, parentContext, &ctx);
+		int action=parentContext->parser(tok,st->name,  &ctx);
 		//printf("action:\n",action);
 		if (action==PARSE_RECURSE) {
 			parseRecursive(st, &ctx);
@@ -804,6 +806,7 @@ static void findRustTags (void)
 	ctx.kind=K_MOD;	// root is a module.
 	ctx.parser= parseModBody;
 	ctx.main_ident_set=0;
+	ctx.parent=0;
 
 	parseRecursive(&st, &ctx);
 	vStringDelete(ctx.name);
