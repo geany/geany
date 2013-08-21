@@ -557,15 +557,17 @@ static void ignoreTypeParams (struct _LexingState* st)
 	}
 }
 
-
+// type declaration :....,;)}
 static RustParserAction parseSkipTypeDecl(RustToken what, vString* ident, RustParserContext* ctx)
 {
 	switch (what) {
 	case Tok_SEMI:
 	case Tok_COMMA:
 		return PARSE_EXIT;
-	case Tok_CurlR:	// TODO: THIS MUST PUSH IT BACK ON THE STEAM /can't consume
-		return PARSE_EXIT2;	 // exit2 means parent gets a } yuk this is a horrible way to do this. 
+	case Tok_GT:
+	case Tok_PARR:
+	case Tok_CurlR:	// TODO: THIS MUST PUSH IT BACK , or have peek instead of consume?
+		return PARSE_EXIT2;	 // exit2 means parent gets a } yuk this is a horrible workaround
 	case Tok_PARL:
 		return PARSE_IGNORE_BALANCED;
 	case Tok_LT:
@@ -810,51 +812,6 @@ static RustParserAction parseModBody (RustToken what,vString*  ident,   RustPars
 		/* we don't care */
 		return PARSE_EXIT;
 
-/*
-	// rust module decls are always (fn|struct|trait|impl|mod) <ident> ...;
-	case RustIDENTIFIER:
-		// we keep track of the identifier if we
-		// come across a function. 
-		vStringCopy (tempName, ident);
-		break;
-*/
-
-/*
-	case Tok_PARL:
-		// if we find an opening parenthesis it means we
-		// found a function (or a macro...) 
-//		addTag (tempName, K_FN);
-		vStringClear (tempName);
-		comeAfter = &parseMod;
-		toDoNext = &ignoreBalanced;
-		ignoreBalanced (ident, what);
-		break;
-
-	case RustFN:
-		toDoNext = &parseFunction;
-		comeAfter = &parseMod;
-		break;
-
-
-	case RustTRAIT:
-		toDoNext = &parseTrait;
-		break;
-	case RustENUM:
-		toDoNext = &parseEnum;
-		break;
-
-	case RustIMPL:
-		toDoNext = &parseImpl;
-		break;
-	case RustFN:
-		toDoNext = &parseFunction;
-		break;
-
-	case RustTYPEDECL:
-		toDoNext = parseTypedecl;
-		comeAfter = &parseMod;
-		break;
-*/
 	case Tok_PARL:	
 	case Tok_CurlL:	
 		return PARSE_IGNORE_BALANCED;
@@ -865,7 +822,7 @@ static RustParserAction parseModBody (RustToken what,vString*  ident,   RustPars
 	}
 }
 
-/// Parser Main Loop
+/// Parser Nestable iterator
 int parseRecursive(LexingState* st,  RustParserContext* parentContext) {
 	RustParserContext ctx;
 	ctx.name=vStringNew();
