@@ -1,6 +1,7 @@
 /** @file LexD.cxx
- ** Lexer for D.
+ ** Lexer for Rust.
  **
+ ** derived from D lexer,
  ** Copyright (c) 2006 by Waldemar Augustyn <waldemar@wdmsys.com>
  ** Converted to lexer object and added further folding features/properties by "Udo Lechner" <dlchnr(at)gmx(dot)net>
  **/
