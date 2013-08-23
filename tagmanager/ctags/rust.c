@@ -529,7 +529,7 @@ static void ignoreTypeParams (LexingState* st)
 	int ignoreBalanced_count = 1;
 	dbprintf("ignore type params\n");
 	while (ignoreBalanced_count>0) {
-		RustKind tok=lex(st);
+		RustToken tok=lex(st);
 		switch (tok) {
 		case Tok_LT:
 			ignoreBalanced_count++;
