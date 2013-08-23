@@ -825,7 +825,7 @@ static RustParserAction parseModBody (RustToken what,vString*  ident,   RustPars
 }
 
 /// Parser Nestable iterator
-int parseRecursive(LexingState* st,  RustParserContext* parentContext) {
+static int parseRecursive(LexingState* st,  RustParserContext* parentContext) {
 	int ret=0;
 	RustParserContext ctx;
 	ctx.name=vStringNew();
