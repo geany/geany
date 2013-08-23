@@ -23,7 +23,7 @@
 #include "vstring.h"
 
 
-#define dbprintf(x,...)
+#define dbprintf(...) /* nothing */
 
 
 typedef enum {
