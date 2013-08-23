@@ -22,7 +22,11 @@
 #include "vstring.h"
 
 
-#define dbprintf(...) /* nothing */
+#if defined(DEBUG) && DEBUG
+#	define dbprintf(...) printf(__VA_ARGS__)
+#else /* !DEBUG */
+#	define dbprintf(...) /* nothing */
+#endif
 
 
 typedef enum {
