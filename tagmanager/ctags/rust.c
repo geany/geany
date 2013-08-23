@@ -513,7 +513,7 @@ static void ignoreBalanced (LexingState* st)
 {
 	int ignoreBalanced_count = 1;
 	while (ignoreBalanced_count>0) {
-		RustKind tok=lex(st);
+		RustToken tok=lex(st);
 		switch (tok) {
 		case Tok_PARL:
 		case Tok_CurlL:
