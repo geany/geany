@@ -54,13 +54,15 @@ typedef enum {
 
 #define PARSE_EXIT_SHIFT 16
 #define PARSE_EXIT_MASK (0xff<<(PARSE_EXIT_SHIFT))
+#define PARSE_GET_EXIT_COUNT(PARSE_ACTION) ((PARSE_ACTION)>>PARSE_EXIT_SHIFT)
+#define PARSE_EXIT_CODE(ACTION,RET_LEVELS) ((ACTION)|((RET_LEVELS)<<PARSE_EXIT_SHIFT))
 typedef enum  {
 	PARSE_NEXT,
 	PARSE_RECURSE,
 	PARSE_IGNORE_BALANCED,
 	PARSE_IGNORE_TYPE_PARAMS,
-	PARSE_EXIT=0x10000,
-	PARSE_EXIT2=0x20000,
+	PARSE_EXIT=PARSE_EXIT_CODE(0,1),
+	PARSE_EXIT2=PARSE_EXIT_CODE(0,2)
 }
 RustParserAction;
 
@@ -823,8 +825,9 @@ int parseRecursive(LexingState* st,  RustParserContext* parentContext) {
 	ctx.parser=NULL;
 	ctx.main_ident_set=0;
 	ctx.parent=parentContext;
-	if (parentContext)
+	if (parentContext) {
 		dbprintf("%x %d:%s . this=%x\n",parentContext,parentContext->kind,vStringValue(parentContext->name),&ctx);
+	}
 	int ret=0;
 
 	while (1){
@@ -837,7 +840,7 @@ int parseRecursive(LexingState* st,  RustParserContext* parentContext) {
 		}
 		int action=parentContext->parser(tok,st->name,  &ctx);
 		int sub_action = action & (~PARSE_EXIT_MASK);
-		//printf("action:\n",action);
+		dbprintf("action:\n",action);
 		if (sub_action==PARSE_RECURSE) {
 			dbprintf("recurse: %x\n",ctx.parser);
 			int ret_level=parseRecursive(st, &ctx);
@@ -854,7 +857,7 @@ int parseRecursive(LexingState* st,  RustParserContext* parentContext) {
 		}
 		if (action & PARSE_EXIT_MASK) {
 			//number of levels to exit.
-			ret=((action)>>16)-1;
+			ret=PARSE_GET_EXIT_COUNT(action)-1;
 			
 			break;
 		}
