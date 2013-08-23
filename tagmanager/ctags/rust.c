@@ -66,7 +66,7 @@ static kindOption RustKinds[] = {
 	{TRUE, 'i', "interface", "trait interface"},
 	{TRUE, 'c', "implementation", "implementation"},
 	{TRUE, 'f', "function", "Function"},
-	{TRUE, 'e', "enumeration", "Enum "}, // TODO tagged 'u' union, or enum ('e')? 
+	{TRUE, 'e', "enumeration", "Enum "}, // TODO tagged 'u' union, or enum ('e')?
 	{TRUE, 't', "typedef", "Type Alias"},
 	{TRUE, 'v', "variable", "Global variable"},
 	{TRUE, 'M', "macro", "Macro Definition"},
@@ -481,6 +481,7 @@ static RustParserContext* ctxParentParent(RustParserContext* ctx) {
 		return ctx->parent->parent;
 	else return NULL;
 }
+
 static void addTag_MainIdent(vString* ident, RustKind kind, RustParserContext* ctx) {
 	if (!ctx->main_ident_set) {
 		ctx->main_ident_set++;
@@ -588,7 +589,7 @@ static RustParserAction parseStructDecl ( RustToken what,vString*  ident,  RustP
 		return PARSE_NEXT;
 	case Tok_PARL: // todo - parse 'argument block' here
 		return PARSE_IGNORE_BALANCED|PARSE_EXIT;
-	case Tok_CurlL:	
+	case Tok_CurlL:
 		ctx->parser = parseStructFields;
 		return PARSE_RECURSE|PARSE_EXIT;
 		break;
@@ -606,7 +607,7 @@ static RustParserAction parseEnumVariants(RustToken what, vString* ident, RustPa
 
 	// TODO: should really be parsing a collection of structs here
 	// then we'd get members of structural types too.
-	// un-named ones are more common in rust code though 
+	// un-named ones are more common in rust code though
 
 	case RustIDENTIFIER:
 		addTag(ident,K_VARIANT,ctx,ctx->parent);
@@ -632,12 +633,12 @@ static RustParserAction parseEnumDecl ( RustToken what,vString*  ident,  RustPar
 	case RustIDENTIFIER:
 		addTag_MainIdent (ident, K_STRUCT,ctx);
 		return PARSE_NEXT;
-	case Tok_LT:	
+	case Tok_LT:
 		return PARSE_IGNORE_TYPE_PARAMS;
-	case Tok_CurlL:	
+	case Tok_CurlL:
 		ctx->parser=parseEnumVariants;
 		return	PARSE_RECURSE|PARSE_EXIT;
-	case Tok_PARL:		
+	case Tok_PARL:
 		return PARSE_IGNORE_BALANCED|PARSE_EXIT;
 	default: return PARSE_EXIT;
 	}
@@ -654,7 +655,7 @@ static RustParserAction parseMethod ( RustToken what,vString*  ident, RustParser
 	case RustIDENTIFIER:
 		addTag_MainIdent (ident, K_METHOD,ctx);
 		return PARSE_NEXT;
-	case Tok_LT:	
+	case Tok_LT:
 		return PARSE_IGNORE_TYPE_PARAMS;
 	case Tok_PARL:	// param block
 		return PARSE_IGNORE_BALANCED;
@@ -677,7 +678,7 @@ static RustParserAction parseFn ( RustToken what,vString*  ident, RustParserCont
 	case RustIDENTIFIER:
 		addTag_MainIdent (ident, K_FN,ctx);
 		return PARSE_NEXT;
-	case Tok_LT:	
+	case Tok_LT:
 		return PARSE_IGNORE_TYPE_PARAMS;
 	case Tok_PARL:	// param block
 		return PARSE_IGNORE_BALANCED;
@@ -702,7 +703,7 @@ static RustParserAction parseMethods ( RustToken what,vString*  ident, RustParse
 	default: return PARSE_NEXT;
 	}
 	return PARSE_NEXT;
-} 
+}
 
 static RustParserAction parseTrait ( RustToken what,vString*  ident, RustParserContext* ctx)
 {
@@ -712,14 +713,14 @@ static RustParserAction parseTrait ( RustToken what,vString*  ident, RustParserC
 	case RustIDENTIFIER:
 		addTag_MainIdent (ident, K_TRAIT,ctx);
 		return PARSE_NEXT;
-	case Tok_CurlL:	
+	case Tok_CurlL:
 		ctx->parser=parseMethods;
 		return PARSE_RECURSE|PARSE_EXIT;
 		break;
-	case Tok_PARL:	
+	case Tok_PARL:
 		return PARSE_IGNORE_BALANCED|PARSE_EXIT;
 		break;
-	case Tok_LT:	
+	case Tok_LT:
 		return PARSE_IGNORE_TYPE_PARAMS;
 	default: return PARSE_EXIT;
 	}
@@ -731,7 +732,7 @@ static RustParserAction parseImpl ( RustToken what,vString*  ident,  RustParserC
 	dbprintf("parse impl: %s\n", vStringValue(ident));
 	switch (what)
 	{
-	case RustFOR:	// clearn the main ident so the next overwrites it. 
+	case RustFOR:	// clearn the main ident so the next overwrites it.
 					// this allows gathering member functions on the struct.
 					//  impl <TRAIT> for <STRUCT> {...}
 		ctx->main_ident_set=0;
@@ -739,12 +740,12 @@ static RustParserAction parseImpl ( RustToken what,vString*  ident,  RustParserC
 	case RustIDENTIFIER:
 		addTag_MainIdent (ident, K_IMPL,ctx);
 		return PARSE_NEXT;
-	case Tok_CurlL:	
+	case Tok_CurlL:
 		ctx->parser=parseMethods;
 		return PARSE_RECURSE|PARSE_EXIT;
-	case Tok_LT:	
-		return PARSE_IGNORE_TYPE_PARAMS;		
-	case Tok_PARL:	
+	case Tok_LT:
+		return PARSE_IGNORE_TYPE_PARAMS;
+	case Tok_PARL:
 		return PARSE_IGNORE_BALANCED|PARSE_EXIT;
 		break;
 	default: return PARSE_EXIT;
@@ -810,8 +811,8 @@ static RustParserAction parseModBody (RustToken what,vString*  ident, RustParser
 		/* we don't care */
 		return PARSE_EXIT;
 
-	case Tok_PARL:	
-	case Tok_CurlL:	
+	case Tok_PARL:
+	case Tok_CurlL:
 		return PARSE_IGNORE_BALANCED;
 	
 	default:
