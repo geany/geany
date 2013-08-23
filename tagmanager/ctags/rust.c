@@ -518,6 +518,8 @@ static void ignoreBalanced (LexingState* st)
 		case Tok_SQUARER:
 			ignoreBalanced_count--;
 			continue;
+		default:
+			break;
 		}
 	}
 }
@@ -535,6 +537,8 @@ static void ignoreTypeParams (LexingState* st)
 		case Tok_GT:
 			ignoreBalanced_count--;
 			continue;
+		default:
+			break;
 		}
 	}
 }
