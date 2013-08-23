@@ -129,6 +129,7 @@ typedef enum {
 	RustIN,
 	RustAS,
 	RustMATCH,
+	RustMUT,
 
 	Tok_EOF	/* END of file */
 } RustKeyword;
@@ -136,7 +137,7 @@ typedef enum {
 const char* rustTokStr[]={
 	",","+","-","*","&","|","$","%","^","?","@","~","/","(",")","<",">","{","}","[","]",";",":","#","\\","\n","any",
 	"mod","struct","trait","impl","fn","enum","type","static","macro_rules!",
-	"","","","","","pub","priv","unsafe","extern","let","use","for","in","as","match"
+	"","","","","","pub","priv","unsafe","extern","let","use","for","in","as","match","mut"
 };
 typedef RustKeyword RustToken;
 
@@ -621,7 +622,6 @@ static const char* lex_strdup_balanced(LexingState* st,const char* open) {
 			break;
 		default:
 			str_realloc_cat(&str,rustTokStr[tok]);
-			str_realloc_cat(&str," ");
 			break;
 		}
 	}
