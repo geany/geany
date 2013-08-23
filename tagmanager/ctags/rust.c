@@ -33,7 +33,7 @@
 # define UNUSED(x) x
 #endif
 
-#define dbprintf //
+#define dbprintf(x,...)
 
 
 typedef enum {
