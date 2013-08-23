@@ -49,7 +49,8 @@ context_action_cmd=
 
 [named_styles]
 # Additional chromacoding contexts for rust, beyond those avaiable in default styles
-# TODO move to filetypes.common when others have used it?
+# will be used if/when scintilla supports rust
+# should this be moved to filetypes.common ?
 keyword=0x202020;0xffffff;true;false
 operator=0x004020;0xffffff;false;false
 delimiter=0x200040;0xffffff;false;false

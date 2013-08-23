@@ -658,6 +658,30 @@ static RustParserAction parseEnumDecl ( RustToken what,vString*  ident,  RustPar
 	return PARSE_EXIT;
 }
 
+static RustParserAction parseMethod ( RustToken what,vString*  ident, RustParserContext* ctx)
+{
+	// TODO - reduce cut/paste, factor in common part with Fn!
+	// its all the same except K_METHOD instead of K_FN - but we want that to distinguish .completions
+	dbprintf("%x parse fn: %s\n",ctx, vStringValue(ident));
+	switch (what)
+	{
+	case RustIDENTIFIER:
+		addTag_MainIdent (ident, K_METHOD,ctx);
+		return PARSE_NEXT;
+	case Tok_LT:	
+		return PARSE_IGNORE_TYPE_PARAMS;
+	case Tok_PARL:	// param block
+		return PARSE_IGNORE_BALANCED;
+	case Tok_CurlL:	// fn body, then quit.
+		return PARSE_IGNORE_BALANCED|PARSE_EXIT;
+		break;
+	case Tok_SEMI:	// fn body, then quit.
+		return PARSE_EXIT;
+	}
+	return PARSE_NEXT;
+}
+
+
 static RustParserAction parseFn ( RustToken what,vString*  ident, RustParserContext* ctx)
 {
 	dbprintf("%x parse fn: %s\n",ctx, vStringValue(ident));
@@ -683,7 +707,7 @@ static RustParserAction parseMethods ( RustToken what,vString*  ident, RustParse
 {
 	switch (what) {
 	case RustFN:
-		ctx->parser=parseFn;
+		ctx->parser=parseMethod;
 		return PARSE_RECURSE;
 	case Tok_CurlR:
 		return PARSE_EXIT;

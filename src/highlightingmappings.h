@@ -421,7 +421,6 @@ static const HLStyle highlighting_styles_D[] =
 	/*{ SCE_D_WORD6,					"word6",					FALSE },
 	{ SCE_D_WORD7,					"word7",					FALSE }*/
 };
-
 static const HLKeyword highlighting_keywords_D[] =
 {
 	{ 0, "primary",		FALSE },
@@ -432,58 +431,6 @@ static const HLKeyword highlighting_keywords_D[] =
 	{ 4, "types",		FALSE },
 };
 #define highlighting_properties_D		EMPTY_PROPERTIES
-
-
-/* Rust */
-#define highlighting_lexer_Rust		SCLEX_RUST
-static const HLStyle highlighting_styles_Rust[] =
-{
-	{ SCE_RUST_DEFAULT,				"default",					FALSE },
-	{ SCE_RUST_COMMENT,				"rcomment",					FALSE },
-	{ SCE_RUST_COMMENTLINE,			"rcommentline",				FALSE },
-	{ SCE_RUST_COMMENTDOC,				"rcommentdoc",				FALSE },
-	{ SCE_RUST_COMMENTNESTED,			"rcommentnested",			FALSE },
-	{ SCE_RUST_NUMBER,					"number",					FALSE },
-	{ SCE_RUST_WORD,					"word",						FALSE },
-	{ SCE_RUST_WORD2,					"word2",					FALSE },
-	{ SCE_RUST_WORD3,					"word3",					FALSE },
-	{ SCE_RUST_TYPEDEF,				"typedef",					FALSE }, /* FIXME: don't remap here */
-	{ SCE_RUST_STRING,					"string",					FALSE },
-	{ SCE_RUST_STRINGB,				"string",					FALSE },
-	{ SCE_RUST_STRINGR,				"string",					FALSE },
-	{ SCE_RUST_STRINGEOL,				"stringeol",				FALSE },
-	{ SCE_RUST_CHARACTER,				"character",				FALSE },
-	{ SCE_RUST_OPERATOR,				"operator",					FALSE },
-	{ SCE_RUST_IDENTIFIER,				"identifier",				FALSE },
-	{ SCE_RUST_COMMENTLINEDOC,			"rcommentlinedoc",			FALSE },
-	{ SCE_RUST_COMMENTDOCKEYWORD,		"rcommentdockeyword",		FALSE },
-	{ SCE_RUST_COMMENTDOCKEYWORDERROR,	"rcommentdockeyworderror",	FALSE },
-	{ SCE_RUST_DELIMITER,	"delimiter",	FALSE },
-	{ SCE_RUST_SPECIAL_DELIMITER,	"special_delimiter",	FALSE },
-	{ SCE_RUST_STRUCT,	"struct",	FALSE },
-	{ SCE_RUST_TRAIT,	"trait",	FALSE },
-	{ SCE_RUST_IMPL,	"impl",	FALSE },
-	{ SCE_RUST_FN,	"fn",	FALSE },
-	{ SCE_RUST_ENUM,	"enum",	FALSE },
-	{ SCE_RUST_TYPE_DECL,	"type_decl",	FALSE },
-	{ SCE_RUST_TYPE_PARAM,	"type_param",	FALSE },
-	{ SCE_RUST_TYPE,	"type",	FALSE }
-	/* these are for user-defined keywords we don't set yet */
-	/*{ SCE_D_WORD6,					"word6",					FALSE },
-	{ SCE_D_WORD7,					"word7",					FALSE }*/
-};
-
-static const HLKeyword highlighting_keywords_Rust[] =
-{
-	{ 0, "primary",		TRUE },
-	/* SCI_SETKEYWORDS = 1 - secondary + global tags file types */
-	{ 1, "secondary",	TRUE },
-	{ 2, "docComment",	FALSE },
-	/* SCI_SETKEYWORDS = 3 is for current session types - see editor_lexer_get_type_keyword_idx() */
-	{ 4, "types",		FALSE },
-};
-#define highlighting_properties_D		EMPTY_PROPERTIES
-
 
 
 /* Diff */
