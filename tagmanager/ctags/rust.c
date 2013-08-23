@@ -464,7 +464,9 @@ static void addTag (vString * const ident, int kind, const RustParserContext* ct
 	tag.kind = RustKinds[kind].letter;
 
 	if (parent) {
-		dbprintf("%x nested in  %x %d %s %s\n",ctx,parent, parent->kind, RustKinds[parent->kind].name,vStringValue(parent->name));
+		dbprintf("%p nested in %p %d %s %s\n",
+		         ctx, parent, parent->kind, RustKinds[parent->kind].name,
+		         vStringValue(parent->name));
 		tag.extensionFields.scope[0]=RustKinds[parent->kind].name;
 		tag.extensionFields.scope[1]=vStringValue(parent->name);
 	}
@@ -487,7 +489,7 @@ static void addTag_MainIdent(vString* ident, RustKind kind, RustParserContext* c
 			vStringDelete(ctx->name);
 		}
 		ctx->name=vStringNewCopy(ident);
-		dbprintf("set main ident %x %d %s\n",ctx, ctx->kind, vStringValue(ctx->name));
+		dbprintf("set main ident %p %d %s\n", ctx, ctx->kind, vStringValue(ctx->name));
 	}
 }
 
@@ -574,7 +576,7 @@ static RustParserAction parseStructFields(RustToken what, vString* ident, RustPa
 
 static RustParserAction parseStructDecl ( RustToken what,vString*  ident,  RustParserContext* ctx)
 {
-	dbprintf("parse struct: %s\n",vStringValue(ident));
+	dbprintf("parse struct: %s\n", vStringValue(ident));
 	switch (what)
 	{
 	// todo: typeparams.
@@ -596,7 +598,7 @@ static RustParserAction parseStructDecl ( RustToken what,vString*  ident,  RustP
 
 static RustParserAction parseEnumVariants(RustToken what, vString* ident, RustParserContext* ctx)
 {
-	dbprintf("parse enum variant: %s\n",vStringValue(ident));
+	dbprintf("parse enum variant: %s\n", vStringValue(ident));
 	switch (what) {
 
 	// TODO: should really be parsing a collection of structs here
@@ -621,7 +623,7 @@ static RustParserAction parseEnumVariants(RustToken what, vString* ident, RustPa
 
 static RustParserAction parseEnumDecl ( RustToken what,vString*  ident,  RustParserContext* ctx)
 {
-	dbprintf("parse enumdecl: %s\n",vStringValue(ident));
+	dbprintf("parse enumdecl: %s\n", vStringValue(ident));
 	switch (what)
 	{
 	case RustIDENTIFIER:
@@ -643,7 +645,7 @@ static RustParserAction parseMethod ( RustToken what,vString*  ident, RustParser
 {
 	// TODO - reduce cut/paste, factor in common part with Fn!
 	// its all the same except K_METHOD instead of K_FN - but we want that to distinguish .completions
-	dbprintf("%x parse fn: %s\n",ctx, vStringValue(ident));
+	dbprintf("%p parse fn: %s\n", ctx, vStringValue(ident));
 	switch (what)
 	{
 	case RustIDENTIFIER:
@@ -666,7 +668,7 @@ static RustParserAction parseMethod ( RustToken what,vString*  ident, RustParser
 
 static RustParserAction parseFn ( RustToken what,vString*  ident, RustParserContext* ctx)
 {
-	dbprintf("%x parse fn: %s\n",ctx, vStringValue(ident));
+	dbprintf("%p parse fn: %s\n", ctx, vStringValue(ident));
 	switch (what)
 	{
 	case RustIDENTIFIER:
@@ -701,7 +703,7 @@ static RustParserAction parseMethods ( RustToken what,vString*  ident, RustParse
 
 static RustParserAction parseTrait ( RustToken what,vString*  ident, RustParserContext* ctx)
 {
-	dbprintf("%x parse trait: %s\n",ctx, vStringValue(ident));
+	dbprintf("%p parse trait: %s\n", ctx, vStringValue(ident));
 	switch (what)
 	{
 	case RustIDENTIFIER:
@@ -723,7 +725,7 @@ static RustParserAction parseTrait ( RustToken what,vString*  ident, RustParserC
 
 static RustParserAction parseImpl ( RustToken what,vString*  ident,  RustParserContext* ctx)
 {
-	dbprintf("parse impl: %s\n",vStringValue(ident));
+	dbprintf("parse impl: %s\n", vStringValue(ident));
 	switch (what)
 	{
 	case RustFOR:	// clearn the main ident so the next overwrites it. 
@@ -770,9 +772,10 @@ static RustParserAction parseModDecl (RustToken what,vString*  ident,  RustParse
 	}
 	return PARSE_NEXT;
 }
-static RustParserAction parseModBody (RustToken what,vString*  ident,   RustParserContext* ctx)
+
+static RustParserAction parseModBody (RustToken what,vString*  ident, RustParserContext* ctx)
 {
-	dbprintf("(parse mod body: %d)",what);
+	dbprintf("(parse mod body: %d)", what);
 	switch (what)
 	{
 
@@ -823,26 +826,24 @@ static int parseRecursive(LexingState* st,  RustParserContext* parentContext) {
 	ctx.parser=NULL;
 	ctx.main_ident_set=0;
 	ctx.parent=parentContext;
-	if (parentContext) {
-		dbprintf("%x %d:%s . this=%x\n",parentContext,parentContext->kind,vStringValue(parentContext->name),&ctx);
-	}
+
+	Assert(parentContext && parentContext->parser);
+
+	dbprintf("%p %d:%s . this=%p\n", parentContext, parentContext->kind, vStringValue(parentContext->name), &ctx);
 
 	while (1){
 		int action=0,sub_action=0;
 
 		RustToken tok=lex(st);
-		dbprintf("(%d %s)\n",tok,vStringValue(st->name));
+		dbprintf("(%d %s)\n", tok, vStringValue(st->name));
 		if (tok==Tok_EOF)
 			break;
-		if (!parentContext->parser) {
-			dbprintf("%d %x?! no callback\n");
-		}
 		action=parentContext->parser(tok,st->name,  &ctx);
 		sub_action = action & (~PARSE_EXIT_MASK);
-		dbprintf("action:\n",action);
+		dbprintf("action: %d\n", action);
 		if (sub_action==PARSE_RECURSE) {
 			int ret_level=0;
-			dbprintf("recurse: %x\n",ctx.parser);
+			dbprintf("recurse: %p\n", ctx.parser);
 			ret_level=parseRecursive(st, &ctx);
 			if (ret_level>0) {
 				ret=ret_level-1;
