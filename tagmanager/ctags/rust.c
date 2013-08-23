@@ -532,8 +532,8 @@ static void ignoreBalanced (LexingState* st)
 
 static void ignoreTypeParams (LexingState* st)
 {
-	dbprintf("ignore type params\n");
 	int ignoreBalanced_count = 1;
+	dbprintf("ignore type params\n");
 	while (ignoreBalanced_count>0) {
 		RustKind tok=lex(st);
 		switch (tok) {
