@@ -830,6 +830,7 @@ static RustParserAction parseModBody (RustToken what,vString*  ident,   RustPars
 
 /// Parser Nestable iterator
 int parseRecursive(LexingState* st,  RustParserContext* parentContext) {
+	int ret=0;
 	RustParserContext ctx;
 	ctx.name=vStringNew();
 	ctx.kind=K_NONE;
@@ -839,7 +840,6 @@ int parseRecursive(LexingState* st,  RustParserContext* parentContext) {
 	if (parentContext) {
 		dbprintf("%x %d:%s . this=%x\n",parentContext,parentContext->kind,vStringValue(parentContext->name),&ctx);
 	}
-	int ret=0;
 
 	while (1){
 		RustToken tok=lex(st);
@@ -884,7 +884,7 @@ static void findRustTags (void)
 {
 	LexingState st;
 	st.name = vStringNew();
-	RustToken tok;
+
 	RustParserContext ctx;
 	ctx.name=vStringNew();
 	ctx.kind=K_MOD;	// root is a module.
