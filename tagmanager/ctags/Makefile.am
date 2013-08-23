@@ -43,13 +43,13 @@ parsers = \
 	r.c \
 	rest.c \
 	ruby.c \
+	rust.c \
 	sh.c \
 	sql.c \
 	tcl.c \
 	txt2tags.c \
 	verilog.c \
-	vhdl.c \
-	rust.c
+	vhdl.c
 
 libctags_a_SOURCES = \
 	args.c \
