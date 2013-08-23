@@ -562,6 +562,7 @@ static RustParserAction parseSkipTypeDecl(RustToken what, vString* ident, RustPa
 		return PARSE_IGNORE_BALANCED;
 	case Tok_LT:
 		return PARSE_IGNORE_TYPE_PARAMS;
+	default: return PARSE_NEXT;
 	}
 	return PARSE_NEXT;
 }
@@ -579,6 +580,7 @@ static RustParserAction parseStructFields(RustToken what, vString* ident, RustPa
 	break;
 	case Tok_CurlR:
 		return PARSE_EXIT;
+	default: return PARSE_NEXT;
 	}
 	return PARSE_NEXT;
 }
@@ -601,6 +603,7 @@ static RustParserAction parseStructDecl ( RustToken what,vString*  ident,  RustP
 		break;
 	case Tok_SEMI:
 		return PARSE_EXIT;
+	default: return PARSE_EXIT;
 	}
 	return PARSE_EXIT;
 }
@@ -625,6 +628,7 @@ static RustParserAction parseEnumVariants(RustToken what, vString* ident, RustPa
 	case Tok_CurlR:
 		return PARSE_EXIT;
 	break;
+	default: return PARSE_NEXT;
 	}
 	return PARSE_NEXT;
 }
@@ -644,6 +648,7 @@ static RustParserAction parseEnumDecl ( RustToken what,vString*  ident,  RustPar
 		return	PARSE_RECURSE|PARSE_EXIT;
 	case Tok_PARL:		
 		return PARSE_IGNORE_BALANCED|PARSE_EXIT;
+	default: return PARSE_EXIT;
 	}
 	return PARSE_EXIT;
 }
@@ -667,6 +672,7 @@ static RustParserAction parseMethod ( RustToken what,vString*  ident, RustParser
 		break;
 	case Tok_SEMI:	// fn body, then quit.
 		return PARSE_EXIT;
+	default: return PARSE_NEXT;
 	}
 	return PARSE_NEXT;
 }
@@ -689,6 +695,7 @@ static RustParserAction parseFn ( RustToken what,vString*  ident, RustParserCont
 		break;
 	case Tok_SEMI:	// fn body, then quit.
 		return PARSE_EXIT;
+	default: return PARSE_NEXT;
 	}
 	return PARSE_NEXT;
 }
@@ -701,6 +708,7 @@ static RustParserAction parseMethods ( RustToken what,vString*  ident, RustParse
 		return PARSE_RECURSE;
 	case Tok_CurlR:
 		return PARSE_EXIT;
+	default: return PARSE_NEXT;
 	}
 	return PARSE_NEXT;
 } 
@@ -722,6 +730,7 @@ static RustParserAction parseTrait ( RustToken what,vString*  ident, RustParserC
 		break;
 	case Tok_LT:	
 		return PARSE_IGNORE_TYPE_PARAMS;
+	default: return PARSE_EXIT;
 	}
 	return PARSE_EXIT;
 }
@@ -747,6 +756,7 @@ static RustParserAction parseImpl ( RustToken what,vString*  ident,  RustParserC
 	case Tok_PARL:	
 		return PARSE_IGNORE_BALANCED|PARSE_EXIT;
 		break;
+	default: return PARSE_EXIT;
 	}
 	return PARSE_EXIT;
 }
@@ -770,6 +780,7 @@ static RustParserAction parseModDecl (RustToken what,vString*  ident,  RustParse
 		return PARSE_RECURSE|PARSE_EXIT;
 	case Tok_SEMI:
 		return PARSE_EXIT;
+	default: return PARSE_NEXT;
 	}
 	return PARSE_NEXT;
 }
