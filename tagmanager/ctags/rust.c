@@ -907,7 +907,6 @@ static void rustInitialize (const langType language)
 
 extern parserDefinition *RustParser (void)
 {
-	dbprintf("rust parser\n");
 	static const char *const extensions[] = { "rs", NULL };
 	parserDefinition *def = parserNew ("Rust");
 	def->kinds = RustKinds;
@@ -915,6 +914,8 @@ extern parserDefinition *RustParser (void)
 	def->extensions = extensions;
 	def->parser = findRustTags;
 	def->initialize = rustInitialize;
+
+	dbprintf("rust parser\n");
 
 	return def;
 }
