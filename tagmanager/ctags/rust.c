@@ -842,6 +842,8 @@ int parseRecursive(LexingState* st,  RustParserContext* parentContext) {
 	}
 
 	while (1){
+		int action=0,sub_action=0;
+
 		RustToken tok=lex(st);
 		dbprintf("(%d %s)\n",tok,vStringValue(st->name));
 		if (tok==Tok_EOF)
@@ -849,12 +851,13 @@ int parseRecursive(LexingState* st,  RustParserContext* parentContext) {
 		if (!parentContext->parser) {
 			dbprintf("%d %x?! no callback\n");
 		}
-		int action=parentContext->parser(tok,st->name,  &ctx);
-		int sub_action = action & (~PARSE_EXIT_MASK);
+		action=parentContext->parser(tok,st->name,  &ctx);
+		sub_action = action & (~PARSE_EXIT_MASK);
 		dbprintf("action:\n",action);
 		if (sub_action==PARSE_RECURSE) {
+			int ret_level=0;
 			dbprintf("recurse: %x\n",ctx.parser);
-			int ret_level=parseRecursive(st, &ctx);
+			ret_level=parseRecursive(st, &ctx);
 			if (ret_level>0) {
 				ret=ret_level-1;
 				goto return_early;
@@ -883,9 +886,10 @@ return_early:
 static void findRustTags (void)
 {
 	LexingState st;
+	RustParserContext ctx;
+
 	st.name = vStringNew();
 
-	RustParserContext ctx;
 	ctx.name=vStringNew();
 	ctx.kind=K_MOD;	// root is a module.
 	ctx.parser= parseModBody;
