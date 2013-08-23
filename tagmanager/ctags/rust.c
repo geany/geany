@@ -21,6 +21,7 @@
 #include "read.h"
 #include "vstring.h"
 
+#define DEBUG 1 
 
 #if defined(DEBUG) && DEBUG
 #	define dbprintf(...) printf(__VA_ARGS__)
@@ -439,7 +440,7 @@ static RustKeyword lex(LexingState * st)
 
 struct RustParserContext;
 
-typedef RustParserAction (*fParse)( RustToken what,vString* ident, struct RustParserContext* ctx);
+typedef RustParserAction (*fParse)( RustToken what,LexingState* st, struct RustParserContext* ctx);
 
 typedef struct RustParserContext {
 	vString*	name;
@@ -453,7 +454,7 @@ typedef struct RustParserContext {
 
 /* Used to centralise tag creation, and be able to add
  * more information to it in the future */
-static void addTag (vString * const ident, int kind, const RustParserContext* ctx, const RustParserContext* parent)
+static void addTag (vString * const ident, const char* arglist, int kind, const RustParserContext* ctx, const RustParserContext* parent)
 {
 	tagEntryInfo tag;
 	initTagEntry (&tag, vStringValue (ident));
@@ -473,6 +474,7 @@ static void addTag (vString * const ident, int kind, const RustParserContext* ct
 		tag.extensionFields.scope[0]=RustKinds[parent->kind].name;
 		tag.extensionFields.scope[1]=vStringValue(parent->name);
 	}
+	tag.extensionFields.arglist=arglist;	// takes ownership
 	makeTagEntry (&tag);
 }
 
@@ -482,18 +484,32 @@ static RustParserContext* ctxParentParent(RustParserContext* ctx) {
 	else return NULL;
 }
 
-static void addTag_MainIdent(vString* ident, RustKind kind, RustParserContext* ctx) {
+// stores the 'main identifier' for a block eg function name, struct name..
+static void rpc_set_main_ident(RustParserContext* ctx,vString* ident,RustKind kind) {
 	if (!ctx->main_ident_set) {
 		ctx->main_ident_set++;
 		dbprintf("%d\n",ctx->main_ident_set);
-		
-		addTag(ident,kind,ctx, ctxParentParent(ctx));
 		ctx->kind=kind;
 		if (ctx->name) {
 			vStringDelete(ctx->name);
 		}
 		ctx->name=vStringNewCopy(ident);
-		dbprintf("set main ident %p %d %s\n", ctx, ctx->kind, vStringValue(ctx->name));
+		dbprintf("ctx set main ident %p %d %s\n", ctx, ctx->kind, vStringValue(ctx->name));
+	}
+}
+
+static void addTag_MainIdent(vString* ident, const char* arglist, RustKind kind, RustParserContext* ctx) {
+	if (!ctx->main_ident_set) {
+		ctx->main_ident_set++;
+		dbprintf("%d\n",ctx->main_ident_set);
+		
+		addTag(ident,arglist, kind,ctx, ctxParentParent(ctx));
+		ctx->kind=kind;
+		if (ctx->name) {
+			vStringDelete(ctx->name);
+		}
+		ctx->name=vStringNewCopy(ident);
+		dbprintf("tag set main ident %p %d %s\n", ctx, ctx->kind, vStringValue(ctx->name));
 	}
 }
 
@@ -540,7 +556,7 @@ static void ignoreTypeParams (LexingState* st)
 }
 
 // type declaration :....,;)}
-static RustParserAction parseSkipTypeDecl(RustToken what, vString* ident, RustParserContext* ctx)
+static RustParserAction parseSkipTypeDecl(RustToken what, LexingState* st, RustParserContext* ctx)
 {
 	switch (what) {
 	case Tok_SEMI:
@@ -559,12 +575,12 @@ static RustParserAction parseSkipTypeDecl(RustToken what, vString* ident, RustPa
 	return PARSE_NEXT;
 }
 
-static RustParserAction parseStructFields(RustToken what, vString* ident, RustParserContext* ctx)
+static RustParserAction parseStructFields(RustToken what, LexingState* st, RustParserContext* ctx)
 {
 	dbprintf("parse struct fields\n");
 	switch (what) {
 	case RustIDENTIFIER:	//only want the rirst .. until ?!
-		addTag(ident, K_FIELD, ctx,ctx->parent);
+		addTag(st->name, NULL, K_FIELD, ctx,ctx->parent);
 	break;
 	case Tok_COLON:
 		ctx->parser = parseSkipTypeDecl;
@@ -578,15 +594,14 @@ static RustParserAction parseStructFields(RustToken what, vString* ident, RustPa
 }
 
 
-static RustParserAction parseStructDecl ( RustToken what,vString*  ident,  RustParserContext* ctx)
+static RustParserAction parseStructDecl ( RustToken what,LexingState* st,  RustParserContext* ctx)
 {
-	dbprintf("parse struct: %s\n", vStringValue(ident));
+	dbprintf("parse struct: %s\n", vStringValue(st->name));
 	switch (what)
 	{
 	// todo: typeparams.
 	case RustIDENTIFIER:
-		addTag_MainIdent (ident, K_STRUCT,ctx);
-		return PARSE_NEXT;
+		addTag_MainIdent (st->name, NULL,K_STRUCT,ctx);
 	case Tok_PARL: // todo - parse 'argument block' here
 		return PARSE_IGNORE_BALANCED|PARSE_EXIT;
 	case Tok_CurlL:
@@ -600,9 +615,9 @@ static RustParserAction parseStructDecl ( RustToken what,vString*  ident,  RustP
 	return PARSE_EXIT;
 }
 
-static RustParserAction parseEnumVariants(RustToken what, vString* ident, RustParserContext* ctx)
+static RustParserAction parseEnumVariants(RustToken what, LexingState* st, RustParserContext* ctx)
 {
-	dbprintf("parse enum variant: %s\n", vStringValue(ident));
+	dbprintf("parse enum variant: %s\n", vStringValue(st->name));
 	switch (what) {
 
 	// TODO: should really be parsing a collection of structs here
@@ -610,7 +625,7 @@ static RustParserAction parseEnumVariants(RustToken what, vString* ident, RustPa
 	// un-named ones are more common in rust code though
 
 	case RustIDENTIFIER:
-		addTag(ident,K_VARIANT,ctx,ctx->parent);
+		addTag(st->name,NULL,K_VARIANT,ctx,ctx->parent);
 	break;
 	case Tok_LT:
 		return PARSE_IGNORE_TYPE_PARAMS;
@@ -625,13 +640,13 @@ static RustParserAction parseEnumVariants(RustToken what, vString* ident, RustPa
 	return PARSE_NEXT;
 }
 
-static RustParserAction parseEnumDecl ( RustToken what,vString*  ident,  RustParserContext* ctx)
+static RustParserAction parseEnumDecl ( RustToken what,LexingState* st,  RustParserContext* ctx)
 {
-	dbprintf("parse enumdecl: %s\n", vStringValue(ident));
+	dbprintf("parse enumdecl: %s\n", vStringValue(st->name));
 	switch (what)
 	{
 	case RustIDENTIFIER:
-		addTag_MainIdent (ident, K_STRUCT,ctx);
+		addTag_MainIdent (st->name, NULL,K_STRUCT,ctx);
 		return PARSE_NEXT;
 	case Tok_LT:
 		return PARSE_IGNORE_TYPE_PARAMS;
@@ -645,19 +660,26 @@ static RustParserAction parseEnumDecl ( RustToken what,vString*  ident,  RustPar
 	return PARSE_EXIT;
 }
 
-static RustParserAction parseMethod ( RustToken what,vString*  ident, RustParserContext* ctx)
+static RustParserAction parseMethod ( RustToken what,LexingState* st, RustParserContext* ctx)
 {
+	printf("parse method");
 	// TODO - reduce cut/paste, factor in common part with Fn!
 	// its all the same except K_METHOD instead of K_FN - but we want that to distinguish .completions
-	dbprintf("%p parse fn: %s\n", ctx, vStringValue(ident));
+	dbprintf("%p parse fn: %s\n", ctx, vStringValue(st->name));
 	switch (what)
 	{
 	case RustIDENTIFIER:
-		addTag_MainIdent (ident, K_METHOD,ctx);
+
+		//lookahead adn grab the argument block? no we dont have the parser.
+			addTag_MainIdent (st->name, NULL,K_METHOD,ctx);
+//		rpc_set_main_ident(ctx, st->name, K_METHOD);
+		
 		return PARSE_NEXT;
 	case Tok_LT:
 		return PARSE_IGNORE_TYPE_PARAMS;
 	case Tok_PARL:	// param block
+		printf("adding method %s",vStringValue(ctx->name));
+		//addTag(ctx->name, NULL,K_METHOD,ctx,ctxParentParent(ctx));
 		return PARSE_IGNORE_BALANCED;
 	case Tok_CurlL:	// fn body, then quit.
 		return PARSE_IGNORE_BALANCED|PARSE_EXIT;
@@ -670,13 +692,13 @@ static RustParserAction parseMethod ( RustToken what,vString*  ident, RustParser
 }
 
 
-static RustParserAction parseFn ( RustToken what,vString*  ident, RustParserContext* ctx)
+static RustParserAction parseFn ( RustToken what,LexingState* st, RustParserContext* ctx)
 {
-	dbprintf("%p parse fn: %s\n", ctx, vStringValue(ident));
+	dbprintf("%p parse fn: %s\n", ctx, vStringValue(st->name));
 	switch (what)
 	{
 	case RustIDENTIFIER:
-		addTag_MainIdent (ident, K_FN,ctx);
+		addTag_MainIdent (st->name, NULL,K_FN,ctx);
 		return PARSE_NEXT;
 	case Tok_LT:
 		return PARSE_IGNORE_TYPE_PARAMS;
@@ -692,7 +714,7 @@ static RustParserAction parseFn ( RustToken what,vString*  ident, RustParserCont
 	return PARSE_NEXT;
 }
 
-static RustParserAction parseMethods ( RustToken what,vString*  ident, RustParserContext* ctx)
+static RustParserAction parseMethods ( RustToken what,LexingState* st, RustParserContext* ctx)
 {
 	switch (what) {
 	case RustFN:
@@ -705,13 +727,13 @@ static RustParserAction parseMethods ( RustToken what,vString*  ident, RustParse
 	return PARSE_NEXT;
 }
 
-static RustParserAction parseTrait ( RustToken what,vString*  ident, RustParserContext* ctx)
+static RustParserAction parseTrait ( RustToken what,LexingState* st, RustParserContext* ctx)
 {
-	dbprintf("%p parse trait: %s\n", ctx, vStringValue(ident));
+	dbprintf("%p parse trait: %s\n", ctx, vStringValue(st->name));
 	switch (what)
 	{
 	case RustIDENTIFIER:
-		addTag_MainIdent (ident, K_TRAIT,ctx);
+		addTag_MainIdent (st->name, NULL,K_TRAIT,ctx);
 		return PARSE_NEXT;
 	case Tok_CurlL:
 		ctx->parser=parseMethods;
@@ -727,9 +749,9 @@ static RustParserAction parseTrait ( RustToken what,vString*  ident, RustParserC
 	return PARSE_EXIT;
 }
 
-static RustParserAction parseImpl ( RustToken what,vString*  ident,  RustParserContext* ctx)
+static RustParserAction parseImpl ( RustToken what,LexingState* st,  RustParserContext* ctx)
 {
-	dbprintf("parse impl: %s\n", vStringValue(ident));
+	printf("parse impl: %s\n", vStringValue(st->name));
 	switch (what)
 	{
 	case RustFOR:	// clearn the main ident so the next overwrites it.
@@ -738,9 +760,10 @@ static RustParserAction parseImpl ( RustToken what,vString*  ident,  RustParserC
 		ctx->main_ident_set=0;
 		return PARSE_NEXT;
 	case RustIDENTIFIER:
-		addTag_MainIdent (ident, K_IMPL,ctx);
+		addTag_MainIdent (st->name,NULL, K_IMPL,ctx);
 		return PARSE_NEXT;
 	case Tok_CurlL:
+		printf("foo\n");
 		ctx->parser=parseMethods;
 		return PARSE_RECURSE|PARSE_EXIT;
 	case Tok_LT:
@@ -757,14 +780,14 @@ static RustParserAction parseImpl ( RustToken what,vString*  ident,  RustParserC
 
 /* Handle the "strong" top levels, all 'big' declarations
  * happen here */
-static RustParserAction parseModBody (RustToken what,vString*  ident,   RustParserContext* ctx);
+static RustParserAction parseModBody (RustToken what,LexingState* st,   RustParserContext* ctx);
 
-static RustParserAction parseModDecl (RustToken what,vString*  ident,  RustParserContext* ctx) {
+static RustParserAction parseModDecl (RustToken what,LexingState* st,  RustParserContext* ctx) {
 	dbprintf("PARSE MOD HAEADER\n");
 	switch (what) {
 	case RustIDENTIFIER:
-		dbprintf("adding mod tag %s\n",vStringValue(ident));
-		addTag_MainIdent (ident, K_MOD, ctx);
+		dbprintf("adding mod tag %s\n",vStringValue(st->name));
+		addTag_MainIdent (st->name, NULL,K_MOD, ctx);
 		return PARSE_NEXT;
 
 	case Tok_CurlL:
@@ -777,7 +800,7 @@ static RustParserAction parseModDecl (RustToken what,vString*  ident,  RustParse
 	return PARSE_NEXT;
 }
 
-static RustParserAction parseModBody (RustToken what,vString*  ident, RustParserContext* ctx)
+static RustParserAction parseModBody (RustToken what,LexingState* st, RustParserContext* ctx)
 {
 	dbprintf("(parse mod body: %d)", what);
 	switch (what)
@@ -842,7 +865,7 @@ static int parseRecursive(LexingState* st,  RustParserContext* parentContext) {
 		dbprintf("(%d %s)\n", tok, vStringValue(st->name));
 		if (tok==Tok_EOF)
 			break;
-		action=parentContext->parser(tok,st->name,  &ctx);
+		action=parentContext->parser(tok, st,  &ctx);
 		sub_action = action & (~PARSE_EXIT_MASK);
 		dbprintf("action: %d\n", action);
 		if (sub_action==PARSE_RECURSE) {
