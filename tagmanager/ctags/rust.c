@@ -458,14 +458,6 @@ typedef struct RustParserContext {
 
 
 
-static void printTagEntry(const tagEntryInfo *tag)
-{
-	fprintf(stderr, "Tag: %s (%s) [ impl: %s, scope: %s, type: %s\n", tag->name,
-	tag->kindName, tag->extensionFields.implementation, tag->extensionFields.scope[1],
-	tag->extensionFields.varType);
-}
-
-
 /* Used to centralise tag creation, and be able to add
  * more information to it in the future */
 static void addTag (vString * const ident, int kind, const RustParserContext* ctx, const RustParserContext* parent)
