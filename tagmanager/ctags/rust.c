@@ -77,6 +77,34 @@ static kindOption RustKinds[] = {
 };
 
 typedef enum {
+	Tok_COMMA,	/* ',' */
+	Tok_PLUS,	/* '+' */
+	Tok_MINUS,	/* '-' */
+	Tok_MUL,
+	Tok_AMP,
+	Tok_OR,
+	Tok_DOLLAR,
+	Tok_MOD,
+	Tok_XOR,
+	Tok_QU,
+	Tok_AT,
+	Tok_TILDRE,
+	Tok_DIV,
+	Tok_PARL,	/* '(' */
+	Tok_PARR,	/* ')' */
+	Tok_LT,	/* '<' */
+	Tok_GT,	/* '>' */
+	Tok_CurlL,	/* '{' */
+	Tok_CurlR,	/* '}' */
+	Tok_SQUAREL,	/* '[' */
+	Tok_SQUARER,	/* ']' */
+	Tok_SEMI,	/* ';' */
+	Tok_COLON,	/* ':' */
+	Tok_Sharp,	/* '#' */
+	Tok_Backslash,	/* '\\' */
+	Tok_EOL,	/* '\r''\n' */
+	Tok_any,
+
 	RustMOD,
 	RustSTRUCT,
 	RustTRAIT,
@@ -95,30 +123,21 @@ typedef enum {
 	RustPRIV,
 	RustUNSAFE,
 	RustEXTERN,
+	RustLET,
 	RustUSE,
 	RustFOR,
-
-	Tok_COMMA,	/* ',' */
-	Tok_PLUS,	/* '+' */
-	Tok_MINUS,	/* '-' */
-	Tok_PARL,	/* '(' */
-	Tok_PARR,	/* ')' */
-	Tok_LT,	/* '<' */
-	Tok_GT,	/* '>' */
-	Tok_CurlL,	/* '{' */
-	Tok_CurlR,	/* '}' */
-	Tok_SQUAREL,	/* '[' */
-	Tok_SQUARER,	/* ']' */
-	Tok_SEMI,	/* ';' */
-	Tok_COLON,	/* ':' */
-	Tok_Sharp,	/* '#' */
-	Tok_Backslash,	/* '\\' */
-	Tok_EOL,	/* '\r''\n' */
-	Tok_any,
+	RustIN,
+	RustAS,
+	RustMATCH,
 
 	Tok_EOF	/* END of file */
 } RustKeyword;
 
+const char* rustTokStr[]={
+	",","+","-","*","&","|","$","%","^","?","@","~","/","(",")","<",">","{","}","[","]",";",":","#","\\","\n","any",
+	"mod","struct","trait","impl","fn","enum","type","static","macro_rules!",
+	"","","","","","pub","priv","unsafe","extern","let","use","for","in","as","match"
+};
 typedef RustKeyword RustToken;
 
 typedef struct sRustKeywordDesc {
@@ -380,9 +399,30 @@ static RustKeyword lex(LexingState * st)
 			else
 			{
 				st->cp++;
-				return Tok_any;
+				return Tok_DIV;
 			}
 			break;
+		case '*':
+			st->cp++;
+			return Tok_MUL;
+		case '&':
+			st->cp++;
+			return Tok_AMP;
+		case '@':
+			st->cp++;
+			return Tok_AT;
+		case '~':
+			st->cp++;
+			return Tok_TILDRE;
+		case '|':
+			st->cp++;
+			return Tok_OR;
+		case '$':
+			st->cp++;
+			return Tok_DOLLAR;
+		case '?':
+			st->cp++;
+			return Tok_QU;
 
 		case ')':
 			st->cp++;
@@ -536,6 +576,59 @@ static void ignoreBalanced (LexingState* st)
 	}
 }
 
+static void str_realloc_cat(char** ppStr, const char* src) {
+	*ppStr=realloc(*ppStr,strlen(*ppStr)+strlen(src)+1);
+	strcat(*ppStr, src);
+};
+
+static const char* lex_strdup_balanced(LexingState* st,const char* open) {
+	char* str=strdup(open);
+	
+	int ignoreBalanced_count = 1;
+	while (ignoreBalanced_count>0) {
+		RustToken tok=lex(st);
+		switch (tok) {
+		case Tok_PARL:
+			str_realloc_cat(&str,"(");
+			ignoreBalanced_count++;
+			continue;
+		case Tok_CurlL:
+			str_realloc_cat(&str,"{");
+			ignoreBalanced_count++;
+			continue;
+		case Tok_SQUAREL:
+			str_realloc_cat(&str,"[");
+			ignoreBalanced_count++;
+			continue;
+		case Tok_EOF:
+			ignoreBalanced_count--;
+			continue;
+		case Tok_PARR:
+			str_realloc_cat(&str,")");
+			ignoreBalanced_count--;
+			continue;
+		case Tok_CurlR:
+			str_realloc_cat(&str,"}");
+			ignoreBalanced_count--;
+			continue;
+		case Tok_SQUARER:
+			str_realloc_cat(&str,"]");
+			ignoreBalanced_count--;
+			continue;
+		case Tok_any:
+		case RustIDENTIFIER:
+			str_realloc_cat(&str,vStringValue(st->name));
+			break;
+		default:
+			str_realloc_cat(&str,rustTokStr[tok]);
+			str_realloc_cat(&str," ");
+			break;
+		}
+	}
+	return str;
+}
+
+
 static void ignoreTypeParams (LexingState* st)
 {
 	int ignoreBalanced_count = 1;
@@ -581,6 +674,7 @@ static RustParserAction parseStructFields(RustToken what, LexingState* st, RustP
 	switch (what) {
 	case RustIDENTIFIER:	//only want the rirst .. until ?!
 		addTag(st->name, NULL, K_FIELD, ctx,ctx->parent);
+	return PARSE_NEXT;
 	break;
 	case Tok_COLON:
 		ctx->parser = parseSkipTypeDecl;
@@ -590,7 +684,6 @@ static RustParserAction parseStructFields(RustToken what, LexingState* st, RustP
 		return PARSE_EXIT;
 	default: return PARSE_NEXT;
 	}
-	return PARSE_NEXT;
 }
 
 
@@ -602,6 +695,7 @@ static RustParserAction parseStructDecl ( RustToken what,LexingState* st,  RustP
 	// todo: typeparams.
 	case RustIDENTIFIER:
 		addTag_MainIdent (st->name, NULL,K_STRUCT,ctx);
+		return PARSE_NEXT;
 	case Tok_PARL: // todo - parse 'argument block' here
 		return PARSE_IGNORE_BALANCED|PARSE_EXIT;
 	case Tok_CurlL:
@@ -660,27 +754,30 @@ static RustParserAction parseEnumDecl ( RustToken what,LexingState* st,  RustPar
 	return PARSE_EXIT;
 }
 
+
+
 static RustParserAction parseMethod ( RustToken what,LexingState* st, RustParserContext* ctx)
 {
-	printf("parse method");
+	dbprintf("parse method");
 	// TODO - reduce cut/paste, factor in common part with Fn!
 	// its all the same except K_METHOD instead of K_FN - but we want that to distinguish .completions
 	dbprintf("%p parse fn: %s\n", ctx, vStringValue(st->name));
 	switch (what)
 	{
 	case RustIDENTIFIER:
-
-		//lookahead adn grab the argument block? no we dont have the parser.
-			addTag_MainIdent (st->name, NULL,K_METHOD,ctx);
-//		rpc_set_main_ident(ctx, st->name, K_METHOD);
-		
+		//stash the method name, we generate the actual method when we get the arg block (...)
+		rpc_set_main_ident(ctx, st->name, K_METHOD);		
 		return PARSE_NEXT;
 	case Tok_LT:
 		return PARSE_IGNORE_TYPE_PARAMS;
 	case Tok_PARL:	// param block
-		printf("adding method %s",vStringValue(ctx->name));
-		//addTag(ctx->name, NULL,K_METHOD,ctx,ctxParentParent(ctx));
-		return PARSE_IGNORE_BALANCED;
+		{
+			const char* args=lex_strdup_balanced(st,"(");
+			dbprintf("adding method %s",vStringValue(ctx->name));
+			printf("args");
+			addTag(ctx->name, args,K_METHOD,ctx,ctxParentParent(ctx));
+			return PARSE_NEXT;
+		}
 	case Tok_CurlL:	// fn body, then quit.
 		return PARSE_IGNORE_BALANCED|PARSE_EXIT;
 		break;
@@ -698,12 +795,20 @@ static RustParserAction parseFn ( RustToken what,LexingState* st, RustParserCont
 	switch (what)
 	{
 	case RustIDENTIFIER:
-		addTag_MainIdent (st->name, NULL,K_FN,ctx);
+		//stash the method name, we generate the actual method when we get the arg block (...)
+		rpc_set_main_ident(ctx, st->name, K_METHOD);		
 		return PARSE_NEXT;
 	case Tok_LT:
 		return PARSE_IGNORE_TYPE_PARAMS;
 	case Tok_PARL:	// param block
-		return PARSE_IGNORE_BALANCED;
+		{
+			const char* args=lex_strdup_balanced(st,"(");
+			dbprintf("adding method %s",vStringValue(ctx->name));
+			printf("args");
+			addTag(ctx->name, args,K_METHOD,ctx,ctxParentParent(ctx));
+			return PARSE_NEXT;
+		}
+
 	case Tok_CurlL:	// fn body, then quit.
 		return PARSE_IGNORE_BALANCED|PARSE_EXIT;
 		break;
