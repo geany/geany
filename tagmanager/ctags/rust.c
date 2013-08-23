@@ -304,13 +304,6 @@ static void readIdentifierRustDirective (LexingState * st)
 
 	vStringTerminate (st->name);
 }
-/*
-static PARSER_ACTION parsePreproc (vString * const ident, RustToken what, const RustParseContext* parent, RustParseContext* ctx) {
-	switch (what) {
-		
-	}
-}
-*/
 
 /* The lexer is in charge of reading the file.
  * Some of sub-lexer (like eatComment) also read file.
@@ -320,7 +313,7 @@ static RustKeyword lex(LexingState * st)
 	int retType;
 
 	/* handling data input here */
-	while (st->cp == NULL || st->cp[0] == '\0')
+	if (st->cp == NULL || st->cp[0] == '\0')
 	{
 		st->cp = fileReadLine ();
 		if (st->cp == NULL)
@@ -470,19 +463,6 @@ static void printTagEntry(const tagEntryInfo *tag)
 	tag->extensionFields.varType);
 }
 
-/* used to prepare tag for OCaml, just in case their is a need to
- * add additional information to the tag. */
-static void prepareTag (tagEntryInfo * tag, vString const *name, RustKind kind)
-{
-
-
-
-//	if (parentName != NULL)
-//	{
-//		tag->extensionFields.scope[0] = RustKinds[parentType].name;
-//		tag->extensionFields.scope[1] = vStringValue (parentName);
-//	}
-}
 
 /* Used to centralise tag creation, and be able to add
  * more information to it in the future */
@@ -499,27 +479,35 @@ static void addTag (vString * const ident, int kind, const RustParserContext* ct
 	tag.kindName=RustKinds[kind].name;
 	tag.kind = RustKinds[kind].letter;
 
-//	if (ctx->parent) {
-		// TODO - we currently nest 2 levels, can we avoid that. eg
-		//  trait
-		//    trait header...
-		//		trait body
-		//			trait function1
-		//			trait function2
-		//			..
 	if (parent) {
 		dbprintf("%x nested in  %x %d %s %s\n",ctx,parent, parent->kind, RustKinds[parent->kind].name,vStringValue(parent->name));
 		tag.extensionFields.scope[0]=RustKinds[parent->kind].name;
 		tag.extensionFields.scope[1]=vStringValue(parent->name);
 	}
-//	} 
-	//else printf("not nested\n");
-	// TODO arglist would be filled in here 
-	//	: tag.extentionFields.arglist
 	makeTagEntry (&tag);
 }
 
-static void ignoreBalanced (struct _LexingState* st)
+static RustParserContext* ctxParentParent(RustParserContext* ctx) {
+	if (ctx->parent)
+		return ctx->parent->parent;
+	else return NULL;
+}
+static void addTag_MainIdent(vString* ident, RustKind kind, RustParserContext* ctx) {
+	if (!ctx->main_ident_set) {
+		ctx->main_ident_set++;
+		dbprintf("%d\n",ctx->main_ident_set);
+		
+		addTag(ident,kind,ctx, ctxParentParent(ctx));
+		ctx->kind=kind;
+		if (ctx->name) {
+			vStringDelete(ctx->name);
+		}
+		ctx->name=vStringNewCopy(ident);
+		dbprintf("set main ident %x %d %s\n",ctx, ctx->kind, vStringValue(ctx->name));
+	}
+}
+
+static void ignoreBalanced (LexingState* st)
 {
 	int ignoreBalanced_count = 1;
 	while (ignoreBalanced_count>0) {
@@ -540,7 +528,7 @@ static void ignoreBalanced (struct _LexingState* st)
 	}
 }
 
-static void ignoreTypeParams (struct _LexingState* st)
+static void ignoreTypeParams (LexingState* st)
 {
 	dbprintf("ignore type params\n");
 	int ignoreBalanced_count = 1;
@@ -736,26 +724,6 @@ static RustParserAction parseTrait ( RustToken what,vString*  ident, RustParserC
 	return PARSE_EXIT;
 }
 
-RustParserContext* ctxParentParent(RustParserContext* ctx) {
-	if (ctx->parent)
-		return ctx->parent->parent;
-	else return NULL;
-}
-void addTag_MainIdent(vString* ident, RustKind kind, RustParserContext* ctx) {
-	if (!ctx->main_ident_set) {
-		ctx->main_ident_set++;
-		dbprintf("%d\n",ctx->main_ident_set);
-		
-		addTag(ident,kind,ctx, ctxParentParent(ctx));
-		ctx->kind=kind;
-		if (ctx->name) {
-			vStringDelete(ctx->name);
-		}
-		ctx->name=vStringNewCopy(ident);
-		dbprintf("set main ident %x %d %s\n",ctx, ctx->kind, vStringValue(ctx->name));
-	}
-}
-
 static RustParserAction parseImpl ( RustToken what,vString*  ident,  RustParserContext* ctx)
 {
 	dbprintf("parse impl: %s\n",vStringValue(ident));
@@ -763,6 +731,7 @@ static RustParserAction parseImpl ( RustToken what,vString*  ident,  RustParserC
 	{
 	case RustFOR:	// clearn the main ident so the next overwrites it. 
 					// this allows gathering member functions on the struct.
+					//  impl <TRAIT> for <STRUCT> {...}
 		ctx->main_ident_set=0;
 		return PARSE_NEXT;
 	case RustIDENTIFIER:
