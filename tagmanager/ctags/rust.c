@@ -475,13 +475,6 @@ static RustKeyword lex(LexingState * st)
 	return Tok_any;
 }
 
-static safe_free(void** ptr) {
-	if (*ptr) {
-		free(*ptr);
-		*ptr=NULL;
-	}
-}
-
 /********** Grammar */
 
 struct RustParserContext;
@@ -774,7 +767,7 @@ static RustParserAction parseMethod ( RustToken what,LexingState* st, RustParser
 			const char* args=lex_strdup_balanced(st,"(");
 			dbprintf("adding method %s",vStringValue(ctx->name));
 			addTag(ctx->name, args,K_METHOD,ctx,ctxParentParent(ctx));
-			safe_free((void**)&args);
+			free(args);
 			return PARSE_NEXT;
 		}
 	case Tok_CurlL:	// fn body, then quit.
@@ -804,7 +797,7 @@ static RustParserAction parseFn ( RustToken what,LexingState* st, RustParserCont
 			const char* args=lex_strdup_balanced(st,"(");
 			dbprintf("adding method %s",vStringValue(ctx->name));
 			addTag(ctx->name, args,K_METHOD,ctx,ctxParentParent(ctx));
-			safe_free((void**)&args);
+			free(args);
 			return PARSE_NEXT;
 		}
 
