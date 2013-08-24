@@ -767,7 +767,7 @@ static RustParserAction parseMethod ( RustToken what,LexingState* st, RustParser
 			const char* args=lex_strdup_balanced(st,"(");
 			dbprintf("adding method %s",vStringValue(ctx->name));
 			addTag(ctx->name, args,K_METHOD,ctx,ctxParentParent(ctx));
-			free(args);
+			free((void*)args);
 			return PARSE_NEXT;
 		}
 	case Tok_CurlL:	// fn body, then quit.
@@ -797,7 +797,7 @@ static RustParserAction parseFn ( RustToken what,LexingState* st, RustParserCont
 			const char* args=lex_strdup_balanced(st,"(");
 			dbprintf("adding method %s",vStringValue(ctx->name));
 			addTag(ctx->name, args,K_METHOD,ctx,ctxParentParent(ctx));
-			free(args);
+			free((void*)args);
 			return PARSE_NEXT;
 		}
 
