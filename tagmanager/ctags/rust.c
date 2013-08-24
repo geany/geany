@@ -475,6 +475,12 @@ static RustKeyword lex(LexingState * st)
 	return Tok_any;
 }
 
+static safe_free(void** ptr) {
+	if (*ptr) {
+		free(*ptr);
+		*ptr=NULL;
+	}
+}
 
 /********** Grammar */
 
@@ -514,7 +520,7 @@ static void addTag (vString * const ident, const char* arglist, int kind, const 
 		tag.extensionFields.scope[0]=RustKinds[parent->kind].name;
 		tag.extensionFields.scope[1]=vStringValue(parent->name);
 	}
-	tag.extensionFields.arglist=arglist;	// takes ownership
+	tag.extensionFields.arglist=arglist;
 	makeTagEntry (&tag);
 }
 
@@ -530,10 +536,7 @@ static void rpc_set_main_ident(RustParserContext* ctx,vString* ident,RustKind ki
 		ctx->main_ident_set++;
 		dbprintf("%d\n",ctx->main_ident_set);
 		ctx->kind=kind;
-		if (ctx->name) {
-			vStringDelete(ctx->name);
-		}
-		ctx->name=vStringNewCopy(ident);
+		vStringCopy(ctx->name, ident);
 		dbprintf("ctx set main ident %p %d %s\n", ctx, ctx->kind, vStringValue(ctx->name));
 	}
 }
@@ -545,10 +548,7 @@ static void addTag_MainIdent(vString* ident, const char* arglist, RustKind kind,
 		
 		addTag(ident,arglist, kind,ctx, ctxParentParent(ctx));
 		ctx->kind=kind;
-		if (ctx->name) {
-			vStringDelete(ctx->name);
-		}
-		ctx->name=vStringNewCopy(ident);
+		vStringCopy(ctx->name,ident);
 		dbprintf("tag set main ident %p %d %s\n", ctx, ctx->kind, vStringValue(ctx->name));
 	}
 }
@@ -774,6 +774,7 @@ static RustParserAction parseMethod ( RustToken what,LexingState* st, RustParser
 			const char* args=lex_strdup_balanced(st,"(");
 			dbprintf("adding method %s",vStringValue(ctx->name));
 			addTag(ctx->name, args,K_METHOD,ctx,ctxParentParent(ctx));
+			safe_free((void**)&args);
 			return PARSE_NEXT;
 		}
 	case Tok_CurlL:	// fn body, then quit.
@@ -803,6 +804,7 @@ static RustParserAction parseFn ( RustToken what,LexingState* st, RustParserCont
 			const char* args=lex_strdup_balanced(st,"(");
 			dbprintf("adding method %s",vStringValue(ctx->name));
 			addTag(ctx->name, args,K_METHOD,ctx,ctxParentParent(ctx));
+			safe_free((void**)&args);
 			return PARSE_NEXT;
 		}
 
