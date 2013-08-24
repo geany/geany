@@ -21,7 +21,6 @@
 #include "read.h"
 #include "vstring.h"
 
-#define DEBUG 1 
 
 #if defined(DEBUG) && DEBUG
 #	define dbprintf(...) printf(__VA_ARGS__)
@@ -774,7 +773,6 @@ static RustParserAction parseMethod ( RustToken what,LexingState* st, RustParser
 		{
 			const char* args=lex_strdup_balanced(st,"(");
 			dbprintf("adding method %s",vStringValue(ctx->name));
-			printf("args");
 			addTag(ctx->name, args,K_METHOD,ctx,ctxParentParent(ctx));
 			return PARSE_NEXT;
 		}
@@ -804,7 +802,6 @@ static RustParserAction parseFn ( RustToken what,LexingState* st, RustParserCont
 		{
 			const char* args=lex_strdup_balanced(st,"(");
 			dbprintf("adding method %s",vStringValue(ctx->name));
-			printf("args");
 			addTag(ctx->name, args,K_METHOD,ctx,ctxParentParent(ctx));
 			return PARSE_NEXT;
 		}
@@ -856,7 +853,7 @@ static RustParserAction parseTrait ( RustToken what,LexingState* st, RustParserC
 
 static RustParserAction parseImpl ( RustToken what,LexingState* st,  RustParserContext* ctx)
 {
-	printf("parse impl: %s\n", vStringValue(st->name));
+	dbprintf("parse impl: %s\n", vStringValue(st->name));
 	switch (what)
 	{
 	case RustFOR:	// clearn the main ident so the next overwrites it.
@@ -868,7 +865,6 @@ static RustParserAction parseImpl ( RustToken what,LexingState* st,  RustParserC
 		addTag_MainIdent (st->name,NULL, K_IMPL,ctx);
 		return PARSE_NEXT;
 	case Tok_CurlL:
-		printf("foo\n");
 		ctx->parser=parseMethods;
 		return PARSE_RECURSE|PARSE_EXIT;
 	case Tok_LT:
