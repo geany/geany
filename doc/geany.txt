@@ -786,21 +786,21 @@ Indentation
 ^^^^^^^^^^^
 
 Geany allows each document to indent either with a tab character,
-multiple spaces or a combination of both. 
+multiple spaces or a combination of both.
 
-The *Tabs* setting indents with one tab character per indent level, and 
+The *Tabs* setting indents with one tab character per indent level, and
 displays tabs as the indent width.
 
-The *Spaces* setting indents with the number of spaces set in the indent 
+The *Spaces* setting indents with the number of spaces set in the indent
 width for each level.
 
-The *Tabs and Spaces* setting indents with spaces as above, then converts 
-as many spaces as it can to tab characters at the rate of one tab for 
-each multiple of the `Various preference` setting 
-*indent_hard_tab_width* (default 8) and displays tabs as the 
+The *Tabs and Spaces* setting indents with spaces as above, then converts
+as many spaces as it can to tab characters at the rate of one tab for
+each multiple of the `Various preference` setting
+*indent_hard_tab_width* (default 8) and displays tabs as the
 *indent_hard_tab_width* value.
 
-The default indent settings are set in `Editor Indentation 
+The default indent settings are set in `Editor Indentation
 preferences`_ (see the link for more information).
 
 The default settings can be overridden per-document using the
@@ -854,9 +854,9 @@ Current chars
     previous line.
 Match braces
     Similar to *Current chars* but the closing brace will be aligned to
-    match the indentation of the line with the opening brace.  This 
-    requires the filetype to be one where Geany knows that the Scintilla 
-    lexer understands matching braces (C, C++, D, HTML, Pascal, Bash, 
+    match the indentation of the line with the opening brace.  This
+    requires the filetype to be one where Geany knows that the Scintilla
+    lexer understands matching braces (C, C++, D, HTML, Pascal, Bash,
     Perl, TCL).
 
 There is also XML-tag auto-indentation. This is enabled when the
@@ -3833,6 +3833,8 @@ on Windows.
 
 The user configuration directory might vary, but on Windows XP it's:
 ``C:\Documents and Settings\UserName\Application Data\geany``
+On Windows 7 and above you most likely will find it at:
+``C:\users\UserName\Roaming\geany``
 
 
 Tools menu items
