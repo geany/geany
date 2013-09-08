@@ -1062,6 +1062,7 @@ void highlighting_init_styles(guint filetype_idx, GKeyFile *config, GKeyFile *co
 		init_styleset_case(FORTH);
 		init_styleset_case(FORTRAN);
 		init_styleset_case(HASKELL);
+		init_styleset_case(LITERATEHASKELL);
 		init_styleset_case(HAXE);
 		init_styleset_case(AS);
 		init_styleset_case(HTML);
@@ -1144,6 +1145,7 @@ void highlighting_set_styles(ScintillaObject *sci, GeanyFiletype *ft)
 		styleset_case(FORTH);
 		styleset_case(FORTRAN);
 		styleset_case(HASKELL);
+		styleset_case(LITERATEHASKELL);
 		styleset_case(HAXE);
 		styleset_case(AS);
 		styleset_case(HTML);

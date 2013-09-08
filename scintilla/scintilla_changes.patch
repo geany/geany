@@ -82,7 +82,7 @@ index 84d003e..37b2a3c 100644
 -	LINK_LEXER(lmKix);
  	LINK_LEXER(lmLatex);
  	LINK_LEXER(lmLISP);
--	LINK_LEXER(lmLiterateHaskell);
+ 	LINK_LEXER(lmLiterateHaskell);
 -	LINK_LEXER(lmLot);
 -	LINK_LEXER(lmLout);
  	LINK_LEXER(lmLua);
