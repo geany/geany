@@ -2087,12 +2087,11 @@ static gboolean autocomplete_check_html(GeanyEditor *editor, gint style, gint po
 
 /* Algorithm based on based on Scite's StartAutoCompleteWord()
  * @returns a sorted list of words matching @p root */
-static GSList *get_doc_words(ScintillaObject *sci, gchar *root, gsize rootlen)
+static GSList *get_doc_words(ScintillaObject *sci,
+		gchar *root, gsize rootlen, GStringChunk *chunk)
 {
-	gchar *word;
-	gint len, current, word_end;
+	gint len, current;
 	gint pos_find, flags;
-	guint word_length;
 	gsize nmatches = 0;
 	GSList *words = NULL;
 	struct Sci_TextToFind ttf;
@@ -2111,23 +2110,27 @@ static GSList *get_doc_words(ScintillaObject *sci, gchar *root, gsize rootlen)
 	pos_find = scintilla_send_message(sci, SCI_FINDTEXT, flags, (uptr_t) &ttf);
 	while (pos_find >= 0 && pos_find < len)
 	{
-		word_end = pos_find + rootlen;
+		gint word_end = pos_find + rootlen;
+
 		if (pos_find != current)
 		{
-			word_end = SSM(sci, SCI_WORDENDPOSITION, word_end, TRUE);
+			guint word_length;
 
+			word_end = SSM(sci, SCI_WORDENDPOSITION, word_end, TRUE);
 			word_length = word_end - pos_find;
 			if (word_length > rootlen)
 			{
-				word = sci_get_contents_range(sci, pos_find, word_end);
+				gchar *word = sci_get_contents_range(sci, pos_find, word_end);
+
 				/* search whether we already have the word in, otherwise add it */
-				if (g_slist_find_custom(words, word, (GCompareFunc)utils_str_casecmp) != NULL)
-					g_free(word);
-				else
+				if (g_slist_find_custom(words, word, (GCompareFunc)utils_str_casecmp) == NULL)
 				{
-					words = g_slist_prepend(words, word);
+					/* use a GStringChunk to reduce allocation overhead */
+					words = g_slist_prepend(words,
+						g_string_chunk_insert_len(chunk, word, word_length));
 					nmatches++;
 				}
+				g_free(word);
 
 				if (nmatches == editor_prefs.autocompletion_max_entries)
 					break;
@@ -2145,12 +2148,15 @@ static gboolean autocomplete_doc_word(GeanyEditor *editor, gchar *root, gsize ro
 {
 	ScintillaObject *sci = editor->sci;
 	GSList *words, *node;
+	GStringChunk *chunk;
 	GString *str;
 	guint n_words = 0;
 
-	words = get_doc_words(sci, root, rootlen);
+	chunk = g_string_chunk_new(512);
+	words = get_doc_words(sci, root, rootlen, chunk);
 	if (!words)
 	{
+		g_string_chunk_free(chunk);
 		scintilla_send_message(sci, SCI_AUTOCCANCEL, 0, 0);
 		return FALSE;
 	}
@@ -2159,7 +2165,6 @@ static gboolean autocomplete_doc_word(GeanyEditor *editor, gchar *root, gsize ro
 	foreach_slist(node, words)
 	{
 		g_string_append(str, node->data);
-		g_free(node->data);
 		if (node->next)
 			g_string_append_c(str, '\n');
 		n_words++;
@@ -2167,6 +2172,7 @@ static gboolean autocomplete_doc_word(GeanyEditor *editor, gchar *root, gsize ro
 	if (n_words >= editor_prefs.autocompletion_max_entries)
 		g_string_append(str, "\n...");
 
+	g_string_chunk_free(chunk);
 	g_slist_free(words);
 
 	show_autocomplete(sci, rootlen, str);
