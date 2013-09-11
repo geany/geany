@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.24\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-08-19 17:54+0200\n"
+"POT-Creation-Date: 2013-09-11 21:23+0200\n"
 "PO-Revision-Date: 2013-08-19 17:58+0200\n"
 "Last-Translator: Frank Lanitz <frank@frank.uvena.de>\n"
 "Language-Team: German <geany-i18n@uvena.de>\n"
@@ -3570,7 +3570,7 @@ msgstr "Gehe zum sichtbaren Zeilenbeginn"
 
 #: ../src/keybindings.c:494
 msgid "Go to End of Display Line"
-msgstr "Gehe zum Zeilenende"
+msgstr "Gehe zum angezeigten Zeilenende"
 
 #: ../src/keybindings.c:496
 msgid "Go to Previous Word Part"
@@ -4115,36 +4115,36 @@ msgstr ""
 "Nur den Basisdateinamen (ohne die Pfadangabe) der zu druckenden Datei "
 "verwenden"
 
-#: ../src/printing.c:404
+#: ../src/printing.c:414
 msgid "Paginating"
 msgstr "Seitenummerierung"
 
-#: ../src/printing.c:428
+#: ../src/printing.c:438
 #, c-format
 msgid "Page %d of %d"
 msgstr "Seite %d von %d"
 
-#: ../src/printing.c:484
+#: ../src/printing.c:494
 #, c-format
 msgid "Did not send document %s to the printing subsystem."
 msgstr "Das Dokument %s wurde NICHT an das Drucksystem weiter gegeben."
 
-#: ../src/printing.c:486
+#: ../src/printing.c:496
 #, c-format
 msgid "Document %s was sent to the printing subsystem."
 msgstr "Das Dokument %s wurde zum Drucken an das Drucksystem übergeben"
 
-#: ../src/printing.c:539
+#: ../src/printing.c:549
 #, c-format
 msgid "Printing of %s failed (%s)."
 msgstr "Drucken der Datei »%s« ist fehlgeschlagen (%s)."
 
-#: ../src/printing.c:577
+#: ../src/printing.c:587
 msgid "Please set a print command in the preferences dialog first."
 msgstr ""
 "Bitte geben Sie zuerst einen Befehl zum Drucken in den Einstellungen an."
 
-#: ../src/printing.c:585
+#: ../src/printing.c:595
 #, c-format
 msgid ""
 "The file \"%s\" will be printed with the following command:\n"
@@ -4155,12 +4155,12 @@ msgstr ""
 "\n"
 "%s"
 
-#: ../src/printing.c:601
+#: ../src/printing.c:611
 #, c-format
 msgid "Printing of \"%s\" failed (return code: %s)."
 msgstr "Drucken der Datei »%s« ist fehlgeschlagen (Rückgabewert: %s)."
 
-#: ../src/printing.c:607
+#: ../src/printing.c:617
 #, c-format
 msgid "File %s printed."
 msgstr "Datei »%s« wurde gedruckt."
