@@ -2151,8 +2151,9 @@ static gboolean autocomplete_doc_word(GeanyEditor *editor, gchar *root, gsize ro
 	GStringChunk *chunk;
 	GString *str;
 	guint n_words = 0;
+	const gsize bufsize = MAX(10 * (rootlen + 3), 128);
 
-	chunk = g_string_chunk_new(512);
+	chunk = g_string_chunk_new(bufsize);
 	words = get_doc_words(sci, root, rootlen, chunk);
 	if (!words)
 	{
@@ -2161,7 +2162,7 @@ static gboolean autocomplete_doc_word(GeanyEditor *editor, gchar *root, gsize ro
 		return FALSE;
 	}
 
-	str = g_string_sized_new(editor_prefs.autocompletion_max_entries * (rootlen + 1));
+	str = g_string_sized_new(bufsize);
 	foreach_slist(node, words)
 	{
 		g_string_append(str, node->data);
