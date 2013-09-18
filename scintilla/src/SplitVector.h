@@ -9,6 +9,10 @@
 #ifndef SPLITVECTOR_H
 #define SPLITVECTOR_H
 
+#ifdef SCI_NAMESPACE
+namespace Scintilla {
+#endif
+
 template <typename T>
 class SplitVector {
 protected:
@@ -279,5 +283,9 @@ public:
 		return part1Length; 
 	}
 };
+
+#ifdef SCI_NAMESPACE
+}
+#endif
 
 #endif

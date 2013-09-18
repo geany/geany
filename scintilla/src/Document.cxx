@@ -38,7 +38,7 @@ using namespace Scintilla;
 #endif
 
 static inline bool IsPunctuation(char ch) {
-	return isascii(ch) && ispunct(ch);
+	return IsASCII(ch) && ispunct(ch);
 }
 
 void LexInterface::Colourise(int start, int end) {
@@ -825,7 +825,7 @@ int Document::SafeSegment(const char *text, int length, int lengthSegment) const
 		return length;
 	int lastSpaceBreak = -1;
 	int lastPunctuationBreak = -1;
-	int lastEncodingAllowedBreak = -1;
+	int lastEncodingAllowedBreak = 0;
 	for (int j=0; j < lengthSegment;) {
 		unsigned char ch = static_cast<unsigned char>(text[j]);
 		if (j > 0) {
@@ -852,6 +852,15 @@ int Document::SafeSegment(const char *text, int length, int lengthSegment) const
 		return lastPunctuationBreak;
 	}
 	return lastEncodingAllowedBreak;
+}
+
+EncodingFamily Document::CodePageFamily() const {
+	if (SC_CP_UTF8 == dbcsCodePage)
+		return efUnicode;
+	else if (dbcsCodePage)
+		return efDBCS;
+	else
+		return efEightBit;
 }
 
 void Document::ModifiedAt(int pos) {
@@ -1965,10 +1974,10 @@ int Document::WordPartLeft(int pos) {
 					--pos;
 				if (!isspacechar(cb.CharAt(pos)))
 					++pos;
-			} else if (!isascii(startChar)) {
-				while (pos > 0 && !isascii(cb.CharAt(pos)))
+			} else if (!IsASCII(startChar)) {
+				while (pos > 0 && !IsASCII(cb.CharAt(pos)))
 					--pos;
-				if (isascii(cb.CharAt(pos)))
+				if (IsASCII(cb.CharAt(pos)))
 					++pos;
 			} else {
 				++pos;
@@ -1986,8 +1995,8 @@ int Document::WordPartRight(int pos) {
 			++pos;
 		startChar = cb.CharAt(pos);
 	}
-	if (!isascii(startChar)) {
-		while (pos < length && !isascii(cb.CharAt(pos)))
+	if (!IsASCII(startChar)) {
+		while (pos < length && !IsASCII(cb.CharAt(pos)))
 			++pos;
 	} else if (IsLowerCase(startChar)) {
 		while (pos < length && IsLowerCase(cb.CharAt(pos)))

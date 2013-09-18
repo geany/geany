@@ -3,14 +3,14 @@
 // Copyright 1998-2004 by Neil Hodgson <neilh@scintilla.org>
 // The License.txt file describes the conditions under which this software may be distributed.
 
-#include <new>
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
-#include <assert.h>
 #include <ctype.h>
 #include <time.h>
+#include <assert.h>
 
+#include <new>
 #include <string>
 #include <vector>
 #include <map>
@@ -1096,7 +1096,7 @@ PRectangle ScintillaGTK::GetClientRectangle() {
 	PRectangle rc = wMain.GetClientPosition();
 	if (verticalScrollBarVisible)
 		rc.right -= verticalScrollBarWidth;
-	if (horizontalScrollBarVisible && (wrapState == eWrapNone))
+	if (horizontalScrollBarVisible && !Wrapping())
 		rc.bottom -= horizontalScrollBarHeight;
 	// Move to origin
 	rc.right -= rc.left;
@@ -1676,7 +1676,7 @@ void ScintillaGTK::Resize(int width, int height) {
 
 	// These allocations should never produce negative sizes as they would wrap around to huge
 	// unsigned numbers inside GTK+ causing warnings.
-	bool showSBHorizontal = horizontalScrollBarVisible && (wrapState == eWrapNone);
+	bool showSBHorizontal = horizontalScrollBarVisible && !Wrapping();
 
 	GtkAllocation alloc;
 	if (showSBHorizontal) {
@@ -1845,7 +1845,7 @@ gint ScintillaGTK::MouseRelease(GtkWidget *widget, GdkEventButton *event) {
 				// If mouse released on scroll bar then the position is relative to the
 				// scrollbar, not the drawing window so just repeat the most recent point.
 				pt = sciThis->ptMouseLast;
-			sciThis->ButtonUp(pt, event->time, (event->state & 4) != 0);
+			sciThis->ButtonUp(pt, event->time, (event->state & GDK_CONTROL_MASK) != 0);
 		}
 	} catch (...) {
 		sciThis->errorStatus = SC_STATUS_FAILURE;
@@ -1962,7 +1962,10 @@ gint ScintillaGTK::Motion(GtkWidget *widget, GdkEventMotion *event) {
 		//Platform::DebugPrintf("Move %x %x %d %c %d %d\n",
 		//	sciThis,event->window,event->time,event->is_hint? 'h' :'.', x, y);
 		Point pt(x, y);
-		sciThis->ButtonMove(pt);
+		int modifiers = ((event->state & GDK_SHIFT_MASK) != 0 ? SCI_SHIFT : 0) |
+		                ((event->state & GDK_CONTROL_MASK) != 0 ? SCI_CTRL : 0) |
+		                ((event->state & modifierTranslated(sciThis->rectangularSelectionModifier)) != 0 ? SCI_ALT : 0);
+		sciThis->ButtonMoveWithModifiers(pt, modifiers);
 	} catch (...) {
 		sciThis->errorStatus = SC_STATUS_FAILURE;
 	}

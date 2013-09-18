@@ -7,7 +7,7 @@ Geany 1.24 (unreleased)
     * Fix custom GTK styles under KDE (#3607935).
 
     Editor
-    * Update Scintilla to version 3.3.3.
+    * Update Scintilla to version 3.3.5.
 
     Filetypes
     * Extend list of recognized keywords for SQL
