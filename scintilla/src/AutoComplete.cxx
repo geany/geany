@@ -10,9 +10,9 @@
 #include <stdio.h>
 #include <assert.h>
 
-#include <algorithm>
 #include <string>
 #include <vector>
+#include <algorithm>
 
 #include "Platform.h"
 

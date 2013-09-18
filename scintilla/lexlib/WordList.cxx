@@ -7,8 +7,8 @@
 
 #include <stdlib.h>
 #include <string.h>
-#include <ctype.h>
 #include <stdio.h>
+#include <ctype.h>
 #include <stdarg.h>
 
 #include <algorithm>
@@ -103,7 +103,7 @@ void WordList::Clear() {
 #ifdef _MSC_VER
 
 static bool cmpWords(const char *a, const char *b) {
-	return strcmp(a, b) == -1;
+	return strcmp(a, b) < 0;
 }
 
 #else

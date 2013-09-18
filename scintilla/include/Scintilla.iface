@@ -1756,6 +1756,10 @@ fun position PositionBefore=2417(position pos,)
 # page into account. Maximum value returned is the last position in the document.
 fun position PositionAfter=2418(position pos,)
 
+# Given a valid document position, return a position that differs in a number
+# of characters. Returned value is always between 0 and last position in document.
+fun position PositionRelative=2670(position pos, int relative)
+
 # Copy a range of text to the clipboard. Positions are clipped into the document.
 fun void CopyRange=2419(position start, position end)
 
@@ -2127,6 +2131,12 @@ fun position CharPositionFromPoint=2561(int x, int y)
 # Return INVALID_POSITION if not close to text.
 fun position CharPositionFromPointClose=2562(int x, int y)
 
+# Set whether switching to rectangular mode while selecting with the mouse is allowed.
+set void SetMouseSelectionRectangularSwitch=2668(bool mouseSelectionRectangularSwitch,)
+
+# Whether switching to rectangular mode while selecting with the mouse is allowed.
+get bool GetMouseSelectionRectangularSwitch=2669(,)
+
 # Set whether multiple selections can be made
 set void SetMultipleSelection=2563(bool multipleSelection,)
 
@@ -2325,6 +2335,15 @@ get bool GetCaretLineVisibleAlways=2654(,)
 
 # Sets the caret line to always visible.
 set void SetCaretLineVisibleAlways=2655(bool alwaysVisible,)
+
+# Set the way a character is drawn.
+set void SetRepresentation=2665(string encodedCharacter, string representation)
+
+# Set the way a character is drawn.
+get int GetRepresentation=2666(string encodedCharacter, stringresult representation)
+
+# Remove a character representation.
+fun void ClearRepresentation=2667(string encodedCharacter,)
 
 # Start notifying the container of all key presses and commands.
 fun void StartRecord=3001(,)
@@ -2580,6 +2599,7 @@ val SCLEX_OSCRIPT=106
 val SCLEX_VISUALPROLOG=107
 val SCLEX_LITERATEHASKELL=108
 val SCLEX_STTXT=109
+val SCLEX_KVIRC=110
 
 # When a lexer specifies its language as SCLEX_AUTOMATIC it receives a
 # value assigned in sequence from SCLEX_AUTOMATIC+1.
@@ -4305,6 +4325,21 @@ val SCE_STTXT_IDENTIFIER=15
 val SCE_STTXT_DATETIME=16
 val SCE_STTXT_VARS=17
 val SCE_STTXT_PRAGMAS=18
+# Lexical states for SCLEX_KVIRC
+lex KVIrc=SCLEX_KVIRC SCLEX_KVIRC_
+val SCE_KVIRC_DEFAULT=0
+val SCE_KVIRC_COMMENT=1
+val SCE_KVIRC_COMMENTBLOCK=2
+val SCE_KVIRC_STRING=3
+val SCE_KVIRC_WORD=4
+val SCE_KVIRC_KEYWORD=5
+val SCE_KVIRC_FUNCTION_KEYWORD=6
+val SCE_KVIRC_FUNCTION=7
+val SCE_KVIRC_VARIABLE=8
+val SCE_KVIRC_NUMBER=9
+val SCE_KVIRC_OPERATOR=10
+val SCE_KVIRC_STRING_FUNCTION=11
+val SCE_KVIRC_STRING_VARIABLE=12
 
 # Events
 

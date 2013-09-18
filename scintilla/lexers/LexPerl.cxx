@@ -1626,7 +1626,7 @@ void SCI_METHOD LexerPerl::Fold(unsigned int startPos, int length, int /* initSt
 				else if (styler.Match(i, "=head"))
 					podHeading = PodHeadingLevel(i, styler);
 			} else if (style == SCE_PL_DATASECTION) {
-				if (ch == '=' && isascii(chNext) && isalpha(chNext) && levelCurrent == SC_FOLDLEVELBASE)
+				if (ch == '=' && IsASCII(chNext) && isalpha(chNext) && levelCurrent == SC_FOLDLEVELBASE)
 					levelCurrent++;
 				else if (styler.Match(i, "=cut") && levelCurrent > SC_FOLDLEVELBASE)
 					levelCurrent = (levelCurrent & ~PERL_HEADFOLD_MASK) - 1;
