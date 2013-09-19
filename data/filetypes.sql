@@ -33,7 +33,7 @@ extension=sql
 #wordchars=_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
 
 # single comments, like # in this file
-comment_single=--
+comment_single=--\s
 # multiline comments
 comment_open=/*
 comment_close=*/
