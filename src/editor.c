@@ -2155,7 +2155,7 @@ static gboolean autocomplete_doc_word(GeanyEditor *editor, gchar *root, gsize ro
 		return FALSE;
 	}
 
-	str = g_string_sized_new(editor_prefs.autocompletion_max_entries * (rootlen + 1));
+	str = g_string_sized_new(rootlen * 2 * 10);
 	foreach_slist(node, words)
 	{
 		g_string_append(str, node->data);
