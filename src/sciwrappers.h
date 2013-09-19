@@ -180,6 +180,8 @@ void				sci_set_scroll_stop_at_last_line	(ScintillaObject *sci, gboolean set);
 void				sci_cancel					(ScintillaObject *sci);
 
 gint				sci_get_position_after		(ScintillaObject *sci, gint start);
+gint				sci_word_start_position		(ScintillaObject *sci, gint position, gboolean onlyWordCharacters);
+gint				sci_word_end_position		(ScintillaObject *sci, gint position, gboolean onlyWordCharacters);
 
 void				sci_lines_join				(ScintillaObject *sci);
 gint				sci_text_width				(ScintillaObject *sci, gint styleNumber, const gchar *text);
