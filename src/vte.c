@@ -82,6 +82,12 @@ typedef enum {
 	VTE_CURSOR_BLINK_OFF
 } VteTerminalCursorBlinkMode;
 
+typedef enum {
+	VTE_CURSOR_SHAPE_BLOCK,
+	VTE_CURSOR_SHAPE_IBEAM,
+	VTE_CURSOR_SHAPE_UNDERLINE
+} VteTerminalCursorShape;
+
 
 /* Holds function pointers we need to access the VTE API. */
 struct VteFunctions
@@ -114,6 +120,7 @@ struct VteFunctions
 	void (*vte_terminal_select_all) (VteTerminal *terminal);
 	void (*vte_terminal_set_audible_bell) (VteTerminal *terminal, gboolean is_audible);
 	void (*vte_terminal_set_background_image_file) (VteTerminal *terminal, const char *path);
+	void (*vte_terminal_set_cursor_shape) (VteTerminal *terminal, VteTerminalCursorShape shape);
 };
 
 
@@ -428,6 +435,27 @@ static void vte_set_cursor_blink_mode(void)
 }
 
 
+static void vte_set_cursor_shape(void)
+{
+	if (vf->vte_terminal_set_cursor_shape != NULL)
+	{
+		VteTerminalCursorShape shape;
+
+		switch (vc->cursor_shape)
+		{
+			case VTE_CURSOR_SHAPE_IBEAM:
+			case VTE_CURSOR_SHAPE_UNDERLINE:
+			case VTE_CURSOR_SHAPE_BLOCK:
+				shape = vc->cursor_shape;
+				break;
+			default:
+				shape = VTE_CURSOR_SHAPE_BLOCK;
+		}
+		vf->vte_terminal_set_cursor_shape(VTE_TERMINAL(vc->vte), shape);
+	}
+}
+
+
 static gboolean vte_register_symbols(GModule *mod)
 {
 	#define BIND_SYMBOL(field) \
@@ -469,6 +497,8 @@ static gboolean vte_register_symbols(GModule *mod)
 		BIND_REQUIRED_SYMBOL(vte_terminal_set_cursor_blinks);
 	BIND_REQUIRED_SYMBOL(vte_terminal_select_all);
 	BIND_REQUIRED_SYMBOL(vte_terminal_set_audible_bell);
+	if (! BIND_SYMBOL(vte_terminal_set_cursor_shape))
+		vf->vte_terminal_set_cursor_shape = NULL;
 
 	#undef BIND_REQUIRED_SYMBOL
 	#undef BIND_SYMBOL
@@ -493,6 +523,7 @@ void vte_apply_user_settings(void)
 	vf->vte_terminal_set_background_image_file(VTE_TERMINAL(vc->vte), vc->image);
 	vf->vte_terminal_set_audible_bell(VTE_TERMINAL(vc->vte), prefs.beep_on_errors);
 	vte_set_cursor_blink_mode();
+	vte_set_cursor_shape();
 
 	override_menu_key();
 }
@@ -812,6 +843,17 @@ void vte_append_preferences_tab(void)
 
 		frame_term = ui_lookup_widget(ui_widgets.prefs_dialog, "frame_term");
 		gtk_widget_show_all(frame_term);
+
+		if (! vf->vte_terminal_set_cursor_shape)
+		{
+			GtkWidget *label = ui_lookup_widget(ui_widgets.prefs_dialog, "terminal_cursor_shape_label");
+			GtkWidget *combo = ui_lookup_widget(ui_widgets.prefs_dialog, "combo_cursor_shape");
+			const gchar *tooltip = _("Setting the cursor shape requires VTE library version 0.20 or newer");
+			gtk_widget_set_sensitive(label, FALSE);
+			gtk_widget_set_sensitive(combo, FALSE);
+			gtk_widget_set_tooltip_text(label, tooltip);
+			gtk_widget_set_tooltip_text(combo, tooltip);
+		}
 	}
 }
 

@@ -803,6 +803,9 @@ static void prefs_init_dialog(void)
 
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_cursor_blinks");
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), vc->cursor_blinks);
+
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "combo_cursor_shape");
+		gtk_combo_box_set_active(GTK_COMBO_BOX(widget), vc->cursor_shape);
 	}
 #endif
 }
@@ -1269,6 +1272,9 @@ on_prefs_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 
 			widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_cursor_blinks");
 			vc->cursor_blinks = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+
+			widget = ui_lookup_widget(ui_widgets.prefs_dialog, "combo_cursor_shape");
+			vc->cursor_shape = gtk_combo_box_get_active(GTK_COMBO_BOX(widget));
 
 			vte_apply_user_settings();
 		}
