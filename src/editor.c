@@ -2121,7 +2121,7 @@ static GSList *get_doc_words(ScintillaObject *sci, gchar *root, gsize rootlen)
 			{
 				word = sci_get_contents_range(sci, pos_find, word_end);
 				/* search whether we already have the word in, otherwise add it */
-				if (g_slist_find_custom(words, word, (GCompareFunc)utils_str_casecmp) != NULL)
+				if (g_slist_find_custom(words, word, (GCompareFunc)strcmp) != NULL)
 					g_free(word);
 				else
 				{
