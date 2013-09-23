@@ -2523,15 +2523,18 @@ void build_load_menu(GKeyFile *config, GeanyBuildSource src, gpointer p)
 
 	/* set GeanyBuildCommand if it doesn't already exist and there is a command */
 /* TODO: rewrite as function */
-#define ASSIGNIF(type, id, string, value) \
-	if (!EMPTY(value) && ! type[GBO_TO_CMD(id)].exists) { \
-		type[GBO_TO_CMD(id)].exists = TRUE; \
-		SETPTR(type[GBO_TO_CMD(id)].label, g_strdup(string)); \
-		SETPTR(type[GBO_TO_CMD(id)].command, (value)); \
-		SETPTR(type[GBO_TO_CMD(id)].working_dir, NULL); \
-		type[GBO_TO_CMD(id)].old = TRUE; \
-	} else \
-		g_free(value);
+#define ASSIGNIF(type, id, string, value)								\
+	do {																\
+		gchar *ASSIGNF__value = (value);								\
+		if (!EMPTY(ASSIGNF__value) && ! type[GBO_TO_CMD(id)].exists) {	\
+			type[GBO_TO_CMD(id)].exists = TRUE;							\
+			SETPTR(type[GBO_TO_CMD(id)].label, g_strdup(string));		\
+			SETPTR(type[GBO_TO_CMD(id)].command, ASSIGNF__value);		\
+			SETPTR(type[GBO_TO_CMD(id)].working_dir, NULL);				\
+			type[GBO_TO_CMD(id)].old = TRUE;							\
+		} else															\
+			g_free(ASSIGNF__value);										\
+	} while (0)
 
 	switch (src)
 	{
