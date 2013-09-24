@@ -1862,11 +1862,26 @@ void symbols_show_load_tags_dialog(void)
 }
 
 
-static void detect_tag_files(const GSList *file_list)
+static void init_user_tags(void)
 {
+	GSList *file_list = NULL, *list = NULL;
 	const GSList *node;
+	gchar *dir;
 
-	for (node = file_list; node != NULL; node = g_slist_next(node))
+	dir = g_build_filename(app->configdir, "tags", NULL);
+	/* create the user tags dir for next time if it doesn't exist */
+	if (! g_file_test(dir, G_FILE_TEST_IS_DIR))
+		utils_mkdir(dir, FALSE);
+	file_list = utils_get_file_list_full(dir, TRUE, FALSE, NULL);
+
+	SETPTR(dir, g_build_filename(app->datadir, "tags", NULL));
+	list = utils_get_file_list_full(dir, TRUE, FALSE, NULL);
+	g_free(dir);
+
+	file_list = g_slist_concat(file_list, list);
+
+	/* populate the filetype-specific tag files lists */
+	for (node = file_list; node != NULL; node = node->next)
 	{
 		gchar *fname = node->data;
 		gchar *utf8_fname = utils_get_utf8_from_locale(fname);
@@ -1877,31 +1892,14 @@ static void detect_tag_files(const GSList *file_list)
 		if (FILETYPE_ID(ft) != GEANY_FILETYPES_NONE)
 			ft->priv->tag_files = g_slist_prepend(ft->priv->tag_files, fname);
 		else
+		{
 			geany_debug("Unknown filetype for file '%s'.", fname);
+			g_free(fname);
+		}
 	}
-}
 
-
-static void init_user_tags(void)
-{
-	GSList *file_list = NULL, *list = NULL;
-	gchar *dir;
-
-	dir = g_build_filename(app->configdir, "tags", NULL);
-	/* create the user tags dir for next time if it doesn't exist */
-	if (! g_file_test(dir, G_FILE_TEST_IS_DIR))
-	{
-		utils_mkdir(dir, FALSE);
-	}
-	file_list = utils_get_file_list_full(dir, TRUE, FALSE, NULL);
-
-	SETPTR(dir, g_build_filename(app->datadir, "tags", NULL));
-	list = utils_get_file_list_full(dir, TRUE, FALSE, NULL);
-	g_free(dir);
-
-	file_list = g_slist_concat(file_list, list);
-	detect_tag_files(file_list);
-	/* don't need to delete list contents because they are stored in ft->priv->tag_files */
+	/* don't need to delete list contents because they are now stored in
+	 * ft->priv->tag_files */
 	g_slist_free(file_list);
 }
 
