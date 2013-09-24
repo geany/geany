@@ -1453,7 +1453,7 @@ static gboolean cb_func_search_action(guint key_id)
 			on_find_document_usage1_activate(NULL, NULL); break;
 		case GEANY_KEYS_SEARCH_MARKALL:
 		{
-			gchar *text = get_current_word_or_sel(doc, TRUE);
+			gchar *text = NULL;
 			gint pos = sci_get_current_position(sci);
 
 			/* clear existing search indicators instead if next to cursor */
@@ -1462,6 +1462,8 @@ static gboolean cb_func_search_action(guint key_id)
 				scintilla_send_message(sci, SCI_INDICATORVALUEAT,
 					GEANY_INDICATOR_SEARCH, MAX(pos - 1, 0)))
 				text = NULL;
+			else
+				text = get_current_word_or_sel(doc, TRUE);
 
 			if (sci_has_selection(sci))
 				search_mark_all(doc, text, SCFIND_MATCHCASE);
