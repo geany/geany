@@ -40,6 +40,7 @@ parsers = \
 	perl.c \
 	php.c \
 	python.c \
+	qml.c\
 	r.c \
 	rest.c \
 	ruby.c \

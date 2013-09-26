@@ -1090,6 +1090,7 @@ void highlighting_init_styles(guint filetype_idx, GKeyFile *config, GKeyFile *co
 		init_styleset_case(VERILOG);
 		init_styleset_case(XML);
 		init_styleset_case(YAML);
+		init_styleset_case(QML);
 		default:
 			if (ft->lexer_filetype)
 				geany_debug("Filetype %s has a recursive lexer_filetype %s set!",
@@ -1172,6 +1173,7 @@ void highlighting_set_styles(ScintillaObject *sci, GeanyFiletype *ft)
 		styleset_case(VERILOG);
 		styleset_case(XML);
 		styleset_case(YAML);
+		styleset_case(QML);
 		case GEANY_FILETYPES_NONE:
 		default:
 			styleset_default(sci, ft->id);

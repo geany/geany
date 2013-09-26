@@ -522,8 +522,15 @@ static void init_builtin_filetypes(void)
 	ft->name = g_strdup("PowerShell");
 	filetype_make_title(ft, TITLE_SOURCE_FILE);
 	ft->group = GEANY_FILETYPE_GROUP_SCRIPT;
-}
 
+#define QML
+	ft = filetypes[GEANY_FILETYPES_QML];
+	ft->lang = 45;
+	ft->name = g_strdup("QML");
+	filetype_make_title(ft, TITLE_SOURCE_FILE);
+	ft->mime_type = g_strdup("text/x-qml");
+	ft->group = GEANY_FILETYPE_GROUP_SCRIPT;
+}
 
 /* initialize fields. */
 static GeanyFiletype *filetype_new(void)

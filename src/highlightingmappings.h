@@ -1519,4 +1519,15 @@ static const HLKeyword highlighting_keywords_YAML[] =
 #define highlighting_properties_YAML	EMPTY_PROPERTIES
 
 
+/* QML */
+#define highlighting_lexer_QML		SCLEX_CPP
+#define highlighting_styles_QML		highlighting_styles_C
+static const HLKeyword highlighting_keywords_QML[] =
+{
+	{ 0, "primary",		FALSE },
+	{ 1, "secondary",	FALSE }
+};
+#define highlighting_properties_QML	highlighting_properties_C
+
+
 #endif /* guard */
