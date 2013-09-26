@@ -99,7 +99,6 @@ static void findQMLTags(void) {
 	boolean is_multiline_comment =	FALSE;
 	boolean is_qml_object		 =	FALSE;
 	const unsigned char *line;
-	vString *js_name;
 
 	while((line = fileReadLine()) != NULL) {
 		// If in middle of multiline comment, skip through till end
