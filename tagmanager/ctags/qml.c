@@ -5,25 +5,59 @@
 
 #include <string.h>     /* to declare strxxx() functions */
 
-typedef struct {
+typedef struct QMLTag {
+	boolean			set; // Is tag set?
+	boolean 		supported; // Is tag supported?
 	vString			*id;
 	vString			*name;
 	unsigned long	line_num;
 	MIOPos			file_pos;
 	int				kind;
-} QMLObject;
+	struct QMLTag	*parent;
+	struct QMLTag	*child;
+	struct QMLTag	*prev;
+	struct QMLTag	*next;
+} QMLTag;
 
-typedef enum {
+typedef enum QMLKind {
 	QML_OBJECT,
-	JS_FUNCTION,
-	KIND_COUNT
+	JS_FUNCTION
 } QMLKind;
 
-static kindOption QMLKinds[KIND_COUNT] = {
+static kindOption QMLKinds[] = {
 	{ TRUE,	'o',	"other",	"objects"	},
-	{ TRUE, 'f',	"function",	"functions"	}
+	{ TRUE, 'f',	"function",	"functions"		}
 };
 
+/*
+ * Malloc and return initialized QMLTag ptr
+ */
+QMLTag* qmlTagNew() {
+	QMLTag *tag	=	malloc(sizeof(QMLTag));
+	tag->set	=	FALSE;
+	tag->name	=	vStringNew();
+	tag->id		=	vStringNew();
+	tag->kind	=	-1;
+	tag->parent	=	NULL;
+	tag->child	=	NULL;
+	tag->prev	=	NULL;
+	tag->next	=	NULL;
+
+	return tag;
+}
+
+/*
+ * Free all memory from tag
+ */
+void qmlTagDelete(QMLTag *tag) {
+	vStringDelete(tag->name);
+	vStringDelete(tag->id);
+	free(tag);
+}
+
+/*
+ * Skip past multiline comment in line, returning remainder of line, or NULL if end not found
+ */
 const unsigned char* skipMultilineComment(const unsigned char *line) {
 	boolean found = FALSE;
 
@@ -37,69 +71,71 @@ const unsigned char* skipMultilineComment(const unsigned char *line) {
 		line++;
 	}
 
-	if(found) line = NULL;
+	// If end of comment is found return remainder of line
+	if(found) return line;
 
-	return line;
+	else return NULL;
 }
 
-void createQMLObjectTag(QMLObject *qml_obj, boolean *is_qml_object) {
+/*
+ * Create QML tag with current values
+ */
+void createTag(QMLTag *tag) {
 	tagEntryInfo entry;
-	initTagEntry(&entry, vStringValue(qml_obj->name));
+	initTagEntry(&entry, vStringValue(tag->name));
 
-	entry.lineNumber	=	qml_obj->line_num;
-	entry.filePosition	=	qml_obj->file_pos;
-	entry.kindName		=	QMLKinds[qml_obj->kind].name;
-	entry.kind			=	QMLKinds[qml_obj->kind].letter;
+	// If cur is QML_OBJECT, and ID is not empty, then set name with ID
+	if(tag->kind == QML_OBJECT && strcmp(tag->id->buffer, "") != 0) {
+		vStringCatS(tag->name, ": ");
+		vStringCat(tag->name, tag->id);
+	}
+
+	entry.lineNumber	=	tag->line_num;
+	entry.filePosition	=	tag->file_pos;
+	entry.kindName		=	QMLKinds[tag->kind].name;
+	entry.kind			=	QMLKinds[tag->kind].letter;
 
 	makeTagEntry(&entry);
-	vStringClear(qml_obj->name);
-	vStringDelete(qml_obj->name);
-
-	*is_qml_object = FALSE;
 }
 
-vString* getName(const unsigned char **str_ptr) {
-	vString *name = vStringNew();
-	const unsigned char *str = *str_ptr;
-
-	while(isalnum(*str) || *str == '_') {
-		vStringPut(name, *str);
-		str++;
+/*
+ * Copy alphanumeric chars from line to word until non-alphanumeric is reached.
+ * Line is incremented past word.
+ */
+void getFirstWord(const unsigned char **line, vString *word) {
+	while(isspace(**line)) (*line)++; // First skip any whitespace
+	// Next copy all alphanumerics and '_' to word
+	while(isalnum(**line) || **line == '_') {
+		vStringPut(word, **line);
+		(*line)++;
 	}
 
-	*str_ptr = str;
-	vStringTerminate(name);
-	return name;
+	vStringTerminate(word);
 }
 
-// Get ID from str, then append ": ID" to name and return
-vString *getId(const unsigned char *str, vString *name) {
-	vString *id = vStringNew();
-
-	while(strstr(str, "id:") != NULL) {
-		if(strncmp(str, "id:", 3) == 0) {
-			str += 3;
-			while(isspace(*str)) str++;
-			id = getName(&str);
-			vStringCatS(name, ": ");
-			vStringCat(name, id);
+/*
+ *  Get ID from line and store in vString *id
+ */
+void getId(const unsigned char *line, vString *id) {
+	while(strstr(line, "id:") != NULL) {
+		if(strncmp(line, "id:", 3) == 0) {
+			line += 3; // Skip past "id:" to word
+			getFirstWord(&line, id);
 		}
 
-		else str++;
+		else line++;
 	}
-
-	vStringClear(id);
-	vStringDelete(id);
-
-	return name;
 }
 
-static void findQMLTags(void) {
-	QMLObject *qml_obj			 =	malloc(sizeof(QMLObject));
-	boolean is_multiline_comment =	FALSE;
-	boolean is_qml_object		 =	FALSE;
-	const unsigned char *line;
+/*
+ * Scan line by line for QML tags
+ */
+static void findTags(void) {
+	const unsigned char *line		=	NULL;
+	QMLTag *cur						=	qmlTagNew();
+	boolean is_multiline_comment	=	FALSE;
 
+	// Main loop
 	while((line = fileReadLine()) != NULL) {
 		// If in middle of multiline comment, skip through till end
 		if(is_multiline_comment) {
@@ -116,77 +152,81 @@ static void findQMLTags(void) {
 			else is_multiline_comment = FALSE;
 		}
 
-		// If in middle of QML Object { } check for ID and '}'
-		if(is_qml_object && (strstr(line, "id:") != NULL || strchr(line, '}') != NULL)) {
-			if(strstr(line, "id:") != NULL)
-				qml_obj->name = getId(line, qml_obj->name);
-
-			else createQMLObjectTag(qml_obj, &is_qml_object);
-		}
-
-		// If '{' in line, but '(' not in line, then there might be a QML Object
-		if(strchr(line, '{') != NULL && strchr(line, '(') == NULL) {
-			int i = 0;
-			while(isspace(*line)) line++; // Increment ptr past any whitespace before 'Object {'
-			// Search past whole word of 'Object'
-			while(!isspace(line[i])) {
-				if(line[i] == '{' || line[i] == ':') break;
-				i++;
+		// Check for QML Object or JS Function
+		// If '{' in line, then there might be a QML Object or JS Function
+		if(strchr(line, '{') != NULL) {
+			// If cur->set, then we are already in a tag, so create child and make cur
+			if(cur->set) {
+				QMLTag *child	=	qmlTagNew();
+				cur->child		=	child;
+				child->parent	=	cur;
+				cur				=	child;
 			}
 
-			while(isspace(line[i])) i++; // Search past any space between 'Object' and '{'
+			// Skip whitespace and check for "function"
+			while(isspace(*line)) line++;
+			if(strncmp(line, "function", 8) == 0) {
+				line += 8;
+				cur->kind = JS_FUNCTION;
+				cur->supported = TRUE;
+			}
 
-			// If '{' is after potential Object name and any whitespace, prepare tag to be added
-			if(line[i] == '{') {
-				qml_obj->name		 =	getName(&line);
-				qml_obj->line_num	 =	File.lineNumber;
-				qml_obj->file_pos	 =	File.filePosition;
-				qml_obj->kind		 =	QML_OBJECT;
-				is_qml_object		 =	TRUE;
+			// Get info for tag
+			cur->set = TRUE;
+			getFirstWord(&line, cur->name);
+			cur->line_num = File.lineNumber;
+			cur->file_pos = File.filePosition;
 
-				// If ID is on same line
-				if(strstr(line, "id:") != NULL) {
-					while(strncmp(line, "id:", 3) != 0) line++;
-					qml_obj->name = getId(line, qml_obj->name);
-				}
+			while(isspace(*line)) line++; // Skip whitespace after word
 
-				// If single line Object
-				if(strchr(line, '}') != NULL)
-					createQMLObjectTag(qml_obj, &is_qml_object);
+			// If '{' is after word and any whitespace, then tag is a QML object
+			if(*line == '{') {
+				cur->kind = QML_OBJECT;
+				cur->supported = TRUE;
 			}
 		}
 
-		// If line contains a function
-		// Using while to prepare for unlikely event that "function" appears more than once in line
-		while(strstr(line, "function") != NULL) {
-			while(strncmp(line, "function", 8) != 0) line++;
+		// Check for ID
+		if(strstr(line, "id:") != NULL) {
+			// If cur is an active tag, set ID
+			if(cur->set) getId(line, cur->id);
+			// Else set ID to parent
+			else getId(line, cur->parent->id);
+		}
 
-			// If whitespace is after "function"
-			if(isspace(line[8])) {
-				line += 8; // Skip past "function"
+		// Check for '}' to close tag
+		if(strchr(line, '}')) {
+			QMLTag *tmp = cur; // Store cur while we switch to next or child
 
-				while(isspace(*line)) line++;
+			// If in tag, then check if supported to create, then switch to cur->next
+			if(cur->set) {
+				// If kind is supported, then create tag
+				if(cur->supported) createTag(cur);
 
-				vString *name = getName(&line);
-
-				while(isspace(*line)) line++;
-
-				// If '(' is after "function" and whitespace, then add tag as JS_FUNCTION
-				if(*line == '(') makeSimpleTag(name, QMLKinds, JS_FUNCTION);
-
-				vStringClear(name);
-				vStringDelete(name);
-
-				break;
+				// Then move cur to next
+				tmp->next	=	qmlTagNew();
+				cur			=	tmp->next;
+				cur->parent	=	tmp->parent;
 			}
 
-			else line++;
+			// Else we must have switched to cur->next but there is no next, just another '}'
+			// Therefore we need to create a tag for parent (if it's supported).
+			// Then switch to parent->next
+			else {
+				if(cur->parent->supported) createTag(cur->parent);
+				cur->parent->next	=	qmlTagNew();
+				cur 				=	tmp->parent->next;
+				cur->parent			=	tmp->parent->parent;
+			 }
+
+			qmlTagDelete(tmp); // Delete QMLTag and free it's memory
 		}
 	}
-
-	free(qml_obj);
 }
 
+/*
+ * QML parser definition
+ */
 extern parserDefinition *QMLParser(void) {
 	parserDefinition* def = parserNew("QML");
 	static const char *const extensions [] = { "qml", NULL };
@@ -194,7 +234,7 @@ extern parserDefinition *QMLParser(void) {
 	def->kinds		=	QMLKinds;
 	def->kindCount	=	KIND_COUNT(QMLKinds);
 	def->extensions	=	extensions;
-	def->parser		=	findQMLTags;
+	def->parser		=	findTags;
 	def->regex		=	FALSE;
 
 	return def;
