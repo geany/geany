@@ -494,7 +494,7 @@ void sidebar_openfiles_add(GeanyDocument *doc)
 	}
 	else if (doc->file_type && doc->file_type->icon)
 	{
-		doc->file_type->icon;
+		file_icon = doc->file_type->icon;
 	}
 	else
 		file_icon = ui_get_mime_icon("text/plain", GTK_ICON_SIZE_MENU);
