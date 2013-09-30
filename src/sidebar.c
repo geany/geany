@@ -56,7 +56,6 @@ static struct
 	GtkWidget *save;
 	GtkWidget *reload;
 	GtkWidget *show_paths;
-	GtkWidget *middle_mouse_close;
 	GtkWidget *find_in_files;
 	GtkWidget *expand_all;
 	GtkWidget *collapse_all;
@@ -89,7 +88,6 @@ enum
 static GtkTreeStore	*store_openfiles;
 static GtkWidget *openfiles_popup_menu;
 static gboolean documents_show_paths;
-static gboolean documents_middle_mouse_close;
 static GtkWidget *tag_window;	/* scrolled window that holds the symbol list GtkTreeView */
 
 /* callback prototypes */
@@ -656,12 +654,6 @@ static void on_openfiles_show_paths_activate(GtkCheckMenuItem *item, gpointer us
 }
 
 
-static void on_openfiles_middle_mouse_close_activate(GtkCheckMenuItem *item, gpointer user_data)
-{
-	documents_middle_mouse_close = gtk_check_menu_item_get_active(item);
-}
-
-
 static void on_list_document_activate(GtkCheckMenuItem *item, gpointer user_data)
 {
 	interface_prefs.sidebar_openfiles_visible = gtk_check_menu_item_get_active(item);
@@ -767,13 +759,6 @@ static void create_openfiles_popup_menu(void)
 	gtk_container_add(GTK_CONTAINER(openfiles_popup_menu), doc_items.show_paths);
 	g_signal_connect(doc_items.show_paths, "activate",
 			G_CALLBACK(on_openfiles_show_paths_activate), NULL);
-
-	doc_items.middle_mouse_close = gtk_check_menu_item_new_with_mnemonic(_("Close _With Middle Mouse Button"));
-	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(doc_items.middle_mouse_close), documents_middle_mouse_close);
-	gtk_widget_show(doc_items.middle_mouse_close);
-	gtk_container_add(GTK_CONTAINER(openfiles_popup_menu), doc_items.middle_mouse_close);
-	g_signal_connect(doc_items.middle_mouse_close, "activate",
-			G_CALLBACK(on_openfiles_middle_mouse_close_activate), NULL);
 
 	item = gtk_separator_menu_item_new();
 	gtk_widget_show(item);
@@ -1037,13 +1022,6 @@ static gboolean sidebar_button_press_cb(GtkWidget *widget, GdkEventButton *event
 		else
 			handled = taglist_go_to_selection(selection, 0, event->state);
 	}
-	else if (event->button == 2)
-	{
-		if (widget == tv.tree_openfiles && documents_middle_mouse_close)
-		{
-			on_openfiles_document_action(NULL, OPENFILES_ACTION_REMOVE);
-		}
-	}
 	else if (event->button == 3)
 	{
 		if (widget == tv.tree_openfiles)
@@ -1094,7 +1072,6 @@ static void documents_menu_update(GtkTreeSelection *selection)
 	g_free(shortname);
 
 	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(doc_items.show_paths), documents_show_paths);
-	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(doc_items.middle_mouse_close), documents_middle_mouse_close);
 	gtk_widget_set_sensitive(doc_items.expand_all, documents_show_paths);
 	gtk_widget_set_sensitive(doc_items.collapse_all, documents_show_paths);
 }
@@ -1126,7 +1103,6 @@ void sidebar_init(void)
 
 	group = stash_group_new(PACKAGE);
 	stash_group_add_boolean(group, &documents_show_paths, "documents_show_paths", TRUE);
-	stash_group_add_boolean(group, &documents_middle_mouse_close, "documents_middle_mouse_close", TRUE);
 	stash_group_add_widget_property(group, &ui_prefs.sidebar_page, "sidebar_page", GINT_TO_POINTER(0),
 		main_widgets.sidebar_notebook, "page", 0);
 	configuration_add_pref_group(group, FALSE);
