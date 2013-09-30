@@ -448,6 +448,24 @@ static GtkTreeIter *get_doc_parent(GeanyDocument *doc)
 	return &parent;
 }
 
+static GdkPixbuf *sidebar_openfiles_check_header_icon(GeanyDocument *doc)
+{
+	if(NULL == doc || NULL == doc->file_name || NULL == doc->file_type)
+		return NULL;
+	gchar *ext = strrchr(doc->file_name, '.');
+	if (!ext)
+		return NULL;
+	else
+		ext++;
+	if (strcmp(doc->file_type->name, "C") == 0 || strcmp(doc->file_type->name, "C++") == 0)
+	{
+		if (strcasecmp(ext, "h") == 0)
+			return ui_get_mime_icon("text/x-chdr", GTK_ICON_SIZE_MENU);
+		else if (strcasecmp(ext, "hpp") == 0)
+			return ui_get_mime_icon("text/x-c++hdr", GTK_ICON_SIZE_MENU);
+	}
+	return NULL;
+}
 
 /* Also sets doc->priv->iter.
  * This is called recursively in sidebar_openfiles_update_all(). */
@@ -471,12 +489,21 @@ void sidebar_openfiles_add(GeanyDocument *doc)
 		gtk_tree_view_expand_row(GTK_TREE_VIEW(tv.tree_openfiles), path, TRUE);
 		gtk_tree_path_free(path);
 	}
-	if (!file_icon)
+	GdkPixbuf *header_icon = sidebar_openfiles_check_header_icon(doc);
+	if (header_icon)
+	{
+		file_icon = header_icon;
+	}
+	else if (doc->file_type && doc->file_type->icon)
+	{
+		doc->file_type->icon;
+	}
+	else
 		file_icon = ui_get_mime_icon("text/plain", GTK_ICON_SIZE_MENU);
 
 	basename = g_path_get_basename(DOC_FILENAME(doc));
 	gtk_tree_store_set(store_openfiles, iter,
-		DOCUMENTS_ICON, (doc->file_type && doc->file_type->icon) ? doc->file_type->icon : file_icon,
+		DOCUMENTS_ICON, file_icon,
 		DOCUMENTS_SHORTNAME, basename, DOCUMENTS_DOCUMENT, doc, DOCUMENTS_COLOR, color,
 		DOCUMENTS_FILENAME, DOC_FILENAME(doc), -1);
 	g_free(basename);
@@ -507,7 +534,8 @@ void sidebar_openfiles_update(GeanyDocument *doc)
 	{
 		/* just update color and the icon */
 		const GdkColor *color = document_get_status_color(doc);
-		GdkPixbuf *icon = doc->file_type->icon;
+		GdkPixbuf *header_icon = sidebar_openfiles_check_header_icon(doc);
+		GdkPixbuf *icon = header_icon ? header_icon : doc->file_type->icon;
 
 		gtk_tree_store_set(store_openfiles, iter, DOCUMENTS_COLOR, color, -1);
 		if (icon)
