@@ -105,7 +105,7 @@ void createTag(QMLTag *tag) {
 void getFirstWord(const unsigned char **line, vString *word) {
 	while(isspace(**line)) (*line)++; // First skip any whitespace
 	// Next copy all alphanumerics and '_' to word
-	while(isalnum(**line) || **line == '_') {
+	while(isalnum(**line) || **line == '_' || **line == '.') {
 		vStringPut(word, **line);
 		(*line)++;
 	}
@@ -169,6 +169,24 @@ static void findTags(void) {
 				line += 8;
 				cur->kind = JS_FUNCTION;
 				cur->supported = TRUE;
+			}
+
+			// Else check for ':' and '{'
+			else if(strchr(line, ':') != NULL && strchr(line, '{') != NULL) {
+				int i = 0;
+				while(i <= strlen(line)) {
+					static int words = 0;
+
+					if(isspace(line[i])) words++; // If we hit a space, inc num of words
+					// After if(), inc i (for parent loop and incing past ':')
+					if(line[i++] == (unsigned char)':' && words <= 1) {
+						while(isspace(line[i])) i++;
+						if(line[i] == (unsigned char)'{') {
+							cur->kind = JS_FUNCTION;
+							cur->supported = TRUE;
+						}
+					}
+				}
 			}
 
 			// Get info for tag
