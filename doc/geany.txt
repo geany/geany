@@ -2616,6 +2616,11 @@ number_non_ft_menu_items          The maximum number of menu items in the      3
                                   independent section of the Build menu.
 number_exec_menu_items            The maximum number of menu items in the      2           on restart
                                   execute section of the Build menu.
+**Tools related**
+win_spawn_mode                    Whether to use default spawning (0) or       0           immediately
+                                  a simpler alternative (1). Leave set to 0
+                                  unless you experience problems with
+                                  process spawning (e.g. build commands).
 ================================  ===========================================  ==========  ===========
 
 The extract_filetype_regex has the default value GEANY_DEFAULT_FILETYPE_REGEX.

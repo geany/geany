@@ -54,6 +54,7 @@
 #include "filetypes.h"
 #include "project.h"
 #include "editor.h"
+#include "prefs.h"
 
 #define BUFSIZE 4096
 #define CMDSIZE 32768
@@ -1036,7 +1037,7 @@ gboolean win32_spawn(const gchar *dir, gchar **argv, gchar **env, GSpawnFlags fl
 	gchar *tmp_errfile = create_temp_file();
 	gchar *command;
 
-	if (env != NULL)
+	if (tool_prefs.win_spawn_mode != 1 || env != NULL)
 	{
 		return _broken_win32_spawn(dir, argv, env, flags, std_out, std_err,
 			exit_status, error);
