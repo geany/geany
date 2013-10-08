@@ -8,6 +8,7 @@
 typedef struct QMLTag {
 	boolean			set; // Is tag set?
 	boolean 		supported; // Is tag supported?
+	boolean			added; // Has the tag already been created?
 	vString			*id;
 	vString			*name;
 	unsigned long	line_num;
@@ -35,6 +36,7 @@ static kindOption QMLKinds[] = {
 QMLTag* qmlTagNew() {
 	QMLTag *tag	=	malloc(sizeof(QMLTag));
 	tag->set	=	FALSE;
+	tag->added	=	FALSE;
 	tag->name	=	vStringNew();
 	tag->id		=	vStringNew();
 	tag->kind	=	-1;
@@ -50,9 +52,46 @@ QMLTag* qmlTagNew() {
  * Free all memory from tag
  */
 void qmlTagDelete(QMLTag *tag) {
+	// Free vStrings
 	vStringDelete(tag->name);
 	vStringDelete(tag->id);
+
+	// Make links point to NULL
+	if(tag->parent != NULL && tag->parent->child == tag) tag->parent->child = NULL;
+	if(tag->prev != NULL) tag->prev->next = NULL;
+
+	// Free QMLTag
 	free(tag);
+}
+
+/*
+ * Iterate through QMLTag linked list freeing each
+ */
+void freeQMLTags(QMLTag *tag) {
+	while(tag != NULL) {
+		// Else if tag has child, recurse down
+		if(tag->child != NULL) tag = tag->child;
+
+		// If tag has next sibling, move to it
+		else if(tag->next != NULL) tag = tag->next;
+
+		// Else delete tag and move back or up
+		else {
+			// If prev exists, delete and move back
+			if(tag->prev != NULL) {
+				QMLTag *prev = tag->prev;
+				qmlTagDelete(tag);
+				tag = prev;
+			}
+
+			// Else delete tag and move up to parent
+			else {
+				QMLTag *parent = tag->parent;
+				qmlTagDelete(tag);
+				tag = parent;
+			}
+		}
+	}
 }
 
 /*
@@ -80,7 +119,7 @@ const unsigned char* skipMultilineComment(const unsigned char *line) {
 /*
  * Create QML tag with current values
  */
-void createTag(QMLTag *tag) {
+void makeTag(QMLTag *tag) {
 	tagEntryInfo entry;
 	initTagEntry(&entry, vStringValue(tag->name));
 
@@ -92,10 +131,36 @@ void createTag(QMLTag *tag) {
 
 	entry.lineNumber	=	tag->line_num;
 	entry.filePosition	=	tag->file_pos;
+	entry.isFileScope	=	TRUE;
 	entry.kindName		=	QMLKinds[tag->kind].name;
 	entry.kind			=	QMLKinds[tag->kind].letter;
 
+	if(tag->parent != NULL) {
+		entry.extensionFields.scope[0] = QMLKinds[tag->parent->kind].name;
+		entry.extensionFields.scope[1] = vStringValue(tag->parent->name);
+	}
+
+	tag->added = TRUE;
 	makeTagEntry(&entry);
+}
+
+/*
+ * Iterate through QMLTag linked list, creating CTags tag for each.
+ * Create tags in order from parent to child, from left to right.
+ */
+void makeTags(QMLTag *tag) {
+	while(tag != NULL) {
+		// If tag is supported and hasn't been added, then create it
+		if(tag->supported && !tag->added) makeTag(tag);
+		// If tag is not supported, set added to TRUE so it skips it later (even though it's a lie;)
+		else if(!tag->supported) tag->added = TRUE;
+		// If tag has children that haven't already been added, recurse down
+		if(tag->child != NULL && !tag->child->added) tag = tag->child;
+		// Else if tag has next siblings that hasn't been added, move to it
+		else if(tag->next != NULL && !tag->next->added) tag = tag->next;
+		// Else move back to parent
+		else tag = tag->parent;
+	}
 }
 
 /*
@@ -132,9 +197,11 @@ void getId(const unsigned char *line, vString *id) {
  */
 static void findTags(void) {
 	const unsigned char *line		=	NULL;
-	QMLTag *cur						=	qmlTagNew();
+	QMLTag *const root				=	qmlTagNew();
+	QMLTag *cur						=	root;
 	boolean is_multiline_comment	=	FALSE;
 
+//AFTER REFRESHING SYMBOL LIST NULL ITEMS ARE CREATED, FIND OUT WHYYYYY!!!!!!!!!
 	// Main loop
 	while((line = fileReadLine()) != NULL) {
 		// If in middle of multiline comment, skip through till end
@@ -152,15 +219,38 @@ static void findTags(void) {
 			else is_multiline_comment = FALSE;
 		}
 
+		// Check for '}' to close tag
+		if(strchr(line, '}')) {
+			// If in tag switch to cur->next
+			if(cur->set) {
+				cur->next			=	qmlTagNew();
+				cur->next->prev		=	cur;
+				cur->next->parent	=	cur->parent;
+				cur					=	cur->next;
+			}
+
+			// Else we must have switched to cur->next but there is no next, just another '}'
+			// Delete blank tag and switch to parent->next
+			else if(cur->parent != NULL) {
+				QMLTag *tmp = cur;
+				cur->parent->next			=	qmlTagNew();
+				cur->parent->next->parent	=	cur->parent->parent;
+				cur->parent->next->prev		=	cur->parent;
+				cur							=	cur->parent->next;
+				qmlTagDelete(tmp);
+			}
+
+			continue;
+		}
+
 		// Check for QML Object or JS Function
 		// If '{' in line, then there might be a QML Object or JS Function
 		if(strchr(line, '{') != NULL) {
-			// If cur->set, then we are already in a tag, so create child and make cur
+			// If cur->set, then we are already in a tag, so create child and switch to it
 			if(cur->set) {
-				QMLTag *child	=	qmlTagNew();
-				cur->child		=	child;
-				child->parent	=	cur;
-				cur				=	child;
+				cur->child			=	qmlTagNew();
+				cur->child->parent	=	cur;
+				cur					=	cur->child;
 			}
 
 			// Skip whitespace and check for "function"
@@ -174,11 +264,10 @@ static void findTags(void) {
 			// Else check for ':' and '{'
 			else if(strchr(line, ':') != NULL && strchr(line, '{') != NULL) {
 				int i = 0;
+				int words = 0;
 				while(i <= strlen(line)) {
-					static int words = 0;
-
 					if(isspace(line[i])) words++; // If we hit a space, inc num of words
-					// After if(), inc i (for parent loop and incing past ':')
+					// After if(line[i] == ':'), inc i (for parent loop and incing past ':')
 					if(line[i++] == (unsigned char)':' && words <= 1) {
 						while(isspace(line[i])) i++;
 						if(line[i] == (unsigned char)'{') {
@@ -190,17 +279,17 @@ static void findTags(void) {
 			}
 
 			// Get info for tag
-			cur->set = TRUE;
 			getFirstWord(&line, cur->name);
-			cur->line_num = File.lineNumber;
-			cur->file_pos = File.filePosition;
+			cur->line_num	=	File.lineNumber;
+			cur->file_pos	=	File.filePosition;
+			cur->set		=	TRUE;
 
 			while(isspace(*line)) line++; // Skip whitespace after word
 
 			// If '{' is after word and any whitespace, then tag is a QML object
 			if(*line == '{') {
-				cur->kind = QML_OBJECT;
-				cur->supported = TRUE;
+				cur->kind		=	QML_OBJECT;
+				cur->supported	=	TRUE;
 			}
 		}
 
@@ -211,35 +300,16 @@ static void findTags(void) {
 			// Else set ID to parent
 			else getId(line, cur->parent->id);
 		}
-
-		// Check for '}' to close tag
-		if(strchr(line, '}')) {
-			QMLTag *tmp = cur; // Store cur while we switch to next or child
-
-			// If in tag, then check if supported to create, then switch to cur->next
-			if(cur->set) {
-				// If kind is supported, then create tag
-				if(cur->supported) createTag(cur);
-
-				// Then move cur to next
-				tmp->next	=	qmlTagNew();
-				cur			=	tmp->next;
-				cur->parent	=	tmp->parent;
-			}
-
-			// Else we must have switched to cur->next but there is no next, just another '}'
-			// Therefore we need to create a tag for parent (if it's supported).
-			// Then switch to parent->next
-			else {
-				if(cur->parent->supported) createTag(cur->parent);
-				cur->parent->next	=	qmlTagNew();
-				cur 				=	tmp->parent->next;
-				cur->parent			=	tmp->parent->parent;
-			 }
-
-			qmlTagDelete(tmp); // Delete QMLTag and free it's memory
-		}
 	}
+
+	// When finished building QMLTags linked list, make sure root->next is NULL
+	// Then create tags, and free QMLTags
+	if(root->next != NULL) {
+		qmlTagDelete(root->next);
+		root->next = NULL;
+	}
+	makeTags(root);
+	freeQMLTags(root);
 }
 
 /*
