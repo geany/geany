@@ -121,7 +121,6 @@ const unsigned char* skipMultilineComment(const unsigned char *line) {
  */
 void makeTag(QMLTag *tag) {
 	tagEntryInfo entry;
-	initTagEntry(&entry, vStringValue(tag->name));
 
 	// If cur is QML_OBJECT, and ID is not empty, then set name with ID
 	if(tag->kind == QML_OBJECT && strcmp(tag->id->buffer, "") != 0) {
@@ -129,6 +128,7 @@ void makeTag(QMLTag *tag) {
 		vStringCat(tag->name, tag->id);
 	}
 
+	initTagEntry(&entry, vStringValue(tag->name));
 	entry.lineNumber	=	tag->line_num;
 	entry.filePosition	=	tag->file_pos;
 	entry.isFileScope	=	TRUE;
@@ -308,6 +308,7 @@ static void findTags(void) {
 		qmlTagDelete(root->next);
 		root->next = NULL;
 	}
+
 	makeTags(root);
 	freeQMLTags(root);
 }
