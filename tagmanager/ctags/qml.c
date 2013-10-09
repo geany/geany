@@ -34,16 +34,17 @@ static kindOption QMLKinds[] = {
  * Malloc and return initialized QMLTag ptr
  */
 QMLTag* qmlTagNew() {
-	QMLTag *tag	=	malloc(sizeof(QMLTag));
-	tag->set	=	FALSE;
-	tag->added	=	FALSE;
-	tag->name	=	vStringNew();
-	tag->id		=	vStringNew();
-	tag->kind	=	-1;
-	tag->parent	=	NULL;
-	tag->child	=	NULL;
-	tag->prev	=	NULL;
-	tag->next	=	NULL;
+	QMLTag *tag		=	malloc(sizeof(QMLTag));
+	tag->set		=	FALSE;
+	tag->added		=	FALSE;
+	tag->supported	=	FALSE;
+	tag->name		=	vStringNew();
+	tag->id			=	vStringNew();
+	tag->kind		=	-1;
+	tag->parent		=	NULL;
+	tag->child		=	NULL;
+	tag->prev		=	NULL;
+	tag->next		=	NULL;
 
 	return tag;
 }
@@ -152,7 +153,7 @@ void makeTags(QMLTag *tag) {
 	while(tag != NULL) {
 		// If tag is supported and hasn't been added, then create it
 		if(tag->supported && !tag->added) makeTag(tag);
-		// If tag is not supported, set added to TRUE so it skips it later (even though it's a lie;)
+		// If tag's not supported, set added to TRUE so it skips it later (even though it's a lie ;)
 		else if(!tag->supported) tag->added = TRUE;
 		// If tag has children that haven't already been added, recurse down
 		if(tag->child != NULL && !tag->child->added) tag = tag->child;
@@ -285,8 +286,9 @@ static void findTags(void) {
 
 			while(isspace(*line)) line++; // Skip whitespace after word
 
-			// If '{' is after word and any whitespace, then tag is a QML object
-			if(*line == '{') {
+			// If '{' is after word and any whitespace, and tag->name isn't blank,
+			// then tag is a QML object
+			if(*line == '{' && vStringLength(cur->name) > 0) {
 				cur->kind		=	QML_OBJECT;
 				cur->supported	=	TRUE;
 			}
@@ -297,7 +299,7 @@ static void findTags(void) {
 			// If cur is an active tag, set ID
 			if(cur->set) getId(line, cur->id);
 			// Else set ID to parent
-			else getId(line, cur->parent->id);
+			else if(cur->parent != NULL) getId(line, cur->parent->id);
 		}
 	}
 
