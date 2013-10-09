@@ -201,7 +201,6 @@ static void findTags(void) {
 	QMLTag *cur						=	root;
 	boolean is_multiline_comment	=	FALSE;
 
-//AFTER REFRESHING SYMBOL LIST NULL ITEMS ARE CREATED, FIND OUT WHYYYYY!!!!!!!!!
 	// Main loop
 	while((line = fileReadLine()) != NULL) {
 		// If in middle of multiline comment, skip through till end
