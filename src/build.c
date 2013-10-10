@@ -842,7 +842,7 @@ static GPid build_spawn_cmd(GeanyDocument *doc, const gchar *cmd, const gchar *d
 	g_free(output[0]);
 	g_free(output[1]);
 #else
-	if (build_info.pid > 0)
+	if (build_info.pid != 0)
 	{
 		g_child_watch_add(build_info.pid, (GChildWatchFunc) build_exit_cb, NULL);
 		build_menu_update(doc);
