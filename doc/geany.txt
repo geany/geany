@@ -2621,6 +2621,9 @@ win_spawn_mode                    Whether to use default spawning (0) or       0
                                   a simpler alternative (1). Leave set to 0
                                   unless you experience problems with
                                   process spawning (e.g. build commands).
+                                  There is also another option (2), but this
+                                  has some known issues when output exceeds
+                                  4kb.
 ================================  ===========================================  ==========  ===========
 
 The extract_filetype_regex has the default value GEANY_DEFAULT_FILETYPE_REGEX.

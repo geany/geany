@@ -1028,8 +1028,8 @@ gboolean _broken_win32_spawn(const gchar *dir, gchar **argv, gchar **env, GSpawn
  * flags is ignored, G_SPAWN_SEARCH_PATH is implied.
  * Don't call this function directly, use utils_spawn_[a]sync() instead.
  * Adapted from tm_workspace_create_global_tags(). */
-gboolean win32_spawn(const gchar *dir, gchar **argv, gchar **env, GSpawnFlags flags,
-					 gchar **std_out, gchar **std_err, gint *exit_status, GError **error)
+static gboolean system_spawn(const gchar *dir, gchar **argv,
+		gchar **std_out, gchar **std_err, gint *exit_status, GError **error)
 {
 	gint ret;
 	gboolean fail;
@@ -1037,11 +1037,6 @@ gboolean win32_spawn(const gchar *dir, gchar **argv, gchar **env, GSpawnFlags fl
 	gchar *tmp_errfile = create_temp_file();
 	gchar *command;
 
-	if (tool_prefs.win_spawn_mode != 1 || env != NULL)
-	{
-		return _broken_win32_spawn(dir, argv, env, flags, std_out, std_err,
-			exit_status, error);
-	}
 	if (!tmp_file || !tmp_errfile)
 	{
 		g_warning("%s: Could not create temporary files!", G_STRFUNC);
@@ -1073,6 +1068,27 @@ gboolean win32_spawn(const gchar *dir, gchar **argv, gchar **env, GSpawnFlags fl
 		*exit_status = ret;
 
 	return !fail;
+}
+
+
+gboolean win32_spawn(const gchar *dir, gchar **argv, gchar **env, GSpawnFlags flags,
+					 gchar **std_out, gchar **std_err, gint *exit_status, GError **error)
+{
+	switch (tool_prefs.win_spawn_mode)
+	{
+		case 2:
+			return _broken_win32_spawn(dir, argv, env, flags, std_out, std_err,
+				exit_status, error);
+		case 1:
+			if (!env)
+				return system_spawn(dir, argv,
+					std_out, std_err, exit_status, error);
+			/* fall through */
+		case 0:
+		default:
+			return g_spawn_sync(dir, argv, env, flags, NULL, NULL,
+				std_out, std_err, exit_status, error);
+	}
 }
 
 
