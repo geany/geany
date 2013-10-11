@@ -111,6 +111,8 @@ struct GeanyDocument
 	 * not be set elsewhere.
 	 * @see file_name. */
 	gchar 			*real_path;
+	/** Icon detected from the mime-type */
+	GdkPixbuf *icon;
 
 	struct GeanyDocumentPrivate *priv;	/* should be last, append fields before this item */
 };

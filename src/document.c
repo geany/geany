@@ -535,7 +535,20 @@ static GeanyDocument *document_create(const gchar *utf8_filename)
 #ifndef USE_GIO_FILEMON
 	doc->priv->last_check = time(NULL);
 #endif
-
+	GError *error;
+	GFile *file = g_file_new_for_path(doc->file_name);
+	GFileInfo *file_info = g_file_query_info(file, "standard::*", 0, NULL, &error);
+	if(file_info)
+	{
+		const char *content_type = g_file_info_get_content_type(file_info);
+		const char *mime_type = g_content_type_get_mime_type(content_type);
+		if(mime_type)
+			doc->icon = ui_get_mime_icon(mime_type, GTK_ICON_SIZE_MENU);
+		else
+			doc->icon = ui_get_mime_icon("text/plain", GTK_ICON_SIZE_MENU);
+		g_object_unref(file_info);
+	}
+	g_object_unref(file);
 	sidebar_openfiles_add(doc);	/* sets doc->iter */
 
 	notebook_new_tab(doc);
@@ -603,6 +616,7 @@ static gboolean remove_page(guint page_num)
 	g_free(doc->priv->saved_encoding.encoding);
 	g_free(doc->file_name);
 	g_free(doc->real_path);
+	g_object_unref(doc->icon);
 	tm_workspace_remove_object(doc->tm_file, TRUE, TRUE);
 
 	if (doc->priv->tag_tree)
