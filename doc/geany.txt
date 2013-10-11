@@ -3952,13 +3952,14 @@ the '``*``' wildcard - e.g. ``filetypes.Bar.conf``.
 Custom filetypes are not as powerful as built-in filetypes, but
 support for the following has been implemented:
 
-* Recognizing and setting the filetype (after the user has manually edited
-  ``filetype_extensions.conf``).
+* Recognizing and setting the filetype (after the user has manually updated
+  the `filetype extensions`_ file).
+* `Filetype group membership`_.
 * Reading filetype settings in the ``[settings]`` section, including:
     * Using an existing syntax highlighting lexer (`lexer_filetype`_ key).
-    * Using an existing tag parser (``tag_parser`` key).
+    * Using an existing tag parser (`tag_parser`_ key).
 * Build commands (``[build-menu]`` section).
-* Loading global tags files (sharing the ``tag_parser`` namespace).
+* Loading global tags files (sharing the ``tag_parser`` filetype's namespace).
 
 See `Filetype configuration`_ for details on each setting.
 
@@ -4165,6 +4166,8 @@ context_action_cmd
     context_action_cmd=firefox "http://www.php.net/%s"
 
     *Example:* ``context_action_cmd=devhelp -s "%s"``
+
+.. _tag_parser:
 
 tag_parser
     The TagManager language name, e.g. "C". Usually the same as the
@@ -4576,8 +4579,9 @@ whitespace_chars
 Filetype extensions
 -------------------
 
-To change the default filetype extension used when saving a new file,
-see `Filetype definition files`_.
+.. note::
+    To change the default filetype extension used when saving a new file,
+    see `Filetype definition files`_.
 
 You can override the list of file extensions that Geany uses to detect
 filetypes using the user ``filetype_extensions.conf`` file. Use the
@@ -4597,7 +4601,7 @@ should look like::
     Make=Makefile*;*.mk;Buildfile;
 
 Filetype group membership
--------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^
 Group membership is also stored in ``filetype_extensions.conf``. This
 file is used to store information Geany needs at startup, whereas the
 separate filetype definition files hold information only needed when
