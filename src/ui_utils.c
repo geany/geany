@@ -2026,6 +2026,8 @@ void ui_init_prefs(void)
 		"msgwin_messages_visible", TRUE);
 	stash_group_add_boolean(group, &interface_prefs.msgwin_scribble_visible,
 		"msgwin_scribble_visible", TRUE);
+	stash_group_add_boolean(group, &search_prefs.move_cursor,
+		"scroll_on_replace_all", TRUE);
 }
 
 

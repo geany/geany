@@ -2218,7 +2218,7 @@ gint document_replace_all(GeanyDocument *doc, const gchar *find_text, const gcha
 
 	len = sci_get_length(doc->editor->sci);
 	count = document_replace_range(
-			doc, find_text, replace_text, flags, 0, len, TRUE, NULL);
+			doc, find_text, replace_text, flags, 0, len, search_prefs.move_cursor, NULL);
 
 	show_replace_summary(doc, count, original_find_text, original_replace_text);
 	return count;
