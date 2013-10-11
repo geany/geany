@@ -1,3 +1,12 @@
+/*
+ *	Copyright (c) 2013, Tory Gaurnier
+ *
+ *	This source code is released for free distribution under the terms of the
+ *	GNU General Public License.
+ *
+ *	This module creates tags for QML source files.
+ */
+
 #include "general.h"    /* always include first */
 #include "entry.h"
 #include "parse.h"      /* always include */
@@ -27,7 +36,7 @@ typedef enum QMLKind {
 
 static kindOption QMLKinds[] = {
 	{ TRUE,	'o',	"other",	"objects"	},
-	{ TRUE, 'f',	"function",	"functions"		}
+	{ TRUE, 'f',	"function",	"functions"	}
 };
 
 /*
@@ -45,6 +54,23 @@ QMLTag* qmlTagNew() {
 	tag->child		=	NULL;
 	tag->prev		=	NULL;
 	tag->next		=	NULL;
+
+	return tag;
+}
+
+QMLTag* qmlTagSet(QMLTag *tag, vString *word, QMLKind kind) {
+	if(tag->set) {
+		tag->child			=	qmlTagNew();
+		tag->child->parent	=	tag;
+		tag					=	tag->child;
+	}
+
+	vStringCopy(tag->name, word);
+	tag->kind		=	kind;
+	tag->line_num	=	File.lineNumber;
+	tag->file_pos	=	File.filePosition;
+	tag->set		=	TRUE;
+	tag->supported	=	TRUE;
 
 	return tag;
 }
@@ -96,6 +122,32 @@ void freeQMLTags(QMLTag *tag) {
 }
 
 /*
+ * Skip past unsupported block, returning remainder of line, or NULL if end not found within line.
+ * unsigned int *i is a pointer to in_unsupported_block, stores number of recursions in unsupported
+ * blocks (for example, recursive while loops), and acts as a boolean.
+ */
+const unsigned char* skipUnsupportedBlock(const unsigned char *line, unsigned int *i) {
+	while(*i > 0 && *line != '\0') {
+		switch(*line) {
+			case '}':
+				(*i)--;
+				break;
+
+			case '{':
+				(*i)++;
+				break;
+		}
+
+		line++;
+	}
+
+	// If end of unsupported blocks is found return remainder of line
+	if(!*i) return line;
+
+	else return NULL;
+}
+
+/*
  * Skip past multiline comment in line, returning remainder of line, or NULL if end not found
  */
 const unsigned char* skipMultilineComment(const unsigned char *line) {
@@ -137,8 +189,21 @@ void makeTag(QMLTag *tag) {
 	entry.kind			=	QMLKinds[tag->kind].letter;
 
 	if(tag->parent != NULL) {
-		entry.extensionFields.scope[0] = QMLKinds[tag->parent->kind].name;
-		entry.extensionFields.scope[1] = vStringValue(tag->parent->name);
+		QMLTag *cur = tag->parent;
+		vString *scope = vStringNew();
+		vStringCopy(scope, cur->name);
+
+		while((cur = cur->parent) != NULL) {
+			vString *tmp = vStringNew();
+			vStringCopy(tmp, scope);
+			vStringCopy(scope, cur->name);
+			vStringCatS(scope, ".");
+			vStringCat(scope, tmp);
+			vStringDelete(tmp);
+		}
+
+		entry.extensionFields.scope[0] = vStringValue(tag->name);
+		entry.extensionFields.scope[1] = vStringValue(scope);
 	}
 
 	tag->added = TRUE;
@@ -166,140 +231,155 @@ void makeTags(QMLTag *tag) {
 
 /*
  * Copy alphanumeric chars from line to word until non-alphanumeric is reached.
- * Line is incremented past word.
+ * Line is incremented past word and whitespace after word.
  */
-void getFirstWord(const unsigned char **line, vString *word) {
+void getNextWord(const unsigned char **line, vString *word) {
 	while(isspace(**line)) (*line)++; // First skip any whitespace
 	// Next copy all alphanumerics and '_' to word
 	while(isalnum(**line) || **line == '_' || **line == '.') {
-		vStringPut(word, **line);
+		// If we have a period and it's not a signal function/expression, then don't add '.'
+		// Signal function/expression will have "on" and then a capital letter
+		if(**line == '.' && !(strncmp(*line, ".on", 3) == 0 && isupper((*line)[3])))
+			vStringPut(word, ' ');
+
+		else vStringPut(word, **line);
 		(*line)++;
 	}
 
+	while(isspace(**line)) (*line)++; // Next skip any trailing whitespace
+
 	vStringTerminate(word);
-}
-
-/*
- *  Get ID from line and store in vString *id
- */
-void getId(const unsigned char *line, vString *id) {
-	while(strstr(line, "id:") != NULL) {
-		if(strncmp(line, "id:", 3) == 0) {
-			line += 3; // Skip past "id:" to word
-			getFirstWord(&line, id);
-		}
-
-		else line++;
-	}
 }
 
 /*
  * Scan line by line for QML tags
  */
 static void findTags(void) {
-	const unsigned char *line		=	NULL;
-	QMLTag *const root				=	qmlTagNew();
-	QMLTag *cur						=	root;
-	boolean is_multiline_comment	=	FALSE;
+	const unsigned char *line			=	NULL;
+	QMLTag *const root					=	qmlTagNew();
+	QMLTag *cur							=	root;
+	boolean in_multiline_comment		=	FALSE; // True if we are inside a multiline comment
+	unsigned int in_unsupported_block	=	0; // > 0 if we are inside an unsupported block
+	vString *word						=	vStringNew();
 
 	// Main loop
 	while((line = fileReadLine()) != NULL) {
-		// If in middle of multiline comment, skip through till end
-		if(is_multiline_comment) {
-			if((line = skipMultilineComment(line)) == NULL) continue;
-			else is_multiline_comment = FALSE;
-		}
-
-		// Skip whitespace and comments
-		while(isspace(*line)) line++;
-		if(strncmp(line, "//", 2) == 0) continue;
-		if(strncmp(line, "/*", 2) == 0) {
-			is_multiline_comment = TRUE;
-			if((line = skipMultilineComment(line)) == NULL) continue;
-			else is_multiline_comment = FALSE;
-		}
-
-		// Check for '}' to close tag
-		if(strchr(line, '}')) {
-			// If in tag switch to cur->next
-			if(cur->set) {
-				cur->next			=	qmlTagNew();
-				cur->next->prev		=	cur;
-				cur->next->parent	=	cur->parent;
-				cur					=	cur->next;
+		// Loop through line until end of line is reached
+		while(*line != '\0') {
+			// If in middle of multiline comment, skip through till end
+			if(in_multiline_comment) {
+				if((line = skipMultilineComment(line)) == NULL) break;
+				else in_multiline_comment = FALSE;
 			}
 
-			// Else we must have switched to cur->next but there is no next, just another '}'
-			// Delete blank tag and switch to parent->next
-			else if(cur->parent != NULL) {
-				QMLTag *tmp = cur;
-				cur->parent->next			=	qmlTagNew();
-				cur->parent->next->parent	=	cur->parent->parent;
-				cur->parent->next->prev		=	cur->parent;
-				cur							=	cur->parent->next;
-				qmlTagDelete(tmp);
-			}
-
-			continue;
-		}
-
-		// Check for QML Object or JS Function
-		// If '{' in line, then there might be a QML Object or JS Function
-		if(strchr(line, '{') != NULL) {
-			// If cur->set, then we are already in a tag, so create child and switch to it
-			if(cur->set) {
-				cur->child			=	qmlTagNew();
-				cur->child->parent	=	cur;
-				cur					=	cur->child;
-			}
-
-			// Skip whitespace and check for "function"
+			// Skip whitespace and comments
 			while(isspace(*line)) line++;
-			if(strncmp(line, "function", 8) == 0) {
-				line += 8;
-				cur->kind = JS_FUNCTION;
-				cur->supported = TRUE;
+			if(strncmp(line, "//", 2) == 0) {
+				line = NULL;
+				break;
 			}
 
-			// Else check for ':' and '{'
-			else if(strchr(line, ':') != NULL && strchr(line, '{') != NULL) {
-				int i = 0;
-				int words = 0;
-				while(i <= strlen(line)) {
-					if(isspace(line[i])) words++; // If we hit a space, inc num of words
-					// After if(line[i] == ':'), inc i (for parent loop and incing past ':')
-					if(line[i++] == (unsigned char)':' && words <= 1) {
-						while(isspace(line[i])) i++;
-						if(line[i] == (unsigned char)'{') {
-							cur->kind = JS_FUNCTION;
-							cur->supported = TRUE;
+			// Check if start of multiline comment
+			if(strncmp(line, "/*", 2) == 0) {
+				in_multiline_comment = TRUE;
+				if((line = skipMultilineComment(line)) == NULL) break;
+				else in_multiline_comment = FALSE;
+			}
+
+			// If in unsupported block, skip through till end
+			if(in_unsupported_block)
+				if((line = skipUnsupportedBlock(line, &in_unsupported_block)) == NULL) break;
+
+			// Get next word in line
+			getNextWord(&line, word);
+
+			// If word is not blank, check for supported tags
+			if(vStringLength(word) > 0) {
+				// If word is "function", then there is a Javascript function
+				if(strcmp(vStringValue(word), "function") == 0)
+					cur = qmlTagSet(cur, word, JS_FUNCTION);
+
+				// If ':' is next in line, check for function or ID
+				else if(*line == ':') {
+					line++; // Increment past ':'
+
+					// If word is "id" then set ID
+					if(strcmp(vStringValue(word), "id") == 0) {
+						// If cur is an active tag, set ID
+						if(cur->set) getNextWord(&line, cur->id);
+						// Else set ID to parent
+						else if(cur->parent != NULL)
+							getNextWord(&line, cur->parent->id);
+					}
+
+					// Else check for function
+					else {
+						while(isspace(*line)) line++;
+						// If '{' is next in line, then we have a signal function or a function
+						// bound to a property
+						if(*line == '{') {
+							line++; // Inc past '{'
+							cur = qmlTagSet(cur, word, JS_FUNCTION);
 						}
 					}
 				}
+
+				// If '{' is next in line, then there may be a QML Object
+				else if(*line == '{') {
+					line++; // Inc past '{'
+					// If word is "else", then we are in an unsupported block
+					if(strcmp(vStringValue(word), "else") == 0) {
+						in_unsupported_block++;
+						if((line = skipUnsupportedBlock(line, &in_unsupported_block)) == NULL) {
+							vStringClear(word);
+							break;
+						}
+					}
+
+					// Else we are in a QML Object
+					else cur = qmlTagSet(cur, word, QML_OBJECT);
+				}
 			}
 
-			// Get info for tag
-			getFirstWord(&line, cur->name);
-			cur->line_num	=	File.lineNumber;
-			cur->file_pos	=	File.filePosition;
-			cur->set		=	TRUE;
-
-			while(isspace(*line)) line++; // Skip whitespace after word
-
-			// If '{' is after word and any whitespace, and tag->name isn't blank,
-			// then tag is a QML object
-			if(*line == '{' && vStringLength(cur->name) > 0) {
-				cur->kind		=	QML_OBJECT;
-				cur->supported	=	TRUE;
+			// Else if word is blank, and '{' is next, then we are likely following a () from an
+			// unsupported block
+			else if(*line == '{') {
+				line++; // Increment past '{'
+				in_unsupported_block++;
+				if((line = skipUnsupportedBlock(line, &in_unsupported_block)) == NULL) {
+					vStringClear(word);
+					break;
+				}
 			}
-		}
 
-		// Check for ID
-		if(strstr(line, "id:") != NULL) {
-			// If cur is an active tag, set ID
-			if(cur->set) getId(line, cur->id);
-			// Else set ID to parent
-			else if(cur->parent != NULL) getId(line, cur->parent->id);
+			// Else if word is blank, check for '}' to close tag
+			else if(*line == '}') {
+				line++; // Skip past '}'
+
+				// If in tag switch to cur->next
+				if(cur->set) {
+					cur->next			=	qmlTagNew();
+					cur->next->prev		=	cur;
+					cur->next->parent	=	cur->parent;
+					cur					=	cur->next;
+				}
+
+				// Else we must have switched to cur->next but there is no next, just another '}'
+				// Delete blank tag and switch to parent->next
+				else if(cur->parent != NULL) {
+					QMLTag *tmp = cur;
+					cur->parent->next			=	qmlTagNew();
+					cur->parent->next->parent	=	cur->parent->parent;
+					cur->parent->next->prev		=	cur->parent;
+					cur							=	cur->parent->next;
+					qmlTagDelete(tmp);
+				}
+			}
+
+			// Else increment line by one character to avoid infinite loop on unrecognized chars
+			else line++;
+
+			vStringClear(word);
 		}
 	}
 
