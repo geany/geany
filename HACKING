@@ -395,7 +395,7 @@ changes to the source code. Follow instructions in the manual:
 http://geany.org/manual/geany.html#custom-filetypes. Don't forget to
 update the ``[Groups]`` section in ``filetype_extensions.conf``.
 
-.. warning:
+.. warning::
   You should use the newer `[build-menu]` section for default build
   commands - the older `[build_settings]` may not work correctly for
   custom filetypes.
