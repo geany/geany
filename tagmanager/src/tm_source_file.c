@@ -244,7 +244,8 @@ void tm_source_file_set_tag_arglist(const char *tag_name, const char *arglist)
 		return;
 	}
 
-	tags = tm_tags_find(current_source_file->work_object.tags_array, tag_name, FALSE, &count);
+	tags = tm_tags_find(current_source_file->work_object.tags_array, tag_name, FALSE, FALSE,
+			&count);
 	if (tags != NULL && count == 1)
 	{
 		tag = tags[0];

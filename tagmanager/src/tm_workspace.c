@@ -594,8 +594,9 @@ const GPtrArray *tm_workspace_find(const char *name, int type, TMTagAttrType *at
 	else
 		tags = g_ptr_array_new();
 
-	matches[0] = tm_tags_find(theWorkspace->work_object.tags_array, name, partial, &tagCount[0]);
-	matches[1] = tm_tags_find(theWorkspace->global_tags, name, partial, &tagCount[1]);
+	matches[0] = tm_tags_find(theWorkspace->work_object.tags_array, name, partial, TRUE,
+					&tagCount[0]);
+	matches[1] = tm_tags_find(theWorkspace->global_tags, name, partial, TRUE, &tagCount[1]);
 
 	/* file tags */
 	if (matches[0] && *matches[0])
@@ -690,7 +691,7 @@ fill_find_tags_array (GPtrArray *dst, const GPtrArray *src,
 	if ((!src) || (!dst) || (!name) || (!*name))
 		return 0;
 
-	match = tm_tags_find (src, name, partial, &count);
+	match = tm_tags_find (src, name, partial, TRUE, &count);
 	if (count && match && *match)
 	{
 		for (tagIter = 0; tagIter < count; ++tagIter)

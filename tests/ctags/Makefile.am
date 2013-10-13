@@ -194,6 +194,7 @@ test_sources = \
 	property.cs						\
 	prototype.h						\
 	pure_elem.f95					\
+	py_constructor_arglist.py		\
 	random.sql						\
 	readlob.sql						\
 	readlong.sql					\
