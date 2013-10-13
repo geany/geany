@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.23\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-07-15 02:36+0000\n"
-"PO-Revision-Date: 2013-07-15 14:00+0300\n"
+"POT-Creation-Date: 2013-10-13 02:36+0000\n"
+"PO-Revision-Date: 2013-10-13 13:30+0300\n"
 "Last-Translator: Yosef Or Boczko <yoseforb@gmail.com>\n"
 "Language-Team: Hebrew <>\n"
 "Language: he\n"
@@ -649,7 +649,7 @@ msgstr "לשוניות קבצים חדשים תוצבנה מימין ללשונ�
 msgid "File tabs will be placed on the right of the notebook"
 msgstr "לשוניות קבצים חדשים תוצבנה משמאל ללשוניות הפתוחות"
 
-#: ../data/geany.glade.h:147 ../src/plugins.c:1470 ../src/project.c:153
+#: ../data/geany.glade.h:147 ../src/plugins.c:1472 ../src/project.c:153
 msgid "Filename:"
 msgstr "שם קובץ:"
 
@@ -666,7 +666,7 @@ msgstr "מעבר לבחירה ה_באה"
 msgid "Find Pre_vious Selection"
 msgstr "מעבר לבחירה ה_קודמת"
 
-#: ../data/geany.glade.h:151 ../src/symbols.c:2389
+#: ../data/geany.glade.h:151 ../src/symbols.c:2391
 msgid "Find _Document Usage"
 msgstr "חיפוש _מספר המופעים במסמך"
 
@@ -678,11 +678,11 @@ msgstr "חיפוש ה_בא"
 msgid "Find _Previous"
 msgstr "חיפוש ה_קודם"
 
-#: ../data/geany.glade.h:154 ../src/symbols.c:2384
+#: ../data/geany.glade.h:154 ../src/symbols.c:2386
 msgid "Find _Usage"
 msgstr "חיפוש _מספר המופעים"
 
-#: ../data/geany.glade.h:155 ../src/symbols.c:2394
+#: ../data/geany.glade.h:155 ../src/symbols.c:2396
 msgid "Find in F_iles..."
 msgstr "חיפוש ב_קובץ..."
 
@@ -849,7 +849,7 @@ msgstr "הופך את צבעי הדגשת התחביר בברירת מחדל ב�
 msgid "Invert syntax highlighting colors"
 msgstr "היפוך צבעים בהדגשת תחביר"
 
-#: ../data/geany.glade.h:193 ../src/plugins.c:1444 ../src/prefs.c:1626
+#: ../data/geany.glade.h:193 ../src/plugins.c:1446 ../src/prefs.c:1626
 msgid "Keybindings"
 msgstr "צירופי־מקשים"
 
@@ -956,7 +956,7 @@ msgstr "ה_ודעה הבאה"
 msgid "Next to current"
 msgstr "לצד הלשונית הנוכחית"
 
-#: ../data/geany.glade.h:218 ../src/filetypes.c:102 ../src/filetypes.c:1789
+#: ../data/geany.glade.h:218 ../src/filetypes.c:102 ../src/filetypes.c:1804
 msgid "None"
 msgstr "ללא"
 
@@ -1872,7 +1872,7 @@ msgid "_Auto-indentation"
 msgstr "הזחה אוטומ_טית"
 
 #. build the code
-#: ../data/geany.glade.h:418 ../src/build.c:2552 ../src/build.c:2829
+#: ../data/geany.glade.h:418 ../src/build.c:2555 ../src/build.c:2832
 msgid "_Build"
 msgstr "_בנייה"
 
@@ -2036,7 +2036,7 @@ msgstr "מיזמים _אחרונים"
 msgid "_Reflow Lines/Block"
 msgstr "הצג_ת בלוק/שורות מחדש"
 
-#: ../data/geany.glade.h:459 ../src/callbacks.c:434 ../src/document.c:2951
+#: ../data/geany.glade.h:459 ../src/callbacks.c:433 ../src/document.c:2951
 #: ../src/sidebar.c:705
 msgid "_Reload"
 msgstr "טעינה מחד_ש"
@@ -2303,7 +2303,7 @@ msgid "_Previous Error"
 msgstr "שגיאה קו_דמת"
 
 #. arguments
-#: ../src/build.c:1473 ../src/build.c:2869
+#: ../src/build.c:1473 ../src/build.c:2872
 msgid "_Set Build Commands"
 msgstr "הגדרת פקודות _בנייה"
 
@@ -2394,30 +2394,30 @@ msgstr ""
 msgid "Set Build Commands"
 msgstr "הגדרת פקודות בנייה"
 
-#: ../src/build.c:2545
+#: ../src/build.c:2548
 msgid "_Compile"
 msgstr "הי_דור"
 
-#: ../src/build.c:2559 ../src/build.c:2589 ../src/build.c:2797
+#: ../src/build.c:2562 ../src/build.c:2592 ../src/build.c:2800
 msgid "_Execute"
 msgstr "ה_רצה"
 
 #. build the code with make custom
-#: ../src/build.c:2604 ../src/build.c:2795 ../src/build.c:2849
+#: ../src/build.c:2607 ../src/build.c:2798 ../src/build.c:2852
 msgid "Make Custom _Target..."
 msgstr "בנייה _מותאמת אישית..."
 
 #. build the code with make object
-#: ../src/build.c:2606 ../src/build.c:2796 ../src/build.c:2857
+#: ../src/build.c:2609 ../src/build.c:2799 ../src/build.c:2860
 msgid "Make _Object"
 msgstr "בניית קובץ _Object"
 
-#: ../src/build.c:2608 ../src/build.c:2794
+#: ../src/build.c:2611 ../src/build.c:2797
 msgid "_Make"
 msgstr "_בנייה"
 
 #. build the code with make all
-#: ../src/build.c:2841
+#: ../src/build.c:2844
 msgid "_Make All"
 msgstr "ב_ניית הכל"
 
@@ -2432,61 +2432,61 @@ msgid_plural "%d files saved."
 msgstr[0] "קובץ אחד נשמר."
 msgstr[1] "%d קבצים נשמרו."
 
-#: ../src/callbacks.c:435
+#: ../src/callbacks.c:434
 msgid "Any unsaved changes will be lost."
 msgstr "כל השינויים שלא נשמרו יאבדו."
 
-#: ../src/callbacks.c:436
+#: ../src/callbacks.c:435
 #, c-format
 msgid "Are you sure you want to reload '%s'?"
 msgstr "האם אתה בטוח שברצונך לטעון מחדש את הקובץ '%s' ?"
 
-#: ../src/callbacks.c:1061 ../src/keybindings.c:468
+#: ../src/callbacks.c:1060 ../src/keybindings.c:468
 msgid "Go to Line"
 msgstr "מעבר לשורה"
 
-#: ../src/callbacks.c:1062
+#: ../src/callbacks.c:1061
 msgid "Enter the line you want to go to:"
 msgstr "הזן את מספר השורה שברצונך לעבור אליה:"
 
-#: ../src/callbacks.c:1163 ../src/callbacks.c:1188
+#: ../src/callbacks.c:1162 ../src/callbacks.c:1187
 msgid ""
 "Please set the filetype for the current file before using this function."
 msgstr "אנא הגדר את סוג הקובץ הנוכחי לפני שימוש באפשרות זו."
 
-#: ../src/callbacks.c:1293 ../src/ui_utils.c:652
+#: ../src/callbacks.c:1292 ../src/ui_utils.c:652
 msgid "dd.mm.yyyy"
 msgstr "dd.mm.yyyy"
 
-#: ../src/callbacks.c:1295 ../src/ui_utils.c:653
+#: ../src/callbacks.c:1294 ../src/ui_utils.c:653
 msgid "mm.dd.yyyy"
 msgstr "mm.dd.yyyy"
 
-#: ../src/callbacks.c:1297 ../src/ui_utils.c:654
+#: ../src/callbacks.c:1296 ../src/ui_utils.c:654
 msgid "yyyy/mm/dd"
 msgstr "yyyy/mm/dd"
 
-#: ../src/callbacks.c:1299 ../src/ui_utils.c:663
+#: ../src/callbacks.c:1298 ../src/ui_utils.c:663
 msgid "dd.mm.yyyy hh:mm:ss"
 msgstr "dd.mm.yyyy hh:mm:ss"
 
-#: ../src/callbacks.c:1301 ../src/ui_utils.c:664
+#: ../src/callbacks.c:1300 ../src/ui_utils.c:664
 msgid "mm.dd.yyyy hh:mm:ss"
 msgstr "mm.dd.yyyy hh:mm:ss"
 
-#: ../src/callbacks.c:1303 ../src/ui_utils.c:665
+#: ../src/callbacks.c:1302 ../src/ui_utils.c:665
 msgid "yyyy/mm/dd hh:mm:ss"
 msgstr "yyyy/mm/dd hh:mm:ss"
 
-#: ../src/callbacks.c:1305 ../src/ui_utils.c:674
+#: ../src/callbacks.c:1304 ../src/ui_utils.c:674
 msgid "_Use Custom Date Format"
 msgstr "שימוש בתבנית _תאריך מותאמת אישית"
 
-#: ../src/callbacks.c:1309
+#: ../src/callbacks.c:1308
 msgid "Custom Date Format"
 msgstr "עיצוב תבנית התאריך"
 
-#: ../src/callbacks.c:1310
+#: ../src/callbacks.c:1309
 msgid ""
 "Enter here a custom date and time format. You can use any conversion "
 "specifiers which can be used with the ANSI C strftime function."
@@ -2494,15 +2494,15 @@ msgstr ""
 "ציין תבנית עבור תווים כלליים לציון תאריך ושעה. ניתן להשתמש בכל תווי ההמרה "
 "אשר ניתן להשתמש בפונקציית strftime לפי תקן ANSI C."
 
-#: ../src/callbacks.c:1333
+#: ../src/callbacks.c:1332
 msgid "Date format string could not be converted (possibly too long)."
 msgstr "מחרוזת תבנית התאריך לא ניתנת להמרה."
 
-#: ../src/callbacks.c:1526 ../src/callbacks.c:1534
+#: ../src/callbacks.c:1525 ../src/callbacks.c:1533
 msgid "No more message items."
 msgstr "אין פריטים נוספים"
 
-#: ../src/callbacks.c:1672
+#: ../src/callbacks.c:1671
 #, c-format
 msgid "Could not open file %s (File not found)"
 msgstr "לא ניתן לפתוח את הקובץ %s (הקובץ לא נמצא)"
@@ -2616,7 +2616,7 @@ msgstr "שמירת הקובץ ושינוי שמו"
 msgid "Error"
 msgstr "שגיאה"
 
-#: ../src/dialogs.c:689 ../src/dialogs.c:767 ../src/dialogs.c:1330
+#: ../src/dialogs.c:689 ../src/dialogs.c:767 ../src/dialogs.c:1331
 #: ../src/win32.c:684
 msgid "Question"
 msgstr "שאלה"
@@ -2654,7 +2654,7 @@ msgstr "ארעה שגיאה או שפרטי הקובץ אינם ניתנים ל�
 
 #: ../src/dialogs.c:1197 ../src/dialogs.c:1198 ../src/dialogs.c:1199
 #: ../src/dialogs.c:1205 ../src/dialogs.c:1206 ../src/dialogs.c:1207
-#: ../src/symbols.c:2200 ../src/symbols.c:2214 ../src/ui_utils.c:281
+#: ../src/symbols.c:2202 ../src/symbols.c:2216 ../src/ui_utils.c:281
 msgid "unknown"
 msgstr "לא ידוע"
 
@@ -2863,15 +2863,15 @@ msgstr "לנסות שוב לשמור את הקובץ ?"
 msgid "File \"%s\" was not found on disk!"
 msgstr "הקובץ \"%s\" לא נמצא בדיסק !"
 
-#: ../src/editor.c:4361
+#: ../src/editor.c:4366
 msgid "Enter Tab Width"
 msgstr "הכנסת רוחב טאב"
 
-#: ../src/editor.c:4362
+#: ../src/editor.c:4367
 msgid "Enter the amount of spaces which should be replaced by a tab character."
 msgstr "הזן את מספר הרווחים שיחליפו כל טאב."
 
-#: ../src/editor.c:4524
+#: ../src/editor.c:4529
 #, c-format
 msgid "Warning: non-standard hard tab width: %d != 8!"
 msgstr "רוחב טאב לא תקני: ‎%d != 8"
@@ -3039,33 +3039,33 @@ msgstr "קובץ תצורה"
 msgid "Gettext translation file"
 msgstr "קובץ תרגום Gettext"
 
-#: ../src/filetypes.c:734
+#: ../src/filetypes.c:746
 msgid "_Programming Languages"
 msgstr "שפות ת_כנות"
 
-#: ../src/filetypes.c:735
+#: ../src/filetypes.c:747
 msgid "_Scripting Languages"
 msgstr "שפות _תסריט"
 
-#: ../src/filetypes.c:736
+#: ../src/filetypes.c:748
 msgid "_Markup Languages"
 msgstr "שפות _סימון"
 
-#: ../src/filetypes.c:737
+#: ../src/filetypes.c:749
 msgid "M_iscellaneous"
 msgstr "_שונות"
 
-#: ../src/filetypes.c:1475 ../src/win32.c:105
+#: ../src/filetypes.c:1490 ../src/win32.c:105
 msgid "All Source"
 msgstr "כל מקור"
 
 #. create meta file filter "All files"
-#: ../src/filetypes.c:1500 ../src/project.c:300 ../src/win32.c:95
+#: ../src/filetypes.c:1515 ../src/project.c:300 ../src/win32.c:95
 #: ../src/win32.c:140 ../src/win32.c:161 ../src/win32.c:166
 msgid "All files"
 msgstr "כל הקבצים"
 
-#: ../src/filetypes.c:1548
+#: ../src/filetypes.c:1563
 #, c-format
 msgid "Bad regex for filetype %s: %s"
 msgstr "ביטוי רגולרי לא תקין בסוג הקובץ %s: ‫%s"
@@ -3074,25 +3074,25 @@ msgstr "ביטוי רגולרי לא תקין בסוג הקובץ %s: ‫%s"
 msgid "untitled"
 msgstr "ללא שם"
 
-#: ../src/highlighting.c:1259 ../src/main.c:861 ../src/socket.c:166
+#: ../src/highlighting.c:1263 ../src/main.c:861 ../src/socket.c:166
 #: ../src/templates.c:224
 #, c-format
 msgid "Could not find file '%s'."
 msgstr "הקובץ '%s' לא נמצא."
 
-#: ../src/highlighting.c:1331
+#: ../src/highlighting.c:1335
 msgid "Default"
 msgstr "ברירת מחדל"
 
-#: ../src/highlighting.c:1370
+#: ../src/highlighting.c:1374
 msgid "The current filetype overrides the default style."
 msgstr "סגנון הקובץ הנוכחי עוקף את סגנון ברירת המחדל."
 
-#: ../src/highlighting.c:1371
+#: ../src/highlighting.c:1375
 msgid "This may cause color schemes to display incorrectly."
 msgstr "דבר זה עלול לגרום להצגה שגויה של ערכות הצבעים"
 
-#: ../src/highlighting.c:1392
+#: ../src/highlighting.c:1396
 msgid "Color Schemes"
 msgstr "ערכות צבעים"
 
@@ -3618,11 +3618,11 @@ msgstr "צירופי־מקשים"
 msgid "The following keyboard shortcuts are configurable:"
 msgstr "ניתן לקבוע צירופי־מקשים לפעולות הבאות:"
 
-#: ../src/keyfile.c:979
+#: ../src/keyfile.c:984
 msgid "Type here what you want, use it as a notice/scratch board"
 msgstr "הזן כאן מה שאתה רוצה והשתמש בזה בתור הודעות או לוח רישום."
 
-#: ../src/keyfile.c:1185
+#: ../src/keyfile.c:1190
 msgid "Failed to load one or more session files."
 msgstr "אירעה תקלה בטעינת קובץ אחד או יותר בעת ההפעלה."
 
@@ -3833,23 +3833,23 @@ msgstr "תיאור"
 msgid "No plugins available."
 msgstr "אין תוספים זמינים."
 
-#: ../src/plugins.c:1422
+#: ../src/plugins.c:1424
 msgid "Plugins"
 msgstr "תוספים"
 
-#: ../src/plugins.c:1442
+#: ../src/plugins.c:1444
 msgid "Choose which plugins should be loaded at startup:"
 msgstr "בחר אילו תוספים יטענו בעת ההפעלה:"
 
-#: ../src/plugins.c:1459
+#: ../src/plugins.c:1461
 msgid "<b>Plugin details:</b>"
 msgstr "<b>פרטי התוסף:</b>"
 
-#: ../src/plugins.c:1468
+#: ../src/plugins.c:1470
 msgid "Plugin:"
 msgstr "תוסף:"
 
-#: ../src/plugins.c:1469
+#: ../src/plugins.c:1471
 msgid "Author(s):"
 msgstr "יוצר:"
 
@@ -3866,11 +3866,11 @@ msgstr "בחירת צירוף־מקשים"
 msgid "Press the combination of the keys you want to use for \"%s\"."
 msgstr "לחץ על צירוף המקשים שברצונך להשתמש עבור \"%s\"."
 
-#: ../src/prefs.c:226 ../src/symbols.c:2352 ../src/sidebar.c:739
+#: ../src/prefs.c:226 ../src/symbols.c:2354 ../src/sidebar.c:739
 msgid "_Expand All"
 msgstr "הר_חב הכל"
 
-#: ../src/prefs.c:231 ../src/symbols.c:2357 ../src/sidebar.c:745
+#: ../src/prefs.c:231 ../src/symbols.c:2359 ../src/sidebar.c:745
 msgid "_Collapse All"
 msgstr "_כווץ הכל"
 
@@ -3945,35 +3945,35 @@ msgstr "הגדרות מסמך"
 msgid "Print only the basename(without the path) of the printed file"
 msgstr "הדפסת שם הקובץ בלבד, ללא הנתיב המלא"
 
-#: ../src/printing.c:404
+#: ../src/printing.c:414
 msgid "Paginating"
 msgstr "מדפיס"
 
-#: ../src/printing.c:428
+#: ../src/printing.c:438
 #, c-format
 msgid "Page %d of %d"
 msgstr "עמוד %d מתוך %d"
 
-#: ../src/printing.c:484
+#: ../src/printing.c:494
 #, c-format
 msgid "Did not send document %s to the printing subsystem."
 msgstr "לא ניתן לשלוח את המסמך %s להדפסה."
 
-#: ../src/printing.c:486
+#: ../src/printing.c:496
 #, c-format
 msgid "Document %s was sent to the printing subsystem."
 msgstr "המסמך %s נשלח להדפסה."
 
-#: ../src/printing.c:539
+#: ../src/printing.c:549
 #, c-format
 msgid "Printing of %s failed (%s)."
 msgstr "הדפסת %s נכשלה (%s)."
 
-#: ../src/printing.c:577
+#: ../src/printing.c:587
 msgid "Please set a print command in the preferences dialog first."
 msgstr "נא לקבוע פקודת הדפסה בשיח ההעדפות."
 
-#: ../src/printing.c:585
+#: ../src/printing.c:595
 #, c-format
 msgid ""
 "The file \"%s\" will be printed with the following command:\n"
@@ -3983,12 +3983,12 @@ msgstr ""
 "הקובץ %s יודפס עם הפקודה הבאה:\n"
 "%s"
 
-#: ../src/printing.c:601
+#: ../src/printing.c:611
 #, c-format
 msgid "Printing of \"%s\" failed (return code: %s)."
 msgstr "הדפסת %s נכשלה (קוד יציאה: %s)."
 
-#: ../src/printing.c:607
+#: ../src/printing.c:617
 #, c-format
 msgid "File %s printed."
 msgstr "הקובץ %s הודפס."
@@ -4370,18 +4370,18 @@ msgstr "נספח"
 
 #: ../src/symbols.c:704 ../src/symbols.c:749 ../src/symbols.c:774
 #: ../src/symbols.c:785 ../src/symbols.c:885 ../src/symbols.c:896
-#: ../src/symbols.c:908 ../src/symbols.c:922 ../src/symbols.c:934
-#: ../src/symbols.c:946 ../src/symbols.c:961 ../src/symbols.c:990
-#: ../src/symbols.c:1021
+#: ../src/symbols.c:909 ../src/symbols.c:923 ../src/symbols.c:935
+#: ../src/symbols.c:947 ../src/symbols.c:962 ../src/symbols.c:991
+#: ../src/symbols.c:1022
 msgid "Other"
 msgstr "אחר"
 
-#: ../src/symbols.c:710 ../src/symbols.c:954 ../src/symbols.c:1000
+#: ../src/symbols.c:710 ../src/symbols.c:955 ../src/symbols.c:1001
 msgid "Module"
 msgstr "מודול"
 
-#: ../src/symbols.c:711 ../src/symbols.c:881 ../src/symbols.c:932
-#: ../src/symbols.c:944 ../src/symbols.c:959 ../src/symbols.c:971
+#: ../src/symbols.c:711 ../src/symbols.c:881 ../src/symbols.c:933
+#: ../src/symbols.c:945 ../src/symbols.c:960 ../src/symbols.c:972
 msgid "Types"
 msgstr "סוג"
 
@@ -4391,9 +4391,9 @@ msgstr "סוג בנאי"
 
 #: ../src/symbols.c:713 ../src/symbols.c:735 ../src/symbols.c:756
 #: ../src/symbols.c:773 ../src/symbols.c:782 ../src/symbols.c:795
-#: ../src/symbols.c:805 ../src/symbols.c:869 ../src/symbols.c:918
-#: ../src/symbols.c:941 ../src/symbols.c:956 ../src/symbols.c:984
-#: ../src/symbols.c:1008
+#: ../src/symbols.c:805 ../src/symbols.c:869 ../src/symbols.c:919
+#: ../src/symbols.c:942 ../src/symbols.c:957 ../src/symbols.c:985
+#: ../src/symbols.c:1009
 msgid "Functions"
 msgstr "פונקציות"
 
@@ -4422,9 +4422,9 @@ msgid "Keys"
 msgstr "מקשים"
 
 #: ../src/symbols.c:736 ../src/symbols.c:797 ../src/symbols.c:870
-#: ../src/symbols.c:895 ../src/symbols.c:920 ../src/symbols.c:933
-#: ../src/symbols.c:942 ../src/symbols.c:958 ../src/symbols.c:991
-#: ../src/symbols.c:1020
+#: ../src/symbols.c:895 ../src/symbols.c:921 ../src/symbols.c:934
+#: ../src/symbols.c:943 ../src/symbols.c:959 ../src/symbols.c:992
+#: ../src/symbols.c:1021
 msgid "Variables"
 msgstr "משתנים"
 
@@ -4457,31 +4457,31 @@ msgid "Steps"
 msgstr "צעדים"
 
 #: ../src/symbols.c:781 ../src/symbols.c:878 ../src/symbols.c:903
-#: ../src/symbols.c:915
+#: ../src/symbols.c:916
 msgid "Package"
 msgstr "חבילה"
 
-#: ../src/symbols.c:783 ../src/symbols.c:945 ../src/symbols.c:968
+#: ../src/symbols.c:783 ../src/symbols.c:946 ../src/symbols.c:969
 msgid "Labels"
 msgstr "תוויות"
 
-#: ../src/symbols.c:784 ../src/symbols.c:796 ../src/symbols.c:921
-#: ../src/symbols.c:943
+#: ../src/symbols.c:784 ../src/symbols.c:796 ../src/symbols.c:922
+#: ../src/symbols.c:944
 msgid "Constants"
 msgstr "קבועים"
 
-#: ../src/symbols.c:792 ../src/symbols.c:857 ../src/symbols.c:1003
+#: ../src/symbols.c:792 ../src/symbols.c:857 ../src/symbols.c:1004
 msgid "Namespaces"
 msgstr "מרחבי שם"
 
-#: ../src/symbols.c:793 ../src/symbols.c:904 ../src/symbols.c:916
-#: ../src/symbols.c:929 ../src/symbols.c:955 ../src/symbols.c:1007
+#: ../src/symbols.c:793 ../src/symbols.c:904 ../src/symbols.c:917
+#: ../src/symbols.c:930 ../src/symbols.c:956 ../src/symbols.c:1008
 msgid "Interfaces"
 msgstr "ממשקים"
 
 #: ../src/symbols.c:794 ../src/symbols.c:816 ../src/symbols.c:848
 #: ../src/symbols.c:858 ../src/symbols.c:867 ../src/symbols.c:905
-#: ../src/symbols.c:917 ../src/symbols.c:930 ../src/symbols.c:1006
+#: ../src/symbols.c:918 ../src/symbols.c:931 ../src/symbols.c:1007
 msgid "Classes"
 msgstr "מחלקות"
 
@@ -4538,11 +4538,11 @@ msgid "Singletons"
 msgstr "אותות"
 
 #: ../src/symbols.c:850 ../src/symbols.c:859 ../src/symbols.c:868
-#: ../src/symbols.c:906 ../src/symbols.c:931
+#: ../src/symbols.c:906 ../src/symbols.c:932
 msgid "Methods"
 msgstr "שגרות"
 
-#: ../src/symbols.c:860 ../src/symbols.c:985
+#: ../src/symbols.c:860 ../src/symbols.c:986
 msgid "Procedures"
 msgstr "פרוצדורה"
 
@@ -4578,69 +4578,73 @@ msgstr "אירועים"
 msgid "Functions / Tasks"
 msgstr "פונקציות/משימות"
 
-#: ../src/symbols.c:907 ../src/symbols.c:1009
+#: ../src/symbols.c:907 ../src/symbols.c:1010
 msgid "Members"
 msgstr "משתמשים"
 
-#: ../src/symbols.c:919
+#: ../src/symbols.c:908
+msgid "Enums"
+msgstr "Enums"
+
+#: ../src/symbols.c:920
 msgid "Properties"
 msgstr "מאפיינים"
 
-#: ../src/symbols.c:957
+#: ../src/symbols.c:958
 msgid "Subroutines"
 msgstr "שגרות"
 
-#: ../src/symbols.c:960
+#: ../src/symbols.c:961
 msgid "Blocks"
 msgstr "בלוקים"
 
-#: ../src/symbols.c:969 ../src/symbols.c:978 ../src/symbols.c:1017
+#: ../src/symbols.c:970 ../src/symbols.c:979 ../src/symbols.c:1018
 msgid "Macros"
 msgstr "הגדרות מאקרו"
 
-#: ../src/symbols.c:970
+#: ../src/symbols.c:971
 msgid "Defines"
 msgstr "הגדרות Define"
 
-#: ../src/symbols.c:977
+#: ../src/symbols.c:978
 msgid "Targets"
 msgstr "מטרות"
 
-#: ../src/symbols.c:986
+#: ../src/symbols.c:987
 msgid "Indexes"
 msgstr "אינדקסים"
 
-#: ../src/symbols.c:987
+#: ../src/symbols.c:988
 msgid "Tables"
 msgstr "לוחות"
 
-#: ../src/symbols.c:988
+#: ../src/symbols.c:989
 msgid "Triggers"
 msgstr "Triggers"
 
-#: ../src/symbols.c:989
+#: ../src/symbols.c:990
 msgid "Views"
 msgstr "תצוגות"
 
-#: ../src/symbols.c:1010
+#: ../src/symbols.c:1011
 msgid "Structs"
 msgstr "מבנים"
 
-#: ../src/symbols.c:1011
+#: ../src/symbols.c:1012
 msgid "Typedefs / Enums"
 msgstr "Typedefs / Enums"
 
-#: ../src/symbols.c:1775
+#: ../src/symbols.c:1776
 #, c-format
 msgid "Unknown filetype extension for \"%s\".\n"
 msgstr "סיומת הקובץ \"%s\" לא מוכרת.\n"
 
-#: ../src/symbols.c:1798
+#: ../src/symbols.c:1802
 #, c-format
 msgid "Failed to create tags file, perhaps because no tags were found.\n"
 msgstr "נכשל ניסיון יצירת תגיות לקובץ, אולי לא נמצאו תגיות.\n"
 
-#: ../src/symbols.c:1805
+#: ../src/symbols.c:1809
 #, c-format
 msgid ""
 "Usage: %s -g <Tag File> <File list>\n"
@@ -4649,7 +4653,7 @@ msgstr ""
 "השתמש: %s -g <קובץ תג> <רשימת קבצים>\n"
 "\n"
 
-#: ../src/symbols.c:1806
+#: ../src/symbols.c:1810
 #, c-format
 msgid ""
 "Example:\n"
@@ -4660,40 +4664,40 @@ msgstr ""
 "CFLAGS=`pkg-config gtk+-2.0 --cflags` %s -g gtk2.c.tags /usr/include/gtk-2.0/"
 "gtk/gtk.h\n"
 
-#: ../src/symbols.c:1820
+#: ../src/symbols.c:1824
 msgid "Load Tags"
 msgstr "טעינת תגיות"
 
-#: ../src/symbols.c:1827
+#: ../src/symbols.c:1831
 msgid "Geany tag files (*.*.tags)"
 msgstr "‏Geany קָבְצי תג (‎*.*.tags)"
 
 #. For translators: the first wildcard is the filetype, the second the filename
-#: ../src/symbols.c:1847
+#: ../src/symbols.c:1851
 #, c-format
 msgid "Loaded %s tags file '%s'."
 msgstr "טעינת %s קובץ תג '%s'."
 
-#: ../src/symbols.c:1850
+#: ../src/symbols.c:1854
 #, c-format
 msgid "Could not load tags file '%s'."
 msgstr "לא ניתן לטעון את קובץ התגיות '%s'."
 
-#: ../src/symbols.c:1990
+#: ../src/symbols.c:1992
 #, c-format
 msgid "Forward declaration \"%s\" not found."
 msgstr "לא נמצאה הצהרה קודמת של \"%s\"."
 
-#: ../src/symbols.c:1992
+#: ../src/symbols.c:1994
 #, c-format
 msgid "Definition of \"%s\" not found."
 msgstr "לא נמצאה הגדרה קודמת של \"%s\"."
 
-#: ../src/symbols.c:2367
+#: ../src/symbols.c:2369
 msgid "Sort by _Name"
 msgstr "מיין ל_פי שם"
 
-#: ../src/symbols.c:2374
+#: ../src/symbols.c:2376
 msgid "Sort by _Appearance"
 msgstr "מיין ל_פי סדר הופעה"
 
@@ -5105,7 +5109,7 @@ msgstr "קבצים מיזם Geany"
 msgid "Executables"
 msgstr "הרצה"
 
-#: ../src/win32.c:1210
+#: ../src/win32.c:1198
 #, c-format
 msgid "Process timed out after %.02f s!"
 msgstr "תם הזמן שהוקצב לתהליך (%.02f)"
@@ -5600,12 +5604,18 @@ msgid "_Top and Bottom"
 msgstr "עליון ו_תחתון"
 
 #: ../plugins/splitwindow.c:429
-msgid "Split Horizontally"
-msgstr "פיצול אופקי"
+msgid "Side by Side"
+msgstr "זה לצד זה"
 
 #: ../plugins/splitwindow.c:431
-msgid "Split Vertically"
-msgstr "פיצול אנכי"
+msgid "Top and Bottom"
+msgstr "עליון ותחתון"
+
+#~ msgid "Split Horizontally"
+#~ msgstr "פיצול אופקי"
+
+#~ msgid "Split Vertically"
+#~ msgstr "פיצול אנכי"
 
 #~ msgid "file adate"
 #~ msgstr "תאריך פתיחת קובץ"
