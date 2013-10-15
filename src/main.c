@@ -1027,6 +1027,10 @@ gint main(gint argc, gchar **argv)
 	gint config_dir_result;
 	const gchar *locale;
 
+#if ! GLIB_CHECK_VERSION(2, 36, 0)
+	g_type_init();
+#endif
+
 	log_handlers_init();
 
 	app = g_new0(GeanyApp, 1);

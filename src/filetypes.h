@@ -139,7 +139,7 @@ struct GeanyFiletype
 	gchar			 *error_regex_string;
 	GeanyFiletype	 *lexer_filetype;
 	gchar			 *mime_type;
-	GdkPixbuf		 *icon;
+	GIcon			 *icon;
 	gchar			 *comment_single; /* single-line comment */
 	/* filetype indent settings, -1 if not set */
 	gint			  indent_type;
@@ -217,8 +217,6 @@ gboolean filetypes_parse_error_message(GeanyFiletype *ft, const gchar *message,
 
 gboolean filetype_get_comment_open_close(const GeanyFiletype *ft, gboolean single_first,
 		const gchar **co, const gchar **cc);
-
-GdkPixbuf *filetype_get_icon(GeanyFiletype *ft);
 
 G_END_DECLS
 

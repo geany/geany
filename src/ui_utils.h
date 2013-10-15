@@ -334,7 +334,7 @@ gboolean ui_is_keyval_enter_or_return(guint keyval);
 
 gint ui_get_gtk_settings_integer(const gchar *property_name, gint default_value);
 
-GdkPixbuf *ui_get_mime_icon(const gchar *mime_type, GtkIconSize size);
+GIcon *ui_get_mime_icon(const gchar *mime_type);
 
 void ui_focus_current_document(void);
 

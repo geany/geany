@@ -1384,11 +1384,9 @@ void filetypes_load_config(guint ft_id, gboolean reload)
 	load_settings(ft_id, config, config_home);
 	highlighting_init_styles(ft_id, config, config_home);
 
-	if (reload && ft->icon)
-	{
+	if (ft->icon)
 		g_object_unref(ft->icon);
-		ft->icon = NULL;
-	}
+	ft->icon = ui_get_mime_icon(ft->mime_type);
 
 	g_key_file_free(config);
 	g_key_file_free(config_home);
@@ -1797,21 +1795,4 @@ gboolean filetype_get_comment_open_close(const GeanyFiletype *ft, gboolean singl
 	}
 
 	return !EMPTY(*co);
-}
-
-
-/* gets the filetype icon, possibly rendering it if not yet done
- * Returns the filetype's icon, should not be freed
- * 
- * This requires the mime_type setting so has to be done after the filetype
- * is loaded, but we don't necessarily have GTK in filetypes_load_config(),
- * so use a helper function that renders the icon if needed */
-GdkPixbuf *filetype_get_icon(GeanyFiletype *ft)
-{
-	g_return_val_if_fail(ft != NULL, NULL);
-
-	if (! ft->icon)
-		ft->icon = ui_get_mime_icon(ft->mime_type, GTK_ICON_SIZE_MENU);
-
-	return ft->icon;
 }
