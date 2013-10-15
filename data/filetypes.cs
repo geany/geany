@@ -22,6 +22,9 @@ lexer_filetype=C
 # default extension used when saving files
 extension=cs
 
+# MIME type
+mime_type=text/x-csharp
+
 # the following characters are these which a "word" can contains, see documentation
 #wordchars=_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
 

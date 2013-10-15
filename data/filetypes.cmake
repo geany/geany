@@ -28,6 +28,9 @@ userdefined=
 # default extension used when saving files
 extension=cmake
 
+# MIME type
+mime_type=text/x-cmake
+
 # the following characters are these which a "word" can contains, see documentation
 #wordchars=_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
 

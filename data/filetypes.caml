@@ -28,6 +28,9 @@ keywords_optional=option Some None ignore ref
 # default extension used when saving files
 extension=ml
 
+# MIME type
+mime_type=text/x-ocaml
+
 # the following characters are these which a "word" can contains, see documentation
 #wordchars=_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
 

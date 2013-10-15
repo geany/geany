@@ -218,6 +218,8 @@ gboolean filetypes_parse_error_message(GeanyFiletype *ft, const gchar *message,
 gboolean filetype_get_comment_open_close(const GeanyFiletype *ft, gboolean single_first,
 		const gchar **co, const gchar **cc);
 
+GdkPixbuf *filetype_get_icon(GeanyFiletype *ft);
+
 G_END_DECLS
 
 #endif

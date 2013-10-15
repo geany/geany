@@ -456,6 +456,7 @@ void sidebar_openfiles_add(GeanyDocument *doc)
 	gchar *basename;
 	const GdkColor *color = document_get_status_color(doc);
 	static GdkPixbuf *file_icon = NULL;
+	GdkPixbuf *ft_icon = doc->file_type ? filetype_get_icon(doc->file_type) : NULL;
 
 	gtk_tree_store_append(store_openfiles, iter, parent);
 
@@ -474,7 +475,7 @@ void sidebar_openfiles_add(GeanyDocument *doc)
 
 	basename = g_path_get_basename(DOC_FILENAME(doc));
 	gtk_tree_store_set(store_openfiles, iter,
-		DOCUMENTS_ICON, (doc->file_type && doc->file_type->icon) ? doc->file_type->icon : file_icon,
+		DOCUMENTS_ICON, ft_icon ? ft_icon : file_icon,
 		DOCUMENTS_SHORTNAME, basename, DOCUMENTS_DOCUMENT, doc, DOCUMENTS_COLOR, color,
 		DOCUMENTS_FILENAME, DOC_FILENAME(doc), -1);
 	g_free(basename);
@@ -505,7 +506,7 @@ void sidebar_openfiles_update(GeanyDocument *doc)
 	{
 		/* just update color and the icon */
 		const GdkColor *color = document_get_status_color(doc);
-		GdkPixbuf *icon = doc->file_type->icon;
+		GdkPixbuf *icon = filetype_get_icon(doc->file_type);
 
 		gtk_tree_store_set(store_openfiles, iter, DOCUMENTS_COLOR, color, -1);
 		if (icon)

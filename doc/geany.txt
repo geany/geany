@@ -4204,6 +4204,10 @@ xml_indent_tags
     to filetypes for which the HTML or XML lexer is used. Such filetypes have
     this setting in their system configuration files.
 
+mime_type
+    The MIME type for this file type, e.g. "text/x-csrc".  This is used
+    for example to chose the icon to display for this file type.
+
 
 [indentation] section
 `````````````````````

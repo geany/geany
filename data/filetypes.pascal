@@ -30,6 +30,9 @@ lexer.pascal.smart.highlighting=1
 # default extension used when saving files
 extension=pas
 
+# MIME type
+mime_type=text/x-pascal
+
 # the following characters are these which a "word" can contains, see documentation
 #wordchars=_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
 

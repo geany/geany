@@ -6,4 +6,6 @@
 # default extension used when saving files
 extension=abc
 
+# MIME type
+mime_type=text/vnd.abc
 

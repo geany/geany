@@ -28,6 +28,9 @@ postproc=preprocessor
 # default extension used when saving files
 extension=txt2tags
 
+# MIME type
+mime_type=text/x-txt2tags
+
 # sort tags by appearance
 symbol_list_sort_mode=1
 
