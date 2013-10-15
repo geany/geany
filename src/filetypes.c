@@ -1279,17 +1279,18 @@ static void load_settings(guint ft_id, GKeyFile *config, GKeyFile *configh)
 }
 
 
-static void add_keys(GKeyFile *dest, const gchar *group, GKeyFile *src)
+static void copy_keys(GKeyFile *dest, const gchar *dest_group,
+		GKeyFile *src, const gchar *src_group)
 {
-	gchar **keys = g_key_file_get_keys(src, group, NULL, NULL);
+	gchar **keys = g_key_file_get_keys(src, src_group, NULL, NULL);
 	gchar **ptr;
 
 	foreach_strv(ptr, keys)
 	{
 		gchar *key = *ptr;
-		gchar *value = g_key_file_get_value(src, group, key, NULL);
+		gchar *value = g_key_file_get_value(src, src_group, key, NULL);
 
-		g_key_file_set_value(dest, group, key, value);
+		g_key_file_set_value(dest, dest_group, key, value);
 		g_free(value);
 	}
 	g_strfreev(keys);
@@ -1329,7 +1330,7 @@ static void add_group_keys(GKeyFile *kf, const gchar *group, GeanyFiletype *ft)
 
 		if (g_key_file_load_from_file(src, files[i], G_KEY_FILE_NONE, NULL))
 		{
-			add_keys(kf, group, src);
+			copy_keys(kf, group, src, group);
 			loaded = TRUE;
 		}
 		g_key_file_free(src);
@@ -1351,21 +1352,27 @@ static void copy_ft_groups(GKeyFile *kf)
 	foreach_strv(ptr, groups)
 	{
 		gchar *group = *ptr;
-		gchar *name = strstr(*ptr, "=");
+		gchar *old_group;
+		gchar *name = strchr(*ptr, '=');
 		GeanyFiletype *ft;
 
-		if (!name)
+		if (!name || !name[1]) /* no name or no parent name */
 			continue;
+
+		old_group = g_strdup(group);
 
 		/* terminate group at '=' */
 		*name = 0;
 		name++;
-		if (!name[0])
-			continue;
 
 		ft = filetypes_lookup_by_name(name);
 		if (ft)
+		{
 			add_group_keys(kf, group, ft);
+			/* move old group keys (foo=bar) to proper group name (foo) */
+			copy_keys(kf, group, kf, old_group);
+		}
+		g_free(old_group);
 	}
 	g_strfreev(groups);
 }
