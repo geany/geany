@@ -1035,6 +1035,7 @@ gboolean win32_spawn(const gchar *dir, gchar **argv, gchar **env, GSpawnFlags fl
 	gchar *tmp_file = create_temp_file();
 	gchar *tmp_errfile = create_temp_file();
 	gchar *command;
+	gchar **ptr;
 
 	if (env != NULL)
 	{
@@ -1045,6 +1046,13 @@ gboolean win32_spawn(const gchar *dir, gchar **argv, gchar **env, GSpawnFlags fl
 	{
 		g_warning("%s: Could not create temporary files!", G_STRFUNC);
 		return FALSE;
+	}
+	foreach_strv(ptr, argv)
+	{
+		/* Note: We can't use g_shell_quote - it puts single quotes around
+		 * the string, which only works with /bin/sh, not the Windows shell */
+		if (strstr(*ptr, " "))
+			SETPTR(*ptr, g_strconcat("\"", *ptr, "\"", NULL));
 	}
 	command = g_strjoinv(" ", argv);
 	SETPTR(command, g_strdup_printf("%s >%s 2>%s",
