@@ -2600,6 +2600,7 @@ val SCLEX_VISUALPROLOG=107
 val SCLEX_LITERATEHASKELL=108
 val SCLEX_STTXT=109
 val SCLEX_KVIRC=110
+val SCLEX_RUST=111
 
 # When a lexer specifies its language as SCLEX_AUTOMATIC it receives a
 # value assigned in sequence from SCLEX_AUTOMATIC+1.
@@ -4340,6 +4341,29 @@ val SCE_KVIRC_NUMBER=9
 val SCE_KVIRC_OPERATOR=10
 val SCE_KVIRC_STRING_FUNCTION=11
 val SCE_KVIRC_STRING_VARIABLE=12
+# Lexical states for SCLEX_RUST
+lex Rust=SCLEX_RUST SCE_RUST_
+val SCE_RUST_DEFAULT=0
+val SCE_RUST_COMMENTBLOCK=1
+val SCE_RUST_COMMENTLINE=2
+val SCE_RUST_COMMENTBLOCKDOC=3
+val SCE_RUST_COMMENTLINEDOC=4
+val SCE_RUST_NUMBER=5
+val SCE_RUST_WORD=6
+val SCE_RUST_WORD2=7
+val SCE_RUST_WORD3=8
+val SCE_RUST_WORD4=9
+val SCE_RUST_WORD5=10
+val SCE_RUST_WORD6=11
+val SCE_RUST_WORD7=12
+val SCE_RUST_STRING=13
+val SCE_RUST_STRINGR=14
+val SCE_RUST_CHARACTER=15
+val SCE_RUST_OPERATOR=16
+val SCE_RUST_IDENTIFIER=17
+val SCE_RUST_LIFETIME=18
+val SCE_RUST_MACRO=19
+val SCE_RUST_LEXERROR=20
 
 # Events
 
@@ -4371,6 +4395,8 @@ evt void IndicatorRelease=2024(int modifiers, int position)
 evt void AutoCCancelled=2025(void)
 evt void AutoCCharDeleted=2026(void)
 evt void HotSpotReleaseClick=2027(int modifiers, int position)
+evt void FocusIn=2028(void)
+evt void FocusOut=2029(void)
 
 cat Provisional
 
@@ -4402,6 +4428,12 @@ get int GetSubStylesStart=4021(int styleBase,)
 
 # The number of sub styles associated with a base style
 get int GetSubStylesLength=4022(int styleBase,)
+
+# For a sub style, return the base style, else return the argument.
+get int GetStyleFromSubStyle=4027(int subStyle,)
+
+# For a secondary style, return the primary style, else return the argument.
+get int GetPrimaryStyleFromStyle=4028(int style,)
 
 # Free allocated sub styles
 fun void FreeSubStyles=4023(,)

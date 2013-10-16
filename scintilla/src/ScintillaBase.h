@@ -57,7 +57,7 @@ protected:
 	ScintillaBase();
 	virtual ~ScintillaBase();
 	virtual void Initialise() = 0;
-	virtual void Finalise() = 0;
+	virtual void Finalise();
 
 	virtual void AddCharUTF(char *s, unsigned int len, bool treatAsDBCS=false);
 	void Command(int cmdId);

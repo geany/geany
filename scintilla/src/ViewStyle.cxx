@@ -324,7 +324,7 @@ void ViewStyle::Refresh(Surface &surface, int tabInChars) {
 	}
 	maxAscent = 1;
 	maxDescent = 1;
-	FindMaxAscentDescent(maxAscent, maxDescent);
+	FindMaxAscentDescent();
 	maxAscent += extraAscent;
 	maxDescent += extraDescent;
 	lineHeight = maxAscent + maxDescent;
@@ -514,7 +514,7 @@ FontRealised *ViewStyle::Find(const FontSpecification &fs) {
 	return 0;
 }
 
-void ViewStyle::FindMaxAscentDescent(unsigned int &maxAscent, unsigned int &maxDescent) {
+void ViewStyle::FindMaxAscentDescent() {
 	for (FontMap::const_iterator it = fonts.begin(); it != fonts.end(); ++it) {
 		if (maxAscent < it->second->ascent)
 			maxAscent = it->second->ascent;

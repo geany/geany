@@ -279,7 +279,7 @@ int SCI_METHOD Document::LineStart(int line) const {
 }
 
 int SCI_METHOD Document::LineEnd(int line) const {
-	if (line == LinesTotal() - 1) {
+	if (line >= LinesTotal() - 1) {
 		return LineStart(line + 1);
 	} else {
 		int position = LineStart(line + 1);
