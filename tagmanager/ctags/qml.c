@@ -246,6 +246,7 @@ void makeTags(QMLTag *tag) {
  * Line is incremented past word and whitespace after word.
  */
 void getNextWord(const unsigned char **line, vString *word) {
+	vStringClear(word);
 	while(isspace(**line)) (*line)++; // First skip any whitespace
 	// Next copy all alphanumerics and '_' to word
 	while(isalnum(**line) || **line == '_' || **line == '.') {
@@ -309,8 +310,11 @@ static void findTags(void) {
 			// If word is not blank, check for supported tags
 			if(vStringLength(word) > 0) {
 				// If word is "function", then there is a Javascript function
-				if(strcmp(vStringValue(word), "function") == 0)
-					cur = qmlTagSet(cur, word, JS_FUNCTION);
+				if(strcmp(vStringValue(word), "function") == 0) {
+						getNextWord(&line, word);
+						while(isspace(*line)) line++;
+						if(*line == '(') cur = qmlTagSet(cur, word, JS_FUNCTION);
+					}
 
 				// If ':' is next in line, check for function or ID
 				else if(*line == ':') {
