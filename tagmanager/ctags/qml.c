@@ -14,6 +14,7 @@
 
 #include <string.h>     /* to declare strxxx() functions */
 
+
 typedef struct QMLTag {
 	boolean			set; // Is tag set?
 	boolean 		supported; // Is tag supported?
@@ -29,15 +30,18 @@ typedef struct QMLTag {
 	struct QMLTag	*next;
 } QMLTag;
 
+
 typedef enum QMLKind {
 	QML_OBJECT,
 	JS_FUNCTION
 } QMLKind;
 
+
 static kindOption QMLKinds[] = {
 	{ TRUE,	'o',	"other",	"objects"	},
 	{ TRUE, 'f',	"function",	"functions"	}
 };
+
 
 /*
  * Malloc and return initialized QMLTag ptr
@@ -58,6 +62,7 @@ QMLTag* qmlTagNew() {
 	return tag;
 }
 
+
 QMLTag* qmlTagSet(QMLTag *tag, vString *word, QMLKind kind) {
 	if(tag->set) {
 		tag->child			=	qmlTagNew();
@@ -75,6 +80,7 @@ QMLTag* qmlTagSet(QMLTag *tag, vString *word, QMLKind kind) {
 	return tag;
 }
 
+
 /*
  * Free all memory from tag
  */
@@ -90,6 +96,7 @@ void qmlTagDelete(QMLTag *tag) {
 	// Free QMLTag
 	free(tag);
 }
+
 
 /*
  * Iterate through QMLTag linked list freeing each
@@ -121,6 +128,7 @@ void freeQMLTags(QMLTag *tag) {
 	}
 }
 
+
 /*
  * Skip past unsupported block, returning remainder of line, or NULL if end not found within line.
  * unsigned int *i is a pointer to in_unsupported_block, stores number of recursions in unsupported
@@ -147,6 +155,7 @@ const unsigned char* skipUnsupportedBlock(const unsigned char *line, unsigned in
 	else return NULL;
 }
 
+
 /*
  * Skip past multiline comment in line, returning remainder of line, or NULL if end not found
  */
@@ -168,6 +177,7 @@ const unsigned char* skipMultilineComment(const unsigned char *line) {
 
 	else return NULL;
 }
+
 
 /*
  * Create QML tag with current values
@@ -210,6 +220,7 @@ void makeTag(QMLTag *tag) {
 	makeTagEntry(&entry);
 }
 
+
 /*
  * Iterate through QMLTag linked list, creating CTags tag for each.
  * Create tags in order from parent to child, from left to right.
@@ -228,6 +239,7 @@ void makeTags(QMLTag *tag) {
 		else tag = tag->parent;
 	}
 }
+
 
 /*
  * Copy alphanumeric chars from line to word until non-alphanumeric is reached.
@@ -250,6 +262,7 @@ void getNextWord(const unsigned char **line, vString *word) {
 
 	vStringTerminate(word);
 }
+
 
 /*
  * Scan line by line for QML tags
@@ -393,6 +406,7 @@ static void findTags(void) {
 	makeTags(root);
 	freeQMLTags(root);
 }
+
 
 /*
  * QML parser definition
