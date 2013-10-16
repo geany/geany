@@ -1257,6 +1257,7 @@ static gboolean lexer_has_braces(ScintillaObject *sci)
 		case SCLEX_PERL:
 		case SCLEX_TCL:
 		case SCLEX_R:
+		case SCLEX_RUST:
 			return TRUE;
 		default:
 			return FALSE;
@@ -2893,6 +2894,7 @@ static gint get_multiline_comment_style(GeanyEditor *editor, gint line_start)
 		case SCLEX_CAML: style_comment = SCE_CAML_COMMENT; break;
 		case SCLEX_D: style_comment = SCE_D_COMMENT; break;
 		case SCLEX_PASCAL: style_comment = SCE_PAS_COMMENT; break;
+		case SCLEX_RUST: style_comment = SCE_RUST_COMMENTBLOCK; break;
 		default: style_comment = SCE_C_COMMENT;
 	}
 
@@ -3414,6 +3416,10 @@ static gboolean in_block_comment(gint lexer, gint style)
 
 		case SCLEX_CSS:
 			return (style == SCE_CSS_COMMENT);
+
+		case SCLEX_RUST:
+			return (style == SCE_RUST_COMMENTBLOCK ||
+				style == SCE_RUST_COMMENTBLOCKDOC);
 
 		default:
 			return FALSE;
@@ -4951,6 +4957,7 @@ void editor_set_indentation_guides(GeanyEditor *editor)
 		case SCLEX_FREEBASIC:
 		case SCLEX_D:
 		case SCLEX_OCTAVE:
+		case SCLEX_RUST:
 			mode = SC_IV_LOOKBOTH;
 			break;
 
