@@ -112,6 +112,7 @@ int Scintilla_LinkLexers() {
 	LINK_LEXER(lmPython);
 	LINK_LEXER(lmR);
 	LINK_LEXER(lmRuby);
+	LINK_LEXER(lmRust);
 	LINK_LEXER(lmSQL);
 	LINK_LEXER(lmTCL);
 	LINK_LEXER(lmTxt2tags);
