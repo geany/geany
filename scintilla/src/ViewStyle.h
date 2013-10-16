@@ -180,7 +180,7 @@ private:
 	void AllocStyles(size_t sizeNew);
 	void CreateFont(const FontSpecification &fs);
 	FontRealised *Find(const FontSpecification &fs);
-	void FindMaxAscentDescent(unsigned int &maxAscent, unsigned int &maxDescent);
+	void FindMaxAscentDescent();
 	// Private so can only be copied through copy constructor which ensures font names initialised correctly
 	ViewStyle &operator=(const ViewStyle &);
 };

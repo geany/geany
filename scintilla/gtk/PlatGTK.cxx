@@ -890,18 +890,6 @@ static size_t MultiByteLenFromIconv(const Converter &conv, const char *s, size_t
 	return 1;
 }
 
-static size_t UTF8CharLength(const char *s) {
-	const unsigned char *us = reinterpret_cast<const unsigned char *>(s);
-	unsigned char ch = *us;
-	if (ch < 0x80) {
-		return 1;
-	} else if (ch < 0x80 + 0x40 + 0x20) {
-		return 2;
-	} else {
-		return 3;
-	}
-}
-
 void SurfaceImpl::DrawTextBase(PRectangle rc, Font &font_, XYPOSITION ybase, const char *s, int len,
                                  ColourDesired fore) {
 	PenColour(fore);
@@ -1045,7 +1033,7 @@ void SurfaceImpl::MeasureWidths(Font &font_, const char *s, int len, XYPOSITION 
 									positions[i++] = iti.position - (places - place) * iti.distance / places;
 									positionsCalculated++;
 								}
-								clusterStart += UTF8CharLength(utfForm.c_str()+clusterStart);
+								clusterStart += UTF8CharLength(static_cast<unsigned char>(utfForm.c_str()[clusterStart]));
 								place++;
 							}
 						}

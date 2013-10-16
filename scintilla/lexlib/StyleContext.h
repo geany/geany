@@ -172,11 +172,11 @@ public:
 			}
 			int diffRelative = n - offsetRelative;
 			int posNew = multiByteAccess->GetRelativePosition(posRelative, diffRelative);
-			int ch = multiByteAccess->GetCharacterAndWidth(posNew, 0);
+			int chReturn = multiByteAccess->GetCharacterAndWidth(posNew, 0);
 			posRelative = posNew;
 			currentPosLastRelative = currentPos;
 			offsetRelative = n;
-			return ch;
+			return chReturn;
 		} else {
 			// fast version for single byte encodings
 			return static_cast<unsigned char>(styler.SafeGetCharAt(currentPos + n, 0));

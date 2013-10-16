@@ -191,9 +191,9 @@ static int styleCheckIdentifier(LexAccessor &styler, unsigned int bk) {
 static int podLineScan(LexAccessor &styler, unsigned int &pos, unsigned int endPos) {
 	// forward scan the current line to classify line for POD style
 	int state = -1;
-	while (pos <= endPos) {
+	while (pos < endPos) {
 		int ch = static_cast<unsigned char>(styler.SafeGetCharAt(pos));
-		if (ch == '\n' || ch == '\r' || pos >= endPos) {
+		if (ch == '\n' || ch == '\r') {
 			if (ch == '\r' && styler.SafeGetCharAt(pos + 1) == '\n') pos++;
 			break;
 		}
@@ -861,10 +861,14 @@ void SCI_METHOD LexerPerl::Lex(unsigned int startPos, int length, int initStyle,
 							sc.Forward();
 						}
 						if (sc.ch != '\r') {	// skip CR if CRLF
-							HereDoc.Append(sc.ch);
+							int i = 0;			// else append char, possibly an extended char
+							while (i < sc.width) {
+								HereDoc.Append(static_cast<unsigned char>(styler.SafeGetCharAt(sc.currentPos + i)));
+								i++;
+							}
 						}
 					}
-				} else { // an unquoted here-doc delimiter
+				} else { // an unquoted here-doc delimiter, no extended charsets
 					if (setHereDocDelim.Contains(sc.ch)) {
 						HereDoc.Append(sc.ch);
 					} else {
@@ -885,7 +889,7 @@ void SCI_METHOD LexerPerl::Lex(unsigned int startPos, int length, int initStyle,
 			if (HereDoc.DelimiterLength == 0 || sc.Match(HereDoc.Delimiter)) {
 				int c = sc.GetRelative(HereDoc.DelimiterLength);
 				if (c == '\r' || c == '\n') {	// peek first, do not consume match
-					sc.Forward(HereDoc.DelimiterLength);
+					sc.ForwardBytes(HereDoc.DelimiterLength);
 					sc.SetState(SCE_PL_DEFAULT);
 					backFlag = BACK_NONE;
 					HereDoc.State = 0;
@@ -939,7 +943,7 @@ void SCI_METHOD LexerPerl::Lex(unsigned int startPos, int length, int initStyle,
 				if (pod == SCE_PL_DEFAULT) {
 					if (sc.state == SCE_PL_POD_VERB) {
 						unsigned int fw2 = fw;
-						while (fw2 <= endPos && pod == SCE_PL_DEFAULT) {
+						while (fw2 < (endPos - 1) && pod == SCE_PL_DEFAULT) {
 							fw = fw2++;	// penultimate line (last blank line)
 							pod = podLineScan(styler, fw2, endPos);
 							styler.SetLineState(styler.GetLine(fw2), pod);
@@ -961,7 +965,7 @@ void SCI_METHOD LexerPerl::Lex(unsigned int startPos, int length, int initStyle,
 					}
 					sc.SetState(pod);
 				}
-				sc.Forward(fw - sc.currentPos);	// commit style
+				sc.ForwardBytes(fw - sc.currentPos);	// commit style
 			}
 			break;
 		case SCE_PL_REGEX:
@@ -1021,7 +1025,7 @@ void SCI_METHOD LexerPerl::Lex(unsigned int startPos, int length, int initStyle,
 						// For '#', if no whitespace in between, it's a delimiter.
 						if (IsASpace(c)) {
 							// Keep going
-						} else if (c == '#' && IsASpaceOrTab(sc.GetRelative(sLen - 1))) {
+						} else if (c == '#' && IsASpaceOrTab(sc.GetRelativeCharacter(sLen - 1))) {
 							endType = 3;
 						} else
 							Quote.Open(c);
@@ -1109,7 +1113,7 @@ void SCI_METHOD LexerPerl::Lex(unsigned int startPos, int length, int initStyle,
 				while (setSubPrototype.Contains(sc.GetRelative(i)))
 					i++;
 				if (sc.GetRelative(i) == ')') {	// valid sub prototype
-					sc.Forward(i);
+					sc.ForwardBytes(i);
 					sc.ForwardSetState(SCE_PL_DEFAULT);
 				} else {
 					// abandon prototype, restart from '('
@@ -1322,7 +1326,7 @@ void SCI_METHOD LexerPerl::Lex(unsigned int startPos, int length, int initStyle,
 				if (setArray.Contains(sc.chNext)) {
 					// no special treatment
 				} else if (sc.chNext == ':' && sc.GetRelative(2) == ':') {
-					sc.Forward(2);
+					sc.ForwardBytes(2);
 				} else if (sc.chNext == '{' || sc.chNext == '[') {
 					sc.ForwardSetState(SCE_PL_OPERATOR);
 				} else {
@@ -1445,7 +1449,7 @@ void SCI_METHOD LexerPerl::Lex(unsigned int startPos, int length, int initStyle,
 					if (preferRE) {
 						sc.SetState(SCE_PL_SYMBOLTABLE);
 						if (sc.chNext == ':' && sc.GetRelative(2) == ':') {
-							sc.Forward(2);
+							sc.ForwardBytes(2);
 						} else if (sc.chNext == '{') {
 							sc.ForwardSetState(SCE_PL_OPERATOR);
 						} else {
@@ -1462,7 +1466,7 @@ void SCI_METHOD LexerPerl::Lex(unsigned int startPos, int length, int initStyle,
 						if (setHash.Contains(sc.chNext)) {
 							sc.Forward();
 						} else if (sc.chNext == ':' && sc.GetRelative(2) == ':') {
-							sc.Forward(2);
+							sc.ForwardBytes(2);
 						} else if (sc.chNext == '{') {
 							sc.ForwardSetState(SCE_PL_OPERATOR);
 						} else {

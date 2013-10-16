@@ -387,6 +387,14 @@ public:
 	int SCI_METHOD SubStylesLength(int styleBase) {
 		return subStyles.Length(styleBase);
 	}
+	int SCI_METHOD StyleFromSubStyle(int subStyle) {
+		int styleBase = subStyles.BaseStyle(MaskActive(subStyle));
+		int active = subStyle & activeFlag;
+		return styleBase | active;
+	}
+	int SCI_METHOD PrimaryStyleFromStyle(int style) {
+		return MaskActive(style);
+ 	}
 	void SCI_METHOD FreeSubStyles() {
 		subStyles.Free();
 	}
