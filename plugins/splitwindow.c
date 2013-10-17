@@ -674,6 +674,21 @@ void plugin_init(GeanyData *data)
 	GeanyKeyGroup *key_group;
 
 	/* Individual style for the toolbar */
+#if GTK_CHECK_VERSION(3, 0, 0)
+	GtkCssProvider *provider = gtk_css_provider_new();
+	gtk_css_provider_load_from_data(provider,
+		"#geany-splitwindow-toolbar {\n"
+		"	-GtkWidget-focus-padding: 0;\n"
+		"	-GtkWidget-focus-line-width: 0;\n"
+		"	-GtkToolbar-internal-padding: 0;\n"
+		"	-GtkToolbar-shadow-type: none;\n"
+		"	padding: 0;\n"
+		"}\n",
+		-1, NULL);
+	gtk_style_context_add_provider_for_screen(gdk_screen_get_default(),
+		GTK_STYLE_PROVIDER(provider), GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+	g_object_unref(provider);
+#else
 	gtk_rc_parse_string(
 		"style \"geany-splitwindow-toolbar-style\" {\n"
 		"	GtkWidget::focus-padding = 0\n"
@@ -685,6 +700,7 @@ void plugin_init(GeanyData *data)
 		"}\n"
 		"widget \"*.geany-splitwindow-toolbar\" style \"geany-splitwindow-toolbar-style\""
 	);
+#endif
 
 	menu_items.main = item = gtk_menu_item_new_with_mnemonic(_("_Split Window"));
 	gtk_menu_shell_append(GTK_MENU_SHELL(geany_data->main_widgets->tools_menu), item);
