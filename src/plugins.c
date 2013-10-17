@@ -86,7 +86,8 @@ static PluginFuncs plugin_funcs = {
 	&plugin_show_configure,
 	&plugin_timeout_add,
 	&plugin_timeout_add_seconds,
-	&plugin_idle_add
+	&plugin_idle_add,
+	&plugin_builder_connect_signals
 };
 
 static DocumentFuncs doc_funcs = {
@@ -640,7 +641,7 @@ plugin_init(Plugin *plugin)
 	active_plugin_list = g_list_insert_sorted(active_plugin_list, plugin, cmp_plugin_names);
 
 	geany_debug("Loaded:   %s (%s)", plugin->filename,
-		NVL(plugin->info.name, "<Unknown>"));
+		FALLBACK(plugin->info.name, "<Unknown>"));
 }
 
 
@@ -729,7 +730,7 @@ plugin_new(const gchar *fname, gboolean init_plugin, gboolean add_to_list)
 
 	/* read plugin name, etc. */
 	plugin_set_info(&plugin->info);
-	if (G_UNLIKELY(! NZV(plugin->info.name)))
+	if (G_UNLIKELY(EMPTY(plugin->info.name)))
 	{
 		geany_debug("No plugin name set in plugin_set_info() for \"%s\" - ignoring plugin!",
 			fname);
@@ -855,7 +856,7 @@ static gchar *get_custom_plugin_path(const gchar *plugin_path_config,
 {
 	gchar *plugin_path_custom;
 
-	if (!NZV(prefs.custom_plugin_path))
+	if (EMPTY(prefs.custom_plugin_path))
 		return NULL;
 
 	plugin_path_custom = utils_get_locale_from_utf8(prefs.custom_plugin_path);
@@ -917,7 +918,7 @@ load_active_plugins(void)
 	{
 		const gchar *fname = active_plugins_pref[i];
 
-		if (NZV(fname) && g_file_test(fname, G_FILE_TEST_EXISTS))
+		if (!EMPTY(fname) && g_file_test(fname, G_FILE_TEST_EXISTS))
 		{
 			if (!check_plugin_path(fname) || plugin_new(fname, TRUE, FALSE) == NULL)
 				failed_plugins_list = g_list_prepend(failed_plugins_list, g_strdup(fname));
@@ -1160,6 +1161,7 @@ enum
 	PLUGIN_COLUMN_DESCRIPTION,
 	PLUGIN_COLUMN_PLUGIN,
 	PLUGIN_N_COLUMNS,
+	PM_BUTTON_KEYBINDINGS,
 	PM_BUTTON_CONFIGURE,
 	PM_BUTTON_HELP
 };
@@ -1173,6 +1175,7 @@ typedef struct
 	GtkWidget *filename_label;
 	GtkWidget *author_label;
 	GtkWidget *configure_button;
+	GtkWidget *keybindings_button;
 	GtkWidget *help_button;
 }
 PluginManagerWidgets;
@@ -1188,6 +1191,8 @@ static void pm_update_buttons(Plugin *p)
 	gtk_widget_set_sensitive(pm_widgets.configure_button,
 		(p->configure || p->configure_single) && is_active);
 	gtk_widget_set_sensitive(pm_widgets.help_button, p->help != NULL && is_active);
+	gtk_widget_set_sensitive(pm_widgets.keybindings_button,
+		p->key_group && p->key_group->plugin_key_count > 0 && is_active);
 }
 
 
@@ -1356,6 +1361,8 @@ static void pm_on_plugin_button_clicked(GtkButton *button, gpointer user_data)
 				plugin_show_configure(&p->public);
 			else if (GPOINTER_TO_INT(user_data) == PM_BUTTON_HELP && p->help != NULL)
 				p->help();
+			else if (GPOINTER_TO_INT(user_data) == PM_BUTTON_KEYBINDINGS && p->key_group && p->key_group->plugin_key_count > 0)
+				keybindings_dialog_show_prefs_scroll(p->info.name);
 		}
 	}
 }
@@ -1386,6 +1393,8 @@ static void pm_dialog_response(GtkDialog *dialog, gint response, gpointer user_d
 		plugin_list = NULL;
 	}
 	gtk_widget_destroy(GTK_WIDGET(dialog));
+
+	configuration_save();
 }
 
 
@@ -1434,6 +1443,11 @@ static void pm_show_dialog(GtkMenuItem *menuitem, gpointer user_data)
 
 	label = geany_wrap_label_new(_("Choose which plugins should be loaded at startup:"));
 
+	pm_widgets.keybindings_button = gtk_button_new_with_label(_("Keybindings"));
+	gtk_widget_set_sensitive(pm_widgets.keybindings_button, FALSE);
+	g_signal_connect(pm_widgets.keybindings_button, "clicked",
+		G_CALLBACK(pm_on_plugin_button_clicked), GINT_TO_POINTER(PM_BUTTON_KEYBINDINGS));
+
 	pm_widgets.configure_button = gtk_button_new_from_stock(GTK_STOCK_PREFERENCES);
 	gtk_widget_set_sensitive(pm_widgets.configure_button, FALSE);
 	g_signal_connect(pm_widgets.configure_button, "clicked",
@@ -1466,9 +1480,11 @@ static void pm_show_dialog(GtkMenuItem *menuitem, gpointer user_data)
 	gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(desc_win), table);
 
 	hbox = gtk_hbox_new(FALSE, 0);
+	gtk_box_set_spacing(GTK_BOX(hbox), 6);
 	gtk_box_pack_start(GTK_BOX(hbox), label2, TRUE, TRUE, 0);
-	gtk_box_pack_start(GTK_BOX(hbox), pm_widgets.help_button, FALSE, FALSE, 4);
+	gtk_box_pack_start(GTK_BOX(hbox), pm_widgets.help_button, FALSE, FALSE, 0);
 	gtk_box_pack_start(GTK_BOX(hbox), pm_widgets.configure_button, FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(hbox), pm_widgets.keybindings_button, FALSE, FALSE, 0);
 
 	label_vbox = gtk_vbox_new(FALSE, 3);
 	gtk_box_pack_start(GTK_BOX(label_vbox), hbox, FALSE, FALSE, 0);

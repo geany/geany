@@ -69,9 +69,9 @@
 #define GEANY_DISK_CHECK_TIMEOUT		30
 #define GEANY_DEFAULT_TOOLS_MAKE		"make"
 #ifdef G_OS_WIN32
-#define GEANY_DEFAULT_TOOLS_TERMINAL	"cmd.exe"
+#define GEANY_DEFAULT_TOOLS_TERMINAL	"cmd.exe /Q /C %c"
 #else
-#define GEANY_DEFAULT_TOOLS_TERMINAL	"xterm"
+#define GEANY_DEFAULT_TOOLS_TERMINAL	"xterm -e \"/bin/sh %c\""
 #endif
 #define GEANY_DEFAULT_TOOLS_BROWSER		"firefox"
 #define GEANY_DEFAULT_TOOLS_PRINTCMD	"lpr"
@@ -240,10 +240,6 @@ static void init_pref_groups(void)
 		"number_non_ft_menu_items", 0);
 	stash_group_add_integer(group, &build_menu_prefs.number_exec_menu_items,
 		"number_exec_menu_items", 0);
-    
-    /* use the Geany icon instead of the theme */
-    stash_group_add_boolean(group, &main_use_geany_icon,
-        "use_geany_icon", FALSE);
 }
 
 
@@ -477,7 +473,7 @@ static void save_dialog_prefs(GKeyFile *config)
 	g_key_file_set_string(config, PACKAGE, "pref_template_datetime", template_prefs.datetime_format);
 
 	/* tools settings */
-	g_key_file_set_string(config, "tools", "term_cmd", tool_prefs.term_cmd ? tool_prefs.term_cmd : "");
+	g_key_file_set_string(config, "tools", "terminal_cmd", tool_prefs.term_cmd ? tool_prefs.term_cmd : "");
 	g_key_file_set_string(config, "tools", "browser_cmd", tool_prefs.browser_cmd ? tool_prefs.browser_cmd : "");
 	g_key_file_set_string(config, "tools", "grep_cmd", tool_prefs.grep_cmd ? tool_prefs.grep_cmd : "");
 	g_key_file_set_string(config, PACKAGE, "context_action_cmd", tool_prefs.context_action_cmd);
@@ -519,6 +515,7 @@ static void save_dialog_prefs(GKeyFile *config)
 		g_key_file_set_boolean(config, "VTE", "cursor_blinks", vc->cursor_blinks);
 		g_key_file_set_integer(config, "VTE", "scrollback_lines", vc->scrollback_lines);
 		g_key_file_set_string(config, "VTE", "font", vc->font);
+		g_key_file_set_string(config, "VTE", "image", vc->image);
 		g_key_file_set_string(config, "VTE", "shell", vc->shell);
 		tmp_string = utils_get_hex_from_color(vc->colour_fore);
 		g_key_file_set_string(config, "VTE", "colour_fore", tmp_string);
@@ -696,6 +693,7 @@ static void load_dialog_prefs(GKeyFile *config)
 {
 	gchar *tmp_string, *tmp_string2;
 	const gchar *default_charset = NULL;
+	gchar *cmd;
 
 	/* compatibility with Geany 0.20 */
 	if (!g_key_file_has_key(config, PACKAGE, atomic_file_saving_key, NULL))
@@ -843,6 +841,7 @@ static void load_dialog_prefs(GKeyFile *config)
 		vc->emulation = utils_get_setting_string(config, "VTE", "emulation", "xterm");
 		vc->send_selection_unsafe = utils_get_setting_boolean(config, "VTE",
 			"send_selection_unsafe", FALSE);
+		vc->image = utils_get_setting_string(config, "VTE", "image", "");
 		vc->shell = utils_get_setting_string(config, "VTE", "shell", shell);
 		vc->font = utils_get_setting_string(config, "VTE", "font", "Monospace 10");
 		vc->scroll_on_key = utils_get_setting_boolean(config, "VTE", "scroll_on_key", TRUE);
@@ -874,17 +873,35 @@ static void load_dialog_prefs(GKeyFile *config)
 
 	template_prefs.version = utils_get_setting_string(config, PACKAGE, "pref_template_version", "1.0");
 
-	tmp_string2 = utils_get_hostname();
-	tmp_string = g_strdup_printf("%s@%s", g_get_user_name(), tmp_string2);
+	tmp_string = g_strdup_printf("%s@%s", g_get_user_name(), g_get_host_name());
 	template_prefs.mail = utils_get_setting_string(config, PACKAGE, "pref_template_mail", tmp_string);
 	g_free(tmp_string);
-	g_free(tmp_string2);
-	template_prefs.year_format = utils_get_setting_string(config, PACKAGE, "pref_template_year", "%Y");
-	template_prefs.date_format = utils_get_setting_string(config, PACKAGE, "pref_template_date", "%Y-%m-%d");
-	template_prefs.datetime_format = utils_get_setting_string(config, PACKAGE, "pref_template_datetime", "%d.%m.%Y %H:%M:%S %Z");
+	template_prefs.year_format = utils_get_setting_string(config, PACKAGE, "pref_template_year", GEANY_TEMPLATES_FORMAT_YEAR);
+	template_prefs.date_format = utils_get_setting_string(config, PACKAGE, "pref_template_date", GEANY_TEMPLATES_FORMAT_DATE);
+	template_prefs.datetime_format = utils_get_setting_string(config, PACKAGE, "pref_template_datetime", GEANY_TEMPLATES_FORMAT_DATETIME);
 
 	/* tools */
-	tool_prefs.term_cmd = utils_get_setting_string(config, "tools", "term_cmd", GEANY_DEFAULT_TOOLS_TERMINAL);
+	cmd = utils_get_setting_string(config, "tools", "terminal_cmd", "");
+	if (EMPTY(cmd))
+	{
+		cmd = utils_get_setting_string(config, "tools", "term_cmd", "");
+		if (!EMPTY(cmd))
+		{
+			tmp_string = cmd;
+#ifdef G_OS_WIN32
+			if (strstr(cmd, "cmd.exe"))
+				cmd = g_strconcat(cmd, " /Q /C %c", NULL);
+			else
+				cmd = g_strconcat(cmd, " %c", NULL);
+#else
+			cmd = g_strconcat(cmd, " -e \"/bin/sh %c\"", NULL);
+#endif
+			g_free(tmp_string);
+		}
+		else
+			cmd = g_strdup(GEANY_DEFAULT_TOOLS_TERMINAL);
+	}
+	tool_prefs.term_cmd = cmd;
 	tool_prefs.browser_cmd = utils_get_setting_string(config, "tools", "browser_cmd", GEANY_DEFAULT_TOOLS_BROWSER);
 	tool_prefs.grep_cmd = utils_get_setting_string(config, "tools", "grep_cmd", GEANY_DEFAULT_TOOLS_GREP);
 
@@ -899,8 +916,15 @@ static void load_dialog_prefs(GKeyFile *config)
 	/* printing */
 	tmp_string2 = g_find_program_in_path(GEANY_DEFAULT_TOOLS_PRINTCMD);
 #ifdef G_OS_WIN32
-	/* single quote paths on Win32 for g_spawn_command_line_async */
-	tmp_string = g_strconcat("'", tmp_string2, "' '%f'", NULL);
+	if (!EMPTY(tmp_string2))
+	{
+		/* single quote paths on Win32 for g_spawn_command_line_async */
+		tmp_string = g_strconcat("'", tmp_string2, "' '%f'", NULL);
+	}
+	else
+	{
+		tmp_string = g_strdup("");
+	}
 #else
 	tmp_string = g_strconcat(tmp_string2, " %f", NULL);
 #endif

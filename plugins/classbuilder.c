@@ -848,7 +848,7 @@ static gboolean create_class(CreateClassDialog *cc_dlg)
 		case GEANY_CLASS_TYPE_GTK:
 		{
 			class_info->namespace = g_strdup(gtk_entry_get_text(GTK_ENTRY(cc_dlg->class_namespace_entry)));
-			if (!NZV(class_info->namespace))
+			if (EMPTY(class_info->namespace))
 			{
 				class_info->namespace_up = g_strdup("");
 				class_info->namespace_low = g_strdup("");
@@ -1094,13 +1094,13 @@ void plugin_init(GeanyData *data)
 	menu_create_class1_menu = gtk_menu_new ();
 	gtk_menu_item_set_submenu (GTK_MENU_ITEM (menu_create_class1), menu_create_class1_menu);
 
-	menu_create_cpp_class = gtk_menu_item_new_with_mnemonic (_("_C++ Class"));
+	menu_create_cpp_class = gtk_menu_item_new_with_mnemonic (_("_C++ Class..."));
 	gtk_container_add (GTK_CONTAINER (menu_create_class1_menu), menu_create_cpp_class);
 
-	menu_create_gtk_class = gtk_menu_item_new_with_mnemonic (_("_GTK+ Class"));
+	menu_create_gtk_class = gtk_menu_item_new_with_mnemonic (_("_GTK+ Class..."));
 	gtk_container_add (GTK_CONTAINER (menu_create_class1_menu), menu_create_gtk_class);
 
-	menu_create_php_class = gtk_menu_item_new_with_mnemonic (_("_PHP Class"));
+	menu_create_php_class = gtk_menu_item_new_with_mnemonic (_("_PHP Class..."));
 	gtk_container_add (GTK_CONTAINER (menu_create_class1_menu), menu_create_php_class);
 
 	g_signal_connect(menu_create_cpp_class, "activate",

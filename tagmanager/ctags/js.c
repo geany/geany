@@ -68,7 +68,8 @@ typedef enum eKeywordId {
 	KEYWORD_switch,
 	KEYWORD_try,
 	KEYWORD_catch,
-	KEYWORD_finally
+	KEYWORD_finally,
+	KEYWORD_return
 } keywordId;
 
 /*	Used to determine whether keyword is valid for the token language and
@@ -156,7 +157,8 @@ static const keywordDesc JsKeywordTable [] = {
 	{ "switch",		KEYWORD_switch				},
 	{ "try",		KEYWORD_try					},
 	{ "catch",		KEYWORD_catch				},
-	{ "finally",	KEYWORD_finally				}
+	{ "finally",	KEYWORD_finally				},
+	{ "return",		KEYWORD_return				}
 };
 
 /*
@@ -459,7 +461,6 @@ getNextChar:
 						  switch (LastTokenType)
 						  {
 							  case TOKEN_CHARACTER:
-							  case TOKEN_KEYWORD:
 							  case TOKEN_IDENTIFIER:
 							  case TOKEN_STRING:
 							  case TOKEN_CLOSE_CURLY:
@@ -1112,6 +1113,7 @@ static boolean parseStatement (tokenInfo *const token, boolean is_inside_class)
 	tokenInfo *const method_body_token = newToken ();
 	vString * saveScope = vStringNew ();
 	boolean is_class = FALSE;
+	boolean is_var = FALSE;
 	boolean is_terminated = TRUE;
 	boolean is_global = FALSE;
 	boolean has_methods = FALSE;
@@ -1495,9 +1497,11 @@ static boolean parseStatement (tokenInfo *const token, boolean is_inside_class)
 		else if (isKeyword (token, KEYWORD_new))
 		{
 			readToken (token);
+			is_var = isType (token, TOKEN_IDENTIFIER);
 			if ( isKeyword (token, KEYWORD_function) ||
 					isKeyword (token, KEYWORD_capital_function) ||
-					isKeyword (token, KEYWORD_capital_object) )
+					isKeyword (token, KEYWORD_capital_object) ||
+					is_var )
 			{
 				if ( isKeyword (token, KEYWORD_capital_object) )
 					is_class = TRUE;
@@ -1510,11 +1514,18 @@ static boolean parseStatement (tokenInfo *const token, boolean is_inside_class)
 				{
 					if ( token->nestLevel == 0 )
 					{
-						if ( is_class )
+						if ( is_var )
 						{
-							makeClassTag (name);
-						} else {
-							makeFunctionTag (name);
+							makeJsTag (name, JSTAG_VARIABLE);
+						}
+						else
+						{
+							if ( is_class )
+							{
+								makeClassTag (name);
+							} else {
+								makeFunctionTag (name);
+							}
 						}
 					}
 				}
@@ -1633,7 +1644,7 @@ static boolean parseLine (tokenInfo *const token, boolean is_inside_class)
 				parseSwitch (token);
 				break;
 			default:
-				parseStatement (token, is_inside_class);
+				is_terminated = parseStatement (token, is_inside_class);
 				break;
 		}
 	}

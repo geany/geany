@@ -44,9 +44,9 @@ all: $(COMPLIB)
 clean:
 	-$(RM) deps.mak *.o $(COMPLIB)
 
-$(COMPLIB): abc.o args.o c.o cobol.o fortran.o make.o conf.o pascal.o perl.o php.o diff.o vhdl.o verilog.o lua.o js.o \
+$(COMPLIB): abaqus.o abc.o args.o c.o cobol.o fortran.o make.o conf.o pascal.o perl.o php.o diff.o vhdl.o verilog.o lua.o js.o \
 actionscript.o nsis.o objc.o \
-haskell.o haxe.o html.o python.o lregex.o rest.o sh.o ctags.o entry.o get.o keyword.o nestlevel.o \
+haskell.o haxe.o html.o python.o lregex.o asciidoc.o rest.o sh.o ctags.o entry.o get.o keyword.o nestlevel.o \
 options.o \
 parse.o basic.o read.o sort.o strlist.o latex.o markdown.o matlab.o docbook.o tcl.o ruby.o asm.o sql.o txt2tags.o css.o \
 vstring.o r.o

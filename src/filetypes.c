@@ -496,6 +496,32 @@ static void init_builtin_filetypes(void)
 	ft->name = g_strdup("Forth");
 	filetype_make_title(ft, TITLE_SOURCE_FILE);
 	ft->group = GEANY_FILETYPE_GROUP_SCRIPT;
+
+#define ASCIIDOC
+	ft = filetypes[GEANY_FILETYPES_ASCIIDOC];
+	ft->lang = 43;
+	ft->name = g_strdup("Asciidoc");
+	filetype_make_title(ft, TITLE_SOURCE_FILE);
+	ft->group = GEANY_FILETYPE_GROUP_MARKUP;
+
+#define ABAQUS
+	ft = filetypes[GEANY_FILETYPES_ABAQUS];
+	ft->lang = 44;
+	ft->name = g_strdup("Abaqus");
+	filetype_make_title(ft, TITLE_SOURCE_FILE);
+	ft->group = GEANY_FILETYPE_GROUP_SCRIPT;
+
+#define BATCH
+	ft = filetypes[GEANY_FILETYPES_BATCH];
+	ft->name = g_strdup("Batch");
+	filetype_make_title(ft, TITLE_FILE);
+	ft->group = GEANY_FILETYPE_GROUP_SCRIPT;
+
+#define POWERSHELL
+	ft = filetypes[GEANY_FILETYPES_POWERSHELL];
+	ft->name = g_strdup("PowerShell");
+	filetype_make_title(ft, TITLE_SOURCE_FILE);
+	ft->group = GEANY_FILETYPE_GROUP_SCRIPT;
 }
 
 
@@ -660,7 +686,7 @@ static void on_document_save(G_GNUC_UNUSED GObject *object, GeanyDocument *doc)
 {
 	gchar *f;
 
-	g_return_if_fail(NZV(doc->real_path));
+	g_return_if_fail(!EMPTY(doc->real_path));
 
 	f = g_build_filename(app->configdir, "filetype_extensions.conf", NULL);
 	if (utils_str_equal(doc->real_path, f))
@@ -905,10 +931,13 @@ static GeanyFiletype *find_shebang(const gchar *utf8_filename, const gchar *line
 			{ "make",	GEANY_FILETYPES_MAKE },
 			{ "zsh",	GEANY_FILETYPES_SH },
 			{ "ksh",	GEANY_FILETYPES_SH },
+			{ "mksh",	GEANY_FILETYPES_SH },
 			{ "csh",	GEANY_FILETYPES_SH },
+			{ "tcsh",	GEANY_FILETYPES_SH },
 			{ "ash",	GEANY_FILETYPES_SH },
 			{ "dmd",	GEANY_FILETYPES_D },
-			{ "wish",	GEANY_FILETYPES_TCL }
+			{ "wish",	GEANY_FILETYPES_TCL },
+			{ "node",	GEANY_FILETYPES_JS }
 		};
 		gchar *tmp = g_path_get_basename(line + 2);
 		gchar *basename_interpreter = tmp;
@@ -1202,7 +1231,7 @@ static void load_settings(guint ft_id, GKeyFile *config, GKeyFile *configh)
 		SETPTR(filetypes[ft_id]->comment_single, result);
 	}
 	/* import correctly filetypes that use old-style single comments */
-	else if (! NZV(filetypes[ft_id]->comment_close))
+	else if (EMPTY(filetypes[ft_id]->comment_close))
 	{
 		SETPTR(filetypes[ft_id]->comment_single, filetypes[ft_id]->comment_open);
 		filetypes[ft_id]->comment_open = NULL;
@@ -1250,17 +1279,18 @@ static void load_settings(guint ft_id, GKeyFile *config, GKeyFile *configh)
 }
 
 
-static void add_keys(GKeyFile *dest, const gchar *group, GKeyFile *src)
+static void copy_keys(GKeyFile *dest, const gchar *dest_group,
+		GKeyFile *src, const gchar *src_group)
 {
-	gchar **keys = g_key_file_get_keys(src, group, NULL, NULL);
+	gchar **keys = g_key_file_get_keys(src, src_group, NULL, NULL);
 	gchar **ptr;
 
 	foreach_strv(ptr, keys)
 	{
 		gchar *key = *ptr;
-		gchar *value = g_key_file_get_value(src, group, key, NULL);
+		gchar *value = g_key_file_get_value(src, src_group, key, NULL);
 
-		g_key_file_set_value(dest, group, key, value);
+		g_key_file_set_value(dest, dest_group, key, value);
 		g_free(value);
 	}
 	g_strfreev(keys);
@@ -1300,7 +1330,7 @@ static void add_group_keys(GKeyFile *kf, const gchar *group, GeanyFiletype *ft)
 
 		if (g_key_file_load_from_file(src, files[i], G_KEY_FILE_NONE, NULL))
 		{
-			add_keys(kf, group, src);
+			copy_keys(kf, group, src, group);
 			loaded = TRUE;
 		}
 		g_key_file_free(src);
@@ -1322,21 +1352,27 @@ static void copy_ft_groups(GKeyFile *kf)
 	foreach_strv(ptr, groups)
 	{
 		gchar *group = *ptr;
-		gchar *name = strstr(*ptr, "=");
+		gchar *old_group;
+		gchar *name = strchr(*ptr, '=');
 		GeanyFiletype *ft;
 
-		if (!name)
+		if (!name || !name[1]) /* no name or no parent name */
 			continue;
+
+		old_group = g_strdup(group);
 
 		/* terminate group at '=' */
 		*name = 0;
 		name++;
-		if (!name[0])
-			continue;
 
 		ft = filetypes_lookup_by_name(name);
 		if (ft)
+		{
 			add_group_keys(kf, group, ft);
+			/* move old group keys (foo=bar) to proper group name (foo) */
+			copy_keys(kf, group, kf, old_group);
+		}
+		g_free(old_group);
 	}
 	g_strfreev(groups);
 }
@@ -1515,7 +1551,7 @@ GeanyFiletype *filetypes_lookup_by_name(const gchar *name)
 {
 	GeanyFiletype *ft;
 
-	g_return_val_if_fail(NZV(name), NULL);
+	g_return_val_if_fail(!EMPTY(name), NULL);
 
 	ft = g_hash_table_lookup(filetypes_hash, name);
 	if (G_UNLIKELY(ft == NULL))
@@ -1563,7 +1599,7 @@ gboolean filetypes_parse_error_message(GeanyFiletype *ft, const gchar *message,
 	*filename = NULL;
 	*line = -1;
 
-	if (G_UNLIKELY(! NZV(regstr)))
+	if (G_UNLIKELY(EMPTY(regstr)))
 		return FALSE;
 
 	if (!ft->priv->error_regex || regstr != ft->priv->last_error_pattern)
@@ -1789,7 +1825,7 @@ gboolean filetype_get_comment_open_close(const GeanyFiletype *ft, gboolean singl
 	if (single_first)
 	{
 		*co = ft->comment_single;
-		if (NZV(*co))
+		if (!EMPTY(*co))
 			*cc = NULL;
 		else
 		{
@@ -1800,7 +1836,7 @@ gboolean filetype_get_comment_open_close(const GeanyFiletype *ft, gboolean singl
 	else
 	{
 		*co = ft->comment_open;
-		if (NZV(*co))
+		if (!EMPTY(*co))
 			*cc = ft->comment_close;
 		else
 		{
@@ -1809,5 +1845,5 @@ gboolean filetype_get_comment_open_close(const GeanyFiletype *ft, gboolean singl
 		}
 	}
 
-	return NZV(*co);
+	return !EMPTY(*co);
 }

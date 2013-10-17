@@ -1,0 +1,9 @@
+# format=tagmanager
+IPointÌ32Ö0
+MainÌ128Í()ÎMainClassÖ0Ïpublic void
+MainClassÌ1Ö0
+MyPointÌ1Ö0
+MyPointÌ128Í(int x, int y)ÎMyPointÖ0
+PrintPointÌ128Í(IPoint p)ÎMainClassÖ0Ïprivate void
+myXÌ8ÎMyPointÖ0Ïint
+myYÌ8ÎMyPointÖ0Ïint

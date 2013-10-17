@@ -1,6 +1,6 @@
 ## Process this file with automake to produce Makefile.in
 
-SUBDIRS = tagmanager scintilla src plugins icons po doc
+SUBDIRS = tagmanager scintilla src plugins icons po doc tests
 
 AUTOMAKE_OPTIONS =	1.7
 
@@ -8,6 +8,7 @@ ACLOCAL_AMFLAGS = -I m4
 
 WIN32_BUILD_FILES = \
 	geany_private.rc \
+	geany.exe.manifest \
 	win32-config.h \
 	makefile.win32
 
@@ -24,8 +25,13 @@ SYS_DATA_FILES = \
 	$(srcdir)/data/templates/* \
 	$(srcdir)/data/templates/files/* \
 	$(srcdir)/data/colorschemes/* \
-	$(top_srcdir)/data/geany.glade \
+	$(top_srcdir)/data/geany.glade
+
+if GTK3
+	$(top_srcdir)/data/geany.css
+else
 	$(top_srcdir)/data/geany.gtkrc
+endif
 
 EXTRA_DIST = \
 	autogen.sh \

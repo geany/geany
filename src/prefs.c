@@ -334,6 +334,33 @@ static void kb_set_shortcut(GtkTreeStore *store, GtkTreeIter *iter,
 }
 
 
+void prefs_kb_search_name(const gchar *search)
+{
+	GtkTreeIter   iter;
+	gboolean      valid;
+	GtkTreeModel *model;
+
+	model = gtk_tree_view_get_model(tree);
+	valid = gtk_tree_model_get_iter_first(model, &iter);
+	while (valid)
+	{
+		gchar *name;
+
+		gtk_tree_model_get(model, &iter, KB_TREE_ACTION, &name, -1);
+		if (g_strcmp0(name, search) == 0)
+		{
+			GtkTreePath *path = gtk_tree_model_get_path(model, &iter);
+			gtk_tree_view_scroll_to_cell(tree, path, NULL, TRUE, .0f, .0f);
+			gtk_tree_path_free(path);
+			g_free(name);
+			break;
+		}
+		g_free(name);
+		valid = gtk_tree_model_iter_next(model, &iter);
+	}
+}
+
+
 static void kb_init(void)
 {
 	GtkTreeIter parent, iter;
@@ -743,6 +770,9 @@ static void prefs_init_dialog(void)
 
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "color_back");
 		gtk_color_button_set_color(GTK_COLOR_BUTTON(widget), vc->colour_back);
+
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "entry_image");
+		gtk_entry_set_text(GTK_ENTRY(widget), vc->image);
 
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "spin_scrollback");
 		gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget), vc->scrollback_lines);
@@ -1208,6 +1238,10 @@ on_prefs_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 			gtk_spin_button_update(GTK_SPIN_BUTTON(widget));
 			vc->scrollback_lines = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));
 
+			widget = ui_lookup_widget(ui_widgets.prefs_dialog, "entry_image");
+			g_free(vc->image);
+			vc->image = g_strdup(gtk_entry_get_text(GTK_ENTRY(widget)));
+
 			widget = ui_lookup_widget(ui_widgets.prefs_dialog, "entry_shell");
 			g_free(vc->shell);
 			vc->shell = g_strdup(gtk_entry_get_text(GTK_ENTRY(widget)));
@@ -1635,14 +1669,10 @@ void prefs_show_dialog(void)
 		GtkWidget *label;
 		guint i;
 		gchar *encoding_string;
-		GdkPixbuf *pb;
 
 		ui_widgets.prefs_dialog = create_prefs_dialog();
 		gtk_widget_set_name(ui_widgets.prefs_dialog, "GeanyPrefsDialog");
 		gtk_window_set_transient_for(GTK_WINDOW(ui_widgets.prefs_dialog), GTK_WINDOW(main_widgets.window));
-		pb = ui_new_pixbuf_from_inline(GEANY_IMAGE_LOGO);
-		gtk_window_set_icon(GTK_WINDOW(ui_widgets.prefs_dialog), pb);
-		g_object_unref(pb);	/* free our reference */
 
 		/* init the file encoding combo boxes */
 		encoding_list = ui_builder_get_object("encoding_list");

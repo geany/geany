@@ -31,6 +31,9 @@
 G_BEGIN_DECLS
 
 #define GEANY_TEMPLATES_INDENT 3
+#define GEANY_TEMPLATES_FORMAT_YEAR              C_("DefaultYear", "%Y")
+#define GEANY_TEMPLATES_FORMAT_DATE              C_("DefaultDate", "%Y-%m-%d")
+#define GEANY_TEMPLATES_FORMAT_DATETIME          C_("DefaultDateTime", "%d.%m.%Y %H:%M:%S %Z")
 
 enum
 {

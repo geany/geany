@@ -89,9 +89,7 @@ static void makeAsciidocTag (const vString* const name, const int kind)
 }
 
 
-/* checks if str is all the same character 
- * FIXME needs to consider single line titles as well as underlines
- * and rename me istitle() */
+/* checks if str is all the same character */
 static boolean issame(const char *str)
 {
 	char first = *str;
@@ -123,8 +121,8 @@ static int get_kind(char c)
 
 
 /* computes the length of an UTF-8 string
- * if the string doesn't look like UTF-8, return -1 
- * FIXME asciidoc also takes the asian character width into consideration */
+ * if the string doesn't look like UTF-8, return -1
+ * FIXME consider East_Asian_Width Unicode property */
 static int utf8_strlen(const char *buf, int buf_len)
 {
 	int len = 0;
@@ -169,9 +167,9 @@ static void findAsciidocTags (void)
 		if (name_len < 0)
 			name_len = name_len_bytes;
 
-		/* underlines must be +-2 chars */
-		if (line_len >= name_len - 2 && line_len <= name_len + 2 && name_len > 0 &&
-			ispunct(line[0]) && issame((const char*) line))
+		/* underlines must be +-2 chars FIXME detect single line titles */
+		if (line_len > 2 && line_len >= name_len - 2 && line_len <= name_len + 2 &&
+			name_len > 0 && ispunct(line[0]) && issame((const char*) line))
 		{
 			char c = line[0];
 			int kind = get_kind(c);

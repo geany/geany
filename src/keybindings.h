@@ -247,6 +247,7 @@ enum GeanyKeyBindingID
 	GEANY_KEYS_FORMAT_JOINLINES,				/**< Keybinding. */
 	GEANY_KEYS_GOTO_LINESTARTVISUAL,			/**< Keybinding. */
 	GEANY_KEYS_DOCUMENT_CLONE,					/**< Keybinding. */
+	GEANY_KEYS_FILE_QUIT,						/**< Keybinding. */
 	GEANY_KEYS_COUNT	/* must not be used by plugins */
 };
 
@@ -284,6 +285,8 @@ void keybindings_write_to_file(void);
 void keybindings_show_shortcuts(void);
 
 gboolean keybindings_check_event(GdkEventKey *ev, GeanyKeyBinding *kb);
+
+void keybindings_dialog_show_prefs_scroll(const gchar *name);
 
 G_END_DECLS
 

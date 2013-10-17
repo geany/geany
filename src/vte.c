@@ -49,6 +49,7 @@
 #include "geanywraplabel.h"
 #include "editor.h"
 #include "sciwrappers.h"
+#include "gtkcompat.h"
 
 
 VteInfo vte_info;
@@ -112,6 +113,7 @@ struct VteFunctions
 	void (*vte_terminal_set_cursor_blinks) (VteTerminal *terminal, gboolean blink);
 	void (*vte_terminal_select_all) (VteTerminal *terminal);
 	void (*vte_terminal_set_audible_bell) (VteTerminal *terminal, gboolean is_audible);
+	void (*vte_terminal_set_background_image_file) (VteTerminal *terminal, const char *path);
 };
 
 
@@ -185,7 +187,7 @@ void vte_init(void)
 		return;
 	}
 
-	if (NZV(vte_info.lib_vte))
+	if (!EMPTY(vte_info.lib_vte))
 	{
 		module = g_module_open(vte_info.lib_vte, G_MODULE_BIND_LAZY);
 	}
@@ -199,8 +201,14 @@ void vte_init(void)
 	if (module == NULL)
 	{
 		gint i;
-		const gchar *sonames[] = {  "libvte.so", "libvte.so.4",
-									"libvte.so.8", "libvte.so.9", NULL };
+		const gchar *sonames[] = {
+#if GTK_CHECK_VERSION(3, 0, 0)
+			"libvte2_90.so", "libvte2_90.so.9",
+#else
+			"libvte.so", "libvte.so.4", "libvte.so.8", "libvte.so.9",
+#endif
+			NULL
+		};
 
 		for (i = 0; sonames[i] != NULL && module == NULL; i++)
 		{
@@ -252,7 +260,7 @@ static void create_vte(void)
 
 	vc->vte = vte = vf->vte_terminal_new();
 	scrollbar = gtk_vscrollbar_new(GTK_ADJUSTMENT(VTE_TERMINAL(vte)->adjustment));
-	GTK_WIDGET_UNSET_FLAGS(scrollbar, GTK_CAN_FOCUS);
+	gtk_widget_set_can_focus(scrollbar, FALSE);
 
 	/* create menu now so copy/paste shortcuts work */
 	vc->menu = vte_create_popup_menu();
@@ -303,6 +311,7 @@ void vte_close(void)
 	g_object_unref(vc->menu);
 	g_free(vc->emulation);
 	g_free(vc->shell);
+	g_free(vc->image);
 	g_free(vc->font);
 	g_free(vc->colour_back);
 	g_free(vc->colour_fore);
@@ -451,6 +460,7 @@ static gboolean vte_register_symbols(GModule *mod)
 	BIND_REQUIRED_SYMBOL(vte_terminal_set_color_foreground);
 	BIND_REQUIRED_SYMBOL(vte_terminal_set_color_bold);
 	BIND_REQUIRED_SYMBOL(vte_terminal_set_color_background);
+	BIND_REQUIRED_SYMBOL(vte_terminal_set_background_image_file);
 	BIND_REQUIRED_SYMBOL(vte_terminal_feed_child);
 	BIND_REQUIRED_SYMBOL(vte_terminal_im_append_menuitems);
 	if (! BIND_SYMBOL(vte_terminal_set_cursor_blink_mode))
@@ -480,6 +490,7 @@ void vte_apply_user_settings(void)
 	vf->vte_terminal_set_color_foreground(VTE_TERMINAL(vc->vte), vc->colour_fore);
 	vf->vte_terminal_set_color_bold(VTE_TERMINAL(vc->vte), vc->colour_fore);
 	vf->vte_terminal_set_color_background(VTE_TERMINAL(vc->vte), vc->colour_back);
+	vf->vte_terminal_set_background_image_file(VTE_TERMINAL(vc->vte), vc->image);
 	vf->vte_terminal_set_audible_bell(VTE_TERMINAL(vc->vte), prefs.beep_on_errors);
 	vte_set_cursor_blink_mode();
 
@@ -721,7 +732,7 @@ static void vte_drag_data_received(GtkWidget *widget, GdkDragContext *drag_conte
 	else
 	{
 		gchar *text = (gchar*) gtk_selection_data_get_text(data);
-		if (NZV(text))
+		if (!EMPTY(text))
 			vf->vte_terminal_feed_child(VTE_TERMINAL(widget), text, strlen(text));
 		g_free(text);
 	}
@@ -771,11 +782,17 @@ void vte_append_preferences_tab(void)
 		GtkWidget *frame_term, *button_shell, *entry_shell;
 		GtkWidget *check_run_in_vte, *check_skip_script;
 		GtkWidget *font_button, *fg_color_button, *bg_color_button;
+		GtkWidget *entry_image, *button_image;
 
 		button_shell = GTK_WIDGET(ui_lookup_widget(ui_widgets.prefs_dialog, "button_term_shell"));
 		entry_shell = GTK_WIDGET(ui_lookup_widget(ui_widgets.prefs_dialog, "entry_shell"));
 		ui_setup_open_button_callback(button_shell, NULL,
 			GTK_FILE_CHOOSER_ACTION_OPEN, GTK_ENTRY(entry_shell));
+
+		button_image = GTK_WIDGET(ui_lookup_widget(ui_widgets.prefs_dialog, "button_term_image"));
+		entry_image = GTK_WIDGET(ui_lookup_widget(ui_widgets.prefs_dialog, "entry_image"));
+		ui_setup_open_button_callback(button_image, NULL,
+			GTK_FILE_CHOOSER_ACTION_OPEN, GTK_ENTRY(entry_image));
 
 		check_skip_script = GTK_WIDGET(ui_lookup_widget(ui_widgets.prefs_dialog, "check_skip_script"));
 		gtk_widget_set_sensitive(check_skip_script, vc->run_in_vte);
@@ -817,8 +834,7 @@ void vte_send_selection_to_vte(void)
 
 	if (sci_has_selection(doc->editor->sci))
 	{
-		text = g_malloc0(sci_get_selected_text_length(doc->editor->sci) + 1);
-		sci_get_selected_text(doc->editor->sci, text);
+		text = sci_get_selection_contents(doc->editor->sci);
 	}
 	else
 	{	/* Get the current line */

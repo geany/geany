@@ -1,0 +1,8 @@
+# format=tagmanager
+AccessSalaryÌ128Í()ÎEmployeeÖ0Ïpublic double
+EmployeeÌ1Ö0
+MainÌ128Í()ÎMainClassÖ0Ïpublic void
+MainClassÌ1Ö0
+nameÌ8ÎEmployeeÖ0
+not_visibleÌ8ÎEmployeeÖ0Ïint
+salaryÌ8ÎEmployeeÖ0Ïdouble

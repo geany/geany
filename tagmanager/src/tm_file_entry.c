@@ -32,7 +32,7 @@
 #define FILE_FREE(T)	g_slice_free(TMFileEntry, (T))
 
 
-void tm_file_entry_print(TMFileEntry *entry, gpointer __unused__ user_data
+void tm_file_entry_print(TMFileEntry *entry, gpointer UNUSED user_data
   , guint level)
 {
 	guint i;

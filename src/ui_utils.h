@@ -22,6 +22,8 @@
 #ifndef GEANY_UI_UTILS_H
 #define GEANY_UI_UTILS_H 1
 
+#include "gtkcompat.h"
+
 G_BEGIN_DECLS
 
 
@@ -104,6 +106,7 @@ typedef struct UIPrefs
 	gint		sidebar_page;
 	gboolean	msgwindow_visible;
 	gboolean	allow_always_save; /* if set, files can always be saved, even if unchanged */
+	gchar		*statusbar_template;
 	gboolean	new_document_after_close;
 
 	/* Menu-item related data */
@@ -148,7 +151,8 @@ extern UIWidgets ui_widgets;
 typedef struct GeanyAutoSeparator
 {
 	GtkWidget	*widget;	/* e.g. GtkSeparatorToolItem, GtkSeparatorMenuItem */
-	gint		ref_count;	/* set to zero initially */
+	gint		show_count;	/* visible items, set to zero initially */
+	gint		item_count;	/* total items, set to zero initially */
 }
 GeanyAutoSeparator;
 
@@ -167,14 +171,6 @@ GeanyUIEditorFeatures;
 #define GEANY_STOCK_SAVE_ALL "geany-save-all"
 #define GEANY_STOCK_CLOSE_ALL "geany-close-all"
 #define GEANY_STOCK_BUILD "geany-build"
-
-enum
-{
-	GEANY_IMAGE_LOGO,
-	GEANY_IMAGE_SAVE_ALL,
-	GEANY_IMAGE_CLOSE_ALL,
-	GEANY_IMAGE_BUILD
-};
 
 
 void ui_widget_show_hide(GtkWidget *widget, gboolean show);
@@ -195,10 +191,10 @@ GtkWidget *ui_image_menu_item_new(const gchar *stock_id, const gchar *label);
 
 void ui_hbutton_box_copy_layout(GtkButtonBox *master, GtkButtonBox *copy);
 
-void ui_combo_box_add_to_history(GtkComboBoxEntry *combo_entry,
+void ui_combo_box_add_to_history(GtkComboBoxText *combo_entry,
 		const gchar *text, gint history_len);
 
-void ui_combo_box_prepend_text_once(GtkComboBox *combo, const gchar *text);
+void ui_combo_box_prepend_text_once(GtkComboBoxText *combo, const gchar *text);
 
 GtkWidget *ui_path_box_new(const gchar *title, GtkFileChooserAction action, GtkEntry *entry);
 
@@ -246,8 +242,6 @@ void ui_init(void);
 void ui_init_prefs(void);
 
 void ui_finalize_builder(void);
-
-void ui_finalize(void);
 
 void ui_init_toolbar_widgets(void);
 
@@ -303,11 +297,6 @@ void ui_sidebar_show_hide(void);
 void ui_document_show_hide(GeanyDocument *doc);
 
 void ui_set_search_entry_background(GtkWidget *widget, gboolean success);
-
-
-GdkPixbuf *ui_new_pixbuf_from_inline(gint img);
-
-GtkWidget *ui_new_image_from_inline(gint img);
 
 
 void ui_create_recent_menus(void);

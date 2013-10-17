@@ -384,13 +384,31 @@ Adding a source file foo.[hc] in src/ or plugins/
 Adding a filetype
 -----------------
 You can add a filetype without syntax highlighting or tag parsing, but
-check to see if those features have been written in other projects first.
+check to see if those features have been written in upstream projects
+first (scintilla or ctags).
+
+**Custom:**
+
+If you want to reuse an existing lexer and/or tag parser, making a
+custom filetype is probably easier - it doesn't require any
+changes to the source code. Follow instructions in the manual:
+http://geany.org/manual/geany.html#custom-filetypes. Don't forget to
+update the ``[Groups]`` section in ``filetype_extensions.conf``.
+
+.. warning::
+  You should use the newer `[build-menu]` section for default build
+  commands - the older `[build_settings]` may not work correctly for
+  custom filetypes.
+
+**Built-in:**
 
 * Add GEANY_FILETYPES_FOO to filetypes.h.
 * Initialize GEANY_FILETYPES_FOO in init_builtin_filetypes() of
   filetypes.c. You should use filetype_make_title() to avoid a
   translation whenever possible.
 * Update data/filetype_extensions.conf.
+
+The remaining notes relate mostly to built-in filetypes.
 
 filetypes.* configuration file
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -402,7 +420,7 @@ Programming languages should have:
 
 * [keywords] if the lexer supports it.
 * [settings] mostly for comment settings.
-* [build_settings] for commands to run.
+* [build-menu] (or [build_settings]) for commands to run.
 
 For languages with a Scintilla lexer, there should be a [styling] section,
 to correspond to the styles used in highlighting_styles_FOO[] in

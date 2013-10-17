@@ -32,9 +32,14 @@ G_BEGIN_DECLS
 #include <time.h>
 
 
-/** Returns TRUE if @a ptr points to a non-zero value. */
-#define NZV(ptr) \
-	((ptr) && (ptr)[0])
+/** Returns @c TRUE if @a ptr is @c NULL or @c *ptr is @c FALSE. */
+#define EMPTY(ptr) \
+	(!(ptr) || !*(ptr))
+
+/** @deprecated 2013/08 - use @c !EMPTY() instead. */
+#ifndef GEANY_DISABLE_DEPRECATED
+#define NZV(ptr) (!EMPTY(ptr))
+#endif
 
 /** Assigns @a result to @a ptr, then frees the old value.
  * @a result can be an expression using the 'old' value of @a ptr.
@@ -177,8 +182,6 @@ gchar *utils_remove_ext_from_filename(const gchar *filename);
 
 gchar utils_brace_opposite(gchar ch);
 
-gchar *utils_get_hostname(void);
-
 gint utils_string_find(GString *haystack, gint start, gint end, const gchar *needle);
 
 gint utils_string_replace(GString *str, gint pos, gint len, const gchar *replace);
@@ -276,6 +279,10 @@ gchar *utils_str_middle_truncate(const gchar *string, guint truncate_length);
 gchar *utils_str_remove_chars(gchar *string, const gchar *chars);
 
 gchar **utils_copy_environment(const gchar **exclude_vars, const gchar *first_varname, ...) G_GNUC_NULL_TERMINATED;
+
+GDate *utils_parse_date(const gchar *input);
+
+gchar *utils_parse_and_format_build_date(const gchar *input);
 
 G_END_DECLS
 

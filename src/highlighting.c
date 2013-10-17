@@ -30,6 +30,8 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <string.h>
+#include <glib.h>
+#include <glib/gprintf.h>
 
 #include "SciLexer.h"
 #include "highlighting.h"
@@ -223,7 +225,7 @@ static void parse_color(GKeyFile *kf, const gchar *str, gint *clr)
 
 	g_return_if_fail(clr != NULL);
 
-	if (G_UNLIKELY(! NZV(str)))
+	if (G_UNLIKELY(EMPTY(str)))
 		return;
 
 	named_color = g_key_file_get_string(kf, "named_colors", str, NULL);
@@ -243,11 +245,11 @@ static void parse_color(GKeyFile *kf, const gchar *str, gint *clr)
 
 	if (strlen(start) == 3)
 	{
-		snprintf(hex_clr, 9, "0x%c%c%c%c%c%c", start[0], start[0],
+		g_snprintf(hex_clr, 9, "0x%c%c%c%c%c%c", start[0], start[0],
 			start[1], start[1], start[2], start[2]);
 	}
 	else
-		snprintf(hex_clr, 9, "0x%s", start);
+		g_snprintf(hex_clr, 9, "0x%s", start);
 
 	g_free(named_color);
 
@@ -552,7 +554,7 @@ static void load_named_styles(GKeyFile *config, GKeyFile *config_home)
 
 	named_style_hash = g_hash_table_new_full(g_str_hash, g_str_equal, g_free, g_free);
 
-	if (NZV(scheme))
+	if (!EMPTY(scheme))
 	{
 		gchar *path, *path_home;
 
@@ -993,7 +995,7 @@ static void read_properties(GeanyFiletype *ft, GKeyFile *config, GKeyFile *confi
 
 static guint get_lexer_filetype(GeanyFiletype *ft)
 {
-	ft = NVL(ft->lexer_filetype, ft);
+	ft = FALLBACK(ft->lexer_filetype, ft);
 	return ft->id;
 }
 
@@ -1039,9 +1041,11 @@ void highlighting_init_styles(guint filetype_idx, GKeyFile *config, GKeyFile *co
 
 	switch (lexer_id)
 	{
+		init_styleset_case(ABAQUS);
 		init_styleset_case(ADA);
 		init_styleset_case(ASM);
 		init_styleset_case(BASIC);
+		init_styleset_case(BATCH);
 		init_styleset_case(C);
 		init_styleset_case(CAML);
 		init_styleset_case(CMAKE);
@@ -1074,6 +1078,7 @@ void highlighting_init_styles(guint filetype_idx, GKeyFile *config, GKeyFile *co
 		init_styleset_case(PERL);
 		init_styleset_case(PHP);
 		init_styleset_case(PO);
+		init_styleset_case(POWERSHELL);
 		init_styleset_case(PYTHON);
 		init_styleset_case(R);
 		init_styleset_case(RUBY);
@@ -1118,9 +1123,11 @@ void highlighting_set_styles(ScintillaObject *sci, GeanyFiletype *ft)
 
 	switch (lexer_id)
 	{
+		styleset_case(ABAQUS);
 		styleset_case(ADA);
 		styleset_case(ASM);
 		styleset_case(BASIC);
+		styleset_case(BATCH);
 		styleset_case(C);
 		styleset_case(CAML);
 		styleset_case(CMAKE);
@@ -1153,6 +1160,7 @@ void highlighting_set_styles(ScintillaObject *sci, GeanyFiletype *ft)
 		styleset_case(PERL);
 		styleset_case(PHP);
 		styleset_case(PO);
+		styleset_case(POWERSHELL);
 		styleset_case(PYTHON);
 		styleset_case(R);
 		styleset_case(RUBY);
@@ -1264,7 +1272,7 @@ static gchar *utils_get_setting_locale_string(GKeyFile *keyfile,
 {
 	gchar *result = g_key_file_get_locale_string(keyfile, group, key, NULL, NULL);
 
-	return NVL(result, g_strdup(default_value));
+	return FALLBACK(result, g_strdup(default_value));
 }
 
 
@@ -1505,7 +1513,9 @@ gboolean highlighting_is_string_style(gint lexer, gint style)
 				style == SCE_LUA_STRING);
 
 		case SCLEX_HASKELL:
+		case SCLEX_LITERATEHASKELL:
 			return (style == SCE_HA_CHARACTER ||
+				style == SCE_HA_STRINGEOL ||
 				style == SCE_HA_STRING);
 
 		case SCLEX_FREEBASIC:
@@ -1563,6 +1573,9 @@ gboolean highlighting_is_string_style(gint lexer, gint style)
 				style == SCE_ADA_STRING ||
 				style == SCE_ADA_CHARACTEREOL ||
 				style == SCE_ADA_STRINGEOL);
+
+		case SCLEX_ABAQUS:
+			return (style == SCE_ABAQUS_STRING);
 	}
 	return FALSE;
 }
@@ -1585,6 +1598,7 @@ gboolean highlighting_is_comment_style(gint lexer, gint style)
 				style == SCE_C_COMMENTLINE ||
 				style == SCE_C_COMMENTDOC ||
 				style == SCE_C_PREPROCESSORCOMMENT ||
+				style == SCE_C_PREPROCESSORCOMMENTDOC ||
 				style == SCE_C_COMMENTLINEDOC ||
 				style == SCE_C_COMMENTDOCKEYWORD ||
 				style == SCE_C_COMMENTDOCKEYWORDERROR);
@@ -1660,10 +1674,13 @@ gboolean highlighting_is_comment_style(gint lexer, gint style)
 				style == SCE_LUA_COMMENTDOC);
 
 		case SCLEX_HASKELL:
+		case SCLEX_LITERATEHASKELL:
 			return (style == SCE_HA_COMMENTLINE ||
 				style == SCE_HA_COMMENTBLOCK ||
 				style == SCE_HA_COMMENTBLOCK2 ||
-				style == SCE_HA_COMMENTBLOCK3);
+				style == SCE_HA_COMMENTBLOCK3 ||
+				style == SCE_HA_LITERATE_COMMENT ||
+				style == SCE_HA_LITERATE_CODEDELIM);
 
 		case SCLEX_FREEBASIC:
 			return (style == SCE_B_COMMENT);
@@ -1700,6 +1717,10 @@ gboolean highlighting_is_comment_style(gint lexer, gint style)
 			return (style == SCE_ADA_COMMENTLINE ||
 				style == SCE_NSIS_COMMENTBOX);
 
+		case SCLEX_ABAQUS:
+			return (style == SCE_ABAQUS_COMMENT ||
+				 style == SCE_ABAQUS_COMMENTBLOCK);
+
 		case SCLEX_ASM:
 			return (style == SCE_ASM_COMMENT ||
 				style == SCE_ASM_COMMENTBLOCK ||
@@ -1721,9 +1742,18 @@ gboolean highlighting_is_code_style(gint lexer, gint style)
 	switch (lexer)
 	{
 		case SCLEX_CPP:
+		{
 			if (style == SCE_C_PREPROCESSOR)
 				return FALSE;
 			break;
+		}
+		case SCLEX_HASKELL:
+		case SCLEX_LITERATEHASKELL:
+		{
+			if (style == SCE_HA_PREPROCESSOR)
+				return FALSE;
+			break;
+		}
 	}
 	return !(highlighting_is_comment_style(lexer, style) ||
 		highlighting_is_string_style(lexer, style));

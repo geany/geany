@@ -1,4 +1,5 @@
-.. |(version)| replace:: 1.23
+.. |(version)| replace:: 1.24
+.. -*- reStructuredText -*-
 
 =======
  Geany
@@ -13,7 +14,7 @@
           Frank Lanitz,
           Colomban Wendling,
           Matthew Brush
-:Date: 2012-06-18
+:Date: 2013-03-10
 :Version: |(version)|
 
 Copyright © 2005-2012
@@ -143,6 +144,10 @@ Then as root::
 
     % make install
 
+Or via sudo::
+
+    % sudo make install
+
 Waf based build system
 ^^^^^^^^^^^^^^^^^^^^^^
 
@@ -174,12 +179,12 @@ using the environment variable ``WAFCACHE``.
 A possible location of the cache directory could be ``~/.cache/waf``. In order to make use of
 this, you first need to create this directory::
 
-	$ mkdir -p ~/.cache/waf
+    $ mkdir -p ~/.cache/waf
 
 then add the environment variable to your shell configuration (the following example is for
 Bash and should be adjusted to your used shell)::
 
-	export WAFCACHE=/home/username/.cache/waf
+    export WAFCACHE=/home/username/.cache/waf
 
 Remember to replace ``username`` with your actual username.
 
@@ -210,7 +215,7 @@ list, type::
     $ ./configure --help
 
 or::
-	$ ./waf --help
+    $ ./waf --help
 
 (depending on which build system you use).
 
@@ -264,6 +269,9 @@ You can start Geany in the following ways:
 
   Choose in your application menu of your used Desktop Environment:
   Development --> Geany.
+
+  At Windows-systems you will find Geany after installation inside
+  the application menu within its special folder.
 
 * From the command line:
 
@@ -778,9 +786,22 @@ Indentation
 ^^^^^^^^^^^
 
 Geany allows each document to indent either with a tab character,
-multiple spaces or a combination of both. The default indent
-settings are set in `Editor Indentation preferences`_ (see the link
-for more information).
+multiple spaces or a combination of both.
+
+The *Tabs* setting indents with one tab character per indent level, and
+displays tabs as the indent width.
+
+The *Spaces* setting indents with the number of spaces set in the indent
+width for each level.
+
+The *Tabs and Spaces* setting indents with spaces as above, then converts
+as many spaces as it can to tab characters at the rate of one tab for
+each multiple of the `Various preference` setting
+*indent_hard_tab_width* (default 8) and displays tabs as the
+*indent_hard_tab_width* value.
+
+The default indent settings are set in `Editor Indentation
+preferences`_ (see the link for more information).
 
 The default settings can be overridden per-document using the
 Document menu. They can also be overridden by projects - see
@@ -822,7 +843,10 @@ Geany has four types of auto-indentation:
 None
     Disables auto-indentation completely.
 Basic
-    Adds the same amount of whitespace on a new line as on the last line.
+    Adds the same amount of whitespace on a new line as on the previous line.
+    For the *Tabs* and the *Spaces* indent types the indentation will use the
+    same combination of characters as the previous line.  The
+    *Tabs and Spaces* indentation type converts as explained above.
 Current chars
     Does the same as *Basic* but also indents a new line after an opening
     brace '{', and de-indents when typing a closing brace '}'. For Python,
@@ -830,7 +854,10 @@ Current chars
     previous line.
 Match braces
     Similar to *Current chars* but the closing brace will be aligned to
-    match the indentation of the line with the opening brace.
+    match the indentation of the line with the opening brace.  This
+    requires the filetype to be one where Geany knows that the Scintilla
+    lexer understands matching braces (C, C++, D, HTML, Pascal, Bash,
+    Perl, TCL).
 
 There is also XML-tag auto-indentation. This is enabled when the
 mode is more than just Basic, and is also controlled by a filetype
@@ -1265,8 +1292,8 @@ Value   *find_selection_type* behaviour
 Find usage
 ^^^^^^^^^^
 
-Find usage searches all open files. It is similar to the Find All In
-Session option in the Find dialog.
+*Find Usage* searches all open files. It is similar to the *Find All In
+Session* option in the Find dialog.
 
 If there is a selection, then it is used as the search text; otherwise
 the current word is used. The current word is either taken from the
@@ -1274,11 +1301,15 @@ word nearest the edit cursor, or the word underneath the popup menu
 click position when the popup menu is used. The search results are
 shown in the Messages tab of the Message Window.
 
+.. note::
+    You can also use Find Usage for symbol list items from the popup
+    menu.
+
 
 Find in files
 ^^^^^^^^^^^^^
 
-Find in files is a more powerful version of Find usage that searches
+*Find in Files* is a more powerful version of *Find Usage* that searches
 all files in a certain directory using the Grep tool. The Grep tool
 must be correctly set in Preferences to the path of the system's Grep
 utility. GNU Grep is recommended (see note below).
@@ -1593,16 +1624,17 @@ corresponding filetype is first used. Currently these are for:
 Global tags file format
 ```````````````````````
 
-Global tags files can have two different formats:
+Global tags files can have three different formats:
 
 * Tagmanager format
 * Pipe-separated format
+* CTags format
 
 The first line of global tags files should be a comment, introduced
-by ``#`` followed by a space and a string like ``format=pipe``
-or ``format=tagmanager`` respectively, these are case-sensitive.
-This helps Geany to read the file properly. If this line
-is missing, Geany tries to auto-detect the used format but this
+by ``#`` followed by a space and a string like ``format=pipe``,
+``format=ctags`` or ``format=tagmanager`` respectively, these are
+case-sensitive.  This helps Geany to read the file properly. If this
+line is missing, Geany tries to auto-detect the used format but this
 might fail.
 
 
@@ -1610,7 +1642,8 @@ The Tagmanager format is a bit more complex and is used for files
 created by the ``geany -g`` command. There is one tag per line.
 Different tag attributes like the return value or the argument list
 are separated with different characters indicating the type of the
-following argument.
+following argument.  This is the more complete and recommended tag
+format.
 
 Pipe-separated format
 *********************
@@ -1633,6 +1666,15 @@ You can easily write your own global tag files using this format.
 Just save them in your tags directory, as described earlier in the
 section `Global tags`_.
 
+CTags format
+************
+This is the format that ctags generates, and that is used by Vim.
+This format is compatible with the format historically used by Vi.
+
+The format is described at http://ctags.sourceforge.net/FORMAT, but
+for the full list of existing extensions please refer to ctags.
+However, note that Geany may actually only honor a subset of the
+existing extensions.
 
 Generating a global tags file
 `````````````````````````````
@@ -2021,7 +2063,10 @@ Use indicators to show compile errors
 
 Newline strips trailing spaces
     Remove any whitespace at the end of the line when you hit the
-    Enter/Return key. See also `Strip trailing spaces`_.
+    Enter/Return key. See also `Strip trailing spaces`_.  Note
+    auto indentation is calculated before stripping, so although this
+    setting will clear a blank line, it will not set the next line
+    indentation back to zero.
 
 Line breaking column
     The editor column number to insert a newline at when Line Breaking
@@ -2346,7 +2391,9 @@ Tool paths
 ``````````
 
 Terminal
-    The location of your terminal executable.
+    The command to execute a script in a terminal.  Occurrences of %c
+    in the command are substituted with the run script name, see
+    `Terminal emulators`_.
 
 Browser
     The location of your web browser executable.
@@ -2465,67 +2512,53 @@ Rarely used preferences, explained in the table below. A few of them require
 restart to take effect, and a few other will only affect newly opened or created
 documents before restart.
 
-================================  =========================================  ==========  ===========
-Key                               Description                                Default     Applies
-================================  =========================================  ==========  ===========
+================================  ===========================================  ==========  ===========
+Key                               Description                                  Default     Applies
+================================  ===========================================  ==========  ===========
 **Editor related**
-use_gtk_word_boundaries           Whether to look for the end of a word      true        to new
-                                  when using word-boundary related                       documents
+use_gtk_word_boundaries           Whether to look for the end of a word        true        to new
+                                  when using word-boundary related                         documents
                                   Scintilla commands (see `Scintilla
                                   keyboard commands`_).
-brace_match_ltgt                  Whether to highlight <, > angle brackets.  false       immediately
-complete_snippets_whilst_editing  Whether to allow completion of snippets    false       immediately
+brace_match_ltgt                  Whether to highlight <, > angle brackets.    false       immediately
+complete_snippets_whilst_editing  Whether to allow completion of snippets      false       immediately
                                   when editing an existing line (i.e. there
                                   is some text after the current cursor
                                   position on the line). Only used when the
                                   keybinding `Complete snippet` is set to
                                   ``Space``.
-show_editor_scrollbars            Whether to display scrollbars. If set to   true        immediately
+show_editor_scrollbars            Whether to display scrollbars. If set to     true        immediately
                                   false, the horizontal and vertical
                                   scrollbars are hidden completely.
-indent_hard_tab_width             The size of a tab character. Don't change  8           immediately
+indent_hard_tab_width             The size of a tab character. Don't change    8           immediately
                                   it unless you really need to; use the
                                   indentation settings instead.
 **Interface related**
-show_symbol_list_expanders        Whether to show or hide the small          true        to new
-                                  expander icons on the symbol list                      documents
+show_symbol_list_expanders        Whether to show or hide the small            true        to new
+                                  expander icons on the symbol list                        documents
                                   treeview.
-allow_always_save                 Whether files can be saved always, even    false       immediately
+allow_always_save                 Whether files can be saved always, even      false       immediately
                                   if they don't have any changes.
                                   By default, the Save button and menu
                                   item are disabled when a file is
                                   unchanged. When setting this option to
                                   true, the Save button and menu item are
                                   always active and files can be saved.
-compiler_tab_autoscroll           Whether to automatically scroll to the     true        immediately
+compiler_tab_autoscroll           Whether to automatically scroll to the       true        immediately
                                   last line of the output in the Compiler
                                   tab.
-statusbar_template                The status bar statistics line format.     See below.  immediately
-                                  (Search in src/ui_utils.c for details).
-new_document_after_close          Whether to open a new document after all   false       immediately
+statusbar_template                The status bar statistics line format.       See below.  immediately
+                                  (See `Statusbar Templates`_ for details).
+new_document_after_close          Whether to open a new document after all     false       immediately
                                   documents have been closed.
-msgwin_status_visible             Whether to show the Status tab in the      true        immediately
+msgwin_status_visible             Whether to show the Status tab in the        true        immediately
                                   Messages Window
-msgwin_compiler_visible           Whether to show the Compiler tab in the    true        immediately
+msgwin_compiler_visible           Whether to show the Compiler tab in the      true        immediately
                                   Messages Window
-msgwin_messages_visible           Whether to show the Messages tab in the    true        immediately
+msgwin_messages_visible           Whether to show the Messages tab in the      true        immediately
                                   Messages Window
-msgwin_scribble_visible           Whether to show the Scribble tab in the    true        immediately
+msgwin_scribble_visible           Whether to show the Scribble tab in the      true        immediately
                                   Messages Window
-use_geany_icon                    Whether to use the Geany icon on the       false       on restart
-                                  window instead of the theme's icon
-================================  =========================================  ==========  ===========
-
-By default, statusbar_template is empty. This tells Geany to use its
-internal default, which is currently:
-
-``line: %l / %L\t col: %c\t sel: %s\t %w      %t      %mmode: %M      encoding: %e      filetype: %f      scope: %S``
-
-Note that ``\t`` = tab.
-
-================================  ===========================================  ==========  ===========
-Key                               Description                                  Default     Applies
-================================  ===========================================  ==========  ===========
 **VTE related**
 emulation                         Terminal emulation mode. Only change this    xterm       immediately
                                   if you have VTE termcap files other than
@@ -2587,6 +2620,43 @@ number_exec_menu_items            The maximum number of menu items in the      2
 
 The extract_filetype_regex has the default value GEANY_DEFAULT_FILETYPE_REGEX.
 
+Statusbar Templates
+```````````````````
+
+The default statusbar template is (note ``\t`` = tab):
+
+``line: %l / %L\t col: %c\t sel: %s\t %w      %t      %mmode: %M      encoding: %e      filetype: %f      scope: %S``
+
+Settings the preference to an empty string will also cause Geany to use this
+internal default.
+
+The following format characters are available for the statusbar template:
+
+============  ===========================================================
+Placeholder   Description
+============  ===========================================================
+  ``%l``      The current line number starting at 1
+  ``%L``      The total number of lines
+  ``%c``      The current column number starting at 0
+  ``%C``      The current column number starting at 1
+  ``%s``      The number of selected characters or if only whole lines
+              selected, the number of selected lines.
+  ``%w``      Shows ``RO`` when the document is in read-only mode,
+              otherwise shows whether the editor is in overtype (OVR)
+              or insert (INS) mode.
+  ``%t``      Shows the indentation mode, either tabs (TAB),
+              spaces (SP) or both (T/S).
+  ``%m``      Shows whether the document is modified (MOD) or nothing.
+  ``%M``      The name of the document's line-endings (ex. ``Unix (LF)``)
+  ``%e``      The name of the document's encoding (ex. UTF-8).
+  ``%f``      The filetype of the document (ex. None, Python, C, etc).
+  ``%S``      The name of the scope where the caret is located.
+  ``%p``      The caret position in the entire document starting at 0.
+  ``%r``      Shows whether the document is read-only (RO) or nothing.
+  ``%Y``      The Scintilla style number at the caret position. This is
+              useful if you're debugging color schemes or related code.
+============  ===========================================================
+
 Terminal (VTE) preferences
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -2605,6 +2675,9 @@ Foreground color
 
 Background color
     Select the background color of the terminal.
+
+Background image
+    Select the background image to show behind the terminal's text.
 
 Scrollback lines
     The number of lines buffered so that you can scroll though the history.
@@ -2839,15 +2912,14 @@ Execute
 ```````
 
 Execute will run the corresponding executable file, shell script or
-interpreted script in a terminal window. Note that the Terminal tool
-path must be correctly set in the Tools tab of the Preferences dialog -
-you can use any terminal program that runs a Bourne compatible shell
-and accept the "-e" command line argument to start a command or can be
-selected to use the built-in VTE if it is available - see
-`Virtual terminal emulator widget (VTE)`_.
+interpreted script in a terminal window. The command set in the
+"Set Build Commands" dialog is run in a script to ensure the terminal
+stays open after execution completes.  Note: see `Terminal emulators`_
+below for the command format.  Alternatively the built-in VTE can be used
+if it is available - see `Virtual terminal emulator widget (VTE)`_.
 
-After your program or script has finished executing, you will be
-prompted to press the return key. This allows you to review any text
+After your program or script has finished executing, the run script will
+prompt you to press the return key. This allows you to review any text
 output from the program before the terminal window is closed.
 
 .. note::
@@ -2870,11 +2942,16 @@ more than one child process.
 Terminal emulators
 ******************
 
-Xterm is known to work properly. If you are using "Terminal"
-(the terminal program of Xfce), you should add the command line
-option ``--disable-server`` otherwise the started process cannot be
-stopped. Just add this option in the preferences dialog on the Tools
-tab in the terminal field.
+The Terminal field of the tools preferences tab requires a command to
+execute the terminal program and to pass it the name of the Geany run
+script that it should execute in a Bourne compatible shell (eg /bin/sh).
+The marker "%c" is substituted with the name of the Geany run script,
+which is created in the working directory set in the Build commands
+dialog, see `Build menu commands dialog`_ for details.
+
+As an example the default (Linux) command is::
+
+    xterm -e "/bin/sh %c"
 
 
 Set build commands
@@ -2910,7 +2987,7 @@ behaviors:
   compiler tab and parse it for errors.
 * Execute commands - are configurable and intended for executing your
   program or other long running programs.  The output is not parsed for errors
-  and is directed to the terminal selected in preferences.
+  and is directed to the terminal command selected in preferences.
 * Fixed commands - these perform built-in actions:
 
   * Go to the next error.
@@ -3202,14 +3279,6 @@ want to assign to the action and it will be saved when you press OK.
 You can define only one key combination for each action and each key
 combination can only be defined for one action.
 
-Some of the default key combinations are common across many
-applications, for example *Ctrl-N* for New and *Ctrl-O* for Open.
-Because they are so common it is not advisable to change these, but
-you can add other key combinations for these actions. For example
-*Ctrl-O* is set to execute menu_open by default, but you can also
-define *Alt-O*, so that the file open dialog is shown by pressing
-either *Ctrl-O* or *Alt-O*.
-
 The following tables list all customizable keyboard shortcuts, those
 which are common to many applications are marked with (C) after the
 shortcut.
@@ -3241,6 +3310,8 @@ Reload file                     Ctrl-R  (C)               Reloads the current fi
                                                           will be lost.
 
 Print                           Ctrl-P  (C)               Prints the current file.
+
+Quit                            Ctrl-Q  (C)               Quits Geany.
 =============================== ========================= ==================================================
 
 
@@ -3762,6 +3833,8 @@ on Windows.
 
 The user configuration directory might vary, but on Windows XP it's:
 ``C:\Documents and Settings\UserName\Application Data\geany``
+On Windows 7 and above you most likely will find it at:
+``C:\users\UserName\Roaming\geany``
 
 
 Tools menu items
@@ -3879,13 +3952,14 @@ the '``*``' wildcard - e.g. ``filetypes.Bar.conf``.
 Custom filetypes are not as powerful as built-in filetypes, but
 support for the following has been implemented:
 
-* Recognizing and setting the filetype (after the user has manually edited
-  ``filetype_extensions.conf``).
+* Recognizing and setting the filetype (after the user has manually updated
+  the `filetype extensions`_ file).
+* `Filetype group membership`_.
 * Reading filetype settings in the ``[settings]`` section, including:
     * Using an existing syntax highlighting lexer (`lexer_filetype`_ key).
-    * Using an existing tag parser (``tag_parser`` key).
+    * Using an existing tag parser (`tag_parser`_ key).
 * Build commands (``[build-menu]`` section).
-* Loading global tags files (sharing the ``tag_parser`` namespace).
+* Loading global tags files (sharing the ``tag_parser`` filetype's namespace).
 
 See `Filetype configuration`_ for details on each setting.
 
@@ -4092,6 +4166,8 @@ context_action_cmd
     context_action_cmd=firefox "http://www.php.net/%s"
 
     *Example:* ``context_action_cmd=devhelp -s "%s"``
+
+.. _tag_parser:
 
 tag_parser
     The TagManager language name, e.g. "C". Usually the same as the
@@ -4503,8 +4579,9 @@ whitespace_chars
 Filetype extensions
 -------------------
 
-To change the default filetype extension used when saving a new file,
-see `Filetype definition files`_.
+.. note::
+    To change the default filetype extension used when saving a new file,
+    see `Filetype definition files`_.
 
 You can override the list of file extensions that Geany uses to detect
 filetypes using the user ``filetype_extensions.conf`` file. Use the
@@ -4524,7 +4601,7 @@ should look like::
     Make=Makefile*;*.mk;Buildfile;
 
 Filetype group membership
--------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^
 Group membership is also stored in ``filetype_extensions.conf``. This
 file is used to store information Geany needs at startup, whereas the
 separate filetype definition files hold information only needed when
@@ -4781,7 +4858,7 @@ geanyversion   The actual Geany version, e.g.                file templates, fil
 
 filename       The filename of the current file.             file header, snippets, file
                For new files, it's only replaced when        templates.
-               first saving if found on the first 3 lines
+               first saving if found on the first 4 lines
                of the file.
 
 project        The current project's name, if any.           file header, snippets, file templates.
@@ -5240,9 +5317,8 @@ GEANY_MIN_SYMBOLLIST_CHARS      How many characters you need to type to       4
 GEANY_DISK_CHECK_TIMEOUT        Time in seconds between checking a file for   30
                                 external changes.
 GEANY_DEFAULT_TOOLS_MAKE        The make tool. This can also include a path.  "make"
-GEANY_DEFAULT_TOOLS_TERMINAL    A terminal emulator. It has to accept the     "xterm"
-                                command line option "-e". This can also
-                                include a path.
+GEANY_DEFAULT_TOOLS_TERMINAL    A terminal emulator command, see              See below.
+                                `Terminal emulators`_.
 GEANY_DEFAULT_TOOLS_BROWSER     A web browser. This can also include a path.  "firefox"
 GEANY_DEFAULT_TOOLS_PRINTCMD    A printing tool. It should be able to accept  "lpr"
                                 and process plain text files. This can also
@@ -5263,6 +5339,15 @@ GEANY_DEFAULT_FILETYPE_REGEX    The default regex to extract filetypes from   Se
 ==============================  ============================================  ==================
 
 The GEANY_DEFAULT_FILETYPE_REGEX default value is  -\\*-\\s*([^\\s]+)\\s*-\\*- which finds Emacs filetypes.
+
+The GEANY_DEFAULT_TOOLS_TERMINAL default value on Windows is::
+
+    cmd.exe /Q /C %c
+
+and on any non-Windows system is::
+
+    xterm -e "/bin/sh %c"
+
 
 build.c
 -------

@@ -82,7 +82,8 @@ typedef enum eKeywordId
 	KEYWORD_PROGRAM, KEYWORD_PROTECTED, KEYWORD_PUBLIC,
 	KEYWORD_REF, KEYWORD_REGISTER, KEYWORD_RETURN,
 	KEYWORD_SHADOW, KEYWORD_STATE,
-	KEYWORD_SET, KEYWORD_SHORT, KEYWORD_SIGNAL, KEYWORD_SIGNED, KEYWORD_SIZE_T, KEYWORD_STATIC, KEYWORD_STRING,
+	KEYWORD_SET, KEYWORD_SHORT, KEYWORD_SIGNAL, KEYWORD_SIGNED, KEYWORD_SIZE_T, KEYWORD_STATIC,
+	KEYWORD_STATIC_ASSERT, KEYWORD_STRING,
 	KEYWORD_STRUCT, KEYWORD_SWITCH, KEYWORD_SYNCHRONIZED,
 	KEYWORD_TASK, KEYWORD_TEMPLATE, KEYWORD_THIS, KEYWORD_THROW,
 	KEYWORD_THROWS, KEYWORD_TRANSIENT, KEYWORD_TRANS, KEYWORD_TRANSITION,
@@ -203,6 +204,7 @@ typedef struct sStatementInfo
 	boolean			haveQualifyingName;	/* do we have a name we are considering? */
 	boolean			gotParenName;		/* was a name inside parentheses parsed yet? */
 	boolean			gotArgs;			/* was a list of parameters parsed yet? */
+	unsigned int	nSemicolons;			/* how many semicolons did we see in that statement */
 	impType			implementation;		/* abstract or concrete implementation? */
 	unsigned int	tokenIndex;			/* currently active token */
 	tokenInfo*		token [((int) NumTokens)];
@@ -326,7 +328,7 @@ typedef enum
 {
 	JK_UNDEFINED = -1,
 	JK_CLASS, JK_FIELD, JK_INTERFACE, JK_METHOD,
-	JK_PACKAGE
+	JK_PACKAGE, JK_ENUMERATOR, JK_ENUMERATION
 } javaKind;
 
 static kindOption JavaKinds [] = {
@@ -335,6 +337,8 @@ static kindOption JavaKinds [] = {
 	{ TRUE,  'i', "interface", "interfaces"},
 	{ TRUE,  'm', "method", "methods"},
 	{ TRUE,  'p', "package", "packages"},
+	{ TRUE,  'e', "enumerator", "enumerators (values inside an enumeration)"},
+	{ TRUE,  'g', "enum",       "enumeration names"},
 };
 
 typedef enum
@@ -476,6 +480,7 @@ static const keywordDesc KeywordTable [] = {
 	{ "size_t",         KEYWORD_SIZE_T,         { 1, 1, 0, 0, 0, 1, 1 } },
 	{ "state",          KEYWORD_STATE,          { 0, 0, 0, 0, 1, 0, 0 } },
 	{ "static",         KEYWORD_STATIC,         { 1, 1, 1, 1, 1, 1, 1 } },
+	{ "static_assert",  KEYWORD_STATIC_ASSERT,  { 0, 1, 0, 0, 0, 0, 0 } },
 	{ "string",         KEYWORD_STRING,         { 0, 0, 1, 0, 1, 1, 0 } },
 	{ "struct",         KEYWORD_STRUCT,         { 1, 1, 1, 0, 0, 1, 1 } },
 	{ "switch",         KEYWORD_SWITCH,         { 1, 1, 1, 1, 0, 1, 1 } },
@@ -735,7 +740,7 @@ static const char *keywordString (const keywordId keyword)
 	return name;
 }
 
-static void __unused__ pt (tokenInfo *const token)
+static void UNUSED pt (tokenInfo *const token)
 {
 	if (isType (token, TOKEN_NAME))
 		printf("type: %-12s: %-13s   line: %lu\n",
@@ -750,7 +755,7 @@ static void __unused__ pt (tokenInfo *const token)
 			   tokenString (token->type), token->lineNumber);
 }
 
-static void __unused__ ps (statementInfo *const st)
+static void UNUSED ps (statementInfo *const st)
 {
 	unsigned int i;
 	printf("scope: %s   decl: %s   gotName: %s   gotParenName: %s\n",
@@ -938,6 +943,7 @@ static void reinitStatement (statementInfo *const st, const boolean partial)
 	st->implementation		= IMP_DEFAULT;
 	st->gotArgs				= FALSE;
 	st->gotName				= FALSE;
+	st->nSemicolons			= 0;
 	st->haveQualifyingName	= FALSE;
 	st->argEndPosition		= 0;
 
@@ -1087,11 +1093,13 @@ static javaKind javaTagKind (const tagType type)
 	javaKind result = JK_UNDEFINED;
 	switch (type)
 	{
-		case TAG_CLASS:     result = JK_CLASS;     break;
-		case TAG_FIELD:     result = JK_FIELD;     break;
-		case TAG_INTERFACE: result = JK_INTERFACE; break;
-		case TAG_METHOD:    result = JK_METHOD;    break;
-		case TAG_PACKAGE:   result = JK_PACKAGE;   break;
+		case TAG_CLASS:      result = JK_CLASS;         break;
+		case TAG_FIELD:      result = JK_FIELD;         break;
+		case TAG_INTERFACE:  result = JK_INTERFACE;     break;
+		case TAG_METHOD:     result = JK_METHOD;        break;
+		case TAG_PACKAGE:    result = JK_PACKAGE;       break;
+		case TAG_ENUM:       result = JK_ENUMERATION;   break;
+		case TAG_ENUMERATOR: result = JK_ENUMERATOR;    break;
 
 		default: Assert ("Bad Java tag type" == NULL); break;
 	}
@@ -1678,9 +1686,12 @@ static keywordId analyzeKeyword (const char *const name)
 {
 	const keywordId id = (keywordId) lookupKeyword (name, getSourceLanguage ());
 
-	/* ignore D @attributes, but show them in function signatures */
-	if (isLanguage(Lang_d) && id == KEYWORD_NONE && name[0] == '@')
+	/* ignore D @attributes and Java @annotations(...), but show them in function signatures */
+	if ((isLanguage(Lang_d) || isLanguage(Lang_java)) && id == KEYWORD_NONE && name[0] == '@')
+	{
+		skipParens(); /* if annotation has parameters, skip them */
 		return KEYWORD_CONST;
+	}
 	return id;
 }
 
@@ -2011,6 +2022,7 @@ static void processToken (tokenInfo *const token, statementInfo *const st)
 		case KEYWORD_SHORT:		st->declaration = DECL_BASE;		break;
 		case KEYWORD_SIGNED:	st->declaration = DECL_BASE;		break;
 		case KEYWORD_STRUCT:	checkIsClassEnum (st, DECL_STRUCT);	break;
+		case KEYWORD_STATIC_ASSERT: skipParens ();                  break;
 		case KEYWORD_THROWS:	discardTypeList (token);			break;
 		case KEYWORD_TYPEDEF:	st->scope	= SCOPE_TYPEDEF;		break;
 		case KEYWORD_UNION:		st->declaration = DECL_UNION;		break;
@@ -2623,20 +2635,21 @@ static void processColon (statementInfo *const st)
 		{
 			readParents (st, ':');
 		}
-		else if (parentDecl (st) == DECL_STRUCT || parentDecl (st) == DECL_CLASS)
-		{
-			c = skipToOneOf (",;");
-			if (c == ',')
-				setToken (st, TOKEN_COMMA);
-			else if (c == ';')
-				setToken (st, TOKEN_SEMICOLON);
-		}
-		else if (isLanguage (Lang_cpp) && st->declaration == DECL_ENUM)
+		else if ((isLanguage (Lang_cpp) || isLanguage (Lang_csharp)) &&
+				 st->declaration == DECL_ENUM)
 		{
 			/* skip enum's base type */
 			c = skipToOneOf ("{;");
 			if (c == '{')
 				setToken (st, TOKEN_BRACE_OPEN);
+			else if (c == ';')
+				setToken (st, TOKEN_SEMICOLON);
+		}
+		else if (parentDecl (st) == DECL_STRUCT || parentDecl (st) == DECL_CLASS)
+		{
+			c = skipToOneOf (",;");
+			if (c == ',')
+				setToken (st, TOKEN_COMMA);
 			else if (c == ';')
 				setToken (st, TOKEN_SEMICOLON);
 		}
@@ -2779,6 +2792,9 @@ static void nextToken (statementInfo *const st)
 		}
 	} while (isType (token, TOKEN_NONE));
 
+	if (isType (token, TOKEN_SEMICOLON) && st->parent)
+		st->parent->nSemicolons ++;
+
 	/* We want to know about non-keyword variable types */
 	if (TOKEN_NONE == st->firstToken->type)
 	{
@@ -2906,7 +2922,9 @@ static void tagCheck (statementInfo *const st)
 	{
 		case TOKEN_NAME:
 		{
-			if (insideEnumBody (st))
+			if (insideEnumBody (st) &&
+				/* Java enumerations can contain members after a semicolon */
+				(! isLanguage(Lang_java) || st->parent->nSemicolons < 1))
 				qualifyEnumeratorTag (st, token);
 			break;
 		}
@@ -3015,7 +3033,9 @@ static void tagCheck (statementInfo *const st)
 		case TOKEN_SEMICOLON:
 		case TOKEN_COMMA:
 		{
-			if (insideEnumBody (st))
+			if (insideEnumBody (st) &&
+				/* Java enumerations can contain members after a semicolon */
+				(! isLanguage (Lang_java) || st->parent->nSemicolons < 2))
 				;
 			else if (isType (prev, TOKEN_NAME))
 			{

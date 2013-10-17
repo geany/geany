@@ -31,6 +31,7 @@
 #include "support.h"
 #include "geanywraplabel.h"
 #include "main.h"
+#include "templates.h"
 
 #include "gb.c"
 
@@ -57,7 +58,8 @@ const gchar *translators[][2] = {
 	{ "fi", "Harri Koskinen &lt;harri@fastmonkey.org&gt;\nJari Rahkonen &lt;jari.rahkonen@pp1.inet.fi&gt;" },
 	{ "fr", "Jean-Philippe Moal &lt;skateinmars@skateinmars.net&gt;" },
 	{ "gl", "José Manuel Castroagudín Silva &lt;chavescesures@gmail.com&gt;"},
-	{ "he", "Yosef Or Botschko &lt;yosefor3@walla.com&gt;"},
+	{ "hi", "Asheesh Ranjan &lt;asheeshranjan1@gmail.com&gt;"},
+	{ "he", "Yosef Or Boczko &lt;yoseforb@gmail.com&gt;"},
 	{ "hu", "Gabor Kmetyko &lt;kg_kilo@freemail.hu&gt;" },
 	{ "it", "Max Baldinelli &lt;m.baldinelli@agora.it&gt;,\nDario Santomarco &lt;dariello@yahoo.it&gt;" },
 	{ "ja", "Tarot Osuji &lt;tarot@sdf.lonestar.org&gt;\nChikahiro Masami &lt;cmasa.z321@gmail.com&gt;" },
@@ -72,10 +74,11 @@ const gchar *translators[][2] = {
 			   "Adrovane Marques Kade &lt;adrovane@gmail.com&gt;\n"
 			   "Rafael Peregrino da Silva &lt;rperegrino@linuxnewmedia.com.br&gt;"},
 	{ "ro", "Alex Eftimie &lt;alex@rosedu.org&gt;" },
-	{ "ru_RU", "brahmann_ &lt;brahmann@pisem.net&gt;,\nNikita E. Shalaev &lt;nshalaev@eu.spb.ru&gt;" },
+	{ "ru", "brahmann_ &lt;brahmann@pisem.net&gt;,\nNikita E. Shalaev &lt;nshalaev@eu.spb.ru&gt;" },
 	{ "sk", "Tomáš Vadina &lt;kyberdev@gmail.com&gt;" },
 	{ "sl", "Jože Klepec &lt;joze.klepec@siol.net&gt;"},
 	{ "sv", "Tony Mattsson &lt;superxorn@gmail.com&gt;" },
+	{ "sr", "Nikola Radovanovic &lt;cobisimo@gmail.com&gt;"},
 	{ "tr", "Gürkan Gür &lt;seqizz@gmail.com&gt;"},
 	{ "uk", "Boris Dibrov &lt;dibrov.bor@gmail.com&gt;" },
 	{ "vi_VN", "Clytie Siddall &lt;clytie@riverland.net.au&gt;" },
@@ -145,12 +148,12 @@ static GtkWidget *create_dialog(void)
 	GtkWidget *info_box;
 	GtkWidget *header_hbox;
 	GtkWidget *header_eventbox;
-	GdkPixbuf *icon;
 	GtkTextBuffer* tb;
 	gchar *license_text = NULL;
 	gchar buffer[512];
 	gchar buffer2[128];
 	guint i, row = 0;
+	gchar *build_date;
 
 	dialog = gtk_dialog_new();
 
@@ -158,6 +161,7 @@ static GtkWidget *create_dialog(void)
 	gtk_window_set_transient_for(GTK_WINDOW(dialog), GTK_WINDOW(main_widgets.window));
 	gtk_window_set_position(GTK_WINDOW(dialog), GTK_WIN_POS_CENTER_ON_PARENT);
 	gtk_window_set_title(GTK_WINDOW(dialog), _("About Geany"));
+	gtk_window_set_icon_name(GTK_WINDOW(dialog), "geany");
 	gtk_widget_set_name(dialog, "GeanyDialog");
 	gtk_dialog_add_button(GTK_DIALOG(dialog), GTK_STOCK_CLOSE, GTK_RESPONSE_CLOSE);
 	gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_CLOSE);
@@ -171,7 +175,7 @@ static GtkWidget *create_dialog(void)
 	gtk_container_set_border_width(GTK_CONTAINER(header_hbox), 4);
 	gtk_widget_show(header_hbox);
 	gtk_container_add(GTK_CONTAINER(header_eventbox), header_hbox);
-	header_image = gtk_image_new();
+	header_image = gtk_image_new_from_icon_name("geany", GTK_ICON_SIZE_DIALOG);
 	gtk_box_pack_start(GTK_BOX(header_hbox), header_image, FALSE, FALSE, 0);
 	header_label = gtk_label_new(NULL);
 	gtk_label_set_use_markup(GTK_LABEL(header_label), TRUE);
@@ -185,12 +189,6 @@ static GtkWidget *create_dialog(void)
 	g_signal_connect_after(header_eventbox, "style-set", G_CALLBACK(header_eventbox_style_set), NULL);
 	g_signal_connect_after(header_label, "style-set", G_CALLBACK(header_label_style_set), NULL);
 	gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))), header_eventbox, FALSE, FALSE, 0);
-
-	/* set image */
-	icon = ui_new_pixbuf_from_inline(GEANY_IMAGE_LOGO);
-	gtk_image_set_from_pixbuf(GTK_IMAGE(header_image), icon);
-	gtk_window_set_icon(GTK_WINDOW(dialog), icon);
-	g_object_unref(icon);	/* free our reference */
 
 	/* create notebook */
 	notebook = gtk_notebook_new();
@@ -228,7 +226,9 @@ static GtkWidget *create_dialog(void)
 	gtk_label_set_justify(GTK_LABEL(builddate_label), GTK_JUSTIFY_CENTER);
 	gtk_label_set_selectable(GTK_LABEL(builddate_label), TRUE);
 	gtk_label_set_use_markup(GTK_LABEL(builddate_label), TRUE);
-	g_snprintf(buffer2, sizeof(buffer2), _("(built on or after %s)"), __DATE__);
+	build_date = utils_parse_and_format_build_date(__DATE__);
+	g_snprintf(buffer2, sizeof(buffer2), _("(built on or after %s)"), build_date);
+	g_free(build_date);
 	g_snprintf(buffer, sizeof(buffer), BUILDDATE, buffer2);
 	gtk_label_set_markup(GTK_LABEL(builddate_label), buffer);
 	gtk_misc_set_padding(GTK_MISC(builddate_label), 2, 2);

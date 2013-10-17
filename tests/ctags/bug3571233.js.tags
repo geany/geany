@@ -1,0 +1,11 @@
+# format=tagmanager
+MyClassÌ1Ö0
+MyClassÌ16Ö0
+function1Ì16Ö0
+function2Ì16Ö0
+method2Ì128ÎMyClassÖ0
+nestedFunction1Ì16ÎMyClass.method2Ö0
+nestedFunction2Ì16ÎMyClass.method2Ö0
+nestedFunction3Ì16Îfunction1Ö0
+nestedFunction4Ì16Îfunction2Ö0
+nestedFunction5Ì16Îfunction2Ö0

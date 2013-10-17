@@ -34,7 +34,7 @@ static kindOption LuaKinds [] = {
 */
 
 /* for debugging purposes */
-static void __unused__ print_string (char *p, char *q)
+static void UNUSED print_string (char *p, char *q)
 {
 	for ( ; p != q; p++)
 		fprintf (errout, "%c", *p);

@@ -1,12 +1,12 @@
 dnl Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.60])
-AC_INIT([Geany], [1.23],
+AC_INIT([Geany], [1.24],
 		[https://sourceforge.net/tracker/?group_id=153444&atid=787791])
 AC_CONFIG_SRCDIR([src/geany.h])
 AC_CONFIG_AUX_DIR([build-aux])
 AC_CONFIG_MACRO_DIR([m4])
-AM_INIT_AUTOMAKE
+AM_INIT_AUTOMAKE([1.11 parallel-tests])
 AC_CONFIG_HEADERS([config.h])
 
 m4_ifdef([AM_SILENT_RULES],[AM_SILENT_RULES([yes])])
@@ -46,7 +46,7 @@ AC_TYPE_SIZE_T
 AC_STRUCT_TM
 
 # Checks for library functions.
-AC_CHECK_FUNCS([gethostname ftruncate fgetpos mkstemp strerror strstr])
+AC_CHECK_FUNCS([ftruncate fgetpos mkstemp strerror strstr])
 
 # autoscan end
 
@@ -56,14 +56,27 @@ GEANY_CHECK_REVISION([dnl force debug mode for a SVN working copy
 					  CFLAGS="-g -DGEANY_DEBUG $CFLAGS"])
 
 
+AC_ARG_ENABLE([gtk3],
+		[AS_HELP_STRING([--enable-gtk3],
+						[compile with GTK3 support (experimental) [default=no]])],
+		[enable_gtk3=$enableval],
+		[enable_gtk3=no])
+
+AS_IF([test "x$enable_gtk3" = xyes],
+	  [gtk_package=gtk+-3.0
+	   gtk_min_version=3.0],
+	  [gtk_package=gtk+-2.0
+	   gtk_min_version=2.16])
+AM_CONDITIONAL([GTK3], [test "x$gtk_package" = "xgtk+-3.0"])
+
 # GTK/GLib/GIO checks
-gtk_modules="gtk+-2.0 >= 2.16 glib-2.0 >= 2.20"
+gtk_modules="$gtk_package >= $gtk_min_version glib-2.0 >= 2.20"
 gtk_modules_private="gio-2.0 >= 2.20 gmodule-2.0"
 PKG_CHECK_MODULES([GTK], [$gtk_modules $gtk_modules_private])
 AC_SUBST([DEPENDENCIES], [$gtk_modules])
 AC_SUBST([GTK_CFLAGS])
 AC_SUBST([GTK_LIBS])
-GTK_VERSION=`$PKG_CONFIG --modversion gtk+-2.0`
+GTK_VERSION=`$PKG_CONFIG --modversion $gtk_package`
 GEANY_STATUS_ADD([Using GTK version], [${GTK_VERSION}])
 # GTHREAD checks
 gthread_modules="gthread-2.0"
@@ -102,8 +115,16 @@ AC_CONFIG_FILES([
 		Makefile
 		icons/Makefile
 		icons/16x16/Makefile
+		icons/24x24/Makefile
+		icons/32x32/Makefile
 		icons/48x48/Makefile
 		icons/scalable/Makefile
+		icons/tango/Makefile
+		icons/tango/16x16/Makefile
+		icons/tango/24x24/Makefile
+		icons/tango/32x32/Makefile
+		icons/tango/48x48/Makefile
+		icons/tango/scalable/Makefile
 		tagmanager/Makefile
 		tagmanager/ctags/Makefile
 		tagmanager/mio/Makefile
@@ -118,6 +139,8 @@ AC_CONFIG_FILES([
 		geany.spec
 		geany.pc
 		doc/Doxyfile
+		tests/Makefile
+		tests/ctags/Makefile
 ])
 AC_OUTPUT
 

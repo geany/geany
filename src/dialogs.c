@@ -55,6 +55,7 @@
 #include "build.h"
 #include "main.h"
 #include "project.h"
+#include "gtkcompat.h"
 
 
 enum
@@ -155,7 +156,7 @@ static void open_file_dialog_handle_response(GtkWidget *dialog, gint response)
 		}
 		g_slist_free(filelist);
 	}
-	if (app->project && NZV(app->project->base_path))
+	if (app->project && !EMPTY(app->project->base_path))
 		gtk_file_chooser_remove_shortcut_folder(GTK_FILE_CHOOSER(dialog),
 			app->project->base_path, NULL);
 }
@@ -319,7 +320,7 @@ static GtkWidget *add_file_open_extra_widget(GtkWidget *dialog)
 					(GtkAttachOptions) (0), 4, 5);
 	/* the ebox is for the tooltip, because gtk_combo_box can't show tooltips */
 	filetype_ebox = gtk_event_box_new();
-	filetype_combo = gtk_combo_box_new_text();
+	filetype_combo = gtk_combo_box_text_new();
 	gtk_combo_box_set_wrap_width(GTK_COMBO_BOX(filetype_combo), 2);
 	gtk_widget_set_tooltip_text(filetype_ebox,
 		_("Explicitly defines a filetype for the file, if it would not be detected by filename extension.\nNote if you choose multiple files, they will all be opened with the chosen filetype."));
@@ -377,7 +378,7 @@ static GtkWidget *create_open_file_dialog(void)
 	gtk_file_chooser_set_extra_widget(GTK_FILE_CHOOSER(dialog), add_file_open_extra_widget(dialog));
 	filetype_combo = ui_lookup_widget(dialog, "filetype_combo");
 
-	gtk_combo_box_append_text(GTK_COMBO_BOX(filetype_combo), _("Detect by file extension"));
+	gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(filetype_combo), _("Detect by file extension"));
 	/* add FileFilters(start with "All Files") */
 	gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(dialog),
 				filetypes_create_file_filter(filetypes[GEANY_FILETYPES_NONE]));
@@ -390,7 +391,7 @@ static GtkWidget *create_open_file_dialog(void)
 
 		if (G_UNLIKELY(ft->id == GEANY_FILETYPES_NONE))
 			continue;
-		gtk_combo_box_append_text(GTK_COMBO_BOX(filetype_combo), ft->title);
+		gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(filetype_combo), ft->title);
 		gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(dialog), filetypes_create_file_filter(ft));
 	}
 	gtk_combo_box_set_active(GTK_COMBO_BOX(filetype_combo), 0);
@@ -468,7 +469,7 @@ void dialogs_show_open_file(void)
 		if (initdir != NULL && g_path_is_absolute(initdir))
 				gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog), initdir);
 
-		if (app->project && NZV(app->project->base_path))
+		if (app->project && !EMPTY(app->project->base_path))
 			gtk_file_chooser_add_shortcut_folder(GTK_FILE_CHOOSER(dialog),
 					app->project->base_path, NULL);
 
@@ -485,7 +486,7 @@ static gboolean handle_save_as(const gchar *utf8_filename, gboolean rename_file)
 	GeanyDocument *doc = document_get_current();
 	gboolean success = FALSE;
 
-	g_return_val_if_fail(NZV(utf8_filename), FALSE);
+	g_return_val_if_fail(!EMPTY(utf8_filename), FALSE);
 
 	if (doc->file_name != NULL)
 	{
@@ -514,7 +515,7 @@ static gboolean save_as_dialog_handle_response(GtkWidget *dialog, gint response)
 	{
 		case GEANY_RESPONSE_RENAME:
 			/* rename doesn't check for empty filename or overwriting */
-			if (G_UNLIKELY(! NZV(new_filename)))
+			if (G_UNLIKELY(EMPTY(new_filename)))
 			{
 				utils_beep();
 				break;
@@ -627,7 +628,7 @@ static gboolean show_save_as_gtk(GeanyDocument *doc)
 		g_free(fname);
 	}
 
-	if (app->project && NZV(app->project->base_path))
+	if (app->project && !EMPTY(app->project->base_path))
 		gtk_file_chooser_add_shortcut_folder(GTK_FILE_CHOOSER(dialog),
 			app->project->base_path, NULL);
 
@@ -638,7 +639,7 @@ static gboolean show_save_as_gtk(GeanyDocument *doc)
 	}
 	while (! save_as_dialog_handle_response(dialog, resp));
 
-	if (app->project && NZV(app->project->base_path))
+	if (app->project && !EMPTY(app->project->base_path))
 		gtk_file_chooser_remove_shortcut_folder(GTK_FILE_CHOOSER(dialog),
 			app->project->base_path, NULL);
 
@@ -695,12 +696,7 @@ static void show_msgbox_dialog(GtkWidget *dialog, GtkMessageType type, GtkWindow
 			break;
 	}
 	gtk_window_set_title(GTK_WINDOW(dialog), title);
-	if (parent == NULL || GTK_IS_DIALOG(parent))
-	{
-		GdkPixbuf *pb = ui_new_pixbuf_from_inline(GEANY_IMAGE_LOGO);
-		gtk_window_set_icon(GTK_WINDOW(dialog), pb);
-		g_object_unref(pb);
-	}
+	gtk_window_set_icon_name(GTK_WINDOW(dialog), "geany");
 	gtk_widget_set_name(dialog, "GeanyDialog");
 
 	gtk_dialog_run(GTK_DIALOG(dialog));
@@ -825,6 +821,20 @@ gboolean dialogs_show_unsaved_file(GeanyDocument *doc)
 
 
 #ifndef G_OS_WIN32
+/* Use GtkFontChooserDialog on GTK3.2 for consistency, and because
+ * GtkFontSelectionDialog is somewhat broken on 3.4 */
+#if GTK_CHECK_VERSION(3, 2, 0)
+#	undef GTK_FONT_SELECTION_DIALOG
+#	define GTK_FONT_SELECTION_DIALOG				GTK_FONT_CHOOSER_DIALOG
+
+#	define gtk_font_selection_dialog_new(title) \
+		gtk_font_chooser_dialog_new((title), NULL)
+#	define gtk_font_selection_dialog_get_font_name(dlg) \
+		gtk_font_chooser_get_font(GTK_FONT_CHOOSER(dlg))
+#	define gtk_font_selection_dialog_set_font_name(dlg, font) \
+		gtk_font_chooser_set_font(GTK_FONT_CHOOSER(dlg), (font))
+#endif
+
 static void
 on_font_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 {
@@ -931,7 +941,7 @@ on_input_dialog_response(GtkDialog *dialog, gint response, GtkWidget *entry)
 		if (persistent)
 		{
 			GtkWidget *combo = (GtkWidget *) g_object_get_data(G_OBJECT(dialog), "combo");
-			ui_combo_box_add_to_history(GTK_COMBO_BOX_ENTRY(combo), str, 0);
+			ui_combo_box_add_to_history(GTK_COMBO_BOX_TEXT(combo), str, 0);
 		}
 		input_cb(str);
 	}
@@ -955,7 +965,7 @@ static void add_input_widgets(GtkWidget *dialog, GtkWidget *vbox,
 
 	if (persistent)	/* remember previous entry text in a combo box */
 	{
-		GtkWidget *combo = gtk_combo_box_entry_new_text();
+		GtkWidget *combo = gtk_combo_box_text_new_with_entry();
 
 		entry = gtk_bin_get_child(GTK_BIN(combo));
 		ui_entry_add_clear_icon(GTK_ENTRY(entry));
@@ -1133,7 +1143,7 @@ gboolean dialogs_show_input_numeric(const gchar *title, const gchar *label_text,
 
 void dialogs_show_file_properties(GeanyDocument *doc)
 {
-	GtkWidget *dialog, *label, *table, *hbox, *image, *perm_table, *check, *vbox;
+	GtkWidget *dialog, *label, *image, *check;
 	gchar *file_size, *title, *base_name, *time_changed, *time_modified, *time_accessed, *enctext;
 	gchar *short_name;
 	GdkPixbuf *pixbuf;
@@ -1199,312 +1209,76 @@ void dialogs_show_file_properties(GeanyDocument *doc)
 
 	base_name = g_path_get_basename(doc->file_name);
 	short_name = utils_str_middle_truncate(base_name, 30);
-	title = g_strconcat(short_name, " ", _("Properties"), NULL);
-	dialog = gtk_dialog_new_with_buttons(title, GTK_WINDOW(main_widgets.window),
-										 GTK_DIALOG_DESTROY_WITH_PARENT,
-										 GTK_STOCK_CLOSE, GTK_RESPONSE_CANCEL, NULL);
+	title = g_strdup_printf(_("%s Properties"), short_name);
+	dialog = ui_builder_get_object("properties_dialog");
+	gtk_window_set_title(GTK_WINDOW(dialog), title);
 	g_free(short_name);
 	g_free(title);
 	gtk_widget_set_name(dialog, "GeanyDialog");
-	vbox = ui_dialog_vbox_new(GTK_DIALOG(dialog));
 
-	g_signal_connect(dialog, "response", G_CALLBACK(gtk_widget_destroy), NULL);
-	g_signal_connect(dialog, "delete-event", G_CALLBACK(gtk_widget_destroy), NULL);
+	label = ui_lookup_widget(dialog, "file_name_label");
+	gtk_label_set_text(GTK_LABEL(label), base_name);
 
-	gtk_window_set_default_size(GTK_WINDOW(dialog), 300, -1);
-
-	label = ui_label_new_bold(base_name);
-	gtk_label_set_selectable(GTK_LABEL(label), TRUE);
-	gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
+	image = ui_lookup_widget(dialog, "file_type_image");
 	pixbuf = ui_get_mime_icon(doc->file_type->mime_type, GTK_ICON_SIZE_BUTTON);
-	image = gtk_image_new_from_pixbuf(pixbuf);
+	gtk_image_set_from_pixbuf(GTK_IMAGE(image), pixbuf);
 	g_object_unref(pixbuf);
-	gtk_misc_set_alignment(GTK_MISC(image), 1.0, 0.5);
-	hbox = gtk_hbox_new(FALSE, 6);
-	gtk_label_set_use_markup(GTK_LABEL(label), TRUE);
-	gtk_box_pack_start(GTK_BOX(hbox), image, TRUE, TRUE, 0);
-	gtk_box_pack_start(GTK_BOX(hbox), label, TRUE, TRUE, 0);
-	gtk_box_pack_start(GTK_BOX(vbox), hbox, TRUE, TRUE, 0);
 
-	table = gtk_table_new(8, 2, FALSE);
-	gtk_table_set_row_spacings(GTK_TABLE(table), 10);
-	gtk_table_set_col_spacings(GTK_TABLE(table), 10);
+	label = ui_lookup_widget(dialog, "file_type_label");
+	gtk_label_set_text(GTK_LABEL(label), doc->file_type->title);
 
-	label = gtk_label_new(_("<b>Type:</b>"));
-	gtk_table_attach(GTK_TABLE(table), label, 0, 1, 0, 1,
-					(GtkAttachOptions) (GTK_FILL),
-					(GtkAttachOptions) (0), 0, 0);
-	gtk_label_set_use_markup(GTK_LABEL(label), TRUE);
-	gtk_misc_set_alignment(GTK_MISC(label), 1, 0);
-
-	label = gtk_label_new(doc->file_type->title);
-	gtk_label_set_selectable(GTK_LABEL(label), TRUE);
-	gtk_table_attach(GTK_TABLE(table), label, 1, 2, 0, 1,
-					(GtkAttachOptions) (GTK_FILL),
-					(GtkAttachOptions) (0), 0, 0);
-	gtk_misc_set_alignment(GTK_MISC(label), 0, 0);
-
-	label = gtk_label_new(_("<b>Size:</b>"));
-	gtk_table_attach(GTK_TABLE(table), label, 0, 1, 1, 2,
-					(GtkAttachOptions) (GTK_FILL),
-					(GtkAttachOptions) (0), 0, 0);
-	gtk_label_set_use_markup(GTK_LABEL(label), TRUE);
-	gtk_misc_set_alignment(GTK_MISC(label), 1, 0);
-
+	label = ui_lookup_widget(dialog, "file_size_label");
 	file_size = utils_make_human_readable_str(filesize, 1, 0);
-	label = gtk_label_new(file_size);
-	gtk_label_set_selectable(GTK_LABEL(label), TRUE);
-	gtk_table_attach(GTK_TABLE(table), label, 1, 2, 1, 2,
-					(GtkAttachOptions) (GTK_FILL),
-					(GtkAttachOptions) (0), 0, 0);
+	gtk_label_set_text(GTK_LABEL(label), file_size);
 	g_free(file_size);
-	gtk_misc_set_alignment(GTK_MISC(label), 0, 0);
 
-	label = gtk_label_new(_("<b>Location:</b>"));
-	gtk_table_attach(GTK_TABLE(table), label, 0, 1, 2, 3,
-					(GtkAttachOptions) (GTK_FILL),
-					(GtkAttachOptions) (0), 0, 0);
-	gtk_label_set_use_markup(GTK_LABEL(label), TRUE);
-	gtk_misc_set_alignment(GTK_MISC(label), 1, 0);
+	label = ui_lookup_widget(dialog, "file_location_label");
+	gtk_label_set_text(GTK_LABEL(label), doc->file_name);
 
-	label = gtk_label_new(doc->file_name);
-	gtk_label_set_selectable(GTK_LABEL(label), TRUE);
-	gtk_table_attach(GTK_TABLE(table), label, 1, 2, 2, 3,
-					(GtkAttachOptions) (GTK_FILL),
-					(GtkAttachOptions) (0), 0, 0);
-	gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0);
-
-	label = gtk_label_new(_("<b>Read-only:</b>"));
-	gtk_table_attach(GTK_TABLE(table), label, 0, 1, 3, 4,
-					(GtkAttachOptions) (GTK_FILL),
-					(GtkAttachOptions) (0), 0, 0);
-	gtk_label_set_use_markup(GTK_LABEL(label), TRUE);
-	gtk_misc_set_alignment(GTK_MISC(label), 1, 0);
-
-	check = gtk_check_button_new_with_label(_("(only inside Geany)"));
-	gtk_widget_set_sensitive(check, FALSE);
-	gtk_button_set_focus_on_click(GTK_BUTTON(check), FALSE);
+	check = ui_lookup_widget(dialog, "file_read_only_check");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check), doc->readonly);
-	gtk_table_attach(GTK_TABLE(table), check, 1, 2, 3, 4,
-					(GtkAttachOptions) (GTK_FILL),
-					(GtkAttachOptions) (0), 0, 0);
-	gtk_button_set_alignment(GTK_BUTTON(check), 0.0, 0);
 
-	label = gtk_label_new(_("<b>Encoding:</b>"));
-	gtk_table_attach(GTK_TABLE(table), label, 0, 1, 4, 5,
-					(GtkAttachOptions) (GTK_FILL),
-					(GtkAttachOptions) (0), 0, 0);
-	gtk_label_set_use_markup(GTK_LABEL(label), TRUE);
-	gtk_misc_set_alignment(GTK_MISC(label), 1, 0);
-
+	label = ui_lookup_widget(dialog, "file_encoding_label");
 	enctext = g_strdup_printf("%s %s",
 		doc->encoding,
 		(encodings_is_unicode_charset(doc->encoding)) ?
 			((doc->has_bom) ? _("(with BOM)") : _("(without BOM)")) : "");
-
-	label = gtk_label_new(enctext);
-	gtk_label_set_selectable(GTK_LABEL(label), TRUE);
+	gtk_label_set_text(GTK_LABEL(label), enctext);
 	g_free(enctext);
 
-	gtk_table_attach(GTK_TABLE(table), label, 1, 2, 4, 5,
-					(GtkAttachOptions) (GTK_FILL),
-					(GtkAttachOptions) (0), 0, 0);
-	gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0);
+	label = ui_lookup_widget(dialog, "file_modified_label");
+	gtk_label_set_text(GTK_LABEL(label), time_modified);
+	label = ui_lookup_widget(dialog, "file_changed_label");
+	gtk_label_set_text(GTK_LABEL(label), time_changed);
+	label = ui_lookup_widget(dialog, "file_accessed_label");
+	gtk_label_set_text(GTK_LABEL(label), time_accessed);
 
-	label = gtk_label_new(_("<b>Modified:</b>"));
-	gtk_table_attach(GTK_TABLE(table), label, 0, 1, 5, 6,
-					(GtkAttachOptions) (GTK_FILL),
-					(GtkAttachOptions) (0), 0, 0);
-	gtk_label_set_use_markup(GTK_LABEL(label), TRUE);
-	gtk_misc_set_alignment(GTK_MISC(label), 1, 0);
-
-	label = gtk_label_new(time_modified);
-	gtk_label_set_selectable(GTK_LABEL(label), TRUE);
-	gtk_table_attach(GTK_TABLE(table), label, 1, 2, 5, 6,
-					(GtkAttachOptions) (GTK_FILL),
-					(GtkAttachOptions) (0), 0, 0);
-	gtk_misc_set_alignment(GTK_MISC(label), 0, 0);
-
-	label = gtk_label_new(_("<b>Changed:</b>"));
-	gtk_table_attach(GTK_TABLE(table), label, 0, 1, 6, 7,
-					(GtkAttachOptions) (GTK_FILL),
-					(GtkAttachOptions) (0), 0, 0);
-	gtk_label_set_use_markup(GTK_LABEL(label), TRUE);
-	gtk_misc_set_alignment(GTK_MISC(label), 1, 0);
-
-	label = gtk_label_new(time_changed);
-	gtk_label_set_selectable(GTK_LABEL(label), TRUE);
-	gtk_table_attach(GTK_TABLE(table), label, 1, 2, 6, 7,
-					(GtkAttachOptions) (GTK_FILL),
-					(GtkAttachOptions) (0), 0, 0);
-	gtk_misc_set_alignment(GTK_MISC(label), 0, 0);
-
-	label = gtk_label_new(_("<b>Accessed:</b>"));
-	gtk_table_attach(GTK_TABLE(table), label, 0, 1, 7, 8,
-					(GtkAttachOptions) (GTK_FILL),
-					(GtkAttachOptions) (0), 0, 0);
-	gtk_label_set_use_markup(GTK_LABEL(label), TRUE);
-	gtk_misc_set_alignment(GTK_MISC(label), 1, 0);
-
-	label = gtk_label_new(time_accessed);
-	gtk_label_set_selectable(GTK_LABEL(label), TRUE);
-	gtk_table_attach(GTK_TABLE(table), label, 1, 2, 7, 8,
-					(GtkAttachOptions) (GTK_FILL),
-					(GtkAttachOptions) (0), 0, 0);
-	gtk_misc_set_alignment(GTK_MISC(label), 0, 0);
-
-	/* add table */
-	gtk_box_pack_start(GTK_BOX(vbox), table, TRUE, TRUE, 0);
-
-	/* create table with the permissions */
-	perm_table = gtk_table_new(5, 4, TRUE);
-	gtk_table_set_row_spacings(GTK_TABLE(perm_table), 5);
-	gtk_table_set_col_spacings(GTK_TABLE(perm_table), 5);
-
-	label = gtk_label_new(_("<b>Permissions:</b>"));
-	gtk_label_set_use_markup(GTK_LABEL(label), TRUE);
-	gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(perm_table), label, 0, 4, 0, 1,
-					(GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
-					(GtkAttachOptions) (0), 0, 0);
-
-	/* Header */
-	label = gtk_label_new(_("Read:"));
-	gtk_table_attach(GTK_TABLE(perm_table), label, 1, 2, 1, 2,
-					(GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
-					(GtkAttachOptions) (0), 0, 0);
-	gtk_label_set_use_markup(GTK_LABEL(label), TRUE);
-	gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0);
-
-	label = gtk_label_new(_("Write:"));
-	gtk_table_attach(GTK_TABLE(perm_table), label, 2, 3, 1, 2,
-					(GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
-					(GtkAttachOptions) (0), 0, 0);
-	gtk_label_set_use_markup(GTK_LABEL(label), TRUE);
-	gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0);
-
-	label = gtk_label_new(_("Execute:"));
-	gtk_table_attach(GTK_TABLE(perm_table), label, 3, 4, 1, 2,
-					(GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
-					(GtkAttachOptions) (0), 0, 0);
-	gtk_label_set_use_markup(GTK_LABEL(label), TRUE);
-	gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0);
-
-	/* Owner */
-	label = gtk_label_new(_("Owner:"));
-	gtk_table_attach(GTK_TABLE(perm_table), label, 0, 1, 2, 3,
-					(GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
-					(GtkAttachOptions) (0), 0, 0);
-	gtk_label_set_use_markup(GTK_LABEL(label), TRUE);
-	gtk_misc_set_alignment(GTK_MISC(label), 0.5, 0);
-
-	check = gtk_check_button_new();
-	gtk_widget_set_sensitive(check, FALSE);
-	gtk_button_set_focus_on_click(GTK_BUTTON(check), FALSE);
+	/* permissions */
+	check = ui_lookup_widget(dialog, "file_perm_owner_r_check");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check), mode & S_IRUSR);
-	gtk_table_attach(GTK_TABLE(perm_table), check, 1, 2, 2, 3,
-					(GtkAttachOptions) (GTK_EXPAND | GTK_EXPAND | GTK_FILL),
-					(GtkAttachOptions) (0), 0, 0);
-	gtk_button_set_alignment(GTK_BUTTON(check), 0.5, 0);
-
-	check = gtk_check_button_new();
-	gtk_widget_set_sensitive(check, FALSE);
-	gtk_button_set_focus_on_click(GTK_BUTTON(check), FALSE);
+	check = ui_lookup_widget(dialog, "file_perm_owner_w_check");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check), mode & S_IWUSR);
-	gtk_table_attach(GTK_TABLE(perm_table), check, 2, 3, 2, 3,
-					(GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
-					(GtkAttachOptions) (0), 0, 0);
-	gtk_button_set_alignment(GTK_BUTTON(check), 0.5, 0);
-
-	check = gtk_check_button_new();
-	gtk_widget_set_sensitive(check, FALSE);
-	gtk_button_set_focus_on_click(GTK_BUTTON(check), FALSE);
+	check = ui_lookup_widget(dialog, "file_perm_owner_x_check");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check), mode & S_IXUSR);
-	gtk_table_attach(GTK_TABLE(perm_table), check, 3, 4, 2, 3,
-					(GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
-					(GtkAttachOptions) (0), 0, 0);
-	gtk_button_set_alignment(GTK_BUTTON(check), 0.5, 0);
-
-
-	/* Group */
-	label = gtk_label_new(_("Group:"));
-	gtk_table_attach(GTK_TABLE(perm_table), label, 0, 1, 3, 4,
-					(GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
-					(GtkAttachOptions) (0), 0, 0);
-	gtk_label_set_use_markup(GTK_LABEL(label), TRUE);
-	gtk_misc_set_alignment(GTK_MISC(label), 0.5, 0);
-
-	check = gtk_check_button_new();
-	gtk_widget_set_sensitive(check, FALSE);
-	gtk_button_set_focus_on_click(GTK_BUTTON(check), FALSE);
+	check = ui_lookup_widget(dialog, "file_perm_group_r_check");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check), mode & S_IRGRP);
-	gtk_table_attach(GTK_TABLE(perm_table), check, 1, 2, 3, 4,
-					(GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
-					(GtkAttachOptions) (0), 0, 0);
-	gtk_button_set_alignment(GTK_BUTTON(check), 0.5, 0);
-
-	check = gtk_check_button_new();
-	gtk_widget_set_sensitive(check, FALSE);
-	gtk_button_set_focus_on_click(GTK_BUTTON(check), FALSE);
+	check = ui_lookup_widget(dialog, "file_perm_group_w_check");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check), mode & S_IWGRP);
-	gtk_table_attach(GTK_TABLE(perm_table), check, 2, 3, 3, 4,
-					(GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
-					(GtkAttachOptions) (0), 0, 0);
-	gtk_button_set_alignment(GTK_BUTTON(check), 0.5, 0);
-
-	check = gtk_check_button_new();
-	gtk_widget_set_sensitive(check, FALSE);
-	gtk_button_set_focus_on_click(GTK_BUTTON(check), FALSE);
+	check = ui_lookup_widget(dialog, "file_perm_group_x_check");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check), mode & S_IXGRP);
-	gtk_table_attach(GTK_TABLE(perm_table), check, 3, 4, 3, 4,
-					(GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
-					(GtkAttachOptions) (0), 0, 0);
-	gtk_button_set_alignment(GTK_BUTTON(check), 0.5, 0);
-
-
-	/* Other */
-	label = gtk_label_new(_("Other:"));
-	gtk_table_attach(GTK_TABLE(perm_table), label, 0, 1, 4, 5,
-					(GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
-					(GtkAttachOptions) (0), 0, 0);
-	gtk_label_set_use_markup(GTK_LABEL(label), TRUE);
-	gtk_misc_set_alignment(GTK_MISC(label), 0.5, 0);
-
-	check = gtk_check_button_new();
-	gtk_widget_set_sensitive(check, FALSE);
-	gtk_button_set_focus_on_click(GTK_BUTTON(check), FALSE);
+	check = ui_lookup_widget(dialog, "file_perm_other_r_check");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check), mode & S_IROTH);
-	gtk_table_attach(GTK_TABLE(perm_table), check, 1, 2, 4, 5,
-					(GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
-					(GtkAttachOptions) (0), 0, 0);
-	gtk_button_set_alignment(GTK_BUTTON(check), 0.5, 0);
-
-	check = gtk_check_button_new();
-	gtk_widget_set_sensitive(check, FALSE);
-	gtk_button_set_focus_on_click(GTK_BUTTON(check), FALSE);
+	check = ui_lookup_widget(dialog, "file_perm_other_w_check");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check), mode & S_IWOTH);
-	gtk_table_attach(GTK_TABLE(perm_table), check, 2, 3, 4, 5,
-					(GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
-					(GtkAttachOptions) (0), 0, 0);
-	gtk_button_set_alignment(GTK_BUTTON(check), 0.5, 0);
-
-	check = gtk_check_button_new();
-	gtk_widget_set_sensitive(check, FALSE);
-	gtk_button_set_focus_on_click(GTK_BUTTON(check), FALSE);
+	check = ui_lookup_widget(dialog, "file_perm_other_x_check");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check), mode & S_IXOTH);
-	gtk_table_attach(GTK_TABLE(perm_table), check, 3, 4, 4, 5,
-					(GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
-					(GtkAttachOptions) (0), 0, 0);
-	gtk_button_set_alignment(GTK_BUTTON(check), 0.5, 0);
-
-	gtk_box_pack_start(GTK_BOX(vbox), perm_table ,TRUE, TRUE, 0);
 
 	g_free(base_name);
 	g_free(time_changed);
 	g_free(time_modified);
 	g_free(time_accessed);
 
-	gtk_widget_show_all(dialog);
+	gtk_widget_show(dialog);
 }
 
 
@@ -1535,7 +1309,8 @@ static gint show_prompt(GtkWidget *parent,
 
 #ifdef G_OS_WIN32
 	/* our native dialog code doesn't support custom buttons */
-	if (btn_3 == (gchar*)GTK_STOCK_YES && btn_2 == (gchar*)GTK_STOCK_NO && btn_1 == NULL)
+	if (utils_str_equal(btn_3, GTK_STOCK_YES) &&
+		utils_str_equal(btn_2, GTK_STOCK_NO) && btn_1 == NULL)
 	{
 		gchar *string = (extra_text == NULL) ? g_strdup(question_text) :
 			g_strconcat(question_text, "\n\n", extra_text, NULL);
@@ -1554,12 +1329,7 @@ static gint show_prompt(GtkWidget *parent,
 		GTK_BUTTONS_NONE, "%s", question_text);
 	gtk_widget_set_name(dialog, "GeanyDialog");
 	gtk_window_set_title(GTK_WINDOW(dialog), _("Question"));
-	if (parent == NULL || GTK_IS_DIALOG(parent))
-	{
-		GdkPixbuf *pb = ui_new_pixbuf_from_inline(GEANY_IMAGE_LOGO);
-		gtk_window_set_icon(GTK_WINDOW(dialog), pb);
-		g_object_unref(pb);
-	}
+	gtk_window_set_icon_name(GTK_WINDOW(dialog), "geany");
 
 	/* question_text will be in bold if optional extra_text used */
 	if (extra_text != NULL)

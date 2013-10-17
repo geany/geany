@@ -1,0 +1,6 @@
+# format=tagmanager
+AccÌ16384Ö0Ïa
+seedÌ16Í()Ö0Ïusing random
+seedÌ1024Í(S,M,H)Ö0Ïrandom
+tot_printÌ16Í(Tot)Ö0Ï
+uniformÌ16384Ö0Ïpick pick

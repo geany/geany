@@ -151,6 +151,12 @@ typedef struct _TMTag
 	gint refcount; /*!< the reference count of the tag */
 } TMTag;
 
+typedef enum {
+	TM_FILE_FORMAT_TAGMANAGER,
+	TM_FILE_FORMAT_PIPE,
+	TM_FILE_FORMAT_CTAGS
+} TMFileFormat;
+
 /*!
  Prototype for user-defined tag comparison function. This is the type
  of argument that needs to be passed to tm_tags_sort_custom() and
@@ -195,6 +201,11 @@ gboolean tm_tag_init_from_file(TMTag *tag, TMSourceFile *file, FILE *fp);
 gboolean tm_tag_init_from_file_alt(TMTag *tag, TMSourceFile *file, FILE *fp);
 
 /*!
+ Same as tm_tag_init_from_file(), but parsing CTags tag file format
+*/
+gboolean tm_tag_init_from_file_ctags(TMTag *tag, TMSourceFile *file, FILE *fp);
+
+/*!
  Creates a new tag structure from a tagEntryInfo pointer and a TMSOurceFile pointer
  and returns a pointer to it.
  \param file - Pointer to the TMSourceFile structure containing the tag
@@ -207,7 +218,7 @@ TMTag *tm_tag_new(TMSourceFile *file, const tagEntryInfo *tag_entry);
  Same as tm_tag_new() except that the tag attributes are read from file.
  \param mode langType to use for the tag.
 */
-TMTag *tm_tag_new_from_file(TMSourceFile *file, FILE *fp, gint mode, gboolean format_pipe);
+TMTag *tm_tag_new_from_file(TMSourceFile *file, FILE *fp, gint mode, TMFileFormat format);
 
 /*!
  Writes tag information to the given FILE *.
@@ -294,14 +305,18 @@ gboolean tm_tags_dedup(GPtrArray *tags_array, TMTagAttrType *sort_attributes);
 gboolean tm_tags_custom_dedup(GPtrArray *tags_array, TMTagCompareFunc compare_func);
 
 /*!
- Returns a pointer to the position of the first matching tag in a sorted tags array.
- \param sorted_tags_array Tag array sorted on name
+ Returns a pointer to the position of the first matching tag in a (sorted) tags array.
+ The passed array of tags should be already sorted by name for optimal performance. If
+ \c tags_array_sorted is set to FALSE, it may be unsorted but the lookup will be slower.
+ \param tags_array Tag array (may be sorted on name)
  \param name Name of the tag to locate.
  \param partial If TRUE, matches the first part of the name instead of doing exact match.
+ \param tags_array_sorted If TRUE, the passed \c tags_array is sorted by name so it can be
+ searched with binary search. Otherwise it is searched linear which is obviously slower.
  \param tagCount Return location of the matched tags.
 */
-TMTag **tm_tags_find(const GPtrArray *sorted_tags_array, const char *name,
-		gboolean partial, int * tagCount);
+TMTag **tm_tags_find(const GPtrArray *tags_array, const char *name,
+		gboolean partial, gboolean tags_array_sorted, int * tagCount);
 
 /*!
  Completely frees an array of tags.

@@ -1,0 +1,14 @@
+# format=tagmanager
+DaysÌ2ÎEnumTestÖ0
+EnumTestÌ1Ö0
+FriÌ4ÎEnumTest.DaysÖ0
+MainÌ128Í()ÎEnumTestÖ0Ïpublic void
+MaxÌ4ÎEnumTest.RangeÖ0
+MinÌ4ÎEnumTest.RangeÖ0
+MonÌ4ÎEnumTest.DaysÖ0
+RangeÌ2ÎEnumTestÖ0
+SatÌ4ÎEnumTest.DaysÖ0
+SunÌ4ÎEnumTest.DaysÖ0
+ThuÌ4ÎEnumTest.DaysÖ0
+TueÌ4ÎEnumTest.DaysÖ0
+WedÌ4ÎEnumTest.DaysÖ0

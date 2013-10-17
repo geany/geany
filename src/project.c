@@ -123,6 +123,8 @@ void project_new(void)
 	gtk_widget_set_name(e->dialog, "GeanyDialogProject");
 	bbox = gtk_hbox_new(FALSE, 0);
 	button = gtk_button_new();
+	gtk_widget_set_can_default(button, TRUE);
+	gtk_window_set_default(GTK_WINDOW(e->dialog), button);
 	image = gtk_image_new_from_stock(GTK_STOCK_NEW, GTK_ICON_SIZE_BUTTON);
 	label = gtk_label_new_with_mnemonic(_("C_reate"));
 	gtk_box_pack_start(GTK_BOX(bbox), image, FALSE, FALSE, 3);
@@ -142,6 +144,7 @@ void project_new(void)
 	gtk_misc_set_alignment(GTK_MISC(label), 1, 0);
 
 	e->name = gtk_entry_new();
+	gtk_entry_set_activates_default(GTK_ENTRY(e->name), TRUE);
 	ui_entry_add_clear_icon(GTK_ENTRY(e->name));
 	gtk_entry_set_max_length(GTK_ENTRY(e->name), MAX_NAME_LEN);
 
@@ -151,6 +154,7 @@ void project_new(void)
 	gtk_misc_set_alignment(GTK_MISC(label), 1, 0);
 
 	e->file_name = gtk_entry_new();
+	gtk_entry_set_activates_default(GTK_ENTRY(e->file_name), TRUE);
 	ui_entry_add_clear_icon(GTK_ENTRY(e->file_name));
 	gtk_entry_set_width_chars(GTK_ENTRY(e->file_name), 30);
 	button = gtk_button_new();
@@ -167,6 +171,7 @@ void project_new(void)
 	gtk_misc_set_alignment(GTK_MISC(label), 1, 0);
 
 	e->base_path = gtk_entry_new();
+	gtk_entry_set_activates_default(GTK_ENTRY(e->base_path), TRUE);
 	ui_entry_add_clear_icon(GTK_ENTRY(e->base_path));
 	gtk_widget_set_tooltip_text(e->base_path,
 		_("Base directory of all files that make up the project. "
@@ -662,7 +667,7 @@ static gboolean update_config(const PropertyDialogElements *e, gboolean new_proj
 	else
 		file_name = gtk_label_get_text(GTK_LABEL(e->file_name));
 
-	if (G_UNLIKELY(! NZV(file_name)))
+	if (G_UNLIKELY(EMPTY(file_name)))
 	{
 		SHOW_ERR(_("You have specified an invalid project filename."));
 		gtk_widget_grab_focus(e->file_name);
@@ -671,7 +676,7 @@ static gboolean update_config(const PropertyDialogElements *e, gboolean new_proj
 
 	locale_filename = utils_get_locale_from_utf8(file_name);
 	base_path = gtk_entry_get_text(GTK_ENTRY(e->base_path));
-	if (NZV(base_path))
+	if (!EMPTY(base_path))
 	{	/* check whether the given directory actually exists */
 		gchar *locale_path = utils_get_locale_from_utf8(base_path);
 
@@ -727,7 +732,7 @@ static gboolean update_config(const PropertyDialogElements *e, gboolean new_proj
 	SETPTR(p->name, g_strdup(name));
 	SETPTR(p->file_name, g_strdup(file_name));
 	/* use "." if base_path is empty */
-	SETPTR(p->base_path, g_strdup(NZV(base_path) ? base_path : "./"));
+	SETPTR(p->base_path, g_strdup(!EMPTY(base_path) ? base_path : "./"));
 
 	if (! new_project)	/* save properties specific fields */
 	{
@@ -892,7 +897,7 @@ static void on_name_entry_changed(GtkEditable *editable, PropertyDialogElements 
 		return;
 
 	name = gtk_editable_get_chars(editable, 0, -1);
-	if (NZV(name))
+	if (!EMPTY(name))
 	{
 		base_path = g_strconcat(project_dir, G_DIR_SEPARATOR_S,
 			name, G_DIR_SEPARATOR_S, NULL);
@@ -1089,7 +1094,7 @@ gchar *project_get_base_path(void)
 {
 	GeanyProject *project = app->project;
 
-	if (project && NZV(project->base_path))
+	if (project && !EMPTY(project->base_path))
 	{
 		if (g_path_is_absolute(project->base_path))
 			return g_strdup(project->base_path);
@@ -1122,7 +1127,7 @@ void project_save_prefs(GKeyFile *config)
 		g_key_file_set_string(config, "project", "session_file", utf8_filename);
 	}
 	g_key_file_set_string(config, "project", "project_file_path",
-		NVL(local_prefs.project_file_path, ""));
+		FALLBACK(local_prefs.project_file_path, ""));
 }
 
 

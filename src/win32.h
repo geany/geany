@@ -52,8 +52,6 @@ void win32_init_debug_code(void);
 
 void win32_set_working_directory(const gchar *dir);
 
-gchar *win32_get_hostname(void);
-
 gboolean win32_get_exit_status(GPid child_pid);
 
 gboolean win32_spawn(const gchar *dir, gchar **argv, gchar **env, GSpawnFlags flags,

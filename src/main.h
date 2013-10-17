@@ -51,8 +51,6 @@ GeanyStatus;
 
 extern GeanyStatus main_status;
 
-extern gboolean main_use_geany_icon;
-
 
 const gchar *main_get_version_string(void);
 

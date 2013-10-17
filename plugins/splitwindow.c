@@ -26,6 +26,7 @@
 #endif
 
 #include "geanyplugin.h"
+#include "gtkcompat.h"
 #include <string.h>
 
 
@@ -566,8 +567,8 @@ static void split_view(gboolean horizontal)
 	GtkWidget *parent = gtk_widget_get_parent(notebook);
 	GtkWidget *pane, *toolbar;
 	GeanyDocument *doc = document_get_current();
-	gint width = notebook->allocation.width / 2;
-	gint height = notebook->allocation.height / 2;
+	gint width = gtk_widget_get_allocated_width(notebook) / 2;
+	gint height = gtk_widget_get_allocated_height(notebook) / 2;
 
 	g_return_if_fail(doc);
 	g_return_if_fail(edit_window.editor == NULL);
@@ -714,9 +715,9 @@ void plugin_init(GeanyData *data)
 	/* setup keybindings */
 	key_group = plugin_set_key_group(geany_plugin, "split_window", KB_COUNT, NULL);
 	keybindings_set_item(key_group, KB_SPLIT_HORIZONTAL, kb_activate,
-		0, 0, "split_horizontal", _("Split Horizontally"), menu_items.horizontal);
+		0, 0, "split_horizontal", _("Side by Side"), menu_items.horizontal);
 	keybindings_set_item(key_group, KB_SPLIT_VERTICAL, kb_activate,
-		0, 0, "split_vertical", _("Split Vertically"), menu_items.vertical);
+		0, 0, "split_vertical", _("Top and Bottom"), menu_items.vertical);
 	keybindings_set_item(key_group, KB_SPLIT_UNSPLIT, kb_activate,
 		0, 0, "split_unsplit", _("_Unsplit"), menu_items.unsplit);
 	keybindings_set_item(key_group, KB_SPLIT_SWITCH, kb_activate,

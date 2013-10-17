@@ -247,7 +247,7 @@ static void create_file_save_as_dialog(const gchar *extension, ExportFunc func,
 		gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(dialog), fname);
 
 		/* use default startup directory(if set) if no files are open */
-		if (NZV(default_open_path) && g_path_is_absolute(default_open_path))
+		if (!EMPTY(default_open_path) && g_path_is_absolute(default_open_path))
 		{
 			gchar *locale_path = utils_get_locale_from_utf8(default_open_path);
 			gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog), locale_path);
@@ -784,13 +784,13 @@ void plugin_init(GeanyData *data)
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menu_export), menu_export_menu);
 
 	/* HTML */
-	menu_create_html = gtk_menu_item_new_with_mnemonic(_("As _HTML"));
+	menu_create_html = gtk_menu_item_new_with_mnemonic(_("As _HTML..."));
 	gtk_container_add(GTK_CONTAINER (menu_export_menu), menu_create_html);
 
 	g_signal_connect(menu_create_html, "activate", G_CALLBACK(on_menu_create_html_activate), NULL);
 
 	/* LaTeX */
-	menu_create_latex = gtk_menu_item_new_with_mnemonic(_("As _LaTeX"));
+	menu_create_latex = gtk_menu_item_new_with_mnemonic(_("As _LaTeX..."));
 	gtk_container_add(GTK_CONTAINER (menu_export_menu), menu_create_latex);
 
 	g_signal_connect(menu_create_latex, "activate",

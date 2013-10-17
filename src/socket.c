@@ -272,7 +272,7 @@ gint socket_init(gint argc, gchar **argv)
 		return -1;
 #else
 	gchar *display_name = gdk_get_display();
-	gchar *hostname = utils_get_hostname();
+	const gchar *hostname = g_get_host_name();
 	gchar *p;
 
 	if (display_name == NULL)
@@ -293,7 +293,6 @@ gint socket_init(gint argc, gchar **argv)
 			app->configdir, G_DIR_SEPARATOR, hostname, display_name);
 
 	g_free(display_name);
-	g_free(hostname);
 
 	/* check whether the real user id is the same as this of the socket file */
 	check_socket_permissions();
@@ -624,7 +623,7 @@ gboolean socket_lock_input_cb(GIOChannel *source, GIOCondition condition, gpoint
 		else if (strncmp(buf, "doclist", 7) == 0)
 		{
 			gchar *doc_list = build_document_list();
-			if (NZV(doc_list))
+			if (!EMPTY(doc_list))
 				socket_fd_write_all(sock, doc_list, strlen(doc_list));
 			else
 				/* send ETX (end-of-text) in case we have no open files, we must send anything
@@ -653,8 +652,12 @@ gboolean socket_lock_input_cb(GIOChannel *source, GIOCondition condition, gpoint
 #ifdef G_OS_WIN32
 		else if (strncmp(buf, "window", 6) == 0)
 		{
+#	if GTK_CHECK_VERSION(3, 0, 0)
+			HWND hwnd = (HWND) gdk_win32_window_get_handle(gtk_widget_get_window(window));
+#	else
 			HWND hwnd = (HWND) gdk_win32_drawable_get_handle(
 				GDK_DRAWABLE(gtk_widget_get_window(window)));
+#	endif
 			socket_fd_write(sock, (gchar *)&hwnd, sizeof(hwnd));
 		}
 #endif
@@ -663,12 +666,18 @@ gboolean socket_lock_input_cb(GIOChannel *source, GIOCondition condition, gpoint
 	if (popup)
 	{
 #ifdef GDK_WINDOWING_X11
+		GdkWindow *x11_window = gtk_widget_get_window(window);
+
 		/* Set the proper interaction time on the window. This seems necessary to make
 		 * gtk_window_present() really bring the main window into the foreground on some
 		 * window managers like Gnome's metacity.
 		 * Code taken from Gedit. */
-		gdk_x11_window_set_user_time(gtk_widget_get_window(window),
-			gdk_x11_get_server_time(gtk_widget_get_window(window)));
+#	if GTK_CHECK_VERSION(3, 0, 0)
+		if (GDK_IS_X11_WINDOW(x11_window))
+#	endif
+		{
+			gdk_x11_window_set_user_time(x11_window, gdk_x11_get_server_time(x11_window));
+		}
 #endif
 		gtk_window_present(GTK_WINDOW(window));
 #ifdef G_OS_WIN32
@@ -752,7 +761,11 @@ static gint socket_fd_check_io(gint fd, GIOCondition cond)
 #endif
 
 	FD_ZERO(&fds);
+#ifdef G_OS_WIN32
+	FD_SET((SOCKET)fd, &fds);
+#else
 	FD_SET(fd, &fds);
+#endif
 
 	if (cond == G_IO_IN)
 	{

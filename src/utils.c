@@ -52,6 +52,7 @@
 #include "win32.h"
 #include "project.h"
 #include "ui_utils.h"
+#include "templates.h"
 
 #include "utils.h"
 
@@ -254,7 +255,7 @@ gint utils_write_file(const gchar *filename, const gchar *text)
 		{
 			geany_debug("utils_write_file(): could not write to file %s (%s)",
 				filename, g_strerror(errno));
-			return NVL(errno, EIO);
+			return FALLBACK(errno, EIO);
 		}
 	}
 	return 0;
@@ -341,12 +342,20 @@ gboolean utils_is_short_html_tag(const gchar *tag_name)
 		"base",
 		"basefont",	/* < or not < */
 		"br",
+		"col",
+		"command",
+		"embed",
 		"frame",
 		"hr",
 		"img",
 		"input",
+		"keygen",
 		"link",
-		"meta"
+		"meta",
+		"param",
+		"source",
+		"track",
+		"wbr"
 	};
 
 	if (tag_name)
@@ -411,7 +420,7 @@ gboolean utils_atob(const gchar *str)
 /* NULL-safe version of g_path_is_absolute(). */
 gboolean utils_is_absolute_path(const gchar *path)
 {
-	if (G_UNLIKELY(! NZV(path)))
+	if (G_UNLIKELY(EMPTY(path)))
 		return FALSE;
 
 	return g_path_is_absolute(path);
@@ -625,19 +634,6 @@ gchar utils_brace_opposite(gchar ch)
 		case '>': return '<';
 		default: return '\0';
 	}
-}
-
-
-gchar *utils_get_hostname(void)
-{
-#ifdef G_OS_WIN32
-	return win32_get_hostname();
-#elif defined(HAVE_GETHOSTNAME)
-	gchar hostname[100];
-	if (gethostname(hostname, sizeof(hostname)) == 0)
-		return g_strdup(hostname);
-#endif
-	return g_strdup("localhost");
 }
 
 
@@ -1476,7 +1472,7 @@ gboolean utils_str_has_upper(const gchar *str)
 {
 	gunichar c;
 
-	if (! NZV(str) || ! g_utf8_validate(str, -1, NULL))
+	if (EMPTY(str) || ! g_utf8_validate(str, -1, NULL))
 		return FALSE;
 
 	while (*str != '\0')
@@ -1506,7 +1502,7 @@ gint utils_string_find(GString *haystack, gint start, gint end, const gchar *nee
 	if (start >= (gint)haystack->len)
 		return -1;
 
-	g_return_val_if_fail(NZV(needle), -1);
+	g_return_val_if_fail(!EMPTY(needle), -1);
 
 	if (end < 0)
 		end = haystack->len;
@@ -1635,33 +1631,16 @@ guint utils_string_regex_replace_all(GString *haystack, GRegex *regex,
 /* Get project or default startup directory (if set), or NULL. */
 const gchar *utils_get_default_dir_utf8(void)
 {
-	if (app->project && NZV(app->project->base_path))
+	if (app->project && !EMPTY(app->project->base_path))
 	{
 		return app->project->base_path;
 	}
 
-	if (NZV(prefs.default_open_path))
+	if (!EMPTY(prefs.default_open_path))
 	{
 		return prefs.default_open_path;
 	}
 	return NULL;
-}
-
-
-static gboolean check_error(GError **error)
-{
-	if (error != NULL && *error != NULL)
-	{
-		/* imitate the GLib warning */
-		g_warning(
-			"GError set over the top of a previous GError or uninitialized memory.\n"
-			"This indicates a bug in someone's code. You must ensure an error is NULL "
-			"before it's set.");
-		/* after returning the code may segfault, but we don't care because we should
-		 * make sure *error is NULL */
-		return FALSE;
-	}
-	return TRUE;
 }
 
 
@@ -1688,12 +1667,9 @@ gboolean utils_spawn_sync(const gchar *dir, gchar **argv, gchar **env, GSpawnFla
 {
 	gboolean result;
 
-	if (! check_error(error))
-		return FALSE;
-
 	if (argv == NULL)
 	{
-		*error = g_error_new(G_SPAWN_ERROR, G_SPAWN_ERROR_FAILED, "argv must not be NULL");
+		g_set_error(error, G_SPAWN_ERROR, G_SPAWN_ERROR_FAILED, "argv must not be NULL");
 		return FALSE;
 	}
 
@@ -1734,12 +1710,9 @@ gboolean utils_spawn_async(const gchar *dir, gchar **argv, gchar **env, GSpawnFl
 {
 	gboolean result;
 
-	if (! check_error(error))
-		return FALSE;
-
 	if (argv == NULL)
 	{
-		*error = g_error_new(G_SPAWN_ERROR, G_SPAWN_ERROR_FAILED, "argv must not be NULL");
+		g_set_error(error, G_SPAWN_ERROR, G_SPAWN_ERROR_FAILED, "argv must not be NULL");
 		return FALSE;
 	}
 
@@ -1900,7 +1873,7 @@ gchar *utils_str_remove_chars(gchar *string, const gchar *chars)
 	gchar *w = string;
 
 	g_return_val_if_fail(string, NULL);
-	if (G_UNLIKELY(! NZV(chars)))
+	if (G_UNLIKELY(EMPTY(chars)))
 		return string;
 
 	foreach_str(r, string)
@@ -2091,4 +2064,37 @@ gchar **utils_strv_join(gchar **first, gchar **second)
 	g_free(first);
 	g_free(second);
 	return strv;
+}
+
+
+/* Try to parse a date using g_date_set_parse(). It doesn't take any format hint,
+ * obviously g_date_set_parse() uses some magic.
+ * The returned GDate object must be freed. */
+GDate *utils_parse_date(const gchar *input)
+{
+	GDate *date = g_date_new();
+
+	g_date_set_parse(date, input);
+
+	if (g_date_valid(date))
+		return date;
+
+	g_date_free(date);
+	return NULL;
+}
+
+
+gchar *utils_parse_and_format_build_date(const gchar *input)
+{
+	gchar date_buf[255];
+	GDate *date = utils_parse_date(input);
+
+	if (date != NULL)
+	{
+		g_date_strftime(date_buf, sizeof(date_buf), GEANY_TEMPLATES_FORMAT_DATE, date);
+		g_date_free(date);
+		return g_strdup(date_buf);
+	}
+
+	return g_strdup(input);
 }

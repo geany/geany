@@ -25,6 +25,7 @@
 #endif
 
 #include "geanyplugin.h"
+#include "gtkcompat.h"
 
 #include <unistd.h>
 #include <errno.h>
@@ -92,7 +93,7 @@ static gboolean backupcopy_set_backup_dir(const gchar *utf8_dir)
 {
 	gchar *tmp;
 
-	if (G_UNLIKELY(! NZV(utf8_dir)))
+	if (G_UNLIKELY(EMPTY(utf8_dir)))
 		return FALSE;
 
 	tmp = utils_get_locale_from_utf8(utf8_dir);
@@ -190,6 +191,7 @@ static void backupcopy_document_save_cb(GObject *obj, GeanyDocument *doc, gpoint
 	gchar *basename_src;
 	gchar *dir_parts_src;
 	gchar *stamp;
+	gchar buf[512];
 
 	if (! enable_backupcopy)
 		return;
@@ -226,9 +228,9 @@ static void backupcopy_document_save_cb(GObject *obj, GeanyDocument *doc, gpoint
 		return;
 	}
 
-	while (fgets(stamp, sizeof(stamp), src) != NULL)
+	while (fgets(buf, sizeof(buf), src) != NULL)
 	{
-		fputs(stamp, dst);
+		fputs(buf, dst);
 	}
 
 	fclose(src);
@@ -384,7 +386,7 @@ static void backupcopy_dir_button_clicked_cb(GtkButton *button, gpointer item)
 					GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT, NULL);
 
 	text = utils_get_locale_from_utf8(gtk_entry_get_text(GTK_ENTRY(item)));
-	if (NZV(text))
+	if (!EMPTY(text))
 		gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog), text);
 
 	/* run it */
@@ -429,8 +431,8 @@ static void configure_response_cb(GtkDialog *dialog, gint response, G_GNUC_UNUSE
 			GTK_TOGGLE_BUTTON(pref_widgets.autosave_save_all_radio2));
 
 		g_free(instantsave_default_ft);
-		instantsave_default_ft = gtk_combo_box_get_active_text(
-			GTK_COMBO_BOX(pref_widgets.instantsave_ft_combo));
+		instantsave_default_ft = gtk_combo_box_text_get_active_text(
+			GTK_COMBO_BOX_TEXT(pref_widgets.instantsave_ft_combo));
 
 		text_dir = gtk_entry_get_text(GTK_ENTRY(pref_widgets.backupcopy_entry_dir));
 		text_time = gtk_entry_get_text(GTK_ENTRY(pref_widgets.backupcopy_entry_time));
@@ -456,7 +458,7 @@ static void configure_response_cb(GtkDialog *dialog, gint response, G_GNUC_UNUSE
 		SETPTR(backupcopy_time_fmt, g_strdup(text_time));
 		if (enable_backupcopy)
 		{
-			if (NZV(text_dir) && backupcopy_set_backup_dir(text_dir))
+			if (!EMPTY(text_dir) && backupcopy_set_backup_dir(text_dir))
 			{
 				g_key_file_set_string(config, "backupcopy", "backup_dir", text_dir);
 			}
@@ -529,7 +531,7 @@ GtkWidget *plugin_configure(GtkDialog *dialog)
 	vbox = gtk_vbox_new(FALSE, 6);
 
 	notebook = gtk_notebook_new();
-	GTK_WIDGET_UNSET_FLAGS(notebook, GTK_CAN_FOCUS);
+	gtk_widget_set_can_focus(notebook, FALSE);
 	gtk_container_set_border_width(GTK_CONTAINER(notebook), 5);
 	gtk_box_pack_start(GTK_BOX(vbox), notebook, FALSE, TRUE, 0);
 
@@ -620,13 +622,13 @@ GtkWidget *plugin_configure(GtkDialog *dialog)
 		gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
 		gtk_box_pack_start(GTK_BOX(inner_vbox), label, FALSE, FALSE, 0);
 
-		pref_widgets.instantsave_ft_combo = combo = gtk_combo_box_new_text();
+		pref_widgets.instantsave_ft_combo = combo = gtk_combo_box_text_new();
 		i = 0;
 		foreach_slist(node, filetypes_get_sorted_by_name())
 		{
 			GeanyFiletype *ft = node->data;
 
-			gtk_combo_box_append_text(GTK_COMBO_BOX(combo), ft->name);
+			gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(combo), ft->name);
 
 			if (utils_str_equal(ft->name, instantsave_default_ft))
 				gtk_combo_box_set_active(GTK_COMBO_BOX(combo), i);
@@ -663,7 +665,7 @@ GtkWidget *plugin_configure(GtkDialog *dialog)
 
 		pref_widgets.backupcopy_entry_dir = entry_dir = gtk_entry_new();
 		gtk_label_set_mnemonic_widget(GTK_LABEL(label), entry_dir);
-		if (NZV(backupcopy_backup_dir))
+		if (!EMPTY(backupcopy_backup_dir))
 			gtk_entry_set_text(GTK_ENTRY(entry_dir), backupcopy_backup_dir);
 
 		button = gtk_button_new();
@@ -686,7 +688,7 @@ GtkWidget *plugin_configure(GtkDialog *dialog)
 
 		pref_widgets.backupcopy_entry_time = entry_time = gtk_entry_new();
 		gtk_label_set_mnemonic_widget(GTK_LABEL(label), entry_time);
-		if (NZV(backupcopy_time_fmt))
+		if (!EMPTY(backupcopy_time_fmt))
 			gtk_entry_set_text(GTK_ENTRY(entry_time), backupcopy_time_fmt);
 		gtk_box_pack_start(GTK_BOX(inner_vbox), entry_time, FALSE, FALSE, 0);
 

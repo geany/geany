@@ -388,7 +388,7 @@ static gchar *get_doc_folder(const gchar *path)
 		dirname = tmp_dirname;
 
 		/* If matches home dir, replace with tilde */
-		if (NZV(home_dir) && utils_filename_has_prefix(dirname, home_dir))
+		if (!EMPTY(home_dir) && utils_filename_has_prefix(dirname, home_dir))
 		{
 			rest = dirname + strlen(home_dir);
 			if (*rest == G_DIR_SEPARATOR || *rest == '\0')
@@ -588,16 +588,24 @@ void sidebar_add_common_menu_items(GtkMenu *menu)
 
 	item = gtk_check_menu_item_new_with_mnemonic(_("Show S_ymbol List"));
 	gtk_container_add(GTK_CONTAINER(menu), item);
+#if GTK_CHECK_VERSION(3, 0, 0)
+	g_signal_connect(item, "draw", G_CALLBACK(on_sidebar_display_symbol_list_show), NULL);
+#else
 	g_signal_connect(item, "expose-event",
 			G_CALLBACK(on_sidebar_display_symbol_list_show), NULL);
+#endif
 	gtk_widget_show(item);
 	g_signal_connect(item, "activate",
 			G_CALLBACK(on_list_symbol_activate), NULL);
 
 	item = gtk_check_menu_item_new_with_mnemonic(_("Show _Document List"));
 	gtk_container_add(GTK_CONTAINER(menu), item);
+#if GTK_CHECK_VERSION(3, 0, 0)
+	g_signal_connect(item, "draw", G_CALLBACK(on_sidebar_display_open_files_show), NULL);
+#else
 	g_signal_connect(item, "expose-event",
 			G_CALLBACK(on_sidebar_display_open_files_show), NULL);
+#endif
 	gtk_widget_show(item);
 	g_signal_connect(item, "activate",
 			G_CALLBACK(on_list_document_activate), NULL);
@@ -707,7 +715,7 @@ static void create_openfiles_popup_menu(void)
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(openfiles_popup_menu), item);
 
-	item = ui_image_menu_item_new(GTK_STOCK_FIND, _("_Find in Files"));
+	item = ui_image_menu_item_new(GTK_STOCK_FIND, _("_Find in Files..."));
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(openfiles_popup_menu), item);
 	g_signal_connect(item, "activate", G_CALLBACK(on_find_in_files), NULL);
@@ -1024,7 +1032,7 @@ static void documents_menu_update(GtkTreeSelection *selection)
 		gtk_tree_model_get(model, &iter, DOCUMENTS_DOCUMENT, &doc,
 			DOCUMENTS_SHORTNAME, &shortname, -1);
 	}
-	path = NZV(shortname) &&
+	path = !EMPTY(shortname) &&
 		(g_path_is_absolute(shortname) ||
 		(app->project && g_str_has_prefix(shortname, app->project->name)));
 

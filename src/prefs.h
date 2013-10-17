@@ -58,6 +58,8 @@ extern GeanyToolPrefs tool_prefs;
 
 void prefs_show_dialog(void);
 
+void prefs_kb_search_name(const gchar *search);
+
 G_END_DECLS
 
 #endif

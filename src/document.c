@@ -605,6 +605,9 @@ static gboolean remove_page(guint page_num)
 	g_free(doc->real_path);
 	tm_workspace_remove_object(doc->tm_file, TRUE, TRUE);
 
+	if (doc->priv->tag_tree)
+		gtk_widget_destroy(doc->priv->tag_tree);
+
 	editor_destroy(doc->editor);
 	doc->editor = NULL; /* needs to be NULL for document_undo_clear() call below */
 
@@ -973,6 +976,16 @@ static gboolean detect_indent_width(GeanyEditor *editor, GeanyIndentType type, g
 	line_count = sci_get_line_count(sci);
 	for (line = 0; line < line_count; line++)
 	{
+		gint pos = sci_get_line_indent_position(sci, line);
+
+		/* We probably don't have style info yet, because we're generally called just after
+		 * the document got created, so we can't use highlighting_is_code_style().
+		 * That's not good, but the assumption below that concerning lines start with an
+		 * asterisk (common continuation character for C/C++/Java/...) should do the trick
+		 * without removing too much legitimate lines. */
+		if (sci_get_char_at(sci, pos) == '*')
+			continue;
+
 		width = sci_get_line_indentation(sci, line);
 		/* most code will have indent total <= 24, otherwise it's more likely to be
 		 * alignment than indentation */
@@ -1362,19 +1375,20 @@ static void replace_header_filename(GeanyDocument *doc)
 	g_return_if_fail(doc != NULL);
 	g_return_if_fail(doc->file_type != NULL);
 
+	filebase = g_regex_escape_string(GEANY_STRING_UNTITLED, -1);
 	if (doc->file_type->extension)
-		filebase = g_strconcat("\\<", GEANY_STRING_UNTITLED, "\\.\\w+", NULL);
+		SETPTR(filebase, g_strconcat("\\b", filebase, "\\.\\w+", NULL));
 	else
-		filebase = g_strdup(GEANY_STRING_UNTITLED);
+		SETPTR(filebase, g_strconcat("\\b", filebase, "\\b", NULL));
 
 	filename = g_path_get_basename(doc->file_name);
 
 	/* only search the first 3 lines */
 	ttf.chrg.cpMin = 0;
-	ttf.chrg.cpMax = sci_get_position_from_line(doc->editor->sci, 3);
+	ttf.chrg.cpMax = sci_get_position_from_line(doc->editor->sci, 4);
 	ttf.lpstrText = filebase;
 
-	if (search_find_text(doc->editor->sci, SCFIND_MATCHCASE | SCFIND_REGEXP, &ttf) != -1)
+	if (search_find_text(doc->editor->sci, SCFIND_MATCHCASE | SCFIND_REGEXP, &ttf, NULL) != -1)
 	{
 		sci_set_target_start(doc->editor->sci, ttf.chrgText.cpMin);
 		sci_set_target_end(doc->editor->sci, ttf.chrgText.cpMax);
@@ -1503,13 +1517,12 @@ _("An error occurred while converting the file from UTF-8 in \"%s\". The file re
 
 		if (conv_error->code == G_CONVERT_ERROR_ILLEGAL_SEQUENCE)
 		{
-			gchar *context = NULL;
 			gint line, column;
 			gint context_len;
 			gunichar unic;
 			/* don't read over the doc length */
 			gint max_len = MIN((gint)bytes_read + 6, (gint)*len - 1);
-			context = g_malloc(7); /* read 6 bytes from Sci + '\0' */
+			gchar context[7]; /* read 6 bytes from Sci + '\0' */
 			sci_get_text_range(doc->editor->sci, bytes_read, max_len, context);
 
 			/* take only one valid Unicode character from the context and discard the leftover */
@@ -1521,7 +1534,6 @@ _("An error occurred while converting the file from UTF-8 in \"%s\". The file re
 			error_text = g_strdup_printf(
 				_("Error message: %s\nThe error occurred at \"%s\" (line: %d, column: %d)."),
 				conv_error->message, context, line + 1, column);
-			g_free(context);
 		}
 		else
 			error_text = g_strdup_printf(_("Error message: %s."), conv_error->message);
@@ -1890,7 +1902,8 @@ gboolean document_search_bar_find(GeanyDocument *doc, const gchar *text, gint fl
  * @param original_text Text as it was entered by user, or @c NULL to use @c text
  */
 gint document_find_text(GeanyDocument *doc, const gchar *text, const gchar *original_text,
-		gint flags, gboolean search_backwards, gboolean scroll, GtkWidget *parent)
+		gint flags, gboolean search_backwards, GeanyMatchInfo **match_,
+		gboolean scroll, GtkWidget *parent)
 {
 	gint selection_end, selection_start, search_pos;
 
@@ -1917,9 +1930,9 @@ gint document_find_text(GeanyDocument *doc, const gchar *text, const gchar *orig
 
 	sci_set_search_anchor(doc->editor->sci);
 	if (search_backwards)
-		search_pos = sci_search_prev(doc->editor->sci, flags, text);
+		search_pos = search_find_prev(doc->editor->sci, text, flags, match_);
 	else
-		search_pos = search_find_next(doc->editor->sci, text, flags);
+		search_pos = search_find_next(doc->editor->sci, text, flags, match_);
 
 	if (search_pos != -1)
 	{
@@ -1950,7 +1963,7 @@ gint document_find_text(GeanyDocument *doc, const gchar *text, const gchar *orig
 			gint ret;
 
 			sci_set_current_position(doc->editor->sci, (search_backwards) ? sci_len : 0, FALSE);
-			ret = document_find_text(doc, text, original_text, flags, search_backwards, scroll, parent);
+			ret = document_find_text(doc, text, original_text, flags, search_backwards, match_, scroll, parent);
 			if (ret == -1)
 			{	/* return to original cursor position if not found */
 				sci_set_current_position(doc->editor->sci, selection_start, FALSE);
@@ -1972,6 +1985,7 @@ gint document_replace_text(GeanyDocument *doc, const gchar *find_text, const gch
 		const gchar *replace_text, gint flags, gboolean search_backwards)
 {
 	gint selection_end, selection_start, search_pos;
+	GeanyMatchInfo *match = NULL;
 
 	g_return_val_if_fail(doc != NULL && find_text != NULL && replace_text != NULL, -1);
 
@@ -1990,7 +2004,7 @@ gint document_replace_text(GeanyDocument *doc, const gchar *find_text, const gch
 	if (selection_end == selection_start)
 	{
 		/* no selection so just find the next match */
-		document_find_text(doc, find_text, original_find_text, flags, search_backwards, TRUE, NULL);
+		document_find_text(doc, find_text, original_find_text, flags, search_backwards, NULL, TRUE, NULL);
 		return -1;
 	}
 	/* there's a selection so go to the start before finding to search through it
@@ -2000,20 +2014,22 @@ gint document_replace_text(GeanyDocument *doc, const gchar *find_text, const gch
 	else
 		sci_goto_pos(doc->editor->sci, selection_start, TRUE);
 
-	search_pos = document_find_text(doc, find_text, original_find_text, flags, search_backwards, TRUE, NULL);
+	search_pos = document_find_text(doc, find_text, original_find_text, flags, search_backwards, &match, TRUE, NULL);
 	/* return if the original selected text did not match (at the start of the selection) */
 	if (search_pos != selection_start)
+	{
+		if (search_pos != -1)
+			geany_match_info_free(match);
 		return -1;
+	}
 
 	if (search_pos != -1)
 	{
-		gint replace_len;
-		/* search next/prev will select matching text, which we use to set the replace target */
-		sci_target_from_selection(doc->editor->sci);
-		replace_len = search_replace_target(doc->editor->sci, replace_text, flags & SCFIND_REGEXP);
+		gint replace_len = search_replace_match(doc->editor->sci, match, replace_text);
 		/* select the replacement - find text will skip past the selected text */
 		sci_set_selection_start(doc->editor->sci, search_pos);
 		sci_set_selection_end(doc->editor->sci, search_pos + replace_len);
+		geany_match_info_free(match);
 	}
 	else
 	{
@@ -2693,6 +2709,60 @@ static void document_redo_add(GeanyDocument *doc, guint type, gpointer data)
 }
 
 
+enum
+{
+	STATUS_CHANGED,
+#ifdef USE_GIO_FILEMON
+	STATUS_DISK_CHANGED,
+#endif
+	STATUS_READONLY
+};
+static struct
+{
+	const gchar *name;
+	GdkColor color;
+	gboolean loaded;
+} document_status_styles[] = {
+	{ "geany-document-status-changed",      {0}, FALSE },
+#ifdef USE_GIO_FILEMON
+	{ "geany-document-status-disk-changed", {0}, FALSE },
+#endif
+	{ "geany-document-status-readonly",     {0}, FALSE }
+};
+
+
+static gint document_get_status_id(GeanyDocument *doc)
+{
+	if (doc->changed)
+		return STATUS_CHANGED;
+#ifdef USE_GIO_FILEMON
+	else if (doc->priv->file_disk_status == FILE_CHANGED)
+		return STATUS_DISK_CHANGED;
+#endif
+	else if (doc->readonly)
+		return STATUS_READONLY;
+
+	return -1;
+}
+
+
+/* returns an identifier that is to be set as a widget name or class to get it styled
+ * depending on the document status (changed, readonly, etc.)
+ * a NULL return value means default (unchanged) style */
+const gchar *document_get_status_widget_class(GeanyDocument *doc)
+{
+	gint status;
+
+	g_return_val_if_fail(doc != NULL, NULL);
+
+	status = document_get_status_id(doc);
+	if (status < 0)
+		return NULL;
+	else
+		return document_status_styles[status].name;
+}
+
+
 /**
  *  Gets the status color of the document, or @c NULL if default widget coloring should be used.
  *  Returned colors are red if the document has changes, green if the document is read-only
@@ -2707,25 +2777,45 @@ static void document_redo_add(GeanyDocument *doc, guint type, gpointer data)
  */
 const GdkColor *document_get_status_color(GeanyDocument *doc)
 {
-	static GdkColor red = {0, 0xFFFF, 0, 0};
-	static GdkColor green = {0, 0, 0x7FFF, 0};
-#ifdef USE_GIO_FILEMON
-	static GdkColor orange = {0, 0xFFFF, 0x7FFF, 0};
-#endif
-	GdkColor *color = NULL;
+	gint status;
 
 	g_return_val_if_fail(doc != NULL, NULL);
 
-	if (doc->changed)
-		color = &red;
-#ifdef USE_GIO_FILEMON
-	else if (doc->priv->file_disk_status == FILE_CHANGED)
-		color = &orange;
-#endif
-	else if (doc->readonly)
-		color = &green;
+	status = document_get_status_id(doc);
+	if (status < 0)
+		return NULL;
+	if (! document_status_styles[status].loaded)
+	{
+#if GTK_CHECK_VERSION(3, 0, 0)
+		GdkRGBA color;
+		GtkWidgetPath *path = gtk_widget_path_new();
+		GtkStyleContext *ctx = gtk_style_context_new();
+		gtk_widget_path_append_type(path, GTK_TYPE_WINDOW);
+		gtk_widget_path_append_type(path, GTK_TYPE_BOX);
+		gtk_widget_path_append_type(path, GTK_TYPE_NOTEBOOK);
+		gtk_widget_path_append_type(path, GTK_TYPE_LABEL);
+		gtk_widget_path_iter_set_name(path, -1, document_status_styles[status].name);
+		gtk_style_context_set_screen(ctx, gtk_widget_get_screen(GTK_WIDGET(doc->editor->sci)));
+		gtk_style_context_set_path(ctx, path);
+		gtk_style_context_get_color(ctx, GTK_STATE_NORMAL, &color);
+		document_status_styles[status].color.red   = 0xffff * color.red;
+		document_status_styles[status].color.green = 0xffff * color.green;
+		document_status_styles[status].color.blue  = 0xffff * color.blue;
+		document_status_styles[status].loaded = TRUE;
+		gtk_widget_path_unref(path);
+		g_object_unref(ctx);
+#else
+		GtkSettings *settings = gtk_widget_get_settings(GTK_WIDGET(doc->editor->sci));
+		gchar *path = g_strconcat("GeanyMainWindow.GtkHBox.GtkNotebook.",
+				document_status_styles[status].name, NULL);
+		GtkStyle *style = gtk_rc_get_style_by_paths(settings, path, NULL, GTK_TYPE_LABEL);
 
-	return color;	/* return pointer to static GdkColor. */
+		document_status_styles[status].color = style->fg[GTK_STATE_NORMAL];
+		document_status_styles[status].loaded = TRUE;
+		g_free(path);
+#endif
+	}
+	return &document_status_styles[status].color;
 }
 
 

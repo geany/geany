@@ -90,7 +90,6 @@ gboolean	ignore_callback;	/* hack workaround for GTK+ toggle button callback pro
 
 GeanyStatus	 main_status;
 CommandLineOptions cl_options;	/* fields initialised in parse_command_line_options */
-gboolean main_use_geany_icon;
 
 
 static const gchar geany_lib_versions[] = "GTK %u.%u.%u, GLib %u.%u.%u";
@@ -228,7 +227,21 @@ static void apply_settings(void)
 
 static void main_init(void)
 {
+	/* add our icon path in case we aren't installed in the system prefix */
+	gchar *path;
+#ifdef G_OS_WIN32
+	gchar *install_dir = win32_get_installation_dir();
+	path = g_build_filename(install_dir, "share", "icons", NULL);
+	g_free(install_dir);
+#else
+	path = g_build_filename(GEANY_DATADIR, "icons", NULL);
+#endif
+	gtk_icon_theme_append_search_path(gtk_icon_theme_get_default(), path);
+	g_free(path);
+
 	/* inits */
+	ui_init_stock_items();
+
 	ui_init_builder();
 
 	main_widgets.window				= NULL;
@@ -245,8 +258,6 @@ static void main_init(void)
 	ui_prefs.recent_queue				= g_queue_new();
 	ui_prefs.recent_projects_queue		= g_queue_new();
 	main_status.opening_session_files	= FALSE;
-
-	ui_init_stock_items();
 
 	main_widgets.window = create_window1();
 
@@ -324,7 +335,7 @@ static void get_line_and_column_from_filename(gchar *filename, gint *line, gint 
 
 	g_assert(*line == -1 && *column == -1);
 
-	if (G_UNLIKELY(! NZV(filename)))
+	if (G_UNLIKELY(EMPTY(filename)))
 		return;
 
 	/* allow to open files like "test:0" */
@@ -368,6 +379,18 @@ static void get_line_and_column_from_filename(gchar *filename, gint *line, gint 
 }
 
 
+#ifdef G_OS_WIN32
+static void change_working_directory_on_windows(const gchar *install_dir)
+{
+	/* On Windows, change the working directory to the Geany installation path to not lock
+	 * the directory of a file passed as command line argument (see bug #2626124).
+	 * This also helps if plugins or other code uses relative paths to load
+	 * any additional resources (e.g. share/geany-plugins/...). */
+	win32_set_working_directory(install_dir);
+}
+#endif
+
+
 static void setup_paths(void)
 {
 	gchar *data_dir;
@@ -381,6 +404,8 @@ static void setup_paths(void)
 
 	data_dir = g_build_filename(install_dir, "data", NULL); /* e.g. C:\Program Files\geany\data */
 	doc_dir = g_build_filename(install_dir, "doc", NULL);
+
+	change_working_directory_on_windows(install_dir);
 
 	g_free(install_dir);
 #else
@@ -546,13 +571,16 @@ static void parse_command_line_options(gint *argc, gchar ***argv)
 
 	if (show_version)
 	{
+		gchar *build_date = utils_parse_and_format_build_date(__DATE__);
+
 		printf(PACKAGE " %s (", main_get_version_string());
 		/* note for translators: library versions are printed after this */
-		printf(_("built on %s with "), __DATE__);
+		printf(_("built on %s with "), build_date);
 		printf(geany_lib_versions,
 			GTK_MAJOR_VERSION, GTK_MINOR_VERSION, GTK_MICRO_VERSION,
 			GLIB_MAJOR_VERSION, GLIB_MINOR_VERSION, GLIB_MICRO_VERSION);
 		printf(")\n");
+		g_free(build_date);
 		wait_for_input_on_windows();
 		exit(0);
 	}
@@ -849,7 +877,7 @@ static void load_session_project_file(void)
 
 	locale_filename = utils_get_locale_from_utf8(project_prefs.session_file);
 
-	if (G_LIKELY(NZV(locale_filename)))
+	if (G_LIKELY(!EMPTY(locale_filename)))
 		project_load_file(locale_filename);
 
 	g_free(locale_filename);
@@ -947,6 +975,52 @@ static const gchar *get_locale(void)
 }
 
 
+#if ! GTK_CHECK_VERSION(3, 0, 0)
+/* This prepends our own gtkrc file to the list of RC files to be loaded by GTK at startup.
+ * This function *has* to be called before gtk_init().
+ *
+ * We have a custom RC file defining various styles we need, and we want the user to be
+ * able to override them (e.g. if they want -- or need -- other colors).  Fair enough, one
+ * would simply call gtk_rc_parse() with the appropriate filename.  However, the styling
+ * rules applies in the order they are loaded, then if we load our styles after GTK has
+ * loaded the user's ones we'd override them.
+ *
+ * There are 2 solutions to fix this:
+ * 1) set our styles' priority to something with lower than "user" (actually "theme"
+ *    priority because rules precedence are first calculated depending on the priority
+ *    no matter of how precise the rules is, so we need to override the theme).
+ * 2) prepend our custom style to GTK's list while keeping priority to user (which is the
+ *    default), so it gets loaded before real user's ones and so gets overridden by them.
+ *
+ * One would normally go for 1 because it's ways simpler and requires less code: you just
+ * have to add the priorities to your styles, which is a matter of adding a few ":theme" in
+ * the RC file.  However, KDE being a bitch it doesn't set the gtk-theme-name but rather
+ * directly includes the style to use in a user gtkrc file, which makes the theme have
+ * "user" priority, hence overriding our styles.  So, we cannot set priorities in the RC
+ * file if we want to support running under KDE, which pretty much leave us with no choice
+ * but to go with solution 2, which unfortunately requires writing ugly code since GTK
+ * don't have a gtk_rc_prepend_default_file() function.  Thank you very much KDE.
+ *
+ * Though, as a side benefit it also makes the code work with people using gtk-chtheme,
+ * which also found it funny to include the theme in the user RC file. */
+static void setup_gtk2_styles(void)
+{
+	gchar **gtk_files = gtk_rc_get_default_files();
+	gchar **new_files = g_malloc(sizeof *new_files * (g_strv_length(gtk_files) + 2));
+	guint i = 0;
+
+	new_files[i++] = g_build_filename(app->datadir, "geany.gtkrc", NULL);
+	for (; *gtk_files; gtk_files++)
+		new_files[i++] = g_strdup(*gtk_files);
+	new_files[i] = NULL;
+
+	gtk_rc_set_default_files(new_files);
+
+	g_strfreev(new_files);
+}
+#endif
+
+
 gint main(gint argc, gchar **argv)
 {
 	GeanyDocument *doc;
@@ -968,20 +1042,25 @@ gint main(gint argc, gchar **argv)
 	memset(&ui_widgets, 0, sizeof(UIWidgets));
 
 	setup_paths();
+#if ! GTK_CHECK_VERSION(3, 0, 0)
+	setup_gtk2_styles();
+#endif
 #ifdef ENABLE_NLS
 	main_locale_init(GEANY_LOCALEDIR, GETTEXT_PACKAGE);
 #endif
 	parse_command_line_options(&argc, &argv);
 
+#if ! GLIB_CHECK_VERSION(2, 32, 0)
 	/* Initialize GLib's thread system in case any plugins want to use it or their
-	 * dependencies (e.g. WebKit, Soup, ...) */
+	 * dependencies (e.g. WebKit, Soup, ...). Deprecated since GLIB 2.32. */
 	if (!g_thread_supported())
 		g_thread_init(NULL);
-    /* removed as signal handling was wrong, see signal_cb()
+#endif
+
+	/* removed as signal handling was wrong, see signal_cb()
 	signal(SIGTERM, signal_cb); */
+
 #ifdef G_OS_UNIX
-	/* SIGQUIT is used to kill spawned children and we get also this signal, so ignore */
-	signal(SIGQUIT, SIG_IGN);
 	/* ignore SIGPIPE signal for preventing sudden death of program */
 	signal(SIGPIPE, SIG_IGN);
 #endif
@@ -1057,26 +1136,6 @@ gint main(gint argc, gchar **argv)
 	document_init_doclist();
 	symbols_init();
 	editor_snippets_init();
-
-	/* set window icon */
-	{
-		GdkPixbuf *pb;
-        if (main_use_geany_icon)
-        {
-            pb = ui_new_pixbuf_from_inline(GEANY_IMAGE_LOGO);
-        }
-        else
-        {
-            pb = gtk_icon_theme_load_icon(gtk_icon_theme_get_default(), "geany", 48, 0, NULL);
-            if (pb == NULL)
-            {
-                g_warning("Unable to find Geany icon in theme, using embedded icon");
-                pb = ui_new_pixbuf_from_inline(GEANY_IMAGE_LOGO);
-            }
-        }
-		gtk_window_set_icon(GTK_WINDOW(main_widgets.window), pb);
-		g_object_unref(pb);	/* free our reference */
-	}
 
 	/* registering some basic events */
 	g_signal_connect(main_widgets.window, "delete-event", G_CALLBACK(on_exit_clicked), NULL);
@@ -1155,17 +1214,6 @@ gint main(gint argc, gchar **argv)
 	}
 #endif
 
-#ifdef G_OS_WIN32
-	{
-		gchar *dir;
-		/* On Windows, change the working directory to the Geany installation path to not lock
-		 * the directory of a file passed as command line argument (see bug #2626124). */
-		dir = win32_get_installation_dir();
-		win32_set_working_directory(dir);
-		g_free(dir);
-	}
-#endif
-
 	/* when we are really done with setting everything up and the main event loop is running,
 	 * tell other components, mainly plugins, that startup is complete */
 	g_idle_add_full(G_PRIORITY_LOW, send_startup_complete, NULL, NULL);
@@ -1215,7 +1263,6 @@ void main_quit()
 	sidebar_finalize();
 	configuration_finalize();
 	filetypes_free_types();
-	ui_finalize();
 	log_finalize();
 
 	tm_workspace_free(TM_WORK_OBJECT(app->tm_workspace));

@@ -65,6 +65,7 @@
 #include "toolbar.h"
 #include "highlighting.h"
 #include "pluginutils.h"
+#include "gtkcompat.h"
 
 
 #ifdef HAVE_VTE
@@ -220,9 +221,8 @@ G_MODULE_EXPORT void on_close1_activate(GtkMenuItem *menuitem, gpointer user_dat
 {
 	GeanyDocument *doc = document_get_current();
 
-	g_return_if_fail(doc != NULL);
-
-	document_close(doc);
+	if (doc != NULL)
+		document_close(doc);
 }
 
 
@@ -737,11 +737,9 @@ G_MODULE_EXPORT void on_toggle_case1_activate(GtkMenuItem *menuitem, gpointer us
 	{
 		gchar *result = NULL;
 		gint cmd = SCI_LOWERCASE;
-		gint text_len = sci_get_selected_text_length(sci);
 		gboolean rectsel = (gboolean) scintilla_send_message(sci, SCI_SELECTIONISRECTANGLE, 0, 0);
 
-		text = g_malloc(text_len + 1);
-		sci_get_selected_text(sci, text);
+		text = sci_get_selection_contents(sci);
 
 		if (utils_str_has_upper(text))
 		{
@@ -749,7 +747,6 @@ G_MODULE_EXPORT void on_toggle_case1_activate(GtkMenuItem *menuitem, gpointer us
 				cmd = SCI_LOWERCASE;
 			else
 				result = g_utf8_strdown(text, -1);
-
 		}
 		else
 		{
@@ -757,7 +754,6 @@ G_MODULE_EXPORT void on_toggle_case1_activate(GtkMenuItem *menuitem, gpointer us
 				cmd = SCI_UPPERCASE;
 			else
 				result = g_utf8_strup(text, -1);
-
 		}
 
 		if (result != NULL)
@@ -765,7 +761,7 @@ G_MODULE_EXPORT void on_toggle_case1_activate(GtkMenuItem *menuitem, gpointer us
 			sci_replace_sel(sci, result);
 			g_free(result);
 			if (keep_sel)
-				sci_set_selection_start(sci, sci_get_current_position(sci) - text_len + 1);
+				sci_set_selection_start(sci, sci_get_current_position(sci) - strlen(text));
 		}
 		else
 			sci_send_command(sci, cmd);
@@ -910,8 +906,7 @@ static void find_usage(gboolean in_session)
 
 	if (sci_has_selection(doc->editor->sci))
 	{	/* take selected text if there is a selection */
-		search_text = g_malloc(sci_get_selected_text_length(doc->editor->sci) + 1);
-		sci_get_selected_text(doc->editor->sci, search_text);
+		search_text = sci_get_selection_contents(doc->editor->sci);
 		flags = SCFIND_MATCHCASE;
 	}
 	else
@@ -1651,7 +1646,7 @@ G_MODULE_EXPORT void on_menu_open_selected_file1_activate(GtkMenuItem *menuitem,
 			filename = g_build_path(G_DIR_SEPARATOR_S, path, sel, NULL);
 
 			if (! g_file_test(filename, G_FILE_TEST_EXISTS) &&
-				app->project != NULL && NZV(app->project->base_path))
+				app->project != NULL && !EMPTY(app->project->base_path))
 			{
 				/* try the project's base path */
 				SETPTR(path, project_get_base_path());
@@ -1709,8 +1704,7 @@ G_MODULE_EXPORT void on_context_action1_activate(GtkMenuItem *menuitem, gpointer
 
 	if (sci_has_selection(doc->editor->sci))
 	{	/* take selected text if there is a selection */
-		word = g_malloc(sci_get_selected_text_length(doc->editor->sci) + 1);
-		sci_get_selected_text(doc->editor->sci, word);
+		word = sci_get_selection_contents(doc->editor->sci);
 	}
 	else
 	{
@@ -1719,7 +1713,7 @@ G_MODULE_EXPORT void on_context_action1_activate(GtkMenuItem *menuitem, gpointer
 
 	/* use the filetype specific command if available, fallback to global command otherwise */
 	if (doc->file_type != NULL &&
-		NZV(doc->file_type->context_action_cmd))
+		!EMPTY(doc->file_type->context_action_cmd))
 	{
 		command = g_strdup(doc->file_type->context_action_cmd);
 	}
@@ -1729,7 +1723,7 @@ G_MODULE_EXPORT void on_context_action1_activate(GtkMenuItem *menuitem, gpointer
 	}
 
 	/* substitute the wildcard %s and run the command if it is non empty */
-	if (G_LIKELY(NZV(command)))
+	if (G_LIKELY(!EMPTY(command)))
 	{
 		utils_str_replace_all(&command, "%s", word);
 
@@ -1811,7 +1805,7 @@ G_MODULE_EXPORT void on_back_activate(GtkMenuItem *menuitem, gpointer user_data)
 
 G_MODULE_EXPORT gboolean on_motion_event(GtkWidget *widget, GdkEventMotion *event, gpointer user_data)
 {
-	if (prefs.auto_focus && ! GTK_WIDGET_HAS_FOCUS(widget))
+	if (prefs.auto_focus && ! gtk_widget_has_focus(widget))
 		gtk_widget_grab_focus(widget);
 
 	return FALSE;
