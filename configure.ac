@@ -24,6 +24,7 @@ fi
 AC_USE_SYSTEM_EXTENSIONS
 
 AC_PROG_CC
+AC_PROG_CC_C99
 
 AC_PROG_CXX
 # check for C++ compiler explicitly and fail if none is found, do this check
