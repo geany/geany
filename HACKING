@@ -165,13 +165,10 @@ to set warning options (as well as anything else e.g. -g -O2).
 * Enable warnings - for gcc use '-Wall -W' (and optionally
   -Wno-unused-parameter to avoid unused parameter warnings in Glade
   callbacks).
-* You should try to write ISO C90 code for portability, so always
+* You should try to write ISO C99 code for portability, so always
   use C ``/* */`` comments and function_name(void) instead of
   function_name(). This is for compatibility with various Unix-like
-  compilers. You should use -ansi to help check this.
-  Note that MIO (tagmanager/mio) requires ``MIO_FORCE_ANSI``
-  preprocessor constant to be defined to build with ``-ansi``, so you
-  should add ``-DMIO_FORCE_ANSI`` together with ``-ansi``.
+  compilers. You should use -std=c99 to help check this.
 
 .. tip::
     Remember for gcc you need to enable optimization to get certain
@@ -187,9 +184,9 @@ Style
   When editing with Geany set preference files->Strip trailing spaces
   and tabs.
 * Use the multiline comment ``/* */`` to comment small blocks of code,
-  functions descriptions or longer explanations of code, etc. C++ single
-  line comments will cause portability issues. The more comments are in
-  your code the better. (See also ``scripts/fix-cxx-comments.pl`` in Git).
+  functions descriptions or longer explanations of code, etc. The more
+  comments are in your code the better. (See also
+  ``scripts/fix-cxx-comments.pl`` in Git).
 * Lines should not be longer than about 100 characters and after 100
   characters the lines should be wrapped and indented once more to
   show that the line is continued.
@@ -200,7 +197,8 @@ Style
 * 2-operand operators should have a space each side.
 * Function bodies should have 2 blank newlines after them.
 * Align braces together on separate lines.
-* Don't put assignments in 'if/while/etc' expressions.
+* Don't put assignments in 'if/while/etc' expressions except for loops,
+  for example ``for (int i = 0; i < some_limit; i++)``.
 * if statements without brace bodies should have the code on a separate
   line, then a blank line afterwards.
 * Use braces after if/while statements if the body uses another
