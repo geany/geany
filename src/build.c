@@ -771,7 +771,6 @@ static GPid build_spawn_cmd(GeanyDocument *doc, const gchar *cmd, const gchar *d
 	gchar **argv;
 	gchar *working_dir;
 	gchar *utf8_working_dir;
-	gchar *cmd_string;
 	gchar *utf8_cmd_string;
 #ifdef SYNC_SPAWN
 	gchar *output[2];
@@ -791,19 +790,25 @@ static GPid build_spawn_cmd(GeanyDocument *doc, const gchar *cmd, const gchar *d
 	clear_all_errors();
 	SETPTR(current_dir_entered, NULL);
 
-	cmd_string = g_strdup(cmd);
-
 #ifdef G_OS_WIN32
-	argv = g_strsplit(cmd_string, " ", 0);
+	/* Parse arguments similar to /bin/sh - should be OK on Windows too */
+	if (!g_shell_parse_argv(cmd, NULL, &argv, &error))
+	{
+		geany_debug("build command spawning failed: %s", error->message);
+		ui_set_statusbar(TRUE, _("Process failed (%s)"), error->message);
+		g_error_free(error);
+		error = NULL;
+		return (GPid) 0;
+	}
 #else
 	argv = g_new0(gchar *, 4);
 	argv[0] = g_strdup("/bin/sh");
 	argv[1] = g_strdup("-c");
-	argv[2] = cmd_string;
+	argv[2] = g_strdup(cmd);
 	argv[3] = NULL;
 #endif
 
-	utf8_cmd_string = utils_get_utf8_from_locale(cmd_string);
+	utf8_cmd_string = utils_get_utf8_from_locale(cmd);
 	utf8_working_dir = !EMPTY(dir) ? g_strdup(dir) : g_path_get_dirname(doc->file_name);
 	working_dir = utils_get_locale_from_utf8(utf8_working_dir);
 
