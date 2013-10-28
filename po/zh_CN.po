@@ -1107,11 +1107,11 @@ msgid "Removes trailing spaces and tabs and the end of lines"
 msgstr "去除行尾空格和制表符"
 
 #: ../data/geany.glade.h:243 ../src/keybindings.c:569
-msgid "Replace tabs by space"
+msgid "Replace tabs with space"
 msgstr "用空格替换制表符"
 
 #: ../data/geany.glade.h:244
-msgid "Replaces all tabs in document by spaces"
+msgid "Replaces all tabs in document with spaces"
 msgstr "替换文档中所有制表符为空格"
 
 #: ../data/geany.glade.h:245
@@ -1909,7 +1909,7 @@ msgid "_Strip Trailing Spaces"
 msgstr "去除行尾空白(_S)"
 
 #: ../data/geany.glade.h:434
-msgid "_Replace Tabs by Spaces"
+msgid "_Replace Tabs with Spaces"
 msgstr "替换制表符为空格(_R)"
 
 #: ../data/geany.glade.h:435
@@ -3503,7 +3503,7 @@ msgid "Toggle Line breaking"
 msgstr "切换自动断行"
 
 #: ../src/keybindings.c:571
-msgid "Replace spaces by tabs"
+msgid "Replace spaces with tabs"
 msgstr "替换空格为制表符"
 
 #: ../src/keybindings.c:573

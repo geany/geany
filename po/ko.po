@@ -1204,12 +1204,12 @@ msgid "Removes trailing spaces and tabs and the end of lines"
 msgstr "질질 끌리는 스페이스, 탭, 줄끝표시 지우기"
 
 #: ../data/geany.glade.h:243 ../src/keybindings.c:569
-msgid "Replace tabs by space"
+msgid "Replace tabs with space"
 msgstr "탭을 스페이스로 바꾸기"
 
 #: ../data/geany.glade.h:244
 #, fuzzy
-msgid "Replaces all tabs in document by spaces"
+msgid "Replaces all tabs in document with spaces"
 msgstr "문서내의 모든 탭을 스페이스로 바꿈."
 
 #: ../data/geany.glade.h:245
@@ -2073,7 +2073,7 @@ msgid "_Strip Trailing Spaces"
 msgstr "질질끌리는 공백 지우기(_S)"
 
 #: ../data/geany.glade.h:434
-msgid "_Replace Tabs by Spaces"
+msgid "_Replace Tabs with Spaces"
 msgstr "탭을 스페이스로 바꾸기(_R)"
 
 #: ../data/geany.glade.h:435
@@ -3721,7 +3721,7 @@ msgid "Toggle Line breaking"
 msgstr "자동 행분리 전환"
 
 #: ../src/keybindings.c:571
-msgid "Replace spaces by tabs"
+msgid "Replace spaces with tabs"
 msgstr "스페이스를 탭으로 바꿈"
 
 #: ../src/keybindings.c:573
@@ -6275,7 +6275,7 @@ msgstr ""
 #~ msgid "Treat this file as read-only. No changes can be made."
 #~ msgstr "이 파일을 읽기전용으로 설정."
 
-#~ msgid "Replaces all spaces in the document by tab characters."
+#~ msgid "Replaces all spaces in the document with tab characters."
 #~ msgstr "문서내의 모든 스페이스를 탭으로 바꿈."
 
 #~ msgid "Folds all contractible code blocks"

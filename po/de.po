@@ -1210,11 +1210,11 @@ msgid "Removes trailing spaces and tabs and the end of lines"
 msgstr "Entfernt Leerzeichen und Tabulatoren am Ende einer Zeile"
 
 #: ../data/geany.glade.h:243 ../src/keybindings.c:570
-msgid "Replace tabs by space"
+msgid "Replace tabs with space"
 msgstr "Tabulatoren durch Leerzeichen ersetzen"
 
 #: ../data/geany.glade.h:244
-msgid "Replaces all tabs in document by spaces"
+msgid "Replaces all tabs in document with spaces"
 msgstr "Ersetzt alle Tabulatoren im Dokument durch Leerzeichen"
 
 #: ../data/geany.glade.h:245
@@ -2121,7 +2121,7 @@ msgid "_Strip Trailing Spaces"
 msgstr "Lee_rzeichen am Zeilenende entfernen"
 
 #: ../data/geany.glade.h:453
-msgid "_Replace Tabs by Spaces"
+msgid "_Replace Tabs with Spaces"
 msgstr "Tabulat_oren durch Leerzeichen ersetzen"
 
 #: ../data/geany.glade.h:454
@@ -3685,7 +3685,7 @@ msgid "Toggle Line breaking"
 msgstr "Automatischen Zeilenumbruch umschalten"
 
 #: ../src/keybindings.c:572
-msgid "Replace spaces by tabs"
+msgid "Replace spaces with tabs"
 msgstr "Leerzeichen durch Tabulatoren ersetzen"
 
 #: ../src/keybindings.c:574

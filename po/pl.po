@@ -1175,11 +1175,11 @@ msgid "Removes trailing spaces and tabs and the end of lines"
 msgstr "Usuwa spacje i znaki tabulacji na końcu linii"
 
 #: ../data/geany.glade.h:243 ../src/keybindings.c:569
-msgid "Replace tabs by space"
+msgid "Replace tabs with space"
 msgstr "Zamiana tabulacji na spacje"
 
 #: ../data/geany.glade.h:244
-msgid "Replaces all tabs in document by spaces"
+msgid "Replaces all tabs in document with spaces"
 msgstr "Zamienia wszystkie znaki tabulacji na spacje"
 
 #: ../data/geany.glade.h:245
@@ -2014,7 +2014,7 @@ msgid "_Strip Trailing Spaces"
 msgstr "Usuń _białe znaki z końców wierszy"
 
 #: ../data/geany.glade.h:434
-msgid "_Replace Tabs by Spaces"
+msgid "_Replace Tabs with Spaces"
 msgstr "Zamień znaki tabulacji na _spacje"
 
 #: ../data/geany.glade.h:435
@@ -3638,7 +3638,7 @@ msgid "Toggle Line breaking"
 msgstr "Włącz/wyłącz łamanie wierszy"
 
 #: ../src/keybindings.c:571
-msgid "Replace spaces by tabs"
+msgid "Replace spaces with tabs"
 msgstr "Zastąp spacje znakami tabulacji"
 
 #: ../src/keybindings.c:573
@@ -6125,7 +6125,7 @@ msgstr "Podziel w poziomie"
 #~ msgid "Treat this file as read-only. No changes can be made."
 #~ msgstr "Tryb 'tylko do odczytu'. Nie można dokonać zmian w pliku."
 
-#~ msgid "Replaces all spaces in the document by tab characters."
+#~ msgid "Replaces all spaces in the document with tab characters."
 #~ msgstr "Zamienia wszystkie znaki spacji na znaki tabulacji."
 
 #~ msgid "Folds all contractible code blocks"

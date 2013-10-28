@@ -1189,11 +1189,11 @@ msgid "Removes trailing spaces and tabs and the end of lines"
 msgstr "Gỡ bỏ các dấu cách theo sau, tab, và kết thúc dòng"
 
 #: ../data/geany.glade.h:243 ../src/keybindings.c:569
-msgid "Replace tabs by space"
+msgid "Replace tabs with space"
 msgstr "Thay thế các tab bằng dấu cách"
 
 #: ../data/geany.glade.h:244
-msgid "Replaces all tabs in document by spaces"
+msgid "Replaces all tabs in document with spaces"
 msgstr "Thay thế bằng dấu cách mọi tab trong tài liệu"
 
 #: ../data/geany.glade.h:245
@@ -2051,7 +2051,7 @@ msgid "_Strip Trailing Spaces"
 msgstr "Bỏ dấu cách theo _sau"
 
 #: ../data/geany.glade.h:434
-msgid "_Replace Tabs by Spaces"
+msgid "_Replace Tabs with Spaces"
 msgstr "Tha_y thế các tab bằng dấu cách"
 
 #: ../data/geany.glade.h:435
@@ -3697,7 +3697,7 @@ msgid "Toggle Line breaking"
 msgstr "Bật/tắt ngắt dòng"
 
 #: ../src/keybindings.c:571
-msgid "Replace spaces by tabs"
+msgid "Replace spaces with tabs"
 msgstr "Thay thế bằng tab các dấu cách"
 
 #: ../src/keybindings.c:573

@@ -1175,11 +1175,11 @@ msgid "Removes trailing spaces and tabs and the end of lines"
 msgstr "Poreže razmike in presledke na koncu vrstic"
 
 #: ../data/geany.glade.h:243 ../src/keybindings.c:570
-msgid "Replace tabs by space"
+msgid "Replace tabs with space"
 msgstr "Zamenja razmike s presledki"
 
 #: ../data/geany.glade.h:244
-msgid "Replaces all tabs in document by spaces"
+msgid "Replaces all tabs in document with spaces"
 msgstr "Zamenja vse razmike v dokumentu s presledki"
 
 #: ../data/geany.glade.h:245
@@ -2088,7 +2088,7 @@ msgid "_Strip Trailing Spaces"
 msgstr "_Odreži presledke na repu"
 
 #: ../data/geany.glade.h:453
-msgid "_Replace Tabs by Spaces"
+msgid "_Replace Tabs with Spaces"
 msgstr "Zamenjaj _razmake s presledki"
 
 #: ../data/geany.glade.h:454
@@ -3663,7 +3663,7 @@ msgid "Toggle Line breaking"
 msgstr "Preklopi lomljenje vrstic"
 
 #: ../src/keybindings.c:572
-msgid "Replace spaces by tabs"
+msgid "Replace spaces with tabs"
 msgstr "Zamenjaj presledke z razmaki"
 
 #: ../src/keybindings.c:574
