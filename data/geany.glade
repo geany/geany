@@ -4553,12 +4553,12 @@
                             </child>
                             <child>
                               <object class="GtkCheckButton" id="check_replace_tabs">
-                                <property name="label" translatable="yes">Replace tabs by space</property>
+                                <property name="label" translatable="yes">Replace tabs with space</property>
                                 <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
-                                <property name="tooltip_text" translatable="yes">Replaces all tabs in document by spaces</property>
+                                <property name="tooltip_text" translatable="yes">Replaces all tabs in document with spaces</property>
                                 <property name="use_underline">True</property>
                                 <property name="draw_indicator">True</property>
                               </object>
@@ -7185,7 +7185,7 @@
                             </child>
                             <child>
                               <object class="GtkCheckButton" id="check_replace_tabs1">
-                                <property name="label" translatable="yes">Replace tabs by space</property>
+                                <property name="label" translatable="yes">Replace tabs with space</property>
                                 <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
@@ -9563,7 +9563,7 @@
                             <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">_Replace Tabs by Spaces</property>
+                            <property name="label" translatable="yes">Replace Tabs with _Spaces</property>
                             <property name="use_underline">True</property>
                             <signal name="activate" handler="on_replace_tabs_activate" swapped="no"/>
                           </object>
@@ -9573,7 +9573,7 @@
                             <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">Replace Spaces b_y Tabs...</property>
+                            <property name="label" translatable="yes">Replace Spaces with _Tabs...</property>
                             <property name="use_underline">True</property>
                             <signal name="activate" handler="on_replace_spaces_activate" swapped="no"/>
                           </object>
