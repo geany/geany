@@ -1687,7 +1687,7 @@ static gchar *save_doc(GeanyDocument *doc, const gchar *locale_filename,
  *  Also shows the Save As dialog if necessary.
  *  If the file is not modified, this function may do nothing unless @a force is set to @c TRUE.
  *
- *  Saving may include replacing tabs by spaces,
+ *  Saving may include replacing tabs with spaces,
  *  stripping trailing spaces and adding a final new line at the end of the file, depending
  *  on user preferences. Then the @c "document-before-save" signal is emitted,
  *  allowing plugins to modify the document before it is saved, and data is
@@ -1729,7 +1729,7 @@ gboolean document_save_file(GeanyDocument *doc, gboolean force)
 		return FALSE;
 
 	fp = project_get_file_prefs();
-	/* replaces tabs by spaces but only if the current file is not a Makefile */
+	/* replaces tabs with spaces but only if the current file is not a Makefile */
 	if (fp->replace_tabs && doc->file_type->id != GEANY_FILETYPES_MAKE)
 		editor_replace_tabs(doc->editor);
 	/* strip trailing spaces */
