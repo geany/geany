@@ -2066,7 +2066,7 @@ msgstr "Догол мөрийг Зайгаар _орлуулах"
 
 #: ../data/geany.glade.h:435
 #, fuzzy
-msgid "Replace Spaces b_y Tabs"
+msgid "Replace Spaces with _Tabs"
 msgstr "Догол мөрийг Зайгаар _орлуулах"
 
 #: ../data/geany.glade.h:436

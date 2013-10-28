@@ -1052,7 +1052,7 @@ msgid "Removes trailing spaces and tabs and the end of lines"
 msgstr "Dosyaların sonundaki boşluk, sekme ve diğer satır sonu karakterlerini temizler"
 
 #: ../data/geany.glade.h:250
-msgid "Replace Spaces b_y Tabs"
+msgid "Replace Spaces with _Tabs"
 msgstr "Boşlukları Sekme _Yap"
 
 #: ../data/geany.glade.h:251

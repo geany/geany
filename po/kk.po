@@ -1903,7 +1903,7 @@ msgid "_Replace Tabs with Spaces"
 msgstr "Табул_яцияны бос аралықтармен алмастыру"
 
 #: ../data/geany.glade.h:435
-msgid "Replace Spaces b_y Tabs"
+msgid "Replace Spaces with _Tabs"
 msgstr "Б_ос аралықтарды табуляциямен алмастыру"
 
 #: ../data/geany.glade.h:436

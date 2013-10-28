@@ -2091,7 +2091,7 @@ msgid "_Replace Tabs with Spaces"
 msgstr "Tabulatoren duerch Ofstänn e_rsetzen"
 
 #: ../data/geany.glade.h:435
-msgid "Replace Spaces b_y Tabs"
+msgid "Replace Spaces with _Tabs"
 msgstr "_Ofstänn duerch Tabulatoren ersetzen"
 
 #: ../data/geany.glade.h:436

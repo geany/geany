@@ -2090,7 +2090,7 @@ msgid "_Replace Tabs with Spaces"
 msgstr "Î_nlocuiește tab-urile cu spații"
 
 #: ../data/geany.glade.h:435
-msgid "Replace Spaces b_y Tabs"
+msgid "Replace Spaces with _Tabs"
 msgstr "Î_nlocuiește tab-urile _cu spații"
 
 # FUZZY

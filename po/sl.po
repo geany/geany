@@ -2092,7 +2092,7 @@ msgid "_Replace Tabs with Spaces"
 msgstr "Zamenjaj _razmake s presledki"
 
 #: ../data/geany.glade.h:454
-msgid "Replace Spaces b_y Tabs..."
+msgid "Replace Spaces with _Tabs..."
 msgstr "Zamenjaj _presledke z razmaki"
 
 #: ../data/geany.glade.h:455

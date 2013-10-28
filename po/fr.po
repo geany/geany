@@ -2139,7 +2139,7 @@ msgid "_Replace Tabs with Spaces"
 msgstr "Remplacer les tabulati_ons par des espaces"
 
 #: ../data/geany.glade.h:454
-msgid "Replace Spaces b_y Tabs..."
+msgid "Replace Spaces with _Tabs..."
 msgstr "Rempla_cer les espaces par des tabulations…"
 
 #: ../data/geany.glade.h:455

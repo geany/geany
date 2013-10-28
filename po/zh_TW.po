@@ -1947,7 +1947,7 @@ msgid "_Replace Tabs with Spaces"
 msgstr "以空白置換跳格(_R)"
 
 #: ../data/geany.glade.h:435
-msgid "Replace Spaces b_y Tabs"
+msgid "Replace Spaces with _Tabs"
 msgstr "以跳格置換空白(_Y)"
 
 #: ../data/geany.glade.h:436

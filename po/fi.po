@@ -1999,7 +1999,7 @@ msgid "_Replace Tabs with Spaces"
 msgstr "Korvaa _sarkaimet välilyönneillä"
 
 #: ../data/geany.glade.h:435
-msgid "Replace Spaces b_y Tabs"
+msgid "Replace Spaces with _Tabs"
 msgstr "Korvaa vä_lilyönnit sarkaimilla"
 
 #: ../data/geany.glade.h:436

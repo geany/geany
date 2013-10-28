@@ -2017,7 +2017,7 @@ msgid "_Replace Tabs with Spaces"
 msgstr "Nahradit tabelátory _mezerami"
 
 #: ../data/geany.glade.h:435
-msgid "Replace Spaces b_y Tabs"
+msgid "Replace Spaces with _Tabs"
 msgstr "Nahradit mezery t_abelátory"
 
 #: ../data/geany.glade.h:436

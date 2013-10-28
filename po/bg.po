@@ -2186,7 +2186,7 @@ msgstr "_Замени табулациите с интервали"
 
 #: ../data/geany.glade.h:435
 #, fuzzy
-msgid "Replace Spaces b_y Tabs"
+msgid "Replace Spaces with _Tabs"
 msgstr "_Замени табулациите с интервали"
 
 #: ../data/geany.glade.h:436

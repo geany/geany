@@ -2077,7 +2077,7 @@ msgid "_Replace Tabs with Spaces"
 msgstr "탭을 스페이스로 바꾸기(_R)"
 
 #: ../data/geany.glade.h:435
-msgid "Replace Spaces b_y Tabs"
+msgid "Replace Spaces with _Tabs"
 msgstr "스페이스를 탭으로 바꾸기(_y)"
 
 #: ../data/geany.glade.h:436

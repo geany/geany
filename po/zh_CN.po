@@ -1913,7 +1913,7 @@ msgid "_Replace Tabs with Spaces"
 msgstr "替换制表符为空格(_R)"
 
 #: ../data/geany.glade.h:435
-msgid "Replace Spaces b_y Tabs"
+msgid "Replace Spaces with _Tabs"
 msgstr "替换空格为制表符为(_Y)"
 
 #: ../data/geany.glade.h:436

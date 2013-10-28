@@ -1142,7 +1142,7 @@ msgid "Removes trailing spaces and tabs and the end of lines"
 msgstr "Borra los espacios y tabulaciones al final de las líneas"
 
 #: ../data/geany.glade.h:250
-msgid "Replace Spaces b_y Tabs"
+msgid "Replace Spaces with _Tabs"
 msgstr "Reemplazar _espacios por tabulaciones"
 
 #: ../data/geany.glade.h:251 ../src/keybindings.c:569

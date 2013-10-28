@@ -1896,7 +1896,7 @@ msgid "_Replace Tabs with Spaces"
 msgstr "_Asenda tabeldusmärgid tühikutega"
 
 #: ../data/geany.glade.h:435
-msgid "Replace Spaces b_y Tabs"
+msgid "Replace Spaces with _Tabs"
 msgstr "Asenda t_ühikud tabeldusmärkidega"
 
 #: ../data/geany.glade.h:436

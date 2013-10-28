@@ -2055,7 +2055,7 @@ msgid "_Replace Tabs with Spaces"
 msgstr "Tha_y thế các tab bằng dấu cách"
 
 #: ../data/geany.glade.h:435
-msgid "Replace Spaces b_y Tabs"
+msgid "Replace Spaces with _Tabs"
 msgstr "Tha_y thế các dấu cách bằng Tab"
 
 #: ../data/geany.glade.h:436

@@ -1823,7 +1823,7 @@ msgid "_Replace Tabs with Spaces"
 msgstr "_Tabulátorok cseréje szóközre"
 
 #: ../data/geany.glade.h:435
-msgid "Replace Spaces b_y Tabs"
+msgid "Replace Spaces with _Tabs"
 msgstr "Szóközök cseré_je tabulátorokra"
 
 #: ../data/geany.glade.h:436
