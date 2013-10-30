@@ -777,8 +777,11 @@ static void remove_callbacks(Plugin *plugin)
 	if (signal_ids == NULL)
 		return;
 
-	foreach_array(SignalConnection, sc, signal_ids)
-		g_signal_handler_disconnect(sc->object, sc->handler_id);
+	foreach_array(SignalConnection, sc, signal_ids) {
+		/* The plugin might have disconnected the signal already */
+		if (g_signal_handler_is_connected(sc->object, sc->handler_id))
+			g_signal_handler_disconnect(sc->object, sc->handler_id);
+	}
 
 	g_array_free(signal_ids, TRUE);
 }
