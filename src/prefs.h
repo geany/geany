@@ -50,6 +50,7 @@ typedef struct GeanyToolPrefs
 	gchar			*term_cmd;				/**< terminal emulator command */
 	gchar			*grep_cmd;				/**< grep command */
 	gchar			*context_action_cmd;	/**< context action command */
+	gint			win_spawn_mode;			/* hidden pref - workaround spawn issues */
 }
 GeanyToolPrefs;
 

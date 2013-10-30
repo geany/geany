@@ -227,6 +227,8 @@ static void init_pref_groups(void)
 		"find_selection_type", GEANY_FIND_SEL_CURRENT_WORD);
 	stash_group_add_string(group, &file_prefs.extract_filetype_regex,
 		"extract_filetype_regex", GEANY_DEFAULT_FILETYPE_REGEX);
+	stash_group_add_integer(group, &tool_prefs.win_spawn_mode,
+		"win_spawn_mode", 0);
 
 	/* Note: Interface-related various prefs are in ui_init_prefs() */
 
