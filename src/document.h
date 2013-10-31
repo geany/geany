@@ -77,7 +77,7 @@ extern GeanyFilePrefs file_prefs;
  **/
 struct GeanyDocument
 {
-	/** General flag to represent this document is active and all properties are set correctly. */
+	/** Flag used to check if this document is valid when iterating @ref documents_array. */
 	gboolean		 is_valid;
 	gint			 index;		/**< Index in the documents array. */
 	/** Whether this document supports source code symbols(tags) to show in the sidebar. */
@@ -133,7 +133,7 @@ extern GPtrArray *documents_array;
 #define documents_foreach(i) foreach_document(i)
 #endif
 
-/** Iterates all valid documents.
+/** Iterates all valid document indexes.
  * Use like a @c for statement.
  * @param i @c guint index for @ref documents_array.
  *
@@ -152,9 +152,7 @@ extern GPtrArray *documents_array;
 			{}\
 		else /* prevent outside 'else' matching our macro 'if' */
 
-/** @c NULL-safe way to check @c doc_ptr->is_valid.
- * This is useful when @a doc_ptr was stored some time earlier and documents may have been
- * closed since then.
+/** Null-safe way to check @ref GeanyDocument::is_valid.
  * @note This should not be used to check the result of the main API functions,
  * these only need a NULL-pointer check - @c document_get_current() != @c NULL. */
 #define DOC_VALID(doc_ptr) \
