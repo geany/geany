@@ -1023,6 +1023,9 @@ gboolean _broken_win32_spawn(const gchar *dir, gchar **argv, gchar **env, GSpawn
 }
 
 
+/* Note: g_spawn is broken for receiving both stdio and stderr e.g. when
+ * running make and there are compile errors. See glib/giowin32.c header
+ * comment about Windows bugs, e.g. #338943 */
 /* Simple replacement for _broken_win32_spawn().
  * flags is ignored, G_SPAWN_SEARCH_PATH is implied.
  * Don't call this function directly, use utils_spawn_[a]sync() instead.
