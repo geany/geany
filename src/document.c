@@ -3670,20 +3670,7 @@ gint document_compare_by_tab_order(gconstpointer a, gconstpointer b)
  */
 gint document_compare_by_tab_order_reverse(gconstpointer a, gconstpointer b)
 {
-	GeanyDocument *doc_a = *((GeanyDocument**) a);
-	GeanyDocument *doc_b = *((GeanyDocument**) b);
-	gint notebook_position_doc_a;
-	gint notebook_position_doc_b;
-
-	notebook_position_doc_a = document_get_notebook_page(doc_a);
-	notebook_position_doc_b = document_get_notebook_page(doc_b);
-
-	if (notebook_position_doc_a < notebook_position_doc_b)
-		return 1;
-	if (notebook_position_doc_a > notebook_position_doc_b)
-		return -1;
-	/* equality */
-	return 0;
+	return -1 * document_compare_by_tab_order(a, b);
 }
 
 
