@@ -4861,8 +4861,6 @@ static void on_document_save(GObject *obj, GeanyDocument *doc)
 {
 	gchar *f = g_build_filename(app->configdir, "snippets.conf", NULL);
 
-	g_return_if_fail(!EMPTY(doc->real_path));
-
 	if (utils_str_equal(doc->real_path, f))
 	{
 		/* reload snippets */
