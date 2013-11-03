@@ -647,10 +647,9 @@ static void parse_command_line_options(gint *argc, gchar ***argv)
 static gint create_config_dir(void)
 {
 	gint saved_errno = 0;
-	gchar *conf_file = g_build_filename(app->configdir, "geany.conf", NULL);
-	gchar *filedefs_dir = g_build_filename(app->configdir, GEANY_FILEDEFS_SUBDIR, NULL);
-
-	gchar *templates_dir = g_build_filename(app->configdir, GEANY_TEMPLATES_SUBDIR, NULL);
+	gchar *conf_file = NULL;
+	gchar *filedefs_dir = NULL;
+	gchar *templates_dir = NULL;
 
 	if (! g_file_test(app->configdir, G_FILE_TEST_EXISTS))
 	{
@@ -696,6 +695,10 @@ static gint create_config_dir(void)
 		geany_debug("creating config directory %s", app->configdir);
 		saved_errno = utils_mkdir(app->configdir, TRUE);
 	}
+
+	conf_file = g_build_filename(app->configdir, "geany.conf", NULL);
+	filedefs_dir = g_build_filename(app->configdir, GEANY_FILEDEFS_SUBDIR, NULL);
+	templates_dir = g_build_filename(app->configdir, GEANY_TEMPLATES_SUBDIR, NULL);
 
 	if (saved_errno == 0 && ! g_file_test(conf_file, G_FILE_TEST_EXISTS))
 	{	/* check whether geany.conf can be written */
