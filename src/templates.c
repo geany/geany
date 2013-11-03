@@ -630,7 +630,7 @@ static gchar *run_command(const gchar *command, const gchar *file_name,
 		{
 			g_warning("templates_replace_command: %s", error->message);
 			g_error_free(error);
-			return NULL;
+			result = NULL;
 		}
 		g_strfreev(argv);
 		g_strfreev(env);
