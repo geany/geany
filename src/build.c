@@ -868,7 +868,6 @@ static GPid build_spawn_cmd(GeanyDocument *doc, const gchar *cmd, const gchar *d
  * when vc->skip_run_script is set, otherwise it will be set to NULL */
 static gchar *prepare_run_script(GeanyDocument *doc, gchar **vte_cmd_nonscript, guint cmdindex)
 {
-	gchar *locale_filename = NULL;
 	GeanyBuildCommand *cmd = NULL;
 	gchar *executable = NULL;
 	gchar *working_dir = NULL;
@@ -881,8 +880,6 @@ static gchar *prepare_run_script(GeanyDocument *doc, gchar **vte_cmd_nonscript, 
 
 	if (vte_cmd_nonscript != NULL)
 		*vte_cmd_nonscript = NULL;
-
-	locale_filename = utils_get_locale_from_utf8(doc->file_name);
 
 	cmd = get_build_cmd(doc, GEANY_GBG_EXEC, cmdindex, NULL);
 
@@ -912,7 +909,7 @@ static gchar *prepare_run_script(GeanyDocument *doc, gchar **vte_cmd_nonscript, 
 			if (vte_cmd_nonscript != NULL)
 				*vte_cmd_nonscript = cmd_string;
 
-			utils_free_pointers(2, executable, locale_filename, NULL);
+			utils_free_pointers(1, executable, NULL);
 			return working_dir;
 		}
 		else
@@ -932,7 +929,7 @@ static gchar *prepare_run_script(GeanyDocument *doc, gchar **vte_cmd_nonscript, 
 		g_error_free(error);
 	}
 
-	utils_free_pointers(4, cmd_string, tmp, executable, locale_filename, NULL);
+	utils_free_pointers(3, cmd_string, tmp, executable, NULL);
 
 	if (result)
 		return working_dir;
