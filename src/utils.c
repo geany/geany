@@ -1798,13 +1798,15 @@ gboolean utils_is_remote_path(const gchar *path)
  * @see tm_get_real_path() - also resolves links. */
 void utils_tidy_path(gchar *filename)
 {
-	GString *str = g_string_new(filename);
+	GString *str;
 	const gchar *c, *needle;
 	gchar *tmp;
 	gssize pos;
 	gboolean preserve_double_backslash = FALSE;
 
 	g_return_if_fail(g_path_is_absolute(filename));
+
+	str = g_string_new(filename);
 
 	if (str->len >= 2 && strncmp(str->str, "\\\\", 2) == 0)
 		preserve_double_backslash = TRUE;
