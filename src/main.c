@@ -539,7 +539,7 @@ static void parse_command_line_options(gint *argc, gchar ***argv)
 			continue;
 
 		cl_options.goto_line = atoi((*argv)[i] + 1);
-		(*argv)[i] = "--dummy";
+		(*argv)[i] = (gchar *) "--dummy";
 	}
 
 	context = g_option_context_new(_("[FILES...]"));
