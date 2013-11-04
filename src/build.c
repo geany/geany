@@ -866,7 +866,6 @@ static GPid build_spawn_cmd(GeanyDocument *doc, const gchar *cmd, const gchar *d
 static gchar *prepare_run_script(GeanyDocument *doc, gchar **vte_cmd_nonscript, guint cmdindex)
 {
 	GeanyBuildCommand *cmd = NULL;
-	gchar *executable = NULL;
 	gchar *working_dir = NULL;
 	const gchar *cmd_working_dir;
 	gboolean autoclose = FALSE;
@@ -905,8 +904,9 @@ static gchar *prepare_run_script(GeanyDocument *doc, gchar **vte_cmd_nonscript, 
 		{
 			if (vte_cmd_nonscript != NULL)
 				*vte_cmd_nonscript = cmd_string;
+			else
+				g_free(cmd_string);
 
-			utils_free_pointers(1, executable, NULL);
 			return working_dir;
 		}
 		else
@@ -926,7 +926,7 @@ static gchar *prepare_run_script(GeanyDocument *doc, gchar **vte_cmd_nonscript, 
 		g_error_free(error);
 	}
 
-	utils_free_pointers(3, cmd_string, tmp, executable, NULL);
+	utils_free_pointers(2, cmd_string, tmp, NULL);
 
 	if (result)
 		return working_dir;
