@@ -428,8 +428,9 @@ G_MODULE_EXPORT void on_reload_as_activate(GtkMenuItem *menuitem, gpointer user_
 		charset = doc->encoding;
 
 	base_name = g_path_get_basename(doc->file_name);
-	/* don't prompt if file hasn't been edited at all */
-	if ((!doc->changed && !document_can_undo(doc) && !document_can_redo(doc)) ||
+	/* don't prompt if edit history is maintained, or if file hasn't been edited at all. */
+	if (file_prefs.keep_edit_history_on_reload ||
+		(!doc->changed && !document_can_undo(doc) && !document_can_redo(doc)) ||
 		dialogs_show_question_full(NULL, _("_Reload"), GTK_STOCK_CANCEL,
 		_("Any unsaved changes will be lost."),
 		_("Are you sure you want to reload '%s'?"), base_name))
