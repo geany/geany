@@ -1100,6 +1100,8 @@ GeanyDocument *document_open_file_full(GeanyDocument *doc, const gchar *filename
 	gchar *locale_filename = NULL;
 	GeanyFiletype *use_ft;
 	FileData filedata;
+	UndoReloadData *undo_reload_data;
+	gboolean add_undo_reload_action;
 
 	if (reload)
 	{
@@ -1157,8 +1159,31 @@ GeanyDocument *document_open_file_full(GeanyDocument *doc, const gchar *filename
 			monitor_file_setup(doc);
 		}
 
-		sci_set_undo_collection(doc->editor->sci, FALSE); /* avoid creation of an undo action */
-		sci_empty_undo_buffer(doc->editor->sci);
+		if (! reload || ! file_prefs.keep_edit_history_on_reload)
+		{
+			sci_set_undo_collection(doc->editor->sci, FALSE); /* avoid creation of an undo action */
+			sci_empty_undo_buffer(doc->editor->sci);
+			undo_reload_data = NULL;
+		}
+		else
+		{
+			undo_reload_data = (UndoReloadData*) g_malloc(sizeof(UndoReloadData));
+
+			/* We will be adding a UNDO_RELOAD action to the undo stack that undoes
+			 * this reload. To do that, we keep collecting undo actions during
+			 * reloading, and at the end add an UNDO_RELOAD action that performs
+			 * all these actions in bulk. To keep track of how many undo actions
+			 * were added during this time, we compare the current undo-stack height
+			 * with its height at the end of the process. Note that g_trash_stack_height()
+			 * is O(N), which is a little ugly, but this seems like the most maintainable
+			 * option. */
+			undo_reload_data->actions_count = g_trash_stack_height(&doc->priv->undo_actions);
+
+			/* We use add_undo_reload_action to track any changes to the document that
+			 * require adding an undo action to revert the reload, but that do not
+			 * generate an undo action themselves. */
+			add_undo_reload_action = FALSE;
+		}
 
 		/* add the text to the ScintillaObject */
 		sci_set_readonly(doc->editor->sci, FALSE);	/* to allow replacing text */
@@ -1167,10 +1192,27 @@ GeanyDocument *document_open_file_full(GeanyDocument *doc, const gchar *filename
 
 		/* detect & set line endings */
 		editor_mode = utils_get_line_endings(filedata.data, filedata.len);
+		if (undo_reload_data)
+		{
+			undo_reload_data->eol_mode = editor_get_eol_char_mode(doc->editor);
+			/* Force adding an undo-reload action if the EOL mode changed. */
+			if (editor_mode != undo_reload_data->eol_mode)
+				add_undo_reload_action = TRUE;
+		}
 		sci_set_eol_mode(doc->editor->sci, editor_mode);
 		g_free(filedata.data);
 
 		sci_set_undo_collection(doc->editor->sci, TRUE);
+
+		/* If reloading and the current and new encodings or BOM states differ,
+		 * add appropriate undo actions. */
+		if (undo_reload_data)
+		{
+			if (! utils_str_equal(doc->encoding, filedata.enc))
+				document_undo_add(doc, UNDO_ENCODING, g_strdup(doc->encoding));
+			if (doc->has_bom != filedata.bom)
+				document_undo_add(doc, UNDO_BOM, GINT_TO_POINTER(doc->has_bom));
+		}
 
 		doc->priv->mtime = filedata.mtime; /* get the modification time from file and keep it */
 		g_free(doc->encoding);	/* if reloading, free old encoding */
@@ -1196,7 +1238,34 @@ GeanyDocument *document_open_file_full(GeanyDocument *doc, const gchar *filename
 		}
 		else
 		{	/* reloading */
-			document_undo_clear(doc);
+			if (undo_reload_data)
+			{
+				/* Calculate the number of undo actions that are part of the reloading
+				 * process, and add the UNDO_RELOAD action. */
+				undo_reload_data->actions_count =
+					g_trash_stack_height(&doc->priv->undo_actions) - undo_reload_data->actions_count;
+
+				/* We only add an undo-reload action if the document has actually changed.
+				 * At the time of writing, this condition is moot because sci_set_text
+				 * generates an undo action even when the text hasn't really changed, so
+				 * actions_count is always greater than zero. In the future this might change.
+				 * It's arguable whether we should add an undo-reload action unconditionally,
+				 * especially since it's possible (if unlikely) that there had only
+				 * been "invisible" changes to the document, such as changes in encoding and
+				 * EOL mode, but for the time being that's how we roll. */
+				if (undo_reload_data->actions_count > 0 || add_undo_reload_action)
+					document_undo_add(doc, UNDO_RELOAD, undo_reload_data);
+				else
+					g_free(undo_reload_data);
+
+				/* We didn't save the document per-se, but its contents are now
+				 * synchronized with the file on disk, hence set a save point here.
+				 * We need to do this in this case only, because we don't clear
+				 * Scintilla's undo stack. */
+				sci_set_savepoint(doc->editor->sci);
+			}
+			else
+				document_undo_clear(doc);
 
 			use_ft = ft;
 		}
