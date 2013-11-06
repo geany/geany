@@ -220,6 +220,8 @@ static void init_pref_groups(void)
 		"gio_unsafe_save_backup", FALSE);
 	stash_group_add_boolean(group, &file_prefs.use_gio_unsafe_file_saving,
 		"use_gio_unsafe_file_saving", TRUE);
+	stash_group_add_boolean(group, &file_prefs.keep_edit_history_on_reload,
+		"keep_edit_history_on_reload", TRUE);
 	/* for backwards-compatibility */
 	stash_group_add_integer(group, &editor_prefs.indentation->hard_tab_width,
 		"indent_hard_tab_width", 8);

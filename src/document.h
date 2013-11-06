@@ -66,6 +66,7 @@ typedef struct GeanyFilePrefs
 	gboolean		use_gio_unsafe_file_saving; /* whether to use GIO as the unsafe backend */
 	gchar			*extract_filetype_regex;	/* regex to extract filetype on opening */
 	gboolean		tab_close_switch_to_mru;
+	gboolean		keep_edit_history_on_reload; /* Keep undo stack upon, and allow undoing of, document reloading. */
 }
 GeanyFilePrefs;
 
