@@ -2496,7 +2496,9 @@ void document_undo_clear_stack(GTrashStack **stack)
 		{
 			switch (a->type)
 			{
-				case UNDO_ENCODING: g_free(a->data); break;
+				case UNDO_ENCODING:
+				case UNDO_RELOAD:
+					g_free(a->data); break;
 				default: break;
 			}
 			g_free(a);
@@ -2618,6 +2620,29 @@ void document_undo(GeanyDocument *doc)
 				g_free(action->data);
 				break;
 			}
+			case UNDO_RELOAD:
+			{
+				UndoReloadData *data = (UndoReloadData*)action->data;
+				gint eol_mode = data->eol_mode;
+				guint i;
+
+				/* We reuse 'data' for the redo action, so read the current EOL mode
+				 * into it before proceeding. */
+				data->eol_mode = editor_get_eol_char_mode(doc->editor);
+
+				/* Undo the rest of the actions which are part of the reloading process. */
+				for (i = data->actions_count; i; --i)
+					document_undo(doc);
+
+				/* Restore the previous EOL mode. */
+				sci_set_eol_mode(doc->editor->sci, eol_mode);
+				/* This might affect the status bar and document meny, so update them. */
+				ui_update_statusbar(doc, -1);
+				ui_document_show_hide(doc);
+
+				document_redo_add(doc, UNDO_RELOAD, data);
+				break;
+			}
 			default: break;
 		}
 	}
@@ -2684,6 +2709,29 @@ void document_redo(GeanyDocument *doc)
 				ignore_callback = FALSE;
 
 				g_free(action->data);
+				break;
+			}
+			case UNDO_RELOAD:
+			{
+				UndoReloadData *data = (UndoReloadData*)action->data;
+				gint eol_mode = data->eol_mode;
+				guint i;
+
+				/* We reuse 'data' for the undo action, so read the current EOL mode
+				 * into it before proceeding. */
+				data->eol_mode = editor_get_eol_char_mode(doc->editor);
+
+				/* Redo the rest of the actions which are part of the reloading process. */
+				for (i = data->actions_count; i; --i)
+					document_redo(doc);
+
+				/* Restore the previous EOL mode. */
+				sci_set_eol_mode(doc->editor->sci, eol_mode);
+				/* This might affect the status bar and document meny, so update them. */
+				ui_update_statusbar(doc, -1);
+				ui_document_show_hide(doc);
+
+				document_undo_add_internal(doc, UNDO_RELOAD, data);
 				break;
 			}
 			default: break;
