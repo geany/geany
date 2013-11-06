@@ -104,6 +104,7 @@ typedef struct
 
 static void document_undo_clear_stack(GTrashStack **stack);
 static void document_undo_clear(GeanyDocument *doc);
+static void document_undo_add_internal(GeanyDocument *doc, guint type, gpointer data);
 static void document_redo_add(GeanyDocument *doc, guint type, gpointer data);
 static gboolean remove_page(guint page_num);
 
@@ -2515,8 +2516,11 @@ void document_undo_clear(GeanyDocument *doc)
 }
 
 
-/* note: this is called on SCN_MODIFIED notifications */
-void document_undo_add(GeanyDocument *doc, guint type, gpointer data)
+/* Adds an undo action without clearing the redo stack. This function should
+ * not be called directly, generally (use document_undo_add() instead), but is
+ * used by document_redo() in order not to erase the redo stack while moving
+ * an action from the redo stack to the undo stack. */
+void document_undo_add_internal(GeanyDocument *doc, guint type, gpointer data)
 {
 	undo_action *action;
 
@@ -2533,6 +2537,15 @@ void document_undo_add(GeanyDocument *doc, guint type, gpointer data)
 		document_set_text_changed(doc, TRUE);
 
 	ui_update_popup_reundo_items(doc);
+}
+
+/* note: this is called on SCN_MODIFIED notifications */
+void document_undo_add(GeanyDocument *doc, guint type, gpointer data)
+{
+	/* Clear the redo actions stack before adding the undo action. */
+	document_undo_clear_stack(&doc->priv->redo_actions);
+
+	document_undo_add_internal(doc, type, data);
 }
 
 
@@ -2646,14 +2659,14 @@ void document_redo(GeanyDocument *doc)
 		{
 			case UNDO_SCINTILLA:
 			{
-				document_undo_add(doc, UNDO_SCINTILLA, NULL);
+				document_undo_add_internal(doc, UNDO_SCINTILLA, NULL);
 
 				sci_redo(doc->editor->sci);
 				break;
 			}
 			case UNDO_BOM:
 			{
-				document_undo_add(doc, UNDO_BOM, GINT_TO_POINTER(doc->has_bom));
+				document_undo_add_internal(doc, UNDO_BOM, GINT_TO_POINTER(doc->has_bom));
 
 				doc->has_bom = GPOINTER_TO_INT(action->data);
 				ui_update_statusbar(doc, -1);
@@ -2662,7 +2675,7 @@ void document_redo(GeanyDocument *doc)
 			}
 			case UNDO_ENCODING:
 			{
-				document_undo_add(doc, UNDO_ENCODING, g_strdup(doc->encoding));
+				document_undo_add_internal(doc, UNDO_ENCODING, g_strdup(doc->encoding));
 
 				document_set_encoding(doc, (const gchar*)action->data);
 
