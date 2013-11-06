@@ -102,6 +102,7 @@ typedef struct
 } undo_action;
 
 
+static void document_undo_clear_stack(GTrashStack **stack);
 static void document_undo_clear(GeanyDocument *doc);
 static void document_redo_add(GeanyDocument *doc, guint type, gpointer data);
 static gboolean remove_page(guint page_num);
@@ -2482,14 +2483,14 @@ void document_set_encoding(GeanyDocument *doc, const gchar *new_encoding)
  * to the encoding or the Unicode BOM (which are Scintilla independet).
  * All Scintilla events are stored in the undo / redo buffer and are passed through. */
 
-/* Clears the Undo and Redo buffer (to be called when reloading or closing the document) */
-void document_undo_clear(GeanyDocument *doc)
+/* Clears an Undo or Redo buffer. */
+void document_undo_clear_stack(GTrashStack **stack)
 {
 	undo_action *a;
 
-	while (g_trash_stack_height(&doc->priv->undo_actions) > 0)
+	while (g_trash_stack_height(stack) > 0)
 	{
-		a = g_trash_stack_pop(&doc->priv->undo_actions);
+		a = g_trash_stack_pop(stack);
 		if (G_LIKELY(a != NULL))
 		{
 			switch (a->type)
@@ -2500,22 +2501,14 @@ void document_undo_clear(GeanyDocument *doc)
 			g_free(a);
 		}
 	}
-	doc->priv->undo_actions = NULL;
+	*stack = NULL;
+}
 
-	while (g_trash_stack_height(&doc->priv->redo_actions) > 0)
-	{
-		a = g_trash_stack_pop(&doc->priv->redo_actions);
-		if (G_LIKELY(a != NULL))
-		{
-			switch (a->type)
-			{
-				case UNDO_ENCODING: g_free(a->data); break;
-				default: break;
-			}
-			g_free(a);
-		}
-	}
-	doc->priv->redo_actions = NULL;
+/* Clears the Undo and Redo buffer (to be called when reloading or closing the document) */
+void document_undo_clear(GeanyDocument *doc)
+{
+	document_undo_clear_stack(&doc->priv->undo_actions);
+	document_undo_clear_stack(&doc->priv->redo_actions);
 
 	if (! main_status.quitting && doc->editor != NULL)
 		document_set_text_changed(doc, FALSE);
