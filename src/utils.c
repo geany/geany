@@ -1799,9 +1799,7 @@ gboolean utils_is_remote_path(const gchar *path)
 void utils_tidy_path(gchar *filename)
 {
 	GString *str;
-	const gchar *c, *needle;
-	gchar *tmp;
-	gssize pos;
+	const gchar *needle;
 	gboolean preserve_double_backslash = FALSE;
 
 	g_return_if_fail(g_path_is_absolute(filename));
@@ -1826,11 +1824,13 @@ void utils_tidy_path(gchar *filename)
 	needle = G_DIR_SEPARATOR_S ".." G_DIR_SEPARATOR_S;
 	while (1)
 	{
-		c = strstr(str->str, needle);
+		const gchar *c = strstr(str->str, needle);
 		if (c == NULL)
 			break;
 		else
 		{
+			gssize pos, sub_len;
+
 			pos = c - str->str;
 			if (pos <= 3)
 				break;	/* bad path */
@@ -1839,17 +1839,20 @@ void utils_tidy_path(gchar *filename)
 			g_string_erase(str, pos, strlen(needle));
 			g_string_insert_c(str, pos, G_DIR_SEPARATOR);
 
-			tmp = g_strndup(str->str, pos);	/* path up to "/../" */
-			c = g_strrstr(tmp, G_DIR_SEPARATOR_S);
-			g_return_if_fail(c);
+			/* search for last "/" before found "/../" */
+			c = g_strrstr_len(str->str, pos, G_DIR_SEPARATOR_S);
+			sub_len = pos - (c - str->str);
+			if (! c)
+				break;	/* bad path */
 
-			pos = c - tmp;	/* position of previous "/" */
-			g_string_erase(str, pos, strlen(c));
-			g_free(tmp);
+			pos = c - str->str;	/* position of previous "/" */
+			g_string_erase(str, pos, sub_len);
 		}
 	}
-	g_return_if_fail(strlen(str->str) <= strlen(filename));
-	strcpy(filename, str->str);
+	if (str->len <= strlen(filename))
+		memcpy(filename, str->str, str->len + 1);
+	else
+		g_warn_if_reached();
 	g_string_free(str, TRUE);
 }
 
