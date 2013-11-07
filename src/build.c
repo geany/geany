@@ -315,7 +315,7 @@ static void printfcmds(void)
 	{ \
 		*fr=src; \
 		if (printbuildcmds) \
-			printf("cmd[%d,%d]=%d\n",cmdgrp,cmdindex,src); \
+			printf("cmd[%u,%u]=%u\n",cmdgrp,cmdindex,src); \
 		return &(cmds[cmdindex]); \
 	}
 
@@ -325,7 +325,7 @@ static void printfcmds(void)
 		{ \
 			*fr=src; \
 			if (printbuildcmds) \
-				printf("cmd[%d,%d]=%d\n",cmdgrp,cmdindex,src); \
+				printf("cmd[%u,%u]=%u\n",cmdgrp,cmdindex,src); \
 			return &(ft->cmds[cmdindex]); \
 		}
 
@@ -2414,7 +2414,7 @@ static void build_load_menu_grp(GKeyFile *config, GeanyBuildCommand **dst, gint 
 		gchar *label;
 		if (cmd >= 100)
 			return; /* ensure no buffer overflow */
-		sprintf(cmdbuf, "%02d", cmd);
+		sprintf(cmdbuf, "%02u", cmd);
 		set_key_grp(key, groups[grp]);
 		set_key_cmd(key, cmdbuf);
 		set_key_fld(key, "LB");
@@ -2631,7 +2631,7 @@ static guint build_save_menu_grp(GKeyFile *config, GeanyBuildCommand *src, gint 
 			static gchar cmdbuf[4] = "   ";
 			if (cmd >= 100)
 				return count; /* ensure no buffer overflow */
-			sprintf(cmdbuf, "%02d", cmd);
+			sprintf(cmdbuf, "%02u", cmd);
 			set_key_grp(key, groups[grp]);
 			set_key_cmd(key, cmdbuf);
 			if (src[cmd].exists)
