@@ -2413,7 +2413,7 @@ static void build_load_menu_grp(GKeyFile *config, GeanyBuildCommand **dst, gint 
 	{
 		gchar *label;
 		if (cmd >= 100)
-			return; /* ensure no buffer overflow */
+			break; /* ensure no buffer overflow */
 		sprintf(cmdbuf, "%02u", cmd);
 		set_key_grp(key, groups[grp]);
 		set_key_cmd(key, cmdbuf);
@@ -2630,7 +2630,7 @@ static guint build_save_menu_grp(GKeyFile *config, GeanyBuildCommand *src, gint 
 		{
 			static gchar cmdbuf[4] = "   ";
 			if (cmd >= 100)
-				return count; /* ensure no buffer overflow */
+				break; /* ensure no buffer overflow */
 			sprintf(cmdbuf, "%02u", cmd);
 			set_key_grp(key, groups[grp]);
 			set_key_cmd(key, cmdbuf);
