@@ -218,8 +218,8 @@ TMFileEntry *tm_file_entry_new(const char *path, TMFileEntry *parent
 						entry->children = g_slist_prepend(entry->children, new_entry);
 					}
 				}
+				closedir(dir);
 			}
-			closedir(dir);
 			entry->children = g_slist_sort(entry->children, (GCompareFunc) tm_file_entry_compare);
 			g_free(entries);
 			break;

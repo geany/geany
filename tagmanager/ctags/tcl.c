@@ -91,9 +91,13 @@ static void findTclTags (void)
 		/* Now `line' points at first word and `cp' points at next word */
 
 		if (match (line, "proc"))
-			cp = makeTclTag (cp, name, K_PROCEDURE);
+		{
+			makeTclTag (cp, name, K_PROCEDURE);
+		}
 		else if (match (line, "class") || match (line, "itcl::class"))
-			cp = makeTclTag (cp, name, K_CLASS);
+		{
+			makeTclTag (cp, name, K_CLASS);
+		}
 		else if (match (line, "public") ||
 				match (line, "protected") ||
 				match (line, "private"))
@@ -103,29 +107,31 @@ static void findTclTags (void)
 				cp += 6;
 				while (isspace ((int) *cp))
 					++cp;
-				cp = makeTclTag (cp, name, K_METHOD);
+				makeTclTag (cp, name, K_METHOD);
 			}
 		}
 		else if (match (line, "method"))
 		{
-			cp = makeTclTag (cp, name, K_METHOD);
+			makeTclTag (cp, name, K_METHOD);
 		}
-		else if (match (line, "oo::class") ) {
+		else if (match (line, "oo::class") )
+		{
 			if (match (cp, "create"))
 			{
 				cp += 6;
 				while (isspace ((int) *cp))
 					++cp;
-				cp = makeTclTag (cp, name, K_CLASS);
+				makeTclTag (cp, name, K_CLASS);
 			}
 		}
-		else if (match (line, "namespace") ) {
+		else if (match (line, "namespace") )
+		{
 			if (match (cp, "eval"))
 			{
 				cp += 4;
 				while (isspace ((int) *cp))
 					++cp;
-				cp = makeTclTag (cp, name, K_MODULE);
+				makeTclTag (cp, name, K_MODULE);
 			}
 		}
 

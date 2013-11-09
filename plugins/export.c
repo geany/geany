@@ -533,11 +533,9 @@ static void write_latex_file(GeanyDocument *doc, const gchar *filename,
 		}
 		column++;
 	}
+
 	if (block_open)
-	{
 		g_string_append(body, "}\n");
-		block_open = FALSE;
-	}
 
 	/* force writing of style 0 (used at least for line breaks) */
 	styles[0][USED] = 1;
@@ -725,11 +723,9 @@ static void write_html_file(GeanyDocument *doc, const gchar *filename,
 		}
 		column++;
 	}
+
 	if (span_open)
-	{
 		g_string_append(body, "</span>");
-		span_open = FALSE;
-	}
 
 	/* write used styles in the header */
 	css = g_string_new("");

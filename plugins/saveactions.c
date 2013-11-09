@@ -250,21 +250,28 @@ static void instantsave_document_new_cb(GObject *obj, GeanyDocument *doc, gpoint
 		GeanyFiletype *ft = doc->file_type;
 
 		fd = g_file_open_tmp("gis_XXXXXX", &new_filename, NULL);
-		if (fd != -1)
-			close(fd); /* close the returned file descriptor as we only need the filename */
+		if (fd == -1)
+		{
+			g_warning(_("Unable to create tempfile"));
+			return;
+		}
+
+		close(fd); /* close the returned file descriptor as we only need the filename */
 
 		if (ft == NULL || ft->id == GEANY_FILETYPES_NONE)
 			/* ft is NULL when a new file without template was opened, so use the
 			 * configured default file type */
 			ft = filetypes_lookup_by_name(instantsave_default_ft);
 
-		if (ft != NULL)
-			/* add the filetype's default extension to the new filename */
-			SETPTR(new_filename, g_strconcat(new_filename, ".", ft->extension, NULL));
+		if (ft == NULL)
+			ft = filetypes[GEANY_FILETYPES_NONE];
+
+		/* add the filetype's default extension to the new filename */
+		SETPTR(new_filename, g_strconcat(new_filename, ".", ft->extension, NULL));
 
 		doc->file_name = new_filename;
 
-		if (doc->file_type->id == GEANY_FILETYPES_NONE)
+		if (ft->id == GEANY_FILETYPES_NONE)
 			document_set_filetype(doc, filetypes_lookup_by_name(instantsave_default_ft));
 
 		/* force saving the file to enable all the related actions(tab name, filetype, etc.) */

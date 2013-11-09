@@ -208,18 +208,23 @@ static void findMakeTags (void)
 		{
 			readIdentifier (c, name);
 			if (strncmp (vStringValue (name), "endef", 5) == 0)
+			{
 				in_define = FALSE;
+			}
 			else if (in_define)
+			{
 				skipLine ();
+			}
 			else if (strncmp (vStringValue (name), "define", 6) == 0  &&
 				isIdentifier (c))
 			{
 				in_define = TRUE;
-				c = skipToNonWhite ();
+				skipToNonWhite ();
 				newMacroFromDefine (name);
 				skipLine ();
 			}
-			else {
+			else
+			{
 				c = skipToNonWhite ();
 				if (strchr (":?+", c) != NULL)
 				{

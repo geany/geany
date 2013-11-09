@@ -502,8 +502,14 @@ gchar *templates_get_template_function(GeanyDocument *doc, const gchar *func_nam
 
 gchar *templates_get_template_changelog(GeanyDocument *doc)
 {
-	GString *result = g_string_new(templates[GEANY_TEMPLATE_CHANGELOG]);
-	const gchar *file_type_name = (doc != NULL) ? doc->file_type->name : "";
+	GString *result;
+	const gchar *file_type_name;
+
+	if (doc == NULL)
+		return g_strdup(_("Invalid document, cannot get changelog template."));
+
+	result = g_string_new(templates[GEANY_TEMPLATE_CHANGELOG]);
+	file_type_name = doc->file_type->name;
 
 	replace_static_values(result);
 	templates_replace_default_dates(result);

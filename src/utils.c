@@ -150,10 +150,7 @@ gint utils_get_line_endings(const gchar* buffer, gsize size)
 		max_mode = crlf;
 	}
 	if (cr > max_mode)
-	{
 		mode = SC_EOL_CR;
-		max_mode = cr;
-	}
 
 	return mode;
 }

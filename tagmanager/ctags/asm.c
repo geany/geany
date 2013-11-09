@@ -344,9 +344,10 @@ static void findAsmTags (void)
 		{
 			while (isspace ((int) *cp))
 				++cp;
-			cp = readSymbol (cp, name);
+			readSymbol (cp, name);
 			nameFollows = TRUE;
 		}
+
 		makeAsmTag (name, operator, labelCandidate, nameFollows);
 	}
 	vStringDelete (name);

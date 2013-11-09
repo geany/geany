@@ -215,7 +215,6 @@ static void tagNameList (const verilogKind kind, int c)
 	Assert (isIdentifierCharacter (c));
 	do
 	{
-		repeat = FALSE;
 		if (isIdentifierCharacter (c))
 		{
 			readIdentifier (name, c);
