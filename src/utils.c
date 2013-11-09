@@ -1988,15 +1988,15 @@ gchar **utils_copy_environment(const gchar **exclude_vars, const gchar *first_va
 	const gchar *key, *value;
 	guint n, o;
 
-	/* get all the environ variables */
-	env = g_listenv();
-
 	/* count the additional variables */
 	va_start(args, first_varname);
 	for (o = 1; va_arg(args, gchar*) != NULL; o++);
 	va_end(args);
 	/* the passed arguments should be even (key, value pairs) */
 	g_return_val_if_fail(o % 2 == 0, NULL);
+
+	/* get all the environ variables */
+	env = g_listenv();
 
 	o /= 2;
 
