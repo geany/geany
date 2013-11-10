@@ -266,13 +266,13 @@ GeanyDocument *document_get_current(void)
 }
 
 
-void document_init_doclist()
+void document_init_doclist(void)
 {
 	documents_array = g_ptr_array_new();
 }
 
 
-void document_finalize()
+void document_finalize(void)
 {
 	guint i;
 

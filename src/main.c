@@ -1236,7 +1236,7 @@ static void queue_free(GQueue *queue)
 }
 
 
-void main_quit()
+void main_quit(void)
 {
 	geany_debug("Quitting...");
 

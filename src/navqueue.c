@@ -50,7 +50,7 @@ static GtkAction *navigation_buttons[2];
 
 
 
-void navqueue_init()
+void navqueue_init(void)
 {
 	navigation_queue = g_queue_new();
 	nav_queue_pos = 0;
@@ -63,7 +63,7 @@ void navqueue_init()
 }
 
 
-void navqueue_free()
+void navqueue_free(void)
 {
 	while (! g_queue_is_empty(navigation_queue))
 	{
@@ -184,7 +184,7 @@ static gboolean goto_file_pos(const gchar *file, gint pos)
 }
 
 
-void navqueue_go_back()
+void navqueue_go_back(void)
 {
 	filepos *fprev;
 
@@ -208,7 +208,7 @@ void navqueue_go_back()
 }
 
 
-void navqueue_go_forward()
+void navqueue_go_forward(void)
 {
 	filepos *fnext;
 

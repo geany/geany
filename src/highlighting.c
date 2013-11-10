@@ -451,7 +451,7 @@ static void set_sci_style(ScintillaObject *sci, guint style, guint ft_id, guint 
 }
 
 
-void highlighting_free_styles()
+void highlighting_free_styles(void)
 {
 	guint i;
 

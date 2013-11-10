@@ -646,7 +646,7 @@ static void init_custom_filetypes(const gchar *path)
 
 /* Create the filetypes array and fill it with the known filetypes.
  * Warning: GTK isn't necessarily initialized yet. */
-void filetypes_init_types()
+void filetypes_init_types(void)
 {
 	filetype_id ft_id;
 	gchar *f;
@@ -761,7 +761,7 @@ static void create_set_filetype_menu(void)
 }
 
 
-void filetypes_init()
+void filetypes_init(void)
 {
 	GSList *node;
 

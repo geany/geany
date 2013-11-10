@@ -654,7 +654,7 @@ static gboolean show_save_as_gtk(GeanyDocument *doc)
  *
  *  @return @c TRUE if the file was saved, otherwise @c FALSE.
  **/
-gboolean dialogs_show_save_as()
+gboolean dialogs_show_save_as(void)
 {
 	GeanyDocument *doc = document_get_current();
 	gboolean result = FALSE;
@@ -864,7 +864,7 @@ on_font_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 
 
 /* This shows the font selection dialog to choose a font. */
-void dialogs_show_open_font()
+void dialogs_show_open_font(void)
 {
 #ifdef G_OS_WIN32
 	win32_show_font_dialog();

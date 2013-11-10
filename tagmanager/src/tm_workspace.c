@@ -91,7 +91,7 @@ void tm_workspace_free(gpointer workspace)
 	}
 }
 
-const TMWorkspace *tm_get_workspace()
+const TMWorkspace *tm_get_workspace(void)
 {
 	if (NULL == theWorkspace)
 		tm_create_workspace();

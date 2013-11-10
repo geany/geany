@@ -529,7 +529,7 @@ void sidebar_openfiles_update(GeanyDocument *doc)
 }
 
 
-void sidebar_openfiles_update_all()
+void sidebar_openfiles_update_all(void)
 {
 	guint i;
 

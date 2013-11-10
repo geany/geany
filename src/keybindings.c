@@ -907,7 +907,7 @@ static GtkWidget *create_dialog(void)
 }
 
 
-static void key_dialog_show_prefs()
+static void key_dialog_show_prefs(void)
 {
 	GtkWidget *wid;
 

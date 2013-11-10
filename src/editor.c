@@ -3974,7 +3974,7 @@ void editor_indentation_by_one_space(GeanyEditor *editor, gint pos, gboolean dec
 }
 
 
-void editor_finalize()
+void editor_finalize(void)
 {
 	scintilla_release_resources();
 }

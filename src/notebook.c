@@ -534,7 +534,7 @@ static gboolean notebook_tab_bar_click_cb(GtkWidget *widget, GdkEventButton *eve
 }
 
 
-void notebook_init()
+void notebook_init(void)
 {
 	g_signal_connect_after(main_widgets.notebook, "button-press-event",
 		G_CALLBACK(notebook_tab_bar_click_cb), NULL);
@@ -561,7 +561,7 @@ void notebook_free(void)
 }
 
 
-static void setup_tab_dnd()
+static void setup_tab_dnd(void)
 {
 	GtkWidget *notebook = main_widgets.notebook;
 
