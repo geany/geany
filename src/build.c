@@ -62,6 +62,7 @@
 #include "toolbar.h"
 #include "geanymenubuttonaction.h"
 #include "gtkcompat.h"
+#include "fileloc.h"
 
 /* g_spawn_async_with_pipes doesn't work on Windows */
 #ifdef G_OS_WIN32
@@ -1060,8 +1061,7 @@ static GPid build_run_cmd(GeanyDocument *doc, guint cmdindex)
 static void process_build_output_line(const gchar *str, gint color)
 {
 	gchar *msg, *tmp;
-	gchar *filename;
-	gint line;
+	GeanyFileLocation *fileloc;
 
 	msg = g_strdup(str);
 
@@ -1077,24 +1077,23 @@ static void process_build_output_line(const gchar *str, gint color)
 	{
 		SETPTR(current_dir_entered, tmp);
 	}
-	msgwin_parse_compiler_error_line(msg, current_dir_entered, &filename, &line);
+	fileloc = msgwin_parse_compiler_error(msg, current_dir_entered);
 
-	if (line != -1 && filename != NULL)
+	if (fileloc != NULL)
 	{
-		GeanyDocument *doc = document_find_by_filename(filename);
+		GeanyDocument *doc = fileloc_get_document(fileloc);
+		gint line = fileloc_get_line(fileloc);
 
 		/* limit number of indicators */
-		if (doc && editor_prefs.use_indicators &&
+		if (line >= 0 && doc && editor_prefs.use_indicators &&
 			build_info.message_count < GEANY_BUILD_ERR_HIGHLIGHT_MAX)
 		{
-			if (line > 0) /* some compilers, like pdflatex report errors on line 0 */
-				line--;   /* so only adjust the line number if it is greater than 0 */
 			editor_indicator_set_on_line(doc->editor, GEANY_INDICATOR_ERROR, line);
 		}
 		build_info.message_count++;
 		color = COLOR_RED;	/* error message parsed on the line */
 	}
-	g_free(filename);
+	fileloc_free(fileloc);
 
 	msgwin_compiler_add_string(color, msg);
 	g_free(msg);
