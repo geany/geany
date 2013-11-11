@@ -34,6 +34,7 @@
 #include "editor.h"
 #include "navqueue.h"
 #include "toolbar.h"
+#include "fileloc.h"
 
 
 /* for the navigation history queue */
@@ -136,24 +137,41 @@ static void add_new_position(const gchar *utf8_filename, gint pos)
 }
 
 
-/**
+/*
  *  Adds old file position and new file position to the navqueue, then goes to the new position.
  *
  *  @param old_doc The document of the previous position, if set as invalid (@c NULL) then no old
  *         position is set
- *  @param new_doc The document of the new position, must be valid.
- *  @param line the line number of the new position. It is counted with 1 as the first line, not 0.
+ *  @param fileloc The new file position. Can be unsanitized. If no location is
+ *                 associated with @a fileloc, the current position of the
+ *                 associated document, if any, is used.
  *
- *  @return @c TRUE if the cursor has changed the position to @a line or @c FALSE otherwise.
+ *  @return @c TRUE if the position changed successfully or @c FALSE otherwise.
  **/
-gboolean navqueue_goto_line(GeanyDocument *old_doc, GeanyDocument *new_doc, gint line)
+gboolean navqueue_goto_fileloc(GeanyDocument *old_doc, const GeanyFileLocation *fileloc)
 {
+	GeanyFileLocation *sanitized_fileloc;
+	gboolean mark;
+	GeanyDocument *new_doc;
 	gint pos;
 
-	g_return_val_if_fail(new_doc != NULL, FALSE);
-	g_return_val_if_fail(line >= 1, FALSE);
+	g_return_val_if_fail(fileloc != NULL, FALSE);
 
-	pos = sci_get_position_from_line(new_doc->editor->sci, line - 1);
+	sanitized_fileloc = fileloc_copy(fileloc);
+	fileloc_sanitize(sanitized_fileloc, TRUE);
+	/* Only show a mark on the target line if the caller provided a location. */
+	mark = fileloc_has_location(sanitized_fileloc);
+	fileloc_fill_missing_params(sanitized_fileloc, FALSE, TRUE);
+
+	new_doc = fileloc_get_document(sanitized_fileloc);
+	if (new_doc == NULL)
+		return FALSE;
+
+	pos = fileloc_get_pos(sanitized_fileloc);
+	if (pos < 0)
+		return FALSE;
+
+	fileloc_free(sanitized_fileloc);
 
 	/* first add old file position */
 	if (old_doc != NULL && old_doc->file_name)
@@ -169,7 +187,36 @@ gboolean navqueue_goto_line(GeanyDocument *old_doc, GeanyDocument *new_doc, gint
 		add_new_position(new_doc->file_name, pos);
 	}
 
-	return editor_goto_pos(new_doc->editor, pos, TRUE);
+	return editor_goto_pos(new_doc->editor, pos, mark);
+}
+
+/**
+ *  Adds old file position and new file position to the navqueue, then goes to the new position.
+ *
+ *  @param old_doc The document of the previous position, if set as invalid (@c NULL) then no old
+ *         position is set
+ *  @param new_doc The document of the new position, must be valid.
+ *  @param line the line number of the new position. It is counted with 1 as the first line, not 0.
+ *
+ *  @return @c TRUE if the cursor has changed the position to @a line or @c FALSE otherwise.
+ **/
+gboolean navqueue_goto_line(GeanyDocument *old_doc, GeanyDocument *new_doc, gint line)
+{
+	GeanyFileLocation *fileloc;
+	gboolean result;
+
+	g_return_val_if_fail(new_doc != NULL, FALSE);
+	g_return_val_if_fail(line >= 1, FALSE);
+
+	fileloc = fileloc_new();
+	fileloc_set_document(fileloc, new_doc);
+	fileloc_set_line(fileloc, line - 1);
+
+	result = navqueue_goto_fileloc(old_doc, fileloc);
+
+	fileloc_free(fileloc);
+
+	return result;
 }
 
 
