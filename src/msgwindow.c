@@ -974,26 +974,28 @@ static void parse_compiler_error_line(const gchar *string,
 }
 
 
-/* try to parse the file and line number where the error occured described in string
- * and when something useful is found, it stores the line number in *line and the
- * relevant file with the error in *filename.
- * *line will be -1 if no error was found in string.
- * *filename must be freed unless it is NULL. */
-void msgwin_parse_compiler_error_line(const gchar *string, const gchar *dir,
-		gchar **filename, gint *line)
+/*
+ *  Parses the file location associated with a compiler error message.
+ *
+ *  @param string Error message string.
+ *  @param dir Directory of the file for which the build command was invoked.
+ *
+ *  @return If @a string is an error message, returns the file location
+ *          associated with the error. Otherwise, returns NULL. The caller is
+ *          responsible for freeing the returned value.
+ **/
+GeanyFileLocation *msgwin_parse_compiler_error(const gchar *string, const gchar *dir)
 {
 	GeanyFiletype *ft;
 	gchar *trimmed_string;
-
-	*filename = NULL;
-	*line = -1;
+	GeanyFileLocation *fileloc;
 
 	if (G_UNLIKELY(string == NULL))
-		return;
+		return NULL;
 
 	if (dir == NULL)
 		dir = build_info.dir;
-	g_return_if_fail(dir != NULL);
+	g_return_val_if_fail(dir != NULL, NULL);
 
 	trimmed_string = g_strdup(string);
 	g_strchug(trimmed_string); /* remove possible leading whitespace */
@@ -1001,13 +1003,48 @@ void msgwin_parse_compiler_error_line(const gchar *string, const gchar *dir,
 	ft = filetypes[build_info.file_type_id];
 
 	/* try parsing with a custom regex */
-	if (!filetypes_parse_error_message(ft, trimmed_string, filename, line))
+	fileloc = filetypes_parse_error_message(ft, trimmed_string);
+	if (fileloc != NULL)
+	{
+		gchar *filename = fileloc_get_filename(fileloc);
+
+		if (filename != NULL)
+		{
+			make_absolute(&filename, dir);
+			fileloc_set_filename(fileloc, filename);
+			g_free(filename);
+		}
+		else
+		{
+			/* If the string is an error message but no associated file was
+			 * found, fall back to the current document. */
+			fileloc_fill_missing_params(fileloc, TRUE, FALSE);
+		}
+	}
+	else
 	{
 		/* fallback to default old-style parsing */
-		parse_compiler_error_line(trimmed_string, filename, line);
+		gchar *filename = NULL;
+		gint line = -1;
+
+		parse_compiler_error_line(trimmed_string, &filename, &line);
+
+		if (filename != NULL && line >= 0)
+		{
+			fileloc = fileloc_new();
+			make_absolute(&filename, dir);
+			fileloc_set_locale_filename(fileloc, filename);
+			fileloc_set_line(fileloc, line - 1); /* Let the line number be negative
+                                                  * if line == 0, so there's no
+                                                  * associated line number. */
+		}
+
+		g_free(filename);
 	}
-	make_absolute(filename, dir);
+
 	g_free(trimmed_string);
+
+	return fileloc;
 }
 
 

@@ -22,6 +22,8 @@
 #ifndef GEANY_MSGWINDOW_H
 #define GEANY_MSGWINDOW_H 1
 
+#include "fileloc.h"
+
 G_BEGIN_DECLS
 
 /**
@@ -97,8 +99,7 @@ void msgwin_menu_add_common_items(GtkMenu *menu);
 
 gboolean msgwin_goto_compiler_file_line(gboolean focus_editor);
 
-void msgwin_parse_compiler_error_line(const gchar *string, const gchar *dir,
-									  gchar **filename, gint *line);
+GeanyFileLocation *msgwin_parse_compiler_error(const gchar *string, const gchar *dir);
 
 gboolean msgwin_goto_messages_file_line(gboolean focus_editor);
 
