@@ -4235,18 +4235,59 @@ As of Geany 0.19 this section is supplemented by the `[build-menu] section`_.
 Values that are set in the [build-menu] section will override those in this section.
 
 error_regex
-    This is a regular expression to parse a filename
-    and line number from build output. If undefined, Geany will fall
-    back to its default error message parsing.
+    A Perl-style regular expression pattern to use when parsing source
+    location information from diagnostics in build output. If undefined,
+    Geany will fall back to its default diagnostic parsing.
 
-    Only the first two matches will be read by Geany. Geany will look for
-    a match that is purely digits, and use this for the line number. The
-    remaining match will be used as the filename.
+    Geany will try to match build output against this pattern, and will look for
+    the following named capture groups:
 
-    *Example:* ``error_regex=(.+):([0-9]+):[0-9]+``
+    ====  ===================================================================
+    Name  Field
+    ====  ===================================================================
+    f     UTF-8 encoded filename.
+    F     Locale encoded filename.
+    l     Zero-based line number.
+    L     One-based line number.
+    c     Zero-based column number.
+    C     One-based column number.
+    h     Zero-based line offset in characters.
+    H     One-based line offset in characters.
+    u     Zero-based line offset in bytes, using UTF-8 encoding.
+    U     One-based line offset in bytes, using UTF-8 encoding.
+    d     Zero-based line offset in bytes, using the file's encoding.
+    D     One-based line offset in bytes, using the file's encoding.
+    a     Zero-based line offset in bytes, using the locale encoding.
+    A     One-based line offset in bytes, using the locale encoding.
+    ====  ===================================================================
 
-    This will parse a message such as:
-    ``test.py:7:24: E202 whitespace before ']'``
+    Geany will use the substring captured by these groups as the corresponding
+    field listed in the table above. If no submatch is found for a particular
+    field, a default value for the field will be used.
+    At most one of "f" and "F", one of "l" and "L", and one of "c", "C", "h",
+    "H", "u", "U", "d", "D", "a" and "A" should be matched for a given
+    diagnostic.
+
+    *Example:* ``error_regex=(?<F>.+?):(?<L>\d+):(?<C>\d+)``
+
+    This pattern will parse a diagnostic such as
+    ``test.py:7:24: E202 whitespace before ']'``,
+    with "test.py" as the filename, 7 as the line number and 24 as the column
+    number.
+
+    Additionally, the name of a capture group can be followed by a single digit.
+    If such a group is matched, Geany will ignore the digit and treat the group
+    according to the above rules. This allows several groups that correspond
+    to the same field to be included in the pattern in order to match different
+    diagnostic styles, as long as any given diagnostic matches at most one of
+    these groups.
+
+    *Example:* ``error_regex=(?<F>.+?)(:(?<L1>\d+)|\((?<L2>\d+)\))``
+
+    This pattern will match and parse both a diagnostic such as
+    ``test.c:5: error: redeclaration of 'x' with no linkage``
+    and a diagnostic such as
+    ``test.c(5) : error C2086: 'int x': redefinition``.
 
 **Build commands**
 
