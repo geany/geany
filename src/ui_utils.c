@@ -59,10 +59,10 @@
 
 
 #define DEFAULT_STATUSBAR_TEMPLATE N_(\
-	"line: %l / %L\t "   \
-	"col: %c\t "         \
-	"ch: %h\t "          \
-	"sel: %s\t "         \
+	"line: %l / %L%T "   \
+	"col: %c%T "         \
+	"ch: %h%T "          \
+	"sel: %s%T "         \
 	"%w      %t      %m" \
 	"mode: %M      "     \
 	"encoding: %e      " \
