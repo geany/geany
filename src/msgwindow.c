@@ -625,63 +625,34 @@ find_prev_build_dir(GtkTreePath *cur, GtkTreeModel *model, gchar **prefix)
 }
 
 
-static gboolean goto_compiler_file_line(const gchar *filename, gint line, gboolean focus_editor)
+static gboolean goto_compiler_file_line(GeanyFileLocation *fileloc, gboolean focus_editor)
 {
-	if (!filename || line <= -1)
+	GeanyDocument *doc;
+	GeanyDocument *old_doc;
+	gint line;
+
+	if (fileloc == NULL)
 		return FALSE;
 
-	/* If the path doesn't exist, try the current document.
-	 * This happens when we receive build messages in the wrong order - after the
-	 * 'Leaving directory' messages */
-	if (!g_file_test(filename, G_FILE_TEST_EXISTS))
+	old_doc = document_get_current();
+	doc = fileloc_open_document_and_convert_pivot(fileloc, FALSE, NULL, NULL, TRUE);
+
+	if (doc == NULL)
+		return FALSE;
+
+	line = fileloc_get_line(fileloc);
+	if (line >= 0 && ! doc->changed && editor_prefs.use_indicators)	/* if modified, line may be wrong */
+		editor_indicator_set_on_line(doc->editor, GEANY_INDICATOR_ERROR, line);
+
+	if (navqueue_goto_fileloc(old_doc, fileloc))
 	{
-		gchar *cur_dir = utils_get_current_file_dir_utf8();
-		gchar *name;
+		if (focus_editor)
+			gtk_widget_grab_focus(GTK_WIDGET(doc->editor->sci));
 
-		if (cur_dir)
-		{
-			/* we let the user know we couldn't find the parsed filename from the message window */
-			SETPTR(cur_dir, utils_get_locale_from_utf8(cur_dir));
-			name = g_path_get_basename(filename);
-			SETPTR(name, g_build_path(G_DIR_SEPARATOR_S, cur_dir, name, NULL));
-			g_free(cur_dir);
-
-			if (g_file_test(name, G_FILE_TEST_EXISTS))
-			{
-				ui_set_statusbar(FALSE, _("Could not find file '%s' - trying the current document path."),
-					filename);
-				filename = name;
-			}
-			else
-				g_free(name);
-		}
+		return TRUE;
 	}
-
-	{
-		gchar *utf8_filename = utils_get_utf8_from_locale(filename);
-		GeanyDocument *doc = document_find_by_filename(utf8_filename);
-		GeanyDocument *old_doc = document_get_current();
-
-		g_free(utf8_filename);
-
-		if (doc == NULL)	/* file not already open */
-			doc = document_open_file(filename, FALSE, NULL, NULL);
-
-		if (doc != NULL)
-		{
-			gboolean ret;
-
-			if (! doc->changed && editor_prefs.use_indicators)	/* if modified, line may be wrong */
-				editor_indicator_set_on_line(doc->editor, GEANY_INDICATOR_ERROR, line - 1);
-
-			ret = navqueue_goto_line(old_doc, doc, line);
-			if (ret && focus_editor)
-				gtk_widget_grab_focus(GTK_WIDGET(doc->editor->sci));
-
-			return ret;
-		}
-	}
-	return FALSE;
+	else
+		return FALSE;
 }
 
 
@@ -709,20 +680,20 @@ gboolean msgwin_goto_compiler_file_line(gboolean focus_editor)
 		gtk_tree_model_get(model, &iter, 1, &string, -1);
 		if (string != NULL)
 		{
-			gint line;
-			gchar *filename, *dir;
+			GeanyFileLocation *fileloc;
+			gchar *dir;
 			GtkTreePath *path;
 			gboolean ret;
 
 			path = gtk_tree_model_get_path(model, &iter);
 			find_prev_build_dir(path, model, &dir);
 			gtk_tree_path_free(path);
-			msgwin_parse_compiler_error_line(string, dir, &filename, &line);
+			fileloc = msgwin_parse_compiler_error(string, dir);
 			g_free(string);
 			g_free(dir);
 
-			ret = goto_compiler_file_line(filename, line, focus_editor);
-			g_free(filename);
+			ret = goto_compiler_file_line(fileloc, focus_editor);
+			fileloc_free(fileloc);
 			return ret;
 		}
 	}
