@@ -65,3 +65,6 @@ context_action_cmd=
 compiler=fbc -w all "%f"
 run_cmd="./%e"
 
+# Diagnostic example:
+#   getdrive.bas(52) error 18: Syntax error in '? GetAllDrives'
+error_regex=(?<F>.+?)\((?<L>\d+)(?:,(?<H>\d+))?\)

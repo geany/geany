@@ -73,3 +73,7 @@ EX_00_BD=false
 EX_01_LB=_View DVI File
 EX_01_CM=evince "%e.dvi"
 EX_01_BD=false
+
+# Diagnostic example:
+#   ./kommtechnik_2b.tex:18: Emergency stop.
+error_regex=(?<F>.+?):(?<L>\d+)(?::(?<H>\d+))?

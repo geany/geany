@@ -80,4 +80,12 @@ compiler=gcc -Wall -c "%f"
 linker=gcc -Wall -o "%e" "%f"
 run_cmd="./%e"
 
-
+# Diagnostic examples:
+#   GCC:
+#     empty.h:4: Warnung: type defaults to `int' in declaration of `foo'
+#     empty.c:21:8: error: conflicting types for `foo'
+#   MSVC:
+#     empty.c(21) : error C3001: ...
+#     empty.c(21,8) : error C3001: ...
+#   Don't accidently find libtool versions x:y:x and think it is a file name.
+error_regex=(?!.*libtool --mode=link)(?<F>.+?)(?::(?<L1>\d+)(?::(?<U1>\d+))?|\((?<L2>\d+)(?:,(?<H2>\d+))?\))

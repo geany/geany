@@ -37,3 +37,10 @@ context_action_cmd=
 #width=4
 # 0 is spaces, 1 is tabs, 2 is tab & spaces
 type=1
+
+[build_settings]
+# Diagnostic examples:
+#   GCC:
+#     empty.h:4: Warnung: type defaults to `int' in declaration of `foo'
+#     empty.c:21:8: error: conflicting types for `foo'
+error_regex=(?!.*libtool --mode=link.*)(?<F>.+?):(?<L>\d+)(?::(?<U>\d+))?

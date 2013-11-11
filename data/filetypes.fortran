@@ -45,3 +45,8 @@ compiler=gfortran -Wall -c "%f"
 linker=gfortran -Wall -o "%e" "%f"
 run_cmd="./%e"
 
+# Diagnostic examples:
+#   GCC:
+#     empty.h:4: Warning: type defaults to `int' in declaration of `foo'
+#     empty.c:21:8: error: conflicting types for `foo'
+error_regex=(?!.*libtool --mode=link)(?<F>.+?):(?<L>\d+)(?::(?<U>\d+))?
