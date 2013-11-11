@@ -306,6 +306,9 @@ static gchar *create_statusbar_statistics(GeanyDocument *doc,
 				g_string_append_printf(stats_str, "%d",
 					sci_get_style_at(doc->editor->sci, pos));
 				break;
+			case 'T':
+				g_string_append_c(stats_str, '\t');
+				break;
 			default:
 				g_string_append_len(stats_str, expos, 1);
 		}

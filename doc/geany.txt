@@ -2657,6 +2657,7 @@ Placeholder   Description
   ``%r``      Shows whether the document is read-only (RO) or nothing.
   ``%Y``      The Scintilla style number at the caret position. This is
               useful if you're debugging color schemes or related code.
+  ``%T``      A single tab character.
 ============  ===========================================================
 
 Terminal (VTE) preferences
