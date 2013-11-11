@@ -2639,6 +2639,8 @@ Placeholder   Description
   ``%L``      The total number of lines
   ``%c``      The current column number starting at 0
   ``%C``      The current column number starting at 1
+  ``%h``      The current character number starting at 0
+  ``%H``      The current character number starting at 1
   ``%s``      The number of selected characters or if only whole lines
               selected, the number of selected lines.
   ``%w``      Shows ``RO`` when the document is in read-only mode,

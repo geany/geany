@@ -220,6 +220,14 @@ static gchar *create_statusbar_statistics(GeanyDocument *doc,
 			case 'C':
 				g_string_append_printf(stats_str, "%d", col + 1);
 				break;
+			case 'h':
+				g_string_append_printf(stats_str, "%d",
+					pos - sci_get_position_from_line(doc->editor->sci, line));
+				break;
+			case 'H':
+				g_string_append_printf(stats_str, "%d",
+					pos - sci_get_position_from_line(doc->editor->sci, line) + 1);
+				break;
 			case 'p':
 				g_string_append_printf(stats_str, "%u", pos);
 				break;
