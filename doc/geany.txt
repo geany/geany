@@ -2625,7 +2625,7 @@ Statusbar Templates
 
 The default statusbar template is:
 
-``line: %l / %L%T col: %c%T ch: %h%T sel: %s%T %w      %t      %mmode: %M      encoding: %e      filetype: %f      scope: %S``
+``line: %l / %L%T col: %C%T ch: %H%T sel: %s%T %w      %t      %mmode: %M      encoding: %e      filetype: %f      scope: %S``
 
 Settings the preference to an empty string will also cause Geany to use this
 internal default.
