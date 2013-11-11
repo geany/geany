@@ -34,7 +34,7 @@ static void installCobolRegex (const langType language)
 		"\\1", "n,namespace,sections", "i");
 }
 
-extern parserDefinition* CobolParser ()
+extern parserDefinition* CobolParser (void)
 {
 	static const char *const extensions [] = {
 			"cbl", "cob", "cpy", "CBL", "COB", NULL };
