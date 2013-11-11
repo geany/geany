@@ -61,6 +61,7 @@
 #define DEFAULT_STATUSBAR_TEMPLATE N_(\
 	"line: %l / %L\t "   \
 	"col: %c\t "         \
+	"ch: %h\t "          \
 	"sel: %s\t "         \
 	"%w      %t      %m" \
 	"mode: %M      "     \
