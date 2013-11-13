@@ -192,6 +192,9 @@ static void init_prefs(void)
 		"pref_search_always_wrap", FALSE, "check_hide_find_dialog");
 	stash_group_add_toggle_button(group, &search_prefs.use_current_file_dir,
 		"pref_search_current_file_dir", TRUE, "check_fif_current_dir");
+	stash_group_add_toggle_button(group, &search_prefs.replace_entry_activates_replace_and_find,
+		"pref_search_replace_entry_activates_replace_and_find", FALSE,
+		"check_replace_entry_activates_replace_and_find");
 	stash_group_add_boolean(group, &find_dlg.all_expanded, "find_all_expanded", FALSE);
 	stash_group_add_boolean(group, &replace_dlg.all_expanded, "replace_all_expanded", FALSE);
 	/* dialog positions */
@@ -1372,7 +1375,9 @@ on_find_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 static void
 on_replace_entry_activate(GtkEntry *entry, gpointer user_data)
 {
-	on_replace_dialog_response(NULL, GEANY_RESPONSE_REPLACE, NULL);
+	on_replace_dialog_response(NULL,
+		search_prefs.replace_entry_activates_replace_and_find ? GEANY_RESPONSE_REPLACE_AND_FIND : GEANY_RESPONSE_REPLACE,
+		NULL);
 }
 
 
