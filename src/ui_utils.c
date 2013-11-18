@@ -2708,6 +2708,9 @@ GdkPixbuf *ui_get_mime_icon(const gchar *mime_type, GtkIconSize size)
 		{
 #if GTK_CHECK_VERSION(3, 0, 0)
 			GtkStyleContext *ctx = gtk_style_context_new();
+			GtkWidgetPath *path = gtk_widget_path_new();
+			gtk_style_context_set_path(ctx, path);
+			gtk_widget_path_unref(path);
 			icon = gtk_icon_set_render_icon_pixbuf(icon_set, ctx, size);
 			g_object_unref(ctx);
 #else
