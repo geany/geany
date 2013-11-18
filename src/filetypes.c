@@ -522,6 +522,12 @@ static void init_builtin_filetypes(void)
 	ft->name = g_strdup("PowerShell");
 	filetype_make_title(ft, TITLE_SOURCE_FILE);
 	ft->group = GEANY_FILETYPE_GROUP_SCRIPT;
+
+#define NIMROD
+	ft = filetypes[GEANY_FILETYPES_NIMROD];
+	ft->name = g_strdup("Nimrod");
+	filetype_make_title(ft, TITLE_SOURCE_FILE);
+	ft->group = GEANY_FILETYPE_GROUP_COMPILED;
 }
 
 
@@ -937,7 +943,8 @@ static GeanyFiletype *find_shebang(const gchar *utf8_filename, const gchar *line
 			{ "ash",	GEANY_FILETYPES_SH },
 			{ "dmd",	GEANY_FILETYPES_D },
 			{ "wish",	GEANY_FILETYPES_TCL },
-			{ "node",	GEANY_FILETYPES_JS }
+			{ "node",	GEANY_FILETYPES_JS },
+			{ "nimrod",	GEANY_FILETYPES_NIMROD }
 		};
 		gchar *tmp = g_path_get_basename(line + 2);
 		gchar *basename_interpreter = tmp;

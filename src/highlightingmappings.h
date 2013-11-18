@@ -992,6 +992,35 @@ static const HLKeyword highlighting_keywords_MATLAB[] =
 #define highlighting_properties_MATLAB	EMPTY_PROPERTIES
 
 
+/* Nimrod */
+#define highlighting_lexer_NIMROD		SCLEX_NIMROD
+static const HLStyle highlighting_styles_NIMROD[] =
+{
+	{ SCE_P_DEFAULT,		"default",			FALSE },
+	{ SCE_P_COMMENTLINE,	"commentline",		FALSE },
+	{ SCE_P_NUMBER,			"number",			FALSE },
+	{ SCE_P_STRING,			"string",			FALSE },
+	{ SCE_P_CHARACTER,		"character",		FALSE },
+	{ SCE_P_WORD,			"word",				FALSE },
+	{ SCE_P_TRIPLE,			"triple",			FALSE },
+	{ SCE_P_TRIPLEDOUBLE,	"tripledouble",		FALSE },
+	{ SCE_P_CLASSNAME,		"classname",		FALSE },
+	{ SCE_P_DEFNAME,		"defname",			FALSE },
+	{ SCE_P_OPERATOR,		"operator",			FALSE },
+	{ SCE_P_IDENTIFIER,		"identifier",		FALSE },
+	{ SCE_P_COMMENTBLOCK,	"commentblock",		FALSE },
+	{ SCE_P_STRINGEOL,		"stringeol",		FALSE },
+	{ SCE_P_WORD2,			"word2",			FALSE },
+	{ SCE_P_DECORATOR,		"decorator",		FALSE }
+};
+static const HLKeyword highlighting_keywords_NIMROD[] =
+{
+	{ 0, "primary",		FALSE },
+	{ 1, "identifiers",	FALSE }
+};
+#define highlighting_properties_NIMROD	EMPTY_PROPERTIES
+
+
 /* NSIS */
 #define highlighting_lexer_NSIS			SCLEX_NSIS
 static const HLStyle highlighting_styles_NSIS[] =
