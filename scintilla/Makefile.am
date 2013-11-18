@@ -27,6 +27,7 @@ lexers/LexLisp.cxx \
 lexers/LexLua.cxx \
 lexers/LexMarkdown.cxx \
 lexers/LexMatlab.cxx \
+lexers/LexNimrod.cxx \
 lexers/LexNsis.cxx \
 lexers/LexOthers.cxx \
 lexers/LexPascal.cxx \

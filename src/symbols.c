@@ -993,6 +993,17 @@ static void add_top_level_items(GeanyDocument *doc)
 				NULL);
 			break;
 		}
+    case GEANY_FILETYPES_NIMROD:
+		{
+			tag_list_add_groups(tag_store,
+				&(tv_iters.tag_class), _("Classes"), "classviewer-class",
+				&(tv_iters.tag_member), _("Methods"), "classviewer-macro",
+				&(tv_iters.tag_function), _("Functions"), "classviewer-method",
+				&(tv_iters.tag_variable), _("Variables"), "classviewer-var",
+				&(tv_iters.tag_namespace), _("Imports"), "classviewer-namespace",
+				NULL);
+			break;
+		}
 		case GEANY_FILETYPES_D:
 		default:
 		{
@@ -2056,6 +2067,7 @@ static gchar *parse_function_at_line(ScintillaObject *sci, gint tag_line)
 	{
 		case SCLEX_RUBY:	fn_style = SCE_RB_DEFNAME; break;
 		case SCLEX_PYTHON:	fn_style = SCE_P_DEFNAME; break;
+		case SCLEX_NIMROD:	fn_style = SCE_P_DEFNAME; break;
 		default: fn_style = SCE_C_IDENTIFIER;	/* several lexers use SCE_C_IDENTIFIER */
 	}
 	start = sci_get_position_from_line(sci, tag_line - 2);

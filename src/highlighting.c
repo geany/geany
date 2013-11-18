@@ -1072,6 +1072,7 @@ void highlighting_init_styles(guint filetype_idx, GKeyFile *config, GKeyFile *co
 		init_styleset_case(MAKE);
 		init_styleset_case(MATLAB);
 		init_styleset_case(MARKDOWN);
+		init_styleset_case(NIMROD);
 		init_styleset_case(NSIS);
 		init_styleset_case(OBJECTIVEC);
 		init_styleset_case(PASCAL);
@@ -1154,6 +1155,7 @@ void highlighting_set_styles(ScintillaObject *sci, GeanyFiletype *ft)
 		styleset_case(MAKE);
 		styleset_case(MARKDOWN);
 		styleset_case(MATLAB);
+		styleset_case(NIMROD);
 		styleset_case(NSIS);
 		styleset_case(OBJECTIVEC);
 		styleset_case(PASCAL);
@@ -1576,6 +1578,13 @@ gboolean highlighting_is_string_style(gint lexer, gint style)
 
 		case SCLEX_ABAQUS:
 			return (style == SCE_ABAQUS_STRING);
+
+    case SCLEX_NIMROD:
+			return (style == SCE_P_STRING ||
+				style == SCE_P_TRIPLE ||
+				style == SCE_P_TRIPLEDOUBLE ||
+				style == SCE_P_CHARACTER ||
+				style == SCE_P_STRINGEOL);
 	}
 	return FALSE;
 }
@@ -1725,6 +1734,10 @@ gboolean highlighting_is_comment_style(gint lexer, gint style)
 			return (style == SCE_ASM_COMMENT ||
 				style == SCE_ASM_COMMENTBLOCK ||
 				style == SCE_ASM_COMMENTDIRECTIVE);
+
+    case SCLEX_NIMROD:
+			return (style == SCE_P_COMMENTLINE ||
+				style == SCE_P_COMMENTBLOCK);
 	}
 	return FALSE;
 }

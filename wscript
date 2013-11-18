@@ -92,6 +92,7 @@ ctags_sources = set([
     'tagmanager/ctags/make.c',
     'tagmanager/ctags/markdown.c',
     'tagmanager/ctags/matlab.c',
+    'tagmanager/ctags/nimrod.c',
     'tagmanager/ctags/nsis.c',
     'tagmanager/ctags/nestlevel.c',
     'tagmanager/ctags/objc.c',

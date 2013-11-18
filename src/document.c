@@ -2315,6 +2315,7 @@ void document_highlight_tags(GeanyDocument *doc)
 		case GEANY_FILETYPES_CS:
 		case GEANY_FILETYPES_D:
 		case GEANY_FILETYPES_JAVA:
+		case GEANY_FILETYPES_NIMROD:
 		case GEANY_FILETYPES_OBJECTIVEC:
 		case GEANY_FILETYPES_VALA:
 		{

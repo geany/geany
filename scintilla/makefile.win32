@@ -98,7 +98,8 @@ LexBasic.o \
 LexR.o \
 LexYAML.o \
 LexCmake.o \
-LexNsis.o
+LexNsis.o \
+LexNimrod.o
 
 all: $(COMPLIB)
 

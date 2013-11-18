@@ -34,6 +34,7 @@ parsers = \
 	make.c \
 	markdown.c \
 	matlab.c \
+	nimrod.c \
 	nsis.c \
 	objc.c \
 	pascal.c \

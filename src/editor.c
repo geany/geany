@@ -1423,6 +1423,8 @@ static gint get_indent_size_after_line(GeanyEditor *editor, gint line)
 			additional_indent = iprefs->width * get_brace_indent(sci, line);
 		else if (sci_get_lexer(sci) == SCLEX_PYTHON) /* Python/Cython */
 			additional_indent = iprefs->width * get_python_indent(sci, line);
+    else if (sci_get_lexer(sci) == SCLEX_NIMROD) /* Nimrod */
+			additional_indent = iprefs->width * get_python_indent(sci, line);
 
 		/* HTML lexer "has braces" because of PHP and JavaScript.  If get_brace_indent() did not
 		 * recommend us to insert additional indent, we are probably not in PHP/JavaScript chunk and
@@ -4948,6 +4950,7 @@ void editor_set_indentation_guides(GeanyEditor *editor)
 		case SCLEX_PROPERTIES:
 		case SCLEX_FORTRAN: /* Is this the best option for Fortran? */
 		case SCLEX_CAML:
+		case SCLEX_NIMROD:
 			mode = SC_IV_LOOKFORWARD;
 			break;
 
