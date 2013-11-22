@@ -473,7 +473,7 @@ void editor_toggle_fold(GeanyEditor *editor, gint line, gint modifiers)
 
 		if (sci_get_line_is_visible(sci, line + 1))
 		{	/* unfold all children of the current fold point */
-			for (i = line; i < last_line; i++)
+			for (i = line; i <= last_line; i++)
 			{
 				if (! sci_get_line_is_visible(sci, i))
 				{
@@ -483,7 +483,7 @@ void editor_toggle_fold(GeanyEditor *editor, gint line, gint modifiers)
 		}
 		else
 		{	/* fold all children of the current fold point */
-			for (i = line; i < last_line; i++)
+			for (i = line; i <= last_line; i++)
 			{
 				gint level = sci_get_fold_level(sci, i);
 				if (level & SC_FOLDLEVELHEADERFLAG)
