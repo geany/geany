@@ -995,6 +995,7 @@ static GPid build_run_cmd(GeanyDocument *doc, guint cmdindex)
 		gchar *locale_term_cmd = NULL;
 		gint argv_len, i;
 		gchar **argv = NULL;
+		gchar *script_path = NULL;
 
 		/* get the terminal path */
 		locale_term_cmd = utils_get_locale_from_utf8(tool_prefs.term_cmd);
@@ -1005,6 +1006,8 @@ static GPid build_run_cmd(GeanyDocument *doc, guint cmdindex)
 				_("Could not parse terminal command \"%s\" "
 					"(check Terminal tool setting in Preferences)"), tool_prefs.term_cmd);
 			run_info[cmdindex].pid = (GPid) 1;
+			script_path = g_build_filename(working_dir, RUN_SCRIPT_CMD, NULL);
+			g_unlink(script_path);
 			goto free_strings;
 		}
 
@@ -1022,6 +1025,8 @@ static GPid build_run_cmd(GeanyDocument *doc, guint cmdindex)
 				_("Could not find terminal \"%s\" "
 					"(check path for Terminal tool setting in Preferences)"), tool_prefs.term_cmd);
 			run_info[cmdindex].pid = (GPid) 1;
+			script_path = g_build_filename(working_dir, RUN_SCRIPT_CMD, NULL);
+			g_unlink(script_path);
 			goto free_strings;
 		}
 
@@ -1035,8 +1040,9 @@ static GPid build_run_cmd(GeanyDocument *doc, guint cmdindex)
 		{
 			geany_debug("g_spawn_async() failed: %s", error->message);
 			ui_set_statusbar(TRUE, _("Process failed (%s)"), error->message);
-			g_unlink(RUN_SCRIPT_CMD);
 			g_error_free(error);
+			script_path = g_build_filename(working_dir, RUN_SCRIPT_CMD, NULL);
+			g_unlink(script_path);
 			error = NULL;
 			run_info[cmdindex].pid = (GPid) 0;
 		}
@@ -1050,6 +1056,7 @@ static GPid build_run_cmd(GeanyDocument *doc, guint cmdindex)
 		free_strings:
 		g_strfreev(argv);
 		g_free(locale_term_cmd);
+		g_free(script_path);
 	}
 
 	g_free(working_dir);
