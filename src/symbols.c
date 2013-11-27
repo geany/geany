@@ -285,7 +285,7 @@ GString *symbols_find_tags_as_string(GPtrArray *tags_array, guint tag_types, gin
  * type.
  * @param ft_id File type identifier.
  * @return The context separator string.
- * 
+ *
  * Returns non-printing sequence "\x03" ie ETX (end of text) for filetypes
  * without a context separator.
  *
@@ -993,7 +993,7 @@ static void add_top_level_items(GeanyDocument *doc)
 				NULL);
 			break;
 		}
-    case GEANY_FILETYPES_NIMROD:
+		case GEANY_FILETYPES_NIMROD:
 		{
 			tag_list_add_groups(tag_store,
 				&(tv_iters.tag_class), _("Classes"), "classviewer-class",
