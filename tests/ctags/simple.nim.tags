@@ -1,3 +1,16 @@
 # format=tagmanager
+TComplexWordÌ1Ö0
+TWordÌ1Ö0
+countÌ16384ÎTWordÖ0
+countWordÌ16Í(par: string)Ö0
+module3Ì256Ö0
 proc1Ì256Ö0
 proc2Ì256Ö0
+resultÌ16384ÎcountWordÖ0
+someIntÌ16384Ö0
+str1Ì16384Ö0
+str2Ì16384Ö0
+str3Ì16384Ö0
+tagÌ16384ÎTComplexWordÖ0
+underFunctionÌ16384ÎcountWordÖ0
+wordÌ16384ÎTWordÖ0
