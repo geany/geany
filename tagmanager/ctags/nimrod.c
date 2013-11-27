@@ -798,7 +798,7 @@ static void findNimrodTags (void)
 
 extern parserDefinition *NimrodParser (void)
 {
-    static const char *const extensions[] = { "py", "pyx", "pxd", "pxi" ,"scons", NULL };
+  static const char *const extensions[] = { "nim", NULL };
 	parserDefinition *def = parserNew ("Nimrod");
 	def->kinds = NimrodKinds;
 	def->kindCount = KIND_COUNT (NimrodKinds);
