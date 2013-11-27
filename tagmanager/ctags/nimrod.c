@@ -47,12 +47,12 @@ static char const * const doubletriple = "\"\"\"";
 
 static boolean isIdentifierFirstCharacter (int c)
 {
-	return (boolean) (isalpha (c) || c == '_');
+	return (boolean) (isalpha (c));
 }
 
 static boolean isIdentifierCharacter (int c)
 {
-	return (boolean) (isalnum (c) || c == '_');
+	return (boolean) (isalnum (c));
 }
 
 static const char *get_class_name_from_parent (const char *parent)
@@ -120,6 +120,7 @@ static void makeFunctionTag (vString *const function,
 	}
 	makeTagEntry (&tag);
 }
+
 
 /* Given a string with the contents of the line directly after the "class"
  * keyword, extract all necessary information and create a tag.
@@ -224,13 +225,14 @@ static const char *skipIdentifier (const char *cp)
 	return cp;
 }
 
-static const char *findDefinitionOrClass (const char *cp)
+static const char *findDefinitionOrType (const char *cp)
 {
 	while (*cp)
 	{
 		cp = skipEverything (cp);
-		if (!strncmp(cp, "def", 3) || !strncmp(cp, "class", 5) ||
-			!strncmp(cp, "cdef", 4) || !strncmp(cp, "cpdef", 5))
+		if (!strncmp(cp, "proc", 4) || !strncmp(cp, "type", 4) ||
+		    !strncmp(cp, "const", 5) || !strncmp(cp, "var", 3) ||
+		    !strncmp(cp, "let", 3))
 		{
 			return cp;
 		}
@@ -259,32 +261,14 @@ static const char *parseIdentifier (const char *cp, vString *const identifier)
 	return cp;
 }
 
-static void parseClass (const char *cp, vString *const class,
-	vString *const parent, int is_class_parent)
+static void parseType (const char *cp, vString *const type,
+	vString *const parent, int is_type_parent)
 {
 	vString *const inheritance = vStringNew ();
 	vStringClear (inheritance);
-	cp = parseIdentifier (cp, class);
+	cp = parseIdentifier (cp, type);
 	cp = skipSpace (cp);
-	if (*cp == '(')
-	{
-		++cp;
-		while (*cp != ')')
-		{
-			if (*cp == '\0')
-			{
-				/* Closing parenthesis can be in follow up line. */
-				cp = (const char *) fileReadLine ();
-				if (!cp) break;
-				vStringPut (inheritance, ' ');
-				continue;
-			}
-			vStringPut (inheritance, *cp);
-			++cp;
-		}
-		vStringTerminate (inheritance);
-	}
-	makeClassTag (class, inheritance, parent, is_class_parent);
+	makeClassTag (type, inheritance, parent, is_type_parent);
 	vStringDelete (inheritance);
 }
 
@@ -355,17 +339,28 @@ static char *parseArglist(const char *buf)
 	return strdup(start);
 }
 
-static void parseFunction (const char *cp, vString *const def,
-	vString *const parent, int is_class_parent)
+static void parseFunction (const char *cp, vString *const name,
+	vString *const parent, int is_type_parent)
 {
 	char *arglist;
 
-	cp = parseIdentifier (cp, def);
+	cp = parseIdentifier (cp, name);
 	arglist = parseArglist (cp);
-	makeFunctionTag (def, parent, is_class_parent, arglist);
+	makeFunctionTag (name, parent, is_type_parent, arglist);
 	if (arglist != NULL)
 		eFree (arglist);
 }
+
+static void parseVariable (const char *cp, vString *const name,
+	vString *const parent, int is_parent)
+{
+	// Ignoring variables in global blocks different than types
+	if (!is_parent && vStringLength(parent) > 0) return;
+
+	cp = parseIdentifier (cp, name);
+	makeVariableTag (name, parent);
+}
+
 
 /* Get the combined name of a nested symbol. Classes are separated with ".",
  * functions with "/". For example this code:
@@ -507,26 +502,15 @@ static void find_triple_end(char const *string, char const **which)
 	}
 }
 
-static const char *findVariable(const char *line)
+static const char *findField(const char *line)
 {
-	/* Parse global and class variable names (C.x) from assignment statements.
-	 * Object attributes (obj.x) are ignored.
-	 * Assignment to a tuple 'x, y = 2, 3' not supported.
-	 * TODO: ignore duplicate tags from reassignment statements. */
+	/* Parse type type names (C.x) from assignment statements.
+	 * Object attributes (obj.x) are ignored. */
 	const char *cp, *sp, *eq, *start;
 
-	cp = strstr(line, "=");
+	cp = strstr(line, ":");
 	if (!cp)
 		return NULL;
-	eq = cp + 1;
-	while (*eq)
-	{
-		if (*eq == '=')
-			return NULL;	/* ignore '==' operator and 'x=5,y=6)' function lines */
-		if (*eq == '(' || *eq == '#')
-			break;	/* allow 'x = func(b=2,y=2,' lines and comments at the end of line */
-		eq++;
-	}
 
 	/* go backwards to the start of the line, checking we have valid chars */
 	start = cp - 1;
@@ -539,9 +523,9 @@ static const char *findVariable(const char *line)
 	sp = start;
 	while (sp >= line && isspace ((int) *sp))
 		--sp;
-	if ((sp + 1) != line)	/* the line isn't a simple variable assignment */
+	if ((sp + 1) != line)	/* the line isn't a simple field*/
 		return NULL;
-	/* the line is valid, parse the variable name */
+	/* the line is valid, parse the field name */
 	++start;
 	return start;
 }
@@ -583,49 +567,6 @@ static const char *skipTypeDecl (const char *cp, boolean *is_class)
 	return NULL;
 }
 
-/* checks if there is a lambda at position of cp, and return its argument list
- * if so.
- * We don't return the lambda name since it is useless for now since we already
- * know it when we call this function, and it would be a little slower. */
-static boolean varIsLambda (const char *cp, char **arglist)
-{
-	boolean is_lambda = FALSE;
-
-	cp = skipSpace (cp);
-	cp = skipIdentifier (cp); /* skip the lambda's name */
-	cp = skipSpace (cp);
-	if (*cp == '=')
-	{
-		cp++;
-		cp = skipSpace (cp);
-		if (strncmp (cp, "lambda", 6) == 0)
-		{
-			const char *tmp;
-
-			cp += 6; /* skip the lambda */
-			tmp = skipSpace (cp);
-			/* check if there is a space after lambda to detect assignations
-			 * starting with 'lambdaXXX' */
-			if (tmp != cp)
-			{
-				vString *args = vStringNew ();
-
-				cp = tmp;
-				vStringPut (args, '(');
-				for (; *cp != 0 && *cp != ':'; cp++)
-					vStringPut (args, *cp);
-				vStringPut (args, ')');
-				vStringTerminate (args);
-				if (arglist)
-					*arglist = strdup (vStringValue (args));
-				vStringDelete (args);
-				is_lambda = TRUE;
-			}
-		}
-	}
-	return is_lambda;
-}
-
 /* checks if @p cp has keyword @p keyword at the start, and fills @p cp_n with
  * the position of the next non-whitespace after the keyword */
 static boolean matchKeyword (const char *keyword, const char *cp, const char **cp_n)
@@ -655,7 +596,7 @@ static void findNimrodTags (void)
 	{
 		const char *cp = line, *candidate;
 		char const *longstring;
-		char const *keyword, *variable;
+		char const *keyword, *field;
 		int indent;
 
 		cp = skipSpace (cp);
@@ -689,8 +630,74 @@ static void findNimrodTags (void)
 			find_triple_end(cp, &longStringLiteral);
 			continue;
 		}
-		
+
 		checkParent(nesting_levels, indent, parent);
+
+		/* Deal with proc, type or var definition keywords. */
+		keyword = findDefinitionOrType (cp);
+		if (keyword)
+		{
+			boolean found = FALSE;
+			boolean is_function = FALSE;
+			boolean is_type = FALSE;
+			if (matchKeyword ("proc", keyword, &cp))
+			{
+				found = TRUE;
+				is_function = TRUE;
+			}
+			if (matchKeyword ("const", keyword, &cp) ||
+			    matchKeyword ("var", keyword, &cp) ||
+			    matchKeyword ("let", keyword, &cp))
+			{
+				found = TRUE;
+			}
+			else if (matchKeyword ("type", keyword, &cp))
+			{
+				found = TRUE;
+				is_type = TRUE;
+			}
+
+			if (found)
+			{
+				boolean is_parent_type;
+
+				is_parent_type =
+					constructParentString(nesting_levels, indent, parent);
+
+				if (is_type)
+					parseType (cp, name, parent, is_parent_type);
+				else if (is_function)
+					parseFunction(cp, name, parent, is_parent_type);
+				else
+					parseVariable(cp, name, parent, is_parent_type);
+
+				addNestingLevel(nesting_levels, indent, name, is_type);
+			}
+		}
+		/* Find type fields */
+		field = findField(line);
+		if (field)
+		{
+			const char *start = field;
+			char *arglist;
+			boolean parent_is_type;
+
+			vStringClear (name);
+			while (isIdentifierCharacter ((int) *start))
+			{
+				vStringPut (name, (int) *start);
+				++start;
+			}
+			vStringTerminate (name);
+
+			parent_is_type = constructParentString(nesting_levels, indent, parent);
+
+			/* skip variables in methods */
+			if (! parent_is_type && vStringLength(parent) > 0)
+				continue;
+
+			makeVariableTag (name, parent);
+		}
 
 		/* Deal with multiline string start. */
 		longstring = find_triple_start(cp, &longStringLiteral);
@@ -702,90 +709,6 @@ static void findNimrodTags (void)
 			continue;
 		}
 
-		/* Deal with def and class keywords. */
-		keyword = findDefinitionOrClass (cp);
-		if (keyword)
-		{
-			boolean found = FALSE;
-			boolean is_class = FALSE;
-			if (matchKeyword ("def", keyword, &cp))
-			{
-				found = TRUE;
-			}
-			else if (matchKeyword ("class", keyword, &cp))
-			{
-				found = TRUE;
-				is_class = TRUE;
-			}
-			else if (matchKeyword ("cdef", keyword, &cp))
-		    {
-		        candidate = skipTypeDecl (cp, &is_class);
-		        if (candidate)
-		        {
-		    		found = TRUE;
-		    		cp = candidate;
-		        }
-
-		    }
-    		else if (matchKeyword ("cpdef", keyword, &cp))
-		    {
-		        candidate = skipTypeDecl (cp, &is_class);
-		        if (candidate)
-		        {
-		    		found = TRUE;
-		    		cp = candidate;
-		        }
-		    }
-
-			if (found)
-			{
-				boolean is_parent_class;
-
-				is_parent_class =
-					constructParentString(nesting_levels, indent, parent);
-
-				if (is_class)
-					parseClass (cp, name, parent, is_parent_class);
-				else
-					parseFunction(cp, name, parent, is_parent_class);
-
-				addNestingLevel(nesting_levels, indent, name, is_class);
-			}
-		}
-		/* Find global and class variables */
-		variable = findVariable(line);
-		if (variable)
-		{
-			const char *start = variable;
-			char *arglist;
-			boolean parent_is_class;
-
-			vStringClear (name);
-			while (isIdentifierCharacter ((int) *start))
-			{
-				vStringPut (name, (int) *start);
-				++start;
-			}
-			vStringTerminate (name);
-
-			parent_is_class = constructParentString(nesting_levels, indent, parent);
-			if (varIsLambda (variable, &arglist))
-			{
-				/* show class members or top-level script lambdas only */
-				if (parent_is_class || vStringLength(parent) == 0)
-					makeFunctionTag (name, parent, parent_is_class, arglist);
-				if (arglist != NULL)
-					eFree (arglist);
-			}
-			else
-			{
-				/* skip variables in methods */
-				if (! parent_is_class && vStringLength(parent) > 0)
-					continue;
-
-				makeVariableTag (name, parent);
-			}
-		}
 		/* Find and parse imports */
 		parseImports(line);
 	}
