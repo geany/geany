@@ -525,6 +525,7 @@ static void init_builtin_filetypes(void)
 
 #define NIMROD
 	ft = filetypes[GEANY_FILETYPES_NIMROD];
+  ft->lang = 45;
 	ft->name = g_strdup("Nimrod");
 	filetype_make_title(ft, TITLE_SOURCE_FILE);
 	ft->group = GEANY_FILETYPE_GROUP_COMPILED;
