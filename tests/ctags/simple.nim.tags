@@ -6,7 +6,6 @@ countWordÌ16Í(par: string)Ö0
 module3Ì256Ö0
 proc1Ì256Ö0
 proc2Ì256Ö0
-resultÌ16384ÎcountWordÖ0
 someIntÌ16384Ö0
 str1Ì16384Ö0
 str2Ì16384Ö0
