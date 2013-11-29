@@ -9,6 +9,7 @@ src/dialogs.c
 src/document.c
 src/editor.c
 src/encodings.c
+src/fileloc.c
 src/filetypes.c
 src/geany.h
 src/geanymenubuttonaction.c
