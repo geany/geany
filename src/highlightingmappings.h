@@ -1004,14 +1004,8 @@ static const HLStyle highlighting_styles_NIMROD[] =
 	{ SCE_P_WORD,			"word",				FALSE },
 	{ SCE_P_TRIPLE,			"triple",			FALSE },
 	{ SCE_P_TRIPLEDOUBLE,	"tripledouble",		FALSE },
-	{ SCE_P_CLASSNAME,		"classname",		FALSE },
-	{ SCE_P_DEFNAME,		"defname",			FALSE },
 	{ SCE_P_OPERATOR,		"operator",			FALSE },
-	{ SCE_P_IDENTIFIER,		"identifier",		FALSE },
-	{ SCE_P_COMMENTBLOCK,	"commentblock",		FALSE },
-	{ SCE_P_STRINGEOL,		"stringeol",		FALSE },
-	{ SCE_P_WORD2,			"word2",			FALSE },
-	{ SCE_P_DECORATOR,		"decorator",		FALSE }
+	{ SCE_P_IDENTIFIER,		"identifier",		FALSE }
 };
 static const HLKeyword highlighting_keywords_NIMROD[] =
 {
