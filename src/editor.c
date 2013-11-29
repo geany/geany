@@ -1366,6 +1366,20 @@ static gint get_python_indent(ScintillaObject *sci, gint line)
 	return 0;
 }
 
+static gint get_nimrod_indent(ScintillaObject *sci, gint line)
+{
+	gint last_char = get_sci_line_code_end_position(sci, line);
+
+	/* add extra indentation for Python after colon */
+	if (sci_get_char_at(sci, last_char) == ':' ||
+	    sci_get_char_at(sci, last_char) == '=' &&
+		sci_get_style_at(sci, last_char) == SCE_P_OPERATOR)
+	{
+		return 1;
+	}
+	return 0;
+}
+
 
 static gint get_xml_indent(ScintillaObject *sci, gint line)
 {
@@ -1424,7 +1438,7 @@ static gint get_indent_size_after_line(GeanyEditor *editor, gint line)
 		else if (sci_get_lexer(sci) == SCLEX_PYTHON) /* Python/Cython */
 			additional_indent = iprefs->width * get_python_indent(sci, line);
 		else if (sci_get_lexer(sci) == SCLEX_NIMROD) /* Nimrod */
-			additional_indent = iprefs->width * get_python_indent(sci, line);
+			additional_indent = iprefs->width * get_nimrod_indent(sci, line);
 
 		/* HTML lexer "has braces" because of PHP and JavaScript.  If get_brace_indent() did not
 		 * recommend us to insert additional indent, we are probably not in PHP/JavaScript chunk and
