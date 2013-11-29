@@ -671,7 +671,7 @@ static void findNimrodTags (void)
 				else
 					parseVariable(cp, name, parent, is_parent_type);
 
-				addNestingLevel(nesting_levels, indent, name, is_type);
+				addNestingLevel(nesting_levels, indent, name, is_type || is_function);
 			}
 		}
 		/* Find type fields */
