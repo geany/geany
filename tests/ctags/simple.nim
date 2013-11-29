@@ -23,3 +23,10 @@ let str3 = r"raw string"
 if True:
   let str4 = "aaa"
 let someInt = 999
+
+# basic iterator
+iterator countup(a, b: int): int =
+  var res = a
+  while res <= b:
+    yield res
+    inc(res)
