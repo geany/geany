@@ -4,9 +4,6 @@
 [keywords]
 # all items must be in one line
 primary=addr and as asm atomic bind block break case cast const continue converter discard distinct div do elif else end enum except export finally for from generic if import in include interface is isnot iterator lambda let macro method mixin mod nil not notin object of or out proc ptr raise ref return shared shl shr static template try tuple type var when while with without xor yield
-# additional keywords, will be highlighted with style "word2"
-# these are the builtins for Python 2.7 created with ' '.join(dir(__builtins__))
-identifiers=
 
 [lexer_properties]
 fold.comment.python=1
