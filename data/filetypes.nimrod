@@ -1,22 +1,5 @@
 # For complete documentation of this file, please see Geany's main documentation
-[styling]
-# Edit these in the colorscheme .conf file instead
-default=default
-commentline=comment_line
-number=number_1
-string=string_1
-character=character
-word=keyword_1
-triple=string_2
-tripledouble=string_2
-classname=type
-defname=function
-operator=operator
-identifier=identifier_1
-commentblock=comment
-stringeol=string_eol
-word2=keyword_2
-decorator=decorator
+[styling=Python]
 
 [keywords]
 # all items must be in one line
