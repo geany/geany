@@ -1009,8 +1009,7 @@ static const HLStyle highlighting_styles_NIMROD[] =
 };
 static const HLKeyword highlighting_keywords_NIMROD[] =
 {
-	{ 0, "primary",		FALSE },
-	{ 1, "identifiers",	FALSE }
+	{ 0, "primary",		FALSE }
 };
 #define highlighting_properties_NIMROD	EMPTY_PROPERTIES
 
