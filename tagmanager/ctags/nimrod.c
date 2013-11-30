@@ -232,7 +232,7 @@ static const char *findDefinitionOrType (const char *cp)
 		cp = skipEverything (cp);
 		if (!strncmp(cp, "proc", 4) || !strncmp(cp, "type", 4) ||
 		    !strncmp(cp, "const", 5) || !strncmp(cp, "var", 3) ||
-		    !strncmp(cp, "let", 3))
+		    !strncmp(cp, "let", 3) || !strncmp(cp, "iterator", 8))
 		{
 			return cp;
 		}
@@ -640,7 +640,8 @@ static void findNimrodTags (void)
 			boolean found = FALSE;
 			boolean is_function = FALSE;
 			boolean is_type = FALSE;
-			if (matchKeyword ("proc", keyword, &cp))
+			if (matchKeyword ("proc", keyword, &cp) ||
+			    matchKeyword ("iterator", keyword, &cp))
 			{
 				found = TRUE;
 				is_function = TRUE;
