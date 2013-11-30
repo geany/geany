@@ -2,8 +2,8 @@
 TComplexWordÌ1Ö0
 TWordÌ1Ö0
 countÌ16384ÎTWordÖ0
-countupÌ16Í(a, b: int)Ö0
 countWordÌ16Í(par: string)Ö0
+countupÌ16Í(a, b: int)Ö0
 module3Ì256Ö0
 proc1Ì256Ö0
 proc2Ì256Ö0
