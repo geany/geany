@@ -42,6 +42,7 @@
 #include "stash.h"
 #include "toolbar.h"
 #include "gtkcompat.h"
+#include "spawn.h"
 
 #include <unistd.h>
 #include <string.h>
@@ -144,12 +145,10 @@ static struct
 fif_dlg = {NULL, NULL, NULL, NULL, NULL, NULL, {0, 0}};
 
 
-static gboolean search_read_io(GIOChannel *source, GIOCondition condition, gpointer data);
-static gboolean search_read_io_stderr(GIOChannel *source, GIOCondition condition, gpointer data);
+static void search_read_io(const gchar *text, gpointer data);
+static void search_read_io_stderr(const gchar *text, gpointer data);
 
-static void search_close_pid(GPid child_pid, gint status, gpointer user_data);
-
-static gchar **search_get_argv(const gchar **argv_prefix, const gchar *dir);
+static void search_finished(gint status, gpointer user_data);
 
 static GRegex *compile_regex(const gchar *str, gint sflags);
 
@@ -1530,9 +1529,11 @@ fail:
 }
 
 
-static GString *get_grep_options(void)
+static GString *get_grep_command(void)
 {
-	GString *gstr = g_string_new("-nHI");	/* line numbers, filenames, ignore binaries */
+	GString *gstr = g_string_new(tool_prefs.grep_cmd);
+
+	g_string_append(gstr, " -nHIr");  /* line #s, filenames, ignore binaries, recursive */
 
 	if (settings.fif_invert_results)
 		g_string_append_c(gstr, 'v');
@@ -1540,8 +1541,6 @@ static GString *get_grep_options(void)
 		g_string_append_c(gstr, 'i');
 	if (settings.fif_match_whole_word)
 		g_string_append_c(gstr, 'w');
-	if (settings.fif_recursive)
-		g_string_append_c(gstr, 'r');
 
 	if (!settings.fif_regexp)
 		g_string_append_c(gstr, 'F');
@@ -1571,6 +1570,10 @@ static GString *get_grep_options(void)
 		g_string_append(gstr, tmp->str);
 		g_string_free(tmp, TRUE);
 	}
+
+	if (!settings.fif_recursive)
+		g_string_append(gstr, " --exclude-dir=[^.]* --exclude-dir=.?*");
+
 	return gstr;
 }
 
@@ -1598,22 +1601,18 @@ on_find_in_files_dialog_response(GtkDialog *dialog, gint response,
 			ui_set_statusbar(FALSE, _("Invalid directory for find in files."));
 		else if (!EMPTY(search_text))
 		{
-			gchar *locale_dir;
-			GString *opts = get_grep_options();
+			GString *cmd = get_grep_command();
 			const gchar *enc = (enc_idx == GEANY_ENCODING_UTF_8) ? NULL :
 				encodings_get_charset_from_index(enc_idx);
 
-			locale_dir = utils_get_locale_from_utf8(utf8_dir);
-
-			if (search_find_in_files(search_text, locale_dir, opts->str, enc))
+			if (search_find_in_files(search_text, utf8_dir, cmd->str, enc))
 			{
 				ui_combo_box_add_to_history(GTK_COMBO_BOX_TEXT(search_combo), search_text, 0);
 				ui_combo_box_add_to_history(GTK_COMBO_BOX_TEXT(fif_dlg.files_combo), NULL, 0);
 				ui_combo_box_add_to_history(GTK_COMBO_BOX_TEXT(dir_combo), utf8_dir, 0);
 				gtk_widget_hide(fif_dlg.dialog);
 			}
-			g_free(locale_dir);
-			g_string_free(opts, TRUE);
+			g_string_free(cmd, TRUE);
 		}
 		else
 			ui_set_statusbar(FALSE, _("No text to find."));
@@ -1624,37 +1623,17 @@ on_find_in_files_dialog_response(GtkDialog *dialog, gint response,
 
 
 static gboolean
-search_find_in_files(const gchar *utf8_search_text, const gchar *dir, const gchar *opts,
+search_find_in_files(const gchar *utf8_search_text, const gchar *utf8_dir, const gchar *cmd,
 	const gchar *enc)
 {
-	gchar **argv_prefix, **argv, **opts_argv;
-	gchar *command_grep;
+	gchar **argv = g_new(gchar *, 4);
+	gchar *dir = utils_get_locale_from_utf8(utf8_dir);
 	gchar *search_text = NULL;
-	gint opts_argv_len, i;
-	GPid child_pid;
-	gint stdout_fd;
-	gint stderr_fd;
 	GError *error = NULL;
 	gboolean ret = FALSE;
 	gssize utf8_text_len;
 
 	if (EMPTY(utf8_search_text) || ! dir) return TRUE;
-
-	command_grep = g_find_program_in_path(tool_prefs.grep_cmd);
-	if (command_grep == NULL)
-	{
-		ui_set_statusbar(TRUE, _("Cannot execute grep tool '%s';"
-			" check the path setting in Preferences."), tool_prefs.grep_cmd);
-		return FALSE;
-	}
-
-	if (! g_shell_parse_argv(opts, &opts_argv_len, &opts_argv, &error))
-	{
-		ui_set_statusbar(TRUE, _("Cannot parse extra options: %s"), error->message);
-		g_error_free(error);
-		g_free(command_grep);
-		return FALSE;
-	}
 
 	/* convert the search text in the preferred encoding (if the text is not valid UTF-8. assume
 	 * it is already in the preferred encoding) */
@@ -1666,207 +1645,84 @@ search_find_in_files(const gchar *utf8_search_text, const gchar *dir, const gcha
 	if (search_text == NULL)
 		search_text = g_strdup(utf8_search_text);
 
-	/* set grep command and options */
-	argv_prefix = g_new0(gchar*, 1 + opts_argv_len + 3 + 1);	/* last +1 for recursive arg */
-
-	argv_prefix[0] = command_grep;
-	for (i = 0; i < opts_argv_len; i++)
-	{
-		argv_prefix[i + 1] = g_strdup(opts_argv[i]);
-	}
-	g_strfreev(opts_argv);
-
-	i++;	/* correct for tool_prefs.grep_cmd */
-	argv_prefix[i++] = g_strdup("--");
-	argv_prefix[i++] = search_text;
-
-	/* finally add the arguments(files to be searched) */
-	if (strstr(argv_prefix[1], "r"))	/* recursive option set */
-	{
-		/* Use '.' so we get relative paths in the output */
-		argv_prefix[i++] = g_strdup(".");
-		argv_prefix[i++] = NULL;
-		argv = argv_prefix;
-	}
-	else
-	{
-		argv_prefix[i++] = NULL;
-		argv = search_get_argv((const gchar**)argv_prefix, dir);
-		g_strfreev(argv_prefix);
-	}
-
-	if (argv == NULL)	/* no files */
-	{
-		return FALSE;
-	}
+	argv[0] = g_strdup("--");
+	argv[1] = search_text;
+	argv[2] = ".";
+	argv[3] = NULL;
 
 	gtk_list_store_clear(msgwindow.store_msg);
 	gtk_notebook_set_current_page(GTK_NOTEBOOK(msgwindow.notebook), MSG_MESSAGE);
 
-	if (! g_spawn_async_with_pipes(dir, (gchar**)argv, NULL, G_SPAWN_DO_NOT_REAP_CHILD,
-		NULL, NULL, &child_pid,
-		NULL, &stdout_fd, &stderr_fd, &error))
+	/* we can pass 'enc' without strdup'ing it here because it's a global const string and
+	 * always exits longer than the lifetime of this function */
+	if (spawn_with_callbacks(dir, cmd, argv, NULL, NULL, NULL, search_read_io, (gpointer) enc,
+		search_read_io_stderr, (gpointer) enc, search_finished, NULL, NULL, &error))
 	{
-		geany_debug("%s: g_spawn_async_with_pipes() failed: %s", G_STRFUNC, error->message);
+		gchar *utf8_str;
+
+		ui_progress_bar_start(_("Searching..."));
+		msgwin_set_messages_dir(dir);
+		utf8_str = g_strdup_printf(_("%s -- %s (in directory: %s)"), cmd, utf8_search_text,
+			utf8_dir);
+		msgwin_msg_add_string(COLOR_BLUE, -1, NULL, utf8_str);
+		g_free(utf8_str);
+		ret = TRUE;
+	}
+	else
+	{
+		geany_debug("%s: g_spawn_with_callbacks() failed: %s", G_STRFUNC, error->message);
 		ui_set_statusbar(TRUE, _("Process failed (%s)"), error->message);
 		g_error_free(error);
 		ret = FALSE;
 	}
-	else
-	{
-		gchar *str, *utf8_str;
 
-		ui_progress_bar_start(_("Searching..."));
-
-		msgwin_set_messages_dir(dir);
-		/* we can pass 'enc' without strdup'ing it here because it's a global const string and
-		 * always exits longer than the lifetime of this function */
-		utils_set_up_io_channel(stdout_fd, G_IO_IN | G_IO_PRI | G_IO_ERR | G_IO_HUP | G_IO_NVAL,
-			TRUE, search_read_io, (gpointer) enc);
-		utils_set_up_io_channel(stderr_fd, G_IO_IN | G_IO_PRI | G_IO_ERR | G_IO_HUP | G_IO_NVAL,
-			TRUE, search_read_io_stderr, (gpointer) enc);
-		g_child_watch_add(child_pid, search_close_pid, NULL);
-
-		str = g_strdup_printf(_("%s %s -- %s (in directory: %s)"),
-			tool_prefs.grep_cmd, opts, utf8_search_text, dir);
-		utf8_str = utils_get_utf8_from_locale(str);
-		msgwin_msg_add_string(COLOR_BLUE, -1, NULL, utf8_str);
-		utils_free_pointers(2, str, utf8_str, NULL);
-		ret = TRUE;
-	}
+	g_free(dir);
 	g_strfreev(argv);
 	return ret;
 }
 
 
-static gboolean pattern_list_match(GSList *patterns, const gchar *str)
+static void read_fif_io(const gchar *text, gchar *enc, gint msg_color)
 {
-	GSList *item;
+		gchar *msg = g_strdup(text);
+		gchar *utf8_msg = NULL;
 
-	foreach_slist(item, patterns)
-	{
-		if (g_pattern_match_string(item->data, str))
-			return TRUE;
-	}
-	return FALSE;
-}
-
-
-/* Creates an argument vector of strings, copying argv_prefix[] values for
- * the first arguments, then followed by filenames found in dir.
- * Returns NULL if no files were found, otherwise returned vector should be fully freed. */
-static gchar **search_get_argv(const gchar **argv_prefix, const gchar *dir)
-{
-	guint prefix_len, list_len, i, j;
-	gchar **argv;
-	GSList *list, *item, *patterns = NULL;
-	GError *error = NULL;
-
-	g_return_val_if_fail(dir != NULL, NULL);
-
-	prefix_len = g_strv_length((gchar**)argv_prefix);
-	list = utils_get_file_list(dir, &list_len, &error);
-	if (error)
-	{
-		ui_set_statusbar(TRUE, _("Could not open directory (%s)"), error->message);
-		g_error_free(error);
-		return NULL;
-	}
-	if (list == NULL)
-		return NULL;
-
-	argv = g_new(gchar*, prefix_len + list_len + 1);
-
-	for (i = 0, j = 0; i < prefix_len; i++)
-	{
-		if (g_str_has_prefix(argv_prefix[i], "--include="))
+		g_strstrip(msg);
+		/* enc is NULL when encoding is set to UTF-8, so we can skip any conversion */
+		if (enc != NULL)
 		{
-			const gchar *pat = &(argv_prefix[i][10]); /* the pattern part of the argument */
-
-			patterns = g_slist_prepend(patterns, g_pattern_spec_new(pat));
+			if (! g_utf8_validate(msg, -1, NULL))
+			{
+				utf8_msg = g_convert(msg, -1, "UTF-8", enc, NULL, NULL, NULL);
+			}
+			if (utf8_msg == NULL)
+				utf8_msg = msg;
 		}
 		else
-			argv[j++] = g_strdup(argv_prefix[i]);
-	}
+			utf8_msg = msg;
 
-	if (patterns)
-	{
-		GSList *pat;
+		msgwin_msg_add_string(msg_color, -1, NULL, utf8_msg);
 
-		foreach_slist(item, list)
-		{
-			if (pattern_list_match(patterns, item->data))
-				argv[j++] = item->data;
-			else
-				g_free(item->data);
-		}
-		foreach_slist(pat, patterns)
-			g_pattern_spec_free(pat->data);
-		g_slist_free(patterns);
-	}
-	else
-	{
-		foreach_slist(item, list)
-			argv[j++] = item->data;
-	}
-
-	argv[j] = NULL;
-	g_slist_free(list);
-	return argv;
+		if (utf8_msg != msg)
+			g_free(utf8_msg);
+		g_free(msg);
 }
 
 
-static gboolean read_fif_io(GIOChannel *source, GIOCondition condition, gchar *enc, gint msg_color)
+static void search_read_io(const gchar *text, gpointer data)
 {
-	if (condition & (G_IO_IN | G_IO_PRI))
-	{
-		gchar *msg, *utf8_msg;
-
-		while (g_io_channel_read_line(source, &msg, NULL, NULL, NULL) && msg)
-		{
-			utf8_msg = NULL;
-
-			g_strstrip(msg);
-			/* enc is NULL when encoding is set to UTF-8, so we can skip any conversion */
-			if (enc != NULL)
-			{
-				if (! g_utf8_validate(msg, -1, NULL))
-				{
-					utf8_msg = g_convert(msg, -1, "UTF-8", enc, NULL, NULL, NULL);
-				}
-				if (utf8_msg == NULL)
-					utf8_msg = msg;
-			}
-			else
-				utf8_msg = msg;
-
-			msgwin_msg_add_string(msg_color, -1, NULL, utf8_msg);
-
-			if (utf8_msg != msg)
-				g_free(utf8_msg);
-			g_free(msg);
-		}
-	}
-	if (condition & (G_IO_ERR | G_IO_HUP | G_IO_NVAL))
-		return FALSE;
-
-	return TRUE;
+	read_fif_io(text, data, COLOR_BLACK);
 }
 
 
-static gboolean search_read_io(GIOChannel *source, GIOCondition condition, gpointer data)
+static void search_read_io_stderr(const gchar *text, gpointer data)
 {
-	return read_fif_io(source, condition, data, COLOR_BLACK);
+	/* should we honour enc for errors? */
+	read_fif_io(text, data, COLOR_DARK_RED);
 }
 
 
-static gboolean search_read_io_stderr(GIOChannel *source, GIOCondition condition, gpointer data)
-{
-	return read_fif_io(source, condition, data, COLOR_DARK_RED);
-}
-
-
-static void search_close_pid(GPid child_pid, gint status, gpointer user_data)
+static void search_finished(gint status, gpointer user_data)
 {
 	const gchar *msg = _("Search failed.");
 #ifdef G_OS_UNIX
@@ -1907,7 +1763,6 @@ static void search_close_pid(GPid child_pid, gint status, gpointer user_data)
 			break;
 	}
 	utils_beep();
-	g_spawn_close_pid(child_pid);
 	ui_progress_bar_stop();
 }
 

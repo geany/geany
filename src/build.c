@@ -30,6 +30,7 @@
 
 #include "geany.h"
 #include "build.h"
+#include "spawn.h"
 
 #include <stdlib.h>
 #include <string.h>
@@ -37,14 +38,6 @@
 #include <unistd.h>
 #include <errno.h>
 #include <glib/gstdio.h>
-
-#ifdef G_OS_UNIX
-# include <sys/types.h>
-# include <sys/wait.h>
-# include <signal.h>
-#else
-# include <windows.h>
-#endif
 
 #include "prefs.h"
 #include "support.h"
@@ -63,10 +56,6 @@
 #include "geanymenubuttonaction.h"
 #include "gtkcompat.h"
 
-/* g_spawn_async_with_pipes doesn't work on Windows */
-#ifdef G_OS_WIN32
-#define SYNC_SPAWN
-#endif
 
 /* Number of editor indicators to draw - limited as this can affect performance */
 #define GEANY_BUILD_ERR_HIGHLIGHT_MAX 50
@@ -118,12 +107,10 @@ widgets;
 static guint build_groups_count[GEANY_GBG_COUNT] = { 3, 4, 2 };
 static guint build_items_count = 9;
 
-#ifndef SYNC_SPAWN
-static void build_exit_cb(GPid child_pid, gint status, gpointer user_data);
-static gboolean build_iofunc(GIOChannel *ioc, GIOCondition cond, gpointer data);
-#endif
+static void build_exit_cb(gint status, gpointer user_data);
+static void build_iofunc(const gchar *text, gpointer user_data);
 static gboolean build_create_shellscript(const gchar *fname, const gchar *cmd, gboolean autoclose, GError **error);
-static GPid build_spawn_cmd(GeanyDocument *doc, const gchar *cmd, const gchar *dir);
+static void build_spawn_cmd(GeanyDocument *doc, const gchar *cmd, const gchar *dir);
 static void set_stop_button(gboolean stop);
 static void run_exit_cb(GPid child_pid, gint status, gpointer user_data);
 static void on_set_build_commands_activate(GtkWidget *w, gpointer u);
@@ -131,7 +118,6 @@ static void on_build_next_error(GtkWidget *menuitem, gpointer user_data);
 static void on_build_previous_error(GtkWidget *menuitem, gpointer user_data);
 static void kill_process(GPid *pid);
 static void show_build_result_message(gboolean failure);
-static void process_build_output_line(const gchar *line, gint color);
 static void show_build_commands_dialog(void);
 static void on_build_menu_item(GtkWidget *w, gpointer user_data);
 
@@ -665,47 +651,6 @@ static void clear_all_errors(void)
 }
 
 
-#ifdef SYNC_SPAWN
-static void parse_build_output(const gchar **output, gint status)
-{
-	guint x, i, len;
-	gchar *line, **lines;
-
-	for (x = 0; x < 2; x++)
-	{
-		if (!EMPTY(output[x]))
-		{
-			lines = g_strsplit_set(output[x], "\r\n", -1);
-			len = g_strv_length(lines);
-
-			for (i = 0; i < len; i++)
-			{
-				if (!EMPTY(lines[i]))
-				{
-					line = lines[i];
-					while (*line != '\0')
-					{	/* replace any control characters in the output */
-						if (*line < 32)
-							*line = 32;
-						line++;
-					}
-					process_build_output_line(lines[i], COLOR_BLACK);
-				}
-			}
-			g_strfreev(lines);
-		}
-	}
-
-	show_build_result_message(status != 0);
-	utils_beep();
-
-	build_info.pid = 0;
-	/* enable build items again */
-	build_menu_update(NULL);
-}
-#endif
-
-
 /* Replaces occurences of %e and %p with the appropriate filenames,
  * %d and %p replacements should be in UTF8 */
 static gchar *build_replace_placeholder(const GeanyDocument *doc, const gchar *src)
@@ -765,40 +710,21 @@ static gchar *build_replace_placeholder(const GeanyDocument *doc, const gchar *s
 
 /* dir is the UTF-8 working directory to run cmd in. It can be NULL to use the
  * idx document directory */
-static GPid build_spawn_cmd(GeanyDocument *doc, const gchar *cmd, const gchar *dir)
+static void build_spawn_cmd(GeanyDocument *doc, const gchar *cmd, const gchar *dir)
 {
 	GError *error = NULL;
-	gchar **argv;
 	gchar *working_dir;
 	gchar *utf8_working_dir;
 	gchar *utf8_cmd_string;
-#ifdef SYNC_SPAWN
-	gchar *output[2];
-	gint status;
-#else
-	gint stdout_fd;
-	gint stderr_fd;
-#endif
 
 	if (!((doc != NULL && !EMPTY(doc->file_name)) || !EMPTY(dir)))
 	{
 		geany_debug("Failed to run command with no working directory");
 		ui_set_statusbar(TRUE, _("Process failed, no working directory"));
-		return (GPid) 1;
 	}
 
 	clear_all_errors();
 	SETPTR(current_dir_entered, NULL);
-
-#ifdef G_OS_WIN32
-	argv = g_strsplit(cmd, " ", 0);
-#else
-	argv = g_new0(gchar *, 4);
-	argv[0] = g_strdup("/bin/sh");
-	argv[1] = g_strdup("-c");
-	argv[2] = g_strdup(cmd);
-	argv[3] = NULL;
-#endif
 
 	utf8_cmd_string = utils_get_utf8_from_locale(cmd);
 	utf8_working_dir = !EMPTY(dir) ? g_strdup(dir) : g_path_get_dirname(doc->file_name);
@@ -816,47 +742,16 @@ static GPid build_spawn_cmd(GeanyDocument *doc, const gchar *cmd, const gchar *d
 	build_info.file_type_id = (doc == NULL) ? GEANY_FILETYPES_NONE : doc->file_type->id;
 	build_info.message_count = 0;
 
-#ifdef SYNC_SPAWN
-	if (! utils_spawn_sync(working_dir, argv, NULL, G_SPAWN_SEARCH_PATH,
-			NULL, NULL, &output[0], &output[1], &status, &error))
-#else
-	if (! g_spawn_async_with_pipes(working_dir, argv, NULL,
-			G_SPAWN_SEARCH_PATH | G_SPAWN_DO_NOT_REAP_CHILD, NULL, NULL,
-			&(build_info.pid), NULL, &stdout_fd, &stderr_fd, &error))
-#endif
+	if (!spawn_with_callbacks(working_dir, cmd, NULL, NULL, NULL, NULL, build_iofunc,
+			GINT_TO_POINTER(0), build_iofunc, GINT_TO_POINTER(1), build_exit_cb, NULL,
+			&build_info.pid, &error))
 	{
 		geany_debug("build command spawning failed: %s", error->message);
 		ui_set_statusbar(TRUE, _("Process failed (%s)"), error->message);
-		g_strfreev(argv);
 		g_error_free(error);
-		g_free(working_dir);
-		error = NULL;
-		return (GPid) 0;
 	}
 
-#ifdef SYNC_SPAWN
-	parse_build_output((const gchar**) output, status);
-	g_free(output[0]);
-	g_free(output[1]);
-#else
-	if (build_info.pid != 0)
-	{
-		g_child_watch_add(build_info.pid, (GChildWatchFunc) build_exit_cb, NULL);
-		build_menu_update(doc);
-		ui_progress_bar_start(NULL);
-	}
-
-	/* use GIOChannels to monitor stdout and stderr */
-	utils_set_up_io_channel(stdout_fd, G_IO_IN | G_IO_PRI | G_IO_ERR | G_IO_HUP | G_IO_NVAL,
-		TRUE, build_iofunc, GINT_TO_POINTER(0));
-	utils_set_up_io_channel(stderr_fd, G_IO_IN | G_IO_PRI | G_IO_ERR | G_IO_HUP | G_IO_NVAL,
-		TRUE, build_iofunc, GINT_TO_POINTER(1));
-#endif
-
-	g_strfreev(argv);
 	g_free(working_dir);
-
-	return build_info.pid;
 }
 
 
@@ -1057,73 +952,45 @@ static GPid build_run_cmd(GeanyDocument *doc, guint cmdindex)
 }
 
 
-static void process_build_output_line(const gchar *str, gint color)
+static void build_iofunc(const gchar *text, gpointer user_data)
 {
 	gchar *msg, *tmp;
 	gchar *filename;
 	gint line;
+	gint color = GPOINTER_TO_INT(user_data) ? COLOR_DARK_RED : COLOR_BLACK;
 
-	msg = g_strdup(str);
-
+	msg = g_strdup(text);
 	g_strchomp(msg);
 
-	if (EMPTY(msg))
+	if (!EMPTY(msg))
 	{
-		g_free(msg);
-		return;
-	}
+		if (build_parse_make_dir(msg, &tmp))
+			SETPTR(current_dir_entered, tmp);
 
-	if (build_parse_make_dir(msg, &tmp))
-	{
-		SETPTR(current_dir_entered, tmp);
-	}
-	msgwin_parse_compiler_error_line(msg, current_dir_entered, &filename, &line);
+		msgwin_parse_compiler_error_line(msg, current_dir_entered, &filename, &line);
 
-	if (line != -1 && filename != NULL)
-	{
-		GeanyDocument *doc = document_find_by_filename(filename);
-
-		/* limit number of indicators */
-		if (doc && editor_prefs.use_indicators &&
-			build_info.message_count < GEANY_BUILD_ERR_HIGHLIGHT_MAX)
+		if (line != -1 && filename != NULL)
 		{
-			if (line > 0) /* some compilers, like pdflatex report errors on line 0 */
-				line--;   /* so only adjust the line number if it is greater than 0 */
-			editor_indicator_set_on_line(doc->editor, GEANY_INDICATOR_ERROR, line);
-		}
-		build_info.message_count++;
-		color = COLOR_RED;	/* error message parsed on the line */
-	}
-	g_free(filename);
+			GeanyDocument *doc = document_find_by_filename(filename);
 
-	msgwin_compiler_add_string(color, msg);
+			/* limit number of indicators */
+			if (doc && editor_prefs.use_indicators &&
+				build_info.message_count < GEANY_BUILD_ERR_HIGHLIGHT_MAX)
+			{
+				if (line > 0) /* some compilers, like pdflatex report errors on line 0 */
+					line--;   /* so only adjust the line number if it is greater than 0 */
+				editor_indicator_set_on_line(doc->editor, GEANY_INDICATOR_ERROR, line);
+			}
+			build_info.message_count++;
+			color = COLOR_RED;	/* error message parsed on the line */
+		}
+
+		g_free(filename);
+		msgwin_compiler_add_string(color, msg);
+	}
+
 	g_free(msg);
 }
-
-
-#ifndef SYNC_SPAWN
-static gboolean build_iofunc(GIOChannel *ioc, GIOCondition cond, gpointer data)
-{
-	if (cond & (G_IO_IN | G_IO_PRI))
-	{
-		gchar *msg;
-		GIOStatus st;
-
-		while ((st = g_io_channel_read_line(ioc, &msg, NULL, NULL, NULL)) == G_IO_STATUS_NORMAL && msg)
-		{
-			gint color = (GPOINTER_TO_INT(data)) ? COLOR_DARK_RED : COLOR_BLACK;
-
-			process_build_output_line(msg, color);
- 			g_free(msg);
-		}
-		if (st == G_IO_STATUS_ERROR || st == G_IO_STATUS_EOF) return FALSE;
-	}
-	if (cond & (G_IO_ERR | G_IO_HUP | G_IO_NVAL))
-		return FALSE;
-
-	return TRUE;
-}
-#endif
 
 
 gboolean build_parse_make_dir(const gchar *string, gchar **prefix)
@@ -1196,40 +1063,21 @@ static void show_build_result_message(gboolean failure)
 }
 
 
-#ifndef SYNC_SPAWN
-static void build_exit_cb(GPid child_pid, gint status, gpointer user_data)
+static void build_exit_cb(gint status, gpointer user_data)
 {
-	gboolean failure = FALSE;
-
 #ifdef G_OS_WIN32
-	failure = status;
+	show_build_result_message(status);
 #else
-	if (WIFEXITED(status))
-	{
-		if (WEXITSTATUS(status) != EXIT_SUCCESS)
-			failure = TRUE;
-	}
-	else if (WIFSIGNALED(status))
-	{
-		/* the terminating signal: WTERMSIG (status)); */
-		failure = TRUE;
-	}
-	else
-	{	/* any other failure occured */
-		failure = TRUE;
-	}
+	show_build_result_message(!WIFEXITED(status) || WEXITSTATUS(status) != EXIT_SUCCESS);
 #endif
-	show_build_result_message(failure);
 
 	utils_beep();
-	g_spawn_close_pid(child_pid);
 
 	build_info.pid = 0;
 	/* enable build items again */
 	build_menu_update(NULL);
 	ui_progress_bar_stop();
 }
-#endif
 
 
 static void run_exit_cb(GPid child_pid, gint status, gpointer user_data)
@@ -1773,25 +1621,23 @@ static void on_toolbutton_make_activate(GtkWidget *menuitem, gpointer user_data)
 
 static void kill_process(GPid *pid)
 {
-	gint result;
+	GError *error = NULL;
 
 #ifdef G_OS_WIN32
 	g_return_if_fail(*pid != NULL);
-	result = TerminateProcess(*pid, 0);
-	/* TerminateProcess() returns TRUE on success, for the check below we have to convert
-	 * it to FALSE (and vice versa) */
-	result = ! result;
 #else
 	g_return_if_fail(*pid > 1);
-	result = kill(*pid, SIGTERM);
 #endif
 
-	if (result != 0)
-		ui_set_statusbar(TRUE, _("Process could not be stopped (%s)."), g_strerror(errno));
-	else
+	if (spawn_kill_process(*pid, &error))
 	{
 		*pid = 0;
 		build_menu_update(NULL);
+	}
+	else
+	{
+		ui_set_statusbar(TRUE, _("Process could not be stopped (%s)."), error->message);
+		g_error_free(error);
 	}
 }
 
