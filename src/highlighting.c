@@ -219,9 +219,7 @@ static gboolean read_named_style(const gchar *named_style, GeanyLexerStyle *styl
 static void parse_color(GKeyFile *kf, const gchar *str, gint *clr)
 {
 	gint c;
-	gchar hex_clr[9] = { 0 };
 	gchar *named_color = NULL;
-	const gchar *start;
 
 	g_return_if_fail(clr != NULL);
 
@@ -229,38 +227,16 @@ static void parse_color(GKeyFile *kf, const gchar *str, gint *clr)
 		return;
 
 	named_color = g_key_file_get_string(kf, "named_colors", str, NULL);
-	if  (named_color)
+	if (named_color)
 		str = named_color;
 
-	if (str[0] == '#')
-		start = str + 1;
-	else if (strlen(str) > 1 && str[0] == '0' && (str[1] == 'x' || str[1] == 'X'))
-		start = str + 2;
-	else
-	{
+	c = utils_parse_color(str);
+	if (c == -1)
 		geany_debug("Bad color '%s'", str);
-		g_free(named_color);
-		return;
-	}
-
-	if (strlen(start) == 3)
-	{
-		g_snprintf(hex_clr, 9, "0x%c%c%c%c%c%c", start[0], start[0],
-			start[1], start[1], start[2], start[2]);
-	}
 	else
-		g_snprintf(hex_clr, 9, "0x%s", start);
+		*clr = c;
 
 	g_free(named_color);
-
-	c = utils_parse_color(hex_clr);
-
-	if (c > -1)
-	{
-		*clr = c;
-		return;
-	}
-	geany_debug("Bad color '%s'", str);
 }
 
 
