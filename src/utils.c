@@ -977,35 +977,30 @@ gchar *utils_make_human_readable_str(guint64 size, gulong block_size,
 }
 
 
-/* utils_strtod() converts a string containing a hex colour ("0x00ff00") into an integer.
- * Basically, it is the same as strtod() would do, but it does not understand hex colour values,
- * before ANSI-C99. With with_route set, it takes strings of the format "#00ff00".
- * Returns -1 on failure. */
-gint utils_strtod(const gchar *source, gchar **end, gboolean with_route)
+/* Converts a string containing a hex colour ("0x00ff00") into an integer.
+ * Returns an integer color in the format BBGGRR or -1 on failure. */
+gint utils_parse_color(const gchar *source)
 {
-	guint red, green, blue, offset = 0;
+	guint red, green, blue;
 
 	g_return_val_if_fail(source != NULL, -1);
 
-	if (with_route && (strlen(source) != 7 || source[0] != '#'))
+	if (source[0] == '#')
+		source++;
+	else if (source[0] == '0' && (source[1] == 'x' || source[1] == 'X'))
+		source += 2;
+	else
 		return -1;
-	else if (! with_route && (strlen(source) != 8 || source[0] != '0' ||
-		(source[1] != 'x' && source[1] != 'X')))
-	{
-		return -1;
-	}
 
-	/* offset is set to 1 when the string starts with 0x, otherwise it starts with #
-	 * and we don't need to increase the index */
-	if (! with_route)
-		offset = 1;
+	if (strlen(source) != 6)
+		return -1;
 
 	red = utils_get_value_of_hex(
-					source[1 + offset]) * 16 + utils_get_value_of_hex(source[2 + offset]);
+					source[0]) * 16 + utils_get_value_of_hex(source[1]);
 	green = utils_get_value_of_hex(
-					source[3 + offset]) * 16 + utils_get_value_of_hex(source[4 + offset]);
+					source[2]) * 16 + utils_get_value_of_hex(source[3]);
 	blue = utils_get_value_of_hex(
-					source[5 + offset]) * 16 + utils_get_value_of_hex(source[6 + offset]);
+					source[4]) * 16 + utils_get_value_of_hex(source[5]);
 
 	return (red | (green << 8) | (blue << 16));
 }

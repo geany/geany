@@ -253,7 +253,7 @@ static void parse_color(GKeyFile *kf, const gchar *str, gint *clr)
 
 	g_free(named_color);
 
-	c = utils_strtod(hex_clr, NULL, FALSE);
+	c = utils_parse_color(hex_clr);
 
 	if (c > -1)
 	{

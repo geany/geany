@@ -220,7 +220,7 @@ void utils_beep(void);
 gchar *utils_make_human_readable_str(guint64 size, gulong block_size,
 									 gulong display_unit);
 
-gint utils_strtod(const gchar *source, gchar **end, gboolean with_route);
+gint utils_parse_color(const gchar *source);
 
 gchar *utils_get_current_time_string(void);
 
