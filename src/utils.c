@@ -964,16 +964,17 @@ gchar *utils_make_human_readable_str(guint64 size, gulong block_size,
 }
 
 
- static guint utils_get_value_of_hex(const gchar ch)
+static gboolean read_hex(const gchar *s, guint len, gint *h)
 {
-	if (ch >= '0' && ch <= '9')
-		return ch - '0';
-	else if (ch >= 'A' && ch <= 'F')
-		return ch - 'A' + 10;
-	else if (ch >= 'a' && ch <= 'f')
-		return ch - 'a' + 10;
-	else
-		return 0;
+	guint i;
+	*h = 0;
+	for (i = 0; i < len; i++)
+	{
+		if (! g_ascii_isxdigit(s[i]))
+			return FALSE;
+		*h = (*h << 4) | g_ascii_xdigit_value(s[i]);
+	}
+	return TRUE;
 }
 
 
@@ -981,7 +982,7 @@ gchar *utils_make_human_readable_str(guint64 size, gulong block_size,
  * Returns an integer color in the format BBGGRR or -1 on failure. */
 gint utils_parse_color(const gchar *source)
 {
-	guint red, green, blue;
+	gint red, green, blue;
 
 	g_return_val_if_fail(source != NULL, -1);
 
@@ -995,12 +996,10 @@ gint utils_parse_color(const gchar *source)
 	if (strlen(source) != 6)
 		return -1;
 
-	red = utils_get_value_of_hex(
-					source[0]) * 16 + utils_get_value_of_hex(source[1]);
-	green = utils_get_value_of_hex(
-					source[2]) * 16 + utils_get_value_of_hex(source[3]);
-	blue = utils_get_value_of_hex(
-					source[4]) * 16 + utils_get_value_of_hex(source[5]);
+	if (! read_hex(source, 2, &red) ||
+		! read_hex(source + 2, 2, &green) ||
+		! read_hex(source + 4, 2, &blue))
+		return -1;
 
 	return (red | (green << 8) | (blue << 16));
 }
