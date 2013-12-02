@@ -978,11 +978,13 @@ static gboolean read_hex(const gchar *s, guint len, gint *h)
 }
 
 
-/* Converts a string containing a hex colour ("0x00ff00") into an integer.
+/* Converts a string containing an hex or HTML RGB color with 1 or 2 digits per
+ * channel (0x00ff11, 0x0f1, #00ff11, #0f1) to an integer.
  * Returns an integer color in the format BBGGRR or -1 on failure. */
 gint utils_parse_color(const gchar *source)
 {
-	gint red, green, blue;
+	gint r, g, b;
+	guint len;
 
 	g_return_val_if_fail(source != NULL, -1);
 
@@ -993,15 +995,24 @@ gint utils_parse_color(const gchar *source)
 	else
 		return -1;
 
-	if (strlen(source) != 6)
+	len = strlen(source);
+	if (len % 3 || len < 3 || len > 6)
+		return -1;
+	len /= 3;
+
+	if (! read_hex(source, len, &r) ||
+		! read_hex(source + len, len, &g) ||
+		! read_hex(source + len * 2, len, &b))
 		return -1;
 
-	if (! read_hex(source, 2, &red) ||
-		! read_hex(source + 2, 2, &green) ||
-		! read_hex(source + 4, 2, &blue))
-		return -1;
+	if (len < 2)
+	{
+		r |= r << 4;
+		g |= g << 4;
+		b |= b << 4;
+	}
 
-	return (red | (green << 8) | (blue << 16));
+	return (r | (g << 8) | (b << 16));
 }
 
 
