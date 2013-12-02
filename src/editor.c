@@ -442,6 +442,7 @@ const GeanyEditorPrefs *editor_get_prefs(GeanyEditor *editor)
 void editor_toggle_fold(GeanyEditor *editor, gint line, gint modifiers)
 {
 	ScintillaObject *sci;
+	gint header;
 
 	g_return_if_fail(editor != NULL);
 
@@ -460,39 +461,21 @@ void editor_toggle_fold(GeanyEditor *editor, gint line, gint modifiers)
 		if (first > parent)
 			SSM(sci, SCI_SETFIRSTVISIBLELINE, parent, 0);
 	}
-	sci_toggle_fold(sci, line);
 
-	/* extra toggling of child fold points
-	 * use when editor_prefs.unfold_all_children is set and Shift is NOT pressed or when
-	 * editor_prefs.unfold_all_children is NOT set but Shift is pressed */
+	/* find the fold header of the given line in case the one clicked isn't a fold point */
+	if (sci_get_fold_level(sci, line) & SC_FOLDLEVELHEADERFLAG)
+		header = line;
+	else
+		header = sci_get_fold_parent(sci, line);
+
 	if ((editor_prefs.unfold_all_children && ! (modifiers & SCMOD_SHIFT)) ||
 		(! editor_prefs.unfold_all_children && (modifiers & SCMOD_SHIFT)))
 	{
-		gint last_line = SSM(sci, SCI_GETLASTCHILD, line, -1);
-		gint i;
-
-		if (sci_get_line_is_visible(sci, line + 1))
-		{	/* unfold all children of the current fold point */
-			for (i = line; i <= last_line; i++)
-			{
-				if (! sci_get_line_is_visible(sci, i))
-				{
-					sci_toggle_fold(sci, sci_get_fold_parent(sci, i));
-				}
-			}
-		}
-		else
-		{	/* fold all children of the current fold point */
-			for (i = line; i <= last_line; i++)
-			{
-				gint level = sci_get_fold_level(sci, i);
-				if (level & SC_FOLDLEVELHEADERFLAG)
-				{
-					if (sci_get_fold_expanded(sci, i))
-						sci_toggle_fold(sci, i);
-				}
-			}
-		}
+		SSM(sci, SCI_FOLDCHILDREN, header, SC_FOLDACTION_TOGGLE);
+	}
+	else
+	{
+		SSM(sci, SCI_FOLDLINE, header, SC_FOLDACTION_TOGGLE);
 	}
 }
 
