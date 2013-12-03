@@ -964,50 +964,55 @@ gchar *utils_make_human_readable_str(guint64 size, gulong block_size,
 }
 
 
- static guint utils_get_value_of_hex(const gchar ch)
+static gboolean read_hex(const gchar *s, guint len, gint *h)
 {
-	if (ch >= '0' && ch <= '9')
-		return ch - '0';
-	else if (ch >= 'A' && ch <= 'F')
-		return ch - 'A' + 10;
-	else if (ch >= 'a' && ch <= 'f')
-		return ch - 'a' + 10;
-	else
-		return 0;
+	guint i;
+	*h = 0;
+	for (i = 0; i < len; i++)
+	{
+		if (! g_ascii_isxdigit(s[i]))
+			return FALSE;
+		*h = (*h << 4) | g_ascii_xdigit_value(s[i]);
+	}
+	return TRUE;
 }
 
 
-/* utils_strtod() converts a string containing a hex colour ("0x00ff00") into an integer.
- * Basically, it is the same as strtod() would do, but it does not understand hex colour values,
- * before ANSI-C99. With with_route set, it takes strings of the format "#00ff00".
- * Returns -1 on failure. */
-gint utils_strtod(const gchar *source, gchar **end, gboolean with_route)
+/* Converts a string containing an hex or HTML RGB color with 1 or 2 digits per
+ * channel (0x00ff11, 0x0f1, #00ff11, #0f1) to an integer.
+ * Returns an integer color in the format BBGGRR or -1 on failure. */
+gint utils_parse_color(const gchar *source)
 {
-	guint red, green, blue, offset = 0;
+	gint r, g, b;
+	guint len;
 
 	g_return_val_if_fail(source != NULL, -1);
 
-	if (with_route && (strlen(source) != 7 || source[0] != '#'))
+	if (source[0] == '#')
+		source++;
+	else if (source[0] == '0' && (source[1] == 'x' || source[1] == 'X'))
+		source += 2;
+	else
 		return -1;
-	else if (! with_route && (strlen(source) != 8 || source[0] != '0' ||
-		(source[1] != 'x' && source[1] != 'X')))
+
+	len = strlen(source);
+	if (len % 3 || len < 3 || len > 6)
+		return -1;
+	len /= 3;
+
+	if (! read_hex(source, len, &r) ||
+		! read_hex(source + len, len, &g) ||
+		! read_hex(source + len * 2, len, &b))
+		return -1;
+
+	if (len < 2)
 	{
-		return -1;
+		r |= r << 4;
+		g |= g << 4;
+		b |= b << 4;
 	}
 
-	/* offset is set to 1 when the string starts with 0x, otherwise it starts with #
-	 * and we don't need to increase the index */
-	if (! with_route)
-		offset = 1;
-
-	red = utils_get_value_of_hex(
-					source[1 + offset]) * 16 + utils_get_value_of_hex(source[2 + offset]);
-	green = utils_get_value_of_hex(
-					source[3 + offset]) * 16 + utils_get_value_of_hex(source[4 + offset]);
-	blue = utils_get_value_of_hex(
-					source[5 + offset]) * 16 + utils_get_value_of_hex(source[6 + offset]);
-
-	return (red | (green << 8) | (blue << 16));
+	return (r | (g << 8) | (b << 16));
 }
 
 
