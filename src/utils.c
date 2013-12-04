@@ -872,18 +872,6 @@ gchar *utils_get_hex_from_color(GdkColor *color)
 }
 
 
-guint utils_invert_color(guint color)
-{
-	guint r, g, b;
-
-	r = 0xffffff - color;
-	g = 0xffffff - (color >> 8);
-	b = 0xffffff - (color >> 16);
-
-	return (r | (g << 8) | (b << 16));
-}
-
-
 /* Get directory from current file in the notebook.
  * Returns dir string that should be freed or NULL, depending on whether current file is valid.
  * Returned string is in UTF-8 encoding */

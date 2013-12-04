@@ -391,7 +391,7 @@ static void get_keyfile_ints(GKeyFile *config, GKeyFile *configh, const gchar *s
 static guint invert(guint icolour)
 {
 	if (interface_prefs.highlighting_invert_all)
-		return utils_invert_color(icolour);
+		return 0xffffff - icolour;
 
 	return icolour;
 }
