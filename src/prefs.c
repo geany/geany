@@ -477,7 +477,7 @@ static void prefs_init_dialog(void)
 	}
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), TRUE);
 
-	gdk_color_parse(editor_prefs.long_line_color, &color);
+	utils_parse_color(editor_prefs.long_line_color, &color);
 	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "long_line_color");
 	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget), &color);
 

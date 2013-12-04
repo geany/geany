@@ -565,7 +565,7 @@ void win32_show_color_dialog(const gchar *colour)
 	cc.lStructSize = sizeof(cc);
 	cc.hwndOwner = GDK_WINDOW_HWND(gtk_widget_get_window(main_widgets.window));
 	cc.lpCustColors = (LPDWORD) acr_cust_clr;
-	cc.rgbResult = (colour != NULL) ? utils_parse_color(colour) : 0;
+	cc.rgbResult = (colour != NULL) ? utils_parse_color_to_bgr(colour) : 0;
 	cc.Flags = CC_FULLOPEN | CC_RGBINIT;
 
 	if (ChooseColor(&cc))

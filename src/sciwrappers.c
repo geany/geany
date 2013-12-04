@@ -69,7 +69,7 @@ void sci_set_line_numbers(ScintillaObject *sci, gboolean set, gint extra_width)
 
 void sci_set_mark_long_lines(ScintillaObject *sci, gint type, gint column, const gchar *colour)
 {
-	glong colour_val = utils_parse_color(colour); /* Scintilla uses a "long" value */
+	glong colour_val = utils_parse_color_to_bgr(colour); /* Scintilla uses a "long" value */
 
 	if (column == 0)
 		type = 2;

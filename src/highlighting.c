@@ -230,7 +230,7 @@ static void parse_color(GKeyFile *kf, const gchar *str, gint *clr)
 	if (named_color)
 		str = named_color;
 
-	c = utils_parse_color(str);
+	c = utils_parse_color_to_bgr(str);
 	if (c == -1)
 		geany_debug("Bad color '%s'", str);
 	else

@@ -857,10 +857,10 @@ static void load_dialog_prefs(GKeyFile *config)
 		vc->colour_fore = g_new0(GdkColor, 1);
 		vc->colour_back = g_new0(GdkColor, 1);
 		tmp_string = utils_get_setting_string(config, "VTE", "colour_fore", "#ffffff");
-		gdk_color_parse(tmp_string, vc->colour_fore);
+		utils_parse_color(tmp_string, vc->colour_fore);
 		g_free(tmp_string);
 		tmp_string = utils_get_setting_string(config, "VTE", "colour_back", "#000000");
-		gdk_color_parse(tmp_string, vc->colour_back);
+		utils_parse_color(tmp_string, vc->colour_back);
 		g_free(tmp_string);
 	}
 #endif

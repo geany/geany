@@ -964,55 +964,44 @@ gchar *utils_make_human_readable_str(guint64 size, gulong block_size,
 }
 
 
-static gboolean read_hex(const gchar *s, guint len, gint *h)
+/* converts a color representation using gdk_color_parse(), with additional
+ * support of the "0x" prefix as a synonym for "#" */
+gboolean utils_parse_color(const gchar *spec, GdkColor *color)
 {
-	guint i;
-	*h = 0;
-	for (i = 0; i < len; i++)
+	gchar buf[64] = {0};
+
+	g_return_val_if_fail(spec != NULL, -1);
+
+	if (spec[0] == '0' && (spec[1] == 'x' || spec[1] == 'X'))
 	{
-		if (! g_ascii_isxdigit(s[i]))
-			return FALSE;
-		*h = (*h << 4) | g_ascii_xdigit_value(s[i]);
+		/* convert to # format for GDK to understand it */
+		buf[0] = '#';
+		strncpy(buf + 1, spec + 2, sizeof(buf) - 2);
+		spec = buf;
 	}
-	return TRUE;
+
+	return gdk_color_parse(spec, color);
 }
 
 
-/* Converts a string containing an hex or HTML RGB color with 1 or 2 digits per
- * channel (0x00ff11, 0x0f1, #00ff11, #0f1) to an integer.
- * Returns an integer color in the format BBGGRR or -1 on failure. */
-gint utils_parse_color(const gchar *source)
+/* converts a GdkColor to the packed 24 bits BGR format, as understood by Scintilla
+ * returns a 24 bits BGR color, or -1 on failure */
+gint utils_color_to_bgr(const GdkColor *c)
 {
-	gint r, g, b;
-	guint len;
+	g_return_val_if_fail(c != NULL, -1);
+	return (c->red / 256) | ((c->green / 256) << 8) | ((c->blue / 256) << 16);
+}
 
-	g_return_val_if_fail(source != NULL, -1);
 
-	if (source[0] == '#')
-		source++;
-	else if (source[0] == '0' && (source[1] == 'x' || source[1] == 'X'))
-		source += 2;
+/* parses @p spec using utils_parse_color() and convert it to 24 bits BGR using
+ * utils_color_to_bgr() */
+gint utils_parse_color_to_bgr(const gchar *spec)
+{
+	GdkColor color;
+	if (utils_parse_color(spec, &color))
+		return utils_color_to_bgr(&color);
 	else
 		return -1;
-
-	len = strlen(source);
-	if (len % 3 || len < 3 || len > 6)
-		return -1;
-	len /= 3;
-
-	if (! read_hex(source, len, &r) ||
-		! read_hex(source + len, len, &g) ||
-		! read_hex(source + len * 2, len, &b))
-		return -1;
-
-	if (len < 2)
-	{
-		r |= r << 4;
-		g |= g << 4;
-		b |= b << 4;
-	}
-
-	return (r | (g << 8) | (b << 16));
 }
 
 
