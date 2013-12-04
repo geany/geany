@@ -396,7 +396,7 @@ static void kb_init(void)
 static void prefs_init_dialog(void)
 {
 	GtkWidget *widget;
-	GdkColor *color;
+	GdkColor color = {0};
 
 	/* Synchronize with Stash settings */
 	prefs_action(PREF_DISPLAY);
@@ -477,11 +477,9 @@ static void prefs_init_dialog(void)
 	}
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), TRUE);
 
-	color = g_new0(GdkColor, 1);
-	gdk_color_parse(editor_prefs.long_line_color, color);
+	gdk_color_parse(editor_prefs.long_line_color, &color);
 	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "long_line_color");
-	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget), color);
-	g_free(color);
+	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget), &color);
 
 	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_show_notebook_tabs");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), interface_prefs.show_notebook_tabs);
