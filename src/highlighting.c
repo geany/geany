@@ -319,15 +319,6 @@ static void get_keyfile_style(GKeyFile *config, GKeyFile *configh,
 }
 
 
-/* Convert 0xRRGGBB to 0xBBGGRR, which scintilla expects. */
-static gint rotate_rgb(gint color)
-{
-	return ((color & 0xFF0000) >> 16) +
-		(color & 0x00FF00) +
-		((color & 0x0000FF) << 16);
-}
-
-
 static void convert_int(const gchar *int_str, gint *val)
 {
 	gchar *end;
@@ -671,7 +662,7 @@ static void styleset_common(ScintillaObject *sci, guint ft_id)
 
 	/* Error indicator */
 	SSM(sci, SCI_INDICSETSTYLE, GEANY_INDICATOR_ERROR, INDIC_SQUIGGLEPIXMAP);
-	SSM(sci, SCI_INDICSETFORE, GEANY_INDICATOR_ERROR, invert(rotate_rgb(0xff0000)));
+	SSM(sci, SCI_INDICSETFORE, GEANY_INDICATOR_ERROR, invert(0x0000FF /* red, in BGR */));
 
 	/* Search indicator, used for 'Mark' matches */
 	SSM(sci, SCI_INDICSETSTYLE, GEANY_INDICATOR_SEARCH, INDIC_ROUNDBOX);
