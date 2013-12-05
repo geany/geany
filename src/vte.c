@@ -313,8 +313,6 @@ void vte_close(void)
 	g_free(vc->shell);
 	g_free(vc->image);
 	g_free(vc->font);
-	g_free(vc->colour_back);
-	g_free(vc->colour_fore);
 	g_free(vc->send_cmd_prefix);
 	g_free(vc);
 	g_free(gtk_menu_key_accel);
@@ -487,9 +485,9 @@ void vte_apply_user_settings(void)
 	vf->vte_terminal_set_scroll_on_output(VTE_TERMINAL(vc->vte), vc->scroll_on_out);
 	vf->vte_terminal_set_emulation(VTE_TERMINAL(vc->vte), vc->emulation);
 	vf->vte_terminal_set_font_from_string(VTE_TERMINAL(vc->vte), vc->font);
-	vf->vte_terminal_set_color_foreground(VTE_TERMINAL(vc->vte), vc->colour_fore);
-	vf->vte_terminal_set_color_bold(VTE_TERMINAL(vc->vte), vc->colour_fore);
-	vf->vte_terminal_set_color_background(VTE_TERMINAL(vc->vte), vc->colour_back);
+	vf->vte_terminal_set_color_foreground(VTE_TERMINAL(vc->vte), &vc->colour_fore);
+	vf->vte_terminal_set_color_bold(VTE_TERMINAL(vc->vte), &vc->colour_fore);
+	vf->vte_terminal_set_color_background(VTE_TERMINAL(vc->vte), &vc->colour_back);
 	vf->vte_terminal_set_background_image_file(VTE_TERMINAL(vc->vte), vc->image);
 	vf->vte_terminal_set_audible_bell(VTE_TERMINAL(vc->vte), prefs.beep_on_errors);
 	vte_set_cursor_blink_mode();
@@ -761,17 +759,13 @@ G_MODULE_EXPORT void on_term_font_set(GtkFontButton *widget, gpointer user_data)
 
 G_MODULE_EXPORT void on_term_fg_color_set(GtkColorButton *widget, gpointer user_data)
 {
-	g_free(vc->colour_fore);
-	vc->colour_fore = g_new0(GdkColor, 1);
-	gtk_color_button_get_color(widget, vc->colour_fore);
+	gtk_color_button_get_color(widget, &vc->colour_fore);
 }
 
 
 G_MODULE_EXPORT void on_term_bg_color_set(GtkColorButton *widget, gpointer user_data)
 {
-	g_free(vc->colour_back);
-	vc->colour_back = g_new0(GdkColor, 1);
-	gtk_color_button_get_color(widget, vc->colour_back);
+	gtk_color_button_get_color(widget, &vc->colour_back);
 }
 
 

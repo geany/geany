@@ -57,8 +57,8 @@ typedef struct
 	gchar *image;
 	gchar *font;
 	gchar *send_cmd_prefix;
-	GdkColor *colour_fore;
-	GdkColor *colour_back;
+	GdkColor colour_fore;
+	GdkColor colour_back;
 } VteConfig;
 extern VteConfig *vc;
 

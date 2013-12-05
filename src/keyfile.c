@@ -517,10 +517,10 @@ static void save_dialog_prefs(GKeyFile *config)
 		g_key_file_set_string(config, "VTE", "font", vc->font);
 		g_key_file_set_string(config, "VTE", "image", vc->image);
 		g_key_file_set_string(config, "VTE", "shell", vc->shell);
-		tmp_string = utils_get_hex_from_color(vc->colour_fore);
+		tmp_string = utils_get_hex_from_color(&vc->colour_fore);
 		g_key_file_set_string(config, "VTE", "colour_fore", tmp_string);
 		g_free(tmp_string);
-		tmp_string = utils_get_hex_from_color(vc->colour_back);
+		tmp_string = utils_get_hex_from_color(&vc->colour_back);
 		g_key_file_set_string(config, "VTE", "colour_back", tmp_string);
 		g_free(tmp_string);
 	}
@@ -854,13 +854,11 @@ static void load_dialog_prefs(GKeyFile *config)
 		vc->skip_run_script = utils_get_setting_boolean(config, "VTE", "skip_run_script", FALSE);
 		vc->cursor_blinks = utils_get_setting_boolean(config, "VTE", "cursor_blinks", FALSE);
 		vc->scrollback_lines = utils_get_setting_integer(config, "VTE", "scrollback_lines", 500);
-		vc->colour_fore = g_new0(GdkColor, 1);
-		vc->colour_back = g_new0(GdkColor, 1);
 		tmp_string = utils_get_setting_string(config, "VTE", "colour_fore", "#ffffff");
-		utils_parse_color(tmp_string, vc->colour_fore);
+		utils_parse_color(tmp_string, &vc->colour_fore);
 		g_free(tmp_string);
 		tmp_string = utils_get_setting_string(config, "VTE", "colour_back", "#000000");
-		utils_parse_color(tmp_string, vc->colour_back);
+		utils_parse_color(tmp_string, &vc->colour_back);
 		g_free(tmp_string);
 	}
 #endif

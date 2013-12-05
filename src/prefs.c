@@ -764,10 +764,10 @@ static void prefs_init_dialog(void)
 		gtk_font_button_set_font_name(GTK_FONT_BUTTON(widget), vc->font);
 
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "color_fore");
-		gtk_color_button_set_color(GTK_COLOR_BUTTON(widget), vc->colour_fore);
+		gtk_color_button_set_color(GTK_COLOR_BUTTON(widget), &vc->colour_fore);
 
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "color_back");
-		gtk_color_button_set_color(GTK_COLOR_BUTTON(widget), vc->colour_back);
+		gtk_color_button_set_color(GTK_COLOR_BUTTON(widget), &vc->colour_back);
 
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "entry_image");
 		gtk_entry_set_text(GTK_ENTRY(widget), vc->image);
