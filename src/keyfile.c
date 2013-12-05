@@ -688,6 +688,16 @@ void configuration_load_session_files(GKeyFile *config, gboolean read_recent_fil
 }
 
 
+static void get_setting_color(GKeyFile *config, const gchar *section, const gchar *key,
+		GdkColor *color, const gchar *default_color)
+{
+	gchar *str = utils_get_setting_string(config, section, key, NULL);
+	if (str == NULL || ! utils_parse_color(str, color))
+		utils_parse_color(default_color, color);
+	g_free(str);
+}
+
+
 /* note: new settings should be added in init_pref_groups() */
 static void load_dialog_prefs(GKeyFile *config)
 {
@@ -854,12 +864,8 @@ static void load_dialog_prefs(GKeyFile *config)
 		vc->skip_run_script = utils_get_setting_boolean(config, "VTE", "skip_run_script", FALSE);
 		vc->cursor_blinks = utils_get_setting_boolean(config, "VTE", "cursor_blinks", FALSE);
 		vc->scrollback_lines = utils_get_setting_integer(config, "VTE", "scrollback_lines", 500);
-		tmp_string = utils_get_setting_string(config, "VTE", "colour_fore", "#ffffff");
-		utils_parse_color(tmp_string, &vc->colour_fore);
-		g_free(tmp_string);
-		tmp_string = utils_get_setting_string(config, "VTE", "colour_back", "#000000");
-		utils_parse_color(tmp_string, &vc->colour_back);
-		g_free(tmp_string);
+		get_setting_color(config, "VTE", "colour_fore", &vc->colour_fore, "#ffffff");
+		get_setting_color(config, "VTE", "colour_back", &vc->colour_back, "#000000");
 	}
 #endif
 	/* templates */
