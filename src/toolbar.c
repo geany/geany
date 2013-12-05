@@ -794,7 +794,10 @@ static void tb_editor_drag_data_get_cb(GtkWidget *widget, GdkDragContext *contex
 
 	gtk_tree_model_get(model, &iter, TB_EDITOR_COL_ACTION, &name, -1);
 	if (G_UNLIKELY(EMPTY(name)))
+	{
+		g_free(name);
 		return;
+	}
 
 	atom = gdk_atom_intern(tb_editor_dnd_targets[0].target, FALSE);
 	gtk_selection_data_set(data, atom, 8, (guchar*) name, strlen(name));

@@ -843,7 +843,7 @@ static void load_dialog_prefs(GKeyFile *config)
 		vte_info.dir = utils_get_setting_string(config, "VTE", "last_dir", NULL);
 		if ((vte_info.dir == NULL || utils_str_equal(vte_info.dir, "")) && pw != NULL)
 			/* last dir is not set, fallback to user's home directory */
-			vte_info.dir = g_strdup(pw->pw_dir);
+			SETPTR(vte_info.dir, g_strdup(pw->pw_dir));
 		else if (vte_info.dir == NULL && pw == NULL)
 			/* fallback to root */
 			vte_info.dir = g_strdup("/");
@@ -888,7 +888,7 @@ static void load_dialog_prefs(GKeyFile *config)
 	cmd = utils_get_setting_string(config, "tools", "terminal_cmd", "");
 	if (EMPTY(cmd))
 	{
-		cmd = utils_get_setting_string(config, "tools", "term_cmd", "");
+		SETPTR(cmd, utils_get_setting_string(config, "tools", "term_cmd", ""));
 		if (!EMPTY(cmd))
 		{
 			tmp_string = cmd;
@@ -903,7 +903,7 @@ static void load_dialog_prefs(GKeyFile *config)
 			g_free(tmp_string);
 		}
 		else
-			cmd = g_strdup(GEANY_DEFAULT_TOOLS_TERMINAL);
+			SETPTR(cmd, g_strdup(GEANY_DEFAULT_TOOLS_TERMINAL));
 	}
 	tool_prefs.term_cmd = cmd;
 	tool_prefs.browser_cmd = utils_get_setting_string(config, "tools", "browser_cmd", GEANY_DEFAULT_TOOLS_BROWSER);
