@@ -660,7 +660,7 @@ msgstr "在原始碼檔案中切換列註解時加入的字串，它被用來標
 
 #: ../data/geany.glade.h:139
 msgid "<b>Features</b>"
-msgstr "<b>功能<</b>"
+msgstr "<b>功能</b>"
 
 #: ../data/geany.glade.h:140
 msgid "Features"
