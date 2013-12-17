@@ -6,7 +6,7 @@ AC_INIT([Geany], [1.24],
 AC_CONFIG_SRCDIR([src/geany.h])
 AC_CONFIG_AUX_DIR([build-aux])
 AC_CONFIG_MACRO_DIR([m4])
-AM_INIT_AUTOMAKE([1.11 -Wall parallel-tests])
+AM_INIT_AUTOMAKE([1.11 -Wall parallel-tests subdir-objects])
 AC_CONFIG_HEADERS([config.h])
 
 m4_ifdef([AM_SILENT_RULES],[AM_SILENT_RULES([yes])])
@@ -26,6 +26,7 @@ AC_USE_SYSTEM_EXTENSIONS
 m4_ifdef([AM_PROG_AR],[AM_PROG_AR])
 AC_PROG_CC
 AC_PROG_CC_C99
+AM_PROG_CC_C_O
 
 AC_PROG_CXX
 # check for C++ compiler explicitly and fail if none is found, do this check
