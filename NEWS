@@ -2,18 +2,74 @@ Geany 1.24 (unreleased)
 
     General
     * Add experimental support for GTK3.
+    * Add support for loading CTags and Vi tags files.
+    * Save configuration when plugin manager dialog is closed.
+
+    Bug fixes
+    * Fix many small memory leaks (many of them found by Pavel Roschin).
+    * Fix stopping of some spawned commands.
+    * Fix cursor position and selection after comment toggling (#3576431).
+    * Fix truncated output of ``--list-documents`` command-line option.
 
     Interface
     * Fix custom GTK styles under KDE (#3607935).
+    * Add Find entries in the Symbol List popup menu (#3608278).
+    * Flatten-out the View menu.
+    * Add a button to directly configure a plugin's keybindings in the
+      plugin manager (Pavel Roschin)
 
     Editor
-    * Update Scintilla to version 3.3.5.
+    * Update Scintilla to version 3.3.6.
+    * Fix Reflow to follow Line breaking behavior (Eugene Arshinov).
+    * Fix unfolding the very last line in a level (#1007).
+    * Fix commenting the very last line in some situations.
+
+    Search
+    * Fix bulk Search & Replace not to match replacements.
 
     Filetypes
-    * Extend list of recognized keywords for SQL
+    * Add CUDA filetype (PR#147, Benjamin Chrétien).
+    * Add basic Rust filetype.
+    * Add Batch filetype (canou).
+    * Add Graphviz filetype (PR#125, Miro Hrončok).
+    * Add PowerShell filetype (Igor Shaula).
+    * Add Clojure fieltype (PR#92, Hoàng Minh Thắng).
+    * Many improvements to the PHP tag parser.
+    * Update PHP global tags file (PR#137, John Long).
+    * Fix Asciidoc parser recognition of open block as underline.
+    * Fix symbol list entry for Asciidoc headers containing a dot.
+    * SQL parsing improvements.
+    * Extend list of recognized keywords for SQL.
+    * Fix SQL single-line comment marker (#997).
+    * Fix parsing of some JavaScript constructors.
+    * Fix parsing a JavaScript regular expression in a return statement.
+    * Parse Java annotations with parameters (#924, Braden Walters).
+    * Display Java enums in the symbol list.
+    * Fix parsing of C++ static_assert.
+    * Fix parsing of typed enums in C# and C++.
+    * Fix parsing of Frotran "forall" blocks and procedure pointers
+      (Alexander Eberspächer).
+    * Fix parsing of complex Cython types.
+    * Fix re-parsing Objective-C code.
+    * Fix parsing of Verliog initializers.
+    * Fix displaying of quoted Bash HereDoc delimiters (#952).
+    * Add some HTML5 keywords (Duncan de Wet).
+    * Add Erlang snippets and a template (PR#157, Fabio Ticconi).
+    * Haskell highlighting improvements (kudah).
+    * Add Matlab class keywords (PR#136, Felix Totir).
+    * Fix argument list on some Python constructors.
+    * Fix R indenting to use braces.
+    * Display R sources and libraries in the symbol list.
 
     Internationalization
-    * Update translations: de, he
+    * Make date templates translatable (Christian Dywan).
+    * Update translations: de, eu, he, it, lt, sl
+
+    API
+    * Add plugin_builder_connect_signals().
+
+    Windows
+    * Fix infinite pagination when printing (#961).
 
 
 Geany 1.23.1 (May 19, 2013)
