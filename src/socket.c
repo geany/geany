@@ -195,21 +195,25 @@ static void remove_socket_link_full(void)
 
 static void socket_get_document_list(gint sock)
 {
-	gchar doc_list[BUFFER_LENGTH];
-	gint doc_list_len;
+	gchar buf[BUFFER_LENGTH];
+	gint n_read;
 
 	if (sock < 0)
 		return;
 
 	socket_fd_write_all(sock, "doclist\n", 8);
 
-	doc_list_len = socket_fd_read(sock, doc_list, sizeof(doc_list));
-	if (doc_list_len >= BUFFER_LENGTH)
-		doc_list_len = BUFFER_LENGTH -1;
-	doc_list[doc_list_len] = '\0';
-	/* if we received ETX (end-of-text), there were no open files, so print only otherwise */
-	if (! utils_str_equal(doc_list, "\3"))
-		printf("%s", doc_list);
+	do
+	{
+		n_read = socket_fd_read(sock, buf, sizeof(buf));
+		/* if we received ETX (end-of-text), there is nothing else to read, so cut that
+		 * byte not to output it and to be sure not to validate the loop condition */
+		if (n_read > 0 && buf[n_read - 1] == '\3')
+			n_read--;
+		if (n_read > 0)
+			fwrite(buf, 1, n_read, stdout);
+	}
+	while (n_read >= sizeof(buf));
 }
 
 
@@ -625,10 +629,8 @@ gboolean socket_lock_input_cb(GIOChannel *source, GIOCondition condition, gpoint
 			gchar *doc_list = build_document_list();
 			if (!EMPTY(doc_list))
 				socket_fd_write_all(sock, doc_list, strlen(doc_list));
-			else
-				/* send ETX (end-of-text) in case we have no open files, we must send anything
-				 * otherwise the client would hang on reading */
-				socket_fd_write_all(sock, "\3", 1);
+			/* send ETX (end-of-text) so reader knows to stop reading */
+			socket_fd_write_all(sock, "\3", 1);
 			g_free(doc_list);
 		}
 		else if (strncmp(buf, "line", 4) == 0)
