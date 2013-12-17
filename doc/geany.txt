@@ -215,6 +215,7 @@ list, type::
     $ ./configure --help
 
 or::
+
     $ ./waf --help
 
 (depending on which build system you use).
