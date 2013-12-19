@@ -1076,21 +1076,23 @@ gint main(gint argc, gchar **argv)
 		socket_info.lock_socket = -1;
 		socket_info.lock_socket_tag = 0;
 		socket_info.lock_socket = socket_init(argc, argv);
-		/* Socket exists */
-		if (socket_info.lock_socket == -2)
+		/* Quit if filenames were sent to first instance or the list of open
+		 * documents has been printed */
+		if ((socket_info.lock_socket == -2 /* socket exists */ && argc > 1) ||
+			cl_options.list_documents)
 		{
-			/* Quit if filenames were sent to first instance or the list of open
-			 * documents has been sent */
-			if (argc > 1 || cl_options.list_documents)
-			{
-				gdk_notify_startup_complete();
-				g_free(app->configdir);
-				g_free(app->datadir);
-				g_free(app->docdir);
-				g_free(app);
-				return 0;
-			}
-			/* Start a new instance if no command line strings were passed */
+			socket_finalize();
+			gdk_notify_startup_complete();
+			g_free(app->configdir);
+			g_free(app->datadir);
+			g_free(app->docdir);
+			g_free(app);
+			return 0;
+		}
+		/* Start a new instance if no command line strings were passed,
+		 * even if the socket already exists */
+		else if (socket_info.lock_socket == -2 /* socket already exists */)
+		{
 			socket_info.ignore_socket = TRUE;
 			cl_options.new_instance = TRUE;
 		}

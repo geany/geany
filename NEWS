@@ -10,6 +10,8 @@ Geany 1.24 (unreleased)
     * Fix stopping of some spawned commands.
     * Fix cursor position and selection after comment toggling (#3576431).
     * Fix truncated output of ``--list-documents`` command-line option.
+    * Fix launching a new instance when ``--list-documents`` is passed and
+      no other instance is running.
 
     Interface
     * Fix custom GTK styles under KDE (#3607935).
