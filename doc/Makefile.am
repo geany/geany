@@ -8,7 +8,7 @@ EXTRA_DIST = geany.html geany.css geany.txt geany.1 \
 	$(srcdir)/$(IMAGE_FILES)
 
 geany-$(VERSION).pdf: geany.txt
-	rst2latex -stg --documentoptions="10pt,a4paper" --output-encoding=utf8 $< geany.tex
+	rst2latex -stg --documentoptions="10pt,a4paper" --output-encoding=utf8 $(srcdir)/geany.txt geany.tex
 	(absbuilddir="$$(pwd)/$(builddir)"; \
 	 cd "$(srcdir)" && \
 	 pdflatex -output-directory="$$absbuilddir" "$$absbuilddir/geany.tex")
@@ -19,13 +19,13 @@ api-doc: Doxyfile
 	doxygen
 
 hacking.html: ../HACKING
-	rst2html -stg --stylesheet=$(srcdir)/geany.css $< $@
+	rst2html -stg --stylesheet=$(srcdir)/geany.css $(srcdir)/../HACKING $@
 
 # when generating documentation, first try rst2html.py as it is the upstream default
 geany.html: geany.txt
 	(rst2html.py --version) < /dev/null > /dev/null 2>&1 && \
-	rst2html.py -stg --stylesheet=$(srcdir)/geany.css $< $@ || \
-	rst2html -stg --stylesheet=$(srcdir)/geany.css $< $@
+	rst2html.py -stg --stylesheet=$(srcdir)/geany.css $(srcdir)/geany.txt $@ || \
+	rst2html -stg --stylesheet=$(srcdir)/geany.css $(srcdir)/geany.txt $@
 
 hacking-doc: hacking.html
 doc: geany.html
