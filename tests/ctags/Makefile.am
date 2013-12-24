@@ -203,6 +203,7 @@ test_sources = \
 	regexp.js						\
 	secondary_fcn_name.js			\
 	semicolon.f90					\
+	shebang.js						\
 	signature.cpp					\
 	simple.bas						\
 	simple.cbl						\
