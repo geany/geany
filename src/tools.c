@@ -732,8 +732,11 @@ static void cc_insert_custom_command_items(GtkMenu *me, const gchar *label, cons
 	if (key_idx != -1)
 	{
 		kb = keybindings_lookup_item(GEANY_KEY_GROUP_FORMAT, key_idx);
-		gtk_widget_add_accelerator(item, "activate", gtk_accel_group_new(),
-			kb->key, kb->mods, GTK_ACCEL_VISIBLE);
+		if (kb->key > 0)
+		{
+			gtk_widget_add_accelerator(item, "activate", gtk_accel_group_new(),
+				kb->key, kb->mods, GTK_ACCEL_VISIBLE);
+		}
 	}
 	gtk_container_add(GTK_CONTAINER(me), item);
 	gtk_widget_show(item);
