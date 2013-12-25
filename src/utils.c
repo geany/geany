@@ -53,6 +53,7 @@
 #include "project.h"
 #include "ui_utils.h"
 #include "templates.h"
+#include "spawn.h"
 
 #include "utils.h"
 
@@ -1623,15 +1624,14 @@ const gchar *utils_get_default_dir_utf8(void)
 
 
 /**
- *  Wraps g_spawn_sync() and internally calls this function on Unix-like
- *  systems. On Win32 platforms, it uses the Windows API.
+ *  Wraps spawn_with_capture(), which see.
  *
  *  @param dir The child's current working directory, or @a NULL to inherit parent's.
  *  @param argv The child's argument vector.
  *  @param env The child's environment, or @a NULL to inherit parent's.
- *  @param flags Flags from GSpawnFlags.
- *  @param child_setup A function to run in the child just before exec().
- *  @param user_data The user data for child_setup.
+ *  @param flags Ignored.
+ *  @param child_setup Ignored.
+ *  @param user_data Ignored.
  *  @param std_out The return location for child output.
  *  @param std_err The return location for child error messages.
  *  @param exit_status The child exit status, as returned by waitpid().
@@ -1643,40 +1643,21 @@ gboolean utils_spawn_sync(const gchar *dir, gchar **argv, gchar **env, GSpawnFla
 						  GSpawnChildSetupFunc child_setup, gpointer user_data, gchar **std_out,
 						  gchar **std_err, gint *exit_status, GError **error)
 {
-	gboolean result;
-
-	if (argv == NULL)
-	{
-		g_set_error(error, G_SPAWN_ERROR, G_SPAWN_ERROR_FAILED, "argv must not be NULL");
-		return FALSE;
-	}
-
-	if (std_out)
-		*std_out = NULL;
-
-	if (std_err)
-		*std_err = NULL;
-
-#ifdef G_OS_WIN32
-	result = win32_spawn(dir, argv, env, flags, std_out, std_err, exit_status, error);
-#else
-	result = g_spawn_sync(dir, argv, env, flags, NULL, NULL, std_out, std_err, exit_status, error);
-#endif
-
-	return result;
+	return spawn_with_capture(dir, NULL, argv, env, GTK_WINDOW(main_widgets.window), NULL,
+		std_out, std_err, exit_status, error);
 }
 
 
 /**
- *  Wraps g_spawn_async() and internally calls this function on Unix-like
- *  systems. On Win32 platforms, it uses the Windows API.
+ *  Wraps spawn_async_with_pipes(). Under Windows, the child is displayed
+ *  in a minimized window. Use g_spawn_async() to run it in a normal window.
  *
  *  @param dir The child's current working directory, or @a NULL to inherit parent's.
  *  @param argv The child's argument vector.
  *  @param env The child's environment, or @a NULL to inherit parent's.
- *  @param flags Flags from GSpawnFlags.
- *  @param child_setup A function to run in the child just before exec().
- *  @param user_data The user data for child_setup.
+ *  @param flags Ignored.
+ *  @param child_setup Ignored.
+ *  @param user_data Ignored.
  *  @param child_pid The return location for child process ID, or NULL.
  *  @param error The return location for error or @a NULL.
  *
@@ -1686,20 +1667,7 @@ gboolean utils_spawn_async(const gchar *dir, gchar **argv, gchar **env, GSpawnFl
 						   GSpawnChildSetupFunc child_setup, gpointer user_data, GPid *child_pid,
 						   GError **error)
 {
-	gboolean result;
-
-	if (argv == NULL)
-	{
-		g_set_error(error, G_SPAWN_ERROR, G_SPAWN_ERROR_FAILED, "argv must not be NULL");
-		return FALSE;
-	}
-
-#ifdef G_OS_WIN32
-	result = win32_spawn(dir, argv, env, flags, NULL, NULL, NULL, error);
-#else
-	result = g_spawn_async(dir, argv, env, flags, NULL, NULL, child_pid, error);
-#endif
-	return result;
+	return spawn_async_with_pipes(dir, NULL, argv, env, child_pid, NULL, NULL, NULL, error);
 }
 
 

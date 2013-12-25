@@ -420,7 +420,6 @@ static void on_open_in_new_window_activate(GtkMenuItem *menuitem, gpointer user_
 	GeanyDocument *doc = user_data;
 
 	g_return_if_fail(doc->is_valid);
-
 	geany_path = g_find_program_in_path("geany");
 
 	if (geany_path)
@@ -429,7 +428,7 @@ static void on_open_in_new_window_activate(GtkMenuItem *menuitem, gpointer user_
 		gchar *argv[] = {geany_path, "-i", doc_path, NULL};
 		GError *err = NULL;
 
-		if (!utils_spawn_async(NULL, argv, NULL, 0, NULL, NULL, NULL, &err))
+		if (!g_spawn_async(NULL, argv, NULL, 0, NULL, NULL, NULL, &err))
 		{
 			g_printerr("Unable to open new window: %s", err->message);
 			g_error_free(err);
