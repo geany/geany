@@ -65,7 +65,7 @@ Geany 1.24 (unreleased)
 
     Internationalization
     * Make date templates translatable (Christian Dywan).
-    * Update translations: de, eu, he, it, lt, sl
+    * Update translations: de, eu, he, it, lt, sl, sv
 
     API
     * Add plugin_builder_connect_signals().
