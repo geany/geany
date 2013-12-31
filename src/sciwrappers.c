@@ -477,7 +477,7 @@ void sci_cut(ScintillaObject *sci)
 
 void sci_copy(ScintillaObject *sci)
 {
-	SSM(sci, SCI_COPY, 0, 0);
+	SSM(sci, SCI_COPYALLOWLINE, 0, 0);
 }
 
 
