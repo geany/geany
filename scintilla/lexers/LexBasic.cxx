@@ -389,9 +389,9 @@ void SCI_METHOD LexerBasic::Lex(unsigned int startPos, int length, int initStyle
 				sc.SetState(SCE_B_STRING);
 			} else if (IsDigit(sc.ch)) {
 				sc.SetState(SCE_B_NUMBER);
-			} else if (sc.Match('$')) {
+			} else if (sc.Match('$') | sc.Match("&h") | sc.Match("&H") | sc.Match("&o") | sc.Match("&O")) {
 				sc.SetState(SCE_B_HEXNUMBER);
-			} else if (sc.Match('%')) {
+			} else if (sc.Match('%') | sc.Match("&b") | sc.Match("&B")) {
 				sc.SetState(SCE_B_BINNUMBER);
 			} else if (sc.Match('#')) {
 				sc.SetState(SCE_B_CONSTANT);
