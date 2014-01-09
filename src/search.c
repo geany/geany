@@ -476,13 +476,12 @@ static void create_find_dialog(void)
 	gtk_label_set_mnemonic_widget(GTK_LABEL(label), entry);
 	gtk_entry_set_width_chars(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(entry))), 50);
 	find_dlg.entry = gtk_bin_get_child(GTK_BIN(entry));
-	ui_hookup_widget(find_dlg.dialog, entry, "entry");
 
 	g_signal_connect(gtk_bin_get_child(GTK_BIN(entry)), "activate",
-			G_CALLBACK(on_find_entry_activate), NULL);
+			G_CALLBACK(on_find_entry_activate), entry);
 	ui_entry_add_activate_backward_signal(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(entry))));
 	g_signal_connect(gtk_bin_get_child(GTK_BIN(entry)), "activate-backward",
-			G_CALLBACK(on_find_entry_activate_backward), NULL);
+			G_CALLBACK(on_find_entry_activate_backward), entry);
 	g_signal_connect(find_dlg.dialog, "response",
 			G_CALLBACK(on_find_dialog_response), entry);
 	g_signal_connect(find_dlg.dialog, "delete-event",
@@ -656,7 +655,7 @@ static void create_replace_dialog(void)
 	g_signal_connect(gtk_bin_get_child(GTK_BIN(entry_replace)), "activate",
 			G_CALLBACK(on_replace_entry_activate), NULL);
 	g_signal_connect(replace_dlg.dialog, "response",
-			G_CALLBACK(on_replace_dialog_response), entry_replace);
+			G_CALLBACK(on_replace_dialog_response), NULL);
 	g_signal_connect(replace_dlg.dialog, "delete-event",
 			G_CALLBACK(gtk_widget_hide_on_delete), NULL);
 
@@ -1258,8 +1257,7 @@ gint search_mark_all(GeanyDocument *doc, const gchar *search_text, gint flags)
 static void
 on_find_entry_activate(GtkEntry *entry, gpointer user_data)
 {
-	on_find_dialog_response(NULL, GEANY_RESPONSE_FIND,
-				ui_lookup_widget(GTK_WIDGET(entry), "entry"));
+	on_find_dialog_response(NULL, GEANY_RESPONSE_FIND, user_data);
 }
 
 
@@ -1270,8 +1268,7 @@ on_find_entry_activate_backward(GtkEntry *entry, gpointer user_data)
 	if (search_data.flags & SCFIND_REGEXP)
 		utils_beep();
 	else
-		on_find_dialog_response(NULL, GEANY_RESPONSE_FIND_PREVIOUS,
-					ui_lookup_widget(GTK_WIDGET(entry), "entry"));
+		on_find_dialog_response(NULL, GEANY_RESPONSE_FIND_PREVIOUS, user_data);
 }
 
 

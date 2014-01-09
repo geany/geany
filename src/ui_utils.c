@@ -1679,8 +1679,7 @@ void ui_setup_open_button_callback(GtkWidget *open_btn, const gchar *title,
 		g_object_set_data_full(G_OBJECT(open_btn), "title", g_strdup(title),
 				(GDestroyNotify) g_free);
 	g_object_set_data(G_OBJECT(open_btn), "action", GINT_TO_POINTER(action));
-	ui_hookup_widget(open_btn, path_entry, "entry");
-	g_signal_connect(open_btn, "clicked", G_CALLBACK(ui_path_box_open_clicked), open_btn);
+	g_signal_connect(open_btn, "clicked", G_CALLBACK(ui_path_box_open_clicked), path_entry);
 }
 
 
@@ -1725,10 +1724,9 @@ static gchar *run_file_chooser(const gchar *title, GtkFileChooserAction action,
 
 static void ui_path_box_open_clicked(GtkButton *button, gpointer user_data)
 {
-	GtkWidget *path_box = GTK_WIDGET(user_data);
-	GtkFileChooserAction action = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(path_box), "action"));
-	GtkEntry *entry = g_object_get_data(G_OBJECT(path_box), "entry");
-	const gchar *title = g_object_get_data(G_OBJECT(path_box), "title");
+	GtkFileChooserAction action = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(button), "action"));
+	GtkEntry *entry = user_data;
+	const gchar *title = g_object_get_data(G_OBJECT(button), "title");
 	gchar *utf8_path = NULL;
 
 	/* TODO: extend for other actions */
