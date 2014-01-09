@@ -170,6 +170,9 @@ static void
 on_replace_dialog_response(GtkDialog *dialog, gint response, gpointer user_data);
 
 static void
+on_replace_find_entry_activate(GtkEntry *entry, gpointer user_data);
+
+static void
 on_replace_entry_activate(GtkEntry *entry, gpointer user_data);
 
 static void
@@ -648,6 +651,8 @@ static void create_replace_dialog(void)
 	g_signal_connect(gtk_bin_get_child(GTK_BIN(entry_find)),
 			"key-press-event", G_CALLBACK(on_widget_key_pressed_set_focus),
 			gtk_bin_get_child(GTK_BIN(entry_replace)));
+	g_signal_connect(gtk_bin_get_child(GTK_BIN(entry_find)), "activate",
+			G_CALLBACK(on_replace_find_entry_activate), NULL);
 	g_signal_connect(gtk_bin_get_child(GTK_BIN(entry_replace)), "activate",
 			G_CALLBACK(on_replace_entry_activate), NULL);
 	g_signal_connect(replace_dlg.dialog, "response",
@@ -1366,6 +1371,13 @@ on_find_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 		if (check_close)
 			gtk_widget_hide(find_dlg.dialog);
 	}
+}
+
+
+static void
+on_replace_find_entry_activate(GtkEntry *entry, gpointer user_data)
+{
+	on_replace_dialog_response(NULL, GEANY_RESPONSE_FIND, NULL);
 }
 
 
