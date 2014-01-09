@@ -61,6 +61,9 @@ styling.within.preprocessor=1
 # default extension used when saving files
 extension=pl
 
+# MIME type
+mime_type=application/x-perl
+
 # the following characters are these which a "word" can contains, see documentation
 #wordchars=_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
 

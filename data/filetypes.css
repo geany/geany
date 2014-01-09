@@ -43,6 +43,9 @@ browser_pseudo_elements=^-ms- ^-apple- ^-epub- ^-moz- ^-o- ^-wap- ^-webkit- ^-xv
 # default extension used when saving files
 extension=css
 
+# MIME type
+mime_type=text/css
+
 # the following characters are these which a "word" can contains, see documentation
 #wordchars=_-abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
 

@@ -10,6 +10,9 @@ phpscript.mode=1
 # default extension used when saving files
 extension=php
 
+# MIME type
+mime_type=application/x-php
+
 # the following characters are these which a "word" can contains, see documentation
 #wordchars=_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
 

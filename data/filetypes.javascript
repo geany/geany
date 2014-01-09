@@ -10,6 +10,9 @@ secondary=Array Boolean Date Function Math Number Object String RegExp EvalError
 # default extension used when saving files
 extension=js
 
+# MIME type
+mime_type=application/javascript
+
 # the following characters are these which a "word" can contains, see documentation
 #wordchars=_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
 
