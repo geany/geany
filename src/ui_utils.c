@@ -1886,6 +1886,28 @@ static void create_config_files_menu(void)
 }
 
 
+/* adds factory icons with a named icon source using the stock items id */
+static void add_stock_icons(const GtkStockItem *items, gsize count)
+{
+	GtkIconFactory *factory = gtk_icon_factory_new();
+	GtkIconSource *source = gtk_icon_source_new();
+	gsize i;
+
+	for (i = 0; i < count; i++)
+	{
+		GtkIconSet *set = gtk_icon_set_new();
+
+		gtk_icon_source_set_icon_name(source, items[i].stock_id);
+		gtk_icon_set_add_source(set, source);
+		gtk_icon_factory_add(factory, items[i].stock_id, set);
+		gtk_icon_set_unref(set);
+	}
+	gtk_icon_source_free(source);
+	gtk_icon_factory_add_default(factory);
+	g_object_unref(factory);
+}
+
+
 void ui_init_stock_items(void)
 {
 	GtkStockItem items[] =
@@ -1895,7 +1917,8 @@ void ui_init_stock_items(void)
 		{ GEANY_STOCK_BUILD, N_("Build"), 0, 0, GETTEXT_PACKAGE }
 	};
 
-	gtk_stock_add((GtkStockItem *) items, G_N_ELEMENTS(items));
+	gtk_stock_add(items, G_N_ELEMENTS(items));
+	add_stock_icons(items, G_N_ELEMENTS(items));
 }
 
 

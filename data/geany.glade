@@ -3,13 +3,6 @@
   <requires lib="gtk+" version="2.16"/>
   <!-- interface-naming-policy project-wide -->
   <object class="GtkAccelGroup" id="accelgroup1"/>
-  <object class="GtkIconFactory" id="iconfactory1">
-    <sources>
-      <source stock-id="geany-build" icon-name="geany-build"/>
-      <source stock-id="geany-close-all" icon-name="geany-close-all"/>
-      <source stock-id="geany-save-all" icon-name="geany-save-all"/>
-    </sources>
-  </object>
   <object class="GtkAdjustment" id="adjustment1">
     <property name="lower">3</property>
     <property name="upper">1000</property>
