@@ -75,4 +75,11 @@ linker=dmd -w -of"%e" "%f"
 
 run_cmd="./%e"
 
-
+# Diagnostic examples:
+#   GNU D compiler front-end, gdc:
+#     gantry.d:18: variable gantry.main.c reference to auto class must be auto
+#     warning - gantry.d:20: statement is not reachable
+#   Digital Mars dmd compiler:
+#     warning - pi.d(118): implicit conversion of expression (digit) of type int ...
+#     gantry.d(18): variable gantry.main.c reference to auto class must be auto
+error_regex=(?:\bwarning - )?(?<F>.+?)(?::(?<L1>\d+)(?::(?<H1>\d+))?|\((?<L2>\d+)(?:,(?<H2>\d+))?\))

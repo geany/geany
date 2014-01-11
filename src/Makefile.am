@@ -15,6 +15,7 @@ SRCS = \
 	document.c document.h \
 	editor.c editor.h \
 	encodings.c encodings.h \
+	fileloc.c fileloc.h \
 	filetypes.c filetypes.h \
 	geanyentryaction.c geanyentryaction.h \
 	geanymenubuttonaction.c geanymenubuttonaction.h \

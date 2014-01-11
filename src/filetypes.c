@@ -43,6 +43,7 @@
 #include "sciwrappers.h"
 #include "ui_utils.h"
 #include "symbols.h"
+#include "fileloc.h"
 
 #include <stdlib.h>
 
@@ -1577,13 +1578,70 @@ static void compile_regex(GeanyFiletype *ft, gchar *regstr)
 }
 
 
-gboolean filetypes_parse_error_message(GeanyFiletype *ft, const gchar *message,
-		gchar **filename, gint *line)
+/* Minimal size of the gchar array to be used as the full_name argument to
+ * fetch_extended_error_regex_submatch(). */
+#define FETCH_EXTENDED_ERROR_REGEX_SUBMATCH_FULL_NAME_MINSIZE 3
+static GeanyFileLocation *parse_error_message_extended(const GMatchInfo *minfo,
+									gboolean *is_extended_style_error_regex);
+static gchar* fetch_extended_error_regex_submatch(const GMatchInfo *minfo,
+	const gchar *names, gboolean *group_exists, gchar *full_name);
+
+/*
+ *  Parses an error message according to the error regex pattern associated with
+ *  a filetype.
+ *
+ *  Two styles of error regex patterns are supported:
+ *
+ *  Extended style: A pattern is an extended-style pattern if it contains one or
+ *  more named capture groups called "f", "F", "l", "L", "c", "C", "h", "H",
+ *  "u", "U", "d", "D", "a", or "A", or any of the above followed by a single
+ *  digit (that is, "f1", "L7", etc.).
+ *  The submatch of a group named "f" or "F" (possibly followed by a digit), if
+ *  exists and matched, is used as the filename. "f" indicates a UTF-8 encoded
+ *  filename; "F" indicates a locale encoded filename.
+ *  The submatch of a group named "l" or "L" (possibly followed by a digit), if
+ *  exists and matched, is used as the line number, and should match a
+ *  nonnegative numeric value. "l" indicates zero-based line number; "L"
+ *  indicates a one-based line number.
+ *  The submatch of a group named "c", "C", "h", "H", "u", "U", "d", "D", "a" or
+ *  "A" (possibly followed by a digit), if exists and matched, is used as the
+ *  line offset, and should match a nonnegative numeric value. "c" indicates a
+ *  zero-based column number; "C" indicates a one-based column number; "h"
+ *  indicates a zero-based character number; "H" indicates a one-based character
+ *  number; "u" indicates a zero-based UTF-8 byte offset; "U" indicates a
+ *  one-based UTF-8 byte offset; "d" indicates a zero-based encoding byte
+ *  offset; "D" indicates a one-based encoding byte offset; "a" indicates a
+ *  zero-based locale byte offset; "A" indicates a one-based locale byte offset.
+ *  If there is more than one subhmatch of a group named "f" or "F", more than
+ *  one submatch of a group named "l" or "L", or more than one submatch of a
+ *  group named "c", "C", "h", "H", "u", "U", "d", "D", "a" or "A" (or, for all
+ *  of the above, such respective named group followed by a single digit), the
+ *  result is unspecified.
+ *
+ *  Simple style: A pattern is a simple-style pattern if it is not an
+ *  extended-style pattern. The pattern should match the message string with at
+ *  least two submatches, and at least one of the first two capture groups must
+ *  match a nonnegative numeric value. The first capture group that matches a
+ *  nonnegative numeric value is used as the one-based line number, and the
+ *  other one of the first two capture groups is used as the locale-encoded
+ *  filename. Simple-style patterns are supported for backward compatibility
+ *  and should be otherwise avoided.
+ *
+ *  @param ft Filetype.
+ *  @param message Error message.
+ *  @return Returns the file location associated with the error message if a
+ *          match was found and all the conditions regarding submatches were
+ *          met, or NULL otherwise. The caller is responsible for freeing the
+ *          returned value.
+ **/
+GeanyFileLocation *filetypes_parse_error_message(GeanyFiletype *ft, const gchar *message)
 {
 	gchar *regstr;
 	gchar **tmp;
 	GeanyDocument *doc;
 	GMatchInfo *minfo;
+	GeanyFileLocation *fileloc;
+	gboolean is_extended_style_error_regex;
 
 	if (ft == NULL)
 	{
@@ -1593,14 +1651,11 @@ gboolean filetypes_parse_error_message(GeanyFiletype *ft, const gchar *message,
 	}
 	tmp = build_get_regex(build_info.grp, ft, NULL);
 	if (tmp == NULL)
-		return FALSE;
+		return NULL;
 	regstr = *tmp;
 
-	*filename = NULL;
-	*line = -1;
-
 	if (G_UNLIKELY(EMPTY(regstr)))
-		return FALSE;
+		return NULL;
 
 	if (!ft->priv->error_regex || regstr != ft->priv->last_error_pattern)
 	{
@@ -1608,45 +1663,272 @@ gboolean filetypes_parse_error_message(GeanyFiletype *ft, const gchar *message,
 		ft->priv->last_error_pattern = regstr;
 	}
 	if (!ft->priv->error_regex)
-		return FALSE;
+		return NULL;
 
 	if (!g_regex_match(ft->priv->error_regex, message, 0, &minfo))
 	{
 		g_match_info_free(minfo);
-		return FALSE;
+		return NULL;
 	}
+
+	/* Try to parse the match info as an extended-style error regex. */
+	fileloc = parse_error_message_extended(minfo, &is_extended_style_error_regex);
+	if (is_extended_style_error_regex)
+	{
+		g_match_info_free(minfo);
+		return fileloc;
+	}
+	else
+	{
+		/* Even though the regex is not an extended-style error regex pattern,
+		 * parse_error_message_extended() might still return non-NULL. We don't
+		 * use the parsed file location in this case, though, and fall back to
+		 * simple-style parsing for backward compatibility. */
+		fileloc_free(fileloc);
+		fileloc = NULL;
+	}
+
+	/* Fall back to simple-style error regex parsing. */
 	if (g_match_info_get_match_count(minfo) >= 3)
 	{
 		gchar *first, *second, *end;
 		glong l;
 
+		fileloc = fileloc_new();
+
 		first = g_match_info_fetch(minfo, 1);
 		second = g_match_info_fetch(minfo, 2);
 		l = strtol(first, &end, 10);
-		if (*end == '\0')	/* first is purely decimals */
+		if (*end == '\0' && l >= 0) /* first is purely decimals */
 		{
-			*line = l;
-			g_free(first);
-			*filename = second;
+			fileloc_set_line(fileloc, l - 1); /* Let the line number be negative
+                                               * if l == 0, so there's no
+                                               * associated line number. */
+			fileloc_set_locale_filename(fileloc, second);
 		}
 		else
 		{
 			l = strtol(second, &end, 10);
-			if (*end == '\0')
+			if (*end == '\0' && l >= 0)
 			{
-				*line = l;
-				g_free(second);
-				*filename = first;
+				fileloc_set_line(fileloc, l - 1); /* Let the line number be negative
+                                                   * if l == 0, so there's no
+                                                   * associated line number. */
+				fileloc_set_locale_filename(fileloc, first);
 			}
 			else
 			{
-				g_free(first);
-				g_free(second);
+				fileloc_free(fileloc);
+				fileloc = NULL;
 			}
 		}
+
+		g_free(first);
+		g_free(second);
 	}
 	g_match_info_free(minfo);
-	return *filename != NULL;
+	return fileloc;
+}
+
+/* Tries to parse an extended-style error regex match info.
+ * On input, minfo should point to the regex match info of an error message
+ * string.
+ * On output, if is_extended_style_error_regex is not NULL,
+ * *is_extended_style_error_regex is set to TRUE if the regex pattern is an
+ * extended-style error regex pattern, or FALSE otherwise.
+ * The function returns the file location associated with the error message if
+ * the searched string is a valid error message, or NULL otherwise. The caller
+ * is responsible for freeing the returned value.
+ * Note that the returned value and the value of *is_extended_style_error_regex
+ * are independent: it's possible that the regex *pattern* is an extended-style
+ * error regex pattern, but it simply didn't match anything, in which case the
+ * function will return NULL and *is_extended_style_error_regex will be TRUE.
+ * Conversely, it's possible that the pattern matched the error string without
+ * any errors despite not being an extended-style error regex pattern, in which
+ * case the function returns a non-NULL value and *is_extended_style_error_regex
+ * is FALSE.
+ **/
+static GeanyFileLocation *parse_error_message_extended(const GMatchInfo *minfo,
+									gboolean *is_extended_style_error_regex)
+{
+	gchar *submatch, *end;
+	gchar full_group_name[FETCH_EXTENDED_ERROR_REGEX_SUBMATCH_FULL_NAME_MINSIZE];
+	glong n;
+	GeanyFileLocation *fileloc;
+
+	/* Assume this is not an extended-style error regex until proven otherwise. */
+	if (is_extended_style_error_regex)
+		*is_extended_style_error_regex = FALSE;
+
+	/* Start with an empty file location. */
+	fileloc = fileloc_new();
+
+	/* Look for a filename submatch. */
+	if ((submatch = fetch_extended_error_regex_submatch(minfo, "Ff",
+		is_extended_style_error_regex, full_group_name)))
+	{
+		/* Set the filename according to the group name. */
+		switch (full_group_name[0])
+		{
+			case 'f': fileloc_set_filename(fileloc, submatch); break;
+			case 'F': fileloc_set_locale_filename(fileloc, submatch); break;
+			default: g_assert_not_reached();
+		}
+		g_free(submatch);
+	}
+
+	/* Look for a line number submatch. */
+	if ((submatch = fetch_extended_error_regex_submatch(minfo, "Ll",
+		is_extended_style_error_regex, full_group_name)))
+	{
+		/* Make sure it's a nonnegative number. */
+		n = strtol(submatch, &end, 10);
+		g_free(submatch);
+		if (end == submatch || n < 0)
+		{
+			/* It's not. Assume this is not an error message. */
+			fileloc_free(fileloc);
+			return NULL;
+		}
+		/* Adjust the line number according to the group name. */
+		switch (full_group_name[0])
+		{
+			case 'l': break;
+			case 'L': --n; break; /* Let the line number be negative if n == 0, so
+								   * there's no associated line number. */
+			default: g_assert_not_reached();
+		}
+		fileloc_set_line(fileloc, n);
+	}
+
+	/* Look for a line offset submatch. */
+	if ((submatch = fetch_extended_error_regex_submatch(minfo, "HUDhudCcAa",
+		is_extended_style_error_regex, full_group_name)))
+	{
+		GeanyFileLocationOffsetKind off_kind;
+
+		/* Make sure it's a nonnegative number. */
+		n = strtol(submatch, &end, 10);
+		g_free(submatch);
+		if (end == submatch || n < 0)
+		{
+			/* It's not. Assume this is not an error message. */
+			fileloc_free(fileloc);
+			return NULL;
+		}
+		/* Identify and adjust the line offset according to the group name. */
+		switch (full_group_name[0])
+		{
+			case 'C': --n; /* Let the line offset be negative if n == 0, so
+						    * there's no associated line offset.
+						    * The fall-though to the next case is intentional. */
+			case 'c': off_kind = GEANY_FLOK_COLUMN; break;
+
+			case 'H': --n; /* ditto */
+			case 'h': off_kind = GEANY_FLOK_CHARACTER; break;
+
+			case 'U': --n; /* ditto */
+			case 'u': off_kind = GEANY_FLOK_UTF8_BYTE; break;
+
+			case 'D': --n; /* ditto */
+			case 'd': off_kind = GEANY_FLOK_ENCODING_BYTE; break;
+
+			case 'A': --n; /* ditto */
+			case 'a': off_kind = GEANY_FLOK_LOCALE_BYTE; break;
+
+			default: g_assert_not_reached();
+		}
+		fileloc_set_line_offset(fileloc, off_kind, n);
+	}
+
+	return fileloc;
+}
+
+/* Fetches an extended-style error regex submatch.
+ * minfo should point to the regex match info of an error message string.
+ * names should be a string, each character of which is a potential name of a
+ * capture group. It's advised to order the names by likelihood of occurence, so
+ * that the more likely ones preceed the less likely ones. The match info is
+ * searched for a group whose name is one of the characters of this string,
+ * potentially followed by a single digit. If such group is found, *group_exists
+ * is set to TRUE if not NULL. If this group matched anything, its name is
+ * copied to full_name and its value is returned. If no such group is found, or
+ * no such group matched anything, NULL is returned.
+ * full_name should be a gchar array of size at least
+ * FETCH_EXTENDED_ERROR_REGEX_SUBMATCH_FULL_NAME_MINSIZE.
+ * The returned value should be freed if not NULL. */
+static gchar* fetch_extended_error_regex_submatch(const GMatchInfo *minfo,
+	const gchar *names, gboolean *group_exists, gchar *full_name)
+{
+	gint i;
+
+	/* Group names of interest are at most two characters long. */
+	{ G_STATIC_ASSERT(FETCH_EXTENDED_ERROR_REGEX_SUBMATCH_FULL_NAME_MINSIZE >= 3); }
+	full_name[2] = '\0';
+
+	/* We iterate over the possible digit suffixes on the outer loop, and over
+	 * the different leading characters on the inner loop, since, heuristicly,
+	 * we don't expect large digit values to occur very often.
+	 * On the first outer iteration, we look for groups with no digit suffix at
+	 * all, so initialize the second character of full_name to nil. */
+	full_name[1] = '\0';
+
+	/* Iterate over the potential suffixes. There are eleven of them, including
+	 * the no-suffix case. */
+	for (i = 1; i <= 11; ++i)
+	{
+		const gchar *name;
+
+		/* Iterate over the potential names. */
+		for (name = names; *name; ++name)
+		{
+			gint submatch_begin, submatch_end;
+
+			full_name[0] = *name;
+
+			/* Look for a named capture group called full_name. */
+			if (g_match_info_fetch_named_pos(minfo, full_name, &submatch_begin, &submatch_end))
+			{
+				/* We found a capture group---set *group_exists if necessary.
+				 * We use it to determine if the regex pattern is an
+				 * extended-style error regex pattern. */
+				if (group_exists)
+					*group_exists = TRUE;
+
+				/* It's still possible, though, that the group didn't actually
+				 * match anything, so make sure it did. */
+				if (submatch_begin >= 0)
+				{
+					/* It did, we found a submatch. Copy its contents and return. */
+					gint submatch_len = submatch_end - submatch_begin;
+					gchar *submatch = (gchar*) g_malloc(
+						(submatch_len + 1) * sizeof(gchar)
+					);
+
+					memcpy(
+						submatch,
+						g_match_info_get_string(minfo) + submatch_begin,
+						submatch_len * sizeof(gchar)
+					);
+					submatch[submatch_len] = '\0';
+
+					return submatch;
+				}
+			}
+		}
+
+		/* We update the second character of full_name at the *end* of the
+		 * iteration for use on the next one, so that full_name doesn't end in
+		 * a digit on the first iteration. We let i count up from 1 and take its
+		 * value modulo 10 so that we look for names ending in 1 first and for
+		 * those that end in 0 last (simply because we assume 0 is the least
+		 * likely digit to occur.) Recall that we already set the third
+		 * character of full_name to '\0' at the beginning of the function. */
+		full_name[1] = (gchar) ('0' + (i % 10));
+	}
+
+	/* No submatch found. */
+	return NULL;
 }
 
 

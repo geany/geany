@@ -950,7 +950,7 @@ gchar *sci_get_contents_range(ScintillaObject *sci, gint start, gint end)
 {
 	gchar *text;
 
-	g_return_val_if_fail(start < end, NULL);
+	g_return_val_if_fail(start <= end, NULL);
 
 	text = g_malloc((gsize) (end - start) + 1);
 	sci_get_text_range(sci, start, end, text);

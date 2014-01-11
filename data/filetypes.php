@@ -47,5 +47,10 @@ xml_indent_tags=true
 compiler=php -l "%f"
 run_cmd=php "%f"
 
+# Diagnostic examples:
+#   Parse error: parse error, unexpected T_CASE in brace_bug.php on line 3
+#   Parse error: syntax error, unexpected T_LNUMBER, expecting T_FUNCTION in bob.php on line 16
+error_regex=.+?:.+ in (?<F>.+) on line (?<L>\d+)
+
 # use can also use something like this, to view your PHP or HTML files through a browser and webserver
 #run_cmd=firefox http://localhost/test_site/%f

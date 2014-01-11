@@ -135,3 +135,7 @@ compiler=tidy %f >/dev/null
 
 # the file will be opened with the default browser which can be set in the preferences dialog
 run_cmd=builtin
+
+# Diagnostic example:
+#   line 78 column 7 - Warning: <table> missing '>' for end of tag
+error_regex=\bline (?<L>\d+) column (?<H>\d+)

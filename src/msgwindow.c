@@ -625,63 +625,34 @@ find_prev_build_dir(GtkTreePath *cur, GtkTreeModel *model, gchar **prefix)
 }
 
 
-static gboolean goto_compiler_file_line(const gchar *filename, gint line, gboolean focus_editor)
+static gboolean goto_compiler_file_line(GeanyFileLocation *fileloc, gboolean focus_editor)
 {
-	if (!filename || line <= -1)
+	GeanyDocument *doc;
+	GeanyDocument *old_doc;
+	gint line;
+
+	if (fileloc == NULL)
 		return FALSE;
 
-	/* If the path doesn't exist, try the current document.
-	 * This happens when we receive build messages in the wrong order - after the
-	 * 'Leaving directory' messages */
-	if (!g_file_test(filename, G_FILE_TEST_EXISTS))
+	old_doc = document_get_current();
+	doc = fileloc_open_document_and_convert_pivot(fileloc, FALSE, NULL, NULL, TRUE);
+
+	if (doc == NULL)
+		return FALSE;
+
+	line = fileloc_get_line(fileloc);
+	if (line >= 0 && ! doc->changed && editor_prefs.use_indicators)	/* if modified, line may be wrong */
+		editor_indicator_set_on_line(doc->editor, GEANY_INDICATOR_ERROR, line);
+
+	if (navqueue_goto_fileloc(old_doc, fileloc))
 	{
-		gchar *cur_dir = utils_get_current_file_dir_utf8();
-		gchar *name;
+		if (focus_editor)
+			gtk_widget_grab_focus(GTK_WIDGET(doc->editor->sci));
 
-		if (cur_dir)
-		{
-			/* we let the user know we couldn't find the parsed filename from the message window */
-			SETPTR(cur_dir, utils_get_locale_from_utf8(cur_dir));
-			name = g_path_get_basename(filename);
-			SETPTR(name, g_build_path(G_DIR_SEPARATOR_S, cur_dir, name, NULL));
-			g_free(cur_dir);
-
-			if (g_file_test(name, G_FILE_TEST_EXISTS))
-			{
-				ui_set_statusbar(FALSE, _("Could not find file '%s' - trying the current document path."),
-					filename);
-				filename = name;
-			}
-			else
-				g_free(name);
-		}
+		return TRUE;
 	}
-
-	{
-		gchar *utf8_filename = utils_get_utf8_from_locale(filename);
-		GeanyDocument *doc = document_find_by_filename(utf8_filename);
-		GeanyDocument *old_doc = document_get_current();
-
-		g_free(utf8_filename);
-
-		if (doc == NULL)	/* file not already open */
-			doc = document_open_file(filename, FALSE, NULL, NULL);
-
-		if (doc != NULL)
-		{
-			gboolean ret;
-
-			if (! doc->changed && editor_prefs.use_indicators)	/* if modified, line may be wrong */
-				editor_indicator_set_on_line(doc->editor, GEANY_INDICATOR_ERROR, line - 1);
-
-			ret = navqueue_goto_line(old_doc, doc, line);
-			if (ret && focus_editor)
-				gtk_widget_grab_focus(GTK_WIDGET(doc->editor->sci));
-
-			return ret;
-		}
-	}
-	return FALSE;
+	else
+		return FALSE;
 }
 
 
@@ -709,20 +680,20 @@ gboolean msgwin_goto_compiler_file_line(gboolean focus_editor)
 		gtk_tree_model_get(model, &iter, 1, &string, -1);
 		if (string != NULL)
 		{
-			gint line;
-			gchar *filename, *dir;
+			GeanyFileLocation *fileloc;
+			gchar *dir;
 			GtkTreePath *path;
 			gboolean ret;
 
 			path = gtk_tree_model_get_path(model, &iter);
 			find_prev_build_dir(path, model, &dir);
 			gtk_tree_path_free(path);
-			msgwin_parse_compiler_error_line(string, dir, &filename, &line);
+			fileloc = msgwin_parse_compiler_error(string, dir);
 			g_free(string);
 			g_free(dir);
 
-			ret = goto_compiler_file_line(filename, line, focus_editor);
-			g_free(filename);
+			ret = goto_compiler_file_line(fileloc, focus_editor);
+			fileloc_free(fileloc);
 			return ret;
 		}
 	}
@@ -974,26 +945,28 @@ static void parse_compiler_error_line(const gchar *string,
 }
 
 
-/* try to parse the file and line number where the error occured described in string
- * and when something useful is found, it stores the line number in *line and the
- * relevant file with the error in *filename.
- * *line will be -1 if no error was found in string.
- * *filename must be freed unless it is NULL. */
-void msgwin_parse_compiler_error_line(const gchar *string, const gchar *dir,
-		gchar **filename, gint *line)
+/*
+ *  Parses the file location associated with a compiler error message.
+ *
+ *  @param string Error message string.
+ *  @param dir Directory of the file for which the build command was invoked.
+ *
+ *  @return If @a string is an error message, returns the file location
+ *          associated with the error. Otherwise, returns NULL. The caller is
+ *          responsible for freeing the returned value.
+ **/
+GeanyFileLocation *msgwin_parse_compiler_error(const gchar *string, const gchar *dir)
 {
 	GeanyFiletype *ft;
 	gchar *trimmed_string;
-
-	*filename = NULL;
-	*line = -1;
+	GeanyFileLocation *fileloc;
 
 	if (G_UNLIKELY(string == NULL))
-		return;
+		return NULL;
 
 	if (dir == NULL)
 		dir = build_info.dir;
-	g_return_if_fail(dir != NULL);
+	g_return_val_if_fail(dir != NULL, NULL);
 
 	trimmed_string = g_strdup(string);
 	g_strchug(trimmed_string); /* remove possible leading whitespace */
@@ -1001,13 +974,48 @@ void msgwin_parse_compiler_error_line(const gchar *string, const gchar *dir,
 	ft = filetypes[build_info.file_type_id];
 
 	/* try parsing with a custom regex */
-	if (!filetypes_parse_error_message(ft, trimmed_string, filename, line))
+	fileloc = filetypes_parse_error_message(ft, trimmed_string);
+	if (fileloc != NULL)
+	{
+		gchar *filename = fileloc_get_filename(fileloc);
+
+		if (filename != NULL)
+		{
+			make_absolute(&filename, dir);
+			fileloc_set_filename(fileloc, filename);
+			g_free(filename);
+		}
+		else
+		{
+			/* If the string is an error message but no associated file was
+			 * found, fall back to the current document. */
+			fileloc_fill_missing_params(fileloc, TRUE, FALSE);
+		}
+	}
+	else
 	{
 		/* fallback to default old-style parsing */
-		parse_compiler_error_line(trimmed_string, filename, line);
+		gchar *filename = NULL;
+		gint line = -1;
+
+		parse_compiler_error_line(trimmed_string, &filename, &line);
+
+		if (filename != NULL && line >= 0)
+		{
+			fileloc = fileloc_new();
+			make_absolute(&filename, dir);
+			fileloc_set_locale_filename(fileloc, filename);
+			fileloc_set_line(fileloc, line - 1); /* Let the line number be negative
+                                                  * if line == 0, so there's no
+                                                  * associated line number. */
+		}
+
+		g_free(filename);
 	}
-	make_absolute(filename, dir);
+
 	g_free(trimmed_string);
+
+	return fileloc;
 }
 
 

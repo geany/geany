@@ -42,3 +42,8 @@ context_action_cmd=
 # (use only one of it at one time)
 compiler=ferite -vc "%f"
 run_cmd=ferite "%f"
+
+# Diagnostic examples:
+#   Error: Parse Error: on line 5 in "/tmp/hello.fe"
+#   Error: Compile Error: on line 24, in /test/class.fe
+error_regex=^Error: (?:Parse Error: on line (?<L1>\d+) in "(?<F1>.+)"|Compile Errpr: on line (?<L2>\d+), in (?<F2>.+))

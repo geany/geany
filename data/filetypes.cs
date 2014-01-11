@@ -54,3 +54,5 @@ context_action_cmd=
 # be careful following settings are untested
 compiler=mcs /t:winexe "%f" /r:System,System.Drawing
 run_cmd=mono "%e.exe"
+
+error_regex=(?<F>.+?)\((?<L>\d+)(?:,(?<H>\d+))?\)

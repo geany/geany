@@ -61,3 +61,7 @@ context_action_cmd=
 # (use only one of it at one time)
 compiler=fpc "%f"
 run_cmd="./%e"
+
+# Diagnostic example:
+#   bandit.pas(149,3) Fatal: Syntax error, ";" expected but "ELSE" found
+error_regex=(?<F>.+?)\((?<L>\d+)(?:,(?<H>\d+))?\)

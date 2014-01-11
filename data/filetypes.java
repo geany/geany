@@ -44,3 +44,12 @@ context_action_cmd=
 # (use only one of it at one time)
 compiler=javac "%f"
 run_cmd=java "%e"
+
+# Diagnostic examples:
+#   GCC:
+#     empty.h:4: Warnung: type defaults to `int' in declaration of `foo'
+#     empty.c:21:8: error: conflicting types for `foo'
+#   Java Apache Ant.
+#     [javac] <Full Path to File + extension>:<line n°>: <error>
+#   Don't accidently find libtool versions x:y:x and think it is a file name.
+error_regex=(?:\[javac\] )?(?<F>.+?):(?<L>\d+)(?::(?<U>\d+))?

@@ -65,3 +65,6 @@ context_action_cmd=
 compiler=tclsh "%f"
 run_cmd=tclsh "%f"
 
+# Diagnostic example:
+#   (file "clrdial.tcl" line 12)
+error_regex=\(file "(?<F>.+?)" line (?<L>\d+)\)

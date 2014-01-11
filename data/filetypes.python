@@ -64,3 +64,10 @@ context_action_cmd=
 # (use only one of it at one time)
 compiler=python -m py_compile "%f"
 run_cmd=python "%f"
+
+# Diagnostic examples:
+#   Old Python format:
+#     File "HyperArch.py", line 37, in ?
+#   New Python format (2.6+):
+#     ('invalid syntax', ('sender.py', 149, 20, ' ...'))
+error_regex=File "(?<F1>.+?)", line (?<L1>\d+), in .+|\('.+?', \('(?<F2>.+?)', (?<L2>\d+), (?<H2>\d+).*\)\)

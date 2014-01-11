@@ -76,3 +76,5 @@ context_action_cmd=
 # (use only one of it at one time)
 compiler=ruby -c "%f"
 run_cmd=ruby "%f"
+
+error_regex=(?<F>.+?):(?<L>\d+)(?::(?<H>\d+))?
