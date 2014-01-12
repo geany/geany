@@ -522,6 +522,15 @@ static void init_builtin_filetypes(void)
 	ft->name = g_strdup("PowerShell");
 	filetype_make_title(ft, TITLE_SOURCE_FILE);
 	ft->group = GEANY_FILETYPE_GROUP_SCRIPT;
+
+#define RUST
+	ft = filetypes[GEANY_FILETYPES_RUST];
+	ft->lang = 45;
+	ft->name = g_strdup("Rust");
+	filetype_make_title(ft, TITLE_SOURCE_FILE);
+	ft->mime_type = g_strdup("text/x-rustsrc");
+	ft->group = GEANY_FILETYPE_GROUP_COMPILED;
+
 }
 
 
