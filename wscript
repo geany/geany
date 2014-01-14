@@ -105,6 +105,7 @@ ctags_sources = set([
     'tagmanager/ctags/read.c',
     'tagmanager/ctags/rest.c',
     'tagmanager/ctags/ruby.c',
+    'tagmanager/ctags/rust.c',
     'tagmanager/ctags/sh.c',
     'tagmanager/ctags/sort.c',
     'tagmanager/ctags/sql.c',

@@ -300,6 +300,7 @@ const gchar *symbols_get_context_separator(gint ft_id)
 		case GEANY_FILETYPES_GLSL:	/* for structs */
 		/*case GEANY_FILETYPES_RUBY:*/ /* not sure what to use atm*/
 		case GEANY_FILETYPES_PHP:
+		case GEANY_FILETYPES_RUST:
 			return "::";
 
 		/* avoid confusion with other possible separators in group/section name */
@@ -772,6 +773,22 @@ static void add_top_level_items(GeanyDocument *doc)
 			tag_list_add_groups(tag_store,
 				&(tv_iters.tag_function), _("Functions"), "classviewer-method",
 				&(tv_iters.tag_other), _("Other"), NULL,
+				NULL);
+			break;
+		}
+		case GEANY_FILETYPES_RUST:
+		{
+			tag_list_add_groups(tag_store,
+				&(tv_iters.tag_namespace), _("Modules"), "classviewer-namespace",
+				&(tv_iters.tag_struct), _("Structures"), "classviewer-struct",
+				&(tv_iters.tag_interface), _("Traits"), "classviewer-class",
+				&(tv_iters.tag_class), _("Implementations"), "classviewer-class",
+				&(tv_iters.tag_function), _("Functions"), "classviewer-method",
+				&(tv_iters.tag_type), _("Typedefs / Enums"), "classviewer-struct",
+				&(tv_iters.tag_variable), _("Variables"), "classviewer-var",
+				&(tv_iters.tag_macro), _("Macros"), "classviewer-macro",
+				&(tv_iters.tag_member), _("Methods"), "classviewer-member",
+				&(tv_iters.tag_other), _("Other"), "classviewer-other", NULL,
 				NULL);
 			break;
 		}

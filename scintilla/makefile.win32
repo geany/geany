@@ -96,6 +96,7 @@ LexLua.o \
 LexHaskell.o \
 LexBasic.o \
 LexR.o \
+LexRust.o \
 LexYAML.o \
 LexCmake.o \
 LexNsis.o

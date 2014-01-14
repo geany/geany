@@ -43,6 +43,7 @@ parsers = \
 	r.c \
 	rest.c \
 	ruby.c \
+	rust.c \
 	sh.c \
 	sql.c \
 	tcl.c \

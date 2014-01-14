@@ -522,6 +522,15 @@ static void init_builtin_filetypes(void)
 	ft->name = g_strdup("PowerShell");
 	filetype_make_title(ft, TITLE_SOURCE_FILE);
 	ft->group = GEANY_FILETYPE_GROUP_SCRIPT;
+
+#define RUST
+	ft = filetypes[GEANY_FILETYPES_RUST];
+	ft->lang = 45;
+	ft->name = g_strdup("Rust");
+	filetype_make_title(ft, TITLE_SOURCE_FILE);
+	ft->mime_type = g_strdup("text/x-rustsrc");
+	ft->group = GEANY_FILETYPE_GROUP_COMPILED;
+
 }
 
 
@@ -937,7 +946,8 @@ static GeanyFiletype *find_shebang(const gchar *utf8_filename, const gchar *line
 			{ "ash",	GEANY_FILETYPES_SH },
 			{ "dmd",	GEANY_FILETYPES_D },
 			{ "wish",	GEANY_FILETYPES_TCL },
-			{ "node",	GEANY_FILETYPES_JS }
+			{ "node",	GEANY_FILETYPES_JS },
+			{ "rust",	GEANY_FILETYPES_RUST }
 		};
 		gchar *tmp = g_path_get_basename(line + 2);
 		gchar *basename_interpreter = tmp;

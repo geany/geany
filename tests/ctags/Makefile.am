@@ -229,6 +229,8 @@ test_sources = \
 	tabindent.py					\
 	test.py							\
 	test.vhd						\
+	test_input.rs					\
+	test_input2.rs					\
 	traffic_signal.v				\
 	traits.php						\
 	union.f							\

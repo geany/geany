@@ -1290,6 +1290,41 @@ static const HLKeyword highlighting_keywords_RUBY[] =
 };
 #define highlighting_properties_RUBY	EMPTY_PROPERTIES
 
+/* Rust */
+#define highlighting_lexer_RUST		SCLEX_RUST
+static const HLStyle highlighting_styles_RUST[] =
+{
+	{ SCE_RUST_DEFAULT,				"default",					FALSE },
+	{ SCE_RUST_COMMENTBLOCK,		"commentblock",				FALSE },
+	{ SCE_RUST_COMMENTLINE,			"commentline",				FALSE },
+	{ SCE_RUST_COMMENTBLOCKDOC,		"commentblockdoc",			FALSE },
+	{ SCE_RUST_COMMENTLINEDOC,		"commentlinedoc",			FALSE },
+	{ SCE_RUST_NUMBER,				"number",					FALSE },
+	{ SCE_RUST_WORD,				"word",						FALSE },
+	{ SCE_RUST_WORD2,				"word2",					FALSE },
+	{ SCE_RUST_WORD3,				"word3",					FALSE },
+	{ SCE_RUST_WORD4,				"word4",					FALSE },
+	{ SCE_RUST_WORD5,				"word5",					FALSE },
+	{ SCE_RUST_WORD6,				"word6",					FALSE },
+	{ SCE_RUST_WORD7,				"word7",					FALSE },
+	{ SCE_RUST_STRING,				"string",					FALSE },
+	{ SCE_RUST_STRINGR,				"stringraw",				FALSE },
+	{ SCE_RUST_CHARACTER,			"character",				FALSE },
+	{ SCE_RUST_OPERATOR,			"operator",					FALSE },
+	{ SCE_RUST_IDENTIFIER,			"identifier",				FALSE },
+	{ SCE_RUST_LIFETIME,			"lifetime",					FALSE },
+	{ SCE_RUST_MACRO,				"macro",					FALSE },
+	{ SCE_RUST_LEXERROR,			"lexerror",					FALSE }
+};
+static const HLKeyword highlighting_keywords_RUST[] =
+{
+	{ 0, "primary",		FALSE },
+	/* SCI_SETKEYWORDS = 1 - secondary + global tags file types */
+	{ 1, "secondary",	TRUE },
+	{ 2, "tertiary",	FALSE },
+	/* SCI_SETKEYWORDS = 3 is for current session types - see editor_lexer_get_type_keyword_idx() */
+};
+#define highlighting_properties_RUST		EMPTY_PROPERTIES
 
 /* SH */
 #define highlighting_lexer_SH		SCLEX_BASH

@@ -36,6 +36,7 @@ lexers/LexPython.cxx \
 lexers/LexPO.cxx \
 lexers/LexR.cxx \
 lexers/LexRuby.cxx \
+lexers/LexRust.cxx \
 lexers/LexSQL.cxx \
 lexers/LexTCL.cxx \
 lexers/LexTxt2tags.cxx \
