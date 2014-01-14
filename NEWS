@@ -31,7 +31,7 @@ Geany 1.24 (unreleased)
 
     Filetypes
     * Add CUDA filetype (PR#147, Benjamin Chrétien).
-    * Add basic Rust filetype.
+    * Add Rust filetype (PR#181, SiegeLord).
     * Add Batch filetype (canou).
     * Add Graphviz filetype (PR#125, Miro Hrončok).
     * Add PowerShell filetype (Igor Shaula).
