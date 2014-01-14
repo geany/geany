@@ -1049,6 +1049,7 @@ void highlighting_init_styles(guint filetype_idx, GKeyFile *config, GKeyFile *co
 		init_styleset_case(PYTHON);
 		init_styleset_case(R);
 		init_styleset_case(RUBY);
+		init_styleset_case(RUST);
 		init_styleset_case(SH);
 		init_styleset_case(SQL);
 		init_styleset_case(TCL);
@@ -1131,6 +1132,7 @@ void highlighting_set_styles(ScintillaObject *sci, GeanyFiletype *ft)
 		styleset_case(PYTHON);
 		styleset_case(R);
 		styleset_case(RUBY);
+		styleset_case(RUST);
 		styleset_case(SH);
 		styleset_case(SQL);
 		styleset_case(TCL);
@@ -1543,6 +1545,12 @@ gboolean highlighting_is_string_style(gint lexer, gint style)
 
 		case SCLEX_ABAQUS:
 			return (style == SCE_ABAQUS_STRING);
+
+		case SCLEX_RUST:
+			return (style == SCE_RUST_CHARACTER ||
+				style == SCE_RUST_STRING ||
+				style == SCE_RUST_STRINGR ||
+				style == SCE_RUST_LEXERROR);
 	}
 	return FALSE;
 }
@@ -1692,6 +1700,12 @@ gboolean highlighting_is_comment_style(gint lexer, gint style)
 			return (style == SCE_ASM_COMMENT ||
 				style == SCE_ASM_COMMENTBLOCK ||
 				style == SCE_ASM_COMMENTDIRECTIVE);
+
+		case SCLEX_RUST:
+			return (style == SCE_RUST_COMMENTBLOCK ||
+				style == SCE_RUST_COMMENTLINE ||
+				style == SCE_RUST_COMMENTBLOCKDOC ||
+				style == SCE_RUST_COMMENTLINEDOC);
 	}
 	return FALSE;
 }
