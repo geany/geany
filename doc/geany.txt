@@ -3631,6 +3631,8 @@ Zoom In                         Ctrl-+  (C)               Zooms in the text.
 Zoom Out                        Ctrl--  (C)               Zooms out the text.
 
 Zoom Reset                      Ctrl-0                    Reset any previous zoom on the text.
+
+Toggle Long Line Marker                                   Shows or hides the long line marker.
 =============================== ========================= ==================================================
 
 Focus keybindings

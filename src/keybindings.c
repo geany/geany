@@ -515,6 +515,8 @@ static void init_default_kb(void)
 		GDK_minus, GDK_CONTROL_MASK, "menu_zoomout", _("Zoom Out"), "menu_zoom_out1");
 	add_kb(group, GEANY_KEYS_VIEW_ZOOMRESET, NULL,
 		GDK_0, GDK_CONTROL_MASK, "normal_size", _("Zoom Reset"), "normal_size1");
+	add_kb(group, GEANY_KEYS_VIEW_LONGLINE, NULL,
+		0, 0, "toggle_longline", _("Toggle Long Line Marker"), NULL);
 
 	group = keybindings_get_core_group(GEANY_KEY_GROUP_FOCUS);
 
@@ -1502,6 +1504,18 @@ static gboolean cb_func_view_action(guint key_id)
 			break;
 		case GEANY_KEYS_VIEW_ZOOMRESET:
 			on_normal_size1_activate(NULL, NULL);
+			break;
+		case GEANY_KEYS_VIEW_LONGLINE:
+			editor_prefs.long_line_enabled = !editor_prefs.long_line_enabled;
+			
+			guint i;
+			for (i = 0; i < documents_array->len; i++)
+			{
+				if (documents[i]->is_valid)
+				{
+					editor_apply_update_prefs(documents[i]->editor);
+				}
+			}
 			break;
 		default:
 			break;
