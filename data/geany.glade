@@ -4369,7 +4369,6 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="model">encoding_list</property>
-                                        <property name="wrap_width">3</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext6"/>
                                           <attributes>
@@ -4436,7 +4435,6 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="model">encoding_list</property>
-                                        <property name="wrap_width">3</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext7"/>
                                           <attributes>

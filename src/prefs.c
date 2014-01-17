@@ -1664,7 +1664,7 @@ void prefs_show_dialog(void)
 	if (ui_widgets.prefs_dialog == NULL)
 	{
 		GtkListStore *encoding_list, *eol_list;
-		GtkWidget *label;
+		GtkWidget *label, *widget;
 		guint i;
 		gchar *encoding_string;
 
@@ -1686,6 +1686,13 @@ void prefs_show_dialog(void)
 		list_store_append_text(eol_list, utils_get_eol_name(SC_EOL_CRLF));
 		list_store_append_text(eol_list, utils_get_eol_name(SC_EOL_CR));
 		list_store_append_text(eol_list, utils_get_eol_name(SC_EOL_LF));
+
+		/* wet combo box wrap width after having filled the encoding to workaround
+		 * GTK bug https://bugzilla.gnome.org/show_bug.cgi?id=722388 */
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "combo_new_encoding");
+		gtk_combo_box_set_wrap_width(GTK_COMBO_BOX(widget), 3);
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "combo_open_encoding");
+		gtk_combo_box_set_wrap_width(GTK_COMBO_BOX(widget), 3);
 
 		/* add manually GeanyWrapLabels because they can't be added with Glade */
 		/* page Tools */
