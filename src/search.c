@@ -853,8 +853,6 @@ static void create_fif_dialog(void)
 		*check_recursive, *check_extra, *entry_extra, *check_regexp, *combo_files_mode;
 	GtkWidget *dbox, *sbox, *lbox, *rbox, *hbox, *vbox, *ebox;
 	GtkSizeGroup *size_group;
-	gchar *encoding_string;
-	guint i;
 
 	fif_dlg.dialog = gtk_dialog_new_with_buttons(
 		_("Find in Files"), GTK_WINDOW(main_widgets.window), GTK_DIALOG_DESTROY_WITH_PARENT,
@@ -931,14 +929,7 @@ static void create_fif_dialog(void)
 	label2 = gtk_label_new_with_mnemonic(_("E_ncoding:"));
 	gtk_misc_set_alignment(GTK_MISC(label2), 0, 0.5);
 
-	e_combo = gtk_combo_box_text_new();
-	for (i = 0; i < GEANY_ENCODINGS_MAX; i++)
-	{
-		encoding_string = encodings_to_string(&encodings[i]);
-		gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(e_combo), encoding_string);
-		g_free(encoding_string);
-	}
-	gtk_combo_box_set_wrap_width(GTK_COMBO_BOX(e_combo), 3);
+	e_combo = ui_create_encodings_combo_box(FALSE, GEANY_ENCODING_UTF_8);
 	gtk_label_set_mnemonic_widget(GTK_LABEL(label2), e_combo);
 	fif_dlg.encoding_combo = e_combo;
 
@@ -1118,7 +1109,7 @@ void search_show_find_in_files_dialog_full(const gchar *text, const gchar *dir)
 	/* set the encoding of the current file */
 	if (doc != NULL)
 		enc_idx = encodings_get_idx_from_charset(doc->encoding);
-	gtk_combo_box_set_active(GTK_COMBO_BOX(fif_dlg.encoding_combo), enc_idx);
+	ui_encodings_combo_box_set_active_encoding(GTK_COMBO_BOX(fif_dlg.encoding_combo), enc_idx);
 
 	/* put the focus to the directory entry if it is empty */
 	if (utils_str_equal(gtk_entry_get_text(GTK_ENTRY(entry)), ""))
@@ -1600,8 +1591,8 @@ on_find_in_files_dialog_response(GtkDialog *dialog, gint response,
 		GtkWidget *dir_combo = fif_dlg.dir_combo;
 		const gchar *utf8_dir =
 			gtk_entry_get_text(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(dir_combo))));
-		GeanyEncodingIndex enc_idx = gtk_combo_box_get_active(
-			GTK_COMBO_BOX(fif_dlg.encoding_combo));
+		GeanyEncodingIndex enc_idx =
+			ui_encodings_combo_box_get_active_encoding(GTK_COMBO_BOX(fif_dlg.encoding_combo));
 
 		if (G_UNLIKELY(EMPTY(utf8_dir)))
 			ui_set_statusbar(FALSE, _("Invalid directory for find in files."));

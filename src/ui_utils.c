@@ -2768,3 +2768,94 @@ const gchar *ui_lookup_stock_label(const gchar *stock_id)
 	g_warning("No stock id '%s'!", stock_id);
 	return NULL;
 }
+
+
+/* finds the next iter at any level
+ * @param iter in/out, the current iter, will be changed to the next one
+ * @param down whether to try the child iter
+ * @return TRUE if there @p iter was set, or FALSE if there is no next iter */
+gboolean ui_tree_model_iter_any_next(GtkTreeModel *model, GtkTreeIter *iter, gboolean down)
+{
+	GtkTreeIter guess;
+	GtkTreeIter copy = *iter;
+
+	/* go down if the item has children */
+	if (down && gtk_tree_model_iter_children(model, &guess, iter))
+		*iter = guess;
+	/* or to the next item at the same level */
+	else if (gtk_tree_model_iter_next(model, &copy))
+		*iter = copy;
+	/* or to the next item at a parent level */
+	else if (gtk_tree_model_iter_parent(model, &guess, iter))
+	{
+		copy = guess;
+		while (TRUE)
+		{
+			if (gtk_tree_model_iter_next(model, &copy))
+			{
+				*iter = copy;
+				return TRUE;
+			}
+			else if (gtk_tree_model_iter_parent(model, &copy, &guess))
+				guess = copy;
+			else
+				return FALSE;
+		}
+	}
+	else
+		return FALSE;
+
+	return TRUE;
+}
+
+
+GtkWidget *ui_create_encodings_combo_box(gboolean has_detect, gint default_enc)
+{
+	GtkCellRenderer *renderer;
+	GtkTreeIter iter;
+	GtkWidget *combo = gtk_combo_box_new();
+	GtkTreeStore *store = encodings_encoding_store_new(has_detect);
+
+	if (default_enc < 0 || default_enc >= GEANY_ENCODINGS_MAX)
+		default_enc = has_detect ? GEANY_ENCODINGS_MAX : GEANY_ENCODING_NONE;
+
+	gtk_combo_box_set_model(GTK_COMBO_BOX(combo), GTK_TREE_MODEL(store));
+	if (encodings_encoding_store_get_iter(store, &iter, default_enc))
+		gtk_combo_box_set_active_iter(GTK_COMBO_BOX(combo), &iter);
+	renderer = gtk_cell_renderer_text_new();
+	gtk_cell_layout_pack_start(GTK_CELL_LAYOUT(combo), renderer, TRUE);
+	gtk_cell_layout_set_cell_data_func(GTK_CELL_LAYOUT(combo), renderer,
+			encodings_encoding_store_cell_data_func, NULL, NULL);
+
+	return combo;
+}
+
+
+gint ui_encodings_combo_box_get_active_encoding(GtkComboBox *combo)
+{
+	GtkTreeIter iter;
+	gint enc = GEANY_ENCODING_NONE;
+
+	/* there should always be an active iter anyway, but we check just in case */
+	if (gtk_combo_box_get_active_iter(combo, &iter))
+	{
+		GtkTreeModel *model = gtk_combo_box_get_model(combo);
+		enc = encodings_encoding_store_get_encoding(GTK_TREE_STORE(model), &iter);
+	}
+
+	return enc;
+}
+
+
+gboolean ui_encodings_combo_box_set_active_encoding(GtkComboBox *combo, gint enc)
+{
+	GtkTreeIter iter;
+	GtkTreeModel *model = gtk_combo_box_get_model(combo);
+
+	if (encodings_encoding_store_get_iter(GTK_TREE_STORE(model), &iter, enc))
+	{
+		gtk_combo_box_set_active_iter(combo, &iter);
+		return TRUE;
+	}
+	return FALSE;
+}

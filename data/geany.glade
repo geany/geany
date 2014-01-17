@@ -433,12 +433,6 @@
       </object>
     </child>
   </object>
-  <object class="GtkListStore" id="encoding_list">
-    <columns>
-      <!-- column-name text -->
-      <column type="gchararray"/>
-    </columns>
-  </object>
   <object class="GtkListStore" id="eol_list">
     <columns>
       <!-- column-name text -->
@@ -4368,12 +4362,8 @@
                                       <object class="GtkComboBox" id="combo_new_encoding">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="model">encoding_list</property>
                                         <child>
-                                          <object class="GtkCellRendererText" id="cellrenderertext6"/>
-                                          <attributes>
-                                            <attribute name="text">0</attribute>
-                                          </attributes>
+                                          <object class="GtkCellRendererText" id="combo_new_encoding_renderer"/>
                                         </child>
                                       </object>
                                     </child>
@@ -4434,12 +4424,8 @@
                                       <object class="GtkComboBox" id="combo_open_encoding">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="model">encoding_list</property>
                                         <child>
-                                          <object class="GtkCellRendererText" id="cellrenderertext7"/>
-                                          <attributes>
-                                            <attribute name="text">0</attribute>
-                                          </attributes>
+                                          <object class="GtkCellRendererText" id="combo_open_encoding_renderer"/>
                                         </child>
                                       </object>
                                     </child>

@@ -80,6 +80,15 @@ void encodings_select_radio_item(const gchar *charset);
 void encodings_init(void);
 void encodings_finalize(void);
 
+GtkTreeStore *encodings_encoding_store_new(gboolean has_detect);
+
+gint encodings_encoding_store_get_encoding(GtkTreeStore *store, GtkTreeIter *iter);
+
+gboolean encodings_encoding_store_get_iter(GtkTreeStore *store, GtkTreeIter *iter, gint enc);
+
+void encodings_encoding_store_cell_data_func(GtkCellLayout *cell_layout, GtkCellRenderer *cell,
+		GtkTreeModel *tree_model, GtkTreeIter *iter, gpointer data);
+
 gchar *encodings_convert_to_utf8(const gchar *buffer, gssize size, gchar **used_encoding);
 
 /* Converts a string from the given charset to UTF-8.

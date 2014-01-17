@@ -547,8 +547,7 @@ static void prefs_init_dialog(void)
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), file_prefs.tab_order_beside);
 
 	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "combo_new_encoding");
-	/* luckily the index of the combo box items match the index of the encodings array */
-	gtk_combo_box_set_active(GTK_COMBO_BOX(widget), file_prefs.default_new_encoding);
+	ui_encodings_combo_box_set_active_encoding(GTK_COMBO_BOX(widget), file_prefs.default_new_encoding);
 
 	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_open_encoding");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),
@@ -558,10 +557,10 @@ static void prefs_init_dialog(void)
 	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "combo_open_encoding");
 	if (file_prefs.default_open_encoding >= 0)
 	{
-		gtk_combo_box_set_active(GTK_COMBO_BOX(widget), file_prefs.default_open_encoding);
+		ui_encodings_combo_box_set_active_encoding(GTK_COMBO_BOX(widget), file_prefs.default_open_encoding);
 	}
 	else
-		gtk_combo_box_set_active(GTK_COMBO_BOX(widget), GEANY_ENCODING_UTF_8);
+		ui_encodings_combo_box_set_active_encoding(GTK_COMBO_BOX(widget), GEANY_ENCODING_UTF_8);
 
 	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "combo_eol");
 	if (file_prefs.default_eol_character >= 0 && file_prefs.default_eol_character < 3)
@@ -1020,13 +1019,13 @@ on_prefs_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 		file_prefs.tab_order_beside = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "combo_new_encoding");
-		file_prefs.default_new_encoding = gtk_combo_box_get_active(GTK_COMBO_BOX(widget));
+		file_prefs.default_new_encoding = ui_encodings_combo_box_get_active_encoding(GTK_COMBO_BOX(widget));
 
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_open_encoding");
 		if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)))
 		{
 			widget = ui_lookup_widget(ui_widgets.prefs_dialog, "combo_open_encoding");
-			file_prefs.default_open_encoding = gtk_combo_box_get_active(GTK_COMBO_BOX(widget));
+			file_prefs.default_open_encoding = ui_encodings_combo_box_get_active_encoding(GTK_COMBO_BOX(widget));
 		}
 		else
 			file_prefs.default_open_encoding = -1;
@@ -1663,22 +1662,34 @@ void prefs_show_dialog(void)
 {
 	if (ui_widgets.prefs_dialog == NULL)
 	{
-		GtkListStore *encoding_list, *eol_list;
-		GtkWidget *label, *widget;
-		guint i;
-		gchar *encoding_string;
+		GtkListStore *eol_list;
+		GtkWidget *label;
 
 		ui_widgets.prefs_dialog = create_prefs_dialog();
 		gtk_widget_set_name(ui_widgets.prefs_dialog, "GeanyPrefsDialog");
 		gtk_window_set_transient_for(GTK_WINDOW(ui_widgets.prefs_dialog), GTK_WINDOW(main_widgets.window));
 
 		/* init the file encoding combo boxes */
-		encoding_list = ui_builder_get_object("encoding_list");
-		for (i = 0; i < GEANY_ENCODINGS_MAX; i++)
 		{
-			encoding_string = encodings_to_string(&encodings[i]);
-			list_store_append_text(encoding_list, encoding_string);
-			g_free(encoding_string);
+			struct {
+				const gchar *combo, *renderer;
+			} names[] = {
+				{ "combo_new_encoding", "combo_new_encoding_renderer" },
+				{ "combo_open_encoding", "combo_open_encoding_renderer" }
+			};
+			guint i;
+			GtkTreeStore *encoding_list = encodings_encoding_store_new(FALSE);
+
+			for (i = 0; i < G_N_ELEMENTS(names); i++)
+			{
+				GtkWidget *combo = ui_lookup_widget(ui_widgets.prefs_dialog, names[i].combo);
+
+				gtk_cell_layout_set_cell_data_func(GTK_CELL_LAYOUT(combo),
+						ui_builder_get_object(names[i].renderer),
+						encodings_encoding_store_cell_data_func, NULL, NULL);
+				gtk_combo_box_set_model(GTK_COMBO_BOX(combo), GTK_TREE_MODEL(encoding_list));
+			}
+			g_object_unref(encoding_list);
 		}
 
 		/* init the eol character combo box */
@@ -1687,12 +1698,6 @@ void prefs_show_dialog(void)
 		list_store_append_text(eol_list, utils_get_eol_name(SC_EOL_CR));
 		list_store_append_text(eol_list, utils_get_eol_name(SC_EOL_LF));
 
-		/* wet combo box wrap width after having filled the encoding to workaround
-		 * GTK bug https://bugzilla.gnome.org/show_bug.cgi?id=722388 */
-		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "combo_new_encoding");
-		gtk_combo_box_set_wrap_width(GTK_COMBO_BOX(widget), 3);
-		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "combo_open_encoding");
-		gtk_combo_box_set_wrap_width(GTK_COMBO_BOX(widget), 3);
 
 		/* add manually GeanyWrapLabels because they can't be added with Glade */
 		/* page Tools */

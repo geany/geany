@@ -497,6 +497,123 @@ void encodings_init(void)
 }
 
 
+static gint encoding_combo_store_sort_func(GtkTreeModel *model,
+										   GtkTreeIter *a,
+										   GtkTreeIter *b,
+										   gpointer data)
+{
+	gboolean a_has_child = gtk_tree_model_iter_has_child(model, a);
+	gboolean b_has_child = gtk_tree_model_iter_has_child(model, b);
+	gchar *a_string;
+	gchar *b_string;
+	gint cmp_res;
+
+	if (a_has_child != b_has_child)
+		return a_has_child ? -1 : 1;
+
+	gtk_tree_model_get(model, a, 1, &a_string, -1);
+	gtk_tree_model_get(model, b, 1, &b_string, -1);
+	cmp_res = strcmp(a_string, b_string);
+	g_free(a_string);
+	g_free(b_string);
+	return cmp_res;
+}
+
+
+GtkTreeStore *encodings_encoding_store_new(gboolean has_detect)
+{
+	GtkTreeStore *store;
+	GtkTreeIter iter_current, iter_westeuro, iter_easteuro, iter_eastasian,
+				iter_asian, iter_utf8, iter_middleeast;
+	GtkTreeIter *iter_parent;
+	gchar *encoding_string;
+	gint i;
+
+	store = gtk_tree_store_new(2, G_TYPE_INT, G_TYPE_STRING);
+
+	if (has_detect)
+	{
+		gtk_tree_store_append(store, &iter_current, NULL);
+		gtk_tree_store_set(store, &iter_current, 0, GEANY_ENCODINGS_MAX, 1, _("Detect from file"), -1);
+	}
+
+	gtk_tree_store_append(store, &iter_westeuro, NULL);
+	gtk_tree_store_set(store, &iter_westeuro, 0, -1, 1, _("West European"), -1);
+	gtk_tree_store_append(store, &iter_easteuro, NULL);
+	gtk_tree_store_set(store, &iter_easteuro, 0, -1, 1, _("East European"), -1);
+	gtk_tree_store_append(store, &iter_eastasian, NULL);
+	gtk_tree_store_set(store, &iter_eastasian, 0, -1, 1, _("East Asian"), -1);
+	gtk_tree_store_append(store, &iter_asian, NULL);
+	gtk_tree_store_set(store, &iter_asian, 0, -1, 1, _("SE & SW Asian"), -1);
+	gtk_tree_store_append(store, &iter_middleeast, NULL);
+	gtk_tree_store_set(store, &iter_middleeast, 0, -1, 1, _("Middle Eastern"), -1);
+	gtk_tree_store_append(store, &iter_utf8, NULL);
+	gtk_tree_store_set(store, &iter_utf8, 0, -1, 1, _("Unicode"), -1);
+
+	for (i = 0; i < GEANY_ENCODINGS_MAX; i++)
+	{
+		switch (encodings[i].group)
+		{
+			case WESTEUROPEAN: iter_parent = &iter_westeuro; break;
+			case EASTEUROPEAN: iter_parent = &iter_easteuro; break;
+			case EASTASIAN: iter_parent = &iter_eastasian; break;
+			case ASIAN: iter_parent = &iter_asian; break;
+			case MIDDLEEASTERN: iter_parent = &iter_middleeast; break;
+			case UNICODE: iter_parent = &iter_utf8; break;
+			case NONE:
+			default: iter_parent = NULL;
+		}
+		gtk_tree_store_append(store, &iter_current, iter_parent);
+		encoding_string = encodings_to_string(&encodings[i]);
+		gtk_tree_store_set(store, &iter_current, 0, i, 1, encoding_string, -1);
+		g_free(encoding_string);
+	}
+
+	gtk_tree_sortable_set_sort_column_id(GTK_TREE_SORTABLE(store), 1, GTK_SORT_ASCENDING);
+	gtk_tree_sortable_set_sort_func(GTK_TREE_SORTABLE(store), 1, encoding_combo_store_sort_func, NULL, NULL);
+
+	return store;
+}
+
+
+gint encodings_encoding_store_get_encoding(GtkTreeStore *store, GtkTreeIter *iter)
+{
+	gint enc;
+	gtk_tree_model_get(GTK_TREE_MODEL(store), iter, 0, &enc, -1);
+	return enc;
+}
+
+
+gboolean encodings_encoding_store_get_iter(GtkTreeStore *store, GtkTreeIter *iter, gint enc)
+{
+	if (gtk_tree_model_get_iter_first(GTK_TREE_MODEL(store), iter))
+	{
+		do
+		{
+			if (encodings_encoding_store_get_encoding(store, iter) == enc)
+				return TRUE;
+		}
+		while (ui_tree_model_iter_any_next(GTK_TREE_MODEL(store), iter, TRUE));
+	}
+	return FALSE;
+}
+
+
+void encodings_encoding_store_cell_data_func(GtkCellLayout *cell_layout,
+											 GtkCellRenderer *cell,
+											 GtkTreeModel *tree_model,
+											 GtkTreeIter *iter,
+											 gpointer data)
+{
+	gboolean sensitive = !gtk_tree_model_iter_has_child(tree_model, iter);
+	gchar *text;
+
+	gtk_tree_model_get(tree_model, iter, 1, &text, -1);
+	g_object_set(cell, "sensitive", sensitive, "text", text, NULL);
+	g_free(text);
+}
+
+
 /**
  *  Tries to convert @a buffer into UTF-8 encoding from the encoding specified with @a charset.
  *  If @a fast is not set, additional checks to validate the converted string are performed.
