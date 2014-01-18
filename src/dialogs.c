@@ -591,7 +591,7 @@ static gboolean show_save_as_gtk(GeanyDocument *doc)
 	GtkWidget *dialog;
 	gint resp;
 
-	g_return_val_if_fail(doc != NULL, FALSE);
+	g_return_val_if_fail(DOC_VALID(doc), FALSE);
 
 	dialog = create_save_file_dialog(doc);
 
@@ -1171,6 +1171,8 @@ void dialogs_show_file_properties(GeanyDocument *doc)
 # define S_IWOTH 0
 # define S_IXOTH 0
 #endif
+
+	g_return_if_fail(doc == NULL || doc->is_valid);
 
 	if (doc == NULL || doc->file_name == NULL)
 	{

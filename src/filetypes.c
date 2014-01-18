@@ -1056,6 +1056,8 @@ GeanyFiletype *filetypes_detect_from_document(GeanyDocument *doc)
 	gchar 			*lines[GEANY_FILETYPE_SEARCH_LINES + 1];
 	gint			 i;
 
+	g_return_val_if_fail(doc == NULL || doc->is_valid, filetypes[GEANY_FILETYPES_NONE]);
+
 	if (doc == NULL)
 		return filetypes[GEANY_FILETYPES_NONE];
 

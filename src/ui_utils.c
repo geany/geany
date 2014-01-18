@@ -317,6 +317,8 @@ static gchar *create_statusbar_statistics(GeanyDocument *doc,
 /* updates the status bar document statistics */
 void ui_update_statusbar(GeanyDocument *doc, gint pos)
 {
+	g_return_if_fail(doc == NULL || doc->is_valid);
+
 	if (! interface_prefs.statusbar_visible)
 		return; /* just do nothing if statusbar is not visible */
 
@@ -358,6 +360,8 @@ void ui_set_window_title(GeanyDocument *doc)
 {
 	GString *str;
 	GeanyProject *project = app->project;
+
+	g_return_if_fail(doc == NULL || doc->is_valid);
 
 	if (doc == NULL)
 		doc = document_get_current();
@@ -445,6 +449,8 @@ void ui_update_popup_reundo_items(GeanyDocument *doc)
 	gboolean enable_redo;
 	guint i, len;
 
+	g_return_if_fail(doc == NULL || doc->is_valid);
+
 	if (doc == NULL)
 	{
 		enable_undo = FALSE;
@@ -475,6 +481,8 @@ void ui_update_popup_copy_items(GeanyDocument *doc)
 	gboolean enable;
 	guint i, len;
 
+	g_return_if_fail(doc == NULL || doc->is_valid);
+
 	if (doc == NULL)
 		enable = FALSE;
 	else
@@ -501,6 +509,8 @@ void ui_update_menu_copy_items(GeanyDocument *doc)
 	guint i, len;
 	GtkWidget *focusw = gtk_window_get_focus(GTK_WINDOW(main_widgets.window));
 
+	g_return_if_fail(doc == NULL || doc->is_valid);
+
 	if (IS_SCINTILLA(focusw))
 		enable = (doc == NULL) ? FALSE : sci_has_selection(doc->editor->sci);
 	else
@@ -523,6 +533,8 @@ void ui_update_menu_copy_items(GeanyDocument *doc)
 void ui_update_insert_include_item(GeanyDocument *doc, gint item)
 {
 	gboolean enable = FALSE;
+
+	g_return_if_fail(doc == NULL || doc->is_valid);
 
 	if (doc == NULL || doc->file_type == NULL)
 		enable = FALSE;
@@ -891,6 +903,8 @@ void ui_document_show_hide(GeanyDocument *doc)
 	const gchar *widget_name;
 	GtkWidget *item;
 	const GeanyIndentPrefs *iprefs;
+
+	g_return_if_fail(doc == NULL || doc->is_valid);
 
 	if (doc == NULL)
 		doc = document_get_current();

@@ -394,7 +394,7 @@ void search_find_selection(GeanyDocument *doc, gboolean search_backwards)
 {
 	gchar *s = NULL;
 
-	g_return_if_fail(doc != NULL);
+	g_return_if_fail(DOC_VALID(doc));
 
 #ifdef G_OS_UNIX
 	if (search_prefs.find_selection_type == GEANY_FIND_SEL_X)
@@ -1225,7 +1225,7 @@ gint search_mark_all(GeanyDocument *doc, const gchar *search_text, gint flags)
 	struct Sci_TextToFind ttf;
 	GSList *match, *matches;
 
-	g_return_val_if_fail(doc != NULL, 0);
+	g_return_val_if_fail(DOC_VALID(doc), 0);
 
 	/* clear previous search indicators */
 	editor_indicator_clear(doc->editor, GEANY_INDICATOR_SEARCH);
@@ -2134,7 +2134,7 @@ static gint find_document_usage(GeanyDocument *doc, const gchar *search_text, gi
 	gint prev_line = -1;
 	GSList *match, *matches;
 
-	g_return_val_if_fail(doc != NULL, 0);
+	g_return_val_if_fail(DOC_VALID(doc), 0);
 
 	short_file_name = g_path_get_basename(DOC_FILENAME(doc));
 

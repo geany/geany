@@ -356,7 +356,7 @@ void tools_execute_custom_command(GeanyDocument *doc, const gchar *command)
 	gint stdout_fd;
 	gint stderr_fd;
 
-	g_return_if_fail(doc != NULL && command != NULL);
+	g_return_if_fail(DOC_VALID(doc) && command != NULL);
 
 	if (! sci_has_selection(doc->editor->sci))
 		editor_select_lines(doc->editor, FALSE);
@@ -697,7 +697,7 @@ static void cc_on_custom_command_activate(GtkMenuItem *menuitem, gpointer user_d
 	GeanyDocument *doc = document_get_current();
 	gint command_idx;
 
-	g_return_if_fail(doc != NULL);
+	g_return_if_fail(DOC_VALID(doc));
 
 	command_idx = GPOINTER_TO_INT(user_data);
 

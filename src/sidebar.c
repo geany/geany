@@ -187,6 +187,8 @@ void sidebar_update_tag_list(GeanyDocument *doc, gboolean update)
 {
 	GtkWidget *child = gtk_bin_get_child(GTK_BIN(tag_window));
 
+	g_return_if_fail(doc == NULL || doc->is_valid);
+
 	/* changes the tree view to the given one, trying not to do useless changes */
 	#define CHANGE_TREE(new_child) \
 		G_STMT_START { \

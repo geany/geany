@@ -107,6 +107,8 @@ static void convert_eol_characters(GString *template, GeanyDocument *doc)
 {
 	gint doc_eol_mode;
 
+	g_return_if_fail(doc == NULL || doc->is_valid);
+
 	if (doc == NULL)
 		doc = document_get_current();
 
@@ -436,7 +438,7 @@ gchar *templates_get_template_licence(GeanyDocument *doc, gint licence_type)
 {
 	GString *template;
 
-	g_return_val_if_fail(doc != NULL, NULL);
+	g_return_val_if_fail(DOC_VALID(doc), NULL);
 	g_return_val_if_fail(licence_type == GEANY_TEMPLATE_GPL || licence_type == GEANY_TEMPLATE_BSD, NULL);
 
 	template = g_string_new(templates[licence_type]);
@@ -502,9 +504,13 @@ gchar *templates_get_template_function(GeanyDocument *doc, const gchar *func_nam
 
 gchar *templates_get_template_changelog(GeanyDocument *doc)
 {
-	GString *result = g_string_new(templates[GEANY_TEMPLATE_CHANGELOG]);
-	const gchar *file_type_name = (doc != NULL) ? doc->file_type->name : "";
+	GString *result;
+	const gchar *file_type_name;
 
+	g_return_val_if_fail(DOC_VALID(doc), NULL);
+
+	result = g_string_new(templates[GEANY_TEMPLATE_CHANGELOG]);
+	file_type_name = (doc->file_type != NULL) ? doc->file_type->name : "";
 	replace_static_values(result);
 	templates_replace_default_dates(result);
 	templates_replace_command(result, DOC_FILENAME(doc), file_type_name, NULL);

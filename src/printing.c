@@ -624,8 +624,7 @@ static void print_external(GeanyDocument *doc)
 
 void printing_print_doc(GeanyDocument *doc)
 {
-	if (doc == NULL)
-		return;
+	g_return_if_fail(DOC_VALID(doc));
 
 	if (printing_prefs.use_gtk_printing)
 		printing_print_gtk(doc);

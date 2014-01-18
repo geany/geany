@@ -1715,7 +1715,7 @@ gboolean symbols_recreate_tag_list(GeanyDocument *doc, gint sort_mode)
 {
 	GList *tags;
 
-	g_return_val_if_fail(doc != NULL, FALSE);
+	g_return_val_if_fail(DOC_VALID(doc), FALSE);
 
 	tags = get_tag_list(doc, tm_tag_max_t);
 	if (tags == NULL)
@@ -2225,6 +2225,8 @@ static gint get_current_tag_name_cached(GeanyDocument *doc, const gchar **tagnam
 {
 	static gint tag_line = -1;
 	static gchar *cur_tag = NULL;
+
+	g_return_val_if_fail(doc == NULL || doc->is_valid, -1);
 
 	if (doc == NULL)	/* reset current function */
 	{

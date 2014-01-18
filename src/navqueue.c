@@ -150,7 +150,8 @@ gboolean navqueue_goto_line(GeanyDocument *old_doc, GeanyDocument *new_doc, gint
 {
 	gint pos;
 
-	g_return_val_if_fail(new_doc != NULL, FALSE);
+	g_return_val_if_fail(old_doc == NULL || old_doc->is_valid, FALSE);
+	g_return_val_if_fail(DOC_VALID(new_doc), FALSE);
 	g_return_val_if_fail(line >= 1, FALSE);
 
 	pos = sci_get_position_from_line(new_doc->editor->sci, line - 1);

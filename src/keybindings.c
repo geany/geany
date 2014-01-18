@@ -1041,6 +1041,8 @@ static void trigger_button_event(GtkWidget *widget, guint32 event_time)
  * notebook tab list. */
 static gboolean check_menu_key(GeanyDocument *doc, guint keyval, guint state, guint32 event_time)
 {
+	g_return_val_if_fail(doc == NULL || doc->is_valid, FALSE);
+
 	if ((keyval == GDK_Menu && state == 0) || (keyval == GDK_F10 && state == GDK_SHIFT_MASK))
 	{
 		GtkWidget *focusw = gtk_window_get_focus(GTK_WINDOW(main_widgets.window));
@@ -1585,8 +1587,7 @@ static gboolean cb_func_build_action(guint key_id)
 
 static gboolean read_current_word(GeanyDocument *doc, gboolean sci_word)
 {
-	if (doc == NULL)
-		return FALSE;
+	g_return_val_if_fail(DOC_VALID(doc), FALSE);
 
 	if (sci_word)
 	{
@@ -1820,8 +1821,7 @@ static void goto_matching_brace(GeanyDocument *doc)
 	gint pos, new_pos;
 	gint after_brace;
 
-	if (doc == NULL)
-		return;
+	g_return_if_fail(DOC_VALID(doc));
 
 	pos = sci_get_current_position(doc->editor->sci);
 	after_brace = pos > 0 && utils_isbrace(sci_get_char_at(doc->editor->sci, pos - 1), TRUE);
