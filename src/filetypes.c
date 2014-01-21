@@ -1288,11 +1288,27 @@ gboolean filetypes_parse_error_message(GeanyFiletype *ft, const gchar *message,
 	}
 	if (g_match_info_get_match_count(minfo) >= 3)
 	{
-		gchar *first, *second, *end;
+		gchar *first = NULL, *second, *end;
 		glong l;
+		gint i;
 
-		first = g_match_info_fetch(minfo, 1);
-		second = g_match_info_fetch(minfo, 2);
+		for (i = 1; ; i++)
+		{
+			gint start_pos;
+
+			g_match_info_fetch_pos(minfo, i, &start_pos, NULL);
+			if (start_pos != -1)
+			{
+				if (first == NULL)
+					first = g_match_info_fetch(minfo, i);
+				else
+				{
+					second = g_match_info_fetch(minfo, i);
+					break;
+				}
+			}
+		}
+
 		l = strtol(first, &end, 10);
 		if (*end == '\0')	/* first is purely decimals */
 		{
