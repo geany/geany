@@ -13,6 +13,7 @@ deps.mak
 .lock-waf_*
 Makefile
 Makefile.in
+.dirstamp
 
 #-----------------------------------------------------------------------
 # / (root)
@@ -26,6 +27,7 @@ Makefile.in
 /config.guess
 /config.h
 /config.h.in
+/config.h.in~
 /config.log
 /config.status
 /config.sub
