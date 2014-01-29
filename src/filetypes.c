@@ -44,6 +44,8 @@
 #include "ui_utils.h"
 #include "symbols.h"
 
+#include "tm_parser.h"
+
 #include <stdlib.h>
 
 #define GEANY_FILETYPE_SEARCH_LINES 2 /* lines of file to search for filetype */
@@ -112,8 +114,8 @@ static void ft_init(filetype_id ft_id, int lang, const char *name,
 }
 
 /* Evil macro to save typing and make init_builtin_filetypes() more readable */
-#define FT_INIT(ft_id, lang_id, name, title_name, title_type, mime_type, group_id) \
-	ft_init(GEANY_FILETYPES_##ft_id, lang_id, name, title_name, \
+#define FT_INIT(ft_id, parser_id, name, title_name, title_type, mime_type, group_id) \
+	ft_init(GEANY_FILETYPES_##ft_id, TM_PARSER_##parser_id, name, title_name, \
 		TITLE_##title_type, mime_type, GEANY_FILETYPE_GROUP_##group_id)
 
 
@@ -122,72 +124,72 @@ static void init_builtin_filetypes(void)
 {
 	/* Column legend:
 	 *   [0] = Filetype constant (GEANY_FILETYPES_*)
-	 *   [1] = CTags parser (see tagmanager/ctags/src/parsers.h)
+	 *   [1] = CTags parser (TM_PARSER_*)
 	 *   [2] = Non-translated filetype name (*not* label for display)
 	 *   [3] = Translatable human filetype title prefix or NULL to use [2]
 	 *   [4] = Title type (TITLE_*) constant (ex. TITLE_SOURCE_FILE is 'source file' suffix)
 	 *   [5] = Mime type or NULL for none/unknown
 	 *   [6] = The filetype group constant (GEANY_FILETYPE_GROUP_*)
 	 * --------------------------------------------------------------------------------------------------------------------------
-	 *       [0]        [1]  [2]                 [3]                        [4]          [5]                           [6]      */
-	FT_INIT( NONE,       -2, "None",             _("None"),                 NONE,        NULL,                         NONE     );
-	FT_INIT( C,           0, "C",                NULL,                      SOURCE_FILE, "text/x-csrc",                COMPILED );
-	FT_INIT( CPP,         1, "C++",              NULL,                      SOURCE_FILE, "text/x-c++src",              COMPILED );
-	FT_INIT( OBJECTIVEC, 42, "Objective-C",      NULL,                      SOURCE_FILE, "text/x-objc",                COMPILED );
-	FT_INIT( CS,         25, "C#",               NULL,                      SOURCE_FILE, "text/x-csharp",              COMPILED );
-	FT_INIT( VALA,       33, "Vala",             NULL,                      SOURCE_FILE, "text/x-vala",                COMPILED );
-	FT_INIT( D,          17, "D",                NULL,                      SOURCE_FILE, "text/x-dsrc",                COMPILED );
-	FT_INIT( JAVA,        2, "Java",             NULL,                      SOURCE_FILE, "text/x-java",                COMPILED );
-	FT_INIT( PASCAL,      4, "Pascal",           NULL,                      SOURCE_FILE, "text/x-pascal",              COMPILED );
-	FT_INIT( ASM,         9, "ASM",              "Assembler",               SOURCE_FILE, NULL,                         COMPILED );
-	FT_INIT( BASIC,      26, "FreeBasic",        NULL,                      SOURCE_FILE, NULL,                         COMPILED );
-	FT_INIT( FORTRAN,    18, "Fortran",          "Fortran (F90)",           SOURCE_FILE, "text/x-fortran",             COMPILED );
-	FT_INIT( F77,        30, "F77",              "Fortran (F77)",           SOURCE_FILE, "text/x-fortran",             COMPILED );
-	FT_INIT( GLSL,       31, "GLSL",             NULL,                      SOURCE_FILE, NULL,                         COMPILED );
-	FT_INIT( CAML,       -2, "CAML",             "(O)Caml",                 SOURCE_FILE, "text/x-ocaml",               COMPILED );
-	FT_INIT( PERL,        5, "Perl",             NULL,                      SOURCE_FILE, "application/x-perl",         SCRIPT   );
-	FT_INIT( PHP,         6, "PHP",              NULL,                      SOURCE_FILE, "application/x-php",          SCRIPT   );
-	FT_INIT( JS,         23, "Javascript",       NULL,                      SOURCE_FILE, "application/javascript",     SCRIPT   );
-	FT_INIT( PYTHON,      7, "Python",           NULL,                      SOURCE_FILE, "text/x-python",              SCRIPT   );
-	FT_INIT( RUBY,       14, "Ruby",             NULL,                      SOURCE_FILE, "application/x-ruby",         SCRIPT   );
-	FT_INIT( TCL,        15, "Tcl",              NULL,                      SOURCE_FILE, "text/x-tcl",                 SCRIPT   );
-	FT_INIT( LUA,        22, "Lua",              NULL,                      SOURCE_FILE, "text/x-lua",                 SCRIPT   );
-	FT_INIT( FERITE,     19, "Ferite",           NULL,                      SOURCE_FILE, NULL,                         SCRIPT   );
-	FT_INIT( HASKELL,    24, "Haskell",          NULL,                      SOURCE_FILE, "text/x-haskell",             COMPILED );
-	FT_INIT( MARKDOWN,   36, "Markdown",         NULL,                      SOURCE_FILE, "text/x-markdown",            MARKUP   );
-	FT_INIT( TXT2TAGS,   37, "Txt2tags",         NULL,                      SOURCE_FILE, "text/x-txt2tags",            MARKUP   );
-	FT_INIT( ABC,        38, "Abc",              NULL,                      FILE,        NULL,                         MISC     );
-	FT_INIT( SH,         16, "Sh",               _("Shell"),                SCRIPT,      "application/x-shellscript",  SCRIPT   );
-	FT_INIT( MAKE,        3, "Make",             _("Makefile"),             NONE,        "text/x-makefile",            SCRIPT   );
-	FT_INIT( XML,        -2, "XML",              NULL,                      DOCUMENT,    "application/xml",            MARKUP   );
-	FT_INIT( DOCBOOK,    12, "Docbook",          NULL,                      DOCUMENT,    "application/docbook+xml",    MARKUP   );
-	FT_INIT( HTML,       29, "HTML",             NULL,                      DOCUMENT,    "text/html",                  MARKUP   );
-	FT_INIT( CSS,        13, "CSS",              _("Cascading Stylesheet"), NONE,        "text/css",                   MARKUP   ); /* not really markup but fit quite well to HTML */
-	FT_INIT( SQL,        11, "SQL",              NULL,                      FILE,        "text/x-sql",                 MISC     );
-	FT_INIT( COBOL,      41, "COBOL",            NULL,                      SOURCE_FILE, "text/x-cobol",               COMPILED );
-	FT_INIT( LATEX,       8, "LaTeX",            NULL,                      SOURCE_FILE, "text/x-tex",                 MARKUP   );
-	FT_INIT( VHDL,       21, "VHDL",             NULL,                      SOURCE_FILE, "text/x-vhdl",                COMPILED );
-	FT_INIT( VERILOG,    39, "Verilog",          NULL,                      SOURCE_FILE, "text/x-verilog",             COMPILED );
-	FT_INIT( DIFF,       20, "Diff",             NULL,                      FILE,        "text/x-patch",               MISC     );
-	FT_INIT( LISP,       -2, "Lisp",             NULL,                      SOURCE_FILE, NULL,                         SCRIPT   );
-	FT_INIT( ERLANG,     -2, "Erlang",           NULL,                      SOURCE_FILE, "text/x-erlang",              COMPILED );
-	FT_INIT( CONF,       10, "Conf",             _("Config"),               FILE,        NULL,                         MISC     );
-	FT_INIT( PO,         -2, "Po",               _("Gettext translation"),  FILE,        "text/x-gettext-translation", MISC     );
-	FT_INIT( HAXE,       27, "Haxe",             NULL,                      SOURCE_FILE, NULL,                         COMPILED );
-	FT_INIT( AS,         34, "ActionScript",     NULL,                      SOURCE_FILE, "application/ecmascript",     SCRIPT   );
-	FT_INIT( R,          40, "R",                NULL,                      SOURCE_FILE, NULL,                         SCRIPT   );
-	FT_INIT( REST,       28, "reStructuredText", NULL,                      SOURCE_FILE, NULL,                         MARKUP   );
-	FT_INIT( MATLAB,     32, "Matlab/Octave",    NULL,                      SOURCE_FILE, "text/x-matlab",              SCRIPT   );
-	FT_INIT( YAML,       -2, "YAML",             NULL,                      FILE,        "application/x-yaml",         MISC     );
-	FT_INIT( CMAKE,      -2, "CMake",            NULL,                      SOURCE_FILE, "text/x-cmake",               SCRIPT   );
-	FT_INIT( NSIS,       35, "NSIS",             NULL,                      SOURCE_FILE, NULL,                         SCRIPT   );
-	FT_INIT( ADA,        -2, "Ada",              NULL,                      SOURCE_FILE, "text/x-adasrc",              COMPILED );
-	FT_INIT( FORTH,      -2, "Forth",            NULL,                      SOURCE_FILE, NULL,                         SCRIPT   );
-	FT_INIT( ASCIIDOC,   43, "Asciidoc",         NULL,                      SOURCE_FILE, NULL,                         MARKUP   );
-	FT_INIT( ABAQUS,     44, "Abaqus",           NULL,                      SOURCE_FILE, NULL,                         SCRIPT   );
-	FT_INIT( BATCH,      -2, "Batch",            NULL,                      SCRIPT,      NULL,                         SCRIPT   );
-	FT_INIT( POWERSHELL, -2, "PowerShell",       NULL,                      SOURCE_FILE, NULL,                         SCRIPT   );
-	FT_INIT( RUST,       45, "Rust",             NULL,                      SOURCE_FILE, "text/x-rustsrc",             COMPILED );
+	 *       [0]         [1]           [2]                 [3]                        [4]          [5]                           [6]      */
+	FT_INIT( NONE,       NONE,         "None",             _("None"),                 NONE,        NULL,                         NONE     );
+	FT_INIT( C,          C,            "C",                NULL,                      SOURCE_FILE, "text/x-csrc",                COMPILED );
+	FT_INIT( CPP,        CPP,          "C++",              NULL,                      SOURCE_FILE, "text/x-c++src",              COMPILED );
+	FT_INIT( OBJECTIVEC, OBJC,         "Objective-C",      NULL,                      SOURCE_FILE, "text/x-objc",                COMPILED );
+	FT_INIT( CS,         CSHARP,       "C#",               NULL,                      SOURCE_FILE, "text/x-csharp",              COMPILED );
+	FT_INIT( VALA,       VALA,         "Vala",             NULL,                      SOURCE_FILE, "text/x-vala",                COMPILED );
+	FT_INIT( D,          D,            "D",                NULL,                      SOURCE_FILE, "text/x-dsrc",                COMPILED );
+	FT_INIT( JAVA,       JAVA,         "Java",             NULL,                      SOURCE_FILE, "text/x-java",                COMPILED );
+	FT_INIT( PASCAL,     PASCAL,       "Pascal",           NULL,                      SOURCE_FILE, "text/x-pascal",              COMPILED );
+	FT_INIT( ASM,        ASM,          "ASM",              "Assembler",               SOURCE_FILE, NULL,                         COMPILED );
+	FT_INIT( BASIC,      FREEBASIC,    "FreeBasic",        NULL,                      SOURCE_FILE, NULL,                         COMPILED );
+	FT_INIT( FORTRAN,    FORTRAN,      "Fortran",          "Fortran (F90)",           SOURCE_FILE, "text/x-fortran",             COMPILED );
+	FT_INIT( F77,        F77,          "F77",              "Fortran (F77)",           SOURCE_FILE, "text/x-fortran",             COMPILED );
+	FT_INIT( GLSL,       GLSL,         "GLSL",             NULL,                      SOURCE_FILE, NULL,                         COMPILED );
+	FT_INIT( CAML,       NONE,         "CAML",             "(O)Caml",                 SOURCE_FILE, "text/x-ocaml",               COMPILED );
+	FT_INIT( PERL,       PERL,         "Perl",             NULL,                      SOURCE_FILE, "application/x-perl",         SCRIPT   );
+	FT_INIT( PHP,        PHP,          "PHP",              NULL,                      SOURCE_FILE, "application/x-php",          SCRIPT   );
+	FT_INIT( JS,         JAVASCRIPT,   "Javascript",       NULL,                      SOURCE_FILE, "application/javascript",     SCRIPT   );
+	FT_INIT( PYTHON,     PYTHON,       "Python",           NULL,                      SOURCE_FILE, "text/x-python",              SCRIPT   );
+	FT_INIT( RUBY,       RUBY,         "Ruby",             NULL,                      SOURCE_FILE, "application/x-ruby",         SCRIPT   );
+	FT_INIT( TCL,        TCL,          "Tcl",              NULL,                      SOURCE_FILE, "text/x-tcl",                 SCRIPT   );
+	FT_INIT( LUA,        LUA,          "Lua",              NULL,                      SOURCE_FILE, "text/x-lua",                 SCRIPT   );
+	FT_INIT( FERITE,     FERITE,       "Ferite",           NULL,                      SOURCE_FILE, NULL,                         SCRIPT   );
+	FT_INIT( HASKELL,    HASKELL,      "Haskell",          NULL,                      SOURCE_FILE, "text/x-haskell",             COMPILED );
+	FT_INIT( MARKDOWN,   MARKDOWN,     "Markdown",         NULL,                      SOURCE_FILE, "text/x-markdown",            MARKUP   );
+	FT_INIT( TXT2TAGS,   TXT2TAGS,     "Txt2tags",         NULL,                      SOURCE_FILE, "text/x-txt2tags",            MARKUP   );
+	FT_INIT( ABC,        ABC,          "Abc",              NULL,                      FILE,        NULL,                         MISC     );
+	FT_INIT( SH,         SH,           "Sh",               _("Shell"),                SCRIPT,      "application/x-shellscript",  SCRIPT   );
+	FT_INIT( MAKE,       MAKEFILE,     "Make",             _("Makefile"),             NONE,        "text/x-makefile",            SCRIPT   );
+	FT_INIT( XML,        NONE,         "XML",              NULL,                      DOCUMENT,    "application/xml",            MARKUP   );
+	FT_INIT( DOCBOOK,    DOCBOOK,      "Docbook",          NULL,                      DOCUMENT,    "application/docbook+xml",    MARKUP   );
+	FT_INIT( HTML,       HTML,         "HTML",             NULL,                      DOCUMENT,    "text/html",                  MARKUP   );
+	FT_INIT( CSS,        CSS,          "CSS",              _("Cascading Stylesheet"), NONE,        "text/css",                   MARKUP   ); /* not really markup but fit quite well to HTML */
+	FT_INIT( SQL,        SQL,          "SQL",              NULL,                      FILE,        "text/x-sql",                 MISC     );
+	FT_INIT( COBOL,      COBOL,        "COBOL",            NULL,                      SOURCE_FILE, "text/x-cobol",               COMPILED );
+	FT_INIT( LATEX,      LATEX,        "LaTeX",            NULL,                      SOURCE_FILE, "text/x-tex",                 MARKUP   );
+	FT_INIT( VHDL,       VHDL,         "VHDL",             NULL,                      SOURCE_FILE, "text/x-vhdl",                COMPILED );
+	FT_INIT( VERILOG,    VERILOG,      "Verilog",          NULL,                      SOURCE_FILE, "text/x-verilog",             COMPILED );
+	FT_INIT( DIFF,       DIFF,         "Diff",             NULL,                      FILE,        "text/x-patch",               MISC     );
+	FT_INIT( LISP,       NONE,         "Lisp",             NULL,                      SOURCE_FILE, NULL,                         SCRIPT   );
+	FT_INIT( ERLANG,     NONE,         "Erlang",           NULL,                      SOURCE_FILE, "text/x-erlang",              COMPILED );
+	FT_INIT( CONF,       CONF,         "Conf",             _("Config"),               FILE,        NULL,                         MISC     );
+	FT_INIT( PO,         NONE,         "Po",               _("Gettext translation"),  FILE,        "text/x-gettext-translation", MISC     );
+	FT_INIT( HAXE,       HAXE,         "Haxe",             NULL,                      SOURCE_FILE, NULL,                         COMPILED );
+	FT_INIT( AS,         ACTIONSCRIPT, "ActionScript",     NULL,                      SOURCE_FILE, "application/ecmascript",     SCRIPT   );
+	FT_INIT( R,          R,            "R",                NULL,                      SOURCE_FILE, NULL,                         SCRIPT   );
+	FT_INIT( REST,       REST,         "reStructuredText", NULL,                      SOURCE_FILE, NULL,                         MARKUP   );
+	FT_INIT( MATLAB,     MATLAB,       "Matlab/Octave",    NULL,                      SOURCE_FILE, "text/x-matlab",              SCRIPT   );
+	FT_INIT( YAML,       NONE,         "YAML",             NULL,                      FILE,        "application/x-yaml",         MISC     );
+	FT_INIT( CMAKE,      NONE,         "CMake",            NULL,                      SOURCE_FILE, "text/x-cmake",               SCRIPT   );
+	FT_INIT( NSIS,       NSIS,         "NSIS",             NULL,                      SOURCE_FILE, NULL,                         SCRIPT   );
+	FT_INIT( ADA,        NONE,         "Ada",              NULL,                      SOURCE_FILE, "text/x-adasrc",              COMPILED );
+	FT_INIT( FORTH,      NONE,         "Forth",            NULL,                      SOURCE_FILE, NULL,                         SCRIPT   );
+	FT_INIT( ASCIIDOC,   ASCIIDOC,     "Asciidoc",         NULL,                      SOURCE_FILE, NULL,                         MARKUP   );
+	FT_INIT( ABAQUS,     ABAQUS,       "Abaqus",           NULL,                      SOURCE_FILE, NULL,                         SCRIPT   );
+	FT_INIT( BATCH,      NONE,         "Batch",            NULL,                      SCRIPT,      NULL,                         SCRIPT   );
+	FT_INIT( POWERSHELL, NONE,         "PowerShell",       NULL,                      SOURCE_FILE, NULL,                         SCRIPT   );
+	FT_INIT( RUST,       RUST,         "Rust",             NULL,                      SOURCE_FILE, "text/x-rustsrc",             COMPILED );
 }
 
 

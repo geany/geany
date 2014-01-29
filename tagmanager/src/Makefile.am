@@ -14,6 +14,7 @@ noinst_LIBRARIES = libtagmanager.a
 tagmanager_includedir = $(includedir)/geany/tagmanager
 tagmanager_include_HEADERS = \
 	tm_file_entry.h \
+	tm_parser.h \
 	tm_project.h \
 	tm_source_file.h \
 	tm_symbol.h \

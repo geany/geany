@@ -402,8 +402,7 @@ update the ``[Groups]`` section in ``filetype_extensions.conf``.
 
 * Add GEANY_FILETYPES_FOO to filetypes.h.
 * Initialize GEANY_FILETYPES_FOO in init_builtin_filetypes() of
-  filetypes.c. You should use filetype_make_title() to avoid a
-  translation whenever possible.
+  filetypes.c.
 * Update data/filetype_extensions.conf.
 
 The remaining notes relate mostly to built-in filetypes.
@@ -527,14 +526,16 @@ Method
 * Add foo.c to SRCS in Makefile.am.
 * Add foo.o to OBJS in makefile.win32.
 * Add path/foo.c to geany_sources in wscript.
-* Add Foo to parsers.h & fill in comment with parser number for foo.
+* Add Foo to parsers.h
+* Add TM_PARSER_FOO to tagmanager/src/tm_parser.h.  The list here must follow
+  exactly the order in parsers.h.
 
 In foo.c:
 Edit FooKinds 3rd column to match a s_tag_type_names string in tm_tag.c.
 (You may want to make the symbols.c change before doing this).
 
 In filetypes.c, init_builtin_filetypes():
-Set filetypes[GEANY_FILETYPES_FOO].lang = foo's parser number.
+Set the 2nd argument of the FT_INIT() macro for this filetype to FOO.
 
 In symbols.c:
 Unless your parser uses C-like tag type kinds, update

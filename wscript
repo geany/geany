@@ -514,7 +514,7 @@ def build(bld):
             scintilla/include/Scintilla.iface scintilla/include/ScintillaWidget.h ''')
         bld.install_files('${PREFIX}/include/geany/tagmanager', '''
             tagmanager/src/tm_file_entry.h tagmanager/src/tm_project.h
-            tagmanager/src/tm_source_file.h
+            tagmanager/src/tm_source_file.h tagmanager/src/tm_parser.h
             tagmanager/src/tm_symbol.h tagmanager/src/tm_tag.h
             tagmanager/src/tm_tagmanager.h tagmanager/src/tm_work_object.h
             tagmanager/src/tm_workspace.h ''')
