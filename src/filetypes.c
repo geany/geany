@@ -61,6 +61,8 @@ static GHashTable *filetypes_hash = NULL;	/* Hash of filetype pointers based on 
  * @see filetypes_get_sorted_by_name(). */
 GSList *filetypes_by_title = NULL;
 
+static GtkWidget *group_menus[GEANY_FILETYPE_GROUP_COUNT] = {NULL};
+
 
 static void create_radio_menu_item(GtkWidget *menu, GeanyFiletype *ftype);
 
@@ -391,9 +393,7 @@ static void setup_config_file_menus(void)
 }
 
 
-static GtkWidget *group_menus[GEANY_FILETYPE_GROUP_COUNT] = {NULL};
-
-static void create_sub_menu(GtkWidget *parent, gsize group_id, const gchar *title)
+static void create_sub_menu(GtkWidget *parent, GeanyFiletypeGroupID group_id, const gchar *title)
 {
 	GtkWidget *menu, *item;
 
@@ -1359,7 +1359,7 @@ static void read_extensions(GKeyFile *sysconfig, GKeyFile *userconfig)
 }
 
 
-static void read_group(GKeyFile *config, const gchar *group_name, gint group_id)
+static void read_group(GKeyFile *config, const gchar *group_name, GeanyFiletypeGroupID group_id)
 {
 	gchar **names = g_key_file_get_string_list(config, "Groups", group_name, NULL, NULL);
 	gchar **name;
