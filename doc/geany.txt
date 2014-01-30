@@ -2558,6 +2558,8 @@ statusbar_template                The status bar statistics line format.       S
                                   (See `Statusbar Templates`_ for details).
 new_document_after_close          Whether to open a new document after all     false       immediately
                                   documents have been closed.
+max_notebook_tab_width            The maximum width of the notebook tabs       30          on restart
+                                  before the label texts are ellipsized.
 msgwin_status_visible             Whether to show the Status tab in the        true        immediately
                                   Messages Window
 msgwin_compiler_visible           Whether to show the Compiler tab in the      true        immediately
