@@ -691,6 +691,13 @@ static void cc_show_dialog_custom_commands(void)
 	gtk_widget_destroy(dialog);
 }
 
+void cc_show_dialog_run_custom_command(GeanyDocument *doc)
+{
+	gchar *command;
+	command = dialogs_show_input(_("Send Selection to Command"),
+		GTK_WINDOW(main_widgets.window), _("Command:"), NULL);
+	tools_execute_custom_command(doc, command);
+}
 
 static void cc_on_custom_command_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
@@ -704,7 +711,14 @@ static void cc_on_custom_command_activate(GtkMenuItem *menuitem, gpointer user_d
 	if (ui_prefs.custom_commands == NULL ||
 		command_idx < 0 || command_idx > (gint) g_strv_length(ui_prefs.custom_commands))
 	{
-		cc_show_dialog_custom_commands();
+		if (command_idx == -2)
+		{
+			cc_show_dialog_run_custom_command(doc);
+		}
+		else
+		{
+			cc_show_dialog_custom_commands();
+		}
 		return;
 	}
 
@@ -722,6 +736,7 @@ static void cc_insert_custom_command_items(GtkMenu *me, const gchar *label, cons
 
 	switch (idx)
 	{
+		case -2: key_idx = GEANY_KEYS_FORMAT_SENDTOCMD; break;
 		case 0: key_idx = GEANY_KEYS_FORMAT_SENDTOCMD1; break;
 		case 1: key_idx = GEANY_KEYS_FORMAT_SENDTOCMD2; break;
 		case 2: key_idx = GEANY_KEYS_FORMAT_SENDTOCMD3; break;
@@ -788,6 +803,7 @@ void tools_create_insert_custom_command_menu_items(void)
 	gtk_container_add(GTK_CONTAINER(menu_edit), item);
 	gtk_widget_show(item);
 
+	cc_insert_custom_command_items(menu_edit, _("Custom Command"), NULL, -2);
 	cc_insert_custom_command_items(menu_edit, _("Set Custom Commands"), NULL, -1);
 }
 

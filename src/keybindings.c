@@ -391,6 +391,8 @@ static void init_default_kb(void)
 		0, 0, "edit_decreaseindentbyspace", _("Decrease indent by one space"), NULL);
 	add_kb(group, GEANY_KEYS_FORMAT_AUTOINDENT, NULL,
 		0, 0, "edit_autoindent", _("_Smart Line Indent"), "smart_line_indent1");
+	add_kb(group, GEANY_KEYS_FORMAT_SENDTOCMD, NULL,
+		0, 0, "edit_sendtocmd", _("Send to Custom Command"), NULL);
 	add_kb(group, GEANY_KEYS_FORMAT_SENDTOCMD1, NULL,
 		GDK_1, GDK_CONTROL_MASK, "edit_sendtocmd1", _("Send to Custom Command 1"), NULL);
 	add_kb(group, GEANY_KEYS_FORMAT_SENDTOCMD2, NULL,
@@ -2341,6 +2343,9 @@ static gboolean cb_func_format_action(guint key_id)
 			break;
 		case GEANY_KEYS_FORMAT_TOGGLECASE:
 			on_toggle_case1_activate(NULL, NULL);
+			break;
+		case GEANY_KEYS_FORMAT_SENDTOCMD:
+			cc_show_dialog_run_custom_command(doc);
 			break;
 		case GEANY_KEYS_FORMAT_SENDTOCMD1:
 			if (ui_prefs.custom_commands && g_strv_length(ui_prefs.custom_commands) > 0)
