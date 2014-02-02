@@ -5469,7 +5469,7 @@ msgstr "_Reemplazar caracteres especiales"
 
 #: ../plugins/htmlchars.c:770
 msgid "_Replace Characters in Selection"
-msgstr "_Duplicar línea o selección"
+msgstr "R_eemplazar caracteres en selección"
 
 #: ../plugins/htmlchars.c:785
 msgid "Insert Special HTML Characters"
