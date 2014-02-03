@@ -1058,6 +1058,7 @@ gboolean win32_spawn(const gchar *dir, gchar **argv, gchar **env, GSpawnFlags fl
 		locale_command = g_strdup(command);
 	geany_debug("WIN32: actually running command:\n%s", command);
 	g_chdir(dir);
+	errno = 0;
 	ret = system(locale_command);
 	/* the command can return -1 as an exit code, so check errno also */
 	fail = ret == -1 && errno;
