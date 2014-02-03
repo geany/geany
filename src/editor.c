@@ -4349,6 +4349,7 @@ void editor_replace_spaces(GeanyEditor *editor)
 	gint search_pos;
 	static gdouble tab_len_f = -1.0; /* keep the last used value */
 	gint tab_len;
+	gchar *text;
 	struct Sci_TextToFind ttf;
 
 	g_return_if_fail(editor != NULL);
@@ -4364,11 +4365,12 @@ void editor_replace_spaces(GeanyEditor *editor)
 		return;
 	}
 	tab_len = (gint) tab_len_f;
+	text = g_strnfill(tab_len, ' ');
 
 	sci_start_undo_action(editor->sci);
 	ttf.chrg.cpMin = 0;
 	ttf.chrg.cpMax = sci_get_length(editor->sci);
-	ttf.lpstrText = g_strnfill(tab_len, ' ');
+	ttf.lpstrText = text;
 
 	while (TRUE)
 	{
@@ -4390,7 +4392,7 @@ void editor_replace_spaces(GeanyEditor *editor)
 		ttf.chrg.cpMax -= tab_len - 1;
 	}
 	sci_end_undo_action(editor->sci);
-	g_free(ttf.lpstrText);
+	g_free(text);
 }
 
 
