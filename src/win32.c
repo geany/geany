@@ -1052,6 +1052,7 @@ gboolean win32_spawn(const gchar *dir, gchar **argv, gchar **env, GSpawnFlags fl
 	command = g_strjoinv(" ", argv);
 	SETPTR(command, g_strdup_printf("cmd.exe /S /C \"%s >%s 2>%s\"",
 		command, tmp_file, tmp_errfile));
+	geany_debug("WIN32: actually running command:\n%s", command);
 	g_chdir(dir);
 	ret = system(command);
 	/* the command can return -1 as an exit code, so check errno also */
