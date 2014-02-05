@@ -5937,6 +5937,20 @@
                               </packing>
                             </child>
                             <child>
+                              <object class="GtkLabel" id="terminal_cursor_shape_label">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="xalign">0</property>
+                                <property name="label" translatable="yes">Cursor shape:</property>
+                              </object>
+                              <packing>
+                                <property name="top_attach">6</property>
+                                <property name="bottom_attach">7</property>
+                                <property name="x_options">GTK_FILL</property>
+                                <property name="y_options">GTK_FILL</property>
+                              </packing>
+                            </child>
+                            <child>
                               <object class="GtkColorButton" id="color_fore">
                                 <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
@@ -6076,6 +6090,28 @@
                                 <property name="right_attach">3</property>
                                 <property name="top_attach">5</property>
                                 <property name="bottom_attach">6</property>
+                                <property name="x_options">GTK_FILL</property>
+                                <property name="y_options">GTK_FILL</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkComboBox" id="combo_cursor_shape">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="tooltip_text" translatable="yes">Sets the cursor shape of the terminal widget</property>
+                                <property name="model">vte_cursor_shape_list</property>
+                                <child>
+                                  <object class="GtkCellRendererText" id="cellrenderertext8"/>
+                                  <attributes>
+                                    <attribute name="text">0</attribute>
+                                  </attributes>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="left_attach">1</property>
+                                <property name="right_attach">3</property>
+                                <property name="top_attach">6</property>
+                                <property name="bottom_attach">7</property>
                                 <property name="x_options">GTK_FILL</property>
                                 <property name="y_options">GTK_FILL</property>
                               </packing>
@@ -7864,6 +7900,23 @@
       </row>
       <row>
         <col id="0" translatable="yes">Bottom</col>
+      </row>
+    </data>
+  </object>
+  <object class="GtkListStore" id="vte_cursor_shape_list">
+    <columns>
+      <!-- column-name item -->
+      <column type="gchararray"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0" translatable="yes">Block</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">I-Beam</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Underline</col>
       </row>
     </data>
   </object>
