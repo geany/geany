@@ -1167,11 +1167,11 @@ msgid "Removes trailing spaces and tabs and the end of lines"
 msgstr "Tar bort överflödiga mellanslag och tab-tecken i slutet av filen"
 
 #: ../data/geany.glade.h:243 ../src/keybindings.c:569
-msgid "Replace tabs by space"
+msgid "Replace tabs with space"
 msgstr "Ersätt tab-tecken med mellanslag"
 
 #: ../data/geany.glade.h:244
-msgid "Replaces all tabs in document by spaces"
+msgid "Replaces all tabs in document with spaces"
 msgstr ""
 "Ersätter alla tab-tecken i dokumentet med mellanslag (indraget blir lika "
 "stort)."
@@ -1988,11 +1988,11 @@ msgid "_Strip Trailing Spaces"
 msgstr "Ta bort _överflödiga mellanslag"
 
 #: ../data/geany.glade.h:434
-msgid "_Replace Tabs by Spaces"
+msgid "_Replace Tabs with Spaces"
 msgstr "Ersätt tab med mellanslag"
 
 #: ../data/geany.glade.h:435
-msgid "Replace Spaces b_y Tabs"
+msgid "Replace Spaces with _Tabs"
 msgstr "Ersätt mellanslag med tab"
 
 #: ../data/geany.glade.h:436
@@ -3607,7 +3607,7 @@ msgid "Toggle Line breaking"
 msgstr "Justera radbrytning (line-break)"
 
 #: ../src/keybindings.c:571
-msgid "Replace spaces by tabs"
+msgid "Replace spaces with tabs"
 msgstr "Ersätt mellanslag med tab-tecken"
 
 #: ../src/keybindings.c:573
@@ -6185,7 +6185,7 @@ msgstr "Dela vertikalt"
 #~ msgid "Treat this file as read-only. No changes can be made."
 #~ msgstr "Behandla denna fil som skrivskyddad. Inga ändringar kan sparas."
 
-#~ msgid "Replaces all spaces in the document by tab characters."
+#~ msgid "Replaces all spaces in the document with tab characters."
 #~ msgstr ""
 #~ "Ersätter alla mellanslag i dokumentet med tab-tecken (indraget blir lika "
 #~ "stort)."

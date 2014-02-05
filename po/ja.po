@@ -1155,11 +1155,11 @@ msgid "Removes trailing spaces and tabs and the end of lines"
 msgstr "行末の空白やタブを除去します"
 
 #: ../data/geany.glade.h:243 ../src/keybindings.c:569
-msgid "Replace tabs by space"
+msgid "Replace tabs with space"
 msgstr "タブを空白に置換"
 
 #: ../data/geany.glade.h:244
-msgid "Replaces all tabs in document by spaces"
+msgid "Replaces all tabs in document with spaces"
 msgstr "文書のすべてのタブを空白で置換します"
 
 #: ../data/geany.glade.h:245
@@ -1975,11 +1975,11 @@ msgid "_Strip Trailing Spaces"
 msgstr "末尾の空白を除去(_S)"
 
 #: ../data/geany.glade.h:434
-msgid "_Replace Tabs by Spaces"
+msgid "_Replace Tabs with Spaces"
 msgstr "タブを空白で置換(_R)"
 
 #: ../data/geany.glade.h:435
-msgid "Replace Spaces b_y Tabs"
+msgid "Replace Spaces with _Tabs"
 msgstr "空白をタブで置換(_Y)"
 
 #: ../data/geany.glade.h:436
@@ -3590,7 +3590,7 @@ msgid "Toggle Line breaking"
 msgstr "自動改行"
 
 #: ../src/keybindings.c:571
-msgid "Replace spaces by tabs"
+msgid "Replace spaces with tabs"
 msgstr "タブを空白で置換"
 
 #: ../src/keybindings.c:573
@@ -6143,7 +6143,7 @@ msgstr "上下に分割"
 #~ msgid "Treat this file as read-only. No changes can be made."
 #~ msgstr "このファイルを読み取り専用として扱います。変更ができなくなります"
 
-#~ msgid "Replaces all spaces in the document by tab characters."
+#~ msgid "Replaces all spaces in the document with tab characters."
 #~ msgstr "文書中のすべての空白をタブで置換します"
 
 #~ msgid "Folds all contractible code blocks"

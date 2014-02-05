@@ -1016,11 +1016,11 @@ msgstr "Elimina espazos e tabulacións ao final dos ficheiros"
 
 #: ../data/geany.glade.h:243
 #: ../src/keybindings.c:569
-msgid "Replace tabs by space"
+msgid "Replace tabs with space"
 msgstr "Substituír tabulacións por espazos"
 
 #: ../data/geany.glade.h:244
-msgid "Replaces all tabs in document by spaces"
+msgid "Replaces all tabs in document with spaces"
 msgstr "Substitúe todas as tabulacións no documento por espazos"
 
 #: ../data/geany.glade.h:245
@@ -1819,11 +1819,11 @@ msgid "_Strip Trailing Spaces"
 msgstr "Quitar e_spazos do final"
 
 #: ../data/geany.glade.h:434
-msgid "_Replace Tabs by Spaces"
+msgid "_Replace Tabs with Spaces"
 msgstr "Substituí_r tabulacións por espazos"
 
 #: ../data/geany.glade.h:435
-msgid "Replace Spaces b_y Tabs"
+msgid "Replace Spaces with _Tabs"
 msgstr "Substituír espazos por _tabulacións"
 
 #: ../data/geany.glade.h:436
@@ -3494,7 +3494,7 @@ msgid "Toggle Line breaking"
 msgstr "Des/Activar a rotura de liñas"
 
 #: ../src/keybindings.c:571
-msgid "Replace spaces by tabs"
+msgid "Replace spaces with tabs"
 msgstr "Substituír espazos por tabulacións"
 
 #: ../src/keybindings.c:573

@@ -1052,16 +1052,16 @@ msgid "Removes trailing spaces and tabs and the end of lines"
 msgstr "Dosyaların sonundaki boşluk, sekme ve diğer satır sonu karakterlerini temizler"
 
 #: ../data/geany.glade.h:250
-msgid "Replace Spaces b_y Tabs"
+msgid "Replace Spaces with _Tabs"
 msgstr "Boşlukları Sekme _Yap"
 
 #: ../data/geany.glade.h:251
 #: ../src/keybindings.c:569
-msgid "Replace tabs by space"
+msgid "Replace tabs with space"
 msgstr "Sekmeleri boşluklara dönüştür"
 
 #: ../data/geany.glade.h:252
-msgid "Replaces all tabs in document by spaces"
+msgid "Replaces all tabs in document with spaces"
 msgstr "Dökümandaki bütün sekme karakterlerini boşluklara dönüştürür"
 
 #: ../data/geany.glade.h:253
@@ -1857,7 +1857,7 @@ msgid "_Replace"
 msgstr "Değişti_r"
 
 #: ../data/geany.glade.h:444
-msgid "_Replace Tabs by Spaces"
+msgid "_Replace Tabs with Spaces"
 msgstr "S_ekmeleri Boşluk Yap"
 
 #: ../data/geany.glade.h:445
@@ -3493,7 +3493,7 @@ msgid "Toggle Line breaking"
 msgstr "Satır kesmeyi aç/kapat"
 
 #: ../src/keybindings.c:571
-msgid "Replace spaces by tabs"
+msgid "Replace spaces with tabs"
 msgstr "Boşlukları sekmeye çevir"
 
 #: ../src/keybindings.c:573
@@ -5933,7 +5933,7 @@ msgstr "Dikey olarak böl"
 #~ msgstr "Araç çubuğunu kapatır/açar"
 #~ msgid "Treat this file as read-only. No changes can be made."
 #~ msgstr "Bu dosyaya salt okunur olarak davran, hiçbir değişiklik yapılmasın."
-#~ msgid "Replaces all spaces in the document by tab characters."
+#~ msgid "Replaces all spaces in the document with tab characters."
 #~ msgstr "Dökümandaki bütün boşluk karakterlerini sekmelere dönüştürür."
 #~ msgid "Folds all contractible code blocks"
 #~ msgstr "Bütün daraltılabilir kod bloklarını katlar"

@@ -1142,15 +1142,15 @@ msgid "Removes trailing spaces and tabs and the end of lines"
 msgstr "Borra los espacios y tabulaciones al final de las líneas"
 
 #: ../data/geany.glade.h:250
-msgid "Replace Spaces b_y Tabs"
+msgid "Replace Spaces with _Tabs"
 msgstr "Reemplazar _espacios por tabulaciones"
 
 #: ../data/geany.glade.h:251 ../src/keybindings.c:569
-msgid "Replace tabs by space"
+msgid "Replace tabs with space"
 msgstr "Reemplazar tabulaciones por espacios"
 
 #: ../data/geany.glade.h:252
-msgid "Replaces all tabs in document by spaces"
+msgid "Replaces all tabs in document with spaces"
 msgstr "Reemplaza todas las tabulaciones en el documento por espacios"
 
 #: ../data/geany.glade.h:253
@@ -2078,7 +2078,7 @@ msgid "_Replace"
 msgstr "_Reemplazar"
 
 #: ../data/geany.glade.h:444
-msgid "_Replace Tabs by Spaces"
+msgid "_Replace Tabs with Spaces"
 msgstr "_Reemplazar tabulaciones por espacios"
 
 #: ../data/geany.glade.h:445
@@ -3669,7 +3669,7 @@ msgid "Toggle Line breaking"
 msgstr "Activar/desactivar salto de línea"
 
 #: ../src/keybindings.c:571
-msgid "Replace spaces by tabs"
+msgid "Replace spaces with tabs"
 msgstr "Reemplazar espacios por tabulaciones"
 
 #: ../src/keybindings.c:573

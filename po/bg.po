@@ -1271,12 +1271,12 @@ msgid "Removes trailing spaces and tabs and the end of lines"
 msgstr "Премахва табулациите, интервалите в края на реда"
 
 #: ../data/geany.glade.h:243 ../src/keybindings.c:569
-msgid "Replace tabs by space"
+msgid "Replace tabs with space"
 msgstr "Замени табулацията с интервали"
 
 #: ../data/geany.glade.h:244
 #, fuzzy
-msgid "Replaces all tabs in document by spaces"
+msgid "Replaces all tabs in document with spaces"
 msgstr "Заменя всички табулации в документа с интервали"
 
 #: ../data/geany.glade.h:245
@@ -2181,12 +2181,12 @@ msgid "_Strip Trailing Spaces"
 msgstr "Махни излишните символи на края"
 
 #: ../data/geany.glade.h:434
-msgid "_Replace Tabs by Spaces"
+msgid "_Replace Tabs with Spaces"
 msgstr "_Замени табулациите с интервали"
 
 #: ../data/geany.glade.h:435
 #, fuzzy
-msgid "Replace Spaces b_y Tabs"
+msgid "Replace Spaces with _Tabs"
 msgstr "_Замени табулациите с интервали"
 
 #: ../data/geany.glade.h:436
@@ -3892,7 +3892,7 @@ msgstr "Об_ърни коментирането на реда"
 
 #: ../src/keybindings.c:571
 #, fuzzy
-msgid "Replace spaces by tabs"
+msgid "Replace spaces with tabs"
 msgstr "_Замени табулациите с интервали"
 
 #: ../src/keybindings.c:573
@@ -6609,7 +6609,7 @@ msgstr ""
 #~ "промени."
 
 #, fuzzy
-#~ msgid "Replaces all spaces in the document by tab characters."
+#~ msgid "Replaces all spaces in the document with tab characters."
 #~ msgstr "Заменя всички табулации в документа с интервали"
 
 #~ msgid "Folds all contractible code blocks"

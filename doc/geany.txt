@@ -2359,7 +2359,7 @@ Strip trailing spaces
     .. note::
         This does not apply to Diff documents, e.g. patch files.
 
-Replace tabs by space
+Replace tabs with spaces
     Replace all tabs in the document with the equivalent number of spaces.
 
     .. note::
@@ -3467,7 +3467,7 @@ Toggle line commentation        Ctrl-E                    Comments a line if it 
                                                           a comment if the line is commented.
 
 Increase indent                 Ctrl-I                    Indents the current line or selection by one tab
-                                                          or by spaces in the amount of the tab width
+                                                          or with spaces in the amount of the tab width
                                                           setting.
 
 Decrease indent                 Ctrl-U                    Removes one tab or the amount of spaces of
@@ -3701,9 +3701,9 @@ Action                               Default shortcut     Description
 ==================================== ==================== ==================================================
 Clone                                                     See `Cloning documents`_.
 
-Replace tabs by space                                     Replaces all tabs with the right amount of spaces.
+Replace tabs with space                                   Replaces all tabs with the right amount of spaces.
 
-Replace spaces by tabs                                    Replaces leading spaces with tab characters.
+Replace spaces with tabs                                  Replaces leading spaces with tab characters.
 
 Toggle current fold                                       Toggles the folding state of the current code block.
 

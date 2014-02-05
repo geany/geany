@@ -1153,15 +1153,15 @@ msgid "Removes trailing spaces and tabs and the end of lines"
 msgstr "מסיר רווחים והזחות הנמצאים בסופי שורות"
 
 #: ../data/geany.glade.h:264
-msgid "Replace Spaces b_y Tabs..."
+msgid "Replace Spaces with _Tabs..."
 msgstr "החלפת רווחים בטא_בים..."
 
 #: ../data/geany.glade.h:265 ../src/keybindings.c:570
-msgid "Replace tabs by space"
+msgid "Replace tabs with space"
 msgstr "החלפת טאבים ברווחים"
 
 #: ../data/geany.glade.h:266
-msgid "Replaces all tabs in document by spaces"
+msgid "Replaces all tabs in document with spaces"
 msgstr "החלפת כל הטאבים במסמך ברווחים"
 
 #: ../data/geany.glade.h:267
@@ -2046,7 +2046,7 @@ msgid "_Reload Configuration"
 msgstr "רענון תצו_רה"
 
 #: ../data/geany.glade.h:461
-msgid "_Replace Tabs by Spaces"
+msgid "_Replace Tabs with Spaces"
 msgstr "החלפת _טאבים ברווחים"
 
 #: ../data/geany.glade.h:462
@@ -3543,7 +3543,7 @@ msgid "Toggle Line breaking"
 msgstr "ביטול/אפשור שבירת שורות"
 
 #: ../src/keybindings.c:572
-msgid "Replace spaces by tabs"
+msgid "Replace spaces with tabs"
 msgstr "החלפת רווחים בטאבים"
 
 #: ../src/keybindings.c:574

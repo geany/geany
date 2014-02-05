@@ -1054,16 +1054,16 @@ msgid "Removes trailing spaces and tabs and the end of lines"
 msgstr "Elimina els espais i tabulacions sobrants a final de línia"
 
 #: ../data/geany.glade.h:250
-msgid "Replace Spaces b_y Tabs"
+msgid "Replace Spaces with _Tabs"
 msgstr "Ree_mplaça Espais per Tabulacions"
 
 #: ../data/geany.glade.h:251
 #: ../src/keybindings.c:569
-msgid "Replace tabs by space"
+msgid "Replace tabs with space"
 msgstr "Reemplaça tabulacions per espais"
 
 #: ../data/geany.glade.h:252
-msgid "Replaces all tabs in document by spaces"
+msgid "Replaces all tabs in document with spaces"
 msgstr "Reemplaça totes les tabulacions al document per espais"
 
 #: ../data/geany.glade.h:253
@@ -1859,7 +1859,7 @@ msgid "_Replace"
 msgstr "_Reemplaça"
 
 #: ../data/geany.glade.h:444
-msgid "_Replace Tabs by Spaces"
+msgid "_Replace Tabs with Spaces"
 msgstr "_Reemplaça Tabulacions per Espais"
 
 #: ../data/geany.glade.h:445
@@ -3495,7 +3495,7 @@ msgid "Toggle Line breaking"
 msgstr "Activa o desactiva el Trencament de línia"
 
 #: ../src/keybindings.c:571
-msgid "Replace spaces by tabs"
+msgid "Replace spaces with tabs"
 msgstr "Reemplaça espais per tabulacions"
 
 #: ../src/keybindings.c:573
@@ -6090,7 +6090,7 @@ msgstr "Divideix Verticalment"
 #~ msgid "Treat this file as read-only. No changes can be made."
 #~ msgstr "Tracta el fitxer com a només lectura. No es podran fer canvis."
 
-#~ msgid "Replaces all spaces in the document by tab characters."
+#~ msgid "Replaces all spaces in the document with tab characters."
 #~ msgstr "Reemplaça tots els espais al document per tabulacions."
 
 #~ msgid "Folds all contractible code blocks"

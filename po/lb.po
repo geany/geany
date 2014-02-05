@@ -1219,11 +1219,11 @@ msgid "Removes trailing spaces and tabs and the end of lines"
 msgstr "Läscht Ofstänn an Tabulatoren um Enn vun enger Zeil"
 
 #: ../data/geany.glade.h:243 ../src/keybindings.c:569
-msgid "Replace tabs by space"
+msgid "Replace tabs with space"
 msgstr "Tabs duerch Espacen ersetzen"
 
 #: ../data/geany.glade.h:244
-msgid "Replaces all tabs in document by spaces"
+msgid "Replaces all tabs in document with spaces"
 msgstr "All Tabs am Dokument duerch Espacen ersetzen"
 
 #: ../data/geany.glade.h:245
@@ -2087,11 +2087,11 @@ msgid "_Strip Trailing Spaces"
 msgstr "Of_stänn um Zeilenenn läschen"
 
 #: ../data/geany.glade.h:434
-msgid "_Replace Tabs by Spaces"
+msgid "_Replace Tabs with Spaces"
 msgstr "Tabulatoren duerch Ofstänn e_rsetzen"
 
 #: ../data/geany.glade.h:435
-msgid "Replace Spaces b_y Tabs"
+msgid "Replace Spaces with _Tabs"
 msgstr "_Ofstänn duerch Tabulatoren ersetzen"
 
 #: ../data/geany.glade.h:436
@@ -3742,7 +3742,7 @@ msgid "Toggle Line breaking"
 msgstr "Automateschen Zeilenembroch emschalten"
 
 #: ../src/keybindings.c:571
-msgid "Replace spaces by tabs"
+msgid "Replace spaces with tabs"
 msgstr "Ofstänn duerch Tabulatoren ersetzen"
 
 #: ../src/keybindings.c:573

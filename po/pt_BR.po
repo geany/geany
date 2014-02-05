@@ -1055,16 +1055,16 @@ msgid "Removes trailing spaces and tabs and the end of lines"
 msgstr "Remove espaços e tabulações e finais de linha"
 
 #: ../data/geany.glade.h:250
-msgid "Replace Spaces b_y Tabs"
+msgid "Replace Spaces with _Tabs"
 msgstr "Substituir Es_paços por Tabs"
 
 #: ../data/geany.glade.h:251
 #: ../src/keybindings.c:569
-msgid "Replace tabs by space"
+msgid "Replace tabs with space"
 msgstr "Substituir tabs por espaços"
 
 #: ../data/geany.glade.h:252
-msgid "Replaces all tabs in document by spaces"
+msgid "Replaces all tabs in document with spaces"
 msgstr "Substitui todas as tabulações no documento por espaços"
 
 #: ../data/geany.glade.h:253
@@ -1860,7 +1860,7 @@ msgid "_Replace"
 msgstr "Substitui_r"
 
 #: ../data/geany.glade.h:444
-msgid "_Replace Tabs by Spaces"
+msgid "_Replace Tabs with Spaces"
 msgstr "_Substituir Tabs por Espaços"
 
 #: ../data/geany.glade.h:445
@@ -3496,7 +3496,7 @@ msgid "Toggle Line breaking"
 msgstr "Alternar Quebra de Linha"
 
 #: ../src/keybindings.c:571
-msgid "Replace spaces by tabs"
+msgid "Replace spaces with tabs"
 msgstr "Substituir espaços por tabs"
 
 #: ../src/keybindings.c:573
@@ -6089,7 +6089,7 @@ msgstr "Dividir Verticalmente"
 #~ "Trata este arquivo como somente-leitura. Nenhuma alteração poderá ser "
 #~ "feita."
 
-#~ msgid "Replaces all spaces in the document by tab characters."
+#~ msgid "Replaces all spaces in the document with tab characters."
 #~ msgstr "Substitui todos os espaços no documento por tabs."
 
 #~ msgid "Folds all contractible code blocks"

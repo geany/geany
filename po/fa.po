@@ -1190,12 +1190,12 @@ msgid "Removes trailing spaces and tabs and the end of lines"
 msgstr "Removes trailing spaces and tabs and the end of lines"
 
 #: ../data/geany.glade.h:243 ../src/keybindings.c:569
-msgid "Replace tabs by space"
-msgstr "Replace tabs by space"
+msgid "Replace tabs with space"
+msgstr "Replace tabs with space"
 
 #: ../data/geany.glade.h:244
-msgid "Replaces all tabs in document by spaces"
-msgstr "Replaces all tabs in document by spaces"
+msgid "Replaces all tabs in document with spaces"
+msgstr "Replaces all tabs in document with spaces"
 
 #: ../data/geany.glade.h:245
 msgid "<b>Saving files</b>"
@@ -2029,12 +2029,12 @@ msgid "_Strip Trailing Spaces"
 msgstr "_Strip Trailing Spaces"
 
 #: ../data/geany.glade.h:434
-msgid "_Replace Tabs by Spaces"
-msgstr "_Replace Tabs by Spaces"
+msgid "_Replace Tabs with Spaces"
+msgstr "_Replace Tabs with Spaces"
 
 #: ../data/geany.glade.h:435
-msgid "Replace Spaces b_y Tabs"
-msgstr "Replace Spaces b_y Tabs"
+msgid "Replace Spaces with _Tabs"
+msgstr "Replace Spaces with _Tabs"
 
 #: ../data/geany.glade.h:436
 msgid "_Fold All"
@@ -3657,8 +3657,8 @@ msgid "Toggle Line breaking"
 msgstr "Toggle Line breaking"
 
 #: ../src/keybindings.c:571
-msgid "Replace spaces by tabs"
-msgstr "Replace spaces by tabs"
+msgid "Replace spaces with tabs"
+msgstr "Replace spaces with tabs"
 
 #: ../src/keybindings.c:573
 msgid "Toggle current fold"
@@ -6243,8 +6243,8 @@ msgstr "Split Vertically"
 #~ msgid "Treat this file as read-only. No changes can be made."
 #~ msgstr "Treat this file as read-only. No changes can be made."
 
-#~ msgid "Replaces all spaces in the document by tab characters."
-#~ msgstr "Replaces all spaces in the document by tab characters."
+#~ msgid "Replaces all spaces in the document with tab characters."
+#~ msgstr "Replaces all spaces in the document with tab characters."
 
 #~ msgid "Folds all contractible code blocks"
 #~ msgstr "Folds all contractible code blocks"

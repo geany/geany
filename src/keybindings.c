@@ -567,9 +567,9 @@ static void init_default_kb(void)
 	add_kb(group, GEANY_KEYS_DOCUMENT_CLONE, NULL,
 		0, 0, "menu_clone", _("_Clone"), "clone1");
 	add_kb(group, GEANY_KEYS_DOCUMENT_REPLACETABS, NULL,
-		0, 0, "menu_replacetabs", _("Replace tabs by space"), "menu_replace_tabs");
+		0, 0, "menu_replacetabs", _("Replace tabs with space"), "menu_replace_tabs");
 	add_kb(group, GEANY_KEYS_DOCUMENT_REPLACESPACES, NULL,
-		0, 0, "menu_replacespaces", _("Replace spaces by tabs"), "menu_replace_spaces");
+		0, 0, "menu_replacespaces", _("Replace spaces with tabs"), "menu_replace_spaces");
 	add_kb(group, GEANY_KEYS_DOCUMENT_TOGGLEFOLD, NULL,
 		0, 0, "menu_togglefold", _("Toggle current fold"), NULL);
 	add_kb(group, GEANY_KEYS_DOCUMENT_FOLDALL, NULL,
