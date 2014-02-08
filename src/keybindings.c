@@ -2345,19 +2345,19 @@ static gboolean cb_func_format_action(guint key_id)
 			on_toggle_case1_activate(NULL, NULL);
 			break;
 		case GEANY_KEYS_FORMAT_SENDTOCMD:
-			cc_show_dialog_run_custom_command(doc);
+			cc_show_run_dialog();
 			break;
 		case GEANY_KEYS_FORMAT_SENDTOCMD1:
 			if (ui_prefs.custom_commands && g_strv_length(ui_prefs.custom_commands) > 0)
-				tools_execute_custom_command(doc, ui_prefs.custom_commands[0]);
+				tools_execute_custom_command(doc, ui_prefs.custom_commands[0], TRUE);
 			break;
 		case GEANY_KEYS_FORMAT_SENDTOCMD2:
 			if (ui_prefs.custom_commands && g_strv_length(ui_prefs.custom_commands) > 1)
-				tools_execute_custom_command(doc, ui_prefs.custom_commands[1]);
+				tools_execute_custom_command(doc, ui_prefs.custom_commands[1], TRUE);
 			break;
 		case GEANY_KEYS_FORMAT_SENDTOCMD3:
 			if (ui_prefs.custom_commands && g_strv_length(ui_prefs.custom_commands) > 2)
-				tools_execute_custom_command(doc, ui_prefs.custom_commands[2]);
+				tools_execute_custom_command(doc, ui_prefs.custom_commands[2], TRUE);
 			break;
 		case GEANY_KEYS_FORMAT_SENDTOVTE:
 			on_send_selection_to_vte1_activate(NULL, NULL);

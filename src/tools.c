@@ -75,6 +75,21 @@ struct cc_dialog
 	GtkWidget *button_down;
 };
 
+/* run-once custom command dialog */
+static struct
+{
+	GtkWidget	*dialog;
+	GtkWidget	*entry;
+}
+cc_run_dlg = {NULL, NULL};
+
+/* cc_run_dlg responses */
+enum
+{
+	GEANY_RESPONSE_CC_REPLACE_SELECTION = 1,
+	GEANY_RESPONSE_CC_NEW_BUFFER
+};
+
 /* data required by the custom command callbacks */
 struct cc_data
 {
@@ -346,8 +361,8 @@ static void cc_exit_cb(GPid child_pid, gint status, gpointer user_data)
 
 /* Executes command (which should include all necessary command line args) and passes the current
  * selection through the standard input of command. The whole output of command replaces the
- * current selection. */
-void tools_execute_custom_command(GeanyDocument *doc, const gchar *command)
+ * current selection, or is pasted in a new document if replace is false. */
+void tools_execute_custom_command(GeanyDocument *doc, const gchar *command, gboolean replace)
 {
 	GError *error = NULL;
 	GPid pid;
@@ -381,6 +396,9 @@ void tools_execute_custom_command(GeanyDocument *doc, const gchar *command)
 		data->buffer = NULL;
 		data->doc = doc;
 		data->command = command;
+
+		if (!replace)
+			data->doc = document_new_file(NULL, NULL, NULL);
 
 		g_child_watch_add(pid, cc_exit_cb, data);
 
@@ -691,13 +709,106 @@ static void cc_show_dialog_custom_commands(void)
 	gtk_widget_destroy(dialog);
 }
 
-void cc_show_dialog_run_custom_command(GeanyDocument *doc)
+
+static void on_cc_run_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 {
-	gchar *command;
-	command = dialogs_show_input(_("Send Selection to Command"),
-		GTK_WINDOW(main_widgets.window), _("Command:"), NULL);
-	tools_execute_custom_command(doc, command);
+	if (response == GTK_RESPONSE_CANCEL || response == GTK_RESPONSE_DELETE_EVENT)
+		gtk_widget_hide(cc_run_dlg.dialog);
+	else
+	{
+		GeanyDocument *doc = document_get_current();
+
+		if (doc == NULL)
+			return;
+
+		gchar *command = g_strdup(gtk_entry_get_text(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(user_data)))));
+
+		if (EMPTY(command))
+		{
+			utils_beep();
+			gtk_widget_grab_focus(cc_run_dlg.entry);
+			return;
+		}
+		ui_combo_box_add_to_history(GTK_COMBO_BOX_TEXT(user_data), command, 0);
+
+		switch (response)
+		{
+			case GEANY_RESPONSE_CC_REPLACE_SELECTION:
+				tools_execute_custom_command(doc, command, TRUE);
+				break;
+			case GEANY_RESPONSE_CC_NEW_BUFFER:
+				tools_execute_custom_command(doc, command, FALSE);
+				break;
+		}
+		gtk_widget_hide(cc_run_dlg.dialog);
+	}
 }
+
+
+/* A simple wrapper. Default response when entry field is activated. */
+static void on_cc_run_entry_activate(GtkEntry *entry, gpointer user_data)
+{
+	on_cc_run_dialog_response(NULL, GEANY_RESPONSE_CC_REPLACE_SELECTION, user_data);
+}
+
+
+static void create_cc_run_dialog(void)
+{
+	GtkWidget *label, *entry, *hbox, *vbox, *button;
+
+	cc_run_dlg.dialog = gtk_dialog_new_with_buttons(_("Send Selection to Command"),
+		GTK_WINDOW(main_widgets.window), GTK_DIALOG_DESTROY_WITH_PARENT,
+		GTK_STOCK_CLOSE, GTK_RESPONSE_CANCEL, NULL);
+	vbox = ui_dialog_vbox_new(GTK_DIALOG(cc_run_dlg.dialog));
+	gtk_box_set_spacing(GTK_BOX(vbox), 9);
+
+	button = ui_button_new_with_image(GTK_STOCK_NEW, _("In _New Document"));
+	gtk_dialog_add_action_widget(GTK_DIALOG(cc_run_dlg.dialog), button,
+		GEANY_RESPONSE_CC_NEW_BUFFER);
+
+	button = gtk_button_new_from_stock(GTK_STOCK_APPLY);
+	gtk_dialog_add_action_widget(GTK_DIALOG(cc_run_dlg.dialog), button,
+		GEANY_RESPONSE_CC_REPLACE_SELECTION);
+
+	label = gtk_label_new_with_mnemonic(_("_Command:"));
+	gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
+
+	entry = gtk_combo_box_text_new_with_entry();
+	ui_entry_add_clear_icon(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(entry))));
+	gtk_label_set_mnemonic_widget(GTK_LABEL(label), entry);
+	gtk_entry_set_width_chars(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(entry))), 40);
+	cc_run_dlg.entry = gtk_bin_get_child(GTK_BIN(entry));
+
+	g_signal_connect(gtk_bin_get_child(GTK_BIN(entry)), "activate",
+			G_CALLBACK(on_cc_run_entry_activate), entry);
+	g_signal_connect(cc_run_dlg.dialog, "response",
+			G_CALLBACK(on_cc_run_dialog_response), entry);
+	g_signal_connect(cc_run_dlg.dialog, "delete-event",
+			G_CALLBACK(gtk_widget_hide_on_delete), NULL);
+
+	hbox = gtk_hbox_new(FALSE, 6);
+	gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(hbox), entry, TRUE, TRUE, 0);
+	gtk_box_pack_start(GTK_BOX(vbox), hbox, TRUE, FALSE, 0);
+}
+
+
+void cc_show_run_dialog(void)
+{
+	if (cc_run_dlg.dialog == NULL)
+	{
+		create_cc_run_dialog();
+		gtk_widget_show_all(cc_run_dlg.dialog);
+	}
+	else
+	{
+		gtk_widget_grab_focus(cc_run_dlg.entry);
+		gtk_widget_show(cc_run_dlg.dialog);
+		/* bring the dialog back in the foreground in case it is already open but the focus is away */
+		gtk_window_present(GTK_WINDOW(cc_run_dlg.dialog));
+	}
+}
+
 
 static void cc_on_custom_command_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
@@ -713,7 +824,7 @@ static void cc_on_custom_command_activate(GtkMenuItem *menuitem, gpointer user_d
 	{
 		if (command_idx == -2)
 		{
-			cc_show_dialog_run_custom_command(doc);
+			cc_show_run_dialog();
 		}
 		else
 		{
@@ -724,7 +835,7 @@ static void cc_on_custom_command_activate(GtkMenuItem *menuitem, gpointer user_d
 
 	/* send it through the command and when the command returned the output the current selection
 	 * will be replaced */
-	tools_execute_custom_command(doc, ui_prefs.custom_commands[command_idx]);
+	tools_execute_custom_command(doc, ui_prefs.custom_commands[command_idx], TRUE);
 }
 
 
