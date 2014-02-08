@@ -528,6 +528,7 @@ struct TreeviewSymbols
 	GtkTreeIter		 tag_macro;
 	GtkTreeIter		 tag_member;
 	GtkTreeIter		 tag_variable;
+	GtkTreeIter		 tag_externvar;
 	GtkTreeIter		 tag_namespace;
 	GtkTreeIter		 tag_struct;
 	GtkTreeIter		 tag_interface;
@@ -545,6 +546,7 @@ static void init_tag_iters(void)
 	tv_iters.tag_member.stamp = -1;
 	tv_iters.tag_macro.stamp = -1;
 	tv_iters.tag_variable.stamp = -1;
+	tv_iters.tag_externvar.stamp = -1;
 	tv_iters.tag_namespace.stamp = -1;
 	tv_iters.tag_struct.stamp = -1;
 	tv_iters.tag_interface.stamp = -1;
@@ -1036,6 +1038,7 @@ static void add_top_level_items(GeanyDocument *doc)
 			}
 			tag_list_add_groups(tag_store,
 				&(tv_iters.tag_variable), _("Variables"), "classviewer-var",
+				&(tv_iters.tag_externvar), _("Extern Variables"), "classviewer-var",
 				&(tv_iters.tag_other), _("Other"), "classviewer-other", NULL);
 		}
 	}
@@ -1170,6 +1173,11 @@ static GtkTreeIter *get_tag_type_iter(TMTagType tag_type, filetype_id ft_id)
 		case tm_tag_function_t:
 		{
 			iter = &tv_iters.tag_function;
+			break;
+		}
+		case tm_tag_externvar_t:
+		{
+			iter = &tv_iters.tag_externvar;
 			break;
 		}
 		case tm_tag_macro_t:
