@@ -33,7 +33,9 @@ static kindOption PythonKinds[] = {
 	{TRUE, 'f', "function", "functions"},
 	{TRUE, 'm', "method",   "class methods"},
     {TRUE, 'v', "variable", "variables"},
-    {TRUE, 'i', "namespace", "imports"}
+    /* defined as externvar to get those excluded as forward type in symbols.c:goto_tag()
+     * so we can jump to the real implementation (if known) instead of to the import statement */
+    {TRUE, 'x', "externvar", "imports"}
 };
 
 typedef enum {
