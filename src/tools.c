@@ -90,6 +90,12 @@ enum
 	GEANY_RESPONSE_CC_NEW_BUFFER
 };
 
+enum
+{
+	GEANY_MENU_IDX_CC_EDIT_COMMANDS = -1,
+	GEANY_MENU_IDX_CC_RUN_COMMAND = -2
+};
+
 /* data required by the custom command callbacks */
 struct cc_data
 {
@@ -829,23 +835,21 @@ static void cc_on_custom_command_activate(GtkMenuItem *menuitem, gpointer user_d
 
 	command_idx = GPOINTER_TO_INT(user_data);
 
-	if (ui_prefs.custom_commands == NULL ||
-		command_idx < 0 || command_idx > (gint) g_strv_length(ui_prefs.custom_commands))
+	if (ui_prefs.custom_commands && command_idx >= 0 &&
+			command_idx < (gint) g_strv_length(ui_prefs.custom_commands))
 	{
-		if (command_idx == -2)
-		{
-			cc_show_run_dialog();
-		}
-		else
-		{
-			cc_show_dialog_custom_commands();
-		}
-		return;
+		/* send it through the command and when the command returned the output,
+		 * the current selection will be replaced */
+		tools_execute_custom_command(doc, ui_prefs.custom_commands[command_idx], TRUE);
 	}
-
-	/* send it through the command and when the command returned the output the current selection
-	 * will be replaced */
-	tools_execute_custom_command(doc, ui_prefs.custom_commands[command_idx], TRUE);
+	else if (command_idx == GEANY_MENU_IDX_CC_RUN_COMMAND)
+	{
+		cc_show_run_dialog();
+	}
+	else
+	{
+		cc_show_dialog_custom_commands();
+	}
 }
 
 
@@ -857,7 +861,9 @@ static void cc_insert_custom_command_items(GtkMenu *me, const gchar *label, cons
 
 	switch (idx)
 	{
-		case -2: key_idx = GEANY_KEYS_FORMAT_SENDTOCMD; break;
+		case GEANY_MENU_IDX_CC_RUN_COMMAND:
+			key_idx = GEANY_KEYS_FORMAT_SENDTOCMD;
+			break;
 		case 0: key_idx = GEANY_KEYS_FORMAT_SENDTOCMD1; break;
 		case 1: key_idx = GEANY_KEYS_FORMAT_SENDTOCMD2; break;
 		case 2: key_idx = GEANY_KEYS_FORMAT_SENDTOCMD3; break;
@@ -865,7 +871,7 @@ static void cc_insert_custom_command_items(GtkMenu *me, const gchar *label, cons
 
 	item = gtk_menu_item_new_with_label(label);
 	gtk_widget_set_tooltip_text(item, tooltip);
-	if (key_idx != -1)
+	if (key_idx != GEANY_MENU_IDX_CC_EDIT_COMMANDS)
 	{
 		kb = keybindings_lookup_item(GEANY_KEY_GROUP_FORMAT, key_idx);
 		if (kb->key > 0)
@@ -924,8 +930,8 @@ void tools_create_insert_custom_command_menu_items(void)
 	gtk_container_add(GTK_CONTAINER(menu_edit), item);
 	gtk_widget_show(item);
 
-	cc_insert_custom_command_items(menu_edit, _("Custom Command"), NULL, -2);
-	cc_insert_custom_command_items(menu_edit, _("Set Custom Commands"), NULL, -1);
+	cc_insert_custom_command_items(menu_edit, _("Custom Command"), NULL, GEANY_MENU_IDX_CC_RUN_COMMAND);
+	cc_insert_custom_command_items(menu_edit, _("Set Custom Commands"), NULL, GEANY_MENU_IDX_CC_EDIT_COMMANDS);
 }
 
 
