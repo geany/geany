@@ -721,7 +721,7 @@ static void on_cc_run_dialog_response(GtkDialog *dialog, gint response, gpointer
 		if (doc == NULL)
 			return;
 
-		gchar *command = g_strdup(gtk_entry_get_text(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(user_data)))));
+		const gchar *command = gtk_entry_get_text(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(user_data))));
 
 		if (EMPTY(command))
 		{
@@ -807,6 +807,16 @@ void cc_show_run_dialog(void)
 		/* bring the dialog back in the foreground in case it is already open but the focus is away */
 		gtk_window_present(GTK_WINDOW(cc_run_dlg.dialog));
 	}
+}
+
+
+#define FREE_WIDGET(wid) \
+	if (wid && GTK_IS_WIDGET(wid)) gtk_widget_destroy(wid);
+
+void tools_finalize(void)
+{
+	FREE_WIDGET(cc_run_dlg.dialog);
+	FREE_WIDGET(cc_run_dlg.entry);
 }
 
 

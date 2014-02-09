@@ -33,4 +33,6 @@ void tools_word_count(void);
 
 void tools_color_chooser(const gchar *color);
 
+void tools_finalize(void);
+
 #endif
