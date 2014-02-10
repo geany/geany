@@ -290,7 +290,7 @@ static gboolean cc_replace_sel_cb(gpointer user_data)
 		return TRUE;
 	}
 
-	if (! data->error && data->buffer != NULL)
+	if (! data->error && data->buffer != NULL && DOC_VALID(data->doc))
 	{	/* Command completed successfully */
 		sci_replace_sel(data->doc->editor->sci, data->buffer->str);
 	}
