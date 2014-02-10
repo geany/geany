@@ -3487,7 +3487,9 @@ Smart line indent                                         Indents the current li
                                                           with the same indentation as the previous line.
 
 Send to Custom Command                                    Passes the current selection to an external
-                                                          command that you type in the input field.
+                                                          command that you type in the input field of the
+                                                          resulting dialog, which also allows you to recall
+                                                          and edit previous commands.
 
 Send to Custom Command 1 (2,3)  Ctrl-1 (2,3)              Passes the current selection to a configured
                                                           external command (available for the first
