@@ -688,6 +688,7 @@ void configuration_load_session_files(GKeyFile *config, gboolean read_recent_fil
 }
 
 
+#ifdef HAVE_VTE
 static void get_setting_color(GKeyFile *config, const gchar *section, const gchar *key,
 		GdkColor *color, const gchar *default_color)
 {
@@ -696,6 +697,7 @@ static void get_setting_color(GKeyFile *config, const gchar *section, const gcha
 		utils_parse_color(default_color, color);
 	g_free(str);
 }
+#endif
 
 
 /* note: new settings should be added in init_pref_groups() */
