@@ -1255,6 +1255,8 @@ gboolean filetypes_parse_error_message(GeanyFiletype *ft, const gchar *message,
 	gchar **tmp;
 	GeanyDocument *doc;
 	GMatchInfo *minfo;
+	gint i, n_match_groups;
+	gchar *first, *second;
 
 	if (ft == NULL)
 	{
@@ -1286,28 +1288,31 @@ gboolean filetypes_parse_error_message(GeanyFiletype *ft, const gchar *message,
 		g_match_info_free(minfo);
 		return FALSE;
 	}
-	if (g_match_info_get_match_count(minfo) >= 3)
+
+	n_match_groups = g_match_info_get_match_count(minfo);
+	first = second = NULL;
+
+	for (i = 1; i < n_match_groups; i++)
 	{
-		gchar *first = NULL, *second, *end;
-		glong l;
-		gint i;
+		gint start_pos;
 
-		for (i = 1; ; i++)
+		g_match_info_fetch_pos(minfo, i, &start_pos, NULL);
+		if (start_pos != -1)
 		{
-			gint start_pos;
-
-			g_match_info_fetch_pos(minfo, i, &start_pos, NULL);
-			if (start_pos != -1)
+			if (first == NULL)
+				first = g_match_info_fetch(minfo, i);
+			else
 			{
-				if (first == NULL)
-					first = g_match_info_fetch(minfo, i);
-				else
-				{
-					second = g_match_info_fetch(minfo, i);
-					break;
-				}
+				second = g_match_info_fetch(minfo, i);
+				break;
 			}
 		}
+	}
+
+	if (second)
+	{
+		gchar *end;
+		glong l;
 
 		l = strtol(first, &end, 10);
 		if (*end == '\0')	/* first is purely decimals */
@@ -1332,6 +1337,9 @@ gboolean filetypes_parse_error_message(GeanyFiletype *ft, const gchar *message,
 			}
 		}
 	}
+	else
+		g_free(first);
+
 	g_match_info_free(minfo);
 	return *filename != NULL;
 }
