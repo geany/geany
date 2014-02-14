@@ -126,6 +126,7 @@ test_sources = \
 	extern_variable.h				\
 	forall_module.f90				\
 	format.pl						\
+	fortran_associate.f90		\
 	func_typedef.h					\
 	general.cs						\
 	hex2dec.sql						\
