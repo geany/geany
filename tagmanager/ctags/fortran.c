@@ -698,7 +698,7 @@ static int skipToNextLine (void)
 	return c;
 }
 
-static int getFreeFormChar (void)
+static int getFreeFormChar (boolean inComment)
 {
 	static boolean newline = TRUE;
 	boolean advanceLine = FALSE;
@@ -708,7 +708,7 @@ static int getFreeFormChar (void)
 	 * free-format text line is an ampersand then the next non-comment
 	 * line is a continuation line.
 	 */
-	if (c == '&')
+	if (! inComment && c == '&')
 	{
 		do
 			c = fileGetc ();
@@ -757,7 +757,7 @@ static int getChar (void)
 		Ungetc = '\0';
 	}
 	else if (FreeSourceForm)
-		c = getFreeFormChar ();
+		c = getFreeFormChar (FALSE);
 	else
 		c = getFixedFormChar ();
 	return c;
@@ -992,7 +992,7 @@ getNextChar:
 			if (FreeSourceForm)
 			{
 				do
-				   c = getChar ();
+					c = getFreeFormChar (TRUE);
 				while (c != '\n' && c != EOF);
 			}
 			else

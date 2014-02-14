@@ -127,6 +127,7 @@ test_sources = \
 	forall_module.f90				\
 	format.pl						\
 	fortran_associate.f90			\
+	fortran_line_continuation.f90	\
 	func_typedef.h					\
 	general.cs						\
 	hex2dec.sql						\
