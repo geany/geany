@@ -221,6 +221,7 @@ test_sources = \
 	simple.tcl						\
 	spurious_label_tags.c			\
 	sql_single_quote.sql			\
+	square_parens.f90				\
 	state_machine.v					\
 	static_array.c					\
 	stdcall.f						\

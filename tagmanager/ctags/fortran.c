@@ -70,6 +70,7 @@ typedef enum eKeywordId {
 	KEYWORD_cexternal,
 	KEYWORD_cglobal,
 	KEYWORD_character,
+	KEYWORD_codimension,
 	KEYWORD_common,
 	KEYWORD_complex,
 	KEYWORD_contains,
@@ -154,6 +155,8 @@ typedef enum eTokenType {
 	TOKEN_OPERATOR,
 	TOKEN_PAREN_CLOSE,
 	TOKEN_PAREN_OPEN,
+	TOKEN_SQUARE_CLOSE,
+	TOKEN_SQUARE_OPEN,
 	TOKEN_PERCENT,
 	TOKEN_STATEMENT_END,
 	TOKEN_STRING
@@ -238,6 +241,7 @@ static const keywordDesc FortranKeywordTable [] = {
 	{ "cexternal",      KEYWORD_cexternal    },
 	{ "cglobal",        KEYWORD_cglobal      },
 	{ "character",      KEYWORD_character    },
+	{ "codimension",    KEYWORD_codimension  },
 	{ "common",         KEYWORD_common       },
 	{ "complex",        KEYWORD_complex      },
 	{ "contains",       KEYWORD_contains     },
@@ -964,10 +968,12 @@ getNextChar:
 		case EOF:  longjmp (Exception, (int) ExceptionEOF);  break;
 		case ' ':  goto getNextChar;
 		case '\t': goto getNextChar;
-		case ',':  token->type = TOKEN_COMMA;       break;
-		case '(':  token->type = TOKEN_PAREN_OPEN;  break;
-		case ')':  token->type = TOKEN_PAREN_CLOSE; break;
-		case '%':  token->type = TOKEN_PERCENT;     break;
+		case ',':  token->type = TOKEN_COMMA;        break;
+		case '(':  token->type = TOKEN_PAREN_OPEN;   break;
+		case ')':  token->type = TOKEN_PAREN_CLOSE;  break;
+		case '[':  token->type = TOKEN_SQUARE_OPEN;  break;
+		case ']':  token->type = TOKEN_SQUARE_CLOSE; break;
+		case '%':  token->type = TOKEN_PERCENT;      break;
 
 		case '*':
 		case '/':
@@ -1096,23 +1102,31 @@ static void skipToNextStatement (tokenInfo *const token)
 	} while (isType (token, TOKEN_STATEMENT_END));
 }
 
-/* skip over parenthesis enclosed contents starting at next token.
- * Token is left at the first token following closing parenthesis. If an
- * opening parenthesis is not found, `token' is moved to the end of the
- * statement.
+/* skip over paired tokens, managing nested pairs and stopping at statement end
+ * or right after closing token, whatever comes first.
  */
-static void skipOverParens (tokenInfo *const token)
+static void skipOverPair (tokenInfo *const token, tokenType topen, tokenType tclose)
 {
 	int level = 0;
 	do {
 		if (isType (token, TOKEN_STATEMENT_END))
 			break;
-		else if (isType (token, TOKEN_PAREN_OPEN))
+		else if (isType (token, topen))
 			++level;
-		else if (isType (token, TOKEN_PAREN_CLOSE))
+		else if (isType (token, tclose))
 			--level;
 		readToken (token);
 	} while (level > 0);
+}
+
+static void skipOverParens (tokenInfo *const token)
+{
+	skipOverPair (token, TOKEN_PAREN_OPEN, TOKEN_PAREN_CLOSE);
+}
+
+static void skipOverSquares (tokenInfo *const token)
+{
+	skipOverPair (token, TOKEN_SQUARE_OPEN, TOKEN_SQUARE_CLOSE);
 }
 
 static boolean isTypeSpec (tokenInfo *const token)
@@ -1292,6 +1306,11 @@ static void parseQualifierSpecList (tokenInfo *const token)
 				readToken (token);
 				break;
 
+			case KEYWORD_codimension:
+				readToken (token);
+				skipOverSquares (token);
+				break;
+
 			case KEYWORD_dimension:
 			case KEYWORD_extends:
 			case KEYWORD_intent:
@@ -1329,8 +1348,13 @@ static void parseEntityDecl (tokenInfo *const token)
 	Assert (isType (token, TOKEN_IDENTIFIER));
 	makeFortranTag (token, variableTagType ());
 	readToken (token);
+	/* we check for both '()' and '[]'
+	 * coarray syntax permits variable(), variable[], or variable()[]
+	 */
 	if (isType (token, TOKEN_PAREN_OPEN))
 		skipOverParens (token);
+	if (isType (token, TOKEN_SQUARE_OPEN))
+		skipOverSquares (token);
 	if (isType (token, TOKEN_OPERATOR) &&
 			strcmp (vStringValue (token->string), "*") == 0)
 	{
@@ -1353,8 +1377,11 @@ static void parseEntityDecl (tokenInfo *const token)
 					! isType (token, TOKEN_STATEMENT_END))
 			{
 				readToken (token);
+				/* another coarray check, for () and [] */
 				if (isType (token, TOKEN_PAREN_OPEN))
 					skipOverParens (token);
+				if (isType (token, TOKEN_SQUARE_OPEN))
+					skipOverSquares (token);
 			}
 		}
 	}
