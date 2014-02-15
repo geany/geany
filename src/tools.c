@@ -80,8 +80,9 @@ static struct
 {
 	GtkWidget	*dialog;
 	GtkWidget	*entry;
+	gboolean	busy;	/* signifies that the current executing command hasn't completed yet */
 }
-cc_run_dlg = {NULL, NULL};
+cc_run_dlg = {NULL, NULL, FALSE};
 
 /* cc_run_dlg responses */
 enum
@@ -302,6 +303,28 @@ static gboolean cc_iofunc_err(GIOChannel *ioc, GIOCondition cond, gpointer user_
 }
 
 
+static gboolean cc_run_dlg_delete_event(GtkWidget *widget)
+{
+	/* returning TRUE prevents dialog destruction.
+	 * this is all that is needed here;
+	 * everything else happens in on_cc_run_dialog_response, automatically
+	 * called with respone=GTK_RESPONSE_DELETE_EVENT */
+	return TRUE;
+}
+
+
+static void cc_run_dlg_set_busy(gboolean sensitive)
+{
+	cc_run_dlg.busy = !sensitive;  /* this prevents hiding via delete-event (e.g. Esc key) */
+	gtk_dialog_set_response_sensitive(GTK_DIALOG(cc_run_dlg.dialog),
+		GEANY_RESPONSE_CC_REPLACE_SELECTION, sensitive);
+	gtk_dialog_set_response_sensitive(GTK_DIALOG(cc_run_dlg.dialog),
+		GEANY_RESPONSE_CC_NEW_BUFFER, sensitive);
+	gtk_dialog_set_response_sensitive(GTK_DIALOG(cc_run_dlg.dialog),
+		GTK_RESPONSE_CANCEL, sensitive);
+}
+
+
 static gboolean cc_replace_sel_cb(gpointer user_data)
 {
 	struct cc_data *data = user_data;
@@ -319,6 +342,12 @@ static gboolean cc_replace_sel_cb(gpointer user_data)
 	if (data->buffer)
 		g_string_free(data->buffer, TRUE);
 	g_slice_free1(sizeof *data, data);
+
+	if (GTK_IS_WIDGET(cc_run_dlg.dialog))
+	{
+		gtk_widget_hide(cc_run_dlg.dialog);
+		cc_run_dlg_set_busy(TRUE);
+	}
 
 	return FALSE;
 }
@@ -715,11 +744,13 @@ static void cc_show_dialog_custom_commands(void)
 	gtk_widget_destroy(dialog);
 }
 
-
 static void on_cc_run_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 {
 	if (response == GTK_RESPONSE_CANCEL || response == GTK_RESPONSE_DELETE_EVENT)
-		gtk_widget_hide(cc_run_dlg.dialog);
+	{
+		if (!cc_run_dlg.busy)
+			gtk_widget_hide(cc_run_dlg.dialog);
+	}
 	else
 	{
 		GeanyDocument *doc = document_get_current();
@@ -737,6 +768,11 @@ static void on_cc_run_dialog_response(GtkDialog *dialog, gint response, gpointer
 		}
 		ui_combo_box_add_to_history(GTK_COMBO_BOX_TEXT(user_data), command, 0);
 
+		cc_run_dlg_set_busy(FALSE);
+
+		g_assert(response == GEANY_RESPONSE_CC_REPLACE_SELECTION ||
+			response == GEANY_RESPONSE_CC_NEW_BUFFER);
+
 		switch (response)
 		{
 			case GEANY_RESPONSE_CC_REPLACE_SELECTION:
@@ -746,7 +782,6 @@ static void on_cc_run_dialog_response(GtkDialog *dialog, gint response, gpointer
 				tools_execute_custom_command(doc, command, FALSE);
 				break;
 		}
-		gtk_widget_hide(cc_run_dlg.dialog);
 	}
 }
 
@@ -763,7 +798,7 @@ static void create_cc_run_dialog(void)
 	GtkWidget *label, *entry, *hbox, *vbox, *button;
 
 	cc_run_dlg.dialog = gtk_dialog_new_with_buttons(_("Send Selection to Command"),
-		GTK_WINDOW(main_widgets.window), GTK_DIALOG_DESTROY_WITH_PARENT,
+		GTK_WINDOW(main_widgets.window), GTK_DIALOG_DESTROY_WITH_PARENT | GTK_DIALOG_MODAL,
 		GTK_STOCK_CLOSE, GTK_RESPONSE_CANCEL, NULL);
 	vbox = ui_dialog_vbox_new(GTK_DIALOG(cc_run_dlg.dialog));
 	gtk_box_set_spacing(GTK_BOX(vbox), 9);
@@ -790,7 +825,7 @@ static void create_cc_run_dialog(void)
 	g_signal_connect(cc_run_dlg.dialog, "response",
 			G_CALLBACK(on_cc_run_dialog_response), entry);
 	g_signal_connect(cc_run_dlg.dialog, "delete-event",
-			G_CALLBACK(gtk_widget_hide_on_delete), NULL);
+			G_CALLBACK(cc_run_dlg_delete_event), NULL);
 
 	hbox = gtk_hbox_new(FALSE, 6);
 	gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
@@ -836,7 +871,7 @@ static void cc_on_custom_command_activate(GtkMenuItem *menuitem, gpointer user_d
 	command_idx = GPOINTER_TO_INT(user_data);
 
 	if (ui_prefs.custom_commands && command_idx >= 0 &&
-			command_idx < (gint) g_strv_length(ui_prefs.custom_commands))
+		command_idx < (gint) g_strv_length(ui_prefs.custom_commands))
 	{
 		/* send it through the command and when the command returned the output,
 		 * the current selection will be replaced */
