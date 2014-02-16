@@ -126,10 +126,6 @@ enum GeanyKeyBindingID
 	GEANY_KEYS_BUILD_MAKE,						/**< Keybinding. */
 	GEANY_KEYS_INSERT_ALTWHITESPACE,			/**< Keybinding. */
 	GEANY_KEYS_EDITOR_SCROLLLINEDOWN,			/**< Keybinding. */
-	GEANY_KEYS_EDITOR_LINEUP,					/**< Keybinding. */
-	GEANY_KEYS_EDITOR_LINEDOWN,					/**< Keybinding. */
-	GEANY_KEYS_EDITOR_CHARRIGHT,					/**< Keybinding. */
-	GEANY_KEYS_EDITOR_CHARLEFT,					/**< Keybinding. */
 	GEANY_KEYS_VIEW_TOGGLEALL,					/**< Keybinding. */
 	GEANY_KEYS_VIEW_FULLSCREEN,					/**< Keybinding. */
 	GEANY_KEYS_GOTO_LINEEND,					/**< Keybinding. */
@@ -252,6 +248,10 @@ enum GeanyKeyBindingID
 	GEANY_KEYS_GOTO_LINESTARTVISUAL,			/**< Keybinding. */
 	GEANY_KEYS_DOCUMENT_CLONE,					/**< Keybinding. */
 	GEANY_KEYS_FILE_QUIT,						/**< Keybinding. */
+	GEANY_KEYS_EDITOR_LINEUP,					/**< Keybinding. */
+	GEANY_KEYS_EDITOR_LINEDOWN,					/**< Keybinding. */
+	GEANY_KEYS_EDITOR_CHARRIGHT,					/**< Keybinding. */
+	GEANY_KEYS_EDITOR_CHARLEFT,					/**< Keybinding. */
 	GEANY_KEYS_COUNT	/* must not be used by plugins */
 };
 
