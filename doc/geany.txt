@@ -3349,6 +3349,14 @@ Scroll up by one line           Alt-Up                    Scrolls the view.
 
 Scroll down by one line         Alt-Down                  Scrolls the view.
 
+Previous line                                             Move the cursor up to the previous line
+
+Next line                                                 Move the cursor down to the next line
+
+Backward char                                             Move the cursor backward a character
+
+Forward char                                              Move the cursor forward a character.
+
 Complete word                   Ctrl-Space                Shows the autocompletion list. If already showing
                                                           tag completion, it shows document word completion
                                                           instead, even if it is not enabled for automatic

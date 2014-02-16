@@ -312,6 +312,14 @@ static void init_default_kb(void)
 		GDK_Up, GDK_MOD1_MASK, "edit_scrolllineup", _("Scroll up the view by one line"), NULL);
 	add_kb(group, GEANY_KEYS_EDITOR_SCROLLLINEDOWN, NULL,
 		GDK_Down, GDK_MOD1_MASK, "edit_scrolllinedown", _("Scroll down the view by one line"), NULL);
+	add_kb(group, GEANY_KEYS_EDITOR_LINEUP, NULL,
+		0, 0, "edit_line_up", _("Previous line"), NULL);
+	add_kb(group, GEANY_KEYS_EDITOR_LINEDOWN, NULL,
+		0, 0, "edit_line_down", _("Next line"), NULL);
+	add_kb(group, GEANY_KEYS_EDITOR_CHARLEFT, NULL,
+		0, 0, "edit_char_left", _("Backward char"), NULL);
+	add_kb(group, GEANY_KEYS_EDITOR_CHARRIGHT, NULL,
+		0, 0, "edit_char_right", _("Forward char"), NULL);
 	add_kb(group, GEANY_KEYS_EDITOR_COMPLETESNIPPET, NULL,
 		GDK_Tab, 0, "edit_completesnippet", _("Complete snippet"), NULL);
 	add_kb(group, GEANY_KEYS_EDITOR_SNIPPETNEXTCURSOR, NULL,
@@ -2027,6 +2035,18 @@ static gboolean cb_func_editor_action(guint key_id)
 			break;
 		case GEANY_KEYS_EDITOR_SCROLLLINEDOWN:
 			sci_send_command(doc->editor->sci, SCI_LINESCROLLDOWN);
+			break;
+		case GEANY_KEYS_EDITOR_LINEDOWN:
+			sci_send_command(doc->editor->sci, SCI_LINEDOWN);
+			break;
+		case GEANY_KEYS_EDITOR_LINEUP:
+			sci_send_command(doc->editor->sci, SCI_LINEUP);
+			break;
+		case GEANY_KEYS_EDITOR_CHARRIGHT:
+			sci_send_command(doc->editor->sci, SCI_CHARRIGHT);
+			break;
+		case GEANY_KEYS_EDITOR_CHARLEFT:
+			sci_send_command(doc->editor->sci, SCI_CHARLEFT);
 			break;
 		case GEANY_KEYS_EDITOR_DUPLICATELINE:
 			duplicate_lines(doc->editor);
