@@ -3357,6 +3357,10 @@ Backward char                                             Move the cursor backwa
 
 Forward char                                              Move the cursor forward a character.
 
+Delete                                                    Delete next character.
+
+Back Delete                                               Delete previous character.
+
 Complete word                   Ctrl-Space                Shows the autocompletion list. If already showing
                                                           tag completion, it shows document word completion
                                                           instead, even if it is not enabled for automatic
