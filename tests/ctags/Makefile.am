@@ -193,6 +193,7 @@ test_sources = \
 	Package.pm						\
 	php5_5_class_kw.php				\
 	procedure_pointer_module.f90	\
+	procpoint.f90					\
 	property.cs						\
 	prototype.h						\
 	pure_elem.f95					\
