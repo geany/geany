@@ -216,9 +216,9 @@ static kindOption FortranKinds [] = {
 	{ FALSE, 'L', "local",		"local, common block, and namelist variables"},
 	{ TRUE,  'm', "namespace",	"modules"},
 	{ TRUE,  'n', "namelist",	"namelists"},
-	{ TRUE,  'p', "package",	"programs"},
-	{ TRUE,  's', "member",	"subroutines"},
-	{ TRUE,  't', "typedef",	"derived types and structures"},
+	{ TRUE,  'p', "struct",	"programs"},
+	{ TRUE,  's', "method",	"subroutines"},
+	{ TRUE,  't', "class",	"derived types and structures"},
 	{ TRUE,  'v', "variable",	"program (global) and module variables"}
 };
 
