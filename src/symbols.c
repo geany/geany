@@ -977,6 +977,7 @@ static void add_top_level_items(GeanyDocument *doc)
 				&(tv_iters.tag_function), _("Functions / Subroutines"), "classviewer-method",
 				&(tv_iters.tag_variable), _("Variables"), "classviewer-var",
 				&(tv_iters.tag_class), _("Types"), "classviewer-class",
+				&(tv_iters.tag_member), _("Components"), "classviewer-member",
 				&(tv_iters.tag_macro), _("Blocks"), "classviewer-member",
 				&(tv_iters.tag_other), _("Other"), "classviewer-other",
 				NULL);
