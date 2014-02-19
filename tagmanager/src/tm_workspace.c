@@ -751,13 +751,11 @@ tm_get_current_tag (GPtrArray * file_tags, const gulong line, const guint tag_ty
 	{
 		guint i;
 		gulong matching_line = 0;
-		glong delta;
 
 		for (i = 0; (i < local->len); ++i)
 		{
 			TMTag *tag = TM_TAG (local->pdata[i]);
-			delta = line - tag->atts.entry.line;
-			if (delta >= 0 && (gulong)delta < line - matching_line)
+			if (tag->atts.entry.line <= line && tag->atts.entry.line > matching_line)
 			{
 				matching_tag = tag;
 				matching_line = tag->atts.entry.line;
