@@ -121,7 +121,9 @@ test_sources = \
 	directives.c					\
 	dopbl2.f						\
 	enum.c							\
+	enum.f90						\
 	enum.java						\
+	enumerators.f90					\
 	events.cs						\
 	extern_variable.h				\
 	forall_module.f90				\

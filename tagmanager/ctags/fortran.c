@@ -65,6 +65,7 @@ typedef enum eKeywordId {
 	KEYWORD_assignment,
 	KEYWORD_associate,
 	KEYWORD_automatic,
+	KEYWORD_bind,
 	KEYWORD_block,
 	KEYWORD_byte,
 	KEYWORD_cexternal,
@@ -83,6 +84,8 @@ typedef enum eKeywordId {
 	KEYWORD_elemental,
 	KEYWORD_end,
 	KEYWORD_entry,
+	KEYWORD_enum,
+	KEYWORD_enumerator,
 	KEYWORD_equivalence,
 	KEYWORD_extends,
 	KEYWORD_external,
@@ -178,6 +181,8 @@ typedef enum eTagType {
 	TAG_SUBROUTINE,
 	TAG_DERIVED_TYPE,
 	TAG_VARIABLE,
+	TAG_ENUM,
+	TAG_ENUMERATOR,
 	TAG_COUNT  /* must be last */
 } tagType;
 
@@ -219,7 +224,9 @@ static kindOption FortranKinds [] = {
 	{ TRUE,  'p', "struct",	"programs"},
 	{ TRUE,  's', "method",	"subroutines"},
 	{ TRUE,  't', "class",	"derived types and structures"},
-	{ TRUE,  'v', "variable",	"program (global) and module variables"}
+	{ TRUE,  'v', "variable",	"program (global) and module variables"},
+	{ TRUE,  'E', "enum",	"enumerations"},
+	{ TRUE,  'F', "enumerator",	"enumeration values"},
 };
 
 /* For efinitions of Fortran 77 with extensions:
@@ -236,6 +243,7 @@ static const keywordDesc FortranKeywordTable [] = {
 	{ "assignment",     KEYWORD_assignment   },
 	{ "associate",      KEYWORD_associate    },
 	{ "automatic",      KEYWORD_automatic    },
+	{ "bind",           KEYWORD_bind         },
 	{ "block",          KEYWORD_block        },
 	{ "byte",           KEYWORD_byte         },
 	{ "cexternal",      KEYWORD_cexternal    },
@@ -254,6 +262,8 @@ static const keywordDesc FortranKeywordTable [] = {
 	{ "elemental",      KEYWORD_elemental    },
 	{ "end",            KEYWORD_end          },
 	{ "entry",          KEYWORD_entry        },
+	{ "enum",           KEYWORD_enum         },
+	{ "enumerator",     KEYWORD_enumerator   },
 	{ "equivalence",    KEYWORD_equivalence  },
 	{ "extends",        KEYWORD_extends      },
 	{ "external",       KEYWORD_external     },
@@ -368,7 +378,8 @@ static const tokenInfo* ancestorScope (void)
 	{
 		tokenInfo *const token = Ancestors.list + i - 1;
 		if (token->type == TOKEN_IDENTIFIER &&
-			token->tag != TAG_UNDEFINED  && token->tag != TAG_INTERFACE)
+			token->tag != TAG_UNDEFINED  && token->tag != TAG_INTERFACE &&
+			token->tag != TAG_ENUM)
 			result = token;
 	}
 	return result;
@@ -1144,6 +1155,7 @@ static boolean isTypeSpec (tokenInfo *const token)
 		case KEYWORD_record:
 		case KEYWORD_type:
 		case KEYWORD_procedure:
+		case KEYWORD_enumerator:
 			result = TRUE;
 			break;
 		default:
@@ -1169,6 +1181,21 @@ static boolean isSubprogramPrefix (tokenInfo *const token)
 			break;
 	}
 	return result;
+}
+
+static void parseKindSelector (tokenInfo *const token)
+{
+	if (isType (token, TOKEN_PAREN_OPEN))
+		skipOverParens (token);  /* skip kind-selector */
+	if (isType (token, TOKEN_OPERATOR) &&
+		strcmp (vStringValue (token->string), "*") == 0)
+	{
+		readToken (token);
+		if (isType (token, TOKEN_PAREN_OPEN))
+			skipOverParens (token);
+		else
+			readToken (token);
+	}
 }
 
 /*  type-spec
@@ -1208,14 +1235,7 @@ static void parseTypeSpec (tokenInfo *const token)
 		case KEYWORD_real:
 		case KEYWORD_procedure:
 			readToken (token);
-			if (isType (token, TOKEN_PAREN_OPEN))
-				skipOverParens (token);  /* skip kind-selector */
-			if (isType (token, TOKEN_OPERATOR) &&
-				strcmp (vStringValue (token->string), "*") == 0)
-			{
-				readToken (token);
-				readToken (token);
-			}
+			parseKindSelector (token);
 			break;
 
 		case KEYWORD_double:
@@ -1244,6 +1264,10 @@ static void parseTypeSpec (tokenInfo *const token)
 				skipOverParens (token);  /* skip type-name */
 			else
 				parseDerivedTypeDef (token);
+			break;
+
+		case KEYWORD_enumerator:
+			readToken (token);
 			break;
 
 		default:
@@ -1333,11 +1357,12 @@ static tagType variableTagType (void)
 		const tokenInfo* const parent = ancestorTop ();
 		switch (parent->tag)
 		{
-			case TAG_MODULE:       result = TAG_VARIABLE;  break;
-			case TAG_DERIVED_TYPE: result = TAG_COMPONENT; break;
-			case TAG_FUNCTION:     result = TAG_LOCAL;     break;
-			case TAG_SUBROUTINE:   result = TAG_LOCAL;     break;
-			default:               result = TAG_VARIABLE;  break;
+			case TAG_MODULE:       result = TAG_VARIABLE;   break;
+			case TAG_DERIVED_TYPE: result = TAG_COMPONENT;  break;
+			case TAG_FUNCTION:     result = TAG_LOCAL;      break;
+			case TAG_SUBROUTINE:   result = TAG_LOCAL;      break;
+			case TAG_ENUM:         result = TAG_ENUMERATOR; break;
+			default:               result = TAG_VARIABLE;   break;
 		}
 	}
 	return result;
@@ -1791,6 +1816,54 @@ static void parseInterfaceBlock (tokenInfo *const token)
 	deleteToken (name);
 }
 
+/* enum-block
+ *      enum-stmt (is ENUM, BIND(C) [ :: type-alias-name ]
+ *                 or ENUM [ kind-selector ] [ :: ] [ type-alias-name ])
+ *          [ enum-body (is ENUMERATOR [ :: ] enumerator-list) ]
+ *      end-enum-stmt (is END ENUM)
+ */
+static void parseEnumBlock (tokenInfo *const token)
+{
+	tokenInfo *name = NULL;
+	Assert (isKeyword (token, KEYWORD_enum));
+	readToken (token);
+	if (isType (token, TOKEN_COMMA))
+	{
+		readToken (token);
+		if (isType (token, TOKEN_KEYWORD))
+			readToken (token);
+		if (isType (token, TOKEN_PAREN_OPEN))
+			skipOverParens (token);
+	}
+	parseKindSelector (token);
+	if (isType (token, TOKEN_DOUBLE_COLON))
+		readToken (token);
+	if (isType (token, TOKEN_IDENTIFIER))
+		name = newTokenFrom (token);
+	if (name == NULL)
+	{
+		name = newToken ();
+		name->type = TOKEN_IDENTIFIER;
+		name->tag = TAG_ENUM;
+	}
+	else
+		makeFortranTag (name, TAG_ENUM);
+	skipToNextStatement (token);
+	ancestorPush (name);
+	while (! isKeyword (token, KEYWORD_end))
+	{
+		if (isTypeSpec (token))
+			parseTypeDeclarationStmt (token);
+		else
+			skipToNextStatement (token);
+	}
+	readSubToken (token);
+	/* secondary token should be KEYWORD_enum token */
+	skipToNextStatement (token);
+	ancestorPop ();
+	deleteToken (name);
+}
+
 /*  entry-stmt is
  *      ENTRY entry-name [ ( dummy-arg-list ) ]
  */
@@ -1872,6 +1945,7 @@ static boolean parseDeclarationConstruct (tokenInfo *const token)
 	{
 		case KEYWORD_entry:		parseEntryStmt (token);      break;
 		case KEYWORD_interface:	parseInterfaceBlock (token); break;
+		case KEYWORD_enum:		parseEnumBlock (token);      break;
 		case KEYWORD_stdcall:   readToken (token);           break;
 		/* derived type handled by parseTypeDeclarationStmt(); */
 
@@ -2079,6 +2153,7 @@ static boolean parseExecutionPart (tokenInfo *const token)
 			case KEYWORD_end:
 				readSubToken (token);
 				if (isSecondaryKeyword (token, KEYWORD_do) ||
+					isSecondaryKeyword (token, KEYWORD_enum) ||
 					isSecondaryKeyword (token, KEYWORD_if) ||
 					isSecondaryKeyword (token, KEYWORD_select) ||
 					isSecondaryKeyword (token, KEYWORD_where) ||
