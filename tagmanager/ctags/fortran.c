@@ -1610,8 +1610,11 @@ static void parseStructureStmt (tokenInfo *const token)
 		strcmp (vStringValue (token->string), "/") == 0)
 	{  /* read structure name */
 		readToken (token);
-		if (isType (token, TOKEN_IDENTIFIER))
+		if (isType (token, TOKEN_IDENTIFIER) || isType (token, TOKEN_KEYWORD))
+		{
 			name = newTokenFrom (token);
+			name->type = TOKEN_IDENTIFIER;
+		}
 		skipPast (token, TOKEN_OPERATOR);
 	}
 	if (name == NULL)
@@ -1728,8 +1731,11 @@ static void parseDerivedTypeDef (tokenInfo *const token)
 		parseQualifierSpecList (token);
 	if (isType (token, TOKEN_DOUBLE_COLON))
 		readToken (token);
-	if (isType (token, TOKEN_IDENTIFIER))
+	if (isType (token, TOKEN_IDENTIFIER) || isType (token, TOKEN_KEYWORD))
+	{
+		token->type = TOKEN_IDENTIFIER;
 		makeFortranTag (token, TAG_DERIVED_TYPE);
+	}
 	ancestorPush (token);
 	skipToNextStatement (token);
 	if (isKeyword (token, KEYWORD_private) ||
@@ -1777,18 +1783,19 @@ static void parseInterfaceBlock (tokenInfo *const token)
 	tokenInfo *name = NULL;
 	Assert (isKeyword (token, KEYWORD_interface));
 	readToken (token);
-	if (isType (token, TOKEN_IDENTIFIER))
-	{
-		name = newTokenFrom (token);
-	}
-	else if (isKeyword (token, KEYWORD_assignment) ||
-			 isKeyword (token, KEYWORD_operator))
+	if (isKeyword (token, KEYWORD_assignment) ||
+		isKeyword (token, KEYWORD_operator))
 	{
 		readToken (token);
 		if (isType (token, TOKEN_PAREN_OPEN))
 			readToken (token);
 		if (isType (token, TOKEN_OPERATOR))
 			name = newTokenFrom (token);
+	}
+	else if (isType (token, TOKEN_IDENTIFIER) || isType (token, TOKEN_KEYWORD))
+	{
+		name = newTokenFrom (token);
+		name->type = TOKEN_IDENTIFIER;
 	}
 	if (name == NULL)
 	{
@@ -1844,8 +1851,11 @@ static void parseEnumBlock (tokenInfo *const token)
 	parseKindSelector (token);
 	if (isType (token, TOKEN_DOUBLE_COLON))
 		readToken (token);
-	if (isType (token, TOKEN_IDENTIFIER))
+	if (isType (token, TOKEN_IDENTIFIER) || isType (token, TOKEN_KEYWORD))
+	{
 		name = newTokenFrom (token);
+		name->type = TOKEN_IDENTIFIER;
+	}
 	if (name == NULL)
 	{
 		name = newAnonTokenFrom (token, "Enum");
@@ -2101,8 +2111,11 @@ static void parseModule (tokenInfo *const token)
 {
 	Assert (isKeyword (token, KEYWORD_module));
 	readToken (token);
-	if (isType (token, TOKEN_IDENTIFIER))
+	if (isType (token, TOKEN_IDENTIFIER) || isType (token, TOKEN_KEYWORD))
+	{
+		token->type = TOKEN_IDENTIFIER;
 		makeFortranTag (token, TAG_MODULE);
+	}
 	ancestorPush (token);
 	skipToNextStatement (token);
 	parseSpecificationPart (token);
@@ -2182,8 +2195,11 @@ static void parseSubprogram (tokenInfo *const token, const tagType tag)
 			isKeyword (token, KEYWORD_function) ||
 			isKeyword (token, KEYWORD_subroutine));
 	readToken (token);
-	if (isType (token, TOKEN_IDENTIFIER))
+	if (isType (token, TOKEN_IDENTIFIER) || isType (token, TOKEN_KEYWORD))
+	{
+		token->type = TOKEN_IDENTIFIER;
 		makeFortranTag (token, tag);
+	}
 	ancestorPush (token);
 	skipToNextStatement (token);
 	parseSpecificationPart (token);

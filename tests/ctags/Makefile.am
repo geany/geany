@@ -158,6 +158,7 @@ test_sources = \
 	keyword_implicit.cs				\
 	keyword_interface.cs			\
 	keyword_namespace.cs			\
+	keyword_names.f90				\
 	keyword_out.cs					\
 	keyword_override.cs				\
 	keyword_params.cs				\
