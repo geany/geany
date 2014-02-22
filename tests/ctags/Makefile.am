@@ -179,6 +179,7 @@ test_sources = \
 	matlab_backtracking.m			\
 	matlab_test.m					\
 	maze.erl						\
+	members.f90						\
 	misc_types.f90					\
 	misc_types.f					\
 	mode.php						\
@@ -202,6 +203,7 @@ test_sources = \
 	prototype.h						\
 	pure_elem.f95					\
 	py_constructor_arglist.py		\
+	qualified_types.f90				\
 	random.sql						\
 	readlob.sql						\
 	readlong.sql					\

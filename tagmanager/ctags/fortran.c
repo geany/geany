@@ -100,6 +100,8 @@ typedef enum eKeywordId {
 	KEYWORD_intent,
 	KEYWORD_interface,
 	KEYWORD_intrinsic,
+	KEYWORD_kind,
+	KEYWORD_len,
 	KEYWORD_logical,
 	KEYWORD_map,
 	KEYWORD_module,
@@ -280,6 +282,8 @@ static const keywordDesc FortranKeywordTable [] = {
 	{ "intent",         KEYWORD_intent       },
 	{ "interface",      KEYWORD_interface    },
 	{ "intrinsic",      KEYWORD_intrinsic    },
+	{ "kind",           KEYWORD_kind         },
+	{ "len",            KEYWORD_len          },
 	{ "logical",        KEYWORD_logical      },
 	{ "map",            KEYWORD_map          },
 	{ "module",         KEYWORD_module       },
@@ -1331,6 +1335,8 @@ static void parseQualifierSpecList (tokenInfo *const token)
 			case KEYWORD_allocatable:
 			case KEYWORD_external:
 			case KEYWORD_intrinsic:
+			case KEYWORD_kind:
+			case KEYWORD_len:
 			case KEYWORD_optional:
 			case KEYWORD_private:
 			case KEYWORD_pointer:
