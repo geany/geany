@@ -208,6 +208,7 @@ static unsigned int Column = 0;
 static boolean FreeSourceForm = FALSE;
 static boolean ParsingString;
 static tokenInfo *Parent = NULL;
+static boolean NewLine = TRUE;
 static unsigned int contextual_fake_count = 0;
 
 /* indexed by tagType */
@@ -725,7 +726,6 @@ static int skipToNextLine (void)
 
 static int getFreeFormChar (boolean inComment)
 {
-	static boolean newline = TRUE;
 	boolean advanceLine = FALSE;
 	int c = fileGetc ();
 
@@ -740,7 +740,7 @@ static int getFreeFormChar (boolean inComment)
 		while (isspace (c)  &&  c != '\n');
 		if (c == '\n')
 		{
-			newline = TRUE;
+			NewLine = TRUE;
 			advanceLine = TRUE;
 		}
 		else if (c == '!')
@@ -751,16 +751,16 @@ static int getFreeFormChar (boolean inComment)
 			c = '&';
 		}
 	}
-	else if (newline && (c == '!' || c == '#'))
+	else if (NewLine && (c == '!' || c == '#'))
 		advanceLine = TRUE;
 	while (advanceLine)
 	{
 		while (isspace (c))
 			c = fileGetc ();
-		if (c == '!' || (newline && c == '#'))
+		if (c == '!' || (NewLine && c == '#'))
 		{
 			c = skipToNextLine ();
-			newline = TRUE;
+			NewLine = TRUE;
 			continue;
 		}
 		if (c == '&')
@@ -768,7 +768,7 @@ static int getFreeFormChar (boolean inComment)
 		else
 			advanceLine = FALSE;
 	}
-	newline = (boolean) (c == '\n');
+	NewLine = (boolean) (c == '\n');
 	return c;
 }
 
@@ -2289,6 +2289,7 @@ static boolean findFortranTags (const unsigned int passCount)
 	FreeSourceForm = (boolean) (passCount > 1);
 	contextual_fake_count = 0;
 	Column = 0;
+	NewLine = TRUE;
 	exception = (exception_t) setjmp (Exception);
 	if (exception == ExceptionEOF)
 		retry = FALSE;
