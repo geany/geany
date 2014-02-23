@@ -20,6 +20,7 @@ test_sources = \
 	attributes.cs					\
 	auto.f							\
 	bit_field.c						\
+	block.f90						\
 	bracematch.js					\
 	bug1020715.cpp					\
 	bug1020715.c					\
@@ -140,6 +141,7 @@ test_sources = \
 	initialization.f90				\
 	interface_indexers.cs			\
 	interface_properties.cs			\
+	interfaces.f90					\
 	internal.cs						\
 	intro_orig.tex					\
 	intro.tex						\
