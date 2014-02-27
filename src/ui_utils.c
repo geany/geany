@@ -608,7 +608,7 @@ void ui_create_insert_menu_items(void)
 		"memory", "locale", NULL
 	};
 	const gchar *c_includes_stl[] = {
-		"bitset", "dequev", "list", "map", "set", "queue", "stack", "vector", "algorithm",
+		"bitset", "deque", "list", "map", "set", "queue", "stack", "vector", "algorithm",
 		"iterator", "functional", "string", "complex", "valarray", NULL
 	};
 
