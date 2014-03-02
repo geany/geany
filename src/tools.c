@@ -947,29 +947,31 @@ void tools_word_count(void)
  * color dialog callbacks
  */
 #ifndef G_OS_WIN32
-static void on_color_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
+static void on_color_dialog_response(GTK_DIALOG() dialog, gint response, gpointer user_data)
 {
 	switch (response)
 	{
 		case GTK_RESPONSE_OK:
+			gtk_widget_hide(ui_widgets.open_colorsel);
+			/* fall through */
+		case GTK_RESPONSE_APPLY:
 		{
 			GdkColor color;
 			GeanyDocument *doc = document_get_current();
 			gchar *hex;
 			GtkWidget *colorsel;
 
-			gtk_widget_hide(ui_widgets.open_colorsel);
 			g_return_if_fail(doc != NULL);
 
 			colorsel = gtk_color_selection_dialog_get_color_selection(GTK_COLOR_SELECTION_DIALOG(ui_widgets.open_colorsel));
 			gtk_color_selection_get_current_color(GTK_COLOR_SELECTION(colorsel), &color);
 
 			hex = utils_get_hex_from_color(&color);
+
 			editor_insert_color(doc->editor, hex);
 			g_free(hex);
 			break;
 		}
-
 		default:
 			gtk_widget_hide(ui_widgets.open_colorsel);
 	}
@@ -984,11 +986,15 @@ void tools_color_chooser(const gchar *color)
 	win32_show_color_dialog(color);
 #else
 	GdkColor gc;
+	//gchar *c = (gchar*) color;
 	GtkWidget *colorsel;
 
 	if (ui_widgets.open_colorsel == NULL)
 	{
 		ui_widgets.open_colorsel = gtk_color_selection_dialog_new(_("Color Chooser"));
+
+		gtk_dialog_add_button (GTK_DIALOG() ui_widgets.open_colorsel, GTK_STOCK_APPLY, GTK_RESPONSE_APPLY);
+
 		gtk_widget_set_name(ui_widgets.open_colorsel, "GeanyDialog");
 		gtk_window_set_transient_for(GTK_WINDOW(ui_widgets.open_colorsel), GTK_WINDOW(main_widgets.window));
 		colorsel = gtk_color_selection_dialog_get_color_selection(GTK_COLOR_SELECTION_DIALOG(ui_widgets.open_colorsel));
@@ -1001,6 +1007,7 @@ void tools_color_chooser(const gchar *color)
 	}
 	else
 		colorsel = gtk_color_selection_dialog_get_color_selection(GTK_COLOR_SELECTION_DIALOG(ui_widgets.open_colorsel));
+
 	/* if color is non-NULL set it in the dialog as preselected color */
 	if (color != NULL && utils_parse_color(color, &gc))
 	{
