@@ -276,24 +276,41 @@ static void instantsave_document_new_cb(GObject *obj, GeanyDocument *doc, gpoint
 }
 
 
-/* Handle autosave when focus out */
-static GSourceFunc save_curdoc_on_focus_out()
+/** Save when focus out
+ *
+ * @param pointer ref to the current doc (struct GeanyDocument *)
+ *
+ * @return always FALSE = Just a one shot execution
+ *
+ **/
+static gboolean save_on_focus_out_idle(gpointer p_cur_doc)
 {
-	GeanyDocument *cur_doc = document_get_current();
+	struct GeanyDocument *cur_doc = (struct GeanyDocument *)p_cur_doc;
 
-	if ( (cur_doc != NULL) && (cur_doc->file_name != NULL) )
+	if (DOC_VALID(cur_doc) && (cur_doc->file_name != NULL))
 		document_save_file(cur_doc, FALSE);
 
 	return FALSE;
 }
 
 
-/* Handle the SCN_FOCUSOUT signal (autosaving the current doc when focus out) */
+/** Autosave the current file when the focus out of the _editor_
+ *
+ * Get the SCN_FOCUSOUT signal, and then ask plugin_idle_add()
+ * to save the current doc when idle
+ *
+ * @return always FALSE = Non block signals
+ *
+ **/
 static gboolean on_document_focus_out(GObject *object, GeanyEditor *editor,
 								 SCNotification *nt, gpointer data)
 {
-	if(nt->nmhdr.code == SCN_FOCUSOUT && enable_autosave_losing_focus)
-		plugin_idle_add(geany_plugin, (GSourceFunc) save_curdoc_on_focus_out, NULL);
+	if (nt->nmhdr.code == SCN_FOCUSOUT
+		&& enable_autosave_losing_focus
+		&& editor->document->file_name != NULL)
+	{
+		plugin_idle_add(geany_plugin, (GSourceFunc)save_on_focus_out_idle, editor->document);
+	}
 
 	return FALSE;
 }
