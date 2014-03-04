@@ -978,6 +978,7 @@ static void on_color_dialog_response(GtkDialog *dialog, gint response, gpointer 
 }
 #endif
 
+
 /* This shows the color selection dialog to choose a color. */
 void tools_color_chooser(const gchar *color)
 {
