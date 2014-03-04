@@ -5068,6 +5068,14 @@ configure a keybinding for the plugin.
 Save Actions
 ------------
 
+Auto Save
+^^^^^^^^^
+
+This plugin provides an option to automatically save documents.
+You can choose to save the current document, or all of your documents, at
+a given delay.
+
+
 Instant Save
 ^^^^^^^^^^^^
 This plugin sets on every new file (*File->New* or *File->New (with template)*)
