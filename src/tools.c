@@ -952,13 +952,15 @@ static void on_color_dialog_response(GtkDialog *dialog, gint response, gpointer 
 	switch (response)
 	{
 		case GTK_RESPONSE_OK:
+			gtk_widget_hide(ui_widgets.open_colorsel);
+			/* fall through */
+		case GTK_RESPONSE_APPLY:
 		{
 			GdkColor color;
 			GeanyDocument *doc = document_get_current();
 			gchar *hex;
 			GtkWidget *colorsel;
 
-			gtk_widget_hide(ui_widgets.open_colorsel);
 			g_return_if_fail(doc != NULL);
 
 			colorsel = gtk_color_selection_dialog_get_color_selection(GTK_COLOR_SELECTION_DIALOG(ui_widgets.open_colorsel));
@@ -976,7 +978,6 @@ static void on_color_dialog_response(GtkDialog *dialog, gint response, gpointer 
 }
 #endif
 
-
 /* This shows the color selection dialog to choose a color. */
 void tools_color_chooser(const gchar *color)
 {
@@ -989,6 +990,9 @@ void tools_color_chooser(const gchar *color)
 	if (ui_widgets.open_colorsel == NULL)
 	{
 		ui_widgets.open_colorsel = gtk_color_selection_dialog_new(_("Color Chooser"));
+
+		gtk_dialog_add_button (GTK_DIALOG(ui_widgets.open_colorsel), GTK_STOCK_APPLY, GTK_RESPONSE_APPLY);
+
 		gtk_widget_set_name(ui_widgets.open_colorsel, "GeanyDialog");
 		gtk_window_set_transient_for(GTK_WINDOW(ui_widgets.open_colorsel), GTK_WINDOW(main_widgets.window));
 		colorsel = gtk_color_selection_dialog_get_color_selection(GTK_COLOR_SELECTION_DIALOG(ui_widgets.open_colorsel));
