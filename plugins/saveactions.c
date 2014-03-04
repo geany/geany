@@ -32,7 +32,6 @@
 #include <glib/gstdio.h>
 
 
-GeanyPlugin		*geany_plugin;
 GeanyData		*geany_data;
 GeanyFunctions	*geany_functions;
 
@@ -53,7 +52,6 @@ enum
 static struct
 {
 	GtkWidget *checkbox_enable_autosave;
-	GtkWidget *checkbox_enable_autosave_losing_focus;
 	GtkWidget *checkbox_enable_instantsave;
 	GtkWidget *checkbox_enable_backupcopy;
 
@@ -72,7 +70,6 @@ pref_widgets;
 
 
 static gboolean enable_autosave;
-static gboolean enable_autosave_losing_focus;
 static gboolean enable_instantsave;
 static gboolean enable_backupcopy;
 
@@ -276,34 +273,10 @@ static void instantsave_document_new_cb(GObject *obj, GeanyDocument *doc, gpoint
 }
 
 
-/* Handle autosave when focus out */
-static GSourceFunc save_curdoc_on_focus_out()
-{
-	GeanyDocument *cur_doc = document_get_current();
-
-	if ( (cur_doc != NULL) && (cur_doc->file_name != NULL) )
-		document_save_file(cur_doc, FALSE);
-
-	return FALSE;
-}
-
-
-/* Handle the SCN_FOCUSOUT signal (autosaving the current doc when focus out) */
-static gboolean on_document_focus_out(GObject *object, GeanyEditor *editor,
-								 SCNotification *nt, gpointer data)
-{
-	if(nt->nmhdr.code == SCN_FOCUSOUT && enable_autosave_losing_focus)
-		plugin_idle_add(geany_plugin, (GSourceFunc) save_curdoc_on_focus_out, NULL);
-
-	return FALSE;
-}
-
-
 PluginCallback plugin_callbacks[] =
 {
 	{ "document-new", (GCallback) &instantsave_document_new_cb, FALSE, NULL },
 	{ "document-save", (GCallback) &backupcopy_document_save_cb, FALSE, NULL },
-	{ "editor-notify", (GCallback) &on_document_focus_out, FALSE, NULL },
 	{ NULL, NULL, FALSE, NULL }
 };
 
@@ -369,8 +342,6 @@ void plugin_init(GeanyData *data)
 
 	enable_autosave = utils_get_setting_boolean(
 		config, "saveactions", "enable_autosave", FALSE);
-	enable_autosave_losing_focus = utils_get_setting_boolean(
-		config, "saveactions", "enable_autosave_losing_focus", FALSE);
 	enable_instantsave = utils_get_setting_boolean(
 		config, "saveactions", "enable_instantsave", FALSE);
 	enable_backupcopy = utils_get_setting_boolean(
@@ -447,8 +418,6 @@ static void configure_response_cb(GtkDialog *dialog, gint response, G_GNUC_UNUSE
 
 		enable_autosave = gtk_toggle_button_get_active(
 			GTK_TOGGLE_BUTTON(pref_widgets.checkbox_enable_autosave));
-		enable_autosave_losing_focus = gtk_toggle_button_get_active(
-			GTK_TOGGLE_BUTTON(pref_widgets.checkbox_enable_autosave_losing_focus));
 		enable_instantsave = gtk_toggle_button_get_active(
 			GTK_TOGGLE_BUTTON(pref_widgets.checkbox_enable_instantsave));
 		enable_backupcopy = gtk_toggle_button_get_active(
@@ -474,7 +443,6 @@ static void configure_response_cb(GtkDialog *dialog, gint response, G_GNUC_UNUSE
 		g_key_file_load_from_file(config, config_file, G_KEY_FILE_NONE, NULL);
 
 		g_key_file_set_boolean(config, "saveactions", "enable_autosave", enable_autosave);
-		g_key_file_set_boolean(config, "saveactions", "enable_autosave_losing_focus", enable_autosave_losing_focus);
 		g_key_file_set_boolean(config, "saveactions", "enable_instantsave", enable_instantsave);
 		g_key_file_set_boolean(config, "saveactions", "enable_backupcopy", enable_backupcopy);
 
@@ -571,7 +539,7 @@ GtkWidget *plugin_configure(GtkDialog *dialog)
 	 * Auto Save
 	 */
 	{
-		GtkWidget *spin, *hbox, *checkbox, *checkbox_enable_as_lf, *radio1, *radio2;
+		GtkWidget *spin, *hbox, *checkbox, *radio1, *radio2;
 
 		notebook_vbox = gtk_vbox_new(FALSE, 2);
 		inner_vbox = gtk_vbox_new(FALSE, 5);
@@ -579,12 +547,6 @@ GtkWidget *plugin_configure(GtkDialog *dialog)
 		gtk_box_pack_start(GTK_BOX(notebook_vbox), inner_vbox, TRUE, TRUE, 5);
 		gtk_notebook_insert_page(GTK_NOTEBOOK(notebook),
 			notebook_vbox, gtk_label_new(_("Auto Save")), NOTEBOOK_PAGE_AUTOSAVE);
-
-		checkbox_enable_as_lf = gtk_check_button_new_with_mnemonic(_("Enable save when losing _focus"));
-		gtk_button_set_focus_on_click(GTK_BUTTON(checkbox_enable_as_lf), FALSE);
-		pref_widgets.checkbox_enable_autosave_losing_focus = checkbox_enable_as_lf;
-		gtk_box_pack_start(GTK_BOX(inner_vbox), checkbox_enable_as_lf, FALSE, FALSE, 6);
-		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(checkbox_enable_as_lf), enable_autosave_losing_focus);
 
 		checkbox_enable = gtk_check_button_new_with_mnemonic(_("_Enable"));
 		gtk_button_set_focus_on_click(GTK_BUTTON(checkbox_enable), FALSE);
