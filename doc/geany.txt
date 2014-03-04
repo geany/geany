@@ -5068,6 +5068,14 @@ configure a keybinding for the plugin.
 Save Actions
 ------------
 
+Save on focus out
+^^^^^^^^^^^^^^^^^
+
+You can save the current document when the editor's focus goes out.
+Every pop-up, menu dialogs, or anything else that can make the editor lose the focus,
+will make the current document to be saved.
+
+
 Instant Save
 ^^^^^^^^^^^^
 This plugin sets on every new file (*File->New* or *File->New (with template)*)
