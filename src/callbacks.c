@@ -1614,6 +1614,7 @@ G_MODULE_EXPORT void on_menu_project1_activate(GtkMenuItem *menuitem, gpointer u
 G_MODULE_EXPORT void on_menu_open_selected_file1_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
 	GeanyDocument *doc = document_get_current();
+	GeanyFiletype *ft = filetypes_detect_from_document(doc);
 	gchar *sel = NULL;
 	const gchar *wc;
 
@@ -1653,7 +1654,6 @@ G_MODULE_EXPORT void on_menu_open_selected_file1_activate(GtkMenuItem *menuitem,
 				SETPTR(path, utils_get_locale_from_utf8(path));
 				SETPTR(filename, g_build_path(G_DIR_SEPARATOR_S, path, sel, NULL));
 			}
-			g_free(path);
 #ifdef G_OS_UNIX
 			if (! g_file_test(filename, G_FILE_TEST_EXISTS))
 				SETPTR(filename, g_build_path(G_DIR_SEPARATOR_S, "/usr/local/include", sel, NULL));
@@ -1661,11 +1661,49 @@ G_MODULE_EXPORT void on_menu_open_selected_file1_activate(GtkMenuItem *menuitem,
 			if (! g_file_test(filename, G_FILE_TEST_EXISTS))
 				SETPTR(filename, g_build_path(G_DIR_SEPARATOR_S, "/usr/include", sel, NULL));
 #endif
+
+			 /* maybe the file extension was missing, try the standard extension */
+			if (! g_file_test(filename, G_FILE_TEST_EXISTS)){
+				SETPTR(path, utils_get_current_file_dir_utf8());
+				SETPTR(path, utils_get_locale_from_utf8(path));
+				if (!path)
+					path = g_get_current_dir();
+				SETPTR(filename, g_build_path(G_DIR_SEPARATOR_S, path, sel, NULL));
+				SETPTR(filename, g_build_path(".", filename, ft->extension, NULL));
+			}
+
+			if (! g_file_test(filename, G_FILE_TEST_EXISTS) &&
+				app->project != NULL && !EMPTY(app->project->base_path))
+			{
+				/* try the project's base path */
+				SETPTR(path, project_get_base_path());
+				SETPTR(path, utils_get_locale_from_utf8(path));
+				SETPTR(filename, g_build_path(G_DIR_SEPARATOR_S, path, sel, NULL));
+				SETPTR(filename, g_build_path(".", filename, ft->extension, NULL));
+			}
+
+#ifdef G_OS_UNIX
+			if (! g_file_test(filename, G_FILE_TEST_EXISTS)){
+				SETPTR(filename, g_build_path(G_DIR_SEPARATOR_S, "/usr/local/include", sel, NULL));
+				SETPTR(filename, g_build_path(".", filename, ft->extension, NULL));
+			}
+
+			if (! g_file_test(filename, G_FILE_TEST_EXISTS)){
+				SETPTR(filename, g_build_path(G_DIR_SEPARATOR_S, "/usr/include", sel, NULL));
+				SETPTR(filename, g_build_path(".", filename, ft->extension, NULL));
+			}
+#endif
+			g_free(path);
 		}
 
-		if (g_file_test(filename, G_FILE_TEST_EXISTS))
+		if ( ! g_file_test(filename, G_FILE_TEST_EXISTS)){
+			/* maybe we have to add an extension */
+			SETPTR(filename, g_build_path(".", filename, ft->extension, NULL));
+		}
+
+		if (g_file_test(filename, G_FILE_TEST_EXISTS)){
 			document_open_file(filename, FALSE, NULL, NULL);
-		else
+		} else
 		{
 			SETPTR(sel, utils_get_utf8_from_locale(sel));
 			ui_set_statusbar(TRUE, _("Could not open file %s (File not found)"), sel);
