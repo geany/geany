@@ -3293,7 +3293,16 @@ New                             Ctrl-N  (C)               Creates a new file.
 
 Open                            Ctrl-O  (C)               Opens a file.
 
-Open selected file              Ctrl-Shift-O              Opens the selected filename.
+Open selected file              Ctrl-Shift-O              Opens the selected filename. If the file does
+                                                          not exist the file type extension of the current
+                                                          document is added.
+
+                                                          LaTeX example:
+
+    														\\include{chapter5}
+
+                                                          The file chapter5.tex is opened.
+
 
 Re-open last closed tab                                   Re-opens the last closed document tab.
 
