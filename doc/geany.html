@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="generator" content="Docutils 0.8.1: http://docutils.sourceforge.net/" />
+<meta name="generator" content="Docutils 0.11: http://docutils.sourceforge.net/" />
 <title>Geany</title>
 <meta name="authors" content="Enrico Tröger  Nick Treleaven  Frank Lanitz  Colomban Wendling  Matthew Brush" />
 <meta name="date" content="2013-03-10" />
@@ -146,6 +146,7 @@ Stylesheet for Geany's documentation based on a version of John Gabriele.
 <td>1.24</td></tr>
 </tbody>
 </table>
+<!-- -*- reStructuredText -*- -->
 <p>Copyright © 2005-2012</p>
 <p>This document is distributed under the terms of the GNU General Public
 License as published by the Free Software Foundation; either version 2
@@ -459,8 +460,10 @@ of this program, and also in the chapter <a class="reference internal" href="#gn
 </li>
 </ul>
 </li>
-<li><a class="reference internal" href="#filetype-extensions" id="id207">Filetype extensions</a></li>
+<li><a class="reference internal" href="#filetype-extensions" id="id207">Filetype extensions</a><ul>
 <li><a class="reference internal" href="#filetype-group-membership" id="id208">Filetype group membership</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#preferences-file-format" id="id209">Preferences file format</a><ul>
 <li><a class="reference internal" href="#build-menu-section" id="id210">[build-menu] section</a></li>
 </ul>
@@ -687,10 +690,10 @@ list, type:</p>
 <pre class="literal-block">
 $ ./configure --help
 </pre>
-<dl class="docutils">
-<dt>or::</dt>
-<dd>$ ./waf --help</dd>
-</dl>
+<p>or:</p>
+<pre class="literal-block">
+$ ./waf --help
+</pre>
 <p>(depending on which build system you use).</p>
 <p>You may also want to read the INSTALL file for advanced installation
 options.</p>
@@ -738,6 +741,8 @@ permissions. See <a class="reference internal" href="#configuration-files">Confi
 <li><p class="first">From the Desktop Environment menu:</p>
 <p>Choose in your application menu of your used Desktop Environment:
 Development --&gt; Geany.</p>
+<p>At Windows-systems you will find Geany after installation inside
+the application menu within its special folder.</p>
 </li>
 <li><p class="first">From the command line:</p>
 <p>To start Geany from a command line, type the following and press
@@ -1257,9 +1262,18 @@ before the selected text was copied to the new position.</p>
 <div class="section" id="indentation">
 <h3><a class="toc-backref" href="#id45">Indentation</a></h3>
 <p>Geany allows each document to indent either with a tab character,
-multiple spaces or a combination of both. The default indent
-settings are set in <a class="reference internal" href="#editor-indentation-preferences">Editor Indentation preferences</a> (see the link
-for more information).</p>
+multiple spaces or a combination of both.</p>
+<p>The <em>Tabs</em> setting indents with one tab character per indent level, and
+displays tabs as the indent width.</p>
+<p>The <em>Spaces</em> setting indents with the number of spaces set in the indent
+width for each level.</p>
+<p>The <em>Tabs and Spaces</em> setting indents with spaces as above, then converts
+as many spaces as it can to tab characters at the rate of one tab for
+each multiple of the <cite>Various preference</cite> setting
+<em>indent_hard_tab_width</em> (default 8) and displays tabs as the
+<em>indent_hard_tab_width</em> value.</p>
+<p>The default indent settings are set in <a class="reference internal" href="#editor-indentation-preferences">Editor Indentation
+preferences</a> (see the link for more information).</p>
 <p>The default settings can be overridden per-document using the
 Document menu. They can also be overridden by projects - see
 <a class="reference internal" href="#project-management">Project management</a>.</p>
@@ -1297,7 +1311,10 @@ user doesn't always have to indent each line manually.</p>
 <dt>None</dt>
 <dd>Disables auto-indentation completely.</dd>
 <dt>Basic</dt>
-<dd>Adds the same amount of whitespace on a new line as on the last line.</dd>
+<dd>Adds the same amount of whitespace on a new line as on the previous line.
+For the <em>Tabs</em> and the <em>Spaces</em> indent types the indentation will use the
+same combination of characters as the previous line.  The
+<em>Tabs and Spaces</em> indentation type converts as explained above.</dd>
 <dt>Current chars</dt>
 <dd>Does the same as <em>Basic</em> but also indents a new line after an opening
 brace '{', and de-indents when typing a closing brace '}'. For Python,
@@ -1305,7 +1322,10 @@ a new line will be indented after typing ':' at the end of the
 previous line.</dd>
 <dt>Match braces</dt>
 <dd>Similar to <em>Current chars</em> but the closing brace will be aligned to
-match the indentation of the line with the opening brace.</dd>
+match the indentation of the line with the opening brace.  This
+requires the filetype to be one where Geany knows that the Scintilla
+lexer understands matching braces (C, C++, D, HTML, Pascal, Bash,
+Perl, TCL).</dd>
 </dl>
 <p>There is also XML-tag auto-indentation. This is enabled when the
 mode is more than just Basic, and is also controlled by a filetype
@@ -3743,9 +3763,9 @@ shortcut.</p>
 <h4><a class="toc-backref" href="#id164">File keybindings</a></h4>
 <table border="1" class="docutils">
 <colgroup>
-<col width="29%" />
 <col width="24%" />
-<col width="47%" />
+<col width="19%" />
+<col width="57%" />
 </colgroup>
 <thead valign="bottom">
 <tr><th class="head">Action</th>
@@ -3764,7 +3784,14 @@ shortcut.</p>
 </tr>
 <tr><td>Open selected file</td>
 <td>Ctrl-Shift-O</td>
-<td>Opens the selected filename.</td>
+<td><p class="first">Opens the selected filename. If the file does
+not exist the file type extension of the current
+document is added.</p>
+<p>LaTeX example:</p>
+<blockquote>
+\include{chapter5}</blockquote>
+<p class="last">The file chapter5.tex is opened.</p>
+</td>
 </tr>
 <tr><td>Re-open last closed tab</td>
 <td>&nbsp;</td>
@@ -4752,7 +4779,9 @@ path where Geany is installed (see <a class="reference internal" href="#installa
 <p>The system path is the <tt class="docutils literal">data</tt> subfolder of the installation path
 on Windows.</p>
 <p>The user configuration directory might vary, but on Windows XP it's:
-<tt class="docutils literal"><span class="pre">C:\Documents</span> and Settings\UserName\Application Data\geany</tt></p>
+<tt class="docutils literal"><span class="pre">C:\Documents</span> and Settings\UserName\Application Data\geany</tt>
+On Windows 7 and above you most likely will find it at:
+<tt class="docutils literal"><span class="pre">C:\users\UserName\Roaming\geany</span></tt></p>
 </div>
 </div>
 <div class="section" id="tools-menu-items">
@@ -4875,21 +4904,23 @@ the '<tt class="docutils literal">*</tt>' wildcard - e.g. <tt class="docutils li
 <p>Custom filetypes are not as powerful as built-in filetypes, but
 support for the following has been implemented:</p>
 <ul>
-<li><p class="first">Recognizing and setting the filetype (after the user has manually edited
-<tt class="docutils literal">filetype_extensions.conf</tt>).</p>
+<li><p class="first">Recognizing and setting the filetype (after the user has manually updated
+the <a class="reference internal" href="#filetype-extensions">filetype extensions</a> file).</p>
+</li>
+<li><p class="first"><a class="reference internal" href="#filetype-group-membership">Filetype group membership</a>.</p>
 </li>
 <li><dl class="first docutils">
 <dt>Reading filetype settings in the <tt class="docutils literal">[settings]</tt> section, including:</dt>
 <dd><ul class="first last simple">
 <li>Using an existing syntax highlighting lexer (<a class="reference internal" href="#lexer-filetype">lexer_filetype</a> key).</li>
-<li>Using an existing tag parser (<tt class="docutils literal">tag_parser</tt> key).</li>
+<li>Using an existing tag parser (<a class="reference internal" href="#tag-parser">tag_parser</a> key).</li>
 </ul>
 </dd>
 </dl>
 </li>
 <li><p class="first">Build commands (<tt class="docutils literal"><span class="pre">[build-menu]</span></tt> section).</p>
 </li>
-<li><p class="first">Loading global tags files (sharing the <tt class="docutils literal">tag_parser</tt> namespace).</p>
+<li><p class="first">Loading global tags files (sharing the <tt class="docutils literal">tag_parser</tt> filetype's namespace).</p>
 </li>
 </ul>
 <p>See <a class="reference internal" href="#filetype-configuration">Filetype configuration</a> for details on each setting.</p>
@@ -5071,6 +5102,8 @@ position or by the current selection.</p>
 context_action_cmd=firefox &quot;<a class="reference external" href="http://www.php.net/%s">http://www.php.net/%s</a>&quot;</p>
 <p class="last"><em>Example:</em> <tt class="docutils literal">context_action_cmd=devhelp <span class="pre">-s</span> &quot;%s&quot;</tt></p>
 </dd>
+</dl>
+<dl class="docutils" id="tag-parser">
 <dt>tag_parser</dt>
 <dd>The TagManager language name, e.g. &quot;C&quot;. Usually the same as the
 filetype name.</dd>
@@ -5463,8 +5496,11 @@ when moving, selecting and deleting across word boundaries
 </div>
 <div class="section" id="filetype-extensions">
 <h2><a class="toc-backref" href="#id207">Filetype extensions</a></h2>
-<p>To change the default filetype extension used when saving a new file,
+<div class="note">
+<p class="first admonition-title">Note</p>
+<p class="last">To change the default filetype extension used when saving a new file,
 see <a class="reference internal" href="#filetype-definition-files">Filetype definition files</a>.</p>
+</div>
 <p>You can override the list of file extensions that Geany uses to detect
 filetypes using the user <tt class="docutils literal">filetype_extensions.conf</tt> file. Use the
 <em>Tools-&gt;Configuration Files-&gt;filetype_extensions.conf</em> menu item. See
@@ -5480,9 +5516,8 @@ should look like:</p>
 [Extensions]
 Make=Makefile*;*.mk;Buildfile;
 </pre>
-</div>
 <div class="section" id="filetype-group-membership">
-<h2><a class="toc-backref" href="#id208">Filetype group membership</a></h2>
+<h3><a class="toc-backref" href="#id208">Filetype group membership</a></h3>
 <p>Group membership is also stored in <tt class="docutils literal">filetype_extensions.conf</tt>. This
 file is used to store information Geany needs at startup, whereas the
 separate filetype definition files hold information only needed when
@@ -5500,6 +5535,7 @@ None=None;
 <div class="note">
 <p class="first admonition-title">Note</p>
 <p class="last">Group membership is only read at startup.</p>
+</div>
 </div>
 </div>
 <div class="section" id="preferences-file-format">
@@ -6913,7 +6949,7 @@ USE OR PERFORMANCE OF THIS SOFTWARE.</p>
 <div class="footer">
 <hr class="footer" />
 <a class="reference external" href="geany.txt">View document source</a>.
-Generated on: 2013-04-15 01:56 UTC.
+Generated on: 2014-03-06 10:45 UTC.
 Generated by <a class="reference external" href="http://docutils.sourceforge.net/">Docutils</a> from <a class="reference external" href="http://docutils.sourceforge.net/rst.html">reStructuredText</a> source.
 
 </div>
