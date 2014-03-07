@@ -1346,6 +1346,41 @@ GtkWidget *ui_dialog_vbox_new(GtkDialog *dialog)
 }
 
 
+/* Reorders a dialog's buttons
+ * @param dialog A dialog
+ * @param response First response ID to reorder
+ * @param ... more response IDs, terminated by -1
+ *
+ * Like gtk_dialog_set_alternative_button_order(), but reorders the default
+ * buttons layout, not the alternative one.  This is useful if you e.g. added a
+ * button to a dialog which already had some and need yours not to be on the
+ * end.
+ */
+/* Heavily based on gtk_dialog_set_alternative_button_order().
+ * This relies on the action area to be a GtkBox, but although not documented
+ * the API expose it to be a GtkHButtonBox though GtkBuilder, so it should be
+ * fine */
+void ui_dialog_set_primary_button_order(GtkDialog *dialog, gint response, ...)
+{
+	va_list ap;
+	GtkWidget *action_area = gtk_dialog_get_action_area(dialog);
+	gint position;
+
+	va_start(ap, response);
+	for (position = 0; response != -1; position++)
+	{
+		GtkWidget *child = gtk_dialog_get_widget_for_response(dialog, response);
+		if (child)
+			gtk_box_reorder_child(GTK_BOX(action_area), child, position);
+		else
+			g_warning("%s: no child button with response id %d.", G_STRFUNC, response);
+
+		response = va_arg(ap, gint);
+	}
+	va_end(ap);
+}
+
+
 /** Creates a @c GtkButton with custom text and a stock image similar to
  * @c gtk_button_new_from_stock().
  * @param stock_id A @c GTK_STOCK_NAME string.

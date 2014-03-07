@@ -22,6 +22,7 @@
 #ifndef GEANY_UI_UTILS_H
 #define GEANY_UI_UTILS_H 1
 
+#include <stdarg.h>
 #include "gtkcompat.h"
 
 G_BEGIN_DECLS
@@ -184,6 +185,8 @@ gchar *ui_menu_item_get_text(GtkMenuItem *menu_item);
 GtkWidget *ui_frame_new_with_alignment(const gchar *label_text, GtkWidget **alignment);
 
 GtkWidget *ui_dialog_vbox_new(GtkDialog *dialog);
+
+void ui_dialog_set_primary_button_order(GtkDialog *dialog, gint response, ...);
 
 GtkWidget *ui_button_new_with_image(const gchar *stock_id, const gchar *text);
 
