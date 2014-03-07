@@ -1282,12 +1282,12 @@
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="check_native_windows_dialogs">
-                                    <property name="label" translatable="yes">Use Windows File Open/Save dialogs</property>
+                                    <property name="label" translatable="yes">Use Windows native dialogs</property>
                                     <property name="use_action_appearance">False</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
-                                    <property name="tooltip_text" translatable="yes">Defines whether to use the native Windows File Open/Save dialogs or whether to use the GTK default dialogs</property>
+                                    <property name="tooltip_text" translatable="yes">Defines whether to use the Windows native dialogs or whether to use the GTK default dialogs</property>
                                     <property name="use_underline">True</property>
                                     <property name="draw_indicator">True</property>
                                   </object>
