@@ -419,18 +419,25 @@ gboolean win32_show_document_open_dialog(GtkWindow *parent, const gchar *title, 
 
 
 gchar *win32_show_document_save_as_dialog(GtkWindow *parent, const gchar *title,
-										  const gchar *initial_file)
+										  GeanyDocument *doc)
 {
 	OPENFILENAMEW of;
 	gint retval;
 	gchar tmp[MAX_PATH];
 	wchar_t w_file[MAX_PATH];
 	wchar_t w_title[512];
+	wchar_t w_file_type[16];
 
 	w_file[0] = '\0';
+	w_file_type[0] = '\0';
 
-	if (initial_file != NULL)
-		MultiByteToWideChar(CP_UTF8, 0, initial_file, -1, w_file, G_N_ELEMENTS(w_file));
+	/* Convert the name of the file for of.lpstrFile */
+	MultiByteToWideChar(CP_UTF8, 0, DOC_FILENAME(doc), -1, w_file, G_N_ELEMENTS(w_file));
+
+	/* Convert the extension for of.lpstrDefExt */
+	if ((doc->file_type != NULL) && (doc->file_type->extension != NULL))
+		MultiByteToWideChar(CP_UTF8, 0, doc->file_type->extension, -1, w_file_type,
+				G_N_ELEMENTS(w_file_type));
 
 	MultiByteToWideChar(CP_UTF8, 0, title, -1, w_title, G_N_ELEMENTS(w_title));
 
@@ -451,7 +458,7 @@ gchar *win32_show_document_save_as_dialog(GtkWindow *parent, const gchar *title,
 	of.nMaxFile = 2048;
 	of.lpstrFileTitle = NULL;
 	of.lpstrTitle = w_title;
-	of.lpstrDefExt = L"";
+	of.lpstrDefExt = w_file_type;
 	of.Flags = OFN_FILEMUSTEXIST | OFN_EXPLORER;
 	retval = GetSaveFileNameW(&of);
 
