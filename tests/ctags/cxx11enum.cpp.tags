@@ -1,0 +1,19 @@
+# format=tagmanager
+AÌ2Ö0
+A_aÌ4ÎAÖ0
+A_bÌ4ÎAÖ0
+A_cÌ4ÎAÖ0
+BÌ2Ö0
+B_aÌ4ÎBÖ0
+B_bÌ4ÎBÖ0
+B_cÌ4ÎBÖ0
+CÌ2Ö0
+C_aÌ4ÎCÖ0
+C_bÌ4ÎCÖ0
+C_cÌ4ÎCÖ0
+DÌ2ÎFooÖ0
+FooÌ1Ö0
+aÌ4ÎFoo::DÖ0
+bÌ4ÎFoo::DÖ0
+cÌ4ÎFoo::DÖ0
+fooÌ1024Í(enum D a)ÎFooÖ0Ïvirtual void

@@ -1,8 +1,8 @@
 /*
  *      callbacks.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2005-2011 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2006-2011 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2005-2012 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2006-2012 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -14,9 +14,9 @@
  *      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *      GNU General Public License for more details.
  *
- *      You should have received a copy of the GNU General Public License
- *      along with this program; if not, write to the Free Software
- *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *      You should have received a copy of the GNU General Public License along
+ *      with this program; if not, write to the Free Software Foundation, Inc.,
+ *      51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
 /*
@@ -65,6 +65,7 @@
 #include "toolbar.h"
 #include "highlighting.h"
 #include "pluginutils.h"
+#include "gtkcompat.h"
 
 
 #ifdef HAVE_VTE
@@ -173,7 +174,7 @@ G_MODULE_EXPORT void on_save1_activate(GtkMenuItem *menuitem, gpointer user_data
 
 	if (doc != NULL && cur_page >= 0)
 	{
-		document_save_file(doc, FALSE);
+		document_save_file(doc, ui_prefs.allow_always_save);
 	}
 }
 
@@ -220,9 +221,8 @@ G_MODULE_EXPORT void on_close1_activate(GtkMenuItem *menuitem, gpointer user_dat
 {
 	GeanyDocument *doc = document_get_current();
 
-	g_return_if_fail(doc != NULL);
-
-	document_close(doc);
+	if (doc != NULL)
+		document_close(doc);
 }
 
 
@@ -413,7 +413,10 @@ G_MODULE_EXPORT void on_reload_as_activate(GtkMenuItem *menuitem, gpointer user_
 	const gchar *charset = NULL;
 
 	g_return_if_fail(doc != NULL);
-	g_return_if_fail(doc->file_name != NULL);
+
+	/* No need to reload "untitled" (non-file-backed) documents */
+	if (doc->file_name == NULL)
+		return;
 
 	if (i >= 0)
 	{
@@ -599,7 +602,7 @@ static gboolean delayed_check_disk_status(gpointer data)
 
 /* Changes window-title after switching tabs and lots of other things.
  * note: using 'after' makes Scintilla redraw before the UI, appearing more responsive */
-G_MODULE_EXPORT void on_notebook1_switch_page_after(GtkNotebook *notebook, GtkNotebookPage *page,
+G_MODULE_EXPORT void on_notebook1_switch_page_after(GtkNotebook *notebook, gpointer page,
 		guint page_num, gpointer user_data)
 {
 	GeanyDocument *doc;
@@ -638,7 +641,7 @@ G_MODULE_EXPORT void on_notebook1_switch_page_after(GtkNotebook *notebook, GtkNo
 }
 
 
-G_MODULE_EXPORT void on_tv_notebook_switch_page(GtkNotebook *notebook, GtkNotebookPage *page,
+G_MODULE_EXPORT void on_tv_notebook_switch_page(GtkNotebook *notebook, gpointer page,
 		guint page_num, gpointer user_data)
 {
 	/* suppress selection changed signal when switching to the open files list */
@@ -646,7 +649,7 @@ G_MODULE_EXPORT void on_tv_notebook_switch_page(GtkNotebook *notebook, GtkNotebo
 }
 
 
-G_MODULE_EXPORT void on_tv_notebook_switch_page_after(GtkNotebook *notebook, GtkNotebookPage *page,
+G_MODULE_EXPORT void on_tv_notebook_switch_page_after(GtkNotebook *notebook, gpointer page,
 		guint page_num, gpointer user_data)
 {
 	ignore_callback = FALSE;
@@ -734,11 +737,9 @@ G_MODULE_EXPORT void on_toggle_case1_activate(GtkMenuItem *menuitem, gpointer us
 	{
 		gchar *result = NULL;
 		gint cmd = SCI_LOWERCASE;
-		gint text_len = sci_get_selected_text_length(sci);
 		gboolean rectsel = (gboolean) scintilla_send_message(sci, SCI_SELECTIONISRECTANGLE, 0, 0);
 
-		text = g_malloc(text_len + 1);
-		sci_get_selected_text(sci, text);
+		text = sci_get_selection_contents(sci);
 
 		if (utils_str_has_upper(text))
 		{
@@ -746,7 +747,6 @@ G_MODULE_EXPORT void on_toggle_case1_activate(GtkMenuItem *menuitem, gpointer us
 				cmd = SCI_LOWERCASE;
 			else
 				result = g_utf8_strdown(text, -1);
-
 		}
 		else
 		{
@@ -754,7 +754,6 @@ G_MODULE_EXPORT void on_toggle_case1_activate(GtkMenuItem *menuitem, gpointer us
 				cmd = SCI_UPPERCASE;
 			else
 				result = g_utf8_strup(text, -1);
-
 		}
 
 		if (result != NULL)
@@ -762,7 +761,7 @@ G_MODULE_EXPORT void on_toggle_case1_activate(GtkMenuItem *menuitem, gpointer us
 			sci_replace_sel(sci, result);
 			g_free(result);
 			if (keep_sel)
-				sci_set_selection_start(sci, sci_get_current_position(sci) - text_len + 1);
+				sci_set_selection_start(sci, sci_get_current_position(sci) - strlen(text));
 		}
 		else
 			sci_send_command(sci, cmd);
@@ -907,8 +906,7 @@ static void find_usage(gboolean in_session)
 
 	if (sci_has_selection(doc->editor->sci))
 	{	/* take selected text if there is a selection */
-		search_text = g_malloc(sci_get_selected_text_length(doc->editor->sci) + 1);
-		sci_get_selected_text(doc->editor->sci, search_text);
+		search_text = sci_get_selection_contents(doc->editor->sci);
 		flags = SCFIND_MATCHCASE;
 	}
 	else
@@ -1168,7 +1166,7 @@ G_MODULE_EXPORT void on_comments_function_activate(GtkMenuItem *menuitem, gpoint
 	/* symbols_get_current_function returns -1 on failure, so sci_get_position_from_line
 	 * returns the current position, so it should be safe */
 	line = symbols_get_current_function(doc, &cur_tag);
-	pos = sci_get_position_from_line(doc->editor->sci, line - 1);
+	pos = sci_get_position_from_line(doc->editor->sci, line);
 
 	text = templates_get_template_function(doc, cur_tag);
 
@@ -1648,7 +1646,7 @@ G_MODULE_EXPORT void on_menu_open_selected_file1_activate(GtkMenuItem *menuitem,
 			filename = g_build_path(G_DIR_SEPARATOR_S, path, sel, NULL);
 
 			if (! g_file_test(filename, G_FILE_TEST_EXISTS) &&
-				app->project != NULL && NZV(app->project->base_path))
+				app->project != NULL && !EMPTY(app->project->base_path))
 			{
 				/* try the project's base path */
 				SETPTR(path, project_get_base_path());
@@ -1706,8 +1704,7 @@ G_MODULE_EXPORT void on_context_action1_activate(GtkMenuItem *menuitem, gpointer
 
 	if (sci_has_selection(doc->editor->sci))
 	{	/* take selected text if there is a selection */
-		word = g_malloc(sci_get_selected_text_length(doc->editor->sci) + 1);
-		sci_get_selected_text(doc->editor->sci, word);
+		word = sci_get_selection_contents(doc->editor->sci);
 	}
 	else
 	{
@@ -1716,7 +1713,7 @@ G_MODULE_EXPORT void on_context_action1_activate(GtkMenuItem *menuitem, gpointer
 
 	/* use the filetype specific command if available, fallback to global command otherwise */
 	if (doc->file_type != NULL &&
-		NZV(doc->file_type->context_action_cmd))
+		!EMPTY(doc->file_type->context_action_cmd))
 	{
 		command = g_strdup(doc->file_type->context_action_cmd);
 	}
@@ -1726,7 +1723,7 @@ G_MODULE_EXPORT void on_context_action1_activate(GtkMenuItem *menuitem, gpointer
 	}
 
 	/* substitute the wildcard %s and run the command if it is non empty */
-	if (G_LIKELY(NZV(command)))
+	if (G_LIKELY(!EMPTY(command)))
 	{
 		utils_str_replace_all(&command, "%s", word);
 
@@ -1808,7 +1805,7 @@ G_MODULE_EXPORT void on_back_activate(GtkMenuItem *menuitem, gpointer user_data)
 
 G_MODULE_EXPORT gboolean on_motion_event(GtkWidget *widget, GdkEventMotion *event, gpointer user_data)
 {
-	if (prefs.auto_focus && ! GTK_WIDGET_HAS_FOCUS(widget))
+	if (prefs.auto_focus && ! gtk_widget_has_focus(widget))
 		gtk_widget_grab_focus(widget);
 
 	return FALSE;
@@ -2083,9 +2080,15 @@ G_MODULE_EXPORT void on_reflow_lines_block1_activate(GtkMenuItem *menuitem, gpoi
 }
 
 
-G_MODULE_EXPORT void on_transpose_current_line1_activate(GtkMenuItem *menuitem, gpointer user_data)
+G_MODULE_EXPORT void on_move_lines_up1_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
-	keybindings_send_command(GEANY_KEY_GROUP_EDITOR, GEANY_KEYS_EDITOR_TRANSPOSELINE);
+	keybindings_send_command(GEANY_KEY_GROUP_EDITOR, GEANY_KEYS_EDITOR_MOVELINEUP);
+}
+
+
+G_MODULE_EXPORT void on_move_lines_down1_activate(GtkMenuItem *menuitem, gpointer user_data)
+{
+	keybindings_send_command(GEANY_KEY_GROUP_EDITOR, GEANY_KEYS_EDITOR_MOVELINEDOWN);
 }
 
 

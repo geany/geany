@@ -1,8 +1,8 @@
 /*
  *      main.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2005-2011 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2006-2011 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2005-2012 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2006-2012 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -14,9 +14,9 @@
  *      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *      GNU General Public License for more details.
  *
- *      You should have received a copy of the GNU General Public License
- *      along with this program; if not, write to the Free Software
- *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *      You should have received a copy of the GNU General Public License along
+ *      with this program; if not, write to the Free Software Foundation, Inc.,
+ *      51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
 /**
@@ -219,12 +219,29 @@ static void apply_settings(void)
 
 	if (interface_prefs.sidebar_pos != GTK_POS_LEFT)
 		ui_swap_sidebar_pos();
+
+	gtk_orientable_set_orientation(GTK_ORIENTABLE(ui_lookup_widget(main_widgets.window, "vpaned1")),
+		interface_prefs.msgwin_orientation);
 }
 
 
 static void main_init(void)
 {
+	/* add our icon path in case we aren't installed in the system prefix */
+	gchar *path;
+#ifdef G_OS_WIN32
+	gchar *install_dir = win32_get_installation_dir();
+	path = g_build_filename(install_dir, "share", "icons", NULL);
+	g_free(install_dir);
+#else
+	path = g_build_filename(GEANY_DATADIR, "icons", NULL);
+#endif
+	gtk_icon_theme_append_search_path(gtk_icon_theme_get_default(), path);
+	g_free(path);
+
 	/* inits */
+	ui_init_stock_items();
+
 	ui_init_builder();
 
 	main_widgets.window				= NULL;
@@ -241,8 +258,6 @@ static void main_init(void)
 	ui_prefs.recent_queue				= g_queue_new();
 	ui_prefs.recent_projects_queue		= g_queue_new();
 	main_status.opening_session_files	= FALSE;
-
-	ui_init_stock_items();
 
 	main_widgets.window = create_window1();
 
@@ -320,7 +335,7 @@ static void get_line_and_column_from_filename(gchar *filename, gint *line, gint 
 
 	g_assert(*line == -1 && *column == -1);
 
-	if (G_UNLIKELY(! NZV(filename)))
+	if (G_UNLIKELY(EMPTY(filename)))
 		return;
 
 	/* allow to open files like "test:0" */
@@ -364,6 +379,18 @@ static void get_line_and_column_from_filename(gchar *filename, gint *line, gint 
 }
 
 
+#ifdef G_OS_WIN32
+static void change_working_directory_on_windows(const gchar *install_dir)
+{
+	/* On Windows, change the working directory to the Geany installation path to not lock
+	 * the directory of a file passed as command line argument (see bug #2626124).
+	 * This also helps if plugins or other code uses relative paths to load
+	 * any additional resources (e.g. share/geany-plugins/...). */
+	win32_set_working_directory(install_dir);
+}
+#endif
+
+
 static void setup_paths(void)
 {
 	gchar *data_dir;
@@ -375,13 +402,15 @@ static void setup_paths(void)
 	 * documentation and data files */
 	gchar *install_dir = win32_get_installation_dir();
 
-	data_dir = g_strconcat(install_dir, "\\data", NULL); /* e.g. C:\Program Files\geany\data */
-	doc_dir = g_strconcat(install_dir, "\\doc", NULL);
+	data_dir = g_build_filename(install_dir, "data", NULL); /* e.g. C:\Program Files\geany\data */
+	doc_dir = g_build_filename(install_dir, "doc", NULL);
+
+	change_working_directory_on_windows(install_dir);
 
 	g_free(install_dir);
 #else
-	data_dir = g_strconcat(GEANY_DATADIR, "/geany", NULL); /* e.g. /usr/share/geany */
-	doc_dir = g_strconcat(GEANY_DOCDIR, "/html", NULL);
+	data_dir = g_build_filename(GEANY_DATADIR, "geany", NULL); /* e.g. /usr/share/geany */
+	doc_dir = g_build_filename(GEANY_DOCDIR, "html", NULL);
 #endif
 
 	/* convert path names to locale encoding */
@@ -449,7 +478,7 @@ void main_locale_init(const gchar *locale_dir, const gchar *package)
 	{
 		gchar *install_dir = win32_get_installation_dir();
 		/* e.g. C:\Program Files\geany\lib\locale */
-		l_locale_dir = g_strconcat(install_dir, "\\share\\locale", NULL);
+		l_locale_dir = g_build_filename(install_dir, "share", "locale", NULL);
 		g_free(install_dir);
 	}
 #else
@@ -510,7 +539,7 @@ static void parse_command_line_options(gint *argc, gchar ***argv)
 			continue;
 
 		cl_options.goto_line = atoi((*argv)[i] + 1);
-		(*argv)[i] = "--dummy";
+		(*argv)[i] = (gchar *) "--dummy";
 	}
 
 	context = g_option_context_new(_("[FILES...]"));
@@ -542,13 +571,16 @@ static void parse_command_line_options(gint *argc, gchar ***argv)
 
 	if (show_version)
 	{
+		gchar *build_date = utils_parse_and_format_build_date(__DATE__);
+
 		printf(PACKAGE " %s (", main_get_version_string());
 		/* note for translators: library versions are printed after this */
-		printf(_("built on %s with "), __DATE__);
+		printf(_("built on %s with "), build_date);
 		printf(geany_lib_versions,
 			GTK_MAJOR_VERSION, GTK_MINOR_VERSION, GTK_MICRO_VERSION,
 			GLIB_MAJOR_VERSION, GLIB_MINOR_VERSION, GLIB_MICRO_VERSION);
 		printf(")\n");
+		g_free(build_date);
 		wait_for_input_on_windows();
 		exit(0);
 	}
@@ -615,10 +647,9 @@ static void parse_command_line_options(gint *argc, gchar ***argv)
 static gint create_config_dir(void)
 {
 	gint saved_errno = 0;
-	gchar *conf_file = g_build_filename(app->configdir, "geany.conf", NULL);
-	gchar *filedefs_dir = g_build_filename(app->configdir, GEANY_FILEDEFS_SUBDIR, NULL);
-
-	gchar *templates_dir = g_build_filename(app->configdir, GEANY_TEMPLATES_SUBDIR, NULL);
+	gchar *conf_file = NULL;
+	gchar *filedefs_dir = NULL;
+	gchar *templates_dir = NULL;
 
 	if (! g_file_test(app->configdir, G_FILE_TEST_EXISTS))
 	{
@@ -664,6 +695,10 @@ static gint create_config_dir(void)
 		geany_debug("creating config directory %s", app->configdir);
 		saved_errno = utils_mkdir(app->configdir, TRUE);
 	}
+
+	conf_file = g_build_filename(app->configdir, "geany.conf", NULL);
+	filedefs_dir = g_build_filename(app->configdir, GEANY_FILEDEFS_SUBDIR, NULL);
+	templates_dir = g_build_filename(app->configdir, GEANY_TEMPLATES_SUBDIR, NULL);
 
 	if (saved_errno == 0 && ! g_file_test(conf_file, G_FILE_TEST_EXISTS))
 	{	/* check whether geany.conf can be written */
@@ -748,7 +783,8 @@ static gint setup_config_dir(void)
 	return mkdir_result;
 }
 
-
+/* Signal handling removed since on_exit_clicked() uses functions that are
+ * illegal in signal handlers
 static void signal_cb(gint sig)
 {
 	if (sig == SIGTERM)
@@ -756,7 +792,7 @@ static void signal_cb(gint sig)
 		on_exit_clicked(NULL, NULL);
 	}
 }
-
+ */
 
 /* Used for command-line arguments at startup or from socket.
  * this will strip any :line:col filename suffix from locale_filename */
@@ -844,7 +880,7 @@ static void load_session_project_file(void)
 
 	locale_filename = utils_get_locale_from_utf8(project_prefs.session_file);
 
-	if (G_LIKELY(NZV(locale_filename)))
+	if (G_LIKELY(!EMPTY(locale_filename)))
 		project_load_file(locale_filename);
 
 	g_free(locale_filename);
@@ -942,6 +978,52 @@ static const gchar *get_locale(void)
 }
 
 
+#if ! GTK_CHECK_VERSION(3, 0, 0)
+/* This prepends our own gtkrc file to the list of RC files to be loaded by GTK at startup.
+ * This function *has* to be called before gtk_init().
+ *
+ * We have a custom RC file defining various styles we need, and we want the user to be
+ * able to override them (e.g. if they want -- or need -- other colors).  Fair enough, one
+ * would simply call gtk_rc_parse() with the appropriate filename.  However, the styling
+ * rules applies in the order they are loaded, then if we load our styles after GTK has
+ * loaded the user's ones we'd override them.
+ *
+ * There are 2 solutions to fix this:
+ * 1) set our styles' priority to something with lower than "user" (actually "theme"
+ *    priority because rules precedence are first calculated depending on the priority
+ *    no matter of how precise the rules is, so we need to override the theme).
+ * 2) prepend our custom style to GTK's list while keeping priority to user (which is the
+ *    default), so it gets loaded before real user's ones and so gets overridden by them.
+ *
+ * One would normally go for 1 because it's ways simpler and requires less code: you just
+ * have to add the priorities to your styles, which is a matter of adding a few ":theme" in
+ * the RC file.  However, KDE being a bitch it doesn't set the gtk-theme-name but rather
+ * directly includes the style to use in a user gtkrc file, which makes the theme have
+ * "user" priority, hence overriding our styles.  So, we cannot set priorities in the RC
+ * file if we want to support running under KDE, which pretty much leave us with no choice
+ * but to go with solution 2, which unfortunately requires writing ugly code since GTK
+ * don't have a gtk_rc_prepend_default_file() function.  Thank you very much KDE.
+ *
+ * Though, as a side benefit it also makes the code work with people using gtk-chtheme,
+ * which also found it funny to include the theme in the user RC file. */
+static void setup_gtk2_styles(void)
+{
+	gchar **gtk_files = gtk_rc_get_default_files();
+	gchar **new_files = g_malloc(sizeof *new_files * (g_strv_length(gtk_files) + 2));
+	guint i = 0;
+
+	new_files[i++] = g_build_filename(app->datadir, "geany.gtkrc", NULL);
+	for (; *gtk_files; gtk_files++)
+		new_files[i++] = g_strdup(*gtk_files);
+	new_files[i] = NULL;
+
+	gtk_rc_set_default_files(new_files);
+
+	g_strfreev(new_files);
+}
+#endif
+
+
 gint main(gint argc, gchar **argv)
 {
 	GeanyDocument *doc;
@@ -963,20 +1045,25 @@ gint main(gint argc, gchar **argv)
 	memset(&ui_widgets, 0, sizeof(UIWidgets));
 
 	setup_paths();
+#if ! GTK_CHECK_VERSION(3, 0, 0)
+	setup_gtk2_styles();
+#endif
 #ifdef ENABLE_NLS
 	main_locale_init(GEANY_LOCALEDIR, GETTEXT_PACKAGE);
 #endif
 	parse_command_line_options(&argc, &argv);
 
+#if ! GLIB_CHECK_VERSION(2, 32, 0)
 	/* Initialize GLib's thread system in case any plugins want to use it or their
-	 * dependencies (e.g. WebKit, Soup, ...) */
+	 * dependencies (e.g. WebKit, Soup, ...). Deprecated since GLIB 2.32. */
 	if (!g_thread_supported())
 		g_thread_init(NULL);
+#endif
 
-	signal(SIGTERM, signal_cb);
+	/* removed as signal handling was wrong, see signal_cb()
+	signal(SIGTERM, signal_cb); */
+
 #ifdef G_OS_UNIX
-	/* SIGQUIT is used to kill spawned children and we get also this signal, so ignore */
-	signal(SIGQUIT, SIG_IGN);
 	/* ignore SIGPIPE signal for preventing sudden death of program */
 	signal(SIGPIPE, SIG_IGN);
 #endif
@@ -989,21 +1076,23 @@ gint main(gint argc, gchar **argv)
 		socket_info.lock_socket = -1;
 		socket_info.lock_socket_tag = 0;
 		socket_info.lock_socket = socket_init(argc, argv);
-		/* Socket exists */
-		if (socket_info.lock_socket == -2)
+		/* Quit if filenames were sent to first instance or the list of open
+		 * documents has been printed */
+		if ((socket_info.lock_socket == -2 /* socket exists */ && argc > 1) ||
+			cl_options.list_documents)
 		{
-			/* Quit if filenames were sent to first instance or the list of open
-			 * documents has been sent */
-			if (argc > 1 || cl_options.list_documents)
-			{
-				gdk_notify_startup_complete();
-				g_free(app->configdir);
-				g_free(app->datadir);
-				g_free(app->docdir);
-				g_free(app);
-				return 0;
-			}
-			/* Start a new instance if no command line strings were passed */
+			socket_finalize();
+			gdk_notify_startup_complete();
+			g_free(app->configdir);
+			g_free(app->datadir);
+			g_free(app->docdir);
+			g_free(app);
+			return 0;
+		}
+		/* Start a new instance if no command line strings were passed,
+		 * even if the socket already exists */
+		else if (socket_info.lock_socket == -2 /* socket already exists */)
+		{
 			socket_info.ignore_socket = TRUE;
 			cl_options.new_instance = TRUE;
 		}
@@ -1052,13 +1141,6 @@ gint main(gint argc, gchar **argv)
 	document_init_doclist();
 	symbols_init();
 	editor_snippets_init();
-
-	/* set window icon */
-	{
-		GdkPixbuf *pb = ui_new_pixbuf_from_inline(GEANY_IMAGE_LOGO);
-		gtk_window_set_icon(GTK_WINDOW(main_widgets.window), pb);
-		g_object_unref(pb);	/* free our reference */
-	}
 
 	/* registering some basic events */
 	g_signal_connect(main_widgets.window, "delete-event", G_CALLBACK(on_exit_clicked), NULL);
@@ -1137,17 +1219,6 @@ gint main(gint argc, gchar **argv)
 	}
 #endif
 
-#ifdef G_OS_WIN32
-	{
-		gchar *dir;
-		/* On Windows, change the working directory to the Geany installation path to not lock
-		 * the directory of a file passed as command line argument (see bug #2626124). */
-		dir = win32_get_installation_dir();
-		win32_set_working_directory(dir);
-		g_free(dir);
-	}
-#endif
-
 	/* when we are really done with setting everything up and the main event loop is running,
 	 * tell other components, mainly plugins, that startup is complete */
 	g_idle_add_full(G_PRIORITY_LOW, send_startup_complete, NULL, NULL);
@@ -1167,7 +1238,7 @@ static void queue_free(GQueue *queue)
 }
 
 
-void main_quit()
+void main_quit(void)
 {
 	geany_debug("Quitting...");
 
@@ -1197,7 +1268,6 @@ void main_quit()
 	sidebar_finalize();
 	configuration_finalize();
 	filetypes_free_types();
-	ui_finalize();
 	log_finalize();
 
 	tm_workspace_free(TM_WORK_OBJECT(app->tm_workspace));

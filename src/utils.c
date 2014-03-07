@@ -1,8 +1,8 @@
 /*
  *      utils.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2005-2011 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2006-2011 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2005-2012 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2006-2012 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -14,9 +14,9 @@
  *      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *      GNU General Public License for more details.
  *
- *      You should have received a copy of the GNU General Public License
- *      along with this program; if not, write to the Free Software
- *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *      You should have received a copy of the GNU General Public License along
+ *      with this program; if not, write to the Free Software Foundation, Inc.,
+ *      51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
 /*
@@ -52,6 +52,7 @@
 #include "win32.h"
 #include "project.h"
 #include "ui_utils.h"
+#include "templates.h"
 
 #include "utils.h"
 
@@ -254,7 +255,7 @@ gint utils_write_file(const gchar *filename, const gchar *text)
 		{
 			geany_debug("utils_write_file(): could not write to file %s (%s)",
 				filename, g_strerror(errno));
-			return NVL(errno, EIO);
+			return FALLBACK(errno, EIO);
 		}
 	}
 	return 0;
@@ -341,12 +342,20 @@ gboolean utils_is_short_html_tag(const gchar *tag_name)
 		"base",
 		"basefont",	/* < or not < */
 		"br",
+		"col",
+		"command",
+		"embed",
 		"frame",
 		"hr",
 		"img",
 		"input",
+		"keygen",
 		"link",
-		"meta"
+		"meta",
+		"param",
+		"source",
+		"track",
+		"wbr"
 	};
 
 	if (tag_name)
@@ -411,7 +420,7 @@ gboolean utils_atob(const gchar *str)
 /* NULL-safe version of g_path_is_absolute(). */
 gboolean utils_is_absolute_path(const gchar *path)
 {
-	if (G_UNLIKELY(! NZV(path)))
+	if (G_UNLIKELY(EMPTY(path)))
 		return FALSE;
 
 	return g_path_is_absolute(path);
@@ -625,19 +634,6 @@ gchar utils_brace_opposite(gchar ch)
 		case '>': return '<';
 		default: return '\0';
 	}
-}
-
-
-gchar *utils_get_hostname(void)
-{
-#ifdef G_OS_WIN32
-	return win32_get_hostname();
-#elif defined(HAVE_GETHOSTNAME)
-	gchar hostname[100];
-	if (gethostname(hostname, sizeof(hostname)) == 0)
-		return g_strdup(hostname);
-#endif
-	return g_strdup("localhost");
 }
 
 
@@ -867,28 +863,12 @@ gchar *utils_get_setting_string(GKeyFile *config, const gchar *section, const gc
 
 gchar *utils_get_hex_from_color(GdkColor *color)
 {
-	gchar *buffer = g_malloc0(9);
-
 	g_return_val_if_fail(color != NULL, NULL);
 
-	g_snprintf(buffer, 8, "#%02X%02X%02X",
-	      (guint) (utils_scale_round(color->red / 256, 255)),
-	      (guint) (utils_scale_round(color->green / 256, 255)),
-	      (guint) (utils_scale_round(color->blue / 256, 255)));
-
-	return buffer;
-}
-
-
-guint utils_invert_color(guint color)
-{
-	guint r, g, b;
-
-	r = 0xffffff - color;
-	g = 0xffffff - (color >> 8);
-	b = 0xffffff - (color >> 16);
-
-	return (r | (g << 8) | (b << 16));
+	return g_strdup_printf("#%02X%02X%02X",
+		(guint) (utils_scale_round(color->red / 256, 255)),
+		(guint) (utils_scale_round(color->green / 256, 255)),
+		(guint) (utils_scale_round(color->blue / 256, 255)));
 }
 
 
@@ -972,50 +952,44 @@ gchar *utils_make_human_readable_str(guint64 size, gulong block_size,
 }
 
 
- static guint utils_get_value_of_hex(const gchar ch)
+/* converts a color representation using gdk_color_parse(), with additional
+ * support of the "0x" prefix as a synonym for "#" */
+gboolean utils_parse_color(const gchar *spec, GdkColor *color)
 {
-	if (ch >= '0' && ch <= '9')
-		return ch - '0';
-	else if (ch >= 'A' && ch <= 'F')
-		return ch - 'A' + 10;
-	else if (ch >= 'a' && ch <= 'f')
-		return ch - 'a' + 10;
-	else
-		return 0;
+	gchar buf[64] = {0};
+
+	g_return_val_if_fail(spec != NULL, -1);
+
+	if (spec[0] == '0' && (spec[1] == 'x' || spec[1] == 'X'))
+	{
+		/* convert to # format for GDK to understand it */
+		buf[0] = '#';
+		strncpy(buf + 1, spec + 2, sizeof(buf) - 2);
+		spec = buf;
+	}
+
+	return gdk_color_parse(spec, color);
 }
 
 
-/* utils_strtod() converts a string containing a hex colour ("0x00ff00") into an integer.
- * Basically, it is the same as strtod() would do, but it does not understand hex colour values,
- * before ANSI-C99. With with_route set, it takes strings of the format "#00ff00".
- * Returns -1 on failure. */
-gint utils_strtod(const gchar *source, gchar **end, gboolean with_route)
+/* converts a GdkColor to the packed 24 bits BGR format, as understood by Scintilla
+ * returns a 24 bits BGR color, or -1 on failure */
+gint utils_color_to_bgr(const GdkColor *c)
 {
-	guint red, green, blue, offset = 0;
+	g_return_val_if_fail(c != NULL, -1);
+	return (c->red / 256) | ((c->green / 256) << 8) | ((c->blue / 256) << 16);
+}
 
-	g_return_val_if_fail(source != NULL, -1);
 
-	if (with_route && (strlen(source) != 7 || source[0] != '#'))
+/* parses @p spec using utils_parse_color() and convert it to 24 bits BGR using
+ * utils_color_to_bgr() */
+gint utils_parse_color_to_bgr(const gchar *spec)
+{
+	GdkColor color;
+	if (utils_parse_color(spec, &color))
+		return utils_color_to_bgr(&color);
+	else
 		return -1;
-	else if (! with_route && (strlen(source) != 8 || source[0] != '0' ||
-		(source[1] != 'x' && source[1] != 'X')))
-	{
-		return -1;
-	}
-
-	/* offset is set to 1 when the string starts with 0x, otherwise it starts with #
-	 * and we don't need to increase the index */
-	if (! with_route)
-		offset = 1;
-
-	red = utils_get_value_of_hex(
-					source[1 + offset]) * 16 + utils_get_value_of_hex(source[2 + offset]);
-	green = utils_get_value_of_hex(
-					source[3 + offset]) * 16 + utils_get_value_of_hex(source[4 + offset]);
-	blue = utils_get_value_of_hex(
-					source[5 + offset]) * 16 + utils_get_value_of_hex(source[6 + offset]);
-
-	return (red | (green << 8) | (blue << 16));
 }
 
 
@@ -1476,7 +1450,7 @@ gboolean utils_str_has_upper(const gchar *str)
 {
 	gunichar c;
 
-	if (! NZV(str) || ! g_utf8_validate(str, -1, NULL))
+	if (EMPTY(str) || ! g_utf8_validate(str, -1, NULL))
 		return FALSE;
 
 	while (*str != '\0')
@@ -1506,7 +1480,7 @@ gint utils_string_find(GString *haystack, gint start, gint end, const gchar *nee
 	if (start >= (gint)haystack->len)
 		return -1;
 
-	g_return_val_if_fail(NZV(needle), -1);
+	g_return_val_if_fail(!EMPTY(needle), -1);
 
 	if (end < 0)
 		end = haystack->len;
@@ -1635,33 +1609,16 @@ guint utils_string_regex_replace_all(GString *haystack, GRegex *regex,
 /* Get project or default startup directory (if set), or NULL. */
 const gchar *utils_get_default_dir_utf8(void)
 {
-	if (app->project && NZV(app->project->base_path))
+	if (app->project && !EMPTY(app->project->base_path))
 	{
 		return app->project->base_path;
 	}
 
-	if (NZV(prefs.default_open_path))
+	if (!EMPTY(prefs.default_open_path))
 	{
 		return prefs.default_open_path;
 	}
 	return NULL;
-}
-
-
-static gboolean check_error(GError **error)
-{
-	if (error != NULL && *error != NULL)
-	{
-		/* imitate the GLib warning */
-		g_warning(
-			"GError set over the top of a previous GError or uninitialized memory.\n"
-			"This indicates a bug in someone's code. You must ensure an error is NULL "
-			"before it's set.");
-		/* after returning the code may segfault, but we don't care because we should
-		 * make sure *error is NULL */
-		return FALSE;
-	}
-	return TRUE;
 }
 
 
@@ -1688,12 +1645,9 @@ gboolean utils_spawn_sync(const gchar *dir, gchar **argv, gchar **env, GSpawnFla
 {
 	gboolean result;
 
-	if (! check_error(error))
-		return FALSE;
-
 	if (argv == NULL)
 	{
-		*error = g_error_new(G_SPAWN_ERROR, G_SPAWN_ERROR_FAILED, "argv must not be NULL");
+		g_set_error(error, G_SPAWN_ERROR, G_SPAWN_ERROR_FAILED, "argv must not be NULL");
 		return FALSE;
 	}
 
@@ -1734,12 +1688,9 @@ gboolean utils_spawn_async(const gchar *dir, gchar **argv, gchar **env, GSpawnFl
 {
 	gboolean result;
 
-	if (! check_error(error))
-		return FALSE;
-
 	if (argv == NULL)
 	{
-		*error = g_error_new(G_SPAWN_ERROR, G_SPAWN_ERROR_FAILED, "argv must not be NULL");
+		g_set_error(error, G_SPAWN_ERROR, G_SPAWN_ERROR_FAILED, "argv must not be NULL");
 		return FALSE;
 	}
 
@@ -1829,13 +1780,13 @@ gboolean utils_is_remote_path(const gchar *path)
  * @see tm_get_real_path() - also resolves links. */
 void utils_tidy_path(gchar *filename)
 {
-	GString *str = g_string_new(filename);
-	const gchar *c, *needle;
-	gchar *tmp;
-	gssize pos;
+	GString *str;
+	const gchar *needle;
 	gboolean preserve_double_backslash = FALSE;
 
 	g_return_if_fail(g_path_is_absolute(filename));
+
+	str = g_string_new(filename);
 
 	if (str->len >= 2 && strncmp(str->str, "\\\\", 2) == 0)
 		preserve_double_backslash = TRUE;
@@ -1855,11 +1806,13 @@ void utils_tidy_path(gchar *filename)
 	needle = G_DIR_SEPARATOR_S ".." G_DIR_SEPARATOR_S;
 	while (1)
 	{
-		c = strstr(str->str, needle);
+		const gchar *c = strstr(str->str, needle);
 		if (c == NULL)
 			break;
 		else
 		{
+			gssize pos, sub_len;
+
 			pos = c - str->str;
 			if (pos <= 3)
 				break;	/* bad path */
@@ -1868,17 +1821,20 @@ void utils_tidy_path(gchar *filename)
 			g_string_erase(str, pos, strlen(needle));
 			g_string_insert_c(str, pos, G_DIR_SEPARATOR);
 
-			tmp = g_strndup(str->str, pos);	/* path up to "/../" */
-			c = g_strrstr(tmp, G_DIR_SEPARATOR_S);
-			g_return_if_fail(c);
+			/* search for last "/" before found "/../" */
+			c = g_strrstr_len(str->str, pos, G_DIR_SEPARATOR_S);
+			sub_len = pos - (c - str->str);
+			if (! c)
+				break;	/* bad path */
 
-			pos = c - tmp;	/* position of previous "/" */
-			g_string_erase(str, pos, strlen(c));
-			g_free(tmp);
+			pos = c - str->str;	/* position of previous "/" */
+			g_string_erase(str, pos, sub_len);
 		}
 	}
-	g_return_if_fail(strlen(str->str) <= strlen(filename));
-	strcpy(filename, str->str);
+	if (str->len <= strlen(filename))
+		memcpy(filename, str->str, str->len + 1);
+	else
+		g_warn_if_reached();
 	g_string_free(str, TRUE);
 }
 
@@ -1900,7 +1856,7 @@ gchar *utils_str_remove_chars(gchar *string, const gchar *chars)
 	gchar *w = string;
 
 	g_return_val_if_fail(string, NULL);
-	if (G_UNLIKELY(! NZV(chars)))
+	if (G_UNLIKELY(EMPTY(chars)))
 		return string;
 
 	foreach_str(r, string)
@@ -2091,4 +2047,37 @@ gchar **utils_strv_join(gchar **first, gchar **second)
 	g_free(first);
 	g_free(second);
 	return strv;
+}
+
+
+/* Try to parse a date using g_date_set_parse(). It doesn't take any format hint,
+ * obviously g_date_set_parse() uses some magic.
+ * The returned GDate object must be freed. */
+GDate *utils_parse_date(const gchar *input)
+{
+	GDate *date = g_date_new();
+
+	g_date_set_parse(date, input);
+
+	if (g_date_valid(date))
+		return date;
+
+	g_date_free(date);
+	return NULL;
+}
+
+
+gchar *utils_parse_and_format_build_date(const gchar *input)
+{
+	gchar date_buf[255];
+	GDate *date = utils_parse_date(input);
+
+	if (date != NULL)
+	{
+		g_date_strftime(date_buf, sizeof(date_buf), GEANY_TEMPLATES_FORMAT_DATE, date);
+		g_date_free(date);
+		return g_strdup(date_buf);
+	}
+
+	return g_strdup(input);
 }

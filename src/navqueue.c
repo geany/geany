@@ -2,8 +2,8 @@
  *      navqueue.c - this file is part of Geany, a fast and lightweight IDE
  *
  *      Copyright 2007 Dave Moore <wrex006(at)gmail(dot)com>
- *      Copyright 2007-2011 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2007-2011 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2007-2012 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2007-2012 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -15,9 +15,9 @@
  *      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *      GNU General Public License for more details.
  *
- *      You should have received a copy of the GNU General Public License
- *      along with this program; if not, write to the Free Software
- *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *      You should have received a copy of the GNU General Public License along
+ *      with this program; if not, write to the Free Software Foundation, Inc.,
+ *      51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
 /*
@@ -50,7 +50,7 @@ static GtkAction *navigation_buttons[2];
 
 
 
-void navqueue_init()
+void navqueue_init(void)
 {
 	navigation_queue = g_queue_new();
 	nav_queue_pos = 0;
@@ -63,7 +63,7 @@ void navqueue_init()
 }
 
 
-void navqueue_free()
+void navqueue_free(void)
 {
 	while (! g_queue_is_empty(navigation_queue))
 	{
@@ -150,7 +150,8 @@ gboolean navqueue_goto_line(GeanyDocument *old_doc, GeanyDocument *new_doc, gint
 {
 	gint pos;
 
-	g_return_val_if_fail(new_doc != NULL, FALSE);
+	g_return_val_if_fail(old_doc == NULL || old_doc->is_valid, FALSE);
+	g_return_val_if_fail(DOC_VALID(new_doc), FALSE);
 	g_return_val_if_fail(line >= 1, FALSE);
 
 	pos = sci_get_position_from_line(new_doc->editor->sci, line - 1);
@@ -184,7 +185,7 @@ static gboolean goto_file_pos(const gchar *file, gint pos)
 }
 
 
-void navqueue_go_back()
+void navqueue_go_back(void)
 {
 	filepos *fprev;
 
@@ -208,7 +209,7 @@ void navqueue_go_back()
 }
 
 
-void navqueue_go_forward()
+void navqueue_go_forward(void)
 {
 	filepos *fnext;
 

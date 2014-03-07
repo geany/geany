@@ -1,8 +1,8 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; geany.nsi - this file is part of Geany, a fast and lightweight IDE
 ;
-; Copyright 2007-2011 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
-; Copyright 2007-2011 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+; Copyright 2007-2012 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+; Copyright 2007-2012 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
 ;
 ; This program is free software; you can redistribute it and/or modify
 ; it under the terms of the GNU General Public License as published by
@@ -32,8 +32,8 @@ RequestExecutionLevel highest ; set execution level for Windows Vista
 ; helper defines  ;
 ;;;;;;;;;;;;;;;;;;;
 !define PRODUCT_NAME "Geany"
-!define PRODUCT_VERSION "1.22"
-!define PRODUCT_VERSION_ID "1.22.0.0"
+!define PRODUCT_VERSION "1.24"
+!define PRODUCT_VERSION_ID "1.24.0.0"
 !define PRODUCT_PUBLISHER "The Geany developer team"
 !define PRODUCT_WEB_SITE "http://www.geany.org/"
 !define PRODUCT_DIR_REGKEY "Software\Geany"
@@ -50,7 +50,7 @@ VIProductVersion "${PRODUCT_VERSION_ID}"
 VIAddVersionKey "ProductName" "${PRODUCT_NAME}"
 VIAddVersionKey "FileVersion" "${PRODUCT_VERSION}"
 VIAddVersionKey "ProductVersion" "${PRODUCT_VERSION}"
-VIAddVersionKey "LegalCopyright" "Copyright 2005-2011 by the Geany developer team"
+VIAddVersionKey "LegalCopyright" "Copyright 2005-2012 by the Geany developer team"
 VIAddVersionKey "FileDescription" "${PRODUCT_NAME} Installer"
 
 BrandingText "$(^NAME) installer (NSIS 2.46)"
@@ -128,11 +128,16 @@ Section "!Program Files" SEC01
 	SetOutPath "$INSTDIR\data"
 	File "${RESOURCEDIR}\data\GPL-2"
 	File "${RESOURCEDIR}\data\file*"
+	File "${RESOURCEDIR}\data\geany.glade"
+	File "${RESOURCEDIR}\data\geany.gtkrc"
 	File "${RESOURCEDIR}\data\snippets.conf"
 	File "${RESOURCEDIR}\data\ui_toolbar.xml"
 
 	SetOutPath "$INSTDIR\data\templates"
 	File /r "${RESOURCEDIR}\data\templates\*"
+
+	SetOutPath "$INSTDIR\data\colorschemes"
+	File /r "${RESOURCEDIR}\data\colorschemes\*"
 
 	SetOutPath "$INSTDIR\share\icons"
 	File /r "${RESOURCEDIR}\share\icons\*"
@@ -212,6 +217,7 @@ SectionEnd
 Section "Context Menus" SEC07
 	SectionIn 1
 	WriteRegStr HKCR "*\shell\OpenWithGeany" "" "Open with Geany"
+	WriteRegStr HKCR "*\shell\OpenWithGeany" "Icon" "$INSTDIR\bin\geany.exe"
 	WriteRegStr HKCR "*\shell\OpenWithGeany\command" "" '"$INSTDIR\bin\geany.exe" "%1"'
 SectionEnd
 

@@ -32,6 +32,8 @@
 	geany_functions->p_plugin->plugin_timeout_add_seconds
 #define plugin_idle_add \
 	geany_functions->p_plugin->plugin_idle_add
+#define plugin_builder_connect_signals \
+	geany_functions->p_plugin->plugin_builder_connect_signals
 #define document_new_file \
 	geany_functions->p_document->document_new_file
 #define document_get_current \

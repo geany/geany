@@ -3,13 +3,15 @@
 # Use localwin32.mk instead of editing variables as it is included in sub
 # makefiles.
 # Use localwin32.mk to override RST2HTML, DOXYGEN
-# For MSYS use localwin32.mk to set CP and RM.
 
 RST2HTML=python rst2html.py
 DOXYGEN=doxygen
-CP = copy
-RM = del
+CP = copy /y
 -include ../localwin32.mk
+
+ifdef MSYS
+CP = cp
+endif
 
 doc: geany.txt
 	$(RST2HTML) -stg --stylesheet=geany.css $^ geany.html

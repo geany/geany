@@ -1,8 +1,8 @@
 /*
  *      sciwrappers.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2005-2011 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2006-2011 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2005-2012 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2006-2012 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -14,9 +14,9 @@
  *      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *      GNU General Public License for more details.
  *
- *      You should have received a copy of the GNU General Public License
- *      along with this program; if not, write to the Free Software
- *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *      You should have received a copy of the GNU General Public License along
+ *      with this program; if not, write to the Free Software Foundation, Inc.,
+ *      51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
 /** @file sciwrappers.h
@@ -69,7 +69,7 @@ void sci_set_line_numbers(ScintillaObject *sci, gboolean set, gint extra_width)
 
 void sci_set_mark_long_lines(ScintillaObject *sci, gint type, gint column, const gchar *colour)
 {
-	glong colour_val = utils_strtod(colour, NULL, TRUE); /* Scintilla uses a "long" value */
+	glong colour_val = utils_parse_color_to_bgr(colour); /* Scintilla uses a "long" value */
 
 	if (column == 0)
 		type = 2;
@@ -375,6 +375,12 @@ gint sci_get_col_from_position(ScintillaObject *sci, gint position)
 }
 
 
+gint sci_get_position_from_col(ScintillaObject *sci, gint line, gint col)
+{
+	return (gint) SSM(sci, SCI_FINDCOLUMN, line, col);
+}
+
+
 /** Gets the position for the start of @a line.
  * @param sci Scintilla widget.
  * @param line Line.
@@ -523,6 +529,10 @@ gint sci_get_length(ScintillaObject *sci)
 }
 
 
+/** Gets the currently used lexer
+ * @param sci Scintilla widget.
+ * @returns The lexer ID
+ */
 gint sci_get_lexer(ScintillaObject *sci)
 {
 	return (gint) SSM(sci, SCI_GETLEXER, 0, 0);
@@ -586,18 +596,24 @@ void sci_get_text(ScintillaObject *sci, gint len, gchar *text)
 }
 
 
-/** Gets all text inside a given text length.
+/** Allocates and fills a buffer with text from the start of the document.
  * @param sci Scintilla widget.
- * @param len Length of the text to retrieve from the start of the document,
- *            usually sci_get_length() + 1.
+ * @param buffer_len Buffer length to allocate, including the terminating
+ * null char, e.g. sci_get_length() + 1. Alternatively use @c -1 to get all
+ * text (since Geany 1.23).
  * @return A copy of the text. Should be freed when no longer needed.
  *
- * @since 0.17
+ * @since 1.23 (0.17)
  */
-gchar *sci_get_contents(ScintillaObject *sci, gint len)
+gchar *sci_get_contents(ScintillaObject *sci, gint buffer_len)
 {
-	gchar *text = g_malloc(len);
-	SSM(sci, SCI_GETTEXT, (uptr_t) len, (sptr_t) text);
+	gchar *text;
+
+	if (buffer_len < 0)
+		buffer_len = sci_get_length(sci) + 1;
+
+	text = g_malloc(buffer_len);
+	SSM(sci, SCI_GETTEXT, (uptr_t) buffer_len, (sptr_t) text);
 	return text;
 }
 
@@ -678,7 +694,7 @@ gint sci_get_fold_parent(ScintillaObject *sci, gint start_line)
 
 void sci_toggle_fold(ScintillaObject *sci, gint line)
 {
-	SSM(sci, SCI_TOGGLEFOLD, (uptr_t) line, 1);
+	SSM(sci, SCI_TOGGLEFOLD, (uptr_t) line, 0);
 }
 
 
@@ -923,10 +939,9 @@ void sci_get_text_range(ScintillaObject *sci, gint start, gint end, gchar *text)
 
 
 /** Gets text between @a start and @a end.
- *
  * @param sci Scintilla widget.
- * @param start Start.
- * @param end End.
+ * @param start Start position.
+ * @param end End position.
  * @return The text inside the given range. Should be freed when no longer needed.
  *
  * @since 0.17
@@ -1238,12 +1253,6 @@ gint sci_get_position_after(ScintillaObject *sci, gint start)
 }
 
 
-void sci_lines_split(ScintillaObject *sci, gint pixelWidth)
-{
-	SSM(sci, SCI_LINESSPLIT, (uptr_t) pixelWidth, 0);
-}
-
-
 void sci_lines_join(ScintillaObject *sci)
 {
 	SSM(sci, SCI_LINESJOIN, 0, 0);
@@ -1255,12 +1264,27 @@ gint sci_text_width(ScintillaObject *sci, gint styleNumber, const gchar *text)
 	return (gint) SSM(sci, SCI_TEXTWIDTH, (uptr_t) styleNumber, (sptr_t) text);
 }
 
+
 void sci_move_selected_lines_down(ScintillaObject *sci)
 {
 	SSM(sci, SCI_MOVESELECTEDLINESDOWN, 0, 0);
 }
 
+
 void sci_move_selected_lines_up(ScintillaObject *sci)
 {
 	SSM(sci, SCI_MOVESELECTEDLINESUP, 0, 0);
 }
+
+
+gint sci_word_start_position(ScintillaObject *sci, gint position, gboolean onlyWordCharacters)
+{
+	return SSM(sci, SCI_WORDSTARTPOSITION, position, onlyWordCharacters);
+}
+
+
+gint sci_word_end_position(ScintillaObject *sci, gint position, gboolean onlyWordCharacters)
+{
+	return SSM(sci, SCI_WORDENDPOSITION, position, onlyWordCharacters);
+}
+

@@ -1,9 +1,9 @@
 /*
  *      highlightingmappings.h - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2005-2011 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2006-2011 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
- *      Copyright 2011 Colomban Wendling <ban(at)herbesfolles(dot)org>
+ *      Copyright 2005-2012 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2006-2012 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2011-2012 Colomban Wendling <ban(at)herbesfolles(dot)org>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -15,9 +15,9 @@
  *      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *      GNU General Public License for more details.
  *
- *      You should have received a copy of the GNU General Public License
- *      along with this program; if not, write to the Free Software
- *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *      You should have received a copy of the GNU General Public License along
+ *      with this program; if not, write to the Free Software Foundation, Inc.,
+ *      51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
 
@@ -67,6 +67,31 @@ typedef struct
 
 /* like G_N_ELEMENTS() but supports @array being NULL (for empty entries) */
 #define HL_N_ENTRIES(array) ((array != NULL) ? G_N_ELEMENTS(array) : 0)
+
+
+/* Abaqus */
+#define highlighting_lexer_ABAQUS			SCLEX_ABAQUS
+static const HLStyle highlighting_styles_ABAQUS[] =
+{
+	{ SCE_ABAQUS_DEFAULT,		"default",		FALSE },
+	{ SCE_ABAQUS_COMMENT,		"comment",		FALSE },
+	{ SCE_ABAQUS_NUMBER,		"number",		FALSE },
+	{ SCE_ABAQUS_STRING,		"string",		FALSE },
+	{ SCE_ABAQUS_OPERATOR,		"operator",		FALSE },
+	{ SCE_ABAQUS_PROCESSOR,		"processor",		FALSE },
+	{ SCE_ABAQUS_STARCOMMAND,	"starcommand",		FALSE },
+	{ SCE_ABAQUS_ARGUMENT,		"argument",		FALSE }
+};
+static const HLKeyword highlighting_keywords_ABAQUS[] =
+{
+	{ 0, "processors", FALSE },
+	{ 1, "commands", FALSE },
+	{ 2, "slashommands", FALSE },
+	{ 3, "starcommands", FALSE },
+	{ 4, "arguments", FALSE },
+	{ 5, "functions", FALSE }
+};
+#define highlighting_properties_ABAQUS		EMPTY_PROPERTIES
 
 
 /* Ada */
@@ -171,6 +196,27 @@ static const HLKeyword highlighting_keywords_BASIC[] =
 #define highlighting_properties_BASIC	EMPTY_PROPERTIES
 
 
+/* BATCH */
+#define highlighting_lexer_BATCH		SCLEX_BATCH
+static const HLStyle highlighting_styles_BATCH[] =
+{
+	{ SCE_BAT_DEFAULT,		"default",		FALSE },
+	{ SCE_BAT_COMMENT,		"comment",		FALSE },
+	{ SCE_BAT_LABEL,		"label",		FALSE },
+	{ SCE_BAT_WORD,			"word",			FALSE },
+	{ SCE_BAT_HIDE,			"hide",			FALSE },
+	{ SCE_BAT_COMMAND,		"command",		FALSE },
+	{ SCE_BAT_IDENTIFIER,	"identifier",	FALSE },
+	{ SCE_BAT_OPERATOR,		"operator",		FALSE }
+};
+static const HLKeyword highlighting_keywords_BATCH[] =
+{
+	{ 0, "keywords",			FALSE },
+	{ 1, "keywords_optional",	FALSE }
+};
+#define highlighting_properties_BATCH	EMPTY_PROPERTIES
+
+
 /* C */
 /* Also used by some other SCLEX_CPP-based filetypes */
 #define highlighting_lexer_C		SCLEX_CPP
@@ -180,10 +226,13 @@ static const HLStyle highlighting_styles_C[] =
 	{ SCE_C_COMMENT,				"comment",					FALSE },
 	{ SCE_C_COMMENTLINE,			"commentline",				FALSE },
 	{ SCE_C_COMMENTDOC,				"commentdoc",				FALSE },
+	{ SCE_C_PREPROCESSORCOMMENT,	"preprocessorcomment",		FALSE },
+	{ SCE_C_PREPROCESSORCOMMENTDOC,	"preprocessorcommentdoc",	FALSE },
 	{ SCE_C_NUMBER,					"number",					FALSE },
 	{ SCE_C_WORD,					"word",						FALSE },
 	{ SCE_C_WORD2,					"word2",					FALSE },
 	{ SCE_C_STRING,					"string",					FALSE },
+	{ SCE_C_STRINGRAW,				"stringraw",				FALSE },
 	{ SCE_C_CHARACTER,				"character",				FALSE },
 	{ SCE_C_UUID,					"uuid",						FALSE },
 	{ SCE_C_PREPROCESSOR,			"preprocessor",				FALSE },
@@ -194,6 +243,7 @@ static const HLStyle highlighting_styles_C[] =
 	/* triple verbatims use the same style */
 	{ SCE_C_TRIPLEVERBATIM,			"verbatim",					FALSE },
 	{ SCE_C_REGEX,					"regex",					FALSE },
+	{ SCE_C_HASHQUOTEDSTRING,		"hashquotedstring",			FALSE },
 	{ SCE_C_COMMENTLINEDOC,			"commentlinedoc",			FALSE },
 	{ SCE_C_COMMENTDOCKEYWORD,		"commentdockeyword",		FALSE },
 	{ SCE_C_COMMENTDOCKEYWORDERROR,	"commentdockeyworderror",	FALSE },
@@ -291,6 +341,7 @@ static const HLStyle highlighting_styles_CSS[] =
 	{ SCE_CSS_VALUE,					"value",					FALSE },
 	{ SCE_CSS_ID,						"id",						FALSE },
 	{ SCE_CSS_IDENTIFIER2,				"identifier2",				FALSE },
+	{ SCE_CSS_VARIABLE,					"variable",					FALSE },
 	{ SCE_CSS_IMPORTANT,				"important",				FALSE },
 	{ SCE_CSS_DIRECTIVE,				"directive",				FALSE },
 	{ SCE_CSS_IDENTIFIER3,				"identifier3",				FALSE },
@@ -543,7 +594,12 @@ static const HLStyle highlighting_styles_FORTH[] =
 };
 static const HLKeyword highlighting_keywords_FORTH[] =
 {
-	{ 0, "primary",	FALSE }
+	{ 0, "primary",		FALSE },
+	{ 1, "keyword",		FALSE },
+	{ 2, "defword",		FALSE },
+	{ 3, "preword1",	FALSE },
+	{ 4, "preword2",	FALSE },
+	{ 5, "string",		FALSE }
 };
 #define highlighting_properties_FORTH	EMPTY_PROPERTIES
 
@@ -560,27 +616,35 @@ static const HLKeyword highlighting_keywords_FORTH[] =
 #define highlighting_lexer_HASKELL			SCLEX_HASKELL
 static const HLStyle highlighting_styles_HASKELL[] =
 {
-	{ SCE_HA_DEFAULT,		"default",			FALSE },
-	{ SCE_HA_COMMENTLINE,	"commentline",		FALSE },
-	{ SCE_HA_COMMENTBLOCK,	"commentblock",		FALSE },
-	{ SCE_HA_COMMENTBLOCK2,	"commentblock2",	FALSE },
-	{ SCE_HA_COMMENTBLOCK3,	"commentblock3",	FALSE },
-	{ SCE_HA_NUMBER,		"number",			FALSE },
-	{ SCE_HA_KEYWORD,		"keyword",			FALSE },
-	{ SCE_HA_IMPORT,		"import",			FALSE },
-	{ SCE_HA_STRING,		"string",			FALSE },
-	{ SCE_HA_CHARACTER,		"character",		FALSE },
-	{ SCE_HA_CLASS,			"class",			FALSE },
-	{ SCE_HA_OPERATOR,		"operator",			FALSE },
-	{ SCE_HA_IDENTIFIER,	"identifier",		FALSE },
-	{ SCE_HA_INSTANCE,		"instance",			FALSE },
-	{ SCE_HA_CAPITAL,		"capital",			FALSE },
-	{ SCE_HA_MODULE,		"module",			FALSE },
-	{ SCE_HA_DATA,			"data",				FALSE }
+	{ SCE_HA_DEFAULT,				"default",				FALSE },
+	{ SCE_HA_COMMENTLINE,			"commentline",			FALSE },
+	{ SCE_HA_COMMENTBLOCK,			"commentblock",			FALSE },
+	{ SCE_HA_COMMENTBLOCK2,			"commentblock2",		FALSE },
+	{ SCE_HA_COMMENTBLOCK3,			"commentblock3",		FALSE },
+	{ SCE_HA_NUMBER,				"number",				FALSE },
+	{ SCE_HA_KEYWORD,				"keyword",				FALSE },
+	{ SCE_HA_IMPORT,				"import",				FALSE },
+	{ SCE_HA_STRING,				"string",				FALSE },
+	{ SCE_HA_CHARACTER,				"character",			FALSE },
+	{ SCE_HA_CLASS,					"class",				FALSE },
+	{ SCE_HA_OPERATOR,				"operator",				FALSE },
+	{ SCE_HA_IDENTIFIER,			"identifier",			FALSE },
+	{ SCE_HA_INSTANCE,				"instance",				FALSE },
+	{ SCE_HA_CAPITAL,				"capital",				FALSE },
+	{ SCE_HA_MODULE,				"module",				FALSE },
+	{ SCE_HA_DATA,					"data",					FALSE },
+	{ SCE_HA_PRAGMA,				"pragma",				FALSE },
+	{ SCE_HA_PREPROCESSOR,			"preprocessor",			FALSE },
+	{ SCE_HA_STRINGEOL,				"stringeol",			FALSE },
+	{ SCE_HA_RESERVED_OPERATOR,		"reserved_operator",	FALSE },
+	{ SCE_HA_LITERATE_COMMENT,		"literate_comment",		FALSE },
+	{ SCE_HA_LITERATE_CODEDELIM,	"literate_codedelim",	FALSE }
 };
 static const HLKeyword highlighting_keywords_HASKELL[] =
 {
-	{ 0, "keywords",	FALSE }
+	{ 0, "keywords",		   FALSE },
+	{ 1, "ffi",				   FALSE },
+	{ 2, "reserved_operators", FALSE }
 };
 #define highlighting_properties_HASKELL		EMPTY_PROPERTIES
 
@@ -1071,18 +1135,59 @@ static const HLKeyword highlighting_keywords_PERL[] =
 #define highlighting_lexer_PO		SCLEX_PO
 static const HLStyle highlighting_styles_PO[] =
 {
-	{ SCE_PO_DEFAULT,		"default",			FALSE },
-	{ SCE_PO_COMMENT,		"comment",			FALSE },
-	{ SCE_PO_MSGID,			"msgid",			FALSE },
-	{ SCE_PO_MSGID_TEXT,	"msgid_text",		FALSE },
-	{ SCE_PO_MSGSTR,		"msgstr",			FALSE },
-	{ SCE_PO_MSGSTR_TEXT,	"msgstr_text",		FALSE },
-	{ SCE_PO_MSGCTXT,		"msgctxt",			FALSE },
-	{ SCE_PO_MSGCTXT_TEXT,	"msgctxt_text",		FALSE },
-	{ SCE_PO_FUZZY,			"fuzzy",			FALSE }
+	{ SCE_PO_DEFAULT,				"default",				FALSE },
+	{ SCE_PO_COMMENT,				"comment",				FALSE },
+	{ SCE_PO_PROGRAMMER_COMMENT,	"programmer_comment",	FALSE },
+	{ SCE_PO_REFERENCE,				"reference",			FALSE },
+	{ SCE_PO_FLAGS,					"flags",				FALSE },
+	{ SCE_PO_FUZZY,					"fuzzy",				FALSE },
+	{ SCE_PO_MSGID,					"msgid",				FALSE },
+	{ SCE_PO_MSGID_TEXT,			"msgid_text",			FALSE },
+	{ SCE_PO_MSGID_TEXT_EOL,		"msgid_text_eol",		FALSE },
+	{ SCE_PO_MSGSTR,				"msgstr",				FALSE },
+	{ SCE_PO_MSGSTR_TEXT,			"msgstr_text",			FALSE },
+	{ SCE_PO_MSGSTR_TEXT_EOL,		"msgstr_text_eol",		FALSE },
+	{ SCE_PO_MSGCTXT,				"msgctxt",				FALSE },
+	{ SCE_PO_MSGCTXT_TEXT,			"msgctxt_text",			FALSE },
+	{ SCE_PO_MSGCTXT_TEXT_EOL,		"msgctxt_text_eol",		FALSE },
+	{ SCE_PO_ERROR,					"error",				FALSE }
 };
 #define highlighting_keywords_PO	EMPTY_KEYWORDS
 #define highlighting_properties_PO	EMPTY_PROPERTIES
+
+
+/* PowerShell */
+#define highlighting_lexer_POWERSHELL		SCLEX_POWERSHELL
+static const HLStyle highlighting_styles_POWERSHELL[] =
+{
+	{ SCE_POWERSHELL_DEFAULT,			"default",				FALSE },
+	{ SCE_POWERSHELL_COMMENT,			"comment",				FALSE },
+	{ SCE_POWERSHELL_STRING,			"string",				FALSE },
+	{ SCE_POWERSHELL_CHARACTER,			"character",			FALSE },
+	{ SCE_POWERSHELL_NUMBER,			"number",				FALSE },
+	{ SCE_POWERSHELL_VARIABLE,			"variable",				FALSE },
+	{ SCE_POWERSHELL_OPERATOR,			"operator",				FALSE },
+	{ SCE_POWERSHELL_IDENTIFIER,		"identifier",			FALSE },
+	{ SCE_POWERSHELL_KEYWORD,			"keyword",				FALSE },
+	{ SCE_POWERSHELL_CMDLET,			"cmdlet",				FALSE },
+	{ SCE_POWERSHELL_ALIAS,				"alias",				FALSE },
+	{ SCE_POWERSHELL_FUNCTION,			"function",				FALSE },
+	{ SCE_POWERSHELL_USER1,				"user1",				FALSE },
+	{ SCE_POWERSHELL_COMMENTSTREAM,		"commentstream",		FALSE },
+	{ SCE_POWERSHELL_HERE_STRING,		"here_string",			FALSE },
+	{ SCE_POWERSHELL_HERE_CHARACTER,	"here_character",		FALSE },
+	{ SCE_POWERSHELL_COMMENTDOCKEYWORD,	"commentdockeyword",	FALSE },
+};
+static const HLKeyword highlighting_keywords_POWERSHELL[] =
+{
+	{ 0, "keywords",	FALSE },
+	{ 1, "cmdlets",		FALSE },
+	{ 2, "aliases",		FALSE },
+	{ 3, "functions",	FALSE },
+	{ 4, "user1",		FALSE },
+	{ 5, "docComment",	FALSE },
+};
+#define highlighting_properties_POWERSHELL	EMPTY_PROPERTIES
 
 
 /* Python */
@@ -1185,6 +1290,41 @@ static const HLKeyword highlighting_keywords_RUBY[] =
 };
 #define highlighting_properties_RUBY	EMPTY_PROPERTIES
 
+/* Rust */
+#define highlighting_lexer_RUST		SCLEX_RUST
+static const HLStyle highlighting_styles_RUST[] =
+{
+	{ SCE_RUST_DEFAULT,				"default",					FALSE },
+	{ SCE_RUST_COMMENTBLOCK,		"commentblock",				FALSE },
+	{ SCE_RUST_COMMENTLINE,			"commentline",				FALSE },
+	{ SCE_RUST_COMMENTBLOCKDOC,		"commentblockdoc",			FALSE },
+	{ SCE_RUST_COMMENTLINEDOC,		"commentlinedoc",			FALSE },
+	{ SCE_RUST_NUMBER,				"number",					FALSE },
+	{ SCE_RUST_WORD,				"word",						FALSE },
+	{ SCE_RUST_WORD2,				"word2",					FALSE },
+	{ SCE_RUST_WORD3,				"word3",					FALSE },
+	{ SCE_RUST_WORD4,				"word4",					FALSE },
+	{ SCE_RUST_WORD5,				"word5",					FALSE },
+	{ SCE_RUST_WORD6,				"word6",					FALSE },
+	{ SCE_RUST_WORD7,				"word7",					FALSE },
+	{ SCE_RUST_STRING,				"string",					FALSE },
+	{ SCE_RUST_STRINGR,				"stringraw",				FALSE },
+	{ SCE_RUST_CHARACTER,			"character",				FALSE },
+	{ SCE_RUST_OPERATOR,			"operator",					FALSE },
+	{ SCE_RUST_IDENTIFIER,			"identifier",				FALSE },
+	{ SCE_RUST_LIFETIME,			"lifetime",					FALSE },
+	{ SCE_RUST_MACRO,				"macro",					FALSE },
+	{ SCE_RUST_LEXERROR,			"lexerror",					FALSE }
+};
+static const HLKeyword highlighting_keywords_RUST[] =
+{
+	{ 0, "primary",		FALSE },
+	/* SCI_SETKEYWORDS = 1 - secondary + global tags file types */
+	{ 1, "secondary",	TRUE },
+	{ 2, "tertiary",	FALSE },
+	/* SCI_SETKEYWORDS = 3 is for current session types - see editor_lexer_get_type_keyword_idx() */
+};
+#define highlighting_properties_RUST		EMPTY_PROPERTIES
 
 /* SH */
 #define highlighting_lexer_SH		SCLEX_BASH

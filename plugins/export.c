@@ -1,8 +1,8 @@
 /*
  *      export.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2007-2011 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2007-2011 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2007-2012 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2007-2012 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -14,10 +14,9 @@
  *      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *      GNU General Public License for more details.
  *
- *      You should have received a copy of the GNU General Public License
- *      along with this program; if not, write to the Free Software
- *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
- *      MA 02110-1301, USA.
+ *      You should have received a copy of the GNU General Public License along
+ *      with this program; if not, write to the Free Software Foundation, Inc.,
+ *      51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
 /* Export plugin. */
@@ -248,7 +247,7 @@ static void create_file_save_as_dialog(const gchar *extension, ExportFunc func,
 		gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(dialog), fname);
 
 		/* use default startup directory(if set) if no files are open */
-		if (NZV(default_open_path) && g_path_is_absolute(default_open_path))
+		if (!EMPTY(default_open_path) && g_path_is_absolute(default_open_path))
 		{
 			gchar *locale_path = utils_get_locale_from_utf8(default_open_path);
 			gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog), locale_path);
@@ -785,13 +784,13 @@ void plugin_init(GeanyData *data)
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menu_export), menu_export_menu);
 
 	/* HTML */
-	menu_create_html = gtk_menu_item_new_with_mnemonic(_("As _HTML"));
+	menu_create_html = gtk_menu_item_new_with_mnemonic(_("As _HTML..."));
 	gtk_container_add(GTK_CONTAINER (menu_export_menu), menu_create_html);
 
 	g_signal_connect(menu_create_html, "activate", G_CALLBACK(on_menu_create_html_activate), NULL);
 
 	/* LaTeX */
-	menu_create_latex = gtk_menu_item_new_with_mnemonic(_("As _LaTeX"));
+	menu_create_latex = gtk_menu_item_new_with_mnemonic(_("As _LaTeX..."));
 	gtk_container_add(GTK_CONTAINER (menu_export_menu), menu_create_latex);
 
 	g_signal_connect(menu_create_latex, "activate",

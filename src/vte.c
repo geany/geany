@@ -1,8 +1,8 @@
 /*
  *      vte.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2005-2011 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2006-2011 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2005-2012 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2006-2012 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -14,9 +14,9 @@
  *      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *      GNU General Public License for more details.
  *
- *      You should have received a copy of the GNU General Public License
- *      along with this program; if not, write to the Free Software
- *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *      You should have received a copy of the GNU General Public License along
+ *      with this program; if not, write to the Free Software Foundation, Inc.,
+ *      51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
 /*
@@ -49,6 +49,7 @@
 #include "geanywraplabel.h"
 #include "editor.h"
 #include "sciwrappers.h"
+#include "gtkcompat.h"
 
 
 VteInfo vte_info;
@@ -72,7 +73,7 @@ struct _VteTerminal
 	GtkAdjustment *adjustment;
 };
 
-#define VTE_TERMINAL(obj) (GTK_CHECK_CAST((obj), VTE_TYPE_TERMINAL, VteTerminal))
+#define VTE_TERMINAL(obj) (G_TYPE_CHECK_INSTANCE_CAST((obj), VTE_TYPE_TERMINAL, VteTerminal))
 #define VTE_TYPE_TERMINAL (vf->vte_terminal_get_type())
 
 typedef enum {
@@ -93,7 +94,7 @@ struct VteFunctions
 	void (*vte_terminal_set_word_chars) (VteTerminal *terminal, const char *spec);
 	void (*vte_terminal_set_mouse_autohide) (VteTerminal *terminal, gboolean setting);
 	void (*vte_terminal_reset) (VteTerminal *terminal, gboolean full, gboolean clear_history);
-	GtkType (*vte_terminal_get_type) (void);
+	GType (*vte_terminal_get_type) (void);
 	void (*vte_terminal_set_scroll_on_output) (VteTerminal *terminal, gboolean scroll);
 	void (*vte_terminal_set_scroll_on_keystroke) (VteTerminal *terminal, gboolean scroll);
 	void (*vte_terminal_set_font_from_string) (VteTerminal *terminal, const char *name);
@@ -112,6 +113,7 @@ struct VteFunctions
 	void (*vte_terminal_set_cursor_blinks) (VteTerminal *terminal, gboolean blink);
 	void (*vte_terminal_select_all) (VteTerminal *terminal);
 	void (*vte_terminal_set_audible_bell) (VteTerminal *terminal, gboolean is_audible);
+	void (*vte_terminal_set_background_image_file) (VteTerminal *terminal, const char *path);
 };
 
 
@@ -121,7 +123,7 @@ static void vte_restart(GtkWidget *widget);
 static gboolean vte_button_pressed(GtkWidget *widget, GdkEventButton *event, gpointer user_data);
 static gboolean vte_keyrelease_cb(GtkWidget *widget, GdkEventKey *event, gpointer data);
 static gboolean vte_keypress_cb(GtkWidget *widget, GdkEventKey *event, gpointer data);
-static void vte_register_symbols(GModule *module);
+static gboolean vte_register_symbols(GModule *module);
 static void vte_popup_menu_clicked(GtkMenuItem *menuitem, gpointer user_data);
 static GtkWidget *vte_create_popup_menu(void);
 static void vte_commit_cb(VteTerminal *vte, gchar *arg1, guint arg2, gpointer user_data);
@@ -185,7 +187,7 @@ void vte_init(void)
 		return;
 	}
 
-	if (NZV(vte_info.lib_vte))
+	if (!EMPTY(vte_info.lib_vte))
 	{
 		module = g_module_open(vte_info.lib_vte, G_MODULE_BIND_LAZY);
 	}
@@ -199,8 +201,14 @@ void vte_init(void)
 	if (module == NULL)
 	{
 		gint i;
-		const gchar *sonames[] = {  "libvte.so", "libvte.so.4",
-									"libvte.so.8", "libvte.so.9", NULL };
+		const gchar *sonames[] = {
+#if GTK_CHECK_VERSION(3, 0, 0)
+			"libvte2_90.so", "libvte2_90.so.9",
+#else
+			"libvte.so", "libvte.so.4", "libvte.so.8", "libvte.so.9",
+#endif
+			NULL
+		};
 
 		for (i = 0; sonames[i] != NULL && module == NULL; i++)
 		{
@@ -216,9 +224,18 @@ void vte_init(void)
 	}
 	else
 	{
-		vte_info.have_vte = TRUE;
 		vf = g_new0(struct VteFunctions, 1);
-		vte_register_symbols(module);
+		if (vte_register_symbols(module))
+			vte_info.have_vte = TRUE;
+		else
+		{
+			vte_info.have_vte = FALSE;
+			g_free(vf);
+			/* FIXME: is closing the module safe? see vte_close() and test on FreeBSD */
+			/*g_module_close(module);*/
+			module = NULL;
+			return;
+		}
 	}
 
 	create_vte();
@@ -243,7 +260,7 @@ static void create_vte(void)
 
 	vc->vte = vte = vf->vte_terminal_new();
 	scrollbar = gtk_vscrollbar_new(GTK_ADJUSTMENT(VTE_TERMINAL(vte)->adjustment));
-	GTK_WIDGET_UNSET_FLAGS(scrollbar, GTK_CAN_FOCUS);
+	gtk_widget_set_can_focus(scrollbar, FALSE);
 
 	/* create menu now so copy/paste shortcuts work */
 	vc->menu = vte_create_popup_menu();
@@ -294,9 +311,8 @@ void vte_close(void)
 	g_object_unref(vc->menu);
 	g_free(vc->emulation);
 	g_free(vc->shell);
+	g_free(vc->image);
 	g_free(vc->font);
-	g_free(vc->colour_back);
-	g_free(vc->colour_fore);
 	g_free(vc->send_cmd_prefix);
 	g_free(vc);
 	g_free(gtk_menu_key_accel);
@@ -390,6 +406,10 @@ static gboolean vte_button_pressed(GtkWidget *widget, GdkEventButton *event, gpo
 		gtk_widget_grab_focus(vc->vte);
 		gtk_menu_popup(GTK_MENU(vc->menu), NULL, NULL, NULL, NULL, event->button, event->time);
 	}
+	else if (event->button == 2)
+	{
+		gtk_widget_grab_focus(widget);
+	}
 	return FALSE;
 }
 
@@ -406,35 +426,52 @@ static void vte_set_cursor_blink_mode(void)
 }
 
 
-static void vte_register_symbols(GModule *mod)
+static gboolean vte_register_symbols(GModule *mod)
 {
-	g_module_symbol(mod, "vte_terminal_new", (void*)&vf->vte_terminal_new);
-	g_module_symbol(mod, "vte_terminal_set_size", (void*)&vf->vte_terminal_set_size);
-	g_module_symbol(mod, "vte_terminal_fork_command", (void*)&vf->vte_terminal_fork_command);
-	g_module_symbol(mod, "vte_terminal_set_word_chars", (void*)&vf->vte_terminal_set_word_chars);
-	g_module_symbol(mod, "vte_terminal_set_mouse_autohide", (void*)&vf->vte_terminal_set_mouse_autohide);
-	g_module_symbol(mod, "vte_terminal_reset", (void*)&vf->vte_terminal_reset);
-	g_module_symbol(mod, "vte_terminal_get_type", (void*)&vf->vte_terminal_get_type);
-	g_module_symbol(mod, "vte_terminal_set_scroll_on_output", (void*)&vf->vte_terminal_set_scroll_on_output);
-	g_module_symbol(mod, "vte_terminal_set_scroll_on_keystroke", (void*)&vf->vte_terminal_set_scroll_on_keystroke);
-	g_module_symbol(mod, "vte_terminal_set_font_from_string", (void*)&vf->vte_terminal_set_font_from_string);
-	g_module_symbol(mod, "vte_terminal_set_scrollback_lines", (void*)&vf->vte_terminal_set_scrollback_lines);
-	g_module_symbol(mod, "vte_terminal_get_has_selection", (void*)&vf->vte_terminal_get_has_selection);
-	g_module_symbol(mod, "vte_terminal_copy_clipboard", (void*)&vf->vte_terminal_copy_clipboard);
-	g_module_symbol(mod, "vte_terminal_paste_clipboard", (void*)&vf->vte_terminal_paste_clipboard);
-	g_module_symbol(mod, "vte_terminal_set_emulation", (void*)&vf->vte_terminal_set_emulation);
-	g_module_symbol(mod, "vte_terminal_set_color_foreground", (void*)&vf->vte_terminal_set_color_foreground);
-	g_module_symbol(mod, "vte_terminal_set_color_bold", (void*)&vf->vte_terminal_set_color_bold);
-	g_module_symbol(mod, "vte_terminal_set_color_background", (void*)&vf->vte_terminal_set_color_background);
-	g_module_symbol(mod, "vte_terminal_feed_child", (void*)&vf->vte_terminal_feed_child);
-	g_module_symbol(mod, "vte_terminal_im_append_menuitems", (void*)&vf->vte_terminal_im_append_menuitems);
-	g_module_symbol(mod, "vte_terminal_set_cursor_blink_mode", (void*)&vf->vte_terminal_set_cursor_blink_mode);
-	if (vf->vte_terminal_set_cursor_blink_mode == NULL)
+	#define BIND_SYMBOL(field) \
+		g_module_symbol(mod, #field, (void*)&vf->field)
+	#define BIND_REQUIRED_SYMBOL(field) \
+		G_STMT_START { \
+			if (! BIND_SYMBOL(field)) \
+			{ \
+				g_critical(_("invalid VTE library \"%s\": missing symbol \"%s\""), \
+						g_module_name(mod), #field); \
+				return FALSE; \
+			} \
+		} G_STMT_END
+
+	BIND_REQUIRED_SYMBOL(vte_terminal_new);
+	BIND_REQUIRED_SYMBOL(vte_terminal_set_size);
+	BIND_REQUIRED_SYMBOL(vte_terminal_fork_command);
+	BIND_REQUIRED_SYMBOL(vte_terminal_set_word_chars);
+	BIND_REQUIRED_SYMBOL(vte_terminal_set_mouse_autohide);
+	BIND_REQUIRED_SYMBOL(vte_terminal_reset);
+	BIND_REQUIRED_SYMBOL(vte_terminal_get_type);
+	BIND_REQUIRED_SYMBOL(vte_terminal_set_scroll_on_output);
+	BIND_REQUIRED_SYMBOL(vte_terminal_set_scroll_on_keystroke);
+	BIND_REQUIRED_SYMBOL(vte_terminal_set_font_from_string);
+	BIND_REQUIRED_SYMBOL(vte_terminal_set_scrollback_lines);
+	BIND_REQUIRED_SYMBOL(vte_terminal_get_has_selection);
+	BIND_REQUIRED_SYMBOL(vte_terminal_copy_clipboard);
+	BIND_REQUIRED_SYMBOL(vte_terminal_paste_clipboard);
+	BIND_REQUIRED_SYMBOL(vte_terminal_set_emulation);
+	BIND_REQUIRED_SYMBOL(vte_terminal_set_color_foreground);
+	BIND_REQUIRED_SYMBOL(vte_terminal_set_color_bold);
+	BIND_REQUIRED_SYMBOL(vte_terminal_set_color_background);
+	BIND_REQUIRED_SYMBOL(vte_terminal_set_background_image_file);
+	BIND_REQUIRED_SYMBOL(vte_terminal_feed_child);
+	BIND_REQUIRED_SYMBOL(vte_terminal_im_append_menuitems);
+	if (! BIND_SYMBOL(vte_terminal_set_cursor_blink_mode))
 		/* vte_terminal_set_cursor_blink_mode() is only available since 0.17.1, so if we don't find
 		 * this symbol, we are probably on an older version and use the old API instead */
-		g_module_symbol(mod, "vte_terminal_set_cursor_blinks", (void*)&vf->vte_terminal_set_cursor_blinks);
-	g_module_symbol(mod, "vte_terminal_select_all", (void*)&vf->vte_terminal_select_all);
-	g_module_symbol(mod, "vte_terminal_set_audible_bell", (void*)&vf->vte_terminal_set_audible_bell);
+		BIND_REQUIRED_SYMBOL(vte_terminal_set_cursor_blinks);
+	BIND_REQUIRED_SYMBOL(vte_terminal_select_all);
+	BIND_REQUIRED_SYMBOL(vte_terminal_set_audible_bell);
+
+	#undef BIND_REQUIRED_SYMBOL
+	#undef BIND_SYMBOL
+
+	return TRUE;
 }
 
 
@@ -448,9 +485,10 @@ void vte_apply_user_settings(void)
 	vf->vte_terminal_set_scroll_on_output(VTE_TERMINAL(vc->vte), vc->scroll_on_out);
 	vf->vte_terminal_set_emulation(VTE_TERMINAL(vc->vte), vc->emulation);
 	vf->vte_terminal_set_font_from_string(VTE_TERMINAL(vc->vte), vc->font);
-	vf->vte_terminal_set_color_foreground(VTE_TERMINAL(vc->vte), vc->colour_fore);
-	vf->vte_terminal_set_color_bold(VTE_TERMINAL(vc->vte), vc->colour_fore);
-	vf->vte_terminal_set_color_background(VTE_TERMINAL(vc->vte), vc->colour_back);
+	vf->vte_terminal_set_color_foreground(VTE_TERMINAL(vc->vte), &vc->colour_fore);
+	vf->vte_terminal_set_color_bold(VTE_TERMINAL(vc->vte), &vc->colour_fore);
+	vf->vte_terminal_set_color_background(VTE_TERMINAL(vc->vte), &vc->colour_back);
+	vf->vte_terminal_set_background_image_file(VTE_TERMINAL(vc->vte), vc->image);
 	vf->vte_terminal_set_audible_bell(VTE_TERMINAL(vc->vte), prefs.beep_on_errors);
 	vte_set_cursor_blink_mode();
 
@@ -684,14 +722,15 @@ static void vte_drag_data_received(GtkWidget *widget, GdkDragContext *drag_conte
 {
 	if (info == TARGET_TEXT_PLAIN)
 	{
-		if (data->format == 8 && data->length > 0)
+		if (gtk_selection_data_get_format(data) == 8 && gtk_selection_data_get_length(data) > 0)
 			vf->vte_terminal_feed_child(VTE_TERMINAL(widget),
-				(const gchar*) data->data, data->length);
+				(const gchar*) gtk_selection_data_get_data(data),
+				gtk_selection_data_get_length(data));
 	}
 	else
 	{
 		gchar *text = (gchar*) gtk_selection_data_get_text(data);
-		if (NZV(text))
+		if (!EMPTY(text))
 			vf->vte_terminal_feed_child(VTE_TERMINAL(widget), text, strlen(text));
 		g_free(text);
 	}
@@ -720,17 +759,13 @@ G_MODULE_EXPORT void on_term_font_set(GtkFontButton *widget, gpointer user_data)
 
 G_MODULE_EXPORT void on_term_fg_color_set(GtkColorButton *widget, gpointer user_data)
 {
-	g_free(vc->colour_fore);
-	vc->colour_fore = g_new0(GdkColor, 1);
-	gtk_color_button_get_color(widget, vc->colour_fore);
+	gtk_color_button_get_color(widget, &vc->colour_fore);
 }
 
 
 G_MODULE_EXPORT void on_term_bg_color_set(GtkColorButton *widget, gpointer user_data)
 {
-	g_free(vc->colour_back);
-	vc->colour_back = g_new0(GdkColor, 1);
-	gtk_color_button_get_color(widget, vc->colour_back);
+	gtk_color_button_get_color(widget, &vc->colour_back);
 }
 
 
@@ -741,11 +776,17 @@ void vte_append_preferences_tab(void)
 		GtkWidget *frame_term, *button_shell, *entry_shell;
 		GtkWidget *check_run_in_vte, *check_skip_script;
 		GtkWidget *font_button, *fg_color_button, *bg_color_button;
+		GtkWidget *entry_image, *button_image;
 
 		button_shell = GTK_WIDGET(ui_lookup_widget(ui_widgets.prefs_dialog, "button_term_shell"));
 		entry_shell = GTK_WIDGET(ui_lookup_widget(ui_widgets.prefs_dialog, "entry_shell"));
 		ui_setup_open_button_callback(button_shell, NULL,
 			GTK_FILE_CHOOSER_ACTION_OPEN, GTK_ENTRY(entry_shell));
+
+		button_image = GTK_WIDGET(ui_lookup_widget(ui_widgets.prefs_dialog, "button_term_image"));
+		entry_image = GTK_WIDGET(ui_lookup_widget(ui_widgets.prefs_dialog, "entry_image"));
+		ui_setup_open_button_callback(button_image, NULL,
+			GTK_FILE_CHOOSER_ACTION_OPEN, GTK_ENTRY(entry_image));
 
 		check_skip_script = GTK_WIDGET(ui_lookup_widget(ui_widgets.prefs_dialog, "check_skip_script"));
 		gtk_widget_set_sensitive(check_skip_script, vc->run_in_vte);
@@ -787,8 +828,7 @@ void vte_send_selection_to_vte(void)
 
 	if (sci_has_selection(doc->editor->sci))
 	{
-		text = g_malloc0(sci_get_selected_text_length(doc->editor->sci) + 1);
-		sci_get_selected_text(doc->editor->sci, text);
+		text = sci_get_selection_contents(doc->editor->sci);
 	}
 	else
 	{	/* Get the current line */

@@ -1,8 +1,8 @@
 /*
  *      win32.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2005-2011 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2006-2011 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2005-2012 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2006-2012 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -14,9 +14,9 @@
  *      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *      GNU General Public License for more details.
  *
- *      You should have received a copy of the GNU General Public License
- *      along with this program; if not, write to the Free Software
- *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *      You should have received a copy of the GNU General Public License along
+ *      with this program; if not, write to the Free Software Foundation, Inc.,
+ *      51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
 /*
@@ -40,6 +40,7 @@
 #include <math.h>
 #include <stdlib.h>
 
+#include <glib/gstdio.h>
 #include <gdk/gdkwin32.h>
 
 #include "win32.h"
@@ -122,7 +123,7 @@ static wchar_t *get_file_filters(void)
 	len = strlen(string);
 	g_strdelimit(string, "\t", '\0');
 	g_assert(string[len - 1] == 0x0);
-	MultiByteToWideChar(CP_UTF8, 0, string, len, title, sizeof(title));
+	MultiByteToWideChar(CP_UTF8, 0, string, len, title, G_N_ELEMENTS(title));
 	g_free(string);
 
 	return title;
@@ -141,7 +142,7 @@ static wchar_t *get_file_filter_all_files(void)
 	len = strlen(filter);
 	g_strdelimit(filter, "\t", '\0');
 	g_assert(filter[len - 1] == 0x0);
-	MultiByteToWideChar(CP_UTF8, 0, filter, len, title, sizeof(title));
+	MultiByteToWideChar(CP_UTF8, 0, filter, len, title, G_N_ELEMENTS(title));
 	g_free(filter);
 
 	return title;
@@ -169,7 +170,7 @@ static wchar_t *get_filters(gboolean project_files)
 	len = strlen(string);
 	g_strdelimit(string, "\t", '\0');
 	g_assert(string[len - 1] == 0x0);
-	MultiByteToWideChar(CP_UTF8, 0, string, len, title, sizeof(title));
+	MultiByteToWideChar(CP_UTF8, 0, string, len, title, G_N_ELEMENTS(title));
 	g_free(string);
 
 	return title;
@@ -188,7 +189,7 @@ static wchar_t *get_dir_for_path(const gchar *utf8_filename)
 	else
 		result = g_path_get_dirname(utf8_filename);
 
-	MultiByteToWideChar(CP_UTF8, 0, result, -1, w_dir, sizeof(w_dir));
+	MultiByteToWideChar(CP_UTF8, 0, result, -1, w_dir, G_N_ELEMENTS(w_dir));
 
 	if (result != utf8_filename)
 		g_free(result);
@@ -236,7 +237,7 @@ gchar *win32_show_folder_dialog(GtkWidget *parent, const gchar *title, const gch
 	wchar_t fname[MAX_PATH];
 	wchar_t w_title[512];
 
-	MultiByteToWideChar(CP_UTF8, 0, title, -1, w_title, sizeof(w_title));
+	MultiByteToWideChar(CP_UTF8, 0, title, -1, w_title, G_N_ELEMENTS(w_title));
 
 	if (parent == NULL)
 		parent = main_widgets.window;
@@ -283,7 +284,7 @@ gchar *win32_show_project_open_dialog(GtkWidget *parent, const gchar *title,
 
 	fname[0] = '\0';
 
-	MultiByteToWideChar(CP_UTF8, 0, title, -1, w_title, sizeof(w_title));
+	MultiByteToWideChar(CP_UTF8, 0, title, -1, w_title, G_N_ELEMENTS(w_title));
 
 	if (parent == NULL)
 		parent = main_widgets.window;
@@ -346,9 +347,9 @@ gboolean win32_show_document_open_dialog(GtkWindow *parent, const gchar *title, 
 	fname[0] = '\0';
 
 	if (initial_dir != NULL)
-		MultiByteToWideChar(CP_UTF8, 0, initial_dir, -1, w_dir, sizeof(w_dir));
+		MultiByteToWideChar(CP_UTF8, 0, initial_dir, -1, w_dir, G_N_ELEMENTS(w_dir));
 
-	MultiByteToWideChar(CP_UTF8, 0, title, -1, w_title, sizeof(w_title));
+	MultiByteToWideChar(CP_UTF8, 0, title, -1, w_title, G_N_ELEMENTS(w_title));
 
 	/* initialise file dialog info struct */
 	memset(&of, 0, sizeof of);
@@ -429,9 +430,9 @@ gchar *win32_show_document_save_as_dialog(GtkWindow *parent, const gchar *title,
 	w_file[0] = '\0';
 
 	if (initial_file != NULL)
-		MultiByteToWideChar(CP_UTF8, 0, initial_file, -1, w_file, sizeof(w_file));
+		MultiByteToWideChar(CP_UTF8, 0, initial_file, -1, w_file, G_N_ELEMENTS(w_file));
 
-	MultiByteToWideChar(CP_UTF8, 0, title, -1, w_title, sizeof(w_title));
+	MultiByteToWideChar(CP_UTF8, 0, title, -1, w_title, G_N_ELEMENTS(w_title));
 
 	/* initialise file dialog info struct */
 	memset(&of, 0, sizeof of);
@@ -485,9 +486,9 @@ gchar *win32_show_file_dialog(GtkWindow *parent, const gchar *title, const gchar
 	w_file[0] = '\0';
 
 	if (initial_file != NULL)
-		MultiByteToWideChar(CP_UTF8, 0, initial_file, -1, w_file, sizeof(w_file));
+		MultiByteToWideChar(CP_UTF8, 0, initial_file, -1, w_file, G_N_ELEMENTS(w_file));
 
-	MultiByteToWideChar(CP_UTF8, 0, title, -1, w_title, sizeof(w_title));
+	MultiByteToWideChar(CP_UTF8, 0, title, -1, w_title, G_N_ELEMENTS(w_title));
 
 	/* initialise file dialog info struct */
 	memset(&of, 0, sizeof of);
@@ -564,7 +565,7 @@ void win32_show_color_dialog(const gchar *colour)
 	cc.lStructSize = sizeof(cc);
 	cc.hwndOwner = GDK_WINDOW_HWND(gtk_widget_get_window(main_widgets.window));
 	cc.lpCustColors = (LPDWORD) acr_cust_clr;
-	cc.rgbResult = (colour != NULL) ? utils_strtod(colour, NULL, colour[0] == '#') : 0;
+	cc.rgbResult = (colour != NULL) ? utils_parse_color_to_bgr(colour) : 0;
 	cc.Flags = CC_FULLOPEN | CC_RGBINIT;
 
 	if (ChooseColor(&cc))
@@ -598,7 +599,7 @@ void win32_show_pref_file_dialog(GtkEntry *item)
 		filename = g_find_program_in_path(field[0]);
 		if (filename != NULL && g_file_test(filename, G_FILE_TEST_EXISTS))
 		{
-			MultiByteToWideChar(CP_UTF8, 0, filename, -1, fname, sizeof(fname));
+			MultiByteToWideChar(CP_UTF8, 0, filename, -1, fname, G_N_ELEMENTS(fname));
 			g_free(filename);
 		}
 	}
@@ -721,7 +722,7 @@ gboolean win32_message_dialog(GtkWidget *parent, GtkMessageType type, const gcha
 gint win32_check_write_permission(const gchar *dir)
 {
 	static wchar_t w_dir[MAX_PATH];
-	MultiByteToWideChar(CP_UTF8, 0, dir, -1, w_dir, sizeof w_dir);
+	MultiByteToWideChar(CP_UTF8, 0, dir, -1, w_dir, G_N_ELEMENTS(w_dir));
 	if (_waccess(w_dir, R_OK | W_OK) != 0)
 		return errno;
 	else
@@ -756,11 +757,52 @@ gboolean win32_get_exit_status(GPid child_pid)
 }
 
 
-static void debug_setup_console()
+static FILE *open_std_handle(DWORD handle, const char *mode)
+{
+	HANDLE lStdHandle;
+	int hConHandle;
+	FILE *fp;
+
+	lStdHandle = GetStdHandle(handle);
+	if (lStdHandle == INVALID_HANDLE_VALUE)
+	{
+		gchar *err = g_win32_error_message(GetLastError());
+		g_warning("GetStdHandle(%ld) failed: %s", (long)handle, err);
+		g_free(err);
+		return NULL;
+	}
+	hConHandle = _open_osfhandle((long)lStdHandle, _O_TEXT);
+	if (hConHandle == -1)
+	{
+		gchar *err = g_win32_error_message(GetLastError());
+		g_warning("_open_osfhandle(%ld, _O_TEXT) failed: %s", (long)lStdHandle, err);
+		g_free(err);
+		return NULL;
+	}
+	fp = _fdopen(hConHandle, mode);
+	if (! fp)
+	{
+		gchar *err = g_win32_error_message(GetLastError());
+		g_warning("_fdopen(%d, \"%s\") failed: %s", hConHandle, mode, err);
+		g_free(err);
+		return NULL;
+	}
+	if (setvbuf(fp, NULL, _IONBF, 0) != 0)
+	{
+		gchar *err = g_win32_error_message(GetLastError());
+		g_warning("setvbuf(%p, NULL, _IONBF, 0) failed: %s", fp, err);
+		g_free(err);
+		fclose(fp);
+		return NULL;
+	}
+
+	return fp;
+}
+
+
+static void debug_setup_console(void)
 {
 	static const WORD MAX_CONSOLE_LINES = 500;
-	gint	 hConHandle;
-	glong	 lStdHandle;
 	CONSOLE_SCREEN_BUFFER_INFO coninfo;
 	FILE	*fp;
 
@@ -773,25 +815,19 @@ static void debug_setup_console()
 	SetConsoleScreenBufferSize(GetStdHandle(STD_OUTPUT_HANDLE), coninfo.dwSize);
 
 	/* redirect unbuffered STDOUT to the console */
-	lStdHandle = (long)GetStdHandle(STD_OUTPUT_HANDLE);
-	hConHandle = _open_osfhandle(lStdHandle, _O_TEXT);
-	fp = _fdopen(hConHandle, "w");
-	*stdout = *fp;
-	setvbuf(stdout, NULL, _IONBF, 0);
+	fp = open_std_handle(STD_OUTPUT_HANDLE, "w");
+	if (fp)
+		*stdout = *fp;
 
 	/* redirect unbuffered STDERR to the console */
-	lStdHandle = (long)GetStdHandle(STD_ERROR_HANDLE);
-	hConHandle = _open_osfhandle(lStdHandle, _O_TEXT);
-	fp = _fdopen(hConHandle, "w");
-	*stderr = *fp;
-	setvbuf(stderr, NULL, _IONBF, 0);
+	fp = open_std_handle(STD_ERROR_HANDLE, "w");
+	if (fp)
+		*stderr = *fp;
 
 	/* redirect unbuffered STDIN to the console */
-	lStdHandle = (long)GetStdHandle(STD_INPUT_HANDLE);
-	hConHandle = _open_osfhandle(lStdHandle, _O_TEXT);
-	fp = _fdopen( hConHandle, "r" );
-	*stdin = *fp;
-	setvbuf(stdin, NULL, _IONBF, 0);
+	fp = open_std_handle(STD_INPUT_HANDLE, "r");
+	if (fp)
+		*stdin = *fp;
 }
 
 
@@ -808,21 +844,28 @@ void win32_init_debug_code(void)
 }
 
 
-gchar *win32_get_hostname(void)
+static gchar *create_temp_file(void)
 {
-	gchar hostname[100];
-	DWORD size = sizeof(hostname);
+	gchar *name;
+	gint fd;
 
-	if (GetComputerName(hostname, &size))
-		return g_strdup(hostname);
+	fd = g_file_open_tmp("tmp_XXXXXX", &name, NULL);
+	if (fd == -1)
+		name = NULL;
 	else
-		return g_strdup("localhost");
+		close(fd);
+
+	return name;
 }
 
 
+/* Sometimes this blocks for 30s before aborting when there are several
+ * pages of (error) output and sometimes hangs - see the FIXME.
+ * Also gw_spawn.dwExitCode seems to be not set properly. */
 /* Process spawning implementation for Windows, by Pierre Joye.
  * Don't call this function directly, use utils_spawn_[a]sync() instead. */
-gboolean win32_spawn(const gchar *dir, gchar **argv, gchar **env, GSpawnFlags flags,
+static
+gboolean _broken_win32_spawn(const gchar *dir, gchar **argv, gchar **env, GSpawnFlags flags,
 					 gchar **std_out, gchar **std_err, gint *exit_status, GError **error)
 {
 	TCHAR  buffer[CMDSIZE]=TEXT("");
@@ -980,6 +1023,68 @@ gboolean win32_spawn(const gchar *dir, gchar **argv, gchar **env, GSpawnFlags fl
 }
 
 
+/* Note: g_spawn is broken for receiving both stdio and stderr e.g. when
+ * running make and there are compile errors. See glib/giowin32.c header
+ * comment about Windows bugs, e.g. #338943 */
+/* Simple replacement for _broken_win32_spawn().
+ * flags is ignored, G_SPAWN_SEARCH_PATH is implied.
+ * Don't call this function directly, use utils_spawn_[a]sync() instead.
+ * Adapted from tm_workspace_create_global_tags(). */
+gboolean win32_spawn(const gchar *dir, gchar **argv, gchar **env, GSpawnFlags flags,
+					 gchar **std_out, gchar **std_err, gint *exit_status, GError **error)
+{
+	gint ret;
+	gboolean fail;
+	gchar *tmp_file = create_temp_file();
+	gchar *tmp_errfile = create_temp_file();
+	gchar *command;
+	gchar *locale_command;
+
+	if (env != NULL)
+	{
+		return _broken_win32_spawn(dir, argv, env, flags, std_out, std_err,
+			exit_status, error);
+	}
+	if (!tmp_file || !tmp_errfile)
+	{
+		g_warning("%s: Could not create temporary files!", G_STRFUNC);
+		return FALSE;
+	}
+	command = g_strjoinv(" ", argv);
+	SETPTR(command, g_strdup_printf("cmd.exe /S /C \"%s >%s 2>%s\"",
+		command, tmp_file, tmp_errfile));
+	locale_command = g_locale_from_utf8(command, -1, NULL, NULL, NULL);
+	if (! locale_command)
+		locale_command = g_strdup(command);
+	geany_debug("WIN32: actually running command:\n%s", command);
+	g_chdir(dir);
+	errno = 0;
+	ret = system(locale_command);
+	/* the command can return -1 as an exit code, so check errno also */
+	fail = ret == -1 && errno;
+	if (!fail)
+	{
+		if (std_out != NULL)
+			g_file_get_contents(tmp_file, std_out, NULL, NULL);
+		if (std_err != NULL)
+			g_file_get_contents(tmp_errfile, std_err, NULL, NULL);
+	}
+	else if (error)
+		g_set_error_literal(error, G_SPAWN_ERROR, errno, g_strerror(errno));
+
+	g_free(command);
+	g_free(locale_command);
+	g_unlink(tmp_file);
+	g_free(tmp_file);
+	g_unlink(tmp_errfile);
+	g_free(tmp_errfile);
+	if (exit_status)
+		*exit_status = ret;
+
+	return !fail;
+}
+
+
 static gboolean GetContentFromHandle(HANDLE hFile, gchar **content, GError **error)
 {
 	DWORD filesize;
@@ -1065,8 +1170,8 @@ static gboolean CreateChildProcess(geany_win32_spawn *gw_spawn, TCHAR *szCmdline
 	/* Expand environment variables like %blah%. */
 	expandedCmdline = win32_expand_environment_variables(szCmdline);
 
-	MultiByteToWideChar(CP_UTF8, 0, expandedCmdline, -1, w_commandline, sizeof(w_commandline));
-	MultiByteToWideChar(CP_UTF8, 0, dir, -1, w_dir, sizeof(w_dir));
+	MultiByteToWideChar(CP_UTF8, 0, expandedCmdline, -1, w_commandline, G_N_ELEMENTS(w_commandline));
+	MultiByteToWideChar(CP_UTF8, 0, dir, -1, w_dir, G_N_ELEMENTS(w_dir));
 
 	/* Create the child process. */
 	bFuncRetn = CreateProcessW(NULL,
@@ -1093,10 +1198,15 @@ static gboolean CreateChildProcess(geany_win32_spawn *gw_spawn, TCHAR *szCmdline
 	else
 	{
 		gint i;
+		gsize ms = 30*1000;
 
-		for (i = 0; i < 2 && WaitForSingleObject(piProcInfo.hProcess, 30*1000) == WAIT_TIMEOUT; i++)
+		/* FIXME: this seems to timeout when there are many lines
+		 * to read - maybe because the child's pipe is full */
+		for (i = 0; i < 2 &&
+			WaitForSingleObject(piProcInfo.hProcess, ms) == WAIT_TIMEOUT; i++)
 		{
-			geany_debug("CreateChildProcess: CreateProcess failed");
+			ui_set_statusbar(FALSE, _("Process timed out after %.02f s!"), ms / 1000.0F);
+			geany_debug("CreateChildProcess: timed out");
 			TerminateProcess(piProcInfo.hProcess, WAIT_TIMEOUT); /* NOTE: This will not kill grandkids. */
 		}
 

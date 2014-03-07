@@ -2,8 +2,8 @@
 #
 # WAF build script - this file is part of Geany, a fast and lightweight IDE
 #
-# Copyright 2008-2011 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
-# Copyright 2008-2011 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+# Copyright 2008-2012 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+# Copyright 2008-2012 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -45,13 +45,16 @@ import tempfile
 from waflib import Logs, Options, Scripting, Utils
 from waflib.Configure import ConfigurationContext
 from waflib.Errors import WafError
-from waflib.TaskGen import feature
+from waflib.TaskGen import feature, before_method
+from waflib.Tools.compiler_c import c_compiler
+from waflib.Tools.compiler_cxx import cxx_compiler
 
 
 APPNAME = 'geany'
-VERSION = '1.22'
+VERSION = '1.24'
 LINGUAS_FILE = 'po/LINGUAS'
 MINIMUM_GTK_VERSION = '2.16.0'
+MINIMUM_GTK3_VERSION = '3.0.0'
 MINIMUM_GLIB_VERSION = '2.20.0'
 
 top = '.'
@@ -60,23 +63,68 @@ out = '_build_'
 
 mio_sources = set(['tagmanager/mio/mio.c'])
 
+ctags_sources = set([
+    'tagmanager/ctags/abaqus.c',
+    'tagmanager/ctags/args.c',
+    'tagmanager/ctags/abc.c',
+    'tagmanager/ctags/actionscript.c',
+    'tagmanager/ctags/asciidoc.c',
+    'tagmanager/ctags/asm.c',
+    'tagmanager/ctags/basic.c',
+    'tagmanager/ctags/c.c',
+    'tagmanager/ctags/cobol.c',
+    'tagmanager/ctags/conf.c',
+    'tagmanager/ctags/css.c',
+    'tagmanager/ctags/ctags.c',
+    'tagmanager/ctags/diff.c',
+    'tagmanager/ctags/docbook.c',
+    'tagmanager/ctags/entry.c',
+    'tagmanager/ctags/fortran.c',
+    'tagmanager/ctags/get.c',
+    'tagmanager/ctags/haskell.c',
+    'tagmanager/ctags/haxe.c',
+    'tagmanager/ctags/html.c',
+    'tagmanager/ctags/js.c',
+    'tagmanager/ctags/keyword.c',
+    'tagmanager/ctags/latex.c',
+    'tagmanager/ctags/lregex.c',
+    'tagmanager/ctags/lua.c',
+    'tagmanager/ctags/make.c',
+    'tagmanager/ctags/markdown.c',
+    'tagmanager/ctags/matlab.c',
+    'tagmanager/ctags/nsis.c',
+    'tagmanager/ctags/nestlevel.c',
+    'tagmanager/ctags/objc.c',
+    'tagmanager/ctags/options.c',
+    'tagmanager/ctags/parse.c',
+    'tagmanager/ctags/pascal.c',
+    'tagmanager/ctags/r.c',
+    'tagmanager/ctags/perl.c',
+    'tagmanager/ctags/php.c',
+    'tagmanager/ctags/python.c',
+    'tagmanager/ctags/read.c',
+    'tagmanager/ctags/rest.c',
+    'tagmanager/ctags/ruby.c',
+    'tagmanager/ctags/rust.c',
+    'tagmanager/ctags/sh.c',
+    'tagmanager/ctags/sort.c',
+    'tagmanager/ctags/sql.c',
+    'tagmanager/ctags/strlist.c',
+    'tagmanager/ctags/txt2tags.c',
+    'tagmanager/ctags/tcl.c',
+    'tagmanager/ctags/vhdl.c',
+    'tagmanager/ctags/verilog.c',
+    'tagmanager/ctags/vstring.c'])
+
 tagmanager_sources = set([
-    'tagmanager/args.c', 'tagmanager/abc.c', 'tagmanager/actionscript.c', 'tagmanager/asm.c',
-    'tagmanager/basic.c', 'tagmanager/c.c', 'tagmanager/cobol.c',
-    'tagmanager/conf.c', 'tagmanager/css.c', 'tagmanager/ctags.c', 'tagmanager/diff.c',
-    'tagmanager/docbook.c', 'tagmanager/entry.c', 'tagmanager/fortran.c', 'tagmanager/get.c',
-    'tagmanager/haskell.c', 'tagmanager/haxe.c', 'tagmanager/html.c', 'tagmanager/js.c',
-    'tagmanager/keyword.c', 'tagmanager/latex.c', 'tagmanager/lregex.c', 'tagmanager/lua.c',
-    'tagmanager/make.c', 'tagmanager/markdown.c', 'tagmanager/matlab.c', 'tagmanager/nsis.c',
-    'tagmanager/nestlevel.c', 'tagmanager/objc.c', 'tagmanager/options.c',
-    'tagmanager/parse.c', 'tagmanager/pascal.c', 'tagmanager/r.c',
-    'tagmanager/perl.c', 'tagmanager/php.c', 'tagmanager/python.c', 'tagmanager/read.c',
-    'tagmanager/rest.c', 'tagmanager/ruby.c', 'tagmanager/sh.c', 'tagmanager/sort.c',
-    'tagmanager/sql.c', 'tagmanager/strlist.c', 'tagmanager/txt2tags.c', 'tagmanager/tcl.c',
-    'tagmanager/tm_file_entry.c',
-    'tagmanager/tm_project.c', 'tagmanager/tm_source_file.c', 'tagmanager/tm_symbol.c',
-    'tagmanager/tm_tag.c', 'tagmanager/tm_tagmanager.c', 'tagmanager/tm_work_object.c',
-    'tagmanager/tm_workspace.c', 'tagmanager/vhdl.c', 'tagmanager/verilog.c', 'tagmanager/vstring.c'])
+    'tagmanager/src/tm_file_entry.c',
+    'tagmanager/src/tm_project.c',
+    'tagmanager/src/tm_source_file.c',
+    'tagmanager/src/tm_symbol.c',
+    'tagmanager/src/tm_tag.c',
+    'tagmanager/src/tm_tagmanager.c',
+    'tagmanager/src/tm_work_object.c',
+    'tagmanager/src/tm_workspace.c'])
 
 scintilla_sources = set(['scintilla/gtk/scintilla-marshal.c'])
 
@@ -91,6 +139,44 @@ geany_sources = set([
     'src/symbols.c',
     'src/templates.c', 'src/toolbar.c', 'src/tools.c', 'src/sidebar.c',
     'src/ui_utils.c', 'src/utils.c'])
+
+geany_icons = {
+    'hicolor/16x16/apps':       ['16x16/classviewer-class.png',
+                                 '16x16/classviewer-macro.png',
+                                 '16x16/classviewer-member.png',
+                                 '16x16/classviewer-method.png',
+                                 '16x16/classviewer-namespace.png',
+                                 '16x16/classviewer-other.png',
+                                 '16x16/classviewer-struct.png',
+                                 '16x16/classviewer-var.png',
+                                 '16x16/geany.png'],
+    'hicolor/16x16/actions':    ['16x16/geany-build.png',
+                                 '16x16/geany-close-all.png',
+                                 '16x16/geany-save-all.png'],
+    'hicolor/24x24/actions':    ['24x24/geany-build.png',
+                                 '24x24/geany-close-all.png',
+                                 '24x24/geany-save-all.png'],
+    'hicolor/32x32/actions':    ['32x32/geany-build.png',
+                                 '32x32/geany-close-all.png',
+                                 '32x32/geany-save-all.png'],
+    'hicolor/48x48/actions':    ['48x48/geany-build.png',
+                                 '48x48/geany-close-all.png',
+                                 '48x48/geany-save-all.png'],
+    'hicolor/48x48/apps':       ['48x48/geany.png'],
+    'hicolor/scalable/apps':    ['scalable/geany.svg'],
+    'hicolor/scalable/actions': ['scalable/geany-build.svg',
+                                 'scalable/geany-close-all.svg',
+                                 'scalable/geany-save-all.svg'],
+    'Tango/16x16/actions':      ['tango/16x16/geany-save-all.png'],
+    'Tango/24x24/actions':      ['tango/24x24/geany-save-all.png'],
+    'Tango/32x32/actions':      ['tango/32x32/geany-save-all.png'],
+    'Tango/48x48/actions':      ['tango/48x48/geany-save-all.png'],
+    'Tango/scalable/actions':   ['tango/scalable/geany-save-all.svg']
+}
+geany_icons_indexes = {
+    'hicolor':  ['index.theme'],
+    'Tango':    ['tango/index.theme']
+}
 
 
 def configure(conf):
@@ -112,7 +198,6 @@ def configure(conf):
 
     conf.check_cc(function_name='fgetpos', header_name='stdio.h', mandatory=False)
     conf.check_cc(function_name='ftruncate', header_name='unistd.h', mandatory=False)
-    conf.check_cc(function_name='gethostname', header_name='unistd.h', mandatory=False)
     conf.check_cc(function_name='mkstemp', header_name='stdlib.h', mandatory=False)
     conf.check_cc(function_name='strstr', header_name='string.h')
 
@@ -129,15 +214,21 @@ def configure(conf):
     _load_intltool_if_available(conf)
 
     # GTK / GIO version check
-    conf.check_cfg(package='gtk+-2.0', atleast_version=MINIMUM_GTK_VERSION, uselib_store='GTK',
+    gtk_package_name = 'gtk+-3.0' if conf.options.use_gtk3 else 'gtk+-2.0'
+    minimum_gtk_version = MINIMUM_GTK3_VERSION if conf.options.use_gtk3 else MINIMUM_GTK_VERSION
+    conf.check_cfg(package=gtk_package_name, atleast_version=minimum_gtk_version, uselib_store='GTK',
         mandatory=True, args='--cflags --libs')
     conf.check_cfg(package='glib-2.0', atleast_version=MINIMUM_GLIB_VERSION, uselib_store='GLIB',
         mandatory=True, args='--cflags --libs')
     conf.check_cfg(package='gmodule-2.0', uselib_store='GMODULE',
         mandatory=True, args='--cflags --libs')
     conf.check_cfg(package='gio-2.0', uselib_store='GIO', args='--cflags --libs', mandatory=True)
-    gtk_version = conf.check_cfg(modversion='gtk+-2.0', uselib_store='GTK') or 'Unknown'
+    gtk_version = conf.check_cfg(modversion=gtk_package_name, uselib_store='GTK') or 'Unknown'
     conf.check_cfg(package='gthread-2.0', uselib_store='GTHREAD', args='--cflags --libs')
+    # remember GTK version for the build step
+    conf.env['gtk_package_name'] = gtk_package_name
+    conf.env['minimum_gtk_version'] = minimum_gtk_version
+    conf.env['use_gtk3'] = conf.options.use_gtk3
 
     # Windows specials
     if is_win32:
@@ -213,9 +304,14 @@ def configure(conf):
 
 
 def options(opt):
-    opt.tool_options('compiler_cc')
-    opt.tool_options('compiler_cxx')
-    opt.tool_options('intltool')
+    # Disable MSVC detection on win32: building Geany with MSVC is currently not supported
+    # If anyone wants to add support for building with MSVC, this hack should be removed.
+    c_compiler['win32'] = ['gcc']
+    cxx_compiler['win32'] = ['g++']
+
+    opt.load('compiler_cc')
+    opt.load('compiler_cxx')
+    opt.load('intltool')
 
     # Features
     opt.add_option('--disable-plugins', action='store_true', default=False,
@@ -226,6 +322,9 @@ def options(opt):
     opt.add_option('--disable-vte', action='store_true', default=False,
         help='compile without support for an embedded virtual terminal [[default: No]',
         dest='no_vte')
+    opt.add_option('--enable-gtk3', action='store_true', default=False,
+        help='compile with GTK3 support (experimental) [[default: No]',
+        dest='use_gtk3')
     # Paths
     opt.add_option('--mandir', type='string', default='',
         help='man documentation', dest='mandir')
@@ -252,28 +351,39 @@ def build(bld):
         else:
             instpath = None
 
-        bld.new_task_gen(
+        bld(
             features                = ['c', 'cshlib'],
             source                  = 'plugins/%s.c' % plugin_name,
-            includes                = ['.', 'src/', 'scintilla/include', 'tagmanager/include'],
+            includes                = ['.', 'src/', 'scintilla/include', 'tagmanager/src'],
             defines                 = 'G_LOG_DOMAIN="%s"' % plugin_name,
             target                  = plugin_name,
             uselib                  = ['GTK', 'GLIB', 'GMODULE'],
             install_path            = instpath)
 
+    # CTags
+    bld(
+        features        = ['c', 'cstlib'],
+        source          = ctags_sources,
+        name            = 'ctags',
+        target          = 'ctags',
+        includes        = ['.', 'tagmanager', 'tagmanager/ctags'],
+        defines         = 'G_LOG_DOMAIN="CTags"',
+        uselib          = ['GLIB'],
+        install_path    = None)  # do not install this library
+
     # Tagmanager
-    bld.new_task_gen(
+    bld(
         features        = ['c', 'cstlib'],
         source          = tagmanager_sources,
         name            = 'tagmanager',
         target          = 'tagmanager',
-        includes        = ['.', 'tagmanager', 'tagmanager/include'],
+        includes        = ['.', 'tagmanager', 'tagmanager/ctags'],
         defines         = 'G_LOG_DOMAIN="Tagmanager"',
         uselib          = ['GTK', 'GLIB'],
         install_path    = None)  # do not install this library
 
     # MIO
-    bld.new_task_gen(
+    bld(
         features        = ['c', 'cstlib'],
         source          = mio_sources,
         name            = 'mio',
@@ -286,7 +396,7 @@ def build(bld):
     # Scintilla
     files = bld.srcnode.ant_glob('scintilla/**/*.cxx', src=True, dir=False)
     scintilla_sources.update(files)
-    bld.new_task_gen(
+    bld(
         features        = ['c', 'cxx', 'cxxstlib'],
         name            = 'scintilla',
         target          = 'scintilla',
@@ -302,19 +412,18 @@ def build(bld):
         geany_sources.add('src/win32.c')
         geany_sources.add('geany_private.rc')
 
-    bld.new_task_gen(
+    bld(
         features        = ['c', 'cxx', 'cprogram'],
         name            = 'geany',
         target          = 'geany',
         source          = geany_sources,
-        includes        = ['.', 'scintilla/include/', 'tagmanager/include/'],
+        includes        = ['.', 'scintilla/include', 'tagmanager/src'],
         defines         = ['G_LOG_DOMAIN="Geany"', 'GEANY_PRIVATE'],
-        linkflags       = [] if is_win32 else ['-Wl,--export-dynamic'],
         uselib          = ['GTK', 'GLIB', 'GMODULE', 'GIO', 'GTHREAD', 'WIN32', 'SUNOS_SOCKET'],
-        use             = ['scintilla', 'tagmanager', 'mio'])
+        use             = ['scintilla', 'ctags', 'tagmanager', 'mio'])
 
     # geanyfunctions.h
-    bld.new_task_gen(
+    bld(
         source  = ['plugins/genapi.py', 'src/plugins.c'],
         name    = 'geanyfunctions.h',
         before  = ['c', 'cxx'],
@@ -333,18 +442,20 @@ def build(bld):
 
     # Translations
     if bld.env['INTLTOOL']:
-        bld.new_task_gen(
+        bld(
             features        = ['linguas', 'intltool_po'],
             podir           = 'po',
             install_path    = '${LOCALEDIR}',
             appname         = 'geany')
 
     # geany.pc
-    bld.new_task_gen(
+    bld(
         source          = 'geany.pc.in',
         dct             = {'VERSION': VERSION,
-                           'DEPENDENCIES': 'gtk+-2.0 >= %s glib-2.0 >= %s' % \
-                                (MINIMUM_GTK_VERSION, MINIMUM_GLIB_VERSION),
+                           'DEPENDENCIES': '%s >= %s glib-2.0 >= %s' % \
+                                (bld.env['gtk_package_name'],
+                                 bld.env['minimum_gtk_version'],
+                                 MINIMUM_GLIB_VERSION),
                            'prefix': bld.env['PREFIX'],
                            'exec_prefix': '${prefix}',
                            'libdir': '${exec_prefix}/lib',
@@ -356,14 +467,14 @@ def build(bld):
     if not is_win32:
         # geany.desktop
         if bld.env['INTLTOOL']:
-            bld.new_task_gen(
+            bld(
                 features        = 'intltool_in',
                 source          = 'geany.desktop.in',
                 flags           = ['-d', '-q', '-u', '-c'],
                 install_path    = '${DATADIR}/applications')
 
         # geany.1
-        bld.new_task_gen(
+        bld(
             features        = 'subst',
             source          = 'doc/geany.1.in',
             target          = 'geany.1',
@@ -372,7 +483,7 @@ def build(bld):
             install_path    = '${MANDIR}/man1')
 
         # geany.spec
-        bld.new_task_gen(
+        bld(
             features        = 'subst',
             source          = 'geany.spec.in',
             target          = 'geany.spec',
@@ -380,7 +491,7 @@ def build(bld):
             dct             = {'VERSION': VERSION})
 
         # Doxyfile
-        bld.new_task_gen(
+        bld(
             features        = 'subst',
             source          = 'doc/Doxyfile.in',
             target          = 'doc/Doxyfile',
@@ -396,17 +507,17 @@ def build(bld):
             src/document.h src/editor.h src/encodings.h src/filetypes.h src/geany.h
             src/highlighting.h src/keybindings.h src/msgwindow.h src/plugindata.h
             src/prefs.h src/project.h src/search.h src/stash.h src/support.h
-            src/templates.h src/toolbar.h src/ui_utils.h src/utils.h src/build.h
+            src/templates.h src/toolbar.h src/ui_utils.h src/utils.h src/build.h src/gtkcompat.h
             plugins/geanyplugin.h plugins/geanyfunctions.h''')
         bld.install_files('${PREFIX}/include/geany/scintilla', '''
             scintilla/include/SciLexer.h scintilla/include/Scintilla.h
             scintilla/include/Scintilla.iface scintilla/include/ScintillaWidget.h ''')
         bld.install_files('${PREFIX}/include/geany/tagmanager', '''
-            tagmanager/include/tm_file_entry.h tagmanager/include/tm_project.h
-            tagmanager/include/tm_source_file.h
-            tagmanager/include/tm_symbol.h tagmanager/include/tm_tag.h
-            tagmanager/include/tm_tagmanager.h tagmanager/include/tm_work_object.h
-            tagmanager/include/tm_workspace.h ''')
+            tagmanager/src/tm_file_entry.h tagmanager/src/tm_project.h
+            tagmanager/src/tm_source_file.h tagmanager/src/tm_parser.h
+            tagmanager/src/tm_symbol.h tagmanager/src/tm_tag.h
+            tagmanager/src/tm_tagmanager.h tagmanager/src/tm_work_object.h
+            tagmanager/src/tm_workspace.h ''')
     # Docs
     base_dir = '${PREFIX}' if is_win32 else '${DOCDIR}'
     ext = '.txt' if is_win32 else ''
@@ -435,6 +546,11 @@ def build(bld):
     bld.install_files('${DATADIR}/%s' % data_dir, 'data/geany.glade')
     bld.install_files('${DATADIR}/%s' % data_dir, 'data/snippets.conf')
     bld.install_files('${DATADIR}/%s' % data_dir, 'data/ui_toolbar.xml')
+    if bld.env['use_gtk3']:
+        bld.install_files('${DATADIR}/%s' % data_dir, 'data/geany.css')
+    else:
+        bld.install_files('${DATADIR}/%s' % data_dir, 'data/geany.gtkrc')
+
     start_dir = bld.path.find_dir('data/colorschemes')
     template_dest = '${DATADIR}/%s/colorschemes' % data_dir
     bld.install_files(template_dest, start_dir.ant_glob('*'), cwd=start_dir)
@@ -442,16 +558,13 @@ def build(bld):
     template_dest = '${DATADIR}/%s/templates' % data_dir
     bld.install_files(template_dest, start_dir.ant_glob('**/*'), cwd=start_dir, relative_trick=True)
     # Icons
-    icon_dest = '${PREFIX}/share/icons' if is_win32 else '${DATADIR}/icons/hicolor/16x16/apps'
-    start_dir = bld.path.find_dir('icons/16x16')
-    bld.install_files(icon_dest, start_dir.ant_glob('*.png'), cwd=start_dir)
-    if not is_win32:
-        start_dir = bld.path.find_dir('icons/48x48')
-        icon_dest = '${DATADIR}/icons/hicolor/48x48/apps'
-        bld.install_files(icon_dest, start_dir.ant_glob('*.png'), cwd=start_dir)
-        start_dir = bld.path.find_dir('icons/scalable')
-        scalable_dest = '${DATADIR}/icons/hicolor/scalable/apps'
-        bld.install_files(scalable_dest, start_dir.ant_glob('*.svg'), cwd=start_dir)
+    for dest, srcs in geany_icons.items():
+        dest_dir = os.path.join('${PREFIX}/share/icons' if is_win32 else '${DATADIR}/icons', dest)
+        bld.install_files(dest_dir, srcs, cwd=bld.path.find_dir('icons'))
+    # install theme indexes on Windows
+    if is_win32:
+        for dest, srcs in geany_icons_indexes.items():
+            bld.install_files(os.path.join('${PREFIX}/share/icons', dest), srcs, cwd=bld.path.find_dir('icons'))
 
 
 def distclean(ctx):
@@ -468,6 +581,7 @@ def _remove_linguas_file():
 
 
 @feature('linguas')
+@before_method('apply_intltool_po')
 def write_linguas_file(self):
     if os.path.exists(LINGUAS_FILE):
         return
@@ -492,15 +606,16 @@ def _post_install(ctx):
     is_win32 = _target_is_win32(ctx)
     if is_win32:
         return
-    theme_dir = Utils.subst_vars('${DATADIR}/icons/hicolor', ctx.env)
-    icon_cache_updated = False
-    if not ctx.options.destdir:
-        ctx.exec_command('gtk-update-icon-cache -q -f -t %s' % theme_dir)
-        Logs.pprint('GREEN', 'GTK icon cache updated.')
-        icon_cache_updated = True
-    if not icon_cache_updated:
-        Logs.pprint('YELLOW', 'Icon cache not updated. After install, run this:')
-        Logs.pprint('YELLOW', 'gtk-update-icon-cache -q -f -t %s' % theme_dir)
+    for d in 'hicolor', 'Tango':
+        theme_dir = Utils.subst_vars('${DATADIR}/icons/' + d, ctx.env)
+        icon_cache_updated = False
+        if not ctx.options.destdir:
+            ctx.exec_command('gtk-update-icon-cache -q -f -t %s' % theme_dir)
+            Logs.pprint('GREEN', 'GTK icon cache updated.')
+            icon_cache_updated = True
+        if not icon_cache_updated:
+            Logs.pprint('YELLOW', 'Icon cache not updated. After install, run this:')
+            Logs.pprint('YELLOW', 'gtk-update-icon-cache -q -f -t %s' % theme_dir)
 
 
 def updatepo(ctx):
@@ -614,7 +729,7 @@ def _get_git_rev(conf):
 
 def _load_intltool_if_available(conf):
     try:
-        conf.check_tool('intltool')
+        conf.load('intltool')
         if 'LINGUAS' in os.environ:
             conf.env['LINGUAS'] = os.environ['LINGUAS']
     except WafError:

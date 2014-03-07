@@ -1,8 +1,8 @@
 /*
  *      filebrowser.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2007-2011 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2007-2011 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2007-2012 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2007-2012 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -14,10 +14,9 @@
  *      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *      GNU General Public License for more details.
  *
- *      You should have received a copy of the GNU General Public License
- *      along with this program; if not, write to the Free Software
- *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
- *      MA 02110-1301, USA.
+ *      You should have received a copy of the GNU General Public License along
+ *      with this program; if not, write to the Free Software Foundation, Inc.,
+ *      51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
 /* Sidebar file browser plugin. */
@@ -27,6 +26,7 @@
 #endif
 
 #include "geanyplugin.h"
+#include "gtkcompat.h"
 #include <string.h>
 
 #include <gdk/gdkkeysyms.h>
@@ -186,7 +186,7 @@ static void add_item(const gchar *name)
 	const gchar *sep;
 	gboolean dir;
 
-	if (G_UNLIKELY(! NZV(name)))
+	if (G_UNLIKELY(EMPTY(name)))
 		return;
 
 	/* root directory doesn't need separator */
@@ -237,7 +237,7 @@ static void add_top_level_entry(void)
 	GtkTreeIter iter;
 	gchar *utf8_dir;
 
-	if (! NZV(g_path_skip_root(current_dir)))
+	if (EMPTY(g_path_skip_root(current_dir)))
 		return;	/* ignore 'C:\' or '/' */
 
 	utf8_dir = g_path_get_dirname(current_dir);
@@ -281,7 +281,7 @@ static void refresh(void)
 	utf8_dir = utils_get_utf8_from_locale(current_dir);
 	gtk_entry_set_text(GTK_ENTRY(path_entry), utf8_dir);
 	gtk_widget_set_tooltip_text(path_entry, utf8_dir);
-	ui_combo_box_add_to_history(GTK_COMBO_BOX_ENTRY(path_combo), utf8_dir, 0);
+	ui_combo_box_add_to_history(GTK_COMBO_BOX_TEXT(path_combo), utf8_dir, 0);
 	g_free(utf8_dir);
 
 	add_top_level_entry();	/* ".." item */
@@ -321,7 +321,7 @@ static gchar *get_default_dir(void)
 	else
 		dir = geany->prefs->default_open_path;
 
-	if (NZV(dir))
+	if (!EMPTY(dir))
 		return utils_get_locale_from_utf8(dir);
 
 	return g_get_current_dir();
@@ -612,7 +612,7 @@ static GtkWidget *create_popup_menu(void)
 	g_signal_connect(item, "activate", G_CALLBACK(on_open_clicked), NULL);
 	popup_items.open = item;
 
-	item = ui_image_menu_item_new(GTK_STOCK_OPEN, _("Open _externally"));
+	item = ui_image_menu_item_new(GTK_STOCK_OPEN, _("Open _Externally"));
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	g_signal_connect(item, "activate", G_CALLBACK(on_external_open), NULL);
@@ -627,7 +627,7 @@ static GtkWidget *create_popup_menu(void)
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	g_signal_connect(item, "activate", G_CALLBACK(refresh), NULL);
 
-	item = ui_image_menu_item_new(GTK_STOCK_FIND, _("_Find in Files"));
+	item = ui_image_menu_item_new(GTK_STOCK_FIND, _("_Find in Files..."));
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	g_signal_connect(item, "activate", G_CALLBACK(on_find_in_files), NULL);
@@ -716,9 +716,8 @@ static gboolean on_key_press(GtkWidget *widget, GdkEventKey *event, gpointer dat
 		return TRUE;
 	}
 
-	if ((event->keyval == GDK_Up ||
-		event->keyval == GDK_KP_Up) &&
-		(event->state & GDK_MOD1_MASK))	/* FIXME: Alt-Up doesn't seem to work! */
+	if (( (event->keyval == GDK_Up || event->keyval == GDK_KP_Up) && (event->state & GDK_MOD1_MASK)) || /* FIXME: Alt-Up doesn't seem to work! */
+		(event->keyval == GDK_BackSpace) )
 	{
 		on_go_up();
 		return TRUE;
@@ -763,7 +762,7 @@ static void on_path_entry_activate(GtkEntry *entry, gpointer user_data)
 {
 	gchar *new_dir = (gchar*) gtk_entry_get_text(entry);
 
-	if (NZV(new_dir))
+	if (!EMPTY(new_dir))
 	{
 		if (g_str_has_suffix(new_dir, ".."))
 		{
@@ -805,7 +804,7 @@ static void on_filter_activate(GtkEntry *entry, gpointer user_data)
 	{
 		clear_filter();
 	}
-	ui_combo_box_add_to_history(GTK_COMBO_BOX_ENTRY(filter_combo), NULL, 0);
+	ui_combo_box_add_to_history(GTK_COMBO_BOX_TEXT(filter_combo), NULL, 0);
 	refresh();
 }
 
@@ -899,7 +898,7 @@ static GtkWidget *make_filterbar(void)
 
 	label = gtk_label_new(_("Filter:"));
 
-	filter_combo = gtk_combo_box_entry_new_text();
+	filter_combo = gtk_combo_box_text_new_with_entry();
 	filter_entry = gtk_bin_get_child(GTK_BIN(filter_combo));
 
 	ui_entry_add_clear_icon(GTK_ENTRY(filter_entry));
@@ -1007,7 +1006,7 @@ static void project_change_cb(G_GNUC_UNUSED GObject *obj, G_GNUC_UNUSED GKeyFile
 	gchar *new_dir;
 	GeanyProject *project = geany->app->project;
 
-	if (! fb_set_project_base_path || project == NULL || ! NZV(project->base_path))
+	if (! fb_set_project_base_path || project == NULL || EMPTY(project->base_path))
 		return;
 
 	/* TODO this is a copy of project_get_base_path(), add it to the plugin API */
@@ -1093,7 +1092,7 @@ void plugin_init(GeanyData *data)
 	filterbar = make_filterbar();
 	gtk_box_pack_start(GTK_BOX(file_view_vbox), filterbar, FALSE, FALSE, 0);
 
-	path_combo = gtk_combo_box_entry_new_text();
+	path_combo = gtk_combo_box_text_new_with_entry();
 	gtk_box_pack_start(GTK_BOX(file_view_vbox), path_combo, FALSE, FALSE, 2);
 	g_signal_connect(path_combo, "changed", G_CALLBACK(ui_combo_box_changed), NULL);
 	path_entry = gtk_bin_get_child(GTK_BIN(path_combo));
@@ -1110,7 +1109,7 @@ void plugin_init(GeanyData *data)
 		GTK_SCROLLED_WINDOW(scrollwin),
 		GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
 	gtk_container_add(GTK_CONTAINER(scrollwin), file_view);
-	gtk_container_add(GTK_CONTAINER(file_view_vbox), scrollwin);
+	gtk_box_pack_start(GTK_BOX(file_view_vbox), scrollwin, TRUE, TRUE, 0);
 
 	/* load settings before file_view "realize" callback */
 	load_settings();

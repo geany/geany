@@ -1,8 +1,8 @@
 /*
  *      stash.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2008-2011 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
- *      Copyright 2008-2011 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2008-2012 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2008-2012 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -14,10 +14,9 @@
  *      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *      GNU General Public License for more details.
  *
- *      You should have received a copy of the GNU General Public License
- *      along with this program; if not, write to the Free Software
- *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
- *      MA 02110-1301, USA.
+ *      You should have received a copy of the GNU General Public License along
+ *      with this program; if not, write to the Free Software Foundation, Inc.,
+ *      51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
 /**
@@ -84,6 +83,26 @@
 #include "utils.h"		/* only for foreach_*, utils_get_setting_*(). Stash should not depend on Geany. */
 
 #include "stash.h"
+
+
+/* GTK3 removed ComboBoxEntry, but we need a value to differentiate combo box with and
+ * without entries, and it must not collide with other GTypes */
+#ifdef GTK_TYPE_COMBO_BOX_ENTRY
+#	define TYPE_COMBO_BOX_ENTRY GTK_TYPE_COMBO_BOX_ENTRY
+#else /* !GTK_TYPE_COMBO_BOX_ENTRY */
+#	define TYPE_COMBO_BOX_ENTRY get_combo_box_entry_type()
+static GType get_combo_box_entry_type(void)
+{
+	static volatile gsize type = 0;
+	if (g_once_init_enter(&type))
+	{
+		GType g_type = g_type_register_static_simple(GTK_TYPE_COMBO_BOX, "dummy-combo-box-entry",
+				sizeof(GtkComboBoxClass), NULL, sizeof(GtkComboBox), NULL, G_TYPE_FLAG_ABSTRACT);
+		g_once_init_leave(&type, g_type);
+	}
+	return type;
+}
+#endif /* !GTK_TYPE_COMBO_BOX_ENTRY */
 
 
 struct StashPref
@@ -564,7 +583,7 @@ lookup_widget(GtkWidget *widget, const gchar *widget_name)
 		if (GTK_IS_MENU(widget))
 			parent = gtk_menu_get_attach_widget(GTK_MENU(widget));
 		else
-			parent = widget->parent;
+			parent = gtk_widget_get_parent(widget);
 		if (parent == NULL)
 			parent = (GtkWidget*) g_object_get_data(G_OBJECT(widget), "GladeParentKey");
 		if (parent == NULL)
@@ -697,7 +716,7 @@ static void pref_action(PrefAction action, StashGroup *group, GtkWidget *owner)
 			handle_spin_button(widget, entry, action);
 		else if (entry->widget_type == GTK_TYPE_COMBO_BOX)
 			handle_combo_box(widget, entry, action);
-		else if (entry->widget_type == GTK_TYPE_COMBO_BOX_ENTRY)
+		else if (entry->widget_type == TYPE_COMBO_BOX_ENTRY)
 			handle_combo_box_entry(widget, entry, action);
 		else if (entry->widget_type == GTK_TYPE_ENTRY)
 			handle_entry(widget, entry, action);
@@ -862,7 +881,7 @@ void stash_group_add_combo_box_entry(StashGroup *group, gchar **setting,
 		const gchar *key_name, const gchar *default_value, StashWidgetID widget_id)
 {
 	add_widget_pref(group, G_TYPE_STRING, setting, key_name, (gpointer)default_value,
-		GTK_TYPE_COMBO_BOX_ENTRY, widget_id);
+		TYPE_COMBO_BOX_ENTRY, widget_id);
 }
 
 
@@ -1083,7 +1102,7 @@ void stash_tree_setup(GPtrArray *group_array, GtkTreeView *tree)
 	GtkTreeModel *model;
 	GtkCellRenderer *cell;
 	GtkTreeViewColumn *column;
-	GtkObject *adjustment;
+	GtkAdjustment *adjustment;
 
 	store = gtk_list_store_new(STASH_TREE_COUNT, G_TYPE_STRING, G_TYPE_POINTER);
 	stash_tree_append_prefs(group_array, store, PREF_DISPLAY);
@@ -1120,7 +1139,7 @@ void stash_tree_setup(GPtrArray *group_array, GtkTreeView *tree)
 		stash_tree_renderer_set_data, GSIZE_TO_POINTER(G_TYPE_STRING), NULL);
 	/* integer renderer */
 	cell = gtk_cell_renderer_spin_new();
-	adjustment = gtk_adjustment_new(0, G_MININT, G_MAXINT, 1, 10, 0);
+	adjustment = GTK_ADJUSTMENT(gtk_adjustment_new(0, G_MININT, G_MAXINT, 1, 10, 0));
 	g_object_set(cell, "adjustment", adjustment, NULL);
 	g_signal_connect(cell, "edited", G_CALLBACK(stash_tree_string_edited), model);
 	gtk_cell_layout_pack_start(GTK_CELL_LAYOUT(column), cell, FALSE);

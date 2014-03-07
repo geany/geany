@@ -1,8 +1,8 @@
 /*
  *      sidebar.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2005-2011 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2006-2011 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2005-2012 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2006-2012 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -14,9 +14,9 @@
  *      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *      GNU General Public License for more details.
  *
- *      You should have received a copy of the GNU General Public License
- *      along with this program; if not, write to the Free Software
- *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *      You should have received a copy of the GNU General Public License along
+ *      with this program; if not, write to the Free Software Foundation, Inc.,
+ *      51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
 /*
@@ -186,6 +186,8 @@ static void create_default_tag_tree(void)
 void sidebar_update_tag_list(GeanyDocument *doc, gboolean update)
 {
 	GtkWidget *child = gtk_bin_get_child(GTK_BIN(tag_window));
+
+	g_return_if_fail(doc == NULL || doc->is_valid);
 
 	/* changes the tree view to the given one, trying not to do useless changes */
 	#define CHANGE_TREE(new_child) \
@@ -368,8 +370,9 @@ static gchar *get_doc_folder(const gchar *path)
 	{
 		gsize len = strlen(project_base_path);
 
+		/* remove trailing separator so we can match base path exactly */
 		if (project_base_path[len-1] == G_DIR_SEPARATOR)
-			project_base_path[len-1] = '\0';
+			project_base_path[--len] = '\0';
 
 		/* check whether the dir name matches or uses the project base path */
 		if (utils_filename_has_prefix(tmp_dirname, project_base_path))
@@ -387,7 +390,7 @@ static gchar *get_doc_folder(const gchar *path)
 		dirname = tmp_dirname;
 
 		/* If matches home dir, replace with tilde */
-		if (NZV(home_dir) && utils_filename_has_prefix(dirname, home_dir))
+		if (!EMPTY(home_dir) && utils_filename_has_prefix(dirname, home_dir))
 		{
 			rest = dirname + strlen(home_dir);
 			if (*rest == G_DIR_SEPARATOR || *rest == '\0')
@@ -528,7 +531,7 @@ void sidebar_openfiles_update(GeanyDocument *doc)
 }
 
 
-void sidebar_openfiles_update_all()
+void sidebar_openfiles_update_all(void)
 {
 	guint i;
 
@@ -587,16 +590,24 @@ void sidebar_add_common_menu_items(GtkMenu *menu)
 
 	item = gtk_check_menu_item_new_with_mnemonic(_("Show S_ymbol List"));
 	gtk_container_add(GTK_CONTAINER(menu), item);
+#if GTK_CHECK_VERSION(3, 0, 0)
+	g_signal_connect(item, "draw", G_CALLBACK(on_sidebar_display_symbol_list_show), NULL);
+#else
 	g_signal_connect(item, "expose-event",
 			G_CALLBACK(on_sidebar_display_symbol_list_show), NULL);
+#endif
 	gtk_widget_show(item);
 	g_signal_connect(item, "activate",
 			G_CALLBACK(on_list_symbol_activate), NULL);
 
 	item = gtk_check_menu_item_new_with_mnemonic(_("Show _Document List"));
 	gtk_container_add(GTK_CONTAINER(menu), item);
+#if GTK_CHECK_VERSION(3, 0, 0)
+	g_signal_connect(item, "draw", G_CALLBACK(on_sidebar_display_open_files_show), NULL);
+#else
 	g_signal_connect(item, "expose-event",
 			G_CALLBACK(on_sidebar_display_open_files_show), NULL);
+#endif
 	gtk_widget_show(item);
 	g_signal_connect(item, "activate",
 			G_CALLBACK(on_list_document_activate), NULL);
@@ -706,7 +717,7 @@ static void create_openfiles_popup_menu(void)
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(openfiles_popup_menu), item);
 
-	item = ui_image_menu_item_new(GTK_STOCK_FIND, _("_Find in Files"));
+	item = ui_image_menu_item_new(GTK_STOCK_FIND, _("_Find in Files..."));
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(openfiles_popup_menu), item);
 	g_signal_connect(item, "activate", G_CALLBACK(on_find_in_files), NULL);
@@ -876,11 +887,12 @@ static gboolean openfiles_go_to_selection(GtkTreeSelection *selection, guint key
 }
 
 
-static gboolean taglist_go_to_selection(GtkTreeSelection *selection, guint keyval)
+static gboolean taglist_go_to_selection(GtkTreeSelection *selection, guint keyval, guint state)
 {
 	GtkTreeIter iter;
 	GtkTreeModel *model;
 	gint line = 0;
+	gboolean handled = TRUE;
 
 	if (gtk_tree_selection_get_selected(selection, &model, &iter))
 	{
@@ -898,13 +910,15 @@ static gboolean taglist_go_to_selection(GtkTreeSelection *selection, guint keyva
 			if (doc != NULL)
 			{
 				navqueue_goto_line(doc, doc, line);
-				if (keyval != GDK_space)
+				if (keyval != GDK_space && ! (state & GDK_CONTROL_MASK))
 					change_focus_to_editor(doc, NULL);
+				else
+					handled = FALSE;
 			}
 		}
 		tm_tag_unref(tag);
 	}
-	return FALSE;
+	return handled;
 }
 
 
@@ -927,7 +941,7 @@ static gboolean sidebar_key_press_cb(GtkWidget *widget, GdkEventKey *event,
 		if (widget == tv.tree_openfiles) /* tag and doc list have separate handlers */
 			openfiles_go_to_selection(selection, event->keyval);
 		else
-			taglist_go_to_selection(selection, event->keyval);
+			taglist_go_to_selection(selection, event->keyval, event->state);
 
 		return TRUE;
 	}
@@ -975,10 +989,12 @@ static gboolean sidebar_button_press_cb(GtkWidget *widget, GdkEventButton *event
 	else if (event->button == 1)
 	{	/* allow reclicking of taglist treeview item */
 		if (widget == tv.tree_openfiles)
+		{
 			openfiles_go_to_selection(selection, 0);
+			handled = TRUE;
+		}
 		else
-			taglist_go_to_selection(selection, 0);
-		handled = TRUE;
+			handled = taglist_go_to_selection(selection, 0, event->state);
 	}
 	else if (event->button == 3)
 	{
@@ -1018,7 +1034,7 @@ static void documents_menu_update(GtkTreeSelection *selection)
 		gtk_tree_model_get(model, &iter, DOCUMENTS_DOCUMENT, &doc,
 			DOCUMENTS_SHORTNAME, &shortname, -1);
 	}
-	path = NZV(shortname) &&
+	path = !EMPTY(shortname) &&
 		(g_path_is_absolute(shortname) ||
 		(app->project && g_str_has_prefix(shortname, app->project->name)));
 

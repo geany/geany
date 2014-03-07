@@ -1,0 +1,14 @@
+# format=tagmanager
+*Ì64Îcontainer.dirtyTabÖ0
+DifferentÌ1Ö0
+TabChromeÌ1Ö0
+createTabTileÌ128ÎDifferentÖ0
+createTabTileÌ128ÎTabChromeÖ0
+destroyTabTileÌ128ÎDifferentÖ0
+destroyTabTileÌ128ÎTabChromeÖ0
+dirtyTabÌ1ÎcontainerÖ0
+initÌ128ÎDifferentÖ0
+initÌ128ÎTabChromeÖ0
+snapshotÌ64Îcontainer.dirtyTabÖ0
+titleÌ64Îcontainer.dirtyTabÖ0
+urlÌ64Îcontainer.dirtyTabÖ0

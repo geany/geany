@@ -96,9 +96,9 @@ WARN_LOGFILE           =
 #---------------------------------------------------------------------------
 INPUT                  = ../src/ ./ \
                          ../plugins/geanyplugin.h ../plugins/geanyfunctions.h \
-                         ../tagmanager/tm_source_file.c ../tagmanager/include/tm_source_file.h \
-                         ../tagmanager/tm_work_object.c ../tagmanager/include/tm_work_object.h \
-                         ../tagmanager/tm_workspace.c ../tagmanager/include/tm_workspace.h
+                         ../tagmanager/src/tm_source_file.c ../tagmanager/src/tm_source_file.h \
+                         ../tagmanager/src/tm_work_object.c ../tagmanager/src/tm_work_object.h \
+                         ../tagmanager/src/tm_workspace.c ../tagmanager/src/tm_workspace.h
 INPUT_ENCODING         = UTF-8
 FILE_PATTERNS          = *.c \
                          *.cc \

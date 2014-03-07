@@ -16,10 +16,6 @@
 #include <assert.h>
 #include <ctype.h>
 
-#ifdef _MSC_VER
-#pragma warning(disable: 4786)
-#endif
-
 #include <string>
 #include <map>
 #include <set>
@@ -157,7 +153,7 @@ class LexerAsm : public ILexer {
 public:
 	LexerAsm() {
 	}
-	~LexerAsm() {
+	virtual ~LexerAsm() {
 	}
 	void SCI_METHOD Release() {
 		delete this;
@@ -348,7 +344,7 @@ void SCI_METHOD LexerAsm::Lex(unsigned int startPos, int length, int initStyle, 
 		if (sc.state == SCE_ASM_DEFAULT) {
 			if (sc.ch == ';'){
 				sc.SetState(SCE_ASM_COMMENT);
-			} else if (isascii(sc.ch) && (isdigit(sc.ch) || (sc.ch == '.' && isascii(sc.chNext) && isdigit(sc.chNext)))) {
+			} else if (IsASCII(sc.ch) && (isdigit(sc.ch) || (sc.ch == '.' && IsASCII(sc.chNext) && isdigit(sc.chNext)))) {
 				sc.SetState(SCE_ASM_NUMBER);
 			} else if (IsAWordStart(sc.ch)) {
 				sc.SetState(SCE_ASM_IDENTIFIER);

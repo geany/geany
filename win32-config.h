@@ -63,9 +63,6 @@
 /* Define to 1 if you have the `getcwd' function. */
 #define HAVE_GETCWD 1
 
-/* Define to 1 if you have the `gethostname' function. */
-//#define HAVE_GETHOSTNAME 1
-
 /* Define to 1 if you have the `getpagesize' function. */
 #define HAVE_GETPAGESIZE 1
 
@@ -314,7 +311,7 @@
 /* #undef volatile */
 
 /* Version number of package */
-#define VERSION "1.22"
+#define VERSION "1.24"
 
 #define REVISION "-1"
 

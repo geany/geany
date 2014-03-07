@@ -1,8 +1,8 @@
 /*
  *      toolbar.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2009-2011 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2009-2011 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2009-2012 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2009-2012 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -14,9 +14,9 @@
  *      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *      GNU General Public License for more details.
  *
- *      You should have received a copy of the GNU General Public License
- *      along with this program; if not, write to the Free Software
- *      Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *      You should have received a copy of the GNU General Public License along
+ *      with this program; if not, write to the Free Software Foundation, Inc.,
+ *      51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
 /**
@@ -395,6 +395,9 @@ GtkWidget *toolbar_init(void)
 	gtk_ui_manager_insert_action_group(uim, group, 0);
 
 	toolbar = toolbar_reload(NULL);
+#if GTK_CHECK_VERSION(3, 0, 0)
+	gtk_style_context_add_class(gtk_widget_get_style_context(toolbar), "primary-toolbar");
+#endif
 
 	gtk_settings = gtk_widget_get_settings(GTK_WIDGET(toolbar));
 	if (gtk_settings != NULL)
@@ -790,8 +793,11 @@ static void tb_editor_drag_data_get_cb(GtkWidget *widget, GdkDragContext *contex
 		return;
 
 	gtk_tree_model_get(model, &iter, TB_EDITOR_COL_ACTION, &name, -1);
-	if (G_UNLIKELY(! NZV(name)))
+	if (G_UNLIKELY(EMPTY(name)))
+	{
+		g_free(name);
 		return;
+	}
 
 	atom = gdk_atom_intern(tb_editor_dnd_targets[0].target, FALSE);
 	gtk_selection_data_set(data, atom, 8, (guchar*) name, strlen(name));
@@ -809,12 +815,12 @@ static void tb_editor_drag_data_rcvd_cb(GtkWidget *widget, GdkDragContext *conte
 	GtkTreeView *tree = GTK_TREE_VIEW(widget);
 	gboolean del = FALSE;
 
-	if (data->length >= 0 && data->format == 8)
+	if (gtk_selection_data_get_length(data) >= 0 && gtk_selection_data_get_format(data) == 8)
 	{
 		gboolean is_sep;
 		gchar *text = NULL;
 
-		text = (gchar*) data->data;
+		text = (gchar*) gtk_selection_data_get_data(data);
 		is_sep = utils_str_equal(text, TB_EDITOR_SEPARATOR);
 		/* If the source of the action is equal to the target, we do just re-order and so need
 		 * to delete the separator to get it moved, not just copied. */
@@ -866,7 +872,7 @@ static gboolean tb_editor_foreach_used(GtkTreeModel *model, GtkTreePath *path,
 
 	if (utils_str_equal(action_name, TB_EDITOR_SEPARATOR))
 		g_string_append_printf(data, "\t\t<separator/>\n");
-	else if (G_LIKELY(NZV(action_name)))
+	else if (G_LIKELY(!EMPTY(action_name)))
 		g_string_append_printf(data, "\t\t<toolitem action='%s' />\n", action_name);
 
 	g_free(action_name);

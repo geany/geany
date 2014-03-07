@@ -1,0 +1,8 @@
+# format=tagmanager
+BarÌ1Ö0
+FooÌ1Ö0
+__constructÌ16Í()ÎBarÖ0
+__constructÌ16Í($a, $b)ÎFooÖ0
+method1Ì16Í()ÎBarÖ0
+method1Ì16Í($arg)ÎFooÖ0
+method2Ì16Í()ÎFooÖ0

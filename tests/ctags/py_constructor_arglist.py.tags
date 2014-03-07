@@ -1,0 +1,16 @@
+# format=tagmanager
+HttpResponseÌ32768Ö0
+HttpResponseBadRequestÌ32768Ö0
+InterfaceDataValidationErrorÌ32768Ö0
+RequestContextÌ32768Ö0
+SomeClassÌ1Í(self, filename, pathsep='', treegap=64)Ö0
+__init__Ì128Í(self, filename, pathsep='', treegap=64)ÎSomeClassÖ0
+btopenÌ32768Ö0
+csrf_exemptÌ32768Ö0
+csrf_exempt2Ì32768Ö0
+login_requiredÌ32768Ö0
+permission_requiredÌ32768Ö0
+render_to_responseÌ32768Ö0
+require_POSTÌ32768Ö0
+simplejsonÌ32768Ö0
+sysÌ32768Ö0

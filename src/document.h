@@ -1,8 +1,8 @@
 /*
  *      document.h - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2005-2011 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2006-2011 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2005-2012 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2006-2012 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -14,9 +14,9 @@
  *      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *      GNU General Public License for more details.
  *
- *      You should have received a copy of the GNU General Public License
- *      along with this program; if not, write to the Free Software
- *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *      You should have received a copy of the GNU General Public License along
+ *      with this program; if not, write to the Free Software Foundation, Inc.,
+ *      51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
 /**
@@ -34,6 +34,7 @@ G_BEGIN_DECLS
 #include "Scintilla.h"
 #include "ScintillaWidget.h"
 #include "editor.h"
+#include "search.h"
 
 #if defined(G_OS_WIN32)
 # define GEANY_DEFAULT_EOL_CHARACTER SC_EOL_CRLF
@@ -145,7 +146,7 @@ extern GPtrArray *documents_array;
  * @note This should not be used to check the result of the main API functions,
  * these only need a NULL-pointer check - @c document_get_current() != @c NULL. */
 #define DOC_VALID(doc_ptr) \
-	(G_LIKELY((doc_ptr) != NULL && (doc_ptr)->is_valid))
+	((doc_ptr) != NULL && (doc_ptr)->is_valid)
 
 /**
  *  Returns the filename of the document passed or @c GEANY_STRING_UNTITLED
@@ -210,8 +211,6 @@ gboolean document_account_for_unsaved(void);
 
 gboolean document_close_all(void);
 
-GeanyDocument *document_clone(GeanyDocument *old_doc, const gchar *utf8_filename);
-
 GeanyDocument *document_open_file_full(GeanyDocument *doc, const gchar *filename, gint pos,
 		gboolean readonly, GeanyFiletype *ft, const gchar *forced_enc);
 
@@ -224,7 +223,8 @@ gboolean document_search_bar_find(GeanyDocument *doc, const gchar *text, gint fl
 		gboolean backwards);
 
 gint document_find_text(GeanyDocument *doc, const gchar *text, const gchar *original_text,
-		gint flags, gboolean search_backwards, gboolean scroll, GtkWidget *parent);
+		gint flags, gboolean search_backwards, GeanyMatchInfo **match_,
+		gboolean scroll, GtkWidget *parent);
 
 gint document_replace_text(GeanyDocument *doc, const gchar *find_text, const gchar *original_find_text,
 		const gchar *replace_text, gint flags, gboolean search_backwards);
@@ -261,6 +261,8 @@ void document_undo_add(GeanyDocument *doc, guint type, gpointer data);
 
 void document_update_tab_label(GeanyDocument *doc);
 
+const gchar *document_get_status_widget_class(GeanyDocument *doc);
+
 const GdkColor *document_get_status_color(GeanyDocument *doc);
 
 gchar *document_get_basename_for_display(GeanyDocument *doc, gint length);
@@ -280,6 +282,8 @@ gint document_compare_by_tab_order(gconstpointer a, gconstpointer b);
 gint document_compare_by_tab_order_reverse(gconstpointer a, gconstpointer b);
 
 void document_grab_focus(GeanyDocument *doc);
+
+GeanyDocument *document_clone(GeanyDocument *old_doc);
 
 G_END_DECLS
 

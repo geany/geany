@@ -1,8 +1,8 @@
 /*
  *      tools.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2006-2011 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2006-2011 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2006-2012 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2006-2012 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -14,9 +14,9 @@
  *      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *      GNU General Public License for more details.
  *
- *      You should have received a copy of the GNU General Public License
- *      along with this program; if not, write to the Free Software
- *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *      You should have received a copy of the GNU General Public License along
+ *      with this program; if not, write to the Free Software Foundation, Inc.,
+ *      51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
 /*
@@ -75,9 +75,15 @@ struct cc_dialog
 	GtkWidget *button_down;
 };
 
-static gboolean cc_error_occurred = FALSE;
-static gboolean cc_reading_finished = FALSE;
-static GString *cc_buffer;
+/* data required by the custom command callbacks */
+struct cc_data
+{
+	const gchar *command;	/* command launched */
+	GeanyDocument *doc;		/* document in which replace the selection */
+	GString *buffer;		/* buffer holding stdout content, or NULL */
+	gboolean error;			/* whether and error occurred */
+	gboolean finished;		/* whether the command has finished */
+};
 
 
 static gboolean cc_exists_command(const gchar *command)
@@ -99,7 +105,7 @@ static void cc_dialog_update_row_status(GtkListStore *store, GtkTreeIter *iter, 
 	gint argc;
 	gchar **argv;
 
-	if (! NZV(cmd))
+	if (EMPTY(cmd))
 		stock_id = GTK_STOCK_YES;
 	else if (g_shell_parse_argv(cmd, &argc, &argv, &err))
 	{
@@ -200,22 +206,25 @@ static void cc_on_dialog_move_down_clicked(GtkButton *button, struct cc_dialog *
 }
 
 
-static gboolean cc_iofunc(GIOChannel *ioc, GIOCondition cond, gpointer data)
+static gboolean cc_iofunc(GIOChannel *ioc, GIOCondition cond, gpointer user_data)
 {
+	struct cc_data *data = user_data;
+
 	if (cond & (G_IO_IN | G_IO_PRI))
 	{
 		gchar *msg = NULL;
 		GIOStatus rv;
 		GError *err = NULL;
 
-		cc_buffer = g_string_sized_new(256);
+		if (! data->buffer)
+			data->buffer = g_string_sized_new(256);
 
 		do
 		{
 			rv = g_io_channel_read_line(ioc, &msg, NULL, NULL, &err);
 			if (msg != NULL)
 			{
-				g_string_append(cc_buffer, msg);
+				g_string_append(data->buffer, msg);
 				g_free(msg);
 			}
 			if (G_UNLIKELY(err != NULL))
@@ -235,8 +244,10 @@ static gboolean cc_iofunc(GIOChannel *ioc, GIOCondition cond, gpointer data)
 }
 
 
-static gboolean cc_iofunc_err(GIOChannel *ioc, GIOCondition cond, gpointer data)
+static gboolean cc_iofunc_err(GIOChannel *ioc, GIOCondition cond, gpointer user_data)
 {
+	struct cc_data *data = user_data;
+
 	if (cond & (G_IO_IN | G_IO_PRI))
 	{
 		gchar *msg = NULL;
@@ -253,41 +264,40 @@ static gboolean cc_iofunc_err(GIOChannel *ioc, GIOCondition cond, gpointer data)
 			}
 		} while (rv == G_IO_STATUS_NORMAL || rv == G_IO_STATUS_AGAIN);
 
-		if (NZV(str->str))
+		if (!EMPTY(str->str))
 		{
-			g_warning("%s: %s\n", (const gchar *) data, str->str);
+			g_warning("%s: %s\n", data->command, str->str);
 			ui_set_statusbar(TRUE,
 				_("The executed custom command returned an error. "
 				"Your selection was not changed. Error message: %s"),
 				str->str);
-			cc_error_occurred = TRUE;
+			data->error = TRUE;
 
 		}
 		g_string_free(str, TRUE);
 	}
-	cc_reading_finished = TRUE;
+	data->finished = TRUE;
 	return FALSE;
 }
 
 
 static gboolean cc_replace_sel_cb(gpointer user_data)
 {
-	GeanyDocument *doc = user_data;
+	struct cc_data *data = user_data;
 
-	if (! cc_reading_finished)
+	if (! data->finished)
 	{	/* keep this function in the main loop until cc_iofunc_err() has finished */
 		return TRUE;
 	}
 
-	if (! cc_error_occurred && cc_buffer != NULL)
+	if (! data->error && data->buffer != NULL && DOC_VALID(data->doc))
 	{	/* Command completed successfully */
-		sci_replace_sel(doc->editor->sci, cc_buffer->str);
-		g_string_free(cc_buffer, TRUE);
-		cc_buffer = NULL;
+		sci_replace_sel(data->doc->editor->sci, data->buffer->str);
 	}
 
-	cc_error_occurred = FALSE;
-	cc_reading_finished = FALSE;
+	if (data->buffer)
+		g_string_free(data->buffer, TRUE);
+	g_slice_free1(sizeof *data, data);
 
 	return FALSE;
 }
@@ -297,29 +307,31 @@ static gboolean cc_replace_sel_cb(gpointer user_data)
  * If it returned with a sucessful exit code, replace the selection. */
 static void cc_exit_cb(GPid child_pid, gint status, gpointer user_data)
 {
+	struct cc_data *data = user_data;
+
 	/* if there was already an error, skip further checks */
-	if (! cc_error_occurred)
+	if (! data->error)
 	{
 #ifdef G_OS_UNIX
 		if (WIFEXITED(status))
 		{
 			if (WEXITSTATUS(status) != EXIT_SUCCESS)
-				cc_error_occurred = TRUE;
+				data->error = TRUE;
 		}
 		else if (WIFSIGNALED(status))
 		{	/* the terminating signal: WTERMSIG (status)); */
-			cc_error_occurred = TRUE;
+			data->error = TRUE;
 		}
 		else
 		{	/* any other failure occured */
-			cc_error_occurred = TRUE;
+			data->error = TRUE;
 		}
 #else
-		cc_error_occurred = ! win32_get_exit_status(child_pid);
+		data->error = ! win32_get_exit_status(child_pid);
 #endif
 
-		if (cc_error_occurred)
-		{	/* here we are sure cc_error_occurred was set due to an unsuccessful exit code
+		if (data->error)
+		{	/* here we are sure data->error was set due to an unsuccessful exit code
 			 * and so we add an error message */
 			/* TODO maybe include the exit code in the error message */
 			ui_set_statusbar(TRUE,
@@ -327,7 +339,7 @@ static void cc_exit_cb(GPid child_pid, gint status, gpointer user_data)
 		}
 	}
 
-	g_idle_add(cc_replace_sel_cb, user_data);
+	g_idle_add(cc_replace_sel_cb, data);
 	g_spawn_close_pid(child_pid);
 }
 
@@ -344,7 +356,7 @@ void tools_execute_custom_command(GeanyDocument *doc, const gchar *command)
 	gint stdout_fd;
 	gint stderr_fd;
 
-	g_return_if_fail(doc != NULL && command != NULL);
+	g_return_if_fail(DOC_VALID(doc) && command != NULL);
 
 	if (! sci_has_selection(doc->editor->sci))
 		editor_select_lines(doc->editor, FALSE);
@@ -357,31 +369,33 @@ void tools_execute_custom_command(GeanyDocument *doc, const gchar *command)
 	}
 	ui_set_statusbar(TRUE, _("Passing data and executing custom command: %s"), command);
 
-	cc_error_occurred = FALSE;
-
 	if (g_spawn_async_with_pipes(NULL, argv, NULL, G_SPAWN_SEARCH_PATH | G_SPAWN_DO_NOT_REAP_CHILD,
 						NULL, NULL, &pid, &stdin_fd, &stdout_fd, &stderr_fd, &error))
 	{
 		gchar *sel;
-		gint len, remaining, wrote;
+		gint remaining, wrote;
+		struct cc_data *data = g_slice_alloc(sizeof *data);
 
-		if (pid != 0)
-			g_child_watch_add(pid, (GChildWatchFunc) cc_exit_cb, doc);
+		data->error = FALSE;
+		data->finished = FALSE;
+		data->buffer = NULL;
+		data->doc = doc;
+		data->command = command;
+
+		g_child_watch_add(pid, cc_exit_cb, data);
 
 		/* use GIOChannel to monitor stdout */
 		utils_set_up_io_channel(stdout_fd, G_IO_IN | G_IO_PRI | G_IO_ERR | G_IO_HUP | G_IO_NVAL,
-				FALSE, cc_iofunc, NULL);
+				FALSE, cc_iofunc, data);
 		/* copy program's stderr to Geany's stdout to help error tracking */
 		utils_set_up_io_channel(stderr_fd, G_IO_IN | G_IO_PRI | G_IO_ERR | G_IO_HUP | G_IO_NVAL,
-				FALSE, cc_iofunc_err, (gpointer)command);
+				FALSE, cc_iofunc_err, data);
 
 		/* get selection */
-		len = sci_get_selected_text_length(doc->editor->sci);
-		sel = g_malloc0(len + 1);
-		sci_get_selected_text(doc->editor->sci, sel);
+		sel = sci_get_selection_contents(doc->editor->sci);
 
 		/* write data to the command */
-		remaining = len - 1;
+		remaining = strlen(sel);
 		do
 		{
 			wrote = write(stdin_fd, sel, remaining);
@@ -569,7 +583,7 @@ static void cc_show_dialog_custom_commands(void)
 
 		for (i = 0; i < len; i++)
 		{
-			if (! NZV(ui_prefs.custom_commands[i]))
+			if (EMPTY(ui_prefs.custom_commands[i]))
 				continue; /* skip empty fields */
 
 			cc_dialog_add_command(&cc, i, FALSE);
@@ -628,7 +642,7 @@ static void cc_show_dialog_custom_commands(void)
 				gchar *lbl;
 
 				gtk_tree_model_get(GTK_TREE_MODEL(cc.store), &iter, CC_COLUMN_CMD, &cmd, CC_COLUMN_LABEL, &lbl, -1);
-				if (NZV(cmd))
+				if (!EMPTY(cmd))
 				{
 					cmd_list = g_slist_prepend(cmd_list, cmd);
 					lbl_list = g_slist_prepend(lbl_list, lbl);
@@ -683,7 +697,7 @@ static void cc_on_custom_command_activate(GtkMenuItem *menuitem, gpointer user_d
 	GeanyDocument *doc = document_get_current();
 	gint command_idx;
 
-	g_return_if_fail(doc != NULL);
+	g_return_if_fail(DOC_VALID(doc));
 
 	command_idx = GPOINTER_TO_INT(user_data);
 
@@ -718,8 +732,11 @@ static void cc_insert_custom_command_items(GtkMenu *me, const gchar *label, cons
 	if (key_idx != -1)
 	{
 		kb = keybindings_lookup_item(GEANY_KEY_GROUP_FORMAT, key_idx);
-		gtk_widget_add_accelerator(item, "activate", gtk_accel_group_new(),
-			kb->key, kb->mods, GTK_ACCEL_VISIBLE);
+		if (kb->key > 0)
+		{
+			gtk_widget_add_accelerator(item, "activate", gtk_accel_group_new(),
+				kb->key, kb->mods, GTK_ACCEL_VISIBLE);
+		}
 	}
 	gtk_container_add(GTK_CONTAINER(me), item);
 	gtk_widget_show(item);
@@ -756,9 +773,9 @@ void tools_create_insert_custom_command_menu_items(void)
 		{
 			const gchar *label = ui_prefs.custom_commands_labels[i];
 
-			if (! NZV(label))
+			if (EMPTY(label))
 				label = ui_prefs.custom_commands[i];
-			if (NZV(label)) /* skip empty items */
+			if (!EMPTY(label)) /* skip empty items */
 			{
 				cc_insert_custom_command_items(menu_edit, label, ui_prefs.custom_commands[i], idx);
 				idx++;
@@ -848,14 +865,12 @@ void tools_word_count(void)
 
 	if (sci_has_selection(doc->editor->sci))
 	{
-		text = g_malloc0(sci_get_selected_text_length(doc->editor->sci) + 1);
-		sci_get_selected_text(doc->editor->sci, text);
+		text = sci_get_selection_contents(doc->editor->sci);
 		range = _("selection");
 	}
 	else
 	{
-		text = g_malloc(sci_get_length(doc->editor->sci) + 1);
-		sci_get_text(doc->editor->sci, sci_get_length(doc->editor->sci) + 1 , text);
+		text = sci_get_contents(doc->editor->sci, -1);
 		range = _("whole document");
 	}
 	word_count(text, &chars, &lines, &words);
@@ -932,29 +947,34 @@ void tools_word_count(void)
  * color dialog callbacks
  */
 #ifndef G_OS_WIN32
-static void
-on_color_cancel_button_clicked(GtkButton *button, gpointer user_data)
+static void on_color_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 {
-	gtk_widget_hide(ui_widgets.open_colorsel);
-}
+	switch (response)
+	{
+		case GTK_RESPONSE_OK:
+			gtk_widget_hide(ui_widgets.open_colorsel);
+			/* fall through */
+		case GTK_RESPONSE_APPLY:
+		{
+			GdkColor color;
+			GeanyDocument *doc = document_get_current();
+			gchar *hex;
+			GtkWidget *colorsel;
 
+			g_return_if_fail(doc != NULL);
 
-static void
-on_color_ok_button_clicked(GtkButton *button, gpointer user_data)
-{
-	GdkColor color;
-	GeanyDocument *doc = document_get_current();
-	gchar *hex;
+			colorsel = gtk_color_selection_dialog_get_color_selection(GTK_COLOR_SELECTION_DIALOG(ui_widgets.open_colorsel));
+			gtk_color_selection_get_current_color(GTK_COLOR_SELECTION(colorsel), &color);
 
-	gtk_widget_hide(ui_widgets.open_colorsel);
-	g_return_if_fail(doc != NULL);
+			hex = utils_get_hex_from_color(&color);
+			editor_insert_color(doc->editor, hex);
+			g_free(hex);
+			break;
+		}
 
-	gtk_color_selection_get_current_color(
-			GTK_COLOR_SELECTION(GTK_COLOR_SELECTION_DIALOG(ui_widgets.open_colorsel)->colorsel), &color);
-
-	hex = utils_get_hex_from_color(&color);
-	editor_insert_color(doc->editor, hex);
-	g_free(hex);
+		default:
+			gtk_widget_hide(ui_widgets.open_colorsel);
+	}
 }
 #endif
 
@@ -965,38 +985,32 @@ void tools_color_chooser(const gchar *color)
 #ifdef G_OS_WIN32
 	win32_show_color_dialog(color);
 #else
-	gchar *c = (gchar*) color;
+	GdkColor gc;
+	GtkWidget *colorsel;
 
 	if (ui_widgets.open_colorsel == NULL)
 	{
 		ui_widgets.open_colorsel = gtk_color_selection_dialog_new(_("Color Chooser"));
+		gtk_dialog_add_button(GTK_DIALOG(ui_widgets.open_colorsel), GTK_STOCK_APPLY, GTK_RESPONSE_APPLY);
+		ui_dialog_set_primary_button_order(GTK_DIALOG(ui_widgets.open_colorsel),
+				GTK_RESPONSE_APPLY, GTK_RESPONSE_CANCEL, GTK_RESPONSE_OK, -1);
 		gtk_widget_set_name(ui_widgets.open_colorsel, "GeanyDialog");
 		gtk_window_set_transient_for(GTK_WINDOW(ui_widgets.open_colorsel), GTK_WINDOW(main_widgets.window));
-		gtk_color_selection_set_has_palette(
-			GTK_COLOR_SELECTION(GTK_COLOR_SELECTION_DIALOG(ui_widgets.open_colorsel)->colorsel), TRUE);
+		colorsel = gtk_color_selection_dialog_get_color_selection(GTK_COLOR_SELECTION_DIALOG(ui_widgets.open_colorsel));
+		gtk_color_selection_set_has_palette(GTK_COLOR_SELECTION(colorsel), TRUE);
 
-		g_signal_connect(GTK_COLOR_SELECTION_DIALOG(ui_widgets.open_colorsel)->cancel_button, "clicked",
-						G_CALLBACK(on_color_cancel_button_clicked), NULL);
-		g_signal_connect(GTK_COLOR_SELECTION_DIALOG(ui_widgets.open_colorsel)->ok_button, "clicked",
-						G_CALLBACK(on_color_ok_button_clicked), NULL);
+		g_signal_connect(ui_widgets.open_colorsel, "response",
+						G_CALLBACK(on_color_dialog_response), NULL);
 		g_signal_connect(ui_widgets.open_colorsel, "delete-event",
 						G_CALLBACK(gtk_widget_hide_on_delete), NULL);
 	}
+	else
+		colorsel = gtk_color_selection_dialog_get_color_selection(GTK_COLOR_SELECTION_DIALOG(ui_widgets.open_colorsel));
 	/* if color is non-NULL set it in the dialog as preselected color */
-	if (c != NULL && (c[0] == '0' || c[0] == '#'))
+	if (color != NULL && utils_parse_color(color, &gc))
 	{
-		GdkColor gc;
-
-		if (c[0] == '0' && c[1] == 'x')
-		{	/* we have a string of the format "0x00ff00" and we need it to "#00ff00" */
-			c[1] = '#';
-			c++;
-		}
-		gdk_color_parse(c, &gc);
-		gtk_color_selection_set_current_color(GTK_COLOR_SELECTION(
-							GTK_COLOR_SELECTION_DIALOG(ui_widgets.open_colorsel)->colorsel), &gc);
-		gtk_color_selection_set_previous_color(GTK_COLOR_SELECTION(
-							GTK_COLOR_SELECTION_DIALOG(ui_widgets.open_colorsel)->colorsel), &gc);
+		gtk_color_selection_set_current_color(GTK_COLOR_SELECTION(colorsel), &gc);
+		gtk_color_selection_set_previous_color(GTK_COLOR_SELECTION(colorsel), &gc);
 	}
 
 	/* We make sure the dialog is visible. */

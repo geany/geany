@@ -1,8 +1,8 @@
 /*
  *      prefs.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2005-2011 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2006-2011 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2005-2012 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2006-2012 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -14,9 +14,9 @@
  *      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *      GNU General Public License for more details.
  *
- *      You should have received a copy of the GNU General Public License
- *      along with this program; if not, write to the Free Software
- *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *      You should have received a copy of the GNU General Public License along
+ *      with this program; if not, write to the Free Software Foundation, Inc.,
+ *      51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
 /*
@@ -185,11 +185,11 @@ static void kb_tree_view_change_button_clicked_cb(GtkWidget *button, gpointer da
 					_("Press the combination of the keys you want to use for \"%s\"."), name);
 			label = gtk_label_new(str);
 			gtk_misc_set_padding(GTK_MISC(label), 5, 10);
-			gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), label);
+			gtk_container_add(GTK_CONTAINER(gtk_dialog_get_content_area(GTK_DIALOG(dialog))), label);
 
 			dialog_label = gtk_label_new("");
 			gtk_misc_set_padding(GTK_MISC(dialog_label), 5, 10);
-			gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), dialog_label);
+			gtk_container_add(GTK_CONTAINER(gtk_dialog_get_content_area(GTK_DIALOG(dialog))), dialog_label);
 
 			g_signal_connect(dialog, "key-press-event",
 								G_CALLBACK(kb_grab_key_dialog_key_press_cb), NULL);
@@ -334,6 +334,33 @@ static void kb_set_shortcut(GtkTreeStore *store, GtkTreeIter *iter,
 }
 
 
+void prefs_kb_search_name(const gchar *search)
+{
+	GtkTreeIter   iter;
+	gboolean      valid;
+	GtkTreeModel *model;
+
+	model = gtk_tree_view_get_model(tree);
+	valid = gtk_tree_model_get_iter_first(model, &iter);
+	while (valid)
+	{
+		gchar *name;
+
+		gtk_tree_model_get(model, &iter, KB_TREE_ACTION, &name, -1);
+		if (g_strcmp0(name, search) == 0)
+		{
+			GtkTreePath *path = gtk_tree_model_get_path(model, &iter);
+			gtk_tree_view_scroll_to_cell(tree, path, NULL, TRUE, .0f, .0f);
+			gtk_tree_path_free(path);
+			g_free(name);
+			break;
+		}
+		g_free(name);
+		valid = gtk_tree_model_iter_next(model, &iter);
+	}
+}
+
+
 static void kb_init(void)
 {
 	GtkTreeIter parent, iter;
@@ -369,7 +396,7 @@ static void kb_init(void)
 static void prefs_init_dialog(void)
 {
 	GtkWidget *widget;
-	GdkColor *color;
+	GdkColor color = {0};
 
 	/* Synchronize with Stash settings */
 	prefs_action(PREF_DISPLAY);
@@ -450,11 +477,9 @@ static void prefs_init_dialog(void)
 	}
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), TRUE);
 
-	color = g_new0(GdkColor, 1);
-	gdk_color_parse(editor_prefs.long_line_color, color);
+	utils_parse_color(editor_prefs.long_line_color, &color);
 	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "long_line_color");
-	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget), color);
-	g_free(color);
+	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget), &color);
 
 	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_show_notebook_tabs");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), interface_prefs.show_notebook_tabs);
@@ -739,10 +764,13 @@ static void prefs_init_dialog(void)
 		gtk_font_button_set_font_name(GTK_FONT_BUTTON(widget), vc->font);
 
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "color_fore");
-		gtk_color_button_set_color(GTK_COLOR_BUTTON(widget), vc->colour_fore);
+		gtk_color_button_set_color(GTK_COLOR_BUTTON(widget), &vc->colour_fore);
 
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "color_back");
-		gtk_color_button_set_color(GTK_COLOR_BUTTON(widget), vc->colour_back);
+		gtk_color_button_set_color(GTK_COLOR_BUTTON(widget), &vc->colour_back);
+
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "entry_image");
+		gtk_entry_set_text(GTK_ENTRY(widget), vc->image);
 
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "spin_scrollback");
 		gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget), vc->scrollback_lines);
@@ -856,6 +884,9 @@ on_prefs_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 
 		if (interface_prefs.sidebar_pos != old_sidebar_pos)
 			ui_swap_sidebar_pos();
+
+		widget = ui_lookup_widget(main_widgets.window, "vpaned1");
+		gtk_orientable_set_orientation(GTK_ORIENTABLE(widget), interface_prefs.msgwin_orientation);
 
 		/* General settings */
 		/* startup */
@@ -1204,6 +1235,10 @@ on_prefs_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 			widget = ui_lookup_widget(ui_widgets.prefs_dialog, "spin_scrollback");
 			gtk_spin_button_update(GTK_SPIN_BUTTON(widget));
 			vc->scrollback_lines = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));
+
+			widget = ui_lookup_widget(ui_widgets.prefs_dialog, "entry_image");
+			g_free(vc->image);
+			vc->image = g_strdup(gtk_entry_get_text(GTK_ENTRY(widget)));
 
 			widget = ui_lookup_widget(ui_widgets.prefs_dialog, "entry_shell");
 			g_free(vc->shell);
@@ -1629,17 +1664,13 @@ void prefs_show_dialog(void)
 	if (ui_widgets.prefs_dialog == NULL)
 	{
 		GtkListStore *encoding_list, *eol_list;
-		GtkWidget *label;
+		GtkWidget *label, *widget;
 		guint i;
 		gchar *encoding_string;
-		GdkPixbuf *pb;
 
 		ui_widgets.prefs_dialog = create_prefs_dialog();
 		gtk_widget_set_name(ui_widgets.prefs_dialog, "GeanyPrefsDialog");
 		gtk_window_set_transient_for(GTK_WINDOW(ui_widgets.prefs_dialog), GTK_WINDOW(main_widgets.window));
-		pb = ui_new_pixbuf_from_inline(GEANY_IMAGE_LOGO);
-		gtk_window_set_icon(GTK_WINDOW(ui_widgets.prefs_dialog), pb);
-		g_object_unref(pb);	/* free our reference */
 
 		/* init the file encoding combo boxes */
 		encoding_list = ui_builder_get_object("encoding_list");
@@ -1655,6 +1686,13 @@ void prefs_show_dialog(void)
 		list_store_append_text(eol_list, utils_get_eol_name(SC_EOL_CRLF));
 		list_store_append_text(eol_list, utils_get_eol_name(SC_EOL_CR));
 		list_store_append_text(eol_list, utils_get_eol_name(SC_EOL_LF));
+
+		/* wet combo box wrap width after having filled the encoding to workaround
+		 * GTK bug https://bugzilla.gnome.org/show_bug.cgi?id=722388 */
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "combo_new_encoding");
+		gtk_combo_box_set_wrap_width(GTK_COMBO_BOX(widget), 3);
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "combo_open_encoding");
+		gtk_combo_box_set_wrap_width(GTK_COMBO_BOX(widget), 3);
 
 		/* add manually GeanyWrapLabels because they can't be added with Glade */
 		/* page Tools */

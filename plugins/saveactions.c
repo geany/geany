@@ -1,8 +1,8 @@
 /*
  *      saveactions.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2007-2011 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2007-2011 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2007-2012 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2007-2012 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -14,10 +14,9 @@
  *      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *      GNU General Public License for more details.
  *
- *      You should have received a copy of the GNU General Public License
- *      along with this program; if not, write to the Free Software
- *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
- *      MA 02110-1301, USA.
+ *      You should have received a copy of the GNU General Public License along
+ *      with this program; if not, write to the Free Software Foundation, Inc.,
+ *      51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
 
@@ -26,12 +25,14 @@
 #endif
 
 #include "geanyplugin.h"
+#include "gtkcompat.h"
 
 #include <unistd.h>
 #include <errno.h>
 #include <glib/gstdio.h>
 
 
+GeanyPlugin		*geany_plugin;
 GeanyData		*geany_data;
 GeanyFunctions	*geany_functions;
 
@@ -52,6 +53,7 @@ enum
 static struct
 {
 	GtkWidget *checkbox_enable_autosave;
+	GtkWidget *checkbox_enable_autosave_losing_focus;
 	GtkWidget *checkbox_enable_instantsave;
 	GtkWidget *checkbox_enable_backupcopy;
 
@@ -70,6 +72,7 @@ pref_widgets;
 
 
 static gboolean enable_autosave;
+static gboolean enable_autosave_losing_focus;
 static gboolean enable_instantsave;
 static gboolean enable_backupcopy;
 
@@ -93,7 +96,7 @@ static gboolean backupcopy_set_backup_dir(const gchar *utf8_dir)
 {
 	gchar *tmp;
 
-	if (G_UNLIKELY(! NZV(utf8_dir)))
+	if (G_UNLIKELY(EMPTY(utf8_dir)))
 		return FALSE;
 
 	tmp = utils_get_locale_from_utf8(utf8_dir);
@@ -191,6 +194,7 @@ static void backupcopy_document_save_cb(GObject *obj, GeanyDocument *doc, gpoint
 	gchar *basename_src;
 	gchar *dir_parts_src;
 	gchar *stamp;
+	gchar buf[512];
 
 	if (! enable_backupcopy)
 		return;
@@ -227,9 +231,9 @@ static void backupcopy_document_save_cb(GObject *obj, GeanyDocument *doc, gpoint
 		return;
 	}
 
-	while (fgets(stamp, sizeof(stamp), src) != NULL)
+	while (fgets(buf, sizeof(buf), src) != NULL)
 	{
-		fputs(stamp, dst);
+		fputs(buf, dst);
 	}
 
 	fclose(src);
@@ -272,10 +276,51 @@ static void instantsave_document_new_cb(GObject *obj, GeanyDocument *doc, gpoint
 }
 
 
+/* Save when focus out
+ *
+ * @param pointer ref to the current doc (struct GeanyDocument *)
+ *
+ * @return always FALSE = Just a one shot execution
+ *
+ */
+static gboolean save_on_focus_out_idle(gpointer p_cur_doc)
+{
+	GeanyDocument *cur_doc = p_cur_doc;
+
+	if (DOC_VALID(cur_doc) && (cur_doc->file_name != NULL))
+		document_save_file(cur_doc, FALSE);
+
+	return FALSE;
+}
+
+
+/* Autosave the current file when the focus out of the _editor_
+ *
+ * Get the SCN_FOCUSOUT signal, and then ask plugin_idle_add()
+ * to save the current doc when idle
+ *
+ * @return always FALSE = Non block signals
+ *
+ */
+static gboolean on_document_focus_out(GObject *object, GeanyEditor *editor,
+								 SCNotification *nt, gpointer data)
+{
+	if (nt->nmhdr.code == SCN_FOCUSOUT
+		&& enable_autosave_losing_focus
+		&& editor->document->file_name != NULL)
+	{
+		plugin_idle_add(geany_plugin, save_on_focus_out_idle, editor->document);
+	}
+
+	return FALSE;
+}
+
+
 PluginCallback plugin_callbacks[] =
 {
 	{ "document-new", (GCallback) &instantsave_document_new_cb, FALSE, NULL },
 	{ "document-save", (GCallback) &backupcopy_document_save_cb, FALSE, NULL },
+	{ "editor-notify", (GCallback) &on_document_focus_out, FALSE, NULL },
 	{ NULL, NULL, FALSE, NULL }
 };
 
@@ -341,6 +386,8 @@ void plugin_init(GeanyData *data)
 
 	enable_autosave = utils_get_setting_boolean(
 		config, "saveactions", "enable_autosave", FALSE);
+	enable_autosave_losing_focus = utils_get_setting_boolean(
+		config, "saveactions", "enable_autosave_losing_focus", FALSE);
 	enable_instantsave = utils_get_setting_boolean(
 		config, "saveactions", "enable_instantsave", FALSE);
 	enable_backupcopy = utils_get_setting_boolean(
@@ -385,7 +432,7 @@ static void backupcopy_dir_button_clicked_cb(GtkButton *button, gpointer item)
 					GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT, NULL);
 
 	text = utils_get_locale_from_utf8(gtk_entry_get_text(GTK_ENTRY(item)));
-	if (NZV(text))
+	if (!EMPTY(text))
 		gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog), text);
 
 	/* run it */
@@ -417,6 +464,8 @@ static void configure_response_cb(GtkDialog *dialog, gint response, G_GNUC_UNUSE
 
 		enable_autosave = gtk_toggle_button_get_active(
 			GTK_TOGGLE_BUTTON(pref_widgets.checkbox_enable_autosave));
+		enable_autosave_losing_focus = gtk_toggle_button_get_active(
+			GTK_TOGGLE_BUTTON(pref_widgets.checkbox_enable_autosave_losing_focus));
 		enable_instantsave = gtk_toggle_button_get_active(
 			GTK_TOGGLE_BUTTON(pref_widgets.checkbox_enable_instantsave));
 		enable_backupcopy = gtk_toggle_button_get_active(
@@ -430,8 +479,8 @@ static void configure_response_cb(GtkDialog *dialog, gint response, G_GNUC_UNUSE
 			GTK_TOGGLE_BUTTON(pref_widgets.autosave_save_all_radio2));
 
 		g_free(instantsave_default_ft);
-		instantsave_default_ft = gtk_combo_box_get_active_text(
-			GTK_COMBO_BOX(pref_widgets.instantsave_ft_combo));
+		instantsave_default_ft = gtk_combo_box_text_get_active_text(
+			GTK_COMBO_BOX_TEXT(pref_widgets.instantsave_ft_combo));
 
 		text_dir = gtk_entry_get_text(GTK_ENTRY(pref_widgets.backupcopy_entry_dir));
 		text_time = gtk_entry_get_text(GTK_ENTRY(pref_widgets.backupcopy_entry_time));
@@ -442,6 +491,7 @@ static void configure_response_cb(GtkDialog *dialog, gint response, G_GNUC_UNUSE
 		g_key_file_load_from_file(config, config_file, G_KEY_FILE_NONE, NULL);
 
 		g_key_file_set_boolean(config, "saveactions", "enable_autosave", enable_autosave);
+		g_key_file_set_boolean(config, "saveactions", "enable_autosave_losing_focus", enable_autosave_losing_focus);
 		g_key_file_set_boolean(config, "saveactions", "enable_instantsave", enable_instantsave);
 		g_key_file_set_boolean(config, "saveactions", "enable_backupcopy", enable_backupcopy);
 
@@ -457,7 +507,7 @@ static void configure_response_cb(GtkDialog *dialog, gint response, G_GNUC_UNUSE
 		SETPTR(backupcopy_time_fmt, g_strdup(text_time));
 		if (enable_backupcopy)
 		{
-			if (NZV(text_dir) && backupcopy_set_backup_dir(text_dir))
+			if (!EMPTY(text_dir) && backupcopy_set_backup_dir(text_dir))
 			{
 				g_key_file_set_string(config, "backupcopy", "backup_dir", text_dir);
 			}
@@ -530,7 +580,7 @@ GtkWidget *plugin_configure(GtkDialog *dialog)
 	vbox = gtk_vbox_new(FALSE, 6);
 
 	notebook = gtk_notebook_new();
-	GTK_WIDGET_UNSET_FLAGS(notebook, GTK_CAN_FOCUS);
+	gtk_widget_set_can_focus(notebook, FALSE);
 	gtk_container_set_border_width(GTK_CONTAINER(notebook), 5);
 	gtk_box_pack_start(GTK_BOX(vbox), notebook, FALSE, TRUE, 0);
 
@@ -538,7 +588,7 @@ GtkWidget *plugin_configure(GtkDialog *dialog)
 	 * Auto Save
 	 */
 	{
-		GtkWidget *spin, *hbox, *checkbox, *radio1, *radio2;
+		GtkWidget *spin, *hbox, *checkbox, *checkbox_enable_as_lf, *radio1, *radio2;
 
 		notebook_vbox = gtk_vbox_new(FALSE, 2);
 		inner_vbox = gtk_vbox_new(FALSE, 5);
@@ -546,6 +596,12 @@ GtkWidget *plugin_configure(GtkDialog *dialog)
 		gtk_box_pack_start(GTK_BOX(notebook_vbox), inner_vbox, TRUE, TRUE, 5);
 		gtk_notebook_insert_page(GTK_NOTEBOOK(notebook),
 			notebook_vbox, gtk_label_new(_("Auto Save")), NOTEBOOK_PAGE_AUTOSAVE);
+
+		checkbox_enable_as_lf = gtk_check_button_new_with_mnemonic(_("Enable save when losing _focus"));
+		gtk_button_set_focus_on_click(GTK_BUTTON(checkbox_enable_as_lf), FALSE);
+		pref_widgets.checkbox_enable_autosave_losing_focus = checkbox_enable_as_lf;
+		gtk_box_pack_start(GTK_BOX(inner_vbox), checkbox_enable_as_lf, FALSE, FALSE, 6);
+		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(checkbox_enable_as_lf), enable_autosave_losing_focus);
 
 		checkbox_enable = gtk_check_button_new_with_mnemonic(_("_Enable"));
 		gtk_button_set_focus_on_click(GTK_BUTTON(checkbox_enable), FALSE);
@@ -557,7 +613,7 @@ GtkWidget *plugin_configure(GtkDialog *dialog)
 
 		label = gtk_label_new_with_mnemonic(_("Auto save _interval:"));
 		gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
-		gtk_container_add(GTK_CONTAINER(inner_vbox), label);
+		gtk_box_pack_start(GTK_BOX(inner_vbox), label, TRUE, TRUE, 0);
 
 		pref_widgets.autosave_interval_spin = spin = gtk_spin_button_new_with_range(1, 1800, 1);
 		gtk_spin_button_set_value(GTK_SPIN_BUTTON(spin), autosave_interval);
@@ -621,13 +677,13 @@ GtkWidget *plugin_configure(GtkDialog *dialog)
 		gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
 		gtk_box_pack_start(GTK_BOX(inner_vbox), label, FALSE, FALSE, 0);
 
-		pref_widgets.instantsave_ft_combo = combo = gtk_combo_box_new_text();
+		pref_widgets.instantsave_ft_combo = combo = gtk_combo_box_text_new();
 		i = 0;
 		foreach_slist(node, filetypes_get_sorted_by_name())
 		{
 			GeanyFiletype *ft = node->data;
 
-			gtk_combo_box_append_text(GTK_COMBO_BOX(combo), ft->name);
+			gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(combo), ft->name);
 
 			if (utils_str_equal(ft->name, instantsave_default_ft))
 				gtk_combo_box_set_active(GTK_COMBO_BOX(combo), i);
@@ -664,7 +720,7 @@ GtkWidget *plugin_configure(GtkDialog *dialog)
 
 		pref_widgets.backupcopy_entry_dir = entry_dir = gtk_entry_new();
 		gtk_label_set_mnemonic_widget(GTK_LABEL(label), entry_dir);
-		if (NZV(backupcopy_backup_dir))
+		if (!EMPTY(backupcopy_backup_dir))
 			gtk_entry_set_text(GTK_ENTRY(entry_dir), backupcopy_backup_dir);
 
 		button = gtk_button_new();
@@ -675,7 +731,7 @@ GtkWidget *plugin_configure(GtkDialog *dialog)
 		gtk_container_add(GTK_CONTAINER(button), image);
 
 		hbox = gtk_hbox_new(FALSE, 6);
-		gtk_box_pack_start_defaults(GTK_BOX(hbox), entry_dir);
+		gtk_box_pack_start(GTK_BOX(hbox), entry_dir, TRUE, TRUE, 0);
 		gtk_box_pack_start(GTK_BOX(hbox), button, FALSE, FALSE, 0);
 
 		gtk_box_pack_start(GTK_BOX(inner_vbox), hbox, FALSE, FALSE, 0);
@@ -687,7 +743,7 @@ GtkWidget *plugin_configure(GtkDialog *dialog)
 
 		pref_widgets.backupcopy_entry_time = entry_time = gtk_entry_new();
 		gtk_label_set_mnemonic_widget(GTK_LABEL(label), entry_time);
-		if (NZV(backupcopy_time_fmt))
+		if (!EMPTY(backupcopy_time_fmt))
 			gtk_entry_set_text(GTK_ENTRY(entry_time), backupcopy_time_fmt);
 		gtk_box_pack_start(GTK_BOX(inner_vbox), entry_time, FALSE, FALSE, 0);
 

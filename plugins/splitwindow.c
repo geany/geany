@@ -1,8 +1,8 @@
 /*
  *      splitwindow.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2008-2011 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
- *      Copyright 2008-2011 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2008-2012 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2008-2012 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -14,10 +14,9 @@
  *      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *      GNU General Public License for more details.
  *
- *      You should have received a copy of the GNU General Public License
- *      along with this program; if not, write to the Free Software
- *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
- *      MA 02110-1301, USA.
+ *      You should have received a copy of the GNU General Public License along
+ *      with this program; if not, write to the Free Software Foundation, Inc.,
+ *      51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
 /* Split Window plugin. */
@@ -27,6 +26,7 @@
 #endif
 
 #include "geanyplugin.h"
+#include "gtkcompat.h"
 #include <string.h>
 
 
@@ -174,7 +174,7 @@ static void set_editor(EditWindow *editwin, GeanyEditor *editor)
 
 	editwin->sci = editor_create_widget(editor);
 	gtk_widget_show(GTK_WIDGET(editwin->sci));
-	gtk_container_add(GTK_CONTAINER(editwin->vbox), GTK_WIDGET(editwin->sci));
+	gtk_box_pack_start(GTK_BOX(editwin->vbox), GTK_WIDGET(editwin->sci), TRUE, TRUE, 0);
 
 	sync_to_current(editwin->sci, editor->sci);
 
@@ -301,22 +301,22 @@ static void split_view(gboolean horizontal)
 	GtkWidget *parent = gtk_widget_get_parent(notebook);
 	GtkWidget *pane, *toolbar, *box;
 	GeanyDocument *doc = document_get_current();
-	gint width = notebook->allocation.width / 2;
-	gint height = notebook->allocation.height / 2;
+	gint width = gtk_widget_get_allocated_width(notebook) / 2;
+	gint height = gtk_widget_get_allocated_height(notebook) / 2;
 
 	g_return_if_fail(doc);
 	g_return_if_fail(edit_window.editor == NULL);
 
 	set_state(horizontal ? STATE_SPLIT_HORIZONTAL : STATE_SPLIT_VERTICAL);
 
-	gtk_widget_ref(notebook);
+	g_object_ref(notebook);
 	gtk_container_remove(GTK_CONTAINER(parent), notebook);
 
 	pane = horizontal ? gtk_hpaned_new() : gtk_vpaned_new();
 	gtk_container_add(GTK_CONTAINER(parent), pane);
 
 	gtk_container_add(GTK_CONTAINER(pane), notebook);
-	gtk_widget_unref(notebook);
+	g_object_unref(notebook);
 
 	box = gtk_vbox_new(FALSE, 0);
 	toolbar = create_toolbar();
@@ -360,7 +360,7 @@ static void on_unsplit(GtkMenuItem *menuitem, gpointer user_data)
 
 	g_return_if_fail(edit_window.editor);
 
-	gtk_widget_ref(notebook);
+	g_object_ref(notebook);
 	gtk_container_remove(GTK_CONTAINER(pane), notebook);
 
 	gtk_widget_destroy(pane);
@@ -368,7 +368,7 @@ static void on_unsplit(GtkMenuItem *menuitem, gpointer user_data)
 	edit_window.sci = NULL;
 
 	gtk_container_add(GTK_CONTAINER(parent), notebook);
-	gtk_widget_unref(notebook);
+	g_object_unref(notebook);
 }
 
 
@@ -426,9 +426,9 @@ void plugin_init(GeanyData *data)
 	/* setup keybindings */
 	key_group = plugin_set_key_group(geany_plugin, "split_window", KB_COUNT, NULL);
 	keybindings_set_item(key_group, KB_SPLIT_HORIZONTAL, kb_activate,
-		0, 0, "split_horizontal", _("Split Horizontally"), menu_items.horizontal);
+		0, 0, "split_horizontal", _("Side by Side"), menu_items.horizontal);
 	keybindings_set_item(key_group, KB_SPLIT_VERTICAL, kb_activate,
-		0, 0, "split_vertical", _("Split Vertically"), menu_items.vertical);
+		0, 0, "split_vertical", _("Top and Bottom"), menu_items.vertical);
 	keybindings_set_item(key_group, KB_SPLIT_UNSPLIT, kb_activate,
 		0, 0, "split_unsplit", _("_Unsplit"), menu_items.unsplit);
 }

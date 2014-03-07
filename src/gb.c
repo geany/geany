@@ -1,8 +1,8 @@
 /*
  *      gb.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2005-2011 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2006-2011 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2005-2012 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2006-2012 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -14,9 +14,9 @@
  *      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *      GNU General Public License for more details.
  *
- *      You should have received a copy of the GNU General Public License
- *      along with this program; if not, write to the Free Software
- *      Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *      You should have received a copy of the GNU General Public License along
+ *      with this program; if not, write to the Free Software Foundation, Inc.,
+ *      51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
 /*
@@ -29,6 +29,7 @@
 #include <signal.h>
 #include <unistd.h>
 #include <gdk-pixbuf/gdk-pixdata.h>
+#include "gtkcompat.h"
 
 #define MAX_PICS 10
 #define LOOP_DELAY 200000	/* micro seconds */
@@ -159,7 +160,7 @@ static GtkWidget *create_help_dialog(GtkWindow *parent)
 	gtk_window_set_modal(GTK_WINDOW(help_dialog), TRUE);
 	gtk_window_set_transient_for(GTK_WINDOW(help_dialog), parent);
 
-	dialog_vbox1 = GTK_DIALOG(help_dialog)->vbox;
+	dialog_vbox1 = gtk_dialog_get_content_area(GTK_DIALOG(help_dialog));
 	gtk_widget_show(dialog_vbox1);
 
 	scrolledwindow1 = gtk_scrolled_window_new(NULL, NULL);
@@ -184,14 +185,14 @@ static GtkWidget *create_help_dialog(GtkWindow *parent)
 	gtk_text_view_set_left_margin(GTK_TEXT_VIEW(textview1), 1);
 	gtk_text_view_set_right_margin(GTK_TEXT_VIEW(textview1), 1);
 
-	dialog_action_area1 = GTK_DIALOG(help_dialog)->action_area;
+	dialog_action_area1 = gtk_dialog_get_action_area(GTK_DIALOG(help_dialog));
 	gtk_widget_show(dialog_action_area1);
 	gtk_button_box_set_layout(GTK_BUTTON_BOX(dialog_action_area1), GTK_BUTTONBOX_END);
 
 	okbutton1 = gtk_button_new_from_stock(GTK_STOCK_OK);
 	gtk_widget_show(okbutton1);
 	gtk_dialog_add_action_widget(GTK_DIALOG(help_dialog), okbutton1, GTK_RESPONSE_OK);
-	GTK_WIDGET_SET_FLAGS(okbutton1, GTK_CAN_DEFAULT);
+	gtk_widget_set_can_default(okbutton1, TRUE);
 
 	return help_dialog;
 }

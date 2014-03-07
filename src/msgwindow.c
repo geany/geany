@@ -1,8 +1,8 @@
 /*
  *      msgwindow.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2005-2011 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2006-2011 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2005-2012 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2006-2012 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -14,9 +14,9 @@
  *      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *      GNU General Public License for more details.
  *
- *      You should have received a copy of the GNU General Public License
- *      along with this program; if not, write to the Free Software
- *      Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *      You should have received a copy of the GNU General Public License along
+ *      with this program; if not, write to the Free Software Foundation, Inc.,
+ *      51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
 /**
@@ -470,7 +470,7 @@ on_compiler_treeview_copy_activate(GtkMenuItem *menuitem, gpointer user_data)
 		gchar *string;
 
 		gtk_tree_model_get(model, &iter, str_idx, &string, -1);
-		if (NZV(string))
+		if (!EMPTY(string))
 		{
 			gtk_clipboard_set_text(gtk_clipboard_get(gdk_atom_intern("CLIPBOARD", FALSE)),
 				string, -1);
@@ -512,7 +512,7 @@ static void on_compiler_treeview_copy_all_activate(GtkMenuItem *menuitem, gpoint
 		gchar *line;
 
 		gtk_tree_model_get(GTK_TREE_MODEL(store), &iter, str_idx, &line, -1);
-		if (NZV(line))
+		if (!EMPTY(line))
 		{
 			g_string_append(str, line);
 			g_string_append_c(str, '\n');
@@ -744,8 +744,7 @@ static void make_absolute(gchar **filename, const gchar *dir)
 
 	/* add directory */
 	if (! utils_is_absolute_path(*filename))
-		SETPTR(*filename, g_strconcat(dir, G_DIR_SEPARATOR_S,
-			*filename + skip_dot_slash, NULL));
+		SETPTR(*filename, g_build_filename(dir, *filename + skip_dot_slash, NULL));
 }
 
 

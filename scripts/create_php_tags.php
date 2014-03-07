@@ -5,10 +5,10 @@
 //
 // Script to generate a new php.tags file from a downloaded PHP function summary list from
 //
-// https://raw.github.com/salathe/phpdoc-base/master/funcsummary.txt
+// http://svn.php.net/repository/phpdoc/doc-base/trunk/funcsummary.txt
 //
 // - The script can be run from any directory
-// - The script downloads the file funcsummary.txt using the curl library.
+// - The script downloads the file funcsummary.txt using PHP's stdlib
 
 # (from tagmanager/tm_tag.c:32)
 define("TA_NAME", 200);
@@ -20,8 +20,8 @@ define("TA_VARTYPE", 207);
 define("TYPE_FUNCTION", 128);
 
 // Create an array of the lines in the file
-$url = 'https://raw.github.com/salathe/phpdoc-base/master/funcsummary.txt';
-$file = get_url_data_in_array($url);
+$url = 'http://svn.php.net/repository/phpdoc/doc-base/trunk/funcsummary.txt';
+$file = file($url, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
 
 // Create template for a tag (tagmanager format)
 $tagTpl = "%s%c%d%c%s%c%s";
@@ -72,14 +72,3 @@ sort($tagsOutput);
 file_put_contents($filePhpTags, join("\n", $tagsOutput));
 echo "Created:\n${filePhpTags}\n";
 echo str_repeat('-',75)."\n";
-
-function get_url_data_in_array($url){
-    $ch = curl_init();
-    $timeout = 5;
-    curl_setopt($ch,CURLOPT_URL,$url);
-    curl_setopt($ch,CURLOPT_RETURNTRANSFER,1);
-    curl_setopt($ch,CURLOPT_CONNECTTIMEOUT,$timeout);
-    $data = curl_exec($ch);
-    curl_close($ch);
-    return explode("\n", $data);
-}

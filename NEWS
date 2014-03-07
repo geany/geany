@@ -1,4 +1,222 @@
-Geany 1.22 (unreleased)
+Geany 1.24 (unreleased)
+
+    General
+    * Add experimental support for GTK3.
+    * Add support for loading CTags and Vi tags files.
+    * Save configuration when plugin manager dialog is closed.
+
+    Bug fixes
+    * Fix many small memory leaks (many of them found by Pavel Roschin).
+    * Fix stopping of some spawned commands.
+    * Fix cursor position and selection after comment toggling (#3576431).
+    * Fix truncated output of ``--list-documents`` command-line option.
+    * Fix launching a new instance when ``--list-documents`` is passed and
+      no other instance is running.
+
+    Interface
+    * Fix custom GTK styles under KDE (#3607935).
+    * Add Find entries in the Symbol List popup menu (#3608278).
+    * Flatten-out the View menu.
+    * Add a button to directly configure a plugin's keybindings in the
+      plugin manager (Pavel Roschin)
+
+    Editor
+    * Update Scintilla to version 3.3.6.
+    * Fix Reflow to follow Line breaking behavior (Eugene Arshinov).
+    * Fix unfolding the very last line in a level (#1007).
+    * Fix commenting the very last line in some situations.
+
+    Search
+    * Fix bulk Search & Replace not to match replacements.
+
+    Filetypes
+    * Add CUDA filetype (PR#147, Benjamin Chrétien).
+    * Add Rust filetype (PR#181, SiegeLord).
+    * Add Batch filetype (canou).
+    * Add Graphviz filetype (PR#125, Miro Hrončok).
+    * Add PowerShell filetype (Igor Shaula).
+    * Add Clojure fieltype (PR#92, Hoàng Minh Thắng).
+    * Many improvements to the PHP tag parser.
+    * Update PHP global tags file (PR#137, John Long).
+    * Fix Asciidoc parser recognition of open block as underline.
+    * Fix symbol list entry for Asciidoc headers containing a dot.
+    * SQL parsing improvements.
+    * Extend list of recognized keywords for SQL.
+    * Fix SQL single-line comment marker (#997).
+    * Fix parsing of some JavaScript constructors.
+    * Fix parsing a JavaScript regular expression in a return statement.
+    * Parse Java annotations with parameters (#924, Braden Walters).
+    * Display Java enums in the symbol list.
+    * Fix parsing of C++ static_assert.
+    * Fix parsing of typed enums in C# and C++.
+    * Fix parsing of Frotran "forall" blocks and procedure pointers
+      (Alexander Eberspächer).
+    * Fix parsing of complex Cython types.
+    * Fix re-parsing Objective-C code.
+    * Fix parsing of Verliog initializers.
+    * Fix displaying of quoted Bash HereDoc delimiters (#952).
+    * Add some HTML5 keywords (Duncan de Wet).
+    * Add Erlang snippets and a template (PR#157, Fabio Ticconi).
+    * Haskell highlighting improvements (kudah).
+    * Add Matlab class keywords (PR#136, Felix Totir).
+    * Fix argument list on some Python constructors.
+    * Fix R indenting to use braces.
+    * Display R sources and libraries in the symbol list.
+
+    Internationalization
+    * Make date templates translatable (Christian Dywan).
+    * Update translations: de, eu, he, it, lt, sl, sv
+
+    API
+    * Add plugin_builder_connect_signals().
+
+    Windows
+    * Fix infinite pagination when printing (#961).
+
+
+Geany 1.23.1 (May 19, 2013)
+
+    Bug fixes
+    * Fix custom styles under KDE and for people using gtk-chtheme
+      (corrects tab coloring, #3607935).
+    * Fix broken opening files from command line on Windows (#3613096).
+
+
+Geany 1.23 (March 10, 2013)
+
+    General
+    * Various fixes to language theming (#3573213).
+    * Various Windows makefile fixes.
+    * Rewrite printing code (#2629121, #2804000, #3475444, #3580268,
+      #3580269).
+    * Use the Geany icon from the theme (#3576695).
+    * Make Geany-specific icons themeable.
+
+    Bug fixes
+    * Fix too aggressive scope caching (#2142789, #2667917, #2868850).
+    * Fix showing project name in the Documents sidebar.
+    * Fix opening filenames with leading or trailing spaces from the
+      command line into a running instance.
+    * Fix re-opening files with unknown but detected encoding
+      (#3509407, #3605293).
+    * Fix crash when loading a broken or incompatible VTE library.
+    * Report scope including classes, namespaces and alike (#1996778).
+    * Fix cancelling Project Close when showing the unsaved changes
+      dialog.
+    * Only use "allow_always_save" setting for direct user interaction
+      (Quentin Glidic).
+    * Fix some keybinding not getting properly displayed in the menus
+      after being updated (#1912683, #3599251).
+    * Make Terminal tool setting more flexible to support any terminal.
+    * Fix replacing file name in files header upon save.
+    * Fix UAC Virtualization issue on newer Windows versions when trying
+      to save files to read-only locations (#3566329, #3515490).
+
+    Interface
+    * Control-click on the symbols sidebar don't focus the editor.
+    * Add an option to place the message window on the right.
+    * Fix display of non-ASCII tags in the symbols tree for non-UTF-8
+      files.
+    * Replace 'Open file in a new tab' save dialog option with new
+      'Document->Clone' menu item.
+    * Fix clashing button mnemonic in detect/reload dialog (#3587465).
+    * Grab focus in the embedded terminal upon middle click (#3574724).
+    * Add support for embedded terminal background image (Mislav
+      Blažević).
+
+    Editor
+    * Update Scintilla to version 3.2.3 (#2808638, #2909124, #3094431,
+      #3233160, #3540469).
+    * Properly indent even if the indenting character isn't the last
+      one.
+    * Always display text in LTR direction.
+    * Improve collapsing fold behavior when start point is offscreen.
+    * Faster squiggle underlining.
+    * Fix multiline comments at end of file (#3026691).
+    * Keep caret and anchor position upon indent and unindent
+      (#3167355).
+    * Complete on dash (-) too in CSS documents.
+    * Make wordchars have precedence over whitespacechars (#3429368).
+    * Fix cursor position after comment toggling with no selection
+      (#3576431).
+    * Fix reshowing calltip after autocompletion list closed.
+    * Fix uncommenting multiline comments when cursor is on a delimiter.
+    * Clear search markers on Mark All keybinding when already set.
+    * Never strip trailing spaces from Diff documents.
+    * Reduce unnecessary redraws when typing (Evandro Borracini).
+    * Fix comment toggling inside PHP and HTML with bottom-up selection.
+
+    Search
+    * 'Mark All' now also uses the fully-featured PCRE engine
+      (#3564132).
+    * Only set Find in Files directory once per-document.
+    * Fix a crash when matching the very last character of the document.
+    * Fix search and replacement of empty matches.
+    * Fix a possible crash when searching on a range.
+
+    Keybindings
+    * Add keybinding for 'Go to Start of Display Line' (#3182425).
+    * Allow to change the keybinding for 'Quit'.
+
+    Filetypes
+    * Parse '!' char in D parameter lists.
+    * Fix parsing of Haskell comments inside a type (#3552129).
+    * Fix Cython auto indentation.
+    * Add more keywords to Forth (Oco).
+    * Add some missing Haxe keywords (#3448664).
+    * Add some missing CSS3 keywords (Trong Thanh Tran).
+    * Add some missing D keywords (#3595187) (Felix Totir).
+    * Fix a crash parsing some C macros (#3556536).
+    * Update some Python keywords.
+    * Update Python global tags file.
+    * Show VHDL blocks in the symbol list.
+    * Fix ruby scope after "do" (#3046418).
+    * Fix parsing of ruby keywords when followed by a semicolon
+      (#2130612).
+    * Lots of JavaScript symbols parsing improvements (#2992393,
+      #3034303, #3034339, #3036476, #3398636, #3470609, #3568542,
+      #3570192, #3571233).
+    * Use "scala" extension for Scala (#3574723).
+    * Fix parsing of reStructuredText titles containing UTF-8
+      characters (#3578050).
+    * Parse C++11 final classes (#3577559).
+    * Parse C++11 enums with type specifier and classed enums
+      (#3578557).
+    * Fix highlighting of C++11 raw strings (#3578557).
+    * Fix parsing of colons in D (#3577788).
+    * Fix parsing of D 'static assert' (#3582833).
+    * Parse scope for D nested template blocks (#3582833).
+    * Ignore D angle brackets.
+    * Fix reStructuredText comment marker (#3585377).
+    * Add Asciidoc filetype.
+    * Fix parsing of Python keywords followed by a tab (\t).
+    * Add more HTML5 self-closing tags (Duncan de Wet).
+    * Update default D template to use a more standard prototype for
+      main().
+    * Fix improperly translated string in Pascal template (#3602314).
+    * Add Go language filetype (tomboy64).
+
+    Plugins
+    * Export: Fix missing linking on libm (Chow Loong Jin)
+    * File Browser: Backspace now moves to parent directory.
+
+    API:
+    * Fix plugin_add_toolbar_item() insertion order (#3522755)
+      (Dimitar Zhekov).
+
+    Windows
+    * Fix spawning synchronous commands on Windows.
+    * Show Find in Files status summary.
+    * Add icon to the Explorer context menu item.
+
+    Internationalization
+    * Add translations: et, eu, he, hi, sr
+    * Update translations: ca, cs, de, es, fi, gl, it, kk, lt, nl,
+                           pt_BR, ru, sv, sl, tr
+    * Fix a crash when using the Turkish translation (#3560181).
+
+
+Geany 1.22 (June 18, 2012)
 
     General
     * Bump dependencies to GTK >= 2.16 and GLib >= 2.20.
@@ -6,13 +224,13 @@ Geany 1.22 (unreleased)
     * Rewrite theming support for better flexibility.
     * Add support for opening files read-only from the command line.
     * Always load the default session if configured to do so.
-    * Make all filetypes use named styles to simplify colour scheme
+    * Make all filetypes use named styles to simplify color scheme
       authoring.
     * Make 'Replace Spaces by Tabs' only match leading spaces to
       preserve alignment.
 
     Possibly incompatible changes
-    * Theming and filetype style changes mean old filetypes and colour
+    * Theming and filetype style changes mean old filetypes and color
       schemes are not compatible with this version of Geany.
     * There are some default keybinding changes but these will only
       apply to newly created configurations.
@@ -24,17 +242,21 @@ Geany 1.22 (unreleased)
     * Properly handle remote URIs received through drag 'n drop
       (#2966770, #3479567).
     * Fix build with bleeding-edge GLib (#3483388).
-    * Fix colour scheme selection in Ubuntu Unity (#3479674).
+    * Fix color scheme selection in Ubuntu Unity (#3479674).
     * Fix very slow regex tag parsing on Windows (e.g. for HTML).
     * Fix detecting a changed file on disk when opening from
       the command-line (Windows).
     * Fix quick search entry behavior on Windows.
+    * Fix keybindings conflicts check when swapping a binding.
+    * Fix comments insertion in some cases (#3449635, #3534320).
     * Add missing Windows mio makefile.
 
     Prefs
     * Split "always wrap search and hide find dialog" pref into
       "always wrap search" and "hide find dialog" (Dimitar Zhekov).
     * Add Project Properties overrides for 'Saving files' prefs.
+    * Add hidden VTE preference "send_cmd_prefix" to prefix commands sent
+      to the VTE. (See the manual for details).
 
     Interface
     * Add support for switching to the last used document after closing
@@ -102,9 +324,10 @@ Geany 1.22 (unreleased)
     * Add stash_group_free_settings().
     * Add support for plugins written in C++.
 
-    Internationalisation:
+    Internationalization:
     * Add translations: ar, id, lt, mn, nn, sk
-    * Update translations: de, hu, it, kk, pl, sl, sv, zh_TW
+    * Update translations: de, es, fr, hu, it, ja, kk, lt, nl, pl, pt,
+      pt_BR, sk, sl, sv, tr, zh_CN, zh_TW
 
 
 Geany 0.21 (October 2, 2011)

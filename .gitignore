@@ -10,8 +10,10 @@
 deps.mak
 .deps/
 .libs/
+.lock-waf_*
 Makefile
 Makefile.in
+.dirstamp
 
 #-----------------------------------------------------------------------
 # / (root)
@@ -25,6 +27,7 @@ Makefile.in
 /config.guess
 /config.h
 /config.h.in
+/config.h.in~
 /config.log
 /config.status
 /config.sub
@@ -45,8 +48,11 @@ Makefile.in
 /libtool
 /localwin32.mk
 /.lock-wscript
+/.lock-wafbuild
 /ltmain.sh
-/m4/
+/m4/lt*.m4
+/m4/intltool.m4
+/m4/libtool.m4
 /make_deb.sh
 /missing
 /mkinstalldirs
@@ -78,6 +84,7 @@ Makefile.in
 /po/*.sed
 /po/*.sin
 /po/stamp-it
+/po/.intlcache
 
 #-----------------------------------------------------------------------
 # /src/
@@ -92,3 +99,9 @@ Makefile.in
 /doc/hacking.html
 /doc/*.pdf
 /doc/reference
+
+#-----------------------------------------------------------------------
+# /tests/
+#-----------------------------------------------------------------------
+/tests/**/*.trs
+/tests/**/*.log

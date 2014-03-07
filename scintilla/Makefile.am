@@ -6,6 +6,7 @@ noinst_LIBRARIES=libscintilla.a
 AM_CXXFLAGS = -DNDEBUG -DGTK -DSCI_LEXER -DG_THREADS_IMPL_NONE
 
 LEXER_SRCS= \
+lexers/LexAbaqus.cxx \
 lexers/LexAda.cxx \
 lexers/LexAsm.cxx \
 lexers/LexBash.cxx \
@@ -21,6 +22,7 @@ lexers/LexForth.cxx \
 lexers/LexFortran.cxx \
 lexers/LexHTML.cxx \
 lexers/LexHaskell.cxx \
+lexers/LexLaTeX.cxx \
 lexers/LexLisp.cxx \
 lexers/LexLua.cxx \
 lexers/LexMarkdown.cxx \
@@ -29,9 +31,12 @@ lexers/LexNsis.cxx \
 lexers/LexOthers.cxx \
 lexers/LexPascal.cxx \
 lexers/LexPerl.cxx \
+lexers/LexPowerShell.cxx \
 lexers/LexPython.cxx \
+lexers/LexPO.cxx \
 lexers/LexR.cxx \
 lexers/LexRuby.cxx \
+lexers/LexRust.cxx \
 lexers/LexSQL.cxx \
 lexers/LexTCL.cxx \
 lexers/LexTxt2tags.cxx \
@@ -47,6 +52,8 @@ gtk/scintilla-marshal.c \
 gtk/scintilla-marshal.h \
 lexlib/Accessor.cxx \
 lexlib/Accessor.h \
+lexlib/CharacterCategory.cxx \
+lexlib/CharacterCategory.h \
 lexlib/CharacterSet.cxx \
 lexlib/CharacterSet.h \
 lexlib/LexAccessor.h \
@@ -64,12 +71,17 @@ lexlib/PropSetSimple.h \
 lexlib/SparseState.h \
 lexlib/StyleContext.cxx \
 lexlib/StyleContext.h \
+lexlib/SubStyles.h \
 lexlib/WordList.cxx \
 lexlib/WordList.h \
 src/AutoComplete.cxx \
 src/AutoComplete.h \
 src/CallTip.cxx \
 src/CallTip.h \
+src/CaseConvert.cxx \
+src/CaseConvert.h \
+src/CaseFolder.cxx \
+src/CaseFolder.h \
 src/Catalogue.cxx \
 src/Catalogue.h \
 src/CellBuffer.cxx \
@@ -112,6 +124,7 @@ src/Style.cxx \
 src/Style.h \
 src/UniConversion.cxx \
 src/UniConversion.h \
+src/UnicodeFromUTF8.h \
 src/ViewStyle.cxx \
 src/ViewStyle.h \
 src/XPM.cxx \
@@ -120,7 +133,7 @@ $(LEXER_SRCS)
 
 libscintilla_a_SOURCES = $(SRCS)
 
-INCLUDES=-I$(top_srcdir) -I$(srcdir)/include -I$(srcdir)/src -I$(srcdir)/lexlib @GTK_CFLAGS@
+AM_CPPFLAGS = -I$(top_srcdir) -I$(srcdir)/include -I$(srcdir)/src -I$(srcdir)/lexlib @GTK_CFLAGS@
 
 marshallers: gtk/scintilla-marshal.list
 	glib-genmarshal --prefix scintilla_marshal gtk/scintilla-marshal.list --header > gtk/scintilla-marshal.h

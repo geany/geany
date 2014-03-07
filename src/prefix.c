@@ -53,7 +53,7 @@ static char *br_last_value = (char*)NULL;
 
 
 static void
-br_free_last_value ()
+br_free_last_value (void)
 {
 	if (br_last_value)
 		free (br_last_value);

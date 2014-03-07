@@ -1,8 +1,8 @@
 /*
  *      plugindata.h - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2007-2011 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2007-2011 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2007-2012 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2007-2012 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -14,10 +14,9 @@
  *      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *      GNU General Public License for more details.
  *
- *      You should have received a copy of the GNU General Public License
- *      along with this program; if not, write to the Free Software
- *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
- *      MA 02110-1301, USA.
+ *      You should have received a copy of the GNU General Public License along
+ *      with this program; if not, write to the Free Software Foundation, Inc.,
+ *      51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
 /**
@@ -42,6 +41,7 @@ G_BEGIN_DECLS
 
 #include "editor.h"	/* GeanyIndentType */
 #include "build.h"  /* GeanyBuildGroup, GeanyBuildSource, GeanyBuildCmdEntries enums */
+#include "gtkcompat.h"
 
 
 /** The Application Programming Interface (API) version, incremented
@@ -55,14 +55,21 @@ G_BEGIN_DECLS
  * @warning You should not test for values below 200 as previously
  * @c GEANY_API_VERSION was defined as an enum value, not a macro.
  */
-#define GEANY_API_VERSION 215
+#define GEANY_API_VERSION 217
 
+/* hack to have a different ABI when built with GTK3 because loading GTK2-linked plugins
+ * with GTK3-linked Geany leads to crash */
+#if GTK_CHECK_VERSION(3, 0, 0)
+#	define GEANY_ABI_SHIFT 8
+#else
+#	define GEANY_ABI_SHIFT 0
+#endif
 /** The Application Binary Interface (ABI) version, incremented whenever
  * existing fields in the plugin data types have to be changed or reordered.
  * Changing this forces all plugins to be recompiled before Geany can load them. */
 /* This should usually stay the same if fields are only appended, assuming only pointers to
  * structs and not structs themselves are declared by plugins. */
-#define GEANY_ABI_VERSION 69
+#define GEANY_ABI_VERSION (69 << GEANY_ABI_SHIFT)
 
 
 /** Defines a function to check the plugin is safe to load.
@@ -265,7 +272,7 @@ typedef struct GeanyFunctions
 	struct MsgWinFuncs			*p_msgwindow;
 	struct EncodingFuncs		*p_encodings;		/**< See encodings.h */
 	struct KeybindingFuncs		*p_keybindings;		/**< See keybindings.h */
-	struct TagManagerFuncs		*p_tm;				/**< See tagmanager/include */
+	struct TagManagerFuncs		*p_tm;				/**< See tagmanager/src */
 	struct SearchFuncs			*p_search;			/**< See search.h */
 	struct HighlightingFuncs	*p_highlighting;	/**< See highlighting.h */
 	struct FiletypeFuncs		*p_filetypes;		/**< See filetypes.h */
@@ -477,7 +484,7 @@ typedef struct UIUtilsFuncs
 	void		(*ui_widget_modify_font_from_string) (GtkWidget *widget, const gchar *str);
 	gboolean	(*ui_is_keyval_enter_or_return) (guint keyval);
 	gint		(*ui_get_gtk_settings_integer) (const gchar *property_name, gint default_value);
-	void		(*ui_combo_box_add_to_history) (GtkComboBoxEntry *combo_entry,
+	void		(*ui_combo_box_add_to_history) (GtkComboBoxText *combo_entry,
 				const gchar *text, gint history_len);
 	void		(*ui_menu_add_document_items_sorted) (GtkMenu *menu, struct GeanyDocument *active,
 				GCallback callback, GCompareFunc compare_func);
@@ -659,6 +666,7 @@ typedef struct PluginFuncs
 	guint	(*plugin_timeout_add_seconds) (GeanyPlugin *plugin, guint interval,
 		GSourceFunc function, gpointer data);
 	guint	(*plugin_idle_add) (GeanyPlugin *plugin, GSourceFunc function, gpointer data);
+	void	(*plugin_builder_connect_signals) (GeanyPlugin *plugin, GtkBuilder *builder, gpointer user_data);
 }
 PluginFuncs;
 

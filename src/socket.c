@@ -1,8 +1,8 @@
 /*
  *      socket.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2006-2011 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2006-2011 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2006-2012 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2006-2012 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *      Copyright 2006 Hiroyuki Yamamoto (author of Sylpheed)
  *
  *      This program is free software; you can redistribute it and/or modify
@@ -15,9 +15,9 @@
  *      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *      GNU General Public License for more details.
  *
- *      You should have received a copy of the GNU General Public License
- *      along with this program; if not, write to the Free Software
- *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *      You should have received a copy of the GNU General Public License along
+ *      with this program; if not, write to the Free Software Foundation, Inc.,
+ *      51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
 /*
@@ -195,21 +195,25 @@ static void remove_socket_link_full(void)
 
 static void socket_get_document_list(gint sock)
 {
-	gchar doc_list[BUFFER_LENGTH];
-	gint doc_list_len;
+	gchar buf[BUFFER_LENGTH];
+	gint n_read;
 
 	if (sock < 0)
 		return;
 
 	socket_fd_write_all(sock, "doclist\n", 8);
 
-	doc_list_len = socket_fd_read(sock, doc_list, sizeof(doc_list));
-	if (doc_list_len >= BUFFER_LENGTH)
-		doc_list_len = BUFFER_LENGTH -1;
-	doc_list[doc_list_len] = '\0';
-	/* if we received ETX (end-of-text), there were no open files, so print only otherwise */
-	if (! utils_str_equal(doc_list, "\3"))
-		printf("%s", doc_list);
+	do
+	{
+		n_read = socket_fd_read(sock, buf, sizeof(buf));
+		/* if we received ETX (end-of-text), there is nothing else to read, so cut that
+		 * byte not to output it and to be sure not to validate the loop condition */
+		if (n_read > 0 && buf[n_read - 1] == '\3')
+			n_read--;
+		if (n_read > 0)
+			fwrite(buf, 1, n_read, stdout);
+	}
+	while (n_read >= sizeof(buf));
 }
 
 
@@ -272,7 +276,7 @@ gint socket_init(gint argc, gchar **argv)
 		return -1;
 #else
 	gchar *display_name = gdk_get_display();
-	gchar *hostname = utils_get_hostname();
+	const gchar *hostname = g_get_host_name();
 	gchar *p;
 
 	if (display_name == NULL)
@@ -293,7 +297,6 @@ gint socket_init(gint argc, gchar **argv)
 			app->configdir, G_DIR_SEPARATOR, hostname, display_name);
 
 	g_free(display_name);
-	g_free(hostname);
 
 	/* check whether the real user id is the same as this of the socket file */
 	check_socket_permissions();
@@ -611,19 +614,23 @@ gboolean socket_lock_input_cb(GIOChannel *source, GIOCondition condition, gpoint
 			cl_options.readonly = strncmp(buf+4, "ro", 2) == 0; /* open in readonly? */
 			while (socket_fd_gets(sock, buf, sizeof(buf)) != -1 && *buf != '.')
 			{
-				handle_input_filename(g_strstrip(buf));
+				gsize buf_len = strlen(buf);
+
+				/* remove trailing newline */
+				if (buf_len > 0 && buf[buf_len - 1] == '\n')
+					buf[buf_len - 1] = '\0';
+
+				handle_input_filename(buf);
 			}
 			popup = TRUE;
 		}
 		else if (strncmp(buf, "doclist", 7) == 0)
 		{
 			gchar *doc_list = build_document_list();
-			if (NZV(doc_list))
+			if (!EMPTY(doc_list))
 				socket_fd_write_all(sock, doc_list, strlen(doc_list));
-			else
-				/* send ETX (end-of-text) in case we have no open files, we must send anything
-				 * otherwise the client would hang on reading */
-				socket_fd_write_all(sock, "\3", 1);
+			/* send ETX (end-of-text) so reader knows to stop reading */
+			socket_fd_write_all(sock, "\3", 1);
 			g_free(doc_list);
 		}
 		else if (strncmp(buf, "line", 4) == 0)
@@ -647,8 +654,12 @@ gboolean socket_lock_input_cb(GIOChannel *source, GIOCondition condition, gpoint
 #ifdef G_OS_WIN32
 		else if (strncmp(buf, "window", 6) == 0)
 		{
+#	if GTK_CHECK_VERSION(3, 0, 0)
+			HWND hwnd = (HWND) gdk_win32_window_get_handle(gtk_widget_get_window(window));
+#	else
 			HWND hwnd = (HWND) gdk_win32_drawable_get_handle(
 				GDK_DRAWABLE(gtk_widget_get_window(window)));
+#	endif
 			socket_fd_write(sock, (gchar *)&hwnd, sizeof(hwnd));
 		}
 #endif
@@ -657,12 +668,18 @@ gboolean socket_lock_input_cb(GIOChannel *source, GIOCondition condition, gpoint
 	if (popup)
 	{
 #ifdef GDK_WINDOWING_X11
+		GdkWindow *x11_window = gtk_widget_get_window(window);
+
 		/* Set the proper interaction time on the window. This seems necessary to make
 		 * gtk_window_present() really bring the main window into the foreground on some
 		 * window managers like Gnome's metacity.
 		 * Code taken from Gedit. */
-		gdk_x11_window_set_user_time(gtk_widget_get_window(window),
-			gdk_x11_get_server_time(gtk_widget_get_window(window)));
+#	if GTK_CHECK_VERSION(3, 0, 0)
+		if (GDK_IS_X11_WINDOW(x11_window))
+#	endif
+		{
+			gdk_x11_window_set_user_time(x11_window, gdk_x11_get_server_time(x11_window));
+		}
 #endif
 		gtk_window_present(GTK_WINDOW(window));
 #ifdef G_OS_WIN32
@@ -746,7 +763,11 @@ static gint socket_fd_check_io(gint fd, GIOCondition cond)
 #endif
 
 	FD_ZERO(&fds);
+#ifdef G_OS_WIN32
+	FD_SET((SOCKET)fd, &fds);
+#else
 	FD_SET(fd, &fds);
+#endif
 
 	if (cond == G_IO_IN)
 	{

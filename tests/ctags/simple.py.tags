@@ -1,0 +1,27 @@
+# format=tagmanager
+ALLÌ16384Ö0
+DATAÌ16384Ö0
+INDENTÌ16384Ö0
+KEYÌ16384Ö0
+TREEIDÌ16384Ö0
+VERSIONÌ16384Ö0
+__init__Ì128Í(self, filename, pathsep='', treegap=64)ÎoneÖ0
+__private_function__Ì128Í(self, key, data)ÎoneÖ0
+_testÌ16Í(test, code, outcome, exception)Ö0
+btopenÌ32768Ö0
+deeply_nestedÌ1Î_test.ignored_function.more_nestingÖ0
+even_moreÌ128Í()Î_test.ignored_function.more_nesting.deeply_nestedÖ0
+fooÌ16Í(Ö0
+ignored_functionÌ16Í()Î_testÖ0
+more_nestingÌ16Í()Î_test.ignored_functionÖ0
+oneÌ1Í(self, filename, pathsep='', treegap=64)Ö0
+onlyÌ128Í(arg)ÎtwoÖ0
+public_functionÌ128Í(self, key)ÎoneÖ0
+so_is_thisÌ1ÎoneÖ0
+thisÌ1Î_test.ignored_function.more_nesting.deeply_nested.even_moreÖ0
+thisÌ128Î_test.ignored_function.more_nesting.deeply_nested.even_more.thisÖ0
+this_is_ignoredÌ1Îone.public_functionÖ0
+threeÌ1Ö0
+twoÌ1Ö0
+xÌ128Í(x)ÎoneÖ0
+yÌ16384ÎoneÖ0

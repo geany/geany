@@ -1,8 +1,8 @@
 /*
  *      templates.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2005-2011 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2006-2011 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2005-2012 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2006-2012 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -14,9 +14,9 @@
  *      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *      GNU General Public License for more details.
  *
- *      You should have received a copy of the GNU General Public License
- *      along with this program; if not, write to the Free Software
- *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *      You should have received a copy of the GNU General Public License along
+ *      with this program; if not, write to the Free Software Foundation, Inc.,
+ *      51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
 /*
@@ -106,6 +106,8 @@ static void read_template(const gchar *name, gint id)
 static void convert_eol_characters(GString *template, GeanyDocument *doc)
 {
 	gint doc_eol_mode;
+
+	g_return_if_fail(doc == NULL || doc->is_valid);
 
 	if (doc == NULL)
 		doc = document_get_current();
@@ -300,7 +302,7 @@ static void on_document_save(G_GNUC_UNUSED GObject *object, GeanyDocument *doc)
 {
 	gchar *path = g_build_filename(app->configdir, GEANY_TEMPLATES_SUBDIR, NULL);
 
-	g_return_if_fail(NZV(doc->real_path));
+	g_return_if_fail(!EMPTY(doc->real_path));
 
 	if (strncmp(doc->real_path, path, strlen(path)) == 0)
 	{
@@ -365,9 +367,9 @@ static void make_comment_block(GString *comment_text, gint filetype_idx, guint i
 	template_eol_char = utils_get_eol_char(template_eol_mode);
 
 	filetype_get_comment_open_close(ft, FALSE, &co, &cc);
-	if (NZV(co))
+	if (!EMPTY(co))
 	{
-		if (NZV(cc))
+		if (!EMPTY(cc))
 		{
 			frame_start = g_strconcat(co, template_eol_char, NULL);
 			frame_end = g_strconcat(cc, template_eol_char, NULL);
@@ -388,7 +390,7 @@ static void make_comment_block(GString *comment_text, gint filetype_idx, guint i
 	}
 
 	/* do some magic to nicely format C-like multi-line comments */
-	if (NZV(frame_start) && frame_start[1] == '*')
+	if (!EMPTY(frame_start) && frame_start[1] == '*')
 	{
 		/* prefix the string with a space */
 		SETPTR(frame_end, g_strconcat(" ", frame_end, NULL));
@@ -436,7 +438,7 @@ gchar *templates_get_template_licence(GeanyDocument *doc, gint licence_type)
 {
 	GString *template;
 
-	g_return_val_if_fail(doc != NULL, NULL);
+	g_return_val_if_fail(DOC_VALID(doc), NULL);
 	g_return_val_if_fail(licence_type == GEANY_TEMPLATE_GPL || licence_type == GEANY_TEMPLATE_BSD, NULL);
 
 	template = g_string_new(templates[licence_type]);
@@ -502,9 +504,13 @@ gchar *templates_get_template_function(GeanyDocument *doc, const gchar *func_nam
 
 gchar *templates_get_template_changelog(GeanyDocument *doc)
 {
-	GString *result = g_string_new(templates[GEANY_TEMPLATE_CHANGELOG]);
-	const gchar *file_type_name = (doc != NULL) ? doc->file_type->name : "";
+	GString *result;
+	const gchar *file_type_name;
 
+	g_return_val_if_fail(DOC_VALID(doc), NULL);
+
+	result = g_string_new(templates[GEANY_TEMPLATE_CHANGELOG]);
+	file_type_name = (doc->file_type != NULL) ? doc->file_type->name : "";
 	replace_static_values(result);
 	templates_replace_default_dates(result);
 	templates_replace_command(result, DOC_FILENAME(doc), file_type_name, NULL);
@@ -630,7 +636,7 @@ static gchar *run_command(const gchar *command, const gchar *file_name,
 		{
 			g_warning("templates_replace_command: %s", error->message);
 			g_error_free(error);
-			return NULL;
+			result = NULL;
 		}
 		g_strfreev(argv);
 		g_strfreev(env);

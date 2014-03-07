@@ -1,8 +1,8 @@
 /*
  *      plugins.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2007-2011 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2007-2011 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2007-2012 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2007-2012 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -14,10 +14,9 @@
  *      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *      GNU General Public License for more details.
  *
- *      You should have received a copy of the GNU General Public License
- *      along with this program; if not, write to the Free Software
- *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
- *      MA 02110-1301, USA.
+ *      You should have received a copy of the GNU General Public License along
+ *      with this program; if not, write to the Free Software Foundation, Inc.,
+ *      51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
 /* Code to manage, load and unload plugins. */
@@ -87,7 +86,8 @@ static PluginFuncs plugin_funcs = {
 	&plugin_show_configure,
 	&plugin_timeout_add,
 	&plugin_timeout_add_seconds,
-	&plugin_idle_add
+	&plugin_idle_add,
+	&plugin_builder_connect_signals
 };
 
 static DocumentFuncs doc_funcs = {
@@ -641,7 +641,7 @@ plugin_init(Plugin *plugin)
 	active_plugin_list = g_list_insert_sorted(active_plugin_list, plugin, cmp_plugin_names);
 
 	geany_debug("Loaded:   %s (%s)", plugin->filename,
-		NVL(plugin->info.name, "<Unknown>"));
+		FALLBACK(plugin->info.name, "<Unknown>"));
 }
 
 
@@ -730,7 +730,7 @@ plugin_new(const gchar *fname, gboolean init_plugin, gboolean add_to_list)
 
 	/* read plugin name, etc. */
 	plugin_set_info(&plugin->info);
-	if (G_UNLIKELY(! NZV(plugin->info.name)))
+	if (G_UNLIKELY(EMPTY(plugin->info.name)))
 	{
 		geany_debug("No plugin name set in plugin_set_info() for \"%s\" - ignoring plugin!",
 			fname);
@@ -856,7 +856,7 @@ static gchar *get_custom_plugin_path(const gchar *plugin_path_config,
 {
 	gchar *plugin_path_custom;
 
-	if (!NZV(prefs.custom_plugin_path))
+	if (EMPTY(prefs.custom_plugin_path))
 		return NULL;
 
 	plugin_path_custom = utils_get_locale_from_utf8(prefs.custom_plugin_path);
@@ -883,7 +883,7 @@ static gboolean check_plugin_path(const gchar *fname)
 	gchar *plugin_path_custom;
 	gboolean ret = FALSE;
 
-	plugin_path_config = g_strconcat(app->configdir, G_DIR_SEPARATOR_S, "plugins", NULL);
+	plugin_path_config = g_build_filename(app->configdir, "plugins", NULL);
 	if (g_str_has_prefix(fname, plugin_path_config))
 		ret = TRUE;
 
@@ -918,7 +918,7 @@ load_active_plugins(void)
 	{
 		const gchar *fname = active_plugins_pref[i];
 
-		if (NZV(fname) && g_file_test(fname, G_FILE_TEST_EXISTS))
+		if (!EMPTY(fname) && g_file_test(fname, G_FILE_TEST_EXISTS))
 		{
 			if (!check_plugin_path(fname) || plugin_new(fname, TRUE, FALSE) == NULL)
 				failed_plugins_list = g_list_prepend(failed_plugins_list, g_strdup(fname));
@@ -942,7 +942,7 @@ load_plugins_from_path(const gchar *path)
 		if (tmp == NULL || utils_str_casecmp(tmp, "." G_MODULE_SUFFIX) != 0)
 			continue;
 
-		fname = g_strconcat(path, G_DIR_SEPARATOR_S, item->data, NULL);
+		fname = g_build_filename(path, item->data, NULL);
 		if (plugin_new(fname, FALSE, TRUE))
 			count++;
 		g_free(fname);
@@ -962,12 +962,12 @@ static gchar *get_plugin_path(void)
 	gchar *path;
 	gchar *install_dir = win32_get_installation_dir();
 
-	path = g_strconcat(install_dir, "\\lib", NULL);
+	path = g_build_filename(install_dir, "lib", NULL);
 	g_free(install_dir);
 
 	return path;
 #else
-	return g_strconcat(GEANY_LIBDIR, G_DIR_SEPARATOR_S "geany", NULL);
+	return g_build_filename(GEANY_LIBDIR, "geany", NULL);
 #endif
 }
 
@@ -979,7 +979,7 @@ static void load_all_plugins(void)
 	gchar *plugin_path_system;
 	gchar *plugin_path_custom;
 
-	plugin_path_config = g_strconcat(app->configdir, G_DIR_SEPARATOR_S, "plugins", NULL);
+	plugin_path_config = g_build_filename(app->configdir, "plugins", NULL);
 	plugin_path_system = get_plugin_path();
 
 	/* first load plugins in ~/.config/geany/plugins/ */
@@ -1051,11 +1051,19 @@ void plugins_load_active(void)
 }
 
 
+/* Update the global active plugins list so it's up-to-date when configuration
+ * is saved. Called in response to GeanyObject's "save-settings" signal. */
 static void update_active_plugins_pref(void)
 {
 	gint i = 0;
 	GList *list;
-	gsize count = g_list_length(active_plugin_list) + g_list_length(failed_plugins_list);
+	gsize count;
+
+	/* if plugins are disabled, don't clear list of active plugins */
+	if (!want_plugins)
+		return;
+
+	count = g_list_length(active_plugin_list) + g_list_length(failed_plugins_list);
 
 	g_strfreev(active_plugins_pref);
 
@@ -1085,14 +1093,6 @@ static void update_active_plugins_pref(void)
 }
 
 
-static void on_save_settings(GKeyFile *config)
-{
-	/* if plugins are disabled, don't clear list of active plugins */
-	if (want_plugins)
-		update_active_plugins_pref();
-}
-
-
 /* called even if plugin support is disabled */
 void plugins_init(void)
 {
@@ -1111,7 +1111,7 @@ void plugins_init(void)
 	stash_group_add_entry(group, &prefs.custom_plugin_path,
 		"custom_plugin_path", "", "extra_plugin_path_entry");
 
-	g_signal_connect(geany_object, "save-settings", G_CALLBACK(on_save_settings), NULL);
+	g_signal_connect(geany_object, "save-settings", G_CALLBACK(update_active_plugins_pref), NULL);
 	stash_group_add_string_vector(group, &active_plugins_pref, "active_plugins", NULL);
 }
 
@@ -1161,6 +1161,7 @@ enum
 	PLUGIN_COLUMN_DESCRIPTION,
 	PLUGIN_COLUMN_PLUGIN,
 	PLUGIN_N_COLUMNS,
+	PM_BUTTON_KEYBINDINGS,
 	PM_BUTTON_CONFIGURE,
 	PM_BUTTON_HELP
 };
@@ -1174,6 +1175,7 @@ typedef struct
 	GtkWidget *filename_label;
 	GtkWidget *author_label;
 	GtkWidget *configure_button;
+	GtkWidget *keybindings_button;
 	GtkWidget *help_button;
 }
 PluginManagerWidgets;
@@ -1189,6 +1191,8 @@ static void pm_update_buttons(Plugin *p)
 	gtk_widget_set_sensitive(pm_widgets.configure_button,
 		(p->configure || p->configure_single) && is_active);
 	gtk_widget_set_sensitive(pm_widgets.help_button, p->help != NULL && is_active);
+	gtk_widget_set_sensitive(pm_widgets.keybindings_button,
+		p->key_group && p->key_group->plugin_key_count > 0 && is_active);
 }
 
 
@@ -1357,6 +1361,8 @@ static void pm_on_plugin_button_clicked(GtkButton *button, gpointer user_data)
 				plugin_show_configure(&p->public);
 			else if (GPOINTER_TO_INT(user_data) == PM_BUTTON_HELP && p->help != NULL)
 				p->help();
+			else if (GPOINTER_TO_INT(user_data) == PM_BUTTON_KEYBINDINGS && p->key_group && p->key_group->plugin_key_count > 0)
+				keybindings_dialog_show_prefs_scroll(p->info.name);
 		}
 	}
 }
@@ -1375,6 +1381,8 @@ free_non_active_plugin(gpointer data, gpointer user_data)
 }
 
 
+/* Callback when plugin manager dialog closes, only ever has response of
+ * GTK_RESPONSE_OK or GTK_RESPONSE_DELETE_EVENT and both are treated the same. */
 static void pm_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 {
 	if (plugin_list != NULL)
@@ -1385,6 +1393,8 @@ static void pm_dialog_response(GtkDialog *dialog, gint response, gpointer user_d
 		plugin_list = NULL;
 	}
 	gtk_widget_destroy(GTK_WIDGET(dialog));
+
+	configuration_save();
 }
 
 
@@ -1413,7 +1423,7 @@ static void pm_show_dialog(GtkMenuItem *menuitem, gpointer user_data)
 
 	pm_widgets.dialog = gtk_dialog_new_with_buttons(_("Plugins"), GTK_WINDOW(main_widgets.window),
 						GTK_DIALOG_DESTROY_WITH_PARENT,
-						GTK_STOCK_OK, GTK_RESPONSE_CANCEL, NULL);
+						GTK_STOCK_OK, GTK_RESPONSE_OK, NULL);
 	vbox = ui_dialog_vbox_new(GTK_DIALOG(pm_widgets.dialog));
 	gtk_widget_set_name(pm_widgets.dialog, "GeanyDialog");
 	gtk_box_set_spacing(GTK_BOX(vbox), 6);
@@ -1432,6 +1442,11 @@ static void pm_show_dialog(GtkMenuItem *menuitem, gpointer user_data)
 	gtk_container_add(GTK_CONTAINER(swin), pm_widgets.tree);
 
 	label = geany_wrap_label_new(_("Choose which plugins should be loaded at startup:"));
+
+	pm_widgets.keybindings_button = gtk_button_new_with_label(_("Keybindings"));
+	gtk_widget_set_sensitive(pm_widgets.keybindings_button, FALSE);
+	g_signal_connect(pm_widgets.keybindings_button, "clicked",
+		G_CALLBACK(pm_on_plugin_button_clicked), GINT_TO_POINTER(PM_BUTTON_KEYBINDINGS));
 
 	pm_widgets.configure_button = gtk_button_new_from_stock(GTK_STOCK_PREFERENCES);
 	gtk_widget_set_sensitive(pm_widgets.configure_button, FALSE);
@@ -1465,9 +1480,11 @@ static void pm_show_dialog(GtkMenuItem *menuitem, gpointer user_data)
 	gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(desc_win), table);
 
 	hbox = gtk_hbox_new(FALSE, 0);
+	gtk_box_set_spacing(GTK_BOX(hbox), 6);
 	gtk_box_pack_start(GTK_BOX(hbox), label2, TRUE, TRUE, 0);
-	gtk_box_pack_start(GTK_BOX(hbox), pm_widgets.help_button, FALSE, FALSE, 4);
+	gtk_box_pack_start(GTK_BOX(hbox), pm_widgets.help_button, FALSE, FALSE, 0);
 	gtk_box_pack_start(GTK_BOX(hbox), pm_widgets.configure_button, FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(hbox), pm_widgets.keybindings_button, FALSE, FALSE, 0);
 
 	label_vbox = gtk_vbox_new(FALSE, 3);
 	gtk_box_pack_start(GTK_BOX(label_vbox), hbox, FALSE, FALSE, 0);
@@ -1483,7 +1500,7 @@ static void pm_show_dialog(GtkMenuItem *menuitem, gpointer user_data)
 
 	g_signal_connect(pm_widgets.dialog, "response", G_CALLBACK(pm_dialog_response), NULL);
 
-	gtk_container_add(GTK_CONTAINER(vbox), vbox2);
+	gtk_box_pack_start(GTK_BOX(vbox), vbox2, TRUE, TRUE, 0);
 	gtk_widget_show_all(pm_widgets.dialog);
 }
 

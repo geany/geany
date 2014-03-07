@@ -1,8 +1,8 @@
 /*
  *      sciwrappers.h - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2005-2011 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2006-2011 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2005-2012 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2006-2012 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -14,9 +14,9 @@
  *      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *      GNU General Public License for more details.
  *
- *      You should have received a copy of the GNU General Public License
- *      along with this program; if not, write to the Free Software
- *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *      You should have received a copy of the GNU General Public License along
+ *      with this program; if not, write to the Free Software Foundation, Inc.,
+ *      51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
 #ifndef GEANY_SCIWRAPPERS_H
@@ -60,6 +60,7 @@ gint				sci_marker_next				(ScintillaObject *sci, gint line, gint marker_mask, g
 gint				sci_marker_previous			(ScintillaObject *sci, gint line, gint marker_mask, gboolean wrap);
 
 gint 				sci_get_col_from_position	(ScintillaObject *sci, gint position);
+gint 				sci_get_position_from_col (ScintillaObject *sci, gint line, gint col);
 gint 				sci_get_line_from_position	(ScintillaObject *sci, gint position);
 gint 				sci_get_position_from_line	(ScintillaObject *sci, gint line);
 gint 				sci_get_current_position	(ScintillaObject *sci);
@@ -84,7 +85,7 @@ void				sci_set_selection			(ScintillaObject *sci, gint anchorPos, gint currentP
 
 gint				sci_get_length				(ScintillaObject *sci);
 void				sci_get_text				(ScintillaObject *sci, gint len, gchar *text);
-gchar*				sci_get_contents			(ScintillaObject *sci, gint len);
+gchar*				sci_get_contents			(ScintillaObject *sci, gint buffer_len);
 void				sci_get_selected_text		(ScintillaObject *sci, gchar *text);
 gint				sci_get_selected_text_length(ScintillaObject *sci);
 gchar*				sci_get_selection_contents	(ScintillaObject *sci);
@@ -179,8 +180,9 @@ void				sci_set_scroll_stop_at_last_line	(ScintillaObject *sci, gboolean set);
 void				sci_cancel					(ScintillaObject *sci);
 
 gint				sci_get_position_after		(ScintillaObject *sci, gint start);
+gint				sci_word_start_position		(ScintillaObject *sci, gint position, gboolean onlyWordCharacters);
+gint				sci_word_end_position		(ScintillaObject *sci, gint position, gboolean onlyWordCharacters);
 
-void				sci_lines_split				(ScintillaObject *sci, gint pixelWidth);
 void				sci_lines_join				(ScintillaObject *sci);
 gint				sci_text_width				(ScintillaObject *sci, gint styleNumber, const gchar *text);
 
