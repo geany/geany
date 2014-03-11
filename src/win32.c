@@ -419,18 +419,27 @@ gboolean win32_show_document_open_dialog(GtkWindow *parent, const gchar *title, 
 
 
 gchar *win32_show_document_save_as_dialog(GtkWindow *parent, const gchar *title,
-										  const gchar *initial_file)
+										  GeanyDocument *doc)
 {
 	OPENFILENAMEW of;
 	gint retval;
 	gchar tmp[MAX_PATH];
 	wchar_t w_file[MAX_PATH];
 	wchar_t w_title[512];
+	int n;
 
 	w_file[0] = '\0';
 
-	if (initial_file != NULL)
-		MultiByteToWideChar(CP_UTF8, 0, initial_file, -1, w_file, G_N_ELEMENTS(w_file));
+	/* Convert the name of the file for of.lpstrFile */
+	n = MultiByteToWideChar(CP_UTF8, 0, DOC_FILENAME(doc), -1, w_file, G_N_ELEMENTS(w_file));
+
+	/* If creating a new file name, convert and append the extension if any */
+	if (! doc->file_name && doc->file_type && doc->file_type->extension && n + 1 < G_N_ELEMENTS(w_file))
+	{
+		w_file[n - 1] = L'.';
+		MultiByteToWideChar(CP_UTF8, 0, doc->file_type->extension, -1, &w_file[n],
+				G_N_ELEMENTS(w_file) - n - 1);
+	}
 
 	MultiByteToWideChar(CP_UTF8, 0, title, -1, w_title, G_N_ELEMENTS(w_title));
 

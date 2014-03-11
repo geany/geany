@@ -30,7 +30,7 @@ gchar *win32_show_file_dialog(GtkWindow *parent, const gchar *title, const gchar
 gboolean win32_show_document_open_dialog(GtkWindow *parent, const gchar *title, const gchar *initial_dir);
 
 gchar *win32_show_document_save_as_dialog(GtkWindow *parent, const gchar *title,
-										  const gchar *initial_file);
+										  GeanyDocument *doc);
 
 void win32_show_font_dialog(void);
 
