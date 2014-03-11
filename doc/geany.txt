@@ -938,6 +938,12 @@ Normal shell quoting is supported, so you can do things like:
 The above example would normally be done with the `Replace all`_
 function, but it can be handy to have common commands already set up.
 
+Note that the command is not run in a shell, so if you want to use
+shell features like pipes and command chains, you need to explicitly
+launch the shell and pass it your command:
+
+* ``sh -c 'sort | uniq'``
+
 
 Context actions
 ^^^^^^^^^^^^^^^
