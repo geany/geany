@@ -75,6 +75,28 @@ struct cc_dialog
 	GtkWidget *button_down;
 };
 
+/* run-once custom command dialog */
+static struct
+{
+	GtkWidget	*dialog;
+	GtkWidget	*entry;
+	gboolean	busy;	/* signifies that the current executing command hasn't completed yet */
+}
+cc_run_dlg = {NULL, NULL, FALSE};
+
+/* cc_run_dlg responses */
+enum
+{
+	GEANY_RESPONSE_CC_REPLACE_SELECTION = 1,
+	GEANY_RESPONSE_CC_NEW_BUFFER
+};
+
+enum
+{
+	GEANY_MENU_IDX_CC_EDIT_COMMANDS = -1,
+	GEANY_MENU_IDX_CC_RUN_COMMAND = -2
+};
+
 /* data required by the custom command callbacks */
 struct cc_data
 {
@@ -281,6 +303,28 @@ static gboolean cc_iofunc_err(GIOChannel *ioc, GIOCondition cond, gpointer user_
 }
 
 
+static gboolean cc_run_dlg_delete_event(GtkWidget *widget)
+{
+	/* returning TRUE prevents dialog destruction.
+	 * this is all that is needed here;
+	 * everything else happens in on_cc_run_dialog_response, automatically
+	 * called with respone=GTK_RESPONSE_DELETE_EVENT */
+	return TRUE;
+}
+
+
+static void cc_run_dlg_set_busy(gboolean sensitive)
+{
+	cc_run_dlg.busy = !sensitive;  /* this prevents hiding via delete-event (e.g. Esc key) */
+	gtk_dialog_set_response_sensitive(GTK_DIALOG(cc_run_dlg.dialog),
+		GEANY_RESPONSE_CC_REPLACE_SELECTION, sensitive);
+	gtk_dialog_set_response_sensitive(GTK_DIALOG(cc_run_dlg.dialog),
+		GEANY_RESPONSE_CC_NEW_BUFFER, sensitive);
+	gtk_dialog_set_response_sensitive(GTK_DIALOG(cc_run_dlg.dialog),
+		GTK_RESPONSE_CANCEL, sensitive);
+}
+
+
 static gboolean cc_replace_sel_cb(gpointer user_data)
 {
 	struct cc_data *data = user_data;
@@ -298,6 +342,12 @@ static gboolean cc_replace_sel_cb(gpointer user_data)
 	if (data->buffer)
 		g_string_free(data->buffer, TRUE);
 	g_slice_free1(sizeof *data, data);
+
+	if (GTK_IS_WIDGET(cc_run_dlg.dialog))
+	{
+		gtk_widget_hide(cc_run_dlg.dialog);
+		cc_run_dlg_set_busy(TRUE);
+	}
 
 	return FALSE;
 }
@@ -346,8 +396,8 @@ static void cc_exit_cb(GPid child_pid, gint status, gpointer user_data)
 
 /* Executes command (which should include all necessary command line args) and passes the current
  * selection through the standard input of command. The whole output of command replaces the
- * current selection. */
-void tools_execute_custom_command(GeanyDocument *doc, const gchar *command)
+ * current selection, or is pasted in a new document if replace is false. */
+void tools_execute_custom_command(GeanyDocument *doc, const gchar *command, gboolean replace)
 {
 	GError *error = NULL;
 	GPid pid;
@@ -381,6 +431,9 @@ void tools_execute_custom_command(GeanyDocument *doc, const gchar *command)
 		data->buffer = NULL;
 		data->doc = doc;
 		data->command = command;
+
+		if (!replace)
+			data->doc = document_new_file(NULL, NULL, NULL);
 
 		g_child_watch_add(pid, cc_exit_cb, data);
 
@@ -691,6 +744,122 @@ static void cc_show_dialog_custom_commands(void)
 	gtk_widget_destroy(dialog);
 }
 
+static void on_cc_run_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
+{
+	if (response == GTK_RESPONSE_CANCEL || response == GTK_RESPONSE_DELETE_EVENT)
+	{
+		if (!cc_run_dlg.busy)
+			gtk_widget_hide(cc_run_dlg.dialog);
+	}
+	else
+	{
+		GeanyDocument *doc = document_get_current();
+
+		if (doc == NULL)
+			return;
+
+		const gchar *command = gtk_entry_get_text(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(user_data))));
+
+		if (EMPTY(command))
+		{
+			utils_beep();
+			gtk_widget_grab_focus(cc_run_dlg.entry);
+			return;
+		}
+		ui_combo_box_add_to_history(GTK_COMBO_BOX_TEXT(user_data), command, 0);
+
+		cc_run_dlg_set_busy(FALSE);
+
+		g_assert(response == GEANY_RESPONSE_CC_REPLACE_SELECTION ||
+			response == GEANY_RESPONSE_CC_NEW_BUFFER);
+
+		switch (response)
+		{
+			case GEANY_RESPONSE_CC_REPLACE_SELECTION:
+				tools_execute_custom_command(doc, command, TRUE);
+				break;
+			case GEANY_RESPONSE_CC_NEW_BUFFER:
+				tools_execute_custom_command(doc, command, FALSE);
+				break;
+		}
+	}
+}
+
+
+/* A simple wrapper. Default response when entry field is activated. */
+static void on_cc_run_entry_activate(GtkEntry *entry, gpointer user_data)
+{
+	on_cc_run_dialog_response(NULL, GEANY_RESPONSE_CC_REPLACE_SELECTION, user_data);
+}
+
+
+static void create_cc_run_dialog(void)
+{
+	GtkWidget *label, *entry, *hbox, *vbox, *button;
+
+	cc_run_dlg.dialog = gtk_dialog_new_with_buttons(_("Send Selection to Command"),
+		GTK_WINDOW(main_widgets.window), GTK_DIALOG_DESTROY_WITH_PARENT | GTK_DIALOG_MODAL,
+		GTK_STOCK_CLOSE, GTK_RESPONSE_CANCEL, NULL);
+	vbox = ui_dialog_vbox_new(GTK_DIALOG(cc_run_dlg.dialog));
+	gtk_box_set_spacing(GTK_BOX(vbox), 9);
+
+	button = ui_button_new_with_image(GTK_STOCK_NEW, _("In _New Document"));
+	gtk_dialog_add_action_widget(GTK_DIALOG(cc_run_dlg.dialog), button,
+		GEANY_RESPONSE_CC_NEW_BUFFER);
+
+	button = gtk_button_new_from_stock(GTK_STOCK_APPLY);
+	gtk_dialog_add_action_widget(GTK_DIALOG(cc_run_dlg.dialog), button,
+		GEANY_RESPONSE_CC_REPLACE_SELECTION);
+
+	label = gtk_label_new_with_mnemonic(_("_Command:"));
+	gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
+
+	entry = gtk_combo_box_text_new_with_entry();
+	ui_entry_add_clear_icon(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(entry))));
+	gtk_label_set_mnemonic_widget(GTK_LABEL(label), entry);
+	gtk_entry_set_width_chars(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(entry))), 40);
+	cc_run_dlg.entry = gtk_bin_get_child(GTK_BIN(entry));
+
+	g_signal_connect(gtk_bin_get_child(GTK_BIN(entry)), "activate",
+			G_CALLBACK(on_cc_run_entry_activate), entry);
+	g_signal_connect(cc_run_dlg.dialog, "response",
+			G_CALLBACK(on_cc_run_dialog_response), entry);
+	g_signal_connect(cc_run_dlg.dialog, "delete-event",
+			G_CALLBACK(cc_run_dlg_delete_event), NULL);
+
+	hbox = gtk_hbox_new(FALSE, 6);
+	gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(hbox), entry, TRUE, TRUE, 0);
+	gtk_box_pack_start(GTK_BOX(vbox), hbox, TRUE, FALSE, 0);
+}
+
+
+void cc_show_run_dialog(void)
+{
+	if (cc_run_dlg.dialog == NULL)
+	{
+		create_cc_run_dialog();
+		gtk_widget_show_all(cc_run_dlg.dialog);
+	}
+	else
+	{
+		gtk_widget_grab_focus(cc_run_dlg.entry);
+		gtk_widget_show(cc_run_dlg.dialog);
+		/* bring the dialog back in the foreground in case it is already open but the focus is away */
+		gtk_window_present(GTK_WINDOW(cc_run_dlg.dialog));
+	}
+}
+
+
+#define FREE_WIDGET(wid) \
+	if (wid && GTK_IS_WIDGET(wid)) gtk_widget_destroy(wid);
+
+void tools_finalize(void)
+{
+	FREE_WIDGET(cc_run_dlg.dialog);
+	FREE_WIDGET(cc_run_dlg.entry);
+}
+
 
 static void cc_on_custom_command_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
@@ -701,16 +870,21 @@ static void cc_on_custom_command_activate(GtkMenuItem *menuitem, gpointer user_d
 
 	command_idx = GPOINTER_TO_INT(user_data);
 
-	if (ui_prefs.custom_commands == NULL ||
-		command_idx < 0 || command_idx > (gint) g_strv_length(ui_prefs.custom_commands))
+	if (ui_prefs.custom_commands && command_idx >= 0 &&
+		command_idx < (gint) g_strv_length(ui_prefs.custom_commands))
+	{
+		/* send it through the command and when the command returned the output,
+		 * the current selection will be replaced */
+		tools_execute_custom_command(doc, ui_prefs.custom_commands[command_idx], TRUE);
+	}
+	else if (command_idx == GEANY_MENU_IDX_CC_RUN_COMMAND)
+	{
+		cc_show_run_dialog();
+	}
+	else
 	{
 		cc_show_dialog_custom_commands();
-		return;
 	}
-
-	/* send it through the command and when the command returned the output the current selection
-	 * will be replaced */
-	tools_execute_custom_command(doc, ui_prefs.custom_commands[command_idx]);
 }
 
 
@@ -722,6 +896,9 @@ static void cc_insert_custom_command_items(GtkMenu *me, const gchar *label, cons
 
 	switch (idx)
 	{
+		case GEANY_MENU_IDX_CC_RUN_COMMAND:
+			key_idx = GEANY_KEYS_FORMAT_SENDTOCMD;
+			break;
 		case 0: key_idx = GEANY_KEYS_FORMAT_SENDTOCMD1; break;
 		case 1: key_idx = GEANY_KEYS_FORMAT_SENDTOCMD2; break;
 		case 2: key_idx = GEANY_KEYS_FORMAT_SENDTOCMD3; break;
@@ -729,7 +906,7 @@ static void cc_insert_custom_command_items(GtkMenu *me, const gchar *label, cons
 
 	item = gtk_menu_item_new_with_label(label);
 	gtk_widget_set_tooltip_text(item, tooltip);
-	if (key_idx != -1)
+	if (key_idx != GEANY_MENU_IDX_CC_EDIT_COMMANDS)
 	{
 		kb = keybindings_lookup_item(GEANY_KEY_GROUP_FORMAT, key_idx);
 		if (kb->key > 0)
@@ -788,7 +965,8 @@ void tools_create_insert_custom_command_menu_items(void)
 	gtk_container_add(GTK_CONTAINER(menu_edit), item);
 	gtk_widget_show(item);
 
-	cc_insert_custom_command_items(menu_edit, _("Set Custom Commands"), NULL, -1);
+	cc_insert_custom_command_items(menu_edit, _("Custom Command"), NULL, GEANY_MENU_IDX_CC_RUN_COMMAND);
+	cc_insert_custom_command_items(menu_edit, _("Set Custom Commands"), NULL, GEANY_MENU_IDX_CC_EDIT_COMMANDS);
 }
 
 

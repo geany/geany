@@ -1257,6 +1257,7 @@ void main_quit(void)
 	templates_free_templates();
 	msgwin_finalize();
 	search_finalize();
+	tools_finalize();
 	build_finalize();
 	document_finalize();
 	symbols_finalize();

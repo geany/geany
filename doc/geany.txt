@@ -922,14 +922,17 @@ command, so the command should be able to read from it and it should
 print all results to its standard output which will be read by
 Geany. To help finding errors in executing the command, the output
 of the program's standard error will be printed on Geany's standard
-output.
+output, in the statusbar, and in the status message window.
 
 If there is no selection, the whole current line is used instead.
 
-To add a custom command, use the *Send Selection to->Set Custom
-Commands* menu item. Click on *Add* to get a new item and type the
-command. You can also specify some command line options. Empty
-commands are not saved.
+To send the selection to a run-once custom command, use the *Send
+Selection to->Custom Command* menu item.
+
+To save a custom command for frequent invocation, use the *Send
+Selection to->Set Custom Commands* menu item. Click on *Add* to get
+a new item and type the command. You can also specify some command
+line options. Empty commands are not saved.
 
 Normal shell quoting is supported, so you can do things like:
 
@@ -3488,6 +3491,11 @@ Decrease indent by one space                              Deindents the current 
 
 Smart line indent                                         Indents the current line or all selected lines
                                                           with the same indentation as the previous line.
+
+Send to Custom Command                                    Passes the current selection to an external
+                                                          command that you type in the input field of the
+                                                          resulting dialog, which also allows you to recall
+                                                          and edit previous commands.
 
 Send to Custom Command 1 (2,3)  Ctrl-1 (2,3)              Passes the current selection to a configured
                                                           external command (available for the first
