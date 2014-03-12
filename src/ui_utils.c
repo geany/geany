@@ -1346,6 +1346,29 @@ GtkWidget *ui_dialog_vbox_new(GtkDialog *dialog)
 }
 
 
+static GtkWidget *dialog_get_widget_for_response(GtkDialog *dialog, gint response_id)
+{
+#if GTK_CHECK_VERSION(2, 20, 0)
+	return gtk_dialog_get_widget_for_response(dialog, response_id);
+#else /* GTK < 2.20 */
+	/* base logic stolen from GTK */
+	GtkWidget *action_area = gtk_dialog_get_action_area(dialog);
+	GtkWidget *widget = NULL;
+	GList *children, *node;
+
+	children = gtk_container_get_children(GTK_CONTAINER(action_area));
+	for (node = children; node && ! widget; node = node->next)
+	{
+		if (gtk_dialog_get_response_for_widget(dialog, node->data) == response_id)
+			widget = node->data;
+	}
+	g_list_free(children);
+
+	return widget;
+#endif
+}
+
+
 /* Reorders a dialog's buttons
  * @param dialog A dialog
  * @param response First response ID to reorder
@@ -1369,7 +1392,7 @@ void ui_dialog_set_primary_button_order(GtkDialog *dialog, gint response, ...)
 	va_start(ap, response);
 	for (position = 0; response != -1; position++)
 	{
-		GtkWidget *child = gtk_dialog_get_widget_for_response(dialog, response);
+		GtkWidget *child = dialog_get_widget_for_response(dialog, response);
 		if (child)
 			gtk_box_reorder_child(GTK_BOX(action_area), child, position);
 		else
