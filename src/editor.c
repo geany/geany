@@ -4053,6 +4053,8 @@ void editor_display_current_line(GeanyEditor *editor, gfloat percent_of_view)
 void editor_indicator_clear_errors(GeanyEditor *editor)
 {
 	editor_indicator_clear(editor, GEANY_INDICATOR_ERROR);
+	/* This is bluish squiggly line */
+	editor_indicator_clear(editor, GEANY_INDICATOR_WARNING);
 	sci_marker_delete_all(editor->sci, 0);	/* remove the yellow error line marker */
 }
 
