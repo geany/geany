@@ -758,13 +758,14 @@ static void parse_file_line(ParseData *data, gchar **filename, gint *line, gchar
 {
 	gchar *end = NULL;
 	gchar **fields;
+	gint default_number_of_tokens = -1;
 
 	*filename = NULL;
 	*line = -1;
 
 	g_return_if_fail(data->string != NULL);
 
-	fields = g_strsplit_set(data->string, data->pattern, data->min_fields);
+	fields = g_strsplit_set(data->string, data->pattern, default_number_of_tokens);
 
 	/* parse the line */
 	if (g_strv_length(fields) < data->min_fields)
@@ -775,7 +776,7 @@ static void parse_file_line(ParseData *data, gchar **filename, gint *line, gchar
 
 	*line = strtol(fields[data->line_idx], &end, 10);
 
-	if (g_strv_length(fields) == data->min_fields)
+	if (data->line_idx+2 < g_strv_length(fields))
 	{
 		*type = g_strstrip(g_strdup(fields[data->line_idx+2]));
 	}
@@ -967,7 +968,7 @@ static void parse_compiler_error_line(const gchar *string,
 			if (strstr(string, "libtool --mode=link") == NULL)
 			{
 				data.pattern = ":";
-				data.min_fields = 5;
+				data.min_fields = 3;
 				data.line_idx = 1;
 				data.file_idx = 0;
 				break;
