@@ -16,6 +16,7 @@ lexers/LexCPP.cxx \
 lexers/LexCSS.cxx \
 lexers/LexCaml.cxx \
 lexers/LexCmake.cxx \
+lexers/LexCoffeeScript.cxx \
 lexers/LexD.cxx \
 lexers/LexErlang.cxx \
 lexers/LexForth.cxx \
