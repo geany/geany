@@ -70,6 +70,7 @@ LexBash.o \
 LexCOBOL.o \
 LexCSS.o \
 LexCPP.o \
+LexCoffeeScript.o \
 LexHTML.o \
 LexOthers.o \
 LexPascal.o \
