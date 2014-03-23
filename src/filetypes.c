@@ -435,12 +435,6 @@ void filetypes_init(void)
 
 	filetypes_init_types();
 
-	/* this has to be here as GTK isn't initialized in filetypes_init_types(). */
-	foreach_slist(node, filetypes_by_title)
-	{
-		GeanyFiletype *ft = node->data;
-		ft->icon = ui_get_mime_icon(ft->mime_type, GTK_ICON_SIZE_MENU);
-	}
 	create_set_filetype_menu();
 	setup_config_file_menus();
 }
@@ -824,8 +818,6 @@ static void filetype_free(gpointer data, G_GNUC_UNUSED gpointer user_data)
 	g_free(ft->ftdefcmds);
 	g_free(ft->execcmds);
 	g_free(ft->error_regex_string);
-	if (ft->icon)
-		g_object_unref(ft->icon);
 	g_strfreev(ft->pattern);
 
 	if (ft->priv->error_regex)

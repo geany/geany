@@ -457,7 +457,6 @@ void sidebar_openfiles_add(GeanyDocument *doc)
 	GtkTreeIter *parent = get_doc_parent(doc);
 	gchar *basename;
 	const GdkColor *color = document_get_status_color(doc);
-	static GdkPixbuf *file_icon = NULL;
 
 	gtk_tree_store_append(store_openfiles, iter, parent);
 
@@ -471,12 +470,10 @@ void sidebar_openfiles_add(GeanyDocument *doc)
 		gtk_tree_view_expand_row(GTK_TREE_VIEW(tv.tree_openfiles), path, TRUE);
 		gtk_tree_path_free(path);
 	}
-	if (!file_icon)
-		file_icon = ui_get_mime_icon("text/plain", GTK_ICON_SIZE_MENU);
 
 	basename = g_path_get_basename(DOC_FILENAME(doc));
 	gtk_tree_store_set(store_openfiles, iter,
-		DOCUMENTS_ICON, (doc->file_type && doc->file_type->icon) ? doc->file_type->icon : file_icon,
+		DOCUMENTS_ICON, doc->icon,
 		DOCUMENTS_SHORTNAME, basename, DOCUMENTS_DOCUMENT, doc, DOCUMENTS_COLOR, color,
 		DOCUMENTS_FILENAME, DOC_FILENAME(doc), -1);
 	g_free(basename);
@@ -507,11 +504,12 @@ void sidebar_openfiles_update(GeanyDocument *doc)
 	{
 		/* just update color and the icon */
 		const GdkColor *color = document_get_status_color(doc);
-		GdkPixbuf *icon = doc->file_type->icon;
+		GdkPixbuf *icon = doc->icon;
+		if (!icon) 
+			icon = ui_get_mime_icon(doc->file_type->mime_type, GTK_ICON_SIZE_MENU);
 
 		gtk_tree_store_set(store_openfiles, iter, DOCUMENTS_COLOR, color, -1);
-		if (icon)
-			gtk_tree_store_set(store_openfiles, iter, DOCUMENTS_ICON, icon, -1);
+		gtk_tree_store_set(store_openfiles, iter, DOCUMENTS_ICON, icon, -1);
 	}
 	else
 	{

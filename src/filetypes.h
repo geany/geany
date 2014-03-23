@@ -140,7 +140,6 @@ struct GeanyFiletype
 	gchar			 *error_regex_string;
 	GeanyFiletype	 *lexer_filetype;
 	gchar			 *mime_type;
-	GdkPixbuf		 *icon;
 	gchar			 *comment_single; /* single-line comment */
 	/* filetype indent settings, -1 if not set */
 	gint			  indent_type;
