@@ -1199,7 +1199,7 @@ msgid ""
 "mixed line endings in the same file"
 msgstr ""
 "Stellt sicher, dass die Zeilenumbrüche vor dem Speichern immer umgewandelt "
-"werden um gemischte Zeilenende zu vermeiden."
+"werden um gemischte Zeilenenden zu vermeiden."
 
 #: ../data/geany.glade.h:241
 msgid "Strip trailing spaces and tabs"
@@ -1458,7 +1458,7 @@ msgid ""
 "header on each page. You can use any conversion specifiers which can be used "
 "with the ANSI C strftime function."
 msgstr ""
-"Geben Sie ein Datumsformat an, dass für jeden Seitenkopf benutzt wird. Dabei "
+"Geben Sie ein Datumsformat an, das für jeden Seitenkopf benutzt wird. Dabei "
 "können alle Platzhalter verwendet werden, die auch in der ANSI C Funktion "
 "»strftime« zum Einsatz kommen können."
 
@@ -1565,7 +1565,7 @@ msgid ""
 "Allows the VTE to receive keyboard shortcuts (apart from focus commands)"
 msgstr ""
 "Erlaubt das integrierte Terminal über Tastenkürzel anzusprechen (mit "
-"Ausnahme der Fokus Kommandos)"
+"Ausnahme des Fokus Kommandos)"
 
 #: ../data/geany.glade.h:322
 msgid "Disable menu shortcut key (F10 by default)"
@@ -2162,7 +2162,7 @@ msgstr "S_chließen"
 
 #: ../data/geany.glade.h:463
 msgid "Apply the default indentation settings to all documents"
-msgstr "Wende die Standardeinreckü"
+msgstr "Wende die Standardeinrückung auf alle Dokumente an"
 
 #: ../data/geany.glade.h:464
 msgid "_Apply Default Indentation"
@@ -2381,7 +2381,7 @@ msgid ""
 "Could not parse terminal command \"%s\" (check Terminal tool setting in "
 "Preferences)"
 msgstr ""
-"Konnte de Aufruf für das Terminalprogramm »%s« nicht verstehen. (Bitte die "
+"Konnte den Aufruf für das Terminalprogramm »%s« nicht verstehen. (Bitte die "
 "Terminal-Einstellungen überprüfen.)"
 
 #: ../src/build.c:1031
@@ -3768,7 +3768,7 @@ msgstr ""
 #: ../src/keyfile.c:1194
 msgid "Failed to load one or more session files."
 msgstr ""
-"Eine oder mehre Datei(en) aus der letzten Sitzung konnte(n) nicht geladen "
+"Eine oder mehrere Datei(en) aus der letzten Sitzung konnte(n) nicht geladen "
 "werden."
 
 #: ../src/log.c:181
@@ -3844,7 +3844,7 @@ msgstr "Geanys Installationsverzeichnis ausgeben"
 #: ../src/main.c:138
 msgid "Open all FILES in read-only mode (see documention)"
 msgstr ""
-"Alle Dateien nur zum Lesen öffnen (unbeteiligt die Dokumentation dazu "
+"Alle Dateien nur zum Lesen öffnen (die Dokumentation dazu "
 "konsultieren)"
 
 #: ../src/main.c:139
@@ -4117,7 +4117,7 @@ msgstr ""
 
 #: ../src/printing.c:414
 msgid "Paginating"
-msgstr "Seitenummerierung"
+msgstr "Seitennummerierung"
 
 #: ../src/printing.c:438
 #, c-format
@@ -4392,7 +4392,7 @@ msgid ""
 "Custom: specify file patterns manually"
 msgstr ""
 "Alle: Durchsuche alle Dateien im Verzeichnis\n"
-"Projekt: Benutzer Dateimuster, die in den Projekteinstellungen hinterlegt "
+"Projekt: Benutze Dateimuster, die in den Projekteinstellungen hinterlegt "
 "sind\n"
 "Benutzerdefiniert: Manuelles angeben der Dateimuster"
 
@@ -4491,8 +4491,8 @@ msgstr "Suche fehlgeschlagen."
 #, c-format
 msgid "Search completed with %d match."
 msgid_plural "Search completed with %d matches."
-msgstr[0] "Such mit %d Treffer abgeschlossen."
-msgstr[1] "Such mit %d Treffern abgeschlossen."
+msgstr[0] "Suche mit %d Treffer abgeschlossen."
+msgstr[1] "Suche mit %d Treffern abgeschlossen."
 
 #: ../src/search.c:1912
 msgid "No matches found."
@@ -5386,7 +5386,7 @@ msgstr "Konstruktor erstellen"
 
 #: ../plugins/classbuilder.c:559
 msgid "Create destructor"
-msgstr "Dekonstruktor erstellen"
+msgstr "Destruktor erstellen"
 
 #: ../plugins/classbuilder.c:566
 msgid "Is abstract"
