@@ -1596,7 +1596,7 @@ msgstr "修改于："
 
 #: ../data/geany.glade.h:352
 msgid "Changed:"
-msgstr "变更于（ctime）："
+msgstr "变更于 (ctime)："
 
 #: ../data/geany.glade.h:353
 msgid "Accessed:"
