@@ -34,7 +34,7 @@ Alternatively you can view the API documentation online at
 http://www.geany.org/manual/reference/.
 
 Pull requests
-------------
+-------------
 Making pull requests on Github is the preferred way of contributing for geany.
 
 .. note:: For helping you to get started: https://help.github.com/articles/fork-a-repo
@@ -80,11 +80,11 @@ Please, make sure contributions you make follow these rules:
 * changes should be made in a dedicated branch for pull requests.
 * only one feature should be in each pull request (or patch).
 * pull requests (or patches) should not contain changes unrelated to the feature,
-and commits should be sensible units of change.
+  and commits should be sensible units of change.
 * the submitter should squash together corrections that are part of
-the development process, especially correcting your own mistakes.
+  the development process, especially correcting your own mistakes.
 * Please make sure your modifications follow the style of existing code:
-see `Coding`_ for more information.
+  see `Coding`_ for more information.
 
 See `Committing`_ for more information.
 
