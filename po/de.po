@@ -291,18 +291,15 @@ msgstr ""
 "Werkzeugliste sowie für das integrierte Terminal."
 
 #: ../data/geany.glade.h:53
-#, fuzzy
 msgid "Use Windows native dialogs"
-msgstr "Benutze den Windows Datei öffnen/speichern Dialog"
+msgstr "Windows-typische Dialoge nutzen"
 
 #: ../data/geany.glade.h:54
-#, fuzzy
 msgid ""
 "Defines whether to use the Windows native dialogs or whether to use the GTK "
 "default dialogs"
 msgstr ""
-"Bestimmt, ob der native Windows Datei öffnen/speichern anstelle des GTK-"
-"Dialogs genutzt werden soll."
+"Bestimmt, ob Dialoge im Stil von Windows oder von Gtk geöffnet werden sollen"
 
 #: ../data/geany.glade.h:55
 msgid "<b>Miscellaneous</b>"
