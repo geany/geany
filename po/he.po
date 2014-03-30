@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.23\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-03-29 23:00+0300\n"
+"POT-Creation-Date: 2014-03-30 20:46+0200\n"
 "PO-Revision-Date: 2014-03-29 23:05+0300\n"
 "Last-Translator: Yosef Or Boczko <yoseforb@gmail.com>\n"
 "Language-Team: עברית <>\n"
@@ -274,13 +274,15 @@ msgstr ""
 "יישומון העורך הראשי, חיפוש ומעבר שורה בסרגל הכלים ושדות במדמה המסוף (VTE)."
 
 #: ../data/geany.glade.h:53
-msgid "Use Windows File Open/Save dialogs"
+#, fuzzy
+msgid "Use Windows native dialogs"
 msgstr "שימוש בסייר הקבצים של חלונות לפתיחה ולשמירת קבצים"
 
 #: ../data/geany.glade.h:54
+#, fuzzy
 msgid ""
-"Defines whether to use the native Windows File Open/Save dialogs or whether "
-"to use the GTK default dialogs"
+"Defines whether to use the Windows native dialogs or whether to use the GTK "
+"default dialogs"
 msgstr ""
 "מגדיר אם להשתמש בסייר הקבצים של חלונות לפתיחה ולשמירת קבצים או להשתמש בדו־"
 "שיח ברירת המחדל של GTK לפתיחת קבצים"
@@ -982,7 +984,7 @@ msgstr "צבע:"
 msgid "Sets the color of the long line marker"
 msgstr "מגדיר צבע לסימון שורה ארוכה"
 
-#: ../data/geany.glade.h:209 ../src/toolbar.c:70 ../src/tools.c:993
+#: ../data/geany.glade.h:209 ../src/toolbar.c:70 ../src/tools.c:996
 msgid "Color Chooser"
 msgstr "בחירת צבע"
 
