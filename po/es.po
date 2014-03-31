@@ -1,15 +1,15 @@
 # translation of es.po to
-# Spanish translation file for Geany 1.23
+# Spanish translation file for Geany 1.24
 # This file is distributed under the same license as the geany package.
 # Damián Viano <des@damianv.com.ar>, 2006, 2007.
 # Antonio Jiménez González <ajimenez@linuxmail.org>, 2009 - 2010.
-# Lucas Vieites <lucas.vieites@gmail.com>, 2010 - 2013.
+# Lucas Vieites <lucas.vieites@gmail.com>, 2010 - 2014.
 msgid ""
 msgstr ""
-"Project-Id-Version: Geany 1.23\n"
+"Project-Id-Version: Geany 1.24\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-03-30 20:46+0200\n"
-"PO-Revision-Date: 2013-02-25 11:58+0100\n"
+"POT-Creation-Date: 2014-03-31 02:36+0000\n"
+"PO-Revision-Date: 2014-03-31 07:23+0100\n"
 "Last-Translator: Lucas Vieites <lucas@codexion.com>\n"
 "Language-Team: Español <geany-i18n@uvena.de>\n"
 "Language: es\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.5.4\n"
+"X-Generator: Poedit 1.6.4\n"
 
 #: ../geany.desktop.in.h:1 ../data/geany.glade.h:365
 msgid "Geany"
@@ -282,18 +282,16 @@ msgstr ""
 "campo «ir a línea» y la VTE."
 
 #: ../data/geany.glade.h:53
-#, fuzzy
 msgid "Use Windows native dialogs"
-msgstr "Utilizar diálogos «Abrir/Guardar archivo» de Windows"
+msgstr "Utilizar diálogos nativos de Windows"
 
 #: ../data/geany.glade.h:54
-#, fuzzy
 msgid ""
 "Defines whether to use the Windows native dialogs or whether to use the GTK "
 "default dialogs"
 msgstr ""
-"Define si se utilizarán los diálogos de apertura y guardado de archivos "
-"nativos de Windows o los predeterminados de GTK."
+"Define si se utilizarán los diálogos nativos de Windows o los "
+"predeterminados de GTK."
 
 #: ../data/geany.glade.h:55
 msgid "<b>Miscellaneous</b>"
@@ -1704,46 +1702,39 @@ msgstr "Usar ajustes globales"
 
 #: ../data/geany.glade.h:347
 msgid "Size:"
-msgstr ""
+msgstr "Tamaño:"
 
 #: ../data/geany.glade.h:348
-#, fuzzy
 msgid "Location:"
-msgstr "<b>Ubicación:</b>"
+msgstr "Ubicación:"
 
 #: ../data/geany.glade.h:349
-#, fuzzy
 msgid "Read-only:"
-msgstr ", sólo lectura"
+msgstr "Sólo lectura:"
 
 #: ../data/geany.glade.h:350
-#, fuzzy
 msgid "Encoding:"
-msgstr "_Codificación:"
+msgstr "Codificación:"
 
 #: ../data/geany.glade.h:351
-#, fuzzy
 msgid "Modified:"
-msgstr "<b>Modificado:</b>"
+msgstr "Modificado:"
 
 #: ../data/geany.glade.h:352
-#, fuzzy
 msgid "Changed:"
-msgstr "_Cambiar"
+msgstr "Cambiado:"
 
 #: ../data/geany.glade.h:353
-#, fuzzy
 msgid "Accessed:"
-msgstr "<b>Accedido:</b>"
+msgstr "Accedido:"
 
 #: ../data/geany.glade.h:354
 msgid "(only inside Geany)"
 msgstr "(sólo dentro de Geany)"
 
 #: ../data/geany.glade.h:355
-#, fuzzy
 msgid "Permissions:"
-msgstr "<b>Permisos:</b>"
+msgstr "Permisos:"
 
 #: ../data/geany.glade.h:356
 msgid "Read:"
@@ -1790,18 +1781,16 @@ msgid "New (with _Template)"
 msgstr "Nuevo (desde _plantilla)"
 
 #: ../data/geany.glade.h:368
-#, fuzzy
 msgid "_Open..."
-msgstr "_Abrir"
+msgstr "_Abrir..."
 
 #: ../data/geany.glade.h:369
 msgid "Recent _Files"
 msgstr "Arc_hivos recientes"
 
 #: ../data/geany.glade.h:370
-#, fuzzy
 msgid "Save _As..."
-msgstr "Guardar como..."
+msgstr "Guardar _como…"
 
 #: ../data/geany.glade.h:371
 msgid "Save A_ll"
@@ -1821,9 +1810,8 @@ msgid "Page Set_up"
 msgstr "C_onfiguración de página"
 
 #: ../data/geany.glade.h:375
-#, fuzzy
 msgid "_Print..."
-msgstr "Imprimir"
+msgstr "I_mprimir..."
 
 #: ../data/geany.glade.h:376 ../src/notebook.c:490
 msgid "Close Ot_her Documents"
@@ -1922,9 +1910,8 @@ msgid "P_lugin Preferences"
 msgstr "Preferencias de comp_lementos"
 
 #: ../data/geany.glade.h:400
-#, fuzzy
 msgid "_Find..."
-msgstr "Buscar"
+msgstr "_Buscar..."
 
 #: ../data/geany.glade.h:401
 msgid "Find _Next"
@@ -1935,14 +1922,12 @@ msgid "Find _Previous"
 msgstr "Buscar _anterior"
 
 #: ../data/geany.glade.h:403 ../src/symbols.c:2425
-#, fuzzy
 msgid "Find in F_iles..."
-msgstr "Buscar en arch_ivos"
+msgstr "Buscar en arch_ivos..."
 
 #: ../data/geany.glade.h:404
-#, fuzzy
 msgid "_Replace..."
-msgstr "_Reemplazar"
+msgstr "_Reemplazar..."
 
 #: ../data/geany.glade.h:405
 msgid "Next _Message"
@@ -1961,9 +1946,8 @@ msgid "_Go to Previous Marker"
 msgstr "_Ir a la marca anterior"
 
 #: ../data/geany.glade.h:409
-#, fuzzy
 msgid "_Go to Line..."
-msgstr "_Ir a la línea"
+msgstr "_Ir a la línea..."
 
 #: ../data/geany.glade.h:410 ../src/keybindings.c:440
 msgid "Find Next _Selection"
@@ -1986,14 +1970,12 @@ msgid "_View"
 msgstr "_Ver"
 
 #: ../data/geany.glade.h:415
-#, fuzzy
 msgid "Change _Font..."
-msgstr "Cambiar _fuente"
+msgstr "Cambiar _fuente..."
 
 #: ../data/geany.glade.h:416
-#, fuzzy
 msgid "Change _Color Scheme..."
-msgstr "Esquemas de _color"
+msgstr "Cambiar esquema de _color..."
 
 #: ../data/geany.glade.h:417
 msgid "Show _Markers Margin"
@@ -2144,9 +2126,8 @@ msgid "_Replace Tabs by Spaces"
 msgstr "_Reemplazar tabulaciones por espacios"
 
 #: ../data/geany.glade.h:454
-#, fuzzy
 msgid "Replace Spaces b_y Tabs..."
-msgstr "Reemplazar _espacios por tabulaciones"
+msgstr "Reemplazar _espacios por tabulaciones..."
 
 #: ../data/geany.glade.h:455
 msgid "_Fold All"
@@ -2169,9 +2150,8 @@ msgid "_Project"
 msgstr "_Proyecto"
 
 #: ../data/geany.glade.h:460
-#, fuzzy
 msgid "_New..."
-msgstr "_Nuevo"
+msgstr "_Nuevo..."
 
 #: ../data/geany.glade.h:461
 msgid "_Recent Projects"
@@ -2216,9 +2196,8 @@ msgid "_Word Count"
 msgstr "C_ontar palabras"
 
 #: ../data/geany.glade.h:471
-#, fuzzy
 msgid "Load Ta_gs..."
-msgstr "Cargar eti_quetas"
+msgstr "Cargar eti_quetas..."
 
 #: ../data/geany.glade.h:472
 msgid "_Help"
@@ -2241,14 +2220,12 @@ msgid "Wi_ki"
 msgstr "Wi_ki"
 
 #: ../data/geany.glade.h:477
-#, fuzzy
 msgid "Report a _Bug..."
-msgstr "Informar de _fallo"
+msgstr "Informar de _fallo..."
 
 #: ../data/geany.glade.h:478
-#, fuzzy
 msgid "_Donate..."
-msgstr "_Donar"
+msgstr "_Donar..."
 
 #: ../data/geany.glade.h:479 ../src/sidebar.c:124
 msgid "Symbols"
@@ -2544,9 +2521,8 @@ msgstr "_Ejecutar"
 
 #. build the code with make custom
 #: ../src/build.c:2618 ../src/build.c:2809 ../src/build.c:2863
-#, fuzzy
 msgid "Make Custom _Target..."
-msgstr "Compilar obje_tivo personalizado"
+msgstr "Compilar obje_tivo personalizado..."
 
 #. build the code with make object
 #: ../src/build.c:2620 ../src/build.c:2810 ../src/build.c:2871
@@ -2812,9 +2788,9 @@ msgid "unknown"
 msgstr "desconocido"
 
 #: ../src/dialogs.c:1214
-#, fuzzy, c-format
+#, c-format
 msgid "%s Properties"
-msgstr "Propiedades"
+msgstr "Propiedades de %s"
 
 #: ../src/dialogs.c:1247 ../src/ui_utils.c:285
 msgid "(with BOM)"
@@ -3179,38 +3155,34 @@ msgid "%s file"
 msgstr "Archivo %s"
 
 #: ../src/filetypes.c:93
-#, fuzzy, c-format
+#, c-format
 msgid "%s script"
-msgstr "Archivo de script %s"
+msgstr "Script %s"
 
 #: ../src/filetypes.c:94
-#, fuzzy, c-format
+#, c-format
 msgid "%s document"
-msgstr "Documento XML"
+msgstr "Documento %s"
 
 #: ../src/filetypes.c:164
-#, fuzzy
 msgid "Shell"
-msgstr "Shell:"
+msgstr "Shell"
 
 #: ../src/filetypes.c:165
 msgid "Makefile"
 msgstr "Makefile"
 
 #: ../src/filetypes.c:169
-#, fuzzy
 msgid "Cascading Stylesheet"
-msgstr "Hoja de estilo en cascada (CSS)"
+msgstr "Hoja de estilo en cascada"
 
 #: ../src/filetypes.c:178
-#, fuzzy
 msgid "Config"
-msgstr "Archivo de configuración"
+msgstr "Configuración"
 
 #: ../src/filetypes.c:179
-#, fuzzy
 msgid "Gettext translation"
-msgstr "Archivo de traducción gettext"
+msgstr "Traducción gettext"
 
 #: ../src/filetypes.c:414
 msgid "_Programming Languages"
@@ -4663,12 +4635,11 @@ msgstr "Módulos"
 
 #: ../src/symbols.c:786 ../src/symbols.c:817
 msgid "Traits"
-msgstr ""
+msgstr "Atributos"
 
 #: ../src/symbols.c:787
-#, fuzzy
 msgid "Implementations"
-msgstr "Implementa:"
+msgstr "Implementaciones"
 
 #: ../src/symbols.c:789 ../src/symbols.c:1033
 msgid "Typedefs / Enums"
@@ -4799,26 +4770,23 @@ msgstr "Miembros"
 
 #: ../src/symbols.c:927 ../src/symbols.c:982
 msgid "Enums"
-msgstr ""
+msgstr "Enums"
 
 #: ../src/symbols.c:939
 msgid "Properties"
 msgstr "Propiedades"
 
 #: ../src/symbols.c:975
-#, fuzzy
 msgid "Programs"
-msgstr "Programa"
+msgstr "Programas"
 
 #: ../src/symbols.c:977
-#, fuzzy
 msgid "Functions / Subroutines"
-msgstr "Funciones/procedimientos"
+msgstr "Funciones/subrutinas"
 
 #: ../src/symbols.c:980
-#, fuzzy
 msgid "Components"
-msgstr "Completados"
+msgstr "Componentes"
 
 #: ../src/symbols.c:981
 msgid "Blocks"
@@ -4853,9 +4821,8 @@ msgid "Structs"
 msgstr "Estructuras"
 
 #: ../src/symbols.c:1043
-#, fuzzy
 msgid "Extern Variables"
-msgstr "Variables"
+msgstr "Variables externas"
 
 #: ../src/symbols.c:1803
 #, c-format
@@ -5179,9 +5146,8 @@ msgid "H_ide Sidebar"
 msgstr "_Ocultar barra lateral"
 
 #: ../src/sidebar.c:720 ../plugins/filebrowser.c:630
-#, fuzzy
 msgid "_Find in Files..."
-msgstr "_Buscar en archivos"
+msgstr "Buscar en arch_ivos…"
 
 #: ../src/sidebar.c:730
 msgid "Show _Paths"
@@ -5445,19 +5411,16 @@ msgid "Create Cla_ss"
 msgstr "Crear cla_se"
 
 #: ../plugins/classbuilder.c:1097
-#, fuzzy
 msgid "_C++ Class..."
-msgstr "Clase _C++"
+msgstr "Clase _C++..."
 
 #: ../plugins/classbuilder.c:1100
-#, fuzzy
 msgid "_GTK+ Class..."
-msgstr "Clase _GTK+"
+msgstr "Clase _GTK+..."
 
 #: ../plugins/classbuilder.c:1103
-#, fuzzy
 msgid "_PHP Class..."
-msgstr "Clase _PHP"
+msgstr "Clase _PHP..."
 
 #: ../plugins/htmlchars.c:40
 msgid "HTML Characters"
@@ -5535,9 +5498,8 @@ msgid "HTML (name)"
 msgstr "HTML (nombre)"
 
 #: ../plugins/htmlchars.c:739
-#, fuzzy
 msgid "_Insert Special HTML Characters..."
-msgstr "_Insertar caracteres especiales de HTML"
+msgstr "_Insertar caracteres especiales de HTML..."
 
 #. Add menuitem for html replacement functions
 #: ../plugins/htmlchars.c:754
@@ -5616,15 +5578,13 @@ msgstr "_Exportar"
 
 #. HTML
 #: ../plugins/export.c:787
-#, fuzzy
 msgid "As _HTML..."
-msgstr "Como _HTML"
+msgstr "Como _HTML..."
 
 #. LaTeX
 #: ../plugins/export.c:793
-#, fuzzy
 msgid "As _LaTeX..."
-msgstr "Como _LaTeX"
+msgstr "Como _LaTeX..."
 
 #: ../plugins/filebrowser.c:45
 msgid "File Browser"
@@ -5644,9 +5604,8 @@ msgid "Could not execute configured external command '%s' (%s)."
 msgstr "No se ha podido ejecutar el comando externo configurado «%s» (%s)."
 
 #: ../plugins/filebrowser.c:615
-#, fuzzy
 msgid "Open _Externally"
-msgstr "Abrir _externamente"
+msgstr "Abrir _externamente..."
 
 #: ../plugins/filebrowser.c:640
 msgid "Show _Hidden Files"
@@ -5778,7 +5737,7 @@ msgstr "Autoguardar"
 
 #: ../plugins/saveactions.c:600
 msgid "Enable save when losing _focus"
-msgstr ""
+msgstr "Activar guardar al perder _foco"
 
 #: ../plugins/saveactions.c:606 ../plugins/saveactions.c:668
 #: ../plugins/saveactions.c:709
@@ -5861,14 +5820,12 @@ msgid "_Top and Bottom"
 msgstr "_Vertical"
 
 #: ../plugins/splitwindow.c:429
-#, fuzzy
 msgid "Side by Side"
-msgstr "_Horizontal"
+msgstr "Yuxtapuestos"
 
 #: ../plugins/splitwindow.c:431
-#, fuzzy
 msgid "Top and Bottom"
-msgstr "_Vertical"
+msgstr "Arriba y abajo"
 
 #~ msgid "<b>Type:</b>"
 #~ msgstr "<b>Tipo:</b>"
