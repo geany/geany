@@ -5,6 +5,7 @@
 # Anna Talianova <anickat1@gmail.com>, 2008.
 # Karel Kolman <kolmis@gmail.com>, 2009-2011.
 # Miro Hrončok <miro@hroncok.cz>, 2013.
+# Stanislav Horáček <stanislav.horacek@gmail.com>, 2014.
 #
 msgid ""
 msgstr ""
@@ -12,7 +13,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-03-30 20:46+0200\n"
 "PO-Revision-Date: 2013-01-05 19:00+0100\n"
-"Last-Translator: Miro Hrončok <miro@hroncok.cz>\n"
+"Last-Translator: Stanislav Horáček <stanislav.horacek@gmail.com>\n"
 "Language-Team: Czech <geany-i18n@uvena.de>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
@@ -314,7 +315,7 @@ msgstr "<b>Různé</b>"
 
 #: ../data/geany.glade.h:56
 msgid "Always wrap search"
-msgstr ""
+msgstr "Vždy hledat v celém dokumentu"
 
 #: ../data/geany.glade.h:57
 msgid "Always wrap search around the document"
@@ -326,7 +327,7 @@ msgstr "Skrýt dialogové okno Najít"
 
 #: ../data/geany.glade.h:59
 msgid "Hide the Find dialog after clicking Find Next/Previous"
-msgstr "Skrýt sialogové okno Najít po kliknutí na Najít další/předchozí"
+msgstr "Skrýt dialogové okno Najít po kliknutí na Najít další/předchozí"
 
 #: ../data/geany.glade.h:60
 msgid "Use the current word under the cursor for Find dialogs"
@@ -527,7 +528,7 @@ msgstr "Volá funkci menu Zobrazit->Skrýt/zobrazit všechny ostatní panely"
 
 #: ../data/geany.glade.h:102
 msgid "Switch to last used document after closing a tab"
-msgstr "Přejít na naposledy používaný dokumentu po zvaření záložky"
+msgstr "Přejít na naposledy používaný dokumentu po zavření záložky"
 
 #: ../data/geany.glade.h:103
 msgid "<b>Editor tabs</b>"
@@ -638,7 +639,7 @@ msgid ""
 msgstr ""
 "Je-li povolena \"chytrá\" klávesa home, pak stisk klávesy HOME posune kurzor "
 "na první neprázdný znak na řádku, nachází-li se kurzor právě tam, je posunut "
-"na začátek rádku. Je-li tato volba vypnuta, stisknutí klávesy HOME posune "
+"na začátek řádku. Je-li tato volba vypnuta, stisknutí klávesy HOME posune "
 "kurzor vždy na začátek aktuálního řádku, nehledě na polohu kurzoru."
 
 #: ../data/geany.glade.h:127
@@ -720,7 +721,7 @@ msgid ""
 "<i>Project->Apply Default Indentation</i>."
 msgstr ""
 "Poznámka: Pro aplikaci těchto nastavení na všechny aktuálně otevřené soubory "
-"použijte <i>Projekt->Aplikuj automatické odsazení</i>."
+"použijte <i>Projekt->Aplikovat automatické odsazení</i>."
 
 #: ../data/geany.glade.h:142
 msgid "Width:"
@@ -1606,7 +1607,7 @@ msgstr "Terminál"
 
 #: ../data/geany.glade.h:332
 msgid "<i>Warning: read the manual before changing these preferences.</i>"
-msgstr "<i><Varování: před změnami v těchto nastaveních si přečtěte manuál./i>"
+msgstr "<i>Varování: před změnami v těchto nastaveních si přečtěte manuál.</i>"
 
 #: ../data/geany.glade.h:333
 msgid "<b>Various preferences</b>"
@@ -1677,46 +1678,39 @@ msgstr "Použít globální nastavení"
 
 #: ../data/geany.glade.h:347
 msgid "Size:"
-msgstr ""
+msgstr "Velikost"
 
 #: ../data/geany.glade.h:348
-#, fuzzy
 msgid "Location:"
-msgstr "<b>Umístění:</b>"
+msgstr "Umístění:"
 
 #: ../data/geany.glade.h:349
-#, fuzzy
 msgid "Read-only:"
-msgstr ", jen pro čtení"
+msgstr "Jen pro čtení:"
 
 #: ../data/geany.glade.h:350
-#, fuzzy
 msgid "Encoding:"
-msgstr "_Kódování:"
+msgstr "Kódování:"
 
 #: ../data/geany.glade.h:351
-#, fuzzy
 msgid "Modified:"
-msgstr "<b>Upraveno:</b>"
+msgstr "Upraveno:"
 
 #: ../data/geany.glade.h:352
-#, fuzzy
 msgid "Changed:"
-msgstr "_Změnit"
+msgstr "Změněno:"
 
 #: ../data/geany.glade.h:353
-#, fuzzy
 msgid "Accessed:"
-msgstr "<b>Poslední přístup:</b>"
+msgstr "Poslední přístup:"
 
 #: ../data/geany.glade.h:354
 msgid "(only inside Geany)"
 msgstr "(pouze pro Geany)"
 
 #: ../data/geany.glade.h:355
-#, fuzzy
 msgid "Permissions:"
-msgstr "<b>Oprávnění:</b>"
+msgstr "Oprávnění:"
 
 #: ../data/geany.glade.h:356
 msgid "Read:"
@@ -1792,7 +1786,7 @@ msgstr "Znovu načíst s kódování_m"
 
 #: ../data/geany.glade.h:374
 msgid "Page Set_up"
-msgstr "Nastavení Strán_ky"
+msgstr "Nastavení strán_ky"
 
 #: ../data/geany.glade.h:375
 #, fuzzy
@@ -2164,7 +2158,7 @@ msgstr "Aplikovat automatické odsazení na všechny dokumenty"
 
 #: ../data/geany.glade.h:464
 msgid "_Apply Default Indentation"
-msgstr "_Aplikuj automatické odsazení"
+msgstr "_Aplikovat automatické odsazení"
 
 #. build the code
 #: ../data/geany.glade.h:465 ../src/build.c:2566 ../src/build.c:2843
@@ -2643,7 +2637,7 @@ msgstr "JV a JZ Asie"
 
 #: ../src/dialogs.c:231
 msgid "Middle Eastern"
-msgstr "Střední Východ"
+msgstr "Střední východ"
 
 #: ../src/dialogs.c:233 ../src/encodings.c:112 ../src/encodings.c:113
 #: ../src/encodings.c:114 ../src/encodings.c:115 ../src/encodings.c:116
@@ -3122,7 +3116,7 @@ msgstr "_JV a JZ Asie"
 
 #: ../src/encodings.c:444
 msgid "_Middle Eastern"
-msgstr "_Střední Východ"
+msgstr "_Střední východ"
 
 #: ../src/encodings.c:450
 msgid "_Unicode"
@@ -3226,7 +3220,7 @@ msgstr "Současný typ souboru přepisuje výchozí styl."
 
 #: ../src/highlighting.c:1344
 msgid "This may cause color schemes to display incorrectly."
-msgstr "Toto může způspbit nesprávné zobrazení barevných schémat."
+msgstr "Toto může způsobit nesprávné zobrazení barevných schémat."
 
 #: ../src/highlighting.c:1365
 msgid "Color Schemes"
@@ -5602,7 +5596,7 @@ msgstr "Připojí záložku prohlížeče souborů k postranní liště"
 
 #: ../plugins/filebrowser.c:369
 msgid "Too many items selected!"
-msgstr "Vybráno příliš mnoho položek !"
+msgstr "Vybráno příliš mnoho položek!"
 
 #: ../plugins/filebrowser.c:445
 #, c-format
@@ -5643,7 +5637,7 @@ msgid ""
 "Filter your files with the usual wildcards. Separate multiple patterns with "
 "a space."
 msgstr ""
-"Filtrujte soubory bežnými divokými kartami. Více masek oddělte pomocí mezer."
+"Filtrujte soubory běžnými divokými kartami. Více masek oddělte pomocí mezer."
 
 #: ../plugins/filebrowser.c:1123
 msgid "Focus File List"
