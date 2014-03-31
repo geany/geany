@@ -7,9 +7,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.23\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-03-30 20:46+0200\n"
-"PO-Revision-Date: 2014-03-29 23:05+0300\n"
-"Last-Translator: Yosef Or Boczko <yoseforb@gmail.com>\n"
+"POT-Creation-Date: 2014-04-01 00:36+0300\n"
+"PO-Revision-Date: 2014-04-01 00:39+0300\n"
+"Last-Translator: Yosef Or Boczko <yoseforb@gnome.org>\n"
 "Language-Team: עברית <>\n"
 "Language: he\n"
 "MIME-Version: 1.0\n"
@@ -274,18 +274,14 @@ msgstr ""
 "יישומון העורך הראשי, חיפוש ומעבר שורה בסרגל הכלים ושדות במדמה המסוף (VTE)."
 
 #: ../data/geany.glade.h:53
-#, fuzzy
 msgid "Use Windows native dialogs"
-msgstr "שימוש בסייר הקבצים של חלונות לפתיחה ולשמירת קבצים"
+msgstr "שימוש בתיבות דו־שיח הטבעיות של Windows"
 
 #: ../data/geany.glade.h:54
-#, fuzzy
 msgid ""
 "Defines whether to use the Windows native dialogs or whether to use the GTK "
 "default dialogs"
-msgstr ""
-"מגדיר אם להשתמש בסייר הקבצים של חלונות לפתיחה ולשמירת קבצים או להשתמש בדו־"
-"שיח ברירת המחדל של GTK לפתיחת קבצים"
+msgstr "מגדיר אם להשתמש בתיבות דו־שיח של Windows או להשתמש ברירת מחדל של GTK"
 
 #: ../data/geany.glade.h:55
 msgid "<b>Miscellaneous</b>"
