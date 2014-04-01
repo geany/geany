@@ -11,8 +11,8 @@ msgstr ""
 "Project-Id-Version: Geany 1.24\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-03-30 20:46+0200\n"
-"PO-Revision-Date: 2014-01-30 23:01+0100\n"
-"Last-Translator: Giuseppe Penone <giuspen@gmail.com>\n"
+"PO-Revision-Date: 2014-04-01 21:33+0200\n"
+"Last-Translator: Federico Reghenzani <federico.dev@reghe.net>\n"
 "Language-Team:  <geany-i18n@uvena.de>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
@@ -287,12 +287,10 @@ msgstr ""
 "terminale."
 
 #: ../data/geany.glade.h:53
-#, fuzzy
 msgid "Use Windows native dialogs"
-msgstr "Utilizza le finestre di dialogo File Apri/Salva"
+msgstr "Utilizza le finestre di dialogo native di Windows"
 
 #: ../data/geany.glade.h:54
-#, fuzzy
 msgid ""
 "Defines whether to use the Windows native dialogs or whether to use the GTK "
 "default dialogs"
@@ -4828,19 +4826,16 @@ msgid "Properties"
 msgstr "Proprietà"
 
 #: ../src/symbols.c:975
-#, fuzzy
 msgid "Programs"
-msgstr "Programma"
+msgstr "Programmi"
 
 #: ../src/symbols.c:977
-#, fuzzy
 msgid "Functions / Subroutines"
 msgstr "Funzioni / Procedure"
 
 #: ../src/symbols.c:980
-#, fuzzy
 msgid "Components"
-msgstr "Completamenti"
+msgstr "Componenti"
 
 #: ../src/symbols.c:981
 msgid "Blocks"
@@ -4875,9 +4870,8 @@ msgid "Structs"
 msgstr "Strutture"
 
 #: ../src/symbols.c:1043
-#, fuzzy
 msgid "Extern Variables"
-msgstr "Variabili"
+msgstr "Variabili Esterne"
 
 #: ../src/symbols.c:1803
 #, c-format
@@ -5802,7 +5796,7 @@ msgstr "Salvataggio automatico"
 
 #: ../plugins/saveactions.c:600
 msgid "Enable save when losing _focus"
-msgstr ""
+msgstr "Abilita salvataggio quando il _focus viene perso"
 
 #: ../plugins/saveactions.c:606 ../plugins/saveactions.c:668
 #: ../plugins/saveactions.c:709
