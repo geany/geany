@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: Geany 1.23\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-03-30 20:46+0200\n"
-"PO-Revision-Date: 2014-03-29 21:28-0800\n"
+"PO-Revision-Date: 2014-03-31 17:37-0800\n"
 "Last-Translator: Xhacker Liu <liu.dongyuan@gmail.com>\n"
 "Language-Team: Chinese (simplified) <i18n-zh@googlegroups.com>\n"
 "Language: zh_CN\n"
@@ -271,16 +271,14 @@ msgstr ""
 "找和定位框和虚拟终端。"
 
 #: ../data/geany.glade.h:53
-#, fuzzy
 msgid "Use Windows native dialogs"
-msgstr "使用 Winodows 文件打开/保存对话框"
+msgstr "使用 Winodows 原生对话框"
 
 #: ../data/geany.glade.h:54
-#, fuzzy
 msgid ""
 "Defines whether to use the Windows native dialogs or whether to use the GTK "
 "default dialogs"
-msgstr "选择使用原生的 Windows 文件打开/保存对话框或者 GTK 默认的对话框"
+msgstr "选择使用 Windows 原生对话框或者 GTK 默认对话框"
 
 #: ../data/geany.glade.h:55
 msgid "<b>Miscellaneous</b>"
