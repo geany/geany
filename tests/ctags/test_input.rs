@@ -2,8 +2,22 @@
 #[feature(globs)];
 #[feature(macro_rules)];
 use std::*;
+use std::io::stdio::println;
 use test_input2::*;
 mod test_input2;
+
+pub struct A
+{
+	foo: fn() -> int,
+	bar: int
+}
+
+pub struct B
+{
+	#[cfg(test)]
+	foo: int,
+	bar: int
+}
 
 /*
  * fn ignored_in_comment() {}
@@ -18,14 +32,17 @@ mod test_input2;
 
 static size: uint = 1;
 
+#[cfg(test)]
 struct S1 {
-	only_field: [int, ..size]
+	priv only_field: [int, ..size]
 }
 
 macro_rules! test_macro
 {
 	() => {1}
 }
+
+macro_rules! ignore (($($x:tt)*) => (()))
 
 fn yada(a:int,c:Foo,b:test_input2::fruit::SomeStruct) -> ~str {
 	a.to_str()
@@ -43,6 +60,14 @@ fn main() {
 	(
 		fn ignored_inside_macro() {}
 	)
+	ignore!
+	[
+		fn ignored_inside_macro() {}
+	]
+	ignore!
+	{
+		fn ignored_inside_macro() {}
+	}
 
 	let _ = "fn ignored_in_string() {}
 	";
@@ -64,7 +89,7 @@ struct Foo2 {
 }
 
 impl Foo {
-	fn my_method(&self,_:int){ print("my_method of foo");}
+	fn my_method(&self,_:int){ println("my_method of foo");}
 }
 
 enum Animal {

@@ -1,3 +1,5 @@
+use std::io::stdio::println;
+
 pub fn foo_bar_test_func(apples:fruit::SomeStruct,(oranges,lemon):(int,int))->int{
 	let some_var_name=2*oranges;
 	let a=SomeLongStructName{v:0};
@@ -8,7 +10,9 @@ pub fn foo_bar_test_func(apples:fruit::SomeStruct,(oranges,lemon):(int,int))->in
 
 pub mod fruit {
 	pub struct SomeStruct{
-		red_value:int,green_value:int,blue_value:int
+		pub red_value: int,
+		pub green_value: int,
+		pub blue_value: int
 	}
 }
 

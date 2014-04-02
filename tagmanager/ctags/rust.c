@@ -67,6 +67,7 @@ typedef enum {
 	TOKEN_IDENT,
 	TOKEN_LSHIFT,
 	TOKEN_RSHIFT,
+	TOKEN_RARROW,
 	TOKEN_EOF
 } tokenType;
 
@@ -128,6 +129,9 @@ static void writeCurTokenToStr (lexerState *lexer, vString *out_str)
 			break;
 		case TOKEN_RSHIFT:
 			vStringCatS(out_str, ">>");
+			break;
+		case TOKEN_RARROW:
+			vStringCatS(out_str, "->");
 			break;
 		default:
 			vStringPut(out_str, (char) lexer->cur_token);
@@ -355,6 +359,11 @@ static int advanceToken (lexerState *lexer, boolean skip_whitspace)
 		{
 			advanceNChar(lexer, 2);
 			return lexer->cur_token = TOKEN_LSHIFT;
+		}
+		else if (lexer->cur_c == '-' && lexer->next_c == '>')
+		{
+			advanceNChar(lexer, 2);
+			return lexer->cur_token = TOKEN_RARROW;
 		}
 		else
 		{
@@ -706,10 +715,31 @@ static void parseStructOrEnum (lexerState *lexer, vString *scope, int parent_kin
 		vString *field_name = vStringNew();
 		while (lexer->cur_token != TOKEN_EOF)
 		{
+			int goal_tokens2[] = {'}', ','};
+			/* Skip attributes. Format:
+			 * #[..] or #![..]
+			 * */
+			if (lexer->cur_token == '#')
+			{
+				advanceToken(lexer, TRUE);
+				if (lexer->cur_token == '!')
+					advanceToken(lexer, TRUE);
+				if (lexer->cur_token == '[')
+				{
+					/* It's an attribute, skip it. */
+					skipUntil(lexer, NULL, 0);
+				}
+				else
+				{
+					/* Something's up with this field, skip to the next one */
+					skipUntil(lexer, goal_tokens2, 2);
+					continue;
+				}
+			}
 			if (lexer->cur_token == TOKEN_IDENT)
 			{
-				int goal_tokens2[] = {'}', ','};
-				if (strcmp(lexer->token_str->buffer, "priv") == 0)
+				if (strcmp(lexer->token_str->buffer, "priv") == 0
+				    || strcmp(lexer->token_str->buffer, "pub") == 0)
 				{
 					advanceToken(lexer, TRUE);
 					if (lexer->cur_token != TOKEN_IDENT)
@@ -746,19 +776,22 @@ static void skipMacro (lexerState *lexer)
 	int minus_token = 0;
 
 	advanceToken(lexer, TRUE);
-	if (lexer->cur_token == '(')
+	switch (lexer->cur_token)
 	{
-		plus_token = '(';
-		minus_token = ')';
-	}
-	else if (lexer->cur_token == '{')
-	{
-		plus_token = '{';
-		minus_token = '}';
-	}
-	else
-	{
-		return;
+		case '(':
+			plus_token = '(';
+			minus_token = ')';
+			break;
+		case '{':
+			plus_token = '{';
+			minus_token = '}';
+			break;
+		case '[':
+			plus_token = '[';
+			minus_token = ']';
+			break;
+		default:
+			return;
 	}
 
 	while (lexer->cur_token != TOKEN_EOF)
