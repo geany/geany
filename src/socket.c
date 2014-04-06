@@ -64,9 +64,9 @@
 # include <netinet/in.h>
 # include <glib/gstdio.h>
 #else
-# include <gdk/gdkwin32.h>
-# include <windows.h>
 # include <winsock2.h>
+# include <windows.h>
+# include <gdk/gdkwin32.h>
 # include <ws2tcpip.h>
 #endif
 #include <string.h>
