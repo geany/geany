@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.23\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-03-30 20:46+0200\n"
-"PO-Revision-Date: 2014-03-23 09:01+0200\n"
+"POT-Creation-Date: 2014-04-06 08:21+0300\n"
+"PO-Revision-Date: 2014-04-06 08:42+0200\n"
 "Last-Translator: Algimantas Margevičius <algimantas@margevicius.lt>\n"
 "Language-Team: Lietuvių <>\n"
 "Language: lt\n"
@@ -277,17 +277,16 @@ msgstr ""
 "paieška, „eiti į eilutę“ laukeliais ir VTE."
 
 #: ../data/geany.glade.h:53
-#, fuzzy
 msgid "Use Windows native dialogs"
-msgstr "Naudoti langų tvarkyklės „Failas Atverti/Saugoti“ dialogus"
+msgstr "Naudoti langų tvarkyklės dialogus"
 
 #: ../data/geany.glade.h:54
-#, fuzzy
 msgid ""
 "Defines whether to use the Windows native dialogs or whether to use the GTK "
 "default dialogs"
 msgstr ""
-"Nustato ar naudoti langų tvarkyklės failo meniu ar GTK numatytuosius dialogus"
+"Nustato ar naudoti langų tvarkyklės failo meniu dialogus ar GTK "
+"numatytuosius dialogus"
 
 #: ../data/geany.glade.h:55
 msgid "<b>Miscellaneous</b>"
@@ -467,8 +466,8 @@ msgid ""
 "Shows a small cross button in the file tabs to easily close files when "
 "clicking on it (requires restart of Geany)"
 msgstr ""
-"Ant failų kortelių rodo mažus mygtukus, su kryžiuku, greitam užvėrimui"
-"(reikės paleisti Geany iš naujo)"
+"Ant failų kortelių rodo mažus mygtukus, su kryžiuku, greitam "
+"užvėrimui(reikės paleisti Geany iš naujo)"
 
 #: ../data/geany.glade.h:95
 msgid "Placement of new file tabs:"
