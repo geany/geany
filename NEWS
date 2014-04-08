@@ -10,15 +10,22 @@ Geany 1.24 (unreleased)
     * Fix stopping of some spawned commands.
     * Fix cursor position and selection after comment toggling (#3576431).
     * Fix truncated output of ``--list-documents`` command-line option.
-    * Fix launching a new instance when ``--list-documents`` is passed and
-      no other instance is running.
+    * Fix launching a new instance when ``--list-documents`` is passed
+      and no other instance is running.
+    * Fix crash if a Custom Command returns after its related document
+      has been closed.
+    * Fix typo in "deque" C++ include name (#1027).
 
     Interface
     * Fix custom GTK styles under KDE (#3607935).
     * Add Find entries in the Symbol List popup menu (#3608278).
     * Flatten-out the View menu.
     * Add a button to directly configure a plugin's keybindings in the
-      plugin manager (Pavel Roschin)
+      plugin manager (Pavel Roschin).
+    * Add an Apply button to the color chooser dialog (FR#686,
+      Steven Valsesia).
+    * Use a non-cropped 16x16 application icon (#1010).
+    * Fix "leaks" of geany_run_script (#975).
 
     Editor
     * Update Scintilla to version 3.3.6.
@@ -28,6 +35,7 @@ Geany 1.24 (unreleased)
 
     Search
     * Fix bulk Search & Replace not to match replacements.
+    * Search when activating the Replace dialog find entry.
 
     Filetypes
     * Add CUDA filetype (PR#147, Benjamin Chrétien).
@@ -40,15 +48,18 @@ Geany 1.24 (unreleased)
     * Update PHP global tags file (PR#137, John Long).
     * Fix Asciidoc parser recognition of open block as underline.
     * Fix symbol list entry for Asciidoc headers containing a dot.
+    * Fix Asciidoc title parsing.
     * SQL parsing improvements.
     * Extend list of recognized keywords for SQL.
     * Fix SQL single-line comment marker (#997).
     * Fix parsing of some JavaScript constructors.
     * Fix parsing a JavaScript regular expression in a return statement.
+    * Fix parsing JavaScript files with a shebang.
     * Parse Java annotations with parameters (#924, Braden Walters).
     * Display Java enums in the symbol list.
     * Fix parsing of C++ static_assert.
     * Fix parsing of typed enums in C# and C++.
+    * Mitigate parsing errors on C++ generics containing an expression.
     * Fix parsing of Frotran "forall" blocks and procedure pointers
       (Alexander Eberspächer).
     * Fix parsing of complex Cython types.
@@ -62,16 +73,30 @@ Geany 1.24 (unreleased)
     * Fix argument list on some Python constructors.
     * Fix R indenting to use braces.
     * Display R sources and libraries in the symbol list.
+    * Many improvements to the Fortran tag parser (#1023, #1030, with
+      help from Adam Hirst).
+    * Put Makefile comments at start of line.
+    * Add some missing Pascal keywords (#1033).
+    * Add default build command for Bibtex in the Latex filetype
+      (PR#227, Francisco Iacobelli).
+    * Ignore Python imports when going to a tag's definition.
 
     Internationalization
     * Make date templates translatable (Christian Dywan).
     * Update translations: cs, de, es, eu, he, it, lt, sk, sl, sv, zh_CN
+
+    Plugins
+    * Save Actions: add autosave when the editor lose focus (FR#683,
+      Steven Valsesia).
 
     API
     * Add plugin_builder_connect_signals().
 
     Windows
     * Fix infinite pagination when printing (#961).
+    * Fix spawning commands with spaces (#943).
+    * Allow to use the GTK color chooser dialog (PR#218, Steven Valsesia).
+    * Add default extension to native save dialogs (#1021).
 
 
 Geany 1.23.1 (May 19, 2013)
