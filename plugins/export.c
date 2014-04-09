@@ -569,7 +569,7 @@ static void write_html_file(GeanyDocument *doc, const gchar *filename,
 	ScintillaObject *sci = doc->editor->sci;
 	gint i, doc_len, style = -1, old_style = 0, column = 0;
 	gint k, line_number, line_number_width, line_number_max_width = 0, pad;
-	gchar c, c_next, *date;
+	gchar c, c_next, *date, *doc_filename;
 	/* 0 - fore, 1 - back, 2 - bold, 3 - italic, 4 - font size, 5 - used(0/1) */
 	gint styles[STYLE_MAX + 1][MAX_TYPES];
 	gboolean span_open = FALSE;
@@ -721,12 +721,13 @@ static void write_html_file(GeanyDocument *doc, const gchar *filename,
 	}
 
 	date = get_date(DATE_TYPE_HTML);
+	doc_filename = g_markup_escape_text(DOC_FILENAME(doc), -1);
 	/* write all */
 	html = g_string_new(TEMPLATE_HTML);
 	utils_string_replace_all(html, "{export_date}", date);
 	utils_string_replace_all(html, "{export_content}", body->str);
 	utils_string_replace_all(html, "{export_styles}", css->str);
-	utils_string_replace_all(html, "{export_filename}", DOC_FILENAME(doc));
+	utils_string_replace_all(html, "{export_filename}", doc_filename);
 
 	write_data(filename, html->str);
 
@@ -734,6 +735,7 @@ static void write_html_file(GeanyDocument *doc, const gchar *filename,
 	g_string_free(body, TRUE);
 	g_string_free(css, TRUE);
 	g_string_free(html, TRUE);
+	g_free(doc_filename);
 	g_free(date);
 }
 
