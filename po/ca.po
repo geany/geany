@@ -1,22 +1,23 @@
 # Catalan translations for Geany package.
 # Copyright (C) 2007-2011 by Geany's COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# toni <topi@elpiset.net>, 2007-2013.
+# toni <topi@elpiset.net>, 2007-2014.
 #
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Geany 1.23\n"
+"Project-Id-Version: Geany 1.24\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-03-30 20:46+0200\n"
-"PO-Revision-Date: 2013-03-07 20:54+0100\n"
-"Last-Translator: Toni Garcia-Navarro <topi@elpiset.net>\n"
+"POT-Creation-Date: 2014-04-08 02:36+0000\n"
+"PO-Revision-Date: 2014-04-08 09:05+0100\n"
+"Last-Translator: \n"
 "Language-Team: Catalan <ca@dodds.net>\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n"
+"X-Generator: Poedit 1.5.4\n"
 
 #: ../geany.desktop.in.h:1 ../data/geany.glade.h:365
 msgid "Geany"
@@ -280,18 +281,16 @@ msgstr ""
 "Terminal."
 
 #: ../data/geany.glade.h:53
-#, fuzzy
 msgid "Use Windows native dialogs"
-msgstr "Utilitza la finestra d'Obrir/Desar del Windows"
+msgstr "Utilitza les finestres de Windows"
 
 #: ../data/geany.glade.h:54
-#, fuzzy
 msgid ""
 "Defines whether to use the Windows native dialogs or whether to use the GTK "
 "default dialogs"
 msgstr ""
-"Defineix si s'utilitzen les finestres d'Obrir/Desar nadiues del Windows o "
-"les predeterminades de GTK"
+"Defineix si s'utilitzen les finestres nadiues de Windows o les "
+"predeterminades de GTK"
 
 #: ../data/geany.glade.h:55
 msgid "<b>Miscellaneous</b>"
@@ -1673,46 +1672,39 @@ msgstr "Utilitzeu les preferències globals"
 
 #: ../data/geany.glade.h:347
 msgid "Size:"
-msgstr ""
+msgstr "Mida:"
 
 #: ../data/geany.glade.h:348
-#, fuzzy
 msgid "Location:"
-msgstr "<b>Ubicació:</b>"
+msgstr "Ubicació:"
 
 #: ../data/geany.glade.h:349
-#, fuzzy
 msgid "Read-only:"
-msgstr ", només lectura"
+msgstr "Només lectura:"
 
 #: ../data/geany.glade.h:350
-#, fuzzy
 msgid "Encoding:"
-msgstr "_Codificació:"
+msgstr "Codificació:"
 
 #: ../data/geany.glade.h:351
-#, fuzzy
 msgid "Modified:"
-msgstr "<b>Modificat:</b>"
+msgstr "Modificat:"
 
 #: ../data/geany.glade.h:352
-#, fuzzy
 msgid "Changed:"
-msgstr "Can_via"
+msgstr "Modificat:"
 
 #: ../data/geany.glade.h:353
-#, fuzzy
 msgid "Accessed:"
-msgstr "<b>Accedit:</b>"
+msgstr "Accedit:"
 
 #: ../data/geany.glade.h:354
 msgid "(only inside Geany)"
 msgstr "(només dins Geany)"
 
 #: ../data/geany.glade.h:355
-#, fuzzy
 msgid "Permissions:"
-msgstr "<b>Permisos:</b>"
+msgstr "Permisos:"
 
 #: ../data/geany.glade.h:356
 msgid "Read:"
@@ -1759,18 +1751,16 @@ msgid "New (with _Template)"
 msgstr "Nou (des de Plan_tilla)"
 
 #: ../data/geany.glade.h:368
-#, fuzzy
 msgid "_Open..."
-msgstr "_Obrir"
+msgstr "_Obrir..."
 
 #: ../data/geany.glade.h:369
 msgid "Recent _Files"
 msgstr "_Fitxers Recents"
 
 #: ../data/geany.glade.h:370
-#, fuzzy
 msgid "Save _As..."
-msgstr "Desa com"
+msgstr "Desa _Com..."
 
 #: ../data/geany.glade.h:371
 msgid "Save A_ll"
@@ -1790,9 +1780,8 @@ msgid "Page Set_up"
 msgstr "_Configuració de la pàgina"
 
 #: ../data/geany.glade.h:375
-#, fuzzy
 msgid "_Print..."
-msgstr "Imprimeix"
+msgstr "Im_primeix..."
 
 #: ../data/geany.glade.h:376 ../src/notebook.c:490
 msgid "Close Ot_her Documents"
@@ -1891,9 +1880,8 @@ msgid "P_lugin Preferences"
 msgstr "_Preferències dels Plugins"
 
 #: ../data/geany.glade.h:400
-#, fuzzy
 msgid "_Find..."
-msgstr "Cerca"
+msgstr "_Cerca..."
 
 #: ../data/geany.glade.h:401
 msgid "Find _Next"
@@ -1904,14 +1892,12 @@ msgid "Find _Previous"
 msgstr "Cerca l'_Anterior"
 
 #: ../data/geany.glade.h:403 ../src/symbols.c:2425
-#, fuzzy
 msgid "Find in F_iles..."
-msgstr "Cerca en els F_itxers"
+msgstr "Cerca en els F_itxers..."
 
 #: ../data/geany.glade.h:404
-#, fuzzy
 msgid "_Replace..."
-msgstr "_Reemplaça"
+msgstr "_Reemplaça..."
 
 #: ../data/geany.glade.h:405
 msgid "Next _Message"
@@ -1930,9 +1916,8 @@ msgid "_Go to Previous Marker"
 msgstr "Ves a la Marca _Anterior"
 
 #: ../data/geany.glade.h:409
-#, fuzzy
 msgid "_Go to Line..."
-msgstr "_Vés a la Línia"
+msgstr "_Vés a la Línia..."
 
 #: ../data/geany.glade.h:410 ../src/keybindings.c:440
 msgid "Find Next _Selection"
@@ -1955,14 +1940,12 @@ msgid "_View"
 msgstr "_Visualitza"
 
 #: ../data/geany.glade.h:415
-#, fuzzy
 msgid "Change _Font..."
-msgstr "Canvia el _Tipus de Lletra"
+msgstr "Canvia el _Tipus de Lletra..."
 
 #: ../data/geany.glade.h:416
-#, fuzzy
 msgid "Change _Color Scheme..."
-msgstr "Esquemes de _Color"
+msgstr "Canvia l'Esquema de _Colors..."
 
 #: ../data/geany.glade.h:417
 msgid "Show _Markers Margin"
@@ -2113,9 +2096,8 @@ msgid "_Replace Tabs by Spaces"
 msgstr "_Reemplaça Tabulacions per Espais"
 
 #: ../data/geany.glade.h:454
-#, fuzzy
 msgid "Replace Spaces b_y Tabs..."
-msgstr "Ree_mplaça Espais per Tabulacions"
+msgstr "Ree_mplaça Espais per Tabulacions..."
 
 #: ../data/geany.glade.h:455
 msgid "_Fold All"
@@ -2138,9 +2120,8 @@ msgid "_Project"
 msgstr "_Projecte"
 
 #: ../data/geany.glade.h:460
-#, fuzzy
 msgid "_New..."
-msgstr "_Nou"
+msgstr "_Nou..."
 
 #: ../data/geany.glade.h:461
 msgid "_Recent Projects"
@@ -2184,9 +2165,8 @@ msgid "_Word Count"
 msgstr "_Recompte de Paraules"
 
 #: ../data/geany.glade.h:471
-#, fuzzy
 msgid "Load Ta_gs..."
-msgstr "Carrega _Etiquetes"
+msgstr "Carrega _Etiquetes..."
 
 #: ../data/geany.glade.h:472
 msgid "_Help"
@@ -2209,14 +2189,12 @@ msgid "Wi_ki"
 msgstr "Wi_ki"
 
 #: ../data/geany.glade.h:477
-#, fuzzy
 msgid "Report a _Bug..."
-msgstr "Reporta un _Error"
+msgstr "Reporta un _Error..."
 
 #: ../data/geany.glade.h:478
-#, fuzzy
 msgid "_Donate..."
-msgstr "Fes una _Donació"
+msgstr "Fes una _Donació..."
 
 #: ../data/geany.glade.h:479 ../src/sidebar.c:124
 msgid "Symbols"
@@ -2512,14 +2490,13 @@ msgstr "_Executa"
 
 #. build the code with make custom
 #: ../src/build.c:2618 ../src/build.c:2809 ../src/build.c:2863
-#, fuzzy
 msgid "Make Custom _Target..."
-msgstr "M_ake..."
+msgstr "Munta amb _Objectiu Especificat..."
 
 #. build the code with make object
 #: ../src/build.c:2620 ../src/build.c:2810 ../src/build.c:2871
 msgid "Make _Object"
-msgstr "Make _Object"
+msgstr "Munta _Objecte"
 
 #: ../src/build.c:2622 ../src/build.c:2808
 msgid "_Make"
@@ -2723,20 +2700,20 @@ msgstr "R_eanomena"
 msgid "Save the file and rename it"
 msgstr "Desa el fitxer i reanomena'l"
 
-#: ../src/dialogs.c:686 ../src/win32.c:687
+#: ../src/dialogs.c:686 ../src/win32.c:688
 msgid "Error"
 msgstr "Error"
 
 #: ../src/dialogs.c:689 ../src/dialogs.c:767 ../src/dialogs.c:1333
-#: ../src/win32.c:693
+#: ../src/win32.c:694
 msgid "Question"
 msgstr "Pregunta"
 
-#: ../src/dialogs.c:692 ../src/win32.c:699
+#: ../src/dialogs.c:692 ../src/win32.c:700
 msgid "Warning"
 msgstr "Advertència"
 
-#: ../src/dialogs.c:695 ../src/win32.c:705
+#: ../src/dialogs.c:695 ../src/win32.c:706
 msgid "Information"
 msgstr "Informació"
 
@@ -2772,9 +2749,9 @@ msgid "unknown"
 msgstr "desconegut"
 
 #: ../src/dialogs.c:1214
-#, fuzzy, c-format
+#, c-format
 msgid "%s Properties"
-msgstr "Propietats"
+msgstr "Propietats de %s"
 
 #: ../src/dialogs.c:1247 ../src/ui_utils.c:285
 msgid "(with BOM)"
@@ -3136,36 +3113,32 @@ msgid "%s file"
 msgstr "fitxer %s"
 
 #: ../src/filetypes.c:93
-#, fuzzy, c-format
+#, c-format
 msgid "%s script"
 msgstr "fitxer de script %s"
 
 #: ../src/filetypes.c:94
-#, fuzzy, c-format
+#, c-format
 msgid "%s document"
-msgstr "Document XML"
+msgstr "Document %s"
 
 #: ../src/filetypes.c:164
-#, fuzzy
 msgid "Shell"
-msgstr "Intèrpret d'ordres:"
+msgstr "Intèrpret d'ordres"
 
 #: ../src/filetypes.c:165
 msgid "Makefile"
 msgstr "Makefile"
 
 #: ../src/filetypes.c:169
-#, fuzzy
 msgid "Cascading Stylesheet"
 msgstr "Full d'estil en cascada (CSS)"
 
 #: ../src/filetypes.c:178
-#, fuzzy
 msgid "Config"
-msgstr "Fitxer de configuració"
+msgstr "Configuració"
 
 #: ../src/filetypes.c:179
-#, fuzzy
 msgid "Gettext translation"
 msgstr "Fitxer de traduccions de gettext"
 
@@ -3185,13 +3158,13 @@ msgstr "Llenguatges de _Marcatge"
 msgid "M_iscellaneous"
 msgstr "M_iscel·lània"
 
-#: ../src/filetypes.c:1168 ../src/win32.c:105
+#: ../src/filetypes.c:1168 ../src/win32.c:106
 msgid "All Source"
 msgstr "Tot Codi Font"
 
 #. create meta file filter "All files"
-#: ../src/filetypes.c:1193 ../src/project.c:300 ../src/win32.c:95
-#: ../src/win32.c:140 ../src/win32.c:161 ../src/win32.c:166
+#: ../src/filetypes.c:1193 ../src/project.c:300 ../src/win32.c:96
+#: ../src/win32.c:141 ../src/win32.c:162 ../src/win32.c:167
 msgid "All files"
 msgstr "Tots els fitxers"
 
@@ -3710,15 +3683,15 @@ msgstr "Compila"
 
 #: ../src/keybindings.c:595
 msgid "Make all"
-msgstr "Compila-ho tot"
+msgstr "Munta-ho tot"
 
 #: ../src/keybindings.c:598
 msgid "Make custom target"
-msgstr "Compila amb make (objectiu especificat)"
+msgstr "Munta amb objectiu especificat"
 
 #: ../src/keybindings.c:600
 msgid "Make object"
-msgstr "Compila amb 'make object'"
+msgstr "Munta (make object)"
 
 #: ../src/keybindings.c:602
 msgid "Next error"
@@ -4613,12 +4586,11 @@ msgstr "Mòduls"
 
 #: ../src/symbols.c:786 ../src/symbols.c:817
 msgid "Traits"
-msgstr ""
+msgstr "Trets (Traits)"
 
 #: ../src/symbols.c:787
-#, fuzzy
 msgid "Implementations"
-msgstr "Implementa:"
+msgstr "Implementacions"
 
 #: ../src/symbols.c:789 ../src/symbols.c:1033
 msgid "Typedefs / Enums"
@@ -4749,26 +4721,23 @@ msgstr "Membres"
 
 #: ../src/symbols.c:927 ../src/symbols.c:982
 msgid "Enums"
-msgstr ""
+msgstr "Enumerats"
 
 #: ../src/symbols.c:939
 msgid "Properties"
 msgstr "Propietats"
 
 #: ../src/symbols.c:975
-#, fuzzy
 msgid "Programs"
-msgstr "Programa"
+msgstr "Programes"
 
 #: ../src/symbols.c:977
-#, fuzzy
 msgid "Functions / Subroutines"
 msgstr "Funcions / Procediments"
 
 #: ../src/symbols.c:980
-#, fuzzy
 msgid "Components"
-msgstr "Completats"
+msgstr "Components"
 
 #: ../src/symbols.c:981
 msgid "Blocks"
@@ -4803,9 +4772,8 @@ msgid "Structs"
 msgstr "Estructures"
 
 #: ../src/symbols.c:1043
-#, fuzzy
 msgid "Extern Variables"
-msgstr "Variables"
+msgstr "Variables Externes"
 
 #: ../src/symbols.c:1803
 #, c-format
@@ -5128,9 +5096,8 @@ msgid "H_ide Sidebar"
 msgstr "Amaga la Barra _Lateral"
 
 #: ../src/sidebar.c:720 ../plugins/filebrowser.c:630
-#, fuzzy
 msgid "_Find in Files..."
-msgstr "_Cerca en els Fitxers"
+msgstr "_Cerca en els Fitxers..."
 
 #: ../src/sidebar.c:730
 msgid "Show _Paths"
@@ -5282,15 +5249,15 @@ msgstr ""
 "No es pot canviar el directori en l'Emulador de Terminal, probablement "
 "s'està executant una ordre."
 
-#: ../src/win32.c:160
+#: ../src/win32.c:161
 msgid "Geany project files"
 msgstr "Fitxers de projecte de Geany"
 
-#: ../src/win32.c:165
+#: ../src/win32.c:166
 msgid "Executables"
 msgstr "Executables"
 
-#: ../src/win32.c:1217
+#: ../src/win32.c:1218
 #, c-format
 msgid "Process timed out after %.02f s!"
 msgstr "El procés ha excedit el límit de temps de %.02f s!"
@@ -5392,19 +5359,16 @@ msgid "Create Cla_ss"
 msgstr "Crea Cla_sse"
 
 #: ../plugins/classbuilder.c:1097
-#, fuzzy
 msgid "_C++ Class..."
-msgstr "Classe _C++"
+msgstr "Classe _C++..."
 
 #: ../plugins/classbuilder.c:1100
-#, fuzzy
 msgid "_GTK+ Class..."
-msgstr "Classe _GTK+"
+msgstr "Classe _GTK+..."
 
 #: ../plugins/classbuilder.c:1103
-#, fuzzy
 msgid "_PHP Class..."
-msgstr "Classe _PHP"
+msgstr "Classe _PHP..."
 
 #: ../plugins/htmlchars.c:40
 msgid "HTML Characters"
@@ -5482,9 +5446,8 @@ msgid "HTML (name)"
 msgstr "HTML (nom)"
 
 #: ../plugins/htmlchars.c:739
-#, fuzzy
 msgid "_Insert Special HTML Characters..."
-msgstr "_Insereix Caràcter Especial HTML"
+msgstr "_Insereix Caràcter Especial HTML..."
 
 #. Add menuitem for html replacement functions
 #: ../plugins/htmlchars.c:754
@@ -5561,15 +5524,13 @@ msgstr "_Exporta"
 
 #. HTML
 #: ../plugins/export.c:787
-#, fuzzy
 msgid "As _HTML..."
-msgstr "Com a _HTML"
+msgstr "Com a _HTML..."
 
 #. LaTeX
 #: ../plugins/export.c:793
-#, fuzzy
 msgid "As _LaTeX..."
-msgstr "Com a _LaTeX"
+msgstr "Com a _LaTeX..."
 
 #: ../plugins/filebrowser.c:45
 msgid "File Browser"
@@ -5589,9 +5550,8 @@ msgid "Could not execute configured external command '%s' (%s)."
 msgstr "No s'ha pogut executar l'ordre externa '%s' (%s)."
 
 #: ../plugins/filebrowser.c:615
-#, fuzzy
 msgid "Open _Externally"
-msgstr "Obre _externament"
+msgstr "Obre _Externament..."
 
 #: ../plugins/filebrowser.c:640
 msgid "Show _Hidden Files"
@@ -5723,7 +5683,7 @@ msgstr "Auto Desa"
 
 #: ../plugins/saveactions.c:600
 msgid "Enable save when losing _focus"
-msgstr ""
+msgstr "Desa quan es perd el _focus"
 
 #: ../plugins/saveactions.c:606 ../plugins/saveactions.c:668
 #: ../plugins/saveactions.c:709
@@ -5806,14 +5766,12 @@ msgid "_Top and Bottom"
 msgstr "_Dalt i Baix"
 
 #: ../plugins/splitwindow.c:429
-#, fuzzy
 msgid "Side by Side"
-msgstr "_Junts"
+msgstr "Un al Costat de l'Altre"
 
 #: ../plugins/splitwindow.c:431
-#, fuzzy
 msgid "Top and Bottom"
-msgstr "_Dalt i Baix"
+msgstr "Dalt i Baix"
 
 #~ msgid "<b>Type:</b>"
 #~ msgstr "<b>Tipus:</b>"
