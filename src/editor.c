@@ -4164,8 +4164,12 @@ void editor_insert_color(GeanyEditor *editor, const gchar *colour)
 		if (sci_get_char_at(editor->sci, start) == '0' &&
 			sci_get_char_at(editor->sci, start + 1) == 'x')
 		{
+			gint end = sci_get_selection_end(editor->sci);
+
 			sci_set_selection_start(editor->sci, start + 2);
-			sci_set_selection_end(editor->sci, start + 8);
+			/* we need to also re-set the selection end in case the anchor was located before
+			 * the cursor, since set_selection_start() always moves the cursor, not the anchor */
+			sci_set_selection_end(editor->sci, end);
 			replacement++; /* skip the leading "0x" */
 		}
 		else if (sci_get_char_at(editor->sci, start - 1) == '#')
