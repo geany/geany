@@ -393,7 +393,7 @@ static void write_latex_file(GeanyDocument *doc, const gchar *filename,
 	/* read the document and write the LaTeX code */
 	body = g_string_new("");
 	doc_len = sci_get_length(sci);
-	for (i = 0; i <= doc_len; i++)
+	for (i = 0; i < doc_len; i++)
 	{
 		style = sci_get_style_at(sci, i);
 		c = sci_get_char_at(sci, i);
@@ -635,7 +635,7 @@ static void write_html_file(GeanyDocument *doc, const gchar *filename,
 	/* read the document and write the HTML body */
 	body = g_string_new("");
 	doc_len = sci_get_length(sci);
-	for (i = 0; i <= doc_len; i++)
+	for (i = 0; i < doc_len; i++)
 	{
 		style = sci_get_style_at(sci, i);
 		c = sci_get_char_at(sci, i);
