@@ -492,40 +492,14 @@ static void write_latex_file(GeanyDocument *doc, const gchar *filename,
 				g_string_append(body, "\\symbol{94}");
 				break;
 			}
-			/** TODO still don't work for "---" or "----" */
-			case '-':  /* mask "--" */
+			/* mask "--", "<<" and ">>" */
+			case '-':
+			case '<':
+			case '>':
 			{
-				if (c_next == '-')
-				{
-					g_string_append(body, "-\\/-");
-					i++; /* skip the next character */
-				}
-				else
-					g_string_append_c(body, '-');
-
-				break;
-			}
-			case '<':  /* mask "<<" */
-			{
-				if (c_next == '<')
-				{
-					g_string_append(body, "<\\/<");
-					i++; /* skip the next character */
-				}
-				else
-					g_string_append_c(body, '<');
-
-				break;
-			}
-			case '>':  /* mask ">>" */
-			{
-				if (c_next == '>')
-				{
-					g_string_append(body, ">\\/>");
-					i++; /* skip the next character */
-				}
-				else
-					g_string_append_c(body, '>');
+				g_string_append_c(body, c);
+				if (c_next == c)
+					g_string_append(body, "\\/");
 
 				break;
 			}
