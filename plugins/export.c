@@ -393,7 +393,7 @@ static void write_latex_file(GeanyDocument *doc, const gchar *filename,
 	/* read the document and write the LaTeX code */
 	body = g_string_new("");
 	doc_len = sci_get_length(sci);
-	for (i = 0; i <= doc_len; i++)
+	for (i = 0; i < doc_len; i++)
 	{
 		style = sci_get_style_at(sci, i);
 		c = sci_get_char_at(sci, i);
@@ -492,40 +492,14 @@ static void write_latex_file(GeanyDocument *doc, const gchar *filename,
 				g_string_append(body, "\\symbol{94}");
 				break;
 			}
-			/** TODO still don't work for "---" or "----" */
-			case '-':  /* mask "--" */
+			/* mask "--", "<<" and ">>" */
+			case '-':
+			case '<':
+			case '>':
 			{
-				if (c_next == '-')
-				{
-					g_string_append(body, "-\\/-");
-					i++; /* skip the next character */
-				}
-				else
-					g_string_append_c(body, '-');
-
-				break;
-			}
-			case '<':  /* mask "<<" */
-			{
-				if (c_next == '<')
-				{
-					g_string_append(body, "<\\/<");
-					i++; /* skip the next character */
-				}
-				else
-					g_string_append_c(body, '<');
-
-				break;
-			}
-			case '>':  /* mask ">>" */
-			{
-				if (c_next == '>')
-				{
-					g_string_append(body, ">\\/>");
-					i++; /* skip the next character */
-				}
-				else
-					g_string_append_c(body, '>');
+				g_string_append_c(body, c);
+				if (c_next == c)
+					g_string_append(body, "\\/");
 
 				break;
 			}
@@ -544,7 +518,7 @@ static void write_latex_file(GeanyDocument *doc, const gchar *filename,
 
 	/* write used styles in the header */
 	cmds = g_string_new("");
-	for (i = 0; i <= STYLE_MAX; i++)
+	for (i = 0; i < style_max; i++)
 	{
 		if (styles[i][USED])
 		{
@@ -577,10 +551,7 @@ static void write_latex_file(GeanyDocument *doc, const gchar *filename,
 	utils_string_replace_all(latex, "{export_content}", body->str);
 	utils_string_replace_all(latex, "{export_styles}", cmds->str);
 	utils_string_replace_all(latex, "{export_date}", date);
-	if (doc->file_name == NULL)
-		utils_string_replace_all(latex, "{export_filename}", GEANY_STRING_UNTITLED);
-	else
-		utils_string_replace_all(latex, "{export_filename}", doc->file_name);
+	utils_string_replace_all(latex, "{export_filename}", DOC_FILENAME(doc));
 
 	write_data(filename, latex->str);
 
@@ -598,7 +569,7 @@ static void write_html_file(GeanyDocument *doc, const gchar *filename,
 	ScintillaObject *sci = doc->editor->sci;
 	gint i, doc_len, style = -1, old_style = 0, column = 0;
 	gint k, line_number, line_number_width, line_number_max_width = 0, pad;
-	gchar c, c_next, *date;
+	gchar c, c_next, *date, *doc_filename;
 	/* 0 - fore, 1 - back, 2 - bold, 3 - italic, 4 - font size, 5 - used(0/1) */
 	gint styles[STYLE_MAX + 1][MAX_TYPES];
 	gboolean span_open = FALSE;
@@ -635,7 +606,7 @@ static void write_html_file(GeanyDocument *doc, const gchar *filename,
 	/* read the document and write the HTML body */
 	body = g_string_new("");
 	doc_len = sci_get_length(sci);
-	for (i = 0; i <= doc_len; i++)
+	for (i = 0; i < doc_len; i++)
 	{
 		style = sci_get_style_at(sci, i);
 		c = sci_get_char_at(sci, i);
@@ -737,7 +708,7 @@ static void write_html_file(GeanyDocument *doc, const gchar *filename,
 	"\tbody\n\t{\n\t\tfont-family: %s, monospace;\n\t\tfont-size: %dpt;\n\t}\n",
 				font_name, font_size);
 
-	for (i = 0; i <= STYLE_MAX; i++)
+	for (i = 0; i < style_max; i++)
 	{
 		if (styles[i][USED])
 		{
@@ -750,15 +721,13 @@ static void write_html_file(GeanyDocument *doc, const gchar *filename,
 	}
 
 	date = get_date(DATE_TYPE_HTML);
+	doc_filename = g_markup_escape_text(DOC_FILENAME(doc), -1);
 	/* write all */
 	html = g_string_new(TEMPLATE_HTML);
 	utils_string_replace_all(html, "{export_date}", date);
 	utils_string_replace_all(html, "{export_content}", body->str);
 	utils_string_replace_all(html, "{export_styles}", css->str);
-	if (doc->file_name == NULL)
-		utils_string_replace_all(html, "{export_filename}", GEANY_STRING_UNTITLED);
-	else
-		utils_string_replace_all(html, "{export_filename}", doc->file_name);
+	utils_string_replace_all(html, "{export_filename}", doc_filename);
 
 	write_data(filename, html->str);
 
@@ -766,6 +735,7 @@ static void write_html_file(GeanyDocument *doc, const gchar *filename,
 	g_string_free(body, TRUE);
 	g_string_free(css, TRUE);
 	g_string_free(html, TRUE);
+	g_free(doc_filename);
 	g_free(date);
 }
 
