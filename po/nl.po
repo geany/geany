@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.23\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-03-30 20:46+0200\n"
-"PO-Revision-Date: 2012-11-19 21:44+0100\n"
+"POT-Creation-Date: 2014-04-07 21:41+0200\n"
+"PO-Revision-Date: 2014-04-07 21:29+0100\n"
 "Last-Translator: Peter Scholtens <peter.scholtens@xs4all.nl>\n"
 "Language-Team: Dutch <geany-i18n@uvena.de>\n"
 "Language: nl\n"
@@ -280,18 +280,15 @@ msgstr ""
 "en de VTE."
 
 #: ../data/geany.glade.h:53
-#, fuzzy
 msgid "Use Windows native dialogs"
-msgstr "Gebruik Openen/Opslaan dialoog van Windows"
+msgstr "Gebruik oorspronkelijke Windows dialogen"
 
 #: ../data/geany.glade.h:54
-#, fuzzy
 msgid ""
 "Defines whether to use the Windows native dialogs or whether to use the GTK "
 "default dialogs"
 msgstr ""
-"Bepaald of de standaard Windows Openen/Opslaan of de GTK default dialoog "
-"gebruikt wordt"
+"Bepaald of de standaard Windows of de GTK default dialogen gebruikt worden"
 
 #: ../data/geany.glade.h:55
 msgid "<b>Miscellaneous</b>"
@@ -1120,7 +1117,8 @@ msgstr "Open nieuwe bestanden van de opdrachtregel"
 #: ../data/geany.glade.h:227
 msgid "Start a new file for each command-line filename that doesn't exist"
 msgstr ""
-"Open een nieuw bestand voor elk bestand op de opdrachtregel die niet bestaat"
+"Open een nieuw bestand voor elke niet bestaande bestandsnaam op de "
+"opdrachtregel"
 
 #: ../data/geany.glade.h:228
 msgid "Default end of line characters:"
@@ -1485,9 +1483,8 @@ msgid "Background color:"
 msgstr "Achtergrondkleur:"
 
 #: ../data/geany.glade.h:306
-#, fuzzy
 msgid "Background image:"
-msgstr "Achtergrond"
+msgstr "Achtergrond figuur"
 
 #: ../data/geany.glade.h:307
 msgid "Scrollback lines:"
@@ -1502,14 +1499,12 @@ msgid "Sets the foreground color of the text in the terminal widget"
 msgstr "Stelt de letterkleur in van de de tekst in de terminal"
 
 #: ../data/geany.glade.h:310
-#, fuzzy
 msgid "Sets the background color of the text in the terminal widget"
 msgstr "Stelt de achtergrondkleur in van de tekst in de terminal"
 
 #: ../data/geany.glade.h:311
-#, fuzzy
 msgid "Sets the path to the background image in the terminal widget"
-msgstr "Stelt de achtergrondkleur in van de tekst in de terminal"
+msgstr "Stelt het pad in naar de achtergrondfiguur in de terminal"
 
 #: ../data/geany.glade.h:312
 msgid ""
@@ -1689,46 +1684,39 @@ msgstr "Gebruik algemene instellingen"
 
 #: ../data/geany.glade.h:347
 msgid "Size:"
-msgstr ""
+msgstr "Grootte:"
 
 #: ../data/geany.glade.h:348
-#, fuzzy
 msgid "Location:"
-msgstr "<b>Locatie:</b>"
+msgstr "Locatie:"
 
 #: ../data/geany.glade.h:349
-#, fuzzy
 msgid "Read-only:"
-msgstr ", alleen lezen"
+msgstr "Alleen lezen:"
 
 #: ../data/geany.glade.h:350
-#, fuzzy
 msgid "Encoding:"
-msgstr "Coderin_g:"
+msgstr "Codering:"
 
 #: ../data/geany.glade.h:351
-#, fuzzy
 msgid "Modified:"
-msgstr "<b>Gemodificeerd:</b>"
+msgstr "Gemodificeerd:"
 
 #: ../data/geany.glade.h:352
-#, fuzzy
 msgid "Changed:"
-msgstr "_Wijzigen"
+msgstr "Gewijzigd:"
 
 #: ../data/geany.glade.h:353
-#, fuzzy
 msgid "Accessed:"
-msgstr "<b>Geopend:</b>"
+msgstr "Geopend:"
 
 #: ../data/geany.glade.h:354
 msgid "(only inside Geany)"
 msgstr "(enkel binnenin Geany)"
 
 #: ../data/geany.glade.h:355
-#, fuzzy
 msgid "Permissions:"
-msgstr "<b>Permissies:</b>"
+msgstr "Permissies:"
 
 #: ../data/geany.glade.h:356
 msgid "Read:"
@@ -1775,7 +1763,6 @@ msgid "New (with _Template)"
 msgstr "Nieuw (met Sja_bloon)"
 
 #: ../data/geany.glade.h:368
-#, fuzzy
 msgid "_Open..."
 msgstr "_Openen"
 
@@ -1784,7 +1771,6 @@ msgid "Recent _Files"
 msgstr "_Recente bestanden"
 
 #: ../data/geany.glade.h:370
-#, fuzzy
 msgid "Save _As..."
 msgstr "Opslaan als"
 
@@ -1807,7 +1793,6 @@ msgid "Page Set_up"
 msgstr "_Pagina opmaak"
 
 #: ../data/geany.glade.h:375
-#, fuzzy
 msgid "_Print..."
 msgstr "Afdrukken"
 
@@ -1848,14 +1833,12 @@ msgid "_Select Current Paragraph"
 msgstr "Selecteer huidige _paragraaf"
 
 #: ../data/geany.glade.h:385
-#, fuzzy
 msgid "_Move Line(s) Up"
-msgstr "Verplaats regel(s) omhoog"
+msgstr "Verplaats regel(s) om_hoog"
 
 #: ../data/geany.glade.h:386
-#, fuzzy
 msgid "_Move Line(s) Down"
-msgstr "Verplaats regel(s) omlaag"
+msgstr "Verplaats regel(s) om_laag"
 
 #: ../data/geany.glade.h:387 ../src/keybindings.c:402
 msgid "_Send Selection to Terminal"
@@ -1910,7 +1893,6 @@ msgid "P_lugin Preferences"
 msgstr "P_lugin voorkeuren"
 
 #: ../data/geany.glade.h:400
-#, fuzzy
 msgid "_Find..."
 msgstr "Zoek"
 
@@ -1923,12 +1905,10 @@ msgid "Find _Previous"
 msgstr "Zoek vor_ige"
 
 #: ../data/geany.glade.h:403 ../src/symbols.c:2425
-#, fuzzy
 msgid "Find in F_iles..."
 msgstr "Zoek _in bestanden"
 
 #: ../data/geany.glade.h:404
-#, fuzzy
 msgid "_Replace..."
 msgstr "_Vervangen"
 
@@ -1949,7 +1929,6 @@ msgid "_Go to Previous Marker"
 msgstr "Ga naar vorige ma_rker"
 
 #: ../data/geany.glade.h:409
-#, fuzzy
 msgid "_Go to Line..."
 msgstr "_Ga naar regel"
 
@@ -1975,14 +1954,12 @@ msgid "_View"
 msgstr "_Beeld"
 
 #: ../data/geany.glade.h:415
-#, fuzzy
 msgid "Change _Font..."
 msgstr "_Lettertype wijzigen"
 
 #: ../data/geany.glade.h:416
-#, fuzzy
 msgid "Change _Color Scheme..."
-msgstr "_Kleurkiezer"
+msgstr "_Wijzig kleurenschema"
 
 #: ../data/geany.glade.h:417
 msgid "Show _Markers Margin"
@@ -2121,9 +2098,8 @@ msgid "Convert and Set to CR (_Mac)"
 msgstr "Converteren en instellen op CR (_Mac)"
 
 #: ../data/geany.glade.h:451 ../src/keybindings.c:568
-#, fuzzy
 msgid "_Clone"
-msgstr "_Sluiten"
+msgstr "Klonen"
 
 #: ../data/geany.glade.h:452
 msgid "_Strip Trailing Spaces"
@@ -2134,7 +2110,6 @@ msgid "_Replace Tabs by Spaces"
 msgstr "Vervang tabs door s_paties"
 
 #: ../data/geany.glade.h:454
-#, fuzzy
 msgid "Replace Spaces b_y Tabs..."
 msgstr "Vervang spaties door _tabs"
 
@@ -2383,13 +2358,13 @@ msgstr ""
 "bevat."
 
 #: ../src/build.c:1012
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Could not parse terminal command \"%s\" (check Terminal tool setting in "
 "Preferences)"
 msgstr ""
-"Kon terminal \"%s\" niet vinden (controleer het pad voor de terminal in "
-"Voorkeuren)"
+"Kon terminal \"%s\" niet uitvoeren (controleer de instellingen van de "
+"terminal in Voorkeuren)"
 
 #: ../src/build.c:1031
 #, c-format
@@ -2749,20 +2724,20 @@ msgstr "H_ernoem"
 msgid "Save the file and rename it"
 msgstr "Bewaar en hernoem bestand"
 
-#: ../src/dialogs.c:686 ../src/win32.c:687
+#: ../src/dialogs.c:686 ../src/win32.c:688
 msgid "Error"
 msgstr "Fout"
 
 #: ../src/dialogs.c:689 ../src/dialogs.c:767 ../src/dialogs.c:1333
-#: ../src/win32.c:693
+#: ../src/win32.c:694
 msgid "Question"
 msgstr "Vraag"
 
-#: ../src/dialogs.c:692 ../src/win32.c:699
+#: ../src/dialogs.c:692 ../src/win32.c:700
 msgid "Warning"
 msgstr "Waarschuwing"
 
-#: ../src/dialogs.c:695 ../src/win32.c:705
+#: ../src/dialogs.c:695 ../src/win32.c:706
 msgid "Information"
 msgstr "Informatie"
 
@@ -2798,9 +2773,9 @@ msgid "unknown"
 msgstr "Onbekend"
 
 #: ../src/dialogs.c:1214
-#, fuzzy, c-format
+#, c-format
 msgid "%s Properties"
-msgstr "Eigenschappen"
+msgstr "%s Eigenschappen"
 
 #: ../src/dialogs.c:1247 ../src/ui_utils.c:285
 msgid "(with BOM)"
@@ -3165,9 +3140,9 @@ msgid "%s script"
 msgstr "%s scriptbestand"
 
 #: ../src/filetypes.c:94
-#, fuzzy, c-format
+#, c-format
 msgid "%s document"
-msgstr "XML document"
+msgstr "'%s' document"
 
 #: ../src/filetypes.c:164
 #, fuzzy
@@ -3179,14 +3154,13 @@ msgid "Makefile"
 msgstr "Makebestand"
 
 # Of toch Cascading StyleSheet?
-# Ik vind CSS bronbestand beter in het meu passen.
+# Ik vind CSS bronbestand beter in het menu passen.
 #: ../src/filetypes.c:169
 #, fuzzy
 msgid "Cascading Stylesheet"
 msgstr "CSS bronbestand"
 
 #: ../src/filetypes.c:178
-#, fuzzy
 msgid "Config"
 msgstr "Configuratiebestand"
 
@@ -3211,13 +3185,13 @@ msgstr "Op_maaktalen"
 msgid "M_iscellaneous"
 msgstr "Overige"
 
-#: ../src/filetypes.c:1168 ../src/win32.c:105
+#: ../src/filetypes.c:1168 ../src/win32.c:106
 msgid "All Source"
 msgstr "Alle bronbestanden"
 
 #. create meta file filter "All files"
-#: ../src/filetypes.c:1193 ../src/project.c:300 ../src/win32.c:95
-#: ../src/win32.c:140 ../src/win32.c:161 ../src/win32.c:166
+#: ../src/filetypes.c:1193 ../src/project.c:300 ../src/win32.c:96
+#: ../src/win32.c:141 ../src/win32.c:162 ../src/win32.c:167
 msgid "All files"
 msgstr "Alle bestanden"
 
@@ -3250,7 +3224,7 @@ msgstr "Dit kan de kleurenselectie verkeerd weergeven."
 
 #: ../src/highlighting.c:1365
 msgid "Color Schemes"
-msgstr "_Kleurkiezer"
+msgstr "Kleurenschema's"
 
 #. visual group order
 #: ../src/keybindings.c:227 ../src/symbols.c:722
@@ -4390,7 +4364,7 @@ msgstr "project"
 
 #: ../src/search.c:821
 msgid "custom"
-msgstr "Aangepast"
+msgstr "aangepast"
 
 #: ../src/search.c:825
 msgid ""
@@ -4722,24 +4696,20 @@ msgid "Type Selectors"
 msgstr "Type selectors"
 
 #: ../src/symbols.c:856
-#, fuzzy
 msgid "Section Level 1"
-msgstr "Sectie"
+msgstr "Sectie nivo 1"
 
 #: ../src/symbols.c:857
-#, fuzzy
 msgid "Section Level 2"
-msgstr "Sectie"
+msgstr "Sectie nivo 2"
 
 #: ../src/symbols.c:858
-#, fuzzy
 msgid "Section Level 3"
-msgstr "Sectie"
+msgstr "Sectie nivo 3"
 
 #: ../src/symbols.c:859
-#, fuzzy
 msgid "Section Level 4"
-msgstr "Sectie"
+msgstr "Sectie nivo 4"
 
 #: ../src/symbols.c:868
 msgid "Singletons"
@@ -4796,17 +4766,15 @@ msgstr "Eigenschappen"
 #: ../src/symbols.c:975
 #, fuzzy
 msgid "Programs"
-msgstr "Programma"
+msgstr "Programma's"
 
 #: ../src/symbols.c:977
-#, fuzzy
 msgid "Functions / Subroutines"
-msgstr "Functies / Procedures"
+msgstr "Functies / Subroutines"
 
 #: ../src/symbols.c:980
-#, fuzzy
 msgid "Components"
-msgstr "Voltooiing"
+msgstr "Componenten"
 
 #: ../src/symbols.c:981
 msgid "Blocks"
@@ -4841,9 +4809,8 @@ msgid "Structs"
 msgstr "Constructies"
 
 #: ../src/symbols.c:1043
-#, fuzzy
 msgid "Extern Variables"
-msgstr "Variabelen"
+msgstr "Externe variabelen"
 
 #: ../src/symbols.c:1803
 #, c-format
@@ -5169,7 +5136,6 @@ msgid "H_ide Sidebar"
 msgstr "Zijbalk _verbergen"
 
 #: ../src/sidebar.c:720 ../plugins/filebrowser.c:630
-#, fuzzy
 msgid "_Find in Files..."
 msgstr "_Zoek in bestanden"
 
@@ -5327,15 +5293,15 @@ msgstr ""
 "Kon de directory niet veranderen in de terminal omdat er waarschijnlijk een "
 "commando in staat."
 
-#: ../src/win32.c:160
+#: ../src/win32.c:161
 msgid "Geany project files"
 msgstr "Geany Project bestanden"
 
-#: ../src/win32.c:165
+#: ../src/win32.c:166
 msgid "Executables"
 msgstr "Uitvoerbare"
 
-#: ../src/win32.c:1217
+#: ../src/win32.c:1218
 #, c-format
 msgid "Process timed out after %.02f s!"
 msgstr ""
@@ -5527,7 +5493,6 @@ msgid "HTML (name)"
 msgstr "HTML (naam)"
 
 #: ../plugins/htmlchars.c:739
-#, fuzzy
 msgid "_Insert Special HTML Characters..."
 msgstr "Voeg spec_iale HTML karakters toe"
 
@@ -5606,15 +5571,13 @@ msgstr "_Exporteer"
 
 #. HTML
 #: ../plugins/export.c:787
-#, fuzzy
 msgid "As _HTML..."
-msgstr "Als _HTML"
+msgstr "Naar _HTML"
 
 #. LaTeX
 #: ../plugins/export.c:793
-#, fuzzy
 msgid "As _LaTeX..."
-msgstr "Als _LaTeX"
+msgstr "Naar _LaTeX"
 
 #: ../plugins/filebrowser.c:45
 msgid "File Browser"
@@ -5849,14 +5812,12 @@ msgid "_Top and Bottom"
 msgstr "_Boven en Onder"
 
 #: ../plugins/splitwindow.c:429
-#, fuzzy
 msgid "Side by Side"
-msgstr "_Zij aan zij"
+msgstr "Zij aan zij"
 
 #: ../plugins/splitwindow.c:431
-#, fuzzy
 msgid "Top and Bottom"
-msgstr "_Boven en Onder"
+msgstr "Boven en Onder"
 
 #~ msgid "<b>Type:</b>"
 #~ msgstr "<b>Bestandstype:</b>"
