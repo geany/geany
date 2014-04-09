@@ -544,7 +544,7 @@ static void write_latex_file(GeanyDocument *doc, const gchar *filename,
 
 	/* write used styles in the header */
 	cmds = g_string_new("");
-	for (i = 0; i <= STYLE_MAX; i++)
+	for (i = 0; i < style_max; i++)
 	{
 		if (styles[i][USED])
 		{
@@ -737,7 +737,7 @@ static void write_html_file(GeanyDocument *doc, const gchar *filename,
 	"\tbody\n\t{\n\t\tfont-family: %s, monospace;\n\t\tfont-size: %dpt;\n\t}\n",
 				font_name, font_size);
 
-	for (i = 0; i <= STYLE_MAX; i++)
+	for (i = 0; i < style_max; i++)
 	{
 		if (styles[i][USED])
 		{
