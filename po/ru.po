@@ -5,13 +5,14 @@
 # Denis Koryavov <dkoryavov@yandex.ru>, 2010.
 # Igor Burmistrov <meyday@yandex.ru>, 2012
 # Maxim Musatov <m1kc@yandex.ru>, 2012
+# Pavel Roschin <roschin@scriptumplus.ru>, 2014
 msgid ""
 msgstr ""
-"Project-Id-Version: Geany 1.23\n"
+"Project-Id-Version: Geany 1.24\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-03-30 20:46+0200\n"
-"PO-Revision-Date: 2012-09-16 00:01+0300\n"
-"Last-Translator: Musatov M. <m1kc@yandex.ru>\n"
+"POT-Creation-Date: 2014-04-09 02:36+0000\n"
+"PO-Revision-Date: 2014-04-09 18:41+0400\n"
+"Last-Translator: Pavel Roschin <roschin@scriptumplus.ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
@@ -1239,7 +1240,8 @@ msgstr "Браузер:"
 msgid ""
 "A terminal emulator command (%c is substituted with the Geany run script "
 "filename)"
-msgstr ""
+msgstr "Команда эмулятора терминала (вместо %c будет подставлено имя файла "
+"скрипта запуска Geany)"
 
 #: ../data/geany.glade.h:255
 msgid "Path (and possibly additional arguments) to your favorite browser"
@@ -1677,7 +1679,7 @@ msgstr "Использовать глобальные настройки"
 
 #: ../data/geany.glade.h:347
 msgid "Size:"
-msgstr ""
+msgstr "Размер:"
 
 #: ../data/geany.glade.h:348
 #, fuzzy
@@ -2736,20 +2738,20 @@ msgstr "Переи_меновать"
 msgid "Save the file and rename it"
 msgstr "Сохранить и переименовать файл."
 
-#: ../src/dialogs.c:686 ../src/win32.c:687
+#: ../src/dialogs.c:686 ../src/win32.c:688
 msgid "Error"
 msgstr "Ошибка"
 
 #: ../src/dialogs.c:689 ../src/dialogs.c:767 ../src/dialogs.c:1333
-#: ../src/win32.c:693
+#: ../src/win32.c:694
 msgid "Question"
 msgstr "Вопрос"
 
-#: ../src/dialogs.c:692 ../src/win32.c:699
+#: ../src/dialogs.c:692 ../src/win32.c:700
 msgid "Warning"
 msgstr "Предупреждение"
 
-#: ../src/dialogs.c:695 ../src/win32.c:705
+#: ../src/dialogs.c:695 ../src/win32.c:706
 msgid "Information"
 msgstr "Информация"
 
@@ -3197,13 +3199,13 @@ msgstr "Языки _разметки"
 msgid "M_iscellaneous"
 msgstr "_Прочее"
 
-#: ../src/filetypes.c:1168 ../src/win32.c:105
+#: ../src/filetypes.c:1168 ../src/win32.c:106
 msgid "All Source"
 msgstr "Все файлы исходного кода"
 
 #. create meta file filter "All files"
-#: ../src/filetypes.c:1193 ../src/project.c:300 ../src/win32.c:95
-#: ../src/win32.c:140 ../src/win32.c:161 ../src/win32.c:166
+#: ../src/filetypes.c:1193 ../src/project.c:300 ../src/win32.c:96
+#: ../src/win32.c:141 ../src/win32.c:162 ../src/win32.c:167
 msgid "All files"
 msgstr "Все типы"
 
@@ -3342,7 +3344,7 @@ msgstr "Открыть последнюю закрытую вкладку"
 
 #: ../src/keybindings.c:277
 msgid "Quit"
-msgstr ""
+msgstr "Выход"
 
 #: ../src/keybindings.c:294
 msgid "Undo"
@@ -4613,15 +4615,15 @@ msgstr "Структуры"
 
 #: ../src/symbols.c:767
 msgid "Parts"
-msgstr ""
+msgstr "Части"
 
 #: ../src/symbols.c:768
 msgid "Assembly"
-msgstr ""
+msgstr "Сборка"
 
 #: ../src/symbols.c:769
 msgid "Steps"
-msgstr ""
+msgstr "Шаги"
 
 #: ../src/symbols.c:784 ../src/symbols.c:866 ../src/symbols.c:912
 msgid "Modules"
@@ -4770,7 +4772,7 @@ msgstr "Члены"
 
 #: ../src/symbols.c:927 ../src/symbols.c:982
 msgid "Enums"
-msgstr ""
+msgstr "Перечисления"
 
 #: ../src/symbols.c:939
 msgid "Properties"
@@ -5284,7 +5286,7 @@ msgstr "Unix (LF)"
 #: ../src/vte.c:437
 #, c-format
 msgid "invalid VTE library \"%s\": missing symbol \"%s\""
-msgstr ""
+msgstr "неправильная библиотека VTE \"%s\": отсутствует идентификатор \"%s\""
 
 #: ../src/vte.c:586
 msgid "_Set Path From Document"
@@ -5305,15 +5307,15 @@ msgid ""
 msgstr ""
 "Не удалось изменить каталог в VTE (вероятно, в нём выполняется команда)."
 
-#: ../src/win32.c:160
+#: ../src/win32.c:161
 msgid "Geany project files"
 msgstr "Файлы проекта Geany"
 
-#: ../src/win32.c:165
+#: ../src/win32.c:166
 msgid "Executables"
 msgstr "Исполняемые"
 
-#: ../src/win32.c:1217
+#: ../src/win32.c:1218
 #, fuzzy, c-format
 msgid "Process timed out after %.02f s!"
 msgstr "Процесс исчерпал лимит времени после %.02f секунд ожидания!"
@@ -5746,7 +5748,7 @@ msgstr "Автоматическое сохранение"
 
 #: ../plugins/saveactions.c:600
 msgid "Enable save when losing _focus"
-msgstr ""
+msgstr "Сохранять при потере _фокуса"
 
 #: ../plugins/saveactions.c:606 ../plugins/saveactions.c:668
 #: ../plugins/saveactions.c:709
