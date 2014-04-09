@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: Geany 1.23\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-03-30 20:46+0200\n"
-"PO-Revision-Date: 2013-05-22 15:58+0200\n"
+"PO-Revision-Date: 2014-04-09 23:10+0200\n"
 "Last-Translator: Colomban Wendling <ban@herbesfolles.org>\n"
 "Language-Team: French <geany-i18n@uvena.de>\n"
 "Language: fr\n"
@@ -286,19 +286,16 @@ msgstr ""
 "les champs aller à la ligne et le VTE."
 
 #: ../data/geany.glade.h:53
-#, fuzzy
 msgid "Use Windows native dialogs"
-msgstr ""
-"Utiliser la boite de dialogue Windows d'ouverture/sauvegarde des fichiers"
+msgstr "Utiliser les boîtes de dialogue Windows"
 
 #: ../data/geany.glade.h:54
-#, fuzzy
 msgid ""
 "Defines whether to use the Windows native dialogs or whether to use the GTK "
 "default dialogs"
 msgstr ""
-"Utiliser ou non la boite de dialogue Windows d'ouverture/sauvegarde des "
-"fichiers ou la boite de dialogue GTK"
+"Utiliser ou non les boîtes de dialogue Windows à la place des boîtes "
+"de dialogue GTK"
 
 #: ../data/geany.glade.h:55
 msgid "<b>Miscellaneous</b>"
@@ -3178,38 +3175,34 @@ msgid "%s file"
 msgstr "Fichier %s"
 
 #: ../src/filetypes.c:93
-#, fuzzy, c-format
+#, c-format
 msgid "%s script"
-msgstr "fichier de script %sl"
+msgstr "Script %s"
 
 #: ../src/filetypes.c:94
-#, fuzzy, c-format
+#, c-format
 msgid "%s document"
-msgstr "Document XML"
+msgstr "Document %s"
 
 #: ../src/filetypes.c:164
-#, fuzzy
 msgid "Shell"
-msgstr "Shell :"
+msgstr "Shell"
 
 #: ../src/filetypes.c:165
 msgid "Makefile"
 msgstr "Makefile"
 
 #: ../src/filetypes.c:169
-#, fuzzy
 msgid "Cascading Stylesheet"
 msgstr "Feuille de style en cascade"
 
 #: ../src/filetypes.c:178
-#, fuzzy
 msgid "Config"
-msgstr "Fichier de Config"
+msgstr "de configuration"
 
 #: ../src/filetypes.c:179
-#, fuzzy
 msgid "Gettext translation"
-msgstr "Fichier de traduction Gettext"
+msgstr "de traduction Gettext"
 
 #: ../src/filetypes.c:414
 msgid "_Programming Languages"
@@ -4680,12 +4673,11 @@ msgstr "Modules"
 
 #: ../src/symbols.c:786 ../src/symbols.c:817
 msgid "Traits"
-msgstr ""
+msgstr "Traits"
 
 #: ../src/symbols.c:787
-#, fuzzy
 msgid "Implementations"
-msgstr "Implémente :"
+msgstr "Implémentations"
 
 #: ../src/symbols.c:789 ../src/symbols.c:1033
 msgid "Typedefs / Enums"
@@ -4816,26 +4808,23 @@ msgstr "Membres"
 
 #: ../src/symbols.c:927 ../src/symbols.c:982
 msgid "Enums"
-msgstr ""
+msgstr "Enums"
 
 #: ../src/symbols.c:939
 msgid "Properties"
 msgstr "Propriétés"
 
 #: ../src/symbols.c:975
-#, fuzzy
 msgid "Programs"
-msgstr "Programme"
+msgstr "Programmes"
 
 #: ../src/symbols.c:977
-#, fuzzy
 msgid "Functions / Subroutines"
-msgstr "Fonctions / Procédures"
+msgstr "Fonctions / Sous-routines"
 
 #: ../src/symbols.c:980
-#, fuzzy
 msgid "Components"
-msgstr "Complétions"
+msgstr "Components"
 
 #: ../src/symbols.c:981
 msgid "Blocks"
@@ -4870,9 +4859,8 @@ msgid "Structs"
 msgstr "Structs"
 
 #: ../src/symbols.c:1043
-#, fuzzy
 msgid "Extern Variables"
-msgstr "Variables"
+msgstr "Variables externes"
 
 #: ../src/symbols.c:1803
 #, c-format
@@ -5657,12 +5645,11 @@ msgstr "Trop d'éléments sélectionnés !"
 #: ../plugins/filebrowser.c:445
 #, c-format
 msgid "Could not execute configured external command '%s' (%s)."
-msgstr "Impossible d'exécuter la commande extérieure configurée '%s' (%s)."
+msgstr "Impossible d'exécuter la commande '%s' configurée pour le programme externe (%s)."
 
 #: ../plugins/filebrowser.c:615
-#, fuzzy
 msgid "Open _Externally"
-msgstr "Ouvrir à l'_extérieur"
+msgstr "Ouvrir dans un programme _externe"
 
 #: ../plugins/filebrowser.c:640
 msgid "Show _Hidden Files"
@@ -5706,7 +5693,7 @@ msgstr "Focus sur le chemin"
 
 #: ../plugins/filebrowser.c:1218
 msgid "External open command:"
-msgstr "Commande d'ouverture extérieure :"
+msgstr "Commande du programme externe :"
 
 #: ../plugins/filebrowser.c:1226
 #, c-format
@@ -5717,11 +5704,13 @@ msgid ""
 "%d will be replaced with the path name of the selected file without the "
 "filename"
 msgstr ""
-"La commande à lancer en utilisant \"Ouvrir à l'extérieur\". Vous pouvez "
-"utiliser les caractères de substitution %f et %d.\n"
-"%f sera remplacé par le nom du fichier en incluant son chemin complet\n"
-"%d sera remplacé par le nom du chemin vers le fichier sélectionné sans le "
-"nom du fichier"
+"La commande à lancer en utilisant \"Ouvrir dans un programme "
+"externe\". Vous pouvez utiliser les caractères de substitution %f et "
+"%d.\n"
+"%f sera remplacé par le nom du fichier en incluant son chemin "
+"complet\n"
+"%d sera remplacé par le nom du chemin vers le fichier sélectionné "
+"sans le nom du fichier"
 
 #: ../plugins/filebrowser.c:1234
 msgid "Show hidden files"
@@ -5795,12 +5784,12 @@ msgstr "Enregistrement automatique"
 
 #: ../plugins/saveactions.c:600
 msgid "Enable save when losing _focus"
-msgstr ""
+msgstr "Activer l'enregistrement lors de la perte du _focus"
 
 #: ../plugins/saveactions.c:606 ../plugins/saveactions.c:668
 #: ../plugins/saveactions.c:709
 msgid "_Enable"
-msgstr "_Valider"
+msgstr "_Activer"
 
 #: ../plugins/saveactions.c:614
 msgid "Auto save _interval:"
@@ -5813,16 +5802,16 @@ msgstr "secondes"
 #: ../plugins/saveactions.c:631
 msgid "_Print status message if files have been automatically saved"
 msgstr ""
-"_Afficher un message de statut si les fichiers ont été automatiquement "
+"Afficher un _message de statut si les fichiers ont été automatiquement "
 "sauvegardés"
 
 #: ../plugins/saveactions.c:639
 msgid "Save only current open _file"
-msgstr "_Enregistrer seulement le fichier ouvert courant"
+msgstr "Enregistrer seulement le fichier ouvert _courant"
 
 #: ../plugins/saveactions.c:646
 msgid "Sa_ve all open files"
-msgstr "_Enregistrer tous les fichiers ouverts"
+msgstr "Enregistrer _tous les fichiers ouverts"
 
 #: ../plugins/saveactions.c:666
 msgid "Instant Save"
@@ -5881,14 +5870,12 @@ msgid "_Top and Bottom"
 msgstr "En _haut et en bas"
 
 #: ../plugins/splitwindow.c:429
-#, fuzzy
 msgid "Side by Side"
-msgstr "_Côte à côte"
+msgstr "Côte à côte"
 
 #: ../plugins/splitwindow.c:431
-#, fuzzy
 msgid "Top and Bottom"
-msgstr "En _haut et en bas"
+msgstr "En haut et en bas"
 
 #~ msgid "Shell script"
 #~ msgstr "Script Shell"
