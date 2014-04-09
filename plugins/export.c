@@ -551,10 +551,7 @@ static void write_latex_file(GeanyDocument *doc, const gchar *filename,
 	utils_string_replace_all(latex, "{export_content}", body->str);
 	utils_string_replace_all(latex, "{export_styles}", cmds->str);
 	utils_string_replace_all(latex, "{export_date}", date);
-	if (doc->file_name == NULL)
-		utils_string_replace_all(latex, "{export_filename}", GEANY_STRING_UNTITLED);
-	else
-		utils_string_replace_all(latex, "{export_filename}", doc->file_name);
+	utils_string_replace_all(latex, "{export_filename}", DOC_FILENAME(doc));
 
 	write_data(filename, latex->str);
 
@@ -729,10 +726,7 @@ static void write_html_file(GeanyDocument *doc, const gchar *filename,
 	utils_string_replace_all(html, "{export_date}", date);
 	utils_string_replace_all(html, "{export_content}", body->str);
 	utils_string_replace_all(html, "{export_styles}", css->str);
-	if (doc->file_name == NULL)
-		utils_string_replace_all(html, "{export_filename}", GEANY_STRING_UNTITLED);
-	else
-		utils_string_replace_all(html, "{export_filename}", doc->file_name);
+	utils_string_replace_all(html, "{export_filename}", DOC_FILENAME(doc));
 
 	write_data(filename, html->str);
 
