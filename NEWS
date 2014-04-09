@@ -15,6 +15,8 @@ Geany 1.24 (unreleased)
     * Fix crash if a Custom Command returns after its related document
       has been closed.
     * Fix typo in "deque" C++ include name (#1027).
+    * Fix replacing a selection starting with "0x" by a color if the
+      selection is not 8 bytes long.
 
     Interface
     * Fix custom GTK styles under KDE (#3607935).
@@ -88,6 +90,10 @@ Geany 1.24 (unreleased)
     Plugins
     * Save Actions: add autosave when the editor lose focus (FR#683,
       Steven Valsesia).
+    * Export: fix exporting a document not ending with a newline.
+    * Export: fix including random, unused styles in the output.
+    * Export: fix HTML title if the file name contains control characters.
+    * Export: fix LaTeX export with many consecutive '-', '<' or '>'.
 
     API
     * Add plugin_builder_connect_signals().
