@@ -284,17 +284,15 @@ msgstr ""
 "перехода к строке и терминала."
 
 #: ../data/geany.glade.h:53
-#, fuzzy
 msgid "Use Windows native dialogs"
-msgstr "Использовать диалоги Windows для сохранения/открытия файлов"
+msgstr "Использовать диалоги Windows"
 
 #: ../data/geany.glade.h:54
-#, fuzzy
 msgid ""
 "Defines whether to use the Windows native dialogs or whether to use the GTK "
 "default dialogs"
 msgstr ""
-"Определяет, использовать ли диалоги Windows для открытия и сохранения файлов "
+"Определяет, использовать ли диалоги Windows "
 "или использовать стандартные диалоги библиотеки GTK."
 
 #: ../data/geany.glade.h:55
@@ -421,9 +419,8 @@ msgid "Bottom"
 msgstr "Внизу"
 
 #: ../data/geany.glade.h:81
-#, fuzzy
 msgid "<b>Message window</b>"
-msgstr "Окно сообщений:"
+msgstr "<b>Окно сообщений</b>"
 
 #: ../data/geany.glade.h:82
 msgid "Symbol list:"
@@ -1473,9 +1470,8 @@ msgid "Background color:"
 msgstr "Цвет фона:"
 
 #: ../data/geany.glade.h:306
-#, fuzzy
 msgid "Background image:"
-msgstr "Фон"
+msgstr "Фоновое изображение:"
 
 #: ../data/geany.glade.h:307
 msgid "Scrollback lines:"
@@ -1490,14 +1486,12 @@ msgid "Sets the foreground color of the text in the terminal widget"
 msgstr "Устанавлиивает цвет текста для окна терминала"
 
 #: ../data/geany.glade.h:310
-#, fuzzy
 msgid "Sets the background color of the text in the terminal widget"
 msgstr "Устанавливает цвет фона для окна терминала"
 
 #: ../data/geany.glade.h:311
-#, fuzzy
 msgid "Sets the path to the background image in the terminal widget"
-msgstr "Устанавливает цвет фона для окна терминала"
+msgstr "Устанавливает путь до фонового изображения для окна терминала"
 
 #: ../data/geany.glade.h:312
 msgid ""
@@ -1643,7 +1637,6 @@ msgid "File patterns:"
 msgstr "Шаблоны файлов:"
 
 #: ../data/geany.glade.h:341
-#, fuzzy
 msgid ""
 "Space separated list of file patterns used for the find in files dialog (e."
 "g. *.c *.h)"
@@ -1682,43 +1675,36 @@ msgid "Size:"
 msgstr "Размер:"
 
 #: ../data/geany.glade.h:348
-#, fuzzy
 msgid "Location:"
-msgstr "<b>Размещение:</b>"
+msgstr "Размещение:"
 
 #: ../data/geany.glade.h:349
-#, fuzzy
 msgid "Read-only:"
-msgstr ", только чтение"
+msgstr "Только чтение:"
 
 #: ../data/geany.glade.h:350
-#, fuzzy
 msgid "Encoding:"
-msgstr "_Кодировка:"
+msgstr "Кодировка:"
 
 #: ../data/geany.glade.h:351
-#, fuzzy
 msgid "Modified:"
-msgstr "<b>Модифицирован:</b>"
+msgstr "Модифицирован:"
 
 #: ../data/geany.glade.h:352
-#, fuzzy
 msgid "Changed:"
-msgstr "_Изменить"
+msgstr "Изменён:"
 
 #: ../data/geany.glade.h:353
-#, fuzzy
 msgid "Accessed:"
-msgstr "<b>Последний доступ:</b>"
+msgstr "Последний доступ:"
 
 #: ../data/geany.glade.h:354
 msgid "(only inside Geany)"
 msgstr "(только внутри Geany)"
 
 #: ../data/geany.glade.h:355
-#, fuzzy
 msgid "Permissions:"
-msgstr "<b>Права:</b>"
+msgstr "Права:"
 
 #: ../data/geany.glade.h:356
 msgid "Read:"
@@ -1765,18 +1751,16 @@ msgid "New (with _Template)"
 msgstr "Создать из _шаблона"
 
 #: ../data/geany.glade.h:368
-#, fuzzy
 msgid "_Open..."
-msgstr "_Открыть"
+msgstr "_Открыть..."
 
 #: ../data/geany.glade.h:369
 msgid "Recent _Files"
 msgstr "Недавние _файлы"
 
 #: ../data/geany.glade.h:370
-#, fuzzy
 msgid "Save _As..."
-msgstr "Сохранить как"
+msgstr "Сохранить как..."
 
 #: ../data/geany.glade.h:371
 msgid "Save A_ll"
@@ -1796,9 +1780,8 @@ msgid "Page Set_up"
 msgstr "_Параметры страницы"
 
 #: ../data/geany.glade.h:375
-#, fuzzy
 msgid "_Print..."
-msgstr "Печать"
+msgstr "_Печать..."
 
 #: ../data/geany.glade.h:376 ../src/notebook.c:490
 msgid "Close Ot_her Documents"
@@ -1837,14 +1820,12 @@ msgid "_Select Current Paragraph"
 msgstr "Выделить _абзац"
 
 #: ../data/geany.glade.h:385
-#, fuzzy
 msgid "_Move Line(s) Up"
-msgstr "Переместить строки вверх"
+msgstr "Переместить строку(и) вверх"
 
 #: ../data/geany.glade.h:386
-#, fuzzy
 msgid "_Move Line(s) Down"
-msgstr "Переместить строки вниз"
+msgstr "Переместить строку(и) вниз"
 
 #: ../data/geany.glade.h:387 ../src/keybindings.c:402
 msgid "_Send Selection to Terminal"
@@ -1899,9 +1880,8 @@ msgid "P_lugin Preferences"
 msgstr "Настройки _модулей"
 
 #: ../data/geany.glade.h:400
-#, fuzzy
 msgid "_Find..."
-msgstr "Найти"
+msgstr "Найти..."
 
 #: ../data/geany.glade.h:401
 msgid "Find _Next"
@@ -1912,14 +1892,12 @@ msgid "Find _Previous"
 msgstr "Найти _предыдущее"
 
 #: ../data/geany.glade.h:403 ../src/symbols.c:2425
-#, fuzzy
 msgid "Find in F_iles..."
-msgstr "Найти в _файлах"
+msgstr "Найти в _файлах..."
 
 #: ../data/geany.glade.h:404
-#, fuzzy
 msgid "_Replace..."
-msgstr "_Заменить"
+msgstr "_Заменить..."
 
 #: ../data/geany.glade.h:405
 msgid "Next _Message"
@@ -1938,9 +1916,8 @@ msgid "_Go to Previous Marker"
 msgstr "Перейти к п_редыдущему маркеру"
 
 #: ../data/geany.glade.h:409
-#, fuzzy
 msgid "_Go to Line..."
-msgstr "Перейти на с_троку"
+msgstr "Перейти на с_троку..."
 
 #: ../data/geany.glade.h:410 ../src/keybindings.c:440
 msgid "Find Next _Selection"
@@ -1963,14 +1940,12 @@ msgid "_View"
 msgstr "_Вид"
 
 #: ../data/geany.glade.h:415
-#, fuzzy
 msgid "Change _Font..."
-msgstr "Выбрать _шрифт"
+msgstr "Выбрать _шрифт..."
 
 #: ../data/geany.glade.h:416
-#, fuzzy
 msgid "Change _Color Scheme..."
-msgstr "_Цветовые схемы"
+msgstr "_Цветовые схемы..."
 
 #: ../data/geany.glade.h:417
 msgid "Show _Markers Margin"
@@ -2109,9 +2084,8 @@ msgid "Convert and Set to CR (_Mac)"
 msgstr "Заменить окончания строк на CR (_Mac)"
 
 #: ../data/geany.glade.h:451 ../src/keybindings.c:568
-#, fuzzy
 msgid "_Clone"
-msgstr "_Закрыть"
+msgstr "Клонировать"
 
 #: ../data/geany.glade.h:452
 msgid "_Strip Trailing Spaces"
@@ -2122,9 +2096,8 @@ msgid "_Replace Tabs by Spaces"
 msgstr "_Заменить табуляции пробелами"
 
 #: ../data/geany.glade.h:454
-#, fuzzy
 msgid "Replace Spaces b_y Tabs..."
-msgstr "Заменить пробелы _табуляциями"
+msgstr "Заменить пробелы _табуляциями..."
 
 #: ../data/geany.glade.h:455
 msgid "_Fold All"
@@ -2147,9 +2120,8 @@ msgid "_Project"
 msgstr "Про_ект"
 
 #: ../data/geany.glade.h:460
-#, fuzzy
 msgid "_New..."
-msgstr "_Новый"
+msgstr "_Новый..."
 
 #: ../data/geany.glade.h:461
 msgid "_Recent Projects"
@@ -2193,9 +2165,8 @@ msgid "_Word Count"
 msgstr "_Количество слов"
 
 #: ../data/geany.glade.h:471
-#, fuzzy
 msgid "Load Ta_gs..."
-msgstr "_Загрузить теги"
+msgstr "_Загрузить теги..."
 
 #: ../data/geany.glade.h:472
 msgid "_Help"
@@ -2218,14 +2189,12 @@ msgid "Wi_ki"
 msgstr "Wi_ki"
 
 #: ../data/geany.glade.h:477
-#, fuzzy
 msgid "Report a _Bug..."
-msgstr "Соо_бщить об ошибке"
+msgstr "Соо_бщить об ошибке..."
 
 #: ../data/geany.glade.h:478
-#, fuzzy
 msgid "_Donate..."
-msgstr "Сделать _пожертвование"
+msgstr "Сделать _пожертвование..."
 
 #: ../data/geany.glade.h:479 ../src/sidebar.c:124
 msgid "Symbols"
@@ -2375,12 +2344,12 @@ msgstr ""
 "Не удалось запустить файл в терминале, (возможно, в нем выполняется команда)."
 
 #: ../src/build.c:1012
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Could not parse terminal command \"%s\" (check Terminal tool setting in "
 "Preferences)"
 msgstr ""
-"Не удалось найти терминал \"%s\" (проверьте путь для терминала в настройках)"
+"Не удалось разобрать команду терминала \"%s\" (проверьте настройки терминала)"
 
 #: ../src/build.c:1031
 #, c-format
@@ -2520,9 +2489,8 @@ msgstr "_Выполнить"
 
 #. build the code with make custom
 #: ../src/build.c:2618 ../src/build.c:2809 ../src/build.c:2863
-#, fuzzy
 msgid "Make Custom _Target..."
-msgstr "Собрать заданную _цель"
+msgstr "Собрать заданную _цель..."
 
 #. build the code with make object
 #: ../src/build.c:2620 ../src/build.c:2810 ../src/build.c:2871
@@ -2787,9 +2755,9 @@ msgid "unknown"
 msgstr "неизвестно"
 
 #: ../src/dialogs.c:1214
-#, fuzzy, c-format
+#, c-format
 msgid "%s Properties"
-msgstr "Свойства"
+msgstr "Свойства %s"
 
 #: ../src/dialogs.c:1247 ../src/ui_utils.c:285
 msgid "(with BOM)"
@@ -3150,36 +3118,32 @@ msgid "%s file"
 msgstr "файл %s"
 
 #: ../src/filetypes.c:93
-#, fuzzy, c-format
+#, c-format
 msgid "%s script"
-msgstr "Файл скрипта %s"
+msgstr "скрипт %s"
 
 #: ../src/filetypes.c:94
-#, fuzzy, c-format
+#, c-format
 msgid "%s document"
-msgstr "Документ XML"
+msgstr "документ %s"
 
 #: ../src/filetypes.c:164
-#, fuzzy
 msgid "Shell"
-msgstr "Оболочка:"
+msgstr "Shell скрипт"
 
 #: ../src/filetypes.c:165
 msgid "Makefile"
 msgstr "Файл сборки (Makefile)"
 
 #: ../src/filetypes.c:169
-#, fuzzy
 msgid "Cascading Stylesheet"
 msgstr "Файл каскадной таблицы стилей (CSS)"
 
 #: ../src/filetypes.c:178
-#, fuzzy
 msgid "Config"
 msgstr "Файл настроек"
 
 #: ../src/filetypes.c:179
-#, fuzzy
 msgid "Gettext translation"
 msgstr "Файл перевода (Gettext)"
 
@@ -4104,9 +4068,8 @@ msgid "Print only the basename(without the path) of the printed file"
 msgstr "Печатать только имя файла, опуская путь к нему."
 
 #: ../src/printing.c:414
-#, fuzzy
 msgid "Paginating"
-msgstr "Печать"
+msgstr "Разбивка на страницы"
 
 #: ../src/printing.c:438
 #, c-format
@@ -4374,7 +4337,6 @@ msgid "custom"
 msgstr "указать"
 
 #: ../src/search.c:825
-#, fuzzy
 msgid ""
 "All: search all files in the directory\n"
 "Project: use file patterns defined in the project settings\n"
@@ -4574,7 +4536,6 @@ msgid "Sections"
 msgstr "Разделы"
 
 #: ../src/symbols.c:724
-#, fuzzy
 msgid "Paragraph"
 msgstr "Абзац"
 
@@ -4634,9 +4595,8 @@ msgid "Traits"
 msgstr ""
 
 #: ../src/symbols.c:787
-#, fuzzy
 msgid "Implementations"
-msgstr "Наследование:"
+msgstr "Реализации"
 
 #: ../src/symbols.c:789 ../src/symbols.c:1033
 msgid "Typedefs / Enums"
@@ -4706,24 +4666,20 @@ msgid "Type Selectors"
 msgstr "Типы"
 
 #: ../src/symbols.c:856
-#, fuzzy
 msgid "Section Level 1"
-msgstr "Раздел"
+msgstr "Раздел уровень 1"
 
 #: ../src/symbols.c:857
-#, fuzzy
 msgid "Section Level 2"
-msgstr "Раздел"
+msgstr "Раздел уровень 2"
 
 #: ../src/symbols.c:858
-#, fuzzy
 msgid "Section Level 3"
-msgstr "Раздел"
+msgstr "Раздел уровень 3"
 
 #: ../src/symbols.c:859
-#, fuzzy
 msgid "Section Level 4"
-msgstr "Раздел"
+msgstr "Раздел уровень 4"
 
 #: ../src/symbols.c:868
 msgid "Singletons"
@@ -4754,9 +4710,8 @@ msgid "Variables / Signals"
 msgstr "Переменные / Сигналы"
 
 #: ../src/symbols.c:903
-#, fuzzy
 msgid "Processes / Blocks / Components"
-msgstr "Процессы / Компоненты"
+msgstr "Процессы / Блоки / Компоненты"
 
 #: ../src/symbols.c:911
 msgid "Events"
@@ -4779,19 +4734,16 @@ msgid "Properties"
 msgstr "Свойства"
 
 #: ../src/symbols.c:975
-#, fuzzy
 msgid "Programs"
-msgstr "Программа"
+msgstr "Программы"
 
 #: ../src/symbols.c:977
-#, fuzzy
 msgid "Functions / Subroutines"
 msgstr "Функции / Процедуры"
 
 #: ../src/symbols.c:980
-#, fuzzy
 msgid "Components"
-msgstr "Автозавершение"
+msgstr "Компоненты"
 
 #: ../src/symbols.c:981
 msgid "Blocks"
@@ -4806,7 +4758,6 @@ msgid "Targets"
 msgstr "Цели"
 
 #: ../src/symbols.c:1008
-#, fuzzy
 msgid "Indexes"
 msgstr "Индексы"
 
@@ -4827,9 +4778,8 @@ msgid "Structs"
 msgstr "Структуры"
 
 #: ../src/symbols.c:1043
-#, fuzzy
 msgid "Extern Variables"
-msgstr "Переменные"
+msgstr "Внешние переменные"
 
 #: ../src/symbols.c:1803
 #, c-format
@@ -5026,7 +4976,6 @@ msgid "Search Field"
 msgstr "Найти поле"
 
 #: ../src/toolbar.c:390
-#, fuzzy
 msgid "Goto Field"
 msgstr "Перейти к полю"
 
@@ -5151,22 +5100,20 @@ msgid "H_ide Sidebar"
 msgstr "_Скрыть боковую панель"
 
 #: ../src/sidebar.c:720 ../plugins/filebrowser.c:630
-#, fuzzy
 msgid "_Find in Files..."
-msgstr "_Найти в файлах"
+msgstr "_Найти в файлах..."
 
 #: ../src/sidebar.c:730
 msgid "Show _Paths"
 msgstr "Показать _пути"
 
 #: ../src/ui_utils.c:62
-#, fuzzy
 msgid ""
 "line: %l / %L\t col: %c\t sel: %s\t %w      %t      %mmode: %M      "
 "encoding: %e      filetype: %f      scope: %S"
 msgstr ""
-"строка: %l / %L\t столбец: %c\t выделено: %s\t %w      %t      %mрежим: "
-"%M      кодировка: %e      тип файла: %f      область действия: %S"
+"строка: %l / %L\t столбец: %c\t выделено: %s\t %w      %t      %mрежим: %M      "
+"кодировка: %e      тип файла: %f      область действия: %S"
 
 #. L = lines
 #: ../src/ui_utils.c:236
@@ -5316,7 +5263,7 @@ msgid "Executables"
 msgstr "Исполняемые"
 
 #: ../src/win32.c:1218
-#, fuzzy, c-format
+#, c-format
 msgid "Process timed out after %.02f s!"
 msgstr "Процесс исчерпал лимит времени после %.02f секунд ожидания!"
 
@@ -5417,19 +5364,16 @@ msgid "Create Cla_ss"
 msgstr "Создать _класс"
 
 #: ../plugins/classbuilder.c:1097
-#, fuzzy
 msgid "_C++ Class..."
-msgstr "Класс _C++"
+msgstr "Класс _C++..."
 
 #: ../plugins/classbuilder.c:1100
-#, fuzzy
 msgid "_GTK+ Class..."
-msgstr "Класс _GTK+"
+msgstr "Класс _GTK+..."
 
 #: ../plugins/classbuilder.c:1103
-#, fuzzy
 msgid "_PHP Class..."
-msgstr "Класс _PHP"
+msgstr "Класс _PHP..."
 
 #: ../plugins/htmlchars.c:40
 msgid "HTML Characters"
@@ -5508,9 +5452,8 @@ msgid "HTML (name)"
 msgstr "HTML (имя)"
 
 #: ../plugins/htmlchars.c:739
-#, fuzzy
 msgid "_Insert Special HTML Characters..."
-msgstr "Вставить _специальные символы HTML"
+msgstr "Вставить _специальные символы HTML..."
 
 #. Add menuitem for html replacement functions
 #: ../plugins/htmlchars.c:754
@@ -5590,15 +5533,13 @@ msgstr "_Экспорт"
 
 #. HTML
 #: ../plugins/export.c:787
-#, fuzzy
 msgid "As _HTML..."
-msgstr "В _HTML"
+msgstr "В _HTML..."
 
 #. LaTeX
 #: ../plugins/export.c:793
-#, fuzzy
 msgid "As _LaTeX..."
-msgstr "В _LaTeX"
+msgstr "В _LaTeX..."
 
 #: ../plugins/filebrowser.c:45
 msgid "File Browser"
@@ -5618,7 +5559,6 @@ msgid "Could not execute configured external command '%s' (%s)."
 msgstr "Не удалось выполнить внешнюю команду '%s' (%s)."
 
 #: ../plugins/filebrowser.c:615
-#, fuzzy
 msgid "Open _Externally"
 msgstr "Открыть во _внешней программе"
 
@@ -5826,19 +5766,16 @@ msgid "_Side by Side"
 msgstr "По _вертикали"
 
 #: ../plugins/splitwindow.c:413
-#, fuzzy
 msgid "_Top and Bottom"
 msgstr "По _горизонтали"
 
 #: ../plugins/splitwindow.c:429
-#, fuzzy
 msgid "Side by Side"
-msgstr "По _вертикали"
+msgstr "По вертикали"
 
 #: ../plugins/splitwindow.c:431
-#, fuzzy
 msgid "Top and Bottom"
-msgstr "По _горизонтали"
+msgstr "По горизонтали"
 
 #~ msgid "<b>Type:</b>"
 #~ msgstr "<b>Тип:</b>"
