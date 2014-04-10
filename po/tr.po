@@ -1,12 +1,12 @@
 # Turkish translations for geany package.
 # Copyright (C) 2006-2013 THE geany'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the geany package.
-# Gürkan Gür <seqizz@gmail.com> 2008 - 2013
+# Gürkan Gür <seqizz@gmail.com> 2008 - 2014
 msgid ""
 msgstr ""
-"Project-Id-Version: Geany 1.23\n"
+"Project-Id-Version: Geany 1.24\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-03-30 20:46+0200\n"
+"POT-Creation-Date: 2014-04-09 02:36+0000\n"
 "PO-Revision-Date: 2012-06-12 12:36+0200\n"
 "Last-Translator: Gürkan Gür <seqizz@gmail.com>\n"
 "Language-Team: \n"
@@ -281,13 +281,12 @@ msgid "Use Windows native dialogs"
 msgstr "Windows dosya yöneticisinin diyaloglarını kullan"
 
 #: ../data/geany.glade.h:54
-#, fuzzy
 msgid ""
 "Defines whether to use the Windows native dialogs or whether to use the GTK "
 "default dialogs"
 msgstr ""
-"Windows içindeki dosya diyaloglarının mı yoksa GTK dosya diyaloglarının mı "
-"kullanılacağını belirler"
+"Windowsa ait diyalogların mı yoksa GTK diyaloglarının mı kullanılacağını "
+"belirler"
 
 #: ../data/geany.glade.h:55
 msgid "<b>Miscellaneous</b>"
@@ -1653,46 +1652,39 @@ msgstr "Global ayarları kullan"
 
 #: ../data/geany.glade.h:347
 msgid "Size:"
-msgstr ""
+msgstr "Boyut:"
 
 #: ../data/geany.glade.h:348
-#, fuzzy
 msgid "Location:"
-msgstr "<b>Yer:</b>"
+msgstr "Konum:"
 
 #: ../data/geany.glade.h:349
-#, fuzzy
 msgid "Read-only:"
-msgstr ", salt okunur"
+msgstr "Salt okunur:"
 
 #: ../data/geany.glade.h:350
-#, fuzzy
 msgid "Encoding:"
-msgstr "K_odlama:"
+msgstr "Kodlama:"
 
 #: ../data/geany.glade.h:351
-#, fuzzy
 msgid "Modified:"
-msgstr "<b>Düzenlendi:</b>"
+msgstr "Düzenlenme:"
 
 #: ../data/geany.glade.h:352
-#, fuzzy
 msgid "Changed:"
-msgstr "De_ğiştir"
+msgstr "Değiştirme:"
 
 #: ../data/geany.glade.h:353
-#, fuzzy
 msgid "Accessed:"
-msgstr "<b>Ulaşıldı:</b>"
+msgstr "Erişim:"
 
 #: ../data/geany.glade.h:354
 msgid "(only inside Geany)"
 msgstr "(sadece Geany içinde)"
 
 #: ../data/geany.glade.h:355
-#, fuzzy
 msgid "Permissions:"
-msgstr "<b>İzinler:</b>"
+msgstr "İzinler:"
 
 #: ../data/geany.glade.h:356
 msgid "Read:"
@@ -1739,18 +1731,16 @@ msgid "New (with _Template)"
 msgstr "Yeni (_kalıp ile)"
 
 #: ../data/geany.glade.h:368
-#, fuzzy
 msgid "_Open..."
-msgstr "A_ç"
+msgstr "A_ç..."
 
 #: ../data/geany.glade.h:369
 msgid "Recent _Files"
 msgstr "_Önceki Dosyalar"
 
 #: ../data/geany.glade.h:370
-#, fuzzy
 msgid "Save _As..."
-msgstr "Farklı kaydet"
+msgstr "F_arklı kaydet..."
 
 #: ../data/geany.glade.h:371
 msgid "Save A_ll"
@@ -1770,9 +1760,8 @@ msgid "Page Set_up"
 msgstr "Sayfa D_üzeni"
 
 #: ../data/geany.glade.h:375
-#, fuzzy
 msgid "_Print..."
-msgstr "Yazdır"
+msgstr "_Yazdır..."
 
 #: ../data/geany.glade.h:376 ../src/notebook.c:490
 msgid "Close Ot_her Documents"
@@ -1871,9 +1860,8 @@ msgid "P_lugin Preferences"
 msgstr "Ek_lenti Seçenekleri"
 
 #: ../data/geany.glade.h:400
-#, fuzzy
 msgid "_Find..."
-msgstr "Bul"
+msgstr "A_ra..."
 
 #: ../data/geany.glade.h:401
 msgid "Find _Next"
@@ -1884,14 +1872,12 @@ msgid "Find _Previous"
 msgstr "Ön_cekini Bul"
 
 #: ../data/geany.glade.h:403 ../src/symbols.c:2425
-#, fuzzy
 msgid "Find in F_iles..."
-msgstr "Dosyalar _İçinde Bul"
+msgstr "Dosyaların _İçinde Ara..."
 
 #: ../data/geany.glade.h:404
-#, fuzzy
 msgid "_Replace..."
-msgstr "Değişti_r"
+msgstr "Değişti_r..."
 
 #: ../data/geany.glade.h:405
 msgid "Next _Message"
@@ -1910,9 +1896,8 @@ msgid "_Go to Previous Marker"
 msgstr "_Önceki İşaretçiye Git"
 
 #: ../data/geany.glade.h:409
-#, fuzzy
 msgid "_Go to Line..."
-msgstr "Satıra _Git"
+msgstr "Satıra _Git..."
 
 #: ../data/geany.glade.h:410 ../src/keybindings.c:440
 msgid "Find Next _Selection"
@@ -1935,14 +1920,12 @@ msgid "_View"
 msgstr "G_örünüm"
 
 #: ../data/geany.glade.h:415
-#, fuzzy
 msgid "Change _Font..."
-msgstr "Ya_zıtipini Değiştir"
+msgstr "Ya_zıtipini Değiştir..."
 
 #: ../data/geany.glade.h:416
-#, fuzzy
 msgid "Change _Color Scheme..."
-msgstr "_Renk Şemaları"
+msgstr "_Renk Şemasını Değiştir..."
 
 #: ../data/geany.glade.h:417
 msgid "Show _Markers Margin"
@@ -2093,9 +2076,8 @@ msgid "_Replace Tabs by Spaces"
 msgstr "S_ekmeleri Boşluk Yap"
 
 #: ../data/geany.glade.h:454
-#, fuzzy
 msgid "Replace Spaces b_y Tabs..."
-msgstr "Boşlukları Sekme _Yap"
+msgstr "Boşlukları Sekme _Yap..."
 
 #: ../data/geany.glade.h:455
 msgid "_Fold All"
@@ -2118,9 +2100,8 @@ msgid "_Project"
 msgstr "_Proje"
 
 #: ../data/geany.glade.h:460
-#, fuzzy
 msgid "_New..."
-msgstr "Ye_ni"
+msgstr "Ye_ni..."
 
 #: ../data/geany.glade.h:461
 msgid "_Recent Projects"
@@ -2164,9 +2145,8 @@ msgid "_Word Count"
 msgstr "Kelime Saya_cı"
 
 #: ../data/geany.glade.h:471
-#, fuzzy
 msgid "Load Ta_gs..."
-msgstr "Bi_çim Yükle"
+msgstr "Bi_çim Yükle..."
 
 #: ../data/geany.glade.h:472
 msgid "_Help"
@@ -2189,14 +2169,12 @@ msgid "Wi_ki"
 msgstr "Wi_ki"
 
 #: ../data/geany.glade.h:477
-#, fuzzy
 msgid "Report a _Bug..."
-msgstr "Hata _Bildir"
+msgstr "Hata _Bildir..."
 
 #: ../data/geany.glade.h:478
-#, fuzzy
 msgid "_Donate..."
-msgstr "_Bağış Yap"
+msgstr "_Bağış Yap..."
 
 #: ../data/geany.glade.h:479 ../src/sidebar.c:124
 msgid "Symbols"
@@ -2489,9 +2467,8 @@ msgstr "_Çalıştır"
 
 #. build the code with make custom
 #: ../src/build.c:2618 ../src/build.c:2809 ../src/build.c:2863
-#, fuzzy
 msgid "Make Custom _Target..."
-msgstr "_Özel Hedef Derle"
+msgstr "_Özel Hedef Derle..."
 
 #. build the code with make object
 #: ../src/build.c:2620 ../src/build.c:2810 ../src/build.c:2871
@@ -2703,20 +2680,20 @@ msgstr "Y_eniden adlandır"
 msgid "Save the file and rename it"
 msgstr "Dosyayı kaydet ve yeniden isimlendir"
 
-#: ../src/dialogs.c:686 ../src/win32.c:687
+#: ../src/dialogs.c:686 ../src/win32.c:688
 msgid "Error"
 msgstr "Hata"
 
 #: ../src/dialogs.c:689 ../src/dialogs.c:767 ../src/dialogs.c:1333
-#: ../src/win32.c:693
+#: ../src/win32.c:694
 msgid "Question"
 msgstr "Soru"
 
-#: ../src/dialogs.c:692 ../src/win32.c:699
+#: ../src/dialogs.c:692 ../src/win32.c:700
 msgid "Warning"
 msgstr "Uyarı"
 
-#: ../src/dialogs.c:695 ../src/win32.c:705
+#: ../src/dialogs.c:695 ../src/win32.c:706
 msgid "Information"
 msgstr "Bilgi"
 
@@ -2750,9 +2727,9 @@ msgid "unknown"
 msgstr "bilinmeyen"
 
 #: ../src/dialogs.c:1214
-#, fuzzy, c-format
+#, c-format
 msgid "%s Properties"
-msgstr "Özellikler"
+msgstr "%s Özellikleri"
 
 #: ../src/dialogs.c:1247 ../src/ui_utils.c:285
 msgid "(with BOM)"
@@ -3113,38 +3090,34 @@ msgid "%s file"
 msgstr "%s dosya"
 
 #: ../src/filetypes.c:93
-#, fuzzy, c-format
+#, c-format
 msgid "%s script"
-msgstr "%s betik dosyası"
+msgstr "%s betiği"
 
 #: ../src/filetypes.c:94
-#, fuzzy, c-format
+#, c-format
 msgid "%s document"
-msgstr "XML dosyası"
+msgstr "%s dosyası"
 
 #: ../src/filetypes.c:164
-#, fuzzy
 msgid "Shell"
-msgstr "Kabuk:"
+msgstr "Kabuk"
 
 #: ../src/filetypes.c:165
 msgid "Makefile"
 msgstr "Makefile"
 
 #: ../src/filetypes.c:169
-#, fuzzy
 msgid "Cascading Stylesheet"
 msgstr "CSS dosyası"
 
 #: ../src/filetypes.c:178
-#, fuzzy
 msgid "Config"
 msgstr "Ayar dosyası"
 
 #: ../src/filetypes.c:179
-#, fuzzy
 msgid "Gettext translation"
-msgstr "Gettext çeviri dosyası"
+msgstr "Gettext çevirisi"
 
 #: ../src/filetypes.c:414
 msgid "_Programming Languages"
@@ -3162,13 +3135,13 @@ msgstr "İşaretle_me Dilleri"
 msgid "M_iscellaneous"
 msgstr "Çe_şitli"
 
-#: ../src/filetypes.c:1168 ../src/win32.c:105
+#: ../src/filetypes.c:1168 ../src/win32.c:106
 msgid "All Source"
 msgstr "Bütün Kaynak"
 
 #. create meta file filter "All files"
-#: ../src/filetypes.c:1193 ../src/project.c:300 ../src/win32.c:95
-#: ../src/win32.c:140 ../src/win32.c:161 ../src/win32.c:166
+#: ../src/filetypes.c:1193 ../src/project.c:300 ../src/win32.c:96
+#: ../src/win32.c:141 ../src/win32.c:162 ../src/win32.c:167
 msgid "All files"
 msgstr "Tüm dosyalar"
 
@@ -4568,7 +4541,7 @@ msgstr "Parçalar"
 
 #: ../src/symbols.c:768
 msgid "Assembly"
-msgstr ""
+msgstr "Assembly"
 
 #: ../src/symbols.c:769
 msgid "Steps"
@@ -4583,9 +4556,8 @@ msgid "Traits"
 msgstr ""
 
 #: ../src/symbols.c:787
-#, fuzzy
 msgid "Implementations"
-msgstr "Uyguladığı:"
+msgstr "Uygulamalar"
 
 #: ../src/symbols.c:789 ../src/symbols.c:1033
 msgid "Typedefs / Enums"
@@ -4723,19 +4695,16 @@ msgid "Properties"
 msgstr "Özellikler"
 
 #: ../src/symbols.c:975
-#, fuzzy
 msgid "Programs"
-msgstr "Program"
+msgstr "Programlar"
 
 #: ../src/symbols.c:977
-#, fuzzy
 msgid "Functions / Subroutines"
 msgstr "Fonksiyonlar / Prosedürler"
 
 #: ../src/symbols.c:980
-#, fuzzy
 msgid "Components"
-msgstr "Tamamlamalar"
+msgstr "Bileşenler"
 
 #: ../src/symbols.c:981
 msgid "Blocks"
@@ -4770,9 +4739,8 @@ msgid "Structs"
 msgstr "Yapılar"
 
 #: ../src/symbols.c:1043
-#, fuzzy
 msgid "Extern Variables"
-msgstr "Değişkenler"
+msgstr "Dış Değişkenler"
 
 #: ../src/symbols.c:1803
 #, c-format
@@ -5094,9 +5062,8 @@ msgid "H_ide Sidebar"
 msgstr "Araç Çubuğunu G_izle"
 
 #: ../src/sidebar.c:720 ../plugins/filebrowser.c:630
-#, fuzzy
 msgid "_Find in Files..."
-msgstr "Dosyalarda _Bul"
+msgstr "Dosyalarda _Bul..."
 
 #: ../src/sidebar.c:730
 msgid "Show _Paths"
@@ -5249,15 +5216,15 @@ msgid ""
 msgstr ""
 "Terminalde dizin değiştirilemedi, büyük ihtimalle bir komut içerdiğinden."
 
-#: ../src/win32.c:160
+#: ../src/win32.c:161
 msgid "Geany project files"
 msgstr "Geany proje dosyaları"
 
-#: ../src/win32.c:165
+#: ../src/win32.c:166
 msgid "Executables"
 msgstr "Çalıştırılabilir dosyalar"
 
-#: ../src/win32.c:1217
+#: ../src/win32.c:1218
 #, c-format
 msgid "Process timed out after %.02f s!"
 msgstr "İşlem %.02f s zaman aşımını geçti!"
@@ -5359,19 +5326,16 @@ msgid "Create Cla_ss"
 msgstr "_Sınıf Oluştur"
 
 #: ../plugins/classbuilder.c:1097
-#, fuzzy
 msgid "_C++ Class..."
-msgstr "_C++ Sınıfı"
+msgstr "_C++ Sınıfı..."
 
 #: ../plugins/classbuilder.c:1100
-#, fuzzy
 msgid "_GTK+ Class..."
-msgstr "_GTK+ Sınıfı"
+msgstr "_GTK+ Sınıfı..."
 
 #: ../plugins/classbuilder.c:1103
-#, fuzzy
 msgid "_PHP Class..."
-msgstr "_PHP Sınıfı"
+msgstr "_PHP Sınıfı..."
 
 #: ../plugins/htmlchars.c:40
 msgid "HTML Characters"
@@ -5449,9 +5413,8 @@ msgid "HTML (name)"
 msgstr "HTML (isim)"
 
 #: ../plugins/htmlchars.c:739
-#, fuzzy
 msgid "_Insert Special HTML Characters..."
-msgstr "Özel HTML karakterler_i Ekle"
+msgstr "Özel HTML karakterler_i Ekle..."
 
 #. Add menuitem for html replacement functions
 #: ../plugins/htmlchars.c:754
@@ -5529,15 +5492,13 @@ msgstr "Dı_şa Aktar"
 
 #. HTML
 #: ../plugins/export.c:787
-#, fuzzy
 msgid "As _HTML..."
-msgstr "_HTML Olarak"
+msgstr "_HTML olarak..."
 
 #. LaTeX
 #: ../plugins/export.c:793
-#, fuzzy
 msgid "As _LaTeX..."
-msgstr "_LaTeX Olarak"
+msgstr "_LaTeX olarak..."
 
 #: ../plugins/filebrowser.c:45
 msgid "File Browser"
@@ -5686,7 +5647,7 @@ msgstr "Otomatik Kayıt"
 
 #: ../plugins/saveactions.c:600
 msgid "Enable save when losing _focus"
-msgstr ""
+msgstr "Odağı kaybedince kaydetmeyi e_tkinleştir"
 
 #: ../plugins/saveactions.c:606 ../plugins/saveactions.c:668
 #: ../plugins/saveactions.c:709
@@ -5768,14 +5729,12 @@ msgid "_Top and Bottom"
 msgstr "_Üst ve Alt"
 
 #: ../plugins/splitwindow.c:429
-#, fuzzy
 msgid "Side by Side"
-msgstr "_Yan yana"
+msgstr "Yan yana"
 
 #: ../plugins/splitwindow.c:431
-#, fuzzy
 msgid "Top and Bottom"
-msgstr "_Üst ve Alt"
+msgstr "Üst ve Alt"
 
 #~ msgid "<b>Type:</b>"
 #~ msgstr "<b>Tür:</b>"
