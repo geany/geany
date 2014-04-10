@@ -227,6 +227,16 @@ Section "Desktop Shortcuts" SEC08
 	CreateShortCut "$QUICKLAUNCH\Geany.lnk" "$INSTDIR\bin\Geany.exe"
 SectionEnd
 
+; Development files
+Section "Development files" SEC09
+	SetOverwrite ifnewer
+	SetOutPath "$INSTDIR\include"
+	File /r "${RESOURCEDIR}\include\*"
+
+	SetOutPath "$INSTDIR\lib\pkgconfig"
+	File "${RESOURCEDIR}\lib\pkgconfig\geany.pc"
+SectionEnd
+
 Section -AdditionalIcons
 	SetOutPath $INSTDIR
 	!insertmacro MUI_STARTMENU_WRITE_BEGIN ${PRODUCT_NAME}
@@ -277,6 +287,7 @@ Section Uninstall
 	RMDir /r "$INSTDIR\doc"
 	RMDir /r "$INSTDIR\data"
 	RMDir /r "$INSTDIR\etc"
+	RMDir /r "$INSTDIR\include"
 	RMDir /r "$INSTDIR\lib"
 	RMDir /r "$INSTDIR\share"
 	RMDir "$INSTDIR"
@@ -314,6 +325,7 @@ SectionEnd
 !endif
 !insertmacro MUI_DESCRIPTION_TEXT ${SEC07} "Add context menu item 'Open With Geany'"
 !insertmacro MUI_DESCRIPTION_TEXT ${SEC08} "Create shortcuts for Geany on the desktop and in the Quicklaunch Bar"
+!insertmacro MUI_DESCRIPTION_TEXT ${SEC09} "You need these files only if you want to develop own plugins for Geany. If unsure, you can skip it."
 !insertmacro MUI_FUNCTION_DESCRIPTION_END
 
 ;;;;;;;;;;;;;;;;;;;;;
