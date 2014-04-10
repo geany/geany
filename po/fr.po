@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: Geany 1.23\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-03-30 20:46+0200\n"
-"PO-Revision-Date: 2014-04-09 23:10+0200\n"
+"PO-Revision-Date: 2014-04-10 17:29+0200\n"
 "Last-Translator: Colomban Wendling <ban@herbesfolles.org>\n"
 "Language-Team: French <geany-i18n@uvena.de>\n"
 "Language: fr\n"
@@ -43,7 +43,7 @@ msgstr "_Format"
 
 #: ../data/geany.glade.h:3
 msgid "I_nsert"
-msgstr "I_nsérer"
+msgstr "_Insérer"
 
 #: ../data/geany.glade.h:4
 msgid "Insert _ChangeLog Entry"
@@ -59,7 +59,7 @@ msgstr "Insérer un commentaire _multilignes"
 
 #: ../data/geany.glade.h:7
 msgid "_More"
-msgstr "_Plus"
+msgstr "P_lus"
 
 #: ../data/geany.glade.h:8
 msgid "Insert File _Header"
@@ -75,7 +75,7 @@ msgstr "Insérer une note _BSD"
 
 #: ../data/geany.glade.h:11
 msgid "Insert Dat_e"
-msgstr "Insérer la dat_e"
+msgstr "Insérer la _date"
 
 #: ../data/geany.glade.h:12
 msgid "invisible"
@@ -87,19 +87,19 @@ msgstr "_Insérer \"include <...>\""
 
 #: ../data/geany.glade.h:14 ../src/keybindings.c:415
 msgid "_Insert Alternative White Space"
-msgstr "_Insérer un espacement alternatif"
+msgstr "Insérer un _espacement alternatif"
 
 #: ../data/geany.glade.h:15
 msgid "_Search"
-msgstr "_Rechercher"
+msgstr "Rec_hercher"
 
 #: ../data/geany.glade.h:16
 msgid "Open Selected F_ile"
-msgstr "Ou_vrir le fichier sélectionné"
+msgstr "Ouvrir le fichier s_électionné"
 
 #: ../data/geany.glade.h:17 ../src/symbols.c:2415
 msgid "Find _Usage"
-msgstr "_Rechercher dans tous les documents"
+msgstr "Rechercher d_ans tous les documents"
 
 #: ../data/geany.glade.h:18 ../src/symbols.c:2420
 msgid "Find _Document Usage"
@@ -1808,11 +1808,11 @@ msgstr "_Ouvrir…"
 
 #: ../data/geany.glade.h:369
 msgid "Recent _Files"
-msgstr "_Fichiers récents"
+msgstr "Fi_chiers récents"
 
 #: ../data/geany.glade.h:370
 msgid "Save _As..."
-msgstr "Enregistrer sous…"
+msgstr "Enregistrer _sous…"
 
 #: ../data/geany.glade.h:371
 msgid "Save A_ll"
@@ -1825,7 +1825,7 @@ msgstr "_Recharger"
 
 #: ../data/geany.glade.h:373
 msgid "R_eload As"
-msgstr "R_echarger en tant que"
+msgstr "Rec_harger en tant que"
 
 #: ../data/geany.glade.h:374
 msgid "Page Set_up"
@@ -1833,7 +1833,7 @@ msgstr "_Mise en page"
 
 #: ../data/geany.glade.h:375
 msgid "_Print..."
-msgstr "Imprimer…"
+msgstr "_Imprimer…"
 
 #: ../data/geany.glade.h:376 ../src/notebook.c:490
 msgid "Close Ot_her Documents"
@@ -1845,11 +1845,11 @@ msgstr "_Tout fermer"
 
 #: ../data/geany.glade.h:378
 msgid "_Commands"
-msgstr "_Commandes"
+msgstr "Comm_andes"
 
 #: ../data/geany.glade.h:379 ../src/keybindings.c:350
 msgid "_Cut Current Line(s)"
-msgstr "_Couper le(s) ligne(s) courante(s)"
+msgstr "Co_uper le(s) ligne(s) courante(s)"
 
 #: ../data/geany.glade.h:380 ../src/keybindings.c:347
 msgid "_Copy Current Line(s)"
@@ -1865,11 +1865,11 @@ msgstr "_Dupliquer la ligne ou la sélection"
 
 #: ../data/geany.glade.h:383 ../src/keybindings.c:360
 msgid "_Select Current Line(s)"
-msgstr "_Sélectionner la(les) ligne(s) courante(s)"
+msgstr "Sélectionner la(les) _ligne(s) courante(s)"
 
 #: ../data/geany.glade.h:384 ../src/keybindings.c:363
 msgid "_Select Current Paragraph"
-msgstr "_Sélectionner le paragraphe courant"
+msgstr "Sélectionner le _paragraphe courant"
 
 #: ../data/geany.glade.h:385
 msgid "_Move Line(s) Up"
@@ -1925,15 +1925,15 @@ msgstr "Insérer des co_mmentaires"
 
 #: ../data/geany.glade.h:398
 msgid "Preference_s"
-msgstr "Préférence_s"
+msgstr "_Préférences"
 
 #: ../data/geany.glade.h:399 ../src/keybindings.c:428
 msgid "P_lugin Preferences"
-msgstr "Préférences des _plugins"
+msgstr "Préférences des p_lugins"
 
 #: ../data/geany.glade.h:400
 msgid "_Find..."
-msgstr "Rechercher…"
+msgstr "_Rechercher…"
 
 #: ../data/geany.glade.h:401
 msgid "Find _Next"
@@ -1961,11 +1961,11 @@ msgstr "Message _précédent"
 
 #: ../data/geany.glade.h:407 ../src/keybindings.c:477
 msgid "_Go to Next Marker"
-msgstr "Se _rendre au marqueur suivant"
+msgstr "Se rendre au marqueur _suivant"
 
 #: ../data/geany.glade.h:408 ../src/keybindings.c:480
 msgid "_Go to Previous Marker"
-msgstr "Se _rendre au marqueur précédent"
+msgstr "Se rendre au m_arqueur précédent"
 
 #: ../data/geany.glade.h:409
 msgid "_Go to Line..."
@@ -1985,7 +1985,7 @@ msgstr "Tout _marquer"
 
 #: ../data/geany.glade.h:413
 msgid "Go to T_ag Declaration"
-msgstr "Aller à la déclaration du _symbole"
+msgstr "Aller à la déclaration du sym_bole"
 
 #: ../data/geany.glade.h:414 ../src/dialogs.c:358
 msgid "_View"
@@ -2021,11 +2021,11 @@ msgstr "Afficher les guides d'_indentation"
 
 #: ../data/geany.glade.h:422
 msgid "Full_screen"
-msgstr "Plein é_cran"
+msgstr "Plein _écran"
 
 #: ../data/geany.glade.h:423
 msgid "To_ggle All Additional Widgets"
-msgstr "Afficher/Cacher toutes les fenêtres _supplémentaires"
+msgstr "Afficher/Cacher toutes les fenêtres s_upplémentaires"
 
 #: ../data/geany.glade.h:424
 msgid "Show Message _Window"
@@ -2149,7 +2149,7 @@ msgstr "Remplacer les tabulati_ons par des espaces"
 
 #: ../data/geany.glade.h:454
 msgid "Replace Spaces b_y Tabs..."
-msgstr "Rempla_cer les espaces par des tabulations…"
+msgstr "Remplacer les espaces par des tab_ulations…"
 
 #: ../data/geany.glade.h:455
 msgid "_Fold All"
@@ -2194,7 +2194,7 @@ msgstr "_Appliquer l'indentation par défaut"
 #. build the code
 #: ../data/geany.glade.h:465 ../src/build.c:2566 ../src/build.c:2843
 msgid "_Build"
-msgstr "Const_ruire"
+msgstr "_Construire"
 
 #: ../data/geany.glade.h:466
 msgid "_Tools"
@@ -2441,7 +2441,7 @@ msgstr "Erreur suiva_nte"
 
 #: ../src/build.c:1470
 msgid "_Previous Error"
-msgstr "_Erreur précédente"
+msgstr "Erreur _précédente"
 
 #. arguments
 #: ../src/build.c:1480 ../src/build.c:2883
@@ -5450,7 +5450,7 @@ msgstr "Type de constructeur :"
 
 #: ../plugins/classbuilder.c:1091
 msgid "Create Cla_ss"
-msgstr "Créer une cla_sse"
+msgstr "C_réer une classe"
 
 #: ../plugins/classbuilder.c:1097
 msgid "_C++ Class..."
