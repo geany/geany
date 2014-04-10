@@ -380,13 +380,17 @@ static void get_line_and_column_from_filename(gchar *filename, gint *line, gint 
 
 
 #ifdef G_OS_WIN32
-static void change_working_directory_on_windows(const gchar *install_dir)
+static void change_working_directory_on_windows()
 {
+	gchar *install_dir = win32_get_installation_dir();
+
 	/* On Windows, change the working directory to the Geany installation path to not lock
 	 * the directory of a file passed as command line argument (see bug #2626124).
 	 * This also helps if plugins or other code uses relative paths to load
 	 * any additional resources (e.g. share/geany-plugins/...). */
 	win32_set_working_directory(install_dir);
+
+	g_free(install_dir);
 }
 #endif
 
@@ -404,8 +408,6 @@ static void setup_paths(void)
 
 	data_dir = g_build_filename(install_dir, "data", NULL); /* e.g. C:\Program Files\geany\data */
 	doc_dir = g_build_filename(install_dir, "doc", NULL);
-
-	change_working_directory_on_windows(install_dir);
 
 	g_free(install_dir);
 #else
@@ -1097,6 +1099,12 @@ gint main(gint argc, gchar **argv)
 			cl_options.new_instance = TRUE;
 		}
 	}
+#endif
+
+#ifdef G_OS_WIN32
+	/* after we initialized the socket code and handled command line args,
+	 * let's change the working directory on Windows to not lock it */
+	change_working_directory_on_windows();
 #endif
 
 	locale = get_locale();
