@@ -238,7 +238,7 @@ def configure(conf):
             _add_to_env_and_define(conf, 'PREFIX', new_prefix, quote=True)
             _add_to_env_and_define(conf, 'BINDIR', os.path.join(new_prefix, 'bin'), quote=True)
         _add_to_env_and_define(conf, 'DOCDIR', os.path.join(conf.env['PREFIX'], 'doc'), quote=True)
-        _add_to_env_and_define(conf, 'LIBDIR', conf.env['PREFIX'], quote=True)
+        _add_to_env_and_define(conf, 'LIBDIR', '%s/lib' % conf.env['PREFIX'], quote=True)
         conf.define('LOCALEDIR', os.path.join('share' 'locale'), quote=True)
         # overwrite LOCALEDIR to install message catalogues properly
         conf.env['LOCALEDIR'] = os.path.join(conf.env['PREFIX'], 'share/locale')
@@ -501,23 +501,22 @@ def build(bld):
     ###
     # Install files
     ###
-    if not is_win32:
-        # Headers
-        bld.install_files('${PREFIX}/include/geany', '''
-            src/document.h src/editor.h src/encodings.h src/filetypes.h src/geany.h
-            src/highlighting.h src/keybindings.h src/msgwindow.h src/plugindata.h
-            src/prefs.h src/project.h src/search.h src/stash.h src/support.h
-            src/templates.h src/toolbar.h src/ui_utils.h src/utils.h src/build.h src/gtkcompat.h
-            plugins/geanyplugin.h plugins/geanyfunctions.h''')
-        bld.install_files('${PREFIX}/include/geany/scintilla', '''
-            scintilla/include/SciLexer.h scintilla/include/Scintilla.h
-            scintilla/include/Scintilla.iface scintilla/include/ScintillaWidget.h ''')
-        bld.install_files('${PREFIX}/include/geany/tagmanager', '''
-            tagmanager/src/tm_file_entry.h tagmanager/src/tm_project.h
-            tagmanager/src/tm_source_file.h tagmanager/src/tm_parser.h
-            tagmanager/src/tm_symbol.h tagmanager/src/tm_tag.h
-            tagmanager/src/tm_tagmanager.h tagmanager/src/tm_work_object.h
-            tagmanager/src/tm_workspace.h ''')
+    # Headers
+    bld.install_files('${PREFIX}/include/geany', '''
+        src/document.h src/editor.h src/encodings.h src/filetypes.h src/geany.h
+        src/highlighting.h src/keybindings.h src/msgwindow.h src/plugindata.h
+        src/prefs.h src/project.h src/search.h src/stash.h src/support.h
+        src/templates.h src/toolbar.h src/ui_utils.h src/utils.h src/build.h src/gtkcompat.h
+        plugins/geanyplugin.h plugins/geanyfunctions.h''')
+    bld.install_files('${PREFIX}/include/geany/scintilla', '''
+        scintilla/include/SciLexer.h scintilla/include/Scintilla.h
+        scintilla/include/Scintilla.iface scintilla/include/ScintillaWidget.h ''')
+    bld.install_files('${PREFIX}/include/geany/tagmanager', '''
+        tagmanager/src/tm_file_entry.h tagmanager/src/tm_project.h
+        tagmanager/src/tm_source_file.h tagmanager/src/tm_parser.h
+        tagmanager/src/tm_symbol.h tagmanager/src/tm_tag.h
+        tagmanager/src/tm_tagmanager.h tagmanager/src/tm_work_object.h
+        tagmanager/src/tm_workspace.h ''')
     # Docs
     base_dir = '${PREFIX}' if is_win32 else '${DOCDIR}'
     ext = '.txt' if is_win32 else ''
