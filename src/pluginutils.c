@@ -103,7 +103,20 @@ void plugin_module_make_resident(GeanyPlugin *plugin)
  * (if supported by @a signal_name).
  * @param callback The function to call when the signal is emitted.
  * @param user_data The user data passed to the signal handler.
- * @see plugin_callbacks. */
+ * @see plugin_callbacks.
+ *
+ * @warning This should only be used on objects that outlive the plugin, never on
+ *          objects that will get destroyed before the plugin is unloaded.  For objects
+ *          created and destroyed by the plugin, you can simply use @c g_signal_connect(),
+ *          since all handlers are disconnected when the object is destroyed anyway.
+ *          For objects that may or may not outlive the plugin (like @link GeanyEditor.sci
+ *          a document's @c ScintillaObject @endlink, which is destroyed when the document
+ *          is closed), you currently have to manually handle both situations, when the
+ *          plugin is unloaded before the object is destroyed (and then, you have to
+ *          disconnect the signal on @c plugin_cleanup()), and when the object is destroyed
+ *          during the plugin's lifetime (in which case you cannot and should not disconnect
+ *          manually in @c plugin_cleanup() since it already has been disconnected and the
+ *          object has been destroyed), and disconnect yourself or not as appropriate. */
 void plugin_signal_connect(GeanyPlugin *plugin,
 		GObject *object, const gchar *signal_name, gboolean after,
 		GCallback callback, gpointer user_data)
