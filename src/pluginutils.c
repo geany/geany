@@ -128,6 +128,9 @@ void plugin_signal_connect(GeanyPlugin *plugin,
 	gulong id;
 	SignalConnection sc;
 
+	g_return_if_fail(plugin != NULL);
+	g_return_if_fail(object == NULL || G_IS_OBJECT(object));
+
 	if (!object)
 		object = geany_object;
 
