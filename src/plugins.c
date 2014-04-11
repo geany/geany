@@ -769,6 +769,37 @@ plugin_new(const gchar *fname, gboolean init_plugin, gboolean add_to_list)
 }
 
 
+static void on_object_weak_notify(gpointer data, GObject *old_ptr)
+{
+	Plugin *plugin = data;
+	guint i = 0;
+
+	g_return_if_fail(plugin && plugin->signal_ids);
+
+	for (i = 0; i < plugin->signal_ids->len; i++)
+	{
+		SignalConnection *sc = &g_array_index(plugin->signal_ids, SignalConnection, i);
+
+		if (sc->object == old_ptr)
+		{
+			g_array_remove_index_fast(plugin->signal_ids, i);
+			/* we can break the loop right after finding the first match,
+			 * because we will get one notification per connected signal */
+			break;
+		}
+	}
+}
+
+
+/* add an object to watch for destruction, and release pointers to it when destroyed.
+ * this should only be used by plugin_signal_connect() to add a watch on
+ * the object lifetime and nuke out references to it in plugin->signal_ids */
+void plugin_watch_object(Plugin *plugin, gpointer object)
+{
+	g_object_weak_ref(object, on_object_weak_notify, plugin);
+}
+
+
 static void remove_callbacks(Plugin *plugin)
 {
 	GArray *signal_ids = plugin->signal_ids;
@@ -778,7 +809,10 @@ static void remove_callbacks(Plugin *plugin)
 		return;
 
 	foreach_array(SignalConnection, sc, signal_ids)
+	{
 		g_signal_handler_disconnect(sc->object, sc->handler_id);
+		g_object_weak_unref(sc->object, on_object_weak_notify, plugin);
+	}
 
 	g_array_free(signal_ids, TRUE);
 }

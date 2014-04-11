@@ -61,4 +61,7 @@ GeanyPluginPrivate;
 typedef GeanyPluginPrivate Plugin;	/* shorter alias */
 
 
+void plugin_watch_object(Plugin *plugin, gpointer object);
+
+
 #endif /* GEANY_PLUGINPRIVATE_H */
