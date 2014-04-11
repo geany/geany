@@ -1,15 +1,15 @@
 # Portuguese translation for geany
 # Copyright (c) 2009 Rosetta Contributors and Canonical Ltd 2009
-# Copyright (c) 2009 - 2011 Geany's development team
+# Copyright (c) 2009 - 2014 Geany's development team
 # This file is distributed under the same license as the geany package.
 #
-# André Glória <gloria_dot_andre_at_gmail_dot_com> 2009 - 2011
+# André Glória <gloria_dot_andre_at_gmail_dot_com> 2009 - 2014
 msgid ""
 msgstr ""
-"Project-Id-Version: Geany 1.23\n"
+"Project-Id-Version: Geany 1.24\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-03-30 20:46+0200\n"
-"PO-Revision-Date: 2012-06-06 01:00+0100\n"
+"POT-Creation-Date: 2014-04-06 02:36+0000\n"
+"PO-Revision-Date: 2014-04-10 23:45-0000\n"
 "Last-Translator: André Glória <gloria_dot_andre_at_gmail_dot_com>\n"
 "Language-Team: \n"
 "Language: pt\n"
@@ -18,9 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Launchpad-Export-Date: 2010-03-08 13:33+0000\n"
-"X-Generator: Launchpad (build Unknown)\n"
-"X-Poedit-Language: Portuguese\n"
-"X-Poedit-Country: PORTUGAL\n"
+"X-Generator: Poedit 1.6.4\n"
 
 #: ../geany.desktop.in.h:1 ../data/geany.glade.h:365
 msgid "Geany"
@@ -157,12 +155,8 @@ msgid "Load virtual terminal support"
 msgstr "Carregar suporte para terminal virtual"
 
 #: ../data/geany.glade.h:29
-msgid ""
-"Whether the virtual terminal emulation (VTE) should be loaded at startup, "
-"disable it if you do not need it"
-msgstr ""
-"Se a emulação virtual do terminal (VTE) deverá ser carregada no arranque, "
-"desactive-a caso não precise"
+msgid "Whether the virtual terminal emulation (VTE) should be loaded at startup, disable it if you do not need it"
+msgstr "Se a emulação virtual do terminal (VTE) deverá ser carregada no arranque, desactive-a caso não precise"
 
 #: ../data/geany.glade.h:30
 msgid "Enable plugin support"
@@ -197,11 +191,8 @@ msgid "Startup path:"
 msgstr "Caminho Inicial:"
 
 #: ../data/geany.glade.h:38
-msgid ""
-"Path to start in when opening or saving files. Must be an absolute path."
-msgstr ""
-"Caminho onde começar quando abrir ou guardar ficheiros. Tem de ser um "
-"caminho absoluto."
+msgid "Path to start in when opening or saving files. Must be an absolute path."
+msgstr "Caminho onde começar quando abrir ou guardar ficheiros. Tem de ser um caminho absoluto."
 
 #: ../data/geany.glade.h:39
 msgid "Project files:"
@@ -216,14 +207,8 @@ msgid "Extra plugin path:"
 msgstr "Directório para plugins extra:"
 
 #: ../data/geany.glade.h:42
-msgid ""
-"Geany looks by default in the global installation path and in the "
-"configuration directory. The path entered here will be searched additionally "
-"for plugins. Leave blank to disable."
-msgstr ""
-"Por norma o Geany procura no directório de instalação e na directoria de "
-"configurações. O directório aqui introduzido será usado para procurar mais "
-"plugins. Deixe o campo em branco para desactivar."
+msgid "Geany looks by default in the global installation path and in the configuration directory. The path entered here will be searched additionally for plugins. Leave blank to disable."
+msgstr "Por norma o Geany procura no directório de instalação e na directoria de configurações. O directório aqui introduzido será usado para procurar mais plugins. Deixe o campo em branco para desactivar."
 
 #: ../data/geany.glade.h:43
 msgid "<b>Paths</b>"
@@ -238,63 +223,40 @@ msgid "Beep on errors or when compilation has finished"
 msgstr "Apitar quando ocorrerem erros ou compilações terminarem"
 
 #: ../data/geany.glade.h:46
-msgid ""
-"Whether to beep if an error occurred or when the compilation process has "
-"finished"
-msgstr ""
-"Se um som deve ser produzido quando um erro ocorre ou um compilação termina"
+msgid "Whether to beep if an error occurred or when the compilation process has finished"
+msgstr "Se um som deve ser produzido quando um erro ocorre ou um compilação termina"
 
 #: ../data/geany.glade.h:47
 msgid "Switch to status message list at new message"
 msgstr "Mudar para lista de mensagem de estado quando existir nova mensagem"
 
 #: ../data/geany.glade.h:48
-msgid ""
-"Switch to the status message tab (in the notebook window at the bottom) if a "
-"new status message arrives"
-msgstr ""
-"Mudar para a aba de mensagens de estado (na janela principal, em baixo) caso "
-"uma nova mensagem apareça"
+msgid "Switch to the status message tab (in the notebook window at the bottom) if a new status message arrives"
+msgstr "Mudar para a aba de mensagens de estado (na janela principal, em baixo) caso uma nova mensagem apareça"
 
 #: ../data/geany.glade.h:49
 msgid "Suppress status messages in the status bar"
 msgstr "Suprimir mensagens de estado na barra de estado"
 
 #: ../data/geany.glade.h:50
-msgid ""
-"Removes all messages from the status bar. The messages are still displayed "
-"in the status messages window."
-msgstr ""
-"Remove todas as mensagens da barra de estado. As mensagens são à mesma "
-"mostradas na janela de mensagens de estado."
+msgid "Removes all messages from the status bar. The messages are still displayed in the status messages window."
+msgstr "Remove todas as mensagens da barra de estado. As mensagens são à mesma mostradas na janela de mensagens de estado."
 
 #: ../data/geany.glade.h:51
 msgid "Auto-focus widgets (focus follows mouse)"
 msgstr "Auto-Focar widgets (o foco segue o rato)"
 
 #: ../data/geany.glade.h:52
-msgid ""
-"Gives the focus automatically to widgets below the mouse cursor. Works for "
-"the main editor widget, the scribble, the toolbar search and goto line "
-"fields and the VTE."
-msgstr ""
-"Foca/Realça automaticamente os widgets que se encontram debaixo do cursor do "
-"rato. Funciona na principal janela de edição, no widget \"Rabiscar\", na "
-"barra de procura, nos campos de \"Ir para linha\" e no VTE."
+msgid "Gives the focus automatically to widgets below the mouse cursor. Works for the main editor widget, the scribble, the toolbar search and goto line fields and the VTE."
+msgstr "Foca/Realça automaticamente os widgets que se encontram debaixo do cursor do rato. Funciona na principal janela de edição, no widget \"Rabiscar\", na barra de procura, nos campos de \"Ir para linha\" e no VTE."
 
 #: ../data/geany.glade.h:53
-#, fuzzy
 msgid "Use Windows native dialogs"
-msgstr "Usar diálogos de Abrir/Guardar ficheiros, do Windows"
+msgstr "Usar diálogos do Windows"
 
 #: ../data/geany.glade.h:54
-#, fuzzy
-msgid ""
-"Defines whether to use the Windows native dialogs or whether to use the GTK "
-"default dialogs"
-msgstr ""
-"Define se se devem utilizar os diálogos de Abrir/Guardar nativos do Windows "
-"ou os do GTK"
+msgid "Defines whether to use the Windows native dialogs or whether to use the GTK default dialogs"
+msgstr "Define se se devem utilizar diálogos nativos do Windows ou os do GTK"
 
 #: ../data/geany.glade.h:55
 msgid "<b>Miscellaneous</b>"
@@ -321,13 +283,8 @@ msgid "Use the current word under the cursor for Find dialogs"
 msgstr "Usar a palavra onde se encontra o cursor, nos campos de Procura"
 
 #: ../data/geany.glade.h:61
-msgid ""
-"Use current word under the cursor when opening the Find, Find in Files or "
-"Replace dialog and there is no selection"
-msgstr ""
-"Usar a palavra onde se encontra o cursor quando realizar uma Procura, uma "
-"Procura em Ficheiros ou uma Substituição, no caso de não haver uma palavra "
-"seleccionada"
+msgid "Use current word under the cursor when opening the Find, Find in Files or Replace dialog and there is no selection"
+msgstr "Usar a palavra onde se encontra o cursor quando realizar uma Procura, uma Procura em Ficheiros ou uma Substituição, no caso de não haver uma palavra seleccionada"
 
 #: ../data/geany.glade.h:62
 msgid "Use the current file's directory for Find in Files"
@@ -342,28 +299,16 @@ msgid "Use project-based session files"
 msgstr "Usar ficheiros de sessão, por projecto"
 
 #: ../data/geany.glade.h:65
-msgid ""
-"Whether to store a project's session files and open them when re-opening the "
-"project"
-msgstr ""
-"Se os ficheiros de sessão do projecto devem ser guardados e abertos aquando "
-"da reabertura do projecto"
+msgid "Whether to store a project's session files and open them when re-opening the project"
+msgstr "Se os ficheiros de sessão do projecto devem ser guardados e abertos aquando da reabertura do projecto"
 
 #: ../data/geany.glade.h:66
 msgid "Store project file inside the project base directory"
 msgstr "Guardar o ficheiro de projecto na directoria base do projecto"
 
 #: ../data/geany.glade.h:67
-msgid ""
-"When enabled, a project file is stored by default inside the project base "
-"directory when creating new projects instead of one directory above the base "
-"directory. You can still change the path of the project file in the New "
-"Project dialog."
-msgstr ""
-"Quando activo, o ficheiro de projecto é guardado, por norma, dentro da "
-"directoria base do projecto (ao criar um novo), ao invés de ser guardado um "
-"nível a cima desta. Pode, no entanto, alterar o directório do ficheiro de "
-"projecto na janela de Novo Projecto."
+msgid "When enabled, a project file is stored by default inside the project base directory when creating new projects instead of one directory above the base directory. You can still change the path of the project file in the New Project dialog."
+msgstr "Quando activo, o ficheiro de projecto é guardado, por norma, dentro da directoria base do projecto (ao criar um novo), ao invés de ser guardado um nível a cima desta. Pode, no entanto, alterar o directório do ficheiro de projecto na janela de Novo Projecto."
 
 #: ../data/geany.glade.h:68
 msgid "<b>Projects</b>"
@@ -422,9 +367,8 @@ msgid "Bottom"
 msgstr "Fundo"
 
 #: ../data/geany.glade.h:81
-#, fuzzy
 msgid "<b>Message window</b>"
-msgstr "Janela de Mensagens:"
+msgstr "<b>Janela de Mensagens</b>"
 
 #: ../data/geany.glade.h:82
 msgid "Symbol list:"
@@ -460,8 +404,7 @@ msgstr "Apresentar barra de estados"
 
 #: ../data/geany.glade.h:90
 msgid "Whether to show the status bar at the bottom of the main window"
-msgstr ""
-"Se a barra de estado deve aparecer, no fundo da janela principal do programa"
+msgstr "Se a barra de estado deve aparecer, no fundo da janela principal do programa"
 
 #: ../data/geany.glade.h:91 ../src/prefs.c:1612
 msgid "Interface"
@@ -476,12 +419,8 @@ msgid "Show close buttons"
 msgstr "Mostrar botões para fechar"
 
 #: ../data/geany.glade.h:94
-msgid ""
-"Shows a small cross button in the file tabs to easily close files when "
-"clicking on it (requires restart of Geany)"
-msgstr ""
-"Mostra uma pequena cruz no separador do ficheiro, para o fechar ao clicar "
-"nesta (será necessário reiniciar o Geany)"
+msgid "Shows a small cross button in the file tabs to easily close files when clicking on it (requires restart of Geany)"
+msgstr "Mostra uma pequena cruz no separador do ficheiro, para o fechar ao clicar nesta (será necessário reiniciar o Geany)"
 
 #: ../data/geany.glade.h:95
 msgid "Placement of new file tabs:"
@@ -500,12 +439,8 @@ msgid "Next to current"
 msgstr "A seguir ao activo"
 
 #: ../data/geany.glade.h:99
-msgid ""
-"Whether to place file tabs next to the current tab rather than at the edges "
-"of the notebook"
-msgstr ""
-"Se se devem colocar abas a seguir à aba actual, ao invés, de na extremidade "
-"do bloco"
+msgid "Whether to place file tabs next to the current tab rather than at the edges of the notebook"
+msgstr "Se se devem colocar abas a seguir à aba actual, ao invés, de na extremidade do bloco"
 
 #: ../data/geany.glade.h:100
 msgid "Double-clicking hides all additional widgets"
@@ -513,8 +448,7 @@ msgstr "Fazer um clique duplo esconde todos os widgets adicionais"
 
 #: ../data/geany.glade.h:101
 msgid "Calls the View->Toggle All Additional Widgets command"
-msgstr ""
-"Executa o comando em Ver -> Activa/Desactiva todos os widgets adicionais"
+msgstr "Executa o comando em Ver -> Activa/Desactiva todos os widgets adicionais"
 
 #: ../data/geany.glade.h:102
 msgid "Switch to last used document after closing a tab"
@@ -546,9 +480,7 @@ msgstr "_Acrescentar a Barra de Ferramentas ao menu"
 
 #: ../data/geany.glade.h:109
 msgid "Pack the toolbar to the main menu to save vertical space"
-msgstr ""
-"Acondiciona a Barra de Ferramentas no menu principal de modo a poupar espaço "
-"vertical no editor"
+msgstr "Acondiciona a Barra de Ferramentas no menu principal de modo a poupar espaço vertical no editor"
 
 #: ../data/geany.glade.h:110 ../src/toolbar.c:939
 msgid "Customize Toolbar"
@@ -607,46 +539,24 @@ msgid "Line wrapping"
 msgstr "Translinear"
 
 #: ../data/geany.glade.h:124
-msgid ""
-"Wrap the line at the window border and continue it on the next line. Note: "
-"line wrapping has a high performance cost for large documents so should be "
-"disabled on slow machines."
-msgstr ""
-"Mudar de linha ao atingir o fim da janela, continuando a escrita na linha "
-"seguinte. Note: mudar de linha ao escrever tem um enorme custo de computação "
-"em ficheiros grandes e como tal deve ser desactivada em computadores fracos."
+msgid "Wrap the line at the window border and continue it on the next line. Note: line wrapping has a high performance cost for large documents so should be disabled on slow machines."
+msgstr "Mudar de linha ao atingir o fim da janela, continuando a escrita na linha seguinte. Note: mudar de linha ao escrever tem um enorme custo de computação em ficheiros grandes e como tal deve ser desactivada em computadores fracos."
 
 #: ../data/geany.glade.h:125
 msgid "\"Smart\" home key"
 msgstr "Activar tecla Home \"inteligente\""
 
 #: ../data/geany.glade.h:126
-msgid ""
-"When \"smart\" home is enabled, the HOME key will move the caret to the "
-"first non-blank character of the line, unless it is already there, it moves "
-"to the very beginning of the line. When this feature is disabled, the HOME "
-"key always moves the caret to the start of the current line, regardless of "
-"its current position."
-msgstr ""
-"Quando a função tecla Home \"inteligente\" está activada, o pressionar desta "
-"tecla move o cursor para o primeiro caractere não branco da linha, excepto "
-"se já estiver nessa posição, caso em que este será movido mesmo para o "
-"início da linha. Se esta funcionalidade estiver desactivada, a tecla Home "
-"moverá sempre o cursor para o inicio da linha actual, independentemente da "
-"sua posição."
+msgid "When \"smart\" home is enabled, the HOME key will move the caret to the first non-blank character of the line, unless it is already there, it moves to the very beginning of the line. When this feature is disabled, the HOME key always moves the caret to the start of the current line, regardless of its current position."
+msgstr "Quando a função tecla Home \"inteligente\" está activada, o pressionar desta tecla move o cursor para o primeiro caractere não branco da linha, excepto se já estiver nessa posição, caso em que este será movido mesmo para o início da linha. Se esta funcionalidade estiver desactivada, a tecla Home moverá sempre o cursor para o inicio da linha actual, independentemente da sua posição."
 
 #: ../data/geany.glade.h:127
 msgid "Disable Drag and Drop"
 msgstr "Desactivar Arrastar e Largar"
 
 #: ../data/geany.glade.h:128
-msgid ""
-"Disable drag and drop completely in the editor window so you can't drag and "
-"drop any selections within or outside of the editor window"
-msgstr ""
-"Desactiva o arrastar e largar em toda a janela do editor, assim não será "
-"possível arrastar e largar quaisquer selecções nem dentro nem fora da janela "
-"do editor"
+msgid "Disable drag and drop completely in the editor window so you can't drag and drop any selections within or outside of the editor window"
+msgstr "Desactiva o arrastar e largar em toda a janela do editor, assim não será possível arrastar e largar quaisquer selecções nem dentro nem fora da janela do editor"
 
 #: ../data/geany.glade.h:129
 msgid "Code folding"
@@ -657,25 +567,16 @@ msgid "Fold/unfold all children of a fold point"
 msgstr "Agregar/desagregar todos os \"filhos\" de um ponto de agregação"
 
 #: ../data/geany.glade.h:131
-msgid ""
-"Fold or unfold all children of a fold point. By pressing the Shift key while "
-"clicking on a fold symbol the contrary behavior is used."
-msgstr ""
-"Compacta ou expande todos os filhos de um ponto de compactação. Ao "
-"pressionar a tecla Shift em simultâneo com o clicar no símbolo de "
-"compactação, obtém-se o comportamento contrário."
+msgid "Fold or unfold all children of a fold point. By pressing the Shift key while clicking on a fold symbol the contrary behavior is used."
+msgstr "Compacta ou expande todos os filhos de um ponto de compactação. Ao pressionar a tecla Shift em simultâneo com o clicar no símbolo de compactação, obtém-se o comportamento contrário."
 
 #: ../data/geany.glade.h:132
 msgid "Use indicators to show compile errors"
 msgstr "Usar indicadores para mostrar erros de compilação"
 
 #: ../data/geany.glade.h:133
-msgid ""
-"Whether to use indicators (a squiggly underline) to highlight the lines "
-"where the compiler found a warning or an error"
-msgstr ""
-"Se se devem usar indicadores (um sublinhado irregular em forma de ondas) "
-"para destacar as linhas onde o compilador encontrou um erro ou um aviso"
+msgid "Whether to use indicators (a squiggly underline) to highlight the lines where the compiler found a warning or an error"
+msgstr "Se se devem usar indicadores (um sublinhado irregular em forma de ondas) para destacar as linhas onde o compilador encontrou um erro ou um aviso"
 
 #: ../data/geany.glade.h:134
 msgid "Newline strips trailing spaces"
@@ -683,9 +584,7 @@ msgstr "Mudança de linha remove espaços do final da linha"
 
 #: ../data/geany.glade.h:135
 msgid "Enable newline to strip the trailing spaces on the previous line"
-msgstr ""
-"Activa a funcionalidade da mudança de linha (enter) remover todos os espaços "
-"no final da linha anterior"
+msgstr "Activa a funcionalidade da mudança de linha (enter) remover todos os espaços no final da linha anterior"
 
 #: ../data/geany.glade.h:136
 msgid "Line breaking column:"
@@ -696,12 +595,8 @@ msgid "Comment toggle marker:"
 msgstr "Marcador do alternar de um comentário:"
 
 #: ../data/geany.glade.h:138
-msgid ""
-"A string which is added when toggling a line comment in a source file, it is "
-"used to mark the comment as toggled."
-msgstr ""
-"Uma expressão que é adicionada quando se comuta uma linha de comentário num "
-"ficheiro, a expressão indica que o comentário foi comutado."
+msgid "A string which is added when toggling a line comment in a source file, it is used to mark the comment as toggled."
+msgstr "Uma expressão que é adicionada quando se comuta uma linha de comentário num ficheiro, a expressão indica que o comentário foi comutado."
 
 #: ../data/geany.glade.h:139
 msgid "<b>Features</b>"
@@ -712,12 +607,8 @@ msgid "Features"
 msgstr "Funcionalidades"
 
 #: ../data/geany.glade.h:141
-msgid ""
-"Note: To apply these settings to all currently open documents, use "
-"<i>Project->Apply Default Indentation</i>."
-msgstr ""
-"Nota: Para aplicar estas configurações a todos os documentos abertos, use "
-"<i>Projecto->Aplicar Indentação por Omissão</i>."
+msgid "Note: To apply these settings to all currently open documents, use <i>Project->Apply Default Indentation</i>."
+msgstr "Nota: Para aplicar estas configurações a todos os documentos abertos, use <i>Projecto->Aplicar Indentação por Omissão</i>."
 
 #: ../data/geany.glade.h:142
 msgid "Width:"
@@ -736,23 +627,16 @@ msgid "Detect type from file"
 msgstr "Detectar tipo a partir do ficheiro"
 
 #: ../data/geany.glade.h:146
-msgid ""
-"Whether to detect the indentation type from file contents when a file is "
-"opened"
-msgstr ""
-"Se o tipo de indentação deverá ser detectado através do conteúdo do "
-"ficheiro, quando este é aberto"
+msgid "Whether to detect the indentation type from file contents when a file is opened"
+msgstr "Se o tipo de indentação deverá ser detectado através do conteúdo do ficheiro, quando este é aberto"
 
 #: ../data/geany.glade.h:147
 msgid "T_abs and spaces"
 msgstr "T_abulações e espaços"
 
 #: ../data/geany.glade.h:148
-msgid ""
-"Use spaces if the total indent is less than the tab width, otherwise use both"
-msgstr ""
-"Usar espaços se o total da indentação for menos do que a largura de uma "
-"tabulação, caso contrário usar os dois"
+msgid "Use spaces if the total indent is less than the tab width, otherwise use both"
+msgstr "Usar espaços se o total da indentação for menos do que a largura de uma tabulação, caso contrário usar os dois"
 
 #: ../data/geany.glade.h:149
 msgid "_Spaces"
@@ -775,12 +659,8 @@ msgid "Detect width from file"
 msgstr "Detectar largura a partir do ficheiro"
 
 #: ../data/geany.glade.h:154
-msgid ""
-"Whether to detect the indentation width from file contents when a file is "
-"opened"
-msgstr ""
-"Se o tipo de indentação deverá ser detectado através do conteúdo do "
-"ficheiro, quando este é aberto"
+msgid "Whether to detect the indentation width from file contents when a file is opened"
+msgstr "Se o tipo de indentação deverá ser detectado através do conteúdo do ficheiro, quando este é aberto"
 
 #: ../data/geany.glade.h:155
 msgid "Type:"
@@ -791,11 +671,8 @@ msgid "Tab key indents"
 msgstr "Tecla \"Tab\" indenta"
 
 #: ../data/geany.glade.h:157
-msgid ""
-"Pressing tab/shift-tab indents/unindents instead of inserting a tab character"
-msgstr ""
-"Pressionando a tecla \"Tab\" indenta ao invés de inserir um caractere de "
-"tabulação. Pressionar as teclas \"Shift\"+\"Tab\" remove a indentação"
+msgid "Pressing tab/shift-tab indents/unindents instead of inserting a tab character"
+msgstr "Pressionando a tecla \"Tab\" indenta ao invés de inserir um caractere de tabulação. Pressionar as teclas \"Shift\"+\"Tab\" remove a indentação"
 
 #: ../data/geany.glade.h:158
 msgid "<b>Indentation</b>"
@@ -810,12 +687,8 @@ msgid "Snippet completion"
 msgstr "Completar excertos de código"
 
 #: ../data/geany.glade.h:161
-msgid ""
-"Type a defined short character sequence and complete it to a more complex "
-"string using a single keypress"
-msgstr ""
-"Escreva uma pequena expressão previamente definida e complete-a, criando uma "
-"expressão mais complexa, pressionando apenas uma tecla"
+msgid "Type a defined short character sequence and complete it to a more complex string using a single keypress"
+msgstr "Escreva uma pequena expressão previamente definida e complete-a, criando uma expressão mais complexa, pressionando apenas uma tecla"
 
 #: ../data/geany.glade.h:162
 msgid "XML/HTML tag auto-closing"
@@ -830,25 +703,16 @@ msgid "Automatic continuation of multi-line comments"
 msgstr "Continuação automática de comentários multi-linha"
 
 #: ../data/geany.glade.h:165
-msgid ""
-"Continue automatically multi-line comments in languages like C, C++ and Java "
-"when a new line is entered inside such a comment"
-msgstr ""
-"Continuar automaticamente um comentário que ocupa mais do que uma linha em "
-"linguagens como o C, C++ e Java, quando uma mudança de linha (tecla enter) é "
-"inserida dentro desse comentário"
+msgid "Continue automatically multi-line comments in languages like C, C++ and Java when a new line is entered inside such a comment"
+msgstr "Continuar automaticamente um comentário que ocupa mais do que uma linha em linguagens como o C, C++ e Java, quando uma mudança de linha (tecla enter) é inserida dentro desse comentário"
 
 #: ../data/geany.glade.h:166
 msgid "Autocomplete symbols"
 msgstr "Auto-Completar símbolos"
 
 #: ../data/geany.glade.h:167
-msgid ""
-"Automatic completion of known symbols in open files (function names, global "
-"variables, ...)"
-msgstr ""
-"Completa automaticamente símbolos conhecidos em ficheiros abertos (nomes de "
-"funções, variáveis globais, ...)"
+msgid "Automatic completion of known symbols in open files (function names, global variables, ...)"
+msgstr "Completa automaticamente símbolos conhecidos em ficheiros abertos (nomes de funções, variáveis globais, ...)"
 
 #: ../data/geany.glade.h:168
 msgid "Autocomplete all words in document"
@@ -871,12 +735,8 @@ msgid "Characters to type for autocompletion:"
 msgstr "Caracteres necessários para auto-completar:"
 
 #: ../data/geany.glade.h:173
-msgid ""
-"The amount of characters which are necessary to show the symbol "
-"autocompletion list"
-msgstr ""
-"Define a quantidade de caracteres que são necessários introduzir até que "
-"seja apresentada a lista de auto-completação de símbolos"
+msgid "The amount of characters which are necessary to show the symbol autocompletion list"
+msgstr "Define a quantidade de caracteres que são necessários introduzir até que seja apresentada a lista de auto-completação de símbolos"
 
 #: ../data/geany.glade.h:174
 msgid "Display height in rows for the autocompletion list"
@@ -884,23 +744,15 @@ msgstr "Altura, em linhas, com que a lista de auto-completação é apresentada"
 
 #: ../data/geany.glade.h:175
 msgid "Maximum number of entries to display in the autocompletion list"
-msgstr ""
-"Número máximo de entradas a serem apresentadas na lista de auto-completação"
+msgstr "Número máximo de entradas a serem apresentadas na lista de auto-completação"
 
 #: ../data/geany.glade.h:176
 msgid "Symbol list update frequency:"
 msgstr "Frequência de actualização da lista de símbolos:"
 
 #: ../data/geany.glade.h:177
-msgid ""
-"Minimal delay (in milliseconds) between two automatic updates of the symbol "
-"list. Note that a too short delay may have performance impact, especially "
-"with large files. A delay of 0 disables real-time updates."
-msgstr ""
-"Atraso mínimo (em mili-segundos) entre 2 actualizações automáticas da lista "
-"de símbolos. Note que um atraso muito curto poderá causar um impacto no "
-"desempenho, especialmente com ficheiros muito grandes. Um atraso de 0 (zero) "
-"desactiva as actualizações em tempo-real."
+msgid "Minimal delay (in milliseconds) between two automatic updates of the symbol list. Note that a too short delay may have performance impact, especially with large files. A delay of 0 disables real-time updates."
+msgstr "Atraso mínimo (em mili-segundos) entre 2 actualizações automáticas da lista de símbolos. Note que um atraso muito curto poderá causar um impacto no desempenho, especialmente com ficheiros muito grandes. Um atraso de 0 (zero) desactiva as actualizações em tempo-real."
 
 #: ../data/geany.glade.h:178
 msgid "<b>Completions</b>"
@@ -960,8 +812,7 @@ msgstr "Inverter as cores do realce da sintaxe"
 
 #: ../data/geany.glade.h:192
 msgid "Invert all colors, by default using white text on a black background"
-msgstr ""
-"Inverter todas as cores, usar por omissão texto branco sobre fundo preto"
+msgstr "Inverter todas as cores, usar por omissão texto branco sobre fundo preto"
 
 #: ../data/geany.glade.h:193
 msgid "Show indentation guides"
@@ -1000,12 +851,8 @@ msgid "Show markers margin"
 msgstr "Mostra margem para marcadores"
 
 #: ../data/geany.glade.h:202
-msgid ""
-"Shows or hides the small margin right of the line numbers, which is used to "
-"mark lines"
-msgstr ""
-"Mostra ou oculta uma pequena coluna ao lado direito dos números de linha, a "
-"qual pode ser usada para marcar linhas"
+msgid "Shows or hides the small margin right of the line numbers, which is used to mark lines"
+msgstr "Mostra ou oculta uma pequena coluna ao lado direito dos números de linha, a qual pode ser usada para marcar linhas"
 
 #: ../data/geany.glade.h:203
 msgid "Stop scrolling at last line"
@@ -1013,9 +860,7 @@ msgstr "Parar deslocamento na última linha"
 
 #: ../data/geany.glade.h:204
 msgid "Whether to stop scrolling one page past the last line of a document"
-msgstr ""
-"Se o deslocamento (scroll) de uma página deve terminar após a última linha "
-"do documento"
+msgstr "Se o deslocamento (scroll) de uma página deve terminar após a última linha do documento"
 
 #: ../data/geany.glade.h:205
 msgid "<b>Display</b>"
@@ -1038,41 +883,24 @@ msgid "Color Chooser"
 msgstr "Selector de Cores"
 
 #: ../data/geany.glade.h:210
-msgid ""
-"The long line marker is a thin vertical line in the editor, it helps to mark "
-"long lines, or as a hint to break the line. Set this value to a value "
-"greater than 0 to specify the column where it should appear."
-msgstr ""
-"A marca de linha longa é uma fina linha vertical que aparece no editor. Esta "
-"ajuda a identificar linhas longas ou avisa que uma quebra de linha deve ser "
-"inserida. Defina este valor para algo maior do que zero a fim de especificar "
-"a coluna onde a marca deve aparecer"
+msgid "The long line marker is a thin vertical line in the editor, it helps to mark long lines, or as a hint to break the line. Set this value to a value greater than 0 to specify the column where it should appear."
+msgstr "A marca de linha longa é uma fina linha vertical que aparece no editor. Esta ajuda a identificar linhas longas ou avisa que uma quebra de linha deve ser inserida. Defina este valor para algo maior do que zero a fim de especificar a coluna onde a marca deve aparecer"
 
 #: ../data/geany.glade.h:211
 msgid "Line"
 msgstr "Linha"
 
 #: ../data/geany.glade.h:212
-msgid ""
-"Prints a vertical line in the editor window at the given cursor position "
-"(see below)"
-msgstr ""
-"Desenha uma linha vertical na janela de edição na posição indicada (ver em "
-"baixo)"
+msgid "Prints a vertical line in the editor window at the given cursor position (see below)"
+msgstr "Desenha uma linha vertical na janela de edição na posição indicada (ver em baixo)"
 
 #: ../data/geany.glade.h:213
 msgid "Background"
 msgstr "Fundo"
 
 #: ../data/geany.glade.h:214
-msgid ""
-"The background color of characters after the given cursor position (see "
-"below) changed to the color set below, (this is recommended if you use "
-"proportional fonts)"
-msgstr ""
-"A cor de fundo dos caracteres após a posição indicada (ver em baixo) muda "
-"para a cor definida em baixo (recomendado caso esteja a usar tipos de letra "
-"proporcionais)"
+msgid "The background color of characters after the given cursor position (see below) changed to the color set below, (this is recommended if you use proportional fonts)"
+msgstr "A cor de fundo dos caracteres após a posição indicada (ver em baixo) muda para a cor definida em baixo (recomendado caso esteja a usar tipos de letra proporcionais)"
 
 #: ../data/geany.glade.h:215
 msgid "Enabled"
@@ -1095,12 +923,8 @@ msgid "Only for rectangular selections"
 msgstr "Apenas para selecções rectangulares"
 
 #: ../data/geany.glade.h:220
-msgid ""
-"Only show virtual spaces beyond the end of lines when drawing a rectangular "
-"selection"
-msgstr ""
-"Mostrar os espaçamentos virtuais para além do final das linhas, apenas "
-"quando a desenhar uma selecção rectagular"
+msgid "Only show virtual spaces beyond the end of lines when drawing a rectangular selection"
+msgstr "Mostrar os espaçamentos virtuais para além do final das linhas, apenas quando a desenhar uma selecção rectagular"
 
 #: ../data/geany.glade.h:221
 msgid "Always"
@@ -1128,9 +952,7 @@ msgstr "Abre um novo documento a partir da linha de comandos"
 
 #: ../data/geany.glade.h:227
 msgid "Start a new file for each command-line filename that doesn't exist"
-msgstr ""
-"Cria um novo documento por cada nome de ficheiro na linha de comandos que "
-"não exista"
+msgstr "Cria um novo documento por cada nome de ficheiro na linha de comandos que não exista"
 
 #: ../data/geany.glade.h:228
 msgid "Default end of line characters:"
@@ -1153,14 +975,8 @@ msgid "Use fixed encoding when opening non-Unicode files"
 msgstr "Usar codificação fixa ao abrir ficheiros \"não Unicode\""
 
 #: ../data/geany.glade.h:233
-msgid ""
-"This option disables the automatic detection of the file encoding when "
-"opening non-Unicode files and opens the file with the specified encoding "
-"(usually not needed)"
-msgstr ""
-"Esta opção desactiva a detecção automática da codificação ao abrir ficheiros "
-"\"não Unicode\" e abre-os com a codificação especificada (normalmente não é "
-"necessário)"
+msgid "This option disables the automatic detection of the file encoding when opening non-Unicode files and opens the file with the specified encoding (usually not needed)"
+msgstr "Esta opção desactiva a detecção automática da codificação ao abrir ficheiros \"não Unicode\" e abre-os com a codificação especificada (normalmente não é necessário)"
 
 #: ../data/geany.glade.h:234
 msgid "Default encoding (existing non-Unicode files):"
@@ -1168,9 +984,7 @@ msgstr "Codificação pré-definida (ficheiros \"não Unicode\" já existentes)"
 
 #: ../data/geany.glade.h:235
 msgid "Sets the default encoding for opening existing non-Unicode files"
-msgstr ""
-"Define a codificação por omissão ao abrir ficheiros \"não Unicode\" "
-"existentes"
+msgstr "Define a codificação por omissão ao abrir ficheiros \"não Unicode\" existentes"
 
 #: ../data/geany.glade.h:236
 msgid "<b>Encodings</b>"
@@ -1189,13 +1003,8 @@ msgid "Ensure consistent line endings"
 msgstr "Garantir terminações de linha consistentes"
 
 #: ../data/geany.glade.h:240
-msgid ""
-"Ensures that newline characters always get converted before saving, avoiding "
-"mixed line endings in the same file"
-msgstr ""
-"Garante que os caracteres de mudança de linha são sempre convertido antes do "
-"ficheiro ser guardado, isto evita a existência de caracteres de mudança de "
-"linha diferentes num mesmo ficheiro"
+msgid "Ensures that newline characters always get converted before saving, avoiding mixed line endings in the same file"
+msgstr "Garante que os caracteres de mudança de linha são sempre convertido antes do ficheiro ser guardado, isto evita a existência de caracteres de mudança de linha diferentes num mesmo ficheiro"
 
 #: ../data/geany.glade.h:241
 msgid "Strip trailing spaces and tabs"
@@ -1223,20 +1032,15 @@ msgstr "Comprimento da lista de ficheiros recentes:"
 
 #: ../data/geany.glade.h:247
 msgid "Specifies the number of files which are stored in the Recent files list"
-msgstr ""
-"Especifica o número de ficheiros a guardar na lista de ficheiros Recentes"
+msgstr "Especifica o número de ficheiros a guardar na lista de ficheiros Recentes"
 
 #: ../data/geany.glade.h:248
 msgid "Disk check timeout:"
 msgstr "Tempo entre verificações no disco:"
 
 #: ../data/geany.glade.h:249
-msgid ""
-"How often to check for changes to document files on disk, in seconds. Zero "
-"disables checking."
-msgstr ""
-"Cadencia para a verificação de alterações dos documentos no disco, em "
-"segundos. O zero desactiva a verificação."
+msgid "How often to check for changes to document files on disk, in seconds. Zero disables checking."
+msgstr "Cadencia para a verificação de alterações dos documentos no disco, em segundos. O zero desactiva a verificação."
 
 #: ../data/geany.glade.h:250 ../src/prefs.c:1618 ../src/symbols.c:695
 #: ../plugins/filebrowser.c:1119
@@ -1253,16 +1057,12 @@ msgstr "Navegador Web:"
 
 #: ../data/geany.glade.h:254
 #, no-c-format
-msgid ""
-"A terminal emulator command (%c is substituted with the Geany run script "
-"filename)"
-msgstr ""
+msgid "A terminal emulator command (%c is substituted with the Geany run script filename)"
+msgstr "Um comando do emulador de terminal ( %c será substituído pelo nome do script que o Geany executar)"
 
 #: ../data/geany.glade.h:255
 msgid "Path (and possibly additional arguments) to your favorite browser"
-msgstr ""
-"Caminho (e possivelmente argumentos adicionais) para o seu navegador web "
-"favorito"
+msgstr "Caminho (e possivelmente argumentos adicionais) para o seu navegador web favorito"
 
 #: ../data/geany.glade.h:256
 msgid "Grep:"
@@ -1278,14 +1078,8 @@ msgstr "Acção contextual:"
 
 #: ../data/geany.glade.h:260
 #, no-c-format
-msgid ""
-"Context action command. The currently selected word can be used with %s. It "
-"can appear anywhere in the given command and will be replaced before "
-"execution."
-msgstr ""
-"Comando de acção contextual. A palavra actualmente seleccionada pode ser "
-"usada com o descritor %s. Este descritor pode aparecer em qualquer ponto do "
-"comando e será substituído antes da execução."
+msgid "Context action command. The currently selected word can be used with %s. It can appear anywhere in the given command and will be replaced before execution."
+msgstr "Comando de acção contextual. A palavra actualmente seleccionada pode ser usada com o descritor %s. Este descritor pode aparecer em qualquer ponto do comando e será substituído antes da execução."
 
 #: ../data/geany.glade.h:261
 msgid "<b>Commands</b>"
@@ -1348,28 +1142,16 @@ msgid "Date & time:"
 msgstr "Data & hora:"
 
 #: ../data/geany.glade.h:276
-msgid ""
-"Specify a format for the the {datetime} wildcard. You can use any conversion "
-"specifiers which can be used with the ANSI C strftime function."
-msgstr ""
-"Especifica o formato da expressão especial {datetime}. Pode usar qualquer "
-"descritor de formato dos suportados pela função strftime em ANSI C."
+msgid "Specify a format for the the {datetime} wildcard. You can use any conversion specifiers which can be used with the ANSI C strftime function."
+msgstr "Especifica o formato da expressão especial {datetime}. Pode usar qualquer descritor de formato dos suportados pela função strftime em ANSI C."
 
 #: ../data/geany.glade.h:277
-msgid ""
-"Specify a format for the the {year} wildcard. You can use any conversion "
-"specifiers which can be used with the ANSI C strftime function."
-msgstr ""
-"Especifica o formato da expressão especial {year}. Pode usar qualquer "
-"descritor de formato dos suportados pela função strftime em ANSI C."
+msgid "Specify a format for the the {year} wildcard. You can use any conversion specifiers which can be used with the ANSI C strftime function."
+msgstr "Especifica o formato da expressão especial {year}. Pode usar qualquer descritor de formato dos suportados pela função strftime em ANSI C."
 
 #: ../data/geany.glade.h:278
-msgid ""
-"Specify a format for the the {date} wildcard. You can use any conversion "
-"specifiers which can be used with the ANSI C strftime function."
-msgstr ""
-"Especifica o formato da expressão especial {date}. Pode usar qualquer "
-"descritor de formato dos suportados pela função strftime em ANSI C."
+msgid "Specify a format for the the {date} wildcard. You can use any conversion specifiers which can be used with the ANSI C strftime function."
+msgstr "Especifica o formato da expressão especial {date}. Pode usar qualquer descritor de formato dos suportados pela função strftime em ANSI C."
 
 #: ../data/geany.glade.h:279
 msgid "<b>Template data</b>"
@@ -1398,9 +1180,7 @@ msgstr "Comando:"
 #: ../data/geany.glade.h:286
 #, no-c-format
 msgid "Path to the command for printing files (use %f for the filename)"
-msgstr ""
-"Caminho para o comando que imprime ficheiros (use %f onde quer o nome do "
-"ficheiro)"
+msgstr "Caminho para o comando que imprime ficheiros (use %f onde quer o nome do ficheiro)"
 
 #: ../data/geany.glade.h:287
 msgid "Use an external command for printing"
@@ -1419,24 +1199,16 @@ msgid "Print page numbers"
 msgstr "Imprimir o número das páginas"
 
 #: ../data/geany.glade.h:291 ../src/printing.c:241
-msgid ""
-"Add page numbers at the bottom of each page. It takes 2 lines of the page."
-msgstr ""
-"Adiciona numeração de página ao final de cada página. Isto consome 2 linhas "
-"em cada página."
+msgid "Add page numbers at the bottom of each page. It takes 2 lines of the page."
+msgstr "Adiciona numeração de página ao final de cada página. Isto consome 2 linhas em cada página."
 
 #: ../data/geany.glade.h:292 ../src/printing.c:244
 msgid "Print page header"
 msgstr "Imprimir o cabeçalho de página"
 
 #: ../data/geany.glade.h:293 ../src/printing.c:246
-msgid ""
-"Add a little header to every page containing the page number, the filename "
-"and the current date (see below). It takes 3 lines of the page."
-msgstr ""
-"Adiciona um pequeno cabeçalho a todas as páginas, com o número da página, o "
-"nome do ficheiro e a data actual (ver em baixo). Isto consome 3 linhas de "
-"cada página."
+msgid "Add a little header to every page containing the page number, the filename and the current date (see below). It takes 3 lines of the page."
+msgstr "Adiciona um pequeno cabeçalho a todas as páginas, com o número da página, o nome do ficheiro e a data actual (ver em baixo). Isto consome 3 linhas de cada página."
 
 #: ../data/geany.glade.h:294 ../src/printing.c:262
 msgid "Use the basename of the printed file"
@@ -1451,14 +1223,8 @@ msgid "Date format:"
 msgstr "Formato da Data:"
 
 #: ../data/geany.glade.h:297 ../src/printing.c:276
-msgid ""
-"Specify a format for the date and time stamp which is added to the page "
-"header on each page. You can use any conversion specifiers which can be used "
-"with the ANSI C strftime function."
-msgstr ""
-"Especifique o formato da data e da hora que serão adicionados ao cabeçalho "
-"de cada página. Pode usar qualquer descritor de formato dos suportados pela "
-"função strftime em ANSI C."
+msgid "Specify a format for the date and time stamp which is added to the page header on each page. You can use any conversion specifiers which can be used with the ANSI C strftime function."
+msgstr "Especifique o formato da data e da hora que serão adicionados ao cabeçalho de cada página. Pode usar qualquer descritor de formato dos suportados pela função strftime em ANSI C."
 
 #: ../data/geany.glade.h:298
 msgid "Use native GTK printing"
@@ -1493,9 +1259,8 @@ msgid "Background color:"
 msgstr "Cor de Fundo:"
 
 #: ../data/geany.glade.h:306
-#, fuzzy
 msgid "Background image:"
-msgstr "Fundo"
+msgstr "Imagem de fundo:"
 
 #: ../data/geany.glade.h:307
 msgid "Scrollback lines:"
@@ -1510,30 +1275,20 @@ msgid "Sets the foreground color of the text in the terminal widget"
 msgstr "Define a cor principal do texto no widget que emula o terminal"
 
 #: ../data/geany.glade.h:310
-#, fuzzy
 msgid "Sets the background color of the text in the terminal widget"
 msgstr "Define a cor de fundo do texto no widget que emula o terminal"
 
 #: ../data/geany.glade.h:311
-#, fuzzy
 msgid "Sets the path to the background image in the terminal widget"
-msgstr "Define a cor de fundo do texto no widget que emula o terminal"
+msgstr "Define o diretório para a imagem de fundo do widget que emula o terminal"
 
 #: ../data/geany.glade.h:312
-msgid ""
-"Specifies the history in lines, which you can scroll back in the terminal "
-"widget"
-msgstr ""
-"Especifica a história, em número de linhas, que é possível recuar no widget "
-"do terminal"
+msgid "Specifies the history in lines, which you can scroll back in the terminal widget"
+msgstr "Especifica a história, em número de linhas, que é possível recuar no widget do terminal"
 
 #: ../data/geany.glade.h:313
-msgid ""
-"Sets the path to the shell which should be started inside the terminal "
-"emulation"
-msgstr ""
-"Define o directório do executável da linha de comandos a usar dentro do "
-"emulador de terminal"
+msgid "Sets the path to the shell which should be started inside the terminal emulation"
+msgstr "Define o directório do executável da linha de comandos a usar dentro do emulador de terminal"
 
 #: ../data/geany.glade.h:314
 msgid "Scroll on keystroke"
@@ -1549,9 +1304,7 @@ msgstr "Deslocar ao receber texto"
 
 #: ../data/geany.glade.h:317
 msgid "Whether to scroll to the bottom when output is generated"
-msgstr ""
-"Se se desloca o texto até ao fim sempre que algum texto é gerado por um "
-"comando"
+msgstr "Se se desloca o texto até ao fim sempre que algum texto é gerado por um comando"
 
 #: ../data/geany.glade.h:318
 msgid "Cursor blinks"
@@ -1566,60 +1319,40 @@ msgid "Override Geany keybindings"
 msgstr "Sobrepor os atalhos do Geany"
 
 #: ../data/geany.glade.h:321
-msgid ""
-"Allows the VTE to receive keyboard shortcuts (apart from focus commands)"
-msgstr ""
-"Permite que o emulador de terminal receba atalhos do teclado (sem serem os "
-"comandos de foco)"
+msgid "Allows the VTE to receive keyboard shortcuts (apart from focus commands)"
+msgstr "Permite que o emulador de terminal receba atalhos do teclado (sem serem os comandos de foco)"
 
 #: ../data/geany.glade.h:322
 msgid "Disable menu shortcut key (F10 by default)"
 msgstr "Desactivar a tecla do atalho do menu (tecla por omissão: F10)"
 
 #: ../data/geany.glade.h:323
-msgid ""
-"This option disables the keybinding to popup the menu bar (default is F10). "
-"Disabling it can be useful if you use, for example, Midnight Commander "
-"within the VTE."
-msgstr ""
-"Esta opção desactiva o atalho de teclado que activa o menu da barra de menus "
-"(tecla por omissão: F10). Isto pode ser útil se, por exemplo, pretender "
-"correr o Midnight Commander dentro do VTE."
+msgid "This option disables the keybinding to popup the menu bar (default is F10). Disabling it can be useful if you use, for example, Midnight Commander within the VTE."
+msgstr "Esta opção desactiva o atalho de teclado que activa o menu da barra de menus (tecla por omissão: F10). Isto pode ser útil se, por exemplo, pretender correr o Midnight Commander dentro do VTE."
 
 #: ../data/geany.glade.h:324
 msgid "Follow path of the current file"
 msgstr "Seguir o directório do ficheiro activo"
 
 #: ../data/geany.glade.h:325
-msgid ""
-"Whether to execute \\\"cd $path\\\" when you switch between opened files"
-msgstr ""
-"Se se deve executar \\\"cd $path\\\" cada vez que muda entre ficheiros "
-"abertos"
+msgid "Whether to execute \\\"cd $path\\\" when you switch between opened files"
+msgstr "Se se deve executar \\\"cd $path\\\" cada vez que muda entre ficheiros abertos"
 
 #: ../data/geany.glade.h:326
 msgid "Execute programs in the VTE"
 msgstr "Executar programas no VTE"
 
 #: ../data/geany.glade.h:327
-msgid ""
-"Run programs in VTE instead of opening a terminal emulation window. Please "
-"note, programs executed in VTE cannot be stopped"
-msgstr ""
-"Executar programas no VTE ao invés de abrir uma janela com o terminal. Note "
-"que programas executados no VTE não podem ser parados."
+msgid "Run programs in VTE instead of opening a terminal emulation window. Please note, programs executed in VTE cannot be stopped"
+msgstr "Executar programas no VTE ao invés de abrir uma janela com o terminal. Note que programas executados no VTE não podem ser parados."
 
 #: ../data/geany.glade.h:328
 msgid "Don't use run script"
 msgstr "Não usar o script de execução"
 
 #: ../data/geany.glade.h:329
-msgid ""
-"Don't use the simple run script which is usually used to display the exit "
-"status of the executed program"
-msgstr ""
-"Não usa o simples script de execução que normalmente é usado para mostrar o "
-"código de terminação de um programa executado"
+msgid "Don't use the simple run script which is usually used to display the exit status of the executed program"
+msgstr "Não usa o simples script de execução que normalmente é usado para mostrar o código de terminação de um programa executado"
 
 #: ../data/geany.glade.h:330
 msgid "<b>Terminal</b>"
@@ -1667,22 +1400,12 @@ msgid "File patterns:"
 msgstr "Padrões de ficheiros:"
 
 #: ../data/geany.glade.h:341
-msgid ""
-"Space separated list of file patterns used for the find in files dialog (e."
-"g. *.c *.h)"
-msgstr ""
-"Lista, separada por espaços, de padrões de ficheiros a serem usados no "
-"diálogo \"Procura em Ficheiros\" (ex, *.c *.h)"
+msgid "Space separated list of file patterns used for the find in files dialog (e.g. *.c *.h)"
+msgstr "Lista, separada por espaços, de padrões de ficheiros a serem usados no diálogo \"Procura em Ficheiros\" (ex, *.c *.h)"
 
 #: ../data/geany.glade.h:342 ../src/project.c:177
-msgid ""
-"Base directory of all files that make up the project. This can be a new "
-"path, or an existing directory tree. You can use paths relative to the "
-"project filename."
-msgstr ""
-"Directório base para todos os ficheiros que constituem o projecto. Pode ser "
-"um novo directório ou um já existente. Pode usar ficheiros relativos ao nome "
-"do ficheiro de projecto."
+msgid "Base directory of all files that make up the project. This can be a new path, or an existing directory tree. You can use paths relative to the project filename."
+msgstr "Directório base para todos os ficheiros que constituem o projecto. Pode ser um novo directório ou um já existente. Pode usar ficheiros relativos ao nome do ficheiro de projecto."
 
 #: ../data/geany.glade.h:343 ../src/keybindings.c:238
 msgid "Project"
@@ -1702,46 +1425,39 @@ msgstr "Usar definições globais"
 
 #: ../data/geany.glade.h:347
 msgid "Size:"
-msgstr ""
+msgstr "Tamanho:"
 
 #: ../data/geany.glade.h:348
-#, fuzzy
 msgid "Location:"
-msgstr "<b>Localização:</b>"
+msgstr "Localização:"
 
 #: ../data/geany.glade.h:349
-#, fuzzy
 msgid "Read-only:"
-msgstr ", só de leitura"
+msgstr "Só de leitura:"
 
 #: ../data/geany.glade.h:350
-#, fuzzy
 msgid "Encoding:"
-msgstr "Codi_ficação:"
+msgstr "Codificação:"
 
 #: ../data/geany.glade.h:351
-#, fuzzy
 msgid "Modified:"
-msgstr "<b>Modificado:</b>"
+msgstr "Modificado:"
 
 #: ../data/geany.glade.h:352
-#, fuzzy
 msgid "Changed:"
-msgstr "_Modificar"
+msgstr "Modificado:"
 
 #: ../data/geany.glade.h:353
-#, fuzzy
 msgid "Accessed:"
-msgstr "<b>Acedido:</b>"
+msgstr "Acedido:"
 
 #: ../data/geany.glade.h:354
 msgid "(only inside Geany)"
 msgstr "(apenas dentro do Geany)"
 
 #: ../data/geany.glade.h:355
-#, fuzzy
 msgid "Permissions:"
-msgstr "<b>Permissões:</b>"
+msgstr "Permissões:"
 
 #: ../data/geany.glade.h:356
 msgid "Read:"
@@ -1788,18 +1504,16 @@ msgid "New (with _Template)"
 msgstr "Novo (com _Modelo)"
 
 #: ../data/geany.glade.h:368
-#, fuzzy
 msgid "_Open..."
-msgstr "_Abrir"
+msgstr "_Abrir..."
 
 #: ../data/geany.glade.h:369
 msgid "Recent _Files"
 msgstr "_Ficheiros Recentes"
 
 #: ../data/geany.glade.h:370
-#, fuzzy
 msgid "Save _As..."
-msgstr "Guardar como"
+msgstr "Guardar _como..."
 
 #: ../data/geany.glade.h:371
 msgid "Save A_ll"
@@ -1819,9 +1533,8 @@ msgid "Page Set_up"
 msgstr "Config_uração de Página"
 
 #: ../data/geany.glade.h:375
-#, fuzzy
 msgid "_Print..."
-msgstr "Imprimir"
+msgstr "_Imprimir..."
 
 #: ../data/geany.glade.h:376 ../src/notebook.c:490
 msgid "Close Ot_her Documents"
@@ -1860,14 +1573,12 @@ msgid "_Select Current Paragraph"
 msgstr "_Seleccionar o parágrafo actual"
 
 #: ../data/geany.glade.h:385
-#, fuzzy
 msgid "_Move Line(s) Up"
-msgstr "Mover a(s) linha(s) para cima"
+msgstr "_Mover a(s) linha(s) para cima"
 
 #: ../data/geany.glade.h:386
-#, fuzzy
 msgid "_Move Line(s) Down"
-msgstr "Mover a(s) linha(s) para baixo"
+msgstr "_Mover a(s) linha(s) para baixo"
 
 #: ../data/geany.glade.h:387 ../src/keybindings.c:402
 msgid "_Send Selection to Terminal"
@@ -1922,9 +1633,8 @@ msgid "P_lugin Preferences"
 msgstr "Preferências de P_lugin"
 
 #: ../data/geany.glade.h:400
-#, fuzzy
 msgid "_Find..."
-msgstr "Procurar"
+msgstr "_Procurar..."
 
 #: ../data/geany.glade.h:401
 msgid "Find _Next"
@@ -1935,14 +1645,12 @@ msgid "Find _Previous"
 msgstr "Procurar o _Anterior"
 
 #: ../data/geany.glade.h:403 ../src/symbols.c:2425
-#, fuzzy
 msgid "Find in F_iles..."
-msgstr "Pesquisar em F_icheiros"
+msgstr "Pesquisar em F_icheiros..."
 
 #: ../data/geany.glade.h:404
-#, fuzzy
 msgid "_Replace..."
-msgstr "_Substituir"
+msgstr "_Substituir..."
 
 #: ../data/geany.glade.h:405
 msgid "Next _Message"
@@ -1961,9 +1669,8 @@ msgid "_Go to Previous Marker"
 msgstr "_Ir para a marca anterior"
 
 #: ../data/geany.glade.h:409
-#, fuzzy
 msgid "_Go to Line..."
-msgstr "_Ir Para a Linha"
+msgstr "_Ir Para a Linha..."
 
 #: ../data/geany.glade.h:410 ../src/keybindings.c:440
 msgid "Find Next _Selection"
@@ -1986,14 +1693,12 @@ msgid "_View"
 msgstr "_Ver"
 
 #: ../data/geany.glade.h:415
-#, fuzzy
 msgid "Change _Font..."
-msgstr "Alterar tipo de _Letra"
+msgstr "Alterar tipo de _Letra..."
 
 #: ../data/geany.glade.h:416
-#, fuzzy
 msgid "Change _Color Scheme..."
-msgstr "_Esquemas de Cor"
+msgstr "Mudar Esquemas de _Cor..."
 
 #: ../data/geany.glade.h:417
 msgid "Show _Markers Margin"
@@ -2132,9 +1837,8 @@ msgid "Convert and Set to CR (_Mac)"
 msgstr "Converter e definir para CR (_Mac)"
 
 #: ../data/geany.glade.h:451 ../src/keybindings.c:568
-#, fuzzy
 msgid "_Clone"
-msgstr "Fe_char"
+msgstr "_Clonar"
 
 #: ../data/geany.glade.h:452
 msgid "_Strip Trailing Spaces"
@@ -2145,9 +1849,8 @@ msgid "_Replace Tabs by Spaces"
 msgstr "Substitui_r Tabulações por Espaços"
 
 #: ../data/geany.glade.h:454
-#, fuzzy
 msgid "Replace Spaces b_y Tabs..."
-msgstr "Substituir Espaços _por Tabulações"
+msgstr "Substituir Espaços _por Tabulações..."
 
 #: ../data/geany.glade.h:455
 msgid "_Fold All"
@@ -2170,9 +1873,8 @@ msgid "_Project"
 msgstr "_Projecto"
 
 #: ../data/geany.glade.h:460
-#, fuzzy
 msgid "_New..."
-msgstr "_Novo"
+msgstr "_Novo..."
 
 #: ../data/geany.glade.h:461
 msgid "_Recent Projects"
@@ -2216,9 +1918,8 @@ msgid "_Word Count"
 msgstr "Contar _Palavras"
 
 #: ../data/geany.glade.h:471
-#, fuzzy
 msgid "Load Ta_gs..."
-msgstr "Carre_gar Etiquetas (Tags)"
+msgstr "Carre_gar Etiquetas (Tags)..."
 
 #: ../data/geany.glade.h:472
 msgid "_Help"
@@ -2241,14 +1942,12 @@ msgid "Wi_ki"
 msgstr "Wi_ki"
 
 #: ../data/geany.glade.h:477
-#, fuzzy
 msgid "Report a _Bug..."
-msgstr "Reportar um _Bug"
+msgstr "Reportar um _Erro..."
 
 #: ../data/geany.glade.h:478
-#, fuzzy
 msgid "_Donate..."
-msgstr "_Donativo"
+msgstr "_Doar..."
 
 #: ../data/geany.glade.h:479 ../src/sidebar.c:124
 msgid "Symbols"
@@ -2340,11 +2039,8 @@ msgstr "Contribuidores"
 
 #: ../src/about.c:377
 #, c-format
-msgid ""
-"Some of the many contributors (for a more detailed list, see the file %s):"
-msgstr ""
-"Alguns dos muitos contribuidores (para uma lista detalhada, consultar o "
-"ficheiro %s):"
+msgid "Some of the many contributors (for a more detailed list, see the file %s):"
+msgstr "Alguns dos muitos contribuidores (para uma lista detalhada, consultar o ficheiro %s):"
 
 #: ../src/about.c:403
 msgid "Credits"
@@ -2355,12 +2051,8 @@ msgid "License"
 msgstr "Licença"
 
 #: ../src/about.c:429
-msgid ""
-"License text could not be found, please visit http://www.gnu.org/licenses/"
-"gpl-2.0.txt to view it online."
-msgstr ""
-"A Licença não foi encontrada, por favor visite http://www.gnu.org/licenses/"
-"gpl-2.0.txt para a ler na internet."
+msgid "License text could not be found, please visit http://www.gnu.org/licenses/gpl-2.0.txt to view it online."
+msgstr "A Licença não foi encontrada, por favor visite http://www.gnu.org/licenses/gpl-2.0.txt para a ler na internet."
 
 #. fall back to %d
 #: ../src/build.c:753
@@ -2393,29 +2085,18 @@ msgid "Failed to execute \"%s\" (start-script could not be created: %s)"
 msgstr "Erro ao executar \"%s\" (o script de arranque não pode ser criado: %s)"
 
 #: ../src/build.c:985
-msgid ""
-"Could not execute the file in the VTE because it probably contains a command."
-msgstr ""
-"Erro ao executar o ficheiro no VTE porque provavelmente este contém um "
-"comando."
+msgid "Could not execute the file in the VTE because it probably contains a command."
+msgstr "Erro ao executar o ficheiro no VTE porque provavelmente este contém um comando."
 
 #: ../src/build.c:1012
-#, fuzzy, c-format
-msgid ""
-"Could not parse terminal command \"%s\" (check Terminal tool setting in "
-"Preferences)"
-msgstr ""
-"Terminal \"%s\" não encontrado (verifique o caminho para o executável do "
-"Terminal, nas preferências)"
+#, c-format
+msgid "Could not parse terminal command \"%s\" (check Terminal tool setting in Preferences)"
+msgstr "Incapaz de interpretar o comando de terminal \"%s\" (verifique as opções do Terminal, em Preferências)"
 
 #: ../src/build.c:1031
 #, c-format
-msgid ""
-"Could not find terminal \"%s\" (check path for Terminal tool setting in "
-"Preferences)"
-msgstr ""
-"Terminal \"%s\" não encontrado (verifique o caminho para o executável do "
-"Terminal, nas preferências)"
+msgid "Could not find terminal \"%s\" (check path for Terminal tool setting in Preferences)"
+msgstr "Terminal \"%s\" não encontrado (verifique o caminho para o executável do Terminal, nas preferências)"
 
 #: ../src/build.c:1189
 msgid "Compilation failed."
@@ -2431,8 +2112,7 @@ msgstr "Texto Personalizado"
 
 #: ../src/build.c:1390
 msgid "Enter custom text here, all entered text is appended to the command."
-msgstr ""
-"Introduza as opções aqui, todo o texto introduzido será passado ao comando."
+msgstr "Introduza as opções aqui, todo o texto introduzido será passado ao comando."
 
 #: ../src/build.c:1468
 msgid "_Next Error"
@@ -2453,13 +2133,11 @@ msgstr "Gerar a partir do ficheiro activo"
 
 #: ../src/build.c:1777
 msgid "Build the current file with Make and the default target"
-msgstr ""
-"Gerar a partir do ficheiro activo, com o comando make e opções por omissão"
+msgstr "Gerar a partir do ficheiro activo, com o comando make e opções por omissão"
 
 #: ../src/build.c:1779
 msgid "Build the current file with Make and the specified target"
-msgstr ""
-"Gerar a partir do ficheiro activo, com o comando make e opções personalizadas"
+msgstr "Gerar a partir do ficheiro activo, com o comando make e opções personalizadas"
 
 #: ../src/build.c:1781
 msgid "Compile the current file with Make"
@@ -2518,8 +2196,7 @@ msgstr "Comandos Independentes"
 
 #: ../src/build.c:2165
 msgid "Note: Item 2 opens a dialog and appends the response to the command."
-msgstr ""
-"Nota: Item 2 abre uma janela de diálogo e acrescenta a resposta ao comando."
+msgstr "Nota: Item 2 abre uma janela de diálogo e acrescenta a resposta ao comando."
 
 #: ../src/build.c:2174
 msgid "Execute commands"
@@ -2527,12 +2204,8 @@ msgstr "Comandos para Execução"
 
 #: ../src/build.c:2186
 #, c-format
-msgid ""
-"%d, %e, %f, %p are substituted in command and directory fields, see manual "
-"for details."
-msgstr ""
-"%d, %e, %f, %p são substituídos em campos de comandos e directórios, "
-"consulte o manual para detalhes."
+msgid "%d, %e, %f, %p are substituted in command and directory fields, see manual for details."
+msgstr "%d, %e, %f, %p são substituídos em campos de comandos e directórios, consulte o manual para detalhes."
 
 #: ../src/build.c:2344
 msgid "Set Build Commands"
@@ -2548,9 +2221,8 @@ msgstr "_Executar"
 
 #. build the code with make custom
 #: ../src/build.c:2618 ../src/build.c:2809 ../src/build.c:2863
-#, fuzzy
 msgid "Make Custom _Target..."
-msgstr "Gerar _Personalizado"
+msgstr "Gerar Resultado _Personalizado..."
 
 #. build the code with make object
 #: ../src/build.c:2620 ../src/build.c:2810 ../src/build.c:2871
@@ -2595,8 +2267,7 @@ msgid "Enter the line you want to go to:"
 msgstr "Introduza a linha para onde quer ir:"
 
 #: ../src/callbacks.c:1162 ../src/callbacks.c:1187
-msgid ""
-"Please set the filetype for the current file before using this function."
+msgid "Please set the filetype for the current file before using this function."
 msgstr "Por favor, defina o tipo do ficheiro activo antes de usar esta função."
 
 #: ../src/callbacks.c:1292 ../src/ui_utils.c:664
@@ -2632,17 +2303,12 @@ msgid "Custom Date Format"
 msgstr "Formato de data personalizado"
 
 #: ../src/callbacks.c:1309
-msgid ""
-"Enter here a custom date and time format. You can use any conversion "
-"specifiers which can be used with the ANSI C strftime function."
-msgstr ""
-"Introduza aqui o formato de data e hora personalizado. Pode usar qualquer "
-"tipo de descritor dos permitidos na versão ANSI C da função strftime."
+msgid "Enter here a custom date and time format. You can use any conversion specifiers which can be used with the ANSI C strftime function."
+msgstr "Introduza aqui o formato de data e hora personalizado. Pode usar qualquer tipo de descritor dos permitidos na versão ANSI C da função strftime."
 
 #: ../src/callbacks.c:1332
 msgid "Date format string could not be converted (possibly too long)."
-msgstr ""
-"O formato para a data não pode ser convertido (provavelmente é muito longo)."
+msgstr "O formato para a data não pode ser convertido (provavelmente é muito longo)."
 
 #: ../src/callbacks.c:1525 ../src/callbacks.c:1533
 msgid "No more message items."
@@ -2698,17 +2364,11 @@ msgstr "Definir a codificação:"
 
 #: ../src/dialogs.c:309
 msgid ""
-"Explicitly defines an encoding for the file, if it would not be detected. "
-"This is useful when you know that the encoding of a file cannot be detected "
-"correctly by Geany.\n"
-"Note if you choose multiple files, they will all be opened with the chosen "
-"encoding."
+"Explicitly defines an encoding for the file, if it would not be detected. This is useful when you know that the encoding of a file cannot be detected correctly by Geany.\n"
+"Note if you choose multiple files, they will all be opened with the chosen encoding."
 msgstr ""
-"Define, explicitamente, a codificação para o ficheiro se esta não for "
-"detectável. Esta opção é útil quando sabe à partida que o Geany não será "
-"capaz de detectar automaticamente a codificação do ficheiro.\n"
-"Note que se escolher múltiplos ficheiros, todos serão abertos com a "
-"codificação escolhida."
+"Define, explicitamente, a codificação para o ficheiro se esta não for detectável. Esta opção é útil quando sabe à partida que o Geany não será capaz de detectar automaticamente a codificação do ficheiro.\n"
+"Note que se escolher múltiplos ficheiros, todos serão abertos com a codificação escolhida."
 
 #. line 2 with filetype combo
 #: ../src/dialogs.c:316
@@ -2717,27 +2377,19 @@ msgstr "Define o tipo de ficheiro:"
 
 #: ../src/dialogs.c:325
 msgid ""
-"Explicitly defines a filetype for the file, if it would not be detected by "
-"filename extension.\n"
-"Note if you choose multiple files, they will all be opened with the chosen "
-"filetype."
+"Explicitly defines a filetype for the file, if it would not be detected by filename extension.\n"
+"Note if you choose multiple files, they will all be opened with the chosen filetype."
 msgstr ""
-"Define, explicitamente, o tipo ficheiro se este não for detectado através da "
-"extensão.\n"
-"Note que se escolher múltiplos ficheiros, todos serão abertos segundo o tipo "
-"de ficheiro escolhido."
+"Define, explicitamente, o tipo ficheiro se este não for detectado através da extensão.\n"
+"Note que se escolher múltiplos ficheiros, todos serão abertos segundo o tipo de ficheiro escolhido."
 
 #: ../src/dialogs.c:354 ../src/dialogs.c:460
 msgid "Open File"
 msgstr "Abrir Ficheiro"
 
 #: ../src/dialogs.c:360
-msgid ""
-"Opens the file in read-only mode. If you choose more than one file to open, "
-"all files will be opened read-only."
-msgstr ""
-"Abre o ficheiro em, apenas, modo de leitura. Se escolher mais do que um "
-"ficheiro, todos serão abertos, exclusivamente, em modo de leitura."
+msgid "Opens the file in read-only mode. If you choose more than one file to open, all files will be opened read-only."
+msgstr "Abre o ficheiro em, apenas, modo de leitura. Se escolher mais do que um ficheiro, todos serão abertos, exclusivamente, em modo de leitura."
 
 #: ../src/dialogs.c:380
 msgid "Detect by file extension"
@@ -2798,12 +2450,8 @@ msgid "Choose font"
 msgstr "Escolha o tipo de letra"
 
 #: ../src/dialogs.c:1180
-msgid ""
-"An error occurred or file information could not be retrieved (e.g. from a "
-"new file)."
-msgstr ""
-"Ocorreu um erro ou a informação sobre o ficheiro não pode ser obtida (e.x. "
-"um novo ficheiro)."
+msgid "An error occurred or file information could not be retrieved (e.g. from a new file)."
+msgstr "Ocorreu um erro ou a informação sobre o ficheiro não pode ser obtida (e.x. um novo ficheiro)."
 
 #: ../src/dialogs.c:1199 ../src/dialogs.c:1200 ../src/dialogs.c:1201
 #: ../src/dialogs.c:1207 ../src/dialogs.c:1208 ../src/dialogs.c:1209
@@ -2812,9 +2460,9 @@ msgid "unknown"
 msgstr "desconhecido"
 
 #: ../src/dialogs.c:1214
-#, fuzzy, c-format
+#, c-format
 msgid "%s Properties"
-msgstr "Propriedades"
+msgstr "Propriedades %s"
 
 #: ../src/dialogs.c:1247 ../src/ui_utils.c:285
 msgid "(with BOM)"
@@ -2846,24 +2494,16 @@ msgstr "O ficheiro \"%s\" não é válido %s."
 
 #: ../src/document.c:824
 #, c-format
-msgid ""
-"The file \"%s\" does not look like a text file or the file encoding is not "
-"supported."
-msgstr ""
-"O ficheiro \"%s\" não parece ser um ficheiro de texto ou a sua codificação "
-"não é suportada."
+msgid "The file \"%s\" does not look like a text file or the file encoding is not supported."
+msgstr "O ficheiro \"%s\" não parece ser um ficheiro de texto ou a sua codificação não é suportada."
 
 #: ../src/document.c:834
 #, c-format
 msgid ""
-"The file \"%s\" could not be opened properly and has been truncated. This "
-"can occur if the file contains a NULL byte. Be aware that saving it can "
-"cause data loss.\n"
+"The file \"%s\" could not be opened properly and has been truncated. This can occur if the file contains a NULL byte. Be aware that saving it can cause data loss.\n"
 "The file was set to read-only."
 msgstr ""
-"O ficheiro \"%s\" não pode ser aberto correctamente e foi truncado (há "
-"partes omitidas). Isto pode ocorrer caso o ficheiro contenha o byte NULL. "
-"Muita atenção que se o salvar, informação deste poderá perder-se.\n"
+"O ficheiro \"%s\" não pode ser aberto correctamente e foi truncado (há partes omitidas). Isto pode ocorrer caso o ficheiro contenha o byte NULL. Muita atenção que se o salvar, informação deste poderá perder-se.\n"
 "O ficheiro foi definido como apenas de leitura."
 
 #: ../src/document.c:1046
@@ -2913,12 +2553,8 @@ msgstr "Erro ao renomear o ficheiro."
 
 #: ../src/document.c:1516
 #, c-format
-msgid ""
-"An error occurred while converting the file from UTF-8 in \"%s\". The file "
-"remains unsaved."
-msgstr ""
-"Ocorreu um erro ao converter o ficheiro de UTF-8 para %s. O ficheiro não se "
-"encontra guardado."
+msgid "An error occurred while converting the file from UTF-8 in \"%s\". The file remains unsaved."
+msgstr "Ocorreu um erro ao converter o ficheiro de UTF-8 para %s. O ficheiro não se encontra guardado."
 
 #: ../src/document.c:1537
 #, c-format
@@ -2937,8 +2573,7 @@ msgstr "Mensagem de erro: %s."
 #: ../src/document.c:1601
 #, c-format
 msgid "Failed to open file '%s' for writing: fopen() failed: %s"
-msgstr ""
-"Erro ao abrir o ficheiro '%s' para escrita: a função fopen() falhou: %s"
+msgstr "Erro ao abrir o ficheiro '%s' para escrita: a função fopen() falhou: %s"
 
 #: ../src/document.c:1619
 #, c-format
@@ -3175,38 +2810,34 @@ msgid "%s file"
 msgstr "Ficheiro %s"
 
 #: ../src/filetypes.c:93
-#, fuzzy, c-format
+#, c-format
 msgid "%s script"
-msgstr "script  %s"
+msgstr "script %s"
 
 #: ../src/filetypes.c:94
-#, fuzzy, c-format
+#, c-format
 msgid "%s document"
-msgstr "documento XML"
+msgstr "documento %s"
 
 #: ../src/filetypes.c:164
-#, fuzzy
 msgid "Shell"
-msgstr "Linha de Comandos:"
+msgstr "Linha de Comandos"
 
 #: ../src/filetypes.c:165
 msgid "Makefile"
 msgstr "Makefile"
 
 #: ../src/filetypes.c:169
-#, fuzzy
 msgid "Cascading Stylesheet"
 msgstr "Folha de Estilo em Cascata"
 
 #: ../src/filetypes.c:178
-#, fuzzy
 msgid "Config"
-msgstr "Ficheiro de configuração"
+msgstr "Configuração"
 
 #: ../src/filetypes.c:179
-#, fuzzy
 msgid "Gettext translation"
-msgstr "Ficheiro de tradução Gettext"
+msgstr "Tradução Gettext"
 
 #: ../src/filetypes.c:414
 msgid "_Programming Languages"
@@ -3369,7 +3000,7 @@ msgstr "Reabrir a última aba que fechou "
 
 #: ../src/keybindings.c:277
 msgid "Quit"
-msgstr ""
+msgstr "Sair"
 
 #: ../src/keybindings.c:294
 msgid "Undo"
@@ -3592,9 +3223,8 @@ msgid "Go to End of Line"
 msgstr "Ir para o fim da linha"
 
 #: ../src/keybindings.c:492
-#, fuzzy
 msgid "Go to Start of Display Line"
-msgstr "Ir para o fim da linha actual"
+msgstr "Ir para o Início da linha apresentada"
 
 #: ../src/keybindings.c:494
 msgid "Go to End of Display Line"
@@ -3805,12 +3435,8 @@ msgid "Cl_ear"
 msgstr "_Limpar"
 
 #: ../src/main.c:121
-msgid ""
-"Set initial column number for the first opened file (useful in conjunction "
-"with --line)"
-msgstr ""
-"Definir o número da coluna onde colocar o cursor para o primeiro ficheiro "
-"aberto (útil em conjunto com --line)"
+msgid "Set initial column number for the first opened file (useful in conjunction with --line)"
+msgstr "Definir o número da coluna onde colocar o cursor para o primeiro ficheiro aberto (útil em conjunto com --line)"
 
 #: ../src/main.c:122
 msgid "Use an alternate configuration directory"
@@ -3830,16 +3456,11 @@ msgstr "Não pré-processar ficheiros de C/C++ ao gerar etiquetas (tags)"
 
 #: ../src/main.c:127
 msgid "Don't open files in a running instance, force opening a new instance"
-msgstr ""
-"Não abrir ficheiros na instanciação actual do programa, forçar a abertura de "
-"uma nova instância"
+msgstr "Não abrir ficheiros na instanciação actual do programa, forçar a abertura de uma nova instância"
 
 #: ../src/main.c:128
-msgid ""
-"Use this socket filename for communication with a running Geany instance"
-msgstr ""
-"Usar o nome deste ficheiro para o socket de comunicação com uma instância "
-"activa do Geany"
+msgid "Use this socket filename for communication with a running Geany instance"
+msgstr "Usar o nome deste ficheiro para o socket de comunicação com uma instância activa do Geany"
 
 #: ../src/main.c:129
 msgid "Return a list of open documents in a running Geany instance"
@@ -3847,9 +3468,7 @@ msgstr "Devolve a lista de ficheiros abertos numa instância activa do Geany"
 
 #: ../src/main.c:131
 msgid "Set initial line number for the first opened file"
-msgstr ""
-"Definir o número da linha onde colocar o cursor para o primeiro ficheiro "
-"aberto"
+msgstr "Definir o número da linha onde colocar o cursor para o primeiro ficheiro aberto"
 
 #: ../src/main.c:132
 msgid "Don't show message window at startup"
@@ -3907,28 +3526,19 @@ msgstr "Mover agora?"
 
 #: ../src/main.c:668
 msgid "Geany needs to move your old configuration directory before starting."
-msgstr ""
-"O Geany precisa mover a directoria de configurações antiga antes de iniciar."
+msgstr "O Geany precisa mover a directoria de configurações antiga antes de iniciar."
 
 #: ../src/main.c:677
 #, c-format
-msgid ""
-"Your configuration directory has been successfully moved from \"%s\" to \"%s"
-"\"."
-msgstr ""
-"A directoria de configurações foi movida com sucesso de \"%s\" para \"%s\"."
+msgid "Your configuration directory has been successfully moved from \"%s\" to \"%s\"."
+msgstr "A directoria de configurações foi movida com sucesso de \"%s\" para \"%s\"."
 
 #. for translators: the third %s in brackets is the error message which
 #. * describes why moving the dir didn't work
 #: ../src/main.c:687
 #, c-format
-msgid ""
-"Your old configuration directory \"%s\" could not be moved to \"%s\" (%s). "
-"Please move manually the directory to the new location."
-msgstr ""
-"A directoria de configurações antiga \"%s\" não pode ser movida para \"%s"
-"\" (Erro: %s). Por favor, mova manualmente a directoria para a nova "
-"localização."
+msgid "Your old configuration directory \"%s\" could not be moved to \"%s\" (%s). Please move manually the directory to the new location."
+msgstr "A directoria de configurações antiga \"%s\" não pode ser movida para \"%s\" (Erro: %s). Por favor, mova manualmente a directoria para a nova localização."
 
 #: ../src/main.c:772
 #, c-format
@@ -3974,8 +3584,7 @@ msgstr "_Ocultar Janela de Mensagens"
 #: ../src/msgwindow.c:651
 #, c-format
 msgid "Could not find file '%s' - trying the current document path."
-msgstr ""
-"Erro a encontrar o ficheiro '%s' - a tentar no directório do ficheiro activo."
+msgstr "Erro a encontrar o ficheiro '%s' - a tentar no directório do ficheiro activo."
 
 #: ../src/notebook.c:196
 msgid "Switch to Document"
@@ -3983,12 +3592,8 @@ msgstr "Mudar para documento"
 
 #: ../src/plugins.c:497
 #, c-format
-msgid ""
-"The plugin \"%s\" is not binary compatible with this release of Geany - "
-"please recompile it."
-msgstr ""
-"O plugin \"%s\" não é compatível com esta versão do Geany - por favor, "
-"recompile-o."
+msgid "The plugin \"%s\" is not binary compatible with this release of Geany - please recompile it."
+msgstr "O plugin \"%s\" não é compatível com esta versão do Geany - por favor, recompile-o."
 
 #: ../src/plugins.c:1041
 msgid "_Plugin Manager"
@@ -4086,38 +3691,22 @@ msgstr "A combinação \"%s\" já se encontra a ser usada para \"%s\"."
 #. page Tools
 #: ../src/prefs.c:1699
 msgid "Enter tool paths below. Tools you do not need can be left blank."
-msgstr ""
-"Introduza os caminhos para os comandos, em baixo. Comandos que não precisa "
-"podem ser deixados em branco."
+msgstr "Introduza os caminhos para os comandos, em baixo. Comandos que não precisa podem ser deixados em branco."
 
 #. page Templates
 #: ../src/prefs.c:1704
-msgid ""
-"Set the information to be used in templates. See the documentation for "
-"details."
-msgstr ""
-"Defina informação a ser usada em modelos de documentos. Para mais detalhes "
-"consulte a documentação."
+msgid "Set the information to be used in templates. See the documentation for details."
+msgstr "Defina informação a ser usada em modelos de documentos. Para mais detalhes consulte a documentação."
 
 #. page Keybindings
 #: ../src/prefs.c:1709
-msgid ""
-"Here you can change keyboard shortcuts for various actions. Select one and "
-"press the Change button to enter a new shortcut, or double click on an "
-"action to edit the string representation of the shortcut directly."
-msgstr ""
-"Aqui pode alterar os atalhos de teclado de várias funcionalidades. "
-"Seleccione uma e carregue no botão Mudar para introduzir o novo atalho, ou "
-"faça duplo clique sobre a funcionalidade para editar o atalho directamente."
+msgid "Here you can change keyboard shortcuts for various actions. Select one and press the Change button to enter a new shortcut, or double click on an action to edit the string representation of the shortcut directly."
+msgstr "Aqui pode alterar os atalhos de teclado de várias funcionalidades. Seleccione uma e carregue no botão Mudar para introduzir o novo atalho, ou faça duplo clique sobre a funcionalidade para editar o atalho directamente."
 
 #. page Editor->Indentation
 #: ../src/prefs.c:1714
-msgid ""
-"<i>Warning: these settings are overridden by the current project. See "
-"<b>Project->Properties</b>.</i>"
-msgstr ""
-"<i>Atenção: Estas definições podem ser sobrepostas pelas do projecto actual. "
-"Consulte <b> Projecto-> Propriedades</b>.</i>"
+msgid "<i>Warning: these settings are overridden by the current project. See <b>Project->Properties</b>.</i>"
+msgstr "<i>Atenção: Estas definições podem ser sobrepostas pelas do projecto actual. Consulte <b> Projecto-> Propriedades</b>.</i>"
 
 #: ../src/printing.c:159
 #, c-format
@@ -4133,9 +3722,8 @@ msgid "Print only the basename(without the path) of the printed file"
 msgstr "Imprime apenas o nome do ficheiro, sem o caminho para este"
 
 #: ../src/printing.c:414
-#, fuzzy
 msgid "Paginating"
-msgstr "Imprimir"
+msgstr "A paginar"
 
 #: ../src/printing.c:438
 #, c-format
@@ -4159,8 +3747,7 @@ msgstr "A impressão do ficheiro %s falhou (%s)."
 
 #: ../src/printing.c:587
 msgid "Please set a print command in the preferences dialog first."
-msgstr ""
-"Primeiro, introduza um comando de impressão nas preferências, se faz favor."
+msgstr "Primeiro, introduza um comando de impressão nas preferências, se faz favor."
 
 #: ../src/printing.c:595
 #, c-format
@@ -4249,8 +3836,7 @@ msgstr "O nome de projecto fornecido é demasiado curto."
 #: ../src/project.c:660
 #, c-format
 msgid "The specified project name is too long (max. %d characters)."
-msgstr ""
-"O nome de projecto fornecido é demasiado longo (no máximo %d carácteres)."
+msgstr "O nome de projecto fornecido é demasiado longo (no máximo %d carácteres)."
 
 #: ../src/project.c:672
 msgid "You have specified an invalid project filename."
@@ -4290,12 +3876,8 @@ msgid "_Use regular expressions"
 msgstr "_Usar expressões regulares"
 
 #: ../src/search.c:305
-msgid ""
-"Use POSIX-like regular expressions. For detailed information about using "
-"regular expressions, please read the documentation."
-msgstr ""
-"Use expressões regular do tipo POSIX. Para informação detalhada sobre "
-"expressões regulares, por favor, consulte a documentação."
+msgid "Use POSIX-like regular expressions. For detailed information about using regular expressions, please read the documentation."
+msgstr "Use expressões regular do tipo POSIX. Para informação detalhada sobre expressões regulares, por favor, consulte a documentação."
 
 #: ../src/search.c:312
 msgid "Search _backwards"
@@ -4307,11 +3889,11 @@ msgstr "Usar sequências de _escape"
 
 #: ../src/search.c:329
 msgid ""
-"Replace \\\\, \\t, \\n, \\r and \\uXXXX (Unicode chararacters) with the "
-"corresponding control characters"
+"Replace \\\\, \\t, \\n"
+", \\r and \\uXXXX (Unicode chararacters) with the corresponding control characters"
 msgstr ""
-"Substituir \\\\, \\t, \\n, \\r e \\uXXXX (caracteres Unicode) pela sua "
-"função correspondente, como caracteres de controlo"
+"Substituir \\\\, \\t, \\n"
+", \\r e \\uXXXX (caracteres Unicode) pela sua função correspondente, como caracteres de controlo"
 
 #: ../src/search.c:338 ../src/search.c:968
 msgid "C_ase sensitive"
@@ -4477,9 +4059,7 @@ msgstr "Nenhuma expressão para procurar."
 #: ../src/search.c:1655
 #, c-format
 msgid "Cannot execute grep tool '%s'; check the path setting in Preferences."
-msgstr ""
-"Erro ao executar o comando grep '%s'; verifique o directório deste nas "
-"Preferências."
+msgstr "Erro ao executar o comando grep '%s'; verifique o directório deste nas Preferências."
 
 #: ../src/search.c:1662
 #, c-format
@@ -4523,12 +4103,10 @@ msgstr "Má expressão regular: %s"
 #. TODO maybe this message needs a rewording
 #: ../src/socket.c:232
 msgid ""
-"Geany tried to access the Unix Domain socket of another instance running as "
-"another user.\n"
+"Geany tried to access the Unix Domain socket of another instance running as another user.\n"
 "This is a fatal error and Geany will now quit."
 msgstr ""
-"O Geany tentou aceder a um Unix Domain socket de outra instância a ser "
-"executada por outro utilizador.\n"
+"O Geany tentou aceder a um Unix Domain socket de outra instância a ser executada por outro utilizador.\n"
 "Isto origina um erro falta e o Geany será agora encerrado."
 
 #: ../src/stash.c:1118
@@ -4641,15 +4219,15 @@ msgstr "Estruturas"
 
 #: ../src/symbols.c:767
 msgid "Parts"
-msgstr ""
+msgstr "Partes"
 
 #: ../src/symbols.c:768
 msgid "Assembly"
-msgstr ""
+msgstr "Assemblagem"
 
 #: ../src/symbols.c:769
 msgid "Steps"
-msgstr ""
+msgstr "Passos"
 
 #: ../src/symbols.c:784 ../src/symbols.c:866 ../src/symbols.c:912
 msgid "Modules"
@@ -4657,12 +4235,11 @@ msgstr "Módulos"
 
 #: ../src/symbols.c:786 ../src/symbols.c:817
 msgid "Traits"
-msgstr ""
+msgstr "Traços"
 
 #: ../src/symbols.c:787
-#, fuzzy
 msgid "Implementations"
-msgstr "Implementa:"
+msgstr "Implementações"
 
 #: ../src/symbols.c:789 ../src/symbols.c:1033
 msgid "Typedefs / Enums"
@@ -4732,24 +4309,20 @@ msgid "Type Selectors"
 msgstr "Selectores de Tipo"
 
 #: ../src/symbols.c:856
-#, fuzzy
 msgid "Section Level 1"
-msgstr "Secção"
+msgstr "Secção Nível 1"
 
 #: ../src/symbols.c:857
-#, fuzzy
 msgid "Section Level 2"
-msgstr "Secção"
+msgstr "Secção Nível 2"
 
 #: ../src/symbols.c:858
-#, fuzzy
 msgid "Section Level 3"
-msgstr "Secção"
+msgstr "Secção Nível 3"
 
 #: ../src/symbols.c:859
-#, fuzzy
 msgid "Section Level 4"
-msgstr "Secção"
+msgstr "Secção Nível 4"
 
 #: ../src/symbols.c:868
 msgid "Singletons"
@@ -4780,9 +4353,8 @@ msgid "Variables / Signals"
 msgstr "Variáveis / Sinais"
 
 #: ../src/symbols.c:903
-#, fuzzy
 msgid "Processes / Blocks / Components"
-msgstr "Processos / Componentes"
+msgstr "Processos / Blocos / Componentes"
 
 #: ../src/symbols.c:911
 msgid "Events"
@@ -4798,26 +4370,23 @@ msgstr "Membros"
 
 #: ../src/symbols.c:927 ../src/symbols.c:982
 msgid "Enums"
-msgstr ""
+msgstr "Enums"
 
 #: ../src/symbols.c:939
 msgid "Properties"
 msgstr "Propriedades"
 
 #: ../src/symbols.c:975
-#, fuzzy
 msgid "Programs"
-msgstr "Programa"
+msgstr "Programas"
 
 #: ../src/symbols.c:977
-#, fuzzy
 msgid "Functions / Subroutines"
 msgstr "Funções / Procedimentos"
 
 #: ../src/symbols.c:980
-#, fuzzy
 msgid "Components"
-msgstr "Automatismos"
+msgstr "Componentes"
 
 #: ../src/symbols.c:981
 msgid "Blocks"
@@ -4852,9 +4421,8 @@ msgid "Structs"
 msgstr "Estruturas"
 
 #: ../src/symbols.c:1043
-#, fuzzy
 msgid "Extern Variables"
-msgstr "Variáveis"
+msgstr "Variáveis Externas"
 
 #: ../src/symbols.c:1803
 #, c-format
@@ -4864,9 +4432,7 @@ msgstr "Extensão do ficheiro \"%s\" desconhecida.\n"
 #: ../src/symbols.c:1829
 #, c-format
 msgid "Failed to create tags file, perhaps because no tags were found.\n"
-msgstr ""
-"Erro ao criar o ficheiro de etiquetas (tags), talvez porque nenhuma etiqueta "
-"(tag) foi encontrada.\n"
+msgstr "Erro ao criar o ficheiro de etiquetas (tags), talvez porque nenhuma etiqueta (tag) foi encontrada.\n"
 
 #: ../src/symbols.c:1836
 #, c-format
@@ -4881,12 +4447,10 @@ msgstr ""
 #, c-format
 msgid ""
 "Example:\n"
-"CFLAGS=`pkg-config gtk+-2.0 --cflags` %s -g gtk2.c.tags /usr/include/gtk-2.0/"
-"gtk/gtk.h\n"
+"CFLAGS=`pkg-config gtk+-2.0 --cflags` %s -g gtk2.c.tags /usr/include/gtk-2.0/gtk/gtk.h\n"
 msgstr ""
 "Exemplo:\n"
-"CFLAGS=`pkg-config gtk+-2.0 --cflags` %s -g gtk2.c.tags /usr/include/gtk-2.0/"
-"gtk/gtk.h\n"
+"CFLAGS=`pkg-config gtk+-2.0 --cflags` %s -g gtk2.c.tags /usr/include/gtk-2.0/gtk/gtk.h\n"
 
 #: ../src/symbols.c:1851
 msgid "Load Tags"
@@ -4984,10 +4548,8 @@ msgid "Run or view the current file"
 msgstr "Executar ou Ver o ficheiro activo"
 
 #: ../src/toolbar.c:70
-msgid ""
-"Open a color chooser dialog, to interactively pick colors from a palette"
-msgstr ""
-"Abre a janela do selector de cores, para interactivamente escolher uma cor"
+msgid "Open a color chooser dialog, to interactively pick colors from a palette"
+msgstr "Abre a janela do selector de cores, para interactivamente escolher uma cor"
 
 #: ../src/toolbar.c:71
 msgid "Zoom in the text"
@@ -5066,12 +4628,8 @@ msgid "--- Separator ---"
 msgstr "--- Separador ---"
 
 #: ../src/toolbar.c:955
-msgid ""
-"Select items to be displayed on the toolbar. Items can be reordered by drag "
-"and drop."
-msgstr ""
-"Seleccione itens para serem apresentados na barra de ferramentas. Itens "
-"podem ser reordenados com \"arrastar e largar\"."
+msgid "Select items to be displayed on the toolbar. Items can be reordered by drag and drop."
+msgstr "Seleccione itens para serem apresentados na barra de ferramentas. Itens podem ser reordenados com \"arrastar e largar\"."
 
 #: ../src/toolbar.c:971
 msgid "Available Items"
@@ -5092,17 +4650,12 @@ msgstr "Comando não encontrado"
 
 #: ../src/tools.c:271
 #, c-format
-msgid ""
-"The executed custom command returned an error. Your selection was not "
-"changed. Error message: %s"
-msgstr ""
-"O comando, personalizado, executado retornou um erro. A sua selecção não foi "
-"modificada. Mensagem de erro: %s."
+msgid "The executed custom command returned an error. Your selection was not changed. Error message: %s"
+msgstr "O comando, personalizado, executado retornou um erro. A sua selecção não foi modificada. Mensagem de erro: %s."
 
 #: ../src/tools.c:338
 msgid "The executed custom command exited with an unsuccessful exit code."
-msgstr ""
-"O comando, personalizado, executado terminou com um código de insucesso."
+msgstr "O comando, personalizado, executado terminou com um código de insucesso."
 
 #: ../src/tools.c:366 ../src/tools.c:416
 #, c-format
@@ -5119,12 +4672,8 @@ msgid "Set Custom Commands"
 msgstr "Definir Pomandos Personalizados"
 
 #: ../src/tools.c:536
-msgid ""
-"You can send the current selection to any of these commands and the output "
-"of the command replaces the current selection."
-msgstr ""
-"Pode enviar a selecção actual para qualquer um destes comandos e o seu "
-"resultado substituirá a referida selecção."
+msgid "You can send the current selection to any of these commands and the output of the command replaces the current selection."
+msgstr "Pode enviar a selecção actual para qualquer um destes comandos e o seu resultado substituirá a referida selecção."
 
 #: ../src/tools.c:550
 msgid "ID"
@@ -5179,21 +4728,16 @@ msgid "H_ide Sidebar"
 msgstr "_Ocultar a Barra Lateral"
 
 #: ../src/sidebar.c:720 ../plugins/filebrowser.c:630
-#, fuzzy
 msgid "_Find in Files..."
-msgstr "Procurar em _Ficheiros"
+msgstr "Procurar em _Ficheiros..."
 
 #: ../src/sidebar.c:730
 msgid "Show _Paths"
 msgstr "Mostrar Direc_tórios"
 
 #: ../src/ui_utils.c:62
-msgid ""
-"line: %l / %L\t col: %c\t sel: %s\t %w      %t      %mmode: %M      "
-"encoding: %e      filetype: %f      scope: %S"
-msgstr ""
-"linha: %l / %L\t col: %c\t sel: %s\t %w      %t      %mmodo: %M      "
-"codificação: %e      tipo de ficheiro: %f      contexto: %S"
+msgid "line: %l / %L\t col: %c\t sel: %s\t %w      %t      %mmode: %M      encoding: %e      filetype: %f      scope: %S"
+msgstr "linha: %l / %L\t col: %c\t sel: %s\t %w      %t      %mmodo: %M      codificação: %e      tipo de ficheiro: %f      contexto: %S"
 
 #. L = lines
 #: ../src/ui_utils.c:236
@@ -5291,12 +4835,8 @@ msgid "Select Browser"
 msgstr "Seleccionar navegador web"
 
 #: ../src/utils.c:89
-msgid ""
-"Failed to spawn the configured browser command. Please correct it or enter "
-"another one."
-msgstr ""
-"Erro ao executar o comando do navegador web configurado. Por favor corrija-o "
-"ou introduza um novo."
+msgid "Failed to spawn the configured browser command. Please correct it or enter another one."
+msgstr "Erro ao executar o comando do navegador web configurado. Por favor corrija-o ou introduza um novo."
 
 #: ../src/utils.c:375
 msgid "Win (CRLF)"
@@ -5313,7 +4853,7 @@ msgstr "Unix (LF)"
 #: ../src/vte.c:437
 #, c-format
 msgid "invalid VTE library \"%s\": missing symbol \"%s\""
-msgstr ""
+msgstr "biblioteca VTE inválida \"%s\": símbolo \"%s\" em falta"
 
 #: ../src/vte.c:586
 msgid "_Set Path From Document"
@@ -5328,12 +4868,8 @@ msgid "_Input Methods"
 msgstr "Modos de _Inserção"
 
 #: ../src/vte.c:708
-msgid ""
-"Could not change the directory in the VTE because it probably contains a "
-"command."
-msgstr ""
-"Erro ao mudar de directoria no terminal (VTE), provavelmente porque esta "
-"contém um comando."
+msgid "Could not change the directory in the VTE because it probably contains a command."
+msgstr "Erro ao mudar de directoria no terminal (VTE), provavelmente porque esta contém um comando."
 
 #: ../src/win32.c:160
 msgid "Geany project files"
@@ -5346,7 +4882,7 @@ msgstr "Executáveis"
 #: ../src/win32.c:1217
 #, c-format
 msgid "Process timed out after %.02f s!"
-msgstr ""
+msgstr "O processo parou após o tempo limite de %.02f s!"
 
 #: ../plugins/classbuilder.c:37
 msgid "Class Builder"
@@ -5445,19 +4981,16 @@ msgid "Create Cla_ss"
 msgstr "Criar Cla_sse"
 
 #: ../plugins/classbuilder.c:1097
-#, fuzzy
 msgid "_C++ Class..."
-msgstr "Classe _C++"
+msgstr "Classe _C++..."
 
 #: ../plugins/classbuilder.c:1100
-#, fuzzy
 msgid "_GTK+ Class..."
-msgstr "Classe _GTK+"
+msgstr "Classe _GTK+..."
 
 #: ../plugins/classbuilder.c:1103
-#, fuzzy
 msgid "_PHP Class..."
-msgstr "Classe _PHP"
+msgstr "Classe _PHP..."
 
 #: ../plugins/htmlchars.c:40
 msgid "HTML Characters"
@@ -5519,12 +5052,8 @@ msgid "_Insert"
 msgstr "_Inserir"
 
 #: ../plugins/htmlchars.c:501
-msgid ""
-"Choose a special character from the list below and double click on it or use "
-"the button to insert it at the current cursor position."
-msgstr ""
-"Escolha um caractere, da lista apresentada em baixo e faça duplo clique "
-"sobre o mesmo, ou use o botão, para o inserir na posição actual do cursor."
+msgid "Choose a special character from the list below and double click on it or use the button to insert it at the current cursor position."
+msgstr "Escolha um caractere, da lista apresentada em baixo e faça duplo clique sobre o mesmo, ou use o botão, para o inserir na posição actual do cursor."
 
 #: ../plugins/htmlchars.c:515
 msgid "Character"
@@ -5535,9 +5064,8 @@ msgid "HTML (name)"
 msgstr "HTML (nome)"
 
 #: ../plugins/htmlchars.c:739
-#, fuzzy
 msgid "_Insert Special HTML Characters..."
-msgstr "_Inserir caracteres HTML especiais"
+msgstr "_Inserir caracteres HTML especiais..."
 
 #. Add menuitem for html replacement functions
 #: ../plugins/htmlchars.c:754
@@ -5589,11 +5117,8 @@ msgid "_Use current zoom level"
 msgstr "_Usar o nível de Zoom actual"
 
 #: ../plugins/export.c:202
-msgid ""
-"Renders the font size of the document together with the current zoom level"
-msgstr ""
-"Desenha o tipo de letra do documento conjuntamente com o actual nível de "
-"ampliação (zoom)"
+msgid "Renders the font size of the document together with the current zoom level"
+msgstr "Desenha o tipo de letra do documento conjuntamente com o actual nível de ampliação (zoom)"
 
 #: ../plugins/export.c:280
 #, c-format
@@ -5616,15 +5141,13 @@ msgstr "_Exportar"
 
 #. HTML
 #: ../plugins/export.c:787
-#, fuzzy
 msgid "As _HTML..."
-msgstr "Como _HTML"
+msgstr "Como _HTML..."
 
 #. LaTeX
 #: ../plugins/export.c:793
-#, fuzzy
 msgid "As _LaTeX..."
-msgstr "Como _LaTeX"
+msgstr "Como _LaTeX..."
 
 #: ../plugins/filebrowser.c:45
 msgid "File Browser"
@@ -5641,12 +5164,9 @@ msgstr "Demasiados itens seleccionados!"
 #: ../plugins/filebrowser.c:445
 #, c-format
 msgid "Could not execute configured external command '%s' (%s)."
-msgstr ""
-"Erro ao executar o comando externo '%s' (%s). Este comando foi definido por "
-"si."
+msgstr "Erro ao executar o comando externo '%s' (%s). Este comando foi definido por si."
 
 #: ../plugins/filebrowser.c:615
-#, fuzzy
 msgid "Open _Externally"
 msgstr "Abrir _externamente"
 
@@ -5675,12 +5195,8 @@ msgid "Filter:"
 msgstr "Filtro:"
 
 #: ../plugins/filebrowser.c:908
-msgid ""
-"Filter your files with the usual wildcards. Separate multiple patterns with "
-"a space."
-msgstr ""
-"Filtre os seus ficheiros com caracteres universais  usuais. Separe múltiplos "
-"padrões com um espaço."
+msgid "Filter your files with the usual wildcards. Separate multiple patterns with a space."
+msgstr "Filtre os seus ficheiros com caracteres universais  usuais. Separe múltiplos padrões com um espaço."
 
 #: ../plugins/filebrowser.c:1123
 msgid "Focus File List"
@@ -5697,18 +5213,13 @@ msgstr "Comando Externo para a função Abrir:"
 #: ../plugins/filebrowser.c:1226
 #, c-format
 msgid ""
-"The command to execute when using \"Open with\". You can use %f and %d "
-"wildcards.\n"
+"The command to execute when using \"Open with\". You can use %f and %d wildcards.\n"
 "%f will be replaced with the filename including full path\n"
-"%d will be replaced with the path name of the selected file without the "
-"filename"
+"%d will be replaced with the path name of the selected file without the filename"
 msgstr ""
-"O comando a executar ao usar o \"Abrir com\". Pode usar os descritores %f e "
-"%d.\n"
-"%f será substituído pelo nome do ficheiro incluindo o caminho para o seu "
-"directório\n"
-"%d será substituído pelo caminho até ao directório do ficheiro seleccionado, "
-"sem o nome deste"
+"O comando a executar ao usar o \"Abrir com\". Pode usar os descritores %f e %d.\n"
+"%f será substituído pelo nome do ficheiro incluindo o caminho para o seu directório\n"
+"%d será substituído pelo caminho até ao directório do ficheiro seleccionado, sem o nome deste"
 
 #: ../plugins/filebrowser.c:1234
 msgid "Show hidden files"
@@ -5727,10 +5238,8 @@ msgid "Use the project's base directory"
 msgstr "Usar o directório base do projecto"
 
 #: ../plugins/filebrowser.c:1271
-msgid ""
-"Change the directory to the base directory of the currently opened project"
-msgstr ""
-"Muda o directório para o directório base do projecto que se encontra aberto"
+msgid "Change the directory to the base directory of the currently opened project"
+msgstr "Muda o directório para o directório base do projecto que se encontra aberto"
 
 #: ../plugins/saveactions.c:42
 msgid "Save Actions"
@@ -5738,8 +5247,7 @@ msgstr "Acções de Guardar"
 
 #: ../plugins/saveactions.c:42
 msgid "This plugin provides different actions related to saving of files."
-msgstr ""
-"Este plugin fornece diferentes acções relativas ao guardar de ficheiros."
+msgstr "Este plugin fornece diferentes acções relativas ao guardar de ficheiros."
 
 #: ../plugins/saveactions.c:174
 #, c-format
@@ -5771,9 +5279,7 @@ msgstr "Seleccione um directório"
 
 #: ../plugins/saveactions.c:517
 msgid "Backup directory does not exist or is not writable."
-msgstr ""
-"Directório para a cópia de segurança não existe ou não tem permissões para "
-"escrita."
+msgstr "Directório para a cópia de segurança não existe ou não tem permissões para escrita."
 
 #: ../plugins/saveactions.c:598
 msgid "Auto Save"
@@ -5781,7 +5287,7 @@ msgstr "Auto-Gravar"
 
 #: ../plugins/saveactions.c:600
 msgid "Enable save when losing _focus"
-msgstr ""
+msgstr "Habilitar o guardar quando perde o _foco"
 
 #: ../plugins/saveactions.c:606 ../plugins/saveactions.c:668
 #: ../plugins/saveactions.c:709
@@ -5798,8 +5304,7 @@ msgstr "segundos"
 
 #: ../plugins/saveactions.c:631
 msgid "_Print status message if files have been automatically saved"
-msgstr ""
-"Im_primir mensagens de estado se os ficheiros forem guardados automaticamente"
+msgstr "Im_primir mensagens de estado se os ficheiros forem guardados automaticamente"
 
 #: ../plugins/saveactions.c:639
 msgid "Save only current open _file"
@@ -5827,9 +5332,7 @@ msgstr "_Directoria onde guardar cópias de segurança:"
 
 #: ../plugins/saveactions.c:740
 msgid "Date/_Time format for backup files (\"man strftime\" for details):"
-msgstr ""
-"Forma_to da Data/Hora para cópias de segurança (para detalhes executar \"man "
-"strftime\")"
+msgstr "Forma_to da Data/Hora para cópias de segurança (para detalhes executar \"man strftime\")"
 
 #: ../plugins/saveactions.c:753
 msgid "Directory _levels to include in the backup destination:"
@@ -5865,14 +5368,12 @@ msgid "_Top and Bottom"
 msgstr "_Topo e Base"
 
 #: ../plugins/splitwindow.c:429
-#, fuzzy
 msgid "Side by Side"
-msgstr "_Lado a Lado"
+msgstr "Lado a Lado"
 
 #: ../plugins/splitwindow.c:431
-#, fuzzy
 msgid "Top and Bottom"
-msgstr "_Topo e Base"
+msgstr "Cima e Baixo"
 
 #~ msgid "<b>Type:</b>"
 #~ msgstr "<b>Tipo:</b>"
@@ -6208,6 +5709,7 @@ msgstr "_Topo e Base"
 #~ msgstr "Escolha o comando para executar o projecto"
 
 #~ msgid "Replaced text in %u file."
+
 #~ msgid_plural "Replaced text in %u files."
 #~ msgstr[0] "Texto substituído no ficheiro %u."
 #~ msgstr[1] "Texto substituído nos ficheiros %u."

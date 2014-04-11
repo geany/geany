@@ -85,7 +85,7 @@ Geany 1.24 (unreleased)
 
     Internationalization
     * Make date templates translatable (Christian Dywan).
-    * Update translations: ca, cs, de, es, eu, he, it, kk, lt, nl, sk, 
+    * Update translations: ca, cs, de, es, eu, he, it, kk, lt, nl, pt, sk, 
                            sl, sv, tr, zh_CN
 
     Plugins
