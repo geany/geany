@@ -592,7 +592,14 @@ static gboolean remove_page(guint page_num)
 
 	doc->is_valid = FALSE;
 
-	if (! main_status.quitting)
+	if (main_status.quitting)
+	{
+		/* we need to destroy the ScintillaWidget so our handlers on it are
+		 * disconnected before we free any data they may use (like the editor).
+		 * when not quitting, this is handled by removing the notebook page. */
+		gtk_widget_destroy(doc->editor->sci);
+	}
+	else
 	{
 		notebook_remove_page(page_num);
 		sidebar_remove_document(doc);
