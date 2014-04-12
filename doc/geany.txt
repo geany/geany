@@ -17,7 +17,7 @@
 :Date: 2013-03-10
 :Version: |(version)|
 
-Copyright © 2005-2012
+Copyright © 2005-2014
 
 This document is distributed under the terms of the GNU General Public
 License as published by the Free Software Foundation; either version 2

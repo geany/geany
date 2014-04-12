@@ -22,7 +22,7 @@ FILETYPE			VFT_APP
 			VALUE "FileVersion", VER_FILEVERSION_STR
 			VALUE "FileDescription", "Geany"
 			VALUE "InternalName", "Geany"
-			VALUE "LegalCopyright", "Copyright 2005-2012 by the Geany developers"
+			VALUE "LegalCopyright", "Copyright 2005-2014 by the Geany developers"
 			VALUE "LegalTrademarks", ""
 			VALUE "OriginalFilename", "Geany.exe"
 			VALUE "ProductName", "Geany"
