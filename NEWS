@@ -4,6 +4,7 @@ Geany 1.24 (unreleased)
     * Add experimental support for GTK3.
     * Add support for loading CTags and Vi tags files.
     * Save configuration when plugin manager dialog is closed.
+    * Regenerate 16x16 Geany icon to be not cutoff.
 
     Bug fixes
     * Fix many small memory leaks (many of them found by Pavel Roschin).
@@ -85,6 +86,7 @@ Geany 1.24 (unreleased)
       (PR#227, Francisco Iacobelli).
     * Ignore Python imports when going to a tag's definition.
     * Ass some more Ruby extensions (Igor Shaula).
+    * Fix 'Go to Tag definition' for parsed Python imports.
 
     Internationalization
     * Make date templates translatable (Christian Dywan).
@@ -107,6 +109,11 @@ Geany 1.24 (unreleased)
     * Fix spawning commands with spaces (#943).
     * Allow to use the GTK color chooser dialog (PR#218, Steven Valsesia).
     * Add default extension to native save dialogs (#1021).
+    * Add colorschemes from the Geany-Themes to the Windows installer.
+    * Add option to install Geany header files and pkgconfig file to the
+      Windows installer.
+    * Fix broken opening files from command line on Windows
+      (again, #3613096).
 
 
 Geany 1.23.1 (May 19, 2013)
