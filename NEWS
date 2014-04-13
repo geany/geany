@@ -17,6 +17,7 @@ Geany 1.24 (unreleased)
     * Fix typo in "deque" C++ include name (#1027).
     * Fix replacing a selection starting with "0x" by a color if the
       selection is not 8 bytes long.
+    * Fix a possible crash on quit.
 
     Interface
     * Fix custom GTK styles under KDE (#3607935).
@@ -37,6 +38,7 @@ Geany 1.24 (unreleased)
 
     Search
     * Fix bulk Search & Replace not to match replacements.
+    * Fix finding start of word when performing whole word matching.
     * Search when activating the Replace dialog find entry.
 
     Filetypes
@@ -82,6 +84,7 @@ Geany 1.24 (unreleased)
     * Add default build command for Bibtex in the Latex filetype
       (PR#227, Francisco Iacobelli).
     * Ignore Python imports when going to a tag's definition.
+    * Ass some more Ruby extensions (Igor Shaula).
 
     Internationalization
     * Make date templates translatable (Christian Dywan).
