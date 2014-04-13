@@ -45,7 +45,7 @@ Geany 1.24 (unreleased)
     * Add Batch filetype (canou).
     * Add Graphviz filetype (PR#125, Miro Hrončok).
     * Add PowerShell filetype (Igor Shaula).
-    * Add Clojure fieltype (PR#92, Hoàng Minh Thắng).
+    * Add Clojure filetype (PR#92, Hoàng Minh Thắng).
     * Many improvements to the PHP tag parser.
     * Update PHP global tags file (PR#137, John Long).
     * Fix Asciidoc parser recognition of open block as underline.
