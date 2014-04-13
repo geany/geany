@@ -313,6 +313,9 @@ def options(opt):
     opt.load('compiler_cxx')
     opt.load('intltool')
 
+    # Option
+    opt.add_option('--no-scm', action='store_true', default=False,
+        help='Disable SCM detection [default: No]', dest='no_scm')
     # Features
     opt.add_option('--disable-plugins', action='store_true', default=False,
         help='compile without plugin support [default: No]', dest='no_plugins')
@@ -714,6 +717,9 @@ def _define_from_opt(conf, define_name, opt_value, default_value, quote=1):
 
 
 def _get_git_rev(conf):
+    if conf.options.no_scm:
+        return
+
     if not os.path.isdir('.git'):
         return
 
