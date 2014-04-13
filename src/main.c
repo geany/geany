@@ -91,6 +91,7 @@ gboolean	ignore_callback;	/* hack workaround for GTK+ toggle button callback pro
 GeanyStatus	 main_status;
 CommandLineOptions cl_options;	/* fields initialised in parse_command_line_options */
 
+static gchar *original_cwd = NULL;
 
 static const gchar geany_lib_versions[] = "GTK %u.%u.%u, GLib %u.%u.%u";
 
@@ -313,7 +314,11 @@ gchar *main_get_argv_filename(const gchar *filename)
 	else
 	{
 		/* use current dir */
-		gchar *cur_dir = g_get_current_dir();
+		gchar *cur_dir = NULL;
+		if (original_cwd == NULL)
+			cur_dir = g_get_current_dir();
+		else
+			cur_dir = g_strdup(original_cwd);
 
 		result = g_strjoin(
 			G_DIR_SEPARATOR_S, cur_dir, filename, NULL);
@@ -383,6 +388,9 @@ static void get_line_and_column_from_filename(gchar *filename, gint *line, gint 
 static void change_working_directory_on_windows()
 {
 	gchar *install_dir = win32_get_installation_dir();
+
+	/* remember original working directory for use with opening files from the command line */
+	original_cwd = g_get_current_dir();
 
 	/* On Windows, change the working directory to the Geany installation path to not lock
 	 * the directory of a file passed as command line argument (see bug #2626124).
@@ -1333,6 +1341,7 @@ void main_quit(void)
 	g_object_unref(geany_object);
 	geany_object = NULL;
 
+	g_free(original_cwd);
 	g_free(app);
 
 	ui_finalize_builder();
