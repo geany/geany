@@ -245,7 +245,10 @@ def configure(conf):
         # DATADIR is defined in objidl.h, so we remove it from config.h but keep it in env
         conf.undefine('DATADIR')
         conf.env['DATADIR'] = os.path.join(conf.env['PREFIX'], 'data')
-        conf.env.append_value('LINKFLAGS_cprogram', ['-mwindows'])
+        conf.env.append_value('LINKFLAGS_cprogram', [
+            '-mwindows',
+            '-static-libgcc',
+            '-static-libstdc++'])
         conf.env.append_value('LIB_WIN32', ['wsock32', 'uuid', 'ole32', 'iberty'])
     else:
         conf.env['cshlib_PATTERN'] = '%s.so'
