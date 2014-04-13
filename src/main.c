@@ -385,7 +385,7 @@ static void get_line_and_column_from_filename(gchar *filename, gint *line, gint 
 
 
 #ifdef G_OS_WIN32
-static void change_working_directory_on_windows()
+static void change_working_directory_on_windows(void)
 {
 	gchar *install_dir = win32_get_installation_dir();
 
