@@ -31,8 +31,9 @@ Geany 1.24 (unreleased)
     * Fix "leaks" of geany_run_script (#975).
 
     Editor
-    * Update Scintilla to version 3.3.6.
-    * Fix Reflow to follow Line breaking behavior (Eugene Arshinov).
+    * Update Scintilla to version 3.3.6 (#962, #995).
+    * Fix Reflow to follow Line breaking behavior (#382, #412, #464,
+      Eugene Arshinov).
     * Fix unfolding the very last line in a level (#1007).
     * Fix commenting the very last line in some situations.
 
@@ -58,7 +59,7 @@ Geany 1.24 (unreleased)
     * SQL parsing improvements.
     * Extend list of recognized keywords for SQL.
     * Fix SQL single-line comment marker (#997).
-    * Fix parsing of some JavaScript constructors.
+    * Fix parsing of some JavaScript constructors (#966).
     * Fix parsing a JavaScript regular expression in a return statement.
     * Fix parsing JavaScript files with a shebang.
     * Parse Java annotations with parameters (#924, Braden Walters).
