@@ -138,6 +138,8 @@ Section "!Program Files" SEC01
 
 	SetOutPath "$INSTDIR\data\colorschemes"
 	File /r "${RESOURCEDIR}\data\colorschemes\*"
+	# Geany color schemes project, don't bail out if they are missing
+	File /nonfatal /r "..\geany-themes\colorschemes\*.conf"
 
 	SetOutPath "$INSTDIR\share\icons"
 	File /r "${RESOURCEDIR}\share\icons\*"
