@@ -13,6 +13,7 @@ word2=keyword_2
 string=string_1
 stringraw=string_2
 character=character
+userliteral=other
 uuid=other
 preprocessor=preprocessor
 operator=operator

@@ -168,6 +168,10 @@ static const HLStyle highlighting_styles_BASIC[] =
 {
 	{ SCE_B_DEFAULT,		"default",			FALSE },
 	{ SCE_B_COMMENT,		"comment",			FALSE },
+	{ SCE_B_COMMENTBLOCK,	"commentblock",		FALSE },
+	{ SCE_B_DOCLINE,		"docline",			FALSE },
+	{ SCE_B_DOCBLOCK,		"docblock",			FALSE },
+	{ SCE_B_DOCKEYWORD,		"dockeyword",		FALSE },
 	{ SCE_B_NUMBER,			"number",			FALSE },
 	{ SCE_B_KEYWORD,		"word",				FALSE },
 	{ SCE_B_STRING,			"string",			FALSE },
@@ -234,6 +238,7 @@ static const HLStyle highlighting_styles_C[] =
 	{ SCE_C_STRING,					"string",					FALSE },
 	{ SCE_C_STRINGRAW,				"stringraw",				FALSE },
 	{ SCE_C_CHARACTER,				"character",				FALSE },
+	{ SCE_C_USERLITERAL,			"userliteral",				FALSE },
 	{ SCE_C_UUID,					"uuid",						FALSE },
 	{ SCE_C_PREPROCESSOR,			"preprocessor",				FALSE },
 	{ SCE_C_OPERATOR,				"operator",					FALSE },
