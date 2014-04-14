@@ -19,6 +19,9 @@ primary=break case catch classdef continue else elseif end enumeration events fo
 # default extension used when saving files
 extension=m
 
+# MIME type
+mime_type=text/x-matlab
+
 # the following characters are these which a "word" can contains, see documentation
 #wordchars=_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
 

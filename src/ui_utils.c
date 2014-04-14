@@ -2680,7 +2680,7 @@ void ui_menu_add_document_items_sorted(GtkMenu *menu, GeanyDocument *active,
 
 		base_name = g_path_get_basename(DOC_FILENAME(doc));
 		menu_item = gtk_image_menu_item_new_with_label(base_name);
-		image = gtk_image_new_from_pixbuf(doc->file_type->icon);
+		image = gtk_image_new_from_gicon(doc->file_type->icon, GTK_ICON_SIZE_MENU);
 		gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(menu_item), image);
 
 		gtk_widget_show(menu_item);
@@ -2758,60 +2758,24 @@ void ui_editable_insert_text_callback(GtkEditable *editable, gchar *new_text,
 
 
 /* gets the icon that applies to a particular MIME type */
-GdkPixbuf *ui_get_mime_icon(const gchar *mime_type, GtkIconSize size)
+GIcon *ui_get_mime_icon(const gchar *mime_type)
 {
-	GdkPixbuf *icon = NULL;
+	GIcon *icon = NULL;
 	gchar *ctype;
-	GIcon *gicon;
-	GtkIconInfo *info;
-	GtkIconTheme *theme;
-	gint real_size;
 
-	if (!gtk_icon_size_lookup(size, &real_size, NULL))
-	{
-		g_return_val_if_reached(NULL);
-	}
 	ctype = g_content_type_from_mime_type(mime_type);
-	if (ctype != NULL)
-	{
-		gicon = g_content_type_get_icon(ctype);
-		theme = gtk_icon_theme_get_default();
-		info = gtk_icon_theme_lookup_by_gicon(theme, gicon, real_size, 0);
-		g_object_unref(gicon);
-		g_free(ctype);
+	if (ctype)
+		icon = g_content_type_get_icon(ctype);
 
-		if (info != NULL)
-		{
-			icon = gtk_icon_info_load_icon(info, NULL);
-			gtk_icon_info_free(info);
-		}
-	}
-
-	/* fallback for builds with GIO < 2.18 or if icon lookup failed, like it might happen on Windows */
-	if (icon == NULL)
+	/* fallback if icon lookup failed, like it might happen on Windows (?) */
+	if (! icon)
 	{
 		const gchar *stock_id = GTK_STOCK_FILE;
-		GtkIconSet *icon_set;
 
 		if (strstr(mime_type, "directory"))
 			stock_id = GTK_STOCK_DIRECTORY;
 
-		icon_set = gtk_icon_factory_lookup_default(stock_id);
-		if (icon_set)
-		{
-#if GTK_CHECK_VERSION(3, 0, 0)
-			GtkStyleContext *ctx = gtk_style_context_new();
-			GtkWidgetPath *path = gtk_widget_path_new();
-			gtk_style_context_set_path(ctx, path);
-			gtk_widget_path_unref(path);
-			icon = gtk_icon_set_render_icon_pixbuf(icon_set, ctx, size);
-			g_object_unref(ctx);
-#else
-			icon = gtk_icon_set_render_icon(icon_set, gtk_widget_get_default_style(),
-				gtk_widget_get_default_direction(),
-				GTK_STATE_NORMAL, size, NULL, NULL);
-#endif
-		}
+		icon = g_themed_icon_new(stock_id);
 	}
 	return icon;
 }

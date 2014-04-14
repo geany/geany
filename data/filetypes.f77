@@ -28,6 +28,9 @@ user_functions=cdabs cdcos cdexp cdlog cdsin cdsqrt cotan cotand dcmplx dconjg d
 # default extension used when saving files
 extension=f
 
+# MIME type
+mime_type=text/x-fortran
+
 # the following characters are these which a "word" can contains, see documentation
 #wordchars=_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
 

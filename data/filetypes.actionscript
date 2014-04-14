@@ -11,6 +11,9 @@ classes=ArgumentError Array Boolean Class Date DefinitionError Error EvalError F
 # default extension used when saving files
 extension=as
 
+# MIME type
+mime_type=application/ecmascript
+
 # the following characters are these which a "word" can contains, see documentation
 #wordchars=_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
 
