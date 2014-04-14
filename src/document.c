@@ -2445,7 +2445,7 @@ void document_set_filetype(GeanyDocument *doc, GeanyFiletype *type)
 
 		/* assume that if previous filetype was none and the settings are the default ones, this
 		 * is the first time the filetype is carefully set, so we should apply indent settings */
-		if (old_ft && old_ft->id == GEANY_FILETYPES_NONE &&
+		if ((! old_ft || old_ft->id == GEANY_FILETYPES_NONE) &&
 			doc->editor->indent_type == iprefs->type &&
 			doc->editor->indent_width == iprefs->width)
 		{
