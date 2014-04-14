@@ -13,6 +13,9 @@ ideol=type
 # default extension used when saving files
 extension=mak
 
+# MIME type
+mime_type=text/x-makefile
+
 # the following characters are these which a "word" can contains, see documentation
 #wordchars=_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
 

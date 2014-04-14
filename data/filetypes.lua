@@ -42,6 +42,9 @@ user4=
 # default extension used when saving files
 extension=lua
 
+# MIME type
+mime_type=text/x-lua
+
 # the following characters are these which a "word" can contains, see documentation
 #wordchars=_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
 

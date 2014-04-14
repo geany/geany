@@ -34,6 +34,9 @@ lexer.cpp.track.preprocessor=0
 # default extension used when saving files
 extension=rs
 
+# MIME type
+mime_type=text/x-rustsrc
+
 # single comments, like # in this file
 comment_single=//
 # multiline comments

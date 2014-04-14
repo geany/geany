@@ -35,6 +35,9 @@ fold.d.comment.explicit=0
 # default extension used when saving files
 extension=d
 
+# MIME type
+mime_type=text/x-dsrc
+
 # the following characters are these which a "word" can contains, see documentation
 #wordchars=_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
 
