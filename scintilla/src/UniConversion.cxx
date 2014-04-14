@@ -159,7 +159,7 @@ static int BytesFromLead(int leadByte) {
 
 void UTF8BytesOfLeadInitialise() {
 	if (!initialisedBytesOfLead) {
-		for (int i=0;i<256;i++) {
+		for (int i=0; i<256; i++) {
 			UTF8BytesOfLead[i] = BytesFromLead(i);
 		}
 		initialisedBytesOfLead = true;

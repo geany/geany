@@ -209,7 +209,7 @@ void ScintillaBase::AutoCompleteStart(int lenEntered, const char *list) {
 	if (ac.chooseSingle && (listType == 0)) {
 		if (list && !strchr(list, ac.GetSeparator())) {
 			const char *typeSep = strchr(list, ac.GetTypesep());
-			int lenInsert = typeSep ? 
+			int lenInsert = typeSep ?
 				static_cast<int>(typeSep-list) : static_cast<int>(strlen(list));
 			if (ac.ignoreCase) {
 				// May need to convert the case before invocation, so remove lenEntered characters
@@ -381,7 +381,7 @@ int ScintillaBase::AutoCompleteGetCurrentText(char *buffer) const {
 		if (item != -1) {
 			const std::string selected = ac.GetValue(item);
 			if (buffer != NULL)
-				strcpy(buffer, selected.c_str());
+				memcpy(buffer, selected.c_str(), selected.length()+1);
 			return static_cast<int>(selected.length());
 		}
 	}
@@ -417,15 +417,15 @@ void ScintillaBase::CallTipShow(Point pt, const char *defn) {
 	// space
 	PRectangle rcClient = GetClientRectangle();
 	int offset = vs.lineHeight + rc.Height();
-	// adjust so it displays below the text.
-	if (rc.top < rcClient.top) {
-		rc.top += offset;
-		rc.bottom += offset;
-	}
 	// adjust so it displays above the text.
 	if (rc.bottom > rcClient.bottom) {
 		rc.top -= offset;
 		rc.bottom -= offset;
+	}
+	// adjust so it displays below the text.
+	if (rc.top < rcClient.top) {
+		rc.top += offset;
+		rc.bottom += offset;
 	}
 	// Now display the window.
 	CreateCallTipWindow(rc);
@@ -463,9 +463,13 @@ void ScintillaBase::CancelModes() {
 	Editor::CancelModes();
 }
 
-void ScintillaBase::ButtonDown(Point pt, unsigned int curTime, bool shift, bool ctrl, bool alt) {
+void ScintillaBase::ButtonDownWithModifiers(Point pt, unsigned int curTime, int modifiers) {
 	CancelModes();
-	Editor::ButtonDown(pt, curTime, shift, ctrl, alt);
+	Editor::ButtonDownWithModifiers(pt, curTime, modifiers);
+}
+
+void ScintillaBase::ButtonDown(Point pt, unsigned int curTime, bool shift, bool ctrl, bool alt) {
+	ButtonDownWithModifiers(pt, curTime, ModifierFlags(shift, ctrl, alt));
 }
 
 #ifdef SCI_LEXER
@@ -482,7 +486,7 @@ class LexState : public LexInterface {
 public:
 	int lexLanguage;
 
-	LexState(Document *pdoc_);
+	explicit LexState(Document *pdoc_);
 	virtual ~LexState();
 	void SetLexer(uptr_t wParam);
 	void SetLexerLanguage(const char *languageName);
@@ -888,6 +892,10 @@ sptr_t ScintillaBase::WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lPara
 
 	case SCI_CALLTIPPOSSTART:
 		return ct.posStartCallTip;
+
+	case SCI_CALLTIPSETPOSSTART:
+		ct.posStartCallTip = wParam;
+		break;
 
 	case SCI_CALLTIPSETHLT:
 		ct.SetHighlight(wParam, lParam);

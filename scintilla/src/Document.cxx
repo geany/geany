@@ -955,7 +955,7 @@ bool Document::InsertString(int position, const char *s, int insertLength) {
 int SCI_METHOD Document::AddData(char *data, int length) {
 	try {
 		int position = Length();
-		InsertString(position,data, length);
+		InsertString(position, data, length);
 	} catch (std::bad_alloc &) {
 		return SC_STATUS_BADALLOC;
 	} catch (...) {
@@ -1892,7 +1892,7 @@ void SCI_METHOD Document::DecorationFillRange(int position, int value, int fillL
 
 bool Document::AddWatcher(DocWatcher *watcher, void *userData) {
 	WatcherWithUserData wwud(watcher, userData);
-	std::vector<WatcherWithUserData>::iterator it = 
+	std::vector<WatcherWithUserData>::iterator it =
 		std::find(watchers.begin(), watchers.end(), wwud);
 	if (it != watchers.end())
 		return false;
@@ -1901,7 +1901,7 @@ bool Document::AddWatcher(DocWatcher *watcher, void *userData) {
 }
 
 bool Document::RemoveWatcher(DocWatcher *watcher, void *userData) {
-	std::vector<WatcherWithUserData>::iterator it = 
+	std::vector<WatcherWithUserData>::iterator it =
 		std::find(watchers.begin(), watchers.end(), WatcherWithUserData(watcher, userData));
 	if (it != watchers.end()) {
 		watchers.erase(it);
@@ -2103,7 +2103,7 @@ int Document::BraceMatch(int position, int /*maxReStyle*/) {
  */
 class BuiltinRegex : public RegexSearchBase {
 public:
-	BuiltinRegex(CharClassify *charClassTable) : search(charClassTable) {}
+	explicit BuiltinRegex(CharClassify *charClassTable) : search(charClassTable) {}
 
 	virtual ~BuiltinRegex() {
 	}

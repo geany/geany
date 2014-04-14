@@ -190,6 +190,10 @@ const char *UndoHistory::AppendAction(actionType at, int position, const char *d
 			}
 			// See if current action can be coalesced into previous action
 			// Will work if both are inserts or deletes and position is same
+#if defined(_MSC_VER) && defined(_PREFAST_)
+			// Visual Studio 2013 Code Analysis wrongly believes actions can be NULL at its next reference
+			__analysis_assume(actions);
+#endif
 			if (currentAction == savePoint) {
 				currentAction++;
 			} else if (!actions[currentAction].mayCoalesce) {
