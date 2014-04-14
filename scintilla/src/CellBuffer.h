@@ -17,8 +17,8 @@ class PerLine {
 public:
 	virtual ~PerLine() {}
 	virtual void Init()=0;
-	virtual void InsertLine(int)=0;
-	virtual void RemoveLine(int)=0;
+	virtual void InsertLine(int line)=0;
+	virtual void RemoveLine(int line)=0;
 };
 
 /**

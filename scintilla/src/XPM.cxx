@@ -61,11 +61,9 @@ XPM::XPM(const char *const *linesForm) {
 }
 
 XPM::~XPM() {
-	Clear();
 }
 
 void XPM::Init(const char *textForm) {
-	Clear();
 	// Test done is two parts to avoid possibility of overstepping the memory
 	// if memcmp implemented strangely. Must be 4 bytes at least at destination.
 	if ((0 == memcmp(textForm, "/* X", 4)) && (0 == memcmp(textForm, "/* XPM */", 9))) {
@@ -81,7 +79,6 @@ void XPM::Init(const char *textForm) {
 }
 
 void XPM::Init(const char *const *linesForm) {
-	Clear();
 	height = 1;
 	width = 1;
 	nColours = 1;
@@ -120,12 +117,9 @@ void XPM::Init(const char *const *linesForm) {
 	for (int y=0; y<height; y++) {
 		const char *lform = linesForm[y+nColours+1];
 		size_t len = MeasureLength(lform);
-		for (size_t x = 0; x<len; x++) 
+		for (size_t x = 0; x<len; x++)
 			pixels[y * width + x] = static_cast<unsigned char>(lform[x]);
 	}
-}
-
-void XPM::Clear() {
 }
 
 void XPM::Draw(Surface *surface, PRectangle &rc) {
@@ -244,7 +238,7 @@ void RGBAImage::SetPixel(int x, int y, ColourDesired colour, int alpha) {
 	pixel[3] = static_cast<unsigned char>(alpha);
 }
 
-RGBAImageSet::RGBAImageSet() : height(-1), width(-1){
+RGBAImageSet::RGBAImageSet() : height(-1), width(-1) {
 }
 
 RGBAImageSet::~RGBAImageSet() {

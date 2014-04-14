@@ -643,7 +643,7 @@ void SCI_METHOD LexerSQL::Fold(unsigned int startPos, int length, int initStyle,
 			break;
 		}
 	}
-	
+
 	int levelNext = levelCurrent;
 	char chNext = styler[startPos];
 	int styleNext = styler.StyleAt(startPos);

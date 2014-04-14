@@ -51,8 +51,8 @@ public:
 			// Try allowing approximate transliterations
 			if (transliterations) {
 				char fullDest[200];
-				strcpy(fullDest, charSetDestination);
-				strcat(fullDest, "//TRANSLIT");
+				g_strlcpy(fullDest, charSetDestination, sizeof(fullDest));
+				g_strlcat(fullDest, "//TRANSLIT", sizeof(fullDest));
 				OpenHandle(fullDest, charSetSource);
 			}
 			if (!Succeeded()) {

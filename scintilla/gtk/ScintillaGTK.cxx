@@ -31,6 +31,7 @@
 #ifdef SCI_LEXER
 #include "SciLexer.h"
 #endif
+#include "StringCopy.h"
 #include "SplitVector.h"
 #include "Partitioning.h"
 #include "RunStyles.h"
@@ -165,7 +166,7 @@ class ScintillaGTK : public ScintillaBase {
 	ScintillaGTK &operator=(const ScintillaGTK &);
 
 public:
-	ScintillaGTK(_ScintillaObject *sci_);
+	explicit ScintillaGTK(_ScintillaObject *sci_);
 	virtual ~ScintillaGTK();
 	static void ClassInit(OBJECT_CLASS* object_class, GtkWidgetClass *widget_class, GtkContainerClass *container_class);
 private:
@@ -338,14 +339,14 @@ static const GtkTargetEntry clipboardCopyTargets[] = {
 	{ (gchar *) "UTF8_STRING", 0, TARGET_UTF8_STRING },
 	{ (gchar *) "STRING", 0, TARGET_STRING },
 };
-static const gint nClipboardCopyTargets = sizeof(clipboardCopyTargets) / sizeof(clipboardCopyTargets[0]);
+static const gint nClipboardCopyTargets = ELEMENTS(clipboardCopyTargets);
 
 static const GtkTargetEntry clipboardPasteTargets[] = {
 	{ (gchar *) "text/uri-list", 0, TARGET_URI },
 	{ (gchar *) "UTF8_STRING", 0, TARGET_UTF8_STRING },
 	{ (gchar *) "STRING", 0, TARGET_STRING },
 };
-static const gint nClipboardPasteTargets = sizeof(clipboardPasteTargets) / sizeof(clipboardPasteTargets[0]);
+static const gint nClipboardPasteTargets = ELEMENTS(clipboardPasteTargets);
 
 static GtkWidget *PWidget(Window &w) {
 	return reinterpret_cast<GtkWidget *>(w.GetID());
@@ -1126,7 +1127,7 @@ void ScintillaGTK::SetVerticalScrollPos() {
 
 void ScintillaGTK::SetHorizontalScrollPos() {
 	DwellEnd(true);
-	gtk_adjustment_set_value(GTK_ADJUSTMENT(adjustmenth), xOffset / 2);
+	gtk_adjustment_set_value(GTK_ADJUSTMENT(adjustmenth), xOffset);
 }
 
 bool ScintillaGTK::ModifyScrollBars(int nMax, int nPage) {
@@ -1244,7 +1245,7 @@ const char *ScintillaGTK::CharacterSetID() const {
 class CaseFolderDBCS : public CaseFolderTable {
 	const char *charSet;
 public:
-	CaseFolderDBCS(const char *charSet_) : charSet(charSet_) {
+	explicit CaseFolderDBCS(const char *charSet_) : charSet(charSet_) {
 		StandardASCII();
 	}
 	virtual size_t Fold(char *folded, size_t sizeFolded, const char *mixed, size_t lenMixed) {
@@ -1334,7 +1335,7 @@ std::string ScintillaGTK::CaseMapString(const std::string &s, int caseMapping) {
 
 	if (IsUnicodeMode()) {
 		std::string retMapped(s.length() * maxExpansionCaseConversion, 0);
-		size_t lenMapped = CaseConvertString(&retMapped[0], retMapped.length(), s.c_str(), s.length(), 
+		size_t lenMapped = CaseConvertString(&retMapped[0], retMapped.length(), s.c_str(), s.length(),
 			(caseMapping == cmUpper) ? CaseConversionUpper : CaseConversionLower);
 		retMapped.resize(lenMapped);
 		return retMapped;
@@ -1769,17 +1770,24 @@ gint ScintillaGTK::PressThis(GdkEventButton *event) {
 			return FALSE;
 		}
 
+		bool shift = (event->state & GDK_SHIFT_MASK) != 0;
 		bool ctrl = (event->state & GDK_CONTROL_MASK) != 0;
+		// On X, instead of sending literal modifiers use the user specified
+		// modifier, defaulting to control instead of alt.
+		// This is because most X window managers grab alt + click for moving
+		bool alt = (event->state & modifierTranslated(rectangularSelectionModifier)) != 0;
 
 		gtk_widget_grab_focus(PWidget(wMain));
 		if (event->button == 1) {
-			// On X, instead of sending literal modifiers use the user specified
-			// modifier, defaulting to control instead of alt.
-			// This is because most X window managers grab alt + click for moving
-			ButtonDown(pt, event->time,
-			        (event->state & GDK_SHIFT_MASK) != 0,
-			        (event->state & GDK_CONTROL_MASK) != 0,
-			        (event->state & modifierTranslated(rectangularSelectionModifier)) != 0);
+#if PLAT_GTK_MACOSX
+			bool meta = ctrl;
+			// GDK reports the Command modifer key as GDK_MOD2_MASK for button events,
+			// not GDK_META_MASK like in key events.
+			ctrl = (event->state & GDK_MOD2_MASK) != 0;
+#else
+			bool meta = false;
+#endif
+			ButtonDownWithModifiers(pt, event->time, ModifierFlags(shift, ctrl, alt, meta));
 		} else if (event->button == 2) {
 			// Grab the primary selection if it exists
 			SelectionPosition pos = SPositionFromLocation(pt, false, false, UserVirtualSpace());
@@ -1807,13 +1815,13 @@ gint ScintillaGTK::PressThis(GdkEventButton *event) {
 		} else if (event->button == 4) {
 			// Wheel scrolling up (only GTK 1.x does it this way)
 			if (ctrl)
-				SetAdjustmentValue(adjustmenth, (xOffset / 2) - 6);
+				SetAdjustmentValue(adjustmenth, xOffset - 6);
 			else
 				SetAdjustmentValue(adjustmentv, topLine - 3);
 		} else if (event->button == 5) {
 			// Wheel scrolling down (only GTK 1.x does it this way)
 			if (ctrl)
-				SetAdjustmentValue(adjustmenth, (xOffset / 2) + 6);
+				SetAdjustmentValue(adjustmenth, xOffset + 6);
 			else
 				SetAdjustmentValue(adjustmentv, topLine + 3);
 		}
@@ -1950,7 +1958,7 @@ gint ScintillaGTK::Motion(GtkWidget *widget, GdkEventMotion *event) {
 		GdkModifierType state;
 		if (event->is_hint) {
 #if GTK_CHECK_VERSION(3,0,0)
-			gdk_window_get_device_position(event->window, 
+			gdk_window_get_device_position(event->window,
 				event->device, &x, &y, &state);
 #else
 			gdk_window_get_pointer(event->window, &x, &y, &state);
@@ -2336,9 +2344,12 @@ void ScintillaGTK::RealizeText(GtkWidget *widget, void*) {
 	}
 }
 
+static GObjectClass *scintilla_class_parent_class;
+
 void ScintillaGTK::Destroy(GObject *object) {
 	try {
 		ScintillaObject *scio = reinterpret_cast<ScintillaObject *>(object);
+
 		// This avoids a double destruction
 		if (!scio->pscin)
 			return;
@@ -2348,6 +2359,7 @@ void ScintillaGTK::Destroy(GObject *object) {
 
 		delete sciThis;
 		scio->pscin = 0;
+		scintilla_class_parent_class->finalize(object);
 	} catch (...) {
 		// Its dead so nowhere to save the status
 	}
@@ -2510,9 +2522,9 @@ void ScintillaGTK::ScrollSignal(GtkAdjustment *adj, ScintillaGTK *sciThis) {
 void ScintillaGTK::ScrollHSignal(GtkAdjustment *adj, ScintillaGTK *sciThis) {
 	try {
 #if GTK_CHECK_VERSION(3,0,0)
-		sciThis->HorizontalScrollTo(static_cast<int>(gtk_adjustment_get_value(adj) * 2));
+		sciThis->HorizontalScrollTo(static_cast<int>(gtk_adjustment_get_value(adj)));
 #else
-		sciThis->HorizontalScrollTo(static_cast<int>(adj->value * 2));
+		sciThis->HorizontalScrollTo(static_cast<int>(adj->value));
 #endif
 	} catch (...) {
 		sciThis->errorStatus = SC_STATUS_FAILURE;
@@ -2910,7 +2922,7 @@ static void scintilla_class_init(ScintillaClass *klass) {
 
 		klass->command = NULL;
 		klass->notify = NULL;
-
+		scintilla_class_parent_class = G_OBJECT_CLASS(g_type_class_peek_parent(klass));
 		ScintillaGTK::ClassInit(object_class, widget_class, container_class);
 	} catch (...) {
 	}
