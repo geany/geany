@@ -2765,7 +2765,10 @@ GIcon *ui_get_mime_icon(const gchar *mime_type)
 
 	ctype = g_content_type_from_mime_type(mime_type);
 	if (ctype)
+	{
 		icon = g_content_type_get_icon(ctype);
+		g_free(ctype);
+	}
 
 	/* fallback if icon lookup failed, like it might happen on Windows (?) */
 	if (! icon)
