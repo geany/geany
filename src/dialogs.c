@@ -205,7 +205,7 @@ static GtkWidget *create_filetype_combo_box(void)
 	store = gtk_tree_store_new(2, G_TYPE_INT, G_TYPE_STRING);
 
 	gtk_tree_store_insert_with_values(store, &iter_detect, NULL, -1,
-			0, GEANY_FILETYPES_NONE, 1, _("Detect by file extension"), -1);
+			0, GEANY_FILETYPES_NONE, 1, _("Detect from file"), -1);
 
 	gtk_tree_store_insert_with_values(store, &iter_compiled, NULL, -1,
 			0, -1, 1, _("Programming Languages"), -1);
