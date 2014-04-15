@@ -452,6 +452,8 @@ For languages with a Scintilla lexer, there should be a [styling] section,
 to correspond to the styles used in highlighting_styles_FOO[] in
 highlightingmappings.h - see below.
 
+Don't forget to add the newly created filetype file to data/Makefile.am.
+
 Syntax highlighting
 ^^^^^^^^^^^^^^^^^^^
 It may be possible to use an existing Scintilla lexer in the scintilla/

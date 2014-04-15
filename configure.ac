@@ -137,6 +137,7 @@ AC_CONFIG_FILES([
 		src/Makefile
 		plugins/Makefile
 		po/Makefile.in
+		data/Makefile
 		doc/Makefile
 		doc/geany.1
 		geany.spec
