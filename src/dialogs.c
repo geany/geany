@@ -365,7 +365,7 @@ static GtkWidget *create_open_file_dialog(void)
 			GTK_FILE_CHOOSER_ACTION_OPEN, NULL, NULL);
 	gtk_widget_set_name(dialog, "GeanyDialog");
 
-	viewbtn = gtk_dialog_add_button(GTK_DIALOG(dialog), _("_View"), GEANY_RESPONSE_VIEW);
+	viewbtn = gtk_dialog_add_button(GTK_DIALOG(dialog), C_("Open dialog action", "_View"), GEANY_RESPONSE_VIEW);
 	gtk_widget_set_tooltip_text(viewbtn,
 		_("Opens the file in read-only mode. If you choose more than one file to open, all files will be opened read-only."));
 
