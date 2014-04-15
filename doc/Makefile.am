@@ -1,11 +1,43 @@
 man_MANS=geany.1
+
+htmldocimagesdir = $(docdir)/html/images
+dist_htmldocimages_DATA = \
+	images/build_menu_commands_dialog.png \
+	images/find_dialog.png \
+	images/find_in_files_dialog.png \
+	images/main_window.png \
+	images/pref_dialog_edit_completions.png \
+	images/pref_dialog_edit_display.png \
+	images/pref_dialog_edit_features.png \
+	images/pref_dialog_edit_indentation.png \
+	images/pref_dialog_files.png \
+	images/pref_dialog_gen_misc.png \
+	images/pref_dialog_gen_startup.png \
+	images/pref_dialog_interface_interface.png \
+	images/pref_dialog_interface_notebook.png \
+	images/pref_dialog_interface_toolbar.png \
+	images/pref_dialog_keys.png \
+	images/pref_dialog_printing.png \
+	images/pref_dialog_templ.png \
+	images/pref_dialog_tools.png \
+	images/pref_dialog_various.png \
+	images/pref_dialog_vte.png \
+	images/replace_dialog.png
+
+doc_DATA = \
+	$(top_srcdir)/AUTHORS \
+	$(top_srcdir)/ChangeLog \
+	$(top_srcdir)/COPYING \
+	$(top_srcdir)/NEWS \
+	$(top_srcdir)/README \
+	$(top_srcdir)/THANKS \
+	$(top_srcdir)/TODO
+
 DOCDIR = $(DESTDIR)$(docdir)
-IMAGE_FILES = images/*.png
 EXTRA_DIST = geany.html geany.css geany.txt geany.1 \
 	plugins.dox pluginsymbols.c pluginsignals.c \
 	stash-example.c stash-gui-example.c \
-	makefile.win32 \
-	$(srcdir)/$(IMAGE_FILES)
+	makefile.win32
 
 geany-$(VERSION).pdf: geany.txt
 	rst2latex -stg --documentoptions="10pt,a4paper" --output-encoding=utf8 $(srcdir)/geany.txt geany.tex
@@ -40,22 +72,10 @@ doc-clean:
 uninstall-local:
 	rm -rf $(DOCDIR);
 
+# manually install some files under another name
 install-data-local:
-	$(mkinstalldirs) $(DOCDIR)/html/images
-	for file in `ls $(srcdir)/$(IMAGE_FILES)`; do \
-	  if [ -f $$file ]; then \
-	    basefile=`echo $$file | sed -e 's,^.*/,,'`; \
-	    $(INSTALL_DATA) $$file $(DOCDIR)/html/images/$$basefile; \
-	  fi \
-	done
+	$(mkinstalldirs) $(DOCDIR)/html
 	$(INSTALL_DATA) $(srcdir)/geany.html $(DOCDIR)/html/index.html
 	$(INSTALL_DATA) $(srcdir)/geany.txt $(DOCDIR)/manual.txt
-	$(INSTALL_DATA) $(top_srcdir)/README $(DOCDIR)
-	$(INSTALL_DATA) $(top_srcdir)/ChangeLog $(DOCDIR)
-	$(INSTALL_DATA) $(top_srcdir)/NEWS $(DOCDIR)
-	$(INSTALL_DATA) $(top_srcdir)/COPYING $(DOCDIR)
-	$(INSTALL_DATA) $(top_srcdir)/AUTHORS $(DOCDIR)
-	$(INSTALL_DATA) $(top_srcdir)/TODO $(DOCDIR)
-	$(INSTALL_DATA) $(top_srcdir)/THANKS $(DOCDIR)
 	$(INSTALL_DATA) $(top_srcdir)/scintilla/License.txt $(DOCDIR)/ScintillaLicense.txt
 
