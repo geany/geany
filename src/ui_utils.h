@@ -318,6 +318,7 @@ gboolean ui_tree_view_find_next(GtkTreeView *treeview, TVMatchCallback cb);
 
 gboolean ui_tree_view_find_previous(GtkTreeView *treeview, TVMatchCallback cb);
 
+gboolean ui_tree_model_iter_any_next(GtkTreeModel *model, GtkTreeIter *iter, gboolean down);
 
 void ui_statusbar_showhide(gboolean state);
 
@@ -340,6 +341,12 @@ gint ui_get_gtk_settings_integer(const gchar *property_name, gint default_value)
 GIcon *ui_get_mime_icon(const gchar *mime_type);
 
 void ui_focus_current_document(void);
+
+GtkWidget *ui_create_encodings_combo_box(gboolean has_detect, gint default_enc);
+
+gint ui_encodings_combo_box_get_active_encoding(GtkComboBox *combo);
+
+gboolean ui_encodings_combo_box_set_active_encoding(GtkComboBox *combo, gint enc);
 
 G_END_DECLS
 
