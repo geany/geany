@@ -1,5 +1,8 @@
 Geany 1.24.1 (unreleased)
 
+    General
+    * Fix distribution of custom GTK style files (#1037).
+
 
 Geany 1.24 (April 13, 2014)
 
