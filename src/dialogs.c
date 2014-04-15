@@ -80,11 +80,14 @@ filesel_state = {
 	{
 		0,
 		GEANY_ENCODINGS_MAX, /* default encoding is detect from file */
-		0,
+		GEANY_FILETYPES_NONE, /* default filetype is detect from extension */
 		FALSE,
 		FALSE
 	}
 };
+
+
+static gint filetype_combo_box_get_active_filetype(GtkComboBox *combo);
 
 
 /* gets the ID of the current file filter */
@@ -134,11 +137,11 @@ static void open_file_dialog_handle_response(GtkWidget *dialog, gint response)
 
 		filesel_state.open.more_options_visible = gtk_expander_get_expanded(GTK_EXPANDER(expander));
 		filesel_state.open.filter_idx = file_chooser_get_filter_idx(GTK_FILE_CHOOSER(dialog));
-		filesel_state.open.filetype_idx = gtk_combo_box_get_active(GTK_COMBO_BOX(filetype_combo));
+		filesel_state.open.filetype_idx = filetype_combo_box_get_active_filetype(GTK_COMBO_BOX(filetype_combo));
 
 		/* ignore detect from file item */
 		if (filesel_state.open.filetype_idx > 0)
-			ft = g_slist_nth_data(filetypes_by_title, (guint) filesel_state.open.filetype_idx);
+			ft = filetypes_index(filesel_state.open.filetype_idx);
 
 		filesel_state.open.encoding_idx = ui_encodings_combo_box_get_active_encoding(GTK_COMBO_BOX(encoding_combo));
 		if (filesel_state.open.encoding_idx >= 0 && filesel_state.open.encoding_idx < GEANY_ENCODINGS_MAX)
@@ -175,6 +178,111 @@ on_file_open_check_hidden_toggled(GtkToggleButton *togglebutton, GtkWidget *dial
 {
 	filesel_state.open.show_hidden = gtk_toggle_button_get_active(togglebutton);
 	gtk_file_chooser_set_show_hidden(GTK_FILE_CHOOSER(dialog), filesel_state.open.show_hidden);
+}
+
+
+static void filetype_combo_cell_data_func(GtkCellLayout *cell_layout, GtkCellRenderer *cell,
+		GtkTreeModel *tree_model, GtkTreeIter *iter, gpointer data)
+{
+	gboolean sensitive = !gtk_tree_model_iter_has_child(tree_model, iter);
+	gchar *text;
+
+	gtk_tree_model_get(tree_model, iter, 1, &text, -1);
+	g_object_set(cell, "sensitive", sensitive, "text", text, NULL);
+	g_free(text);
+}
+
+
+static GtkWidget *create_filetype_combo_box(void)
+{
+	GtkTreeStore *store;
+	GtkTreeIter iter_compiled, iter_script, iter_markup, iter_misc, iter_detect;
+	GtkTreeIter *iter_parent;
+	GtkWidget *combo;
+	GtkCellRenderer *renderer;
+	GSList *node;
+
+	store = gtk_tree_store_new(2, G_TYPE_INT, G_TYPE_STRING);
+
+	gtk_tree_store_insert_with_values(store, &iter_detect, NULL, -1,
+			0, GEANY_FILETYPES_NONE, 1, _("Detect by file extension"), -1);
+
+	gtk_tree_store_insert_with_values(store, &iter_compiled, NULL, -1,
+			0, -1, 1, _("Programming Languages"), -1);
+	gtk_tree_store_insert_with_values(store, &iter_script, NULL, -1,
+			0, -1, 1, _("Scripting Languages"), -1);
+	gtk_tree_store_insert_with_values(store, &iter_markup, NULL, -1,
+			0, -1, 1, _("Markup Languages"), -1);
+	gtk_tree_store_insert_with_values(store, &iter_misc, NULL, -1,
+			0, -1, 1, _("Miscellaneous"), -1);
+
+	foreach_slist (node, filetypes_by_title)
+	{
+		GeanyFiletype *ft = node->data;
+
+		if (ft->id == GEANY_FILETYPES_NONE)
+			continue;
+
+		switch (ft->group)
+		{
+			case GEANY_FILETYPE_GROUP_COMPILED: iter_parent = &iter_compiled; break;
+			case GEANY_FILETYPE_GROUP_SCRIPT: iter_parent = &iter_script; break;
+			case GEANY_FILETYPE_GROUP_MARKUP: iter_parent = &iter_markup; break;
+			case GEANY_FILETYPE_GROUP_MISC: iter_parent = &iter_misc; break;
+			case GEANY_FILETYPE_GROUP_NONE:
+			default: iter_parent = NULL;
+		}
+		gtk_tree_store_insert_with_values(store, NULL, iter_parent, -1,
+				0, (gint) ft->id, 1, ft->title, -1);
+	}
+
+	combo = gtk_combo_box_new_with_model(GTK_TREE_MODEL(store));
+	gtk_combo_box_set_active_iter(GTK_COMBO_BOX(combo), &iter_detect);
+	renderer = gtk_cell_renderer_text_new();
+	gtk_cell_layout_pack_start(GTK_CELL_LAYOUT(combo), renderer, TRUE);
+	gtk_cell_layout_set_cell_data_func(GTK_CELL_LAYOUT(combo), renderer,
+			filetype_combo_cell_data_func, NULL, NULL);
+
+	g_object_unref(store);
+
+	return combo;
+}
+
+
+static gint filetype_combo_box_get_active_filetype(GtkComboBox *combo)
+{
+	gint id = 0;
+	GtkTreeIter iter;
+
+	if (gtk_combo_box_get_active_iter(combo, &iter))
+	{
+		GtkTreeModel *model = gtk_combo_box_get_model(combo);
+		gtk_tree_model_get(model, &iter, 0, &id, -1);
+	}
+	return id;
+}
+
+
+static gboolean filetype_combo_box_set_active_filetype(GtkComboBox *combo, const gint id)
+{
+	GtkTreeModel *model = gtk_combo_box_get_model(combo);
+	GtkTreeIter iter;
+
+	if (gtk_tree_model_get_iter_first(model, &iter))
+	{
+		do
+		{
+			gint row_id;
+			gtk_tree_model_get(model, &iter, 0, &row_id, -1);
+			if (id == row_id)
+			{
+				gtk_combo_box_set_active_iter(combo, &iter);
+				return TRUE;
+			}
+		}
+		while (ui_tree_model_iter_any_next(model, &iter, TRUE));
+	}
+	return FALSE;
 }
 
 
@@ -225,7 +333,7 @@ static GtkWidget *add_file_open_extra_widget(GtkWidget *dialog)
 					(GtkAttachOptions) (0), 4, 5);
 	/* the ebox is for the tooltip, because gtk_combo_box can't show tooltips */
 	filetype_ebox = gtk_event_box_new();
-	filetype_combo = gtk_combo_box_text_new();
+	filetype_combo = create_filetype_combo_box();
 	gtk_widget_set_tooltip_text(filetype_ebox,
 		_("Explicitly defines a filetype for the file, if it would not be detected by filename extension.\nNote if you choose multiple files, they will all be opened with the chosen filetype."));
 	gtk_container_add(GTK_CONTAINER(filetype_ebox), filetype_combo);
@@ -250,7 +358,6 @@ static GtkWidget *add_file_open_extra_widget(GtkWidget *dialog)
 static GtkWidget *create_open_file_dialog(void)
 {
 	GtkWidget *dialog;
-	GtkWidget *filetype_combo;
 	GtkWidget *viewbtn;
 	GSList *node;
 
@@ -278,9 +385,7 @@ static GtkWidget *create_open_file_dialog(void)
 
 	/* add checkboxes and filename entry */
 	gtk_file_chooser_set_extra_widget(GTK_FILE_CHOOSER(dialog), add_file_open_extra_widget(dialog));
-	filetype_combo = ui_lookup_widget(dialog, "filetype_combo");
 
-	gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(filetype_combo), _("Detect by file extension"));
 	/* add FileFilters(start with "All Files") */
 	gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(dialog),
 				filetypes_create_file_filter(filetypes[GEANY_FILETYPES_NONE]));
@@ -293,11 +398,8 @@ static GtkWidget *create_open_file_dialog(void)
 
 		if (G_UNLIKELY(ft->id == GEANY_FILETYPES_NONE))
 			continue;
-		gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(filetype_combo), ft->title);
 		gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(dialog), filetypes_create_file_filter(ft));
 	}
-	gtk_combo_box_set_wrap_width(GTK_COMBO_BOX(filetype_combo), 3);
-	gtk_combo_box_set_active(GTK_COMBO_BOX(filetype_combo), 0);
 
 	g_signal_connect(dialog, "notify::show-hidden",
 		G_CALLBACK(on_file_open_show_hidden_notify), NULL);
@@ -318,18 +420,17 @@ static void open_file_dialog_apply_settings(GtkWidget *dialog)
 	if (! initialized)
 	{
 		filesel_state.open.filter_idx = file_chooser_get_filter_idx(GTK_FILE_CHOOSER(dialog));
-		filesel_state.open.filetype_idx = gtk_combo_box_get_active(GTK_COMBO_BOX(filetype_combo));
 
 		initialized = TRUE;
 	}
 	else
 	{
 		file_chooser_set_filter_idx(GTK_FILE_CHOOSER(dialog), filesel_state.open.filter_idx);
-		gtk_combo_box_set_active(GTK_COMBO_BOX(filetype_combo), filesel_state.open.filetype_idx);
 	}
 	gtk_expander_set_expanded(GTK_EXPANDER(expander), filesel_state.open.more_options_visible);
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_hidden), filesel_state.open.show_hidden);
 	ui_encodings_combo_box_set_active_encoding(GTK_COMBO_BOX(encoding_combo), filesel_state.open.encoding_idx);
+	filetype_combo_box_set_active_filetype(GTK_COMBO_BOX(filetype_combo), filesel_state.open.filetype_idx);
 }
 
 
