@@ -64,7 +64,7 @@ LEXOBJS:=$(addsuffix .o,$(basename $(notdir $(wildcard ../lexers/Lex*.cxx))))
 all: $(COMPLIB)
 
 clean:
-	$(RM) ../*.o $(COMPLIB) ../*.plist
+	$(RM) *.o $(COMPLIB) *.plist
 
 deps:
 	$(CC) -MM $(CONFIGFLAGS) $(CXXTFLAGS) *.cxx ../src/*.cxx ../lexlib/*.cxx ../lexers/*.cxx >deps.mak
