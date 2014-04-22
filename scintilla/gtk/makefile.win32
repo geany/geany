@@ -19,8 +19,6 @@ ifdef MSYS
 RM = rm -f
 endif
 
-PREFIX = D:/MinGW/extra_libs
-
 GTK_INCLUDES= \
 	-I$(PREFIX)/include/gtk-2.0 \
 	-I$(PREFIX)/lib/gtk-2.0/include \
