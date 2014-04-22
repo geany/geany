@@ -55,7 +55,7 @@ endif
 MARSHALLER=scintilla-marshal.o
 
 .cxx.o:
-	$(CXX) $(CXXTFLAGS) -c $<
+	$(CXX) $(CXXFLAGS) -c $<
 .c.o:
 	$(CC) $(CXXFLAGS) -c $<
 
