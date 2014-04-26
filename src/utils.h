@@ -179,6 +179,8 @@ gboolean utils_spawn_async(const gchar *dir, gchar **argv, gchar **env, GSpawnFl
 						   GSpawnChildSetupFunc child_setup, gpointer user_data, GPid *child_pid,
 						   GError **error);
 
+gchar *utf8_strdown(const gchar *str);
+
 gint utils_str_casecmp(const gchar *s1, const gchar *s2);
 
 gchar *utils_get_date_time(const gchar *format, time_t *time_to_use);
