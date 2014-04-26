@@ -997,6 +997,11 @@ static gboolean sidebar_button_press_cb(GtkWidget *widget, GdkEventButton *event
 		else
 			handled = taglist_go_to_selection(selection, 0, event->state);
 	}
+	else if (event->button == 2)
+	{
+		if (widget == tv.tree_openfiles)
+			on_openfiles_document_action(NULL, GINT_TO_POINTER(OPENFILES_ACTION_REMOVE));
+	}
 	else if (event->button == 3)
 	{
 		if (widget == tv.tree_openfiles)
