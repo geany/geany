@@ -381,6 +381,10 @@ GeanyDocument *document_get_current(void)
 void document_init_doclist(void)
 {
 	documents_array = g_ptr_array_new();
+#ifdef GEANY_DEBUG
+	// add a dummy invalid document to catch naive iteration
+	g_ptr_array_add(documents_array, g_new0(GeanyDocument, 1));
+#endif
 }
 
 
@@ -390,6 +394,7 @@ void document_finalize(void)
 
 	for (i = 0; i < documents_array->len; i++)
 		g_free(documents[i]);
+
 	g_ptr_array_free(documents_array, TRUE);
 }
 
@@ -476,9 +481,13 @@ void document_set_text_changed(GeanyDocument *doc, gboolean changed)
  * or -1 if the documents_array is full */
 static gint document_get_new_idx(void)
 {
-	guint i;
+	guint i = 0;
 
-	for (i = 0; i < documents_array->len; i++)
+#ifdef GEANY_DEBUG
+	// ignore dummy invalid document
+	i = 1;
+#endif
+	for (; i < documents_array->len; i++)
 	{
 		if (documents[i]->editor == NULL)
 		{
