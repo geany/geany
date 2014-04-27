@@ -52,6 +52,7 @@ if WITH_DOXYGEN
 
 doxygen_sources = \
 	$(srcdir)/*.[ch] \
+	$(srcdir)/*.dox \
 	$(top_srcdir)/src/*.[ch] \
 	$(top_srcdir)/plugins/geanyplugin.h \
 	$(top_srcdir)/plugins/geanyfunctions.h \
