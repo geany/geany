@@ -16,7 +16,11 @@ AC_DEFUN([GEANY_CHECK_DOXYGEN],
 		AS_IF([test "x$DOXYGEN" != "x"],
 			[geany_doxygen_path="$DOXYGEN"], [geany_doxygen_path="doxygen"])
 		AC_PATH_PROG([DOXYGEN], [$geany_doxygen_path], [no])
-		AS_IF([test "x$DOXYGEN" != "xno"], [geany_with_doxygen=yes], [geany_with_doxygen=no])
+		AS_IF([test "x$DOXYGEN" != "xno"],
+			  [geany_with_doxygen=yes],
+			  [test "x$geany_with_doxygen" = xyes],
+			  [AC_MSG_ERROR([API documentation enabled but doxygen not found])],
+			  [geany_with_doxygen=no])
 	])
 
 	AM_CONDITIONAL([WITH_DOXYGEN], [test "x$geany_with_doxygen" != "xno"])
