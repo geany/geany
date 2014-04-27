@@ -523,9 +523,7 @@ static void printing_print_gtk(GeanyDocument *doc)
 
 	gtk_print_operation_set_unit(op, GTK_UNIT_POINTS);
 	gtk_print_operation_set_show_progress(op, TRUE);
-#if GTK_CHECK_VERSION(2, 18, 0)
 	gtk_print_operation_set_embed_page_setup(op, TRUE);
-#endif
 
 	g_signal_connect(op, "begin-print", G_CALLBACK(begin_print), &dinfo);
 	g_signal_connect(op, "end-print", G_CALLBACK(end_print), &dinfo);
