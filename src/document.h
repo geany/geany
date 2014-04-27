@@ -118,9 +118,11 @@ struct GeanyDocument
 extern GPtrArray *documents_array;
 
 
-/** Wraps documents_array so it can be used with C array syntax.
- * Example: documents[0]->sci = NULL;
- * @see document_index(). */
+/** Wraps @ref documents_array so it can be used with C array syntax.
+ * @warning Always check the returned document is valid (@c doc->is_valid).
+ *
+ * Example: @code GeanyDocument *doc = documents[i]; @endcode
+ * @see documents_array(). */
 #define documents ((GeanyDocument **)GEANY(documents_array)->pdata)
 
 /** @deprecated Use @ref foreach_document() instead.
@@ -133,7 +135,17 @@ extern GPtrArray *documents_array;
 
 /** Iterates all valid documents.
  * Use like a @c for statement.
- * @param i @c guint index for document_index(). */
+ * @param i @c guint index for @ref documents_array.
+ *
+ * Example:
+ * @code
+ * guint i;
+ * foreach_document(i)
+ * {
+ * 	GeanyDocument *doc = documents[i];
+ * 	g_assert(doc->is_valid);
+ * }
+ * @endcode */
 #define foreach_document(i) \
 	for (i = 0; i < GEANY(documents_array)->len; i++)\
 		if (!documents[i]->is_valid)\
