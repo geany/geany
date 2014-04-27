@@ -60,13 +60,13 @@ doxygen_sources = \
 	$(top_srcdir)/tagmanager/src/tm_work_object.[ch] \
 	$(top_srcdir)/tagmanager/src/tm_workspace.[ch]
 
-$(builddir)/Doxyfile.stamp: $(builddir)/Doxyfile $(doxygen_sources)
+Doxyfile.stamp: Doxyfile $(doxygen_sources)
 	$(AM_V_GEN)$(DOXYGEN) Doxyfile && echo "" > $@
 
-all-local: $(builddir)/Doxyfile.stamp
+all-local: Doxyfile.stamp
 
 clean-local:
-	-rm -rf $(builddir)/reference/ $(builddir)/Doxyfile.stamp
+	-rm -rf reference/ Doxyfile.stamp
 
 endif
 
