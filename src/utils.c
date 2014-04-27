@@ -584,11 +584,7 @@ gboolean utils_str_equal(const gchar *a, const gchar *b)
 	if (a == NULL && b == NULL) return TRUE;
 	else if (a == NULL || b == NULL) return FALSE;
 
-	while (*a == *b++)
-		if (*a++ == '\0')
-			return TRUE;
-
-	return FALSE;
+	return strcmp(a, b) == 0;
 }
 
 
