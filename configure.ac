@@ -113,6 +113,8 @@ GEANY_I18N
 GEANY_DATA_DIR=`eval echo ${datarootdir}/geany`
 AC_SUBST([GEANY_DATA_DIR])
 
+# Documentation tools
+GEANY_CHECK_DOCUTILS
 GEANY_CHECK_DOXYGEN
 
 # Output
