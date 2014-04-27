@@ -34,18 +34,72 @@ doc_DATA = \
 	$(top_srcdir)/TODO
 
 DOCDIR = $(DESTDIR)$(docdir)
-EXTRA_DIST = geany.html geany.css geany.txt geany.1 \
-	plugins.dox pluginsymbols.c pluginsignals.c \
-	stash-example.c stash-gui-example.c \
+
+EXTRA_DIST = \
+	geany.html \
+	geany.css \
+	geany.txt \
+	geany.1 \
+	plugins.dox \
+	pluginsymbols.c \
+	pluginsignals.c \
+	stash-example.c \
+	stash-gui-example.c \
 	makefile.win32
 
-geany-$(VERSION).pdf: geany.txt
-	rst2latex -stg --documentoptions="10pt,a4paper" --output-encoding=utf8 $(srcdir)/geany.txt geany.tex
-	(absbuilddir="$$(pwd)/$(builddir)"; \
-	 cd "$(srcdir)" && \
-	 pdflatex -output-directory="$$absbuilddir" "$$absbuilddir/geany.tex")
-	rm -f geany.tex geany.aux geany.log geany.out
-	mv geany.pdf $@
+# HTML user manual and hacking file
+if WITH_RST2HTML
+
+geany.html: $(srcdir)/geany.css $(srcdir)/geany.txt
+	$(AM_V_GEN)$(RST2HTML) -stg --stylesheet=$(srcdir)/geany.css $(srcdir)/geany.txt $@
+
+hacking.html: $(srcdir)/geany.css $(top_srcdir)/HACKING
+	$(AM_V_GEN)$(RST2HTML) -stg --stylesheet=$(srcdir)/geany.css $(top_srcdir)/HACKING $@
+
+all-html-local: geany.html hacking.html
+
+install-html-local:
+	$(mkinstalldirs) $(DOCDIR)/html
+	$(INSTALL_DATA) $(srcdir)/geany.html $(DOCDIR)/html/index.html
+
+clean-html-local:
+	-rm -f hacking.html
+# FIXME: why is the generated HTML manual checked-in to VCS?
+#	-rm -f geany.html
+
+else
+all-html-local:;
+install-html-local:;
+clean-html-local:;
+endif
+
+# PDF user manual
+if WITH_LATEXPDF
+
+# FIXME: - cp/rm hack so pdflatex can find images in out-of-tree build
+#            (maybe use TEXINPUTS env var somehow?)
+#        - grep hack because pdflatex barfs all kinds of crazy info besides warnings/errors
+#        - images in output PDF file are way too big, need something equivalent to:
+#            \includegraphics[width=\textwidth,height=\textheight,keepaspectratio]{...}
+geany-$(VERSION).pdf: geany-$(VERSION).tex
+	-cp -r "$(srcdir)/images/" "$(builddir)/"
+	$(AM_V_GEN)$(PDFLATEX) -interaction=nonstopmode -halt-on-error -file-line-error \
+		"geany-$(VERSION).tex" | grep -i ".*:[0-9]*:.*\|warning"
+
+geany-$(VERSION).tex: $(srcdir)/geany.txt
+	$(AM_V_GEN)$(RST2LATEX) -stg --documentoptions="10pt,a4paper" --output-encoding=utf8 $(srcdir)/geany.txt $@
+
+all-pdf-local: geany-$(VERSION).pdf
+
+clean-pdf-local:
+	-rm -f geany-$(VERSION).tex geany-$(VERSION).aux geany-$(VERSION).log \
+		geany-$(VERSION).out geany-$(VERSION).toc geany-$(VERSION).pdf
+	-if test "$(srcdir)" != "$(builddir)"; then rm -rf "$(builddir)/images/"; fi
+
+else
+all-pdf-local:;
+clean-pdf-local:;
+endif
 
 # API Documentation
 if WITH_DOXYGEN
@@ -63,39 +117,25 @@ doxygen_sources = \
 Doxyfile.stamp: Doxyfile $(doxygen_sources)
 	$(AM_V_GEN)$(DOXYGEN) Doxyfile && echo "" > $@
 
-all-local: Doxyfile.stamp
+all-api-docs-local: Doxyfile.stamp
 
-clean-local:
+clean-api-docs-local:
 	-rm -rf reference/ Doxyfile.stamp
 
+else
+all-api-docs-local:;
+clean-api-docs-local:;
 endif
 
-hacking.html: ../HACKING
-	rst2html -stg --stylesheet=$(srcdir)/geany.css $(srcdir)/../HACKING $@
-
-# when generating documentation, first try rst2html.py as it is the upstream default
-geany.html: geany.txt
-	(rst2html.py --version) < /dev/null > /dev/null 2>&1 && \
-	rst2html.py -stg --stylesheet=$(srcdir)/geany.css $(srcdir)/geany.txt $@ || \
-	rst2html -stg --stylesheet=$(srcdir)/geany.css $(srcdir)/geany.txt $@
-
-hacking-doc: hacking.html
-doc: geany.html
-pdf: geany-$(VERSION).pdf
-
-doc-clean:
-	rm -f geany.html
-	rm -f geany.1
-	rm -f *.pdf
-	rm -f hacking.html
+all-local: all-html-local all-pdf-local all-api-docs-local
+clean-local: clean-html-local clean-pdf-local clean-api-docs-local
 
 uninstall-local:
 	rm -rf $(DOCDIR);
 
 # manually install some files under another name
-install-data-local:
-	$(mkinstalldirs) $(DOCDIR)/html
-	$(INSTALL_DATA) $(srcdir)/geany.html $(DOCDIR)/html/index.html
+install-data-local: install-html-local
+	$(mkinstalldirs) $(DOCDIR)
 	$(INSTALL_DATA) $(srcdir)/geany.txt $(DOCDIR)/manual.txt
 	$(INSTALL_DATA) $(top_srcdir)/scintilla/License.txt $(DOCDIR)/ScintillaLicense.txt
 
