@@ -52,7 +52,7 @@ PROJECT_LOGO           =
 # If a relative path is entered, it will be relative to the location
 # where doxygen was started. If left blank the current directory will be used.
 
-OUTPUT_DIRECTORY       = ./
+OUTPUT_DIRECTORY       = @top_builddir@/doc
 
 # If the CREATE_SUBDIRS tag is set to YES, then doxygen will create
 # 4096 sub-directories (in 2 levels) under the output directory of each output
@@ -657,16 +657,16 @@ WARN_LOGFILE           =
 # directories like "/usr/src/myproject". Separate the files or directories
 # with spaces.
 
-INPUT                  = ../src/ \
-                         ./ \
-                         ../plugins/geanyplugin.h \
-                         ../plugins/geanyfunctions.h \
-                         ../tagmanager/src/tm_source_file.c \
-                         ../tagmanager/src/tm_source_file.h \
-                         ../tagmanager/src/tm_work_object.c \
-                         ../tagmanager/src/tm_work_object.h \
-                         ../tagmanager/src/tm_workspace.c \
-                         ../tagmanager/src/tm_workspace.h
+INPUT                  = @top_srcdir@/src/ \
+                         @top_srcdir@/doc/ \
+                         @top_srcdir@/plugins/geanyplugin.h \
+                         @top_srcdir@/plugins/geanyfunctions.h \
+                         @top_srcdir@/tagmanager/src/tm_source_file.c \
+                         @top_srcdir@/tagmanager/src/tm_source_file.h \
+                         @top_srcdir@/tagmanager/src/tm_work_object.c \
+                         @top_srcdir@/tagmanager/src/tm_work_object.h \
+                         @top_srcdir@/tagmanager/src/tm_workspace.c \
+                         @top_srcdir@/tagmanager/src/tm_workspace.h
 
 # This tag can be used to specify the character encoding of the source files
 # that doxygen parses. Internally doxygen uses the UTF-8 encoding, which is
@@ -747,7 +747,7 @@ EXCLUDE_SYMBOLS        =
 # directories that contain example code fragments that are included (see
 # the \include command).
 
-EXAMPLE_PATH           = .
+EXAMPLE_PATH           = @top_srcdir@/doc
 
 # If the value of the EXAMPLE_PATH tag contains directories, you can use the
 # EXAMPLE_PATTERNS tag to specify one or more wildcard pattern (like *.cpp
