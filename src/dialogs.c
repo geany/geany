@@ -897,12 +897,8 @@ void dialogs_show_open_font(void)
 		gtk_window_set_type_hint(GTK_WINDOW(ui_widgets.open_fontsel), GDK_WINDOW_TYPE_HINT_DIALOG);
 		gtk_widget_set_name(ui_widgets.open_fontsel, "GeanyDialog");
 
-#if GTK_CHECK_VERSION(2, 20, 0)
-		/* apply button doesn't have a getter and is hidden by default, but we'd like to show it */
 		apply_button = gtk_dialog_get_widget_for_response(GTK_DIALOG(ui_widgets.open_fontsel), GTK_RESPONSE_APPLY);
-#else
-		apply_button = GTK_FONT_SELECTION_DIALOG(ui_widgets.open_fontsel)->apply_button;
-#endif
+
 		if (apply_button)
 			gtk_widget_show(apply_button);
 
