@@ -67,169 +67,169 @@
  */
 
 /**
- *  @page guidelines Plugin Writing Guidelines
+ * @page guidelines Plugin Writing Guidelines
  *
- *  @section intro Introduction
+ * @section intro Introduction
  *
- *  The following hints and guidelines are only recommendations. Nobody is forced to follow
- *  them at all.
+ * The following hints and guidelines are only recommendations. Nobody is forced to follow
+ * them at all.
  *
- *  @section general General notes
+ * @section general General notes
  *
- *  @subsection ideas Getting a plugin idea
+ * @subsection ideas Getting a plugin idea
  *
- *  If you want to write a plugin but don't know yet what it should do, have a look at
- *  http://www.geany.org/Support/PluginWishlist to get an idea about what users wish.
+ * If you want to write a plugin but don't know yet what it should do, have a look at
+ * http://www.geany.org/Support/PluginWishlist to get an idea about what users wish.
  *
- *  @subsection code Managing the source code
+ * @subsection code Managing the source code
  *
- *  For authors of plugins for Geany, we created a dedicated @a geany-plugins project
- *  on Sourceforge and GitHub to ease development of plugins and help new authors.
- *  All information about this project you can find at http://plugins.geany.org/
+ * For authors of plugins for Geany, we created a dedicated @a geany-plugins project
+ * on Sourceforge and GitHub to ease development of plugins and help new authors.
+ * All information about this project you can find at http://plugins.geany.org/
  *
- *  To add a new plugin to this project, get in touch with the people on the
- *  geany-devel-mailing list and create a fork of the geany-plugins project
- *  at https://github.com/geany/geany-plugins.
- *  Beside of adding a new plugin, geany-devel-mailing list is also the place where
- *  to discuss development related questions.
- *  However, once you have done your fork of geany-plugins you can develop
- *  your plugin until you think its the right time to publish it. At this point,
- *  create a pull request for adding your patch set into the master branch of the main
- *  geany-plugins repository.
+ * To add a new plugin to this project, get in touch with the people on the
+ * geany-devel-mailing list and create a fork of the geany-plugins project
+ * at https://github.com/geany/geany-plugins.
+ * Beside of adding a new plugin, geany-devel-mailing list is also the place where
+ * to discuss development related questions.
+ * However, once you have done your fork of geany-plugins you can develop
+ * your plugin until you think its the right time to publish it. At this point,
+ * create a pull request for adding your patch set into the master branch of the main
+ * geany-plugins repository.
  *
- *  Of course, you don't need to use GitHub - any Git is fine. But GitHub
- *  is making it way easier for review, merging and get in touch with you for 
- *  comments.
+ * Of course, you don't need to use GitHub - any Git is fine. But GitHub
+ * is making it way easier for review, merging and get in touch with you for
+ * comments.
  *
- *  If you don't want your plugin to be part of the geany-plugins project it is also fine.
- *  Just skip the part about forking geany-plugins and sending a pull request.
- *  In this case it is of course also a good idea to post some kind of announcement
- *  to geany-devel and maybe to the main geany mailing list -- it's up to you.
- *  You can also ask for your plugin to be listed on the http://plugins.geany.org/
- *  website as a third party plugin, helping Geany user to know about your plugin.
+ * If you don't want your plugin to be part of the geany-plugins project it is also fine.
+ * Just skip the part about forking geany-plugins and sending a pull request.
+ * In this case it is of course also a good idea to post some kind of announcement
+ * to geany-devel and maybe to the main geany mailing list -- it's up to you.
+ * You can also ask for your plugin to be listed on the http://plugins.geany.org/
+ * website as a third party plugin, helping Geany user to know about your plugin.
  *
- *  At time of writing, there are some plugins already available in the
- *  repositories. Feel free to use any of these plugins as a start for your own,
- *  maybe by copying the directory structure and the autotools files
- *  (Makefile.am, configure.in, ...). Most of the available plugins are also ready for
- *  i18n support, just for reference.
+ * At time of writing, there are some plugins already available in the
+ * repositories. Feel free to use any of these plugins as a start for your own,
+ * maybe by copying the directory structure and the autotools files
+ * (Makefile.am, configure.in, ...). Most of the available plugins are also ready for
+ * i18n support, just for reference.
  *
- *  We encourage authors using this service to only commit changes to their
- *  own plugin and not to others' plugins. Instead just send patches to
- *  geany-devel at uvena.de or the plugin author directly.
+ * We encourage authors using this service to only commit changes to their
+ * own plugin and not to others' plugins. Instead just send patches to
+ * geany-devel at uvena.de or the plugin author directly.
  *
- *  @section paths Installation paths
+ * @section paths Installation paths
  *
- *   - The plugin binary (@c pluginname.so) should be installed in Geany's libdir. This is
- *     necessary so that Geany can find the plugin.
- *     An easy way to retrieve Geany's libdir is to use the pkg-config tool, e.g. @code
- *     `$PKG_CONFIG --variable=libdir geany`/ geany
- *     @endcode
- *   - If your plugin creates other binary files like helper programs or helper libraries,
- *     they should go into @c $prefix/bin (for programs, ideally prefixed with @a geany),
- *     additional libraries should be installed in Geany's libdir, maybe in a subdirectory.
- *   - Plugins should install their documentation files (README, NEWS, ChangeLog, licences and
- *     other documentation files) into the common documentation directory
- *     @c $prefix/share/doc/geany-plugins/$pluginname/
- *   - Translation files should be installed normally into @c $prefix/share/locale. There is no
- *     need to use Geany's translation directory. To set up translation support properly and
- *     for additional information, see main_locale_init().
- *   - Do @a never install anything into a user's home directory like installing
- *     the plugin binary in @c ~/.config/geany/plugins/.
- *
- *
- *  @page howto Plugin HowTo
- *
- *  @section intro Introduction
- *
- *  Since Geany 0.12 there is a plugin interface to extend Geany's functionality and
- *  add new features. This document gives a brief overview about how to add new
- *  plugins by writing a simple "Hello World" plugin in C or C++.
+ * - The plugin binary (@c pluginname.so) should be installed in Geany's libdir. This is
+ *   necessary so that Geany can find the plugin.
+ *   An easy way to retrieve Geany's libdir is to use the pkg-config tool, e.g. @code
+ *   `$PKG_CONFIG --variable=libdir geany`/ geany
+ *   @endcode
+ * - If your plugin creates other binary files like helper programs or helper libraries,
+ *   they should go into @c $prefix/bin (for programs, ideally prefixed with @a geany),
+ *   additional libraries should be installed in Geany's libdir, maybe in a subdirectory.
+ * - Plugins should install their documentation files (README, NEWS, ChangeLog, licences and
+ *   other documentation files) into the common documentation directory
+ *   @c $prefix/share/doc/geany-plugins/$pluginname/
+ * - Translation files should be installed normally into @c $prefix/share/locale. There is no
+ *   need to use Geany's translation directory. To set up translation support properly and
+ *   for additional information, see main_locale_init().
+ * - Do @a never install anything into a user's home directory like installing
+ *   the plugin binary in @c ~/.config/geany/plugins/.
  *
  *
- *  @section buildenv Build environment
+ * @page howto Plugin HowTo
  *
- *  To be able to write plugins for Geany, you need the source code and some development
- *  packages for GTK and its dependencies. The following will only describe the way to compile and
- *  build plugins on Unix-like systems [1].
- *  If you already have the Geany source code and compiled it from them, you can skip the
- *  following.
+ * @section intro Introduction
  *
- *  First you need to have Geany installed. Then install the development files for GTK
- *  and its dependencies. The easiest way to do this is to use your distribution's package
- *  management system, e.g. on Debian and Ubuntu systems you can use
- *  @code apt-get install libgtk2.0-dev intltool @endcode
- *  This will install all necessary files to be able to compile plugins for Geany. On other
- *  distributions, the package names and commands to use may differ.
+ * Since Geany 0.12 there is a plugin interface to extend Geany's functionality and
+ * add new features. This document gives a brief overview about how to add new
+ * plugins by writing a simple "Hello World" plugin in C or C++.
  *
- *  Basically, you are done at this point and could continue with writing the plugin code.
  *
- *  [1] For Windows, it is basically the same but you might have some more work on setting up
- *  the general build environment(compiler, GTK development files, ...). This is described on
- *  Geany's website at http://www.geany.org/Support/BuildingOnWin32.
+ * @section buildenv Build environment
  *
- *  @section helloworld "Hello World"
+ * To be able to write plugins for Geany, you need the source code and some development
+ * packages for GTK and its dependencies. The following will only describe the way to compile and
+ * build plugins on Unix-like systems [1].
+ * If you already have the Geany source code and compiled it from them, you can skip the
+ * following.
  *
- *  When writing a plugin, you will find a couple of functions or macros which are mandatory
- *  and some which are free to use for implementing some useful feature once your plugin
- *  becomes more powerful like including a configuration or help dialog.
+ * First you need to have Geany installed. Then install the development files for GTK
+ * and its dependencies. The easiest way to do this is to use your distribution's package
+ * management system, e.g. on Debian and Ubuntu systems you can use
+ * @code apt-get install libgtk2.0-dev intltool @endcode
+ * This will install all necessary files to be able to compile plugins for Geany. On other
+ * distributions, the package names and commands to use may differ.
  *
- *  You should start your plugin with including some of the needed C header files and defining
- *  some basic global variables which will help you to access all needed functions of the plugin
- *  API in a more comfortable way.
+ * Basically, you are done at this point and could continue with writing the plugin code.
  *
- *  Let's start with the very basic headers and add more later if necessary.
- *  @code
+ * [1] For Windows, it is basically the same but you might have some more work on setting up
+ * the general build environment(compiler, GTK development files, ...). This is described on
+ * Geany's website at http://www.geany.org/Support/BuildingOnWin32.
+ *
+ * @section helloworld "Hello World"
+ *
+ * When writing a plugin, you will find a couple of functions or macros which are mandatory
+ * and some which are free to use for implementing some useful feature once your plugin
+ * becomes more powerful like including a configuration or help dialog.
+ *
+ * You should start your plugin with including some of the needed C header files and defining
+ * some basic global variables which will help you to access all needed functions of the plugin
+ * API in a more comfortable way.
+ *
+ * Let's start with the very basic headers and add more later if necessary.
+ * @code
 #include <geanyplugin.h>
- *  @endcode
+ * @endcode
  *
- *  @a geanyplugin.h includes all of the Geany API and also the necessary GTK header files,
- *  so there is no need to include @a gtk/gtk.h yourself.
+ * @a geanyplugin.h includes all of the Geany API and also the necessary GTK header files,
+ * so there is no need to include @a gtk/gtk.h yourself.
  *
- *  @note
- *  @a plugindata.h contains the biggest part of the plugin API and provides some basic macros.
- *  @a geanyfunctions.h provides some macros for convenient access to plugin API functions.
+ * @note
+ * @a plugindata.h contains the biggest part of the plugin API and provides some basic macros.
+ * @a geanyfunctions.h provides some macros for convenient access to plugin API functions.
  *
- *  Then you should define three basic variables which will give access to data fields and
- *  functions provided by the plugin API.
- *  @code
+ * Then you should define three basic variables which will give access to data fields and
+ * functions provided by the plugin API.
+ * @code
 GeanyPlugin			*geany_plugin;
 GeanyData			*geany_data;
 GeanyFunctions		*geany_functions;
- *  @endcode
+ * @endcode
  *
- *  Now you can go on and write your first lines for your new plugin. As mentioned before,
- *  you will need to implement and fill out a couple of functions/macros to make the plugin work.
- *  So let's start with PLUGIN_VERSION_CHECK().
+ * Now you can go on and write your first lines for your new plugin. As mentioned before,
+ * you will need to implement and fill out a couple of functions/macros to make the plugin work.
+ * So let's start with PLUGIN_VERSION_CHECK().
  *
- *  PLUGIN_VERSION_CHECK() is a convenient way to tell Geany which version of Geany's plugin API
- *  is needed at minimum to run your plugin. The value is defined in
- *  @a plugindata.h by @a GEANY_API_VERSION. In most cases this should be your minimum.
- *  Nevertheless when setting this value, you should choose the lowest possible version here to
- *  make the plugin compatible with a bigger number of versions of Geany.
+ * PLUGIN_VERSION_CHECK() is a convenient way to tell Geany which version of Geany's plugin API
+ * is needed at minimum to run your plugin. The value is defined in
+ * @a plugindata.h by @a GEANY_API_VERSION. In most cases this should be your minimum.
+ * Nevertheless when setting this value, you should choose the lowest possible version here to
+ * make the plugin compatible with a bigger number of versions of Geany.
  *
- *  For the next step, you will need to tell Geany some basic information about your plugin
- *  which will be shown in the plugin manager dialog.
+ * For the next step, you will need to tell Geany some basic information about your plugin
+ * which will be shown in the plugin manager dialog.
  *
- *  To do this you should use the PLUGIN_SET_INFO() macro, which expects 4 parameters:
- *  - Plugin name
- *  - Short description
- *  - Version
- *  - Author
+ * To do this you should use the PLUGIN_SET_INFO() macro, which expects 4 parameters:
+ * - Plugin name
+ * - Short description
+ * - Version
+ * - Author
  *
- *  Based on this, the line could look like:
- *  @code
+ * Based on this, the line could look like:
+ * @code
 PLUGIN_SET_INFO("HelloWorld", "Just another tool to say hello world",
 				"1.0", "John Doe <john.doe@example.org>");
- *  @endcode
+ * @endcode
  *
- *  Once this is done, you will need to implement the function which will be executed when the
- *  plugin is loaded. Part of that function could be adding and removing of an item to
- *  Geany's Tools menu, setting up keybindings or registering some callbacks. Also you will
- *  need to implement the function that is called when your plugin is unloaded.
- *  These functions are called plugin_init() and plugin_cleanup(). Let's see what this
- *  looks like:
- *  @code
+ * Once this is done, you will need to implement the function which will be executed when the
+ * plugin is loaded. Part of that function could be adding and removing of an item to
+ * Geany's Tools menu, setting up keybindings or registering some callbacks. Also you will
+ * need to implement the function that is called when your plugin is unloaded.
+ * These functions are called plugin_init() and plugin_cleanup(). Let's see what this
+ * looks like:
+ * @code
 PLUGIN_VERSION_CHECK(211)
 
 PLUGIN_SET_INFO("HelloWorld", "Just another tool to say hello world",
@@ -242,18 +242,18 @@ void plugin_init(GeanyData *data)
 void plugin_cleanup(void)
 {
 }
- *  @endcode
+ * @endcode
  *
- *  If you think this plugin seems not to implement any functionality right now and only wastes
- *  some memory, you are right. But it should compile and load/unload in Geany nicely.
- *  Now you have the very basic layout of a new plugin. Great, isn't it?
+ * If you think this plugin seems not to implement any functionality right now and only wastes
+ * some memory, you are right. But it should compile and load/unload in Geany nicely.
+ * Now you have the very basic layout of a new plugin. Great, isn't it?
  *
- *  @note
+ * @note
  *
- *  If you would rather write the plugin in C++, you can do that by marking the
- *  plugin functions that it implements as @c extern @c "C", for example:
+ * If you would rather write the plugin in C++, you can do that by marking the
+ * plugin functions that it implements as @c extern @c "C", for example:
  *
- *  @code
+ * @code
  *
 extern "C" void plugin_init(GeanyData *data)
 {
@@ -262,34 +262,34 @@ extern "C" void plugin_init(GeanyData *data)
 extern "C" void plugin_cleanup(void)
 {
 }
- *  @endcode
+ * @endcode
  *
- *  @section building Building
+ * @section building Building
  *
- *  First make plugin.o:
+ * First make plugin.o:
  *
- *  @code gcc -c plugin.c -fPIC `pkg-config --cflags geany` @endcode
+ * @code gcc -c plugin.c -fPIC `pkg-config --cflags geany` @endcode
  *
- *  Then make the plugin library plugin.so (or plugin.dll on Windows):
+ * Then make the plugin library plugin.so (or plugin.dll on Windows):
  *
- *  @code gcc plugin.o -o plugin.so -shared `pkg-config --libs geany` @endcode
+ * @code gcc plugin.o -o plugin.so -shared `pkg-config --libs geany` @endcode
  *
- *  If all went OK, put the library into one of the paths Geany looks for plugins,
- *  e.g. $prefix/lib/geany. See @ref paths "Installation paths" for details.
+ * If all went OK, put the library into one of the paths Geany looks for plugins,
+ * e.g. $prefix/lib/geany. See @ref paths "Installation paths" for details.
  *
- *  @note
+ * @note
  *
- *  If you are writing the plugin in C++, then you will need to use your C++
- *  compiler here, for example @c g++.
+ * If you are writing the plugin in C++, then you will need to use your C++
+ * compiler here, for example @c g++.
  *
- *  @section realfunc Adding functionality
+ * @section realfunc Adding functionality
  *
- *  Let's go on and implement some real functionality.
+ * Let's go on and implement some real functionality.
  *
- *  As mentioned before, plugin_init() will be called when the plugin is loaded in Geany.
- *  So it should implement everything that needs to be done during startup. In this case,
- *  we'd like to add a menu item to Geany's Tools menu which runs a dialog printing "Hello World".
- *  @code
+ * As mentioned before, plugin_init() will be called when the plugin is loaded in Geany.
+ * So it should implement everything that needs to be done during startup. In this case,
+ * we'd like to add a menu item to Geany's Tools menu which runs a dialog printing "Hello World".
+ * @code
 void plugin_init(GeanyData *data)
 {
 	GtkWidget *main_menu_item;
@@ -307,36 +307,36 @@ void plugin_init(GeanyData *data)
 	g_signal_connect(main_menu_item, "activate",
 		G_CALLBACK(item_activate_cb), NULL);
 }
- *  @endcode
+ * @endcode
  *
- *  This will add an item to the Tools menu and connect this item to a function which implements
- *  what should be done when the menu item is activated by the user.
- *  This is done by g_signal_connect(). The Tools menu can be accessed with
- *  geany->main_widgets->tools_menu. The structure @a main_widgets contains pointers to the
- *  main GUI elements in Geany.
+ * This will add an item to the Tools menu and connect this item to a function which implements
+ * what should be done when the menu item is activated by the user.
+ * This is done by g_signal_connect(). The Tools menu can be accessed with
+ * geany->main_widgets->tools_menu. The structure @a main_widgets contains pointers to the
+ * main GUI elements in Geany.
  *
- *  Geany has a simple API for showing message dialogs. So our function contains
- *  only a few lines:
- *  @code
+ * Geany has a simple API for showing message dialogs. So our function contains
+ * only a few lines:
+ * @code
 void item_activate_cb(GtkMenuItem *menuitem, gpointer user_data)
 {
 	dialogs_show_msgbox(GTK_MESSAGE_INFO, "Hello World");
 }
- *  @endcode
+ * @endcode
  *
- *  For the moment you don't need to worry about the parameters of that function.
+ * For the moment you don't need to worry about the parameters of that function.
  *
- *  Now we need to clean up properly when the plugin is unloaded.
+ * Now we need to clean up properly when the plugin is unloaded.
  *
- *  To remove the menu item from the Tools menu, you can use gtk_widget_destroy().
- *  gtk_widget_destroy() expects a pointer to a GtkWidget object.
+ * To remove the menu item from the Tools menu, you can use gtk_widget_destroy().
+ * gtk_widget_destroy() expects a pointer to a GtkWidget object.
  *
- *  First you should add gtk_widget_destroy() to your plugin_cleanup() function.
- *  The argument for gtk_widget_destroy() is the widget object you created earlier in
- *  plugin_init(). To be able to access this pointer in plugin_cleanup(), you need to move
- *  its definition from plugin_init() into the global context so its visibility will increase
- *  and it can be accessed in all functions.
- *  @code
+ * First you should add gtk_widget_destroy() to your plugin_cleanup() function.
+ * The argument for gtk_widget_destroy() is the widget object you created earlier in
+ * plugin_init(). To be able to access this pointer in plugin_cleanup(), you need to move
+ * its definition from plugin_init() into the global context so its visibility will increase
+ * and it can be accessed in all functions.
+ * @code
 static GtkWidget *main_menu_item = NULL;
 
 // ...
@@ -351,15 +351,15 @@ void plugin_cleanup(void)
 {
 	gtk_widget_destroy(main_menu_item);
 }
- *  @endcode
+ * @endcode
  *
- *  This will ensure your menu item is removed from the Tools menu as well as from
- *  memory once your plugin is unloaded, so you don't leave any memory leaks.
- *  Once this is done, your first plugin is ready. Congratulations!
+ * This will ensure your menu item is removed from the Tools menu as well as from
+ * memory once your plugin is unloaded, so you don't leave any memory leaks.
+ * Once this is done, your first plugin is ready. Congratulations!
  *
- *  @section listing Complete listing (without comments)
+ * @section listing Complete listing (without comments)
  *
- *  @code
+ * @code
 #include <geanyplugin.h>
 
 GeanyPlugin		*geany_plugin;
