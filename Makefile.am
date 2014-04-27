@@ -5,6 +5,7 @@ SUBDIRS = tagmanager scintilla src plugins icons po doc data tests
 AUTOMAKE_OPTIONS =	1.7
 
 ACLOCAL_AMFLAGS = -I m4
+AM_DISTCHECK_CONFIGURE_FLAGS = --enable-api-docs
 
 WIN32_BUILD_FILES = \
 	geany_private.rc \
