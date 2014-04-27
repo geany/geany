@@ -167,16 +167,16 @@ unmanageable diffs.
 
 GTK versions & API documentation
 --------------------------------
-Geany requires GTK >= 2.16 and GLib >= 2.20. API symbols from newer
+Geany requires GTK >= 2.24 and GLib >= 2.28. API symbols from newer
 GTK/GLib versions should be avoided or made optional to keep the source
 code building on older systems.
 
-The official GTK 2.16 API documentation may not be available online
+The official GTK 2.24 API documentation may not be available online
 anymore, so we put it on http://www.geany.org/manual/gtk/. There
 is also a tarball with all available files for download and use with
 devhelp.
 
-Using the 2.16 API documentation of the GTK libs (including GLib, GDK
+Using the 2.24 API documentation of the GTK libs (including GLib, GDK
 and Pango) has the advantages that you don't get confused by any
 newer API additions and you don't have to take care about whether
 you can use them or not.
@@ -187,8 +187,8 @@ Coding
   them down into smaller static functions where possible. This makes code
   much easier to read and maintain.
 * Use GLib types and functions - gint not int, g_free() not free().
-* Your code should build against GLib 2.20 and GTK 2.16. At least for the
-  moment, we want to keep the minimum requirement for GTK at 2.16 (of
+* Your code should build against GLib 2.27.3 and GTK 2.24. At least for the
+  moment, we want to keep the minimum requirement for GTK at 2.24 (of
   course, you can use the GTK_CHECK_VERSION macro to protect code using
   later versions).
 * Variables should be declared before statements. You can use
