@@ -55,12 +55,9 @@ doxygen_sources = \
 	$(top_srcdir)/src/*.[ch] \
 	$(top_srcdir)/plugins/geanyplugin.h \
 	$(top_srcdir)/plugins/geanyfunctions.h \
-	$(top_srcdir)/tagmanager/src/tm_source_file.c \
-	$(top_srcdir)/tagmanager/src/tm_source_file.h \
-	$(top_srcdir)/tagmanager/src/tm_work_object.c \
-	$(top_srcdir)/tagmanager/src/tm_work_object.h \
-	$(top_srcdir)/tagmanager/src/tm_workspace.c \
-	$(top_srcdir)/tagmanager/src/tm_workspace.h
+	$(top_srcdir)/tagmanager/src/tm_source_file.[ch] \
+	$(top_srcdir)/tagmanager/src/tm_work_object.[ch] \
+	$(top_srcdir)/tagmanager/src/tm_workspace.[ch]
 
 $(builddir)/Doxyfile.stamp: $(builddir)/Doxyfile $(doxygen_sources)
 	$(AM_V_GEN)$(DOXYGEN) $< && echo "" > $@
