@@ -61,7 +61,7 @@ doxygen_sources = \
 	$(top_srcdir)/tagmanager/src/tm_workspace.[ch]
 
 $(builddir)/Doxyfile.stamp: $(builddir)/Doxyfile $(doxygen_sources)
-	$(AM_V_GEN)$(DOXYGEN) $< && echo "" > $@
+	$(AM_V_GEN)$(DOXYGEN) Doxyfile && echo "" > $@
 
 all-local: $(builddir)/Doxyfile.stamp
 
