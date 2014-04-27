@@ -435,7 +435,8 @@ gchar *win32_show_document_save_as_dialog(GtkWindow *parent, const gchar *title,
 	n = MultiByteToWideChar(CP_UTF8, 0, DOC_FILENAME(doc), -1, w_file, G_N_ELEMENTS(w_file));
 
 	/* If creating a new file name, convert and append the extension if any */
-	if (! doc->file_name && doc->file_type && doc->file_type->extension && n + 1 < G_N_ELEMENTS(w_file))
+	if (! doc->file_name && doc->file_type && doc->file_type->extension &&
+		n + 1 < (int)G_N_ELEMENTS(w_file))
 	{
 		w_file[n - 1] = L'.';
 		MultiByteToWideChar(CP_UTF8, 0, doc->file_type->extension, -1, &w_file[n],
