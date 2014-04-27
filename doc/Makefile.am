@@ -47,8 +47,30 @@ geany-$(VERSION).pdf: geany.txt
 	rm -f geany.tex geany.aux geany.log geany.out
 	mv geany.pdf $@
 
-api-doc: Doxyfile
-	doxygen
+# API Documentation
+if WITH_DOXYGEN
+
+doxygen_sources = \
+	$(srcdir)/*.[ch] \
+	$(top_srcdir)/src/*.[ch] \
+	$(top_srcdir)/plugins/geanyplugin.h \
+	$(top_srcdir)/plugins/geanyfunctions.h \
+	$(top_srcdir)/tagmanager/src/tm_source_file.c \
+	$(top_srcdir)/tagmanager/src/tm_source_file.h \
+	$(top_srcdir)/tagmanager/src/tm_work_object.c \
+	$(top_srcdir)/tagmanager/src/tm_work_object.h \
+	$(top_srcdir)/tagmanager/src/tm_workspace.c \
+	$(top_srcdir)/tagmanager/src/tm_workspace.h
+
+$(builddir)/Doxyfile.stamp: $(builddir)/Doxyfile $(doxygen_sources)
+	$(AM_V_GEN)$(DOXYGEN) $< && echo "" > $@
+
+all-local: $(builddir)/Doxyfile.stamp
+
+clean-local:
+	-rm -rf $(builddir)/reference/ $(builddir)/Doxyfile.stamp
+
+endif
 
 hacking.html: ../HACKING
 	rst2html -stg --stylesheet=$(srcdir)/geany.css $(srcdir)/../HACKING $@

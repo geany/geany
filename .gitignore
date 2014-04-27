@@ -97,6 +97,7 @@ Makefile.in
 # /doc/
 #-----------------------------------------------------------------------
 /doc/Doxyfile
+/doc/Doxyfile.stamp
 /doc/geany.1
 /doc/hacking.html
 /doc/*.pdf
