@@ -40,23 +40,20 @@ AC_DEFUN([GEANY_CHECK_DOCUTILS_PDF],
 [
 	AC_ARG_ENABLE([pdf-docs],
 		[AS_HELP_STRING([--enable-pdf-docs],
-			[generate PDF documentation using rst2latex and pdflatex [default=no]])],
+			[generate PDF documentation using rst2pdf [default=no]])],
 		[geany_enable_pdf_docs="$enableval"],
 		[geany_enable_pdf_docs="no"])
-	AC_ARG_VAR([RST2LATEX], [Path to Docutils rst2latex executable])
-	AC_ARG_VAR([PDFLATEX], [Path to pdflatex executable])
+	AC_ARG_VAR([RST2PDF], [Path to Docutils rst2pdf executable])
 	AS_IF([test "x$geany_enable_pdf_docs" != "xno"],
 	[
-		AS_IF([test -z "$RST2LATEX"], [RST2LATEX="rst2latex"])
-		AC_PATH_PROG([RST2LATEX], [$RST2LATEX], [no])
-		AS_IF([test -z "$PDFLATEX"], [PDFLATEX="pdflatex"])
-		AC_PATH_PROG([PDFLATEX], [$PDFLATEX], [no])
-		AS_IF([test "x$RST2LATEX" != "xno" -a "x$PDFLATEX" != "xo"],
+		AS_IF([test -z "$RST2PDF"], [RST2PDF="rst2pdf"])
+		AC_PATH_PROG([RST2PDF], [$RST2PDF], [no])
+		AS_IF([test "x$RST2PDF" != "xno"],
 			[geany_enable_pdf_docs="yes"],
 			[test "x$geany_enable_pdf_docs" = "xyes"],
-			[AC_MSG_ERROR([PDF documentation enabled but rst2latex or pdflatex not found])],
+			[AC_MSG_ERROR([PDF documentation enabled but rst2pdf not found])],
 			[geany_enable_pdf_docs="no"])
 	])
-	AM_CONDITIONAL([WITH_LATEXPDF], [test "x$geany_enable_pdf_docs" != "xno"])
+	AM_CONDITIONAL([WITH_RST2PDF], [test "x$geany_enable_pdf_docs" != "xno"])
 	GEANY_STATUS_ADD([Build PDF documentation], [$geany_enable_pdf_docs])
 ])
