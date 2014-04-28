@@ -80,7 +80,7 @@ geany-$(VERSION).pdf: geany-$(VERSION).tex
 	 cd "$(srcdir)" && \
 	 $(PDFLATEX) $(PDFLATEX_FLAGS) -interaction=nonstopmode -halt-on-error -file-line-error \
 	 	-output-directory="$$absbuilddir" "$$absbuilddir/geany-$(VERSION).tex" | \
-	 { r=$?; grep -i "^!\|.*:[0-9]*:.*\|warning" >&2; exit $r; })
+	 { r=$?; grep -iA1 "^!\|.*:[0-9]*:.*\|warning" >&2; exit $r; })
 
 geany-$(VERSION).tex: $(srcdir)/geany.txt
 	$(AM_V_GEN)$(RST2LATEX) -stg --documentoptions="10pt,a4paper" --output-encoding=utf8 $(srcdir)/geany.txt $@
