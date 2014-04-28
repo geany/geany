@@ -71,15 +71,16 @@ endif
 # PDF user manual
 if WITH_LATEXPDF
 
-# FIXME: - cp/rm hack so pdflatex can find images in out-of-tree build
-#            (maybe use TEXINPUTS env var somehow?)
-#        - grep hack because pdflatex barfs all kinds of crazy info besides warnings/errors
+# FIXME: - grep hack because pdflatex barfs all kinds of crazy info besides warnings/errors
 #        - images in output PDF file are way too big, need something equivalent to:
 #            \includegraphics[width=\textwidth,height=\textheight,keepaspectratio]{...}
 geany-$(VERSION).pdf: geany-$(VERSION).tex
-	-cp -r "$(srcdir)/images/" "$(builddir)/"
-	$(AM_V_GEN)$(PDFLATEX) -interaction=nonstopmode -halt-on-error -file-line-error \
-		"geany-$(VERSION).tex" | grep -i ".*:[0-9]*:.*\|warning"
+	$(AM_V_GEN)\
+	(absbuilddir="$$(pwd)/$(builddir)"; \
+	 cd "$(srcdir)" && \
+	 $(PDFLATEX) $(PDFLATEX_FLAGS) -interaction=nonstopmode -halt-on-error -file-line-error \
+	 	-output-directory="$$absbuilddir" "$$absbuilddir/geany-$(VERSION).tex" | \
+	 { r=$?; grep -i "^!\|.*:[0-9]*:.*\|warning" >&2; exit $r; })
 
 geany-$(VERSION).tex: $(srcdir)/geany.txt
 	$(AM_V_GEN)$(RST2LATEX) -stg --documentoptions="10pt,a4paper" --output-encoding=utf8 $(srcdir)/geany.txt $@
@@ -89,7 +90,6 @@ all-pdf-local: geany-$(VERSION).pdf
 clean-pdf-local:
 	-rm -f geany-$(VERSION).tex geany-$(VERSION).aux geany-$(VERSION).log \
 		geany-$(VERSION).out geany-$(VERSION).toc geany-$(VERSION).pdf
-	-if test "$(srcdir)" != "$(builddir)"; then rm -rf "$(builddir)/images/"; fi
 
 else
 all-pdf-local:;
