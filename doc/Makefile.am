@@ -58,10 +58,6 @@ hacking.html: $(srcdir)/geany.css $(top_srcdir)/HACKING
 
 all-html-local: geany.html hacking.html
 
-install-html-local:
-	$(mkinstalldirs) $(DOCDIR)/html
-	$(INSTALL_DATA) $(srcdir)/geany.html $(DOCDIR)/html/index.html
-
 clean-html-local:
 	-rm -f hacking.html
 # FIXME: why is the generated HTML manual checked-in to VCS?
@@ -69,7 +65,6 @@ clean-html-local:
 
 else
 all-html-local:;
-install-html-local:;
 clean-html-local:;
 endif
 
@@ -134,8 +129,8 @@ uninstall-local:
 	rm -rf $(DOCDIR);
 
 # manually install some files under another name
-install-data-local: install-html-local
-	$(mkinstalldirs) $(DOCDIR)
+install-data-local:
+	$(mkinstalldirs) $(DOCDIR)/html
+	$(INSTALL_DATA) $(srcdir)/geany.html $(DOCDIR)/html/index.html
 	$(INSTALL_DATA) $(srcdir)/geany.txt $(DOCDIR)/manual.txt
 	$(INSTALL_DATA) $(top_srcdir)/scintilla/License.txt $(DOCDIR)/ScintillaLicense.txt
-
