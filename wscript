@@ -201,6 +201,8 @@ def configure(conf):
     conf.check_cc(function_name='mkstemp', header_name='stdlib.h', mandatory=False)
     conf.check_cc(function_name='strstr', header_name='string.h')
 
+    conf.check_cc(function_name='pow', header_name='math.h', lib='m', uselib_store='M')
+
     # check sunOS socket support
     if Options.platform == 'sunos':
         conf.check_cc(function_name='socket', lib='socket',
@@ -351,7 +353,7 @@ def build(bld):
     if bld.cmd in ('install', 'uninstall'):
         bld.add_post_fun(_post_install)
 
-    def build_plugin(plugin_name, install=True):
+    def build_plugin(plugin_name, install=True, uselib_add=[]):
         if install:
             instpath = '${PREFIX}/lib' if is_win32 else '${LIBDIR}/geany'
         else:
@@ -363,7 +365,7 @@ def build(bld):
             includes                = ['.', 'src/', 'scintilla/include', 'tagmanager/src'],
             defines                 = 'G_LOG_DOMAIN="%s"' % plugin_name,
             target                  = plugin_name,
-            uselib                  = ['GTK', 'GLIB', 'GMODULE'],
+            uselib                  = ['GTK', 'GLIB', 'GMODULE'] + uselib_add,
             install_path            = instpath)
 
     # CTags
@@ -408,7 +410,7 @@ def build(bld):
         target          = 'scintilla',
         source          = scintilla_sources,
         includes        = ['.', 'scintilla/include', 'scintilla/src', 'scintilla/lexlib'],
-        uselib          = ['GTK', 'GLIB', 'GMODULE'],
+        uselib          = ['GTK', 'GLIB', 'GMODULE', 'M'],
         install_path    = None)  # do not install this library
 
     # Geany
@@ -425,7 +427,7 @@ def build(bld):
         source          = geany_sources,
         includes        = ['.', 'scintilla/include', 'tagmanager/src'],
         defines         = ['G_LOG_DOMAIN="Geany"', 'GEANY_PRIVATE'],
-        uselib          = ['GTK', 'GLIB', 'GMODULE', 'GIO', 'GTHREAD', 'WIN32', 'SUNOS_SOCKET'],
+        uselib          = ['GTK', 'GLIB', 'GMODULE', 'GIO', 'GTHREAD', 'WIN32', 'SUNOS_SOCKET', 'M'],
         use             = ['scintilla', 'ctags', 'tagmanager', 'mio'])
 
     # geanyfunctions.h
@@ -440,7 +442,7 @@ def build(bld):
     if bld.env['HAVE_PLUGINS'] == 1:
         build_plugin('classbuilder')
         build_plugin('demoplugin', False)
-        build_plugin('export')
+        build_plugin('export', uselib_add=['M'])
         build_plugin('filebrowser')
         build_plugin('htmlchars')
         build_plugin('saveactions')
