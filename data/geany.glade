@@ -4239,7 +4239,7 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
-                                    <property name="tooltip_text" translatable="yes">Start a new file for each command-line filename that doesn't exist</property>
+                                    <property name="tooltip_text" translatable="yes">Create a new file for each command-line filename that doesn't exist</property>
                                     <property name="use_underline">True</property>
                                     <property name="draw_indicator">True</property>
                                   </object>
