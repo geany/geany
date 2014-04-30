@@ -8283,7 +8283,7 @@
                                 <property name="can_focus">False</property>
                                 <child>
                                   <object class="GtkImageMenuItem" id="cut_current_lines1">
-                                    <property name="label" translatable="yes">_Cut Current Line(s)</property>
+                                    <property name="label" translatable="yes">Cu_t Current Line(s)</property>
                                     <property name="use_action_appearance">False</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
@@ -8320,7 +8320,7 @@
                                     <property name="use_action_appearance">False</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="label" translatable="yes">_Duplicate Line or Selection</property>
+                                    <property name="label" translatable="yes">D_uplicate Line or Selection</property>
                                     <property name="use_underline">True</property>
                                     <signal name="activate" handler="on_duplicate_line_or_selection1_activate" swapped="no"/>
                                   </object>
@@ -8336,7 +8336,7 @@
                                     <property name="use_action_appearance">False</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="label" translatable="yes">_Select Current Line(s)</property>
+                                    <property name="label" translatable="yes">S_elect Current Line(s)</property>
                                     <property name="use_underline">True</property>
                                     <signal name="activate" handler="on_select_current_lines1_activate" swapped="no"/>
                                   </object>
@@ -8346,7 +8346,7 @@
                                     <property name="use_action_appearance">False</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="label" translatable="yes">_Select Current Paragraph</property>
+                                    <property name="label" translatable="yes">Se_lect Current Paragraph</property>
                                     <property name="use_underline">True</property>
                                     <signal name="activate" handler="on_select_current_paragraph1_activate" swapped="no"/>
                                   </object>
@@ -8372,7 +8372,7 @@
                                     <property name="use_action_appearance">False</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="label" translatable="yes">_Move Line(s) Down</property>
+                                    <property name="label" translatable="yes">M_ove Line(s) Down</property>
                                     <property name="use_underline">True</property>
                                     <signal name="activate" handler="on_move_lines_down1_activate" swapped="no"/>
                                   </object>
