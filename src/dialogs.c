@@ -515,7 +515,7 @@ static gboolean save_as_dialog_handle_response(GtkWidget *dialog, gint response)
 				break;
 			}
 			if (g_file_test(new_filename, G_FILE_TEST_EXISTS) &&
-				!dialogs_show_question_full(NULL, NULL, NULL,
+				!dialogs_show_question_full(NULL, NULL, NULL, FALSE,
 					_("Overwrite?"),
 					_("Filename already exists!")))
 				break;
@@ -1284,6 +1284,7 @@ static gint show_prompt(GtkWidget *parent,
 		const gchar *btn_1, GtkResponseType response_1,
 		const gchar *btn_2, GtkResponseType response_2,
 		const gchar *btn_3, GtkResponseType response_3,
+		const GtkResponseType response_default,
 		const gchar *question_text, const gchar *extra_text)
 {
 	gboolean ret = FALSE;
@@ -1331,14 +1332,21 @@ static gint show_prompt(GtkWidget *parent,
 			"%s", extra_text);
 
 	if (btn_1 != NULL)
-		gtk_dialog_add_button(GTK_DIALOG(dialog), btn_1, response_1);
+	{
+		btn = gtk_dialog_add_button(GTK_DIALOG(dialog), btn_1, response_1);
+		if (response_default == response_1)
+			gtk_widget_grab_default(btn);
+	}
 
 	/* For a cancel button, use cancel response so user can press escape to cancel */
 	btn = gtk_dialog_add_button(GTK_DIALOG(dialog), btn_2,
 		utils_str_equal(btn_2, GTK_STOCK_CANCEL) ? GTK_RESPONSE_CANCEL : response_2);
-	/* we don't want a default, but we need to override the apply button as default */
-	gtk_widget_grab_default(btn);
-	gtk_dialog_add_button(GTK_DIALOG(dialog), btn_3, response_3);
+	if (response_default == response_2)
+		gtk_widget_grab_default(btn);
+
+	btn = gtk_dialog_add_button(GTK_DIALOG(dialog), btn_3, response_3);
+	if (response_default == response_3)
+		gtk_widget_grab_default(btn);
 
 	ret = gtk_dialog_run(GTK_DIALOG(dialog));
 	gtk_widget_destroy(dialog);
@@ -1373,6 +1381,7 @@ gboolean dialogs_show_question(const gchar *text, ...)
 		NULL, GTK_RESPONSE_NONE,
 		GTK_STOCK_NO, GTK_RESPONSE_NO,
 		GTK_STOCK_YES, GTK_RESPONSE_YES,
+		GTK_RESPONSE_NO,
 		string, NULL);
 	g_free(string);
 	return (result == GTK_RESPONSE_YES);
@@ -1383,7 +1392,7 @@ gboolean dialogs_show_question(const gchar *text, ...)
  * if parent is NULL, main_widgets.window will be used
  * yes_btn, no_btn can be NULL. */
 gboolean dialogs_show_question_full(GtkWidget *parent, const gchar *yes_btn, const gchar *no_btn,
-	const gchar *extra_text, const gchar *main_text, ...)
+	const gboolean is_yes_btn_default, const gchar *extra_text, const gchar *main_text, ...)
 {
 	gint result;
 	gchar *string;
@@ -1396,6 +1405,7 @@ gboolean dialogs_show_question_full(GtkWidget *parent, const gchar *yes_btn, con
 		NULL, GTK_RESPONSE_NONE,
 		no_btn, GTK_RESPONSE_NO,
 		yes_btn, GTK_RESPONSE_YES,
+		is_yes_btn_default ? GTK_RESPONSE_YES : GTK_RESPONSE_NO,
 		string, extra_text);
 	g_free(string);
 	return (result == GTK_RESPONSE_YES);
@@ -1420,6 +1430,7 @@ gint dialogs_show_prompt(GtkWidget *parent,
 	string = g_strdup_vprintf(main_text, args);
 	va_end(args);
 	result = show_prompt(parent, btn_1, response_1, btn_2, response_2, btn_3, response_3,
+				response_2,
 				string, extra_text);
 	g_free(string);
 	return result;

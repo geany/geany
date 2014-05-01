@@ -1969,7 +1969,7 @@ gint document_find_text(GeanyDocument *doc, const gchar *text, const gchar *orig
 
 		/* we searched only part of the document, so ask whether to wraparound. */
 		if (search_prefs.always_wrap ||
-			dialogs_show_question_full(parent, GTK_STOCK_FIND, GTK_STOCK_CANCEL,
+			dialogs_show_question_full(parent, GTK_STOCK_FIND, GTK_STOCK_CANCEL, TRUE,
 				_("Wrap search and find again?"), _("\"%s\" was not found."), original_text))
 		{
 			gint ret;

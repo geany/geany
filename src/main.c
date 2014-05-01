@@ -673,7 +673,7 @@ static gint create_config_dir(void)
 			if (g_file_test(old_dir, G_FILE_TEST_EXISTS))
 			{
 				if (! dialogs_show_question_full(main_widgets.window,
-					GTK_STOCK_YES, GTK_STOCK_QUIT, _("Move it now?"),
+					GTK_STOCK_YES, GTK_STOCK_QUIT, FALSE, _("Move it now?"),
 					"%s",
 					_("Geany needs to move your old configuration directory before starting.")))
 					exit(0);
