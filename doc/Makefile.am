@@ -69,27 +69,15 @@ clean-html-local:;
 endif
 
 # PDF user manual
-if WITH_LATEXPDF
+if WITH_RST2PDF
 
-# FIXME: - grep hack because pdflatex barfs all kinds of crazy info besides warnings/errors
-#        - images in output PDF file are way too big, need something equivalent to:
-#            \includegraphics[width=\textwidth,height=\textheight,keepaspectratio]{...}
-geany-$(VERSION).pdf: geany-$(VERSION).tex
-	$(AM_V_GEN)\
-	(absbuilddir="$$(pwd)/$(builddir)"; \
-	 cd "$(srcdir)" && \
-	 $(PDFLATEX) $(PDFLATEX_FLAGS) -interaction=nonstopmode -halt-on-error -file-line-error \
-	 	-output-directory="$$absbuilddir" "$$absbuilddir/geany-$(VERSION).tex" | \
-	 { r=$?; grep -iA1 "^!\|.*:[0-9]*:.*\|warning" >&2; exit $r; })
-
-geany-$(VERSION).tex: $(srcdir)/geany.txt
-	$(AM_V_GEN)$(RST2LATEX) -stg --documentoptions="10pt,a4paper" --output-encoding=utf8 $(srcdir)/geany.txt $@
+geany-$(VERSION).pdf: geany.txt
+	$(AM_V_GEN)$(RST2PDF) $(srcdir)/geany.txt -o $@
 
 all-pdf-local: geany-$(VERSION).pdf
 
 clean-pdf-local:
-	-rm -f geany-$(VERSION).tex geany-$(VERSION).aux geany-$(VERSION).log \
-		geany-$(VERSION).out geany-$(VERSION).toc geany-$(VERSION).pdf
+	-rm -f geany-$(VERSION).pdf
 
 else
 all-pdf-local:;
